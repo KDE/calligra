@@ -34,10 +34,10 @@ class PropertyEditor : public KListView
 	Q_OBJECT
 
 	public:
-		PropertyEditor(QWidget *parent=0, const char *name=0);
+		PropertyEditor(QWidget *parent=0, bool returnToAccept = false, const char *name=0);
 		~PropertyEditor();
 
-		void	reset();
+		void	reset(bool editorOnly = false);
 		void	setBuffer(PropertyBuffer *b) { m_buffer = b; }
 
 	public slots:
@@ -57,6 +57,7 @@ class PropertyEditor : public KListView
 	private:
 		PropertyEditorEditor	*m_currentEditor;
 		PropertyEditorItem	*m_editItem;
+		bool m_returnToAccept;
 		PropertyBuffer		*m_buffer;
 };
 

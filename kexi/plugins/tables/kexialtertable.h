@@ -23,34 +23,6 @@
 #include "kexidialogbase.h"
 #include "kexiDB/kexidb.h"
 
-/*
-class QStringList;
-
-class KStatusBar;
-
-class KexiTableView;
-class KexiDBRecord;
-class KexiTableItem;
-
-class KexiAlterTable : public KexiDialogBase
-{
-	Q_OBJECT
-	public:
-		KexiAlterTable(KexiView *view, QWidget *parent, const QString &table, const char *name=0);
-
-		virtual KXMLGUIClient *guiClient(){return new KXMLGUIClient();}
-	protected:
-		void initTable();
-	protected slots:
-		void slotItemChanged(KexiTableItem *i, int col);
-	private:
-		KexiTableView* m_view;
-		KStatusBar* m_statusbar;
-		QString m_table;
-		QStringList m_fieldnames;
-};
-*/
-
 class KexiTableView;
 class KexiTableItem;
 class PropertyEditor;

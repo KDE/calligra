@@ -27,11 +27,13 @@ PropertyEditorList::PropertyEditorList(QWidget *parent, QVariant::Type type, QVa
  : PropertyEditorEditor(parent, type, value, name)
 {
 	m_combo = new QComboBox(this);
-	
+
+	m_combo->setFocusPolicy(QWidget::StrongFocus);
 	m_combo->setGeometry(frameGeometry());
 	m_combo->show();
 
 	setWidget(m_combo);
+	connect(m_combo, SIGNAL(activated(int)), SLOT(valueChanged()));
 }
 
 PropertyEditorList::PropertyEditorList(QWidget *parent, QVariant::Type type, QVariant value, QStringList list, const char *name)
@@ -39,6 +41,7 @@ PropertyEditorList::PropertyEditorList(QWidget *parent, QVariant::Type type, QVa
 {
 	m_combo = new QComboBox(this);
 
+	m_combo->setFocusPolicy(QWidget::StrongFocus);
 	m_combo->setGeometry(frameGeometry());
 	m_combo->insertStringList(list);
 	m_combo->setCurrentItem(value.toInt());

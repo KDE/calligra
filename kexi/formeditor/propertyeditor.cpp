@@ -34,13 +34,14 @@
 #include "propertyeditorinput.h"
 #include "eventeditoreditor.h"
 
-PropertyEditor::PropertyEditor(QWidget *parent, const char *name)
+PropertyEditor::PropertyEditor(QWidget *parent, bool returnToAccept, const char *name)
  : KListView(parent, name)
 {
 	addColumn(i18n("Property"));
 	addColumn(i18n("Value"));
 
 	m_currentEditor = 0;
+	m_returnToAccept = returnToAccept;
 
 	connect(this, SIGNAL(selectionChanged(QListViewItem *)), this, SLOT(slotClicked(QListViewItem *)));
 	connect(header(), SIGNAL(sizeChange(int, int, int)), this, SLOT(slotColumnSizeChanged(int, int, int)));
@@ -127,9 +128,16 @@ PropertyEditor::createEditor(PropertyEditorItem *i, const QRect &geometry)
 	}
 
 	connect(editor, SIGNAL(reject(PropertyEditorEditor *)), this,
-	 SLOT(slotEditorReject(PropertyEditorEditor *)));
+		SLOT(slotEditorReject(PropertyEditorEditor *)));
+
+	if(m_returnToAccept)
+	{
+		connect(editor, SIGNAL(accept(PropertyEditorEditor *)), this,
+			SLOT(slotEditorAccept(PropertyEditorEditor *)));
+	}
+
 	connect(editor, SIGNAL(changed(PropertyEditorEditor *)), this,
-	 SLOT(slotValueChanged(PropertyEditorEditor *)));
+		SLOT(slotValueChanged(PropertyEditorEditor *)));
 	editor->setGeometry(geometry);
 	editor->resize(geometry.width(), geometry.height());
 	editor->show();
@@ -150,12 +158,18 @@ PropertyEditor::slotValueChanged(PropertyEditorEditor *editor)
 			m_buffer->changeProperty(m_editItem->object(), m_editItem->name().latin1(), editor->getValue());
 		}
 	}
+
+	if(!m_returnToAccept)
+	{
 		emit itemRenamed(m_editItem);
+	}
 }
 
 void
 PropertyEditor::slotEditorAccept(PropertyEditorEditor *editor)
 {
+	emit itemRenamed(m_editItem);
+	editor->hide();
 }
 
 void
@@ -181,13 +195,17 @@ PropertyEditor::slotColumnSizeChanged(int section, int, int newS)
 }
 
 void
-PropertyEditor::reset()
+PropertyEditor::reset(bool editorOnly)
 {
-	clear();
 	if(m_currentEditor)
 	{
 		delete m_currentEditor;
 		m_currentEditor = 0;
+	}
+
+	if(!editorOnly)
+	{
+		clear();
 	}
 }
 

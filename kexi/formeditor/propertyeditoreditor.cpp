@@ -34,13 +34,16 @@ PropertyEditorEditor::eventFilter(QObject* watched, QEvent* e)
 		if(ev->key() == Key_Escape)
 		{
 			emit reject(this);
-			return false;
+			return true;
+		}
+		else if((ev->key() == Key_Return) || (ev->key() == Key_Enter))
+		{
+			emit accept(this);
+			return true;
 		}
 	}
-	else
-	{
-		return false;
-	}
+
+	return QWidget::eventFilter(watched, e);
 }
 
 void
@@ -55,9 +58,8 @@ PropertyEditorEditor::resizeEvent(QResizeEvent *ev)
 void
 PropertyEditorEditor::setWidget(QWidget *w)
 {
-	installEventFilter(this);
-
 	m_childWidget = w;
+	m_childWidget->installEventFilter(this);
 }
 
 QVariant
