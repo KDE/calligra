@@ -2989,7 +2989,7 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
   const KSpreadSheet *table = m_pCanvas->activeTable();
   assert( table );
 
-  double ev_PosY = m_pCanvas->doc()->unzoomItY( _ev->pos().y() );
+  double ev_PosY = m_pCanvas->doc()->unzoomItY( _ev->pos().y() ) + m_pCanvas->yOffset();
   double dHeight = m_pCanvas->doc()->unzoomItY( height() );
   m_bResize = FALSE;
   m_bSelection = FALSE;
@@ -3031,7 +3031,7 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
     // Determine row to resize
     double tmp;
     m_iResizedRow = table->topRow( ev_PosY - 1, tmp );
-    paintSizeIndicator( ev_PosY, true );
+    paintSizeIndicator( _ev->pos().y(), true );
   }
   else
   {
@@ -3073,6 +3073,8 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
     KSpreadSheet *table = m_pCanvas->activeTable();
     assert( table );
 
+    double ev_PosY = m_pCanvas->doc()->unzoomItY( _ev->pos().y() ) + m_pCanvas->yOffset();
+
     if ( m_bResize )
     {
         // Remove size indicator painted by paintSizeIndicator
@@ -3096,17 +3098,17 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
             }
         }
 
-        int height = 0;
-        int y = table->rowPos( m_iResizedRow );
-        if ( ( m_pCanvas->doc()->unzoomItY( _ev->pos().y() ) - y ) <= 0.0 )
-            height = 0;
+        double height = 0.0;
+        double y = table->dblRowPos( m_iResizedRow );
+        if ( ev_PosY - y <= 0.0 )
+            height = 0.0;
         else
-            height = int( m_pCanvas->doc()->unzoomItY(  _ev->pos().y() ) - y );
+            height = ev_PosY - y;
 
         if ( !m_pCanvas->doc()->undoBuffer()->isLocked() )
         {
             //just resize
-            if( height != 0 )
+            if( height != 0.0 )
             {
                 KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(), m_pCanvas->activeTable(), rect );
                 m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
@@ -3123,16 +3125,16 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
         for( int i = start; i <= end; i++ )
         {
             RowLayout *rl = table->nonDefaultRowLayout( i );
-            if( height != 0 )
+            if( height != 0.0 )
             {
                 if( !rl->isHide() )
-                    rl->setHeight( height );
+                    rl->setDblHeight( height );
             }
             else
                 rl->setHide( true );
         }
 
-        if( height == 0 )
+        if( height == 0.0 )
             table->emitHideColumn();
 
         delete m_lSize;
@@ -3286,7 +3288,7 @@ void KSpreadVBorder::mouseDoubleClickEvent( QMouseEvent * /*_ev */)
   KSpreadSheet *table = m_pCanvas->activeTable();
   assert( table );
 
-  if(!m_pView->koDocument()->isReadWrite())
+  if( !m_pView->koDocument()->isReadWrite() )
     return;
 
   adjustRow();
@@ -3301,13 +3303,13 @@ void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
   KSpreadSheet *table = m_pCanvas->activeTable();
   assert( table );
 
-  double ev_PosY = m_pCanvas->doc()->unzoomItY( _ev->pos().y() );
+  double ev_PosY = m_pCanvas->doc()->unzoomItY( _ev->pos().y() ) + m_pCanvas->yOffset();
   double dHeight = m_pCanvas->doc()->unzoomItY( height() );
 
   // The button is pressed and we are resizing ?
   if ( m_bResize )
   {
-    paintSizeIndicator( ev_PosY, false );
+    paintSizeIndicator( _ev->pos().y(), false );
   }
   // The button is pressed and we are selecting ?
   else if ( m_bSelection )
@@ -3342,34 +3344,26 @@ void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
   // No button is pressed and the mouse is just moved
   else
   {
-    double tmp;
-    int tmpRow = table->topRow( ev_PosY - 1, tmp );
-    int ypos   = int( ev_PosY );
+     //What is the internal size of 1 pixel
+    const double unzoomedPixel = m_pCanvas->doc()->unzoomItY( 1 );
+    double y;
+    int tmpRow = table->topRow( m_pCanvas->yOffset(), y );
 
-    if ( ( ( table->topRow( ( ypos - 1 ), tmp ) != tmpRow )
-           || ( table->topRow( ( ypos - 1 ) + 3, tmp ) != tmpRow ) )
-         && !( table->rowLayout( tmpRow )->isHide() && tmpRow == 1) )
+    while ( y < m_pCanvas->doc()->unzoomItY( height() ) + m_pCanvas->yOffset() )
     {
-        setCursor( splitVCursor );
-        return;
-    }
-
-    /* Doesn't work correctly, gets removed if it turns out that the new
-       version really works, Norbert
-    while ( y < height() )
-    {
-      int h = table->rowLayout( row )->height( m_pCanvas );
-
-      if ( _ev->pos().y() >= y + h - 1 && _ev->pos().y() <= y + h + 1
-	   &&!(table->rowLayout(tmpRow)->isHide()&&tmpRow==1))
+      double h = table->rowLayout( tmpRow )->dblHeight();
+      //if col is hide and it's the first column
+      //you mustn't resize it.
+      if ( ev_PosY >= y + h - unzoomedPixel && 
+           ev_PosY <= y + h + unzoomedPixel &&
+           !( table->rowLayout( tmpRow )->isHide() && tmpRow == 1 ) )
       {
-        setCursor(splitVCursor);
+        setCursor( splitVCursor );
         return;
       }
       y += h;
+      tmpRow++;
     }
-    */
-
     setCursor( arrowCursor );
   }
 }
@@ -3384,7 +3378,6 @@ void KSpreadVBorder::wheelEvent( QWheelEvent* _ev )
 
 void KSpreadVBorder::paintSizeIndicator( int mouseY, bool firstTime )
 {
-    //mouseY is an unzoomed value
     KSpreadSheet *table = m_pCanvas->activeTable();
     assert( table );
 
@@ -3392,29 +3385,27 @@ void KSpreadVBorder::paintSizeIndicator( int mouseY, bool firstTime )
     painter.begin( m_pCanvas );
     painter.setRasterOp( NotROP );
 
-    int zoomedResizePos = int( m_pCanvas->doc()->zoomItY( m_iResizePos ) );
-
     if ( !firstTime )
-      painter.drawLine( 0, zoomedResizePos, m_pCanvas->width(), zoomedResizePos );
+      painter.drawLine( 0, m_iResizePos, m_pCanvas->width(), m_iResizePos );
 
     m_iResizePos = mouseY;
 
     // Dont make the row have a height < 2 pixel.
-    int y = table->rowPos( m_iResizedRow );
-    if ( m_iResizePos < y )
+    int y = m_pCanvas->doc()->zoomItY( table->dblRowPos( m_iResizedRow ) - m_pCanvas->yOffset() );
+    if ( m_iResizePos < y + 2 )
         m_iResizePos = y;
 
-    zoomedResizePos = int( m_pCanvas->doc()->zoomItY( m_iResizePos ) );
-    painter.drawLine( 0, zoomedResizePos, m_pCanvas->width(), zoomedResizePos );
+    painter.drawLine( 0, m_iResizePos, m_pCanvas->width(), m_iResizePos );
 
     painter.end();
 
     QString tmpSize;
     if( m_iResizePos != y )
-        tmpSize = i18n("Height: %1 %2").arg( KoUnit::ptToUnit( ( ( m_iResizePos - y ) ), m_pView->doc()->getUnit() ) )
+        tmpSize = i18n("Height: %1 %2").arg( KoUnit::ptToUnit( m_pCanvas->doc()->unzoomItY( m_iResizePos - y ), 
+                                                               m_pView->doc()->getUnit() ) )
                                        .arg( m_pView->doc()->getUnitName() );
     else
-        tmpSize=i18n( "Hide Row" );
+        tmpSize = i18n( "Hide Row" );
 
     painter.begin( this );
     int len = painter.fontMetrics().width( tmpSize );
@@ -3424,20 +3415,14 @@ void KSpreadVBorder::paintSizeIndicator( int mouseY, bool firstTime )
     if( !m_lSize )
     {
           m_lSize = new QLabel( m_pCanvas );
-          m_lSize->setGeometry( m_pCanvas->doc()->zoomItY( 3 ),
-                                m_pCanvas->doc()->zoomItY( y + 3 ),
-                                m_pCanvas->doc()->zoomItY( len + 2 ),
-                                m_pCanvas->doc()->zoomItY( hei + 2 ) );
+          m_lSize->setGeometry( 3, y + 3, len + 2, hei + 2 );
           m_lSize->setAlignment( Qt::AlignVCenter );
           m_lSize->setText( tmpSize );
           m_lSize->show();
     }
     else
     {
-          m_lSize->setGeometry( m_pCanvas->doc()->zoomItY( 3 ),
-                                m_pCanvas->doc()->zoomItY( y + 3 ),
-                                m_pCanvas->doc()->zoomItY( len + 2 ),
-                                m_pCanvas->doc()->zoomItY( hei + 2 ) );
+          m_lSize->setGeometry( 3, y + 3, len + 2, hei + 2 );
           m_lSize->setText( tmpSize );
     }
 }
@@ -3446,7 +3431,8 @@ void KSpreadVBorder::updateRows( int from, int to )
 {
     KSpreadTable *table = m_pCanvas->activeTable();
     if ( !table )
-	return;
+        return;
+
     int y0 = table->rowPos( from, m_pCanvas );
     int y1 = table->rowPos( to+1, m_pCanvas );
     update( 0, y0, width(), y1-y0 );
@@ -3580,7 +3566,7 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
       m_pCanvas->deleteEditor( true ); // save changes
   }
   
-  double ev_PosX = m_pCanvas->doc()->unzoomItX( _ev->pos().x() );
+  double ev_PosX = m_pCanvas->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
   double dWidth = m_pCanvas->doc()->unzoomItX( width() );
   m_bResize = FALSE;
   m_bSelection = FALSE;
@@ -3618,7 +3604,7 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
     // Determine the column to resize
     double tmp;
     m_iResizedColumn = table->leftColumn( ev_PosX - 1, tmp );
-    paintSizeIndicator( ev_PosX, true );
+    paintSizeIndicator( _ev->pos().x(), true );
   }
   else if ( ( rect.left() != rect.right() )
             && ( tmpCol >= rect.left() )
@@ -3658,10 +3644,13 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
 
 void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
 {
-    KSpreadSheet *table = m_pCanvas->activeTable();
-    assert( table );
     if(!m_pView->koDocument()->isReadWrite())
         return;
+        
+    KSpreadSheet *table = m_pCanvas->activeTable();
+    assert( table );
+    
+    double ev_PosX = m_pCanvas->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
 
     if ( m_bResize )
     {
@@ -3686,17 +3675,17 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
             }
         }
 
-        int width = 0;
-        int x = table->columnPos( m_iResizedColumn );
-        if ( ( m_pCanvas->doc()->unzoomItX( _ev->pos().x() ) - x ) <= 0.0 )
-            width = 0 ;
+        double width = 0.0;
+        double x = table->dblColumnPos( m_iResizedColumn );
+        if ( ev_PosX - x <= 0.0 )
+            width = 0.0;
         else
-            width = int( m_pCanvas->doc()->unzoomItX( _ev->pos().x() ) - x );
+            width = ev_PosX - x;
 
         if ( !m_pCanvas->doc()->undoBuffer()->isLocked() )
         {
             //just resize
-            if( width != 0 )
+            if( width != 0.0 )
             {
                 KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(), m_pCanvas->activeTable(), rect );
                 m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
@@ -3711,16 +3700,16 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
         for( int i = start; i <= end; i++ )
         {
             ColumnLayout *cl = table->nonDefaultColumnLayout( i );
-            if( width != 0 )
+            if( width != 0.0 )
             {
                 if( !cl->isHide() )
-                    cl->setWidth( width );
+                    cl->setDblWidth( width );
             }
             else
                 cl->setHide( true );
         }
 
-        if( width == 0 )
+        if( width == 0.0 )
             table->emitHideRow();
 
         delete m_lSize;
@@ -3877,7 +3866,7 @@ void KSpreadHBorder::mouseDoubleClickEvent( QMouseEvent * /*_ev */)
   KSpreadSheet *table = m_pCanvas->activeTable();
   assert( table );
 
-  if(!m_pView->koDocument()->isReadWrite())
+  if( !m_pView->koDocument()->isReadWrite() )
     return;
 
   adjustColumn();
@@ -3891,13 +3880,13 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
   KSpreadSheet *table = m_pCanvas->activeTable();
   assert( table );
 
-  double ev_PosX = m_pCanvas->doc()->unzoomItX( _ev->pos().x() );
+  double ev_PosX = m_pCanvas->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
   double dWidth = m_pCanvas->doc()->unzoomItX( width() );
 
   // The button is pressed and we are resizing ?
   if ( m_bResize )
   {
-    paintSizeIndicator( ev_PosX, false );
+    paintSizeIndicator( _ev->pos().x(), false );
   }
   // The button is pressed and we are selecting ?
   else if ( m_bSelection )
@@ -3930,40 +3919,29 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
     }
 
   }
-  // Perhaps we have to modify the cursor
+  // No button is pressed and the mouse is just moved
   else
   {
-    //if col is hide and it's the first column
-    //you mustn't resize it.
-    double tmp;
-    int tmpCol = table->leftColumn( ev_PosX - 1, tmp );
-    int xpos   = int( ev_PosX );
-
-    if ( ( ( table->leftColumn( ( xpos - 1 ), tmp ) != tmpCol )
-           || ( table->leftColumn( ( xpos - 1 ) + 3, tmp ) != tmpCol ) )
-         && !( table->columnLayout( tmpCol )->isHide() && tmpCol == 1 ) )
+     //What is the internal size of 1 pixel
+    const double unzoomedPixel = m_pCanvas->doc()->unzoomItX( 1 );
+    double x;
+    int tmpCol = table->leftColumn( m_pCanvas->xOffset(), x );
+    
+    while ( x < m_pCanvas->doc()->unzoomItY( width() ) + m_pCanvas->xOffset() )
     {
+      double w = table->columnLayout( tmpCol )->dblWidth();
+      //if col is hide and it's the first column
+      //you mustn't resize it.
+      if ( ev_PosX >= x + w - unzoomedPixel &&
+           ev_PosX <= x + w + unzoomedPixel &&
+           !( table->columnLayout( tmpCol )->isHide() && tmpCol == 1 ) )
+      {
         setCursor( splitHCursor );
         return;
+      }
+      x += w;
+      tmpCol++;
     }
-
-    /* Doesn't work correctly, gets removed if it turns out that the new
-       version really works, Norbert
-    while ( x < width() )
-    {
-    int w = table->columnLayout( col )->width( m_pCanvas );
-
-    if ( _ev->pos().x() >= x + w - 1
-    && _ev->pos().x() <= x + w + 1
-    &&!(table->columnLayout(tmpCol)->isHide() && tmpCol == 1) )
-    {
-    setCursor(splitHCursor);
-    return;
-    }
-    x += w;
-    }
-    */
-
     setCursor( arrowCursor );
   }
 }
@@ -3984,29 +3962,28 @@ void KSpreadHBorder::paintSizeIndicator( int mouseX, bool firstTime )
     painter.begin( m_pCanvas );
     painter.setRasterOp( NotROP );
 
-    int zoomedResizePos = int( m_pCanvas->doc()->zoomItX( m_iResizePos ) );
-
     if ( !firstTime )
-      painter.drawLine( zoomedResizePos, 0, zoomedResizePos, m_pCanvas->height() );
+      painter.drawLine( m_iResizePos, 0, m_iResizePos, m_pCanvas->height() );
 
     m_iResizePos = mouseX;
 
     // Dont make the column have a width < 2 pixels.
-    int x = table->columnPos( m_iResizedColumn, m_pCanvas );
-    if ( m_iResizePos <= x )
+    int x = m_pCanvas->doc()->zoomItX( table->dblColumnPos( m_iResizedColumn ) - m_pCanvas->xOffset() );
+    if ( m_iResizePos < x + 2 )
         m_iResizePos = x;
 
-    zoomedResizePos = int( m_pCanvas->doc()->zoomItX( m_iResizePos ) );
-    painter.drawLine( zoomedResizePos, 0, zoomedResizePos, m_pCanvas->height() );
+    painter.drawLine( m_iResizePos, 0, m_iResizePos, m_pCanvas->height() );
 
     painter.end();
 
     QString tmpSize;
     if( m_iResizePos != x )
-        tmpSize = i18n("Width: %1 %2").arg(KoUnit::ptToUnit( ( ( m_iResizePos - x ) ), m_pView->doc()->getUnit() ) )
+        tmpSize = i18n("Width: %1 %2").arg( KoUnit::ptToUnit( m_pCanvas->doc()->unzoomItX( m_iResizePos - x ),
+                                                              m_pView->doc()->getUnit() ) )
                                       .arg( m_pView->doc()->getUnitName() );
     else
         tmpSize = i18n( "Hide Column" );
+
     painter.begin( this );
     int len = painter.fontMetrics().width( tmpSize );
     int hei = painter.fontMetrics().height();
@@ -4015,20 +3992,14 @@ void KSpreadHBorder::paintSizeIndicator( int mouseX, bool firstTime )
     if( !m_lSize )
     {
         m_lSize = new QLabel( m_pCanvas );
-        m_lSize->setGeometry( m_pCanvas->doc()->zoomItX( x + 3 ),
-                              m_pCanvas->doc()->zoomItX( 3 ),
-                              m_pCanvas->doc()->zoomItX( len + 2 ),
-                              m_pCanvas->doc()->zoomItX( hei + 2 ) );
+        m_lSize->setGeometry( x + 3, 3, len + 2, hei + 2 );
         m_lSize->setAlignment( Qt::AlignVCenter );
         m_lSize->setText( tmpSize );
         m_lSize->show();
     }
     else
     {
-        m_lSize->setGeometry( m_pCanvas->doc()->zoomItX( x + 3 ),
-                              m_pCanvas->doc()->zoomItX( 3 ),
-                              m_pCanvas->doc()->zoomItX( len + 2 ),
-                              m_pCanvas->doc()->zoomItX( hei + 2 ) );
+        m_lSize->setGeometry( x + 3, 3, len + 2, hei + 2 );
         m_lSize->setText( tmpSize );
     }
 }
@@ -4037,7 +4008,8 @@ void KSpreadHBorder::updateColumns( int from, int to )
 {
     KSpreadTable *table = m_pCanvas->activeTable();
     if ( !table )
-	return;
+        return;
+
     int x0 = table->columnPos( from, m_pCanvas );
     int x1 = table->columnPos( to+1, m_pCanvas );
     update( x0, 0, x1-x0, height() );
