@@ -114,7 +114,9 @@ KoUnitDoubleValidator::validate( QString &s, int &pos ) const
 
 QString KoUnitDoubleBase::getVisibleText( double value ) const
 {
-    return QString( "%1%2").arg( KGlobal::locale()->formatNumber( value, m_precision ) ).arg( KoUnit::unitName( m_unit ) );
+    const QString num ( QString( "%1%2").arg( KGlobal::locale()->formatNumber( value, m_precision ), KoUnit::unitName( m_unit ) ) );
+    kdDebug(30004) << "getVisibleText: " << QString::number( value, 'f', 12 ) << " => " << num << endl;
+    return num;
 }
 
 double KoUnitDoubleBase::toDouble( const QString& str, bool* ok ) const
@@ -127,7 +129,7 @@ double KoUnitDoubleBase::toDouble( const QString& str, bool* ok ) const
         str2.remove( sep );
     const double dbl = KGlobal::locale()->readNumber( str2, ok );
     if ( ok )
-        kdDebug(30004) << "toDouble:" << str << ": => :" << str2 << ": => " << dbl << endl;
+        kdDebug(30004) << "toDouble:" << str << ": => :" << str2 << ": => " << QString::number( dbl, 'f', 12 ) << endl;
     else
         kdWarning(30004) << "toDouble error:" << str << ": => :" << str2 << ":" << endl;
     return dbl;
