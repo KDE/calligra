@@ -87,8 +87,8 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
     if ( parent ) {
         mousePressed = false;
         modType = MT_NONE;
-        resizeObjNum = -1;
-        editNum = -1;
+        resizeObjNum = 0L;
+        editNum = 0L;
         setBackgroundColor( white );
         m_view = _view;
         setupMenus();
@@ -430,7 +430,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
     oldMy = contentsPoint.y();
     QPoint rasterPoint( ( oldMx / rastX() ) * rastX() - diffx(), ( oldMy / rastY() ) * rastY() - diffy() );
 
-    resizeObjNum = -1;
+    resizeObjNum = 0L;
 
     exitEditMode();
 
@@ -513,6 +513,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
                     firstX = contentsPoint.x();
                     firstY = contentsPoint.y();
+#if 0
                     if ( (int)objectList().count() - 1 >= 0 ) {
                         for ( int i = objectList().count() - 1; i >= 0 ; i-- ) {
                             kpobject = objectList().at( i );
@@ -528,13 +529,29 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                                 }
                                 break;
                             }
-                        }
+                       }
                     }
+#endif
+		    kpobject=m_activePage->getObjectResized(docPoint, modType, deSelAll, overObject );
+		    if(kpobject)
+		      {
+			oldBoundingRect=getOldBoundingRect(kpobject);
+			resizeObjNum = kpobject;
+		      }
+		    else
+		      {
+			kpobject=m_view->kPresenterDoc()->stickyPage()->getObjectResized(docPoint, modType, deSelAll, overObject );
+			if(kpobject)
+			  {
+			    oldBoundingRect=getOldBoundingRect(kpobject);
+			    resizeObjNum = kpobject;
+			  }
+		      }
 
                     if ( deSelAll && !( e->state() & ShiftButton ) && !( e->state() & ControlButton ) )
                         deSelectAllObj();
 
-                    if ( overObject )
+                    if ( kpobject && overObject )
                     {
                         if(!kpobject->isSelected())
                             selectObj( kpobject );
@@ -737,7 +754,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
     mouseMoveEvent( e );
 
     if ( modType != MT_NONE && modType != MT_MOVE ) {
-        KPObject *kpobject = objectList().at( resizeObjNum );
+        KPObject *kpobject=resizeObjNum;
         if ( kpobject ) {
             ratio = static_cast<double>( static_cast<double>( kpobject->getSize().width() ) /
                                          static_cast<double>( kpobject->getSize().height() ) );
@@ -807,8 +824,8 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 
     KoPoint mv;
     KoSize sz;
-    if ( toolEditMode == TEM_MOUSE && modType != MT_NONE && modType != MT_MOVE  && resizeObjNum != -1 ) {
-        kpobject = objectList().at( resizeObjNum );
+    if ( toolEditMode == TEM_MOUSE && modType != MT_NONE && modType != MT_MOVE  && resizeObjNum ) {
+        kpobject = resizeObjNum;
         if ( kpobject ) {
             mv = KoPoint( kpobject->getOrig().x() - m_view->zoomHandler()->unzoomItX( oldRect.x()),
                          kpobject->getOrig().y() - m_view->zoomHandler()->unzoomItY(oldRect.y()) );
@@ -881,114 +898,107 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
         }
             break;
         case MT_RESIZE_UP: {
-            if ( resizeObjNum < 0 ) break;
+            if ( !resizeObjNum ) break;
+	    kpobject = resizeObjNum;
             if ( firstX != mx || firstY != my ) {
-                kpobject = objectList().at( resizeObjNum );
                 ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object up" ), mv, sz,
                                                       kpobject, m_view->kPresenterDoc() );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
                 m_view->kPresenterDoc()->addCommand( resizeCmd );
             }
-            kpobject = objectList().at( resizeObjNum );
             _repaint( oldBoundingRect );
             _repaint( kpobject );
         } break;
         case MT_RESIZE_DN: {
-            if ( resizeObjNum < 0 ) break;
+            if ( !resizeObjNum ) break;
+	    kpobject =  resizeObjNum;
             if ( firstX != mx || firstY != my ) {
-                kpobject = objectList().at( resizeObjNum );
                 ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object down" ), mv, sz,
                                                       kpobject, m_view->kPresenterDoc() );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
                 m_view->kPresenterDoc()->addCommand( resizeCmd );
             }
-            kpobject = objectList().at( resizeObjNum );
             _repaint( oldBoundingRect );
             _repaint( kpobject );
         } break;
         case MT_RESIZE_LF: {
-            if ( resizeObjNum < 0 ) break;
+            if ( !resizeObjNum ) break;
+	    kpobject = resizeObjNum;
             if ( firstX != mx || firstY != my ) {
-                kpobject = objectList().at( resizeObjNum );
                 ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object left" ), mv, sz,
                                                       kpobject, m_view->kPresenterDoc() );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
                 m_view->kPresenterDoc()->addCommand( resizeCmd );
             }
-            kpobject = objectList().at( resizeObjNum );
             _repaint( oldBoundingRect );
             _repaint( kpobject );
         } break;
         case MT_RESIZE_RT: {
-            if ( resizeObjNum < 0 ) break;
+            if ( !resizeObjNum ) break;
+	    kpobject =  resizeObjNum ;
+
             if ( firstX != mx || firstY != my ) {
-                kpobject = objectList().at( resizeObjNum );
                 ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object right" ), mv, sz,
                                                       kpobject, m_view->kPresenterDoc() );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
                 m_view->kPresenterDoc()->addCommand( resizeCmd );
             }
-            kpobject = objectList().at( resizeObjNum );
             _repaint( oldBoundingRect );
             _repaint( kpobject );
         } break;
         case MT_RESIZE_LU: {
-            if ( resizeObjNum < 0 ) break;
+            if ( !resizeObjNum ) break;
+	    kpobject = resizeObjNum;
             if ( firstX != mx || firstY != my ) {
-                kpobject = objectList().at( resizeObjNum );
                 ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object left up" ), mv, sz,
                                                       kpobject, m_view->kPresenterDoc() );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
                 m_view->kPresenterDoc()->addCommand( resizeCmd );
             }
-            kpobject = objectList().at( resizeObjNum );
             _repaint( oldBoundingRect );
             _repaint( kpobject );
         } break;
         case MT_RESIZE_LD: {
-            if ( resizeObjNum < 0 ) break;
+            if ( !resizeObjNum ) break;
+	    kpobject =  resizeObjNum;
             if ( firstX != mx || firstY != my ) {
-                kpobject = objectList().at( resizeObjNum );
                 ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object left and down" ), mv, sz,
                                                       kpobject, m_view->kPresenterDoc() );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
                 m_view->kPresenterDoc()->addCommand( resizeCmd );
             }
-            kpobject = objectList().at( resizeObjNum );
             _repaint( oldBoundingRect );
             _repaint( kpobject );
         } break;
         case MT_RESIZE_RU: {
-            if ( resizeObjNum < 0 ) break;
+            if ( !resizeObjNum ) break;
+	    kpobject =  resizeObjNum;
             if ( firstX != mx || firstY != my ) {
-                kpobject = objectList().at( resizeObjNum );
                 ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object right and up" ), mv, sz,
                                                       kpobject, m_view->kPresenterDoc() );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
                 m_view->kPresenterDoc()->addCommand( resizeCmd );
             }
-            kpobject = objectList().at( resizeObjNum );
             _repaint( oldBoundingRect );
             _repaint( kpobject );
         } break;
         case MT_RESIZE_RD: {
-            if ( resizeObjNum < 0 ) break;
+            if ( !resizeObjNum ) break;
+	    kpobject = resizeObjNum;
             if ( firstX != mx || firstY != my ) {
-                kpobject = objectList().at( resizeObjNum );
                 ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize object right and down" ), mv, sz,
                                                       kpobject, m_view->kPresenterDoc() );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
                 m_view->kPresenterDoc()->addCommand( resizeCmd );
             }
-            kpobject = objectList().at( resizeObjNum );
             _repaint( oldBoundingRect );
             _repaint( kpobject );
         } break;
@@ -1073,7 +1083,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 
     mousePressed = false;
     modType = MT_NONE;
-    resizeObjNum = -1;
+    resizeObjNum = 0L;
     mouseMoveEvent( e );
     ratio = 0.0;
     keepRatio = false;
@@ -1152,7 +1162,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 		} else if ( modType == MT_MOVE ) {
                     m_hotSpot = docPoint - m_boundingRect.topLeft();
 		    moveObject( mx - oldMx , my - oldMy, false );
-		} else if ( modType != MT_NONE && resizeObjNum != -1 ) {
+		} else if ( modType != MT_NONE && resizeObjNum ) {
                     resizeObject( modType, mx - oldMx, my - oldMy );
 		}
 
@@ -1336,55 +1346,85 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 /*==================== mouse double click ========================*/
 void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
 {
-    if(!m_view->koDocument()->isReadWrite())
-        return;
-    QPoint contentsPoint( e->pos().x()+diffx(), e->pos().y()+diffy() );
-    KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( contentsPoint );
-    if(m_currentTextObjectView)
+  if(!m_view->koDocument()->isReadWrite())
+    return;
+  QPoint contentsPoint( e->pos().x()+diffx(), e->pos().y()+diffy() );
+  KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( contentsPoint );
+  if(m_currentTextObjectView)
     {
-        KPTextObject *txtObj=m_currentTextObjectView->kpTextObject();
-        Q_ASSERT(txtObj);
-        if(txtObj->contains( docPoint ))
+      KPTextObject *txtObj=m_currentTextObjectView->kpTextObject();
+      Q_ASSERT(txtObj);
+      if(txtObj->contains( docPoint ))
         {
-            KoPoint pos = contentsPoint - txtObj->getOrig();
-            //pos=m_view->zoomHandler()->pixelToLayoutUnit(QPoint(pos.x(),pos.y()));
-            m_currentTextObjectView->mouseDoubleClickEvent( e, m_view->zoomHandler()->ptToLayoutUnitPix( pos ) );
-            return;
+	  KoPoint pos = contentsPoint - txtObj->getOrig();
+	  //pos=m_view->zoomHandler()->pixelToLayoutUnit(QPoint(pos.x(),pos.y()));
+	  m_currentTextObjectView->mouseDoubleClickEvent( e, m_view->zoomHandler()->ptToLayoutUnitPix( pos ) );
+	  return;
         }
     }
 
-    //disallow activating objects outside the "page"
-    if ( !m_activePage->getPageRect().contains(docPoint))
-        return;
+  //disallow activating objects outside the "page"
+  if ( !m_activePage->getPageRect().contains(docPoint))
+    return;
 
-    if ( toolEditMode != TEM_MOUSE || !editMode ) return;
+  if ( toolEditMode != TEM_MOUSE || !editMode ) return;
 
-    deSelectAllObj();
-    KPObject *kpobject = 0;
-
-    if ( (int)objectList().count() - 1 >= 0 ) {
-	for ( int i = objectList().count()  - 1; i >= 0; i-- ) {
-	    kpobject = objectList().at( i );
-	    if ( kpobject->contains( docPoint ) ) {
-		if ( kpobject->getType() == OT_TEXT ) {
-		    KPTextObject *kptextobject = dynamic_cast<KPTextObject*>( kpobject );
-                    if(m_currentTextObjectView)
-                    {
-                        m_currentTextObjectView->terminate();
-                        delete m_currentTextObjectView;
-                    }
-                    m_currentTextObjectView=kptextobject->createKPTextView(this);
-
-		    setTextBackground( kptextobject );
-                    setCursor( arrowCursor );
-		    editNum = i;
-		    break;
-		} else if ( kpobject->getType() == OT_PART ) {
-		    static_cast<KPPartObject *>(kpobject)->activate( m_view );
-		    editNum = i;
-		    break;
-		}
+  deSelectAllObj();
+  KPObject *kpobject = 0;
+#if 0
+  if ( (int)objectList().count() - 1 >= 0 ) {
+    for ( int i = objectList().count()  - 1; i >= 0; i-- ) {
+      kpobject = objectList().at( i );
+      if ( kpobject->contains( docPoint ) ) {
+	if ( kpobject->getType() == OT_TEXT ) {
+	  KPTextObject *kptextobject = dynamic_cast<KPTextObject*>( kpobject );
+	  if(m_currentTextObjectView)
+	    {
+	      m_currentTextObjectView->terminate();
+	      delete m_currentTextObjectView;
 	    }
+	  m_currentTextObjectView=kptextobject->createKPTextView(this);
+
+	  setTextBackground( kptextobject );
+	  setCursor( arrowCursor );
+	  editNum = kptextobject;
+	  break;
+	} else if ( kpobject->getType() == OT_PART ) {
+	  KPPartObject * obj=static_cast<KPPartObject *>(kpobject);
+	  obj->activate( m_view );
+	  editNum = obj;
+	  break;
+	}
+      }
+    }
+  }
+#endif
+  kpobject=m_activePage->getEditObj(docPoint);
+  if( !kpobject)
+    {
+      kpobject=m_view->kPresenterDoc()->stickyPage()->getEditObj(docPoint );
+    }
+  if(kpobject)
+    {
+      if ( kpobject->getType() == OT_TEXT ) 
+	{
+	KPTextObject *kptextobject = dynamic_cast<KPTextObject*>( kpobject );
+	if(m_currentTextObjectView)
+	  {
+	    m_currentTextObjectView->terminate();
+	    delete m_currentTextObjectView;
+	  }
+	m_currentTextObjectView=kptextobject->createKPTextView(this);
+	
+	setTextBackground( kptextobject );
+	setCursor( arrowCursor );
+	editNum = kpobject;
+      } 
+      else if ( kpobject->getType() == OT_PART ) 
+	{
+	  KPPartObject * obj=static_cast<KPPartObject *>(kpobject);
+	  obj->activate( m_view );
+	  editNum = obj;
 	}
     }
 }
@@ -1488,7 +1528,7 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
             break;
 	default: break;
 	}
-    } else if ( editNum != -1 ) {
+    } else if ( editNum ) {
 	if ( e->key() == Key_Escape ) {
             exitEditMode();
 	}
@@ -3986,7 +4026,7 @@ void KPrCanvas::endDrawPolyline()
         repaint( false );
     mousePressed = false;
     modType = MT_NONE;
-    resizeObjNum = -1;
+    resizeObjNum = 0L;
     ratio = 0.0;
     keepRatio = false;
 }
@@ -4001,7 +4041,7 @@ void KPrCanvas::endDrawCubicBezierCurve()
         repaint( false );
     mousePressed = false;
     modType = MT_NONE;
-    resizeObjNum = -1;
+    resizeObjNum = 0L;
     ratio = 0.0;
     keepRatio = false;
 }
@@ -4226,8 +4266,8 @@ void KPrCanvas::gotoPage( int pg )
 /*================================================================*/
 KPTextObject* KPrCanvas::kpTxtObj()
 {
-    return ( ( editNum != -1 && objectList().at( editNum )->getType() == OT_TEXT ) ?
-             dynamic_cast<KPTextObject*>( objectList().at( editNum ) ) : 0 );
+    return ( ( editNum && editNum->getType() == OT_TEXT ) ?
+             dynamic_cast<KPTextObject*>( editNum ) : 0 );
     // ### return m_currentTextObjectView->kpTextObject()
 }
 
@@ -4421,28 +4461,31 @@ bool KPrCanvas::calcRatio( double &dx, double &dy, KPObject *kpobject, double ra
 /*================================================================*/
 void KPrCanvas::exitEditMode()
 {
-    if ( editNum != -1 ) {
-        KPObject *kpobject = objectList().at( editNum );
-        editNum = -1;
-        if ( kpobject->getType() == OT_TEXT ) {
-            if(m_currentTextObjectView)
+  if ( editNum ) 
+    {
+      if ( editNum->getType() == OT_TEXT ) 
+	{
+	  if(m_currentTextObjectView)
             {
-                m_currentTextObjectView->clearSelection();
-                //hide cursor when we desactivate textObjectView
-                m_currentTextObjectView->drawCursor( false );
-                m_currentTextObjectView->terminate();
-                delete m_currentTextObjectView;
-                m_currentTextObjectView=0L;
+	      m_currentTextObjectView->clearSelection();
+	      //hide cursor when we desactivate textObjectView
+	      m_currentTextObjectView->drawCursor( false );
+	      m_currentTextObjectView->terminate();
+	      delete m_currentTextObjectView;
+	      m_currentTextObjectView=0L;
             }
-            // Title of slide may have changed
-            emit updateSideBarItem( currPgNum()-1 );
-            emit objectSelectedChanged();
-
-        } else if ( kpobject->getType() == OT_PART ) {
-            static_cast<KPPartObject *>(kpobject)->deactivate();
-            _repaint( kpobject );
-            return;
-        }
+	  // Title of slide may have changed
+	  emit updateSideBarItem( currPgNum()-1 );
+	  emit objectSelectedChanged();
+	  editNum=0L;
+        } 
+      else if (editNum->getType() == OT_PART ) 
+	{
+	  static_cast<KPPartObject *>(editNum)->deactivate();
+	  _repaint( editNum );
+	  editNum=0L;
+	  return;
+        }	
     }
 }
 
@@ -4647,7 +4690,8 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
     double dx = m_view->zoomHandler()->unzoomItX( _dx);
     double dy = m_view->zoomHandler()->unzoomItY( _dy);
     KoRect page=m_activePage->getPageRect();
-    KPObject *kpobject = objectList().at( resizeObjNum );
+    KPObject *kpobject=resizeObjNum;
+
     KoRect objRect=kpobject->getBoundingRect(m_view->zoomHandler());
     KoRect pageRect=m_activePage->getPageRect();
     KoPoint point=objRect.topLeft();
@@ -4815,11 +4859,11 @@ void KPrCanvas::createEditing( KPTextObject *textObj )
         m_currentTextObjectView->terminate();
         delete m_currentTextObjectView;
         m_currentTextObjectView = 0L;
-        editNum = -1;
+        editNum = 0L;
     }
     m_currentTextObjectView=textObj->createKPTextView( this );
     // ## we should really replace editNum with a pointer
-    editNum=objectList().findRef(textObj);
+    editNum=textObj;
 }
 
 void KPrCanvas::terminateEditing( KPTextObject *textObj )
@@ -4829,7 +4873,7 @@ void KPrCanvas::terminateEditing( KPTextObject *textObj )
         m_currentTextObjectView->terminate();
         delete m_currentTextObjectView;
         m_currentTextObjectView = 0L;
-        editNum = -1 ;
+        editNum = 0L;
     }
 }
 

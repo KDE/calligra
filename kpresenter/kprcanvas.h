@@ -369,7 +369,9 @@ private:
     bool mousePressed;
     ModifyType modType;
     unsigned int oldMx, oldMy;
-    int resizeObjNum, editNum;
+
+    KPObject *resizeObjNum, *editNum;
+
     bool fillBlack;
     KPresenterView *m_view;
     bool editMode, goingBack, drawMode;
