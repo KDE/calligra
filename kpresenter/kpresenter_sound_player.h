@@ -5,7 +5,7 @@
                        stefan@space.twc.de
 
    and konq_sound.h konq_sound.cc
-   Copyright (c) 2001 Malte Starostik <malte.starostik@t-online.de>
+   Copyright (c) 2001 Malte Starostik <malte@kde.org>
 
    This file's authors :
    Copyright (C) 2001 Toshitaka Fujioka <fujioka@kde.org>
