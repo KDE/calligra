@@ -17,6 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
+#ifndef KPRESENTER_ABOUTDATA
+#define KPRESENTER_ABOUTDATA
+
 #include <kaboutdata.h>
 #include <klocale.h>
 
@@ -31,3 +34,5 @@ KAboutData * newKPresenterAboutData()
     aboutData->addAuthor("Reginald Stadlbauer",0, "reggie@kde.org");
     return aboutData;
 }
+
+#endif

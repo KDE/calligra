@@ -18,6 +18,9 @@
    Boston, MA 02111-1307, USA.
 */
 
+#ifndef KFORMULA_ABOUTDATA
+#define KFORMULA_ABOUTDATA
+
 #include <kaboutdata.h>
 #include <klocale.h>
 
@@ -33,3 +36,5 @@ KAboutData * newKFormulaAboutData()
     aboutData->addAuthor("Ulrich Kuettler",0, "ulrich.kuettler@mailbox.tu-dresden.de");
     return aboutData;
 }
+
+#endif

@@ -17,6 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
+#ifndef GRAPHITE_ABOUTDATA
+#define GRAPHITE_ABOUTDATA
+
 #include <kaboutdata.h>
 #include <klocale.h>
 
@@ -31,3 +34,5 @@ KAboutData * newGraphiteAboutData()
     aboutData->addAuthor("Werner Trobin", 0, "trobin@kde.org");
     return aboutData;
 }
+
+#endif

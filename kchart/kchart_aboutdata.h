@@ -1,8 +1,11 @@
 /*
- * $Id:$
+ * $Id$
  *
  * Copyright 1999 by Kalle Dalheimer, released under Artistic License.
  */
+
+#ifndef KCHART_ABOUTDATA
+#define KCHART_ABOUTDATA
 
 #include <kaboutdata.h>
 #include <klocale.h>
@@ -18,3 +21,5 @@ KAboutData * newKChartAboutData()
     aboutData->addAuthor("Kalle Dalheimer",0, "kalle@kde.org");
     return aboutData;
 }
+
+#endif

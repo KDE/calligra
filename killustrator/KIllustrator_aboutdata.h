@@ -1,6 +1,6 @@
 /* -*- C++ -*-
 
-  $Id:$
+  $Id$
 
   This file is part of KIllustrator.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
@@ -22,6 +22,9 @@
 
 */
 
+#ifndef KILLU_ABOUTDATA
+#define KILLU_ABOUTDATA
+
 #include <kaboutdata.h>
 #include <klocale.h>
 
@@ -39,3 +42,5 @@ KAboutData * newKIllustratorAboutData()
     aboutData->addAuthor("Igor Janssen", 0, "rm@linux.ru.net");
     return aboutData;
 }
+
+#endif

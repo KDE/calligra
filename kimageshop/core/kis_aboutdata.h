@@ -18,6 +18,9 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#ifndef KRAYON_ABOUTDATA
+#define KRAYON_ABOUTDATA
+
 #include <kaboutdata.h>
 #include <klocale.h>
 
@@ -39,3 +42,5 @@ KAboutData * newKrayonAboutData()
     aboutData->addAuthor("Laurent Montel",0, "lmontel@mandrakesoft.com");
     return aboutData;
 }
+
+#endif

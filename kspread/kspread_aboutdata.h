@@ -17,6 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
+#ifndef KSPREAD_ABOUTDATA
+#define KSPREAD_ABOUTDATA
+
 #include <kaboutdata.h>
 #include <klocale.h>
 
@@ -33,3 +36,5 @@ KAboutData * newKSpreadAboutData()
     aboutData->addAuthor("David Faure",0, "faure@kde.org");
     return aboutData;
 }
+
+#endif

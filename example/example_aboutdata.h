@@ -17,9 +17,11 @@
    Boston, MA 02111-1307, USA.
 */
 
+#ifndef EXAMPLE_ABOUTDATA
+#define EXAMPLE_ABOUTDATA
+
 #include <kaboutdata.h>
 #include <klocale.h>
-
 
 static const char* description=I18N_NOOP("Example KOffice Program");
 static const char* version="0.1";
@@ -32,3 +34,5 @@ KAboutData * newExampleAboutData()
     aboutData->addAuthor("Torben Weis",0, "weis@kde.org");
     return aboutData;
 }
+
+#endif
