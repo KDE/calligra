@@ -1662,7 +1662,12 @@ void KSpreadView::changeAngle()
   if ( !m_pTable )
         return;
   KSpreadAngle* dlg = new KSpreadAngle( this, "Angle" ,QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
-  dlg->show();
+  if(dlg->exec())
+        {
+        QRect r( activeTable()-> selectionRect() );
+        if( r.right() !=0x7FFF && r.bottom() !=0x7FFF)
+                adjust();
+        }
 }
 
 void KSpreadView::consolidate()

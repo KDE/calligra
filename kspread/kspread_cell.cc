@@ -597,7 +597,7 @@ QString KSpreadCell::decodeFormular( const char* _text, int _col, int _row )
 }
 
 void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
-{ 
+{
   m_leftBorderPen.setWidth( leftBorderWidth( _col, _row ) );
   m_topBorderPen.setWidth( topBorderWidth( _col, _row ) );
   m_fallDiagonalPen.setWidth( fallDiagonalWidth( _col, _row) );
@@ -1354,6 +1354,12 @@ ColumnLayout *cl = m_pTable->columnLayout( _col );
 
 int w = cl->width();
 int h = rl->height();
+
+if ( m_iExtraXCells )
+    w = m_iExtraWidth;
+if ( m_iExtraYCells )
+    h = m_iExtraHeight;
+
 switch( m_eAlignY )
 {
         case KSpreadCell::Top:
