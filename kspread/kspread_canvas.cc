@@ -1208,6 +1208,12 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 
       return;
 
+    case Key_Delete:
+
+       activeTable()->clearSelection( QPoint( markerColumn(), markerRow() ) );
+
+       return;
+
     default:
 
       // No null character ...
