@@ -251,6 +251,10 @@ bool AbiWordWorker::doOpenDocument(void)
     {
         *m_streamOut << "<m key=\"dc.title\">" << escapeAbiWordText(m_docInfo.title) << "</m>\n";    
     }
+    if (!m_docInfo.abstract.isEmpty())
+    {
+        *m_streamOut << "<m key=\"dc.description\">" << escapeAbiWordText(m_docInfo.abstract) << "</m>\n";    
+    }
     
     // Say who we are (with the CVS revision number) in case we have a bug in our filter output!
     *m_streamOut << "<m key=\"abiword.generator\">KWord Export Filter";
@@ -263,7 +267,7 @@ bool AbiWordWorker::doOpenDocument(void)
     *m_streamOut << "</m>\n";
 
     QDateTime now (QDateTime::currentDateTime(Qt::UTC)); // current time in UTC
-    *m_streamOut << "<m key=\"date_last_changed\">"
+    *m_streamOut << "<m key=\"abiword.date_last_changed\">"
          << escapeAbiWordText(now.toString(Qt::ISODate)) // ### PROBLEM: AbiWord uses an unlocalized Qt::TextDate
          << "</m>\n";
     
@@ -542,7 +546,7 @@ QString AbiWordWorker::textFormatToAbiProps(const TextFormatting& formatOrigin,
         && (force || (formatOrigin.fontName!=formatData.fontName)))
     {
         strElement+="font-family: ";
-        strElement+=fontName; // TODO: add alternative font names
+        strElement+= escapeAbiWordText(fontName); // TODO: add alternative font names
         strElement+="; ";
     }
 
