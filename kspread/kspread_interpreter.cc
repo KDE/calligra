@@ -3958,7 +3958,39 @@ static bool kspreadfunc_sexdec( KSContext& context )
   return true;
 }
 
+static bool kspreadfunc_roman( KSContext& context )
+{
+  const QCString RNUnits[] = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"};
+  const QCString RNTens[] = {"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"};
+  const QCString RNHundreds[] = {"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"};
+  const QCString RNThousands[] = {"", "M", "MM", "MMM"};
 
+
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  if ( !KSUtil::checkArgumentsCount( context,1, "ROMAN",true ) )
+    return false;
+  int value;
+  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) )
+      if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+	  return false;
+      else
+	value=(int)args[0]->doubleValue();
+  else
+    	value=(int)args[0]->intValue();
+  if(value<0)
+    {
+      context.setValue( new KSValue(i18n("Err")));
+      return true;
+    }
+  QString result;
+
+  result= QString::fromLatin1( RNThousands[ ( value / 1000 ) ] +
+			       RNHundreds[ ( value / 100 ) % 10 ] +
+			       RNTens[ ( value / 10 ) % 10 ] +
+			       RNUnits[ ( value ) % 10 ] );
+  context.setValue( new KSValue(result));
+  return true;
+}
 
 static bool kspreadfunc_cell( KSContext& context )
 {
@@ -4207,6 +4239,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "hours", new KSValue( new KSBuiltinFunction( module, "hours", kspreadfunc_hours) ) );
   module->addObject( "minutes", new KSValue( new KSBuiltinFunction( module, "minutes", kspreadfunc_minutes) ) );
   module->addObject( "seconds", new KSValue( new KSBuiltinFunction( module, "seconds", kspreadfunc_seconds) ) );
+  module->addObject( "ROMAN", new KSValue( new KSBuiltinFunction( module, "ROMAN", kspreadfunc_roman) ) );
   return module;
 }
 

@@ -537,6 +537,20 @@
       </Help>
     </Function>
 
+ <Function>
+      <Name>ROMAN</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Number</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+        <Text>The ROMAN() function returns the number in roman format. Number should be positive and entire.</Text>
+        <Syntax>ROMAN( Number )</Syntax>
+        <Example>ROMAN(99) returns "XCIX"</Example>
+        <Example>ROMAN(-55) returns "Err"</Example>
+      </Help>
+    </Function>
 
 
   </Group>

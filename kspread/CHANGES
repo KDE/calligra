@@ -1185,3 +1185,7 @@ You don't change global "spell checking" config.
 ----------------------------------------------------
 -Now you can paste a text plain ( you can copy a text between for example
 a text which is in kwrite and kspread)
+
+2001-02-21-Montel laurent <lmontel@mandrakesoft.com>
+----------------------------------------------------
+-Add new mathematic function : ROMAN
