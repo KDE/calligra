@@ -3,8 +3,8 @@
 Type=Application
 Exec=ktables
 CorbaExec=ktables --server
-Icon=lo-ktables.png
-MiniIcon=mini-ktables.png
+Icon=ktables.png
+MiniIcon=ktables.png
 DocPath=ktables/index.html
 Comment=
 Type=Application
