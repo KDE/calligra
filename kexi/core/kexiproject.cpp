@@ -233,8 +233,8 @@ KexiProject::items(KexiPart::Info *i)
 		bool ok;
 		int ident;
 		QString objName;
-		if ( (ident=cursor->value(0).toInt(&ok)) && ok && ident>0 
-			&& (objName=cursor->value(1).toString()) && Kexi::isIdentifier(objName) ) {
+		if ( (ident=cursor->value(0).toInt(&ok)) && ok && (ident>0) 
+			&& (objName=cursor->value(1).toString()) && (Kexi::isIdentifier(objName)) ) {
 			it->setIdentifier(ident);
 			it->setMime(i->mime()); //js: may be not null???
 			it->setName(objName);
