@@ -50,9 +50,12 @@ public:
     KoPoint &operator=(const KoPoint &rhs) { m_x = rhs.x(); m_y = rhs.y(); return *this; }
     KoPoint &operator+=( const KoPoint &rhs ) { m_x += rhs.x(); m_y += rhs.y(); return *this; }
     KoPoint &operator-=( const KoPoint &rhs ) { m_x -= rhs.x(); m_y -= rhs.y(); return *this; }
+    KoPoint &operator*=( const double &c ) { m_x *= c; m_y *= c; return *this; }
 
     friend inline KoPoint operator+( const KoPoint &, const KoPoint & );
     friend inline KoPoint operator-( const KoPoint &, const KoPoint & );
+    friend inline KoPoint operator*( const KoPoint &, const double & );
+    friend inline KoPoint operator*( const double &, const KoPoint & );
 
     // Not in QPoint:
     void setCoords(const double &x, const double &y) { m_x = x; m_y = y; }
@@ -72,5 +75,11 @@ inline KoPoint operator+( const KoPoint &p1, const KoPoint &p2 )
 
 inline KoPoint operator-( const KoPoint &p1, const KoPoint &p2 )
 { return KoPoint( p1.m_x-p2.m_x, p1.m_y-p2.m_y ); }
+
+inline KoPoint operator*( const KoPoint &p, const double &c )
+{ return KoPoint( p.m_x*c, p.m_y*c ); }
+
+inline KoPoint operator*( const double &c, const KoPoint &p )
+{ return KoPoint( p.m_x*c, p.m_y*c ); }
 
 #endif
