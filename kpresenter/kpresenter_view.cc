@@ -416,7 +416,12 @@ void KPresenterView::setupPrinter( KPrinter &prt )
     prt.setFromTo( 1, m_pKPresenterDoc->getPageNums() );
     prt.setOption( "kde-range", m_pKPresenterDoc->selectedForPrinting() );
     prt.setPageSelection(KPrinter::ApplicationSide);
-    KoFormat pageFormat = m_pKPresenterDoc->pageLayout().format;
+    KoPageLayout layout = m_pKPresenterDoc->pageLayout();
+    prt.setOption( "kde-margin-top", QString::number(layout.ptTop) );
+    prt.setOption( "kde-margin-bottom", QString::number(layout.ptBottom) );
+    prt.setOption( "kde-margin-left", QString::number(layout.ptLeft) );
+    prt.setOption( "kde-margin-right", QString::number(layout.ptRight) );
+    KoFormat pageFormat = layout.format;
     prt.setPageSize( static_cast<KPrinter::PageSize>( KoPageFormat::printerPageSize( pageFormat ) ) );
 
     if ( m_pKPresenterDoc->pageLayout().orientation == PG_LANDSCAPE || pageFormat == PG_SCREEN )
@@ -3485,7 +3490,7 @@ void KPresenterView::styleOk()
         }
     }
 
-    // stick has to be done before the object name is set, 
+    // stick has to be done before the object name is set,
     // so that the name is set in the right page
     bool bSticky=styleDia->isSticky();
     if ( !styleDia->stickyNoChange())
@@ -3504,7 +3509,7 @@ void KPresenterView::styleOk()
             macro->addCommand(cmd);
         }
     }
-    
+
     if ( styleDia->isOneObject())
     {
         KoRect rect = styleDia->getNewSize();
