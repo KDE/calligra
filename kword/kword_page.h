@@ -217,7 +217,7 @@ protected slots:
     void doAutoScroll();
     void formatMore();
     void noInput();
-    
+
 protected:
     unsigned int ptLeftBorder();
     unsigned int ptRightBorder();
@@ -367,7 +367,7 @@ protected:
     QStringList cachedLines;
     KWFormatContext *oldFc;
     QPoint cachedContentsPos;
-    bool _erase, _setErase, _resizing, redrawOnlyCurrFrameset;
+    bool _erase, _setErase, redrawOnlyCurrFrameset;
     int currFrameSet;
 
 };

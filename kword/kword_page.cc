@@ -58,10 +58,10 @@
 /*================================================================*/
 KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
     : QScrollView( parent, "", WNorthWestGravity ), format( _doc ),
-      blinkTimer( this ), scrollTimer( this ), formatTimer( this ), 
+      blinkTimer( this ), scrollTimer( this ), formatTimer( this ),
       inputTimer( this ), cachedParag( 0L ),
       cachedContentsPos( QPoint( -1, -1 ) ), _setErase( TRUE ),
-      _resizing( FALSE ), redrawOnlyCurrFrameset( FALSE ), currFrameSet( -1 )
+      redrawOnlyCurrFrameset( FALSE ), currFrameSet( -1 )
 {
     setKeyCompression( TRUE );
     setFocusPolicy( QWidget::StrongFocus );
@@ -913,9 +913,12 @@ void KWPage::viewportMousePressEvent( QMouseEvent *e )
 /*================================================================*/
 void KWPage::vmrEdit()
 {
-    if ( doc->has_selection() && doc->getSelStart() != doc->getSelEnd() && mouseMoved )
+    if ( doc->has_selection() && *doc->getSelStart() != *doc->getSelEnd() && mouseMoved )
 	doc->copySelectedText();
 
+    if ( doc->has_selection() && *doc->getSelStart() == *doc->getSelEnd() )
+	doc->setSelection( FALSE );
+       
     gui->getView()->updateStyle( fc->getParag()->getParagLayout()->getName(), FALSE );
     gui->getView()->setFormat( *( ( KWFormat* )fc ), TRUE, FALSE );
     gui->getView()->setFlow( fc->getParag()->getParagLayout()->getFlow() );
@@ -1646,7 +1649,7 @@ void KWPage::recalcPage( KWParag *_p )
     *formatFC = *paintfc;
     formatTimer.stop();
     formatTimer.start( 0, TRUE );
-    
+
     delete paintfc;
 
     if ( blinking )
@@ -1721,36 +1724,43 @@ void KWPage::paintText( QPainter &painter, KWFormatContext *paintfc, int i, QPai
 	p = doc->findFirstParagOfRect( e->rect().y() + contentsY(), firstVisiblePage, i );
 
 	if ( p ) {
-	    paintfc->setFrameSet( i + 1 );
+ 	    paintfc->setFrameSet( i + 1 );
 	    paintfc->init( p, recalcAll );
 
-	    KWFrame *frame = 0L;
-	    int _y = -1, _hei = -1;
+	    QRegion emptyRegion = paintfc->getEmptyRegion();
+	    QRect r = *doc->getFrameSet( i )->getFrame( paintfc->getFrame() - 1 );
+	    r.setHeight( paintfc->getPTY() - r.y() );
+	    emptyRegion = emptyRegion.subtract( r );
+
+	    KWFrame *frame = doc->getFrameSet( i )->getFrame( paintfc->getFrame() - 1 );
+	    KWFrame *oldFrame = frame;
 	    bool bend = FALSE;
 	    while ( !bend ) {
 		if ( allowBreak1( paintfc, i ) )
 		    break;
-		if ( !_resizing ) {
-		    KWFrame *oldFrame = frame;
-		    frame = doc->getFrameSet( i )->getFrame( paintfc->getFrame() - 1 );
+		oldFrame = frame;
+		frame = doc->getFrameSet( i )->getFrame( paintfc->getFrame() - 1 );
 
-		    if ( oldFrame && frame && oldFrame != frame && _y >= 0 && _hei > 0 ) {
-			int li = oldFrame->getLeftIndent( _y, _hei );
-			painter.fillRect( oldFrame->x() - contentsX() + li,
-					  _y, oldFrame->width() - li - oldFrame->getRightIndent( _y, _hei ),
-					  _hei, QBrush( oldFrame->getBackgroundColor() ) );
-		    }
-
-		    unsigned int _x = frame->x() - contentsX();
-		    unsigned int _wid = frame->width();
-		    unsigned int li = frame->getLeftIndent( paintfc->getPTY(), paintfc->getLineHeight() );
-		    QRect fr( _x + li, paintfc->getPTY() - contentsY(),
-			      _wid - li - frame->getRightIndent( paintfc->getPTY(), paintfc->getLineHeight() ),
-			      paintfc->getLineHeight() );
-		    painter.fillRect( fr, QBrush( frame->getBackgroundColor() ) );
-		    _y = fr.bottom();
-		    _hei = frame->height() - ( _y - ( frame->y() - contentsY() ) );
+		if ( oldFrame != frame ) {
+		    painter.save();
+		    emptyRegion.translate( -contentsX(), -contentsY() );
+		    painter.setClipRegion( emptyRegion );
+		    painter.fillRect( emptyRegion.boundingRect(), QBrush( oldFrame->getBackgroundColor() ) );
+		    painter.restore();
+	
+		    emptyRegion = paintfc->getEmptyRegion();
+		    QRect r = *doc->getFrameSet( i )->getFrame( paintfc->getFrame() - 1 );
+		    r.setHeight( paintfc->getPTY() - r.y() );
+		    emptyRegion = emptyRegion.subtract( r );
 		}
+
+		unsigned int _x = frame->x() - contentsX();
+		unsigned int _wid = frame->width();
+		unsigned int li = frame->getLeftIndent( paintfc->getPTY(), paintfc->getLineHeight() );
+		unsigned int re = frame->getRightIndent( paintfc->getPTY(), paintfc->getLineHeight() );
+		QRect fr( _x + li, paintfc->getPTY() - contentsY(), _wid - li - re, paintfc->getLineHeight() );
+		emptyRegion = emptyRegion.subtract( QRect( _x + li, paintfc->getPTY(), _wid - li - re, paintfc->getLineHeight() ) );
+		painter.fillRect( fr, QBrush( frame->getBackgroundColor() ) );
 		doc->printLine( *paintfc, painter, contentsX(), contentsY(), width(), height(), gui->getView()->getViewFormattingChars() );
 		bend = !paintfc->makeNextLineLayout();
 		if ( paintfc->getPage() > lastVisiblePage )
@@ -1760,6 +1770,52 @@ void KWPage::paintText( QPainter &painter, KWFormatContext *paintfc, int i, QPai
 	    *formatFC = *paintfc;
 	    formatTimer.stop();
 	    formatTimer.start( 0, TRUE );
+
+	    if ( frame ) {
+		painter.save();
+		emptyRegion.translate( -contentsX(), -contentsY() );	
+		painter.setClipRegion( emptyRegion );
+		painter.fillRect( emptyRegion.boundingRect(), QBrush( frame->getBackgroundColor() ) );
+		painter.restore();
+	    }
+	    KWFrameSet *fs = doc->getFrameSet( i );
+	    KWFrame *f = 0;
+	    int frm = fs->getFrameFromPtr( frame ); 
+	    if ( frm != -1 && frm < (int)fs->getNumFrames() - 1 ) {
+		// #### quite unefficient
+		for ( unsigned int j = frm + 1; j < fs->getNumFrames(); ++j ) {
+		    painter.save();
+		    f = fs->getFrame( j );
+		    QRegion reg = f->getEmptyRegion();
+		    reg.translate( -contentsX(), -contentsY() );
+		    reg = reg.intersect( e->rect() );
+		    painter.setClipRegion( reg );
+		    QRect r = *f;
+		    r.moveBy( -contentsX(), -contentsY() );
+		    if ( r.intersects( e->rect() ) )
+			painter.fillRect( r, f->getBackgroundColor() );
+		    painter.restore();
+		}
+	    }
+	    
+	} else {
+	    painter.setClipRect( e->rect() );
+	    KWFrameSet *fs = doc->getFrameSet( i );
+	    KWFrame *f = 0;
+	    // #### quite unefficient
+	    for ( unsigned int j = 0; j < fs->getNumFrames(); ++j ) {
+		painter.save();
+		f = fs->getFrame( j );
+		QRegion reg = f->getEmptyRegion();
+		reg.translate( -contentsX(), -contentsY() );
+		reg = reg.intersect( e->rect() );
+		painter.setClipRegion( reg );
+		QRect r = *f;
+		r.moveBy( -contentsX(), -contentsY() );
+		if ( r.intersects( e->rect() ) )
+		    painter.fillRect( r, f->getBackgroundColor() );
+		painter.restore();
+	    }
 
 	}
     } else {
@@ -1773,8 +1829,10 @@ void KWPage::paintText( QPainter &painter, KWFormatContext *paintfc, int i, QPai
 
 	while ( TRUE ) {
 	    int frm = fs->getNext( r );
-	    if ( !v.intersects( r ) ) break;
-	    if ( frm == -1 ) break;
+	    if ( !v.intersects( r ) ) 
+		break;
+	    if ( frm == -1 ) 
+		break;
 
 	    r.moveBy( 0, fs->getFrame( frm )->height() + 1 );
 
@@ -1782,21 +1840,15 @@ void KWPage::paintText( QPainter &painter, KWFormatContext *paintfc, int i, QPai
 	    paintfc->setFrameSet( i + 1 );
 	    paintfc->init( p, TRUE, frm + 1, fs->getFrame( frm )->getPageNum() + 1 );
 
+	    QRect fr = *fs->getFrame( paintfc->getFrame() - 1 );
+	    fr.moveBy( -contentsX(), -contentsY() );
+	    painter.fillRect( fr, QBrush( fs->getFrame( 0 )->getBackgroundColor() ) );
+	    	    
 	    bool bend = FALSE;
 	    while ( !bend ) {
 		if ( allowBreak1( paintfc, i ) )
 		    break;
 
-		if ( !_resizing ) {
-		    KWFrame *frame = fs->getFrame( paintfc->getFrame() - 1 );
-		    unsigned int _x = frame->x() - contentsX();
-		    unsigned int _wid = frame->width();
-		    unsigned int li = frame->getLeftIndent( paintfc->getPTY(), paintfc->getLineHeight() );
-		    QRect fr( _x + li, paintfc->getPTY() - contentsY(),
-			      _wid - li - frame->getRightIndent( paintfc->getPTY(), paintfc->getLineHeight() ),
-			      paintfc->getLineHeight() );
-		    painter.fillRect( fr, QBrush( fs->getFrame( 0 )->getBackgroundColor() ) );
-		}
 		doc->printLine( *paintfc, painter, contentsX(), contentsY(), width(), height(), gui->getView()->getViewFormattingChars() );
 		bend = !paintfc->makeNextLineLayout();
 		if ( paintfc->getPage() > lastVisiblePage )
@@ -1823,12 +1875,11 @@ void KWPage::finishPainting( QPaintEvent *e, QPainter &painter )
 				      _fc.getPTY() - contentsY(),
 				      _wid - frameSet->getFrame( _fc.getFrame() - 1 )->getLeftIndent( _fc.getPTY(), _fc.getLineHeight() ) -
 				      frameSet->getFrame( _fc.getFrame() - 1 )->getRightIndent( _fc.getPTY(), _fc.getLineHeight() ),
-				      _fc.getLineHeight() ) ) )
-    {
+				      _fc.getLineHeight() ) ) ) {
 	if ( !e->rect().contains( QRect( _x + frameSet->getFrame( _fc.getFrame() - 1 )->getLeftIndent( _fc.getPTY(), _fc.getLineHeight() ),
 					 _fc.getPTY() - contentsY(),
-					 _wid - frameSet->getFrame( _fc.getFrame() - 1 )->getLeftIndent( _fc.getPTY(), _fc.getLineHeight() ) -
-					 frameSet->getFrame( _fc.getFrame() - 1 )->getRightIndent( _fc.getPTY(), _fc.getLineHeight() ),
+					 _wid - frameSet->getFrame( _fc.getFrame() - 1 )->getLeftIndent( _fc.getPTY(), _fc.getLineHeight() ) 
+					 - frameSet->getFrame( _fc.getFrame() - 1 )->getRightIndent( _fc.getPTY(), _fc.getLineHeight() ),
 					 _fc.getLineHeight() ) ) )
 	    painter.setClipping( FALSE );
     }
@@ -1862,24 +1913,20 @@ void KWPage::viewportPaintEvent( QPaintEvent *e )
 	_erase = e->erased();
     _setErase = FALSE;
 
-    if ( _erase && !_resizing )
+    if ( _erase )
 	painter.eraseRect( e->rect().x(), e->rect().y(),
 			   e->rect().width(), e->rect().height() );
 
-    drawBorders( painter, e->rect(), _erase && !_resizing, &r );
-    // #### hack for now
-    drawBorders( painter, e->rect(), _erase && !_resizing, 0 );
+    drawBorders( painter, e->rect(), _erase, &r );
 
     int cf = currFrameSet == -1 ? fc->getFrameSet() - 1 : currFrameSet;
 
     KWFormatContext *paintfc = new KWFormatContext( doc, 1 );
-    for ( unsigned int i = 0; i < doc->getNumFrameSets(); i++ )
-    {
+    for ( unsigned int i = 0; i < doc->getNumFrameSets(); i++ ) {
 	if ( redrawOnlyCurrFrameset && (int)i != cf )
 	    continue;
 
-	switch ( doc->getFrameSet( i )->getFrameType() )
-	{
+	switch ( doc->getFrameSet( i )->getFrameType() ) {
 	case FT_PICTURE:
 	    paintPicture( painter, i );
 	    break;
@@ -1905,20 +1952,21 @@ void KWPage::viewportPaintEvent( QPaintEvent *e )
 }
 
 /*================================================================*/
-void KWPage::repaintKeyEvent1( KWTextFrameSet *frameSet, bool full, bool exitASAP )
+void KWPage::repaintKeyEvent1( KWTextFrameSet *frameSet, bool /*full*/, bool exitASAP )
 {
     QPainter painter;
     painter.begin( viewport() );
 
     KWFormatContext paintfc( doc, fc->getFrameSet() );
     paintfc = *fc;
-//	####
-//     QRegion emptyRegion = paintfc.getEmptyRegion();
-//     QRect r = *frameSet->getFrame( paintfc.getFrame() - 1 );
-//     r.setHeight( r.height() - paintfc.getPTY() );
-//     emptyRegion.subtract( r );
-    bool bend = FALSE;
+
+    QRegion emptyRegion = paintfc.getEmptyRegion();
+    QRect r = *frameSet->getFrame( paintfc.getFrame() - 1 );
+    r.setHeight( paintfc.getPTY() - r.y() );
+    emptyRegion = emptyRegion.subtract( r );
     
+    bool bend = FALSE;
+
     unsigned int currFrameNum = paintfc.getFrame() - 1;
     unsigned int ptYEnd = fc->getParag()->getPTYEnd();
     bool lookInCache = paintfc.getParag() == cachedParag;
@@ -1934,25 +1982,28 @@ void KWPage::repaintKeyEvent1( KWTextFrameSet *frameSet, bool full, bool exitASA
 	oldFrame = frame;
 	frame = frameSet->getFrame( paintfc.getFrame() - 1 );
 	
-//	####
-// 	if ( oldFrame != frame ) {
-// 	    painter.save();
-// 	    //emptyRegion.translate( -contentsX(), -contentsY() );
-// 	    painter.setClipRegion( emptyRegion );
-// 	    painter.fillRect( emptyRegion.boundingRect(), QBrush( oldFrame->getBackgroundColor() ) );
-// 	    painter.restore();
+	if ( oldFrame != frame ) {
+	    painter.save();
+	    emptyRegion.translate( -contentsX(), -contentsY() );
+	    painter.setClipRegion( emptyRegion );
+	    painter.fillRect( emptyRegion.boundingRect(), QBrush( oldFrame->getBackgroundColor() ) );
+	    painter.restore();
 	
-// 	    emptyRegion = paintfc.getEmptyRegion();
-// 	    QRect r = *frameSet->getFrame( paintfc.getFrame() - 1 );
-// 	    r.setHeight( r.height() - paintfc.getPTY() );
-// 	    emptyRegion.subtract( r );
-// 	}
+	    emptyRegion = paintfc.getEmptyRegion();
+	    QRect r = *frameSet->getFrame( paintfc.getFrame() - 1 );
+	    r.setHeight( paintfc.getPTY() - r.y() );
+	    emptyRegion = emptyRegion.subtract( r );
+	}
 	 	
 	if ( paintfc.getParag() != fc->getParag() )
 	    forceDraw = TRUE;
 	if ( paintfc.getParag() != fc->getParag() && paintfc.getParag() != fc->getParag()->getPrev() &&
-	     fc->getParag()->getPTYEnd() == ptYEnd && exitASAP )
+	     fc->getParag()->getPTYEnd() == ptYEnd && exitASAP ) {
+	     QRect r = *frameSet->getFrame( paintfc.getFrame() - 1 );
+	     r.setY( paintfc.getPTY() );
+	     emptyRegion = emptyRegion.subtract( r ); 
 	    break;
+	}
 	if ( frameSet->getFrame( currFrameNum )->isMostRight() && frameSet->getNumFrames() > currFrameNum + 1 &&
 	     frameSet->getFrame( paintfc.getFrame() )->top() - static_cast<int>( contentsY() ) >
 	     static_cast<int>( lastVisiblePage ) * static_cast<int>( ptPaperHeight() ) &&
@@ -1978,7 +2029,7 @@ void KWPage::repaintKeyEvent1( KWTextFrameSet *frameSet, bool full, bool exitASA
 
 	unsigned int li = frame->getLeftIndent( paintfc.getPTY(), paintfc.getLineHeight() );
 	unsigned int re = frame->getRightIndent( paintfc.getPTY(), paintfc.getLineHeight() );
-	// #### emptyRegion.subtract( QRect( _x + li, paintfc.getPTY(), _wid - li - re, paintfc.getLineHeight() ) );
+	emptyRegion = emptyRegion.subtract( QRect( _x + li, paintfc.getPTY(), _wid - li - re, paintfc.getLineHeight() ) );
 	if ( drawIt || forceDraw ) {
 	    painter.fillRect( _x + li, paintfc.getPTY() - contentsY(),
 			      _wid - li - re, paintfc.getLineHeight(), QBrush( frame->getBackgroundColor() ) );
@@ -1995,29 +2046,28 @@ void KWPage::repaintKeyEvent1( KWTextFrameSet *frameSet, bool full, bool exitASA
 	    bend = TRUE;
     }
 
-//	####
-//     if ( frame ) {
-// 	painter.save();
-// 	//emptyRegion.translate( -contentsX(), -contentsY() );
-// 	painter.setClipRegion( emptyRegion );
-// 	painter.fillRect( emptyRegion.boundingRect(), QBrush( frame->getBackgroundColor() ) );
-// 	painter.restore();
-//     }
-
-    if ( full && ( int )paintfc.getPTY() + ( int )paintfc.getLineHeight() < frameSet->getFrame( paintfc.getFrame() - 1 )->bottom() &&
-	 !paintfc.getParag()->getNext() ) {
+    if ( frame ) {
 	painter.save();
-	QRegion rg = frameSet->getFrame( paintfc.getFrame() - 1 )->getEmptyRegion();
-	rg.translate( -contentsX(), -contentsY() );
-	painter.setClipRegion( rg );
-	unsigned int _y = ( int )paintfc.getParag()->getPTYEnd() - ( int )contentsY();
-	unsigned int _x = frameSet->getFrame( paintfc.getFrame() - 1 )->x() - contentsX() ;
-	unsigned int _wid = frameSet->getFrame( paintfc.getFrame() - 1 )->width();
-	unsigned int _hei = frameSet->getFrame( paintfc.getFrame() - 1 )->height() -
-			    ( _y - frameSet->getFrame( paintfc.getFrame() - 1 )->y() );
-	painter.fillRect( _x, _y, _wid, _hei, QBrush( frameSet->getFrame( paintfc.getFrame() - 1 )->getBackgroundColor() ) );
+	emptyRegion.translate( -contentsX(), -contentsY() );
+	painter.setClipRegion( emptyRegion );
+	painter.fillRect( emptyRegion.boundingRect(), QBrush( frame->getBackgroundColor() ) );
 	painter.restore();
     }
+
+//     if ( full && ( int )paintfc.getPTY() + ( int )paintfc.getLineHeight() < frameSet->getFrame( paintfc.getFrame() - 1 )->bottom() &&
+// 	 !paintfc.getParag()->getNext() ) {
+// 	painter.save();
+// 	QRegion rg = frameSet->getFrame( paintfc.getFrame() - 1 )->getEmptyRegion();
+// 	rg.translate( -contentsX(), -contentsY() );
+// 	painter.setClipRegion( rg );
+// 	unsigned int _y = ( int )paintfc.getParag()->getPTYEnd() - ( int )contentsY();
+// 	unsigned int _x = frameSet->getFrame( paintfc.getFrame() - 1 )->x() - contentsX() ;
+// 	unsigned int _wid = frameSet->getFrame( paintfc.getFrame() - 1 )->width();
+// 	unsigned int _hei = frameSet->getFrame( paintfc.getFrame() - 1 )->height() -
+// 			    ( _y - frameSet->getFrame( paintfc.getFrame() - 1 )->y() );
+// 	painter.fillRect( _x, _y, _wid, _hei, QBrush( frameSet->getFrame( paintfc.getFrame() - 1 )->getBackgroundColor() ) );
+// 	painter.restore();
+//     }
 
     painter.end();
 
@@ -2562,13 +2612,13 @@ bool KWPage::kDefault( QKeyEvent *e, int, int, KWParag *, KWTextFrameSet *frameS
 void KWPage::keyPressEvent( QKeyEvent *e )
 {
 #define STOP { stopProcessKeyEvent(); return; }
-    
+
     if ( mouseMode != MM_EDIT || e->key() == Key_Control )
 	return;
 
     inputTimer.stop();
     formatTimer.stop();
-    
+
     startProcessKeyEvent();
 
     editModeChanged( e );
@@ -2823,7 +2873,7 @@ void KWPage::drawBorders( QPainter &_painter, QRect v_area, bool drawBack, QRegi
 
     for ( unsigned int i = 0; i < doc->getNumFrameSets(); i++ ) {
 	frameset = doc->getFrameSet( i );
-	if ( !frameset->isVisible() ) 
+	if ( !frameset->isVisible() )
 	    continue;
 
 	if ( isAHeader( frameset->getFrameInfo() ) && !doc->hasHeader() ||
@@ -2853,11 +2903,13 @@ void KWPage::drawBorders( QPainter &_painter, QRect v_area, bool drawBack, QRegi
 		    _painter.setBrush( Qt::NoBrush );
 		_painter.drawRect( frame );
 		if ( region )
-		    region->subtract( QRect( frame.x() - 2, frame.y() - 2, frame.width() + 4, frame.height() + 4 ) );
+		    *region = region->subtract( QRect( frame.x(), frame.y(), frame.width(), frame.height() ) );
 	    }
 
 	    _painter.setBrush( Qt::NoBrush );
 	    if ( v_area.intersects( frame ) && frameset->getGroupManager() ) {
+		if ( region )
+		    *region = region->subtract( QRect( frame.x(), frame.y(), frame.width(), frame.height() ) );
 		_painter.fillRect( frame, tmp->getBackgroundColor() );
 		_painter.drawLine( tmp->right() - contentsX() + 1, tmp->y() - contentsY() - 1,
 				   tmp->right() - contentsX() + 1, tmp->bottom() - contentsY() + 1 );
@@ -4712,7 +4764,7 @@ void KWPage::formatMore()
 {
     if ( inKeyEvent )
 	return;
-    
+
     //qDebug( "formatMore" );
     bool bend = FALSE;
 

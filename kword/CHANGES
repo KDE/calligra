@@ -1413,7 +1413,7 @@ Reggie, 11.8.1999:
   and the formatting was fucked up. Now using a null-timer KWord formats this stuff below
   in the background in steps of 15 lines. The result is really good! There are still some
   small problems (the timer is not always started when it should and so on). Also this formatting stuff
-  is only done for the frameset, in which the user is working at the moment - it should be done for all 
+  is only done for the frameset, in which the user is working at the moment - it should be done for all
   framests. I'll work on these things tomorrow.
 - Some other small fixes
 
@@ -1430,4 +1430,12 @@ Reggie, 13.8.1999:
 - Started using QRegions to always clear empty areas correctly
   (when this QRegion stuff is done most of the remaining redraw errors will
    be fixed :-)
+
+Reggie, 19 - 20.8.1999:
+-----------------------
+- Fixed much more drawing errors using QRegions. QRegions are really cooool!
+  Now all big drawing and formatting errors seem to be fixed :-)
+- Removed some hacks which are not needed anymore
+- Fixed some crashing code
+
 

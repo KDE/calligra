@@ -425,9 +425,9 @@ void KWFrameSet::delFrame( KWFrame *frm, bool remove )
     int _num = frames.findRef( frm );
     if ( _num == -1 )
         return;
-    
+
     KWFrame *f;
-    
+
     bool del = true;
     int i = 0;
     for ( f = frames.first(); f != 0; f = frames.next(), i++ )
@@ -450,9 +450,8 @@ void KWFrameSet::delFrame( KWFrame *frm, bool remove )
 /*================================================================*/
 int KWFrameSet::getFrame( int _x, int _y )
 {
-    for ( unsigned int i = 0; i < getNumFrames(); i++ )
-    {
-        if ( getFrame( i )->contains( QPoint( _x, _y ) ) ) return i;
+    for ( unsigned int i = 0; i < getNumFrames(); i++ ) {
+	if ( getFrame( i )->contains( QPoint( _x, _y ) ) ) return i;
     }
     return -1;
 }
@@ -464,10 +463,15 @@ KWFrame *KWFrameSet::getFrame( unsigned int _num )
 }
 
 /*================================================================*/
+int KWFrameSet::getFrameFromPtr( KWFrame *frame )
+{
+    return frames.findRef( frame );
+}
+
+/*================================================================*/
 bool KWFrameSet::contains( unsigned int mx, unsigned int my )
 {
-    for ( unsigned int i = 0; i < frames.count(); i++ )
-    {
+    for ( unsigned int i = 0; i < frames.count(); i++ ) {
         if ( frames.at( i )->contains( QPoint( mx, my ) ) ) return true;
     }
 
