@@ -7,9 +7,12 @@
 #define VDOCUMENT_H
 
 #include "vlayer.h"
+#include "vcolor.h"
 
 class QDomDocument;
 class QDomElement;
+
+class VShape;
 
 // All non-visual, static doc info is in here.
 // The karbon part uses this class.
@@ -44,8 +47,8 @@ public:
 	const VObjectList& selection() const { return m_selection; }
 	void selectAllObjects();    // select all vobjects period.
 	void deselectAllObjects();  // unselect all vobjects from all vlayers.
-	void selectObject( VObject& object, bool exclusive = false );
-	void deselectObject( VObject& object );
+	void selectObject( VShape& object, bool exclusive = false );
+	void deselectObject( VShape& object );
 	void selectObjectsWithinRect( const KoRect& rect, bool exclusive = false );
 
 	// move up/down within layer
@@ -57,9 +60,9 @@ public:
 	void setDefaultStrokeColor( const VColor &color ) { m_defaultStrokeColor = color; }
 	void setDefaultFillColor( const VColor &color ) { m_defaultFillColor = color; }
 	/// all newly created shapes in this document get the default color by using this method
-	void applyDefaultColors( VObject & ) const;
+	void applyDefaultColors( VShape & ) const;
 
-	void appendObject( VObject* object ); // insert a new vobject
+	void appendObject( VShape* object ); // insert a new vobject
 
 	VLayer* activeLayer() const { return m_activeLayer; }   // active layer.
 

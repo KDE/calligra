@@ -7,9 +7,9 @@
 #include <qpainter.h>
 #include <qpixmap.h>
 
+#include "vcanvas.h"
 #include "karbon_view.h"
 #include "karbon_part.h"
-#include "vcanvas.h"
 #include "vhandletool.h"
 #include "vpainter.h"
 #include "vpainterfactory.h"

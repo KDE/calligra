@@ -16,8 +16,7 @@
 #include <kdebug.h>
 
 
-VPath::VPath()
-	: VObject()
+VPath::VPath() : VShape()
 {
 	m_segmentLists.setAutoDelete( true );
 
@@ -26,7 +25,7 @@ VPath::VPath()
 }
 
 VPath::VPath( const VPath& path )
-	: VObject( path )
+	: VShape( path )
 {
 	m_segmentLists.setAutoDelete( true );
 
@@ -352,7 +351,7 @@ VPath::save( QDomElement& element ) const
 		QDomElement me = element.ownerDocument().createElement( "PATH" );
 		element.appendChild( me );
 
-		VObject::save( me );
+		VShape::save( me );
 
 		// save segmentlists:
 		QPtrListIterator<VSegmentList> itr( m_segmentLists );
@@ -384,7 +383,7 @@ VPath::load( const QDomElement& element )
 			}
 			else
 			{
-				VObject::load( child );
+				VShape::load( child );
 			}
 		}
 	}

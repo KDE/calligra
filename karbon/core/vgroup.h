@@ -5,14 +5,14 @@
 #ifndef __VGROUP_H__
 #define __VGROUP_H__
 
-#include "vobject.h"
+#include "vshape.h"
 #include "vobjectlist.h"
 
 class QDomElement;
 
 // grouping of VObjects
 
-class VGroup : public VObject
+class VGroup : public VShape
 {
 public:
 	VGroup();
@@ -25,7 +25,7 @@ public:
 	void setState( const VState state );
 	// clear the group without deleting the objects
 	void ungroup();
-	void insertObject( VObject* object );
+	void insertObject( VShape* object );
 
 	virtual void transform( const QWMatrix& m );
 

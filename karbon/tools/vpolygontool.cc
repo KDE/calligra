@@ -53,7 +53,7 @@ VPolygonTool::drawTemporaryObject(
 			m_dialog->edges(),
 			d2 );
 
-	VObject* path = cmd->createPath();
+	VShape* path = cmd->createPath();
 	path->setState( state_edit );
 	path->draw( painter, path->boundingBox() );
 

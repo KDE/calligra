@@ -31,22 +31,22 @@ public:
 	virtual void transform( const QWMatrix& ) {}
 
 	/// appends the object relative to the current position in the object list
-	void appendObject( VObject* object );
+	void appendObject( VShape* object );
 
 	/// prepends the object relative to the current position in the object list
-	void prependObject( VObject* object );
+	void prependObject( VShape* object );
 
 	/// removes the reference to the object, not the object itself
-	void removeRef( const VObject* object );
+	void removeRef( const VShape* object );
 
 
 	/// moves the object one step down the list.
 	/// When the object is at the bottom this method has no effect.
-	void moveObjectDown( const VObject* object );
+	void moveObjectDown( const VShape* object );
 
 	/// moves the object one step up the list.
 	/// When the object is at the top this method has no effect.
-	void moveObjectUp( const VObject* object );
+	void moveObjectUp( const VShape* object );
 
 
 	/// selects all objects that intersect with rect.

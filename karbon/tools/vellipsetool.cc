@@ -49,7 +49,7 @@ VEllipseTool::drawTemporaryObject(
 	VEllipseCmd* cmd =
 		new VEllipseCmd( &part()->document(), p.x(), p.y(), p.x() + d1, p.y() + d2 );
 
-	VObject* path = cmd->createPath();
+	VShape* path = cmd->createPath();
 	path->setState( state_edit );
 	path->draw( painter, path->boundingBox() );
 

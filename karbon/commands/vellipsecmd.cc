@@ -39,7 +39,7 @@ VEllipseCmd::VEllipseCmd( VDocument *doc,
 	}
 }
 
-VObject*
+VShape*
 VEllipseCmd::createPath()
 {
 	// first create (half-)unity circle around origin (0,0):

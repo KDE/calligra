@@ -8,10 +8,7 @@
 
 #include "vshapecmd.h"
 
-
 // create a ellipse-shape.
-
-class VObject;
 
 class VEllipseCmd : public VShapeCmd
 {
@@ -20,7 +17,7 @@ public:
 		 const double brX, const double brY );
 	virtual ~VEllipseCmd() {}
 
-	virtual VObject* createPath();
+	virtual VShape* createPath();
 
 private:
 	double m_tlX;

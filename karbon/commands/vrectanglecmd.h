@@ -10,8 +10,6 @@
 
 // create a rectangle-shape.
 
-class VObject;
-
 class VRectangleCmd : public VShapeCmd
 {
 public:
@@ -19,7 +17,7 @@ public:
 		 const double brX, const double brY );
 	virtual ~VRectangleCmd() {}
 
-	virtual VObject* createPath();
+	virtual VShape* createPath();
 
 private:
 	double m_tlX;

@@ -18,6 +18,7 @@ noinst_HEADERS = \
 	vlayer.h \
 	vobject.h \
 	vobjectlist.h \
+	vshape.h \
 	vgroup.h \
 	vpath.h \
 	vsegment.h \
@@ -33,8 +34,8 @@ libkarboncore_la_SOURCES = \
 	vgradient.cc \
 	vdocument.cc \
 	vlayer.cc \
-	vobject.cc \
 	vobjectlist.cc \
+	vshape.cc \
 	vgroup.cc \
 	vpath.cc \
 	vsegment.cc \

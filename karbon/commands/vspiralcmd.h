@@ -19,7 +19,7 @@ public:
 		double radius, uint segments, double fade, bool cw = true, double angle = 0.0 );
  	virtual ~VSpiralCmd() {}
 
-	virtual VObject* createPath();
+	virtual VShape* createPath();
 
 private:
 	double m_centerX;

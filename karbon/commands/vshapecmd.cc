@@ -3,8 +3,8 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include "vobject.h"
 #include "vshapecmd.h"
+#include "vshape.h"
 #include "vdocument.h"
 
 void

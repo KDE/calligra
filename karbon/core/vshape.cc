@@ -4,17 +4,17 @@
 
 #include <qdom.h>
 
-#include "vobject.h"
+#include "vshape.h"
 
 void
-VObject::save( QDomElement& element ) const
+VShape::save( QDomElement& element ) const
 {
 	m_stroke.save( element );
 	m_fill.save( element );
 }
 
 void
-VObject::load( const QDomElement& element )
+VShape::load( const QDomElement& element )
 {
 	if( element.tagName() == "STROKE" )
 	{

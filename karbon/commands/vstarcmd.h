@@ -19,7 +19,7 @@ public:
 		double outerR, double innerR, uint edges, double angle = 0.0 );
 	virtual ~VStarCmd() {}
 
-	virtual VObject* createPath();
+	virtual VShape* createPath();
 
 private:
 	double m_centerX;

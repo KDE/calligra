@@ -13,22 +13,22 @@
 
 #include <kdebug.h>
 
-VGroup::VGroup() : VObject()
+VGroup::VGroup() : VShape()
 {
 }
 
-VGroup::VGroup( const VObjectList &objects ) : VObject(), m_objects( objects )
+VGroup::VGroup( const VObjectList &objects ) : VShape(), m_objects( objects )
 {
 	m_fill.setType( fill_unknown );
 	//stroke().setType( stroke_unknown );
 }
 
-VGroup::VGroup( const VGroup& other ) : VObject()
+VGroup::VGroup( const VGroup& other ) : VShape()
 {
 	// copy objects
 	VObjectListIterator itr = other.m_objects;
 	for ( ; itr.current() ; ++itr )
-		m_objects.append( itr.current()->clone() );
+		m_objects.append( static_cast<VShape *>( itr.current()->clone() ) );
 }
 
 VGroup::~VGroup()
@@ -140,7 +140,7 @@ VGroup::setFill( const VFill &f )
 	for ( ; itr.current() ; ++itr )
 		itr.current()->setFill( f );
 
-	VObject::setFill( f );
+	VShape::setFill( f );
 }
 
 void
@@ -150,7 +150,7 @@ VGroup::setStroke( const VStroke &s )
 	for ( ; itr.current() ; ++itr )
 		itr.current()->setStroke( s );
 
-	VObject::setStroke( s );
+	VShape::setStroke( s );
 }
 
 void
@@ -196,7 +196,7 @@ VGroup::load( const QDomElement& element )
 }
 
 void
-VGroup::insertObject( VObject* object )
+VGroup::insertObject( VShape* object )
 {
 	// put new objects "on top" by appending them:
 	m_objects.append( object );

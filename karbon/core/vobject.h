@@ -9,17 +9,6 @@
 #include <qptrlist.h>
 #include <koRect.h>
 
-#include "vfill.h"
-#include "vstroke.h"
-
-enum VState
-{
-	state_normal   = 0,	/// visible, not active
-	state_selected = 1, /// visible, active and can be manipulated by tools
-	state_edit     = 2, /// visible, active and is currently manipulated by a tool
-	state_deleted  = 3  /// not visible
-};
-
 class QDomElement;
 class QWMatrix;
 class VPainter;
@@ -35,16 +24,12 @@ class VVisitor;
 class VObject
 {
 public:
-	VObject( VObject *parent = 0L, VState state = state_normal ) : m_parent( parent )
+	VObject( VObject *parent = 0L ) : m_parent( parent )
 	{
-		m_state = state;
 		m_boundingBoxIsInvalid = true;
 	}
 	VObject( const VObject &obj )
 	{
-		m_fill   = obj.m_fill;
-		m_stroke = obj.m_stroke;
-		m_state  = obj.m_state;
 		m_boundingBoxIsInvalid = true;
 		m_parent = obj.m_parent;
 	}
@@ -104,27 +89,6 @@ public:
 		{ return false; };
 
 	/**
-	 * Get the state the object is in.
-	 *
-	 * @return the object state at time of calling.
-	 */
-	VState state() const { return m_state; }
-	/**
-	 * Sets the state to a specified new state.
-	 * Note that this will not have any effect until draw() is
-	 * called on this object.
-	 *
-	 * @param state the new state.
-	 */
-	virtual void setState( const VState state ) { m_state = state; }
-
-	const VFill& fill() const { return m_fill; }
-	const VStroke& stroke() const { return m_stroke; }
-
-	virtual void setFill( const VFill& fill ) { m_fill = fill; }
-	virtual void setStroke( const VStroke& stroke ) { m_stroke = stroke; }
-
-	/**
 	 * Create an exact copy of this object.
 	 */
 	virtual VObject* clone() = 0;
@@ -132,12 +96,12 @@ public:
 	/**
 	 * Save this object's state to xml.
 	 */
-	virtual void save( QDomElement& element ) const;
+	virtual void save( QDomElement& element ) const = 0;
 	/**
 	 * Load this object's state from xml and initialize
 	 * this object accordingly.
 	 */
-	virtual void load( const QDomElement& element );
+	virtual void load( const QDomElement& element ) = 0;
 
 	/// Accept a VVisitor.
 	virtual void accept( VVisitor& /*visitor*/ ) {}
@@ -146,15 +110,11 @@ public:
 	VObject *parent() { return m_parent; }
 
 protected:
-	VFill m_fill;
-	VStroke m_stroke;
-
 	/// Bounding box.
 	mutable KoRect m_boundingBox;
 	mutable bool m_boundingBoxIsInvalid;
 
 private:
-	VState m_state;
 	VObject *m_parent;
 };
 

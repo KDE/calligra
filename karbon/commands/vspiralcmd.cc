@@ -30,7 +30,7 @@ VSpiralCmd::VSpiralCmd( VDocument *doc,
 	m_fade = ( fade <= 0.0 || fade >= 1.0 ) ? 0.5 : fade;
 }
 
-VObject*
+VShape*
 VSpiralCmd::createPath()
 {
 	VPath* path = new VPath();

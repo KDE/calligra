@@ -40,7 +40,7 @@ VLayer::draw( VPainter *painter, const KoRect& rect )
 }
 
 void
-VLayer::appendObject( VObject* object )
+VLayer::appendObject( VShape* object )
 {
 	// put new objects "on top" by appending them:
 	m_objects.append( object );
@@ -48,7 +48,7 @@ VLayer::appendObject( VObject* object )
 }
 
 void
-VLayer::prependObject( VObject* object )
+VLayer::prependObject( VShape* object )
 {
 	// prepend object
 	m_objects.prepend( object );
@@ -56,14 +56,14 @@ VLayer::prependObject( VObject* object )
 }
 
 void
-VLayer::removeRef( const VObject* object )
+VLayer::removeRef( const VShape* object )
 {
 	//
 	m_objects.removeRef( object );
 }
 
 void
-VLayer::moveObjectDown( const VObject* object )
+VLayer::moveObjectDown( const VShape* object )
 {
 	if( m_objects.getFirst() == object ) return;
 
@@ -75,7 +75,7 @@ VLayer::moveObjectDown( const VObject* object )
 }
 
 void
-VLayer::moveObjectUp( const VObject* object )
+VLayer::moveObjectUp( const VShape* object )
 {
 	if( m_objects.getLast() == object ) return;
 

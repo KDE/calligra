@@ -50,7 +50,7 @@ public:
 	VDocument& document() { return m_doc; }
 
 	/// insert a new vobject
-	void insertObject( VObject* object );
+	void insertObject( VShape* object );
 
 	/// insert a command into the undo/redo-history:
 	void addCommand( VCommand* cmd, bool repaint = false );

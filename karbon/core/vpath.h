@@ -11,7 +11,7 @@
 
 #include <koPoint.h>
 
-#include "vobject.h"
+#include "vshape.h"
 #include "vsegmentlist.h"
 #include "vvisitor.h"
 
@@ -19,7 +19,7 @@ class QDomElement;
 class QWMatrix;
 class VPainter;
 
-class VPath : public VObject
+class VPath : public VShape
 {
 public:
 	VPath();

@@ -47,7 +47,7 @@ VRoundRectCmd::VRoundRectCmd( VDocument *doc,
 	}
 }
 
-VObject*
+VShape*
 VRoundRectCmd::createPath()
 {
 	VPath* path = new VPath();

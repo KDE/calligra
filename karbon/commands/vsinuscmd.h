@@ -19,7 +19,7 @@ public:
 		 const double brX, const double brY, const uint periods = 1 );
 	virtual ~VSinusCmd() {}
 
-	virtual VObject* createPath();
+	virtual VShape* createPath();
 
 private:
 	double m_tlX;

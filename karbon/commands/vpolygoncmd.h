@@ -10,8 +10,6 @@
 
 // create a polygon-shape.
 
-class VObject;
-
 class VPolygonCmd : public VShapeCmd
 {
 public:
@@ -19,7 +17,7 @@ public:
 		double radius, uint edges, double angle = 0.0 );
 	virtual ~VPolygonCmd() {}
 
-	virtual VObject* createPath();
+	virtual VShape* createPath();
 
 private:
 	double m_centerX;

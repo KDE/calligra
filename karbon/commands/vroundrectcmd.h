@@ -10,8 +10,6 @@
 
 // create a round rectangle-shape.
 
-class VObject;
-
 class VRoundRectCmd : public VShapeCmd
 {
 public:
@@ -19,7 +17,7 @@ public:
 		 const double brX, const double brY, const double edgeR );
 	virtual ~VRoundRectCmd() {}
 
-	virtual VObject* createPath();
+	virtual VShape* createPath();
 
 private:
 	double m_tlX;

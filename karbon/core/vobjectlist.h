@@ -7,11 +7,11 @@
 #define __VOBJECTLIST_H__
 
 #include <qptrlist.h>
-#include "vobject.h"
+#include "vshape.h"
 
 class KoRect;
 
-class VObjectList : public QPtrList<VObject>
+class VObjectList : public QPtrList<VShape>
 {
 public:
 	VObjectList();
@@ -26,7 +26,7 @@ private:
 	mutable bool m_boundingBoxIsInvalid;
 };
 
-typedef QPtrListIterator<VObject> VObjectListIterator;
+typedef QPtrListIterator<VShape> VObjectListIterator;
 
 #endif
 

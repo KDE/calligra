@@ -4,6 +4,7 @@
 */
 
 #include "vdocument.h"
+#include "vshape.h"
 
 #include <qdom.h>
 
@@ -34,7 +35,7 @@ VDocument::insertLayer( VLayer* layer )
 }
 
 void
-VDocument::appendObject( VObject* object )
+VDocument::appendObject( VShape* object )
 {
 	m_activeLayer->appendObject( object );
 }
@@ -113,7 +114,7 @@ VDocument::load( const QDomElement& doc )
 }
 
 void
-VDocument::selectObject( VObject& object, bool exclusive )
+VDocument::selectObject( VShape& object, bool exclusive )
 {
 	if( exclusive )
 		deselectAllObjects();
@@ -123,7 +124,7 @@ VDocument::selectObject( VObject& object, bool exclusive )
 }
 
 void
-VDocument::deselectObject( VObject& object )
+VDocument::deselectObject( VShape& object )
 {
 	object.setState( state_normal );
 	m_selection.removeRef( &object );
@@ -143,9 +144,9 @@ VDocument::selectAllObjects()
 		VObjectListIterator itr2( objects );
 		for ( ; itr2.current(); ++itr2 )
 		{
-			if( itr2.current()->state() != state_deleted )
+			if( static_cast<VShape *>( itr2.current() )->state() != state_deleted )
 			{
-				itr2.current()->setState( state_selected );
+				static_cast<VShape *>( itr2.current() )->setState( state_selected );
 				m_selection.append( itr2.current() );
 			}
 		}
@@ -168,7 +169,7 @@ VDocument::selectObjectsWithinRect( const KoRect& rect, bool exclusive )
 		VObjectListIterator itr2( objects );
 		for ( ; itr2.current(); ++itr2 )
 		{
-			itr2.current()->setState( state_selected );
+			static_cast<VShape *>(itr2.current())->setState( state_selected );
 			m_selection.append( itr2.current() );
 		}
 	}
@@ -182,7 +183,7 @@ VDocument::deselectAllObjects()
 	VObjectListIterator itr( m_selection );
 	for ( ; itr.current() ; ++itr )
 	{
-		itr.current()->setState( state_normal );
+		static_cast<VShape *>(itr.current())->setState( state_normal );
 	}
 
 	m_selection.clear();
@@ -323,7 +324,7 @@ VDocument::moveSelectionToBottom()
 }
 
 void
-VDocument::applyDefaultColors( VObject& obj ) const
+VDocument::applyDefaultColors( VShape& obj ) const
 {
 	VStroke stroke( obj.stroke() );
 	VFill fill( obj.fill() );
