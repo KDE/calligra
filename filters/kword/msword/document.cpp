@@ -128,6 +128,7 @@ void Document::finishDocument()
         QDomElement keyElem = m_mainDocument.createElement("KEY");
         picturesElem.appendChild( keyElem );
         keyElem.setAttribute( "filename", *it );
+        keyElem.setAttribute( "name", *it );
     }
 }
 

@@ -177,7 +177,7 @@ void KWordTextHandler::pictureFound( const wvWare::PictureFunctor& pictureFuncto
                                      wvWare::SharedPtr<const wvWare::Word97::CHP> /*chp*/ )
 {
     static unsigned int s_pictureNumber = 0;
-    QString pictureName = "picture/picture";
+    QString pictureName = "pictures/picture";
     pictureName += QString::number( s_pictureNumber ); // filenames start at 0
     // looks better to the user if frame names start at 1
     QString frameName = i18n("Picture %1").arg( ++s_pictureNumber );
