@@ -3202,11 +3202,7 @@ void KWView::formatFont()
     QColor col=textIface->textBackgroundColor();
     col=col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base );
 
-    if( m_fontDlg )
-    {
-        delete m_fontDlg;
-        m_fontDlg = 0L;
-    }
+    delete m_fontDlg;
     m_fontDlg = new KoFontDia( this, "", textIface->textFont(),
                                actionFormatSub->isChecked(),
                                actionFormatSuper->isChecked(),
