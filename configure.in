@@ -24,7 +24,22 @@ AC_SUBST(LIBMICO)
 idldir="\$(prefix)/idl"
 AC_SUBST(idldir)
 
-dnl add here all your Makefiles. This are created by configure
+AC_ARG_WITH(pythondir, 
+[ --with-pythondir=pythondir    use python installed in pythondir ],
+[
+  PYTHONDIR=$witharg
+], PYTHONDIR=/usr/local
+)
+
+PYTHONINC=-I$PYTHONDIR/include/python1.5
+PYTHONLIB=-L$PYTHONDIR/lib/python1.5/config
+LIBPYTHON=-lpython1.5
+
+AC_SUBST(PYTHONINC)
+AC_SUBST(PYTHONLIB)
+AC_SUBST(LIBPYTHON)
+
+dnl add here all your Makefiles. These are created by configure
 AC_OUTPUT(Makefile \
 	kimage/Makefile \
 	kspread/pics/Makefile \
