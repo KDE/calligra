@@ -39,6 +39,7 @@ class KSpreadSheet;
 class KSpreadCanvas;
 class KSpreadView;
 
+class KLocale;
 class QDomElement;
 class QDomDocument;
 class KoXmlWriter;
@@ -50,18 +51,15 @@ class KSpreadGenValidationStyles;
 
 #include <qpainter.h>
 #include <qptrlist.h>
-#include <qstrlist.h>
 #include <qdatetime.h>
 
-#include "docbase.h"
 #include "kspread_format.h"
 #include "kspread_global.h"
 #include "kspread_condition.h"
-
 #include "kspread_value.h"
-#include <kozoomhandler.h>
-#include <koOasisStyles.h>
 
+#include <koOasisStyles.h>
+#include <koRect.h>
 struct KSpreadValidity
 {
     KSpreadValidity()
@@ -107,16 +105,14 @@ class CellPrivate;
  * default cell. @ref #isDefault tells wether a cell is the default one
  * or not.
  */
-class KSPREAD_EXPORT KSpreadCell : public KSpreadFormat,
-    public KSpread::DocBase
+class KSPREAD_EXPORT KSpreadCell : public KSpreadFormat
 {
   friend class SelectPrivate;
   friend class KSpreadConditions;
 public:
 
-  KSpreadCell (KSpreadSheet *_sheet, KSpread::DocInfo *docinfo, int _column, int _row);
-  KSpreadCell (KSpreadSheet *_sheet, KSpread::DocInfo *docinfo,
-        KSpreadStyle * _style, int _column, int _row);
+  KSpreadCell (KSpreadSheet *_sheet, int _column, int _row);
+  KSpreadCell (KSpreadSheet *_sheet, KSpreadStyle * _style, int _column, int _row);
 
     /**
      * @see #sheetDies
@@ -184,6 +180,10 @@ public:
      */
     static QString columnName( uint column );
 
+    /**
+     * Returns the locale setting of this cell.
+     */
+    KLocale* locale();
     /**
      * Returns true if this cell holds a formula.
      */

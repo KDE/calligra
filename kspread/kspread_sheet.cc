@@ -344,7 +344,7 @@ KSpreadSheet::KSpreadSheet (KSpread::DocInfo *docinfo,
   d->rows.setAutoDelete( true );
   d->columns.setAutoDelete( true );
 
-  d->defaultCell = new KSpreadCell( this, di, styleManager()->defaultStyle(), 0, 0);
+  d->defaultCell = new KSpreadCell( this, styleManager()->defaultStyle(), 0, 0);
   d->defaultRowFormat = new RowFormat( this, 0 );
   d->defaultRowFormat->setDefault();
   d->defaultColumnFormat = new ColumnFormat( this, 0 );
@@ -1016,9 +1016,9 @@ KSpreadCell* KSpreadSheet::nonDefaultCell( int _column, int _row,
   KSpreadCell * cell = 0;
 
   if ( _style )
-    cell = new KSpreadCell( this, di, _style, _column, _row );
+    cell = new KSpreadCell( this, _style, _column, _row );
   else
-    cell = new KSpreadCell( this, di, _column, _row );
+    cell = new KSpreadCell( this, _column, _row );
 
   insertCell( cell );
 
@@ -1215,7 +1215,7 @@ KSpreadSheet::SelectionType KSpreadSheet::workOnCells( const QPoint& _marker, Ce
 		    if ( cell == d->defaultCell )
 			// '&& worker.create_if_default' unnecessary as never used in type A
 		    {
-			cell = new KSpreadCell( this, di, i, rw->row() );
+			cell = new KSpreadCell( this, i, rw->row() );
 			insertCell( cell );
 		    }
 		}
@@ -1300,7 +1300,7 @@ KSpreadSheet::SelectionType KSpreadSheet::workOnCells( const QPoint& _marker, Ce
 			//     before the undo object is created, aren't they?
 			if ( cell == d->defaultCell )
 			{
-			    cell = new KSpreadCell( this, di, i, rw->row() );
+			    cell = new KSpreadCell( this, i, rw->row() );
 			    insertCell( cell );
 			}
 			worker.doWork( cell, false, i, rw->row() );
@@ -1324,7 +1324,7 @@ KSpreadSheet::SelectionType KSpreadSheet::workOnCells( const QPoint& _marker, Ce
 		{
 		    if ( worker.create_if_default && cell == d->defaultCell )
 		    {
-			cell = new KSpreadCell( this, di, x, y );
+			cell = new KSpreadCell( this, x, y );
 			insertCell( cell );
 		    }
                     if ( cell != d->defaultCell )
@@ -1489,7 +1489,7 @@ KSpreadSheet::SelectionType KSpreadSheet::workOnCells( KSpreadSelection* selecti
         {
           if ( cell == d->defaultCell && worker.create_if_default )
           {
-            cell = new KSpreadCell( this, di, s, x, y );
+            cell = new KSpreadCell( this, s, x, y );
             insertCell( cell );
           }
           if ( cell != d->defaultCell )
@@ -4413,7 +4413,7 @@ void KSpreadSheet::swapCells( int x1, int y1, int x2, int y2, bool cpFormat )
   // as a user.
   if (!ref1->isFormula() && !ref2->isFormula())
   {
-    KSpreadCell *tmp = new KSpreadCell( this, di, -1, -1 );
+    KSpreadCell *tmp = new KSpreadCell( this, -1, -1 );
 
     tmp->copyContent( ref1 );
     ref1->copyContent( ref2 );
@@ -5935,7 +5935,7 @@ bool KSpreadSheet::loadSelection( const QDomDocument& doc, const QRect &pasteAre
             if ( isProtected() && !cell->notProtected( col + coff, row + roff ) )
               continue;
 
-            cellBackup = new KSpreadCell(this, di, cell->column(), cell->row());
+            cellBackup = new KSpreadCell(this, cell->column(), cell->row());
             cellBackup->copyAll(cell);
 
             if ( !cell->load( c, _xshift + coff, _yshift + roff, sp, op, pasteFC ) )
@@ -6418,7 +6418,7 @@ QDomDocument KSpreadSheet::saveCellRect( const QRect &_rect, bool copy, bool era
 	    cell = cellAt( i, j );
 	    if ( cell == d->defaultCell )
 	    {
-		cell = new KSpreadCell( this, di, i, j );
+		cell = new KSpreadCell( this, i, j );
 		insertCell( cell );
 		insert=true;
 	    }
@@ -7962,7 +7962,7 @@ bool KSpreadSheet::loadXML( const QDomElement& sheet )
         QDomElement e = n.toElement();
         if ( !e.isNull() && e.tagName() == "cell" )
         {
-            KSpreadCell *cell = new KSpreadCell( this, di, 0, 0 );
+            KSpreadCell *cell = new KSpreadCell( this, 0, 0 );
             if ( cell->load( e, 0, 0 ) )
                 insertCell( cell );
             else

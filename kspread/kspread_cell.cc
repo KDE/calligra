@@ -268,10 +268,8 @@ CellExtra* CellPrivate::extra()
  *****************************************************************************/
 
 
-KSpreadCell::KSpreadCell( KSpreadSheet * _sheet, KSpread::DocInfo *docinfo,
-    int _column, int _row )
-  : KSpreadFormat (_sheet, _sheet->styleManager()->defaultStyle()),
-    DocBase (docinfo)
+KSpreadCell::KSpreadCell( KSpreadSheet * _sheet, int _column, int _row )
+  : KSpreadFormat (_sheet, _sheet->styleManager()->defaultStyle())
 {
   d = new CellPrivate;
   d->row = _row;
@@ -280,10 +278,9 @@ KSpreadCell::KSpreadCell( KSpreadSheet * _sheet, KSpread::DocInfo *docinfo,
 }
 
 
-KSpreadCell::KSpreadCell( KSpreadSheet * _sheet, KSpread::DocInfo *docinfo,
+KSpreadCell::KSpreadCell( KSpreadSheet * _sheet, 
     KSpreadStyle * _style,  int _column, int _row )
-  : KSpreadFormat( _sheet, _style ),
-    DocBase (docinfo)
+  : KSpreadFormat( _sheet, _style )
 {
   d = new CellPrivate;
   d->row = _row;
@@ -377,6 +374,10 @@ QString KSpreadCell::columnName() const
   return columnName( d->column );
 }
 
+KLocale* KSpreadCell::locale()
+{
+  return m_pSheet->doc()->locale();
+}
 
 // Return the symbolic name of any column.
 //
@@ -1417,7 +1418,7 @@ void KSpreadCell::setOutputText()
   else
   {
     //we should display real value
-    d->strOutText = formatter()->formatText (this, formatType());
+    d->strOutText = sheet()->doc()->formatter()->formatText (this, formatType());
   }
 
   //check conditions if needed
@@ -4536,7 +4537,7 @@ void KSpreadCell::checkTextInput()
   // Get the text from that cell
   QString str = d->strText;
 
-  parser()->parse (str, this);
+  sheet()->doc()->parser()->parse (str, this);
 
   // Parsing as time acts like an autoformat: we even change d->strText
   // [h]:mm:ss -> might get set by ValueParser
