@@ -5434,15 +5434,12 @@ void KWView::spellCheckerDone( const QString & )
 void KWView::clearSpellChecker()
 {
     kdDebug(32001) << "KWView::clearSpellChecker" << endl;
-    delete m_spell.kospell;
-    m_spell.kospell=0;
-#if 0
-    if ( m_spell.kspell ) {
-        m_spell.kspell->cleanUp();
-        delete m_spell.kspell;
-        m_spell.kspell = 0;
+    if ( m_spell.kospell ) {
+        m_spell.kospell->cleanUp();
+        delete m_spell.kospell;
+        m_spell.kospell = 0;
     }
-#endif
+
     delete m_spell.textIterator;
     m_spell.textIterator = 0L;
     if(m_spell.macroCmdSpellCheck)

@@ -64,7 +64,10 @@ KoBgSpellCheck::KoBgSpellCheck()
 
 KoBgSpellCheck::~KoBgSpellCheck()
 {
-    delete m_bgSpell.kspell;
+    if ( m_bgSpell.kspell ) {
+        m_bgSpell.kspell->cleanUp();
+        delete m_bgSpell.kspell;
+    }
     delete d->m_pKSpellConfig;
     delete d;
 }
@@ -371,6 +374,7 @@ void KoBgSpellCheck::spellCheckerFinished()
     kdDebug(32500) << "--- KoBgSpellCheck::spellCheckerFinished ---" << endl;
 #endif
     KoSpell::spellStatus status = m_bgSpell.kspell->status();
+    m_bgSpell.kspell->cleanUp();
     delete m_bgSpell.kspell;
     m_bgSpell.kspell = 0;
     m_bgSpell.currentParag = 0;
@@ -421,8 +425,11 @@ void KoBgSpellCheck::stopSpellChecking()
 #ifdef DEBUG_BGSPELLCHECKING
   kdDebug(32500) << "KoBgSpellCheck::stopSpellChecking" << endl;
 #endif
-  delete m_bgSpell.kspell;
-  m_bgSpell.kspell = 0;
+  if ( m_bgSpell.kspell ) {
+      m_bgSpell.kspell->cleanUp();
+      delete m_bgSpell.kspell;
+      m_bgSpell.kspell = 0;
+  }
   m_bgSpell.currentParag = 0;
   m_bgSpell.currentTextObj = 0;
   d->startTimer->stop();
