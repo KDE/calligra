@@ -218,6 +218,8 @@ protected:
     virtual void closeEvent(QCloseEvent *e);
     virtual bool queryClose();
 
+    virtual bool eventFilter(QObject *obj, QEvent *ev);
+
     KRecentFilesAction *m_recent;
 
 protected slots:
