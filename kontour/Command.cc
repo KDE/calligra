@@ -32,7 +32,7 @@
 #include "GObject.h"
 
 Command::Command(GDocument *aGDoc, const QString &name):
-KCommand(name)
+KNamedCommand(name)
 {
   mGDoc = aGDoc;
 }

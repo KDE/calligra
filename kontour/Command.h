@@ -34,7 +34,7 @@ class GDocument;
 class GObject;
 class QWMatrix;
 
-class Command : public KCommand
+class Command : public KNamedCommand
 {
 public:
   Command(GDocument *aGDoc, const QString &name);
