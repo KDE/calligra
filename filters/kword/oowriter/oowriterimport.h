@@ -64,7 +64,7 @@ private:
         const QString& key, int type, const QString& text, QDomElement& child);
     void parseTable( QDomDocument &doc, const QDomElement& parent, QDomElement& currentFramesetElement );
     void parseInsideOfTable( QDomDocument &doc, const QDomElement& parent, QDomElement& currentFramesetElement,
-        const QString& tableName, uint& row, uint& column );
+        const QString& tableName, const QMemArray<double> & columnLefts, uint& row, uint& column );
 
     QDomDocument    m_content;
     QDomDocument    m_meta;

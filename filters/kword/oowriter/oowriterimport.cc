@@ -160,7 +160,7 @@ void OoWriterImport::createStyles( QDomDocument& doc )
             continue;
         // We only generate paragraph styles for now
         if ( e.attribute( "style:family" ) != "paragraph" )
-            continue;
+             continue;
 
         // We use the style stack, to flatten out parent styles
         // Once KWord supports style inheritance, replace this with a single m_styleStack.push.
@@ -1356,7 +1356,7 @@ void OoWriterImport::parseTable( QDomDocument &doc, const QDomElement& parent, Q
     QString tableName ( parent.attribute("table:name") ); // TODO: what if empty (non-unique?)
     kdDebug(30518) << "Found table " << tableName << endl;
 
-    // In OOWriter a table is never inside a paragrpah, in KWord it is always in a paragraph
+    // In OOWriter a table is never inside a paragraph, in KWord it is always in a paragraph
     QDomElement paragraphElementOut (doc.createElement("PARAGRAPH"));
     currentFramesetElement.appendChild(paragraphElementOut);
 
@@ -1378,13 +1378,61 @@ void OoWriterImport::parseTable( QDomDocument &doc, const QDomElement& parent, Q
     elementAnchor.setAttribute("instance",tableName);
     elementFormat.appendChild(elementAnchor);
 
+
+    const QDomNodeList columnStyles ( parent.elementsByTagName( "table:table-column" ));
+
+    // Left position of the cell (similar to RTF's \cellx). The last one defined (no, not the 1024th) is the right position of the last cell
+    QMemArray<double> columnLefts(1024); // ### FIXME: size is PROVISORY!!!
+
+    uint col=0;
+    columnLefts[0]=0; // Initialize left of first cell
+    for (uint i=0; i<columnStyles.length(); i++)
+    {
+        const QDomElement elem ( columnStyles.item(i).toElement() );
+        uint repeat = elem.attribute("table:number-columns-repeated", "1").toUInt(); // Default 1 time
+        if (!repeat)
+            repeat=1; // At least one column defined!
+        const QString styleName ( elem.attribute("table:style-name") );
+        kdDebug(30518) << "Column " << col << " style " << styleName << endl;
+        const QDomElement* style=m_styles.find(styleName);
+        double width=0.0;
+        if (style)
+        {
+            const QDomElement elemProps( style->namedItem("style:properties").toElement() );
+            if (elemProps.isNull())
+            {
+                kdWarning(30518) << "Could not find table column style properties!" << endl;
+            }
+            const QString strWidth ( elemProps.attribute("style:column-width") );
+            kdDebug(30518) << "- raw style width " << strWidth << endl;
+            width = KoUnit::parseValue( strWidth );
+        }
+        else
+            kdWarning(30518) << "Could not find table column style!" << endl;
+
+        if (width < 1.0) // Soemthing is wrong with the width
+        {
+            kdWarning(30518) << "Table column width ridiculous, assuming 1 inch!" << endl;
+            width=72.0;
+        }
+        else
+            kdDebug(30518) << "- style width " << width << endl;
+
+        for (uint j=0; j<repeat; j++)
+        {
+            columnLefts.at(col+1) = width + columnLefts.at(col);
+            kdDebug(30518) << "Cell column " << col << " left " << columnLefts.at(col) << " right " << columnLefts.at(col+1) << endl;
+            ++col;
+        }
+    }
+
     uint row=0;
     uint column=0;
-    parseInsideOfTable(doc, parent, currentFramesetElement, tableName, row, column);
+    parseInsideOfTable(doc, parent, currentFramesetElement, tableName, columnLefts, row, column);
 }
 
 void OoWriterImport::parseInsideOfTable( QDomDocument &doc, const QDomElement& parent, QDomElement& currentFramesetElement,
-    const QString& tableName, uint& row, uint& column )
+    const QString& tableName, const QMemArray<double> & columnLefts, uint& row, uint& column )
 {
     QDomElement framesetsPluralElement (doc.documentElement().namedItem("FRAMESETS").toElement());
     if (framesetsPluralElement.isNull())
@@ -1419,10 +1467,11 @@ void OoWriterImport::parseInsideOfTable( QDomDocument &doc, const QDomElement& p
             framesetsPluralElement.appendChild(framesetElement);
 
             QDomElement frameElementOut(doc.createElement("FRAME"));
-            //frameElementOut.setAttribute("left",28);
-            //frameElementOut.setAttribute("top",42);
-            //frameElementOut.setAttribute("bottom",566);
-            //frameElementOut.setAttribute("right",798);
+            frameElementOut.setAttribute("left",columnLefts.at(column));
+            frameElementOut.setAttribute("right",columnLefts.at(column+1));
+            // We assume 1 inch as cell height (### TODO, but how?)
+            frameElementOut.setAttribute("top",72*row);
+            frameElementOut.setAttribute("bottom",72*row+72);
             frameElementOut.setAttribute("runaround",1);
             // ### TODO: a few attributes are missing
             framesetElement.appendChild(frameElementOut);
@@ -1433,12 +1482,16 @@ void OoWriterImport::parseInsideOfTable( QDomDocument &doc, const QDomElement& p
         else if ( name == "table:table-row" )
         {
             column=0;
-            parseInsideOfTable( doc, t, currentFramesetElement, tableName, row, column);
+            parseInsideOfTable( doc, t, currentFramesetElement, tableName, columnLefts, row, column);
             row++;
         }
         else if ( name == "table:table-header-rows" ) // Provisory (###TODO)
         {
-            parseInsideOfTable( doc, t, currentFramesetElement, tableName, row, column);
+            parseInsideOfTable( doc, t, currentFramesetElement, tableName, columnLefts, row, column);
+        }
+        else if (name == "table:table-column")
+        {
+            // Allready treated in OoWriterImport::parseTable, we do not need to do anything here!
         }
         else
         {
