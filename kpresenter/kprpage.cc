@@ -2984,9 +2984,7 @@ bool KPrPage::haveASelectedPartObj()
 
 bool KPrPage::haveASelectedGroupObj()
 {
-    QPtrList<KPObject> lst;
-    getAllObjectSelectedList(lst );
-    QPtrListIterator<KPObject> it( lst );
+    QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current(); ++it ) {
         if ( it.current()->getType() == OT_GROUP )
             return true;
