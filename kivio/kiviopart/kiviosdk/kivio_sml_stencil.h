@@ -135,6 +135,8 @@ public:
 
     virtual KivioConnectorTarget *connectToTarget( KivioConnectorPoint *, double );
     virtual KivioConnectorTarget *connectToTarget( KivioConnectorPoint *, int );
+    
+    virtual KoPoint snapToTarget( const KoPoint& p, double thresh, bool& hit );
 
     virtual void updateGeometry();
 

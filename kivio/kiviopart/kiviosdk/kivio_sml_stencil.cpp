@@ -1471,6 +1471,34 @@ KivioConnectorTarget *KivioSMLStencil::connectToTarget( KivioConnectorPoint *p, 
     return NULL;
 }
 
+KoPoint KivioSMLStencil::snapToTarget( const KoPoint& p, double thresh, bool& hit )
+{
+    KoPoint retVal = p;
+    double tx, ty;
+    hit = false;
+
+    KivioConnectorTarget *pTarget = m_pConnectorTargets->first();
+
+    while( pTarget )
+    {
+        tx = pTarget->x();
+        ty = pTarget->y();
+
+        if( retVal.x() >= tx - thresh &&
+            retVal.x() <= tx + thresh &&
+            retVal.y() >= ty - thresh &&
+            retVal.y() <= ty + thresh )
+        {
+            retVal.setX(tx);
+            retVal.setY(ty);
+            hit = true;
+        }
+
+        pTarget = m_pConnectorTargets->next();
+    }
+
+    return retVal;
+}
 
 /**
  * Connects a KivioConnectorPoint to this stencil via targetID.

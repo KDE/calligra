@@ -44,6 +44,7 @@ class DCOPObject;
 #include <qrect.h>
 #include <qpalette.h>
 #include <qwidget.h>
+#include <koPoint.h>
 
 #include "kivio_rect.h"
 #include "kivio_stencil.h"
@@ -153,6 +154,8 @@ class KivioPage : public QObject
     void distributeStencils( DistributeData );
 
     KivioConnectorTarget *connectPointToTarget( KivioConnectorPoint *, double );
+    KoPoint snapToTarget( const KoPoint& p, double thresh, bool& hit );
+
     void setHidePage(bool _hide);
   public slots:
     void deleteSelectedStencils();

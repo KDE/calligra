@@ -195,6 +195,13 @@ KivioConnectorTarget *KivioStencil::connectToTarget( KivioConnectorPoint *, int 
     return NULL;
 }
 
+KoPoint KivioStencil::snapToTarget( const KoPoint& p, double /*thresh*/, bool& hit )
+{
+  KoPoint retVal = p;
+  hit = false;
+  return retVal;
+}
+
 int KivioStencil::generateIds(int nextAvailable)
 {
     return nextAvailable;

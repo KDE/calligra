@@ -1528,6 +1528,33 @@ KivioConnectorTarget *KivioPage::connectPointToTarget( KivioConnectorPoint *p, d
    return NULL;
 }
 
+KoPoint KivioPage::snapToTarget( const KoPoint& p, double thresh, bool& hit )
+{
+   KivioLayer *pLayer, *pCurLayer;
+   KoPoint retVal = p;
+
+   pCurLayer = curLayer();
+   pLayer = firstLayer();
+
+   while( pLayer && !hit )
+   {
+      if( pLayer != pCurLayer )
+      {
+          if( pLayer->connectable()==false || pLayer->visible()==false )
+          {
+            pLayer = nextLayer();
+            continue;
+          }
+      }
+
+      retVal = pLayer->snapToTarget(p, 8.0f, hit);
+
+      pLayer = nextLayer();
+   }
+
+   return retVal;
+}
+
 void KivioPage::setHidePage(bool _hide)
 {
     setHidden(_hide);

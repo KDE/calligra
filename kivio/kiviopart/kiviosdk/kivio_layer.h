@@ -22,6 +22,7 @@
 #include <qdom.h>
 #include <qptrlist.h>
 #include <qobject.h>
+#include <koPoint.h>
 class KivioConnectorPoint;
 class KivioConnectorTarget;
 class KivioPage;
@@ -98,6 +99,8 @@ public:
     KivioStencil *takeStencil( KivioStencil * );
 
     KivioConnectorTarget *connectPointToTarget( KivioConnectorPoint *, float );
+
+    KoPoint snapToTarget( const KoPoint& p, double thresh, bool& hit );
 
     int generateStencilIds( int );
 

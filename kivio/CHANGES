@@ -38,3 +38,7 @@ Kivio 1.3beta4 -> 1.3rc1
 ------------------------
 - Fixed copying text in other codecs then latin1
 - Fixed the size of the stencilbar when loading stencils at start up
+
+Kivio 1.3rc1 -> 1.3
+--------------------
+- Made the connector tool snap to targets before the grid/help lines

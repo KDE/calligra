@@ -24,6 +24,7 @@
 #include <qdom.h>
 #include <qptrlist.h>
 #include <qbitarray.h>
+#include <koPoint.h>
 
 class KivioCustomDragData;
 class KivioConnectorPoint;
@@ -220,6 +221,8 @@ public:
     // This attempts to connect based on a targetID.  This should  ***ONLY*** be used
     // right after a load
     virtual KivioConnectorTarget *connectToTarget( KivioConnectorPoint *, int );
+
+    virtual KoPoint snapToTarget( const KoPoint& p, double /*thresh*/, bool& hit );
 
     virtual void searchForConnections( KivioPage * );
     virtual void searchForConnections( KivioPage *pPage, double threshold );

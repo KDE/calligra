@@ -162,7 +162,12 @@ bool ConnectorTool::startRubberBanding( QMouseEvent *e )
     return false;
   }
 
-  startPoint = m_pCanvas->snapToGrid(m_pCanvas->mapFromScreen( e->pos() ));
+  bool hit = false;
+  startPoint = pPage->snapToTarget(m_pCanvas->mapFromScreen(e->pos()), 8.0, hit);
+
+  if(!hit) {
+    startPoint = m_pCanvas->snapToGrid(startPoint);
+  }
 
   // Create the stencil
   m_pStencil = (KivioStraightConnector*)ss->newStencil();
@@ -205,8 +210,13 @@ void ConnectorTool::mouseMove( QMouseEvent * e )
 
 void ConnectorTool::continueRubberBanding( QMouseEvent *e )
 {
-  KoPoint endPoint = m_pCanvas->mapFromScreen( e->pos() );
-  endPoint = m_pCanvas->snapToGrid(endPoint);
+  KivioPage* pPage = m_pCanvas->activePage();
+  bool hit = false;
+  KoPoint endPoint = pPage->snapToTarget(m_pCanvas->mapFromScreen(e->pos()), 8.0, hit);
+
+  if(!hit) {
+    endPoint = m_pCanvas->snapToGrid(endPoint);
+  }
 
   m_pStencil->setStartPoint(endPoint.x(), endPoint.y());
 
