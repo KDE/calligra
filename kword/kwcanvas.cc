@@ -109,7 +109,7 @@ void KWCanvas::repaintChanged( KWFrameSet * fs, bool resetChanged )
 
 void KWCanvas::repaintAll( bool erase /* = false */ )
 {
-    kdDebug() << "KWCanvas::repaintAll erase=" << erase << endl;
+    //kdDebug() << "KWCanvas::repaintAll erase=" << erase << endl;
     viewport()->repaint( erase );
 }
 
@@ -628,7 +628,12 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
         KWFrameSet *frameset = framesetIt.current();
         // Can't move main frameset of a WP document
         if ( doc->processingType() == KWDocument::WP && bFirst ||
-             frameset->getFrameType() == FT_TEXT && frameset->getFrameInfo() != FI_BODY ) continue;
+             frameset->getFrameType() == FT_TEXT && frameset->getFrameInfo() != FI_BODY )
+            continue;
+        // Can't move frame of floating frameset
+        if ( frameset->isFloating() ) continue;
+
+        frameMoved = true;
 
         QListIterator<KWFrame> frameIt( frameset->frameIterator() );
         for ( ; frameIt.current(); ++frameIt )
@@ -670,8 +675,6 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
             }
         }
     }
-
-    frameMoved = true;
 
     // Doesn't work ! It makes the cursor jump.
     // I have tried every combination of contentsToViewport and viewport()->mapToGlobal etc., no luck

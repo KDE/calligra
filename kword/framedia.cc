@@ -856,14 +856,18 @@ bool KWFrameDia::applyChanges()
 
     if ( tab1 )
     {
+        // The floating attribute applies to the whole frameset...
+        KWFrameSet * fs = frame->getFrameSet();
+
         // Floating
-        if ( floating->isChecked() && !frame->getFrameSet()->isFloating() )
+        if ( floating->isChecked() && !fs->isFloating() )
         {
             // ### turn non-floating frame into floating frame (but where to insert the anchor ??)
         }
-        else if ( !floating->isChecked() && frame->getFrameSet()->isFloating() )
+        else if ( !floating->isChecked() && fs->isFloating() )
         {
-            // ## turn floating-frame into non-floating frame (should be easier)
+            // turn floating-frame into non-floating frame (should be easier)
+            fs->setFixed();
         }
     }
     if ( tab2 )
