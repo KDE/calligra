@@ -1353,7 +1353,7 @@ void KWParagCounterWidget::save( KWParagLayout & lay ) {
         lay.counter = new KoParagCounter( m_counter );
 }
 
-KWParagTabulatorsWidget::KWParagTabulatorsWidget( KWUnit::Unit unit, QWidget * parent, const char * name )
+KWParagTabulatorsWidget::KWParagTabulatorsWidget( KWUnit::Unit unit, double frameWidth,QWidget * parent, const char * name )
     : KWParagLayoutWidget( KWParagDia::PD_TABS, parent, name ), m_unit(unit)
 {
     QGridLayout *grid = new QGridLayout( this, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
@@ -1362,12 +1362,22 @@ KWParagTabulatorsWidget::KWParagTabulatorsWidget( KWUnit::Unit unit, QWidget * p
     grid->addWidget( lTab, 0, 0 );
 
     eTabPos = new QLineEdit( this );
+    QString lenght;
+    if(frameWidth==-1)
+    {
+        frameWidth=9999;
+    }
+    else
+    {
+        frameWidth=KWUnit::userValue(frameWidth,m_unit);
+        lenght=i18n("\nFrame width : %1").arg(frameWidth);
 
-    eTabPos->setValidator( new QDoubleValidator( eTabPos ) );
+    }
+    eTabPos->setValidator( new KFloatValidator( 0,frameWidth,eTabPos ) );
     grid->addWidget( eTabPos, 1, 0 );
 
     QString unitDescription = KWUnit::unitDescription( m_unit );
-    lTab->setText(i18n( "1 is a unit name", "Tabulator positions are given in %1" ).arg(unitDescription));
+    lTab->setText(i18n( "1 is a unit name", "Tabulator positions are given in %1").arg(unitDescription)+lenght);
 
     KButtonBox * bbTabs = new KButtonBox( this );
     bAdd = bbTabs->addButton( i18n( "Add" ), false );
@@ -1567,7 +1577,7 @@ QString KWParagTabulatorsWidget::tabName()
 /* Class: KWParagDia                                              */
 /******************************************************************/
 KWParagDia::KWParagDia( QWidget* parent, const char* name,
-                        int flags, KWDocument *doc )
+                        int flags, KWDocument *doc, double _frameWidth )
     : KDialogBase(Tabbed, QString::null, Ok | Cancel, Ok, parent, name, true )
 {
     m_flags = flags;
@@ -1595,7 +1605,7 @@ KWParagDia::KWParagDia( QWidget* parent, const char* name,
     if ( m_flags & PD_TABS )
     {
         QVBox * page = addVBoxPage( i18n( "Tabulators" ) );
-        m_tabulatorsWidget = new KWParagTabulatorsWidget( m_doc->getUnit(), page, "tabs" );
+        m_tabulatorsWidget = new KWParagTabulatorsWidget( m_doc->getUnit(),_frameWidth, page, "tabs");
     }
     setInitialSize( QSize(600, 500) );
 }

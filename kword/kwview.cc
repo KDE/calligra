@@ -2041,7 +2041,7 @@ void KWView::formatParagraph()
         KWParagDia *paragDia = new KWParagDia( this, "",
                                                KWParagDia::PD_SPACING | KWParagDia::PD_ALIGN |
                                                KWParagDia::PD_BORDERS |
-                                               KWParagDia::PD_NUMBERING | KWParagDia::PD_TABS, m_doc );
+                                               KWParagDia::PD_NUMBERING | KWParagDia::PD_TABS, m_doc,edit->textFrameSet()->getFrame(0)->width() );
         paragDia->setCaption( i18n( "Paragraph settings" ) );
 
         // Initialize the dialog from the current paragraph's settings

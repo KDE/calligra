@@ -273,7 +273,7 @@ class KWParagTabulatorsWidget : public KWParagLayoutWidget
 {
     Q_OBJECT
 public:
-    KWParagTabulatorsWidget( KWUnit::Unit unit, QWidget * parent, const char * name = 0 );
+    KWParagTabulatorsWidget( KWUnit::Unit unit, double _frameWidth, QWidget * parent, const char * name = 0 );
     virtual ~KWParagTabulatorsWidget() {}
 
     virtual void display( const KWParagLayout & lay );
@@ -321,7 +321,7 @@ public:
     static const int PD_NUMBERING = 8;
     static const int PD_TABS = 16;
 
-    KWParagDia( QWidget*, const char*, int flags, KWDocument *_doc );
+    KWParagDia( QWidget*, const char*, int flags, KWDocument *_doc, double _frameWidth=-1);
     ~KWParagDia();
 
     int getFlags() { return m_flags; }

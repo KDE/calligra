@@ -98,7 +98,7 @@ KWStyleManager::KWStyleManager( QWidget *_parent, KWDocument *_doc )
     addTab( newTab );
 
     newTab = new KWStyleParagTab( m_tabs );
-    newTab->setWidget( new KWParagTabulatorsWidget( unit, newTab ) );
+    newTab->setWidget( new KWParagTabulatorsWidget( unit, -1, newTab ) );
     addTab( newTab );
     m_stylesList->setCurrentItem( 0 );
     noSignals=false;
