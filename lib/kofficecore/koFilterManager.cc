@@ -143,11 +143,19 @@ QString KoFilterManager::import( const char* _url, const char *_native_format )
   K2URL url( _url );
   
   KMimeType *t = KMimeType::findByURL( url, 0, url.isLocalFile() );
-
-  cerr << "######### FOUND MimeType " << _url << endl;
+  QString mimeType;
+  if (t) {
+    cerr << "######### FOUND MimeType " << t->mimeType() << endl;
+    mimeType = t->mimeType();
+  }
+  else {
+    cerr << "####### No MimeType found. findByURL returned 0. Setting text/plain" << endl;
+    mimeType = "text/plain";
+  }
   
-  if ( strcmp( t->mimeType(), _native_format ) == 0 )
+  if ( (strcmp( mimeType, _native_format ) == 0) )
   {
+    cerr << "strcmp( mimeType, _native_format ) == 0 !! Returning without conversion. " << endl;
     // TODO: fetch remote file!
     assert( url.isLocalFile() );
     
@@ -157,8 +165,9 @@ QString KoFilterManager::import( const char* _url, const char *_native_format )
   QString constr = "Export == '";
   constr += _native_format;
   constr += "' and Import == '";
-  constr += t->mimeType();
+  constr += mimeType;
   constr += "'";
+
   vector<KoFilterEntry> vec = koQueryFilters( constr );
   if ( vec.size() == 0 )
   {
@@ -199,7 +208,7 @@ QString KoFilterManager::import( const char* _url, const char *_native_format )
   KOffice::Filter_var filter = factory->create();
   assert( !CORBA::is_nil( filter ) );
 
-  filter->filter( data, t->mimeType(), _native_format );
+  filter->filter( data, mimeType, _native_format );
   
   p = new char[ data.length() ];
   for( CORBA::ULong l = 0; l < data.length(); l++ )
