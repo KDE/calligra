@@ -55,8 +55,8 @@ public:
 
     PBPreview( QWidget* parent, const char* name, PaintType _paintType );
 
-    void setPen( QPen _pen ) { pen = _pen; repaint( true ); }
-    void setBrush( QBrush _brush ) { brush = _brush; }
+    void setPen( const QPen &_pen ) { pen = _pen; repaint( true ); }
+    void setBrush( const QBrush &_brush ) { brush = _brush; }
     void setLineBegin( LineEnd lb ) { lineBegin = lb; repaint( true ); }
     void setLineEnd( LineEnd le ) { lineEnd = le; repaint( true ); }
     void setGradient( KPGradient *g ) { gradient = g; }

@@ -47,7 +47,7 @@ public:
 
     void setShadowDirection( ShadowDirection sd ) { shadowDirection = sd; repaint( true ); }
     void setShadowDistance( int sd ) { shadowDistance = sd; repaint( true ); }
-    void setShadowColor( QColor sc ) { shadowColor = sc; repaint( true ); }
+    void setShadowColor( const QColor &sc ) { shadowColor = sc; repaint( true ); }
 
 protected:
     void drawContents( QPainter* );
@@ -73,7 +73,7 @@ public:
 
     void setShadowDirection( ShadowDirection sd );
     void setShadowDistance( int sd );
-    void setShadowColor( QColor sc );
+    void setShadowColor( const QColor &sc );
 
     ShadowDirection getShadowDirection() { return shadowDirection; }
     int getShadowDistance() { return shadowDistance; }

@@ -51,7 +51,7 @@ public:
     { len = _len; repaint( true ); }
     void setType( PieType _type )
     { type = _type; repaint( true ); }
-    void setPenBrush( QPen _pen, QBrush _brush )
+    void setPenBrush( const QPen &_pen, const QBrush &_brush )
     { pen = _pen; brush = _brush; repaint( true ); }
 
 protected:
@@ -82,7 +82,7 @@ public:
     { len = _len; eLen->setValue( len ); piePreview->setLength( len ); }
     void setType( PieType _type )
     { type = _type; cType->setCurrentItem( _type ); piePreview->setType( type ); }
-    void setPenBrush( QPen _pen, QBrush _brush )
+    void setPenBrush( const QPen &_pen, const QBrush &_brush )
     { pen = _pen; brush = _brush; piePreview->setPenBrush( pen, brush );  }
 
     int getAngle()

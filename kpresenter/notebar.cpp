@@ -91,22 +91,22 @@ void NoteBar::slotTextChanged()
 
 void NoteBar::slotSelectionChanged()
 {
-    kdDebug() << "slotSelectionChanged(): " << textEdit->hasSelectedText() << endl;
+    kdDebug(33001) << "slotSelectionChanged(): " << textEdit->hasSelectedText() << endl;
 }
 
 void NoteBar::slotCopyAvailable( bool yes )
 {
-    kdDebug() << "slotCopyAvailable( " << yes << " )" << endl;
+    kdDebug(33001) << "slotCopyAvailable( " << yes << " )" << endl;
 }
 
 void NoteBar::slotUndoAvailable( bool yes )
 {
-    kdDebug() << "slotUndoAvailable( " << yes << " )" << endl;
+    kdDebug(33001) << "slotUndoAvailable( " << yes << " )" << endl;
 }
 
 void NoteBar::slotRedoAvailable( bool yes )
 {
-    kdDebug() << "slotRedoAvailable( " << yes << " )" << endl;
+    kdDebug(33001) << "slotRedoAvailable( " << yes << " )" << endl;
 }
 
 void NoteBar::printNote( QPainter *_painter, KPrinter *_printer )

@@ -282,7 +282,7 @@ void ShadowDia::setShadowDistance( int sd )
 }
 
 /*====================== set shadow color ========================*/
-void ShadowDia::setShadowColor( QColor sc )
+void ShadowDia::setShadowColor(const  QColor &sc )
 {
     shadowColor = sc;
     sPreview->setShadowColor( shadowColor );
