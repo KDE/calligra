@@ -284,9 +284,9 @@ void Para::analyseFormat(const QDomNode balise)
 		case EF_ERROR: kdDebug() << "Id format error" << endl;
 			break;
 		case EF_TEXTZONE: /* It's a text line (1) */
+				zone = new TextZone(_texte, this);
 				if(_currentPos != _texte.length())
 				{
-					zone = new TextZone(_texte, this);
 					zone->analyse(balise);
 					if(zone->getPos() != _currentPos)
 					{
