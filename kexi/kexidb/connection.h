@@ -380,7 +380,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		bool insertRecord(TableSchema &tableSchema, QValueList<QVariant>& values);
 		
 		bool insertRecord(FieldList& fields, QValueList<QVariant>& values);
-		
+
 		/*! Creates table defined by \a tableSchema.
 		 Schema information is also added into kexi system tables, for later reuse.
 		 \a tableSchema object is inserted to Connection structures - it is
@@ -495,6 +495,17 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		/*! \return sql string of actually executed SQL statement,
 		 usually using drv_executeSQL(). */
 		const QString recentSQLString() const { return m_sql; }
+
+		/*! Stores object's schema data (id, name, caption, help text)
+		 described by \a sdata on the backend. 
+		 If \a newObject is true, new entry is created, 
+		 and obtained, unique object identifier is assigned to \a sdata 
+		 (see SchemaData::id()).
+		 
+		 If \a newObject is false, it's expected that entry on the backend already exists,
+		 so it's updated (changes to identifier are not allowed).
+		 \return true on success. */
+		bool storeObjectSchemaData( SchemaData &sdata, bool newObject );
 
 	protected:
 		/*! Used by Driver */
@@ -702,7 +713,10 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 			using \a cursor opened on 'kexi__objects' table, pointing to a record
 			corresponding to given object. */
 		bool setupObjectSchemaData( const KexiDB::RowData &data, SchemaData &sdata );
-//		bool setupObjectSchemaData( const KexiDB::Cursor *cursor, SchemaData *sdata );
+
+		/*! Added for convenience. 
+		 \sa setupObjectSchemaData( const KexiDB::RowData &data, SchemaData &sdata ) */
+		bool setupObjectSchemaData( int objectID, SchemaData &sdata );
 		
 		/*! Setups full table schema for table \a t using 'kexi__*' system tables. 
 			Used internally by tableSchema() methods. */

@@ -69,7 +69,7 @@ Field::Field(TableSchema *tableSchema)
 
 Field::Field(const QString& name, Type ctype,
  uint cconst, uint options, uint length, uint precision,
- QVariant defaultValue, const QString& caption, const QString& helpText,
+ QVariant defaultValue, const QString& caption, const QString& description,
  uint width)
 	: m_parent(0)
 	,m_name(name)
@@ -80,7 +80,7 @@ Field::Field(const QString& name, Type ctype,
 	,m_defaultValue(defaultValue)
 	,m_order(-1)
 	,m_caption(caption)
-	,m_help(helpText)
+	,m_desc(description)
 	,m_width(width)
 	,m_expr(0)
 {

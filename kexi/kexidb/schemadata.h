@@ -36,14 +36,17 @@ namespace KexiDB {
 class KEXI_DB_EXPORT SchemaData
 {
 	public:
-		const int type() const;
-		const int id() const;
-		const QString& name() const;
+		SchemaData(int obj_type = KexiDB::UnknownObjectType);
+		virtual ~SchemaData();
+
+		int type() const { return m_type; }
+		int id() const { return m_id; }
+		QString name() const { return m_name; }
 		void setName(const QString& n) { m_name=n; }
-		const QString& caption() const;
+		QString caption() const { return m_caption; }
 		void setCaption(const QString& c) { m_caption=c; }
-		const QString& helpText() const;
-		void setHelpText(const QString& ht) { m_helpText=ht; }
+		QString description() const { return m_desc; }
+		void setDescription(const QString& desc) { m_desc=desc; }
 
 		//! \return debug string useful for debugging
 		virtual QString schemaDataDebugString() const;
@@ -55,7 +58,7 @@ class KEXI_DB_EXPORT SchemaData
 		 but just based on the information about native table.
 		 
 		 By native object we mean the one that has no additional
-		 data like caption, helpText, etc. properties (no kexidb extensions).
+		 data like caption, description, etc. properties (no kexidb extensions).
 		 
 		 Native objects schemas are used mostly for representing 
 		 kexi system (kexi__*) tables in memory for later reference;
@@ -67,19 +70,16 @@ class KEXI_DB_EXPORT SchemaData
 		
 		/* Sets native flag */
 		virtual void setNative(bool set) { m_native=set; }
-	protected:
-		SchemaData(int obj_type = KexiDB::UnknownObjectType);
-		virtual ~SchemaData();
 
+	protected:
 		//! Clears all properties excpet 'type'.
 		void clear();
 
-	//js	QStringList m_primaryKeys;
 		int m_type;
 		int m_id;
 		QString m_name;
 		QString m_caption;
-		QString m_helpText;
+		QString m_desc;
 		bool m_native : 1;
 
 	friend class Connection;

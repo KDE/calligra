@@ -49,6 +49,7 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 		typedef QPtrList<TableSchema> List; //!< Type of tables list
 
 		TableSchema(const QString & name);
+		TableSchema(const SchemaData& sdata);
 		TableSchema();
 
 		/*! Copy constructor. */
@@ -102,7 +103,7 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 		 
 		 Any internal KexiDB system table's schema (kexi__*) has 
 		 cleared its SchemaData part, e.g. id=-1 for such table,
-		 and no helptext, caption and so on. This is because
+		 and no description, caption and so on. This is because
 		 it represents a native database table rather that extended Kexi table.
 		 
 		 isKexiDBSystem()==true implies isNative()==true.
@@ -133,6 +134,8 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 	protected:
 		/*! Automatically retrieves table schema via connection. */
 		TableSchema(Connection *conn, const QString & name = QString::null);
+
+		void init();
 
 		IndexSchema::List m_indices;
 

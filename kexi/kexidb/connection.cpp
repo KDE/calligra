@@ -781,16 +781,7 @@ C_INS_REC_ALL
 	}
 
 C_INS_REC_ALL
-/*
-C_INS_REC( C_A(0), V_ALAST(0)  )
-C_INS_REC( C_A(0) C_A(1), V_A(0) V_ALAST(1) )
-C_INS_REC( C_A(0) C_A(1) C_A(2), V_A(0) V_A(1) V_ALAST(2) )
-C_INS_REC( C_A(0) C_A(1) C_A(2) C_A(3), V_A(0) V_A(1) V_A(2) V_ALAST(3) )
-C_INS_REC( C_A(0) C_A(1) C_A(2) C_A(3) C_A(4), V_A(0) V_A(1) V_A(2) V_A(3) V_ALAST(4) )
-C_INS_REC( C_A(0) C_A(1) C_A(2) C_A(3) C_A(4) C_A(5), V_A(0) V_A(1) V_A(2) V_A(3) V_A(4) V_ALAST(5) )
-C_INS_REC( C_A(0) C_A(1) C_A(2) C_A(3) C_A(4) C_A(5) C_A(6), V_A(0) V_A(1) V_A(2) V_A(3) V_A(4) V_A(5) V_ALAST(6) )
-C_INS_REC( C_A(0) C_A(1) C_A(2) C_A(3) C_A(4) C_A(5) C_A(6) C_A(7), V_A(0) V_A(1) V_A(2) V_A(3) V_A(4) V_A(5) V_A(6) V_ALAST(7) )
-*/
+
 #undef C_A
 #undef V_A
 #undef V_ALAST
@@ -962,7 +953,9 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema )
 		createTable_ERR;
 	
 	//add schema info to kexi__* tables
-	TableSchema *ts = m_tables_byname["kexi__objects"];
+	if (!storeObjectSchemaData( *tableSchema, true ))
+		createTable_ERR;
+/*	TableSchema *ts = m_tables_byname["kexi__objects"];
 	if (!ts)
 		return false;
 		
@@ -971,23 +964,23 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema )
 		return false;
 		
 	if (!insertRecord(*fl, QVariant(tableSchema->type()), QVariant(tableSchema->name()),
-		QVariant(tableSchema->caption()), QVariant(tableSchema->helpText()) ))
+		QVariant(tableSchema->caption()), QVariant(tableSchema->description()) ))
 		createTable_ERR;
 	
-	delete fl;
+	delete fl;*/
 	
 //	if (!insertRecord(*ts, QVariant()/*autoinc*/, QVariant(tableSchema->type()), QVariant(tableSchema->name()),
-//		QVariant(tableSchema->caption()), QVariant(tableSchema->helpText())))
+//		QVariant(tableSchema->caption()), QVariant(tableSchema->description())))
 //		createTable_ERR;
-	int obj_id = lastInsertedAutoIncValue("o_id",*ts);
+/*	int obj_id = lastInsertedAutoIncValue("o_id",*ts);
 	if (obj_id<=0)
 		createTable_ERR;
-	KexiDBDbg << "######## obj_id == " << obj_id << endl;
+	KexiDBDbg << "######## obj_id == " << obj_id << endl;*/
 	
-	ts = m_tables_byname["kexi__fields"];
+	TableSchema *ts = m_tables_byname["kexi__fields"];
 	if (!ts)
 		return false;
-	fl = ts->subList(
+	FieldList *fl = ts->subList(
 		"t_id",
 		"f_type",
 		"f_name",
@@ -1009,7 +1002,7 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema )
 	while (f) {
 		QValueList<QVariant> vals;
 		vals
-		<< QVariant(obj_id)
+		<< QVariant(tableSchema->id())//obj_id)
 		<< QVariant(f->type())
 		<< QVariant(f->name())
 		<< QVariant(f->length())
@@ -1019,7 +1012,7 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema )
 		<< QVariant(f->defaultValue())
 		<< QVariant(f->order())
 		<< QVariant(f->caption())
-		<< QVariant(f->helpText());
+		<< QVariant(f->description());
 		
 		if (!insertRecord(*fl, vals ))
 			createTable_ERR;
@@ -1413,10 +1406,47 @@ bool Connection::setupObjectSchemaData( const KexiDB::RowData &data, SchemaData 
 		return false;
 	}
 	sdata.m_caption = data[3].toString();
-	sdata.m_helpText = data[4].toString();
+	sdata.m_desc = data[4].toString();
 	
 	KexiDBDbg<<"@@@ Connection::setupObjectSchemaData() == " << sdata.schemaDataDebugString() << endl;
 	return true;
+}
+
+bool Connection::setupObjectSchemaData( int objectID, SchemaData &sdata )
+{
+	RowData data;
+	if (!querySingleRecord(QString("select o_id, o_type, o_name, o_caption, o_desc from kexi__objects where o_id=%1").arg(objectID), data))
+		return false;
+	return setupObjectSchemaData( data, sdata );
+}
+
+bool Connection::storeObjectSchemaData( SchemaData &sdata, bool newObject )
+{
+	TableSchema *ts = m_tables_byname["kexi__objects"];
+	if (!ts)
+		return false;
+	if (newObject) {
+		FieldList *fl = ts->subList("o_type", "o_name", "o_caption", "o_desc");
+		if (!fl)
+			return false;
+		if (!insertRecord(*fl, QVariant(sdata.type()), QVariant(sdata.name()),
+			QVariant(sdata.caption()), QVariant(sdata.description()) ))
+			return false;
+		//fetch newly assigned ID
+		int obj_id = lastInsertedAutoIncValue("o_id",*ts);
+		KexiDBDbg << "######## obj_id == " << obj_id << endl;
+		if (obj_id<=0)
+			return false;
+		sdata.m_id = obj_id;
+		return true;
+	}
+	FieldList *fl = ts->subList("o_id", "o_type", "o_name", "o_caption", "o_desc");
+	if (!fl)
+		return false;
+	return drv_executeSQL(QString("update kexi__objects set o_type=%2, o_caption=%3, o_desc=%4 where o_id=%1")
+		.arg(sdata.id()).arg(sdata.type())
+		.arg(m_driver->valueToSQL(KexiDB::Field::Text, sdata.caption()))
+		.arg(m_driver->valueToSQL(KexiDB::Field::Text, sdata.description())) );
 }
 
 bool Connection::querySingleRecord(const QString& sql, KexiDB::RowData &data)
@@ -1489,7 +1519,7 @@ KexiDB::TableSchema* Connection::setupTableSchema( const KexiDB::RowData &data )
 			cursor->value(2).asString(), (Field::Type)f_type, f_constr, f_len, f_prec, f_opts );
 		f->setDefaultValue( cursor->value(7).toCString() );
 		f->m_caption = cursor->value(9).asString();
-		f->m_help = cursor->value(10).asString();
+		f->m_desc = cursor->value(10).asString();
 		t->addField(f);
 		cursor->moveNext();
 	}
@@ -1518,7 +1548,7 @@ TableSchema* Connection::tableSchema( const QString& tableName )
 		return t;
 	//not found: retrieve schema
 	RowData data;
-	if (!querySingleRecord(QString("select * from kexi__objects where o_name='%1' and o_type=%2")
+	if (!querySingleRecord(QString("select o_id, o_type, o_name, o_caption, o_desc from kexi__objects where o_name='%1' and o_type=%2")
 			.arg(m_tableName).arg(KexiDB::TableObjectType), data))
 		return 0;
 	
@@ -1532,7 +1562,7 @@ TableSchema* Connection::tableSchema( const int tableId )
 		return t;
 	//not found: retrieve schema
 	RowData data;
-	if (!querySingleRecord(QString("select * from kexi__objects where o_id=%1").arg(tableId), data))
+	if (!querySingleRecord(QString("select o_id, o_type, o_name, o_caption, o_desc from kexi__objects where o_id=%1").arg(tableId), data))
 		return 0;
 	
 	return setupTableSchema(data);
@@ -1544,13 +1574,12 @@ QuerySchema* Connection::querySchema( const int queryId )
 	if (q)
 		return q;
 	//not found: retrieve schema
-	RowData queryobject_data, querydata_data;
-
-	if (!querySingleRecord(QString("select * from kexi__objects where o_id=%1").arg(queryId), queryobject_data))
-		return 0;
+//	RowData queryobject_data, querydata_data;
+//	if (!querySingleRecord(QString("select * from kexi__objects where o_id=%1").arg(queryId), queryobject_data))
+//		return 0;
 
 	q = new QuerySchema();
-	if (!setupObjectSchemaData( queryobject_data, *q )) {
+	if (!setupObjectSchemaData( queryId, *q )) {
 		delete q;
 		return 0;
 	}
@@ -1599,7 +1628,7 @@ bool Connection::setupKexiDBSystemSchema()
 	.addField( new Field("o_type", Field::Byte, 0, Field::Unsigned) )
 	.addField( new Field("o_name", Field::Text) )
 	.addField( new Field("o_caption", Field::Text ) )
-	.addField( new Field("o_help", Field::LongText ) );
+	.addField( new Field("o_desc", Field::LongText ) );
 
 	TableSchema *t_fields = newKexiDBSystemTableSchema("kexi__fields");
 	t_fields->addField( new Field("t_id", Field::Integer, 0, Field::Unsigned) )

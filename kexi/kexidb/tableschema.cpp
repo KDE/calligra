@@ -36,9 +36,17 @@ TableSchema::TableSchema(const QString& name)
 	, m_isKexiDBSystem(false)
 {
 	m_name = name;
-	m_indices.setAutoDelete( true );
-	m_pkey = new IndexSchema(this);
-	m_indices.append(m_pkey);
+	init();
+}
+
+TableSchema::TableSchema(const SchemaData& sdata)
+	: FieldList(true)
+	, SchemaData(sdata)
+	, m_conn(0)
+	, m_query(0)
+	, m_isKexiDBSystem(false)
+{
+	init();
 }
 
 TableSchema::TableSchema()
@@ -47,6 +55,11 @@ TableSchema::TableSchema()
 	, m_conn(0)
 	, m_query(0)
 	, m_isKexiDBSystem(false)
+{
+	init();
+}
+
+void TableSchema::init()
 {
 	m_indices.setAutoDelete( true );
 	m_pkey = new IndexSchema(this);

@@ -35,46 +35,21 @@ SchemaData::~SchemaData()
 {
 }
 
-const int SchemaData::type() const
-{
-	return m_type;
-}
-
-const int SchemaData::id() const
-{
-	return m_id;
-}
-
-const QString& SchemaData::name() const
-{
-	return m_name;
-}
-
-const QString& SchemaData::caption() const
-{
-	return m_caption;
-}
-
-const QString& SchemaData::helpText() const
-{
-	return m_helpText;
-}
-
 void SchemaData::clear()
 {
 	m_id = -1;
 	m_name = QString::null;
 	m_caption = QString::null;
-	m_helpText = QString::null;
+	m_desc = QString::null;
 }
 
 QString SchemaData::schemaDataDebugString() const
 {
-	QString helpText = m_helpText;
-	if (helpText.length()>40) {
-		helpText.truncate(40);
-		helpText+="...";
+	QString desc = m_desc;
+	if (desc.length()>40) {
+		desc.truncate(40);
+		desc+="...";
 	}
-	return QString("id=%1 name='%2' caption='%3' helpText='%4'")
-		.arg(m_id).arg(m_name).arg(m_caption).arg(helpText);
+	return QString("id=%1 name='%2' caption='%3' desc='%4'")
+		.arg(m_id).arg(m_name).arg(m_caption).arg(desc);
 }

@@ -138,7 +138,8 @@ class KEXI_DB_EXPORT Field
 			uint options = NoOptions,
 			uint length=0, uint precision=0,
 			QVariant defaultValue=QVariant(),
-			const QString& caption = QString::null, const QString& helpText = QString::null,
+			const QString& caption = QString::null,
+			const QString& description = QString::null,
 			uint width = 0);
 
 		/*! Copy constructor. */
@@ -261,8 +262,8 @@ class KEXI_DB_EXPORT Field
 		inline QString caption() const { return m_caption; }
 		//! \return caption of this field or - if empty - return its name
 		inline QString captionOrName() const { return m_caption.isEmpty() ? m_name : m_caption; }
-		//! \return help text for this field
-		inline QString helpText() const { return m_help; }
+		//! \return description text for this field
+		inline QString description() const { return m_desc; }
 		//! \return width of this field (usually in pixels or points)
 		//! 0 (the default) means there is no hint for the width
 		inline uint width() const { return m_width; }
@@ -298,7 +299,7 @@ class KEXI_DB_EXPORT Field
 		void setNotNull(bool n);
 		void setNotEmpty(bool n);
 		void setCaption(const QString& caption) { m_caption=caption; }
-		void setHelpText(const QString& helpText) { m_help=helpText; }
+		void setDescription(const QString& description) { m_desc=description; }
 		void setWidth(uint w) { m_width=w; }
 
 		/*! There can be added asterisks (QueryAsterisk objects) 
@@ -348,7 +349,7 @@ class KEXI_DB_EXPORT Field
 		QVariant m_defaultValue;
 		int m_order;
 		QString m_caption;
-		QString m_help;
+		QString m_desc;
 		uint m_width;
 		QValueVector<QString> m_hints;
 
