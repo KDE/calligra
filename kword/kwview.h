@@ -226,6 +226,7 @@ public slots:
     void tableDeleteCol();
     void tableJoinCells();
     void tableSplitCells();
+    void tableProtectCells();
     void tableUngroupTable();
     void tableDelete();
 
@@ -501,6 +502,7 @@ private:
     KAction *actionTableResizeCol;
     KAction *actionTableJoinCells;
     KAction *actionTableSplitCells;
+    KToggleAction *actionTableProtectCells;
 
     KAction *actionTableUngroup;
     KAction *actionTableDelete;

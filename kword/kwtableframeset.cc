@@ -36,6 +36,7 @@ DESCRIPTION
 #include <dcopobject.h>
 #include "KWordFrameSetIface.h"
 #include "KWordTableFrameSetIface.h"
+#include <kmessagebox.h>
 
 KWTableFrameSet::KWTableFrameSet( KWDocument *doc, const QString & name ) :
     KWFrameSet( doc )
@@ -1926,6 +1927,30 @@ void KWTableFrameSet::setRightBorder(KoBorder newBorder) {
     }
 }
 
+KCommand *KWTableFrameSet::setProtectContent ( bool _protect )
+{
+    QPtrListIterator<Cell> it( m_cells );
+    Cell *cell;
+    bool createMacro = false;
+    KMacroCommand *macro = new KMacroCommand( i18n("Protect Content"));
+    while ( (cell = it.current()) != 0 ) {
+        ++it;
+        if (cell->frame( 0 )->isSelected()) {
+            if ( cell->protectContent() != _protect )
+            {
+                KWProtectContentCommand *cmd = new KWProtectContentCommand( i18n("Protect Content"), cell , _protect);
+                cell->setProtectContent( _protect );
+                macro->addCommand( cmd );
+                createMacro = true;
+            }
+        }
+    }
+    if ( createMacro )
+        return macro;
+    else
+        delete macro;
+    return 0L;
+}
 
 #ifndef NDEBUG
 void KWTableFrameSet::printDebug( KWFrame * theFrame )
@@ -2249,7 +2274,12 @@ void KWTableFrameSetEdit::keyPressEvent( QKeyEvent * e )
     if ( fs )
         setCurrentCell( fs );
     else
-        m_currentCell->keyPressEvent( e );
+    {
+        if ( !textframeSet->textObject()->protectContent() )
+            m_currentCell->keyPressEvent( e );
+        else
+            KMessageBox::information(0L, i18n("Read-only content cannot be changed. No modifications will be accepted"));
+    }
 }
 
 void KWTableFrameSetEdit::keyReleaseEvent( QKeyEvent * e )

@@ -815,6 +815,10 @@ void KWView::setupActions()
     actionTableSplitCells->setToolTip( i18n( "Split one cell into two or more cells." ) );
     actionTableSplitCells->setWhatsThis( i18n( "Split one cell into two or more cells.<p>Cells can be split horizontally, vertically or both directions at once." ) );
 
+    actionTableProtectCells= new KToggleAction( i18n( "Protect Cells" ), 0,
+                                         this, SLOT( tableProtectCells() ),
+                                         actionCollection(), "table_protectcells" );
+
     actionTableUngroup = new KAction( i18n( "&Ungroup Table" ), 0,
                                       this, SLOT( tableUngroupTable() ),
                                       actionCollection(), "table_ungroup" );
@@ -1588,6 +1592,7 @@ void KWView::showMouseMode( int _mouseMode )
 
     actionTableJoinCells->setEnabled( FALSE );
     actionTableSplitCells->setEnabled( FALSE );
+    actionTableProtectCells->setEnabled( false );
     actionFormatFrameSet->setEnabled(FALSE);
 }
 
@@ -3349,6 +3354,17 @@ void KWView::tableDelete()
     m_gui->canvasWidget()->emitFrameSelectedChanged();
 }
 
+void KWView::tableProtectCells()
+{
+    KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
+    Q_ASSERT(table);
+    if (!table)
+        return;
+    KCommand *cmd = table->setProtectContent ( actionTableProtectCells->isChecked() );
+    if ( cmd )
+        m_doc->addCommand( cmd );
+}
+
 // Called when selecting a style in the Format / Style menu
 void KWView::slotStyleSelected()
 {
@@ -4639,6 +4655,15 @@ void KWView::frameSelectedChanged()
     actionTableDelete->setEnabled( state );
     actionTableUngroup->setEnabled( state );
     actionTableResizeCol->setEnabled( state );
+    actionTableProtectCells->setEnabled( state );
+    if ( state )
+    {
+        unsigned int row = 0;
+        unsigned int col = 0;
+        table->getFirstSelected(row, col );
+        bool _protect = table->getCell( row, col )->protectContent();
+        actionTableProtectCells->setChecked(_protect);
+    }
 
     m_doc->refreshFrameBorderButton();
 

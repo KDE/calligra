@@ -280,6 +280,9 @@ public:
     */
     void setRightBorder(KoBorder newBorder);
 
+    KCommand *setProtectContent ( bool _protect );
+
+
 #ifndef NDEBUG
     virtual void printDebug( KWFrame * frame );
     virtual void printDebug();
