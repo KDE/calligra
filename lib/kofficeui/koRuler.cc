@@ -56,6 +56,7 @@ KoRuler::KoRuler(QWidget *_parent,QWidget *_canvas,Orientation _orientation,
   currTab = -1;
 
   tabList.setAutoDelete(false);
+  frameStart = -1;
 }
 
 /*================================================================*/
@@ -187,7 +188,7 @@ void KoRuler::drawTabs(QPainter &_painter)
   for (unsigned int i = 0;i < tabList.count();i++)
     {
       _tab = tabList.at(i);
-      ptPos = _tab->ptPos - diffx;
+      ptPos = _tab->ptPos - diffx + (frameStart == -1 ? static_cast<int>(layout.ptLeft) : frameStart);
       switch (_tab->type)
 	{
 	case T_LEFT:
@@ -357,11 +358,13 @@ void KoRuler::mousePressEvent(QMouseEvent *e)
 	  p.begin(canvas);
 	  p.setRasterOp(NotROP);
 	  p.setPen(QPen(black,1,SolidLine));
-	  p.drawLine(tabList.at(currTab)->ptPos,0,tabList.at(currTab)->ptPos,canvas->height());
+	  p.drawLine(tabList.at(currTab)->ptPos + (frameStart == -1 ? static_cast<int>(layout.ptLeft) : frameStart),0,
+		     tabList.at(currTab)->ptPos + (frameStart == -1 ? static_cast<int>(layout.ptLeft) : frameStart),canvas->height());
 	  p.end();
 	}
     }
-  else if (tabChooser && (flags & F_TABS) && tabChooser->getCurrTabType() != 0)    {
+  else if (tabChooser && (flags & F_TABS) && tabChooser->getCurrTabType() != 0)    
+    {
       KoTabulator *_tab = new KoTabulator;
       switch (tabChooser->getCurrTabType())
 	{
@@ -379,8 +382,8 @@ void KoRuler::mousePressEvent(QMouseEvent *e)
 	  break;
 	default: break;
 	}
-      _tab->ptPos = e->x() + diffx;
-      _tab->mmPos = POINT_TO_MM(e->x() + diffx);
+      _tab->ptPos = e->x() + diffx - (frameStart == -1 ? static_cast<int>(layout.ptLeft) : frameStart);
+      _tab->mmPos = POINT_TO_MM(_tab->ptPos);
 
       tabList.append(_tab);
       emit tabListChanged(&tabList);
@@ -470,11 +473,13 @@ void KoRuler::mouseReleaseEvent(QMouseEvent *e)
 	  p.begin(canvas);
 	  p.setRasterOp(NotROP);
 	  p.setPen(QPen(black,1,SolidLine));
-	  p.drawLine(tabList.at(currTab)->ptPos,0,tabList.at(currTab)->ptPos,canvas->height());
+	  p.drawLine(tabList.at(currTab)->ptPos + (frameStart == -1 ? static_cast<int>(layout.ptLeft) : frameStart),0,
+		     tabList.at(currTab)->ptPos + (frameStart == -1 ? static_cast<int>(layout.ptLeft) : frameStart),canvas->height());
 	  p.end();
 	}
-      if (tabList.at(currTab)->ptPos < layout.ptLeft || tabList.at(currTab)->ptPos > layout.ptWidth - (layout.ptRight + layout.ptLeft) ||
-	  e->y() < 0 || e->y() > height())
+      if (tabList.at(currTab)->ptPos + (frameStart == -1 ? static_cast<int>(layout.ptLeft) : frameStart) < layout.ptLeft || 
+	  tabList.at(currTab)->ptPos + (frameStart == -1 ? static_cast<int>(layout.ptLeft) : frameStart) > layout.ptWidth - 
+	  (layout.ptRight + layout.ptLeft) || e->y() < -50 || e->y() > height() + 50)
 	tabList.remove(currTab);
 
       emit tabListChanged(&tabList);
@@ -543,7 +548,7 @@ void KoRuler::mouseMoveEvent(QMouseEvent *e)
 		currTab = -1;
 		for (unsigned int i = 0;i < tabList.count();i++)
 		  {
-		    pos = tabList.at(i)->ptPos - diffx;
+		    pos = tabList.at(i)->ptPos - diffx + (frameStart == -1 ? static_cast<int>(layout.ptLeft) : frameStart);
 		    if (mx > pos - 5 && mx < pos + 5)
 		      {
 			setCursor(sizeHorCursor);
@@ -656,10 +661,14 @@ void KoRuler::mouseMoveEvent(QMouseEvent *e)
 		      p.begin(canvas);
 		      p.setRasterOp(NotROP);
 		      p.setPen(QPen(black,1,SolidLine));
-		      p.drawLine(tabList.at(currTab)->ptPos,0,tabList.at(currTab)->ptPos,canvas->height());
+		      p.drawLine(tabList.at(currTab)->ptPos + (frameStart == -1 ? static_cast<int>(layout.ptLeft) : frameStart),0,
+				 tabList.at(currTab)->ptPos + (frameStart == -1 ? static_cast<int>(layout.ptLeft) : frameStart),
+				 canvas->height());
 		      tabList.at(currTab)->ptPos += (e->x() - oldMx);
 		      tabList.at(currTab)->mmPos = POINT_TO_MM(tabList.at(currTab)->ptPos);
-		      p.drawLine(tabList.at(currTab)->ptPos,0,tabList.at(currTab)->ptPos,canvas->height());
+		      p.drawLine(tabList.at(currTab)->ptPos + (frameStart == -1 ? static_cast<int>(layout.ptLeft) : frameStart),0,
+				 tabList.at(currTab)->ptPos + (frameStart == -1 ? static_cast<int>(layout.ptLeft) : frameStart),
+				 canvas->height());
 		      p.end();
 		      oldMx = e->x();
 		      oldMy = e->y();

@@ -86,7 +86,7 @@ public:
     { i_first = cMM_TO_POINT(_first); repaint(false); }
 
   void setTabList(QList<KoTabulator>* _tabList);
-
+  void setFrameStart(int _frameStart) { frameStart = _frameStart; repaint(false); }
 
 signals:
   void newPageLayout(KoPageLayout);
@@ -131,7 +131,8 @@ protected:
   KoTabChooser *tabChooser;
   QList<KoTabulator> tabList;
   int currTab;
-  
+  int frameStart;
+
 };
 
 #endif
