@@ -137,7 +137,7 @@ void KWInsertPicDia::slotChooseImage()
     {
         KDialogBase::close();
     }
-    enableButtonOK ( !m_filename.isEmpty() );
+    enableButtonOK ( m_preview->setPicture( m_filename ) );
     m_bFirst = false;
 }
 
