@@ -41,13 +41,20 @@ KarbonView::resizeEvent( QResizeEvent* /*event*/ ) {
 void
 KarbonView::cut()
 {
-    kdDebug(31000) << "KarbonView::cut(): CUT called" << endl;
+    kdDebug(31000) << "KarbonView::edit_cut(): CUT called" << endl;
 }
 
 void
 KarbonView::initActions()
 {
-    KStdAction::cut(this, SLOT( cut() ), actionCollection(), "cut" );
+    KStdAction::cut(this, SLOT( cut() ), actionCollection(), "edit_cut" );
+    
+    m_zoomAction = new KSelectAction( i18n("&Zoom"), 0, actionCollection(), "view_zoom" );
+    QStringList stl;
+    stl << i18n("25%") << i18n("50%") << i18n("100%");
+    m_zoomAction->setItems(stl);
+    m_zoomAction->setCurrentItem(2);
+    m_zoomAction->setEditable(true);
 }
 
 #include "karbon_view.moc"

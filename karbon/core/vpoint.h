@@ -18,18 +18,22 @@ public:
     // convert to QPoint and recalculate if necessary:
     const QPoint& getQPoint() const;
 
-    void moveTo( double& x, double& y );
-    void rmoveTo( double& x, double& y );
+    void moveTo( const double& x, const double& y );
+    void rmoveTo( const double& x, const double& y );
 
     const double& x() const { return m_x; }
-    void setX( double& x );
+    void setX( const double& x );
     const double& y() const { return m_y; }
-    void setY( double& y );
+    void setY( const double& y );
 
 //    VPoint& operator= (const VPoint& p) { return *this; }
     void operator +=( const VPoint& p ) { m_x+=p.m_x; m_y+=p.m_y; m_isDirty=true; }
     void operator -=( const VPoint& p ) { m_x-=p.m_x; m_y-=p.m_y; m_isDirty=true; }
 
+    // ref-counting (vpaths share vpoints):
+    unsigned int ref() { return ++m_refCount; }
+    unsigned int unref() { return --m_refCount; }
+    
     /**
      * we scale QPoint with fractScale, i.e. we consider fractBits bits
      * of the fraction of each double-coordinate.
@@ -43,7 +47,13 @@ private:
     double m_y;
     mutable QPoint m_QPoint;	// for painting
 
+    unsigned int m_refCount;	// how many objects use this vpoint ?
     mutable bool m_isDirty;	// need to recalculate QPoint ?
 };
+
+inline bool operator ==( const VPoint& l, const VPoint& r )
+    { return ( l.x()==r.x() && l.y()==r.y() ); }
+inline bool operator !=( const VPoint& l, const VPoint& r )
+    { return !operator==(l,r); }
 
 #endif

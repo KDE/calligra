@@ -6,6 +6,7 @@
 #include "vcanvas.h"	// necessary because of canvas()
 
 class KAction;
+class KSelectAction;
 class QPaintEvent;
 
 class KarbonPart;
@@ -30,6 +31,8 @@ private:
     void initActions();
     
     VCanvas* m_canvas;
+    
+    KSelectAction* m_zoomAction;
 };
 
 #endif

@@ -1,46 +1,88 @@
+#include <kdebug.h>
+
 #include <qpainter.h>
 #include <qpointarray.h>
 
 #include "vpath.h"
 #include "vpoint.h"
 
-VPath::VPath()
-    : VObject(), m_isClosed( false )
-{
-    // let's see if using autodelete brings us into hell:
-    m_primitives.setAutoDelete(true);
-    m_points.setAutoDelete(true);
+// TODO: think about closing path: should last segment use vpoint of first segment ?
 
-    m_points.append( new VPoint() );	// we always need a current point (0.0,0.0)
+VPath::VPath()
+    : VObject(), m_isClosed(false)
+{
+    m_segments.append( new Segment );
+    m_segments.getLast()->p1 = 0L;
+    m_segments.getLast()->p2 = 0L;
+    m_segments.getLast()->p3 = new VPoint(); // we always need a current point (0.0,0.0)
 }
 
 VPath::~VPath()
 {
-    for ( VPrimitive* primitive=m_primitives.first(); primitive!=0L; primitive=m_primitives.next() ) 
+    for ( Segment* segment=m_segments.first(); segment!=0L; segment=m_segments.next() ) 
     {
-	delete( primitive );
-    }    
-    for ( VPoint* point=m_points.first(); point!=0L; point=m_points.next() ) 
-    {
-	delete( point );
+	if ( segment->p1 )	// control-points are never shared
+	    delete( segment->p1 );
+	if ( segment->p2 )
+	    delete( segment->p2 );
+	if ( segment->p3 && segment->p3->unref()==0 )
+	    delete( segment->p3 );
     }
 }
 
 void
 VPath::draw( QPainter& painter )
 {
+    // (walk down all Segments and add their QPoints into a QPointArray)
+
+    Segment* segment = m_segments.first();	// first segment
+    VPoint* prevPoint(0L);	// previous point (for beziers)    
     QPointArray qpa;
-    // walk down all VPrimitives and store their QPoints into a QPointArray:
-    for ( VPrimitive* primitive=m_primitives.first(); primitive!=0L; primitive=m_primitives.next() ) 
+    
+    // only paint first point if path isnt closed:
+    if ( segment!=0L && !isClosed() )
     {
-	primitive->getQPoints( qpa );	// note: vbeziers give more than 2 qpoints
+	qpa.resize( qpa.size()+1 );
+	qpa.setPoint( qpa.size()-1, segment->p3->getQPoint() );
+	prevPoint = segment->p3;
+    }
+
+    for ( segment=m_segments.next(); segment!=0L; segment=m_segments.next() ) 
+    {
+    	// draw bezier-curve if all points are available:
+	if ( prevPoint!=0L && segment->p1 && segment->p2 && segment->p3 )
+	{
+	    // let qt calculate us bezier-qpoints:
+	    QPointArray pa(4);
+	    pa.setPoint( 0, prevPoint->getQPoint() );
+	    pa.setPoint( 1, segment->p1->getQPoint() );
+	    pa.setPoint( 2, segment->p2->getQPoint() );
+	    pa.setPoint( 3, segment->p3->getQPoint() );
+	    pa = pa.quadBezier(); // is this a memory leak ?
+
+	    // can this part be made more eficient ? i bet it can...
+	    unsigned int size1(qpa.size()), size2(pa.size());
+	    qpa.resize( size1+size2 );
+	    for ( unsigned int i=0; i<size2; i++ )
+	    {
+		qpa.setPoint( size1+i, pa.point(i) );
+	    }
+	}
+	else
+	{
+	    // draw a line:
+	    qpa.resize( qpa.size()+1 );
+	    qpa.setPoint( qpa.size()-1, segment->p3->getQPoint() );
+	}
+	prevPoint = segment->p3; // need previous point to calculate bezier-qpoints
     }
     
     painter.save();
     painter.setPen( Qt::black );
     painter.setBrush( Qt::blue );
+
     // draw open or closed path ?
-    if ( m_isClosed )
+    if ( isClosed() )
 	painter.drawPolygon( qpa );
     else
 	painter.drawPolyline( qpa );
@@ -48,54 +90,83 @@ VPath::draw( QPainter& painter )
 }
 
 void
-VPath::moveTo( double& x, double& y )
+VPath::moveTo( const double& x, const double& y )
 {
-    m_points.getLast()->moveTo( x, y );
+    m_segments.getLast()->p3->moveTo( x, y );
 }
 
 void
-VPath::rmoveTo( double& x, double& y )
+VPath::rmoveTo( const double& dx, const double& dy )
 {
-    m_points.getLast()->rmoveTo( x, y );
+    m_segments.getLast()->p3->rmoveTo( dx, dy );
 }
 
 void
-VPath::lineTo( double& x, double& y )
+VPath::lineTo( const double& x, const double& y )
 {
-    VPoint* newpoint = new VPoint( x, y );
-    m_primitives.append( new VLine( m_points.getLast(), newpoint ) );
-    m_points.append( newpoint );
-}
-
-void
-VPath::curveTo( double& x1, double& y1, double& x2, double& y2, double& x3, double& y3 )
-{
-    VPoint* newpoint1 = new VPoint( x1, y1 );
-    VPoint* newpoint2 = new VPoint( x2, y2 );
-    VPoint* newpoint3 = new VPoint( x3, y3 );
-    m_primitives.append( new VBezier( m_points.getLast(), newpoint1, newpoint2, newpoint3 ) );
-    m_points.append( newpoint1 );
-    m_points.append( newpoint2 );
-    m_points.append( newpoint3 );
-}
-
-void
-VPath::translate( double& dx, double& dy )
-{
-    for ( VPoint* point=m_points.first(); point!=0L; point=m_points.next() ) 
+    if ( !isClosed() )
     {
-	point->rmoveTo( dx, dy );
+	m_segments.append( new Segment );
+        m_segments.getLast()->p1 = 0L;
+        m_segments.getLast()->p2 = 0L;
+        m_segments.getLast()->p3 = new VPoint( x, y );
+    }
+}
+
+void
+VPath::curveTo( const double& x1, const double& y1, const double& x2,
+    const double& y2, const double& x3, const double& y3 )
+{
+    if ( !isClosed() )
+    {
+        m_segments.append( new Segment );
+        m_segments.getLast()->p1 = new VPoint( x1, y1 );
+        m_segments.getLast()->p2 = new VPoint( x2, y2 );
+        m_segments.getLast()->p3 = new VPoint( x3, y3 );
+    }
+}
+
+void
+VPath::translate( const double& dx, const double& dy )
+{
+    Segment* segment = m_segments.first();	// first segment
+
+    // only translate first point if path isnt closed:
+    if ( segment!=0L && !isClosed() )
+    {
+	if ( segment->p3 )
+	    segment->p3->rmoveTo( dx, dy );
+    }
+    
+    for ( segment=m_segments.next(); segment!=0L; segment=m_segments.next() ) 
+    {
+	if ( segment->p1 )
+	    segment->p1->rmoveTo( dx, dy );
+	if ( segment->p2 )
+	    segment->p2->rmoveTo( dx, dy );
+	if ( segment->p3 )
+	    segment->p3->rmoveTo( dx, dy );
     }
 }
 
 void
 VPath::close()
 {
-    if ( !(m_primitives.getLast()->lastPoint()==m_primitives.getFirst()->firstPoint()) ) 
+    // TODO: dont "close" a single line
+    // draw a line if last point differs from first point
+    if ( *(m_segments.getFirst()->p3) != *(m_segments.getLast()->p3) )
     {
-	m_primitives.append( new VLine(
-	    m_primitives.getLast()->lastPoint(),
-	    m_primitives.getFirst()->firstPoint() ) );
-    }    
-    m_isClosed = true;
+	lineTo( m_segments.getFirst()->p3->x(), m_segments.getFirst()->p3->y() );
+    }
+    
+    // do nothing if first and last point are the same (eg only first point exists):
+    if ( m_segments.getFirst()->p3!=m_segments.getLast()->p3 )
+    {
+	if ( m_segments.getLast()->p3->unref()==0 )
+	    delete m_segments.getLast()->p3;
+	    
+	m_segments.getLast()->p3 = m_segments.getFirst()->p3;
+	
+	m_isClosed = true;
+    }
 }

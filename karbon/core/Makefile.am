@@ -8,14 +8,14 @@ noinst_HEADERS = \
     vobject.h \
     vpath.h \
     vpoint.h \
-    vprimitive.h
+    vrect.h
 
 libkarboncore_la_SOURCES = \
     vcanvas.cc \
     vobject.cc \
     vpath.cc \
     vpoint.cc \
-    vprimitive.cc
+    vrect.cc
 
 libkarboncore_la_METASOURCES = \
     AUTO

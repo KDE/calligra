@@ -88,7 +88,6 @@ KarbonPart::paintContent( QPainter& painter, const QRect& /*rect*/,
     bool /*transparent*/ )
 {
     painter.scale(VPoint::s_fractInvScale,VPoint::s_fractInvScale);
-
     // paint all objects:
     VObject* obj;
     for ( obj=m_objects.first(); obj!=0L; obj=m_objects.next() ) 
