@@ -65,10 +65,8 @@
 #include "vpainterfactory.h"
 #include "vqpainter.h"
 //#include "vtext.h"
-#include "vselection.h"
 #include "vstrokefillpreview.h"
 #include "vstatebutton.h"
-#include <kaction.h>
 #include <kdeversion.h>
 
 #include <tkfloatspinboxaction.h>

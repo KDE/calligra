@@ -12,7 +12,6 @@
 #include "vobject.h"
 #include "vpath.h"
 #include "vgroup.h"
-#include "vobject.h"
 //#include "vtext.h"
 #include "vvisitor.h"
 
