@@ -273,15 +273,6 @@ namespace  // in order not to mess with the global namespace ;)
         }
         return connected;
     }
-
-    // This method restores the initial color of the nodes for a new
-    // BFS run (KoShell case)
-    void resetGraph( QAsciiDict<Vertex>& vertices )
-    {
-        QAsciiDictIterator<Vertex> it( vertices );
-        for ( ; it.current(); ++it )
-            it.current()->setColor( Vertex::White );
-    }
 }
 
 // The static method to figure out to which parts of the
@@ -305,23 +296,24 @@ QStringList KoFilterManager::mimeFilter()
     if ( partIt == partEnd )
         return QStringList();
 
-    // Okay, parts not empty... no merging for the first call
-    QStringList filters = connected( vertices, ( *partIt ).service()->property( "X-KDE-NativeMimeType" ).toString().latin1() );
-    ++partIt;
-
+    // To find *all* reachable mimetypes, we have to resort to
+    // a small hat trick, in order to avoid multiple searches:
+    // We introduce a fake vertex, which is connected to every
+    // single KOffice mimetype. Due to that one BFS is enough :)
+    // Now we just need an... ehrm.. unique name for our fake mimetype
+    Vertex *v = new Vertex( "supercalifragilistic/x-pialadocious" );
+    vertices.insert( "supercalifragilistic/x-pialadocious", v );
     while ( partIt != partEnd ) {
-        // get the connected items for the next KOffice mimetype
-        QStringList tmp = connected( vertices,
-                                     ( *partIt ).service()->property( "X-KDE-NativeMimeType" ).toString().latin1() );
-        // merge the result with the new list
-        QStringList::ConstIterator it = tmp.begin();
-        QStringList::ConstIterator end = tmp.end();
-        for ( ; it!=end; ++it )
-            if ( filters.find( *it ) == filters.end() )
-                filters.append( *it );
+        QCString key( ( *partIt ).service()->property( "X-KDE-NativeMimeType" ).toString().latin1() );
+        if ( !key.isEmpty() )
+            v->addEdge( vertices[ key ] );
         ++partIt;
     }
-    return filters;
+    QStringList result = connected( vertices, "supercalifragilistic/x-pialadocious" );
+
+    // Finally we have to get rid of our fake mimetype again
+    result.remove( "supercalifragilistic/x-pialadocious" );
+    return result;
 }
 
 // Here we check whether the filter is available. This stuff is quite slow,
