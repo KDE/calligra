@@ -702,6 +702,7 @@ PageStyle::PageStyle( StyleFactory * styleFactory, QDomElement & e, const uint i
         {
         case -1:
             m_page_effect = "random";
+            break;
         case 1:
             m_page_effect = "close-vertical";
             break;
