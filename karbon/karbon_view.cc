@@ -523,17 +523,14 @@ KarbonView::ellipseTool()
 void
 KarbonView::polygonTool()
 {
-	//if( shell() && shell()->rootView() == this )
-	//{
-		if( m_currentTool == m_polygonTool )
-			m_polygonTool->showDialog();
-		else
-		{
-			m_currentTool->deactivate();
-			m_currentTool = m_polygonTool;
-			m_currentTool->activate();
-		}
-	//}
+	if( m_currentTool == m_polygonTool )
+		m_polygonTool->showDialog();
+	else
+	{
+		m_currentTool->deactivate();
+		m_currentTool = m_polygonTool;
+		m_currentTool->activate();
+	}
 }
 
 void
@@ -547,17 +544,14 @@ KarbonView::rectangleTool()
 void
 KarbonView::roundRectTool()
 {
-	//if( shell() && shell()->rootView() == this )
-	//{
-		if( m_currentTool == m_roundRectTool )
-			m_roundRectTool->showDialog();
-		else
-		{
-			m_currentTool->deactivate();
-			m_currentTool = m_roundRectTool;
-			m_currentTool->activate();
-		}
-	//}
+	if( m_currentTool == m_roundRectTool )
+		m_roundRectTool->showDialog();
+	else
+	{
+		m_currentTool->deactivate();
+		m_currentTool = m_roundRectTool;
+		m_currentTool->activate();
+	}
 }
 
 void
@@ -614,65 +608,53 @@ KarbonView::shearTool()
 void
 KarbonView::sinusTool()
 {
-	//if( shell() && shell()->rootView() == this )
-	//{
-		if( m_currentTool == m_sinusTool )
-			m_sinusTool->showDialog();
-		else
-		{
-			m_currentTool->deactivate();
-			m_currentTool = m_sinusTool;
-			m_currentTool->activate();
-		}
-	//}
+	if( m_currentTool == m_sinusTool )
+		m_sinusTool->showDialog();
+	else
+	{
+		m_currentTool->deactivate();
+		m_currentTool = m_sinusTool;
+		m_currentTool->activate();
+	}
 }
 
 void
 KarbonView::spiralTool()
 {
-	//if( shell() && shell()->rootView() == this )
-	//{
-		if( m_currentTool == m_spiralTool )
-			m_spiralTool->showDialog();
-		else
-		{
-			m_currentTool->deactivate();
-			m_currentTool = m_spiralTool;
-			m_currentTool->activate();
-		}
-	//}
+	if( m_currentTool == m_spiralTool )
+		m_spiralTool->showDialog();
+	else
+	{
+		m_currentTool->deactivate();
+		m_currentTool = m_spiralTool;
+		m_currentTool->activate();
+	}
 }
 
 void
 KarbonView::starTool()
 {
-	//if( shell() && shell()->rootView() == this )
-	//{
-		if( m_currentTool == m_starTool )
-			m_starTool->showDialog();
-		else
-		{
-			m_currentTool->deactivate();
-			m_currentTool = m_starTool;
-			m_currentTool->activate();
-		}
-	//}
+	if( m_currentTool == m_starTool )
+		m_starTool->showDialog();
+	else
+	{
+		m_currentTool->deactivate();
+		m_currentTool = m_starTool;
+		m_currentTool->activate();
+	}
 }
 
 void
 KarbonView::gradTool()
 {
-	//if( shell() && shell()->rootView() == this )
-	//{
-		if( m_currentTool == m_gradTool )
-			m_gradTool->showDocker();
-		else
-		{
-			m_currentTool->deactivate();
-			m_currentTool = m_gradTool;
-			m_currentTool->activate();
-		}
-	//}
+	if( m_currentTool == m_gradTool )
+		m_gradTool->showDocker();
+	else
+	{
+		m_currentTool->deactivate();
+		m_currentTool = m_gradTool;
+		m_currentTool->activate();
+	}
 }
 
 void
@@ -680,7 +662,7 @@ KarbonView::polylineTool()
 {
 	if( m_currentTool == m_polylineTool )
 	{
-			// Ends the current polyline and prepare for the next.
+		// Ends the current polyline and prepare for the next.
 		m_currentTool->deactivate();
 		m_currentTool->activate();
 	}
@@ -690,8 +672,7 @@ KarbonView::polylineTool()
 		m_currentTool = m_polylineTool;
 		m_currentTool->activate();
 	}
-}	// KarbonView::polylineTool
-
+}
 
 void
 KarbonView::pathInsertKnots()
