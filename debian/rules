@@ -7,6 +7,11 @@ BUILDDIR = ./build
 
 build: $(BUILDDIR)/build-stamp
 
+-include debian/debiandirs
+
+debian/debiandirs: admin/debianrules
+	perl -w admin/debianrules echodirs > debian/debiandirs
+
 $(BUILDDIR)/build-stamp:
 	dh_testdir
 	if test ! -f configure; then \
@@ -14,16 +19,17 @@ $(BUILDDIR)/build-stamp:
 	fi 
 	test -d $(BUILDDIR) || mkdir $(BUILDDIR) ;\
 	cd $(BUILDDIR) ;\
-	eval `perl -w ../admin/debianrules echodirs`; \
-	CFLAGS="-O2 -g -Wall" \
-	 CXXFLAGS="-O2 -g -Wall" \
-	../configure --enable-debug --disable-rpath \
-	--prefix=/usr --libdir=$$libdir --includedir=$$includedir
+	../configure --disable-debug --disable-rpath --enable-final \
+	--libdir=/$(kde_libdir) --includedir=/$(kde_includedir) \
+	--prefix=/$(kde_prefix) --with-qtdir=$(QTDIR)
+
 	make -C $(BUILDDIR)
+
 	touch $(BUILDDIR)/build-stamp
 
 clean: debian-clean
 	-rm -rf $(BUILDDIR)
+	-rm -f debian/debiandirs
 	dh_clean
 
 debian-clean:
@@ -44,9 +50,9 @@ binary-arch: build
 	dh_testdir
 	dh_testroot
 	dh_clean -k
-	make -C $(BUILDDIR) install DESTDIR=`pwd`/debian/tmp
+	make -C $(BUILDDIR) install DESTDIR=`pwd`/debian/tmp/
 	perl -w admin/debianrules
-	dh_movefiles -pkoffice-cvs-dev usr/lib/*.a usr/lib/*.so usr/lib/*.la usr/include
+	dh_movefiles -pkoffice-cvs-dev $(kde_libdir)/lib*.so $(kde_libdir)/lib*.a $(kde_libdir)/lib*.la  $(kde_includedir)
 	dh_undocumented
 	dh_installdocs
 	dh_installmenu
