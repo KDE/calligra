@@ -286,15 +286,14 @@ KarbonPart::initConfig()
 		setShowStatusBar( config->readBoolEntry( "ShowStatusBar" , true ) );
 		setBackupFile( config->readNumEntry( "BackupFile", true ) );
 	}
-        int undos = 30;
+	int undos = 30;
 	if( config->hasGroup( "Misc" ) )
 	{
-            config->setGroup( "Misc" );
-            undos = config->readNumEntry( "UndoRedo", -1 );
+		config->setGroup( "Misc" );
+		undos = config->readNumEntry( "UndoRedo", -1 );
 	}
-        if( undos != -1 )
-            setUndoRedoLimit( undos );
-
+	if( undos != -1 )
+		setUndoRedoLimit( undos );
 }
 
 void
@@ -313,7 +312,6 @@ KarbonPart::initUnit()
 
 void
 KarbonPart::setUnit( KoUnit::Unit _unit )
-
 {
 	m_doc.setUnit( _unit );
 	QPtrListIterator<KoView> itr( views() );
