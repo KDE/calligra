@@ -36,7 +36,7 @@ string& tstring::stripWhiteSpace()
     return *this;
   }
   
-  remove( 0, i );
+  erase( 0, i );
   
   len = length();
   int j = len - 1;
@@ -46,7 +46,7 @@ string& tstring::stripWhiteSpace()
   if ( j == len - 1 )
     return (*this);
   
-  remove( j + 1, len - j - 1 );
+  erase( j + 1, len - j - 1 );
   return (*this);
 }
 

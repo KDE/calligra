@@ -1,9 +1,9 @@
 #ifndef __torben_h__
 #define __torben_h__
 
-#include <ministl/list.h>
+#include <list.h>
 #include <iostream.h>
-#include <ministl/string>
+#include <string>
 
 typedef list<string> strlist;
 
@@ -12,7 +12,7 @@ class tstring : public string
 public:
   tstring() : string() { }
   tstring (const string& str) : string( str ) { }
-  tstring (const string& str, size_type pos, size_type n = NPOS)
+  tstring (const string& str, size_type pos, size_type n = npos )
     : string( str, pos, n ) { }
   tstring (const char* s, size_type n)
     : string( s, n ) { }
