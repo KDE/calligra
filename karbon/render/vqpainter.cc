@@ -222,3 +222,16 @@ VQPainter::setRasterOp( Qt::RasterOp r )
 	m_painter->setRasterOp( r );
 }
 
+void
+VQPainter::drawNode( const KoPoint &p, int width )
+{
+	m_painter->drawRect( QRect( p.x() * m_zoomFactor - width  , p.y() * m_zoomFactor - width,  2 * width,  2 * width ) );
+	//m_painter->drawRect( QRect( p.x() - width  , p.y() - width,  2 * width,  2 * width ) );
+}
+
+void
+VQPainter::drawRect( const KoRect &rect )
+{
+	m_painter->drawRect( QRect( rect.x(), rect.y(), rect.width(),  rect.height() ) );
+}
+

@@ -38,6 +38,7 @@
 #include "vpainter.h"
 #include "vpainterfactory.h"
 #include "vselection.h"
+#include "vcanvas.h"
 
 // Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
 // static const char * CURRENT_DTD_VERSION = "1.2";
@@ -195,6 +196,13 @@ KarbonPart::repaintAllViews( bool repaint )
 		static_cast<KarbonView*>( itr.current() )->canvasWidget()->repaintAll( repaint );
 }
 
+void
+KarbonPart::repaintAllViews( const KoRect &rect )
+{
+	QPtrListIterator<KoView> itr( views() );
+	for( ; itr.current() ; ++itr )
+		static_cast<KarbonView*>( itr.current() )->canvasWidget()->repaintAll( rect );
+}
 
 void
 KarbonPart::paintContent( QPainter& painter, const QRect& rect,

@@ -30,6 +30,7 @@
 
 class DCOPObject;
 class QRect;
+class KoRect;
 class VCommand;
 class VCommandHistory;
 
@@ -93,6 +94,7 @@ public:
 public slots:
 	/// repaint all views attached to this koDocument
 	void repaintAllViews( bool repaint = true );
+	void repaintAllViews( const KoRect & );
 	void slotDocumentRestored();
 	void slotCommandExecuted();
 

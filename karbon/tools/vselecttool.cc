@@ -196,7 +196,7 @@ VSelectTool::mouseButtonRelease()
 			KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize() );
 
 		view()->selectionChanged();
-		view()->part()->repaintAllViews( true );
+		view()->part()->repaintAllViews( KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize() );
 	}
 	else
 		m_state = normal;
@@ -221,7 +221,7 @@ VSelectTool::mouseDragRelease()
 			KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize() );
 
 		view()->selectionChanged();
-		view()->part()->repaintAllViews( true );
+		view()->part()->repaintAllViews( KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize() );
 	}
 	else if( m_state == moving )
 	{

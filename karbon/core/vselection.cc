@@ -18,13 +18,14 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qpainter.h>
 #include <qrect.h>
 
 #include "vdocument.h"
+#include "vpainter.h"
 #include "vselection.h"
 #include "vselectnodes.h"
 #include "vselectobjects.h"
+#include "vdrawselection.h"
 
 
 VSelection::VSelection( VObject* parent )
@@ -136,11 +137,13 @@ VSelection::clear()
 }
 
 void
-VSelection::draw( QPainter* painter, double zoomFactor ) const
+VSelection::draw( VPainter* painter, double zoomFactor ) const
 {
 	if( objects().count() == 0 || state() == VObject::edit )
 		return;
 
+	VDrawSelection op( m_objects, painter );
+	op.visit( *static_cast<VDocument*>( parent() ) );
 
 	// get bounding box:
 	const KoRect& rect = boundingBox();
@@ -165,7 +168,7 @@ VSelection::draw( QPainter* painter, double zoomFactor ) const
 	painter->setPen( Qt::blue.light() );
 	painter->setBrush( Qt::NoBrush );
 
-	painter->drawRect( QRect( m_qrect[ 0 ].x() * zoomFactor, m_qrect[ 0 ].y() * zoomFactor,
+	painter->drawRect( KoRect( m_qrect[ 0 ].x() * zoomFactor, m_qrect[ 0 ].y() * zoomFactor,
 							  m_qrect[ 0 ].width() * zoomFactor, m_qrect[ 0 ].height() * zoomFactor ) );
 	painter->setPen( Qt::blue.light() );
 
@@ -175,7 +178,7 @@ VSelection::draw( QPainter* painter, double zoomFactor ) const
 		painter->setPen( Qt::blue.light() );
 		painter->setBrush( Qt::white );
 
-		QRect temp;
+		KoRect temp;
 		for( uint i = node_lt; i <= node_rb; ++i )
 		{
 			if( i != node_mm )

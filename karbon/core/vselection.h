@@ -31,7 +31,7 @@
 
 
 class QObject;
-class QPainter;
+class VPainter;
 class QPoint;
 class KoPoint;
 class QRect;
@@ -70,7 +70,7 @@ public:
 
 	virtual ~VSelection();
 
-	void draw( QPainter* painter, double zoomFactor ) const;
+	void draw( VPainter* painter, double zoomFactor ) const;
 
 	virtual const KoRect& boundingBox() const;
 

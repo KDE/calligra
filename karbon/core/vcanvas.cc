@@ -26,6 +26,7 @@
 #include "karbon_part.h"
 #include "vcanvas.h"
 #include "vpainter.h"
+#include "vqpainter.h"
 #include "vpainterfactory.h"
 #include "vselection.h"
 #include "vlayersdocker.h"
@@ -173,12 +174,13 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 	p->blit( rect );
 
 	// draw handle:
-	QPainter qpainter( p->device() );
+	VQPainter qpainter( p->device() );
 	// Y mirroring
 	QWMatrix mat;
 	mat.scale( 1, -1 );
 	mat.translate( -contentsX(), contentsY() - contentsHeight() );
 	qpainter.setWorldMatrix( mat );
+	qpainter.setZoomFactor( m_view->zoom() );
 	m_part->document().selection()->draw( &qpainter, m_view->zoom() );
 
 	bitBlt( viewport(), QPoint( rect.x(), rect.y() ), p->device(), rect );
@@ -213,12 +215,13 @@ VCanvas::drawDocument( QPainter* /*painter*/, const QRect& rect, bool drawVObjec
 	}
 
 	// draw handle:
-	QPainter qpainter( p->device() );
+	VQPainter qpainter( p->device() );
 	// Y mirroring
 	QWMatrix mat;
 	mat.scale( 1, -1 );
 	mat.translate( -contentsX(), contentsY() - contentsHeight() );
 	qpainter.setWorldMatrix( mat );
+	qpainter.setZoomFactor( m_view->zoom() );
 	m_part->document().selection()->draw( &qpainter, m_view->zoom() );
 
 	bitBlt( viewport(), 0, 0, p->device(), 0, 0, width(), height() );
@@ -243,12 +246,13 @@ VCanvas::repaintAll( const KoRect & )
 	p->blit( rect );
 
 	// draw handle:
-	QPainter qpainter( p->device() );
+	VQPainter qpainter( p->device() );
 	// Y mirroring
 	QWMatrix mat;
 	mat.scale( 1, -1 );
 	mat.translate( -contentsX(), contentsY() - contentsHeight() );
 	qpainter.setWorldMatrix( mat );
+	qpainter.setZoomFactor( m_view->zoom() );
 	m_part->document().selection()->draw( &qpainter, m_view->zoom() );
 
 	bitBlt( viewport(), QPoint( rect.x(), rect.y() ), p->device(), rect );

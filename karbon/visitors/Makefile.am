@@ -11,11 +11,13 @@ noinst_LTLIBRARIES = libkarbonvisitors.la
 noinst_HEADERS = \
 	vselectnodes.h \
 	vselectobjects.h \
+	vdrawselection.h \
 	vtransformnodes.h 
 
 libkarbonvisitors_la_SOURCES = \
 	vselectnodes.cc \
 	vselectobjects.cc \
+	vdrawselection.cc \
 	vtransformnodes.cc 
 
 libkarbonvisitors_la_METASOURCES = \

@@ -66,6 +66,10 @@ public:
 	virtual void save();
 	virtual void restore();
 
+	// helper
+	virtual void drawNode( const KoPoint& , int );
+	virtual void drawRect( const KoRect & );
+
 	//
 	virtual void setRasterOp( Qt::RasterOp );
 
