@@ -250,10 +250,12 @@ QRect KWFrame::outerRect() const
 {
     KWDocument *doc = frameSet()->kWordDocument();
     QRect outerRect( doc->zoomRect( *this ) );
-    outerRect.rLeft() -= KoBorder::zoomWidthX( brd_left.ptWidth, doc, 1 );
-    outerRect.rTop() -= KoBorder::zoomWidthY( brd_top.ptWidth, doc, 1 );
-    outerRect.rRight() += KoBorder::zoomWidthX( brd_right.ptWidth, doc, 1 );
-    outerRect.rBottom() += KoBorder::zoomWidthY( brd_bottom.ptWidth, doc, 1 );
+    if(!(frameSet() && frameSet()->getGroupManager())) {
+        outerRect.rLeft() -= KoBorder::zoomWidthX( brd_left.ptWidth, doc, 1 );
+        outerRect.rTop() -= KoBorder::zoomWidthY( brd_top.ptWidth, doc, 1 );
+        outerRect.rRight() += KoBorder::zoomWidthX( brd_right.ptWidth, doc, 1 );
+        outerRect.rBottom() += KoBorder::zoomWidthY( brd_bottom.ptWidth, doc, 1 );
+    }
     return outerRect;
 }
 
@@ -261,10 +263,6 @@ KoRect KWFrame::outerKoRect() const
 {
     KoRect outerRect = *this;
     KWDocument *doc = frameSet()->kWordDocument();
-/*    outerRect.rLeft() -= brd_left.ptWidth;
-    outerRect.rTop() -= brd_top.ptWidth;
-    outerRect.rRight() += brd_right.ptWidth;
-    outerRect.rBottom() += brd_bottom.ptWidth;*/
     outerRect.rLeft() -= KoBorder::zoomWidthX( brd_left.ptWidth, doc, 1 ) / doc->zoomedResolutionX();
     outerRect.rTop() -= KoBorder::zoomWidthY( brd_top.ptWidth, doc, 1 ) / doc->zoomedResolutionY();
     outerRect.rRight() += KoBorder::zoomWidthX( brd_right.ptWidth, doc, 1 ) / doc->zoomedResolutionX();
