@@ -25,9 +25,9 @@
 #ifndef KIllustrator_main_h_
 #define KIllustrator_main_h_
 
-#include <opApplication.h>
+#include <koApplication.h>
 
-class KIllustratorApp : public OPApplication {
+class KIllustratorApp : public KoApplication {
   Q_OBJECT
 public:
   KIllustratorApp (int& argc, char** argv);
