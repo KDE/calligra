@@ -2,10 +2,19 @@ koffice (1:1.2.90-1) unstable; urgency=low
 
   * New upstream release (1.3-beta1).
   * New binary packages kexi and krita.
-  * Binary package kontour no longer exists.
+  * Binary package kontour no longer exists (closes: #140345, #191517).
   * Split koffice-libs into koffice-libs and koffice-data.
   * Moved import/export filters into app-specific packages where possible.
   * Build-Conflicts with python2.3-dev to ensure we build against python2.2.
+  * Karbon fixed on big-endian machines (closes: #189735).
+  * Kivio group/ungroup no longer loses connectedness (closes: #110009).
+  * Kivio zoom toolbar no longer vanishes (closes: #123011).
+  * Kivio splash screen removed (closes: #123091).
+  * Kivio documents can now be safely embedded in kword (closes: #144611).
+  * KPresenter image printing improved (closes: #81770).
+  * KPresenter now handles transparent images correctly (closes: #184598).
+  * KWord HTML export is no longer white-on-white (closes: #184421).
+  * Support for openoffice imports/exports (closes: #188779).
   * Thanks to James Greenhalgh for helping with this build.
 
  -- Ben Burton <bab@debian.org>  Fri,  9 May 2003 17:19:37 +1000
