@@ -35,16 +35,18 @@
 PropertyEditorFont::PropertyEditorFont(QWidget *parent, KexiProperty *property, const char *name)
  : KexiPropertySubEditor(parent, property, name)
 {
-	m_font = property->value().toFont();
+//	m_font = property->value().toFont();
 	
 	m_label = new QLabel(this);
+	m_label->setMargin( 2 );
 	m_label->resize(width(), height()-1);
 
 	m_button = new KPushButton(" ... ", this);
 	m_button->resize(height(), height()-8);
 	m_button->move(width() - m_button->width(), 0);
 	
-	m_label->setText(m_font.family() + " " + QString::number(m_font.pointSize()) );
+//	m_label->setText( KexiProperty::format( m_font ) );
+	setValue(property->value());
 	m_label->setBackgroundMode(Qt::PaletteBase);
 	m_label->show();
 	m_button->show();
@@ -64,7 +66,7 @@ void
 PropertyEditorFont::setValue(const QVariant &value)
 {
 	m_font = value.toFont();
-	m_label->setText(m_font.family() + " " + QString::number(m_font.pointSize()));
+	m_label->setText( KexiProperty::format( m_font ) );
 	emit changed(this);
 }
 
@@ -75,7 +77,8 @@ PropertyEditorFont::selectFont()
 	
 	if(result == KFontDialog::Accepted)
 	{
-		m_label->setText(m_font.family() + " " + QString::number(m_font.pointSize()));
+		setValue(m_font);
+//		m_label->setText(m_font.family() + " " + QString::number(m_font.pointSize()));
 		emit changed(this);
 	}
 }

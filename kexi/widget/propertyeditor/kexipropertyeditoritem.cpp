@@ -88,11 +88,12 @@ spHelper::keyToValue(const QString &key)
 
 // ======== KexiPropertyEditorItem ============================
 
-KexiPropertyEditorItem::KexiPropertyEditorItem(KexiPropertyEditorItem *parent, KexiProperty *property,
+KexiPropertyEditorItem::KexiPropertyEditorItem(KexiPropertyEditorItem *par, KexiProperty *property,
 	KexiPropertyEditorItem *after)
- : KListViewItem(parent, after, property->desc().isEmpty() ? property->name() : property->desc()
+ : KListViewItem(par, after, property->desc().isEmpty() ? property->name() : property->desc()
 	, property->valueText())
 {
+	m_order = parent()->childCount();
 //	m_value = property->value();
 //	m_oldvalue = m_value;
 	m_property=property;
@@ -215,10 +216,11 @@ KexiPropertyEditorItem::KexiPropertyEditorItem(KexiPropertyEditorItem *parent, K
 	updateValue();
 }
 
-KexiPropertyEditorItem::KexiPropertyEditorItem(KListView *parent, const QString &text)
- : KListViewItem(parent, text, "")
+KexiPropertyEditorItem::KexiPropertyEditorItem(KListView *par, const QString &text)
+ : KListViewItem(par, text, "")
 {
-//	m_value = "";
+	m_order = listView()->childCount();
+	//	m_value = "";
 	m_property= new KexiProperty();
 //	m_oldvalue=m_value;
 //	m_childprop = 0;
@@ -503,3 +505,19 @@ void KexiPropertyEditorItem::updateValue()
 	setText( 1, m_property->valueText() );
 }
 
+/*QString KexiPropertyEditorItem::key( int column, bool ascending ) const
+{
+	if (!ascending)
+		return QListViewItem::key(column, ascending);
+
+	return QString().sprintf("%5.5d", m_order);
+}*/
+
+int KexiPropertyEditorItem::compare( QListViewItem *i, int col, bool ascending ) const
+{
+	if (!ascending)
+		return -QListViewItem::key( col, ascending ).localeAwareCompare( i->key( col, ascending ) );
+
+	return m_order - static_cast<KexiPropertyEditorItem*>(i)->m_order;
+//		QString().sprintf("%5.5d", m_order).localeAwareCompare( QString().sprintf("%5.5d", i->m_order) );
+}

@@ -42,8 +42,8 @@
 KexiPropertyEditor::KexiPropertyEditor(QWidget *parent, bool autoSync, const char *name)
  : KListView(parent, name)
 {
-	addColumn(i18n("Property"), 145);
-	addColumn(i18n("Value"), 100);
+	addColumn(i18n("Property"));//, 145);
+	addColumn(i18n("Value"));//, 100);
 
 	m_buffer = 0;
 	m_topItem = 0;
@@ -61,9 +61,11 @@ KexiPropertyEditor::KexiPropertyEditor(QWidget *parent, bool autoSync, const cha
 	connect(m_defaults, SIGNAL(clicked()), this, SLOT(resetItem()));
 
 	setFullWidth(true);
-	setShowSortIndicator(true);
-	setSorting(-1);
-	setItemMargin(3);
+	setShowSortIndicator(false);
+	setTooltipColumn(0);
+	setSorting(0);
+//	setItemMargin(3);
+	header()->setMovingEnabled( false );
 }
 
 

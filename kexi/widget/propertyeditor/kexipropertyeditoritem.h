@@ -79,6 +79,15 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditorItem : public KListViewItem
 
 		virtual void updateValue();
 
+/*		typedef enum ItemsOrder {
+			DefaultOrder = 2;
+		};
+*/
+		//! Reimplemented for sorting
+//		virtual QString key ( int column, bool ascending ) const;
+		virtual int compare( QListViewItem *i, int col, bool ascending ) const;
+
+
 	protected:
 		/*! Reimplemented from KListViewItem to draw custom contents. Properties names are wriiten in bold if 
 		    modified. Also takes care of drawing borders around the cells as well as pixmaps or colors if necessary.
@@ -103,6 +112,8 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditorItem : public KListViewItem
 		KexiProperty	*m_property;
 //		QPtrList<KexiProperty>	*m_childprop;
 		ChildDict	*m_children;
+
+		uint m_order;
 };
 
 #endif
