@@ -1679,6 +1679,9 @@ void KPTextView::dropEvent( QDropEvent * e )
             int objTextNum=-1;
             objTextNum=KPrTextDrag::decodeTextObjectNumber( e );
             KPTextObject * obj = m_canvas->textObjectByPos( objTextNum );
+            //don't remove text if we dnd and textobj is protected
+            if ( obj->isProtectContent() )
+                obj->textDocument()->removeSelection(KoTextDocument::Standard );
             obj =obj  ? obj : kpTextObject();
             if ( obj )
             {

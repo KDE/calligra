@@ -7103,7 +7103,7 @@ KPTextObject* KPrCanvas::textUnderMouse( const QPoint & point )
     QPtrListIterator<KPTextObject> it2(obj );
     for ( ; it2.current() ; ++it2 ) {
         QRect outerRect( m_view->kPresenterDoc()->zoomHandler()->zoomRect( it2.current()->getRect()) );
-        if ( outerRect.contains( point) )
+        if ( !it2.current()->isProtectContent() && outerRect.contains( point) )
             return it2.current();
     }
     return 0L;
