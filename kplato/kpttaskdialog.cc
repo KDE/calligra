@@ -100,6 +100,10 @@ KPTTaskDialog::KPTTaskDialog(KPTTask &task, KPTStandardWorktime *workTime, QWidg
     if (workTime) {
         m_generalTab->setEstimateScales(workTime->durationDay().hours());
     }
+    m_generalTab->setEstimateFieldUnit(0, i18n("days"));
+    m_generalTab->setEstimateFieldUnit(1, i18n("hours"));
+    m_generalTab->setEstimateFieldUnit(2, i18n("minutes"));
+    
     m_generalTab->setEstimate(task.effort()->expected()); 
     m_generalTab->setOptimistic(task.effort()->optimisticRatio());
     m_generalTab->setPessimistic(task.effort()->pessimisticRatio());

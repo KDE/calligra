@@ -294,11 +294,6 @@
                         <string>Start time or Earliest start</string>
                     </property>
                 </widget>
-                <widget class="KPTDurationWidget" row="2" column="2">
-                    <property name="name">
-                        <cstring>estimate</cstring>
-                    </property>
-                </widget>
                 <widget class="QLabel" row="0" column="0">
                     <property name="name">
                         <cstring>textLabel3</cstring>
@@ -379,6 +374,11 @@
                             </property>
                         </spacer>
                     </hbox>
+                </widget>
+                <widget class="KPTDurationWidget" row="2" column="2">
+                    <property name="name">
+                        <cstring>estimate</cstring>
+                    </property>
                 </widget>
             </grid>
         </widget>
@@ -533,16 +533,16 @@
         <slot>checkAllFieldsFilled()</slot>
     </connection>
     <connection>
-        <sender>estimate</sender>
-        <signal>valueChanged()</signal>
-        <receiver>KPTTaskGeneralPanelBase</receiver>
-        <slot>checkAllFieldsFilled()</slot>
-    </connection>
-    <connection>
         <sender>chooseLeader</sender>
         <signal>clicked()</signal>
         <receiver>KPTTaskGeneralPanelBase</receiver>
         <slot>changeLeader()</slot>
+    </connection>
+    <connection>
+        <sender>estimate</sender>
+        <signal>valueChanged()</signal>
+        <receiver>KPTTaskGeneralPanelBase</receiver>
+        <slot>checkAllFieldsFilled()</slot>
     </connection>
 </connections>
 <tabstops>
@@ -581,6 +581,7 @@
     <slot>checkAllFieldsFilled()</slot>
     <slot>setEstimateFields( int mask )</slot>
     <slot>setEstimateScales( int day )</slot>
+    <slot>setEstimateFieldUnit( int field, QString unit )</slot>
 </slots>
 <functions>
     <function returnType="int">schedulingType() const</function>
@@ -602,10 +603,10 @@
     <includehint>kdatetimewidget.h</includehint>
     <includehint>kdatewidget.h</includehint>
     <includehint>ktimewidget.h</includehint>
-    <includehint>kptdurationwidget.h</includehint>
     <includehint>kdatetimewidget.h</includehint>
     <includehint>kdatewidget.h</includehint>
     <includehint>ktimewidget.h</includehint>
+    <includehint>kptdurationwidget.h</includehint>
     <includehint>ktextedit.h</includehint>
 </includehints>
 </UI>

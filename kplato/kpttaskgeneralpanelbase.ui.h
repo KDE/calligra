@@ -181,6 +181,13 @@ void KPTTaskGeneralPanelBase::setEstimateFields( int mask )
 void KPTTaskGeneralPanelBase::setEstimateScales( int day )
 {
     estimate->setFieldScale(0, day, day);
+    estimate->setFieldRightscale(0, day);
     
     estimate->setFieldLeftscale(1, day);
+}
+
+
+void KPTTaskGeneralPanelBase::setEstimateFieldUnit( int field, QString unit )
+{
+    estimate->setFieldUnit(field, unit);
 }

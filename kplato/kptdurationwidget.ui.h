@@ -32,9 +32,12 @@ struct FieldDescriptor
     // Used for calculating a correct duration
     unsigned fullScale;
     unsigned scale;
+    
+    // Used for displaying a unit behind each field
+    QLabel *unit;
 };
 
-#define setField(f, l, ls, c, fmt, r, rs, s, fs, sc) \
+#define setField(f, l, ls, c, fmt, r, rs, s, fs, sc, u) \
 do \
 { \
     m_fields[f].left = l; \
@@ -46,6 +49,7 @@ do \
     m_fields[f].separator = s; \
     m_fields[f].fullScale = fs; \
     m_fields[f].scale = sc; \
+    m_fields[f].unit = u; \
 } while (0)
     
 void KPTDurationWidget::init()
@@ -71,18 +75,24 @@ void KPTDurationWidget::init()
     m_ss->setValidator(m_validator);
     m_ms->setValidator(m_validator);
     
+    m_ddUnit->hide();
+    m_hhUnit->hide();
+    m_mmUnit->hide();
+    m_ssUnit->hide();
+    m_msUnit->hide();
+    
     m_fields = new FieldDescriptor[5];    
-    setField(0, NULL, 0, m_ddd, "%u", m_hh, 24, m_hhSpace, 24, 24);
-    setField(1, m_ddd, 24, m_hh, "%02u", m_mm, 60, m_mmColon, 60, 60);
-    setField(2, m_hh, 60, m_mm, "%02u", m_ss, 60, NULL, 60, 60);
-    setField(3, m_mm, 60, m_ss, "%02u", m_ms, 1000, m_ssColon, 60, 60);
-    setField(4, m_ss, 1000, m_ms, "%03u", NULL, 0, m_dot, 0, 0);
+    setField(0, NULL, 0, m_ddd, "%u", m_hh, 24, m_hhSpace, 24, 24, m_ddUnit);
+    setField(1, m_ddd, 24, m_hh, "%02u", m_mm, 60, m_mmColon, 60, 60, m_hhUnit);
+    setField(2, m_hh, 60, m_mm, "%02u", m_ss, 60, NULL, 60, 60, m_mmUnit);
+    setField(3, m_mm, 60, m_ss, "%02u", m_ms, 1000, m_ssColon, 60, 60, m_ssUnit);
+    setField(4, m_ss, 1000, m_ms, "%03u", NULL, 0, m_dot, 0, 0, m_msUnit);
 }
 
 void KPTDurationWidget::destroy()
 {
     delete m_fields;
-    delete m_validator;
+    //delete m_validator;  //QWidget takes care of this
 }
 
 void KPTDurationWidget::setValue(const KPlato::KPTDuration &newDuration)
@@ -231,6 +241,10 @@ void KPTDurationWidget::setVisibleFields( int fieldMask )
             {
                 m_fields[i].separator->show();
             }
+            if (m_fields[i].unit)
+            {
+                m_fields[i].unit->show();
+     }
         }
         else
         {
@@ -239,6 +253,10 @@ void KPTDurationWidget::setVisibleFields( int fieldMask )
             {
                 m_fields[i].separator->hide();
             }
+            if (m_fields[i].unit)
+            {
+                m_fields[i].unit->hide();
+     }
         }
     }
 }
@@ -272,6 +290,14 @@ void KPTDurationWidget::setFieldScale(int f, unsigned fullScale, unsigned scale)
 {
     m_fields[f].fullScale = fullScale;
     m_fields[f].scale = scale;
+}
+
+void KPTDurationWidget::setFieldUnit(int f, QString unit)
+{
+    if (m_fields[f].unit)
+    {
+ m_fields[f].unit->setText(unit);
+    }
 }
 
 
