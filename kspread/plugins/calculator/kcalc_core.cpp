@@ -38,7 +38,8 @@
 
 #include "kcalc.h"
 
-#define i18n( x ) x
+//What's that?!? (Werner)
+//#define i18n( x ) x
 
 // Undefine HAVE_LONG_DOUBLE for Beta 4 since RedHat 5.0 comes with a borken
 // glibc

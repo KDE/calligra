@@ -265,7 +265,8 @@ ostream& operator<<( ostream &out, KPPixmapDataCollection::Key &key )
     QDate date = key.lastModified.date();
     QTime time = key.lastModified.time();
 
-    out << " filename=\"" << key.filename.utf8() << "\" year=\"" << date.year()
+    out << " filename=\"" << (const char*)key.filename.utf8() << "\" year=\""
+	<< date.year()
 	<< "\" month=\"" << date.month() << "\" day=\"" << date.day()
 	<< "\" hour=\"" << time.hour() << "\" minute=\"" << time.minute()
 	<< "\" second=\"" << time.second() << "\" msec=\"" << time.msec() << "\" ";

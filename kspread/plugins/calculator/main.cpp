@@ -37,7 +37,8 @@
 
 #include <stdio.h>
 
-#define i18n( x ) x
+// ??? (Werner)
+//#define i18n( x ) x
 
 /***************************************************
  *
@@ -63,7 +64,7 @@ CalcFactory::CalcFactory( QObject* parent, const char* name )
 
 CalcFactory::~CalcFactory()
 {
-    delete s_global; 
+    delete s_global;
 }
 
 QObject* CalcFactory::create( QObject* parent, const char* name, const char* /*classname*/, const QStringList & )

@@ -29,7 +29,8 @@
 
 #include <qfontdialog.h>
 
-#define i18n( x ) x
+// ??? (Werner)
+//#define i18n( x ) x
 
 FontDlg::FontDlg(QWidget *parent, const char *name, DefStruct *defstruct)
   : QDialog(parent, name)

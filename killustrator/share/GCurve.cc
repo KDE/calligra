@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -30,16 +30,9 @@
 #include <cassert>
 #include <klocale.h>
 #include "version.h"
-#include <math.h>
-
-static float seg_length (const Coord& p1, const Coord& p2) {
-  float dx = p2.x () - p1.x ();
-  float dy = p2.y () - p1.y ();
-  return sqrt (dx * dx + dy * dy);
-}
 
 static Coord computePoint (int idx, const GSegment& s1, const GSegment& s2) {
-  // s1 == Line, s2 == Bezier 
+  // s1 == Line, s2 == Bezier
   float xp, yp;
 
   float llen = s1.length ();
@@ -56,7 +49,7 @@ static Coord computePoint (int idx, const GSegment& s1, const GSegment& s2) {
   return Coord (xp, yp);
 }
 
-static Coord blendPoints (const Coord& p1, const Coord& p2, 
+static Coord blendPoints (const Coord& p1, const Coord& p2,
 			  int step, int num) {
   float dx = ((p2.x () - p1.x ()) / (num + 1.0)) * (step + 1.0);
   float dy = ((p2.y () - p1.y ()) / (num + 1.0)) * (step + 1.0);
@@ -80,8 +73,8 @@ static GSegment blendSegments (const GSegment& s1, const GSegment& s2,
       snew.setPoint (1, computePoint (1, s1, s2));
       snew.setPoint (2, computePoint (2, s1, s2));
       snew.setPoint (3, s1.pointAt (1));
-      for (int i = 0; i < 4; i++) 
-	seg.setPoint (i, blendPoints (snew.pointAt (i), s2.pointAt (i), 
+      for (int i = 0; i < 4; i++)
+	seg.setPoint (i, blendPoints (snew.pointAt (i), s2.pointAt (i),
 				      step, num));
     }
     else if (s2.kind () == GSegment::sk_Line) {
@@ -90,13 +83,13 @@ static GSegment blendSegments (const GSegment& s1, const GSegment& s2,
       snew.setPoint (1, computePoint (1, s2, s1));
       snew.setPoint (2, computePoint (2, s2, s1));
       snew.setPoint (3, s2.pointAt (1));
-      for (int i = 0; i < 4; i++) 
-	seg.setPoint (i, blendPoints (s1.pointAt (i), snew.pointAt (i), 
+      for (int i = 0; i < 4; i++)
+	seg.setPoint (i, blendPoints (s1.pointAt (i), snew.pointAt (i),
 				      step, num));
     }
     else {
-      for (int i = 0; i < 4; i++) 
-	seg.setPoint (i, blendPoints (s1.pointAt (i), s2.pointAt (i), 
+      for (int i = 0; i < 4; i++)
+	seg.setPoint (i, blendPoints (s1.pointAt (i), s2.pointAt (i),
 				      step, num));
     }
   }
@@ -107,13 +100,13 @@ GSegment::GSegment (Kind sk) : skind (sk), bpoints (4) {
 }
 
 const Coord& GSegment::pointAt (int i) const {
-  assert (i >= 0 && ((skind == sk_Bezier && i < 4) || 
+  assert (i >= 0 && ((skind == sk_Bezier && i < 4) ||
 		     (skind == sk_Line && i < 2)));
   return points[i];
 }
 
 void GSegment::setPoint (int i, const Coord& c) {
-  assert (i >= 0 && ((skind == sk_Bezier && i < 4) || 
+  assert (i >= 0 && ((skind == sk_Bezier && i < 4) ||
 		     (skind == sk_Line && i < 2)));
   points[i] = c;
   if (skind == sk_Bezier) {
@@ -156,7 +149,7 @@ bool GSegment::contains (const Coord& p) {
     if (x1 - 3 <= p.x () && p.x () <= x2 + 3) {
       if (abs (int (x1 - x2)) < 5) {
 	if ((y1 <= p.y () && p.y () <= y2) ||
-	    (y2 <= p.y () && p.y () <= y1)) 
+	    (y2 <= p.y () && p.y () <= y1))
 	    return true;
       }
       else {
@@ -173,7 +166,7 @@ bool GSegment::contains (const Coord& p) {
 	}
 	else {
 	  yp = m * p.x () + n;
-	  
+	
 	  if (yp - 5 <= p.y () && p.y () <= yp + 5)
 	    return true;
 	}
@@ -186,13 +179,13 @@ bool GSegment::contains (const Coord& p) {
   }
   return false;
 }
-  
-void GSegment::draw (QPainter& p, bool withBasePoints, bool /*outline*/, 
+
+void GSegment::draw (QPainter& p, bool withBasePoints, bool /*outline*/,
 		     bool drawFirst) {
   if (skind == sk_Line)
     Painter::drawLine (p, points[0].x (), points[0].y (),
 		points[1].x (), points[1].y ());
-  else 
+  else
     p.drawQuadBezier (bpoints);
   if (withBasePoints) {
     p.save ();
@@ -209,7 +202,7 @@ void GSegment::draw (QPainter& p, bool withBasePoints, bool /*outline*/,
 }
 
 void GSegment::movePoint (int idx, float dx, float dy) {
-  assert (idx >= 0 && ((skind == sk_Bezier && idx < 4) || 
+  assert (idx >= 0 && ((skind == sk_Bezier && idx < 4) ||
 		       (skind == sk_Line && idx < 2)));
   points[idx].x (points[idx].x () + dx);
   points[idx].y (points[idx].y () + dy);
@@ -243,7 +236,7 @@ QPointArray GSegment::getPoints () const {
     result.setPoint (1, qRound (points[1].x ()), qRound (points[1].y ()));
     return result;
   }
-  else 
+  else
     return bpoints.quadBezier ();
 }
 
@@ -294,7 +287,7 @@ void GCurve::draw (QPainter& p, bool withBasePoints, bool outline) {
     if (! workInProgress () && !outline) {
       initBrush (brush);
       p.setBrush (brush);
-      
+
       if (gradientFill ()) {
 	if (! gShape.valid ())
 	  updateGradientShape (p);
@@ -310,7 +303,7 @@ void GCurve::draw (QPainter& p, bool withBasePoints, bool outline) {
       Painter::drawRect (p, pnt.x () - 2, pnt.y () - 2, 4, 4);
     }
   }
-   
+
   }
   else {
     list<GSegment>::iterator i;
@@ -337,7 +330,7 @@ void GCurve::movePoint (int idx, float dx, float dy) {
   float ndx = dx * iMatrix.m11 () + dy * iMatrix.m21 ();
   float ndy = dy * iMatrix.m22 () + dx * iMatrix.m12 ();
 
-  for (i = segments.begin (); i != segments.end (); i++) { 
+  for (i = segments.begin (); i != segments.end (); i++) {
     int num = (i->kind () == GSegment::sk_Line ? 2 : 4);
     pidx += num;
     if (pidx > idx) {
@@ -370,7 +363,7 @@ int GCurve::getNeighbourPoint (const Coord& p) {
   int idx = 0;
 
   list<GSegment>::iterator i;
-  for (i = segments.begin (); i != segments.end (); i++) { 
+  for (i = segments.begin (); i != segments.end (); i++) {
     int num  = (i->kind () == GSegment::sk_Line ? 2 : 4);
     for (int n = 0; n < num; n++) {
       c = i->pointAt (n).transform (tMatrix);
@@ -485,19 +478,19 @@ void GCurve::removePoint (int idx, bool update) {
       segments.erase (segments.begin ());
     }
     else {
-      for (i = segments.begin (); i != segments.end (); i++) { 
+      for (i = segments.begin (); i != segments.end (); i++) {
 	int num = (i->kind () == GSegment::sk_Line ? 2 : 4);
 	pidx += num;
 	if (pidx > idx) {
 	  // remove this segment and set the first point
-	  // of the following 
+	  // of the following
 	}
       }
     }
 #endif
   }
 
-  if (update) 
+  if (update)
     updateRegion ();
 }
 
@@ -546,7 +539,7 @@ GCurve* GCurve::blendCurves (GCurve *start, GCurve *end, int step, int num) {
 	       last.pointAt (3));
     lseg.setPoint (0, p);
     lseg.setPoint (1, p);
-    
+
     while (si != start->segments.end ()) {
       GSegment seg = blendSegments (*si, lseg, step, num);
       res->segments.push_back (seg);
@@ -557,7 +550,7 @@ GCurve* GCurve::blendCurves (GCurve *start, GCurve *end, int step, int num) {
 				     end->getOutlineColor (), step, num));
   if (start->isClosed () && end->isClosed ()) {
     // blend fill properties
-    if (start->getFillStyle () == end->getFillStyle () && 
+    if (start->getFillStyle () == end->getFillStyle () &&
 	start->getFillStyle () == GObject::FillInfo::SolidFill) {
       res->setFillStyle (GObject::FillInfo::SolidFill);
       res->setFillColor (blendColors (start->getFillColor (),
@@ -569,7 +562,7 @@ GCurve* GCurve::blendCurves (GCurve *start, GCurve *end, int step, int num) {
   return res;
 }
 
-QColor GCurve::blendColors (const QColor& c1, const QColor& c2, int step, 
+QColor GCurve::blendColors (const QColor& c1, const QColor& c2, int step,
 			    int num) {
   if (c1 == c2)
     return c1;

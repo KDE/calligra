@@ -28,6 +28,7 @@
 
 //#include <qcolordialog.h>
 #include <kcolordlg.h>
+#include <klocale.h>
 
 // Undefine HAVE_LONG_DOUBLE for Beta 4 since RedHat 5.0 comes with a borken
 // glibc
@@ -36,7 +37,8 @@
 #undef HAVE_LONG_DOUBLE
 #endif
 
-#define i18n( x ) x
+// ??? (Werner)
+//#define i18n( x ) x
 
 ConfigDlg::ConfigDlg(QWidget *parent, const char *name, DefStruct *defstruct)
   : QDialog(parent, name)
