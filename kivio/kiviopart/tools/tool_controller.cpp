@@ -190,8 +190,10 @@ Tool* ToolController::getActiveTool()
 
 void ToolController::delegateEvent( QEvent* e, KivioCanvas* canvas )
 {
-  if ( m_pActiveTool && m_pActiveTool->canvasWidget() == canvas )
+  if ( m_pActiveTool && m_pActiveTool->canvasWidget() == canvas ) {
     m_pActiveTool->processEvent(e);
+    m_pActiveView->canvasWidget()->setFocus();
+  }
 }
 
 void ToolController::selectTool( Tool* t )
