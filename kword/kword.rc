@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="49">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="50">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -105,6 +105,7 @@
   <Menu name="Column"><text>Column</text>
   	<Action name="table_inscol"/>
 	<Action name="table_delcol"/>
+	<Action name="table_resizecol"/>
   </Menu>
   <Separator/>
   <Action name="table_joincells"/>
@@ -351,6 +352,7 @@
  <Menu name="Column"><text>Column</text>
 	 <Action name="table_inscol"/>
 	 <Action name="table_delcol"/>
+	 <Action name="table_resizecol"/>
  </Menu>
  <Separator/>
  <Menu name="TableBorders"><text>Configure Table Borders</text>

@@ -149,3 +149,4 @@ Changes between KWord-1.2-beta1 and KWord-1.2-beta2
 - Paragraph selection, clicking on the left of the text frame
 - Add "protect content" feature
 - Add double line boder type
+- Add a dialogbox to resize column in table

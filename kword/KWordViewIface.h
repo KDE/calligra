@@ -31,7 +31,7 @@ class KWordViewIface : public KoViewIface
     K_DCOP
 public:
     KWordViewIface( KWView *view_ );
-    KWView * getView(){return view;}
+    KWView * getView()const{return view;}
 k_dcop:
     virtual void fileStatistics();
     virtual void editFind();
@@ -47,6 +47,15 @@ k_dcop:
     virtual void extraCreateTemplate();
 
     virtual void insertTable();
+    virtual void tableInsertRow();
+    virtual void tableInsertCol();
+    virtual void tableResizeCol();
+    virtual void tableDeleteRow();
+    virtual void tableDeleteCol();
+    virtual void tableJoinCells();
+    virtual void tableSplitCells();
+    virtual void tableUngroupTable();
+
     virtual void insertPicture();
     virtual void toolsPart();
 

@@ -179,3 +179,43 @@ void KWordViewIface::createStyleFromSelection()
 {
     view->createStyleFromSelection();
 }
+
+void KWordViewIface::tableInsertRow()
+{
+    view->tableInsertRow();
+}
+
+void KWordViewIface::tableInsertCol()
+{
+    view->tableInsertCol();
+}
+
+void KWordViewIface::tableResizeCol()
+{
+    view->tableResizeCol();
+}
+
+void KWordViewIface::tableDeleteRow()
+{
+    view->tableDeleteRow();
+}
+
+void KWordViewIface::tableDeleteCol()
+{
+    view->tableDeleteCol();
+}
+
+void KWordViewIface::tableJoinCells()
+{
+    view->tableJoinCells();
+}
+
+void KWordViewIface::tableSplitCells()
+{
+    view->tableSplitCells();
+}
+
+void KWordViewIface::tableUngroupTable()
+{
+    view->tableUngroupTable();
+}

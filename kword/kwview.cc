@@ -41,6 +41,7 @@
 #include "insdia.h"
 #include <koCharSelectDia.h>
 #include <koChangeCaseDia.h>
+#include "resizetabledia.h"
 #include "kwcommand.h"
 #include "kwconfig.h"
 #include "kwdoc.h"
@@ -796,6 +797,11 @@ void KWView::setupActions()
                                      actionCollection(), "table_delcol" );
     actionTableDelCol->setToolTip( i18n( "Delete one column from the current table." ) );
     actionTableDelCol->setWhatsThis( i18n( "Delete one column from the current table.<p>Your cursor does not need to be in the column to be deleted. You will be given the opportunity to specify which row to delete.." ) );
+
+    actionTableResizeCol = new KAction( i18n( "Resize Column..." ), 0,
+                               this, SLOT( tableResizeCol() ),
+                               actionCollection(), "table_resizecol" );
+
 
     actionTableJoinCells = new KAction( i18n( "&Join Cells" ), 0,
                                         this, SLOT( tableJoinCells() ),
@@ -3226,6 +3232,17 @@ void KWView::tableDeleteCol()
     }
 }
 
+void KWView::tableResizeCol()
+{
+    KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
+    Q_ASSERT(table);
+    if (!table)
+        return;
+    KWResizeTableDia dia( this, "", table, m_doc, KWResizeTableDia::COL, m_gui->canvasWidget() );
+    dia.setCaption( i18n( "Resize Column" ) );
+    dia.exec();
+}
+
 void KWView::tableJoinCells()
 {
     //m_gui->canvasWidget()->setMouseMode( KWCanvas::MM_EDIT_FRAME );
@@ -4621,6 +4638,7 @@ void KWView::frameSelectedChanged()
     actionTableDelCol->setEnabled( state );
     actionTableDelete->setEnabled( state );
     actionTableUngroup->setEnabled( state );
+    actionTableResizeCol->setEnabled( state );
 
     m_doc->refreshFrameBorderButton();
 

@@ -221,6 +221,7 @@ public slots:
 
     void tableInsertRow();
     void tableInsertCol();
+    void tableResizeCol();
     void tableDeleteRow();
     void tableDeleteCol();
     void tableJoinCells();
@@ -497,6 +498,7 @@ private:
     KAction *actionTableDelCol;
     KAction *actionTableInsertRow;
     KAction *actionTableInsertCol;
+    KAction *actionTableResizeCol;
     KAction *actionTableJoinCells;
     KAction *actionTableSplitCells;
 
