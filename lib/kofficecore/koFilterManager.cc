@@ -67,13 +67,6 @@ const QString KoFilterManager::fileSelectorList( const Direction &direction, con
 
     QValueList<KoFilterEntry> vec = KoFilterEntry::query( service );
 
-    // ############ Torben: What the hell is that good for ?
-    /*if (!registry)
-    {
-        registry->addFactory( new KServiceTypeFactory );
-        registry->load();
-    }*/
-
     QString ret;
 
     if ( _native_pattern && _native_name )
@@ -143,7 +136,7 @@ const QString KoFilterManager::import( const QString & _url, const char *_native
 {
     KURL url( _url );
 
-    KMimeType *t = KMimeType::findByURL( url, 0, url.isLocalFile() );
+    KMimeType::Ptr t = KMimeType::findByURL( url, 0, url.isLocalFile() );
     QCString mimeType;
     if (t) {
         kdebug( KDEBUG_INFO, 30003, "######### FOUND MimeType %s", t->mimeType().data() );
@@ -215,7 +208,7 @@ const bool KoFilterManager::export_() {
 
     KURL url( exportFile );
 
-    KMimeType *t = KMimeType::findByURL( url, 0, url.isLocalFile() );
+    KMimeType::Ptr t = KMimeType::findByURL( url, 0, url.isLocalFile() );
     QCString mimeType;
     if (t) {
         kdebug( KDEBUG_INFO, 30003, "######### FOUND MimeType %c", t->mimeType().ascii() );
