@@ -38,7 +38,7 @@
 #include "pwdprompt.h"
 
 typedef KGenericFactory<KoCryptImport, KoFilter> KoCryptImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkocryptimport, KoCryptImportFactory( "kocryptfilter" ) );
+K_EXPORT_COMPONENT_FACTORY( libkocryptimport, KoCryptImportFactory( "kofficefilters" ) )
 
 
 #define READ_ERROR_CHECK(XX)  do {                                         \
