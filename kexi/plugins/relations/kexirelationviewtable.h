@@ -59,6 +59,7 @@ class KEXI_HAND_RELAT_EXPORT KexiRelationViewTableContainer : public QFrame
 
 	private:
 		KexiRelationViewTable	*m_tableView;
+		KexiRelationView	*m_parent;
 
 	protected slots:
 		void moved();

@@ -26,6 +26,7 @@
 #include <math.h>
 
 #include <kexirelation.h>
+#include "kexirelationview.h"
 #include "kexirelationviewtable.h"
 #include "kexirelationviewconnection.h"
 
@@ -33,8 +34,9 @@
 #include "rn.xpm"
 
 KexiRelationViewConnection::KexiRelationViewConnection(KexiRelationViewTableContainer *srcTbl, KexiRelationViewTableContainer *rcvTbl,
-   SourceConnection &c)
+   SourceConnection &c, KexiRelationView *parent)
 {
+	m_parent = parent;
 	kdDebug() << "KexiRelationViewConnection::KexiRelationViewConnection()" << endl;
 
 	m_srcTable = srcTbl;
@@ -54,12 +56,12 @@ KexiRelationViewConnection::KexiRelationViewConnection(KexiRelationViewTableCont
 }
 
 void
-KexiRelationViewConnection::drawConnection(QPainter *p, QWidget *parent)
+KexiRelationViewConnection::drawConnection(QPainter *p)
 {
 	p->setPen(QColor(0,0,0));
-	int sx = m_srcTable->x() + m_srcTable->width();
+	int sx = m_srcTable->x() + m_srcTable->width() + m_parent->contentsX();
 	int sy = m_srcTable->globalY(m_srcField);
-	int rx = m_rcvTable->x();
+	int rx = m_rcvTable->x() + m_parent->contentsX();
 	int ry = m_rcvTable->globalY(m_rcvField);
 
 	QPoint side1(0, 0);
@@ -147,8 +149,8 @@ const QRect
 KexiRelationViewConnection::connectionRect()
 {
 
-	int sx = m_srcTable->x();
-	int rx = m_rcvTable->x();
+	int sx = m_srcTable->x() + m_parent->contentsX();
+	int rx = m_rcvTable->x() + m_parent->contentsX();
 	int ry = m_rcvTable->globalY(m_rcvField);
 	int sy = m_srcTable->globalY(m_srcField);
 
@@ -176,7 +178,7 @@ KexiRelationViewConnection::connectionRect()
 
 
 //	return QRect(sx - 1, sy - 1, (rx + m_rcvTable->width()) - sx + 1, ry - sy + 1);
-	QRect rect(left - 3, top - 7, dx + 3, dy + 7);
+	QRect rect(left - 3, top - 7, dx + 3, dy + 10);
 	m_oldRect = rect;
 
 	return rect;

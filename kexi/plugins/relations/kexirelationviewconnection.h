@@ -25,6 +25,7 @@
 
 class QPainter;
 class KexiRelationViewTableContainer;
+class KexiRelationView;
 struct SourceConnection;
 
 class KEXI_HAND_RELAT_EXPORT KexiRelationViewConnection
@@ -32,7 +33,7 @@ class KEXI_HAND_RELAT_EXPORT KexiRelationViewConnection
 	public:
 
 		KexiRelationViewConnection(KexiRelationViewTableContainer *srcTbl,KexiRelationViewTableContainer *rcvTbl,
-		  SourceConnection &);
+		  SourceConnection &, KexiRelationView *parent);
 		~KexiRelationViewConnection();
 
 
@@ -42,7 +43,7 @@ class KEXI_HAND_RELAT_EXPORT KexiRelationViewConnection
 
 		   http://www.c-plusplus.de ;)
 		*/
-		void		drawConnection(QPainter *p, QWidget *parent);
+		void		drawConnection(QPainter *p);
 
 		bool		selected() { return m_selected; }
 		void		setSelected(bool s) { m_selected = s; }
@@ -66,6 +67,8 @@ class KEXI_HAND_RELAT_EXPORT KexiRelationViewConnection
 
 		bool				m_selected;
 		SourceConnection		m_conn;
+
+		KexiRelationView		*m_parent;
 };
 
 #endif

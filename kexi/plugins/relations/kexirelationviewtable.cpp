@@ -53,6 +53,8 @@ KexiRelationViewTableContainer::KexiRelationViewTableContainer(KexiRelationView 
 //js:	resize(100, 150);
 	//setMouseTracking(true);
 
+	m_parent = parent;
+
 	QVBoxLayout *lyr = new QVBoxLayout(this,2,1); //js: using Q*BoxLayout is a good idea
 	lyr->setMargin(3);
 
@@ -74,9 +76,11 @@ void KexiRelationViewTableContainer::moved() {
 int KexiRelationViewTableContainer::globalY(const QString &field)
 {
 //	kdDebug() << "KexiRelationViewTableContainer::globalY()" << endl;
-	QPoint o = mapFromGlobal(QPoint(0, (m_tableView->globalY(field))));
+//	QPoint o = mapFromGlobal(QPoint(0, (m_tableView->globalY(field))/*+m_parent->contentsY()*/));
+
+	QPoint o(0, (m_tableView->globalY(field)) + m_parent->contentsY());
 //	kdDebug() << "KexiRelationViewTableContainer::globalY() db2" << endl;
-	return mapToParent(o).y();
+	return m_parent->viewport()->mapFromGlobal(o).y();
 }
 
 void

@@ -138,7 +138,7 @@ KexiRelationView::addConnection(SourceConnection conn, bool interactive)
 
 
 	KexiRelationViewConnection *connView = new KexiRelationViewConnection(m_tables[conn.srcTable],
-	 m_tables[conn.rcvTable], conn);
+	 m_tables[conn.rcvTable], conn, this);
 	m_connectionViews.append(connView);
 	updateContents(connView->connectionRect());
 
@@ -155,13 +155,13 @@ void
 KexiRelationView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
 {
 	KexiRelationViewConnection *cview;
-	p->translate((double)contentsX(), (double)contentsY());
+//	p->translate(0, (double)contentsY());
 
 	QRect clipping(cx, cy, cw, ch);
 	for(cview = m_connectionViews.first(); cview; cview = m_connectionViews.next())
 	{
 		if(clipping.intersects(cview->connectionRect()))
-			cview->drawConnection(p, this);
+			cview->drawConnection(p);
 	}
 }
 
