@@ -92,9 +92,11 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 		void setVisible(bool v) { if (fieldinfo) fieldinfo->visible=v;
 			m_visible=v; }
 
-		//! returns whatever is available: field's caption or field's alias (from query) 
-		//! or finally - field's name
-		QString nameOrCaption() const { return m_nameOrCaption; }
+		/*! \return whatever is available: 
+		 - field's caption
+		 - or field's alias (from query)
+		 - or finally - field's name */
+		QString captionAliasOrName() const { return m_captionAliasOrName; }
 
 		/*! Assigns validator \a v for this column. 
 		 If the validator has no parent obejct, it will be owned by the column, 
@@ -123,7 +125,7 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 		KexiDB::Field* field() const { return m_field; }
 		
 		/*! A rich field information for db-aware data. 
-		 For not-db-aware data it always return false (use field() instead. */
+		 For not-db-aware data it is always 0 (use field() instead. */
 		KexiDB::QueryColumnInfo* fieldinfo;
 
 		bool isDBAware : 1; //!< true if data is stored in DB, not only in memeory
@@ -143,7 +145,7 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 
 		void init();
 
-		QString m_nameOrCaption;
+		QString m_captionAliasOrName;
 
 		KexiValidator* m_validator;
 

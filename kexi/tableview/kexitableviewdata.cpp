@@ -46,7 +46,7 @@ KexiTableViewColumn::KexiTableViewColumn(KexiDB::Field& f, bool owner)
 {
 	isDBAware = false;
 	m_fieldOwned = owner;
-	m_nameOrCaption = m_field->captionOrName();
+	m_captionAliasOrName = m_field->captionOrName();
 	init();
 }
 
@@ -69,7 +69,7 @@ KexiTableViewColumn::KexiTableViewColumn(const QString& name, KexiDB::Field::Typ
 
 	isDBAware = false;
 	m_fieldOwned = true;
-	m_nameOrCaption = m_field->captionOrName();
+	m_captionAliasOrName = m_field->captionOrName();
 	init();
 }
 
@@ -84,14 +84,14 @@ KexiTableViewColumn::KexiTableViewColumn(
 
 	//setup column's caption:
 	if (!fieldinfo->field->caption().isEmpty()) {
-		m_nameOrCaption = fieldinfo->field->caption();
+		m_captionAliasOrName = fieldinfo->field->caption();
 	}
 	else {
 		//reuse alias if available:
-		m_nameOrCaption = fieldinfo->alias;
+		m_captionAliasOrName = fieldinfo->alias;
 		//last hance: use field name
-		if (m_nameOrCaption.isEmpty())
-			m_nameOrCaption = fieldinfo->field->name();
+		if (m_captionAliasOrName.isEmpty())
+			m_captionAliasOrName = fieldinfo->field->name();
 		//todo: compute other auto-name?
 	}
 	init();

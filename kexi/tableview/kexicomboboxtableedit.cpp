@@ -218,7 +218,7 @@ QVariant KexiComboBoxTableEdit::value(bool &ok)
 		if (relData) {
 			//use 'related table data' model
 			KexiTableItem *it = m_popup->tableView()->selectedItem();
-			return it ? it->at(0) : QVariant();
+			return it ? it->at(0) : m_origValue;//QVariant();
 		}
 		else {
 			//use 'enum hints' model
@@ -259,6 +259,20 @@ void KexiComboBoxTableEdit::clear()
 
 bool KexiComboBoxTableEdit::valueChanged()
 {
+/*	KexiTableViewData *relData = column()->relatedData();
+	if (relData) {
+		//use 'related table data' model
+		KexiTableItem *it = m_popup->tableView()->selectedItem();
+		if (!it)
+			return false;
+	}
+	else {
+		//use 'enum hints' model
+		const int row = m_popup->tableView()->currentRow();
+		if (row<0)
+			return false;
+	}*/
+
 	//just compare values
 	return KexiTableEdit::valueChanged();
 }

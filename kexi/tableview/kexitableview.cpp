@@ -499,7 +499,8 @@ void KexiTableView::setData( KexiTableViewData *data, bool owner )
 					if (wid==0)
 						wid=KEXITV_DEFAULT_COLUMN_WIDTH;//default col width in pixels
 //js: TODO - add col width configuration and storage
-					d->pTopHeader->addLabel(f->captionOrName(), wid);
+//					d->pTopHeader->addLabel(f->captionOrName(), wid);
+					d->pTopHeader->addLabel(it.current()->captionAliasOrName(), wid);
 					if (!f->description().isEmpty())
 						d->pTopHeader->setToolTip( i, f->description() );
 				}
@@ -909,7 +910,11 @@ void KexiTableView::slotRefreshRequested()
 //	setCursor(-1, -1, true);
 	d->clearVariables();
 	d->pVerticalHeader->setCurrentRow(-1);
-	d->initDataContentsOnShow = true;
+	if (isVisible())
+		initDataContents();
+	else
+		d->initDataContentsOnShow = true;
+	d->pVerticalHeader->addLabels(m_data->count());
 }
 
 #if 0 //todo
@@ -2909,58 +2914,62 @@ bool KexiTableView::acceptEditor()
 	//autoincremented field can be omitted (left as null or empty) if we're inserting a new row
 	const bool autoIncColumnCanBeOmitted = d->newRowEditing && d->pEditor->field()->isAutoIncrement();
 
-	if (d->pEditor->valueIsNull()) {//null value entered
-		if (d->pEditor->field()->isNotNull() && !autoIncColumnCanBeOmitted) {
-			kdDebug() << "KexiTableView::acceptEditor(): NULL NOT ALLOWED!" << endl;
-			res = KexiValidator::Error;
-			msg = KexiValidator::msgColumnNotEmpty().arg(d->pEditor->field()->captionOrName());
-			desc = i18n("The column's constraint is declared as NOT NULL.");
-//			allow = false;
-//			removeEditor();
-//			return true;
-		}
-		else {
-			kdDebug() << "KexiTableView::acceptEditor(): NULL VALUE WILL BE SET" << endl;
-			//ok, just leave newval as NULL
-			setNull = true;
-		}
-	}
-	else if (d->pEditor->valueIsEmpty()) {//empty value entered
-		if (d->pEditor->field()->hasEmptyProperty()) {
-			if (d->pEditor->field()->isNotEmpty() && !autoIncColumnCanBeOmitted) {
-				kdDebug() << "KexiTableView::acceptEditor(): EMPTY NOT ALLOWED!" << endl;
-				res = KexiValidator::Error;
-				msg = KexiValidator::msgColumnNotEmpty().arg(d->pEditor->field()->captionOrName());
-				desc = i18n("The column's constraint is declared as NOT EMPTY.");
-//				allow = false;
-//				removeEditor();
-//				return true;
-			}
-			else {
-				kdDebug() << "KexiTableView::acceptEditor(): EMPTY VALUE WILL BE SET" << endl;
-			}
-		}
-		else {
+	bool valueChanged = d->pEditor->valueChanged();
+
+	if (valueChanged) {
+		if (d->pEditor->valueIsNull()) {//null value entered
 			if (d->pEditor->field()->isNotNull() && !autoIncColumnCanBeOmitted) {
-				kdDebug() << "KexiTableView::acceptEditor(): NEITHER NULL NOR EMPTY VALUE CAN BE SET!" << endl;
+				kdDebug() << "KexiTableView::acceptEditor(): NULL NOT ALLOWED!" << endl;
 				res = KexiValidator::Error;
 				msg = KexiValidator::msgColumnNotEmpty().arg(d->pEditor->field()->captionOrName());
-				desc = i18n("The column's constraint is declared as NOT EMPTY and NOT NULL.");
-//				allow = false;
-//				removeEditor();
-//				return true;
+				desc = i18n("The column's constraint is declared as NOT NULL.");
+	//			allow = false;
+	//			removeEditor();
+	//			return true;
 			}
 			else {
-				kdDebug() << "KexiTableView::acceptEditor(): NULL VALUE WILL BE SET BECAUSE EMPTY IS NOT ALLOWED" << endl;
+				kdDebug() << "KexiTableView::acceptEditor(): NULL VALUE WILL BE SET" << endl;
 				//ok, just leave newval as NULL
 				setNull = true;
 			}
 		}
-	}
+		else if (d->pEditor->valueIsEmpty()) {//empty value entered
+			if (d->pEditor->field()->hasEmptyProperty()) {
+				if (d->pEditor->field()->isNotEmpty() && !autoIncColumnCanBeOmitted) {
+					kdDebug() << "KexiTableView::acceptEditor(): EMPTY NOT ALLOWED!" << endl;
+					res = KexiValidator::Error;
+					msg = KexiValidator::msgColumnNotEmpty().arg(d->pEditor->field()->captionOrName());
+					desc = i18n("The column's constraint is declared as NOT EMPTY.");
+	//				allow = false;
+	//				removeEditor();
+	//				return true;
+				}
+				else {
+					kdDebug() << "KexiTableView::acceptEditor(): EMPTY VALUE WILL BE SET" << endl;
+				}
+			}
+			else {
+				if (d->pEditor->field()->isNotNull() && !autoIncColumnCanBeOmitted) {
+					kdDebug() << "KexiTableView::acceptEditor(): NEITHER NULL NOR EMPTY VALUE CAN BE SET!" << endl;
+					res = KexiValidator::Error;
+					msg = KexiValidator::msgColumnNotEmpty().arg(d->pEditor->field()->captionOrName());
+					desc = i18n("The column's constraint is declared as NOT EMPTY and NOT NULL.");
+	//				allow = false;
+	//				removeEditor();
+	//				return true;
+				}
+				else {
+					kdDebug() << "KexiTableView::acceptEditor(): NULL VALUE WILL BE SET BECAUSE EMPTY IS NOT ALLOWED" << endl;
+					//ok, just leave newval as NULL
+					setNull = true;
+				}
+			}
+		}
+	}//changed
 
 	//try to get the value entered:
 	if (res == KexiValidator::Ok) {
-		if (!setNull && !d->pEditor->valueChanged()
+		if (!setNull && !valueChanged
 			|| setNull && d->pCurrentItem->at(d->curCol).isNull()) {
 			kdDebug() << "KexiTableView::acceptEditor(): VALUE NOT CHANGED." << endl;
 			removeEditor();
@@ -3762,6 +3771,11 @@ void KexiTableView::navBtnNewClicked()
 bool KexiTableView::eventFilter( QObject *o, QEvent *e )
 {
 	//don't allow to stole key my events by others:
+	if (e->type()==QEvent::Show) {
+		kdDebug() << "SHOW" << endl;
+	}
+	kdDebug() << "spontaneous " << e->spontaneous() << " type=" << e->type() << endl;
+	
 	if (e->spontaneous() && (e->type()==QEvent::KeyPress /*|| e->type()==QEvent::AccelOverride*/)) {
 		QKeyEvent *ke = static_cast<QKeyEvent*>(e);
 		int k = ke->key();
