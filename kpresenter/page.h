@@ -123,7 +123,6 @@ public:
     void gotoPage( int pg );
 
     bool mouseSelectedObject;
-    int objectPosX, objectPosY;
 
 public slots:
     void exitEditMode();
