@@ -31,7 +31,7 @@
 #include "GPart.h"
 #include "Coord.h"
 
-#include <qmessagebox.h>
+#include <kmessagebox.h>
 #include <qstring.h>
 #include <qfileinfo.h>
 #include <qdom.h>
@@ -57,7 +57,7 @@ KIllustratorChild::~KIllustratorChild ()
 KIllustratorDocument::KIllustratorDocument( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
-    setInstance( KIllustratorFactory::global() );
+    //setInstance( KIllustratorFactory::global() );
     m_gdocument = new GDocument();
     GObject::registerPrototype ("object", new GPart ());
 }
@@ -102,7 +102,6 @@ bool KIllustratorDocument::loadChildren (KoStore* store)
 
 bool KIllustratorDocument::saveChildren (KoStore* _store, const char *_path)
 {
-  kdDebug() << "void KIllustratorDocument::saveChildren( KOStore::Store _store, const char *_path )" << endl;
   int i = 0;
   QListIterator<KoDocumentChild> it ( children() );
   for( ; it.current(); ++it )
@@ -114,7 +113,7 @@ bool KIllustratorDocument::saveChildren (KoStore* _store, const char *_path)
   return true;
 }
 
-// I admire that piece of art, so I didn't touch it... (Werner)
+// I admire that piece of art, so I didn't dare touching it... (Werner)
 /*
 bool KIllustratorDocument::completeSaving (KoStore* store)
 {
@@ -127,15 +126,14 @@ bool KIllustratorDocument::completeSaving (KoStore* store)
 
 void KIllustratorDocument::insertPart (const QRect& rect, KoDocumentEntry& e)
 {
-    kdDebug() << "KIllustrator: insetPart !!!!!!!!!!!!!!!!!!!!!" << endl;
     KoDocument* doc = e.createDoc();
     if ( !doc )
         return;
 
     if (! doc->initDoc() )
     {
-        QMessageBox::critical ((QWidget *) 0L, i18n ("KIllustrator Error"),
-                               i18n ("Could not insert document"), i18n ("OK"));
+        KMessageBox::error((QWidget *) 0L, i18n ("KIllustrator Error"),
+                               i18n ("Could not insert document"));
         return;
     }
 
@@ -176,7 +174,6 @@ KoMainWindow* KIllustratorDocument::createShell()
 {
     KoMainWindow* shell = new KIllustratorShell;
     shell->show();
-
     return shell;
 }
 

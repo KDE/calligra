@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,22 +15,21 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
 
-#include <iostream.h>
-#include "AlignCmd.h"
+#include <AlignCmd.h>
+#include <GDocument.h>
+
 #include <klocale.h>
 
-#include "GDocument.h"
-
-AlignCmd::AlignCmd (GDocument* doc, HorizAlignment halign, 
-                    VertAlignment valign, bool centerToPage, 
-		    bool snapToGrid) : ObjectManipCmd (doc, i18n("Align")) {
+AlignCmd::AlignCmd (GDocument* doc, HorizAlignment halign,
+                    VertAlignment valign, bool centerToPage,
+                    bool snapToGrid) : ObjectManipCmd (doc, i18n("Align")) {
   horizAlign = halign;
   vertAlign = valign;
   center = centerToPage;
@@ -44,7 +43,7 @@ void AlignCmd::execute () {
   unsigned int i;
 
   unsigned int nobjs = document->selectionCount ();
-  
+
   if (nobjs == 0)
     return;
 
@@ -58,13 +57,13 @@ void AlignCmd::execute () {
     alignBox = alignObject->boundingBox ();
 
     for (i = 0, it = document->getSelection ().begin ();
-	 it != document->getSelection ().end (); it++, i++) {
+         it != document->getSelection ().end (); it++, i++) {
       GObject* obj = *it;
       if (obj == alignObject)
         continue;
 
       Rect objBox = obj->boundingBox ();
-  
+
       switch (horizAlign) {
       case HAlign_Left:
         dx = alignBox.left () - objBox.left ();
@@ -116,9 +115,9 @@ void AlignCmd::execute () {
     Coord bcenter = document->boundingBoxForSelection ().center ();
     QWMatrix matrix;
     matrix.translate (pcenter.x () - bcenter.x (),
-		      pcenter.y () - bcenter.y ());
+                      pcenter.y () - bcenter.y ());
     for (list<GObject*>::iterator it = document->getSelection ().begin ();
-	 it != document->getSelection ().end (); it++)
+         it != document->getSelection ().end (); it++)
       (*it)->transform (matrix, true);
   }
   document->setAutoUpdate (true);

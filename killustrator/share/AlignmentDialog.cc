@@ -22,371 +22,226 @@
 
 */
 
-#include "AlignmentDialog.h"
-#include "AlignmentDialog.moc"
-
-#include <stdio.h>
-
-#include <klocale.h>
-#include <kapp.h>
-#include <kbuttonbox.h>
-#include <kseparator.h>
-#include <kiconloader.h>
-#include <ktabctl.h>
+#include <AlignmentDialog.h>
 
 #include <qpushbutton.h>
-#include <qbuttongroup.h>
-#include <qlabel.h>
+#include <qvbuttongroup.h>
+#include <qhbuttongroup.h>
 #include <qlayout.h>
-#include <qgroupbox.h>
+#include <qvgroupbox.h>
 #include <qradiobutton.h>
 #include <qcheckbox.h>
 
-#include "GDocument.h"
-#include "GObject.h"
-#include "CommandHistory.h"
+#include <klocale.h>
+#include <kiconloader.h>
+#include <kdebug.h>
 
-#define BUTTON_WIDTH  40
-#define BUTTON_HEIGHT 40
+#include <GDocument.h>
+#include <GObject.h>
+#include <CommandHistory.h>
+
 
 AlignmentDialog::AlignmentDialog (QWidget* parent, const char* name) :
-    QDialog (parent, name, true) {
-  QPushButton* button;
-  QWidget* widget;
-
-  setCaption (i18n ("Alignment"));
-
-  QVBoxLayout *vl = new QVBoxLayout (this, 2);
-
-  // the tab control
-  tabctl = new KTabCtl (this);
-  connect (tabctl, SIGNAL(tabSelected(int)), this, SLOT(selectTab(int)));
-
-  activeTab = 0;
-
-  widget = createAlignmentWidget (tabctl);
-  tabctl->addTab (widget, i18n ("Align"));
-
-  widget = createDistributionWidget (tabctl);
-  tabctl->addTab (widget, i18n ("Distribute"));
-
-  vl->addWidget (tabctl, 1);
-
-  // a separator
-  KSeparator* sep = new KSeparator (this);
-  vl->addWidget (sep);
-
-  // the standard buttons
-  KButtonBox *bbox = new KButtonBox (this);
-  button = bbox->addButton (i18n ("OK"));
-  connect (button, SIGNAL (clicked ()), SLOT (accept ()));
-  button = bbox->addButton (i18n ("Cancel"));
-  connect (button, SIGNAL (clicked ()), SLOT (reject ()));
-  bbox->addStretch (1);
-  button = bbox->addButton (i18n ("Help"));
-  connect (button, SIGNAL (clicked ()), SLOT (helpPressed ()));
-  bbox->layout ();
-  bbox->setMinimumSize (bbox->sizeHint ());
-
-  vl->addWidget (bbox);
-
-  vl->activate ();
-  adjustSize ();
-
-  setMinimumSize (300, 300);
-  setMaximumSize (350, 300);
+    KDialogBase(KDialogBase::Tabbed, i18n("Alignment"),
+                KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok,
+                parent, name, true) {
+        createAlignmentWidget(addPage(i18n("Align")));
+        createDistributionWidget(addPage(i18n("Distribute")));
 }
 
-QWidget* AlignmentDialog::createAlignmentWidget (QWidget* parent) {
-  QWidget* w;
-  QButtonGroup* group;
-  QGroupBox* box;
+void AlignmentDialog::createAlignmentWidget (QWidget* parent) {
 
-  w = new QWidget (parent);
-  QGridLayout *layout = new QGridLayout (w, 2, 3, 10);
+    QGridLayout *layout = new QGridLayout(parent, 2, 2, KDialogBase::marginHint(), KDialogBase::spacingHint());
 
-  group = new QButtonGroup (w, "Vertically");
-  group->setTitle (i18n ("Vertically"));
+    QButtonGroup *group = new QVButtonGroup(i18n ("Vertically"), parent, "Vertically");
+    group->setExclusive(true);
+    layout->addMultiCellWidget (group, 0, 1, 0, 0);
 
-  valignButton[0] = new QPushButton (group);
-  valignButton[0]->setToggleButton (true);
-  valignButton[0]->setPixmap (UserIcon ("atop"));
-  valignButton[0]->setGeometry (20, 30,
-				BUTTON_WIDTH, BUTTON_HEIGHT);
+    valignButton[0] = new QPushButton (group);
+    valignButton[0]->setToggleButton (true);
+    valignButton[0]->setPixmap (UserIcon ("atop"));
 
+    valignButton[1] = new QPushButton (group);
+    valignButton[1]->setToggleButton (true);
+    valignButton[1]->setPixmap (UserIcon ("avcenter"));
 
-  valignButton[1] = new QPushButton (group);
-  valignButton[1]->setToggleButton (true);
-  valignButton[1]->setPixmap (UserIcon ("avcenter"));
-  valignButton[1]->setGeometry (20, 30 + 1 * BUTTON_HEIGHT,
-				BUTTON_WIDTH, BUTTON_HEIGHT);
+    valignButton[2] = new QPushButton (group);
+    valignButton[2]->setToggleButton (true);
+    valignButton[2]->setPixmap (UserIcon ("abottom"));
 
-  valignButton[2] = new QPushButton (group);
-  valignButton[2]->setToggleButton (true);
-  valignButton[2]->setPixmap (UserIcon ("abottom"));
-  valignButton[2]->setGeometry (20, 30 + 2 * BUTTON_HEIGHT,
-				BUTTON_WIDTH, BUTTON_HEIGHT);
+    group = new QHButtonGroup (i18n ("Horizontally"), parent, "Horizontally");
+    group->setExclusive (true);
+    layout->addWidget (group, 0, 1);
 
-  group->setExclusive (true);
-#if NEWKDE
-  layout->addMultiCellWidget (group, 0, 1, 0, 0, 0);
-#else /*TB1999-10-23: Don't know whether the Qt 1.x version is needed */
-  layout->addMultiCellWidget (group, 0, 1, 0, 0, AlignCenter);
-#endif
+    halignButton[0] = new QPushButton (group);
+    halignButton[0]->setToggleButton (true);
+    halignButton[0]->setPixmap (UserIcon ("aleft"));
 
-  group = new QButtonGroup (w, "Horizontally");
-  group->setTitle (i18n ("Horizontally"));
+    halignButton[1] = new QPushButton (group);
+    halignButton[1]->setToggleButton (true);
+    halignButton[1]->setPixmap (UserIcon ("ahcenter"));
 
-  halignButton[0] = new QPushButton (group);
-  halignButton[0]->setToggleButton (true);
-  halignButton[0]->setPixmap (UserIcon ("aleft"));
-  halignButton[0]->setGeometry (20, 30, BUTTON_WIDTH,
-				BUTTON_HEIGHT);
+    halignButton[2] = new QPushButton (group);
+    halignButton[2]->setToggleButton (true);
+    halignButton[2]->setPixmap (UserIcon ("aright"));
 
-  halignButton[1] = new QPushButton (group);
-  halignButton[1]->setToggleButton (true);
-  halignButton[1]->setPixmap (UserIcon ("ahcenter"));
-  halignButton[1]->setGeometry (20 + BUTTON_WIDTH, 30,
-                           BUTTON_WIDTH, BUTTON_HEIGHT);
+    QGroupBox *box = new QVGroupBox (parent);
+    layout->addWidget(box, 1, 1);
 
-  halignButton[2] = new QPushButton (group);
-  halignButton[2]->setToggleButton (true);
-  halignButton[2]->setPixmap (UserIcon ("aright"));
-  halignButton[2]->setGeometry (20 + 2 * BUTTON_WIDTH,
-                           30, BUTTON_WIDTH, BUTTON_HEIGHT);
-
-  group->setExclusive (true);
-#if NEWKDE
-  layout->addMultiCellWidget (group, 0, 0, 1, 2, 0);
-#else /*TB1999-10-23: Don't know whether the Qt 1.x version is needed */
-  layout->addMultiCellWidget (group, 0, 0, 1, 2, AlignCenter);
-#endif
-
-  box = new QGroupBox (w);
-  gbutton = new QCheckBox (box);
-  gbutton->setText (i18n ("To Grid"));
-  gbutton->setFixedSize (gbutton->sizeHint ());
-  gbutton->move (15, 20);
-
-  cbutton = new QCheckBox (box);
-  cbutton->setText (i18n ("Align To Center of Page"));
-  cbutton->setFixedSize (cbutton->sizeHint ());
-  cbutton->move (15, 45);
-
-#if NEWKDE
-  layout->addMultiCellWidget (box, 1, 1, 1, 2, 0);
-#else /*TB1999-10-23: Don't know whether the Qt 1.x version is needed */
-  layout->addMultiCellWidget (box, 1, 1, 1, 2, AlignCenter);
-#endif
-
-  layout->activate ();
-  w->adjustSize ();
-  return w;
+    gbutton = new QCheckBox(i18n ("To Grid"), box);
+    cbutton = new QCheckBox (i18n ("Align To Center of Page"), box);
 }
 
-QWidget* AlignmentDialog::createDistributionWidget (QWidget* parent) {
-  QWidget* w;
-  QButtonGroup* group;
+void AlignmentDialog::createDistributionWidget (QWidget* parent) {
 
-  w = new QWidget (parent);
-  QGridLayout *layout = new QGridLayout (w, 2, 3, 10);
+    QGridLayout *layout = new QGridLayout (parent, 2, 2, KDialogBase::marginHint(), KDialogBase::spacingHint());
 
-  group = new QButtonGroup (w, "Vertically");
-  group->setTitle (i18n ("Vertically"));
+    QButtonGroup *group = new QVButtonGroup(i18n ("Vertically"), parent, "Vertically");
+    group->setExclusive(true);
+    layout->addMultiCellWidget(group, 0, 1, 0, 0);
 
-  vdistButton[0] = new QPushButton (group);
-  vdistButton[0]->setToggleButton (true);
-  vdistButton[0]->setPixmap (UserIcon ("dtop"));
-  vdistButton[0]->setGeometry (20, 30, BUTTON_WIDTH, BUTTON_HEIGHT);
+    vdistButton[0] = new QPushButton (group);
+    vdistButton[0]->setToggleButton (true);
+    vdistButton[0]->setPixmap (UserIcon ("dtop"));
 
+    vdistButton[1] = new QPushButton (group);
+    vdistButton[1]->setToggleButton (true);
+    vdistButton[1]->setPixmap (UserIcon ("dvcenter"));
 
-  vdistButton[1] = new QPushButton (group);
-  vdistButton[1]->setToggleButton (true);
-  vdistButton[1]->setPixmap (UserIcon ("dvcenter"));
-  vdistButton[1]->setGeometry (20, 30 + 1 * BUTTON_HEIGHT,
-			       BUTTON_WIDTH, BUTTON_HEIGHT);
+    vdistButton[2] = new QPushButton (group);
+    vdistButton[2]->setToggleButton (true);
+    vdistButton[2]->setPixmap (UserIcon ("dvdist"));
 
-  vdistButton[2] = new QPushButton (group);
-  vdistButton[2]->setToggleButton (true);
-  vdistButton[2]->setPixmap (UserIcon ("dvdist"));
-  vdistButton[2]->setGeometry (20, 30 + 2 * BUTTON_HEIGHT,
-			       BUTTON_WIDTH, BUTTON_HEIGHT);
+    vdistButton[3] = new QPushButton (group);
+    vdistButton[3]->setToggleButton (true);
+    vdistButton[3]->setPixmap (UserIcon ("dbottom"));
 
-  vdistButton[3] = new QPushButton (group);
-  vdistButton[3]->setToggleButton (true);
-  vdistButton[3]->setPixmap (UserIcon ("dbottom"));
-  vdistButton[3]->setGeometry (20, 30 + 3 * BUTTON_HEIGHT,
-			       BUTTON_WIDTH, BUTTON_HEIGHT);
+    group = new QHButtonGroup (i18n ("Horizontally"), parent, "Horizontally");
+    group->setExclusive (true);
+    layout->addWidget(group, 0, 1);
 
-  group->setExclusive (true);
-  layout->addMultiCellWidget (group, 0, 1, 0, 0, AlignCenter);
-#if NEWKDE
-  layout->addMultiCellWidget (group, 0, 1, 0, 0, 0);
-#else /*TB1999-10-23: Don't know whether the Qt 1.x version is needed */
-  layout->addMultiCellWidget (group, 0, 1, 0, 0, AlignCenter);
-#endif
+    hdistButton[0] = new QPushButton (group);
+    hdistButton[0]->setToggleButton (true);
+    hdistButton[0]->setPixmap (UserIcon ("dleft"));
 
-  group = new QButtonGroup (w, "Horizontally");
-  group->setTitle (i18n ("Horizontally"));
+    hdistButton[1] = new QPushButton (group);
+    hdistButton[1]->setToggleButton (true);
+    hdistButton[1]->setPixmap (UserIcon ("dhcenter"));
 
-  hdistButton[0] = new QPushButton (group);
-  hdistButton[0]->setToggleButton (true);
-  hdistButton[0]->setPixmap (UserIcon ("dleft"));
-  hdistButton[0]->setGeometry (20, 30, BUTTON_WIDTH,
-				BUTTON_HEIGHT);
+    hdistButton[2] = new QPushButton (group);
+    hdistButton[2]->setToggleButton (true);
+    hdistButton[2]->setPixmap (UserIcon ("dhdist"));
 
-  hdistButton[1] = new QPushButton (group);
-  hdistButton[1]->setToggleButton (true);
-  hdistButton[1]->setPixmap (UserIcon ("dhcenter"));
-  hdistButton[1]->setGeometry (20 + BUTTON_WIDTH, 30,
-                           BUTTON_WIDTH, BUTTON_HEIGHT);
+    hdistButton[3] = new QPushButton (group);
+    hdistButton[3]->setToggleButton (true);
+    hdistButton[3]->setPixmap (UserIcon ("dright"));
 
-  hdistButton[2] = new QPushButton (group);
-  hdistButton[2]->setToggleButton (true);
-  hdistButton[2]->setPixmap (UserIcon ("dhdist"));
-  hdistButton[2]->setGeometry (20 + 2 * BUTTON_WIDTH,
-			       30, BUTTON_WIDTH, BUTTON_HEIGHT);
+    group = new QVButtonGroup(i18n ("Distribute at"), parent);
+    layout->addWidget(group, 1, 1);
 
-  hdistButton[3] = new QPushButton (group);
-  hdistButton[3]->setToggleButton (true);
-  hdistButton[3]->setPixmap (UserIcon ("dright"));
-  hdistButton[3]->setGeometry (20 + 3 * BUTTON_WIDTH,
-                           30, BUTTON_WIDTH, BUTTON_HEIGHT);
-
-  group->setExclusive (true);
-#if NEWKDE
-  layout->addMultiCellWidget (group, 0, 0, 1, 2, 0);
-#else /*TB1999-10-23: Don't know whether the Qt 1.x version is needed */
-  layout->addMultiCellWidget (group, 0, 0, 1, 2, AlignCenter);
-#endif
-
-  group = new QButtonGroup (w);
-  group->setTitle (i18n ("Distribute at"));
-
-  sbutton = new QRadioButton (group);
-  sbutton->setText (i18n ("Selection"));
-  sbutton->move (15, 20);
-  sbutton->setChecked (true);
-
-  pbutton = new QRadioButton (group);
-  pbutton->setText (i18n ("Page"));
-  pbutton->move (15, 45);
-
-  layout->addMultiCellWidget (group, 1, 1, 1, 2, AlignCenter);
-#if NEWKDE
-  layout->addMultiCellWidget (group, 1, 1, 1, 2, 0);
-#else /*TB1999-10-23: Don't know whether the Qt 1.x version is needed */
-  layout->addMultiCellWidget (group, 1, 1, 1, 2, AlignCenter);
-#endif
-
-  layout->activate ();
-  w->adjustSize ();
-  return w;
-}
-
-void AlignmentDialog::helpPressed () {
+    sbutton = new QRadioButton (i18n ("Selection"), group);
+    sbutton->setChecked (true);
+    pbutton = new QRadioButton (i18n ("Page"), group);
 }
 
 HorizAlignment AlignmentDialog::getHorizAlignment () {
-  HorizAlignment result = HAlign_None;
 
-  if (halignButton[0]->isOn ())
-    result = HAlign_Left;
-  else if (halignButton[1]->isOn ())
-    result = HAlign_Center;
-  else if (halignButton[2]->isOn ())
-    result = HAlign_Right;
+    HorizAlignment result = HAlign_None;
 
-  return result;
+    if (halignButton[0]->isOn ())
+        result = HAlign_Left;
+    else if (halignButton[1]->isOn ())
+        result = HAlign_Center;
+    else if (halignButton[2]->isOn ())
+        result = HAlign_Right;
+
+    return result;
 }
 
 VertAlignment AlignmentDialog::getVertAlignment () {
-  VertAlignment result = VAlign_None;
 
-  if (valignButton[0]->isOn ())
-    result = VAlign_Top;
-  else if (valignButton[1]->isOn ())
-    result = VAlign_Center;
-  else if (valignButton[2]->isOn ())
-    result = VAlign_Bottom;
+    VertAlignment result = VAlign_None;
 
-  return result;
+    if (valignButton[0]->isOn ())
+        result = VAlign_Top;
+    else if (valignButton[1]->isOn ())
+        result = VAlign_Center;
+    else if (valignButton[2]->isOn ())
+        result = VAlign_Bottom;
+
+    return result;
 }
 
 bool AlignmentDialog::centerToPage () {
-  return cbutton->isOn ();
+    return cbutton->isOn ();
 }
 
 bool AlignmentDialog::snapToGrid () {
-  return gbutton->isOn ();
+    return gbutton->isOn ();
 }
 
 HorizDistribution AlignmentDialog::getHorizDistribution () {
-  HorizDistribution result = HDistrib_None;
 
-  if (hdistButton[0]->isOn ())
-    result = HDistrib_Left;
-  if (hdistButton[1]->isOn ())
-    result = HDistrib_Center;
-  if (hdistButton[2]->isOn ())
-    result = HDistrib_Distance;
-  if (hdistButton[3]->isOn ())
-    result = HDistrib_Right;
+    HorizDistribution result = HDistrib_None;
 
-  return result;
+    if (hdistButton[0]->isOn ())
+        result = HDistrib_Left;
+    if (hdistButton[1]->isOn ())
+        result = HDistrib_Center;
+    if (hdistButton[2]->isOn ())
+        result = HDistrib_Distance;
+    if (hdistButton[3]->isOn ())
+        result = HDistrib_Right;
+
+    return result;
 }
 
 VertDistribution AlignmentDialog::getVertDistribution () {
-  VertDistribution result = VDistrib_None;
 
-  if (vdistButton[0]->isOn ())
-    result = VDistrib_Top;
-  if (vdistButton[1]->isOn ())
-    result = VDistrib_Center;
-  if (vdistButton[2]->isOn ())
-    result = VDistrib_Distance;
-  if (vdistButton[3]->isOn ())
-    result = VDistrib_Bottom;
+    VertDistribution result = VDistrib_None;
 
-  return result;
+    if (vdistButton[0]->isOn ())
+        result = VDistrib_Top;
+    if (vdistButton[1]->isOn ())
+        result = VDistrib_Center;
+    if (vdistButton[2]->isOn ())
+        result = VDistrib_Distance;
+    if (vdistButton[3]->isOn ())
+        result = VDistrib_Bottom;
+
+    return result;
 }
 
 DistributionMode AlignmentDialog::getDistributionMode () {
-  return (sbutton->isOn () ? DMode_AtSelection : DMode_AtPage);
+    return (sbutton->isOn () ? DMode_AtSelection : DMode_AtPage);
 }
 
 AlignmentMode AlignmentDialog::getMode () {
-  return (activeTab == 0 ? AMode_Align : AMode_Distribute);
-}
-
-void AlignmentDialog::selectTab (int t) {
-  activeTab = t;
+    return (activePageIndex()==0 ? AMode_Align : AMode_Distribute);
 }
 
 void AlignmentDialog::alignSelection (GDocument* doc,
-				      CommandHistory* history) {
-  if (! doc->selectionIsEmpty ()) {
-    AlignmentDialog dialog (0L, "Alignment");
+                                      CommandHistory* history) {
+    if (! doc->selectionIsEmpty ()) {
+        AlignmentDialog dialog (0L, "Alignment");
 
-    int result = dialog.exec ();
-    if (result == Accepted) {
-      if (dialog.getMode () == AMode_Align) {
-        AlignCmd *cmd = new AlignCmd (doc, dialog.getHorizAlignment (),
-				      dialog.getVertAlignment (),
-				      dialog.centerToPage (),
-				      dialog.snapToGrid ());
-        history->addCommand (cmd, true);
-      }
-      else {
-        DistributeCmd *cmd =
-	  new DistributeCmd (doc, dialog.getHorizDistribution (),
-			     dialog.getVertDistribution (),
-			     dialog.getDistributionMode ());
-        history->addCommand (cmd, true);
-      }
+        if (dialog.exec() == Accepted) {
+            if (dialog.getMode () == AMode_Align) {
+                AlignCmd *cmd = new AlignCmd (doc, dialog.getHorizAlignment (),
+                                              dialog.getVertAlignment (),
+                                              dialog.centerToPage (),
+                                              dialog.snapToGrid ());
+                history->addCommand (cmd, true);
+            }
+            else {
+                DistributeCmd *cmd =
+                    new DistributeCmd (doc, dialog.getHorizDistribution (),
+                                       dialog.getVertDistribution (),
+                                       dialog.getDistributionMode ());
+                history->addCommand (cmd, true);
+            }
+        }
     }
-  }
 }
 
-#undef BUTTON_WIDTH
-#undef BUTTON_HEIGHT
+#include <AlignmentDialog.moc>

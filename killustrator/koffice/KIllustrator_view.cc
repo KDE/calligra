@@ -58,7 +58,6 @@
 #include "ScriptDialog.h"
 #include "PStateManager.h"
 #include "ExportFilter.h"
-#include "AboutDialog.h"
 #include "GroupCmd.h"
 #include "UngroupCmd.h"
 #include "DeleteCmd.h"
