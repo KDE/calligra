@@ -310,9 +310,16 @@ class KEXI_DB_EXPORT Field
 		inline bool hasEmptyProperty() const { return Field::hasEmptyProperty(m_type); }
 
 		/*! static version of hasEmptyProperty() method
-		 \return true if this field has EMPTY property (i.e. it is of type
-		 string or is a BLOB) */
+		 \return true if this field type has EMPTY property (i.e. it is string or BLOB type) */
 		static bool hasEmptyProperty(uint type);
+
+		/*! \return true if this field can be auto-incremented. 
+		 Actually, returns true for integer field type. \sa IntegerType, isAutoIncrement() */
+		inline bool isAutoIncrementAllowed() const { return Field::isAutoIncrementAllowed(m_type); }
+
+		/*! static version of isAutoIncrementAllowed() method
+		 \return true if this field type can be auto-incremented. */
+		static bool isAutoIncrementAllowed(uint type);
 
 		void setType(Type t);
 
@@ -343,15 +350,20 @@ class KEXI_DB_EXPORT Field
 			\return true if given value was valid for field type. */
 		bool setDefaultValue(const QCString& def);
 
+		/*! Sets auto increment flag. Only available to set true, 
+		 if isAutoIncrementAllowed() is true. */
 		void setAutoIncrement(bool a);
 
 		/*! Specifies whether the field is single-field primary key or not 
 		 (KexiDB::PrimeryKey item). 
+
 		 Use this with caution. Setting this to true implies setting:
 		 - setUniqueKey(true)
 		 - setNotNull(true)
 		 - setNotEmpty(true)
-		 - setIndexed(true) */
+		 - setIndexed(true)
+
+		 Setting this to false implies setting setAutoIncrement(false). */
 		void setPrimaryKey(bool p);
 
 		/*! Specifies whether the field has single-field unique constraint or not 

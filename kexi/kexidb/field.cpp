@@ -240,6 +240,11 @@ bool Field::hasEmptyProperty(uint type)
 	return Field::isTextType(type) || type==BLOB;
 }
 
+bool Field::isAutoIncrementAllowed(uint type)
+{
+	return Field::isIntegerType(type);
+}
+
 Field::TypeGroup Field::typeGroup(uint type)
 {
 	if (Field::isTextType(type))
@@ -292,6 +297,9 @@ Field::setConstraints(uint c)
 	}
 	if (isIndexed()) {
 		setIndexed(true);
+	}
+	if (isAutoIncrement() && !isAutoIncrementAllowed()) {
+		setAutoIncrement(false);
 	}
 }
 
@@ -444,6 +452,8 @@ Field::setDefaultValue(const QCString& def)
 void
 Field::setAutoIncrement(bool a)
 {
+	if (a && !isAutoIncrementAllowed())
+		return;
 	if (isAutoIncrement() != a)
 		m_constraints = static_cast<Field::Constraints>(m_constraints ^ Field::AutoInc);
 }
@@ -458,6 +468,10 @@ Field::setPrimaryKey(bool p)
 		setNotNull(true);
 		setNotEmpty(true);
 		setIndexed(true);
+	}
+	else {
+//! \todo is this ok for all engines?
+		setAutoIncrement(false);
 	}
 }
 
