@@ -23,6 +23,9 @@
 #include <klineedit.h>
 #include <kdebug.h>
 #include <qlayout.h>
+#include <kconfig.h>
+#include <kpushbutton.h>
+#include <klineeditdlg.h>
 
 /******************************************************************
  *
@@ -39,10 +42,72 @@ KWQTSQLSerialLetterOpen::KWQTSQLSerialLetterOpen( QWidget *parent, KWQTSQLSerial
         widget->username->setText(db->username);
         widget->port->setText(db->port);
         widget->databasename->setText(db->databasename);
-        connect(this,SIGNAL(okClicked()),this,SLOT(handleOk()));
+        fillSavedProperties();
+	connect(this,SIGNAL(okClicked()),this,SLOT(handleOk()));
+	connect(widget->savedProperties,SIGNAL(activated(const QString&)),
+		this, SLOT(savedPropertiesChanged(const QString&)));
+	connect(widget->rememberButton,SIGNAL(clicked()),
+		this, SLOT(slotSave()));
 }
 
 KWQTSQLSerialLetterOpen::~KWQTSQLSerialLetterOpen(){;}
+
+void KWQTSQLSerialLetterOpen::savedPropertiesChanged(const QString& name)
+{
+	if (name!=i18n("<not saved>"))
+	{
+		KConfig conf("kwserialletterrc");
+		conf.setGroup("KWSLQTDB:"+name);
+		widget->hostname->setText(conf.readEntry("hostname",""));
+		widget->username->setText(conf.readEntry("username",""));
+		widget->port->setText(conf.readEntry("port",""));
+		widget->databasename->setText(conf.readEntry("databasename",""));
+ 	}
+	else
+	{
+		widget->hostname->setText("");
+		widget->username->setText("");
+		widget->port->setText(i18n("default"));
+		widget->databasename->setText("");
+	}
+
+}
+
+void KWQTSQLSerialLetterOpen::fillSavedProperties()
+{
+	widget->savedProperties->clear();
+	widget->savedProperties->insertItem(i18n("<not saved>"));
+	//Read data from configuration file and add entries
+	KConfig conf("kwserialletterrc");
+	QStringList list=conf.groupList();
+	for (QStringList::Iterator it=list.begin();it!=list.end();++it)
+	{
+		if ((*it).startsWith("KWSLQTDB:"))
+		widget->savedProperties->insertItem((*it).right((*it).length()-9));
+	}
+}
+
+void KWQTSQLSerialLetterOpen::slotSave()
+{
+	QString value;
+	bool ok;
+	value=KLineEditDlg::getText(i18n("Store settings"),i18n("Name:"),
+		QString::null, &ok,this);
+	if (!ok) kdDebug()<<"Cancel was pressed"<<endl;
+	if (value.isEmpty()) kdDebug()<<"Name value was empty"<<endl;
+	if ((ok) && (!value.isEmpty()))
+	{
+		KConfig conf("kwserialletterrc");
+		conf.setGroup("KWSLQTDB:"+value);
+		conf.writeEntry("hostname",widget->hostname->text());
+		conf.writeEntry("username",widget->username->text());
+		conf.writeEntry("port",widget->port->text());
+		conf.writeEntry("databasename",widget->databasename->text());
+		conf.sync();
+		fillSavedProperties();
+		widget->savedProperties->setCurrentText(value);
+	}
+}
 
 void KWQTSQLSerialLetterOpen::handleOk()
 {

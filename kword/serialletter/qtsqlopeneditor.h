@@ -47,8 +47,14 @@ public:
 private:
  KWQTSQLSerialDataSourceBase *db;
  KWQTSQLOpenWidget *widget;
+ 
+ void fillSavedProperties();
+
 private slots:
 void handleOk();
+public slots:
+void savedPropertiesChanged(const QString&);
+void slotSave();
 };
 
 #endif
