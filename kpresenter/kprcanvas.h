@@ -209,6 +209,7 @@ public:
     bool getEditMode() { return editMode; }
 
     void ungroupObjects();
+    void groupObjects();
 
 public slots:
     void exitEditMode();

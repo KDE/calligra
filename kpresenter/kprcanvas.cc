@@ -5283,3 +5283,9 @@ void KPrCanvas::ungroupObjects()
     m_activePage->ungroupObjects();
     m_view->kPresenterDoc()->stickyPage()->ungroupObjects();
 }
+
+void KPrCanvas::groupObjects()
+{
+    m_activePage->groupObjects();
+    m_view->kPresenterDoc()->stickyPage()->groupObjects();
+}

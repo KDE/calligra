@@ -1184,7 +1184,7 @@ void KPresenterView::extraLineEnd()
 void KPresenterView::extraGroup()
 {
     m_canvas->setToolEditMode( TEM_MOUSE );
-    m_canvas->activePage()->groupObjects();
+    m_canvas->groupObjects();
     objectSelectedChanged();
 }
 
