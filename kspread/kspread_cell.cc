@@ -3546,13 +3546,6 @@ void KSpreadCell::update()
 
 void KSpreadCell::updateDepending()
 {
-
-  /* implement this when we figure out how to get it to work
-  if ( table()->doc()->delayCalculation() )
-  {
-    return;
-  }
-  */
     kdDebug(36002) << util_cellName( m_iColumn, m_iRow ) << " updateDepending" << endl;
 
     // Every cell that references us must set its calc dirty flag
