@@ -66,14 +66,14 @@ class KWordFrame : public KoFrame
 	Q_OBJECT
 
 public:
-	KWordFrame(KWordView*,KWordChild*);
+	KWordFrame( KWordView*, KWordChild* );
 
 	KWordChild* child()
     { return m_pKWordChild; }
 	KWordView* wordView()
     { return m_pKWordView; }
 
-	void setPartObject(KWPartFrameSet *o) { obj = o; }
+	void setPartObject( KWPartFrameSet *o ) { obj = o; }
 	KWPartFrameSet *getPartObject() { return obj; }
 
 protected:
@@ -95,10 +95,10 @@ class KWordView : public QWidget,
 
 public:
 	// C++
-	KWordView(QWidget *_parent,const char *_name,KWordDocument *_doc);
+	KWordView( QWidget *_parent, const char *_name, KWordDocument *_doc );
 	virtual ~KWordView();
 
-	void setShell(KWordShell *_shell) { shell = _shell; }
+	void setShell( KWordShell *_shell ) { shell = _shell; }
 
 	// IDL
 	virtual void editUndo();
@@ -167,9 +167,9 @@ public:
 	virtual void helpAboutKOffice();
 	virtual void helpAboutKDE();
 
-	virtual void textStyleSelected(const char *style);
-	virtual void textSizeSelected(const char *size);
-	virtual void textFontSelected(const char *font);
+	virtual void textStyleSelected( const char *style );
+	virtual void textSizeSelected( const char *size );
+	virtual void textFontSelected( const char *font );
 	virtual void textBold();
 	virtual void textItalic();
 	virtual void textUnderline();
@@ -178,7 +178,7 @@ public:
 	virtual void textAlignCenter();
 	virtual void textAlignRight();
 	virtual void textAlignBlock();
-	virtual void textLineSpacing(const char *spc);
+	virtual void textLineSpacing( const char *spc );
 	virtual void textEnumList();
 	virtual void textUnsortList();
 	virtual void textSuperScript();
@@ -188,33 +188,33 @@ public:
 	virtual void textBorderTop();
 	virtual void textBorderBottom();
 	virtual void textBorderColor();
-	virtual void textBorderWidth(const char *width);
-	virtual void textBorderStyle(const char *style);
+	virtual void textBorderWidth( const char *width );
+	virtual void textBorderStyle( const char *style );
 	virtual void frameBorderLeft();
 	virtual void frameBorderRight();
 	virtual void frameBorderTop();
 	virtual void frameBorderBottom();
 	virtual void frameBorderColor();
-	virtual void frameBorderWidth(const char *width);
-	virtual void frameBorderStyle(const char *style);
+	virtual void frameBorderWidth( const char *width );
+	virtual void frameBorderStyle( const char *style );
 	virtual void frameBackColor();
 
-	virtual void setMode(KOffice::View::Mode _mode);
-	virtual void setFocus(CORBA::Boolean mode);
+	virtual void setMode( KOffice::View::Mode _mode );
+	virtual void setFocus( CORBA::Boolean mode );
 
 	// C++
 	virtual CORBA::Boolean printDlg();
 
-	virtual void setFormat(KWFormat &_format,bool _check = true,bool _update_page = true,bool _redraw = true);
-	virtual void setFlow(KWParagLayout::Flow _flow);
-	virtual void setLineSpacing(int _spc);
-	virtual void setParagBorders(KWParagLayout::Border _left,KWParagLayout::Border _right,
-								 KWParagLayout::Border _top,KWParagLayout::Border _bottom);
+	virtual void setFormat( KWFormat &_format, bool _check = true, bool _update_page = true, bool _redraw = true );
+	virtual void setFlow( KWParagLayout::Flow _flow );
+	virtual void setLineSpacing( int _spc );
+	virtual void setParagBorders( KWParagLayout::Border _left, KWParagLayout::Border _right,
+								  KWParagLayout::Border _top, KWParagLayout::Border _bottom );
 
 	KWordGUI *getGUI() { return gui; }
 	void uncheckAllTools();
-	void setTool(MouseMode _mouseMode);
-	void updateStyle(QString _styleName,bool _updateFormat = true);
+	void setTool( MouseMode _mouseMode );
+	void updateStyle( QString _styleName, bool _updateFormat = true );
 	void updateStyleList();
 
 	bool getViewFormattingChars() { return _viewFormattingChars; }
@@ -224,28 +224,28 @@ public:
 	void setFramesToParts();
 	void hideAllFrames();
 
-	void setSearchEntry(KWSearchDia::KWSearchEntry *e) { searchEntry = e; }
-	void setReplaceEntry(KWSearchDia::KWSearchEntry *e) { replaceEntry = e; }
+	void setSearchEntry( KWSearchDia::KWSearchEntry *e ) { searchEntry = e; }
+	void setReplaceEntry( KWSearchDia::KWSearchEntry *e ) { replaceEntry = e; }
 
-	void changeUndo(QString,bool);
-	void changeRedo(QString,bool);
+	void changeUndo( QString, bool );
+	void changeRedo( QString, bool );
 
 	void sendFocusEvent();
 
 public slots:
-	void slotInsertObject(KWordChild *_child,KWPartFrameSet *_kwpf);
-	void slotUpdateChildGeometry(KWordChild *_child);
-	void slotGeometryEnd(KoFrame*);
-	void slotMoveEnd(KoFrame*);
+	void slotInsertObject( KWordChild *_child, KWPartFrameSet *_kwpf );
+	void slotUpdateChildGeometry( KWordChild *_child );
+	void slotGeometryEnd( KoFrame* );
+	void slotMoveEnd( KoFrame* );
 	void paragDiaOk();
 	void styleManagerOk();
 	void openPageLayoutDia()
     { formatPage(); }
-	void newPageLayout(KoPageLayout _layout);
+	void newPageLayout( KoPageLayout _layout );
 	void spellCheckerReady();
-	void spellCheckerMisspelling(char*,QStrList*,unsigned);
-	void spellCheckerCorrected(char*,char*,unsigned);
-	void spellCheckerDone(char*);
+	void spellCheckerMisspelling( char*, QStrList*, unsigned );
+	void spellCheckerCorrected( char*, char*, unsigned );
+	void spellCheckerDone( char* );
 	void searchDiaClosed();
 
 	void clipboardDataChanged();
@@ -255,27 +255,27 @@ protected:
 	// C++
 	virtual void init();
 	// IDL
-	virtual bool event(const char* _event,const CORBA::Any& _value);
+	virtual bool event( const char* _event, const CORBA::Any& _value );
 	// C++
-	bool mappingCreateMenubar(OpenPartsUI::MenuBar_ptr _menubar);
-	bool mappingCreateToolbar(OpenPartsUI::ToolBarFactory_ptr _factory);
+	bool mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar );
+	bool mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory );
 
 	virtual void cleanUp();
 
-	void resizeEvent(QResizeEvent *e);
-	void keyPressEvent(QKeyEvent *e);
-	void keyReleaseEvent(QKeyEvent *e);
-	void mousePressEvent(QMouseEvent *e);
-	void mouseReleaseEvent(QMouseEvent *e);
-	void mouseMoveEvent(QMouseEvent *e);
-	void focusInEvent(QFocusEvent *e);
-	virtual void dragEnterEvent(QDragEnterEvent *e);
-	virtual void dragMoveEvent(QDragMoveEvent *e);
-	virtual void dragLeaveEvent(QDragLeaveEvent *e);
-	virtual void dropEvent(QDropEvent *e);
+	void resizeEvent( QResizeEvent *e );
+	void keyPressEvent( QKeyEvent *e );
+	void keyReleaseEvent( QKeyEvent *e );
+	void mousePressEvent( QMouseEvent *e );
+	void mouseReleaseEvent( QMouseEvent *e );
+	void mouseMoveEvent( QMouseEvent *e );
+	void focusInEvent( QFocusEvent *e );
+	virtual void dragEnterEvent( QDragEnterEvent *e );
+	virtual void dragMoveEvent( QDragMoveEvent *e );
+	virtual void dragLeaveEvent( QDragLeaveEvent *e );
+	virtual void dropEvent( QDropEvent *e );
 
-	enum PType {TXT_COLOR,FRAME_COLOR,BACK_COLOR};
-	QString colorToPixString(QColor,PType _type);
+	enum PType {TXT_COLOR, FRAME_COLOR, BACK_COLOR};
+	QString colorToPixString( QColor, PType _type );
 	void getFonts();
 	void setParagBorderValues();
 
@@ -441,17 +441,17 @@ protected:
 	// text toolbar values
 	QFont tbFont;
 	QColor tbColor;
-	QStrList fontList,styleList;
+	QStrList fontList, styleList;
 
 	KWordGUI *gui;
 	bool m_bShowGUI;
-	bool _viewFormattingChars,_viewFrameBorders,_viewTableGrid;
+	bool _viewFormattingChars, _viewFrameBorders, _viewTableGrid;
 
 	KWFormat format;
 	KWParagLayout::Flow flow;
 	KWFormat::VertAlign vertAlign;
-	KWParagLayout::Border left,right,top,bottom,tmpBrd,frmBrd;
-	KWSearchDia::KWSearchEntry *searchEntry,*replaceEntry;
+	KWParagLayout::Border left, right, top, bottom, tmpBrd, frmBrd;
+	KWSearchDia::KWSearchEntry *searchEntry, *replaceEntry;
 	QBrush backColor;
 	int spc;
 
@@ -463,7 +463,7 @@ protected:
 
 	KWParag *currParag;
 	int currFrameSetNum;
-	OpenPartsUI::BarPosition oldFramePos,oldTextPos;
+	OpenPartsUI::BarPosition oldFramePos, oldTextPos;
 
 	KWordShell *shell;
 
@@ -528,12 +528,12 @@ class KExtPanner : public KNewPanner
 	Q_OBJECT
 
 public:
-	KExtPanner(QWidget *parent = 0,const char *name = 0,Orientation orient = Vertical,Units units = Percent,int pos = 50)
-		: KNewPanner(parent,name,orient,units,pos) {}
+	KExtPanner( QWidget *parent = 0, const char *name = 0, Orientation orient = Vertical, Units units = Percent, int pos = 50 )
+		: KNewPanner( parent, name, orient, units, pos ) {}
 
 protected:
-	void resizeEvent(QResizeEvent *e)
-    { KNewPanner::resizeEvent(e); emit pannerResized(); }
+	void resizeEvent( QResizeEvent *e )
+    { KNewPanner::resizeEvent( e ); emit pannerResized(); }
 
 signals:
 	void pannerResized();
@@ -545,12 +545,12 @@ class KWordGUI : public QWidget
 	Q_OBJECT
 
 public:
-	KWordGUI(QWidget *parent,bool __show,KWordDocument *_doc,KWordView *_view);
+	KWordGUI( QWidget *parent, bool __show, KWordDocument *_doc, KWordView *_view );
 
 	KWordDocument *getDocument()
     { return doc; }
 
-	void showGUI(bool __show);
+	void showGUI( bool __show );
 
 	void setDocument( KWordDocument *_doc );
 
@@ -571,38 +571,38 @@ public:
 	KWDocStruct *getDocStruct()
     { return docStruct; }
 
-	void showDocStruct(bool __show);
+	void showDocStruct( bool __show );
 
-	void setOffset(int _x,int _y)
+	void setOffset( int _x, int _y )
     { xOffset = _x; yOffset = _y; }
 
-	void keyEvent(QKeyEvent *e)
-    { keyPressEvent(e); }
+	void keyEvent( QKeyEvent *e )
+    { keyPressEvent( e ); }
 
 	void setRanges();
 
-	void scrollTo(int _x,int _y)
-    { if (_x != xOffset) scrollH(_x); if (_y != yOffset) scrollV(_y); }
+	void scrollTo( int _x, int _y )
+    { if ( _x != xOffset ) scrollH( _x ); if ( _y != yOffset ) scrollV( _y ); }
 
 protected slots:
-	void scrollH(int);
-	void scrollV(int);
-	void unitChanged(QString);
+	void scrollH( int );
+	void scrollV( int );
+	void unitChanged( QString );
 	void reorganize();
 
 protected:
-	void resizeEvent(QResizeEvent *e);
-	void keyPressEvent(QKeyEvent *e);
-	void keyReleaseEvent(QKeyEvent *e);
-	virtual void dragEnterEvent(QDragEnterEvent *e);
-	virtual void dragMoveEvent(QDragMoveEvent *e);
-	virtual void dragLeaveEvent(QDragLeaveEvent *e);
-	virtual void dropEvent(QDropEvent *e);
+	void resizeEvent( QResizeEvent *e );
+	void keyPressEvent( QKeyEvent *e );
+	void keyReleaseEvent( QKeyEvent *e );
+	virtual void dragEnterEvent( QDragEnterEvent *e );
+	virtual void dragMoveEvent( QDragMoveEvent *e );
+	virtual void dragLeaveEvent( QDragLeaveEvent *e );
+	virtual void dropEvent( QDropEvent *e );
 
-	int xOffset,yOffset;
+	int xOffset, yOffset;
 	bool _show;
-	QScrollBar *s_vert,*s_horz;
-	KoRuler *r_vert,*r_horz;
+	QScrollBar *s_vert, *s_horz;
+	KoRuler *r_vert, *r_horz;
 	KWPage *paperWidget;
 	KWordDocument *doc;
 	KWordView *view;

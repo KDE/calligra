@@ -16,11 +16,11 @@
 #include <qdialog.h>
 #include <qstring.h>
 
-class QWidget;
-class QGridLayout;
-class QPushButton;
-class KCharSelect;
-class KButtonBox;
+class QWidget; 
+class QGridLayout; 
+class QPushButton; 
+class KCharSelect; 
+class KButtonBox; 
 
 /******************************************************************/
 /* class KCharSelectDia                                           */
@@ -33,22 +33,22 @@ class KCharSelectDia : public QDialog
 public:
 
 	// constructor - destructor
-	KCharSelectDia(QWidget *parent,const char *name,const QChar &_chr,const QString &_font,bool _enableFont);
+	KCharSelectDia( QWidget *parent, const char *name, const QChar &_chr, const QString &_font, bool _enableFont ); 
 
 	// select char dialog
-	static bool selectChar(QString &_font,QChar &_chr,bool _enableFont = true);
+	static bool selectChar( QString &_font, QChar &_chr, bool _enableFont = true ); 
 
 	// internal
-	QChar chr();
-	QString font();
+	QChar chr(); 
+	QString font(); 
 
 protected:
 	// dialog objects
-	QGridLayout *grid;
-	KButtonBox *bbox;
-	QPushButton *bOk,*bCancel;
-	KCharSelect *charSelect;
+	QGridLayout *grid; 
+	KButtonBox *bbox; 
+	QPushButton *bOk, *bCancel; 
+	KCharSelect *charSelect; 
 
-};
+}; 
 
 #endif

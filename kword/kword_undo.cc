@@ -26,146 +26,146 @@
 /*================================================================*/
 void KWTextChangeCommand::execute()
 {
-	if (parags.isEmpty())
-		return;
+	if ( parags.isEmpty() )
+		return; 
 
-	QList<KWParag> old;
-	old.setAutoDelete(false);
+	QList<KWParag> old; 
+	old.setAutoDelete( false ); 
 
-	KWParag *parag = dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(frameset))->getFirstParag();
+	KWParag *parag = dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( frameset ) )->getFirstParag(); 
 
-	KWParag *parag1 = 0L,*parag2 = 0L;
+	KWParag *parag1 = 0L, *parag2 = 0L; 
 
-	while (parag)
+	while ( parag )
     {
-		if (parag->getParagName() == before)
-			parag1 = parag;
+		if ( parag->getParagName() == before )
+			parag1 = parag; 
 
-		if (parag->getParagName() == after)
-			parag2 = parag;
+		if ( parag->getParagName() == after )
+			parag2 = parag; 
 
-		if (parag1 && parag2) break;
+		if ( parag1 && parag2 ) break; 
 
-		parag = parag->getNext();
+		parag = parag->getNext(); 
     }
 
-	if (!parag1 && !parag2)
-		dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(frameset))->setFirstParag(parags.first());
+	if ( !parag1 && !parag2 )
+		dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( frameset ) )->setFirstParag( parags.first() ); 
 
-	else if (!parag1 && parag2)
+	else if ( !parag1 && parag2 )
     {
-		parag = dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(frameset))->getFirstParag();
-		while (parag != parag2)
+		parag = dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( frameset ) )->getFirstParag(); 
+		while ( parag != parag2 )
 		{
-			old.append(new KWParag(*parag));
-			parag = parag->getNext();
+			old.append( new KWParag( *parag ) ); 
+			parag = parag->getNext(); 
 		}
-		dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(frameset))->setFirstParag(parags.first());
-		parag2->setPrev(parags.last());
+		dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( frameset ) )->setFirstParag( parags.first() ); 
+		parag2->setPrev( parags.last() ); 
     }
 
-	else if (parag1 && !parag2)
+	else if ( parag1 && !parag2 )
     {
-		parag = parag1->getNext();
-		while (parag)
+		parag = parag1->getNext(); 
+		while ( parag )
 		{
-			old.append(new KWParag(*parag));
-			parag = parag->getNext();
+			old.append( new KWParag( *parag ) ); 
+			parag = parag->getNext(); 
 		}
-		parag1->setNext(parags.first());
+		parag1->setNext( parags.first() ); 
     }
 
-	if (parag1 && parag2)
+	if ( parag1 && parag2 )
     {
-		parag = parag1->getNext();
-		while (parag != parag2)
+		parag = parag1->getNext(); 
+		while ( parag != parag2 )
 		{
-			old.append(new KWParag(*parag));
-			parag = parag->getNext();
+			old.append( new KWParag( *parag ) ); 
+			parag = parag->getNext(); 
 		}
-		parag1->setNext(parags.first());
-		parag2->setPrev(parags.last());
+		parag1->setNext( parags.first() ); 
+		parag2->setPrev( parags.last() ); 
     }
 
-	fc->setTextPos(textPos);
+	fc->setTextPos( textPos ); 
 
-	parags.clear();
-	parags = old;
-	parags.setAutoDelete(false);
+	parags.clear(); 
+	parags = old; 
+	parags.setAutoDelete( false ); 
 }
 
 /*================================================================*/
 void KWTextChangeCommand::unexecute()
 {
-	if (parags.isEmpty())
-		return;
+	if ( parags.isEmpty() )
+		return; 
 
-	QList<KWParag> old;
-	old.setAutoDelete(false);
+	QList<KWParag> old; 
+	old.setAutoDelete( false ); 
 
-	KWParag *parag = dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(frameset))->getFirstParag();
+	KWParag *parag = dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( frameset ) )->getFirstParag(); 
 
-	KWParag *parag1 = 0L,*parag2 = 0L;
+	KWParag *parag1 = 0L, *parag2 = 0L; 
 
-	while (parag)
+	while ( parag )
     {
-		if (parag->getParagName() == before)
-			parag1 = parag;
+		if ( parag->getParagName() == before )
+			parag1 = parag; 
 
-		if (parag->getParagName() == after)
-			parag2 = parag;
+		if ( parag->getParagName() == after )
+			parag2 = parag; 
 
-		if (parag1 && parag2) break;
+		if ( parag1 && parag2 ) break; 
 
-		parag = parag->getNext();
+		parag = parag->getNext(); 
     }
 
-	if (!parag1 && !parag2)
+	if ( !parag1 && !parag2 )
     {
-		dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(frameset))->setFirstParag(parags.first());
-		old.append(new KWParag(*dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(frameset))->getFirstParag()));
+		dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( frameset ) )->setFirstParag( parags.first() ); 
+		old.append( new KWParag( *dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( frameset ) )->getFirstParag() ) ); 
     }
 
-	else if (!parag1 && parag2)
+	else if ( !parag1 && parag2 )
     {
-		parag = dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(frameset))->getFirstParag();
-		while (parag != parag2)
+		parag = dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( frameset ) )->getFirstParag(); 
+		while ( parag != parag2 )
 		{
-			old.append(new KWParag(*parag));
-			parag = parag->getNext();
+			old.append( new KWParag( *parag ) ); 
+			parag = parag->getNext(); 
 		}
-		dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(frameset))->setFirstParag(parags.first());
-		parag2->setPrev(parags.last());
+		dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( frameset ) )->setFirstParag( parags.first() ); 
+		parag2->setPrev( parags.last() ); 
     }
 
-	else if (parag1 && !parag2)
+	else if ( parag1 && !parag2 )
     {
-		parag = parag1->getNext();
-		while (parag)
+		parag = parag1->getNext(); 
+		while ( parag )
 		{
-			old.append(new KWParag(*parag));
-			parag = parag->getNext();
+			old.append( new KWParag( *parag ) ); 
+			parag = parag->getNext(); 
 		}
-		parag1->setNext(parags.first());
+		parag1->setNext( parags.first() ); 
     }
 
-	if (parag1 && parag2)
+	if ( parag1 && parag2 )
     {
-		parag = parag1->getNext();
-		while (parag != parag2)
+		parag = parag1->getNext(); 
+		while ( parag != parag2 )
 		{
-			old.append(new KWParag(*parag));
-			parag = parag->getNext();
+			old.append( new KWParag( *parag ) ); 
+			parag = parag->getNext(); 
 		}
-		parag1->setNext(parags.first());
-		parag2->setPrev(parags.last());
+		parag1->setNext( parags.first() ); 
+		parag2->setPrev( parags.last() ); 
     }
 
-	fc->setTextPos(textPos);
+	fc->setTextPos( textPos ); 
 
-	parags.clear();
-	parags = old;
-	parags.setAutoDelete(false);
+	parags.clear(); 
+	parags = old; 
+	parags.setAutoDelete( false ); 
 }
 
 /******************************************************************/
@@ -174,49 +174,49 @@ void KWTextChangeCommand::unexecute()
 
 /*================================================================*/
 KWCommandHistory::KWCommandHistory()
-	: current(-1)
+	: current( -1 )
 {
-	history.setAutoDelete(true);
+	history.setAutoDelete( true ); 
 }
 
 /*================================================================*/
-void KWCommandHistory::addCommand(KWCommand *_command)
+void KWCommandHistory::addCommand( KWCommand *_command )
 {
-	if (current < static_cast<int>(history.count()))
+	if ( current < static_cast<int>( history.count() ) )
     {
-		QList<KWCommand> _commands;
-		_commands.setAutoDelete(false);
+		QList<KWCommand> _commands; 
+		_commands.setAutoDelete( false ); 
 
-		for (int i = 0;i < current;i++)
+		for ( int i = 0; i < current; i++ )
 		{
-			_commands.insert(i,history.at(0));
-			history.take(0);
+			_commands.insert( i, history.at( 0 ) ); 
+			history.take( 0 ); 
 		}
 
-		_commands.append(_command);
-		history.clear();
-		history = _commands;
-		history.setAutoDelete(true);
+		_commands.append( _command ); 
+		history.clear(); 
+		history = _commands; 
+		history.setAutoDelete( true ); 
     }
 	else
-		history.append(_command);
+		history.append( _command ); 
 
-	if (history.count() > MAX_UNDO_REDO)
-		history.removeFirst();
+	if ( history.count() > MAX_UNDO_REDO )
+		history.removeFirst(); 
 	else
-		current++;
+		current++; 
 
-	emit undoRedoChanged(getUndoName(),getRedoName());
+	emit undoRedoChanged( getUndoName(), getRedoName() ); 
 }
 
 /*================================================================*/
 void KWCommandHistory::undo()
 {
-	if (current > 0)
+	if ( current > 0 )
     {
-		history.at(current - 1)->unexecute();
-		current--;
-		emit undoRedoChanged(getUndoName(),getRedoName());
+		history.at( current - 1 )->unexecute(); 
+		current--; 
+		emit undoRedoChanged( getUndoName(), getRedoName() ); 
     }
 
 }
@@ -224,28 +224,28 @@ void KWCommandHistory::undo()
 /*================================================================*/
 void KWCommandHistory::redo()
 {
-	if (current < static_cast<int>(history.count()) && current > -1)
+	if ( current < static_cast<int>( history.count() ) && current > -1 )
     {
-		history.at(current)->execute();
-		current++;
-		emit undoRedoChanged(getUndoName(),getRedoName());
+		history.at( current )->execute(); 
+		current++; 
+		emit undoRedoChanged( getUndoName(), getRedoName() ); 
     }
 }
 
 /*================================================================*/
 QString KWCommandHistory::getUndoName()
 {
-	if (current > 0)
-		return history.at(current - 1)->getName();
+	if ( current > 0 )
+		return history.at( current - 1 )->getName(); 
 	else
-		return QString();
+		return QString(); 
 }
 
 /*================================================================*/
 QString KWCommandHistory::getRedoName()
 {
-	if (current < static_cast<int>(history.count()) && current > -1)
-		return history.at(current)->getName();
+	if ( current < static_cast<int>( history.count() ) && current > -1 )
+		return history.at( current )->getName(); 
 	else
-		return QString();
+		return QString(); 
 }

@@ -65,50 +65,50 @@ public:
 		}
 
 		QString expr;
-		bool checkFamily,checkColor,checkSize,checkBold,checkItalic,checkUnderline,checkVertAlign;
+		bool checkFamily, checkColor, checkSize, checkBold, checkItalic, checkUnderline, checkVertAlign;
 		QString family;
 		QColor color;
 		int size;
-		bool bold,italic,underline;
+		bool bold, italic, underline;
 		KWFormat::VertAlign vertAlign;
-		bool caseSensitive,regexp,reverse,wholeWords,wildcard;
+		bool caseSensitive, regexp, reverse, wholeWords, wildcard;
 		bool ask;
 	};
 
-	KWSearchDia(QWidget *parent,const char *name,KWordDocument *_doc,KWPage *_page,KWordView *_view,
-				KWSearchEntry *_searchEntry,KWSearchEntry *_replaceEntry,QStrList _fontlist);
+	KWSearchDia( QWidget *parent, const char *name, KWordDocument *_doc, KWPage *_page, KWordView *_view,
+				 KWSearchEntry *_searchEntry, KWSearchEntry *_replaceEntry, QStrList _fontlist );
 
 protected:
 	void setupTab1();
 	void setupTab2();
-	void closeEvent(QCloseEvent *e) { emit cancelButtonPressed(); }
+	void closeEvent( QCloseEvent *e ) { emit cancelButtonPressed(); }
 
 	QWidget *tab1;
-	QGridLayout *grid1,*sGrid;
+	QGridLayout *grid1, *sGrid;
 	QGroupBox *gSearch;
-	QCheckBox *cRegExp,*cFamily,*cSize,*cColor,*cBold,*cItalic,*cUnderline,*cVertAlign,*cmBold,*cmItalic,*cmUnderline,*cCase,*cWholeWords,*cRev;
-	QComboBox *cmFamily,*cmSize,*cmVertAlign;
+	QCheckBox *cRegExp, *cFamily, *cSize, *cColor, *cBold, *cItalic, *cUnderline, *cVertAlign, *cmBold, *cmItalic, *cmUnderline, *cCase, *cWholeWords, *cRev;
+	QComboBox *cmFamily, *cmSize, *cmVertAlign;
 	KColorButton *bColor;
 	QLabel *lSearch;
 	KButtonBox *bbSearch;
-	QPushButton *bSearchFirst,*bSearchNext,*bSearchAll;
+	QPushButton *bSearchFirst, *bSearchNext, *bSearchAll;
 	QLineEdit *eSearch;
 
 	QWidget *tab2;
-	QGridLayout *grid2,*rGrid;
+	QGridLayout *grid2, *rGrid;
 	QGroupBox *gReplace;
-	QCheckBox *rcFamily,*rcSize,*rcColor,*rcBold,*rcItalic,*rcUnderline,*rcVertAlign,*rcmBold,*rcmItalic,*rcmUnderline,*cAsk,*cWildcard;
-	QComboBox *rcmFamily,*rcmSize,*rcmVertAlign;
+	QCheckBox *rcFamily, *rcSize, *rcColor, *rcBold, *rcItalic, *rcUnderline, *rcVertAlign, *rcmBold, *rcmItalic, *rcmUnderline, *cAsk, *cWildcard;
+	QComboBox *rcmFamily, *rcmSize, *rcmVertAlign;
 	KColorButton *rbColor;
 	QLabel *lReplace;
 	KButtonBox *bbReplace;
-	QPushButton *bReplaceFirst,*bReplaceNext,*bReplaceAll;
+	QPushButton *bReplaceFirst, *bReplaceNext, *bReplaceAll;
 	QLineEdit *eReplace;
 
 	KWordDocument *doc;
 	KWPage *page;
 	KWordView *view;
-	KWSearchEntry *searchEntry,*replaceEntry;
+	KWSearchEntry *searchEntry, *replaceEntry;
 	QStrList fontlist;
 
 protected slots:
@@ -121,13 +121,13 @@ protected slots:
 	void slotCheckItalic();
 	void slotCheckUnderline();
 	void slotCheckVertAlign();
-	void slotFamily(const QString &);
-	void slotSize(const QString &);
-	void slotColor(const QColor&);
+	void slotFamily( const QString & );
+	void slotSize( const QString & );
+	void slotColor( const QColor& );
 	void slotBold();
 	void slotItalic();
 	void slotUnderline();
-	void slotVertAlign(int);
+	void slotVertAlign( int );
 	void replaceFirst();
 	void replaceNext();
 	void replaceAll();
@@ -138,13 +138,13 @@ protected slots:
 	void rslotCheckItalic();
 	void rslotCheckUnderline();
 	void rslotCheckVertAlign();
-	void rslotFamily(const QString &);
-	void rslotSize(const QString &);
-	void rslotColor(const QColor&);
+	void rslotFamily( const QString & );
+	void rslotSize( const QString & );
+	void rslotColor( const QColor& );
 	void rslotBold();
 	void rslotItalic();
 	void rslotUnderline();
-	void rslotVertAlign(int);
+	void rslotVertAlign( int );
 	void saveSettings();
 	void slotRegExp();
 

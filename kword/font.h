@@ -17,14 +17,14 @@ class KWordDocument;
 class KWUserFont
 {
 public:
-	KWUserFont(KWordDocument *_doc,QString _name);
+	KWUserFont( KWordDocument *_doc, QString _name );
 	~KWUserFont();
 
 	QString getFontName() { return fontName; }
 
-	bool operator==(KWUserFont &_font)
+	bool operator==( KWUserFont &_font )
 	{ return _font.getFontName() == fontName; }
-	bool operator!=(KWUserFont &_font)
+	bool operator!=( KWUserFont &_font )
 	{ return _font.getFontName() != fontName; }
 
 protected:
@@ -41,8 +41,8 @@ protected:
 class KWDisplayFont : public QFont
 {
 public:
-	KWDisplayFont(KWordDocument *_doc,KWUserFont *_font,unsigned int _size,
-				  int _weight,bool _italic,bool _underline );
+	KWDisplayFont( KWordDocument *_doc, KWUserFont *_font, unsigned int _size,
+				   int _weight, bool _italic, bool _underline );
 	~KWDisplayFont();
 
 	void scaleFont();
@@ -55,14 +55,14 @@ public:
 	unsigned int getPTAscender() { return fm.ascent(); }
 	unsigned int getPTDescender() { return fm.descent() + 2; }
 
-	unsigned int getPTWidth(QString _text);
-	unsigned int getPTWidth(char &_c);
-	unsigned int getPTWidth(QChar &_c);
+	unsigned int getPTWidth( QString _text );
+	unsigned int getPTWidth( char &_c );
+	unsigned int getPTWidth( QChar &_c );
 
-	void setPTSize(int _size);
-	void setWeight(int _weight);
-	void setItalic(bool _italic);
-	void setUnderline(bool _underline);
+	void setPTSize( int _size );
+	void setWeight( int _weight );
+	void setItalic( bool _italic );
+	void setUnderline( bool _underline );
 
 protected:
 	QFontMetrics fm;

@@ -54,8 +54,8 @@ class QPrinter;
 class KWordChild : public KoDocumentChild
 {
 public:
-	KWordChild(KWordDocument *_wdoc,const KRect& _rect,KOffice::Document_ptr _doc,int diffx,int diffy);
-	KWordChild(KWordDocument *_wdoc);
+	KWordChild( KWordDocument *_wdoc, const KRect& _rect, KOffice::Document_ptr _doc, int diffx, int diffy );
+	KWordChild( KWordDocument *_wdoc );
 	~KWordChild();
 
 	KWordDocument* parent()
@@ -83,7 +83,7 @@ public:
 
 	virtual void cleanUp();
 
-	enum ProcessingType {WP = 0,DTP = 1};
+	enum ProcessingType {WP = 0, DTP = 1};
 	static const int U_FONT_FAMILY_SAME_SIZE = 1;
 	static const int U_FONT_ALL_SAME_SIZE = 2;
 	static const int U_COLOR = 4;
@@ -103,11 +103,11 @@ public:
 	virtual CORBA::Boolean init();
 
 	// C++
-	virtual bool loadXML(KOMLParser& parser,KOStore::Store_ptr _store);
-	virtual bool loadChildren(KOStore::Store_ptr _store);
-	virtual bool save(ostream& out,const char *_format);
+	virtual bool loadXML( KOMLParser& parser, KOStore::Store_ptr _store );
+	virtual bool loadChildren( KOStore::Store_ptr _store );
+	virtual bool save( ostream& out, const char *_format );
 
-	virtual bool loadTemplate(const char *_url);
+	virtual bool loadTemplate( const char *_url );
 
 	// IDL
 	virtual OpenParts::View_ptr createView();
@@ -115,10 +115,10 @@ public:
 	KWordView* createWordView( QWidget* _parent = 0 );
 
 	// IDL
-	virtual void viewList(KOffice::Document::ViewList*& _list);
+	virtual void viewList( KOffice::Document::ViewList*& _list );
 
 	virtual char* mimeType()
-    { return CORBA::string_dup(MIME_TYPE); }
+    { return CORBA::string_dup( MIME_TYPE ); }
 
 	virtual CORBA::Boolean isModified()
     { return m_bModified; }
@@ -126,7 +126,7 @@ public:
 	virtual KOffice::MainWindow_ptr createMainWindow();
 
 	// C++
-	virtual void setModified(bool _c) { m_bModified = _c; if (_c) m_bEmpty = false; }
+	virtual void setModified( bool _c ) { m_bModified = _c; if ( _c ) m_bEmpty = false; }
 	virtual bool isEmpty() { return m_bEmpty; }
 
 	unsigned int viewCount() { return m_lstViews.count(); }
@@ -134,38 +134,38 @@ public:
 	virtual QStrList outputFormats();
 	virtual QStrList inputFormats();
 
-	virtual void addView(KWordView *_view);
-	virtual void removeView(KWordView *_view);
+	virtual void addView( KWordView *_view );
+	virtual void removeView( KWordView *_view );
 
-	virtual void insertObject(const KRect& _rect,KoDocumentEntry& _e, int diffx, int diffy );
-	virtual void changeChildGeometry(KWordChild *_child,const KRect&);
+	virtual void insertObject( const KRect& _rect, KoDocumentEntry& _e, int diffx, int diffy );
+	virtual void changeChildGeometry( KWordChild *_child, const KRect& );
 
 	virtual QListIterator<KWordChild> childIterator();
 
 	/**
 	 * Sets the paper size and recalculates the papers width and height.
 	 */
-	void setPageLayout(KoPageLayout _layout,KoColumns _cl,KoKWHeaderFooter _hf);
+	void setPageLayout( KoPageLayout _layout, KoColumns _cl, KoKWHeaderFooter _hf );
 
-	void getPageLayout(KoPageLayout& _layout,KoColumns& _cl,KoKWHeaderFooter& _hf)
+	void getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHeaderFooter& _hf )
     { _layout = pageLayout; _cl = pageColumns; _hf = pageHeaderFooter; }
 
-	KWFrameSet *getFrameSet(unsigned int _num)
-    { return frames.at(_num); }
+	KWFrameSet *getFrameSet( unsigned int _num )
+    { return frames.at( _num ); }
 	unsigned int getNumFrameSets()
     { return frames.count(); }
-	void addFrameSet(KWFrameSet *f)
+	void addFrameSet( KWFrameSet *f )
     { frames.append(f); updateAllRanges(); updateAllFrames(); /*updateAllViews(0L);*/ }
-	void delFrameSet(KWFrameSet *f)
-    { frames.remove(f); }
+	void delFrameSet( KWFrameSet *f )
+    { frames.remove( f ); }
 
 
 	/**
 	 * Returns the first parag of the frameset <i>_num</i>.
 	 */
-	KWParag *getFirstParag(unsigned int _num) {
-		if (frames.at(_num)->getFrameType() == FT_TEXT)
-			return dynamic_cast<KWTextFrameSet*>(frames.at(_num))->getFirstParag();
+	KWParag *getFirstParag( unsigned int _num ) {
+		if ( frames.at( _num )->getFrameType() == FT_TEXT )
+			return dynamic_cast<KWTextFrameSet*>( frames.at( _num ) )->getFirstParag();
 		else
 			return 0L;
 	}
@@ -200,22 +200,22 @@ public:
 	 *
 	 * @see KWUserFont
 	 */
-	KWUserFont* findUserFont(QString _fontname);
+	KWUserFont* findUserFont( QString _fontname );
 
 	/**
 	 * @return a display font matching the criteriums or 0L if none is found.
 	 */
-	KWDisplayFont* findDisplayFont(KWUserFont* _font,unsigned int _size,int _weight,bool _italic,bool _underline);
+	KWDisplayFont* findDisplayFont( KWUserFont* _font, unsigned int _size, int _weight, bool _italic, bool _underline );
 
 	/**
 	 * @return a pointer to the parag with the given name or 0L if not found.
 	 *
 	 * @see KWParagLayout
 	 */
-	KWParagLayout* findParagLayout(QString _name);
+	KWParagLayout* findParagLayout( QString _name );
 
-	KWParag* findFirstParagOfPage(unsigned int _page,unsigned int _frameset);
-	KWParag* findFirstParagOfRect(unsigned int _ypos,unsigned int _page,unsigned int _frameset);
+	KWParag* findFirstParagOfPage( unsigned int _page, unsigned int _frameset );
+	KWParag* findFirstParagOfRect( unsigned int _ypos, unsigned int _page, unsigned int _frameset );
 
 	unsigned int getPTTopBorder() { return pageLayout.ptTop; }
 	unsigned int getPTBottomBorder() { return pageLayout.ptBottom; }
@@ -240,25 +240,25 @@ public:
 	 *         page with number '_page'. The borders of the paper
 	 *         are not considered to belong to the printable area.
 	 */
-	bool isPTYInFrame(unsigned int _frameSet,unsigned int _frame,unsigned int _ypos);
+	bool isPTYInFrame( unsigned int _frameSet, unsigned int _frame, unsigned int _ypos );
 
-	bool printLine(KWFormatContext &_fc,QPainter &_painter,int xOffset,int yOffset,int _w,int _h,
-				   bool _viewFormattingChars = false,bool _drawVarBack = true);
-	void printBorders(QPainter &_painter,int xOffset,int yOffset,int _w,int _h);
+	bool printLine( KWFormatContext &_fc, QPainter &_painter, int xOffset, int yOffset, int _w, int _h,
+					bool _viewFormattingChars = false, bool _drawVarBack = true );
+	void printBorders( QPainter &_painter, int xOffset, int yOffset, int _w, int _h );
 
-	void drawMarker(KWFormatContext &_fc,QPainter *_painter,int xOffset,int yOffset);
+	void drawMarker( KWFormatContext &_fc, QPainter *_painter, int xOffset, int yOffset );
 
-	void updateAllViews(KWordView *_view,bool _clear = false);
+	void updateAllViews( KWordView *_view, bool _clear = false );
 	void setUnitToAll();
 	void updateAllRanges();
 	void updateAllCursors();
-	void drawAllBorders(QPainter *_painter = 0);
-	void recalcWholeText(bool _cursor = false,bool _fast = false);
+	void drawAllBorders( QPainter *_painter = 0 );
+	void recalcWholeText( bool _cursor = false, bool _fast = false );
 	void hideAllFrames();
 
 	int getPages() { return pages; }
 
-	void setPages(int _pages)
+	void setPages( int _pages )
     { pages = _pages; updateAllRanges(); }
 
 	KWFormatCollection *getFormatCollection()
@@ -266,49 +266,49 @@ public:
 	KWImageCollection *getImageCollection()
     { return &imageCollection; }
 
-	void insertPicture(QString _filename,KWPage *_paperWidget);
+	void insertPicture( QString _filename, KWPage *_paperWidget );
 
-	void setSelStart(KWFormatContext &_fc)
+	void setSelStart( KWFormatContext &_fc )
     { selStart = _fc; }
 	KWFormatContext *getSelStart()
     { return &selStart; emit selectionOnOff(); }
-	void setSelEnd(KWFormatContext &_fc)
+	void setSelEnd( KWFormatContext &_fc )
     { selEnd = _fc; emit selectionOnOff(); }
 	KWFormatContext *getSelEnd()
     { return &selEnd; }
-	void drawSelection(QPainter &_painter,int xOffset,int yOffset);
-	void setSelection(bool _has)
+	void drawSelection( QPainter &_painter, int xOffset, int yOffset );
+	void setSelection( bool _has )
     { hasSelection = _has; emit selectionOnOff(); }
 	bool has_selection()
     { return hasSelection; }
 
-	void deleteSelectedText(KWFormatContext *_fc,QPainter &_painter);
+	void deleteSelectedText( KWFormatContext *_fc, QPainter &_painter );
 	void copySelectedText();
-	void setFormat(KWFormat &_format);
+	void setFormat( KWFormat &_format );
 
-	void paste(KWFormatContext *_fc,QString _string,KWPage *_page,KWFormat *_format = 0L,const QString &_mime = "text/plain");
+	void paste( KWFormatContext *_fc, QString _string, KWPage *_page, KWFormat *_format = 0L, const QString &_mime = "text/plain" );
 
-	void appendPage(unsigned int _page,QPainter &_painter);
+	void appendPage( unsigned int _page, QPainter &_painter );
 
 	ProcessingType getProcessingType()
     { return processingType; }
 
-	int getFrameSet(unsigned int mx,unsigned int my);
+	int getFrameSet( unsigned int mx, unsigned int my );
 	/**
 	 * Return 1, if a frame gets selected which was not selected before,
 	 * 2, if a frame gets selected which was already selected, and
 	 * 0 if no frame got selected.
 	 */
-	int selectFrame(unsigned int mx,unsigned int my);
-	void deSelectFrame(unsigned int mx,unsigned int my);
+	int selectFrame( unsigned int mx, unsigned int my );
+	void deSelectFrame( unsigned int mx, unsigned int my );
 	void deSelectAllFrames();
-	QCursor getMouseCursor(unsigned int mx,unsigned int my);
+	QCursor getMouseCursor( unsigned int mx, unsigned int my );
 	KWFrame *getFirstSelectedFrame();
-	KWFrame *getFirstSelectedFrame(int &_frameset);
-	int getFrameSetNum(KWFrameSet* fs) { return frames.findRef(fs); }
+	KWFrame *getFirstSelectedFrame( int &_frameset );
+	int getFrameSetNum( KWFrameSet* fs ) { return frames.findRef( fs ); }
 	KWFrameSet *getFirstSelectedFrameSet();
 
-	void print(QPainter *painter,QPrinter *printer,float left_margin,float top_margin);
+	void print( QPainter *painter, QPrinter *printer, float left_margin, float top_margin );
 
 	void updateAllFrames();
 
@@ -316,97 +316,97 @@ public:
 	int getRastY() { return rastY; }
 
 	int getApplyStyleTemplate() { return applyStyleTemplate; }
-	void setApplyStyleTemplate(int _f) { applyStyleTemplate = _f; }
+	void setApplyStyleTemplate( int _f ) { applyStyleTemplate = _f; }
 
 	void updateAllStyles();
 	void updateAllStyleLists();
 
-	void setStyleChanged(QString _name);
-	bool isStyleChanged(QString _name);
+	void setStyleChanged( QString _name );
+	bool isStyleChanged( QString _name );
 
 	bool loaded() { return _loaded; }
 
 	bool hasHeader() { return _header; }
 	bool hasFooter() { return _footer; }
-	void setHeader(bool h);
-	void setFooter(bool f);
+	void setHeader( bool h );
+	void setFooter( bool f );
 
-	void recalcFrames(bool _cursor = false,bool _fast = false);
+	void recalcFrames( bool _cursor = false, bool _fast = false );
 
 	KoHFType getHeaderType() { return pageHeaderFooter.header; }
 	KoHFType getFooterType() { return pageHeaderFooter.footer; }
 
-	bool canResize(KWFrameSet *frameset,KWFrame *frame,int page,int diff);
+	bool canResize( KWFrameSet *frameset, KWFrame *frame, int page, int diff );
 
 	bool needRedraw() { return _needRedraw; }
-	void setNeedRedraw(bool _r) { _needRedraw = _r; }
+	void setNeedRedraw( bool _r ) { _needRedraw = _r; }
 
-	void addGroupManager(KWGroupManager *gm) { grpMgrs.append(gm); }
+	void addGroupManager( KWGroupManager *gm ) { grpMgrs.append( gm ); }
 	unsigned int getNumGroupManagers() { return grpMgrs.count(); }
-	KWGroupManager *getGroupManager(int i) { return grpMgrs.at(i); }
+	KWGroupManager *getGroupManager( int i ) { return grpMgrs.at( i ); }
 
-	QPen setBorderPen(KWParagLayout::Border _brd);
-	void enableEmbeddedParts(bool f);
+	QPen setBorderPen( KWParagLayout::Border _brd );
+	void enableEmbeddedParts( bool f );
 
 	bool getAutoCreateNewFrame();
 	RunAround getRunAround();
 	KWUnit getRunAroundGap();
 
-	void setAutoCreateNewFrame(bool _auto);
-	void setRunAround(RunAround _ra);
-	void setRunAroundGap(KWUnit _gap);
+	void setAutoCreateNewFrame( bool _auto );
+	void setRunAround( RunAround _ra );
+	void setRunAroundGap( KWUnit _gap );
 
-	void getFrameMargins(KWUnit &l,KWUnit &r,KWUnit &t,KWUnit &b);
+	void getFrameMargins( KWUnit &l, KWUnit &r, KWUnit &t, KWUnit &b );
 	bool isOnlyOneFrameSelected();
-	KWFrameSet *getFrameCoords(unsigned int &x,unsigned int &y,unsigned int &w,unsigned int &h,unsigned int &num);
+	KWFrameSet *getFrameCoords( unsigned int &x, unsigned int &y, unsigned int &w, unsigned int &h, unsigned int &num );
 
-	void setFrameMargins(KWUnit l,KWUnit r,KWUnit t,KWUnit b);
-	void setFrameCoords(unsigned int x,unsigned int y,unsigned int w,unsigned int h);
+	void setFrameMargins( KWUnit l, KWUnit r, KWUnit t, KWUnit b );
+	void setFrameCoords( unsigned int x, unsigned int y, unsigned int w, unsigned int h );
 
 	const QString getUnit() { return unit; }
-	void setUnit(QString _unit) { unit = _unit; }
+	void setUnit( QString _unit ) { unit = _unit; }
 
 	int &getNumParags() { return numParags; }
 
-	void saveParagInUndoBuffer(QList<KWParag> parags,int frameset,KWFormatContext *_fc);
-	void saveParagInUndoBuffer(KWParag *parag,int frameset,KWFormatContext *_fc);
+	void saveParagInUndoBuffer( QList<KWParag> parags, int frameset, KWFormatContext *_fc );
+	void saveParagInUndoBuffer( KWParag *parag, int frameset, KWFormatContext *_fc );
 
 	void undo();
 	void redo();
 
-	void updateTableHeaders(QList<KWGroupManager> &grpMgrs);
+	void updateTableHeaders( QList<KWGroupManager> &grpMgrs );
 
 	QIntDict<KWVariableFormat> &getVarFormats() { return varFormats; }
 
-	long int getPageNum(int bottom);
+	long int getPageNum( int bottom );
 
 	KWFootNoteManager &getFootNoteManager() { return footNoteManager; }
-	void setNoteType(KWFootNoteManager::NoteType nt) { footNoteManager.setNoteType(nt); }
+	void setNoteType( KWFootNoteManager::NoteType nt ) { footNoteManager.setNoteType( nt ); }
 	KWFootNoteManager::NoteType getNoteType() { return footNoteManager.getNoteType(); }
 
 	KWAutoFormat &getAutoFormat() { return autoFormat; }
 
 signals:
 	void sig_imageModified();
-	void sig_insertObject(KWordChild *_child,KWPartFrameSet*);
-	void sig_updateChildGeometry(KWordChild *_child);
-	void sig_removeObject(KWordChild *_child);
+	void sig_insertObject( KWordChild *_child, KWPartFrameSet* );
+	void sig_updateChildGeometry( KWordChild *_child );
+	void sig_removeObject( KWordChild *_child );
 	void selectionOnOff();
 
 protected slots:
-	void slotUndoRedoChanged(QString,QString);
+	void slotUndoRedoChanged( QString, QString );
 
 protected:
-	virtual void insertChild(KWordChild*);
-	virtual void makeChildListIntern(KOffice::Document_ptr _doc,const char *_path);
+	virtual void insertChild( KWordChild* );
+	virtual void makeChildListIntern( KOffice::Document_ptr _doc, const char *_path );
 
-	virtual void draw(QPaintDevice*,CORBA::Long _width,CORBA::Long _height,
-					  CORBA::Float _scale );
+	virtual void draw( QPaintDevice*, CORBA::Long _width, CORBA::Long _height,
+					   CORBA::Float _scale );
 
-	void loadFrameSets(KOMLParser&,vector<KOMLAttrib>&);
-	void loadStyleTemplates(KOMLParser&,vector<KOMLAttrib>&);
+	void loadFrameSets( KOMLParser&, vector<KOMLAttrib>& );
+	void loadStyleTemplates( KOMLParser&, vector<KOMLAttrib>& );
 
-	void addStyleTemplate(KWParagLayout *pl);
+	void addStyleTemplate( KWParagLayout *pl );
 
 	QList<KWordView> m_lstViews;
 	QList<KWordChild> m_lstChildren;
@@ -458,11 +458,11 @@ protected:
 
 	int pages;
 
-	KWFormatContext selStart,selEnd;
+	KWFormatContext selStart, selEnd;
 	bool hasSelection;
 
 	ProcessingType processingType;
-	int rastX,rastY;
+	int rastX, rastY;
 
 	bool m_bEmpty;
 
@@ -474,7 +474,7 @@ protected:
 
 	QPixmap ret_pix;
 
-	bool _header,_footer;
+	bool _header, _footer;
 
 	KWUserFont *cUserFont;
 	KWDisplayFont *cDisplayFont;

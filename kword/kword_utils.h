@@ -18,11 +18,11 @@
 
 #include <qstring.h>
 
-const QString RNUnits[] = {"","i","ii","iii","iv","v","vi","vii","viii","ix"};
-const QString RNTens[] = {"","x","xx","xxx","xl","l","lx","lxx","lxxx","xc"};
-const QString RNHundreds[] = {"","c","cc","ccc","cd","d","dc","dcc","dccc","cm"};
-const QString RNThousands[] = {"","m","mm","mmm"};
+const QString RNUnits[] = {"", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix"}; 
+const QString RNTens[] = {"", "x", "xx", "xxx", "xl", "l", "lx", "lxx", "lxxx", "xc"}; 
+const QString RNHundreds[] = {"", "c", "cc", "ccc", "cd", "d", "dc", "dcc", "dccc", "cm"}; 
+const QString RNThousands[] = {"", "m", "mm", "mmm"}; 
 
-QString makeRomanNumber(int n);
+QString makeRomanNumber( int n ); 
 
 #endif

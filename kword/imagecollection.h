@@ -23,7 +23,7 @@
 
 #include <ksize.h>
 
-class KWordDocument;
+class KWordDocument; 
 
 /******************************************************************/
 /* Class: KWImageCollection                                       */
@@ -32,27 +32,27 @@ class KWordDocument;
 class KWImageCollection
 {
 public:
-	KWImageCollection(KWordDocument *_doc);
-	~KWImageCollection();
+	KWImageCollection( KWordDocument *_doc ); 
+	~KWImageCollection(); 
 
-	KWImage *getImage(KWImage &_image,QString &key);
-	KWImage *getImage(KWImage &_image,QString &key,KSize _imgSize);
-	void removeImage(KWImage *_image);
+	KWImage *getImage( KWImage &_image, QString &key ); 
+	KWImage *getImage( KWImage &_image, QString &key, KSize _imgSize ); 
+	void removeImage( KWImage *_image ); 
 
-	QString generateKey(KWImage *_image)
-    { return generateKey(*_image); }
+	QString generateKey( KWImage *_image )
+    { return generateKey( *_image ); }
 
-	KWImage *findImage(QString _key);
+	KWImage *findImage( QString _key ); 
 
 protected:
-	QString generateKey(KWImage &_image);
-	QString generateKey(KWImage &_image,KSize _imgSize);
-	KWImage *insertImage(QString _key,KWImage &_format);
-	KWImage *insertImage(QString _key,KWImage &_format,KSize _imgSize);
+	QString generateKey( KWImage &_image ); 
+	QString generateKey( KWImage &_image, KSize _imgSize ); 
+	KWImage *insertImage( QString _key, KWImage &_format ); 
+	KWImage *insertImage( QString _key, KWImage &_format, KSize _imgSize ); 
 
-	QDict<KWImage> images;
-	KWordDocument *doc;
+	QDict<KWImage> images; 
+	KWordDocument *doc; 
 
-};
+}; 
 
 #endif

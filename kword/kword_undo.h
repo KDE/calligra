@@ -22,10 +22,10 @@
 
 #include "parag.h"
 
-enum KWCommandType {TEXT_CHANGE};
+enum KWCommandType {TEXT_CHANGE}; 
 #define MAX_UNDO_REDO 100
 
-class KWordDocument;
+class KWordDocument; 
 
 /******************************************************************/
 /* Class: KWCommand                                               */
@@ -34,20 +34,20 @@ class KWordDocument;
 class KWCommand
 {
 public:
-	KWCommand(QString _name) : name(_name) {}
+	KWCommand( QString _name ) : name( _name ) {}
 	virtual ~KWCommand() {}
 
-	virtual KWCommandType getType() = 0;
+	virtual KWCommandType getType() = 0; 
 
-	virtual void execute() = 0;
-	virtual void unexecute() = 0;
+	virtual void execute() = 0; 
+	virtual void unexecute() = 0; 
 
 	QString getName() { return name; }
 
 protected:
-	QString name;
+	QString name; 
 
-};
+}; 
 
 /******************************************************************/
 /* Class: KWTextChangeCommand                                     */
@@ -56,29 +56,29 @@ protected:
 class KWTextChangeCommand : public KWCommand
 {
 public:
-	KWTextChangeCommand(QString _name,KWordDocument *_doc,KWFormatContext *_fc,unsigned int _textPos)
-		: KWCommand(_name) { doc = _doc; fc = _fc; textPos = _textPos; parags.setAutoDelete(false); }
+	KWTextChangeCommand( QString _name, KWordDocument *_doc, KWFormatContext *_fc, unsigned int _textPos )
+		: KWCommand( _name ) { doc = _doc; fc = _fc; textPos = _textPos; parags.setAutoDelete( false ); }
 
 	virtual KWCommandType getType() { return TEXT_CHANGE; }
 
-	virtual void execute();
-	virtual void unexecute();
+	virtual void execute(); 
+	virtual void unexecute(); 
 
-	void addParag(KWParag &_parag) { parags.append(new KWParag(_parag)); }
-	void setBefore(QString _before) { before = _before; }
-	void setAfter(QString _after) { after = _after; }
+	void addParag( KWParag &_parag ) { parags.append( new KWParag( _parag ) ); }
+	void setBefore( QString _before ) { before = _before; }
+	void setAfter( QString _after ) { after = _after; }
 
-	void setFrameSet(int _num) { frameset = _num; }
+	void setFrameSet( int _num ) { frameset = _num; }
 
 protected:
-	QList<KWParag> parags;
-	QString before,after;
-	int frameset;
-	KWordDocument *doc;
-	KWFormatContext *fc;
-	unsigned int textPos;
+	QList<KWParag> parags; 
+	QString before, after; 
+	int frameset; 
+	KWordDocument *doc; 
+	KWFormatContext *fc; 
+	unsigned int textPos; 
 
-};
+}; 
 
 /******************************************************************/
 /* Class: KWCommandHistory                                        */
@@ -89,22 +89,22 @@ class KWCommandHistory : public QObject
 	Q_OBJECT
 
 public:
-	KWCommandHistory();
+	KWCommandHistory(); 
 
-	void addCommand(KWCommand *_command);
-	void undo();
-	void redo();
+	void addCommand( KWCommand *_command ); 
+	void undo(); 
+	void redo(); 
 
-	QString getUndoName();
-	QString getRedoName();
+	QString getUndoName(); 
+	QString getRedoName(); 
 
 protected:
-	QList<KWCommand> history;
-	int current;
+	QList<KWCommand> history; 
+	int current; 
 
 signals:
-	void undoRedoChanged(QString,QString);
+	void undoRedoChanged( QString, QString ); 
 
-};
+}; 
 
 #endif

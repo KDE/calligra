@@ -30,29 +30,29 @@
 void KWImage::decRef()
 {
 	--ref;
-	QString key = doc->getImageCollection()->generateKey(this);
+	QString key = doc->getImageCollection()->generateKey( this );
 
-	if (ref <= 0 && doc)
-		doc->getImageCollection()->removeImage(this);
-	if (!doc && ref == 0) warning("RefCount of the image == 0, but I couldn't delete it,"
-								  " because I have not a pointer to the document!");
+	if ( ref <= 0 && doc )
+		doc->getImageCollection()->removeImage( this );
+	if ( !doc && ref == 0 ) warning( "RefCount of the image == 0, but I couldn't delete it, "
+									 " because I have not a pointer to the document!" );
 }
 
 /*================================================================*/
 void KWImage::incRef()
 {
 	++ref;
-	QString key = doc->getImageCollection()->generateKey(this);
+	QString key = doc->getImageCollection()->generateKey( this );
 }
 
 /*================================================================*/
-void KWImage::save(ostream &out)
+void KWImage::save( ostream &out )
 {
 	out << indent << "<FILENAME value=\"" << filename.ascii() << "\"/>" << endl;
 }
 
 /*================================================================*/
-void KWImage::load(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocument *_doc)
+void KWImage::load( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDocument *_doc )
 {
 	doc = _doc;
 	ref = 0;
@@ -60,21 +60,21 @@ void KWImage::load(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocument *_do
 	string tag;
 	string name;
 
-	while (parser.open(0L,tag))
+	while ( parser.open( 0L, tag ) )
     {
-		KOMLParser::parseTag(tag.c_str(),name,lst);
+		KOMLParser::parseTag( tag.c_str(), name, lst );
 	
 		// filename
-		if (name == "FILENAME")
+		if ( name == "FILENAME" )
 		{
-			KOMLParser::parseTag(tag.c_str(),name,lst);
+			KOMLParser::parseTag( tag.c_str(), name, lst );
 			vector<KOMLAttrib>::const_iterator it = lst.begin();
-			for(;it != lst.end();it++)
+			for( ; it != lst.end(); it++ )
 			{
-				if ((*it).m_strName == "value")
+				if ( ( *it ).m_strName == "value" )
 				{		
-					filename = (*it).m_strValue.c_str();
-					QImage::load(filename);
+					filename = ( *it ).m_strValue.c_str();
+					QImage::load( filename );
 				}
 			}
 		}
@@ -82,7 +82,7 @@ void KWImage::load(KOMLParser& parser,vector<KOMLAttrib>& lst,KWordDocument *_do
 		else
 			cerr << "Unknown tag '" << tag << "' in IMAGE" << endl;
 
-		if (!parser.close(tag))
+		if ( !parser.close( tag ) )
 		{
 			cerr << "ERR: Closing Child" << endl;
 			return;

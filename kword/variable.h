@@ -24,12 +24,12 @@
 
 #include <string>
 
-class KWordDocument;
-class KWVariable;
-class KWParag;
+class KWordDocument; 
+class KWVariable; 
+class KWParag; 
 
-enum VariableType {VT_DATE_FIX = 0,VT_DATE_VAR = 1,VT_TIME_FIX = 2,VT_TIME_VAR = 3,VT_PGNUM = 4,VT_NUMPAGES = 5,VT_NONE};
-enum VariableFormatType {VFT_DATE = 0,VFT_TIME = 1,VFT_PGNUM = 2,VFT_NUMPAGES = 3};
+enum VariableType {VT_DATE_FIX = 0, VT_DATE_VAR = 1, VT_TIME_FIX = 2, VT_TIME_VAR = 3, VT_PGNUM = 4, VT_NUMPAGES = 5, VT_NONE}; 
+enum VariableFormatType {VFT_DATE = 0, VFT_TIME = 1, VFT_PGNUM = 2, VFT_NUMPAGES = 3}; 
 
 /******************************************************************/
 /* Class: KWVariableFormat                                        */
@@ -41,17 +41,17 @@ public:
 	KWVariableFormat() {}
 	virtual ~KWVariableFormat() {}
 
-	virtual VariableFormatType getType() = 0;
+	virtual VariableFormatType getType() = 0; 
 
-	virtual void setFormat(QString _format)
+	virtual void setFormat( QString _format )
 	{ format = _format; }
 
-	virtual QString convert(KWVariable *_var) = 0;
+	virtual QString convert( KWVariable *_var ) = 0; 
 
 protected:
-	QString format;
+	QString format; 
 
-};
+}; 
 
 /******************************************************************/
 /* Class: KWVariableDateFormat                                    */
@@ -65,11 +65,11 @@ public:
 	virtual VariableFormatType getType()
 	{ return VFT_DATE; }
 
-	virtual void setFormat(QString _format);
+	virtual void setFormat( QString _format ); 
 
-	virtual QString convert(KWVariable *_var);
+	virtual QString convert( KWVariable *_var ); 
 
-};
+}; 
 
 /******************************************************************/
 /* Class: KWVariableTimeFormat                                    */
@@ -83,11 +83,11 @@ public:
 	virtual VariableFormatType getType()
 	{ return VFT_TIME; }
 
-	virtual void setFormat(QString _format);
+	virtual void setFormat( QString _format ); 
 
-	virtual QString convert(KWVariable *_var);
+	virtual QString convert( KWVariable *_var ); 
 
-};
+}; 
 
 /******************************************************************/
 /* Class: KWVariablePgNumFormat                                   */
@@ -101,20 +101,20 @@ public:
 	virtual VariableFormatType getType()
 	{ return VFT_PGNUM; }
 
-	virtual void setFormat(QString _format);
+	virtual void setFormat( QString _format ); 
 
-	virtual QString convert(KWVariable *_var);
+	virtual QString convert( KWVariable *_var ); 
 
-	void setPre(const QString &_pre) { pre = _pre; }
-	void setPost(const QString &_post) { pre = _post; }
+	void setPre( const QString &_pre ) { pre = _pre; }
+	void setPost( const QString &_post ) { pre = _post; }
 
 	QString getPre() { return pre; }
 	QString getPost() { return post; }
 
 protected:
-	QString pre,post;
+	QString pre, post; 
 
-};
+}; 
 
 /******************************************************************/
 /* Class: KWVariable                                              */
@@ -123,43 +123,43 @@ protected:
 class KWVariable
 {
 public:
-	KWVariable(KWordDocument *_doc) : text() { varFormat = 0L; doc = _doc; }
+	KWVariable( KWordDocument *_doc ) : text() { varFormat = 0L; doc = _doc; }
 	virtual ~KWVariable() {}
 
 	virtual KWVariable *copy() {
-		KWVariable *v = new KWVariable(doc);
-		v->setVariableFormat(varFormat);
-		v->setInfo(frameSetNum,frameNum,pageNum,parag);
-		return v;
+		KWVariable *v = new KWVariable( doc ); 
+		v->setVariableFormat( varFormat ); 
+		v->setInfo( frameSetNum, frameNum, pageNum, parag ); 
+		return v; 
 	}
 
 	virtual VariableType getType()
 	{ return VT_NONE; }
 
-	void setVariableFormat(KWVariableFormat *_varFormat,bool _deleteOld = false)
-	{ if (_deleteOld && varFormat) delete varFormat; varFormat = _varFormat; }
+	void setVariableFormat( KWVariableFormat *_varFormat, bool _deleteOld = false )
+	{ if ( _deleteOld && varFormat ) delete varFormat; varFormat = _varFormat; }
 	KWVariableFormat *getVariableFormat()
 	{ return varFormat; }
 
 	QString getText()
-	{ return varFormat->convert(this); }
+	{ return varFormat->convert( this ); }
 
-	virtual void setInfo(int _frameSetNum,int _frameNum,int _pageNum,KWParag *_parag)
+	virtual void setInfo( int _frameSetNum, int _frameNum, int _pageNum, KWParag *_parag )
 	{ frameSetNum = _frameSetNum; frameNum = _frameNum; pageNum = _pageNum; parag = _parag; }
 
 	virtual void recalc() {}
 
-	virtual void save(ostream &out);
-	virtual void load(string name,string tag,vector<KOMLAttrib>& lst);
+	virtual void save( ostream &out ); 
+	virtual void load( string name, string tag, vector<KOMLAttrib>& lst ); 
 
 protected:
-	KWordDocument *doc;
-	KWVariableFormat *varFormat;
-	QString text;
-	int frameSetNum,frameNum,pageNum;
-	KWParag *parag;
+	KWordDocument *doc; 
+	KWVariableFormat *varFormat; 
+	QString text; 
+	int frameSetNum, frameNum, pageNum; 
+	KWParag *parag; 
 
-};
+}; 
 
 /******************************************************************/
 /* Class: KWPgNumVariable                                         */
@@ -168,13 +168,13 @@ protected:
 class KWPgNumVariable : public KWVariable
 {
 public:
-	KWPgNumVariable(KWordDocument *_doc) : KWVariable(_doc) { pgNum = 0; }
+	KWPgNumVariable( KWordDocument *_doc ) : KWVariable( _doc ) { pgNum = 0; }
 
 	virtual KWVariable *copy() {
-		KWPgNumVariable *var = new KWPgNumVariable(doc);
-		var->setVariableFormat(varFormat);
-		var->setInfo(frameSetNum,frameNum,pageNum,parag);
-		return var;
+		KWPgNumVariable *var = new KWPgNumVariable( doc ); 
+		var->setVariableFormat( varFormat ); 
+		var->setInfo( frameSetNum, frameNum, pageNum, parag ); 
+		return var; 
 	}
 
 	virtual VariableType getType()
@@ -183,13 +183,13 @@ public:
 	virtual void recalc() { pgNum = pageNum; }
 	long unsigned int getPgNum() { return pgNum; }
 
-	virtual void save(ostream &out);
-	virtual void load(string name,string tag,vector<KOMLAttrib>& lst);
+	virtual void save( ostream &out ); 
+	virtual void load( string name, string tag, vector<KOMLAttrib>& lst ); 
 
 protected:
-	long unsigned int pgNum;
+	long unsigned int pgNum; 
 
-};
+}; 
 
 /******************************************************************/
 /* Class: KWDateVariable                                          */
@@ -198,32 +198,32 @@ protected:
 class KWDateVariable : public KWVariable
 {
 public:
-	KWDateVariable(KWordDocument *_doc,bool _fix,QDate _date);
-	KWDateVariable(KWordDocument *_doc) : KWVariable(_doc) {}
+	KWDateVariable( KWordDocument *_doc, bool _fix, QDate _date ); 
+	KWDateVariable( KWordDocument *_doc ) : KWVariable( _doc ) {}
 
 	virtual KWVariable *copy() {
-		KWDateVariable *var = new KWDateVariable(doc,fix,date);
-		var->setVariableFormat(varFormat);
-		var->setInfo(frameSetNum,frameNum,pageNum,parag);
-		return var;
+		KWDateVariable *var = new KWDateVariable( doc, fix, date ); 
+		var->setVariableFormat( varFormat ); 
+		var->setInfo( frameSetNum, frameNum, pageNum, parag ); 
+		return var; 
 	}
 
 	virtual VariableType getType()
 	{ return fix ? VT_DATE_FIX : VT_DATE_VAR; }
 
-	virtual void recalc();
+	virtual void recalc(); 
 
 	QDate getDate() { return date; }
-	void setDate(QDate _date) { date = _date; }
+	void setDate( QDate _date ) { date = _date; }
 
-	virtual void save(ostream &out);
-	virtual void load(string name,string tag,vector<KOMLAttrib>& lst);
+	virtual void save( ostream &out ); 
+	virtual void load( string name, string tag, vector<KOMLAttrib>& lst ); 
 
 protected:
-	QDate date;
-	bool fix;
+	QDate date; 
+	bool fix; 
 
-};
+}; 
 
 /******************************************************************/
 /* Class: KWTimeVariable                                          */
@@ -232,31 +232,31 @@ protected:
 class KWTimeVariable : public KWVariable
 {
 public:
-	KWTimeVariable(KWordDocument *_doc,bool _fix,QTime _time);
-	KWTimeVariable(KWordDocument *_doc) : KWVariable(_doc) {}
+	KWTimeVariable( KWordDocument *_doc, bool _fix, QTime _time ); 
+	KWTimeVariable( KWordDocument *_doc ) : KWVariable( _doc ) {}
 
 	virtual KWVariable *copy() {
-		KWTimeVariable *var = new KWTimeVariable(doc,fix,time);
-		var->setVariableFormat(varFormat);
-		var->setInfo(frameSetNum,frameNum,pageNum,parag);
-		return var;
+		KWTimeVariable *var = new KWTimeVariable( doc, fix, time ); 
+		var->setVariableFormat( varFormat ); 
+		var->setInfo( frameSetNum, frameNum, pageNum, parag ); 
+		return var; 
 	}
 
 	virtual VariableType getType()
 	{ return fix ? VT_TIME_FIX : VT_TIME_VAR; }
 
-	virtual void recalc();
+	virtual void recalc(); 
 
 	QTime getTime() { return time; }
-	void setTime(QTime _time) { time = _time; }
+	void setTime( QTime _time ) { time = _time; }
 
-	virtual void save(ostream &out);
-	virtual void load(string name,string tag,vector<KOMLAttrib>& lst);
+	virtual void save( ostream &out ); 
+	virtual void load( string name, string tag, vector<KOMLAttrib>& lst ); 
 
 protected:
-	QTime time;
-	bool fix;
+	QTime time; 
+	bool fix; 
 
-};
+}; 
 
 #endif

@@ -42,14 +42,14 @@ public:
 	 *
 	 * @see KWUserFont
 	 */
-	KWFormat(KWordDocument *_doc,const QColor& _color,KWUserFont *_font = 0L,int _font_size = -1,int _weight = -1,
-			 char _italic = -1,char _underline = -1,VertAlign _vertAlign = VA_NORMAL,char _math = -1,char _direct = -1);
+	KWFormat( KWordDocument *_doc, const QColor& _color, KWUserFont *_font = 0L, int _font_size = -1, int _weight = -1,
+			  char _italic = -1, char _underline = -1, VertAlign _vertAlign = VA_NORMAL, char _math = -1, char _direct = -1 );
 
 	/**
 	 * Creates a new KWFormat instance. This instance has set all values to
 	 * 'dont change'.
 	 */
-	KWFormat(KWordDocument *_doc);
+	KWFormat( KWordDocument *_doc );
 	KWFormat() { doc = 0L; ref = 0; userFont = 0L; }
 
 	/**
@@ -57,14 +57,14 @@ public:
 	 *
 	 * @param _format It copies its state from this KWFormat instance.
 	 */
-	KWFormat(KWordDocument *_doc,const KWFormat& _format);
+	KWFormat( KWordDocument *_doc, const KWFormat& _format );
 
-	KWFormat& operator=(const KWFormat& _format);
+	KWFormat& operator=( const KWFormat& _format );
 
-	bool operator==(const KWFormat & _format);
-	bool operator!=(const KWFormat & _format);
+	bool operator==( const KWFormat & _format );
+	bool operator!=( const KWFormat & _format );
 
-	void apply(KWFormat &_format);
+	void apply( KWFormat &_format );
 
 	/**
 	 * @return The color to use. The color may be not valid ( test with <TT>QColor::isValid()</TT>.
@@ -110,7 +110,7 @@ public:
 	 *
 	 * @see KWordDocument
 	 */
-	void setDefaults(KWordDocument *_doc);
+	void setDefaults( KWordDocument *_doc );
 
 	/**
 	 * Set the color to use.
@@ -120,7 +120,7 @@ public:
 	 *
 	 * @see $QColor
 	 */
-	void setColor(QColor& _c) { color = _c; }
+	void setColor( QColor& _c ) { color = _c; }
 
 	/**
 	 * Sets the font to use.
@@ -130,37 +130,37 @@ public:
 	 *
 	 * @see KWUserFont
 	 */
-	void setUserFont(KWUserFont* _font) { userFont = _font; }
+	void setUserFont( KWUserFont* _font ) { userFont = _font; }
 
 	/**
 	 * Sets the unzoomed font size to use.
 	 *
 	 * @param _font_size The size of the font to use or -1 if this value does not change.
 	 */
-	void setPTFontSize(int _size) { ptFontSize = _size; }
+	void setPTFontSize( int _size ) { ptFontSize = _size; }
 
 	/**
 	 * Sets the fonts weight to use.
 	 *
 	 * @param _weight The fonts weight or -1 if the value should not change
 	 */
-	void setWeight(int _weight) { weight = _weight; }
+	void setWeight( int _weight ) { weight = _weight; }
 
 	/**
 	 * Sets the fonts italic mode.
 	 *
 	 * @param _italic 1 to enable italic font, 0 to disable and -1 for no change.
 	 */
-	void setItalic(char _italic) { italic = _italic; }
+	void setItalic( char _italic ) { italic = _italic; }
 
 	/**
 	 * Sets the fonts underline mode.
 	 *
 	 * @param _underline 1 to enable underline font, 0 to disable and -1 for no change.
 	 */
-	void setUnderline(char _underline) { underline = _underline; }
+	void setUnderline( char _underline ) { underline = _underline; }
 
-	void setVertAlign(VertAlign _vertAlign) { vertAlign = _vertAlign; }
+	void setVertAlign( VertAlign _vertAlign ) { vertAlign = _vertAlign; }
 
 	void incRef();
 	void decRef();
@@ -168,8 +168,8 @@ public:
 
 	KWordDocument *getDocument() { return doc; }
 
-	void save(ostream &out);
-	void load(KOMLParser&,vector<KOMLAttrib>&,KWordDocument*);
+	void save( ostream &out );
+	void load( KOMLParser&, vector<KOMLAttrib>&, KWordDocument* );
 
 protected:
 	/**

@@ -56,35 +56,35 @@ static FormatRecord formatlist[]= {
 
 FormatManager::FormatManager()
 {
-	list.setAutoDelete(TRUE);
-	init(formatlist);
+	list.setAutoDelete( TRUE );
+	init( formatlist );
 }
 
 FormatManager::~FormatManager()
 {
 }
 
-void FormatManager::init(FormatRecord formatlist[])
+void FormatManager::init( FormatRecord formatlist[] )
 {
 	int i;
 	FormatRecord *rec;
 
 	// Build format list
-	for (i= 0; i < numFormats; i++) {
-		list.append(&formatlist[i]);
-		names.append(formatlist[i].formatName);
-		globAll.append(formatlist[i].glob);
-		globAll.append(" ");
+	for ( i= 0; i < numFormats; i++ ) {
+		list.append( &formatlist[ i ] );
+		names.append( formatlist[ i ].formatName );
+		globAll.append( formatlist[ i ].glob );
+		globAll.append( " " );
 	};
 
 	// Register them with Qt
-	for (rec= list.first(); rec != NULL; rec= list.next()) {
-		if ( (rec->flags & FormatRecord::InternalFormat) == 0L)
-			QImageIO::defineIOHandler(rec->formatName, rec->magic,
-									  0,
-									  rec->read_format, rec->write_format);
+	for ( rec= list.first(); rec != NULL; rec= list.next() ) {
+		if ( ( rec->flags & FormatRecord::InternalFormat ) == 0L )
+			QImageIO::defineIOHandler( rec->formatName, rec->magic,
+									   0,
+									   rec->read_format, rec->write_format );
 	}
-	// Register the ones implemented by kimgio (tiff, jpeg, png, ...)
+	// Register the ones implemented by kimgio ( tiff, jpeg, png, ... )
 	kimgioRegister();
 
 #ifdef HAVE_QIMGIO
@@ -92,33 +92,33 @@ void FormatManager::init(FormatRecord formatlist[])
 #endif
 }
 	
-const QStrList *FormatManager::formats(void)
+const QStrList *FormatManager::formats( void )
 {
 	return &names;
 }
 
-const char *FormatManager::allImagesGlob(void)
+const char *FormatManager::allImagesGlob( void )
 {
 	return globAll;
 }
 
-const char *FormatManager::glob(const char *format)
+const char *FormatManager::glob( const char *format )
 {
 	FormatRecord *rec;
-	QString name(format);
+	QString name( format );
 	QString curr;
 	bool done= FALSE;
 
 	rec= list.first();
 	do {
 		curr= rec->formatName;
-		if (curr == name)
+		if ( curr == name )
 			done= TRUE;
 		else
 			rec= list.next();
-	} while (!done && (rec != NULL));
+	} while ( !done && ( rec != NULL ) );
 
-	if (done)
+	if ( done )
 		return rec->glob;
 	else
 		return NULL;

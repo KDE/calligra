@@ -23,80 +23,80 @@
 /******************************************************************/
 
 /*================================================================*/
-KWordDrag::KWordDrag(QWidget *dragSource = 0L,const char *name = 0L)
-	: QDragObject(dragSource,name), kword(), plain(), html()
+KWordDrag::KWordDrag( QWidget *dragSource = 0L, const char *name = 0L )
+	: QDragObject( dragSource, name ), kword(), plain(), html()
 {
 }
 
 /*================================================================*/
-void KWordDrag::setPlain(const QString &_plain)
+void KWordDrag::setPlain( const QString &_plain )
 {
-	plain = _plain;
+	plain = _plain; 
 }
 
 /*================================================================*/
-void KWordDrag::setKWord(const QString &_kword)
+void KWordDrag::setKWord( const QString &_kword )
 {
-	kword = _kword;
+	kword = _kword; 
 }
 
 /*================================================================*/
-void KWordDrag::setHTML(const QString &_html)
+void KWordDrag::setHTML( const QString &_html )
 {
-	html = _html;
+	html = _html; 
 }
 
 /*================================================================*/
-const char *KWordDrag::format(int i) const
+const char *KWordDrag::format( int i ) const
 {
-	for (int j = 0;MimeTypes[j] != QString::null;j++)
+	for ( int j = 0; MimeTypes[ j ] != QString::null; j++ )
     {
-		if (i == j)
-			return MimeTypes[j].ascii();
+		if ( i == j )
+			return MimeTypes[ j ].ascii(); 
     }
 
-	return 0L;
+	return 0L; 
 }
 
 /*================================================================*/
-QByteArray KWordDrag::encodedData(const char *mime) const
+QByteArray KWordDrag::encodedData( const char *mime ) const
 {
-	QCString str;
+	QCString str; 
 
-	if (QString(mime) == MimeTypes[0])
-		str = plain.ascii();
-	else if (QString(mime) == MimeTypes[1])
-		str = html.ascii();
-	else if (QString(mime) == MimeTypes[2])
-		str = kword.ascii();
+	if ( QString( mime ) == MimeTypes[ 0 ] )
+		str = plain.ascii(); 
+	else if ( QString( mime ) == MimeTypes[ 1 ] )
+		str = html.ascii(); 
+	else if ( QString( mime ) == MimeTypes[ 2 ] )
+		str = kword.ascii(); 
 
-	return str;
+	return str; 
 }
 
 /*================================================================*/
-bool KWordDrag::canDecode(QMimeSource* e)
+bool KWordDrag::canDecode( QMimeSource* e )
 {
-	for (unsigned int i = 0;MimeTypes[i] != QString::null;i++)
+	for ( unsigned int i = 0; MimeTypes[ i ] != QString::null; i++ )
     {
-		if (e->provides(MimeTypes[i]))
-			return true;
+		if ( e->provides( MimeTypes[ i ] ) )
+			return true; 
     }
-	return false;
+	return false; 
 }
 
 /*================================================================*/
-bool KWordDrag::decode(QMimeSource* e,QString& s)
+bool KWordDrag::decode( QMimeSource* e, QString& s )
 {
-	for (unsigned int i = 0;MimeTypes[i] != QString::null;i++)
+	for ( unsigned int i = 0; MimeTypes[ i ] != QString::null; i++ )
     {
-		QByteArray ba = e->encodedData(MimeTypes[i]);
-		if (ba.size())
+		QByteArray ba = e->encodedData( MimeTypes[ i ] ); 
+		if ( ba.size() )
 		{
-			s = QString(ba);
-			return true;
+			s = QString( ba ); 
+			return true; 
 		}
     }
 
-	return false;
+	return false; 
 }
 

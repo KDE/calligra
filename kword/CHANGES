@@ -1189,3 +1189,7 @@ Reggie, 14.5.1999:
 - Big code cleanups:
   - As my coding style was hard to read I started using a better one
   - Fixed includes (Only really neccessary headers are included in the .h files)
+
+Reggie, 15.5.1999:
+------------------
+- More cosmetic fixes (mainly using a better readable coding style)

@@ -37,66 +37,66 @@
 /******************************************************************/
 
 /*================================================================*/
-KWAutoFormatDia::KWAutoFormatDia(QWidget *parent,const char *name,KWordDocument *_doc,KWPage *_page)
-	: QTabDialog(parent,name,true), oBegin(doc->getAutoFormat().getConfigTypographicQuotes().begin),
-	  oEnd(doc->getAutoFormat().getConfigTypographicQuotes().end), quotesChanged(false)
+KWAutoFormatDia::KWAutoFormatDia( QWidget *parent, const char *name, KWordDocument *_doc, KWPage *_page )
+	: QTabDialog( parent, name, true ), oBegin( doc->getAutoFormat().getConfigTypographicQuotes().begin ), 
+	  oEnd( doc->getAutoFormat().getConfigTypographicQuotes().end ), quotesChanged( false )
 {
-	doc = _doc;
-	page = _page;
+	doc = _doc; 
+	page = _page; 
 
-	setupTab1();
+	setupTab1(); 
 
-	setCancelButton(i18n("Cancel"));
-	setOkButton(i18n("OK"));
+	setCancelButton( i18n( "Cancel" ) ); 
+	setOkButton( i18n( "OK" ) ); 
 
-	resize(500,300);
-	connect(this,SIGNAL(applyButtonPressed()),this,SLOT(applyConfig()));
+	resize( 500, 300 ); 
+	connect( this, SIGNAL( applyButtonPressed() ), this, SLOT( applyConfig() ) ); 
 }
 
 /*================================================================*/
 void KWAutoFormatDia::setupTab1()
 {
-	tab1 = new QVBox(this);
+	tab1 = new QVBox( this ); 
 
-	tab1->setMargin(10);
+	tab1->setMargin( 10 ); 
 
-	cbTypographicQuotes = new QCheckBox(tab1);
-	cbTypographicQuotes->setText(i18n("Replace &Quotes by Typographical Quotes:"));
-	cbTypographicQuotes->resize(cbTypographicQuotes->sizeHint());
-	cbTypographicQuotes->setChecked(doc->getAutoFormat().getConfigTypographicQuotes().replace);
+	cbTypographicQuotes = new QCheckBox( tab1 ); 
+	cbTypographicQuotes->setText( i18n( "Replace &Quotes by Typographical Quotes:" ) ); 
+	cbTypographicQuotes->resize( cbTypographicQuotes->sizeHint() ); 
+	cbTypographicQuotes->setChecked( doc->getAutoFormat().getConfigTypographicQuotes().replace ); 
 
-	QHBox *quotes = new QHBox(tab1);
-	pbQuote1 = new QPushButton(quotes);
-	pbQuote1->setText(doc->getAutoFormat().getConfigTypographicQuotes().begin);
-	pbQuote1->resize(pbQuote1->sizeHint());
-	pbQuote2 = new QPushButton(quotes);
-	pbQuote2->setText(doc->getAutoFormat().getConfigTypographicQuotes().end);
-	pbQuote2->resize(pbQuote2->sizeHint());
-	(void)new QWidget(quotes);
-	quotes->setMaximumHeight(pbQuote1->sizeHint().height());
+	QHBox *quotes = new QHBox( tab1 ); 
+	pbQuote1 = new QPushButton( quotes ); 
+	pbQuote1->setText( doc->getAutoFormat().getConfigTypographicQuotes().begin ); 
+	pbQuote1->resize( pbQuote1->sizeHint() ); 
+	pbQuote2 = new QPushButton( quotes ); 
+	pbQuote2->setText( doc->getAutoFormat().getConfigTypographicQuotes().end ); 
+	pbQuote2->resize( pbQuote2->sizeHint() ); 
+	( void )new QWidget( quotes ); 
+	quotes->setMaximumHeight( pbQuote1->sizeHint().height() ); 
 
-	connect(pbQuote1,SIGNAL(clicked()),this,SLOT(chooseQuote1()));
-	connect(pbQuote2,SIGNAL(clicked()),this,SLOT(chooseQuote2()));
+	connect( pbQuote1, SIGNAL( clicked() ), this, SLOT( chooseQuote1() ) ); 
+	connect( pbQuote2, SIGNAL( clicked() ), this, SLOT( chooseQuote2() ) ); 
 
-	(void)new QWidget(tab1);
+	( void )new QWidget( tab1 ); 
 
-	cbUpperCase = new QCheckBox(tab1);
-	cbUpperCase->setText(i18n("Convert first letter from the first word of a sentence automatically\n"
-							  "to &Upper Case (e.g. \"bla. this is a Test\" to \"bla. This is a Test\")"));
-	cbUpperCase->resize(cbUpperCase->sizeHint());
-	cbUpperCase->setChecked(doc->getAutoFormat().getConfigUpperCase());
+	cbUpperCase = new QCheckBox( tab1 ); 
+	cbUpperCase->setText( i18n( "Convert first letter from the first word of a sentence automatically\n"
+								"to &Upper Case ( e.g. \"bla. this is a Test\" to \"bla. This is a Test\" )" ) ); 
+	cbUpperCase->resize( cbUpperCase->sizeHint() ); 
+	cbUpperCase->setChecked( doc->getAutoFormat().getConfigUpperCase() ); 
 
-	(void)new QWidget(tab1);
+	( void )new QWidget( tab1 ); 
 
-	cbUpperUpper = new QCheckBox(tab1);
-	cbUpperUpper->setText(i18n("Concert two Upper &Case letters to one Upper Case and one Lower Case letter.\n"
-							   "(e.g. HAllo to Hallo)"));
-	cbUpperUpper->resize(cbUpperUpper->sizeHint());
-	cbUpperUpper->setChecked(doc->getAutoFormat().getConfigUpperUpper());
+	cbUpperUpper = new QCheckBox( tab1 ); 
+	cbUpperUpper->setText( i18n( "Concert two Upper &Case letters to one Upper Case and one Lower Case letter.\n"
+								 "( e.g. HAllo to Hallo )" ) ); 
+	cbUpperUpper->resize( cbUpperUpper->sizeHint() ); 
+	cbUpperUpper->setChecked( doc->getAutoFormat().getConfigUpperUpper() ); 
 
-	(void)new QWidget(tab1);
+	( void )new QWidget( tab1 ); 
 
-	addTab(tab1,i18n("Simple Autocorrection"));
+	addTab( tab1, i18n( "Simple Autocorrection" ) ); 
 
 	resize(minimumSize());
 }
@@ -105,51 +105,51 @@ void KWAutoFormatDia::setupTab1()
 void KWAutoFormatDia::applyConfig()
 {
 	// iiiiiiiiigit - that's a hack!
-	if (quotesChanged)
+	if ( quotesChanged )
     {
-		KWAutoFormat::TypographicQuotes tq = doc->getAutoFormat().getConfigTypographicQuotes();
-		tq.replace = false;
-		doc->getAutoFormat().configTypographicQuotes(tq);
-		doc->getAutoFormat().setEnabled(true);
-		doc->recalcWholeText();
-		doc->getAutoFormat().setEnabled(false);
+		KWAutoFormat::TypographicQuotes tq = doc->getAutoFormat().getConfigTypographicQuotes(); 
+		tq.replace = false; 
+		doc->getAutoFormat().configTypographicQuotes( tq ); 
+		doc->getAutoFormat().setEnabled( true ); 
+		doc->recalcWholeText(); 
+		doc->getAutoFormat().setEnabled( false ); 
     }
 
-	KWAutoFormat::TypographicQuotes tq = doc->getAutoFormat().getConfigTypographicQuotes();
-	tq.replace = cbTypographicQuotes->isChecked();
-	tq.begin = pbQuote1->text()[0];
-	tq.end = pbQuote2->text()[0];
-	doc->getAutoFormat().configTypographicQuotes(tq);
+	KWAutoFormat::TypographicQuotes tq = doc->getAutoFormat().getConfigTypographicQuotes(); 
+	tq.replace = cbTypographicQuotes->isChecked(); 
+	tq.begin = pbQuote1->text()[ 0 ]; 
+	tq.end = pbQuote2->text()[ 0 ]; 
+	doc->getAutoFormat().configTypographicQuotes( tq ); 
 
-	doc->getAutoFormat().configUpperCase(cbUpperCase->isChecked());
-	doc->getAutoFormat().configUpperUpper(cbUpperUpper->isChecked());
+	doc->getAutoFormat().configUpperCase( cbUpperCase->isChecked() ); 
+	doc->getAutoFormat().configUpperUpper( cbUpperUpper->isChecked() ); 
 
-	doc->getAutoFormat().setEnabled(true);
-	doc->updateAllViews(0L);
-	doc->updateAllCursors();
-	doc->getAutoFormat().setEnabled(false);
+	doc->getAutoFormat().setEnabled( true ); 
+	doc->updateAllViews( 0L ); 
+	doc->updateAllCursors(); 
+	doc->getAutoFormat().setEnabled( false ); 
 }
 
 /*================================================================*/
 void KWAutoFormatDia::chooseQuote1()
 {
-	QString f = font().family();
-	QChar c = doc->getAutoFormat().getConfigTypographicQuotes().begin;
-	if (KCharSelectDia::selectChar(f,c,false))
+	QString f = font().family(); 
+	QChar c = doc->getAutoFormat().getConfigTypographicQuotes().begin; 
+	if ( KCharSelectDia::selectChar( f, c, false ) )
     {
-		pbQuote1->setText(c);
-		quotesChanged = true;
+		pbQuote1->setText( c ); 
+		quotesChanged = true; 
     }
 }
 
 /*================================================================*/
 void KWAutoFormatDia::chooseQuote2()
 {
-	QString f = font().family();
-	QChar c = doc->getAutoFormat().getConfigTypographicQuotes().end;
-	if (KCharSelectDia::selectChar(f,c,false))
+	QString f = font().family(); 
+	QChar c = doc->getAutoFormat().getConfigTypographicQuotes().end; 
+	if ( KCharSelectDia::selectChar( f, c, false ) )
     {
-		pbQuote2->setText(c);
-		quotesChanged = true;
+		pbQuote2->setText( c ); 
+		quotesChanged = true; 
     }
 }

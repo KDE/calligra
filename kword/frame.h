@@ -33,16 +33,16 @@
 #include <koMainWindow.h>
 #include <openparts.h>
 
-class KWFrame;
-class KWordDocument;
-class KWordChild;
-class KWordFrame;
-class KWGroupManager;
+class KWFrame; 
+class KWordDocument; 
+class KWordChild; 
+class KWordFrame; 
+class KWGroupManager; 
 
-enum FrameType {FT_BASE = 0,FT_TEXT = 1,FT_PICTURE = 2,FT_PART};
-enum FrameInfo {FI_BODY = 0,FI_FIRST_HEADER = 1,FI_ODD_HEADER = 2,FI_EVEN_HEADER = 3,FI_FIRST_FOOTER = 4,FI_ODD_FOOTER = 5,FI_EVEN_FOOTER = 6,\
-				FI_FOOTNOTE = 7};
-enum RunAround {RA_NO = 0,RA_BOUNDINGRECT = 1,RA_CONTUR = 2};
+enum FrameType {FT_BASE = 0, FT_TEXT = 1, FT_PICTURE = 2, FT_PART}; 
+enum FrameInfo {FI_BODY = 0, FI_FIRST_HEADER = 1, FI_ODD_HEADER = 2, FI_EVEN_HEADER = 3, FI_FIRST_FOOTER = 4, FI_ODD_FOOTER = 5, FI_EVEN_FOOTER = 6, \
+				FI_FOOTNOTE = 7}; 
+enum RunAround {RA_NO = 0, RA_BOUNDINGRECT = 1, RA_CONTUR = 2}; 
 
 /******************************************************************/
 /* Class: KWFrame                                                 */
@@ -51,42 +51,42 @@ enum RunAround {RA_NO = 0,RA_BOUNDINGRECT = 1,RA_CONTUR = 2};
 class KWFrame : public KRect
 {
 public:
-	KWFrame();
-	KWFrame(const KPoint &topleft,const QPoint &bottomright);
-	KWFrame(const KPoint &topleft,const KSize &size);
-	KWFrame(int left,int top,int width,int height);
-	KWFrame(int left,int top,int width,int height,RunAround _ra,KWUnit _gap);
-	KWFrame(const QRect &_rect);
+	KWFrame(); 
+	KWFrame( const KPoint &topleft, const QPoint &bottomright ); 
+	KWFrame( const KPoint &topleft, const KSize &size ); 
+	KWFrame( int left, int top, int width, int height ); 
+	KWFrame( int left, int top, int width, int height, RunAround _ra, KWUnit _gap ); 
+	KWFrame( const QRect &_rect ); 
 
-	void setRunAround(RunAround _ra) { runAround = _ra; }
+	void setRunAround( RunAround _ra ) { runAround = _ra; }
 	RunAround getRunAround() { return runAround; }
 
-	void setSelected(bool _selected)
+	void setSelected( bool _selected )
     { selected = _selected; }
 	bool isSelected()
     { return selected; }
 
-	void addIntersect(KRect &_r);
+	void addIntersect( KRect &_r ); 
 	void clearIntersects()
     { intersections.clear(); }
 
-	int getLeftIndent(int _y,int _h);
-	int getRightIndent(int _y,int _h);
+	int getLeftIndent( int _y, int _h ); 
+	int getRightIndent( int _y, int _h ); 
 
 	bool hasIntersections()
     { return !intersections.isEmpty(); }
 
-	QCursor getMouseCursor(int mx,int my,bool table);
+	QCursor getMouseCursor( int mx, int my, bool table ); 
 
 	KWUnit getRunAroundGap()
     { return runAroundGap; }
-	void setRunAroundGap(KWUnit gap)
+	void setRunAroundGap( KWUnit gap )
     { runAroundGap = gap; }
 
 	bool isMostRight() { return mostRight; }
-	void setMostRight(bool _mr) { mostRight = _mr; }
+	void setMostRight( bool _mr ) { mostRight = _mr; }
 
-	void setPageNum(int i) { pageNum = i; }
+	void setPageNum( int i ) { pageNum = i; }
 	int getPageNum() { return pageNum; }
 
 	KWParagLayout::Border &getLeftBorder() { return brd_left; }
@@ -97,27 +97,27 @@ public:
 	KWParagLayout::Border getRightBorder2() { return brd_right; }
 	KWParagLayout::Border getTopBorder2() { return brd_top; }
 	KWParagLayout::Border getBottomBorder2() { return brd_bottom; }
-	void setLeftBorder(KWParagLayout::Border _brd) { brd_left = _brd; }
-	void setRightBorder(KWParagLayout::Border _brd) { brd_right = _brd; }
-	void setTopBorder(KWParagLayout::Border _brd) { brd_top = _brd; }
-	void setBottomBorder(KWParagLayout::Border _brd) { brd_bottom = _brd; }
+	void setLeftBorder( KWParagLayout::Border _brd ) { brd_left = _brd; }
+	void setRightBorder( KWParagLayout::Border _brd ) { brd_right = _brd; }
+	void setTopBorder( KWParagLayout::Border _brd ) { brd_top = _brd; }
+	void setBottomBorder( KWParagLayout::Border _brd ) { brd_bottom = _brd; }
 
-	QRegion getEmptyRegion();
+	QRegion getEmptyRegion(); 
 
 	QBrush getBackgroundColor() { return backgroundColor; }
-	void setBackgroundColor(QBrush _color) { backgroundColor = _color; }
+	void setBackgroundColor( QBrush _color ) { backgroundColor = _color; }
 
-	QString leftBrd2String();
-	QString rightBrd2String();
-	QString topBrd2String();
-	QString bottomBrd2String();
+	QString leftBrd2String(); 
+	QString rightBrd2String(); 
+	QString topBrd2String(); 
+	QString bottomBrd2String(); 
 
-	unsigned int getNextFreeYPos(unsigned int _y,unsigned int _h);
+	unsigned int getNextFreeYPos( unsigned int _y, unsigned int _h ); 
 
-	void setBLeft(KWUnit b) { bleft = b; }
-	void setBRight(KWUnit b) { bright = b; }
-	void setBTop(KWUnit b) { btop = b; }
-	void setBBottom(KWUnit b) { bbottom = b; }
+	void setBLeft( KWUnit b ) { bleft = b; }
+	void setBRight( KWUnit b ) { bright = b; }
+	void setBTop( KWUnit b ) { btop = b; }
+	void setBBottom( KWUnit b ) { bbottom = b; }
 
 	KWUnit getBLeft() { return bleft; }
 	KWUnit getBRight() { return bright; }
@@ -125,26 +125,26 @@ public:
 	KWUnit getBBottom() { return bbottom; }
 
 protected:
-	RunAround runAround;
-	bool selected;
-	KWUnit runAroundGap;
-	bool mostRight;
-	int pageNum;
+	RunAround runAround; 
+	bool selected; 
+	KWUnit runAroundGap; 
+	bool mostRight; 
+	int pageNum; 
 
-	QList<KRect> intersections;
+	QList<KRect> intersections; 
 
-	KWParagLayout::Border brd_left,brd_right,brd_top,brd_bottom;
-	QBrush backgroundColor;
+	KWParagLayout::Border brd_left, brd_right, brd_top, brd_bottom; 
+	QBrush backgroundColor; 
 
-	KWUnit bleft,bright,btop,bbottom;
+	KWUnit bleft, bright, btop, bbottom; 
 
 private:
-	KWFrame &operator=(KWFrame &_frame)
+	KWFrame &operator=( KWFrame &_frame )
     { return _frame; }
-	KWFrame (const KWFrame &_frame)
-    {;}
+	KWFrame ( const KWFrame &_frame )
+    {; }
 
-};
+}; 
 
 /******************************************************************/
 /* Class: KWFrameSet                                              */
@@ -153,80 +153,80 @@ private:
 class KWFrameSet
 {
 public:
-	KWFrameSet(KWordDocument *_doc);
+	KWFrameSet( KWordDocument *_doc ); 
 	virtual ~KWFrameSet()
-    {;}
+    {; }
 
 	virtual FrameType getFrameType()
     { return FT_BASE; }
 	virtual FrameInfo getFrameInfo()
     { return frameInfo; }
-	void setFrameInfo(FrameInfo fi) { frameInfo = fi; }
+	void setFrameInfo( FrameInfo fi ) { frameInfo = fi; }
 
-	virtual void addFrame(KWFrame _frame);
-	virtual void addFrame(KWFrame *_frame);
-	virtual void delFrame(unsigned int _num);
+	virtual void addFrame( KWFrame _frame ); 
+	virtual void addFrame( KWFrame *_frame ); 
+	virtual void delFrame( unsigned int _num ); 
 
-	virtual int getFrame(int _x,int _y);
-	virtual KWFrame *getFrame(unsigned int _num);
+	virtual int getFrame( int _x, int _y ); 
+	virtual KWFrame *getFrame( unsigned int _num ); 
 	virtual unsigned int getNumFrames()
     { return frames.count(); }
 
-	virtual bool isPTYInFrame(unsigned int _frame,unsigned int _ypos)
+	virtual bool isPTYInFrame( unsigned int _frame, unsigned int _ypos )
     { return true; }
 
 	virtual void update()
-    {;}
+    {; }
 
 	virtual void clear()
     { frames.clear(); }
 
-	virtual bool contains(unsigned int mx,unsigned int my);
+	virtual bool contains( unsigned int mx, unsigned int my ); 
 	/**
-	 * Return 1, if a frame gets selected which was not selected before,
+	 * Return 1, if a frame gets selected which was not selected before, 
 	 * 2, if a frame gets selected which was already selected
 	 */
-	virtual int selectFrame(unsigned int mx,unsigned int my);
-	virtual void deSelectFrame(unsigned int mx,unsigned int my);
-	virtual QCursor getMouseCursor(unsigned int mx,unsigned int my);
+	virtual int selectFrame( unsigned int mx, unsigned int my ); 
+	virtual void deSelectFrame( unsigned int mx, unsigned int my ); 
+	virtual QCursor getMouseCursor( unsigned int mx, unsigned int my ); 
 
-	virtual void save(ostream &out);
+	virtual void save( ostream &out ); 
 
-	int getNext(KRect _rect);
-	int getPageOfFrame(int i) { return frames.at(i)->getPageNum(); }
+	int getNext( KRect _rect ); 
+	int getPageOfFrame( int i ) { return frames.at( i )->getPageNum(); }
 
-	void setCurrent(int i) { current = i; }
+	void setCurrent( int i ) { current = i; }
 	int getCurrent() { return current; }
 
-	void setGroupManager(KWGroupManager *gm) { grpMgr = gm; }
+	void setGroupManager( KWGroupManager *gm ) { grpMgr = gm; }
 	KWGroupManager *getGroupManager() { return grpMgr; }
 
-	void setIsRemoveableHeader(bool _h)
+	void setIsRemoveableHeader( bool _h )
     { removeableHeader = _h; }
 	bool isRemoveableHeader()
     { return removeableHeader; }
 
-	bool hasSelectedFrame();
+	bool hasSelectedFrame(); 
 
 	bool isVisible() { return visible; }
-	void setVisible(bool v) { visible = v; }
+	void setVisible( bool v ) { visible = v; }
 
 protected:
 	virtual void init()
-    {;}
+    {; }
 
 	// document
-	KWordDocument *doc;
+	KWordDocument *doc; 
 
 	// frames
-	QList<KWFrame> frames;
+	QList<KWFrame> frames; 
 
-	FrameInfo frameInfo;
-	int current;
-	KWGroupManager *grpMgr;
-	bool removeableHeader,visible;
+	FrameInfo frameInfo; 
+	int current; 
+	KWGroupManager *grpMgr; 
+	bool removeableHeader, visible; 
 
-};
+}; 
 
 /******************************************************************/
 /* Class: KWTextFrameSet                                          */
@@ -235,55 +235,55 @@ protected:
 class KWTextFrameSet : public KWFrameSet
 {
 public:
-	KWTextFrameSet(KWordDocument *_doc)
-		: KWFrameSet(_doc)
-    {;}
-	~KWTextFrameSet();
+	KWTextFrameSet( KWordDocument *_doc )
+		: KWFrameSet( _doc )
+    {; }
+	~KWTextFrameSet(); 
 
 	virtual FrameType getFrameType()
     { return FT_TEXT; }
 
-	virtual void update();
+	virtual void update(); 
 
 	/**
 	 * If another parag becomes the first one it uses this function
 	 * to tell the document about it.
 	 */
-	void setFirstParag(KWParag *_parag);
-	KWParag* getFirstParag();
+	void setFirstParag( KWParag *_parag ); 
+	KWParag* getFirstParag(); 
 
 	/**
 	 * WARNING: This methode is _NOT_ efficient! It iterates through all parags!
 	 */
-	KWParag *getLastParag();
+	KWParag *getLastParag(); 
 
-	virtual bool isPTYInFrame(unsigned int _frame,unsigned int _ypos);
+	virtual bool isPTYInFrame( unsigned int _frame, unsigned int _ypos ); 
 
-	void deleteParag(KWParag *_parag);
-	void joinParag(KWParag *_parag1,KWParag *_parag2);
-	void insertParag(KWParag *_parag,InsertPos _pos);
-	void splitParag(KWParag *_parag,unsigned int _pos);
+	void deleteParag( KWParag *_parag ); 
+	void joinParag( KWParag *_parag1, KWParag *_parag2 ); 
+	void insertParag( KWParag *_parag, InsertPos _pos ); 
+	void splitParag( KWParag *_parag, unsigned int _pos ); 
 
-	virtual void save(ostream &out);
-	virtual void load(KOMLParser&,vector<KOMLAttrib>&);
+	virtual void save( ostream &out ); 
+	virtual void load( KOMLParser&, vector<KOMLAttrib>& ); 
 
 	bool getAutoCreateNewFrame() { return autoCreateNewFrame; }
-	void setAutoCreateNewFrame(bool _auto) { autoCreateNewFrame = _auto; }
+	void setAutoCreateNewFrame( bool _auto ) { autoCreateNewFrame = _auto; }
 
-	void updateCounters();
-	void updateAllStyles();
+	void updateCounters(); 
+	void updateAllStyles(); 
 
 	// this function is optimized for framesets in tables and doesn't work for other purposes
-	void assign(KWTextFrameSet *fs);
+	void assign( KWTextFrameSet *fs ); 
 
 protected:
-	virtual void init();
+	virtual void init(); 
 
 	// pointer to the first parag of the list of parags
-	KWParag *parags;
-	bool autoCreateNewFrame;
+	KWParag *parags; 
+	bool autoCreateNewFrame; 
 
-};
+}; 
 
 /******************************************************************/
 /* Class: KWPictureFrameSet                                       */
@@ -292,33 +292,33 @@ protected:
 class KWPictureFrameSet : public KWFrameSet
 {
 public:
-	KWPictureFrameSet(KWordDocument *_doc)
-		: KWFrameSet(_doc)
+	KWPictureFrameSet( KWordDocument *_doc )
+		: KWFrameSet( _doc )
     { image = 0L; }
 	virtual ~KWPictureFrameSet()
-    {;}
+    {; }
 
 	virtual FrameType getFrameType()
     { return FT_PICTURE; }
 
-	virtual void setImage(KWImage *_image)
+	virtual void setImage( KWImage *_image )
     { image = _image; }
-	void setFileName(QString _filename);
-	void setFileName(QString _filename,KSize _imgSize);
-	void setSize(KSize _imgSize);
+	void setFileName( QString _filename ); 
+	void setFileName( QString _filename, KSize _imgSize ); 
+	void setSize( KSize _imgSize ); 
 
 	virtual KWImage* getImage()
     { return image; }
 	QString getFileName() { return filename; }
 
-	virtual void save(ostream &out);
-	virtual void load(KOMLParser&,vector<KOMLAttrib>&);
+	virtual void save( ostream &out ); 
+	virtual void load( KOMLParser&, vector<KOMLAttrib>& ); 
 
 protected:
-	KWImage *image;
-	QString filename;
+	KWImage *image; 
+	QString filename; 
 
-};
+}; 
 
 /******************************************************************/
 /* Class: KWPartFrameSet                                          */
@@ -327,40 +327,40 @@ protected:
 class KWPartFrameSet : public KWFrameSet
 {
 public:
-	KWPartFrameSet(KWordDocument *_doc,KWordChild *_child)
-		: KWFrameSet(_doc)
+	KWPartFrameSet( KWordDocument *_doc, KWordChild *_child )
+		: KWFrameSet( _doc )
     { child = _child; _enableDrawing = true; }
 	virtual ~KWPartFrameSet()
-    {;}
+    {; }
 
 	virtual FrameType getFrameType()
     { return FT_PART; }
 
-	virtual QPicture *getPicture();
+	virtual QPicture *getPicture(); 
 
-	virtual void activate(QWidget *_widget,int diffx,int diffy,int diffxx);
-	virtual void deactivate();
+	virtual void activate( QWidget *_widget, int diffx, int diffy, int diffxx ); 
+	virtual void deactivate(); 
 
 	KWordFrame *getView() { return view; }
-	void setView(KWordFrame *_view) { view = _view; }
+	void setView( KWordFrame *_view ) { view = _view; }
 
-	void setMainWindow(OpenParts::MainWindow_ptr _mainWindow) { mainWindow = KOffice::MainWindow::_narrow(_mainWindow); }
-	void setParentID(OpenParts::Id _id) { parentID = _id; }
+	void setMainWindow( OpenParts::MainWindow_ptr _mainWindow ) { mainWindow = KOffice::MainWindow::_narrow( _mainWindow ); }
+	void setParentID( OpenParts::Id _id ) { parentID = _id; }
 
 	KWordChild *getChild() { return child; }
 
-	virtual void update();
+	virtual void update(); 
 
-	void enableDrawing(bool f) { _enableDrawing = f; }
+	void enableDrawing( bool f ) { _enableDrawing = f; }
 
 protected:
-	KWordFrame *view;
-	KWordChild *child;
-	KOffice::MainWindow_var mainWindow;
-	OpenParts::Id parentID;
-	bool _enableDrawing;
+	KWordFrame *view; 
+	KWordChild *child; 
+	KOffice::MainWindow_var mainWindow; 
+	OpenParts::Id parentID; 
+	bool _enableDrawing; 
 
-};
+}; 
 
 /******************************************************************/
 /* Class: KWGroupManager                                          */
@@ -371,82 +371,82 @@ class KWGroupManager
 public:
 	struct Cell
 	{
-		KWFrameSet *frameSet;
-		unsigned int row,col;
-		unsigned int rows,cols;
-	};
+		KWFrameSet *frameSet; 
+		unsigned int row, col; 
+		unsigned int rows, cols; 
+	}; 
 
-	KWGroupManager(KWordDocument *_doc) : showHeaderOnAllPages(true), hasTmpHeaders(false), active(true)
-    { doc = _doc; cells.setAutoDelete(true); rows = 0; cols = 0; };
+	KWGroupManager( KWordDocument *_doc ) : showHeaderOnAllPages( true ), hasTmpHeaders( false ), active( true )
+    { doc = _doc; cells.setAutoDelete( true ); rows = 0; cols = 0; }; 
 
-	void addFrameSet(KWFrameSet *fs,unsigned int row,unsigned int col);
-	KWFrameSet *getFrameSet(unsigned int row,unsigned int col);
-	bool getFrameSet(KWFrameSet *fs,unsigned int &row,unsigned int &col);
+	void addFrameSet( KWFrameSet *fs, unsigned int row, unsigned int col ); 
+	KWFrameSet *getFrameSet( unsigned int row, unsigned int col ); 
+	bool getFrameSet( KWFrameSet *fs, unsigned int &row, unsigned int &col ); 
 
-	bool isTableHeader(KWFrameSet *fs);
+	bool isTableHeader( KWFrameSet *fs ); 
 
-	void init(unsigned int x,unsigned int y,unsigned int width,unsigned int height);
-	void init();
-	void recalcCols();
-	void recalcRows(QPainter &_painter);
+	void init( unsigned int x, unsigned int y, unsigned int width, unsigned int height ); 
+	void init(); 
+	void recalcCols(); 
+	void recalcRows( QPainter &_painter ); 
 
 	unsigned int getRows() { return rows; }
 	unsigned int getCols() { return cols; }
 
-	KRect getBoundingRect();
+	KRect getBoundingRect(); 
 
 	unsigned int getNumCells() { return cells.count(); }
-	Cell *getCell(int i) { return cells.at(i); }
-	Cell *getCell(unsigned int row,unsigned int col);
+	Cell *getCell( int i ) { return cells.at( i ); }
+	Cell *getCell( unsigned int row, unsigned int col ); 
 
-	bool hasSelectedFrame();
+	bool hasSelectedFrame(); 
 
-	void moveBy(unsigned int dx,unsigned int dy);
-	void drawAllRects(QPainter &p,int xOffset,int yOffset);
+	void moveBy( unsigned int dx, unsigned int dy ); 
+	void drawAllRects( QPainter &p, int xOffset, int yOffset ); 
 
-	void deselectAll();
+	void deselectAll(); 
 
-	void setName(QString _name) { name = _name; }
+	void setName( QString _name ) { name = _name; }
 	QString getName() { return name; }
 
-	void selectUntil(KWFrameSet *fs);
-	bool isOneSelected(KWFrameSet *fs,unsigned int &row,unsigned int &col);
+	void selectUntil( KWFrameSet *fs ); 
+	bool isOneSelected( KWFrameSet *fs, unsigned int &row, unsigned int &col ); 
 
-	void insertRow(unsigned int _idx,QPainter &_painter,bool _recalc = true,bool _removeable = false);
-	void insertCol(unsigned int _idx);
+	void insertRow( unsigned int _idx, QPainter &_painter, bool _recalc = true, bool _removeable = false ); 
+	void insertCol( unsigned int _idx ); 
 
-	void deleteRow(unsigned int _idx,QPainter &_painter,bool _recalc = true);
-	void deleteCol(unsigned int _idx);
+	void deleteRow( unsigned int _idx, QPainter &_painter, bool _recalc = true ); 
+	void deleteCol( unsigned int _idx ); 
 
-	void setShowHeaderOnAllPages(bool s)
+	void setShowHeaderOnAllPages( bool s )
     { showHeaderOnAllPages = s; }
 	bool getShowHeaderOnAllPages()
     { return showHeaderOnAllPages; }
 
-	void updateTempHeaders();
+	void updateTempHeaders(); 
 	bool hasTempHeaders() { return hasTmpHeaders; }
 
-	void ungroup();
+	void ungroup(); 
 
 	bool isActive() { return active; }
 
-	bool joinCells(QPainter &_painter);
-	bool splitCell(QPainter &_painter);
+	bool joinCells( QPainter &_painter ); 
+	bool splitCell( QPainter &_painter ); 
 
 protected:
-	QList<Cell> cells;
-	unsigned int rows,cols;
-	KWordDocument *doc;
-	QString name;
-	bool showHeaderOnAllPages,hasTmpHeaders;
-	bool active;
+	QList<Cell> cells; 
+	unsigned int rows, cols; 
+	KWordDocument *doc; 
+	QString name; 
+	bool showHeaderOnAllPages, hasTmpHeaders; 
+	bool active; 
 
-};
+}; 
 
-bool isAHeader(FrameInfo fi);
-bool isAFooter(FrameInfo fi);
-bool isAWrongHeader(FrameInfo fi,KoHFType t);
-bool isAWrongFooter(FrameInfo fi,KoHFType t);
+bool isAHeader( FrameInfo fi ); 
+bool isAFooter( FrameInfo fi ); 
+bool isAWrongHeader( FrameInfo fi, KoHFType t ); 
+bool isAWrongFooter( FrameInfo fi, KoHFType t ); 
 
 
 #endif

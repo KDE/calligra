@@ -20,9 +20,9 @@
 
 #include <qtabdialog.h>
 
-class KWordDocument;
-class KWPage;
-class QWidget;
+class KWordDocument; 
+class KWPage; 
+class QWidget; 
 
 /******************************************************************/
 /* Class: KWFootNoteDia                                           */
@@ -33,22 +33,22 @@ class KWFootNoteDia : public QTabDialog
 	Q_OBJECT
 
 public:
-	KWFootNoteDia(QWidget *parent,const char *name,KWordDocument *_doc,KWPage *_page,int _start);
+	KWFootNoteDia( QWidget *parent, const char *name, KWordDocument *_doc, KWPage *_page, int _start ); 
 
 protected:
-	void setupTab1();
-	void closeEvent(QCloseEvent *e) { emit cancelButtonPressed(); }
+	void setupTab1(); 
+	void closeEvent( QCloseEvent *e ) { emit cancelButtonPressed(); }
 
-	QWidget *tab1;
+	QWidget *tab1; 
 
-	KWordDocument *doc;
-	KWPage *page;
-	int start;
+	KWordDocument *doc; 
+	KWPage *page; 
+	int start; 
 
 protected slots:
-	void insertFootNote();
+	void insertFootNote(); 
 
-};
+}; 
 
 #endif
 

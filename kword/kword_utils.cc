@@ -16,10 +16,10 @@
 #include "kword_utils.h"
 
 /*================================================================*/
-QString makeRomanNumber(int n)
+QString makeRomanNumber( int n )
 {
-	return QString(RNThousands[(n / 1000)] +
-				   RNHundreds[(n / 100) % 10] +
-				   RNTens[(n / 10) % 10] +
-				   RNUnits[(n) % 10]);
+	return QString( RNThousands[ ( n / 1000 ) ] +
+					RNHundreds[ ( n / 100 ) % 10 ] +
+					RNTens[ ( n / 10 ) % 10 ] +
+					RNUnits[ ( n ) % 10 ] );
 }
