@@ -72,7 +72,8 @@ bool
 KexiDBForm::beforeSwitchTo(int mode, bool &cancelled, bool &dontStore)
 {
 	kdDebug() << "KexiDBForm::beforeSwitchTo(): " << mode << " using " << m_item.form() <<  endl;
-	m_item.form()->objectTree()->debug();
+	if (m_item.form()->objectTree())
+		m_item.form()->objectTree()->debug();
 	QByteArray data;
 	KFormDesigner::FormIO::saveForm(m_item.form(), data);
 	kdDebug() << "KexiDBForm::beforeSwitchTo(): data follows:\n" << QString(data) << endl;
@@ -110,7 +111,8 @@ KexiDBForm::preview()
 //		QHBoxLayout *l = new QHBoxLayout(this);
 //		l->addWidget(m_preview);
 	m_part->manager()->previewForm(m_item.form(), m_preview);
-	m_item.form()->objectTree()->debug();
+	if (m_item.form()->objectTree())
+		m_item.form()->objectTree()->debug();
 
 	kdDebug() << "KexiDBForm::afterSwitchFrom(): preview!: using " << m_item.form() << endl;
 

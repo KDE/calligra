@@ -113,7 +113,8 @@ FormManager::insertWidget(const QString &classname)
 	Form *form;
 	for(form = m_forms.first(); form; form = m_forms.next())
 	{
-		form->toplevelContainer()->widget()->setCursor(QCursor(CrossCursor));
+		if (form->toplevelContainer())
+			form->toplevelContainer()->widget()->setCursor(QCursor(CrossCursor));
 	}
 
 	m_inserting = true;
@@ -151,7 +152,7 @@ FormManager::windowChanged(QWidget *w)
 	Form *form;
 	for(form = m_forms.first(); form; form = m_forms.next())
 	{
-		if(form->toplevelContainer()->widget() == w)
+		if(form->toplevelContainer() && form->toplevelContainer()->widget() == w)
 		{
 			m_active = form;
 			if(m_treeview)
@@ -318,7 +319,7 @@ FormManager::saveFormAs()
 void
 FormManager::previewForm(Form *form, QWidget *container)
 {
-	if(!form || !container)
+	if(!form || !container || !form->objectTree())
 		return;
 	QDomDocument domDoc;
 	FormIO::saveFormToDom(form, domDoc);
@@ -335,7 +336,7 @@ FormManager::previewForm(Form *form, QWidget *container)
 bool
 FormManager::isTopLevel(QWidget *w)
 {
-	if(!activeForm()->objectTree())
+	if(!activeForm() || !activeForm()->objectTree())
 		return false;
 
 	kdDebug() << "FormManager::isTopLevel(): for: " << w->name() << " = "

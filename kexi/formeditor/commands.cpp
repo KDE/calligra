@@ -214,6 +214,8 @@ InsertWidgetCommand::InsertWidgetCommand(Container *container, QPoint p)
 void
 InsertWidgetCommand::execute()
 {
+	if (!m_form->objectTree())
+		return;
 	Container *m_container = m_form->objectTree()->lookup(m_containername)->container();
 	if(m_name.isEmpty())
 		m_name = m_container->form()->objectTree()->genName(m_container->form()->manager()->lib()->displayName(m_class));

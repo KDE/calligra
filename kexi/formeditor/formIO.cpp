@@ -688,6 +688,8 @@ FormIO::readProp(QDomNode node, QObject *obj, const QString &name)
 void
 FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domDoc, bool insideGridLayout)
 {
+	if (!item)
+		return;
 	bool savedAlignment = false;
 	if(item->className() == "Spacer")
 	{

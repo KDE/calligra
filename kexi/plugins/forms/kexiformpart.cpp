@@ -47,6 +47,7 @@
 #include "kexidbform.h"
 //#include <kexipropertyeditor.h>
 
+#define NO_DSWIZARD
 
 KexiFormPart::KexiFormPart(QObject *parent, const char *name, const QStringList &l)
  : KexiPart::Part(parent, name, l)
@@ -102,6 +103,7 @@ KexiViewBase* KexiFormPart::createView(QWidget *parent, KexiDialogBase* dialog,
 	{
 		if(item.identifier() < 0)
 		{
+#ifndef NO_DSWIZARD
 			kdDebug() << "KexiFormPart::createView(): booting wizard..." << endl;
 			KexiDataSourceWizard *w = new KexiDataSourceWizard(win, win);
 			if(!w->exec())
@@ -116,13 +118,14 @@ KexiViewBase* KexiFormPart::createView(QWidget *parent, KexiDialogBase* dialog,
 				delete w;
 			}
 			kdDebug() << "KexiFormPart::createView(): wizard done!" << endl;
+#endif
 		}
 		else
 		{
 			fields = 0;
 		}
 
-       		form = new KFormDesigner::Form(m_manager);
+		form = new KFormDesigner::Form(m_manager);
 		KexiFormPartItem n(item, form);
 		m_forms.insert(item.identifier(), n);
 		it = n;
