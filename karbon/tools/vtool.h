@@ -10,8 +10,6 @@
 
 #include "vglobal.h"
 
-#include <kdebug.h>
-
 class QEvent;
 
 class KarbonPart;
@@ -73,22 +71,11 @@ VTool::recalcCoords()
 			( m_lp.y() - m_fp.y() ) * ( m_lp.y() - m_fp.y() ) );
 
 		// angle:
-		if( m_lp.x() - m_fp.x() == 0.0 )	// catch division by zero.
-		{
-kdDebug() << "*" << endl;
-			m_d2 = m_lp.y() - m_fp.y() >= 0.0
-				? +VGlobal::pi_2
-				: -VGlobal::pi_2;
-		}
-		else
-		{
-			m_d2 = atan2( ( m_lp.y() - m_fp.y() ) , ( m_lp.x() - m_fp.x() ) );
-		}
+		m_d2 = atan2( ( m_lp.y() - m_fp.y() ) , ( m_lp.x() - m_fp.x() ) );
 
 		// define pi/2 as "0.0":
 		m_d2 -= VGlobal::pi_2;
 
-kdDebug() << m_d2 << endl;
 		m_p = m_fp;
 	}
 	else
