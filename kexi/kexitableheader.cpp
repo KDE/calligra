@@ -71,23 +71,13 @@ KexiTableHeader::paintEvent(QPaintEvent *e)
 void
 KexiTableHeader::paintSectionLabel(QPainter *p, int index, const QRect & fr)
 {
-//	if(!m_painter)
-//		m_painter = p;
-
 	if(index == m_currentRow && index != m_insertRow - 1)
 	{
-//		p->setPen(red);
-//		p->drawRect(fr);
-//		p->drawText(fr.x() + 4, fr.y() + 4, fr.width() - 5, fr.height(), AlignLeft, QString::number(index + 1));
-//		p->drawText(fr, static_cast<const QString &>(QString::number(index)));
 		int h = fr.height() - 3;
 		int pos = fr.y() + h;
 		for(int i=0; i < h/2 - 1; i++)
 		{
-//			kdDebug() << "paintSectionLabel(): h: " << h + 2 << " y: " << fr.y() << endl;
-//			p->drawLine(4 + i, fr.y() + i, 4 + i, fr.y() - i);
 			p->drawLine(i + 4, pos - h + 2 + i, i + 4, pos - 2 - i);
-//			p->drawLine(i + 4, fr.y() - h + 2 + i, i + 4, h - 2 - i);
 		}
 
 		QHeader::paintSectionLabel(p, index, fr);

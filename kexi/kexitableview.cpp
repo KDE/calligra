@@ -53,7 +53,7 @@
 #include "kexiinputtableedit.h"
 #include "kexicomboboxtableedit.h"
 
-KexiTableView::KexiTableView(QWidget *parent, const char *name)
+KexiTableView::KexiTableView(QWidget *parent, const char *name, KexiTableList *contents)
 :QScrollView(parent, name, Qt::WRepaintNoErase | Qt::WStaticContents | Qt::WResizeNoErase)
 {
 	setResizePolicy(Manual);
@@ -111,7 +111,12 @@ KexiTableView::KexiTableView(QWidget *parent, const char *name)
 
 	m_pContextMenu = 0;
 
-	m_contents.setAutoDelete(true);
+	if(!contents)
+		m_contents = new KexiTableList();
+	else
+		m_contents = contents;
+
+	m_contents->setAutoDelete(true);
 
 	m_scrollTimer = new QTimer(this);
 	connect(m_scrollTimer, SIGNAL(timeout()), this, SLOT(slotAutoScroll()));
@@ -172,7 +177,7 @@ void KexiTableView::setFont(const QFont &f)
 
 void KexiTableView::remove(KexiTableItem *item, bool moveCursor/*=true*/)
 {
-	if(m_contents.removeRef(item))
+	if(m_contents->removeRef(item))
 	{
 		m_numRows--;
 		if(moveCursor)
@@ -195,7 +200,7 @@ void KexiTableView::addRecord()
 void KexiTableView::clear()
 {
 	editorCancel();
-	m_contents.clear();
+	m_contents->clear();
 
 	// Initialize variables
 	m_pEditor = 0;
@@ -217,7 +222,7 @@ void KexiTableView::clear()
 void KexiTableView::clearAll()
 {
 	editorCancel();
-	m_contents.clear();
+	m_contents->clear();
 
 	m_pEditor = 0;
 	m_numRows = 0;
@@ -258,7 +263,7 @@ int KexiTableView::findString(const QString &string)
 		return 0;
 	}
 
-	QPtrListIterator<KexiTableItem> it(m_contents);
+	QPtrListIterator<KexiTableItem> it(*m_contents);
 
 	if(string.at(0) != QChar('*'))
 	{
@@ -358,7 +363,7 @@ void KexiTableView::setSorting(int col, bool ascending/*=true*/)
 	m_sortOrder = ascending;
 	m_sortedColumn = col;
 	m_pTopHeader->setSortIndicator(col, m_sortOrder);
-	m_contents.setSorting(col, m_sortOrder, columnType(col));
+	m_contents->setSorting(col, m_sortOrder, columnType(col));
 	sort();
 }
 
@@ -386,11 +391,11 @@ void KexiTableView::sort()
 		return;
 	}
 
-	m_contents.sort();
+	m_contents->sort();
 
-	m_curRow = m_contents.findRef(m_pCurrentItem);
+	m_curRow = m_contents->findRef(m_pCurrentItem);
 
-	m_pCurrentItem = m_contents.at(m_curRow);
+	m_pCurrentItem = m_contents->at(m_curRow);
 
 	int cw = columnWidth(m_curCol);
 	int rh = rowHeight(m_curRow);
@@ -459,7 +464,7 @@ void KexiTableView::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
 	int r;
 	pb->fillRect(0, 0, cw, ch, colorGroup().base());
 
-	QPtrListIterator<KexiTableItem> it(m_contents);
+	QPtrListIterator<KexiTableItem> it(*m_contents);
 	it += rowfirst;
 
 	for(r = rowfirst; r <= rowlast; r++, ++it)
@@ -505,7 +510,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 
 //	p->setPen(colorGroup().button());
 
-	if(m_bgAltering && m_contents.findRef(item)%2 != 0)
+	if(m_bgAltering && m_contents->findRef(item)%2 != 0)
 	{
 		QPen originalPen(p->pen());
 		QBrush originalBrush(p->brush());
@@ -1044,7 +1049,7 @@ void KexiTableView::columnSort(int col)
 		m_sortOrder = true;
 	m_sortedColumn = col;
 	m_pTopHeader->setSortIndicator(col, m_sortOrder);
-	m_contents.setSorting(col, m_sortOrder, columnType(col));
+	m_contents->setSorting(col, m_sortOrder, columnType(col));
 	sort();
 //	updateContents( 0, 0, viewport()->width(), viewport()->height());
 }

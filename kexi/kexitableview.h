@@ -60,7 +60,7 @@ class KexiTableView : public QScrollView
 
 Q_OBJECT
 public:
-	KexiTableView(QWidget* parent=0, const char* name=0);
+	KexiTableView(QWidget* parent=0, const char* name=0, KexiTableList *contents=0);
 	~KexiTableView();
 
 	enum ColumnModes
@@ -118,7 +118,7 @@ public:
 
 	KexiTableHeader	*recordMarker();
 
-	KexiTableList	*contents() { return &m_contents; }
+	KexiTableList	*contents() { return m_contents; }
 
 	enum AdditionPolicy
 	{
@@ -225,7 +225,7 @@ protected:
 	QTimer			*m_pUpdateTimer;
 	QPopupMenu		*m_pContextMenu;
 
-	KexiTableList		m_contents;
+	KexiTableList		*m_contents;
 	QMemArray<QVariant::Type>	*m_pColumnTypes;
 	QMemArray<int>		*m_pColumnModes;
 	QPtrList<QVariant>		*m_pColumnDefaults;
@@ -251,7 +251,7 @@ protected:
 
 inline KexiTableItem *KexiTableView::itemAt(int row)
 {
-	return m_contents.at(row);
+	return m_contents->at(row);
 }
 
 inline int KexiTableView::currentRow()

@@ -44,12 +44,12 @@ void KexiTableItem::attach(KexiTableView *tableView, bool sorted=false)
 	if(!sorted)
 	{
 		qDebug("inserting somewhere");
-		tableView->m_contents.append(this);
+		tableView->m_contents->append(this);
 	}
 	else
 	{
 		qDebug("inserting sorted");
-		tableView->m_contents.inSort(this);
+		tableView->m_contents->inSort(this);
 	}
 	tableView->m_numRows++;
 	tableView->triggerUpdate();
@@ -62,7 +62,7 @@ void KexiTableItem::attach(KexiTableView *tableView, int position)
 {
 	qDebug("inserting at position %i", position);
 	m_position = position;
-	tableView->m_contents.insert(position, this);
+	tableView->m_contents->insert(position, this);
 	tableView->m_numRows++;
 	tableView->triggerUpdate();
 
@@ -86,7 +86,7 @@ KexiTableItem::KexiTableItem(KexiTableView *tableView)
 //	for(int i=0; i < tableView->cols(); i++)
 //		m_columns.insert(i, new QVariant);
 
-	tableView->m_contents.append(this);
+	tableView->m_contents->append(this);
 	tableView->inserted();
 
 	tableView->m_numRows++;
