@@ -519,8 +519,10 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			VText *text = new VText( &m_document );
 			text->setText( b.text() );
 			VPath base( 0L );
-			base.moveTo( KoPoint( 100, 100 ) );
-			base.lineTo( KoPoint( 200, 100 ) );
+			double x = parseUnit( b.attribute( "x" ) );
+			double y = parseUnit( b.attribute( "y" ) );
+			base.moveTo( KoPoint( x, y ) );
+			base.lineTo( KoPoint( x + 10, y ) );
 			text->setBasePath( base );
 			obj = text;
 			parseStyle( obj, b );
