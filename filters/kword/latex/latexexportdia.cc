@@ -138,7 +138,7 @@ void LATEXExportDia::slotOk()
 	hide();
 	kdDebug() << "config : " << state() << endl;
 	kdDebug() << "LATEX FILTER --> BEGIN" << endl;
-	Xml2LatexParser LATEXParser(_fileIn, _fileOut, state());
+	Xml2LatexParser LATEXParser(_arrayIn, _fileOut, state());
 	LATEXParser.analyse();
 	kdDebug() << "---------- generate file -------------" << endl;
 	LATEXParser.generate();

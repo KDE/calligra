@@ -48,6 +48,7 @@ class XmlParser
 
 	public:
 		XmlParser(QString);
+		XmlParser(QByteArray);
 		XmlParser();
 		virtual ~XmlParser();
 

@@ -24,7 +24,6 @@
 #include <klocale.h>
 #include <qtextcodec.h>
 #include "latexexportdia.h"
-//#include "xml2latexparser.h"
 
 LATEXExport::LATEXExport(KoFilter *parent, const char *name) :
                      KoFilter(parent, name) {
@@ -45,35 +44,15 @@ bool LATEXExport::filter(const QString &fileIn, const QString &fileOut,
         return false;
     }
     /* input file Reading */
-    QByteArray array=in.read(0xffffffff);
-    QString buf = QString::fromUtf8((const char*)array, array.size());
+    QByteArray array=in.read(in.size());
     in.close();
 
-    QString fileIn2 = QString("/tmp/tmp-latexexport.xml");
-
-    QFile tempIn(fileIn2);
-    if(tempIn.open(IO_WriteOnly))
-    {
-        QTextStream tempStream(&tempIn);
-	tempStream.setEncoding(QTextStream::UnicodeUTF8);
-	tempStream << buf;
-    }
-    tempIn.close();
-    
     LATEXExportDia* dialog = new LATEXExportDia();
-    dialog->setInputFile(fileIn2);
+    dialog->setInputData(array);
     dialog->setOutputFile(fileOut);
 
     dialog->exec();
-    //config = dialog->state();
     delete dialog;
-    /*kdDebug() << "config : " << config << endl;
-    kdDebug() << "LATEX FILTER --> BEGIN" << endl;
-    Xml2LatexParser LATEXParser(fileIn2, fileOut, config);
-    LATEXParser.analyse();
-    kdDebug() << "---------- generate file -------------" << endl;
-    LATEXParser.generate();
-    kdDebug() << "LATEX FILTER --> END" << endl;*/
 
     return true;
 }

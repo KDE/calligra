@@ -36,10 +36,10 @@ Xml2LatexParser::Xml2LatexParser(QString fileIn, QString fileOut):
 	_isEmbeded = false;
 }
 
-Xml2LatexParser::Xml2LatexParser(QString fileIn, QString fileOut, QString config):
-		XmlParser(fileIn), _file(fileOut)
+Xml2LatexParser::Xml2LatexParser(QByteArray array, QString fileOut, QString config):
+		XmlParser(array), _file(fileOut)
 {
-	kdDebug() << fileIn.latin1() << endl;
+	//kdDebug() << fileIn.latin1() << endl;
 	kdDebug() << fileOut.latin1() << endl;
 	_filename = fileOut;
 	setFileHeader(_fileHeader);

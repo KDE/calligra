@@ -43,7 +43,7 @@ class Xml2LatexParser : public XmlParser
 
 	public:
 		Xml2LatexParser(QString, QString);
-		Xml2LatexParser(QString, QString, QString);
+		Xml2LatexParser(QByteArray, QString, QString);
 
 		virtual ~Xml2LatexParser() {}
 

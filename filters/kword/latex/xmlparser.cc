@@ -43,6 +43,11 @@ XmlParser::XmlParser(QString filename):
 	//_eltCurrent = _document.documentElement();
 }
 
+XmlParser::XmlParser(QByteArray in)
+{
+	_document.setContent(in);
+}
+
 XmlParser::XmlParser()
 {
 }

@@ -51,6 +51,7 @@ class LATEXExportDia : public KDialogBase
 	Q_OBJECT
 	QString _fileIn;
 	QString _fileOut;
+	QByteArray _arrayIn;
 
 	public:
 		LATEXExportDia(QWidget *parent=0L, const char *name=0L);
@@ -59,6 +60,7 @@ class LATEXExportDia : public KDialogBase
 
 		virtual QString state();
 		void setInputFile(QString file)  { _fileIn = file; }
+		void setInputData(QByteArray a)  { _arrayIn = a; }
 		void setOutputFile(QString file) { _fileOut = file; }
 
 	private:
