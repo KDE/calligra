@@ -18,6 +18,15 @@
 TimeFormatWidget::TimeFormatWidget( QWidget* parent,  const char* name, WFlags fl )
     : TimeFormatWidgetPrototype( parent, name, fl )
 {
+    QStringList listTimeFormat;
+    listTimeFormat<<i18n("Locale");
+    listTimeFormat<<i18n("hh:mm");
+    listTimeFormat<<i18n("hh:mm:ss");
+    listTimeFormat<<i18n("hh:mm AP");
+    listTimeFormat<<i18n("hh:mm:ss AP");
+    listTimeFormat<<i18n("mm:ss.zzz");
+    ComboBox3->insertStringList(listTimeFormat);
+
     connect( CheckBox1, SIGNAL(toggled ( bool )),this,SLOT(slotPersonalizeChanged(bool)));
     connect( ComboBox3, SIGNAL(activated ( const QString & )), this, SLOT(slotDefaultValueChanged(const QString &)));
     slotPersonalizeChanged(false);

@@ -51,31 +51,6 @@
                 <number>6</number>
             </property>
             <widget class="QComboBox">
-                <item>
-                    <property name="text">
-                        <string>Locale</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>hh:mm</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>hh:mm:ss</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>hh:mm AP</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>hh:mm:ss AP</string>
-                    </property>
-                </item>
                 <property name="name">
                     <cstring>ComboBox3</cstring>
                 </property>
