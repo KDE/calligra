@@ -8,6 +8,8 @@ libkarbonui_la_SOURCES = \
 
 METASOURCES = AUTO
 
+DISTCLEANFILES = dummy.cc
+
 dummy.cc:
 	echo > dummy.cc
 
