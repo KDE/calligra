@@ -1242,7 +1242,6 @@ void KPresenterView::textBold()
 {
     tbFont.setBold( !tbFont.bold() );
     page->setTextBold( tbFont.bold() );
-    m_pKPresenterDoc->setModified(true);
 }
 
 
@@ -1268,7 +1267,6 @@ void KPresenterView::textItalic()
 {
     tbFont.setItalic( !tbFont.italic() );
     page->setTextItalic( tbFont.italic() );
-    m_pKPresenterDoc->setModified(true);
 }
 
 /*===============================================================*/
@@ -1276,7 +1274,6 @@ void KPresenterView::textUnderline()
 {
     tbFont.setUnderline( !tbFont.underline() );
     page->setTextUnderline( tbFont.underline() );
-    m_pKPresenterDoc->setModified(true);
 }
 
 /*===============================================================*/
@@ -1284,7 +1281,6 @@ void KPresenterView::textColor()
 {
     tbColor = actionTextColor->color();
     page->setTextColor( tbColor );
-    m_pKPresenterDoc->setModified(true);
 }
 
 /*===============================================================*/
@@ -1294,7 +1290,6 @@ void KPresenterView::textAlignLeft()
 	return;
     tbAlign = Qt::AlignLeft;
     page->setTextAlign( tbAlign );
-    m_pKPresenterDoc->setModified(true);
 }
 
 /*===============================================================*/
@@ -1304,7 +1299,6 @@ void KPresenterView::textAlignCenter()
 	return;
     tbAlign = Qt::AlignHCenter;
     page->setTextAlign( Qt::AlignHCenter );
-    m_pKPresenterDoc->setModified(true);
 }
 
 /*===============================================================*/
@@ -1314,7 +1308,6 @@ void KPresenterView::textAlignRight()
 	return;
     tbAlign = Qt::AlignRight;
     page->setTextAlign( Qt::AlignRight );
-    m_pKPresenterDoc->setModified(true);
 }
 
 /*===============================================================*/
@@ -1362,7 +1355,6 @@ void KPresenterView::mtextFont()
 /*===============================================================*/
 void KPresenterView::textEnumList()
 {
-    m_pKPresenterDoc->setModified(true);
     KPTextView *txtObj = page->kTxtObj();
     if ( !txtObj )
 	txtObj = page->haveASelectedTextObj();
@@ -1383,7 +1375,6 @@ void KPresenterView::textEnumList()
 /*===============================================================*/
 void KPresenterView::textUnsortList()
 {
-    m_pKPresenterDoc->setModified(true);
     KPTextView *txtObj = page->kTxtObj();
     if ( !txtObj )
 	txtObj = page->haveASelectedTextObj();
@@ -1404,7 +1395,6 @@ void KPresenterView::textUnsortList()
 /*===============================================================*/
 void KPresenterView::textNormalText()
 {
-    m_pKPresenterDoc->setModified(true);
     KPTextView *txtObj = page->kTxtObj();
     if ( !txtObj )
 	txtObj = page->haveASelectedTextObj();
@@ -1422,7 +1412,6 @@ void KPresenterView::textNormalText()
 /*===============================================================*/
 void KPresenterView::textDepthPlus()
 {
-    m_pKPresenterDoc->setModified(true);
     KPTextView *txtObj = page->kTxtObj();
     if ( !txtObj )
 	txtObj = page->haveASelectedTextObj();
@@ -1440,7 +1429,6 @@ void KPresenterView::textDepthPlus()
 /*===============================================================*/
 void KPresenterView::textDepthMinus()
 {
-    m_pKPresenterDoc->setModified(true);
     KPTextView *txtObj = page->kTxtObj();
     if ( !txtObj )
 	txtObj = page->haveASelectedTextObj();
@@ -1915,10 +1903,6 @@ void KPresenterView::initGui()
     actionPenColor->setCurrentColor( Qt::black );
     ( (KColorAction*)actionScreenPenColor )->setColor( Qt::red );
     ( (KSelectAction*)actionScreenPenWidth )->setCurrentItem( 2 );
-#if 0
-    actionEditUndo->setEnabled( false );
-    actionEditRedo->setEnabled( false );
-#endif
     actionEditDelPage->setEnabled( m_pKPresenterDoc->getPageNums() > 1 );
     objectSelectedChanged();
     refreshPageButton();

@@ -566,9 +566,6 @@ void KPTextObject::slotAvailableHeightNeeded()
 
 void KPTextObject::slotRepaintChanged()
 {
-    //todo emit repaintChanged( this ), connected in e.g. the document
-    // (see KWDocument::slotRepaintChanged in kword)
-    kdDebug()<<"KPTextObject::slotRepaintChanged() \n";
     emit repaintChanged( this );
 }
 
