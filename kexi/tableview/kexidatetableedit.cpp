@@ -47,13 +47,13 @@ KexiDateTableEdit::KexiDateTableEdit(KexiDB::Field &f, QWidget *parent)
  : KexiTableEdit(f, parent,"KexiDateTableEdit")
 {
 //	kdDebug() << "KexiDateTableEdit: Date = " << value.toString() << endl;
-	m_view = new QWidget(this);
+	setView( new QWidget(this) );
 //	m_edit = new KLineEdit(m_view);
-	m_edit = new QDateEdit(m_view);
+	m_edit = new QDateEdit(view());
 	m_edit->setAutoAdvance(true);
 //js	m_edit->setFrame(false);
 //js	m_edit->setValidator(new KDateValidator(m_edit, "DateValidator"));
-	QToolButton* btn = new QToolButton(m_view);
+	QToolButton* btn = new QToolButton(view());
 	btn->setText("...");
 	btn->setFixedWidth( QFontMetrics(btn->font()).width(" ... ") );
 	btn->setPopupDelay(1); //1 ms
@@ -70,7 +70,7 @@ KexiDateTableEdit::KexiDateTableEdit(KexiDB::Field &f, QWidget *parent)
 	
 //	connect(btn, SIGNAL(clicked()), this, SLOT(slotShowDatePicker()));
 	
-	QHBoxLayout* layout = new QHBoxLayout(m_view);
+	QHBoxLayout* layout = new QHBoxLayout(view());
 	layout->addWidget(m_edit, 1);
 	layout->addWidget(btn, 0);
 

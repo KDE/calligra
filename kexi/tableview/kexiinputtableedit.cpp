@@ -26,6 +26,7 @@
 #include <qevent.h>
 #include <qlayout.h>
 #include <qtimer.h>
+#include <qpainter.h>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -33,10 +34,30 @@
 #include <kglobalsettings.h>
 #include <kcompletionbox.h>
 #include <knumvalidator.h>
-	
 
-KexiInputTableEdit::KexiInputTableEdit(KexiDB::Field &f, QWidget *parent)
- : KexiTableEdit(f, parent,"KexiInputTableEdit")
+
+class MyLineEdit : public KLineEdit
+{
+	public:
+		MyLineEdit(QWidget *parent, const char *name) : KLineEdit(parent,name)
+		{}
+	protected:
+		virtual void drawFrame ( QPainter * p ) {
+			p->setPen( QPen( colorGroup().text() ) );
+			QRect r = rect();
+			p->moveTo( r.topLeft() );
+			p->lineTo( r.topRight() );
+			p->lineTo( r.bottomRight() );
+			p->lineTo( r.bottomLeft() );
+			if (pos().x() == 0) //draw left side only when it is @ the edge
+				p->lineTo( r.topLeft() );
+		}
+};
+
+//======================================================
+
+KexiInputTableEdit::KexiInputTableEdit(KexiDB::Field &f, QWidget *parent, const char* name)
+ : KexiTableEdit(f, parent, name ? name : "KexiInputTableEdit")
 {
 //	m_type = f.type(); //copied because the rest of code uses m_type
 //	m_field = &f;
@@ -70,15 +91,23 @@ void KexiInputTableEdit::init()
 	if (m_decsym.isEmpty())
 		m_decsym=".";//default
 
-	//create layer for internal editor
-	QHBoxLayout *lyr = new QHBoxLayout(this);
-	lyr->addSpacing(4);
-	lyr->setAutoAdd(true);
+	const bool align_right = m_field->isNumericType();
+
+	if (!align_right) {
+		//create layer for internal editor
+		QHBoxLayout *lyr = new QHBoxLayout(this);
+		lyr->addSpacing(4);
+		lyr->setAutoAdd(true);
+	}
 
 	//create internal editor
-	m_cview = new KLineEdit(this, "KexiInputTableEdit-KLineEdit");
-	setView(m_cview);
-	m_cview->setFrame(false);
+	m_lineedit = new MyLineEdit(this, "KexiInputTableEdit-KLineEdit");
+	setView(m_lineedit);
+	if (align_right)
+		m_lineedit->setAlignment(AlignRight);
+//	m_cview->setFrame(false);
+//	m_cview->setFrameStyle( QFrame::Plain | QFrame::Box );
+//	m_cview->setLineWidth( 1 );
 	m_calculatedCell = false;
 
 #if 0 //js TODO
@@ -89,9 +118,6 @@ void KexiInputTableEdit::init()
 	 m_cview->completionBox()->setTabHandling(true);
 #endif
 
-	if (m_field->isNumericType()) {
-		m_cview->setAlignment(AlignRight);
-	}
 }
 	
 void KexiInputTableEdit::init(const QString& add)
@@ -138,16 +164,16 @@ void KexiInputTableEdit::init(const QString& add)
 				//TODO(js): get decimal places settings here...
 				QStringList sl = QStringList::split(".", tmp_val);
 				if (tmp_val.isEmpty())
-					m_cview->setText("");
+					m_lineedit->setText("");
 				else if (sl.count()==2) {
 					kdDebug() << "sl.count()=="<<sl.count()<< " " <<sl[0] << " | " << sl[1] << endl;
 					tmp_val = sl[0] + m_decsym + sl[1];
 				}
 				tmp_val+=add;
 			}
-//			m_cview->setText(tmp_val);
-			QValidator *validator = new KDoubleValidator(m_cview);
-			m_cview->setValidator( validator );
+//			m_lineedit->setText(tmp_val);
+			QValidator *validator = new KDoubleValidator(m_lineedit);
+			m_lineedit->setValidator( validator );
 		}
 		else if (m_field->isIntegerType()) {
 			if (m_origValue.toInt() == 0) {
@@ -156,27 +182,27 @@ void KexiInputTableEdit::init(const QString& add)
 			else {
 				tmp_val += add;
 			}
-//			m_cview->setText(tmp_val);
+//			m_lineedit->setText(tmp_val);
 			//js: @todo implement ranges here!
-			QValidator *validator = new KIntValidator(m_cview);
-			m_cview->setValidator( validator );
+			QValidator *validator = new KIntValidator(m_lineedit);
+			m_lineedit->setValidator( validator );
 		}
 		else {//default: text
 			tmp_val+=add;
-//			m_cview->setText(tmp_val);
+//			m_lineedit->setText(tmp_val);
 		}
 
 		if (tmp_val.isEmpty()) {
 			if (m_origValue.isNull()) {
 				//we have to set NULL initial value:
-				m_cview->setText(QString::null);
+				m_lineedit->setText(QString::null);
 			}
 		}
 		else {
-			m_cview->setText(tmp_val);
+			m_lineedit->setText(tmp_val);
 		}
 		
-		kdDebug() << "KexiInputTableEdit:  " << m_cview->text().length() << endl;
+		kdDebug() << "KexiInputTableEdit:  " << m_lineedit->text().length() << endl;
 //		m_cview->setSelection(0, m_cview->text().length());
 //		QTimer::singleShot(0, m_view, SLOT(selectAll()));
 
@@ -185,16 +211,24 @@ void KexiInputTableEdit::init(const QString& add)
 		m_cview->selectAll();
 #else
 //js TODO: by default we're moving to the end of editor, ADD OPTION allowing "select all chars"
-		m_cview->end(false);
+		m_lineedit->end(false);
 #endif
 //		setRestrictedCompletion();
 
 //	m_comp = comp;
-	setFocusProxy(m_cview);
+//	setFocusProxy(m_lineedit);
 
 	//orig. editor's text
-	m_origText = m_cview->text();
+	m_origText = m_lineedit->text();
 }
+
+void KexiInputTableEdit::paintEvent ( QPaintEvent *e )
+{
+	QPainter p(this);
+	p.setPen( QPen( colorGroup().text() ) );
+	p.drawRect( rect() );
+}
+
 
 void
 KexiInputTableEdit::setRestrictedCompletion()
@@ -223,42 +257,42 @@ void
 KexiInputTableEdit::completed(const QString &s)
 {
 	kdDebug() << "KexiInputTableEdit::completed(): " << s << endl;
-	m_cview->setText(s);
+	m_lineedit->setText(s);
 }
 
 bool KexiInputTableEdit::valueChanged()
 {
-	if (m_cview->text()!=m_origText)
+	if (m_lineedit->text()!=m_origText)
 		return true;
 	return KexiTableEdit::valueChanged();
 }
 
 bool KexiInputTableEdit::valueIsNull()
 {
-	return m_cview->text().isNull();
+	return m_lineedit->text().isNull();
 }
 
 bool KexiInputTableEdit::valueIsEmpty()
 {
-	return !m_cview->text().isNull() && m_cview->text().isEmpty();
+	return !m_lineedit->text().isNull() && m_lineedit->text().isEmpty();
 }
 
 QVariant KexiInputTableEdit::value(bool &ok)
 {
 	if (m_field->isFPNumericType()) {//==KexiDB::Field::Double || m_type==KexiDB::Field::Float) {
 		//! js @todo PRESERVE PRECISION!
-		QString txt = m_cview->text();
+		QString txt = m_lineedit->text();
 		if (m_decsym!=".")
 			txt = txt.replace(m_decsym,".");//convert back
 		return QVariant( txt.toDouble(&ok) );
 	}
 	else if (m_field->isIntegerType()) {
 		//check constraints
-		return QVariant( m_cview->text().toInt(&ok) );
+		return QVariant( m_lineedit->text().toInt(&ok) );
 	}
 	//default: text
 	ok = true;
-	return QVariant( m_cview->text() );
+	return QVariant( m_lineedit->text() );
 }
 #if 0
 	//let qt&mysql understand what we mean... (numeric values)
@@ -357,17 +391,17 @@ KexiInputTableEdit::backspace()
 void
 KexiInputTableEdit::clear()
 {
-	m_cview->clear();
+	m_lineedit->clear();
 }
 
 bool KexiInputTableEdit::cursorAtStart()
 {
-	return m_cview->cursorPosition()==0;
+	return m_lineedit->cursorPosition()==0;
 }
 
 bool KexiInputTableEdit::cursorAtEnd()
 {
-	return m_cview->cursorPosition()==(int)m_cview->text().length();
+	return m_lineedit->cursorPosition()==(int)m_lineedit->text().length();
 }
 
 #if 0 //js: we've QValidator for validating!

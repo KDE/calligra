@@ -63,8 +63,11 @@ void KexiAlterTableDialog::init()
 	data->addColumn( new KexiTableViewColumn(i18n("Field name"), KexiDB::Field::Text) );
 //js TODO: COMBO
 	KexiDB::Field *f = new KexiDB::Field(i18n("Data type"), KexiDB::Field::Enum);
-	KexiDB::FieldTypeNames t;
-	f->setEnumHints(t);
+	QValueVector<QString> types(KexiDB::Field::LastTypeGroup);
+	for (int i=1; i<=KexiDB::Field::LastTypeGroup; i++) {
+		types[i-1] = KexiDB::Field::typeGroupName(i);
+	}
+	f->setEnumHints(types);
 
 	data->addColumn( new KexiTableViewColumn(*f) );
 	data->addColumn( new KexiTableViewColumn(i18n("Comments"), KexiDB::Field::Text) );
@@ -75,13 +78,14 @@ void KexiAlterTableDialog::init()
 	item->push_back(QVariant(""));
 	data->append(item);
 */
+	//add column data
 	for(unsigned int i=0; i < m_table->fieldCount(); i++)
 	{
 		KexiDB::Field *field = m_table->field(i);
 		KexiTableItem *item = new KexiTableItem(0);
 		item->push_back(QVariant(field->name()));
-		item->push_back(QVariant(field->type()));
-		item->push_back(QVariant(""));
+		item->push_back(QVariant(field->typeGroup()-1)); //-1 because type groups are counted from 1
+		item->push_back(QVariant(field->helpText()));
 		data->append(item);
 
 		KexiPropertyBuffer *buff = new KexiPropertyBuffer(this);
@@ -94,6 +98,7 @@ void KexiAlterTableDialog::init()
 		m_constraints.insert(i, buff);
 	}
 
+	//add empty space
 	for (int i=m_table->fieldCount(); i<40; i++) {
 		KexiPropertyBuffer *buff = new KexiPropertyBuffer(this);
 		buff->insert("pkey", KexiProperty("pkey", QVariant(false, 4), i18n("Primary Key")));

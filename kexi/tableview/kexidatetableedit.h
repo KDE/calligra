@@ -42,7 +42,6 @@ class KPopupMenu;
 */
 class KEXIDATATABLE_EXPORT KexiDateTableEdit : public KexiTableEdit
 {
-
 	Q_OBJECT
 
 	public:

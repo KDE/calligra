@@ -32,11 +32,6 @@ KexiCellEditorFactoryItem::~KexiCellEditorFactoryItem()
 {
 }
 
-int KexiCellEditorFactoryItem::widthForValue( QVariant &val, QFontMetrics &fm )
-{
-	return fm.width( val.toString() );
-}
-
 //============= KexiCellEditorFactoryPrivate ============
 
 class KexiCellEditorFactoryPrivate

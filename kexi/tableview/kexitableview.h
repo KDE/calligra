@@ -52,8 +52,11 @@ class KexiTableEdit;
 class KexiTableViewPrivate;
 class KActionCollection;
 
-//!default column width in pixels
+//! default column width in pixels
 #define KEXITV_DEFAULT_COLUMN_WIDTH 100
+
+//! minimum column width in pixels
+#define KEXITV_MINIMUM_COLUMN_WIDTH 10
 
 /*
 	This class provides a table view widget.
@@ -159,12 +162,19 @@ public:
 	*/
 	bool isDeleteEnabled() const;
 
-	/*! \return true if navigation panel is enabled (visible) for the view.
+	/*! \return true if the navigation panel is enabled (visible) for the view.
 	  True by default. */
 	bool navigatorEnabled() const;
 	
-	/*! Enables or disables navigation panel visibility for the view. */
+	/*! Enables or disables the navigation panel visibility for the view. */
 	void setNavigatorEnabled(bool set);
+
+	/*! \return true if the context menu is enabled (visible) for the view.
+	  True by default. */
+	bool contextMenuEnabled() const;
+
+	/*! Enables or disables the context menu for the view. */
+	void setContextMenuEnabled(bool set);
 	
 	int currentColumn() const;
 	int currentRow() const;
@@ -196,12 +206,30 @@ public:
 	// properties
 	bool		backgroundAltering() const;
 	void		setBackgroundAltering(bool altering);
-//	bool		recordIndicator() const;
-//	void		setRecordIndicator(bool indicator);
 	bool		editableOnDoubleClick() const;
 	void		setEditableOnDoubleClick(bool set);
 	QColor		emptyAreaColor() const;
-	void		setEmptyAreaColor(QColor c);
+	void		setEmptyAreaColor(const QColor& c);
+
+	/*! \return true if this table view has full-row-selection mode set,
+	 what mean that all cells of the current row are always selected, instead of single cell.
+	 This mode is usable for read-only table views, when we're interested only in navigating
+	 by rows. This property is false by default, even for read-only table views.
+	*/
+	bool fullRowSelectionEnabled() const;
+
+	//! Specifies if this table view has full-row-selection mode set. \sa fullRowSelectionEnabled()
+	void setFullRowSelectionEnabled(bool set);
+
+	//! \return true is the vertical header is visible
+	bool verticalHeaderVisible() const;
+	//! Sets vertical header's visibility
+	void setVerticalHeaderVisible(bool set);
+
+	//! \return true is the horizontal header is visible
+	bool horizontalHeaderVisible() const;
+	//! Sets horizontal header's visibility
+	void setHorizontalHeaderVisible(bool set);
 
 #ifndef KEXI_NO_PRINT
 	// printing
@@ -299,6 +327,8 @@ public slots:
 	void selectRow(int row);
 	void selectNextRow();
 	void selectPrevRow();
+	void selectNextPage(); //!< page down action
+	void selectPrevPage(); //!< page up action
 	void selectFirstRow();
 	void selectLastRow();
 
@@ -334,15 +364,16 @@ signals:
 	void itemSelected(KexiTableItem *);
 	void cellSelected(int col, int row);
 
-	void itemReturnPressed(KexiTableItem *, int);
-	void itemDblClicked(KexiTableItem *, int);
-	void itemChanged(KexiTableItem *, int);
-	void itemChanged(KexiTableItem *, int,QVariant oldValue);
-	void itemDeleteRequest(KexiTableItem *);
+	void itemReturnPressed(KexiTableItem *, int row, int col);
+	void itemDblClicked(KexiTableItem *, int row, int col);
+	void itemMouseReleased(KexiTableItem *, int row, int col);
+	void itemChanged(KexiTableItem *, int row, int col);
+	void itemChanged(KexiTableItem *, int row, int col, QVariant oldValue);
+	void itemDeleteRequest(KexiTableItem *, int row, int col);
 	void currentItemDeleteRequest();
 	void addRecordRequest();
 	void dropped(QDropEvent *);
-	void contextMenuRequested(KexiTableItem *, int col, const QPoint &);
+//	void contextMenuRequested(KexiTableItem *,  int row, int col, const QPoint &);
 	void sortedColumnChanged(int col);
 
 	void rowUpdated(KexiTableItem*);
@@ -378,12 +409,17 @@ protected slots:
 	void vScrollBarValueChanged(int v);
 	void vScrollBarSliderReleased();
 	void scrollBarTipTimeout();
+	//! internal, used when top header's size changed
+	void slotTopHeaderSizeChange( int section, int oldSize, int newSize );
+
+	//! receives a signal from cell editors
+	void slotEditRequested();
 
 protected:
 	// painting and layout
 	void	drawContents(QPainter *p, int cx, int cy, int cw, int ch);
 	void	createBuffer(int width, int height);
-	void	paintCell(QPainter* p, KexiTableItem *item, int col, const QRect &cr, bool print=false);
+	void	paintCell(QPainter* p, KexiTableItem *item, int col, int row, const QRect &cr, bool print=false);
 	void	paintEmptyArea(QPainter *p, int cx, int cy, int cw, int ch);
 	void	updateGeometries();
 	virtual QSize tableSize() const;
@@ -394,9 +430,9 @@ protected:
 
 	// event handling
 	virtual void contentsMousePressEvent(QMouseEvent*);
+	virtual void contentsMouseReleaseEvent(QMouseEvent*);
 	virtual void contentsMouseMoveEvent(QMouseEvent*);
-	virtual void contentsMouseDoubleClickEvent(QMouseEvent *e);
-	virtual void contentsMouseReleaseEvent(QMouseEvent *e);
+	virtual void contentsMouseDoubleClickEvent(QMouseEvent*);
 	virtual void keyPressEvent(QKeyEvent*);
 	virtual void focusInEvent(QFocusEvent*);
 	virtual void focusOutEvent(QFocusEvent*);
@@ -407,6 +443,15 @@ protected:
 	virtual void contentsDragMoveEvent(QDragMoveEvent *e);
 	virtual void contentsDropEvent(QDropEvent *ev);
 
+	/*! Internal: creates editor structure without filling it with data.
+	 Used in createEditor() and few places to be able to display cell contents dependending on its type. */
+	KexiTableEdit *editor( int col );
+
+	/*! Updates editor's position, size and shows its focus (not the editor!) 
+	 for \a row and \a col, using editor(). Does nothing if editor not found. */
+	void editorShowFocus( int row, int col );
+
+	//! Creates editors and shows it, what usually means the beginning of a cell editing
 	void createEditor(int row, int col, const QString& addText = QString::null, bool removeOld = false);
 
 	bool focusNextPrevChild(bool next);

@@ -21,38 +21,81 @@
 #ifndef _KEXICOMBOBOXTABLEEDIT_H_
 #define _KEXICOMBOBOXTABLEEDIT_H_
 
-#include <kcombobox.h>
-
 #include "kexidb/field.h"
-#include "kexitableedit.h"
-#include "kexicelleditorfactory.h"
+//#include "kexitableedit.h"
+#include "kexiinputtableedit.h"
+//#include "kexicelleditorfactory.h"
+
+class KPushButton;
+class KLineEdit;
+class KexiComboBoxPopup;
+class KexiTableItem;
 
 /**
  * 
- * Peter Simonsson
  **/
-class KexiComboBoxTableEdit : public KexiTableEdit
+class KexiComboBoxTableEdit : public KexiInputTableEdit
 {
+	Q_OBJECT
+
 	public:
 		KexiComboBoxTableEdit(KexiDB::Field &f, QWidget *parent=0);
 //		KexiComboBoxTableEdit(KexiDB::Field::Type t, const QStringList list,
 //			QWidget *parent=0, const char *name=0);
 
 
+		//! Note: Generally in current implementation this is integer > 0; may be null if no value is set
 		virtual QVariant value(bool &ok);
 
 		virtual void clear();
 		virtual bool cursorAtStart();
 		virtual bool cursorAtEnd();
 
+		virtual bool valueChanged();
 		virtual bool valueIsNull();
 		virtual bool valueIsEmpty();
 
-	private:
+		/*! Reimplemented: resizes a view(). */
+		virtual void resize(int w, int h);
+
+		virtual void showFocus( const QRect& r );
+
+		virtual void hideFocus();
+
+		virtual void paintFocusBorders( QPainter *p, QVariant &cal, int x, int y, int w, int h );
+
+		virtual void setupContents( QPainter *p, bool focused, QVariant val, 
+			QString &txt, int &align, int &x, int &y_offset, int &w, int &h );
+
+//		virtual int rightMargin();
+
+		virtual bool handleKeyPress( QKeyEvent *ke, bool editorActive );
+
+		virtual int widthForValue( QVariant &val, QFontMetrics &fm );
+
+	public:
+		virtual void hide();
+		virtual void show();
+
+	protected slots:
+		void slotButtonClicked();
+		void showPopup();
+		void slotRowAccepted(KexiTableItem *item, int row);
+		void slotItemSelected(KexiTableItem*);
+		void slotLineEditTextChanged(const QString &newtext);
+
+	protected:
+		//! internal
+		void updateFocus( const QRect& r );
+
 		virtual void init(const QString& /*add*/);
 
-		//pointer for to reduces casting (typing :)
-		KComboBox *m_combo;
+//		KComboBox *m_combo;
+//		KLineEdit *m_lineedit; //!< the same as m_view
+		KPushButton *m_button;
+
+		KexiComboBoxPopup *m_popup;
+		int m_parentRightMargin;
 };
 
 class KexiComboBoxEditorFactoryItem : public KexiCellEditorFactoryItem

@@ -222,6 +222,7 @@ TABLE VIEW TODO:
 - add SpreadSheet mode (eg. for alter table, and query editor)
 - add support for enums (combo boxes)
 - shrink viewport area after each row removing (so scrollbars can be updated)
+- add cursor moving on Tab, Shift+Tab keys
 
 TODO:
 - KMdiChildArea::getCaptionColors - change to KGlobalSettings::inactiveTextColor(), etc.
@@ -272,7 +273,73 @@ Detailed TODO for Beta3:
 3. Make all 3 query views workable (@ GUI and KexiDB layer)
 4. Make database relations workable (@ GUI and KexiDB layer)
 
+=== Combo box editor TODO ====
+-we're completely dropping using regular combobox
+-new layout: a lineedit + dropdown button + popup tableview, when needed
+-use (and add few) methods for tableview to enable adjusting it for use it as dropdown tv
+--hide vscrollbar tooltip
+--allow to hide the horizontal stripes
+--add scrolling for mouse dragging
+--add highlighting under mouse pointer
+-dropdown tv has to contain:
+--QSizeGrip at the bottom corder
+-in kexidb: implement combobox settings for the foreign field:
+--ordered set of fields that are visible in popup tableview (ie. just query that is bound with the column)
+-use one and multi-key relations from kexidb
 
+2004-02-04
+Table view:
+  -Generic Cell Editor Framework introduced
+  -selection background painting moved to editor's implementation
+  -for row-selection mode: Home/End keys always move to the 1st/last row
+  -page up/page down actions added as methods
+
+ComboBox Editor improoved:
+
+-we're completely dropping use of regular combobox
+-new layout: a lineedit + dropdown button + popup tableview, when needed
+-methods used (and few added) for tableview to enable adjusting 
+  it for use it as dropdown tv:
+--hidden vtoolbar
+--hidden header (on user demand, and automatically, when only one 
+  column is visible in the dropdown tv
+--hidden the context menu
+--hidden the record navigator
+--added and used a method for selecting entire row, not just a cell
+--tv's recordset made readonly, disable inserting
+--sorting disabled
+
+
+Property Editor: 
+  pointer to current editor is now guarded, fixed crash (on sorting) 
+  due to uninitialized member
+
+2004-01-29
+-KexiDB: crash fixed for records buffering, when a value is NULL 
+(for some targets strdup crashes on NULLs)
+-KexiDB: i18n'd names for datatype groups added, just like datatype names.
+ This will be used eg. in Alter Table Dialog
+
+2004-01-28
+- Main Window: toggle actions are checked off before disabling
+
+- Table View: 
+  -fixed size of Vertical header's item (record marker) used in Table View 
+   (now also works ok with Windows style)
+  -don't paint contents of edited cell - painted editor is enough
+  -methods added for showing/hiding vertical and horizontal header
+  -framework for showing cell's focus depending on editor type added to cell 
+   editor (eg. dropdown btn for combobox)
+COMMIT THIS************^^^^^^^^
+
+- Main Window:
+	Fixed problem with autoincremented identifier in kexi__object
+	table on ObjectCreation for some backends
+	lucijan: what about using kexiDB API, not hardcoding?
+
+2004-01-27
+- Combo box editor
+  -key events fixed
 
 2004-01-26
 - Table View:

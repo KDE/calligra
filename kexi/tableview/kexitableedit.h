@@ -30,6 +30,8 @@ namespace KexiDB {
 
 class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 {
+	Q_OBJECT
+
 	public:
 		KexiTableEdit(KexiDB::Field &f, QWidget* parent = 0, const char* name = 0);
 
@@ -68,10 +70,73 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 		/*! Reimplemented: resizes a view(). */
 		virtual void resize(int w, int h);
 
+		/*! \return the view widget of this editor, e.g. line edit widget. */
 		QWidget* view() const { return m_view; }
 
 		//! clears editor's data, so the data now contains NULL data
 		virtual void clear() = 0;
+
+		/*! Displays additional elements that are needed for indicating that the current cell
+		 is selected. For example, combobox editor (KexiComboBoxTableEdit) moves and shows
+		 dropdown button. \a r is the rectangle for the cell. 
+		 For reimplementation. By default does nothing. */
+		virtual void showFocus( const QRect& r );
+
+		/*! Hides additional elements that are needed for indicating that the current cell
+		 is selected. 
+		 For reimplementation. By default does nothing. */
+		virtual void hideFocus();
+
+		/*! Paints a border for the cell described by \a x, \a y, \a w, \a h on \a p painter.
+		 The cell's value is \a val (may be usefull if you want to reimplement this method).
+		*/
+		virtual void paintFocusBorders( QPainter *p, QVariant &cal, int x, int y, int w, int h );
+
+		/*! For reimplementation.
+		 Sets up cell's contents using context of \a val value. 
+		 \a focusd is true if the cell is focused. \a align is set using Qt::AlignmentFlags.
+		 Some additional things may be painted using \a p,
+		 it's not needed to paint the text (this is done automatically outside.
+
+		 Before calling, \a x, \a y_offset, \a w, \a h parameters are initialized,
+		 but you can tune these values depending on the context. 
+		 You should set \a txt to a text representation of \a val, 
+		 otherwise no text will be painted. */
+		virtual void setupContents( QPainter *p, bool focused, QVariant val, 
+			QString &txt, int &align, int &x, int &y_offset, int &w, int &h );
+
+		/*! For reimplementation.
+		 Paints selection's background using \a p. Most parameters are similar to these from 
+		 setupContents().
+		*/
+		virtual void paintSelectionBackground( QPainter *p, bool focused, const QString& txt, 
+			int align, int x, int y_offset, int w, int h, const QColor& fillColor,
+			bool readOnly, bool fullRowSelection );
+
+		/*! Sometimes, editor can contain non-standard margin, for example combobox editor contains
+		 dropdown button at the right side. \returns left margin's size; 
+		 0 by default. For reimplementation.  */
+		int leftMargin() const { return m_leftMargin; }
+
+		/*! Sometimes, editor can contain non-standard margin, for example combobox editor contains
+		 dropdown button at the right side. \returns right margin;s size; 
+		 0 by default. For reimplementation.  */
+		int rightMargin() const { return m_rightMargin; }
+
+		/*! Handles \a ke key event that came over the column that is bound to this editor.
+		 For implementation: true should be returned if \a ke should be accepted.
+		 If \a editorActive is true, this editor is currently active, i.e. the table view is in edit mode.
+		 By default false is returned. */
+		virtual bool handleKeyPress( QKeyEvent *ke, bool editorActive ) { return false; }
+
+		/*! \return width of \a value. For the default implementation \a val is converted to a string 
+		 and width of this string is returned. */
+		virtual int widthForValue( QVariant &val, QFontMetrics &fm );
+
+	signals:
+		void editRequested();
+		void cancelRequested();
+		void acceptRequested();
 
 	protected:
 		/*! Initializes this editor with \a add value, which should be somewhat added to the current
@@ -79,13 +144,19 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 		virtual void init(const QString& add) = 0;
 
 		virtual bool eventFilter(QObject* watched, QEvent* e);
+
+		/*! Sets \a v as view widget for this editor. The view will be assigned as focus proxy
+		 for the editor, its events will be filtered, it will be resized when neede, and so on. */
 		void setView(QWidget *v);
 
 	//		virtual void paintEvent( QPaintEvent *pe );
 		QVariant m_origValue;
 		KexiDB::Field *m_field;
 //		int m_type; //! one of KexiDB::Field
+		int m_leftMargin;
+		int m_rightMargin;
 
+	private:
 		QWidget* m_view;
 };
 

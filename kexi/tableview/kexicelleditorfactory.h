@@ -51,9 +51,6 @@ class KexiCellEditorFactoryItem
 		KexiCellEditorFactoryItem();
 		virtual ~KexiCellEditorFactoryItem();
 
-		/*! \return width of \a value. For the default implementation \a val is converted to a string 
-		 and width of this string is returned. */
-		virtual int widthForValue( QVariant &val, QFontMetrics &fm );
 	protected:
 		virtual KexiTableEdit* createEditor(KexiDB::Field &f, QWidget* parent = 0) = 0;
 

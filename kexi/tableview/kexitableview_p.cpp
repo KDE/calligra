@@ -25,6 +25,7 @@
 */
 
 #include "kexitableview_p.h"
+#include "kexitableedit.h"
 
 #include <qlabel.h>
 
@@ -45,12 +46,14 @@ KexiTableViewPrivate::KexiTableViewPrivate()
 	contentsMousePressEvent_dblClick = false;
 	isSortingEnabled = true;
 	navigatorEnabled = true;
+	contextMenuEnabled = true;
 	navPanel = 0;
 	skipKeyPress = false;
 	vScrollBarValueChanged_enabled = true;
 	navRowNumber = 0;
 	scrollBarTipTimerCnt = 0;
 	scrollBarTip = 0;
+	fullRowSelectionEnabled = false;
 }
 
 KexiTableViewPrivate::~KexiTableViewPrivate()

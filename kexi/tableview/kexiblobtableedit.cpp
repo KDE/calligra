@@ -79,11 +79,11 @@ void KexiBlobTableEdit::init(const QString& add)
 	delete m_tempFile;
 	m_tempFile = 0;
 
-/*js: TODO
 	KMimeMagicResult* mmr = KMimeMagic::self()->findFileType(m_tempFile->name());
 	kdDebug() << "KexiBlobTableEdit: Mimetype = " << mmr->mimeType() << endl;
 
-	m_view = new QWidget(this);
+	setView( new QWidget(this) );
+/*js: TODO
 	QGridLayout *g = new QGridLayout(m_view);
 
 	if(mmr->mimeType().contains("text/") || val.size() == 0)
@@ -254,8 +254,8 @@ KexiBlobTableEdit::menu()
 	menu->insertItem(i18n("Load From File..."), this, SLOT(loadFile()));
 	menu->insertItem(i18n("Save to File..."), this, SLOT(saveFile()));
 
-	QPoint pos = mapToGlobal(m_view->pos());
-	pos.setY(pos.y() + m_view->height());
+	QPoint pos = mapToGlobal(view()->pos());
+	pos.setY(pos.y() + view()->height());
 	menu->move(pos);
 	menu->exec();
 

@@ -32,7 +32,7 @@ class KEXIDATATABLE_EXPORT KexiInputTableEdit : public KexiTableEdit
 	Q_OBJECT
 
 	public:
-		KexiInputTableEdit(KexiDB::Field &f, QWidget *parent=0);
+		KexiInputTableEdit(KexiDB::Field &f, QWidget *parent=0, const char* name = 0);
 
 		virtual ~KexiInputTableEdit();
 
@@ -66,15 +66,17 @@ class KEXIDATATABLE_EXPORT KexiInputTableEdit : public KexiTableEdit
 		void showHintButton();
 		void init();
 
+		virtual void paintEvent ( QPaintEvent *e );
+	//virtual void drawFrame ( QPainter * p );
+
+
 		bool		m_calculatedCell;
 //js		QStringList	m_comp;
 
 		QString m_decsym; //! decimal symbol
 		QString m_origText; //! orig. Line Edit's text after conversion - for easy comparing
 
-
-	private:
-		KLineEdit	*m_cview;
+		KLineEdit	*m_lineedit;
 
 	signals:
 		void hintClicked();

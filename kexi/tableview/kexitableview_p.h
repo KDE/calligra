@@ -104,10 +104,12 @@ class KexiTableViewPrivate
 
 	KexiTableView::ScrollDirection scrollDirection;
 
-	bool			needAutoScroll : 1;
+	bool needAutoScroll : 1;
 
-	bool			bgAltering : 1;
+	bool bgAltering : 1;
 	
+	bool fullRowSelectionEnabled : 1;
+
 	bool disableDrawContents : 1;
 
 	/*! true if currently selected row is edited */
@@ -124,9 +126,13 @@ class KexiTableViewPrivate
 	//! 'sorting by column' availability flag for widget
 	bool isSortingEnabled : 1;
 
-	/*! true if navigation panel is enabled (visible) for the view.
+	/*! true if the navigation panel is enabled (visible) for the view.
 	 True by default. */
 	bool navigatorEnabled : 1;
+
+	/*! true if the context menu is enabled (visible) for the view.
+	 True by default. */
+	bool contextMenuEnabled : 1;
 
 	/*! used to force single skip keyPress event. */
 	bool skipKeyPress : 1;
