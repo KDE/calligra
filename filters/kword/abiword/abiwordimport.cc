@@ -195,13 +195,13 @@ static void FillStandardLayout(QDomElement& layoutElement)
     element=layoutElement.ownerDocument().createElement("FONT");
     element.setAttribute("name","times");
     formatElement.appendChild(element);
-        
+
     element=layoutElement.ownerDocument().createElement("TABULATOR");
     element.setAttribute("mmpos","64.2055");
     element.setAttribute("ptpos","182");
     element.setAttribute("inchpos","2.52778");
     layoutElement.appendChild(element);
-        
+
     element=layoutElement.ownerDocument().createElement("TABULATOR");
     element.setAttribute("mmpos","128.764");
     element.setAttribute("ptpos","365");
@@ -652,6 +652,10 @@ const bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
     QCString strOut=qDomDocumentOut.toCString();
     out.write((const char*)strOut, strOut.length());
     out.close();
+
+#if 0
+    kdDebug(30506) << qDomDocumentOut.toString();
+#endif
 
     kdDebug(30506) << "Now importing to KWord!" << endl;
 
