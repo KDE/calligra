@@ -36,7 +36,7 @@
 #include <kgenericfactory.h>
 
 #include <koFilterChain.h>
-#include "qwmf.h"
+#include "kowmfpaint.h"
 
 #include <KWEFStructures.h>
 #include <KWEFBaseWorker.h>
@@ -1064,18 +1064,15 @@ public:
 				imageSize = imageData.size ();
 				if (imageActualWidth == -1 && imageActualHeight == -1)
 				{
-					QBuffer buffer (imageData);
-					buffer.open (IO_ReadOnly);
-
 					// load WMF
-					QWinMetaFile wmf;
-					if (!wmf.load (buffer))
+					KoWmfPaint wmf;
+					if (!wmf.load (imageData))
 					{
 						kdError (30509) << "Could not open WMF - Invalid Format!" << endl;
 						return true;
 					}
 
-					QRect dimen = wmf.bbox ();
+					QRect dimen = wmf.boundingRect ();
 					// TODO: if you look in the QWmf code, it actually reads the
 					// width/height from the PlaceableHeader (if possible),
 					// then parses the records for the width/height again.
