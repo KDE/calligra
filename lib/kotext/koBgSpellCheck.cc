@@ -109,9 +109,14 @@ void KoBgSpellCheck::startBackgroundSpellCheck()
 
     m_bgSpell.currentParag = m_bgSpell.currentTextObj->textDocument()->firstParag();
     nextParagraphNeedingCheck();
-    //kdDebug() << "fs=" << m_bgSpell.currentTextObj << " parag=" << m_bgSpell.currentParag << endl;
+    kdDebug() << "fs=" << m_bgSpell.currentTextObj << " parag=" << m_bgSpell.currentParag << endl;
 
     if ( !m_bgSpell.currentTextObj || !m_bgSpell.currentParag ) {
+        if ( m_bgSpell.currentTextObj )
+        {
+            if ( (m_bgSpell.currentTextObj->textDocument()->firstParag() == m_bgSpell.currentTextObj->textDocument()->lastParag()) && m_bgSpell.currentTextObj->textDocument()->firstParag()->length() <= 1)
+                m_bgSpell.currentTextObj->setNeedSpellCheck(false);
+        }
         // Might be better to launch again upon document modification (key, pasting, etc.) instead of right now
         //kdDebug() << "KWDocument::startBackgroundSpellCheck nothing to check this time." << endl;
         QTimer::singleShot( 1000, this, SLOT( startBackgroundSpellCheck() ) );
