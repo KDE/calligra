@@ -1,7 +1,16 @@
 GUI:
--	move the dialogs from "Edit->Transform" to a docker under "View"
--   make some pattern widget, krita seems to have a nice one, maybe we can work
-    together, share pattern images and put something in kofficeui.
+-	split the dialog under "Object->Transform" into different non-tabbed dialogs
+-	put the dockers in a space optimized way into a docker which shows up in "View"
+-	remove the "Selection property" docker, this is basically the same as the above docker
+-	remove the dialogs which show up when double clicking the strokefillpreview, this job is done
+	by "color manager" docker
+-	"color manger": dont update color/create a action each time the color slider is dragged
+	but only if it is released.
+-	make some pattern widget, krita seems to have a nice one, maybe we can work
+	together, share pattern images and put something in kofficeui.
+-	we need a gradient widget, maybe cooperate with krita too
+-	remove the dialog which opens when double clicking the gradient tool and but the functionality
+	into a docker together with the gradient widget
 
 REAL BUGS:
 -	scale gradient coords while zooming as well
@@ -12,6 +21,8 @@ REAL BUGS:
 -	copying works wrong: the last selected shape is pasted instead of the shape one copied
 
 TODO:
+-	VImage
+-	VPattern like VImage with embedded binaries instead of paths
 -	use VPathIterator everywhere instead of direct VPath access where not necessary.
 	this way you'll get node undo/redo automatically.
 -	port all sophisticated VPath::functions like counterClockwise() to VPathIterator.
