@@ -27,7 +27,7 @@ Description: KDE Office Suite (Common libraries and binaries)
 Package: kchart
 Architecture: any
 Section: x11
-Replaces: koffice-common
+Replaces: koffice-common, koffice-libs (<< ${Source-Version})
 Depends: ${shlibs:Depends}, koffice-libs (>= ${Source-Version})
 Suggests: kdebase
 Description: KDE Office Suite - KChart
@@ -38,7 +38,7 @@ Description: KDE Office Suite - KChart
 Package: kspread
 Architecture: any
 Section: x11
-Replaces: koffice-common
+Replaces: koffice-common, koffice-libs (<< ${Source-Version})
 Depends: ${shlibs:Depends}, koffice-libs (>= ${Source-Version})
 Suggests: kdebase
 Description: KDE Office Suite - KSpread
@@ -49,7 +49,7 @@ Description: KDE Office Suite - KSpread
 Package: killustrator
 Architecture: any
 Section: x11
-Replaces: koffice-common
+Replaces: koffice-common, koffice-libs (<< ${Source-Version})
 Depends: ${shlibs:Depends}, koffice-libs (>= ${Source-Version})
 Suggests: kdebase
 Description: KDE Office Suite - KIllustrator
@@ -60,7 +60,7 @@ Description: KDE Office Suite - KIllustrator
 Package: kpresenter
 Architecture: any
 Section: x11
-Replaces: koffice-common
+Replaces: koffice-common, koffice-libs (<< ${Source-Version})
 Depends: ${shlibs:Depends}, koffice-libs (>= ${Source-Version})
 Suggests: kdebase
 Description: KDE Office Suite - KPresenter
@@ -71,7 +71,7 @@ Description: KDE Office Suite - KPresenter
 Package: kword
 Architecture: any
 Section: x11
-Replaces: koffice-common
+Replaces: koffice-common, koffice-libs (<< ${Source-Version})
 Depends: ${shlibs:Depends}, koffice-libs (>= ${Source-Version})
 Suggests: kdebase
 Description: KDE Office Suite - KWord
@@ -82,7 +82,7 @@ Description: KDE Office Suite - KWord
 Package: koshell
 Architecture: any
 Section: x11
-Replaces: koffice-libs (<< 2.0-final-7)
+Replaces: koffice-common, koffice-libs (<< ${Source-Version})
 Depends: ${shlibs:Depends}, koffice-libs (>= ${Source-Version})
 Recommends: kchart, kword, kspread, killustrator, kpresenter, kivio
 Suggests: kdebase
@@ -101,4 +101,4 @@ Description: KDE Office Suite
  .
  This Task depends on each of the following KOffice components:
  .
- kchart, kspread, killustrator, kpresenter, and kword
+ kchart, kspread, killustrator, kpresenter, kword, and koshell
