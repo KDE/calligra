@@ -1562,10 +1562,6 @@ bool Worker::op_shrfmla(Q_UINT32 size, QDataStream &body)
 	body >> firstrow >> lastrow >> firstcol >> lastcol;
 	body >> temp >> dataLen;
 
-	kdDebug() << "FR: " << firstrow << " LR: " << lastrow << endl;
-	kdDebug() << "FC: " << firstcol << " LC: " << lastcol << endl;
-	kdDebug() << "DATALEN: " << dataLen << endl;
-
 	char *store = new char[dataLen];
 	body.readRawBytes(store, dataLen);
 	
