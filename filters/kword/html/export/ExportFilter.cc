@@ -144,13 +144,6 @@ void HtmlWorker::formatTextParagraph(const QString& strText, const FormatData& f
         // Opening elements
         openSpan(format);
 
-        if (!format.text.linkName.isEmpty())
-        {
-            *m_streamOut << "<a href=\"";
-            *m_streamOut << escapeHtmlText(format.text.linkReference);
-            *m_streamOut << "\">";
-        }
-
         // The text
         if (strText==" ")
         {//Just a space as text. Therefore we must use a non-breaking space.
@@ -162,11 +155,6 @@ void HtmlWorker::formatTextParagraph(const QString& strText, const FormatData& f
         }
 
         // Closing elements
-        if (!format.text.linkName.isEmpty())
-        {
-            *m_streamOut << "</a>";
-        }
-
         closeSpan(format);
     }
 }
@@ -190,6 +178,23 @@ void HtmlWorker::ProcessParagraphData (const QString& strTag, const QString &par
                 //Retrieve text
                 partialText=paraText.mid ( (*paraFormatDataIt).pos, (*paraFormatDataIt).len );
                 formatTextParagraph(partialText,*paraFormatDataIt);
+            }
+            else if (4==(*paraFormatDataIt).id)
+            {
+                if (9==(*paraFormatDataIt).variable.m_type)
+                {
+                    // A link
+                    *m_streamOut << "<a href=\""
+                        << escapeHtmlText((*paraFormatDataIt).variable.m_linkName)
+                        << "\">"
+                        << escapeHtmlText((*paraFormatDataIt).variable.m_hrefName)
+                        << "</a>";
+                }
+                else
+                {
+                    // Generic variable
+                    *m_streamOut << escapeHtmlText((*paraFormatDataIt).variable.m_text);
+                }
             }
             else if (6==(*paraFormatDataIt).id)
             {
