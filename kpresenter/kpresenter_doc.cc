@@ -1234,8 +1234,14 @@ void KPresenterDoc::loadOasisSettings(const QDomDocument&settingsDoc)
         m_gridX = MM_TO_POINT( valx / 100.0 );
         int valy = firstView.parseConfigItemInt( "GridFineHeight" );
         m_gridY = MM_TO_POINT( valy / 100.0 );
-        // ## TODO IsSnapToGrid
-        // ## TODO SelectedPage
+
+        m_bSnapToGrid = firstView.parseConfigItemBool( "IsSnapToGrid" );
+
+        int activePage = firstView.parseConfigItemInt( "SelectedPage" );
+        kdDebug()<<" activePage :"<<activePage<<endl;
+        if(activePage!=-1)
+            m_initialActivePage=m_pageList.at(activePage);
+
     }
     loadOasisIgnoreList( settings );
     m_varColl->variableSetting()->loadOasis( settings );
