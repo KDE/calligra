@@ -180,3 +180,58 @@ void KivioChangeStencilTextCommand::unexecute()
     m_page->doc()->updateView(m_page);
 }
 
+
+KivioAddLayerCommand::KivioAddLayerCommand( const QString &_name, KivioPage *_page, KivioLayer * _layer, int _pos )
+    :KNamedCommand( _name ),
+     m_page( _page ),
+     m_layer( _layer),
+     layerPos(_pos)
+{
+}
+
+KivioAddLayerCommand::~KivioAddLayerCommand()
+{
+}
+
+void KivioAddLayerCommand::execute()
+{
+    m_page->insertLayer( layerPos, m_layer );
+    m_page->doc()->updateView(m_page);
+}
+
+void KivioAddLayerCommand::unexecute()
+{
+    m_page->takeLayer( m_layer );
+    m_page->doc()->updateView(m_page);
+}
+
+
+KivioRemoveLayerCommand::KivioRemoveLayerCommand( const QString &_name, KivioPage *_page, KivioLayer * _layer, int _pos )
+    :KivioAddLayerCommand( _name, _page, _layer, _pos )
+{
+}
+
+KivioRenameLayerCommand::KivioRenameLayerCommand( const QString &_name, KivioLayer * _layer, const QString & _oldName, const QString & _newName)
+    :KNamedCommand( _name ),
+     m_layer( _layer ),
+     oldName( _oldName),
+     newName( _newName)
+{
+}
+
+KivioRenameLayerCommand::~KivioRenameLayerCommand()
+{
+}
+
+void KivioRenameLayerCommand::execute()
+{
+    m_layer->setName(newName);
+    m_layer->page()->doc()->resetLayerPanel();
+}
+
+void KivioRenameLayerCommand::unexecute()
+{
+    m_layer->setName(oldName);
+    m_layer->page()->doc()->resetLayerPanel();
+}
+

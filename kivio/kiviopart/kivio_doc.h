@@ -138,7 +138,7 @@ public:
 
     void insertPage( KivioPage * page );
     void takePage( KivioPage * page );
-
+    void resetLayerPanel();
 
 public slots:
   void updateView(KivioPage*, bool modified=true);

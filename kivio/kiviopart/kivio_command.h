@@ -131,5 +131,45 @@ protected:
     KivioPage *m_page;
 };
 
+class KivioAddLayerCommand : public KNamedCommand
+{
+public:
+    KivioAddLayerCommand( const QString &_name, KivioPage *_page, KivioLayer * _layer,int _pos );
+    ~KivioAddLayerCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    KivioPage * m_page;
+    KivioLayer *m_layer;
+    int layerPos;
+};
+
+class KivioRemoveLayerCommand : public KivioAddLayerCommand
+{
+public:
+    KivioRemoveLayerCommand( const QString &_name, KivioPage *_page, KivioLayer * _layer, int _pos );
+    ~KivioRemoveLayerCommand() {}
+
+    void execute() { KivioAddLayerCommand::unexecute(); }
+    void unexecute() { KivioAddLayerCommand::execute(); }
+};
+
+class KivioRenameLayerCommand : public KNamedCommand
+{
+public:
+    KivioRenameLayerCommand( const QString &_name, KivioLayer * _layer, const QString & _oldName, const QString & _newName);
+    ~KivioRenameLayerCommand();
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    KivioLayer *m_layer;
+    QString oldName;
+    QString newName;
+
+};
+
 #endif
 

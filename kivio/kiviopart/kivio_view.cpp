@@ -1494,5 +1494,13 @@ void KivioView::slotPageShown( KivioPage* page )
     m_pTabBar->showPage( page->pageName() );
 }
 
+void KivioView::resetLayerPanel()
+{
+    if ( m_pLayersPanel )
+    {
+        m_pLayersPanel->reset();
+    }
+}
+
 
 #include "kivio_view.moc"

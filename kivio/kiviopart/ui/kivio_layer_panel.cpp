@@ -5,6 +5,7 @@
 #include "kivio_page.h"
 #include "kivio_layer.h"
 #include "kivio_factory.h"
+#include "kivio_command.h"
 
 #include "viewitemrenamedialog.h"
 
@@ -129,16 +130,18 @@ void KivioLayerPanel::renameItem()
   ViewItemRenameDialog* dlg = new ViewItemRenameDialog(i18n("Rename Layer"), i18n("Layer name:"), this);
 
   KivioLayer* layer = i->data;
-  dlg->setText(layer->name());
+  QString oldText = layer->name();
+  dlg->setText(oldText);
 
   if( dlg->exec() == QDialog::Accepted )
   {
-    layer->setName(dlg->text());
+      QString newName = dlg->text();
+    layer->setName(newName);
+    KivioRenameLayerCommand *cmd = new KivioRenameLayerCommand( i18n("Rename Layer"), layer, oldText, newName);
+    m_pView->doc()->addCommand( cmd );
   }
   delete dlg;
-
   i->update();
-  m_pView->doc()->setModified(true);
 }
 
 void KivioLayerPanel::upItem()

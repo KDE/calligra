@@ -1138,6 +1138,9 @@ bool KivioPage::removeCurrentLayer()
         return false;
     }
 
+    KivioRemoveLayerCommand * cmd = new KivioRemoveLayerCommand( i18n("Remove layer"), this , m_pCurLayer , m_lstLayers.findRef(m_pCurLayer) );
+    doc()->addCommand( cmd );
+
     if( m_lstLayers.remove( m_pCurLayer )==false )
     {
        kdDebug() << "KivioLayer::removeCurrentLayer() - Couldn't find current layer in the list. Bad!" << endl;
@@ -1148,6 +1151,12 @@ bool KivioPage::removeCurrentLayer()
 
 
     return true;
+}
+
+void KivioPage::takeLayer( KivioLayer *pLayer )
+{
+    int pos=m_lstLayers.findRef(pLayer);
+    m_lstLayers.take( pos );
 }
 
 void KivioPage::addLayer( KivioLayer *pLayer )

@@ -56,6 +56,8 @@ public:
     KivioLayer( KivioPage * );
     virtual ~KivioLayer();
 
+    KivioPage *page()const{return m_pPage;}
+
     virtual DCOPObject* dcopObject();
 
     QPtrList<KivioStencil> *stencilList() { return m_pStencilList; }

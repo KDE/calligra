@@ -853,6 +853,13 @@ void KivioDoc::updateButton()
 	((KivioView*)it.current())->updateButton();
 }
 
+void KivioDoc::resetLayerPanel()
+{
+    QPtrListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+	((KivioView*)it.current())->resetLayerPanel();
+}
+
 void KivioDoc::addCommand( KCommand * cmd )
 {
     kdDebug() << "KivioDoc::addCommand " << cmd->name() << endl;

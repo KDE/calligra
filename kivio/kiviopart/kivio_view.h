@@ -130,6 +130,7 @@ public:
   int lineWidth();
     void updateButton();
     void insertPage( KivioPage* page );
+    void resetLayerPanel();
 
 
 protected:

@@ -144,7 +144,7 @@ public:
   void addLayer( KivioLayer * );
   void insertLayer( int, KivioLayer * );
   KivioLayer *layerAt( int );
-
+    void takeLayer( KivioLayer *pLayer );
   KivioGuideLines* guideLines(){ return gLines; }
 
   /*
