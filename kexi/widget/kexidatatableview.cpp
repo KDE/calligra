@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003   Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2003   Joseph Wenninger <jowenn@kde.org>
+   Copyright (C) 2003   Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -55,29 +56,54 @@ KexiDataTableView::init()
 	connect(verticalScrollBar(), SIGNAL(sliderMoved(int)), this, SLOT(slotMoving(int)));
 }
 
-void KexiDataTableView::setData(KexiDB::Cursor *cursor)
+bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
 {
 	if (!m_first)
 		clearAll();
-	if (!cursor || cursor!=m_cursor)
+	if (!cursor) {
 		clearAll();
-
+		m_cursor = 0;
+		return true;
+	}
+	if (cursor!=m_cursor) {
+		clearAll();
+	}
 	m_cursor = cursor;
 
-	if (!m_cursor || (cursor->fieldCount()<1))
-		return;
+	if (!m_cursor->query()) {
+		kdDebug() << "KexiDataTableView::setData(): WARNING: cursor should have query schema defined!\n--aborting setData()." << endl;
+		m_cursor->debug();
+		clearAll();
+		return false;
+	}
 
-/*TODO	uint i = 0;
-	KexiDB::Field *f = m_cursor->query()
-	m_cursor->fieldCount(); i++)
-	for(uint i = 0; i < m_cursor->fieldCount(); i++)
-	{
+	if (m_cursor->fieldCount()<1) {
+		clearAll();
+		return true;
+	}
+
+	if (!m_cursor->isOpened() && !m_cursor->open()) {
+		kdDebug() << "KexiDataTableView::setData(): WARNING: cannot open cursor\n--aborting setData()." << endl;
+		m_cursor->debug();
+		clearAll();
+		return false;
+	}
+
+	uint i = 0;
+	KexiDB::Field::List *list = m_cursor->query()->fields();
+	KexiDB::Field *f = list->first();
+	while (f) {
+		addColumn(f->caption().isEmpty() ? f->name() : f->caption(), f->variantType(), true);
+		f = list->next();
+	}
+
+//	for(uint i = 0; i < m_cursor->fieldCount(); i++)
+//	{
 //		QVariant defaultval = QVariant("");
 //		addColumn(m_record->fieldName(i), m_record->type(i), !m_record->readOnly(),
 //		 defaultval, 100, m_record->fieldInfo(i)->auto_increment());
-		addColumn("named", QVariant::String, true);
-	}*/
-
+////		addColumn("named", QVariant::String, true);
+//	}
 
 #if 0
 	if(!m_first)
@@ -128,6 +154,7 @@ void KexiDataTableView::setData(KexiDB::Cursor *cursor)
 	{
 	}
 #endif
+	return true;
 }
 
 bool
