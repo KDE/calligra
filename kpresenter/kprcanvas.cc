@@ -6208,6 +6208,8 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
     KoRect page=m_activePage->getPageRect();
     KPObject *kpobject=resizeObjNum;
 
+    keepRatio = keepRatio || kpobject->isKeepRatio();
+
     KoSize objSize = kpobject->getSize();
     KoRect objRect=kpobject->getBoundingRect(m_view->zoomHandler());
     KoRect pageRect=m_activePage->getPageRect();
@@ -6986,16 +6988,18 @@ void KPrCanvas::flipObject( bool _horizontal )
     m_view->kPresenterDoc()->addCommand(macro);
 }
 
-KCommand *KPrCanvas::setProtectObj(bool p)
+KCommand *KPrCanvas::setGeometryPropertiesObj(bool protect, bool ratio)
 {
     QPtrList<KPObject> lst;
     QValueList<bool> listProt;
+    QValueList<bool> listKeepRatio;
     QPtrListIterator<KPObject> it(getObjectList());
     for ( ; it.current(); ++it ) {
         if ( it.current()->isSelected() )
         {
             lst.append( it.current() );
             listProt.append( it.current()->isProtect());
+            listKeepRatio.append( it.current()->isKeepRatio());
         }
     }
     //get sticky obj
@@ -7005,11 +7009,12 @@ KCommand *KPrCanvas::setProtectObj(bool p)
         {
             lst.append( it.current() );
             listProt.append( it.current()->isProtect());
+            listKeepRatio.append( it.current()->isKeepRatio());
         }
     }
     if ( lst.isEmpty())
         return 0L;
-    KCommand *cmd= new KPrProtectObjCommand( i18n("Protect Object"), listProt, lst , p, m_view->kPresenterDoc() );
+    KCommand *cmd= new KPrGeometryPropertiesCommand( i18n("Protect Object"), listProt, listKeepRatio, lst , protect, ratio , m_view->kPresenterDoc() );
     cmd->execute();
     return cmd;
 

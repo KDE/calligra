@@ -695,6 +695,7 @@ private:
     int rndX, rndY;
     bool sticky;
     bool protect;
+    bool keepRatio;
     // for Convex/Concave Polygon
     bool checkConcavePolygon;
     int cornersValue;

@@ -271,3 +271,13 @@ bool KPresenterObjectIface::isProtect() const
 {
     return obj->isProtect();
 }
+
+void KPresenterObjectIface::setKeepRatio( bool b )
+{
+    obj->setKeepRatio(b);
+}
+
+bool KPresenterObjectIface::isKeepRatio() const
+{
+    return obj->isKeepRatio();
+}

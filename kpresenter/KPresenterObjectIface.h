@@ -84,6 +84,9 @@ k_dcop:
     void setProtect( bool b );
     bool isProtect() const;
 
+    void setKeepRatio( bool b );
+    bool isKeepRatio() const;
+
 private:
     KPObject *obj;
 

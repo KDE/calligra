@@ -171,6 +171,7 @@ void StyleDia::slotReset()
     setGradient( oldC1, oldC1, oldBCType,oldUnbalanced, oldXfactor, oldYfactor );
     setSticky( oldSticky );
     setProtected( oldProtect );
+    setKeepRatio( oldKeepRatio );
     setSize( oldRect);
 }
 
@@ -423,6 +424,9 @@ void StyleDia::setupTab4()
     protect= new QCheckBox( i18n("Protect Size and Position"), tab);
     layout->addWidget(protect);
     connect( protect, SIGNAL(clicked ()), this, SLOT(protectChanged()));
+
+    keepRatio= new QCheckBox( i18n("Keep ratio"), tab);
+    layout->addWidget(keepRatio);
 
     QGroupBox *grp1 = new QGroupBox( i18n("Position in %1").arg(m_doc->getUnitName()), tab );
     layout->addWidget( grp1 );
@@ -797,6 +801,16 @@ bool StyleDia::isProtected() const
     return protect->isChecked();
 }
 
+void StyleDia::setKeepRatio( bool p )
+{
+    oldKeepRatio = p;
+    keepRatio->setChecked( p );
+}
+
+bool StyleDia::isKeepRatio()const
+{
+    return keepRatio->isChecked();
+}
 
 KoRect StyleDia::getNewSize() const
 {

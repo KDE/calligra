@@ -248,7 +248,7 @@ public:
 
     void flipObject( bool _horizontal );
 
-    KCommand *setProtectObj(bool p);
+    KCommand *setGeometryPropertiesObj(bool protect, bool ratio);
 
     KoRect zoomAllObject();
 

@@ -3597,6 +3597,25 @@ void KPrPage::setProtect( bool p )
     //todo
 }
 
+bool KPrPage::getKeepRatio( bool p )
+{
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        //don't test header/footer all the time sticky
+        if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
+            continue;
+        if(it.current()->isSelected())
+            return it.current()->isKeepRatio();
+    }
+    return p;
+}
+
+void KPrPage::setKeepRatio( bool p )
+{
+    //todo
+}
+
 KoRect KPrPage::getBoundingAllObjectRect(const KoRect &rect, KPresenterDoc *doc)
 {
     KoRect boundingRect =rect ;

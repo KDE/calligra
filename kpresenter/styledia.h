@@ -124,6 +124,9 @@ public:
     void setProtected( bool p );
     bool isProtected()const;
 
+    void setKeepRatio( bool p );
+    bool isKeepRatio()const;
+
     KoRect getNewSize() const;
     void setSize(const KoRect &);
 
@@ -138,7 +141,7 @@ private:
     KComboBox *choosePStyle, *chooseBStyle, *clineBegin, *clineEnd, *cFillType;
     KIntNumInput *choosePWidth;
     PBPreview *penPrev, *brushPrev;
-    QCheckBox *unbalanced, *sticky, *protect;
+    QCheckBox *unbalanced, *sticky, *protect, *keepRatio;
     KComboBox *gradients;
     KColorButton *gradient1, *gradient2;
     QSlider *xfactor, *yfactor;
@@ -159,8 +162,9 @@ private:
     BCType oldBCType;
     bool oldUnbalanced;
     bool oneObject;
-    bool oldSticky,  oldProtect;
+    bool oldSticky,  oldProtect, oldKeepRatio;
     int oldXfactor, oldYfactor;
+
     KoRect oldRect;
 
 private slots:

@@ -104,6 +104,7 @@ KPObject::KPObject()
     resize = false;
     sticky = false;
     protect = false;
+    keepRatio = false;
     dcop = 0;
 }
 
@@ -173,6 +174,12 @@ QDomDocumentFragment KPObject::save( QDomDocument& doc, double offset )
         elem.setAttribute("state" , protect);
         fragment.appendChild(elem);
     }
+    if(keepRatio) {
+        elem=doc.createElement("RATIO");
+        elem.setAttribute("ratio" , keepRatio);
+        fragment.appendChild(elem);
+    }
+
 
     return fragment;
 }
@@ -291,6 +298,14 @@ double KPObject::load(const QDomElement &element) {
         if(e.hasAttribute("state"))
             protect=static_cast<bool>(e.attribute("state").toInt());
     }
+
+    e=element.namedItem("RATIO").toElement();
+    if (!e.isNull())
+    {
+        if(e.hasAttribute("ratio"))
+            keepRatio=static_cast<bool>(e.attribute("ratio").toInt());
+    }
+
     return offset;
 }
 

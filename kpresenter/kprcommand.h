@@ -865,19 +865,21 @@ protected:
     bool horizontal;
 };
 
-class KPrProtectObjCommand : public KNamedCommand
+class KPrGeometryPropertiesCommand : public KNamedCommand
 {
 public:
-    KPrProtectObjCommand( const QString &_name, QValueList<bool> &_b, QPtrList<KPObject> &_objects, bool _newVal, KPresenterDoc *_doc );
-    ~KPrProtectObjCommand();
+    KPrGeometryPropertiesCommand( const QString &_name, QValueList<bool> &_protect, QValueList<bool> &_ratio, QPtrList<KPObject> &_objects, bool _newProtect, bool _newRatio, KPresenterDoc *_doc );
+    ~KPrGeometryPropertiesCommand();
 
     virtual void execute();
     virtual void unexecute();
 
 protected:
     QValueList<bool> protect;
+    QValueList<bool> ratio;
     QPtrList<KPObject> objects;
-    bool newValue;
+    bool newProtect;
+    bool newRatio;
     KPresenterDoc *doc;
 };
 

@@ -2155,10 +2155,12 @@ void KPrFlipPolyLineCommand::unexecute()
     }
 }
 
-KPrProtectObjCommand::KPrProtectObjCommand( const QString &_name, QValueList<bool> &_b, QPtrList<KPObject> &_objects, bool _newValue, KPresenterDoc *_doc ):
+KPrGeometryPropertiesCommand::KPrGeometryPropertiesCommand( const QString &_name, QValueList<bool> &_protect, QValueList<bool> &_ratio, QPtrList<KPObject> &_objects, bool _newProtect, bool _newRatio, KPresenterDoc *_doc ):
     KNamedCommand( _name ),
-    protect( _b ),
-    newValue( _newValue ),
+    protect( _protect ),
+    ratio(_ratio),
+    newProtect( _newProtect ),
+    newRatio( _newRatio ),
     objects( _objects ),
     doc(_doc)
 {
@@ -2167,27 +2169,29 @@ KPrProtectObjCommand::KPrProtectObjCommand( const QString &_name, QValueList<boo
         it.current()->incCmdRef();
 }
 
-KPrProtectObjCommand::~KPrProtectObjCommand()
+KPrGeometryPropertiesCommand::~KPrGeometryPropertiesCommand()
 {
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->decCmdRef();
 }
 
-void KPrProtectObjCommand::execute()
+void KPrGeometryPropertiesCommand::execute()
 {
     QPtrListIterator<KPObject> it( objects );
     for ( ; it.current() ; ++it )
     {
-        it.current()->setProtect( newValue );
+        it.current()->setProtect( newProtect );
+        it.current()->setKeepRatio( newRatio );
     }
 }
 
-void KPrProtectObjCommand::unexecute()
+void KPrGeometryPropertiesCommand::unexecute()
 {
     KPObject *obj = 0;
     for ( unsigned int i = 0; i < objects.count(); ++i ) {
 	obj = objects.at( i );
         obj->setProtect( *protect.at(i) );
+        obj->setKeepRatio( *ratio.at(i) );
     }
 }

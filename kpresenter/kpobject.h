@@ -199,6 +199,9 @@ public:
     virtual void setProtect( bool b ) { protect = b; }
     bool isProtect() const { return protect; }
 
+    virtual void setKeepRatio( bool b ) { keepRatio = b; }
+    bool isKeepRatio() const { return keepRatio; }
+
     static void setupClipRegion( QPainter *painter, const QRegion &clipRegion );
 
     virtual void setOrigPointInGroup( const KoPoint &_point ) { origTopLeftPointInGroup = _point; }
@@ -256,6 +259,7 @@ protected:
     bool resize:1;
     bool sticky:1;
     bool protect:1;
+    bool keepRatio:1;
 
     float presFakt;
     KoPoint oldOrig;

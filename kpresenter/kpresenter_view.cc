@@ -972,6 +972,8 @@ void KPresenterView::extraPenBrush()
     //now all sticky object are stored in sticky page
     styleDia->setSticky( stickyPage()->getSticky( sticky ) );
     styleDia->setProtected( page->getProtect( protect ) );
+    styleDia->setKeepRatio( page->getKeepRatio( keepRatio ) );
+
 
     styleDia->setCaption( i18n( "Pen and Brush" ) );
     QObject::connect( styleDia, SIGNAL( styleOk() ), this, SLOT( styleOk() ) );
@@ -3328,7 +3330,8 @@ void KPresenterView::styleOk()
     }
 
     bool prot = styleDia->isProtected();
-    cmd = m_canvas->setProtectObj(prot);
+    bool keepR = styleDia->isKeepRatio();
+    cmd = m_canvas->setGeometryPropertiesObj(prot, keepR);
     if ( cmd)
     {
         createMacro=true;
