@@ -68,6 +68,7 @@ QTextCursor * KWInsertTOCCommand::execute( QTextCursor *c )
         {
             parag = static_cast<KWTextParag *>(textdoc->createParag( textdoc, prevTOCParag /*prev*/, body /*next*/, true ));
             QString txt = p->string()->toString();
+            txt = txt.left( txt.length() - 1 ); // remove trailing space
             txt.prepend( p->counter()->text(p) );
             parag->append( txt );
             prevTOCParag = parag;
@@ -139,8 +140,12 @@ void KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, QTextCursor *cursor, KMa
         if ( parag->style() && ( parag->style()->name().startsWith( "Contents Head" ) ||
             parag->style()->name() == "Contents Title" ) )
         {
-            kdDebug() << "KWContents::createContents Deleting paragraph " << p->paragId() << endl;
+            kdDebug() << "KWContents::createContents Deleting paragraph " << p << " " << p->paragId() << endl;
             // This paragraph is part of the TOC -> remove
+
+            /* This method aims to provide an "undo" that restores the previous version of the TOC.
+               Problem is, it screws up the parag style (due to removeSelectedText calling join),
+               and the first parag of the body ends up with the Contents Title style.
             start.setParag( p );
             start.setIndex( 0 );
             textdoc->setSelectionStart( QTextDocument::Temp, &start );
@@ -151,9 +156,31 @@ void KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, QTextCursor *cursor, KMa
             KCommand * cmd = fs->removeSelectedTextCommand( cursor, QTextDocument::Temp );
             if ( macroCmd )
                 macroCmd->addCommand( cmd );
+            */
+
+            // So instead, we do things by hand, and without undo....
+
+            QTextParag *prev = p->prev();
+            QTextParag *next = p->next();
+            // Move cursor out
+            if ( cursor->parag() == p )
+                cursor->setParag( next ? next : prev );
+            delete p;
+            kdDebug() << "KWInsertTOCCommand::removeTOC " << p << " deleted" << endl;
+            p = next;
+            kdDebug() << "KWInsertTOCCommand::removeTOC prev=" << prev << " p=" << p << endl;
+            // Fix parag chain
+            if ( prev )
+                prev->setNext( p );
+            else
+                textdoc->setFirstParag( p );
+            p->setPrev( prev );
+
+            // ### TODO Parag IDs !
         }
         p = p->prev();
     }
+    textdoc->invalidate();
 }
 
 KWStyle * KWInsertTOCCommand::findOrCreateTOCStyle( KWTextFrameSet *fs, int depth )

@@ -355,7 +355,6 @@ void KWTextParag::drawParagString( QPainter &painter, const QString &s, int star
 void KWTextParag::copyParagData( QTextParag *_parag )
 {
     KWTextParag * parag = static_cast<KWTextParag *>(_parag);
-    // KWDocument * doc = textDocument()->textFrameSet()->kWordDocument(); // not used (Werner)
     // Style of the previous paragraph
     KWStyle * style = parag->style();
     // Obey "following style" setting

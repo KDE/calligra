@@ -2311,7 +2311,6 @@ void KWTextFrameSet::pasteKWord( QTextCursor * cursor, const QCString & data, bo
 
     (void) availableHeight(); // calculate it again (set to -1 due to unzoom/zoom)
 
-    setLastFormattedParag( textdoc->firstParag() );
     formatMore();
     emit repaintChanged( this );
     emit ensureCursorVisible();
@@ -2335,6 +2334,7 @@ void KWTextFrameSet::insertTOC( QTextCursor * cursor )
     macroCmd->addCommand( new KWTextCommand( this, QString::null ) );
     *cursor = *( cmd->execute( cursor ) );
 
+    setLastFormattedParag( textdoc->firstParag() );
     formatMore();
     emit repaintChanged( this );
     emit ensureCursorVisible();
