@@ -2846,8 +2846,10 @@ QString KPresenterDoc::templateFileName( bool chooseTemplate, const QString &the
         kdDebug(33001) << "Copying template  (in KPresenterDoc::templateFileName)" << endl
                        << "  from: " << src.prettyURL() << endl
                        << "  to: " << dest.prettyURL() << endl;
-        KIO::NetAccess::del( dest ); // copy does *not* delete, so have to do it explicitly!
-        KIO::NetAccess::copy( src, dest );
+        KIO::NetAccess::file_copy( src,
+				   dest,
+				   -1, /* default permissions */
+				   true /* overwrite */ );
     }
     return fileName;
 }
