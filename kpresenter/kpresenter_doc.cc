@@ -1595,8 +1595,6 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
 #endif
     }
     updateCustomListSlideShow( m_loadingInfo->m_tmpCustomListMap );
-    delete m_loadingInfo;
-    m_loadingInfo=0L;
     kdDebug(33001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;
 
     if ( !settingsDoc.isNull() )
@@ -2834,7 +2832,7 @@ void KPresenterDoc::loadImagesFromStore( KoStore *_store )
 //TODO test if it's call when we load oasis format
 bool KPresenterDoc::completeLoading( KoStore* _store )
 {
-    kdDebug()<<"bool KPresenterDoc::completeLoading( KoStore* _store )*************************\n";
+    //kdDebug()<<"bool KPresenterDoc::completeLoading( KoStore* _store )*************************\n";
     emit sigProgress( 80 );
 
     if ( _store ) {
