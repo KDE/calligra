@@ -504,7 +504,7 @@ Hidden="0"/>
 
 	 /* End COLS */
 
-	 for ( int currentrow = 1 ; currentrow < iMaxRow ; ++currentrow, ++i )
+	 for ( int currentrow = 1 ; currentrow <= iMaxRow ; ++currentrow, ++i )
 	   {
 	     if(i>step) {
 	       value+=2;
@@ -513,7 +513,7 @@ Hidden="0"/>
 	     }
 
 	     QString line;
-	     for ( int currentcolumn = 1 ; currentcolumn < iMaxColumn ; currentcolumn++ )
+	     for ( int currentcolumn = 1 ; currentcolumn <= iMaxColumn ; currentcolumn++ )
 	       {
 
 		 QDomElement cell_contents;
