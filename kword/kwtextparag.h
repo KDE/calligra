@@ -166,6 +166,9 @@ public:
     void printRTDebug( int );
 #endif
 
+    // Reimplemented from QTextParag to implement non-left-aligned tabs
+    virtual int nextTab( int chnum, int x );
+
 protected:
     // This is public in QTextParag but it should be internal to KWTextParag,
     // because it's in pixels.

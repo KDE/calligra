@@ -402,20 +402,16 @@ int KWTextParag::findCustomItem( const QTextCustomItem * custom ) const
 
 void KWTextParag::setTabList( const KoTabulatorList &tabList )
 {
-    // TODO support for centered tabs, right-aligned tabs etc.
-    m_layout.setTabList( tabList );
+    KoTabulatorList lst( tabList );
+    qHeapSort( lst );
+    m_layout.setTabList( lst );
     if ( !tabList.isEmpty() )
     {
         KWDocument * doc = textDocument()->textFrameSet()->kWordDocument();
-        KoTabulatorList::ConstIterator it = tabList.begin();
-        QValueList<int> sortedTabs;
-        for ( int i = 0; it != tabList.end() ; ++it, ++i )
-            sortedTabs.append( (int)doc->zoomItX( (*it).ptPos ) );
-        qHeapSort( sortedTabs );
         int * tabs = new int( tabList.count() ); // will be deleted by ~QTextParag
-        QValueList<int>::Iterator it2 = sortedTabs.begin();
-        for ( int i = 0; it2 != sortedTabs.end() ; ++it2, ++i )
-            tabs[i] = *it2;
+        KoTabulatorList::Iterator it = lst.begin();
+        for ( int i = 0; it != lst.end() ; ++it, ++i )
+            tabs[i] = (int)doc->zoomItX( (*it).ptPos );
         delete [] tabArray();
         setTabArray( tabs );
     } else
@@ -424,6 +420,51 @@ void KWTextParag::setTabList( const KoTabulatorList &tabList )
         setTabArray( 0 );
     }
     invalidate( 0 );
+}
+
+int KWTextParag::nextTab( int chnum, int x )
+{
+    if ( !m_layout.tabList().isEmpty() )
+    {
+        // Fetch the zoomed and sorted tab positions from QTextParag
+        // We stored them there for faster access
+        int * tArray = tabArray();
+        int i = 0;
+        while ( tArray[ i ] ) {
+            //kdDebug() << "KWTextParag::nextTab tArray[" << i << "]=" << tArray[i] << " type" << m_layout.tabList()[i].type << endl;
+            if ( tArray[ i ] >= x ) {
+                int type = m_layout.tabList()[i].type;
+                switch ( type ) {
+                case T_RIGHT:
+                case T_CENTER:
+                {
+                    // Look for the next tab (or EOL)
+                    int c = chnum + 1;
+                    int w = 0;
+                    while ( c < string()->length()-1 && string()->at( c ).c != '\t' )
+                    {
+                        ++c;
+                        QTextStringChar & ch = string()->at( c );
+                        // Determine char width (same code as the one in QTextFormatterBreak[In]Words::format())
+                        if ( ch.c.unicode() >= 32 || ch.isCustom() )
+                            w += string()->width( c );
+                        else
+                            w += ch.format()->width( ' ' );
+                    }
+                    if ( type == T_RIGHT )
+                        return tArray[ i ] - w;
+                    else // T_CENTER
+                        return tArray[ i ] - w/2;
+                }
+                case T_DEC_PNT: // TODO
+                default: // case T_LEFT:
+                    return tArray[ i ];
+                }
+            }
+            ++i;
+        }
+    } else // No tab list, use tab-stop-width. QTextParag has the code :)
+        return QTextParag::nextTab( chnum, x );
 }
 
 //static
@@ -738,7 +779,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
                     }
                     break;
                 }
-                case 6:
+                case 6: // Anchor
                 {
                     ASSERT( len == 1 );
                     QDomElement anchorElem = formatElem.namedItem( "ANCHOR" ).toElement();
@@ -821,6 +862,12 @@ void KWTextParag::printRTDebug( int info )
         kdDebug() << "topMargin()=" << topMargin() << " bottomMargin()=" << bottomMargin()
                   << " leftMargin()=" << leftMargin() << " rightMargin()=" << rightMargin() << endl;
 
+        static const char * tabtype[] = { "T_LEFT", "T_CENTER", "T_RIGHT", "T_DEC_PNT", "error!!!" };
+        KoTabulatorList tabList = m_layout.tabList();
+        KoTabulatorList::Iterator it = tabList.begin();
+        for ( ; it != tabList.end() ; it++ )
+            kdDebug() << "Tab type:" << tabtype[(*it).type] << " at: " << (*it).ptPos << endl;
+
     } else if ( info == 1 ) // formatting info
     {
         kdDebug() << "  Paragraph format=" << paragFormat() << " " << paragFormat()->key()
@@ -838,11 +885,6 @@ void KWTextParag::printRTDebug( int info )
                 kdDebug() << " - custom item " << ch.customItem() << endl;
         }
     }
-
-    /*KoTabulatorList tabList = m_layout.tabList();
-      KoTabulatorList::Iterator it = tabList.begin();
-      for ( ; it != tabList.end() ; it++ )
-      kdDebug() << "Tab at: " << (*it).ptPos << endl;*/
 }
 #endif
 

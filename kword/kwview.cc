@@ -2622,7 +2622,7 @@ void KWView::updateButtons()
     actionInsertSpecialChar->setEnabled(state);
     actionInsertPicture->setEnabled(state);
     actionInsertFormula->setEnabled(state);
-
+    actionInsertContents->setEnabled(state);
     actionInsertVariable->setEnabled(state);
 
     KWTableFrameSet *table = gui->canvasWidget()->getTable();

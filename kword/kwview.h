@@ -21,23 +21,16 @@
 #define kwview_h
 
 #include <koprinter.h>
-#include <qwidget.h>
-#include <qlist.h>
-#include <qcolor.h>
-#include <qfont.h>
 #include <qbrush.h>
-#include <qstringlist.h>
-#include <qstylesheet.h>
 
 #include "border.h"
 #include "defs.h"
 #include "kwtextparag.h"
-//#include "footnote.h"
 
 #include <koPageLayoutDia.h>
-#include <koRuler.h>
 #include <koView.h>
 
+class KoRuler;
 class KWCanvas;
 class KWChild;
 class KWDocument;
