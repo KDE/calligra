@@ -104,16 +104,25 @@ void KexiDataTable::setDataSet(KexiDBRecord *rec)
 
 	for(uint i = 0; i < m_record->fieldCount(); i++)
 	{
-		if(!m_record->fieldInfo(i)->auto_increment())
+		QVariant defaultval = QVariant("");
+		if(m_record->isForignField(i))
 		{
-			m_tableView->addColumn(m_record->fieldName(i), m_record->type(i), !m_record->readOnly());
-			kdDebug() << "KexiDataTable::setDataSet(): adding usual column" << endl;
+			QStringList fdata;
+			KexiDBRecord *ftr = m_db->queryRecord("SELECT * FROM " + m_record->fieldInfo(i)->table());
+			if(ftr)
+			{
+				while(ftr->next())
+				{
+					fdata.append(ftr->value(m_record->fieldName(i)).toString());
+				}
+
+				defaultval = QVariant(fdata);
+				delete ftr;
+			}
 		}
-		else
-		{
-			m_tableView->addColumn(m_record->fieldName(i), m_record->type(i), !m_record->readOnly(), QVariant(""), 100, true);
-			kdDebug() << "KexiDataTable::setDataSet(): adding auto-inc columns" << endl;
-		}
+
+		m_tableView->addColumn(m_record->fieldName(i), m_record->type(i), !m_record->readOnly(),
+		 defaultval, 100, m_record->fieldInfo(i)->auto_increment());
 	}
 
 	int record = 0;
@@ -151,7 +160,7 @@ KexiDataTable::executeQuery(const QString &queryStatement)
 
 	try
 	{
-		m_record = kexiProject()->db()->queryRecord(queryStatement, false);
+		m_record = kexiProject()->db()->queryRecord(queryStatement, true);
 	}
 	catch(KexiDBError &err)
 	{

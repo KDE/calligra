@@ -31,6 +31,15 @@ class KexiDBInterfaceManager;
 class KexiDBDriver;
 class KexiDBRecord;
 
+typedef struct SourceConnection
+{
+        QString srcTable;
+        QString rcvTable;
+        QString srcField;
+        QString rcvField;
+};
+
+typedef QValueList<SourceConnection> RelationList;
 typedef QPtrList<KexiDBField> KexiDBTableStruct;
 
 class KexiDB : public QObject
@@ -100,16 +109,18 @@ class KexiDB : public QObject
 
 		void appendManager(KexiDBInterfaceManager *m);
 
+		void setRelations(RelationList r) { m_relations = r; }
+		RelationList			relations() { return m_relations; }
+
 		KexiDBInterfaceManager	*manager();
-
 		KexiDBDriver		*m_currentDriver;
-
 		uint us(int i) { return i; }
 
 	protected:
 
 		KexiDBInterfaceManager	*m_manager;
 		KexiDBWatcher		*m_dbwatcher;
+		RelationList		m_relations;
 };
 
 #endif

@@ -29,7 +29,6 @@
 
 #include <koStore.h>
 
-#include "kexiDB/kexidb.h"
 #include "kexiDB/kexidbrecord.h"
 
 #include "kexiproject.h"
@@ -65,6 +64,7 @@ void KexiRelation::updateRelationList(QObject *who,RelationList relationList)
 	m_undoStack.push(m_relationList);
 	m_relationList=relationList;
 	emit relationListUpdated(who);
+	m_parent->db()->setRelations(relationList);
 }
 
 void KexiRelation::storeRelations(KoStore *store)
@@ -163,6 +163,7 @@ void KexiRelation::loadRelations(KoStore *store)
     }
 	m_undoStack.clear();
 	m_usageCount=0;
+	m_parent->db()->setRelations(m_relationList);
 }
 
 KexiRelation::~KexiRelation()

@@ -93,7 +93,17 @@ MySqlRecord::commit(unsigned int record, bool insertBuffer)
 			if(!insertBuffer)
 			{
 				kdDebug() << "MySqlRecord::commit: committing update" << endl;
-				QString statement("update " + m_table + " set " + (*it).field + "='" + value + "' where " + m_keyField + "='" + key + "'");
+
+				QString statement;
+				if(fieldInfo((*it).field)->table() == m_table)
+				{
+					statement = "update " + m_table + " set " + (*it).field + "='" +
+					 value + "' where " + m_keyField + "='" + key + "'";
+				}
+				else
+				{
+					statement = forignUpdate((*it).field, value, key, false);
+				}
 //				kdDebug() << "MySqlRecord::commit(): query: " << statement << endl;
 				m_db->query(statement);
 				(*it).done = true;
@@ -101,7 +111,17 @@ MySqlRecord::commit(unsigned int record, bool insertBuffer)
 			else if(insertBuffer && index != -1)
 			{
 				kdDebug() << "MySqlRecord::commit: committing suicide" << endl;
-				QString statement("insert into " + m_table + " set " + (*it).field + " = '" + value + "'");
+
+				QString statement;
+				if(fieldInfo((*it).field)->table() == m_table)
+				{
+					statement = "insert into " + m_table + " set " + (*it).field +
+					 " = '" + value + "'";
+				}
+				else
+				{
+					statement = forignUpdate((*it).field, value, "", true);
+				}
 //				kdDebug() << "MySqlRecord::commit(insert): " << statement << endl;
 				m_db->query(statement);
 				m_insertList.remove(m_insertList.at(index));
@@ -113,7 +133,7 @@ MySqlRecord::commit(unsigned int record, bool insertBuffer)
 					if((*it).field == m_keyField)
 					{
 						m_keyBuffer.insert(record, QVariant(value));
-						m_db->watcher()->update(0, m_table, (*it).field, record, QVariant(value));
+						m_db->watcher()->update(0, m_table, m_keyField, record, QVariant(value));
 					}
 					if(fieldInfo(m_keyField)->auto_increment())
 					{
@@ -129,6 +149,83 @@ MySqlRecord::commit(unsigned int record, bool insertBuffer)
 		}
 	}
 	return true;
+}
+
+QString
+MySqlRecord::forignUpdate(const QString &field, const QString &value, const QString &key, bool n)
+{
+	kdDebug() << "MySqlRecord::commit(): forign manipulation!" << endl;
+	//working out forign key field
+	QString ftable = fieldInfo(field)->table();
+	QString ffield = fieldInfo(field)->name();
+
+	QString updateq;
+	bool create = true;
+
+	QString fkeyq("SELECT * FROM " + ftable + " WHERE " +
+	 ffield + " = " + "'" + value + "'");
+	kdDebug() << "MySqlRecord::forignUpdate(): fm: " << fkeyq << endl;
+	KexiDBRecord *r = m_db->queryRecord(fkeyq, false);
+	if(r)
+	{
+		if(r->next())
+			create = false;
+		else
+			create = true;
+
+		for(uint i=0; i < r->fieldCount(); i++)
+		{
+			if(r->fieldInfo(i)->primary_key() || r->fieldInfo(i)->unique_key())
+			{
+ 				RelationList rl = m_db->relations();
+				for(RelationList::Iterator it = rl.begin(); it != rl.end(); ++it)
+				{
+					QString fkey = m_db->escape(r->value(i).toString());
+
+					if((*it).rcvTable == ftable && (*it).srcTable == m_table)
+					{
+						QString local = (*it).srcField;
+
+						if(create)
+						{
+							kdDebug() << "MySqlRecord::forignUpdate(): creating..." << endl;
+							uint buffer = r->insert();
+							r->update(buffer, ffield, QVariant(value));
+							r->commit(buffer, true);
+							delete r;
+							return forignUpdate(field, value, key, n);
+						}
+
+						if(!n)
+						{
+							kdDebug() << "MySqlRecord::forignUpdate(): update" << endl;
+							updateq = "update " + m_table + " set " + local + "='" +
+							 fkey + "' where " + m_keyField + "='" + key + "'";
+						}
+						else
+						{
+							updateq = "insert into " + m_table + " set " + local +
+							 " = '" + fkey + "'";
+
+						}
+
+						kdDebug() << "MySqlRecord::forignUpdate(): u: " << updateq << endl;
+//						delete r;
+
+//						break;
+					}
+				}
+
+//				break;
+
+			}
+		}
+
+	}
+	kdDebug() << "MySqlRecord::forignUpdate(): done 0!" << endl;
+	delete r;
+	kdDebug() << "MySqlRecord::forignUpdate(): done 1!" << endl;
+	return updateq;
 }
 
 QVariant
@@ -293,6 +390,15 @@ unsigned long
 MySqlRecord::last_id()
 {
 	return m_lastID;
+}
+
+bool
+MySqlRecord::isForignField(uint f)
+{
+	if(fieldInfo(f)->table() == m_table)
+		return false;
+	else
+		return true;
 }
 
 MySqlRecord::~MySqlRecord()

@@ -20,7 +20,7 @@
 #ifndef KEXIINPUTTABLEEDIT_H
 #define KEXIINPUTTABLEEDIT_H
 
-#include <qlineedit.h>
+#include <klineedit.h>
 #include <qvariant.h>
 
 #include "kexitableedit.h"
@@ -30,20 +30,30 @@ class KexiInputTableEdit : public KexiTableEdit
 	Q_OBJECT
 
 	public:
-		KexiInputTableEdit(QVariant value, QVariant::Type type, QString ov=QString::null, bool mark=false, QWidget *parent=0, const char *name=0);
+		KexiInputTableEdit(QVariant value, QVariant::Type type, QString ov=QString::null, bool mark=false,
+		 QWidget *parent=0, const char *name=0, QStringList comp = QStringList());
 
 		virtual QVariant value();
 		virtual bool eventFilter(QObject* watched, QEvent* e);
 		void end(bool mark);
 		void backspace();
 
+	protected slots:
+		void setRestrictedCompletion();
+		void completed(const QString &);
+
+
 	protected:
 		void showHintButton();
-		
+
 		QVariant::Type	m_type;
 		QVariant	m_value;
 
 		bool		m_calculatedCell;
+		QStringList	m_comp;
+
+	private:
+		KLineEdit	*m_cview;
 
 	signals:
 		void hintClicked();

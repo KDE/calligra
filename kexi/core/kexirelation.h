@@ -23,16 +23,8 @@
 
 #include <qvaluelist.h>
 #include <qvaluestack.h>
+#include "kexiDB/kexidb.h"
 
-typedef struct SourceConnection
-{
-        QString srcTable;
-        QString rcvTable;
-        QString srcField;
-        QString rcvField;
-};
-
-typedef QValueList<SourceConnection> RelationList;
 
 class KexiProject;
 class KoStore;

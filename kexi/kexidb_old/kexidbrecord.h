@@ -169,6 +169,7 @@ class KexiDBRecord : public QObject
 		virtual bool prev() = 0;
 
 		virtual unsigned long last_id() = 0;
+		virtual bool isForignField(uint field) { return false; }
 };
 
 #endif

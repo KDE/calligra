@@ -26,18 +26,28 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
+#include <kcompletionbox.h>
 
 #include "kexiinputtableedit.h"
 
-KexiInputTableEdit::KexiInputTableEdit(QVariant value, QVariant::Type type, QString ov, bool mark, QWidget *parent, const char *name)
+KexiInputTableEdit::KexiInputTableEdit(QVariant value, QVariant::Type type, QString ov, bool mark, QWidget *parent, const char *name, QStringList comp)
  : KexiTableEdit()
 {
 	m_type = type;
 	m_value = value;
-	m_view = new QLineEdit(this, "tableLineEdit");
+	m_cview = new KLineEdit(this, "tableLineEdit");
+	m_view = m_cview;
 	m_view->installEventFilter(this);
-	static_cast<QLineEdit*>(m_view)->setFrame(false);
+	m_cview->setFrame(false);
 	m_calculatedCell = false;
+
+	connect(m_cview->completionBox(), SIGNAL(activated(const QString &)),
+	 this, SLOT(completed(const QString &)));
+	connect(m_cview->completionBox(), SIGNAL(highlighted(const QString &)),
+	 this, SLOT(completed(const QString &)));
+
+	 m_cview->completionBox()->setTabHandling(true);
+
 
 	if(!ov.isNull())
 	{
@@ -45,39 +55,44 @@ KexiInputTableEdit::KexiInputTableEdit(QVariant value, QVariant::Type type, QStr
 		{
 			case QVariant::Double:
 				if(ov == KGlobal::locale()->decimalSymbol() || ov == KGlobal::locale()->monetaryDecimalSymbol())
-					static_cast<QLineEdit*>(m_view)->setText(ov);
+					m_cview->setText(ov);
 
 			case QVariant::Int:
 				if(ov == KGlobal::locale()->negativeSign())
-					static_cast<QLineEdit*>(m_view)->setText(ov);
+					m_cview->setText(ov);
 
 			case QVariant::UInt:
 				if(ov == "1" || ov == "2" || ov == "3" || ov == "4" || ov == "5" || ov == "6" || ov == "7" || ov == "8" || ov == "9" || ov == "0")
-					static_cast<QLineEdit*>(m_view)->setText(ov);
+					m_cview->setText(ov);
 //					break;
 
 				if(ov == "=")
+				{
 					kdDebug() << "KexiInputTableEdit::KexiInputTableEdit(): calculated!" << endl;
 					m_calculatedCell = true;
-					static_cast<QLineEdit*>(m_view)->setText(ov);
-					break;
+					m_cview->setText(ov);
+				}
+				break;
 
 
 			default:
-				static_cast<QLineEdit*>(m_view)->setText(ov);
+				m_cview->setText(ov);
+				QTimer::singleShot(1, this, SLOT(setRestrictedCompletion()));
 				break;
 		}
 	}
 	else
 	{
-		static_cast<QLineEdit*>(m_view)->setText(value.toString());
+		m_cview->setText(value.toString());
 		kdDebug() << "KexiInputTableEdit::KexiInputTableEdit(): have to mark! (%i)"
-			<< static_cast<QLineEdit*>(m_view)->text().length() << endl;
-//		static_cast<QLineEdit*>(m_view)->setSelection(0, static_cast<QLineEdit*>(m_view)->text().length());
+			<< m_cview->text().length() << endl;
+//		m_cview->setSelection(0, m_cview->text().length());
 		QTimer::singleShot(0, m_view, SLOT(selectAll()));
-		static_cast<QLineEdit*>(m_view)->selectAll();
+		m_cview->selectAll();
+//		setRestrictedCompletion();
 	}
 
+	m_comp = comp;
 	setFocusProxy(m_view);
 }
 
@@ -135,28 +150,38 @@ KexiInputTableEdit::eventFilter(QObject* watched, QEvent* e)
 						case Key_Next:
 						case Key_Escape:
 							return false;
-							break;
 
 						case Key_Equal:
 							m_calculatedCell = true;
 							return true;
-							break;
 
 						case Key_Backspace:
-							if(static_cast<QLineEdit*>(m_view)->text() == "=")
+							if(m_cview->text() == "=")
 								m_calculatedCell = false;
 							return false;
 
 						default:
 							return true;
-							break;
 					}
 
 					break;
 
 				default:
+//					static_cast<KLineEdit*>(m_view)->setCompletedItems(m_comp);
+//					static_cast<KLineEdit*>(m_view)->setKeyBinding(KGlobalSettings::CompletionPopup, Qt::Key_Return);
+
+					switch(ev->key())
+					{
+						case Key_Enter:
+						case Key_Return:
+						case Key_Tab:
+							return false;
+
+						default:
+							QTimer::singleShot(1, this, SLOT(setRestrictedCompletion()));
+							break;
+					}
 					return false;
-					break;
 			}
 		}
 		else
@@ -168,6 +193,34 @@ KexiInputTableEdit::eventFilter(QObject* watched, QEvent* e)
 	{
 		return KexiTableEdit::eventFilter(watched, e);
 	}
+}
+
+void
+KexiInputTableEdit::setRestrictedCompletion()
+{
+	kdDebug() << "KexiInputTableEdit::setRestrictedCompletion()" << endl;
+	KLineEdit *content = static_cast<KLineEdit*>(m_view);
+	if(content->text().isEmpty())
+		return;
+
+	kdDebug() << "KexiInputTableEdit::setRestrictedCompletion(): something to do" << endl;
+
+	content->useGlobalKeyBindings();
+
+	QStringList newC;
+	for(QStringList::Iterator it = m_comp.begin(); it != m_comp.end(); ++it)
+	{
+		if((*it).startsWith(content->text()))
+			newC.append(*it);
+	}
+	content->setCompletedItems(newC);
+}
+
+void
+KexiInputTableEdit::completed(const QString &s)
+{
+	kdDebug() << "KexiInputTableEdit::completed(): " << s << endl;
+	static_cast<KLineEdit*>(m_view)->setText(s);
 }
 
 QVariant
@@ -183,18 +236,19 @@ KexiInputTableEdit::value()
 //			QString v;
 			if(!m_calculatedCell)
 			{
-				qDebug("KexiInputTableEdit::value() converting => %s", static_cast<QLineEdit*>(m_view)->text().latin1());
-				v = static_cast<QLineEdit*>(m_view)->text().replace(QRegExp("\\" + KGlobal::locale()->thousandsSeparator()), "");
+				qDebug("KexiInputTableEdit::value() converting => %s", m_cview->text().latin1());
+				v = m_cview->text().replace(QRegExp("\\" + KGlobal::locale()->thousandsSeparator()), "");
 				v = v.replace(QRegExp("\\" + KGlobal::locale()->decimalSymbol()), ".");
 				v = v.replace(QRegExp("\\" + KGlobal::locale()->negativeSign()), "-");
-				qDebug("KexiInputTableEdit::value() converting => %s", v.latin1());
+				kdDebug() << "KexiInputTableEdit::value() converting => " << v.latin1() << endl;
 				return QVariant(v);
 			}
 			else
 			{
 				//ok here should the formula be parsed so, just feel like in perl :)
+				kdDebug() << "KexiInputTableEdit::value() calculating..." << endl;
 				double result = 0;
-				QString real = static_cast<QLineEdit*>(m_view)->text().right(static_cast<QLineEdit*>(m_view)->text().length() - 1);
+				QString real = m_cview->text().right(m_cview->text().length() - 1);
 				real = real.replace(QRegExp("\\" + KGlobal::locale()->thousandsSeparator()), "");
 				real = real.replace(QRegExp("\\" + KGlobal::locale()->decimalSymbol()), ".");
 //				qDebug("KexiInputTableEdit::value() calculating '%s'", real.latin1());
@@ -247,7 +301,8 @@ KexiInputTableEdit::value()
 			break;
 
 		default:
-			return QVariant(static_cast<QLineEdit*>(m_view)->text());
+			kdDebug() << "KexiInputTableEdit::value() default..." << endl;
+			return QVariant(m_cview->text());
 	}
 //	return QVariant(0);
 }
@@ -255,13 +310,13 @@ KexiInputTableEdit::value()
 void
 KexiInputTableEdit::end(bool mark)
 {
-	static_cast<QLineEdit*>(m_view)->end(mark);
+	m_cview->end(mark);
 }
 
 void
 KexiInputTableEdit::backspace()
 {
-	static_cast<QLineEdit*>(m_view)->backspace();
+	m_cview->backspace();
 }
 
 #include "kexiinputtableedit.moc"

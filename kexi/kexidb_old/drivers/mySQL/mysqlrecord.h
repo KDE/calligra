@@ -99,6 +99,8 @@ class MySqlRecord : public KexiDBRecord, public MySqlResult
 		bool next();
 		bool prev();
 
+		bool isForignField(uint field);
+
 		unsigned long last_id();
 
 		//needed members
@@ -106,6 +108,7 @@ class MySqlRecord : public KexiDBRecord, public MySqlResult
 
 	protected:
 		bool		findKey(); /* finds the key for updateing */
+		QString		forignUpdate(const QString &field, const QString &value, const QString &key, bool n);
 
 		MySqlDB		*m_db;
 

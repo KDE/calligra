@@ -1027,7 +1027,8 @@ void KexiTableView::createEditor(int row, int col, QString addText/* = QString::
 			kdDebug() << "date editor created..." << endl;
 			break;
 		default:
-			m_pEditor = new KexiInputTableEdit(val, columnType(col), addText, false, viewport(), "inPlaceEd");
+			m_pEditor = new KexiInputTableEdit(val, columnType(col), addText, false, viewport(), "inPlaceEd",
+			 m_pColumnDefaults->at(col)->toStringList());
 			static_cast<KexiInputTableEdit*>(m_pEditor)->end(false);
 			if(backspace)
 				static_cast<KexiInputTableEdit*>(m_pEditor)->backspace();
