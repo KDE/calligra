@@ -167,6 +167,7 @@ static void ProcessSizeTag (QDomNode myNode, void* , QString& abiprops)
     {
         abiprops += "font-size:";
 	abiprops += QString::number(size,10);
+	abiprops += "pt"; // Don't forget the unit symbol!
 	abiprops += "; "; // Note: Trailing space is important!
     }
 }
@@ -185,6 +186,31 @@ static void ProcessFontTag (QDomNode myNode, void* , QString& abiprops)
     	abiprops += fontName; //TODO: font name translation
     	abiprops += "; "; // Note: Trailing space is important!
     }
+}
+
+static void ProcessColorTag (QDomNode myNode, void* , QString& abiprops)
+{
+    int red,green,blue;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList.append ( AttrProcessing ("red"   , "int", (void *)&red   ) );
+    attrProcessingList.append ( AttrProcessing ("green" , "int", (void *)&green ) );
+    attrProcessingList.append ( AttrProcessing ("blue"  , "int", (void *)&blue  ) );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    abiprops += "color:";
+
+    //We must have two hex digits for each colour channel!
+    abiprops += QString::number((red&0xf0)>>4,16);
+    abiprops += QString::number(red&0x0f,16);
+    
+    abiprops += QString::number((green&0xf0)>>4,16);
+    abiprops += QString::number(green&0x0f,16);
+    
+    abiprops += QString::number((blue&0xf0)>>4,16);
+    abiprops += QString::number(blue&0x0f,16);
+    
+    abiprops += "; "; // Note: Trailing space is important!
 }
 
 // FormatData is a container for data retreived from the FORMAT tag
@@ -238,6 +264,7 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, QString &)
     tagProcessingList.append ( TagProcessing ( "WEIGHT",    ProcessWeightTag, NULL ) );
     tagProcessingList.append ( TagProcessing ( "SIZE",      ProcessSizeTag, NULL ) );
     tagProcessingList.append ( TagProcessing ( "FONT",      ProcessFontTag, NULL ) );
+    tagProcessingList.append ( TagProcessing ( "COLOR",     ProcessColorTag,    NULL ) );
 
     //Now let's the sub tags fill in the AbiWord's "props" attribute
     ProcessSubtags (myNode, tagProcessingList, formatData.abiprops);
