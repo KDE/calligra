@@ -182,6 +182,9 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     connect (m_gui->canvasWidget(), SIGNAL(selectionChanged(bool)),
              actionChangeCase, SLOT(setEnabled(bool)));
 
+    connect (m_gui->canvasWidget(), SIGNAL(selectionChanged(bool)),
+             actionCreateStyleFromSelection, SLOT(setEnabled(bool)));
+
     connect( m_gui->canvasWidget(), SIGNAL(frameSelectedChanged()),
              this, SLOT(frameSelectedChanged()));
 
@@ -4467,7 +4470,7 @@ void KWView::slotFrameSetEditChanged()
     actionFormatIncreaseIndent->setEnabled(state);
     actionChangeCase->setEnabled( (rw && !edit)|| (state && hasSelection) );
     actionInsertLink->setEnabled(state);
-
+    actionCreateStyleFromSelection->setEnabled( state && hasSelection);
     bool goodleftMargin=false;
     if(state)
         goodleftMargin=(edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft]>0);
