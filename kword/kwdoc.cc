@@ -2197,8 +2197,9 @@ QCursor KWDocument::getMouseCursor( const QPoint &nPoint, bool controlPressed )
             continue;
 
         QCursor cursor;
-        if ( !fit.atFirst() && // Can't move/resize main text frame
-             frameSet->getMouseCursor( nPoint, controlPressed, cursor ) )
+        // Can't move/resize main text frame (currently), hence the last arg
+        bool mainFrameSet = ( m_processingType == WP ) && fit.atFirst();
+        if ( frameSet->getMouseCursor( nPoint, controlPressed, cursor, !mainFrameSet ) )
             return cursor;
     }
 

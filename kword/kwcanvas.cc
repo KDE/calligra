@@ -983,6 +983,7 @@ void KWCanvas::mrEditFrame( QMouseEvent *e, const QPoint &nPoint ) // Can be cal
                 cmdMoveFrame = 0L;
             }
         }
+        m_doc->repaintAllViews();
     }
     else
     {
@@ -1002,7 +1003,6 @@ void KWCanvas::mrEditFrame( QMouseEvent *e, const QPoint &nPoint ) // Can be cal
             }
         }
     }
-    m_doc->repaintAllViews();
     m_mousePressed = false;
     m_ctrlClickOnSelectedFrame = false;
 }

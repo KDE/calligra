@@ -746,10 +746,10 @@ bool KWFrameSet::contains( double mx, double my )
     return false;
 }
 
-bool KWFrameSet::getMouseCursor( const QPoint &nPoint, bool controlPressed, QCursor & cursor )
+bool KWFrameSet::getMouseCursor( const QPoint &nPoint, bool controlPressed, QCursor & cursor, bool canMove )
 {
     KoPoint docPoint = m_doc->unzoomPoint( nPoint );
-    QCursor defaultCursor = isFloating() ? Qt::pointingHandCursor : Qt::sizeAllCursor;
+    QCursor defaultCursor = ( canMove && !isFloating() ) ? Qt::sizeAllCursor : Qt::pointingHandCursor;
     // See if we're over a frame border
     KWFrame * frame = frameByBorder( nPoint );
     if ( frame )
