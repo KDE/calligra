@@ -1,0 +1,22 @@
+<!DOCTYPE DCOP-IDL><DCOP-IDL>
+<SOURCE>./lateximportdia.h</SOURCE>
+<INCLUDE>koStore.h</INCLUDE>
+<INCLUDE>kdebug.h</INCLUDE>
+<INCLUDE>kdialogbase.h</INCLUDE>
+<INCLUDE>dcopobject.h</INCLUDE>
+<INCLUDE>klocale.h</INCLUDE>
+<INCLUDE>qvbuttongroup.h</INCLUDE>
+<INCLUDE>qradiobutton.h</INCLUDE>
+<INCLUDE>qlayout.h</INCLUDE>
+<INCLUDE>qlabel.h</INCLUDE>
+<INCLUDE>qwidget.h</INCLUDE>
+<CLASS>
+    <NAME>LATEXImportDia</NAME>
+    <SUPER>KDialogBase</SUPER>
+    <SUPER>DCOPObject</SUPER>
+    <FUNC>
+        <TYPE>void</TYPE>
+        <NAME>useDefaultConfig</NAME>
+     </FUNC>
+</CLASS>
+</DCOP-IDL>
