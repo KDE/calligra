@@ -2102,6 +2102,8 @@ void KWView::updateStyleList()
             act->setExclusiveGroup( "styleListAction" );
             actionFormatStyleMenu->insert( act );
         }
+        else
+            kdWarning() << "No style found for " << *it << endl;
     }
 }
 
@@ -2151,7 +2153,7 @@ void KWView::updateFrameStyleList()
     for ( QStringList::Iterator it = lstWithAccels.begin(); it != lstWithAccels.end(); ++it, ++i )
     {
         KToggleAction* act =0L;
-        KWFrameStyle *tmp = m_doc->frameStyleCollection()->findFrameStyle( lst[ i]);
+        KWFrameStyle *tmp = m_doc->frameStyleCollection()->findTranslatedFrameStyle( lst[ i]);
         if ( tmp )
         {
             QCString name = tmp->shortCutName().latin1();
@@ -2171,6 +2173,8 @@ void KWView::updateFrameStyleList()
             act->setExclusiveGroup( "frameStyleList" );
             actionFrameStyleMenu->insert( act );
         }
+        else
+            kdWarning() << "No frame style found for " << *it << endl;
     }
 }
 
@@ -2241,6 +2245,8 @@ void KWView::updateTableStyleList()
             act->setGroup( "tableStyleList" );
             actionTableStyleMenu->insert( act );
         }
+        else
+            kdWarning() << "No table style found for " << *it << endl;
     }
 }
 
