@@ -207,8 +207,8 @@ void KexiTableView::clear()
 	// Initialize variables
 	m_pEditor = 0;
 	m_numRows = 0;
-	m_curRow = 0;
-	m_curCol = 0;
+	m_curRow = -1;
+	m_curCol = -1;
 	m_pCurrentItem=0;
 
 	m_pVerticalHeader->setCurrentRow(-1);
@@ -694,7 +694,7 @@ void KexiTableView::contentsMousePressEvent( QMouseEvent* e )
 		m_curCol = m_numCols-1;
 
 	//	if we have a new focus cell, repaint
-	if ( m_curRow != oldRow || m_curCol != oldCol )
+	if (( m_curRow != oldRow) || (m_curCol != oldCol ))
 	{
 		int cw = columnWidth( m_curCol );
 		int rh = rowHeight( m_curRow );
@@ -703,9 +703,11 @@ void KexiTableView::contentsMousePressEvent( QMouseEvent* e )
 		updateCell( oldRow, oldCol );
 		m_pVerticalHeader->setCurrentRow(m_curRow);
 		m_pCurrentItem = itemAt(m_curRow);
+//		kdDebug()<<"void KexiTableView::contentsMousePressEvent( QMouseEvent* e ) trying to get the current item"<<endl;
 		emit itemSelected(m_pCurrentItem);
 	}
 
+//	kdDebug()<<"void KexiTableView::contentsMousePressEvent( QMouseEvent* e ) by now the current items should be set, if not -> error + crash"<<endl;
 	if(m_pContextMenu && e->button() == RightButton)
 	{
 		m_pContextMenu->exec(QCursor::pos());
