@@ -6,6 +6,8 @@
 #include "kspread_factory.h"
 
 #define KSBarIcon( x ) BarIcon( x, KSpreadFactory::global() )
+#define colWidth 60.0
+#define heightOfRow 20.0
 
 enum PasteMode { Normal, Text, Format, NoBorder, Comment, NormalAndTranspose, TextAndTranspoase,
 		 FormatAndTranspose, NoBorderAndTranspose };

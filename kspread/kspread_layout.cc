@@ -1443,7 +1443,7 @@ RowLayout::RowLayout( KSpreadTable *_table, int _row ) : KSpreadLayout( _table )
     m_prev = 0;
 
     m_bDisplayDirtyFlag = false;
-    m_fHeight = POINT_TO_MM(20.0);
+    m_fHeight = POINT_TO_MM(heightOfRow);
     m_iRow = _row;
     m_bDefault = false;
 }
@@ -1594,7 +1594,7 @@ bool RowLayout::isDefault() const
 ColumnLayout::ColumnLayout( KSpreadTable *_table, int _column ) : KSpreadLayout( _table )
 {
   m_bDisplayDirtyFlag = false;
-  m_fWidth = POINT_TO_MM(60.0);
+  m_fWidth = POINT_TO_MM(colWidth);
   m_iColumn = _column;
   m_bDefault=false;
   m_prev = 0;
