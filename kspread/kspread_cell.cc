@@ -496,6 +496,7 @@ QString KSpreadCell::encodeFormula( int _col, int _row )
             onNumber = false;
         }
     }
+
     return erg;
 }
 
@@ -573,6 +574,7 @@ QString KSpreadCell::decodeFormula( const QString &_text, int _col, int _row )
         else
             erg += _text[pos++];
     }
+
     return erg;
 }
 
@@ -3119,9 +3121,7 @@ void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
    */
   if ( !m_strText.isEmpty() && m_strText[0] == '=' )
   {
-    m_strText = decodeFormula( _text, m_iColumn, m_iRow );
     setFlag(Flag_LayoutDirty);
-    clearFlag(Flag_Error);
 
     m_content = Formula;
 
