@@ -26,6 +26,7 @@ class KoTextObject;
 class KoTextDocument;
 class KoVariable;
 #include <koparaglayout.h>
+#include <kotextdocument.h>
 
 /**
  * Wraps a KoTextDocCommand into a KCommand, for the UI
