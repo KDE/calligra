@@ -575,22 +575,77 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
 
     if ( force || ( formatOrigin.underline != formatData.underline )
         || ( formatOrigin.underlineColor != formatData.underlineColor )
-         )
+        || ( formatOrigin.underlineValue != formatData.underlineValue )
+        || ( formatOrigin.underlineStyle != formatData.underlineStyle ) )
     {
         strElement+="style:text-underline=\"";
         if ( formatData.underline )
         {
-            strElement+="single";
-            key += 'S';
+            QString underlineValue ( formatData.underlineValue );
+            QString underlineStyle ( formatData.underlineStyle );
+
+            if ( underlineStyle.isEmpty() )
+                underlineStyle = "solid";
+            if  ( underlineValue == "1" )
+                underlineValue = "single";
+
+            if ( underlineValue == "single" )
+            {
+                if ( underlineStyle == "dash" )
+                {
+                    strElement += "dash";
+                    key += "DA";
+                }
+                else if ( underlineStyle == "dot" )
+                {
+                    strElement += "dotted";
+                    key += "DO";
+                }
+                else if ( underlineStyle == "dashdot" )
+                {
+                    strElement += "dot-dash";
+                    key += "DDA";
+                }
+                else if ( underlineStyle == "dashdotdot" )
+                {
+                    strElement += "dot-dot-dash";
+                    key += "DDDA";
+                }
+                else
+                {
+                    strElement += "single";
+                    key += "1";
+                }
+            }
+            else if ( underlineValue == "double" )
+            {
+                strElement += "double";
+                key += "2";
+            }
+            else if ( underlineValue == "single-bold" )
+            {
+                strElement += "bold";
+                key += "BL";
+            }
+            else if ( underlineValue == "wave" )
+            {
+                strElement += "wave";
+                key += "WV";
+            }
+            else
+            {
+                strElement += "single";
+                key += "?";
+            }
         }
-         else
+        else
         {
             strElement+="none";
             key += 'N';
         }
         strElement += "\" ";
 
-        if ( formatData.underlineColor.isValid() )
+        if ( formatData.underline && formatData.underlineColor.isValid() )
         {
             const QString colorName( formatData.underlineColor.name() );
             strElement += "style:text-underline-color=\"";
