@@ -130,9 +130,9 @@ void KSpreadUndo::unlock()
   m_pDoc->undoUnlock();
 }
 
-bool KSpreadUndo::isLocked() const 
-{ 
-  return m_pDoc->undoLocked(); 
+bool KSpreadUndo::isLocked() const
+{
+  return m_pDoc->undoLocked();
 }
 
 QString KSpreadUndo::getRedoName()
@@ -3029,34 +3029,6 @@ void KSpreadUndoStyleCell::redo()
     doc()->undoUnlock();
 }
 
-
-
-KSpreadUndoAddTable::KSpreadUndoAddTable(KSpreadDoc *_doc, KSpreadSheet* _table)
-    : KSpreadUndoAction( _doc ),
-      m_table( _table )
-{
-    name=i18n("Add Table");
-}
-
-KSpreadUndoAddTable::~KSpreadUndoAddTable()
-{
-}
-
-void KSpreadUndoAddTable::undo()
-{
-    doc()->undoLock();
-    m_table->map()->takeTable( m_table );
-    doc()->takeTable( m_table );
-    doc()->undoUnlock();
-}
-
-void KSpreadUndoAddTable::redo()
-{
-    doc()->undoLock();
-    m_table->map()->insertTable( m_table );
-    doc()->insertTable( m_table );
-    doc()->undoUnlock();
-}
 
 KSpreadUndoRemoveTable::KSpreadUndoRemoveTable(KSpreadDoc *_doc, KSpreadSheet* _table)
     : KSpreadUndoAction( _doc ),
