@@ -191,7 +191,8 @@ luPixel ContextStyle::getQuadSpace( TextStyle tstyle ) const
 
 luPixel ContextStyle::axisHeight( TextStyle tstyle ) const
 {
-    return ptToPixelY( textStyleValues[ tstyle ].axisHeight( m_axisHeight ) );
+    //return ptToPixelY( textStyleValues[ tstyle ].axisHeight( m_axisHeight ) );
+    return textStyleValues[ tstyle ].axisHeight( m_axisHeight );
 }
 
 luPt ContextStyle::getBaseSize() const
@@ -267,14 +268,21 @@ ContextStyle::TextStyle ContextStyle::convertTextStyleIndex( TextStyle tstyle ) 
 
 void ContextStyle::setup()
 {
-    luPt size = static_cast<luPt>( ptToLayoutUnitPt( m_baseSize ) );
+    luPt size = static_cast<luPt>( m_baseSize );
     QFont font = symbolFont;
     font.setPointSize( size );
     QFontMetrics fm( font );
 
     // Or better the real space required? ( boundingRect )
-    quad = fm.width( 'M' );
-    m_axisHeight = fm.strikeOutPos();
+    quad = ptToLayoutUnitPt( fm.width( 'M' ) );
+
+    font = QFont(defaultFont);
+    font.setPointSize( size );
+    QFontMetrics fm2( font );
+    //m_axisHeight = ptToLayoutUnitPt( fm2.strikeOutPos() );
+    //ptToLayoutUnitPixY
+    //m_axisHeight = ptToLayoutUnitPt( pixelYToPt( fm2.strikeOutPos() ) );
+    m_axisHeight = ptToLayoutUnitPixY( pixelYToPt( fm2.strikeOutPos() ) );
 }
 
 KFORMULA_NAMESPACE_END

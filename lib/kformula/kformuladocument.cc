@@ -31,6 +31,7 @@
 #include "kformulacontainer.h"
 #include "kformuladocument.h"
 #include "symboltable.h"
+#include "symbolaction.h"
 
 KFORMULA_NAMESPACE_BEGIN
 
@@ -90,7 +91,7 @@ struct Document::Document_Impl {
     KToggleAction* syntaxHighlightingAction;
     KSelectAction* leftBracket;
     KSelectAction* rightBracket;
-    KSelectAction* symbolNamesAction;
+    SymbolAction* symbolNamesAction;
 
     SymbolType leftBracketChar;
     SymbolType rightBracketChar;
@@ -242,8 +243,22 @@ void Document::lazyInit()
         impl->contextStyle.init();
 
         if ( impl->actionsCreated ) {
-            QStringList names = impl->contextStyle.symbolTable().allNames();
-            impl->symbolNamesAction->setItems(names);
+            const SymbolTable& st = impl->contextStyle.symbolTable();
+
+            QStringList names = st.allNames();
+            QValueList<QFont> fonts;
+            QMemArray<uchar> chars( names.count() );
+
+            int i = 0;
+            for ( QStringList::Iterator it = names.begin(); it != names.end(); ++it, ++i ) {
+                QString name = *it;
+                QChar ch = st.unicode( name );
+
+                fonts.append( st.font( ch ) );
+                chars[ i ] = st.character( ch );
+            }
+            impl->symbolNamesAction->setSymbols( names, fonts, chars );
+            // impl->symbolNamesAction->setItems(names);
             impl->selectedName = names[0];
         }
     }
@@ -492,12 +507,13 @@ void Document::createActions(KActionCollection* collection)
     //rightBracket->setCurrentItem(0);
 
     impl->insertSymbolAction = new KAction(i18n("Insert symbol"),
-                                        CTRL + Key_I,
-                                        this, SLOT(insertSymbol()),
-                                        collection, "formula_insertsymbol");
-    impl->symbolNamesAction = new KSelectAction(i18n("Symbol names"),
-                                          0, this, SLOT(symbolNames()),
-                                          collection, "formula_symbolnames");
+                                           "key_enter",
+                                           CTRL + Key_I,
+                                           this, SLOT(insertSymbol()),
+                                           collection, "formula_insertsymbol");
+    impl->symbolNamesAction = new SymbolAction(i18n("Symbol names"),
+                                               0, this, SLOT(symbolNames()),
+                                               collection, "formula_symbolnames");
 
     impl->actionsCreated = true;
 }

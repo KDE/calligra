@@ -101,7 +101,8 @@ void FractionElement::calcSizes(const ContextStyle& style, ContextStyle::TextSty
     setWidth( QMAX( numerator->getWidth(), denominator->getWidth() ) );
     setHeight( numerator->getHeight() + denominator->getHeight() +
                2*distY + style.getLineWidth() );
-    setBaseline( numerator->getHeight() + distY + .5*style.getLineWidth() + style.axisHeight( tstyle ) );
+    setBaseline( numerator->getHeight() + distY + .5*style.getLineWidth() +
+                 style.axisHeight( tstyle ) );
 
     numerator->setX( ( getWidth() - numerator->getWidth() ) / 2 );
     denominator->setX( ( getWidth() - denominator->getWidth() ) / 2 );

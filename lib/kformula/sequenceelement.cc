@@ -209,15 +209,24 @@ void SequenceElement::draw( QPainter& painter, const LuPixelRect& r,
 	    if (!child->isInvisible()) {
                 child->draw(painter, r, context, tstyle, istyle, myPos);
             }
-	    // Debug
-            //painter.setPen(Qt::green);
-            //painter.drawRect(parentOrigin.x() + getX(), parentOrigin.y() + getY(),
-            //                 getWidth(), getHeight());
         }
     }
     else {
         drawEmptyRect( painter, context, myPos );
     }
+    // Debug
+    //painter.setPen(Qt::green);
+    //painter.drawRect(parentOrigin.x() + getX(), parentOrigin.y() + getY(),
+    //                 getWidth(), getHeight());
+//     painter.drawLine( context.layoutUnitToPixelX( parentOrigin.x() + getX() ),
+//                       context.layoutUnitToPixelY( parentOrigin.y() + getY() + axis( context, tstyle ) ),
+//                       context.layoutUnitToPixelX( parentOrigin.x() + getX() + getWidth() ),
+//                       context.layoutUnitToPixelY( parentOrigin.y() + getY() + axis( context, tstyle ) ) );
+//     painter.setPen(Qt::red);
+//     painter.drawLine( context.layoutUnitToPixelX( parentOrigin.x() + getX() ),
+//                       context.layoutUnitToPixelY( parentOrigin.y() + getY() + getBaseline() ),
+//                       context.layoutUnitToPixelX( parentOrigin.x() + getX() + getWidth() ),
+//                       context.layoutUnitToPixelY( parentOrigin.y() + getY() + getBaseline() ) );
 }
 
 void SequenceElement::drawEmptyRect( QPainter& painter, const ContextStyle& context,
