@@ -3714,6 +3714,8 @@ void KWPage::femProps()
 /*================================================================*/
 void KWPage::newLeftIndent( double _left )
 {
+    if(!doc->isReadWrite())
+        return;
     KWUnit u;
     u.setPT( _left );
     setLeftIndent( u );
@@ -3734,6 +3736,8 @@ void KWPage::newLeftIndent( double _left )
 /*================================================================*/
 void KWPage::newFirstIndent( double _first )
 {
+    if(!doc->isReadWrite())
+        return;
     KWUnit u;
     u.setPT( _first );
     setFirstLineIndent( u );
