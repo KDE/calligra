@@ -25,7 +25,6 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kiconloader.h>
-#include <kdebug.h>
 
 
 class KoRulerPrivate {
@@ -606,10 +605,16 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 			    layout.left = layout.mmLeft = cPOINT_TO_MM( mx + diffx );
 			    layout.inchLeft = cPOINT_TO_INCH( mx + diffx );
 			    layout.ptLeft = mx + diffx;
-			    if( i_first > right-left-10 )
-				i_first=right-left-10;
-			    if( i_left > right-left-10 )
-				i_left=right-left-10;			
+			    if( i_first > right-left-15 ) {
+				i_first=right-left-15;
+				i_first=i_first<0 ? 0 : i_first;
+				emit newFirstIndent( i_first );
+			    }
+			    if( i_left > right-left-15 ) {
+				i_left=right-left-15;
+				i_left=i_left<0 ? 0 : i_left;
+				emit newLeftIndent( i_left );
+			    }
 			    d->oldMx = mx;
 			    d->oldMy = my;
 			    p.end();
@@ -628,10 +633,16 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 			    layout.right = layout.mmRight = cPOINT_TO_MM( static_cast<int>( pw - ( mx + diffx ) ) );
 			    layout.ptRight = pw - ( mx + diffx );
 			    layout.inchRight = cPOINT_TO_INCH( static_cast<int>( pw - ( mx + diffx ) ) );
-			    if( i_first > right-left-10 )
-				i_first=right-left-10;
-			    if( i_left > right-left-10 )
-				i_left=right-left-10;
+			    if( i_first > right-left-15 ) {
+				i_first=right-left-15;
+				i_first=i_first<0 ? 0 : i_first;
+				emit newFirstIndent( i_first );
+			    }
+			    if( i_left > right-left-15 ) {
+				i_left=right-left-15;
+				i_left=i_left<0 ? 0 : i_left;
+				emit newLeftIndent( i_left );
+			    }
 			    d->oldMx = mx;
 			    d->oldMy = my;
 			    repaint( false );
