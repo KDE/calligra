@@ -18,6 +18,7 @@
 */
 
 #include "kwdoc.h"
+#include "kwcanvas.h"
 #include <koRect.h>
 #include "resizetabledia.h"
 #include "resizetabledia.moc"
@@ -60,7 +61,18 @@ void KWResizeTableDia::setupTab1()
     unsigned int colSelected;
     bool ret = table->getFirstSelected(rowSelected, colSelected );
     if ( !ret )
-        value->setValue( type == ROW ? table->getRows() : table->getCols() );
+    {
+        // Get cursor row
+        int val = type == ROW ? canvas->currentTableRow() : canvas->currentTableCol();
+        if ( val == -1 )
+        {
+            // Fallback
+            val = ( type == ROW ? table->getRows() : table->getCols() );
+        }
+        else
+            ++val;
+        value->setValue( val );
+    }
     else
         value->setValue( type == ROW ? (rowSelected+1) : (colSelected+1) );
     rc = new QLabel( type == ROW ? i18n( "Height (%1):" ).arg(doc->getUnitName()) : i18n( "Width (%1):" ).arg(doc->getUnitName()), page );

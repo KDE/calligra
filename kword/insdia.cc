@@ -22,6 +22,7 @@
 #include "insdia.moc"
 #include "kwtableframeset.h"
 #include "kwview.h"
+#include "kwcanvas.h"
 #include "kwcommand.h"
 
 #include <klocale.h>
@@ -95,9 +96,20 @@ void KWInsertDia::setupTab1()
 
     unsigned int rowSelected;
     unsigned int colSelected;
-    bool ret = table->getFirstSelected(rowSelected, colSelected );
-    if ( !ret )
-        value->setValue( type == ROW ? table->getRows() : table->getCols() );
+    bool ret = table->getFirstSelected( rowSelected, colSelected );
+    if ( !ret ) // nothing selected
+    {
+        // Get cursor row
+        int val = type == ROW ? canvas->currentTableRow() : canvas->currentTableCol();
+        if ( val == -1 )
+        {
+            // Fallback
+            val = ( type == ROW ? table->getRows() : table->getCols() );
+        }
+        else
+            ++val;
+        value->setValue( val );
+    }
     else
         value->setValue( type == ROW ? (rowSelected+1) : (colSelected+1) );
     grid1->addWidget( value, 2, 0 );
@@ -117,9 +129,9 @@ void KWInsertDia::setupTab1()
 
 bool KWInsertDia::doInsert()
 {
-    unsigned int insert= value->value() - ( rBefore->isChecked() ? 1 : 0 );
-    KWView *view = dynamic_cast<KWView*>(parent());
-    if(!view) return false;		//  correct return in this case ?
+    unsigned int insert = value->value() - ( rBefore->isChecked() ? 1 : 0 );
+    KWView *view = canvas->gui()->getView();
+    if(!view) return false; // can't happen
 
     if ( type == ROW )
         view->tableInsertRow(insert, table);

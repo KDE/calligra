@@ -5635,7 +5635,7 @@ void KWView::slotFrameSetEditChanged()
     else
         actionChangeCase->setEnabled( true );
 
-
+    updateTableActions( -1 );
 
     actionInsertFormula->setEnabled(state && (m_gui->canvasWidget()->viewMode()->type()!="ModeText"));
     actionInsertVariable->setEnabled(state);
@@ -5646,7 +5646,7 @@ void KWView::slotFrameSetEditChanged()
     state= state && edit && edit->frameSet() && !edit->frameSet()->isHeaderOrFooter() && !edit->frameSet()->getGroupManager() && !edit->frameSet()->isFootEndNote();
     actionInsertContents->setEnabled(state);
     actionInsertFrameBreak->setEnabled( state );
-    slotUpdateRuler();
+    updatePageInfo();
 }
 
 void KWView::changeFootEndNoteState()
@@ -5766,33 +5766,7 @@ void KWView::frameSelectedChanged()
 
     actionEditCopy->setEnabled( nbFrame >= 1 );
 
-    KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
-    actionTableJoinCells->setEnabled( table && (nbFrame>1));
-    actionTableDelRow->setEnabled( table && table->isRowsSelected());
-    actionTableDelCol->setEnabled( table && table->isColsSelected());
-    actionConvertTableToText->setEnabled( table && table->isFloating());
-
-    bool oneCellSelected = (table && nbFrame==1);
-    actionTableSplitCells->setEnabled( oneCellSelected );
-
-    bool cellsSelected = (table && nbFrame>0);
-
-    actionTableInsertRow->setEnabled( cellsSelected );
-    actionTableInsertCol->setEnabled( cellsSelected );
-    actionTableDelete->setEnabled( cellsSelected );
-    actionTableUngroup->setEnabled( cellsSelected );
-    actionTableResizeCol->setEnabled( cellsSelected );
-    actionTableProtectCells->setEnabled( cellsSelected );
-    actionTablePropertiesMenu->setEnabled( cellsSelected );
-    if ( cellsSelected )
-    {
-        unsigned int row = 0;
-        unsigned int col = 0;
-        table->getFirstSelected(row, col );
-        bool _protect = table->getCell( row, col )->protectContent();
-        actionTableProtectCells->setChecked(_protect);
-    }
-
+    updateTableActions( nbFrame );
     m_doc->refreshFrameBorderButton();
 
     updatePageInfo(); // takes care of slotUpdateRuler()
@@ -5814,6 +5788,43 @@ void KWView::frameSelectedChanged()
         if ( align == Qt::AlignAuto )
             align = Qt::AlignLeft; // ## seems hard to detect RTL here
         showAlign( align );
+    }
+}
+
+
+void KWView::updateTableActions( int nbFramesSelected )
+{
+    if ( nbFramesSelected == -1 ) // not calculated by caller
+    {
+        QPtrList<KWFrame> selectedFrames = m_doc->getSelectedFrames();
+        nbFramesSelected = selectedFrames.count();
+    }
+
+    KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
+    actionTableJoinCells->setEnabled( table && (nbFramesSelected>1));
+    actionConvertTableToText->setEnabled( table && table->isFloating());
+
+    bool oneCellSelected = (table && nbFramesSelected==1);
+    actionTableSplitCells->setEnabled( oneCellSelected ); // TODO also allow to split current cell
+
+    actionTableInsertRow->setEnabled( table );
+    actionTableInsertCol->setEnabled( table );
+    actionTableDelRow->setEnabled( table );
+    actionTableDelCol->setEnabled( table );
+    actionTableResizeCol->setEnabled( table );
+    actionTableDelete->setEnabled( table );
+    actionTablePropertiesMenu->setEnabled( table );
+
+    bool cellsSelected = (table && nbFramesSelected>0);
+    actionTableUngroup->setEnabled( cellsSelected );
+    actionTableProtectCells->setEnabled( cellsSelected );
+    if ( cellsSelected )
+    {
+        unsigned int row = 0;
+        unsigned int col = 0;
+        table->getFirstSelected(row, col );
+        bool _protect = table->getCell( row, col )->protectContent();
+        actionTableProtectCells->setChecked(_protect);
     }
 }
 

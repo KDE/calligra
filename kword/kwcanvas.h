@@ -164,9 +164,14 @@ public:
                       int /*KWTableFrameSet::CellSize*/ wid, int /*KWTableFrameSet::CellSize*/ hei,
                       bool isFloating,
                       KWTableTemplate *tt=0L, int format=31 );
-    KWTableFrameSet * getTable();
 
+    /// The current table (either because one or more cells are selected,
+    /// or because the cursor is in a table cell
     KWTableFrameSet *getCurrentTable()const { return curTable; }
+    /// When the cursor is in a table cell, this returns the row
+    int currentTableRow() const;
+    /// When the cursor is in a table cell, this returns the column
+    int currentTableCol() const;
 
     //move canvas to show point dPoint (in doc coordinates)
     void scrollToOffset( const KoPoint & dPoint );

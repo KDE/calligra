@@ -131,8 +131,7 @@ KWCanvas::KWCanvas(KWViewMode* viewMode, QWidget *parent, KWDocument *d, KWGUI *
         fs = m_doc->frameSet( 0 );
     Q_ASSERT( fs );
     if ( fs && fs->isVisible( m_viewMode ) ) {
-        m_currentFrameSetEdit = fs->createFrameSetEdit( this );
-
+        checkCurrentEdit( fs );
         KWTextFrameSetEdit* textedit = dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit);
         if ( textedit ) {
             int paragId = m_doc->initialCursorParag();
@@ -1318,7 +1317,8 @@ KCommand *KWCanvas::createTextBox( const KoRect & rect )
         _frameSet->addFrame( frame );
         m_doc->addFrameSet( _frameSet );
         KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create Text Frame"), frame );
-	checkCurrentEdit(frame->frameSet(), true);
+	if ( checkCurrentEdit(frame->frameSet(), true) )
+            emit currentFrameSetEditChanged();
         return cmd;
     }
     return 0L;
@@ -1335,7 +1335,8 @@ void KWCanvas::mrCreateText()
         KWFrameDia frameDia( this, frame, m_doc, FT_TEXT );
         frameDia.setCaption(i18n("Connect Frame"));
         frameDia.exec();
-	checkCurrentEdit(frame->frameSet(), true);
+	if ( checkCurrentEdit(frame->frameSet(), true) )
+            emit currentFrameSetEditChanged();
     }
     setMouseMode( MM_EDIT );
     m_doc->repaintAllViews();
@@ -2043,7 +2044,8 @@ void KWCanvas::pasteFrames()
     delete store;
 }
 
-KWTableFrameSet *KWCanvas::getTable()
+// Superseded by getCurrentTable
+/*KWTableFrameSet *KWCanvas::getTable()
 {
     if( !m_currentFrameSetEdit)
         return 0L;
@@ -2052,7 +2054,7 @@ KWTableFrameSet *KWCanvas::getTable()
         return static_cast<KWTableFrameSet *> (m_currentFrameSetEdit->frameSet());
 
     return 0L;
-}
+}*/
 
 void KWCanvas::editFrameSet( KWFrameSet * frameSet, bool onlyText )
 {
@@ -2137,10 +2139,12 @@ bool KWCanvas::checkCurrentEdit( KWFrameSet * fs , bool onlyText )
         //just text frameset
         if(fs->type()==FT_TABLE || fs->type()==FT_TEXT || !onlyText)
         {
+            if ( fs->type() == FT_TABLE )
+                curTable = static_cast<KWTableFrameSet *>(fs);
+            else
+                curTable = 0L;
             m_currentFrameSetEdit = fs->createFrameSetEdit( this );
         }
-        // Display page number in statusbar.
-        gui()->getView()->updatePageInfo();
         emitChanged = true;
     }
     return emitChanged;
@@ -2586,6 +2590,28 @@ void KWCanvas::inlinePictureStarted()
 {
     m_frameInline=true;
     m_frameInlineType=FT_PICTURE;
+}
+
+int KWCanvas::currentTableRow() const
+{
+    if ( !m_currentFrameSetEdit )
+        return -1;
+    KWTextFrameSetEdit *edit=dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit->currentTextEdit());
+    KWTextFrameSet* textfs = edit->textFrameSet();
+    if ( textfs && textfs->getGroupManager() )
+        return static_cast<KWTableFrameSet::Cell *>(textfs)->firstRow();
+    return -1;
+}
+
+int KWCanvas::currentTableCol() const
+{
+    if ( !m_currentFrameSetEdit )
+        return -1;
+    KWTextFrameSetEdit *edit=dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit->currentTextEdit());
+    KWTextFrameSet* textfs = edit->textFrameSet();
+    if ( textfs && textfs->getGroupManager() )
+        return static_cast<KWTableFrameSet::Cell *>(textfs)->firstCol();
+    return -1;
 }
 
 #include "kwcanvas.moc"

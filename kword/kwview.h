@@ -469,6 +469,7 @@ protected:
     virtual void guiActivateEvent( KParts::GUIActivateEvent *ev );
 
     virtual void updateReadWrite( bool readwrite );
+    void updateTableActions( int nbFramesSelected );
 
     void borderShowValues();
     void borderSet();

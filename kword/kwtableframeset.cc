@@ -2020,7 +2020,7 @@ void KWTableFrameSet::drawContents( QPainter * painter, const QRect & crect,
         cell->drawContents( painter, crect, cg, onlyChanged, resetChanged, 0L, viewMode );
     }
     drawBorders( *painter, crect, viewMode );
-    kdDebug(32004) << "drawContents()" << endl;
+    //kdDebug(32004) << "drawContents()" << endl;
 }
 
 void KWTableFrameSet::zoom( bool forPrint )

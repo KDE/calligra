@@ -23,6 +23,7 @@
 #include "deldia.moc"
 #include "kwcommand.h"
 #include "kwview.h"
+#include "kwcanvas.h"
 
 #include <klocale.h>
 
@@ -72,6 +73,13 @@ void KWDeleteDia::setupTab1()
             firstSelectedCell = false;
        }
     }
+    if ( m_toRemove.isEmpty() ) // Nothing selected, so we want to remove the row/col where the cursor is
+    {
+        int val = type == ROW ? canvas->currentTableRow() : canvas->currentTableCol();
+        Q_ASSERT( val != -1 );
+        message += QString::number(val+1);
+        m_toRemove.push_back(val);
+    }
     Q_ASSERT(m_toRemove.count() > 0);
 
     if (m_toRemove.count() == ( (type == ROW) ? table->getRows() : table->getCols() ) )
@@ -91,7 +99,9 @@ void KWDeleteDia::setupTab1()
 
 bool KWDeleteDia::doDelete()
 {
-    KWView *view = dynamic_cast<KWView*>( parent() );
+    KWView *view = canvas->gui()->getView();
+    if(!view) return false; // can't happen
+
     if(type == ROW)
         view->tableDeleteRow(m_toRemove);
     else

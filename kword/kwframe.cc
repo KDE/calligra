@@ -711,7 +711,7 @@ void KWFrameSet::drawMargins( KWFrame *frame, QPainter *p, const QRect &crect, c
     int topMargin = m_doc->zoomItY(frame->bTop());
     int rightMargin = m_doc->zoomItX(frame->bRight());
     int bottomMargin = m_doc->zoomItY(frame->bBottom());
-    kdDebug(32001) << "KWFrameSet::drawMargins leftMargin=" << leftMargin << " topMargin=" << topMargin << " rightMargin=" << rightMargin << " bottomMargin=" << bottomMargin << endl;
+    //kdDebug(32001) << "KWFrameSet::drawMargins leftMargin=" << leftMargin << " topMargin=" << topMargin << " rightMargin=" << rightMargin << " bottomMargin=" << bottomMargin << endl;
 
     if ( topMargin != 0 )
     {
