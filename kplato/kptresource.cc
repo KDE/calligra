@@ -981,13 +981,13 @@ KPTDuration KPTResourceGroupRequest::duration(const KPTDateTime &time, const KPT
             e += e1;
             match = true;
         } else {
-            end.setDate(start.date());
+            end = start;
             break;
         }
         //kdDebug()<<"duration(w)["<<i<<"]"<<(backward?"backward":"forward:")<<" date="<<start.date().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")"<<endl;
     }
-    //kdDebug()<<"duration "<<(backward?"backward":"forward: ")<<start.toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")  match="<<match<<endl;
-    for (int i=0; !match && i < 7; ++i) {
+    //kdDebug()<<"duration "<<(backward?"backward":"forward: ")<<start.toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")  match="<<match<<" sts="<<sts<<endl;
+    for (int i=0; !match && i < 7 && sts; ++i) {
         // days
         end = end.addDays(inc);
         e1 = backward ? effort(end, start - end, &sts) 
@@ -1001,13 +1001,13 @@ KPTDuration KPTResourceGroupRequest::duration(const KPTDateTime &time, const KPT
             e += e1;
             match = true;
         } else {
-            end.setDate(start.date());
+            end = start;
             break;
         }
-        //kdDebug()<<"duration(d)["<<i<<"]"<<(backward?"backward":"forward:")<<" date="<<start.date().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")"<<endl;
+        //kdDebug()<<"duration(d)["<<i<<"] "<<(backward?"backward":"forward:")<<"  date="<<start.date().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")"<<endl;
     }
-    //kdDebug()<<"duration "<<(backward?"backward":"forward: ")<<start.toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")  match="<<match<<endl;
-    for (int i=start.time().hour(); !match && i < 24 && sts; ++i) {
+    //kdDebug()<<"duration "<<(backward?"backward ":"forward: ")<<start.toString()<<" - "<<end.toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")  match="<<match<<" sts="<<sts<<endl;
+    for (int i=0; !match && i < 24 && sts; ++i) {
         // hours
         end = end.addSecs(inc*60*60);
         e1 = backward ? effort(end, start - end, &sts) 
@@ -1020,14 +1020,14 @@ KPTDuration KPTResourceGroupRequest::duration(const KPTDateTime &time, const KPT
         } else if (e + e1 == _effort) {
             e += e1;
             match = true;
-        } else if (e + e1 > _effort) {
+        } else {
             end = start;
             break;
         }
-        //kdDebug()<<"duration(h)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")"<<endl;
+        //kdDebug()<<"duration(h)["<<i<<"]"<<(backward?"backward ":"forward:")<<" time="<<start.time().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")"<<endl;
     }
-    //kdDebug()<<"duration "<<(backward?"backward":"forward: ")<<start.toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")  match="<<match<<endl;
-    for (int i=start.time().minute(); !match && i < 60 && sts; ++i) {
+    //kdDebug()<<"duration "<<(backward?"backward ":"forward: ")<<start.toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")  match="<<match<<" sts="<<sts<<endl;
+    for (int i=0; !match && i < 60 && sts; ++i) {
         //minutes
         end = end.addSecs(inc*60);
         e1 = backward ? effort(end, start - end, &sts) 
@@ -1044,9 +1044,10 @@ KPTDuration KPTResourceGroupRequest::duration(const KPTDateTime &time, const KPT
             end = start;
             break;
         }
-        //kdDebug()<<"duration(m) "<<(backward?"backward":"forward:")<<" time="<<start.time().toString()<<" e="<<e.toString()<<endl;
+        //kdDebug()<<"duration(m) "<<(backward?"backward":"forward:")<<"  time="<<start.time().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")"<<endl;
     }
-    for (int i=start.time().second(); !match && i < 60 && sts; ++i) {
+    //kdDebug()<<"duration "<<(backward?"backward":"forward:")<<"  start="<<start.toString()<<" e="<<e.toString()<<" match="<<match<<" sts="<<sts<<endl;
+    for (int i=0; !match && i < 60 && sts; ++i) {
         //seconds
         e1 = backward ? effort(end, start - end, &sts) 
                       : effort(start, end - start, &sts);
@@ -1063,9 +1064,9 @@ KPTDuration KPTResourceGroupRequest::duration(const KPTDateTime &time, const KPT
             end = start;
             break;
         }
-        //kdDebug()<<"duration(s)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time().toString()<<" e="<<e.toString()<<endl;
+        //kdDebug()<<"duration(s)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")"<<endl;
     }
-    for (int i=start.time().msec(); !match && i < 1000 && sts; ++i) {
+    for (int i=0; !match && i < 1000 && sts; ++i) {
         //milliseconds
         end.setTime(end.time().addMSecs(inc));
         e1 = backward ? effort(end, start - end, &sts) 
@@ -1082,10 +1083,10 @@ KPTDuration KPTResourceGroupRequest::duration(const KPTDateTime &time, const KPT
             end = start;
             break;
         }
-        //kdDebug()<<"duration(ms)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time().toString()<<" e="<<e.toString()<<endl;
+        //kdDebug()<<"duration(ms)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")"<<endl;
     }
     if (!match) {
-        kdError()<<k_funcinfo<<"Could not match effort."<<" Want: "<<_effort.toString(KPTDuration::Format_Day)<<" got: "<<e.toString(KPTDuration::Format_Day)<<endl;
+        kdError()<<k_funcinfo<<"Could not match effort."<<" Want: "<<_effort.toString(KPTDuration::Format_Day)<<" got: "<<e.toString(KPTDuration::Format_Day)<<" sts="<<sts<<endl;
     }
     end = backward ? availableAfter(end) : availableBefore(end);
     
