@@ -289,17 +289,24 @@ VDocumentTab::slotCommandExecuted()
  *  Layers tab                                                           *
  *************************************************************************/
 
-VObjectListViewItem::VObjectListViewItem( QListViewItem* parent, VObject* object )
-	: QListViewItem( parent, 0L ), m_object( object )
+VObjectListViewItem::VObjectListViewItem( QListViewItem* parent, VObject* object, uint key )
+	: QListViewItem( parent, 0L ), m_object( object ), m_key( key )
 {
 	update();
 	if( dynamic_cast<VGroup *>( object ) )
 	{
+		uint objcount = 1;
 		VObjectListIterator itr = dynamic_cast<VGroup *>( object )->objects();
-		for( ; itr.current();++itr )
+		for( ; itr.current();++itr, objcount++ )
 			if( itr.current()->state() != VObject::deleted )
-				new VObjectListViewItem( this, itr.current() );
+				new VObjectListViewItem( this, itr.current(), objcount );
 	}
+}
+
+QString
+VObjectListViewItem::key( int column, bool ascending ) const
+{
+	return QString( "%1" ).arg( m_key );
 }
 
 void
@@ -338,9 +345,10 @@ VLayerListViewItem::VLayerListViewItem( QListView* parent, VLayer* layer )
 {
 	update();
 	VObjectListIterator itr = layer->objects();
-	for( ; itr.current();++itr )
+	uint objcount = 1;
+	for( ; itr.current();++itr, objcount++ )
 		if( itr.current()->state() != VObject::deleted )
-			new VObjectListViewItem( this, itr.current() );
+			new VObjectListViewItem( this, itr.current(), objcount );
 
 } // VLayerListViewItem::VLayerListViewItem
 
@@ -426,7 +434,8 @@ VLayersTab::VLayersTab( KarbonView* view, QWidget* parent )
 	m_layersListView->setColumnAlignment( 1, Qt::AlignCenter );
 	m_layersListView->setColumnAlignment( 2, Qt::AlignCenter );
 	m_layersListView->setResizeMode( QListView::NoColumn );
-	m_layersListView->setSorting( 0, false );
+	//m_layersListView->setSorting( 0, false );
+	m_layersListView->setRootIsDecorated( true );
 
 	connect( m_layersListView, SIGNAL( clicked( QListViewItem*, const QPoint&, int ) ), this, SLOT( selectionChanged( QListViewItem*, const QPoint&, int ) ) );
 	connect( m_layersListView, SIGNAL( rightButtonClicked( QListViewItem*, const QPoint&, int ) ), this, SLOT( renameLayer( QListViewItem*, const QPoint&, int ) ) );

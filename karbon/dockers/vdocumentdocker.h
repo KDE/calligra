@@ -110,13 +110,15 @@ private:
 class VObjectListViewItem : public QListViewItem
 {
 public:
-	VObjectListViewItem( QListViewItem* parent, VObject* object );
+	VObjectListViewItem( QListViewItem* parent, VObject* object, uint key );
 
 	VObject* object() { return m_object; }
 	void update();
+	virtual QString key( int column, bool ascending ) const;
 
 private:
 	VObject	*m_object;
+	uint	 m_key;
 };
 
 class VLayersTab : public QWidget
