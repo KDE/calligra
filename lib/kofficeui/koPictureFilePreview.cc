@@ -45,12 +45,11 @@ public:
         : QScrollView( parent ) { viewport()->setBackgroundMode( PaletteBase ); }
 
     void setPixmap( const QPixmap &pix ) {
-        viewport()->erase();
         pixmap = pix;
         const QBitmap nullBitmap;
         pixmap.setMask( nullBitmap );  //don't show transparency
         resizeContents( pixmap.width(), pixmap.height() );
-        viewport()->repaint( false );
+        viewport()->repaint( true );
     }
 
     void setClipart( const QString &s ) {
