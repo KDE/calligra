@@ -28,7 +28,8 @@
 SetPropertyCmd::SetPropertyCmd (GDocument* doc,
                                 const GObject::OutlineInfo& oinfo,
                                 const GObject::FillInfo& finfo) :
-  ObjectManipCmd (doc, i18n("Set property")) {
+  ObjectManipCmd (doc, i18n("Set property"))
+{
   outline = oinfo;
   fill = finfo;
   tprops.mask = 0;
@@ -37,7 +38,8 @@ SetPropertyCmd::SetPropertyCmd (GDocument* doc,
 SetPropertyCmd::SetPropertyCmd (GObject* obj,
                                 const GObject::OutlineInfo& oinfo,
                                 const GObject::FillInfo& finfo) :
-  ObjectManipCmd (obj, i18n("Set property")) {
+  ObjectManipCmd (obj, i18n("Set property"))
+{
   outline = oinfo;
   fill = finfo;
   tprops.mask = 0;
@@ -47,20 +49,24 @@ SetPropertyCmd::SetPropertyCmd (GDocument* doc,
                                 const GObject::OutlineInfo& oinfo,
                                 const GObject::FillInfo& finfo,
                                 const GText::TextInfo& tinfo) :
-  ObjectManipCmd (doc, i18n("Set property")) {
+  ObjectManipCmd (doc, i18n("Set property"))
+{
   outline = oinfo;
   fill = finfo;
   tprops = tinfo;
 }
 
-void SetPropertyCmd::execute () {
+void SetPropertyCmd::execute ()
+{
   // save the states
   ObjectManipCmd::execute ();
 
-  for (unsigned int i = 0; i < objects.count (); i++) {
+  for (unsigned int i = 0; i < objects.count (); i++)
+  {
     objects[i]->setOutlineInfo (outline);
     objects[i]->setFillInfo (fill);
-    if (tprops.mask && objects[i]->isA ("GText")) {
+    if (tprops.mask && objects[i]->isA ("GText"))
+    {
       GText* tobj = (GText *) objects[i];
       tobj->setTextInfo (tprops);
     }

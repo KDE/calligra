@@ -903,8 +903,9 @@ void KIllustratorView::slotShowRuler( bool b )
 
 void KIllustratorView::slotShowGrid( bool b )
 {
-   if (b!=activeDocument()->showGrid())
+  if (b!=activeDocument()->showGrid())
      activeDocument()->showGrid( b );
+  canvas->update();
 }
 
 void KIllustratorView::slotShowHelplines( bool b )
