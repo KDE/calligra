@@ -266,6 +266,8 @@ protected slots:
     void slotNewCommand( KCommand *cmd );
     void slotRepaintChanged();
     void slotParagraphDeleted(KoTextParag*_parag);
+    void slotParagraphCreated(KoTextParag*_parag);
+    void slotParagraphModified(KoTextParag*_parag);
 
 protected:
     void getMargins( int yp, int h, int* marginLeft, int* marginRight, int* breakBegin, int* breakEnd, int paragLeftMargin = 0 );

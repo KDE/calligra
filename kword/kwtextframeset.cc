@@ -120,6 +120,22 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
              SLOT( slotRepaintChanged() ) );
     connect( m_textobj, SIGNAL( paragraphDeleted( KoTextParag*) ),
              SLOT( slotParagraphDeleted(KoTextParag*) ));
+
+    connect( m_textobj, SIGNAL( paragraphCreated( KoTextParag*) ),
+             SLOT( slotParagraphCreated(KoTextParag*) ));
+    connect( m_textobj, SIGNAL( paragraphModified( KoTextParag*, KoTextParag::ParagModifyType, int, int) ),
+             SLOT( slotParagraphModified(KoTextParag*) ));
+
+}
+
+void KWTextFrameSet::slotParagraphModified(KoTextParag*_parag)
+{
+    //todo
+}
+
+void KWTextFrameSet::slotParagraphCreated(KoTextParag*_parag)
+{
+    //todo
 }
 
 void KWTextFrameSet::slotParagraphDeleted(KoTextParag*_parag)
