@@ -593,14 +593,14 @@ UnGroupObjCmd::~UnGroupObjCmd()
 /*==============================================================*/
 void UnGroupObjCmd::execute()
 {
-    KPObject *obj = 0;
     grpObj->setUpdateObjects( false );
 
-    for ( unsigned int i = 0; i < objects.count(); i++ ) {
-	obj = objects.at( i );
-	m_page->appendObject( obj );
-	obj->addToObjList();
-	obj->setSelected( true );
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+    {
+	m_page->appendObject( it.current() );
+	it.current()->addToObjList();
+	it.current()->setSelected( true );
     }
 
     m_page->takeObject(grpObj);
@@ -612,16 +612,15 @@ void UnGroupObjCmd::execute()
 /*==============================================================*/
 void UnGroupObjCmd::unexecute()
 {
-    QRect r = doc->zoomHandler()->zoomRect( objects.first()->getBoundingRect( doc->zoomHandler() ));
+    KoRect r=KoRect();
 
-    KPObject *obj = 0;
-
-    for ( unsigned int i = 0; i < objects.count(); i++ ) {
-	obj = objects.at( i );
-	obj->setSelected( false );
-	m_page->takeObject(obj);
-	obj->removeFromObjList();
-	r = r.unite( doc->zoomHandler()->zoomRect(obj->getBoundingRect(doc->zoomHandler() ) ));
+    QPtrListIterator<KPObject> it( objects );
+    for ( ; it.current() ; ++it )
+    {
+	it.current()->setSelected( false );
+	m_page->takeObject(it.current());
+	it.current()->removeFromObjList();
+        r |= it.current()->getBoundingRect(doc->zoomHandler());
     }
 
     grpObj->setUpdateObjects( false );

@@ -256,6 +256,7 @@ void KPrPage::groupObjects()
 void KPrPage::ungroupObjects()
 {
     KPObject *kpobject = getSelectedObj();
+
     if ( kpobject && kpobject->getType() == OT_GROUP ) {
 	UnGroupObjCmd *unGroupObjCmd = new UnGroupObjCmd( i18n( "Ungroup Objects" ),
 							  (KPGroupObject*)kpobject, m_doc, this );
