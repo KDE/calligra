@@ -167,7 +167,9 @@ void KoBgSpellCheck::nextParagraphNeedingCheck()
     }
     KoTextParag* parag = m_bgSpell.currentParag;
     if ( parag->string()->needsSpellCheck() )
-        return parag;
+    {
+        return;
+    }
     if ( parag && parag->next() )
         parag = parag->next();
     // Skip any unchanged parags
