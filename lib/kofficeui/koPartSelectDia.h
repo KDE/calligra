@@ -20,11 +20,13 @@
 #ifndef DlgPartSelect_included
 #define DlgPartSelect_included
 
+#include <kdialogbase.h>
 #include <koQueryTypes.h>
-
-#include "koPartSelectDia_data.h"
-
 #include <qvaluelist.h>
+
+class QListView;
+class QListViewItem;
+class QPushButton;
 
 /**
  *  This dialog presents the user all available
@@ -32,9 +34,8 @@
  *  and mini icon. The user may select one and
  *  the corresponding KoDocumentEntry is returned.
  */
-class KoPartSelectDia : public DlgPartSelectData
+class KoPartSelectDia : public KDialogBase
 {
-
     Q_OBJECT
 
 public:
@@ -42,19 +43,14 @@ public:
     /**
      *  Constructor.
      */
-    KoPartSelectDia( QWidget* _parent = NULL, const char* _name = NULL );
+    KoPartSelectDia( QWidget* parent = 0, const char* name = 0 );
 
-    /**
-     *  Destructor.
-     */
-    virtual ~KoPartSelectDia();
-  
     /**
      *  Retrieves the result of the part selection.
      *
      *  @return A document entry.
      */
-    KoDocumentEntry result();
+    KoDocumentEntry entry();
 
     /**
      *  Convenience function for using the dialog.
@@ -64,9 +60,14 @@ public:
      */
     static KoDocumentEntry selectPart();
 
+private slots:
+    void selectionChanged( QListViewItem * );
+    
 private:
-
     QValueList<KoDocumentEntry> m_lstEntries;
+    QListView *listview;
+    QPushButton *okButton;
+    
 };
 
-#endif // DlgPartSelect_included
+#endif
