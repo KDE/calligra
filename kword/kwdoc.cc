@@ -2388,7 +2388,7 @@ KWFrame * KWDocument::deepestInlineFrame(KWFrame *parent, const QPoint& nPoint, 
             return deepestInlineFrame(f,nPoint,border);
         }
     }
-    if (border != 0) border=false;
+    if (border != 0) *border=false;
     return parent;
 }
 
@@ -2433,7 +2433,7 @@ KWFrame * KWDocument::frameBelowFrame(const QPoint& nPoint, KWFrame *frame, bool
                 allreadyFoundArgumentFrame=true;
         }
     }
-    if (border != 0) border=false;
+    if (border != 0) *border=false;
     return 0L;
 }
 
@@ -2456,7 +2456,7 @@ KWFrame * KWDocument::topFrameUnderMouse( const QPoint& nPoint, bool* border) {
             return deepestInlineFrame(f,nPoint,border);
         }
     }
-    if (border != 0) border=false;
+    if (border != 0) *border=false;
     return 0L;
 }
 
