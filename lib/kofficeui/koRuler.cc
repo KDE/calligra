@@ -883,9 +883,13 @@ void KoRuler::setTabList( const KoTabulatorList & _tabList )
 
     d->tabList = _tabList;
     qHeapSort(d->tabList);   // "Trust no one." as opposed to "In David we trust."
-    if(!rmEnd)
+    if(rmEnd)
+        d->removeTab=d->tabList.end(); // different list, so update (David, who doesn't trust werner either anymore)
+    else
         d->removeTab=d->tabList.find(rm);
-    if(!currEnd)
+    if(currEnd)
+        d->currTab=d->tabList.end();
+    else
         d->currTab=d->tabList.find(curr);
     repaint( false );
 }
