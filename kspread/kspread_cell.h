@@ -36,6 +36,7 @@ class KSpreadView;
 class QSimpleRichText;
 class QDomElement;
 class QDomDocument;
+class KoXmlWriter;
 
 class KSParseNode;
 
@@ -234,6 +235,8 @@ public:
      * Usually this is false, to only store the properties explicitly set.
      */
     QDomElement save( QDomDocument& doc, int _x_offset = 0, int _y_offset = 0, bool force = false, bool copy = false, bool era = false );
+
+    virtual bool saveOasis( KoXmlWriter& xmlwriter );
 
     bool load( const QDomElement& cell, int _xshift, int _yshift, PasteMode pm = Normal,
 	       Operation op = OverWrite, bool paste = false );

@@ -46,6 +46,7 @@
 #include "ksploadinginfo.h"
 
 #include <kspread_value.h>
+#include <koxmlwriter.h>
 
 #include <kmessagebox.h>
 
@@ -5113,6 +5114,12 @@ bool KSpreadCell::saveCellResult( QDomDocument& doc, QDomElement& result,
   result.appendChild( doc.createTextNode( str ) );
 
   return true; /* really isn't much of a way for this function to fail */
+}
+
+
+bool KSpreadCell::saveOasis( KoXmlWriter& xmlwriter )
+{
+    return true;
 }
 
 bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oasisStyles )
