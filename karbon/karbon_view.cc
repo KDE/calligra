@@ -72,10 +72,10 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 
 KarbonView::~KarbonView()
 {
-	delete m_canvas;
-	m_canvas = 0L;
 	delete m_dcop;
 	delete m_painterFactory;
+	delete m_canvas;
+	m_canvas = 0L;
 	delete m_toolbox;
 }
 
