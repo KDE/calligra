@@ -46,7 +46,7 @@ class KSpreadCell;
 class KSpreadLocationEditWidget;
 class KoDocumentEntry;
 
-class KSelectColorAction;
+//class KSelectColorAction;
 class TKSelectColorAction;
 class KAction;
 class KSelectAction;
@@ -514,7 +514,7 @@ private:
     KAction* m_borderAll;
     KAction* m_borderOutline;
     KAction* m_borderRemove;
-    KSelectColorAction* m_borderColor;
+    TKSelectColorAction* m_borderColor;
     KAction* m_tableFormat;
     // KAction* m_oszi;
     KAction* m_autoSum;
