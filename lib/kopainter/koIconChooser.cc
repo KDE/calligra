@@ -18,12 +18,14 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <kdebug.h>
 #include <koIconChooser.h>
 
 #include <qpainter.h>
 #include <qcursor.h>
 #include <qhbox.h>
 #include <qlayout.h>
+#include <kdebug.h>
 
 KoPixmapWidget::KoPixmapWidget(const QPixmap &aPixmap, QWidget *parent, const char *name):
 QFrame(parent, name, WStyle_Customize | WStyle_NoBorder)
@@ -58,7 +60,7 @@ void KoPixmapWidget::paintEvent(QPaintEvent *e)
 KoIconChooser::KoIconChooser(QSize aIconSize, QWidget *parent, const char *name):
 QGridView(parent, name)
 {
-  QGridView::setBackgroundColor(white);
+  QGridView::setBackgroundColor(Qt::white);
 
   mMargin = 2;
   setCellWidth(aIconSize.width() + 2 * mMargin);
@@ -83,8 +85,12 @@ KoIconChooser::~KoIconChooser()
 
 void KoIconChooser::addItem(KoIconItem *item)
 {
+  Q_INT32 n = mItemCount;
+
+  Q_ASSERT(item);
   mIconList.insert(mItemCount++, item);
   calculateCells();
+  updateCell(n / numCols(), n - (n / numCols()) * numCols());
 }
 
 bool KoIconChooser::removeItem(KoIconItem *item)
@@ -164,7 +170,7 @@ void KoIconChooser::mousePressEvent(QMouseEvent *e)
 }
 
 // when a big item is shown in full size, delete it on mouseRelease
-void KoIconChooser::mouseReleaseEvent(QMouseEvent */*e*/)
+void KoIconChooser::mouseReleaseEvent(QMouseEvent * /*e*/)
 {
   if(mPixmapWidget)
   {
@@ -256,7 +262,7 @@ void KoIconChooser::paintCell(QPainter *p, int row, int col)
   else
   {
     // empty cell
-    p->fillRect(0, 0, cellWidth(), cellHeight(), QBrush(white));
+    p->fillRect(0, 0, cellWidth(), cellHeight(), QBrush(Qt::white));
   }
 }
 
@@ -272,10 +278,7 @@ KoIconItem *KoIconChooser::itemAt(int row, int col)
 // return 0L if item is not found
 KoIconItem *KoIconChooser::itemAt(int index)
 {
-  if(index == -1 || index >= mItemCount)
-    return 0L;
-  else
-    return mIconList.at(index);
+  return mIconList.count() > index ? mIconList.at(index) : 0;
 }
 
 // return the index of a cell, given row and column position
