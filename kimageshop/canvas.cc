@@ -40,7 +40,6 @@ Canvas::Canvas(int width, int height)
   h=height;
   viewportRect=QRect(0,0,w,h);
   // SHOW_RECT_COORDS(viewportRect);
-  resize(w,h);
   
   QRect tileExtents=::findTileExtents(viewportRect);
   // SHOW_RECT(tileExtents);
@@ -629,5 +628,3 @@ void Canvas::paintBrush(QPoint pt, brush *brsh)
       }
     }
 }
-
-#include "canvas.moc"

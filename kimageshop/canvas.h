@@ -27,8 +27,6 @@ struct canvasTileDescriptor
 
 class Canvas : public QWidget
 {
-  Q_OBJECT
- 
  public:
   Canvas(int width, int height);
   ~Canvas();

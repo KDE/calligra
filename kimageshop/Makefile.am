@@ -47,7 +47,6 @@ METASOURCES = \
  kimageshop_view.moc \
  preferencesdlg.moc \
  zoomfactordlg.moc \
- canvas.moc \
  canvasview.moc \
  layer.moc
 
