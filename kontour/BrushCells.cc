@@ -36,6 +36,7 @@ BrushCells::BrushCells(QWidget *parent, const QColor &color, const char *name):
 QTable(parent, name)
 {
   hide();
+  setFixedWidth(170);
   setSelectionMode(QTable::Single);
   setFrameStyle(QFrame::Panel | QFrame::Sunken);
   setNumRows(4);

@@ -49,25 +49,22 @@
 PaintPanel::PaintPanel(QWidget *parent, const char *name):
 QTabWidget(parent, name)
 {
-  QGroupBox *paintColor = new QGroupBox(2, Qt::Vertical, this);
-  QBoxLayout *box = new QBoxLayout(paintColor, QBoxLayout::Down);
-  mFilled = new QCheckBox(i18n("filled"), paintColor);
+  setTabShape(Triangular);
+  mFilled = new QCheckBox(i18n("filled"), this);
   connect(mFilled, SIGNAL(toggled(bool)), this, SIGNAL(changeFilled(bool)));
-  box->addWidget(mFilled);
-  KoColorChooser *mPaintPanel = new KoColorChooser(paintColor);
+  KoColorChooser *mPaintPanel = new KoColorChooser(this);
   connect(mPaintPanel, SIGNAL(colorChanged(const KoColor &)), this, SIGNAL(changePaintColor(const KoColor &)));
   connect(this, SIGNAL(colorChanged(const KoColor &)), mPaintPanel, SLOT(slotChangeColor(const KoColor &)));
-  box->addWidget(mPaintPanel);
-  insertTab(paintColor, "Color");
+  insertTab(mPaintPanel, i18n("Color"));
   // TODO : add some content here :)
-  insertTab(new QWidget(this), "Gradient");
+  insertTab(mFilled, i18n("Gradient"));
 
   QGroupBox *pattern = new QGroupBox(1, Qt::Vertical, this);
   QBoxLayout *box2 = new QBoxLayout(pattern, QBoxLayout::Down);
   BrushCells *brushCells = new BrushCells(pattern);
   connect(brushCells, SIGNAL(brushChanged(Qt::BrushStyle)), this, SIGNAL(changeBrushStyle(Qt::BrushStyle)));
   box2->addWidget(brushCells);
-  insertTab(pattern, "Pattern");
+  insertTab(pattern, i18n("Pattern"));
 
 }
 
@@ -84,6 +81,7 @@ void PaintPanel::slotStyleChanged(const GStyle &style)
 OutlinePanel::OutlinePanel(QWidget *parent, const char *name):
 QTabWidget(parent, name)
 {
+  setTabShape(Triangular);
   /* Color tab */
   QGroupBox *outlineColor = new QGroupBox(2, Qt::Vertical, this);
   mStroked = new QCheckBox(i18n("stroked"), outlineColor);

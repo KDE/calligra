@@ -53,7 +53,7 @@ private:
   void processKeyPressEvent(QKeyEvent *e, GPage *page, Canvas *canvas);
 
 private:
-  enum State{ S_Init, S_Rubberband, S_Pick, S_Translate, S_Scale, S_Shear, S_Rotate, S_DragHorizHelpline, S_DragVertHelpline};
+  enum State{ S_Init, S_Rubberband, S_Pick, S_RotateSelect, S_Translate, S_Scale, S_Shear, S_Rotate, S_DragHorizHelpline, S_DragVertHelpline};
   State state;
   enum CursorType{ C_Arrow, C_Size, C_Move, C_Rotate, C_Horiz, C_Vert};
   CursorType ctype;

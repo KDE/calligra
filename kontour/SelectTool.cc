@@ -57,6 +57,7 @@ Tool(aId, tc)
 void SelectTool::activate()
 {
   ctype = C_Arrow;
+  toolController()->view()->canvas()->setCursor(Qt::arrowCursor);
 }
 
 void SelectTool::deactivate()
@@ -236,6 +237,25 @@ void SelectTool::processMouseMoveEvent(QMouseEvent *e, GPage *page, Canvas *canv
       }
     }
   }
+  else if(state == S_RotateSelect)
+  {
+    if(e->state() & Qt::LeftButton)
+    {
+    }
+    else
+    {
+      QRect r = canvas->onCanvas(page->boundingBoxForSelection());
+      if(r.contains(xpos, ypos))
+      {
+        if(ctype != C_Move)
+        {
+          canvas->setCursor(Qt::SizeAllCursor);
+          ctype = C_Move;
+        }
+	return;
+      }
+    }
+  }
   else if(state == S_DragHorizHelpline)
   {
     page->document()->updateHorizHelpline(mHL, y);
@@ -349,6 +369,24 @@ void SelectTool::processButtonReleaseEvent(QMouseEvent *e, GPage *page, Canvas *
     state = S_Init;
   else if(state == S_DragVertHelpline)
     state = S_Init;
+  else if(state == S_Pick)
+  {
+    if(ctype == C_Size)
+    {
+      page->handle().mode(Handle::HMode_Rotate);
+      page->updateSelection();
+      state = S_RotateSelect;
+    }
+  }
+  else if(state == S_RotateSelect)
+  {
+    if(ctype == C_Move)
+    {
+      page->handle().mode(Handle::HMode_Default);
+      page->updateSelection();
+      state = S_Pick;
+    }
+  }
   else if(state == S_Translate)
   {
     state = S_Pick;

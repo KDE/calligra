@@ -53,13 +53,12 @@ Tool(aId, tc)
 
 void OvalTool::activate()
 {
-  kdDebug(38000) << "OvalTool::activate()" << endl;
   state = S_Init;
+  toolController()->view()->canvas()->setCursor(Qt::crossCursor);
 }
 
 void OvalTool::deactivate()
 {
-  kdDebug(38000) << "OvalTool::deactivate()" << endl;
 }
 
 void OvalTool::processEvent(QEvent *e)

@@ -74,6 +74,7 @@ Tool(aId, tc)
 void RectTool::activate()
 {
   state = S_Init;
+  toolController()->view()->canvas()->setCursor(Qt::crossCursor);
 }
 
 void RectTool::deactivate()
