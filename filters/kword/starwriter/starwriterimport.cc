@@ -246,7 +246,7 @@ bool StarWriterImport::parseNodes(QByteArray n)
                 }
                 break;
             case 'E':
-                if (!parseTable(s)) return false;
+                //if (!parseTable(s)) return false;
                 break;
             default:
                 break;
@@ -272,6 +272,7 @@ bool StarWriterImport::parseText(QByteArray n)
     for (Q_UINT32 k = 0x00; k < len; k++)
         s[k] = n[0x0B+k];
 
+
     // Write it to the variable
     text = convertToKWordString(s);
     bodyStuff.append("  <PARAGRAPH>\n");
@@ -284,7 +285,8 @@ bool StarWriterImport::parseText(QByteArray n)
 bool StarWriterImport::parseTable(QByteArray n)
 {
     QByteArray s;
-    Q_UINT32 len, p, p2;
+    Q_UINT32 len, len2, len3;
+    Q_UINT32 p, p2;
     QString text;
     QString tableCell, tableText, tableName;
     Q_UINT8 row, column;
@@ -347,7 +349,7 @@ bool StarWriterImport::parseTable(QByteArray n)
     }
 
     // Add everything to tablesStuff
-    tableStuff.append(tableText);
+    tablesStuff.append(tableText);
 
     // Add anchor to bodyStuff
     bodyStuff.append("  <PARAGRAPH>\n");
