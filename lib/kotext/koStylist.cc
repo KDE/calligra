@@ -322,11 +322,23 @@ void KoStyleManager::addStyle() {
     updateGUI();
 }
 
+void KoStyleManager::updateFollowingStyle( KoStyle *s )
+{
+    for ( KoStyle* p = m_changedStyles.first(); p != 0L; p = m_changedStyles.next() )
+    {
+        kdDebug()<<" on tourne !!!!!!!!!!!\n";
+        if ( p->followingStyle() == s)
+            p->setFollowingStyle(p);
+    }
+
+}
+
 void KoStyleManager::deleteStyle() {
 
     unsigned int cur = styleIndex( m_stylesList->currentItem() );
     unsigned int curItem = m_stylesList->currentItem();
     KoStyle *s = m_changedStyles.at(cur);
+    updateFollowingStyle( s );
     Q_ASSERT( s == m_currentStyle );
     delete s;
     m_currentStyle = 0L;

@@ -57,7 +57,7 @@ public:
     virtual void updateAllStyleLists()=0;
 
 protected:
-
+    void updateFollowingStyle( KoStyle *s );
     void setupWidget(const QPtrList<KoStyle> & style);
     void addGeneralTab();
     void apply();
