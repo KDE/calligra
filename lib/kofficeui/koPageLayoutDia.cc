@@ -27,7 +27,7 @@
 #include <qvalidator.h>
 
 // 1 inch ^= 72 pt
-// 1 inch ^= 25.399956 mm
+// 1 inch ^= 25.399956 mm (-pedantic ;p)
 // Note: I don't use division but multiplication with the inverse value
 // because it's faster ;p (Werner)
 #define POINT_TO_MM(px) (px*0.352777167)

@@ -334,13 +334,11 @@ void KoRuler::drawVertical( QPainter *_painter )
     }
 
     p.setPen( QPen( black ) );
-    //p.drawLine( 1, ph - diffy - 1, width() - 1, ph - diffy - 1 );
     p.drawLine( 1, i_ph - diffy + 1, width() - 1, i_ph - diffy + 1 );
     p.setPen( QPen( white ) );
     p.drawLine( 1, i_ph - diffy, width() - 1, i_ph - diffy );
 
     p.setPen( QPen( black ) );
-    //p.drawLine( 1, -diffy - 2, width() - 1, -diffy - 2 );
     p.drawLine( 1, -diffy, width() - 1, -diffy );
     p.setPen( QPen( white ) );
     p.drawLine( 1, -diffy - 1, width() - 1, -diffy - 1 );
@@ -733,7 +731,8 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 			    d->tabList.at( d->currTab )->ptPos = unZoomIt(static_cast<double>(mx) - fr );
 			    d->tabList.at( d->currTab )->mmPos = cPOINT_TO_MM( d->tabList.at( d->currTab )->ptPos );
 			    d->tabList.at( d->currTab )->inchPos = cPOINT_TO_INCH( d->tabList.at( d->currTab )->ptPos );
-			    pt_fr=double2Int(mx-fr);
+			    pt=zoomIt(d->tabList.at( d->currTab )->ptPos);
+			    pt_fr=double2Int(pt+fr);
 			    p.drawLine( pt_fr, 0, pt_fr, d->canvas->height() );
 			    p.end();
 			    d->oldMx = mx;
