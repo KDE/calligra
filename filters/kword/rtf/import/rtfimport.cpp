@@ -21,6 +21,7 @@
 #include <qstringlist.h>
 #include <qdir.h>
 #include <qfileinfo.h>
+#include <qregexp.h>
 
 #include <koPicture.h>
 
@@ -1383,6 +1384,12 @@ void RTFImport::addImportedPicture( const QString& rawFileName )
 {
     kdDebug(30515) << "Import field: reading " << rawFileName << endl;
 
+    if (rawFileName=="\\*")
+    {
+        kdError(30515) << "Import field without file name!" << endl;
+        return;
+    }
+
     QString slashPath( rawFileName );
     slashPath.replace('\\','/'); // Replace directory separators.
     // ### TODO: what with MS-DOS absolute paths? (Will only work for KOffice on Win32)
@@ -1442,6 +1449,115 @@ void RTFImport::addImportedPicture( const QString& rawFileName )
     frameSets.addKey( dt, rawFileName.utf8() );
     frameSets.closeNode( "PICTURE" );
     frameSets.closeNode( "FRAMESET" );
+}
+
+void RTFImport::addDateTime( const QString& format, const bool isDate )
+{
+    DomNode node;
+    if (format.isEmpty())
+    {
+        if (isDate)
+        {
+            node.clear(7);
+            node.addNode("DATE");
+            node.setAttribute("year", 0);
+            node.setAttribute("month", 0);
+            node.setAttribute("day", 0);
+            node.setAttribute("fix", 0);
+            node.closeNode("DATE");
+            addVariable(node, 0, "DATElocale", &fldfmt);
+        }
+        else
+        {
+            node.clear(7);
+            node.addNode("TIME");
+            node.setAttribute("hour", 0);
+            node.setAttribute("minute", 0);
+            node.setAttribute("second", 0);
+            node.setAttribute("fix", 0);
+            node.closeNode("TIME");
+            addVariable(node, 2, "TIMElocale", &fldfmt);
+        }
+        return;
+    }
+
+    QString key;
+    int type=-1; // -1: start, 0: date, 2: time
+    for(unsigned int k=0;k<format.length();k++)
+    {
+        if((format[k]=='y')||(format[k]=='M')||(format[k]=='d'))
+        {
+            if(type==0)//we have date already
+            {
+                key+=format[k];
+            }
+            else if(type==2)//we had time and we want date
+            {
+                //finish time
+                addVariable(node, type, key.utf8(), &fldfmt);
+                type=-1;
+            }
+            if(type==-1) //start date
+            {
+                node.clear(7);
+                node.addNode("DATE");
+                node.setAttribute("year", 0);
+                node.setAttribute("month", 0);
+                node.setAttribute("day", 0);
+                node.setAttribute("fix", 0);
+                node.closeNode("DATE");
+                key="DATE0"; // ### TODO: is 0 needed?
+                key+=format[k];
+                type=0;
+            }
+        }
+        else if((format[k]=='H')||(format[k]=='h')||(format[k]=='m')||(format[k]=='s')) // ### TODO: ap
+        {
+            if(type==2)//we have time already
+            {
+                key+=format[k].lower();
+            }
+            else if(type==0)//we had date and we want time
+            {
+                //finish time
+                addVariable(node, type, key.utf8(), &fldfmt);
+                type=-1;
+            }
+            if(type==-1) //start time
+            {
+                node.clear(7);
+                node.addNode("TIME");
+                node.setAttribute("hour", 0);
+                node.setAttribute("minute", 0);
+                node.setAttribute("second", 0);
+                node.setAttribute("fix", 0);
+                node.closeNode("TIME");
+                type=2;
+                key="TIME";
+                key+=format[k].lower();
+            }
+        }
+        else
+        {
+            if(type==-1)
+            {
+                node.clear(7);
+                node.addNode("DATE");
+                node.setAttribute("year", 0);
+                node.setAttribute("month", 0);
+                node.setAttribute("day", 0);
+                node.setAttribute("fix", 0);
+                node.closeNode("DATE");
+                type=0;
+                key="DATE0";  // ### TODO: is 0 needed?
+            }
+            key+=format[k];
+        }
+    }
+    if(type>=0)
+    {
+        addVariable( node, type, key.utf8(), &fldfmt );
+    }
 }
 
 /**
@@ -1546,9 +1662,13 @@ void RTFImport::parseField( RTFProperty * )
 	    }
 	    else if (fieldName == "TIME" || fieldName == "DATE")
 	    {
-		QCString key;
-		int type=-1;
-		list = QStringList::split( '\\', fldinst );
+                QString strFldinst( QString::fromUtf8(fldinst) );
+#if 1
+                QRegExp regexp("\\\\@\\s*\"(.+)\""); // \@ "Text"
+                regexp.search(strFldinst);
+                QString format(regexp.cap(1));
+#else
+		list = QStringList::split( '\\', strFldinst );
 
 		list[0] = list[0].upper();
 
@@ -1561,88 +1681,15 @@ void RTFImport::parseField( RTFProperty * )
 		}
 		int i=list[j].find('"')+1;
 		QString format=list[j].mid(i, list[j].find('"', i)-i);
+#endif
+                kdDebug(30515) << "Date/time field format: " << format << endl;
 		format.replace("am/pm", "ap");
 		format.replace("a/p", "ap"); // Approximation
 		format.replace("AM/PM", "AP");
 		format.replace("A/P", "AP"); // Approximation
 		format.remove("'"); // KWord 1.3 cannot protect text in date/time
-		for(unsigned int k=0;k<format.length();k++)
-		{
-		    if((format[k]=='y')||(format[k]=='M')||(format[k]=='d'))
-		    {
-			if(type==0)//we have date already
-			{
-			    key+=format[k].latin1();
-			}
-			else if(type==2)//we had time and we want date
-			{
-			    //finish time
-			    addVariable(node, type, key, &fldfmt);
-			    type=-1;
-			}
-			if(type==-1) //start date
-			{
-			    node.clear(7);
-			    node.addNode("DATE");
-			    node.setAttribute("year", 0);
-			    node.setAttribute("month", 0);
-			    node.setAttribute("day", 0);
-			    node.setAttribute("fix", 0);
-			    node.closeNode("DATE");
-			    key="DATE0";
-			    key+=format[k].latin1();
-			    type=0;
-			}
-		    }
-		    else if((format[k]=='H')||(format[k]=='h')||(format[k]=='m')||(format[k]=='s'))
-		    {
-			format[k]=format[k].lower();
-			if(type==2)//we have time already
-			{
-			    key+=format[k].latin1();
-			}
-			else if(type==0)//we had date and we want time
-			{
-			    //finish time
-			    addVariable(node, type, key, &fldfmt);
-			    type=-1;
-			}
-			if(type==-1) //start time
-			{
-			    node.clear(7);
-			    node.addNode("TIME");
-			    node.setAttribute("hour", 0);
-			    node.setAttribute("minute", 0);
-			    node.setAttribute("second", 0);
-			    node.setAttribute("fix", 0);
-			    node.closeNode("TIME");
-			    type=2;
-			    key="TIME";
-			    key+=format[k].latin1();
-			}
-		    }
-		    else
-		    {
-			if(type==-1)
-			{
-			    node.clear(7);
-			    node.addNode("DATE");
-			    node.setAttribute("year", 0);
-			    node.setAttribute("month", 0);
-			    node.setAttribute("day", 0);
-			    node.setAttribute("fix", 0);
-			    node.closeNode("DATE");
-			    type=0;
-			    key="DATE0";
-			}
-			key+=format[k].latin1();
-		    }
-		}
-		if(type!=-1)
-		{
-		    addVariable( node, type, key, &fldfmt );
-		}
-	    }
+                addDateTime( format, (fieldName == "DATE") );
+            }
             else if (fieldName == "IMPORT")
             {
                 addImportedPicture( list[1] );

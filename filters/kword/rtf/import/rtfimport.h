@@ -265,6 +265,7 @@ public:
     void addParagraph( DomNode &node, bool frameBreak );
     void addVariable(DomNode& spec, int type, QCString key, RTFFormat* fmt=0);
     void addImportedPicture( const QString& rawFileName );
+    void addDateTime( const QString& format, const bool isDate );
     void finishTable();
     void writeOutPart( const char *name, QByteArray &array );
 
