@@ -82,6 +82,8 @@ public:
   QDomElement writeToXml(QDomDocument &document);
 
   double length() const;
+private:
+  bool                  mClosed;
 };
 
 /**

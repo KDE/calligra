@@ -1,6 +1,7 @@
 /* -*- C++ -*-
 
   $Id$
+
   This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
   Copyright (C) 2001-2002 Igor Jansen (rm@kde.org)
@@ -24,7 +25,7 @@
 
 #include "GOval.h"
 
-#include <math.h>
+#include <cmath>
 
 #include <qdom.h>
 
@@ -35,25 +36,26 @@
 #include "kontour_global.h"
 #include "GPath.h"
 
-GOval::GOval(double rx, double ry, Type aType, double a1, double a2):
+GOval::GOval(double rx, double ry, Type aType, double sa, double a):
 GObject()
 {
   mRX = rx;
   mRY = ry;
   mType = aType;
-  mAngle1 = a1;
-  mAngle2 = a2;
+  mStartAngle = sa;
+  mAngle = a;
   calcBoundingBox();
 }
 
 GOval::GOval(const QDomElement &element):
 GObject(element.namedItem("go").toElement())
 {
+
   mRX = element.attribute("rx").toDouble();
   mRY = element.attribute("ry").toDouble();
   mType = static_cast<Type>(element.attribute("type").toInt());
-  mAngle1 = element.attribute("a1").toDouble();
-  mAngle2 = element.attribute("a2").toDouble();
+  mStartAngle = element.attribute("sa").toDouble();
+  mAngle = element.attribute("a").toDouble();
   calcBoundingBox();
 }
 
@@ -63,8 +65,8 @@ GObject(obj)
   mRX = obj.mRX;
   mRY = obj.mRY;
   mType = obj.mType;
-  mAngle1 = obj.mAngle1;
-  mAngle2 = obj.mAngle2;
+  mStartAngle = obj.mStartAngle;
+  mAngle = obj.mAngle;
   calcBoundingBox();
 }
 
@@ -78,12 +80,6 @@ GObject *GOval::copy() const
   return new GOval(*this);
 }
 
-void GOval::setAngles(const double sa, const double ea)
-{
-  mAngle1 = sa;
-  mAngle2 = ea;
-}
-
 QString GOval::typeName() const
 {
   if(mRX == mRY)
@@ -95,11 +91,11 @@ QString GOval::typeName() const
 QDomElement GOval::writeToXml(QDomDocument &document)
 {
   QDomElement oval = document.createElement("oval");
-  // TODO save type
   oval.setAttribute("rx", mRX);
   oval.setAttribute("ry", mRY);
-  oval.setAttribute("a1", mAngle1);
-  oval.setAttribute("a2", mAngle2);
+  oval.setAttribute("type", mType);
+  oval.setAttribute("sa", mStartAngle);
+  oval.setAttribute("a", mAngle);
   oval.appendChild(GObject::writeToXml(document));
   return oval;
 }
@@ -108,7 +104,7 @@ void GOval::draw(KoPainter *p, const QWMatrix &m, bool withBasePoints, bool /*ou
 {
   setPen(p);
   setBrush(p);
-  KoVectorPath *v = KoVectorPath::ellipse(0.0, 0.0, mRX, mRY);
+  KoVectorPath *v = KoVectorPath::arc(0.0, 0.0, mRX, mRY, mStartAngle, mAngle);
   v->transform(tmpMatrix * m);
   p->drawVectorPath(v);
   delete v;
@@ -140,13 +136,13 @@ void GOval::calcBoundingBox()
 
   double x, y, angle;
 
-  angle = mAngle1 * Kontour::pi / 180.0;
+  angle = mStartAngle * Kontour::pi / 180.0;
   x = mRX * cos(angle);
   y = mRY * sin(angle);
   segPoint[0].setX(x);
   segPoint[0].setY(y);
 
-  angle = mAngle2 * Kontour::pi / 180.0;
+  angle = (mStartAngle + mAngle) * Kontour::pi / 180.0;
   x = mRX * cos(angle);
   y = mRY * sin(angle);
   segPoint[1].setX(x);
@@ -155,7 +151,7 @@ void GOval::calcBoundingBox()
 
 int GOval::getNeighbourPoint(const KoPoint &p, const double /*distance*/)
 {
-  for(int i = 1; i >= 0; i--)
+  for(int i = 0; i < 2; i++)
   {
     KoPoint c = segPoint[i].transform(tMatrix);
     if(c.isNear(p, Kontour::nearDistance))
@@ -164,8 +160,33 @@ int GOval::getNeighbourPoint(const KoPoint &p, const double /*distance*/)
   return -1;
 }
 
-void GOval::movePoint (int /*idx*/, double /*dx*/, double /*dy*/, bool /*ctrlPressed*/)
+void GOval::movePoint(int idx, double dx, double dy, bool)
 {
+  KoPoint c = segPoint[idx];
+  c = c.transform(tmpMatrix);
+  c.setX(c.x() + dx);
+  c.setY(c.y() + dy);
+  segPoint[idx] = c.transform(iMatrix);
+  if(idx == 0)
+  {
+    double ea = mStartAngle + mAngle;
+    mStartAngle = 180.0 * atan(segPoint[0].y() / segPoint[0].x()) / Kontour::pi;
+    if(segPoint[0].x() < 0.0)
+      mStartAngle += 180.0;
+    if(mStartAngle < 0.0)
+      mStartAngle += 360.0;
+    mAngle = ea - mStartAngle;
+    double angle = mStartAngle * Kontour::pi / 180.0;
+    double x = mRX * cos(angle);
+    double y = mRY * sin(angle);
+    segPoint[0].setX(x);
+    segPoint[0].setY(y);
+    kdDebug() << "angle = " << mStartAngle << endl;
+  }
+  else
+  {
+  
+  }
 }
 
 void GOval::removePoint(int /*idx*/)

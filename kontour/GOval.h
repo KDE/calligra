@@ -34,7 +34,7 @@ class GOval : public GObject
 public:
   enum Type{ Arc, Sector, Segment };
 
-  GOval(double rx, double ry, Type aType = Arc, double a1 = 270.0, double a2 = 270.0);
+  GOval(double rx, double ry, Type aType = Arc, double sa = 0.0, double a = 360.0);
   GOval(const QDomElement &element);
   GOval(const GOval &obj);
 
@@ -44,8 +44,6 @@ public:
   void type(Type t);
 
   bool isCircle() const;
-
-  void setAngles(const double sa, const double ea);
 
   QString typeName () const;
   QDomElement writeToXml(QDomDocument &document);
@@ -64,8 +62,8 @@ private:
   double      mRX;                // X radius
   double      mRY;                // Y radius
   Type        mType;              // Oval type
-  double      mAngle1;            // Start angle
-  double      mAngle2;            // End angle
+  double      mStartAngle;        // Start angle
+  double      mAngle;             // Arc angle
   KoPoint     segPoint[2];        //
 };
 
