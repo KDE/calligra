@@ -8,6 +8,7 @@
 #include <qgroupbox.h>
 #include <qhbuttongroup.h>
 #include <qpushbutton.h>
+#include <qlabel.h>
 #include <kcolordialog.h>
 #include <klocale.h>
 #include <koMainWindow.h>
