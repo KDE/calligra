@@ -113,7 +113,7 @@ KoDocument *KPresenterChild::hitTest( const QPoint &, const QWMatrix & )
 KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
       _gradientCollection(), _clipartCollection(), _hasHeader( false ),
-      _hasFooter( false ),  m_unit( KWUnit::U_MM ),urlIntern()
+      _hasFooter( false ),  m_unit( KoUnit::U_MM ),urlIntern()
 {
     //fCollection = new KTextEditFormatCollection;
     setInstance( KPresenterFactory::global() );
@@ -159,7 +159,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     //   _pageLayout.ptTop = 0;
     //   _pageLayout.ptBottom = 0;
 
-    _pageLayout.unit = PG_MM;
+    _pageLayout.unit = KoUnit::U_MM;
     m_indent = MM_TO_POINT( 10.0 );
 
     objStartY = 0;
@@ -207,22 +207,15 @@ void KPresenterDoc::slotCommandExecuted()
     setModified( true );
 }
 
-void KPresenterDoc::setUnit( KWUnit::Unit _unit )
+void KPresenterDoc::setUnit( KoUnit::Unit _unit )
 {
     m_unit = _unit;
-    switch ( m_unit ) {
-    case KWUnit::U_MM: _pageLayout.unit = PG_MM;
-        break;
-    case KWUnit::U_PT: _pageLayout.unit = PG_PT;
-        break;
-    case KWUnit::U_INCH: _pageLayout.unit = PG_INCH;
-        break;
-    }
+    _pageLayout.unit=m_unit;
 
     QPtrListIterator<KoView> it( views() );
     for( ; it.current(); ++it ) {
-        ((KPresenterView*)it.current())->getHRuler()->setUnit( KWUnit::unitName( m_unit ) );
-        ((KPresenterView*)it.current())->getVRuler()->setUnit( KWUnit::unitName( m_unit ) );
+        ((KPresenterView*)it.current())->getHRuler()->setUnit( KoUnit::unitName( m_unit ) );
+        ((KPresenterView*)it.current())->getVRuler()->setUnit( KoUnit::unitName( m_unit ) );
     }
 }
 
@@ -637,7 +630,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
     if ( _clean ) {
         //KoPageLayout __pgLayout;
         __pgLayout = KoPageLayoutDia::standardLayout();
-        __pgLayout.unit = PG_MM;
+        __pgLayout.unit = KoUnit::U_MM;
 
         if ( !_backgroundList.isEmpty() )
             _backgroundList.clear();
@@ -714,7 +707,7 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
             if(elem.hasAttribute("mmHeight"))   //compatibility
                 __pgLayout.mmHeight = elem.attribute("mmHeight").toDouble();
             if(elem.hasAttribute("unit"))
-                __pgLayout.unit = static_cast<KoUnit>(elem.attribute("unit").toInt());
+                __pgLayout.unit = static_cast<KoUnit::Unit>(elem.attribute("unit").toInt());
             if(elem.hasAttribute("width")) {
                 __pgLayout.mmWidth = elem.attribute("width").toDouble();
                 __pgLayout.ptWidth = MM_TO_POINT( __pgLayout.mmWidth );
@@ -1174,14 +1167,14 @@ void KPresenterDoc::setPageLayout( KoPageLayout pgLayout, int diffx, int diffy )
 
     QString unit;
     switch ( _pageLayout.unit ) {
-    case PG_MM: unit = "mm";
+    case KoUnit::U_MM: unit = "mm";
 	break;
-    case PG_PT: unit = "pt";
+    case KoUnit::U_PT: unit = "pt";
 	break;
-    case PG_INCH: unit = "inch";
+    case KoUnit::U_INCH: unit = "inch";
 	break;
     }
-    setUnit(  KWUnit::unit( unit) );
+    setUnit(  KoUnit::unit( unit) );
 
     repaint( false );
     // don't setModified(true) here, since this is called on startup

@@ -28,7 +28,7 @@ class KMacroCommand;
 class KCommandHistory;
 class KoZoomHandler;
 class KoAutoFormat;
-class KWUnit;
+class KoUnit;
 
 #include <koDocument.h>
 #include <koDocumentChild.h>
@@ -48,7 +48,7 @@ class KWUnit;
 #include <kpimage.h>
 #include <kpgradientcollection.h>
 #include <kpclipartcollection.h>
-#include <kwunit.h>
+#include <koUnit.h>
 class KoDocumentEntry;
 class KPFooterHeaderEditor;
 class KPTextObject;
@@ -329,9 +329,9 @@ public:
     void setIndentValue(double _ind) { m_indent=_ind; }
 
     // The user-chosen global unit
-    QString getUnitName() { return KWUnit::unitName( m_unit ); }
-    KWUnit::Unit getUnit() { return m_unit; }
-    void setUnit( KWUnit::Unit _unit );
+    QString getUnitName() { return KoUnit::unitName( m_unit ); }
+    KoUnit::Unit getUnit() { return m_unit; }
+    void setUnit( KoUnit::Unit _unit );
 
 
 public slots:
@@ -453,7 +453,7 @@ protected:
 
     double m_indent; // in pt
 
-    KWUnit::Unit m_unit;
+    KoUnit::Unit m_unit;
 
 private:
     void pageTitleInsert( unsigned int pageNumber);

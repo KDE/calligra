@@ -3184,7 +3184,7 @@ void KPresenterView::setupRulers()
 /*==============================================================*/
 void KPresenterView::unitChanged( QString u )
 {
-    m_pKPresenterDoc->setUnit(KWUnit::unit( u ) );
+    m_pKPresenterDoc->setUnit(KoUnit::unit( u ) );
 }
 
 /*===================== set ranges of scrollbars ===============*/
@@ -3880,7 +3880,7 @@ void KPresenterView::formatParagraph()
     KPTextView *edit=page->currentTextObjectView();
     if (edit)
     {
-        //FIXME : KWUnit::U_MM unit
+        //FIXME : KoUnit::U_MM unit
         KoParagDia *paragDia = new KoParagDia( this, "",
                                                KoParagDia::PD_SPACING | KoParagDia::PD_ALIGN |
                                                KoParagDia::PD_BORDERS |
@@ -3913,7 +3913,7 @@ void KPresenterView::formatParagraph()
                 changed=true;
             }
 #if 0
-            m_gui->getHorzRuler()->setLeftIndent( KWUnit::userValue( paragDia->leftIndent(), m_doc->getUnit() ) );
+            m_gui->getHorzRuler()->setLeftIndent( KoUnit::userValue( paragDia->leftIndent(), m_doc->getUnit() ) );
 #endif
         }
 
@@ -3925,7 +3925,7 @@ void KPresenterView::formatParagraph()
                 macroCommand->addCommand(cmd);
                 changed=true;
             }
-            //m_gui->getHorzRuler()->setRightIndent( KWUnit::userValue( paragDia->rightIndent(), m_doc->getUnit() ) );
+            //m_gui->getHorzRuler()->setRightIndent( KoUnit::userValue( paragDia->rightIndent(), m_doc->getUnit() ) );
         }
         if(paragDia->isSpaceBeforeChanged())
         {
@@ -3954,7 +3954,7 @@ void KPresenterView::formatParagraph()
                 changed=true;
             }
             /*m_gui->getHorzRuler()->setFirstIndent(
-              KWUnit::userValue( paragDia->leftIndent() + paragDia->firstLineIndent(), m_doc->getUnit() ) );*/
+              KoUnit::userValue( paragDia->leftIndent() + paragDia->firstLineIndent(), m_doc->getUnit() ) );*/
         }
 
         if(paragDia->isAlignChanged())
