@@ -27,7 +27,7 @@ class QObject;
 class QString;
 class QStringList;
 
-class KFORMEDITOR_EXPORT KexiProperty
+class KEXIPROPERTYEDITOR_EXPORT KexiProperty
 {
 	public:
 		KexiProperty(const QString &name, QVariant value);
