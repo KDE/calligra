@@ -22,6 +22,9 @@
 #include <qstring.h>
 #include <qfontmetrics.h>
 
+#include <klocale.h>
+#include <kmessagebox.h>
+
 //#include <koUnit.h>
 
 #include "kformulamathmlread.h"
@@ -1351,9 +1354,9 @@ void MathML2KFormula::startConversion()
         impl->math( element );
     }
     else {
-        kdDebug() << "Fatal error: Not a MathML document!" << endl;
+        kdError() << "Not a MathML document!" << endl;
+        KMessageBox::error( 0, i18n( "The document does not seem to be MathML" ), i18n( "MathML Import Error" ) );
     }
-    //cerr << formuladoc.toCString() << endl;
     done = true;
 }
 
