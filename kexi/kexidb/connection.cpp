@@ -417,8 +417,9 @@ QStringList Connection::tableNames(bool also_system_tables)
 {
 	QStringList list;
 	
-	if (!isDatabaseUsed())
-		return list;
+//lucijan: doesn't work
+//if (!isDatabaseUsed())
+//		return list;
 
 	Cursor *c = executeQuery(QString(
 	 "select o_name from kexi__objects where o_type=%1").arg(KexiDB::TableObjectType));
