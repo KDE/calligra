@@ -67,7 +67,7 @@ VDrawSelection::visitVComposite( VComposite &composite )
 		for( ; itr.current(); ++itr )
 		{
 			VPathIterator jtr( *( itr.current() ) );
-			++jtr;
+			//++jtr;
 			for( ; jtr.current(); ++jtr )
 			{
 				if( editnodes )
