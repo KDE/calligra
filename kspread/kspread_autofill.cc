@@ -983,9 +983,10 @@ void KSpreadTable::FillSequenceWithCopy(QPtrList<KSpreadCell>& _srcList,
 	      && _srcList.count() == 1)
       {
 	QString strMonth=_srcList.at( s )->text();
-	int i = AutoFillSequenceItem::month->findIndex( strMonth );
+	int i = AutoFillSequenceItem::month->findIndex( strMonth )+incr;
 	int k = (i) % AutoFillSequenceItem::month->count();
 	cell->setCellText((*AutoFillSequenceItem::month->at( k )));
+        incr++;
       }
       else if(AutoFillSequenceItem::day != 0L
 	      && AutoFillSequenceItem::day->find( _srcList.at( s )->text()) != 0L
@@ -994,9 +995,10 @@ void KSpreadTable::FillSequenceWithCopy(QPtrList<KSpreadCell>& _srcList,
 	      && _srcList.count()==1)
       {
 	QString strDay=_srcList.at( s )->text();
-	int i = AutoFillSequenceItem::day->findIndex( strDay );
+	int i = AutoFillSequenceItem::day->findIndex( strDay )+incr;
 	int k = (i) % AutoFillSequenceItem::day->count();
 	cell->setCellText((*AutoFillSequenceItem::day->at( k )));
+        incr++;
       }
       else
       {
