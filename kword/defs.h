@@ -45,9 +45,10 @@ const unsigned int minFrameHeight=20;
  * FT_PART = one frame with an embedded part, can be a spreadsheet to a kword doc.<br>
  * FT_FORMULA = one frame with an embedded formula frame. This is semi-native
  * FT_TABLE = Frameset which contains table cells.
+ * Table is 10 so that in the XML file we can use 6, 7, 8, 9 in the future.
  */
 enum FrameSetType { FT_BASE = 0, FT_TEXT = 1, FT_PICTURE = 2, FT_PART = 3,
-                    FT_FORMULA = 4, FT_CLIPART = 5, FT_TABLE = 100 };
+                    FT_FORMULA = 4, FT_CLIPART = 5, FT_TABLE = 10 };
 // This has to remain here because of KWDocument::refreshDocStructure()
 
 // This one has better remain here, otherwise kwdoc.cc needs docstruct.h

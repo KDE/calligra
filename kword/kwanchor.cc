@@ -50,7 +50,7 @@ void KWAnchor::move( int x, int y )
         QPoint nPoint;
         if ( fs->internalToNormal( QPoint( x, y+paragy ), nPoint ) )
         {
-            //kdDebug(32001) << "KWAnchor::draw moving frame to [zoomed pos] " << nPoint.x() << "," << nPoint.y() << endl;
+            //kdDebug(32001) << "KWAnchor::move moving frame to [zoomed pos] " << nPoint.x() << "," << nPoint.y() << endl;
             // Move the frame to position nPoint.
             m_frameset->moveFloatingFrame( m_frameNum, nPoint );
         }
@@ -75,7 +75,11 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
 
     p->save();
     // Determine crect in view coords
-    QRect crect( cx > 0 ? cx : 0, cy+paragy, cw, ch );
+    QRect crect;
+    if ( cx == -1 && cy+paragy == -1 && cw == -1 && ch == -1 )
+        crect = QRect( x, y+paragy, width, height );
+    else
+        crect = QRect( cx > 0 ? cx : 0, cy+paragy, cw, ch );
     //kdDebug() << "KWAnchor::draw crect ( in internal coords ) = " << DEBUGRECT( crect ) << endl;
     QPoint cnPoint = crect.topLeft(); //fallback
     (void) fs->internalToNormal( crect.topLeft(), cnPoint );

@@ -442,7 +442,7 @@ void KWTextFrameSet::layout()
 
 void KWTextFrameSet::invalidate()
 {
-    kdDebug() << "KWTextFrameSet::invalidate" << endl;
+    kdDebug() << "KWTextFrameSet::invalidate " << getName() << endl;
     m_lastFormatted = textdoc->firstParag();
     textdoc->invalidate(); // lazy layout, real update follows upon next repaint
 }

@@ -1167,7 +1167,9 @@ bool KWFrameSet::canRemovePage( int num )
 #ifndef NDEBUG
 void KWFrameSet::printDebug()
 {
-    static const char * typeFrameset[] = { "base", "txt", "pic", "part", "formula", "table","ERROR" };
+    static const char * typeFrameset[] = { "base", "txt", "pic", "part", "formula", "clipart",
+                                           "6", "7", "8", "9", "table",
+                                           "ERROR" };
     static const char * infoFrameset[] = { "body", "first header", "odd headers", "even headers",
                                            "first footer", "odd footers", "even footers", "footnote", "ERROR" };
     static const char * frameBh[] = { "AutoExtendFrame", "AutoCreateNewFrame", "Ignore", "ERROR" };
