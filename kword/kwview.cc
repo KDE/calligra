@@ -93,6 +93,7 @@
 #include "kwtextdocument.h"
 #include "kwcreatebookmarkdia.h"
 #include "kwimportstyledia.h"
+#include "kwframe.h"
 
 #undef Bool
 #include <kspell.h>
@@ -5734,6 +5735,7 @@ void KWView::insertFile()
 void KWView::insertFile(const QString & path)
 {
     bool hasPictures=false;
+    bool hasFixedFramesets = false;
     // ### TODO network transparency
     KoStore* store=KoStore::createStore( path, KoStore::Read );
     if ( store )
@@ -5781,34 +5783,131 @@ void KWView::insertFile(const QString & path)
                 // Need an intermediate list otherwise nextSibling doesn't work after moving the node
                 // to the other DOM tree ;)
                 QValueList<QDomElement> paragList;
+                QValueList<QString> inlineFsNames;
+                QDomElement fsElem;
 
                 QDomNode n = framesetElem.firstChild().toElement();
-                while( !n.isNull() ) {
+                while( !n.isNull() )
+                {
                     QDomElement e = n.toElement(); // try to convert the node to an element.
-                    if( !e.isNull() && e.tagName() == "PARAGRAPH" )
+                    if  ( !e.isNull() && e.tagName() == "PARAGRAPH" )
+                    {
                         paragList.append( e );
+                        // Handle inline framesets
+                        QDomElement formatsElem = e.namedItem( "FORMATS" ).toElement();
+                        if ( !formatsElem.isNull() )
+                        {
+                            // Get references to inline framesets
+                            QDomElement formatElem = formatsElem.firstChild().toElement();
+                            for ( ; !formatElem.isNull() ; formatElem = formatElem.nextSibling().toElement() )
+                            {
+                                QDomElement anchorElem = formatElem.namedItem( "ANCHOR" ).toElement();
+                                if ( !anchorElem.isNull() )
+                                {
+                                    QString type = anchorElem.attribute( "type" );
+                                    if ( type == "grpMgr" /* old syntax */ || type == "frameset" )
+                                    {
+                                        QString iName = anchorElem.attribute( "instance" );
+                                        inlineFsNames.append( iName );
+                                        // inline framsets shall appear after the paragraph
+                                        QString tableName;
+                                        QDomElement table;
+                                        fsElem = framesetElem.nextSibling().toElement();
+                                        for ( ; !fsElem.isNull() ; fsElem = fsElem.nextSibling().toElement() )
+                                        {
+                                            if ( fsElem.tagName() == "FRAMESET" )
+                                            {
+                                                QString name = fsElem.attribute( "name" );
+                                                QString grpMgr = fsElem.attribute( "grpMgr" );
+                                                if ( name == iName )
+                                                {
+                                                    paragList.append( fsElem );
+                                                    //kdDebug()<<k_funcinfo<<" Inline frameset: "<<name<<" added"<<endl;
+                                                }
+                                                else if ( grpMgr == iName )
+                                                {   // Table so we need to create table framset if it is new
+                                                    if ( grpMgr != tableName )
+                                                    {
+                                                        tableName = grpMgr;
+                                                        table = domDoc.createElement("FRAMESET");
+                                                        table.setAttribute("frameType", FT_TABLE);
+                                                        table.setAttribute("frameInfo", 0);
+                                                        table.setAttribute("protectSize", fsElem.attribute("protectSize","0"));
+                                                        table.setAttribute("name", tableName);
+                                                        table.setAttribute("visible", fsElem.attribute("visible","1"));
+                                                        paragList.append( table ); // same level as paragraphs, so it goes into the paragList
+                                                        //kdDebug()<<k_funcinfo<<" paragList Added new table: "<<grpMgr<<endl;
+                                                    }
+
+                                                    table.appendChild( fsElem.cloneNode() ); // add the cell as child to the table frameset
+                                                    //kdDebug()<<k_funcinfo<<" Inline table: "<<grpMgr<<" Added new cell: "<<name<<endl;
+                                                }
+                                                //else kdDebug()<<k_funcinfo<<" Fixed frameset: "<<name<<endl;
+                                            }
+                                            //else kdDebug()<<k_funcinfo<<" Not frameset: "<<fsElem.tagName()<<endl;
+                                        }
+                                        //kdDebug()<<k_funcinfo<<" Treated "<<i<<" frameset elements"<<endl;
+                                    }
+                                }
+                            }
+                        }
+                    }
                     n = n.nextSibling();
                 }
-
+                
                 QValueList<QDomElement>::Iterator it = paragList.begin();
                 QValueList<QDomElement>::Iterator end = paragList.end();
                 for ( ; it!= end ; ++it )
+                {
+                    //kdDebug()<<k_funcinfo<<" paragList tag: "<<(*it).tagName()<<" name: "<<(*it).attribute( "name" )<<" grpMgr: "<<(*it).attribute( "grpMgr" )<<endl;
                     paragsElem.appendChild( *it );
+                }
+                //kdDebug() << k_funcinfo << "\n" << domDoc.toCString() << endl;
 
-                //kdDebug() << k_funcinfo << domDoc.toCString() << endl;
-                // The other framesets
+                // The fixed framesets
                 framesetElem = framesetElem.nextSibling().toElement();
                 QValueList<QDomElement> framesetsList;
 
+                // doctype SELECTION is used for fixed framesets
                 QDomDocument domDocFrames( "SELECTION" ); // see KWCanvas::copySelectedFrames
                 QDomElement topElem = domDocFrames.createElement( "SELECTION" );
                 domDocFrames.appendChild( topElem );
+                QString tableName;
+                QDomElement table;
                 for ( ; !framesetElem.isNull() ; framesetElem = framesetElem.nextSibling().toElement() )
                 {
                     if ( framesetElem.tagName() == "FRAMESET" )
                     {
-                        framesetsList.append( framesetElem );
+                        QString name = framesetElem.attribute( "name" );
+                        QString grpMgr = framesetElem.attribute( "grpMgr" );
+                        if ( !inlineFsNames.contains(name) && !inlineFsNames.contains(grpMgr) )
+                        {   // fixed frameset
+                            if ( !grpMgr.isEmpty() )
+                            {   // Table cell
+                                if ( grpMgr != tableName )
+                                {   // New table (first cell)
+                                    tableName = grpMgr;
+                                    table = domDocFrames.createElement("FRAMESET");
+                                    table.setAttribute("frameType", FT_TABLE);
+                                    table.setAttribute("frameInfo", 0);
+                                    table.setAttribute("protectSize", framesetElem.attribute("protectSize","0"));
+                                    table.setAttribute("name", tableName);
+                                    table.setAttribute("visible", framesetElem.attribute("visible","1"));
+                                    framesetsList.append( table );
+                                    //kdDebug()<<k_funcinfo<<" framesetsList Added new table: "<<grpMgr<<endl;
+                                }
+                                table.appendChild( framesetElem.cloneNode() ); // add the cell as child to the table frameset
+                                //kdDebug()<<k_funcinfo<<" Fixed table '"<<grpMgr<<"': Added new cell: '"<<name<<"'"<<endl;
+                            }
+                            else // other frameset type
+                            {
+                                framesetsList.append( framesetElem );
+                                //kdDebug()<<k_funcinfo<<" Fixed frameset: '"<<name<<"' added"<<endl;
+                            }
+                        }
+                        //else kdDebug()<<k_funcinfo<<" Inline frameset, skipped: "<<name<<endl;
                     }
+                    //else kdDebug()<<k_funcinfo<<" Not frameset element, skipped: "<<framesetElem.tagName()<<endl;
                 }
                 it = framesetsList.begin();
                 end = framesetsList.end();
@@ -5820,6 +5919,7 @@ void KWView::insertFile(const QString & path)
                     // We skip headers and footers
                     if ( frameSetType != FT_TEXT || info == KWFrameSet::FI_BODY || info == KWFrameSet::FI_FOOTNOTE )
                     {
+                        hasFixedFramesets = true;
                         topElem.appendChild( framesetElem );
                     }
                 }
@@ -5827,11 +5927,15 @@ void KWView::insertFile(const QString & path)
                 if ( !macroCmd )
                     macroCmd = new KMacroCommand( i18n("Insert File") );
 
-                //kdDebug() << k_funcinfo << domDocFrames.toCString() << endl;
-                m_doc->pasteFrames( topElem, macroCmd,true );
-
-
+                if ( hasFixedFramesets )
+                {
+                    // insert fixed framesets
+                    //kdDebug() << k_funcinfo << domDocFrames.toCString() << endl;
+                    m_doc->pasteFrames( topElem, macroCmd );
+                }
+                // insert paragraphs and inline framesets (we always have at least one paragraph)
                 KCommand *cmd = textFrameSet->pasteKWord( &insertionCursor, domDoc.toCString(), true );
+
                 if ( cmd ) {
                     macroCmd->addCommand( cmd );
                 }
