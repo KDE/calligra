@@ -32,6 +32,7 @@ class KoUnit;
 class KoVariable;
 class KoVariableFormatCollection;
 class KPrVariableCollection;
+class KTempFile;
 
 #include "kprpage.h"
 
@@ -347,12 +348,20 @@ protected:
     QDomElement saveTitle( QDomDocument &doc );
     QDomElement saveNote( QDomDocument &doc );
     QDomElement saveAttribute( QDomDocument &doc );
+    QDomElement saveUsedSoundFileToXML( QDomDocument &_doc, QStringList _list, const QString &_prefix );
+
     void loadBackground( const QDomElement &element );
     void loadObjects( const QDomElement &element,bool paste=false );
     void loadTitle( const QDomElement &element );
     void loadNote( const QDomElement &element );
+    void loadUsedSoundFileFromXML( const QDomElement &element );
+
     virtual bool completeLoading( KoStore* /* _store */ );
     void makeUsedPixmapList();
+    void makeUsedSoundFileList();
+
+    void saveUsedSoundFileToStore( KoStore *_store, QStringList _list, const QString &_prefix );
+    void loadUsedSoundFileFromStore( KoStore *_store, QStringList _list, const QString &_prefix );
 
     // ************ variables ************
 
@@ -402,6 +411,8 @@ protected:
 
     QValueList<KPImageKey> usedPixmaps;
     QValueList<KPClipartKey> usedCliparts;
+    QStringList usedSoundFile, haveNotOwnDiskSoundFile;
+    QPtrList<KTempFile> tmpSoundFileList;
     DCOPObject *dcop;
 
     int saveOnlyPage;

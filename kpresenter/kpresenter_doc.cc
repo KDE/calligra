@@ -150,6 +150,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     _spInfinitLoop = false;
     _spManualSwitch = true;
     _showPresentationDuration = false;
+    tmpSoundFileList = QPtrList<KTempFile>();
     _rastX = 10;
     _rastY = 10;
     _xRnd = 20;
@@ -345,6 +346,9 @@ KPresenterDoc::~KPresenterDoc()
     delete m_varFormatCollection;
     delete dcop;
     delete m_stickyPage;
+
+    tmpSoundFileList.setAutoDelete( true );
+    tmpSoundFileList.clear();
 }
 
 
@@ -527,6 +531,11 @@ QDomDocument KPresenterDoc::saveXML()
     QDomElement cliparts = _clipartCollection.saveXML( doc, usedCliparts, prefix );
     presenter.appendChild( cliparts );
 
+    // Save sound file list.
+    makeUsedSoundFileList();
+    QDomElement soundFiles = saveUsedSoundFileToXML( doc, usedSoundFile, prefix );
+    presenter.appendChild( soundFiles );
+
     setModified( false );
     return doc;
 }
@@ -628,6 +637,28 @@ QDomElement KPresenterDoc::saveAttribute( QDomDocument &doc )
     return attributes;
 }
 
+QDomElement KPresenterDoc::saveUsedSoundFileToXML( QDomDocument &_doc, QStringList _list, const QString &_prefix )
+{
+    QDomElement soundFiles = _doc.createElement( "SOUNDS" );
+
+    unsigned int i = 0;
+    QStringList::Iterator it = _list.begin();
+    for ( ; it != _list.end(); ++it ) {
+        QString soundFileName = *it;
+        int position = soundFileName.findRev( '.' );
+        QString format = soundFileName.right( soundFileName.length() - position - 1 );
+        QString _name = QString( "sounds/sound%1.%2" ).arg( ++i ).arg( format.lower() );
+        _name.prepend( _prefix );
+
+        QDomElement fileElem = _doc.createElement( "FILE" );
+        soundFiles.appendChild( fileElem );
+        fileElem.setAttribute( "filename", soundFileName );
+        fileElem.setAttribute( "name", _name );
+    }
+
+    return soundFiles;
+}
+
 /*==============================================================*/
 bool KPresenterDoc::completeSaving( KoStore* _store )
 {
@@ -636,8 +667,34 @@ bool KPresenterDoc::completeSaving( KoStore* _store )
     QString prefix = isStoredExtern() ? QString::null : url().url() + "/";
     _imageCollection.saveToStore( _store, usedPixmaps, prefix );
     _clipartCollection.saveToStore( _store, usedCliparts, prefix );
+    saveUsedSoundFileToStore( _store, usedSoundFile, prefix );
     return true;
 }
+
+void KPresenterDoc::saveUsedSoundFileToStore( KoStore *_store, QStringList _list, const QString &_prefix )
+{
+    unsigned int i = 0;
+    QStringList::Iterator it = _list.begin();
+    for ( ; it != _list.end(); ++it ) {
+        QString soundFileName = *it;
+        int position = soundFileName.findRev( '.' );
+        QString format = soundFileName.right( soundFileName.length() - position - 1 );
+        QString _storeURL = QString( "sounds/sound%1.%2" ).arg( ++i ).arg( format.lower() );
+        _storeURL.prepend( _prefix );
+
+        if ( _store->open( _storeURL ) ) {
+            KoStoreDevice dev( _store );
+            QFile _file( soundFileName );
+            if ( _file.open( IO_ReadOnly ) ) {
+               dev.writeBlock( ( _file.readAll() ).data(), _file.size() );
+               _file.close();
+            }
+
+            _store->close();
+        }
+    }
+}
+
 
 /*========================== load ===============================*/
 bool KPresenterDoc::loadChildren( KoStore* _store )
@@ -988,6 +1045,8 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
                 }
                 keyElement=keyElement.nextSibling().toElement();
             }
+        } else if ( elem.tagName() == "SOUNDS" ) {
+            loadUsedSoundFileFromXML( elem );
         }
         elem=elem.nextSibling().toElement();
 
@@ -1427,6 +1486,35 @@ void KPresenterDoc::loadNote( const QDomElement &element )
     }
 }
 
+void KPresenterDoc::loadUsedSoundFileFromXML( const QDomElement &element )
+{
+    usedSoundFile = QStringList();
+    haveNotOwnDiskSoundFile = QStringList();
+    QDomElement fileElement = element.firstChild().toElement();
+    while ( !fileElement.isNull() ) {
+        if ( fileElement.tagName() == "FILE" ) {
+            QString fileName;
+            if ( fileElement.hasAttribute( "name" ) )
+                fileName = fileElement.attribute( "name" );
+
+            if ( fileElement.hasAttribute( "filename" ) ) {
+                QString name = fileElement.attribute( "filename" );
+                QFile _file( name );
+                if ( _file.open( IO_ReadOnly ) ) {
+                    fileName = name;
+                    _file.close();
+                }
+                else
+                    haveNotOwnDiskSoundFile.append( name );
+            }
+
+            usedSoundFile.append( fileName );
+
+            fileElement = fileElement.nextSibling().toElement();
+        }
+    }
+}
+
 /*===================================================================*/
 bool KPresenterDoc::completeLoading( KoStore* _store )
 {
@@ -1475,6 +1563,8 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
 	    _clipartCollection.insertClipart( it2.node->data, pic );
 	}
 
+        loadUsedSoundFileFromStore( _store, usedSoundFile, prefix );
+
 	if ( _clean )
         {
 	    setPageLayout( __pgLayout );
@@ -1501,6 +1591,59 @@ bool KPresenterDoc::completeLoading( KoStore* _store )
     return true;
 }
 
+void KPresenterDoc::loadUsedSoundFileFromStore( KoStore *_store, QStringList _list, const QString &/*_prefix*/ )
+{
+    int i = 0;
+    QStringList::Iterator it = _list.begin();
+    for ( ; it != _list.end(); ++it ) {
+        QString soundFile = *it;
+
+        if ( _store->open( soundFile ) ) {
+            kdDebug( 3301 ) << "Not found file on disk. Use this( " << soundFile << " ) file." << endl;
+            KoStoreDevice dev( _store );
+            int size = _store->size();
+            char *data = new char[size];
+            dev.readBlock( data, size );
+
+            int position = soundFile.findRev( '.' );
+            QString format = soundFile.right( soundFile.length() - position );
+            KTempFile *tmpFile = new KTempFile( QString::null, format );
+            tmpFile->setAutoDelete( true );
+            tmpFile->file()->writeBlock( data, size );
+            tmpFile->close();
+
+            QString tmpFileName = tmpFile->name();
+            tmpSoundFileList.append( tmpFile );
+
+            QString _fileName = *haveNotOwnDiskSoundFile.at( i );
+            ++i;
+
+            QPtrListIterator<KPrPage> it( m_pageList );
+            for ( ; it.current(); ++it ) {
+                QString _file = it.current()->getPageSoundFileName();
+                if ( !_file.isEmpty() && _file == _fileName )
+                    it.current()->setPageSoundFileName( tmpFileName );
+
+                QPtrListIterator<KPObject> oIt( it.current()->objectList() );
+                for ( ; oIt.current(); ++oIt ) {
+                    _file = oIt.current()->getAppearSoundEffectFileName();
+                    if ( !_file.isEmpty() && _file == _fileName )
+                        oIt.current()->setAppearSoundEffectFileName( tmpFileName );
+
+                    _file = oIt.current()->getDisappearSoundEffectFileName();
+                    if ( !_file.isEmpty() && _file == _fileName )
+                        oIt.current()->setDisappearSoundEffectFileName( tmpFileName );
+                }
+            }
+
+            _store->close();
+            delete data;
+        }
+        else {
+            kdDebug( 3301 ) << "Found this( " << soundFile << " ) file on disk" << endl;
+        }
+    }
+}
 
 /*===================== set page layout ==========================*/
 void KPresenterDoc::setPageLayout( KoPageLayout pgLayout )
@@ -1876,6 +2019,33 @@ void KPresenterDoc::makeUsedPixmapList()
 	     static_cast<int>(i) != saveOnlyPage )
 	    continue;
         m_pageList.at(i)->makeUsedPixmapList();
+    }
+}
+
+/*================================================================*/
+void KPresenterDoc::makeUsedSoundFileList()
+{
+    if ( saveOnlyPage != -1 )
+        return;
+
+    usedSoundFile.clear();
+
+    QPtrListIterator<KPrPage> it( m_pageList );
+    for ( ; it.current(); ++it ) {
+        QString _file = it.current()->getPageSoundFileName();
+        if ( !_file.isEmpty() && usedSoundFile.findIndex( _file ) == -1 )
+            usedSoundFile.append( _file );
+
+        QPtrListIterator<KPObject> oIt( it.current()->objectList() );
+        for ( ; oIt.current(); ++oIt ) {
+            _file = oIt.current()->getAppearSoundEffectFileName();
+            if ( !_file.isEmpty() && usedSoundFile.findIndex( _file ) == -1 )
+                usedSoundFile.append( _file );
+
+            _file = oIt.current()->getDisappearSoundEffectFileName();
+            if ( !_file.isEmpty() && usedSoundFile.findIndex( _file ) == -1 )
+                usedSoundFile.append( _file );
+        }
     }
 }
 

@@ -419,7 +419,7 @@ void KPBackGround::drawBackColor( QPainter *_painter, const QSize& ext, const QR
 }
 
 /*================================================================*/
-void KPBackGround::drawBackPix( QPainter *_painter, const QSize& ext, const QRect& crect )
+void KPBackGround::drawBackPix( QPainter *_painter, const QSize& ext, const QRect& /*crect*/ )
 {
     /*kdDebug() << "KPBackGround::drawBackPix ext=" << ext.width() << "," << ext.height() << endl;
     kdDebug() << "mode=" << (backView==BV_ZOOM?"ZOOM":backView==BV_TILED?"TILED":backView==BV_CENTER?"CENTER":"OTHER")
@@ -437,24 +437,15 @@ void KPBackGround::drawBackPix( QPainter *_painter, const QSize& ext, const QRec
         switch ( backView )
         {
         case BV_ZOOM:
-            backImage.draw( *_painter, crect.x(), crect.y(), ext.width(), ext.height(),
-                            crect.x(), crect.y(), crect.width(), crect.height() );
+            _painter->drawPixmap( QRect( 0, 0, ext.width(), ext.height() ), backImage.pixmap() );
             break;
         case BV_TILED:
-            // crect unused, would be too complex
-	    // Note that the tiling is done with the orig pixmap at all zoom levels.
-            // backImage = backImage.scale( backImage.originalSize() );
-
             backImage = backImage.scale( _pixSize );
             _painter->drawTiledPixmap( 0, 0, ext.width(), ext.height(), backImage.pixmap() );
             break;
         case BV_CENTER:
         {
-	    // ### How do zooming and centering go together ?
-	    // Is it ok to use the same pixmap size at all zoom levels ? Probably not.....
-	    // Should this be implemented as "zooming but keeping aspect ratio"?
-
-            backImage = backImage.scale( _pixSize );
+	    backImage = backImage.scale( _pixSize );
 
             QPixmap *pix = new QPixmap( ext.width(), ext.height() );
             bool delPix = true;
