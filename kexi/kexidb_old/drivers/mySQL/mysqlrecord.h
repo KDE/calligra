@@ -81,7 +81,7 @@ class MySqlRecord : public KexiDBRecord, public MySqlResult
 		bool update(unsigned int record, unsigned int field, QVariant value);
 		bool update(unsigned int record, QString field, QVariant value);
 
-		bool deleteRecord();
+		bool deleteRecord(uint record);
 
 		int insert();
 

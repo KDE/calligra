@@ -80,6 +80,8 @@ MySqlResult::value(unsigned int field)
 	{
 		case QVariant::Date:
 			return QVariant(QDate::fromString((m_row)[field], Qt::ISODate));
+		case QVariant::Int:
+			return QVariant(QString((m_row)[field]).toInt());
 		default:
 			return QVariant((m_row)[field]);
 	}

@@ -128,7 +128,7 @@ class KexiDBRecord
 		 *  the changes have to be commited in order to take effect
 		 *  returns true, if delete is possible
 		 */
-		virtual bool deleteRecord() = 0;
+		virtual bool deleteRecord(uint record) = 0;
 
 		/*!
 		 * creates a buffer which enables nice updateing with like

@@ -38,9 +38,19 @@
 #include "kexidatetableedit.h"
 
 KexiDateTableEdit::KexiDateTableEdit(QVariant v, QWidget *parent, const char *name)
-  : QLineEdit("", parent, name)
+  : KexiInputTableEdit(v, QVariant::Date, parent, name)
 {
 	m_data = v;
+	
+	if(!m_data.toDate().isValid())
+	{
+		m_data = QVariant(QDate::currentDate());
+	}
+	else
+	{
+		m_data = v;
+	}
+
 	m_text = KGlobal::_locale->formatDate(m_data.toDate(), true);
 	setText(m_text);
 	setCursor(QCursor(ArrowCursor));
@@ -139,8 +149,19 @@ KexiDateTableEdit::mouseReleaseEvent(QMouseEvent *ev)
 	{
 		m_mouseDown = false;
 		repaint();
-		m_datePicker = new KDatePicker(this, m_data.toDate(), 0, WType_TopLevel | WDestructiveClose | WStyle_Customize | WStyle_StaysOnTop | WStyle_NoBorder);
-		m_datePicker->setCloseButton(true);
+		
+		QDate date;
+		if(!m_data.toDate().isValid())
+		{
+			date = QDate::currentDate();
+		}
+		else
+		{
+			date = m_data.toDate();
+		}
+		m_datePicker = new KexiDatePicker(0, date, 0, WType_TopLevel | WDestructiveClose | WStyle_Customize | WStyle_StaysOnTop | WStyle_NoBorder);
+//		uh man, how i hate backwords compatibility
+//		m_datePicker->setCloseButton(true);
 		QPoint global = mapToGlobal(QPoint(width() - height(), height()));
 		m_datePicker->move(global);
 		m_datePicker->show();
@@ -165,7 +186,25 @@ KexiDateTableEdit::slotDateChanged(QDate date)
 	repaint();
 }
 
+QVariant
+KexiDateTableEdit::value()
+{
+	return QVariant(m_data);
+}
+
 KexiDateTableEdit::~KexiDateTableEdit()
+{
+}
+
+// we need the date thing
+
+KexiDatePicker::KexiDatePicker(QWidget *parent, QDate date, const char *name, WFlags f)
+ : KDatePicker(parent, date, name)
+{
+	setWFlags(f);
+}
+
+KexiDatePicker::~KexiDatePicker()
 {
 }
 

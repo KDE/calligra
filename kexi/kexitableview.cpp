@@ -39,14 +39,14 @@
 #include <klocale.h>
 //#endif
 
-#include <kexiapplication.h>
-
 #include "kexitablerm.h"
 #include "kexitableview.h"
 
 #ifdef USE_KDE
 #include "kexidatetableedit.h"
 #endif
+
+#include "kexiinputtableedit.h"
 
 KexiTableView::KexiTableView(QWidget *parent, const char *name)
 :QScrollView(parent, name, Qt::WRepaintNoErase | Qt::WStaticContents | Qt::WResizeNoErase)
@@ -517,6 +517,19 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 //			p->drawRect(x - 1, 1, w - (x+x) - 1, h + 1);
 			break;
 		}
+		case QVariant::UInt:
+		case QVariant::Double:
+		{
+			if(item->isInsertItem() && m_pColumnModes->at(col) == 3)  //yes that isn't beautiful
+			{
+				p->drawText(x, 2, w - (x+x) - 2, h, AlignRight, "[Auto]");
+			}
+			else
+			{
+				p->drawText(x, 2, w - (x+x) - 2, h, AlignRight, item->getValue(col).toString());
+			}
+			break;
+		}
 		case QVariant::Bool:
 		{
 /*			QRect r(w/2 - style().pixelMetric(QStyle::PM_IndicatorWidth)/2 + x-1, 1, style().pixelMetric(QStyle::PM_IndicatorWidth), style().pixelMetric(QStyle::PM_IndicatorHeight));
@@ -537,13 +550,18 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 		}
 		case QVariant::Date:
 		{
-			#ifdef USE_KDE
-			QString s = KGlobal::_locale->formatDate(item->getValue(col).toDate(), true);
-			#else
-			QString s = item->getDate(col).toString(Qt::LocalDate);
-			#endif
-			p->drawText(x, 0, w - (x+x), h, AlignLeft | SingleLine | AlignVCenter, s);
-			break;
+			QString s = "";
+			
+			if(item->getValue(col).toDate().isValid())
+			{
+				#ifdef USE_KDE
+				s = KGlobal::_locale->formatDate(item->getValue(col).toDate(), true);
+				#else
+				s = item->getDate(col).toString(Qt::LocalDate);
+				#endif
+				p->drawText(x, 0, w - (x+x), h, AlignLeft | SingleLine | AlignVCenter, s);
+				break;
+			}
 		}
 		case QVariant::String:
 		default:
@@ -815,21 +833,22 @@ void KexiTableView::selectPrev()
 
 void KexiTableView::createEditor(int row, int col, QString addText/* = QString::null*/, bool backspace/* = false*/)
 {
-	QString val;
+//	QString val;
+	QVariant val;
 	switch(columnType(col))
 	{
 		case QVariant::Date:
 			#ifdef USE_KDE
-			val = KGlobal::_locale->formatDate(m_pCurrentItem->getDate(col), true);
+//			val = KGlobal::_locale->formatDate(m_pCurrentItem->getDate(col), true);
 
 			#else
-			val = m_pCurrentItem->getDate(col).toString(Qt::LocalDate);
+//			val = m_pCurrentItem->getDate(col).toString(Qt::LocalDate);
 			#endif
 			break;
 
 		default:
-			val = m_pCurrentItem->getText(m_curCol);
-
+//			val = m_pCurrentItem->getText(m_curCol);
+			val = m_pCurrentItem->getValue(m_curCol);
 
 			break;
 	}
@@ -841,13 +860,14 @@ void KexiTableView::createEditor(int row, int col, QString addText/* = QString::
 	{
 		case QVariant::Date:
 			#ifdef USE_KDE
-			m_pEditor = new KexiDateTableEdit(m_pCurrentItem->getValue(col), viewport(), "inPlaceEd");
+			m_pEditor = new KexiDateTableEdit(val, viewport(), "inPlaceEd");
 			qDebug("date editor created...");
 			break;
 			#endif
 
 		default:
-			m_pEditor = new QLineEdit(val + addText, viewport(), "inPlaceEd");
+//			m_pEditor = new QLineEdit(val + addText, viewport(), "inPlaceEd");
+			m_pEditor = new KexiInputTableEdit(val, columnType(col), viewport(), "inPlaceEd");
 			m_pEditor->end(false);
 			if(backspace)
 				m_pEditor->backspace();
@@ -1050,7 +1070,8 @@ void KexiTableView::editorOk()
 {
 	if (!m_pEditor)
 		return;
-	m_pCurrentItem->setText(m_curCol, m_pEditor->text());
+//	m_pCurrentItem->setText(m_curCol, m_pEditor->text());
+	m_pCurrentItem->setValue(m_curCol, m_pEditor->value());
 	editorCancel();
 	emit itemChanged(m_pCurrentItem, m_curCol);
 }

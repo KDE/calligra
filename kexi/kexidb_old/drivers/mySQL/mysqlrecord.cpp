@@ -213,9 +213,13 @@ MySqlRecord::insert()
 }
 
 bool
-MySqlRecord::deleteRecord()
+MySqlRecord::deleteRecord(uint record)
 {
-	return false;
+	if(readOnly())
+		return false;
+
+	QString key = m_db->escape(m_keyBuffer.find(record).data().toString());
+	QString statement("delete form " + m_table + " where " + m_keyField + " = '" + key + "'"); 
 }
 
 void

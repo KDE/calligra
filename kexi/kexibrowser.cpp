@@ -47,7 +47,7 @@ KexiBrowser::KexiBrowser(QWidget *parent, Section s, const char *name ) : KListV
 	iconLoader = KGlobal::iconLoader();
 
 	header()->hide();
-	setRootIsDecorated(true);
+//	setRootIsDecorated(true);
 	
 	addColumn(i18n("Database content"));
 	setResizeMode(QListView::LastColumn);

@@ -43,6 +43,7 @@ class QTimer;
 
 class KexiTableRM;
 class KexiTableItem;
+class KexiInputTableEdit;
 //class KexiTableList;
 
 /*
@@ -204,7 +205,7 @@ protected:
     // foreign widgets
 	QHeader			*m_pTopHeader;
 	KexiTableRM		*m_pRecordMarker;
-	QLineEdit		*m_pEditor;
+	KexiInputTableEdit	*m_pEditor;
 
 	int			m_numRows;
 	int			m_numCols;
