@@ -696,7 +696,7 @@ void KWView::setupActions()
     actionFormatPage->setWhatsThis( i18n( "Change properties of the entire page.<p>Currently you can change paper size, paper orientation, header and footer sizes, and column settings." ) );
 
 
-    actionFormatFrameStylist = new KAction( i18n( "&Frame Style Manager" ), 0 /*shortcut?*/,
+    actionFormatFrameStylist = new KAction( i18n( "&Frame Style Manager..." ), 0 /*shortcut?*/,
                                 this, SLOT( extraFrameStylist() ),
                                 actionCollection(), "frame_stylist" );
     actionFormatFrameStylist->setToolTip( i18n( "Change attributes of framestyles." ) );
