@@ -4,6 +4,7 @@
 #include <qdom.h>
 #include <qdict.h>
 #include <qvaluevector.h>
+#include <qmap.h>
 
 /**
  * Repository of styles used during loading of OASIS/OOo file
@@ -35,20 +36,30 @@ public:
     /// @return master pages ("style:master-page" elements), hashed by name
     const QDict<QDomElement>& masterPages() const { return m_masterPages; }
 
+    typedef QMap<QString, QString> DataFormatsMap;
+    /// Date and time formats found while parsing styles. Used e.g. for fields.
+    /// Key: format name. Value:
+    const DataFormatsMap& dateTimeFormats() const { return m_dateTimeFormats; }
+
 protected:
     /// Add styles to styles map
     void insertStyles( const QDomElement& styles );
 
 private:
+    void importDateTimeStyle( const QDomElement& parent );
+
     KoOasisStyles( const KoOasisStyles & ); // forbidden
     KoOasisStyles& operator=( const KoOasisStyles & ); // forbidden
 
+private:
     QDict<QDomElement>   m_styles;
     QDomElement m_defaultStyle;
     QDomElement m_officeStyle;
 
     QDict<QDomElement>   m_masterPages;
     QDict<QDomElement>   m_listStyles;
+
+    DataFormatsMap m_dateTimeFormats; // maybe generalize to include number formats.
 
     class Private;
     Private *d;
