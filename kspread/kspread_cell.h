@@ -64,6 +64,7 @@ struct KSpreadValidity
 	    m_action = Stop;
 	    m_allow = Allow_All;
 	    displayMessage = true;
+	    allowEmptyCell = false;
 	};
  QString message;
  QString title;
@@ -77,6 +78,7 @@ struct KSpreadValidity
  QDate  dateMin;
  QDate  dateMax;
     bool displayMessage;
+    bool allowEmptyCell;
 };
 
 class CellPrivate;

@@ -70,13 +70,15 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
   chooseType->insertStringList(listType);
   chooseType->setCurrentItem(0);
 
+  allowEmptyCell = new QCheckBox( i18n( "Allow blanks" ), tmpQButtonGroup );
+  grid1->addWidget(allowEmptyCell,1,0);
 
   tmpQLabel = new QLabel( tmpQButtonGroup, "Label_2" );
   tmpQLabel->setText(i18n("Data:" ));
-  grid1->addWidget(tmpQLabel,1,0);
+  grid1->addWidget(tmpQLabel,2,0);
 
   choose=new QComboBox(tmpQButtonGroup);
-  grid1->addWidget(choose,1,1);
+  grid1->addWidget(choose,2,1);
   QStringList list;
   list+=i18n("equal to");
   list+=i18n("greater than");
@@ -90,18 +92,18 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
 
   edit1 = new QLabel( tmpQButtonGroup, "Label_3" );
   edit1->setText(i18n("Minimum:" ));
-  grid1->addWidget(edit1,2,0);
+  grid1->addWidget(edit1,3,0);
 
   val_min=new QLineEdit(tmpQButtonGroup);
-  grid1->addWidget(val_min,2,1);
+  grid1->addWidget(val_min,3,1);
   val_min->setValidator( new KFloatValidator( val_min ) );
 
   edit2 = new QLabel( tmpQButtonGroup, "Label_4" );
   edit2->setText(i18n("Maximum:" ));
-  grid1->addWidget(edit2,3,0);
+  grid1->addWidget(edit2,4,0);
 
   val_max=new QLineEdit(tmpQButtonGroup);
-  grid1->addWidget(val_max,3,1);
+  grid1->addWidget(val_max,4,1);
   val_max->setValidator( new KFloatValidator( val_max ) );
   lay1->addWidget(tmpQButtonGroup);
 
@@ -450,6 +452,7 @@ void KSpreadDlgValidity::init()
       break;
     }
     displayMessage->setChecked( tmpValidity->displayMessage );
+    allowEmptyCell->setChecked( tmpValidity->allowEmptyCell );
   }
   changeIndexType(chooseType->currentItem()) ;
   changeIndexCond(choose->currentItem()) ;
@@ -691,7 +694,7 @@ void KSpreadDlgValidity::OkPressed()
 
   }
   result.displayMessage = displayMessage->isChecked();
-
+  result.allowEmptyCell = allowEmptyCell->isChecked();
   m_pView->doc()->emitBeginOperation( false );
   m_pView->activeTable()->setValidity( m_pView->selectionInfo(),  result);
   m_pView->slotUpdateView( m_pView->activeTable() );

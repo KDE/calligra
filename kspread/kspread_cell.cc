@@ -4312,6 +4312,10 @@ bool KSpreadCell::testValidity() const
     bool valid = false;
     if( d->extra()->validity != NULL )
     {
+        //fixme
+        if ( d->extra()->validity->allowEmptyCell && d->strText.isEmpty() )
+            return true;
+
       if( d->value.isNumber() &&
 	  (d->extra()->validity->m_allow == Allow_Number ||
 	   (d->extra()->validity->m_allow == Allow_Integer &&
