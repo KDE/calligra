@@ -145,8 +145,8 @@ KexiProperty::KexiProperty(const QCString &name, QVariant value, const QString &
 	init(value);
 }
 
-KexiProperty::KexiProperty(const QCString &name, const QString &value, 
- const QStringList &key_list, const QStringList &name_list, 
+KexiProperty::KexiProperty(const QCString &name, const QString &value,
+ const QStringList &key_list, const QStringList &name_list,
  const QString &desc)
 {
 	m_name = name;
@@ -324,8 +324,10 @@ void KexiProperty::setValue(const QVariant &v, bool updateChildren, bool saveOld
 		ch = m_value.toString() != v.toString();
 	}
 	else if (m_value.type()==QVariant::String) {
+		ch = (m_value != v);
 		//property is also changed for string type, if one of value is empty and other isn't
-		ch = (m_value.toString().isEmpty() != v.toString().isEmpty());
+		if(m_value.toString().isEmpty() != v.toString().isEmpty())
+			ch = true;
 	}
 	else
 		ch = (m_value != v);
@@ -438,7 +440,7 @@ void KexiProperty::setChildValue(const QCString& childName, const QVariant &v, b
 	prop->setValue(v, saveOldValue);
 }
 
-void KexiProperty::updateValueForChild(const QCString& childName, 
+void KexiProperty::updateValueForChild(const QCString& childName,
 	const QVariant &v, bool saveOldValue)
 {
 	debug();
@@ -573,7 +575,7 @@ KexiProperty* KexiProperty::child(const QCString& name)
 
 void KexiProperty::debug()
 {
-	QString dbg = "KexiProperty( name='" + QString(m_name) + "' desc='" + m_desc 
+	QString dbg = "KexiProperty( name='" + QString(m_name) + "' desc='" + m_desc
 		+ "' val=" + (m_value.isValid() ? m_value.toString() : "<INVALID>");
 	if (!m_oldValue.isValid())
 		dbg += (", oldVal='" + m_oldValue.toString() + "'");
