@@ -733,39 +733,30 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
 
     if ( force || ( formatOrigin.fontAttribute != formatData.fontAttribute ) )
     {
-        bool smallcaps = false;
-        strElement += "fo:text-transform=\"";
+        // Note: OOWriter does not like when both fo:text-transform and fo:font-variant exist (except if both are none/normal)
+        // (It is documented so, see sections 3.10.1 and 3.10.2)
         if ( formatData.fontAttribute == "uppercase" )
         {
-            strElement += "uppercase";
+            strElement += "fo:text-transform=\"uppercase\" ";
             key += 'U';
         }
         else if ( formatData.fontAttribute == "lowercase" )
         {
-            strElement += "lowercase";
+            strElement += "fo:text-transform=\"lowercase\" ";
             key += 'L';
         }
         else if ( formatData.fontAttribute == "smallcaps" )
         {
-            strElement += "none";
+            strElement += "fo:font-variant=\"small-caps\" ";
             key += 'S';
-            smallcaps = true;
         }
         else
         {
+            strElement += "fo:text-transform=\"none\" ";
+            strElement += "fo:font-variant=\"normal\" ";
             key += 'N';
-            strElement += "none";
         }
-        strElement += "\" ";
-        // ### TODO: mostly issuing font-variant is not necessary.
-        strElement += "fo:font-variant=\"";
-        if ( smallcaps )
-            strElement += "small-caps";
-        else
-            strElement += "normal";
-        strElement += "\" ";
     }
-
 
     return strElement.stripWhiteSpace(); // Remove especially trailing spaces
 }

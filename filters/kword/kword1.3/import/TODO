@@ -10,13 +10,13 @@ converting from raw XML KWord document (in KoStore?)
 Main frame/frameset (fo:border, style:border-line-width, fo:padding?, style:footnote-max-height?)
 Tables
 <FOOTNOTESETTINGS>. <ENDNOTESETTINGS>
+Variables/fields
 ...
 
 === Abiword's rtftest.rtf test file ===
 advanced mode of underlines
 subscript, superscript
 line-height (1, 1.5, 2)
-all caps
 ...
 
 === Old OOWriter To-Do List ===
