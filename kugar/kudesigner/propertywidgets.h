@@ -109,4 +109,13 @@ private:
     QHBoxLayout *l;
 };
 
+
+class PLineStyle: public QComboBox, PropertyWidget{
+public:
+    PLineStyle(QWidget *parent = 0, const char *name = 0);
+
+    virtual QString value() const;
+    virtual void setValue(const QString value);
+};
+
 #endif

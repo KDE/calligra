@@ -84,6 +84,7 @@ QWidget *Property::editorOfType()
     PFontCombo *f;
     PColorCombo *c;
     PSymbolCombo *y;
+    PLineStyle *i;
     
     switch (type())
     {
@@ -108,7 +109,9 @@ QWidget *Property::editorOfType()
             return y;
 
         case LineStyle:
-//            return new PLineEdit(0);
+            i = new PLineStyle(0);
+            i->setValue(value());
+            return i;
 
         case ValueFromList:
         case StringValue:
