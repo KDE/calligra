@@ -1183,10 +1183,6 @@ void QTextCursor::setDocument( QTextDocument *d )
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-// the "static const int numSelections" is a hack for Borland
-static const int numSelections = 9; // Don't count the Temp one!
-const int QTextDocument::numSelections = 9; // numSelections;
-
 QTextDocument::QTextDocument( QTextDocument *p )
     : par( p ), parParag( 0 ), tc( 0 ), tArray( 0 ), tStopWidth( 0 )
 {
@@ -1203,12 +1199,13 @@ QTextDocument::QTextDocument( QTextDocument *p )
     fParag = 0;
     txtFormat = Qt::AutoText;
     preferRichText = FALSE;
-    filename = QString::null;
     pages = FALSE;
     focusIndicator.parag = 0;
     minw = 0;
     minwParag = 0;
     align = Qt3::AlignAuto;
+    nSelections = 1;
+    addMargs = FALSE;
 
     sheet_ = QStyleSheet::defaultSheet();
     factory_ = QMimeSourceFactory::defaultFactory();
@@ -1239,23 +1236,7 @@ QTextDocument::QTextDocument( QTextDocument *p )
     flow_->setWidth( cw );
 
     selectionColors[ Standard ] = QApplication::palette().color( QPalette::Active, QColorGroup::Highlight );
-    selectionColors[ Selection1 ] = Qt::magenta;
-    selectionColors[ Selection2 ] = Qt::green;
-    selectionColors[ Selection3 ] = Qt::yellow;
-    selectionColors[ Selection4 ] = Qt::yellow;
-    selectionColors[ Selection5 ] = Qt::yellow;
-    selectionColors[ Selection6 ] = Qt::yellow;
-    selectionColors[ Selection7 ] = Qt::yellow;
-    selectionColors[ Selection8 ] = Qt::yellow;
     selectionText[ Standard ] = TRUE;
-    selectionText[ Selection1 ] = FALSE;
-    selectionText[ Selection2 ] = FALSE;
-    selectionText[ Selection3] = FALSE;
-    selectionText[ Selection4] = FALSE;
-    selectionText[ Selection5] = FALSE;
-    selectionText[ Selection6] = FALSE;
-    selectionText[ Selection7] = FALSE;
-    selectionText[ Selection8] = FALSE;
     commandHistory = new QTextCommandHistory( 100 );
     tStopWidth = formatCollection()->defaultFormat()->width( 'x' ) * 8;
 }
@@ -1291,7 +1272,6 @@ void QTextDocument::clear( bool createEmptyParag )
     if ( createEmptyParag )
 	fParag = lParag = createParag( this );
     selections.clear();
-    filename = "";
 }
 
 int QTextDocument::widthUsed() const
@@ -1572,17 +1552,6 @@ void QTextDocument::setRichTextInternal( const QString &text )
     }
 }
 
-void QTextDocument::load( const QString &fn )
-{
-    filename = fn;
-    QFile file( fn );
-    file.open( IO_ReadOnly );
-    QTextStream ts( &file );
-    QString txt = ts.read();
-    file.close();
-    setText( txt, fn );
-}
-
 void QTextDocument::setText( const QString &text, const QString &context )
 {
     oText = text;
@@ -1707,29 +1676,6 @@ void QTextDocument::invalidate()
     }
 }
 
-void QTextDocument::save( const QString &fn )
-{
-    if ( !fn.isEmpty() )
-	filename = fn;
-    if ( !filename.isEmpty() ) {
-	QFile file( filename );
-	if ( file.open( IO_WriteOnly ) ) {
-	    QTextStream ts( &file );
-	    ts << text();
-	    file.close();
-	} else {
-	    qWarning( "couldn't open file %s", filename.latin1() );
-	}
-    } else {
-	qWarning( "QTextDocument::save(): couldn't save - no filename specified!" );
-    }
-}
-
-QString QTextDocument::fileName() const
-{
-    return filename;
-}
-
 void QTextDocument::selectionStart( int id, int &paragId, int &index )
 {
     QMap<int, QTextDocumentSelection>::Iterator it = selections.find( id );
@@ -1795,6 +1741,11 @@ QTextParag *QTextDocument::selectionEnd( int id )
     if ( sel.startCursor.parag()->paragId() >  sel.endCursor.parag()->paragId() )
 	return sel.startCursor.parag();
     return sel.endCursor.parag();
+}
+
+void QTextDocument::addSelection( int id )
+{
+    nSelections = QMAX( nSelections, id + 1 );
 }
 
 bool QTextDocument::setSelectionEnd( int id, QTextCursor *cursor )
@@ -2671,7 +2622,8 @@ void QTextString::insert( int index, const QString &s, QTextFormat *f )
 	data[ (int)index + i ].d.format = 0;
 	data[ (int)index + i ].type = QTextStringChar::Regular;
 	data[ (int)index + i ].rightToLeft = 0;
-#if defined(_WS_X11_)
+	data[ (int)index + i ].startOfRun = 0;
+#if defined(Q_WS_X11)
 	//### workaround for broken courier fonts on X11
 	if ( s[ i ] == QChar( 0x00a0U ) )
 	    data[ (int)index + i ].c = ' ';
@@ -3182,6 +3134,9 @@ void QTextParag::format( int start, bool doMove )
 	r.setWidth( QMIN( usedw, r.width() ) );
     }
 
+    if ( !prev() && topMargin() > 0 )
+	r.setY( topMargin() );
+
     if ( y != r.height() )
 	r.setHeight( y );
 
@@ -3323,7 +3278,7 @@ void QTextParag::setFormat( int index, int len, QTextFormat *f, bool useCollecti
 	       f->font().pointSize() != of->font().pointSize() ||
 	       f->font().weight() != of->font().weight() ||
 	       f->font().italic() != of->font().italic() ||
-	       f->hAlign() != of->hAlign() ) ) {
+	       f->vAlign() != of->vAlign() ) ) {
 	    invalidate( 0 );
 	}
 	if ( flags == -1 || flags == QTextFormat::Format || !fc ) {
@@ -3370,11 +3325,12 @@ void QTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *c
 
     QString qstr = str->toString();
 
-    int selectionStarts[ numSelections ];
-    int selectionEnds[ numSelections ];
+    const int nSels = doc ? doc->numSelections() : 1;
+    QArray<int> selectionStarts( nSels );
+    QArray<int> selectionEnds( nSels );
     if ( drawSelections ) {
 	bool hasASelection = FALSE;
-	for ( i = 0; i < numSelections; ++i ) {
+	for ( i = 0; i < nSels; ++i ) {
 	    if ( !hasSelection( i ) ) {
 		selectionStarts[ i ] = -1;
 		selectionEnds[ i ] = -1;
@@ -3451,7 +3407,7 @@ void QTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *c
 	// check if selection state changed
 	bool selectionChange = FALSE;
 	if ( drawSelections ) {
-	    for ( int j = 0; j < numSelections; ++j ) {
+	    for ( int j = 0; j < nSels; ++j ) {
 		selectionChange = selectionStarts[ j ] == i || selectionEnds[ j ] == i;
 		if ( selectionChange )
 		    break;
@@ -3460,7 +3416,8 @@ void QTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *c
 
 	//if something (format, etc.) changed, draw what we have so far
 	if ( ( ( ( alignment() & Qt3::AlignJustify ) == Qt3::AlignJustify && at(paintEnd)->c.isSpace() ) ||
-	       lastDirection != (bool)chr->rightToLeft || //chr->type != lastType ||
+	       lastDirection != (bool)chr->rightToLeft ||
+	       chr->startOfRun ||
 	       lastY != cy || chr->format() != lastFormat ||
 	       (paintEnd != -1 && at(paintEnd)->c =='\t') || chr->c == '\t' ||
 	       selectionChange || chr->isCustom() ) ) {
@@ -3536,7 +3493,7 @@ void QTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *c
     if ( paintStart <= paintEnd ) {
 	bool selectionChange = FALSE;
 	if ( drawSelections ) {
-	    for ( int j = 0; j < numSelections; ++j ) {
+	    for ( int j = 0; j < nSels; ++j ) {
 		selectionChange = selectionStarts[ j ] == i || selectionEnds[ j ] == i;
 		if ( selectionChange )
 		    break;
@@ -3557,10 +3514,10 @@ void QTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *c
 
     // if we should draw a cursor, draw it now
     if ( curx != -1 && cursor ) {
-	painter.fillRect( QRect( curx, cury, 1, curh ), Qt::black );
+	painter.fillRect( QRect( curx, cury, 1, curh - lineSpacing() ), Qt::black );
 	painter.save();
 	if ( string()->isBidi() ) {
-	    int d = curh / 3;
+	    const int d = 4;
 	    if ( at( cursor->index() )->rightToLeft ) {
 		painter.setPen( Qt::black );
 		painter.drawLine( curx, cury, curx - d / 2, cury + d / 2 );
@@ -3578,14 +3535,14 @@ void QTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *c
 
 void QTextParag::drawParagString( QPainter &painter, const QString &str, int start, int len, int startX,
 				      int lastY, int baseLine, int bw, int h, bool drawSelections,
-				      QTextFormat *lastFormat, int i, int *selectionStarts,
-				      int *selectionEnds, const QColorGroup &cg, bool /*rightToLeft*/ )
+				      QTextFormat *lastFormat, int i, const QArray<int> &selectionStarts,
+				      const QArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft )
 {
     painter.setPen( QPen( lastFormat->color() ) );
     painter.setFont( lastFormat->font() );
 
     if ( doc && lastFormat->isAnchor() && !lastFormat->anchorHref().isEmpty() && lastFormat->useLinkColor() ) {
-	painter.setPen( QPen( doc->linkColor() ) );
+	painter.setPen( QPen( Qt::blue /* cg.link() */ ) ); // QT2HACK
 	if ( doc->underlineLinks() ) {
 	    QFont fn = lastFormat->font();
 	    fn.setUnderline( TRUE );
@@ -3594,7 +3551,8 @@ void QTextParag::drawParagString( QPainter &painter, const QString &str, int sta
     }
 
     if ( drawSelections ) {
-	for ( int j = 0; j < numSelections; ++j ) {
+	const int nSels = doc ? doc->numSelections() : 1;
+	for ( int j = 0; j < nSels; ++j ) {
 	    if ( i > selectionStarts[ j ] && i <= selectionEnds[ j ] ) {
 		if ( !doc || doc->invertSelectionText( j ) )
 		    painter.setPen( QPen( cg.color( QColorGroup::HighlightedText ) ) );
@@ -3610,16 +3568,16 @@ void QTextParag::drawParagString( QPainter &painter, const QString &str, int sta
     //if ( rightToLeft )
 	//dir = QPainter::RTL;
     if ( str[start] != '\t' ) {
-	if ( lastFormat->hAlign() == QTextFormat::AlignNormal ) {
+	if ( lastFormat->vAlign() == QTextFormat::AlignNormal ) {
             //QT2HACK painter.drawText( startX, lastY + baseLine, str, start, len, dir );
             painter.drawText( startX, lastY + baseLine, str.mid(start), len );
-	} else if ( lastFormat->hAlign() == QTextFormat::AlignSuperScript ) {
+	} else if ( lastFormat->vAlign() == QTextFormat::AlignSuperScript ) {
 	    QFont f( painter.font() );
 	    f.setPointSize( ( f.pointSize() * 2 ) / 3 );
 	    painter.setFont( f );
 	    //QT2HACK painter.drawText( startX, lastY + baseLine - ( h - painter.fontMetrics().height() ), str, start, len, dir );
 	    painter.drawText( startX, lastY + baseLine - ( h - painter.fontMetrics().height() ), str.mid(start), len );
-	} else if ( lastFormat->hAlign() == QTextFormat::AlignSubScript ) {
+	} else if ( lastFormat->vAlign() == QTextFormat::AlignSubScript ) {
 	    QFont f( painter.font() );
 	    f.setPointSize( ( f.pointSize() * 2 ) / 3 );
 	    painter.setFont( f );
@@ -3914,6 +3872,8 @@ QTextCursor *QTextParag::redo( QTextCursor *c )
 
 int QTextParag::topMargin() const
 {
+    if ( !p && ( !doc || !doc->addMargins() ) )
+	return 0;
     if ( tm != -1 )
 	return tm;
     QStyleSheetItem *item = style();
@@ -4232,6 +4192,7 @@ QTextParagLineStart *QTextFormatter::bidiReorderLine( QTextParag *parag, QTextSt
 		}
 		c->x = x + toAdd;
 		c->rightToLeft = TRUE;
+		c->startOfRun = FALSE;
 		int ww = 0;
 		if ( c->c.unicode() >= 32 || c->c == '\t' || c->isCustom() ) {
 		    ww = text->width( pos );
@@ -4259,6 +4220,7 @@ QTextParagLineStart *QTextFormatter::bidiReorderLine( QTextParag *parag, QTextSt
 		}
 		c->x = x + toAdd;
 		c->rightToLeft = FALSE;
+		c->startOfRun = FALSE;
 		int ww = 0;
 		if ( c->c.unicode() >= 32 || c->c == '\t' || c->isCustom() ) {
 		    ww = text->width( pos );
@@ -4270,6 +4232,7 @@ QTextParagLineStart *QTextFormatter::bidiReorderLine( QTextParag *parag, QTextSt
 		pos++;
 	    }
 	}
+	text->at( r->start ).startOfRun = TRUE;
 	r = runs->next();
     }
     QTextParagLineStart *ls = new QTextParagLineStart( control->context, control->status );
@@ -4680,8 +4643,12 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
     minw = QMAX( minw, tminw );
 
     int m = parag->bottomMargin();
-    if ( parag->next() )
-	m = QMAX( m, parag->next()->topMargin() );
+    if ( parag->next() ) {
+	if ( !doc->addMargins() )
+	    m = QMAX( m, parag->next()->topMargin() );
+	else
+	    m += parag->next()->topMargin();
+    }
     parag->setFullWidth( fullWidth );
     if ( is_printer( parag->painter() ) ) {
 	QPaintDeviceMetrics metrics( parag->painter()->device() );
@@ -4801,7 +4768,7 @@ QTextFormat *QTextFormatCollection::format( QTextFormat *of, QTextFormat *nf, in
 	cres->col = nf->col;
     if ( flags & QTextFormat::Misspelled )
 	cres->missp = nf->missp;
-    if ( flags & QTextFormat::HAlign )
+    if ( flags & QTextFormat::VAlign )
 	cres->ha = nf->ha;
     cres->update();
 
@@ -4931,7 +4898,7 @@ void QTextFormat::setMisspelled( bool b )
     update();
 }
 
-void QTextFormat::setHAlign( VerticalAlignment a )
+void QTextFormat::setVAlign( VerticalAlignment a )
 {
     if ( a == ha )
 	return;

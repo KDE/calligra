@@ -95,11 +95,11 @@ public slots:
     virtual void setAlignment( int a );
     virtual void setParagType( Qt3::QStyleSheetItem::DisplayMode dm, Qt3::QStyleSheetItem::ListStyle listStyle );
     virtual void setCursorPosition( int parag, int index );
-    virtual void setSelection( int parag_from, int index_from, int parag_to, int index_to );
+    virtual void setSelection( int parag_from, int index_from, int parag_to, int index_to, int selNum = 0 );
+    virtual void setSelectionAttributes( int selNum, const QColor &back, bool invertText );
     virtual void setModified( bool m );
     virtual void resetFormat();
     virtual void setUndoDepth( int d );
-    virtual void save( const QString &fn = QString::null );
     virtual void removeSelectedText();
 
 signals:
@@ -317,9 +317,14 @@ inline void QTextEdit::setCursorPosition( int parag, int index )
     Qt3::QTextView::setCursorPosition( parag, index );
 }
 
-inline void QTextEdit::setSelection( int parag_from, int index_from, int parag_to, int index_to )
+inline void QTextEdit::setSelection( int parag_from, int index_from, int parag_to, int index_to, int selNum )
 {
-    Qt3::QTextView::setSelection( parag_from, index_from, parag_to, index_to );
+    Qt3::QTextView::setSelection( parag_from, index_from, parag_to, index_to, selNum );
+}
+
+inline void QTextEdit::setSelectionAttributes( int selNum, const QColor &back, bool invertText )
+{
+    Qt3::QTextView::setSelectionAttributes( selNum, back, invertText );
 }
 
 inline void QTextEdit::setModified( bool m )
@@ -335,11 +340,6 @@ inline void QTextEdit::resetFormat()
 inline void QTextEdit::setUndoDepth( int d )
 {
     Qt3::QTextView::setUndoDepth( d );
-}
-
-inline void QTextEdit::save( const QString &fn )
-{
-    Qt3::QTextView::save( fn );
 }
 
 inline void QTextEdit::setFormat( Qt3::QTextFormat *f, int flags )

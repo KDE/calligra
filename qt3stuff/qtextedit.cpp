@@ -56,8 +56,7 @@
   user input and functions to set/get/modify formatting, text, etc.
 
   As it is derived from QTextView, it supports the same functions to
-  set and load plain and HTML text. Using the save() function, the
-  current contents can also be saved in HTML.
+  set and load plain and HTML text.
 
   QTextEdit internally works on paragraphs. A paragraph is a formatted
   string which is word-wrapped to fit into the width of the
@@ -91,47 +90,45 @@
   Here is a list of key-bindings which are implemented for editing
 
   <ul>
-  <li><i> Left Arrow </i> Move the cursor one character leftwards
-  <li><i> Right Arrow </i> Move the cursor one character rightwards
-  <li><i> Up Arrow </i> Move the cursor one line upwards
-  <li><i> Down Arrow </i> Move the cursor one line downwards
-  <li><i> Page Up </i> Move the cursor one page upwards
-  <li><i> Page Down </i> Move the cursor one page downwards
+  <li><i> Left Arrow </i> Move the cursor one character left
+  <li><i> Right Arrow </i> Move the cursor one character right
+  <li><i> Up Arrow </i> Move the cursor one line up
+  <li><i> Down Arrow </i> Move the cursor one line down
+  <li><i> Page Up </i> Move the cursor one page up
+  <li><i> Page Down </i> Move the cursor one page down
   <li><i> Backspace </i> Delete the character to the left of the cursor
   <li><i> Home </i> Move the cursor to the beginning of the line
   <li><i> End </i> Move the cursor to the end of the line
   <li><i> Delete </i> Delete the character to the right of the cursor
-  <li><i> Shift - Left Arrow </i> Mark text one character leftwards
-  <li><i> Shift - Right Arrow </i> Mark text one character rightwards
-  <li><i> Control-A </i> Move the cursor to the beginning of the line
-  <li><i> Control-B </i> Move the cursor one character leftwards
-  <li><i> Control-C </i> Copy the marked text to the clipboard
-  <li><i> Control-D </i> Delete the character to the right of the cursor
-  <li><i> Control-E </i> Move the cursor to the end of the line
-  <li><i> Control-F </i> Move the cursor one character rightwards
-  <li><i> Control-H </i> Delete the character to the left of the cursor
-  <li><i> Control-K </i> Delete to end of line
-  <li><i> Control-N </i> Move the cursor one line downwards
-  <li><i> Control-P </i> Move the cursor one line upwards
-  <li><i> Control-V </i> Paste the clipboard text into line edit
-  <li><i> Control-X </i> Cut the marked text, copy to clipboard
-  <li><i> Control-Z </i> Undo the last operation
-  <li><i> Control-Y </i> Redo the last operation
-  <li><i> Control - Left Arrow </i> Move the cursor one word leftwards
-  <li><i> Control - Right Arrow </i> Move the cursor one word rightwards
-  <li><i> Control - Up Arrow </i> Move the cursor one word upwards
-  <li><i> Control - Down Arrow </i> Move the cursor one word downwards
-  <li><i> Control - Home Arrow </i> Move the cursor to the beginning of the text
-  <li><i> Control - End Arrow </i> Move the cursor to the end of the text
+  <li><i> Ctrl+A </i> Move the cursor to the beginning of the line
+  <li><i> Ctrl+B </i> Move the cursor one character left
+  <li><i> Ctrl+C </i> Copy the marked text to the clipboard (also
+  <i>Ctrl+Insert</i> under Windows)
+  <li><i> Ctrl+D </i> Delete the character to the right of the cursor
+  <li><i> Ctrl+E </i> Move the cursor to the end of the line
+  <li><i> Ctrl+F </i> Move the cursor one character right
+  <li><i> Ctrl+H </i> Delete the character to the left of the cursor
+  <li><i> Ctrl+K </i> Delete to end of line
+  <li><i> Ctrl+N </i> Move the cursor one line down
+  <li><i> Ctrl+P </i> Move the cursor one line up
+  <li><i> Ctrl+V </i> Paste the clipboard text into line edit (also
+  <i>Shift+Insert</i> under Windows)
+  <li><i> Ctrl+X </i> Cut the marked text, copy to clipboard (also
+  <i>Shift+Delete</i> under Windows)
+  <li><i> Ctrl+Z </i> Undo the last operation
+  <li><i> Ctrl+Y </i> Redo the last operation
+  <li><i> Ctrl+Left Arrow </i> Move the cursor one word left
+  <li><i> Ctrl+Right Arrow </i> Move the cursor one word right
+  <li><i> Ctrl+Up Arrow </i> Move the cursor one word up
+  <li><i> Ctrl+Down Arrow </i> Move the cursor one word down
+  <li><i> Ctrl+Home Arrow </i> Move the cursor to the beginning of the text
+  <li><i> Ctrl+End Arrow </i> Move the cursor to the end of the text
   </ul>
 
-  In addition, the following key bindings are supported only Windows:
-
-  <ul>
-  <li><i> Shift - Delete </i> Cut the marked text, copy to clipboard
-  <li><i> Shift - Insert </i> Paste the clipboard text into line edit
-  <li><i> Control - Insert </i> Copy the marked text to the clipboard
-  </ul>
+    To select (mark) text hold down the Shift key whilst pressing one of
+    the movement keystrokes, for example, <i>Shift+Right Arrow</i> will
+    select the character to the right, and <i>Shift+Ctrl+Right Arrow</i>
+    will select the word to the right, etc.
 
   All other keys with valid ASCII codes insert themselves into the
   text at the cursor position.
@@ -296,7 +293,7 @@
 
 /*! \fn void QTextEdit::clear()
 
-  Removes all text. 
+  Removes all text.
 
 */
 
@@ -376,11 +373,21 @@
   Sets the cursor to the index \a index in the paragraph \a parag.
 */
 
-/*! \fn void QTextEdit::setSelection( int parag_from, int index_from, int parag_to, int index_to )
+/*! \fn void QTextEdit::setSelection( int parag_from, int index_from, int parag_to, int index_to, int selNum )
 
-  Sets a selections which starts at the index \a index_from in the
+  Sets a selection which starts at the index \a index_from in the
   paragraph \a parag_from and ends at index \a index_to in the
   paragraph \a parag_to.
+
+  Uses the selection settings of selection \a selNum. If this is 0,
+  this is the default selection.
+*/
+
+/*! \fn void QTextEdit::setSelectionAttributes( int selNum, const QColor &back, bool invertText )
+
+  Sets the background color of the selection \a selNum to \a back and
+  specifies whether the text of this selection should be inverted by \a invertText.
+
 */
 
 /*! \fn void QTextEdit::setModified( bool m )
@@ -397,14 +404,6 @@
 
   Sets the number of steps the undo/redo history can maximally store
   to \a d.
-*/
-
-/*! \fn void QTextEdit::save( const QString &fn )
-
-  Saves the document to the file \a fn. If \a fn is valid, the
-  filename of the document is set to this name. If \a fn is an empty
-  string, and the document has already a filename, this one is used,
-  otherwise nothing happens.
 */
 
 /*! \fn void QTextEdit::undoAvailable( bool yes )

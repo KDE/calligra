@@ -78,7 +78,6 @@ class Q_EXPORT QTextView : public QScrollView
     Q_PROPERTY( TextFormat textFormat READ textFormat WRITE setTextFormat )
     Q_PROPERTY( QString text READ text WRITE setText )
     Q_PROPERTY( QBrush paper READ paper WRITE setPaper )
-    Q_PROPERTY( QColor linkColor READ linkColor WRITE setLinkColor )
     Q_PROPERTY( bool linkUnderline READ linkUnderline WRITE setLinkUnderline )
     Q_PROPERTY( QString documentTitle READ documentTitle )
     Q_PROPERTY( int length READ length )
@@ -107,30 +106,28 @@ public:
     void setFont( const QFont &f );
 
     QString text() const;
-    QString text( int parag ) const;
+    QString text( int para ) const;
     TextFormat textFormat() const;
     QString context() const;
     QString documentTitle() const;
-    QString fileName() const;
 
-    void getSelection( int &parag_from, int &index_from,
-		    int &parag_to, int &index_to ) const;
+    void getSelection( int &paraFrom, int &indexFrom,
+		    int &paraTo, int &indexTo, int selNum = 0 ) const;
     virtual bool find( const QString &expr, bool cs, bool wo, bool forward = TRUE,
-		       int *parag = 0, int *index = 0 );
+		       int *para = 0, int *index = 0 );
 
     void append( const QString& text );
 
     int paragraphs() const;
     int lines() const;
-    int linesOfParagraph( int parag ) const;
-    int lineOfChar( int parag, int chr );
+    int linesOfParagraph( int para ) const;
+    int lineOfChar( int para, int chr );
     int length() const;
 
     Qt3::QStyleSheet* styleSheet() const;
     QMimeSourceFactory* mimeSourceFactory() const;
 
     QBrush paper() const;
-    QColor linkColor() const;
     bool linkUnderline() const;
 
     int heightForWidth( int w ) const;
@@ -156,7 +153,6 @@ public slots:
     virtual void scrollToAnchor( const QString& name );
     virtual void setPaper( const QBrush& pap );
     virtual void setLinkUnderline( bool );
-    virtual void setLinkColor( const QColor & );
 
     virtual void setWordWrap( WordWrap mode );
     virtual void setWrapColumnOrWidth( int );
@@ -167,12 +163,13 @@ public slots:
     void setText( const QString &txt ) { setText( txt, QString::null ); }
     virtual void setTextFormat( TextFormat f );
     virtual void setText( const QString &txt, const QString &context );
-    virtual void load( const QString &fn );
 
     virtual void selectAll( bool select = TRUE );
     virtual void setTabStops( int ts );
-    virtual void zoomIn();
-    virtual void zoomOut();
+    virtual void zoomIn( int range );
+    virtual void zoomOut( int range );
+    virtual void zoomIn() { zoomIn( 1 ); }
+    virtual void zoomOut() { zoomOut( 1 ); }
 
     virtual void sync();
 
@@ -199,6 +196,7 @@ protected:
     void contentsDragLeaveEvent( QDragLeaveEvent *e );
     void contentsDropEvent( QDropEvent *e );
 #endif
+    // void contentsContextMenuEvent( QContextMenuEvent *e ); QT2HACK
     bool eventFilter( QObject *o, QEvent *e );
     bool focusNextPrevChild( bool next );
     QTextDocument *document() const;
@@ -324,7 +322,8 @@ private: // these are functions which actually do editing stuff, but
     void setParagType( QStyleSheetItem::DisplayMode, QStyleSheetItem::ListStyle listStyle );
     void setCursorPosition( int parag, int index );
     void setSelection( int parag_from, int index_from,
-			       int parag_to, int index_to );
+			       int parag_to, int index_to, int selNum = 0 );
+    void setSelectionAttributes( int selNum, const QColor &back, bool invertText );
     void setModified( bool m );
     void resetFormat();
     void setUndoDepth( int d );
@@ -336,7 +335,6 @@ private: // these are functions which actually do editing stuff, but
     void removeSelectedText();
     void doKeyboardAction( KeyboardActionPrivate action );
     void insert( const QString &text, bool indent = FALSE, bool checkNewLine = TRUE, bool removeSelected = TRUE );
-    void save( const QString &fn = QString::null );
     void readFormats( QTextCursor &c1, QTextCursor &c2, int oldLen, QTextString &text, bool fillStyles = FALSE );
     void clearUndoRedo();
     bool getFormat( int parag, int index, QFont &font, QColor &color );

@@ -105,15 +105,16 @@ class Q_EXPORT QTextStringChar
 
 public:
     // this is never called, initialize variables in QTextString::insert()!!!
-    QTextStringChar() : lineStart( 0 ), type( Regular ) {d.format=0;}
+    QTextStringChar() : lineStart( 0 ), type( Regular ), startOfRun( 0 ) {d.format=0;}
     ~QTextStringChar();
     QChar c;
-    enum Type { Regular, Custom, Mark, Shaped, LigatureFirst, Ligature };
+    enum Type { Regular, Custom, Mark, Shaped };
     uint lineStart : 1;
     uint rightToLeft : 1;
     uint hasCursor : 1;
     uint canBreak : 1;
-    Type type : 3;
+    Type type : 2;
+    uint startOfRun : 1;
 
     int x;
     int height() const;
@@ -144,19 +145,11 @@ public:
 	QChar shapedGlyph;
     };
 
-    struct LigatureData
-    {
-	QTextFormat *format;
-	QChar ligature;
-	unsigned short nchars; // length of the ligature in decomposed form
-    };
-
     union {
 	QTextFormat* format;
 	CustomData* custom;
 	MarkData *mark;
 	ShapedData *shaped;
-	LigatureData *ligature;
     } d;
 
 private:
@@ -683,19 +676,9 @@ class Q_EXPORT QTextDocument : public QObject
 public:
     enum SelectionIds {
 	Standard = 0,
-	Selection1,
-	Selection2,
-	Selection3,
-	Selection4,
-	Selection5,
-	Selection6,
-	Selection7,
-	Selection8,
-	Temp // This selection must not be drawn, it's used e.g. by undo/redo to
+	Temp = 32000 // This selection must not be drawn, it's used e.g. by undo/redo to
 	// remove multiple lines with removeSelectedText()
     };
-
-    static const int numSelections;
 
     QTextDocument( QTextDocument *p );
     ~QTextDocument();
@@ -703,12 +686,9 @@ public:
     QTextParag *parentParag() const { return parParag; }
 
     void setText( const QString &text, const QString &context );
-    void load( const QString &fn );
     QMap<QString, QString> attributes() const { return attribs; }
     void setAttributes( const QMap<QString, QString> &attr ) { attribs = attr; }
 
-    void save( const QString &fn = QString::null );
-    QString fileName() const;
     QString text() const;
     QString text( int parag ) const;
     QString originalText() const;
@@ -755,6 +735,8 @@ public:
     void setFormat( int id, QTextFormat *f, int flags );
     QTextParag *selectionStart( int id );
     QTextParag *selectionEnd( int id );
+    int numSelections() const { return nSelections; }
+    void addSelection( int id );
 
     QString selectedText( int id ) const;
     void copySelectedText( int id );
@@ -786,9 +768,6 @@ public:
     void updateFontSizes( int base );
     void setMimeSourceFactory( QMimeSourceFactory *f ) { if ( f ) factory_ = f; }
     void setContext( const QString &c ) { if ( !c.isEmpty() ) contxt = c; }
-
-    void setLinkColor( const QColor &c ) { linkC = c; }
-    QColor linkColor() const { return linkC; }
 
     void setUnderlineLinks( bool b ) { underlLinks = b; }
     bool underlineLinks() const { return underlLinks; }
@@ -845,6 +824,9 @@ public:
     void removeChild( QTextDocument *d ) { childList.removeRef( d ); }
     QList<QTextDocument> children() const { return childList; }
 
+    void setAddMargins( bool b ) { addMargs = b; }
+    int addMargins() const { return addMargs; }
+
 signals:
     void minimumWidthChanged( int );
 
@@ -876,7 +858,6 @@ private:
     QMap<int, QColor> selectionColors;
     QMap<int, QTextDocumentSelection> selections;
     QMap<int, bool> selectionText;
-    QString filename;
     QTextCommandHistory *commandHistory;
     QTextFormatter *pFormatter;
     QTextIndent *indenter;
@@ -910,6 +891,8 @@ private:
     int uDepth;
     QString oText;
     QList<QTextDocument> childList;
+    int nSelections;
+    bool addMargs;
 
 };
 
@@ -1148,12 +1131,12 @@ public:
     QVector<QStyleSheetItem> styleSheetItems() const;
     QStyleSheetItem *style() const;
 
-    int topMargin() const;
-    int bottomMargin() const;
-    int leftMargin() const;
-    int firstLineMargin() const;
-    int rightMargin() const;
-    int lineSpacing() const;
+    virtual int topMargin() const;
+    virtual int bottomMargin() const;
+    virtual int leftMargin() const;
+    virtual int firstLineMargin() const;
+    virtual int rightMargin() const;
+    virtual int lineSpacing() const;
 
     int numberOfSubParagraph() const;
     void registerFloatingItem( QTextCustomItem *i );
@@ -1205,8 +1188,8 @@ protected:
 private:
     void drawParagString( QPainter &painter, const QString &str, int start, int len, int startX,
 			  int lastY, int baseLine, int bw, int h, bool drawSelections,
-			  QTextFormat *lastFormat, int i, int *selectionStarts,
-			  int *selectionEnds, const QColorGroup &cg, bool rightToLeft  );
+			  QTextFormat *lastFormat, int i, const QArray<int> &selectionStarts,
+			  const QArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft  );
 
 private:
 
@@ -1340,9 +1323,9 @@ public:
 	Size = 16,
 	Color = 32,
 	Misspelled = 64,
-	HAlign = 128,
+	VAlign = 128,
 	Font = Bold | Italic | Underline | Family | Size,
-	Format = Font | Color | Misspelled | HAlign
+	Format = Font | Color | Misspelled | VAlign
     };
 
     enum VerticalAlignment { AlignNormal, AlignSubScript, AlignSuperScript };
@@ -1356,7 +1339,7 @@ public:
     QColor color() const;
     QFont font() const;
     bool isMisspelled() const;
-    VerticalAlignment hAlign() const;
+    VerticalAlignment vAlign() const;
     int minLeftBearing() const;
     int minRightBearing() const;
     int width( const QChar &c ) const;
@@ -1377,13 +1360,13 @@ public:
     void setFont( const QFont &f );
     void setColor( const QColor &c );
     void setMisspelled( bool b );
-    void setHAlign( VerticalAlignment a );
+    void setVAlign( VerticalAlignment a );
 
     bool operator==( const QTextFormat &f ) const;
     QTextFormatCollection *parent() const;
     QString key() const;
 
-    static QString getKey( const QFont &f, const QColor &c, bool misspelled, const QString &lhref, const QString &lnm, VerticalAlignment hAlign );
+    static QString getKey( const QFont &f, const QColor &c, bool misspelled, const QString &lhref, const QString &lnm, VerticalAlignment vAlign );
 
     void addRef();
     void removeRef();
@@ -1847,7 +1830,7 @@ inline bool QTextFormat::isMisspelled() const
     return missp;
 }
 
-inline QTextFormat::VerticalAlignment QTextFormat::hAlign() const
+inline QTextFormat::VerticalAlignment QTextFormat::vAlign() const
 {
     return ha;
 }
@@ -1933,13 +1916,14 @@ inline void QTextFormat::generateKey()
     ts << fn.pointSize()
        << fn.weight()
        << (int)fn.underline()
+       << (int)fn.strikeOut()
        << (int)fn.italic()
        << col.pixel()
        << fn.family()
        << (int)isMisspelled()
        << anchor_href
        << anchor_name
-       << (int)hAlign();
+       << (int)vAlign();
 }
 
 inline QString QTextFormat::getKey( const QFont &fn, const QColor &col, bool misspelled,
@@ -1950,6 +1934,7 @@ inline QString QTextFormat::getKey( const QFont &fn, const QColor &col, bool mis
     ts << fn.pointSize()
        << fn.weight()
        << (int)fn.underline()
+       << (int)fn.strikeOut()
        << (int)fn.italic()
        << col.pixel()
        << fn.family()
@@ -2529,10 +2514,10 @@ inline QTextStringChar::~QTextStringChar()
     switch ( type ) {
 	case Custom:
 	    delete d.custom; break;
+	case Mark:
+	    delete d.mark; break;
 	case Shaped:
 	    delete d.shaped; break;
-	case Ligature:
-	    delete d.ligature;
 	default:
 	    break;
     }
