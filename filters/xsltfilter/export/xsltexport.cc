@@ -31,7 +31,6 @@ K_EXPORT_COMPONENT_FACTORY( libxsltexport, XSLTExportFactory( "xsltexportfilter"
 // Check for XSLT files
 extern "C" {
     int check_libxsltexport() {
-        kdDebug() << "Now I'm here... now I'm there" << endl;
         return 0;
     }
 }
