@@ -40,7 +40,7 @@
       <Help>
 	<Text>The SUMPRODUCT() function (SUM(X*Y)) returns the sum of the product of these values. The number of values in the two arrays should be equal. Otherwise this function returns Err.</Text>
 	<Syntax>SUMPRODUCT(array1;array2)</Syntax>
-	<Example>SUMPRODUCT(A1:A2;B1:B2) with A1=2 A2=5 and B1=3 B2=5 returns 31</Example>
+	<Example>SUMPRODUCT(A1:A2;B1:B2) with A1=2, A2=5, B1=3 and B2=5, returns 31</Example>
       </Help>
     </Function>
 
@@ -58,7 +58,7 @@
       <Help>
 	<Text>The SUMX2PY2() function (SUM(X^2+Y^2)) returns the sum of the squares of these values. The number of values in the two arrays should be equal. Otherwise this function returns Err.</Text>
 	<Syntax>SUMX2PY2(array1;array2)</Syntax>
-	<Example>SUMX2PY2(A1:A2;B1:B2) with A1=2 A2=5 and B1=3 B2=5 returns 63</Example>
+	<Example>SUMX2PY2(A1:A2;B1:B2) with A1=2, A2=5, B1=3 and B2=5, returns 63</Example>
       </Help>
     </Function>
 
@@ -76,7 +76,7 @@
       <Help>
 	<Text>The SUMX2MY2() function (SUM(X^2-Y^2)) returns the difference of the squares of these values. The number of values in the two arrays should be equal. Otherwise this function returns Err.</Text>
 	<Syntax>SUMX2MY2(array1;array2)</Syntax>
-	<Example>SUMX2MY2(A1:A2;B1:B2) with A1=2 A2=5 and B1=3 B2=5 returns -5</Example>
+	<Example>SUMX2MY2(A1:A2;B1:B2) with A1=2, A2=5, B1=3 and B2=5, returns -5</Example>
       </Help>
     </Function>
 
@@ -94,7 +94,7 @@
       <Help>
 	<Text>The SUM2XMY() function (SUM((X-Y)^2)) returns the square of the differences of these values. The number of values in the two arrays should be equal. Otherwise this function returns Err.</Text>
 	<Syntax>SUM2XMY(array1;array2)</Syntax>
-	<Example>SUM2XMY(A1:A2;B1:B2) with A1=2 A2=5 and B1=3 B2=5 returns 1</Example>
+	<Example>SUM2XMY(A1:A2;B1:B2) with A1=2, A2=5, B1=3 and B2=5, returns 1</Example>
       </Help>
     </Function>
 

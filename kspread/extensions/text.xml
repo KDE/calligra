@@ -160,7 +160,7 @@
 	<Type>String</Type>
       </Parameter>
       <Parameter>
-	<Comment>Compare case-sensitve (true/false)?</Comment>
+	<Comment>Compare case-sensitive (true/false)?</Comment>
 	<Type>Boolean</Type>
       </Parameter>
       <Help>
