@@ -47,7 +47,7 @@ KoAboutDia::KoAboutDia(QWidget* parent,
       {
 	setCaption(i18n("KCharts - About"));
 	pLogo.load(KApplication::kde_datadir()+"/koffice/pics/koKCharts.xpm");
-	author = "Torben Weis";
+	author = "Kalle Dalheimer and Torben Weis";
 	email = "<weis@kde.org>";
 	add = "";
       } break;
@@ -71,8 +71,8 @@ KoAboutDia::KoAboutDia(QWidget* parent,
       {
 	setCaption(i18n("KOffice - About"));
 	pLogo.load(KApplication::kde_datadir()+"/koffice/pics/koKOffice.xpm");
-	author = i18n("Torben Weis and Reginald Stadlbauer");
-	email = i18n("<weis@kde.org> and <reggie@kde.org>");
+	author = i18n("the KOffice Team");
+	email = i18n("<koffice@kde.org>");
 	add = "";
       } break;
     default:
@@ -88,11 +88,14 @@ KoAboutDia::KoAboutDia(QWidget* parent,
   
   lInfo = new QLabel(this);
   QString infoText;
+
   infoText.sprintf(i18n("Version: %s\n\n"
 			"(c) by %s 1997 - 1998\n\n"
 			"E-mail: %s \n\n"
 			"The KOffice is under GNU GPL"),
-		   version.data(), author.data(), email.data());
+		   (const char*)version,(const char*)author,(const char*)email);
+  lInfo->setText(infoText);
+
   if (!add.isEmpty())
     lInfo->setText(QString(lInfo->text()) + "\n\n" + add);
   lInfo->resize(lInfo->sizeHint());
