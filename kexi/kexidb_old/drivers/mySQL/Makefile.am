@@ -6,7 +6,7 @@ LDFLAGS = $(all_libraries) $(KDE_RPATH) $(MYSQL_LDFLAGS)
 
 keximysqlinterface_la_METASOURCES = AUTO
 
-keximysqlinterface_la_SOURCES = mysqldb.cpp mysqlfield.cpp mysqlresult.cpp 
+keximysqlinterface_la_SOURCES = mysqldb.cpp mysqlfield.cpp mysqlresult.cpp mysqlrecord.cpp 
 
 keximysqlinterface_la_LIBADD = $(LIB_KPARTS) $(LIB_QT) $(LIB_MYSQL) ../../kexiDB/libkexidb.la
 

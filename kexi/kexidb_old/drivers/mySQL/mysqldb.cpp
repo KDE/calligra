@@ -32,7 +32,7 @@ Boston, MA 02111-1307, USA.
 
 K_EXPORT_COMPONENT_FACTORY(keximysqlinterface, KGenericFactory<MySqlDB>( "mysqlinterface" ));
 
-MySqlDB::MySqlDB(QObject *parent, const char *name, const QStringList &args) : KexiDB(parent, name)
+MySqlDB::MySqlDB(QObject *parent, const char *name, const QStringList &) : KexiDB(parent, name)
 {
 	kdDebug() << "MySqlDB::MySqlDB()" << endl;
 	
