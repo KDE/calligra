@@ -25,7 +25,7 @@
 #include <iostream.h>
 #include "UngroupCmd.h"
 
-UngroupCmd::UngroupCmd (GDocument* doc) : Command(i18n("Ungroup ???")) {
+UngroupCmd::UngroupCmd (GDocument* doc) : Command(i18n("Ungroup")) {
   document = doc;
   for (list<GObject*>::iterator it = doc->getSelection ().begin ();
        it != doc->getSelection ().end (); it++) {

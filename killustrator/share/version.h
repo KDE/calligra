@@ -26,6 +26,6 @@
 #define version_h_
 
 #define APP_NAME "killustrator"
-#define APP_VERSION "0.4.5"
+#define APP_VERSION "0.5"
 
 #endif

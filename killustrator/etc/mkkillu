@@ -35,5 +35,5 @@ autoconf
 
 # if the following fails, try it by hand.
 ./configure
-make dist
+gmake dist
 
