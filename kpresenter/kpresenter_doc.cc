@@ -1112,7 +1112,6 @@ void KPresenterDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainSt
     }
 
     stylesWriter.endElement(); // office:styles
-//todo add other style
 
     stylesWriter.startElement( "office:automatic-styles" );
     styles = mainStyles.styles( STYLE_BACKGROUNDPAGE );
@@ -1343,7 +1342,7 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
         if ( name == "draw:text-box" ) // textbox
         {
             fillStyleStack( o, context );
-             KPTextObject *kptextobject = new KPTextObject( this );
+            KPTextObject *kptextobject = new KPTextObject( this );
             kptextobject->loadOasis(o, context, m_loadingInfo);
             if ( groupObject )
                 groupObject->addObjects( kptextobject );
@@ -4023,6 +4022,7 @@ KPresenterView *KPresenterDoc::firstView() const
 
 void KPresenterDoc::addWordToDictionary( const QString & word)
 {
+    //FIXME !!!!
     //if ( m_bgSpellCheck )
     //m_bgSpellCheck->addPersonalDictonary( word );
 }

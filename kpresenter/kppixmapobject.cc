@@ -96,8 +96,19 @@ DCOPObject* KPPixmapObject::dcopObject()
     return dcop;
 }
 
+QString KPPixmapObject::convertValueToPercent( int val )
+{
+   return QString::number( val )+"%";
+}
+
 void KPPixmapObject::saveOasisPictureElement( KoGenStyle &styleobjectauto )
 {
+
+    if ( bright != 0 )
+    {
+        styleobjectauto.addProperty( "draw:luminance", convertValueToPercent( bright ) );
+    }
+
     switch (m_effect)
     {
     case IE_NONE:
@@ -106,7 +117,7 @@ void KPPixmapObject::saveOasisPictureElement( KoGenStyle &styleobjectauto )
     case IE_CHANNEL_INTENSITY:
     {
         //for the moment kpresenter support just one channel
-        QString percent = QString::number( m_ie_par1.toInt() )+"%";
+        QString percent = convertValueToPercent( m_ie_par1.toInt() );
         KImageEffect::RGBComponent channel = static_cast<KImageEffect::RGBComponent>( m_ie_par2.toInt() );
         switch( channel )
         {
@@ -309,6 +320,13 @@ void KPPixmapObject::loadOasisPictureEffect(KoOasisContext & context )
         m_ie_par1 = QVariant(val);
         m_ie_par2 = QVariant( ( int )KImageEffect::Blue );
     }
+    if ( styleStack.hasAttribute( "draw:luminance" ) )
+    {
+       QString str( styleStack.attribute( "draw:luminance" ) );
+       str = str.remove( "%" );
+       bright = str.toInt();
+    }
+
 }
 
 void KPPixmapObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info)
