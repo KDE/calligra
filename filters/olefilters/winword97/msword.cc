@@ -76,7 +76,7 @@ QString MsWord::char2unicode(unsigned lid, char c)
     {
 	result = '?';
     }
-
+    
     return result;
 }
 
@@ -1424,25 +1424,25 @@ unsigned MsWord::read(U16 lid, const U8 *in, QString *out, unsigned count, bool 
     {
         for (unsigned i = 0; i < count; i++)
         {
-	    if (nFib > s_maxWord6Version) 
-	    {
+//	    if (nFib > s_maxWord6Version || nFib == 1) 
+//	    {
 	    	bytes += MsWordGenerated::read(in + bytes, &char16);
 		*out += QChar(char16);
-	    }
-	    else
+//	    }
+/*	    else
 	    {
 		// Office 95 always saved non-unicode
 	        bytes += MsWordGenerated::read(in + bytes, &char8);
         	*out += char2unicode(lid, char8).latin1();
 	    }
-	}
+*/	}
     }
     else
     {
         for (unsigned i = 0; i < count; i++)
         {
             bytes += MsWordGenerated::read(in + bytes, &char8);
-            *out += char2unicode(lid, char8).utf8();
+            *out += char2unicode(lid, char8).latin1();
 	}
     }
     return bytes;
