@@ -846,11 +846,16 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 }
             } else {
                 QPoint pnt = QCursor::pos();
-                m_tmpHorizHelpline = m_view->kPresenterDoc()->indexOfHorizHelpline(m_view->zoomHandler()->unzoomItY(e->pos().y()+diffy()));
-                m_tmpVertHelpline = m_view->kPresenterDoc()->indexOfVertHelpline(m_view->zoomHandler()->unzoomItX(e->pos().x()+diffx()));
-                if (m_tmpVertHelpline != -1 || m_tmpHorizHelpline != -1)
+                if( m_view->kPresenterDoc()->showHelplines())
                 {
-                    m_view->openPopupMenuHelpLine( pnt );
+                    m_tmpHorizHelpline = m_view->kPresenterDoc()->indexOfHorizHelpline(m_view->zoomHandler()->unzoomItY(e->pos().y()+diffy()));
+                    m_tmpVertHelpline = m_view->kPresenterDoc()->indexOfVertHelpline(m_view->zoomHandler()->unzoomItX(e->pos().x()+diffx()));
+                    if (m_tmpVertHelpline != -1 || m_tmpHorizHelpline != -1)
+                    {
+                        m_view->openPopupMenuHelpLine( pnt );
+                    }
+                    else
+                        m_view->openPopupMenuMenuPage( pnt );
                 }
                 else
                     m_view->openPopupMenuMenuPage( pnt );
