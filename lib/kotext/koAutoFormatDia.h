@@ -133,6 +133,7 @@ protected:
 
 protected slots:
     virtual void slotOk();
+    void slotBulletStyleToggled( bool );
     void slotItemRenamed(QListViewItem * item, const QString & newText, int column);
     void slotRemoveEntry();
     void slotEditEntry();

@@ -56,6 +56,8 @@ protected:
     //KWSearchContext m_formatOptions;
 };
 
+typedef QMap< QString, KoAutoFormatEntry > KoAutoFormatEntryMap;
+
 /******************************************************************/
 /* Class: KoAutoFormat						  */
 /******************************************************************/
@@ -222,13 +224,13 @@ public:
     }
 
     // Iterate over the entries. Called by the dialog
-    QMap< QString, KoAutoFormatEntry >::Iterator firstAutoFormatEntry()
+    KoAutoFormatEntryMap::ConstIterator firstAutoFormatEntry()
     { return m_entries.begin(); }
 
-    QMap< QString, KoAutoFormatEntry >::Iterator lastAutoFormatEntry()
+    KoAutoFormatEntryMap::ConstIterator lastAutoFormatEntry()
     { return m_entries.end(); }
 
-    QMap< QString, KoAutoFormatEntry >::Iterator findFormatEntry(QString find)
+    KoAutoFormatEntryMap::ConstIterator findFormatEntry(QString find)
     { return m_entries.find(find); }
 
     // Copy all autoformat entries from another KWAutoFormat. Called by the dialog
@@ -317,7 +319,6 @@ private:
     TypographicQuotes m_typographicDefaultSimpleQuotes;
 
     KCompletion *m_listCompletion;
-    typedef QMap< QString, KoAutoFormatEntry > KoAutoFormatEntryMap;
     KoAutoFormatEntryMap m_entries;
 
     KoAutoFormatEntryMap m_superScriptEntries;
