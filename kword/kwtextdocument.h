@@ -24,6 +24,7 @@
 
 class KWTextFrameSet;
 class KoTextFormatCollection;
+class KoTextDocCommand;
 
 /**
  * This is our KoTextDocument reimplementation, to create KWTextParag instead of KoTextParags,
@@ -45,6 +46,8 @@ public:
     /** Return the text frameset in which this document is.
      * Note that this can be 0L (e.g. for paragraphs in the paragdia preview) */
     KWTextFrameSet * textFrameSet() const { return m_textfs; }
+
+    virtual KoTextDocCommand *deleteTextCommand( KoTextDocument *textdoc, int id, int index, const QMemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const QValueList<KoParagLayout> & oldParagLayouts );
 
 protected:
     void init();

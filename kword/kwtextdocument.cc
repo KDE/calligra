@@ -22,6 +22,7 @@
 #include "kwdoc.h"
 #include "kwtextframeset.h"
 #include <kdebug.h>
+#include <kocommand.h>
 
 KWTextDocument::KWTextDocument( KWTextFrameSet * textfs, KoTextFormatCollection *fc, KoTextFormatter *formatter )
     : KoTextDocument( textfs->kWordDocument(), fc, formatter, false ), m_textfs( textfs )
@@ -50,5 +51,12 @@ KoTextParag * KWTextDocument::createParag( KoTextDocument *d, KoTextParag *pr, K
 {
     return new KWTextParag( static_cast<KoTextDocument *>(d), static_cast<KoTextParag *>(pr), static_cast<KoTextParag *>(nx), updateIds );
 }
+
+KoTextDocCommand *KWTextDocument::deleteTextCommand( KoTextDocument *textdoc, int id, int index, const QMemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const QValueList<KoParagLayout> & oldParagLayouts )
+{
+    //kdDebug()<<" KoTextDocument::deleteTextCommand************\n";
+    return new KoTextDeleteCommand( textdoc, id, index, str, customItemsMap, oldParagLayouts );
+}
+
 
 #include "kwtextdocument.moc"
