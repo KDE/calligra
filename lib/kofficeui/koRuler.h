@@ -184,7 +184,11 @@ signals:
     void newRightIndent( double );
     /** Old signal, kept for compatibility. Use doubleClicked instead. */
     void openPageLayoutDia();
+    /** This signal is emitted when double-clicking the ruler */
     void doubleClicked();
+    /** This signal is emitted when double-clicking a tab */
+    void doubleClicked( double ptPos );
+
     void tabListChanged( const KoTabulatorList & );
     void unitChanged( QString );
 

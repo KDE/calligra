@@ -811,13 +811,16 @@ void KoRuler::mouseDoubleClickEvent( QMouseEvent* )
     if(!d->m_bReadWrite)
         return;
     if ( d->tabChooser && ( d->flags & F_TABS ) ) {
-        // Double-click -> need to remove the tab that mousePressEvent added
-        // - this sucks, we should insert the tab on release and that's it.
+        // Double-click and mousePressed inserted a tab -> need to remove it
         if ( d->tabChooser->getCurrTabType() != 0 && d->removeTab!=d->tabList.end() && !d->tabList.isEmpty()) {
             d->tabList.remove( d->removeTab );
             d->removeTab=d->tabList.end();
             emit tabListChanged( d->tabList );
             repaint( false );
+        } else if ( d->action == A_TAB ) {
+            // Double-click on a tab
+            emit doubleClicked( (*d->currTab).ptPos );
+            return;
         }
         emit doubleClicked(); // usually paragraph dialog
     } else
