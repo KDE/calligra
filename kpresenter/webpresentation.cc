@@ -448,7 +448,7 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
 
         if ( i < slideInfos.count() - 1 )
             streamOut << "<a href=\"slide_" << pgNum + 1 << ".html\">";
-        streamOut << "<img src=\"../pics/slide_" << pgNum << ".png\" border=\"0\" alt=\"Slide " << pgNum << "\">";
+        streamOut << "<img src=\"../pics/slide_" << pgNum << ".png\" border=\"0\" alt=\"Slide " << pgNum << "\"" << ( isXML() ?" /":"") << ">";
         if ( i < slideInfos.count() - 1 )
             streamOut << "</a>";
 
@@ -493,37 +493,6 @@ void KPWebPresentation::createMainPage( KProgress *progressBar )
 {
     QTextCodec *codec = KGlobal::charsets()->codecForName( m_encoding );
 
-    // create list of slides (with proper link)
-    QString toc;
-    for( unsigned int i = 0; i < slideInfos.count(); i++ )
-        toc.append( QString( "  <li><a href=\"html/slide_%1.html\">%2</a></li>\n" ).
-            arg( i+1 ).arg( slideInfos[ i ].slideTitle ) );
-
-    // footer: author name, e-mail
-    QString htmlAuthor = email.isEmpty() ? escapeHtmlText( codec, author ) :
-        QString("<a href=\"mailto:%1\">%2</a>").arg( escapeHtmlText( codec, email )).arg( escapeHtmlText( codec, author ));
-    QString footer = i18n( "Created on %1 by <i>%2</i> with %3" );
-    footer = footer.arg( KGlobal::locale()->formatDate ( QDate::currentDate() ) ).
-        arg( htmlAuthor ).arg( "<a href=\"http://www.koffice.org/kpresenter\">KPresenter</a>" );
-    footer = EscapeEncodingOnly( codec, footer );
-
-    // construct the main page
-    QString mainPage = 
-      "<body bgcolor=\"%1\" text=\"%2\">\n"
-      "<h1 align=\"center\"><font color=\"%3\">%4</font></h1>\n"
-      "<p align=\"center\"><a href=\"html/slide_1.html\">%5</a></p>\n"
-      "<p>%6</p>\n"
-      "<ol>%7</ol>\n"
-      "<p>%8</p>\n"
-      "</body>\n"
-      "</html>\n";
-
-    mainPage = mainPage.arg( backColor.name() ).arg( textColor.name() ).arg( titleColor.name() ).
-       arg( title ).  arg( i18n("Click here to start the Slideshow") ).
-       arg( i18n("Table of Contents") ).
-       arg( toc ).arg( footer );
-
-    // create index file, write everything
     QFile file( QString( "%1/index.html" ).arg( path ) );
     file.open( IO_WriteOnly );
     QTextStream streamOut( &file );
@@ -531,9 +500,31 @@ void KPWebPresentation::createMainPage( KProgress *progressBar )
         
     writeStartOfHeader( streamOut, codec,  isXML() , i18n("Table of Contents") );
     streamOut << "</head>\n";
+    
+    streamOut << "<body bgcolor=\"" << backColor.name() << "\" text=\"" << textColor.name() << "\">\n";
+    
+    streamOut << "<h1 align=\"center\"><font color=\"" << titleColor.name() 
+        << "\">" << title << "</font></h1>";
 
-    streamOut << mainPage;
+    streamOut << "<p align=\"center\"><a href=\"html/slide_1.html\">";
+    streamOut << i18n("Click here to start the Slideshow");
+    streamOut << "</a></p>\n";
+    
+    streamOut << "<p><b>" << i18n("Table of Contents") << "</b></p>\n";
 
+    // create list of slides (with proper link)
+    streamOut << "<ol>\n";
+    for ( unsigned int i = 0; i < slideInfos.count(); i++ )
+        streamOut << "  <li><a href=\"html/slide_" << i+1 << ".html\">" << slideInfos[ i ].slideTitle << "</a></li>\n";
+    streamOut << "</ol>\n";
+
+    // footer: author name, e-mail
+    QString htmlAuthor = email.isEmpty() ? escapeHtmlText( codec, author ) :
+        QString("<a href=\"mailto:%1\">%2</a>").arg( escapeHtmlText( codec, email )).arg( escapeHtmlText( codec, author ));
+    streamOut << EscapeEncodingOnly ( codec, i18n( "Created on %1 by <i>%2</i> with <a href=\"http://www.koffice.org/kpresenter\">KPresenter</a>" ) 
+        .arg( KGlobal::locale()->formatDate ( QDate::currentDate() ) ).arg( htmlAuthor ) );
+
+    streamOut << "</body>\n</html>\n";
     file.close();
 
     progressBar->setProgress( progressBar->totalSteps() );
