@@ -92,9 +92,7 @@ void KWFontChooser::setColor( const QColor & col )
     // TODO: when kdelibs-2.2 is a requirement, get rid of m_color
     // and use m_chooseFont->color() directly.
     m_color = col;
-#ifdef KFONTCHOOSER_HAS_SETCOLOR
     m_chooseFont->setColor( col );
-#endif
     m_changedFlags = 0;
 }
 
@@ -155,9 +153,7 @@ void KWFontChooser::slotChangeColor()
         {
             m_changedFlags |= QTextFormat::Color;
             m_color = color;
-#ifdef KFONTCHOOSER_HAS_SETCOLOR
             m_chooseFont->setColor( color );
-#endif
         }
     }
 }

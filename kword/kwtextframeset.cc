@@ -3020,7 +3020,6 @@ QPtrList<KAction> KWTextFrameSetEdit::dataToolActionList()
 
     // EEEEEK. Please, no KSpell-specific things in here. This is the generic support
     // for any datatool!
-#ifdef KSPELL_HAS_IGNORE_UPPER_WORD
     if(!text.isEmpty() && doc->dontCheckTitleCase() && text==text.upper())
     {
         text="";
@@ -3035,7 +3034,6 @@ QPtrList<KAction> KWTextFrameSetEdit::dataToolActionList()
             m_singleWord = false;
         }
     }
-#endif
 
     if ( text.isEmpty() ) // Nothing to apply a tool to
         return QPtrList<KAction>();

@@ -1027,11 +1027,8 @@ void KWView::setupPrinter( KPrinter &prt )
     //with a bad date and time
     m_doc->recalcVariables(  VT_TIME );
     m_doc->recalcVariables(  VT_DATE );
-
-#ifdef HAVE_KDEPRINT
     prt.setPageSelection( KPrinter::ApplicationSide );
     prt.setCurrentPage( currentPage() + 1 );
-#endif
     prt.setMinMax( 1, m_doc->getPages() );
 
     KoPageLayout pgLayout = m_doc->pageLayout();
@@ -3195,10 +3192,8 @@ void KWView::startKSpell()
     m_spell.kspell = new KSpell( this, i18n( "Spell Checking" ), this, SLOT( spellCheckerReady() ), m_doc->getKSpellConfig() );
 
 
-#ifdef KSPELL_HAS_IGNORE_UPPER_WORD
      m_spell.kspell->setIgnoreUpperWords(m_doc->dontCheckUpperWord());
      m_spell.kspell->setIgnoreTitleCase(m_doc->dontCheckTitleCase());
-#endif
 
     QObject::connect( m_spell.kspell, SIGNAL( death() ),
                       this, SLOT( spellCheckerFinished() ) );
