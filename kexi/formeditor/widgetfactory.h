@@ -171,7 +171,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		   \a text is the text to display by default in the line edit, \a w is the edited widget, \a geometry is the geometry the new line
 		   edit should have, and \a align is Qt::AlignmentFlags of the new line edit.
 		 */
-		virtual KLineEdit*	createEditor(const QString &text, QWidget *w, QRect geometry, int align,  bool useFrame=false,
+		virtual KLineEdit*	createEditor(const QString &text, QWidget *w, Container *container, QRect geometry, int align,  bool useFrame=false,
 		     BackgroundMode background = Qt::NoBackground);
 		/*! This function provides a simple editing mode : it justs disable event filtering for the widget, and it install it again when
 		  the widget loose focus or Enter is pressed.
@@ -180,7 +180,7 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		/*! This function creates a little dialog (a KEditListBox) to modify the contents of a list (of strings). It can be used to modify the contents
 		 of a combo box for instance. The modified list is copied into \a list when the user presses "Ok".*/
 		virtual bool     editList(QWidget *w, QStringList &list);
-		/* This function creates a little editor to modify rich text. It supports alignment, subscript and superscript and all basic formatting properties.
+		/*! This function creates a little editor to modify rich text. It supports alignment, subscript and superscript and all basic formatting properties.
 		  If the user presses "Ok", the edited text is put in \a text. If he presses "Cancel", nothing happens. */
 		bool  editRichText(QWidget *w, QString &text);
 		/*! This function creates a dialog to modify the contents of a ListView. You can modify both columns and list items. The listview is
@@ -193,8 +193,10 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		 to allow sync inside PropertyEditor.
 		*/
 		virtual void  changeProperty(const char *name, const QVariant &value, Container *container);
-		/*! Adds the i18n'ed description of a property, which will be shown in PropertyEditor. */
+		/*! This function is called when the widget is resized, and the editor size needs to be updated. */
+		virtual void   resizeEditor(QWidget *widget, const QString classname) {;}
 
+		/*! Adds the i18n'ed description of a property, which will be shown in PropertyEditor. */
 		virtual void  addPropertyDescription(Container *container, const char *prop, const QString &desc);
 		/*! Adds the i18n'ed description of a property value, which will be shown in PropertyEditor. */
 		virtual void  addValueDescription(Container *container, const char *value, const QString &desc);

@@ -79,6 +79,7 @@ class StdWidgetFactory : public KFormDesigner::WidgetFactory
 
 	protected:
 		virtual void  changeText(const QString &newText);
+		virtual void   resizeEditor(QWidget *widget, const QString classname);
 		void saveListItem(QListViewItem *item, QDomNode &parentNode, QDomDocument &domDoc);
 		void readListItem(QDomElement &node, QListViewItem *parent, KListView *listview);
 

@@ -61,7 +61,7 @@ WidgetFactory::WidgetFactory(QObject *parent, const char *name)
 }
 
 KLineEdit*
-WidgetFactory::createEditor(const QString &text, QWidget *w, QRect geometry, int align,  bool useFrame, BackgroundMode background)
+WidgetFactory::createEditor(const QString &text, QWidget *w, Container *container, QRect geometry, int align,  bool useFrame, BackgroundMode background)
 {
 	KLineEdit *editor = new KLineEdit(text, w->parentWidget());
 	editor->setAlignment(align);
@@ -83,9 +83,15 @@ WidgetFactory::createEditor(const QString &text, QWidget *w, QRect geometry, int
 
 	m_handles = new ResizeHandleSet(w, true);
 
+	ObjectTreeItem *tree = container->form()->objectTree()->lookup(w->name());
+	if(!tree)
+		return 0;
+	tree->eventEater()->setContainer(this);
+
 	m_editor = editor;
 	m_widget = w;
 	m_firstText = text;
+	m_container = container;
 
 	changeText(text); // to update size of the widget
 	return editor;
@@ -149,12 +155,16 @@ WidgetFactory::editListView(QListView *listview)
 bool
 WidgetFactory::eventFilter(QObject *obj, QEvent *ev)
 {
+	// widget resize using resize handles
+	if((ev->type() == QEvent::Resize) && m_editor && (obj == m_widget))
+		resizeEditor(m_widget, m_widget->className());
+
 	QWidget *w = m_editor ? m_editor : (QWidget *)m_widget;
 
 	if(obj != (QObject *)w)
 		return false;
 
-	if(ev->type() == QEvent::FocusOut)
+	else if(ev->type() == QEvent::FocusOut)
 	{
 		QWidget *focus = w->topLevelWidget()->focusWidget();
 		if(w != focus && !w->child(focus->name(), focus->className()))
@@ -181,7 +191,7 @@ WidgetFactory::eventFilter(QObject *obj, QEvent *ev)
 void
 WidgetFactory::resetEditor()
 {
-	if(!m_editor && m_widget)
+	if(m_widget)
 	{
 		ObjectTreeItem *tree = m_container->form()->objectTree()->lookup(m_widget->name());
 		if(!tree)
@@ -190,9 +200,10 @@ WidgetFactory::resetEditor()
 			return;
 		}
 		tree->eventEater()->setContainer(m_container);
-		setRecursiveCursor(m_widget, m_container->form());
+		if(!m_editor && m_widget)
+			setRecursiveCursor(m_widget, m_container->form());
 	}
-	else if(m_editor)
+	if(m_editor)
 	{
 		changeText(m_editor->text());
 		disconnect(m_editor, 0, this, 0);
@@ -200,12 +211,16 @@ WidgetFactory::resetEditor()
 	}
 
 	if(m_widget)
+	{
 		disconnect(m_widget, 0, this, 0);
+		m_widget->repaint();
+	}
 
 	delete m_handles;
 	m_editor = 0;
 	m_widget = 0;
 	m_handles = 0;
+	m_container = 0;
 }
 
 void

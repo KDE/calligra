@@ -93,10 +93,11 @@ namespace KFormDesigner {
 
 	bool ResizeHandle::eventFilter(QObject *, QEvent *ev)
 	{
-		if ((ev->type()==QEvent::Move) || (ev->type()==QEvent::Resize))
+		/*if ((ev->type()==QEvent::Move) || (ev->type()==QEvent::Resize))
 		{
 			QTimer::singleShot(0,this,SLOT(updatePos()));
-		}
+		}*/
+		updatePos();
 		return false;
 	}
 
@@ -115,7 +116,7 @@ namespace KFormDesigner {
 #endif
 		int m_dotSpacing=10;
 		if (!m_dragging) return;
-		if(m_editing)  return;
+		//if(m_editing)  return;
 
 		int tmpx=m_buddy->x();
 		int tmpy=m_buddy->y();

@@ -377,7 +377,7 @@ StdWidgetFactory::startEditing(const QString &classname, QWidget *w, KFormDesign
 	if(classname == "KLineEdit")
 	{
 		KLineEdit *lineedit = static_cast<KLineEdit*>(w);
-		createEditor(lineedit->text(), lineedit, lineedit->geometry(), lineedit->alignment(), true);
+		createEditor(lineedit->text(), lineedit, container, lineedit->geometry(), lineedit->alignment(), true);
 		return;
 	}
 	else if(classname == "QLabel")
@@ -389,33 +389,36 @@ StdWidgetFactory::startEditing(const QString &classname, QWidget *w, KFormDesign
 			editText();
 		}
 		else
-			createEditor(label->text(), label, label->geometry(), label->alignment());
+			createEditor(label->text(), label, container, label->geometry(), label->alignment());
 		return;
 	}
 	else if(classname == "KPushButton")
 	{
 		KPushButton *push = static_cast<KPushButton*>(w);
-		QRect r(push->geometry());
+		QRect r = w->style().subRect(QStyle::SR_PushButtonContents, w);
+		QRect editorRect = QRect(push->x() + r.x(), push->y() + r.y(), r.width(), r.height());
 		//r.setX(r.x() + 5);
 		//r.setY(r.y() + 5);
 		//r.setWidth(r.width()-10);
 		//r.setHeight(r.height() - 10);
-		createEditor(push->text(), push, r, Qt::AlignCenter, false, Qt::PaletteButton);
+		createEditor(push->text(), push, container, editorRect, Qt::AlignCenter, false, Qt::PaletteButton);
 	}
 	else if(classname == "QRadioButton")
 	{
 		QRadioButton *radio = static_cast<QRadioButton*>(w);
-		QRect r(radio->geometry());
-		r.setX(r.x() + 20);
-		createEditor(radio->text(), radio, r, Qt::AlignAuto);
+		QRect r = w->style().subRect(QStyle::SR_RadioButtonContents, w);
+		QRect editorRect = QRect(radio->x() + r.x(), radio->y() + r.y(), r.width(), r.height());
+		createEditor(radio->text(), radio, container, editorRect, Qt::AlignAuto);
 		return;
 	}
 	else if(classname == "QCheckBox")
 	{
 		QCheckBox *check = static_cast<QCheckBox*>(w);
-		QRect r(check->geometry());
-		r.setX(r.x() + 20);
-		createEditor(check->text(), check, r, Qt::AlignAuto);
+		//QRect r(check->geometry());
+		//r.setX(r.x() + 20);
+		QRect r = w->style().subRect(QStyle::SR_CheckBoxContents, w);
+		QRect editorRect = QRect(check->x() + r.x(), check->y() + r.y(), r.width(), r.height());
+		createEditor(check->text(), check, container, editorRect, Qt::AlignAuto);
 		return;
 	}
 	else if((classname == "KComboBox") || (classname == "KListBox"))
@@ -465,6 +468,7 @@ StdWidgetFactory::changeText(const QString &text)
 	else
 		changeProperty("text", text, m_container);
 
+	/* By-hand method not needed as sizeHint() can do that for us
 	QFontMetrics fm = w->fontMetrics();
 	QSize s(fm.width( text ), fm.height());
 	int width;
@@ -482,13 +486,33 @@ StdWidgetFactory::changeText(const QString &text)
 	else if(n == "QRadioButton")
 		width = w->style().sizeFromContents( QStyle::CT_RadioButton, w, s).width();
 	else
-		return;
+		return;*/
+	int width = w->sizeHint().width();
 
 	if(w->width() < width)
 	{
 		w->resize(width, w->height() );
-		WidgetFactory::m_editor->resize(w->size());
+		//WidgetFactory::m_editor->resize(w->size());
 	}
+}
+
+void
+StdWidgetFactory::resizeEditor(QWidget *widget, const QString classname)
+{
+	QSize s = widget->size();
+	if((classname == "QLabel") || (classname == "KPushButton") || (classname == "KLineEdit") || (classname == "QLabel"))
+
+	if(classname == "QRadioButton")
+		s.setWidth(widget->style().subRect(QStyle::SR_RadioButtonContents, widget).width());
+	else if(classname == "QCheckBox")
+		s.setWidth(widget->style().subRect(QStyle::SR_CheckBoxContents, widget).width());
+	else if(classname == "KPushButton")
+	{
+		s.setHeight(widget->style().subRect(QStyle::SR_PushButtonContents, widget).height());
+		s.setWidth(widget->style().subRect(QStyle::SR_PushButtonContents, widget).width());
+	}
+
+	m_editor->resize(s);
 }
 
 void
@@ -591,7 +615,7 @@ StdWidgetFactory::readSpecialProperty(const QString &classname, QDomElement &nod
 	else if((tag == "column") && (classname == "KListView"))
 	{
 		KListView *listview = (KListView*)w;
-		int id;
+		int id=0;
 		for(QDomNode n = node.firstChild(); !n.isNull(); n = n.nextSibling())
 		{
 			QString prop = n.toElement().attribute("name");

@@ -23,6 +23,7 @@
 
 #include <kiconloader.h>
 #include <kgenericfactory.h>
+#include <klineedit.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kdeversion.h>
@@ -463,15 +464,15 @@ ContainerFactory::startEditing(const QString &classname, QWidget *w, KFormDesign
 	if(classname == "QButtonGroup")
 	{
 		QButtonGroup *group = static_cast<QButtonGroup*>(w);
-		QRect r = QRect(group->x()+2, group->y()-5, group->width()-10, 20);
-		createEditor(group->title(), group, r, Qt::AlignAuto);
+		QRect r = QRect(group->x()+2, group->y()-5, group->width()-10, w->fontMetrics().height() + 10);
+		createEditor(group->title(), group, container, r, Qt::AlignAuto);
 		return;
 	}
 	if(classname == "QGroupBox")
 	{
 		QGroupBox *group = static_cast<QGroupBox*>(w);
-		QRect r = QRect(group->x()+2, group->y()-5, group->width()-10, 20);
-		createEditor(group->title(), group, r, Qt::AlignAuto);
+		QRect r = QRect(group->x()+2, group->y()-5, group->width()-10, w->fontMetrics().height() + 10);
+		createEditor(group->title(), group, container, r, Qt::AlignAuto);
 		return;
 	}
 	return;
@@ -533,6 +534,13 @@ void
 ContainerFactory::changeText(const QString &text)
 {
 	changeProperty("title", text, m_container);
+}
+
+void
+ContainerFactory::resizeEditor(QWidget *widget, const QString classname)
+{
+	QSize s = widget->size();
+	m_editor->resize(s.width() - 20, widget->fontMetrics().height() +10);
 }
 
 // Widget Specific slots used in menu items
