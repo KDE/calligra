@@ -322,8 +322,6 @@ KWFrameSet::KWFrameSet( KWDocument *doc )
 
 KWFrameSet::~KWFrameSet()
 {
-    if ( isFloating() )
-        deleteAnchors();
 }
 
 void KWFrameSet::addFrame( KWFrame *_frame, bool recalc )
@@ -344,13 +342,9 @@ void KWFrameSet::addFrame( KWFrame *_frame, bool recalc )
 
 void KWFrameSet::delFrame( unsigned int _num )
 {
-    //if ( isFloating() )
-    //    deleteAnchors();
     KWFrame *frm = frames.at( _num );
     ASSERT( frm );
     delFrame(frm,true);
-    //if ( isFloating() )
-    //    updateAnchors();
 }
 
 /*================================================================*/
@@ -361,6 +355,7 @@ void KWFrameSet::delFrame( KWFrame *frm, bool remove )
     if ( _num == -1 )
         return;
 
+    // It's the anchor that deletes the frame, not the other way round.
     //if ( isFloating() )
     //    deleteAnchors();
 
@@ -468,7 +463,7 @@ void KWFrameSet::setAnchored( KWAnchorPosition & pos, bool placeHolderExists /* 
 void KWFrameSet::setFixed()
 {
     if ( isFloating() )
-        deleteAnchors();
+        deleteAnchors(); // is this a problem with undo/redo ?
     m_anchorPos.makeInvalid();
 }
 
@@ -927,7 +922,7 @@ void KWFrameSet::zoom()
 
 void KWFrameSet::finalize()
 {
-    //kdDebug() << "KWFrameSet::finalize" << endl;
+    kdDebug() << "KWFrameSet::finalize ( calls updateFrames + zoom ) " << this << endl;
     updateFrames();
     zoom();
 }
@@ -1190,12 +1185,12 @@ void KWPartFrameSetEdit::drawContents( QPainter *p, const QRect &r, QColorGroup 
 /******************************************************************/
 
 
-KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc, KFormulaContainer *_f )
-    : KWFrameSet( _doc ), formula(_f), m_changed( false )
+KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc )
+    : KWFrameSet( _doc ), m_changed( false )
 {
-    if ( formula )
-        connect(formula, SIGNAL(formulaChanged(int, int)),
-                this, SLOT(slotFormulaChanged(int, int)));
+    formula = _doc->getFormulaDocument()->createFormula();
+    connect(formula, SIGNAL(formulaChanged(int, int)),
+            this, SLOT(slotFormulaChanged(int, int)));
 }
 
 KWFormulaFrameSet::~KWFormulaFrameSet()
@@ -1262,23 +1257,10 @@ void KWFormulaFrameSet::drawContents( QPainter* painter, const QRect& crect,
     }
 }
 
-
-// ## can this be done in the constructor instead (DF) ?
-void KWFormulaFrameSet::create()
-{
-    if ( formula != 0 ) {
-        updateFrames();
-        return;
-    }
-
-    formula = m_doc->getFormulaDocument()->createFormula();
-    connect(formula, SIGNAL(formulaChanged(int, int)),
-            this, SLOT(slotFormulaChanged(int, int)));
-    updateFrames();
-}
-
 void KWFormulaFrameSet::slotFormulaChanged(int width, int height)
 {
+    if ( frames.isEmpty() )
+        return;
     // Did I tell you that assignment to parameters is evil?
     width = static_cast<int>( width / kWordDocument()->zoomedResolutionX() ) + 5;
     height = static_cast<int>( height / kWordDocument()->zoomedResolutionY() ) + 5;
@@ -1342,8 +1324,11 @@ void KWFormulaFrameSet::load(QDomElement& attributes)
 
 void KWFormulaFrameSet::zoom()
 {
-    formula->recalc();
-    KWFrameSet::zoom();
+    if ( !frames.isEmpty() )
+    {
+        formula->recalc();
+        KWFrameSet::zoom();
+    }
 }
 
 

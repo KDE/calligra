@@ -618,14 +618,6 @@ void KWView::createKWGUI()
     gui = new KWGUI( this, doc, this );
     gui->setGeometry( 0, 0, width(), height() );
     gui->show();
-
-    // hack
-    KWFrameSet *frameset;
-    for ( unsigned int i = 0; i < doc->getNumFrameSets(); i++ ) {
-        frameset = doc->getFrameSet( i );
-        if ( frameset->getFrameType() == FT_FORMULA )
-            dynamic_cast<KWFormulaFrameSet*>( frameset )->create();
-    }
 }
 
 /*================================================================*/
@@ -1710,14 +1702,17 @@ void KWView::toolsFormula()
     KWTextFrameSetEdit *edit = currentTextEdit();
     if (edit)
     {
-        KWFormulaFrameSet *frameset = new KWFormulaFrameSet( doc, doc->getFormulaDocument()->createFormula() );
+        KWFormulaFrameSet *frameset = new KWFormulaFrameSet( doc );
         KWFrame *frame = new KWFrame(frameset, 0, 0, 10, 10 );
         frameset->addFrame( frame, false );
-        edit->insertFloatingFrameSet( frameset );
+        edit->insertFloatingFrameSet( frameset, i18n("Insert Formula") );
         doc->addFrameSet( frameset ); // last since it triggers a redraw
-        edit->textFrameSet()->clearUndoRedoInfo();
-        KWCreateFrameCommand *cmd = new KWCreateFrameCommand( i18n("Insert Formula"), doc, frame);
-        doc->addCommand(cmd);
+#if 0
+        // Strange, seems we need this
+        cursor->parag()->invalidate( 0 ); // and that's done by KWTextParag::setCustomItem. Hmm.
+        cursor->parag()->setChanged( true );
+        frameSet()->kWordDocument()->slotRepaintChanged( frameSet() );
+#endif
     }
 }
 

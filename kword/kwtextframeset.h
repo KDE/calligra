@@ -261,7 +261,7 @@ public:
 
     virtual KWFrameSetEdit* currentTextEdit(){return this;}
 
-    virtual QString getPopupName() { return "text_popup";} 
+    virtual QString getPopupName() { return "text_popup";}
 
     virtual void terminate();
 
@@ -307,7 +307,7 @@ public:
     void insertPicture( const QString & file );
     void insertVariable( int type, int subtype = 0 );
     void insertSpecialChar(QChar _c);
-    void insertFloatingFrameSet( KWFrameSet * fs );
+    void insertFloatingFrameSet( KWFrameSet * fs, const QString & commandName );
 
     void setBold(bool on);
     void setItalic(bool on);

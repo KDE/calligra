@@ -710,8 +710,13 @@ void KWCreateFrameCommand::execute()
     frame->setFrameSet( frameSet );
     frameSet->addFrame( frame );
 
+    // Shouldn't have any anchored frames here anymore, we create an
+    // insert-text command instead of a KWCreateFrameCommand.
+    ASSERT(!frame->anchor());
+#if 0
     if(frame->anchor())
         frame->anchor()->setDeleted(false);
+#endif
 
     KWTextFrameSet * textfs = dynamic_cast<KWTextFrameSet *>( frameSet );
     if ( textfs )

@@ -249,7 +249,7 @@ public:
      */
     virtual KWFrameSetEdit* currentTextEdit() { return 0L; }
 
-    virtual QString getPopupName() { return QString();} 
+    virtual QString getPopupName() { return QString();}
 
     /**
      * Called before destruction, when terminating edition - use to e.g. hide cursor
@@ -410,6 +410,8 @@ public:
     /** Make this frameset floating, with the anchor at @p parag,@p index in the text frameset @p textfs */
     void setAnchored( KWTextFrameSet* textfs, KWTextParag* parag, int index ); // convenience method
     void setAnchored( KWAnchorPosition & pos, bool placeHolderExists = false );
+    /** Note that this frameset has been made floating */
+    void setAnchorPos( KWAnchorPosition & pos ) { m_anchorPos = pos; }
     /** Make this frameset fixed, i.e. not anchored */
     void setFixed();
     /** Return true if this frameset is floating, false if it's fixed */
@@ -576,11 +578,8 @@ class KWFormulaFrameSet : public KWFrameSet
 {
     Q_OBJECT
 public:
-    KWFormulaFrameSet( KWDocument *_doc, KFormulaContainer * _f = 0L );
-    //KWFormulaFrameSet( KWDocument *_doc, QWidget *parent );
+    KWFormulaFrameSet( KWDocument *_doc );
     virtual ~KWFormulaFrameSet();
-
-    void create();
 
     virtual FrameType getFrameType() { return FT_FORMULA; }
 
@@ -631,7 +630,7 @@ public:
         return static_cast<KWFormulaFrameSet*>(frameSet());
     }
 
-    virtual QString getPopupName() { return "Formula";} 
+    virtual QString getPopupName() { return "Formula";}
 
     /**
      * Paint this frameset in "has focus" mode (e.g. with a cursor)

@@ -475,10 +475,9 @@ void KWCanvas::createTable( unsigned int rows, unsigned int cols,
 
     if ( isFloating && edit )
     {
-        edit->textFrameSet()->clearUndoRedoInfo();
         m_insRect = KoRect( 0, 0, rows * 30, doc->ptPaperWidth()-50 /*10*/ ); // ## check those values
         KWTableFrameSet * table = createTable();
-        edit->insertFloatingFrameSet( table );
+        edit->insertFloatingFrameSet( table, i18n("Insert Floating Table") );
         doc->addFrameSet( table ); // last since it triggers a redraw
     }
     else
@@ -905,7 +904,7 @@ void KWCanvas::mrCreateFormula()
 {
     m_insRect = m_insRect.normalize();
     if ( m_insRect.width() > doc->gridX() && m_insRect.height() > doc->gridY() ) {
-        KWFormulaFrameSet *frameset = new KWFormulaFrameSet( doc, doc->getFormulaDocument()->createFormula() );
+        KWFormulaFrameSet *frameset = new KWFormulaFrameSet( doc );
         KWFrame *frame = new KWFrame(frameset, m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height() );
         frameset->addFrame( frame, false );
         doc->addFrameSet( frameset );
@@ -929,6 +928,8 @@ void KWCanvas::mrCreateTable()
             KWTableFrameSet * table = createTable();
             // Done at the end so that finalize is called
             doc->addFrameSet( table );
+            // ## TODO undo/redo support. KWCreateFrameCommand won't do it, we need a new command.
+            // Only here, not in createTable() (anchored tables are handled differently)
         }
         doc->updateAllFrames();
         doc->layout();
@@ -939,7 +940,6 @@ void KWCanvas::mrCreateTable()
 
 KWTableFrameSet * KWCanvas::createTable() // uses m_insRect and m_table to create the table
 {
-    // ## TODO undo/redo support. KWCreateFrameCommand won't do it, we need a new command.
     KWTableFrameSet *table = new KWTableFrameSet( doc );
 
     QString _name;

@@ -25,6 +25,7 @@
 #include "kwdoc.h"
 #include "kwview.h"
 #include "kwcanvas.h"
+#include "kwanchor.h"
 #include "kwutils.h"
 #include "kwcommand.h"
 #include "kwdrag.h"
@@ -1926,13 +1927,11 @@ void KWTextFrameSet::insert( QTextCursor * cursor, KWTextFormat * currentFormat,
         undoRedoInfo.customItemsMap = customItemsMap;
     }
 
-    if ( textdoc->useFormatCollection() ) { // (always true)   apply the formatting
-        textdoc->setSelectionStart( QTextDocument::Temp, &oldCursor );
-        textdoc->setSelectionEnd( QTextDocument::Temp, cursor );
-        //kdDebug() << "KWTextFrameSet::insert setting format " << currentFormat << endl;
-        textdoc->setFormat( QTextDocument::Temp, currentFormat, QTextFormat::Format );
-        textdoc->removeSelection( QTextDocument::Temp );
-    }
+    textdoc->setSelectionStart( QTextDocument::Temp, &oldCursor );
+    textdoc->setSelectionEnd( QTextDocument::Temp, cursor );
+    //kdDebug() << "KWTextFrameSet::insert setting format " << currentFormat << endl;
+    textdoc->setFormat( QTextDocument::Temp, currentFormat, QTextFormat::Format );
+    textdoc->removeSelection( QTextDocument::Temp );
 
     formatMore();
     emit repaintChanged( this );
@@ -3051,14 +3050,34 @@ void KWTextFrameSetEdit::insertSpecialChar(QChar _c)
 void KWTextFrameSetEdit::insertPicture( const QString & file )
 {
     KWTextImage * custom = new KWTextImage( textDocument(), file );
-    cursor->parag()->insert( cursor->index(), QChar('@') /*whatever*/ );
-    static_cast<KWTextParag *>( cursor->parag() )->setCustomItem( cursor->index(), custom, m_currentFormat );
-    // TODO undo/redo support
+    CustomItemsMap customItemsMap;
+    customItemsMap.insert( 0, custom );
+    textFrameSet()->insert( cursor, m_currentFormat, QChar('@') /*whatever*/,
+                            false, false, i18n("Insert Inline Picture"),
+                            customItemsMap );
 }
 
-void KWTextFrameSetEdit::insertFloatingFrameSet( KWFrameSet * fs )
+void KWTextFrameSetEdit::insertFloatingFrameSet( KWFrameSet * fs, const QString & commandName )
 {
-    fs->setAnchored( textFrameSet(), static_cast<KWTextParag *>(cursor->parag()), cursor->index() );
+    textFrameSet()->clearUndoRedoInfo();
+    CustomItemsMap customItemsMap;
+    QString placeHolders;
+    // TODO support for multiple floating items (like multiple-page tables)
+    { // the loop will start here :)
+        KWAnchor * anchor = new KWAnchor( textFrameSet()->textDocument(), fs, 0 /*frame number*/ );
+        customItemsMap.insert( 0, anchor );
+        placeHolders += QChar('@');
+        fs->getFrame(0)->setAnchor( anchor );
+    }
+    textFrameSet()->insert( cursor, m_currentFormat, placeHolders,
+                            false, false, commandName,
+                            customItemsMap );
+    // ## do we still need this ?
+    KWAnchorPosition pos;
+    pos.textfs = textFrameSet();
+    pos.parag = static_cast<KWTextParag *>(cursor->parag());
+    pos.index = cursor->index();
+    fs->setAnchorPos( pos );
 }
 
 void KWTextFrameSetEdit::insertVariable( int type, int subtype )
