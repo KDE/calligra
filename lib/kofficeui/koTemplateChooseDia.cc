@@ -32,6 +32,7 @@
 #include <qvgroupbox.h>
 
 #include <klocale.h>
+#include <kdeversion.h>
 #include <kfiledialog.h>
 #include <kinstance.h>
 #include <koFilterManager.h>
@@ -264,7 +265,7 @@ void KoTemplateChooseDia::setupRecentDialog(QWidget * widgetbase, QGridLayout * 
         QString value;
         do {
                 QString key=QString( "File%1" ).arg( i );
-                value=d->m_global->config()->readEntry( key, QString::null );
+                value=d->m_global->config()->readPathEntry( key );
                 if ( !value.isEmpty() ) {
                         KURL url(value);
                         KFileItem *item = new KFileItem( KFileItem::Unknown, KFileItem::Unknown, url );
@@ -432,7 +433,7 @@ void KoTemplateChooseDia::setupDialog()
 
 	    // start with the default template
 	    d->m_templateName = grp.readEntry( "TemplateName" );
-	    d->m_fullTemplateName = grp.readEntry( "FullTemplateName" );
+	    d->m_fullTemplateName = grp.readPathEntry( "FullTemplateName" );
 
 	    // be paranoid : invalid template means empty template
 	    if (!QFile::exists(d->m_fullTemplateName))
@@ -555,7 +556,11 @@ void KoTemplateChooseDia::slotOk()
 	    {
 		grp.writeEntry( "TemplateTab", d->m_jwidget->activePageIndex() );
 		grp.writeEntry( "TemplateName", d->m_templateName );
+#if KDE_IS_VERSION(3,1,3)
+		grp.writePathEntry( "FullTemplateName", d->m_fullTemplateName);
+#else
 		grp.writeEntry( "FullTemplateName", d->m_fullTemplateName);
+#endif
 	    }
 
 	    if (d->m_nodiag)
