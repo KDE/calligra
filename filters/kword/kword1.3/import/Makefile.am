@@ -10,7 +10,7 @@ libkwordkword1dot3import_la_SOURCES = ExportFilter.cc \
 TagProcessing.cc KWEFStructures.cc \
 ProcessDocument.cc KWEFKWordLeader.cc \
 kword13document.cpp kword13parser.cpp kword13frameset.cpp kword13layout.cpp \
-kword13paragraph.cpp kword13utils.cpp tempmain.cpp kword13import.cpp \
+kword13paragraph.cpp kword13utils.cpp kword13import.cpp \
 kword13oasisgenerator.cpp kword13formatone.cpp
 
 libkwordkword1dot3import_la_LDFLAGS = $(all_libraries) -module -avoid-version -no-undefined
