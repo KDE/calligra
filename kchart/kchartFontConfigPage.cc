@@ -68,6 +68,7 @@ void KChartFontConfigPage::initList()
     list->insertItem(i18n("Y-Axis"));
   }
   list->insertItem(i18n("Label"));
+  list->insertItem(i18n("Legend"));
   list->setCurrentItem(0);
   int num=0;
   bool noEnough=false;
@@ -132,7 +133,11 @@ void KChartFontConfigPage::changeLabelFont()
   } else if(list->currentText()==i18n("Label")) {
 	if (KFontDialog::getFont( label,false,this ) == QDialog::Rejected )
 	  return;
-  } else {
+  } else if(list->currentText()==i18n("Legend")) {
+	if (KFontDialog::getFont( legend,false,this ) == QDialog::Rejected )
+	  return;
+  }
+  else {
 	kdDebug( 35001 ) << "Pb in listBox" << endl;
   }
 }
@@ -147,6 +152,7 @@ void KChartFontConfigPage::init()
     yaxis = leftparms.axisLabelsFont();
 
     title=_params->header1Font();
+    legend=_params->legendFont();
     // PENDING(kalle) Adapt
 
     //   title = _params->titleFont();
@@ -180,6 +186,8 @@ void KChartFontConfigPage::apply()
     _params->setAxisParams( KDChartAxisParams::AxisPosRight, rightparms );
     _params->setAxisParams( KDChartAxisParams::AxisPosBottom, bottomparms );
     _params->setHeader1Font(title);
+    //used real size font.
+    _params->setLegendFont(legend,true);
 
 //     _params->setXTitleFont(xtitle);
 //     _params->setYTitleFont(ytitle);
