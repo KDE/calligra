@@ -97,7 +97,7 @@ QValueList<KoDocumentEntry> KoDocumentEntry::query( const QString & _constr )
 
   KTrader::OfferList::ConstIterator it = offers.begin();
   unsigned int max = offers.count();
-  if ( max > 1 )
+  if ( max > 1 && !_constr.isEmpty() )
     kdWarning(30003) << "KoDocumentEntry::query " << _constr << " got " << max << " offers!" << endl;
   for( unsigned int i = 0; i < max; i++ )
   {
