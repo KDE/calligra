@@ -688,7 +688,7 @@ bool KoMainWindow::exportConfirmation( const QCString &outputFormat, const QCStr
         {
             ret = KMessageBox::warningContinueCancel
             (
-                0,
+                this,
                 i18n( "<qt>Saving as a %1 may result in some loss of formatting."
                       "<p>Do you still want to save in this format?</qt>" )
                     .arg( QString( "<b>%1</b>" ).arg( comment ) ), // in case we want to remove the bold later
@@ -702,7 +702,7 @@ bool KoMainWindow::exportConfirmation( const QCString &outputFormat, const QCStr
         {
             ret = KMessageBox::warningContinueCancel
             (
-                0,
+                this,
                 i18n( "<qt>Exporting as a %1 may result in some loss of formatting."
                       "<p>Do you still want to export to this format?</qt>" )
                     .arg( QString( "<b>%1</b>" ).arg( comment ) ), // in case we want to remove the bold later
@@ -775,7 +775,7 @@ bool KoMainWindow::saveDocument( bool saveas )
         bool justChangingFilterOptions = false;
 
         KoFileDialog *dialog = new KoFileDialog(isExporting() ? d->m_lastExportURL.path() : suggestedFilename,
-                                                QString::null, 0L, "file dialog", true);
+                                                QString::null, this, "file dialog", true);
 
         if (!isExporting())
             dialog->setCaption( i18n("Save Document As") );
@@ -1021,7 +1021,7 @@ bool KoMainWindow::queryClose()
         if ( name.isEmpty() )
             name = i18n( "Untitled" );
 
-        int res = KMessageBox::warningYesNoCancel( 0L,
+        int res = KMessageBox::warningYesNoCancel( this,
                         i18n( "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>" ).arg(name),
                         QString::null,
                         KStdGuiItem::save(),
@@ -1089,7 +1089,7 @@ void KoMainWindow::slotFileNew()
 
 void KoMainWindow::slotFileOpen()
 {
-    KFileDialog *dialog=new KFileDialog(QString::null, QString::null, 0L, "file dialog", true);
+    KFileDialog *dialog=new KFileDialog(QString::null, QString::null, this, "file dialog", true);
     if (!isImporting())
         dialog->setCaption( i18n("Open Document") );
     else
@@ -1583,7 +1583,7 @@ void KoMainWindow::slotEmailFile()
    /*kapp->invokeMailer("mailto:?subject=" + theSubject +
      "&attach=" + fileURL);*/
    else
-       KMessageBox::detailedSorry (0, i18n("ERROR: File not found."),
+       KMessageBox::detailedSorry (this, i18n("ERROR: File not found."),
                                    i18n("To send a file you must first have saved the file to the filesystem."),
                                    i18n("Error: File Not Found!"));
 }
