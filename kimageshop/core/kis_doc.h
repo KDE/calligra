@@ -52,7 +52,6 @@ public:
 	 * Reimplemented from KoDocument.
 	 * See koDocument.h.
 	 */
-    virtual KoView* createView( QWidget* parent = 0, const char* name = 0 );
     virtual KoMainWindow* createShell();
     virtual QCString mimeType() const;
 
@@ -128,6 +127,7 @@ signals:
   void imageListUpdated();
 
 protected:
+  virtual KoView* createViewInstance( QWidget* parent, const char* name );
   KoCommandHistory  m_commands;
   QList <KisImage>  m_Images;
   KisImage         *m_pCurrent;

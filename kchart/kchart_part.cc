@@ -93,11 +93,9 @@ QCString KChartPart::mimeType() const
     return "application/x-kchart";
 }
 
-KoView* KChartPart::createView( QWidget* parent, const char* name )
+KoView* KChartPart::createViewInstance( QWidget* parent, const char* name )
 {
-    KChartView *view=new KChartView( this, parent, name );
-    addView(view);
-    return view;
+    return new KChartView( this, parent, name );
 }
 
 KoMainWindow* KChartPart::createShell()
@@ -937,6 +935,9 @@ QFont KChartPart::toFont(QDomElement &element) const {
 
 /**
  * $Log$
+ * Revision 1.37  2000/06/18 10:03:11  wtrobin
+ * Still hunting bugs :)
+ *
  * Revision 1.36  2000/06/18 08:32:40  wtrobin
  * first steps - don't update, it's broken :)
  *

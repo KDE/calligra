@@ -147,13 +147,11 @@ KoMainWindow* KSpreadDoc::createShell()
     return shell;
 }
 
-KoView* KSpreadDoc::createView( QWidget* parent, const char* name )
+KoView* KSpreadDoc::createViewInstance( QWidget* parent, const char* name )
 {
     if ( name == 0 )
 	name = "View";
-    KSpreadView *view=new KSpreadView( parent, name, this );
-    addView(view);
-    return view;
+    return new KSpreadView( parent, name, this );
 }
 
 bool KSpreadDoc::saveChildren( KoStore* _store, const char *_path )

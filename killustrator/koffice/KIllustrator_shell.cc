@@ -38,11 +38,6 @@ QString KIllustratorShell::nativeFormatName() const
   return i18n("KIllustrator");
 }
 
-KoDocument* KIllustratorShell::createDoc() const
-{
-    return new KIllustratorDocument;
-}
-
 void KIllustratorShell::slotFilePrint()
 {
     ((KIllustratorView*)rootView())->printDlg();

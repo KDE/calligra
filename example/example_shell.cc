@@ -17,9 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "example_shell.h"
-#include "example_part.h"
-#include "example_factory.h"
+#include <example_shell.h>
+#include <example_part.h>
+#include <example_factory.h>
 
 ExampleShell::ExampleShell( const char* name )
     : KoMainWindow( ExampleFactory::global(), name )
@@ -30,9 +30,4 @@ ExampleShell::~ExampleShell()
 {
 }
 
-KoDocument* ExampleShell::createDoc() const
-{
-    return new ExamplePart;
-}
-
-#include "example_shell.moc"
+#include <example_shell.moc>

@@ -230,7 +230,6 @@ public:
   const QPen& defaultGridPen() { return m_defaultGridPen; }
 
   KoMainWindow* createShell();
-  KoView* createView( QWidget* parent, const char* name );
 
   virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent );
   void paintContent( QPainter& painter, const QRect& rect, bool transparent, KSpreadTable* table );
@@ -266,6 +265,7 @@ signals:
   void sig_updateView();
 
 protected:
+  KoView* createViewInstance( QWidget* parent, const char* name );
   /**
    * Needed for the printing extension KOffice::Print
    */

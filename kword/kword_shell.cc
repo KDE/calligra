@@ -40,11 +40,6 @@ QString KWordShell::nativeFormatName() const
   return i18n("KWord");
 }
 
-KoDocument* KWordShell::createDoc() const
-{
-    return new KWordDocument;
-}
-
 void KWordShell::setRootDocument( KoDocument *doc )
 {
     KoMainWindow::setRootDocument( doc );

@@ -76,13 +76,6 @@ public:
      */
     virtual KoDocument* rootDocument() const;
 
-    /**
-     * Retrieves the topmost parent document. In almost all cases this
-     * is equivalent to rootDocument(), except when we've got multiple
-     * views of an embedded document (parent is located in another shell!)
-     */
-    virtual KoDocument* topmostParentDocument() const;;
-
     virtual KoView *rootView() const;
 
     /**
@@ -147,11 +140,6 @@ public slots:
     virtual void slotFileClose();
 
     /**
-     *  Quits the Application.
-     */
-    virtual void slotFileQuit();
-
-    /**
      *  Configure key bindings
      */
     virtual void slotConfigureKeys();
@@ -194,7 +182,7 @@ protected:
     /**
      * Create a new empty document.
      */
-    virtual KoDocument* createDoc() const = 0;
+    virtual KoDocument* createDoc() const;
 
     /**
      * Load the desired document and show it.

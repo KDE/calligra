@@ -49,7 +49,6 @@ public slots:
 
 protected:
 
-  virtual KoDocument* createDoc() const;
   virtual bool openDocument( const KURL & url );
 
 private:

@@ -50,11 +50,6 @@ QString KisShell::nativeFormatName() const {
   return i18n("KImageShop");
 }
 
-KoDocument* KisShell::createDoc() const
-{
-    return new KisDoc;
-}
-
 void KisShell::slotFileNew()
 {
   // This is buggy - Please contact me whenever this should be compiled

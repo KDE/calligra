@@ -20,11 +20,9 @@ QCString ExamplePart::mimeType() const
     return "application/x-example";
 }
 
-KoView* ExamplePart::createView( QWidget* parent, const char* name )
+KoView* ExamplePart::createViewInstance( QWidget* parent, const char* name )
 {
-    ExampleView *view=new ExampleView( this, parent, name );
-    addView(view);
-    return view;
+    return new ExampleView( this, parent, name );
 }
 
 KoMainWindow* ExamplePart::createShell()

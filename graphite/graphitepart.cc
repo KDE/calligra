@@ -104,10 +104,8 @@ void GraphitePart::keyReleaseEvent(QKeyEvent *e, GraphiteView */*view*/) {
     // TODO: setGlobalZoom()
 }
 
-KoView *GraphitePart::createView(QWidget *parent, const char *name) {
-    GraphiteView *view=new GraphiteView(this, parent, name);
-    addView(view);
-    return view;
+KoView *GraphitePart::createViewInstance(QWidget *parent, const char *name) {
+    return new GraphiteView(this, parent, name);
 }
 
 KoMainWindow *GraphitePart::createShell() {

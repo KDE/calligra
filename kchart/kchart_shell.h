@@ -34,9 +34,6 @@ public:
      */
     QString nativeFormatPattern() const { return "*.chrt"; }
     QString nativeFormatName() const;
-
-protected:
-    virtual KoDocument* createDoc() const;
 };
 
 #endif

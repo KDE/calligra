@@ -110,11 +110,9 @@ void KFormulaDoc::removeView( KFormulaView *_view )
     m_lstViews.setAutoDelete( true );
 }
 */
-KFormulaView* KFormulaDoc::createFormulaView( QWidget* _parent )
+KoView* KFormulaDoc::createViewInstance( QWidget* _parent, const char *name )
 {
-    KFormulaView *view=new KFormulaView( this, _parent, 0L);
-    addView(view);
-    return view;
+    return new KFormulaView( this, _parent, name);
 }
 /*
 OpenParts::View_ptr KFormulaDoc::createView()

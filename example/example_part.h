@@ -9,7 +9,6 @@ class ExamplePart : public KoDocument
 public:
     ExamplePart( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
 
-    virtual KoView* createView( QWidget* parent = 0, const char* name = 0 );
     virtual KoMainWindow* createShell();
 
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE );
@@ -17,6 +16,9 @@ public:
     virtual bool initDoc();
 
     virtual QCString mimeType() const;
+
+protected:
+    virtual KoView* createViewInstance( QWidget* parent, const char* name );
 };
 
 #endif

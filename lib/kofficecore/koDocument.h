@@ -158,18 +158,9 @@ public:
 
   /**
    *  Create a new view for the document.
-   *
-   *  You need to overload this method to create a view of your desired type.
-   *
-   *  After creating the new view your implementation should call @ref #addView.
-   *
-   *  @param parent Parent widget of the view.
-   *  @param name   Name of the view. The name is used in DCOP, so the name should
-   *                match the pattern [A-Za-z_][A-Za-z_0-9]*.
-   *
    *  @see #createShell
    */
-  virtual KoView *createView( QWidget *parent = 0, const char *name = 0 ) = 0;
+  KoView *createView( QWidget *parent = 0, const char *name = 0 );
 
   /**
    *  Create a new toplevel shell for the document. This in turn will create
@@ -422,6 +413,8 @@ signals:
   void childChanged( KoDocumentChild *child );
 
 protected:
+
+  virtual KoView *createViewInstance( QWidget *parent, const char *name ) = 0;
 
   /**
    *  Saves a document to @ref KReadOnlyPart::m_file (KParts takes care of uploading

@@ -114,7 +114,6 @@ public:
     virtual bool completeSaving( KoStore *_store );
 
     KoMainWindow* createShell();
-    KoView* createView( QWidget* parent, const char* name );
 
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = FALSE );
 
@@ -389,6 +388,7 @@ protected slots:
     void slotChildChanged( KoDocumentChild * child );
 
 protected:
+    KoView* createViewInstance( QWidget* parent, const char* name );
     virtual bool saveChildren( KoStore *_store, const char *_path );
 
     virtual bool completeLoading( KoStore* /* _store */ );

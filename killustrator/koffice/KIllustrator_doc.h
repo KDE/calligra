@@ -64,11 +64,6 @@ public:
     bool loadChildren (KoStore* store);
 
     /**
-     * Overloaded @ref Part::createView
-     */
-    KoView* createView( QWidget* parent, const char* name );
-
-    /**
      * Overloaded @ref Part::createShell
      */
     KoMainWindow* createShell();
@@ -104,6 +99,12 @@ public:
 signals:
     void partInserted (KIllustratorChild* child, GPart* part);
     void childGeometryChanged (KIllustratorChild* child);
+
+protected:
+    /**
+     * Overloaded @ref KoDocument::createViewInstance
+     */
+    KoView* createViewInstance( QWidget* parent, const char* name );
 
 private:
     GDocument* m_gdocument;

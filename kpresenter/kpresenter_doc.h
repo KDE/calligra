@@ -99,7 +99,6 @@ public:
     ~KPresenterDoc();
 
     KoMainWindow* createShell();
-    KoView* createView( QWidget* parent, const char* name );
 
     // Drawing
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = false );
@@ -341,6 +340,7 @@ protected slots:
     void slotDocumentLoaded();
 
 protected:
+    KoView* createViewInstance( QWidget* parent, const char* name );
 
     // ************ functions ************
     /**

@@ -69,7 +69,6 @@ protected slots:
 protected:
 
   virtual bool queryClose();
-  virtual KoDocument* createDoc() const { return 0L; }
 
   void closeDocument();
 

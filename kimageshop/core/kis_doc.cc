@@ -472,10 +472,9 @@ QCString KisDoc::mimeType() const
     return "application/x-kimageshop";
 }
 
-KoView* KisDoc::createView( QWidget* parent, const char* name )
+KoView* KisDoc::createViewInstance( QWidget* parent, const char* name )
 {
   KisView* view = new KisView( this, parent, name );
-  addView(view);
 
   QObject::connect( &m_commands, SIGNAL( undoRedoChanged( QString, QString ) ),
                     view, SLOT( slotUndoRedoChanged( QString, QString ) ) );

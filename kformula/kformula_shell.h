@@ -37,7 +37,6 @@ public:
 
 protected:
 //    virtual QString configFile() const;
-    virtual KoDocument* createDoc();
 };
 
 #endif

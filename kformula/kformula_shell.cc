@@ -39,9 +39,5 @@ QString KFormulaShell::configFile() const
 //    return readConfigFile( "kformula_shell.rc" );
 }
 */
-KoDocument* KFormulaShell::createDoc()
-{
-    return new KFormulaDoc;
-}
 
 #include "kformula_shell.moc"

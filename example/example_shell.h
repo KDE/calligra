@@ -34,9 +34,6 @@ public:
      */
     QString nativeFormatPattern() const { return "*.xmpl"; }
     QString nativeFormatName() const { return "Example"; }
-
-protected:
-    virtual KoDocument* createDoc() const;
 };
 
 #endif

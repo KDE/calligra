@@ -156,10 +156,10 @@ KoDocument::~KoDocument()
   for (; childIt.current(); ++childIt )
     disconnect( childIt.current(), SIGNAL( destroyed() ),
 		this, SLOT( slotChildDestroyed() ) );
-  
+
   d->m_children.setAutoDelete( true );
   d->m_children.clear();
-  
+
   /*
   KoDocumentChild *child=d->m_children.first();
   for( ; child!=0L; child=d->m_children.next()) {
@@ -201,6 +201,13 @@ bool KoDocument::isSingleViewMode() const
 
 bool KoDocument::isEmbedded() const {
   return parent() && parent()->inherits( "KoDocument" );
+}
+
+KoView *KoDocument::createView( QWidget *parent, const char *name ) {
+
+    KoView *view=createViewInstance(parent, name);
+    addView(view);
+    return view;
 }
 
 bool KoDocument::saveFile()
@@ -342,7 +349,7 @@ void KoDocument::slotChildDestroyed()
 {
   const KoDocumentChild *child = static_cast<const KoDocumentChild *>( sender() );
   d->m_children.removeRef( child );
-} 
+}
 
 void KoDocument::slotDestruct()
 {
