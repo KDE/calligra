@@ -124,9 +124,6 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, int leftMargin, const 
 	navPanelLyr->addSpacing( 6 );
 	navPanelLyr->addStretch(10);
 
-//	connect(m_navRecordNumber,SIGNAL(returnPressed(const QString&)),
-	//	this,SLOT(slotRecordNumberReturnPressed(const QString&)));
-//TODO	connect(m_navRecordNumber,SIGNAL(lostFocus()), this,SLOT(navRecordNumber_lostFocus()));
 	connect(m_navBtnPrev,SIGNAL(clicked()),this,SIGNAL(prevButtonClicked()));
 	connect(m_navBtnNext,SIGNAL(clicked()),this,SIGNAL(nextButtonClicked()));
 	connect(m_navBtnLast,SIGNAL(clicked()),this,SIGNAL(lastButtonClicked()));

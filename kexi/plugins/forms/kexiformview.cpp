@@ -310,24 +310,24 @@ void KexiFormScrollView::leaveEvent( QEvent *e )
 
 KexiFormView::KexiFormView(KexiMainWindow *win, QWidget *parent, const char *name, 
 	bool preview, KexiDB::Connection *conn)
- : KexiViewBase(win, parent, name), m_preview(preview), m_buffer(0), m_conn(conn)
+ : KexiViewBase(win, parent, name), m_buffer(0), m_conn(conn)
  , m_resizeMode(KexiFormView::ResizeDefault)
 {
 	QHBoxLayout *l = new QHBoxLayout(this);
 	l->setAutoAdd(true);
 
-	m_scrollView = new KexiFormScrollView(this, preview);
+	m_scrollView = new KexiFormScrollView(this, viewMode()==Kexi::DataViewMode);
 	setViewWidget(m_scrollView);
 //	m_scrollView->show();
 
 	m_dbform = new KexiDBForm(m_scrollView->viewport(), name/*, conn*/);
 //	m_dbform->resize(QSize(400, 300));
 	m_scrollView->setFormWidget(m_dbform);
-	m_scrollView->setResizingEnabled(!preview);
+	m_scrollView->setResizingEnabled(viewMode()!=Kexi::DataViewMode);
 
-	initForm();
+//	initForm();
 
-	if (preview) {
+	if (viewMode()==Kexi::DataViewMode) {
 		m_scrollView->viewport()->setPaletteBackgroundColor(m_dbform->palette().active().background());
 		connect(formPart()->manager(), SIGNAL(noFormSelected()), SLOT(slotNoFormSelected()));
 	}
@@ -382,6 +382,8 @@ KexiFormView::KexiFormView(KexiMainWindow *win, QWidget *parent, const char *nam
 		plugSharedAction("formpart_adjust_width_big", formPart()->manager(), SLOT(adjustWidthToBig()) );
 	}
 
+	initForm();
+
 	/// @todo skip this if ther're no borders
 //	m_dbform->resize( m_dbform->size()+QSize(m_scrollView->verticalScrollBar()->width(), m_scrollView->horizontalScrollBar()->height()) );
 }
@@ -393,7 +395,7 @@ KexiFormView::~KexiFormView()
 KFormDesigner::Form*
 KexiFormView::form() const
 {
-	if(m_preview)
+	if(viewMode()==Kexi::DataViewMode)
 		return tempData()->previewForm;
 	else
 		return tempData()->form;
@@ -402,7 +404,7 @@ KexiFormView::form() const
 void
 KexiFormView::setForm(KFormDesigner::Form *f)
 {
-	if(m_preview)
+	if(viewMode()==Kexi::DataViewMode)
 		tempData()->previewForm = f;
 	else
 		tempData()->form = f;
@@ -439,7 +441,7 @@ KexiFormView::initForm()
 	else
 		loadForm();
 
-	formPart()->manager()->importForm(form(), m_preview);
+	formPart()->manager()->importForm(form(), viewMode()==Kexi::DataViewMode);
 	m_scrollView->setForm(form());
 //	QSize s = m_dbform->size();
 //	QApplication::sendPostedEvents();
@@ -456,7 +458,7 @@ KexiFormView::loadForm()
 
 	kexipluginsdbg << "KexiDBForm::loadForm() Loading the form with id : " << parentDialog()->id() << endl;
 	// If we are previewing the Form, use the tempData instead of the form stored in the db
-	if(m_preview && !tempData()->tempForm.isNull() )
+	if(viewMode()==Kexi::DataViewMode && !tempData()->tempForm.isNull() )
 	{
 		KFormDesigner::FormIO::loadFormFromString(form(), m_dbform, tempData()->tempForm);
 		return;
@@ -478,7 +480,7 @@ KexiFormView::managerPropertyChanged(KexiPropertyBuffer *b)
 tristate
 KexiFormView::beforeSwitchTo(int mode, bool &dontStore)
 {
-	if (mode!=viewMode() && !m_preview) {
+	if (mode!=viewMode() && viewMode()!=Kexi::DataViewMode) {
 		//remember our pos
 		tempData()->scrollViewContentsPos 
 			= QPoint(m_scrollView->contentsX(), m_scrollView->contentsY());
@@ -507,9 +509,7 @@ KexiFormView::afterSwitchFrom(int mode)
 		//m_scrollView->moveChild(m_dbform, 0, 0);
 //	}
 
-	if((mode == Kexi::DesignViewMode) && m_preview) //aka !preview
-	{
-
+	if((mode == Kexi::DesignViewMode) && viewMode()==Kexi::DataViewMode) {
 		// The form may have been modified, so we must recreate the preview
 		delete m_dbform; // also deletes form()
 		m_dbform = new KexiDBForm(m_scrollView->viewport());
@@ -708,7 +708,7 @@ KexiFormView::preferredSizeHint(const QSize& otherSize)
 void
 KexiFormView::resizeEvent( QResizeEvent *e )
 {
-	if (m_preview) {
+	if (viewMode()==Kexi::DataViewMode) {
 		m_scrollView->refreshContentsSizeLater( 
 			e->size().width()!=e->oldSize().width(),
 			e->size().height()!=e->oldSize().height()

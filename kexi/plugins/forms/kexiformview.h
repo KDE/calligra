@@ -147,7 +147,6 @@ class KexiFormView : public KexiViewBase
 		KexiDB::Connection *m_conn;
 		int m_resizeMode;
 		KexiRecordNavigator* m_navPanel;
-		bool m_preview : 1;
 };
 
 #endif
