@@ -1,0 +1,30 @@
+/* XPM */
+static char *mini-kab[] = {
+/* width height num_colors chars_per_pixel */
+"    16    16        7            1",
+/* colors */
+". c #000000",
+"# c #ff00ff",
+"a c #ffffff",
+"b c #bebebe",
+"c c #b22222",
+"d c #808080",
+"e c #ff0000",
+/* pixels */
+"................",
+".##############c",
+".#ddddddddddddcc",
+".##ddd....ddddcc",
+"..###.......ddcc",
+".###..d.aac..dcc",
+".##.db.c......cc",
+".#..db.c.......c",
+"....db.ce...c..c",
+".###.dd.ceec.##c",
+".#d##.......##cc",
+".#dd#########dcc",
+".#ddddddddddddcc",
+".#ddddddddddddcc",
+".#cccccccccccccc",
+".ccccccccccccccc"
+};
