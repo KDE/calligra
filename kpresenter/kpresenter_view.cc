@@ -924,7 +924,7 @@ void KPresenterView::extraWebPres()
 
 	if( !url.isLocalFile() )
 	{
-	  KMessageBox::sorry( this, i18n( "Only local files supprted yet." ) );
+	  KMessageBox::sorry( this, i18n( "Only local files supported yet." ) );
 	  return;
 	}
 
