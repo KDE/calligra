@@ -204,7 +204,7 @@ KoFilter::ConversionStatus ASCIIImport::convert( const QCString& from, const QCS
     if (!dialog->exec())
     {
         kdDebug(30502) << "Dialog was aborted! Aborting filter!" << endl; // this isn't an error!
-        return KoFilter::StupidError;
+        return KoFilter::UserCancelled;
     }
 
     QTextCodec* codec=dialog->getCodec();

@@ -78,7 +78,7 @@ KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCSt
     if (!dialog->exec())
     {
         kdError(30503) << "Dialog was aborted! Aborting filter!" << endl;
-        return KoFilter::StupidError;
+        return KoFilter::UserCancelled;
     }
 
     HtmlWorker* worker;

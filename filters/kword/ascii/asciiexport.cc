@@ -344,7 +344,7 @@ KoFilter::ConversionStatus ASCIIExport::convert( const QCString& from, const QCS
     if (!dialog->exec())
     {
         kdError(30502) << "Dialog was aborted! Aborting filter!" << endl;
-        return KoFilter::StupidError;
+        return KoFilter::UserCancelled;
     }
 
     ASCIIWorker* worker=new ASCIIWorker();
