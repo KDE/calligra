@@ -134,10 +134,16 @@ static QString AmiProLayoutAsXML( const AmiProLayout& layout )
           layout.align==AmiProLayout::Justify ? "justify" :
           "left";
 
+  QString linespacing;
+  linespacing = layout.linespace==AmiProLayout::Single ? "0" :
+                layout.linespace==AmiProLayout::OneAndHalf ? "oneandhalf" :
+                layout.linespace==AmiProLayout::Double ? "double" :
+                  QString::number( layout.linespace );
+
   result.append( "<LAYOUT>\n" );
   result.append( "  <NAME value=\"" + referredStyle + "\" />\n" );
   result.append( "  <FLOW align=\"" + align + "\" />\n" );
-  result.append( "  <LINESPACING value=\"0\" />\n" );
+  result.append( "  <LINESPACING value=\"" + linespacing + "\" />\n" );
   result.append( "  <LEFTBORDER width=\"0\" style=\"0\" />\n" );
   result.append( "  <RIGHTBORDER width=\"0\" style=\"0\" />\n" );
   result.append( "  <TOPBORDER width=\"0\" style=\"0\" />\n" );

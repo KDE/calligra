@@ -47,6 +47,7 @@ class AmiProFormat
 
 typedef QValueList<AmiProFormat> AmiProFormatList;
 
+
 class AmiProLayout
 {
   public:
@@ -58,6 +59,8 @@ class AmiProLayout
     bool word_underline, double_underline;
     bool subscript, superscript, strikethrough;
     enum { Left, Center, Right, Justify } align;
+    const static float Single = -1, OneAndHalf = -1.5, Double = -2;
+    float linespace;
     AmiProLayout();
     AmiProLayout( const AmiProLayout& );
     AmiProLayout& operator=( const AmiProLayout& );
@@ -75,6 +78,8 @@ class AmiProStyle
     bool bold, italic, underline;
     bool word_underline, double_underline;
     bool subscript, superscript, strikethrough;
+    const static float Single = -1, OneAndHalf = -1.5, Double = -2;
+    float linespace;
     AmiProStyle();
     AmiProStyle( const AmiProStyle& );
     AmiProStyle& operator=( const AmiProStyle& );

@@ -172,6 +172,10 @@ bool AmiProParser::parseParagraph( const QString& partext )
 {
   m_text = "";
   m_formatList.clear();
+  m_layout = AmiProLayout();
+
+  // apply default style first
+  m_layout.applyStyle( findStyle( "Body Text" ) );
 
   for( unsigned i=0; i<partext.length(); i++ )
   {
@@ -224,6 +228,7 @@ bool AmiProParser::parseParagraph( const QString& partext )
         AmiProStyle style = findStyle( styleName );
         m_currentFormat.applyStyle( style );
         m_formatList.append( m_currentFormat ); 
+        m_layout.applyStyle( style );
       }
     }
 
@@ -246,20 +251,8 @@ bool AmiProParser::parseParagraph( const QString& partext )
     format.len = nextpos - format.pos;
   }
 
-  // copy layout for referred style
-  if( m_layout.name.isEmpty() ) m_layout.name = "Body Text";
-  AmiProStyle style = findStyle( m_layout.name );
-  m_layout.applyStyle( style );
-
-  bool result = true;
-
   if( m_listener ) 
-    result = m_listener->doParagraph( m_text, m_formatList, m_layout );
-
-  // reinit layout for subsequent paragraph
-  m_layout = AmiProLayout();
-
-  return result;
+    return m_listener->doParagraph( m_text, m_formatList, m_layout );
 }
 
 bool AmiProParser::parseStyle( const QStringList& lines )
@@ -455,6 +448,15 @@ bool AmiProParser::handleTag( const QString& tag )
   if( tag == "+C" )
     m_layout.align = AmiProLayout::Justify;
 
+  // linespace
+  if( tag.left( 3 ) == ":S+" )
+  {
+    float ls = tag.right( tag.length() - 3 ).toFloat();
+    m_layout.linespace = (ls == -1) ? AmiProLayout::Single :
+     (ls == -2) ? AmiProLayout::OneAndHalf :
+     (ls == -3) ? AmiProLayout::Double : ls / 20.0;
+  }
+
   // font
   if( tag.left( 2 ) == ":f" )
   {
@@ -546,6 +548,7 @@ AmiProLayout::AmiProLayout()
   word_underline = double_underline = 
   subscript = superscript = strikethrough = FALSE;
   align = Left;
+  linespace = Single;
 }
 
 void AmiProLayout::assign( const AmiProLayout &l )
@@ -563,6 +566,7 @@ void AmiProLayout::assign( const AmiProLayout &l )
   superscript = l.superscript;
   strikethrough = l.strikethrough;
   align = l.align;
+  linespace = l.linespace;
 }
 
 AmiProLayout::AmiProLayout( const AmiProLayout& l )
@@ -589,6 +593,7 @@ void AmiProLayout::applyStyle( const AmiProStyle& style )
   subscript = style.subscript;
   superscript = style.superscript;
   strikethrough = style.strikethrough;
+  linespace = style.linespace;
 }
 
 // style definition
@@ -601,6 +606,7 @@ AmiProStyle::AmiProStyle()
   bold = italic = underline = 
   word_underline = double_underline = 
   subscript = superscript = strikethrough = FALSE;
+  linespace = Single;
 }
 
 void AmiProStyle::assign( const AmiProStyle& s )
@@ -617,6 +623,7 @@ void AmiProStyle::assign( const AmiProStyle& s )
   subscript = s.subscript;
   superscript = s.superscript;
   strikethrough = s.strikethrough;
+  linespace = s.linespace;
 }
 
 AmiProStyle::AmiProStyle( const AmiProStyle& s )
