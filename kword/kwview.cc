@@ -596,10 +596,9 @@ void KWView::setupActions()
                                              this, SLOT( extraCreateTemplate() ),
                                              actionCollection(), "extra_template" );
     //------------------------ Configure
-    actionExtraOptions = new KAction( i18n( "&Configure..." ), 0,
+    actionExtraOptions = new KAction( i18n( "&Configure..." ),"configure",0,
                                       this, SLOT( configure() ),
                                       actionCollection(), "configure" );
-
 }
 
 /*======================== create GUI ==========================*/
