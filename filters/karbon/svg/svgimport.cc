@@ -435,7 +435,7 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 	obj->setFill( gc->fill );
 	obj->setStroke( gc->stroke );
 	QWMatrix mat = parseTransform( e.attribute( "transform" ) );
-	gc->matrix *= mat;
+	gc->matrix = mat * gc->matrix;
 	VTransformCmd trafo( 0L, gc->matrix );
 	trafo.visit( *obj );
 	m_gc.push( gc );
