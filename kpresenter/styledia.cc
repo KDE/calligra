@@ -262,16 +262,16 @@ StyleDia::StyleDia(QWidget* parent = 0,const char* name = 0,int flags = SD_PEN |
   else
     brushFrame->hide();
 
-  penFrame->setMinimumSize(penPrev->x() + penPrev->width() + 20,penPrev->y() + penPrev->height() + 20);
-  penFrame->setMaximumSize(penPrev->x() + penPrev->width() + 20,penPrev->y() + penPrev->height() + 20);
-  penFrame->resize(penPrev->x() + penPrev->width() + 20,penPrev->y() + penPrev->height() + 20);
-  
-  brushFrame->setMinimumSize(gPrev->x() + gPrev->width() + 20,gPrev->y() + gPrev->height() + 20);
-  brushFrame->setMaximumSize(gPrev->x() + gPrev->width() + 20,gPrev->y() + gPrev->height() + 20);
-  brushFrame->resize(gPrev->x() + gPrev->width() + 20,gPrev->y() + gPrev->height() + 20);
+  penFrame->setMinimumSize(penPrev->x() + penPrev->width() + 40,penPrev->y() + penPrev->height() + 40);
+  penFrame->setMaximumSize(penPrev->x() + penPrev->width() + 40,penPrev->y() + penPrev->height() + 40);
+  penFrame->resize(penPrev->x() + penPrev->width() + 40,penPrev->y() + penPrev->height() + 40);
 
-  resize(max(penFrame->size().width() + 5,brushFrame->size().width() + 5),
-	 max(penFrame->size().height() + 40 + chooseBCol->height(),brushFrame->size().height() + 40 + chooseBCol->height()));
+  brushFrame->setMinimumSize(gPrev->x() + gPrev->width() + 40,gPrev->y() + gPrev->height() + 40);
+  brushFrame->setMaximumSize(gPrev->x() + gPrev->width() + 40,gPrev->y() + gPrev->height() + 40);
+  brushFrame->resize(gPrev->x() + gPrev->width() + 40,gPrev->y() + gPrev->height() + 40);
+
+  resize(max(penFrame->size().width() + 30,brushFrame->size().width() + 30),
+	 max(penFrame->size().height() + 60 + chooseBCol->height(),brushFrame->size().height() + 60 + chooseBCol->height()));
 
   setCancelButton(i18n("Cancel"));
   setOKButton(i18n("OK"));

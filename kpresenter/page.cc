@@ -3160,10 +3160,11 @@ void Page::selectPrev()
 /*================================================================*/
 void Page::dragEnterEvent(QDragEnterEvent *e)
 {
-  if (QUrlDrag::canDecode(e) ||
-      QTextDrag::canDecode(e) ||
+  if (QTextDrag::canDecode(e) ||
       QImageDrag::canDecode(e))
     e->accept();
+  else
+    e->ignore();
 }
 
 /*================================================================*/
@@ -3174,6 +3175,11 @@ void Page::dragLeaveEvent(QDragLeaveEvent *e)
 /*================================================================*/
 void Page::dragMoveEvent(QDragMoveEvent *e)
 {
+  if (QTextDrag::canDecode(e) ||
+      QImageDrag::canDecode(e))
+    e->accept();
+  else
+    e->ignore();
 }
 
 /*================================================================*/
@@ -3206,6 +3212,7 @@ void Page::dropEvent(QDropEvent *e)
       QString cmd = "rm -f ";
       cmd += filename;
       system(cmd.ascii());
+      e->accept();
     }
   else if (QTextDrag::canDecode(e))
     {
@@ -3216,76 +3223,80 @@ void Page::dropEvent(QDropEvent *e)
       QTextDrag::decode(e,text);
 
       view->kPresenterDoc()->insertText(KRect(e->pos().x(),e->pos().y(),250,250),diffx(),diffy(),text,view);
+      e->accept();
     }
-  else if (QUrlDrag::canDecode(e))
-    {
-      setToolEditMode(TEM_MOUSE);
-      deSelectAllObj();
+  else
+    e->ignore();
+  
+//   else if (QUrlDrag::canDecode(e))
+//     {
+//       setToolEditMode(TEM_MOUSE);
+//       deSelectAllObj();
 
-      QStrList lst;
-      QUrlDrag::decode(e,lst);
+//       QStrList lst;
+//       QUrlDrag::decode(e,lst);
 
-      QString str;
-      for (str = lst.first();!str.isEmpty();str = lst.next())
-	{
-// 	  QString uid = getenv("USER");
-// 	  QString num;
-// 	  num.setNum(objectList()->count());
-// 	  uid += "_";
-// 	  uid += num;
+//       QString str;
+//       for (str = lst.first();!str.isEmpty();str = lst.next())
+// 	{
+// // 	  QString uid = getenv("USER");
+// // 	  QString num;
+// // 	  num.setNum(objectList()->count());
+// // 	  uid += "_";
+// // 	  uid += num;
 		
-// 	  QString filename = "/tmp/kpresenter";
-// 	  filename += uid;
+// // 	  QString filename = "/tmp/kpresenter";
+// // 	  filename += uid;
 		
-// 	  KIOJob *job = new KIOJob("kpresenter job");
-// 	  job->copy(str,filename);
+// // 	  KIOJob *job = new KIOJob("kpresenter job");
+// // 	  job->copy(str,filename);
 
-	  // Currently we only allow local files - this should be changed later
-	  KURL url(str);
-	  if (!url.isLocalFile()) return;
+// 	  // Currently we only allow local files - this should be changed later
+// 	  KURL url(str);
+// 	  if (!url.isLocalFile()) return;
 
-	  QString filename = url.path();
- 	  KMimeMagicResult *res = KMimeMagic::self()->findFileType(filename);
+// 	  QString filename = url.path();
+//  	  KMimeMagicResult *res = KMimeMagic::self()->findFileType(filename);
 	
-	  if (res && res->isValid())
-	    {
-	      QString mimetype = res->mimeType();
-	      if (mimetype.contains("image"))
-		{
-		  QCursor c = cursor();
-		  setCursor(waitCursor);
-		  view->kPresenterDoc()->insertPicture(filename,e->pos().x(),e->pos().y());
-      		  setCursor(c);
-		  continue;
-		}	
+// 	  if (res && res->isValid())
+// 	    {
+// 	      QString mimetype = res->mimeType();
+// 	      if (mimetype.contains("image"))
+// 		{
+// 		  QCursor c = cursor();
+// 		  setCursor(waitCursor);
+// 		  view->kPresenterDoc()->insertPicture(filename,e->pos().x(),e->pos().y());
+//       		  setCursor(c);
+// 		  continue;
+// 		}	
 	
-	    }
+// 	    }
 	
-	  // open any non-picture as text
-	  // in the future we should open specific mime types with "their" programms and embed them
-	  QFile f(filename);
-	  QTextStream t(&f);
-	  QString text = "",tmp;
+// 	  // open any non-picture as text
+// 	  // in the future we should open specific mime types with "their" programms and embed them
+// 	  QFile f(filename);
+// 	  QTextStream t(&f);
+// 	  QString text = "",tmp;
 
-	  if (f.open(IO_ReadOnly))
-	    {
-	      while (!t.eof())
-		{
-		  tmp = t.readLine();
-		  tmp += "\n";
-		  text.append(tmp);
-		}
-	      f.close();
-	    }
-	  view->kPresenterDoc()->insertText(KRect(e->pos().x(),e->pos().y(),250,250),diffx(),diffy(),text,view);
+// 	  if (f.open(IO_ReadOnly))
+// 	    {
+// 	      while (!t.eof())
+// 		{
+// 		  tmp = t.readLine();
+// 		  tmp += "\n";
+// 		  text.append(tmp);
+// 		}
+// 	      f.close();
+// 	    }
+// 	  view->kPresenterDoc()->insertText(KRect(e->pos().x(),e->pos().y(),250,250),diffx(),diffy(),text,view);
 
-// 	  QString cmd = "rm -f ";
-// 	  cmd += filename;
-// 	  system(cmd.ascii());
+// // 	  QString cmd = "rm -f ";
+// // 	  cmd += filename;
+// // 	  system(cmd.ascii());
 	
-// 	  delete job;
-	}
-    }
+// // 	  delete job;
+// 	}
+//     }
 }
 
 /*================================================================*/

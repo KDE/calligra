@@ -32,20 +32,20 @@ class QPushButton;
 class KPFooterHeaderEditor : public QVBox
 {
   Q_OBJECT
-  
+
 public:
   KPFooterHeaderEditor(KPresenterDoc *_doc);
   ~KPFooterHeaderEditor();
 
   void allowClose()
   { _allowClose = true; }
-  
+
   void updateSizes();
-  
+
 protected:
   void setupHeader();
   void setupFooter();
-  
+
   void closeEvent(QCloseEvent *e) {
     // this dialog must not get closed!!
     if (!_allowClose) {
@@ -55,19 +55,21 @@ protected:
       QVBox::closeEvent(e);
     }
   }
-  
+
   QTabWidget *tabwidget;
   QCheckBox *showHeader,*showFooter;
-  QPushButton *updatePage,*closeDia;
-  
+  QPushButton *updatePage,*closeDia,*penBrush1,*penBrush2;
+
   KPresenterDoc *doc;
   bool _allowClose;
-  
+
 protected slots:
   void slotShowHeader();
   void slotShowFooter();
   void slotUpdatePage();
   void slotCloseDia();
+  void slotHeaderPenBrush();
+  void slotFooterPenBrush();
   
 };
 

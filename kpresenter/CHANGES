@@ -176,3 +176,8 @@ Reggie, 10.5.1999:
 - Implemented "Extend contents to object height" feature for textobjects
   (this means the linespacing/paragraphspacing is set to values then,
    so that the text fills the whole object rectangle)
+
+Reggie, 12.5.1999:
+------------------
+- DnD Fixes
+- Implemented configuration of background and frame for headers and footers
