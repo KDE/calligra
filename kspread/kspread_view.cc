@@ -402,6 +402,8 @@ public:
     void adjustActions( bool mode );
     void adjustActions( KSpreadSheet* sheet, KSpreadCell* cell );
     void adjustWorkbookActions( bool mode );
+    void updateButton( KSpreadCell *cell, int column, int row);
+    QButton* newIconButton( const char *_file, bool _kbutton = false, QWidget *_parent = 0L );
 };
 
 KSpreadScripts* ViewPrivate::globalScriptsDlg = 0L;
@@ -1451,6 +1453,74 @@ void ViewPrivate::adjustWorkbookActions( bool mode )
   }
 }
 
+// TODO this should be merged with adjustActions
+void ViewPrivate::updateButton( KSpreadCell *cell, int column, int row)
+{
+    toolbarLock = TRUE;
+
+    QColor color=cell->textColor( column, row );
+    if (!color.isValid())
+        color=QApplication::palette().active().text();
+    actions->textColor->setCurrentColor( color );
+
+    color=cell->bgColor(  column, row );
+
+    if ( !color.isValid() )
+        color = QApplication::palette().active().base();
+
+    actions->bgColor->setCurrentColor( color );
+
+    actions->selectFontSize->setFontSize( cell->textFontSize( column, row ) );
+    actions->selectFont->setFont( cell->textFontFamily( column,row ) );
+    actions->bold->setChecked( cell->textFontBold( column, row ) );
+    actions->italic->setChecked( cell->textFontItalic(  column, row) );
+    actions->underline->setChecked( cell->textFontUnderline( column, row ) );
+    actions->strikeOut->setChecked( cell->textFontStrike( column, row ) );
+
+    actions->alignLeft->setChecked( cell->align( column, row ) == KSpreadFormat::Left );
+    actions->alignCenter->setChecked( cell->align( column, row ) == KSpreadFormat::Center );
+    actions->alignRight->setChecked( cell->align( column, row ) == KSpreadFormat::Right );
+
+    actions->alignTop->setChecked( cell->alignY( column, row ) == KSpreadFormat::Top );
+    actions->alignMiddle->setChecked( cell->alignY( column, row ) == KSpreadFormat::Middle );
+    actions->alignBottom->setChecked( cell->alignY( column, row ) == KSpreadFormat::Bottom );
+
+    actions->verticalText->setChecked( cell->verticalText( column,row ) );
+
+    actions->wrapText->setChecked( cell->multiRow( column,row ) );
+
+    KSpreadCell::FormatType ft = cell->formatType();
+    actions->percent->setChecked( ft == KSpreadCell::Percentage );
+    actions->money->setChecked( ft == KSpreadCell::Money );
+
+    if ( activeSheet && !activeSheet->isProtected() )
+      actions->removeComment->setEnabled( !cell->comment(column,row).isEmpty() );
+
+    if ( activeSheet && !activeSheet->isProtected() )
+      actions->decreaseIndent->setEnabled( cell->getIndent( column, row ) > 0.0 );
+
+    toolbarLock = FALSE;
+    if ( activeSheet )
+      adjustActions( activeSheet, cell );
+}
+
+
+
+QButton* ViewPrivate::newIconButton( const char *_file, bool _kbutton, QWidget *_parent )
+{
+  if ( _parent == 0L )
+    _parent = view;
+
+  QButton *pb;
+  if ( !_kbutton )
+    pb = new QPushButton( _parent );
+  else
+    pb = new QToolButton( _parent );
+  pb->setPixmap( QPixmap( KSBarIcon(_file) ) );
+
+  return pb;
+}
+
 /*****************************************************************************
  *
  * KSpreadView
@@ -1553,9 +1623,9 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     hbox->addWidget( d->posWidget );
     hbox->addSpacing( 6 );
 
-    d->cancelButton = newIconButton( "cancel", TRUE, d->toolWidget );
+    d->cancelButton = d->newIconButton( "cancel", TRUE, d->toolWidget );
     hbox->addWidget( d->cancelButton );
-    d->okButton = newIconButton( "ok", TRUE, d->toolWidget );
+    d->okButton = d->newIconButton( "ok", TRUE, d->toolWidget );
     hbox->addWidget( d->okButton );
     hbox->addSpacing( 6 );
 
@@ -2357,56 +2427,6 @@ void KSpreadView::initialPosition()
 }
 
 
-void KSpreadView::updateButton( KSpreadCell *cell, int column, int row)
-{
-    d->toolbarLock = TRUE;
-
-    QColor color=cell->textColor( column, row );
-    if (!color.isValid())
-        color=QApplication::palette().active().text();
-    d->actions->textColor->setCurrentColor( color );
-
-    color=cell->bgColor(  column, row );
-
-    if ( !color.isValid() )
-        color = QApplication::palette().active().base();
-
-    d->actions->bgColor->setCurrentColor( color );
-
-    d->actions->selectFontSize->setFontSize( cell->textFontSize( column, row ) );
-    d->actions->selectFont->setFont( cell->textFontFamily( column,row ) );
-    d->actions->bold->setChecked( cell->textFontBold( column, row ) );
-    d->actions->italic->setChecked( cell->textFontItalic(  column, row) );
-    d->actions->underline->setChecked( cell->textFontUnderline( column, row ) );
-    d->actions->strikeOut->setChecked( cell->textFontStrike( column, row ) );
-
-    d->actions->alignLeft->setChecked( cell->align( column, row ) == KSpreadFormat::Left );
-    d->actions->alignCenter->setChecked( cell->align( column, row ) == KSpreadFormat::Center );
-    d->actions->alignRight->setChecked( cell->align( column, row ) == KSpreadFormat::Right );
-
-    d->actions->alignTop->setChecked( cell->alignY( column, row ) == KSpreadFormat::Top );
-    d->actions->alignMiddle->setChecked( cell->alignY( column, row ) == KSpreadFormat::Middle );
-    d->actions->alignBottom->setChecked( cell->alignY( column, row ) == KSpreadFormat::Bottom );
-
-    d->actions->verticalText->setChecked( cell->verticalText( column,row ) );
-
-    d->actions->wrapText->setChecked( cell->multiRow( column,row ) );
-
-    KSpreadCell::FormatType ft = cell->formatType();
-    d->actions->percent->setChecked( ft == KSpreadCell::Percentage );
-    d->actions->money->setChecked( ft == KSpreadCell::Money );
-
-    if ( d->activeSheet && !d->activeSheet->isProtected() )
-      d->actions->removeComment->setEnabled( !cell->comment(column,row).isEmpty() );
-
-    if ( d->activeSheet && !d->activeSheet->isProtected() )
-      d->actions->decreaseIndent->setEnabled( cell->getIndent( column, row ) > 0.0 );
-
-    d->toolbarLock = FALSE;
-    if ( d->activeSheet )
-      d->adjustActions( d->activeSheet, cell );
-}
-
 void KSpreadView::updateEditWidgetOnPress()
 {
     int column = d->canvas->markerColumn();
@@ -2427,7 +2447,7 @@ void KSpreadView::updateEditWidgetOnPress()
     else
         editWidget()->setText( cell->text() );
 
-    updateButton(cell, column, row);
+    d->updateButton(cell, column, row);
     d->adjustActions( d->activeSheet, cell );
 }
 
@@ -2476,7 +2496,7 @@ void KSpreadView::updateEditWidget()
       d->canvas->editor()->setEditorFont(cell->textFont(column, row), true);
       d->canvas->editor()->setFocus();
     }
-    updateButton(cell, column, row);
+    d->updateButton(cell, column, row);
     d->adjustActions( d->activeSheet, cell );
 }
 
@@ -2667,21 +2687,6 @@ void KSpreadView::setSelectionBorderColor(const QColor &bdColor)
 void KSpreadView::helpUsing()
 {
   kapp->invokeHelp( );
-}
-
-QButton * KSpreadView::newIconButton( const char *_file, bool _kbutton, QWidget *_parent )
-{
-  if ( _parent == 0L )
-    _parent = this;
-
-  QButton *pb;
-  if ( !_kbutton )
-    pb = new QPushButton( _parent );
-  else
-    pb = new QToolButton( _parent );
-  pb->setPixmap( QPixmap( KSBarIcon(_file) ) );
-
-  return pb;
 }
 
 void KSpreadView::enableUndo( bool _b )
