@@ -46,13 +46,13 @@ class KSpreadCell;
 class KSpreadLocationEditWidget;
 class KoDocumentEntry;
 class KStatusBarLabel;
-//class KSelectColorAction;
 class TKSelectColorAction;
 class KAction;
 class KSelectAction;
 class KFontAction;
 class KFontSizeAction;
 class KToggleAction;
+class KoPartSelectAction;
 
 class KActionMenu;
 
@@ -521,6 +521,8 @@ private:
     KToggleAction* m_menuCalcAverage;
     KToggleAction* m_menuCalcCount;
     KToggleAction* m_menuCalcSum;
+
+    KoPartSelectAction *m_insertPart;
 
     /**
      * Pointer to the last popup menu.

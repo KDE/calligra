@@ -59,7 +59,7 @@
 #include <koQueryTrader.h>
 #include <koReplace.h>
 #include <koMainWindow.h>
-
+#include <koPartSelectAction.h>
 
 
 #include "kspread_map.h"
@@ -385,7 +385,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
                         actionCollection(), "insertMathExpr" );
     (void) new KAction( i18n("&Series..."),"series", 0, this, SLOT( insertSeries() ), actionCollection(), "series" );
     (void) new KAction( i18n("&Hyperlink..."), 0, this, SLOT( insertHyperlink() ), actionCollection(), "insertHyperlink" );
-    (void) new KAction( i18n("&Object..."), "frame_query", 0, this, SLOT( insertObject() ),
+    m_insertPart=new KoPartSelectAction( i18n("&Object..."), "frame_query", this, SLOT( insertObject() ),
                         actionCollection(), "insertPart");
     (void) new KAction( i18n("&Chart"), "frame_chart", 0, this, SLOT( insertChart() ), actionCollection(), "insertChart" );
 
@@ -2655,7 +2655,7 @@ void KSpreadView::percent( bool b)
 
 void KSpreadView::insertObject()
 {
-  KoDocumentEntry e = KoPartSelectDia::selectPart( m_pCanvas );
+    KoDocumentEntry e =  m_insertPart->documentEntry();//KoPartSelectDia::selectPart( m_pCanvas );
   if ( e.isEmpty() )
     return;
 
