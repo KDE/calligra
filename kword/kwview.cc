@@ -607,9 +607,7 @@ void KWView::setupActions()
 
     // ---------------------- Tools menu
 
-    actionEditCustomVars = new KAction( i18n( "&Custom Variables..." ), 0,
-                                        this, SLOT( editCustomVars() ),
-                                        actionCollection(), "edit_customvars" );
+
     (void) new KAction( i18n( "&Autocorrection..." ), 0,
                         this, SLOT( extraAutoFormat() ),
                         actionCollection(), "extra_autocorrection" );
@@ -756,6 +754,13 @@ void KWView::refreshCustomMenu()
 
     act = new KAction( i18n("New..."), 0, this, SLOT( insertNewCustomVariable() ), actionCollection(), "custom-action" );
     actionInsertCustom->insert( act );
+
+    actionInsertCustom->popupMenu()->insertSeparator();
+
+    actionEditCustomVars = new KAction( i18n( "&Custom Variables..." ), 0,
+                                        this, SLOT( editCustomVars() ),
+                                        actionCollection(), "edit_customvars" );
+    actionInsertCustom->insert( actionEditCustomVars );
 }
 
 
