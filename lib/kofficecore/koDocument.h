@@ -138,6 +138,11 @@ protected:
   /**
    *  If you want to write additional files to a store,
    *  the you must do it here.
+   *  In the implementation, you should prepend the document
+   *  url before the filename, so that everything is kept relative
+   *  to this document. For instance it will produce urls such as
+   *  store:/1/pictures/picture0.png, if the doc url is store:/1
+   *  But do this ONLY if the document is stored extern (see @ref #isStoredExtern)
    */
   virtual bool completeSaving( KOStore::Store_ptr /* _store */ )
   { return true; }
@@ -202,6 +207,12 @@ protected:
    *  </PRE>
    */
   virtual bool hasToWriteMultipart() = 0;
+
+  /**
+   * Return true if url() is a real filename, false if url() is
+   * an internal url in the store, like "store:/..."
+   */
+  virtual bool isStoredExtern();
 
   /**
    *  Internal class. Dont use.
