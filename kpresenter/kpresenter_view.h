@@ -661,7 +661,7 @@ protected slots:
     void setExtraPenWidth( unsigned int width );
 
     void stopPres() {continuePres = false; }
-    void newPageLayout( KoPageLayout _layout );
+    void newPageLayout( const KoPageLayout &_layout );
     void openPageLayoutDia() { extraLayout(); }
     void unitChanged( QString );
 

@@ -2168,7 +2168,7 @@ void KPresenterView::setExtraPenWidth( unsigned int width )
         pen.setWidth( width );
 }
 
-void KPresenterView::newPageLayout( KoPageLayout _layout )
+void KPresenterView::newPageLayout( const KoPageLayout &_layout )
 {
     KoPageLayout oldLayout = m_pKPresenterDoc->pageLayout();
     KoUnit::Unit unit = m_pKPresenterDoc->getUnit(); // unchanged
@@ -4111,8 +4111,8 @@ void KPresenterView::setupRulers()
 
     QObject::connect( h_ruler, SIGNAL( unitChanged( QString ) ),
                       this, SLOT( unitChanged( QString ) ) );
-    QObject::connect( h_ruler, SIGNAL( newPageLayout( KoPageLayout ) ),
-                      this, SLOT( newPageLayout( KoPageLayout ) ) );
+    QObject::connect( h_ruler, SIGNAL( newPageLayout( const KoPageLayout & ) ),
+                      this, SLOT( newPageLayout( const KoPageLayout & ) ) );
 
     QObject::connect( h_ruler, SIGNAL( addHelpline( const QPoint &, bool ) ),
                       this, SLOT( addHelpline( const QPoint &, bool ) ) );
@@ -4128,8 +4128,8 @@ void KPresenterView::setupRulers()
 
     QObject::connect( v_ruler, SIGNAL( unitChanged( QString ) ),
                       this, SLOT( unitChanged( QString ) ) );
-    QObject::connect( v_ruler, SIGNAL( newPageLayout( KoPageLayout ) ),
-                      this, SLOT( newPageLayout( KoPageLayout ) ) );
+    QObject::connect( v_ruler, SIGNAL( newPageLayout( const KoPageLayout & ) ),
+                      this, SLOT( newPageLayout( const KoPageLayout & ) ) );
     QObject::connect( v_ruler, SIGNAL( doubleClicked() ),
                       this, SLOT( openPageLayoutDia() ) );
 
