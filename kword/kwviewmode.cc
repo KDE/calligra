@@ -21,6 +21,7 @@
 //#include <kotextdocument.h>
 #include "kwdoc.h"
 #include <kdebug.h>
+#include <kdebugclasses.h>
 #include <kwtextframeset.h>
 
 QSize KWViewModeNormal::contentsSize()
@@ -244,6 +245,8 @@ void KWViewModePreview::drawPageBorders( QPainter * painter, const QRect & crect
 KWTextFrameSet * KWViewModeText::textFrameSet() const
 {
     KWFrameSet * fs = m_doc->frameSet( 0 );
+    Q_ASSERT( fs );
+    Q_ASSERT( fs->type() == FT_TEXT );
     if ( !fs || fs->type() != FT_TEXT )
         return 0L;
     return static_cast<KWTextFrameSet *>(fs);
@@ -252,17 +255,19 @@ KWTextFrameSet * KWViewModeText::textFrameSet() const
 QPoint KWViewModeText::normalToView( const QPoint & nPoint )
 {
     KWTextFrameSet * textfs = textFrameSet();
-    if (!textfs || !QRect(0,0,textfs->textDocument()->width(), textfs->availableHeight()).contains(nPoint))
+    if ( !textfs )
         return nPoint;
     else
     {
         QPoint iPoint;
+        // We use documentToInternalMouseSelection to benefit from a bit of tolerance.
+        // This is helpful against rounding errors (e.g. x in pt = 28.0, zoomed = 29, unzooming = 27.8)
         KWTextFrameSet::RelativePosition relPos;
-        if ( textfs->documentToInternalMouseSelection( textfs->kWordDocument()->unzoomPoint( nPoint ), iPoint, relPos ) )
-            return iPoint;
+        if ( textfs->documentToInternalMouseSelection( m_doc->unzoomPoint( nPoint ), iPoint, relPos ) )
+            return m_doc->layoutUnitToPixel( iPoint );
         else
         {
-            kdWarning() << "KWViewModeText: normalToInternal returned 0L for"
+            kdWarning() << "KWViewModeText: documentToInternal returned 0L for "
                         << nPoint.x() << "," << nPoint.y() << endl;
             return nPoint;
         }
@@ -272,17 +277,20 @@ QPoint KWViewModeText::normalToView( const QPoint & nPoint )
 QPoint KWViewModeText::viewToNormal( const QPoint & vPoint )
 {
     KWTextFrameSet * textfs = textFrameSet();
-    if (!textfs || !QRect(0,0,textfs->textDocument()->width(), textfs->availableHeight()).contains(vPoint))
+    QRect contentsRect( QPoint(0,0), contentsSize() );
+    if ( !textfs || !contentsRect.contains(vPoint) )
         return vPoint;
     else
     {
+        QPoint iPoint = m_doc->pixelToLayoutUnit( vPoint );
         KoPoint dPoint;
-        if ( textfs->internalToDocument( vPoint, dPoint ) )
+        if ( textfs->internalToDocument( iPoint, dPoint ) )
             return textfs->kWordDocument()->zoomPoint( dPoint );
         else
         {
-            kdWarning() << "KWViewModeText: internalToNormal returned 0L for "
-                        << vPoint.x() << "," << vPoint.y() << endl;
+            kdWarning() << "KWViewModeText: internalToDocument returned 0L for iPoint "
+                        << iPoint.x() << "," << iPoint.y()
+                        << " (vPoint: " << vPoint << ")" << endl;
             return vPoint;
         }
     }
@@ -293,7 +301,17 @@ QSize KWViewModeText::contentsSize()
     KWTextFrameSet * textfs = textFrameSet();
     if (!textfs)
         return QSize();
-    return QSize( textfs->textDocument()->width(), textfs->availableHeight() + 1 /*bottom line*/ );
+    // Hmm, availableHeight relies on the formatting being done - problem?
+    //QSize luSize( textfs->textDocument()->width(), textfs->availableHeight() + 1 /*bottom line*/ );
+
+    // The actual contents only depend on the amount of text.
+    QSize luSize( textfs->textDocument()->width(), textfs->textDocument()->height() /* + 1 bottom line*/ );
+
+    // But we want to show at least a page if the doc is empty, IMHO.
+    int pageHeight = m_doc->zoomItY( textfs->frame(0)->height() );
+
+    return QSize( m_doc->layoutUnitToPixelX( luSize.width() ),
+                  QMAX( m_doc->layoutUnitToPixelY( luSize.height() ), pageHeight ) );
 }
 
 bool KWViewModeText::isFrameSetVisible( const KWFrameSet *fs )
@@ -320,24 +338,27 @@ void KWViewModeText::drawPageBorders( QPainter * painter, const QRect & crect,
         return;
     painter->save();
     QRegion grayRegion( crect );
+    //kdDebug() << "\nKWViewModeText::drawPageBorders crect=" << grayRegion << endl;
     QPtrListIterator<KWFrame> it( textfs->frameIterator() );
     painter->setPen( QApplication::palette().active().color( QColorGroup::Dark ) );
-    // Draw a line on the right of every frame
-    for ( ; it.current() ; ++it )
+    QSize cSize = contentsSize();
+    // Draw a line on the right -- ## or a shadow?
+    QRect frameRect( 0, 0, cSize.width() + 1, cSize.height() );
+    //kdDebug() << "KWViewModeText::drawPageBorders right line: "  << frameRect.topRight() << "   " << frameRect.bottomRight()<< endl;
+    painter->drawLine( frameRect.topRight(), frameRect.bottomRight() );
+    if ( frameRect.intersects( crect ) )
+        grayRegion -= frameRect;
+
+    //kdDebug() << "KWViewModeText::drawPageBorders grayRegion is now " << grayRegion << endl;
+    if ( crect.bottom() >= cSize.height() )
     {
-        QRect frameRect( m_doc->zoomRect( *it.current() ) );
-        painter->drawLine( frameRect.topRight(), frameRect.bottomRight() );
-        if ( frameRect.intersects( crect ) )
-            grayRegion -= frameRect;
+        // And draw a line at the bottom -- ## or a shadow?
+        painter->drawLine( 0, cSize.height(),
+                           cSize.width(), cSize.height() );
+        grayRegion -= QRect( 0, cSize.height(),
+                             cSize.width(), cSize.height() );
     }
-    if ( crect.bottom() >= textfs->availableHeight() )
-    {
-        // And draw a line at the bottom.
-        painter->drawLine( 0, textfs->availableHeight(),
-                           textfs->textDocument()->width(), textfs->availableHeight() );
-        grayRegion -= QRect( 0, textfs->availableHeight(),
-                           textfs->textDocument()->width(), textfs->availableHeight() );
-    }
+    //kdDebug() << "KWViewModeText::drawPageBorders erasing grayRegion " << grayRegion << endl;
     if ( !grayRegion.isEmpty() )
         m_doc->eraseEmptySpace( painter, grayRegion, QApplication::palette().active().brush( QColorGroup::Mid ) );
     painter->restore();
