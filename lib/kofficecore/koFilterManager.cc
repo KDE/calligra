@@ -48,6 +48,7 @@ public:
     QString exportFile;
     QString native_format, mime_type;
     bool prepare;
+    const KoDocument *document;
     QValueList<KoFilterEntry> m_vec;
     PreviewStack *ps;
     mutable QMap<QString, int> dialogMap;
@@ -341,6 +342,7 @@ QString KoFilterManager::prepareExport( const QString & file, const char *_nativ
 {
     d->exportFile=file;
     d->native_format=_native_format;
+    d->document=document;
     KURL url( d->exportFile );
 
     KMimeType::Ptr t = KMimeType::findByURL( url, 0, url.isLocalFile() );
@@ -386,6 +388,7 @@ QString KoFilterManager::prepareExport( const QString & file, const char *_nativ
     while(i<vec.count() && !ok) {
         KoFilter* filter = vec[i].createFilter();
         ASSERT( filter );
+	QObject::connect(filter, SIGNAL(sigProgress(int)), document, SLOT(slotProgress(int)));
 	
 	if(vec[i].implemented.lower()=="file")
 	    tmpFileNeeded=true;
@@ -394,6 +397,8 @@ QString KoFilterManager::prepareExport( const QString & file, const char *_nativ
 	    // if(ok)
 	    //	document->changedByFilter();
 	}
+	const_cast<KoDocument*>(document)->slotProgress(-1);
+	QObject::disconnect(filter, SIGNAL(sigProgress(int)), document, SLOT(slotProgress(int)));
         delete filter;
         ++i;
     }
@@ -419,8 +424,11 @@ const bool KoFilterManager::export_() {
 	if(d->m_vec[i].implemented.lower()=="file") {
 	    KoFilter* filter = d->m_vec[i].createFilter();
 	    ASSERT( filter );
+	    QObject::connect(filter, SIGNAL(sigProgress(int)), d->document, SLOT(slotProgress(int)));
 	    ok=filter->filter( QCString(d->tmpFile), QCString(d->exportFile), QCString(d->native_format),
 			       QCString(d->mime_type), d->config );
+	    const_cast<KoDocument*>(d->document)->slotProgress(-1);
+	    QObject::disconnect(filter, SIGNAL(sigProgress(int)), d->document, SLOT(slotProgress(int)));
 	    delete filter;
 	}
         ++i;

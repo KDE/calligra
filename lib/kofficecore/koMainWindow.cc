@@ -365,6 +365,7 @@ bool KoMainWindow::openDocument( const KURL & url )
 bool KoMainWindow::saveDocument( bool saveas )
 {
     KoDocument* pDoc = rootDocument();
+    connect(pDoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
 
     QCString _native_format = pDoc->nativeFormatMimeType();
 
@@ -412,17 +413,21 @@ bool KoMainWindow::saveDocument( bool saveas )
         } while ( !bOk );
         KoFilterManager::self()->cleanUp();
         delete dialog;
-        if (bOk)
-        {
-            m_recent->addURL( newURL );
-            bool ret = pDoc->saveAs( newURL );
-            pDoc->setTitleModified();
-            return ret;
-        }
-        return false;
+	if (bOk) {
+	    m_recent->addURL( newURL );
+	    bool ret = pDoc->saveAs( newURL );
+	    pDoc->setTitleModified();
+	    disconnect(pDoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
+	    return ret;
+	}
+	disconnect(pDoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
+	return false;
     }
-    else
-      return pDoc->save();
+    else {
+	bool ret=pDoc->save();
+	disconnect(pDoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
+	return ret;
+    }
 }
 
 bool KoMainWindow::queryClose()
@@ -656,7 +661,6 @@ void KoMainWindow::slotProgress(int value) {
 	//d->m_progress->setMaximumHeight(statusBar()->height());
 	statusBar()->addWidget( d->m_progress, 0, true );
 	d->m_progress->show();
-	// single shot, 1.5s :)
 	d->m_firstTime=false;
     }
     d->m_progress->setValue(value);
