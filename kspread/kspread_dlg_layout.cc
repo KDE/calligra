@@ -558,6 +558,9 @@ void CellLayoutDlg::slotApply()
     QRect r;
     r.setCoords( left, top, right, bottom );
     m_pView->slotUpdateView( table, r );
+    m_pView->doc()->setModified( true );
+    // Update the toolbar (bold/italic/font...)
+    m_pView->updateEditWidget();
 }
 
 

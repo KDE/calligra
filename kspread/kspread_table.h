@@ -425,8 +425,8 @@ public:
      * A convenience function which retrieves the data to be pasted
      * from the clipboard.
      */
-    void paste( const QPoint &_marker, PasteMode=Normal, Operation=OverWrite );
-    void paste( const QByteArray& data, const QPoint &_marker, PasteMode=Normal, Operation=OverWrite );
+    void paste( const QPoint &_marker,bool makeUndo=true, PasteMode=Normal, Operation=OverWrite );
+    void paste( const QByteArray& data, const QPoint &_marker,bool makeUndo=false, PasteMode=Normal, Operation=OverWrite );
     void defaultSelection( const QPoint &_marker );
 
     bool replace( const QPoint &_marker,QString _find,QString _replace,bool b_sensitive, bool b_whole );
@@ -668,7 +668,9 @@ public:
     /**
      * @see #paste
      */
-    bool loadSelection( const QDomDocument& doc, int _xshift, int _yshift,PasteMode = Normal, Operation = OverWrite );
+    bool loadSelection( const QDomDocument& doc, int _xshift, int _yshift,bool makeUndo,PasteMode = Normal, Operation = OverWrite );
+
+    void loadSelectionUndo( const QDomDocument & doc,int _xshift, int _yshift);
 
     /**
      * Deletes all cells in the given rectangle.

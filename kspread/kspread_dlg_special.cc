@@ -121,7 +121,7 @@ void KSpreadspecial::slotOk()
 	op = Div;
 
     m_pView->activeTable()->paste( QPoint(  m_pView->canvasWidget()->markerColumn(),
-					    m_pView->canvasWidget()->markerRow() ), sp, op );
+					    m_pView->canvasWidget()->markerRow() ),true, sp, op );
     accept();
 }
 

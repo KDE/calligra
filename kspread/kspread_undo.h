@@ -377,6 +377,32 @@ protected:
     QString m_tableName;
 };
 
+
+class KSpreadUndoCellPaste : public KSpreadUndoAction
+{
+public:
+    KSpreadUndoCellPaste( KSpreadDoc *_doc, KSpreadTable *_table,int _nbCol,int _nbRow, int _xshift,int _yshift, QRect &_selection );
+    virtual ~KSpreadUndoCellPaste();
+
+    virtual void undo();
+    virtual void redo();
+    void createListCell( QCString &listCell,QValueList<columnSize> &listCol,QValueList<rowSize> &listRow, KSpreadTable* table );
+
+protected:
+    QRect m_selection;
+    QCString m_data;
+    QCString m_dataRedo;
+    QValueList<columnSize> m_lstColumn;
+    QValueList<columnSize> m_lstRedoColumn;
+    QValueList<rowSize> m_lstRow;
+    QValueList<rowSize> m_lstRedoRow;
+    int nbCol;
+    int nbRow;
+    int xshift;
+    int yshift;
+    QString m_tableName;
+};
+
 class KSpreadUndo
 {
 public:

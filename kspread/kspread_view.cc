@@ -421,7 +421,7 @@ void KSpreadView::initialPosition()
     int row = m_pDoc->map()->initialMarkerRow();
     if ( row <= 0 ) row = 1;
     m_pCanvas->gotoLocation( col, row );
-
+    
     //init toggle button
     m_showPageBorders->setChecked( m_pTable->isShowPageBorders());
     m_tableFormat->setEnabled(false);
@@ -1861,7 +1861,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     m_areaName->plug( m_pPopupMenu );
     // If there is no selection
     QRect selection( m_pTable->selectionRect() );
-    if(selection.left()==0 && koDocument()->isReadWrite() )
+    if(selection.left()==0 )
     {
         m_pPopupMenu->insertSeparator();
         m_insertCell->plug( m_pPopupMenu );
@@ -1881,7 +1881,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     m_lstTools.setAutoDelete( true );
 
     if ( !cell->isFormular() && !cell->isValue() && !cell->valueString().isEmpty()
-         && !cell->isTime() &&!cell->isDate() && koDocument()->isReadWrite()
+         && !cell->isTime() &&!cell->isDate()
          && cell->content() != KSpreadCell::VisualFormula)
     {
       m_popupMenuFirstToolId = 10;
@@ -2067,27 +2067,11 @@ void KSpreadView::equalizeColumn()
 void KSpreadView::layoutDlg()
 {
   QRect selection( m_pTable->selectionRect() );
-  if((selection.right()==0x7FFF) ||(selection.bottom()==0x7FFF))
-        {
-        KMessageBox::error( this, i18n("Area too large!"));
-        }
-  else
-        {
-        //m_pCanvas->hideMarker();
-
-        if ( selection.contains( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) ) )
-           CellLayoutDlg dlg( this, m_pTable, selection.left(), selection.top(),
+  if ( selection.contains( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) ) )
+        CellLayoutDlg dlg( this, m_pTable, selection.left(), selection.top(),
                        selection.right(), selection.bottom() );
-        else
-           CellLayoutDlg dlg( this, m_pTable, m_pCanvas->markerColumn(), m_pCanvas->markerRow(), m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
-
-        m_pDoc->setModified( true );
-
-        // Update the toolbar (bold/italic/font...)
-        updateEditWidget();
-
-        //m_pCanvas->showMarker();
-        }
+  else
+        CellLayoutDlg dlg( this, m_pTable, m_pCanvas->markerColumn(), m_pCanvas->markerRow(), m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
 }
 
 void KSpreadView::paperLayoutDlg()
@@ -2397,6 +2381,11 @@ void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old, 
         m_tableFormat->setEnabled( FALSE );
     else
         m_tableFormat->setEnabled( TRUE );
+
+    if(n.right() ==0x7FFF ||n.bottom()==0x7FFF)
+        m_cellLayout->setEnabled( false );
+    else
+        m_cellLayout->setEnabled( true );
 
     // Send some event around. This is read for example
     // by the calculator plugin.

@@ -246,7 +246,7 @@ KSpreadUndoRemoveRow::KSpreadUndoRemoveRow( KSpreadDoc *_doc, KSpreadTable *_tab
     char tmp = m_data[ len - 1 ];
     m_data.resize( len );
     *( m_data.data() + len - 1 ) = tmp;
-	
+
     // printf("UNDO {{{%s}}}\n", buffer.latin1() );
     // printf("UNDO2 %i bytes, length %i {{{%s}}}\n", m_data.length(), m_data.size(), (const char*)m_data );
     // printf("length=%i, size=%i", m_data.length(), m_data.size() );
@@ -1368,3 +1368,211 @@ void KSpreadUndoShowTable::redo()
     doc()->undoBuffer()->unlock();
 }
 
+/****************************************************************************
+ *
+ * KSpreadUndoCellPaste
+ *
+ ***************************************************************************/
+
+KSpreadUndoCellPaste::KSpreadUndoCellPaste( KSpreadDoc *_doc, KSpreadTable* table, int _nbCol,int _nbRow, int _xshift,int _yshift, QRect &_selection )
+    : KSpreadUndoAction( _doc )
+{
+    m_tableName = table->tableName();
+    m_selection = _selection;
+    nbCol=_nbCol;
+    nbRow=_nbRow;
+    xshift=_xshift;
+    yshift=_yshift;
+    createListCell( m_data, m_lstColumn,m_lstRow,table );
+
+}
+
+KSpreadUndoCellPaste::~KSpreadUndoCellPaste()
+{
+}
+
+void KSpreadUndoCellPaste::createListCell( QCString &listCell,QValueList<columnSize> &listCol,QValueList<rowSize> &listRow, KSpreadTable* table )
+{
+    //copy a column(s)
+    if(nbCol!=0)
+    {
+        //save all cells
+        QRect rect;
+        rect.setCoords(xshift,1,xshift+nbCol,0X7FFF);
+        QDomDocument doc = table->saveCellRect( rect);
+        // Save to buffer
+        QString buffer;
+        QTextStream str( &buffer, IO_WriteOnly );
+        str << doc;
+
+        // This is a terrible hack to store unicode
+        // data in a QCString in a way that
+        // QCString::length() == QCString().size().
+        // This allows us to treat the QCString like a QByteArray later on.
+        listCell = buffer.utf8();
+        int len = listCell.length();
+        char tmp = listCell[ len - 1 ];
+        listCell.resize( len );
+        *( listCell.data() + len - 1 ) = tmp;
+
+        //save size of columns
+        for( int y = 1; y <=nbCol ; ++y )
+        {
+           ColumnLayout *cl=table->columnLayout(y);
+           if(!cl->isDefault())
+                {
+                columnSize tmpSize;
+                tmpSize.columnNumber=y;
+                tmpSize.columnWidth=cl->width();
+                listCol.append(tmpSize);
+                }
+        }
+    }
+    //copy a row(s)
+    else if(nbRow!=0)
+    {
+        //save all cells
+        QRect rect;
+        rect.setCoords(1,yshift,0x7FFF,yshift+nbRow);
+        QDomDocument doc = table->saveCellRect( rect);
+        // Save to buffer
+        QString buffer;
+        QTextStream str( &buffer, IO_WriteOnly );
+        str << doc;
+
+        // This is a terrible hack to store unicode
+        // data in a QCString in a way that
+        // QCString::length() == QCString().size().
+        // This allows us to treat the QCString like a QByteArray later on.
+        listCell = buffer.utf8();
+        int len = listCell.length();
+        char tmp = listCell[ len - 1 ];
+        listCell.resize( len );
+        *( listCell.data() + len - 1 ) = tmp;
+
+        //save size of columns
+        for( int y = 1; y <=nbRow ; ++y )
+        {
+           RowLayout *rw=table->rowLayout(y);
+           if(!rw->isDefault())
+                {
+                rowSize tmpSize;
+                tmpSize.rowNumber=y;
+                tmpSize.rowHeight=rw->height();
+                listRow.append(tmpSize);
+                }
+        }
+
+    }
+    //copy just an area
+    else
+    {
+        //save all cells in area
+        QDomDocument doc = table->saveCellRect( m_selection );
+        // Save to buffer
+        QString buffer;
+        QTextStream str( &buffer, IO_WriteOnly );
+        str << doc;
+
+        // This is a terrible hack to store unicode
+        // data in a QCString in a way that
+        // QCString::length() == QCString().size().
+        // This allows us to treat the QCString like a QByteArray later on.
+        listCell = buffer.utf8();
+        int len = listCell.length();
+        char tmp = listCell[ len - 1 ];
+        listCell.resize( len );
+        *( listCell.data() + len - 1 ) = tmp;
+    }
+}
+
+void KSpreadUndoCellPaste::undo()
+{
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    createListCell( m_dataRedo, m_lstRedoColumn,m_lstRedoRow,table );
+
+    doc()->undoBuffer()->lock();
+    if(nbCol!=0)
+    {
+        QRect rect;
+        rect.setCoords(xshift,1,xshift+nbCol,0x7FFF);
+        table->deleteCells( rect );
+        table->paste( m_data, QPoint(xshift,1) );
+        QValueList<columnSize>::Iterator it2;
+        for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
+        {
+           ColumnLayout *cl=table->nonDefaultColumnLayout((*it2).columnNumber);
+           cl->setWidth((*it2).columnWidth);
+        }
+    }
+    else if(nbRow!=0)
+    {
+        QRect rect;
+        rect.setCoords(1,yshift,0x7FFF,yshift+nbRow);
+        table->deleteCells( rect );
+        table->paste( m_data, QPoint(1,yshift) );
+        QValueList<rowSize>::Iterator it2;
+        for ( it2 = m_lstRow.begin(); it2 != m_lstRow.end(); ++it2 )
+        {
+           RowLayout *rw=table->nonDefaultRowLayout((*it2).rowNumber);
+           rw->setHeight((*it2).rowHeight);
+        }
+    }
+    else
+    {
+    table->deleteCells( m_selection );
+    table->paste( m_data,m_selection.topLeft());
+    }
+
+    table->recalc( true );
+    doc()->undoBuffer()->unlock();
+}
+
+void KSpreadUndoCellPaste::redo()
+{
+    doc()->undoBuffer()->lock();
+
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    doc()->undoBuffer()->lock();
+    if(nbCol!=0)
+    {
+        QRect rect;
+        rect.setCoords(xshift,1,xshift+nbCol,0X7FFF);
+        table->deleteCells( rect );
+        table->paste( m_dataRedo, QPoint(xshift,1) );
+        QValueList<columnSize>::Iterator it2;
+        for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
+        {
+           ColumnLayout *cl=table->nonDefaultColumnLayout((*it2).columnNumber);
+           cl->setWidth((*it2).columnWidth);
+        }
+    }
+    else if(nbRow!=0)
+    {
+        QRect rect;
+        rect.setCoords(1,yshift,0x7FFF,yshift+nbRow);
+        table->deleteCells( rect );
+        table->paste( m_dataRedo, QPoint(1,yshift) );
+        QValueList<rowSize>::Iterator it2;
+        for ( it2 = m_lstRedoRow.begin(); it2 != m_lstRedoRow.end(); ++it2 )
+        {
+           RowLayout *rw=table->nonDefaultRowLayout((*it2).rowNumber);
+           rw->setHeight((*it2).rowHeight);
+        }
+    }
+    else
+    {
+    table->deleteCells( m_selection );
+    table->paste( m_dataRedo,m_selection.topLeft());
+    }
+
+    table->recalc( true );
+
+    doc()->undoBuffer()->unlock();
+}
