@@ -19,6 +19,7 @@
 #include <qlistview.h>
 #include "maindlg.h"
 #include "kdebug.h"
+#include "kdatabase_struct.h"
 
 MainDlg::MainDlg(QWidget *parentWidget, const char * widgetName):MyDialog1(parentWidget,widgetName){
 	//connect(this->tabWidget->page(0)->KListView1,SIGNAL(execute(KListViewItem *)),this,SLOT(slotItemClicked()));
@@ -31,6 +32,7 @@ void MainDlg::slotTblItemClicked(QListViewItem *itemClicked){
      kdDebug() << "KDatabase:MainDlg tbl Item Clicked - " << itemClicked->text(0) << endl;
 
      myTblDesigner=new clsTblDesigner();
+     myTblDesigner->populateTblDesigner(itemClicked->text(0));
      myTblDesigner->show();
 }
 

@@ -21,6 +21,7 @@
 #include <tabdialog1.h>
 #include <clstbldesigner.h>
 #include <qbuilddlg.h>
+#include "kdatabase_struct.h"
 
 /**
   *@author root

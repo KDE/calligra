@@ -19,6 +19,7 @@
 
 #include <qwidget.h>
 #include <kdatabase_tabledesigner.h>
+#include "kdatabase_struct.h"
 
 /**
   *@author root
@@ -29,6 +30,8 @@ class clsTblDesigner : public clsTableDesigner  {
 public: 
 	clsTblDesigner(QWidget *parent=0, const char *name=0);
 	~clsTblDesigner();
+   bool populateTblDesigner(QString tblName);
+
 };
 
 #endif

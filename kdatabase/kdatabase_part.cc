@@ -125,22 +125,4 @@ QDomDocument* KDatabasePart::getKDBFile()
 return(&KDBFile);
 }
 
-bool KDBStruct::createTable(QString* tableName, QString fieldInfo)
-{
-
-   return(false);
-}
-
-bool KDBStruct::createView(QString* viewName, QString viewSQL)
-{
-
-   return(false);
-}
-
-bool KDBStruct::createReport(QString* reportName, QString reportSQL)
-{
-
-    return(false);
-}
-
 #include "kdatabase_part.moc"
