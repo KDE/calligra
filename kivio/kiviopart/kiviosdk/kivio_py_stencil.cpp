@@ -430,6 +430,11 @@ void KivioPyStencil::paint( KivioIntraStencilData *d, bool outlined )
 
        if ( stype == "textbox" ) {
           int tf = vTextAlign() | hTextAlign();
+
+          QFont f = textFont();
+          f.setPointSize( f.pointSize() * scale );
+
+          d->painter->setFont( f );
           QString text = getStringFromDict(shape,"text");
           if ( !text.isEmpty() )
             d->painter->drawText( x, y, w, h, tf | Qt::WordBreak, text );
@@ -861,7 +866,26 @@ QString KivioPyStencil::text()
     return QString("");
 }
 
+void KivioPyStencil::setTextFont( const QFont &f )
+{
+    float fs = f.pointSize();
+    QString family = f.family();
 
+    PyDict_SetItemString(  PyDict_GetItemString(vars,"style") , "fontsize"  , Py_BuildValue("f",fs ) ) ;
+    PyDict_SetItemString(  PyDict_GetItemString(vars,"style") , "font"  , Py_BuildValue("s",family.latin1() ) ) ;
+}
+
+QFont KivioPyStencil::textFont()
+{
+    PyObject *fn = PyDict_GetItemString( PyDict_GetItemString(vars,"style"), "font" );
+    PyObject *fs = PyDict_GetItemString( PyDict_GetItemString(vars,"style"), "fontsize" );
+
+    if ( fn && fs )
+        if ( PyNumber_Check(fs) && PyString_Check(fn) )
+            return ( QFont (PyString_AsString(fn), PyInt_AsLong( PyNumber_Int(fs))));
+
+    return QFont();
+}
 
 #endif // HAVE_PYTHON
 

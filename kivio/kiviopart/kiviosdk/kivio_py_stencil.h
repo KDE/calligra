@@ -82,8 +82,8 @@ public:
     virtual QColor textColor();
     virtual void setTextColor( QColor );
 
-    virtual QFont textFont() { return QFont("times",12); }
-    virtual void setTextFont( const QFont & ) {;}
+    virtual QFont textFont();
+    virtual void setTextFont( const QFont & );
 
     virtual int hTextAlign() { return Qt::AlignHCenter; }
     virtual int vTextAlign() { return Qt::AlignVCenter; }
