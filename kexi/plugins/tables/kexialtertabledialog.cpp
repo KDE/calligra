@@ -269,13 +269,17 @@ KexiAlterTableDialog::createPropertyBuffer( int row, KexiDB::Field *field, bool 
 //TODO: show this after we get properly working editor for QVariant:
 	prop->setVisible(false);
 
-	buff->add(new KexiProperty("primaryKey", QVariant(field->isPrimaryKey(), 4), i18n("Primary Key")));
+	buff->add(prop = new KexiProperty("primaryKey", QVariant(field->isPrimaryKey(), 4), i18n("Primary Key")));
+	prop->setIcon("key");
 
 	buff->add(new KexiProperty("unique", QVariant(field->isUniqueKey(), 4), i18n("Unique")));
 
 	buff->add(new KexiProperty("notNull", QVariant(field->isNotNull(), 4), i18n("Required")));
 	
-	buff->add(prop = new KexiProperty("allowEmpty", QVariant(!field->isNotEmpty(), 4), i18n("Allow Zero\nSize")));
+	buff->add(new KexiProperty("allowEmpty", QVariant(!field->isNotEmpty(), 4), i18n("Allow Zero\nSize")));
+
+	buff->add(prop = new KexiProperty("autoIncrement", QVariant(field->isAutoIncrement(), 4), i18n("Autonumber")));
+	prop->setIcon("autonumber");
 
 	buff->add(new KexiProperty("indexed", QVariant(field->isIndexed(), 4), i18n("Indexed")));
 
@@ -574,6 +578,7 @@ void KexiAlterTableDialog::slotPropertyChanged(KexiPropertyBuffer &buf, KexiProp
 			buf["allowEmpty"] = QVariant(false,1);
 			buf["indexed"] = QVariant(true,1);
 		}
+		setAvailable("tablepart_toggle_pkey", propertyBuffer()!=0);
 	}
 //TODO: perhaps show a hint in help panel telling what happens?
 	else if (property.value().toBool()==false) {
@@ -647,6 +652,8 @@ bool KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema, bool &cancel
 			uint options = 0;
 			if (buf["primaryKey"].value().toBool())
 				constraints |= KexiDB::Field::PrimaryKey;
+			if (buf["autoIncrement"].value().toBool())
+				constraints |= KexiDB::Field::AutoInc;
 			if (buf["unique"].value().toBool())
 				constraints |= KexiDB::Field::Unique;
 			if (buf["notnull"].value().toBool())
