@@ -65,10 +65,8 @@ VDocument::append( VObject* object )
 }
 
 void
-VDocument::saveXML( QDomDocument& doc ) const
+VDocument::save( QDomElement& me ) const
 {
-	QDomElement me = doc.createElement( "DOC" );
-
 	QDomAttr attr;
 /*
   attr = doc.createAttribute ("mime");
@@ -94,8 +92,6 @@ VDocument::saveXML( QDomDocument& doc ) const
   me.setAttributeNode (attr); */
 
 	me.setAttribute( "syntaxVersion", m_syntaxVersion );
-
-	doc.appendChild( me );
 
 	// save objects:
 	VLayerListIterator itr( m_layers );

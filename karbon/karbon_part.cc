@@ -99,9 +99,18 @@ KarbonPart::loadXML( QIODevice*, const QDomDocument& document )
 QDomDocument
 KarbonPart::saveXML()
 {
-	QDomDocument document( "DOC" );
-	m_doc.saveXML( document );
-	return document;
+	QDomDocument doc( "DOC" );
+	QDomElement me = doc.createElement( "DOC" );
+
+	doc.appendChild( me );
+
+	QDomElement paper = doc.createElement( "PAPER" );
+	paper.setAttribute( "width", m_pageLayout.ptWidth );
+	paper.setAttribute( "height", m_pageLayout.ptHeight );
+	me.appendChild( paper );
+
+	m_doc.save( me );
+	return doc;
 }
 
 void
