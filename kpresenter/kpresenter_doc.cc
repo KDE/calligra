@@ -581,7 +581,7 @@ QDomDocument KPresenterDoc::saveXML()
     if ( saveOnlyPage == -1 )
     {
         element=doc.createElement("SELSLIDES");
-        for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ ) {
+        for ( uint i = 0; i < m_pageList.count(); i++ ) {
             QDomElement slide=doc.createElement("SLIDE");
             slide.setAttribute("nr", i);
             slide.setAttribute("show", m_pageList.at(i)->isSlideSelected());

@@ -20,10 +20,8 @@
 
 
 #include "kprbgspellcheck.h"
-#include <koBgSpellCheck.h>
 #include <kdebug.h>
 #include <kotextobject.h>
-#include <klocale.h>
 #include "kpresenter_doc.h"
 #include "kptextobject.h"
 

@@ -318,7 +318,7 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
 }
 
 /*======================= draw background ========================*/
-void KPrCanvas::drawBackground( QPainter *painter, const QRect& rect )
+void KPrCanvas::drawBackground( QPainter *painter, const QRect& rect ) const
 {
     QRegion grayRegion( rect );
     if ( editMode )
@@ -352,7 +352,7 @@ void KPrCanvas::drawBackground( QPainter *painter, const QRect& rect )
 }
 
 // 100% stolen from KWord
-void KPrCanvas::eraseEmptySpace( QPainter * painter, const QRegion & emptySpaceRegion, const QBrush & brush )
+void KPrCanvas::eraseEmptySpace( QPainter * painter, const QRegion & emptySpaceRegion, const QBrush & brush ) const
 {
     painter->save();
     painter->setClipRegion( emptySpaceRegion, QPainter::CoordPainter );
@@ -366,7 +366,7 @@ void KPrCanvas::eraseEmptySpace( QPainter * painter, const QRegion & emptySpaceR
 // Draw all object in page : draw object in current page and sticky objects
 void KPrCanvas::drawObjectsInPage(QPainter *painter, const KoRect& rect2, bool drawCursor,
 				  SelectionMode selectMode, bool doSpecificEffects,
-				  const QPtrList<KPObject> & obj)
+				  const QPtrList<KPObject> & obj) const
 {
     QPtrListIterator<KPObject> it( obj );
     for ( ; it.current() ; ++it )
@@ -422,7 +422,7 @@ void KPrCanvas::drawObjectsInPage(QPainter *painter, const KoRect& rect2, bool d
 
 /*========================= draw objects =========================*/
 void KPrCanvas::drawObjects( QPainter *painter, const QRect& rect, bool drawCursor,
-			     SelectionMode selectionMode, bool doSpecificEffects )
+			     SelectionMode selectionMode, bool doSpecificEffects ) const
 {
     int pgNum = editMode ? (int)m_view->getCurrPgNum() : currPresPage;
     KoRect rect2 = m_view->zoomHandler()->unzoomRect(rect);
@@ -437,7 +437,7 @@ void KPrCanvas::drawObjects( QPainter *painter, const QRect& rect, bool drawCurs
 
 }
 
-void KPrCanvas::drawGrid(QPainter *painter, const QRect &rect2)
+void KPrCanvas::drawGrid(QPainter *painter, const QRect &rect2) const
 {
     KPresenterDoc *doc=m_view->kPresenterDoc();
 
@@ -470,7 +470,7 @@ void KPrCanvas::drawGrid(QPainter *painter, const QRect &rect2)
     painter->restore();
 }
 
-void KPrCanvas::drawHelpPoints( QPainter *painter, const QRect &rect2)
+void KPrCanvas::drawHelpPoints( QPainter *painter, const QRect &rect2) const
 {
     KPresenterDoc *doc=m_view->kPresenterDoc();
     if(!doc->isReadWrite())
@@ -495,14 +495,14 @@ void KPrCanvas::drawHelpPoints( QPainter *painter, const QRect &rect2)
     painter->restore();
 }
 
-void KPrCanvas::drawHelplines(QPainter *painter, const QRect &rect2)
+void KPrCanvas::drawHelplines(QPainter *painter, const QRect &rect2) const
 {
     KPresenterDoc *doc=m_view->kPresenterDoc();
 
     if(!doc->isReadWrite())
         return;
     KoRect rect = m_view->zoomHandler()->unzoomRect(rect2);
-    QValueList<double>::Iterator i;
+    QValueList<double>::ConstIterator i;
     QPen _pen = QPen( Qt::black, 1, Qt::DotLine );
     painter->save();
     painter->setPen( _pen );
@@ -528,7 +528,7 @@ void KPrCanvas::drawHelplines(QPainter *painter, const QRect &rect2)
 /*================================================================*/
 // This one is used to generate the pixmaps for the HTML presentation,
 // for the pres-structure-dialog, for the sidebar previews, for template icons.
-void KPrCanvas::drawAllObjectsInPage( QPainter *painter, const QPtrList<KPObject> & obj )
+void KPrCanvas::drawAllObjectsInPage( QPainter *painter, const QPtrList<KPObject> & obj ) const
 {
     QPtrListIterator<KPObject> it( obj );
     for ( ; it.current(); ++it ) {
@@ -3270,7 +3270,7 @@ void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum )
 /*==================== draw a page in a pixmap ===================*/
 // This one is used in fullscreenmode, to generate the pixmaps used for the
 // page effects.
-void KPrCanvas::drawCurrentPageInPix( QPixmap &_pix )
+void KPrCanvas::drawCurrentPageInPix( QPixmap &_pix ) const
 {
     //kdDebug(33001) << "Page::drawCurrentPageInPix" << endl;
 
@@ -3284,7 +3284,7 @@ void KPrCanvas::drawCurrentPageInPix( QPixmap &_pix )
 }
 
 /*==================== print a page ===================*/
-void KPrCanvas::printPage( QPainter* painter, int pageNum )
+void KPrCanvas::printPage( QPainter* painter, int pageNum ) const
 {
     //kdDebug(33001) << "KPrCanvas::printPage" << endl;
     KPrPage* page = m_view->kPresenterDoc()->pageList().at(pageNum);

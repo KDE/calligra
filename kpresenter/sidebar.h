@@ -135,8 +135,8 @@ public:
   void moveItem( int oldPos, int newPos );
   void removeItem( int pos );
 
-  Outline *outline() { return _outline; };
-  ThumbBar *thumbBar() { return _thb; };
+  Outline *outline() const { return _outline; };
+  ThumbBar *thumbBar() const { return _thb; };
 
 signals: // all page numbers 0-based
   void showPage( int i );

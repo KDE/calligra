@@ -363,31 +363,30 @@ protected:
 
     // functions for displaying
     virtual void paintEvent( QPaintEvent* );
-    void paintBackground( QPainter*, const QRect& );
-    void drawBackground( QPainter*, const QRect& );
+    void drawBackground( QPainter*, const QRect& ) const;
 
     //draw all object : object in current page + object in sticky page
     void drawObjects( QPainter*, const QRect&, bool drawCursor,
-		      SelectionMode selectionMode, bool doSpecificEffects );
+		      SelectionMode selectionMode, bool doSpecificEffects ) const;
 
     void drawObjectsInPage(QPainter *painter, const KoRect& rect2, bool drawCursor,
 			   SelectionMode selectionMode, bool doSpecificEffects,
-			   const QPtrList<KPObject> & obj);
+			   const QPtrList<KPObject> & obj) const;
 
-    void drawAllObjectsInPage( QPainter *painter, const QPtrList<KPObject> & obj );
+    void drawAllObjectsInPage( QPainter *painter, const QPtrList<KPObject> & obj ) const;
 
     // draw all helpline
-    void drawHelplines(QPainter *painter, const QRect &rect2);
+    void drawHelplines(QPainter *painter, const QRect &rect2) const;
 
-    void drawHelpPoints( QPainter *painter, const QRect &rect2);
+    void drawHelpPoints( QPainter *painter, const QRect &rect2) const;
 
     // draw grid
-    void drawGrid(QPainter *painter, const QRect &rect2);
+    void drawGrid(QPainter *painter, const QRect &rect2) const;
 
 
     QRect getOldBoundingRect( const KPObject *obj );
 
-    void drawCurrentPageInPix( QPixmap& );
+    void drawCurrentPageInPix( QPixmap& ) const;
     virtual void mousePressEvent( QMouseEvent *e );
     virtual void mouseReleaseEvent( QMouseEvent *e );
     virtual void mouseMoveEvent( QMouseEvent *e );
@@ -406,7 +405,7 @@ protected:
     virtual void keyPressEvent( QKeyEvent *e );
     virtual void keyReleaseEvent( QKeyEvent *e );
 
-    void eraseEmptySpace( QPainter * painter, const QRegion & emptySpaceRegion, const QBrush & brush );
+    void eraseEmptySpace( QPainter * painter, const QRegion & emptySpaceRegion, const QBrush & brush ) const;
 
     // setup popupmenus
     void setupMenus();
@@ -425,7 +424,7 @@ protected:
     void _repaint( const QRect &r );
     void _repaint( KPObject *o );
 
-    void printPage( QPainter*, int pageNum );
+    void printPage( QPainter*, int pageNum ) const;
     void doObjEffects();
     void drawObject( KPObject*, QPixmap*, int, int, int, int, int, int );
 

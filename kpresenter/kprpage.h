@@ -84,14 +84,14 @@ public:
     unsigned int objNums() const { return m_objectList.count(); }
 
     int numTextObject() const;
-    KPTextObject *textFrameSet ( unsigned int _num);
+    KPTextObject *textFrameSet( unsigned int _num ) const;
 
     KCommand * deleteObjs( bool _add=true );
     int numSelected() const;
     void pasteObjs( const QByteArray & data, int nbCopy = 1, double angle = 0.0 , double _increaseX=0.0, double increaseY = 0.0, double moveX=0.0, double moveY=0.0);
     KCommand * replaceObjs( bool createUndoRedo, double _orastX, double _orastY,const QColor & _txtBackCol, const QColor & _otxtBackCol);
 
-    void copyObjs(QDomDocument &doc, QDomElement &presenter);
+    void copyObjs(QDomDocument &doc, QDomElement &presenter) const;
 
     KPObject* getSelectedObj() const;
     void groupObjects();
@@ -220,7 +220,7 @@ public:
     bool getPageSoundEffect( )const;
     QString getPageSoundFileName()const;
 
-    QValueList<int> reorderPage();
+    QValueList<int> reorderPage() const;
 
     bool isSlideSelected()const {return  m_selectedSlides;}
     void slideSelected(bool _b){m_selectedSlides=_b;}
@@ -233,7 +233,7 @@ public:
 
     void deSelectAllObj();
     void deSelectObj( KPObject *kpobject );
-    QDomElement saveObjects( QDomDocument &doc, QDomElement &objects, double yoffset, KoZoomHandler* zoomHandler, int saveOnlyPage );
+    QDomElement saveObjects( QDomDocument &doc, QDomElement &objects, double yoffset, KoZoomHandler* zoomHandler, int saveOnlyPage ) const;
 
     bool oneObjectTextExist() const ;
     bool isOneObjectSelected() const;
@@ -242,8 +242,8 @@ public:
     bool haveASelectedGroupObj() const;
     bool haveASelectedPixmapObj() const;
 
-    KoRect getBoundingRect(const KoRect &rect, KPresenterDoc *doc);
-    KoRect getBoundingAllObjectRect(const KoRect &rect, KPresenterDoc *doc);
+    KoRect getBoundingRect(const KoRect &rect, KPresenterDoc *doc) const;
+    KoRect getBoundingAllObjectRect(const KoRect &rect, KPresenterDoc *doc) const;
     bool chPic( KPresenterView *_view);
     bool chClip(KPresenterView *_view);
 
@@ -274,8 +274,8 @@ public:
     bool canMoveOneObject() const;
     KCommand *alignVertical( VerticalAlignmentType _type );
     void changeTabStopValue ( double _tabStop );
-    bool saveClip(KPresenterView *_view);
-    bool savePicture( KPresenterView *_view );
+    bool saveClip( KPresenterView *_view ) const;
+    bool savePicture( KPresenterView *_view ) const;
     bool findTextObject( KPObject *obj );
     KPObject *nextTextObject(KPTextObject *obj);
 protected:

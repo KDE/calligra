@@ -151,7 +151,7 @@ KCommand * KPrPage::deleteObjs( bool _add )
     return deleteCmd ;
 }
 
-void KPrPage::copyObjs(QDomDocument &doc, QDomElement &presenter)
+void KPrPage::copyObjs(QDomDocument &doc, QDomElement &presenter) const
 {
     if ( !numSelected() )
         return;
@@ -241,7 +241,7 @@ void KPrPage::pasteObjs( const QByteArray & data,int nbCopy, double angle, doubl
     m_doc->setModified(true);
 }
 
-KPTextObject * KPrPage::textFrameSet ( unsigned int _num)
+KPTextObject * KPrPage::textFrameSet ( unsigned int _num ) const
 {
     unsigned int i = 0;
     QPtrListIterator<KPObject> it( m_objectList );
@@ -2974,7 +2974,7 @@ void KPrPage::makeUsedPixmapList()
 }
 
 
-QValueList<int> KPrPage::reorderPage()
+QValueList<int> KPrPage::reorderPage() const
 {
     QValueList<int> orderList;
     orderList.append( 0 );
@@ -3029,7 +3029,7 @@ void KPrPage::deSelectObj( KPObject *kpobject )
     m_doc->repaint( kpobject );
 }
 
-QDomElement KPrPage::saveObjects( QDomDocument &doc, QDomElement &objects, double yoffset, KoZoomHandler* /*zoomHandler*/, int saveOnlyPage )
+QDomElement KPrPage::saveObjects( QDomDocument &doc, QDomElement &objects, double yoffset, KoZoomHandler* /*zoomHandler*/, int saveOnlyPage ) const
 {
     QPtrListIterator<KPObject> oIt(m_objectList);
     for (; oIt.current(); ++oIt )
@@ -3119,7 +3119,7 @@ bool KPrPage::haveASelectedPixmapObj() const
     return false;
 }
 
-KoRect KPrPage::getBoundingRect(const KoRect &rect, KPresenterDoc *doc)
+KoRect KPrPage::getBoundingRect(const KoRect &rect, KPresenterDoc *doc) const
 {
     KoRect boundingRect =rect ;
     QPtrListIterator<KPObject> it( m_objectList );
@@ -3173,7 +3173,7 @@ bool KPrPage::chClip(KPresenterView *_view)
     return false;
 }
 
-bool KPrPage::saveClip(KPresenterView *_view)
+bool KPrPage::saveClip(KPresenterView *_view) const
 {
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -3191,7 +3191,7 @@ bool KPrPage::saveClip(KPresenterView *_view)
     return false;
 }
 
-bool KPrPage::savePicture( KPresenterView *_view )
+bool KPrPage::savePicture( KPresenterView *_view ) const
 {
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -3430,7 +3430,7 @@ QPtrList<KoTextObject> KPrPage::objectText()
 }
 
 
-KPObject * KPrPage::getCursor(const QPoint &pos )
+KPObject * KPrPage::getCursor( const QPoint &pos )
 {
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -3619,7 +3619,7 @@ bool KPrPage::getProtectContent(bool p) const
     return p;
 }
 
-KoRect KPrPage::getBoundingAllObjectRect(const KoRect &rect, KPresenterDoc *doc)
+KoRect KPrPage::getBoundingAllObjectRect(const KoRect &rect, KPresenterDoc *doc) const
 {
     KoRect boundingRect =rect ;
     QPtrListIterator<KPObject> it( m_objectList );

@@ -36,7 +36,7 @@ public:
     //repaint object when we spell check
     virtual void slotRepaintChanged(KoTextObject *obj);
 
-    KPTextObject *currentCheckSpellingFrame(){ return m_currentObj;}
+    KPTextObject *currentCheckSpellingFrame() const { return m_currentObj; }
 
     KoTextObject *nextTextObject( KoTextObject *obj );
 
