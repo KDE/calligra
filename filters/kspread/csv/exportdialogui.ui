@@ -12,9 +12,6 @@
             <height>496</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>ExportDialogUI</string>
-    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -120,9 +117,6 @@
                                 </property>
                                 <property name="text">
                                     <string>&amp;UNIX style (recommended; line feed only)</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+U</string>
                                 </property>
                                 <property name="checked">
                                     <bool>true</bool>
