@@ -633,6 +633,24 @@ void KoMainWindow::slotLoadCanceled( const QString & errMsg )
     disconnect(newdoc, SIGNAL(canceled( const QString & )), this, SLOT(slotLoadCanceled( const QString & )));
 }
 
+void KoMainWindow::slotSaveCanceled( const QString &errMsg )
+{
+    kdDebug(30003) << "KoMainWindow::slotSaveCanceled" << endl;
+    if ( !errMsg.isEmpty() ) // empty when canceled by user
+        KMessageBox::error( this, errMsg );
+    slotSaveCompleted();
+}
+
+void KoMainWindow::slotSaveCompleted()
+{
+    kdDebug(30003) << "KoMainWindow::slotSaveCompleted" << endl;
+    KoDocument* pDoc = (KoDocument *)(sender());
+    disconnect(pDoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
+    disconnect(pDoc, SIGNAL(completed()), this, SLOT(slotSaveCompleted()));
+    disconnect(pDoc, SIGNAL(canceled( const QString & )),
+               this, SLOT(slotSaveCanceled( const QString & )));
+}
+
 // returns true if we should save, false otherwise.
 bool KoMainWindow::exportConfirmation( const QCString &outputFormat, const QCString &nativeFormat )
 {
@@ -688,6 +706,9 @@ bool KoMainWindow::saveDocument( bool saveas )
     if(!pDoc)
         return true;
     connect(pDoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
+    connect(pDoc, SIGNAL(completed()), this, SLOT(slotSaveCompleted()));
+    connect(pDoc, SIGNAL(canceled( const QString & )),
+            this, SLOT(slotSaveCanceled( const QString & )));
 
     KURL oldURL = pDoc->url();
     QString oldFile = pDoc->file();
@@ -932,7 +953,6 @@ bool KoMainWindow::saveDocument( bool saveas )
     }
 #endif
 
-    disconnect(pDoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     return ret;
 }
 

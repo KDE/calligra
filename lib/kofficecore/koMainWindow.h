@@ -358,6 +358,8 @@ private slots:
     void slotProgress(int value);
     void slotLoadCompleted();
     void slotLoadCanceled (const QString &);
+    void slotSaveCompleted();
+    void slotSaveCanceled(const QString &);
 
 private:
     KoMainWindowPrivate *d;
