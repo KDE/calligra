@@ -33,7 +33,6 @@
 #include <qpushbt.h>
 #include <qlistbox.h>
 #include <ktabctl.h>
-#include <kcombo.h>
 
 #include "Canvas.h"
 #include "UnitBox.h"
