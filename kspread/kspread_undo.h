@@ -51,6 +51,13 @@ int col;
 QString text;
 };
 
+struct layoutTextCell {
+int row;
+int col;
+KSpreadLayout * l;
+QString text;
+};
+
 struct layoutCell {
 int row;
 int col;
@@ -360,6 +367,30 @@ protected:
     QRect m_rctRect;
     QValueList<textOfCell> m_lstTextCell;
     QValueList<textOfCell> m_lstRedoTextCell;
+    QString m_tableName;
+};
+
+class KSpreadUndoSort : public KSpreadUndoAction
+{
+public:
+    KSpreadUndoSort( KSpreadDoc *_doc, KSpreadTable *_table, QRect &_selection);
+    virtual ~KSpreadUndoSort();
+
+    virtual void undo();
+    virtual void redo();
+
+    void copyAll( QValueList<layoutTextCell> & list, QValueList<layoutColumn> & listCol, 
+                  QValueList<layoutRow> & listRow, KSpreadTable * table );
+
+protected:
+    QRect m_rctRect;
+    QValueList<layoutTextCell> m_lstLayouts;
+    QValueList<layoutTextCell> m_lstRedoLayouts;
+    QValueList<layoutColumn> m_lstColLayouts;
+    QValueList<layoutColumn> m_lstRedoColLayouts;
+    QValueList<layoutRow> m_lstRowLayouts;
+    QValueList<layoutRow> m_lstRedoRowLayouts;
+
     QString m_tableName;
 };
 

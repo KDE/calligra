@@ -2900,7 +2900,7 @@ void KSpreadTable::sortByRow( int ref_row, SortingOrder mode )
 
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-        KSpreadUndoChangeAreaTextCell *undo = new KSpreadUndoChangeAreaTextCell( m_pDoc, this, r );
+        KSpreadUndoSort *undo = new KSpreadUndoSort( m_pDoc, this, r );
         m_pDoc->undoBuffer()->appendUndo( undo );
     }
     // Are entire rows selected ?
@@ -2943,10 +2943,10 @@ void KSpreadTable::sortByRow( int ref_row, SortingOrder mode )
         KSpreadCell *cell1 = cellAt( d, ref_row  );
         if ( cell1->isObscured() && cell1->isObscuringForced() )
         {
-            int moveX=cell1->obscuringCellsColumn();
-            KSpreadCell* cell = cellAt(moveX,ref_row);
-            cell1 = cellAt( moveX+cell->extraXCells()+1,moveX );
-            d=moveX+cell->extraXCells()+1;
+            int moveX = cell1->obscuringCellsColumn();
+            KSpreadCell * cell = cellAt(moveX, ref_row);
+            cell1 = cellAt( moveX + cell->extraXCells() + 1, moveX );
+            d = moveX + cell->extraXCells() + 1;
         }
 
         // Look for which column we want to swap with the one number d
@@ -2955,7 +2955,7 @@ void KSpreadTable::sortByRow( int ref_row, SortingOrder mode )
 
         for ( int x = d + 1 ; x <= r.right(); x++ )
         {
-            KSpreadCell *cell2 = cellAt( x, ref_row );
+            KSpreadCell * cell2 = cellAt( x, ref_row );
 
             if ( cell2->isEmpty() )
             { /* No need to swap */ }
@@ -2995,7 +2995,7 @@ void KSpreadTable::sortByColumn(int ref_column,SortingOrder mode)
     QRect r( selectionRect() );
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
-        KSpreadUndoChangeAreaTextCell *undo = new KSpreadUndoChangeAreaTextCell( m_pDoc, this, r );
+        KSpreadUndoSort *undo = new KSpreadUndoSort( m_pDoc, this, r );
         m_pDoc->undoBuffer()->appendUndo( undo );
     }
     // It may not happen that entire rows are selected.
@@ -3078,7 +3078,7 @@ void KSpreadTable::sortByColumn(int ref_column,SortingOrder mode)
         // Swap rows cell1 and bestCell (i.e. d and bestY)
         if ( d != bestY )
         {
-            for(int x=r.left();x<=r.right();x++)
+            for (int x = r.left(); x <= r.right(); x++)
                 swapCells( x, d, x, bestY );
         }
     }
@@ -3111,11 +3111,133 @@ void KSpreadTable::swapCells( int x1, int y1, int x2, int y2 )
   // information. Imagine sorting in a table. Swapping
   // the layout while sorting is not what you would expect
   // as a user.
-  KSpreadCell *tmp = new KSpreadCell( this, -1, -1 );
-  tmp->copyContent( ref1 );
-  ref1->copyContent( ref2 );
-  ref2->copyContent( tmp );
-  delete tmp;
+  bool changeLayout = true;
+  if (changeLayout)
+  {
+    KSpreadCell *tmp = new KSpreadCell( this, -1, -1 );
+
+    tmp->copyContent( ref1 );
+    ref1->copyContent( ref2 );
+    ref2->copyContent( tmp );
+
+    KSpreadLayout::Align a = ref1->align( ref1->column(), ref1->row() );
+    ref1->setAlign( ref2->align( ref2->column(), ref2->row() ) );
+    ref2->setAlign(a);
+
+    KSpreadLayout::AlignY ay = ref1->alignY( ref1->column(), ref1->row() );
+    ref1->setAlignY( ref2->alignY( ref2->column(), ref2->row() ) );
+    ref2->setAlignY(ay);
+
+    QFont textFont = ref1->textFont( ref1->column(), ref1->row() );
+    ref1->setTextFont( ref2->textFont( ref2->column(), ref2->row() ) );
+    ref2->setTextFont(textFont);
+
+    QColor textColor = ref1->textColor( ref1->column(), ref1->row() );
+    ref1->setTextColor( ref2->textColor( ref2->column(), ref2->row() ) );
+    ref2->setTextColor(textColor);
+
+    QColor bgColor = ref1->bgColor( ref1->column(), ref1->row() );
+    ref1->setBgColor( ref2->bgColor( ref2->column(), ref2->row() ) );
+    ref2->setBgColor(bgColor);
+
+    QPen lbp = ref1->leftBorderPen( ref1->column(), ref1->row() );
+    ref1->setLeftBorderPen( ref2->leftBorderPen( ref2->column(), ref2->row() ) );
+    ref2->setLeftBorderPen(lbp);
+
+    QPen tbp = ref1->topBorderPen( ref1->column(), ref1->row() );
+    ref1->setTopBorderPen( ref2->topBorderPen( ref2->column(), ref2->row() ) );
+    ref2->setTopBorderPen(tbp);
+
+    QPen bbp = ref1->bottomBorderPen( ref1->column(), ref1->row() );
+    ref1->setBottomBorderPen( ref2->bottomBorderPen( ref2->column(), ref2->row() ) );
+    ref2->setBottomBorderPen(bbp);
+
+    QPen rbp = ref1->rightBorderPen( ref1->column(), ref1->row() );
+    ref1->setRightBorderPen( ref2->rightBorderPen( ref2->column(), ref2->row() ) );
+    ref2->setRightBorderPen(rbp);
+
+    QPen fdp = ref1->fallDiagonalPen( ref1->column(), ref1->row() );
+    ref1->setFallDiagonalPen( ref2->fallDiagonalPen( ref2->column(), ref2->row() ) );
+    ref2->setFallDiagonalPen(fdp);
+
+    QPen udp = ref1->goUpDiagonalPen( ref1->column(), ref1->row() );
+    ref1->setGoUpDiagonalPen( ref2->goUpDiagonalPen( ref2->column(), ref2->row() ) );
+    ref2->setGoUpDiagonalPen(udp);
+
+    QBrush bgBrush = ref1->backGroundBrush( ref1->column(), ref1->row() );
+    ref1->setBackGroundBrush( ref2->backGroundBrush( ref2->column(), ref2->row() ) );
+    ref2->setBackGroundBrush(bgBrush);
+
+    int pre = ref1->precision( ref1->column(), ref1->row() );
+    ref1->setPrecision( ref2->precision( ref2->column(), ref2->row() ) );
+    ref2->setPrecision(pre);
+
+    QString prefix = ref1->prefix( ref1->column(), ref1->row() );
+    ref1->setPrefix( ref2->prefix( ref2->column(), ref2->row() ) );
+    ref2->setPrefix(prefix);
+
+    QString postfix = ref1->postfix( ref1->column(), ref1->row() );
+    ref1->setPostfix( ref2->postfix( ref2->column(), ref2->row() ) );
+    ref2->setPostfix(postfix);
+
+    KSpreadLayout::FloatFormat f = ref1->floatFormat( ref1->column(), ref1->row() );
+    ref1->setFloatFormat( ref2->floatFormat( ref2->column(), ref2->row() ) );
+    ref2->setFloatFormat(f);
+
+    KSpreadLayout::FloatColor c = ref1->floatColor( ref1->column(), ref1->row() );
+    ref1->setFloatColor( ref2->floatColor( ref2->column(), ref2->row() ) );
+    ref2->setFloatColor(c);
+
+    double fact = ref1->factor( ref1->column(), ref1->row() );
+    ref1->setFactor( ref2->factor( ref2->column(), ref2->row() ) );
+    ref2->setFactor(fact);
+
+    bool multi = ref1->multiRow( ref1->column(), ref1->row() );
+    ref1->setMultiRow( ref2->multiRow( ref2->column(), ref2->row() ) );
+    ref2->setMultiRow(multi);
+
+    bool vert = ref1->verticalText( ref1->column(), ref1->row() );
+    ref1->setVerticalText( ref2->verticalText( ref2->column(), ref2->row() ) );
+    ref2->setVerticalText(vert);
+
+    KSpreadCell::Style style = ref1->style();
+    ref1->setStyle( ref2->style() );
+    ref2->setStyle(style); 
+
+    bool print = ref1->getDontprintText( ref1->column(), ref1->row() );
+    ref1->setDontPrintText( ref2->getDontprintText( ref2->column(), ref2->row() ) );
+    ref2->setDontPrintText(print);
+
+    int ind = ref1->getIndent( ref1->column(), ref1->row() );
+    ref1->setIndent( ref2->getIndent( ref2->column(), ref2->row() ) );
+    ref2->setIndent(ind);
+
+    QValueList<KSpreadConditional> conditionList = ref1->GetConditionList();
+    ref1->SetConditionList(ref2->GetConditionList());
+    ref2->SetConditionList(conditionList);
+
+    QString com = ref1->comment( ref1->column(), ref1->row() );
+    ref1->setComment( ref2->comment( ref2->column(), ref2->row() ) );
+    ref2->setComment(com);
+
+    int angle = ref1->getAngle( ref1->column(), ref1->row() );
+    ref1->setAngle( ref2->getAngle( ref2->column(), ref2->row() ) );
+    ref2->setAngle(angle);
+
+    KSpreadLayout::FormatType form = ref1->getFormatType( ref1->column(), ref1->row() );
+    ref1->setFormatType( ref2->getFormatType( ref2->column(), ref2->row() ) );
+    ref2->setFormatType(form);
+
+    delete tmp;
+  }
+  else
+  {
+    KSpreadCell *tmp = new KSpreadCell( this, -1, -1 );
+    tmp->copyContent( ref1 );
+    ref1->copyContent( ref2 );
+    ref2->copyContent( tmp );
+    delete tmp;
+  }
 }
 
 void KSpreadTable::refreshPreference()

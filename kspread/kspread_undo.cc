@@ -904,6 +904,208 @@ void KSpreadUndoCellLayout::redo()
 
 /****************************************************************************
  *
+ * KSpreadUndoSort
+ *
+ ***************************************************************************/
+
+KSpreadUndoSort::KSpreadUndoSort( KSpreadDoc * _doc, KSpreadTable * _table, QRect & _selection ) :
+    KSpreadUndoAction( _doc )
+{
+  name        = i18n("Sort");
+
+  m_rctRect   = _selection;
+  m_tableName = _table->tableName();
+  copyAll( m_lstLayouts, m_lstColLayouts, m_lstRowLayouts, _table );
+}
+
+void KSpreadUndoSort::copyAll(QValueList<layoutTextCell> & list, QValueList<layoutColumn> & listCol, 
+                              QValueList<layoutRow> & listRow, KSpreadTable * table )
+{
+  list.clear();
+
+  if( table->isColumnSelected( m_rctRect ) )
+  {
+    for(int i = m_rctRect.left(); i <= m_rctRect.right(); i++)
+    {
+      layoutColumn tmplayout;
+      tmplayout.col = i;
+      tmplayout.l = new ColumnLayout( table,i );
+      tmplayout.l->copy( *(table->columnLayout( i )) );
+      listCol.append(tmplayout);
+    }
+    KSpreadCell * c = table->firstCell();
+    for( ; c; c = c->nextCell() )
+    {
+      int col = c->column();
+      if ( m_rctRect.left() <= col && m_rctRect.right() >= col
+           &&!c->isObscuringForced())
+      {
+        layoutTextCell tmplayout;
+        tmplayout.col = c->column();
+        tmplayout.row = c->row();
+        tmplayout.l = new KSpreadLayout( table );
+        tmplayout.l->copy( *(table->cellAt( tmplayout.col, tmplayout.row )) );
+        tmplayout.text = c->text();
+        list.append(tmplayout);
+      }
+    }
+    
+  }
+  else if (table->isRowSelected( m_rctRect ) )
+  {
+    for (int i = m_rctRect.top(); i <= m_rctRect.bottom(); i++)
+    {
+      layoutRow tmplayout;
+      tmplayout.row = i;
+      tmplayout.l = new RowLayout( table,i );
+      tmplayout.l->copy( *(table->rowLayout( i )) );
+      listRow.append(tmplayout);
+    }
+    KSpreadCell* c = table->firstCell();
+    for( ; c; c = c->nextCell() )
+    {
+      int row = c->row();
+      if ( m_rctRect.top() <= row && m_rctRect.bottom() >= row
+           && !c->isObscuringForced())
+      {
+        layoutTextCell tmplayout;
+        tmplayout.col = c->column();
+        tmplayout.row = row;
+        tmplayout.l   = new KSpreadLayout( table );
+        tmplayout.l->copy( *(table->cellAt( tmplayout.col, tmplayout.row )) );
+        tmplayout.text = c->text();
+        list.append(tmplayout);
+      }
+    }
+  }
+  else
+  {
+    for ( int y = m_rctRect.top(); y <= m_rctRect.bottom(); y++ )
+      for ( int x = m_rctRect.left(); x <= m_rctRect.right(); x++ )
+      {
+        KSpreadCell * cell = table->nonDefaultCell( x, y );
+        if(!cell->isObscured())
+        {
+          layoutTextCell tmplayout;
+          tmplayout.col = x;
+          tmplayout.row = y;
+          tmplayout.l   = new KSpreadLayout( table );
+          tmplayout.l->copy( *(table->cellAt( x, y )) );
+          tmplayout.text = cell->text();
+          list.append(tmplayout);
+        }
+      }
+  }
+}
+
+KSpreadUndoSort::~KSpreadUndoSort()
+{
+}
+
+void KSpreadUndoSort::undo()
+{
+  KSpreadTable * table = doc()->map()->findTable( m_tableName );
+  if ( !table )
+    return;
+  
+  doc()->undoBuffer()->lock();
+  
+  copyAll( m_lstRedoLayouts, m_lstRedoColLayouts, 
+           m_lstRedoRowLayouts, table );
+
+  if ( table->isColumnSelected( m_rctRect ) )
+  {
+    QValueList<layoutColumn>::Iterator it2;
+    for ( it2 = m_lstColLayouts.begin(); it2 != m_lstColLayouts.end(); ++it2 )
+    {
+      ColumnLayout * col = table->nonDefaultColumnLayout( (*it2).col );
+      col->copy( *(*it2).l );
+    }
+  }
+  else if( table->isRowSelected( m_rctRect ) )
+  {
+    QValueList<layoutRow>::Iterator it2;
+    for ( it2 = m_lstRowLayouts.begin(); it2 != m_lstRowLayouts.end(); ++it2 )
+    {
+      RowLayout *row= table->nonDefaultRowLayout( (*it2).row );
+      row->copy( *(*it2).l );
+    }
+  }
+
+  QValueList<layoutTextCell>::Iterator it2;
+  for ( it2 = m_lstLayouts.begin(); it2 != m_lstLayouts.end(); ++it2 )
+  {
+    KSpreadCell *cell = table->nonDefaultCell( (*it2).col,(*it2).row );
+    if ( (*it2).text.isEmpty() )
+    {
+      if(!cell->text().isEmpty())
+        cell->setCellText( "" );
+    }
+    else
+      cell->setCellText( (*it2).text );
+
+    cell->copy( *(*it2).l );
+    cell->setLayoutDirtyFlag();
+    cell->setDisplayDirtyFlag();
+    table->updateCell( cell, (*it2).col, (*it2).row );
+  }
+  
+  table->updateView(m_rctRect);
+  doc()->undoBuffer()->unlock();
+}
+
+void KSpreadUndoSort::redo()
+{
+    KSpreadTable* table = doc()->map()->findTable( m_tableName );
+    if ( !table )
+	return;
+
+    doc()->undoBuffer()->lock();
+
+    if( table->isColumnSelected( m_rctRect ) )
+    {
+      QValueList<layoutColumn>::Iterator it2;
+      for ( it2 = m_lstRedoColLayouts.begin(); it2 != m_lstRedoColLayouts.end(); ++it2 )
+      {
+        ColumnLayout *col= table->nonDefaultColumnLayout( (*it2).col );
+        col->copy( *(*it2).l );
+      }
+    }
+    else if( table->isRowSelected( m_rctRect ) )
+    {
+      QValueList<layoutRow>::Iterator it2;
+      for ( it2 = m_lstRedoRowLayouts.begin(); it2 != m_lstRedoRowLayouts.end(); ++it2 )
+      {
+        RowLayout *row= table->nonDefaultRowLayout( (*it2).row );
+        row->copy( *(*it2).l );
+      }
+    }
+    
+    QValueList<layoutTextCell>::Iterator it2;
+    for ( it2 = m_lstRedoLayouts.begin(); it2 != m_lstRedoLayouts.end(); ++it2 )
+    {
+      KSpreadCell *cell = table->nonDefaultCell( (*it2).col,(*it2).row );
+      
+      if ( (*it2).text.isEmpty() )
+      {
+        if(!cell->text().isEmpty())
+          cell->setCellText( "" );
+      }
+      else
+        cell->setCellText( (*it2).text );
+      
+      cell->copy( *(*it2).l );
+      cell->setLayoutDirtyFlag();
+      cell->setDisplayDirtyFlag();
+      table->updateCell( cell, (*it2).col, (*it2).row );
+    }
+    
+    table->updateView(m_rctRect);
+    doc()->undoBuffer()->unlock();
+}
+
+/****************************************************************************
+ *
  * KSpreadUndoDelete
  *
  ***************************************************************************/
