@@ -546,6 +546,12 @@ protected:
    */
   void resetURL() { m_url = KURL(); }
 
+  /// @internal
+  virtual void setModified() { ReadWritePart::setModified(); }
+
+  /// @internal
+  virtual void insertChild(QObject *o) { QObject::insertChild(o); }
+
 private slots:
   void slotChildChanged( KoChild *c );
   void slotChildDestroyed();
