@@ -1,6 +1,7 @@
 #ifndef KCHARTWIZARD_H
 #define KCHARTWIZARD_H
 
+#include <klocale.h>
 #include "kwizard.h"
 
 class KChart;
