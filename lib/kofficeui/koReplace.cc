@@ -211,7 +211,7 @@ void KoReplace::slotUser1()
 
     // Tell the world about the replacement we made, in case someone wants to
     // highlight it.
-    emit replace(m_text, m_index, replacedLength, m_expose);
+    emit replace(m_text, m_index, replacedLength,m_matchedLength , m_expose);
     m_replacements++;
     if (m_options & KoReplaceDialog::FindBackwards)
         m_index--;
@@ -236,14 +236,14 @@ void KoReplace::slotUser3()
 }
 
 void KoReplace::doReplace()
-{    
+{
     int replacedLength;
 
     replacedLength = KoReplace::replace(m_text, m_replacement, m_index, m_matchedLength);
 
     // Tell the world about the replacement we made, in case someone wants to
     // highlight it.
-    emit replace(m_text, m_index, replacedLength, m_expose);
+    emit replace(m_text, m_index, replacedLength,m_matchedLength, m_expose);
     m_replacements++;
     if (m_options & KoReplaceDialog::FindBackwards)
         m_index--;

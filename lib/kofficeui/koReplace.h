@@ -233,7 +233,7 @@ signals:
      * Connect to this slot to implement updating of replaced text during the replace
      * operation.
      */
-    void replace(const QString &text, int replacementIndex, int replacedLength, const QRect &expose);
+    void replace(const QString &text, int replacementIndex, int replacedLength,int matchedLength, const QRect &expose);
 
 private:
     void doReplace();
