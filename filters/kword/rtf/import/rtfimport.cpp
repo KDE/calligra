@@ -1857,3 +1857,4 @@ void RTFImport::writeOutMetafile( const char *name, QByteArray &array )
     // Store clipart
     writeOutPart( name, array );
 }
+#include "rtfimport.moc"
