@@ -13,13 +13,13 @@ store_FILES = *.h
 store_LIBS = -lkdecore -lqt
 
 koparts_FILES = *.h
-koparts_LIBS = -lkdeui -lkdecore -lqt
+koparts_LIBS = -lkdeui -lqt
 
 kofficecore_FILES = *.h
-kofficecore_LIBS = -lkparts -lkdecore -lqt
+kofficecore_LIBS = -lkoparts -lkdecore -lqt
 
 kofficeui_FILES = *.h
-kofficeui_LIBS = -lkofficecore -lkparts -lkdeui -lkdecore -lqt
+kofficeui_LIBS = -lkofficecore -lkdeui -lkdecore -lqt
 
 kscript_FILES = *.h
 kscript_LIBS = -lqk -lqt
