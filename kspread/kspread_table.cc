@@ -1314,6 +1314,7 @@ void KSpreadTable::setSelectionBorderColor( const QPoint &_marker, const QColor 
 
 void KSpreadTable::setSeries( const QPoint &_marker,int start,int end,int step,Series mode,Series type)
 {
+    doc()->emitBeginOperation();
     QRect r(_marker.x(), _marker.y(), _marker.x(), _marker.y() );
 
     int y = r.top();
@@ -1405,6 +1406,7 @@ void KSpreadTable::setSeries( const QPoint &_marker,int start,int end,int step,S
         else
             kdDebug(36001) << "Error in Series::type" << endl;
     }
+    doc()->emitEndOperation();
 }
 
 
@@ -2842,7 +2844,7 @@ void KSpreadTable::sortByRow( int ref_row, SortingOrder mode )
     // Sorting algorithm: David's :). Well, I guess it's called minmax or so.
     // For each column, we look for all cells right hand of it and we find the one to swap with it.
     // Much faster than the awful bubbleSort...
-    
+
     for ( int d = r.left();  d <= r.right(); d++ )
     {
         KSpreadCell *cell1 = cellAt( d, ref_row  );
@@ -2890,7 +2892,7 @@ void KSpreadTable::sortByRow( int ref_row, SortingOrder mode )
 
     }
    doc()->emitEndOperation();
-   
+
 }
 
 void KSpreadTable::sortByColumn(int ref_column,SortingOrder mode)

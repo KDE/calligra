@@ -433,6 +433,7 @@ void KSpreadTable::autofill( QRect &src, QRect &dest )
 void KSpreadTable::fillSequence( QPtrList<KSpreadCell>& _srcList, QPtrList<KSpreadCell>& _destList,
                                  QPtrList<AutoFillSequence>& _seqList )
 {
+    doc()->emitBeginOperation();
     QPtrList<AutoFillDeltaSequence> deltaList;
     deltaList.setAutoDelete( TRUE );
 
@@ -592,4 +593,5 @@ void KSpreadTable::fillSequence( QPtrList<KSpreadCell>& _srcList, QPtrList<KSpre
         cell = _destList.next();
         s++;
     }
+    doc()->emitEndOperation();
 }
