@@ -2696,14 +2696,13 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 
         conditionAlign( _painter, _col, _row );
 
-
+        int indent=0;
+        int a = defineAlignX();
+        //apply indent if text is align to left not when text is at right or middle
+        if(  a==KSpreadCell::Left)
+                indent=m_indent;
         if ( !m_bMultiRow && !m_bVerticalText && !m_rotateAngle)
                 {
-                int indent=0;
-                int a = defineAlignX();
-                //apply indent if text is align to left not when text is at right or middle
-                if(  a==KSpreadCell::Left)
-                        indent=m_indent;
                 _painter.drawText( indent+_tx + m_iTextX, _ty + m_iTextY, m_strOutText );
                 }
         else if( m_rotateAngle!=0)
@@ -2713,9 +2712,9 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
             _painter.rotate(angle);
             int x;
             if(angle>0)
-                x=_tx + m_iTextX;
+                x=indent+_tx + m_iTextX;
             else
-                x=static_cast<int>(_tx + m_iTextX -(fm.descent() + fm.ascent())*sin(angle*M_PI/180));
+                x=indent+static_cast<int>(_tx + m_iTextX -(fm.descent() + fm.ascent())*sin(angle*M_PI/180));
             int y;
             if(angle>0)
                 y=_ty + m_iTextY;
@@ -2761,7 +2760,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
                 case KSpreadCell::Center:
                     m_iTextX = ( w2 - fm.width( t ) ) / 2;
                 }
-                _painter.drawText( _tx + m_iTextX + dx, _ty + m_iTextY + dy, t );
+                _painter.drawText( indent+_tx + m_iTextX + dx, _ty + m_iTextY + dy, t );
                 dy += fm.descent() + fm.ascent();
             }
             while ( i != -1 );
@@ -2778,7 +2777,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
             {
                 i=m_strOutText.length();
                 t=m_strOutText.at(j);
-                _painter.drawText( _tx + m_iTextX + dx, _ty + m_iTextY + dy, t );
+                _painter.drawText( indent +_tx + m_iTextX + dx, _ty + m_iTextY + dy, t );
                 dy += fm.descent() + fm.ascent();
                 j++;
             }
