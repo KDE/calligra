@@ -11,7 +11,6 @@
  <STYLES>
   <STYLE>
    <NAME value="Standard" />
-   <FLOW align="left" />
    <FOLLOWING name="Standard" />
    <FORMAT id="1">
     <!-- Use KDE settings for the font -->
@@ -29,7 +28,6 @@
   </STYLE>
   <STYLE>
    <NAME value="Head 1" />
-   <FLOW align="left" />
    <COUNTER numberingtype="1" righttext="." type="1" start="1" depth="0" />
    <FOLLOWING name="Standard" />
    <FORMAT id="1">
@@ -40,7 +38,6 @@
   </STYLE>
   <STYLE>
    <NAME value="Head 2" />
-   <FLOW align="left" />
    <COUNTER numberingtype="1" righttext="." type="1" start="1" depth="1" />
    <FOLLOWING name="Standard" />
    <FORMAT id="1">
@@ -51,7 +48,6 @@
   </STYLE>
   <STYLE>
    <NAME value="Head 3" />
-   <FLOW align="left" />
    <COUNTER numberingtype="1" righttext="." type="1" start="1" depth="2" />
    <FOLLOWING name="Standard" />
    <FORMAT id="1">
@@ -62,7 +58,6 @@
   </STYLE>
   <STYLE>
    <NAME value="Enumerated List" />
-   <FLOW align="left" />
    <COUNTER numberingtype="0" righttext="." type="1" start="1" depth="0" />
    <FOLLOWING name="Enumerated List" />
    <FORMAT id="1">
@@ -71,7 +66,6 @@
   </STYLE>
   <STYLE>
    <NAME value="Alphabetical List" />
-   <FLOW align="left" />
    <COUNTER numberingtype="0" righttext=")" type="2" start="1" depth="0" />
    <FOLLOWING name="Alphabetical List" />
    <FORMAT id="1">
@@ -80,7 +74,6 @@
   </STYLE>
   <STYLE>
    <NAME value="Bullet List" />
-   <FLOW align="left" />
    <COUNTER numberingtype="0" type="10" start="1" depth="0" />
    <FOLLOWING name="Bullet List" />
    <FORMAT id="1">
