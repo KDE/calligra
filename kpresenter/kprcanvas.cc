@@ -572,7 +572,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
     {
         KPTextObject *txtObj=m_currentTextObjectView->kpTextObject();
         Q_ASSERT(txtObj);
-        if(txtObj->contains( docPoint,m_view->zoomHandler() ))
+        if(txtObj->contains( docPoint ))
         {
             KoPoint pos = docPoint - txtObj->innerRect().topLeft(); // in pt, but now translated into the object's coordinate system
             mousePressed=true;
@@ -1231,14 +1231,14 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                 QPtrListIterator<KPObject> it( getObjectList() );
                 for ( ; it.current() ; ++it )
                 {
-                    if ( it.current()->intersects( m_view->zoomHandler()->unzoomRect(rubber),m_view->zoomHandler() ) )
+                    if ( it.current()->intersects( m_view->zoomHandler()->unzoomRect(rubber) ) )
                         selectObj( it.current() );
                 }
 
                 QPtrListIterator<KPObject> sIt(stickyPage()->objectList() );
                 for ( ; sIt.current() ; ++sIt )
                 {
-                    if ( sIt.current()->intersects( m_view->zoomHandler()->unzoomRect(rubber),m_view->zoomHandler() ) )
+                    if ( sIt.current()->intersects( m_view->zoomHandler()->unzoomRect(rubber) ) )
                     {
                         if( m_view->kPresenterDoc()->isHeaderFooter(sIt.current()))
                         {
@@ -1565,7 +1565,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
     {
         KPTextObject *txtObj=m_currentTextObjectView->kpTextObject();
         Q_ASSERT(txtObj);
-        if(txtObj->contains( docPoint,m_view->zoomHandler() )&&mousePressed)
+        if(txtObj->contains( docPoint )&&mousePressed)
         {
             KoPoint pos = docPoint - txtObj->innerRect().topLeft();
             m_currentTextObjectView->mouseMoveEvent( e, m_view->zoomHandler()->ptToLayoutUnitPix( pos ) ); // in LU pixels
@@ -2033,7 +2033,7 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
     {
         KPTextObject *txtObj=m_currentTextObjectView->kpTextObject();
         Q_ASSERT(txtObj);
-        if(txtObj->contains( docPoint,m_view->zoomHandler() ))
+        if(txtObj->contains( docPoint ))
         {
             KoPoint pos = contentsPoint - txtObj->getOrig();
             //pos=m_view->zoomHandler()->pixelToLayoutUnit(QPoint(pos.x(),pos.y()));

@@ -3372,16 +3372,7 @@ QPtrList<KoTextObject> KPrPage::objectText(QPtrList<KPObject> list)
 
 KPObject * KPrPage::getCursor( const QPoint &pos )
 {
-    QPtrListIterator<KPObject> it( m_objectList );
-    for ( ; it.current() ; ++it )
-    {
-        if(it.current()->contains(m_doc->zoomHandler()->zoomPoint(pos),m_doc->zoomHandler())) {
-            if(it.current()->isSelected())
-                return it.current();
-            break;
-        }
-    }
-    return 0L;
+    return getCursor( m_doc->zoomHandler()->unzoomPoint( pos ) );
 }
 
 KPObject * KPrPage::getCursor(const KoPoint &pos )
@@ -3389,7 +3380,7 @@ KPObject * KPrPage::getCursor(const KoPoint &pos )
     KPObject *kpobject=0L;
     for ( int i = m_objectList.count() - 1; i >= 0; i-- ) {
         kpobject = m_objectList.at( i );
-        if ( kpobject->contains( pos,m_doc->zoomHandler() )) {
+        if ( kpobject->contains( pos )) {
             if ( kpobject->isSelected() ) {
                 return kpobject;
             }
@@ -3404,7 +3395,7 @@ KPObject * KPrPage::getObjectResized( const KoPoint &pos, ModifyType modType, bo
     if ( (int)m_objectList.count() - 1 >= 0 ) {
         for ( int i = m_objectList.count() - 1; i >= 0 ; i-- ) {
             kpobject = m_objectList.at( i );
-            if ( !kpobject->isProtect() && kpobject->contains( pos,m_doc->zoomHandler() ) ) {
+            if ( !kpobject->isProtect() && kpobject->contains( pos ) ) {
                 _over = true;
                 if ( kpobject->isSelected() && modType == MT_MOVE )
                     desel = false;
@@ -3422,7 +3413,7 @@ KPObject* KPrPage::getObjectAt( const KoPoint&pos ) const
     QPtrListIterator<KPObject> it( m_objectList );
     KPObject *o = it.toLast();
     while ( o ) {
-        if ( o->contains( pos, m_doc->zoomHandler() ) )
+        if ( o->contains( pos ) )
             return o;
         o = --it;
     }

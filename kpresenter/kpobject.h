@@ -178,8 +178,8 @@ public:
     virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
 		       SelectionMode selectionMode, bool drawContour = FALSE );
 
-    virtual bool contains( const KoPoint &_point,KoZoomHandler *_zoomHandler  ) const;
-    virtual bool intersects( const KoRect & _rect,KoZoomHandler *_zoomHandler  ) const;
+    virtual bool contains( const KoPoint &_point ) const;
+    virtual bool intersects( const KoRect & _rect ) const;
     virtual QCursor getCursor( const KoPoint &_point, ModifyType &_modType, KPresenterDoc *doc ) const;
 
     KoRect rotateRectObject() const;

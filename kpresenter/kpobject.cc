@@ -377,7 +377,7 @@ void KPObject::rotateObjectWithShadow(QPainter *paint,KoZoomHandler *_zoomHandle
 
 
 /*======================== contain point ? =======================*/
-bool KPObject::contains( const KoPoint &_point,KoZoomHandler *_zoomHandler ) const
+bool KPObject::contains( const KoPoint &_point ) const
 {
     if ( angle == 0.0 )
     {
@@ -386,13 +386,13 @@ bool KPObject::contains( const KoPoint &_point,KoZoomHandler *_zoomHandler ) con
     }
     else
     {
-        KoRect r=rotateRectObject(_zoomHandler );
+        KoRect r=rotateRectObject();
         return r.contains( _point );
     }
 }
 
 /*================================================================*/
-bool KPObject::intersects( const KoRect &_rect,KoZoomHandler *_zoomHandler ) const
+bool KPObject::intersects( const KoRect &_rect ) const
 {
     if ( angle == 0.0 )
     {
@@ -401,7 +401,7 @@ bool KPObject::intersects( const KoRect &_rect,KoZoomHandler *_zoomHandler ) con
     }
     else
     {
-        KoRect r=rotateRectObject(_zoomHandler );
+        KoRect r=rotateRectObject();
         return r.intersects( _rect );
     }
 }
@@ -421,7 +421,7 @@ QCursor KPObject::getCursor( const KoPoint &_point, ModifyType &_modType, KPrese
     KoRect r( orig, ext );
     if ( angle != 0.0 )
     {
-        r=rotateRectObject(_zoomHandler );
+        r=rotateRectObject();
         ox = r.x() ;
         oy = r.y();
         ow = r.width();
@@ -565,7 +565,7 @@ void KPObject::paintSelection( QPainter *_painter, KoZoomHandler *_zoomHandler, 
     _painter->setPen( QPen( Qt::black, 1, QPen::SolidLine ) );
     _painter->setBrush( kapp->palette().color( QPalette::Active, QColorGroup::Highlight ) );
 
-    KoRect r = rotateRectObject(_zoomHandler );
+    KoRect r = rotateRectObject();
     int x = _zoomHandler->zoomItX( r.left() - orig.x());
     int y = _zoomHandler->zoomItY( r.top() - orig.y());
     int zX6 = /*_zoomHandler->zoomItX(*/ 6 ;
