@@ -1165,6 +1165,40 @@ void KSpreadUndoCellLayout::redo()
 
 /****************************************************************************
  *
+ * KSpreadUndoChangeAngle
+ *
+ ***************************************************************************/
+
+KSpreadUndoChangeAngle::KSpreadUndoChangeAngle( KSpreadDoc * _doc,
+                                              KSpreadTable * _table,
+                                              const QRect & _selection ) :
+  KSpreadUndoAction( _doc )
+{
+  name = i18n("Change Angle");
+  m_layoutUndo = new KSpreadUndoCellLayout( _doc, _table, _selection, QString::null );
+  m_resizeUndo = new KSpreadUndoResizeColRow( _doc, _table, _selection );
+}
+
+KSpreadUndoChangeAngle::~KSpreadUndoChangeAngle()
+{
+  delete m_resizeUndo;
+  delete m_layoutUndo;
+}
+
+void KSpreadUndoChangeAngle::undo()
+{
+  m_layoutUndo->undo();
+  m_resizeUndo->undo();
+}
+
+void KSpreadUndoChangeAngle::redo()
+{
+  m_layoutUndo->redo();
+  m_resizeUndo->redo();
+}
+
+/****************************************************************************
+ *
  * KSpreadUndoSort
  *
  ***************************************************************************/

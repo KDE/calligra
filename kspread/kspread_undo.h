@@ -348,6 +348,24 @@ protected:
     QString m_tableName;
 };
 
+class KSpreadUndoResizeColRow;
+
+class KSpreadUndoChangeAngle : public KSpreadUndoAction
+{
+public:
+    KSpreadUndoChangeAngle( KSpreadDoc *_doc, KSpreadTable *_table, const QRect &_selection );
+    virtual ~KSpreadUndoChangeAngle();
+
+    virtual void undo();
+    virtual void redo();
+
+protected:
+
+   KSpreadUndoCellLayout* m_layoutUndo;
+   KSpreadUndoResizeColRow* m_resizeUndo;
+
+};
+
 class KSpreadUndoDelete : public KSpreadUndoAction
 {
 public:

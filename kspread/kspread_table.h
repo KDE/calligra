@@ -480,7 +480,7 @@ public:
                               const QString &_comment);
     void setSelectionRemoveComment(KSpreadSelection* selectionInfo);
 
-    void setSelectionAngle(KSpreadSelection* selectionInfo, int _value);
+    void setSelectionAngle(KSpreadSelection* selectionInfo, int _value );
 
     void setSelectionTextColor( KSpreadSelection* selectionInfo,
                                 const QColor &tbColor );

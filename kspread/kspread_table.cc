@@ -1299,6 +1299,10 @@ struct SetSelectionAngleWorker : public KSpreadTable::CellWorkerTypeA {
     SetSelectionAngleWorker( int value ) : _value( value ) { }
 
     QString getUndoTitle() { return i18n("Change Angle"); }
+    KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadTable* table, QRect& r ){
+        return new KSpreadUndoChangeAngle( doc, table, r );
+    }
+
     bool testCondition( RowLayout* rw ) {
         return ( rw->hasProperty( KSpreadCell::PAngle ) );
     }
