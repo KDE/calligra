@@ -58,7 +58,7 @@ int istorestreambuffer::underflow ()
         return EOF;
     }
     //else
-    //  kdebug( KDEBUG_INFO, 30002, "Read %i bytes", anz );
+    //  kDebugInfo( 30002, "Read %i bytes", anz );
 
     /* set the pointer to our buffer
      */

@@ -134,7 +134,7 @@ public:
   istorestreambuffer( KoStore* _store )
     : m_pStore( _store )
   {
-    //kdebug( KDEBUG_INFO, 30002, "Pointer constructor" );
+    //kDebugInfo( 30002, "Pointer constructor" );
     setg (puffer+4,     // beginning of Putback-Zone
 	  puffer+4,     // read posiition
 	  puffer+4);    // end of the buffer
