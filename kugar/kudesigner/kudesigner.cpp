@@ -94,6 +94,10 @@ void KuDesignerApp::enableDocumentActions()
     itemsSpecial->setEnabled(true);
     itemsCalculated->setEnabled(true);
     itemsLine->setEnabled(true);
+
+    toolsEditProps->setEnabled(true);
+    toolsDelete->setEnabled(true);
+    toolsClear->setEnabled(true);
 }
 
 void KuDesignerApp::disableDocumentActions()
@@ -112,6 +116,10 @@ void KuDesignerApp::disableDocumentActions()
     itemsSpecial->setEnabled(false);
     itemsCalculated->setEnabled(false);
     itemsLine->setEnabled(false);
+    
+    toolsEditProps->setEnabled(false);
+    toolsDelete->setEnabled(false);
+    toolsClear->setEnabled(false);
 }
 
 KuDesignerApp::~KuDesignerApp()
@@ -173,6 +181,16 @@ void KuDesignerApp::initActions()
     itemsLine->setExclusiveGroup("itemsToolBar");
 
 
+    toolsEditProps = new KRadioAction(i18n("Edit Properties"), "edit", 0, this,
+	SLOT(slotEditProps()), actionCollection(), "tools_props");
+    toolsEditProps->setExclusiveGroup("editToolBar");
+    toolsDelete = new KRadioAction(i18n("Delete"), "editdelete", 0, this,
+	SLOT(slotDelete()), actionCollection(), "tools_delete");
+    toolsDelete->setExclusiveGroup("editToolBar");
+    toolsClear = new KRadioAction(i18n("Clear Selection"), "view_remove", 0, this,
+	SLOT(slotClearEdit()), actionCollection(), "tools_clear");
+    toolsClear->setExclusiveGroup("editToolBar");
+    toolsClear->setChecked(true);
 
     //creating own menu items and toolbars
 
@@ -223,13 +241,22 @@ void KuDesignerApp::initView()
   setCentralWidget(view);	
   setCaption(doc->URL().fileName(),false);
   connect(view, SIGNAL(selectedActionProcessed()), this, SLOT(unselectItemAction()));
+  connect(view, SIGNAL(selectedEditActionProcessed()), this, SLOT(unselectEditAction()));
+  connect(view, SIGNAL(modificationPerformed()), this, SLOT(setModified()));
 }
 
 void KuDesignerApp::openDocumentFile(const KURL& url)
 {
   slotStatusMsg(i18n("Opening file..."));
 
-  doc->openDocument( url);
+  if (!doc->openDocument( url)) return;
+  setCaption(url.fileName(), false);
+  fileOpenRecent->addURL( url );
+  filePrint->setEnabled(true);
+  fileSave->setEnabled(true);
+  fileSaveAs->setEnabled(true);
+  enableDocumentActions();
+				      
   fileOpenRecent->addURL( url );
   slotStatusMsg(i18n("Ready."));
 }
@@ -381,6 +408,7 @@ void KuDesignerApp::slotFileNew()
           setCaption(doc->URL().fileName(), false);
           enableDocumentActions();
           filePrint->setEnabled(true);
+//	  fileSave->setEnabled(true);
           fileSaveAs->setEnabled(true);
       }
       else
@@ -419,7 +447,7 @@ void KuDesignerApp::slotFileOpen()
     }
     else
     {
-	disableDocumentActions();
+	if (!doc->canvas()) disableDocumentActions();
     }
   }
   slotStatusMsg(i18n("Ready."));
@@ -459,7 +487,7 @@ void KuDesignerApp::slotFileSaveAs()
 {
   slotStatusMsg(i18n("Saving file with a new filename..."));
 
-  KURL url=KFileDialog::getSaveURL(QDir::currentDirPath(),
+  KURL url=KFileDialog::getSaveURL(QString::null,
         i18n("*|Report template files (*.kut)"), this, i18n("Save As"));
   if(!url.isEmpty())
   {
@@ -549,12 +577,14 @@ void KuDesignerApp::slotViewToolBar()
     toolBar("mainToolBar")->hide();
     toolBar("sectionsToolBar")->hide();
     toolBar("itemsToolBar")->hide();
+    toolBar("editToolBar")->hide();
   }
   else
   {
     toolBar("mainToolBar")->show();
     toolBar("sectionsToolBar")->show();
     toolBar("itemsToolBar")->show();
+    toolBar("editToolBar")->show();
   }		
 
   slotStatusMsg(i18n("Ready."));
@@ -596,6 +626,7 @@ void KuDesignerApp::slotAddReportHeader(){
     		50, doc->canvas());
 	    doc->canvas()->templ->reportHeader = rh;
     	doc->canvas()->templ->arrangeSections();
+	doc->setModified(true);
     }
 }
 /** No descriptions */
@@ -608,6 +639,7 @@ void KuDesignerApp::slotAddReportFooter(){
 	    	50, doc->canvas());
     	doc->canvas()->templ->reportFooter = rf;
     	doc->canvas()->templ->arrangeSections();
+	doc->setModified(true);
     }
 }
 /** No descriptions */
@@ -620,6 +652,7 @@ void KuDesignerApp::slotAddPageHeader(){
 	    	50, doc->canvas());
 	    doc->canvas()->templ->pageHeader = ph;
     	doc->canvas()->templ->arrangeSections();
+	doc->setModified(true);
     }
 }
 /** No descriptions */
@@ -632,6 +665,7 @@ void KuDesignerApp::slotAddPageFooter(){
     		50, doc->canvas());
     	doc->canvas()->templ->pageFooter = pf;
     	doc->canvas()->templ->arrangeSections();
+	doc->setModified(true);
     }
 }
 /** No descriptions */
@@ -649,6 +683,7 @@ void KuDesignerApp::slotAddDetailHeader(){
     	dh->props["Level"].first = QString("%1").arg(level);
 	    doc->canvas()->templ->details[level].first.first = dh;
     	doc->canvas()->templ->arrangeSections();
+	doc->setModified(true);
     }
 }
 /** No descriptions */
@@ -668,6 +703,7 @@ void KuDesignerApp::slotAddDetail(){
     	doc->canvas()->templ->details[level].second = d;
     	doc->canvas()->templ->arrangeSections();
     	doc->canvas()->templ->detailsCount++;
+	doc->setModified(true);
     }
 }
 /** No descriptions */
@@ -685,6 +721,7 @@ void KuDesignerApp::slotAddDetailFooter(){
     	df->props["Level"].first = QString("%1").arg(level);
 	    doc->canvas()->templ->details[level].first.second = df;
     	doc->canvas()->templ->arrangeSections();
+	doc->setModified(true);
     }
 }
 /** No descriptions */
@@ -752,4 +789,39 @@ void KuDesignerApp::slotAddItemLine(){
 void KuDesignerApp::unselectItemAction(){
     itemsNothing->setChecked(true);
 }
+
+void KuDesignerApp::unselectEditAction(){
+    toolsClear->setChecked(true);
+}
+
+void KuDesignerApp::slotEditProps()
+{
+    if (doc->canvas())
+	if (itemsNothing->isChecked())
+	    view->setRequest(ReportCanvas::RequestProps);
+	else
+	    unselectEditAction();
+}
+
+void KuDesignerApp::slotDelete()
+{
+    if (doc->canvas())
+	if (itemsNothing->isChecked())
+	    view->setRequest(ReportCanvas::RequestDelete);
+	else
+	    unselectEditAction();
+}
+
+void KuDesignerApp::slotClearEdit()
+{
+    if (view->requested())
+	view->clearRequest();
+}
+
+void KuDesignerApp::setModified()
+{
+    if (doc)
+	doc->setModified(true);
+}
+
 #include "kudesigner.moc"

@@ -1,6 +1,11 @@
 <!DOCTYPE kpartgui>
 <kpartgui name="kudesigner" version="0.1">
 <MenuBar>
+  <Menu name="edit">
+    <Action name="tools_clear" group="edit actions"/>
+    <Action name="tools_props" group="edit actions"/>
+    <Action name="tools_delete" group="edit actions"/>
+  </Menu>
   <Menu name="sections"><text>Sec&amp;tions</text>
     <Action name="rheader"/>
     <Action name="pheader"/>
@@ -39,5 +44,10 @@
     <Action name="special" group="item operations"/>
     <Separator/>
     <Action name="line" group="item operations"/>
+</ToolBar>
+<ToolBar name="editToolBar" noMerge="1" position="left"><text>Edit Toolbar</text>
+    <Action name="tools_clear" group="edit actions"/>
+    <Action name="tools_props" group="edit actions"/>
+    <Action name="tools_delete" group="edit actions"/>
 </ToolBar>
 </kpartgui>

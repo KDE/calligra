@@ -186,6 +186,12 @@ class KuDesignerApp : public KMainWindow
   void slotAddItemLabel();
   /** No descriptions */
   void unselectItemAction();
+  void unselectEditAction();
+  void setModified();
+  
+  void slotEditProps();
+  void slotDelete();
+  void slotClearEdit();
 
   private:
     /** the configuration object of the application */
@@ -229,6 +235,10 @@ class KuDesignerApp : public KMainWindow
     KRadioAction* itemsSpecial;
     KRadioAction* itemsCalculated;
     KRadioAction* itemsLine;
+    
+    KRadioAction* toolsEditProps;
+    KRadioAction* toolsDelete;
+    KRadioAction* toolsClear;
 
     KToggleAction* viewToolBar;
     KToggleAction* viewStatusBar;
