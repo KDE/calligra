@@ -145,24 +145,23 @@ void KPPartObject::slot_changed( KoChild *_koChild )
 
 /*================================================================*/
 void KPPartObject::paint( QPainter *_painter, KoZoomHandler *_zoomHandler,
-			  bool drawingShadow, bool drawContour )
+                          bool /*drawingShadow*/, bool drawContour )
 {
     if ( !_enableDrawing ) return;
 
     if ( drawContour ) {
-	QPen pen3( Qt::black, 1, Qt::DotLine );
-	_painter->setPen( pen3 );
+        QPen pen3( Qt::black, 1, Qt::DotLine );
+        _painter->setPen( pen3 );
         _painter->setRasterOp( Qt::NotXorROP );
-	_painter->drawRect( _zoomHandler->zoomRect( KoRect( KoPoint( 0.0, 0.0 ), getSize() ) ) );
-	return;
+        _painter->drawRect( KoRect( KoPoint( 0.0, 0.0 ), getSize() ).toQRect() );
+        return;
     }
 
     if ( !child || !child->document() )
         return;
 
     child->document()->paintEverything( *_painter,
-                                        _zoomHandler->zoomRect( KoRect( KoPoint( 0.0, 0.0 ),
-                                                                        getSize() ) ),
+                                        KoRect( KoPoint( 0.0, 0.0 ), getSize() ).toQRect(),
                                         true, // flicker?
                                         0 /* View isn't known from here - is that a problem? */,
                                         _zoomHandler->zoomedResolutionX(),
