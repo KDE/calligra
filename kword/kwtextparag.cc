@@ -714,10 +714,8 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */,
                     formatsElem.appendChild( formatElem );
             }
 
-            QDomElement formatElem = doc.createElement( "FORMAT" );
+            QDomElement formatElem = saveFormat( doc, curFormat, paragraphFormat(), index, 1 );
             formatsElem.appendChild( formatElem );
-            formatElem.setAttribute( "pos", index );
-            formatElem.setAttribute( "len", 1 );
             static_cast<KWTextCustomItem *>( ch.customItem() )->save( formatElem );
             startPos = -1;
             curFormat = paragraphFormat();
