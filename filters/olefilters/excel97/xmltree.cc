@@ -1123,11 +1123,14 @@ bool XMLTree::invokeHandler(Q_UINT16 opcode, Q_UINT32 bytes, QDataStream &operan
     unsigned int i;
     method result;
 
+    if(!QString::number(opcode, 16).startsWith("10"))
+    	opcode = opcode & 0x00FF;
+
     // Scan lookup table for operation.
 
     for (i = 0; funcTab[i].name; i++)
     {
-        if (funcTab[i].opcode == (opcode & 0x00FF))
+        if (funcTab[i].opcode == opcode)
         {
             break;
         }
@@ -1144,7 +1147,7 @@ bool XMLTree::invokeHandler(Q_UINT16 opcode, Q_UINT32 bytes, QDataStream &operan
                 " operands: " << bytes << endl;
         else
             kdWarning(s_area) << "invokeHandler: unsupported opcode: 0x" <<
-                QString::number((opcode & 0x00FF), 16) <<
+                QString::number(opcode, 16) <<
                 " operands: " << bytes << endl;
 
         // Skip data we cannot use.
