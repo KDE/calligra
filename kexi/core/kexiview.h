@@ -66,8 +66,9 @@ public:
 	KexiTabBrowser* browser()const { return m_browser; };
 	KexiWindowMode windowMode()const { return m_windowMode;};
 
+#ifndef KEXI_NO_CTXT_HELP
 	KexiContextHelp	*help()const { return m_help; }
-
+#endif
 	KexiProject *project()const ;
 
     virtual void updateReadWrite( bool readwrite );
@@ -97,15 +98,18 @@ protected:
 	KDockWidget		*m_mainDock;
 	QWidget			*m_workspace;
 	KexiTabBrowser	  	*m_browser;
+#ifndef KEXI_NO_CTXT_HELP
 	KexiContextHelp		*m_help;
+#endif
 	KexiWindowMode		m_windowMode;
 
 	KexiDoc			*m_doc;
 
 
 	KAction			*m_actionRelations;
+#ifndef KEXI_NO_CTXT_HELP
 	KToggleAction		*m_actionHelper;
-
+#endif
 	QPtrList<KAction>	*m_formActionList;
 	KexiFormBase		*m_lastForm;
 

@@ -61,7 +61,9 @@ KexiView::KexiView(KexiWindowMode winmode, KexiProject *part,QWidget *parent, co
 
 	dcop = 0;
 	m_browser = 0;
+#ifndef KEXI_NO_CTXT_HELP
 	m_help = 0;
+#endif
 	m_lastForm = NULL;
 	dcopObject(); // build it
 //	createGUI("kexiui.rc",false);
@@ -116,7 +118,6 @@ void KexiView::finalizeInit()
 	initDocBrowser();
 	initHelper();
 
-#if QT_VERSION >= 0x030100
 	if(m_windowMode == MultipleWindowMode)
 	{
 		QDesktopWidget dw;
@@ -125,7 +126,6 @@ void KexiView::finalizeInit()
 		resize(availGeom.width()-(frameGeometry().width()-geometry().width()),
 			height());
 	}
-#endif
 }
 
 void KexiView::initMainDock()
@@ -143,6 +143,7 @@ void KexiView::initDocBrowser()
 
 void KexiView::initHelper(bool h)
 {
+#ifndef KEXI_NO_CTXT_HELP
 	if(h)
 	{
 		m_help=new KexiContextHelp(this,m_actionHelper,m_workspace, "Context Help");
@@ -156,6 +157,7 @@ void KexiView::initHelper(bool h)
 		if(m_help)
 			delete m_help;
 	}
+#endif
 }
 
 void KexiView::initActions()
@@ -170,11 +172,11 @@ void KexiView::initActions()
 	 actionCollection(), "project_props");
 	connect(actionProjectProps, SIGNAL(activated()), this, SLOT(slotShowProjectProps()));
 
-	KAction *actionSettings = new KAction(i18n("Configure Kexi..."), "", Key_F35,
+	KAction *actionSettings = new KAction(i18n("Configure Kexi..."), "", 0,
 	 actionCollection(), "kexi_settings");
 	connect(actionSettings, SIGNAL(activated()), this, SLOT(slotShowSettings()));
 
-	KAction *actionImport = new KAction(i18n("Import Data..."), "", Key_F34,
+	KAction *actionImport = new KAction(i18n("Import Data..."), "", 0,
 	 actionCollection(), "kexi_importdata");
 	connect(actionImport, SIGNAL(activated()), m_project, SLOT(slotImportData()));
 
@@ -182,12 +184,17 @@ void KexiView::initActions()
 	KToggleAction *actionNav = new KToggleAction(i18n("Show Navigator"), "", CTRL + Key_B,
 	 actionCollection(), "show_nav");
 
+#ifndef KEXI_NO_CTXT_HELP
 	m_actionHelper = new KToggleAction(i18n("Show Context Help"), "", CTRL + Key_H,
 	 actionCollection(), "show_contexthelp");
 	m_actionHelper->setChecked(true);
 	connect(m_actionHelper, SIGNAL(toggled(bool)), this, SLOT(initHelper(bool)));
+#endif
 
 	connect(m_project, SIGNAL(dbAvaible()), this, SLOT(slotDBAvaible()));
+	
+	//TODO: disable some actions:
+//	KAction *act = actionCollection()->action("file_import_file");
 }
 
 void KexiView::slotActiveWindowChanged(QWidget *w)

@@ -70,12 +70,14 @@ KexiView *KexiDialogBase::kexiView()const
 void
 KexiDialogBase::setContextHelp(const QString &title, const QString &message)
 {
+#ifndef KEXI_NO_CTXT_HELP
 	if(!m_view->help())
 		return;
 
 	m_contextTitle = title;
 	m_contextMessage = message;
 	m_view->help()->setContextHelp(title, message);
+#endif
 }
 
 void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt, const QString &identifier)
@@ -84,11 +86,7 @@ void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt, const QString &id
 	m_registered=true;
 	if (wt==ToolWindow)
 	{
-#if QT_VERSION >= 0x030100 //(js)
 		w=new QDockWindow(m_view->mainWindow());
-#else //QT 3.0.x
-		w=new QDockWindow(QDockWindow::InDock, m_view->mainWindow());
-#endif
 		w->setResizeEnabled(true);
 		w->setCloseMode(QDockWindow::Always);
 		 reparent(w,QPoint(0,0),true);
@@ -159,7 +157,9 @@ void KexiDialogBase::focusInEvent ( QFocusEvent *)
 	kdDebug()<<"KexiDialogBase::FocusInEvent()"<<endl;
 	if(!m_contextMessage.isNull())
 	{
+#ifndef KEXI_NO_CTXT_HELP
 		setContextHelp(m_contextTitle, m_contextMessage);
+#endif
 	}
 }
 void KexiDialogBase::closeEvent(QCloseEvent *ev)
