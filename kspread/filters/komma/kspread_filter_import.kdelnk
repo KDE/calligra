@@ -5,6 +5,7 @@ Name[sv]=Kalkyl-filter
 Exec=kspread_filter --server
 Comment=Torben's KSpread Filter
 Comment[pt_BR]=Filtro do KSpread
+Comment[ru]=Фильтр таблиц Torben'а
 Comment[sk]=Torbenov KSpread Filter
 Comment[sv]=Torbens kalkyl-filter
 Export=application/x-kspread
