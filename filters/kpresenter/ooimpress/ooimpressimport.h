@@ -69,7 +69,10 @@ private:
     void appendObjectEffect(QDomDocument& doc, QDomElement& e, const QDomElement& object, QDomElement& sound);
 	void appendBackgroundPage( QDomDocument &doc, QDomElement &e,QDomElement & pictureElement,  QDomElement &soundElement );
 
+	void createPresentationAnimation(const QDomElement& element);
+
     QDomElement saveHelper(const QString &tmpText, QDomDocument &doc);
+	void appendObject(QDomNode & drawPage,  QDomDocument & doc,  QDomElement & soundElement, QDomElement & pictureElement, QDomElement & pageNoteElement, QDomElement &objectElement,double offset, bool sticky = false);
 
     QString storeImage( const QDomElement& object );
     QString storeSound(const QDomElement & object, QDomElement & p, QDomDocument & doc);
@@ -87,7 +90,7 @@ private:
     QDomDocument    m_meta;
     QDomDocument    m_settings;
     QDict<QDomElement> m_styles, m_draws;
-    QDomElement m_animations;
+    QDict<QDomElement> m_animations;
     KZip * m_zip;
     StyleStack m_styleStack;
 };

@@ -271,8 +271,19 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
     if ( drawPage.isNull() ) // no slides? give up.
         return;
 
+    QDomElement objectElement = doc.createElement( "OBJECTS" );
+    QDomElement pictureElement = doc.createElement( "PICTURES" );
+    QDomElement pageTitleElement = doc.createElement( "PAGETITLES" );
+    QDomElement pageNoteElement = doc.createElement( "PAGENOTES" );
+    QDomElement backgroundElement = doc.createElement( "BACKGROUND" );
+    QDomElement soundElement = doc.createElement( "SOUNDS" );
+    QDomElement selSlideElement = doc.createElement( "SELSLIDES" );
+
     QDomElement dp = drawPage.toElement();
     QDomElement *master = m_styles[dp.attribute( "draw:master-page-name" )];
+
+    appendObject(*master, doc, soundElement,pictureElement,pageNoteElement,objectElement, 0, true);
+
     QDomElement *style = m_styles[master->attribute( "style:page-master-name" )];
     QDomElement properties = style->namedItem( "style:properties" ).toElement();
     QDomElement *backgroundStyle = m_styles[ "Standard-background"];
@@ -322,13 +333,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
         paperElement.appendChild( paperBorderElement );
     }
 
-    QDomElement objectElement = doc.createElement( "OBJECTS" );
-    QDomElement pictureElement = doc.createElement( "PICTURES" );
-    QDomElement pageTitleElement = doc.createElement( "PAGETITLES" );
-    QDomElement pageNoteElement = doc.createElement( "PAGENOTES" );
-    QDomElement backgroundElement = doc.createElement( "BACKGROUND" );
-    QDomElement soundElement = doc.createElement( "SOUNDS" );
-    QDomElement selSlideElement = doc.createElement( "SELSLIDES" );
+
 
     // parse all pages
     for ( drawPage = body.firstChild(); !drawPage.isNull(); drawPage = drawPage.nextSibling() )
@@ -373,170 +378,13 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
         double offset = CM_TO_POINT( ( dp.attribute( "draw:id" ).toInt() - 1 ) * pageHeight ) + 1;
 
         // animations (object effects)
-        m_animations = drawPage.namedItem("presentation:animations").toElement();
+        createPresentationAnimation(drawPage.namedItem("presentation:animations").toElement() );
 
         // parse all objects
-        for ( QDomNode object = drawPage.firstChild(); !object.isNull(); object = object.nextSibling() )
-        {
-            QDomElement o = object.toElement();
-            QString name = o.tagName();
-            QString drawID = o.attribute("draw:id");
-            m_styleStack.save();
+        appendObject(drawPage, doc, soundElement,pictureElement,pageNoteElement,objectElement, offset);
 
-            QDomElement e;
-            if ( name == "draw:text-box" ) // textbox
-            {
-                fillStyleStack( o );
-                e = doc.createElement( "OBJECT" );
-                e.setAttribute( "type", 4 );
-                append2DGeometry( doc, e, o, (int)offset );
-                appendName(doc, e, o);
-                appendPen( doc, e );
-                appendBrush( doc, e );
-                appendRounding( doc, e, o );
-                appendShadow( doc, e );
-                appendObjectEffect(doc, e, o, soundElement);
-                e.appendChild( parseTextBox( doc, o ) );
-            }
-            else if ( name == "draw:rect" ) // rectangle
-            {
-                fillStyleStack( o );
-                e = doc.createElement( "OBJECT" );
-                e.setAttribute( "type", 2 );
-                append2DGeometry( doc, e, o, (int)offset );
-                appendName(doc, e, o);
-                appendPen( doc, e );
-                appendBrush( doc, e );
-                appendRounding( doc, e, o );
-                appendShadow( doc, e );
-                appendObjectEffect(doc, e, o, soundElement);
-            }
-            else if ( name == "draw:circle" || name == "draw:ellipse" )
-            {
-                fillStyleStack( o );
-                e = doc.createElement( "OBJECT" );
-                append2DGeometry( doc, e, o, (int)offset );
-                appendName(doc, e, o);
-                appendPen( doc, e );
-                appendShadow( doc, e );
-                appendObjectEffect(doc, e, o, soundElement);
 
-                if ( o.hasAttribute( "draw:kind" ) ) // pie, chord or arc
-                {
-                    e.setAttribute( "type", 8 );
-                    appendPie( doc, e, o );
-                    QDomElement type = doc.createElement( "PIETYPE" );
-
-                    QString kind = o.attribute( "draw:kind" );
-                    if ( kind == "section" )
-                    {
-                        appendBrush( doc, e );
-                        type.setAttribute( "value", 0 );
-                    }
-                    else if ( kind == "cut" )
-                    {
-                        appendBrush( doc, e );
-                        type.setAttribute( "value", 2 );
-                    }
-                    else if ( kind == "arc" )
-                    {
-                        // arc has no brush
-                        type.setAttribute( "value", 1 );
-                    }
-                    e.appendChild( type );
-                }
-                else  // circle or ellipse
-                {
-                    e.setAttribute( "type", 3 );
-                    appendBrush( doc, e );
-                }
-            }
-            else if ( name == "draw:line" ) // line
-            {
-                fillStyleStack( o );
-                e = doc.createElement( "OBJECT" );
-                e.setAttribute( "type", 1 );
-                bool orderEndStartLine = appendLineGeometry( doc, e, o, (int)offset );
-                appendName(doc, e, o);
-                appendPen( doc, e );
-                appendBrush( doc, e );
-                appendShadow( doc, e );
-                appendLineEnds( doc, e, orderEndStartLine );
-                appendObjectEffect(doc, e, o, soundElement);
-            }
-            else if (name=="draw:polyline") { // polyline
-                fillStyleStack(o);
-                e = doc.createElement("OBJECT");
-                e.setAttribute("type", 12);
-                append2DGeometry(doc, e, o, (int)offset);
-                appendName(doc, e, o);
-                appendPoints(doc, e, o);
-                appendPen(doc, e);
-                appendBrush(doc, e);
-                appendLineEnds(doc, e);
-                //appendShadow(doc, e);
-                appendObjectEffect(doc, e, o, soundElement);
-            }
-            else if (name=="draw:polygon") { // polygon
-                fillStyleStack(o);
-                e = doc.createElement("OBJECT");
-                e.setAttribute("type", 16);
-                append2DGeometry(doc, e, o, (int)offset);
-                appendPoints(doc, e, o);
-                appendPen(doc, e);
-                appendBrush(doc, e);
-                //appendLineEnds(doc, e);
-                //appendShadow(doc, e);
-                appendObjectEffect(doc, e, o, soundElement);
-            }
-            else if ( name == "draw:image" ) // image
-            {
-                fillStyleStack( o );
-                e = doc.createElement( "OBJECT" );
-                e.setAttribute( "type", 0 );
-                append2DGeometry( doc, e, o, (int)offset );
-                appendName(doc, e, o);
-                appendImage( doc, e, pictureElement, o );
-                appendObjectEffect(doc, e, o, soundElement);
-            }
-            else if ( name == "draw:object" )
-            {
-                //todo add part object
-            }
-            else if ( name == "draw:g" )
-            {
-                 //todo add group object
-            }
-            else if ( name == "presentation:notes" ) // notes
-            {
-                QDomNode textBox = o.namedItem( "draw:text-box" );
-                if ( !textBox.isNull() )
-                {
-                    QString note;
-                    for ( QDomNode text = textBox.firstChild(); !text.isNull(); text = text.nextSibling() )
-                    {
-                        // We don't care about styles as they are not supported in kpresenter.
-                        // Only add a linebreak for every child.
-                        QDomElement t = text.toElement();
-                        note += t.text() + "\n";
-                    }
-                    QDomElement notesElement = doc.createElement( "Note" );
-                    notesElement.setAttribute( "note", note );
-                    pageNoteElement.appendChild( notesElement );
-                }
-            }
-            else
-            {
-                kdDebug(30518) << "Unsupported object '" << name << "'" << endl;
-                m_styleStack.restore();
-                continue;
-            }
-
-            objectElement.appendChild( e );
-            m_styleStack.restore();
-        }
-
-        m_animations.clear();
+        //m_animations.clear();
         m_styleStack.restore();
     }
 
@@ -551,6 +399,191 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
 
     doccontent.appendChild( doc );
 }
+
+void OoImpressImport::appendObject(QDomNode & drawPage,  QDomDocument & doc,  QDomElement & soundElement, QDomElement & pictureElement, QDomElement & pageNoteElement, QDomElement &objectElement, double offset, bool sticky)
+{
+    for ( QDomNode object = drawPage.firstChild(); !object.isNull(); object = object.nextSibling() )
+    {
+        QDomElement o = object.toElement();
+        QString name = o.tagName();
+        QString drawID = o.attribute("draw:id");
+        m_styleStack.save();
+
+        QDomElement e;
+        if ( name == "draw:text-box" ) // textbox
+        {
+            fillStyleStack( o );
+            e = doc.createElement( "OBJECT" );
+            e.setAttribute( "type", 4 );
+            if ( sticky )
+                e.setAttribute( "sticky", "1" );
+            append2DGeometry( doc, e, o, (int)offset );
+            appendName(doc, e, o);
+            appendPen( doc, e );
+            appendBrush( doc, e );
+            appendRounding( doc, e, o );
+            appendShadow( doc, e );
+            appendObjectEffect(doc, e, o, soundElement);
+            e.appendChild( parseTextBox( doc, o ) );
+        }
+        else if ( name == "draw:rect" ) // rectangle
+        {
+            fillStyleStack( o );
+            e = doc.createElement( "OBJECT" );
+            e.setAttribute( "type", 2 );
+            if ( sticky )
+                e.setAttribute( "sticky", "1" );
+            append2DGeometry( doc, e, o, (int)offset );
+            appendName(doc, e, o);
+            appendPen( doc, e );
+            appendBrush( doc, e );
+            appendRounding( doc, e, o );
+            appendShadow( doc, e );
+
+            appendObjectEffect(doc, e, o, soundElement);
+        }
+        else if ( name == "draw:circle" || name == "draw:ellipse" )
+        {
+            fillStyleStack( o );
+            e = doc.createElement( "OBJECT" );
+            if ( sticky )
+                e.setAttribute( "sticky", "1" );
+            append2DGeometry( doc, e, o, (int)offset );
+            appendName(doc, e, o);
+            appendPen( doc, e );
+            appendShadow( doc, e );
+            appendLineEnds( doc, e );
+            appendObjectEffect(doc, e, o, soundElement);
+
+            if ( o.hasAttribute( "draw:kind" ) ) // pie, chord or arc
+            {
+                e.setAttribute( "type", 8 );
+                appendPie( doc, e, o );
+                QDomElement type = doc.createElement( "PIETYPE" );
+
+                QString kind = o.attribute( "draw:kind" );
+                if ( kind == "section" )
+                {
+                    appendBrush( doc, e );
+                    type.setAttribute( "value", 0 );
+                }
+                else if ( kind == "cut" )
+                {
+                    appendBrush( doc, e );
+                    type.setAttribute( "value", 2 );
+                }
+                else if ( kind == "arc" )
+                {
+                    // arc has no brush
+                    type.setAttribute( "value", 1 );
+                }
+                e.appendChild( type );
+            }
+            else  // circle or ellipse
+            {
+                e.setAttribute( "type", 3 );
+                appendBrush( doc, e );
+            }
+        }
+        else if ( name == "draw:line" ) // line
+        {
+            fillStyleStack( o );
+            e = doc.createElement( "OBJECT" );
+            e.setAttribute( "type", 1 );
+            if ( sticky )
+                e.setAttribute( "sticky", "1" );
+            bool orderEndStartLine = appendLineGeometry( doc, e, o, (int)offset );
+            appendName(doc, e, o);
+            appendPen( doc, e );
+            appendBrush( doc, e );
+            appendShadow( doc, e );
+            appendLineEnds( doc, e, orderEndStartLine );
+            appendObjectEffect(doc, e, o, soundElement);
+        }
+        else if (name=="draw:polyline") { // polyline
+            fillStyleStack(o);
+            e = doc.createElement("OBJECT");
+            e.setAttribute("type", 12);
+            if ( sticky )
+                e.setAttribute( "sticky", "1" );
+            append2DGeometry(doc, e, o, (int)offset);
+            appendName(doc, e, o);
+            appendPoints(doc, e, o);
+            appendPen(doc, e);
+            appendBrush(doc, e);
+            appendLineEnds(doc, e);
+            //appendShadow(doc, e);
+            appendObjectEffect(doc, e, o, soundElement);
+        }
+        else if (name=="draw:polygon") { // polygon
+            fillStyleStack(o);
+            e = doc.createElement("OBJECT");
+            e.setAttribute("type", 16);
+            if ( sticky )
+                e.setAttribute( "sticky", "1" );
+            append2DGeometry(doc, e, o, (int)offset);
+            appendName(doc, e, o);
+            appendPoints(doc, e, o);
+            appendPen(doc, e);
+            appendBrush(doc, e);
+            //appendLineEnds(doc, e);
+            //appendShadow(doc, e);
+            appendObjectEffect(doc, e, o, soundElement);
+        }
+        else if ( name == "draw:image" ) // image
+        {
+            fillStyleStack( o );
+            e = doc.createElement( "OBJECT" );
+            e.setAttribute( "type", 0 );
+            if ( sticky )
+                e.setAttribute( "sticky", "1" );
+            append2DGeometry( doc, e, o, (int)offset );
+            appendName(doc, e, o);
+            appendImage( doc, e, pictureElement, o );
+            appendObjectEffect(doc, e, o, soundElement);
+        }
+        else if ( name == "draw:object" )
+        {
+            //todo add part object
+        }
+        else if ( name == "draw:g" )
+        {
+            //todo add group object
+        }
+        else if ( name == "draw:path" )
+        {
+            //todo add path object (freehand/cubic/quadricbeziercurve
+        }
+        else if ( name == "presentation:notes" ) // notes
+        {
+            QDomNode textBox = o.namedItem( "draw:text-box" );
+            if ( !textBox.isNull() )
+            {
+                QString note;
+                for ( QDomNode text = textBox.firstChild(); !text.isNull(); text = text.nextSibling() )
+                {
+                    // We don't care about styles as they are not supported in kpresenter.
+                    // Only add a linebreak for every child.
+                    QDomElement t = text.toElement();
+                    note += t.text() + "\n";
+                }
+                QDomElement notesElement = doc.createElement( "Note" );
+                notesElement.setAttribute( "note", note );
+                pageNoteElement.appendChild( notesElement );
+            }
+        }
+        else
+        {
+            kdDebug(30518) << "Unsupported object '" << name << "'" << endl;
+            m_styleStack.restore();
+            continue;
+        }
+
+        objectElement.appendChild( e );
+        m_styleStack.restore();
+    }
+}
+
 
 void OoImpressImport::appendBackgroundPage( QDomDocument &doc, QDomElement &backgroundElement, QDomElement & pictureElement,  QDomElement &soundElement)
 {
@@ -2070,6 +2103,23 @@ QDomNode OoImpressImport::findAnimationByObjectID(const QString & id)
     }
 
     return QDomNode();
+}
+
+void OoImpressImport::createPresentationAnimation(const QDomElement& element)
+{
+  for ( QDomNode n = element.firstChild(); !n.isNull(); n = n.nextSibling() )
+    {
+        QDomElement e = n.toElement();
+        QCString tagName = e.tagName().latin1();
+        if ( tagName == "presentation:show-shape")
+        {
+            Q_ASSERT( e.hasAttribute( "draw:shape-id" ) );
+            QString name = e.attribute( "draw:shape-id" );
+            //kdDebug()<<" insert animation style : name :"<<name<<endl;
+            QDomElement* ep = new QDomElement( e );
+            m_animations.insert( name, ep );
+        }
+    }
 }
 
 void OoImpressImport::appendObjectEffect(QDomDocument& doc, QDomElement& e, const QDomElement& object,
