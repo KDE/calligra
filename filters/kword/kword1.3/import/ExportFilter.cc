@@ -1150,8 +1150,11 @@ static uint getColumnWidths( const Table& table, QMemArray<double>& widthArray, 
         ++currentColumn;
     }
 
-    // If we are here, the table is either empty or there is not any row without horizontally spanned cells
-    return 0;
+    // If we are here, it can be:
+    // - the table is either empty or there is not any row without horizontally spanned cells
+    // - we have needed the last row for a something usable
+
+    return uniqueColumns ? currentColumn : 0;
 }
 #endif
 
@@ -1208,6 +1211,7 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
     }
 
     const int firstRowNumber = (*firstCell).row;
+    kdDebug(30520) << "First row: " << firstRowNumber << endl;
 
     QMemArray<double> widthArray(4);
 
@@ -1218,7 +1222,7 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
         kdDebug(30520) << "Could not get correct column widths, so approximate" << endl;
         // There was a problem, the width array cannot be trusted, so try to do a column width array with the first row
         numberColumns = getFirstRowColumnWidths( anchor.table, widthArray, firstRowNumber );
-        if ( numberColumns <=0 )
+        if ( numberColumns <= 0 )
         {
             // Still not right? Then it is an error!
             kdError(30520) << "Cannot get column widths of table " << anchor.key.toString() << endl;
