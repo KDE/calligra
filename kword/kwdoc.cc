@@ -1760,7 +1760,7 @@ KWFrameSet * KWDocument::loadFrameSet( QDomElement framesetElem, bool loadFrames
     return 0L;
 }
 
-bool KWDocument::completeLoading( KoStore *_store )
+void KWDocument::loadImagesFromStore( KoStore *_store )
 {
     if ( _store ) {
         if ( m_pixmapMap ) {
@@ -1774,6 +1774,11 @@ bool KWDocument::completeLoading( KoStore *_store )
             m_clipartMap = 0L;
         }
     }
+}
+
+bool KWDocument::completeLoading( KoStore *_store )
+{
+    loadImagesFromStore( _store );
 
     processImageRequests();
     processAnchorRequests();

@@ -5646,11 +5646,27 @@ void KWView::insertFile()
     }
     // ### TODO network transparency
     KoStore* store=KoStore::createStore( url.path(), KoStore::Read );
+    QMap<KoPictureKey, QString> *pixmapMap =0L;
+    QMap<KoPictureKey, QString> *clipartMap = 0L;
     if ( store->open("maindoc.xml") )
     {
         QDomDocument doc;
         doc.setContent( store->device() );
         QDomElement word = doc.documentElement();
+
+        // <PIXMAPS>
+        QDomElement pixmapsElem = word.namedItem( "PIXMAPS" ).toElement();
+        if ( !pixmapsElem.isNull() )
+        {
+            pixmapMap = new QMap<KoPictureKey, QString>( m_doc->imageCollection()->readXML( pixmapsElem ) );
+        }
+
+        // <CLIPARTS>
+        QDomElement clipartsElem = word.namedItem( "CLIPARTS" ).toElement();
+        if ( !clipartsElem.isNull() )
+        {
+            clipartMap = new QMap<KoPictureKey, QString>( m_doc->clipartCollection()->readXML( clipartsElem ) );
+        }
 
         QDomElement framesets = word.namedItem( "FRAMESETS" ).toElement();
         if ( !framesets.isNull() )
@@ -5734,10 +5750,24 @@ void KWView::insertFile()
                 //kdDebug() << k_funcinfo << domDocFrames.toCString() << endl;
                 m_doc->pasteFrames( topElem, macroCmd );
                 m_doc->addCommand( macroCmd );
+
             }
         }
+        else
+        {
+            delete pixmapMap;
+            pixmapMap = 0L;
+            delete clipartMap;
+            clipartMap = 0L;
+        }
     }
+    m_doc->setPixmapMap( pixmapMap );
+    m_doc->setClipartMap( clipartMap );
     store->close();
+
+    m_doc->loadImagesFromStore( store );
+    m_doc->processImageRequests();
+
     delete store;
 }
 

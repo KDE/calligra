@@ -665,6 +665,11 @@ public:
 
     void paragraphDeleted( KoTextParag *_parag, KWFrameSet *frm);
     void initBookmarkList();
+    void loadImagesFromStore( KoStore *_store );
+
+    void setPixmapMap( QMap<KoPictureKey, QString> * _map ) { m_pixmapMap = _map;}
+    void setClipartMap( QMap<KoPictureKey, QString> * _map ) { m_clipartMap = _map;}
+
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
 
