@@ -38,6 +38,7 @@ namespace KFormDesigner {
 
 class ObjectPropertyBuffer;
 class Form;
+class Container;
 class WidgetLibrary;
 class ObjectTreeView;
 typedef QPtrList<KAction> Actions;
@@ -88,7 +89,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		/*! The Container use this function to indicate the exec point of the contextual menu, which is used to position the
 		  pasted widgets.
 		 */
-		void              setInsertPoint(const QPoint &p);
+		//void              setInsertPoint(const QPoint &p);
 
 		/*! \return The Form actually active and focused.
 		 */
@@ -105,13 +106,14 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		QWidget *createBlankForm(const QString &classname, const char *name, QWidget *parent=0);
 
 		/*! Adds a existing form w and changes it to a container */
-		void importForm(QWidget *w, Form *from=0);
+		void importForm(QWidget *w, Form *form=0);
 
 		/*! Deletes the Form \a form and removes it from our list. */
 		void deleteForm(Form *form);
 
 		/*! Shows a propertybuffer in PropertyBuffer */
 		virtual void showPropertyBuffer(ObjectPropertyBuffer *buff);
+		void  createContextMenu(QWidget *w, Container *container);
 
 	public slots:
 		/*! Creates a new blank Form with default class top widget (ie QWidget). The new Form is shown and becomes

@@ -103,7 +103,7 @@ Container::Container(Container *toplevel, QWidget *container, QObject *parent, c
 
 		ObjectTreeItem *it = new ObjectTreeItem(m_form->manager()->lib()->displayName(widget()->className()), widget()->name(), widget(), this);
 		setObjectTree(it);
-		if(parent->inherits("QWidget"))
+		if(parent->isWidgetType())
 		{
 			QString n = parent->name();
 			ObjectTreeItem *parent = m_form->objectTree()->lookup(n);
@@ -118,6 +118,7 @@ Container::Container(Container *toplevel, QWidget *container, QObject *parent, c
 		}
 	}
 
+	connect(toplevel, SIGNAL(destroyed()), this, SLOT(widgetDeleted()));
 	connect(container, SIGNAL(destroyed()), this, SLOT(widgetDeleted()));
 }
 
@@ -138,7 +139,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 				//if(m_moving->parentWidget())
 				//{
 				m_moving = m_moving->parentWidget();
-				if(m_moving->parentWidget() && m_moving->parentWidget()->isA("QTabWidget"))
+				if(m_moving->parentWidget() && m_moving->parentWidget()->inherits("QTabWidget"))
 						m_moving = m_moving->parentWidget();
 				//}
 				kdDebug() << "composed widget  " << m_moving->name() << endl;
@@ -184,7 +185,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 			}
 			else if(mev->button() == RightButton)
 			{
-				KPopupMenu *parent = m_form->manager()->popupMenu();
+				/*KPopupMenu *parent = m_form->manager()->popupMenu();
 				QWidget *w = (QWidget*)s;
 				QString n = m_form->manager()->lib()->displayName(w->className());
 				KPopupMenu *p = new KPopupMenu();
@@ -203,7 +204,8 @@ Container::eventFilter(QObject *s, QEvent *e)
 				parent->exec(QCursor::pos());
 				m_form->manager()->setInsertPoint(QPoint());
 
-				parent->removeItem(id);
+				parent->removeItem(id);*/
+				m_form->manager()->createContextMenu((QWidget*)s, this);
 			}
 			else if(m_move)
 			{

@@ -11,13 +11,14 @@
 #include <qwidgetstack.h>
 #include <qframe.h>
 #include <qbuttongroup.h>
-#include <qtabwidget.h>
 #include <qwidget.h>
 #include <qstring.h>
 #include <qpopupmenu.h>
 #include <qdom.h>
+#include <qevent.h>
 #include <qobjectlist.h>
 
+#include <ktabwidget.h>
 #include <kiconloader.h>
 #include <kgenericfactory.h>
 #include <klocale.h>
@@ -30,6 +31,133 @@
 #include "formIO.h"
 #include "objecttree.h"
 #include "commands.h"
+#include "formmanager.h"
+#include "widgetlibrary.h"
+
+class KFORMEDITOR_EXPORT MyTabWidget : public KTabWidget
+{
+	public:
+		MyTabWidget(QWidget *parent, const char *name, QObject *container)
+		 : KTabWidget(parent, name)
+		{
+			m_container = container;
+
+			QObjectList *list = new QObjectList(*children());
+			for(QObject *obj = list->first(); obj; obj = list->next())
+			{
+				if(obj->isA("KTabBar"))
+					obj->installEventFilter(this);
+			}
+			delete list;
+		}
+		~MyTabWidget() {;}
+
+		void setContainer(QObject *container)
+		{
+			m_container = container;
+		}
+		virtual bool eventFilter(QObject *o, QEvent *ev)
+		{
+			if((!m_container) || (ev->type() != QEvent::MouseButtonRelease))
+				return KTabWidget::eventFilter(o, ev);
+
+			QMouseEvent *mev = static_cast<QMouseEvent*>(ev);
+			if(mev->button() != RightButton)
+				return KTabWidget::eventFilter(o, ev);
+
+			bool ok = m_container->eventFilter(this, ev);
+			if(!ok)
+				return KTabWidget::eventFilter(o, ev);
+			return true;
+		}
+
+	private:
+		QGuardedPtr<QObject>   m_container;
+};
+
+///////  Tab related KCommand (to allow tab creation/deletion undoing)
+
+InsertPageCommand::InsertPageCommand(KFormDesigner::Container *container, QWidget *parent)
+  : KCommand()
+{
+	m_containername = container->widget()->name();
+	m_form = container->form();
+	m_parentname = parent->name();
+	m_pageid = -1;
+}
+
+void
+InsertPageCommand::execute()
+{
+	KFormDesigner::Container *m_container = m_form->objectTree()->lookup(m_containername)->container();
+	QWidget *parent = m_form->objectTree()->lookup(m_parentname)->widget();
+	if(m_name.isEmpty())
+		m_name = m_container->form()->objectTree()->genName(m_container->form()->manager()->lib()->displayName("QWidget"));
+
+	QWidget *page = new QWidget(parent, m_name.latin1());
+	new KFormDesigner::Container(m_container, page, parent);
+
+	QString classname = parent->className();
+	if(classname == "KTabWidget")
+	{
+		KTabWidget *tab = (KTabWidget *)parent;
+		QString n = QString(i18n("Page %1").arg(tab->count() + 1));
+		tab->addTab(page, n);
+		tab->showPage(page);
+
+		KFormDesigner::ObjectTreeItem *item = m_container->form()->objectTree()->lookup(m_name);
+		item->addModProperty("title", n);
+	}
+	else if(classname == "QWidgetStack")
+	{
+		QWidgetStack *stack = (QWidgetStack*)parent;
+		stack->addWidget(page, m_pageid);
+		stack->raiseWidget(page);
+		m_pageid = stack->id(page);
+
+		KFormDesigner::ObjectTreeItem *item = m_container->form()->objectTree()->lookup(m_name);
+		item->addModProperty("id", stack->id(page));
+	}
+}
+
+void
+InsertPageCommand::unexecute()
+{
+	QWidget *page = m_form->objectTree()->lookup(m_name)->widget();
+	QWidget *parent = m_form->objectTree()->lookup(m_parentname)->widget();
+
+	WidgetList list;
+	list.append(page);
+	KCommand *com = new KFormDesigner::DeleteWidgetCommand(list, m_form);
+
+	QString classname = parent->className();
+	if(classname == "KTabWidget")
+	{
+		KTabWidget *tab = (KTabWidget *)parent;
+		tab->removePage(page);
+	}
+	else if(classname == "QWidgetStack")
+	{
+		QWidgetStack *stack = (QWidgetStack*)parent;
+		int id = stack->id(page) - 1;
+		while(!stack->widget(id))
+			id--;
+
+		stack->raiseWidget(id);
+		stack->removeWidget(page);
+	}
+
+	com->execute();
+	delete com;
+}
+
+QString
+InsertPageCommand::name() const
+{
+	return i18n("Add Page");
+}
+
+/////   The factory /////////////////////////
 
 ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStringList &)
  : KFormDesigner::WidgetFactory(parent, name)
@@ -43,7 +171,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *name, const QStr
 
 	KFormDesigner::Widget *wTabWidget = new KFormDesigner::Widget(this);
 	wTabWidget->setPixmap("tabwidget");
-	wTabWidget->setClassName("QTabWidget");
+	wTabWidget->setClassName("KTabWidget");
 	wTabWidget->setName(i18n("Tab Widget"));
 	wTabWidget->setDescription(i18n("A widget to display multiple pages using tabs"));
 	m_classes.append(wTabWidget);
@@ -100,16 +228,14 @@ ContainerFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 		new KFormDesigner::Container(container, w, container);
 		return w;
 	}
-	else if(c == "QTabWidget")
+	else if(c == "KTabWidget")
 	{
-		QTabWidget *tab = new QTabWidget(p, n);
-		container->form()->objectTree()->addChild(container->tree(), new KFormDesigner::ObjectTreeItem(c, n, tab));
+		MyTabWidget *tab = new MyTabWidget(p, n, container);
+		tab->setTabReorderingEnabled(true);
+		container->form()->objectTree()->addChild(container->tree(), new KFormDesigner::ObjectTreeItem(
+		        container->form()->manager()->lib()->displayName(c), n, tab));
 		tab->installEventFilter(container);
-
-		QObjectList *list = new QObjectList( *(tab->children()) );
-		for(QObject *obj = list->first(); obj; obj = list->next())
-			obj->installEventFilter(this);
-		delete list;
+		tab->setContainer(container);
 
 		if(container->form()->interactiveMode())
 		{
@@ -123,7 +249,7 @@ ContainerFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 	else if(c == "QWidget")
 	{
 		QWidget *w = new QWidget(p, n);
-		new KFormDesigner::Container(container, w, container);
+		new KFormDesigner::Container(container, w, p);
 		return w;
 	}
 	else if(c == "QGroupBox")
@@ -145,7 +271,8 @@ ContainerFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 		QWidgetStack *stack = new QWidgetStack(p, n);
 		stack->setLineWidth(2);
 		stack->setFrameStyle(QFrame::StyledPanel|QFrame::Raised);
-		container->form()->objectTree()->addChild(container->tree(), new KFormDesigner::ObjectTreeItem(c, n, stack));
+		container->form()->objectTree()->addChild(container->tree(), new KFormDesigner::ObjectTreeItem(
+		     container->form()->manager()->lib()->displayName(c), n, stack));
 		stack->installEventFilter(container);
 
 		if(container->form()->interactiveMode())
@@ -166,23 +293,38 @@ ContainerFactory::createMenuActions(const QString &classname, QWidget *w, QPopup
 	m_widget = w;
 	m_container = container;
 
-	if(classname == "QTabWidget")
+	if(classname == "KTabWidget")
 	{
 		menu->insertItem(i18n("Add Page"), this, SLOT(AddTabPage()) );
 		menu->insertItem(i18n("Rename Page"), this, SLOT(renameTabPage()));
 		int id = menu->insertItem(i18n("Remove Page"), this, SLOT(removeTabPage()));
-		if( ((QTabWidget*)w)->count() == 1)
+		if( ((KTabWidget*)w)->count() == 1)
 			menu->setItemEnabled(id, false);
 		return true;
 	}
-	else if(w->parentWidget()->isA("QWidgetStack") && !w->parentWidget()->parentWidget()->isA("QTabWidget"))
+	else if(w->parentWidget()->parentWidget()->inherits("QTabWidget"))
+	{
+		m_widget = w->parentWidget()->parentWidget();
+		m_container = m_container->toplevel();
+		menu->insertItem(i18n("Add Page"), this, SLOT(AddTabPage()) );
+		menu->insertItem(i18n("Rename Page"), this, SLOT(renameTabPage()));
+		int id = menu->insertItem(i18n("Remove Page"), this, SLOT(removeTabPage()));
+		if( ((KTabWidget*)m_widget)->count() == 1)
+			menu->setItemEnabled(id, false);
+		return true;
+	}
+	else if(w->parentWidget()->isA("QWidgetStack") && !w->parentWidget()->parentWidget()->inherits("QTabWidget"))
 	{
 		m_widget = w->parentWidget();
 		QWidgetStack *stack = (QWidgetStack*)m_widget;
 		m_container = container->form()->objectTree()->lookup(m_widget->name())->parent()->container();
 		menu->insertItem(i18n("Add Page"), this, SLOT(AddStackPage()) );
 
-		int id = menu->insertItem(i18n("Jump to next page"), this, SLOT(nextStackPage()));
+		int id = menu->insertItem(i18n("Remove Page"), this, SLOT(removeStackPage()) );
+		if( ((QWidgetStack*)m_widget)->children()->count() == 4) // == the stack has only one page
+			menu->setItemEnabled(id, false);
+
+		id = menu->insertItem(i18n("Jump to next page"), this, SLOT(nextStackPage()));
 		if(!stack->widget(stack->id(stack->visibleWidget())+1))
 			menu->setItemEnabled(id, false);
 
@@ -218,7 +360,7 @@ ContainerFactory::startEditing(const QString &classname, QWidget *w, KFormDesign
 void
 ContainerFactory::saveSpecialProperty(const QString &classname, const QString &name, const QVariant &value, QWidget *w, QDomElement &parentNode, QDomDocument &parent)
 {
-	if((name == "title") && (w->parentWidget()->isA("QTabWidget")))
+	if((name == "title") && (w->parentWidget()->parentWidget()->inherits("QTabWidget")))
 	{
 		QTabWidget *tab = (QTabWidget*)w->parentWidget()->parentWidget();
 		KFormDesigner::FormIO::saveProperty(parentNode, parent, "attribute", "title", tab->tabLabel(w));
@@ -234,7 +376,7 @@ void
 ContainerFactory::readSpecialProperty(const QString &classname, QDomElement &node, QWidget *w)
 {
 	QString name = node.attribute("name");
-	if((name == "title") && (w->parentWidget()->isA("QTabWidget")))
+	if((name == "title") && (w->parentWidget()->inherits("QTabWidget")))
 	{
 		QTabWidget *tab = (QTabWidget*)w->parentWidget();
 		tab->addTab(w, node.firstChild().toElement().text());
@@ -244,6 +386,7 @@ ContainerFactory::readSpecialProperty(const QString &classname, QDomElement &nod
 		QWidgetStack *stack = (QWidgetStack*)w->parentWidget();
 		int id = KFormDesigner::FormIO::readProp(node.firstChild(), w, name).toInt();
 		stack->addWidget(w, id);
+		stack->raiseWidget(w);
 	}
 }
 
@@ -261,25 +404,20 @@ ContainerFactory::changeText(const QString &text)
 
 void ContainerFactory::AddTabPage()
 {
-	if (!m_widget->isA("QTabWidget")){ return ;}
-	QString type = "QWidget";
-	QString name = (m_container->form()->objectTree()->genName(type));
-
-	QTabWidget *tab = (QTabWidget *)m_widget;
-	QWidget *page = new QWidget(tab,name.latin1());
-	new KFormDesigner::Container(m_container,page,tab);
-
-	QString n = QString(i18n("Page %1").arg(tab->count() + 1));
-	tab->addTab(page,n);
-	tab->showPage(page);
-
-	KFormDesigner::ObjectTreeItem *item = m_container->form()->objectTree()->lookup(name);
-	item->addModProperty("title", n);
+	if (!m_widget->inherits("QTabWidget")){ return ;}
+	KCommand *com = new InsertPageCommand(m_container, m_widget);
+	if(((KTabWidget*)m_widget)->count() == 0)
+	{
+		com->execute();
+		delete com;
+	}
+	else
+		m_container->form()->addCommand(com, true);
 }
 
 void ContainerFactory::removeTabPage()
 {
-	if (!m_widget->isA("QTabWidget")){ return ;}
+	if (!m_widget->inherits("QTabWidget")){ return ;}
 	QTabWidget *tab = (QTabWidget *)m_widget;
 	QWidget *w = tab->currentPage();
 
@@ -292,7 +430,7 @@ void ContainerFactory::removeTabPage()
 
 void ContainerFactory::renameTabPage()
 {
-	if (!m_widget->isA("QTabWidget")){ return ;}
+	if (!m_widget->inherits("QTabWidget")){ return ;}
 	QTabWidget *tab = (QTabWidget *)m_widget;
 	QWidget *w = tab->currentPage();
 	bool ok;
@@ -306,16 +444,33 @@ void ContainerFactory::renameTabPage()
 void ContainerFactory::AddStackPage()
 {
 	if (!m_widget->isA("QWidgetStack")){ return ;}
-	QString type = "QWidget";
-	QString name = (m_container->form()->objectTree()->genName(type));
+	KCommand *com = new InsertPageCommand(m_container, m_widget);
+	if(!((QWidgetStack*)m_widget)->visibleWidget())
+	{
+		com->execute();
+		delete com;
+	}
+	else
+		m_container->form()->addCommand(com, true);
+}
 
+void ContainerFactory::removeStackPage()
+{
+	if (!m_widget->isA("QWidgetStack")){ return ;}
 	QWidgetStack *stack = (QWidgetStack*)m_widget;
-	QWidget *page = new QWidget(stack, name.latin1());
-	new KFormDesigner::Container(m_container, page, stack);
+	QWidget *page = stack->visibleWidget();
 
-	stack->addWidget(page);
-	KFormDesigner::ObjectTreeItem *item = m_container->form()->objectTree()->lookup(name);
-	item->addModProperty("id", stack->id(page));
+	WidgetList list;
+	list.append(page);
+	KCommand *com = new KFormDesigner::DeleteWidgetCommand(list, m_container->form());
+
+	int id = stack->id(page) - 1;
+	while(!stack->widget(id))
+		id--;
+	stack->raiseWidget(id);
+
+	stack->removeWidget(page);
+	m_container->form()->addCommand(com, true);
 }
 
 void ContainerFactory::prevStackPage()

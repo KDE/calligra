@@ -141,6 +141,7 @@ class DeleteWidgetCommand : public KCommand
 		QDomDocument  m_domDoc;
 		Form       *m_form;
 		QMap<QString, QString>  m_containers;
+		QMap<QString, QString>  m_parents;
 };
 
 class CutWidgetCommand : public DeleteWidgetCommand

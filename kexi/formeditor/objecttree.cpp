@@ -51,11 +51,6 @@ ObjectTreeItem::rename(const QString &name)
 	m_name = name;
 }
 
-ObjectTreeItem::~ObjectTreeItem()
-{
-	kdDebug() << "ObjectTreeItem deleted: " << this->name() << endl;
-}
-
 void
 ObjectTreeItem::addChild(ObjectTreeItem *c)
 {
@@ -106,6 +101,11 @@ ObjectTreeItem::setGridPos(int row, int col, int rowspan, int colspan)
 		m_span = true;
 	else
 		m_span = false;
+}
+
+ObjectTreeItem::~ObjectTreeItem()
+{
+	kdDebug() << "ObjectTreeItem deleted: " << this->name() << endl;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -176,8 +176,11 @@ ObjectTree::addChild(ObjectTreeItem *c)
 void
 ObjectTree::removeChild(const QString &name)
 {
+	kdDebug() << "ObjectTree:: remove the object item " << name << endl;
 	ObjectTreeItem *c = lookup(name);
 	m_container->form()->emitChildRemoved(c);
+	for(ObjectTreeItem *it = c->children()->first(); it; it = c->children()->next())
+		removeChild(it->name());
 	m_treeDict.remove(name);
 	c->parent()->remChild(c);
 	delete c;

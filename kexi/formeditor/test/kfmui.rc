@@ -10,7 +10,7 @@
    <Merge/>
    <Separator/>
    <Action name="library_widget_QGroupBox"/>
-   <Action name="library_widget_QTabWidget"/>
+   <Action name="library_widget_KTabWidget"/>
    <Action name="library_widget_QWidgetStack"/>
    <Action name="library_widget_QFrame"/>
    <Separator/>
@@ -43,7 +43,7 @@
 <ToolBar name="containers" fullWidth="false">
  <text>Containers</text>
    <Action name="library_widget_QGroupBox"/>
-   <Action name="library_widget_QTabWidget"/>
+   <Action name="library_widget_KTabWidget"/>
    <Action name="library_widget_QWidgetStack"/>
    <Action name="library_widget_QFrame"/>
 </ToolBar>

@@ -359,6 +359,7 @@ DeleteWidgetCommand::DeleteWidgetCommand(WidgetList &list, Form *form)
 		if (!item)
 			return;
 		m_containers.insert(item->name(), m_form->parentContainer(item->widget())->widget()->name());
+		m_parents.insert(item->name(), item->parent()->name());
 		FormIO::saveWidget(item, parent, m_domDoc);
 	}
 }
@@ -370,7 +371,7 @@ DeleteWidgetCommand::execute()
 	for(it = m_containers.begin(); it != m_containers.end(); ++it)
 	{
 		ObjectTreeItem *item = m_form->objectTree()->lookup(it.key());
-		if (!item)
+		if (!item || !item->widget())
 			continue;
 
 		Container *cont = m_form->parentContainer(item->widget());
@@ -387,6 +388,8 @@ DeleteWidgetCommand::unexecute()
 	m_form->setInteractiveMode(false);
 	for(QDomNode n = m_domDoc.namedItem("UI").firstChild(); !n.isNull(); n = n.nextSibling())
 	{
+		if(n.toElement().tagName() != "widget")
+			continue;
 		for(QDomNode m = n.firstChild(); !m.isNull(); n = m.nextSibling())
 		{
 			if((m.toElement().tagName() == "property") && (m.toElement().attribute("name") == "name"))
@@ -397,8 +400,12 @@ DeleteWidgetCommand::unexecute()
 		}
 
 		Container *cont = m_form->objectTree()->lookup(m_containers[wname])->container();
+		ObjectTreeItem *parent = m_form->objectTree()->lookup(m_parents[wname]);
 		QDomElement widg = n.toElement();
-		FormIO::loadWidget(cont, m_form->manager()->lib(), widg);
+		if(parent)
+			FormIO::loadWidget(cont, m_form->manager()->lib(), widg, parent->widget());
+		else
+			FormIO::loadWidget(cont, m_form->manager()->lib(), widg);
 	}
 	m_form->setInteractiveMode(true);
 }

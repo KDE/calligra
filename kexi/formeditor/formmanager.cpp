@@ -388,11 +388,34 @@ FormManager::pasteWidget()
 	KCommand *com = new PasteWidgetCommand(m_domDoc, activeForm()->activeContainer(), m_insertPoint);
 	activeForm()->addCommand(com, true);
 }
-
+/*
 void
 FormManager::setInsertPoint(const QPoint &p)
 {
 	m_insertPoint = p;
+}*/
+
+void
+FormManager::createContextMenu(QWidget *w, Container *container)
+{
+	QString n = m_lib->displayName(w->className());
+	KPopupMenu *p = new KPopupMenu();
+
+	int id;
+	bool ok = m_lib->createMenuActions(w->className(), w, p, container);
+	if(!ok)
+	{
+		id = m_popup->insertItem(n);
+		m_popup->setItemEnabled(id, false);
+	}
+	else
+		id = m_popup->insertItem(n, p);
+
+	m_insertPoint = container->widget()->mapFromGlobal(QCursor::pos());
+	m_popup->exec(QCursor::pos());
+	m_insertPoint = QPoint();
+
+	m_popup->removeItem(id);
 }
 
 void

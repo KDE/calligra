@@ -674,18 +674,6 @@ FormIO::readProp(QDomNode node, QObject *obj, const QString &name)
 	}
 		return QVariant();
 }
-/*
-void
-FormIO::readAttribute(QDomNode node, QObject *obj, const QString &name)
-{
-	QDomElement tag = node.toElement();
-	QWidget *w = (QWidget*)obj;
-	if((name == "title") && (w->parentWidget()->isA("QTabWidget")))
-	{
-		QTabWidget *tab = (QTabWidget*)w->parentWidget();
-		tab->addTab(w, tag.text());
-	}
-}*/
 
 void
 FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domDoc, bool insideGridLayout)
@@ -821,13 +809,23 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 		w = lib->createWidget(el.attribute("class"), container->widget(), wname.latin1(), container);
 	else
 		w = lib->createWidget(el.attribute("class"), parent, wname.latin1(), container);
+
 	if(!w)  return;
 
 	ObjectTreeItem *tree;
 	if (!container->form()->objectTree()->lookup(wname))
 	{
 		tree =  new ObjectTreeItem(lib->displayName(el.attribute("class")), wname, w);
-		container->form()->objectTree()->addChild(container->tree(), tree);
+		if(parent)
+		{
+			ObjectTreeItem *pItem = container->form()->objectTree()->lookup(parent->name());
+			if(pItem)
+				container->form()->objectTree()->addChild(pItem, tree);
+			else
+				kdDebug() << "FORMIO :: ERROR no parent widget "  << endl;
+		}
+		else
+			container->form()->objectTree()->addChild(container->tree(), tree);
 	}
 	else
 		tree = container->form()->objectTree()->lookup(wname);
@@ -898,12 +896,7 @@ FormIO::readChildNodes(ObjectTreeItem *tree, Container *container, WidgetLibrary
 				w->setProperty(name.latin1(), val);
 				tree->addModProperty(name, val);
 			}
-		}/*
-		if(n.toElement().tagName() == "attribute")
-		{
-			QString name = n.toElement().attribute("name");
-			readAttribute(n.toElement().firstChild(), w, name);
-		}*/
+		}
 		else if(n.toElement().tagName() == "widget")
 		{
 			bool insideGrid = (el.tagName() == "grid");

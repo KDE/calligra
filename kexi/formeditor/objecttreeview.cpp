@@ -229,6 +229,8 @@ ObjectTreeView::addItem(ObjectTreeItem *item)
 void
 ObjectTreeView::removeItem(ObjectTreeItem *item)
 {
+	if(!item)
+		return;
 	ObjectTreeViewItem *it = findItem(item->name());
 	delete it;
 }
