@@ -939,6 +939,12 @@ void KoTextView::insertSoftHyphen()
                           false /* no newline */, true, i18n("Insert Soft Hyphen") );
 }
 
+void KoTextView::insertNonbreakingSpace()
+{
+    textObject()->insert( cursor(), currentFormat(), QChar(0xa0) /* see QRichText */,
+                          false /* no newline */, true, i18n("Insert non-breaking space") );
+}
+
 void KoTextView::insertSpecialChar(QChar _c)
 {
     if(textObject()->hasSelection() )

@@ -118,7 +118,9 @@ public:
 
     QPtrList<KAction> dataToolActionList(KInstance * instance);
 
+
     void insertSoftHyphen();
+    void insertNonbreakingSpace();
     void insertSpecialChar(QChar _c);
     void changeCaseOfText(KoChangeCaseDia::TypeOfCase _type);
     void referenceLink(QString & href);
