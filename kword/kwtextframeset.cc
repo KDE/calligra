@@ -921,7 +921,7 @@ int KWTextFrameSet::docFontSize( QTextFormat * format ) const
     int * oldSize = m_origFontSizes.find( format );
     if ( !oldSize )
     {
-        kdDebug() << "Can't find format in m_origFontSizes: " << format->key() << endl;
+        kdDebug() << "Can't find format in m_origFontSizes: " << format << "( " << format->key() << ")" << endl;
         return 0;
     }
     else
@@ -2223,6 +2223,8 @@ void KWTextFrameSet::printRTDebug( int info )
         KWTextParag * p = static_cast<KWTextParag *>(parag);
         p->printRTDebug( info );
     }
+    if ( info == 1 )
+        textDocument()->formatCollection()->debug();
 }
 #endif
 
@@ -2257,7 +2259,7 @@ KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )
     inDoubleClick = FALSE;
     mightStartDrag = FALSE;
 
-    currentFormat = 0;
+    m_currentFormat = 0;
     updateUI();
 }
 
@@ -2403,7 +2405,7 @@ void KWTextFrameSetEdit::keyPressEvent( QKeyEvent * e )
 		     cursor->index() == 0 && ( e->text() == "-" || e->text() == "*" ) ) {
 		    setParagType( QStyleSheetItem::DisplayListItem, QStyleSheetItem::ListDisc );
 		} else {*/
-		    textFrameSet()->insert( cursor, currentFormat, e->text(), false, true, i18n("Insert Text") );
+		    textFrameSet()->insert( cursor, m_currentFormat, e->text(), false, true, i18n("Insert Text") );
 		//}
 		break;
 	    }
@@ -2549,7 +2551,7 @@ void KWTextFrameSetEdit::paste()
         // In particular it handles charsets (in the mimetype).
         QString text = QApplication::clipboard()->text();
         if ( !text.isEmpty() )
-            textFrameSet()->pasteText( cursor, text, currentFormat, true );
+            textFrameSet()->pasteText( cursor, text, m_currentFormat, true );
     }
 }
 
@@ -2846,7 +2848,7 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e )
         {
             QString text;
             if ( QTextDrag::decode( e, text ) )
-                textFrameSet()->pasteText( cursor, text, currentFormat, false );
+                textFrameSet()->pasteText( cursor, text, m_currentFormat, false );
         }
     }
 }
@@ -2943,60 +2945,60 @@ void KWTextFrameSetEdit::drawCursor( bool visible )
 
 
 void KWTextFrameSetEdit::setBold( bool on ) {
-    KWTextFormat format( *currentFormat );
+    KWTextFormat format( *m_currentFormat );
     format.setBold( on );
-    textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::Bold );
-   //kdDebug(32003) << "KWTextFrameSetEdit::setBold new currentFormat " << currentFormat << " " << currentFormat->key() << endl;
+    textFrameSet()->setFormat( cursor, m_currentFormat, &format, QTextFormat::Bold );
+   //kdDebug(32003) << "KWTextFrameSetEdit::setBold new m_currentFormat " << m_currentFormat << " " << m_currentFormat->key() << endl;
 }
 
 void KWTextFrameSetEdit::setItalic( bool on ) {
-    KWTextFormat format( *currentFormat );
+    KWTextFormat format( *m_currentFormat );
     format.setItalic( on );
-    textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::Italic );
+    textFrameSet()->setFormat( cursor, m_currentFormat, &format, QTextFormat::Italic );
 }
 
 void KWTextFrameSetEdit::setUnderline( bool on ) {
-    KWTextFormat format( *currentFormat );
+    KWTextFormat format( *m_currentFormat );
     format.setUnderline( on );
-    textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::Underline );
+    textFrameSet()->setFormat( cursor, m_currentFormat, &format, QTextFormat::Underline );
 }
 
 void KWTextFrameSetEdit::setStrikeOut( bool on ) {
-    KWTextFormat format( *currentFormat );
+    KWTextFormat format( *m_currentFormat );
     format.setStrikeOut( on);
-    textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::Format );
+    textFrameSet()->setFormat( cursor, m_currentFormat, &format, QTextFormat::Format );
 }
 
 QColor KWTextFrameSetEdit::textColor() const {
-    return currentFormat->color();
+    return m_currentFormat->color();
 }
 
 QFont KWTextFrameSetEdit::textFont() const {
-    return currentFormat->font();
+    return m_currentFormat->font();
 }
 
 int KWTextFrameSetEdit::textFontSize()const{
-    return currentFormat->font().pointSize ();
+    return m_currentFormat->font().pointSize ();
 }
 
 QString KWTextFrameSetEdit::textFontFamily()const {
-    return currentFormat->font().family();
+    return m_currentFormat->font().family();
 }
 
 void KWTextFrameSetEdit::setPointSize( int s ){
-    KWTextFormat format( *currentFormat );
+    KWTextFormat format( *m_currentFormat );
     format.setPointSize( s );
-    textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::Size, true /* zoom the font size */ );
+    textFrameSet()->setFormat( cursor, m_currentFormat, &format, QTextFormat::Size, true /* zoom the font size */ );
 }
 
 void KWTextFrameSetEdit::setFamily(const QString &font){
-    KWTextFormat format( *currentFormat );
+    KWTextFormat format( *m_currentFormat );
     format.setFamily( font );
-    textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::Family );
+    textFrameSet()->setFormat( cursor, m_currentFormat, &format, QTextFormat::Family );
 }
 
 void KWTextFrameSetEdit::setFont(const QFont &font,bool _subscript,bool _superscript){
-    KWTextFormat format( *currentFormat );
+    KWTextFormat format( *m_currentFormat );
     format.setFont( font );
 
     if(!_subscript)
@@ -3008,45 +3010,45 @@ void KWTextFrameSetEdit::setFont(const QFont &font,bool _subscript,bool _supersc
         }
     else
         format.setVAlign(QTextFormat::AlignSubScript);
-    textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::Format,true /* zoom the font size */);
+    textFrameSet()->setFormat( cursor, m_currentFormat, &format, QTextFormat::Format,true /* zoom the font size */);
 }
 
 void KWTextFrameSetEdit::setTextColor(const QColor &color) {
-    KWTextFormat format( *currentFormat );
+    KWTextFormat format( *m_currentFormat );
     format.setColor( color );
-    textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::Color );
+    textFrameSet()->setFormat( cursor, m_currentFormat, &format, QTextFormat::Color );
 }
 
 void KWTextFrameSetEdit::setTextSubScript(bool on)
 {
-    KWTextFormat format( *currentFormat );
+    KWTextFormat format( *m_currentFormat );
     if(!on)
         format.setVAlign(QTextFormat::AlignNormal);
     else
         format.setVAlign(QTextFormat::AlignSubScript);
-    textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::VAlign );
+    textFrameSet()->setFormat( cursor, m_currentFormat, &format, QTextFormat::VAlign );
 }
 
 void KWTextFrameSetEdit::setTextSuperScript(bool on)
 {
-    KWTextFormat format( *currentFormat );
+    KWTextFormat format( *m_currentFormat );
     if(!on)
         format.setVAlign(QTextFormat::AlignNormal);
     else
         format.setVAlign(QTextFormat::AlignSuperScript);
-    textFrameSet()->setFormat( cursor, currentFormat, &format, QTextFormat::VAlign );
+    textFrameSet()->setFormat( cursor, m_currentFormat, &format, QTextFormat::VAlign );
 }
 
 void KWTextFrameSetEdit::insertSpecialChar(QChar _c)
 {
-    textFrameSet()->insert( cursor, currentFormat, _c, false /* no newline */, true, i18n("Insert Special Char") );
+    textFrameSet()->insert( cursor, m_currentFormat, _c, false /* no newline */, true, i18n("Insert Special Char") );
 }
 
 void KWTextFrameSetEdit::insertPicture( const QString & file )
 {
     KWTextImage * custom = new KWTextImage( textDocument(), file );
     cursor->parag()->insert( cursor->index(), QChar('@') /*whatever*/ );
-    static_cast<KWTextParag *>( cursor->parag() )->setCustomItem( cursor->index(), custom, currentFormat );
+    static_cast<KWTextParag *>( cursor->parag() )->setCustomItem( cursor->index(), custom, m_currentFormat );
     // TODO undo/redo support
 }
 
@@ -3083,9 +3085,9 @@ void KWTextFrameSetEdit::insertVariable( int type, int subtype )
         customItemsMap.insert( 0, var );
         kdDebug() << "KWTextFrameSetEdit::insertVariable inserting into paragraph" << endl;
 #ifdef DEBUG_FORMATS
-        kdDebug() << "KWTextFrameSetEdit::insertVariable currentFormat=" << currentFormat << endl;
+        kdDebug() << "KWTextFrameSetEdit::insertVariable m_currentFormat=" << m_currentFormat << endl;
 #endif
-        textFrameSet()->insert( cursor, currentFormat, QChar('&') /*whatever*/,
+        textFrameSet()->insert( cursor, m_currentFormat, QChar('&') /*whatever*/,
                                 false, false, i18n("Insert Variable"),
                                 customItemsMap );
     }
@@ -3100,19 +3102,23 @@ void KWTextFrameSetEdit::updateUI()
     if ( i > 0 )
         --i;
 #ifdef DEBUG_FORMATS
-    if ( currentFormat )
-        kdDebug(32003) << "KWTextFrameSet::updateUI currentFormat=" << currentFormat
-                       << " " << currentFormat->key()
+    if ( m_currentFormat )
+        kdDebug(32003) << "KWTextFrameSet::updateUI m_currentFormat=" << m_currentFormat
+                       << " " << m_currentFormat->key()
                        << " parag format=" << cursor->parag()->at( i )->format()->key() << endl;
+    else
+        kdDebug(32003) << "KWTextFrameSetEdit::updateUI m_currentFormat=0" << endl;
 #endif
-    if ( !currentFormat || currentFormat->key() != cursor->parag()->at( i )->format()->key() )
+    if ( !m_currentFormat || m_currentFormat->key() != cursor->parag()->at( i )->format()->key() )
     {
-        if ( currentFormat )
-            currentFormat->removeRef();
-        currentFormat = static_cast<KWTextFormat *>( textDocument()->formatCollection()->format( cursor->parag()->at( i )->format() ) );
-        if ( currentFormat->isMisspelled() ) {
-            currentFormat->removeRef();
-            currentFormat = static_cast<KWTextFormat *>( textDocument()->formatCollection()->format( currentFormat->font(), currentFormat->color() ) );
+        if ( m_currentFormat )
+            m_currentFormat->removeRef();
+        kdDebug() << "Setting m_currentFormat from format " << cursor->parag()->at( i )->format()
+                  << " ( character " << i << " in paragraph " << cursor->parag() << " )" << endl;
+        m_currentFormat = static_cast<KWTextFormat *>( textDocument()->formatCollection()->format( cursor->parag()->at( i )->format() ) );
+        if ( m_currentFormat->isMisspelled() ) {
+            m_currentFormat->removeRef();
+            m_currentFormat = static_cast<KWTextFormat *>( textDocument()->formatCollection()->format( m_currentFormat->font(), m_currentFormat->color() ) );
         }
         showCurrentFormat();
         //textDocument()->formatCollection()->debug();
@@ -3176,8 +3182,9 @@ void KWTextFrameSetEdit::updateUI()
 
 void KWTextFrameSetEdit::showCurrentFormat()
 {
-    KWTextFormat format = *currentFormat;
-    format.setPointSize( textFrameSet()->docFontSize( currentFormat ) ); // "unzoom" the font size
+    //kdDebug() << "KWTextFrameSetEdit::showCurrentFormat m_currentFormat=" << m_currentFormat << endl;
+    KWTextFormat format = *m_currentFormat;
+    format.setPointSize( textFrameSet()->docFontSize( m_currentFormat ) ); // "unzoom" the font size
     m_canvas->gui()->getView()->showFormat( format );
 }
 

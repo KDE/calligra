@@ -376,7 +376,7 @@ private:
     QPoint mousePos;
     KWParagLayout m_paragLayout;
     QTextCursor *cursor;
-    KWTextFormat *currentFormat;
+    KWTextFormat *m_currentFormat;
     QTimer *blinkTimer, *dragStartTimer;
     bool cursorVisible;
     bool blinkCursorVisible;

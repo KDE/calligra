@@ -34,7 +34,7 @@ public:
     virtual ~KWTextFormat() {}
     //KWTextFormat( const QStyleSheetItem *s );
     KWTextFormat( const QFont &f, const QColor &c, QTextFormatCollection * coll )
-      : QTextFormat( f, c, coll ) {}
+      : QTextFormat( f, c, coll ) { generateKey(); }
     KWTextFormat( const KWTextFormat &fm ) : QTextFormat( fm ) {}
     //KWTextFormat& operator=( const KWTextFormat &fm );
 

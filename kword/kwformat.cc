@@ -24,7 +24,7 @@
 KWTextFormatCollection::KWTextFormatCollection( KWDocument * doc )
     : QTextFormatCollection(), m_cachedFormat( 0L )
 {
-    kdDebug() << "KWTextFormatCollection::KWTextFormatCollection" << endl;
+    //kdDebug() << "KWTextFormatCollection::KWTextFormatCollection" << endl;
     //kdDebug() << "Deleting default format " << defaultFormat() << endl;
     delete defaultFormat();
 
@@ -59,7 +59,7 @@ QTextFormat * KWTextFormatCollection::format( const QFont &f, const QColor &c )
 
 void KWTextFormatCollection::remove( QTextFormat *f )
 {
-    kdDebug() << "KWTextFormatCollection::remove " << f << endl;
+    //kdDebug() << "KWTextFormatCollection::remove " << f << endl;
     if ( m_cachedFormat == f )
         m_cachedFormat = 0;
     QTextFormatCollection::remove( f );
