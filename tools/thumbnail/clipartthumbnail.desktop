@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Service
+Name=Cliparts
+ServiceTypes=ThumbCreator
+MimeTypes=image/wmf,image/svg+xml
+X-KDE-Library=clipartthumbnail
+CacheThumbnail=true
