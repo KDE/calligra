@@ -95,9 +95,13 @@ KexiCreateProject::slotValueChanged(KexiCreateProjectPage *page, QString &data)
 {
 	kdDebug() << "KexiCreateProject::slotValueChanged() data: " << data << endl;
 
-	if(page && data == "finish")
-	{
+	if (!page)
+		return;
+	if(data == "finish") {
 		setFinishEnabled(page, page->data("finish").toBool());
+	}
+	else if (data == "continue") {
+		setNextEnabled(page, page->data("continue").toBool());
 	}
 }
 

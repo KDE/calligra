@@ -40,9 +40,12 @@ class KEXIPRJWIZARD_EXPORT KexiCreateProjectPageEngine : public KexiCreateProjec
 
 		KComboBox	*m_engine;
 		KTextBrowser	*m_summary;
-
+#ifdef KEXI_ADD_EXAMPLE_ENGINES
+		QStringList m_example_engines;
+		int m_first_example_engine_nr; //! inx of 1st engine that is just example
+#endif
 	protected slots:
-		void		slotActivated(const QString &);
+		void		slotActivated(int idx);
 };
 
 #endif

@@ -20,16 +20,41 @@ Boston, MA 02111-1307, USA.
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qframe.h>
+#include <qwizard.h>
+#include <qpushbutton.h>
+#include <qlistbox.h>
+#include <qpen.h>
+#include <qpainter.h>
 
 #include <klocale.h>
 #include <kdebug.h>
 #include <kcombobox.h>
 #include <ktextbrowser.h>
 #include <kdialog.h>
+#include <kiconloader.h>
+#include <kapp.h>
 
 #include "kexiDB/kexidbinterfacemanager.h"
 #include "kexicreateprojectpageengine.h"
 #include "kexiproject.h"
+
+#include "kexi_global.h"
+
+//! Small extension: list item that can be shown as disabled, but still selectable
+class KexiListBoxItem : public QListBoxPixmap {
+	public:
+	KexiListBoxItem( QListBox * listbox, const QPixmap & pix, const QString & text, bool enabled=true )
+		: QListBoxPixmap(listbox, pix, text ), m_enabled(enabled)
+	{}
+	protected:
+		virtual void paint( QPainter * painter ) {
+			QPen p = painter->pen();
+			p.setColor( isSelected() ? qApp->palette().disabled().highlightedText() : qApp->palette().disabled().text() );
+			painter->setPen(p);
+			QListBoxPixmap::paint(painter);
+		}
+		bool m_enabled : 1;
+};
 
 KexiCreateProjectPageEngine::KexiCreateProjectPageEngine(KexiCreateProject *parent, QPixmap *wpic, const char *name)
  : KexiCreateProjectPage(parent, wpic, name)
@@ -37,7 +62,8 @@ KexiCreateProjectPageEngine::KexiCreateProjectPageEngine(KexiCreateProject *pare
 	QLabel *lEngine = new QLabel(i18n("Driver: "), m_contents);
 
 	m_engine = new KComboBox(m_contents);
-	connect(m_engine, SIGNAL(activated(const QString &)), this, SLOT(slotActivated(const QString &)));
+	m_engine->setMaxCount(8);
+	connect(m_engine, SIGNAL(activated(int)), this, SLOT(slotActivated(int)));
 
 	m_summary = new KTextBrowser(m_contents);
 
@@ -58,12 +84,37 @@ KexiCreateProjectPageEngine::KexiCreateProjectPageEngine(KexiCreateProject *pare
 void
 KexiCreateProjectPageEngine::fill()
 {
+	if (m_engine->count()>0)
+		return;
 	QStringList drivers = project()->manager()->drivers();
 	for(QStringList::Iterator it = drivers.begin(); it != drivers.end(); ++it)
 	{
-		m_engine->insertItem(*it);
+		m_engine->insertItem( kapp->iconLoader()->loadIcon("exec", KIcon::Small), *it);
+	}
+#ifdef KEXI_ADD_EXAMPLE_ENGINES
+	m_first_example_engine_nr = m_engine->count();
+	m_example_engines 
+		<< i18n("Default Kexi embedded engine")
+		<< "PostgreSQL"
+		<< "Interbase/Firebird"
+		<< "CQL++"
+		<< "SAP DB"
+		<< "IBM DB2"
+		<< "Oracle"
+		<< "Sybase/Adaptive Server Enterprise"
+		<< "ADABAS D"
+		<< "Informix" 
+		<< "Progress"
+		<< "ODBC";
+		//(uniwersalne polaczenie do baz) 
+
+	QPixmap &icon = kapp->iconLoader()->loadIcon("exec", KIcon::Small);
+	for ( QStringList::Iterator it = m_example_engines.begin(); it != m_example_engines.end(); ++it ) {
+	m_engine->listBox()->insertItem( new KexiListBoxItem( 0, icon, *it, false ) );
+//		m_engine->insertItem( kapp->iconLoader()->loadIcon("exec", KIcon::Small), *it);
 	}
 
+#endif
 	if(!m_engine->currentText().isEmpty())
 	{
 		setProperty("engine", QVariant(m_engine->currentText()));
@@ -76,24 +127,44 @@ KexiCreateProjectPageEngine::fill()
 void
 KexiCreateProjectPageEngine::fillSummary()
 {
-	QString engineSummary = project()->manager()->driverInfo(m_engine->currentText())->comment();
-	QString userSummary = QString("<b>" + m_engine->currentText() + "</b><br><hr><br>" + engineSummary);
+	QString engineSummary;
+	QVariant location;
+#ifdef KEXI_ADD_EXAMPLE_ENGINES
+	if (m_engine->currentItem()>=m_first_example_engine_nr) {
+		engineSummary = i18n("Sorry, this driver is not availabe with current version of %1.").arg(KEXI_APP_NAME);
+		if (m_engine->currentText()=="ODBC") {
+			engineSummary += i18n("<p>ODBC is an open specification for easier accessing Data Sources. Data Sources include both SQL databases availabe with Kexi drivers and other, like Microsoft SQL Server and Microsoft Access.");
+		}
+	} 
+	else
+#endif
+	{
+		engineSummary = project()->manager()->driverInfo(m_engine->currentText())->comment();
+//		userSummary = QString("<b>" + m_engine->currentText() + "</b><br><hr><br>" + engineSummary);
+		location = project()->manager()->driverInfo(m_engine->currentText())->property("X-Kexi-Location");
+	}
 
 
 	if(!m_engine->currentText().isEmpty())
 	{
-		m_summary->setText(userSummary);
+		m_summary->setText( QString("<b>") + m_engine->currentText() + "</b><br><hr><br>" + engineSummary );
 	}
 
-	QVariant location = project()->manager()->driverInfo(m_engine->currentText())->property("X-Kexi-Location");
 	setProperty("location", location);
 }
 
 void
-KexiCreateProjectPageEngine::slotActivated(const QString &engine)
+KexiCreateProjectPageEngine::slotActivated(int idx)
 {
-	setProperty("engine", QVariant(engine));
-	setProperty("continue", QVariant(true));
+	bool continue_enabled;
+#ifdef KEXI_ADD_EXAMPLE_ENGINES
+	continue_enabled = idx<m_first_example_engine_nr;
+#else
+	continue_enabled=true;
+#endif
+
+	setProperty("continue", continue_enabled);
+	setProperty("engine", QVariant(m_engine->text(idx)));
 	fillSummary();
 }
 
