@@ -98,8 +98,8 @@ void KoFontChooser::setupTab1(bool _withSubSuperScript, uint fontListCriteria )
     d->m_offsetBaseLine= new KIntNumInput( grp );
     grid->addWidget(d->m_offsetBaseLine,1,2);
 
-    d->m_relativeSize-> setRange(-9, 9, 1,false);
-    d->m_relativeSize->setSuffix("pt");
+    d->m_offsetBaseLine->setRange(-9, 9, 1,false);
+    d->m_offsetBaseLine->setSuffix("pt");
 
     if(!_withSubSuperScript)
     {

@@ -203,7 +203,7 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
                 prefix.prepend( ' ' /*the space before the bullet in RTL mode*/ );
             KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ), textColor, xLeft, base, width, y, height );
 
-            p->drawText( xLeft, y + base, prefix );
+            p->drawText( xLeft, y + base - format->offsetFromBaseLine(), prefix );
         }
 
         QRect er( xBullet + (rtl ? width : 0), y + height / 2 - width / 2, width, width );
@@ -235,7 +235,7 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
                 }
                 KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ), textColor, xBullet, base, width, y, height );
 
-                p->drawText( xBullet, y + base, m_layout.counter->customBulletCharacter() );
+                p->drawText( xBullet, y + base- format->offsetFromBaseLine(), m_layout.counter->customBulletCharacter() );
                 break;
             default:
                 break;
@@ -249,7 +249,7 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
 
             KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ), textColor, xBullet + width, base, counterWidth, y,height );
 
-            p->drawText( xBullet + width, y + base, suffix, -1 );
+            p->drawText( xBullet + width, y + base- format->offsetFromBaseLine(), suffix, -1 );
         }
     }
     else
@@ -264,7 +264,7 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
         {
             counterText += ' ' /*the space after the bullet (before in RTL mode)*/;
 
-            p->drawText( xLeft, y + base, counterText, -1 );
+            p->drawText( xLeft, y + base- format->offsetFromBaseLine(), counterText, -1 );
         }
     }
     p->restore();

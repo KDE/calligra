@@ -529,7 +529,7 @@ void KoVariable::drawCustomItemHelper( QPainter* p, int x, int y, int wpix, int 
 
     KoTextParag::drawFontEffects( p, fmt, zh, font, textColor, x, ascentpix, wpix, y, hpix );
 
-    p->drawText( x, y + ascentpix + offset, text() );
+    p->drawText( x, y + ascentpix + offset - fmt->offsetFromBaseLine(), text() );
     p->restore();
 }
 
