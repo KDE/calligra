@@ -508,7 +508,7 @@ const char *StringBuffer::latin1() {
   return m_buffer;
 }
 
-QString StringBuffer::mid( uint index, uint len=0xffffffff) const {
+QString StringBuffer::mid( uint index, uint len) const {
   QString data = toString();
   return data.mid(index,len);
 }
