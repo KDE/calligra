@@ -102,6 +102,15 @@ void KexiTableViewPropertyBuffer::slotRefreshRequested()
 
 void KexiTableViewPropertyBuffer::insert(uint row, KexiPropertyBuffer* buf, bool newOne)
 {
+	if (!buf || row >= m_buffers.size()) {
+		kexiwarn << "KexiTableViewPropertyBuffer::insert() invalid args: rew="<< row<< " buf="<< buf<< endl;
+		return;
+	}
+	if (buf->parent() && buf->parent()!=this) {
+		kexiwarn << "KexiTableViewPropertyBuffer::insert() buffer's parent must be NULL or this KexiTableViewPropertyBuffer" << endl;
+		return;
+	}
+
 //	m_buffers.remove(row);//sanity
 
 /*	//let's move down all buffers that are below
@@ -112,6 +121,7 @@ void KexiTableViewPropertyBuffer::insert(uint row, KexiPropertyBuffer* buf, bool
 		m_buffers.insert( i , b );
 	}*/
 	m_buffers.insert(row, buf);
+
 //	m_buffers.setAutoDelete(true);//revert the flag
 
 	connect(buf,SIGNAL(propertyChanged()), m_view, SLOT(setDirty()));

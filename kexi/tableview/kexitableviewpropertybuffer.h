@@ -76,13 +76,24 @@ class KEXIDATATABLE_EXPORT KexiTableViewPropertyBuffer : public QObject
 
 	public slots:
 		void removeCurrentPropertyBuffer();
+
 		void clear(uint minimumSize = 0);
+
 		/*! Inserts \a buf buffer at \a row position. 
 		 If there was a buffer at this position before, it will be destroyed. 
 		 If \a newOne is true, the property buffer will be marked as newly created, 
-		 simply by adding "newrow" property. */
+		 simply by adding "newrow" property. 
+
+		 The buffer \a buf will be owned by this object, so you should not 
+		 delete this buffer by hand but call removeCurrentPropertyBuffer() 
+		 or remove(uint) instead. 
+		 Note that buffer's parent (QObject::parent()) must be null 
+		 or qual to this KexiTableViewPropertyBuffer object, otherwise this method 
+		 will fail with a warning.
+		*/
 		void insert(uint row, KexiPropertyBuffer* buf, bool newOne = false);
 
+		/*! Removed a buffer at \a row position. */
 		void remove(uint row);
 
 	protected slots:
@@ -103,6 +114,8 @@ class KEXIDATATABLE_EXPORT KexiTableViewPropertyBuffer : public QObject
 
 		//! Called on clearing tableview's data: just clears all buffers.
 		void slotRefreshRequested();
+
+		void bufferDestroying();
 
 	protected:
 		KexiPropertyBuffer::Vector m_buffers; //!< prop. buffers vector
