@@ -19,18 +19,43 @@
 */
 
 // built-in logical functions
-#include "kspread_util.h"
-#include "kspread_doc.h"
-#include "kspread_table.h"
+
+#include <stdlib.h>
+#include <math.h>
+#include <float.h>
 
 #include <koscript_parser.h>
 #include <koscript_util.h>
 #include <koscript_func.h>
 #include <koscript_synext.h>
 
-#include <stdlib.h>
-#include <math.h>
-#include <float.h>
+#include <kspread_doc.h>
+#include <kspread_functions.h>
+#include <kspread_util.h>
+#include <kspread_table.h>
+
+// prototypes (sorted alphabetically)
+bool kspreadfunc_and( KSContext& context );
+bool kspreadfunc_if( KSContext& context );
+bool kspreadfunc_nand( KSContext& context );
+bool kspreadfunc_nor( KSContext& context );
+bool kspreadfunc_not( KSContext& context );
+bool kspreadfunc_or( KSContext& context );
+bool kspreadfunc_xor( KSContext& context );
+
+// registers all logic functions
+void KSpreadRegisterLogicFunctions()
+{
+  KSpreadFunctionRepository* repo = KSpreadFunctionRepository::self();
+
+  repo->registerFunction( "AND",  kspreadfunc_and );   
+  repo->registerFunction( "IF",   kspreadfunc_if );    
+  repo->registerFunction( "NAND", kspreadfunc_nand );  // KSpread-specific
+  repo->registerFunction( "NOR",  kspreadfunc_nor );   // KSpread-specific
+  repo->registerFunction( "NOT",  kspreadfunc_not );   
+  repo->registerFunction( "OR",   kspreadfunc_or );   
+  repo->registerFunction( "XOR",  kspreadfunc_xor );   // KSpread-specific
+}
 
 // Function: NOT
 bool kspreadfunc_not( KSContext& context )

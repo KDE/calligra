@@ -19,18 +19,57 @@
 */
 
 // built-in financial functions
-#include "kspread_util.h"
-#include "kspread_doc.h"
-#include "kspread_table.h"
+
+#include <stdlib.h>
+#include <math.h>
+#include <float.h>
 
 #include <koscript_parser.h>
 #include <koscript_util.h>
 #include <koscript_func.h>
 #include <koscript_synext.h>
 
-#include <stdlib.h>
-#include <math.h>
-#include <float.h>
+#include <kspread_doc.h>
+#include <kspread_functions.h>
+#include <kspread_util.h>
+#include <kspread_table.h>
+
+// prototypes
+bool kspreadfunc_fv( KSContext& context );
+bool kspreadfunc_compound( KSContext& context );
+bool kspreadfunc_continuous( KSContext& context );
+bool kspreadfunc_pv( KSContext& context );
+bool kspreadfunc_pv_annuity( KSContext& context );
+bool kspreadfunc_fv_annuity( KSContext& context );
+bool kspreadfunc_effective( KSContext& context );
+bool kspreadfunc_zero_coupon( KSContext& context );
+bool kspreadfunc_level_coupon( KSContext& context );
+bool kspreadfunc_nominal( KSContext& context );
+bool kspreadfunc_sln( KSContext& context );
+bool kspreadfunc_syd( KSContext& context );
+bool kspreadfunc_db( KSContext& context );
+bool kspreadfunc_euro( KSContext& context );
+
+// registers all financial functions
+void KSpreadRegisterFinancialFunctions()
+{
+  KSpreadFunctionRepository* repo = KSpreadFunctionRepository::self();
+
+  repo->registerFunction( "COMPOUND", kspreadfunc_compound );
+  repo->registerFunction( "CONTINUOUS", kspreadfunc_continuous );
+  repo->registerFunction( "EFFECTIVE", kspreadfunc_effective );
+  repo->registerFunction( "NOMINAL", kspreadfunc_nominal );
+  repo->registerFunction( "FV", kspreadfunc_fv );
+  repo->registerFunction( "FV_ANNUITY", kspreadfunc_fv_annuity );
+  repo->registerFunction( "PV", kspreadfunc_pv );
+  repo->registerFunction( "PV_ANNUITY", kspreadfunc_pv_annuity );
+  repo->registerFunction( "ZERO_COUPON", kspreadfunc_zero_coupon );
+  repo->registerFunction( "LEVEL_COUPON", kspreadfunc_level_coupon );
+  repo->registerFunction( "SLN", kspreadfunc_sln );
+  repo->registerFunction( "SYD", kspreadfunc_syd );
+  repo->registerFunction( "DB", kspreadfunc_db );
+  repo->registerFunction( "EURO", kspreadfunc_euro );  // KSpread-specific, Gnumeric-compatible
+}
 
 // Function: FV
 /* Returns future value, given current value, interest rate and time */

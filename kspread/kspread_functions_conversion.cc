@@ -20,21 +20,52 @@
 
 // built-in conversion functions
 
-#include "kspread_util.h"
-#include "kspread_doc.h"
-#include "kspread_table.h"
-
-#include <koscript_parser.h>
-#include <koscript_util.h>
-#include <koscript_func.h>
-#include <koscript_synext.h>
-
 #include <stdlib.h>
 #include <math.h>
 #include <float.h>
 
 #include <kdebug.h>
 
+#include <koscript_parser.h>
+#include <koscript_util.h>
+#include <koscript_func.h>
+#include <koscript_synext.h>
+
+#include <kspread_doc.h>
+#include <kspread_functions.h>
+#include <kspread_table.h>
+#include <kspread_util.h>
+
+
+// prototypes
+bool kspreadfunc_arabic( KSContext& context );
+bool kspreadfunc_carx( KSContext& context );
+bool kspreadfunc_cary( KSContext& context );
+bool kspreadfunc_decsex( KSContext& context );
+bool kspreadfunc_polr( KSContext& context );
+bool kspreadfunc_pola( KSContext& context );
+bool kspreadfunc_roman( KSContext& context );
+bool kspreadfunc_sexdec( KSContext& context );
+bool kspreadfunc_AsciiToChar( KSContext& context );
+bool kspreadfunc_CharToAscii( KSContext& context );
+bool kspreadfunc_inttobool( KSContext & context );
+bool kspreadfunc_booltoint( KSContext & context );
+bool kspreadfunc_BoolToString( KSContext& context );
+bool kspreadfunc_NumberToString( KSContext& context );
+
+// registers all conversion functions
+void KSpreadRegisterConversionFunctions()
+{
+   KSpreadFunctionRepository* repo = KSpreadFunctionRepository::self();
+   repo->registerFunction( "ARABIC",  kspreadfunc_arabic );
+   repo->registerFunction( "CARX",    kspreadfunc_carx );
+   repo->registerFunction( "CARY",    kspreadfunc_cary );
+   repo->registerFunction( "DECSEX",  kspreadfunc_decsex );
+   repo->registerFunction( "POLR",    kspreadfunc_polr );
+   repo->registerFunction( "POLA",    kspreadfunc_pola );
+   repo->registerFunction( "ROMAN",   kspreadfunc_roman );
+   repo->registerFunction( "SEXDEC",  kspreadfunc_sexdec );
+}
 
 // Function: POLR
 bool kspreadfunc_polr( KSContext& context )

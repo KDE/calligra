@@ -19,23 +19,64 @@
 */
 
 // built-in information functions
-#include "kspread_util.h"
-#include "kspread_doc.h"
-#include "kspread_table.h"
+
+
+#include <config.h>
+#include <stdlib.h>
+#include <math.h>
+#include <float.h>
+#include <sys/utsname.h>
+
+#include <qdir.h>
+#include <kdebug.h>
 
 #include <koscript_parser.h>
 #include <koscript_util.h>
 #include <koscript_func.h>
 #include <koscript_synext.h>
 
-#include <stdlib.h>
-#include <math.h>
-#include <float.h>
+#include <kspread_doc.h>
+#include <kspread_functions.h>
+#include <kspread_table.h>
+#include <kspread_util.h>
 
-#include <qdir.h>
-#include <config.h>
+// prototypes (sort alphabetically)
+bool kspreadfunc_countblank( KSContext & context );
+bool kspreadfunc_filename( KSContext & context );
+bool kspreadfunc_info( KSContext& context );
+bool kspreadfunc_isblank( KSContext& context );
+bool kspreadfunc_isdate( KSContext& context );
+bool kspreadfunc_iseven( KSContext& context );
+bool kspreadfunc_islogical( KSContext& context );
+bool kspreadfunc_isnottext( KSContext& context );
+bool kspreadfunc_isnum( KSContext& context );
+bool kspreadfunc_isodd( KSContext& context );
+bool kspreadfunc_istext( KSContext& context );
+bool kspreadfunc_istime( KSContext& context );
+bool kspreadfunc_n( KSContext & context );
+bool kspreadfunc_type( KSContext & context );
+bool kspreadfunc_version( KSContext & context );
 
-#include <sys/utsname.h>
+// registers all information functions
+void KSpreadRegisterInformationFunctions()
+{
+  KSpreadFunctionRepository* repo = KSpreadFunctionRepository::self();
+
+  repo->registerFunction( "COUNTBLANK", kspreadfunc_countblank );
+  repo->registerFunction( "FILENAME", kspreadfunc_filename );
+  repo->registerFunction( "INFO", kspreadfunc_info );
+  repo->registerFunction( "ISBLANK", kspreadfunc_isblank );
+  repo->registerFunction( "ISDATE", kspreadfunc_isdate );
+  repo->registerFunction( "ISEVEN", kspreadfunc_iseven );
+  repo->registerFunction( "ISLOGICAL", kspreadfunc_islogical );
+  repo->registerFunction( "ISNOTTEXT", kspreadfunc_isnottext );
+  repo->registerFunction( "ISNUM", kspreadfunc_isnum );
+  repo->registerFunction( "ISODD", kspreadfunc_isodd );
+  repo->registerFunction( "ISTEXT", kspreadfunc_istext );
+  repo->registerFunction( "ISTIME", kspreadfunc_istime );
+  repo->registerFunction( "N", kspreadfunc_n );
+  repo->registerFunction( "TYPE", kspreadfunc_type );
+}
 
 // Function: INFO
 bool kspreadfunc_info( KSContext& context )
@@ -51,7 +92,7 @@ bool kspreadfunc_info( KSContext& context )
   QString type = args[0]->stringValue().lower();
 
   if ( type == "directory" )
-  { 
+  {
     context.setValue( new KSValue( QDir::currentDirPath() ) );
     return true;
   }

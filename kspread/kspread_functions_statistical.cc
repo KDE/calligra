@@ -19,17 +19,94 @@
 */
 
 // built-in statistical functions
-#include "kspread_util.h"
-#include "kspread_doc.h"
-#include "kspread_table.h"
+
+#include <stdlib.h>
+#include <math.h>
+#include <float.h>
 
 #include <koscript_parser.h>
 #include <koscript_util.h>
 #include <koscript_func.h>
 #include <koscript_synext.h>
 
-#include <stdlib.h>
-#include <math.h>
+#include <kspread_doc.h>
+#include <kspread_functions.h>
+#include <kspread_table.h>
+#include <kspread_util.h>
+
+// prototypes
+bool kspreadfunc_arrang( KSContext& context );
+bool kspreadfunc_average( KSContext& context );
+bool kspreadfunc_averagea( KSContext& context );
+bool kspreadfunc_avedev( KSContext& context );
+bool kspreadfunc_median( KSContext& context );
+bool kspreadfunc_variance( KSContext& context );
+bool kspreadfunc_stddev( KSContext& context );
+bool kspreadfunc_combin( KSContext& context );
+bool kspreadfunc_bino( KSContext& context );
+bool kspreadfunc_bino_inv( KSContext& context );
+bool kspreadfunc_phi(KSContext& context);
+bool kspreadfunc_gauss(KSContext& context);
+bool kspreadfunc_gammadist( KSContext& context );
+bool kspreadfunc_betadist( KSContext& context );
+bool kspreadfunc_fisher( KSContext& context );
+bool kspreadfunc_fisherinv( KSContext& context );
+bool kspreadfunc_normdist(KSContext& context );
+bool kspreadfunc_lognormdist(KSContext& context );
+bool kspreadfunc_stdnormdist(KSContext& context );
+bool kspreadfunc_expondist(KSContext& context );
+bool kspreadfunc_weibull( KSContext& context );
+bool kspreadfunc_normsinv( KSContext& context );
+bool kspreadfunc_norminv( KSContext& context );
+bool kspreadfunc_gammaln( KSContext& context );
+bool kspreadfunc_poisson( KSContext& context );
+bool kspreadfunc_confidence( KSContext& context );
+bool kspreadfunc_tdist( KSContext& context );
+bool kspreadfunc_fdist( KSContext& context );
+bool kspreadfunc_chidist( KSContext& context );
+bool kspreadfunc_sumproduct( KSContext& context );
+bool kspreadfunc_sumx2py2( KSContext& context );
+bool kspreadfunc_sumx2my2( KSContext& context );
+bool kspreadfunc_sumxmy2( KSContext& context );
+
+// registers all statistical functions
+void KSpreadRegisterStatisticalFunctions()
+{
+  KSpreadFunctionRepository* repo = KSpreadFunctionRepository::self();
+
+  repo->registerFunction( "AVERAGE", kspreadfunc_average );
+  repo->registerFunction( "AVERAGEA", kspreadfunc_averagea );
+  repo->registerFunction( "AVEDEV", kspreadfunc_avedev );
+  repo->registerFunction( "MEDIAN", kspreadfunc_median );
+  repo->registerFunction( "VARIANCE", kspreadfunc_variance );
+  repo->registerFunction( "STDDEV", kspreadfunc_stddev );
+  repo->registerFunction( "COMBIN", kspreadfunc_combin );
+  repo->registerFunction( "PERMUT", kspreadfunc_arrang );
+  repo->registerFunction( "BINO", kspreadfunc_bino );
+  repo->registerFunction( "INVBINO", kspreadfunc_bino_inv );
+  repo->registerFunction( "SUMPRODUCT", kspreadfunc_sumproduct );
+  repo->registerFunction( "SUMX2PY2", kspreadfunc_sumx2py2 );
+  repo->registerFunction( "SUMX2MY2", kspreadfunc_sumx2my2 );
+  repo->registerFunction( "SUM2XMY", kspreadfunc_sumxmy2 );
+  repo->registerFunction( "GAUSS", kspreadfunc_gauss );
+  repo->registerFunction( "PHI", kspreadfunc_phi );
+  repo->registerFunction( "GAMMADIST", kspreadfunc_gammadist );
+  repo->registerFunction( "BETADIST", kspreadfunc_betadist );
+  repo->registerFunction( "FISHER", kspreadfunc_fisher );
+  repo->registerFunction( "FISHERINV", kspreadfunc_fisherinv );
+  repo->registerFunction( "NORMDIST", kspreadfunc_normdist );
+  repo->registerFunction( "LOGNORMDIST", kspreadfunc_lognormdist );
+  repo->registerFunction( "EXPONDIST", kspreadfunc_expondist );
+  repo->registerFunction( "WEIBULL", kspreadfunc_weibull );
+  repo->registerFunction( "NORMSINV", kspreadfunc_normsinv );
+  repo->registerFunction( "NORMINV", kspreadfunc_norminv );
+  repo->registerFunction( "GAMMALN", kspreadfunc_gammaln );
+  repo->registerFunction( "POISSON", kspreadfunc_poisson );
+  repo->registerFunction( "CONFIDENCE", kspreadfunc_confidence );
+  repo->registerFunction( "TDIST", kspreadfunc_tdist );
+  repo->registerFunction( "FDIST", kspreadfunc_fdist );
+  repo->registerFunction( "CHIDIST", kspreadfunc_chidist );
+}
 
 // Function: permut
 bool kspreadfunc_arrang( KSContext& context )

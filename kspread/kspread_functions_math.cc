@@ -19,20 +19,111 @@
 */
 
 // built-in math functions
-#include "kspread_util.h"
-#include "kspread_doc.h"
-#include "kspread_table.h"
-
-#include <koscript_parser.h>
-#include <koscript_util.h>
-#include <koscript_func.h>
-#include <koscript_synext.h>
 
 #include <stdlib.h>
 #include <math.h>
 #include <float.h>
 
 #include <kdebug.h>
+
+#include <koscript_parser.h>
+#include <koscript_util.h>
+#include <koscript_func.h>
+#include <koscript_synext.h>
+
+#include <kspread_doc.h>
+#include <kspread_functions.h>
+#include <kspread_table.h>
+#include <kspread_util.h>
+
+// prototypes
+bool kspreadfunc_abs( KSContext& context );
+bool kspreadfunc_ceil( KSContext& context );
+bool kspreadfunc_count( KSContext& context );
+bool kspreadfunc_countif( KSContext& context );
+bool kspreadfunc_cur( KSContext& context );
+bool kspreadfunc_div( KSContext& context );
+bool kspreadfunc_eps( KSContext& context );
+bool kspreadfunc_even( KSContext& context );
+bool kspreadfunc_exp( KSContext& context );
+bool kspreadfunc_fact( KSContext& context );
+bool kspreadfunc_factdouble( KSContext& context );
+bool kspreadfunc_fib( KSContext& context );
+bool kspreadfunc_floor( KSContext& context );
+bool kspreadfunc_int( KSContext& context );
+bool kspreadfunc_inv( KSContext& context );
+bool kspreadfunc_lcd( KSContext & context );
+bool kspreadfunc_lcm( KSContext & context );
+bool kspreadfunc_ln( KSContext& context );
+bool kspreadfunc_log( KSContext& context );
+bool kspreadfunc_logn( KSContext& context );
+bool kspreadfunc_max( KSContext& context );
+bool kspreadfunc_min( KSContext& context );
+bool kspreadfunc_mod( KSContext& context );
+bool kspreadfunc_mult( KSContext& context );
+bool kspreadfunc_multinomial( KSContext& context );
+bool kspreadfunc_odd( KSContext& context );
+bool kspreadfunc_pow( KSContext& context );
+bool kspreadfunc_quotient( KSContext& context );
+bool kspreadfunc_product( KSContext& context );
+bool kspreadfunc_rand( KSContext& context );
+bool kspreadfunc_randbetween( KSContext& context );
+bool kspreadfunc_rootn( KSContext& context );
+bool kspreadfunc_round( KSContext& context );
+bool kspreadfunc_rounddown( KSContext& context );
+bool kspreadfunc_roundup( KSContext& context );
+bool kspreadfunc_sign( KSContext& context );
+bool kspreadfunc_sqrt( KSContext& context );
+bool kspreadfunc_sqrtpi( KSContext& context );
+bool kspreadfunc_sum( KSContext& context );
+bool kspreadfunc_sumsq( KSContext& context );
+
+// registers all math functions
+void KSpreadRegisterMathFunctions()
+{
+  KSpreadFunctionRepository* repo = KSpreadFunctionRepository::self();
+
+  repo->registerFunction( "ABS",         kspreadfunc_abs );
+  repo->registerFunction( "CEIL",        kspreadfunc_ceil );
+  repo->registerFunction( "COUNT",       kspreadfunc_count );
+  repo->registerFunction( "COUNTIF",     kspreadfunc_countif );
+  repo->registerFunction( "CUR",         kspreadfunc_cur );
+  repo->registerFunction( "DIV",         kspreadfunc_div );
+  repo->registerFunction( "EPS",         kspreadfunc_eps );
+  repo->registerFunction( "EVEN",        kspreadfunc_even );
+  repo->registerFunction( "EXP",         kspreadfunc_exp );
+  repo->registerFunction( "FACT",        kspreadfunc_fact );
+  repo->registerFunction( "FACTDOUBLE",  kspreadfunc_factdouble ); // KSpread-specific,
+  repo->registerFunction( "FIB",         kspreadfunc_fib ); // KSpread-specific, like Quattro-Pro's FIB
+  repo->registerFunction( "FLOOR",       kspreadfunc_floor );
+  repo->registerFunction( "INT",         kspreadfunc_int );
+  repo->registerFunction( "INV",         kspreadfunc_inv );
+  repo->registerFunction( "LCD",         kspreadfunc_lcd );
+  repo->registerFunction( "LCM",         kspreadfunc_lcm );
+  repo->registerFunction( "LN",          kspreadfunc_ln );
+  repo->registerFunction( "LOG",         kspreadfunc_log );
+  repo->registerFunction( "LOGN",        kspreadfunc_logn );
+  repo->registerFunction( "MAX",         kspreadfunc_max );
+  repo->registerFunction( "MIN",         kspreadfunc_min );
+  repo->registerFunction( "MOD",         kspreadfunc_mod );
+  repo->registerFunction( "MULTIPLY",    kspreadfunc_mult );
+  repo->registerFunction( "MULTINOMIAL", kspreadfunc_multinomial );
+  repo->registerFunction( "ODD",         kspreadfunc_odd );
+  repo->registerFunction( "POW",         kspreadfunc_pow );
+  repo->registerFunction( "QUOTIENT",    kspreadfunc_quotient );
+  repo->registerFunction( "PRODUCT",     kspreadfunc_product );
+  repo->registerFunction( "RAND",        kspreadfunc_rand );
+  repo->registerFunction( "RANDBETWEEN", kspreadfunc_randbetween );
+  repo->registerFunction( "ROOTN",       kspreadfunc_rootn );
+  repo->registerFunction( "ROUND",       kspreadfunc_round );
+  repo->registerFunction( "ROUNDDOWN",   kspreadfunc_rounddown );
+  repo->registerFunction( "ROUNDUP",     kspreadfunc_roundup );
+  repo->registerFunction( "SIGN",        kspreadfunc_sign );
+  repo->registerFunction( "SQRT",        kspreadfunc_sqrt );
+  repo->registerFunction( "SQRTPI",      kspreadfunc_sqrtpi );
+  repo->registerFunction( "SUM",         kspreadfunc_sum );
+  repo->registerFunction( "SUMSQ",       kspreadfunc_sumsq );
+}
 
 /*********************************************************************
  *

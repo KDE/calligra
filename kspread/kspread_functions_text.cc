@@ -22,22 +22,87 @@
 // built-in text functions
 // please keep it in alphabetical order
 
-#include "kspread_util.h"
-#include "kspread_doc.h"
-#include "kspread_table.h"
+#include <stdlib.h>
+#include <math.h>
+#include <float.h>
+
+#include <qregexp.h>
+#include <kdebug.h>
 
 #include <koscript_parser.h>
 #include <koscript_util.h>
 #include <koscript_func.h>
 #include <koscript_synext.h>
 
-#include <qregexp.h>
+#include <kspread_doc.h>
+#include <kspread_functions.h>
+#include <kspread_table.h>
+#include <kspread_util.h>
 
-#include <stdlib.h>
-#include <math.h>
-#include <float.h>
+// prototypes
+bool kspreadfunc_char( KSContext& context );
+bool kspreadfunc_clean( KSContext& context );
+bool kspreadfunc_code( KSContext& context );
+bool kspreadfunc_compare( KSContext& context );
+bool kspreadfunc_concatenate( KSContext& context );
+bool kspreadfunc_dollar( KSContext& context );
+bool kspreadfunc_exact( KSContext& context );
+bool kspreadfunc_find( KSContext& context );
+bool kspreadfunc_fixed( KSContext& context );
+bool kspreadfunc_join( KSContext& context );
+bool kspreadfunc_left( KSContext& context );
+bool kspreadfunc_len( KSContext& context );
+bool kspreadfunc_lower( KSContext& context );
+bool kspreadfunc_mid( KSContext& context );
+bool kspreadfunc_proper(KSContext & context);
+bool kspreadfunc_replace( KSContext& context );
+bool kspreadfunc_rept( KSContext& context );
+bool kspreadfunc_rot( KSContext& context );
+bool kspreadfunc_right( KSContext& context );
+bool kspreadfunc_search( KSContext& context );
+bool kspreadfunc_sleek( KSContext& context );
+bool kspreadfunc_substitute( KSContext& context );
+bool kspreadfunc_t( KSContext& context );
+bool kspreadfunc_text( KSContext& context );
+bool kspreadfunc_toggle( KSContext& context );
+bool kspreadfunc_trim(KSContext& context );
+bool kspreadfunc_upper( KSContext& context );
+bool kspreadfunc_value( KSContext& context );
 
-#include <kdebug.h>
+// registers all text functions
+void KSpreadRegisterTextFunctions()
+{
+  KSpreadFunctionRepository* repo = KSpreadFunctionRepository::self();
+
+  repo->registerFunction( "CHAR",        kspreadfunc_char );
+  repo->registerFunction( "CLEAN",       kspreadfunc_clean );
+  repo->registerFunction( "CODE",        kspreadfunc_code );
+  repo->registerFunction( "COMPARE",     kspreadfunc_compare ); // KSpread-specific
+  repo->registerFunction( "CONCATENATE", kspreadfunc_concatenate );
+  repo->registerFunction( "DOLLAR",      kspreadfunc_dollar );
+  repo->registerFunction( "EXACT",       kspreadfunc_exact );
+  repo->registerFunction( "FIND",        kspreadfunc_find );
+  repo->registerFunction( "FIXED",       kspreadfunc_fixed );
+  repo->registerFunction( "LEFT",        kspreadfunc_left );
+  repo->registerFunction( "LEN",         kspreadfunc_len );
+  repo->registerFunction( "LOWER",       kspreadfunc_lower );
+  repo->registerFunction( "MID",         kspreadfunc_mid );
+  repo->registerFunction( "PROPER",      kspreadfunc_proper );
+  repo->registerFunction( "REPLACE",     kspreadfunc_replace );
+  repo->registerFunction( "REPT",        kspreadfunc_rept );
+  repo->registerFunction( "ROT",         kspreadfunc_rot ); // KSpread-specific, like OpenOffice's ROT13
+  repo->registerFunction( "RIGHT",       kspreadfunc_right );
+  repo->registerFunction( "SEARCH",      kspreadfunc_search );
+  repo->registerFunction( "SLEEK",       kspreadfunc_sleek );  // KSpread-specific
+  repo->registerFunction( "SUBSTITUTE",  kspreadfunc_substitute );
+  repo->registerFunction( "T",           kspreadfunc_t );
+  repo->registerFunction( "TEXT",        kspreadfunc_text );
+  repo->registerFunction( "TOGGLE",      kspreadfunc_toggle ); // KSpread-specific
+  repo->registerFunction( "TRIM",        kspreadfunc_trim );
+  repo->registerFunction( "UPPER",       kspreadfunc_upper );
+  repo->registerFunction( "VALUE",       kspreadfunc_value );
+}
+
 
 // Function: CHAR
 bool kspreadfunc_char( KSContext& context )
@@ -321,14 +386,6 @@ bool kspreadfunc_fixed( KSContext& context )
 
   context.setValue( new KSValue( result ) );
   return true;
-}
-
-
-// Function: JOIN
-// This is obsolete, use CONCATENATE
-bool kspreadfunc_join( KSContext& context )
-{
-  return kspreadfunc_concatenate( context );
 }
 
 // Function: LEFT

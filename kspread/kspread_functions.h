@@ -8,6 +8,33 @@ class QDomElement;
 #include <qstringlist.h>
 #include <qdict.h>
 
+#include <koscript_func.h>
+
+// defined pointer to function
+typedef KSBuiltinFuncPtr KSpreadFunctionPtr;
+
+/**
+ * Encapsulates built-in function for formula evaluation.
+ *
+ * Example of built-in functions are SUM, MAX, SIN, COS, etc.
+ *
+ * In order to be accessible from the formula engine, 
+ * function must be registered first using 
+ * KSpreadFunctionRepository::registerFunction().
+ * 
+ */
+class KSpreadFunction
+{
+public:
+  // eval();
+  // 
+  QString name;
+  QString localizedName; // not used yet
+  KSpreadFunctionPtr functionPtr;
+  QString helpText; // in rich-edit
+};
+
+
 enum  KSpreadParameterType { KSpread_Int, KSpread_Float, KSpread_String, KSpread_Boolean, KSpread_Any };
 
 class KSpreadFunctionParameter
@@ -63,20 +90,38 @@ private:
 class KSpreadFunctionRepository
 {
 public:
+
+    static KSpreadFunctionRepository* self();
+
     KSpreadFunctionRepository();
     
-    KSpreadFunctionDescription* function( const QString& name );
+    KSpreadFunctionDescription* functionInfo( const QString& name );
+
+    KSpreadFunction* function( const QString& name );
     
     QStringList functionNames();
     QStringList functionNames( const QString& group );
     
     const QStringList& groups() const { return m_groups; }
+
+    /**
+     * Registers a built-in function so as to make it accessible from
+     * the formula engine.
+     */
+
+    void registerFunction( const QString& name, KSpreadFunctionPtr ptr );
     
 private:
+
+    static KSpreadFunctionRepository* s_self;
+
+    // loads functions description from XML files
     void loadFile( const QString& filename );
     
     QDict<KSpreadFunctionDescription> m_funcs;
     QStringList m_groups;
+
+    QDict<KSpreadFunction> m_functions;
 };
 
 #endif

@@ -8,6 +8,18 @@
 #include <kstandarddirs.h>
 #include <kinstance.h>
 
+// these are defined in kspread_function_*.cc
+void KSpreadRegisterConversionFunctions();  
+void KSpreadRegisterDateTimeFunctions();    
+void KSpreadRegisterEngineeringFunctions(); 
+void KSpreadRegisterFinancialFunctions();   
+void KSpreadRegisterInformationFunctions();   
+void KSpreadRegisterLogicFunctions();       
+void KSpreadRegisterMathFunctions();        
+void KSpreadRegisterStatisticalFunctions();        
+void KSpreadRegisterTextFunctions();        
+void KSpreadRegisterTrigFunctions();        
+
 static KSpreadParameterType toType( const QString& type )
 {
     if ( type == "Boolean" )
@@ -234,25 +246,50 @@ QString KSpreadFunctionDescription::toQML() const
     return text;
 }
 
+KSpreadFunctionRepository* KSpreadFunctionRepository::s_self = 0;
 
-KSpreadFunctionRepository::KSpreadFunctionRepository()
+KSpreadFunctionRepository* KSpreadFunctionRepository::self()
 {
-    m_funcs.setAutoDelete( TRUE );
-
-    // Find all scripts
-    QStringList files = KSpreadFactory::global()->dirs()->findAllResources( "extensions", "*.xml", TRUE );
-    for( QStringList::Iterator it = files.begin(); it != files.end(); ++it )
+    if( !s_self )
     {
-	loadFile( *it );
+        s_self = new KSpreadFunctionRepository();
+
+        // register all built-in functions
+        KSpreadRegisterConversionFunctions();  
+        KSpreadRegisterDateTimeFunctions();    
+        KSpreadRegisterEngineeringFunctions(); 
+        KSpreadRegisterFinancialFunctions();   
+        KSpreadRegisterInformationFunctions();   
+        KSpreadRegisterLogicFunctions();       
+        KSpreadRegisterMathFunctions();        
+        KSpreadRegisterStatisticalFunctions();        
+        KSpreadRegisterTextFunctions();        
+        KSpreadRegisterTrigFunctions();   
+
+        // find all XML description files
+        QStringList files = 
+           KSpreadFactory::global()->dirs()->findAllResources( "extensions", "*.xml", TRUE );
+        for( QStringList::Iterator it = files.begin(); it != files.end(); ++it )
+	    s_self->loadFile( *it );
+
     }
+    return s_self;
 }
 
+// class constructor
+KSpreadFunctionRepository::KSpreadFunctionRepository()
+{
+    m_funcs.setAutoDelete( true );
+    m_functions.setAutoDelete( true );
+}
+
+// loads functions description from XML file
 void KSpreadFunctionRepository::loadFile( const QString& filename )
 {
     QFile file( filename );
     if ( !file.open( IO_ReadOnly ) )
 	return;
-	
+
     QDomDocument doc;
     doc.setContent( &file );
     file.close();
@@ -281,7 +318,8 @@ void KSpreadFunctionRepository::loadFile( const QString& filename )
 			{
 			    KSpreadFunctionDescription* desc = new KSpreadFunctionDescription( e2 );
 			    desc->setGroup( group );
-			    m_funcs.insert( desc->name(), desc );
+                            if( m_functions.find( desc->name() ) )
+			        m_funcs.insert( desc->name(), desc );
 			}
 		    }
 		}
@@ -292,11 +330,19 @@ void KSpreadFunctionRepository::loadFile( const QString& filename )
     }
 }
 
-KSpreadFunctionDescription* KSpreadFunctionRepository::function( const QString& name )
+// returns description of specified function name
+KSpreadFunctionDescription* KSpreadFunctionRepository::functionInfo( const QString& name )
 {
     return m_funcs[ name ];
 }
 
+// returns function (KSpreadFunction) of specified function name
+KSpreadFunction* KSpreadFunctionRepository::function( const QString& name )
+{
+    return m_functions[ name ];
+}
+
+// returns names of function in certain group
 QStringList KSpreadFunctionRepository::functionNames( const QString& group )
 {
     QStringList lst;
@@ -313,6 +359,7 @@ QStringList KSpreadFunctionRepository::functionNames( const QString& group )
     return lst;
 }
 
+// returns names of all available functions
 QStringList KSpreadFunctionRepository::functionNames()
 {
     QStringList lst;
@@ -326,4 +373,17 @@ QStringList KSpreadFunctionRepository::functionNames()
     lst.sort();
 
     return lst;
+}
+
+// registers a new function
+void KSpreadFunctionRepository::registerFunction( const QString& _name, KSpreadFunctionPtr _func )
+{
+    QString name = _name.upper();
+    KSpreadFunction* function;
+
+    function = new KSpreadFunction();
+    function->name = name;
+    function->functionPtr  = _func;   
+
+    m_functions.replace( name, function );
 }

@@ -19,20 +19,65 @@
 */
 
 // built-in trigonometric functions
-#include "kspread_util.h"
-#include "kspread_doc.h"
-#include "kspread_table.h"
-
-#include <koscript_parser.h>
-#include <koscript_util.h>
-#include <koscript_func.h>
-#include <koscript_synext.h>
 
 #include <stdlib.h>
 #include <math.h>
 #include <float.h>
 
 #include <kdebug.h>
+
+#include <koscript_parser.h>
+#include <koscript_util.h>
+#include <koscript_func.h>
+#include <koscript_synext.h>
+
+#include <kspread_doc.h>
+#include <kspread_functions.h>
+#include <kspread_table.h>
+#include <kspread_util.h>
+
+
+// prototypes (sort alphabetically)
+bool kspreadfunc_acos( KSContext& context );
+bool kspreadfunc_acosh( KSContext& context );
+bool kspreadfunc_asinh( KSContext& context );
+bool kspreadfunc_asin( KSContext& context );
+bool kspreadfunc_atan( KSContext& context );
+bool kspreadfunc_atan2( KSContext& context );
+bool kspreadfunc_atanh( KSContext& context );
+bool kspreadfunc_cos( KSContext& context );
+bool kspreadfunc_cosh( KSContext& context );
+bool kspreadfunc_degree( KSContext& context );
+bool kspreadfunc_radian( KSContext& context );
+bool kspreadfunc_sin( KSContext& context );
+bool kspreadfunc_sinh( KSContext& context );
+bool kspreadfunc_tan( KSContext& context );
+bool kspreadfunc_tanh( KSContext& context );
+bool kspreadfunc_pi( KSContext& context );
+
+// registers all trigonometric functions
+void KSpreadRegisterTrigFunctions()
+{
+  KSpreadFunctionRepository* repo = KSpreadFunctionRepository::self();
+
+  repo->registerFunction( "ACOS",   kspreadfunc_acos );
+  repo->registerFunction( "ACOSH",  kspreadfunc_acosh );
+  repo->registerFunction( "ASIN",   kspreadfunc_asin );
+  repo->registerFunction( "ASINH",  kspreadfunc_asinh );
+  repo->registerFunction( "ATAN",   kspreadfunc_atan );
+  repo->registerFunction( "ATAN2",  kspreadfunc_atan2 );
+  repo->registerFunction( "ATANH",  kspreadfunc_atanh );
+  repo->registerFunction( "COS",    kspreadfunc_cos );
+  repo->registerFunction( "COSH",   kspreadfunc_cosh );
+  repo->registerFunction( "DEGREE", kspreadfunc_degree );
+  repo->registerFunction( "RADIAN", kspreadfunc_radian );
+  repo->registerFunction( "SIN",    kspreadfunc_sin );
+  repo->registerFunction( "SINH",   kspreadfunc_sinh );
+  repo->registerFunction( "TAN",    kspreadfunc_tan );
+  repo->registerFunction( "TANH",   kspreadfunc_tanh );
+  repo->registerFunction( "PI",     kspreadfunc_pi );
+}
+
 
 // Function: sin
 bool kspreadfunc_sin( KSContext& context )
@@ -342,7 +387,7 @@ bool kspreadfunc_radian( KSContext& context )
 }
 
 // Function: PI
-bool kspreadfunc_PI( KSContext& context )
+bool kspreadfunc_pi( KSContext& context )
 {
     // QValueList<KSValue::Ptr>& args = context.value()->listValue();
 

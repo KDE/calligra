@@ -165,7 +165,6 @@ private:
      */
     bool refresh_result;
 
-    KSpreadFunctionRepository m_repo;
     KSpreadFunctionDescription* m_desc;
 };
 

@@ -19,18 +19,69 @@
 */
 
 // built-in date/time functions
-#include "kspread_util.h"
-#include "kspread_doc.h"
-#include "kspread_table.h"
+
+#include <stdlib.h>
+#include <math.h>
+#include <float.h>
 
 #include <koscript_parser.h>
 #include <koscript_util.h>
 #include <koscript_func.h>
 #include <koscript_synext.h>
 
-#include <stdlib.h>
-#include <math.h>
-#include <float.h>
+#include <kspread_doc.h>
+#include <kspread_functions.h>
+#include <kspread_table.h>
+#include <kspread_util.h>
+
+// prototypes
+bool kspreadfunc_years( KSContext& context );
+bool kspreadfunc_months( KSContext& context );
+bool kspreadfunc_weeks( KSContext& context );
+bool kspreadfunc_days( KSContext& context );
+bool kspreadfunc_hours( KSContext& context );
+bool kspreadfunc_minutes( KSContext& context );
+bool kspreadfunc_seconds( KSContext& context );
+bool kspreadfunc_date( KSContext& context );
+bool kspreadfunc_day( KSContext& context );
+bool kspreadfunc_month( KSContext& context );
+bool kspreadfunc_time( KSContext& context );
+bool kspreadfunc_currentDate( KSContext& context );
+bool kspreadfunc_shortcurrentDate( KSContext& context );
+bool kspreadfunc_currentTime( KSContext& context );
+bool kspreadfunc_currentDateTime( KSContext& context );
+bool kspreadfunc_dayOfYear( KSContext& context );
+bool kspreadfunc_daysInMonth( KSContext& context );
+bool kspreadfunc_isLeapYear ( KSContext& context );
+bool kspreadfunc_daysInYear ( KSContext& context );
+bool kspreadfunc_weeksInYear( KSContext& context );
+
+// registers all date/time functions
+// sadly, many of these functions aren't Excel compatible
+void KSpreadRegisterDateTimeFunctions()
+{
+  KSpreadFunctionRepository* repo = KSpreadFunctionRepository::self();
+  repo->registerFunction( "YEARS",   kspreadfunc_years );
+  repo->registerFunction( "MONTHS",  kspreadfunc_months );
+  repo->registerFunction( "WEEKS",  kspreadfunc_weeks );
+  repo->registerFunction( "DAYS",  kspreadfunc_days );
+  repo->registerFunction( "HOURS",  kspreadfunc_hours );
+  repo->registerFunction( "MINUTES",  kspreadfunc_minutes );
+  repo->registerFunction( "SECONDS",  kspreadfunc_seconds );
+  repo->registerFunction( "DATE",  kspreadfunc_date );
+  repo->registerFunction( "DAY",  kspreadfunc_day );
+  repo->registerFunction( "MONTH",  kspreadfunc_month );
+  repo->registerFunction( "TIME",  kspreadfunc_time );
+  repo->registerFunction( "CURRENTDATE",  kspreadfunc_currentDate );
+  repo->registerFunction( "SHORTCURRENTDATE",  kspreadfunc_shortcurrentDate );
+  repo->registerFunction( "CURRENTTIME",  kspreadfunc_currentTime );
+  repo->registerFunction( "CURRENTDATETIME",  kspreadfunc_currentDateTime );
+  repo->registerFunction( "DAYOFYEAR",  kspreadfunc_dayOfYear );
+  repo->registerFunction( "DAYSINMONTH",  kspreadfunc_daysInMonth );
+  repo->registerFunction( "ISLEAPYEAR",  kspreadfunc_isLeapYear );
+  repo->registerFunction( "DAYSINYEAR",  kspreadfunc_daysInYear );
+  repo->registerFunction( "WEEKSINYEAR",  kspreadfunc_weeksInYear );
+}
 
 // Function: years
 bool kspreadfunc_years( KSContext& context )

@@ -75,7 +75,7 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
     grid1->addWidget( searchFunct, 0, 0 );
 
     typeFunction = new QComboBox(page);
-    QStringList cats = m_repo.groups();
+    QStringList cats = KSpreadFunctionRepository::self()->groups();
     cats.prepend( i18n("All") );
     typeFunction->insertStringList( cats  );
     grid1->addWidget( typeFunction, 1, 0 );
@@ -636,7 +636,8 @@ void KSpreadDlgFormula::slotDoubleClicked( QListBoxItem* item )
 
 void KSpreadDlgFormula::slotSelected( const QString& function )
 {
-    KSpreadFunctionDescription* desc = m_repo.function( function );
+    KSpreadFunctionDescription* desc = 
+       KSpreadFunctionRepository::self()->functionInfo( function );
     if ( !desc )
     {
 	m_browser->setText( "" );
@@ -667,7 +668,8 @@ void KSpreadDlgFormula::slotSelected( const QString& function )
 // from hyperlink in the "Related Function"
 void KSpreadDlgFormula::slotShowFunction( const QString& function )
 {
-    KSpreadFunctionDescription* desc = m_repo.function( function );
+    KSpreadFunctionDescription* desc = 
+       KSpreadFunctionRepository::self()->functionInfo( function );
     if ( !desc ) return;
 
     // select the category
@@ -711,9 +713,9 @@ void KSpreadDlgFormula::slotActivated( const QString& category )
 {
     QStringList lst;
     if ( category == i18n("All") )
-	lst = m_repo.functionNames();
+	lst = KSpreadFunctionRepository::self()->functionNames();
     else
-	lst = m_repo.functionNames( category );
+	lst = KSpreadFunctionRepository::self()->functionNames( category );
 
     kdDebug(36001)<<"category: "<<category<<" ("<<lst.count()<<"functions)" << endl;
 

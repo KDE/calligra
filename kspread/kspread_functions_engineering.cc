@@ -20,22 +20,147 @@
 
 // built-in engineering functions
 
-#include "kspread_util.h"
-#include "kspread_doc.h"
-#include "kspread_table.h"
-
-#include <koscript_parser.h>
-#include <koscript_util.h>
-#include <koscript_func.h>
-#include <koscript_synext.h>
-
 #include <stdlib.h>
 #include <math.h>
 #include <float.h>
 
 #include <kdebug.h>
 
-// Function: DECHEX
+#include <koscript_parser.h>
+#include <koscript_util.h>
+#include <koscript_func.h>
+#include <koscript_synext.h>
+
+#include <kspread_doc.h>
+#include <kspread_functions.h>
+#include <kspread_table.h>
+#include <kspread_util.h>
+
+
+// prototypes (sort alphabetically)
+bool kspreadfunc_base( KSContext& context );
+bool kspreadfunc_bin2dec( KSContext& context );
+bool kspreadfunc_bin2oct( KSContext& context );
+bool kspreadfunc_bin2hex( KSContext& context );
+bool kspreadfunc_complex( KSContext& context );
+bool kspreadfunc_complex_imag( KSContext& context );
+bool kspreadfunc_complex_real( KSContext& context );
+bool kspreadfunc_dec2hex( KSContext& context );
+bool kspreadfunc_dec2oct( KSContext& context );
+bool kspreadfunc_dec2bin( KSContext& context );
+bool kspreadfunc_delta( KSContext& context );
+bool kspreadfunc_hex2dec( KSContext& context );
+bool kspreadfunc_hex2bin( KSContext& context );
+bool kspreadfunc_hex2oct( KSContext& context );
+bool kspreadfunc_imabs( KSContext& context );
+bool kspreadfunc_imargument( KSContext& context );
+bool kspreadfunc_imconjugate( KSContext& context );
+bool kspreadfunc_imcos( KSContext& context );
+bool kspreadfunc_imdiv( KSContext& context );
+bool kspreadfunc_imexp( KSContext& context );
+bool kspreadfunc_imln( KSContext& context );
+bool kspreadfunc_impower( KSContext& context );
+bool kspreadfunc_improduct( KSContext& context );
+bool kspreadfunc_imsin( KSContext& context );
+bool kspreadfunc_imsqrt( KSContext& context );
+bool kspreadfunc_imsub( KSContext& context );
+bool kspreadfunc_imsum( KSContext& context );
+bool kspreadfunc_oct2dec( KSContext& context );
+bool kspreadfunc_oct2bin( KSContext& context );
+bool kspreadfunc_oct2hex( KSContext& context );
+
+// registers all engineering functions
+void KSpreadRegisterEngineeringFunctions()
+{
+  KSpreadFunctionRepository* repo = KSpreadFunctionRepository::self();
+
+  repo->registerFunction( "BASE",        kspreadfunc_base );    // KSpread-specific, like in Quattro-Pro
+  repo->registerFunction( "BIN2DEC",     kspreadfunc_bin2dec );
+  repo->registerFunction( "BIN2OCT",     kspreadfunc_bin2oct );
+  repo->registerFunction( "BIN2HEX",     kspreadfunc_bin2hex );
+  repo->registerFunction( "COMPLEX",     kspreadfunc_complex );
+  repo->registerFunction( "DEC2HEX",     kspreadfunc_dec2hex );
+  repo->registerFunction( "DEC2BIN",     kspreadfunc_dec2bin );
+  repo->registerFunction( "DEC2OCT",     kspreadfunc_dec2oct );
+  repo->registerFunction( "HEX2BIN",     kspreadfunc_hex2bin );
+  repo->registerFunction( "HEX2DEC",     kspreadfunc_hex2dec );
+  repo->registerFunction( "HEX2OCT",     kspreadfunc_hex2oct );
+  repo->registerFunction( "IMABS",       kspreadfunc_imabs );
+  repo->registerFunction( "IMAGINARY",   kspreadfunc_complex_imag );
+  repo->registerFunction( "IMARGUMENT",  kspreadfunc_imargument );
+  repo->registerFunction( "IMCONJUGATE", kspreadfunc_imconjugate );
+  repo->registerFunction( "IMCOS",       kspreadfunc_imcos );
+  repo->registerFunction( "IMDIV",       kspreadfunc_imdiv );
+  repo->registerFunction( "IMEXP",       kspreadfunc_imexp );
+  repo->registerFunction( "IMLN",        kspreadfunc_imln );
+  repo->registerFunction( "IMPOWER",     kspreadfunc_impower );
+  repo->registerFunction( "IMPRODUCT",   kspreadfunc_improduct );
+  repo->registerFunction( "IMREAL",      kspreadfunc_complex_real );
+  repo->registerFunction( "IMSIN",       kspreadfunc_imsin );
+  repo->registerFunction( "IMSQRT",      kspreadfunc_imsqrt );
+  repo->registerFunction( "IMSUB",       kspreadfunc_imsub );
+  repo->registerFunction( "IMSUM",       kspreadfunc_imsum );
+  repo->registerFunction( "OCT2BIN",     kspreadfunc_oct2bin );
+  repo->registerFunction( "OCT2DEC",     kspreadfunc_oct2dec );
+  repo->registerFunction( "OCT2HEX",     kspreadfunc_oct2hex );
+}
+
+// Function: BASE
+bool kspreadfunc_base( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  int base = 10;
+  int prec = 0;
+
+  if ( KSUtil::checkArgumentsCount( context, 3, "BASE", false ) )
+  {
+    if ( !KSUtil::checkType( context, args[2], KSValue::IntType, true ) ) return false;
+    if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) ) return false;
+    base = args[1]->intValue();
+    prec = args[2]->intValue();
+  }
+  else
+  if ( KSUtil::checkArgumentsCount( context, 2, "BASE", false ) )
+  {
+    if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) ) return false;
+    base = args[1]->intValue();
+  }
+  else
+  if ( !KSUtil::checkArgumentsCount( context, 1, "BASE", true ) )
+    return false;
+
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) ) return false;
+
+  if( ( base < 2 ) || ( base > 36 ) ) return false;
+  if( prec < 0 ) prec = 2;
+
+  double value = args[0]->doubleValue();
+  QString result = QString::number( (int)value, base );
+
+  if( prec > 0 )
+  {
+    result += "."; value = value - (int)value;
+
+    int ix;
+    for( int i = 0; i < prec; i++ )
+    {
+      ix = (int) value * base;
+
+kdDebug() << "value " << value << "  ix " << ix << endl;
+
+      result += "0123456789abcdefghijklmnopqrstuvwxyz"[ix];
+      value = base * (value - (double)ix/base);
+    }
+  }
+
+  context.setValue( new KSValue( result.upper() ) );
+
+  return true;
+}
+
+// Function: DEC2HEX
 bool kspreadfunc_dec2hex( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
@@ -1251,61 +1376,6 @@ bool kspreadfunc_delta( KSContext& context )
   else
         result=0;
   context.setValue( new KSValue(result));
-
-  return true;
-}
-
-// Function: BASE
-bool kspreadfunc_base( KSContext& context )
-{
-  QValueList<KSValue::Ptr>& args = context.value()->listValue();
-
-  int base = 10;
-  int prec = 0;
-
-  if ( KSUtil::checkArgumentsCount( context, 3, "BASE", false ) )
-  {
-    if ( !KSUtil::checkType( context, args[2], KSValue::IntType, true ) ) return false;
-    if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) ) return false;
-    base = args[1]->intValue();
-    prec = args[2]->intValue();
-  }
-  else
-  if ( KSUtil::checkArgumentsCount( context, 2, "BASE", false ) )
-  {
-    if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) ) return false;
-    base = args[1]->intValue();
-  }
-  else
-  if ( !KSUtil::checkArgumentsCount( context, 1, "BASE", true ) )
-    return false;
-
-
-  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) ) return false;
-
-  if( ( base < 2 ) || ( base > 36 ) ) return false;
-  if( prec < 0 ) prec = 2;
-
-  double value = args[0]->doubleValue();
-  QString result = QString::number( (int)value, base );
-
-  if( prec > 0 )
-  {
-    result += "."; value = value - (int)value;
-
-    int ix;
-    for( int i = 0; i < prec; i++ )
-    {
-      ix = (int) value * base;
-
-kdDebug() << "value " << value << "  ix " << ix << endl;
-
-      result += "0123456789abcdefghijklmnopqrstuvwxyz"[ix];
-      value = base * (value - (double)ix/base);
-    }
-  }
-
-  context.setValue( new KSValue( result.upper() ) );
 
   return true;
 }
