@@ -39,7 +39,9 @@ class KivioCanvas;
 class KivioPage;
 class KivioDoc;
 class KivioRuler;
+namespace Kivio {
 class ToolController;
+};
 class KivioGuideLineData;
 
 class KivioScreenPainter;
@@ -54,6 +56,7 @@ class QTimer;
 #define YBORDER_WIDTH 50
 #define XBORDER_HEIGHT 20
 
+using namespace Kivio;
 
 class KivioCanvas : public QWidget
 { Q_OBJECT

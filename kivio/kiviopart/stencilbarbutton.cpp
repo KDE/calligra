@@ -26,6 +26,8 @@
 #include <kdebug.h>
 #include "qdrawutil.h"
 
+using namespace Kivio;
+
 DragBarButton::DragBarButton( const QString& text, QWidget* parent, const char* name )
 : QPushButton(text,parent,name)
 {

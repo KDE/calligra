@@ -23,7 +23,10 @@
 #include <qptrdict.h>
 
 class QVBoxLayout;
+namespace Kivio {
 class DragBarButton;
+};
+using namespace Kivio;
 
 class KivioStackBar : public QFrame
 {Q_OBJECT

@@ -24,6 +24,7 @@
 #include <qptrlist.h>
 #include <qtimer.h>
 
+namespace Kivio {
 class ToolDockBase;
 
 class ToolDockManager : public QObject
@@ -48,5 +49,7 @@ private:
   QWidget* m_pView;
   QPtrList<ToolDockBase> tools;
 };
+};
+
 #endif
 

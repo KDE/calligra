@@ -49,6 +49,7 @@
 #include <qtimer.h>
 #include <qsize.h>
 
+using namespace Kivio;
 
 KivioCanvas::KivioCanvas( QWidget *par, KivioView* view, KivioDoc* doc, ToolController* tc, QScrollBar* vs, QScrollBar* hs, KivioRuler* vr, KivioRuler* hr )
 : QWidget(par, "KivioCanvas", WResizeNoErase | WRepaintNoErase),

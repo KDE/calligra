@@ -20,6 +20,8 @@
 #include "tkcombobox.h"
 #include <qregexp.h>
 
+using namespace Kivio;
+
 ZoomAction::ZoomAction(QObject* parent, const char* name)
 : TKSelectAction(parent,name)
 {

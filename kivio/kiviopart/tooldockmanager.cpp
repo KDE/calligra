@@ -22,6 +22,8 @@
 #include <qapplication.h>
 #include <qcursor.h>
 
+using namespace Kivio;
+
 ToolDockManager::ToolDockManager( QWidget* parent, const char* name )
 : QObject(parent,name)
 {

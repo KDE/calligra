@@ -126,7 +126,7 @@
 
 #define TOGGLE_ACTION(X) ((KToggleAction*)actionCollection()->action(X))
 
-
+using namespace Kivio;
 
 KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
 : KoView( doc, _parent, _name )

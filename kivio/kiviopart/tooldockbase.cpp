@@ -30,6 +30,8 @@
 #include <qapplication.h>
 #include <qobjectlist.h>
 
+using namespace Kivio;
+
 ToolDockBaseBorder::ToolDockBaseBorder( Position position, ToolDockBase* parent, const char* name )
 : QWidget(parent,name)
 {
@@ -341,7 +343,7 @@ void ToolDockBaseCaption::paintEvent( QPaintEvent* )
 	QPoint p1(w-lw-25, (h-5)/2+dl);
 	QPoint p2(p1);
 	p1 += QPoint(lw-5,0);
-	
+
 	qDrawShadeLine( &p, p1, p2, colorGroup(), f, 1, 0 );
 	p1 += QPoint(0,3);
 	p2 += QPoint(0,3);

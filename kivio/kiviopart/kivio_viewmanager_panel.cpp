@@ -17,6 +17,8 @@
 #include <kaction.h>
 #include <kiconloader.h>
 
+using namespace Kivio;
+
 ViewItemList::ViewItemList(QObject* parent, const char* name)
 : QObject(parent, name)
 {

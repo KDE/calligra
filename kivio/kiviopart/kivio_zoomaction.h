@@ -21,6 +21,8 @@
 
 #include "tkaction.h"
 
+namespace Kivio {
+
 class ZoomAction : public TKSelectAction
 { Q_OBJECT
 public:
@@ -37,6 +39,6 @@ protected slots:
   void slotActivated( const QString& text );
 };
 
+};
+
 #endif
-
-

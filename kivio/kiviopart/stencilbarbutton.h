@@ -22,6 +22,7 @@
 #include <qpushbutton.h>
 
 class QPixmap;
+namespace Kivio {
 
 class DragBarButton : public QPushButton
 { Q_OBJECT
@@ -56,6 +57,8 @@ private:
   bool m_bMouseOn;
   bool m_bClose;
   QPoint m_ppoint;
+};
+
 };
 
 #endif

@@ -29,6 +29,8 @@ class KivioPage;
 class KivioCanvas;
 class KivioView;
 
+namespace Kivio {
+
 class Tool;
 
 class ToolSelectAction : public KActionMenu
@@ -66,14 +68,14 @@ class ToolController : public QObject, public KParts::PartBase
 public:
   ToolController( KivioView* view );
   ~ToolController();
-  
+
   void init();
 
   void registerTool( Tool* );
   void setDefaultTool( Tool* );
 
   Tool* getActiveTool();
-  
+
   void delegateEvent( QEvent* e, KivioCanvas* canvas );
 
   void activateView( KivioView* );
@@ -97,5 +99,6 @@ private:
   KivioView* m_pActiveView;
   bool m_bInit;
 };
-
+};
+using namespace Kivio;
 #endif

@@ -26,13 +26,14 @@
 #include <klocale.h>
 
 #include "tool_controller.h"
+#include <kparts/plugin.h>
+
 
 class KivioView;
 class KivioPage;
 class KivioCanvas;
+namespace Kivio {
 class ToolSelectAction;
-
-#include <kparts/plugin.h>
 
 class Tool : public KParts::Plugin
 { Q_OBJECT
@@ -82,5 +83,7 @@ private:
 
 inline bool operator<(Tool& t1, Tool& t2) { return t1.sortNum()<t2.sortNum(); }
 inline bool operator==(Tool&, Tool&) { return false; }
+};
+using namespace Kivio;
 
 #endif

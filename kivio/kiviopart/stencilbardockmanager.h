@@ -23,7 +23,9 @@
 #include <qptrlist.h>
 
 class QSplitter;
+namespace Kivio {
 class DragBarButton;
+};
 class KivioStackBar;
 class StencilBarMoveManager;
 class KivioDoc;

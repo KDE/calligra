@@ -24,10 +24,13 @@
 #include <qframe.h>
 #include <qtimer.h>
 
-enum ToolDockPosition { ToolDockLeft, ToolDockRight, ToolDockTop, ToolDockBottom, ToolDockCenter };
-
 class QGridLayout;
 class StencilBarMoveManager;
+
+namespace Kivio {
+
+enum ToolDockPosition { ToolDockLeft, ToolDockRight, ToolDockTop, ToolDockBottom, ToolDockCenter };
+
 class ToolDockBase;
 class ToolDockManager;
 
@@ -241,5 +244,6 @@ private:
   hstatus hStatus;
 };
 
-#endif
+};
 
+#endif

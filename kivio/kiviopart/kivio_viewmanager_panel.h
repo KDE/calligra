@@ -9,6 +9,8 @@ class KAction;
 class KivioView;
 class QDomElement;
 
+namespace Kivio {
+
 struct ViewItemData
 {
   QString name;
@@ -48,6 +50,11 @@ private:
   ViewItemDataList list;
   int freeId;
 };
+
+};
+
+using namespace Kivio;
+
 /*********************************************************/
 class KivioViewItem: public QListViewItem
 {
@@ -91,7 +98,7 @@ protected slots:
 private:
   KivioView* m_pView;
   QListView* list;
-  ViewItemList* viewItems;
+  Kivio::ViewItemList* viewItems;
 
   KAction* actNew;
   KAction* actDel;

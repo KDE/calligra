@@ -30,13 +30,14 @@ class KivioGroupStencil;
 class KivioStencilSpawner;
 class KivioStencilSpawnerSet;
 class KivioStackBar;
-class DragBarButton;
 class KivioPainter;
 class KivioStencil;
+namespace Kivio {
+class DragBarButton;
 class ViewItemList;
+};
 
 class KoStore;
-class View;
 class QDomDocument;
 class DCOPObject;
 class KCommandHistory;
@@ -53,6 +54,8 @@ class KPrinter;
 class KCommand;
 
 #define MIME_TYPE "application/x-kivio"
+
+using namespace Kivio;
 
 class KivioDoc : public KoDocument
 { Q_OBJECT

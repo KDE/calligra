@@ -32,12 +32,14 @@ class KivioStackBar;
 class KivioStencilSpawner;
 class KivioStencilSpawnerSet;
 class KivioTabBar;
-class ZoomAction;
 class TKSelectColorAction;
-class ToolController;
 class StencilBarDockManager;
+namespace Kivio {
+class ZoomAction;
+class ToolController;
 class ToolDockBase;
 class ToolDockManager;
+}
 
 class KivioBirdEyePanel;
 class KivioLayerPanel;
@@ -76,6 +78,8 @@ class DCOPObject;
 
 #include <koView.h>
 #include <koDocument.h>
+
+using namespace Kivio;
 
 class KivioView : public KoView
 { Q_OBJECT
