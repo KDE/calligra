@@ -1,5 +1,5 @@
 Source: koffice
-Build-Depends: automake, autoconf, debhelper, libqt2.2-dev, kdelibs3-dev, jade, sgml-base, docboook, libc6-dev, libpng2-dev, zlib1g-dev, libtiff3g-dev, gettext
+Build-Depends: automake, autoconf, debhelper, libqt2.2-dev, kdelibs3-dev, jade, sgml-base, docboook, libc6-dev, libpng2-dev, zlib1g-dev, libtiff3g-dev, gettext, libgl-dev
 Section: x11
 Priority: optional
 Maintainer: Ivan E. Moore II <rkrusty@debian.org>
@@ -8,6 +8,7 @@ Standards-Version: 3.1.1
 Package: koffice-libs
 Architecture: any
 Section: x11
+Replaces: koffice
 Depends: ${shlibs:Depends}
 Conflicts: koffice
 Suggests: kdebase

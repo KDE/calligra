@@ -1,3 +1,11 @@
+koffice (2.0-20000911-0) unstable; urgency=low
+ 
+  * More upstream fixes
+  * Fixing duplicate file issue with README
+  * Fixing replacement of old koffice package
+ 
+ -- Ivan E. Moore II <rkrusty@debian.org>  Mon, 11 Sep 2000 04:00:00 -0700
+
 koffice (2.0-20000909-0) unstable; urgency=low
 
   * More upstream fixes

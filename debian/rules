@@ -50,7 +50,7 @@ binary-indep: build install
 	dh_testroot
 	dh_testdir
 	dh_installdirs
-	install -d debian/task-koffice/usr/share/doc/koffice/
+	install -d debian/task-koffice/usr/share/doc/task-koffice/
 	for i in `find debian/ -type l -name "common"`; do \
 		rm $$i ;\
 		ln -s ../common $$i ;\
@@ -70,7 +70,7 @@ binary-indep: build install
 		usr/share/mimelnk/text/x-csv.desktop \
 		usr/share/servicetypes/* 
 
-	cp debian/README.task debian/task-koffice/usr/share/doc/koffice/README
+	cp debian/README.task debian/task-koffice/usr/share/doc/task-koffice/README
 	dh_installdocs -pkoffice-common
 	dh_installdocs -ptask-koffice
 	dh_installchangelogs -pkoffice-common
@@ -142,6 +142,10 @@ binary-arch: build install binary-indep
 	dh_compress
 	dh_fixperms
 	-chmod 644 debian/tmp/usr/bin/kprconverter.pl
+	-rm -f debian/koffice-common/usr/share/icons/locolor/16x16/actions/wizard.png 
+	-rm -f debian/koffice-common/usr/share/icons/locolor/16x16/actions/bottom.png
+	-rm -f debian/koffice-common/usr/share/icons/locolor/16x16/actions/rotate.png
+	-rm -f debian/koffice-common/usr/share/icons/locolor/16x16/actions/top.png
 	dh_suidregister
 	dh_makeshlibs 
 	dh_installdeb
