@@ -659,7 +659,9 @@ void KWView::updatePageInfo()
                   << " m_sbPageLabel=" << m_sbPageLabel
                   << endl;*/
         m_sbPageLabel->setText( QString(" ")+i18n("Page %1/%2").arg(m_currentPage+1).arg(doc->getPages())+' ' );
-        gui->getVertRuler()->setOffset( 0, -gui->canvasWidget()->getVertRulerPos() );
+        QPoint rulerTopLeft = gui->canvasWidget()->rulerPos();
+        gui->getHorzRuler()->setOffset( rulerTopLeft.x(), 0 );
+        gui->getVertRuler()->setOffset( 0, rulerTopLeft.y() );
     }
 }
 

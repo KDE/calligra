@@ -339,7 +339,7 @@ void KWPgNumVariable::recalc()
         KWTextFrameSet * fs = parag->textDocument()->textFrameSet();
         QPoint iPoint = parag->rect().topLeft(); // small bug if a paragraph is cut between two pages.
         QPoint cPoint;
-        KWFrame * frame = fs->internalToContents( iPoint, cPoint );
+        KWFrame * frame = fs->internalToNormal( iPoint, cPoint );
         if ( frame )
             m_pgNum = frame->pageNum() + 1;
     }

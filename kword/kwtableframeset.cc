@@ -1604,21 +1604,16 @@ KWTableFrameSetEdit::~KWTableFrameSetEdit()
     delete m_currentCell;
 }
 
-void KWTableFrameSetEdit::mousePressEvent( QMouseEvent * e )
+void KWTableFrameSetEdit::mousePressEvent( QMouseEvent * e, const QPoint & nPoint, const KoPoint & dPoint )
 {
-    int mx = e->pos().x();
-    int my = e->pos().y();
-    setCurrentCell( mx,  my );
+    setCurrentCell( dPoint );
     if ( m_currentCell )
-        m_currentCell->mousePressEvent( e );
+        m_currentCell->mousePressEvent( e, nPoint, dPoint );
 }
 
-void KWTableFrameSetEdit::setCurrentCell( int mx, int my )
+void KWTableFrameSetEdit::setCurrentCell( const KoPoint & dPoint )
 {
-    KWDocument * doc = m_fs->kWordDocument();
-    int x = static_cast<int>( mx / doc->zoomedResolutionX() );
-    int y = static_cast<int>( my / doc->zoomedResolutionY() );
-    KWFrameSet *fs = tableFrameSet()->getCellByPos( x, y );
+    KWFrameSet *fs = tableFrameSet()->getCellByPos( dPoint.x(), dPoint.y() );
     if ( fs && ( !m_currentCell || fs != m_currentCell->frameSet() ) )
         setCurrentCell( fs );
 }

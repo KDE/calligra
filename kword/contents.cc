@@ -129,10 +129,10 @@ void KWContents::createContents()
 
         // Find page number for paragraph
         QPoint pt;
-        KWFrame * frame = fs->internalToContents( QPoint(0, p->rect().top()), pt );
+        KWFrame * frame = fs->internalToNormal( QPoint(0, p->rect().top()), pt );
         if ( frame ) // let's be safe
         {
-            parag->append( "         " ); // HACK, should be a tab
+            parag->append( "\t" );
             parag->append( QString::number( frame->pageNum() ) );
         }
 

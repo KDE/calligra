@@ -24,6 +24,7 @@
 #include "kwtableframeset.h"
 #include "kwdoc.h"
 #include "kwview.h"
+#include "kwviewmode.h"
 #include "kwcanvas.h"
 #include "kwanchor.h"
 #include "kwutils.h"
@@ -107,7 +108,7 @@ int KWTextFrameSet::availableHeight() const
     return m_availableHeight;
 }
 
-KWFrame * KWTextFrameSet::contentsToInternal( QPoint cPoint, QPoint &iPoint, bool onlyY ) const
+KWFrame * KWTextFrameSet::normalToInternal( QPoint nPoint, QPoint &iPoint, bool onlyY ) const
 {
     int totalHeight = 0;
     KWFrame * copyFrame = 0L;
@@ -119,20 +120,20 @@ KWFrame * KWTextFrameSet::contentsToInternal( QPoint cPoint, QPoint &iPoint, boo
         QRect frameRect = kWordDocument()->zoomRect( *frame );
         QRect r( frameRect );
         if ( onlyY )
-            r.setLeft(0);      // cPoint.x will be 0 too, so only the Y coords will count
-        if ( r.contains( cPoint ) ) // both r and p are in "contents coordinates"
+            r.setLeft(0);      // nPoint.x will be 0 too, so only the Y coords will count
+        if ( r.contains( nPoint ) ) // both r and p are in "normal coordinates"
         {
-            // This translates the coordinates in the document contents
+            // This translates the coordinates from the normal coord system
             // into the QTextDocument's coordinate system
             // (which doesn't have frames, borders, etc.)
             int offsetX = frameRect.left();
             int offsetY = frameRect.top() - ( copyFrame ? copyFrameTop : totalHeight );
 
-            iPoint.setX( cPoint.x() - offsetX );
-            iPoint.setY( cPoint.y() - offsetY );
-            /*kdDebug() << "contentsToInternal: returning " << iPoint.x() << "," << iPoint.y()
+            iPoint.setX( nPoint.x() - offsetX );
+            iPoint.setY( nPoint.y() - offsetY );
+            /*kdDebug() << "normalToInternal: returning " << iPoint.x() << "," << iPoint.y()
                       << " totalHeight=" << totalHeight << " because r: " << DEBUGRECT(r)
-                      << " contains cPoint:" << cPoint.x() << "," << cPoint.y() << endl;*/
+                      << " contains nPoint:" << nPoint.x() << "," << nPoint.y() << endl;*/
             return frame;
         }
         if ( frame->getNewFrameBehaviour() != Copy )
@@ -148,13 +149,13 @@ KWFrame * KWTextFrameSet::contentsToInternal( QPoint cPoint, QPoint &iPoint, boo
 #if 0
     if ( onlyY ) // we only care about Y -> easy, return "we're below the bottom"
         return QPoint( 0, totalHeight );
-    kdDebug(32002) << "KWTextFrameSet::contentsToInternal " << cPoint.x() << "," << cPoint.y()
+    kdDebug(32002) << "KWTextFrameSet::normalToInternal " << nPoint.x() << "," << nPoint.y()
                    << " not in any frame of " << (void*)this << endl;
 #endif
     return 0;
 }
 
-KWFrame * KWTextFrameSet::internalToContents( QPoint iPoint, QPoint & cPoint ) const
+KWFrame * KWTextFrameSet::internalToNormal( QPoint iPoint, QPoint & nPoint ) const
 {
     int totalHeight = 0;
     QListIterator<KWFrame> frameIt( frameIterator() );
@@ -170,8 +171,8 @@ KWFrame * KWTextFrameSet::internalToContents( QPoint iPoint, QPoint & cPoint ) c
         r.moveBy( -offsetX, -offsetY );   // frame in qrt coords
         if ( r.contains( iPoint ) ) // both r and p are in "qrt coordinates"
         {
-            cPoint.setX( iPoint.x() + offsetX );
-            cPoint.setY( iPoint.y() + offsetY );
+            nPoint.setX( iPoint.x() + offsetX );
+            nPoint.setY( iPoint.y() + offsetY );
             return frame;
         }
         if ( frame->getNewFrameBehaviour() != Copy )
@@ -184,9 +185,9 @@ KWFrame * KWTextFrameSet::internalToContents( QPoint iPoint, QPoint & cPoint ) c
         totalHeight += frameRect.height();
     }
 
-    kdDebug(32002) << "** KWTextFrameSet::internalToContents " << iPoint.x() << "," << iPoint.y()
+    kdDebug(32002) << "** KWTextFrameSet::internalToNormal " << iPoint.x() << "," << iPoint.y()
                    << " not in any frame of " << (void*)this << endl;
-    cPoint = iPoint; // bah
+    nPoint = iPoint; // bah
     return 0L;
 }
 
@@ -228,7 +229,7 @@ void KWTextFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &
     if ( lastFormatted == textdoc->lastParag() && !onlyChanged)
     {
         int docHeight = textdoc->height();
-        QRect frameRect = kWordDocument()->zoomRect( *frame );
+        QRect frameRect = m_currentViewMode->normalToView( kWordDocument()->zoomRect( *frame ) );
         // Hmm, we have to calculate the totalHeight here again.... pass from drawContents if slow
         QListIterator<KWFrame> frameIt( frameIterator() );
         int totalHeight = 0;
@@ -260,24 +261,28 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
         if ( !frame->isValid() )
             continue;
 
-        QRect frameRect( kWordDocument()->zoomRect( *frame ) );
+        QRect normalFrameRect( m_doc->zoomRect( *frame ) );
+        //QRect frameRect( viewMode->normalToView( normalFrameRect ) );
         // The parag is in the qtextdoc coordinates -> first translate frame to qtextdoc coords
-        QRect rf( frameRect );
-        int offsetX = frameRect.left();
-        int offsetY = frameRect.top() - ( copyFrame ? copyFrameTop : totalHeight );
+        QRect rf( normalFrameRect );
+        int offsetX = normalFrameRect.left();
+        int offsetY = normalFrameRect.top() - ( copyFrame ? copyFrameTop : totalHeight );
 
-        rf.moveBy( -offsetX, -offsetY );
+        rf.moveBy( -offsetX, -offsetY ); // rf is now in QRT internal coords
 
         rf = rf.intersect( cursor->topParag()->rect() );
         if ( !rf.isEmpty() )
         {
-            QPoint topLeft = cursor->topParag()->rect().topLeft();                                  // in QRT coords
-            int h = cursor->parag()->lineHeightOfChar( cursor->index() );                           //
-            QPoint cPoint( topLeft.x() + offsetX, topLeft.y() + offsetY ); // from QRT to contents
-            QRect clip = QRect( cPoint.x() + cursor->x() - 5, cPoint.y() + cursor->y(), 10, h );  // very small clipping around the cursor
+            QPoint topLeft = cursor->topParag()->rect().topLeft();         // in QRT coords
+            int h = cursor->parag()->lineHeightOfChar( cursor->index() );  //
+            QPoint nPoint( topLeft.x() + offsetX, topLeft.y() + offsetY ); // from QRT to normal
+            QPoint cPoint = viewMode->normalToView( nPoint );     // from normal to view contents
+            // very small clipping around the cursor
+            QRect clip = QRect( cPoint.x() + cursor->x() - 5, cPoint.y() + cursor->y(), 10, h );
 
-            //kdDebug(32002) << "KWTextFrameSet::drawCursor topLeft=(" << topLeft.x() << "," << topLeft.y() << ")  h=" << h << endl;
-            //kdDebug(32002) << this << " Clip for cursor: " << DEBUGRECT(clip) << endl;
+            /*kdDebug(32002) << "KWTextFrameSet::drawCursor "
+                             << " topLeft=(" << topLeft.x() << "," << topLeft.y() << ")  h=" << h << endl;
+              kdDebug(32002) << this << " Clip for cursor: " << DEBUGRECT(clip) << endl;*/
 
             QRegion reg = frameClipRegion( p, frame, clip, viewMode );
             if ( !reg.isEmpty() )
@@ -286,7 +291,8 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
                 p->save();
 
                 p->setClipRegion( reg );
-                p->translate( offsetX, offsetY ); // translate to qrt coords - after setting the clip region !
+                // translate to qrt coords - after setting the clip region !
+                p->translate( cPoint.x() - topLeft.x(), cPoint.y() - topLeft.y() );
 
                 QPixmap *pix = 0;
                 QColorGroup cg = QApplication::palette().active();
@@ -295,8 +301,8 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
                 cg.setBrush( QColorGroup::Base, bgBrush );
 
                 textdoc->drawParag( p, cursor->parag(), topLeft.x() - cursor->totalOffsetX() + cursor->x() - 5,
-                                 topLeft.y() - cursor->totalOffsetY() + cursor->y(), 10, h,
-                                 pix, cg, cursorVisible, cursor );
+                                    topLeft.y() - cursor->totalOffsetY() + cursor->y(), 10, h,
+                                    pix, cg, cursorVisible, cursor );
                 p->restore();
             }
             drawn = true;
@@ -311,7 +317,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
             copyFrame = frame;
             copyFrameTop = totalHeight;
         }
-        totalHeight += frameRect.height();
+        totalHeight += normalFrameRect.height();
     }
     // Well this is a no-op currently (we don't use QTextFlow::draw)
     //if ( textdoc->flow() )
@@ -325,7 +331,6 @@ void KWTextFrameSet::layout()
     m_lastFormatted = textdoc->firstParag();
     textdoc->invalidate(); // lazy layout, real update follows upon next repaint
 }
-
 
 void KWTextFrameSet::statistics( ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words, ulong & sentences )
 {
@@ -369,10 +374,10 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
                        << endl;
 #endif
     QPoint p;
-    KWFrame * frame = internalToContents( QPoint(0, yp), p );
+    KWFrame * frame = internalToNormal( QPoint(0, yp), p );
     if (!frame)
-        kdDebug() << "getMargins: internalToContents returned frame=0L for yp=" << yp << endl;
-    // Everything from there is in contents coordinates.
+        kdDebug() << "getMargins: internalToNormal returned frame=0L for yp=" << yp << endl;
+    // Everything from there is in 'normal' coordinates.
     int left = frame ? kWordDocument()->zoomItX( frame->left() ) : 0;
     int from = left;
     int to = frame ? kWordDocument()->zoomItX( frame->right() ) : 0;
@@ -574,8 +579,8 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
             int top = kWordDocument()->zoomItY( f->top() );
             int bottom = kWordDocument()->zoomItY( f->bottom() );
             QPoint iTop, iBottom; // top and bottom in internal coordinates
-            if ( contentsToInternal( QPoint( 0, top ), iTop, true ) &&  // we know the frame is on top, so using onlyY is ok
-                 contentsToInternal( QPoint( 0, bottom ), iBottom, true ) &&
+            if ( normalToInternal( QPoint( 0, top ), iTop, true ) &&  // we know the frame is on top, so using onlyY is ok
+                 normalToInternal( QPoint( 0, bottom ), iBottom, true ) &&
                  checkVerticalBreak( yp, h, parag, linesTogether,
                                      iTop.y(), iBottom.y() ) )
             {
@@ -623,21 +628,21 @@ void KWTextFrameSet::eraseAfter( QTextParag * parag, QPainter * p, const QColorG
     // it to the next frame. Then we have to erase the space under the paragraph,
     // up to the bottom of the frame. This is what should be done here.
 
-    QPoint cPoint;
+    QPoint nPoint;
     QRect r = parag->rect();
     QPoint iPoint = r.bottomLeft();
     iPoint.ry()++; // go under the paragraph
     //kdDebug(32002) << "KWTextFrameSet::eraseAfter parag=" << parag->paragId() << endl;
-    KWFrame * frame = internalToContents( iPoint, cPoint );
+    KWFrame * frame = internalToNormal( iPoint, nPoint );
     int frameBottom = kWordDocument()->zoomItY( frame->bottom() );
-    ASSERT( cPoint.y() <= frameBottom );
-    //kdDebug(32002) << " parag bottom=" << cPoint.y()
+    ASSERT( nPoint.y() <= frameBottom );
+    //kdDebug(32002) << " parag bottom=" << nPoint.y()
     //               << " frameBottom=" << frameBottom
-    //               << " height of fillRect: " << frameBottom - cPoint.y() << endl;
+    //               << " height of fillRect: " << frameBottom - nPoint.y() << endl;
 
     p->fillRect( iPoint.x(), iPoint.y(),
                  kWordDocument()->zoomItX( frame->width() ) /*r.width()*/, // erase the whole width of the frame
-                 frameBottom - cPoint.y(),
+                 frameBottom - nPoint.y(),
                  /*Qt::blue*/ cg.brush( QColorGroup::Base ) );
 
 }
@@ -1348,7 +1353,7 @@ void KWTextFrameSet::updateViewArea( QWidget * w, int maxY )
     {
         // Convert to internal qtextdoc coordinates
         QPoint iPoint;
-        if ( contentsToInternal( QPoint(0, maxY), iPoint, true /* only care for Y */ ) )
+        if ( normalToInternal( QPoint(0, maxY), iPoint, true /* only care for Y */ ) )
             maxY = iPoint.y();
         else // not found, assume worse
             maxY = m_availableHeight;
@@ -2220,18 +2225,18 @@ void KWTextFrameSet::selectionChangedNotify( bool enableActions /* = true */)
 QRect KWTextFrameSet::paragRect( QTextParag * parag ) const
 {
     QPoint topLeft;
-    (void)internalToContents( parag->rect().topLeft(), topLeft );
+    (void)internalToNormal( parag->rect().topLeft(), topLeft );
     QPoint bottomRight;
-    (void)internalToContents( parag->rect().bottomRight(), bottomRight );
+    (void)internalToNormal( parag->rect().bottomRight(), bottomRight );
     return QRect( topLeft, bottomRight );
 }
 
-void KWTextFrameSet::findPosition( const QPoint &cPoint, QTextParag * & parag, int & index )
+void KWTextFrameSet::findPosition( const QPoint &nPoint, QTextParag * & parag, int & index )
 {
     QTextCursor cursor( textdoc );
 
     QPoint iPoint;
-    if ( contentsToInternal( cPoint, iPoint ) )
+    if ( normalToInternal( nPoint, iPoint ) )
     {
         cursor.place( iPoint, textdoc->firstParag() );
         parag = cursor.parag();
@@ -2633,6 +2638,7 @@ void KWTextFrameSetEdit::copy()
 
 void KWTextFrameSetEdit::startDrag()
 {
+    kdDebug() << "KWTextFrameSetEdit::startDrag" << endl;
     mightStartDrag = FALSE;
     inDoubleClick = FALSE;
     KWDrag *drag = newDrag( m_canvas->viewport() );
@@ -2697,22 +2703,23 @@ void KWTextFrameSetEdit::ensureCursorVisible()
     y += parag->rect().y() + cursor->offsetY();
     int w = 1;
     QPoint p;
-    KWFrame * frame = textFrameSet()->internalToContents( QPoint(x, y), p );
+    KWFrame * frame = textFrameSet()->internalToNormal( QPoint(x, y), p );
     if ( frame && m_currentFrame != frame )
     {
         m_currentFrame = frame;
         m_canvas->gui()->getView()->updatePageInfo();
     }
+    p = m_canvas->viewMode()->normalToView( p );
     m_canvas->ensureVisible( p.x(), p.y() + h / 2, w, h / 2 + 2 );
 }
 
-void KWTextFrameSetEdit::mousePressEvent( QMouseEvent * e )
+void KWTextFrameSetEdit::mousePressEvent( QMouseEvent *e, const QPoint & nPoint, const KoPoint & )
 {
     textFrameSet()->clearUndoRedoInfo();
     mightStartDrag = FALSE;
 
     QPoint iPoint;
-    if ( textFrameSet()->contentsToInternal( e->pos(), iPoint ) )
+    if ( textFrameSet()->normalToInternal( nPoint, iPoint ) )
     {
         mousePos = iPoint;
         emit hideCursor();
@@ -2758,20 +2765,22 @@ void KWTextFrameSetEdit::mousePressEvent( QMouseEvent * e )
     }
 }
 
-void KWTextFrameSetEdit::mouseMoveEvent( QMouseEvent * e )
+void KWTextFrameSetEdit::mouseMoveEvent( QMouseEvent * e, const QPoint & nPoint, const KoPoint & )
 {
     if ( mightStartDrag ) {
+        kdDebug() << "KWTextFrameSetEdit::mouseMoveEvent mightStartDrag=true" << endl;
         dragStartTimer->stop();
         if ( ( e->pos() - dragStartPos ).manhattanLength() > QApplication::startDragDistance() )
             startDrag();
         return;
     }
+    kdDebug() << "KWTextFrameSetEdit::mouseMoveEvent normal case (no drag)" << endl;
     QPoint iPoint;
-    if ( textFrameSet()->contentsToInternal( e->pos(), iPoint ) )
+    if ( textFrameSet()->normalToInternal( nPoint, iPoint ) )
         mousePos = iPoint;
 }
 
-void KWTextFrameSetEdit::mouseReleaseEvent( QMouseEvent * )
+void KWTextFrameSetEdit::mouseReleaseEvent( QMouseEvent *, const QPoint &, const KoPoint & )
 {
     if ( dragStartTimer->isActive() )
 	dragStartTimer->stop();
@@ -2795,7 +2804,7 @@ void KWTextFrameSetEdit::mouseReleaseEvent( QMouseEvent * )
     emit showCursor();
 }
 
-void KWTextFrameSetEdit::mouseDoubleClickEvent( QMouseEvent * )
+void KWTextFrameSetEdit::mouseDoubleClickEvent( QMouseEvent *, const QPoint &, const KoPoint & )
 {
     inDoubleClick = TRUE;
     QTextCursor c1 = *cursor;
@@ -2819,10 +2828,10 @@ void KWTextFrameSetEdit::dragEnterEvent( QDragEnterEvent * e )
     e->acceptAction();
 }
 
-void KWTextFrameSetEdit::dragMoveEvent( QDragMoveEvent * e )
+void KWTextFrameSetEdit::dragMoveEvent( QDragMoveEvent * e, const QPoint &nPoint, const KoPoint & )
 {
     QPoint iPoint;
-    if ( textFrameSet()->contentsToInternal( e->pos(), iPoint ) )
+    if ( textFrameSet()->normalToInternal( nPoint, iPoint ) )
     {
         emit hideCursor();
         placeCursor( iPoint );
@@ -2835,7 +2844,7 @@ void KWTextFrameSetEdit::dragLeaveEvent( QDragLeaveEvent * )
 {
 }
 
-void KWTextFrameSetEdit::dropEvent( QDropEvent * e )
+void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const KoPoint & )
 {
     if ( frameSet()->kWordDocument()->isReadWrite() && KWDrag::canDecode( e ) )
     {
@@ -2843,7 +2852,7 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e )
 
         QTextCursor dropCursor( textDocument() );
         QPoint dropPoint;
-        if ( !textFrameSet()->contentsToInternal( e->pos(), dropPoint ) )
+        if ( !textFrameSet()->normalToInternal( nPoint, dropPoint ) )
             return; // Don't know where to paste
 
         dropCursor.place( dropPoint, textDocument()->firstParag() );
@@ -2930,10 +2939,11 @@ void KWTextFrameSetEdit::focusOutEvent()
 
 void KWTextFrameSetEdit::doAutoScroll( QPoint pos )
 {
+    kdDebug() << "KWTextFrameSetEdit::doAutoScroll mightStartDrag=" << mightStartDrag << endl;
     if ( mightStartDrag )
         return;
     QPoint iPoint;
-    if ( !textFrameSet()->contentsToInternal( pos, iPoint ) )
+    if ( !textFrameSet()->normalToInternal( pos, iPoint ) )
         return;
     hideCursor();
     QTextCursor oldCursor = *cursor;

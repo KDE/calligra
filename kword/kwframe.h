@@ -219,14 +219,14 @@ public:
 
     // Events forwarded by the canvas (when being in "edit" mode)
     virtual void keyPressEvent( QKeyEvent * ) {}
-    virtual void mousePressEvent( QMouseEvent * ) {}
-    virtual void mouseMoveEvent( QMouseEvent * ) {} // only called if button is pressed
-    virtual void mouseReleaseEvent( QMouseEvent * ) {}
-    virtual void mouseDoubleClickEvent( QMouseEvent * ) {}
+    virtual void mousePressEvent( QMouseEvent *, const QPoint &, const KoPoint & ) {}
+    virtual void mouseMoveEvent( QMouseEvent *, const QPoint &, const KoPoint & ) {} // only called if button is pressed
+    virtual void mouseReleaseEvent( QMouseEvent *, const QPoint &, const KoPoint & ) {}
+    virtual void mouseDoubleClickEvent( QMouseEvent *, const QPoint &, const KoPoint & ) {}
     virtual void dragEnterEvent( QDragEnterEvent * ) {}
-    virtual void dragMoveEvent( QDragMoveEvent * ) {}
+    virtual void dragMoveEvent( QDragMoveEvent *, const QPoint &, const KoPoint & ) {}
     virtual void dragLeaveEvent( QDragLeaveEvent * ) {}
-    virtual void dropEvent( QDropEvent * ) {}
+    virtual void dropEvent( QDropEvent *, const QPoint &, const KoPoint & ) {}
     virtual void focusInEvent() {}
     virtual void focusOutEvent() {}
     virtual void doAutoScroll( QPoint ) {}
@@ -541,8 +541,8 @@ public:
     }
 
     // Events forwarded by the canvas (when being in "edit" mode)
-    virtual void mousePressEvent( QMouseEvent * );
-    virtual void mouseDoubleClickEvent( QMouseEvent * );
+    virtual void mousePressEvent( QMouseEvent *, const QPoint &, const KoPoint & );
+    virtual void mouseDoubleClickEvent( QMouseEvent *, const QPoint &, const KoPoint & );
 };
 
 /******************************************************************/
@@ -610,14 +610,14 @@ public:
 
     // Events forwarded by the canvas (when being in "edit" mode)
     virtual void keyPressEvent(QKeyEvent*);
-    virtual void mousePressEvent(QMouseEvent*);
-    virtual void mouseMoveEvent(QMouseEvent*); // only called if button is pressed
-    virtual void mouseReleaseEvent(QMouseEvent*);
-    //virtual void mouseDoubleClickEvent( QMouseEvent * ) {}
+    virtual void mousePressEvent(QMouseEvent*, const QPoint & n, const KoPoint & d );
+    virtual void mouseMoveEvent(QMouseEvent*, const QPoint & n, const KoPoint & d); // only called if button is pressed
+    virtual void mouseReleaseEvent(QMouseEvent*, const QPoint & n, const KoPoint & d);
+    //virtual void mouseDoubleClickEvent( QMouseEvent *, const QPoint & n, const KoPoint & d ) {}
     //virtual void dragEnterEvent( QDragEnterEvent * ) {}
-    //virtual void dragMoveEvent( QDragMoveEvent * ) {}
+    //virtual void dragMoveEvent( QDragMoveEvent *, const QPoint &, const KoPoint & ) {}
     //virtual void dragLeaveEvent( QDragLeaveEvent * ) {}
-    //virtual void dropEvent( QDropEvent * ) {}
+    //virtual void dropEvent( QDropEvent *, const QPoint &, const KoPoint & ) {}
     virtual void focusInEvent();
     virtual void focusOutEvent();
     virtual void doAutoScroll(QPoint);

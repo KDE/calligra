@@ -54,15 +54,15 @@ public:
     /** reshuffle frames so text is always displayed from top-left down and then right. */
     virtual void updateFrames();
 
-    // Convert the @p cPoint in the contents coordinates (those visible to the user)
+    // Convert the @p nPoint in the normal coordinate system
     // into a point (@p iPoint) in the internal qtextdoc coordinates.
     // If @p onlyY is true, the X coordinate isn't taken into account - but should be 0
-    KWFrame * contentsToInternal( QPoint cPoint, QPoint &iPoint, bool onlyY = false ) const;
+    KWFrame * normalToInternal( QPoint nPoint, QPoint &iPoint, bool onlyY = false ) const;
 
     // Convert the @p in the internal qtextdoc coordinates
-    // into a point in the contents coordinates (those visible to the user).
+    // into a point in the normal coordinate system.
     // Also returns the frame in which this point is.
-    KWFrame * internalToContents( QPoint iPoint, QPoint & cPoint ) const;
+    KWFrame * internalToNormal( QPoint iPoint, QPoint & nPoint ) const;
 
     // Return the available height in pixels (sum of all frames' height, with zoom applied)
     // Used to know if we need to create more pages.
@@ -126,7 +126,7 @@ public:
     void selectionChangedNotify( bool enableActions = true );
     QRect paragRect( QTextParag * parag ) const;
 
-    void findPosition( const QPoint &cPoint, QTextParag * & parag, int & index );
+    void findPosition( const QPoint &nPoint, QTextParag * & parag, int & index );
 
     // Highlighting support (for search/replace, spellchecking etc.)
     void highlightPortion( QTextParag * parag, int index, int length, KWCanvas * canvas );
@@ -292,14 +292,14 @@ public:
 
     // Events forwarded by the canvas (when being in "edit" mode)
     virtual void keyPressEvent( QKeyEvent * );
-    virtual void mousePressEvent( QMouseEvent * );
-    virtual void mouseMoveEvent( QMouseEvent * ); // only called if button is pressed
-    virtual void mouseReleaseEvent( QMouseEvent * );
-    virtual void mouseDoubleClickEvent( QMouseEvent * );
+    virtual void mousePressEvent( QMouseEvent *, const QPoint &, const KoPoint & );
+    virtual void mouseMoveEvent( QMouseEvent *, const QPoint &, const KoPoint & ); // only called if button is pressed
+    virtual void mouseReleaseEvent( QMouseEvent *, const QPoint &, const KoPoint & );
+    virtual void mouseDoubleClickEvent( QMouseEvent *, const QPoint &, const KoPoint & );
     virtual void dragEnterEvent( QDragEnterEvent * );
-    virtual void dragMoveEvent( QDragMoveEvent * );
+    virtual void dragMoveEvent( QDragMoveEvent *, const QPoint &, const KoPoint & );
     virtual void dragLeaveEvent( QDragLeaveEvent * );
-    virtual void dropEvent( QDropEvent * );
+    virtual void dropEvent( QDropEvent *, const QPoint &, const KoPoint & );
     virtual void focusInEvent();
     virtual void focusOutEvent();
     virtual void doAutoScroll( QPoint pos );

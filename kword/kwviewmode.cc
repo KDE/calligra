@@ -20,7 +20,15 @@
 #include "kwviewmode.h"
 #include "kwcanvas.h"
 #include "kwdoc.h"
+#include <kdebug.h>
 #include <qpainter.h>
+
+
+QSize KWViewModeNormal::contentsSize()
+{
+    KWDocument * doc = m_canvas->kWordDocument();
+    return QSize( doc->paperWidth(), doc->pageTop( doc->getPages() ) /*i.e. bottom of last one*/ );
+}
 
 void KWViewModeNormal::drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion )
 {
@@ -94,15 +102,30 @@ void KWViewModeNormal::drawPageBorders( QPainter * painter, const QRect & crect,
 
 //////////////////////// Preview mode ////////////////////////////////
 
+
+QSize KWViewModePreview::contentsSize()
+{
+    KWDocument * doc = m_canvas->kWordDocument();
+    int pages = doc->getPages();
+    int rows = (pages-1) / m_pagesPerRow + 1;
+    int hPages = rows > 1 ? m_pagesPerRow : pages;
+    return QSize( hPages * doc->paperWidth(), doc->pageTop( rows ) /* bottom of last row */ );
+}
+
 QPoint KWViewModePreview::normalToView( const QPoint & nPoint )
 {
     KWDocument * doc = m_canvas->kWordDocument();
     // Can't use nPoint.y() / doc->paperHeight() since this would be a rounding problem
     double unzoomedY = doc->unzoomItY( nPoint.y() );
     int page = static_cast<int>( unzoomedY / doc->ptPaperHeight() ); // quotient
-    double yInPagePt = unzoomedY - page * doc->ptPaperHeight();        // and rest
+    double yInPagePt = unzoomedY - page * doc->ptPaperHeight();      // and rest
     int row = page / m_pagesPerRow;
     int col = page % m_pagesPerRow;
+    /*kdDebug() << "KWViewModePreview::normalToView nPoint=" << nPoint.x() << "," << nPoint.y()
+                << " unzoomedY=" << unzoomedY
+                << " ptPaperHeight=" << doc->ptPaperHeight()
+                << " page=" << page << " row=" << row << " col=" << col
+                << " yInPagePt=" << yInPagePt << endl;*/
     return QPoint( col * ( doc->paperWidth() + m_spacing ) + nPoint.x(),
                    row * ( doc->paperHeight() + m_spacing ) + doc->zoomItY( yInPagePt ) );
 }

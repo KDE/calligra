@@ -959,7 +959,7 @@ void KWFrameSet::finalize()
 // It clips to the frame, and clips out any "on top" frame.
 QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const QRect & crect, KWViewMode * viewMode )
 {
-    QRect rc = painter->xForm( kWordDocument()->zoomRect( *frame ) );
+    QRect rc = painter->xForm( viewMode->normalToView( kWordDocument()->zoomRect( *frame ) ) );
     rc &= painter->xForm( crect ); // intersect
     //kdDebug(32002) << "KWTextFrameSet::frameClipRegion frame=" << DEBUGRECT(*frame)
     //               << " clip region rect=" << DEBUGRECT(rc)
@@ -1211,7 +1211,7 @@ KWPartFrameSetEdit::~KWPartFrameSetEdit()
     kdDebug() << "KWPartFrameSetEdit::~KWPartFrameSetEdit" << endl;
 }
 
-void KWPartFrameSetEdit::mousePressEvent( QMouseEvent * )
+void KWPartFrameSetEdit::mousePressEvent( QMouseEvent *, const QPoint &, const KoPoint & )
 {
     // activate child part
     partFrameSet()->updateFrames();
@@ -1224,7 +1224,7 @@ void KWPartFrameSetEdit::mousePressEvent( QMouseEvent * )
     view->partManager()->setActivePart( part, view );
 }
 
-void KWPartFrameSetEdit::mouseDoubleClickEvent( QMouseEvent * )
+void KWPartFrameSetEdit::mouseDoubleClickEvent( QMouseEvent *, const QPoint &, const KoPoint & )
 {
     /// ## Pretty useless since single-click does it now...
     //partFrameSet()->activate( m_canvas->gui()->getView() );
@@ -1385,17 +1385,19 @@ void KWFormulaFrameSetEdit::keyPressEvent(QKeyEvent* event)
     formulaView->keyPressEvent(event);
 }
 
-void KWFormulaFrameSetEdit::mousePressEvent(QMouseEvent* event)
+void KWFormulaFrameSetEdit::mousePressEvent(QMouseEvent* event, const QPoint &, const KoPoint & )
 {
+    // TODO pass the zoomed or unzoomed coordinates - kformula doesn't know about the real coordinates
     formulaView->mousePressEvent(event);
 }
 
-void KWFormulaFrameSetEdit::mouseMoveEvent(QMouseEvent* event)
+void KWFormulaFrameSetEdit::mouseMoveEvent(QMouseEvent* event, const QPoint &, const KoPoint & )
 {
+    // TODO pass the zoomed or unzoomed coordinates - kformula doesn't know about the real coordinates
     formulaView->mouseMoveEvent(event);
 }
 
-void KWFormulaFrameSetEdit::mouseReleaseEvent(QMouseEvent* event)
+void KWFormulaFrameSetEdit::mouseReleaseEvent(QMouseEvent* event, const QPoint &, const KoPoint & )
 {
     formulaView->mouseReleaseEvent(event);
 }

@@ -144,13 +144,11 @@ public:
     //column, row. Otherwise kword crashs.
     void deleteFrameSetEditTable( KWTableFrameSet *table );
 
-    //move canvas
-    void scrollToOffset( int _x, int _y );
-    void setContentsPos( int x, int y );
+    //move canvas to show point dPoint (in doc coordinates)
+    void scrollToOffset( const KoPoint & dPoint );
 
     //koruler position
-    int getVertRulerPos(int y=-1);
-    int getHorzRulerPos(int x=-1);
+    QPoint rulerPos(int x=-1, int y=-1);
 
 protected:
     /** Set format changes on selection on current cursor */

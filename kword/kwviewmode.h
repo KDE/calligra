@@ -56,6 +56,9 @@ public:
     QRect viewToNormal( const QRect & nRect )
     { return QRect( viewToNormal( nRect.topLeft() ), viewToNormal( nRect.bottomRight() ) ); }
 
+    // Size of the contents area
+    virtual QSize contentsSize() = 0;
+
     virtual void drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion ) = 0;
 
 protected:
@@ -72,6 +75,7 @@ public:
     // This view mode is very easy to implement ;-P
     virtual QPoint normalToView( const QPoint & nPoint ) { return nPoint; }
     virtual QPoint viewToNormal( const QPoint & vPoint ) { return vPoint; }
+    virtual QSize contentsSize();
 
     virtual void drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion );
 };
@@ -89,6 +93,7 @@ public:
 
     virtual QPoint normalToView( const QPoint & nPoint );
     virtual QPoint viewToNormal( const QPoint & vPoint );
+    virtual QSize contentsSize();
     virtual void drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion );
 
 private:

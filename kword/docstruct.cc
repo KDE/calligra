@@ -63,10 +63,10 @@ void KWDocStructParagItem::slotDoubleClicked( QListViewItem *_item )
     if ( _item == this )
     {
         KWTextFrameSet * fs = parag->textDocument()->textFrameSet();
-        QPoint iPoint =  parag->rect().topLeft(); // small bug if a paragraph is cut between two pages.
+        QPoint iPoint = parag->rect().topLeft(); // small bug if a paragraph is cut between two pages.
         QPoint cPoint;
-        fs->internalToContents( iPoint, cPoint );
-        gui->canvasWidget()->scrollToOffset(  cPoint.x() , cPoint.y() );
+        fs->internalToNormal( iPoint, cPoint );
+        gui->canvasWidget()->scrollToOffset( fs->kWordDocument()->unzoomPoint( cPoint ) );
     }
 }
 
@@ -87,8 +87,7 @@ KWDocStructFrameItem::KWDocStructFrameItem( QListViewItem *_parent, QString _tex
 void KWDocStructFrameItem::slotDoubleClicked( QListViewItem *_item )
 {
     if ( _item == this )
-        gui->canvasWidget()->scrollToOffset( frameset->kWordDocument()->zoomItX( frame->x() ),
-                                             frameset->kWordDocument()->zoomItY( frame->y() ) );
+        gui->canvasWidget()->scrollToOffset( frame->topLeft() );
 }
 
 /******************************************************************/
@@ -109,8 +108,7 @@ void KWDocStructTableItem::slotDoubleClicked( QListViewItem *_item )
     if ( _item == this )
     {
         KWFrame *frame = table->getCell( 0, 0 )->getFrame( 0 );
-        gui->canvasWidget()->scrollToOffset( table->kWordDocument()->zoomItX( frame->x() ),
-                                             table->kWordDocument()->zoomItY( frame->y() ) );
+        gui->canvasWidget()->scrollToOffset( frame->topLeft() );
     }
 }
 
@@ -132,8 +130,7 @@ void KWDocStructPictureItem::slotDoubleClicked( QListViewItem *_item )
     if ( _item == this )
     {
         KWFrame *frame = pic->getFrame( 0 );
-        gui->canvasWidget()->scrollToOffset( pic->kWordDocument()->zoomItX( frame->x() ),
-                                             pic->kWordDocument()->zoomItY( frame->y() ) );
+        gui->canvasWidget()->scrollToOffset( frame->topLeft() );
     }
 }
 
@@ -155,8 +152,7 @@ void KWDocStructFormulaItem::slotDoubleClicked( QListViewItem *_item )
     if ( _item == this )
     {
         KWFrame *frame = form->getFrame( 0 );
-        gui->canvasWidget()->scrollToOffset( form->kWordDocument()->zoomItX( frame->x() ),
-                                             form->kWordDocument()->zoomItY( frame->y() ) );
+        gui->canvasWidget()->scrollToOffset( frame->topLeft() );
     }
 }
 
@@ -178,8 +174,7 @@ void KWDocStructPartItem::slotDoubleClicked( QListViewItem *_item )
     if ( _item == this )
     {
         KWFrame *frame = part->getFrame( 0 );
-        gui->canvasWidget()->scrollToOffset( part->kWordDocument()->zoomItX( frame->x() ),
-                                             part->kWordDocument()->zoomItY( frame->y() ) );
+        gui->canvasWidget()->scrollToOffset( frame->topLeft() );
     }
 }
 

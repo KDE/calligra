@@ -368,26 +368,14 @@ public:
     int zoom() const { return m_zoom; }
 
     // Input: pt. Output: pixels. Resolution and zoom are applied.
-    int zoomItX( int z ) const {
-        return static_cast<int>(m_zoomedResolutionX * z);
-    }
-    unsigned int zoomItX( unsigned int z ) const {
-        return static_cast<unsigned int>(m_zoomedResolutionX * z);
-    }
     int zoomItX( double z ) const {
         return qRound( m_zoomedResolutionX * z );
-    }
-    int zoomItY( int z ) const {
-        return static_cast<int>(m_zoomedResolutionY * z);
-    }
-    unsigned int zoomItY( unsigned int z ) const {
-        return static_cast<unsigned int>(m_zoomedResolutionY * z);
     }
     int zoomItY( double z ) const {
         return qRound( m_zoomedResolutionY * z );
     }
 
-    QPoint zoomPoint( const QPoint & p ) const {
+    QPoint zoomPoint( const KoPoint & p ) const {
         return QPoint( zoomItX( p.x() ), zoomItY( p.y() ) );
     }
     QRect zoomRect( const KoRect & r ) const {

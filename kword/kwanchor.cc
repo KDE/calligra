@@ -22,6 +22,7 @@
 #include "kwtextdocument.h"
 #include "kwtextframeset.h"
 #include "kwdoc.h"
+#include "kwviewmode.h"
 #include <kdebug.h>
 #include <qdom.h>
 
@@ -56,12 +57,12 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
 
     // 1 - move frame. We have to do this here since QTextCustomItem doesn't
     // have a way to tell us when we are placed (during formatting)
-    QPoint cPoint;
-    if ( fs->internalToContents( QPoint( x, y+paragy ), cPoint ) )
+    QPoint nPoint;
+    if ( fs->internalToNormal( QPoint( x, y+paragy ), nPoint ) )
     {
-        //kdDebug(32001) << "KWAnchor::draw moving frame to [zoomed pos] " << cPoint.x() << "," << cPoint.y() << endl;
+        //kdDebug(32001) << "KWAnchor::draw moving frame to [zoomed pos] " << nPoint.x() << "," << nPoint.y() << endl;
         // Move the frame to position x,y.
-        m_frameset->moveFloatingFrame( m_frameNum, KoPoint( cPoint.x() / doc->zoomedResolutionX(), cPoint.y() / doc->zoomedResolutionY() ) );
+        m_frameset->moveFloatingFrame( m_frameNum, KoPoint( nPoint.x() / doc->zoomedResolutionX(), nPoint.y() / doc->zoomedResolutionY() ) );
     }
 
     // 2 - draw
@@ -69,12 +70,14 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     p->save();
     // Determine crect in contents coords
     QRect crect( cx > 0 ? cx : 0, cy+paragy, cw, ch );
-    if ( fs->internalToContents( crect.topLeft(), cPoint ) )
-        crect.moveTopLeft( cPoint );
+    nPoint = crect.topLeft(); //fallback
+    (void) fs->internalToNormal( crect.topLeft(), nPoint );
+    crect.moveTopLeft( fs->currentViewMode()->normalToView( nPoint ) );
     // and go back to contents coord system
     QPoint iPoint( 0, paragy );
-    if ( fs->internalToContents( iPoint, cPoint ) )
+    if ( fs->internalToNormal( iPoint, nPoint ) )
     {
+        QPoint cPoint = fs->currentViewMode()->normalToView( nPoint );
         //kdDebug(32002) << "translate " << -cPoint.x() << "," << -cPoint.y() << endl;
         p->translate( -cPoint.x(), -cPoint.y() );
     }

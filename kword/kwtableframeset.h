@@ -267,14 +267,23 @@ public:
 
     // Forward all events to the current cell
     virtual void keyPressEvent( QKeyEvent * e );
-    virtual void mousePressEvent( QMouseEvent * e );
-    virtual void mouseMoveEvent( QMouseEvent * e ) { if ( m_currentCell ) m_currentCell->mouseMoveEvent( e ); }
-    virtual void mouseReleaseEvent( QMouseEvent * e ) { if ( m_currentCell ) m_currentCell->mouseReleaseEvent( e ); }
-    virtual void mouseDoubleClickEvent( QMouseEvent * e ) { if ( m_currentCell ) m_currentCell->mouseDoubleClickEvent( e ); } // TODO check current cell
-    virtual void dragEnterEvent( QDragEnterEvent * e ) { if ( m_currentCell ) m_currentCell->dragEnterEvent( e ); }
-    virtual void dragMoveEvent( QDragMoveEvent * e ) { if ( m_currentCell ) m_currentCell->dragMoveEvent( e ); }
-    virtual void dragLeaveEvent( QDragLeaveEvent * e ) { if ( m_currentCell ) m_currentCell->dragLeaveEvent( e ); }
-    virtual void dropEvent( QDropEvent * e ) { if ( m_currentCell ) m_currentCell->dropEvent( e ); } // TODO check current cell
+    virtual void mousePressEvent( QMouseEvent * e, const QPoint &, const KoPoint & );
+    virtual void mouseMoveEvent( QMouseEvent * e, const QPoint & n, const KoPoint & d )
+    { if ( m_currentCell ) m_currentCell->mouseMoveEvent( e, n, d ); }
+    virtual void mouseReleaseEvent( QMouseEvent * e, const QPoint & n, const KoPoint & d )
+    { if ( m_currentCell ) m_currentCell->mouseReleaseEvent( e, n, d ); }
+    virtual void mouseDoubleClickEvent( QMouseEvent * e, const QPoint & n, const KoPoint & d )
+    { if ( m_currentCell ) m_currentCell->mouseDoubleClickEvent( e, n, d ); } // TODO check current cell
+
+    virtual void dragEnterEvent( QDragEnterEvent * e )
+    { if ( m_currentCell ) m_currentCell->dragEnterEvent( e ); }
+    virtual void dragMoveEvent( QDragMoveEvent * e, const QPoint &n, const KoPoint &d )
+    { if ( m_currentCell ) m_currentCell->dragMoveEvent( e, n, d ); }
+    virtual void dragLeaveEvent( QDragLeaveEvent * e )
+    { if ( m_currentCell ) m_currentCell->dragLeaveEvent( e ); }
+    virtual void dropEvent( QDropEvent * e, const QPoint &n, const KoPoint &d )
+    { if ( m_currentCell ) m_currentCell->dropEvent( e, n, d ); } // TODO check current cell
+
     virtual void focusInEvent() { if ( m_currentCell ) m_currentCell->focusInEvent(); }
     virtual void focusOutEvent() { if ( m_currentCell ) m_currentCell->focusOutEvent(); }
     virtual void doAutoScroll( QPoint p ) { if ( m_currentCell ) m_currentCell->doAutoScroll( p ); }
@@ -286,7 +295,7 @@ public:
 
     // Set the cell which is currently being edited
     void setCurrentCell( KWFrameSet * fs );
-    void setCurrentCell( int mx, int my );
+    void setCurrentCell( const KoPoint & dPoint );
 
 protected:
     KWFrameSetEdit * m_currentCell;
