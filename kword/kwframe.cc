@@ -750,10 +750,10 @@ void KWFrameSet::load( QDomElement &attributes )
             KWUnit runAroundGap;
             runAroundGap.setPT( KWDocument::getAttribute( frameElem, "runaroundGap", 0.0 ) );
             getPointBasedAttribute( ra, frameElem, "runaGapPT", 0.0 );
-            l.ptWidth = KWDocument::getAttribute( frameElem, "lWidth", 0 );
-            r.ptWidth = KWDocument::getAttribute( frameElem, "rWidth", 0 );
-            t.ptWidth = KWDocument::getAttribute( frameElem, "tWidth", 0 );
-            b.ptWidth = KWDocument::getAttribute( frameElem, "bWidth", 0 );
+            l.ptWidth = KWDocument::getAttribute( frameElem, "lWidth", 0.0 );
+            r.ptWidth = KWDocument::getAttribute( frameElem, "rWidth", 0.0 );
+            t.ptWidth = KWDocument::getAttribute( frameElem, "tWidth", 0.0 );
+            b.ptWidth = KWDocument::getAttribute( frameElem, "bWidth", 0.0 );
             l.color.setRgb(
                 KWDocument::getAttribute( frameElem, "lRed", 0xff ),
                 KWDocument::getAttribute( frameElem, "lGreen", 0xff ),
