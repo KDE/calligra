@@ -1,0 +1,231 @@
+===================== Testing FxValue, FXPoint, and FxRect =====================
+### The real res. is commented out because it changes from machine to machine.
+### We just set some custom resolution here and use this one for the tests.
+### Real Resolution: 3.582683 pixel per mm
+Setting Resolution (96dpi): 3.779534 pixel per mm
+
+-----> FxValue
+Global Zoom Factor set to 2.0 (200%)
+FxValue v1(): v: 0.000000 px: 0
+FxValue v2(100): v: 13.229144 px: 100
+FxValue v3(100.0): v: 100.000000 px: 756
+GraphiteGlobal Zoom Factor set to 2.5 (250%)
+FxValue v4(v3): v: 100.000000 px: 945
+GraphiteGlobal Zoom Factor set to 3.0 (300%)
+v1=v2: v: 13.229144 px: 150
+v1.setValue(10.0): v: 10.000000 px: 113
+v1.setPxValue(10): v: 0.881943 px: 10
+GraphiteGlobal Zoom Factor set to 1.5 (150%)
+v1.recalculate(): v: 0.881943 px: 5
+v2.setValue(0.9): v: 0.900000 px: 5
+v1==v2: 1
+v2.setValue(1.0): v: 1.000000 px: 6
+v1==v2: 0
+
+-----> FxPoint
+FxPoint p1(): x: v: 0.000000 px: 0
+              y: v: 0.000000 px: 0
+FxPoint p2(v1, v2): x: v: 0.881943 px: 5
+                    y: v: 1.000000 px: 6
+FxPoint p3(QPoint(100, 200)): x: v: 17.638858 px: 100
+                              y: v: 35.277717 px: 200
+FxPoint p4(100, 200): x: v: 17.638858 px: 100
+                      y: v: 35.277717 px: 200
+Global Zoom Factor set to 2.0 (200%)
+FxPoint p5(10.0, 20.0): x: v: 10.000000 px: 76
+                        y: v: 20.000000 px: 151
+p1=p5: x: v: 10.000000 px: 76
+       y: v: 20.000000 px: 151
+p1.setPoint(20.0, 10.0): x: v: 20.000000 px: 151
+                         y: v: 10.000000 px: 76
+p1.pxPoint(): x: 151 y: 76
+p1.setPxPoint(200, 100): x: v: 26.458287 px: 200
+                         y: v: 13.229144 px: 100
+p5.setPxPoint(200, 100): x: v: 26.458287 px: 200
+                         y: v: 13.229144 px: 100
+p5==p1: 1
+p5.setPoint(26.5, 13.4): x: v: 26.500000 px: 200
+                         y: v: 13.200000 px: 100
+p5==p1: 1
+p5.setPoint(26.5, 13.4): x: v: 26.500000 px: 200
+                         y: v: 13.400000 px: 101
+p5==p1: 0
+p5.setPoint(26.5, 13.4): x: v: 26.300000 px: 199
+                         y: v: 13.200000 px: 100
+p5==p1: 0
+
+-----> FxRect
+FxRect r1():
+     LEFT: v: 0.000000 px: 0
+     TOP: v: 0.000000 px: 0
+     RIGHT: v: -0.000000 px: 0
+     BOTTOM: v: -0.000000 px: 0
+r1.isNull(): 1
+r1.isEmpty(): 1
+
+FxRect r2(p2, p4):
+     LEFT: v: 0.881943 px: 7
+     TOP: v: 1.000000 px: 8
+     RIGHT: v: 17.638858 px: 133
+     BOTTOM: v: 35.277717 px: 267
+r2.isNull(): 0
+r2.isEmpty(): 0
+
+FxRect r3(p4, p2):
+     LEFT: v: 17.638858 px: 133
+     TOP: v: 35.277717 px: 267
+     RIGHT: v: 0.881943 px: 7
+     BOTTOM: v: 1.000000 px: 8
+r3.isNull(): 0
+r3.isEmpty(): 1
+r3.normalize()
+FxRect r3(p4, p2), normalized:
+     LEFT: v: 0.881943 px: 7
+     TOP: v: 1.000000 px: 8
+     RIGHT: v: 17.638858 px: 133
+     BOTTOM: v: 35.277717 px: 267
+r3.isNull(): 0
+r3.isEmpty(): 0
+
+FxRect r4(p1, QSize(100, 100)):
+     LEFT: v: 26.458287 px: 200
+     TOP: v: 13.229144 px: 100
+     RIGHT: v: 39.687431 px: 300
+     BOTTOM: v: 26.458287 px: 200
+FxRect r5(10.0, 10.0, 100.0, 100.0):
+     LEFT: v: 10.000000 px: 76
+     TOP: v: 10.000000 px: 76
+     RIGHT: v: 110.000000 px: 831
+     BOTTOM: v: 110.000000 px: 831
+FxRect r6(QRect(10, 10, 100, 100)):
+     LEFT: v: 1.322914 px: 10
+     TOP: v: 1.322914 px: 10
+     RIGHT: v: 14.419767 px: 109
+     BOTTOM: v: 14.419767 px: 109
+r6.topLeft(): x: v: 1.322914 px: 10
+             y: v: 1.322914 px: 10
+r6.bottomRight(): x: v: 14.419767 px: 109
+             y: v: 14.419767 px: 109
+r6.topRight(): x: v: 14.419767 px: 109
+             y: v: 1.322914 px: 10
+r6.bottomLeft(): x: v: 1.322914 px: 10
+             y: v: 14.419767 px: 109
+r6.center(): x: v: 7.871341 px: 60
+             y: v: 7.871341 px: 60
+r6.moveTopLeft(FxPoint(100.0, 200.0)):
+     LEFT: v: 100.000000 px: 756
+     TOP: v: 200.000000 px: 1512
+     RIGHT: v: 113.096852 px: 855
+     BOTTOM: v: 213.096852 px: 1611
+r6.moveBottomRight(FxPoint(100.0, 200.0)):
+     LEFT: v: 86.903148 px: 657
+     TOP: v: 186.903148 px: 1413
+     RIGHT: v: 100.000000 px: 756
+     BOTTOM: v: 200.000000 px: 1512
+r6.moveTopRight(FxPoint(100.0, 200.0)):
+     LEFT: v: 86.903148 px: 657
+     TOP: v: 200.000000 px: 1512
+     RIGHT: v: 100.000000 px: 756
+     BOTTOM: v: 213.096852 px: 1611
+r6.moveBottomLeft(FxPoint(100.0, 200.0)):
+     LEFT: v: 100.000000 px: 756
+     TOP: v: 186.903148 px: 1413
+     RIGHT: v: 113.096852 px: 855
+     BOTTOM: v: 200.000000 px: 1512
+r6.moveCenter(p1):
+     LEFT: v: 1.322914 px: 10
+     TOP: v: 1.322914 px: 10
+     RIGHT: v: 14.419767 px: 109
+     BOTTOM: v: 14.419767 px: 109
+r6.moveBy(20.0, 10.0):
+     LEFT: v: 21.322914 px: 161
+     TOP: v: 11.322914 px: 86
+     RIGHT: v: 34.419767 px: 260
+     BOTTOM: v: 24.419767 px: 185
+r6.setRect(10.0, 20.0, 40.0, 30.0):
+     LEFT: v: 10.000000 px: 76
+     TOP: v: 20.000000 px: 151
+     RIGHT: v: 50.000000 px: 378
+     BOTTOM: v: 50.000000 px: 378
+r6.setRect(10, 20, 40, 30):
+     LEFT: v: 1.322914 px: 10
+     TOP: v: 2.645829 px: 20
+     RIGHT: v: 6.482280 px: 49
+     BOTTOM: v: 6.482280 px: 49
+r6.setCoords(10.0, 20.0, 40.0, 30.0):
+     LEFT: v: 10.000000 px: 76
+     TOP: v: 20.000000 px: 151
+     RIGHT: v: 40.000000 px: 302
+     BOTTOM: v: 30.000000 px: 227
+r6.size(): width: 226 height: 76
+r6.setSize(40, 60):
+     LEFT: v: 10.000000 px: 76
+     TOP: v: 20.000000 px: 151
+     RIGHT: v: 15.345807 px: 116
+     BOTTOM: v: 27.913493 px: 211
+r6.setWidth(10.0):
+     LEFT: v: 10.000000 px: 76
+     TOP: v: 20.000000 px: 151
+     RIGHT: v: 20.000000 px: 151
+     BOTTOM: v: 27.913493 px: 211
+r6.setHeight(10.0):
+     LEFT: v: 10.000000 px: 76
+     TOP: v: 20.000000 px: 151
+     RIGHT: v: 20.000000 px: 151
+     BOTTOM: v: 30.000000 px: 227
+r6.width(): 10.000000 r6.height(): 10.000000
+r6.setWidth(100):
+     LEFT: v: 10.000000 px: 76
+     TOP: v: 20.000000 px: 151
+     RIGHT: v: 23.283293 px: 176
+     BOTTOM: v: 30.000000 px: 227
+r6.setHeight(100):
+     LEFT: v: 10.000000 px: 76
+     TOP: v: 20.000000 px: 151
+     RIGHT: v: 23.283293 px: 176
+     BOTTOM: v: 33.205151 px: 251
+r6.width(): 13.283293 r6.height(): 13.205151
+r6|=r5:
+     LEFT: v: 10.000000 px: 76
+     TOP: v: 15.000000 px: 113
+     RIGHT: v: 40.000000 px: 302
+     BOTTOM: v: 40.000000 px: 302
+r6&=r5:
+     LEFT: v: 15.000000 px: 113
+     TOP: v: 20.000000 px: 151
+     RIGHT: v: 20.000000 px: 151
+     BOTTOM: v: 30.000000 px: 227
+r6.contains(FxPoint(20.0, 20.0)): 1
+r6.contains(FxPoint(20.0, 20.0), true): 0
+r6.contains(QPoint(120, 160), true): 1
+r6.contains(QPoint(120, 227), true): 0
+r6.contains(QPoint(0, 0), true): 0
+
+r6.intersects(r5): 1
+r6.intersects(QRect(0, 0, 100, 100)): 0
+r6.intersects(QRect(120, 200, 100, 100)): 1
+r1 | r2:
+     LEFT: v: 50.000000 px: 378
+     TOP: v: 50.000000 px: 378
+     RIGHT: v: 120.000000 px: 907
+     BOTTOM: v: 150.000000 px: 1134
+r1 & r2:
+     LEFT: v: 70.000000 px: 529
+     TOP: v: 70.000000 px: 529
+     RIGHT: v: 100.000000 px: 756
+     BOTTOM: v: 100.000000 px: 756
+r2.setCoords(50.0, 50.0, 100.0, 100.1):
+     LEFT: v: 50.000000 px: 378
+     TOP: v: 50.000000 px: 378
+     RIGHT: v: 100.000000 px: 756
+     BOTTOM: v: 100.100000 px: 757
+r1==r2: 0
+r1!=r2: 1
+r2.setCoords(50.0, 50.0, 100.0, 99.95):
+     LEFT: v: 50.000000 px: 378
+     TOP: v: 50.000000 px: 378
+     RIGHT: v: 100.000000 px: 756
+     BOTTOM: v: 99.950000 px: 756
+r1==r2: 1
+r1!=r2: 0
+===================================== Done =====================================

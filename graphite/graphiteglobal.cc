@@ -536,8 +536,8 @@ void FxRect::normalize() {
 }
 
 FxPoint FxRect::center() const {
-    return FxPoint( Graphite::abs(m_br.x()-m_tl.x())*0.5,
-                    Graphite::abs(m_br.y()-m_tl.y())*0.5 );
+    return FxPoint( Graphite::abs(m_br.x()-m_tl.x())*0.5+Graphite::min(m_br.x(), m_tl.x()),
+                    Graphite::abs(m_br.y()-m_tl.y())*0.5+Graphite::min(m_br.y(), m_tl.y()) );
 }
 
 void FxRect::moveTopLeft(const FxPoint &topleft) {
