@@ -47,6 +47,8 @@ k_dcop:
     void clearIgnoreWordAll( );
     QStringList spellListIgnoreAll() const;
 
+    void addStringCompletion(const QString & stringCompletion);
+    int zoom() const;
 
 private:
     KSpreadDoc* doc;

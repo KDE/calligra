@@ -58,6 +58,12 @@ void KSpreadDocIface::changeDefaultGridPenColor( const QColor &_col)
     doc->changeDefaultGridPenColor(_col);
 }
 
+QColor KSpreadDocIface::pageBorderColor() const
+{
+    return doc->pageBorderColor();
+}
+
+
 bool KSpreadDocIface::showCommentIndicator()const
 {
     return doc->getShowCommentIndicator();
@@ -124,14 +130,10 @@ bool KSpreadDocIface::showMessageError()const
     return doc->getShowMessageError();
 }
 
-QColor KSpreadDocIface::pageBorderColor() const
-{
-    return doc->pageBorderColor();
-}
-
 void KSpreadDocIface::changePageBorderColor( const QColor & _color)
 {
     doc->changePageBorderColor( _color);
+    doc->refreshInterface();
 }
 
 void KSpreadDocIface::addIgnoreWordAll( const QString &word)
@@ -147,4 +149,14 @@ void KSpreadDocIface::clearIgnoreWordAll( )
 QStringList KSpreadDocIface::spellListIgnoreAll() const
 {
     return doc->spellListIgnoreAll();
+}
+
+void KSpreadDocIface::addStringCompletion(const QString & stringCompletion)
+{
+    doc->addStringCompletion( stringCompletion );
+}
+
+int KSpreadDocIface::zoom() const
+{
+    return doc->zoom();
 }

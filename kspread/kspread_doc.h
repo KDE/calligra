@@ -76,7 +76,7 @@ public:
   virtual bool loadChildren( KoStore* _store );
   virtual bool loadXML( QIODevice *, const QDomDocument& doc );
   QDomElement saveAreaName( QDomDocument& doc ) ;
-  void loadAreaName( QDomElement& element );
+  void loadAreaName( const QDomElement& element );
 
 
   virtual bool initDoc();
@@ -118,7 +118,7 @@ public:
   /**
    * returns the zoom factor in percent.
    */
-  int zoom() const { return m_iZoom; } 
+  int zoom() const { return m_iZoom; }
 
   /**
    * @return the KScript Interpreter used by this document.
@@ -264,7 +264,7 @@ public:
   void changeDefaultGridPenColor( const QColor &_col){m_defaultGridPen.setColor(_col);}
 
   QColor pageBorderColor() const { return m_pageBorderColor; }
-  void changePageBorderColor( QColor const & _color) { m_pageBorderColor = _color; }
+  void changePageBorderColor( const QColor  & _color) { m_pageBorderColor = _color; }
 
   /**
    * show/hide comment indicator

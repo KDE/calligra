@@ -1037,7 +1037,7 @@ QDomElement KSpreadDoc::saveAreaName( QDomDocument& doc )
  return element;
 }
 
-void KSpreadDoc::loadAreaName( QDomElement& element )
+void KSpreadDoc::loadAreaName( const QDomElement& element )
 {
 QDomElement tmp=element.firstChild().toElement();
 for( ; !tmp.isNull(); tmp=tmp.nextSibling().toElement()  )
