@@ -149,12 +149,24 @@ void KoCharStyle::operator=( const KoCharStyle &rhs )
 {
     m_name = rhs.m_name;
     m_shortCut_name = rhs.m_shortCut_name;
+    m_format = rhs.m_format;
 }
 
 QString KoCharStyle::translatedName() const
 {
     return i18n( "Style name", name().utf8() );
 }
+
+const KoTextFormat & KoCharStyle::format() const
+{
+    return m_format;
+}
+
+KoTextFormat & KoCharStyle::format()
+{
+    return m_format;
+}
+
 
 
 KoStyle::KoStyle( const QString & name )
@@ -182,7 +194,6 @@ void KoStyle::operator=( const KoStyle &rhs )
     m_paragLayout = rhs.m_paragLayout;
     m_name = rhs.m_name;
     m_shortCut_name = rhs.m_shortCut_name;
-    m_format = rhs.m_format;
     m_followingStyle = rhs.m_followingStyle;
     m_paragLayout.style = this; // must always be "this"
     m_parentStyle = rhs.m_parentStyle;
@@ -225,16 +236,6 @@ const KoParagLayout & KoStyle::paragLayout() const
 KoParagLayout & KoStyle::paragLayout()
 {
     return m_paragLayout;
-}
-
-const KoTextFormat & KoStyle::format() const
-{
-    return m_format;
-}
-
-KoTextFormat & KoStyle::format()
-{
-    return m_format;
 }
 
 void KoStyle::propagateChanges( int paragLayoutFlag, int formatFlag )

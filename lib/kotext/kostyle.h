@@ -78,6 +78,11 @@ public:
 
     virtual ~KoCharStyle() {}
 
+    /** Return a format. Don't forget to use the format collection
+     * of your KoTextDocument from the result of that method. */
+    const KoTextFormat & format() const;
+    KoTextFormat & format();
+
     void operator=( const KoCharStyle & );
 
     /** The internal name (untranslated if a standard style) */
@@ -121,11 +126,6 @@ public:
     const KoParagLayout & paragLayout() const;
     KoParagLayout & paragLayout();
 
-    /** Return a format. Don't forget to use the format collection
-     * of your KoTextDocument from the result of that method. */
-    const KoTextFormat & format() const;
-    KoTextFormat & format();
-
     KoStyle *followingStyle() const { return m_followingStyle; }
     void setFollowingStyle( KoStyle *fst ) { m_followingStyle = fst; }
 
@@ -156,7 +156,6 @@ public:
 
 private:
     KoParagLayout m_paragLayout;
-    KoTextFormat m_format;
     KoStyle *m_followingStyle;
     KoStyle *m_parentStyle;
     int m_inheritedParagLayoutFlag;
