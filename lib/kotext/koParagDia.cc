@@ -90,6 +90,7 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
         spnDepth->hide();
 
     spnDisplayLevels = new QSpinBox( 0, 15, 1, gStyle );
+    spnDisplayLevels->setMinValue( 1 );
     if ( displayDepth )
         grid->addWidget( spnDisplayLevels, 3, 4 );
     else
