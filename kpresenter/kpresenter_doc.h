@@ -298,6 +298,8 @@ public:
 
     void initConfig();
 
+    bool raiseAndLowerObject;
+
 public slots:
     void movePage( int from, int to );
     void copyPage( int from, int to );

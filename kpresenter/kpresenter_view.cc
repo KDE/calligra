@@ -2094,8 +2094,8 @@ void KPresenterView::objectSelectedChanged()
     actionExtraAlignObjCenterV->setEnabled(state);
     actionExtraAlignObjBottom->setEnabled(state);
     actionEditDelete->setEnabled(state);
-    actionExtraRaise->setEnabled(state);
-    actionExtraLower->setEnabled(state);
+    actionExtraRaise->setEnabled(state && m_pKPresenterDoc->numSelected()==1);
+    actionExtraLower->setEnabled(state && m_pKPresenterDoc->numSelected()==1);
 
     bool isText=page->isASelectedTextObj();
     actionTextFont->setEnabled(isText);

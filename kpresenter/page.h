@@ -268,6 +268,10 @@ private:
     void moveObject( int x, int y, bool key );
     void resizeObject();
 
+    void raiseObject();
+    void lowerObject();
+    int selectedObjectNumber;
+
 public slots:
     void chPic();
     void chClip();

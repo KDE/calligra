@@ -158,6 +158,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     pasteXOffset = pasteYOffset = 0;
     ignoreSticky = TRUE;
     m_pixmapMap = 0L;
+    raiseAndLowerObject = false;
 
     _header = new KPTextObject( this );
     _header->setDrawEditRect( false );
@@ -2516,6 +2517,8 @@ void KPresenterDoc::lowerObjs( int /*diffx*/, int /*diffy*/ )
     LowerRaiseCmd *lrCmd = new LowerRaiseCmd( i18n( "Lower Object(s)" ), _objectList, _new, this );
     lrCmd->execute();
     _commands.addCommand( lrCmd );
+
+    raiseAndLowerObject = true;
 }
 
 /*========================= raise object =========================*/
@@ -2541,6 +2544,8 @@ void KPresenterDoc::raiseObjs( int /*diffx*/, int /*diffy*/ )
     LowerRaiseCmd *lrCmd = new LowerRaiseCmd( i18n( "Raise Object(s)" ), _objectList, _new, this );
     lrCmd->execute();
     _commands.addCommand( lrCmd );
+
+    raiseAndLowerObject = true;
 }
 
 /*=================== insert a picture ==========================*/

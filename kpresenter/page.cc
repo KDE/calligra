@@ -109,6 +109,7 @@ Page::Page( QWidget *parent, const char *name, KPresenterView *_view )
         ratio = 0;
         keepRatio = false;
         mouseSelectedObject = false;
+        selectedObjectNumber = -1;
     } else {
         view = 0;
         hide();
@@ -365,6 +366,7 @@ void Page::mousePressEvent( QMouseEvent *e )
                     if ( overObject ) {
                         selectObj( kpobject );
                         modType = MT_NONE;
+                        raiseObject();
                     } else {
                         modType = MT_NONE;
                         if ( !( e->state() & ShiftButton ) && !( e->state() & ControlButton ) )
@@ -1293,6 +1295,13 @@ void Page::deSelectAllObj()
 {
     if(view->kPresenterDoc()->numSelected()==0)
         return;
+
+    if ( !view->kPresenterDoc()->raiseAndLowerObject && selectedObjectNumber != -1 ) {
+        lowerObject();
+        selectedObjectNumber = -1;
+    }
+    else
+        view->kPresenterDoc()->raiseAndLowerObject = false;
 
     KPObject *kpobject;
 
@@ -4355,6 +4364,51 @@ void Page::resizeObject()
     _repaint( kpobject );
 
     oldBoundingRect = kpobject->getBoundingRect( 0, 0 );
+}
+
+void Page::raiseObject()
+{
+    if ( selectedObjectNumber == -1 ) {
+        KPObject *kpobject = 0;
+        int j = 0;
+        // Examine number of the object which user selected.
+        for ( uint i = 0; i < objectList()->count(); ++i ) {
+            kpobject = objectList()->at( i );
+            if ( kpobject->isSelected() ) {
+                ++j;
+                if ( j > 1 )
+                    break;
+            }
+        }
+
+        if ( j == 1 ) { // execute this if user selected is one object.
+            for ( uint i = 0; i < objectList()->count(); ++i ) {
+                kpobject = objectList()->at( i );
+                if ( kpobject->isSelected() ) {
+                    objectList()->remove( i );
+                    objectList()->append( kpobject );
+                    selectedObjectNumber = i;
+                    break;
+                }
+            }
+        }
+        else
+            selectedObjectNumber = -1;
+    }
+}
+
+void Page::lowerObject()
+{
+    KPObject *kpobject = 0;
+
+    for ( uint i = 0; i < objectList()->count(); ++i ) {
+        kpobject = objectList()->at( i );
+        if ( kpobject->isSelected() ) {
+            objectList()->remove( i );
+            objectList()->insert( selectedObjectNumber, kpobject );
+            break;
+        }
+    }
 }
 
 #include <page.moc>
