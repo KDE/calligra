@@ -110,7 +110,7 @@ KoFilter::ConversionStatus OpenCalcExport::convert( const QCString & from,
     return KoFilter::NotImplemented;
   }
 
-  KSpreadDoc const * const ksdoc = static_cast<const KSpreadDoc *>(document);
+  const KSpreadDoc * ksdoc = static_cast<const KSpreadDoc *>(document);
 
   if ( ksdoc->mimeType() != "application/x-kspread" )
   {
@@ -126,7 +126,7 @@ KoFilter::ConversionStatus OpenCalcExport::convert( const QCString & from,
   return KoFilter::OK;
 }
 
-bool OpenCalcExport::writeFile( KSpreadDoc const * const ksdoc )
+bool OpenCalcExport::writeFile( const KSpreadDoc * ksdoc )
 {
   KoStore * store = KoStore::createStore( m_chain->outputFile(), KoStore::Write, "", KoStore::Zip );
 
@@ -161,7 +161,7 @@ bool OpenCalcExport::writeFile( KSpreadDoc const * const ksdoc )
   return true;
 }
 
-bool OpenCalcExport::exportDocInfo( KoStore * store, KSpreadDoc const * const ksdoc )
+bool OpenCalcExport::exportDocInfo( KoStore * store, const KSpreadDoc* ksdoc )
 {
   if ( !store->open( "meta.xml" ) )
     return false;
@@ -235,7 +235,7 @@ bool OpenCalcExport::exportDocInfo( KoStore * store, KSpreadDoc const * const ks
   return true;
 }
 
-bool OpenCalcExport::exportContent( KoStore * store, KSpreadDoc const * const ksdoc )
+bool OpenCalcExport::exportContent( KoStore * store, const KSpreadDoc * ksdoc )
 {
   if ( !store->open( "content.xml" ) )
     return false;
@@ -340,7 +340,7 @@ void exportNamedExpr( QDomDocument & doc, QDomElement & parent,
   }
 }
 
-bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, KSpreadDoc const * const ksdoc )
+bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, const KSpreadDoc * ksdoc )
 {
   QDomElement fontDecls  = doc.createElement( "office:font-decls" );
   QDomElement autoStyles = doc.createElement( "office:automatic-styles" );
@@ -429,14 +429,14 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, KSpr
 }
 
 void OpenCalcExport::exportSheet( QDomDocument & doc, QDomElement & tabElem,
-                                  KSpreadSheet const * const sheet, int maxCols, int maxRows )
+                                  const KSpreadSheet * sheet, int maxCols, int maxRows )
 {
   kdDebug(30518) << "exportSheet: " << sheet->tableName() << endl;
   int i = 1;
 
   while ( i <= maxCols )
   {
-    ColumnFormat const * const column = sheet->columnFormat( i );
+    const ColumnFormat * column = sheet->columnFormat( i );
     ColumnStyle cs;
     cs.breakB = Style::automatic;
     cs.size   = column->mmWidth() / 10;
@@ -446,7 +446,7 @@ void OpenCalcExport::exportSheet( QDomDocument & doc, QDomElement & tabElem,
     int repeated = 1;
     while ( j <= maxCols )
     {
-      ColumnFormat const * const c = sheet->columnFormat( j );
+      const ColumnFormat *c = sheet->columnFormat( j );
       ColumnStyle cs1;
       cs1.breakB = Style::automatic;
       cs1.size   = c->mmWidth() / 10;
@@ -473,7 +473,7 @@ void OpenCalcExport::exportSheet( QDomDocument & doc, QDomElement & tabElem,
 
   for ( i = 1; i <= maxRows; ++i )
   {
-    RowFormat const * const row = sheet->rowFormat( i );
+    const RowFormat * row = sheet->rowFormat( i );
     RowStyle rs;
     rs.breakB = Style::automatic;
     rs.size   = row->mmHeight() / 10;
@@ -490,14 +490,14 @@ void OpenCalcExport::exportSheet( QDomDocument & doc, QDomElement & tabElem,
 }
 
 void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
-                                  KSpreadSheet const * const sheet, int row, int maxCols )
+                                  const KSpreadSheet *sheet, int row, int maxCols )
 {
   int i = 1;
   while ( i <= maxCols )
   {
     int  repeated = 1;
     bool hasComment = false;
-    KSpreadCell const * const cell = sheet->cellAt( i, row );
+    const KSpreadCell* cell = sheet->cellAt( i, row );
     QDomElement cellElem;
 
     if ( !cell->isObscuringForced() )
@@ -527,7 +527,7 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
       int j = i + 1;
       while ( j <= maxCols )
       {
-        KSpreadCell const * const cell1 = sheet->cellAt( j, row );
+        const KSpreadCell *cell1 = sheet->cellAt( j, row );
 
         CellStyle c1;
         CellStyle::loadData( c1, cell1 ); // TODO: number style
@@ -612,7 +612,7 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
   }
 }
 
-void OpenCalcExport::maxRowCols( KSpreadSheet const * const sheet,
+void OpenCalcExport::maxRowCols( const KSpreadSheet *sheet,
                                  int & maxCols, int & maxRows )
 {
   KSpreadCell const * cell = sheet->firstCell();
@@ -649,7 +649,7 @@ void OpenCalcExport::maxRowCols( KSpreadSheet const * const sheet,
 
 }
 
-bool OpenCalcExport::exportStyles( KoStore * store, KSpreadDoc const * const ksdoc )
+bool OpenCalcExport::exportStyles( KoStore * store, const KSpreadDoc *ksdoc )
 {
   if ( !store->open( "styles.xml" ) )
     return false;
@@ -722,7 +722,7 @@ void OpenCalcExport::exportDefaultCellStyle( QDomDocument & doc, QDomElement & o
   KSpreadDoc * ksdoc    = static_cast<KSpreadDoc *>(document);
 
   KSpreadFormat * format = new KSpreadFormat( 0, ksdoc->styleManager()->defaultStyle() );
-  KLocale const * const locale = ksdoc->locale();
+  const KLocale *locale = ksdoc->locale();
   QString language;
   QString country;
   QString charSet;
@@ -757,10 +757,10 @@ void OpenCalcExport::createDefaultStyles()
 }
 
 void OpenCalcExport::exportPageAutoStyles( QDomDocument & doc, QDomElement & autoStyles,
-                                           KSpreadDoc const * const ksdoc )
+                                           const KSpreadDoc *ksdoc )
 {
   QPtrListIterator<KSpreadSheet> it( ksdoc->map()->tableList() );
-  KSpreadSheet const * const sheet = it.toFirst();
+  const KSpreadSheet * sheet = it.toFirst();
 
   float width  = 20.999;
   float height = 29.699;
@@ -811,14 +811,14 @@ void OpenCalcExport::exportPageAutoStyles( QDomDocument & doc, QDomElement & aut
 }
 
 void OpenCalcExport::exportMasterStyles( QDomDocument & doc, QDomElement & masterStyles,
-                                         KSpreadDoc const * const ksdoc )
+                                         const KSpreadDoc * ksdoc )
 {
   QDomElement masterPage = doc.createElement( "style:master-page" );
   masterPage.setAttribute( "style:name", "Default" );
   masterPage.setAttribute( "style:page-master-name", "pm1" );
 
   QPtrListIterator<KSpreadSheet> it( ksdoc->map()->tableList() );
-  KSpreadSheet const * const sheet = it.toFirst();
+  const KSpreadSheet * sheet = it.toFirst();
 
   QString headerLeft;
   QString headerCenter;
@@ -923,7 +923,7 @@ void OpenCalcExport::addText( QString const & text, QDomDocument & doc,
 }
 
 void OpenCalcExport::convertPart( QString const & part, QDomDocument & doc,
-                                  QDomElement & parent, KSpreadDoc const * const ksdoc )
+                                  QDomElement & parent, const KSpreadDoc * ksdoc )
 {
   QString text;
   QString var;
