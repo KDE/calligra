@@ -389,105 +389,28 @@ QPen KPrPage::getPen( const QPen &pen ) const
     {
         if(it.current()->isSelected())
         {
-            switch ( it.current()->getType() ) {
+            switch ( it.current()->getType() )
+            {
             case OT_LINE:
-            {
-                KPLineObject*kpobject=dynamic_cast<KPLineObject*>( it.current() );
-                if(kpobject)
-                    return kpobject->getPen();
-            }
-            break;
             case OT_RECT:
-            {
-                KPRectObject*kpobject=dynamic_cast<KPRectObject*>( it.current() );
-                if(kpobject)
-                    return kpobject->getPen();
-            }
-            break;
             case OT_ELLIPSE:
-            {
-                KPEllipseObject*kpobject=dynamic_cast<KPEllipseObject*>( it.current() );
-                if(kpobject)
-                    return kpobject->getPen();
-            }
-            break;
             case OT_PIE:
-            {
-                KPPieObject*kpobject=dynamic_cast<KPPieObject*>( it.current() );
-                if(kpobject)
-                    return kpobject->getPen();
-            }
-            break;
             case OT_AUTOFORM:
-            {
-                KPAutoformObject*kpobject=dynamic_cast<KPAutoformObject*>( it.current() );
-                if(kpobject)
-                    return  kpobject->getPen();
-            }
-            break;
             case OT_PART:
-            {
-                KPPartObject*kpobject=dynamic_cast<KPPartObject*>( it.current() );
-                if(kpobject)
-                    return kpobject->getPen();
-            }
-            break;
             case OT_CLIPART:
             case OT_PICTURE:
-            {
-                KPPixmapObject*kpobject=dynamic_cast<KPPixmapObject*>( it.current() );
-                if(kpobject)
-                    return kpobject->getPen();
-            }
-            break;
             case OT_TEXT:
-            {
-                KPTextObject*kpobject=dynamic_cast<KPTextObject*>( it.current() );
-                if(kpobject)
-                    return kpobject->getPen();
-            }
-            break;
             case OT_FREEHAND:
-            {
-                KPFreehandObject*kpobject=dynamic_cast<KPFreehandObject*>( it.current() );
-                if(kpobject)
-                    return dynamic_cast<KPFreehandObject*>( kpobject )->getPen();
-            }
-            break;
             case OT_POLYLINE:
-            {
-                KPPolylineObject*kpobject=dynamic_cast<KPPolylineObject*>( it.current() );
-                if(kpobject)
-                    return kpobject->getPen();
-            }
-            break;
             case OT_QUADRICBEZIERCURVE:
-            {
-                KPQuadricBezierCurveObject*kpobject=dynamic_cast<KPQuadricBezierCurveObject*>( it.current() );
-                if(kpobject)
-                    return kpobject->getPen();
-            }
-            break;
             case OT_CUBICBEZIERCURVE:
-            {
-                KPCubicBezierCurveObject*kpobject=dynamic_cast<KPCubicBezierCurveObject*>( it.current() );
-                if(kpobject)
-                    return kpobject->getPen();
-            }
-            break;
             case OT_POLYGON:
-            {
-                KPPolygonObject*kpobject=dynamic_cast<KPPolygonObject*>( it.current() );
-                if(kpobject)
-                    return kpobject->getPen();
-            }
-            break;
-            case OT_CLOSED_LINE: {
-                KPClosedLineObject *kpobject = dynamic_cast<KPClosedLineObject*>( it.current() );
-                if ( kpobject )
-                    return kpobject->getPen();
-            } break;
-            default: break;
+            case OT_CLOSED_LINE:
+                {
+                    return it.current()->getPen();
+                }
+            default:
+                break;
             }
         }
     }
@@ -1612,7 +1535,7 @@ KCommand* KPrPage::setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags, Q
     QPtrList<PenCmd::Pen> _oldPen;
     PenCmd::Pen _newPen, *ptmp;
 
-    _newPen.pen = QPen( pen );
+    _newPen.pen = pen;
     _newPen.lineBegin = lb;
     _newPen.lineEnd = le;
 
@@ -1632,7 +1555,7 @@ KCommand* KPrPage::setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags, Q
                 KPLineObject *obj=dynamic_cast<KPLineObject*>( kpobject );
                 if(obj)
                 {
-                    ptmp->pen = QPen( obj->getPen() );
+                    ptmp->pen = obj->getPen();
                     ptmp->lineBegin = obj->getLineBegin();
                     ptmp->lineEnd = obj->getLineEnd();
                 }
@@ -1643,7 +1566,7 @@ KCommand* KPrPage::setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags, Q
                 KPRectObject *obj=dynamic_cast<KPRectObject*>( kpobject );
                 if(obj)
                 {
-                    ptmp->pen = QPen( obj->getPen() );
+                    ptmp->pen = obj->getPen();
                 }
             }
             break;
@@ -1652,7 +1575,7 @@ KCommand* KPrPage::setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags, Q
                 KPEllipseObject *obj=dynamic_cast<KPEllipseObject*>( kpobject );
                 if(obj)
                 {
-                    ptmp->pen = QPen( obj->getPen() );
+                    ptmp->pen = obj->getPen();
                 }
             }
             break;
@@ -1661,7 +1584,7 @@ KCommand* KPrPage::setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags, Q
                 KPAutoformObject* obj=dynamic_cast<KPAutoformObject*>( kpobject );
                 if(obj)
                 {
-                    ptmp->pen = QPen( obj->getPen() );
+                    ptmp->pen = obj->getPen();
                     ptmp->lineBegin = obj->getLineBegin();
                     ptmp->lineEnd = obj->getLineEnd();
                 }
@@ -1672,7 +1595,7 @@ KCommand* KPrPage::setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags, Q
                 KPPieObject *obj=dynamic_cast<KPPieObject*>( kpobject );
                 if(obj)
                 {
-                    ptmp->pen = QPen(obj->getPen() );
+                    ptmp->pen = obj->getPen();
                     ptmp->lineBegin = obj->getLineBegin();
                     ptmp->lineEnd = obj->getLineEnd();
                 }
@@ -1683,7 +1606,7 @@ KCommand* KPrPage::setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags, Q
                 KPPartObject *obj=dynamic_cast<KPPartObject*>( kpobject );
                 if(obj)
                 {
-                    ptmp->pen = QPen( obj->getPen() );
+                    ptmp->pen = obj->getPen();
                 }
             }
             break;
@@ -1692,7 +1615,7 @@ KCommand* KPrPage::setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags, Q
                 KPTextObject *obj=dynamic_cast<KPTextObject*>( kpobject );
                 if(obj)
                 {
-                    ptmp->pen = QPen( obj->getPen() );
+                    ptmp->pen = obj->getPen();
                 }
             }
             break;
@@ -1702,7 +1625,7 @@ KCommand* KPrPage::setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags, Q
                 KPPixmapObject *obj=dynamic_cast<KPPixmapObject*>( kpobject );
                 if(obj)
                 {
-                    ptmp->pen = QPen( obj->getPen() );
+                    ptmp->pen = obj->getPen();
                 }
             }
             break;
@@ -1711,7 +1634,7 @@ KCommand* KPrPage::setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags, Q
                 KPFreehandObject *obj=dynamic_cast<KPFreehandObject*>( kpobject );
                 if(obj)
                 {
-                    ptmp->pen = QPen( obj->getPen() );
+                    ptmp->pen = obj->getPen();
                     ptmp->lineBegin = obj->getLineBegin();
                     ptmp->lineEnd = obj->getLineEnd();
                 }
@@ -1722,7 +1645,7 @@ KCommand* KPrPage::setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags, Q
                 KPPolylineObject *obj=dynamic_cast<KPPolylineObject*>( kpobject );
                 if(obj)
                 {
-                    ptmp->pen = QPen( obj->getPen() );
+                    ptmp->pen = obj->getPen();
                     ptmp->lineBegin = obj->getLineBegin();
                     ptmp->lineEnd = obj->getLineEnd();
                 }
@@ -1733,7 +1656,7 @@ KCommand* KPrPage::setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags, Q
                 KPQuadricBezierCurveObject *obj=dynamic_cast<KPQuadricBezierCurveObject*>( kpobject );
                 if(obj)
                 {
-                    ptmp->pen = QPen( obj->getPen() );
+                    ptmp->pen = obj->getPen();
                     ptmp->lineBegin = obj->getLineBegin();
                     ptmp->lineEnd = obj->getLineEnd();
                 }
@@ -1744,7 +1667,7 @@ KCommand* KPrPage::setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags, Q
                 KPCubicBezierCurveObject *obj=dynamic_cast<KPCubicBezierCurveObject*>( kpobject );
                 if(obj)
                 {
-                    ptmp->pen = QPen( obj->getPen() );
+                    ptmp->pen = obj->getPen();
                     ptmp->lineBegin = obj->getLineBegin();
                     ptmp->lineEnd = obj->getLineEnd();
                 }
@@ -1755,14 +1678,14 @@ KCommand* KPrPage::setPen( const QPen &pen, LineEnd lb, LineEnd le, int flags, Q
                 KPPolygonObject *obj=dynamic_cast<KPPolygonObject*>( kpobject );
                 if(obj)
                 {
-                    ptmp->pen = QPen( obj->getPen() );
+                    ptmp->pen = obj->getPen();
                 }
             }
             break;
             case OT_CLOSED_LINE: {
                 KPClosedLineObject *obj = dynamic_cast<KPClosedLineObject*>( kpobject );
                 if ( obj )
-                    ptmp->pen = QPen( obj->getPen() );
+                    ptmp->pen = obj->getPen();
             } break;
 
             case OT_GROUP:

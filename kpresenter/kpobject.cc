@@ -739,6 +739,12 @@ void KPObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
 }
 
 
+QPen KPObject::getPen() const
+{
+    // Return the default pen
+    return QPen();
+}
+
 KPShadowObject::KPShadowObject()
     : KPObject()
 {

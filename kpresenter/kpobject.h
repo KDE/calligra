@@ -216,6 +216,8 @@ public:
 
     virtual KPTextObject *nextTextObject() { return 0L;}
     virtual void getAllObjectSelectedList(QPtrList<KPObject> &lst,bool force = false ) { if (selected || force ) lst.append( this );}
+    virtual QPen getPen() const;
+
 protected:
     /**
      * Modifies x and y to add the shadow offsets
