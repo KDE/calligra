@@ -337,6 +337,7 @@ public:
     //use insert file attribute for footnote frameset
     //don't change it attibute otherwise we have a footnote with is not fixed
     void pasteFrames( QDomElement topElem, KMacroCommand * macroCmd, bool copyFootNote = false );
+    void completePasting();
 
 
     KoStyleCollection * styleCollection()const  { return m_styleColl;}

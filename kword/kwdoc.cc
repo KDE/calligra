@@ -1940,10 +1940,10 @@ bool KWDocument::processFootNoteRequests()
     return ret;
 }
 
-void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd,bool copyFootNote )
+void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd, bool copyFootNote )
 {
     m_pasteFramesetsMap = new QMap<QString, QString>();
-    QPtrList<KWFrameSet> frameSetsToFinalize;
+    //QPtrList<KWFrameSet> frameSetsToFinalize;
     int ref=0;
     int nb = 0;
     QDomElement elem = topElem.firstChild().toElement();
@@ -2017,8 +2017,8 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd,bool
 
         if ( fs )
         {
-            if ( frameSetsToFinalize.findRef( fs ) == -1 )
-                frameSetsToFinalize.append( fs );
+            //if ( frameSetsToFinalize.findRef( fs ) == -1 )
+            //    frameSetsToFinalize.append( fs );
 
             // Load the frame
             if ( !frameElem.isNull() )
@@ -2070,6 +2070,11 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd,bool
             ref|=type;
         }
     }
+    refreshDocStructure(ref);
+}
+
+void KWDocument::completePasting()
+{
     processPictureRequests();
     processAnchorRequests();
     if ( processFootNoteRequests() )
@@ -2079,11 +2084,14 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd,bool
     }
 
     // Finalize afterwards - especially in case of inline frames, made them inline in processAnchorRequests
-    for ( QPtrListIterator<KWFrameSet> fit( frameSetsToFinalize ); fit.current(); ++fit )
+    //for ( QPtrListIterator<KWFrameSet> fit( frameSetsToFinalize ); fit.current(); ++fit )
+
+    // Do it on all of them (we'd need to store frameSetsToFinalize as member var if this is really slow)
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
+    for ( ; fit.current() ; ++fit )
         fit.current()->finalize();
 
     repaintAllViews();
-    refreshDocStructure(ref);
     delete m_pasteFramesetsMap;
     m_pasteFramesetsMap = 0L;
 }

@@ -1824,6 +1824,7 @@ void KWCanvas::pasteFrames()
 
     KMacroCommand * macroCmd = new KMacroCommand( i18n( "Paste Frames" ) );
     m_doc->pasteFrames( topElem, macroCmd );
+    m_doc->completePasting();
     m_doc->addCommand( macroCmd );
 }
 
