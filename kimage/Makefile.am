@@ -41,7 +41,7 @@ img.h: img.idl
 	@echo $(IDL) --relative-paths --query-server-for-narrow -I$(idldir) img.idl ;\
 	rm -f img.h ;\
 	olddir=$(idldir) ;\
-	$(IDL) --relative-paths --query-server-for-narrow -I$(idldir) img.idl ;\
+	$(IDL) --relative-paths --query-server-for-narrow -I$(idldir) img.idl
 
 img.cc: img.h
 img_view.h: img.h
@@ -51,3 +51,6 @@ img_main.cc: img_main.moc
 img_shell.cc: img_shell.moc
 img_view.cc: img_view.moc
 img_main.cc: img_view.h img.h
+
+
+

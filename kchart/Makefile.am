@@ -51,7 +51,7 @@ messages:
 kchart.h: kchart.idl
 	@echo $(IDL) --query-server-for-narrow $(IDL_INCLUDES) kchart.idl ;\
 	rm -f kchart.h kchart.cc ;\
-	$(IDL) --relative-paths --query-server-for-narrow $(IDL_INCLUDES) kchart.idl ;\
+	$(IDL) --relative-paths --query-server-for-narrow $(IDL_INCLUDES) kchart.idl
 
 chart.h: ../lib/interfaces/chart.idl
 	$(IDL) --query-server-for-narrow -I$(idldir) $<
