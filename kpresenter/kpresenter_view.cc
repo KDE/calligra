@@ -4838,6 +4838,10 @@ void KPresenterView::startKSpell()
                       this, SLOT(spellCheckerCorrected(const QString&, int, const QString&)) );
     QObject::connect( m_spell.dlg, SIGNAL(done(const QString&) ),
                       this, SLOT(spellCheckerDone(const QString&)) );
+    QObject::connect( m_spell.dlg, SIGNAL( finished() ),
+                      this, SLOT( spellCheckerFinished( ) ) );
+    QObject::connect( m_spell.dlg, SIGNAL(cancel() ),
+                      this, SLOT( spellCheckerCancel() ) );
     m_spell.dlg->show();
     //clearSpellChecker();
 #endif
@@ -4903,6 +4907,36 @@ void KPresenterView::spellCheckerReady()
     }
 }
 #endif
+
+
+void KPresenterView::spellCheckerCancel()
+{
+#ifdef HAVE_LIBKSPELL2
+    kdDebug()<<"void KPresenterView::spellCheckerCancel() \n";
+    spellCheckerRemoveHighlight();
+    //we add command :( => don't add command and reverte changes
+    clearSpellChecker();
+
+//we cancel spell check so perhaps reverse all changes
+#endif
+}
+
+
+void KPresenterView::spellCheckerRemoveHighlight()
+{
+#ifdef HAVE_LIBKSPELL2
+    KoTextObject* textobj = m_spell.kospell->currentTextObject();
+    if ( textobj ) {
+        KPrTextDocument *textdoc=static_cast<KPrTextDocument *>( textobj->textDocument() );
+        if ( textdoc )
+            textdoc->textObject()->removeHighlight();
+    }
+    KPTextView *edit=m_canvas->currentTextObjectView();
+    if (edit)
+        edit->drawCursor( TRUE );
+#endif
+}
+
 
 void KPresenterView::clearSpellChecker()
 {
@@ -4993,37 +5027,9 @@ void KPresenterView::spellCheckerFinished()
 {
 #ifdef HAVE_LIBKSPELL2
     kdDebug(32001) << "KWView::spellCheckerFinished (death)" << endl;
-    bool kspellNotConfigured=false;
-    delete m_spell.kospell;
-    m_spell.kospell = 0;
-    //FIXME
-#if 0
-    KSpell::spellStatus status = m_spell.kspell->status();
-    delete m_spell.kspell;
-    m_spell.kspell = 0;
-    if (status == KSpell::Error)
-    {
-        kspellNotConfigured=true;
-    }
-    else if (status == KSpell::Crashed)
-    {
-        KMessageBox::sorry(this, i18n("ISpell seems to have crashed."));
-    }
-#endif
-    KoTextObject* textobj = m_spell.kospell->currentTextObject();
-    if ( textobj ) {
-        KPrTextDocument *textdoc=static_cast<KPrTextDocument *>( textobj->textDocument() );
-        if ( textdoc )
-            textdoc->textObject()->removeHighlight();
-    }
 
-    //m_doc->setReadWrite(true);
+    spellCheckerRemoveHighlight();
     clearSpellChecker();
-    KPTextView *edit=m_canvas->currentTextObjectView();
-    if (edit)
-        edit->drawCursor( TRUE );
-    if(kspellNotConfigured)
-        configureSpellChecker();
 #endif
 }
 

@@ -361,6 +361,7 @@ public slots:
 
     void spellCheckerDone( const QString & );
     void spellCheckerFinished( );
+    void spellCheckerCancel();
     void startKSpell();
     void spellAddAutoCorrect (const QString & originalword, const QString & newword);
     void spellCheckerMisspelling( const QString &, int );
@@ -776,6 +777,8 @@ protected:
      * for the selected objects on the active and sticky page
      */
     KCommand * getPenCmd( const QString &name, QPen pen, LineEnd lb, LineEnd le, int flags );
+
+    void spellCheckerRemoveHighlight();
 
 private:
     void clearSpellChecker();
