@@ -228,7 +228,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QCString& from, co
           irow   = rowstr.toInt(&ok);
 
 	  printf (" findpos: %s %d\n",rowstr.latin1(), irow );
-          sscanf (cellnostr.latin1(), "%s%d",tmp, &bla);
+          sscanf (cellnostr.latin1(), "%299s%d",tmp, &bla);
           sprintf (tmp1, "%d", irow);
           leni = strlen (tmp1);
 	  QString cellcolstr;
