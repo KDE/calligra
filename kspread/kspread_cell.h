@@ -566,7 +566,7 @@ public:
      * @param _col is the column this cell is assumed to be in.
      * @param _row is the row this cell is assumed to be in.
      * @param _x tells to occupy _x additional cells in the horizontal
-     * @param _y tells to occupy _y additional cells in the horizontal
+     * @param _y tells to occupy _y additional cells in the vertical
      *
      */
     void forceExtraCells( int _col, int _row, int _x, int _y );

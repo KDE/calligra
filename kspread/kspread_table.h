@@ -825,6 +825,11 @@ public:
     void updateCell( KSpreadCell* _cell, int _col, int _row );
 
     /**
+     * Updates every cell on the table
+     */
+    void update();
+
+    /**
      * used to refresh cells when you make redodelete
      */
     void refreshView(const QRect& rect);
