@@ -149,8 +149,8 @@ void Formula::generate(QTextStream &out)
 	kdDebug() << "FORMULA GENERATION" << endl;
 	QDomDocument *doc = new QDomDocument();
 	doc->setContent(_formula);
-	KFormula::KFormulaMimeSource *formula =
-		new KFormula::KFormulaMimeSource(*doc);
+	KFormula::MimeSource *formula =
+		new KFormula::MimeSource(*doc);
 	kdDebug() << QString(formula->encodedData("text/x-tex")) << endl;
 	out << "$" << QString(formula->encodedData("text/x-tex")) << "$";
 }
