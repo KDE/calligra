@@ -25,34 +25,10 @@
 
 #include "xml2latexparser.h"
 
-Xml2LatexParser::Xml2LatexParser(QString fileIn, QString fileOut):
-		XmlParser(fileIn), _file(fileOut)
-{
-	kdDebug() << fileIn.latin1() << endl;
-	kdDebug() << fileOut.latin1() << endl;
-	_filename = fileOut;
-	setFileHeader(_fileHeader);
-	setRoot(&_document);
-	_isEmbeded = false;
-}
-
-Xml2LatexParser::Xml2LatexParser(QByteArray array, QString fileOut, QString config):
-		XmlParser(array), _file(fileOut)
-{
-	//kdDebug() << fileIn.latin1() << endl;
-	kdDebug() << fileOut.latin1() << endl;
-	_filename = fileOut;
-	setFileHeader(_fileHeader);
-	setRoot(&_document);
-	_isEmbeded = false;
-	analyse_config(config);
-}
-
 Xml2LatexParser::Xml2LatexParser(const KoStore& in, QString fileOut, QString config):
-		XmlParser(in), _file(fileOut)
+		XmlParser(in), _file(fileOut), _in( in )
 {
 	//kdDebug() << fileIn.latin1() << endl;
-	_in = new KoStore(in);
 	kdDebug() << fileOut.latin1() << endl;
 	_filename = fileOut;
 	setFileHeader(_fileHeader);

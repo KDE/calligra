@@ -42,7 +42,7 @@ class XmlParser
 	static bool _useUnicode;
 
 	protected:
-		/* All the inherit class must be have a link with 
+		/* All the inherit class must be have a link with
 		 * the header to specify to use special package
 		 */
 		static FileHeader *_fileHeader;
@@ -50,7 +50,7 @@ class XmlParser
 
 	public:
 		XmlParser(QString);
-		XmlParser(QByteArray);	/* deprecated */
+                XmlParser(QByteArray);	/* deprecated */
 		XmlParser(const KoStore&);
 		XmlParser();
 		virtual ~XmlParser();

@@ -43,7 +43,7 @@ KoFilter::ConversionStatus LATEXExport::convert( const QCString& from, const QCS
     if(to != "text/x-tex" || from != "application/x-kword")
         return KoFilter::NotImplemented;
 
-    KoStore in = KoStore(QString(m_chain->inputFile()), KoStore::Read);
+    KoStore in(QString(m_chain->inputFile()), KoStore::Read);
     if(!in.open("root")) {
         kdError(30503) << "Unable to open input file!" << endl;
         in.close();

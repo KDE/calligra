@@ -54,7 +54,7 @@ XmlParser::XmlParser(QByteArray in)
 
 XmlParser::XmlParser(const KoStore& in)
 {
-	_in = new KoStore(in);
+        _in = &in;
 	if(!_in->open("root"))
 	{
 	        kdError(30503) << "Unable to open input file!" << endl;

@@ -54,10 +54,9 @@ class LATEXExportDia : public KDialogBase
 	QString _fileIn;
 	QString _fileOut;
 	QByteArray _arrayIn;
-	KoStore* _in;	/* the zipped file containing all pictures, part, ... */
+	const KoStore& _in;	/* the zipped file containing all pictures, part, ... */
 
 	public:
-		LATEXExportDia(QWidget *parent=0L, const char *name=0L);	/* deprecated */
 		LATEXExportDia(const KoStore&, QWidget *parent=0L, const char *name=0L);
 
 		virtual ~LATEXExportDia() {}
