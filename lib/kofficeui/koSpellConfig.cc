@@ -34,11 +34,9 @@
 #include <qcombobox.h>
 #include <qwhatsthis.h>
 #include <qvgroupbox.h>
-#include <qpushbutton.h>
 #include <qlistbox.h>
 #include <qpushbutton.h>
 #include <qtabwidget.h>
-#include <qgroupbox.h>
 #include <qgrid.h>
 #include <qgroupbox.h>
 #include <qlayout.h>

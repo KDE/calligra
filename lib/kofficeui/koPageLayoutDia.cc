@@ -37,7 +37,6 @@
 #include <koUnit.h>
 #include <knuminput.h>
 #include <qcheckbox.h>
-#include <qbuttongroup.h>
 
 #include <kiconloader.h>
 

@@ -19,7 +19,6 @@
 
 #include <kdeversion.h>
 #include <klocale.h>
-#include <qvbox.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qlistbox.h>
