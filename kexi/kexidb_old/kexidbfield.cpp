@@ -52,7 +52,6 @@ KexiDBField::sql2qt(KexiDBField::ColumnType sqltype)
 			return QVariant::Time;
 		case SQLTimeStamp:
 			return QVariant::DateTime;
-		case SQLBit:
 		case SQLBoolean:
 			return QVariant::Bool;
 		case SQLInvalid:
@@ -100,7 +99,6 @@ KexiDBField::typeName(ColumnType sqltype)
 			return "Time";
 		case SQLTimeStamp:
 			return "Time Stamp";
-		case SQLBit:
 		case SQLBoolean:
 			return "Bool";
 		case SQLInterval:

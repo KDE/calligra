@@ -28,9 +28,10 @@
 #include <ktempfile.h>
 #include <kmimetype.h>
 #include <kmimemagic.h>
-#include <ktrader.h>
+#include <kuserprofile.h>
 #include <kservice.h>
 #include <kprocess.h>
+#include <kopenwith.h>
 
 KexiBlobTableEdit::KexiBlobTableEdit(QByteArray val, QWidget* parent, const char* name)
 	: KexiTableEdit(parent, name)
@@ -46,11 +47,26 @@ KexiBlobTableEdit::KexiBlobTableEdit(QByteArray val, QWidget* parent, const char
 	
 	KMimeMagicResult* mmr = KMimeMagic::self()->findFileType(m_tempFile->name());
 	kdDebug() << "KexiBlobTableEdit: Mimetype = " << mmr->mimeType() << endl;
-	KTrader::OfferList offers = KTrader::self()->query(mmr->mimeType(), "Type == 'Application'");
-	KService::Ptr ptr = offers.first();
-	kdDebug() << "KexiBlobTableEdit: Exec = " << ptr->exec().section(' ', 0, 0) << endl;
+	KService::Ptr ptr = KServiceTypeProfile::preferredService(mmr->mimeType(), "Application");
+	QString exec;
+	
+	if(!ptr.data())
+	{
+		KURL::List ul;
+		KOpenWithDlg* dlg = new KOpenWithDlg(ul, this);
+		if(dlg->exec() == QDialog::Accepted)
+		{
+			exec = dlg->text().section(' ', 0, 0);
+		}
+	}
+	else
+	{
+		exec = ptr->exec().section(' ', 0, 0);
+	}
+	
+	kdDebug() << "KexiBlobTableEdit: Exec = " << exec << endl;
 	m_proc = new KProcess();
-	*m_proc << ptr->exec().section(' ', 0, 0);
+	*m_proc << exec;
 	*m_proc << m_tempFile->name();
 	connect(m_proc, SIGNAL(processExited(KProcess *)), SLOT(slotFinished(KProcess *)));
 	m_proc->start();

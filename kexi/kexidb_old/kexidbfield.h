@@ -33,7 +33,6 @@ class KexiDBField
 			SQLInvalid = 0,
 			SQLBigInt,
 			SQLBinary,
-			SQLBit,
 			SQLBoolean,
 			SQLDate,
 			SQLDecimal,

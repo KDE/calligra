@@ -130,7 +130,7 @@ MySqlField::sql2string(KexiDBField::ColumnType sqltype)
 		case SQLFloat:
 			return "FLOAT";
 		case SQLBinary:
-			return "VARCHAR BINARY";
+			return "BLOB";
 		case SQLLongVarBinary:
 			return "LONGBLOB";
 		case SQLVarBinary:
@@ -141,7 +141,6 @@ MySqlField::sql2string(KexiDBField::ColumnType sqltype)
 			return "TIME";
 		case SQLTimeStamp:
 			return "TIMESTAMP";
-		case SQLBit:
 		case SQLBoolean:
 			return "BOOL";
 		case SQLInterval:

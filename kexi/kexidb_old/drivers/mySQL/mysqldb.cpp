@@ -356,7 +356,6 @@ MySqlDB::createDefinition(const QString& field, KexiDBField::ColumnType dtype, i
 			break;
 		case KexiDBField::SQLInvalid:
 		case KexiDBField::SQLBinary:
-		case KexiDBField::SQLBit:
 		case KexiDBField::SQLBoolean:
 		case KexiDBField::SQLDate:
 		case KexiDBField::SQLLongVarBinary:
