@@ -89,7 +89,8 @@ public:
                      PComment = 0x400000,
                      PIndent = 0x800000,
 		     PDontPrintText = 0x1000000,
-                     PCustomFormat = 0x2000000 };
+                     PCustomFormat = 0x2000000,
+                     PNotProtected = 0x4000000 };
 
     struct Currency
     {
@@ -229,6 +230,7 @@ public:
     virtual void setIndent( double _indent );
 
     virtual void setDontPrintText ( bool _b);
+    virtual void setNotProtected ( bool _b);
 
     virtual void setCurrency( int type, QString const & symbol );
 
@@ -335,6 +337,7 @@ public:
     virtual double getIndent(int col, int row) const;
 
     virtual bool getDontprintText( int col, int row) const;
+    virtual bool notProtected( int col, int row) const;
 
     KSpreadSheet* table() { return m_pTable; }
     const KSpreadSheet* table() const { return m_pTable; }
@@ -471,6 +474,7 @@ protected:
      */
     double m_dFactor;
 
+    bool m_bNotProtected;
 
     KSpreadSheet *m_pTable;
 

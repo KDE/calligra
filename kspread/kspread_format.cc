@@ -368,6 +368,10 @@ QDomElement KSpreadFormat::saveFormat( QDomDocument& doc,int _col, int _row, boo
           || force )
         && getDontprintText(_col,_row))
 	format.setAttribute( "dontprinttext", "yes" );
+    if( ( hasProperty( PNotProtected )
+          || hasNoFallBackProperties( PNotProtected )
+          || force ) && notProtected( _col, _row ) )
+	format.setAttribute( "noprotection", "yes" );
     if ( hasProperty( PFont ) || hasNoFallBackProperties( PFont ) || force )
 	format.appendChild( createElement( "font", textFont( _col, _row ), doc ) );
     if ( ( hasProperty( PTextPen )
@@ -482,6 +486,10 @@ QDomElement KSpreadFormat::saveFormat( QDomDocument& doc, bool force ) const
           || force )
         && testFlag( Flag_DontPrintText))
 	format.setAttribute( "dontprinttext", "yes" );
+    if( ( hasProperty( PNotProtected )
+          || hasNoFallBackProperties( PNotProtected )
+          || force ) )
+	format.setAttribute( "noprotection", "yes" );
     if ( hasProperty( PFont ) || hasNoFallBackProperties( PFont ) || force )
 	format.appendChild( createElement( "font", m_textFont, doc ) );
     if ( ( hasProperty( PTextPen )
@@ -651,6 +659,12 @@ bool KSpreadFormat::loadFormat( const QDomElement& f, PasteMode pm )
     }
     if(f.hasAttribute( "dontprinttext" ) )
         setDontPrintText(true);
+
+    if(f.hasAttribute( "noprotection" ) )
+    {
+        if ( f.attribute( "noprotection" ) == "yes" )
+            setNotProtected( true );
+    }
 
     if ( f.hasAttribute( "brushcolor" ) )
         setBackGroundBrushColor( QColor( f.attribute( "brushcolor" ) ) );
@@ -1337,18 +1351,33 @@ void KSpreadFormat::setIndent( double _indent )
 void KSpreadFormat::setComment( const QString& _comment )
 {
     if ( _comment.isEmpty() )
-        {
+    {
         clearProperty( PComment );
         setNoFallBackProperties( PComment );
-        }
+    }
     else
-        {
+    {
         setProperty( PComment );
         clearNoFallBackProperties( PComment );
-        }
+    }
 
     m_strComment=_comment;
     formatChanged();
+}
+
+void KSpreadFormat::setNotProtected( bool _b)
+{
+  if ( _b == false )
+  {
+    clearProperty( PNotProtected );
+    setNoFallBackProperties( PNotProtected );
+  }
+  else
+  {
+    setProperty( PNotProtected );
+    clearNoFallBackProperties( PNotProtected );
+  }
+  formatChanged();
 }
 
 void KSpreadFormat::setDontPrintText( bool _b )
@@ -1818,6 +1847,18 @@ double KSpreadFormat::getIndent( int col, int row ) const
 bool KSpreadFormat::getDontprintText( int col, int row ) const
 {
     if ( !hasProperty( PDontPrintText )&& !hasNoFallBackProperties( PDontPrintText ))
+    {
+	const KSpreadFormat* l = fallbackFormat( col, row );
+	if ( l )
+	    return l->getDontprintText( col, row );
+    }
+
+    return testFlag(Flag_DontPrintText);
+}
+
+bool KSpreadFormat::notProtected( int col, int row) const
+{
+    if ( !hasProperty( PNotProtected )&& !hasNoFallBackProperties( PDontPrintText ))
     {
 	const KSpreadFormat* l = fallbackFormat( col, row );
 	if ( l )
