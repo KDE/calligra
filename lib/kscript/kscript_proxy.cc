@@ -13,6 +13,7 @@
 #include <qdatastream.h>
 #include <qvariant.h>
 #include <klocale.h>
+#include <kglobal.h>
 
 /***************************************************
  *
@@ -52,8 +53,8 @@ bool KSProxy::call( KSContext& context, const QString& name )
 {
     qDebug("Call %s\n",name.latin1() );
 
-    static QString setPropMethod = QString::fromLatin1( "setProperty" );
-    static QString getPropMethod = QString::fromLatin1( "property" );
+    static const QString &setPropMethod = KGlobal::staticQString( "setProperty" );
+    static const QString &getPropMethod = KGlobal::staticQString( "property" );
 
     if ( ( name == setPropMethod ||
 	 name == getPropMethod ) && !m_propertyProxyCheckDone )

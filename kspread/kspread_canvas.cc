@@ -314,7 +314,7 @@ void KSpreadCanvas::gotoLocation( const KSpreadRange & _range )
 		KMessageBox::error( this, i18n("Unknown table name %1" ).arg( _range.tableName ) );
                 return;
 	}
-        
+
 	gotoLocation( _range.range.left(), _range.range.top(), table, false );
 	gotoLocation( _range.range.right(), _range.range.bottom(), table, true );
 }
@@ -667,7 +667,7 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
      selection.setBottom( row );
 
   bool selectionChanged = ( selection != table->selectionRect() );
-  if ( selectionChanged ) 
+  if ( selectionChanged )
     hideMarker();
 
   table->setSelection( selection, this );
@@ -694,7 +694,7 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
   }
 
   updatePosWidget();
-  if ( selectionChanged ) 
+  if ( selectionChanged )
     showMarker();
 
   m_bMouseMadeSelection = true;
@@ -1050,7 +1050,7 @@ void KSpreadCanvas::chooseMousePressEvent( QMouseEvent * _ev )
   int row = table->topRow( _ev->pos().y(), ypos, this );
   int col = table->leftColumn( _ev->pos().x(), xpos, this );
 
-  if ( (selection.right() != 0x7fff && selection.bottom() != 0x7fff) && 
+  if ( (selection.right() != 0x7fff && selection.bottom() != 0x7fff) &&
       ( _ev->state() & ShiftButton ) )
   {
     if ( col != m_iMouseStartColumn || row != m_iMouseStartRow )
@@ -2381,10 +2381,10 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
   QFont normalFont = painter.font();
   QFont boldFont = normalFont;
   boldFont.setBold( TRUE );
-  
+
   for ( int y = top_row; y <= bottom_row; y++ )
   {
-    bool highlighted = ( selection.left() != 0 && y >= selection.top() && 
+    bool highlighted = ( selection.left() != 0 && y >= selection.top() &&
                       y <= selection.bottom() );
     bool selected = ( highlighted && selection.right() == 0x7FFF );
 
@@ -2392,23 +2392,21 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
 
     if ( selected )
     {
-      static QBrush fillSelected( 
-                  colorGroup().brush( QColorGroup::Highlight ) );
-      qDrawShadePanel( &painter, 0, ypos, YBORDER_WIDTH, 
-                  row_lay->height( m_pCanvas ), colorGroup(), FALSE, 1, 
+      QBrush fillSelected( colorGroup().brush( QColorGroup::Highlight ) );
+      qDrawShadePanel( &painter, 0, ypos, YBORDER_WIDTH,
+                  row_lay->height( m_pCanvas ), colorGroup(), FALSE, 1,
                   &fillSelected );
     }
     else if ( highlighted )
     {
-      static QBrush fillHighlighted( 
-                  colorGroup().brush( QColorGroup::Background ) );
-      qDrawShadePanel( &painter, 0, ypos, YBORDER_WIDTH, 
-                  row_lay->height( m_pCanvas ), colorGroup(), FALSE, 2, 
+      QBrush fillHighlighted( colorGroup().brush( QColorGroup::Background ) );
+      qDrawShadePanel( &painter, 0, ypos, YBORDER_WIDTH,
+                  row_lay->height( m_pCanvas ), colorGroup(), FALSE, 2,
                   &fillHighlighted );
     }
     else
     {
-      static QBrush fill( colorGroup().brush( QColorGroup::Background ) );
+      QBrush fill( colorGroup().brush( QColorGroup::Background ) );
       qDrawShadePanel( &painter, 0, ypos, YBORDER_WIDTH, row_lay->height( m_pCanvas ), colorGroup(), FALSE, 1, &fill );
     }
 
@@ -2418,7 +2416,7 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
     // Reset painter
     painter.setFont( normalFont );
     painter.setPen( colorGroup().text() );
-    
+
     if ( selected )
       painter.setPen( colorGroup().highlightedText() );
     else if ( highlighted )
@@ -2766,7 +2764,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
 
   for ( int x = left_col; x <= right_col; x++ )
   {
-    bool highlighted = ( selection.left() != 0 && x >= selection.left() && 
+    bool highlighted = ( selection.left() != 0 && x >= selection.left() &&
                       x <= selection.right() );
     bool selected = ( highlighted && selection.bottom() == 0x7FFF );
 
@@ -2774,21 +2772,19 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
 
     if ( selected )
     {
-      static QBrush fillSelected( 
-                  colorGroup().brush( QColorGroup::Highlight ) );
+      QBrush fillSelected( colorGroup().brush( QColorGroup::Highlight ) );
       qDrawShadePanel( &painter, xpos, 0, col_lay->width( m_pCanvas ),
                   XBORDER_HEIGHT, colorGroup(), FALSE, 1, &fillSelected );
     }
     else if ( highlighted )
     {
-      static QBrush fillHighlighted( 
-                  colorGroup().brush( QColorGroup::Background ) );
+      QBrush fillHighlighted( colorGroup().brush( QColorGroup::Background ) );
       qDrawShadePanel( &painter, xpos, 0, col_lay->width( m_pCanvas ),
                   XBORDER_HEIGHT, colorGroup(), FALSE, 2, &fillHighlighted );
     }
     else
     {
-      static QBrush fill( colorGroup().brush( QColorGroup::Background ) );
+      QBrush fill( colorGroup().brush( QColorGroup::Background ) );
       qDrawShadePanel( &painter, xpos, 0, col_lay->width( m_pCanvas ),
                   XBORDER_HEIGHT, colorGroup(), FALSE, 1, &fill );
     }
@@ -2799,7 +2795,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
 
     if ( selected )
       painter.setPen( colorGroup().highlightedText() );
-    else if ( highlighted ) 
+    else if ( highlighted )
       painter.setFont( boldFont );
     if(!m_pView->activeTable()->getShowColumnNumber())
     	{
