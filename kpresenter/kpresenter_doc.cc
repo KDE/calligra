@@ -3171,21 +3171,20 @@ void KPresenterDoc::insertFile(const QString & file )
                            i18n("Insert File"));
         return;
     }
-#if 0
-    KMacroCommand *macro = new KMacroCommand( i18n("Insert File"));
+    KMacroCommand *macro = 0L;
     bool createMacro = false;
-    //for ( int i = m_insertFilePage; i<m_pageList.count();i++)
-    for ( int i =m_pageList.count()-1 ; i>= m_insertFilePage; i--)
+    for ( int i = m_insertFilePage; i<m_pageList.count();i++)
+        //for ( int i =m_pageList.count()-1 ; i>= m_insertFilePage; i--)
     {
+        if ( !macro )
+            macro = new KMacroCommand( i18n("Insert File"));
         createMacro = true;
         KPrInsertPageCmd * cmd = new KPrInsertPageCmd( i18n("Insert File"),i, m_pageList.at(i), this ) ;
         macro->addCommand(cmd );
     }
-    if ( createMacro )
+    if ( macro )
         addCommand( macro );
-    else
-        delete macro;
-#endif
+
     m_insertFilePage = 0;
     // Update the views
     QPtrListIterator<KoView> it( views() );

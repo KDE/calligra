@@ -257,9 +257,10 @@ void ThumbBar::addItem( int pos )
             // move on to next item as we have inserted one
             it = it->nextItem();
         }
-        else if ( page == pos ) {
-            QIconViewItem *item = new QIconViewItem(dynamic_cast<QIconView *>(this), it->prevItem(), QString::number(page+1), getSlideThumb(page));
+        else if ( (page + 1) == pos ) {
+            QIconViewItem *item = new QIconViewItem(dynamic_cast<QIconView *>(this), it, QString::number(pos+1), getSlideThumb(pos));
             item->setDragEnabled(false);  //no dragging for now
+            it = it->nextItem();
         }
         // update page numbers
         if ( page >= pos ) {
@@ -324,7 +325,8 @@ void ThumbBar::removeItem( int pos )
     for ( QIconViewItem *it = firstItem(); it; it = it->nextItem() ) {
         if ( page == pos ) {
             itemToDelete = it;
-            if ( it = it->nextItem() )
+            if ( it->nextItem() )
+                it = it->nextItem(); 
                 change = true;
         }
         if ( change ) {
@@ -496,9 +498,9 @@ void Outline::removeItem( int pos )
     for ( ; it.current(); ++it ) {
         if ( page == pos ) {
             kdDebug() << "Page " << it.current()->text(0) << " removed" << endl;
-            delete it.current();
-            if ( it.current() )
+            if ( it.current()->nextSibling()) 
                 updatePageNum = true;
+            delete it.current();
         }
         if ( updatePageNum ) {
             QString title = doc->pageList().at(page)->pageTitle( i18n( "Slide %1" ).arg( page + 1 ) );
