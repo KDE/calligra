@@ -38,6 +38,7 @@
 class BasicElement;
 class FormulaCursor;
 class FormulaElement;
+class IndexElement;
 class KCommand;
 class KFormulaCommand;
 class KFormulaDocument;
@@ -290,6 +291,12 @@ protected:
     KCommandHistory* getHistory() const;
     
 private:
+
+    /**
+     * Creates a new IndexElement to be inserted and selects the elements
+     * that should become its main child's content.
+     */
+    IndexElement* createIndexElement();
 
     void addGenericIndex(FormulaCursor* cursor, ElementIndexPtr index);
 

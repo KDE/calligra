@@ -35,7 +35,8 @@ class IndexElement : public BasicElement {
 public:
 
     // each index has its own number.
-    enum { upperLeftPos, lowerLeftPos, contentPos, upperRightPos, lowerRightPos };
+    enum { upperLeftPos, lowerLeftPos, upperMiddlePos, contentPos,
+           lowerMiddlePos, upperRightPos, lowerRightPos, parentPos };
     
     IndexElement(BasicElement* parent = 0);
     ~IndexElement();
@@ -177,36 +178,37 @@ public:
     virtual bool isSenseless();
     
     
-    bool hasUpperLeft()  const { return upperLeft  != 0; }
-    bool hasUpperRight() const { return upperRight != 0; }
-    bool hasLowerLeft()  const { return lowerLeft  != 0; }
-    bool hasLowerRight() const { return lowerRight != 0; }
-
-    // Return the index. If there is non, create it first.
-    
-//     SequenceElement* requireUpperLeft();
-//     SequenceElement* requireUpperRight();
-//     SequenceElement* requireLowerLeft();
-//     SequenceElement* requireLowerRight();
+    bool hasUpperLeft()   const { return upperLeft   != 0; }
+    bool hasUpperMiddle() const { return upperMiddle != 0; }
+    bool hasUpperRight()  const { return upperRight  != 0; }
+    bool hasLowerLeft()   const { return lowerLeft   != 0; }
+    bool hasLowerMiddle() const { return lowerMiddle != 0; }
+    bool hasLowerRight()  const { return lowerRight  != 0; }
     
     // If we want to create an index we need a cursor that points there.
     
     void setToUpperLeft(FormulaCursor* cursor);
+    void setToUpperMiddle(FormulaCursor* cursor);
     void setToUpperRight(FormulaCursor* cursor);
     void setToLowerLeft(FormulaCursor* cursor);
+    void setToLowerMiddle(FormulaCursor* cursor);
     void setToLowerRight(FormulaCursor* cursor);
 
     // If the index is there we need a way to move into it.
 
     void moveToUpperLeft(FormulaCursor* cursor, Direction direction);
+    void moveToUpperMiddle(FormulaCursor* cursor, Direction direction);
     void moveToUpperRight(FormulaCursor* cursor, Direction direction);
     void moveToLowerLeft(FormulaCursor* cursor, Direction direction);
+    void moveToLowerMiddle(FormulaCursor* cursor, Direction direction);
     void moveToLowerRight(FormulaCursor* cursor, Direction direction);
 
     // Generic access to each index.
     
     ElementIndexPtr getUpperLeft() { return ElementIndexPtr(new UpperLeftIndex(this)); }
     ElementIndexPtr getLowerLeft() { return ElementIndexPtr(new LowerLeftIndex(this)); }
+    ElementIndexPtr getUpperMiddle() { return ElementIndexPtr(new UpperMiddleIndex(this)); }
+    ElementIndexPtr getLowerMiddle() { return ElementIndexPtr(new LowerMiddleIndex(this)); }
     ElementIndexPtr getUpperRight() { return ElementIndexPtr(new UpperRightIndex(this)); }
     ElementIndexPtr getLowerRight() { return ElementIndexPtr(new LowerRightIndex(this)); }
 
@@ -280,6 +282,28 @@ private:
             { return parent->hasLowerLeft(); }
     };
     
+    class UpperMiddleIndex : public IndexElementIndex {
+    public:
+        UpperMiddleIndex(IndexElement* parent) : IndexElementIndex(parent) {}
+        virtual void moveToIndex(FormulaCursor* cursor, Direction direction)
+            { parent->moveToUpperMiddle(cursor, direction); }
+        virtual void setToIndex(FormulaCursor* cursor)
+            { parent->setToUpperMiddle(cursor); }
+        virtual bool hasIndex() const
+            { return parent->hasUpperMiddle(); }
+    };
+    
+    class LowerMiddleIndex : public IndexElementIndex {
+    public:
+        LowerMiddleIndex(IndexElement* parent) : IndexElementIndex(parent) {}
+        virtual void moveToIndex(FormulaCursor* cursor, Direction direction)
+            { parent->moveToLowerMiddle(cursor, direction); }
+        virtual void setToIndex(FormulaCursor* cursor)
+            { parent->setToLowerMiddle(cursor); }
+        virtual bool hasIndex() const
+            { return parent->hasLowerMiddle(); }
+    };
+
     class UpperRightIndex : public IndexElementIndex {
     public:
         UpperRightIndex(IndexElement* parent) : IndexElementIndex(parent) {}
@@ -302,6 +326,16 @@ private:
             { return parent->hasLowerRight(); }
     };
 
+
+    /**
+     * Sets the x value of the three middle elements. (Two indexes and the content.)
+     */
+    void setMiddleX(int xOffset, int middleWidth);
+
+    /**
+     * @returns the position describtion to the provided element.
+     */
+    int getFromPos(BasicElement* from);
     
     /**
      * Sets the cursor to point to the place where the content is.
@@ -317,13 +351,15 @@ private:
     SequenceElement* content;
 
     /**
-     * The four indexes. Each one might be null.
+     * The six indexes. Each one might be null.
      * If the last one is removed the whole IndexElement
      * should be replaced by its main child.
      */
     SequenceElement* upperLeft;
+    SequenceElement* upperMiddle;
     SequenceElement* upperRight;
     SequenceElement* lowerLeft;
+    SequenceElement* lowerMiddle;
     SequenceElement* lowerRight;
 };
 

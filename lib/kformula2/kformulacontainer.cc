@@ -218,12 +218,7 @@ void KFormulaContainer::addLowerLeftIndex()
     FormulaCursor* cursor = getActiveCursor();
     IndexElement* element = cursor->getActiveIndexElement();
     if (element == 0) {
-        element = new IndexElement;
-
-        if (!cursor->isSelection()) {
-            //cursor->moveLeft(FormulaCursor::SelectMovement | FormulaCursor::WordMovement);
-            cursor->moveLeft(SelectMovement);
-        }
+        element = createIndexElement();
         KFCAddIndex* command = new KFCAddIndex(this, element, element->getLowerLeft());
         execute(command);
     }
@@ -239,11 +234,7 @@ void KFormulaContainer::addUpperLeftIndex()
     FormulaCursor* cursor = getActiveCursor();
     IndexElement* element = cursor->getActiveIndexElement();
     if (element == 0) {
-        element = new IndexElement;
-
-        if (!cursor->isSelection()) {
-            cursor->moveLeft(SelectMovement);
-        }
+        element = createIndexElement();
         KFCAddIndex* command = new KFCAddIndex(this, element, element->getUpperLeft());
         execute(command);
     }
@@ -259,11 +250,7 @@ void KFormulaContainer::addLowerRightIndex()
     FormulaCursor* cursor = getActiveCursor();
     IndexElement* element = cursor->getActiveIndexElement();
     if (element == 0) {
-        element = new IndexElement;
-
-        if (!cursor->isSelection()) {
-            cursor->moveLeft(SelectMovement);
-        }
+        element = createIndexElement();
         KFCAddIndex* command = new KFCAddIndex(this, element, element->getLowerRight());
         execute(command);
     }
@@ -279,11 +266,7 @@ void KFormulaContainer::addUpperRightIndex()
     FormulaCursor* cursor = getActiveCursor();
     IndexElement* element = cursor->getActiveIndexElement();
     if (element == 0) {
-        element = new IndexElement;
-
-        if (!cursor->isSelection()) {
-            cursor->moveLeft(SelectMovement);
-        }
+        element = createIndexElement();
         KFCAddIndex* command = new KFCAddIndex(this, element, element->getUpperRight());
         execute(command);
     }
@@ -292,6 +275,15 @@ void KFormulaContainer::addUpperRightIndex()
     }
 }
 
+IndexElement* KFormulaContainer::createIndexElement()
+{
+    IndexElement* element = new IndexElement;
+    FormulaCursor* cursor = getActiveCursor();
+    if (!cursor->isSelection()) {
+        cursor->moveLeft(SelectMovement);
+    }
+    return element;
+}
 
 /**
  * Just search an element that gets an index. Don't create one
@@ -309,7 +301,12 @@ void KFormulaContainer::addGenericLowerIndex()
     else {
         IndexElement* index = cursor->getActiveIndexElement();
         if (index != 0) {
-            addGenericIndex(cursor, index->getLowerRight());
+            addGenericIndex(cursor, index->getLowerMiddle());
+        }
+        else {
+            index = createIndexElement();
+            KFCAddIndex* command = new KFCAddIndex(this, index, index->getLowerMiddle());
+            execute(command);
         }
     }
 }
@@ -335,7 +332,12 @@ void KFormulaContainer::addGenericUpperIndex()
         else {
             IndexElement* index = cursor->getActiveIndexElement();
             if (index != 0) {
-                addGenericIndex(cursor, index->getUpperRight());
+                addGenericIndex(cursor, index->getUpperMiddle());
+            }
+            else {
+                index = createIndexElement();
+                KFCAddIndex* command = new KFCAddIndex(this, index, index->getUpperMiddle());
+                execute(command);
             }
         }
     }
@@ -417,12 +419,15 @@ void KFormulaContainer::paste()
 
         FormulaCursor* cursor = getActiveCursor();
         if (cursor->buildElementsFromDom(formula, list)) {
-            KFCReplace* command = new KFCReplace(i18n("Paste"), this);
             uint count = list.count();
-            for (uint i = 0; i < count; i++) {
-                command->addElement(list.take(0));
+            // You must not execute an add command that adds nothing.
+            if (count > 0) {
+                KFCReplace* command = new KFCReplace(i18n("Paste"), this);
+                for (uint i = 0; i < count; i++) {
+                    command->addElement(list.take(0));
+                }
+                execute(command);
             }
-            execute(command);
         }
     }
 }
