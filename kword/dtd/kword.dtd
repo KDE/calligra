@@ -1,12 +1,13 @@
 <!--    $Id$
 
 This is an XML document type definition (DTD) for the KWord document format.
-Written by Kalle Dalheimer <kalle@kde.org> with (obviously) input from KWord's
-author Reginald Stadlbauer <reggie@kde.org>.
+Written by Kalle Dalheimer <kalle at kde dot org> with (obviously) input from KWord's
+author Reginald Stadlbauer <reggie at kde dot org>.
 
 Kword DTD version 2 has been created by Thomas Zander, but only small adjustments from
 the original version were made.
 
+(In case of questions about this file, please ask one of the KOffice mailing lists!)
 
 About the version
 =================
@@ -32,6 +33,22 @@ hierarchy including framesets, frames, paragraphs, and so on.
 Framesets hold the actual text. Frames represent the rectangles in which this
 text is "flowed".
 
+Encoding (for advanced users)
+=============================
+
+KWord's document are encoded as UTF-8 by definition. Please use this encoding
+whenever possible. (Remember: ASCII is UTF-8 too and you could use numerical 
+character refences like &#8164; to keep your document ASCII-clean.)
+
+If you find that writing in UTF-8 is too difficult on the system that you plan
+to use, then please use ISO-10646-UCS2 (also known as UTF-16.)
+
+Please write publicly available KWord documents only in one of these two encodings!
+
+Of course, if you do not use UTF-8, replace any occurence of UTF-8 in the text below by the
+encoding that you have chosen. And please be sure to correctly define the XML declaration <?xml
+
+(Sorry, ISO-10646-UCS4 is not available, as QT cannot handle it.)
 
 Some basic notes on XML
 =======================
@@ -44,15 +61,14 @@ integer and fractional parts).
 - <XYZ foo="100" bar="0"/> equals <XYZ foo="100" bar="0"></XYZ>
 
 - Unicode-letters (UTF-8 coded) are used to store the text
-(TODO/FIXME: KWord uses UTF-8. However XML can be coded in something else as long as it is correctly declared.)
 
 - Some special characters ('<', '>', '&', '"', ''') are or can be "escaped" ('&lt;', '&gt;', '&amp;', '&quot;', '&apos;')
-(TODO: document that these five character references are the only ones allowed for KWord.)
+Only these characters can be "escaped". XML cannot handle other "escapes", for example those of HTML are not valid (e.g. &eacute; .)
 
-- Please launch Kword and save an empty file - it is much easier to follow
+- Please launch KWord and save an empty file - it is much easier to follow
 this documentation if you wade through an (almost empty) example document.
 
-- The XML begins with a special tag like this:
+- The XML begins with a special tag like this (it is called the XML declaration):
 
     <?xml version="1.0" encoding="UTF-8"?>
 
@@ -241,7 +257,7 @@ don't put a </?xml...> at the end of the file!).
 
         Attributes:
             startingPageNumber:     the starting page number.
-            displaylink TODO: document!
+            displaylink             ### TODO: document!
             underlinelink:          Underline links by default (true/false)
             displaycomment:         Display comment (true/false)
             displayfieldcode:       Display the name of the variables if true (instead of their value)
@@ -370,7 +386,7 @@ don't put a </?xml...> at the end of the file!).
 
 -->
 <!ELEMENT FRAMESET
-    (FRAME|PARAGRAPH|PICTURE|IMAGE|CLIPART|FORMULA)*>  <!-- missing: defining FORMULA -->
+    (FRAME|PARAGRAPH|PICTURE|IMAGE|CLIPART|FORMULA)*>  <!-- ### missing: defining FORMULA -->
 <!ATTLIST FRAMESET
     name CDATA #REQUIRED
     frameType CDATA #REQUIRED
@@ -461,7 +477,7 @@ don't put a </?xml...> at the end of the file!).
 <!ELEMENT PARAGRAPH
     (TEXT|FORMATS|LAYOUT)*>
 
-<!--    Just guess :) The text is stored as UTF-8 compressed Unicode
+<!--    Just guess :) The text is stored as UTF-8 coded Unicode
         glyphs. Note: the format-tags navigate in the text using an index
         which starts at 0 and runs up till it reaches length-1.
 
@@ -497,7 +513,7 @@ don't put a </?xml...> at the end of the file!).
                                                     This is DEPRECATED, use a floating frame instead.
                                     3...tabulator - Not supported anymore. Use a '\t' in the text instead.
                                     4...a variable - in that case, VARIABLE is also specified
-                                    5...a footnote - was in KOffice-1.0, needs to be implemented again.
+                                    5...a footnote - DEPRECATED (KOffice-1.0)
                                     6...an anchor for a floating frame - in that case, only ANCHOR is specified.
 
             pos:                position where the format starts. This is a
@@ -1206,11 +1222,15 @@ don't put a </?xml...> at the end of the file!).
                        endparag NMTOKEN #REQUIRED>
 
 <!--
-        The key mapping to one pixmap.
-        [Old attribute was named "key" (the filename).]
-        "name" is the relative path to the image in the store (e.g. picture/picture1.ext)
-        (TODO: document when name is needed (as child of PIXMAPS?) and when not)
-        (TODO: suggest *nix epoch (1970-01-01) if no date is available)
+        The key mapping to one picture
+        
+        name:     the relative path to the picture in the store (e.g. picture/picture1.ext)
+        filename: the original path of the picture
+                  (only if <KEY> is a child of <PICTURES>, otherwise the attribute filename does not exist.)
+        year...:  the date/time stamp
+                  (suggestions:
+                   - use UTC if you have the choice
+                   - use the *NIX epoch (1970-01-01) if no date is available otherwise)
 -->
 <!ELEMENT KEY
     EMPTY>
