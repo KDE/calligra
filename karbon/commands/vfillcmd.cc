@@ -10,8 +10,8 @@
 #include "vselection.h"
 
 
-VFillCmd::VFillCmd( VDocument *doc, const VColor& color, float opacity )
-	: VCommand( doc, i18n( "Fill Objects" ) ), m_color( color ), m_opacity( opacity )
+VFillCmd::VFillCmd( VDocument *doc, const VFill &fill )
+	: VCommand( doc, i18n( "Fill Objects" ) ), m_fill( fill )
 {
 	m_selection = m_doc->selection()->clone();
 
@@ -35,10 +35,7 @@ VFillCmd::execute()
 
 		m_oldcolors.push_back( VFill( *itr.current()->fill() ) );
 
-		VFill fill = *itr.current()->fill();
-		fill.setColor( m_color );
-
-		itr.current()->setFill( fill );
+		itr.current()->setFill( m_fill );
 	}
 }
 

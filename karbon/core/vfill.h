@@ -39,6 +39,7 @@ class VFill
 {
 public:
 	VFill();
+	VFill( const VColor & );
 
 	const VColor& color() const { return m_color; }
 	void setColor( const VColor& color ) { m_color = color; m_type = fill_fill; }

@@ -17,6 +17,12 @@ VFill::VFill()
 	m_gradient.setSpreadMethod( gradient_spread_reflect );*/
 }
 
+VFill::VFill( const VColor &c )
+	: m_type( fill_fill ), m_fillRule( fillrule_evenOdd )
+{
+	m_color = c;
+}
+
 void
 VFill::save( QDomElement& element ) const
 {

@@ -100,7 +100,7 @@ void VColorDlg::buttonClicked( int button_ID )
 	switch( button_ID ) {
 	case Fill:
 		if( m_part )
-		m_part->addCommand( new VFillCmd( &m_part->document(), color ), true );
+		m_part->addCommand( new VFillCmd( &m_part->document(), VFill( color) ), true );
 		break;
 	case Outline:
 		if( m_part )

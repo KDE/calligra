@@ -7,7 +7,6 @@
 #define __VFILLCMD_H__
 
 #include "vcommand.h"
-#include "vcolor.h"
 #include "vfill.h"
 
 #include <qvaluevector.h>
@@ -23,7 +22,7 @@ class VPath;
 class VFillCmd : public VCommand
 {
 public:
-	VFillCmd( VDocument *doc, const VColor& color, float opacity = -1 );
+	VFillCmd( VDocument *doc, const VFill & );
 	virtual ~VFillCmd();
 
 	virtual void execute();
@@ -32,8 +31,7 @@ public:
 private:
 	VSelection* m_selection;
 
-	VColor m_color;
-	float m_opacity;
+	VFill m_fill;
 
 	QValueVector<VFill> m_oldcolors;
 };
