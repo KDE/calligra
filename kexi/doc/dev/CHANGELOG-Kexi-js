@@ -324,6 +324,10 @@ TableView:
 - dropdown button position properly updated when scrollview's x-offset is non-0
 Kexi Forms
 - toolbar moved from 'part-wide' area to 'part-instance' area
+Reationships/Query Editor
+- master/detail sides of the realtionship are swapped when correction is needed
+KexiViewBase
+- added possibility of disable data storing on view switching; for some cases
 
 [INFOSYSTEM 2004]
 

@@ -205,6 +205,7 @@ bool KexiDialogBase::switchToViewMode( int newViewMode, bool &cancelled )
 {
 	kdDebug() << "KexiDialogBase::switchToViewMode()" << endl;
 	cancelled = false;
+	bool dontStore = false;
 	KexiViewBase *view = selectedView();
 
 	if (m_currentViewMode == newViewMode)
@@ -213,11 +214,11 @@ bool KexiDialogBase::switchToViewMode( int newViewMode, bool &cancelled )
 		return false;
 
 	if (view) {
-		if (!view->beforeSwitchTo(newViewMode, cancelled))
+		if (!view->beforeSwitchTo(newViewMode, cancelled, dontStore))
 			return false;
 		if (cancelled)
 			return true;
-		if (view->dirty()) {
+		if (!dontStore && view->dirty()) {
 			if (!m_parentWindow->saveObject(this, cancelled, i18n("Design has been changed. You must save it before switching to other view.")))
 				return false;
 			if (cancelled)
@@ -241,7 +242,7 @@ bool KexiDialogBase::switchToViewMode( int newViewMode, bool &cancelled )
 		}
 		addView(newView, newViewMode);
 	}
-	if (!newView->beforeSwitchTo(newViewMode, cancelled)) {
+	if (!newView->beforeSwitchTo(newViewMode, cancelled, dontStore)) {
 		kdDebug() << "Switching to mode " << newViewMode << " failed. Previous mode "
 			<< m_currentViewMode << " restored." << endl;
 		return false;

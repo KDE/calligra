@@ -55,7 +55,7 @@ KexiQueryDesignerSQL::KexiQueryDesignerSQL(KexiMainWindow *mainWin, QWidget *par
 }
 
 bool
-KexiQueryDesignerSQL::beforeSwitchTo(int)
+KexiQueryDesignerSQL::beforeSwitchTo(int mode, bool &cancelled, bool &dontStore)
 {
 	if (m_doc) {
 		KexiDB::Parser *parser = new KexiDB::Parser(mainWin()->project()->dbConnection());
@@ -76,7 +76,7 @@ KexiQueryDesignerSQL::beforeSwitchTo(int)
 }
 
 bool
-KexiQueryDesignerSQL::afterSwitchFrom(int)
+KexiQueryDesignerSQL::afterSwitchFrom(int mode, bool &cancelled)
 {
 	kdDebug() << "KexiQueryDesignerSQL::afterSwitchFrom()" << endl;
 	if (m_doc && m_doc->schema()) {

@@ -40,8 +40,8 @@ class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerSQL : public KexiViewBase
 		KexiQueryDesignerSQLEditor	*editor() { return m_editor; }
 
 	protected:
-		virtual bool			beforeSwitchTo(int);
-		virtual bool			afterSwitchFrom(int);
+		virtual bool beforeSwitchTo(int mode, bool &cancelled, bool &dontStore);
+		virtual bool afterSwitchFrom(int mode, bool &cancelled);
 
 	signals:
 		void				queryShortcut();

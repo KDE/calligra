@@ -72,7 +72,7 @@ class KexiAlterTableDialog : public KexiDataTable
 		 \return newly created property buffer. */
 		KexiPropertyBuffer * createPropertyBuffer( int row, KexiDB::Field *field, bool newOne = false );
 
-		virtual bool beforeSwitchTo(int mode, bool &cancelled);
+		virtual bool beforeSwitchTo(int mode, bool &cancelled, bool &dontStore);
 
 		/*! \return property buffer associated with currently selected row (i.e. field)
 		 or 0 if current row is empty. */

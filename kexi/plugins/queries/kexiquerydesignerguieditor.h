@@ -65,10 +65,10 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 		virtual QSize sizeHint() const;
 
 	protected:
-		void			initTable();
-		void			addRow(const QString &tbl, const QString &field);
+		void initTable();
+		void addRow(const QString &tbl, const QString &field);
 //		void			restore();
-		virtual bool beforeSwitchTo(int mode, bool &cancelled);
+		virtual bool beforeSwitchTo(int mode, bool &cancelled, bool &dontStore);
 		virtual bool afterSwitchFrom(int mode, bool &cancelled);
 
 		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata);

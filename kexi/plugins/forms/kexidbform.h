@@ -66,8 +66,8 @@ class KexiDBForm : public KexiViewBase
 
 	protected:
 		virtual KexiPropertyBuffer *propertyBuffer() { return m_buffer; }
-		virtual bool beforeSwitchTo(int mode);
-		virtual bool afterSwitchFrom(int mode);
+		virtual bool beforeSwitchTo(int mode, bool &cancelled, bool &dontStore);
+		virtual bool afterSwitchFrom(int mode, bool &cancelled);
 
 		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata);
 		virtual bool storeData();

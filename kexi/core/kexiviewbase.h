@@ -97,8 +97,10 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		 \return true if you accept or false if a error occupied and view shouldn't change
 		 Set \a cancelled to true and return true it there is no error but switching should 
 		 be just cancelled (probably after showing some info messages).
+		 Set \a dontStore to true (it's false by default) if you want to avoid data storing
+		 by storeData() or storeNewData().
 		 */
-		virtual bool beforeSwitchTo(int mode, bool &cancelled);
+		virtual bool beforeSwitchTo(int mode, bool &cancelled, bool &dontStore);
 
 		/*! called by KexiDialogBase::switchToViewMode() right after dialog is switched to new mode
 		 By default does nothing. Reimplement this if you need to do something 

@@ -49,7 +49,7 @@ KexiViewBase::~KexiViewBase()
 {
 }
 
-bool KexiViewBase::beforeSwitchTo(int /* mode */, bool & /*cancelled*/)
+bool KexiViewBase::beforeSwitchTo(int /* mode */, bool & /*cancelled*/, bool & /*dontStore*/)
 {
 	return true;
 }

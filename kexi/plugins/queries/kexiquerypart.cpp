@@ -50,6 +50,10 @@ KexiViewBase*
 KexiQueryPart::createView(QWidget *parent, KexiDialogBase* dialog, KexiPart::Item &item, int viewMode)
 {
 	kdDebug() << "KexiQueryPart::createView()" << endl;
+
+	if (!dialog->tempData()) {
+		dialog->setTempData( new KexiQueryPart::TempData(dialog) );
+	}
 	if (viewMode == Kexi::DataViewMode) {
 		return new KexiQueryView(dialog->mainWin(), parent, data(dialog->mainWin()->project()->dbConnection(), item), "dataview");
 	}
@@ -116,7 +120,14 @@ KexiQueryPart::dataSource()
 	return new KexiQueryDataSource(this);
 }
 
-K_EXPORT_COMPONENT_FACTORY( kexihandler_query, KGenericFactory<KexiQueryPart> )
+//----------------
+
+KexiQueryPart::TempData::TempData(QObject* parent)
+ : KexiDialogTempData(parent)
+{
+}
+
+//----------------
 
 KexiQueryDataSource::KexiQueryDataSource(KexiPart::Part *part)
  : KexiPart::DataSource(part)
@@ -138,6 +149,10 @@ KexiQueryDataSource::cursor(KexiProject *, const KexiPart::Item &, bool)
 {
 	return 0;
 }
+
+//----------------
+
+K_EXPORT_COMPONENT_FACTORY( kexihandler_query, KGenericFactory<KexiQueryPart> )
 
 #include "kexiquerypart.moc"
 

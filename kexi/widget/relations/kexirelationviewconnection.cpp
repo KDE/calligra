@@ -34,22 +34,24 @@
 #include "r1.xpm"
 #include "rn.xpm"
 
-KexiRelationViewConnection::KexiRelationViewConnection(KexiRelationViewTableContainer *srcTbl, KexiRelationViewTableContainer *rcvTbl, SourceConnection &c, KexiRelationView *parent)
+KexiRelationViewConnection::KexiRelationViewConnection(
+	KexiRelationViewTableContainer *masterTbl, KexiRelationViewTableContainer *detailsTbl, 
+	SourceConnection &c, KexiRelationView *parent)
 {
 	m_parent = parent;
 	kdDebug() << "KexiRelationViewConnection::KexiRelationViewConnection()" << endl;
 
-	m_srcTable = srcTbl;
-	if(!srcTbl || !rcvTbl)
+	m_masterTable = masterTbl;
+	if(!masterTbl || !detailsTbl)
 	{
 		kdDebug() << "KexiRelationViewConnection::KexiRelationViewConnection(): expect sig11" << endl;
-		kdDebug() << "KexiRelationViewConnection::KexiRelationViewConnection()" << srcTbl << endl;
-		kdDebug() << "KexiRelationViewConnection::KexiRelationViewConnection()" << rcvTbl << endl;
+		kdDebug() << "KexiRelationViewConnection::KexiRelationViewConnection()" << masterTbl << endl;
+		kdDebug() << "KexiRelationViewConnection::KexiRelationViewConnection()" << detailsTbl << endl;
 	}
 
-	m_rcvTable = rcvTbl;
-	m_srcField = c.srcField;
-	m_rcvField = c.rcvField;
+	m_detailsTable = detailsTbl;
+	m_masterField = c.masterField;
+	m_detailsField = c.detailsField;
 
 	m_selected = false;
 }
@@ -62,15 +64,15 @@ void
 KexiRelationViewConnection::drawConnection(QPainter *p)
 {
 	p->setPen(QColor(0,0,0));
-	int sx = m_srcTable->x() + m_srcTable->width() + m_parent->contentsX();
-	int sy = m_srcTable->globalY(m_srcField);
-	int rx = m_rcvTable->x() + m_parent->contentsX();
-	int ry = m_rcvTable->globalY(m_rcvField);
+	int sx = m_masterTable->x() + m_masterTable->width() + m_parent->contentsX();
+	int sy = m_masterTable->globalY(m_masterField);
+	int rx = m_detailsTable->x() + m_parent->contentsX();
+	int ry = m_detailsTable->globalY(m_detailsField);
 
 	QPoint side1(0, 0);
 	QPoint sideN(0, 0);
 
-	if(m_srcTable->x() < m_rcvTable->x())
+	if(m_masterTable->x() < m_detailsTable->x())
 	{
 		p->drawLine(rx - 8, ry, rx, ry);
 		p->drawPoint(rx - 2, ry - 1);
@@ -106,8 +108,8 @@ KexiRelationViewConnection::drawConnection(QPainter *p)
 	}
 	else
 	{
-		int lx = rx + m_rcvTable->width();
-		int rx = sx - m_srcTable->width();
+		int lx = rx + m_detailsTable->width();
+		int rx = sx - m_masterTable->width();
 
 
 		p->drawLine(lx, ry, lx + 8, ry);
@@ -152,10 +154,10 @@ const QRect
 KexiRelationViewConnection::connectionRect()
 {
 
-	int sx = m_srcTable->x() + m_parent->contentsX();
-	int rx = m_rcvTable->x() + m_parent->contentsX();
-	int ry = m_rcvTable->globalY(m_rcvField);
-	int sy = m_srcTable->globalY(m_srcField);
+	int sx = m_masterTable->x() + m_parent->contentsX();
+	int rx = m_detailsTable->x() + m_parent->contentsX();
+	int ry = m_detailsTable->globalY(m_detailsField);
+	int sy = m_masterTable->globalY(m_masterField);
 
 	int width, leftX, rightX;
 
@@ -163,13 +165,13 @@ KexiRelationViewConnection::connectionRect()
 	{
 		leftX = sx;
 		rightX = rx;
-		width = m_srcTable->width();
+		width = m_masterTable->width();
 	}
 	else
 	{
 		leftX = rx;
 		rightX = sx;
-		width = m_rcvTable->width();
+		width = m_detailsTable->width();
 	}
 
 
@@ -180,7 +182,7 @@ KexiRelationViewConnection::connectionRect()
 	int left = leftX + width;
 
 
-//	return QRect(sx - 1, sy - 1, (rx + m_rcvTable->width()) - sx + 1, ry - sy + 1);
+//	return QRect(sx - 1, sy - 1, (rx + m_detailsTable->width()) - sx + 1, ry - sy + 1);
 	QRect rect(left - 3, top - 7, dx + 3, dy + 10);
 	m_oldRect = rect;
 
@@ -202,10 +204,10 @@ KexiRelationViewConnection::matchesPoint(const QPoint &p, int tolerance)
 	 *  gate...
 	 */
 
-	int sx = m_srcTable->x() + m_srcTable->width();
-	int sy = m_srcTable->globalY(m_srcField);
-	int rx = m_rcvTable->x();
-	int ry = m_rcvTable->globalY(m_rcvField);
+	int sx = m_masterTable->x() + m_masterTable->width();
+	int sy = m_masterTable->globalY(m_masterField);
+	int rx = m_detailsTable->x();
+	int ry = m_detailsTable->globalY(m_detailsField);
 
 	int x1 = sx + 8;
 	int y1 = sy;
@@ -214,8 +216,8 @@ KexiRelationViewConnection::matchesPoint(const QPoint &p, int tolerance)
 
 	if(sx > rx)
 	{
-		x1 = m_rcvTable->x() + m_rcvTable->width();
-		x2 = m_srcTable->x();
+		x1 = m_detailsTable->x() + m_detailsTable->width();
+		x2 = m_masterTable->x();
 		y2 = sy;
 		y1 = ry;
 	}
@@ -257,12 +259,12 @@ QString
 KexiRelationViewConnection::toString() const
 {
 	QString str;
-	if (m_srcTable && m_srcTable->table()) {
-		str += (m_srcTable->table()->name() + "." + m_srcField);
+	if (m_masterTable && m_masterTable->table()) {
+		str += (m_masterTable->table()->name() + "." + m_masterField);
 	}
-	if (m_rcvTable && m_rcvTable->table()) {
+	if (m_detailsTable && m_detailsTable->table()) {
 		str += " - ";
-		str += (m_rcvTable->table()->name() + "." + m_rcvField);
+		str += (m_detailsTable->table()->name() + "." + m_detailsField);
 	}
 	return str;
 }

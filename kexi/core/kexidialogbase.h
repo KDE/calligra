@@ -161,6 +161,12 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		/*! Reimpelmented: "*" is added if for 'dirty' dialog's data. */
 //		QString caption() const;
 
+		/*! Used by KexiViewBase subclasses. \return temporary data shared between views */
+		KexiDialogTempData *tempData() const { return m_tempData; }
+
+		/*! Used by KexiViewBase subclasses. Sets temporary data shared between views. */
+		void setTempData( KexiDialogTempData* data ) { m_tempData = data; }
+
 	public slots:
 //		virtual void detach();
 		virtual void setFocus();
@@ -217,11 +223,6 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		 \return true on success
 		 \sa storeDataBlock(). */
 		bool loadDataBlock( QString &dataString, const QString& dataID = QString::null);
-
-		/*! \return temporary data shared between views */
-		KexiDialogTempData *tempData() const { return m_tempData; }
-
-		void setTempData( KexiDialogTempData* data ) { m_tempData = data; }
 
 	private:
 		KexiMainWindow *m_parentWindow;

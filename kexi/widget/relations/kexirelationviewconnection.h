@@ -33,7 +33,8 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationViewConnection
 {
 	public:
 
-		KexiRelationViewConnection(KexiRelationViewTableContainer *srcTbl, KexiRelationViewTableContainer *rcvTbl, struct SourceConnection &s, KexiRelationView *parent);
+		KexiRelationViewConnection(KexiRelationViewTableContainer *masterTbl, 
+			KexiRelationViewTableContainer *detailsTbl, struct SourceConnection &s, KexiRelationView *parent);
 		~KexiRelationViewConnection();
 
 
@@ -51,8 +52,8 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationViewConnection
 		const QRect	connectionRect();
 		const QRect	oldRect() { return m_oldRect; }
 
-		KexiRelationViewTableContainer	*srcTable() { return m_srcTable; }
-		KexiRelationViewTableContainer	*rcvTable() { return m_rcvTable; }
+		KexiRelationViewTableContainer	*masterTable() { return m_masterTable; }
+		KexiRelationViewTableContainer	*detailsTable() { return m_detailsTable; }
 
 		bool matchesPoint(const QPoint &p, int tolerance=3);
 //		SourceConnection	connection() { return m_conn; }
@@ -60,10 +61,10 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationViewConnection
 		QString toString() const;
 
 	private:
-		QGuardedPtr<KexiRelationViewTableContainer> m_srcTable;
-		QGuardedPtr<KexiRelationViewTableContainer> m_rcvTable;
-		QString				m_srcField;
-		QString				m_rcvField;
+		QGuardedPtr<KexiRelationViewTableContainer> m_masterTable;
+		QGuardedPtr<KexiRelationViewTableContainer> m_detailsTable;
+		QString				m_masterField;
+		QString				m_detailsField;
 
 		QRect				m_oldRect;
 

@@ -532,20 +532,20 @@ KexiRelationViewTable::slotDropped(QDropEvent *ev)
 		QString rcvField = recever->text(1);
 
 		SourceConnection s;
-		s.srcTable = srcTable;
-		s.rcvTable = m_table;
-		s.srcField = srcField;
-		s.rcvField = rcvField;
+		s.masterTable = srcTable;
+		s.detailsTable = m_table;
+		s.masterField = srcField;
+		s.detailsField = rcvField;
 
 //		m_parent->addConnection(s);
 		m_view->addConnection(s, false);
 
-		kdDebug() << "KexiRelationViewTable::slotDropped() " << srcTable << ":" << srcField << " " << m_table << ":" << rcvField << endl;
+		kdDebug() << "KexiRelationViewTable::slotDropped() " << srcTable << ":" << srcField << " " 
+			<< m_table << ":" << rcvField << endl;
 		ev->accept();
 		return;
 	}
 	ev->ignore();
-
 }
 
 void

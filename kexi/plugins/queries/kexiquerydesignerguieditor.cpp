@@ -310,7 +310,7 @@ KexiQueryDesignerGuiEditor::restore()
 }*/
 
 bool
-KexiQueryDesignerGuiEditor::beforeSwitchTo(int mode, bool &cancelled)
+KexiQueryDesignerGuiEditor::beforeSwitchTo(int mode, bool &cancelled, bool &dontStore)
 {
 	kdDebug() << "KexiQueryDesignerGuiEditor::beforeSwitch()" << mode << endl;
 	//update the pointer :)
@@ -325,6 +325,9 @@ KexiQueryDesignerGuiEditor::beforeSwitchTo(int mode, bool &cancelled)
 				"First, please create your design.") );
 			return true;
 		}
+		//remember current design in a temporary structure
+		dontStore=true;
+		//TODO
 		return true;
 	}
 	else if (mode==Kexi::TextViewMode) {

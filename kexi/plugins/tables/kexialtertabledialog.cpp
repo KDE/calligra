@@ -307,7 +307,7 @@ KexiAlterTableDialog::initActions()
 	propertyBufferSwitched();
 }*/
 
-bool KexiAlterTableDialog::beforeSwitchTo(int mode, bool &cancelled)
+bool KexiAlterTableDialog::beforeSwitchTo(int mode, bool &cancelled, bool &dontStore)
 {
 	if (mode==Kexi::DesignViewMode) {
 		initData();

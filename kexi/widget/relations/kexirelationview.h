@@ -48,10 +48,10 @@ typedef QPtrList<KexiRelationViewConnection> ConnectionList;
 
 struct SourceConnection
 {
-	QString	srcTable;
-	QString rcvTable;
-	QString srcField;
-	QString rcvField;
+	QString	masterTable;
+	QString detailsTable;
+	QString masterField;
+	QString detailsField;
 
 };
 

@@ -170,30 +170,46 @@ KexiRelationView::addConnection(SourceConnection conn, bool)
 {
 	kdDebug() << "KexiRelationView::addConnection()" << endl;
 
-	KexiRelationViewTableContainer *rcv = m_tables[conn.rcvTable];
-	KexiRelationViewTableContainer *src = m_tables[conn.srcTable];
+	KexiRelationViewTableContainer *master = m_tables[conn.masterTable];
+	KexiRelationViewTableContainer *details = m_tables[conn.detailsTable];
+	if (!master || !details)
+		return;
 
-	/*
-	if(!rcv)
-	{
-		kdDebug() << "KexiRelationView::addConnection(): rcv = 0" << endl;
-		kdDebug() << "  " << m_parent << endl;
-		kdDebug() << "  " << conn.rcvTable << endl;
-		m_parent->chooseTable(conn.rcvTable);
+	KexiDB::TableSchema *masterTable = master->table();
+	KexiDB::TableSchema *detailsTable = details->table();
+	if (!masterTable || !detailsTable)
+		return;
+
+	// ok, but we need to know where is the 'master' and where is the 'details' side:
+	KexiDB::Field *masterFld = masterTable->field(conn.masterField);
+	KexiDB::Field *detailsFld = detailsTable->field(conn.detailsField);
+	if (!masterFld || !detailsFld)
+		return;
+	
+	if (!masterFld->isUniqueKey()) {
+		if (detailsFld->isUniqueKey()) {
+			//SWAP:
+			KexiDB::Field *tmpFld = masterFld;
+			masterFld = detailsFld;
+			detailsFld = tmpFld;
+			KexiDB::TableSchema *tmpTable = masterTable;
+			masterTable = detailsTable;
+			detailsTable = tmpTable;
+			KexiRelationViewTableContainer *tmp = master;
+			master = details;
+			details = tmp;
+			QString tmp_masterTable = conn.masterTable;
+			conn.masterTable = conn.detailsTable;
+			conn.detailsTable = tmp_masterTable;
+			QString tmp_masterField = conn.masterField;
+			conn.masterField = conn.detailsField;
+			conn.detailsField = tmp_masterField;
+		}
 	}
 
-	if(!src)
-	{
-		kdDebug() << "KexiRelationView::addConnection(): src = 0" << endl;
-		kdDebug() << "  " << m_parent << endl;
-		kdDebug() << "  " << conn.srcTable << endl;
-		m_parent->chooseTable(conn.srcTable);
-	}
-	*/
+//	kdDebug() << "KexiRelationView::addConnection(): finalSRC = " << m_tables[conn.srcTable] << endl;
 
-	kdDebug() << "KexiRelationView::addConnection(): finalSRC = " << m_tables[conn.srcTable] << endl;
-
-	KexiRelationViewConnection *connView = new KexiRelationViewConnection(src, rcv, conn, this);
+	KexiRelationViewConnection *connView = new KexiRelationViewConnection(master, details, conn, this);
 	m_connectionViews.append(connView);
 	updateContents(connView->connectionRect());
 
@@ -245,7 +261,7 @@ KexiRelationView::containerMoved(KexiRelationViewTableContainer *c)
 	KexiRelationViewConnection *cview;
 	for (cview = m_connectionViews.first(); cview; cview = m_connectionViews.next())
 	{
-		if(cview->srcTable() == c || cview->rcvTable() == c)
+		if(cview->masterTable() == c || cview->detailsTable() == c)
 		{
 			updateContents(cview->oldRect());
 			updateContents(cview->connectionRect());
@@ -456,8 +472,8 @@ KexiRelationView::hideTable(KexiRelationViewTableContainer* tableView)
 	//for all connections: find and remove all connected with this table
 	QPtrListIterator<KexiRelationViewConnection> it(m_connectionViews);
 	for (;it.current();) {
-		if (it.current()->srcTable() == tableView 
-			|| it.current()->rcvTable() == tableView)
+		if (it.current()->masterTable() == tableView 
+			|| it.current()->detailsTable() == tableView)
 		{
 			//remove this
 			removeConnection(it.current());

@@ -69,7 +69,7 @@ KexiDBForm::managerPropertyChanged(KexiPropertyBuffer *b)
 }
 
 bool
-KexiDBForm::beforeSwitchTo(int mode)
+KexiDBForm::beforeSwitchTo(int mode, bool &cancelled, bool &dontStore)
 {
 	kdDebug() << "KexiDBForm::beforeSwitchTo(): " << mode << " using " << m_item.form() <<  endl;
 	m_item.form()->objectTree()->debug();
@@ -92,7 +92,7 @@ KexiDBForm::beforeSwitchTo(int mode)
 }
 
 bool
-KexiDBForm::afterSwitchFrom(int mode)
+KexiDBForm::afterSwitchFrom(int mode, bool &cancelled)
 {
 	if(mode == Kexi::DesignViewMode)
 	{

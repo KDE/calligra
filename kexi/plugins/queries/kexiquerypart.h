@@ -20,6 +20,7 @@
 #ifndef KEXIQUERYPART_H
 #define KEXIQUERYPART_H
 
+#include <kexidialogbase.h>
 #include <kexipart.h>
 #include <kexipartitem.h>
 #include <kexipartdatasource.h>
@@ -55,6 +56,12 @@ class KexiQueryPart : public KexiPart::Part
 		KexiQueryDocument	*data(KexiDB::Connection *conn, KexiPart::Item &item);
 
 		virtual KexiPart::DataSource *dataSource();
+
+		class TempData : public KexiDialogTempData
+		{
+			public:
+			TempData(QObject* parent);
+		};
 
 	private:
 		QueryData		m_data;
