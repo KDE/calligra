@@ -109,6 +109,7 @@ public:
             if (tag.section(".", 1, 1) == "fixedcost")
                 return (m_resource ? KGlobal::locale()->formatMoney(m_resource->fixedCost()) : QString::null);
         }
+	return QString::null;
     }
 
     KPTProject *m_project;
