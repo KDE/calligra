@@ -20,7 +20,7 @@ Description: KDE Office Suite
 Package: koffice-doc-html
 Architecture: all
 Section: doc
-Suggests: www-browser, koffice
+Suggests: konqueror | www-browser, koffice
 Conflicts: koffice-libs (<< 1:1.1.0-0), koshell (<< 1:1.1.0-0), kpresenter (<< 1:1.1.0-0), kspread (<< 1:1.1.0-0), kugar (<< 1:1.1.0-0), kword (<< 1:1.1.0-0)
 Replaces: koffice-libs (<< 1:1.1.0-0), koshell (<< 1:1.1.0-0), kpresenter (<< 1:1.1.0-0), kspread (<< 1:1.1.0-0), kugar (<< 1:1.1.0-0), kword (<< 1:1.1.0-0)
 Description: KDE Office Suite documentation in HTML format

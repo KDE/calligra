@@ -27,4 +27,5 @@ usr/share/icons/crystalsvg/48x48/apps/kugar.png
 usr/share/icons/locolor/16x16/apps/kudesigner.png
 usr/share/icons/locolor/32x32/apps/kudesigner.png
 usr/share/services/kugar_kugar_import.desktop
+usr/share/services/kugarpart.desktop
 ../kugar.xpm usr/share/pixmaps
