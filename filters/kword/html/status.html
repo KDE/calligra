@@ -43,16 +43,16 @@
 
     <tr BGCOLOR="#EEEEFF">
      <td VALIGN=TOP WIDTH=1% NOWRAP><b><font size=+1>Last update</font></b></td>
-     <td>19 Aug 2001</td>
+     <td>10 Sept 2001</td>
     </tr>
 
     <tr BGCOLOR="#CCCCFF">
      <td VALIGN=TOP><b><font size=+1>Features</font></b></td>
      <td>
         - Crude!<br>
-        - XHTML 1.0 or well-formed HTML 4.01 only!<br>
-        - Imports character entity references<br>
-        - Dialog to be able to deal with wrongly declared character sets (Only for KOffice post-1.1!)<br>
+        - HTML: basic formatting, simple tables.<br>
+        - No stylesheets yet, no table size calculating yet<br>
+        - uses khtml<br>
      </td>
     </tr>
 
@@ -60,11 +60,10 @@
      <td VALIGN=TOP><b><font size=+1>Todo</font></b></td>
      <td>
         - &lt;font&gt;<br>
-        - tables<br>
+        - table size calculation<br>
         - images<br>
-        - use really CSS2 (not just a very little part of it)<br>
+        - implement CSS2, integrate with khtml's css implementation<br>
         - many other tags<br>
-        - importing non-well-formed HTML 4.01 or older<br>
      </td>
     </tr>
 
@@ -75,13 +74,14 @@
         07 May 2001 Removing code of the old import filter<br>
         09 May 2001 Removing code of the former two pass filter system<br>
         18 Aug 2001 Adding a dialog for forcing a character set (Only KOffice post-1.1)<br>
-        10 Sep 2001 A new version of the filter is being written (Only KOffice post-1.1)<br>
+	10 Sep 2001 Rewrite using KHTML as html parser, support (simple) tables<br>
      </td>
     </tr>
 
     <tr BGCOLOR="#EEEEFF">
      <td VALIGN=TOP><b><font size=+1>Authors</font></b></td>
      <td>
+      <a href="mailto:frank.dekervel@student.kuleuven.ac.be">Frank Dekervel</a><br>
       <a href="mailto:nicog@snafu.de">Nicolas Goutte</a>
      </td>
     </tr>
@@ -92,13 +92,13 @@
         <a href="http://www.w3.org/TR/html401">HTML 4.01</a><br>
         <a href="http://www.w3.org/TR/xhtml1">XHTML 1.0</a><br>
         <a href="http://www.w3.org/TR/REC-CSS2">Cascaded Style Sheets Level 2 (CSS2)</a><br>
+	<a href="http://developer.kde.org/documentation/library/2.1-api/classref/khtml/index.html">KHTML Documentation</a><br>
      </td>
     </tr>
 
     <tr BGCOLOR="#EEEEFF">
      <td VALIGN=TOP><b><font size=+1>Progress report </font></b></td>
      <td>
-        A new HTM import filter (based on khtml) is being written by <a href="mailto:Frank.dekervel@student.kuleuven.ac.Be">Frank Dekervel</a>.
      </td>
     </tr>
    </table>
