@@ -76,11 +76,19 @@ private:
     QDomDocument m_part;
     unsigned m_tableManager;
     unsigned m_tableRow;
+    unsigned m_tableRows;
 
     // Since there is no way to fill m_part incrementally with XML content,
     // we will fill m_body instead.
 
     QString m_body;
+
+    // Page sizes, margins etc. all in points.
+
+    static const unsigned s_height = 841; // Height.
+    static const unsigned s_width = 595;  // Width.
+    static const unsigned s_hMargin = 28; // Horizontal margin.
+    static const unsigned s_vMargin = 42; // Vertical margin.
 };
 #endif // WINWORDDOC_H
 
