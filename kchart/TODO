@@ -1,0 +1,57 @@
+Before release of KOffice 1.4
+-----------------------------
+
+* Bugs
+  - 77839: Program hangs when only one value for pie chart 
+	   and value = 0.
+  - 41612: No titles for axes
+  - 100004: Manual should describe stand-alone charting 
+            (see below also)
+
+* Other fixes
+  - Include me in Authors						DONE
+  - Can HiLo charts be made thicker than one line?  
+    New page in config dialog like pie settings?
+  - Tooltips & What's this help?
+  - Remove the predefined bar chart?
+  - What do the settins in Edit->Page Setup do?
+
+  - Fix ChangeLog re: bug titles.
+  - Grep for FIXME and fix them
+
+* Toolbars
+  - Separate toolbar for chart types (separate from data editor, etc).
+  - Group pie chart with ring chart and polar.
+  - Group Box&Whiskers with HiLo
+
+* Icons
+  - Smaller icons for chart subtypes.
+  - Wrong images for HiLo subtype icons.
+
+* Data editor
+  - Make table size handling work.
+  - Smaller column widths?
+
+* Config dialog
+  - Make Data page work.
+  - Pie settings at the same place as Subtype?
+  - Check *all* subpages.
+    - Axes page is ugly.
+    - Font page is ugly
+  - Check handling of defaults.
+
+* Wizard
+  - Make Help button work.
+  - Subtype page should also have icons for subtypes like config dialog.
+  - Why is Finish button disabled for two pages?
+
+* Manual
+  - Describe stand-alone charting.
+  - New screen shots.
+  - Other enhancements?
+
+
+After release of KOffice 1.4
+----------------------------
+
+* Export of bitmaps.
