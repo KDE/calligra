@@ -2148,9 +2148,11 @@ void KoParagShadowWidget::save( KoParagLayout & lay ) {
 /******************************************************************/
 KoParagDia::KoParagDia( QWidget* parent, const char* name,
                         int flags, KoUnit::Unit unit, double _frameWidth, bool breakLine )
-    : KDialogBase(Tabbed, QString::null, Ok | Cancel, Ok, parent, name, true )
+    : KDialogBase(Tabbed, QString::null, Ok | Cancel | User1, Ok, parent, name, true )
 {
     m_flags = flags;
+    setButtonText( KDialogBase::User1, i18n("Reset") );
+
     if ( m_flags & PD_SPACING )
     {
         QVBox * page = addVBoxPage( i18n( "Indent and Spacing" ) );
@@ -2182,12 +2184,14 @@ KoParagDia::KoParagDia( QWidget* parent, const char* name,
         QVBox * page = addVBoxPage( i18n( "Shadow" ) );
         m_shadowWidget=new KoParagShadowWidget( page, "shadow" );
     }
+    connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotReset()));
     setInitialSize( QSize(600, 500) );
 }
 
 KoParagDia::~KoParagDia()
 {
 }
+
 
 void KoParagDia::setCurrentPage( int page )
 {
@@ -2225,6 +2229,22 @@ void KoParagDia::setParagLayout( const KoParagLayout & lay )
     m_tabulatorsWidget->display( lay );
     m_shadowWidget->display(lay);
     oldLayout = lay;
+}
+
+void KoParagDia::slotReset()
+{
+    if( m_shadowWidget )
+        m_indentSpacingWidget->display( oldLayout );
+    if( m_alignWidget )
+        m_alignWidget->display( oldLayout );
+    if( m_borderWidget )
+        m_borderWidget->display( oldLayout );
+    if( m_counterWidget )
+        m_counterWidget->display( oldLayout );
+    if( m_tabulatorsWidget )
+        m_tabulatorsWidget->display( oldLayout );
+    if( m_shadowWidget )
+        m_shadowWidget->display( oldLayout );
 }
 
 bool KoParagDia::isCounterChanged() const

@@ -510,6 +510,8 @@ public:
 					  oldLayout.shadowColor !=shadowColor()
 					  ||  oldLayout.shadowDirection!=shadowDirection());}
 
+protected slots:
+    void slotReset();
 private:
     KoIndentSpacingWidget * m_indentSpacingWidget;
     KoParagAlignWidget * m_alignWidget;
