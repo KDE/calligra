@@ -2259,6 +2259,11 @@ void KWTableFrameSetEdit::mousePressEvent( QMouseEvent * e, const QPoint & nPoin
 void KWTableFrameSetEdit::setCurrentCell( const KoPoint & dPoint )
 {
     KWFrameSet *fs = tableFrameSet()->getCellByPos( dPoint.x(), dPoint.y() );
+    KWTextFrameSet *textframeSet = dynamic_cast<KWTextFrameSet *>(fs);
+
+    if ( textframeSet&& textframeSet->protectContent() && !tableFrameSet()->kWordDocument()->cursorInProtectedArea())
+        return;
+
     if ( fs && ( !m_currentCell || fs != m_currentCell->frameSet() ) )
         setCurrentCell( fs );
 }

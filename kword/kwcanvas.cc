@@ -1920,7 +1920,6 @@ bool KWCanvas::checkCurrentEdit( KWFrameSet * fs , bool onlyText )
         KWTextFrameSet * tmp = dynamic_cast<KWTextFrameSet *>(fs );
         if ( tmp && tmp->protectContent() && !m_doc->cursorInProtectedArea() )
             return false;
-
         //just text frameset
         if(fs->type()==FT_TABLE || fs->type()==FT_TEXT || !onlyText)
         {
