@@ -31,12 +31,12 @@ extern "C" {
     }
 };
 
-static const char *description=I18N_NOOP("graphite - Graphs for Engineers");
+static const char *description=I18N_NOOP("graphite - Scientific Graphs");
 static const char *version="0.1";
 
 KInstance *GraphiteFactory::s_global=0;
 
-GraphiteFactory::GraphiteFactory(QObject *parent, const char *name) 
+GraphiteFactory::GraphiteFactory(QObject *parent, const char *name)
                                 : KoFactory(parent, name) {
 }
 

@@ -17,7 +17,12 @@
    Boston, MA 02111-1307, USA.
 */
 
-// The abstract base classes for all graphic objects
+// The abstract base classes for all graphic objects. This class is
+// implemented as a composite (pattern) - sort of :)
+// There are complex classes (classes which are composed of many
+// objects, like a group) and leaf classes which don't have any
+// children.
+// The resulting tree represents the Z-Order of the document.
 
 #ifndef gobject_h
 #define gobject_h
@@ -32,7 +37,10 @@ class QDomDocument;
 class QPoint;
 class QRect;
 class QPainter;
-class KActionCollection;
+class QMouseEvent;
+class QKeyEvent;
+
+class GObjectM9r;
 
 
 class GObject {
@@ -40,31 +48,45 @@ class GObject {
 public:
     enum State { Visible, Handles, Rot_Handles, Invisible, Deleted };  // all possible states
     enum FillStyle { Brush, GradientFilled };                     // all possible fill styles
-    
+    enum Position { First, Last, Current };
+
     virtual ~GObject();
 
     virtual GObject *clone() const = 0;           // exact copy of "this" (calls the Copy-CTOR)
     virtual GObject *instantiate(const QDomElement /*&element*/) {}  // used in the object factory
-    
+
     const GObject *parent() const { return m_parent; }
-    void setParent(GObject *parent);
-    
-    virtual const bool plugChild(GObject */*child*/) { return true; }
-    virtual const bool unplugChild(GObject */*child*/) { return true; }
-    // (TODO) Do we need an arg to insert childs where we want to (begin/end/...)?
+    void setParent(GObject *parent);               // parent==0L - no parent, parent==this - illegal
+
+    // These two methods are only implemented for "complex" objetcs!
+    // The child is inserted at GObject::Position
+    virtual const bool plugChild(GObject */*child*/, const Position &/*pos*/=Current) { return false; }
+    virtual const bool unplugChild(GObject */*child*/, const Position &/*pos*/=Current) { return false; }
+
+    // These methods are used to access the object's children
+    // Implemented via QListIterator - Leaf classes
+    virtual const GObject *firstChild() { return 0L; }
+    virtual const GObject *nextChild() { return 0L; }
+    virtual const GObject *lastChild() { return 0L; }
+    virtual const GObject *prevChild() { return 0L; }
+    virtual const GObject *current() { return 0L; }
 
     virtual QDomElement save(QDomDocument &doc) const; // save the object to xml
-    
+
+    // toPrinter is set when we print the document - this means we don't
+    // have to paint "invisible" (normally they are colored gray) objects
     virtual void draw(const QPainter &p, const bool toPrinter=false) const = 0;  // guess :)
     // (TODO) Do we need more/other args?
 
-    virtual const bool contains(const QPoint &p) const = 0;   // does the object contain this point?
+    virtual const GObject *hit(const QPoint &p) const = 0;   // does the object contain this point?
     virtual const bool intersects(const QRect &r) const = 0;  // does the object intersect the rectangle?
     virtual const QRect &boundingRect() const = 0;            // the bounding rectangle of this object
 
+    virtual GObjectM9r *createM9r();        // create a Manipulator (M9r :) for that object
+
     //const KActionCollection *popupActions() const { return popup; } // return all the actions provided by
     // (TODO) Use Simon's new magic actionList stuff for that (plain XML instead of actions)
-    
+
     const QString &name() const { return m_name; }       // name of the object (e.g. "Line001")
     void setName(const QString &name) { m_name=name; }   // set the name
 
@@ -93,7 +115,6 @@ signals:
 protected:
     GObject(const QString &name=QString::null);
     GObject(const GObject &rhs);
-    GObject(const QDomElement &element); // create an object from xml (loading)
 
     QString m_name;                              // name of the object
     State m_state;                               // are there handles to draw or not?
@@ -109,5 +130,31 @@ protected:
 
 private:
     GObject &operator=(const GObject &rhs);    // don't assign the objects, clone them
+};
+
+
+// This is the manipulator class for GObject. Manipulators (M9r's)
+// are used to handle the selection, movement, rotation,... of objects.
+// The pure virtual GObject::createM9r() method ensures that the correct
+// manipulator is created :)
+// The M9r is used every time a user wants to change an object. First the
+// object is "hit" - then a M9r is created and this M9r is used as a kind
+// of EventFilter. Every Event is forwarded to the M9r. If the M9r handles
+// the event, it returns true. If the Event remains unhandled, the M9r
+// returns false and the Event has to be processed  by the calling method.
+class GObjectM9r {
+public:
+    virtual ~GObjectM9r() {}
+    
+    virtual const bool mouseMoveEvent(QMouseEvent */*e*/) { return false; }
+    virtual const bool mousePressEvent(QMouseEvent */*e*/) { return false; }
+    virtual const bool mouseReleaseEvent(QMouseEvent */*e*/) { return false; }
+    virtual const bool mouseDoubleClickEvent(QMouseEvent */*e*/) { return false; }
+
+    virtual const bool keyPressEvent(QKeyEvent */*e*/) { return false; }
+    virtual const bool keyReleaseEvent(QKeyEvent */*e*/) { return false; }
+
+private:
+    GObjectM9r &operator=(GObjectM9r &rhs);  // no nasty tricks, please :)
 };
 #endif

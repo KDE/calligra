@@ -57,8 +57,12 @@ QDomElement GObject::save(QDomDocument &doc) const {
 
 void GObject::setParent(GObject *parent) {
 
-    if(parent!=this)
+    if(parent!=this)   // it's illegal to be oneselves parent!
 	m_parent=parent;
+}
+
+GObjectM9r *GObject::createM9r() {
+    return new GObjectM9r;
 }
 
 GObject::GObject(const QString &name) : m_name(name) {
@@ -73,6 +77,8 @@ GObject::GObject(const GObject &rhs) :  m_name(rhs.name()),
     m_brush(rhs.brush()), m_gradient(rhs.gradient()), m_pen(rhs.pen()) {
 }
 
+/*
+// (TODO) move that code to instantiate...
 GObject::GObject(const QDomElement &element) {
 
     bool ok;
@@ -81,11 +87,11 @@ GObject::GObject(const QDomElement &element) {
 	m_name=element.attribute("name");
     else
 	m_name="no valid name";
-    
+
     m_state=static_cast<State>(element.attribute("state").toInt(&ok));
     if(!ok)
 	m_state=Visible;
-    
+
     QDomElement format=element.namedItem("format").toElement();
     if(!format.isNull()) {
 	m_fillStyle=static_cast<FillStyle>(format.attribute("fillStyle").toInt(&ok));
@@ -139,3 +145,4 @@ GObject::GObject(const QDomElement &element) {
 	m_gradient.ncols=1;	
     }	
 }
+*/

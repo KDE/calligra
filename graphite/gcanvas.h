@@ -36,14 +36,14 @@ public:
     virtual ~GCanvas();
 
 protected:
+    // (TODO): I won't use viewportPaintEvent(), but
+    // drawContents which will call paintEverything
+    // in KoDocument...
     // virtual void viewportPaintEvent(QPaintEvent *e);
     // virtual void viewportResizeEvent(QResizeEvent *e);
     // virtual void viewportMousePressEvent(QMouseEvent *e);
     // virtual void viewportMouseReleaseEvent(QMouseEvent *e);
     // virtual void viewportMouseDoubleClickEvent(QMouseEvent *e);
     // virtual void viewportMouseMoveEvent(QMouseEvent *e);
-
-private:
-    //const KGObjectPool * const m_objectPool;
 };
 #endif // gcanvas_h
