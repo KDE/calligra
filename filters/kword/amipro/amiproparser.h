@@ -28,6 +28,8 @@ class AmiProFormat
   public:
     int pos, len;
     bool bold, italic, underline;
+    bool word_underline, double_underline;
+    bool subscript, superscript, strikethrough;
     AmiProFormat();
     AmiProFormat( const AmiProFormat& );
     AmiProFormat& operator=( const AmiProFormat& );

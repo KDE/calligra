@@ -246,6 +246,86 @@ bool AmiProParser::handleTag( const QString& tag )
     m_formatList.append( m_currentFormat );
   }
 
+  // double underline on
+  if( tag == "+)" )
+  {
+    m_currentFormat.double_underline = true; 
+    m_currentFormat.pos = m_text.length();
+    m_formatList.append( m_currentFormat );
+  }
+
+  // double underline off
+  if( tag == "-)" )
+  {
+    m_currentFormat.double_underline = false;
+    m_currentFormat.pos = m_text.length();
+    m_formatList.append( m_currentFormat );
+  }
+
+ // word underline on
+  if( tag == "+$" )
+  {
+    m_currentFormat.word_underline = true; 
+    m_currentFormat.pos = m_text.length();
+    m_formatList.append( m_currentFormat );
+  }
+
+  // word underline off
+  if( tag == "-$" )
+  {
+    m_currentFormat.word_underline = false;
+    m_currentFormat.pos = m_text.length();
+    m_formatList.append( m_currentFormat );
+  }
+
+  // superscript on
+  if( tag == "+&" )
+  {
+    m_currentFormat.superscript = true; 
+    m_currentFormat.pos = m_text.length();
+    m_formatList.append( m_currentFormat );
+  }
+
+  // superscript off
+  if( tag == "-&" )
+  {
+    m_currentFormat.superscript = false;
+    m_currentFormat.pos = m_text.length();
+    m_formatList.append( m_currentFormat );
+  }
+
+  // subscript on
+  if( tag == "+'" )
+  {
+    m_currentFormat.subscript = true;
+    m_currentFormat.pos = m_text.length();
+    m_formatList.append( m_currentFormat );
+  }
+
+  // subscript off
+  if( tag == "-'" )
+  {
+    m_currentFormat.subscript = false;
+    m_currentFormat.pos = m_text.length();
+    m_formatList.append( m_currentFormat );
+  }
+
+  // strikethrough on
+  if( tag == "+%" )
+  {
+    m_currentFormat.strikethrough = true;
+    m_currentFormat.pos = m_text.length();
+    m_formatList.append( m_currentFormat );
+  }
+
+  // strikethrough off
+  if( tag == "-%" )
+  {
+    m_currentFormat.strikethrough = false;
+    m_currentFormat.pos = m_text.length();
+    m_formatList.append( m_currentFormat );
+  }
+
   return true;
 }
 
@@ -253,7 +333,9 @@ bool AmiProParser::handleTag( const QString& tag )
 AmiProFormat::AmiProFormat()
 {
   pos = len = 0;
-  bold = italic = underline = FALSE;
+  bold = italic = underline = 
+  word_underline = double_underline = 
+  subscript = superscript = strikethrough = FALSE;
 }
 
 void AmiProFormat::assign( const AmiProFormat& f )
@@ -263,6 +345,11 @@ void AmiProFormat::assign( const AmiProFormat& f )
   bold = f.bold;
   italic = f.italic;
   underline = f.underline;
+  word_underline = f.word_underline;
+  double_underline = f.double_underline;
+  subscript = f.subscript;
+  superscript = f.superscript;
+  strikethrough = f.strikethrough;
 }
 
 AmiProFormat::AmiProFormat( const AmiProFormat& f )

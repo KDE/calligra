@@ -59,6 +59,14 @@ static QString AmiProFormatAsXML( AmiProFormat format )
   if( format.bold ) result.append("<WEIGHT value=\"75\" />\n" );
   if( format.italic ) result.append( "<ITALIC value=\"1\" />\n" );
   if( format.underline ) result.append( "<UNDERLINE value=\"1\" />\n" );
+  if( format.strikethrough ) result.append( "    <STRIKEOUT value=\"1\" />\n" );
+  if( format.subscript ) result.append( "<VERTALIGN value=\"1\" />\n" );
+  if( format.superscript ) result.append( "<VERTALIGN value=\"2\" />\n" );
+
+  // both word underline and double underline still treat as underline
+  // just wait until KWord has these features
+  if( format.word_underline ) result.append( "<UNDERLINE value=\"1\" />\n" );
+  if( format.double_underline ) result.append( "<UNDERLINE value=\"1\" />\n" );
 
   result.prepend("<FORMAT id=\"1\" pos=\"" + QString::number(format.pos) +
     "\" len=\"" + QString::number(format.len) + "\">\n");

@@ -56,6 +56,7 @@ class AmiProWorker : public KWEFBaseWorker
     QString filename;
     QString result;
     bool m_bold, m_italic, m_underline;
+    bool m_strike, m_subscript, m_superscript;
 };
 
 bool AmiProWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
@@ -98,7 +99,8 @@ bool AmiProWorker::doOpenDocument(void)
   result += "[edoc]\n";
   result += ">\n";
 
-  m_bold = m_italic = m_underline = FALSE;
+  m_bold = m_italic = m_underline =
+  m_strike, m_subscript, m_superscript = FALSE;
 
   return TRUE;
 }
@@ -151,10 +153,16 @@ bool AmiProWorker::doFullParagraph(const QString& paraText,
       m_bold = formatData.text.weight >= 75;
       m_italic = formatData.text.italic;
       m_underline = formatData.text.underline;
+      m_subscript = formatData.text.verticalAlignment == 1;
+      m_superscript = formatData.text.verticalAlignment == 2;
+      m_strike = formatData.text.strikeout;
 
       if( m_bold ) partialText = "<+!>" + partialText + "<-!>";
       if( m_italic ) partialText = "<+\">" + partialText + "<-\">";
       if( m_underline ) partialText = "<+#>" + partialText + "<-#>";
+      if( m_subscript ) partialText = "<+'>" + partialText + "<-'>";
+      if( m_superscript ) partialText = "<+&>" + partialText + "<-&>";
+      if( m_strike) partialText = "<+%>" + partialText + "<-%>";
 
       amiproText += partialText; 
     }
