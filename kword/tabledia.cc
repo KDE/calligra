@@ -240,6 +240,7 @@ void KWTableDia::readTableStyles()
 #endif
 }
 
+/*================================================================*/
 void KWTableDia::slotOk()
 {
     canvas->createTable( nRows->value(), nCols->value(),
@@ -247,6 +248,13 @@ void KWTableDia::slotOk()
                          (KWTblCellSize)cHei->currentItem(),
                          cbIsFloating->isChecked() );
     KDialogBase::slotOk();
+}
+
+/*================================================================*/
+void KWTableDia::slotClose()
+{
+    canvas->setMouseMode( MM_EDIT );
+    KDialogBase::slotClose();
 }
 
 /*================================================================*/
