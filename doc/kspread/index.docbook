@@ -11,9 +11,6 @@
 <author>
 <firstname>Frank-Andreas</firstname>
 <surname>Schmidt</surname>
-<affiliation>
-<address><email>frank-andreas.schmidt@t-online.de</email></address>
-</affiliation>
 </author>
 </authorgroup> 
 
@@ -357,7 +354,7 @@ a file on your hard drive.</para>
 <listitem><para></para></listitem>
 </itemizedlist></para>
 
-<para>Documentation copyright 2000 Frank-Andreas Schmidt <email>frank-andreas.schmidt@t-online.de</email></para>
+<para>Documentation copyright 2000 Frank-Andreas Schmidt</para>
 <para>Translations done by:</para>
     
 <para>
