@@ -264,7 +264,9 @@ KOSpell::setUpDialog ()
 {
     if (ksdlg)
         return;
-    initConfig();
+    bool ret = initConfig();
+    if ( !ret )
+        return;
 
     //Set up the dialog box
     ksdlg=new KOSpellDlg (parent, "dialog", KOSpellConfig::indexFromLanguageFileName( ksconfig->dictionary()),  modaldlg, autocorrect );
