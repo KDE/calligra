@@ -172,18 +172,18 @@ bool KWordDocument::initDoc()
     if ( ret == KoTemplateChooseDia::Template ) {
 	QFileInfo fileInfo( _template );
 	QString fileName( fileInfo.dirPath( TRUE ) + "/" + fileInfo.baseName() + ".kwt" );
-	bool ok = loadTemplate( fileName.data() );
+	bool ok = loadTemplate( fileName );
 	setURL( QString::null );
 	return ok;
     } else if ( ret == KoTemplateChooseDia::File ) {
 	QString fileName( _template );
-	bool ok = loadTemplate( fileName.data() );
+	bool ok = loadTemplate( fileName );
 	setURL( fileName );
 	_loaded = TRUE;
 	return ok;
     } else if ( ret == KoTemplateChooseDia::Empty ) {
 	QString fileName( locate( "kword_template", "Wordprocessing/PlainText.kwt" , KWordFactory::global() ) );
-	bool ok = loadTemplate( fileName.data() );
+	bool ok = loadTemplate( fileName );
 	setURL( QString::null );
 	return ok;
     }
@@ -194,7 +194,7 @@ bool KWordDocument::initDoc()
 }
 
 /*================================================================*/
-bool KWordDocument::loadTemplate( const char *_url )
+bool KWordDocument::loadTemplate( const QString &fileName )
 {
 //     KURL u( _url );
 
@@ -224,7 +224,7 @@ bool KWordDocument::loadTemplate( const char *_url )
 
 //     _loaded = FALSE;
 //     return TRUE;
-    bool ok = loadFromURL( _url );
+    bool ok = loadFromURL( KURL( fileName ) );
     _loaded = FALSE;
     return ok;
 }
@@ -1577,7 +1577,7 @@ bool KWordDocument::save(ostream &out,const char* /* _format */)
 	    format = "BMP";
         QString pictureName = QString( "pictures/picture%1.%2" ).arg( ++i ).arg( format.lower() );
         if ( !isStoredExtern() )
-          pictureName.prepend( url() + "/" );
+          pictureName.prepend( url().url() + "/" );
 
 	out << indent << "<KEY key=\"" << it.current()->getFilename().latin1()
 	    << "\" name=\"" << pictureName.latin1()
@@ -1652,7 +1652,7 @@ bool KWordDocument::completeSaving( KoStore *_store )
 	QCString mime ( "image/" );
         mime += format.lower().ascii();
         if ( !isStoredExtern() )
-          u2.prepend( url() + "/" );
+          u2.prepend( url().url() + "/" );
 	
 	if ( _store->open( u2, mime.lower() ) ) {
 	    ostorestream out( _store );

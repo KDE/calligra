@@ -32,7 +32,7 @@ KPresenterDocIface::KPresenterDocIface( KPresenterDoc *doc_ )
 
 QString KPresenterDocIface::url()
 {
-    return doc->url();
+    return doc->url().url();
 }
 
 DCOPRef KPresenterDocIface::firstView()

@@ -49,7 +49,8 @@ KoDocument* KWordShell::createDoc()
 void KWordShell::setRootPart( Part *part )
 {
     KoMainWindow::setRootPart( part );
-    ( (KWordView*)rootView() )->initGui();
+    if ( part )
+      ( (KWordView*)rootView() )->initGui();
 }
 
 void KWordShell::slotFilePrint()

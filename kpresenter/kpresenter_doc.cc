@@ -338,7 +338,7 @@ bool KPresenterDoc::save(ostream& out,const char * /* format */)
 		format = "BMP";
             QString pictureName = QString( "pictures/picture%1.%2" ).arg( ++i ).arg( format.lower() );
             if ( !isStoredExtern() )
-              pictureName.prepend( url() + "/" );
+              pictureName.prepend( url().url() + "/" );
 	    out << indent << "<KEY " << key << " name=\""
 		<< pictureName.latin1()
 		<< "\" />" << endl;
@@ -356,7 +356,7 @@ bool KPresenterDoc::save(ostream& out,const char * /* format */)
 	KPClipartCollection::Key key = it2.key();
         QString clipartName = QString( "cliparts/clipart%1.wmf" ).arg( ++i );
         if ( !isStoredExtern() )
-          clipartName.prepend( url() + "/" );
+          clipartName.prepend( url().url() + "/" );
 	out << indent << "<KEY " << key << " name=\""
 	    << clipartName.latin1()
 	    << "\" />" << endl;
@@ -446,7 +446,7 @@ bool KPresenterDoc::completeSaving( KoStore* _store )
 
 	    QString mime = "image/" + format.lower();
             if ( !isStoredExtern() )
-              u2.prepend( url() + "/" );
+              u2.prepend( url().url() + "/" );
 
 	    if ( _store->open( u2, mime.lower().ascii() ) ) {
 	        ostorestream out( _store );
@@ -465,7 +465,7 @@ bool KPresenterDoc::completeSaving( KoStore* _store )
 	    QString u2 = QString( "cliparts/clipart%1.wmf" ).arg( ++i );
 	    QString mime = "clipart/wmf";
             if ( !isStoredExtern() )
-              u2.prepend( url() + "/" );
+              u2.prepend( url().url() + "/" );
 
 	    if ( _store->open( u2, mime.lower().ascii() ) ) {
 	        ostorestream out( _store );
@@ -494,7 +494,7 @@ bool KPresenterDoc::loadChildren( KoStore* _store )
 /*========================= load a template =====================*/
 bool KPresenterDoc::load_template( const QString &_url )
 {
-    return loadFromURL( _url );
+    return loadFromURL( KURL( _url ) );
 }
 
 /*========================== load ===============================*/
@@ -527,7 +527,7 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 	_xRnd = 20;
 	_yRnd = 20;
 	_txtBackCol = white;
-	urlIntern = KURL( url() ).path();
+	urlIntern = url().path();
 	presentSlides = PS_ALL;
     }
 
@@ -931,7 +931,7 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 	}
     }
 
-    addToRecentlyOpenedList( url() );
+    addToRecentlyOpenedList( url().url() );
 
     return true;
 }
@@ -1106,7 +1106,7 @@ void KPresenterDoc::loadObjects( KOMLParser& parser, vector<KOMLAttrib>& lst, bo
 bool KPresenterDoc::completeLoading( KoStore* _store )
 {
     if ( _store ) {
-	QString str = urlIntern.isEmpty() ? KURL( url() ).path() : urlIntern;
+	QString str = urlIntern.isEmpty() ? url().path() : urlIntern;
 	
 	QValueListIterator<KPPixmapDataCollection::Key> it = pixmapCollectionKeys.begin();
 	QStringList::Iterator nit = pixmapCollectionNames.begin();
@@ -1359,7 +1359,7 @@ bool KPresenterDoc::insertNewTemplate( int /*diffx*/, int /*diffy*/, bool clean 
 	_clean = clean;
 	objStartY = getPageSize( _backgroundList.count() - 1, 0, 0 ).y() + getPageSize( _backgroundList.count() - 1,
 											0, 0 ).height();
-	load_template( fileName.data() );
+	load_template( fileName );
 	objStartY = 0;
 	_clean = true;
 	setModified(true);

@@ -112,7 +112,7 @@ public:
     virtual bool save( ostream& out, const char* _format );
     virtual bool completeSaving( KoStore *_store );
 
-    virtual bool loadTemplate( const char *_url );
+    virtual bool loadTemplate( const QString &_url );
 
     // IDL
     Shell* createShell();

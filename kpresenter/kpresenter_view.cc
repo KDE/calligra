@@ -425,7 +425,7 @@ void KPresenterView::insertPage()
 	insPageDia = 0;
     }
 
-    QString url = m_pKPresenterDoc->url();
+    KURL url = m_pKPresenterDoc->url(); // Why ? insPageDia changes the url ? (David)
     insPageDia = new InsPageDia( this, "", m_pKPresenterDoc, getCurrPgNum() );
     insPageDia->setCaption( i18n( "KPresenter - Insert Page" ) );
     QObject::connect( insPageDia, SIGNAL( insertPage( int, InsPageMode, InsertPos ) ),
