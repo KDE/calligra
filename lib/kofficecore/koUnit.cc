@@ -187,6 +187,7 @@ KoUnit::Unit KoUnit::unit( const QString &_unitName, bool* ok )
     if ( _unitName == QString::fromLatin1( "pi" ) ) return U_PI;
     if ( _unitName == QString::fromLatin1( "dd" ) ) return U_DD;
     if ( _unitName == QString::fromLatin1( "cc" ) ) return U_CC;
+    if ( _unitName == QString::fromLatin1( "pt" ) ) return U_PT;
     if ( ok )
         *ok = false;
     return U_PT;
