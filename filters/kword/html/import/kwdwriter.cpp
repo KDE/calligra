@@ -112,8 +112,9 @@ QDomElement KWDWriter::currentLayout(QDomElement paragraph) {
 
 QDomElement KWDWriter::createTableCell(int tableno, int nrow,
 				int ncol, int colspan, int x, int y, int w, int h) {
-	
-	QDomElement fs=addFrameSet(docroot().lastChild().toElement(),1,0,
+	QDomElement parent=docroot().elementsByTagName("FRAMESETS").item(0).toElement();
+
+	QDomElement fs=addFrameSet(parent,1,0,
 			QString("Table %1 - %2,%3").arg(tableno).arg(nrow).arg(ncol),
 			1);
 	fs.setAttribute("grpMgr",QString("Table %1").arg(tableno));
@@ -306,7 +307,7 @@ QDomElement KWDWriter::startFormat(QDomElement paragraph) {
         if (paragraph.isNull()) { qWarning("startFormat on empty paragraph"); exit(0); }
 	QDomElement format=_doc->createElement("FORMAT");
 	paragraph.elementsByTagName("FORMATS").item(0).appendChild(format);
-	formatAttribute(paragraph,"SIZE","VALUE","12"); // FIXME hack hack hack
+	//formatAttribute(paragraph,"SIZE","VALUE","12"); // FIXME hack hack hack
 	return format;
 }
 
