@@ -437,6 +437,9 @@ void Page::mousePressEvent( QMouseEvent *e )
         } else if ( e->button() == MidButton )
             view->screenPrev();
         else if ( e->button() == RightButton ) {
+            if ( !drawMode && !spManualSwitch() )
+                view->autoScreenPresStopTimer();
+
             setCursor( arrowCursor );
             QPoint pnt = QCursor::pos();
             presMenu->popup( pnt );
@@ -1091,6 +1094,8 @@ void Page::keyPressEvent( QKeyEvent *e )
 	case Key_Escape: case Key_Q: case Key_X:
 	    view->screenStop(); break;
 	case Key_G:
+            if ( !spManualSwitch() )
+                view->autoScreenPresStopTimer();
 	    slotGotoPage(); break;
 	default: break;
 	}
@@ -3503,6 +3508,9 @@ void Page::slotGotoPage()
     int pg = currPresPage;
     pg = KPGotoPage::gotoPage( view->kPresenterDoc(), _presFakt, slideList, pg, this );
     gotoPage( pg );
+
+    if ( !spManualSwitch() )
+        view->autoScreenPresReStartTimer();
 }
 
 /*================================================================*/
@@ -3725,6 +3733,9 @@ void Page::switchingMode()
     presMenu->setItemChecked( PM_DM, false );
     presMenu->setItemChecked( PM_SM, true );
     drawMode = false; setCursor( blankCursor );
+
+    if ( !spManualSwitch() )
+        view->autoScreenPresIntervalTimer();
 }
 
 /*================================================================*/

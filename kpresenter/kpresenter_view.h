@@ -334,6 +334,10 @@ public:
     void penColorChanged( const QPen & _pen );
     void brushColorChanged( const QBrush & _brush );
 
+    void autoScreenPresReStartTimer();
+    void autoScreenPresIntervalTimer();
+    void autoScreenPresStopTimer();
+
 protected slots:
     // dialog slots
     void backOk( bool );
@@ -385,6 +389,8 @@ protected slots:
 
     void search();
 
+    void doAutomaticScreenPres();
+
 protected:
 
 // ********* functions ***********
@@ -408,7 +414,6 @@ protected:
     void setupRulers();
 
     void startScreenPres( int pgNum = -1 );
-    void doAutomaticScreenPres();
 
     virtual void updateReadWrite( bool readwrite );
 
@@ -596,6 +601,12 @@ protected:
     SideBar *sidebar;
     QSplitter *splitter;
     PageBase *pageBase;
+
+private:
+    QTimer automaticScreenPresSpeed;
+    QTime automaticScreenPresTime;
+    int automaticScreenPresWaitTime;
+    bool automaticScreenPresFirstTimer;
 
 };
 

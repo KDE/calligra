@@ -211,6 +211,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     pageBase = 0;
     sticky = FALSE;
     page = 0L;
+    automaticScreenPresFirstTimer = true;
 
     m_pKPresenterDoc = _doc;
 
@@ -1084,10 +1085,19 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
 	actionScreenStart->setEnabled( false );
 	actionScreenViewPage->setEnabled( false );
 
-	if ( !kPresenterDoc()->spManualSwitch() ) {
+	if ( !kPresenterDoc()->spManualSwitch() && pgNum == -1 ) {
 	    continuePres = true;
 	    exitPres = false;
-	    doAutomaticScreenPres();
+            page->repaint( false );
+
+            if ( automaticScreenPresFirstTimer ) {
+                connect( &automaticScreenPresSpeed, SIGNAL( timeout() ), SLOT( doAutomaticScreenPres() ) );
+                automaticScreenPresTime.start();
+                automaticScreenPresWaitTime = 0;
+                automaticScreenPresSpeed.start( kPresenterDoc()->getPresSpeed()*1000 );
+            }
+            else
+                autoScreenPresReStartTimer();
 	}
     }
 }
@@ -1153,6 +1163,8 @@ void KPresenterView::screenFirst()
 void KPresenterView::screenPrev()
 {
     if ( presStarted ) {
+        if ( !kPresenterDoc()->spManualSwitch() )
+            autoScreenPresReStartTimer();
 	if ( page->pPrev( true ) ) {
             QRect pgRect = kPresenterDoc()->getPageRect( 0, 0, 0, page->presFakt(), false );
 	    yOffset = ( page->presPage() - 1 ) * pgRect.height();
@@ -1174,6 +1186,8 @@ void KPresenterView::screenPrev()
 void KPresenterView::screenNext()
 {
     if ( presStarted ) {
+        if ( !kPresenterDoc()->spManualSwitch() )
+            autoScreenPresReStartTimer();
 	if ( page->pNext( true ) ) {
             QRect pgRect = kPresenterDoc()->getPageRect( 0, 0, 0, page->presFakt(), false );
 	    yOffset = ( page->presPage() - 1 ) * pgRect.height();
@@ -2832,17 +2846,19 @@ void KPresenterView::keyPressEvent( QKeyEvent *e )
 /*====================== do automatic screenpresentation ========*/
 void KPresenterView::doAutomaticScreenPres()
 {
-    page->repaint( false );
-
-    while ( continuePres && !exitPres )
-	screenNext();
-
-    if ( !exitPres && kPresenterDoc()->spInfinitLoop() ) {
-	screenStop();
-	screenStart();
+    if ( exitPres ) // A user pushed Escape key or clicked "Exit presentation" menu.
+        return;
+    else if ( !continuePres && kPresenterDoc()->spInfinitLoop() ) {
+        continuePres = true;
+        page->gotoPage( 1 ); // return to first page.
+        autoScreenPresReStartTimer();
     }
-
-    screenStop();
+    else if ( !continuePres ) {
+        screenStop();
+        return;
+    }
+    else
+        screenNext();
 }
 
 void KPresenterView::updateReadWrite( bool readwrite )
@@ -3427,6 +3443,25 @@ void KPresenterView::brushColorChanged( const QBrush & _brush )
 {
     actionBrushColor->setEnabled( true );
     actionBrushColor->setCurrentColor(_brush.style ()==Qt::NoBrush ? Qt::white : _brush.color() );
+}
+
+void KPresenterView::autoScreenPresReStartTimer()
+{
+    automaticScreenPresTime.start();
+    automaticScreenPresWaitTime = 0;
+    automaticScreenPresSpeed.changeInterval( kPresenterDoc()->getPresSpeed()*1000 );
+}
+
+void KPresenterView::autoScreenPresIntervalTimer()
+{
+    automaticScreenPresTime.restart();
+    automaticScreenPresSpeed.changeInterval( kPresenterDoc()->getPresSpeed()*1000 - automaticScreenPresWaitTime );
+}
+
+void KPresenterView::autoScreenPresStopTimer()
+{
+    automaticScreenPresSpeed.stop();
+    automaticScreenPresWaitTime += automaticScreenPresTime.elapsed();
 }
 
 #include <kpresenter_view.moc>
