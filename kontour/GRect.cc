@@ -117,7 +117,8 @@ void GRect::calcBoundingBox()
   KoPoint p2(0.0, mSY);
   KoPoint p3(mSX, mSY);
   KoPoint p4(mSX, 0.0);
-  mBBox = calcUntransformedBoundingBox(p1, p2, p3, p4);
+  mSBox = calcUntransformedBoundingBox(p1, p2, p3, p4);
+  mBBox = mSBox;
   adjustBBox(mBBox);
 }
 

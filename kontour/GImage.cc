@@ -142,7 +142,8 @@ bool GImage::findNearestPoint(const KoPoint &p, double max_dist, double &dist, i
 
 void GImage::calcBoundingBox()
 {
-  mBBox = calcUntransformedBoundingBox(KoPoint(0, 0), KoPoint(mImage->width(), 0), KoPoint(mImage->width(), mImage->height()), KoPoint(0, mImage->height()));
+  mSBox = calcUntransformedBoundingBox(KoPoint(0, 0), KoPoint(mImage->width(), 0), KoPoint(mImage->width(), mImage->height()), KoPoint(0, mImage->height()));
+  mBBox = mSBox;
 }
 
 GPath *GImage::convertToPath() const

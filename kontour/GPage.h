@@ -106,7 +106,6 @@ public:
   void insertObjectAtIndex(GObject *obj, unsigned int idx);
   void moveObjectToIndex(GObject *obj, unsigned int idx);
 
-
   void selectObject(GObject *obj);
   void unselectObject(GObject *obj);
 
@@ -117,8 +116,9 @@ public:
 
   void deleteSelectedObjects();
 
-  KoRect boundingBoxForSelection();
-  KoRect boundingBoxForAllObjects();
+  const KoRect &boundingBoxForSelection() const {return mBBox; }
+  const KoRect &shapeBoxForSelection() const {return mSBox; }
+  void calcBoxes();
 
   QPtrList<GObject> &getSelection() {return selection; }
   bool selectionIsEmpty() const {return selection.isEmpty(); }
@@ -126,36 +126,33 @@ public:
   unsigned int convertibleCount() const {return mConvertibleCount; }
 
   void drawContents(KoPainter *p, const QWMatrix &m, bool withBasePoints = false, bool outline = false, bool withEditMarks = true);
-  void drawContentsInRegion(KoPainter *p, const QWMatrix &m, const KoRect &r, bool withBasePoints = false, bool outline = false, bool withEditMarks = true);
 
   GObject *findContainingObject(double x, double y);
-  bool findNearestObject(const QString &otype, int x, int y, double max_dist, GObject *&obj, int &pidx, bool all = false);
   bool findContainingObjects(int x, int y, QPtrList<GObject> &olist);
   bool findObjectsContainedIn(const KoRect &r, QPtrList<GObject> &olist);
-  
-  void updateHandle();
 
   void updateSelection();
 
 private:
-  GDocument *mGDoc;
+  GDocument                  *mGDoc;
 
-  QString mName;                  // page name
-  QColor mBGColor;                // background color
-  int mPaperWidth;                // paper width (pt)
-  int mPaperHeight;               // paper height (pt)
-  
-  QPtrList<GLayer> layers;        // the array of all layers
-  GLayer *mActiveLayer;           // the current layer
-  QPtrList<GObject> selection;    // the array of selected objects
+  QString                     mName;                        // page name
+  QColor                      mBGColor;                     // background color
+  int                         mPaperWidth;                  // paper width (pt)
+  int                         mPaperHeight;                 // paper height (pt)
 
-  int mCurLayerNum;
-  unsigned int mConvertibleCount;
+  QPtrList<GLayer>            layers;                       // the array of all layers
+  GLayer                     *mActiveLayer;                 // the current layer
+  QPtrList<GObject>           selection;                    // the array of selected objects
 
-  KoPageLayout mPageLayout;
+  int                         mCurLayerNum;
+  unsigned int                mConvertibleCount;
 
-  KoRect mSelBox;
-  Handle mHandle;
+  KoPageLayout                mPageLayout;
+
+  KoRect                      mBBox;
+  KoRect                      mSBox;
+  Handle                      mHandle;
 };
 
 #endif

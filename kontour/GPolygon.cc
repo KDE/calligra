@@ -150,6 +150,29 @@ void GPolygon::draw(KoPainter *p, const QWMatrix &m, bool withBasePoints, bool o
   }
 }
 
+int GPolygon::getNeighbourPoint(const KoPoint &p)
+{
+  return -1;
+}
+
+void GPolygon::movePoint(int idx, double dx, double dy, bool /*ctrlPressed*/)
+{
+}
+
+void GPolygon::removePoint(int idx, bool update)
+{
+}
+
+bool GPolygon::contains(const KoPoint &p)
+{
+  return false;
+}
+
+bool GPolygon::findNearestPoint(const KoPoint &p, double max_dist, double &dist, int &pidx, bool all)
+{
+  return true;
+}
+
 void GPolygon::calcBoundingBox()
 {
   double xmax, xmin;
@@ -203,34 +226,12 @@ void GPolygon::calcBoundingBox()
     if(c.y() > ymax)
       ymax = c.y();
   }
-  mBBox.setLeft(xmin);
-  mBBox.setRight(xmax);
-  mBBox.setTop(ymin);
-  mBBox.setBottom(ymax);
+  mSBox.setLeft(xmin);
+  mSBox.setRight(xmax);
+  mSBox.setTop(ymin);
+  mSBox.setBottom(ymax);
+  mBBox = mSBox;
   adjustBBox(mBBox);
-}
-
-int GPolygon::getNeighbourPoint(const KoPoint &p)
-{
-  return -1;
-}
-
-void GPolygon::movePoint(int idx, double dx, double dy, bool /*ctrlPressed*/)
-{
-}
-
-void GPolygon::removePoint(int idx, bool update)
-{
-}
-
-bool GPolygon::contains(const KoPoint &p)
-{
-  return false;
-}
-
-bool GPolygon::findNearestPoint(const KoPoint &p, double max_dist, double &dist, int &pidx, bool all)
-{
-  return true;
 }
 
 GPath *GPolygon::convertToPath() const

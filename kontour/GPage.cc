@@ -356,7 +356,7 @@ void GPage::selectAllObjects()
       }
     }
   }
-  updateHandle();
+  calcBoxes();
   document()->emitSelectionChanged();
 }
 
@@ -369,7 +369,7 @@ void GPage::unselectAllObjects()
   for(GObject *o = selection.first(); o != 0L; o = selection.next())
     o->select(false);
   selection.clear();
-  updateHandle();
+  calcBoxes();
   document()->emitSelectionChanged();
 }
 
@@ -407,59 +407,37 @@ void GPage::deleteSelectedObjects()
       obj->layer ()->deleteObject (obj);
     }
     selection.clear ();
-    //setModified ();
-/*    if (autoUpdate)
-    {
-      emit changed ();
-      emit selectionChanged ();
-    }*/
   }
 }
 
-KoRect GPage::boundingBoxForSelection()
+void GPage::calcBoxes()
 {
-  if(!selectionIsEmpty())
+  //TODO private?
+  if(selectionIsEmpty())
   {
-    QPtrListIterator<GObject> i(selection);
-    mSelBox = (*i)->boundingBox();
-    ++i;
-    for(; i.current(); ++i)
-      mSelBox = mSelBox.unite((*i)->boundingBox());
+    mBBox = KoRect();
+    mSBox = KoRect();
+    mHandle.empty();
   }
   else
   {
-    mSelBox = KoRect();
-  }
-  return mSelBox;
-}
-
-KoRect GPage::boundingBoxForAllObjects()
-{
-  KoRect box;
-
-  bool init = false;
-
-  for (QPtrListIterator<GLayer> li(layers); li.current(); ++li)
-  {
-    if((*li)->isEditable())
+    QPtrListIterator<GObject> i(selection);
+    mBBox = (*i)->boundingBox();
+    mSBox = (*i)->shapeBox();
+    ++i;
+    for(; i.current(); ++i)
     {
-      const QPtrList<GObject> &contents = (*li)->objects ();
-      QPtrListIterator<GObject> oi(contents);
-      if (! init)
-      {
-        box = (*oi)->boundingBox ();
-        ++oi;
-        init = true;
-      }
-      for (; oi.current(); ++oi)
-        box = box.unite ((*oi)->boundingBox ());
+      mBBox = mBBox.unite((*i)->boundingBox());
+      mSBox = mSBox.unite((*i)->shapeBox());
     }
+    mHandle.box(mBBox);
+    mHandle.empty(false);
   }
-  return box;
 }
 
 void GPage::drawContents(KoPainter *p, const QWMatrix &m, bool withBasePoints, bool outline, bool withEditMarks)
 {
+  //TODO add regions
   for(QPtrListIterator<GLayer> i(layers); i.current(); ++i)
   {
     if((*i)->isVisible())
@@ -470,68 +448,6 @@ void GPage::drawContents(KoPainter *p, const QWMatrix &m, bool withBasePoints, b
         (*oi)->draw(p, m, withBasePoints && (*oi)->isSelected(), outline, withEditMarks);
     }
   }
-}
-
-void GPage::drawContentsInRegion(KoPainter *p, const QWMatrix &m, const KoRect &r, bool withBasePoints, bool outline, bool withEditMarks)
-{
-  GLayer *i = layers.first();
-  for(; i != 0; i = layers.next())
-  {
-    if(i->isVisible())
-    {
-      const QPtrList<GObject> &contents = i->objects();
-      QPtrListIterator<GObject> oi(contents);
-      for(; oi.current(); ++oi)
-      {
-        // draw the object only if its bounding box
-        // intersects the active region
-        //      const KoRect& bbox = (*oi)->boundingBox ();
-        //      if (r.intersects (bbox))
-//        if((*oi)->intersects(r))
-//          (*oi)->draw(p, m, withBasePoints && (*oi)->isSelected(), outline, withEditMarks);
-      }
-    }
-  }
-}
-
-/**
- * Looks for an object of type <tt>otype</tt> which endpoints are distant
- * not more than <tt>max_dist</tt> from the point <tt>x, y</tt>.
- * The method returns <tt>true</tt> if an object was found as well as
- * the object in <tt>obj</tt> and the index of the nearest point in
- * <tt>pidx</tt>.
- */
-bool GPage::findNearestObject(const QString &otype, int x, int y,
-                                   double max_dist, GObject*& obj,
-                                   int& pidx, bool all)
-{
-  double d, distance = DBL_MAX;
-  obj = 0L;
-  KoPoint p (x, y);
-
-  QPtrListIterator<GLayer> li(layers);
-  for (li.toLast(); li.current(); --li)
-  {
-    if ((*li)->isEditable ())
-    {
-      const QPtrList<GObject>& contents = (*li)->objects ();
-      QPtrListIterator<GObject> oi(contents);
-      for ( ; oi.current(); ++oi)
-      {
-        if (otype == 0L || (*oi)->isA(otype.latin1()))
-	{
-          if ((*oi)->findNearestPoint (p, max_dist, d, pidx, all) && d < distance)
-	  {
-            obj = *oi;
-            distance = d;
-          }
-        }
-      }
-    }
-  }
-  if (obj == 0L)
-    pidx = -1;
-  return obj != 0L;
 }
 
 GObject *GPage::findContainingObject(double x, double y)
@@ -587,27 +503,12 @@ bool GPage::findObjectsContainedIn(const KoRect &r, QPtrList<GObject> &olist)
   return olist.count() > 0;
 }
 
-void GPage::updateHandle()
-{
-  kdDebug(38000) << "Update handle" << endl;
-  if(selectionIsEmpty())
-    mHandle.empty();
-  else
-  {
-    KoRect rr = boundingBoxForSelection();
-	// TODO : adjust to current zoom factor
-    mHandle.box(rr);
-    mHandle.empty(false);
-    kdDebug(38000) << "L=" << rr.left() << endl;
-    kdDebug(38000) << "R=" << rr.right() << endl;
-  }
-}
-
 void GPage::updateSelection()
 {
-  KoRect r = mSelBox;
-  updateHandle();
-  r = r.unite(mSelBox);
+  // TODO may be not recalculate box?
+  KoRect r = mBBox;
+  calcBoxes();
+  r = r.unite(mBBox);
   document()->emitChanged(r, true);
 }
 

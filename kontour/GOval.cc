@@ -129,11 +129,12 @@ void GOval::draw(KoPainter *p, const QWMatrix &m, bool withBasePoints, bool outl
 
 void GOval::calcBoundingBox()
 {
-  KoPoint p1(-mRX, 0.0);
-  KoPoint p2(0.0, mRY);
-  KoPoint p3(mRX, 0.0);
-  KoPoint p4(0.0, -mRY);
-  mBBox = calcUntransformedBoundingBox(p1, p2, p3, p4);
+  KoPoint p1(-mRX, mRY);
+  KoPoint p2(mRX, mRY);
+  KoPoint p3(mRX, -mRY);
+  KoPoint p4(-mRX, -mRY);
+  mSBox = calcUntransformedBoundingBox(p1, p2, p3, p4);
+  mBBox = mSBox;
   adjustBBox(mBBox);
 
   double x, y, angle;
@@ -234,42 +235,18 @@ void GOval::removePoint(int idx, bool update)
 
 bool GOval::contains(const KoPoint &p)
 {
-/*  double x1, y1, x2, y2;
-
-  if(mBBox.contains(p))
+  QPoint pp = iMatrix.map(QPoint(static_cast<int>(p.x()), static_cast<int>(p.y())));
+  double x = pp.x();
+  if(-mRX <= x && x <= mRX)
   {
-    QPoint pp = iMatrix.map(QPoint(static_cast<int>(p.x()), static_cast<int>(p.y())));
-    x1 = sPoint.x();
-    x2 = ePoint.x();
-    if(x1 >= x2)
-    {
-      x1 = x2;
-      x2 = sPoint.x();
-      y1 = ePoint.y();
-      y2 = sPoint.y();
-    }
+    double y = sqrt(mRY * mRY * (1.0 - (x * x) / (mRX * mRX)));
+    if(-y <= pp.y() && pp.y() <= y)
+      return true;
     else
-    {
-      y1 = sPoint.y();
-      y2 = ePoint.y();
-    }
-
-    double x, a, b, sqr;
-    double mx, my;
-
-    mx = (x1 + x2) / 2;
-    my = (y1 + y2) / 2;
-    a = (x2 - x1) / 2;
-    b = (y2 - y1) / 2;
-    x = pp.x();
-    if(x1 <= x && x <= x2)
-    {
-      sqr = sqrt((1 - ((x - mx) * (x - mx)) / (a * a)) * (b * b));
-      if(my - sqr <= pp.y() && pp.y() <= my + sqr)
-        return true;
-    }
-  }*/
-  return false;
+      return false;
+  }
+  else
+    return false;
 }
 
 bool GOval::findNearestPoint(const KoPoint &p, double max_dist, double &dist, int &pidx, bool all)
