@@ -1,2 +1,2 @@
 #TODO: export
-SUBDIRS = import
+SUBDIRS = import.old
