@@ -4,30 +4,31 @@
 //static int numFormats= 6;
 static int numFormats= 5;
 
-static FormatRecord formatlist[] =
+static Format formatlist[] =
 {
   {
     "JPEG",
-    FormatRecord::InternalFormat | FormatRecord::ReadFormat,
+    Format::InternalFormat | Format::ReadFormat,
     "^\377\330\377\340", "*.jpeg *.jpg", 0, 0,
   },
   {
     "BMP",
-    FormatRecord::InternalFormat | FormatRecord::ReadFormat | FormatRecord::WriteFormat,
+    Format::InternalFormat | Format::ReadFormat | Format::WriteFormat,
     0, "*.bmp", 0, 0,
   },
   {	 
     "XBM",
-    FormatRecord::InternalFormat | FormatRecord::ReadFormat | FormatRecord::WriteFormat,
+    Format::InternalFormat | Format::ReadFormat | Format::WriteFormat,
     0, "*.xbm", 0, 0,
   },
   {
     "XPM",
-    FormatRecord::InternalFormat | FormatRecord::ReadFormat | FormatRecord::WriteFormat,
+    Format::InternalFormat | Format::ReadFormat | Format::WriteFormat,
     0, "*.xpm", 0, 0,
   },
   {
     "PNM",
+    Format::InternalFormat | Format::ReadFormat | Format::WriteFormat,
     0, "*.pbm *.pgm *.ppm", 0, 0
   }
 };
@@ -42,10 +43,10 @@ FormatManager::~FormatManager()
 {
 }
 
-void FormatManager::init( FormatRecord formatlist[] )
+void FormatManager::init( Format formatlist[] )
 {
   int i;
-  FormatRecord* rec;
+  Format* rec;
    
   // Build format list
   for( i = 0; i < numFormats; i++ )
@@ -59,7 +60,7 @@ void FormatManager::init( FormatRecord formatlist[] )
   // Register them with Qt
   for( rec = list.first(); rec != NULL; rec = list.next() )
   {
-    if( ( rec->flags & FormatRecord::InternalFormat ) == 0L )
+    if( ( rec->flags & Format::InternalFormat ) == 0L )
     {
       QImageIO::defineIOHandler(rec->formatName, rec->magic, 0, rec->read_format, rec->write_format );
     }
@@ -68,19 +69,19 @@ void FormatManager::init( FormatRecord formatlist[] )
   kimgioRegister();
 }
 	  
-const QStrList *FormatManager::formats()
+const QStringList* FormatManager::formats()
 {
   return &names;
 }
 
-const char *FormatManager::allImagesGlob()
+const QString FormatManager::allImagesGlob()
 {
   return globAll;
 }
  
-const char* FormatManager::glob( const char* format )
+const QString FormatManager::glob( const QString format )
 {
-  FormatRecord* rec;
+  Format* rec;
   QString name( format );
   QString curr;
   bool done = FALSE;

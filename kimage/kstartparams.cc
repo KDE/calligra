@@ -16,14 +16,19 @@ KStartParams::~KStartParams()
   // => wird automatisch gemacht
 }
 
-int KStartParams::countParams()
+uint KStartParams::countParams() const
 {
   return m_paramList.count();
 }
 
-QString KStartParams::getParam( uint _index )
+QString KStartParams::getParam( uint _index ) const
 {
-  return *m_paramList.at( _index );
+  QString result = "";
+  if( _index < countParams() )
+  {
+    result = *m_paramList.at( _index );
+  }
+  return result;
 }
 
 void KStartParams::deleteParam( uint _index )
@@ -62,7 +67,7 @@ bool KStartParams::paramIsPresent( const QString& _longparam, const QString& _sh
   return false;
 }
 
-uint KStartParams::getIndex( const QString& _param )
+int KStartParams::getIndex( const QString& _param )
 {
   uint result = 0;
   QStringList::Iterator it;
@@ -75,10 +80,10 @@ uint KStartParams::getIndex( const QString& _param )
     }
     result++;
   }
-  return result;
+  return -1;
 }
 
-uint KStartParams::getIndex( const QString& _longparam, const QString& _shortparam )
+int KStartParams::getIndex( const QString& _longparam, const QString& _shortparam )
 {
   uint result = 0;
   QStringList::Iterator it;
@@ -91,10 +96,10 @@ uint KStartParams::getIndex( const QString& _longparam, const QString& _shortpar
     }
     result++;
   }
-  return result;
+  return -1;
 }
 
-bool KStartParams::compareParam( const QString& _arg, const QString& _param )
+bool KStartParams::compareParam( const QString& _arg, const QString& _param ) const
 {
   if( _arg.length() < _param.length() )
     return false;

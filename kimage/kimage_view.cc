@@ -28,7 +28,7 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kiconloader.h>
-
+#include <klineeditdlg.h>
 #include <opUIUtils.h>
 #include <opMainWindow.h>
 #include <opMainWindowIf.h>
@@ -37,7 +37,6 @@
 #include <koPrintDia.h>
 #include <koAboutDia.h>
 
-#include "kinputdialog.h"
 #include "kintegerinputdialog.h"
 #include "kzoomfactordialog.h"
 #include "preferencesdlg.h"
@@ -693,9 +692,10 @@ void KImageView::extrasRunCommand()
   CHECK_ALL;
 
   QString tmp;
-  KInputDialog dlg( 0, i18n( "Execute Command" ), i18n( "Commandline:" ) );
-  if( dlg.getStr( tmp ) != KDialog::Accepted )
+  KLineEditDlg dlg( i18n( "Execute Command" ), i18n( "test" ), 0 );
+  if( dlg.exec() != KDialog::Accepted )
   {
+    tmp = dlg.text();
     return;
   }
   KProcess proc;

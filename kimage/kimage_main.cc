@@ -40,6 +40,9 @@ KImageApp::KImageApp( int& argc, char** argv )
   , m_params( argc, argv ) // sollte in KoApplcation
   , m_bWithGUI( true ) // sollte in KoApplication
 {
+  FormatManager* formatManager;
+  formatManager = new FormatManager();
+
   // sollte in KoApplication
   if( m_params.paramIsPresent( "--server", "-s" ) )
   {
@@ -63,7 +66,7 @@ void app_classname::start() \
   \
   if( m_bWithGUI ) \
   { \
-    for( int i = 0; i < m_params.countParams(); i++ ) \
+    for( uint i = 0; i < m_params.countParams(); i++ ) \
     { \
       if( m_params.getParam( i ).left( 1 ) != "-" ) \
       { \
@@ -98,9 +101,6 @@ KOFFICE_APPLICATION_START( KImageApp, KImageShell )
 
 int main( int argc, char** argv )
 {
-  FormatManager* formatManager;
-  formatManager = new FormatManager();
-
   KImageAutoLoader loader( "IDL:KImage/DocumentFactory:1.0", "KImage" );
   KImageApp app( argc, argv );
 
