@@ -483,6 +483,7 @@ protected:
     void frameStyleSelected( KWFrameStyle *_sty );
     void tableStyleSelected( KWTableStyle *_sty );
     void changeFootEndNoteState();
+    void refreshDeletePageAction();
 
 private:
     KWDocument *m_doc;

@@ -470,9 +470,6 @@ void KWView::setupActions()
                                     this, SLOT( deletePage() ),
                                     actionCollection(), "delete_page" );
     kdDebug() <<  m_doc->numPages() <<  " " << (m_doc->processingType() == KWDocument::DTP) << endl;
-    // Duplicated with pageNumChanged
-    actionDeletePage->setEnabled( m_doc->numPages() > 1 && m_doc->processingType() == KWDocument::DTP );
-    kdDebug() << "isEnabled:" << actionDeletePage->isEnabled() << endl;
 
     (void) new KAction( i18n( "Configure Mai&l Merge..." ), "configure",0,
                         this, SLOT( editMailMergeDataBase() ),
@@ -1530,8 +1527,7 @@ void KWView::pageNumChanged()
      updatePageInfo();
      int pages = m_doc->numPages();
      kdDebug() <<  pages <<  " " << (m_doc->processingType() == KWDocument::DTP) << endl;
-     // For now it's only implemented in DTP mode.
-     actionDeletePage->setEnabled( pages > 1 && m_doc->processingType() == KWDocument::DTP );
+     refreshDeletePageAction();
 }
 
 void KWView::updateFrameStatusBarItem()
@@ -1990,10 +1986,15 @@ void KWView::updateReadWrite( bool readwrite )
         frameSelectedChanged();
         slotFrameSetEditChanged();
         refreshCustomMenu();
-
+        refreshDeletePageAction();
         // Correctly enable or disable undo/redo actions again
         m_doc->commandHistory()->updateActions();
     }
+}
+
+void KWView::refreshDeletePageAction()
+{
+    actionDeletePage->setEnabled( m_doc->numPages() > 1 && m_doc->processingType() == KWDocument::DTP );
 }
 
 void KWView::showMouseMode( int _mouseMode )
