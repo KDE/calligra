@@ -30,7 +30,8 @@
 #include "kspread_util.h"
 
 #include <qdom.h>
-
+#include <koxmlwriter.h>
+#include <qbuffer.h>
 #include <kdebug.h>
 
 KSpreadConditional::KSpreadConditional():
@@ -230,6 +231,30 @@ void KSpreadConditions::setConditionList( const QValueList<KSpreadConditional> &
     m_condList.append( KSpreadConditional( d ) );
   }
 }
+
+void KSpreadConditions::saveOasisConditions( KoGenStyle &currentCellStyle )
+{
+    if ( m_condList.isEmpty() )
+        return;
+    QValueList<KSpreadConditional>::const_iterator it;
+    QBuffer buffer;
+    buffer.open( IO_WriteOnly );
+    KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
+
+    for ( it = m_condList.begin(); it != m_condList.end(); ++it )
+    {
+        KSpreadConditional condition = *it;
+        elementWriter.startElement( "style:map" );
+        elementWriter.addAttribute( "style:condition", "..." ); //todo
+        elementWriter.addAttribute("style:apply-style-name", "..." );//todo
+        elementWriter.addAttribute( "style:base-cell-address", "..." );//todo
+        elementWriter.endElement();
+    }
+    QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+    currentCellStyle.addChildElement( "conditional attribute", elementContents );
+
+}
+
 
 QDomElement KSpreadConditions::saveConditions( QDomDocument & doc ) const
 {

@@ -29,6 +29,7 @@
 
 class KSpreadCell;
 class KSpreadStyle;
+class KoGenStyle;
 
 class QColor;
 class QFont;
@@ -103,11 +104,13 @@ class KSpreadConditions
   /**
    * Takes a parsed DOM element and recreates the conditions structure out of
    * it
-   */ 
+   */
   void loadConditions( const QDomElement & element );
 
   void loadOasisConditions( const QDomElement & element );
-    
+
+    void saveOasisConditions( KoGenStyle &currentCellStyle );
+
 
   /**
    * returns the style that matches first (or NULL if no condition matches)

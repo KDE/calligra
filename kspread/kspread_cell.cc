@@ -5150,6 +5150,8 @@ void KSpreadCell::saveOasisAnnotation( KoXmlWriter &xmlwriter )
 void KSpreadCell::saveOasisCellStyle( KoGenStyle &currentCellStyle )
 {
     KSpreadFormat::saveOasisCellStyle( currentCellStyle, column(), row() );
+    if ( d->extra()->conditions )
+        d->extra()->conditions->saveOasisConditions( currentCellStyle );
 }
 
 
