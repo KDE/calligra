@@ -19,6 +19,7 @@
 
 #include <qcstring.h>
 #include <qstring.h>
+#include <qfile.h>
 
 #include <kgenericfactory.h>
 #include <koFilter.h>
