@@ -51,7 +51,7 @@ bool KHTMLReader::filter(KURL url) {
 	_html->begin();
 	_list_depth=0;
 
-	_html->view()->resize(700,530);
+	_html->view()->resize(600,530);
 	_html->setAutoloadImages(false);
 
 	if (_html->openURL(url) == false) {
@@ -130,7 +130,6 @@ void KHTMLReader::startNewLayout(bool startNewFormat, QDomElement layout) {
 void KHTMLReader::completed() {
 	kdDebug() << "KHTMLReader::completed" << endl;
         qApp->exit_loop();
-	_html->view()->resize(700,530);
 	DOM::Document doc=_html->document(); // FIXME parse <HEAD> too
 	DOM::NodeList list=doc.getElementsByTagName("body");
 	DOM::Node docbody=list.item(0);
@@ -461,6 +460,7 @@ bool KHTMLReader::parse_table(DOM::Element e) {
 				// fixme don't guess. get it right.
 	 	    	    	state()->paragraph=_writer->addParagraph(state()->frameset);
 	 	    	    	parseNode(cols);
+				_writer->cleanUpParagraph(state()->paragraph);
  			    	popState();
  				ncol++;
  				bgcolor=bbgcolor;
