@@ -111,6 +111,10 @@ Cursor* MySqlConnection::prepareQuery( const QString& statement, uint cursor_opt
 	return new MySqlCursor(this,statement,cursor_options);
 }
 
+Cursor* MySqlConnection::prepareQuery( QuerySchema& query, uint cursor_options ) {
+	return new MySqlCursor( this, query, cursor_options );
+}
+
 QString MySqlConnection::escapeString(const QString& str) const {
 	return QString();//TODO
 }

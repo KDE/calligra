@@ -262,22 +262,32 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		virtual QString escapeString(const QString& str) const = 0;
 		virtual QCString escapeString(const QCString& str) const = 0;
 		
-		/*! Prepares query described by \a statement. 
+		/*! Prepares query described by raw \a statement. 
 		 \return opened cursor created for results of this query 
 		 or NULL if there was any error. Cursor can have optionally applied \a cursor_options
 		 (one of more selected from KexiDB::Cursor::Options).
 		 Preparation means that returned cursor is created but not opened.
 		 Open this when you would like to do it with Cursor::open().
 
-		 Note that you can create "not configured" cursor when you omit 
-		 \a statement parameter. Then you will need a parameter for
-		 Cursor::open(). */
-		virtual Cursor* prepareQuery( const QString& statement = QString::null, uint cursor_options = 0) = 0;
+		 Note for driver developers: you should initialize cursor engine-specific 
+		 resources and return Cursor subclass' object 
+		 (passing \a statement and \a cursor_options to it's constructor).
+		*/
+		virtual Cursor* prepareQuery( const QString& statement, uint cursor_options = 0) = 0;
+
+		/*! \overload prepareQuery( const QString& statement = QString::null, uint cursor_options = 0)
+		 Prepares query described by \a query schema. 
+
+		 Note for driver developers: you should initialize cursor engine-specific 
+		 resources and return Cursor subclass' object 
+		 (passing \a query and \a cursor_options to it's constructor).
+		*/
+		virtual Cursor* prepareQuery( QuerySchema& query, uint cursor_options = 0 ) = 0;
 
 		/*! \overload prepareQuery( const QString& statement = QString::null, uint cursor_options = 0)
 		 Statement is build from data provided by \a query schema.
 		*/
-		Cursor* prepareQuery( QuerySchema& query, uint cursor_options = 0);
+//		Cursor* prepareQuery( QuerySchema& query, uint cursor_options = 0);
 
 		/*! \overload prepareQuery( const QString& statement = QString::null, uint cursor_options = 0)
 		 Statement is build from data provided by \a table schema, 

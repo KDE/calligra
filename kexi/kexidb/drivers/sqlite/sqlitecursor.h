@@ -69,9 +69,14 @@ class KEXIDB_SQLITE_DRIVER_EXPORT SQLiteCursor : public Cursor
 		virtual void drv_clearServerResult();
 
 	protected:
-		/*! Cursor will operate on \a conn */
-		SQLiteCursor(Connection* conn, const QString& statement = QString::null, uint options = NoOptions );
-		virtual bool drv_open();
+		/*! Cursor will operate on \a conn, raw \a statement will be used to execute query. */
+		SQLiteCursor(Connection* conn, const QString& statement, uint options = NoOptions );
+
+		/*! Cursor will operate on \a conn, \a query schema will be used to execute query. */
+		SQLiteCursor(Connection* conn, QuerySchema& query, uint options = NoOptions );
+
+		virtual bool drv_open(const QString& statement);
+
 		virtual bool drv_close();
 //		virtual bool drv_moveFirst();
 		virtual bool drv_getNextRecord();

@@ -57,6 +57,9 @@ QuerySchema::QuerySchema(TableSchema* tableSchema)
 	m_name = m_parent_table->name();
 	//inherit caption from a table
 	m_caption = m_parent_table->caption();
+
+	//TODO - add fields
+
 }
 
 QuerySchema::~QuerySchema()

@@ -21,32 +21,18 @@
 #include <kdebug.h>
 
 #include <assert.h>
+#include <stdlib.h>
 
 using namespace KexiDB;
 
 
 Cursor::Cursor(Connection* conn, const QString& statement, uint options)
 	: m_conn(conn)
-	, m_statement(statement)
-	, m_opened(false)
-//	, m_atFirst(false)
-//	, m_atLast(false)
-//	, m_beforeFirst(false)
-	, m_atLast(false)
-	, m_afterLast(false)
-	, m_readAhead(false)
-	, m_at(0)
-	, m_fieldCount(0)//do not know
+	, m_query(0)
+	, m_rawStatement(statement)
 	, m_options(options)
-	//<members related to buffering>
-	, m_cols_pointers_mem_size(0)
-	, m_records_in_buf(0)
-	, m_buffering_completed(false)
-	, m_at_buffer(false)
-	//</members related to buffering>
 {
-	assert(m_conn);
-	m_conn->m_cursors.insert(this,this);
+	init();
 #ifndef Q_WS_WIN
 #warning TODO
 #endif
@@ -54,28 +40,72 @@ Cursor::Cursor(Connection* conn, const QString& statement, uint options)
 // (change this when KexiDB::Query will be used here)
 }
 
-Cursor::~Cursor()
+Cursor::Cursor(Connection* conn, QuerySchema& query, uint options )
+	: m_conn(conn)
+	, m_query(&query)
+	, m_options(options)
 {
-	KexiDBDbg << "Cursor::~Cursor() '" << m_statement.latin1() << "'" << endl;
-	m_conn->m_cursors.take(this);
-//	close();
+	init();
 }
 
-bool Cursor::open( const QString& statement )
+void Cursor::init()
+{
+	assert(m_conn);
+	m_conn->m_cursors.insert(this,this);
+	m_opened = false;
+//	, m_atFirst(false)
+//	, m_atLast(false)
+//	, m_beforeFirst(false)
+	m_atLast = false;
+	m_afterLast = false;
+	m_readAhead = false;
+	m_at = 0;
+//js:todo:	if (m_query)
+//		m_fieldCount = m_query->fieldsCount();
+	m_fieldCount = 0; //do not know
+	//<members related to buffering>
+	m_cols_pointers_mem_size = 0;
+	m_records_in_buf = 0;
+	m_buffering_completed = false;
+	m_at_buffer = false;
+}
+
+Cursor::~Cursor()
+{
+	if (!m_query)
+		KexiDBDbg << "Cursor::~Cursor() '" << m_rawStatement.latin1() << "'" << endl;
+	else
+		KexiDBDbg << "Cursor::~Cursor() query '" << m_query->name() << "'" << endl;
+
+	//take me if delete was 
+	if (!m_conn->m_destructor_started)
+		m_conn->m_cursors.take(this);
+	else {
+		KexiDBDbg << "Cursor::~Cursor() can be destroyed with Conenction::deleteCursor(), not with delete operator !"<< endl;
+		exit(1);
+	}
+}
+
+bool Cursor::open()
 {
 	if (m_opened) {
 		if (!close())
 			return false;
 	}
-	if (!statement.isEmpty()) {
-		m_statement = statement;
+	QString statement;
+	if (!m_rawStatement.isEmpty())
+		statement = m_rawStatement;
+	else {
+		if (!m_query) {
+			KexiDBDbg << "Cursor::open(): no query statement (or schema) defined!" << endl;
+			return false;
+		}
+		statement = m_conn->queryStatement( *m_query );
+	}
 #ifndef Q_WS_WIN
 #warning TODO
 #endif
-//TODO(js) if the statement is not empty update m_fieldCount
-// (change this when KexiDB::Query will be used here)
-	}
-	m_opened = drv_open();
+	m_opened = drv_open(statement);
 //	m_beforeFirst = true;
 	m_afterLast = false; //we are not @ the end
 	m_at = 0; //we are before 1st rec
@@ -109,7 +139,9 @@ bool Cursor::close()
 
 bool Cursor::reopen()
 {
-	return m_opened && close() && open();
+	if (!m_opened)
+		return open();
+	return close() && open();
 }
 
 bool Cursor::moveFirst()

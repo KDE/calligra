@@ -118,6 +118,14 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 		
 		/* Sets native flag. Does not allow to set this off for system KexiDB table. */
 		virtual void setNative(bool set);
+
+		/*! \return query schema object that is defined by "select * from <this_table_name>"
+		 This query schema object is owned by the table schema object.
+		 It is convenient way to get such a query when it is available otherwise.
+		 Always return non-null.
+		*/
+		QuerySchema* query();
+
 	protected:
 		/*! Automatically retrieves table schema via connection. */
 		TableSchema(Connection *conn, const QString & name = QString::null);
@@ -127,6 +135,8 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 		Connection *m_conn;
 		
 		IndexSchema *m_pkey;
+
+		QuerySchema *m_query; //<! query schema that is defined by "select * from <this_table_name>"
 
 	private:
 		bool m_isKexiDBSystem : 1;

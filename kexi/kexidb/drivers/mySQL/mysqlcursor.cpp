@@ -25,8 +25,20 @@ Boston, MA 02111-1307, USA.
 using namespace KexiDB;
 
 MySqlCursor::MySqlCursor(KexiDB::Connection* conn, const QString& statement, uint cursor_options)
-	: Cursor(conn,statement,cursor_options), m_res(0),m_row(0),
-	m_lengths(0),m_numRows(0)
+	: Cursor(conn,statement,cursor_options)
+	, m_res(0)
+	, m_row(0)
+	, m_lengths(0)
+	, m_numRows(0)
+{
+}
+
+MySqlCursor::MySqlCursor(Connection* conn, QuerySchema& query, uint options )
+	: Cursor( conn, query, options )
+	, m_res(0)
+	, m_row(0)
+	, m_lengths(0)
+	, m_numRows(0)
 {
 }
 
@@ -34,7 +46,7 @@ MySqlCursor::~MySqlCursor() {
 	close();
 }
 
-bool MySqlCursor::drv_open() {
+bool MySqlCursor::drv_open(const QString& statement) {
 	
 	MySqlConnection *conn=(MySqlConnection*)m_conn;
 	if ( (!conn)  || (!conn->m_mysql)) {
@@ -42,7 +54,7 @@ bool MySqlCursor::drv_open() {
 		setError(ERR_NO_CONNECTION,i18n("No connection for cursor open operation specified"));
 		return false;
 	}
-        if(mysql_real_query(conn->m_mysql, m_statement.utf8(), strlen(m_statement.utf8())) == 0)
+        if(mysql_real_query(conn->m_mysql, statement.utf8(), strlen(statement.utf8())) == 0)
         {
                 if(mysql_errno(conn->m_mysql) == 0) {
 			m_res= mysql_store_result(conn->m_mysql);

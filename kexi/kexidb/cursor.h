@@ -33,6 +33,16 @@ namespace KexiDB {
 
 /*! Provides database cursor functionality.
 
+	Cursor can be defined in two ways:
+
+	-# by passing QuerySchema object to Connection::executeQuery() or Connction::prepareQuery();
+	   then query is defined for in engine-independent way -- this is recommended usage
+
+	-# by passing raw query statement string to Connection::executeQuery() or Connction::prepareQuery();
+	   then query may be defined for in engine-dependent way -- this is not recommended usage,
+	   but convenient when we can't or do not want to allocate QuerySchema object, while we
+	   know that the query statement is syntactically and logically ok in our context.
+
 	You can move cursor to next record with moveNext() and move back with movePrev().
 	The cursor is always positioned on record, not between records, with exception that 
 	ofter open() it is positioned before first record (if any) -- then bof() equals true,
@@ -47,6 +57,10 @@ namespace KexiDB {
 	and reused when needed. Unbuffered cursor always requires one record fetching from
 	db connection at every step done with moveNext(), movePrev(), etc.
 
+	Notes:
+	- Do not use delete operator for Cursor objects - this will fail; use Connection::deleteCursor()
+	instead.
+	- QuerySchema object is not owned by Cursor object that uses it.
 */
 class KEXI_DB_EXPORT Cursor: public Object
 {
@@ -56,57 +70,88 @@ class KEXI_DB_EXPORT Cursor: public Object
 			NoOptions = 0,
 			Buffered = 1
 		};
+
 		virtual ~Cursor();
+
 		/*! \return connection used for the cursor */
 		Connection* connection() { return m_conn; }
-		/*! Opens the cursor using \a statement. 
-		 Omit \a statement if cursor is already initialized with statement 
-		 at creation time. If \a statement is not empty, existing statement
-		 (if any) is overwritten. */
-		bool open( const QString& statement = QString::null );
+
+		/*! Opens the cursor using data provided on creation. 
+		 The data might be either QuerySchema or raw sql statement. */
+		bool open();
+
+		/*! Closes and then opens again the same cursor. 
+		 If the cursor is not opened it is just opened and result of this open is returned.
+		 Otherwise, true is returned if cursor is successfully closed and then opened. */
+		bool reopen();
+
+//		/*! Opens the cursor using \a statement. 
+//		 Omit \a statement if cursor is already initialized with statement 
+//		 at creation time. If \a statement is not empty, existing statement
+//		 (if any) is overwritten. */
+//		bool open( const QString& statement = QString::null );
+
 		/*! Closes previously opened cursor. 
 			If the cursor is closed, nothing happens. */
 		virtual bool close();
+
+		/*! \return query schema used to define this cursor
+		 or NULL if query schema is undefined but raw statement instead. */
+		QuerySchema *query() const { return m_query; }
+
+		/*! \return raw query statement used to define this cursor
+		 or null string if raw statement instead (but QuerySchema is defined instead). */
+		QString rawStatement() const { return m_rawStatement; }
+
 		/*! \return logically or'd cursor's options, 
 			selected from Cursor::Options enum. */
 		uint options() const { return m_options; }
-		/*! \returns true if cursor is buffered. */
+
+		/*! \returns true if the cursor is opened. */
+		bool isOpened() const { return m_opened; }
+
+		/*! \returns true if the cursor is buffered. */
 		bool isBuffered() const;
+
 		/*! Sets this cursor to buffered type or not. See description 
 			of buffered and nonbuffered cursors in class description.
 			This method only works if cursor is not opened (isOpened()==false).
 			You can close already opened cursor and then switch this option on/off.
 		*/
 		void setBuffered(bool buffered);
+
 		/*! Moves current position to the first record and retrieves it.
 			\return true if the first record was retrieved.
 			False could mean that there was an error or there is no record available. */
 		bool moveFirst();
+
 		/*! Moves current position to the last record and retrieves it. 
 			\return true if the last record was retrieved.
 			False could mean that there was an error or there is no record available. */
 		virtual bool moveLast();
+
 		/*! Moves current position to the next record and retrieves it. */
 		virtual bool moveNext();
+
 		/*! Moves current position to the next record and retrieves it. */
 		virtual bool movePrev();
+
 		/*! \return true if current position is after last record. */
 		bool eof() const;
+
 		/*! \return true if current position is before first record. */
 		bool bof() const;
+
 		/*! \return current internal position of the cursor's query. 
 		 We are counting records from 0.
 		 Value -1 means that cursor does not point to any valid record
 		 (this happens eg. after open(), close(), 
 		 and after moving after last record or before first one. */
 		Q_LLONG at() const;
-		QString statement() const { return m_statement; }
-		bool isOpened() const { return m_opened; }
-		/*! Closes and then opens again the same cursor. 
-			Cursor must be opened before calling this method. */
-		bool reopen();
+
 		/*! \return number of fields available for this cursor. */
 		uint fieldCount() const { return m_fieldCount; }
+
 		virtual QVariant value(int i) const = 0;
 
 		/*! [PROTOTYPE] \return current record data or NULL if there is no current records. */
@@ -118,13 +163,25 @@ class KEXI_DB_EXPORT Cursor: public Object
 		virtual void storeCurrentRecord(RecordData &data) const = 0;
 
 	protected:
-		/*! Cursor will operate on \a conn */
-		Cursor(Connection* conn, const QString& statement = QString::null, uint options = NoOptions );
-		virtual bool drv_open() = 0;
+		/*! Cursor will operate on \a conn, raw \a statement will be used to execute query. */
+		Cursor(Connection* conn, const QString& statement, uint options = NoOptions );
+
+		/*! Cursor will operate on \a conn, \a query schema will be used to execute query. */
+		Cursor(Connection* conn, QuerySchema& query, uint options = NoOptions );
+
+		void init();
+
+		/* Note for driver developers: this method should initialize engine-specific cursor's
+		 resources using \a statement. It is not required to store \a statement somewhere
+		 in your Cursor subclass (it is already stored in m_query or m_rawStatement, 
+		 depending query type) - only pass it to proper engine's function. */
+		virtual bool drv_open(const QString& statement) = 0;
+
 		virtual bool drv_close() = 0;
 //		virtual bool drv_moveFirst() = 0;
 		virtual bool drv_getNextRecord() = 0;
 		virtual bool drv_getPrevRecord() = 0;
+
 		/*DISABLED: ! This is called only once in open(), after successful drv_open().
 			Reimplement this if you need (or not) to do get the first record after drv_open(),
 			eg. to know if there are any records in table. Value returned by this method
@@ -134,12 +191,14 @@ class KEXI_DB_EXPORT Cursor: public Object
 		/*! Clears cursor's buffer if this was allocated (only for buffered cursor type).
 			Otherwise do nothing. For reimplementing. Default implementation does nothing. */
 		virtual void drv_clearBuffer() {}
+
 		//! Internal: clears buffer with reimplemented drv_clearBuffer(). */
 		void clearBuffer();
 
 		Connection *m_conn;
+		QuerySchema *m_query;
 //		CursorData *m_data;
-		QString m_statement;
+		QString m_rawStatement;
 		bool m_opened : 1;
 		bool m_beforeFirst : 1;
 		bool m_atLast : 1;

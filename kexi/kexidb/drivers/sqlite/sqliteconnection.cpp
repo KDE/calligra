@@ -140,6 +140,11 @@ Cursor* SQLiteConnection::prepareQuery( const QString& statement, uint cursor_op
 	return new SQLiteCursor( this, statement, cursor_options );
 }
 
+Cursor* SQLiteConnection::prepareQuery( QuerySchema& query, uint cursor_options )
+{
+	return new SQLiteCursor( this, query, cursor_options );
+}
+
 /*bool SQLiteConnection::drv_deleteCursor( CursorData *data )
 {
 	SQLiteCursorData *c_data = (SQLiteCursorData *)data;

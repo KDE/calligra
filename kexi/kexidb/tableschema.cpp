@@ -33,6 +33,7 @@ TableSchema::TableSchema(const QString& name)
 	, SchemaData(KexiDB::TableObjectType)
 	, m_conn(0)
 	, m_isKexiDBSystem(false)
+	, m_query(0)
 {
 	m_name = name;
 	m_indices.setAutoDelete( true );
@@ -45,6 +46,7 @@ TableSchema::TableSchema()
 	, SchemaData(KexiDB::TableObjectType)
 	, m_conn(0)
 	, m_isKexiDBSystem(false)
+	, m_query(0)
 {
 	m_indices.setAutoDelete( true );
 	m_pkey = new IndexSchema(this);
@@ -57,6 +59,7 @@ TableSchema::TableSchema(Connection *conn, const QString & name)
 	, SchemaData(KexiDB::TableObjectType)
 	, m_conn( conn )
 	, m_isKexiDBSystem(false)
+	, m_query(0)
 {
 	assert(conn);
 	m_name = name;
@@ -69,6 +72,7 @@ TableSchema::~TableSchema()
 {
 	if (m_conn)
 		m_conn->removeMe( this );
+	delete m_query;
 }
 
 void TableSchema::setPrimaryKey(IndexSchema *pkey)
@@ -201,6 +205,13 @@ void TableSchema::setNative(bool set)
 	m_native=set;
 }
 
+QuerySchema* TableSchema::query()
+{
+	if (m_query)
+		return m_query;
+	m_query = new QuerySchema( this );
+	return m_query;
+}
 
 //----------------------------------------------------
 

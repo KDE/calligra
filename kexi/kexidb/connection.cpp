@@ -953,30 +953,48 @@ Cursor* Connection::executeQuery( const QString& statement, uint cursor_options 
 
 Cursor* Connection::executeQuery( QuerySchema& query, uint cursor_options )
 {
-	return executeQuery( queryStatement( query ), cursor_options );
+	Cursor *c = prepareQuery( query, cursor_options );
+	if (!c)
+		return 0;
+	if (!c->open()) {//err - kill that
+		setError(c);
+		delete c;
+		return 0;
+	}
+	return c;
 }
 
 Cursor* Connection::executeQuery( TableSchema& table, uint cursor_options )
 {
-	return executeQuery( queryStatement( table ), cursor_options );
+	return executeQuery( *table.query(), cursor_options );
 }
 
-Cursor* Connection::prepareQuery( QuerySchema& query, uint cursor_options )
+/*Cursor* Connection::prepareQuery( QuerySchema& query, uint cursor_options )
 {
-	return prepareQuery( queryStatement( query ), cursor_options );
-}
+	Cursor *c = prepareQuery( query, cursor_options );
+	if (!c)
+		return 0;
+	if (!c->open()) {//err - kill that
+		setError(c);
+		delete c;
+		return 0;
+	}
+	return c;
+}*/
 
 Cursor* Connection::prepareQuery( TableSchema& table, uint cursor_options )
 {
-	return prepareQuery( queryStatement( table ), cursor_options );
+	return prepareQuery( *table.query(), cursor_options );
 }
 
 bool Connection::deleteCursor(Cursor *cursor)
 {
 	if (!cursor)
 		return false;
-	if (cursor->connection()!=this) //illegal call
+	if (cursor->connection()!=this) {//illegal call
 		KexiDBDbg << "Connection::deleteCursor(): WARNING! Cannot delete the cursor not owned by the same connection!" << endl;
+		return false;
+	}
 	bool ret = cursor->close();
 	delete cursor;
 	return ret;

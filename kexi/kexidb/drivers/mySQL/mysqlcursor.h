@@ -34,8 +34,9 @@ namespace KexiDB {
 class KEXIDB_MYSQL_DRIVER_EXPORT MySqlCursor: public Cursor {
 public:
 	MySqlCursor(Connection* conn, const QString& statement = QString::null, uint cursor_options = 0 );
+	MySqlCursor(Connection* conn, QuerySchema& query, uint options = 0 );
 	~MySqlCursor();
-        virtual bool drv_open();
+        virtual bool drv_open(const QString& statement);
         virtual bool drv_close();
         virtual bool drv_moveFirst();
         virtual bool drv_getNextRecord();

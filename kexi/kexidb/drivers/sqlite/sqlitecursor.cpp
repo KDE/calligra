@@ -85,8 +85,17 @@ class KexiDB::SQLiteCursorData
 		const char **prev_colname;*/
 };
 
+
+
 SQLiteCursor::SQLiteCursor(Connection* conn, const QString& statement, uint options)
 	: Cursor( conn, statement, options )
+	, m_data( new SQLiteCursorData() )
+{
+	m_data->data = ((SQLiteConnection*)conn)->d->data;
+}
+
+SQLiteCursor::SQLiteCursor(Connection* conn, QuerySchema& query, uint options )
+	: Cursor( conn, query, options )
 	, m_data( new SQLiteCursorData() )
 {
 	m_data->data = ((SQLiteConnection*)conn)->d->data;
@@ -97,10 +106,10 @@ SQLiteCursor::~SQLiteCursor()
 	close();
 }
 
-bool SQLiteCursor::drv_open()
+bool SQLiteCursor::drv_open(const QString& statement)
 {
-	m_data->st.resize(m_statement.length()*2);
-	m_data->st = m_conn->escapeString( m_statement.local8Bit() );
+	m_data->st.resize(statement.length()*2);
+	m_data->st = m_conn->escapeString( statement.local8Bit() );
 
 	m_data->res = sqlite_compile(
 		m_data->data,
