@@ -724,9 +724,9 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
             if(elem.hasAttribute("value") && elem.attribute("value").toInt()==0)
                 allSlides = TRUE;
         } else if(elem.tagName()=="SELSLIDES") {
-            QDomElement slide=elem.firstChild().toElement();
-            while(!slide.isNull()) {
-                if( _clean ) // Skip this when loading a single page
+            if( _clean ) { // Skip this when loading a single page
+                QDomElement slide=elem.firstChild().toElement();
+                while(!slide.isNull()) {
                     if(slide.tagName()=="SLIDE") {
                         int nr = -1;
                         bool show = false;
@@ -734,16 +734,15 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
                             nr=slide.attribute("nr").toInt();
                         if(slide.hasAttribute("show"))
                             show=static_cast<bool>(slide.attribute("show").toInt());
-                        // We assume that the PAGE tags were found before the
-                        // SELSLIDES tag (this is always the case)
                         if ( nr >= 0 )
                         {
                             //kdDebug() << "KPresenterDoc::loadXML m_selectedSlides nr=" << nr << " show=" << show << endl;
-                            ASSERT( nr < (int)m_selectedSlides.count() );
-                            m_selectedSlides[nr] = show;
+                            ASSERT( nr == (int)m_selectedSlides.count() );
+                            m_selectedSlides.append( show );
                         } else kdWarning() << "Parse error. No nr in <SLIDE> !" << endl;
                     }
-                slide=slide.nextSibling().toElement();
+                    slide=slide.nextSibling().toElement();
+                }
             }
         } else if(elem.tagName()=="PIXMAPS") {
             QDateTime defaultDateTime( _imageCollection.tmpDate(), _imageCollection.tmpTime() );
@@ -776,11 +775,18 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
     if ( _rastX == 0 ) _rastX = 10;
     if ( _rastY == 0 ) _rastY = 10;
 
-    if ( allSlides && _clean ) {
-        //kdDebug() << "KPresenterDoc::loadXML allSlides" << endl;
-        QValueList<bool>::Iterator sit = m_selectedSlides.begin();
-        for ( ; sit != m_selectedSlides.end(); ++sit )
-            (*sit) = true;
+    if ( _clean ) {
+        // Fix the selectedslides list (for all docs)
+        while ( m_selectedSlides.count() < getPageNums() )
+            m_selectedSlides.append(true);
+
+        // Not sure this is necessary anymore.
+        if ( allSlides ) {
+            //kdDebug() << "KPresenterDoc::loadXML allSlides" << endl;
+            QValueList<bool>::Iterator sit = m_selectedSlides.begin();
+            for ( ; sit != m_selectedSlides.end(); ++sit )
+                (*sit) = true;
+        }
     }
 
     setModified(false);
@@ -790,12 +796,12 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
 /*====================== load background =========================*/
 void KPresenterDoc::loadBackground( const QDomElement &element )
 {
+    kdDebug() << "KPresenterDoc::loadBackground" << endl;
     QDomElement page=element.firstChild().toElement();
     while(!page.isNull()) {
         insertNewPage( 0, 0, false ); // appends an entry to _backgroundList
         KPBackGround *kpbackground = _backgroundList.last();
         kpbackground->load( page );
-        m_selectedSlides.append( true ); // create an entry for this page
         page=page.nextSibling().toElement();
     }
 }
@@ -2969,7 +2975,11 @@ int KPresenterDoc::insertPage( int _page, InsertPos _insPos, bool chooseTemplate
     _backgroundList.take( _backgroundList.count() - 1 );
     _backgroundList.insert( _page, kpbackground );
     if ( _page < (int)m_selectedSlides.count() )
+    {
+        kdDebug() << "KPresenterDoc::insertPage inserting in m_selectedSlides at position " << _page << endl;
         m_selectedSlides.insert( m_selectedSlides.at(_page), true );
+        kdDebug() << "KPresenterDoc::insertPage count is now " << m_selectedSlides.count() << endl;
+    }
     else
         m_selectedSlides.append( true );
 
@@ -3594,10 +3604,11 @@ bool KPresenterDoc::isSlideSelected( int pgNum /* 0-based */ ) const
 
 QValueList<int> KPresenterDoc::selectedSlides() const /* returned list is 0-based */
 {
+    int pageNums = getPageNums(); // to be safe
     QValueList<int> result;
     QValueList<bool>::ConstIterator sit = m_selectedSlides.begin();
     for ( int i = 0; sit != m_selectedSlides.end(); ++sit, ++i )
-        if ( *sit )
+        if ( *sit && i < pageNums )
             result << i;
     return result;
 }

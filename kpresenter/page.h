@@ -95,7 +95,7 @@ public:
     bool pNext( bool );
     bool pPrev( bool );
 
-    unsigned int presPage() const { return currPresPage; }
+    unsigned int presPage() const { return currPresPage; } // 1 based
     int presStep() const { return currPresStep; }
     float presFakt() const { return _presFakt; }
     int numPresSteps() const { return presStepList.count(); }
