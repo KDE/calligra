@@ -147,18 +147,18 @@ static RTFProperty propertyTable[] =
 	MEMBER(	0L,		"f",		setNumericProperty,	state.format.font, 0 ),
 	MEMBER(	"@rtf",		"facingp",	setFlagProperty,	facingPages, true ),
 	PROP(	0L,		"fcharset",	ignoreKeyword,		0L, 0 ), // Not needed with Qt
-	MEMBER(	"@fonttbl",	"fdecor",	setEnumProperty,	font.styleHint, QFont::Decorative ),
+	PROP(	"@fonttbl",	"fdecor",	setFontStyleHint,	0L, QFont::Decorative ),
 	MEMBER(	0L,		"fi",		setNumericProperty,	state.layout.firstIndent, 0 ),
-	MEMBER(	"@fonttbl",	"fmodern",	setEnumProperty,	font.styleHint, QFont::TypeWriter ),
-	MEMBER(	"@fonttbl",	"fnil",		setEnumProperty,	font.styleHint, QFont::AnyStyle ),
+	PROP(	"@fonttbl",	"fmodern",	setFontStyleHint,	0L, QFont::TypeWriter ),
+	PROP(	"@fonttbl",	"fnil",		setFontStyleHint,	0L, QFont::AnyStyle ),
 	MEMBER(	0L,		"footery",	setNumericProperty,	state.section.footerMargin, 0 ),
 	PROP(	0L,		"formshade",	ignoreKeyword,		0L, 0 ), // Not supported, KWord has no form support
 	MEMBER(	"@fonttbl",	"fprq",		setNumericProperty,	font.fixedPitch, 0 ),
-	MEMBER(	"@fonttbl",	"froman",	setEnumProperty,	font.styleHint, QFont::Serif ),
+	PROP(	"@fonttbl",	"froman",	setFontStyleHint,	0L, QFont::Serif ),
 	MEMBER(	0L,		"fs",		setNumericProperty,	state.format.fontSize, 0 ),
-	MEMBER(	"@fonttbl",	"fscript",	setEnumProperty,	font.styleHint, QFont::AnyStyle ),
-	MEMBER(	"@fonttbl",	"fswiss",	setEnumProperty,	font.styleHint, QFont::SansSerif ),
-	MEMBER(	"@fonttbl",	"ftech",	setEnumProperty,	font.styleHint, QFont::AnyStyle ),
+	PROP(	"@fonttbl",	"fscript",	setFontStyleHint,	0L, QFont::AnyStyle ),
+	PROP(	"@fonttbl",	"fswiss",	setFontStyleHint,	0L, QFont::SansSerif ),
+	PROP(	"@fonttbl",	"ftech",	setFontStyleHint,	0L, QFont::AnyStyle ),
 	MEMBER(	"@colortbl",	"green",	setNumericProperty,	green, 0 ),
 	MEMBER(	0L,		"headery",	setNumericProperty,	state.section.headerMargin, 0 ),
 	MEMBER(	0L,		"i",		setToggleProperty,	state.format.italic, 0 ),
@@ -918,6 +918,11 @@ void RTFImport::setNumericProperty( RTFProperty *property )
 void RTFImport::setEnumProperty( RTFProperty *property )
 {
     *((int *)(((char *)this) + property->offset)) = property->value;
+}
+
+void RTFImport::setFontStyleHint( RTFProperty* property )
+{
+    font.styleHint = QFont::StyleHint( property->value );
 }
 
 void RTFImport::setPictureType( RTFProperty* property )

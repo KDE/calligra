@@ -265,8 +265,14 @@ public:
     void setNumericProperty( RTFProperty *property );
     void setEnumProperty( RTFProperty *property );
     /**
+     * Set font style hint
+     * @since 1.4
+     */
+    void setFontStyleHint( RTFProperty* property );
+    /**
      * Set the picture type
      * (BMP, PNG...)
+     * @since 1.4
      */
     void setPictureType( RTFProperty* property );
     /**
