@@ -106,9 +106,12 @@ void KWFrameDia::init() {
             setupTab2();
             setupTab4();
         } else if(frameType == FT_TEXT) {
-            setupTab1();
-            setupTab2();
-            setupTab3();
+            if(! (frame->getFrameSet() && 
+                frame->getFrameSet()->getGroupManager())) { // table
+                setupTab1();
+                setupTab2();
+                setupTab3();
+            }
             setupTab4();
             if(! frame->getFrameSet()) // first creation
                showPage(2);

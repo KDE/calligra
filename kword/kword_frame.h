@@ -482,6 +482,7 @@ public:
 
     void selectUntil( KWFrameSet *fs, KWPage *page );
     bool isOneSelected( KWFrameSet *fs, unsigned int &row, unsigned int &col );
+    bool isOneSelected( unsigned int &row, unsigned int &col );
 
     void insertRow( unsigned int _idx, bool _recalc = true, bool _removeable = false );
     void insertCol( unsigned int _idx );

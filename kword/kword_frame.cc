@@ -436,14 +436,14 @@ FrameType KWFrame::getFrameType()
 KWFrame *KWFrame::getCopy() {
     /* returns a deep copy of self */
     KWFrame *frm = new KWFrame(0L, x(), y(),width(), height(), getRunAround(), getRunAroundGap() );
-    frm->setLeftBorder( getLeftBorder() );
-    frm->setRightBorder( getRightBorder() );
-    frm->setTopBorder( getTopBorder() );
-    frm->setBottomBorder( getBottomBorder() );
-    frm->setBLeft( getBLeft() );
-    frm->setBRight( getBRight() );
-    frm->setBTop( getBTop() );
-    frm->setBBottom( getBBottom() );
+    //frm->setLeftBorder( getLeftBorder() );
+    //frm->setRightBorder( getRightBorder() );
+    //frm->setTopBorder( getTopBorder() );
+    //frm->setBottomBorder( getBottomBorder() );
+    //frm->setBLeft( getBLeft() );
+    //frm->setBRight( getBRight() );
+    //frm->setBTop( getBTop() );
+    //frm->setBBottom( getBBottom() );
     frm->setBackgroundColor(getBackgroundColor());
     frm->setFrameBehaviour(getFrameBehaviour());
     frm->setNewFrameBehaviour(getNewFrameBehaviour());
@@ -729,14 +729,16 @@ KWTextFrameSet::~KWTextFrameSet()
 /*================================================================*/
 void KWTextFrameSet::update()
 {
+int amount=frames.count();
+KWFrame *tmpFrame=frames.at(0);
     typedef QList<KWFrame> FrameList;
     QList<FrameList> frameList;
     frameList.setAutoDelete( true );
 
+    // sort frames of this frameset into l2 on (page, y coord, x coord)
     QRect pageRect;
     for ( unsigned int i = 0; i < static_cast<unsigned int>( doc->getPages() + 1 ); i++ ) {
         pageRect = QRect( 0, i * doc->getPTPaperHeight(), doc->getPTPaperWidth(), doc->getPTPaperHeight() );
-
         FrameList *l = new FrameList();
         l->setAutoDelete( false );
         for ( unsigned int j = 0; j < frames.count(); j++ ) {
@@ -745,6 +747,7 @@ void KWTextFrameSet::update()
                 l->append( frames.at( j ) );
             }
         }
+
 
         if ( !l->isEmpty() ) {
             FrameList *ll = new FrameList();
@@ -782,7 +785,8 @@ void KWTextFrameSet::update()
             l = l2;
         }
 
-        frameList.append( l );
+        if(! l->isEmpty()) 
+            frameList.append( l );
     }
 
     frames.setAutoDelete( false );
@@ -801,7 +805,12 @@ void KWTextFrameSet::update()
             }
         }
     }
-
+if(amount != frames.count())  {
+    kdDebug() << "ERROR: Found a problem with a frameset. One or more frames have been removed!" << endl;
+    kdDebug() << "       frame size: " << tmpFrame->x() << ","<< tmpFrame->y() << "," << tmpFrame->width() << "," << tmpFrame->height() << endl;
+    if(grpMgr)
+        kdDebug() << "       cell: " << grpMgr->getCell(this)->row << "," << grpMgr->getCell(this)->col << endl;
+}
     frames.setAutoDelete( true );
 }
 
@@ -1235,7 +1244,7 @@ KWTextFrameSet *KWTextFrameSet::getCopy() {
         KWFrame *thisFrame=getFrame(i)->getCopy();
         newFS->addFrame(thisFrame);
     }
-//kdDebug() << "orig has " << getNumFrames() << ", new has " << newFS->getNumFrames() << endl;
+kdDebug() << "orig has " << getNumFrames() << ", new has " << newFS->getNumFrames() << endl;
     if(newFS->getNumFrames() >0) 
         newFS->assign(this);
     return newFS;
@@ -2091,6 +2100,8 @@ void KWGroupManager::addFrameSet( KWFrameSet *fs, unsigned int row, unsigned int
         if ( cells.at( i )->row * 10 + cells.at( i )->col > sum )
             break;
     }
+    if(fs->getName()==0 || *fs->getName()==0) 
+        fs->setName(QString ("Cell %1,%2").arg(col+1).arg(row+1));
 
     // If the group is anchored, we must adjust the incoming frameset.
     if ( anchored ) {
@@ -2207,68 +2218,90 @@ void KWGroupManager::init()
 /*================================================================*/
 void KWGroupManager::recalcCols()
 {
-/* move this to a function that does rescaling of cells.  */
-    for ( unsigned int i = 0; i < cols; i++ ) { // TODO fix this for cells with cols > 1
-        unsigned int j = 0;
-        int wid = -1;
-        int _wid = 100000;
-        for ( j = 0; j < rows; j++ ) {
-            if ( getFrameSet( j, i )->getFrame( 0 )->isSelected() )
-                wid = getFrameSet( j, i )->getFrame( 0 )->width();
-            _wid = QMIN( getFrameSet( j, i )->getFrame( 0 )->width() , _wid );
-        }
-        if ( wid != -1 ) {
-            if ( getBoundingRect().x() + getBoundingRect().width() + ( wid - _wid ) >
-                 static_cast<int>( doc->getPTPaperWidth() ) )
-                wid = _wid;
-            for ( j = 0; j < rows; j++ ) {
-                KWFrame *frame = getFrameSet( j, i )->getFrame( 0 );
-                if ( wid < static_cast<int>( doc->getRastX() + frame->getBLeft().pt() + frame->getBRight().pt() ) )
-                    frame->setWidth( doc->getRastX() + frame->getBLeft().pt() + frame->getBRight().pt() );
-                else
-                    frame->setWidth( wid );
-            }
-        }
-    } 
-
-    unsigned int x, nextX;
-    if(getFrameSet(0,0) &&  getFrameSet( 0, 0 )->getFrame( 0 ))
-        nextX =getFrameSet( 0, 0 )->getFrame( 0 )->x();
-
-    for ( unsigned int i = 0; i < cols; i++ ) {
-        x=nextX;
-        for ( unsigned int j = 0; j < rows; j++ ) {
-            Cell *cell = getCell(j,i);
-            if(cell->col==i && cell->row==j) {
-                cell->frameSet->getFrame( 0 )->moveTopLeft( QPoint( x, cell->frameSet->getFrame( 0 )->y() ) );
-                cell->frameSet->update();
-            }
-            if(cell->col + cell->cols -1 == i)
-                nextX=cell->frameSet->getFrame(0) -> right() + 3;
-        }
-    }
-/*
-    // Reggie: this has to be improved!
-    QList<int> ws;
-    ws.setAutoDelete( true );
-
-    for ( unsigned int i = 0; i < cols; i++ )
-        ws.append( new int( getFrameSet( 0, i )->getFrame( 0 )->width() ) );
-
-    for ( unsigned int i = 0; i < rows; i++ ) {
-        for ( unsigned int j = 0; j < cols; j++ ) {
-            Cell *cell = getCell( i, j );
-            if ( cell->cols != 1 ) {
-                if ( cell->cols > 0 ) {
-                    int w = 0;
-                    for ( unsigned int k = 0; k < cell->cols; k++ )
-                        w += *ws.at( k + cell->col );
-
-                    cell->frameSet->getFrame( 0 )->setWidth( w + ( cell->cols - 2 ) * 2 + 2 );
+    unsigned int row=0,col=0;
+    if(! cells.isEmpty() && isOneSelected(row,col)) {
+        // check/set sizes of frames
+        // check if leftCoordinate is same as rest of tableRow
+        Cell *activeCell = getCell(row,col);
+        Cell *cell;
+        int coordinate;
+        // find old coord.
+        coordinate=activeCell->frameSet->getFrame(0)->left();
+        for ( unsigned int i = 0; i < rows; i++) {
+            if(i!=row) {
+                cell=getCell(i,col);
+                if(cell->col==col) {
+                    coordinate=cell->frameSet->getFrame(0)->left();
+                    break;
                 }
             }
         }
-    } */
+        if(coordinate != activeCell->frameSet->getFrame(0)->left()) {
+                    // TODO watch minimum width
+            for ( unsigned int i = 0; i < rows; i++) {
+                int difference;
+                if(col==0) {// left most cell
+                    cell = getCell(i,col);
+                    if(cell==activeCell)
+                        cell=0;
+                    else 
+                        difference=(activeCell->frameSet->getFrame(0)->left()- coordinate) * -1;
+                } else {
+                    cell = getCell(i,col-1);
+                    difference=activeCell->frameSet->getFrame(0)->left()- coordinate;
+                }
+                if(cell) {
+                    cell->frameSet->getFrame(0)->setWidth(
+                        cell->frameSet->getFrame(0)->width() + difference);
+                }
+            }
+            if(col!=0) 
+                activeCell->frameSet->getFrame(0)->setWidth(
+                  activeCell->frameSet->getFrame(0)->width() +
+                  activeCell->frameSet->getFrame(0)->left()- coordinate);
+        } else {
+            col+=activeCell->cols-1;
+            // find old coord.
+            coordinate=activeCell->frameSet->getFrame(0)->right();
+            for ( unsigned int i = 0; i < rows; i++) {
+                if(i!=row) {
+                    cell=getCell(i,activeCell->cols+activeCell->col-1);
+                    if(cell->col+cell->cols==activeCell->cols+activeCell->col) {
+                        coordinate=cell->frameSet->getFrame(0)->right();
+                        break;
+                    }
+                }
+            }
+            if(coordinate != activeCell->frameSet->getFrame(0)->right()) {
+                for ( unsigned int i = 0; i < rows; i++) {
+                    Cell *cell = getCell(i,col);
+                    if(cell != activeCell) {
+                        cell->frameSet->getFrame(0)->setWidth(
+                            cell->frameSet->getFrame(0)->width() +
+                            activeCell->frameSet->getFrame(0)->right() - coordinate );
+                    }
+                }
+            }
+        }
+
+        // Move cells
+        unsigned int x, nextX;
+        if(getFrameSet(0,0) &&  getFrameSet( 0, 0 )->getFrame( 0 ))
+            nextX =getFrameSet( 0, 0 )->getFrame( 0 )->x();
+
+        for ( unsigned int i = 0; i < cols; i++ ) {
+            x=nextX;
+            for ( unsigned int j = 0; j < rows; j++ ) {
+                Cell *cell = getCell(j,i);
+                if(cell->col==i && cell->row==j) {
+                    cell->frameSet->getFrame( 0 )->moveTopLeft( QPoint( x, cell->frameSet->getFrame( 0 )->y() ) );
+                    cell->frameSet->update();
+                }
+                if(cell->col + cell->cols -1 == i)
+                    nextX=cell->frameSet->getFrame(0) -> right() + 3;
+            }
+        }
+    }
 }
 
 /*================================================================*/
@@ -2282,26 +2315,74 @@ void KWGroupManager::recalcRows()
         }
     }
     hasTmpHeaders = false;
-
-
-/* move this to a function that does rescaling of cells.  */
-    for ( unsigned int j = 0; j < rows; j++ ) { // fix for cells with rows>1
-        unsigned int i = 0;
-        int hei = -1;
-        int _hei = 100000;
-        for ( i = 0; i < cols; i++ ) {
-            if ( getFrameSet( j, i )->getFrame( 0 )->isSelected() )
-                hei = getFrameSet( j, i )->getFrame( 0 )->height();
-            _hei = std::min( getFrameSet( j, i )->getFrame( 0 )->height() , _hei );
+    // check/set sizes of frames
+    unsigned int row=0,col=0;
+    if(! cells.isEmpty() && isOneSelected(row,col)) {
+        // check if topCoordinate is same as rest of tableRow
+        Cell *activeCell = getCell(row,col);
+        Cell *cell;
+        int coordinate;
+        // find old coord.
+        coordinate=activeCell->frameSet->getFrame(0)->top();
+        for ( unsigned int i = 0; i < cols; i++) {
+            if(i!=col) {
+                cell=getCell(row,i);
+                if(cell->row==row) {
+                    coordinate=cell->frameSet->getFrame(0)->top();
+                    break;
+                }
+            }
         }
-        if ( hei != -1 ) {
-            for ( i = 0; i < cols; i++ )
-                getFrameSet( j, i )->getFrame( 0 )->setHeight( hei );
+        if(coordinate != activeCell->frameSet->getFrame(0)->top()) { // top pos changed
+            // TODO check minimum height
+            for ( unsigned int i = 0; i < cols; i++) {
+                int difference;
+                if(row==0) { // top cell
+                    cell = getCell(0,i);
+                    if(cell==activeCell)
+                        cell=0;
+                    else
+                        difference= (activeCell->frameSet->getFrame(0)->top()- coordinate) * -1;
+                } else {
+                    cell = getCell(row-1,i);
+                    difference= activeCell->frameSet->getFrame(0)->top()- coordinate;
+                }
+                if(cell) {
+                    cell->frameSet->getFrame(0)->setHeight(
+                        cell->frameSet->getFrame(0)->height() +difference);
+                }
+            }
+            if(row!=0)
+                activeCell->frameSet->getFrame(0)->setHeight(
+                    activeCell->frameSet->getFrame(0)->height() +
+                    activeCell->frameSet->getFrame(0)->top()- coordinate);
+        } else { // bottom pos has changed
+            row+=activeCell->rows-1;
+            // find old coord.
+            coordinate=activeCell->frameSet->getFrame(0)->bottom();
+            for ( unsigned int i = 0; i < cols; i++) {
+                if(i!=col) {
+                    cell=getCell(activeCell->row+activeCell->rows-1,i);
+                    if(cell->row+cell->rows==activeCell->row+activeCell->rows) {
+                        coordinate=cell->frameSet->getFrame(0)->bottom();
+                        break;
+                    }
+                }
+            }
+            if(coordinate != activeCell->frameSet->getFrame(0)->bottom()) {
+                for ( unsigned int i = 0; i < cols; i++) {
+                    cell = getCell(row,i);
+                    if(cell != activeCell) {
+                        cell->frameSet->getFrame(0)->setHeight(
+                            cell->frameSet->getFrame(0)->height() +
+                            activeCell->frameSet->getFrame(0)->bottom() - coordinate );
+                    }
+                }
+            }
         }
-    } 
+    }
 
-
-    
+    // do positioning of frames 
     unsigned int y,nextY = getFrameSet( 0, 0 )->getFrame( 0 )->y();
     for ( unsigned int j = 0; j < rows; j++ ) {
         y=nextY;
@@ -2349,8 +2430,12 @@ void KWGroupManager::recalcRows()
                 cell->frameSet->getFrame( 0 )->moveTopLeft( QPoint( cell->frameSet->getFrame( 0 )->x(), y ) );
                 cell->frameSet->update();
             }
-            if(cell->row + cell->rows -1 == j)
-                nextY=cell->frameSet->getFrame(0) -> bottom() + 3;
+            if(cell->frameSet && cell->frameSet->getFrame(0)){
+                if(cell->row + cell->rows -1 == j && cell->frameSet && cell->frameSet->getFrame(0)){
+                    nextY=cell->frameSet->getFrame(0) -> bottom() + 3;
+                }
+            } else 
+                kdDebug () << "Something is wrong with this cell " <<cell->row << "," << cell->col << endl;
         }
 
     }
@@ -2360,7 +2445,6 @@ void KWGroupManager::recalcRows()
         doc->appendPage( doc->getPages() - 1 );
 
     // Reggie: UHHHHHHHHHHHH: Ugly and slow but it helps for now 
-    // TZ: I don't think this is needed (anymore)
     Cell *c;
     for ( unsigned int f = 0; f < cells.count(); f++ ) {
         c = cells.at( f );
@@ -2374,7 +2458,6 @@ kdDebug () << "ERROR: found more than one frameset on a tablecel !! " << endl;
             }
         }
     }
-
 }
 
 /*================================================================*/
@@ -2472,6 +2555,30 @@ void KWGroupManager::selectUntil( KWFrameSet *fs, KWPage *page )
                 page->removeResizeHandles( cells.at( i )->frameSet->getFrame( 0 ) );
         }
     }
+}
+
+/*================================================================*/
+/* Return true if exactly one frame is selected. The parameters row
+   and col will receive the values of the active row and col.
+   When no frame or more then one frame is selected row and col will
+   stay unchanged (and false is returned).
+*/
+bool KWGroupManager::isOneSelected(unsigned int &row, unsigned int &col) {
+    int selectedCell=-1;
+    for ( unsigned int i = 0; i < cells.count(); i++ ) {
+        if(cells.at(i)->frameSet->getFrame(0)->isSelected())  {
+            if(selectedCell==-1) 
+                selectedCell=i;
+            else
+                selectedCell=cells.count()+1;
+        }
+    }
+    if(selectedCell>=0 && selectedCell<=cells.count()) {
+        row=cells.at(selectedCell)->row;
+        col=cells.at(selectedCell)->col;
+        return true;
+    }
+    return false;
 }
 
 /*================================================================*/
@@ -2687,13 +2794,13 @@ bool KWGroupManager::joinCells() {
     colEnd=colBegin+firstCell->cols-1;
     rowEnd=rowBegin+firstCell->rows-1;
 
-    width=firstCell->frameSet->getFrame(0)->width();
-    height=firstCell->frameSet->getFrame(0)->height();
+    //width=firstCell->frameSet->getFrame(0)->width();
+    //height=firstCell->frameSet->getFrame(0)->height();
     while(colEnd+1 <getCols()) { // count all horizontal selected cells
         Cell *cell = getCell(rowEnd,colEnd+1);
         if(cell->frameSet->getFrame(0)->isSelected()) {
             colEnd+=cell->cols;
-            width+=cell->frameSet->getFrame(0)->width();
+            //width+=cell->frameSet->getFrame(0)->width();
         } else 
             break;
     }
@@ -2708,7 +2815,7 @@ bool KWGroupManager::joinCells() {
                 }
             }
             rowEnd+=cell->rows;
-            height+=cell->frameSet->getFrame(0)->height();
+            //height+=cell->frameSet->getFrame(0)->height();
         } else 
             break;
     }
@@ -2718,6 +2825,10 @@ kdDebug() << "joining ("<< rowBegin << ","<< colBegin << ") up until (" << rowEn
             getCell(rowBegin,colBegin) == getCell(rowEnd,colEnd)) 
         return false;
 
+    height=getCell(rowEnd,colBegin)->frameSet->getFrame(0)->bottom() - 
+        getCell(rowBegin,colBegin)->frameSet->getFrame(0)->top();
+    width=getCell(rowBegin,colEnd)->frameSet->getFrame(0)->right() - 
+        getCell(rowBegin,colBegin)->frameSet->getFrame(0)->left();
     
     // do the actual merge.
     for(unsigned int i=colBegin; i<=colEnd;i++) {

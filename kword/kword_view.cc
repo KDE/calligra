@@ -1899,12 +1899,13 @@ void KWordView::tableUngroupTable()
         		i18n("Ungroup Table"), i18n("&Ungroup"));
 	if (result == KMessageBox::Continue)
 	{
-	    grpMgr->ungroup();
 	    QRect r = grpMgr->getBoundingRect();
+	    grpMgr->ungroup();
 	    r = QRect( r.x() - gui->getPaperWidget()->contentsX(),
 		       r.y() - gui->getPaperWidget()->contentsY(),
 		       r.width(), r.height() );
 	    gui->getPaperWidget()->repaintScreen( r, TRUE );
+            m_pKWordDoc->delGroupManager(grpMgr);
 	}
     }
 }
