@@ -298,6 +298,73 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
       m_bLoading = false;
       return false;
   }
+
+  //Backwards compatibility with older versions for paper layout
+  if ( m_syntaxVersion < 1.2 )
+  {
+    // <paper>
+    QDomElement paper = spread.namedItem( "paper" ).toElement();
+    if ( !paper.isNull() )
+    {
+      QString format = paper.attribute( "format" );
+      QString orientation = paper.attribute( "orientation" );
+
+      // <borders>
+      QDomElement borders = paper.namedItem( "borders" ).toElement();
+      if ( !borders.isNull() )
+      {
+          float left = borders.attribute( "left" ).toFloat();
+          float right = borders.attribute( "right" ).toFloat();
+          float top = borders.attribute( "top" ).toFloat();
+          float bottom = borders.attribute( "bottom" ).toFloat();
+          
+          //apply to all tables  
+          QPtrListIterator<KSpreadTable> it ( m_pMap->tableList() );
+          for( ; it.current(); ++it )
+          {
+            it.current()->setPaperLayout( left, top, right, bottom, format, orientation );
+          }
+      }
+      
+      QString hleft, hright, hcenter;
+      QString fleft, fright, fcenter;
+      // <head>
+      QDomElement head = paper.namedItem( "head" ).toElement();
+      if ( !head.isNull() )
+      {
+        QDomElement left = head.namedItem( "left" ).toElement();
+        if ( !left.isNull() )
+          hleft = left.text();
+        QDomElement center = head.namedItem( "center" ).toElement();
+        if ( !center.isNull() )
+        hcenter = center.text();
+        QDomElement right = head.namedItem( "right" ).toElement();
+        if ( !right.isNull() )
+          hright = right.text();
+      }
+      // <foot>
+      QDomElement foot = paper.namedItem( "foot" ).toElement();
+      if ( !foot.isNull() )
+      {
+        QDomElement left = foot.namedItem( "left" ).toElement();
+        if ( !left.isNull() )
+          fleft = left.text();
+        QDomElement center = foot.namedItem( "center" ).toElement();
+        if ( !center.isNull() )
+          fcenter = center.text();
+        QDomElement right = foot.namedItem( "right" ).toElement();
+        if ( !right.isNull() )
+          fright = right.text();
+      }
+      QPtrListIterator<KSpreadTable> it ( m_pMap->tableList() );
+      for( ; it.current(); ++it )
+      {
+        it.current()->setHeadFootLine( hleft, hcenter, hright, fleft, fcenter, fright);
+      }
+    }
+    
+  }
+  
   emit sigProgress( 90 );
   initConfig();
   emit sigProgress(-1);
