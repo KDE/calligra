@@ -1545,7 +1545,7 @@ bool KSpreadCell::calc(bool delay)
   }
 
 
-  if (m_pCode == NULL)
+  if (m_pCode == 0)
   {
     if (testFlag(Flag_ParseError))
     // there was a parse error
@@ -1558,6 +1558,12 @@ bool KSpreadCell::calc(bool delay)
          parsed
       */
       makeFormula();
+
+      if (m_pCode == 0)
+      {
+        // there was a parse error
+        return false;
+      }
     }
   }
   setFlag(Flag_Progress);

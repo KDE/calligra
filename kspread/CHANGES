@@ -10,6 +10,7 @@ Bugfixes:
 - Fix #45967, #31130
 - Fix #45944 (Normal): Paste special->text overwrite borders
 - Fix #42456 (Normal): merged cells with centered text do not survive insert/delete rows
+- Fix #45943 (Crash): crash after "money format"
 - Fix function documentation (YEAR(), FACTDOUBLE() )
 
 Until RC1:
