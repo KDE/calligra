@@ -7,6 +7,9 @@ INCLUDES= -I$(srcdir)/.. $(KSTORE_INCLUDES) $(all_includes)
 
 check_PROGRAMS = priorityqueue_test filterchain_test filter_graph kogenstylestest
 
+check: kogenstylestest
+	./kogenstylestest
+
 priorityqueue_test_SOURCES = priorityqueue_test.cpp
 priorityqueue_test_LDADD = ../libkofficecore.la
 
