@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
    Copyright (C) 2003 David Faure <faure@kde.org>
-   Copyright 2002, 2003 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (C) 2002, 2003, 2004 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -47,8 +47,20 @@
 # include <kdebugclasses.h>
 #endif
 
-typedef KGenericFactory<OoWriterImport, KoFilter> OoWriterImportFactory;
-K_EXPORT_COMPONENT_FACTORY( liboowriterimport, OoWriterImportFactory( "oowriterimport" ) )
+class OoWriterImportFactory : KGenericFactory<OoWriterImport, KoFilter>
+{
+public:
+    OoWriterImportFactory(void) : KGenericFactory<OoWriterImport, KoFilter> ( "oowriterimport" )
+    {}
+
+protected:
+    virtual void setupTranslations(void)
+    {
+        KGlobal::locale()->insertCatalogue( "kofficefilters" );
+    }
+};
+
+K_EXPORT_COMPONENT_FACTORY( liboowriterimport, OoWriterImportFactory() )
 
 
 OoWriterImport::OoWriterImport( KoFilter *, const char *, const QStringList & )

@@ -19,7 +19,3 @@ METASOURCES = AUTO
 service_DATA = kword_oowriter_import.desktop
 
 servicedir = $(kde_servicesdir)
-
-## Disable message extracting until it will be made for the whole KOffice filters
-#messages: rc.cpp
-#	$(XGETTEXT) *.cc *.cpp -o $(podir)/kwordoowriterfilter.pot
