@@ -72,6 +72,13 @@ QPicture* GraphObj::getPic(int,int,int,int)
   return &pic;
 }
 
+/*======================= draw in painter ========================*/
+void GraphObj::drawInPainter(QPainter *painter)
+{
+  if (objType != OT_PICTURE && objType != OT_CLIPART)
+    paintObj(painter);
+}
+
 /*======================= load pixmap ============================*/
 void GraphObj::loadPixmap()
 {
@@ -356,14 +363,17 @@ GraphObj& GraphObj::operator=(GraphObj& go)
   setLineEnd(go.getLineEnd());
 
   if (objType == OT_AUTOFORM) atfInterp->load(fileName);
-  pix_data = "";
-  pix_data_native = "";
 
   resize(go.size());
 
   if (objType == OT_PICTURE)
-    loadPixmap();
-  
+    {
+      pix_data = go.getPixData();
+      pix_data_native = go.getPixDataNative();
+      pix = go.get_pix();
+      origPix = go.getOrigPix();
+    }
+
   if (objType == OT_CLIPART)
     loadClipart();
 
@@ -389,6 +399,8 @@ void GraphObj::paintObj(QPainter *painter)
   int ox = 0,oy = 0,ow = width(),oh = height();
   unsigned int pw = 0,pwOrig = 0,px,py;
   QPicture p;
+
+  painter->save();
 
   switch (objType)
     {
@@ -651,6 +663,8 @@ void GraphObj::paintObj(QPainter *painter)
       } break;
     default: break;
     }
+
+  painter->restore();
 }
 
 /*====================== mouse press =============================*/

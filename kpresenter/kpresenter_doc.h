@@ -65,6 +65,8 @@ class KPresenterView_impl;
 #include <iostream.h>
 #include <fstream.h>
 
+#include <math.h>
+
 #define MIME_TYPE "application/x-kpresenter"
 #define EDITOR "IDL:KPresenter/KPresenterDocument:1.0"
 
@@ -281,7 +283,9 @@ public:
 
   // repaint all views
   void repaint(bool);
-  void repaint(unsigned int,unsigned int,unsigned int,unsigned int,bool);
+  void repaint(unsigned int _x,unsigned int _y,unsigned int _w,unsigned int _h,PageObjects *o,bool _erase)
+    {repaint(_x,_y,_w,_h,o->objNum - 1,_erase);}
+  void repaint(unsigned int,unsigned int,unsigned int,unsigned int,int,bool);
 
   // stuff for screen-presentations
   QList<int> reorderPage(unsigned int,int,int,float fakt = 1.0);
@@ -296,6 +300,8 @@ public:
 
   int numSelected();
   PageObjects* getSelectedObj();
+
+  QRect getRealBoundingRect(QRect,int);
 
 signals:
 

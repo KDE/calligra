@@ -202,6 +202,7 @@ void KPresenterView_impl::editDelete()
 /*========================== edit select all ====================*/
 void KPresenterView_impl::editSelectAll()
 {
+  page->selectAllObj();
 }
 
 /*========================= view new view =======================*/
@@ -1195,7 +1196,10 @@ void KPresenterView_impl::effectOk()
 /*=================== rotate dialog ok ===========================*/
 void KPresenterView_impl::rotateOk()
 {
-  KPresenterDoc()->getSelectedObj()->angle = rotateDia->getAngle();
+  PageObjects* objPtr = KPresenterDoc()->getSelectedObj();
+  objPtr->angle = rotateDia->getAngle();
+
+  KPresenterDoc()->repaint(false);
 }
 
 /*================== scroll horizontal ===========================*/

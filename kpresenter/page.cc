@@ -235,14 +235,14 @@ void Page::paintObjects(QPainter *painter,QRect rect)
   QRect r = painter->viewport();
   QRect r_orig = r;
   objPtr = 0;
-  for (objPtr=objList()->first();objPtr != 0;objPtr=objList()->next())
+  for (objPtr = objList()->first();objPtr != 0;objPtr=objList()->next())
     {
       painter->setViewport(r_orig);
       painter->resetXForm();
       r = painter->viewport();
       /* draw the objects */
-      if ((rect.intersects(QRect(objPtr->ox - diffx(),objPtr->oy - diffy(),
-				 objPtr->ow,objPtr->oh)) && editMode) ||
+      if ((rect.intersects(view->KPresenterDoc()->getRealBoundingRect(QRect(objPtr->ox - diffx(),objPtr->oy - diffy(),
+				 objPtr->ow,objPtr->oh),objPtr->objNum - 1)) && editMode) ||
 	  (!editMode && getPageOfObj(objPtr->objNum,_presFakt) == (int)currPresPage &&
 	   objPtr->presNum <= currPresStep))
 	{     
@@ -250,34 +250,98 @@ void Page::paintObjects(QPainter *painter,QRect rect)
 	    {
 	    case OT_PICTURE: /* pciture */
 	      {
-		painter->drawPixmap(objPtr->ox - diffx(),objPtr->oy - diffy(),
-				    objPtr->graphObj->getPix());
-		//0,0,objPtr->ow,objPtr->oh);
+		if (objPtr->angle == 0)
+		  {
+		    painter->drawPixmap(objPtr->ox - diffx(),objPtr->oy - diffy(),
+					objPtr->graphObj->getPix());
+		    //0,0,objPtr->ow,objPtr->oh);
+		  }
+		else
+		  {
+		    painter->save();
+		    r = painter->viewport();
+		    painter->setViewport(objPtr->ox - diffx(),objPtr->oy - diffy(),
+					 r.width(),r.height());
+
+
+		    QRect br = objPtr->graphObj->getPix().rect();
+		    int pw = br.width();
+		    int ph = br.height();
+		    QRect rr = br;
+		    int pixYPos = -rr.y();
+		    int pixXPos = -rr.x();
+		    br.moveTopLeft(QPoint(-br.width() / 2,-br.height() / 2));
+		    rr.moveTopLeft(QPoint(-rr.width() / 2,-rr.height() / 2));
+
+		    QWMatrix m,mtx;
+		    mtx.rotate(objPtr->angle);
+		    m.translate(pw / 2,ph / 2);
+		    m = mtx * m;
+
+		    painter->setWorldMatrix(m);
+		    
+		    painter->drawPixmap(rr.left() + pixXPos,rr.top() + pixYPos,
+					objPtr->graphObj->getPix());
+
+
+		    painter->resetXForm();
+		    painter->setViewport(r);
+		    painter->restore();
+		  }
 	      } break;
 	    case OT_TEXT: /* text */
 	      {
+		painter->save();
+		int _x,_y,_w,_h;
+		QRect cr = view->KPresenterDoc()->getRealBoundingRect(QRect(objPtr->ox - diffx(),objPtr->oy - diffy(),
+									    objPtr->ow,objPtr->oh),objPtr->objNum - 1);
+		_x = cr.x(); _y = cr.y(); _w = cr.width(); _h = cr.height();
+
 		if (!editMode && currPresStep == objPtr->presNum && !goingBack)
 		  {
 		    switch (objPtr->effect2)
 		      {
 		      case EF2T_PARA:
-			objPtr->objPic = objPtr->textObj->getPic(objPtr->ox - diffx(),objPtr->oy - diffy(),
-								 objPtr->ow,objPtr->oh,!editMode,0,subPresStep);
+			objPtr->objPic = objPtr->textObj->getPic(_x,_y,_w,_h,!editMode,0,subPresStep,true);
 			break;
 		      default:
-			objPtr->objPic = objPtr->textObj->getPic(objPtr->ox - diffx(),objPtr->oy - diffy(),
-								 objPtr->ow,objPtr->oh,!editMode);
+			objPtr->objPic = objPtr->textObj->getPic(_x,_y,_w,_h,!editMode,-1,-1,true);
 		      }
 		  }
 		else
-		  objPtr->objPic = objPtr->textObj->getPic(objPtr->ox - diffx(),objPtr->oy - diffy(),
-							   objPtr->ow,objPtr->oh,!editMode);
- 		painter->translate((float)objPtr->ox - (float)diffx(),(float)objPtr->oy - (float)diffy());
- 		objPtr->objPic->play(painter);
+		  objPtr->objPic = objPtr->textObj->getPic(_x,_y,_w,_h,!editMode,-1,-1,true);
+ 
+		r = painter->viewport();
+		painter->setViewport(objPtr->ox - diffx(),objPtr->oy - diffy(),
+				     r.width(),r.height());
+
+		if (objPtr->angle == 0)
+		  objPtr->objPic->play(painter);
+		else
+		  {
+		    QRect br = objPtr->textObj->rect();
+		    int pw = br.width();
+		    int ph = br.height();
+		    QRect rr = br;
+		    int yPos = -rr.y();
+		    int xPos = -rr.x();
+		    br.moveTopLeft(QPoint(-br.width() / 2,-br.height() / 2));
+		    rr.moveTopLeft(QPoint(-rr.width() / 2,-rr.height() / 2));
+		    
+		    QWMatrix m,mtx;
+		    mtx.rotate(objPtr->angle);
+		    m.translate(pw / 2,ph / 2);
+		    m = mtx * m;
+
+		    painter->setWorldMatrix(m);
+		    painter->translate(rr.left() + xPos,rr.top() + yPos);
+
+		    objPtr->objPic->play(painter);
+		  }
+
+		painter->setViewport(r);
  		painter->resetXForm();
- 		painter->setClipping(false);
- 		painter->setClipping(true);
- 		painter->setClipRect(rect);
+		painter->restore();
 	      } break;
 	    default:
 	      {
@@ -298,8 +362,54 @@ void Page::paintObjects(QPainter *painter,QRect rect)
 
 		objPtr->objPic = objPtr->graphObj->getPic(objPtr->ox - diffx(),objPtr->oy - diffy(),objPtr->ow,objPtr->oh);
 
-		objPtr->objPic->play(painter);
-	      
+		if (objPtr->angle == 0)
+		  objPtr->objPic->play(painter);
+		else
+		  {
+		    QRect br = objPtr->graphObj->rect();
+		    int pw = br.width();
+		    int ph = br.height();
+		    QRect rr = br;
+		    int yPos = -rr.y();
+		    int xPos = -rr.x();
+		    br.moveTopLeft(QPoint(-br.width() / 2,-br.height() / 2));
+		    rr.moveTopLeft(QPoint(-rr.width() / 2,-rr.height() / 2));
+		    
+		    if (objPtr->objType != OT_CLIPART)
+		      {
+			QWMatrix m,mtx,m2;
+			mtx.rotate(objPtr->angle);
+			m.translate(pw / 2,ph / 2);
+			m2.translate(rr.left() + xPos,rr.top() + yPos);
+			m = m2 * mtx * m;
+
+			painter->setWorldMatrix(m);
+			objPtr->graphObj->drawInPainter(painter);
+		      }
+		    else
+		      {
+			// this doesn't work well - has to be rewritten!!
+
+			QWMatrix m,mtx;
+			mtx.rotate(objPtr->angle);
+			m.translate(pw / 2,ph / 2);
+			m = mtx * m;
+
+			QPixmap pm(pw,ph);
+			pm.fill(white);
+			QPainter pnt;
+			pnt.begin(&pm);
+			objPtr->objPic->play(&pnt);
+			pnt.end();
+
+ 			painter->setViewport(objPtr->ox - diffx(),objPtr->oy - diffy(),
+ 					     r.width(),r.height());
+			painter->setWorldMatrix(m);
+		    
+			painter->drawPixmap(rr.left() + xPos,rr.top() + yPos,pm);
+		      }
+		  }
+
 		painter->setViewport(r);
 
 		painter->resetXForm();
@@ -636,15 +746,15 @@ void Page::mouseMoveEvent(QMouseEvent *e)
 		      oox = oox - diffx();
 		      ooy = ooy - diffy();
 		      drawBack = true;
-		      _repaint(ox,oy,ow,oh,false);
- 		      if (ox > oox) _repaint(oox,oy,ox-oox,oh,false);
- 		      if (oy > ooy) _repaint(ox,ooy,ow,oy-ooy,false);
- 		      if (oox > ox) _repaint(ox+ow,oy,oox-ox,oh,false);
- 		      if (ooy > oy) _repaint(ox,oy+oh,ow,ooy-oy,false);
- 		      if ((ox > oox) && (oy > ooy)) _repaint(oox,ooy,ox-oox,oy-ooy,false);
- 		      if ((ox > oox) && (oy < ooy)) _repaint(oox,oy+oh,ox-oox,ooy-oy,false);
- 		      if ((ox < oox) && (oy > ooy)) _repaint(ox+ow,ooy,oox-ox,oy-ooy,false);
- 		      if ((ox < oox) && (oy < ooy)) _repaint(ox+ow,oy+oh,oox-ox,ooy-oy,false);
+		      _repaint(ox,oy,ow,oh,i,false);
+ 		      if (ox > oox) _repaint(oox,oy,ox-oox,oh,i,false);
+ 		      if (oy > ooy) _repaint(ox,ooy,ow,oy-ooy,i,false);
+ 		      if (oox > ox) _repaint(ox+ow,oy,oox-ox,oh,i,false);
+ 		      if (ooy > oy) _repaint(ox,oy+oh,ow,ooy-oy,i,false);
+ 		      if ((ox > oox) && (oy > ooy)) _repaint(oox,ooy,ox-oox,oy-ooy,i,false);
+ 		      if ((ox > oox) && (oy < ooy)) _repaint(oox,oy+oh,ox-oox,ooy-oy,i,false);
+ 		      if ((ox < oox) && (oy > ooy)) _repaint(ox+ow,ooy,oox-ox,oy-ooy,i,false);
+ 		      if ((ox < oox) && (oy < ooy)) _repaint(ox+ow,oy+oh,oox-ox,ooy-oy,i,false);
 		    }
 		}
 	      
@@ -788,7 +898,7 @@ void Page::mouseDoubleClickEvent(QMouseEvent *e)
 	  objPtr->graphObj->setFocus();
 	  graphPtr = objPtr->graphObj;
 	  _repaint(objPtr->ox - diffx(),objPtr->oy - diffy(),
-		   objPtr->ow,objPtr->oh,true);
+		   objPtr->ow,objPtr->oh,objNum,true);
 	}
     }
 }
@@ -859,7 +969,7 @@ void Page::selectObj(int num)
 	      objPtr->isSelected = true;
 	      drawBack = true;
 	      _repaint(objPtr->ox - diffx(),objPtr->oy - diffy(),
-		      objPtr->ow,objPtr->oh,false);
+		      objPtr->ow,objPtr->oh,num,false);
 	      return;
 	    }
 	}
@@ -892,7 +1002,7 @@ void Page::deSelectObj(int num)
 	      objPtr->isSelected = false;
 	      drawBack = true;
 	      _repaint(objPtr->ox - diffx(),objPtr->oy - diffy(),
-		      objPtr->ow,objPtr->oh,false);
+		      objPtr->ow,objPtr->oh,num,false);
 	      return;
 	    }
 	}
@@ -934,8 +1044,8 @@ void Page::resizeObjTop(int diff,PageObjects* obj)
       oy = oy - diffy();
       ooy = ooy - diffy();
       drawBack = true;
-      _repaint(ox,oy,ow,oh,false);
-      if (oh < ooh) _repaint(ox,ooy,ow,ooh-oh,false); 
+      _repaint(ox,oy,ow,oh,obj,false);
+      if (oh < ooh) _repaint(ox,ooy,ow,ooh-oh,obj,false); 
     }
 }
 
@@ -962,8 +1072,8 @@ void Page::resizeObjLeft(int diff,PageObjects* obj)
       oy = oy - diffy();
       oox = oox - diffx();
       drawBack = true;
-      _repaint(ox,oy,ow,oh,false);
-      if (ow < oow) _repaint(oox,oy,oow-ow,oh,false); 
+      _repaint(ox,oy,ow,oh,obj,false);
+      if (ow < oow) _repaint(oox,oy,oow-ow,oh,obj,false); 
     }
 }
 
@@ -988,8 +1098,8 @@ void Page::resizeObjBot(int diff,PageObjects* obj)
       ox = ox - diffx();
       oy = oy - diffy();
       drawBack = true;
-      _repaint(ox,oy,ow,oh,false);
-      if (oh < ooh) _repaint(ox,oy+oh,ow,ooh-oh,false); 
+      _repaint(ox,oy,ow,oh,obj,false);
+      if (oh < ooh) _repaint(ox,oy+oh,ow,ooh-oh,obj,false); 
     }
 }
 
@@ -1014,8 +1124,8 @@ void Page::resizeObjRight(int diff,PageObjects* obj)
       ox = ox - diffx();
       oy = oy - diffy();
       drawBack = true;
-      _repaint(ox,oy,ow,oh,false);
-      if (ow < oow) _repaint(ox+ow,oy,oow-ow,oh,false); 
+      _repaint(ox,oy,ow,oh,obj,false);
+      if (ow < oow) _repaint(ox+ow,oy,oow-ow,oh,obj,false); 
     }
 }
 

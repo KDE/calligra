@@ -1738,7 +1738,7 @@ bool KPresenterDocument_impl::setPenBrush(QPen pen,QBrush brush,LineEnd lb,LineE
 		  objPtr->graphObj->setLineBegin(lb);
 		  objPtr->graphObj->setLineEnd(le);
 		  repaint(objPtr->ox,objPtr->oy,
-			  objPtr->ow,objPtr->oh,false);
+			  objPtr->ow,objPtr->oh,i,false);
 		  ret = true;
 		}
 	    }      
@@ -1891,7 +1891,7 @@ void KPresenterDocument_impl::raiseObjs(int diffx,int diffy)
 	      _objList.take(i);
 	      _objList.append(objPtr);
 	      repaint(objPtr->ox,objPtr->oy,
-		      objPtr->ow,objPtr->oh,false);
+		      objPtr->ow,objPtr->oh,i,false);
 	    
 	    }
 	}      
@@ -1912,7 +1912,7 @@ void KPresenterDocument_impl::lowerObjs(int diffx,int diffy)
 	      _objList.take(i);
 	      _objList.insert(0,objPtr);
 	      repaint(objPtr->ox,objPtr->oy,
-		      objPtr->ow,objPtr->oh,false);
+		      objPtr->ow,objPtr->oh,i,false);
 	    }
 	}      
       reArrangeObjs();
@@ -1952,7 +1952,7 @@ void KPresenterDocument_impl::insertPicture(const char *filename,int diffx,int d
 	  addUndo(uripo);
 
 	  repaint(objPtr->ox,objPtr->oy,
-		  objPtr->ow,objPtr->oh,false);
+		  objPtr->ow,objPtr->oh,_objNums,false);
 	}
     }
   QApplication::restoreOverrideCursor();
@@ -1988,7 +1988,7 @@ void KPresenterDocument_impl::insertClipart(const char *filename,int diffx,int d
       addUndo(uripo);
 
       repaint(objPtr->ox,objPtr->oy,
-	      objPtr->ow,objPtr->oh,false);
+	      objPtr->ow,objPtr->oh,_objNums,false);
     }
   QApplication::restoreOverrideCursor();
 }
@@ -2021,7 +2021,7 @@ void KPresenterDocument_impl::changePicture(const char *filename,int diffx,int d
 		      objPtr->isSelected = false;
 		      objPtr->graphObj->resize(pix.size());
 		      repaint(objPtr->ox,objPtr->oy,
-			      objPtr->ow,objPtr->oh,false);
+			      objPtr->ow,objPtr->oh,i,false);
 		      objPtr = _objList.at(i);
 		      objPtr->ow = pix.width();
 		      objPtr->oh = pix.height();
@@ -2031,7 +2031,7 @@ void KPresenterDocument_impl::changePicture(const char *filename,int diffx,int d
 		      addUndo(urpo);
 
 		      repaint(objPtr->ox,objPtr->oy,
-			      objPtr->ow,objPtr->oh,false);
+			      objPtr->ow,objPtr->oh,i,false);
 		      break;
 		    }
 		}      
@@ -2068,7 +2068,7 @@ void KPresenterDocument_impl::changeClipart(const char *filename,int diffx,int d
 		      objPtr->graphObj->loadClipart();
 		      objPtr->isSelected = false;
 		      repaint(objPtr->ox,objPtr->oy,
-			      objPtr->ow,objPtr->oh,false);
+			      objPtr->ow,objPtr->oh,i,false);
 		      objPtr = _objList.at(i);
 		      objPtr->isSelected = true;
 
@@ -2076,7 +2076,7 @@ void KPresenterDocument_impl::changeClipart(const char *filename,int diffx,int d
 		      addUndo(urpo);
 
 		      repaint(objPtr->ox,objPtr->oy,
-			      objPtr->ow,objPtr->oh,false);
+			      objPtr->ow,objPtr->oh,i,false);
 		      break;
 		    }
 		}      
@@ -2116,7 +2116,7 @@ void KPresenterDocument_impl::insertLine(QPen pen,LineEnd lb,LineEnd le,LineType
   addUndo(uripo);
 
   repaint(objPtr->ox,objPtr->oy,
-	  objPtr->ow,objPtr->oh,false);
+	  objPtr->ow,objPtr->oh,_objNums,false);
 }
 
 /*===================== insert a rectangle =======================*/
@@ -2148,7 +2148,7 @@ void KPresenterDocument_impl::insertRectangle(QPen pen,QBrush brush,RectType rt,
   addUndo(uripo);
 
   repaint(objPtr->ox,objPtr->oy,
-	  objPtr->ow,objPtr->oh,false);
+	  objPtr->ow,objPtr->oh,_objNums,false);
 }
 
 /*===================== insert a circle or ellipse ===============*/
@@ -2178,7 +2178,7 @@ void KPresenterDocument_impl::insertCircleOrEllipse(QPen pen,QBrush brush,int di
   addUndo(uripo);
 
   repaint(objPtr->ox,objPtr->oy,
-	  objPtr->ow,objPtr->oh,false);
+	  objPtr->ow,objPtr->oh,_objNums,false);
 }
 
 /*===================== insert a textobject =====================*/
@@ -2209,7 +2209,7 @@ void KPresenterDocument_impl::insertText(int diffx,int diffy)
   addUndo(uripo);
 
   repaint(objPtr->ox,objPtr->oy,
-	  objPtr->ow,objPtr->oh,false);
+	  objPtr->ow,objPtr->oh,_objNums,false);
 }
 
 /*======================= insert an autoform ====================*/
@@ -2241,7 +2241,7 @@ void KPresenterDocument_impl::insertAutoform(QPen pen,QBrush brush,LineEnd lb,Li
   addUndo(uripo);
 
   repaint(objPtr->ox,objPtr->oy,
- 	  objPtr->ow,objPtr->oh,false);
+ 	  objPtr->ow,objPtr->oh,_objNums,false);
 }
 
 /*=================== repaint all views =========================*/
@@ -2256,8 +2256,11 @@ void KPresenterDocument_impl::repaint(bool erase)
 
 /*=================== repaint all views =========================*/
 void KPresenterDocument_impl::repaint(unsigned int x,unsigned int y,unsigned int w,
-				      unsigned int h,bool erase)
+				      unsigned int h,int objnum,bool erase)
 {
+  QRect r = getRealBoundingRect(QRect(x,y,w,h),objnum);
+  x = r.x(); y = r.y(); w = r.width(); h = r.height();
+
   if (!m_lstViews.isEmpty())
     {
       for (viewPtr = m_lstViews.first();viewPtr != 0;viewPtr = m_lstViews.next())
@@ -2325,8 +2328,8 @@ int KPresenterDocument_impl::getPageOfObj(int objNum,int diffx,int diffy,float f
 	    {
 	      rect = getPageSize(j+1,diffx,diffy,fakt);
 	      rect.setWidth(QApplication::desktop()->width());
-	      if (rect.intersects(QRect(objPtr->ox - diffx,objPtr->oy - diffy,
-					objPtr->ow,objPtr->oh)))	  
+	      if (rect.intersects(getRealBoundingRect(QRect(objPtr->ox - diffx,objPtr->oy - diffy,
+							    objPtr->ow,objPtr->oh),objNum - 1)))	  
 		return j+1;
 	    }
 	}
@@ -2657,7 +2660,7 @@ void KPresenterDocument_impl::pasteObjs(int diffx,int diffy)
 		      objPtr->graphObj->hide();
 		      _objList.append(objPtr);
 		      repaint(objPtr->ox,objPtr->oy,
-			      objPtr->ow,objPtr->oh,false);
+			      objPtr->ow,objPtr->oh,_objNums,false);
 		      objPtr = 0;
 		    }
 		  else if (tag == "GRAPHOBJ")
@@ -2906,4 +2909,29 @@ void KPresenterDocument_impl::undoRedoChange(QString _undo,bool _eundo,QString _
     }
 
   m_bModified = true;
+}
+/*======================== get real bounding rect ===============*/
+QRect KPresenterDocument_impl::getRealBoundingRect(QRect r,int objnum)
+{
+  if (objnum < (int)_objList.count())
+    {
+      objPtr = _objList.at(objnum);
+
+      if (objPtr->angle == 0.0)
+	return r;
+      else
+	{
+	  QWMatrix mtx;
+	  mtx.rotate(objPtr->angle);
+	  QRect rr = mtx.map(r);
+
+	  int diffw = abs(rr.width() - r.width());
+	  int diffh = abs(rr.height() - r.height());
+
+	  return QRect(r.x() - diffw,r.y() - diffh,
+		       r.width() + diffw * 2,r.height() + diffh * 2);
+	}
+    }
+
+  return r;
 }

@@ -66,6 +66,7 @@ public:
   void loadPixmap();
   void loadClipart();
   QPixmap getPix();
+  void drawInPainter(QPainter*);
 
   // set values
   void setLineType(LineType t) {lineType = t;}
@@ -86,7 +87,11 @@ public:
   void setLineEnd(LineEnd le) {lineEnd = le;}
   LineEnd getLineEnd() {return lineEnd;}
   ObjType getObjType() {return objType;}
-  
+  QString getPixData() {return QString(pix_data);}
+  QString getPixDataNative() {return QString(pix_data_native);}
+  QPixmap get_pix() {return QPixmap(pix);}
+  QPixmap getOrigPix() {return QPixmap(origPix);}
+
   // save - load
   void save(ostream&);
   void load(KOMLParser&,vector<KOMLAttrib>&);

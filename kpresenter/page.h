@@ -161,8 +161,10 @@ protected:
 
   void drawBackColor(QColor,QColor,BCType,QPainter*,QSize);
   void _repaint(bool erase=true) {view->KPresenterDoc()->repaint(false);}
-  void _repaint(int _x,int _y,int _w,int _h,bool erase=true)
-    {view->KPresenterDoc()->repaint(_x+diffx(),_y+diffy(),_w,_h,false);}
+  void _repaint(int _x,int _y,int _w,int _h,int o,bool erase=true)
+    {view->KPresenterDoc()->repaint(_x+diffx(),_y+diffy(),_w,_h,o,false);}
+  void _repaint(int _x,int _y,int _w,int _h,PageObjects *o,bool erase=true)
+    {view->KPresenterDoc()->repaint(_x+diffx(),_y+diffy(),_w,_h,o,false);}
 
   void drawPageInPix(QPixmap&,int);
   void drawPageInPainter(QPainter*,int,QRect);
