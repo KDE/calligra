@@ -4,8 +4,28 @@ TODO:
 
 + near future :)
 	+ gui
+		- look why item pixmaps for queries are supported but
+		  not for tables...
+		  
 	+ project
+		- support for storing fileDB references in projectfile
+		- dbhandler ?
+
 	+ table
 	+ kexiDB
+		- ANSI => native parser (using cql)
+		- give the relations to kexidb and allow updating on complex
+		  queries
+	+ query
+		- SQL => gui parser (using cql)
+		    => would bring query saving what is very important
+		- devide gui and meta
+
+	+ relationeditor
+		- look why only n-1 tables are in the "avaible datasources" list
+		- look why a table can't hold more than 1 relation (already worked)
+		- try fixing the repaintbugs (worked long before koffice ;)
+
 	+ general
 		- add from / to XML
+		- maybe inter-engine import
