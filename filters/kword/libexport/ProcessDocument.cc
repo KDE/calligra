@@ -703,12 +703,16 @@ static void ProcessCounterTag ( QDomNode myNode, void *tagData, KWEFKWordLeader 
 {
     CounterData *counter = (CounterData *) tagData;
 
+    // Be extra careful with data declared as enum (it could be very different from an int)
+    int counterStyle = counter->style;
+    int counterNumbering = counter->numbering;
+
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList << AttrProcessing ( "type",            "int",     &counter->style           );
+    attrProcessingList << AttrProcessing ( "type",            counterStyle );
     attrProcessingList << AttrProcessing ( "depth",           counter->depth           );
     attrProcessingList << AttrProcessing ( "bullet",          counter->customCharacter );
     attrProcessingList << AttrProcessing ( "start",           counter->start           );
-    attrProcessingList << AttrProcessing ( "numberingtype",   "int",     &counter->numbering       );
+    attrProcessingList << AttrProcessing ( "numberingtype",   counterNumbering );
     attrProcessingList << AttrProcessing ( "lefttext",        counter->lefttext        );
     attrProcessingList << AttrProcessing ( "righttext",       counter->righttext       );
     attrProcessingList << AttrProcessing ( "bulletfont",      counter->customFont      );
@@ -717,6 +721,9 @@ static void ProcessCounterTag ( QDomNode myNode, void *tagData, KWEFKWordLeader 
     attrProcessingList << AttrProcessing ( "display-levels" );
     attrProcessingList << AttrProcessing ( "align" );
     ProcessAttributes (myNode, attrProcessingList);
+
+    counter->style = CounterData::Style( counterStyle );
+    counter->numbering = CounterData::Numbering( counterNumbering );
 
     AllowNoSubtags (myNode, leader);
 }
