@@ -46,7 +46,7 @@ public:
 
     KWTextDocument * kwTextDocument() const;
 
-    virtual void setParagLayout( const KoParagLayout &layout, int flags = KoParagLayout::All );
+    virtual void setParagLayout( const KoParagLayout &layout, int flags = KoParagLayout::All, int marginIndex = -1 );
 
     /** The type of page-breaking behaviour */
     void setPageBreaking( int pb ); // warning this sets all the flags!

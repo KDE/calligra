@@ -44,7 +44,7 @@ public:
 
     /** Sets all or some parameters from a paraglayout struct.
      * @param flags selects which settings to apply, see KoParagLayout's enum. */
-    virtual void setParagLayout( const KoParagLayout &layout, int flags = KoParagLayout::All );
+    virtual void setParagLayout( const KoParagLayout &layout, int flags = KoParagLayout::All, int marginIndex = -1 );
 
     const KoParagLayout & paragLayout() { return m_layout; }
 

@@ -694,6 +694,39 @@ void KoTextObject::pasteText( KoTextCursor * cursor, const QString & text, KoTex
     }
 }
 
+KCommand* KoTextObject::setParagLayoutCommand( KoTextCursor * cursor, const KoParagLayout& paragLayout,
+                                               int selectionId, int paragLayoutFlags,
+                                               int marginIndex, bool createUndoRedo )
+{
+    if ( protectContent() )
+        return 0;
+    storeParagUndoRedoInfo( cursor, selectionId );
+    undoRedoInfo.type = UndoRedoInfo::Invalid; // tricky, we don't want clear() to create a command
+    if ( paragLayoutFlags != 0 )
+    {
+        if ( !textdoc->hasSelection( selectionId, true ) ) {
+            cursor->parag()->setParagLayout( paragLayout, paragLayoutFlags, marginIndex );
+        } else {
+            KoTextParag *start = textdoc->selectionStart( selectionId );
+            KoTextParag *end = textdoc->selectionEnd( selectionId );
+            for ( ; start && start != end->next() ; start = start->next() )
+                start->setParagLayout( paragLayout, paragLayoutFlags, marginIndex );
+        }
+
+        if ( createUndoRedo )
+        {
+            //kdDebug(32500) << "KoTextObject::applyStyle KoTextParagCommand" << endl;
+            KoTextDocCommand * cmd = new KoTextParagCommand( textdoc, undoRedoInfo.id, undoRedoInfo.eid,
+                                                             undoRedoInfo.oldParagLayouts,
+                                                             paragLayout, paragLayoutFlags,
+                                                             (QStyleSheetItem::Margin)marginIndex );
+            textdoc->addCommand( cmd );
+            return new KoTextCommand( this, /*cmd, */"related to KoTextParagCommand" );
+        }
+    }
+    return 0;
+}
+
 
 void KoTextObject::applyStyle( KoTextCursor * cursor, const KoParagStyle * newStyle,
                                int selectionId,
@@ -730,29 +763,9 @@ KCommand *KoTextObject::applyStyleCommand( KoTextCursor * cursor, const KoParagS
 
     // 1
     //kdDebug(32500) << "KoTextObject::applyStyle setParagLayout" << endl;
-    storeParagUndoRedoInfo( cursor, selectionId );
-    undoRedoInfo.type = UndoRedoInfo::Invalid; // tricky, we don't want clear() to create a command
-    if ( paragLayoutFlags != 0 )
-    {
-        if ( !textdoc->hasSelection( selectionId, true ) ) {
-            cursor->parag()->setParagLayout( newStyle->paragLayout(), paragLayoutFlags );
-        } else {
-            KoTextParag *start = textdoc->selectionStart( selectionId );
-            KoTextParag *end = textdoc->selectionEnd( selectionId );
-            for ( ; start && start != end->next() ; start = start->next() )
-                start->setParagLayout( newStyle->paragLayout(), paragLayoutFlags );
-        }
-
-        if ( createUndoRedo )
-        {
-            //kdDebug(32500) << "KoTextObject::applyStyle KoTextParagCommand" << endl;
-            KoTextDocCommand * cmd = new KoTextParagCommand( textdoc, undoRedoInfo.id, undoRedoInfo.eid,
-                                                         undoRedoInfo.oldParagLayouts,
-                                                         newStyle->paragLayout(), paragLayoutFlags );
-            textdoc->addCommand( cmd );
-            macroCmd->addCommand( new KoTextCommand( this, /*cmd, */"related to KoTextParagCommand" ) );
-        }
-    }
+    KCommand* cmd = setParagLayoutCommand( cursor, newStyle->paragLayout(), selectionId, paragLayoutFlags, -1, createUndoRedo );
+    if ( cmd )
+        macroCmd->addCommand( cmd );
 
     // 2
     //kdDebug(32500) << "KoTextObject::applyStyle gathering text and formatting" << endl;
@@ -1001,8 +1014,9 @@ KCommand *KoTextObject::setCounterCommand( KoTextCursor * cursor, const KoParagC
     if(cursor)
         curCounter=cursor->parag()->counter();
     if ( !textdoc->hasSelection( selectionId, true ) &&
-         curCounter && counter == *curCounter )
+         curCounter && counter == *curCounter ) {
         return 0L;
+    }
     emit hideCursor();
     storeParagUndoRedoInfo( cursor, selectionId );
     if ( !textdoc->hasSelection( selectionId, true ) && cursor) {
@@ -1900,60 +1914,10 @@ KCommand *KoTextObject::setParagLayoutFormatCommand( KoParagLayout *newLayout,in
         return 0L;
     textdoc->selectAll( KoTextDocument::Temp );
     KoTextCursor *cursor = new KoTextCursor( textdoc );
-    KCommand* cmd = setParagLayoutFormatCommand( cursor, KoTextDocument::Temp, newLayout, flags, marginIndex );
+    KCommand* cmd = setParagLayoutCommand( cursor, *newLayout, KoTextDocument::Temp,
+                                           flags, marginIndex, true /*createUndoRedo*/ );
     textdoc->removeSelection( KoTextDocument::Temp );
     delete cursor;
-    return cmd;
-}
-
-KCommand *KoTextObject::setParagLayoutFormatCommand( KoTextCursor* cursor, int selectionId, KoParagLayout *newLayout, int flags, int marginIndex)
-{
-    if ( protectContent() )
-        return 0L;
-    KCommand *cmd =0L;
-    KoParagCounter c;
-    if(newLayout->counter)
-        c=*newLayout->counter;
-    switch(flags)
-    {
-    case KoParagLayout::Alignment:
-        cmd = setAlignCommand( cursor, newLayout->alignment, selectionId );
-        break;
-    case KoParagLayout::Margins:
-        if ( marginIndex == -1 ) {
-            KMacroCommand* macroCmd = new KMacroCommand( QString::null );
-            cmd = setMarginCommand( cursor, QStyleSheetItem::MarginFirstLine, newLayout->margins[QStyleSheetItem::MarginFirstLine], selectionId );
-            macroCmd->addCommand( cmd );
-            cmd = setMarginCommand( cursor, QStyleSheetItem::MarginLeft, newLayout->margins[QStyleSheetItem::MarginLeft], selectionId );
-            macroCmd->addCommand( cmd );
-            cmd = setMarginCommand( cursor, QStyleSheetItem::MarginRight, newLayout->margins[QStyleSheetItem::MarginRight], selectionId );
-            macroCmd->addCommand( cmd );
-            cmd = setMarginCommand( cursor, QStyleSheetItem::MarginTop, newLayout->margins[QStyleSheetItem::MarginTop], selectionId );
-            macroCmd->addCommand( cmd );
-            cmd = setMarginCommand( cursor, QStyleSheetItem::MarginBottom, newLayout->margins[QStyleSheetItem::MarginBottom], selectionId );
-            macroCmd->addCommand( cmd );
-            return macroCmd;
-        }
-        else
-            cmd = setMarginCommand( cursor, (QStyleSheetItem::Margin)marginIndex, newLayout->margins[marginIndex], selectionId );
-        break;
-    case KoParagLayout::LineSpacing:
-        cmd = setLineSpacingCommand( cursor, newLayout->lineSpacingValue(), newLayout->lineSpacingType, selectionId );
-        break;
-    case KoParagLayout::Borders:
-        cmd = setBordersCommand( cursor, newLayout->leftBorder, newLayout->rightBorder, newLayout->topBorder, newLayout->bottomBorder, selectionId );
-        break;
-    case KoParagLayout::Tabulator:
-        cmd = setTabListCommand( cursor, newLayout->tabList(), selectionId );
-        break;
-    case KoParagLayout::BulletNumber:
-        cmd = setCounterCommand( cursor, c, selectionId );
-        break;
-    // TODO case KoParagLayout::PageBreaking:
-    // Currently not used since this is only called (for the parag dialog) from KPresenter
-    default:
-        break;
-    }
     return cmd;
 }
 

@@ -1216,13 +1216,17 @@ void KoTextParag::applyStyle( KoParagStyle *style )
     setFormat( newFormat );
 }
 
-void KoTextParag::setParagLayout( const KoParagLayout & layout, int flags )
+void KoTextParag::setParagLayout( const KoParagLayout & layout, int flags, int marginIndex )
 {
     //kdDebug(32500) << "KoTextParag::setParagLayout flags=" << flags << endl;
     if ( flags & KoParagLayout::Alignment )
         setAlign( layout.alignment );
-    if ( flags & KoParagLayout::Margins )
-        setMargins( layout.margins );
+    if ( flags & KoParagLayout::Margins ) {
+        if ( marginIndex == -1 )
+            setMargins( layout.margins );
+        else
+            setMargin( (QStyleSheetItem::Margin)marginIndex, layout.margins[marginIndex] );
+    }
     if ( flags & KoParagLayout::LineSpacing )
     {
         setLineSpacingType( layout.lineSpacingType );

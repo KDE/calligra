@@ -351,8 +351,9 @@ public:
     virtual KCommand *setParagLayoutFormatCommand( KoParagLayout *newLayout, int flags, int marginIndex=-1);
 
     // common for setParagLayoutFormatCommand above and KoTextView::setParagLayoutFormatCommand
-    KCommand *setParagLayoutFormatCommand( KoTextCursor* cursor, int selectionId, KoParagLayout *newLayout, int flags, int marginIndex );
-
+    KCommand *setParagLayoutCommand( KoTextCursor * cursor, const KoParagLayout& paragLayout,
+                                     int selectionId, int paragLayoutFlags,
+                                     int marginIndex, bool createUndoRedo );
     /**
      * Support for changing the format in the whole textobject
      */

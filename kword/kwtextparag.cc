@@ -733,9 +733,9 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset, bool load
     }
 }
 
-void KWTextParag::setParagLayout( const KoParagLayout & layout, int flags )
+void KWTextParag::setParagLayout( const KoParagLayout & layout, int flags, int marginIndex )
 {
-    KoTextParag::setParagLayout( layout, flags );
+    KoTextParag::setParagLayout( layout, flags, marginIndex );
 
     if ( flags & KoParagLayout::PageBreaking )
         setPageBreaking( layout.pageBreaking );

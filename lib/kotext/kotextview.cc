@@ -1149,9 +1149,10 @@ bool KoTextView::rtl() const
     return m_cursor->parag()->string()->isRightToLeft();
 }
 
-KCommand* KoTextView::setParagLayoutFormatCommand( KoParagLayout *newLayout, int flags, int marginIndex)
+KCommand* KoTextView::setParagLayoutFormatCommand( KoParagLayout *newLayout, int flags, int marginIndex )
 {
-    return textObject()->setParagLayoutFormatCommand( m_cursor, KoTextDocument::Standard, newLayout, flags, marginIndex );
+    return textObject()->setParagLayoutCommand( m_cursor, *newLayout, KoTextDocument::Standard,
+                                                flags, marginIndex, true /*createUndoRedo*/ );
 }
 
 // Heading1 -> Heading2 -> Heading3 -> normal
