@@ -36,6 +36,7 @@
 #include <qdom.h>
 
 #include <kdebug.h>
+#include <kglobal.h>
 #include <kgenericfactory.h>
 
 #include <koGlobal.h>
@@ -43,8 +44,6 @@
 
 #include <asciiimport.h>
 #include <asciiimport.moc>
-
-#include <algorithm>          // needed for max(a,b)
 
 typedef KGenericFactory<ASCIIImport, KoFilter> ASCIIImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libasciiimport, ASCIIImportFactory( "asciiimport" ) );
@@ -251,43 +250,38 @@ void ASCIIImport::processParagraph(QDomDocument& mainDocument,
 {
     // Paragraph with no tables or lists
     QString text;
-    QStringList::ConstIterator it=paragraph.begin();
-    QStringList::ConstIterator startLine=it;
-    QString previousLine=*it;
+    QStringList::ConstIterator it=paragraph.begin(); // Current line (at start, the first one)
+    QStringList::ConstIterator previousLine=it; // The previous one (at start, also the first one)
+    int firstindent=Indent(*it);
 
     // We work with one line in advance (therefore the two it++)
     for( it++; it!=paragraph.end(); it++)
     {
+        text += *previousLine; // add previous line to paragraph
         // check for a short line - if short make it a paragraph
-        if( previousLine.length() <= shortline)
+        if( (*previousLine).length() <= shortline)
         {
             if((*it).length() > shortline)
             // skip if short last line of normal paragraph
             {
-                // write out paragraph begin to (i - 1)
-                const int firstindent = Indent(*startLine);
-                const int secondindent = Indent(previousLine); // We may end of test the same line
+                const int secondindent = Indent(*previousLine);
                 writeOutParagraph(mainDocument,mainFramesetElement,
                     "Standard", text.simplifyWhiteSpace(), firstindent, secondindent);
 
+                firstindent = Indent(*it);
                 text = QString::null;  // reinitialize paragraph text
-                startLine=it;  // reset paragraph start
             }
         }
-        text += previousLine; // add previous line to paragraph
-        previousLine=*it;
+        previousLine=it;
     }
-    // Do not forget to add the last line!
-    text += previousLine;
     // write out paragraph begin to end
-    const int firstindent = Indent(*startLine);
-    const int secondindent = Indent(previousLine); // We may end of test the same line
+    const int secondindent = Indent(*previousLine);
     writeOutParagraph(mainDocument,mainFramesetElement,
         "Standard", text.simplifyWhiteSpace(), firstindent, secondindent);
 }
 
 void ASCIIImport::writeOutParagraph(QDomDocument& mainDocument,
-    QDomElement& mainFramesetElement,  const QString& name,
+    QDomElement& mainFramesetElement, const QString& name,
     const QString& text, const int firstindent, const int secondindent)
 {
     QDomElement paragraphElementOut=mainDocument.createElement("PARAGRAPH");
@@ -498,7 +492,7 @@ bool ASCIIImport::Table( QString *Line, int *linecount, int no_lines,
          while((index2 = Line->find( QRegExp("\t"),index)) > index
          || (index3 = MultSpaces( *Line, index)) > index )
            {
-           index1 = max(index2, index3);
+           index1 = kMax(index2, index3);
            if( index2 > index3)
            index1 = Line->find( QRegExp("[^\t]"), index1);
            tabcount++;
@@ -544,7 +538,7 @@ bool ASCIIImport::Table( QString *Line, int *linecount, int no_lines,
 
            // calculate the column widths
            for(j = 0; j <= tabs[i].columns; j++)
-              width[j] = max(tabs[i].width[j], width[j] );
+              width[j] = kMax(tabs[i].width[j], width[j] );
            }  // else
 
         if(i > 0)
