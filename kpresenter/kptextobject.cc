@@ -405,10 +405,8 @@ QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
     return textobj;
 }
 
-QDomElement KPTextObject::saveHelper(const QString &tmpText,KoTextFormat*lastFormat , QDomDocument &doc)
+void KPTextObject::saveFormat( QDomElement & element, KoTextFormat*lastFormat )
 {
-
-    QDomElement element=doc.createElement(tagTEXT);
     QString tmpFamily, tmpColor, tmpTextBackColor;
     int tmpPointSize=10;
     unsigned int tmpBold=false, tmpItalic=false, tmpUnderline=false,tmpStrikeOut=false;
@@ -444,7 +442,14 @@ QDomElement KPTextObject::saveHelper(const QString &tmpText,KoTextFormat*lastFor
         element.setAttribute(attrTextBackColor, tmpTextBackColor);
     if(tmpVerticalAlign!=-1)
         element.setAttribute(attrVertAlign,tmpVerticalAlign);
+}
 
+QDomElement KPTextObject::saveHelper(const QString &tmpText,KoTextFormat*lastFormat , QDomDocument &doc)
+{
+
+    QDomElement element=doc.createElement(tagTEXT);
+
+    saveFormat ( element, lastFormat );
 
     if(tmpText.stripWhiteSpace().isEmpty())
         // working around a bug in QDom
@@ -549,7 +554,7 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
                     //kdDebug()<<"setFormat :"<<txt<<" i :"<<i<<" txt.length() "<<txt.length()<<endl;
                     i += txt.length();
                 }
-                if ( n.tagName() == "CUSTOM" )
+                else if ( n.tagName() == "CUSTOM" )
                 {
                     if ( !n.hasAttribute("pos"))
                         continue;

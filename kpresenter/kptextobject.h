@@ -134,6 +134,7 @@ protected slots:
 protected:
     virtual QDomElement saveKTextObject( QDomDocument& doc );
     QDomElement saveHelper(const QString &tmpText,KoTextFormat*lastFormat ,QDomDocument &doc);
+    void saveFormat( QDomElement & element, KoTextFormat*lastFormat );
 
     virtual void loadKTextObject( const QDomElement &e, int type );
     void drawText( QPainter* _painter, KoZoomHandler* zoomHandler, bool onlyChanged, KoTextCursor* cursor, bool resetChanged );
