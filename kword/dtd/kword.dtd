@@ -589,9 +589,10 @@ don't put a </?xml...> at the end of the file!).
                 5 = Roman numbering uppercase
                 6 = Custom bullet (one char, set by the 'bullet' attribute)
                 7 = Custom (complex string, see kword's dialog)
-                8 = Circle bullet
-                9 = Square bullet
-                10 = Disc bullet
+                8 = Circle bullet (empty circle)
+                9 = Square bullet (full square)
+                10 = Disc bullet (full circle)
+                11 = Box bullet (empty square)
 
         depth   The level of the numbering.
                 Depth of 0 means the major numbering. (1, 2, 3...)
