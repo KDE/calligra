@@ -8,5 +8,5 @@ ServiceTypes=Kexi/DBDriver
 Type=Service
 InitialPreference=8
 MimeType=text/plain
-X-Kexi-Location=RemoteDB
+X-Kexi-DriverType=Network
 X-Kexi-DriverName=ODBC
