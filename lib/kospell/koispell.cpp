@@ -195,7 +195,15 @@ void KOISpell::startIspell()
             case KOS_E_LATIN3:
                 *proc << "-Tlatin3";
                 break;
-
+            case KOS_E_LATIN15:
+                /*
+                 There is no known ispell dictionary using ISO-8859-15
+                 but many users are tempted to use that setting. (Bug #33108)
+                 So use ISO-8859-1 instead.
+                */
+                *proc << "-Tlatin1";
+                break;
+                
                 // add the other charsets here
             case KOS_E_LATIN4:
             case KOS_E_LATIN5:
@@ -203,7 +211,6 @@ void KOISpell::startIspell()
             case KOS_E_LATIN8:
             case KOS_E_LATIN9:
             case KOS_E_LATIN13:
-            case KOS_E_LATIN15:
 
                 // will work, if this is the default charset in the dictionary
                 kdError(30006) << "charsets iso-8859-4 .. iso-8859-15 not supported yet" << endl;
