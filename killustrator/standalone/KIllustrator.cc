@@ -57,7 +57,7 @@
 #include "PasteCmd.h"
 #include "ReorderCmd.h"
 #include "SetPropertyCmd.h"
-#include "FilterManager.h"
+#include "filter/FilterManager.h"
 #include "ToolButton.h"
 
 #include <kiconloader.h>
@@ -388,16 +388,25 @@ void KIllustrator::initMenu () {
   file->insertSeparator ();
 
   QPopupMenu* efilters = new QPopupMenu ();
+  QPopupMenu* ifilters = new QPopupMenu ();
   FilterManager* filterMgr = FilterManager::instance ();
   QStrList ftypes = filterMgr->getInstalledFilters ();
   const char* ftype = ftypes.first ();
   unsigned int tid = 1;
   while (ftype) {
-    efilters->insertItem (ftype, ID_EXPORT + tid);
-    ftype = ftypes.next ();
+    FilterInfo* finfo = filterMgr->getFilterForType (ftype);
+    if (finfo->kind () == FilterInfo::FKind_Export) {
+      efilters->insertItem (ftype, ID_EXPORT + tid);
+    }
+    else if (finfo->kind () == FilterInfo::FKind_Import) {
+      ifilters->insertItem (ftype, ID_IMPORT + tid);
+    }
     tid++;
+    ftype = ftypes.next ();
   }
   connect (efilters, SIGNAL (activated (int)), SLOT (menuCallback (int)));
+  connect (ifilters, SIGNAL (activated (int)), SLOT (menuCallback (int)));
+  file->insertItem (i18n ("Import"), ifilters);
   file->insertItem (i18n ("Export"), efilters);
 
   file->insertSeparator ();
@@ -660,6 +669,10 @@ void KIllustrator::menuCallback (int item) {
       about (item);
       break;
   default:
+    if (item > ID_IMPORT && item < ID_IMPORT + 100) {
+      tcontroller->reset ();
+      importFromFile (item - ID_IMPORT);
+    }
     if (item > ID_EXPORT && item < ID_EXPORT + 100) {
       tcontroller->reset ();
       exportToFile (item - ID_EXPORT);
@@ -878,6 +891,28 @@ void KIllustrator::exportToFile (int id) {
     if (filter && filter->setup (document, format)) {
       filter->setOutputFileName (fname);
       filter->exportToFile (document);
+    }
+  }
+}
+
+void KIllustrator::importFromFile (int id) {
+  FilterManager* filterMgr = FilterManager::instance ();
+  QStrList ftypes = filterMgr->getInstalledFilters ();
+  const char* format = ftypes.at (id - 1);
+  FilterInfo* filterInfo = filterMgr->getFilterForType (format);
+  if (filterInfo == 0L)
+    return;
+
+  QString mask;
+  mask.sprintf ("*.%s", filterInfo->extension ());
+
+  QString fname = KFileDialog::getOpenFileName (0, (const char *) mask, this);
+  if (! fname.isEmpty ()) {
+    ImportFilter* filter = filterInfo->importFilter ();
+    
+    if (filter && filter->setup (document, format)) {
+      filter->setInputFileName (fname);
+      filter->importFromFile (document);
     }
   }
 }

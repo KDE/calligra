@@ -60,7 +60,8 @@ class TransformationDialog;
 #define ID_FILE_NEW_WINDOW       8 
 #define ID_FILE_EXIT            10 
 
-#define ID_EXPORT              100
+#define ID_IMPORT             1000
+#define ID_EXPORT             2000
 
 #define ID_EDIT_UNDO           200
 #define ID_EDIT_REDO           201
@@ -151,6 +152,7 @@ private:
   void openFile (const char* fname);
   void openURL (const char* url);
   void exportToFile (int id);
+  void importFromFile (int id);
 
   void setFileCaption (const char* fname);
 
