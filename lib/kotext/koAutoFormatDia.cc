@@ -598,9 +598,21 @@ void KoAutoFormatDia::setupTab3()
 
 void KoAutoFormatDia::initTab3()
 {
+    if ( !changeLanguage || noSignal)
+    {
+        initialLanguage=m_autoFormat.getConfigAutoFormatLanguage( );
+        if ( initialLanguage.isEmpty() )
+            autoFormatLanguage->setCurrentItem(0);
+        else
+            autoFormatLanguage->setCurrentText(initialLanguage);
+    }
     //force to re-readconfig when we reset config and we change a entry
     if ( autocorrectionEntryChanged )
+    {
+        if ( !changeLanguage )
+            m_docAutoFormat->configAutoFormatLanguage( initialLanguage);
         m_docAutoFormat->readConfig( true );
+    }
     cbAdvancedAutoCorrection->setChecked(m_autoFormat.getConfigAdvancedAutoCorrect());
     cbAutoCorrectionWithFormat->setChecked( m_autoFormat.getConfigCorrectionWithFormat());
     m_pListView->clear();
@@ -609,14 +621,6 @@ void KoAutoFormatDia::initTab3()
     for( ; it.current(); ++it )
     {
         ( void )new QListViewItem( m_pListView, it.currentKey(), it.current()->replace() );
-    }
-    if ( !changeLanguage || noSignal)
-    {
-        initialLanguage=m_autoFormat.getConfigAutoFormatLanguage( );
-        if ( initialLanguage.isEmpty() )
-            autoFormatLanguage->setCurrentItem(0);
-        else
-            autoFormatLanguage->setCurrentText(initialLanguage);
     }
 }
 
