@@ -19,7 +19,7 @@
 
 
 VPath::VPath()
-	: VObject(), m_closed( false )
+	: VObject(), m_closed( false ), m_fillRule( evenOdd )
 {
 	m_segments.setAutoDelete( true );
 
@@ -54,6 +54,9 @@ VPath::VPath( const VPath& path )
 
 		m_segments.append( list );
 	}
+
+	m_closed = path.m_closed;
+	m_fillRule = path.m_fillRule;
 }
 
 VPath::~VPath()
@@ -76,7 +79,7 @@ VPath::draw( QPainter& painter, const QRect& rect,
 	if( state() != edit )
 	{
 		// paint fill:
-		m_fill.begin_draw( painter, zoomFactor );
+		m_fill.begin_draw( painter, zoomFactor, m_fillRule );
 		for( itr.toFirst(); itr.current(); ++itr )
 		{
 			m_fill.draw( *( itr.current() ) );

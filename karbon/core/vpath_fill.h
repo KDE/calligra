@@ -11,12 +11,14 @@
 
 class QPainter;
 
+enum VFillRule { evenOdd, winding };
+
 class VPathFill : public VFill, VSegmentListTraverser
 {
 public:
 	VPathFill();
 
-	void begin_draw( QPainter& painter, const double zoomFactor );
+	void begin_draw( QPainter& painter, const double zoomFactor, VFillRule rule );
 	void draw( const VSegmentList& list );
 	void end_draw();
 
@@ -40,7 +42,7 @@ private:
 	QPainter* m_painter;
 	double m_zoomFactor;
 	QPointArray m_pa;
-	bool m_hasHoles;	// otherwise spirals suck
+	VFillRule m_fillRule;
 };
 
 #endif

@@ -134,6 +134,9 @@ public:
 	virtual void save( QDomElement& element ) const;
 	virtual void load( const QDomElement& element );
 
+	VFillRule fillRule() { return m_fillRule; }
+	void setFillRule( VFillRule rule ) { m_fillRule = rule; }
+
 private:
 // TODO: this looks ugly somehow:
 	void drawBox( QPainter &painter, double x, double y, uint handleSize = 3 ); // helper function for draw()
@@ -145,6 +148,7 @@ private:
 	VPathFill m_fill;			// fill.
 
 	bool m_closed;
+	VFillRule m_fillRule;
 };
 
 #endif
