@@ -847,6 +847,7 @@ QString encodeSevenBit(QString text)
         {
             escapedText += "\\u";
             escapedText += QString::number(ch, 10);
+            escapedText += " ";
         } else
             escapedText += Qch;
 
