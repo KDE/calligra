@@ -56,7 +56,8 @@ class QSize;
 class QProgressDialog;
 class KWTextFrameSet;
 class KWFramePartMoveCommand;
-
+class KWordFrameSetIface;
+class DCOPObject;
 /**
  * This class represents a single frame.
  * A frame belongs to a frameset which states its contents.
@@ -303,6 +304,8 @@ public:
     KWFrameSet( KWDocument *doc );
     // destructor
     virtual ~KWFrameSet();
+
+    virtual KWordFrameSetIface* dcopObject();
 
     /** The type of frameset. Use this to differentiate between different instantiations of
      *  the framesets. Each implementation will return a different frameType.
@@ -606,6 +609,7 @@ protected:
     QString m_name;
     KWTextFrameSet * m_anchorTextFs;
     KWCanvas * m_currentDrawnCanvas;           // The canvas currently being drawn.
+    KWordFrameSetIface *dcop;
 };
 
 /******************************************************************/

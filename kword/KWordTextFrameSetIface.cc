@@ -27,10 +27,10 @@
 #include "kwdoc.h"
 #include <kapplication.h>
 #include <dcopclient.h>
-
+#include "KWordFrameSetIface.h"
 
 KWordTextFrameSetIface::KWordTextFrameSetIface( KWTextFrameSet *_frame )
-    : DCOPObject()
+    : KWordFrameSetIface( _frame)
 {
    m_frametext = _frame;
 }
@@ -57,26 +57,6 @@ int KWordTextFrameSetIface::numberOfParagraphs()
 QString KWordTextFrameSetIface::name() const
 {
     return m_frametext->getName();
-}
-
-bool KWordTextFrameSetIface::isVisible() const
-{
-    return m_frametext->isVisible();
-}
-
-bool KWordTextFrameSetIface::isFloating() const
-{
-    return m_frametext->isFloating();
-}
-
-bool KWordTextFrameSetIface::isAHeader() const
-{
-    return m_frametext->isAHeader();
-}
-
-bool KWordTextFrameSetIface::isAFooter() const
-{
-    return m_frametext->isAFooter();
 }
 
 QString KWordTextFrameSetIface::selectedText() const

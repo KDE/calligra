@@ -35,6 +35,8 @@ public:
 
 k_dcop:
     virtual DCOPRef textFrameSet( int num );
+    virtual DCOPRef frameSet( int num );
+
     virtual int numPages();
     virtual int numFrameSets();
     virtual unsigned int nbColumns();

@@ -42,6 +42,8 @@
 #include <kparts/partmanager.h>
 #include <kdebug.h>
 #include <float.h>
+#include "KWordFrameSetIface.h"
+#include <dcopobject.h>
 
 /******************************************************************/
 /* Class: KWFrame                                                 */
@@ -449,10 +451,21 @@ KWFrameSet::KWFrameSet( KWDocument *doc )
     connect( this, SIGNAL( repaintChanged( KWFrameSet * ) ),
              doc, SLOT( slotRepaintChanged( KWFrameSet * ) ) );
     frames.setAutoDelete( true );
+    dcop=0L;
 }
+
+KWordFrameSetIface* KWFrameSet::dcopObject()
+{
+    if ( !dcop )
+	dcop = new KWordFrameSetIface( this );
+
+    return dcop;
+}
+
 
 KWFrameSet::~KWFrameSet()
 {
+    delete dcop;
 }
 
 void KWFrameSet::addFrame( KWFrame *_frame, bool recalc )

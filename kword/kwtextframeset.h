@@ -40,6 +40,7 @@ class QProgressDialog;
 class KMacroCommand;
 class KWTextDocument;
 class KoTextObject;
+class KWordFrameSetIface;
 
 /**
  * Class: KWTextFrameSet
@@ -54,7 +55,7 @@ public:
     /** destructor */
     ~KWTextFrameSet();
 
-    virtual DCOPObject* dcopObject();
+    virtual KWordFrameSetIface* dcopObject();
 
 /** The type of frameset. Use this to differentiate between different instantiations of
      *  the framesets. Each implementation will return a different frameType.
@@ -238,7 +239,6 @@ private:
     int m_firstPage;
     /** always empty, for convenience in @ref framesInPage */
     QPtrList<KWFrame> m_emptyList;
-    DCOPObject *dcop;
 };
 
 /**

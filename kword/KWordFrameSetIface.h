@@ -17,35 +17,31 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KWORD_TEXTFRAMESET_IFACE_H
-#define KWORD_TEXTFRAMESET_IFACE_H
+#ifndef KWORD_FRAMESET_IFACE_H
+#define KWORD_FRAMESET_IFACE_H
 
 #include <KoDocumentIface.h>
 #include <dcopref.h>
 
 #include <qstring.h>
 #include <qcolor.h>
-#include "KWordFrameSetIface.h"
-class KWTextFrameSet;
-class KWordViewIface;
+class KWFrameSet;
 
-class KWordTextFrameSetIface :  virtual public KWordFrameSetIface
+class KWordFrameSetIface :  virtual public DCOPObject
 {
     K_DCOP
 public:
-    KWordTextFrameSetIface( KWTextFrameSet *_frametext );
+    KWordFrameSetIface( KWFrameSet *_frame );
 
 k_dcop:
-    virtual DCOPRef startEditing();
-    bool hasSelection() const;
-    int numberOfParagraphs();
-    int paragraphsSelected();
-    QString name() const;
-    QString selectedText() const;
-    void selectAll( bool select );
+    virtual bool isAHeader() const;
+    virtual bool isAFooter() const;
+    virtual bool isHeaderOrFooter() const;
+    virtual bool isMainFrameset() const;
+    virtual bool isMoveable() const;
+    virtual bool isVisible() const;
 private:
-    KWTextFrameSet *m_frametext;
-
+    KWFrameSet *m_frame;
 };
 
 #endif

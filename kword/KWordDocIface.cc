@@ -19,6 +19,7 @@
 
 #include "KWordDocIface.h"
 #include "kwtextframeset.h"
+#include "KWordFrameSetIface.h"
 #include "kwdoc.h"
 #include <kapplication.h>
 #include <dcopclient.h>
@@ -36,6 +37,15 @@ DCOPRef KWordDocIface::textFrameSet( int num )
     return DCOPRef( kapp->dcopClient()->appId(),
 		    doc->textFrameSet( num)->dcopObject()->objId() );
 }
+
+DCOPRef KWordDocIface::frameSet( int num )
+{
+    if( num>= doc->getNumFrameSets())
+        return DCOPRef();
+    return DCOPRef( kapp->dcopClient()->appId(),
+		    doc->frameSet( num)->dcopObject()->objId() );
+}
+
 
 int KWordDocIface::numPages()
 {

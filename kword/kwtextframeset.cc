@@ -50,6 +50,7 @@
 #include <koChangeCaseDia.h>
 #include "KWordTextFrameSetIface.h"
 #include "KWordTextFrameSetEditIface.h"
+#include "KWordFrameSetIface.h"
 
 #include <kdebug.h>
 #include <assert.h>
@@ -127,7 +128,7 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
     }*/
 }
 
-DCOPObject* KWTextFrameSet::dcopObject()
+KWordFrameSetIface* KWTextFrameSet::dcopObject()
 {
     if ( !dcop )
 	dcop = new KWordTextFrameSetIface( this );
