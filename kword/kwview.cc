@@ -1566,6 +1566,7 @@ void KWView::viewTextMode()
         setZoom( m_zoomViewModeNormal, false );
         m_gui->canvasWidget()->switchViewMode( new KWViewModeText( m_doc ) );
         m_doc->setChangeLastModeView(m_gui->canvasWidget()->viewMode()->type());
+        m_doc->updateZoomRuler();
     }
     else
         actionViewTextMode->setChecked( true ); // always one has to be checked !
@@ -1582,6 +1583,7 @@ void KWView::viewPageMode()
         slotUpdateRuler();
         m_gui->canvasWidget()->switchViewMode( new KWViewModeNormal( m_doc ) );
         m_doc->setChangeLastModeView(m_gui->canvasWidget()->viewMode()->type());
+        m_doc->updateZoomRuler();
     }
     else
         actionViewPageMode->setChecked( true ); // always one has to be checked !
