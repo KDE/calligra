@@ -18,17 +18,14 @@
  */
 #include "kivio_factory.h"
 #include "kivio_doc.h"
+#include "kivio_aboutdata.h"
 
-#include <kaboutdata.h>
 #include <klocale.h>
 #include <kinstance.h>
 #include <kstddirs.h>
 #include <kiconloader.h>
 
 #include "kivio_config.h"
-
-static const char* description=I18N_NOOP("KOffice Kivio Application");
-static const char* version="0.1";
 
 extern "C"
 {
@@ -49,16 +46,10 @@ KivioFactory::KivioFactory( QObject* parent, const char* name )
 
 KivioFactory::~KivioFactory()
 {
-  if ( s_aboutData )
-  {
-    delete s_aboutData;
-    s_aboutData=0;
-  }
-  if ( s_global )
-  {
-    delete s_global;
-    s_global = 0L;
-  }
+  delete s_aboutData;
+  s_aboutData=0;
+  delete s_global;
+  s_global = 0L;
 
   // FIXME: Is this the right place to do this?
   if( KivioConfig::config() )
@@ -83,13 +74,7 @@ KParts::Part* KivioFactory::createPart( QWidget *parentWidget, const char *widge
 KAboutData* KivioFactory::aboutData()
 {
   if( !s_aboutData )
-  {
-    s_aboutData = new KAboutData( "kivio", I18N_NOOP("Kivio"),
-                                  version, description, KAboutData::License_GPL,
-                                  "theKompany.com - Kivio",0,"www.thekompany.com");
-    s_aboutData->addAuthor("Dave Marotti","Main author and the original author of Queesio, from which this source is based","lndshark@speakeasy.net");
-    s_aboutData->addAuthor("Max Judin","GUI widgets","max@thekompany.com");
-  }
+    s_aboutData = newKivioAboutData();
   return s_aboutData;
 }
 
@@ -111,4 +96,5 @@ KInstance* KivioFactory::global()
 
   return s_global;
 }
+
 #include "kivio_factory.moc"

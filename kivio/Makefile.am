@@ -14,4 +14,4 @@ package-messages:
 
 
 messages: rc.cpp
-	$(XGETTEXT) `find . -name \*.cpp -not -name \*.moc.*` -o $(podir)/kivio.pot
+	$(XGETTEXT) `find . -name \*.cpp -not -name \*.moc.*` kiviopart/kivio_aboutdata.h -o $(podir)/kivio.pot

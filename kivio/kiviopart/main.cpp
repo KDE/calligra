@@ -17,7 +17,6 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #include <koApplication.h>
-#include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
 #include <kiconloader.h>
@@ -28,7 +27,7 @@
 #include <qapplication.h>
 #include <qdatetime.h>
 
-#include "kivio_factory.h"
+#include "kivio_aboutdata.h"
 
 #include <unistd.h>
 
@@ -41,7 +40,7 @@ static const KCmdLineOptions options[]=
 int main( int argc, char **argv )
 {
 
-    KCmdLineArgs::init( argc, argv, KivioFactory::aboutData());
+    KCmdLineArgs::init( argc, argv, newKivioAboutData() );
     KCmdLineArgs::addCmdLineOptions( options );
 
     KoApplication app;

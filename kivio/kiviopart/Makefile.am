@@ -3,9 +3,8 @@
 #### WARNING! All changes made in this part will be lost! ####
 ##############################################################
 SUBDIRS = ui kiviosdk tklib tools pics tiles stencils 
-lib_LTLIBRARIES =libkiviopart.la
 
-
+kde_module_LTLIBRARIES = libkiviopart.la
 libkiviopart_la_LDFLAGS = -version-info 
 libkiviopart_la_LIBADD = \
 		$(top_builddir)/kivio/kiviopart/tools/libtools.la\
@@ -24,7 +23,6 @@ INCLUDES = -I$(srcdir)/ui\
 
 libkiviopart_la_METASOURCES = AUTO
 libkiviopart_la_SOURCES = \
-		main.cpp\
 		kivio_canvas.cpp\
 		kivio_doc.cpp\
 		kivio_factory.cpp\
@@ -131,10 +129,10 @@ EXTRA_DIST = \
 ##############################################################
 ####                  END KDEStudio part                  ####
 #2########################################################!@#$
-lib_LTLIBRARIES =  libkiviopart.la kivio.la
+lib_LTLIBRARIES = kivio.la
 kivio_la_SOURCES = main.cpp
 kivio_la_LDFLAGS = $(all_libraries) -module -avoid-version
-kivio_la_LIBADD = libkiviopart.la
+kivio_la_LIBADD = ../../lib/kofficecore/libkofficecore.la
 
 libkiviopart_la_LDFLAGS = -avoid-version -module $(LIB_KOFFICEUI) $(all_libraries)
 
