@@ -103,6 +103,7 @@ void KoTextIterator::init( const QValueList<KoTextObject *> & lstObjects, KoText
     assert( m_firstParag );
     assert( m_lastParag );
     m_currentParag = m_firstParag;
+    kdDebug(32500) << "KoTextIterator::init from(" << *m_currentTextObj << "," << m_firstParag->paragId() << ") - to(" << (forw?m_lstObjects.last():m_lstObjects.first()) << "," << m_lastParag->paragId() << "), " << m_lstObjects.count() << " textObjects." << endl;
 }
 
 void KoTextIterator::restart()
@@ -120,6 +121,10 @@ void KoTextIterator::operator++()
 {
     if ( !m_currentParag ) {
         kdDebug() << k_funcinfo << " called past the end" << endl;
+        return;
+    }
+    if ( m_currentParag == m_lastParag ) {
+        m_currentParag = 0L;
         return;
     }
     bool forw = ! ( m_options & KFindDialog::FindBackwards );
@@ -146,6 +151,8 @@ void KoTextIterator::operator++()
                 m_currentParag = 0L; // done
         }
     }
+    kdDebug(32500) << "KoTextIterator++ (" << *m_currentTextObj << "," <<
+        (m_currentParag ? m_currentParag->paragId() : 0) << ")" << endl;
 }
 
 bool KoTextIterator::atEnd() const
@@ -203,4 +210,24 @@ bool KoTextIterator::hasText() const
         return forw ? m_lastIndex > 0
                     : m_lastIndex < strLength;
     return strLength > 0;
+}
+
+void KoTextIterator::setOptions( int options )
+{
+    if ( m_options != options )
+    {
+        bool wasBack = (m_options & KFindDialog::FindBackwards);
+        bool isBack = (options & KFindDialog::FindBackwards);
+        if ( wasBack != isBack )
+        {
+            qSwap( m_firstParag, m_lastParag );
+            qSwap( m_firstIndex, m_lastIndex );
+            if ( m_currentParag == 0 ) // done? -> reinit
+            {
+                kdDebug() << k_funcinfo << "was done -> reinit" << endl;
+                restart();
+            }
+        }
+        m_options = options;
+    }
 }

@@ -49,9 +49,10 @@ public:
 
     /**
      * Change options during iteration. ## Not sure how if all cases will be handled :}
-     * At least this is useful for the "Replace All" button during replacing.
+     * At least this is useful for the "Replace All" button during replacing,
+     * and for switching to "FindBackwards" temporarily for "find previous".
      */
-    void setOptions( int options ) { m_options = options; }
+    void setOptions( int options );
 
     /**
      * Go to next paragraph that we must iterate over
