@@ -25,7 +25,6 @@
 #include <koRect.h>
 
 #include <qlabel.h>
-#include <qcheckbox.h>
 #include <qbuttongroup.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>

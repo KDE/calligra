@@ -25,7 +25,6 @@
 #include "kspread_doc.h"
 #include "kspread_util.h"
 #include "kspread_map.h"
-#include <qlayout.h>
 
 #include <qvariant.h>
 #include <qcombobox.h>
