@@ -1647,7 +1647,7 @@ QString OoImpressImport::storeImage( const QDomElement& object )
     QString fileName = QString( "picture%1" ).arg( m_numPicture++ ) + extension;
     KoStoreDevice* out = m_chain->storageFile( "pictures/" + fileName, KoStore::Write );
 
-    if ( out )
+    if ( file && out )
     {
         QByteArray buffer = file->data();
         out->writeBlock( buffer.data(), buffer.size() );
