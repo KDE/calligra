@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -141,6 +141,14 @@ SvgExport::visitVDocument( VDocument& document )
 	*m_body << "</g>" << endl;
 	*m_defs << "</defs>" << endl;
 	*m_body << "</svg>" << endl;
+}
+
+void
+SvgExport::visitVGroup( VGroup& group )
+{
+	*m_body << "<g>" << endl;
+	VVisitor::visitVGroup( group );
+	*m_body << "</g>" << endl;
 }
 
 void
