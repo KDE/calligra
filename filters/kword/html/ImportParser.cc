@@ -140,71 +140,6 @@ bool HtmlParser::setEncoding(const QString& strEncoding)
     }
 }
 
-// TODO: put HtmlParser::treatMetaTag in another class
-void HtmlParser::treatMetaTag(const QString& tagName, HtmlAttributes& attributes)
-{
-    // The only <meta> element interesting us is the own defineing the encoding.
-
-    // Verify that an attribute "http-equiv" exists and is a "Content-Type"
-    if (attributes["http-equiv"].lower()!="content-type")
-    {
-        return;
-    }
-
-    // Do we have a "content" attribute?
-    QString strContent=attributes["content"].simplifyWhiteSpace();
-    // Note: do not use lower(), as we need the correct encoding name!
-
-    if (strContent.isEmpty())
-    {
-        return;
-    }
-
-    // Verify if we have: "text/html; charset=..."
-    if (!strContent.lower().startsWith("text/html"))
-    {
-        kdWarning(30503) << "Unexpected mime type: " << strContent << " (wrong start)"
-            << " ( at line: " << getLine() << ", column: " << getColumn() << ")"
-            << endl;
-        return;
-    }
-
-    const int posSemiComma=strContent.find(';');
-
-    if (posSemiComma<0)
-    {
-        kdWarning(30503) << "Unexpected mime type: " << strContent << " (no semi-comma)"
-            << " ( at line: " << getLine() << ", column: " << getColumn() << ")"
-            << endl;
-        return;
-    }
-
-    const int posEqual=strContent.find('=',posSemiComma);
-
-    if (posEqual<0)
-    {
-        kdWarning(30503) << "Unexpected mime type: " << strContent << " (no equal)"
-            << " ( at line: " << getLine() << ", column: " << getColumn() << ")"
-            << endl;
-        return;
-    }
-
-    if (strContent.mid(posSemiComma+1,posEqual-posSemiComma-1).simplifyWhiteSpace()!="charset")
-    {
-        kdWarning(30503) << "Unexpected mime type: " << strContent << " (no charset)"
-            << " ( at line: " << getLine() << ", column: " << getColumn() << ")"
-            << endl;
-        return;
-    }
-
-    QString strCharset=strContent.mid(posEqual+1);
-
-    kdDebug(30503) << "Charset: " << strCharset << " (given through <meta> tag)" << endl;
-
-    setEncoding(strCharset);
-
-}
-
 bool HtmlParser::parseTag(bool tagClosing)
 {
     States state=stateTagName;
@@ -692,4 +627,139 @@ bool HtmlParser::parse(void)
     }
 
     return true;
+}
+
+
+bool HtmlParser :: doEmptyElement(const QString& name, const HtmlAttributes& attributes)
+{
+    if (!doStartElement(name,attributes))
+    {
+        return false;
+    }
+    return doEndElement(name);
+}
+
+
+//
+// CharsetParser
+//
+// The goal of this class is to find the charset used by the HTML file
+// We simply search the <meta> tag defining it.
+// If we find the <body> tag, we consider that we are already too far.
+//
+// In future, we could also use the XML declaration ( <?xml )
+// that available in XHTML files. It has the advantage to be near than any <meta> tag
+
+bool CharsetParser::doStartElement(const QString& tagName, const HtmlAttributes& attributes)
+{
+    if (tagName=="meta")
+    {
+        return treatMetaTag(tagName,attributes);
+    }
+    else if (tagName=="body")
+    {
+        // We are already out of the <head> element, so we have no charset information!
+        return false;
+    }
+    return true;
+}
+
+bool CharsetParser::treatMetaTag(const QString& tagName, const HtmlAttributes& attributes)
+{
+    // The only <meta> element interesting us is the own defining the encoding.
+
+#if 1
+    // DEBUG
+    QString strDebug="<meta";
+    HtmlAttributes::ConstIterator it;
+    for (it=attributes.begin(); it !=attributes.end(); it++)
+    {
+        strDebug += ' ';
+        strDebug += it.key();
+        strDebug += '=';
+        strDebug += '"';
+        strDebug += it.data();
+        strDebug += '"';
+    }
+    strDebug += " />";
+    kdDebug(30503) << strDebug << endl;
+#endif
+
+    // Verify that an attribute "http-equiv" exists and is a "Content-Type"
+    if (attributes["http-equiv"].lower()!="content-type")
+    {
+        return true;
+    }
+
+
+    // Do we have a "content" attribute?
+    QString strContent=attributes["content"].simplifyWhiteSpace();
+    // Note: do not use lower(), as we need the correct encoding name!
+
+    if (strContent.isEmpty())
+    {
+        return true;
+    }
+
+    // Verify if we have: "text/html; charset=..."
+    if (!strContent.lower().startsWith("text/html"))
+    {
+        kdWarning(30503) << "Unexpected mime type: " << strContent << " (wrong start)"
+            << " ( at line: " << getLine() << ", column: " << getColumn() << ")"
+            << endl;
+        return true;
+    }
+
+    const int posSemiComma=strContent.find(';');
+
+    if (posSemiComma<0)
+    {
+        kdWarning(30503) << "Unexpected mime type: " << strContent << " (no semi-comma)"
+            << " ( at line: " << getLine() << ", column: " << getColumn() << ")"
+            << endl;
+        return true;
+    }
+
+    const int posEqual=strContent.find('=',posSemiComma);
+
+    if (posEqual<0)
+    {
+        kdWarning(30503) << "Unexpected mime type: " << strContent << " (no equal)"
+            << " ( at line: " << getLine() << ", column: " << getColumn() << ")"
+            << endl;
+        return true;
+    }
+
+    if (strContent.mid(posSemiComma+1,posEqual-posSemiComma-1).simplifyWhiteSpace()!="charset")
+    {
+        kdWarning(30503) << "Unexpected mime type: " << strContent << " (no charset)"
+            << " ( at line: " << getLine() << ", column: " << getColumn() << ")"
+            << endl;
+        return true;
+    }
+
+    QString strCharset=strContent.mid(posEqual+1);
+
+    kdDebug(30503) << "Charset: " << strCharset << " (given through <meta> tag)" << endl;
+
+    m_strCharset=strCharset;
+
+    return false; // We have a charset definition, so stop parsing!
+
+}
+
+bool CharsetParser::doEndElement(const QString&)
+{
+    return true;
+}
+
+bool CharsetParser::doCharacters(const QString&)
+{
+    return true;
+}
+
+QString CharsetParser::findCharset(void)
+{
+    parse(); // Note: we do not need the return value, as it will mostly be "false"!
+    return m_strCharset;
 }

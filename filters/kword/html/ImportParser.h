@@ -42,7 +42,7 @@ public:
     bool setEncoding(const QString& strEncoding);
     bool parse(void);
 public:
-    virtual bool doEmptyElement(const QString& tagName, const HtmlAttributes& attributes)=0;
+    virtual bool doEmptyElement(const QString& tagName, const HtmlAttributes& attributes);
     virtual bool doStartElement(const QString& tagName, const HtmlAttributes& attributes)=0;
     virtual bool doEndElement(const QString& tagName)=0;
     virtual bool doCharacters(const QString& strChars)=0;
@@ -77,6 +77,25 @@ public:
 public: // Undoing the class protection
     inline bool parse(void) { return HtmlParser::parse(); }
     inline bool setEncoding(const QString& strEncoding) { return HtmlParser::setEncoding(strEncoding); }
+};
+
+class CharsetParser : protected HtmlParser
+{
+public:
+    CharsetParser(QTextStream& streamIn) : HtmlParser(streamIn) { }
+    virtual ~CharsetParser(void) { }
+public: // virtual
+    virtual bool doStartElement(const QString& tagName, const HtmlAttributes& attributes);
+    virtual bool doEndElement(const QString& tagName);
+    virtual bool doCharacters(const QString& strChars);
+public:
+    QString findCharset(void);
+protected:
+    bool treatMetaTag(const QString& tagName, const HtmlAttributes& attributes);
+    virtual void WriteOut(const QChar& ch) { };
+    virtual void WriteOut(const QString& str) { };
+private:
+    QString m_strCharset;
 };
 
 #endif // IMPORTPARSER_H

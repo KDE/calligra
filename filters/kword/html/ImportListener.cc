@@ -56,7 +56,6 @@ public:
     }
     virtual ~HtmlListener(void) { }
 public:
-    virtual bool doEmptyElement(const QString& tagName, const HtmlAttributes& attributes);
     virtual bool doStartElement(const QString& tagName, const HtmlAttributes& attributes);
     virtual bool doEndElement(const QString& tagName);
     virtual bool doCharacters(const QString& strChars);
@@ -70,15 +69,6 @@ private:
     QDomElement mainFramesetElement;
     MapTag mapTag;
 };
-
-bool HtmlListener :: doEmptyElement(const QString& name, const HtmlAttributes& attributes)
-{
-    if (!doStartElement(name,attributes))
-    {
-        return false;
-    }
-    return doEndElement(name);
-}
 
 bool HtmlListener :: doStartElement(const QString& name, const HtmlAttributes& attributes)
 {
@@ -265,9 +255,43 @@ static QDomElement DoCreateMainFramesetElement(QDomDocument& qDomDocumentOut)
     return framesetElementOut; // return the main <FRAMESET> where the body text will be under.
 }
 
+QString FindCharset(const QString &fileIn)
+{
+    QFile in(fileIn);
+    if(!in.open(IO_ReadOnly)) {
+        kdError(30503) << "Unable to open input file!" << endl;
+        return QString::null;
+    }
+    QTextStream streamIn(&in);
+
+    CharsetParser* parser=new CharsetParser(streamIn);
+
+    if (!parser)
+    {
+        kdError(30503) << "Could not create CharsetParser object! Aborting!" << endl;
+        return QString::null;
+    }
+
+    QString str=parser->findCharset();
+
+    delete parser;
+
+    return str;
+}
+
 bool HtmlFilter(const QString &fileIn, const QString &fileOut)
 {
     kdDebug(30503)<<"HTML Import filter"<<endl;
+
+    // At first, we must find the charset of the input file.
+    QString strCharset=FindCharset(fileIn);
+
+    if (strCharset.isEmpty())
+    {
+        //We have no charset, so we assume that it is a XHTML file in UTF-8
+        kdWarning(30503) << "No explicit charset definition found! Assuming UTF-8!" << endl;
+        strCharset="UTF-8";
+    }
 
     QFile in(fileIn);
     if(!in.open(IO_ReadOnly)) {
@@ -297,7 +321,7 @@ bool HtmlFilter(const QString &fileIn, const QString &fileOut)
         return false;
     }
 
-    listener->setEncoding(QString::null); //TODO: do real encoding treatment!
+    listener->setEncoding(strCharset);
 
     const bool res=listener->parse();
 
@@ -322,7 +346,7 @@ bool HtmlFilter(const QString &fileIn, const QString &fileOut)
     out.write((const char*)strOut, strOut.length());
     out.close();
 
-#if 1
+#if 0
     kdDebug(30503) << qDomDocumentOut.toString();
 #endif
 
