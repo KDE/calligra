@@ -74,6 +74,7 @@ public:
         //     Friday=5 
         //     Saturday=6
         U16 wdy:3;
+
     } __attribute__ ((packed)) DTTM;
     static unsigned read(const U8 *in, DTTM *out, unsigned count=1);
 
@@ -143,6 +144,7 @@ public:
         //     61 97.5 Percent 
         //     62 97 Percent
         U16 ipat:6;
+
     } __attribute__ ((packed)) SHD;
     static unsigned read(const U8 *in, SHD *out, unsigned count=1);
 
@@ -197,6 +199,7 @@ public:
 
         // sprm's operand
         U16 val:8;
+
     } __attribute__ ((packed)) PRM;
     static unsigned read(const U8 *in, PRM *out, unsigned count=1);
 
@@ -540,6 +543,7 @@ public:
         // in textbox BKD, when == 1 indicates that text overflows the end of 
         // this textbox
         U16 fTextOverflow:1;
+
     } __attribute__ ((packed)) BKD;
     static unsigned read(const U8 *in, BKD *out, unsigned count=1);
 
@@ -566,6 +570,7 @@ public:
         // when 1, this bookmark marks a range of columns in a table 
         // specified by [bkf.itcFirst, bkf.itcLim).
         U16 fCol:1;
+
     } __attribute__ ((packed)) BKF;
     static unsigned read(const U8 *in, BKF *out, unsigned count=1);
 
@@ -634,6 +639,7 @@ public:
 
         // reserved
         U16 unused2_15:1;
+
     } __attribute__ ((packed)) BRC;
     static unsigned read(const U8 *in, BRC *out, unsigned count=1);
 
@@ -660,6 +666,7 @@ public:
 
         // reserved
         U16 fSpare:1;
+
     } __attribute__ ((packed)) BRC10;
     static unsigned read(const U8 *in, BRC10 *out, unsigned count=1);
 
@@ -1005,7 +1012,6 @@ public:
         // 
         U16 fFtcAsciSym:1;
 
-
         // when 1, properties have been changed with revision marking on
         U16 fPropMark;
 
@@ -1127,6 +1133,7 @@ public:
         // if true, the grid will start at the left and top margins and 
         // ignore xaGrid and yaGrid.
         U16 fFollowMargins:1;
+
     } __attribute__ ((packed)) DOGRID;
     static unsigned read(const U8 *in, DOGRID *out, unsigned count=1);
 
@@ -1443,6 +1450,7 @@ public:
 
         // Gutter position for this doc: 0 => side; 1 => top
         U16 iGutterPos:1;
+
     } __attribute__ ((packed)) DOP;
     static unsigned read(const U8 *in, DOP *out, unsigned count=1);
 
@@ -1508,6 +1516,7 @@ public:
 
         // (reserved)
         U32 unused84_22:10;
+
     } __attribute__ ((packed)) DOP102;
     static unsigned read(const U8 *in, DOP102 *out, unsigned count=1);
 
@@ -1648,7 +1657,6 @@ public:
 
         // reserved
         U8 unused0_5:3;
-
 
         // fld.ch == 19 (field begin mark) -> U8 field type (see flt table 
         // below). <p>fld.ch == 21 (field end mark) -> 
@@ -3521,6 +3529,7 @@ public:
 
         // index to a <b>grpprl</b> stored in <b>CLX</b> portion of file.
         U16 igrpprl:15;
+
     } __attribute__ ((packed)) PRM2;
     static unsigned read(const U8 *in, PRM2 *out, unsigned count=1);
 
@@ -3756,7 +3765,6 @@ public:
         //     1 offset from edge of page
         U16 pgbOffsetFrom:3;
 
-
         // default value is 12240 twipswidth of page
         U32 xaPage;
 
@@ -3943,6 +3951,7 @@ public:
 
         // reserved
         U8 unused0_6:2;
+
     } __attribute__ ((packed)) TBD;
     static unsigned read(const U8 *in, TBD *out, unsigned count=1);
 
@@ -4096,6 +4105,7 @@ public:
         // when ==1, apply properties from the selected table look to the 
         // last column of the table
         U16 fLastCol:1;
+
     } __attribute__ ((packed)) TLP;
     static unsigned read(const U8 *in, TLP *out, unsigned count=1);
 
@@ -4207,7 +4217,6 @@ public:
 
         // this FTXBXS is not currently in use
         U16 fReusable;
-
 
         // Shape Identifier (see FSPA) for first Office Shape in textbox 
         // chain.
