@@ -634,11 +634,12 @@ colorParameters::colorParameters( KSpreadView* _view,QWidget *parent , char *nam
   config = KSpreadFactory::global()->config();
 
   QColor _gridColor(Qt::lightGray);
-  if( config->hasGroup("Parameters" ))
-        {
-        config->setGroup( "Parameters" );
-	_gridColor= config->readColorEntry("GridColor",&_gridColor);
-	}
+
+if(  config->hasGroup("KSpread Color" ) )
+   {  
+     config->setGroup( "KSpread Color" );
+     _gridColor= config->readColorEntry("GridColor",&_gridColor);
+   }
 
   QVBoxLayout *box = new QVBoxLayout( this );
   box->setMargin( 5 );
@@ -664,10 +665,9 @@ void colorParameters::apply()
     if(m_pView->doc()->defaultGridPen().color()!=_col)
         {
 	 m_pView->doc()->changeDefaultGridPenColor( _col);
-	 config->setGroup( "Parameters" );
+	 config->setGroup( "KSpread Color" );
 	 config->writeEntry("GridColor",_col);
 	}
-
 }
 
 void colorParameters::slotDefault()
@@ -804,6 +804,7 @@ configureSpellPage::configureSpellPage( KSpreadView* _view,QWidget *parent , cha
   grid1->addWidget(_spellConfig,0,0); 
   box->addWidget( tmpQGroupBox);
 }
+
 void configureSpellPage::apply()
 {
   config->setGroup( "KSpell kspread" );

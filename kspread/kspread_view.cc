@@ -489,15 +489,20 @@ if( config->hasGroup("Parameters" ))
         m_pDoc->setTypeOfCalc((MethodOfCalc)config->readNumEntry("Method of Calc",(int)(Sum)));
 	m_pDoc->setShowTabBar(config->readBoolEntry("Tabbar",true));
 
-	QColor _col(Qt::lightGray);
-	_col= config->readColorEntry("GridColor",&_col);
-	m_pDoc->changeDefaultGridPenColor(_col);
 	m_pDoc->setShowMessageError(config->readBoolEntry( "Msg error" ,false) );
 	
 	m_pDoc->setShowCommentIndicator(config->readBoolEntry("Comment Indicator",true));
 	
 	m_pDoc->setShowFormularBar(config->readBoolEntry("Formula bar",true));
 	}
+
+ if(  config->hasGroup("KSpread Color" ) )
+   {
+     config->setGroup( "KSpread Color" );
+     QColor _col(Qt::lightGray);
+     _col= config->readColorEntry("GridColor",&_col);
+     m_pDoc->changeDefaultGridPenColor(_col);
+   }
 
 if( config->hasGroup("KSpread Page Layout" ) )
   {
