@@ -1266,10 +1266,29 @@ bool OOWriterWorker::doCloseStyles(void)
 bool OOWriterWorker::doFullPaperFormat(const int format,
             const double width, const double height, const int orientation)
 {
-    m_paperFormat=format;
-    m_paperWidth=width;
-    m_paperHeight=height;
-    m_paperOrientation=orientation;
+    if ( ( format < 0 ) // Be carefull that 0 is ISO A3
+        || ( width < 1.0 )
+        || ( height < 1.0 ) )
+    {
+        kdWarning(30518) << "Page size problem: format: " << format << " width: " << width << " height: " << height << endl;
+        // Something is wrong with thepage size
+        KoFormat newFormat = KoFormat ( format );
+        if ( ( format < 0 ) || ( format > PG_LAST_FORMAT ) )
+        {
+            // Bad or unknown format so assume ISO A4
+            newFormat = PG_DIN_A4;
+        }
+        m_paperWidth = KoPageFormat::width ( newFormat, KoOrientation( orientation ) ) * 72.0 / 25.4 ;
+        m_paperHeight = KoPageFormat::height ( newFormat, KoOrientation( orientation ) ) * 72.0 / 25.4 ;
+        m_paperFormat = newFormat;
+    }
+    else
+    {
+        m_paperFormat=format;
+        m_paperWidth=width;
+        m_paperHeight=height;
+    }
+    m_paperOrientation=orientation; // ### TODO: check if OOWriter needs the orignal size (without landscape) or the real size
     return true;
 }
 
