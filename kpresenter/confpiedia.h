@@ -76,20 +76,16 @@ public:
     ConfPieDia( QWidget* parent, const char* );
     ~ConfPieDia();
 
-    void setAngle( int _angle )
-    { angle = _angle; eAngle->setValue( angle ); piePreview->setAngle( angle ); }
-    void setLength( int _len )
-    { len = _len; eLen->setValue( len ); piePreview->setLength( len ); }
-    void setType( PieType _type )
-    { type = _type; cType->setCurrentItem( _type ); piePreview->setType( type ); }
-    void setPenBrush( const QPen &_pen, const QBrush &_brush )
-    { pen = _pen; brush = _brush; piePreview->setPenBrush( pen, brush );  }
+    void setAngle( int _angle );
+    void setLength( int _len );
+    void setType( PieType _type );
+    void setPenBrush( const QPen &_pen, const QBrush &_brush );
 
-    int getAngle()
+    int getAngle() const
     { return angle; }
-    int getLength()
+    int getLength() const
     { return len; }
-    PieType getType()
+    PieType getType() const
     { return type; }
 
 protected:
@@ -99,16 +95,21 @@ protected:
     PiePreview *piePreview;
     QComboBox *cType;
 
-    int angle, len;
     PieType type;
     QPen pen;
     QBrush brush;
+    PieType oldType;
+    QPen oldPen;
+    QBrush oldBrush;
+    int angle, len;
+    int oldAngle, oldLen;
 
 protected slots:
     void lengthChanged( int );
     void angleChanged( int );
     void typeChanged( int );
     void Apply() { emit confPieDiaOk(); }
+    void slotReset();
 
 signals:
     void confPieDiaOk();

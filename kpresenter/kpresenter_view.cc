@@ -958,7 +958,6 @@ void KPresenterView::extraConfigPie()
     confPieDia->setAngle( m_canvas->activePage()->getPieAngle( pieAngle ) );
     confPieDia->setLength( m_canvas->activePage()->getPieLength( pieLength ) );
     confPieDia->setPenBrush( m_canvas->activePage()->getPen( pen ), m_canvas->activePage()->getBrush( brush ) );
-    confPieDia->setCaption( i18n( "KPresenter - Configure Pie/Arc/Chord" ) );
 
     QObject::connect( confPieDia, SIGNAL( confPieDiaOk() ), this, SLOT( confPieOk() ) );
     m_canvas->setToolEditMode( TEM_MOUSE );
@@ -981,7 +980,6 @@ void KPresenterView::extraConfigRect()
     confRectDia->setMaximumSize( confRectDia->width(), confRectDia->height() );
     confRectDia->setMinimumSize( confRectDia->width(), confRectDia->height() );
     confRectDia->setRnds( m_canvas->activePage()->getRndX( rndX ), m_canvas->activePage()->getRndY( rndY ) );
-    confRectDia->setCaption( i18n( "KPresenter - Configure Rectangle" ) );
     QObject::connect( confRectDia, SIGNAL( confRectDiaOk() ), this, SLOT( confRectOk() ) );
     m_canvas->setToolEditMode( TEM_MOUSE );
     confRectDia->exec();
@@ -1012,7 +1010,6 @@ void KPresenterView::extraConfigPolygon()
     confPolygonDia = new ConfPolygonDia( this, "ConfPolygonDia", _checkConcavePolygon, _cornersValue, _sharpnessValue );
     confPolygonDia->setMaximumSize( confPolygonDia->width(), confPolygonDia->height() );
     confPolygonDia->setMinimumSize( confPolygonDia->width(), confPolygonDia->height() );
-    confPolygonDia->setCaption( i18n( "KPresenter - Configure Polygon" ) );
 
     QObject::connect( confPolygonDia, SIGNAL( confPolygonDiaOk() ), this, SLOT( confPolygonOk() ) );
 

@@ -130,11 +130,15 @@ void PolygonPreview::slotSharpnessValue( int value )
 /*==================== constructor ===============================*/
 ConfPolygonDia::ConfPolygonDia( QWidget *parent, const char *name, bool _checkConcavePolygon,
                                 int _cornersValue, int _sharpnessValue )
-    : KDialogBase( parent, name, true )
+    : KDialogBase( parent, name, true , i18n( "KPresenter - Configure Polygon" ), Ok|Cancel|KDialogBase::Apply|KDialogBase::User1, Ok )
 {
     checkConcavePolygon = _checkConcavePolygon;
     cornersValue = _cornersValue;
     sharpnessValue = _sharpnessValue;
+
+    oldCornersValue = _cornersValue;
+    oldSharpnessValue = _sharpnessValue;
+    oldCheckConcavePolygon = _checkConcavePolygon;
 
     // ------------------------ layout
     QWidget *page = new QWidget( this );
@@ -150,15 +154,10 @@ ConfPolygonDia::ConfPolygonDia( QWidget *parent, const char *name, bool _checkCo
 
     m_convexPolygon = new QRadioButton( i18n( "Polygon" ), group );
 
-    if ( _checkConcavePolygon )
-        m_convexPolygon->setChecked( false );
-    else
-        m_convexPolygon->setChecked( true );
 
     connect( m_convexPolygon, SIGNAL( clicked() ), this, SLOT( slotConvexPolygon() ) );
 
     m_concavePolygon = new QRadioButton( i18n( "Concave Polygon" ), group );
-    m_concavePolygon->setChecked( _checkConcavePolygon );
     connect( m_concavePolygon, SIGNAL( clicked() ), this, SLOT( slotConcavePolygon() ) );
 
     m_corners = new KIntNumInput( _cornersValue, gSettings );
@@ -169,7 +168,6 @@ ConfPolygonDia::ConfPolygonDia( QWidget *parent, const char *name, bool _checkCo
     m_sharpness = new KIntNumInput( _sharpnessValue, gSettings );
     m_sharpness->setRange( 0, 100, 1 );
     m_sharpness->setLabel( i18n( "Sharpness:" ) );
-    m_sharpness->setEnabled( _checkConcavePolygon );
     connect( m_sharpness, SIGNAL( valueChanged( int ) ), this, SLOT( slotSharpnessValue( int ) ) );
 
     hbox->addWidget( gSettings );
@@ -187,9 +185,15 @@ ConfPolygonDia::ConfPolygonDia( QWidget *parent, const char *name, bool _checkCo
     connect( m_sharpness, SIGNAL( valueChanged( int ) ), polygonPreview,
              SLOT( slotSharpnessValue( int ) ) );
 
+    setButtonText( KDialogBase::User1, i18n("Reset") );
+
+    connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotReset()));
+
     connect( this, SIGNAL( okClicked() ), this, SLOT( Apply() ) );
     connect( this, SIGNAL( applyClicked() ), this, SLOT( Apply() ) );
     connect( this, SIGNAL( okClicked() ), this, SLOT( accept() ) );
+
+    slotReset();
 }
 
 /*===================== destructor ===============================*/
@@ -218,6 +222,25 @@ void ConfPolygonDia::slotConersValue( int value )
 void ConfPolygonDia::slotSharpnessValue( int value )
 {
     sharpnessValue = value;
+}
+
+void ConfPolygonDia::slotReset()
+{
+    if ( oldCheckConcavePolygon )
+    {
+        m_convexPolygon->setChecked( false );
+        polygonPreview->slotConcavePolygon();
+    }
+    else
+    {
+        m_convexPolygon->setChecked( true );
+        polygonPreview->slotConvexPolygon();
+    }
+    m_concavePolygon->setChecked( oldCheckConcavePolygon );
+    m_sharpness->setEnabled( oldCheckConcavePolygon );
+    m_sharpness->setValue( oldSharpnessValue );
+    m_corners->setValue( oldCornersValue );
+    polygonPreview->repaint();
 }
 
 #include <confpolygondia.moc>

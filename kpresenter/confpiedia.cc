@@ -86,7 +86,7 @@ void PiePreview::drawContents( QPainter* painter )
 
 /*==================== constructor ===============================*/
 ConfPieDia::ConfPieDia( QWidget* parent, const char* name )
-    : KDialogBase( parent, name, true )
+    : KDialogBase( parent, name, true , i18n( "KPresenter - Configure Pie/Arc/Chord" ), Ok|Cancel|KDialogBase::Apply|KDialogBase::User1, Ok)
 {
   // ------------------------ layout
   QWidget *page = new QWidget( this );
@@ -127,6 +127,11 @@ ConfPieDia::ConfPieDia( QWidget* parent, const char* name )
 
   hbox->addWidget( piePreview );
 
+  setButtonText( KDialogBase::User1, i18n("Reset") );
+
+  connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotReset()));
+
+
   connect( this, SIGNAL( okClicked() ), this, SLOT( Apply() ) );
   connect( this, SIGNAL( applyClicked() ), this, SLOT( Apply() ) );
   connect( this, SIGNAL( okClicked() ), this, SLOT( accept() ) );
@@ -157,5 +162,51 @@ void ConfPieDia::typeChanged( int _type )
     type = static_cast<PieType>( _type );
     piePreview->setType( type );
 }
+
+void ConfPieDia::slotReset()
+{
+    eAngle->setValue( oldAngle );
+    eLen->setValue( oldLen );
+    cType->setCurrentItem( oldType );
+    piePreview->setLength( oldLen );
+    piePreview->setAngle( oldAngle );
+    piePreview->setLength( oldLen );
+    piePreview->setType( oldType );
+    piePreview->setPenBrush( oldPen, oldBrush );
+}
+
+void ConfPieDia::setAngle( int _angle )
+{
+    angle = _angle;
+    oldAngle = _angle;
+    eAngle->setValue( angle );
+    piePreview->setAngle( angle );
+}
+
+void ConfPieDia::setLength( int _len )
+{
+    len = _len;
+    oldLen= _len;
+    eLen->setValue( len );
+    piePreview->setLength( len );
+}
+
+void ConfPieDia::setType( PieType _type )
+{
+    type = _type;
+    oldType = _type;
+    cType->setCurrentItem( _type );
+    piePreview->setType( type );
+}
+
+void ConfPieDia::setPenBrush( const QPen &_pen, const QBrush &_brush )
+{
+    pen = _pen;
+    oldPen = _pen;
+    brush = _brush;
+    oldBrush = _brush;
+    piePreview->setPenBrush( pen, brush );
+}
+
 
 #include <confpiedia.moc>

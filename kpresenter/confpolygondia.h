@@ -75,18 +75,22 @@ public:
                     int _cornersValue, int _sharpnessValue );
     ~ConfPolygonDia();
 
-    bool getCheckConcavePolygon() { return checkConcavePolygon; }
-    int getCornersValue() { return cornersValue; }
-    int getSharpnessValue() { return sharpnessValue; }
+    bool getCheckConcavePolygon() const { return checkConcavePolygon; }
+    int getCornersValue() const { return cornersValue; }
+    int getSharpnessValue() const { return sharpnessValue; }
 
 protected:
     QRadioButton *m_convexPolygon, *m_concavePolygon;
     KIntNumInput *m_corners, *m_sharpness;
     QGroupBox *gSettings;
     PolygonPreview *polygonPreview;
-    bool checkConcavePolygon;
+
     int cornersValue;
     int sharpnessValue;
+    int oldCornersValue;
+    int oldSharpnessValue;
+
+    bool checkConcavePolygon, oldCheckConcavePolygon;
 
 protected slots:
     void slotConvexPolygon();
@@ -94,7 +98,7 @@ protected slots:
     void slotConersValue( int value );
     void slotSharpnessValue( int value );
     void Apply() { emit confPolygonDiaOk(); }
-
+    void slotReset();
 signals:
     void confPolygonDiaOk();
 
