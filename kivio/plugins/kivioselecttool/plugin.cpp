@@ -62,3 +62,4 @@ KInstance* SelectToolFactory::global()
 {
   return s_global;
 }
+#include "plugin.moc"

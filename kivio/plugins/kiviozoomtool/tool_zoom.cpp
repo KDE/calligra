@@ -361,3 +361,4 @@ void ZoomTool::zoomRect(QRect r)
   TKPoint p0 = m_pCanvas->mapFromScreen(r.topLeft());
   m_pCanvas->setVisibleArea(KivioRect(p0.x, p0.y, r.width()/m_pCanvas->zoom(), r.height()/m_pCanvas->zoom()));
 }
+#include "tool_zoom.moc"

@@ -243,3 +243,4 @@ void TextTool::endRubberBanding(QMouseEvent *e)
         text(m_pCanvas->rect());
     }
 }
+#include "tool_text.moc"

@@ -926,3 +926,4 @@ void SelectTool::leftDoubleClick( QPoint p )
     // Reselect this tool so we are back in selection mode
     controller()->selectTool(this);
 }
+#include "tool_select.moc"

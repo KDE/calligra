@@ -62,3 +62,4 @@ KInstance* ZoomToolFactory::global()
 {
   return s_global;
 }
+#include "plugin.moc"

@@ -222,3 +222,4 @@ void ConnectorTool::endRubberBanding(QMouseEvent *)
     connector(m_pCanvas->rect());
     m_pStencil = 0;
 }
+#include "tool_connector.moc"

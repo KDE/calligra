@@ -62,3 +62,4 @@ KInstance* ConnectorToolFactory::global()
 {
   return s_global;
 }
+#include "plugin.moc"
