@@ -19,25 +19,36 @@
 
 #ifndef KEXI_NO_CTXT_HELP
 
-#ifndef KEXICONTEXTHELP_H
-#define KEXICONTEXTHELP_H
 
-#include "keximainwindow.h"
+#include "kexicontexthelp.h"
 #include <kocontexthelp.h>
+#include <kxmlguiclient.h>
+#include <kapplication.h>
+#include <klocale.h>
+#include <kaction.h>
+#include <qlayout.h>
+#include <kdebug.h>
+#include <kiconloader.h>
 
-class KEXIMAIN_EXPORT KexiContextHelp : public KoContextHelpWidget
+KexiContextHelp::KexiContextHelp(KexiMainWindow *view, QWidget *parent)
+	:KoContextHelpWidget(parent,"kexi_contexthelp")
 {
-	Q_OBJECT
+	kdDebug()<<"KexiContextHelp::KexiContextHelp()"<<endl;
+	setCaption(i18n("Context Help"));
+	setIcon(SmallIcon("help"));
+	connect(this,SIGNAL(linkClicked( const QString& )),
+		this,SLOT(linkClickedInternal( const QString& )));
+}
 
-	public:
-		KexiContextHelp(KexiMainWindow *view, QWidget *parent=0);
-		~KexiContextHelp();
-	private slots:
-		void linkClickedInternal(const QString &link);
+void KexiContextHelp::linkClickedInternal(const QString& link) {
+	kdDebug()<<"KexiContextHelp: Link: "<<link<<endl;
+	unhandledLink(link);
+}
 
-	signals:
-		void unhandledLink( const QString& link );
-};
+KexiContextHelp::~KexiContextHelp()
+{
+}
 
-#endif
+#include "kexicontexthelp.moc"
+
 #endif

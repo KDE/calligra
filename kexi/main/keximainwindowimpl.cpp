@@ -1710,11 +1710,32 @@ bool KexiMainWindowImpl::newObject( KexiPart::Info *info )
 	if(!part)
 		return false;
 
+	if(info->projectPartID() == -1)
+	{
+		KexiDB::TableSchema *ts = project()->dbConnection()->tableSchema("kexi__parts");
+		kdDebug() << "KexiMainWindowImpl::newObject(): schema: " << ts << endl;
+		if (!ts)
+			return false;
+			
+		KexiDB::FieldList *fl = ts->subList("p_name", "p_mime", "p_url");
+		kdDebug() << "KexiMainWindowImpl::newObject(): fieldlist: " << fl << endl;
+		if (!fl)
+			return false;
+
+		if (!project()->dbConnection()->insertRecord(*fl, QVariant(info->groupName()), QVariant(info->mime()), QVariant("http://")))
+			return false;
+
+		kdDebug() << "KexiMainWindowImpl::newObject(): insert success!" << endl;
+		info->setProjectPartID(project()->dbConnection()->lastInsertedAutoIncValue("p_id", "kexi__parts"));
+		kdDebug() << "KexiMainWindowImpl::newObject(): new id is: " << info->projectPartID()  << endl;
+	}
+
 	KexiCreateItemDlg *dlg = new KexiCreateItemDlg(this, info->objectName(), "citem");
 	if(!dlg->exec())
 		return false;
 
 //Ahh, Lucijan, what about using kexiDB API, not hardcoding? (js)
+//aah, js, good idea! (lucijan)
 //
 //	if(!project()->dbConnection()->executeQuery(QString("INSERT INTO kexi__objects VALUES(NULL, %1, '%2', '%3', NULL)")
 //		.arg(info->projectPartID()).arg(dlg->name()).arg(dlg->caption())))
