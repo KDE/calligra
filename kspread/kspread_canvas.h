@@ -494,6 +494,8 @@ public:
     void adjustColumn( int _col = -1, bool makeUndo=true );
     void equalizeColumn( int resize );
 
+    void updateColumns( int from, int to );
+
 protected:
     virtual void paintEvent ( QPaintEvent* _ev );
     virtual void mousePressEvent( QMouseEvent* _ev );
@@ -503,6 +505,7 @@ protected:
     virtual void wheelEvent( QWheelEvent* );
     void paintSizeIndicator( int mouseX, bool firstTime );
 
+private:
     KSpreadCanvas *m_pCanvas;
     KSpreadView *m_pView;
     /**
@@ -545,6 +548,7 @@ protected:
      */
     QLabel *m_lSize;
 
+private:
 };
 
 /**
@@ -559,6 +563,7 @@ public:
     void resizeRow( double resize, int nb = -1, bool makeUndo=true );
     void adjustRow( int _row = -1, bool makeUndo=true );
     void equalizeRow( int resize );
+    void updateRows( int from, int to );
 
 protected:
     virtual void paintEvent ( QPaintEvent* _ev );
@@ -569,6 +574,7 @@ protected:
     virtual void wheelEvent( QWheelEvent* );
     void paintSizeIndicator( int mouseY, bool firstTime );
 
+private:
     KSpreadCanvas *m_pCanvas;
     KSpreadView *m_pView;
     bool m_bSelection;

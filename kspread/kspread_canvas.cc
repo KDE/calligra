@@ -2788,41 +2788,39 @@ void KSpreadCanvas::ExtendRectBorder(QRect& area)
 void KSpreadCanvas::updatePosWidget()
 {
     QString buffer;
-    QString tmp;
     // No selection, or only one cell merged selected
     if ( selectionInfo()->singleCellSelection() )
     {
         if(activeTable()->getLcMode())
         {
-            buffer="L"+tmp.setNum( markerRow() );
-            buffer+="C"+tmp.setNum( markerColumn() );
+            buffer = "L" + QString::number( markerRow() ) +
+		"C" + QString::number( markerColumn() );
         }
         else
         {
-            buffer=util_encodeColumnLabelText( markerColumn() );
-            buffer+=tmp.setNum( markerRow() );
+            buffer = util_encodeColumnLabelText( markerColumn() ) +
+		QString::number( markerRow() );
         }
     }
-  else
-  {
+    else
+    {
         if(activeTable()->getLcMode())
         {
-            buffer=tmp.setNum( (selection().bottom()-selection().top()+1) )+"Lx";
+            buffer = QString::number( (selection().bottom()-selection().top()+1) )+"Lx";
             if( util_isRowSelected( selection() ) )
-                buffer+=tmp.setNum((KS_colMax-selection().left()+1))+"C";
+                buffer+=QString::number((KS_colMax-selection().left()+1))+"C";
             else
-                buffer+=tmp.setNum((selection().right()-selection().left()+1))+"C";
+                buffer+=QString::number((selection().right()-selection().left()+1))+"C";
         }
         else
         {
                 //encodeColumnLabelText return @@@@ when column >KS_colMax
                 //=> it's not a good display
                 //=> for the moment I display pos of marker
-                buffer=util_encodeColumnLabelText( selection().left() );
-                buffer+=tmp.setNum(selection().top());
-                buffer+=":";
-                buffer+=util_encodeColumnLabelText( QMIN( KS_colMax, selection().right() ) );
-                buffer+=tmp.setNum(selection().bottom());
+                buffer=util_encodeColumnLabelText( selection().left() ) +
+		    QString::number(selection().top()) + ":" +
+		    util_encodeColumnLabelText( QMIN( KS_colMax, selection().right() ) ) +
+		    QString::number(selection().bottom());
                 //buffer=activeTable()->columnLabel( m_iMarkerColumn );
                 //buffer+=tmp.setNum(m_iMarkerRow);
         }
@@ -3436,6 +3434,16 @@ void KSpreadVBorder::paintSizeIndicator( int mouseY, bool firstTime )
     }
 }
 
+void KSpreadVBorder::updateRows( int from, int to )
+{
+    KSpreadTable *table = m_pCanvas->activeTable();
+    if ( !table )
+	return;
+    int y0 = table->rowPos( from, m_pCanvas );
+    int y1 = table->rowPos( to+1, m_pCanvas );
+    update( 0, y0, width(), y1-y0 );
+}
+
 void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
 {
   //Notes on zoom-support from Philipp:
@@ -3449,8 +3457,7 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
     return;
 
   QPainter painter( this );
-  QPen pen;
-  pen.setWidth( 1 );
+  QPen pen( Qt::black, 1 );
   painter.setPen( pen );
   // painter.setBackgroundColor( colorGroup().base() );
 
@@ -3534,7 +3541,6 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
     y++;
   }
   m_pCanvas->updatePosWidget();
-  painter.end();
 }
 
 /****************************************************************
@@ -3998,6 +4004,16 @@ void KSpreadHBorder::paintSizeIndicator( int mouseX, bool firstTime )
     }
 }
 
+void KSpreadHBorder::updateColumns( int from, int to )
+{
+    KSpreadTable *table = m_pCanvas->activeTable();
+    if ( !table )
+	return;
+    int x0 = table->columnPos( from, m_pCanvas );
+    int x1 = table->columnPos( to+1, m_pCanvas );
+    update( x0, 0, x1-x0, height() );
+}
+
 void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
 {
   //Notes on zoom-support from Philipp:
@@ -4007,12 +4023,11 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
   //This means this ugly formula qRound(int(dblheight)*zoom) simulates this scaling.
 
   KSpreadSheet *table = m_pCanvas->activeTable();
-  if (!table )
+  if ( !table )
     return;
 
   QPainter painter( this );
-  QPen pen;
-  pen.setWidth( 1 );
+  QPen pen( Qt::black, 1 );
   painter.setPen( pen );
   painter.setBackgroundColor( white );
 
@@ -4109,7 +4124,6 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
     x++;
   }
   m_pCanvas->updatePosWidget();
-  painter.end();
 }
 
 /****************************************************************
