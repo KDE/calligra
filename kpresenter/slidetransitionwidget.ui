@@ -253,7 +253,7 @@
                                 <cstring>textLabel4</cstring>
                             </property>
                             <property name="text">
-                                <string>Automatic &amp;tansition to the next slide after:</string>
+                                <string>Automatic &amp;transition to the next slide after:</string>
                             </property>
                             <property name="buddy" stdset="0">
                                 <cstring>automaticTransitionInput</cstring>
