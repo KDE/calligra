@@ -49,7 +49,7 @@ VQPainter::end()
 void
 VQPainter::setWorldMatrix( const QWMatrix &mat )
 {
-	m_painter->setWorldMatrix( mat );
+	//m_painter->setWorldMatrix( mat );
 }
 
 void

@@ -74,6 +74,9 @@ VPath::draw( VPainter *painter, const QRect& rect,
 		return;
 
 	painter->save();
+	QWMatrix mat;
+	mat.scale( zoomFactor, zoomFactor );
+	painter->setWorldMatrix( mat );
 	QPtrListIterator<VSegmentList> itr( m_segments );
 
 	if( state() != edit )

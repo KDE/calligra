@@ -24,6 +24,7 @@
 #include <gdk-pixbuf-xlibrgb.h>
 
 #include <kdebug.h>
+#include <math.h>
 
 VKoPainter::VKoPainter( QWidget *target, int w, int h ) : VPainter( target, w, h ), m_target( target )
 {
@@ -254,8 +255,8 @@ VKoPainter::drawVPath( ArtVpath *vec )
 	affine[3] = m_matrix.m22();
 	affine[4] = m_matrix.dx();
 	affine[5] = m_matrix.dy();
-	ArtVpath *temp = art_vpath_affine_transform( vec, affine );
-	vec = temp;
+	/*ArtVpath *temp = art_vpath_affine_transform( vec, affine );
+	vec = temp;*/
 
     // TODO : filling
 	/*{
@@ -300,7 +301,9 @@ VKoPainter::drawVPath( ArtVpath *vec )
 		else if( m_stroke->lineCap() == VStroke::cap_square )
 			capStyle = ART_PATH_STROKE_CAP_SQUARE;
 
-		svp = art_svp_vpath_stroke( vec, ART_PATH_STROKE_JOIN_ROUND, capStyle, m_stroke->lineWidth(), 5.0, 0.25 );
+		// zoom stroke width;
+		double ratio = sqrt(pow(affine[0], 2) + pow(affine[3], 2)) / sqrt(2);
+		svp = art_svp_vpath_stroke( vec, ART_PATH_STROKE_JOIN_ROUND, capStyle, ratio * m_stroke->lineWidth(), 5.0, 0.25 );
 	}
 
 	// render the svp to the buffer
