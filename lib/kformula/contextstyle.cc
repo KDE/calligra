@@ -58,15 +58,13 @@ ContextStyle::ContextStyle()
 void ContextStyle::init()
 {
     table.init();
-
-    baseSize = defaultFont.pointSizeFloat();
     setup();
 }
 
 void ContextStyle::readConfig( KConfig* config )
 {
     config->setGroup( "kformula Font" );
-    QString fontName = config->readEntry( "defaultFont", "Times,18,-1,5,50,1,0,0,0,0" );
+    QString fontName = config->readEntry( "defaultFont", "Times,12,-1,5,50,1,0,0,0,0" );
     defaultFont.fromString( fontName );
     fontName = config->readEntry( "nameFont", "Times,12,-1,5,50,0,0,0,0,0" );
     nameFont.fromString( fontName );
@@ -76,6 +74,8 @@ void ContextStyle::readConfig( KConfig* config )
     operatorFont.fromString( fontName );
     //fontName = config->readEntry( "symbolFont", "times,12,-1,5,50,0,0,0,0,0" );
     //symbolFont.fromString( fontName );
+    QString baseSize = config->readEntry( "baseSize", "20" );
+    m_baseSize = baseSize.toDouble();
 
     config->setGroup( "kformula Color" );
     defaultColor  = config->readColorEntry( "defaultColor",  &defaultColor );
@@ -155,7 +155,7 @@ double ContextStyle::getReductionFactor( TextStyle tstyle ) const
 
 luPt ContextStyle::getAdjustedSize( TextStyle tstyle ) const
 {
-    return static_cast<luPt>( ptToLayoutUnitPt( baseSize*getReductionFactor( tstyle ) ) );
+    return static_cast<luPt>( ptToLayoutUnitPt( m_baseSize*getReductionFactor( tstyle ) ) );
 }
 
 luPixel ContextStyle::getSpace( TextStyle tstyle, SpaceWidth space ) const
@@ -196,14 +196,14 @@ luPixel ContextStyle::axisHeight( TextStyle tstyle ) const
 
 luPt ContextStyle::getBaseSize() const
 {
-    return static_cast<luPt>( ptToLayoutUnitPt( baseSize ) );
+    return static_cast<luPt>( ptToLayoutUnitPt( m_baseSize ) );
 }
 
 void ContextStyle::setBaseSize( pt size )
 {
     //kdDebug( 40000 ) << "ContextStyle::setBaseSize" << endl;
-    if ( size != baseSize ) {
-        baseSize = size;
+    if ( size != m_baseSize ) {
+        m_baseSize = size;
         setup();
     }
 }
@@ -216,12 +216,12 @@ luPixel ContextStyle::getLineWidth() const
 
 luPixel ContextStyle::getEmptyRectWidth() const
 {
-    return ptToLayoutUnitPixX( baseSize/1.8 );
+    return ptToLayoutUnitPixX( m_baseSize/1.8 );
 }
 
 luPixel ContextStyle::getEmptyRectHeight() const
 {
-    return ptToLayoutUnitPixX( baseSize/1.8 );
+    return ptToLayoutUnitPixX( m_baseSize/1.8 );
 }
 
 
@@ -267,7 +267,7 @@ ContextStyle::TextStyle ContextStyle::convertTextStyleIndex( TextStyle tstyle ) 
 
 void ContextStyle::setup()
 {
-    luPt size = static_cast<luPt>( ptToLayoutUnitPt( baseSize ) );
+    luPt size = static_cast<luPt>( ptToLayoutUnitPt( m_baseSize ) );
     QFont font = symbolFont;
     font.setPointSize( size );
     QFontMetrics fm( font );

@@ -32,6 +32,7 @@ class QColor;
 class QGridLayout;
 class QLabel;
 class QPushButton;
+class QSpinBox;
 class QWidget;
 
 class KColorButton;
@@ -61,6 +62,8 @@ protected slots:
     void selectNewNumberFont();
     void selectNewOperatorFont();
 
+    void baseSizeChanged( int value );
+
 private:
 
     QPushButton* buildFontLine( QWidget* fontWidget, QGridLayout* layout, int number,
@@ -76,6 +79,7 @@ private:
     QFont nameFont;
     QFont numberFont;
     QFont operatorFont;
+    QSpinBox* sizeSpin;
 
     QLabel* defaultFontName;
     QLabel* nameFontName;

@@ -22,6 +22,7 @@
 #include <qcheckbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
+#include <qspinbox.h>
 #include <qvbox.h>
 #include <qwidget.h>
 
@@ -48,7 +49,7 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
     // fonts
 
     QWidget* fontWidget = new QWidget( box );
-    QGridLayout* fontLayout = new QGridLayout( fontWidget, 4, 1, KDialog::marginHint(), KDialog::spacingHint() );
+    QGridLayout* fontLayout = new QGridLayout( fontWidget, 5, 1, KDialog::marginHint(), KDialog::spacingHint() );
 
     defaultFont = contextStyle.getDefaultFont();
     nameFont = contextStyle.getNameFont();
@@ -67,6 +68,26 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
     connect( buildFontLine( fontWidget, fontLayout, 3,
                             operatorFont, i18n( "Operator font" ), operatorFontName ), SIGNAL( clicked() ),
              this, SLOT( selectNewOperatorFont() ) );
+
+    QWidget* sizeContainer = new QWidget( fontWidget );
+    QGridLayout* sizeLayout = new QGridLayout( sizeContainer, 1, 3 );
+
+    sizeLayout->setColStretch(0, 0);
+    sizeLayout->setColStretch(1, 1);
+    sizeLayout->setColStretch(2, 0);
+
+    QLabel* sizeTitle = new QLabel( i18n( "Base Size" ), sizeContainer );
+    QLabel* empty = new QLabel( "", sizeContainer );
+    sizeSpin = new QSpinBox( 8, 72, 1, sizeContainer );
+    sizeSpin->setValue( contextStyle.baseSize() );
+
+    sizeLayout->addWidget( sizeTitle, 0, 0 );
+    sizeLayout->addWidget( empty, 0, 1 );
+    sizeLayout->addWidget( sizeSpin, 0, 2 );
+
+    fontLayout->addWidget( sizeContainer, 4, 0 );
+
+    connect( sizeSpin, SIGNAL( valueChanged( int ) ), this, SLOT( baseSizeChanged( int ) ) );
 
     // syntax highlighting
 
@@ -172,8 +193,7 @@ void ConfigurePage::apply()
     contextStyle.setNameFont( nameFont );
     contextStyle.setNumberFont( numberFont );
     contextStyle.setOperatorFont( operatorFont );
-
-    contextStyle.setBaseSize( defaultFont.pointSizeFloat() );
+    contextStyle.setBaseSize( sizeSpin->value() );
 
     contextStyle.setSyntaxHighlighting( syntaxHighlighting->isChecked() );
     contextStyle.setDefaultColor( defaultColorBtn->color() );
@@ -187,6 +207,7 @@ void ConfigurePage::apply()
     m_config->writeEntry( "nameFont", nameFont.toString() );
     m_config->writeEntry( "numberFont", numberFont.toString() );
     m_config->writeEntry( "operatorFont", operatorFont.toString() );
+    m_config->writeEntry( "baseSize", QString::number( sizeSpin->value() ) );
 
     m_config->setGroup( "kformula Color" );
     m_config->writeEntry( "syntaxHighlighting", syntaxHighlighting->isChecked() );
@@ -202,10 +223,12 @@ void ConfigurePage::apply()
 
 void ConfigurePage::slotDefault()
 {
-    defaultFont = QFont( "Times", 18, QFont::Normal, true );
+    defaultFont = QFont( "Times", 12, QFont::Normal, true );
     nameFont = QFont( "Times" );
     numberFont = QFont( "Times" );
     operatorFont = QFont( "Times" );
+
+    sizeSpin->setValue( 20 );
 
     updateFontLabel( defaultFont, defaultFontName );
     updateFontLabel( nameFont, nameFontName );
@@ -240,6 +263,7 @@ void ConfigurePage::selectNewDefaultFont() {
     int result = dlg.exec();
     if ( KDialog::Accepted == result ) {
         defaultFont = dlg.font();
+        defaultFont.setPointSize( 12 );
         updateFontLabel( defaultFont, defaultFontName );
     }
 }
@@ -254,6 +278,7 @@ void ConfigurePage::selectNewNameFont()
     int result = dlg.exec();
     if ( KDialog::Accepted == result ) {
         nameFont = dlg.font();
+        nameFont.setPointSize( 12 );
         updateFontLabel( nameFont, nameFontName );
     }
 }
@@ -268,6 +293,7 @@ void ConfigurePage::selectNewNumberFont()
     int result = dlg.exec();
     if ( KDialog::Accepted == result ) {
         numberFont = dlg.font();
+        numberFont.setPointSize( 12 );
         updateFontLabel( numberFont, numberFontName );
     }
 }
@@ -282,8 +308,13 @@ void ConfigurePage::selectNewOperatorFont()
     int result = dlg.exec();
     if ( KDialog::Accepted == result ) {
         operatorFont = dlg.font();
+        operatorFont.setPointSize( 12 );
         updateFontLabel( operatorFont, operatorFontName );
     }
+}
+
+void ConfigurePage::baseSizeChanged( int /*value*/ )
+{
 }
 
 void ConfigurePage::updateFontLabel( QFont font, QLabel* label )
