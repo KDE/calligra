@@ -2,6 +2,8 @@
 
 #include <qstring.h>
 
+#include <klocale.h>
+
 #include "koscript_parser.h"
 #include "koscript_parsenode.h"
 
@@ -16,7 +18,8 @@ QString toplevelFile;
 int idl_line_no;
 
 // Imported from yacc.yy
-extern void kscriptParse( const char *_code, int extension );
+extern void kscriptParse( const char *_code, int extension, KLocale* locale );
+extern void kscriptParse( int extension, KLocale* locale );
 
 KSParser::KSParser()
 {
@@ -29,7 +32,7 @@ KSParser::~KSParser()
     delete rootNode;
 }
 
-bool KSParser::parse( FILE *inp_file, const char *filename )
+bool KSParser::parse( FILE *inp_file, const char *filename, int extension, KLocale* locale )
 {
   idl_lexFile = toplevelFile = const_cast<char *>(filename);
   yyin = inp_file;
@@ -37,17 +40,17 @@ bool KSParser::parse( FILE *inp_file, const char *filename )
   m_errorMessage = "";
   theParser = this;
   idl_line_no = 1;
-  yyparse();
+  kscriptParse( extension, locale );
 
   return m_errorMessage.isEmpty();
 }
 
-bool KSParser::parse( const char* code, int extension )
+bool KSParser::parse( const char* code, int extension, KLocale* locale )
 {
   m_errorMessage = "";
   theParser = this;
   idl_line_no = 1;
-  kscriptParse( code, extension );
+  kscriptParse( code, extension, locale );
 
   return m_errorMessage.isEmpty();
 }

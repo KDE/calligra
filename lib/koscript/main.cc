@@ -20,7 +20,7 @@ int main( int argc, char** argv )
 {
   const char *appName = (argc > 1) ? argv[1] : "kscript";
   KCmdLineArgs::init(argc, argv, appName,
-        I18N_NOOP("KDE Script interpreter."),
+        I18N_NOOP("KOffice Script interpreter."),
         "2.0.0");
 
   KCmdLineArgs::addCmdLineOptions(options);
@@ -35,7 +35,7 @@ int main( int argc, char** argv )
      exit(1);
   }
 
-  kapp->dcopClient()->registerAs( args->arg(0) );
+  // kapp->dcopClient()->registerAs( args->arg(0) );
 
   qDebug("..... KScript started");
   {

@@ -15,7 +15,8 @@ extern int yylex();
 extern QString idl_lexFile;
 extern int idl_line_no;
 
-void kscriptInitFlex( const char *_code, int extension );
+void kscriptInitFlex( const char *_code, int extension, KLocale* );
+void kscriptInitFlex( int extension, KLocale* );
 
 void yyerror( const char *s )
 {
@@ -175,18 +176,40 @@ specification
 definitions
 	: definition
           {
-	    $$ = new KSParseNode( definitions, $1 );
+	    if ( $1 != 0 )
+	    {
+	    	$$ = new KSParseNode( definitions, $1 );
+	    }
 	  }
 	| definition definitions
           {
-	    $$ = new KSParseNode( definitions, $1 );
-	    $$->setBranch( 2, $2 );
+	    if ( $1 != 0 && $2 != 0 )
+	    {
+	    	$$ = new KSParseNode( definitions, $1 );
+	    	$$->setBranch( 2, $2 );
+	    }
+	    else if ( $1 != 0 )
+	    {
+	    	$$ = new KSParseNode( definitions, $1 );
+	    }
+	    else if ( $2 != 0 )
+	    {
+	    	$$ = new KSParseNode( definitions, $2 );
+	    }
+	    else
+	    {
+		$$ = 0;
+	    }
 	  }
 	;
 
 /*2*/
 definition
-	: const_dcl T_SEMICOLON
+	: T_SEMICOLON
+	  {
+	    $$ = 0;
+	  }
+	| const_dcl T_SEMICOLON
           {
 	    $$ = $1;
 	  }
@@ -194,7 +217,7 @@ definition
 	  {
 	    $$ = $1;
 	  }
-	| func_dcl T_RIGHT_CURLY_BRACKET
+	| func_dcl T_RIGHT_CURLY_BRACKET T_SEMICOLON
 	  {
 	    $$ = $1;
 	  }
@@ -235,15 +258,15 @@ import_list
 	;
 
 main
-	: T_MAIN T_LEFT_CURLY_BRACKET func_body T_RIGHT_CURLY_BRACKET
+	: T_MAIN T_SEMICOLON T_LEFT_CURLY_BRACKET T_SEMICOLON func_body T_RIGHT_CURLY_BRACKET T_SEMICOLON
 	  {
 	    $$ = new KSParseNode( func_dcl );
-	    $$->setBranch( 2, $3 );
+	    $$->setBranch( 2, $5 );
 	    $$->setIdent( "main" );
 	  }
-	| T_MAIN T_LEFT_PARANTHESIS func_params T_RIGHT_PARANTHESIS T_LEFT_CURLY_BRACKET func_body T_RIGHT_CURLY_BRACKET
+	| T_MAIN T_LEFT_PARANTHESIS func_params T_RIGHT_PARANTHESIS T_SEMICOLON T_LEFT_CURLY_BRACKET T_SEMICOLON func_body T_RIGHT_CURLY_BRACKET
 	  {
-	    $$ = new KSParseNode( func_dcl, $3, $6 );
+	    $$ = new KSParseNode( func_dcl, $3, $8 );
 	    $$->setIdent( "main" );
 	  }
 
@@ -660,27 +683,50 @@ dict_elements
 /*79*/
 
 struct_dcl
-	: T_STRUCT T_IDENTIFIER T_LEFT_CURLY_BRACKET struct_exports T_RIGHT_CURLY_BRACKET
+	: T_STRUCT T_IDENTIFIER T_SEMICOLON T_LEFT_CURLY_BRACKET T_SEMICOLON struct_exports T_RIGHT_CURLY_BRACKET
 	  {
-	    $$ = new KSParseNode( t_struct, $4 );
+	    $$ = new KSParseNode( t_struct, $6 );
 	    $$->setIdent( $2 );
 	  }
 	;
 
 struct_exports
+
 	: struct_export
           {
-	    $$ = new KSParseNode( exports, $1 );
+	    if ( $1 != 0 )
+	    {
+	    	$$ = new KSParseNode( exports, $1 );
+	    }
 	  }
 	| struct_export struct_exports
           {
-	    $$ = new KSParseNode( exports, $1 );
-	    $$->setBranch( 2, $2 );
+	    if ( $1 != 0 && $2 != 0 )
+	    {
+	    	$$ = new KSParseNode( exports, $1 );
+	    	$$->setBranch( 2, $2 );
+	    }
+	    else if ( $1 != 0 )
+	    {
+	    	$$ = new KSParseNode( exports, $1 );
+	    }
+	    else if ( $2 != 0 )
+	    {
+	    	$$ = new KSParseNode( exports, $2 );
+	    }
+	    else
+	    {
+		$$ = 0;
+	    }
 	  }
 	;
 
 struct_export
-	: func_dcl T_RIGHT_CURLY_BRACKET
+	: T_SEMICOLON
+	  {
+	    $$ = 0;
+	  }
+	| func_dcl T_RIGHT_CURLY_BRACKET
 	  {
 	    $$ = $1;
 	  }	
@@ -708,15 +754,15 @@ struct_members
 	;
 
 func_dcl
-	: T_IDENTIFIER T_LEFT_PARANTHESIS T_RIGHT_PARANTHESIS T_LEFT_CURLY_BRACKET func_body
+	: T_IDENTIFIER T_LEFT_PARANTHESIS T_RIGHT_PARANTHESIS T_SEMICOLON T_LEFT_CURLY_BRACKET T_SEMICOLON func_body
 	  {
 	    $$ = new KSParseNode( func_dcl );
-	    $$->setBranch( 2, $5 );
+	    $$->setBranch( 2, $7 );
 	    $$->setIdent( $1 );
 	  }
-	| T_IDENTIFIER T_LEFT_PARANTHESIS func_params T_RIGHT_PARANTHESIS T_LEFT_CURLY_BRACKET func_body
+	| T_IDENTIFIER T_LEFT_PARANTHESIS func_params T_RIGHT_PARANTHESIS T_SEMICOLON T_LEFT_CURLY_BRACKET T_SEMICOLON func_body
 	  {
-	    $$ = new KSParseNode( func_dcl, $3, $6 );
+	    $$ = new KSParseNode( func_dcl, $3, $8 );
 	    $$->setIdent( $1 );
 	  }
 	;
@@ -907,8 +953,14 @@ loop_body
 	;
 %%
 
-void kscriptParse( const char *_code, int extension )
+void kscriptParse( const char *_code, int extension, KLocale* locale )
 {
-    kscriptInitFlex( _code, extension );
+    kscriptInitFlex( _code, extension, locale );
+    yyparse();
+}
+
+void kscriptParse( int extension, KLocale* locale )
+{
+    kscriptInitFlex( extension, locale );
     yyparse();
 }

@@ -168,7 +168,6 @@ protected:
    * @ref #lastInputLine
    */
   KSValue::Ptr m_lastInputLine;
-    // QString m_lastInputLine;
 };
 
 #endif

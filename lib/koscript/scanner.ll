@@ -7,6 +7,9 @@
 #include "koscript_parsenode.h"
 #include "koscript_types.h"
 #include "koscript_synext.h"
+#include "koscript_locale.h"
+
+#include <klocale.h>
 
 #ifndef KDE_USE_FINAL
 #include "yacc.cc.h"
@@ -15,6 +18,8 @@
 extern int idl_line_no;
 
 static bool s_kspread;
+static KLocale* s_locale = 0;
+static KLocale* s_defaultLocale = 0;
 
 #include <qstring.h>
 
@@ -142,9 +147,11 @@ static void translate_string( QString& str )
 /*--------------------------------------------------------------------------*/
 
 Digits                  [0-9]+
+Sep			[ .,]
+Sep2			[.,]
+Digit			[0-9]
 Oct_Digit               [0-7]
 Hex_Digit               [a-fA-F0-9]
-Int_Literal		[1-9][0-9]*
 Oct_Literal		0{Oct_Digit}*
 Hex_Literal		(0x|0X){Hex_Digit}*
 Esc_Sequence1           "\\"[ntvbrfa\\\?\'\"]
@@ -154,11 +161,15 @@ Esc_Sequence            ({Esc_Sequence1}|{Esc_Sequence2}|{Esc_Sequence3})
 Char                    ([^\n\t\"\'\\]|{Esc_Sequence})
 Char_Literal            "'"({Char}|\")"'"
 String_Literal		\"({Char}|"'")*\"
-Float_Literal1		{Digits}"."{Digits}(e|E)("+"|"-")?{Digits}
-Float_Literal2		{Digits}(e|E)("+"|"-")?{Digits}
-Float_Literal3          {Digits}"."{Digits}
-Float_Literal4		"."{Digits}
-Float_Literal5		"."{Digits}(e|E)("+"|"-")?{Digits}
+
+Float_Literal1		{Digits}({Sep}{Digit}{Digit}{Digit})*{Sep2}{Digits}(e|E)("+"|"-")?{Digits}
+Float_Literal2		{Digits}({Sep}{Digit}{Digit}{Digit})*(e|E)("+"|"-")?{Digits}
+Float_Literal3		{Digits}({Sep}{Digit}{Digit}{Digit})*{Sep2}{Digits}
+Float_Literal4		{Sep2}{Digits}
+Float_Literal5		{Sep2}{Digits}(e|E)("+"|"-")?{Digits}
+
+Int_Or_Float_Literal2   [1-9][0-9]*({Sep}{Digit}{Digit}{Digit})+
+Int_Literal1		[1-9][0-9]*
 
 /*--------------------------------------------------------------------------*/
 
@@ -171,7 +182,7 @@ KScript_Identifier	[_a-zA-Z][a-zA-Z0-9_]*
 %%
 
 [ \t]			;
-[\n]			idl_line_no++;
+[\n]			{ idl_line_no++; return T_SEMICOLON; }
 "//"[^\n]*		;
 "#!"[^\n]*		;
 "#"[^\n]*\n             ;
@@ -245,8 +256,7 @@ KScript_Identifier	[_a-zA-Z][a-zA-Z0-9_]*
 "("			return T_LEFT_PARANTHESIS;
 ")"			return T_RIGHT_PARANTHESIS;
 ":"			return T_COLON;
-","			return T_COMMA;
-";"			return T_SEMICOLON;
+";"			return T_COMMA;
 "=="			return T_EQUAL;
 "!="			return T_NOTEQUAL;
 "!"			return T_NOT;
@@ -318,15 +328,29 @@ from			return T_FROM;
 			  yylval.ident = new QString( yytext );
 			  return T_IDENTIFIER;
 			}
+{Int_Or_Float_Literal2} |
 {Float_Literal1}	|
 {Float_Literal2}	|
 {Float_Literal3}	|
 {Float_Literal4}	|
 {Float_Literal5}	{
-			  yylval._float = ascii_to_longdouble( yytext );
+			  QString s( yytext );
+			  bool ok = TRUE;
+                          double f = s_locale->readNumber( s, &ok );
+			  // if ( !ok )
+			  //	f = s.toDouble( &ok );
+			  if ( !ok )
+				return T_UNKNOWN;
+			  int i = (int)f;
+			  if ( i == f )
+			  {
+			      yylval._int = i;
+			      return T_INTEGER_LITERAL;
+		  	  }
+			  yylval._float = f;
 			  return T_FLOATING_PT_LITERAL;
 			}
-{Int_Literal}		{
+{Int_Literal1}		{
 			  yylval._int = ascii_to_longlong( 10, yytext );
 			  return T_INTEGER_LITERAL;
 			}
@@ -358,11 +382,33 @@ from			return T_FROM;
 
 %%
 
-void kscriptInitFlex( const char *_code, int extension )
+void kscriptInitFlex( const char *_code, int extension, KLocale* locale )
 {
+   s_locale = locale;
+   if ( !s_locale )
+   {
+	if ( !s_defaultLocale )
+		s_defaultLocale = new KSLocale;
+       s_locale = s_defaultLocale;
+   }
    if ( extension == KSCRIPT_EXTENSION_KSPREAD )
 	s_kspread = TRUE;
    else
 	s_kspread = FALSE;
    yy_switch_to_buffer( yy_scan_string( _code ) );
+}
+
+void kscriptInitFlex( int extension, KLocale* locale )
+{
+   s_locale = locale;
+   if ( !s_locale )
+   {
+	if ( !s_defaultLocale )
+		s_defaultLocale = new KSLocale;
+       s_locale = s_defaultLocale;
+   }
+   if ( extension == KSCRIPT_EXTENSION_KSPREAD )
+	s_kspread = TRUE;
+   else
+	s_kspread = FALSE;
 }

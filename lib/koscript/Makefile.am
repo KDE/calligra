@@ -6,7 +6,8 @@ LDFLAGS   = $(all_libraries)
 ####### Files
 
 lib_LTLIBRARIES = libkoscript.la
-libkoscript_la_SOURCES = koscript_eval.cc koscript_func.cc koscript_property.cc koscript_method.cc \
+libkoscript_la_SOURCES = koscript_locale.cc \
+		  koscript_eval.cc koscript_func.cc koscript_property.cc koscript_method.cc \
 		  koscript_context.cc koscript_value.cc koscript_parser.cc koscript_parsenode.cc yacc.cc \
                   scanner.cc koscript.cc koscript_util.cc koscript_struct.cc
 
@@ -19,7 +20,8 @@ libkoscript_la_LIBADD = $(LIB_KDEUI)
 bin_PROGRAMS = koscript
 
 koscript_SOURCES = main.cc
-noinst_HEADERS = koscript_eval.h koscript_func.h koscript_context.h koscript_value.h \
+noinst_HEADERS = koscript_locale.h \
+		 koscript_eval.h koscript_func.h koscript_context.h koscript_value.h \
 		 koscript_parser.h koscript_parsenode.h koscript.h koscript_util.h koscript_struct.h \
 		 koscript_ptr.h koscript_synext.h koscript_types.h koscript_method.h
 
