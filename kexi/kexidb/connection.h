@@ -37,6 +37,8 @@
 #include <kexidb/transaction.h>
 #include <kexidb/driver.h>
 
+#include <tristate.h>
+
 namespace KexiDB {
 
 //! structure for storing single record with type information
@@ -463,10 +465,10 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		bool dropTable( const QString& table );
 
 		/*! Alters \a tableSchema using \a newTableSchema in memory and on the db backend. 
-		 \return true on success. */
+		 \return true on success, cancelled if altering was cancelled. */
 //TODO(js): implement real altering
 //TODO(js): update any structure (e.g. query) that depend on this table!
-		bool alterTable( TableSchema& tableSchema, TableSchema& newTableSchema);
+		tristate alterTable( TableSchema& tableSchema, TableSchema& newTableSchema);
 
 		/*! Alters table's described \a tableSchema name to \a newName. 
 		 If \a replace is true, destination table is replaced, if present.
@@ -622,6 +624,29 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 Note that if \a dataID is not specified, all data blocks for this dialog will be removed.
 		 \sa loadDataBlock() storeDataBlock(). */
 		bool removeDataBlock( int objectID, const QString& dataID = QString::null);
+
+		class KEXI_DB_EXPORT TableSchemaChangeListenerInterface
+		{
+			public:
+				/*! Closes listening object so it will be deleted and thus no longer use 
+				 a conflicting table schema. */
+				virtual tristate closeListener() = 0;
+
+				/*! i18n'd string that can be displayed for user to inform about 
+				 e.g. conflicting listeners. */
+				QString listenerInfoString;
+		};
+//TMP// TODO: will be more generic
+		/** Register \a listener for receiving (listening) informations about changes 
+		 in TableSchema object. Changes could be: altering and removing. */
+		void registerForTableSchemaChanges(TableSchemaChangeListenerInterface& listener, 
+			TableSchema& schema);
+
+		void unregisterForTableSchemaChanges(TableSchemaChangeListenerInterface& listener, 
+			TableSchema &schema);
+
+		QPtrList<Connection::TableSchemaChangeListenerInterface>*
+			tableSchemaChangeListeners(TableSchema& tableSchema) const;
 
 	protected:
 		/*! Used by Driver */

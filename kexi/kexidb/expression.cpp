@@ -91,15 +91,22 @@ bool BaseExpr::validate(ParseInfo& /*parseInfo*/)
 extern const char * const tname(int offset);
 #define safe_tname(token) ((token>=254 && token<=__LAST_TOKEN) ? tname(token-254) : "")
 
+QString BaseExpr::tokenToDebugString(int token)
+{
+	if (token < 254) {
+		if (isprint(token))
+			return QString(QChar(uchar(token)));
+		else
+			return QString::number(token);
+	}
+	return QString(safe_tname(token));
+}
+
 QString BaseExpr::tokenToString()
 {
-	if (m_token < 254) {
-		if (isprint(m_token))
-			return QString(QChar(uchar(m_token)));
-		else
-			return QString::number(m_token);
-	}
-	return QString(safe_tname(m_token));
+	if (m_token < 255 && isprint(m_token))
+		return tokenToDebugString();
+	return QString::null;
 }
 
 NArgExpr* BaseExpr::toNArg() { return dynamic_cast<NArgExpr*>(this); }
@@ -187,7 +194,8 @@ UnaryExpr::UnaryExpr(int token, BaseExpr *arg)
 {
 	m_cl = KexiDBExpr_Unary;
 	//ustaw ojca
-	m_arg->setParent(this);
+	if (m_arg)
+		m_arg->setParent(this);
 }
 
 UnaryExpr::~UnaryExpr()
@@ -198,7 +206,7 @@ UnaryExpr::~UnaryExpr()
 QString UnaryExpr::debugString()
 {
 	return "UnaryExpr('" 
-		+ tokenToString() + "', "
+		+ tokenToDebugString() + "', "
 		+ (m_arg ? m_arg->debugString() : QString("<NONE>")) 
 		+ QString(",type=%1)").arg(Driver::defaultSQLTypeName(type()));
 }
@@ -208,7 +216,7 @@ QString UnaryExpr::toString()
 	if (m_token=='(') //parentheses (special case)
 		return "(" + (m_arg ? m_arg->toString() : "<NULL>") + ")";
 	if (m_token < 255 && isprint(m_token))
-		return tokenToString() + (m_arg ? m_arg->toString() : "<NULL>");
+		return tokenToDebugString() + (m_arg ? m_arg->toString() : "<NULL>");
 	if (m_token==NOT)
 		return "NOT " + (m_arg ? m_arg->toString() : "<NULL>");
 	if (m_token==SQL_IS_NULL)
@@ -278,8 +286,10 @@ BinaryExpr::BinaryExpr(int aClass, BaseExpr *left_expr, int token, BaseExpr *rig
 {
 	m_cl = aClass;
 	//ustaw ojca
-	m_larg->setParent(this);
-	m_rarg->setParent(this);
+	if (m_larg)
+		m_larg->setParent(this);
+	if (m_rarg)
+		m_rarg->setParent(this);
 }
 
 BinaryExpr::~BinaryExpr()
@@ -330,9 +340,39 @@ QString BinaryExpr::debugString()
 	return QString("BinaryExpr(")
 		+ "class=" + exprClassName(m_cl)
 		+ "," + (m_larg ? m_larg->debugString() : QString("<NONE>")) 
-		+ ",'" + tokenToString() + "',"
+		+ ",'" + tokenToDebugString() + "',"
 		+ (m_rarg ? m_rarg->debugString() : QString("<NONE>")) 
 		+ QString(",type=%1)").arg(Driver::defaultSQLTypeName(type()));
+}
+
+QString BinaryExpr::tokenToString()
+{
+	if (m_token < 255 && isprint(m_token))
+		return tokenToDebugString();
+	// other arithmetic operations: << >>
+	switch (m_token) {
+	case BITWISE_SHIFT_RIGHT: return ">>";
+	case BITWISE_SHIFT_LEFT: return "<<";
+	// other relational operations: <= >= <> (or !=) LIKE IN
+	case NOT_EQUAL: return "<>";
+	case NOT_EQUAL2: return "!=";
+	case LESS_OR_EQUAL: return "<=";
+	case GREATER_OR_EQUAL: return ">=";
+	case LIKE: return "LIKE";
+	case SQL_IN: return "IN";
+	// other logical operations: OR (or ||) AND (or &&) XOR
+	case SIMILAR_TO: return "SIMILAR TO";
+	case NOT_SIMILAR_TO: return "NOT SIMILAR TO";
+	case OR: return "OR";
+	case AND: return "AND";
+	case XOR: return "XOR";
+	// other string operations: || (as CONCATENATION)
+	case CONCATENATION: return "||";
+	// SpecialBinary "pseudo operators":
+	/* not handled here */
+	default:;
+	}
+	return QString("{INVALID_BINARY_OPERATOR#%1} ").arg(m_token);
 }
 
 QString BinaryExpr::toString()
@@ -340,43 +380,7 @@ QString BinaryExpr::toString()
 #define INFIX(a) \
 		(m_larg ? m_larg->toString() : "<NULL>") + " " + a + " " + (m_rarg ? m_rarg->toString() : "<NULL>")
 
-	if (m_token < 255 && isprint(m_token))
-		return INFIX(tokenToString());
-	// other arithmetic operations: << >>
-	if (m_token==BITWISE_SHIFT_RIGHT)
-		return INFIX(">>");
-	if (m_token==BITWISE_SHIFT_LEFT)
-		return INFIX("<<");
-	// other relational operations: <= >= <> (or !=) LIKE IN
-	if (m_token==NOT_EQUAL)
-		return INFIX("<>");
-	if (m_token==NOT_EQUAL2)
-		return INFIX("!=");
-	if (m_token==LESS_OR_EQUAL)
-		return INFIX("<=");
-	if (m_token==GREATER_OR_EQUAL)
-		return INFIX(">=");
-	if (m_token==LIKE)
-		return INFIX("LIKE");
-	if (m_token==SQL_IN)
-		return INFIX("IN");
-	// other logical operations: OR (or ||) AND (or &&) XOR
-	if (m_token==SIMILAR_TO)
-		return INFIX("SIMILAR TO");
-	if (m_token==NOT_SIMILAR_TO)
-		return INFIX("NOT SIMILAR TO");
-	if (m_token==OR)
-		return INFIX("OR");
-	if (m_token==AND)
-		return INFIX("AND");
-	if (m_token==XOR)
-		return INFIX("XOR");
-	// other string operations: || (as CONCATENATION)
-	if (m_token==CONCATENATION)
-		return INFIX("||");
-	// SpecialBinary "pseudo operators":
-	/* not handled here */
-	return INFIX( QString("{INVALID_BINARY_OPERATOR#%1} ").arg(m_token));
+	return INFIX(tokenToString());
 }
 
 //=========================================
@@ -429,7 +433,7 @@ Field::Type ConstExpr::type()
 
 QString ConstExpr::debugString()
 {
-	return QString("ConstExpr('") + tokenToString() +"'," + toString()
+	return QString("ConstExpr('") + tokenToDebugString() +"'," + toString()
 		+ QString(",type=%1)").arg(Driver::defaultSQLTypeName(type()));
 }
 

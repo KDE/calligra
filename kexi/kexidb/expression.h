@@ -72,8 +72,12 @@ public:
 	inline void debug() { KexiDBDbg << debugString() << endl; }
 	virtual QString debugString();
 	/*! \return single character if the token is < 256 
-	 or number (for debugging). */
-	QString tokenToString();
+	 or token name, e.g. LESS_OR_EQUAL (for debugging). */
+	inline QString tokenToDebugString() { return tokenToDebugString(m_token); }
+	static QString tokenToDebugString(int token);
+
+	/*! \return string for token, like "<=" or ">" */
+	virtual QString tokenToString();
 
 	int exprClass() const { return m_cl; }
 
@@ -141,6 +145,8 @@ public:
 	BaseExpr *left() const { return m_larg; }
 	BaseExpr *right() const { return m_rarg; }
 	virtual bool validate(ParseInfo& parseInfo);
+
+	virtual QString tokenToString();
 
 	BaseExpr *m_larg;
 	BaseExpr *m_rarg;

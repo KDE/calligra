@@ -51,12 +51,14 @@ class ConnectionPrivate
 	public:
 		ConnectionPrivate(Connection *conn) 
 		 : m_conn(conn)
+		 , m_tableSchemaChangeListeners(101)
 		 , m_versionMajor(-1)
 		 , m_versionMinor(-1)
 		 , m_dont_remove_transactions(false)
 		 , m_skip_databaseExists_check_in_useDatabase(false)
 		 , m_parser(0)
 		{
+			m_tableSchemaChangeListeners.setAutoDelete(true);
 		}
 		~ConnectionPrivate() 
 		{
@@ -81,6 +83,8 @@ class ConnectionPrivate
 		in the context of this transaction. */
 		Transaction m_default_trans;
 		QValueList<Transaction> m_transactions;
+
+		QPtrDict< QPtrList<Connection::TableSchemaChangeListenerInterface> > m_tableSchemaChangeListeners;
 
 		//! Version information for this connection.
 		int m_versionMajor;
@@ -1304,8 +1308,18 @@ bool Connection::dropTable( const QString& table )
 	return dropTable(ts);
 }
 
-bool Connection::alterTable( TableSchema& tableSchema, TableSchema& newTableSchema )
+tristate Connection::alterTable( TableSchema& tableSchema, TableSchema& newTableSchema )
 {
+	QPtrList<Connection::TableSchemaChangeListenerInterface> *listeners = d->m_tableSchemaChangeListeners[&tableSchema];
+	if (listeners) {
+		for (QPtrListIterator<Connection::TableSchemaChangeListenerInterface>it(*listeners);
+			it.current(); ++it) {
+			tristate res = it.current()->closeListener();
+			if (res!=true)
+				return res;
+		}
+	}
+
 	clearError();
 	if (&tableSchema == &newTableSchema) {
 		setError(ERR_OBJECT_THE_SAME, i18n("Could not alter table \"%1\" using the same table.")
@@ -2478,6 +2492,36 @@ bool Connection::deleteAllRows(QuerySchema &query)
 		return false;
 	}
 	return true;
+}
+
+void Connection::registerForTableSchemaChanges(TableSchemaChangeListenerInterface& listener, 
+	TableSchema &schema)
+{
+	QPtrList<TableSchemaChangeListenerInterface>* listeners = d->m_tableSchemaChangeListeners[&schema];
+	if (!listeners) {
+		listeners = new QPtrList<TableSchemaChangeListenerInterface>();
+		d->m_tableSchemaChangeListeners.insert(&schema, listeners);
+	}
+//TODO: inefficient
+	if (listeners->findRef( &listener )==-1)
+		listeners->append( &listener );
+}
+
+void Connection::unregisterForTableSchemaChanges(TableSchemaChangeListenerInterface& listener, 
+	TableSchema &schema)
+{
+	QPtrList<TableSchemaChangeListenerInterface>* listeners = d->m_tableSchemaChangeListeners[&schema];
+	if (!listeners)
+		return;
+//TODO: inefficient
+	listeners->remove( &listener );
+}
+
+QPtrList<Connection::TableSchemaChangeListenerInterface>*
+Connection::tableSchemaChangeListeners(TableSchema& tableSchema) const
+{
+	KexiDBDbg << d->m_tableSchemaChangeListeners.count() << endl;
+	return d->m_tableSchemaChangeListeners[&tableSchema];
 }
 
 #include "connection.moc"
