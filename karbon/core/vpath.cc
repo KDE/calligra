@@ -164,7 +164,15 @@ VPath::moveTo( const double& x, const double& y )
 	if( closed() ) return *this;
 
 	if( m_segments.getLast()->getLast()->type() == VSegment::begin )
+		m_segments.getLast()->getLast()->setPoint( 3, KoPoint( x, y ) );
+	else // subpaths
 	{
+		// add an initial segment at (0,0):
+		VSegmentList* list = new VSegmentList();
+		list->setAutoDelete( true );
+		list->append( new VSegment() );
+
+		m_segments.append( list );
 		m_segments.getLast()->getLast()->setPoint( 3, KoPoint( x, y ) );
 	}
 
