@@ -112,6 +112,44 @@
     </Function>
 
     <Function>
+      <Name>ERF</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Lower limit</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Upper limit</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>The ERF() function returns the error function.</Text>
+        <Syntax>ERF(Lower limit; Upper limit)</Syntax>
+        <Example>ERF(0.4) equals 0.42839236</Example>
+        <Related>ERFC</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ERFC</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Lower limit</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Upper limit</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>The ERFC() function returns the complementary error function.</Text>
+        <Syntax>ERFC(Lower limit; Upper limit)</Syntax>
+        <Example>ERFC(0.4) equals 0.57160764</Example>
+        <Related>ERF</Related>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>DEC2BIN</Name>
       <Type>String</Type>
       <Parameter>
