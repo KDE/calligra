@@ -520,8 +520,8 @@ don't put a </?xml...> at the end of the file!).
 <!ELEMENT OFFSETS
     EMPTY>
 <!ATTLIST OFFSETS
-    before CDATA #REQUIRED
-    after CDATA #REQUIRED>
+    before CDATA #IMPLIED
+    after CDATA #IMPLIED>
 
 <!-- 
         A paragraph and a style can have counter data.
