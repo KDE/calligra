@@ -101,7 +101,10 @@ KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCSt
         case HtmlExportDialog::Basic:
         worker=new HtmlBasicWorker();
         break;
-        default: // CSS
+        case HtmlExportDialog::CustomCSS:
+        worker=new HtmlBasicWorker( dialog.cssURL() );
+        break;
+        default: // Default CSS
         worker=new HtmlCssWorker();
         }
 

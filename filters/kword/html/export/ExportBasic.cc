@@ -32,6 +32,11 @@
 #include "ExportFilter.h"
 #include "ExportBasic.h"
 
+HtmlBasicWorker::HtmlBasicWorker( const QString &cssURL )
+{
+  m_cssURL = cssURL;
+}
+
 QString HtmlBasicWorker::textFormatToCss(const TextFormatting& formatData) const
 {// PROVISORY
     QString strElement;
@@ -161,49 +166,42 @@ void HtmlBasicWorker::writeDocType(void)
 void HtmlBasicWorker::openFormatData(const FormatData& formatOrigin,
     const FormatData& format, const bool force,const bool allowBold)
 {
-    if ((   // Do we need to write a <font> element?
-            force
-            || (formatOrigin.text.fontName!=format.text.fontName)
-            || (formatOrigin.text.fontSize!=format.text.fontSize)
-            || (formatOrigin.text.fgColor!=format.text.fgColor)
-        )
-        &&
-        (   // Can we write a <font> element?
-            (!format.text.fontName.isEmpty())
-            || (format.text.fontSize>0)
-            || (format.text.fgColor.isValid())
-        ))
-     {
-        *m_streamOut << "<font";
-        if (!format.text.fontName.isEmpty())
-        {
-            *m_streamOut << " face=\"";
-            *m_streamOut << escapeHtmlText(format.text.fontName); // TODO: add alternative font names
-            *m_streamOut << "\"";
-        }
+    bool useCSS = !m_cssURL.isEmpty();
+    QString attr;
+
+    if( !useCSS && ( force || formatOrigin.text.fontName != format.text.fontName ) && !format.text.fontName.isEmpty() )
+    {
+        attr += " face=\"";
+        attr += escapeHtmlText(format.text.fontName); // TODO: add alternative font names
+        attr += "\"";
+    }
+
+    if( !useCSS && ( force || formatOrigin.text.fontSize != format.text.fontSize ) && format.text.fontSize > 0 )
+    {
         // We use absolute font sizes, as relative ones give too many problems.
         int size=format.text.fontSize;
         // 12pt is considered the normal size
-        if (size>0)
-        {
-            size /= 4;
-            if (size<1) size=1;
-            if (size>7) size=7;
-            *m_streamOut << " size=\""; // in XML numbers must be quoted!
-            *m_streamOut << QString::number(size,10);
-            *m_streamOut << "\"";
-        }
+        size /= 4;
+        if (size<1) size=1;
+        if (size>7) size=7;
+        attr += " size=\""; // in XML numbers must be quoted!
+        attr += QString::number(size,10);
+        attr += "\"";
+    }
 
-        if (format.text.fgColor.isValid())
-        {
-            // Give colour
-            *m_streamOut << " color=\"";
-            *m_streamOut << format.text.fgColor.name();
-            *m_streamOut << "\"";
-        }
+    if( ( force || formatOrigin.text.fgColor != format.text.fgColor ) &&
+          format.text.fgColor.isValid() )
+    {
+        // Give colour
+        attr += " color=\"";
+        attr += format.text.fgColor.name();
+        attr += "\"";
+    }
 
-        *m_streamOut << ">";
-     }
+    if( !attr.isEmpty() )
+    {
+        *m_streamOut << "<font" << attr << ">";
+    }
 
     if (force || ((formatOrigin.text.weight>=75)!=(format.text.weight>=75)))
     {
@@ -297,18 +295,14 @@ void HtmlBasicWorker::closeFormatData(const FormatData& formatOrigin,
         }
     }
 
-    if ((   // Do we need to write a <font> element?
-            force
-            || (formatOrigin.text.fontName!=format.text.fontName)
-            || (formatOrigin.text.fontSize!=format.text.fontSize)
-            || (formatOrigin.text.fgColor!=format.text.fgColor)
-        )
-        &&
-        (   // Can we write a <font> element?
-            (!format.text.fontName.isEmpty())
-            || (format.text.fontSize>0)
-            || (format.text.fgColor.isValid())
-        ))
+    bool fontName =  ( force || formatOrigin.text.fontName != format.text.fontName ) &&
+                       !format.text.fontName.isEmpty();
+    bool fontSize =  ( force || formatOrigin.text.fontSize != format.text.fontSize ) &&
+                       format.text.fontSize>0;
+    bool fontColor = ( force ||formatOrigin.text.fgColor != format.text.fgColor ) &&
+                       format.text.fgColor.isValid();
+
+    if( ( m_cssURL.isEmpty() && ( fontName || fontSize ) ) || fontColor )
     {
         *m_streamOut << "</font>";
     }
@@ -368,3 +362,7 @@ bool HtmlBasicWorker::doOpenBody(void)
     return true;
 }
 
+QString HtmlBasicWorker::customCSSURL(void) const
+{
+  return m_cssURL;
+}

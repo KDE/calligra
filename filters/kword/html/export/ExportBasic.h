@@ -1,4 +1,4 @@
-// 
+//
 
 /*
    This file is part of the KDE project
@@ -29,12 +29,12 @@
 class HtmlBasicWorker : public HtmlWorker
 {
 public:
-    HtmlBasicWorker(void) { }
+    HtmlBasicWorker( const QString &cssURL = QString::null );
     virtual ~HtmlBasicWorker(void) { }
 public:
 protected:
     virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered);
-    virtual void openParagraph(const QString& strTag, 
+    virtual void openParagraph(const QString& strTag,
         const LayoutData& layout,QChar::Direction direction=QChar::DirL);
     virtual void closeParagraph(const QString& strTag,
         const LayoutData& layout);
@@ -42,12 +42,16 @@ protected:
     virtual void closeSpan(const FormatData& formatOrigin, const FormatData& format);
     virtual bool doOpenBody(void); ///< HTML's \<body\>
     virtual void writeDocType(void);
+
+    virtual QString customCSSURL(void) const;
 private:
     void openFormatData(const FormatData& formatOrigin,
         const FormatData& format, const bool force, const bool allowBold);
     void closeFormatData(const FormatData& formatOrigin,
         const FormatData& format, const bool force, const bool allowBold);
     QString textFormatToCss(const TextFormatting& formatData) const;
+private:
+    QString m_cssURL;
 };
 
 #endif /* EXPORTBASIC_H */

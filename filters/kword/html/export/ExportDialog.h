@@ -1,4 +1,4 @@
-// 
+//
 
 /*
    This file is part of the KDE project
@@ -36,7 +36,8 @@ public:
     enum Mode {
       Light =0,
       Basic,
-      CSS
+      DefaultCSS,
+      CustomCSS
     };
 
     HtmlExportDialog(QWidget* parent=NULL);
@@ -44,6 +45,11 @@ public:
     bool isXHtml(void) const;
     QTextCodec* getCodec(void) const;
     Mode getMode(void) const;
+    QString cssURL(void) const;
+
+protected slots:
+    void setCSSEnabled( bool );
+
 private:
     ExportDialogUI* m_dialog;
 };

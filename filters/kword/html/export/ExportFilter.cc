@@ -141,7 +141,7 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
 
         const double height = anchor.frame.bottom - anchor.frame.top;
         const double width  = anchor.frame.right  - anchor.frame.left;
-                
+
         const int pos = anchor.picture.koStoreName.findRev( '.' );
         QString extension;
         if ( pos > -1 )
@@ -167,27 +167,27 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
         }
         else if ( extension == "qpic" )
         {
-            
+
             QPicture picture;
-            
+
             QIODevice* io=getSubFileDevice(anchor.picture.koStoreName);
             if (!io)
             {
                 // NO message error, as there must be already one
                 return false;
             }
-            
+
             // TODO: if we have alreasy SVG, do *not* go through QPicture!
             if (picture.load(io))
             {
-            
+
                 // Save picture as SVG
                 *m_streamOut << "<object data=\"" << escapeHtmlText(strImageName) << "\"";
                 *m_streamOut << " type=\"image/svg+xml\"";
                 *m_streamOut << " height=\"" << height << "\" width=\"" << width << "\">\n";
                 *m_streamOut << "</object>"; // <object> is *not* an empty element in HTML!
                 // TODO: other props for image
-            
+
                 kdDebug(30506) << "Trying to save clipart to " << strImageName << endl;
                 if (!picture.save(strImagePath,"svg"))
                 {
@@ -195,7 +195,7 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
                         << " to " << strImageName << endl;
                     return false;
                 }
-            
+
             }
         }
         else
@@ -213,18 +213,18 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
             *m_streamOut << (isXML()?"/>":">");
             writePicture = true;
         }
-        
+
         // Do we still need to write the original picture?
         if ( writePicture )
         {
             QFile file(strImagePath);
-    
+
             if ( !file.open (IO_WriteOnly) )
             {
                 kdError(30503) << "Unable to open image output file!" << endl;
                 return false;
             }
-    
+
             file.writeBlock(image);
             file.close();
         }
@@ -348,7 +348,7 @@ void HtmlWorker::ProcessParagraphData (const QString& strTag, const QString &par
                     makeTable((*paraFormatDataIt).frameAnchor);
                     // The paragraph will need to be opened again
                     paragraphNotOpened=true;
-                    
+
                 }
 
                 else if ( ( 2 == (*paraFormatDataIt).frameAnchor.type )
@@ -601,6 +601,11 @@ bool HtmlWorker::doOpenHead(void)
         m_strTitle=i18n("Untitled Document");
     }
     *m_streamOut << "<title>"<< escapeHtmlText(m_strTitle) <<"</title>\n";  // <TITLE> is mandatory!
+
+    if( !customCSSURL().isEmpty() )
+    {
+      *m_streamOut << "<link ref=\"stylesheet\" type=\"text/css\" href=\"" << customCSSURL() << "\" title=\"Style\" >\n" << endl;
+    }
 
     //TODO: transform documentinfo.xml into many <META> elements (at least the author!)
 

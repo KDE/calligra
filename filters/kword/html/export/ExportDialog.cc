@@ -1,4 +1,4 @@
-// 
+//
 
 /*
    This file is part of the KDE project
@@ -33,6 +33,8 @@
 #include <qlayout.h>
 #include <qradiobutton.h>
 #include <qvbuttongroup.h>
+#include <qcheckbox.h>
+#include <kurlrequester.h>
 
 #include <ExportDialogUI.h>
 #include <ExportDialog.h>
@@ -49,9 +51,15 @@ HtmlExportDialog :: HtmlExportDialog(QWidget* parent)
     encodingList += i18n( "Descriptive encoding name", "Recommended ( %1 )" ).arg( "UTF-8" );
     encodingList += i18n( "Descriptive encoding name", "Locale ( %1 )" ).arg( QTextCodec::codecForLocale()->name() );
     encodingList += KGlobal::charsets()->descriptiveEncodingNames();
-    
+
     m_dialog->comboBoxEncoding->insertStringList( encodingList );
 
+    m_dialog->KURL_ExternalCSS->setMode( KFile::ExistingOnly );
+
+     connect(m_dialog->radioModeEnhanced, SIGNAL( toggled( bool ) ),
+             SLOT( setCSSEnabled( bool ) ) );
+     connect(m_dialog->checkExternalCSS, SIGNAL( toggled( bool ) ),
+             m_dialog->KURL_ExternalCSS, SLOT( setEnabled( bool ) ) );
 
     setMainWidget(m_dialog);
 }
@@ -59,6 +67,12 @@ HtmlExportDialog :: HtmlExportDialog(QWidget* parent)
 HtmlExportDialog :: ~HtmlExportDialog(void)
 {
     kapp->setOverrideCursor(Qt::waitCursor);
+}
+
+void HtmlExportDialog::setCSSEnabled( bool b )
+{
+    m_dialog->checkExternalCSS->setEnabled( b );
+    m_dialog->KURL_ExternalCSS->setEnabled( b && m_dialog->checkExternalCSS->isChecked() );
 }
 
 bool HtmlExportDialog::isXHtml(void) const
@@ -103,21 +117,31 @@ QTextCodec* HtmlExportDialog::getCodec(void) const
 
 HtmlExportDialog::Mode HtmlExportDialog::getMode(void) const
 {
-    if (m_dialog->radioModeEnhanced==m_dialog->buttonGroupMode->selected())
+    if( m_dialog->radioModeEnhanced->isChecked() )
     {
-        return CSS;
+      if( m_dialog->checkExternalCSS->isChecked() )
+        {
+            return CustomCSS;
+        }
+        else
+        {
+            return DefaultCSS;
+        }
     }
-    else if (m_dialog->radioModeBasic==m_dialog->buttonGroupMode->selected())
+    else if ( m_dialog->radioModeBasic->isChecked() )
     {
         return Basic;
     }
-    else if (m_dialog->radioModeLight==m_dialog->buttonGroupMode->selected())
+    else if ( m_dialog->radioModeLight->isChecked() )
     {
         return Light;
     }
-
-    return CSS;//Our default
+    return DefaultCSS;//Our default
 }
 
+QString HtmlExportDialog::cssURL(void) const
+{
+  return m_dialog->KURL_ExternalCSS->url();
+}
 
 #include <ExportDialog.moc>
