@@ -217,7 +217,8 @@ CORBA::Boolean KWordView::printDlg()
 
   KoPageLayout pgLayout;
   KoColumns cl;
-  m_pKWordDoc->getPageLayout(pgLayout,cl);
+  KoKWHeaderFooter hf;
+  m_pKWordDoc->getPageLayout(pgLayout,cl,hf);
 
   switch (pgLayout.format)
     {
@@ -730,18 +731,19 @@ void KWordView::formatPage()
 {
   KoPageLayout pgLayout;
   KoColumns cl;
-  m_pKWordDoc->getPageLayout(pgLayout,cl);
+  KoKWHeaderFooter kwhf;
+  m_pKWordDoc->getPageLayout(pgLayout,cl,kwhf);
 
   KoHeadFoot hf;
-  int flags = FORMAT_AND_BORDERS;
+  int flags = FORMAT_AND_BORDERS | KW_HEADER_AND_FOOTER;
   if (m_pKWordDoc->getProcessingType() == KWordDocument::WP)
     flags = flags | COLUMNS;
   else
     flags = flags | DISABLE_BORDERS;
   
-  if (KoPageLayoutDia::pageLayout(pgLayout,hf,cl,flags)) 
+  if (KoPageLayoutDia::pageLayout(pgLayout,hf,cl,kwhf,flags)) 
     {
-      m_pKWordDoc->setPageLayout(pgLayout,cl);
+      m_pKWordDoc->setPageLayout(pgLayout,cl,kwhf);
       gui->getVertRuler()->setPageLayout(pgLayout);
       gui->getHorzRuler()->setPageLayout(pgLayout);
     }
@@ -1896,9 +1898,10 @@ void KWordView::newPageLayout(KoPageLayout _layout)
 {
   KoPageLayout pgLayout;
   KoColumns cl;
-  m_pKWordDoc->getPageLayout(pgLayout,cl);
+  KoKWHeaderFooter hf;
+  m_pKWordDoc->getPageLayout(pgLayout,cl,hf);
 
-  m_pKWordDoc->setPageLayout(_layout,cl);
+  m_pKWordDoc->setPageLayout(_layout,cl,hf);
   gui->getHorzRuler()->setPageLayout(_layout);
   gui->getVertRuler()->setPageLayout(_layout);
 
@@ -1970,7 +1973,8 @@ KWordGUI::KWordGUI( QWidget *parent, bool __show, KWordDocument *_doc, KWordView
 
   KoPageLayout layout;
   KoColumns cols;
-  doc->getPageLayout(layout,cols);
+  KoKWHeaderFooter hf;
+  doc->getPageLayout(layout,cols,hf);
 
   tabChooser = new KoTabChooser(this,KoTabChooser::TAB_ALL);
 

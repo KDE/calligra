@@ -151,7 +151,8 @@ public:
   void editPaste(QString _string);
 
   void recalcText();
-  void recalcWholeText();
+  void recalcWholeText(bool _cursor = false);
+  void footerHeaderDisappeared();
   void drawBorders(QPainter &_painter,KRect v_area);
   void drawFrameSelection(QPainter &_painter,KWFrame *_frame);
   void setRuler2Frame(unsigned int _frameset,unsigned int _frame);
@@ -165,6 +166,8 @@ public:
     { pixmap_name = f; }
   
   void setPartEntry(KoDocumentEntry e) { partEntry = e; }
+
+  void clear() { buffer.fill(white); drawBuffer(); }
   
 public slots:
   void newLeftIndent(int _left); 

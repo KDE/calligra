@@ -118,6 +118,11 @@ CORBA::Boolean KWordDocument::init()
   pageColumns.columns = 1; //STANDARD_COLUMNS;
   pageColumns.columnSpacing = STANDARD_COLUMN_SPACING;
 
+  pageHeaderFooter.header = HF_SAME;
+  pageHeaderFooter.footer = HF_SAME;
+  pageHeaderFooter.ptHeaderBodySpacing = 10;
+  pageHeaderFooter.ptFooterBodySpacing = 10;
+
   QString _template;
   QString _globalTemplatePath = kapp->kde_datadir() + "/kword/templates/";
   QString _personalTemplatePath = kapp->localkdedir() + "/share/apps/kword/templates/";
@@ -127,39 +132,6 @@ CORBA::Boolean KWordDocument::init()
       QFileInfo fileInfo(_template);
       QString fileName(fileInfo.dirPath(true) + "/" + fileInfo.baseName() + ".kwt");
       loadTemplate(fileName.data());
-      
-//       bool __footer = false,__header = false;
-
-//       for (unsigned int k = 0;k < getNumFrameSets();k++)
-// 	{
-// 	  if (getFrameSet(k)->getFrameInfo() == FI_HEADER) __header = true;
-// 	  if (getFrameSet(k)->getFrameInfo() == FI_FOOTER) __footer = true;
-// 	}
-
-//       if (!__header)
-// 	{
-// 	  KWTextFrameSet *fs = new KWTextFrameSet(this);
-// 	  fs->setFrameInfo(FI_HEADER);
-// 	  KWFrame *frame = new KWFrame(getFrameSet(0)->getFrame(0)->left(),getFrameSet(0)->getFrame(0)->top(),
-// 				       getFrameSet(0)->getFrame(0)->width(),20);
-// 	  fs->setAutoCreateNewFrame(false);
-// 	  fs->addFrame(frame);
-// 	  frames.append(fs);
-// 	}
-
-//       if (!__footer)
-// 	{
-// 	  KWTextFrameSet *fs = new KWTextFrameSet(this);
-// 	  fs->setFrameInfo(FI_FOOTER);
-// 	  KWFrame *frame = new KWFrame(getFrameSet(0)->getFrame(0)->left(),getFrameSet(0)->getFrame(0)->top() + 
-// 				       getFrameSet(0)->getFrame(0)->height() - 20,
-// 				       getFrameSet(0)->getFrame(0)->width(),20);
-// 	  fs->setAutoCreateNewFrame(false);
-// 	  fs->addFrame(frame);
-// 	  frames.append(fs);
-// 	}
-
-//       recalcFrames();
     }
   else
     debug("no template chosen");
@@ -200,12 +172,13 @@ bool KWordDocument::loadTemplate(const char *_url)
 }
 
 /*================================================================*/
-void KWordDocument::setPageLayout(KoPageLayout _layout,KoColumns _cl)
+void KWordDocument::setPageLayout(KoPageLayout _layout,KoColumns _cl,KoKWHeaderFooter _hf)
 { 
   if (processingType == WP)
     {
       pageLayout = _layout; 
       pageColumns = _cl; 
+      pageHeaderFooter = _hf;
     }
   else
     {
@@ -218,6 +191,7 @@ void KWordDocument::setPageLayout(KoPageLayout _layout,KoColumns _cl)
       pageLayout.ptRight = 0;
       pageLayout.ptTop = 0;
       pageLayout.ptBottom = 0;
+      pageHeaderFooter = _hf;
     }
 
   if (processingType == WP)
@@ -249,12 +223,12 @@ void KWordDocument::recalcFrames()
 	  if (getFrameSet(k)->getFrameInfo() == FI_HEADER && hasHeader())
 	    {
 	      header = dynamic_cast<KWTextFrameSet*>(getFrameSet(k));
-	      headOffset = 10 + getFrameSet(k)->getFrame(0)->height(); 
+	      headOffset = pageHeaderFooter.ptHeaderBodySpacing + getFrameSet(k)->getFrame(0)->height(); 
 	    }
 	  if (getFrameSet(k)->getFrameInfo() == FI_FOOTER && hasFooter())
 	    {
 	      footer = dynamic_cast<KWTextFrameSet*>(getFrameSet(k));
-	      footOffset = 10 + getFrameSet(k)->getFrame(0)->height(); 
+	      footOffset = pageHeaderFooter.ptFooterBodySpacing + getFrameSet(k)->getFrame(0)->height(); 
 	    }
 	}
     }
@@ -285,28 +259,46 @@ void KWordDocument::recalcFrames()
   if (headOffset > 0 && hasHeader())
     {
       int h = header->getFrame(0)->height();
-      bool selected = header->getFrame(0)->isSelected();
-      header->clear();
       for (int l = 0;l < pages;l++)
 	{
-	  KWFrame *frame = new KWFrame(getFrameSet(0)->getFrame(0)->left(),l * getPTPaperHeight() + getPTTopBorder(),
-				       getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(),h);
-	  frame->setSelected(selected);
-	  header->addFrame(frame);
+	  if (l < static_cast<int>(header->getNumFrames()))
+	    header->getFrame(l)->setRect(getFrameSet(0)->getFrame(0)->left(),l * getPTPaperHeight() + getPTTopBorder(),
+					 getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(),h);
+	  else
+	    {
+	      KWFrame *frame = new KWFrame(getFrameSet(0)->getFrame(0)->left(),l * getPTPaperHeight() + getPTTopBorder(),
+					   getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(),h);
+	      header->addFrame(frame);
+	    }
+	}
+      if (pages < static_cast<int>(header->getNumFrames()))
+	{	
+	  int diff = pages - header->getNumFrames();
+	  for (;diff > 0;diff--)
+	    header->delFrame(header->getNumFrames() - 1);
 	}
     }
 
   if (footOffset > 0 && hasFooter())
     {
       int h = footer->getFrame(0)->height();
-      bool selected = footer->getFrame(0)->isSelected();
-      footer->clear();
       for (int l = 0;l < pages;l++)
 	{
-	  KWFrame *frame = new KWFrame(getFrameSet(0)->getFrame(0)->left(),(l + 1) * getPTPaperHeight() - getPTBottomBorder() - h,
-				       getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(),h);
-	  frame->setSelected(selected);
-	  footer->addFrame(frame);
+	  if (l < static_cast<int>(header->getNumFrames()))
+	    footer->getFrame(l)->setRect(getFrameSet(0)->getFrame(0)->left(),(l + 1) * getPTPaperHeight() - getPTBottomBorder() - h,
+					 getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(),h);
+	  else
+	    {
+	      KWFrame *frame = new KWFrame(getFrameSet(0)->getFrame(0)->left(),(l + 1) * getPTPaperHeight() - getPTBottomBorder() - h,
+					   getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder(),h);
+	      footer->addFrame(frame);
+	    }
+	}
+      if (pages < static_cast<int>(footer->getNumFrames()))
+	{	
+	  int diff = pages - footer->getNumFrames();
+	  for (;diff > 0;diff--)
+	    footer->delFrame(header->getNumFrames() - 1);
 	}
     }
 
@@ -380,6 +372,11 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
   pageLayout.ptTop = MM_TO_POINT(DEFAULT_TOP_BORDER);
   pageLayout.ptBottom = MM_TO_POINT(DEFAULT_BOTTOM_BORDER);  
   pageLayout.unit = PG_MM;
+
+  pageHeaderFooter.header = HF_SAME;
+  pageHeaderFooter.footer = HF_SAME;
+  pageHeaderFooter.ptHeaderBodySpacing = 10;
+  pageHeaderFooter.ptFooterBodySpacing = 10;
 
   defaultUserFont = findUserFont("times");
   defaultParagLayout = new KWParagLayout(this);
@@ -462,7 +459,12 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
   KoPageLayout __pgLayout;
   __pgLayout.unit = PG_MM;
   KoColumns __columns;
-
+  KoKWHeaderFooter __hf;
+  __hf.header = HF_SAME;
+  __hf.footer = HF_SAME;
+  __hf.ptHeaderBodySpacing = 10;
+  __hf.ptFooterBodySpacing = 10;
+  
   
   // DOC
   if (!parser.open("DOC",tag))
@@ -619,7 +621,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 	}
     }
 
-  setPageLayout(__pgLayout,__columns);
+  setPageLayout(__pgLayout,__columns,__hf);
 
   bool __footer = false,__header = false;
   
@@ -635,9 +637,9 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
       fs->setFrameInfo(FI_HEADER);
       KWFrame *frame = new KWFrame(getFrameSet(0)->getFrame(0)->left(),getFrameSet(0)->getFrame(0)->top(),
 				   getFrameSet(0)->getFrame(0)->width(),20);
-      fs->setAutoCreateNewFrame(false);
       fs->addFrame(frame);
       frames.append(fs);
+      fs->setAutoCreateNewFrame(false);
     }
   
   if (!__footer)
@@ -647,9 +649,9 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
       KWFrame *frame = new KWFrame(getFrameSet(0)->getFrame(0)->left(),getFrameSet(0)->getFrame(0)->top() + 
 				   getFrameSet(0)->getFrame(0)->height() - 20,
 				   getFrameSet(0)->getFrame(0)->width(),20);
-      fs->setAutoCreateNewFrame(false);
       fs->addFrame(frame);
       frames.append(fs);
+      fs->setAutoCreateNewFrame(false);
     }
   
   return true;
@@ -1318,14 +1320,18 @@ void KWordDocument::drawMarker(KWFormatContext &_fc,QPainter *_painter,int xOffs
 }
 
 /*================================================================*/
-void KWordDocument::updateAllViews(KWordView *_view)
+void KWordDocument::updateAllViews(KWordView *_view,bool _clear = false)
 {
   KWordView *viewPtr;
 
   if (!m_lstViews.isEmpty())
     {
       for (viewPtr = m_lstViews.first();viewPtr != 0;viewPtr = m_lstViews.next())
-	if (viewPtr != _view) viewPtr->getGUI()->getPaperWidget()->repaint(false);
+	if (viewPtr != _view) 
+	  {
+	    if (_clear) viewPtr->getGUI()->getPaperWidget()->clear();
+	    viewPtr->getGUI()->getPaperWidget()->repaint(false);
+	  }
     }
 }
 
@@ -2077,6 +2083,7 @@ void KWordDocument::updateAllFrames()
   for (i = 0;i < frames.count();i++)
     {
       frameset = frames.at(i);
+      if (frameset->getFrameInfo() == FI_HEADER || frameset->getFrameInfo() == FI_FOOTER) continue;
       for (j = 0;j < frameset->getNumFrames();j++)
 	_frames.append(frameset->getFrame(j));
     }
@@ -2114,14 +2121,14 @@ void KWordDocument::updateAllFrames()
 }
 
 /*================================================================*/
-void KWordDocument::recalcWholeText()
+void KWordDocument::recalcWholeText(bool _cursor = false)
 {
   KWordView *viewPtr;
 
   if (!m_lstViews.isEmpty())
     {
       viewPtr = m_lstViews.first();
-      viewPtr->getGUI()->getPaperWidget()->recalcWholeText();
+      viewPtr->getGUI()->getPaperWidget()->recalcWholeText(_cursor);
     }
 }
 
@@ -2163,4 +2170,44 @@ void KWordDocument::hideAllFrames()
       for (viewPtr = m_lstViews.first();viewPtr != 0;viewPtr = m_lstViews.next())
 	viewPtr->hideAllFrames();
     }
+}
+
+/*================================================================*/
+void KWordDocument::setHeader(bool h) 
+{ 
+  _header = h; 
+  if (!_header)
+    {
+      KWordView *viewPtr = 0L;
+      
+      if (!m_lstViews.isEmpty())
+	{
+	  for (viewPtr = m_lstViews.first();viewPtr != 0;viewPtr = m_lstViews.next())
+	    viewPtr->getGUI()->getPaperWidget()->footerHeaderDisappeared();
+	}
+    }
+
+  recalcFrames(); 
+  recalcWholeText(true); 
+  updateAllViews(0L,true);
+}
+
+/*================================================================*/
+void KWordDocument::setFooter(bool f) 
+{ 
+  _footer = f; 
+  if (!_footer)
+    {
+      KWordView *viewPtr = 0L;
+      
+      if (!m_lstViews.isEmpty())
+	{
+	  for (viewPtr = m_lstViews.first();viewPtr != 0;viewPtr = m_lstViews.next())
+	    viewPtr->getGUI()->getPaperWidget()->footerHeaderDisappeared();
+	}
+    }
+
+  recalcFrames(); 
+  recalcWholeText(true); 
+  updateAllViews(0L,true); 
 }

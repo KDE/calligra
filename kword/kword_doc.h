@@ -154,10 +154,10 @@ public:
   /**
    * Sets the paper size and recalculates the papers width and height.
    */
-  void setPageLayout(KoPageLayout _layout,KoColumns _cl);
+  void setPageLayout(KoPageLayout _layout,KoColumns _cl,KoKWHeaderFooter _hf);
 
-  void getPageLayout(KoPageLayout& _layout,KoColumns& _cl)
-    { _layout = pageLayout; _cl = pageColumns; }
+  void getPageLayout(KoPageLayout& _layout,KoColumns& _cl,KoKWHeaderFooter& _hf)
+    { _layout = pageLayout; _cl = pageColumns; _hf = pageHeaderFooter; }
 
   KWFrameSet *getFrameSet(unsigned int _num)
     { return frames.at(_num); }
@@ -259,11 +259,11 @@ public:
   
   void drawMarker(KWFormatContext &_fc,QPainter *_painter,int xOffset,int yOffset);
 
-  void updateAllViews(KWordView *_view);
+  void updateAllViews(KWordView *_view,bool _clear = false);
   void updateAllRanges();
   void updateAllCursors();
   void drawAllBorders(QPainter *_painter = 0);
-  void recalcWholeText();
+  void recalcWholeText(bool _cursor = false);
   void hideAllFrames();
 
   int getPages() { return pages; }
@@ -336,8 +336,8 @@ public:
 
   bool hasHeader() { return _header; }
   bool hasFooter() { return _footer; }
-  void setHeader(bool h) { _header = h; recalcFrames(); recalcWholeText(); updateAllViews(0L);}
-  void setFooter(bool f) { _footer = f; recalcFrames(); recalcWholeText(); updateAllViews(0L); }
+  void setHeader(bool h);
+  void setFooter(bool f);
 
   void recalcFrames();
 
@@ -374,6 +374,7 @@ protected:
     
   KoPageLayout pageLayout;
   KoColumns pageColumns;
+  KoKWHeaderFooter pageHeaderFooter;
     
   /**
    * Width of a column in unzoomed points. This value is automatically calculated,

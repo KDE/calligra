@@ -925,7 +925,7 @@ void KWPage::recalcText()
 }
 
 /*================================================================*/
-void KWPage::recalcWholeText()
+void KWPage::recalcWholeText(bool _cursor = false)
 {
   QPainter painter;
   painter.begin(this);
@@ -943,6 +943,34 @@ void KWPage::recalcWholeText()
     }
 
   painter.end();
+  if (_cursor) recalcCursor();
+}
+
+/*================================================================*/
+void KWPage::footerHeaderDisappeared()
+{
+  if (doc->getFrameSet(fc->getFrameSet() - 1)->getFrameInfo() == FI_HEADER ||
+      doc->getFrameSet(fc->getFrameSet() - 1)->getFrameInfo() == FI_FOOTER)
+    { 
+      fc->setFrameSet(1);
+      QPainter p;
+      p.begin(this);
+      fc->init(doc->getFirstParag(0),p,false,false);
+      p.end();
+
+      gui->getView()->updateStyle(fc->getParag()->getParagLayout()->getName(),false);
+      gui->getView()->setFormat(*((KWFormat*)fc),true,false);
+      gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
+      gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
+				      fc->getParag()->getParagLayout()->getRightBorder(),
+				      fc->getParag()->getParagLayout()->getTopBorder(),
+				      fc->getParag()->getParagLayout()->getBottomBorder());
+      gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
+      gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
+      gui->getHorzRuler()->setFrameStart(doc->getFrameSet(fc->getFrameSet() - 1)->getFrame(fc->getFrame() - 1)->x());
+      gui->getHorzRuler()->setTabList(fc->getParag()->getParagLayout()->getTabList());
+      format = *((KWFormat*)fc);
+    }
 }
 
 /*================================================================*/
@@ -2287,7 +2315,8 @@ void KWPage::setRuler2Frame(unsigned int _frameset,unsigned int _frame)
 {
   KoPageLayout _layout;
   KoColumns _cl;
-  doc->getPageLayout(_layout,_cl);
+  KoKWHeaderFooter hf;
+  doc->getPageLayout(_layout,_cl,hf);
   KWFrame *frame = doc->getFrameSet(_frameset)->getFrame(_frame);
 
   unsigned int page = 0;
