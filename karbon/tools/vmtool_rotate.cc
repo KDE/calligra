@@ -13,6 +13,7 @@
 #include "vmtool_rotate.h"
 #include "vmtool_handle.h"
 #include "vmcmd_transform.h"
+#include "vpath.h"
 
 #include <math.h>
 
@@ -115,7 +116,13 @@ VMToolRotate::drawTemporaryObject( KarbonView* view )
 		VObjectListIterator itr2 = list;
 		for( ; itr2.current() ; ++itr2 )
 		{
-			itr2.current()->transform( mat );
+			if( VPath* path = dynamic_cast<VPath*>( itr2.current() ) )
+			{
+				//path->insertKnots( 5 );
+				path->convertToCurves();
+				path->whirlPinch( KoPoint( sp.x() / view->zoomFactor(), sp.y() / view->zoomFactor() ), m_angle / VGlobal::pi_180, 1.0 );
+			}
+			//itr2.current()->transform( mat );
 			itr2.current()->setState( state_edit );
 			itr2.current()->draw(
 				painter,
