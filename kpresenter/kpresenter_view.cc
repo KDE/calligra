@@ -3003,9 +3003,29 @@ void KPresenterView::increaseFontSize()
 void KPresenterView::objectSelectedChanged()
 {
     bool state=m_canvas->isOneObjectSelected();
-    actionScreenAssignEffect->setEnabled(state);
-    actionExtraRotate->setEnabled(state);
-    actionExtraShadow->setEnabled(state && !m_canvas->haveASelectedPictureObj() && !m_canvas->haveASelectedPartObj());
+    if(m_canvas->numberOfObjectSelected()==1)
+    {
+        KPObject *obj=m_canvas->getSelectedObj();
+        //disable this action when we select a header/footer
+        if(obj==m_pKPresenterDoc->header() ||obj==m_pKPresenterDoc->footer())
+        {
+            actionScreenAssignEffect->setEnabled(false);
+            actionExtraRotate->setEnabled(false);
+            actionExtraShadow->setEnabled(false);
+        }
+        else
+        {
+            actionScreenAssignEffect->setEnabled(true);
+            actionExtraRotate->setEnabled(true);
+            actionExtraShadow->setEnabled(true);
+        }
+    }
+    else
+    {
+        actionScreenAssignEffect->setEnabled(state);
+        actionExtraRotate->setEnabled(state);
+        actionExtraShadow->setEnabled(state && !m_canvas->haveASelectedPictureObj() && !m_canvas->haveASelectedPartObj());
+    }
     actionExtraAlignObjs->setEnabled(state);
     actionExtraGroup->setEnabled(state && m_canvas->numberOfObjectSelected()>1);
     actionExtraUnGroup->setEnabled(state);
