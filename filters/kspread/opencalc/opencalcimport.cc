@@ -37,7 +37,7 @@
 #include <kspread_cell.h>
 #include <kspread_doc.h>
 #include <kspread_global.h>
-#include <kspread_table.h>
+#include <kspread_sheet.h>
 #include <kspread_util.h>
 #include <kspread_value.h>
 
@@ -178,7 +178,7 @@ double convertToPoint( QString s )
   return mm;//( MM_TO_POINT( mm ) < 1 ? 1 : MM_TO_POINT( mm ) );
 }
 
-bool OpenCalcImport::readRowLayout( QDomElement & rowNode, QDomElement * rowStyle,
+bool OpenCalcImport::readRowFormat( QDomElement & rowNode, QDomElement * rowStyle,
                                     KSpreadSheet * table, int & row, int & number,
                                     bool isLast )
 {
@@ -193,7 +193,7 @@ bool OpenCalcImport::readRowLayout( QDomElement & rowNode, QDomElement * rowStyl
 
   double height = -1.0;
   bool insertPageBreak = false;
-  KSpreadLayout layout( table );
+  KSpreadFormat layout( table );
 
   while( !node.isNull() )
   {
@@ -271,7 +271,7 @@ bool OpenCalcImport::readRowLayout( QDomElement & rowNode, QDomElement * rowStyl
 
   for ( int i = 0; i < number; ++i )
   {
-    RowLayout * rowL = table->nonDefaultRowLayout( row );
+    RowFormat * rowL = table->nonDefaultRowFormat( row );
     rowL->copy( layout );
 
     if ( height != -1 )
@@ -283,7 +283,7 @@ bool OpenCalcImport::readRowLayout( QDomElement & rowNode, QDomElement * rowStyl
     // if ( insertPageBreak ) TODO:
     //   rowL->setPageBreak( true )
 
-    //    kdDebug() << "Added RowLayout: " << row << endl;
+    //    kdDebug() << "Added RowFormat: " << row << endl;
     ++row;
   }
 
@@ -512,7 +512,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
         cell = table->nonDefaultCell( columns, row );
 
       kdDebug() << "Default style: " << e.attribute( "style:parent-style-name" ) << endl;
-      KSpreadLayout * layout = m_defaultStyles[e.attribute( "style:parent-style-name" )];
+      KSpreadFormat * layout = m_defaultStyles[e.attribute( "style:parent-style-name" )];
 
       if ( layout )
         cell->copy( *layout );
@@ -548,11 +548,11 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
               */
               kdDebug() << "Rotation: height: " << textHeight << endl;
 
-              RowLayout * l = table->rowLayout( row );
+              RowFormat * l = table->rowFormat( row );
               if ( l->height() < textHeight )
               {
                 if ( l->isDefault() )
-                  l = table->nonDefaultRowLayout( row );
+                  l = table->nonDefaultRowFormat( row );
 
                 l->setHeight( textHeight + 2 );
               }
@@ -596,7 +596,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
           if ( type == "currency" )
           {
             cell->setCurrency( 1, e.attribute( "table:currency" ) );
-            cell->setFormatType( KSpreadLayout::Money );
+            cell->setFormatType( KSpreadFormat::Money );
           }
         }
       }
@@ -610,7 +610,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
               cell->setValue( dv );
             cell->setFactor( 100 );
             // TODO: replace with custom...
-            cell->setFormatType( KSpreadLayout::Percentage );
+            cell->setFormatType( KSpreadFormat::Percentage );
           }
         }
         else if ( type == "boolean" )
@@ -624,7 +624,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
           else
             cell->setValue( false );
           ok = true;
-          cell->setFormatType( KSpreadLayout::CustomBoolean );
+          cell->setFormatType( KSpreadFormat::CustomBoolean );
         }
         else if ( type == "date" )
         {
@@ -704,7 +704,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
             // KSpreadValue kval( timeToNum( hours, minutes, seconds ) );
             // cell->setValue( kval );
             cell->setValue( QTime( hours % 24, minutes, seconds ) );
-            cell->setFormatType( KSpreadLayout::CustomTime );
+            cell->setFormatType( KSpreadFormat::CustomTime );
           }
         }
 
@@ -798,21 +798,21 @@ bool OpenCalcImport::readRowsAndCells( QDomElement & content, KSpreadSheet * tab
 
     rowNode = rowNode.nextSibling();
 
-    if ( !readRowLayout( r, rowStyle, table, row, number, rowNode.isNull() ) ) // updates "row"
+    if ( !readRowFormat( r, rowStyle, table, row, number, rowNode.isNull() ) ) // updates "row"
       return false;
 
     if ( !readCells( r, table, backupRow, columns ) )
       return false;
 
-    RowLayout * srcLayout = table->nonDefaultRowLayout( backupRow );
-    RowLayout * layout = 0;
+    RowFormat * srcLayout = table->nonDefaultRowFormat( backupRow );
+    RowFormat * layout = 0;
 
     if ( collapsed )
       srcLayout->setHide( true );
 
     for ( i = 1; i < number; ++i )
     {
-      layout = table->nonDefaultRowLayout( backupRow + i );
+      layout = table->nonDefaultRowFormat( backupRow + i );
 
       layout->copy( *srcLayout );
 
@@ -865,7 +865,7 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, KSpreadSheet * table
     double width   = POINT_TO_MM( colWidth );
     bool collapsed = ( e.attribute( "table:visibility" ) == "collapse" );
     bool insertPageBreak = false;
-    KSpreadLayout styleLayout( table );
+    KSpreadFormat styleLayout( table );
 
     kdDebug() << "Check table:number-columns-repeated" << endl;
     if ( e.hasAttribute( "table:number-columns-repeated" ) )
@@ -883,7 +883,7 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, KSpreadSheet * table
     {
       QString n( e.attribute( "table:default-cell-style-name" ) );
       kdDebug() << "Has attribute default-cell-style-name: " << n << endl;
-      KSpreadLayout * defaultStyle = m_defaultStyles[ n ];
+      KSpreadFormat * defaultStyle = m_defaultStyles[ n ];
       if ( !defaultStyle )
       {
         QString name = e.attribute( "table:default-cell-style-name" );
@@ -893,7 +893,7 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, KSpreadSheet * table
 
         if ( st && !st->isNull() )
         {
-          KSpreadLayout * layout = new KSpreadLayout( 0 );
+          KSpreadFormat * layout = new KSpreadFormat( 0 );
 
           readInStyle( layout, *st );
 
@@ -980,7 +980,7 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, KSpreadSheet * table
     {
       kdDebug() << "Inserting colLayout: " << column << endl;
 
-      ColumnLayout * col = new ColumnLayout( table, column );
+      ColumnFormat * col = new ColumnFormat( table, column );
       col->copy( styleLayout );
       col->setMMWidth( width );
 
@@ -990,7 +990,7 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, KSpreadSheet * table
       if ( collapsed )
         col->setHide( true );
 
-      table->insertColumnLayout( col );
+      table->insertColumnFormat( col );
       ++column;
     }
   }
@@ -1185,8 +1185,8 @@ bool OpenCalcImport::parseBody( int numOfTables )
   int step = (int) ( 80 / numOfTables );
   int progress = 15;
 
-  KSpreadLayout::setGlobalColWidth( MM_TO_POINT( 22.7 ) );
-  KSpreadLayout::setGlobalRowHeight( MM_TO_POINT( 4.3 ) );
+  KSpreadFormat::setGlobalColWidth( MM_TO_POINT( 22.7 ) );
+  KSpreadFormat::setGlobalRowHeight( MM_TO_POINT( 4.3 ) );
   kdDebug() << "Global Height: " << MM_TO_POINT( 4.3 ) << ", Global width: " << MM_TO_POINT( 22.7) << endl;
 
   while ( !sheet.isNull() )
@@ -1204,7 +1204,7 @@ bool OpenCalcImport::parseBody( int numOfTables )
 
     table->setTableName( t.attribute( "table:name" ), true, false );
 
-    KSpreadLayout * defaultStyle = m_defaultStyles[ "Default" ];
+    KSpreadFormat * defaultStyle = m_defaultStyles[ "Default" ];
     if ( defaultStyle )
     {
       KSpreadCell * defaultCell = table->defaultCell();
@@ -1305,7 +1305,7 @@ void OpenCalcImport::insertStyles( QDomElement const & element )
 }
 
 QString * OpenCalcImport::loadFormat( QDomElement * element,
-                                      KSpreadLayout::FormatType & formatType,
+                                      KSpreadFormat::FormatType & formatType,
                                       QString name )
 {
   if ( !element )
@@ -1322,17 +1322,17 @@ QString * OpenCalcImport::loadFormat( QDomElement * element,
   bool negRed = false;
 
   if ( element->tagName() == "number:time-style" )
-    formatType = KSpreadLayout::CustomTime;
+    formatType = KSpreadFormat::CustomTime;
   else if ( element->tagName() == "number:date-style" )
-    formatType = KSpreadLayout::CustomDate;
+    formatType = KSpreadFormat::CustomDate;
   else if ( element->tagName() == "number:percentage-style" )
-    formatType = KSpreadLayout::CustomPercentage;
+    formatType = KSpreadFormat::CustomPercentage;
   else if ( element->tagName() == "number:number-style" )
-    formatType = KSpreadLayout::CustomNumber;
+    formatType = KSpreadFormat::CustomNumber;
   else if ( element->tagName() == "number:currency-style" )
-    formatType = KSpreadLayout::CustomCurrency;
+    formatType = KSpreadFormat::CustomCurrency;
   else if ( element->tagName() == "number:boolean-style" )
-    formatType = KSpreadLayout::CustomBoolean;
+    formatType = KSpreadFormat::CustomBoolean;
 
   if ( !e.isNull() )
     format = new QString();
@@ -1554,7 +1554,7 @@ QString * OpenCalcImport::loadFormat( QDomElement * element,
       for ( i = 0; i < exp; ++i )
         format->append( '0' );
 
-      formatType = KSpreadLayout::CustomScientific;
+      formatType = KSpreadFormat::CustomScientific;
     }
     else
     if ( e.tagName() == "number:fraction" )
@@ -1616,7 +1616,7 @@ QString * OpenCalcImport::loadFormat( QDomElement * element,
   return format;
 }
 
-void OpenCalcImport::loadFontStyle( KSpreadLayout * layout, QDomElement const * font ) const
+void OpenCalcImport::loadFontStyle( KSpreadFormat * layout, QDomElement const * font ) const
 {
   if ( !font || !layout )
     return;
@@ -1652,7 +1652,7 @@ void OpenCalcImport::loadFontStyle( KSpreadLayout * layout, QDomElement const * 
   // text-underline-color
 }
 
-void OpenCalcImport::loadBorder( KSpreadLayout * layout, QString const & borderDef, bPos pos ) const
+void OpenCalcImport::loadBorder( KSpreadFormat * layout, QString const & borderDef, bPos pos ) const
 {
   if ( borderDef == "none" )
     return;
@@ -1702,7 +1702,7 @@ void OpenCalcImport::loadBorder( KSpreadLayout * layout, QString const & borderD
   // TODO Diagonals
 }
 
-void OpenCalcImport::loadStyleProperties( KSpreadLayout * layout, QDomElement const & property ) const
+void OpenCalcImport::loadStyleProperties( KSpreadFormat * layout, QDomElement const & property ) const
 {
   kdDebug() << "*** Loading style properties *****" << endl;
 
@@ -1744,13 +1744,13 @@ void OpenCalcImport::loadStyleProperties( KSpreadLayout * layout, QDomElement co
   {
     QString s = property.attribute( "fo:text-align" );
     if ( s == "center" )
-      layout->setAlign( KSpreadLayout::Center );
+      layout->setAlign( KSpreadFormat::Center );
     else if ( s == "end" )
-      layout->setAlign( KSpreadLayout::Right );
+      layout->setAlign( KSpreadFormat::Right );
     else if ( s == "start" )
-      layout->setAlign( KSpreadLayout::Left );
+      layout->setAlign( KSpreadFormat::Left );
     else if ( s == "justify" ) // TODO in KSpread!
-      layout->setAlign( KSpreadLayout::Center );
+      layout->setAlign( KSpreadFormat::Center );
   }
 
   if ( property.hasAttribute( "fo:background-color" ) )
@@ -1769,11 +1769,11 @@ void OpenCalcImport::loadStyleProperties( KSpreadLayout * layout, QDomElement co
   {
     QString s = property.attribute( "fo:vertical-align" );
     if ( s == "middle" )
-      layout->setAlignY( KSpreadLayout::Middle );
+      layout->setAlignY( KSpreadFormat::Middle );
     else if ( s == "bottom" )
-      layout->setAlignY( KSpreadLayout::Bottom );
+      layout->setAlignY( KSpreadFormat::Bottom );
     else
-      layout->setAlignY( KSpreadLayout::Top );
+      layout->setAlignY( KSpreadFormat::Top );
   }
 
   if ( property.hasAttribute( "fo:wrap-option" ) )
@@ -1812,14 +1812,14 @@ void OpenCalcImport::loadStyleProperties( KSpreadLayout * layout, QDomElement co
   }
 }
 
-void OpenCalcImport::readInStyle( KSpreadLayout * layout, QDomElement const & style )
+void OpenCalcImport::readInStyle( KSpreadFormat * layout, QDomElement const & style )
 {
   kdDebug() << "** Reading Style: " << style.tagName() << "; " << style.attribute("style:name") << endl;
   if ( style.tagName() == "style:style" )
   {
     if ( style.hasAttribute( "style:parent-style-name" ) )
     {
-      KSpreadLayout * cp
+      KSpreadFormat * cp
         = m_defaultStyles.find( style.attribute( "style:parent-style-name" ) );
       kdDebug() << "Copying layout from " << style.attribute( "style:parent-style-name" ) << endl;
 
@@ -1829,7 +1829,7 @@ void OpenCalcImport::readInStyle( KSpreadLayout * layout, QDomElement const & st
     else if ( style.hasAttribute( "style:family") )
     {
       QString name = style.attribute( "style-family" ) + "default";
-      KSpreadLayout * cp = m_defaultStyles.find( name );
+      KSpreadFormat * cp = m_defaultStyles.find( name );
 
       kdDebug() << "Copying layout from " << name << ", " << !cp << endl;
 
@@ -1840,7 +1840,7 @@ void OpenCalcImport::readInStyle( KSpreadLayout * layout, QDomElement const & st
     if ( style.hasAttribute( "style:data-style-name" ) )
     {
       QString * format = m_formats[ style.attribute( "style:data-style-name" ) ];
-      KSpreadLayout::FormatType formatType;
+      KSpreadFormat::FormatType formatType;
 
       if ( !format )
       {
@@ -1954,7 +1954,7 @@ bool OpenCalcImport::createStyleMap( QDomDocument const & styles )
 
     if ( !e.isNull() )
     {
-      KSpreadLayout * layout = new KSpreadLayout( 0 );
+      KSpreadFormat * layout = new KSpreadFormat( 0 );
 
       readInStyle( layout, e );
       kdDebug() << "Default style " << e.attribute( "style:family" ) << "default" << " loaded " << endl;
@@ -1980,7 +1980,7 @@ bool OpenCalcImport::createStyleMap( QDomDocument const & styles )
       continue;
     }
 
-    KSpreadLayout * layout = new KSpreadLayout( 0 );
+    KSpreadFormat * layout = new KSpreadFormat( 0 );
     readInStyle( layout, defs );
     kdDebug() << "Default style " << defs.attribute( "style:name" ) << " loaded " << endl;
 

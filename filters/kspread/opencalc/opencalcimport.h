@@ -21,7 +21,7 @@
 #define OpenCalc_IMPORT_H__
 
 #include <koFilter.h>
-#include "kspread_layout.h"
+#include "kspread_format.h"
 
 #include <qdict.h>
 #include <qdom.h>
@@ -30,7 +30,8 @@ class KSpreadCell;
 class KSpreadDoc;
 class KSpreadSheet;
 
-class OpenCalcImport : public KoFilter 
+
+class OpenCalcImport : public KoFilter
 {
   Q_OBJECT
  public:
@@ -44,7 +45,7 @@ class OpenCalcImport : public KoFilter
 
   class OpenCalcPoint
   {
-   public: 
+   public:
     OpenCalcPoint( QString const & str );
 
     QString table;
@@ -57,14 +58,14 @@ class OpenCalcImport : public KoFilter
   enum bPos { Left, Top, Right, Bottom, Fall, GoUp };
 
   KSpreadDoc *    m_doc;
-  KSpreadLayout * m_defaultLayout;
+  KSpreadFormat * m_defaultLayout;
 
   QDomDocument    m_content;
   QDomDocument    m_meta;
   QDomDocument    m_settings;
-  
+
   QDict<QDomElement>   m_styles;
-  QDict<KSpreadLayout> m_defaultStyles;
+  QDict<KSpreadFormat> m_defaultStyles;
   QDict<QString>       m_formats;
 
   QStringList          m_namedAreas;
@@ -73,19 +74,19 @@ class OpenCalcImport : public KoFilter
   bool parseBody( int numOfTables );
   void insertStyles( QDomElement const & element );
   bool createStyleMap( QDomDocument const & styles );
-  bool readRowLayout( QDomElement & rowNode, QDomElement * rowStyle, 
+  bool readRowFormat( QDomElement & rowNode, QDomElement * rowStyle,
                       KSpreadSheet * table, int & row, int & number, bool last );
   bool readColLayouts( QDomElement & content, KSpreadSheet * table );
   bool readRowsAndCells( QDomElement & content, KSpreadSheet * table );
   bool readCells( QDomElement & rowNode, KSpreadSheet  * table, int row, int & columns );
   void convertFormula( QString & text, QString const & f ) const;
-  void loadFontStyle( KSpreadLayout * layout, QDomElement const * font ) const;
-  void readInStyle( KSpreadLayout * layout, QDomElement const & style );
-  void loadStyleProperties( KSpreadLayout * layout, QDomElement const & property ) const;
-  void loadBorder( KSpreadLayout * layout, QString const & borderDef, bPos pos ) const;
+  void loadFontStyle( KSpreadFormat * layout, QDomElement const * font ) const;
+  void readInStyle( KSpreadFormat * layout, QDomElement const & style );
+  void loadStyleProperties( KSpreadFormat * layout, QDomElement const & property ) const;
+  void loadBorder( KSpreadFormat * layout, QString const & borderDef, bPos pos ) const;
   void loadTableMasterStyle( KSpreadSheet * table, QString const & stylename );
-  QString * loadFormat( QDomElement * element, 
-                        KSpreadLayout::FormatType & formatType,
+  QString * loadFormat( QDomElement * element,
+                        KSpreadFormat::FormatType & formatType,
                         QString name );
   void checkForNamedAreas( QString & formula ) const;
 
