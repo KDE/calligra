@@ -211,6 +211,47 @@ bool HtmlWorker::makeTable(const FrameAnchor& anchor)
     *m_streamOut << "</table>\n";
 }
 
+bool HtmlWorker::makeImage(const FrameAnchor& anchor)
+{
+    *m_streamOut << "<img "; // This is an emüty element!
+
+    QString strImageName=m_fileName;
+
+    const int result=anchor.picture.koStoreName.findRev("/");
+    if (result>=0)
+    {
+        strImageName+=anchor.picture.koStoreName.mid(result+1);
+    }
+    else
+    {
+        strImageName+=anchor.picture.koStoreName;
+    }
+
+    QByteArray image;
+
+    // TODO: verify return value!
+    if (m_kwordLeader)
+        m_kwordLeader->loadKoStoreFile(anchor.picture.koStoreName,image);
+
+    // TODO: test if file is empty and abort!
+    QFile file(strImageName);
+
+    if ( !file.open (IO_WriteOnly) )
+    {
+        kdError(30503) << "Unable to open image output file!" << endl;
+        return false;
+    }
+
+    file.writeBlock(image);
+    file.close();
+
+    // PROVISORY: just make a fake URL
+    *m_streamOut << "src=\"" << strImageName << "\" ";
+    *m_streamOut << "alt=\"" << escapeHtmlText(anchor.picture.key) << "\"";
+    *m_streamOut << (isXML()?"/>":">") << "\n";
+    
+}
+
 QString HtmlWorker::getFormatTextParagraph(const QString& strText, const FormatData& format)
 {
     QString outputText;
@@ -317,12 +358,20 @@ void HtmlWorker::ProcessParagraphData (const QString& strTag, const QString &par
                 {
                     *m_streamOut << "</sub>"; //Subscript
                 }
-                *m_streamOut << "</" << strTag << ">";
+                *m_streamOut << "</" << strTag << ">\n";
 
-                // TODO: everything!
                 if (6==(*paraFormatDataIt).frameAnchor.type)
                 {
                     makeTable((*paraFormatDataIt).frameAnchor);
+                }
+                else if (2==(*paraFormatDataIt).frameAnchor.type)
+                {
+                    makeImage((*paraFormatDataIt).frameAnchor);
+                }
+                else
+                {
+                    kdWarning(30503) << "Unknown anchor type: "
+                        << (*paraFormatDataIt).frameAnchor.type << endl;
                 }
 
                 // And re-open everything like in layout (very annoying (TODO: common code))
@@ -621,7 +670,7 @@ bool HtmlWorker::doOpenFile(const QString& filenameOut, const QString& to)
         kdError(30503) << "Could not create QTextCodec! Aborting" << endl;
         return false;
     }
-        
+
     m_streamOut->setCodec( m_codec );
 
     // Make the default title
@@ -634,6 +683,9 @@ bool HtmlWorker::doOpenFile(const QString& filenameOut, const QString& to)
     {
         m_strTitle=filenameOut;
     }
+
+    m_fileName=filenameOut;
+
     return true;
 }
 

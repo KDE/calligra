@@ -62,11 +62,13 @@ private:
     QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered);
     QString getFormatTextParagraph(const QString& strText, const FormatData& format);
     bool makeTable(const FrameAnchor& anchor);
+    bool makeImage(const FrameAnchor& anchor);
 private:
     QIODevice* m_ioDevice;
     QTextStream* m_streamOut;
     QTextCodec* m_codec; // QTextCodec in which the file will be written
     QString m_strTitle;
+    QString m_fileName; // Name of the output file
     CounterData::Style m_typeList; // What is the style of the current list (undefined, if we are not in a list)
     bool m_inList; // Are we currently in a list?
     bool m_orderedList; // Is the current list ordered or not (undefined, if we are not in a list)
