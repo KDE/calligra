@@ -38,7 +38,8 @@
 #include "cspecialfield.h"
 #include "ccalcfield.h"
 #include "cline.h"
-
+#include "canvkutemplate.h"
+#include "canvband.h"
 #include "property.h"
 #include "plugin.h"
 
@@ -102,45 +103,8 @@ void ReportCanvas::deleteItem(QCanvasItemList &l)
 {
     for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
     {
-        if ((*it)->rtti() > 2000)
-        {
-	    (*it)->hide();
-	    ((CanvasReportItem *)(*it))->section()->items.remove((*it));
-	    delete (*it);
-	    canvas()->update();
-	    emit modificationPerformed();
-	    break;
-        }
-	if ((*it)->rtti() > 1800)
-	{
-/*	    if ((*it)->rtti() == KuDesignerRttiDetail)
-	    {
-		CanvasDetail *det = (CanvasDetail*)(*it);
-		if ( det->props["Level"].first.toInt() <
-		    ((MyCanvas*)(canvas()))->templ->detailsCount - 1)
-		    return;
-	    }*/
-	    CanvasDetailHeader *header = 0;
-	    CanvasDetailFooter *footer = 0;
-	    ((MyCanvas*)(canvas()))->templ->removeSection((CanvasBand *)(*it),
-			&header, &footer);
-	    (*it)->hide();
-	    delete (*it);
-	    if (header)
-	    {
-		header->hide();
-		delete header;
-	    }
-	    if (footer)
-	    {
-		footer->hide();
-		delete footer;
-	    }
-	    ((MyCanvas*)(canvas()))->templ->arrangeSections();
-	    canvas()->update();
-	    emit modificationPerformed();
-	    break;
-	}
+        if ( ((MyCanvas*)(canvas()))->templ->removeSection((CanvasBand *)(*it)) )
+            break;
     }
 }
 

@@ -20,6 +20,7 @@
 #include "kudesigner_view.h"
 #include "kudesigner_factory.h"
 #include "kudesigner_doc.h"
+#include "kudesigner_command.h"
 
 #include <map>
 
@@ -45,8 +46,17 @@
 #include "propertyeditor.h"
 #include "property.h"
 
+#include "canvkutemplate.h"
+#include "canvreportheader.h"
+#include "canvreportfooter.h"
+#include "canvpageheader.h"
+#include "canvpagefooter.h"
+#include "canvdetailheader.h"
+#include "canvdetailfooter.h"
+#include "canvdetail.h"
+
 KudesignerView::KudesignerView( KudesignerDoc* part, QWidget* parent, const char* name )
-    : KoView( part, parent, name ),m_doc(part),pe(0)
+    : KoView( part, parent, name ),pe(0),m_doc(part)
 {
     setInstance( KudesignerFactory::global() );
     if ( !part->isReadWrite() ) // readonly case, e.g. when embedded into konqueror
@@ -248,7 +258,8 @@ void KudesignerView::slotAddDetailFooter(){
     unsigned int level = QInputDialog::getInteger(i18n("Add Detail Footer"), i18n("Enter detail level:"),
         0, 0, 100, 1, &Ok, this);
     if (!Ok) return;
-    if (((KudesignerDoc *)(koDocument()))->canvas()->templ->detailsCount >= level)
+    
+    if (m_doc->canvas()->templ->detailsCount >= level)
     {
         CanvasDetailFooter *df = new CanvasDetailFooter(((KudesignerDoc *)(koDocument()))->canvas()->templ->props["LeftMargin"]->value().toInt(),
             0, ((KudesignerDoc *)(koDocument()))->canvas()->templ->width() - ((KudesignerDoc *)(koDocument()))->canvas()->templ->props["RightMargin"]->value().toInt() -
@@ -257,7 +268,9 @@ void KudesignerView::slotAddDetailFooter(){
         df->props["Level"]->setValue(QString("%1").arg(level));
         ((KudesignerDoc *)(koDocument()))->canvas()->templ->details[level].first.second = df;
         ((KudesignerDoc *)(koDocument()))->canvas()->templ->arrangeSections();
-        ((KudesignerDoc *)(koDocument()))->setModified(true);
+  
+      
+//        m_doc->addCommand( new AddDetailFooterCommand(level, i18n("Insert Detail Footer Section"), m_doc) );
     }
 }
 

@@ -27,4 +27,9 @@ enum KuDesignerCanvasRtti { KuDesignerRttiCanvasBox = 1700, KuDesignerRttiCanvas
     KuDesignerRttiTextBox=2000, KuDesignerRttiCanvasReportItem, KuDesignerRttiCanvasLabel, KuDesignerRttiCanvasField,
     KuDesignerRttiCanvasSpecial, KuDesignerRttiCanvasCalculated, KuDesignerRttiCanvasLine};
 
+/**
+    Holder size for report items. TODO: configurable
+*/
+const int HolderSize = 6;    
+    
 #endif

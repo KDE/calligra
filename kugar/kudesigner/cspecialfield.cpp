@@ -15,6 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 #include <klocale.h>
+
 #include "cspecialfield.h"
 #include "property.h"
 

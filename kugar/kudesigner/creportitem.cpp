@@ -17,14 +17,15 @@
 #include <klocale.h>
 #include <kglobalsettings.h>
 
+#include <qrect.h>
+#include <qpainter.h>
+
 #include "creportitem.h"
 #include "property.h"
 #include "plugin.h"
 #include "mycanvas.h"
+#include "canvband.h"
 
-
-#include <qrect.h>
-#include <qpainter.h>
 
 QRect CanvasReportItem::topLeftResizableRect()
 {

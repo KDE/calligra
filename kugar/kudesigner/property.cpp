@@ -28,8 +28,9 @@ Property::Property(int type, QString name, QString description, QString value,bo
 
 Property::Property(QString name, std::map<QString, QString> v_correspList,
     QString description, QString value, bool save):
+    correspList(v_correspList),
     m_type(ValueFromList), m_name(name), m_description(description), m_value(value),
-    correspList(v_correspList),m_save(save)
+    m_save(save)
 {
     
 }

@@ -102,7 +102,7 @@ protected:
     bool m_save;
 };
 
-/** Master (accordind to Jeff Alger) pointer to Property */
+/** Master (according to Jeff Alger) pointer to Property */
 template<class P>
 class MPropPtr{
 public:

@@ -14,10 +14,25 @@
  *   License, or (at your option) any later version.                       *
  *                                                                         *
  ***************************************************************************/
-#include <qstringlist.h>
 #include <kdebug.h>
+
+#include <qstringlist.h>
+
 #include "mycanvas.h"
 #include "canvbox.h"
+#include "canvkutemplate.h"
+
+MyCanvas::MyCanvas(int w, int h, KudesignerDoc *doc):
+    QCanvas(w, h), m_doc(doc)
+{
+    selected.setAutoDelete(false);
+    templ = 0;
+}
+
+MyCanvas::~MyCanvas()
+{
+    delete templ;
+}
 
 void MyCanvas::scaleCanvas(int scale)
 {

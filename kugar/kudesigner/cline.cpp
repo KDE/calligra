@@ -15,8 +15,11 @@
  *                                                                         *
  ***************************************************************************/
 #include <klocale.h>
+
 #include <qpainter.h>
+
 #include "cline.h"
+#include "canvband.h"
 
 CanvasLine::CanvasLine(int x, int y, int width, int height, QCanvas * canvas):
     CanvasReportItem(x, y, width, height, canvas)

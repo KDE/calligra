@@ -22,6 +22,7 @@
 
 class QString;
 class QStringList;
+class CanvasBand;
 
 class CanvasReportItem: public CanvasBox{
 public:

@@ -34,6 +34,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kcommand.h>
 
 #include <qpainter.h>
 #include <qprinter.h>
@@ -42,6 +43,15 @@
 #include <qdockwindow.h>
 
 #include "mycanvas.h"
+
+#include "canvkutemplate.h"
+#include "canvreportheader.h"
+#include "canvreportfooter.h"
+#include "canvpageheader.h"
+#include "canvpagefooter.h"
+#include "canvdetailheader.h"
+#include "canvdetailfooter.h"
+#include "canvdetail.h"
 
 KudesignerDoc::KudesignerDoc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),m_plugin(0),m_propPos(DockRight)
@@ -56,6 +66,11 @@ KudesignerDoc::KudesignerDoc( QWidget *parentWidget, const char *widgetName, QOb
 KudesignerDoc::~KudesignerDoc()
 {
     delete history;
+}
+
+void KudesignerDoc::addCommand(KCommand *cmd)
+{
+    history->addCommand(cmd);
 }
 
 bool KudesignerDoc::initDoc()

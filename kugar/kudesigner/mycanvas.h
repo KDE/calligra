@@ -18,31 +18,24 @@
 #define MYCANVAS_H
 
 #include <qcanvas.h>
-#include "canvbox.h"
+
 #include "kudesigner_doc.h"
+
+class CanvasBox;
+class CanvasKugarTemplate;
 
 class MyCanvas: public QCanvas{
 public:
-    MyCanvas(int w, int h,KudesignerDoc *doc): QCanvas(w, h),m_doc(doc)
-    {
-        selected.setAutoDelete(false);
-	templ = 0;
-    }
-    ~MyCanvas()
-    {
-	delete templ;
-/*	QCanvasItemList l = allItems();
-	for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
-	{
-	    delete (*it);
-	}*/
-    }
+    MyCanvas(int w, int h,KudesignerDoc *doc);
+    ~MyCanvas();
 
     KudesignerDoc *document(){return m_doc;}
     CanvasKugarTemplate *templ;
     QPtrList<CanvasBox> selected;
+
 protected:
    virtual void drawForeground ( QPainter & painter, const QRect & clip );
+
 private:
     KudesignerDoc *m_doc;
     void scaleCanvas(int scale);

@@ -15,9 +15,12 @@
  *                                                                         *
  ***************************************************************************/
 #include <klocale.h>
+
+#include <qpainter.h>
+
 #include "clabel.h"
 #include "property.h"
-#include <qpainter.h>
+#include "canvband.h"
 
 CanvasLabel::CanvasLabel(int x, int y, int width, int height, QCanvas * canvas):
     CanvasReportItem(x, y, width, height, canvas)

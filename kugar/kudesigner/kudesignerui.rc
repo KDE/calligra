@@ -1,6 +1,10 @@
 <!DOCTYPE kpartgui>
 <kpartgui name="kudesigner" version="0.1">
 <MenuBar>
+ <Menu name="Edit"><text>&amp;Edit</text>
+   <Action name="edit_undo"/>
+   <Action name="edit_redo"/>
+ </Menu>
   <Menu name="sections"><text>Sec&amp;tions</text>
     <Action name="rheader"/>
     <Action name="pheader"/>

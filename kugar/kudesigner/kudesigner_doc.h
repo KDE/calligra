@@ -29,6 +29,7 @@ class QCanvas;
 class QDomNode;
 class CanvasReportItem;
 class CanvasBand;
+class KCommand;
 
 class KudesignerDoc : public KoDocument
 {
@@ -50,6 +51,9 @@ public:
     KuDesignerPlugin *plugin();
     Dock propertyPosition();
     void setForcedPropertyEditorPosition(Dock);
+    
+    void addCommand(KCommand *cmd);
+    
 protected:
     virtual KoView* createViewInstance( QWidget* parent, const char* name );
     virtual bool completeSaving( KoStore* store );
