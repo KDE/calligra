@@ -42,12 +42,11 @@
 
 */
 
-
 #include <htmlexport.h>
 #include <htmlexport.moc>
 #include <kdebug.h>
 #include <qdom.h>
-
+#include <qtextstream.h>
 
 // Start processor's header
 
@@ -535,7 +534,7 @@ static void ProcessTextTag ( QDomNode myNode, void *tagData, QString &)
 
 static void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText )
 {
-    if ( paraText.length () > 0 )
+    if (! paraText.isEmpty() )
     {
         const QString strAmp ("&amp;");
         const QString strLt  ("&lt;");
@@ -628,48 +627,56 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
     tagProcessingList.append ( TagProcessing ( "HARDBRK", NULL,                 NULL) ); // Not documented!
     ProcessSubtags (myNode, tagProcessingList, outputText);
 
+    QString strParaText;
+    ProcessParagraphData ( paraText, paraFormatDataList, strParaText );
+    if (strParaText.isEmpty())
+    {
+        //An empty paragraph is not allowed in HTML, so add a non-breaking space!
+        strParaText="&nbsp;";
+    }
+
     if ( paraLayout == "Head 1" )
     {
         outputText += "<h1>";
-        ProcessParagraphData ( paraText, paraFormatDataList, outputText );
+        outputText +=strParaText;
         outputText += "</h1>\n";
     }
     else if ( paraLayout == "Head 2" )
     {
         outputText += "<h2>";
-        ProcessParagraphData ( paraText, paraFormatDataList, outputText );
+        outputText +=strParaText;
         outputText += "</h2>\n";
     }
     else if ( paraLayout == "Head 3" )
     {
         outputText += "<h3>";  //Warning: No trailing white space or else it's in the text!!!
-        ProcessParagraphData ( paraText, paraFormatDataList, outputText );
+        outputText +=strParaText;
         outputText += "</h3>\n";
     }
     /*
     else if ( paraLayout == "Bullet List" )
     {
         outputText += "<p>"; //TODO
-        ProcessParagraphData ( paraText, paraFormatDataList, outputText );
+        outputText +=strParaText;
         outputText += "</p>\n";
     }
     else if ( paraLayout == "Enumerated List" )
     {
         outputText += "<p>"; //TODO
-        ProcessParagraphData ( paraText, paraFormatDataList, outputText );
+        outputText +=strParaText;
         outputText += "</p>\n";
     }
     else if ( paraLayout == "Alphabetical List" )
     {
         outputText += "<p>"; //TODO
-        ProcessParagraphData ( paraText, paraFormatDataList, outputText );
+        outputText +=strParaText;
         outputText += "</p>\n";
     }
     */
     else
     {// We don't know the layout, so assume it's "Standard". It's better than to abort with an error!
         outputText += "<p>";
-        ProcessParagraphData ( paraText, paraFormatDataList, outputText );
+        outputText +=strParaText;
         outputText += "</p>\n";
     }
 }
@@ -740,6 +747,12 @@ const bool HTMLExport::filter(const QString  &filenameIn,
         return false;
     }
 
+#if 1
+    // Some "security" to see if I have forgotten to run "make install"
+    // (Can be deleted when the filter will be stable.)
+    kdDebug(30503) << "htmlexport.cc " << __DATE__ " " __TIME__ << " " << "$Revision$" << endl;
+#endif
+
     KoStore koStoreIn (filenameIn, KoStore::Read);
 
     if ( !koStoreIn.open ( "root" ) )
@@ -760,47 +773,6 @@ const bool HTMLExport::filter(const QString  &filenameIn,
 
     QDomNode docNodeIn = qDomDocumentIn.documentElement ();
 
-    QString stringBufOut;
-
-    // Make the file header
-    // We are TRANSITIONAL, as we want to use tags like <FONT>, <U> and explicit colours.
-
-    stringBufOut += "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\n";
-
-    // No "lang" attribute for <HTML>, as we do not know in which language the document is!
-    stringBufOut += "<html>\n";
-
-    stringBufOut += "<head>\n";
-
-    // Declare that we are using UTF-8
-    stringBufOut += "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n";
-
-    // Say who we are (with the CVS revision number) in case we have a bug in our filter output!
-    stringBufOut += "<meta name=\"generator\" content=\"KWord HTML Export Filter Version ";
-    QString strVersion("$Revision$");
-    // Eliminate the dollar signs
-    //  (We don't want that the version number changes if the HTML file is itself put in a CVS storage.)
-    stringBufOut += strVersion.mid(10).replace(QRegExp("\\$"),""); // Note: double escape character (one for C++, one for QRegExp!)
-    stringBufOut += "\">\n";
-
-    stringBufOut += "<title>No name</title>\n"; // Just temporary, some user agents *do* choke without <TITLE> if there is a <HEAD> element
-
-#if 1
-    // Some "security" to see if I have forgotten to run "make install"
-    // (Can be deleted when the filter will be stable.)
-    kdDebug(30503) << "htmlexport.cc " << __DATE__ " " __TIME__ << " " << strVersion << endl;
-#endif
-
-    stringBufOut += "</head>\n<body>\n";
-
-    // Now that we have the header, we can do the real work!
-    ProcessDocTag (docNodeIn, NULL, stringBufOut);
-
-    // Add the tail of the file
-    stringBufOut += "</body>\n</html>\n";
-
-    QCString strOut=stringBufOut.utf8(); //Retrieve UTF8 info into a byte array
-
     //Now all is ready to write to a file
     QFile fileOut (filenameOut);
 
@@ -812,9 +784,43 @@ const bool HTMLExport::filter(const QString  &filenameIn,
         return false;
     }
 
-    //Warning: do not use QString::length() (as in asciiexport.cc) but QCString::length()
-    // "QString::length()" gives the number of characters, not the number of bytes needed to represent them in UTF8!
-    fileOut.writeBlock ( (const char *) strOut, strOut.length() ); //Write the file
+    //Use a QTextStream, so we do not have a big buffer using plenty of memory.
+    QTextStream streamOut(&fileOut);
+
+    streamOut.setEncoding( QTextStream::UnicodeUTF8 ); // TODO: possibility of choosing other encodings
+
+    // Make the file header
+    // We are TRANSITIONAL, as we want to use tags like <FONT>, <U> and explicit colours.
+
+    streamOut << "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">" << endl;
+
+    // No "lang" attribute for <HTML>, as we do not know in which language the document is!
+    streamOut << "<html>" << endl;
+
+    streamOut << "<head>" << endl;
+
+    // Declare that we are using UTF-8
+    streamOut << "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n";
+
+    // Say who we are (with the CVS revision number) in case we have a bug in our filter output!
+    QString strVersion("$Revision$");
+    // Eliminate the dollar signs
+    //  (We don't want that the version number changes if the HTML file is itself put in a CVS storage.)
+    streamOut << "<meta name=\"generator\" content=\"KWord HTML Export Filter Version ="
+              << strVersion.mid(10).replace(QRegExp("\\$"),"") // Note: double escape character (one for C++, one for QRegExp!)
+              << "\">" << endl;
+
+    streamOut << "<title>No name</title>\n"; // GRR: Just temporary, some user agents *do* choke without <TITLE> if there is a <HEAD> element
+
+    streamOut << "</head>" << endl << "<body>" << endl;
+
+    // Now that we have the header, we can do the real work!
+    QString stringBufOut;
+    ProcessDocTag (docNodeIn, NULL, stringBufOut);
+    streamOut << stringBufOut;
+
+    // Add the tail of the file
+    streamOut << "</body>" << endl << "</html>" << endl;
 
     fileOut.close (); //Really close the file
     return true;
