@@ -34,3 +34,44 @@ QString KPPixmapObjectIface::fileName() const
 {
     return obj->getFileName();
 }
+
+bool KPPixmapObjectIface::swapRGB() const
+{
+    PictureMirrorType _mirrorType;
+    int _depth=0;
+    bool _swapRGB=false;
+    int _bright=0;
+    obj->getPictureSettings( &_mirrorType, &_depth, &_swapRGB, &_bright );
+    return _swapRGB;
+}
+
+int KPPixmapObjectIface::depth() const
+{
+    PictureMirrorType _mirrorType;
+    int _depth=0;
+    bool _swapRGB=false;
+    int _bright=0;
+    obj->getPictureSettings( &_mirrorType, &_depth, &_swapRGB, &_bright );
+    return _depth;
+}
+
+int KPPixmapObjectIface::pictureMirrorType() const
+{
+    PictureMirrorType _mirrorType;
+    int _depth=0;
+    bool _swapRGB=false;
+    int _bright=0;
+    obj->getPictureSettings( &_mirrorType, &_depth, &_swapRGB, &_bright );
+    return (int)_mirrorType;
+}
+
+int KPPixmapObjectIface::bright() const
+{
+    PictureMirrorType _mirrorType;
+    int _depth=0;
+    bool _swapRGB=false;
+    int _bright=0;
+    obj->getPictureSettings( &_mirrorType, &_depth, &_swapRGB, &_bright );
+    return (int)_bright;
+}
+

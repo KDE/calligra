@@ -37,6 +37,10 @@ public:
 
 k_dcop:
     QString fileName() const;
+    int depth() const;
+    bool swapRGB() const;
+    int pictureMirrorType() const;
+    int bright() const;
 
 private:
     KPPixmapObject *obj;
