@@ -2495,8 +2495,11 @@ void KWDocument::refreshFrameBorderButton()
     if (frame)
     {
         QListIterator<KWView> it( m_lstViews );
+        frame=it.toFirst()->getGUI()->canvasWidget()->settingsFrame(frame);
         for ( ; it.current() ; ++it )
+        {
             it.current()->getGUI()->getView()->showFrameBorders( frame->getLeftBorder(), frame->getRightBorder(), frame->getTopBorder(), frame->getBottomBorder() );
+        }
     }
 }
 
