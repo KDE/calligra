@@ -379,6 +379,9 @@ void KPresenterDoc::initConfig()
     }
 
     KSpellConfig ksconfig;
+#if HAVE_LIBASPELL
+  KOSpellConfig kosconfig;
+#endif
 
     if( config->hasGroup("KSpell kpresenter" ) )
     {
@@ -390,6 +393,15 @@ void KPresenterDoc::initConfig()
         ksconfig.setEncoding(config->readNumEntry ("KSpell_Encoding", KS_E_ASCII));
         ksconfig.setClient(config->readNumEntry ("KSpell_Client", KS_CLIENT_ISPELL));
         setKSpellConfig(ksconfig);
+#if HAVE_LIBASPELL
+        kosconfig.setNoRootAffix(config->readNumEntry ("KSpell_NoRootAffix", 0));
+        kosconfig.setRunTogether(config->readNumEntry ("KSpell_RunTogether", 0));
+        kosconfig.setDictionary(config->readEntry ("KSpell_Dictionary", ""));
+        kosconfig.setDictFromList(config->readNumEntry ("KSpell_DictFromList", FALSE));
+        kosconfig.setEncoding(config->readNumEntry ("KSpell_Encoding", KS_E_ASCII));
+        setKOSpellConfig( kosconfig );
+#endif
+
         setDontCheckUpperWord(config->readBoolEntry("KSpell_dont_check_upper_word",false));
         setDontCheckTitleCase(config->readBoolEntry("KSpell_dont_check_title_case",false));
         m_bgSpellCheck->enableBackgroundSpellCheck(config->readBoolEntry( "SpellCheck", false ));

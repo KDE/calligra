@@ -150,6 +150,8 @@ public:
     void configureSpellChecker();
     void testAndCloseAllTextObjectProtectedContent();
     void updateRulerInProtectContentMode();
+    QPtrList<KAction> listOfResultOfCheckWord( const QString &word );
+
 signals:
     void currentPageChanged( int );
 
@@ -690,6 +692,8 @@ protected slots:
     void slotChangeCutState(bool );
 
     void insertDirectCursor();
+    void slotCorrectWord();
+
 // end of protected slots
 protected:
 

@@ -7501,4 +7501,38 @@ void KPresenterView::spellAddAutoCorrect (const QString & originalword, const QS
     m_pKPresenterDoc->getAutoFormat()->addAutoFormatEntry( originalword, newword );
 }
 
+QPtrList<KAction> KPresenterView::listOfResultOfCheckWord( const QString &word )
+{
+#if HAVE_LIBASPELL
+    KOSpell *tmpSpell = new KOSpell( m_pKPresenterDoc->getKOSpellConfig());
+    QStringList lst = tmpSpell->resultCheckWord(word );
+    QPtrList<KAction> listAction=QPtrList<KAction>();
+    QStringList::ConstIterator it = lst.begin();
+    for ( int i = 0; it != lst.end() ; ++it, ++i )
+    {
+        if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
+        {
+            KAction * act = new KAction( (*it));
+            connect( act, SIGNAL(activated()),this, SLOT(slotCorrectWord()) );
+            listAction.append( act );
+        }
+    }
+    return listAction;
+#endif
+
+    return QPtrList<KAction>();
+}
+
+void KPresenterView::slotCorrectWord()
+{
+    KAction * act = (KAction *)(sender());
+    KPTextView* edit = m_canvas->currentTextObjectView();
+    if ( edit )
+    {
+        edit->selectWordUnderCursor( *(edit->cursor()) );
+        m_pKPresenterDoc->addCommand( edit->textObject()->replaceSelectionCommand( edit->cursor(), act->text(), KoTextDocument::Standard, i18n("Replace Word") ));
+    }
+
+}
+
 #include <kpresenter_view.moc>
