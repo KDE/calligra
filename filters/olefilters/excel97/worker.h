@@ -34,6 +34,7 @@ public:
 	Worker();
 	~Worker();
 
+	void done();
 	const QDomDocument *const part();
 	
 protected:

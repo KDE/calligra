@@ -134,6 +134,8 @@ bool ExcelFilter::filter()
 		// Ensure the progress gets to 100%
 		emit sigProgress((int)(count * 115 / m_length));
 	}
+
+	m_handler->worker()->done();
 	
 	m_ready = true;
 	return m_success;
@@ -149,7 +151,7 @@ void ExcelFilter::slotGotAuthor(const QString &author)
 const QDomDocument *const ExcelFilter::part()
 {
 	if(m_ready && m_success)
-		return m_handler->part();
+		return m_handler->worker()->part();
 	
 	m_part = QDomDocument("spreadsheet");
 	m_part.setContent(

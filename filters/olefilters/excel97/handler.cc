@@ -31,9 +31,9 @@ Handler::~Handler()
 	delete m_worker;
 }
 
-const QDomDocument *const Handler::part()
+Worker *Handler::worker()
 {
-	return m_worker->part();
+	return m_worker;
 }
 
 bool Handler::invokeHandler(Q_UINT16 opcode, Q_UINT32 bytes, QDataStream &operands)

@@ -28,6 +28,49 @@
 
 #include "definitions.h"
 
+class FormulaTodo
+{
+public:
+	FormulaTodo(Q_UINT16 col, Q_UINT16 row, Q_UINT16 biff) { m_col = col; m_row = row; m_biff = biff; }
+
+	Q_UINT16 col() { return m_col; }
+	Q_UINT16 row() { return m_row; }
+	Q_UINT16 biff() { return m_biff; }
+
+private:
+	Q_UINT16 m_col, m_row, m_biff;
+};
+
+class SharedFormula
+{
+public:
+	SharedFormula(int fr, int lr, int fc, int lc, QDataStream *stream, QByteArray *a, char *store, int length)
+	{
+		m_fr = fr; m_lr = lr; m_fc = fc; m_lc = lc;
+		m_stream = stream; m_byteArray = a; m_store = store; m_dataLength = length;
+	}
+
+	~SharedFormula()
+	{
+		m_byteArray->resetRawData(m_store, m_dataLength);
+		delete m_byteArray;
+		delete []m_store;
+		delete m_stream;
+	}
+
+	bool checkrow(int row) { return (row >= m_fr && row <= m_lr); }
+	bool checkcol(int col) { return (col >= m_fc && col <= m_lc); }
+	QDataStream *stream() { return m_stream; }
+
+private:
+	int m_fr, m_lr, m_fc, m_lc;
+	int m_dataLength;
+	
+	char *m_store;
+	QByteArray *m_byteArray;
+	QDataStream *m_stream;
+};
+
 class MergeInfo
 {
 public:
@@ -65,15 +108,19 @@ public:
 	Helper(QDomDocument *root, QPtrList<QDomElement> *tables);
 	~Helper();
 
+	void done();
+	
 	void addDict(Dictionary dict, int index, void *obj);
 	void *queryDict(Dictionary dict, int index);
+
+	void addSharedFormula(SharedFormula *formula);
 	
 	void getTime(double time, int &hour,int  &min, int &second);
 	void getDate(int date, int &year, int &month, int &day, Q_UINT16 date1904);
 	void getFont(Q_UINT16, QDomElement &f, Q_UINT16 fontid);
 	void getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid);
 	
-	const QString getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgce, Q_UINT16 biff);
+	const QString getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgce, Q_UINT16 biff, bool shared = false);
 	const QDomElement getFormat(Q_UINT16 xf);
 
 	PenFormat borderStyleToQtStyle(int penStyle);
@@ -88,6 +135,9 @@ private:
 	QIntDict<QString> m_sstrec;
 	QIntDict<fontrec> m_fontrec;
 	QIntDict<formatrec> m_formatrec;	
+
+	QPtrList<SharedFormula> m_formulaList;
+	QPtrList<FormulaTodo> m_todoFormula;
 
 	KLocale m_locale;
 };

@@ -32,10 +32,77 @@ Helper::Helper(QDomDocument *root, QPtrList<QDomElement> *tables)
 
 	m_root = root;
 	m_tables = tables;
+	
+	m_todoFormula.setAutoDelete(true);
+	m_formulaList.setAutoDelete(true);
 }
 
 Helper::~Helper()
 {
+}
+
+void Helper::done()
+{
+	FormulaTodo *todo;
+	for(todo = m_todoFormula.first(); todo != 0; todo = m_todoFormula.next())
+	{
+		SharedFormula *formula;
+		for(formula = m_formulaList.first(); formula != 0; formula = m_formulaList.next())
+		{
+			if(formula->checkrow(todo->row()) && formula->checkcol(todo->col()))
+			{
+				QString temp = getFormula(todo->row(), todo->col(), *formula->stream(), todo->biff(), true);
+				formula->stream()->device()->reset();
+
+				bool finished = false;
+				QDomElement map = m_root->documentElement().namedItem("map").toElement();
+				QDomNode n = map.firstChild();
+				while(!n.isNull() && !finished)
+				{
+					QDomElement e = n.toElement();
+					if(!e.isNull() && e.tagName() == "table")
+					{
+						QDomNode n2 = e.firstChild();
+						while(!n2.isNull() && !finished)
+						{
+							QDomElement e2 = n2.toElement();
+							if(!e2.isNull() && e2.tagName() == "cell")
+							{
+								if(e2.attribute("row").toInt() == todo->row() + 1 && 
+								   e2.attribute("column").toInt() == todo->col() + 1)
+								{
+									QDomNode n3 = e2.firstChild();
+									while(!n3.isNull() && !finished)
+									{
+										QDomElement e3 = n3.toElement();
+										if(!e3.isNull() && e3.tagName() == "text")
+										{
+											QDomText text = e3.firstChild().toText();
+											if(!text.isNull())
+												text.setData(temp);
+
+											finished = true;
+										}
+										
+										n3 = n3.nextSibling();
+									}
+								}
+							}
+
+							n2 = n2.nextSibling();
+						}
+					}
+
+					n = n.nextSibling();
+				}  			
+			}
+		}
+	}
+}
+
+void Helper::addSharedFormula(SharedFormula *formula)
+{
+	m_formulaList.append(formula);
 }
 
 void Helper::addDict(Dictionary dict, int index, void *obj)
@@ -548,7 +615,48 @@ const QDomElement Helper::getFormat(Q_UINT16 xf)
 	return format;
 }
 
-const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgce, Q_UINT16 biff)
+void getReference(Q_UINT16 row, Q_UINT16 column, Q_INT16 &refRow, Q_INT16 &refColumn, Q_UINT16 biff, bool shared)
+{
+	if(biff == BIFF_8)
+	{
+		if((refColumn & 0x8000) && !shared)
+			refRow -= row;
+
+		if(refColumn & 0x4000)
+		{
+			if(!shared)
+			{
+				refColumn &= 0x3fff;
+				refColumn -= column;
+			}
+			else
+				refColumn = (Q_INT8) refColumn;
+		}
+	}
+	else
+	{
+		// TODO: Test this part!
+		refRow &= 0x3fff;
+
+		if(refRow & 0x8000)
+		{
+			if(shared && (refRow & 0x2000))
+				refRow |= 0xc000;
+			else
+				refRow -= row;
+		}
+		
+		if(refRow & 0x4000)
+		{
+			if(!shared)
+				refColumn -= column;
+			else
+				refColumn = (Q_INT8) refColumn;
+		}
+	}
+}
+
+const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgce, Q_UINT16 biff, bool shared)
 {
 	double number;
 	Q_UINT8 byte, ptg;
@@ -557,6 +665,7 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 	QString str;
 	QStringList parsedFormula;
 	QStringList::Iterator stringPtr;
+	bool found;
 
 	parsedFormula.append("=");
 
@@ -576,22 +685,25 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				kdDebug(30511) << "WARNING: ptgExpr requested in Row " << row << " Col " << column << " !" << endl;
 				kdDebug(30511) << "HASH Table: top-Left-Row " << tlrow << ", top-Left-Col " << tlcol << endl;
 
-				/*
-				SharedFormula *fmla;
-				for(fmla = shrfmlalist.first(); fmla != 0; fmla = shrfmlalist.next())
+				found = false;
+				
+				SharedFormula *formula;
+				for(formula = m_formulaList.first(); formula != 0; formula = m_formulaList.next())
 				{
-					if(fmla->checkrow(tlrow) && fmla->checkcol(tlcol))
+					if(formula->checkrow(tlrow) && formula->checkcol(tlcol))
 					{
-						kdDebug(30511) << "*********** Found a shared formula for this row/col!" << endl;
-
-						kdDebug() << "***************************** START!" << endl;
-						QString formula = getFormula(row, column, *fmla->stream());
-						kdDebug() << "***************************** END!" << endl;
+						found = true;
+						QString temp = getFormula(row, column, *formula->stream(), biff, true);
+						formula->stream()->device()->reset();
+						
+						parsedFormula.append(temp.mid(1));
 					}
 				}
-				*/
 
-				return "N/A"; // Return _error_ formula-string
+				if(!found)
+					m_todoFormula.append(new FormulaTodo(tlcol, tlrow, biff));
+
+				parsedFormula.append("");
 				break;
 			case 0x03:  // ptgAdd
 				stringPtr = parsedFormula.fromLast();
@@ -960,31 +1072,18 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				}
 				break;
 			case 0x24:  // ptgRef
-			case 0x44:
+			case 0x2c:
+				rgce >> refRow;
+				
 				if(biff == BIFF_8)
-				{
-					rgce >> refRow >> refColumn;
-					if(refColumn & 0x8000)
-						refRow += -1*row;
-					
-					if(refColumn & 0x4000)
-					{
-						refColumn &= 0x3fff;
-						refColumn += -1*column;
-					}
-				}
+					rgce >> refColumn;
 				else
 				{
-					rgce >> refRow >> byte;
+					rgce >> byte;
 					refColumn = byte;
-					if(refRow & 0x8000)
-						refRow += -1*row;
-					if(refRow & 0x4000)
-					{
-						refRow &= 0x3fff;
-						refColumn += -1*column;
-					}
 				}
+				
+				getReference(row, column, refRow, refColumn, biff, shared);
 
 				str = "#";
 				str += QString::number((int) refColumn);
@@ -995,39 +1094,22 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				parsedFormula.append("");
 				break;
 			case 0x25:  // ptgArea
-			case 0x45:
-				if (biff == BIFF_8) {
-					rgce >> refRow >> refRowLast >> refColumn >> refColumnLast;
-					if (refColumn & 0x8000)
-						refRow += -1*row;
-					if (refColumn & 0x4000) {
-						refColumn &= 0x3fff;
-						refColumn += -1*column;
-					}
-					if (refColumnLast & 0x8000)
-						refRowLast += -1*row;
-					if (refColumnLast & 0x4000) {
-						refColumnLast &= 0x3fff;
-						refColumnLast += -1*column;
-					}
-				} else {
-					rgce >> refRow >> refRowLast >> byte;
+			case 0x2d:
+				rgce >> refRow >> refRowLast;
+				
+				if(biff == BIFF_8)
+					rgce >> refColumn >> refColumnLast;
+				else
+				{
+					rgce >> byte;
 					refColumn = byte;
 					rgce >> byte;
 					refColumnLast = byte;
-					if (refRow & 0x8000)
-						refRow += -1*row;
-					if (refRow & 0x4000) {
-						refColumn &= 0x3fff;
-						refColumn += -1*column;
-					}
-					if (refRowLast & 0x8000)
-						refRowLast += -1*row;
-					if (refRowLast & 0x4000) {
-						refColumnLast &= 0x3fff;
-						refColumnLast += -1*column;
-					}
 				}
+
+				getReference(row, column, refRow, refColumn, biff, shared);
+				getReference(row, column, refRowLast, refColumnLast, biff, shared);
+
 				str = "#";
 				str += QString::number((int) refColumn);
 				str += "#";
@@ -1044,17 +1126,9 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				if(biff == BIFF_8)
 				{
 					Q_UINT16 sheetNumber;
-					rgce >> sheetNumber;
-				
-					rgce >> refRow >> refColumn;
-					if(refColumn & 0x8000)
-						refRow += -1*row;
-					
-					if(refColumn & 0x4000)
-					{
-						refColumn &= 0x3fff;
-						refColumn += -1*column;
-					}
+					rgce >> sheetNumber >> refRow >> refColumn;
+	
+					getReference(row, column, refRow, refColumn, biff, shared);
 					
 					QDomElement *sheet = m_tables->at(sheetNumber);
 

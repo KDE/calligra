@@ -26,8 +26,9 @@ class Handler
 public:
 	Handler();
 	~Handler();
-
-	const QDomDocument *const part();
+	
+	Worker *worker();
+	
 	bool invokeHandler(Q_UINT16 opcode, Q_UINT32 bytes, QDataStream &operands);
 		
 private:

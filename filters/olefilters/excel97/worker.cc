@@ -72,6 +72,11 @@ const QDomDocument *const Worker::part()
 	return m_root;
 }
 
+void Worker::done()
+{
+	m_helper->done();
+}
+
 bool Worker::op_1904(Q_UINT32, QDataStream &body)
 {
 	body >> m_date1904;
@@ -959,10 +964,9 @@ bool Worker::op_eof(Q_UINT32, QDataStream &)
 	return true;
 }
 
-bool Worker::op_filepass(Q_UINT32 size, QDataStream &body)
+bool Worker::op_filepass(Q_UINT32, QDataStream &body)
 {
 	Q_UINT16 temp;
-	Q_UINT16 wantOne;
 	body >> temp >> temp >> temp;
 
 	char *read = new char[16];
@@ -1548,9 +1552,8 @@ bool Worker::op_setup(Q_UINT32, QDataStream &body)
 	return true;
 }
 
-bool Worker::op_shrfmla(Q_UINT32 /*size*/, QDataStream &/*body*/)
+bool Worker::op_shrfmla(Q_UINT32 size, QDataStream &body)
 {
-	/*
 	Q_UINT16 firstrow, lastrow;
 	Q_UINT8 firstcol, lastcol;
 	Q_UINT16 dataLen;
@@ -1559,39 +1562,21 @@ bool Worker::op_shrfmla(Q_UINT32 /*size*/, QDataStream &/*body*/)
 	body >> firstrow >> lastrow >> firstcol >> lastcol;
 	body >> temp >> dataLen;
 
-	int nowSize = size - (sizeof(Q_UINT16) * 4) - (sizeof(Q_UINT8) * 2);
-
 	kdDebug() << "FR: " << firstrow << " LR: " << lastrow << endl;
 	kdDebug() << "FC: " << firstcol << " LC: " << lastcol << endl;
-
-	if(firstrow == 0 && lastrow == 2 && firstcol == 3 && lastcol == 0)
-		return true;
 	kdDebug() << "DATALEN: " << dataLen << endl;
 
-	if(nowSize != dataLen)
-	{
-		kdError() << "WARNING: Shared formula data seems to be wrong!" << endl;
-		return true;
-	}
-
 	char *store = new char[dataLen];
-
-	QByteArray a;
-
 	body.readRawBytes(store, dataLen);
+	
+	QByteArray *a = new QByteArray();
+	a->setRawData(store, dataLen);
 
-	a.setRawData(store, dataLen);
-
-	QDataStream *fbody = new QDataStream(a, IO_ReadOnly);
+	QDataStream *fbody = new QDataStream(*a, IO_ReadOnly);
 	fbody->setByteOrder(QDataStream::LittleEndian);
 
-	shrfmlalist.append(new SharedFormula(firstrow, lastrow, firstcol, lastcol, fbody));
+	m_helper->addSharedFormula(new SharedFormula(firstrow, lastrow, firstcol, lastcol, fbody, a, store, dataLen));
 
-	a.resetRawData(store, dataLen);
-	delete []store;
-
-	*/
-	
 	return true;
 }
 
