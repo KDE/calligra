@@ -6709,6 +6709,7 @@ bool KSpreadSheet::loadColumnFormat(const QDomElement& column, const KoOasisStyl
     }
 
     KoStyleStack styleStack;
+    styleStack.setTypeProperties("column");
     if ( column.hasAttribute( "table:default-cell-style-name" ) )
     {
         //todo load cell attribute default into this column
@@ -6716,9 +6717,12 @@ bool KSpreadSheet::loadColumnFormat(const QDomElement& column, const KoOasisStyl
         kdDebug()<<" default-cell-style-name :"<<str<<endl;
         QDomElement *style = oasisStyles.styles()[str];
         kdDebug()<<"default column style :"<<style<<endl;
-        styleStack.push( *style );
-        layout.loadOasisStyleProperties( styleStack, oasisStyles );
-        styleStack.pop();
+        if ( style )
+        {
+            styleStack.push( *style );
+            layout.loadOasisStyleProperties( styleStack, oasisStyles );
+            styleStack.pop();
+        }
     }
 
 
@@ -6778,6 +6782,7 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, int &rowIndex,const Ko
     double height = -1.0;
     KSpreadFormat layout( this , doc()->styleManager()->defaultStyle() );
     KoStyleStack styleStack;
+    styleStack.setTypeProperties( "row" );
     if ( row.hasAttribute( "table:style-name" ) )
     {
         QString str = row.attribute( "table:style-name" );

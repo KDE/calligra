@@ -5433,6 +5433,7 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
         kdDebug()<<" style :"<<style<<endl;
         KoStyleStack styleStack;
         styleStack.push( *style );
+        styleStack.setTypeProperties( "cell" );
         loadOasisStyleProperties( styleStack, oasisStyles );
     }
     QDomElement textP = element.namedItem( "text:p" ).toElement();
