@@ -1034,19 +1034,84 @@ void KoPageLayoutDia::formatChanged( int _format )
 /*===================== format changed =============================*/
 void KoPageLayoutDia::orientationChanged( int _orientation )
 {
+    // I hate these kinds of fixes (i.e. adding lots of bloat), but the whole dialog
+    // is very brittle and I didn't want to break anything else by fixing that
+    // preview bug (#10775). I hope you don't mind >;)  (Werner)
     if ( ( KoOrientation )_orientation != layout.orientation ) {
         double tmp;
 
-        layout.mmWidth = epgWidth->text().toDouble();
-        layout.mmHeight = epgHeight->text().toDouble();
-        layout.mmLeft = ebrLeft->text().toDouble();
-        layout.mmRight = ebrRight->text().toDouble();
-        layout.mmTop =  ebrTop->text().toDouble();
-        layout.mmBottom = ebrBottom->text().toDouble();
+        switch ( layout.unit ) {
+            case PG_MM:
+                layout.mmWidth = epgWidth->text().toDouble();
+                layout.mmHeight = epgHeight->text().toDouble();
+                layout.mmLeft = ebrLeft->text().toDouble();
+                layout.mmRight = ebrRight->text().toDouble();
+                layout.mmTop =  ebrTop->text().toDouble();
+                layout.mmBottom = ebrBottom->text().toDouble();
+                layout.ptWidth = MM_TO_POINT( layout.mmWidth );
+                layout.ptHeight = MM_TO_POINT( layout.mmHeight );
+                layout.ptLeft = MM_TO_POINT( layout.mmLeft );
+                layout.ptRight = MM_TO_POINT( layout.mmRight );
+                layout.ptTop = MM_TO_POINT( layout.mmTop );
+                layout.ptBottom = MM_TO_POINT( layout.mmBottom );
+                layout.inchWidth = MM_TO_INCH( layout.mmWidth );
+                layout.inchHeight = MM_TO_INCH( layout.mmHeight );
+                layout.inchLeft = MM_TO_INCH( layout.mmLeft );
+                layout.inchRight = MM_TO_INCH( layout.mmRight );
+                layout.inchTop = MM_TO_INCH( layout.mmTop );
+                layout.inchBottom = MM_TO_INCH( layout.mmBottom );
+                break;
+            case PG_PT:
+                layout.ptWidth = epgWidth->text().toDouble();
+                layout.ptHeight = epgHeight->text().toDouble();
+                layout.ptLeft = ebrLeft->text().toDouble();
+                layout.ptRight = ebrRight->text().toDouble();
+                layout.ptTop =  ebrTop->text().toDouble();
+                layout.ptBottom = ebrBottom->text().toDouble();
+                layout.mmWidth = POINT_TO_MM( layout.ptWidth );
+                layout.mmHeight = POINT_TO_MM( layout.ptHeight );
+                layout.mmLeft = POINT_TO_MM( layout.ptLeft );
+                layout.mmRight = POINT_TO_MM( layout.ptRight );
+                layout.mmTop = POINT_TO_MM( layout.ptTop );
+                layout.mmBottom = POINT_TO_MM( layout.ptBottom );
+                layout.inchWidth = POINT_TO_INCH( layout.ptWidth );
+                layout.inchHeight = POINT_TO_INCH( layout.ptHeight );
+                layout.inchLeft = POINT_TO_INCH( layout.ptLeft );
+                layout.inchRight = POINT_TO_INCH( layout.ptRight );
+                layout.inchTop = POINT_TO_INCH( layout.ptTop );
+                layout.inchBottom = POINT_TO_INCH( layout.ptBottom );
+                break;
+            case PG_INCH:
+                layout.inchWidth = epgWidth->text().toDouble();
+                layout.inchHeight = epgHeight->text().toDouble();
+                layout.inchLeft = ebrLeft->text().toDouble();
+                layout.inchRight = ebrRight->text().toDouble();
+                layout.inchTop =  ebrTop->text().toDouble();
+                layout.inchBottom = ebrBottom->text().toDouble();
+                layout.ptWidth = INCH_TO_POINT( layout.inchWidth );
+                layout.ptHeight = INCH_TO_POINT( layout.inchHeight );
+                layout.ptLeft = INCH_TO_POINT( layout.inchLeft );
+                layout.ptRight = INCH_TO_POINT( layout.inchRight );
+                layout.ptTop = INCH_TO_POINT( layout.inchTop );
+                layout.ptBottom = INCH_TO_POINT( layout.inchBottom );
+                layout.mmWidth = INCH_TO_MM( layout.inchWidth );
+                layout.mmHeight = INCH_TO_MM( layout.inchHeight );
+                layout.mmLeft = INCH_TO_MM( layout.inchLeft );
+                layout.mmRight = INCH_TO_MM( layout.inchRight );
+                layout.mmTop = INCH_TO_MM( layout.inchTop );
+                layout.mmBottom = INCH_TO_MM( layout.inchBottom );
+                break;
+        }
 
         tmp = layout.mmWidth;
         layout.mmWidth = layout.mmHeight;
         layout.mmHeight = tmp;
+        tmp = layout.ptWidth;
+        layout.ptWidth = layout.ptHeight;
+        layout.ptHeight = tmp;
+        tmp = layout.inchWidth;
+        layout.inchWidth = layout.inchHeight;
+        layout.inchHeight = tmp;
 
         if ( ( KoOrientation )_orientation == PG_LANDSCAPE ) {
             tmp = layout.mmLeft;
@@ -1054,20 +1119,33 @@ void KoPageLayoutDia::orientationChanged( int _orientation )
             layout.mmBottom = layout.mmRight;
             layout.mmRight = layout.mmTop;
             layout.mmTop = tmp;
+            tmp = layout.ptLeft;
+            layout.ptLeft = layout.ptBottom;
+            layout.ptBottom = layout.ptRight;
+            layout.ptRight = layout.ptTop;
+            layout.ptTop = tmp;
+            tmp = layout.inchLeft;
+            layout.inchLeft = layout.inchBottom;
+            layout.inchBottom = layout.inchRight;
+            layout.inchRight = layout.inchTop;
+            layout.inchTop = tmp;
         } else {
             tmp = layout.mmTop;
             layout.mmTop = layout.mmRight;
             layout.mmRight = layout.mmBottom;
             layout.mmBottom = layout.mmLeft;
             layout.mmLeft = tmp;
+            tmp = layout.ptTop;
+            layout.ptTop = layout.ptRight;
+            layout.ptRight = layout.ptBottom;
+            layout.ptBottom = layout.ptLeft;
+            layout.ptLeft = tmp;
+            tmp = layout.inchTop;
+            layout.inchTop = layout.inchRight;
+            layout.inchRight = layout.inchBottom;
+            layout.inchBottom = layout.inchLeft;
+            layout.inchLeft = tmp;
         }
-
-        layout.ptWidth = MM_TO_POINT( layout.mmWidth );
-        layout.ptHeight = MM_TO_POINT( layout.mmHeight );
-        layout.ptLeft = MM_TO_POINT( layout.mmLeft );
-        layout.ptRight = MM_TO_POINT( layout.mmRight );
-        layout.ptTop = MM_TO_POINT( layout.mmTop );
-        layout.ptBottom = MM_TO_POINT( layout.mmBottom );
 
         layout.orientation = ( KoOrientation )_orientation;
         setValuesTab1();
