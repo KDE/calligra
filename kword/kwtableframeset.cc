@@ -822,9 +822,10 @@ void KWTableFrameSet::insertRow( unsigned int _idx, bool _recalc, bool isAHeader
         double tmpWidth= colStart[i+colSpan] - colStart[i];
         if(i+colSpan != getCols())
             tmpWidth-=tableCellSpacing;
-        else
-            tmpWidth+=1;
+        /*else
+          tmpWidth+=1;*/
         KWFrame *frame = new KWFrame(0L, colStart[i], br.y(), tmpWidth, height, RA_NO);
+
         frame->setFrameBehaviour(AutoExtendFrame);
         frame->setNewFrameBehaviour(NoFollowup);
 
