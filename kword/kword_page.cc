@@ -1891,6 +1891,8 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 
 	recalcCursor(false,0);
 
+	fc->getParag()->doAutoFormat(fc);
+
 	buffer.fill(white);
 	redrawAllWhileScrolling = true;
 	scrollToCursor(*fc);
@@ -1932,6 +1934,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	else
 	  fc->apply(_format);
 	gui->getView()->setFormat(*((KWFormat*)fc));
+
 	inKeyEvent = false;
 	return;
       } break;
@@ -1976,6 +1979,13 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	  }
 	else
 	  fc->makeLineLayout(painter);
+
+	QPaintDevice *dev = painter.device();
+	painter.end();
+
+	fc->getParag()->doAutoFormat(fc);
+
+	painter.begin(dev);
 
 	paintfc = *fc;
 	bool bend = false;
@@ -2128,6 +2138,13 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 	  }
 	else
 	  fc->makeLineLayout(painter);
+
+	QPaintDevice *dev = painter.device();
+	painter.end();
+
+	fc->getParag()->doAutoFormat(fc);
+
+	painter.begin(dev);
 
 	paintfc = *fc;
 	bool bend = false;
@@ -2314,6 +2331,13 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 		isPrev = true;
 	      }
 
+	    QPaintDevice *dev = painter.device();
+	    painter.end();
+
+	    fc->getParag()->doAutoFormat(fc);
+
+	    painter.begin(dev);
+
 	    paintfc = *fc;
 	    bool bend = false;
 	
@@ -2371,7 +2395,7 @@ void KWPage::keyPressEvent(QKeyEvent *e)
 		fc->cursorGotoPos(tmpTextPos + e->text().length(),painter);
 	      }
 	
-	    QPaintDevice *dev = painter.device();
+	    dev = painter.device();
 	    painter.end();
 
 	    if (doc->needRedraw())
@@ -2826,39 +2850,6 @@ void KWPage::frameSizeChanged(KoPageLayout _layout)
 {
   setRuler2Frame(fc->getFrameSet() - 1,fc->getFrame() - 1);
   return;
-
-//   if (mouseMode != MM_EDIT_FRAME)
-//     {
-//       selectedFrame = fc->getFrame() - 1;
-//       selectedFrameSet = fc->getFrameSet() - 1;
-//     }
-//   else if (selectedFrame == -1 || selectedFrameSet == -1)
-//     return;
-
-//   gui->getHorzRuler()->setFrameStart(doc->getFrameSet(selectedFrameSet)->getFrame(selectedFrame)->x());
-
-//   if (doc->getProcessingType() != KWordDocument::DTP) return;
-
-//   KWFrame *frame = doc->getFrameSet(selectedFrameSet)->getFrame(selectedFrame);
-
-//   unsigned int page = 0;
-//   for (int i = 0;i < doc->getPages();i++)
-//     {
-//       if (frame->intersects(KRect(0,i * ptPaperHeight(),ptPaperWidth(),ptPaperHeight())))
-// 	{
-// 	  page = i;
-// 	  break;
-// 	}
-//     }
-
-//   doc->getFrameSet(selectedFrameSet)->getFrame(selectedFrame)->setCoords(_layout.ptLeft,
-// 									 _layout.ptTop + page * ptPaperHeight(),
-// 									 _layout.ptWidth - _layout.ptRight,
-// 									 _layout.ptHeight - _layout.ptBottom
-// 									 + page * ptPaperHeight());
-//   doc->updateAllFrames();
-//   recalcText();
-//   recalcCursor();
 }
 
 /*================================================================*/

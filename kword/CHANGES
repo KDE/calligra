@@ -1087,5 +1087,7 @@ Reggie, 14.4.1999:
 - Implemented loading footnote/endnote manager
 - Implemented loading footnotes/endotes
 
-
-
+Reggie, 16.4.1999:
+------------------
+- More work on footnotes/endnotes
+- Started with autoformat

@@ -169,7 +169,7 @@ public:
   QString getParagName() { return paragName; }
   void setParagName(const QString &name)
   { paragName = name; }
-  
+
   void setFrameSet(KWTextFrameSet *_fs)
     { frameSet = _fs; }
   void setDocument(KWordDocument *_doc)
@@ -177,6 +177,8 @@ public:
 
   Info getInfo() { return info; }
   void setInfo(Info _info) { info = _info; }
+
+  bool doAutoFormat(KWFormatContext *fc);
 
 protected:
   /**
