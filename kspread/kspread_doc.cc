@@ -150,6 +150,11 @@ bool KSpreadDoc::hasToWriteMultipart()
 
 bool KSpreadDoc::save( ostream& out, const char* )
 {
+  //Terminate current cell edition, if any
+  KSpreadView *v;
+  for( v = (KSpreadView*)firstView(); v != 0L; v = (KSpreadView*)nextView() )
+      v->deleteEditor( true );
+
   QDomDocument doc( "spreadsheet" );
   doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
   QDomElement spread = doc.createElement( "spreadsheet" );

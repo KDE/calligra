@@ -137,6 +137,12 @@ public:
      */
     void updateEditWidget();
 
+
+    /**
+     * Called before saving, to finish the current edition (if any)
+     */
+    void deleteEditor( bool saveChanges = true );
+
     virtual DCOPObject* dcopObject();
 
 public slots:
@@ -292,7 +298,7 @@ public slots:
     void slotRemoveChild( KSpreadChild *_child );
     void slotUpdateChildGeometry( KSpreadChild *_child );
     void slotTableRenamed( KSpreadTable* table, const QString& old_name );
-    
+
     virtual int leftBorder() const;
     virtual int rightBorder() const;
     virtual int topBorder() const;

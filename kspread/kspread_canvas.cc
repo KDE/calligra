@@ -1273,7 +1273,8 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 
 void KSpreadCanvas::deleteEditor( bool saveChanges )
 {
-  assert( m_pEditor );
+  if( !m_pEditor )
+    return;
   // We need to set the line-edit out of edit mode,
   // but only if we are using it (text editor)
   // A bit of a hack - perhaps we should store the editor mode ?

@@ -2466,6 +2466,11 @@ void KSpreadView::enableFormulaToolBar( bool b )
     m_formulaProduct->setEnabled( b );
 }
 
+void KSpreadView::deleteEditor( bool saveChanges )
+{
+  m_pCanvas->deleteEditor( saveChanges );
+}
+
 DCOPObject* KSpreadView::dcopObject()
 {
     if ( !m_dcop )
