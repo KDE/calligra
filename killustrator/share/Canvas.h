@@ -80,7 +80,8 @@ public:
   void setDocument (GDocument* doc);
   GDocument* getDocument ();
 
-  void printDocument ();
+  void setupPrinter( QPrinter &printer );
+  void print( QPrinter &printer );
 
   void zoomIn (int x, int y);
   void zoomOut ();

@@ -104,6 +104,9 @@ protected:
 
     virtual void updateReadWrite( bool readwrite );
 
+    virtual void setupPrinter( QPrinter &printer );
+    virtual void print( QPrinter &printer );
+
 protected slots:
     void showNodesToolbar(bool show);
     void setUndoStatus( bool undoPossible, bool redoPossible );

@@ -143,6 +143,9 @@ public:
      */
     void canvasAddChild( KoViewChild *child );
 
+    virtual void setupPrinter( QPrinter &printer );
+    virtual void print( QPrinter &printer );
+
 public slots:
     // TEMP function. Pure for debugging.
     void printDebug();
@@ -257,9 +260,6 @@ public slots:
     virtual void formulaLeftSub();
     virtual void formulaProduct();
     virtual void formulaSum();
-
-    // C++
-    virtual bool printDlg();
 
     void changeUndo( QString, bool );
     void changeRedo( QString, bool );

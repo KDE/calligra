@@ -31,9 +31,6 @@ public:
 
     QString nativeFormatPattern() const { return "*.ksp"; }
     QString nativeFormatName() const;
-
-public slots:
-    void slotFilePrint();
 };
 
 #endif

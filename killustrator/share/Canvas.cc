@@ -595,8 +595,8 @@ void Canvas::drawGrid (QPainter& p) {
   p.restore ();
 }
 
-void Canvas::printDocument () {
-  QPrinter printer;
+void Canvas::setupPrinter( QPrinter &printer )
+{
   printer.setDocName (document->fileName ());
   printer.setCreator ("KIllustrator");
   switch (document->pageLayout ().format) {
@@ -618,13 +618,15 @@ void Canvas::printDocument () {
   printer.setOrientation (document->pageLayout ().orientation == PG_PORTRAIT ?
                           QPrinter::Portrait : QPrinter::Landscape);
   printer.setFullPage(true);
-  if (printer.setup (this)) {
+}
+
+void Canvas::print( QPrinter &printer )
+{
     QPainter paint;
     paint.begin (&printer);
     paint.setClipping (false);
     document->drawContents (paint);
     paint.end ();
-  }
 }
 
 void Canvas::zoomIn (int x, int y) {

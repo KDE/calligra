@@ -421,6 +421,16 @@ void KoView::setupGlobalActions() {
         actionCollection(), "view_newview" );
 }
 
+void KoView::setupPrinter( QPrinter & )
+{
+    kdDebug() << "KoView::setupPrinter not implemented by the application!" << endl;
+}
+
+void KoView::print( QPrinter & )
+{
+    kdDebug() << "KoView::print not implemented by the application!" << endl;
+}
+
 void KoView::newView() {
     assert( ( d!=0L && d->m_doc != 0L ) );
 

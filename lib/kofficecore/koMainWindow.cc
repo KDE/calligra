@@ -35,6 +35,7 @@
 #include <qmessagebox.h>
 #include <qfileinfo.h>
 #include <qsplitter.h>
+#include <qprinter.h>
 
 #include <kaboutdialog.h>
 #include <kstdaction.h>
@@ -619,6 +620,20 @@ void KoMainWindow::slotFileQuit()
 
 void KoMainWindow::slotFilePrint()
 {
+    if ( !rootView() )
+    {
+        kdDebug() << "KoMainWindow::slotFilePrint : No root view!" << endl;
+        return;
+    }
+
+    QPrinter printer;
+
+    // ### TODO: apply global koffice settings here
+
+    rootView()->setupPrinter( printer );
+
+    if ( printer.setup( this ) )
+        rootView()->print( printer );
 }
 
 void KoMainWindow::slotConfigureKeys()

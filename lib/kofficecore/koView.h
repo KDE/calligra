@@ -243,6 +243,9 @@ public:
    */
   virtual DCOPObject * dcopObject();
 
+  virtual void setupPrinter( QPrinter &printer );
+  virtual void print( QPrinter &printer );
+
 public slots:
 
     virtual void newView();

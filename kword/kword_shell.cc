@@ -40,11 +40,6 @@ QString KWordShell::nativeFormatName() const
   return i18n("KWord");
 }
 
-void KWordShell::slotFilePrint()
-{
-    ( (KWordView*)rootView() )->printDlg();
-}
-
 void KWordShell::slotHelpAbout()
 {
     KAboutDialog *dia = new KAboutDialog( KAboutDialog::AbtImageOnly | KAboutDialog::AbtProduct | KAboutDialog::AbtTitle,

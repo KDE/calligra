@@ -481,10 +481,14 @@ void KIllustratorView::showNodesToolbar(bool show) {
         tb->hide();
 }
 
-bool KIllustratorView::printDlg()
+void KIllustratorView::setupPrinter( QPrinter &printer )
 {
-    canvas->printDocument ();
-    return true;
+    canvas->setupPrinter( printer );
+}
+
+void KIllustratorView::print( QPrinter &printer )
+{
+    canvas->print( printer );
 }
 
 /*

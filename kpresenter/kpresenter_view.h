@@ -117,8 +117,10 @@ public:
     bool gotoPresPage( int pg );
     float getCurrentFaktor();
 
+    virtual void setupPrinter( QPrinter &printer );
+    virtual void print( QPrinter &printer );
+
 public slots:
-    virtual bool printDlg();
     // edit menu
     virtual void editUndo();
     virtual void editRedo();

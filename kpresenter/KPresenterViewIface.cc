@@ -30,11 +30,6 @@ KPresenterViewIface::KPresenterViewIface( KPresenterView *view_ )
     view = view_;
 }
 
-void KPresenterViewIface::printDlg()
-{
-    view->printDlg();
-}
-
 void KPresenterViewIface::editUndo()
 {
     view->editUndo();

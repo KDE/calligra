@@ -1496,20 +1496,14 @@ void KSpreadView::insertHyperlink()
     dlg.exec();
 }
 
-bool KSpreadView::printDlg()
+void KSpreadView::print( QPrinter &prt )
 {
-    QPrinter prt;
-    if ( QPrintDialog::getPrinterSetup( &prt ) )
-    {
-        prt.setFullPage( TRUE );
-        QPainter painter;
-        painter.begin( &prt );
-        // Print the table and tell that m_pDoc is NOT embedded.
-        m_pTable->print( painter, &prt );
-        painter.end();
-    }
-
-    return true;
+    prt.setFullPage( TRUE );
+    QPainter painter;
+    painter.begin( &prt );
+    // Print the table and tell that m_pDoc is NOT embedded.
+    m_pTable->print( painter, &prt );
+    painter.end();
 }
 
 void KSpreadView::insertChart( const QRect& _geometry, KoDocumentEntry& _e )

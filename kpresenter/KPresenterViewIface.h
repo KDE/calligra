@@ -33,7 +33,6 @@ public:
     KPresenterViewIface( KPresenterView *view_ );
 
 k_dcop:
-    virtual void printDlg();
     // edit menu
     virtual void editUndo();
     virtual void editRedo();

@@ -39,9 +39,4 @@ QString KSpreadShell::nativeFormatName() const
   return i18n("KSpread");
 }
 
-void KSpreadShell::slotFilePrint()
-{
-    ((KSpreadView*)rootView())->printDlg();
-}
-
 #include "kspread_shell.moc"

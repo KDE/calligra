@@ -125,7 +125,7 @@ public:
      */
     void insertChild( const QRect& _geometry, KoDocumentEntry& _entry );
 
-    virtual bool printDlg();
+    virtual void print( QPrinter &printer );
 
     void paintContent( QPainter& painter, const QRect& rect, bool transparent );
 
@@ -544,7 +544,7 @@ private:
    //otherwise kspread crash when I try to refresh menubar
    //when I start kspread
    bool m_bLoading;
-    
+
     /**
      * Holds a guarded pointer to the transformation toolbox.
      */

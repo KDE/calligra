@@ -37,9 +37,4 @@ QString KIllustratorShell::nativeFormatName() const
   return i18n("KIllustrator");
 }
 
-void KIllustratorShell::slotFilePrint()
-{
-    ((KIllustratorView*)rootView())->printDlg();
-}
-
 #include <KIllustrator_shell.moc>

@@ -31,9 +31,6 @@ public:
 
     QString nativeFormatPattern() const { return "*.kil"; }
     QString nativeFormatName() const;
-
- public slots:
-    void slotFilePrint();
 };
 
 #endif

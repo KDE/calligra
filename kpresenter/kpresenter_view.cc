@@ -196,9 +196,8 @@ KPresenterView::~KPresenterView()
 }
 
 /*=========================== file print =======================*/
-bool KPresenterView::printDlg()
+void KPresenterView::setupPrinter( QPrinter &prt )
 {
-    QPrinter prt;
     prt.setMinMax( 1, m_pKPresenterDoc->getPageNums() );
     bool makeLandscape = false;
 
@@ -243,15 +242,24 @@ bool KPresenterView::printDlg()
         left_margin = 28.5;
         top_margin = 15.0;
     }
+}
 
-    if ( prt.setup( this ) ) {
-        page->deSelectAllObj();
-        QPainter painter;
-        painter.begin( &prt );
-        page->print( &painter, &prt, left_margin, top_margin );
-        painter.end();
+void KPresenterView::print( QPrinter &prt )
+{
+    float left_margin = 0.0;
+    float top_margin = 0.0;
+
+    if ( m_pKPresenterDoc->pageLayout().format == PG_SCREEN )
+    {
+        left_margin = 28.5;
+        top_margin = 15.0;
     }
-    return true;
+
+    page->deSelectAllObj();
+    QPainter painter;
+    painter.begin( &prt );
+    page->print( &painter, &prt, left_margin, top_margin );
+    painter.end();
 }
 
 /*===============================================================*/

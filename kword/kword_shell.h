@@ -39,7 +39,6 @@ public:
     QString nativeFormatName() const;
 
 public slots:
-    void slotFilePrint();
     void slotHelpAbout();
 };
 

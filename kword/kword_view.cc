@@ -687,9 +687,8 @@ void KWordView::clipboardDataChanged()
 }
 
 /*=========================== file print =======================*/
-bool KWordView::printDlg()
+void KWordView::setupPrinter( QPrinter &prt )
 {
-    QPrinter prt;
     prt.setMinMax( 1, m_pKWordDoc->getPages() );
     bool makeLandscape = FALSE;
 
@@ -739,48 +738,62 @@ bool KWordView::printDlg()
         left_margin = 28.5;
         top_margin = 15.0;
     }
+}
 
-    if ( prt.setup( this ) ) {
-        setCursor( waitCursor );
-        gui->getPaperWidget()->viewport()->setCursor( waitCursor );
+void KWordView::print( QPrinter &prt )
+{
+    setCursor( waitCursor );
+    gui->getPaperWidget()->viewport()->setCursor( waitCursor );
 
-        QList<KWVariable> *vars = m_pKWordDoc->getVariables();
-        KWVariable *v = 0;
-        bool serialLetter = FALSE;
-        for ( v = vars->first(); v; v = vars->next() ) {
-            if ( v->getType() == VT_SERIALLETTER ) {
-                serialLetter = TRUE;
-                break;
-            }
+    QList<KWVariable> *vars = m_pKWordDoc->getVariables();
+    KWVariable *v = 0;
+    bool serialLetter = FALSE;
+    for ( v = vars->first(); v; v = vars->next() ) {
+        if ( v->getType() == VT_SERIALLETTER ) {
+            serialLetter = TRUE;
+            break;
         }
-
-        if ( !m_pKWordDoc->getSerialLetterDataBase() ||
-             m_pKWordDoc->getSerialLetterDataBase()->getNumRecords() == 0 )
-            serialLetter = FALSE;
-
-        if ( !serialLetter ) {
-            QPainter painter;
-            painter.begin( &prt );
-            m_pKWordDoc->print( &painter, &prt, left_margin, top_margin );
-            painter.end();
-        } else {
-            QPainter painter;
-            painter.begin( &prt );
-            for ( int i = 0;i < m_pKWordDoc->getSerialLetterDataBase()->getNumRecords(); ++i ) {
-                m_pKWordDoc->setSerialLetterRecord( i );
-                m_pKWordDoc->print( &painter, &prt, left_margin, top_margin );
-                if ( i < m_pKWordDoc->getSerialLetterDataBase()->getNumRecords() - 1 )
-                    prt.newPage();
-            }
-            m_pKWordDoc->setSerialLetterRecord( -1 );
-            painter.end();
-        }
-
-
-        setCursor( arrowCursor );
-        gui->getPaperWidget()->viewport()->setCursor( ibeamCursor );
     }
-    return TRUE;
+
+    if ( !m_pKWordDoc->getSerialLetterDataBase() ||
+         m_pKWordDoc->getSerialLetterDataBase()->getNumRecords() == 0 )
+        serialLetter = FALSE;
+
+    float left_margin = 0.0;
+    float top_margin = 0.0;
+
+    KoPageLayout pgLayout;
+    KoColumns cl;
+    KoKWHeaderFooter hf;
+    m_pKWordDoc->getPageLayout( pgLayout, cl, hf );
+
+    if ( pgLayout.format == PG_SCREEN )
+    {
+        left_margin = 25.8;
+        top_margin = 15.0;
+    }
+
+    if ( !serialLetter ) {
+        QPainter painter;
+        painter.begin( &prt );
+        m_pKWordDoc->print( &painter, &prt, left_margin, top_margin );
+        painter.end();
+    } else {
+        QPainter painter;
+        painter.begin( &prt );
+        for ( int i = 0;i < m_pKWordDoc->getSerialLetterDataBase()->getNumRecords(); ++i ) {
+            m_pKWordDoc->setSerialLetterRecord( i );
+            m_pKWordDoc->print( &painter, &prt, left_margin, top_margin );
+            if ( i < m_pKWordDoc->getSerialLetterDataBase()->getNumRecords() - 1 )
+                prt.newPage();
+        }
+        m_pKWordDoc->setSerialLetterRecord( -1 );
+        painter.end();
+    }
+
+
+    setCursor( arrowCursor );
+    gui->getPaperWidget()->viewport()->setCursor( ibeamCursor );
 }
 
 /*================================================================*/

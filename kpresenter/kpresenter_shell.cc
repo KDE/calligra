@@ -41,11 +41,6 @@ QString KPresenterShell::nativeFormatName() const
   return i18n("KPresenter");
 }
 
-void KPresenterShell::slotFilePrint()
-{
-    ( (KPresenterView*)rootView() )->printDlg();
-}
-
 void KPresenterShell::slotHelpAbout()
 {
     KAboutDialog *dia = new KAboutDialog( KAboutDialog::AbtImageOnly | KAboutDialog::AbtProduct | KAboutDialog::AbtTitle,
