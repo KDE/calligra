@@ -73,7 +73,6 @@ VSelectTool::drawTemporaryObject( KarbonView* view )
 			list.append( itr.current()->clone() );
 		}
 		VObjectListIterator itr2 = list;
-		painter->setZoomFactor( view->zoom() );
 		for( ; itr2.current() ; ++itr2 )
 		{
 			itr2.current()->transform( mat );
@@ -83,19 +82,16 @@ VSelectTool::drawTemporaryObject( KarbonView* view )
 				painter,
 				itr2.current()->boundingBox() );
 		}
-		painter->setZoomFactor( 1.0 );
 	}
 	else
 	{
 		painter->setPen( Qt::DotLine );
-		painter->setZoomFactor( 1 );
 		painter->newPath();
 		painter->moveTo( KoPoint( m_fp.x(), m_fp.y() ) );
 		painter->lineTo( KoPoint( m_lp.x(), m_fp.y() ) );
 		painter->lineTo( KoPoint( m_lp.x(), m_lp.y() ) );
 		painter->lineTo( KoPoint( m_fp.x(), m_lp.y() ) );
 		painter->lineTo( KoPoint( m_fp.x(), m_fp.y() ) );
-		painter->setZoomFactor( view->zoom() );
 		painter->strokePath();
 
 		m_state = normal;
