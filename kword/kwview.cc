@@ -1829,7 +1829,7 @@ void KWView::updateStyleList()
 #else
     lstWithAccels = lst;
 #endif
-    QMap<QString, KShortcut> *shortCut=new QMap<QString, KShortcut>();
+    QMap<QString, KShortcut> shortCut;
     // Delete previous style actions
     for ( uint i = 0; ; ++i )
     {
@@ -1837,7 +1837,7 @@ void KWView::updateStyleList()
         if ( act )
         {
             if ( !act->shortcut().toString().isEmpty())
-                shortCut->insert( QString("style_%1").arg(i).latin1(), KShortcut( act->shortcut()));
+                shortCut.insert( act->name(), KShortcut( act->shortcut()));
             actionFormatStyleMenu->remove( act );
             delete act;
         }
@@ -1848,21 +1848,21 @@ void KWView::updateStyleList()
     for ( QStringList::Iterator it = lstWithAccels.begin(); it != lstWithAccels.end(); ++it, ++i )
     {
         KToggleAction* act = 0L;
-        if ( shortCut->contains(QString("style_%1").arg(i).latin1()))
+        QCString name = QString("style_%1").arg(i).latin1();
+        if ( shortCut.contains(name))
         {
             act = new KToggleAction( (*it),
-                                     (*shortCut)[QString("style_%1").arg(i).latin1()], this, SLOT( slotStyleSelected() ),
-                                     actionCollection(), QString("style_%1").arg(i).latin1() );
+                                     (shortCut)[name], this, SLOT( slotStyleSelected() ),
+                                     actionCollection(), name );
 
         }
         else
             act = new KToggleAction( (*it),
-                                                0, this, SLOT( slotStyleSelected() ),
-                                                actionCollection(), QString("style_%1").arg(i).latin1() );
+                                     0, this, SLOT( slotStyleSelected() ),
+                                     actionCollection(),name );
         act->setExclusiveGroup( "styleList" );
         actionFormatStyleMenu->insert( act );
     }
-    delete shortCut;
 }
 
 void KWView::updateFrameStyleList()
@@ -1892,12 +1892,16 @@ void KWView::updateFrameStyleList()
 #else
     lstWithAccels = lst;
 #endif
+    QMap<QString, KShortcut> shortCut;
     // Delete previous style actions
     for ( uint i = 0; ; ++i )
     {
-        KAction* act = actionCollection()->action( QString("framestyle_%1").arg(i).latin1() );
+        KAction* act = actionCollection()->action( QString("framestyle_%1").arg(i).latin1());
+
         if ( act )
         {
+            if ( !act->shortcut().toString().isEmpty())
+                shortCut.insert( act->name(), KShortcut( act->shortcut()));
             actionFrameStyleMenu->remove( act );
             delete act;
         }
@@ -1907,13 +1911,25 @@ void KWView::updateFrameStyleList()
     uint i = 0;
     for ( QStringList::Iterator it = lstWithAccels.begin(); it != lstWithAccels.end(); ++it, ++i )
     {
-        KToggleAction* act = new KToggleAction( (*it),
-                                                0, this, SLOT( slotFrameStyleSelected() ),
-                                                actionCollection(), QString("framestyle_%1").arg(i).latin1() );
+        KToggleAction* act =0L;
+        QCString name = QString("framestyle_%1").arg(i).latin1();
+        if ( shortCut.contains(name))
+        {
+            act = new KToggleAction( (*it),
+                                     (shortCut)[name], this, SLOT( slotStyleSelected() ),
+                                     actionCollection(), name );
+
+        }
+        else
+            act = new KToggleAction( (*it),
+                                     0, this, SLOT( slotFrameStyleSelected() ),
+                                     actionCollection(), name );
         act->setExclusiveGroup( "frameStyleList" );
         actionFrameStyleMenu->insert( act );
     }
 }
+
+
 
 void KWView::updateTableStyleList()
 {
@@ -1942,13 +1958,17 @@ void KWView::updateTableStyleList()
 #else
     lstWithAccels = lst;
 #endif
+    QMap<QString, KShortcut> shortCut;
+
     // Delete previous style actions
     for ( uint i = 0; ; ++i )
     {
         KAction* act = actionCollection()->action( QString("tablestyle_%1").arg(i).latin1() );
         if ( act )
         {
-            actionTableStyleMenu->remove( act );
+            if ( !act->shortcut().toString().isEmpty())
+                shortCut.insert( act->name(), KShortcut( act->shortcut()));
+            actionFrameStyleMenu->remove( act );
             delete act;
         }
         else
@@ -1957,9 +1977,20 @@ void KWView::updateTableStyleList()
     uint i = 0;
     for ( QStringList::Iterator it = lstWithAccels.begin(); it != lstWithAccels.end(); ++it, ++i )
     {
-        KToggleAction* act = new KToggleAction( (*it),
-                                                0, this, SLOT( slotTableStyleSelected() ),
-                                                actionCollection(), QString("tablestyle_%1").arg(i).latin1() );
+        KToggleAction* act =0L;
+        QCString name = QString("framestyle_%1").arg(i).latin1();
+        if ( shortCut.contains(name))
+        {
+
+            act = new KToggleAction( (*it),
+                                     (shortCut)[name], this, SLOT( slotTableStyleSelected() ),
+                                     actionCollection(), name );
+        }
+        else
+            act = new KToggleAction( (*it),
+                                     0, this, SLOT( slotTableStyleSelected() ),
+                                     actionCollection(), name );
+
         act->setExclusiveGroup( "tableStyleList" );
         actionTableStyleMenu->insert( act );
     }
