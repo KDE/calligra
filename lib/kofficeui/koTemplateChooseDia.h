@@ -35,25 +35,25 @@
 #include <qtabwidget.h>
 #include <qsizepolicy.h>
 
-#include <kiconloaderdialog.h>
+#include <kicondialog.h>
 #include <kpixmap.h>
 #include <kapp.h>
 
 
-class MyIconCanvas : public KIconLoaderCanvas
+class MyIconCanvas : public KIconCanvas
 {
     Q_OBJECT
 
 public:
     MyIconCanvas( QWidget *parent = 0, const QString &name = QString::null )
-	: KIconLoaderCanvas( parent, name ) {};
+	: KIconCanvas( parent, name ) {};
 
     bool isCurrentValid() { return currentItem(); }
     void loadDir( const QString &dirname, const QString &filter );
 
 protected:
     void viewportMousePressEvent( QMouseEvent *e ) {
-	KIconLoaderCanvas::viewportMousePressEvent( e );
+	KIconCanvas::viewportMousePressEvent( e );
 	if ( isCurrentValid() ) {
 	    QString s = getCurrent();
 	    emit currentChanged( s );

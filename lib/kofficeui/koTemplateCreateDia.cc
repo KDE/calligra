@@ -21,7 +21,7 @@
 #include "koTemplateCreateDia.h"
 
 #include <klocale.h>
-#include <kiconloaderdialog.h>
+#include <kicondialog.h>
 #include <klineeditdlg.h>
 #include <kapp.h>
 
@@ -163,7 +163,7 @@ KoTemplateCreateDia::KoTemplateCreateDia( QWidget *parent, const QString &file_,
     grp->insert( rb );
     rb->setEnabled( FALSE );
 
-    KIconLoaderButton *ilb = new KIconLoaderButton( mainview );
+    KIconButton *ilb = new KIconButton( mainview );
     tmpLayout->addWidget( ilb );
     ilb->setEnabled( FALSE );
 
