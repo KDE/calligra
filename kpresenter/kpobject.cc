@@ -197,7 +197,17 @@ void KPObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj )
     xmlWriter.addAttributePt( "svg:y", orig.y() );
     xmlWriter.addAttributePt( "svg:width", ext.width() );
     xmlWriter.addAttributePt( "svg:height", ext.height() );
+    //FIXME create style (protect object etc)
+}
 
+
+void KPObject::saveOasisObjectStyle( KoGenStyle &styleobjectauto )
+{
+    if ( protect )
+    {
+        styleobjectauto.addProperty( "draw:move-protect", "true" );
+        styleobjectauto.addProperty( "draw:size-protect", "true" );
+    }
 }
 
 bool KPObject::saveOasisObjectStyleAnimation( KoXmlWriter &animation, int objectId )
@@ -420,32 +430,32 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, Q
 
 // draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" draw:shadow="visible" draw:move-protect="true" draw:size-protect="true"
     //kpresenter doesn't have two attribute for protect move and protect size perhaps create two argument for 1.4
-    if ( styleStack.hasAttribute("draw:move-protect" ) )
+    if ( styleStack.hasAttribute("draw:move-protect", QString::null,"graphic" ) )
     {
-        kdDebug()<<" styleStack.attribute(draw:move-protect ) :"<<styleStack.attribute("draw:move-protect" )<<endl;
-        protect = ( styleStack.attribute("draw:move-protect" ) == "true" );
+        kdDebug()<<" styleStack.attribute(draw:move-protect ) :"<<styleStack.attribute("draw:move-protect", QString::null,"graphic" )<<endl;
+        protect = ( styleStack.attribute("draw:move-protect", QString::null,"graphic" ) == "true" );
     }
-    if ( styleStack.hasAttribute("draw:size-protect" ) )
+    if ( styleStack.hasAttribute("draw:size-protect", QString::null,"graphic" ) )
     {
-        kdDebug()<<" styleStack.attribute(draw:size-protect ) :"<<styleStack.attribute("draw:size-protect" )<<endl;
-        protect = ( styleStack.attribute("draw:size-protect" ) == "true" );
+        kdDebug()<<" styleStack.attribute(draw:size-protect ) :"<<styleStack.attribute("draw:size-protect", QString::null,"graphic" )<<endl;
+        protect = ( styleStack.attribute("draw:size-protect", QString::null,"graphic" ) == "true" );
     }
 
     //not supported into kpresenter
-    if ( styleStack.hasAttribute("draw:textarea-vertical-align" ) )
+    if ( styleStack.hasAttribute("draw:textarea-vertical-align", QString::null,"graphic" ) )
     {
-        kdDebug()<<" styleStack.attribute(draw:textarea-vertical-align ) :"<<styleStack.attribute("draw:textarea-vertical-align" )<<endl;
+        kdDebug()<<" styleStack.attribute(draw:textarea-vertical-align ) :"<<styleStack.attribute("draw:textarea-vertical-align", QString::null,"graphic" )<<endl;
     }
-    if ( styleStack.hasAttribute("draw:textarea-horizontal-align" ) )
+    if ( styleStack.hasAttribute("draw:textarea-horizontal-align", QString::null,"graphic" ) )
     {
-        kdDebug()<<" styleStack.attribute(draw:textarea-horizontal-align ) :"<<styleStack.attribute("draw:textarea-horizontal-align" )<<endl;
+        kdDebug()<<" styleStack.attribute(draw:textarea-horizontal-align ) :"<<styleStack.attribute("draw:textarea-horizontal-align", QString::null,"graphic" )<<endl;
     }
-    if ( styleStack.hasAttribute( "draw:shadow" ) &&
-              styleStack.attribute( "draw:shadow" ) == "visible" )
+    if ( styleStack.hasAttribute( "draw:shadow", QString::null,"graphic" ) &&
+              styleStack.attribute( "draw:shadow", QString::null,"graphic" ) == "visible" )
     {
         // use the shadow attribute to indicate an object-shadow
-        double x = KoUnit::parseValue( styleStack.attribute( "draw:shadow-offset-x" ) );
-        double y = KoUnit::parseValue( styleStack.attribute( "draw:shadow-offset-y" ) );
+        double x = KoUnit::parseValue( styleStack.attribute( "draw:shadow-offset-x", QString::null,"graphic" ) );
+        double y = KoUnit::parseValue( styleStack.attribute( "draw:shadow-offset-y", QString::null,"graphic" ) );
         kdDebug()<<" shadow x : "<<x<<" shadow y :"<<y<<endl;
         if ( x < 0 && y < 0 )
         {
@@ -1356,6 +1366,7 @@ QString KP2DObject::saveOasisBackgroundStyle( KoXmlWriter &xmlWriter, KoGenStyle
         styleobjectauto.addProperty( "draw:fill-gradient-name", saveOasisGradientStyle( mainStyles ) );
         break;
     }
+    saveOasisObjectStyle( styleobjectauto );
     return mainStyles.lookup( styleobjectauto, "gr" );
 }
 

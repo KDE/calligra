@@ -284,6 +284,8 @@ protected:
                          const QString &rattr="red", const QString &gattr="green",
                          const QString &battr="blue") const;
 
+    void saveOasisObjectStyle( KoGenStyle &styleobjectauto );
+
     float angle;
     KoPoint orig;
     KoSize ext;
