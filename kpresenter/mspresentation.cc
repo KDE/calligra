@@ -1,0 +1,599 @@
+// -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
+/* This file is part of the KDE project
+   Copyright 2004 Brad Hards <bradh@frogmouth.net>
+   Loosely based on webpresention.cc, which is:
+     Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+     Copyright 2001, 2002 Nicolas GOUTTE <goutte@kde.org>
+     Copyright 2002 Ariya Hidayat <ariya@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
+
+#include "mspresentation.h"
+
+#include "kpresenter_view.h"
+#include "kpresenter_doc.h"
+
+#include "kprcanvas.h"
+#include "kprpage.h"
+
+#include <qdir.h>
+#include <qframe.h>
+#include <qfileinfo.h>
+#include <qhbox.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qpixmap.h>
+#include <qpainter.h>
+#include <qpushbutton.h>
+#include <qvbox.h>
+
+#include <kapplication.h>
+#include <kbuttonbox.h>
+#include <kcolorbutton.h>
+#include <kglobal.h>
+#include <kglobalsettings.h>
+#include <klineedit.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <kprogress.h>
+#include <kstandarddirs.h>
+#include <kurlrequester.h>
+
+KPMSPresentation::KPMSPresentation( KPresenterDoc *_doc, KPresenterView *_view )
+{
+    doc = _doc;
+    view = _view;
+    init();
+}
+
+KPMSPresentation::KPMSPresentation( const KPMSPresentation &msPres )
+    : title( msPres.title ), 
+      slideInfos( msPres.slideInfos ), backColour( msPres.backColour ),
+      textColour( msPres.textColour ), path( msPres.path )
+{
+    doc = msPres.doc;
+    view = msPres.view;
+}
+
+void KPMSPresentation::initCreation( KProgress *progressBar )
+{
+    int p;
+
+    // the title images, and the subsequent real images need to
+    // be in a file under DCIM/, and they start at 101MSPJP, so
+    // we create the DCIM file, and then iterate through looking
+    // for the next "available" directory slot
+    QDir (path).mkdir( path + "/DCIM" );
+    p = progressBar->progress();
+    progressBar->setProgress( ++p );
+    kapp->processEvents();
+
+    QDir dirPath;
+    for (int dirNum = 101; dirNum < 999; dirNum++) {
+        slidePath = QString("/DCIM/%1MSPJP").arg(dirNum);
+        dirPath = QDir( path + slidePath );
+        if (! dirPath.exists())
+            break;
+    }
+
+    p = progressBar->progress();
+    progressBar->setProgress( ++p );
+    kapp->processEvents();
+
+    QDir (path).mkdir( path + slidePath );
+    p = progressBar->progress();
+    progressBar->setProgress( ++p );
+    kapp->processEvents();
+
+    // now do the SPP file directory
+    QDir (path).mkdir( path + "/MSSONY" );
+    p = progressBar->progress();
+    progressBar->setProgress( ++p );
+    kapp->processEvents();
+    QDir (path).mkdir( path + "/MSSONY/PJ" );
+    p = progressBar->progress();
+    progressBar->setProgress( ++p );
+    kapp->processEvents();
+
+    // create the title slides
+    QPixmap titleSlide( 1024, 768 );
+    titleSlide.fill( backColour );
+    QPainter painter( &titleSlide );
+    //the second title is just blank, so create that now
+    titleSlide.save( path + slidePath + "/SPJT0002.JPG", "JPEG" );
+    p = progressBar->progress();
+    progressBar->setProgress( ++p );
+    kapp->processEvents();
+
+    // and put the specified title string on the first slide 
+    QFont textFont( "SansSerif", 96 );
+    painter.setFont( textFont );
+    painter.setPen( textColour );
+    painter.drawText( titleSlide.rect(), Qt::AlignCenter | Qt::WordBreak, title );
+    titleSlide.save( path + slidePath + "/SPJT0001.JPG", "JPEG" );
+   
+    p = progressBar->progress();
+    progressBar->setProgress( ++p );
+    kapp->processEvents();
+
+}
+
+void KPMSPresentation::createSlidesPictures( KProgress *progressBar )
+{
+    if ( slideInfos.isEmpty() )
+        return;
+    QString filename;
+    int p;
+    for ( unsigned int i = 0; i < slideInfos.count(); i++ ) {
+        int pgNum = slideInfos[i].pageNumber;
+        filename.sprintf("/SPJP%04i.JPG", i+3);
+
+        view->getCanvas()->exportPage( pgNum, 1023, 767,
+                                       path + slidePath + filename, "JPEG" );
+
+        p = progressBar->progress();
+        progressBar->setProgress( ++p );
+        kapp->processEvents();
+    }
+}
+
+void KPMSPresentation::createIndexFile( KProgress *progressBar )
+{
+    int p;
+
+    // set up the header part of the SPP file
+    QFile sppFile;
+    sppFile.setName( (path + "/MSSONY/PJ/" + title + ".SPP") );
+    // this should never happen, but we check anyway.
+    if (sppFile.exists()) {
+        if ( KMessageBox::warningYesNo( 0,
+                                   i18n( "You are about to overwrite an existing index file "
+                                         "named %1. Do you want to proceed?" ).arg(title),
+                                   i18n( "Overwrite presentation" ) )
+             == KMessageBox::No) {
+            KMessageBox::information( 0, i18n( "You have aborted the index creation. "
+                                               "Your presentation needs to be regenerated" ) );
+            return;
+        }
+    }
+
+    if (false == sppFile.open( IO_WriteOnly ) ) {
+        KMessageBox::error( 0, i18n( "The index file could not be opened for writing. Your "
+                                     "presentation needs to be regenerated" ) );
+        return;
+    }
+
+    QDataStream sppStream( &sppFile );
+    sppStream.setByteOrder(QDataStream::LittleEndian);
+    p = progressBar->progress();
+    progressBar->setProgress( ++p );
+    kapp->processEvents();
+    
+    // We are doing little endian
+    sppStream << (Q_UINT32)0x00505053; // SPP magic header
+    sppStream << (Q_UINT32)0x00000000; // four null bytes
+    sppStream << (Q_UINT32)0x30303130; // version(?) 0100
+    sppStream << (Q_UINT32)0x00000000; // more nulls
+    sppStream << (Q_UINT32)(slideInfos.count());
+
+    // DCIM path 1, 68 bytes null padded
+    char buff[68];
+    strncpy( buff, QString("/%1").arg(slidePath).ascii(), 67 );
+    buff[67] = 0x00;
+    sppStream.writeRawBytes( buff, 68 );
+    sppStream << (Q_UINT32)0x00000001; // fixed value
+    sppStream << (Q_UINT32)0x00000005; // fixed value
+    sppStream << (Q_UINT32)0x00000000; // more nulls
+    sppStream << (Q_UINT32)0x00000000; // more nulls
+    sppStream << (Q_UINT32)0x00000000; // more nulls
+    sppStream << (Q_UINT32)0x00000000; // more nulls
+    sppStream << (Q_UINT32)0x00000000; // more nulls
+    sppStream << (Q_UINT32)0x00000000; // more nulls
+    p = progressBar->progress();
+    progressBar->setProgress( ++p );
+    kapp->processEvents();
+
+    // title 1, 16 bytes null padded
+    strncpy( buff, "SPJT0001.JPG", 15 );
+    buff[15] = 0x00;
+    sppStream.writeRawBytes( buff, 16 );
+
+    // title 2, 16 bytes null padded
+    strncpy( buff, "SPJT0002.JPG", 15 );
+    buff[15] = 0x00;
+    sppStream.writeRawBytes( buff, 16 );
+
+
+    // type face (?), 44 bytes null padded
+    strncpy( buff, "MS Sans Serif", 43 );
+    buff[44] = 0x00;
+    sppStream.writeRawBytes( buff, 44 );
+
+    //not really sure what this is about
+    sppStream << (Q_UINT32)0xffff0000;
+    sppStream << (Q_UINT32)0xffff00ff;
+    sppStream << (Q_UINT32)0xffff00ff;
+    sppStream << (Q_UINT32)0x000000ff;
+    sppStream << (Q_UINT32)0x00000002;
+    for (int i = 0; i < (296/4); i++) {
+        sppStream << (Q_UINT32)0x00000000;
+    }
+    p = progressBar->progress();
+    progressBar->setProgress( ++p );
+    kapp->processEvents();
+
+    // Add in the slide filenames
+    QString filename;
+    for ( unsigned int i = 0; i < slideInfos.count(); i++ ) {
+        filename.sprintf("/SPJP%04i.JPG", i+3);
+        strncpy( buff, filename.ascii(), 63 );
+        buff[64] = 0x00;
+        sppStream.writeRawBytes( buff, 64 );
+        p = progressBar->progress();
+        progressBar->setProgress( ++p );
+        kapp->processEvents();
+    }
+
+    // OK, now we need to fill to 16384 bytes
+    // the logic is 16384 bytes total, lead in is 512 bytes, and there
+    // is 64 bytes for each real slide
+    for(unsigned int i = 0;  i < (16384-512-64*(slideInfos.count()))/4; i++) {
+        sppStream << (Q_UINT32)0x00000000;
+    }
+
+    p = progressBar->progress();
+    progressBar->setProgress( ++p );
+    kapp->processEvents();
+
+    sppFile.close();
+
+}
+
+void KPMSPresentation::init()
+{
+    title = i18n("Slideshow");
+
+    for ( unsigned int i = 0; i < doc->getPageNums(); i++ )
+    {
+        if ( doc->isSlideSelected( i ) )
+        {
+            SlideInfo info;
+            info.pageNumber = i;
+            slideInfos.append( info );
+        }
+    }
+    if ( slideInfos.isEmpty() )
+        kdWarning() << "No slides selected!" << endl;
+    backColour = Qt::black;
+    textColour = Qt::white;
+
+    path = KGlobalSettings::documentPath();
+}
+
+KPMSPresentationSetup::KPMSPresentationSetup( KPresenterDoc *_doc, KPresenterView *_view )
+    : QDialog( 0, "", false ), msPres(  _doc, _view )
+{
+    doc = _doc;
+    view = _view;
+
+    
+    QLabel *helptext = new QLabel( this );
+    helptext->setAlignment( Qt::WordBreak | Qt::AlignTop| Qt::AlignLeft );
+    helptext->setText( i18n( "Please enter the directory where the memory stick "
+                             "presentation should be saved. Please also enter a "
+                             "title for the slideshow presentation. " ) );
+
+    QLabel *lable2 = new QLabel( i18n("Path:"), this );
+    lable2->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
+    path=new KURLRequester( this );
+    path->setMode( KFile::Directory);
+    path->lineEdit()->setText(msPres.getPath());
+    lable2->setBuddy(path);
+    QHBoxLayout *pathLayout = new QHBoxLayout;
+    pathLayout->addWidget(lable2);
+    pathLayout->addWidget(path);
+    connect( path, SIGNAL( textChanged(const QString&) ),
+             this, SLOT( slotChoosePath(const QString&) ) );
+    connect( path, SIGNAL( urlSelected( const QString&) ),
+             this, SLOT( slotChoosePath(const QString&) ) );
+
+
+    QLabel *lable1 = new QLabel( i18n("Title:"), this, "lable1" );
+    lable1->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
+    // TODO - check if there is already a presentation with this title, and
+    // add a number after it until there isn't.
+    title = new KLineEdit( msPres.getTitle(), this );
+    lable1->setBuddy( title );
+    QHBoxLayout *titleLayout = new QHBoxLayout;
+    titleLayout->addWidget( lable1 );
+    titleLayout->addWidget( title );
+
+    QHBox *moreBox = new QHBox( this );
+    QPushButton *showColourButton = new QPushButton( i18n("&Set Colours"), moreBox );
+    showColourButton->setToggleButton( true );
+    connect( showColourButton, SIGNAL( toggled(bool) ), this, SLOT( showColourGroup(bool) ) );
+
+    QVBoxLayout *topLayout = new QVBoxLayout;
+    topLayout->addWidget( helptext );
+    topLayout->addSpacing( 10 );
+    topLayout->addLayout( pathLayout );
+    topLayout->addLayout( titleLayout );
+    topLayout->addWidget( moreBox );
+
+    colourGroup = new QGroupBox( 2, Qt::Vertical,
+                                            i18n("Preliminary Slides"),
+                                            this , "colourBox" );
+    QHBox *textColourLayout = new QHBox( colourGroup );
+    QLabel *lable3 = new QLabel( i18n("Text colour:"), textColourLayout );
+    lable3->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
+    textColour = new KColorButton( msPres.getTextColour(), textColourLayout );
+    lable3->setBuddy( textColour );
+    
+    QHBox *backgroundColourLayout = new QHBox( colourGroup );
+    QLabel *lable4 = new QLabel( i18n("Background colour:"), backgroundColourLayout );
+    lable4->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
+    backColour = new KColorButton( msPres.getBackColour(), backgroundColourLayout );
+    lable4->setBuddy( backColour );
+    colourGroup->setHidden( true );
+
+    QHBox *buttonLayout = new QHBox( this );
+    QPushButton *createButton = new QPushButton( i18n("&OK"), buttonLayout );
+    QPushButton *cancelButton = new QPushButton( i18n("&Cancel"), buttonLayout );
+    
+    mainLayout = new QVBoxLayout( this );
+    mainLayout->setMargin(11);
+    mainLayout->setSpacing(6);
+    mainLayout->addLayout(topLayout);
+    mainLayout->addSpacing( 10 );
+    mainLayout->addWidget(colourGroup);
+    mainLayout->addWidget(buttonLayout);
+    mainLayout->setResizeMode( QLayout::Fixed );
+    mainLayout->setGeometry( QRect( 0, 0, 300, 220 ) );
+
+    connect( cancelButton, SIGNAL( clicked() ), this, SLOT( reject() ) );
+    connect( createButton, SIGNAL( clicked() ), this, SLOT( finish() ) );
+}
+
+KPMSPresentationSetup::~KPMSPresentationSetup()
+{
+    view->enableMSPres();
+}
+
+void KPMSPresentationSetup::createMSPresentation( KPresenterDoc *_doc, KPresenterView *_view )
+{
+    KPMSPresentationSetup *dlg = new KPMSPresentationSetup( _doc, _view );
+
+    dlg->setCaption( i18n( "Create Memory Stick Slideshow" ) );
+    dlg->show();
+}
+
+void KPMSPresentationSetup::showColourGroup(bool on)
+{
+    if (on) {
+        colourGroup->setHidden( false );
+        mainLayout->setGeometry( QRect(0, 0, 300, 220 ) );
+    } else {
+        colourGroup->setHidden( true );
+        mainLayout->setGeometry( QRect(0, 0, 300, 320 ) );
+    }
+}
+
+void KPMSPresentationSetup::finish()
+{
+    msPres.setTitle( title->text() );
+
+    msPres.setBackColour( backColour->color() );
+    msPres.setTextColour( textColour->color() );
+    msPres.setPath( path->lineEdit()->text() );
+
+    // Things to sanity check:
+    // 1. that the directory exists. If not, offer to create it.
+    // 2. that the directory is writable.
+    // 3. that the .spp file doesn't already exist. If it does, offer to overwrite it.
+    // If we fail to create a directory, or the user tells us not to bother creating it,
+    // or the user doesn't want to overwrite it, go back.
+    QString pathname = path->lineEdit()->text();
+    QFileInfo fi( pathname );
+
+    // path doesn't exist. ask user if it should be created.
+    if ( !fi.exists() ) {
+        QString msg = i18n( "<qt>The directory <b>%1</b> does not exist.<br>"
+                            "Do you want create it?</qt>" );
+        if( KMessageBox::questionYesNo( this, msg.arg( pathname ),
+                                        i18n( "Directory Not Found" ) )
+            == KMessageBox::Yes)
+            {
+                // we are trying to create the directory
+                QDir dir;
+                bool ok = dir.mkdir( pathname );
+                if( !ok ) {
+                    // then directory couldn't be created
+                    KMessageBox::sorry( this,
+                                        i18n( "Can't create directory!" ) );
+                    path->setFocus();
+                    return;
+                }
+            }
+        else {
+            // user preferred not to create directory
+            path->setFocus();
+            return;
+        }
+    }
+
+    
+    if ( !fi.isDir() ) {
+        // path exists but it's not a valid directory. warn the user.
+        KMessageBox::error( this,
+                            i18n( "The path you entered is not a valid directory!\n"
+                                  "Please correct this." ),
+                            i18n( "Invalid Path" ) );
+        path->setFocus();
+        return;
+    }
+    
+    QFile sppFile;
+    sppFile.setName( ( pathname + "/MSSONY/PJ/" + title->text() + ".SPP" ) );
+    if (sppFile.exists()) {
+        if ( KMessageBox::warningYesNo( 0,
+                                   i18n( "You are about to overwrite an existing index "
+                                         "file : %1.\n "
+                                         "Do you want to proceed?" ).arg( sppFile.name() ),
+                                   i18n( "Overwrite presentation" ) )
+             == KMessageBox::No) {
+            path->setFocus();
+            return;
+        }
+    }
+
+    close();
+        
+    KPMSPresentationCreateDialog::createMSPresentation( doc, view, msPres );
+
+}
+
+void KPMSPresentationSetup::slotChoosePath(const QString &text)
+{
+    msPres.setPath(text);
+}
+
+
+
+
+KPMSPresentationCreateDialog::KPMSPresentationCreateDialog( KPresenterDoc *_doc, KPresenterView *_view,
+                                                            const KPMSPresentation &_msPres )
+    : QDialog( 0, "", false ), msPres( _msPres )
+{
+    doc = _doc;
+    view = _view;
+
+    setupGUI();
+}
+
+KPMSPresentationCreateDialog::~KPMSPresentationCreateDialog()
+{
+    view->enableMSPres();
+}
+
+void KPMSPresentationCreateDialog::createMSPresentation( KPresenterDoc *_doc, KPresenterView *_view,
+                                                         const KPMSPresentation &_msPres )
+{
+    KPMSPresentationCreateDialog *dlg = new KPMSPresentationCreateDialog( _doc, _view, _msPres );
+
+    dlg->setCaption( i18n( "Create Memory Stick Slideshow" ) );
+    dlg->resize( 400, 250 );
+    dlg->show();
+    dlg->start();
+}
+
+void KPMSPresentationCreateDialog::start()
+{
+    setCursor( waitCursor );
+    initCreation();
+    createSlidesPictures();
+    createIndexFile();
+    setCursor( arrowCursor );
+
+    bDone->setEnabled( true );
+}
+
+void KPMSPresentationCreateDialog::initCreation()
+{
+    QFont f = step1->font(), f2 = step1->font();
+    f.setBold( true );
+    step1->setFont( f );
+
+    progressBar->setProgress( 0 );
+    progressBar->setTotalSteps( msPres.initSteps() );
+
+    msPres.initCreation( progressBar );
+
+    step1->setFont( f2 );
+    progressBar->setProgress( progressBar->totalSteps() );
+}
+
+void KPMSPresentationCreateDialog::createSlidesPictures()
+{
+    QFont f = step2->font(), f2 = f;
+    f.setBold( true );
+    step2->setFont( f );
+
+    progressBar->setProgress( 0 );
+    if ( msPres.slidesSteps() > 0 )
+    {
+        progressBar->setTotalSteps( msPres.slidesSteps() );
+        msPres.createSlidesPictures( progressBar );
+    }
+
+    step2->setFont( f2 );
+    progressBar->setProgress( progressBar->totalSteps() );
+}
+
+void KPMSPresentationCreateDialog::createIndexFile()
+{
+    QFont f = step3->font(), f2 = f;
+    f.setBold( true );
+    step3->setFont( f );
+
+    progressBar->setProgress( 0 );
+    if ( msPres.indexFileSteps() > 0 )
+    {
+        progressBar->setTotalSteps( msPres.indexFileSteps() );
+        msPres.createIndexFile( progressBar );
+    }
+
+    step3->setFont( f2 );
+    progressBar->setProgress( progressBar->totalSteps() );
+}
+
+void KPMSPresentationCreateDialog::setupGUI()
+{
+    back = new QVBox( this );
+    back->setMargin( KDialog::marginHint() );
+
+    QFrame *line;
+
+    step1 = new QLabel( i18n( "Create directory structure" ), back );
+    step2 = new QLabel( i18n( "Create pictures of the slides" ), back );
+    step3 = new QLabel( i18n( "Create index file" ), back );
+
+    line = new QFrame( back );
+    line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+    line->setMaximumHeight( 20 );
+
+    progressBar = new KProgress( back );
+
+    line = new QFrame( back );
+    line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+    line->setMaximumHeight( 20 );
+
+    KButtonBox *bb = new KButtonBox( back );
+    bb->addStretch();
+    bDone = bb->addButton( i18n( "Done" ) );
+
+    bDone->setEnabled( false );
+
+    connect( bDone, SIGNAL( clicked() ), this, SLOT( accept() ) );
+}
+
+void KPMSPresentationCreateDialog::resizeEvent( QResizeEvent *e )
+{
+    QDialog::resizeEvent( e );
+    back->resize( size() );
+}
+
+#include "mspresentation.moc"

@@ -241,6 +241,7 @@ public slots:
     void extraLineBegin();
     void extraLineEnd();
     void extraWebPres();
+    void extraMSPres();
     void extraCreateTemplate();
     void extraDefaultTemplate();
     void extraGroup();
@@ -508,6 +509,7 @@ public:
 //     QColor &currColor() { return tbColor; }
 
     void enableWebPres();
+    void enableMSPres();
 
     /**
      * Overloaded from View
@@ -858,6 +860,7 @@ private:
     bool m_bShowGUI;
     bool presStarted;
     bool allowWebPres;
+    bool allowMSPres;
     int currPg; // 0-based
 
     QSize oldSize;
@@ -964,6 +967,7 @@ private:
     KAction *actionExtraLayout;
     KAction *actionExtraConfigure;
     KAction *actionExtraWebPres;
+    KAction *actionExtraMSPres;
     KAction *actionExtraCreateTemplate;
     KAction *actionExtraLineBegin;
     KAction *actionExtraLineEnd;

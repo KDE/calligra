@@ -230,6 +230,11 @@ void KPresenterViewIface::extraWebPres()
     view->extraWebPres();
 }
 
+void KPresenterViewIface::extraMSPres()
+{
+    view->extraMSPres();
+}
+
 void KPresenterViewIface::extraAlignObjLeft()
 {
     view->extraAlignObjLeft();

@@ -73,6 +73,7 @@
 #include "kpresenter_view.h"
 #include "kpresenter_doc.h"
 #include "webpresentation.h"
+#include "mspresentation.h"
 #include "kptextobject.h"
 
 #include <klocale.h>
@@ -240,6 +241,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     rndX = 0;
     rndY = 0;
     allowWebPres = true;
+    allowMSPres = true;
     currPg = 0;
     sidebar = 0;
     notebar = 0;
@@ -1308,6 +1310,14 @@ void KPresenterView::extraWebPres()
     }
 
     KPWebPresentationWizard::createWebPresentation( config, m_pKPresenterDoc, this );
+}
+
+void KPresenterView::extraMSPres()
+{
+    if ( !allowMSPres )
+        return;
+
+    KPMSPresentationSetup::createMSPresentation( m_pKPresenterDoc, this );
 }
 
 void KPresenterView::extraLineBegin()
@@ -2715,6 +2725,10 @@ void KPresenterView::setupActions()
                                       "webpres", 0,
                                       this, SLOT( extraWebPres() ),
                                       actionCollection(), "extra_webpres" );
+
+    actionExtraMSPres = new KAction( i18n( "Create Memor&y Stick Slideshow..." ),
+				     0, this, SLOT( extraMSPres() ),
+				     actionCollection(), "extra_mspres" );
 
     actionExtraCreateTemplate = new KAction( i18n( "Template Manager" ), 0,
                                              this, SLOT( extraCreateTemplate() ),
@@ -4293,6 +4307,10 @@ void KPresenterView::setRulerMousePos( int mx, int my )
 }
 
 void KPresenterView::enableWebPres()
+{
+}
+
+void KPresenterView::enableMSPres()
 {
 }
 

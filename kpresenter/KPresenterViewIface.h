@@ -92,6 +92,7 @@ k_dcop:
     virtual void extraLineBegin();
     virtual void extraLineEnd();
     virtual void extraWebPres();
+    virtual void extraMSPres();
     virtual void extraGroup();
     virtual void extraUnGroup();
     virtual void extraPenStyle();

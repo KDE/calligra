@@ -6,7 +6,8 @@ bin_SCRIPTS = kprconverter.pl
 ## The part
 lib_LTLIBRARIES =
 kde_module_LTLIBRARIES = libkpresenterpart.la
-libkpresenterpart_la_SOURCES = koPointArray.cc kprcanvas.cc kprpage.cc searchdia.cc backdia.cc webpresentation.cc kpresenter_view.cc \
+libkpresenterpart_la_SOURCES = koPointArray.cc kprcanvas.cc kprpage.cc searchdia.cc backdia.cc \
+	webpresentation.cc kpresenter_view.cc  mspresentation.cc \
 	kpresenter_doc.cc \
 	styledia.cc kpresenter_sound_player.cc \
 	pgconfdia.cc effectdia.cc kprcommand.cc \
@@ -70,7 +71,7 @@ noinst_HEADERS = koPointArray.h kprcanvas.h kprpage.h kpresenter_doc.h kpresente
 		kpautoformobject.h kptextobject.h \
 		kppixmapobject.h kppieobject.h kppartobject.h kpgroupobject.h \
 		kpbackground.h kpgradient.h kpgradientcollection.h \
-		gotopage.h webpresentation.h \
+		gotopage.h webpresentation.h mspresentation.h \
 		kpresenter_factory.h kpresenter_aboutdata.h \
 		KPresenterDocIface.h KPresenterViewIface.h KPresenterObjectIface.h \
 		KPresenterPageIface.h sidebar.h  kpresenter_dlg_config.h \
