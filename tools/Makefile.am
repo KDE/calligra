@@ -1,1 +1,1 @@
-SUBDIRS = converter spell thumbnail thesaurus kthesaurus
+SUBDIRS = spell thumbnail thesaurus kthesaurus
