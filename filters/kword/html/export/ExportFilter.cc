@@ -575,7 +575,7 @@ bool HtmlWorker::doOpenHead(void)
     // Eliminate the dollar signs
     //  (We don't want that the version number changes if the HTML file is itself put in a CVS storage.)
     *m_streamOut << "<meta name=\"Generator\" content=\"KWord HTML Export Filter Version"
-              << strVersion.mid(10).replace('$',"")
+              << strVersion.mid( 10 ).remove( '$' )
               << "\""<< (isXML()?" /":"") // X(HT)ML closes empty elements, HTML not!
               << ">\n";
 
