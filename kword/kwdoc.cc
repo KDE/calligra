@@ -1224,6 +1224,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
             if ( __pgLayout.ptBottom == 0.0 )
                 __pgLayout.ptBottom = getAttribute( paperborders, "ptBottom", 0.0 );
         }
+        else
+            kdWarning() << "No <PAPERBORDERS> tag!" << endl;
     }
     else
         kdWarning() << "No <PAPER> tag! This is a mandatory tag! Expect weird page sizes..." << endl;
@@ -1455,7 +1457,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         } else if( fs->type()==FT_TABLE) {
             static_cast<KWTableFrameSet *>( fs )->validate();
         } else if(!fs->getNumFrames()) {
-            kdWarning () << "frameset " << i << " has no frames" << endl;
+            kdWarning () << "frameset " << i << " " << fs->getName() << " has no frames" << endl;
             removeFrameSet(fs);
             if ( fs->type() == FT_PART )
                 delete static_cast<KWPartFrameSet *>(fs)->getChild();
@@ -1464,12 +1466,12 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
             for (int f=fs->getNumFrames()-1; f>=0; f--) {
                 KWFrame *frame = fs->frame(f);
                 if(frame->height() < static_cast <int>(minFrameHeight)) {
-                    kdWarning() << "frame height is so small no text will fit, adjusting (was: "
+                    kdWarning() << fs->getName() << " frame " << f << " height is so small no text will fit, adjusting (was: "
                                 << frame->height() << " is: " << minFrameHeight << ")" << endl;
                     frame->setHeight(minFrameHeight);
                 }
                 if(frame->width() < static_cast <int>(minFrameWidth)) {
-                    kdWarning() << "frame width is so small no text will fit, adjusting (was: "
+                    kdWarning() << fs->getName() << " frame " << f << " width is so small no text will fit, adjusting (was: "
                                 << frame->width() << " is: " << minFrameWidth  << ")" << endl;
                     frame->setWidth(minFrameWidth);
                 }
