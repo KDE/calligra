@@ -54,6 +54,28 @@ bool CellInfo::operator< (const CellInfo &cell) const
       ((row == cell.row) && (column < cell.column));
 }
 
+bool Range::contains (const CellInfo &cell)
+{
+  return (((startrow <= cell.row) && (startcol <= cell.column)) &&
+      (((startrow + rows - 1) >= cell.row) && ((startcol + cols - 1) >= cell.column)));
+}
+
+bool Range::intersects (const Range &range)
+{
+  //TODO: verify that what I wrote is really correct :)
+  bool i1 = false, i2 = false;
+  if ((startrow <= range.startrow) && (startrow >= (range.startrow + range.rows - 1)))
+    i1 = true;
+  if ((range.startrow <= startrow) && (range.startrow >= (startrow + rows - 1)))
+    i1 = true;
+  if ((startcol <= range.startcol) && (startcol >= (range.startcol + range.cols - 1)))
+    i2 = true;
+  if ((range.startcol <= startcol) && (range.startcol >= (startcol + cols - 1)))
+    i2 = true;
+  
+  return (i1 && i2);
+}
+
 DependencyManager::DependencyManager (KSpreadSheet *s)
     : sheet (s)
 {
@@ -226,26 +248,84 @@ void DependencyManager::generateDependencies (const RangeList &rangeList)
 
 void DependencyManager::processDependencies (const CellInfo &cell) const
 {
-  //TODO
+  if (deps->cellDeps.contains (cell))
+  {
+    QValueList<CellInfo> d = deps->cellDeps[cell];
+    QValueList<CellInfo>::iterator it;
+    for (it = d.begin(); it != d.end(); ++it)
+      updateCell (*it);
+  }
   
   processRangeDependencies (cell);
 }
 
 void DependencyManager::processRangeDependencies (const CellInfo &cell) const
 {
-  //TODO
+  CellInfo leading = leadingCell (cell);
+  QValueList<RangeDependency>::iterator it;
+  if (!deps->rangeDeps.count (leading))
+    return;  //no range dependencies in this cell chunk
+  for (it = deps->rangeDeps[leading].begin(); it != deps->rangeDeps[leading].end(); ++it)
+  {
+    //process all range dependencies, and for each range including the modified cell,
+    //recalc the depending cell
+    if ((*it).range.contains (cell))
+    {
+      CellInfo ci;
+      ci.row = (*it).range.startrow;
+      ci.column = (*it).range.startcol;
+      updateCell (ci);
+    }
+  }
 }
 
 void DependencyManager::processDependencies (const Range &range) const
 {
-  //TODO
+  //each cell's dependencies need to be updated - that cannot be helped - having a range
+  //only helps with range dependencies
+  for (int row = range.startrow; row < range.startrow + range.rows; row++)
+    for (int col = range.startcol; col < range.startcol + range.cols; col++)
+    {
+      CellInfo ci;
+      ci.row = row;
+      ci.column = col;
+      if (deps->cellDeps.contains (ci))
+      {
+        QValueList<CellInfo> d = deps->cellDeps[ci];
+        QValueList<CellInfo>::iterator it;
+        for (it = d.begin(); it != d.end(); ++it)
+          updateCell (*it);
+      }
+    }
   
   processRangeDependencies (range);
 }
 
 void DependencyManager::processRangeDependencies (const Range &range) const
 {
-  //TODO
+  //TODO: some optimization, so that we don't recompute cells depending of huge
+  //ranges more than once (now we recompute them once per cell-chunk used by their dependency)
+  
+  QValueList<CellInfo> leadings = leadingCells (range);
+  QValueList<CellInfo>::iterator it;
+  for (it = leadings.begin(); it != leadings.end(); ++it)
+  {
+    if (!deps->rangeDeps.count (*it))
+      continue;  //no range dependencies in this cell chunk
+    QValueList<RangeDependency>::iterator it2;
+    for (it2 = deps->rangeDeps[*it].begin(); it2 != deps->rangeDeps[*it].end(); ++it2)
+    {
+      //process all range dependencies, and for each range intersecting with our range,
+      //recalc the depending cell
+      if ((*it2).range.intersects (range))
+      {
+        CellInfo ci;
+        ci.row = (*it2).range.startrow;
+        ci.column = (*it2).range.startcol;
+        updateCell (ci);
+      }
+    }
+  }
 }
 
 void DependencyManager::processDependencies (const RangeList &rangeList) const
@@ -259,13 +339,15 @@ void DependencyManager::processDependencies (const RangeList &rangeList) const
     processDependencies (*it2);
 }
 
-void DependencyManager::updateCell (const CellInfo &cell)
+void DependencyManager::updateCell (const CellInfo &cell) const
 {
+  //TODO...
+
   //prevent infinite recursion (circular dependencies)
   
   //set the computing-dependencies flag
   
-  //recalculate the cell
+  //recalculate the cell ( probably using cell->calc(false); )
   
   //clear the computing-dependencies flag
   

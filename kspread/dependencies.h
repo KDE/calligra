@@ -45,6 +45,11 @@ struct CellInfo {
 struct Range {
   int startrow, startcol;
   int rows, cols;
+  
+  /** does this range contain the given cell? */
+  inline bool contains (const CellInfo &cell);
+  /** do these two ranges have at least one common cell? */
+  bool intersects (const Range &range);
 };
 
 /**
@@ -118,7 +123,7 @@ class DependencyManager {
   void processDependencies (const RangeList &rangeList) const;
 
   /** update one cell due to changed dependencies */
-  void updateCell (const CellInfo &cell);  
+  void updateCell (const CellInfo &cell) const;
 
   /** return a leading cell for a given cell (used to store range
   dependencies effectively) */
