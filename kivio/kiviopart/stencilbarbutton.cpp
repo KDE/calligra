@@ -38,6 +38,7 @@ DragBarButton::DragBarButton( const QString& text, QWidget* parent, const char* 
   m_bDragged = false;
   m_bMouseOn = false;
   m_bClose = false;
+  m_orientation = Qt::Vertical;
 
   const char* stencil_xpm[] = {
   "12 12 17 1",
@@ -108,11 +109,20 @@ DragBarButton::~DragBarButton()
 
 void DragBarButton::drawButton( QPainter* paint )
 {
-#ifdef __GNUC__
-#warning "Left out for now, lacking a style expert (Werner)"
-#endif
+  QSize pixSize;
+
+  if(m_orientation == Qt::Vertical) {
+    pixSize = QSize(width(), height());
+  } else {
+    pixSize = QSize(height(), width());
+  }
+
+  QPixmap pix(pixSize.width(), pixSize.height());
+  pix.fill(eraseColor());
+  QPainter pixPainter(&pix);
+
   const QColorGroup& g = colorGroup();
-  style().drawControl( QStyle::CE_PushButton, paint, this, QRect(0, 0, width(), height()), colorGroup() );
+  style().drawControl( QStyle::CE_PushButton, &pixPainter, this, QRect(0, 0, pixSize.width(), pixSize.height()), colorGroup() );
 
   int m = 3;
   int tw = 0;
@@ -120,7 +130,7 @@ void DragBarButton::drawButton( QPainter* paint )
 
   if ( m_pIcon ) {
     pw = m_pIcon->width();
-    style().drawItem( paint, QRect( m, 0, pw, height() ),
+    style().drawItem( &pixPainter, QRect( m, 0, pw, pixSize.height() ),
                       AlignLeft | AlignVCenter,
                       colorGroup(), isEnabled(),
                       m_pIcon, QString::null, -1,
@@ -132,9 +142,9 @@ void DragBarButton::drawButton( QPainter* paint )
     QSize sz = fm.size( ShowPrefix, text() );
     tw = sz.width();
     int x = m + pw + (tw!=0 && pw!=0 ?m:0);
-    QString t = KStringHandler::rPixelSqueeze(text(), fm, width() - (x + m + 22));
+    QString t = KStringHandler::rPixelSqueeze(text(), fm, pixSize.width() - (x + m + 22));
 
-    style().drawItem( paint, QRect( x, 0, tw, height() ),
+    style().drawItem( &pixPainter, QRect( x, 0, tw, pixSize.height() ),
                       AlignLeft | AlignVCenter|ShowPrefix,
                       colorGroup(), isEnabled(),
                       0L, t, -1,
@@ -142,19 +152,26 @@ void DragBarButton::drawButton( QPainter* paint )
   }
 
 
-  QPoint p1(width()-10,0);
-  QPoint p2(width()-10,height());
-  qDrawShadeLine( paint, p1, p2, g, true, 0, 1 );
+  QPoint p1(pixSize.width() - 10, 0);
+  QPoint p2(pixSize.width() - 10, pixSize.height());
+  qDrawShadeLine( &pixPainter, p1, p2, g, true, 0, 1 );
 
-  p1 += QPoint(2,0);
-  p2 += QPoint(2,0);
-  qDrawShadeLine( paint, p1, p2, g, true, 0, 1 );
+  p1 += QPoint(2, 0);
+  p2 += QPoint(2, 0);
+  qDrawShadeLine( &pixPainter, p1, p2, g, true, 0, 1 );
 
 // Temporary fix
 //  if (m_bMouseOn) {
-    int z = m_bClose ? 1:0;
-    paint->drawPixmap(width()-20+z, (height()-m_pClosePix->height())/2+z, *m_pClosePix );
+  int z = m_bClose ? 1:0;
+  pixPainter.drawPixmap(pixSize.width() - 20 + z, (pixSize.height() - m_pClosePix->height()) / 2 + z, *m_pClosePix);
 //  }
+
+  if(m_orientation == Qt::Vertical) {
+    paint->drawPixmap(0, 0, pix);
+  } else {
+    paint->rotate(-90);
+    paint->drawPixmap(1 - pixSize.width(), 0, pix);
+  }
 }
 
 void DragBarButton::setIcon( const QString& name )
@@ -191,7 +208,15 @@ QSize DragBarButton::sizeHint() const
   int h = QMAX(ph,th)+2*m;
   int w = m + pw + (tw!=0 && pw!=0 ?m:0) + tw + m + 22;
 
-  return QSize(w,h).expandedTo( QApplication::globalStrut() );
+  QSize size;
+  
+  if(m_orientation == Qt::Vertical) {
+    size = QSize(w, h).expandedTo(QApplication::globalStrut());
+  } else {
+    size = QSize(h, w).expandedTo(QApplication::globalStrut());
+  }
+  
+  return size;
 }
 
 void DragBarButton::mousePressEvent( QMouseEvent* ev )
@@ -255,6 +280,11 @@ void DragBarButton::leaveEvent( QEvent* ev )
   QPushButton::leaveEvent(ev);
   m_bMouseOn = false;
   repaint();
+}
+
+void DragBarButton::setOrientation(Orientation orientation)
+{
+  m_orientation = orientation;
 }
 
 #include "stencilbarbutton.moc"

@@ -25,38 +25,45 @@ class QPixmap;
 namespace Kivio {
 
 class DragBarButton : public QPushButton
-{ Q_OBJECT
-public:
-  DragBarButton( const QString&, QWidget* parent, const char* name = 0 );
-  ~DragBarButton();
-
-  void setIcon( const QString& );
-  void setPixmap( const QPixmap& );
-
-  QSize sizeHint() const;
-
-signals:
-  void beginDrag();
-  void finishDrag();
-  void closeRequired(DragBarButton *);
-
-protected:
-  void drawButton( QPainter* );
-  void mousePressEvent( QMouseEvent* );
-  void mouseReleaseEvent( QMouseEvent* );
-  void mouseMoveEvent( QMouseEvent* );
-
-  void enterEvent( QEvent* );
-  void leaveEvent( QEvent* );
-
-private:
-  QPixmap* m_pClosePix;
-  QPixmap* m_pIcon;
-  bool m_bPressed;
-  bool m_bDragged;
-  bool m_bMouseOn;
-  bool m_bClose;
-  QPoint m_ppoint;
+{
+  Q_OBJECT
+  public:
+    DragBarButton( const QString&, QWidget* parent, const char* name = 0 );
+    ~DragBarButton();
+  
+    void setIcon( const QString& );
+    void setPixmap( const QPixmap& );
+  
+    QSize sizeHint() const;
+    
+    Qt::Orientation orientation() const { return m_orientation; }
+  
+  signals:
+    void beginDrag();
+    void finishDrag();
+    void closeRequired(DragBarButton *);
+  
+  public slots:
+    void setOrientation(Orientation orientation);
+  
+  protected:
+    void drawButton( QPainter* );
+    void mousePressEvent( QMouseEvent* );
+    void mouseReleaseEvent( QMouseEvent* );
+    void mouseMoveEvent( QMouseEvent* );
+  
+    void enterEvent( QEvent* );
+    void leaveEvent( QEvent* );
+  
+  private:
+    QPixmap* m_pClosePix;
+    QPixmap* m_pIcon;
+    bool m_bPressed;
+    bool m_bDragged;
+    bool m_bMouseOn;
+    bool m_bClose;
+    QPoint m_ppoint;
+    Qt::Orientation m_orientation;
 };
 
 }

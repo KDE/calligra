@@ -132,7 +132,6 @@ void StencilBarDockManager::insertStencilSet( QWidget* w, const QString& caption
 
     if (!bar) {
       bar = new KivioStackBar(m_pView->mainWindow());
-      bar->setResizeEnabled(true);
       m_pView->mainWindow()->moveDockWindow(bar, position);
       m_pBars.append(bar);
       connect(bar,SIGNAL(beginDragPage(DragBarButton*)),SLOT(slotBeginDragPage(DragBarButton*)));

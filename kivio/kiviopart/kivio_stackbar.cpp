@@ -55,10 +55,12 @@ void KivioStackBar::insertPage( QWidget* w, const QString& title )
   setMaximumWidth( QMAX(maximumSize().width(),w->maximumSize().width() ) );
 
   DragBarButton* b = new DragBarButton( title, this );
+  b->setOrientation(orientation());
   connect( b, SIGNAL(clicked()), SLOT(showButtonPage()) );
   connect( b, SIGNAL(beginDrag()), SLOT(buttonBeginDrag()) );
   connect( b, SIGNAL(finishDrag()), SLOT(buttonFinishDrag()) );
   connect( b, SIGNAL(closeRequired(DragBarButton*)), SLOT(slotDeleteButton(DragBarButton*)) );
+  connect(this, SIGNAL(orientationChanged(Orientation)), b, SLOT(setOrientation(Orientation)));
 
   boxLayout()->addWidget(b);
   boxLayout()->addWidget(w, 1);
