@@ -118,8 +118,8 @@ CORBA::Boolean KoTarStore::open( const char* _name, const char * /*_mime_type*/ 
     }
     KTarFile * f = (KTarFile *) entry;
     m_byteArray = f->data();
-
-    m_iSize = m_byteArray.size();
+    m_iSize = f->data().size(); 
+    // it seems m_byteArray might be bigger than f->data().size() (if a previous file was bigger)
     m_readBytes = 0;
   }
   else
@@ -147,9 +147,9 @@ void KoTarStore::close()
   
     m_sName = toExternalNaming( m_sName );
 
-    kdebug( KDEBUG_INFO, 30002, "Writing file %s into TAR archive. Size %d. Cumulated size %d",
-          m_sName.latin1(), m_byteArray.size(), m_iSize );
-    m_pTar->writeFile( m_sName , "user", "group", m_byteArray.size(), m_byteArray.data() );
+    kdebug( KDEBUG_INFO, 30002, "Writing file %s into TAR archive. size %d. [byteArray size %d]",
+          m_sName.latin1(), m_iSize, m_byteArray.size() );
+    m_pTar->writeFile( m_sName , "user", "group", m_iSize, m_byteArray.data() );
   }
 
   delete m_stream;
