@@ -1070,7 +1070,7 @@ void QTextCursor::splitAndInsertEmptyParag( bool ind, bool updateIds )
 {
     if ( !doc )
 	return;
-    qDebug("QTextCursor::splitAndInsertEmptyParag");
+    //qDebug("QTextCursor::splitAndInsertEmptyParag");
     tmpIndex = -1;
     QTextFormat *f = 0;
     if ( doc->useFormatCollection() ) {
@@ -2578,7 +2578,7 @@ void QTextDocument::registerCustomItem( QTextCustomItem *i, QTextParag *p )
 	p->registerFloatingItem( i );
     }
     i->setParagraph( p );
-    qDebug("QTextDocument::registerCustomItem %p",(void*)i);
+    //qDebug("QTextDocument::registerCustomItem %p",(void*)i);
     customItems.append( i );
 }
 
@@ -2587,7 +2587,7 @@ void QTextDocument::unregisterCustomItem( QTextCustomItem *i, QTextParag *p )
     flow_->unregisterFloatingItem( i );
     p->unregisterFloatingItem( i );
     customItems.removeRef( i );
-    qDebug("QTextDocument::unregisterCustomItem %p",(void*)i);
+    //qDebug("QTextDocument::unregisterCustomItem %p",(void*)i);
     i->setParagraph( 0L );
 }
 
@@ -3189,7 +3189,7 @@ void QTextParag::remove( int index, int len )
 {
     if ( index + len - str->length() > 0 )
 	return;
-    qDebug("QTextParag::remove index=%d, len=%d", index, len);
+    //qDebug("QTextParag::remove index=%d, len=%d", index, len);
     for ( int i = index; i < index + len; ++i ) {
 	QTextStringChar *c = at( i );
 	if ( doc && c->isCustom() ) {
@@ -3204,7 +3204,7 @@ void QTextParag::remove( int index, int len )
 
 void QTextParag::join( QTextParag *s )
 {
-    qDebug("QTextParag::join this=%d (length %d) with %d (length %d)",paragId(),length(),s->paragId(),s->length());
+    //qDebug("QTextParag::join this=%d (length %d) with %d (length %d)",paragId(),length(),s->paragId(),s->length());
     int oh = r.height() + s->r.height();
     n = s->n;
     if ( n )
@@ -3532,7 +3532,7 @@ void QTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *c
     QTextStringChar *chr = at( 0 );
     ASSERT( chr );
     if (!chr) { qDebug("paragraph %p %d, can't paint, EMPTY !", this, paragId()); return; }
-    qDebug( "painting paragraph %p %d", this, paragId() );
+    //qDebug( "painting paragraph %p %d", this, paragId() );
     int i = 0;
     int h = 0;
     int baseLine = 0, lastBaseLine = 0;
@@ -4727,7 +4727,7 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
     int linenr = 0;
 
     int i = start;
-    qDebug( "Initial QTextParagLineStart at y=%d", y );
+    //qDebug( "Initial QTextParagLineStart at y=%d", y );
     QTextParagLineStart *lineStart = new QTextParagLineStart( y, 0, 0 );
     insertLineStart( parag, 0, lineStart );
     int lastBreak = -1;
@@ -4808,7 +4808,7 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
 		tminw = marg;
 	    continue;
 	}
-        qDebug("c='%c' i=%d/%d x=%d ww=%d w=%d (test is x+ww>w) lastBreak=%d isBreakable=%d",c->c.latin1(),i,len,x,ww,w,lastBreak,isBreakable(string,i));
+        //qDebug("c='%c' i=%d/%d x=%d ww=%d w=%d (test is x+ww>w) lastBreak=%d isBreakable=%d",c->c.latin1(),i,len,x,ww,w,lastBreak,isBreakable(string,i));
         // Wrapping at end of line
 	if ( isWrapEnabled() && !isBreakable( string, i ) &&
              ( lastBreak != -1 || allowBreakInWords() ) &&
@@ -4969,7 +4969,7 @@ int QTextFormatterBreakWords::format( QTextDocument *doc, QTextParag *parag,
         if ( c->isCustom() )
             c->customItem()->move( x, y );
 	x += ww;
-        qDebug("added %d -> now x=%d",ww,x);
+        //qDebug("added %d -> now x=%d",ww,x);
     }
 
     // Finish formatting the last line
