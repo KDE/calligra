@@ -210,7 +210,6 @@ KarbonPart::repaintAllViews( bool repaint )
 	for( ; itr.current() ; ++itr )
 	{
 		static_cast<KarbonView*>( itr.current() )->canvasWidget()->repaintAll( repaint );
-		static_cast<KarbonView*>( itr.current() )->layersDocker()->updatePreviews();
 	}
 }
 

@@ -193,7 +193,8 @@ void VLayersDocker::updateLayers()
 	m_view->part()->document().layers().toVector( &vector );
 	for( int i = vector.count() - 1; i >= 0; i-- )
 	{
-		VLayerListViewItem* item = new VLayerListViewItem( m_layersListView, m_view, vector[i] );
+		if ( vector[i]->state() != VObject::deleted )
+			VLayerListViewItem* item = new VLayerListViewItem( m_layersListView, m_view, vector[i] );
 	}
 	m_layersListView->sort();
 } // VLayersDocker::updateLayers
