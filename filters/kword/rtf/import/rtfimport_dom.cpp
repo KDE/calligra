@@ -170,7 +170,7 @@ void DomNode::addKey( const QDateTime& dt, const QString& filename, const QStrin
     const QTime time ( dt.time() );
 
     addNode( "KEY" );
-    setAttribute( QString::fromLatin1("filename"), CheckAndEscapeXmlText(filename) );
+    setAttribute( "filename", CheckAndEscapeXmlText(filename) );
     setAttribute( "year", date.year() );
     setAttribute( "month", date.month() );
     setAttribute( "day", date.day() );
@@ -181,7 +181,7 @@ void DomNode::addKey( const QDateTime& dt, const QString& filename, const QStrin
 
     if (!name.isEmpty())
     {
-        setAttribute( QString::fromLatin1("name"), CheckAndEscapeXmlText(name) );
+        setAttribute( "name", CheckAndEscapeXmlText(name) );
     }
     closeNode( "KEY" );
 }
@@ -214,21 +214,6 @@ void DomNode::addFrame( int left, int top, int right, int bottom,
     setAttribute( "newFrameBehaviour", newFrameBehaviour );
     setAttribute( "sheetSide", sheetSide );
 }
-
-/**
- * Sets a new attribute to a string value.
- */
-void DomNode::setAttribute( const char *attribute, const char *value )
-{
-    str += ' ';
-    str += attribute;
-    str += '=';
-    str += '"';
-    str += value;
-    str += '"';
-    hasAttributes = true;
-}
-
 
 /**
  * Sets a new attribute to a string value.

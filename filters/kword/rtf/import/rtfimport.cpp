@@ -399,11 +399,11 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
     state.ignoreGroup = false;
 
     utf8TextCodec=QTextCodec::codecForName("UTF-8");
-    //kdDebug(30515) << "UTF-8 asked, given: " << (utf8TextCodec?utf8TextCodec->name():QString("-none-")) << endl;
+    kdDebug(30515) << "UTF-8 asked, given: " << (utf8TextCodec?utf8TextCodec->name():QString("-none-")) << endl;
 
     // There is no default encoding in RTF, it must be always declared. (But beware of buggy files!)
     textCodec=QTextCodec::codecForName("CP 1252"); // Or IBM 435 ?
-    //kdDebug(30515) << "CP 1252 asked, given: " << (textCodec?textCodec->name():QString("-none-")) << endl;
+    kdDebug(30515) << "CP 1252 asked, given: " << (textCodec?textCodec->name():QString("-none-")) << endl;
 
     // Parse RTF document
     while (true)
@@ -628,7 +628,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
 		if (styleSheet[k].layout.style == style.next)
 		{
                 mainDoc.addNode( "FOLLOWING" );
-                mainDoc.setAttribute( QString::fromLatin1("name"), CheckAndEscapeXmlText( styleSheet[k].name ));
+                mainDoc.setAttribute( "name", CheckAndEscapeXmlText( styleSheet[k].name ));
                 mainDoc.closeNode( "FOLLOWING");
 		    break;
 		}
@@ -1668,8 +1668,8 @@ void RTFImport::parseField( RTFProperty * )
 		    }
 		}
 		node.addNode( "LINK" );
-		node.setAttribute( QString::fromLatin1("linkName"), fldrslt );
-		node.setAttribute( QString::fromLatin1("hrefName"), hrefName );
+		node.setAttribute( "linkName", fldrslt );
+		node.setAttribute( "hrefName", hrefName );
 		node.closeNode( "LINK" );
 		addVariable( node, 9, "STRING", &fldfmt);
 	    }
@@ -1772,7 +1772,7 @@ void RTFImport::addVariable (const DomNode& spec, int type, const QString& key, 
     node.closeTag(true);
         node.addNode("TYPE");
         node.setAttribute( "type", type );
-        node.setAttribute( QString::fromLatin1("key"), CheckAndEscapeXmlText(key) );
+        node.setAttribute( "key", CheckAndEscapeXmlText(key) );
         node.setAttribute( "text", 1 );
         node.closeNode("TYPE");
 
@@ -2035,7 +2035,7 @@ void RTFImport::addFormat( DomNode &node, KWFormat &format, RTFFormat *baseForma
 
 	    if (fontTable.contains( format.fmt.font ))
 	    {
-		node.setAttribute( QString::fromLatin1("name"), fontTable[format.fmt.font] );
+		node.setAttribute( "name", fontTable[format.fmt.font] );
 	    }
 	    node.closeNode( "FONT" );
 	}
@@ -2134,7 +2134,7 @@ void RTFImport::addFormat( DomNode &node, KWFormat &format, RTFFormat *baseForma
                 node.setAttribute( "styleline", styleline );
             if ( underlinecolor >= 0 && uint(underlinecolor) < colorTable.count() )
             {
-                node.setAttribute( QString::fromLatin1("underlinecolor"), colorTable[underlinecolor].name() );
+                node.setAttribute( "underlinecolor", colorTable[underlinecolor].name() );
             }
 
 	    node.closeNode( "UNDERLINE" );
@@ -2195,7 +2195,7 @@ void RTFImport::addLayout( DomNode &node, const QString &name, RTFLayout &layout
 {
     // Style name and alignment
     node.addNode( "NAME" );
-      node.setAttribute( QString::fromLatin1("value"), CheckAndEscapeXmlText(name) );
+      node.setAttribute( "value", CheckAndEscapeXmlText(name) );
     node.closeNode( "NAME" );
     node.addNode( "FLOW" );
       node.setAttribute( "align", alignN[layout.alignment] );
