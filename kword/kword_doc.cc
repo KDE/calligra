@@ -2281,9 +2281,9 @@ void KWordDocument::updateAllStyleLists()
 
     if ( !m_lstViews.isEmpty() )
     {
-        if ( viewPtr->getGUI() && viewPtr->getGUI()->getPaperWidget() )
+        for ( viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
         {
-            for ( viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
+            if ( viewPtr->getGUI() && viewPtr->getGUI()->getPaperWidget() )
             {
                 viewPtr->updateStyleList();
             }
@@ -2343,14 +2343,14 @@ void KWordDocument::insertPicture( QString _filename, KWPage *_paperWidget )
 }
 
 /*================================================================*/
-void KWordDocument::drawSelection( QPainter &_painter, int xOffset, int yOffset, 
+void KWordDocument::drawSelection( QPainter &_painter, int xOffset, int yOffset,
                                    KWFormatContext *_selStart, KWFormatContext *_selEnd )
 {
     if ( !_selStart )
-        _selStart = &selStart; 
+        _selStart = &selStart;
     if ( !_selEnd )
-        _selEnd = &selEnd; 
-    
+        _selEnd = &selEnd;
+
     if ( !_selStart->getParag() || !selEnd.getParag() )
         return;
 
