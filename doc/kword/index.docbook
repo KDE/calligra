@@ -21,8 +21,8 @@
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup> 
 
-<date>2000-09-24</date>
-<releaseinfo>0.01.00</releaseinfo>
+<date>2001-06-05</date>
+<releaseinfo>1.00.00</releaseinfo>
 
 <abstract>
 <para>
@@ -68,7 +68,7 @@ documentation team, please feel free to send me a message at
 <sect2 id="done">
 <title>What is done</title>
 
-<para>Sections 1-8.2.6 have been reviewed, snapshots updated, icons
+<para>Sections 1-6 have been reviewed, snapshots updated, icons
 correct, etc.  These sections are up to date. Any comments anyone has
 on these sections of the manual, would be greatly appreciated.</para>
 
@@ -83,6 +83,7 @@ work in this manual:</para>
 <itemizedlist>
 <listitem><para>Continue to review previously written sections.</para></listitem>
 <listitem><para>Write "Character Formatting Toolbars"</para></listitem>
+<listitem><para>Update Tutorial Screenshots.</para></listitem>
 <listitem><para>Write Kword Options</para></listitem>
 <listitem><para>Write Zoom</para></listitem>
 <listitem><para>Finish Detailed Guides</para></listitem>
@@ -95,6 +96,8 @@ table by subject</para></listitem>
 <listitem><para>Finish Find and Replace Section.</para></listitem>
 <listitem><para>Finish up "Add to dictionary section"</para></listitem>
 <listitem><para>Finish Autocorrection (when implementation is complete).</para></listitem>
+<listitem><para>Make sure the "Collate" is correctly described when printing works again.</para></listitem>
+
 </itemizedlist>
 
 </sect2>
@@ -148,18 +151,18 @@ Is What You Get) Wordprocessor/Desktop Publishing Program.</para>
 Environment.  Other applications in KOffice include</para>
 
 <simplelist type="vert" columns="1">
-<member><application>KOShell</application> (toolbar/program starter)</member>
-<member><application>KSpread</application> (spreadsheet)</member> 
-<member><application>KPresenter</application> (presentation creator)</member>
-<member><application>KIllustrator</application> (a vector drawing program)</member>
-<member><application>KImageShop</application> (a bitmap image editor)</member>
-<!-- <member>Katabase (database) </member> ****Put this back in if it does become a reality**** -->
-<member><application>KChart</application> (for charts/graphs)</member>
-<member>and <application>KImage</application> (an image viewer).  </member>
+<member><application>KSpread</application> (A fully functional spreadsheet.)</member> 
+<member><application>KPresenter</application> (A presentation creator.)</member>
+<member><application>KIllustrator</application> (A vector drawing program.)</member>
+<member><application>Krayon</application> (A bitmap image editor)</member>
+<member><application>Kivio</application> (A flowchart creater.)</member>
+<member>and <application>Kugar</application> (A report generation tool.)  </member>
+<member>All of this can be done within a simple integrated office desktop.</member>
+
 </simplelist>
 
 <para>All KOffice applications were designed from the beginning to take
-advantage KDE 2.0. Because of this, <application>KWord</application>
+advantage of the features of KDE 2.0. Because of this, <application>KWord</application>
 (like all of KOffice), supports drag and drop, themes, and many other
 advanced features you expect from todays desktop environment.</para>
 
@@ -167,20 +170,27 @@ advanced features you expect from todays desktop environment.</para>
 can work either as a traditional word processor, or as a simple
 but powerful desktop publishing application. This is possible
 because <application>KWord</application> is a frame oriented word
-processor, not a page oriented word processor (<application>Microsoft
+processor, not a Page Layout word processor (<application>Microsoft
 Word</application>, <application>Word Perfect</application> and
-<application>Applixware</application> are all page oriented word
+<application>Applixware</application> are all Page Layout word
 processors).</para>
 
 <para>Frame oriented word processors work by creating one or more "frames"
 per page. Each frame acts as a boundry (like a frame which surrounds
 a photograph), which limits the text to the boundries of the frame.
 You can move and reshape these boundries, to define exactly where on the
-page the text will be placed.  As you resize frames, the text layout is
-reworked to fit within these frames. You can easily "connect" one frame
+page the text will be placed.  As you resize frames, the Text Oriented is
+reworked to fit within these frames.</para>
+
+<inlinemediaobject><imageobject><imagedata format="PNG" fileref="intro1.png" align="center"/> </imageobject><textobject><phrase>Button</phrase></textobject></inlinemediaobject>
+
+<para> You can easily "connect" one frame
 to the next. When you connect two frames, any text which does not fit
-within the first frame, flows easily and automatically into the next.
-In addition to text, you can include virtually anything inside a frame.
+within the first frame, flows easily and automatically into the next.</para>
+
+<inlinemediaobject><imageobject><imagedata format="PNG" fileref="intro2.png" align="center"/> </imageobject><textobject><phrase>Button</phrase></textobject></inlinemediaobject>
+
+<para>In addition to text, you can include virtually anything inside a frame.
 A frame can contain a spreadsheet, clipart, pictures, a database form,
 or nearly any piece of data. Since each page can have any number of
 frames, documents can appear quite sophisticated while still remaining
@@ -191,6 +201,9 @@ you place one frame on top of part of another frame, the text from the
 "lowest" frame can be automatically wrapped around the newly created
 frame. This reformating all occurs in a WYSIWYG Graphical User Interface,
 and occurs as you edit.</para>
+
+<inlinemediaobject><imageobject><imagedata format="PNG" fileref="intro3.png" align="center"/> </imageobject><textobject><phrase>Button</phrase></textobject></inlinemediaobject>
+
 
 <para>KWord simplifies the creation of new pages (at the users option),
 by automatically creating frames for the next page, using the current
@@ -265,6 +278,8 @@ to the most complex document you might need to work on.</para>
 to the conclusion that reading this manual from cover to cover, is an
 unreasonable (and fortunately unecessary) task.</para>
 
+<para>Since different users will have different needs, each section of this manual is self-contained.  You are not expected to have read all of the previous sections of the manual to find a section useful.</para>
+
 <para>This user guide is designed to be helpful to a wide variety of
 users, from the very experienced, to the novice user.  Each user will
 have different needs from this manual.  To help you determine what you
@@ -299,7 +314,7 @@ easy.</para>
 <row><entry>Advanced User</entry><entry>Comfortable with other frames based word processors (Frame Maker, etc).</entry>
 <entry><para><simplelist type="vert" columns="1">
 <member><link linkend="WPVSDTP">The differenct between Wordprocessing and DTP templates</link></member>
-<member><link linkend="textandframe"> The difference between Text Edit mode and Frame Edit mode</link></member>
+<member><link linkend="TextandFrame"> The difference between Text Edit mode and Frame Edit mode</link></member>
 </simplelist></para></entry></row>
 </tbody></tgroup>
 </informaltable>
@@ -309,7 +324,7 @@ however, is help you figure out which parts of the manual you need to
 read before you begin using <application>KWord</application>.</para>
 
 <para>These sections will help you get started. You can then refer
-to the other parts of this manual as you need to help you wil specific
+to the other parts of this manual as you need to help you with specific
 situations.</para>
 
 </sect1>
@@ -339,7 +354,7 @@ KWord can be started one of four ways:
 <para>Or</para>
 <para><screen><prompt>$</prompt> <command>kword <replaceable>filename</replaceable> &amp;</command></screen></para></listitem>
 <listitem><para>Using <application>Konqerer</application>, you can click on your data file (KWord documents end in .kwd).  This will automatically start <application>KWord</application> and begin editing the file.</para></listitem>
-<listitem><para>Using <application>KOShell</application></para></listitem>
+<listitem><para>Using the KOffice Workspace.</para></listitem>
 </orderedlist></para>
 
 </sect1>
@@ -350,12 +365,12 @@ KWord can be started one of four ways:
 <para>OK, so the first question you may have is:</para>
 
 <para><emphasis>Why do I need to use a frames based word processor, when
-I am perfectly happy writing my letters on my current, page oriented,
+I am perfectly happy writing my letters on my current, Page Layout,
 word processor? </emphasis></para>
 
 <para>Well the good news is, adjusting to a frames based word processor
 is easy and once you select a template, <application>KWord</application>
-will act just like the page oriented wordprocessor you are used to.
+will act just like the Page Layout wordprocessor you are used to.
 There are templates available for simple correspondance and day to day
 use.</para>
 
@@ -393,18 +408,17 @@ frames for you.</para>
 <para>This is not a problem. If you begin your document as a single
 column document and decide later that two columns is better for your
 needs, you can add another column. The purpose of templates is not to
-limit your ability to change your format, but rather to take some of
+limit your ability to change your layout, but rather to take some of
 the work load off you whenever possible.
 Choosing the correct template when you begin your document will simplify
 the formating (as opposed to always selecting the default template and
 making your changes later.), but it is also important to remember that
-choosing the wrong template will not increase your work when compared
-to page-oriented word processors.</para>
+choosing the wrong template will not limit your work.</para>
 
 <para><emphasis>Working with frames (aka Your First Document)</emphasis></para>
 
 <para>The following section, consists of two fundimental topics which
-you should understand before we continue, and a step by step walk through
+you should understand before we continue, followed by a step by step walk through
 of the most important functions you will need to understand to complete
 a complex document. We will generate the start of a newsletter using
 this tutorial. If you do not want to complete the tutorial, or have
@@ -423,28 +437,28 @@ to jump directly to that section of the tutorial:</para>
 </orderedlist>
 
 <para>This tutorial is designed to be done in order, starting with
-<link linkend="WPVSDTP">The difference between Normal and Publishing
-templates</link></para>
+<link linkend="WPVSDTP">The difference between Text Oriented and Page Layout
+templates.</link> I recommend going through the tutorial in order at least once.</para>
 </sect1>
 
 <sect1 id="WPVSDTP"> 
-<title>The difference between Normal and Publishing templates</title>
+<title>The difference between Text Oriented and Page Layout templates</title>
 <para>Before we begin with the tutorial, it is important that the
-difference between Publishing and Normal templates is clear in your
+difference between Text Oriented and Page Layout templates is clear in your
 mind.</para>
 
 <variablelist>
 <varlistentry>
-<term>Normal</term>
-<listitem><para>The Normal templates are designed to act like
-page-oriented wordprocessors. When you select a Normal template, you
-will create a template with one or more frames. The first frameset is
+<term>Text Oriented</term>
+<listitem><para>The Text Oriented templates are designed to act like
+page-oriented wordprocessors. When you select a Text Oriented template, you
+will create a template with one or more frames. The first frame is
 distinctly tied to the paper size of your document. When you increase
-or decrease the paper size, the frame size is automatically adjusted.
+or decrease the paper size or change the margins, the frame size is automatically adjusted.
 You are <emphasis>not</emphasis> able to move this frame around on the
 page and you cannot delete this frame. If you need to adjust the size
 or position of this frame, you must <link linkend="PageFormat">adjust
-the margins</link> to adjust the frame position or size. On top of the
+the margins</link>. On top of the
 first frame, you can, of course, add additional frames. These frames
 can contain pictures, text or whatever you want. These new frames can
 be moved, resized and deleted to suit your needs. If you want it, KWord
@@ -452,12 +466,12 @@ will even wrap the text from the first frame around any information in
 any subsiquent frames.</para></listitem>
 </varlistentry>
 <varlistentry>
-<term>Publishing</term>
+<term>Page Layout</term>
 <listitem><para>These templates are designed for desktop publishing.
 When you select a template from this class, all of the frames are
-"created equal". This is where the difference between Publishing and
-Normal template lies. None of the frames in a Publishing template
-are tied to the page as tightly as the main frame in a Normal template
+"created equal". This is where the difference between Page Layout and
+Text Oriented template lies. None of the frames in a Page Layout template
+are tied to the page as tightly as the main frame in a Text Oriented template
 is. Each of the frames is independent of the page size, and can be moved
 or resized without changing margins, etc. Of course this also means
 that altering the margins or papersize of your document requires that
@@ -466,13 +480,13 @@ you individually move/resize each frame.
 </varlistentry>
 </variablelist>
 
-<para>As you can see, the choice between Publishing and Normal templates
-is a choice between flexibility (Publishing) and convenince (Normal).
+<para>As you can see, the choice between Page Layout and Text Oriented templates
+is a choice between flexibility (Page Layout) and convenince (Text Oriented).
 You can create any document you like with either type of template.</para>
 
-<para>If the concept of templates is unclear, please follow along with
-the following step by step. The first document you will create will use
-a publishing template. This should help clairify exactly how templates
+<para>If the concept of templates is still unclear, please follow along with
+the following tutorial. The first document you create will use
+a Page Layout template. This should help clairify exactly how templates
 function.</para></sect1>
 
 <sect1 id="TextandFrame">
@@ -486,10 +500,10 @@ often interrelated components:
 <orderedlist Numeration="Arabic">
 <listitem><para>The content, which consists of text you enter through
 the keyboard, the pictures you have on your hard disk, the data in your
-spreadsheet, etc.</para></listitem>
+spreadsheet, etc.  This is the subject of your document. This is the information you want to convey.</para></listitem>
 <listitem><para>The layout, which consists of how the information is
 given to the reader. Multiple columns, boxes surrounding text, italics
-for emphasis, etc.</para></listitem>
+for emphasis, etc. Using good layout, you can organize and emphasize your information in a way that is easily understood by the reader.  </para></listitem>
 </orderedlist>
 </para>
 
@@ -502,8 +516,8 @@ for emphasis, etc.</para></listitem>
 </itemizedlist>
 <para>Text Edit Mode is most commonly used for the <emphasis>entry of
 the content</emphasis> of the document. In Text Edit Mode, you enter
-text from the keyboard, cut and paste from other applications, build
-tables for your data, etc.</para>
+text from the keyboard, cut and paste from other applications, fill
+tables with your data, etc.</para>
 <para>Frame Edit Mode is most commonly used for the
 <emphasis>layout</emphasis> of the document. Using Frame Edit Mode,
 you can adjust the width of text, resize pictures, etc.</para>
@@ -523,6 +537,8 @@ Frame</guimenuitem></menuchoice>, by pressing
 F5, or by clicking on the Frame  Edit toolbar
 button <inlinemediaobject><imageobject><imagedata format="PNG" fileref="framemode.png"/></imageobject><textobject><phrase>Button</phrase></textobject></inlinemediaobject>
 </para>
+
+<para>It is important to keep this distinction in mind when using &kword;. Depending on whether you are in Frame Edit Mode or Text Edit Mode, &kword; will act differently.</para>
 
 <para>Now that we have discussed the differences between publishing and normal templates and introduced the differences between Text Edit Mode and Frame Edit Mode, we will begin the tutorial</para>
 
@@ -559,7 +575,7 @@ document</link> after KWord is running), a dialog appears.</para>
 
 <para>For your first document:</para>
 
-<para>Step 1: Click on the Publishing tab.</para>
+<para>Step 1: Click on the Page Layout tab.</para>
 
 <mediaobject><imageobject><imagedata format="PNG" fileref="Tut1.png" align="center"/></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject>
 
@@ -587,7 +603,7 @@ separate frame.</emphasis></para>
 <title>Selecting a frame and entering text into that frame</title>
 
 <para><emphasis>To begin entering text (or adding any sort of data for that matter), to a document, you must first let the computer know which frame to put the data in.</emphasis></para>
-<para>Step 4: place the mouse cursor over the upper-left frame</para>
+<para>Step 4: Place the mouse cursor over the upper-left frame</para>
 <para>Step 5: Click once with the left mouse button.</para>
 <para><mediaobject><imageobject><imagedata format="PNG" fileref="Tut4.png" align="center"/></imageobject><textobject><phrase>Screenshot</phrase></textobject></mediaobject></para>
 
@@ -680,31 +696,33 @@ the left mouse button.  Drag the mouse diagonally.  An outline will appear which
 <listitem><para><link linkend="mb">The Menu Bar</link>.</para></listitem>
 <listitem><para><link linkend="tb">and an assortment of Toolbars</link>.</para></listitem>
 </orderedlist>
-<screenshot><mediaobject><imageobject><imagedata fileref="screen" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+<screenshot><mediaobject><imageobject><imagedata fileref="screen.png" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
 <para><emphasis><anchor id="kdeframe"/>The KDE Frame.</emphasis></para>
 <para>The KDE Titlebar surrounds all applications run under KDE.  For more information on KDE Frames, please see the KDE User Guide.</para>
 <para><emphasis><anchor id="da"/>The Document Area.</emphasis></para>
-<para>The document area consists of:</para><para></para>
+<para>The document area consists of:</para>
 <informaltable frame="none"><tgroup cols="2" align="left"><tbody>
 <row><entry></entry><entry><variablelist>
 <varlistentry><term>Horizontal and Vertical Rulers</term><listitem><para>The rulers can be used to help you layout your document.  For more information on Rulers, see <link linkend="Rulers">Using Rulers</link>.</para></listitem></varlistentry>
-<varlistentry><term>Scrollbar</term><listitem><para>The scrollbar is used to move through a KWord document quickly.  The KWord scroll bar functions similar to all scrollbars in KDE or Windows.</para></listitem></varlistentry>
+<varlistentry><term>Scrollbar</term><listitem><para>The scrollbars are used to move through a &kword; document quickly.  The &kword; scroll bar functions similar to all scrollbars in KDE or Windows.</para></listitem></varlistentry>
 <varlistentry><term>Tab Selector</term><listitem><para>This is used to select and place tab stops in your document for easy formatting.  For more information on tab stops, see the section entitled <link linkend="TabStops">Using Tab Stops</link>.</para></listitem></varlistentry>
 <varlistentry><term>Document View</term><listitem><para>This is the area of the screen which is used to enter text.  It shows you the current status of your document, and allows you to adjust frames, select text, and cut and paste text.  </para></listitem></varlistentry>
 </variablelist></entry></row></tbody></tgroup></informaltable>
 <para><emphasis><anchor id="mb"/>The Menubar</emphasis></para>
 <para>The Menu Bar provides acess to all of KWords functions and options.  Each part of the KWord menubar is detailed in the section entitled: <link linkend="BasicMenubar">The Basic Menu Bar</link>.</para>
 <para><emphasis><anchor id="tb"/>The Toolbars</emphasis></para>
-<para>The Tool bars provide "shortcuts" to commonly used functions.  KWord uses 6 toolbars, with similar functions grouped together.</para>
+<para>The Tool bars provide "shortcuts" to commonly used functions.  KWord uses 8 toolbars, with similar functions grouped together.</para>
 <para></para>
 <informaltable frame="none"><tgroup cols="2" align="left"><tbody>
 <row><entry></entry><entry><variablelist>
-<varlistentry><term><link linkend="CharFormatToolbar">Character/Border Formatting Toolbar</link></term><listitem><para>This toolbar has commonly used features for formatting your text and paragraph borders. Features on this toolbar include boldface and italic text, superscripted text, and adding a border to your paragraph</para></listitem></varlistentry>
+<varlistentry><term><link linkend="CharFormatToolbar">Format Toolbar</link></term><listitem><para>This toolbar has commonly used features for formatting your text and paragraph borders. Features on this toolbar include boldface and italic text, superscripted text, and adding a border to your paragraph</para></listitem></varlistentry>
 <varlistentry><term><link linkend="FileToolbar">File Toolbar</link></term><listitem><para>This toolbar is used to load, save, print and start new documents</para></listitem></varlistentry>
-<varlistentry><term><link linkend="FrameCreateToolbar">Frame/Create Toolbar</link></term><listitem><para>This toolbar is used to add new text frames to your document.  You can also add graphics, tables or formulas to your document with this toolbar.</para></listitem></varlistentry>
-<varlistentry><term><link linkend="BasicEditToolbar">Basic Editing Toolbar</link></term><listitem><para>This toolbar is for common editing functions such as cut, paste, undo, redo, find and spellcheck</para></listitem></varlistentry>
-<varlistentry><term><link linkend="InsertToolbar">Insert Toolbar</link></term><listitem><para>This toolbar is used to insert pictures, clipart or special characters in your document.</para></listitem></varlistentry>
-<varlistentry><term><link linkend="TableEditToolbar">Table Edit Toolbar</link></term><listitem><para>This toolbar is used to add or remove rows or columns from tables.</para></listitem></varlistentry>
+<varlistentry><term><link linkend="InsertToolBar">Insert Toolbar</link></term><listitem><para>This toolbar is used to add new text frames to your document.  You can also add graphics, tables or formulas to your document with this toolbar.</para></listitem></varlistentry>
+<varlistentry><term><link linkend="BasicEditToolbar">Edit Toolbar</link></term><listitem><para>This toolbar is for common editing functions such as cut, paste, undo, redo, find and spellcheck</para></listitem></varlistentry>
+<varlistentry><term><link linkend="ParagraphToolBar">Paragraph Toolbar</link></term><listitem><para>This toolbar is used to insert pictures, clipart or special characters in your document.</para></listitem></varlistentry>
+<varlistentry><term><link linkend="TableEditToolbar">Table Toolbar</link></term><listitem><para>This toolbar is used to add or remove rows or columns from tables.</para></listitem></varlistentry>
+<varlistentry><term><link linkend="BorderToolbar">Borders Toolbar</link></term><listitem><para>This toolbar is used to add or remove borders surrounding paragraphs.</para></listitem></varlistentry>
+<varlistentry><term><link linkend="FormulaToolbar">Formula Toolbar</link></term><listitem><para>This toolbar is used to add or remove formulas and their components.</para></listitem></varlistentry>
 </variablelist></entry></row></tbody></tgroup></informaltable>
 </sect1>
 <sect1 id="Rulers"><title>Using Rulers</title>
@@ -713,7 +731,7 @@ the left mouse button.  Drag the mouse diagonally.  An outline will appear which
 <para>Each ruler has a bright area surrounded by a dark area.  The bright area shows the size and location of the currently selected frame on that page.  As you change frames, the bright area changes to reflect the new frame's settings.</para>
 <para>The ruler can measure the page in 3 units of measure:</para>
 <orderedlist numeration="arabic">
-<listitem><para>Milimeters (mm) - This is the default</para></listitem>
+<listitem><para>Milimeters (mm)</para></listitem>
 <listitem><para>Points (pt)</para></listitem>
 <listitem><para>Inches (in)</para></listitem>
 </orderedlist>
@@ -735,18 +753,21 @@ the left mouse button.  Drag the mouse diagonally.  An outline will appear which
 <listitem><para>You can start KWord from the command line by typing<screen><prompt>$</prompt> <command>kword &amp;</command></screen></para></listitem>
 <listitem><para>You can begin a new document in KWord by selecting <menuchoice> <guimenu>File</guimenu><guimenuitem>New</guimenuitem></menuchoice> from the Menu bar</para></listitem>
 <listitem><para>You can use the keyboard shortcut: <keycombo><keycap>Ctrl</keycap><keycap>N</keycap></keycombo></para></listitem>
-<listitem><para>or by clicking <inlinemediaobject><imageobject><imagedata fileref="filenew2" format="PNG" align="center"/></imageobject></inlinemediaobject> on the toolbar.</para></listitem>
+<listitem><para>or by clicking <inlinemediaobject><imageobject><imagedata fileref="filenew2.png" format="PNG" align="center"/></imageobject></inlinemediaobject> on the toolbar.</para></listitem>
 </itemizedlist>
 <para>However you begin a new document, a dialog box appears:</para>
-<screenshot><mediaobject><imageobject><imagedata fileref="ChooseTempDia" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+<screenshot><mediaobject><imageobject><imagedata fileref="ChooseTempDia.png" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
 <para>This dialog box allows you to:</para>
 <itemizedlist spacing="compact">
 <listitem><para><link linkend="newdoctemp">Start a New document from a template</link></para></listitem>
-<listitem><para><link linkend="Loading">Open a previously saved document</link></para></listitem>
-<listitem><para><link linkend="emptydoc">Start an "Empty" document.(default)</link></para></listitem>
+<listitem><para><link linkend="Loading1">Open an existing document</link></para></listitem>
+<listitem><para><link linkend="Loading2">Open a recent document</link></para></listitem>
+<listitem><para><link linkend="emptydoc">Start an "Empty" document. (This is the default)</link></para></listitem>
 </itemizedlist>
-<tip><para>You can use the following keyboard shortcuts:  New document from a template (<keycombo><keycap>Alt</keycap><keycap>T</keycap></keycombo>), Open a previous document (<keycombo><keycap>Alt</keycap><keycap>O</keycap></keycombo>), or
-Start and Empty document (<keycombo><keycap>Alt</keycap><keycap>E</keycap></keycombo>)</para>
+<tip><para>You can use the following keyboard shortcuts:</para>
+<para>New document from a template - <keycombo><keycap>Alt</keycap><keycap>T</keycap></keycombo></para>
+<para>Open a recent document (<keycombo><keycap>Alt</keycap><keycap>R</keycap></keycombo>)</para>
+<para>Start and Empty document (<keycombo><keycap>Alt</keycap><keycap>E</keycap></keycombo>)</para>
 <para>If you use the keyboard shortcuts, you will need to press Enter on the keyboard or click "OK" to confirm your selection.</para></tip>
 <para><emphasis><anchor id="newdoctemp"/>Starting a new document from a template</emphasis></para>
 <para>In order to start a new document based on a template, you must first choose your template.</para>
@@ -755,6 +776,10 @@ Start and Empty document (<keycombo><keycap>Alt</keycap><keycap>E</keycap></keyc
 <para>Once you are on the correct tab, you are shown all the available templates, each with a title and a small icon which shows you the general layout of the template. </para>
 <tip><para>&kword; comes with two standard template groups. You can add new tabs by installing outside templates, or creating templates of your own.</para></tip>
 <para>To select your template, click on it with the left button.  The selected template will be highlighted.  Confirm your choice by clicking the OK button. This will begin a new document with that template.</para>
+<para><emphasis><anchor id="Loading1"/>Open an existing document</emphasis></para>
+<para>Click on the Choose button, and an new dialog box is revealed.  For more details on this dialog box refer to <link linkend="Loading">Retreiving a saved document</link>.</para>
+<para><emphasis><anchor id="Loading2"/>Open a recent document</emphasis></para>
+<para>Simply click on the drop down box to the right of <guilabel>Open a recent document</guilabel>, and select the file.  Click <guilabel>OK</guilabel> to complete the selection.</para>
 <para><emphasis><anchor id="emptydoc"/>Starting an "Empty" document</emphasis></para>
 <para>This is the default action, and begins a new document in Wordprocessing Mode, with one frame per page.  
 This is an excellent choice for every day correspondance, or general word processing.</para>
@@ -766,7 +791,7 @@ This is an excellent choice for every day correspondance, or general word proces
 <itemizedlist>
 <listitem><para>By selecting <menuchoice> <guimenu>File</guimenu><guimenuitem>Save</guimenuitem></menuchoice> from the Menu Bar</para></listitem>
 <listitem><para>You can use the keyboard shortcut: <keycombo><keycap>Ctrl</keycap><keycap>S</keycap></keycombo></para></listitem>
-<listitem><para>or by clicking <inlinemediaobject><imageobject><imagedata fileref="filefloppy" format="PNG" align="center"/></imageobject></inlinemediaobject> on the toolbar.</para></listitem>
+<listitem><para>or by clicking <inlinemediaobject><imageobject><imagedata fileref="filefloppy.png" format="PNG" align="center"/></imageobject></inlinemediaobject> on the toolbar.</para></listitem>
 </itemizedlist>
 <para>Any of these methods results in the same action by KWord.</para>
 <para>By selecting the "Save" command, you are instructing KWord to save the file under the current filename. You will not be given the option to change the filename or its location. If you want to change the name of the file, or where it is saved, you must select <link linkend="CmdSaveAs"><menuchoice> <guimenu>File</guimenu><guimenuitem>Save As...</guimenuitem></menuchoice></link> from the Menu bar.</para>
@@ -777,29 +802,27 @@ This is an excellent choice for every day correspondance, or general word proces
 <para>The "Save As..." command can be invoked 2 ways:</para>
 <itemizedlist>
 <listitem><para>By selecting <menuchoice> <guimenu>File</guimenu><guimenuitem>Save As...</guimenuitem></menuchoice> from the Menu bar</para></listitem>
-<listitem><para>or by trying to "Save" a file which does not yet have a filename.</para></listitem>
+<listitem><para>or by trying to <guimenuitem>Save</guimenuitem> a file which does not yet have a filename.</para></listitem>
 </itemizedlist>
-<para>The difference between the "Save" and the "Save As..." command, is the "Save As..." command prompts you for a filename, and lets you select a different file format or location.</para>
-<para>When you select the "Save As..." function, a dialog appears.</para>
-<screenshot><mediaobject><imageobject><imagedata fileref="savedlg" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+<para>The difference between the <guimenuitem>Save</guimenuitem> and the <guimenuitem>Save As...</guimenuitem> command, is the <guimenuitem>Save As...</guimenuitem> command prompts you for a filename, and lets you select a different file format or location.  The <guimenuitem>Save</guimenuitem> command simply saves the file in the previous location.</para>
+<para>When you select the <guimenuitem>Save As...</guimenuitem> function, a dialog appears.</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="savedlg.png" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
 <para>Lets look at this dialog more closely:</para>
-<para>This dialog shows my current directory is "/home/mmcbride".  You can see this by the textbox at the top of the dialog</para>
-<para>The large box below that shows I currently have 13 folders in this directory.  One of the folders is "/home/mike/Desktop", another is "/home/mike/Mail".</para>
+<para>This dialog shows my current directory is "/home/mmcbride/kword".  You can see this by the textbox at the top of the dialog</para>
+<para>The large box below that shows I currently have 1 folders in this directory, entitled <emphasis>Past Work</emphasis>, and 2 files (<emphasis>Job Description</emphasis> and <emphasis>Resume</emphasis>).</para>
 <para>In the upper left corner, is a blue arrow pointed up.  This arrow will take you up one level in the directory structure.</para>
 <para>The next two buttons are backwards and forward buttons.  These buttons work just like a browser, where you can use the back button to travel to the previous directory, and the forward button to advance into a directory you just came from.</para>
 <para>Next to the arrow buttons, is a button that looks like a house.  Clicking this will take you to your home directory.</para>
 <para>Next to the home button, is a reload button.  Clicking this button, causes &kword; to reload the current directory in the event things have changed.</para>
-<para>Next to the reload button, is a button with a purple ribbon on it.  This button allows you to set and navigate through bookmarks.  This is a quick way to jump to commonly accessed directories.  By clicking this button, a submenu appears which allows you to add bookmarks or jump to a new bookmark.</para>
+<para>Next to the reload button, is a button with a grey ribbon on it.  This button allows you to set and navigate through bookmarks.  This is a quick way to jump to commonly accessed directories.  By clicking this button, a submenu appears which allows you to add bookmarks or jump to a new bookmark.</para>
 <para>Next to the bookmark button, is a new folder button.  If you want to create a new folder, simply click the button.  &kword; will ask for a name for the folder.  Then the folder will be created and you will automatically be placed in the new folder.</para>
-<note><para>There is one folder labled "..".  This is a special folder that exists in all directories on your computer.  It tells the computer that if I select this folder, to move up one level in the directory heirarchy. (If a directory heirarchy is a foriegn concept to you, I would recommend reading a chapter in a good Unix book, which describes the directory filesystem).</para></note>
-<para>We can also see I have previously saved a file called "tempfile". (All KWord documents end in .kwd).</para>
-<para>The text box labled "File Name" is blank, which indicates this file does not currently have a filename at all.  If you were saving a file to a new location (not saving a new file), you would see the current file name listed here.</para>
-<para>The text box labled "File Type" shows we intend to save this as a KWord file.  Using KWord, you can save the file as other formats.  For information on this, see the section on <link linkend="Filters">Filters</link>.</para>
-<para>There is a Cancel button, if you click this button, the save will be aborted, and you will return to editing the document.</para>
-<para>There is an OK button, which will be used when we have selected the correct location, correct format and correct filename.  Clicking this button saves the file.</para>
+<para>The text box labled <guilabel>Location</guilabel> is blank, which indicates this file does not currently have a filename at all.</para>
+<para>The text box labled <guilabel>Filter</guilabel> shows we intend to save this as a KWord file.  Using KWord, you can save the file as other formats.  For information on other filters, see the section on <link linkend="Filters">Filters</link>.</para>
+<para>There is a <guibutton>Cancel</guibutton> button, if you click this button, the save will be aborted, and you will return to editing the document.</para>
+<para>There is an <guibutton>OK</guibutton> button, which will be used when we have selected the correct location, correct format and correct filename.  Clicking this button saves the file.</para>
 <para>Using this dialog, you can move through the directory tree to find a location to save your document in.</para>
-<para>To enter a folder, you double click on that folder.  To exit that folder, you double click the ".." folder, or the click blue up arrow  button.</para>
-<para>When you are in the correct folder, you can type a name into the "File Name" box. There is no need to put a .kwd at the end of your filename, &kword; will do this for you.</para>
+<para>To enter a folder click on that folder.  To exit that folder, click the blue up arrow button.</para>
+<para>When you are in the correct folder, you can type a name into the <guilabel>Location</guilabel> box. There is no need to put a .kwd at the end of your filename, &kword; will do this for you.</para>
 <note><para>Unix filenames are more flexible than many other operating systems.  Filenames can:</para>
 <itemizedlist spacing="compact">
 <listitem><para>be of nearly any length</para></listitem>
@@ -811,7 +834,7 @@ This is an excellent choice for every day correspondance, or general word proces
 <listitem><para>end with a common file extension (.ps,.pdf,etc).  This will tell KWord to try to export to that filetype.  KWord has only certain specific <link linkend="Filters">filters</link>.</para></listitem>
 </itemizedlist>
 </note>
-<para>Once you have entered the correct information you can click on "Save" to complete the save.</para>
+<para>Once you have entered the correct information you can click on <guibutton>OK</guibutton> to complete the save.</para>
 <para>KWord does not report a sucessful save.  Therefore, if the file was saved without incident, KWord will return you to editing your document.  If there is a probelm with the save, an error box will appear.</para>
 <note><para>KWord will only allow you to save your file where you are allowed to by the permisions listed by the operating system. If you try to save outside that area, KWord will generate an error.</para></note>
 </sect2>
@@ -822,53 +845,48 @@ This is an excellent choice for every day correspondance, or general word proces
 <listitem><para>By clicking "Open a previously saved document" and the "Choose" button when <link linkend="NewDoc">Opening a New Document</link></para></listitem>
 <listitem><para>By selecting <menuchoice> <guimenu>File</guimenu><guimenuitem>Open</guimenuitem></menuchoice> from the Menu bar</para></listitem>
 <listitem><para>You can use the keyboard shortcut: <keycombo><keycap>Ctrl</keycap><keycap>O</keycap></keycombo></para></listitem>
-<listitem><para>or by clicking <inlinemediaobject><imageobject><imagedata fileref="fileopen" format="PNG" align="center"/></imageobject></inlinemediaobject> on the toolbar.</para></listitem>
+<listitem><para>or by clicking <inlinemediaobject><imageobject><imagedata fileref="fileopen.png" format="PNG" align="center"/></imageobject></inlinemediaobject> on the toolbar.</para></listitem>
 </itemizedlist>
 <para>Any of these methods results in the same action by KWord.</para>
 <para>When trying to open a file, a dialog appears.</para>
-<screenshot><mediaobject><imageobject><imagedata fileref="opendlg" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+<screenshot><mediaobject><imageobject><imagedata fileref="opendlg.png" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
 <para>Lets look at this dialog more closely:</para>
-<para>This dialog shows my current directory is "/home/mmcbride".  You can see this by the textbox at the top of the dialog</para>
-<para>The large box below that shows I currently have 13 folders in this directory.  One of the folders is "/home/mike/Desktop", another is "/home/mike/Mail".</para>
+<para>This dialog shows my current directory is <emphasis>/home/mmcbride/kword</emphasis>.  You can see this by the textbox at the top of the dialog</para>
+<para>The large box below that shows I currently have 1 folder in this directory, entitled <emphasis>Past Work</emphasis>, and 2 files (<emphasis>Job Description</emphasis> and <emphasis>Resume</emphasis>).</para>
 <para>In the upper left corner, is a blue arrow pointed up.  This arrow will take you up one level in the directory structure.</para>
 <para>The next two buttons are backwards and forward buttons.  These buttons work just like a browser, where you can use the back button to travel to the previous directory, and the forward button to advance into a directory you just came from.</para>
 <para>Next to the arrow buttons, is a button that looks like a house.  Clicking this will take you to your home directory.</para>
 <para>Next to the home button, is a reload button.  Clicking this button, causes &kword; to reload the current directory in the event things have changed.</para>
-<para>Next to the reload button, is a button with a purple ribbon on it.  This button allows you to set and navigate through bookmarks.  This is a quick way to jump to commonly accessed directories.  By clicking this button, a submenu appears which allows you to add bookmarks or jump to a new bookmark.</para>
+<para>Next to the reload button, is a button with a grey ribbon on it.  This button allows you to set and navigate through bookmarks.  This is a quick way to jump to commonly accessed directories.  By clicking this button, a submenu appears which allows you to add bookmarks or jump to a new bookmark.</para>
 <para>Next to the bookmark button, is a new folder button.  If you want to create a new folder, simply click the button.  &kword; will ask for a name for the folder.  Then the folder will be created and you will automatically be placed in the new folder.</para>
-<note><para>There is one folder labled "..".  This is a special folder that exists in all directories on your computer.  It tells the computer that if I select this folder, to move up one level in the directory heirarchy. (If a directory heirarchy is a foriegn concept to you, I would recommend reading a chapter in a good Unix book, which describes the directory filesystem).</para></note>
-<para>We can also see I have previously saved a file called "tempfile". (All KWord documents end in .kwd).</para>
-<para>The text box labled "File Name" is blank, which indicates that there is no currently selected file.  After you have selected a file (before you hit the OK button), the file name is listed here.</para>
-<para>The text box labled "File Type" shows we intend to save this as a KWord file.  Using KWord, you can save the file as other formats.  For information on this, see the section on <link linkend="Filters">Filters</link>.</para>
-<para>When you are in the correct folder, you can type a name into the "File Name" box. There is no need to put a .kwd at the end of your filename, &kword; will do this for you.</para>
-<para>The text box labled "File Type" shows we intend to load a KWord file.  Using KWord, you can load files from other formats.  For information on this, see the section on <link linkend="Filters">Filters</link>.</para>
-<para>Another function of the "File Type" box, is to act as a file mask. A file mask hides all the files that KWord believes are unimportant to your current task.  When the KWord filetype is set to KWord file, the dialog box only shows Folders, and files ending in ".kwd".  If you file does not end in .kwd, you need to change the file type box to read "All files".  Now all files will be displayed.</para>
-
-
-<para>There is a "Cancel" button, if you click this button, the load will be aborted.</para>
-<para>There is a "Open" button, which will be used when we have selected the correct location, correct format and correct filename.</para>
+<para>The text box labled <guilabel>Location</guilabel> is blank.  Once you click on a filename, that filename will appear in this blank.  Alternativly, you can simply type the filename in the blank.</para>
+<para>The text box labled <guilabel>Filter</guilabel> shows we intend to load all file types.  Using KWord, you can load files from other formats.  For information on this, see the section on <link linkend="Filters">Filters</link>.</para>
+<tip><para>Another function of the <guilabel>Filter</guilabel> box, is to act as a file mask. A file mask hides all the files that KWord believes are unimportant to your current task.  When the KWord filetype is set to KWord file, the dialog box only shows Folders, and files ending in ".kwd".  If you file does not end in .kwd, you need to change the file type box to read "All files", by selecting the drop down box.  Now all files will be displayed.</para></tip>
 <para>Using this dialog, you can move through the directory tree to find a location to load your document from.</para>
-<para>To enter a folder, you double click on that folder.  To exit that folder, you double click the ".." folder, or click the blue up arrow button.</para>
-<para>Once you have located your file, you can open it by double clicking on the filename, left clicking on the filename and then clicking on "Open", or by typing the filename in the text box labled "File Name" and clicking "Open".</para>
+<para>To enter a folder, you double click on that folder.  To exit that folder click the blue up arrow button.</para>
+
+<para>There is a <guibutton>Cancel</guibutton> button, if you click this button, the load will be aborted.</para>
+<para>There is a <guibutton>OK</guibutton> button, which will be used when we have selected the correct location, correct format and correct filename.</para>
 </sect1>
 <sect1 id="Printing"><title>Printing A Document</title>
-<para>The "Open" command can be invoked 3 ways:</para>
+<para>The Print command can be invoked 3 ways:</para>
 <itemizedlist>
 <listitem><para>By selecting <menuchoice> <guimenu>File</guimenu><guimenuitem>Print</guimenuitem></menuchoice> from the Menu bar</para></listitem>
 <listitem><para>You can use the keyboard shortcut: <keycombo><keycap>Ctrl</keycap><keycap>P</keycap></keycombo></para></listitem>
-<listitem><para>or by clicking <inlinemediaobject><imageobject><imagedata fileref="fileprint" format="PNG" align="center"/></imageobject></inlinemediaobject> on the toolbar.</para></listitem>
+<listitem><para>or by clicking <inlinemediaobject><imageobject><imagedata fileref="fileprint.png" format="PNG" align="center"/></imageobject></inlinemediaobject> on the toolbar.</para></listitem>
 </itemizedlist>
-<para>No matter how you do this, the print dialog will appear.</para>
-<screenshot><mediaobject><imageobject><imagedata fileref="pntdlg" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
-<para>The top section of this dialog allows you to print to a printer (default) or print to a file.</para>
-<para>Below the radio button labled Print to a printer, is a list of printers connected to the computer.</para>
-<para>The number of printers available will vary depending on the computer.  In this example, there are 2 printers.  All the printers are connected directly to the computer.  Your system may have network printers listed.  If you do not know which printer to use, you are probably best off using the default value (lp).  If you want to print to another printer, simply click on the printer of your choice.</para>
+<para>No matter how you do this, the KDE print dialog will appear.</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="pntdlg.png" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+<para>The top drop down box labele <guilabel>Name</guilabel> shows the currently selected printer.  To configure this printer click on the
+<guibutton>Properties</guibutton> button.</para>
+<para>To select a different printer, click on the dropdown box and select the desired printer.</para>
 <para>If you want to print your output into a postscript file, select Print to File.  You can now use the "Browse" button to locate the files destination.  As an alternative, you can enter the absolute path and filename for your new file.</para>
-<para>The Printer Settings section allows you to select color or greyscale printing.  If you do not have a color printer, this feature has no effect.</para>
-<para>Under Options, you can select either to print the whole document (the default), or selected pages.  If you select the Print Selected Pages option, you will be given the opportunity to select your start and end pages in the text boxes provided.</para>
+<para>Under <guilabel>Page Selection</guilabel>, you can select either to print the whole document (the default), print the page the cursor is located on, or print a range of pages.  If you select the <guilabel>Print Range</guilabel> option, you will be given the opportunity to select your start and end pages in the text boxe provided.</para>
+<para>In the box in the lower right, you should set the number of copies you want printed.  You can either enter the number directly into the box, or use the arrows to adjust the number. KWord can print a maximum of 9999 copies at once.</para>
+<para>You can have KDE collate your documents by clicking on the <guilabel>Collate</guilabel> check box.  If selected, KDE will print all of the pages for copy 1, then print all the pages for copy 2, etc.  If not selected, KDE will print all of the copies of the first page, then all of the copies of the second page, etc.</para>
 <para>You can also determine if the document is printed in forward order (print first page first), or reverse order (print last page first).</para>
-<para>You can also set the number of copies.  You can either enter the number directly into the box, or use the arrows to adjust the number. KWord can print a maximum of 99 copies at once.</para>
-<para>The left side of the print dialog, allows you to set the page size and the direction of print.  Any differences between the page formatted in the document view, and the page size and shape selected here, may result in truncated output. To prevent this, you should make these paper settings match your <link linkend="PageFormat">document settings</link>.</para>
+
+<para>Just above the <guibutton>OK</guibutton> you can tell KDE to print the Even pages, the Odd pages or All pages.</para>
 <para>When you are satisfied with your selections, you can click OK to print.</para>
 <para>If you click on Cancel, the printing will be aborted.</para>
 </sect1>
@@ -879,7 +897,12 @@ This is an excellent choice for every day correspondance, or general word proces
 <para>This section of the guide will cover more advanced features of data editing.  This section focuses entirely on text data.  For working with other types of data, please see the <link linkend="Guides3">next section</link>. </para>
 <sect1 id="select"><title>Selecting Text</title>
 <para>For many editing and formatting functions in KWord, you will want to perform a certain action (bold face, underline, etc) to a certain section of text, not the document as a whole. You specify which text you want by selecting (highlighting) text.</para>
+<<<<<<< index.docbook
+<para>Selected text has a dark background to seperate it from unselected text. You select text by designating a start and an end point.  All the text in between the start and end point is selected text.  (Note:  The "endpoint" can be located before the start point.  The text will not be in reverse order.)</para>
+<screenshot><mediaobject><imageobject><imagedata fileref="select1.png" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
+=======
 <para>Selected text has a black background to seperate it from unselected text. You select text by designating a start and an end point.  All the text in between the start and end point is selected text.  (Note:  The "endpoint" can be located before the start point.  The text will not be reversed.)</para>
+>>>>>>> 1.27
 <para>You can select text with either the mouse or the keyboard. </para>
 <sect2 id="selkb"><title>Using The Keyboard</title>
 <informaltable frame="none"><tgroup cols="2" align="left">
@@ -921,7 +944,7 @@ This is an excellent choice for every day correspondance, or general word proces
  
 <para>The text now reads <quote>Verona</quote> again.</para>
 <para>If, after you Undo a change, and then decide that was a mistake, you can select <menuchoice> <guimenu>Edit</guimenu><guimenuitem>Redo</guimenuitem></menuchoice> and the Undo is reversed.</para>
-<note><para>Sometimes it is not possible for &kword; to undo an edit.  You will be informed of this when you select the <guimenu>Edit</guimenu> function, it will replace the Undo function with No Undo Possible.</para></note>
+<note><para>Sometimes it is not possible for &kword; to undo an edit.  You will be informed of this when you select the <guimenu>Edit</guimenu> function, it will replace the <guimenuitem>Undo</guimenuitem> function with <guimenuitem>No Undo Possible</guimenuitem>.</para></note>
 </sect1>
 <sect1 id="Clipboard"><title>Cut/Copy/Paste and the Clipboard</title>
 <para>The "clipboard" is a concept familiar to most people who have used modern word processors. It is a piece of your computers memory which is set aside as a temporary storage space.  You can "Cut" or "Copy" text from your document into the clipboard.  You can then move to another part of the document, and "Paste" this text back into the document at the new position.</para>
@@ -931,17 +954,19 @@ This is an excellent choice for every day correspondance, or general word proces
 
 <para><quote>The big, red fox jumped over the lazy dog.</quote></para>
 <para>Using the mouse or keyboard, you select the phrase <quote>big, red</quote>.</para>
-<para>Now select <menuchoice> <guimenu>Edit</guimenu><guimenuitem>Copy</guimenuitem></menuchoice> from the menubar or press <keycombo><keycap>Ctrl</keycap><keycap>C</keycap></keycombo>.</para>
+<para>Now select <menuchoice> <guimenu>Edit</guimenu><guimenuitem>Copy</guimenuitem></menuchoice> from the menubar, click 
+<inlinemediaobject><imageobject><imagedata fileref="editcopy.png" format="PNG" align="center"/></imageobject></inlinemediaobject> from the toolbar or press <keycombo><keycap>Ctrl</keycap><keycap>C</keycap></keycombo>.</para>
 <para><emphasis>This has moved a copy of the selected text to the clipboard.</emphasis></para>
 <para>You now place the mouse cursor between <quote>lazy</quote> and <quote>dog</quote> and click once.</para>
-<para>Now select <menuchoice> <guimenu>Edit</guimenu><guimenuitem>Paste</guimenuitem></menuchoice> from the menubar or press <keycombo><keycap>Ctrl</keycap><keycap>V</keycap></keycombo></para>
+<para>Now select <menuchoice> <guimenu>Edit</guimenu><guimenuitem>Paste</guimenuitem></menuchoice> from the menubar, click 
+<inlinemediaobject><imageobject><imagedata fileref="editpaste.png" format="PNG" align="center"/></imageobject></inlinemediaobject> from the toolbar or press <keycombo><keycap>Ctrl</keycap><keycap>V</keycap></keycombo></para>
 <para>The resulting sentence is: </para>
 <para><quote>The fox jumped over the lazy big, red dog</quote></para>
 <sect2 id="localcopy"><title>The Copy Command</title>
 <para>The "Copy" command can be invoked 4 ways:</para>
 <itemizedlist>
 <listitem><para>By selecting <menuchoice> <guimenu>Edit</guimenu><guimenuitem>Copy</guimenuitem></menuchoice> from the Menu bar</para></listitem>
-<listitem><para>By clicking <inlinemediaobject><imageobject><imagedata fileref="editcopy" format="PNG" align="center"/></imageobject></inlinemediaobject> on the toolbar.</para></listitem>
+<listitem><para>By clicking <inlinemediaobject><imageobject><imagedata fileref="editcopy.png" format="PNG" align="center"/></imageobject></inlinemediaobject> on the toolbar.</para></listitem>
 <listitem><para>You can use the keyboard shortcut: <keycombo><keycap>Ctrl</keycap><keycap>C</keycap></keycombo></para></listitem>
 <listitem><para>You can use the mouse to highlight the text.  That text is automatically moved into the clipboard.</para></listitem>
 </itemizedlist>
@@ -951,7 +976,7 @@ This is an excellent choice for every day correspondance, or general word proces
 <para>The "Cut" command can be invoked 3 ways:</para>
 <itemizedlist>
 <listitem><para>By selecting <menuchoice> <guimenu>Edit</guimenu><guimenuitem>Cut</guimenuitem></menuchoice> from the Menu bar</para></listitem>
-<listitem><para>By clicking <inlinemediaobject><imageobject><imagedata fileref="editcut" format="PNG" align="center"/></imageobject></inlinemediaobject> on the toolbar.</para></listitem>
+<listitem><para>By clicking <inlinemediaobject><imageobject><imagedata fileref="editcut.png" format="PNG" align="center"/></imageobject></inlinemediaobject> on the toolbar.</para></listitem>
 <listitem><para>You can use the keyboard shortcut: <keycombo><keycap>Ctrl</keycap><keycap>X</keycap></keycombo></para></listitem>
 </itemizedlist>
 <para>The "Cut" command moves a copy of the selected text to the clipboard.  <emphasis>The selected text is then deleted from the sentance in your document.</emphasis></para>
@@ -960,7 +985,7 @@ This is an excellent choice for every day correspondance, or general word proces
 <para>The "Paste" command can be invoked 3 ways:</para>
 <itemizedlist>
 <listitem><para>By selecting <menuchoice> <guimenu>Edit</guimenu><guimenuitem>Paste</guimenuitem></menuchoice> from the Menu bar</para></listitem>
-<listitem><para>By clicking <inlinemediaobject><imageobject><imagedata fileref="editpaste" format="PNG" align="center"/></imageobject></inlinemediaobject> on the toolbar.</para></listitem>
+<listitem><para>By clicking <inlinemediaobject><imageobject><imagedata fileref="editpaste.png" format="PNG" align="center"/></imageobject></inlinemediaobject> on the toolbar.</para></listitem>
 <listitem><para>You can use the keyboard shortcut: <keycombo><keycap>Ctrl</keycap><keycap>V</keycap></keycombo></para></listitem>
 </itemizedlist>
 <para>The "Paste" command inserts a copy of all the text in the clipboard at the current position of the cursor.  The clipboard is unaffected. (So another paste command will produce yet another copy of the text in the document.)</para>
@@ -1076,7 +1101,7 @@ This is an excellent choice for every day correspondance, or general word proces
 </sect2></sect1></chapter> 
 <!-- **************************************************************************************************** -->   
 <chapter id="Guides3"><title>Detailed Guides: Document Layout</title>
-<para><link linkend="Guides">Two sections ago</link>, we talked about <link linkend="NewDoc">creating</link>, <link linkend="Saving">saving</link>, <link linkend="Loading">loading</link> and <link linkend="Printing">printing documents</link>. <link linkend="Guides2">In the section after that</link> (the previous section), we discussed <link linkend="Select">entering the textual information</link>, <link linkend="Clipboard">moving it around</link>, <link linkend="SpellCheck">spell checing</link>, and <link linkend="AutoCorrect">autocorrecting</link> your text.</para>
+<para><link linkend="Guides">Two sections ago</link>, we talked about <link linkend="NewDoc">creating</link>, <link linkend="Saving">saving</link>, <link linkend="Loading">loading</link> and <link linkend="Printing">printing documents</link>. <link linkend="Guides2">In the section after that</link> (the previous section), we discussed <link linkend="select">entering the textual information</link>, <link linkend="Clipboard">moving it around</link>, <link linkend="SpellCheck">spell checing</link>, and <link linkend="Autocorrect">autocorrecting</link> your text.</para>
 <para>This section of the guide is designed to help you layout your documents.  We will begin with changing the size and shape of the page and the margins, and work progressively through smaller and smaller blocks of text (frames, then paragraphs, then characters).</para>
 <para>After we have discussed formatting individual characters, we will deal with some miscellaneous topics related to layout of your document.</para>
 <sect1 id="PageFormat"><title>Formatting the Page</title>
@@ -1115,7 +1140,7 @@ This is an excellent choice for every day correspondance, or general word proces
 <para>Clicking on the "Header and Footer" tab changes the dialog options.</para>
 <screenshot><mediaobject><imageobject><imagedata fileref="wpfmtpg3" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
 <para>This dialog can be broken into two major sections, with each section being divided in to smaller divisions.</para>
-<para>If you are not familiar with Headers and Footers yet, you should first read the section entitled <link linkend="Headfoot">Headers/Footers</link></para>
+<para>If you are not familiar with Headers and Footers yet, you should first read the section entitled <link linkend="HeadFoot">Headers/Footers</link></para>
 <para><emphasis>Headers</emphasis></para>
 <para>This section lets you determine the placement of headers, and which pages have which headers on them.</para>
 <para>In the text box labled "Spacing between header and body", you can specify how much empty space should be placed between the bottom of the header, and the top of the main frame.</para>
@@ -1168,7 +1193,7 @@ This is an excellent choice for every day correspondance, or general word proces
 <para>Clicking on the "Header and Footer" tab changes the dialog options.</para>
 <screenshot><mediaobject><imageobject><imagedata fileref="dtpfmtpg2" format="PNG" align="center"/></imageobject></mediaobject></screenshot>
 <para>This dialog can be broken into two major sections, with each section being divided in to smaller divisions.</para>
-<para>If you are not familiar with Headers and Footers yet, you should first read the section entitled <link linkend="Headfoot">Headers/Footers</link></para>
+<para>If you are not familiar with Headers and Footers yet, you should first read the section entitled <link linkend="HeadFoot">Headers/Footers</link></para>
 <para><emphasis>Headers</emphasis></para>
 <para>This section lets you determine the placement of headers, and which pages have which headers on them.</para>
 <para>In the text box labled "Spacing between header and body", you can specify how much empty space should be placed between the bottom of the header, and the top of the main frame.</para>
@@ -2118,7 +2143,7 @@ This is an excellent choice for every day correspondance, or general word proces
 <chapter id="Guides4"><title>Detailed Guides: More than just text</title>
 <sect1 id="dg4intro"><title>Introduction</title><para></para></sect1>
 <sect1 id="Graphics"><title>Graphics</title><para></para>
-<sect2 id="Insgraphics"><title>Insert Pictures</title><para></para></sect2>
+<sect2 id="InsGraphics"><title>Insert Pictures</title><para></para></sect2>
 <sect2 id="Insclipart"><title>Insert Clipart</title><para></para></sect2>
 <sect2 id="resizeGraphics"><title>Resize Graphics</title><para></para></sect2>
 <sect2 id="Movegraphics"><title>Move Graphics</title><para></para></sect2>
@@ -2848,9 +2873,9 @@ Will <link linkend="SpellCheck">spell check</link> the document.</action></para>
 <link linkend="MenuCrPF">Create Picture Frame</link>
 </entry></row>
 <row><entry>
-<link linkend="MenuCrCAF"><inlinemediaobject><imageobject><imagedata fileref="clipart" format="PNG" align="center"/></imageobject></inlinemediaobject></link>
+<link linkend="MenuCrCaF"><inlinemediaobject><imageobject><imagedata fileref="clipart" format="PNG" align="center"/></imageobject></inlinemediaobject></link>
 </entry><entry valign="middle">
-<link linkend="MenuCrCAF">Create Clipart Frame</link>
+<link linkend="MenuCrCaF">Create Clipart Frame</link>
 </entry></row>
 <row><entry>
 <link linkend="MenuCrTbl"><inlinemediaobject><imageobject><imagedata fileref="part-kspread" format="PNG" align="center"/></imageobject></inlinemediaobject></link>
