@@ -425,6 +425,7 @@ protected:
     QPopupMenu *mm_menu, *frame_edit_menu;
     int mm_edit, mm_edit_frame, mm_create_text, mm_create_pix, mm_create_clipart, mm_create_table,
         mm_create_formula, mm_create_part, mm_create_kspread_table;
+    int frEditProps, frEditDel, frEditReconnect;
 
     // Anchor support.
     bool useAnchor;

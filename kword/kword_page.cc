@@ -919,6 +919,22 @@ void KWPage::vmpRightButton( QMouseEvent *e, int mx, int my )
             selectAllFrames( FALSE );
             selectFrame( mx, my, TRUE );
             QPoint pnt( QCursor::pos() );
+            KWFrame *frame=doc->getFirstSelectedFrame();
+            // if a header/footer etc. Dont show the popup.
+            if(frame->getFrameSet() && frame->getFrameSet()->getFrameInfo() != FI_BODY) return;
+            // enable delete
+            frame_edit_menu->setItemEnabled(frEditDel, true);
+            // if text frame, 
+            if(frame->getFrameSet() && frame->getFrameSet()->getFrameType() == FT_TEXT) {
+                // if frameset 0 disable delete
+                if(doc->getProcessingType() == KWordDocument::WP && frame->getFrameSet() == doc->getFrameSet(0)) {
+                    frame_edit_menu->setItemEnabled(frEditReconnect, false);
+                    frame_edit_menu->setItemEnabled(frEditDel, false);
+                } else {
+                    frame_edit_menu->setItemEnabled(frEditReconnect, true);
+                }
+            } else 
+                frame_edit_menu->setItemEnabled(frEditReconnect, false);
             frame_edit_menu->popup( pnt );
         } break;
         default: break;
@@ -1182,6 +1198,7 @@ void KWPage::vmrCreateTable()
     }
     mmEdit();
     useAnchor = false;
+    kdDebug() << "KWPage::vmrCreateTable exit" << endl;
 }
 
 /*================================================================*/
@@ -3519,10 +3536,10 @@ void KWPage::setupMenus()
 
     frame_edit_menu = new QPopupMenu;
     CHECK_PTR( frame_edit_menu );
-    frame_edit_menu->insertItem( i18n( "Properties..." ), this, SLOT( femProps() ) );
+    frEditProps = frame_edit_menu->insertItem( i18n( "Properties..." ), this, SLOT( femProps() ) );
     frame_edit_menu->insertSeparator();
-    frame_edit_menu->insertItem( i18n( "Delete Frame" ), this, SLOT( editDeleteFrame() ) );
-    frame_edit_menu->insertItem( i18n( "Reconnect Frame" ), this, SLOT( editReconnectFrame() ) );
+    frEditDel = frame_edit_menu->insertItem( i18n( "Delete Frame" ), this, SLOT( editDeleteFrame() ) );
+    frEditReconnect = frame_edit_menu->insertItem( i18n( "Reconnect Frame" ), this, SLOT( editReconnectFrame() ) );
 }
 
 /*================================================================*/
@@ -3553,15 +3570,15 @@ int KWPage::getPageOfRect( QRect _rect )
 /*================================================================*/
 void KWPage::femProps()
 {
-    if ( frameDia ) {
-        frameDia->close();
-        delete frameDia;
-        frameDia = 0;
-    }
-
     //repaintScreen( FALSE );
     KWFrame *frame=doc->getFirstSelectedFrame();
     if(frame) {
+        if ( frameDia ) {
+            frameDia->close();
+            delete frameDia;
+            frameDia = 0;
+        }
+
         frameDia = new KWFrameDia( this, frame);
         connect( frameDia, SIGNAL( changed() ), this, SLOT( frameDiaClosed() ) );
         frameDia->setCaption(i18n("Frame Properties"));
