@@ -416,28 +416,39 @@ bool KPresenterDoc::saveChildren( KoStore* _store )
     int i = 0;
 
     if ( saveOnlyPage == -1 ) // Don't save all children into template for one page
-           // ###### TODO: save objects that are on that page
+        // ###### TODO: save objects that are on that page
     {
-      QPtrListIterator<KoDocumentChild> it( children() );
-      for( ; it.current(); ++it ) {
-          // Don't save children that are only in the undo/redo history
-          // but not anymore in the presentation
-          KPrPage *page;
-          for ( page = m_pageList.first(); page ; page = m_pageList.next() )
-          {
-              QPtrListIterator<KPObject> oIt(page->objectList());
-              for (; oIt.current(); ++oIt )
-              {
-                  if ( oIt.current()->getType() == OT_PART &&
-                       dynamic_cast<KPPartObject*>( oIt.current() )->getChild() == it.current() )
-                  {
-                      if (((KoDocumentChild*)(it.current()))->document()!=0)
-                          if ( !((KoDocumentChild*)(it.current()))->document()->saveToStore( _store, QString::number( i++ ) ) )
-                              return false;
-                  }
-              }
-          }
-      }
+        QPtrListIterator<KoDocumentChild> it( children() );
+        for( ; it.current(); ++it ) {
+            // Don't save children that are only in the undo/redo history
+            // but not anymore in the presentation
+            KPrPage *page;
+            for ( page = m_pageList.first(); page ; page = m_pageList.next() )
+            {
+                QPtrListIterator<KPObject> oIt(page->objectList());
+                for (; oIt.current(); ++oIt )
+                {
+                    if ( oIt.current()->getType() == OT_PART &&
+                         dynamic_cast<KPPartObject*>( oIt.current() )->getChild() == it.current() )
+                    {
+                        if (((KoDocumentChild*)(it.current()))->document()!=0)
+                            if ( !((KoDocumentChild*)(it.current()))->document()->saveToStore( _store, QString::number( i++ ) ) )
+                                return false;
+                    }
+                }
+            }
+            QPtrListIterator<KPObject> oIt(m_stickyPage->objectList());
+            for (; oIt.current(); ++oIt )
+            {
+                if ( oIt.current()->getType() == OT_PART &&
+                     dynamic_cast<KPPartObject*>( oIt.current() )->getChild() == it.current() )
+                {
+                    if (((KoDocumentChild*)(it.current()))->document()!=0)
+                        if ( !((KoDocumentChild*)(it.current()))->document()->saveToStore( _store, QString::number( i++ ) ) )
+                            return false;
+                }
+            }
+        }
     }
     return true;
 }
@@ -583,41 +594,10 @@ QDomDocument KPresenterDoc::saveXML()
             if ( saveOnlyPage != -1 &&
                  i != saveOnlyPage )
                 continue;
-            QPtrListIterator<KPObject> oIt(m_pageList.at(i)->objectList());
-            for (; oIt.current(); ++oIt )
-            {
-                double offset=i*m_pageList.at(i)->getPageRect().height();
-                if ( oIt.current()->getType() == OT_PART &&
-                     dynamic_cast<KPPartObject*>( oIt.current() )->getChild() == chl.current() )
-                {
-                    QDomElement embedded=doc.createElement("EMBEDDED");
-                    KPresenterChild* curr = (KPresenterChild*)chl.current();
-
-                    // geometry is no zoom value !
-                    QRect _rect = curr->geometry();
-                    int tmpX = (int)zoomHandler()->unzoomItX( _rect.x() );
-                    int tmpY = (int)zoomHandler()->unzoomItY( _rect.y() );
-                    int tmpWidth = (int)zoomHandler()->unzoomItX( _rect.width() );
-                    int tmpHeight = (int)zoomHandler()->unzoomItY( _rect.height() );
-                    curr->setGeometry( QRect( tmpX, tmpY, tmpWidth, tmpHeight ) );
-
-                    embedded.appendChild(curr->save(doc, true));
-
-                    curr->setGeometry( _rect ); // replace zoom value
-
-                    QDomElement settings=doc.createElement("SETTINGS");
-                    QPtrListIterator<KPObject> setOIt(m_pageList.at(i)->objectList());
-                    for (; setOIt.current(); ++setOIt )
-                    {
-                        if ( setOIt.current()->getType() == OT_PART &&
-                             dynamic_cast<KPPartObject*>( setOIt.current() )->getChild() == curr )
-                            settings.appendChild(setOIt.current()->save( doc,offset ));
-                    }
-                    embedded.appendChild(settings);
-                    presenter.appendChild(embedded);
-                }
-            }
+            double offset=i*m_pageList.at(i)->getPageRect().height();
+            saveEmbeddedObject(m_pageList.at(i), chl.current(),doc,presenter,offset );
         }
+        saveEmbeddedObject(m_stickyPage, chl.current(),doc,presenter,0.0 );
     }
 
     if ( saveOnlyPage == -1 )
@@ -644,6 +624,45 @@ QDomDocument KPresenterDoc::saveXML()
 
     setModified( false );
     return doc;
+}
+
+
+void KPresenterDoc::saveEmbeddedObject(KPrPage *page, KoDocumentChild *chl,QDomDocument &doc,QDomElement &presenter, double offset )
+{
+    QPtrListIterator<KPObject> oIt(page->objectList());
+    for (; oIt.current(); ++oIt )
+    {
+        if ( oIt.current()->getType() == OT_PART &&
+             dynamic_cast<KPPartObject*>( oIt.current() )->getChild() == chl )
+        {
+            QDomElement embedded=doc.createElement("EMBEDDED");
+            KPresenterChild* curr = (KPresenterChild*)chl;
+
+            // geometry is no zoom value !
+            QRect _rect = curr->geometry();
+            int tmpX = (int)zoomHandler()->unzoomItX( _rect.x() );
+            int tmpY = (int)zoomHandler()->unzoomItY( _rect.y() );
+            int tmpWidth = (int)zoomHandler()->unzoomItX( _rect.width() );
+            int tmpHeight = (int)zoomHandler()->unzoomItY( _rect.height() );
+            curr->setGeometry( QRect( tmpX, tmpY, tmpWidth, tmpHeight ) );
+
+            embedded.appendChild(curr->save(doc, true));
+
+            curr->setGeometry( _rect ); // replace zoom value
+
+            QDomElement settings=doc.createElement("SETTINGS");
+            QPtrListIterator<KPObject> setOIt(page->objectList());
+            for (; setOIt.current(); ++setOIt )
+            {
+                if ( setOIt.current()->getType() == OT_PART &&
+                     dynamic_cast<KPPartObject*>( setOIt.current() )->getChild() == curr )
+                    settings.appendChild(setOIt.current()->save( doc,offset ));
+            }
+            embedded.appendChild(settings);
+            presenter.appendChild(embedded);
+        }
+    }
+
 }
 
 /*===============================================================*/
