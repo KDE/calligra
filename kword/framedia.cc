@@ -1200,7 +1200,7 @@ void KWFrameDia::enableRunAround()
 
 bool KWFrameDia::applyChanges()
 {
-    //kdDebug() << "KWFrameDia::applyChanges************************"<<endl;
+    //kdDebug() << "KWFrameDia::applyChanges"<<endl;
     KWFrame *frameCopy = 0L;
     bool isNewFrame=false;
     if(frame) { // only do undo/redo when we have 1 frame to change for now..
@@ -1433,12 +1433,20 @@ bool KWFrameDia::applyChanges()
             doc->repaintAllViews();
         }
     }
+
     int pageNum = QMIN( static_cast<int>(frame->y() / doc->ptPaperHeight()), doc->getPages()-1 );
 
-    double px = QMAX(0,KoUnit::fromUserValue( sx->text(), doc->getUnit() ));
-    double py = QMAX(0, KoUnit::fromUserValue(sy->text(),doc->getUnit())) +pageNum * doc->ptPaperHeight();
-    double pw = QMAX(KoUnit::fromUserValue( sw->text(), doc->getUnit() ),0);
-    double ph = QMAX(KoUnit::fromUserValue(sh->text(), doc->getUnit() ),0);
+    double px=0.0;
+    double py=0.0;
+    double pw=0.0;
+    double ph=0.0;
+    if(tab4)
+    {
+        px = QMAX(0,KoUnit::fromUserValue( sx->text(), doc->getUnit() ));
+        py = QMAX(0, KoUnit::fromUserValue(sy->text(),doc->getUnit())) +pageNum * doc->ptPaperHeight();
+        pw = QMAX(KoUnit::fromUserValue( sw->text(), doc->getUnit() ),0);
+        ph = QMAX(KoUnit::fromUserValue(sh->text(), doc->getUnit() ),0);
+    }
 
     KoRect rect( px, py, pw, ph );
 
