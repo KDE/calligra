@@ -32,8 +32,8 @@
 class ListInfo
 {
 public:
-    CounterData::Style m_typeList; // What is the style of the current list (undefined, if we are not in a list)
-    bool m_orderedList; // Is the current list ordered or not (undefined, if we are not in a list)
+    CounterData::Style m_typeList; ///< What is the style of the current list (undefined, if we are not in a list)
+    bool m_orderedList; ///< Is the current list ordered or not (undefined, if we are not in a list)
 };
 
 class RTFWorker : public KWEFBaseWorker
@@ -43,7 +43,7 @@ public:
     virtual ~RTFWorker(void) { delete m_streamOut; delete m_ioDevice; }
 public:
     virtual bool doOpenFile(const QString& filenameOut, const QString& to);
-    virtual bool doCloseFile(void); // Close file in normal conditions
+    virtual bool doCloseFile(void); ///< Close file in normal conditions
     virtual bool doOpenDocument(void);
     virtual bool doCloseDocument(void);
     virtual bool doFullParagraph(const QString& paraText, const LayoutData& layout,
@@ -67,7 +67,7 @@ private:
      * Encodes the @p text into
      * RTF seven bit ASCII. This affects any 8 bit characters.
      * They are encoded either with \\' or with \\u
-     * @return the escape string
+     * @return the escaped string
      */
     QString escapeRtfText ( const QString& text ) const;
     QString ProcessParagraphData ( const QString &paraText,
@@ -96,8 +96,8 @@ protected:
     QString m_textDocInfo;
     QString m_textPage;
     QString m_textBody;
-    QString m_fileName; // Name of the output file
-    QValueStack<ListInfo> m_listStack; // Stack for list information
+    QString m_fileName; ///< Name of the output file
+    QValueStack<ListInfo> m_listStack; ///< Stack for list information
     QStringList m_fontList;
     QValueList<QColor> m_colorList;
     QValueList<LayoutData> m_styleList;
