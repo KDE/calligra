@@ -41,6 +41,7 @@ VSelectTool::activate()
 //		view()->statusMessage()->setText( i18n( "Scale" ) );
 	view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::arrowCursor ) );
 	view()->part()->document().selection()->setState( VObject::selected );
+	view()->part()->document().selection()->clearNodes();
 }
 
 void
