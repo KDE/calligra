@@ -128,6 +128,30 @@ void SideBar::currentChanged(QWidget *tab)
     }
 }
 
+void SideBar::addItem( int pos )
+{
+    _outline->addItem( pos );
+    _thb->addItem( pos );
+}
+
+void SideBar::moveItem( int oldPos, int newPos )
+{
+    _outline->moveItem( oldPos, newPos );
+    _thb->moveItem( oldPos, newPos );
+}
+
+void SideBar::removeItem( int pos )
+{
+    _outline->removeItem( pos );
+    _thb->removeItem( pos );
+}
+
+void SideBar::updateItem( int pos, bool sticky )
+{
+    _outline->updateItem( pos );
+    _thb->updateItem( pos, sticky );
+}
+
 ThumbBar::ThumbBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v)
   :KIconView(parent), doc(d), view(v)
 {
@@ -181,19 +205,96 @@ void ThumbBar::rebuildItems()
 {
     if( !isVisible())
         return;
-  kdDebug(33001) << "ThumbBar::rebuildItems" << endl;
+    kdDebug(33001) << "ThumbBar::rebuildItems" << endl;
 
-  QApplication::setOverrideCursor( Qt::waitCursor );
+    QApplication::setOverrideCursor( Qt::waitCursor );
 
-  clear();
-  for ( unsigned int i = 0; i < doc->getPageNums(); i++ ) {
-    QIconViewItem *item = new QIconViewItem(dynamic_cast<QIconView *>(this), QString::number(i+1), getSlideThumb(i));
-    item->setDragEnabled(false);  //no dragging for now
-  }
+    clear();
+    for ( unsigned int i = 0; i < doc->getPageNums(); i++ ) {
+        QIconViewItem *item = new QIconViewItem(dynamic_cast<QIconView *>(this), QString::number(i+1), getSlideThumb(i));
+        item->setDragEnabled(false);  //no dragging for now
+    }
 
-  uptodate = true;
+    uptodate = true;
 
-  QApplication::restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
+}
+
+void ThumbBar::updateItem( int pagenr /* 0-based */, bool sticky )
+{
+    int pagecnt = 0;
+    // Find icon
+    for ( QIconViewItem *it = firstItem(); it; it = it->nextItem() )
+    {
+        if ( sticky ) {
+            it->setPixmap(getSlideThumb( pagecnt ));
+            pagecnt++;
+        }
+        else {
+            if ( it->text().toInt() == pagenr + 1 )
+            {
+                it->setPixmap(getSlideThumb( pagenr ));
+                return;
+            }
+       }
+    }
+    if ( ! sticky )
+        kdWarning() << "Item for page " << pagenr << " not found" << endl;
+}
+
+void ThumbBar::addItem( int pos )
+{
+  kdDebug()<< "ThumbBar::addItem not yet implemented" << endl;
+}
+
+// moves a item without recreating all pages
+void ThumbBar::moveItem( int oldPos, int newPos )
+{
+    int page = 0;
+    QIconViewItem *after = 0;
+    QIconViewItem *take = 0;
+    for ( QIconViewItem *it = firstItem(); it; it = it->nextItem() ) {
+        // find page which should move
+        if ( page == oldPos ) {
+            take = it;
+        }
+        // find position where page should be insert
+        // as a page can not be insert at the beginning get the first one
+        // the page to get depends on if a page is moved forward / backwards
+        if ( page == newPos ) {
+            after = page == 0 ? it : newPos > oldPos ? it : it->prevItem();
+        }
+        page++;
+    }
+
+    if ( ! take )
+        return;
+
+    takeItem( take );
+    insertItem( take, after);
+    // update the thumbs if new pos was 0
+    // because it was insert after the first one
+    if ( newPos == 0 ) {
+        //todo do not recreate the pics
+        after->setPixmap(getSlideThumb( 0 ));
+        take->setPixmap(getSlideThumb( 1 ));
+    }
+
+    //write the new page numbers
+    int lowPage = oldPos > newPos ? newPos : oldPos;
+    int highPage = oldPos < newPos ? newPos : oldPos;
+    page = 0;
+    for ( QIconViewItem *it = firstItem(); it; it = it->nextItem() ) {
+        if ( page >= lowPage && page <= highPage) {
+            it->setText( QString::number(page+1) );
+        }
+        page++;
+    }
+}
+
+void ThumbBar::removeItem( int pos )
+{
+  kdDebug()<< "ThumbBar::removeItem not yet implemented" << endl;
 }
 
 QPixmap ThumbBar::getSlideThumb(int slideNr)
@@ -288,6 +389,7 @@ void Outline::rebuildItems()
     }
 }
 
+// update the Outline item, the title my have changed
 void Outline::updateItem( int pagenr /* 0-based */)
 {
     // Find item
@@ -309,6 +411,43 @@ void Outline::updateItem( int pagenr /* 0-based */)
         }
     }
     kdWarning() << "Item for page " << pagenr << " not found" << endl;
+}
+
+void Outline::addItem( int pos )
+{
+  kdDebug()<< "Outline::addItem not yet implemented" << endl;
+}
+
+// move an Outline Item so that not the hole list has to be recerated
+void Outline::moveItem( int oldPos, int newPos )
+{
+    int page = 0;
+    
+    int lowPage = oldPos > newPos ? newPos : oldPos;
+    int highPage = oldPos < newPos ? newPos : oldPos;
+    QListViewItemIterator it( this );
+    // Recreate all Titles and pagenumbers between lowPage & highPage
+    for ( ; it.current(); ++it ) {
+        if ( page >= lowPage && page <= highPage) {
+            QString title = doc->pageList().at(page)->pageTitle( i18n( "Slide %1" ).arg( page + 1 ) );
+            if (title.length() > 12) // restrict to a maximum of 12 characters
+                it.current()->setText( 0, title.left(5) + "..." + title.right(4));
+            else
+                it.current()->setText( 0, title );
+
+            it.current()->setText( 1, QString::null ); // hack, to make itemStateChange do nothing
+            static_cast<OutlineItem*>(it.current())->setOn( doc->isSlideSelected( page ) );
+            it.current()->setText( 1, QString::number( page + 1 ) ); // page number
+            if ( page == highPage )
+                return;
+        }
+        page++;
+    } 
+}
+
+void Outline::removeItem( int pos )
+{
+  kdDebug()<< "Outline::removeItem not yet implemented" << endl;
 }
 
 void Outline::itemStateChange( OutlineItem * item, bool state )
@@ -389,6 +528,7 @@ void Outline::doMoveItems()
     }
     if(num!=numNow) {
         emit movePage( num, numNow );
+        // this has to be done because moving a page is take + insert the page
         setSelected( movedItem, true );
     }
 }

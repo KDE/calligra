@@ -310,7 +310,8 @@ public:
     void updateZoomRuler();
     void newZoomAndResolution( bool updateViews, bool forPrint );
 
-    void AddRemovePage();
+    void addRemovePage( int pos, bool addPage );
+    void movePageTo( int oldPos, int newPos );
 
     void updateSideBarItem(int pgNum);
 

@@ -4281,6 +4281,40 @@ void KPresenterView::updateSideBarItem( int pagenr )
         sidebar->updateItem( pagenr );
 }
 
+void KPresenterView::addSideBarItem( int pos )
+{
+    if ( sidebar )
+    {
+        sidebar->blockSignals( TRUE );
+        sidebar->thumbBar()->uptodate = false;
+        sidebar->outline()->rebuildItems();
+        sidebar->thumbBar()->rebuildItems();
+        sidebar->blockSignals( FALSE );
+    }
+}
+
+void KPresenterView::moveSideBarItem( int oldPos, int newPos )
+{
+    if ( sidebar )
+    {
+        sidebar->blockSignals( TRUE );
+        sidebar->moveItem( oldPos, newPos );
+        sidebar->blockSignals( FALSE );
+    }
+}
+
+void KPresenterView::removeSideBarItem( int pos )
+{
+    if ( sidebar )
+    {
+        sidebar->blockSignals( TRUE );
+        sidebar->thumbBar()->uptodate = false;
+        sidebar->outline()->rebuildItems();
+        sidebar->thumbBar()->rebuildItems();
+        sidebar->blockSignals( FALSE );
+    }
+}
+
 void KPresenterView::updatePageInfo()
 {
   if (m_sbPageLabel)

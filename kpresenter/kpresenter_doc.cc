@@ -2052,8 +2052,32 @@ void KPresenterDoc::takePage(KPrPage *_page)
     emit sig_updateMenuBar();
 }
 
-void KPresenterDoc::AddRemovePage()
+void KPresenterDoc::addRemovePage( int pos, bool addPage )
 {
+    kdDebug() << "addRemovePage pos = " << pos << endl;
+    recalcPageNum();
+
+    recalcVariables( VT_PGNUM );
+
+    // Update the sidebars
+    QPtrListIterator<KoView> it( views() );
+    for (; it.current(); ++it ) {
+        if ( addPage ) {
+            static_cast<KPresenterView*>(it.current())->addSideBarItem( pos );
+        }
+        else {
+            static_cast<KPresenterView*>(it.current())->removeSideBarItem( pos );
+        }
+    }
+
+    //update statusbar
+    emit pageNumChanged();
+    emit sig_updateMenuBar();
+}
+
+void KPresenterDoc::movePageTo( int oldPos, int newPos )
+{
+    kdDebug() << "movePage oldPos = " << oldPos << ", neuPos = " << newPos << endl;
     recalcPageNum();
 
     recalcVariables( VT_PGNUM );
@@ -2061,7 +2085,7 @@ void KPresenterDoc::AddRemovePage()
     // Update the sidebars
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-        static_cast<KPresenterView*>(it.current())->updateSideBar();
+        static_cast<KPresenterView*>(it.current())->moveSideBarItem( oldPos, newPos );
 
     //update statusbar
     emit pageNumChanged();

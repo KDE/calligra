@@ -696,6 +696,8 @@ void InsertCmd::execute()
     if ( object->getType() == OT_TEXT )
 	( (KPTextObject*)object )->recalcPageNum( doc,m_page );
     doc->repaint( object );
+    int pos=doc->pageList().findRef(m_page);
+    doc->updateSideBarItem(pos);
 }
 
 /*====================== unexecute ===============================*/
@@ -710,6 +712,8 @@ void InsertCmd::unexecute()
             doc->terminateEditing( (KPTextObject*)object );
     }
     doc->repaint( oldRect );
+    int pos=doc->pageList().findRef(m_page);
+    doc->updateSideBarItem(pos);
 }
 
 /******************************************************************/
@@ -801,7 +805,8 @@ void MoveByCmd::execute()
 	doc->repaint( oldRect );
 	doc->repaint( objects.at( i ) );
     }
-
+    int pos=doc->pageList().findRef(m_page);
+    doc->updateSideBarItem(pos);
 }
 
 /*====================== unexecute ===============================*/
@@ -821,6 +826,8 @@ void MoveByCmd::unexecute()
 	doc->repaint( oldRect );
 	doc->repaint( objects.at( i ) );
     }
+    int pos=doc->pageList().findRef(m_page);
+    doc->updateSideBarItem(pos);
 }
 
 /******************************************************************/
@@ -1456,60 +1463,60 @@ void PolygonSettingCmd::unexecute()
 
 /*======================== constructor ===========================*/
 PictureSettingCmd::PictureSettingCmd( const QString &_name, QPtrList<PictureSettings> &_oldSettings,
-                                      PictureSettings _newSettings, QPtrList<KPObject> &_objects, KPresenterDoc *_doc )
-    : KNamedCommand( _name ), oldSettings( _oldSettings ), objects( _objects )
+			      PictureSettings _newSettings, QPtrList<KPObject> &_objects, KPresenterDoc *_doc )
+: KNamedCommand( _name ), oldSettings( _oldSettings ), objects( _objects )
 {
-    objects.setAutoDelete( false );
-    oldSettings.setAutoDelete( false );
-    doc = _doc;
-    newSettings = _newSettings;
+objects.setAutoDelete( false );
+oldSettings.setAutoDelete( false );
+doc = _doc;
+newSettings = _newSettings;
 
-    QPtrListIterator<KPObject> it( objects );
-    for ( ; it.current() ; ++it )
-        it.current()->incCmdRef();
+QPtrListIterator<KPObject> it( objects );
+for ( ; it.current() ; ++it )
+it.current()->incCmdRef();
 }
 
 /*======================== destructor ============================*/
 PictureSettingCmd::~PictureSettingCmd()
 {
-    QPtrListIterator<KPObject> it( objects );
-    for ( ; it.current() ; ++it )
-        it.current()->decCmdRef();
-    oldSettings.setAutoDelete( true );
-    oldSettings.clear();
+QPtrListIterator<KPObject> it( objects );
+for ( ; it.current() ; ++it )
+it.current()->decCmdRef();
+oldSettings.setAutoDelete( true );
+oldSettings.clear();
 }
 
 /*====================== execute =================================*/
 void PictureSettingCmd::execute()
 {
-    QPtrListIterator<KPObject> it( objects );
-    for ( ; it.current() ; ++it ) {
-        KPPixmapObject * obj = dynamic_cast<KPPixmapObject*>( it.current() );
-        if ( obj ) {
-            obj->setPictureMirrorType(newSettings.mirrorType);
-            obj->setPictureDepth(newSettings.depth);
-            obj->setPictureSwapRGB(newSettings.swapRGB);
-            obj->setPictureGrayscal(newSettings.grayscal);
-            obj->setPictureBright(newSettings.bright);
-	}
-    }
-    doc->repaint( false );
+QPtrListIterator<KPObject> it( objects );
+for ( ; it.current() ; ++it ) {
+KPPixmapObject * obj = dynamic_cast<KPPixmapObject*>( it.current() );
+if ( obj ) {
+    obj->setPictureMirrorType(newSettings.mirrorType);
+    obj->setPictureDepth(newSettings.depth);
+    obj->setPictureSwapRGB(newSettings.swapRGB);
+    obj->setPictureGrayscal(newSettings.grayscal);
+    obj->setPictureBright(newSettings.bright);
+}
+}
+doc->repaint( false );
 }
 
 /*====================== unexecute ===============================*/
 void PictureSettingCmd::unexecute()
 {
-    for ( unsigned int i = 0; i < objects.count(); ++i ) {
-        KPPixmapObject * obj = dynamic_cast<KPPixmapObject*>( objects.at(i) );
-        if ( obj ) {
-            obj->setPictureMirrorType(oldSettings.at( i )->mirrorType);
-            obj->setPictureDepth(oldSettings.at( i )->depth);
-            obj->setPictureSwapRGB(oldSettings.at( i )->swapRGB);
-            obj->setPictureGrayscal(oldSettings.at( i )->grayscal);
-            obj->setPictureBright(oldSettings.at( i )->bright);
-	}
-    }
-    doc->repaint( false );
+for ( unsigned int i = 0; i < objects.count(); ++i ) {
+KPPixmapObject * obj = dynamic_cast<KPPixmapObject*>( objects.at(i) );
+if ( obj ) {
+    obj->setPictureMirrorType(oldSettings.at( i )->mirrorType);
+    obj->setPictureDepth(oldSettings.at( i )->depth);
+    obj->setPictureSwapRGB(oldSettings.at( i )->swapRGB);
+    obj->setPictureGrayscal(oldSettings.at( i )->grayscal);
+    obj->setPictureBright(oldSettings.at( i )->bright);
+}
+}
+doc->repaint( false );
 }
 
 /******************************************************************/
@@ -1864,14 +1871,14 @@ void KPrDeletePageCmd::execute()
 {
     doc->deSelectAllObj();
     doc->takePage(m_page);
-    doc->AddRemovePage();
+    doc->addRemovePage( position, false );
 }
 
 void KPrDeletePageCmd::unexecute()
 {
     doc->deSelectAllObj();
     doc->insertPage( m_page, position);
-    doc->AddRemovePage();
+    doc->addRemovePage( position, true );
 }
 
 KPrInsertPageCmd::KPrInsertPageCmd( const QString &_name,int _pos, KPrPage *_page, KPresenterDoc *_doc ) :
@@ -1891,7 +1898,7 @@ void KPrInsertPageCmd::execute()
 {
     doc->deSelectAllObj();
     doc->insertPage( m_page, position);
-    doc->AddRemovePage();
+    doc->addRemovePage( position, true );
     m_page->completeLoading( false, -1 );
 }
 
@@ -1899,7 +1906,7 @@ void KPrInsertPageCmd::unexecute()
 {
     doc->deSelectAllObj();
     doc->takePage(m_page);
-    doc->AddRemovePage();
+    doc->addRemovePage( position, false );
 }
 
 KPrMovePageCmd::KPrMovePageCmd( const QString &_name,int _oldpos,int _newpos, KPrPage *_page, KPresenterDoc *_doc ) :
@@ -1920,7 +1927,7 @@ void KPrMovePageCmd::execute()
     doc->deSelectAllObj();
     doc->takePage(m_page);
     doc->insertPage( m_page, newPosition);
-    doc->AddRemovePage();
+    doc->movePageTo( oldPosition, newPosition );
 }
 
 void KPrMovePageCmd::unexecute()
@@ -1928,7 +1935,7 @@ void KPrMovePageCmd::unexecute()
     doc->deSelectAllObj();
     doc->takePage(m_page);
     doc->insertPage(m_page,oldPosition);
-    doc->AddRemovePage();
+    doc->movePageTo( newPosition, oldPosition );
 }
 
 

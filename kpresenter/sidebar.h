@@ -45,6 +45,10 @@ public:
   ThumbBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v);
   ~ThumbBar();
   void setCurrentPage( int pg );
+  void updateItem( int pagenr, bool sticky = false );
+  void addItem( int pos );
+  void moveItem( int oldPos, int newPos );
+  void removeItem( int pos );
   QRect tip(const QPoint &pos, QString &title);
 
   bool uptodate;
@@ -79,6 +83,9 @@ public:
     void setOn( int pg, bool on );
     QSize sizeHint() const { return QSize( 145, KListView::sizeHint().height() ); }
     void updateItem( int pagenr );
+    void addItem( int pos );
+    void moveItem( int oldPos, int newPos );
+    void removeItem( int pos );
     // Called by OutlineItem
     void itemStateChange( OutlineItem * item, bool state );
     QRect tip(const QPoint &pos, QString &title);
@@ -123,7 +130,10 @@ public:
   };
   void setOn( int pg, bool on ) { _outline->setOn(pg, on); };
   //QSize sizeHint() const { return QSize( 120, QTabWidget::sizeHint().height() ); };
-  void updateItem( int pagenr ) { _outline->updateItem(pagenr); };
+  void updateItem( int pagenr, bool sticky = false);
+  void addItem( int pos );
+  void moveItem( int oldPos, int newPos );
+  void removeItem( int pos );
 
   Outline *outline() { return _outline; };
   ThumbBar *thumbBar() { return _thb; };

@@ -280,6 +280,9 @@ public slots:
      * Update a given item in the sidebar
      */
     void updateSideBarItem( int pagenr );
+    void addSideBarItem( int pos );
+    void moveSideBarItem( int oldPos, int newPos );
+    void removeSideBarItem( int pos );
 
     //statusbar updates
     void updatePageInfo();
