@@ -93,6 +93,25 @@ void BasicElement::goInside(FormulaCursor* cursor)
     }
 }
 
+
+/**
+ * Moves the cursor to a normal place where new elements
+ * might be inserted.
+ */
+void BasicElement::normalize(FormulaCursor* cursor, Direction direction)
+{
+    BasicElement* element = getMainChild();
+    if (element != 0) {
+        if (direction == beforeCursor) {
+            element->moveLeft(cursor, this);
+        }
+        else {
+            element->moveRight(cursor, this);
+        }
+    }
+}
+
+
 QDomElement BasicElement::getElementDom(QDomDocument& doc)
 {
     QDomElement de = doc.createElement(getTagName());

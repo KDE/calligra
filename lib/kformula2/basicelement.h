@@ -202,7 +202,7 @@ public:
      * Moves the cursor to a normal place where new elements
      * might be inserted.
      */
-    virtual void normalize(FormulaCursor*, Direction) {}
+    virtual void normalize(FormulaCursor*, Direction);
 
     
     /**

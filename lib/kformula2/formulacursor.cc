@@ -296,13 +296,16 @@ void FormulaCursor::replaceSelectionWith(BasicElement* element,
     //list.setAutoDelete(true);
     
     //remove(list, direction);
-    getElement()->remove(this, list, direction);
+    if (isSelection()) {
+        getElement()->remove(this, list, direction);
+    }
     
     insert(element, direction);
     SequenceElement* mainChild = element->getMainChild();
     if (mainChild != 0) {
         mainChild->goInside(this);
         insert(list);
+        /*
         BasicElement* parent = element->getParent();
         if (direction == BasicElement::beforeCursor) {
             parent->moveRight(this, element);
@@ -310,6 +313,8 @@ void FormulaCursor::replaceSelectionWith(BasicElement* element,
         else {
             parent->moveLeft(this, element);
         }
+        */
+        element->selectChild(this, mainChild);
     }
 }
 
@@ -523,25 +528,35 @@ QDomDocument FormulaCursor::copy()
 }
 
 /**
- * Inserts the content from the tree at the current position.
+ * Inserts the elements that could be read from the dom into
+ * the list. Returns true on success.
  */
-bool FormulaCursor::paste(QDomDocument doc)
+bool FormulaCursor::buildElementsFromDom(QDomDocument doc, QList<BasicElement>& list)
 {
     SequenceElement* sequence = getNormal();
     if (sequence != 0) {
-        QList<BasicElement> list;
-        list.setAutoDelete(true);
         QDomNode n = doc.firstChild();
         if (n.isElement()) {
             QDomElement e = n.toElement();
             if (sequence->buildChildrenFromDom(list, e.firstChild())) {
-                insert(list);
                 return true;
             }
         }
     }
     return false;
 }
+
+bool FormulaCursor::paste(QDomDocument doc)
+{
+    QList<BasicElement> list;
+    list.setAutoDelete(true);
+    if (buildElementsFromDom(doc, list)) {
+        insert(list);
+        return true;
+    }
+    return false;
+}
+
 
 /**
  * Creates a new CursorData object that describes the cursor.

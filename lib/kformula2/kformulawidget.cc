@@ -194,18 +194,8 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
                     }
 		    break;
                 case Qt::Key_V:
-		    {
-		    QMimeSource *m=clipboard->data();
-			if(m->provides("application/x-kformula")) {
-                	    QDomDocument formula;
-			    QByteArray data=m->encodedData("application/x-kformula");
-			    cerr << data <<"aaa"<< endl;
-    	    		    formula.setContent(data);
-		    	    cursor->paste(formula);
-            		}
-		    }
-		    
-		    break;
+		    document->paste(cursor, clipboard->data());
+                    break;
                 default:
                     //cerr << "Key: " << event->key() << endl;
                     break;

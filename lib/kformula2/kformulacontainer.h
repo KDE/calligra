@@ -21,9 +21,12 @@
 #ifndef __KFORMULACONTAINER_H
 #define __KFORMULACONTAINER_H
 
+#include <qclipboard.h>
+#include <qlist.h>
 #include <qobject.h>
 #include <qstack.h>
-#include <qlist.h>
+
+#include <kcommand.h>
 
 #include "artwork.h"
 #include "basicelement.h"
@@ -37,6 +40,7 @@ class FormulaElement;
 class QKeyEvent;
 class QPainter;
 class KFormulaCommand;
+
 
 class KFormulaContainer : public QObject {
     Q_OBJECT
@@ -94,8 +98,10 @@ public:
      * Load the formula from the specified file.
      */
     void load(QString file);
-    
-    
+
+    FormulaCursor* getActiveCursor() { return activeCursor; }
+    void setActiveCursor(FormulaCursor* cursor) { activeCursor = cursor; }
+
 signals:
 
     /**
@@ -115,10 +121,6 @@ signals:
     
 public slots:    
 
-
-    void execute(KFormulaCommand *command);
-
-
     // There are a lot of thing we can do with the formula.
     
     void addText(FormulaCursor* cursor, QChar ch);
@@ -134,10 +136,6 @@ public slots:
     void addUpperLeftIndex(FormulaCursor* cursor);
     void addLowerRightIndex(FormulaCursor* cursor);
     void addUpperRightIndex(FormulaCursor* cursor);
-
-    void addRootIndex(FormulaCursor* cursor);
-    void addSymbolLowerIndex(FormulaCursor* cursor, Artwork::SymbolType type);
-    void addSymbolUpperIndex(FormulaCursor* cursor, Artwork::SymbolType type);
 
     void addGenericLowerIndex(FormulaCursor* cursor);
     void addGenericUpperIndex(FormulaCursor* cursor);
@@ -177,29 +175,36 @@ public slots:
      */
     QRect boundingRect();
 
-    
+    /**
+     * Insert data from the clipboard.
+     */
+    void paste(FormulaCursor* cursor, QMimeSource* source);
+
 private:
 
-    void addIndex(FormulaCursor* cursor, ElementIndexPtr index);
+    void addGenericIndex(FormulaCursor* cursor, ElementIndexPtr index);
 
+    void execute(KFormulaCommand *command);
+    
     /**
      * Push the command to the undo stack
      */
-     void pushUndoStack(KFormulaCommand *command);
+    //void pushUndoStack(KFormulaCommand *command);
 
     /**
      * Push the command to the redo stack
      */
-     void pushRedoStack(KFormulaCommand *command);
+    //void pushRedoStack(KFormulaCommand *command);
      
     /**
      * Clean redo stack because of a modify.
      */
-     void cleanRedoStack() {redoStack.clear();}
+    //void cleanRedoStack() {redoStack.clear();}
+
     /**
      * Clean undo stack because of a modify.
      */
-     void cleanUndoStack() {undoStack.clear();}
+    //void cleanUndoStack() {undoStack.clear();}
      
 
     /**
@@ -217,15 +222,25 @@ private:
      */
     bool dirty;
 
+    /**
+     * The active cursor is the one that triggered the last command.
+     * We need to remember it so we can use the kdelib undo system.
+     */
+    FormulaCursor* activeCursor;
+    
+    /**
+     * Our undo stack.
+     */
+    KCommandHistory history;
+
     // debug
     friend class TestFormulaCursor;
     friend class TestIndexElement;
+    friend class TestCommands;
     
-
     //Undo and redo stack
-    QStack<KFormulaCommand> undoStack;
-    QStack<KFormulaCommand> redoStack;
- 
+    //QStack<KFormulaCommand> undoStack;
+    //QStack<KFormulaCommand> redoStack;
 };
 
 

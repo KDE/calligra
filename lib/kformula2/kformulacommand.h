@@ -21,259 +21,340 @@
 #ifndef __KFORMULACOMMAND_H
 #define __KFORMULACOMMAND_H
 
+#include <qlist.h>
+
+#include <kcommand.h>
+
+#include "artwork.h"
 #include "kformulacontainer.h"
 #include "formulacursor.h"
 
-class KFormulaCommand 
+
+/**
+ * Base for all kformula commands.
+ *
+ * Each command works in the same way. The constructor sets up
+ * everything. After the command is created you can execute
+ * it. To create a command doesn't mean to execute it. These are
+ * two different things.
+ *
+ * If the command execution fails or has nothing to do in the first place
+ * you must not put it in the command history. @ref KFormulaCommand::isSenseless
+ * will return <pre>true</pre> then.
+ *
+ * If you don't like what you've done feel free to unexecute.
+ */
+class KFormulaCommand : public KCommand
 {
 public:
-   /**
-    * Execute for the first time and create command for undo/redo
-    * stacks, default implementation do nothing into document at
-    * position cursor.
-    * Cursor position is saved.
-    */
-    KFormulaCommand(KFormulaContainer *document,FormulaCursor *cursor);
 
-    /**
-     * Delete the cursor.
-     */
+    KFormulaCommand(const QString &name, KFormulaContainer* document);
     virtual ~KFormulaCommand();
 
     /**
-     * Undo the command
-     * @return true if undo is done.
-     * Default implementation do nothing.
+     * Executes the command using the KFormulaContainer's active
+     * cursor.
      */
-     virtual bool undo(FormulaCursor *) { return true; } //undo of nothing is nothing
- 
+    virtual void execute() = 0;
+
     /**
-     * Redo the command
-     * @return true if redo is done.
-     * Default implementation do nothing.
+     * Undoes the command using the KFormulaContainer's active
+     * cursor.
      */
-     virtual bool redo(FormulaCursor *) {return true; }  //undo of nothing is nothing
+    virtual void unexecute() = 0;
 
     /**
      * @return a short i18n text that describes the undo/redo
      * action. This has to be used in menus entries.
      */
-     QString getShortDescription() { return shortText; } 
+    QString getShortDescription() { return shortText; } 
 
     /**
      * @return a long i18n text that describes the undo/redo
      * action. This can be used as tooltip.
      */
-     QString getLongDescription() { return longText; } 
+    QString getLongDescription() { return longText; } 
+
 
     /**
-     * @return true if the command you asked for do nothing relevant,
-     * may be it only move the cursor, in this case the constructor will
-     * move the cursor but the undo/redo will do nothing.
+     * A command might have no effect.
+     * @returns true if nothing happened.
      */
-     
-     virtual bool isDoNothing() { return false; }  //this class is doing nothing but this function
-                                                   //Is used by many childclasses     
+    virtual bool isSenseless() { return false; }
 
 protected:
-     
-     KFormulaContainer *doc;
-     FormulaCursor::CursorData *cursordata;  //Cursor before the command execution
-     FormulaCursor::CursorData *undocursor;  //Cursor after the command execution
-     QString shortText;
-     QString longText;
-     
+
+    FormulaCursor* getActiveCursor() { return doc->getActiveCursor(); }
+
+    void destroyUndoCursor() { delete undocursor; undocursor = 0; }
     
+    // I would prefer to have private attributes.
+    
+    /**
+     * The container we belong to.
+     */
+    KFormulaContainer* doc;
+
+    /**
+     * Cursor position before the command execution.
+     */
+    FormulaCursor::CursorData* cursordata;
+
+    /**
+     * Cursor position after the command execution.
+     */
+    FormulaCursor::CursorData* undocursor;
+
+    /**
+     * Descriptions.
+     */
+    QString shortText;
+    QString longText;
+
+    /**
+     * the list where all elements are stored that are removed
+     * from the tree. Nearly each command needs it.
+     */
+    QList<BasicElement> removedList;
 };
 
+
+/**
+ * Base for all commands that want to add a simple element.
+ */
 class KFCAdd : public KFormulaCommand
 {
 public:
-   /**
-    * generic add command, default implementation do nothing
-    */
-    KFCAdd(KFormulaContainer *document,FormulaCursor* cursor);
+
+    KFCAdd(const QString &name, KFormulaContainer* document);
  
-    virtual bool undo(FormulaCursor *cursor);
-    virtual bool redo(FormulaCursor *cursor);
-
-protected:
-
-     QList<BasicElement> removedList;
-     BasicElement *insideElement;   
+    virtual void execute();
+    virtual void unexecute();
 };
 
+
+/**
+ * Command that is used to remove the current selection
+ * if we want to replace it with another element.
+ */
 class KFCRemoveSelection : public KFormulaCommand
 {
 public:
-   /**
-    * generic add command, default implementation do nothing
-    */
-    KFCRemoveSelection(KFormulaContainer *document,FormulaCursor* cursor,BasicElement::Direction dir);
+
+    /**
+     * generic add command, default implementation do nothing
+     */
+    KFCRemoveSelection(KFormulaContainer* document, BasicElement::Direction dir);
  
-    virtual bool undo(FormulaCursor *cursor);
-    virtual bool redo(FormulaCursor *cursor);
+    virtual void execute();
+    virtual void unexecute();
 
 protected:
-
-     QList<BasicElement> removedList;
-     BasicElement::Direction dir;   
+    BasicElement::Direction dir;   
 };
+
+
+/**
+ * Command that is used to remove the currently
+ * selected element.
+ */
+class KFCRemove : public KFormulaCommand
+{
+public:
+
+    /**
+     * generic add command, default implementation do nothing
+     */
+    KFCRemove(KFormulaContainer* document, BasicElement::Direction dir);
+    ~KFCRemove();
+    
+    virtual void execute();
+    virtual void unexecute();
+
+private:
+
+    /**
+     * The element we might have extracted.
+     */
+    BasicElement* element;
+
+    /**
+     * If this is a complex remove command we need to remember two
+     * cursor positions. The one after the first removal (this one)
+     * and another at the end.
+     */
+    FormulaCursor::CursorData* simpleRemoveCursor;
+
+    BasicElement::Direction dir;   
+};
+
+
+/**
+ * Command to remove the parent element.
+ */
+class KFCRemoveEnclosing : public KFormulaCommand
+{
+public:
+    KFCRemoveEnclosing(KFormulaContainer* document, BasicElement::Direction dir);
+    ~KFCRemoveEnclosing();
+
+    virtual void execute();
+    virtual void unexecute();
+
+    virtual bool isSenseless() { return element == 0; }
+    
+private:
+    BasicElement* element;
+
+    BasicElement::Direction direction;
+};
+
 
 class KFCAddText : public KFCAdd
 {
 public:
-   /**
-    * Build a addTextElement command and add
-    * at cursor a textelement with content ch
-    */
-    KFCAddText(KFormulaContainer *document,FormulaCursor* cursor, QChar ch);
-   
+    /**
+     * Build a addTextElement command and add
+     * at cursor a textelement with content ch
+     */
+    KFCAddText(KFormulaContainer *document, QChar ch);
 };
+
 
 class KFCAddNumber : public KFCAdd
 {
 public:
-   /**
-    * Build a addNumberElement command and add
-    * at cursor a numberelement with content ch
-    */
-    KFCAddNumber(KFormulaContainer *document,FormulaCursor* cursor, QChar ch);
-   
+    /**
+     * Build a addNumberElement command and add
+     * at cursor a numberelement with content ch
+     */
+    KFCAddNumber(KFormulaContainer *document, QChar ch);
 };
+
 
 class KFCAddOperator : public KFCAdd
 {
 public:
-   /**
-    * Build a addOperatorElement command and add
-    * at cursor a operatorelement with content ch
-    */
-    KFCAddOperator(KFormulaContainer *document,FormulaCursor* cursor, QChar ch);
-   
+    /**
+     * Build a addOperatorElement command and add
+     * at cursor a operatorelement with content ch
+     */
+    KFCAddOperator(KFormulaContainer *document, QChar ch);
 };
 
+
+/**
+ * Base for all commands that want to replace the current
+ * selection with a new element and set the replaced elements
+ * as main child.
+ */
 class KFCAddReplacing : public KFormulaCommand
 {
 public:
-   /**
-    * abstract class hinerited by bracket,fraction and root
-    */
-    KFCAddReplacing(KFormulaContainer *document,FormulaCursor* cursor);
+    KFCAddReplacing(const QString &name, KFormulaContainer* document);
+    ~KFCAddReplacing();
 
-    virtual bool undo(FormulaCursor *cursor);
-    virtual bool redo(FormulaCursor *cursor);
+    virtual void execute();
+    virtual void unexecute();
 
 protected:
+    
+    void setElement(BasicElement* e) { element = e; }
+    
+private:
 
-     QList<BasicElement> removedList;
-     BasicElement *insideElement;   
-  
+    /**
+     * The element that is to be inserted.
+     */
+    BasicElement* element;
 };
 
 
 class KFCAddRoot : public KFCAddReplacing
 {
 public:
-   /**
-    * Build a addRootElement command and add
-    * at cursor a root element
-    */
-    KFCAddRoot(KFormulaContainer *document,FormulaCursor* cursor);
- 
-  
+    KFCAddRoot(KFormulaContainer* document);
 };
+
 
 class KFCAddFraction : public KFCAddReplacing
 {
 public:
-   /**
-    * Build a addFractionElement command and add
-    * at cursor a fraction element
-    */
-    KFCAddFraction(KFormulaContainer *document,FormulaCursor* cursor);
- 
-  
+    KFCAddFraction(KFormulaContainer* document);
 };
+
 
 class KFCAddBracket : public KFCAddReplacing
 {
 public:
-   /**
-    * Build a addBracketElement command and add
-    * at cursor a braket element
-    */
-    KFCAddBracket(KFormulaContainer *document,FormulaCursor* cursor,QChar left,QChar right);
- 
+    KFCAddBracket(KFormulaContainer* document, QChar left, QChar right);
 };
 
-class KFCAddMatrix : public KFormulaCommand
+
+class KFCAddSymbol : public KFCAddReplacing
 {
 public:
-   /**
-    * Build a addRootElement command and add
-    * at cursor a root element
-    */
-    KFCAddMatrix(KFormulaContainer *document,FormulaCursor* cursor,int r,int c);
-
-    virtual bool undo(FormulaCursor *cursor);
-    virtual bool redo(FormulaCursor *cursor);
-
-protected:
-
-     QList<BasicElement> removedList;
-     BasicElement *insideElement;   
-  
+    KFCAddSymbol(KFormulaContainer* document, Artwork::SymbolType type);
 };
 
-class KFCAddIndex : public KFormulaCommand
+
+class MatrixElement;
+
+class KFCAddMatrix : public KFCAdd
 {
 public:
-   /**
-    * Add an index at position.
-    */
-    KFCAddIndex(KFormulaContainer *document,FormulaCursor* cursor,int position);
+    KFCAddMatrix(KFormulaContainer* document, int r, int c);
 
-    virtual bool undo(FormulaCursor *cursor);
-    virtual bool redo(FormulaCursor *cursor);
+    virtual void execute();
 
-    /**
-     * @return true if the command you asked for do nothing relevant,
-     * may be it only move the cursor, in this case the constructor will
-     * move the cursor but the undo/redo will do nothing.
-     */
-     
-     virtual bool isDoNothing() { return nothing; }  
-
-
-
-protected:
-
-
-     QList<BasicElement> removedList;
-     BasicElement *indexelem;   
-     FormulaCursor::CursorData *indexcursor;  //Cursor for index insertion (lower orupper,left or right)
-     FormulaCursor::CursorData *enclosingcursor;  //Cursor for index insertion (lower orupper,left or right)
-              
-     bool nothing;
-     bool indexExists;
-     
+private:
+    MatrixElement* matrix;
 };
 
 
+/**
+ * Add an index. The element that gets the index needs to be there
+ * already. Else we would not have gotten the ElementIndexPtr.
+ */
+class KFCAddGenericIndex : public KFCAdd
+{
+public:
 
-#if 0
-   void addOperator(FormulaCursor* cursor, QChar ch);
-    void addBracket(FormulaCursor* cursor, char left, char right);
-    void addFraction(FormulaCursor* cursor);
-    void addRoot(FormulaCursor* cursor);
-    void addSymbol(FormulaCursor* cursor, Artwork::SymbolType type);
-    void addMatrix(FormulaCursor* cursor, int rows, int columns);
-    void addLowerRightIndex(FormulaCursor* cursor);
-    void addUpperRightIndex(FormulaCursor* cursor);
+    KFCAddGenericIndex(KFormulaContainer* document, ElementIndexPtr index);
 
-    void removeSelection(FormulaCursor* cursor, BasicElement::Direction);
-#endif
+private:
+};
+
+
+class IndexElement;
+
+/**
+ * Add an IndexElement.
+ *
+ * This is an exception as the element itself is not constructed
+ * inside the constructor but by the caller.
+ */
+class KFCAddIndex : public KFCAddReplacing
+{
+public:
+
+    KFCAddIndex(KFormulaContainer* document, IndexElement* element, ElementIndexPtr index);
+
+    virtual void execute();
+    virtual void unexecute();
     
+private:
+    KFCAddGenericIndex addGenericIndex;
+};
+
+
+/**
+ * Command to insert stuff from the clipboard.
+ */
+class KFCPaste : public KFCAdd
+{
+public:
+    KFCPaste(KFormulaContainer* document, QList<BasicElement>& list);
+};
 
 #endif // __KFORMULACONTAINER_H

@@ -23,7 +23,6 @@
 
 #include <qlist.h>
 
-
 #include "kformulacommand.h"
 #include "formulacursor.h"
 #include "bracketelement.h"
@@ -36,385 +35,321 @@
 #include "fractionelement.h"
 #include "indexelement.h"
 #include "sequenceelement.h"
+#include "symbolelement.h"
 
-KFormulaCommand::KFormulaCommand(KFormulaContainer *document,
-				 FormulaCursor *cursor)
+
+KFormulaCommand::KFormulaCommand(const QString &name, KFormulaContainer* document)
+        : KCommand(name), doc(document), cursordata(0), undocursor(0)
 {
-    doc=document;
-    if(cursor)
-        cursordata=cursor->getCursorData();
-    else
-        cursordata=0;
-    
-    undocursor=0;
+    removedList.setAutoDelete(true);
 
-    shortText="";
-    longText=i18n("There is no info for this undo/redo");
+    FormulaCursor* cursor = getActiveCursor();
+    cursordata = cursor->getCursorData();
+
+    shortText = "";
+    longText = i18n("There is no info for this undo/redo");
 }
 
 KFormulaCommand::~KFormulaCommand()
 {
-    if(cursordata)
-        delete cursordata;
+    delete undocursor;
+    delete cursordata;
 }
+
 
 // ******  Generic Add command 
 
-KFCAdd::KFCAdd(KFormulaContainer *document,FormulaCursor *cursor) : KFormulaCommand(document,cursor)
+KFCAdd::KFCAdd(const QString &name, KFormulaContainer *document)
+        : KFormulaCommand(name, document)
 {
-    removedList.setAutoDelete(true); 
-    removedList.clear();
-    insideElement=0;
-    undocursor=cursor->getCursorData();
-    
-    shortText=i18n("Add");
-    longText=i18n("Add an element of unknown type");
-
+    shortText = i18n("Add");
+    longText = i18n("Add an element");
 }
 
-bool KFCAdd::undo(FormulaCursor *cursor)
+void KFCAdd::execute()
 {
-
-    cursor->setCursorData(undocursor);
-    cursor->remove(removedList,BasicElement::beforeCursor);
-
-    return true;
-}
-
-
-bool KFCAdd::redo(FormulaCursor *cursor)
-{
-
+    FormulaCursor* cursor = getActiveCursor();
     cursor->setCursorData(cursordata);
-    cursor->insert(removedList);
+    cursor->insert(removedList, BasicElement::beforeCursor);
+    undocursor = cursor->getCursorData();
+    cursor->setSelection(false);
+}
 
-    if(!insideElement)
-        cursor->setSelection(false);
-    else
-        cursor->goInsideElement(insideElement);
-	
-    return true;
+
+void KFCAdd::unexecute()
+{
+    FormulaCursor* cursor = getActiveCursor();
+    cursor->setCursorData(undocursor);
+    destroyUndoCursor();
+    cursor->remove(removedList, BasicElement::beforeCursor);
+    //cursor->setSelection(false);
+    cursor->normalize();
 }
 
 
 
 // ******  Remove selection command 
 
-KFCRemoveSelection::KFCRemoveSelection(KFormulaContainer *document,FormulaCursor *cursor,
-		    BasicElement::Direction direction) : KFormulaCommand(document,cursor)
+KFCRemoveSelection::KFCRemoveSelection(KFormulaContainer *document,
+                                       BasicElement::Direction direction)
+        : KFormulaCommand(i18n("_:Undo descr.\nRemove selected text"), document),
+          dir(direction)
 {
-    dir=direction;
-    removedList.setAutoDelete(true); 
-    cursor->remove(removedList, direction);
-    if (cursor->elementIsSenseless()) {
-        BasicElement* element = cursor->replaceByMainChildContent();
-        delete element;
-    }
-    cursor->normalize();
-    undocursor=cursor->getCursorData();
     shortText=i18n("_:Undo descr.\nRemove selected text");
     longText=i18n("Remove the currently selected text");
-
 }
 
-bool KFCRemoveSelection::redo(FormulaCursor *cursor)
+void KFCRemoveSelection::execute()
 {
-
+    FormulaCursor* cursor = getActiveCursor();
     cursor->setCursorData(cursordata);
-    cursor->remove(removedList,dir);
-    if (cursor->elementIsSenseless()) {
-        BasicElement* element = cursor->replaceByMainChildContent();
-        delete element;
-    }
-    cursor->normalize();
-    return true;
+    cursor->remove(removedList, dir);
+    undocursor = cursor->getCursorData();
 }
 
-
-bool KFCRemoveSelection::undo(FormulaCursor *cursor)
+void KFCRemoveSelection::unexecute()
 {
-
+    FormulaCursor* cursor = getActiveCursor();
     cursor->setCursorData(undocursor);
+    destroyUndoCursor();
     cursor->insert(removedList);
-    return true;
+    cursor->setSelection(false);
 }
 
 
-
-//  **** Add text,operator,numbers command
-KFCAddText::KFCAddText(KFormulaContainer *document,FormulaCursor *cursor,QChar ch) 
-: KFCAdd(document,cursor)
+KFCRemove::KFCRemove(KFormulaContainer *document,
+                     BasicElement::Direction direction)
+        : KFormulaCommand(i18n("_:Undo descr.\nRemove selected text"), document),
+          element(0), simpleRemoveCursor(0), dir(direction)
 {
-    
+    shortText=i18n("_:Undo descr.\nRemove selected text");
+    longText=i18n("Remove the currently selected text");
+}
 
-    QList<BasicElement> list;
-    list.setAutoDelete(true);
-    list.append(new TextElement(ch));
-    cursor->insert(list);
+KFCRemove::~KFCRemove()
+{
+    delete simpleRemoveCursor;
+    delete element;
+}
+
+void KFCRemove::execute()
+{
+    FormulaCursor* cursor = getActiveCursor();
+    cursor->setCursorData(cursordata);
+    cursor->remove(removedList, dir);
+    if (cursor->elementIsSenseless()) {
+        simpleRemoveCursor = cursor->getCursorData();
+        element = cursor->replaceByMainChildContent();
+    }
+    undocursor = cursor->getCursorData();
+    cursor->normalize();
+}
+
+void KFCRemove::unexecute()
+{
+    FormulaCursor* cursor = getActiveCursor();
+    cursor->setCursorData(undocursor);
+    destroyUndoCursor();
+    if (element != 0) {
+        cursor->replaceSelectionWith(element);
+        element = 0;
+        
+        cursor->setCursorData(simpleRemoveCursor);
+        delete simpleRemoveCursor;
+        simpleRemoveCursor = 0;
+    }
+    cursor->insert(removedList, dir);
     cursor->setSelection(false);
-    undocursor=cursor->getCursorData();
+}
+
+
+KFCRemoveEnclosing::KFCRemoveEnclosing(KFormulaContainer* document,
+                                       BasicElement::Direction dir)
+        : KFormulaCommand(i18n("_:Undo descr.\nRemove enclosing element"), document),
+          element(0), direction(dir)
+{
+}
+
+KFCRemoveEnclosing::~KFCRemoveEnclosing()
+{
+    delete element;
+}
+
+void KFCRemoveEnclosing::execute()
+{
+    FormulaCursor* cursor = getActiveCursor();
+    cursor->setCursorData(cursordata);
+    element = cursor->removeEnclosingElement(direction);
+    undocursor = cursor->getCursorData();
+    //cursor->normalize();
+    cursor->setSelection(false);
+}
+
+void KFCRemoveEnclosing::unexecute()
+{
+    FormulaCursor* cursor = getActiveCursor();
+    cursor->setCursorData(undocursor);
+    destroyUndoCursor();
+    cursor->replaceSelectionWith(element);
+    cursor->normalize();
+    element = 0;
+}
+
+
+//  **** Add text, operator, numbers command
+
+KFCAddText::KFCAddText(KFormulaContainer* document, QChar ch) 
+        : KFCAdd(i18n("_:Undo descr.\nAdd text"), document)
+{
+    removedList.append(new TextElement(ch));
     shortText=i18n("_:Undo descr.\nAdd text");
     longText=i18n("Insertion of a text element");
-
 }
 
 
-KFCAddNumber::KFCAddNumber(KFormulaContainer *document,FormulaCursor *cursor,QChar ch) 
-: KFCAdd(document,cursor)
+KFCAddNumber::KFCAddNumber(KFormulaContainer* document, QChar ch)
+        : KFCAdd(i18n("_:Undo descr.\nAdd number"), document)
 {
-    
-
-    QList<BasicElement> list;
-    list.setAutoDelete(true);
-    list.append(new NumberElement(ch));
-    cursor->insert(list);
-    cursor->setSelection(false);
-    undocursor=cursor->getCursorData();
+    removedList.append(new NumberElement(ch));
     shortText=i18n("_:Undo descr.\nAdd number");
     longText=i18n("Insertion of a numberic element");
-
 }
 
-KFCAddOperator::KFCAddOperator(KFormulaContainer *document,FormulaCursor *cursor,QChar ch) 
-: KFCAdd(document,cursor)
+KFCAddOperator::KFCAddOperator(KFormulaContainer* document, QChar ch)
+        : KFCAdd(i18n("_:Undo descr.\nAdd operator"), document)
 {
-    
-
-    QList<BasicElement> list;
-    list.setAutoDelete(true);
-    list.append(new OperatorElement(ch));
-    cursor->insert(list);
-    cursor->setSelection(false);
-    undocursor=cursor->getCursorData();
+    removedList.append(new OperatorElement(ch));
     shortText=i18n("_:Undo descr.\nAdd operator");
     longText=i18n("Insertion of an operator element");
-
 }
 
 
-// ******  Add root,bracket etc command 
+// ******  Add root, bracket etc command 
 
-KFCAddReplacing::KFCAddReplacing(KFormulaContainer *document,FormulaCursor *cursor)
-		        : KFormulaCommand(document,cursor)
+KFCAddReplacing::KFCAddReplacing(const QString &name, KFormulaContainer* document)
+        : KFormulaCommand(name, document), element(0)
 {
+}
 
+KFCAddReplacing::~KFCAddReplacing()
+{
+    delete element;
 }
 
 
-bool KFCAddReplacing::undo(FormulaCursor *cursor)
+void KFCAddReplacing::execute()
 {
-
-
-    cursor->setCursorData(undocursor);
-    BasicElement* element = cursor->removeEnclosingElement(BasicElement::beforeCursor);
-    removedList.clear();
-    removedList.append(element);
-    
-//    cursor->remove(removedList,BasicElement::beforeCursor);
-
-    return true;
-}
-
-
-bool KFCAddReplacing::redo(FormulaCursor *cursor)
-{
-
+    FormulaCursor* cursor = getActiveCursor();
     cursor->setCursorData(cursordata);
-    if(cursor->isSelection())
-    {        
-	cursor->replaceSelectionWith(removedList.first());
-    }
-    else
-	cursor->insert(removedList.first());
-
-//    cursor->insert(removedList);
-
-    if(!insideElement)
-        cursor->setSelection(false);
-    else
-        cursor->goInsideElement(insideElement);
-	
-    return true;
+    cursor->replaceSelectionWith(element);
+    undocursor = cursor->getCursorData();
+    cursor->goInsideElement(element);
+    element = 0;
 }
 
 
-KFCAddRoot::KFCAddRoot(KFormulaContainer *document,FormulaCursor *cursor)
-		        : KFCAddReplacing(document,cursor)
+void KFCAddReplacing::unexecute()
 {
+    FormulaCursor* cursor = getActiveCursor();
+    cursor->setCursorData(undocursor);
+    destroyUndoCursor();
+    element = cursor->replaceByMainChildContent();
+    cursor->normalize();
+}
 
+
+KFCAddRoot::KFCAddRoot(KFormulaContainer* document)
+        : KFCAddReplacing(i18n("_:Undo descr.\nAdd root"), document)
+{
     RootElement* root = new RootElement();
-
-    if(cursor->isSelection())
-    {        
-	cursor->replaceSelectionWith(root);
-    }
-    else
-	cursor->insert(root);
-        
-	//cursor->setSelection(false);
-    insideElement=root;
-    cursor->goInsideElement(root);
-    undocursor=cursor->getCursorData();
-
-
+    setElement(root);
 }
 
-KFCAddFraction::KFCAddFraction(KFormulaContainer *document,FormulaCursor *cursor)
-		        : KFCAddReplacing(document,cursor)
-{
 
+KFCAddFraction::KFCAddFraction(KFormulaContainer* document)
+        : KFCAddReplacing(i18n("_:Undo descr.\nAdd fraction"), document)
+{
     FractionElement* frac = new FractionElement();
-
-    if(cursor->isSelection())
-    {        
-	cursor->replaceSelectionWith(frac);
-    }
-    else
-	cursor->insert(frac);
-        
-	//cursor->setSelection(false);
-    insideElement=frac;
-    cursor->goInsideElement(frac);
-    undocursor=cursor->getCursorData();
-
-
+    setElement(frac);
 }
 
 
-// ******  Add Bracket command 
-
-KFCAddBracket::KFCAddBracket(KFormulaContainer *document,FormulaCursor *cursor,QChar left,QChar right)
-		        : KFCAddReplacing(document,cursor)
-
+KFCAddBracket::KFCAddBracket(KFormulaContainer* document, QChar left, QChar right)
+        : KFCAddReplacing(i18n("_:Undo descr.\nAdd bracket"), document)
 {
-
     BracketElement* bra = new BracketElement(left,right);
+    setElement(bra);
+}
 
-    if(cursor->isSelection())
-    {        
-	cursor->replaceSelectionWith(bra);
-    }
-    else
-	cursor->insert(bra);
-        
-	//cursor->setSelection(false);
-    insideElement=bra;
-    cursor->goInsideElement(bra);
-    undocursor=cursor->getCursorData();
-
-
+KFCAddSymbol::KFCAddSymbol(KFormulaContainer* document, Artwork::SymbolType type)
+        : KFCAddReplacing(i18n("_:Undo descr.\nAdd symbol"), document)
+{
+    SymbolElement* sym = new SymbolElement(type);
+    setElement(sym);
 }
 
 // ******  Add matrix command 
 
-KFCAddMatrix::KFCAddMatrix(KFormulaContainer *document,FormulaCursor *cursor,int r,int c)
-		        : KFormulaCommand(document,cursor)
+KFCAddMatrix::KFCAddMatrix(KFormulaContainer* document, int r, int c)
+        : KFCAdd(i18n("_:Undo descr.\nAdd a matrix"), document)
 {
+    matrix = new MatrixElement(r, c);
+    removedList.append(matrix);
+}
 
-    MatrixElement* matrix = new MatrixElement(r,c);
-    cursor->insert(matrix);
-        //cursor->setSelection(false);
-    insideElement=matrix;
+void KFCAddMatrix::execute()
+{
+    KFCAdd::execute();
+    FormulaCursor* cursor = getActiveCursor();
     cursor->goInsideElement(matrix);
-
-
 }
 
-bool KFCAddMatrix::undo(FormulaCursor *cursor)
+// ******  Add index command
+
+KFCAddGenericIndex::KFCAddGenericIndex(KFormulaContainer* document,
+                                       ElementIndexPtr index)
+        : KFCAdd(i18n("_:Undo descr.\nAdd any index"), document)
 {
-
-    cursor->setCursorData(cursordata);
-    cursor->remove(removedList,BasicElement::afterCursor);
-
-    return true;
-}
-
-
-bool KFCAddMatrix::redo(FormulaCursor *cursor)
-{
-
-    cursor->setCursorData(cursordata);
-    cursor->insert(removedList);
-    cursor->goInsideElement(insideElement);
-	
-    return true;
-}
-
-// ******  Add index command 
-
-KFCAddIndex::KFCAddIndex(KFormulaContainer *document,FormulaCursor *cursor,int position)
-		        : KFormulaCommand(document,cursor)
-{
-    indexExists=true;
-    IndexElement* element = cursor->getActiveIndexElement();
-    if (element == 0) {
-        element = new IndexElement;
-        cursor->replaceSelectionWith(element, BasicElement::beforeCursor);
-	cursor->goInsideElement(element);
-	enclosingcursor=cursor->getCursorData();
-	indexExists=false;
-    } 
-    ElementIndexPtr index = element->getIndex(position);
-
+    removedList.append(new SequenceElement());
     
-    if (!index->hasIndex()) {
-        SequenceElement* indexContent = new SequenceElement;
-        index->setToIndex(cursor);
-        indexcursor=cursor->getCursorData();  	
-    
-        cursor->insert(indexContent);
-            //cursor->goInsideElement(indexContent);
+    FormulaCursor* cursor = getActiveCursor();
+    index->setToIndex(cursor);
+    delete cursordata;
+    cursordata = cursor->getCursorData();
+}
+
+
+KFCAddIndex::KFCAddIndex(KFormulaContainer* document,
+                         IndexElement* element, ElementIndexPtr index)
+        : KFCAddReplacing(i18n("_:Undo descr.\nAdd index"), document),
+          addGenericIndex(document, index)
+{
+    setElement(element);
+}
+
+void KFCAddIndex::execute()
+{
+    KFCAddReplacing::execute();
+    addGenericIndex.execute();
+}
+
+void KFCAddIndex::unexecute()
+{
+    addGenericIndex.unexecute();
+    KFCAddReplacing::unexecute();
+}
+
+
+/**
+ * Command to insert stuff from the clipboard.
+ */
+KFCPaste::KFCPaste(KFormulaContainer* document, QList<BasicElement>& list)
+        : KFCAdd(i18n("_:Undo descr.\nPaste"), document)
+{
+    list.setAutoDelete(false);
+    uint count = list.count();
+    for (uint i = 0; i < count; i++) {
+        removedList.append(list.at(i));
     }
-    else {
-            //We are doing nothing relevant here!   
-        nothing=true;
-        index->moveToIndex(cursor, BasicElement::afterCursor);
-        cursor->setSelection(false);
-    }	
-    
-    undocursor=cursor->getCursorData();
+    list.clear();
 }
-
-bool KFCAddIndex::undo(FormulaCursor *cursor)
-{
-    if(nothing) 
-	return true;
-
-
-    cursor->setCursorData(undocursor);
-
-//Remove the inserted index
-    cursor->remove(removedList,BasicElement::beforeCursor);
-    cerr << removedList.count() <<endl;    
-//If we are the command that creates the indexelement we also remove it.    
-
-    indexelem=0;
-    if(!indexExists) {
-        cursor->setCursorData(enclosingcursor);
-	indexelem = cursor->removeEnclosingElement(BasicElement::beforeCursor);
-    }
-    cursor->setCursorData(cursordata);
-    return true;
-
-}
-
-
-bool KFCAddIndex::redo(FormulaCursor *cursor)
-{
-    if(nothing) 
-	return true;
-    
-    cursor->setCursorData(cursordata);
-
-    if(!indexExists) {
-        cursor->replaceSelectionWith(indexelem, BasicElement::beforeCursor);
-    }
-    
-    cursor->setCursorData(indexcursor);  
-    cursor->insert(removedList);
-
-    return true;
-
-}
-
-

@@ -239,8 +239,11 @@ public:
     QDomDocument copy();
 
     /**
-     * Inserts the content from the tree at the current position.
+     * Inserts the elements that could be read from the dom into
+     * the list. Returns true on success.
      */
+    bool buildElementsFromDom(QDomDocument doc, QList<BasicElement>& list);
+
     bool paste(QDomDocument doc);
     
     // undo/redo support

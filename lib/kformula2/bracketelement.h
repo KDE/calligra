@@ -101,7 +101,6 @@ public:
      */
     virtual void remove(FormulaCursor*, QList<BasicElement>&, Direction);
 
-    
     // main child
     //
     // If an element has children one has to become the main one.
