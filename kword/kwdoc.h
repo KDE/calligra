@@ -177,7 +177,7 @@ class KWDocument : public KoDocument, public KoZoomHandler
     Q_PROPERTY( double defaultColumnSpacing READ defaultColumnSpacing WRITE setDefaultColumnSpacing )
     Q_PROPERTY( int maxRecentFiles READ maxRecentFiles )
     Q_PROPERTY( QString globalLanguage READ globalLanguage WRITE setGlobalLanguage )
-    Q_PROPERTY( bool globalHyphen READ globalHyphen WRITE setGlobalHyphen )
+    Q_PROPERTY( bool globalHyphenation READ globalHyphenation WRITE setGlobalHyphenation )
     Q_PROPERTY( QStringList horizontalLinePath READ horizontalLinePath WRITE setHorizontalLinePath )
     Q_PROPERTY( bool insertDirectCursor READ insertDirectCursor WRITE setInsertDirectCursor )
     Q_PROPERTY( QString picturePath READ picturePath WRITE setPicturePath )
@@ -826,8 +826,8 @@ public:
     void setGlobalLanguage( const QString & _lang ){m_globalLanguage = _lang;}
     void addWordToDictionary( const QString & );
 
-    bool globalHyphen() const { return m_bGlobalHyphen; }
-    void setGlobalHyphen ( bool _hyphen ) { m_bGlobalHyphen = _hyphen; }
+    bool globalHyphenation() const { return m_bGlobalHyphenation; }
+    void setGlobalHyphenation ( bool _hyphen ) { m_bGlobalHyphenation = _hyphen; }
 
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
@@ -1029,7 +1029,7 @@ private:
     QString m_picturePath;
     QString m_globalLanguage;
     QStringList m_horizontalLinePath;
-    bool m_bGlobalHyphen;
+    bool m_bGlobalHyphenation;
 };
 
 

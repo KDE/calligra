@@ -43,11 +43,11 @@ public:
     bool abortFormatting;
 };
 
-KoTextObject::KoTextObject( KoZoomHandler *zh, const QFont& defaultFont, const QString &defaultLanguage, bool hyphen, KoStyle* defaultStyle, int _tabStopWidth,
+KoTextObject::KoTextObject( KoZoomHandler *zh, const QFont& defaultFont, const QString &defaultLanguage, bool hyphenation, KoStyle* defaultStyle, int _tabStopWidth,
                             QObject* parent, const char *name )
     : QObject( parent, name ), m_defaultStyle( defaultStyle ), undoRedoInfo( this )
 {
-    textdoc = new KoTextDocument( zh, new KoTextFormatCollection( defaultFont, QColor(),defaultLanguage, hyphen ) );
+    textdoc = new KoTextDocument( zh, new KoTextFormatCollection( defaultFont, QColor(),defaultLanguage, hyphenation ) );
     if ( _tabStopWidth != -1 )
         textdoc->setTabStops( _tabStopWidth );
     init();
@@ -1283,7 +1283,7 @@ KCommand * KoTextObject::setTabListCommand( KoTextCursor * cursor, const KoTabul
     return new KoTextCommand( this, /*cmd, */i18n("Change Tabulator") );
 }
 
-KCommand * KoTextObject::setHyphenCommand(  KoTextCursor * cursor, bool _hyph )
+KCommand * KoTextObject::setHyphenationCommand(  KoTextCursor * cursor, bool _hyph )
 {
     if ( protectContent() )
         return 0L;
@@ -2392,11 +2392,11 @@ KCommand *KoTextFormatInterface::setAlignCommand(int align)
     return setParagLayoutFormatCommand(&format,KoParagLayout::Alignment);
 }
 
-KCommand *KoTextFormatInterface::setHyphenCommand( bool _b )
+KCommand *KoTextFormatInterface::setHyphenationCommand( bool _b )
 {
     KoTextFormat format( *currentFormat() );
-    format.setHyphen( _b );
-    return setFormatCommand( &format, KoTextFormat::Hyphen );
+    format.setHyphenation( _b );
+    return setFormatCommand( &format, KoTextFormat::Hyphenation);
 }
 
 

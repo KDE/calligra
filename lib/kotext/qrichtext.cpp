@@ -4063,7 +4063,7 @@ void KoTextParag::setFormat( int index, int len, KoTextFormat *f, bool useCollec
                f->wordByWord() != of->wordByWord()  ||
                f->attributeFont() != of->attributeFont() ||
                f->language() != of->language()) ||
-               f->hyphen() != of->hyphen()) {
+               f->hyphenation() != of->hyphenation()) {
 	    invalidate( 0 );
 	}
 	if ( flags == -1 || flags == KoTextFormat::Format || !fc ) {

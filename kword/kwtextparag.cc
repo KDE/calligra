@@ -515,7 +515,7 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
 {
     KoTextFormat format;
     //todo fixme !!!!!!!!!!!!
-    format.setHyphen( hyphanation );
+    format.setHyphenation( hyphanation );
     QFont font;
     if ( refFormat )
     {
@@ -666,7 +666,7 @@ void KWTextParag::loadLayout( QDomElement & attributes )
         if ( !formatElem.isNull() )
         {
             // Load paragraph format
-            KoTextFormat f = loadFormat( formatElem, defaultFormat, doc->defaultFont(), doc->globalLanguage(), doc->globalHyphen() );
+            KoTextFormat f = loadFormat( formatElem, defaultFormat, doc->defaultFont(), doc->globalLanguage(), doc->globalHyphenation() );
             setFormat( document()->formatCollection()->format( &f ) );
         }
         else // No paragraph format
@@ -724,7 +724,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset, bool load
                 switch( id ) {
                 case 1: // Normal text
                 {
-                    KoTextFormat f = loadFormat( formatElem, paragraphFormat(), doc->defaultFont(),doc->globalLanguage(), doc->globalHyphen() );
+                    KoTextFormat f = loadFormat( formatElem, paragraphFormat(), doc->defaultFont(),doc->globalLanguage(), doc->globalHyphenation() );
                     //kdDebug(32002) << "KWTextParag::loadFormatting applying formatting from " << index << " to " << index+len << endl;
                     setFormat( index, len, document()->formatCollection()->format( &f ) );
                     break;
@@ -780,7 +780,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset, bool load
                         if ( var )
                         {
                             var->load( varElem );
-                            KoTextFormat f = loadFormat( formatElem, paragraphFormat(), doc->defaultFont(),doc->globalLanguage(), doc->globalHyphen() );
+                            KoTextFormat f = loadFormat( formatElem, paragraphFormat(), doc->defaultFont(),doc->globalLanguage(), doc->globalHyphenation() );
                             setCustomItem( index, var, document()->formatCollection()->format( &f ) );
 
                             var->recalc();

@@ -104,7 +104,7 @@ KPTextObject::KPTextObject(  KPresenterDoc *doc )
     m_doc=doc;
     m_textVertAlign = KP_TOP;
     // Default color should be QColor() ... but kpresenter isn't fully color-scheme-aware yet
-    KoTextFormatCollection* fc = new KoTextFormatCollection( doc->defaultFont(), Qt::black, doc->globalLanguage(), doc->globalHyphen() );
+    KoTextFormatCollection* fc = new KoTextFormatCollection( doc->defaultFont(), Qt::black, doc->globalLanguage(), doc->globalHyphenation() );
     KPrTextDocument * textdoc = new KPrTextDocument( this, fc );
     if ( m_doc->tabStopValue() != -1 )
         textdoc->setTabStops( m_doc->zoomHandler()->ptToLayoutUnitPixX( m_doc->tabStopValue() ));
@@ -661,7 +661,7 @@ void KPTextObject::loadKTextObject( const QDomElement &elem )
                         lastParag->remove( 0, 1 ); // Remove current trailing space
                         firstTextTag = false;
                     }
-                    KoTextFormat fm = loadFormat( n, lastParag->paragraphFormat(), m_doc->defaultFont(), m_doc->globalLanguage(), m_doc->globalHyphen() );
+                    KoTextFormat fm = loadFormat( n, lastParag->paragraphFormat(), m_doc->defaultFont(), m_doc->globalLanguage(), m_doc->globalHyphenation() );
 
                     QString txt = n.firstChild().toText().data();
 
@@ -730,7 +730,7 @@ void KPTextObject::loadVariable( QValueList<QDomElement> & listVariable,KoTextPa
             if ( var )
             {
                 var->load( varElem );
-                KoTextFormat format = loadFormat( *it, lastParag->paragraphFormat(), m_doc->defaultFont(), m_doc->globalLanguage(), m_doc->globalHyphen() );
+                KoTextFormat format = loadFormat( *it, lastParag->paragraphFormat(), m_doc->defaultFont(), m_doc->globalLanguage(), m_doc->globalHyphenation() );
                 lastParag->setCustomItem( index, var, lastParag->document()->formatCollection()->format( &format ));
                 var->recalc();
             }
@@ -742,7 +742,7 @@ void KPTextObject::loadVariable( QValueList<QDomElement> & listVariable,KoTextPa
 KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat, const QFont & defaultFont, const QString & defaultLanguage, bool hyphen )
 {
     KoTextFormat format;
-    format.setHyphen( hyphen );
+    format.setHyphenation( hyphen );
     QFont fn;
     if ( refFormat )
     {

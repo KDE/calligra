@@ -2081,7 +2081,7 @@ KoTextCursor * KPrPasteTextCommand::execute( KoTextCursor *c )
         while ( !n.isNull() ) {
             if ( n.tagName() == "TEXT" ) {
                 QString txt = n.firstChild().toText().data();
-                KoTextFormat fm = textdoc->textObject()->loadFormat( n, parag->paragraphFormat(), doc->defaultFont(),doc->globalLanguage(), doc->globalHyphen() );
+                KoTextFormat fm = textdoc->textObject()->loadFormat( n, parag->paragraphFormat(), doc->defaultFont(),doc->globalLanguage(), doc->globalHyphenation() );
                 parag->setFormat( i, txt.length(), textdoc->formatCollection()->format( &fm ) );
                 i += txt.length();
             }

@@ -152,7 +152,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     m_refreshSideBar = true;
     m_picturePath= KGlobalSettings::documentPath();
     m_globalLanguage = KGlobal::locale()->language();
-    m_bGlobalHyphen = false;
+    m_bGlobalHyphenation = false;
     _duplicatePage=false;
 
     KoStyle* m_standardStyle = new KoStyle( "Standard" );
@@ -185,7 +185,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     if( config->hasGroup("Interface") ) {
         config->setGroup( "Interface" );
         m_globalLanguage=config->readEntry("language", KGlobal::locale()->language());
-        m_bGlobalHyphen=config->readBoolEntry("hyphen", false);
+        m_bGlobalHyphenation=config->readBoolEntry("hyphenation", false);
     }
 
     m_standardStyle->format().setLanguage( m_globalLanguage);
@@ -2954,7 +2954,7 @@ void KPresenterDoc::loadStyleTemplates( const QDomElement &stylesElem )
         QDomElement formatElem = styleElem.namedItem( "FORMAT" ).toElement();
         if ( !formatElem.isNull() )
         {
-            sty->format() = KPTextObject::loadFormat( formatElem, 0L, defaultFont(), globalLanguage(), globalHyphen() );
+            sty->format() = KPTextObject::loadFormat( formatElem, 0L, defaultFont(), globalLanguage(), globalHyphenation() );
         }
         else
             kdWarning(33001) << "No FORMAT tag in <STYLE>" << endl; // This leads to problems in applyStyle().

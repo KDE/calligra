@@ -112,7 +112,7 @@ public:
 
     KCommand *setShadowTextCommand( bool _b );
 
-    KCommand *setHyphenCommand( bool _b );
+    KCommand *setHyphenationCommand( bool _b );
 
 
     KCommand *setFontAttributeCommand( KoTextFormat::AttributeStyle _att);
@@ -281,7 +281,7 @@ public:
 
     KCommand * setShadowCommand( KoTextCursor * cursor,double dist, short int direction, const QColor &col,int selectionId= KoTextDocument::Standard  );
     KCommand * setParagDirectionCommand( KoTextCursor * cursor, QChar::Direction d, int selectionId = KoTextDocument::Standard );
-    KCommand * setHyphenCommand(  KoTextCursor * cursor, bool _hyph );
+    KCommand * setHyphenationCommand(  KoTextCursor * cursor, bool _hyph );
 
     KCommand* applyStyle( KoTextCursor * cursor, const KoStyle * style,
                      int selectionId = KoTextDocument::Standard,

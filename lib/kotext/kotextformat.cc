@@ -52,7 +52,7 @@ KoTextFormat::KoTextFormat()
     m_underlineLineStyle = U_SOLID;
     m_strikeOutLineStyle = S_SOLID;
     m_language = KGlobal::locale()->language();
-    d->m_bHyphen = false;
+    d->m_bHyphenation = false;
     d->m_bShadowText = true;
     d->m_relativeTextSize = 0.66;
     d->m_offsetFromBaseLine= 0;
@@ -64,7 +64,7 @@ KoTextFormat::KoTextFormat()
 //#endif
 }
 
-KoTextFormat::KoTextFormat( const QFont &f, const QColor &c, const QString &_language, bool hyphen, KoTextFormatCollection *parent )
+KoTextFormat::KoTextFormat( const QFont &f, const QColor &c, const QString &_language, bool hyphenation, KoTextFormatCollection *parent )
     : fn( f ), col( c ), /*fm( QFontMetrics( f ) ),*/ linkColor( TRUE )
 {
 #ifdef DEBUG_COLLECTION
@@ -101,7 +101,7 @@ KoTextFormat::KoTextFormat( const QFont &f, const QColor &c, const QString &_lan
     d->m_offsetFromBaseLine = 0;
     d->m_bWordByWord = false;
     d->m_charStyle = 0L;
-    d->m_bHyphen = hyphen;
+    d->m_bHyphenation = hyphenation;
     m_attributeFont = ATT_NONE;
     ////
     generateKey();
@@ -159,7 +159,7 @@ KoTextFormat& KoTextFormat::operator=( const KoTextFormat &f )
     m_underlineLineStyle = f.m_underlineLineStyle;
     m_strikeOutLineStyle = f.m_strikeOutLineStyle;
     m_language = f.m_language;
-    d->m_bHyphen=f.d->m_bHyphen;
+    d->m_bHyphenation=f.d->m_bHyphenation;
     d->m_bShadowText = f.d->m_bShadowText;
     d->m_relativeTextSize = f.d->m_relativeTextSize;
     d->m_offsetFromBaseLine = f.d->m_offsetFromBaseLine;
@@ -235,8 +235,8 @@ void KoTextFormat::copyFormat( const KoTextFormat & nf, int flags )
         setWordByWord(nf.wordByWord());
     if( flags & KoTextFormat::Attribute)
         setAttributeFont(nf.attributeFont());
-    if( flags & KoTextFormat::Hyphen )
-        setHyphen( nf.hyphen());
+    if( flags & KoTextFormat::Hyphenation )
+        setHyphenation( nf.hyphenation());
     //////
     update();
     //kdDebug(32500) << "KoTextFormat " << (void*)this << " copyFormat nf=" << (void*)&nf << " " << nf.key() << " flags=" << flags
@@ -369,7 +369,7 @@ void KoTextFormat::generateKey()
     k += '/';
     k += QString::number( (int)m_attributeFont);
     k += '/';
-    k += QString::number( (int)d->m_bHyphen);
+    k += QString::number( (int)d->m_bHyphenation);
     ////
 }
 
@@ -562,8 +562,8 @@ int KoTextFormat::compare( const KoTextFormat & format ) const
         flags |= KoTextFormat::WordByWord;
     if ( attributeFont() != format.attributeFont() )
         flags |= KoTextFormat::Attribute;
-    if( hyphen() != format.hyphen() )
-        flags |= KoTextFormat::Hyphen;
+    if( hyphenation() != format.hyphenation() )
+        flags |= KoTextFormat::Hyphenation;
     return flags;
 }
 
@@ -952,11 +952,11 @@ KoTextFormat::AttributeStyle KoTextFormat::stringToAttributeFont( const QString 
 }
 
 
-void KoTextFormat::setHyphen( bool b )
+void KoTextFormat::setHyphenation( bool b )
 {
-    if ( d->m_bHyphen == b )
+    if ( d->m_bHyphenation == b )
         return;
-    d->m_bHyphen = b;
+    d->m_bHyphenation = b;
     update();
 
 }

@@ -116,7 +116,7 @@ class KPresenterDoc : public KoDocument
     Q_PROPERTY( QString picturePath READ picturePath WRITE setPicturePath )
     Q_PROPERTY( QString globalLanguage READ globalLanguage WRITE setGlobalLanguage )
     Q_PROPERTY( bool refreshSideBar READ refreshSideBar WRITE setRefreshSideBar )
-    Q_PROPERTY( QString globalHyphen READ globalHyphen WRITE setGlobalHyphen )
+    Q_PROPERTY( bool globalHyphenation READ globalHyphenation WRITE setGlobalHyphenation )
     Q_PROPERTY( double tabStopValue READ tabStopValue WRITE setTabStopValue )
     Q_PROPERTY( bool snapToGrid READ snapToGrid WRITE setSnapToGrid )
     Q_PROPERTY( bool backgroundSpellCheckEnabled READ backgroundSpellCheckEnabled WRITE enableBackgroundSpellCheck )
@@ -474,8 +474,8 @@ public:
     QString globalLanguage()const { return m_globalLanguage; }
     void setGlobalLanguage( const QString & _lang ){m_globalLanguage = _lang;}
 
-    bool globalHyphen() const { return m_bGlobalHyphen; }
-    void setGlobalHyphen ( bool _hyphen ) { m_bGlobalHyphen = _hyphen; }
+    bool globalHyphenation() const { return m_bGlobalHyphenation; }
+    void setGlobalHyphenation ( bool _hyphen ) { m_bGlobalHyphenation = _hyphen; }
 
     void addWordToDictionary( const QString & word);
 
@@ -650,7 +650,7 @@ private:
     QString m_picturePath;
     bool  m_bInsertDirectCursor;
     QString m_globalLanguage;
-    bool m_bGlobalHyphen;
+    bool m_bGlobalHyphenation;
 };
 
 #endif
