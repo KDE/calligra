@@ -34,7 +34,7 @@ KAboutData *newKexiAboutData()
 	KAboutData *aboutData=new KAboutData( "kexi", KEXI_APP_NAME,
 		KEXI_VERSION_STRING, description, KAboutData::License_LGPL,
 		I18N_NOOP(	"(c) 2002-2004, Kexi Team\n"
-					"(c) 2003, 2004, OpenOffice Polska Ltd.\n"), 
+					"(c) 2003, 2004, OpenOffice Polska Ltd.\n"),
 		I18N_NOOP(	"This software is developed by Kexi Team - an international group\n"
 					"of independent developers, with additional assistance and support\n"
 					"from the OpenOffice Polska company.\n\n"
@@ -46,7 +46,7 @@ KAboutData *newKexiAboutData()
 	aboutData->addAuthor("Peter Simonsson",I18N_NOOP("Developer"),"psn@linux.se");
 	aboutData->addAuthor("Joseph Wenninger", I18N_NOOP("Form Designer, UIModes & much more"), "jowenn@kde.org");
 	aboutData->addAuthor("Seth Kurzenberg",I18N_NOOP("CQL++, SQL assistance"),  "seth@cql.com");
-	aboutData->addAuthor("Laurent Montel", I18N_NOOP("Code cleanings"), "montell@club-internet.fr");
+	aboutData->addAuthor("Laurent Montel", I18N_NOOP("Code cleanings"), "montel@kde.org");
 	aboutData->addAuthor("Till Busch", I18N_NOOP("Bugfixes, Original Table Widget"), "till@bux.at");
 	aboutData->addAuthor("Cedric Pasteur", I18N_NOOP("KexiPropertyEditor and FormDesigner"), "cedric.pasteur@free.fr");
 	aboutData->addAuthor("Jaroslaw Staniek / OpenOffice Polska", I18N_NOOP("Developer, Designer, KexiDB, commercially supported version, win32 port"), "js@iidea.pl");
