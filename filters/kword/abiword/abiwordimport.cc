@@ -42,6 +42,7 @@
 #include "ImportHelpers.h"
 #include "ImportFormatting.h"
 #include "ImportStyle.h"
+#include "ImportField.h"
 
 #include "abiwordimport.h"
 
@@ -335,23 +336,6 @@ bool EndElementP (StackItem* stackItem)
     return true;
 }
 
-static void InsertTimeVariable(QDomDocument& mainDocument,
-    QDomElement& variableElement, QString strKey, QString strText)
-{
-    QDomElement typeElement=mainDocument.createElement("TYPE");
-    typeElement.setAttribute("key",strKey);
-    typeElement.setAttribute("type",2); // Time
-    typeElement.setAttribute("text",strText);
-    variableElement.appendChild(typeElement); //Append to <VARIABLE>
-    QDomElement timeElement=mainDocument.createElement("TIME");
-    // We cannot calculate the time, so default to midnight
-    timeElement.setAttribute("hour",0);
-    timeElement.setAttribute("minute",0);
-    timeElement.setAttribute("second",0);
-    timeElement.setAttribute("fix",0); // AbiWord's <field> is never fixed
-    variableElement.appendChild(timeElement); //Append to <VARIABLE>
-}
-
 static bool StartElementField(StackItem* stackItem, StackItem* stackCurrent,
     QDomDocument& mainDocument, const QXmlAttributes& attributes)
 {
@@ -360,7 +344,7 @@ static bool StartElementField(StackItem* stackItem, StackItem* stackCurrent,
     {
         QString strType=attributes.value("type").stripWhiteSpace();
         kdDebug(30506)<<"<field> type:"<<strType<<endl;
-        // TODO: a <field> can have formating in  the props attribute. Can KWord follow?
+        
         AbiPropsMap abiPropsMap;
         PopulateProperties(stackItem,QString::null,attributes,abiPropsMap,true);
 
@@ -369,46 +353,11 @@ static bool StartElementField(StackItem* stackItem, StackItem* stackCurrent,
         // We create a format element
         QDomElement variableElement=mainDocument.createElement("VARIABLE");
 
-        if (strType=="time")
+        if (!ProcessField(mainDocument, variableElement, strType))
         {
-            InsertTimeVariable(mainDocument, variableElement, "TIMELocale", "00:00");
-        }
-        else if (strType=="time_miltime")
-        {
-            // AbiWord's military time is just the standard 24h time (with seconds)
-            InsertTimeVariable(mainDocument, variableElement, "TIMEhh:mm:ss", "00:00:00");
-        }
-        else if (strType=="date")
-        {
-            QDomElement typeElement=mainDocument.createElement("TYPE");
-            typeElement.setAttribute("key","DATE1Locale"); // Long locale date
-            typeElement.setAttribute("type",0); // date
-            typeElement.setAttribute("text","-"); // Just a dummy, KWord will do the work
-            variableElement.appendChild(typeElement); //Append to <VARIABLE>
-            QDomElement dateElement=mainDocument.createElement("DATE");
-            // As we have no idea about the current date, use the *nix epoch 1970-01-01
-            dateElement.setAttribute("year",1970);
-            dateElement.setAttribute("month",1);
-            dateElement.setAttribute("day",1);
-            dateElement.setAttribute("fix",0);  // AbiWord's <field> is never fixed
-            variableElement.appendChild(dateElement); //Append to <VARIABLE>
-        }
-        else if ((strType=="page_number")||(strType=="page_count"))
-        {
-            QDomElement typeElement=mainDocument.createElement("TYPE");
-            typeElement.setAttribute("key","NUMBER");
-            typeElement.setAttribute("type",4); // page number/count
-            typeElement.setAttribute("text",1); // We cannot count the pages, so give a default value
-            variableElement.appendChild(typeElement); //Append to <VARIABLE>
-            QDomElement pgnumElement=mainDocument.createElement("PGNUM");
-            pgnumElement.setAttribute("subtype",(strType=="page_count")?1:0);
-            pgnumElement.setAttribute("value",1);
-            variableElement.appendChild(pgnumElement); //Append to <VARIABLE>
-        }
-        else
-        {
+            // The field type was not recognised,
+            //   therefore write the field type in red as normal text
             kdWarning(30506) << "Unknown <field> type: " << strType << endl;
-            // Write the field name in red
             QDomElement formatElement=mainDocument.createElement("FORMAT");
             formatElement.setAttribute("id",1); // Variable
             formatElement.setAttribute("pos",stackItem->pos); // Start position

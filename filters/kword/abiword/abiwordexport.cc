@@ -97,6 +97,7 @@ private:
     QString escapeAbiWordText(const QString& strText) const;
     bool makeImage(const FrameAnchor& anchor);
     bool convertUnknownImage(const QString& name, QByteArray& image);
+    void writeAbiProps(const TextFormatting& formatLayout, const TextFormatting& format);
 private:
     QIODevice* m_ioDevice;
     QTextStream* m_streamOut;
@@ -500,6 +501,26 @@ bool AbiWordWorker::makeImage(const FrameAnchor& anchor)
     return true;
 }
 
+void AbiWordWorker::writeAbiProps (const TextFormatting& formatLayout, const TextFormatting& format)
+{
+    QString abiprops=textFormatToAbiProps(formatLayout,format,false);
+
+    // Erase the last semi-comma (as in CSS2, semi-commas only separate instructions and do not terminate them)
+    const int result=abiprops.findRev(";");
+
+    if (result>=0)
+    {
+        // Remove the last semi-comma and the space thereafter
+        abiprops.remove(result,2);
+    }
+
+    if (!abiprops.isEmpty())
+    {
+        *m_streamOut << " props=\"" << abiprops << "\"";
+    }
+}
+
+
 void AbiWordWorker::processParagraphData ( const QString &paraText,
     const TextFormatting& formatLayout,
     const ValueListFormatData &paraFormatDataList)
@@ -526,27 +547,38 @@ void AbiWordWorker::processParagraphData ( const QString &paraText,
                 }
                 else
                 { // Text with properties, so use a <c> element!
-
-                    QString abiprops=textFormatToAbiProps(formatLayout,(*paraFormatDataIt).text,false);
-
-                    // Erase the last semi-comma (as in CSS2, semi-commas only separate instructions and do not terminate them)
-                    const int result=abiprops.findRev(";");
-
-                    if (result>=0)
-                    {
-                        // Remove the last semi-comma and the space thereafter
-                        abiprops.remove(result,2);
-                    }
-
-                    *m_streamOut << "<c props=\"" << abiprops << "\">";
-                    *m_streamOut << partialText << "</c>";
+                    *m_streamOut << "<c";
+                    writeAbiProps(formatLayout,(*paraFormatDataIt).text);
+                    *m_streamOut << ">" << partialText << "</c>";
                 }
             }
             else if (4==(*paraFormatDataIt).id)
             {
-                if (9==(*paraFormatDataIt).variable.m_type)
+                if (0==(*paraFormatDataIt).variable.m_type)
                 {
-                    // A link
+                    // As AbiWord's field is inflexible, we cannot make the date custom
+                    *m_streamOut << "<field type=\"date_ntdfl\"";
+                    writeAbiProps(formatLayout,(*paraFormatDataIt).text);
+                    *m_streamOut << "/>";
+                }
+                else if (2==(*paraFormatDataIt).variable.m_type)
+                {
+                    // As AbiWord's field is inflexible, we cannot make the time custom
+                    *m_streamOut << "<field type=\"time\"";
+                    writeAbiProps(formatLayout,(*paraFormatDataIt).text);
+                    *m_streamOut << "/>";
+                }
+                else if (4==(*paraFormatDataIt).variable.m_type)
+                {
+                    // As AbiWord's field is inflexible, we cannot make the time custom
+                    // TODO: page_count (but we need help from the libexport: <PGNUM>)
+                    *m_streamOut << "<field type=\""<< "page_number" <<"\"";
+                    writeAbiProps(formatLayout,(*paraFormatDataIt).text);
+                    *m_streamOut << "/>";
+                }
+                else if (9==(*paraFormatDataIt).variable.m_type)
+                {
+                    // A link (TODO: formating)
                     *m_streamOut << "<a xlink:href=\""
                         << escapeAbiWordText((*paraFormatDataIt).variable.m_linkName)
                         << "\"><c>" // In AbiWord, an anchor <a> has always a <c> child
