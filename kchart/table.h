@@ -14,8 +14,8 @@
 
 #ifndef TABLE_H
 #define TABLE_H
-#include <qtablevw.h>
-#include <qlined.h>
+#include <qtableview.h>
+#include <qlineedit.h>
 #include <qpainter.h>
 #include <qstrlist.h>
 

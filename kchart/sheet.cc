@@ -14,7 +14,7 @@
 
 #include <stdlib.h>
 
-#include <qscrbar.h>
+#include <qscrollbar.h>
 
 #include "sheet.h"
 #include "sheet.moc"

@@ -4,9 +4,9 @@
 #include "kchart_view.h"
 #include "kchartparams.h"
 
-#include <qbttngrp.h>
+#include <qbuttongroup.h>
 #include <qframe.h>
-#include <qpushbt.h>
+#include <qpushbutton.h>
 #include <qlabel.h>
 
 #include <klocale.h>

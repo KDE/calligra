@@ -5,9 +5,9 @@
 
 #include <qlabel.h>
 #include <qframe.h>
-#include <qlined.h>
-#include <qchkbox.h>
-#include <qgrpbox.h>
+#include <qlineedit.h>
+#include <qcheckbox.h>
+#include <qgroupbox.h>
 #include <klocale.h>
 
 kchartWizardSetupAxesPage::kchartWizardSetupAxesPage( QWidget* parent, 

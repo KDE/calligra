@@ -4,16 +4,17 @@
 #include "kchart_view.h"
 
 #include <qframe.h>
-#include <qpushbt.h>
-#include <qbttngrp.h>
+#include <qpushbutton.h>
+#include <qbuttongroup.h>
 #include <qlabel.h>
-#include <qobjcoll.h>
+#include <qcollection.h>
+#include <qobjectlist.h>
 
 #include <kiconloader.h>
 #include <kglobal.h>
 #include <klocale.h>
 
-kchartWizardSelectChartSubTypePage::kchartWizardSelectChartSubTypePage( QWidget* parent, 
+kchartWizardSelectChartSubTypePage::kchartWizardSelectChartSubTypePage( QWidget* parent,
 						    KChartPart* chart ) :
   QWidget( parent ),
   _chart( chart )
@@ -39,8 +40,8 @@ bool kchartWizardSelectChartSubTypePage::createChildren( )
     //  _charttype = _chart->chartType(); // note new chart type
 
   // PENDING(kalle): The pages should be prepared as QWidgets and just
-  // put in as needed to avoid recreating them over and over again. 
-  // 
+  // put in as needed to avoid recreating them over and over again.
+  //
   // Not sure if we need to do it (eats more memory). (David)
 
   // clear the page
@@ -67,7 +68,7 @@ bool kchartWizardSelectChartSubTypePage::createChildren( )
 	normalbarsFR->setLineWidth( 2 );
 	_normalbarsPB = new QPushButton( normalbarsFR );
 	_normalbarsPB->setToggleButton( true );
-	_normalbarsPB->resize( normalbarsFR->contentsRect().width(), 
+	_normalbarsPB->resize( normalbarsFR->contentsRect().width(),
 						   normalbarsFR->contentsRect().height() );
 	_normalbarsPB->setOn( true );
 	_normalbarsPB->show();
@@ -85,7 +86,7 @@ bool kchartWizardSelectChartSubTypePage::createChildren( )
 	barsontopFR->setFrameStyle( QFrame::Sunken | QFrame::Panel );
 	_barsontopPB = new QPushButton( barsontopFR );
 	_barsontopPB->setToggleButton( true );
-	_barsontopPB->resize( barsontopFR->contentsRect().width(), 
+	_barsontopPB->resize( barsontopFR->contentsRect().width(),
 						  barsontopFR->contentsRect().height() );
 	_barsontopPB->show();
 	_typeBG->insert( _barsontopPB, OnTop );
@@ -102,7 +103,7 @@ bool kchartWizardSelectChartSubTypePage::createChildren( )
 	barsinfrontFR->show();
 	_barsinfrontPB = new QPushButton( barsinfrontFR );
 	_barsinfrontPB->setToggleButton( true );
-	_barsinfrontPB->resize( barsinfrontFR->contentsRect().width(), 
+	_barsinfrontPB->resize( barsinfrontFR->contentsRect().width(),
 							barsinfrontFR->contentsRect().height() );
 	_barsinfrontPB->show();
 	_typeBG->insert( _barsinfrontPB, InFront );
@@ -116,7 +117,7 @@ bool kchartWizardSelectChartSubTypePage::createChildren( )
     ((QPushButton*)_typeBG->find( _chart->overwrite() ))->setOn( true );
 
 	break;
-  }  
+  }
   default: {
 	QLabel* nosubtypesLA = new QLabel( i18n( "There are no subtypes for this chart type" ), this );
 	nosubtypesLA->setFont( QFont( "Helvetica", 12, QFont::Bold ) );

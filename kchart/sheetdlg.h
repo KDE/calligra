@@ -15,7 +15,7 @@
 #ifndef SHEETDLG_H
 #define SHEETDLG_H
 
-#include <qpushbt.h>
+#include <qpushbutton.h>
 #include <qdialog.h>
 
 class Sheet;

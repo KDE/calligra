@@ -3,9 +3,9 @@
 #include "kchartWizardLabelsLegendPage.h"
 #include "kchart_view.h"
 
-#include <qbttngrp.h>
-#include <qlined.h>
-#include <qradiobt.h>
+#include <qbuttongroup.h>
+#include <qlineedit.h>
+#include <qradiobutton.h>
 #include <qlabel.h>
 
 #include <klocale.h>

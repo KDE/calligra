@@ -3,7 +3,7 @@
 #include "kchartWizardSelectDataPage.h"
 
 #include <qlabel.h>
-#include <qlined.h>
+#include <qlineedit.h>
 
 kchartWizardSelectDataPage::kchartWizardSelectDataPage( QWidget* parent ) :
   QWidget( parent )

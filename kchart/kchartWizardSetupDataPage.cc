@@ -4,9 +4,9 @@
 #include "kchart_view.h"
 #include "kchartWizard.h"
 
-#include <qradiobt.h>
-#include <qchkbox.h>
-#include <qbttngrp.h>
+#include <qradiobutton.h>
+#include <qcheckbox.h>
+#include <qbuttongroup.h>
 #include <qlabel.h>
 
 kchartWizardSetupDataPage::kchartWizardSetupDataPage( QWidget* parent,

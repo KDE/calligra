@@ -13,7 +13,7 @@
  ****************************************************/
 
 #include <qpainter.h>
-#include <qdrawutl.h>
+#include <qdrawutil.h>
 
 #include "table.h"
 #include "table.moc"
