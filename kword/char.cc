@@ -451,6 +451,9 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
 				    case VT_CUSTOM:
 					var = new KWCustomVariable( _doc );
 					break;
+				    case VT_SERIALLETTER:
+					var = new KWSerialLetterVariable( _doc );
+					break;
 				    default: break;
 				    }
 

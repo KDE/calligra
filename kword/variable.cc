@@ -18,6 +18,7 @@
 #include "defs.h"
 #include "kword_doc.h"
 #include "kword_utils.h"
+#include "serialletter.h"
 
 #include <komlMime.h>
 #include <klocale.h>
@@ -115,6 +116,31 @@ QString KWVariableCustomFormat::convert( KWVariable *_var )
 
     return dynamic_cast<KWCustomVariable*>( _var )->getValue();
 }
+
+/******************************************************************/
+/* Class: KWVariableSerialLetterFormat                            */
+/******************************************************************/
+
+/*================================================================*/
+void KWVariableSerialLetterFormat::setFormat( QString _format )
+{
+    KWVariableFormat::setFormat( _format );
+}
+
+/*================================================================*/
+QString KWVariableSerialLetterFormat::convert( KWVariable *_var )
+{
+    if ( _var->getType() != VT_SERIALLETTER ) {
+	qWarning( "Can't convert variable of type %d to a page num!!!", _var->getType() );
+	return QString();
+    }
+
+    return dynamic_cast<KWSerialLetterVariable*>( _var )->getValue();
+}
+
+
+// ----------------------------------------------------------------------------------
+
 
 /******************************************************************/
 /* Class: KWVariable						  */
@@ -325,7 +351,7 @@ void KWCustomVariable::recalc()
 void KWCustomVariable::save( ostream &out )
 {
     KWVariable::save( out );
-    out << indent << "<CUSTOM name=\"" << correctQString( name ).latin1() << "\" value=\"" 
+    out << indent << "<CUSTOM name=\"" << correctQString( name ).latin1() << "\" value=\""
 	<< correctQString( getValue() ).latin1() << "\"/>" << endl;
 }
 
@@ -364,4 +390,55 @@ QString KWCustomVariable::getValue() const
 void KWCustomVariable::setValue( const QString &v )
 {
     doc->setVariableValue( name, v );
+}
+
+/******************************************************************/
+/* Class: KWSerialLetterVariable                                  */
+/******************************************************************/
+
+/*================================================================*/
+KWSerialLetterVariable::KWSerialLetterVariable( KWordDocument *_doc, const QString &name_ )
+    : KWVariable( _doc ), name( name_ )
+{
+    recalc();
+}
+
+/*================================================================*/
+void KWSerialLetterVariable::recalc()
+{
+}
+
+/*================================================================*/
+void KWSerialLetterVariable::save( ostream &out )
+{
+    KWVariable::save( out );
+    out << indent << "<SERIALLETTER name=\"" << correctQString( name ).latin1() 
+	<< "\"/>" << endl;
+}
+
+/*================================================================*/
+void KWSerialLetterVariable::load( string name_, string tag, vector<KOMLAttrib>& lst )
+{
+    recalc();
+    KWVariable::load( name_, tag, lst );
+    if ( name_ == "SERIALLETTER" ) {
+	KOMLParser::parseTag( tag.c_str(), name_, lst );
+	vector<KOMLAttrib>::const_iterator it = lst.begin();
+	for (  ; it != lst.end(); it++ ) {
+	    if ( ( *it ).m_strName == "name" )
+		name = ( *it ).m_strValue.c_str();
+	}
+    }
+}
+
+/*================================================================*/
+QString KWSerialLetterVariable::getName() const
+{
+    return name;
+}
+
+/*================================================================*/
+QString KWSerialLetterVariable::getValue() const
+{
+    return doc->getSerialLetterDataBase()->getValue( name );
 }

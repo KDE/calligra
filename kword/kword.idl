@@ -19,7 +19,7 @@ module KWord
       slot void editDeleteFrame();
       slot void editReconnectFrame();
       slot void editCustomVars();
-      
+
       slot void newView();
       slot void viewFormattingChars();
       slot void viewFrameBorders();
@@ -39,6 +39,7 @@ module KWord
       slot void insertVariableTimeVar();
       slot void insertVariablePageNum();
       slot void insertVariableCustom();
+      slot void insertVariableSerialLetter();
       slot void insertFootNoteEndNote();
 
       slot void formatFont();

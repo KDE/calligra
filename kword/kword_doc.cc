@@ -32,6 +32,7 @@
 #include "image.h"
 #include "char.h"
 #include "kword_utils.h"
+#include "serialletter.h"
 
 #include <komlMime.h>
 #include <koStream.h>
@@ -101,7 +102,8 @@ KWordDocument::KWordDocument()
 
     m_bEmpty = TRUE;
     applyStyleTemplate = 0;
-    applyStyleTemplate = applyStyleTemplate | U_FONT_FAMILY_ALL_SIZE | U_COLOR | U_BORDER | U_INDENT | U_NUMBERING | U_ALIGN | U_TABS;
+    applyStyleTemplate = applyStyleTemplate | U_FONT_FAMILY_ALL_SIZE | U_COLOR | U_BORDER | U_INDENT |
+			 U_NUMBERING | U_ALIGN | U_TABS;
     _loaded = FALSE;
     _header = FALSE;
     _footer = FALSE;
@@ -117,6 +119,16 @@ KWordDocument::KWordDocument()
     frames.setAutoDelete( TRUE );
     grpMgrs.setAutoDelete( TRUE );
     variables.setAutoDelete( FALSE );
+
+    slDataBase = new KWSerialLetterDataBase( this );
+    slRecordNum = -1;
+
+    // ### remove this later
+    slDataBase->addEntry( i18n( "First Name" ) );
+    slDataBase->addEntry( i18n( "Last Name" ) );
+    slDataBase->appendRecord();
+    slDataBase->setValue( i18n( "First Name" ), "Reginald", 0 );
+    slDataBase->setValue( i18n( "Last Name" ), "Stadlbauer", 0 );
     
     QObject::connect( &history, SIGNAL( undoRedoChanged( QString, QString ) ), this,
 		      SLOT( slotUndoRedoChanged( QString, QString ) ) );
@@ -143,13 +155,14 @@ CORBA::Boolean KWordDocument::initDoc()
     pageHeaderFooter.inchFooterBodySpacing = POINT_TO_MM( 10 );
 
     QString _template;
-    
+
     QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Import,
                                                                 "application/x-kword",
 								"*.kwd", "KWord",
 								false );
 
-    KoTemplateChooseDia::ReturnType ret = KoTemplateChooseDia::chooseTemplate( "kword_template", _template, TRUE, FALSE, filter, "application/x-kword" );
+    KoTemplateChooseDia::ReturnType ret = KoTemplateChooseDia::chooseTemplate(
+	"kword_template", _template, TRUE, FALSE, filter, "application/x-kword" );
     if ( ret == KoTemplateChooseDia::Template ) {
 	QFileInfo fileInfo( _template );
 	QString fileName( fileInfo.dirPath( TRUE ) + "/" + fileInfo.baseName() + ".kwt" );
@@ -717,14 +730,14 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
     lay->setCounterRightText( "" );
     lay->setNumberingType( KWParagLayout::NT_LIST );
 
-    if (TRUE /*no variable formats were loaded*/)
-    {
+    if (TRUE /*no variable formats were loaded*/) {
 	varFormats.insert( VT_DATE_FIX, new KWVariableDateFormat() );
 	varFormats.insert( VT_DATE_VAR, new KWVariableDateFormat() );
 	varFormats.insert( VT_TIME_FIX, new KWVariableTimeFormat() );
 	varFormats.insert( VT_TIME_VAR, new KWVariableTimeFormat() );
 	varFormats.insert( VT_PGNUM, new KWVariablePgNumFormat() );
 	varFormats.insert( VT_CUSTOM, new KWVariableCustomFormat() );
+	varFormats.insert( VT_SERIALLETTER, new KWVariableSerialLetterFormat() );
 	// ... and so on ...
     }
 
@@ -3617,7 +3630,7 @@ void KWordDocument::registerVariable( KWVariable *var )
 {
     if ( !var )
 	return;
-    
+
     variables.append( var );
     if ( var->getType() == VT_CUSTOM ) {
 	if ( !varValues.contains( ( (KWCustomVariable*)var )->getName() ) )
@@ -3641,4 +3654,16 @@ void KWordDocument::setVariableValue( const QString &name, const QString &value 
 QString KWordDocument::getVariableValue( const QString &name )
 {
     return varValues[ name ];
+}
+
+/*================================================================*/
+KWSerialLetterDataBase *KWordDocument::getSerialLetterDataBase() const
+{
+    return slDataBase;
+}
+
+/*================================================================*/
+int KWordDocument::getSerialLetterRecord() const
+{
+    return slRecordNum;
 }

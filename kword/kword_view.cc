@@ -916,6 +916,12 @@ void KWordView::insertVariableCustom()
 }
 
 /*===============================================================*/
+void KWordView::insertVariableSerialLetter()
+{
+    gui->getPaperWidget()->insertVariable( VT_SERIALLETTER );
+}
+
+/*===============================================================*/
 void KWordView::insertFootNoteEndNote()
 {
     int start = m_pKWordDoc->getFootNoteManager().findStart( gui->getPaperWidget()->getCursor() );
@@ -1779,7 +1785,7 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     m_idMenuEdit_ReconnectFrame = m_vMenuEdit->insertItem4( text, this, "editReconnectFrame", 0, -1, -1 );
 
     m_vMenuEdit->insertSeparator( -1 );
-    
+
     text = Q2C( i18n( "&Custom Variables..." ) );
     m_idMenuEdit_CustomVars = m_vMenuEdit->insertItem4( text, this, "editCustomVars", 0, -1, -1 );
 
@@ -1860,6 +1866,10 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     m_vMenuInsert_Variable->insertSeparator( -1 );
     text = Q2C( i18n( "Custom..." ) );
     m_idMenuInsert_VariableCustom = m_vMenuInsert_Variable->insertItem4( text, this, "insertVariableCustom", 0, -1, -1 );
+    m_vMenuInsert_Variable->insertSeparator( -1 );
+    text = Q2C( i18n( "Serial Letter..." ) );
+    m_idMenuInsert_VariableSerialLetter = m_vMenuInsert_Variable->insertItem4( text, this, "insertVariableSerialLetter", 
+									       0, -1, -1 );
 
     // tools menu
     text = Q2C( i18n( "&Tools" ) );

@@ -28,9 +28,10 @@ class KWordDocument;
 class KWVariable;
 class KWParag;
 
-enum VariableType {VT_DATE_FIX = 0, VT_DATE_VAR = 1, VT_TIME_FIX = 2, VT_TIME_VAR = 3, VT_PGNUM = 4,
-		   VT_NUMPAGES = 5, VT_CUSTOM = 6, VT_NONE };
-enum VariableFormatType {VFT_DATE = 0, VFT_TIME = 1, VFT_PGNUM = 2, VFT_NUMPAGES = 3, VFT_CUSTOM = 4 };
+enum VariableType { VT_DATE_FIX = 0, VT_DATE_VAR = 1, VT_TIME_FIX = 2, VT_TIME_VAR = 3, VT_PGNUM = 4,
+		    VT_NUMPAGES = 5, VT_CUSTOM = 6, VT_SERIALLETTER = 7, VT_NONE };
+enum VariableFormatType { VFT_DATE = 0, VFT_TIME = 1, VFT_PGNUM = 2, VFT_NUMPAGES = 3, VFT_CUSTOM = 4,
+			  VFT_SERIALLETTER = 5 };
 
 /******************************************************************/
 /* Class: KWVariableFormat                                        */
@@ -135,6 +136,23 @@ public:
 
 };
 
+/******************************************************************/
+/* Class: KWVariableSerialLetterFormat                            */
+/******************************************************************/
+
+class KWVariableSerialLetterFormat : public KWVariableFormat
+{
+public:
+    KWVariableSerialLetterFormat() {}
+
+    virtual VariableFormatType getType() const
+    { return VFT_SERIALLETTER; }
+
+    virtual void setFormat( QString _format );
+
+    virtual QString convert( KWVariable *_var );
+
+};
 
 
 // ----------------------------------------------------------------------------------------------
@@ -318,6 +336,39 @@ public:
 protected:
     QString name;
 
+};
+
+/******************************************************************/
+/* Class: KWSerialLetterVariable                                  */
+/******************************************************************/
+
+class KWSerialLetterVariable : public KWVariable
+{
+public:
+    KWSerialLetterVariable( KWordDocument *_doc, const QString &name_ );
+    KWSerialLetterVariable( KWordDocument *_doc ) : KWVariable( _doc ) {}
+
+    virtual KWVariable *copy() {
+        KWSerialLetterVariable *var = new KWSerialLetterVariable( doc, name );
+        var->setVariableFormat( varFormat );
+        var->setInfo( frameSetNum, frameNum, pageNum, parag );
+        return var;
+    }
+
+    virtual VariableType getType() const
+    { return VT_SERIALLETTER; }
+
+    virtual void recalc();
+
+    virtual void save( ostream &out );
+    virtual void load( string name, string tag, vector<KOMLAttrib>& lst );
+
+    virtual QString getName() const;
+    virtual QString getValue() const;
+
+protected:
+    QString name;
+    
 };
 
 #endif

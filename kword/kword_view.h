@@ -109,7 +109,7 @@ public:
     virtual void editDeleteFrame();
     virtual void editReconnectFrame();
     virtual void editCustomVars();
-    
+
     virtual void newView();
     virtual void viewFormattingChars();
     virtual void viewFrameBorders();
@@ -129,6 +129,7 @@ public:
     virtual void insertVariableTimeVar();
     virtual void insertVariablePageNum();
     virtual void insertVariableCustom();
+    virtual void insertVariableSerialLetter();
     virtual void insertFootNoteEndNote();
 
     virtual void formatFont();
@@ -206,7 +207,8 @@ public:
     // C++
     virtual CORBA::Boolean printDlg();
 
-    virtual void setFormat( const KWFormat &_format, bool _check = true, bool _update_page = true, bool _redraw = true );
+    virtual void setFormat( const KWFormat &_format, bool _check = true, 
+			    bool _update_page = true, bool _redraw = true );
     virtual void setFlow( KWParagLayout::Flow _flow );
     virtual void setLineSpacing( int _spc );
     virtual void setParagBorders( KWParagLayout::Border _left, KWParagLayout::Border _right,
@@ -318,6 +320,7 @@ protected:
     CORBA::Long m_idMenuInsert_VariableTimeVar;
     CORBA::Long m_idMenuInsert_VariablePageNum;
     CORBA::Long m_idMenuInsert_VariableCustom;
+    CORBA::Long m_idMenuInsert_VariableSerialLetter;
     CORBA::Long m_idMenuInsert_FootNoteEndNote;
 
     // format menu

@@ -1,0 +1,77 @@
+/******************************************************************/
+/* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
+/* Version: 0.0.1                                                 */
+/* Author: Reginald Stadlbauer, Torben Weis                       */
+/* E-Mail: reggie@kde.org, weis@kde.org                           */
+/* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
+/* needs c++ library Qt (http://www.troll.no)                     */
+/* written for KDE (http://www.kde.org)                           */
+/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
+/* needs OpenParts and Kom (weis@kde.org)                         */
+/* License: GNU GPL                                               */
+/******************************************************************/
+/* Module: Serial Letters                                         */
+/******************************************************************/
+
+#ifndef serialletter_h
+#define serialletter_h
+
+#include <qmap.h>
+#include <qstring.h>
+#include <qstringlist.h>
+#include <qdialog.h>
+#include <qvbox.h>
+
+class QListBox;
+class KWordDocument;
+
+/******************************************************************
+ *
+ * Class: KWSerialLetterDataBase
+ *
+ ******************************************************************/
+
+class KWSerialLetterDataBase
+{
+public:
+    KWSerialLetterDataBase( KWordDocument *doc_ );
+    
+    QString getValue( const QString &name, int record = -1 ) const;
+    void setValue( const QString &name, const QString &value, int record = -1 );
+    void appendRecord();
+    void addEntry( const QString &name );
+    void removeEntry( const QString &name );
+    
+    const QMap< QString, QStringList > database() const {
+	return db;
+    }
+    
+protected:
+    KWordDocument *doc;
+    QMap< QString, QStringList > db;
+    
+};
+
+/******************************************************************
+ *
+ * Class: KWSerialLetterVariableInsertDia
+ *
+ ******************************************************************/
+
+class KWSerialLetterVariableInsertDia : public QDialog
+{
+    Q_OBJECT
+
+public:
+    KWSerialLetterVariableInsertDia( QWidget *parent, KWSerialLetterDataBase* db );
+    QString getName() const;
+
+protected:
+    void resizeEvent( QResizeEvent *e );
+
+    QListBox *names;
+    QVBox *back;
+
+};
+
+#endif

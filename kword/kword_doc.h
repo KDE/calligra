@@ -21,6 +21,7 @@ class KWPage;
 class QPrinter;
 class KWCharImage;
 class KWPictureFrameSet;
+class KWSerialLetterDataBase;
 
 #include <koDocument.h>
 #include <koPrintExt.h>
@@ -253,7 +254,8 @@ public:
     void copySelectedText();
     void setFormat( KWFormat &_format );
 
-    void paste( KWFormatContext *_fc, QString _string, KWPage *_page, KWFormat *_format = 0L, const QString &_mime = "text/plain" );
+    void paste( KWFormatContext *_fc, QString _string, KWPage *_page, 
+		KWFormat *_format = 0L, const QString &_mime = "text/plain" );
 
     void appendPage( unsigned int _page, bool redrawBackgroundWhenAppendPage = TRUE );
 
@@ -365,6 +367,9 @@ public:
 
     void setVariableValue( const QString &name, const QString &value );
     QString getVariableValue( const QString &name );
+
+    KWSerialLetterDataBase *getSerialLetterDataBase() const;
+    int getSerialLetterRecord() const;
     
 signals:
     void sig_imageModified();
@@ -449,6 +454,8 @@ protected:
     QDict<KWPictureFrameSet> imageRequests2;
     QList<KWVariable> variables;
     QMap< QString, QString > varValues;
+    KWSerialLetterDataBase *slDataBase;
+    int slRecordNum;
     
 };
 

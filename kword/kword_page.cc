@@ -36,6 +36,7 @@
 #include "font.h"
 #include "docstruct.h"
 #include "variabledlgs.h"
+#include "serialletter.h"
 
 #include <qtextstream.h>
 #include <qevent.h>
@@ -2384,7 +2385,7 @@ bool KWPage::kReturn( QKeyEvent *e, int oldPage, int oldFrame, KWParag *oldParag
 
     int h_ = frameSet->getFrame( oldFrame - 1 )->height();
     int y_ = fc->getPTY() - 5 - contentsY();
-    
+
     if ( fc->isCursorAtParagEnd() ) {
 	frameSet->insertParag( fc->getParag(), I_AFTER );
 	fc->setTextPos( 0 );
@@ -2416,13 +2417,13 @@ bool KWPage::kReturn( QKeyEvent *e, int oldPage, int oldFrame, KWParag *oldParag
 
     if ( h_ != frameSet->getFrame( oldFrame - 1 )->height() )
 	redrawOnlyCurrFrameset = FALSE;
-    
+
     recalcCursor( FALSE, 0 );
 
     int yp = contentsY();
     redrawAllWhileScrolling = TRUE;
-    if ( redrawOnlyCurrFrameset ) 
-	scrollClipRect = QRect( 0, y_, visibleWidth(), visibleHeight() - y_ ); 
+    if ( redrawOnlyCurrFrameset )
+	scrollClipRect = QRect( 0, y_, visibleWidth(), visibleHeight() - y_ );
     else
 	scrollClipRect = QRect( 0, 0, visibleWidth(), visibleHeight() );
     scrollToCursor( *fc );
@@ -2962,7 +2963,7 @@ void KWPage::drawBorders( QPainter &_painter, QRect v_area, bool drawBack, QRegi
 			   tmp->height() + 2 );
 	    if ( !v_area.intersects( frame ) )
 		continue;
-	    
+	
 	    _painter.setBrush( isAHeader( frameset->getFrameInfo() ) || isAFooter( frameset->getFrameInfo() ) ?
 			       frameset->getFrame( 0 )->getBackgroundColor() : tmp->getBackgroundColor() );
 	    _painter.setPen( lightGray );
@@ -2988,7 +2989,7 @@ void KWPage::drawBorders( QPainter &_painter, QRect v_area, bool drawBack, QRegi
 		    _painter.drawRect( frame );
 		}
 	    }
-	    
+	
 	    _painter.setBrush( Qt::NoBrush );
 	    if ( v_area.intersects( frame ) && frameset->getGroupManager() ) {
 		if ( region )
@@ -4313,10 +4314,20 @@ void KWPage::insertVariable( VariableType type )
 	fc->getParag()->setFormat( fc->getTextPos(), 1, format );
     } break;
     case VT_CUSTOM: {
-	
 	KWVariableNameDia *dia = new KWVariableNameDia( this, doc->getVariables() );
 	if ( dia->exec() == QDialog::Accepted ) {
 	    KWCustomVariable *var = new KWCustomVariable( doc, dia->getName() );
+	    var->setVariableFormat( doc->getVarFormats().find( static_cast<int>( type ) ) );
+	    fc->getParag()->insertVariable( fc->getTextPos(), var );
+	    fc->getParag()->setFormat( fc->getTextPos(), 1, format );
+	}
+	delete dia;
+    } break;
+    case VT_SERIALLETTER: {
+	KWSerialLetterVariableInsertDia 
+	    *dia = new KWSerialLetterVariableInsertDia( this, doc->getSerialLetterDataBase() );
+	if ( dia->exec() == QDialog::Accepted ) {
+	    KWSerialLetterVariable *var = new KWSerialLetterVariable( doc, dia->getName() );
 	    var->setVariableFormat( doc->getVarFormats().find( static_cast<int>( type ) ) );
 	    fc->getParag()->insertVariable( fc->getTextPos(), var );
 	    fc->getParag()->setFormat( fc->getTextPos(), 1, format );
