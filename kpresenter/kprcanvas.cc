@@ -876,6 +876,20 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
                 p.end();
             }
+            else if( m_indexPointArray == 1)
+            {
+                QPainter p( this );
+                p.setPen( QPen( black, 1, SolidLine ) );
+                p.setBrush( NoBrush );
+                p.setRasterOp( NotROP );
+                p.drawLine( m_dragStartPoint, m_dragEndPoint ); //
+                p.end();
+                m_pointArray = KoPointArray();
+                m_indexPointArray = 0;
+
+                m_drawPolyline = false;
+                mousePressed = false;
+            }
             return;
         }
 
