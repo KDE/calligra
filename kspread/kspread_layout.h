@@ -65,6 +65,22 @@ public:
     virtual ~KSpreadLayout();
 
     void copy( KSpreadLayout &_l );
+    
+    ////////////////////////////////
+    //
+    // Loading and saving
+    //
+    ////////////////////////////////
+
+    bool load( const QDomElement& f );
+    QDomElement save( QDomDocument& doc ) const;
+
+    ////////////////////////////////
+    //
+    // Properties
+    //
+    ////////////////////////////////
+
 
     void clearProperties();
     void clearProperty( Properties p );
@@ -256,6 +272,11 @@ protected:
      */
     virtual bool isDefault() const;
 
+    QDomElement createElement( const QString &tagName, const QFont &font, QDomDocument &doc ) const;
+    QDomElement createElement( const QString& tagname, const QPen& pen, QDomDocument &doc ) const;
+    QFont toFont(QDomElement &element) const;
+    QPen toPen(QDomElement &element) const;
+    
     /**
      * Tells whether text may be broken into multiple lines.
      */

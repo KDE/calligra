@@ -243,7 +243,7 @@ public:
      * @see KSpreadTable::print
      */
     bool needsPrinting() const;
-    
+
     /**
      * Tells whether the cell contains, text, a formula, richtext or a visual formula.
      */
@@ -680,11 +680,6 @@ protected:
      * If @ref #m_bValue is set, a new value for @ref m_dValue is calculated.
       */
     void checkValue();
-
-    QDomElement createElement( const QString &tagName, const QFont &font, QDomDocument &doc ) const;
-    QDomElement createElement( const QString& tagname, const QPen& pen, QDomDocument &doc ) const;
-    QFont toFont(QDomElement &element) const;
-    QPen toPen(QDomElement &element) const;
 
     /**
      * This cells row.

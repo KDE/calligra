@@ -132,6 +132,316 @@ void KSpreadLayout::setProperty( Properties p )
 
 /////////////
 //
+// Loading and saving
+//
+/////////////
+
+QDomElement KSpreadLayout::createElement( const QString &tagName, const QFont &font, QDomDocument &doc ) const {
+
+    QDomElement e = doc.createElement( tagName );
+
+    e.setAttribute( "family", font.family() );
+    e.setAttribute( "size", font.pointSize() );
+    e.setAttribute( "weight", font.weight() );
+    if ( font.bold() )
+	e.setAttribute( "bold", "yes" );
+    if ( font.italic() )
+	e.setAttribute( "italic", "yes" );
+    if ( font.underline() )
+    	e.setAttribute( "underline", "yes" );
+    if ( font.strikeOut() )
+    	e.setAttribute( "strikeout", "yes" );
+
+    return e;
+}
+
+QDomElement KSpreadLayout::createElement( const QString& tagname, const QPen& pen, QDomDocument &doc ) const
+{
+    QDomElement e=doc.createElement( tagname );
+    e.setAttribute( "color", pen.color().name() );
+    e.setAttribute( "style", (int)pen.style() );
+    e.setAttribute( "width", (int)pen.width() );
+    return e;
+}
+
+QFont KSpreadLayout::toFont(QDomElement &element) const
+{
+    QFont f;
+    f.setFamily( element.attribute( "family" ) );
+
+    bool ok;
+    f.setPointSize( element.attribute("size").toInt( &ok ) );
+    if ( !ok ) return QFont();
+
+    f.setWeight( element.attribute("weight").toInt( &ok ) );
+    if ( !ok ) return QFont();
+
+    if ( element.hasAttribute( "italic" ) && element.attribute("italic") == "yes" )
+	f.setItalic( TRUE );
+
+    if ( element.hasAttribute( "bold" ) && element.attribute("bold") == "yes" )
+	f.setBold( TRUE );
+
+    if ( element.hasAttribute( "underline" ) && element.attribute("underline") == "yes" )
+	f.setUnderline( TRUE );
+
+    if ( element.hasAttribute( "strikeout" ) && element.attribute("strikeout") == "yes" )
+	f.setStrikeOut( TRUE );
+
+    return f;
+}
+
+QPen KSpreadLayout::toPen(QDomElement &element) const
+{
+    bool ok;
+    QPen p;
+    p.setStyle( (Qt::PenStyle)element.attribute("style").toInt( &ok ) );
+    if ( !ok ) return QPen();
+
+    p.setWidth( element.attribute("width").toInt( &ok ) );
+    if ( !ok ) return QPen();
+
+    p.setColor( QColor( element.attribute("color") ) );
+
+    return p;
+}
+
+QDomElement KSpreadLayout::save( QDomDocument& doc ) const
+{
+    QDomElement format = doc.createElement( "format" );
+    
+    if ( hasProperty( PAlign ) )
+	format.setAttribute( "align", (int)m_eAlign );
+    if ( hasProperty( PAlignY ) )
+	format.setAttribute( "alignY", (int)m_eAlignY );
+    if ( hasProperty( PBackgroundColor ) && m_bgColor.isValid() )
+	format.setAttribute( "bgcolor", m_bgColor.name() );
+    if ( hasProperty( PMultiRow ) &&  m_bMultiRow )
+	format.setAttribute( "multirow", "yes" );
+    if ( hasProperty( PVerticalText ) && m_bVerticalText )
+	format.setAttribute( "verticaltext", "yes" );
+    if ( hasProperty( PPrecision ) )
+	format.setAttribute( "precision", m_iPrecision );
+    if ( hasProperty( PPrefix ) && !m_strPrefix.isEmpty() )
+	format.setAttribute( "prefix", m_strPrefix );
+    if ( hasProperty( PPostfix ) && !m_strPostfix.isEmpty() )
+	format.setAttribute( "postfix", m_strPostfix );
+    if ( hasProperty( PFloatFormat ) )
+	format.setAttribute( "float", (int)m_eFloatFormat );
+    if ( hasProperty( PFloatColor ) )
+	format.setAttribute( "floatcolor", (int)m_eFloatColor );
+    if ( hasProperty( PFaktor ) )
+	format.setAttribute( "faktor", m_dFaktor );
+    if ( hasProperty( PFont ) )
+	format.appendChild( createElement( "font", m_textFont, doc ) );
+    if ( hasProperty( PTextPen ) )
+	format.appendChild( createElement( "pen", m_textPen, doc ) );
+    if ( hasProperty( PBackgroundBrush ) )
+    {
+	format.setAttribute( "brushcolor", m_backGroundBrush.color().name() );
+	format.setAttribute( "brushstyle",(int)m_backGroundBrush.style() );
+    }
+    if ( hasProperty( PLeftBorder ) )
+    {
+	QDomElement left = doc.createElement( "left-border" );
+	left.appendChild( createElement( "pen", m_leftBorderPen, doc ) );
+	format.appendChild( left );
+    }
+    if ( hasProperty( PTopBorder ) )
+    {
+	QDomElement top = doc.createElement( "top-border" );
+	top.appendChild( createElement( "pen", m_topBorderPen, doc ) );
+	format.appendChild( top );
+    }
+    if ( hasProperty( PRightBorder ) )
+    {
+	QDomElement right = doc.createElement( "right-border" );
+	right.appendChild( createElement( "pen", m_rightBorderPen, doc ) );
+	format.appendChild( right );
+    }
+    if ( hasProperty( PBottomBorder ) )
+    {
+	QDomElement bottom = doc.createElement( "bottom-border" );
+	bottom.appendChild( createElement( "pen", m_bottomBorderPen, doc ) );
+	format.appendChild( bottom );
+    }
+    if ( hasProperty( PFallDiagonal ) )
+    {
+	QDomElement fallDiagonal  = doc.createElement( "fall-diagonal" );
+	fallDiagonal.appendChild( createElement( "pen", m_fallDiagonalPen, doc ) );
+	format.appendChild( fallDiagonal );
+    }
+    if ( hasProperty( PGoUpDiagonal ) )
+    {
+	QDomElement goUpDiagonal = doc.createElement( "up-diagonal" );
+	goUpDiagonal.appendChild( createElement( "pen", m_goUpDiagonalPen, doc ) );
+	format.appendChild( goUpDiagonal );
+    }
+
+    return format;
+}
+    
+bool KSpreadLayout::load( const QDomElement& f )
+{
+    bool ok;
+	
+    if ( f.hasAttribute( "align" ) )
+    {
+	Align a = (Align)f.attribute("align").toInt( &ok );
+	if ( !ok )
+	    return false;
+	// Validation
+	if ( (unsigned int)a < 1 || (unsigned int)a > 4 )
+        {
+	    kdDebug(36001) << "Value out of range Cell::align=" << (unsigned int)a << endl;
+	    return false;
+	}
+	// Assignment
+	setAlign( a );
+    }
+    if ( f.hasAttribute( "alignY" ) )
+    {
+	AlignY a = (AlignY)f.attribute("alignY").toInt( &ok );
+	if ( !ok )
+	    return false;
+	// Validation
+	if ( (unsigned int)a < 1 || (unsigned int)a > 4 )
+        {
+	    kdDebug(36001) << "Value out of range Cell::alignY=" << (unsigned int)a << endl;
+	    return false;
+	}
+	// Assignment
+	setAlignY( a );
+    }
+    
+    if ( f.hasAttribute( "bgcolor" ) )
+	setBgColor( QColor( f.attribute( "bgcolor" ) ) );
+
+    if ( f.hasAttribute( "multirow" ) )
+	setMultiRow( true );
+
+    if ( f.hasAttribute( "verticaltext" ) )
+	setVerticalText( true );
+
+    if ( f.hasAttribute( "precision" ) )
+    {
+	int i = f.attribute("precision").toInt( &ok );
+	if ( i < -1 )
+        {
+	    kdDebug(36001) << "Value out of range Cell::precision=" << i << endl;
+	    return false;
+	}
+	m_iPrecision = i;
+    }
+
+    if ( f.hasAttribute( "float" ) )
+    {
+	FloatFormat a = (FloatFormat)f.attribute("float").toInt( &ok );
+	if ( !ok ) return false;
+	if ( (unsigned int)a < 1 || (unsigned int)a > 3 )
+        {
+	    kdDebug(36001) << "Value out of range Cell::float=" << (unsigned int)a << endl;
+	    return false;
+	}
+	// Assignment
+	setFloatFormat( a );
+    }
+
+    if ( f.hasAttribute( "floatcolor" ) )
+    {
+	FloatColor a = (FloatColor)f.attribute("floatcolor").toInt( &ok );
+	if ( !ok ) return false;
+	if ( (unsigned int)a < 1 || (unsigned int)a > 2 )
+        {
+	    kdDebug(36001) << "Value out of range Cell::floatcolor=" << (unsigned int)a << endl;
+	    return false;
+	}
+	// Assignment
+	setFloatColor( a );
+    }
+
+    if ( f.hasAttribute( "faktor" ) )
+    {
+	setFaktor( f.attribute("faktor").toDouble( &ok ) );
+	if ( !ok ) return false;
+    }
+
+    if ( f.hasAttribute( "brushcolor" ) )
+	setBackGroundBrushColor( QColor( f.attribute( "brushcolor" ) ) );
+
+    if ( f.hasAttribute( "brushstyle" ) )
+    {
+	setBackGroundBrushStyle((Qt::BrushStyle) f.attribute( "brushstyle" ).toInt(&ok)  );
+	if(!ok) return false;
+    }
+
+    QDomElement pen = f.namedItem( "pen" ).toElement();
+    if ( !pen.isNull() )
+	setTextPen( toPen(pen) );
+
+    QDomElement font = f.namedItem( "font" ).toElement();
+    if ( !font.isNull() )
+	setTextFont( toFont(font) );
+
+    QDomElement left = f.namedItem( "left-border" ).toElement();
+    if ( !left.isNull() )
+    {
+	QDomElement pen = left.namedItem( "pen" ).toElement();
+	if ( !pen.isNull() )
+	    setLeftBorderPen( toPen(pen) );
+    }
+
+    QDomElement top = f.namedItem( "top-border" ).toElement();
+    if ( !top.isNull() )
+    {
+	QDomElement pen = top.namedItem( "pen" ).toElement();
+	if ( !pen.isNull() )
+	    setTopBorderPen( toPen(pen) );
+    }
+
+    QDomElement right = f.namedItem( "right-border" ).toElement();
+    if ( !right.isNull() )
+    {
+	QDomElement pen = right.namedItem( "pen" ).toElement();
+	if ( !pen.isNull() )
+	    setRightBorderPen( toPen(pen) );
+    }
+
+    QDomElement bottom = f.namedItem( "bottom-border" ).toElement();
+    if ( !bottom.isNull() )
+    {
+	QDomElement pen = bottom.namedItem( "pen" ).toElement();
+	if ( !pen.isNull() )
+	    setBottomBorderPen( toPen(pen) );
+    }
+
+    QDomElement fallDiagonal = f.namedItem( "fall-diagonal" ).toElement();
+    if ( !fallDiagonal.isNull() )
+    {
+	QDomElement pen = fallDiagonal.namedItem( "pen" ).toElement();
+	if ( !pen.isNull() )
+	    setFallDiagonalPen( toPen(pen) );
+    }
+
+    QDomElement goUpDiagonal = f.namedItem( "up-diagonal" ).toElement();
+    if ( !goUpDiagonal.isNull() )
+    {
+	QDomElement pen = goUpDiagonal.namedItem( "pen" ).toElement();
+	if ( !pen.isNull() )
+	    setGoUpDiagonalPen( toPen(pen) );
+    }
+
+    if ( f.hasAttribute( "prefix" ) )
+	setPrefix( f.attribute( "prefix" ) );
+    if ( f.hasAttribute( "postfix" ) )
+	setPostfix( f.attribute( "postfix" ) );
+
+    return true;
+}
+
+
+/////////////
+//
 // Set methods
 //
 /////////////
