@@ -84,6 +84,7 @@ public:
   void print( QPrinter &printer );
 
   void zoomIn (int x, int y);
+  void zoomIn ();
   void zoomOut ();
 
   void showBasePoints (bool flag = true);
@@ -121,7 +122,7 @@ signals:
   void rightButtonClicked (int x, int y);
 
   void visibleAreaChanged (int x, int y);
-  void zoomFactorChanged (float zoom);
+  void zoomFactorChanged (float zoom, int xpos, int ypos);
 
   void mousePositionChanged (int x, int y);
 

@@ -133,11 +133,13 @@ void KIllustratorView::createMyGUI()
     m_undo = KStdAction::undo(this, SLOT( slotUndo() ), actionCollection(), "undo" );
     m_redo = KStdAction::redo(this, SLOT( slotRedo() ), actionCollection(), "redo" );
     new KAction( i18n("Dup&licate"), 0, this, SLOT( slotDuplicate() ), actionCollection(), "duplicate" );
-    m_delete=new KAction( i18n("&Delete"), 0, this, SLOT( slotDelete() ), actionCollection(), "delete" );
+    m_delete=new KAction( i18n("&Delete"), Key_Delete, this, SLOT( slotDelete() ), actionCollection(), "delete" );
     new KAction( i18n("&Select All"), 0, this, SLOT( slotSelectAll() ), actionCollection(), "selectAll" );
     m_properties = new KAction( i18n("&Properties..."), 0, this, SLOT( slotProperties() ), actionCollection(), "properties" );
 
     // View menu
+    new KAction( i18n("Zoom in..."), Key_Plus, this, SLOT( slotZoomIn() ), actionCollection(), "view_zoomin" );
+    new KAction( i18n("Zoom out..."), Key_Minus, this, SLOT( slotZoomOut() ), actionCollection(), "view_zoomout" );
     KToggleAction *m_outline = new KToggleAction( i18n("Ou&tline"), 0, actionCollection(), "outline" );
     m_outline->setExclusiveGroup( "Outline" );
     connect( m_outline, SIGNAL( toggled( bool ) ), this, SLOT( slotOutline( bool ) ) );
@@ -235,9 +237,13 @@ void KIllustratorView::createMyGUI()
     zooms << "1000%";
 
     m_viewZoom->setItems (zooms);
+    m_viewZoom->setEditable (true);
     connect (m_viewZoom, SIGNAL(activated(const QString &)),
              this, SLOT(slotViewZoom(const QString &)));
     m_viewZoom->setCurrentItem(1);
+
+    new KAction( i18n("Zoom in"), "viewmag+", 0, this, SLOT( slotZoomIn() ), actionCollection(), "tool_zoomin");
+    new KAction( i18n("Zoom out"), "viewmag-", 0, this, SLOT( slotZoomOut() ), actionCollection(), "tool_zoomout");
 
     // Colorbar action
     QValueList<QColor> colorList;
@@ -305,19 +311,30 @@ void KIllustratorView::setupCanvas()
 {
     MeasurementUnit mu = PStateManager::instance ()->defaultMeasurementUnit ();
     hRuler = new Ruler (Ruler::Horizontal, mu, this);
-    hRuler->setGeometry(30, 0, width()-30, 30);
+    hRuler->setGeometry(20, 0, width()-20, 20);
     hRuler->setMeasurementUnit(PStateManager::instance()->defaultMeasurementUnit());
     vRuler = new Ruler (Ruler::Vertical, mu, this);
-    vRuler->setGeometry(0, 30, 30, height()-30);
+    vRuler->setGeometry(0, 20, 20, height()-20);
     vRuler->setMeasurementUnit(PStateManager::instance()->defaultMeasurementUnit());
 
     scrollview = new QScrollView(this);
-    scrollview->setGeometry(30, 30, width()-30, height()-30);
+    scrollview->setGeometry(20, 20, width()-20, height()-20);
 
     canvas = new Canvas (m_pDoc->gdoc(), 72.0, scrollview, scrollview->viewport());
     canvas->setCursor(Qt::crossCursor);
     scrollview->addChild(canvas);
     scrollview->viewport()->setBackgroundMode(QWidget::PaletteBackground);
+    
+    int x = scrollview->viewport()->width()-canvas->width();
+    int y = scrollview->viewport()->height()-canvas->height();
+    if(x < 0)
+     x = 0;
+    if(y < 0)
+     y = 0;
+    canvas->move(x/2,y/2);
+    hRuler->updateVisibleArea (x/2, y/2);
+    vRuler->updateVisibleArea (x/2, y/2);
+    
     QObject::connect (canvas, SIGNAL(sizeChanged ()),
                       scrollview, SLOT(updateScrollBars()));
     QObject::connect (canvas, SIGNAL(visibleAreaChanged (int, int)),
@@ -325,12 +342,12 @@ void KIllustratorView::setupCanvas()
     QObject::connect (canvas, SIGNAL(visibleAreaChanged (int, int)),
                       vRuler, SLOT(updateVisibleArea (int, int)));
 
-    QObject::connect (canvas, SIGNAL(zoomFactorChanged (float)),
-                      hRuler, SLOT(setZoomFactor (float)));
-    QObject::connect (canvas, SIGNAL(zoomFactorChanged (float)),
-                      vRuler, SLOT(setZoomFactor (float)));
-    QObject::connect (canvas, SIGNAL(zoomFactorChanged (float)),
-                      this, SLOT(slotZoomFactorChanged(float)));
+    QObject::connect (canvas, SIGNAL(zoomFactorChanged (float, int ,int)),
+                      hRuler, SLOT(setZoomFactor (float, int ,int)));
+    QObject::connect (canvas, SIGNAL(zoomFactorChanged (float, int ,int)),
+                      vRuler, SLOT(setZoomFactor (float, int ,int)));
+    QObject::connect (canvas, SIGNAL(zoomFactorChanged (float, int ,int)),
+                      this, SLOT(slotZoomFactorChanged(float, int ,int)));
     QObject::connect (canvas, SIGNAL(mousePositionChanged (int, int)),
                       hRuler, SLOT(updatePointer(int, int)));
     QObject::connect (canvas, SIGNAL(mousePositionChanged (int, int)),
@@ -437,9 +454,9 @@ void KIllustratorView::setUndoStatus(bool undoPossible, bool redoPossible)
 
 void KIllustratorView::resizeEvent(QResizeEvent* ) {
     if(m_bShowRulers) {
-        hRuler->setGeometry(30, 0, width()-30, 30);
-        vRuler->setGeometry(0, 30, 30, height()-30);
-        scrollview->setGeometry(30, 30, width()-30, height()-30);
+        hRuler->setGeometry(20, 0, width()-20, 20);
+        vRuler->setGeometry(0, 20, 20, height()-20);
+        scrollview->setGeometry(20, 20, width()-20, height()-20);
     }
     else
         scrollview->setGeometry(0, 0, width(), height());
@@ -1168,8 +1185,7 @@ void KIllustratorView::slotAddHelpline(int x, int y, bool d) {
     canvas->addHelpline(x, y, d);
 }
 
-void KIllustratorView::slotZoomFactorChanged(float factor) {
-
+void KIllustratorView::slotZoomFactorChanged(float factor, int xpos, int ypos) {
     QStringList list=m_viewZoom->items();
     QString f=QString::number(qRound(factor*100.0));
     int i=0;
@@ -1185,5 +1201,15 @@ void KIllustratorView::slotSettingsChanged() {
     hRuler->setMeasurementUnit(PStateManager::instance()->defaultMeasurementUnit());
     vRuler->setMeasurementUnit(PStateManager::instance()->defaultMeasurementUnit());
 }
+
+void KIllustratorView::slotZoomIn()
+ {
+  canvas->zoomIn ();
+ }
+
+void KIllustratorView::slotZoomOut()
+ {
+  canvas->zoomOut ();
+ }
 
 #include <KIllustrator_view.moc>

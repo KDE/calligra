@@ -20,6 +20,9 @@
   <Action name="properties"/>
  </Menu>
  <Menu name="view"><text>&amp;View</text>
+  <Action name="view_zoomin"/>
+  <Action name="view_zoomout"/>
+  <Separator/>
   <Action name="view_newview"/>
   <ActionList name="view_closeallviews"/>
   <Separator/>
@@ -99,6 +102,9 @@
   <Action name="cut"/>
   <Action name="copy"/>
   <Action name="paste"/>
+  <Separator/>
+  <Action name="tool_zoomin"/>
+  <Action name="tool_zoomout"/>
 </ToolBar>
 <ToolBar fullWidth="false" name="colorbar" position="right"><Text>Color</Text>
   <Action name="colorbar"/>

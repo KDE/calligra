@@ -124,9 +124,16 @@ void Canvas::setZoomFactor (float factor) {
   calculateSize ();
   // recompute pixmaps of fill areas
   document->invalidateClipRegions ();
+  int x = scrollview->viewport()->width()-width();
+  int y = scrollview->viewport()->height()-height();
+  if(x < 0)
+   x = 0;
+  if(y < 0)
+   y = 0;
+  move(x/2,y/2);
   updateView ();
   emit sizeChanged ();
-  emit zoomFactorChanged (zoomFactor);
+  emit zoomFactorChanged (zoomFactor, x/2 ,y/2);
 }
 
 float Canvas::getZoomFactor () const {
@@ -636,6 +643,19 @@ void Canvas::zoomIn (int x, int y) {
              ++i;
             setZoomFactor(*i);
             scrollview->center(x, y);
+            break;
+        }
+    }
+  }
+}
+
+void Canvas::zoomIn () {
+  
+  for (QValueList<float>::Iterator i=zoomFactors.begin(); i!=zoomFactors.end(); ++i) {
+    if (*i == getZoomFactor()) {
+        if(*i!=zoomFactors.last()) {
+             ++i;
+            setZoomFactor(*i);
             break;
         }
     }

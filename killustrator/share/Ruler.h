@@ -43,7 +43,7 @@ public:
   void setMeasurementUnit (MeasurementUnit mu);
 
 public slots:
-  void setZoomFactor (float zf);
+  void setZoomFactor (float zf, int xpos, int ypos);
   void updatePointer (int x, int y);
   void updateVisibleArea (int xpos, int ypos);
 
@@ -68,6 +68,7 @@ protected:
   void drawRuler ();
 
   void initMarker (int w, int h);
+  void drawNum (QPainter &p, int x, int y, int a, bool orient);
 
 protected slots:
   void mousePressEvent ( QMouseEvent * );

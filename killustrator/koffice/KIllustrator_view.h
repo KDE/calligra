@@ -183,9 +183,11 @@ private slots:
     void slotConfigurePolygon();
     void slotConfigureEllipse();
     void slotAddHelpline(int x, int y, bool d);
-    void slotZoomFactorChanged(float factor);
+    void slotZoomFactorChanged(float factor, int xpos, int ypos);
     void slotSettingsChanged();
-
+    void slotZoomIn();
+    void slotZoomOut();
+    
 protected:
     KIllustratorDocument *m_pDoc;
     EditPointTool *editPointTool;
