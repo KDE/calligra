@@ -3515,7 +3515,7 @@ void KTextEditFormatCollection::unzoom()
 void KTextEditDocument::zoom( float f )
 {
     oldListMult = listMult;
-    listMult = (int)( (float)listMult * f );
+    listMult = (int)( (float)listMult * ( f - f / 5.0 ) );
     formatCollection()->zoom( f );
     invalidate();
 }
