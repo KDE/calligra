@@ -2628,7 +2628,7 @@ QTextParag *QTextDocument::draw( QPainter *p, int cx, int cy, int cw, int ch, co
     QRect crect( cx, cy, cw, ch );
 
     // Space above first parag
-    if ( parag && cy + ch <= parag->rect().y() && parag->rect().y() > 0 ) {
+    if ( parag && cy <= parag->rect().y() && parag->rect().y() > 0 ) {
         QRect r( 0, 0,
                  parag->document()->x() + parag->document()->width(),
                  parag->rect().y() );
