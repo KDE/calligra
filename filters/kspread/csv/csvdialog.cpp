@@ -479,7 +479,6 @@ void CSVDialog::formatClicked(int id)
         break;
     }
 
-#if 1
     for ( int i = 0; i < m_dialog->m_table->numSelections(); ++i )
     {
         QTableSelection select ( m_dialog->m_table->selection( i ) );
@@ -489,9 +488,6 @@ void CSVDialog::formatClicked(int id)
             
         }
     }
-#else    
-    m_dialog->m_table->horizontalHeader()->setLabel(m_dialog->m_table->currentColumn(), header);
-#endif
 }
 
 void CSVDialog::delimiterClicked(int id)
