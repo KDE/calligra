@@ -195,7 +195,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *name, const QStr
 	m_classes.append(wListBox);
 
 	KFormDesigner::Widget *wTextEdit = new KFormDesigner::Widget(this);
-	wTextEdit->setPixmap("lineedit");
+	wTextEdit->setPixmap("textedit");
 	wTextEdit->setClassName("KTextEdit");
 	wTextEdit->setAlternateClassName("QTextEdit");
 	wTextEdit->setInclude("ktextedit.h");
@@ -241,7 +241,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *name, const QStr
 	m_classes.append(wLine);
 
 	KFormDesigner::Widget *wDate = new KFormDesigner::Widget(this);
-	wDate->setPixmap("lineedit");
+	wDate->setPixmap("dateedit");
 	wDate->setClassName("KDateWidget");
 	#if KDE_IS_VERSION(3,1,9) //TMP
 	wDate->setAlternateClassName("QDateEdit");
@@ -253,7 +253,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *name, const QStr
 	m_classes.append(wDate);
 
 	KFormDesigner::Widget *wTime = new KFormDesigner::Widget(this);
-	wTime->setPixmap("lineedit");
+	wTime->setPixmap("timeedit");
 	wTime->setClassName("KTimeWidget");
 	#if KDE_IS_VERSION(3,1,9) //TMP
 	wTime->setAlternateClassName("QTimeEdit");
@@ -265,7 +265,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *name, const QStr
 	m_classes.append(wTime);
 
 	KFormDesigner::Widget *wDateTime = new KFormDesigner::Widget(this);
-	wDateTime->setPixmap("lineedit");
+	wDateTime->setPixmap("datetimeedit");
 	wDateTime->setClassName("KDateTimeWidget");
 	#if KDE_IS_VERSION(3,1,9) //TMP
 	wDateTime->setAlternateClassName("QDateTimeEdit");
