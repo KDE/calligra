@@ -70,6 +70,13 @@ typedef enum
     krhpC=0x0100
 } KivioResizeHandlePosition;
 
+typedef enum
+{
+  kstNormal = 0,
+  kstConnector,
+  kstGroup
+} KivioStencilType;
+
 #define KIVIO_RESIZE_HANDLE_POSITION_ALL \
     ( krhpNW    \
       | krhpN   \
@@ -116,11 +123,17 @@ protected:
     QBitArray *m_pProtection;
     QBitArray *m_pCanProtect;
 
+    // The stemcil type
+    KivioStencilType m_type;
+
 public:
     KivioStencil();
     virtual ~KivioStencil();
 
     virtual KivioStencil *duplicate() { return NULL; }
+
+    virtual KivioStencilType type() { return m_type; }
+    virtual void setType(KivioStencilType t) { m_type = t; }
 
 
     virtual double x() { return m_x; }

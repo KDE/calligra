@@ -32,19 +32,21 @@ KivioStencil::KivioStencil()
       m_pProtection(NULL),
       m_pCanProtect(NULL)
 {
-    m_x = m_y = 0.0f;
-    m_w = m_h = 72.0f;
+  m_x = m_y = 0.0f;
+  m_w = m_h = 72.0f;
 
-    m_selected = false;
+  m_selected = false;
 
-    m_pProtection = new QBitArray(NUM_PROTECTIONS);
-    m_pCanProtect = new QBitArray(NUM_PROTECTIONS);
-    for( int i=0; i<NUM_PROTECTIONS; i++ )
-    {
-        m_pProtection->clearBit(i);
-        m_pCanProtect->setBit(i);
-    }
+  m_pProtection = new QBitArray(NUM_PROTECTIONS);
+  m_pCanProtect = new QBitArray(NUM_PROTECTIONS);
 
+  for( int i = 0; i < NUM_PROTECTIONS; i++ )
+  {
+    m_pProtection->clearBit(i);
+    m_pCanProtect->setBit(i);
+  }
+
+  m_type = kstNormal;
 }
 
 KivioStencil::~KivioStencil()

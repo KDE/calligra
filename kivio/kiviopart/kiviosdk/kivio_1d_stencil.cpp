@@ -583,75 +583,71 @@ bool Kivio1DStencil::boolContainsFalse( bool *boolArray, int count )
 
 void Kivio1DStencil::searchForConnections( KivioPage *pPage )
 {
-    bool *done = new bool[ m_pConnectorPoints->count()];
+  bool *done = new bool[ m_pConnectorPoints->count()];
+  int i;
 
-    int i;
+  for( i=0; i<(int)m_pConnectorPoints->count(); i++ )
+    done[i] = false;
 
-    for( i=0; i<(int)m_pConnectorPoints->count(); i++ )
-        done[i] = false;
+  KivioConnectorPoint *p;
+  i=0;
+  p = m_pConnectorPoints->first();
 
-    KivioConnectorPoint *p;
+  while( p )
+  {
+    if( p->targetId() == -1 )
+      done[i] = true;
 
-    i=0;
-    p = m_pConnectorPoints->first();
-    while( p )
+    i++;
+    p = m_pConnectorPoints->next();
+  }
+
+  // No connections? BaiL!
+  if( boolAllTrue( done, m_pConnectorPoints->count() ) )
+  {
+    delete [] done;
+    return;
+  }
+
+  KivioLayer *pLayer = pPage->firstLayer();
+
+  while( pLayer && ( boolContainsFalse(done, m_pConnectorPoints->count()) ) )
+  {
+    KivioStencil *pStencil = pLayer->firstStencil();
+
+    while( pStencil && ( boolContainsFalse(done, m_pConnectorPoints->count()) ) )
     {
-        if( p->targetId() == -1 )
-            done[i] = true;
+      // No connecting to ourself!
+      if( pStencil != this )
+      {
 
-        i++;
-        p = m_pConnectorPoints->next();
-    }
-
-
-    // No connections? BaiL!
-    if( boolAllTrue( done, m_pConnectorPoints->count() ) )
-    {
-       delete [] done;
-       return;
-    }
-
-
-
-    KivioLayer *pLayer = pPage->firstLayer();
-    while( pLayer && ( boolContainsFalse(done, m_pConnectorPoints->count()) ) )
-    {
-        KivioStencil *pStencil = pLayer->firstStencil();
-
-        while( pStencil && ( boolContainsFalse(done, m_pConnectorPoints->count()) ) )
+        // Iterate through all connectors attempting to connect it to the stencil.
+        // If it connects, mark it as done
+        i=0;
+        p = m_pConnectorPoints->first();
+        while( p )
         {
-            // No connecting to ourself!
-            if( pStencil != this )
+          if( !done[i] && p->targetId() != -1 )
+          {
+            if( pStencil->connectToTarget( p, p->targetId() ) )
             {
-
-                // Iterate through all connectors attempting to connect it to the stencil.
-                // If it connects, mark it as done
-                i=0;
-                p = m_pConnectorPoints->first();
-                while( p )
-                {
-                    if( !done[i] &&
-                         p->targetId() != -1 )
-                    {
-                        if( pStencil->connectToTarget( p, p->targetId() ) )
-                        {
-                            done[i] = true;
-                        }
-                    }
-
-                    i++;
-                    p = m_pConnectorPoints->next();
-                }
-
+                done[i] = true;
             }
+          }
 
-            pStencil = pLayer->nextStencil();
+          i++;
+          p = m_pConnectorPoints->next();
         }
 
-        pLayer = pPage->nextLayer();
+      }
+
+      pStencil = pLayer->nextStencil();
     }
 
-    delete [] done;
+    pLayer = pPage->nextLayer();
+  }
+
+  delete [] done;
 }
 
 
