@@ -442,27 +442,28 @@ Table* Connection::tableSchema( const QString& tableName )
 	if (t)
 		return t;
 	//not found: retrieve schema
-	KexiDB::Cursor *cursor = executeQuery( 
-		QString("select * from kexi__tables where t_name='%1'").arg(tableName) );
-	if (!cursor->open()) {
-		delete cursor;
+	KexiDB::Cursor *cursor;
+	if (!(cursor = executeQuery( QString("select * from kexi__tables where t_name='%1'").arg(tableName) )))
+		return 0;
+	if (!cursor->moveFirst()) {
+		deleteCursor(cursor);
 		return 0;
 	}
-	if (!cursor->moveFirst())
-		return 0;
 	bool ok;
 	int t_id = cursor->value(0).toInt(&ok);
-	if (!ok)
+	if (!ok) {
+		deleteCursor(cursor);
 		return 0;
+	}
 	t = new Table( tableName, this );
 	t->m_id = t_id;
 	kdDebug()<<"@@@ t_id=="<<t->m_id<<" t_name="<<cursor->value(1).asCString()<<endl;
 
 	deleteCursor(cursor);
 
-	cursor = executeQuery( 
-		QString("select * from kexi__fields where t_id='%1' order by f_order").arg(t->m_id) );
-	if (!cursor->open() || !cursor->moveFirst()) {
+	if (!(cursor = executeQuery( QString("select * from kexi__fields where t_id='%1' order by f_order").arg(t->m_id) )))
+		return 0;
+	if (!cursor->moveFirst()) {
 		deleteCursor(cursor);
 		return 0;
 	}
@@ -470,20 +471,30 @@ Table* Connection::tableSchema( const QString& tableName )
 		kdDebug()<<"@@@ t_name=="<<cursor->value(2).asCString()<<endl;
 
 		int f_type = cursor->value(1).toInt(&ok);
-		if (!ok)
+		if (!ok) { 
+			deleteCursor(cursor);
 			return 0;
+		}
 		int f_len = cursor->value(3).toInt(&ok);
-		if (!ok)
+		if (!ok) {
+			deleteCursor(cursor);
 			return 0;
+		}
 		int f_prec = cursor->value(4).toInt(&ok);
-		if (!ok)
+		if (!ok) {
+			deleteCursor(cursor);
 			return 0;
+		}
 		int f_constr = cursor->value(5).toInt(&ok);
-		if (!ok)
+		if (!ok) {
+			deleteCursor(cursor);
 			return 0;
+		}
 		int f_opts = cursor->value(6).toInt(&ok);
-		if (!ok)
+		if (!ok) {
+			deleteCursor(cursor);
 			return 0;
+		}
 		
 		Field *f = new Field(
 			cursor->value(2).asString(), (Field::Type)f_type, f_constr, f_len, f_prec, f_opts );
@@ -492,6 +503,11 @@ Table* Connection::tableSchema( const QString& tableName )
 		f->m_help = cursor->value(10).asString();
 		t->addField(f);
 		cursor->moveNext();
+	}
+
+	if (!deleteCursor(cursor)) {
+		delete t;
+		return 0;
 	}
 
 	m_tables.insert(tableName, t);

@@ -51,8 +51,6 @@ class KEXI_DB_EXPORT DriverManager : public QObject, public KexiDB::Object
 		 \return db driver, or 0 if error (then error message is also set) */
 		Driver* driver(const QCString& name);
 
-		static DriverManager *self();
-
 		/*! returns list of available drivers names. That drivers can be loaded
 		 by first use of driver() method. */
 		const QStringList driverNames();
