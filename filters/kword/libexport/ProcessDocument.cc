@@ -80,6 +80,8 @@ static void ProcessAboutTag ( QDomNode         myNode,
     QValueList<TagProcessing> tagProcessingList;
     tagProcessingList.append ( TagProcessing ( "title",    ProcessTextTag, &docInfo->title    ) );
     tagProcessingList.append ( TagProcessing ( "abstract", ProcessTextTag, &docInfo->abstract ) );
+    tagProcessingList.append ( TagProcessing ( "keyword",    ProcessTextTag, &docInfo->keywords    ) );
+    tagProcessingList.append ( TagProcessing ( "subject", ProcessTextTag, &docInfo->subject ) );
     ProcessSubtags (myNode, tagProcessingList, leader);
 }
 
@@ -98,12 +100,14 @@ static void ProcessAuthorTag ( QDomNode         myNode,
     tagProcessingList.append ( TagProcessing ( "company",     ProcessTextTag, &docInfo->company    ) );
     tagProcessingList.append ( TagProcessing ( "email",       ProcessTextTag, &docInfo->email      ) );
     tagProcessingList.append ( TagProcessing ( "telephone",   ProcessTextTag, &docInfo->telephone  ) );
+    tagProcessingList.append ( TagProcessing ( "telephone-work",   ProcessTextTag, &docInfo->telephonework  ) );
     tagProcessingList.append ( TagProcessing ( "fax",         ProcessTextTag, &docInfo->fax        ) );
     tagProcessingList.append ( TagProcessing ( "country",     ProcessTextTag, &docInfo->country    ) );
     tagProcessingList.append ( TagProcessing ( "postal-code", ProcessTextTag, &docInfo->postalCode ) );
     tagProcessingList.append ( TagProcessing ( "city",        ProcessTextTag, &docInfo->city       ) );
     tagProcessingList.append ( TagProcessing ( "street",      ProcessTextTag, &docInfo->street     ) );
     tagProcessingList.append ( TagProcessing ( "initial",     ProcessTextTag, &docInfo->initial    ) );
+    tagProcessingList.append ( TagProcessing ( "position",     ProcessTextTag, &docInfo->position    ) );
     ProcessSubtags (myNode, tagProcessingList, leader);
 }
 
@@ -237,7 +241,7 @@ static void ProcessOldLayoutChildTag (QDomNode myNode, void *tagData, KWEFKWordL
         ;
     ProcessAttributes (myNode, attrProcessingList);
 }
- 
+
 static void ProcessUnderlineTag (QDomNode myNode, void *tagData, KWEFKWordLeader* /*leader*/ )
 {
     TextFormatting* text=(TextFormatting*) tagData;
@@ -245,7 +249,7 @@ static void ProcessUnderlineTag (QDomNode myNode, void *tagData, KWEFKWordLeader
     QString strColor;
 
     text->underlineWord = false;
-    
+
     QValueList<AttrProcessing> attrProcessingList;
 
     attrProcessingList
@@ -281,7 +285,7 @@ static void ProcessStrikeoutTag (QDomNode myNode, void *tagData, KWEFKWordLeader
     QValueList<AttrProcessing> attrProcessingList;
     attrProcessingList << AttrProcessing ("value" , type );
     attrProcessingList << AttrProcessing ("styleline" , linestyle );
-    attrProcessingList << AttrProcessing ( "wordbyword", text->strikeoutWord );    
+    attrProcessingList << AttrProcessing ( "wordbyword", text->strikeoutWord );
     ProcessAttributes (myNode, attrProcessingList);
 
     if( type.isEmpty() || ( type == "0" ) )
@@ -753,7 +757,7 @@ static void ProcessLayoutTabulatorTag ( QDomNode myNode, void *tagData, KWEFKWor
             << AttrProcessing ( "inchpos" ) // Never ever use it, as this value is mostly wrong (e.g. 1.1009e+15)
         ;
     }
-    
+
     ProcessAttributes (myNode, attrProcessingList);
     tabulatorList->append(tabulator);
 
@@ -928,9 +932,9 @@ static void ProcessLineSpaceTag (QDomNode myNode, void *tagData, KWEFKWordLeader
 static void ProcessFlowTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader )
 {
     LayoutData *layout = (LayoutData *) tagData;
-    
+
     QString oldAlign, normalAlign;
-    
+
     QValueList<AttrProcessing> attrProcessingList;
     if ( leader->m_oldSyntax )
     {
@@ -978,7 +982,7 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader 
     QValueList<AttrProcessing> attrProcessingList;
     attrProcessingList << AttrProcessing ( "outline" ); // Only in <STYLE>
     ProcessAttributes (myNode, attrProcessingList);
-    
+
     LayoutData *layout = (LayoutData *) tagData;
 
     ValueListFormatData formatDataList;
@@ -999,7 +1003,7 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader 
     tagProcessingList << TagProcessing ( "FORMAT",       ProcessFormatTag,            &formatDataList     );
     tagProcessingList << TagProcessing ( "TABULATOR",    ProcessLayoutTabulatorTag,   &layout->tabulatorList       );
     tagProcessingList << TagProcessing ( "SHADOW",       ProcessShadowTag,            layout                       );
-    
+
     if ( leader->m_oldSyntax )
     {
         layout->indentLeft = 0.0; // ### TODO: needed or not?

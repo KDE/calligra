@@ -1190,6 +1190,15 @@ bool AbiWordWorker::doFullDocumentInfo(const KWEFDocumentInfo& docInfo)
         *m_streamOut << "<m key=\"dc.description\">" << escapeAbiWordText(m_docInfo.abstract) << "</m>\n";
     }
 
+    if ( !m_docInfo.keywords.isEmpty() )
+    {
+        *m_streamOut << "<m key=\"abiword.keywords\">" << escapeAbiWordText(m_docInfo.keywords) << "</m>\n";
+    }
+    if ( !m_docInfo.subject.isEmpty() )
+    {
+        *m_streamOut << "<m key=\"dc.subject\">" << escapeAbiWordText(m_docInfo.subject) << "</m>\n";
+    }
+
     // Say who we are (with the CVS revision number) in case we have a bug in our filter output!
     *m_streamOut << "<m key=\"abiword.generator\">KWord Export Filter";
 

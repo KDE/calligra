@@ -109,7 +109,7 @@ class TextFormatting
          * @note the test language "xx" in converted to "en_US"
          */
         QString language;
-        
+
         bool    missing;   ///< true if this TextFormatting object does not correspond to a real \<FORMAT\> element
 };
 
@@ -518,6 +518,8 @@ public:
     // <ABOUT>
     QString title;
     QString abstract;
+    QString keywords;
+    QString subject;
     // <AUTHOR>
     QString fullName;
     QString jobTitle;
@@ -530,6 +532,8 @@ public:
     QString city;
     QString street;
     QString initial;
+    QString position;
+    QString telephonework;
 };
 
 /// \since 1.4
