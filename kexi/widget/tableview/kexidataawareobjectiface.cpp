@@ -530,7 +530,9 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
 		}
 
 		// cursor moved to other row: end of row editing
+		bool newRowInserted = false;
 		if (m_rowEditing && m_curRow != newrow) {
+			newRowInserted = m_newRowEditing;
 			if (!acceptRowEdit()) {
 				//accepting failed: cancel setting the cursor
 				return;
@@ -594,13 +596,13 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
 					.arg(m_curRow).arg((ulong)itemAt(m_curRow)) << endl;
 	//NOT EFFECTIVE!!!!!!!!!!!
 				//set item iterator
-				if (isInsertingEnabled() && m_currentItem == m_insertItem && m_curRow == (rows()-1)) {
+				if (!newRowInserted && isInsertingEnabled() && m_currentItem == m_insertItem && m_curRow == (rows()-1)) {
 					//moving from 'insert item' to last item
 					m_itemIterator->toLast();
 				}
-				else if (!forceSet && m_currentItem != m_insertItem && oldRow>=0 && (oldRow+1)==m_curRow) //just move next
+				else if (!newRowInserted && !forceSet && m_currentItem != m_insertItem && oldRow>=0 && (oldRow+1)==m_curRow) //just move next
 					++(*m_itemIterator);
-				else if (!forceSet && m_currentItem != m_insertItem && oldRow>=0 && (oldRow-1)==m_curRow) //just move back
+				else if (!newRowInserted && !forceSet && m_currentItem != m_insertItem && oldRow>=0 && (oldRow-1)==m_curRow) //just move back
 					--(*m_itemIterator);
 				else { //move at:
 					m_itemIterator->toFirst();
