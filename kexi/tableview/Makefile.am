@@ -4,8 +4,8 @@ lib_LTLIBRARIES = libkexidatatable.la
 libkexidatatable_la_SOURCES = kexicelleditorfactory.cpp \
 		kexitableedit.cpp kexitableheader.cpp kexitableitem.cpp kexitableviewdata.cpp \
 		kexitablerm.cpp kexitableview.cpp kexitableview_p.cpp kexidatetableedit.cpp  \
-		kexiinputtableedit.cpp kexiblobtableedit.cpp kexicomboboxtableedit.cpp \
-		kexicomboboxpopup.cpp
+		kexiinputtableedit.cpp kexiblobtableedit.cpp kexibooltableedit.cpp \
+		kexicomboboxtableedit.cpp kexicomboboxpopup.cpp kexitableviewpropertybuffer.cpp
 
 
 libkexidatatable_la_LDFLAGS = $(all_libraries) -Wnounresolved

@@ -1,0 +1,104 @@
+/* This file is part of the KDE project
+   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this program; see the file COPYING.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+ */
+
+#ifndef KEXIBOOLTABLEEDIT_H
+#define KEXIBOOLTABLEEDIT_H
+
+#include <qvariant.h>
+
+#include "kexitableedit.h"
+#include "kexicelleditorfactory.h"
+
+/*! @short Cell editor for boolean type.
+*/
+class KEXIDATATABLE_EXPORT KexiBoolTableEdit : public KexiTableEdit
+{
+	Q_OBJECT
+
+	public:
+		KexiBoolTableEdit(KexiTableViewColumn &column, QScrollView *parent=0, const char* name = 0);
+
+		virtual ~KexiBoolTableEdit();
+
+//		virtual bool valueChanged();
+
+		//! \return true if editor's value is null (not empty)
+		virtual bool valueIsNull();
+
+		//! \return true if editor's value is empty (not null). 
+		//! Only few field types can accept "EMPTY" property 
+		//! (check this with KexiDB::Field::hasEmptyProperty()), 
+		virtual bool valueIsEmpty();
+
+		virtual QVariant value(bool &ok);
+
+		virtual bool cursorAtStart();
+		virtual bool cursorAtEnd();
+
+//		virtual bool eventFilter(QObject* watched, QEvent* e);
+//js		void end(bool mark);
+//js		void backspace();
+		virtual void clear();
+
+		/*! \return total size of this editor, including any buttons, etc. (if present). */
+//		virtual QSize totalSize();
+
+		virtual void setupContents( QPainter *p, bool focused, QVariant val, 
+			QString &txt, int &align, int &x, int &y_offset, int &w, int &h );
+
+		virtual void clickedOnContents();
+
+	protected slots:
+//		void setRestrictedCompletion();
+//		void completed(const QString &);
+
+	protected:
+		//! initializes this editor with \a add value
+		virtual void init(const QString& add, bool removeOld);
+
+		void showHintButton();
+		void init();
+
+//		virtual void paintEvent ( QPaintEvent *e );
+	//virtual void drawFrame ( QPainter * p );
+
+		//! We've no editor widget that would store current value, so we do this here
+		QVariant m_currentValue;
+
+//		bool		m_calculatedCell;
+//js		QStringList	m_comp;
+
+//		QString m_decsym; //! decimal symbol
+//		QString m_origText; //! orig. Line Edit's text after conversion - for easy comparing
+
+	signals:
+		void hintClicked();
+};
+
+class KexiBoolEditorFactoryItem : public KexiCellEditorFactoryItem
+{
+	public:
+		KexiBoolEditorFactoryItem();
+		virtual ~KexiBoolEditorFactoryItem();
+
+	protected:
+		virtual KexiTableEdit* createEditor(KexiTableViewColumn &column, QScrollView* parent = 0);
+};
+
+#endif
