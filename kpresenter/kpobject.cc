@@ -186,7 +186,7 @@ QDomDocumentFragment KPObject::save( QDomDocument& doc, double offset )
 
 double KPObject::load(const QDomElement &element) {
 
-    double offset=0.0;
+    double offset=-1.0;
     QDomElement e=element.namedItem(tagORIG).toElement();
     if(!e.isNull()) {
         if(e.hasAttribute(attrX))

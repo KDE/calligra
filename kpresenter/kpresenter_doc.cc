@@ -1046,6 +1046,9 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
                 delete kppartobject;
                 kppartobject = 0L;
             }
+            //hack for some old file, they don't have ORIG tag !
+            if ( offset == -1.0 )
+                offset = r.y();
             if ( sticky && !ignoreSticky && kppartobject )
             {
                 m_stickyPage->appendObject(kppartobject );
