@@ -35,7 +35,7 @@ class QDomElement;
 class KPTextObject : public KPObject
 {
 public:
-    KPTextObject();
+    KPTextObject( KPresenterDoc *doc );
     virtual ~KPTextObject()
     {}
 

@@ -38,8 +38,8 @@
 /******************************************************************/
 
 /*================ default constructor ===========================*/
-KPTextObject::KPTextObject()
-    : KPObject(), ktextobject( 0, "" )
+KPTextObject::KPTextObject(  KPresenterDoc *doc )
+    : KPObject(), ktextobject( doc, 0, "" )
 {
     ktextobject.hide();
     brush = Qt::NoBrush;
@@ -558,8 +558,8 @@ void KPTextObject::saveKTextObject( QTextStream& out )
 {
     KTextEditParag *parag = ktextobject.document()->firstParag();
     KTextEditDocument::TextSettings textSettings = ktextobject.document()->textSettings();
-    out << otag 
-	<< "<TEXTOBJ lineSpacing=\"" << ktextobject.document()->lineSpacing() 
+    out << otag
+	<< "<TEXTOBJ lineSpacing=\"" << ktextobject.document()->lineSpacing()
 	<< "\" paragSpacing=\"" << ktextobject.document()->paragSpacing()
 	<< "\" margin=\"" << ktextobject.document()->margin()
 	<< "\" bulletType1=\"" << (int)textSettings.bulletType[0]

@@ -172,7 +172,7 @@ protected:
 };
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
+class KPresenterDoc;
 class KTextEditDocument
 {
 public:
@@ -192,7 +192,7 @@ public:
 	OutlinedSquare
     };
 
-    KTextEditDocument();
+    KTextEditDocument( KPresenterDoc *doc );
 
     void clear();
 
@@ -305,7 +305,6 @@ private:
     QMap<int, bool> selectionText;
     KTextEditCommandHistory *commandHistory;
     KTextEditFormatter *pFormatter;
-    KTextEditFormatCollection *fCollection;
     int ls, ps;
     QColor allColor;
     bool allInOne;
@@ -313,7 +312,8 @@ private:
     int oldListMult;
     TextSettings txtSettings;
     int marg;
-
+    KPresenterDoc *kpr_doc;
+    
 };
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -551,12 +551,12 @@ private:
     QColor col;
     QFontMetrics *fm;
     int leftBearing, rightBearing;
-    int widths[ 65536 ];
+    int widths[ 256 ];
     int hei, asc, dsc;
     KTextEditFormatCollection *collection;
     int ref;
     QString k;
-
+    
 };
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -589,6 +589,7 @@ private:
     QColor ccol;
     QString kof, knf;
     int cflags;
+    float zoomFakt;
 
 };
 
@@ -603,8 +604,8 @@ public:
 	EnumList
     };
 
-    KTextEdit( QWidget *parent, const QString &fn, bool tabify = FALSE );
-    KTextEdit( QWidget *parent = 0, const char *name = 0 );
+    KTextEdit( KPresenterDoc *doc, QWidget *parent, const QString &fn, bool tabify = FALSE );
+    KTextEdit( KPresenterDoc *doc, QWidget *parent = 0, const char *name = 0 );
     virtual ~KTextEdit();
 
     void clear();
@@ -909,11 +910,6 @@ inline KTextEditParag *KTextEditDocument::paragAt( int i ) const
     return 0;
 }
 
-inline KTextEditFormatCollection *KTextEditDocument::formatCollection() const
-{
-    return fCollection;
-}
-
 inline int KTextEditDocument::listIndent( int depth ) const
 {
     // #######
@@ -968,7 +964,7 @@ inline KTextEditFormat::KTextEditFormat( const QFont &f, const QColor &c )
     hei = fm->height();
     asc = fm->ascent();
     dsc = fm->descent();
-    for ( int i = 0; i < 65536; ++i )
+    for ( int i = 0; i < 256; ++i )
 	widths[ i ] = 0;
     generateKey();
     addRef();
@@ -981,7 +977,7 @@ inline KTextEditFormat::KTextEditFormat( const KTextEditFormat &f )
     fm = new QFontMetrics( fn );
     leftBearing = f.leftBearing;
     rightBearing = f.rightBearing;
-    for ( int i = 0; i < 65536; ++i )
+    for ( int i = 0; i < 256; ++i )
 	widths[ i ] = f.widths[ i ];
     hei = f.hei;
     asc = f.asc;
@@ -998,7 +994,7 @@ inline void KTextEditFormat::update()
     hei = fm->height();
     asc = fm->ascent();
     dsc = fm->descent();
-    for ( int i = 0; i < 65536; ++i )
+    for ( int i = 0; i < 256; ++i )
 	widths[ i ] = 0;
     generateKey();
 }
@@ -1032,10 +1028,13 @@ inline int KTextEditFormat::width( const QChar &c ) const
 {
     if ( c == '\t' )
 	return 30;
-    int w = widths[ c.unicode() ];
+    int w = 0;
+    if ( c.unicode() < 256 )
+	w = widths[ c.unicode() ];
     if ( w == 0 ) {
 	w = fm->width( c );
-	( (KTextEditFormat*)this )->widths[ c.unicode() ] = w;
+	if ( c.unicode() < 256 )
+	    ( (KTextEditFormat*)this )->widths[ c.unicode() ] = w;
     }
     return w;
 }

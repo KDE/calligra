@@ -99,8 +99,8 @@ void KPGroupObject::moveBy( int _dx, int _dy )
 /*================================================================*/
 void KPGroupObject::resizeBy( QSize _size )
 {
-    float fx = (float)( (float)ext.width() + (float)_size.width() ) / (float)ext.width(); 
-    float fy = (float)( (float)ext.height() + (float)_size.height() ) / (float)ext.height(); 
+    float fx = (float)( (float)ext.width() + (float)_size.width() ) / (float)ext.width();
+    float fy = (float)( (float)ext.height() + (float)_size.height() ) / (float)ext.height();
     KPObject::resizeBy( _size );
     updateSizes( fx, fy );
 }
@@ -108,8 +108,8 @@ void KPGroupObject::resizeBy( QSize _size )
 /*================================================================*/
 void KPGroupObject::resizeBy( int _dx, int _dy )
 {
-    float fx = (float)( (float)ext.width() + (float)_dx ) / (float)ext.width(); 
-    float fy = (float)( (float)ext.height() + (float)_dy ) / (float)ext.height(); 
+    float fx = (float)( (float)ext.width() + (float)_dx ) / (float)ext.width();
+    float fy = (float)( (float)ext.height() + (float)_dy ) / (float)ext.height();
     KPObject::resizeBy( _dx, _dy );
     updateSizes( fx, fy );
 }
@@ -120,11 +120,11 @@ void KPGroupObject::save( QTextStream& out )
     out << indent << "<ORIG x=\"" << orig.x() << "\" y=\"" << orig.y() << "\"/>" << endl;
     out << indent << "<SIZE width=\"" << ext.width() << "\" height=\"" << ext.height() << "\"/>" << endl;
     out << indent << "<OBJECTS>" << endl;
-    
+
     KPObject *kpobject = 0;
     for ( unsigned int i = 0; i < objects.count() ; ++i ) {
 	kpobject = objects.at( i );
-	if ( kpobject->getType() == OT_PART ) 
+	if ( kpobject->getType() == OT_PART )
 	    continue;
 	out << otag << "<OBJECT type=\"" << static_cast<int>( kpobject->getType() ) << "\">" << endl;
 	kpobject->save( out );
@@ -142,7 +142,7 @@ void KPGroupObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst,
     string name;
 
     updateObjs = false;
-    
+
     while ( parser.open( 0L, tag ) ) {
 	parser.parseTag( tag.c_str(), name, lst );
 
@@ -227,7 +227,7 @@ void KPGroupObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst,
 			objects.append( kpclipartobject );
 		    } break;
 		    case OT_TEXT: {
-			KPTextObject *kptextobject = new KPTextObject();
+			KPTextObject *kptextobject = new KPTextObject( doc );
 			kptextobject->load( parser, lst );
 
 			objects.append( kptextobject );
@@ -255,8 +255,8 @@ void KPGroupObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst,
 		    return;
 		}
 	    }
-	    
-	    
+	
+	
 	} else
 	    cerr << "Unknown tag '" << tag << "' in GROUP_OBJECT" << endl;
 
@@ -265,7 +265,7 @@ void KPGroupObject::load( KOMLParser& parser, vector<KOMLAttrib>& lst,
 	    return;
 	}
     }
-    
+
     updateObjs = true;
 }
 
@@ -282,7 +282,7 @@ void KPGroupObject::draw( QPainter *_painter, int _diffx, int _diffy )
 	kpobject = objects.at( i );
 	kpobject->draw( _painter, _diffy, _diffy );
     }
-    
+
     KPObject::draw( _painter, _diffx, _diffy );
 }
 
@@ -295,8 +295,8 @@ void KPGroupObject::updateSizes( float fx, float fy )
     KPObject *kpobject = 0;
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
 	kpobject = objects.at( i );
-	int w = (int)( (float)kpobject->getSize().width() * fx ); 
-	int h = (int)( (float)kpobject->getSize().height() * fy ); 
+	int w = (int)( (float)kpobject->getSize().width() * fx );
+	int h = (int)( (float)kpobject->getSize().height() * fy );
 	kpobject->setSize( w, h );
     }
 }
@@ -306,7 +306,7 @@ void KPGroupObject::updateCoords( int dx, int dy )
 {
     if ( !updateObjs )
 	return;
-    
+
     for ( unsigned int i = 0; i < objects.count(); i++ )
 	objects.at( i )->moveBy( dx, dy );
 }
@@ -318,7 +318,7 @@ void KPGroupObject::rotate( float _angle )
 
     if ( !updateObjs )
 	return;
-    
+
     for ( unsigned int i = 0; i < objects.count(); i++ )
 	objects.at( i )->rotate( _angle );
 }
@@ -330,7 +330,7 @@ void KPGroupObject::setShadowDistance( int _distance )
 
     if ( !updateObjs )
 	return;
-    
+
     for ( unsigned int i = 0; i < objects.count(); i++ )
 	objects.at( i )->setShadowDistance( _distance );
 }
@@ -342,7 +342,7 @@ void KPGroupObject::setShadowDirection( ShadowDirection _direction )
 
     if ( !updateObjs )
 	return;
-    
+
     for ( unsigned int i = 0; i < objects.count(); i++ )
 	objects.at( i )->setShadowDirection( _direction );
 }
@@ -354,7 +354,7 @@ void KPGroupObject::setShadowColor( QColor _color )
 
     if ( !updateObjs )
 	return;
-    
+
     for ( unsigned int i = 0; i < objects.count(); i++ )
 	objects.at( i )->setShadowColor( _color );
 }
@@ -366,7 +366,7 @@ void KPGroupObject::setEffect( Effect _effect )
 
     if ( !updateObjs )
 	return;
-    
+
     for ( unsigned int i = 0; i < objects.count(); i++ )
 	objects.at( i )->setEffect( _effect );
 }
@@ -378,7 +378,7 @@ void KPGroupObject::setEffect2( Effect2 _effect2 )
 
     if ( !updateObjs )
 	return;
-    
+
     for ( unsigned int i = 0; i < objects.count(); i++ )
 	objects.at( i )->setEffect2( _effect2 );
 }
@@ -390,7 +390,7 @@ void KPGroupObject::setPresNum( int _presNum )
 
     if ( !updateObjs )
 	return;
-    
+
     for ( unsigned int i = 0; i < objects.count(); i++ )
 	objects.at( i )->setPresNum( _presNum );
 }
@@ -402,7 +402,7 @@ void KPGroupObject::setDisappear( bool b )
 
     if ( !updateObjs )
 	return;
-    
+
     for ( unsigned int i = 0; i < objects.count(); i++ )
 	objects.at( i )->setDisappear( b );
 }
@@ -414,7 +414,7 @@ void KPGroupObject::setDisappearNum( int num )
 
     if ( !updateObjs )
 	return;
-    
+
     for ( unsigned int i = 0; i < objects.count(); i++ )
 	objects.at( i )->setDisappearNum( num );
 }
@@ -426,7 +426,7 @@ void KPGroupObject::setEffect3( Effect3 _effect3)
 
     if ( !updateObjs )
 	return;
-    
+
     for ( unsigned int i = 0; i < objects.count(); i++ )
 	objects.at( i )->setEffect3( _effect3 );
 }
@@ -438,7 +438,7 @@ void KPGroupObject::zoom( float _fakt )
 
     if ( !updateObjs )
 	return;
-    
+
     for ( unsigned int i = 0; i < objects.count(); i++ )
 	objects.at( i )->zoom( _fakt );
 }
@@ -450,7 +450,7 @@ void KPGroupObject::zoomOrig()
 
     if ( !updateObjs )
 	return;
-    
+
     for ( unsigned int i = 0; i < objects.count(); i++ )
 	objects.at( i )->zoomOrig();
 }
@@ -462,7 +462,7 @@ void KPGroupObject::setOwnClipping( bool _ownClipping )
 
     if ( !updateObjs )
 	return;
-    
+
     for ( unsigned int i = 0; i < objects.count(); i++ )
 	objects.at( i )->setOwnClipping( _ownClipping );
 }
@@ -474,7 +474,7 @@ void KPGroupObject::setSubPresStep( int _subPresStep )
 
     if ( !updateObjs )
 	return;
-    
+
     for ( unsigned int i = 0; i < objects.count(); i++ )
 	objects.at( i )->setSubPresStep( _subPresStep );
 }
@@ -486,7 +486,7 @@ void KPGroupObject::doSpecificEffects( bool _specEffects, bool _onlyCurrStep )
 
     if ( !updateObjs )
 	return;
-    
+
     for ( unsigned int i = 0; i < objects.count(); i++ )
 	objects.at( i )->doSpecificEffects( _specEffects, _onlyCurrStep );
 }

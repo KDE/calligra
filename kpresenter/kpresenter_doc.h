@@ -23,6 +23,7 @@
 class KPresenterDoc;
 class KPresenterView;
 class DCOPObject;
+class KTextEditFormatCollection;
 
 #include <koDocument.h>
 #include <koDocumentChild.h>
@@ -322,6 +323,8 @@ public:
     void groupObjects();
     void ungroupObjects();
 
+    KTextEditFormatCollection *formatCollection() const { return fCollection; }
+    
 signals:
 
     // document modified
@@ -426,7 +429,8 @@ protected:
     DCOPObject *dcop;
 
     int saveOnlyPage;
-
+    KTextEditFormatCollection *fCollection;
+    
 };
 
 #endif

@@ -211,6 +211,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
       _pixmapCollection(), _gradientCollection(), _clipartCollection(), _commands(), _hasHeader( false ),
       _hasFooter( false ), urlIntern()
 {
+    fCollection = new KTextEditFormatCollection;
     setInstance( KPresenterFactory::global() );
 
     dcop = 0;
@@ -251,9 +252,9 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     pasting = false;
     pasteXOffset = pasteYOffset = 0;
 
-    _header = new KPTextObject;
+    _header = new KPTextObject( this );
     _header->setDrawEditRect( false );
-    _footer = new KPTextObject;
+    _footer = new KPTextObject( this );
     _footer->setDrawEditRect( false );
     _footer->setDrawEmpty( false );
     _header->setDrawEmpty( false );
@@ -1154,7 +1155,7 @@ void KPresenterDoc::loadObjects( KOMLParser& parser, vector<KOMLAttrib>& lst, bo
 		    _objectList->append( kpclipartobject );
 	    } break;
 	    case OT_TEXT: {
-		KPTextObject *kptextobject = new KPTextObject();
+		KPTextObject *kptextobject = new KPTextObject( this );
 		kptextobject->load( parser, lst );
 
 		if ( _paste ) {
@@ -3099,7 +3100,7 @@ void KPresenterDoc::insertPie( QRect r, QPen pen, QBrush brush, FillType ft, QCo
 /*===================== insert a textobject =====================*/
 void KPresenterDoc::insertText( QRect r, int diffx, int diffy, QString text, KPresenterView *_view )
 {
-    KPTextObject *kptextobject = new KPTextObject();
+    KPTextObject *kptextobject = new KPTextObject( this );
     kptextobject->setOrig( r.x() + diffx, r.y() + diffy );
     kptextobject->setSize( r.width(), r.height() );
     kptextobject->setSelected( true );

@@ -32,6 +32,7 @@
 #include <qregexp.h>
 
 #include <stdlib.h>
+#include "kpresenter_doc.h"
 
 QPixmap *KTextEdit::bufferPixmap( const QSize &s )
 {
@@ -47,9 +48,9 @@ QPixmap *KTextEdit::bufferPixmap( const QSize &s )
     return buf_pixmap;
 }
 
-KTextEdit::KTextEdit( QWidget *parent, const char *name )
+KTextEdit::KTextEdit( KPresenterDoc *d, QWidget *parent, const char *name )
     : QWidget( parent, name, WNorthWestGravity | WRepaintNoErase ),
-      doc( new KTextEditDocument ), undoRedoInfo( doc )
+      doc( new KTextEditDocument( d ) ), undoRedoInfo( doc )
 {
     init();
 }
@@ -2001,13 +2002,13 @@ void KTextEditCursor::indent()
 
 const int KTextEditDocument::numSelections = 2; // Don't count the Temp one!
 
-KTextEditDocument::KTextEditDocument()
+KTextEditDocument::KTextEditDocument( KPresenterDoc *doc )
 {
+    kpr_doc = doc;
     listMult = 15;
     allInOne = FALSE;
     marg = 0;
     pFormatter = 0;
-    fCollection = new KTextEditFormatCollection;
     fParag = 0;
     ls = ps = 0;
 
@@ -3190,6 +3191,7 @@ int KTextEditFormatterBreakWords::format( KTextEditParag *parag, int start )
 
 KTextEditFormatCollection::KTextEditFormatCollection()
 {
+    zoomFakt = 1;
     defFormat = new KTextEditFormat( QFont( "utopia", 20 ), Qt::black );
     lastFormat = cres = 0;
     cflags = -1;
@@ -3399,6 +3401,9 @@ void KTextEditFormat::setColor( const QColor &c )
 
 void KTextEditFormatCollection::zoom( float f )
 {
+    if ( zoomFakt == f )
+	return;
+    zoomFakt = f;
     QDictIterator<KTextEditFormat> it( cKey );
     KTextEditFormat *format;
     orig.clear();
@@ -3417,6 +3422,7 @@ void KTextEditFormatCollection::zoom( float f )
 
 void KTextEditFormatCollection::unzoom()
 {
+    zoomFakt = 1;
     QDictIterator<KTextEditFormat> it( orig );
     QDictIterator<KTextEditFormat> it2( cKey );
     KTextEditFormat *fm, *fm2;
@@ -3434,14 +3440,14 @@ void KTextEditDocument::zoom( float f )
 {
     oldListMult = listMult;
     listMult = (int)( (float)listMult * f );
-    fCollection->zoom( f );
+    formatCollection()->zoom( f );
     invalidate();
 }
 
 void KTextEditDocument::unzoom()
 {
     listMult = oldListMult;
-    fCollection->unzoom();
+    formatCollection()->unzoom();
     invalidate();
 }
 
@@ -3538,4 +3544,9 @@ void KTextEdit::extendContents2Height()
     int sp = QMAX( 0, h / ( doc->lastParag()->paragId() + 1 ) );
     doc->setParagSpacing( sp );
     doc->invalidate();
+}
+
+KTextEditFormatCollection *KTextEditDocument::formatCollection() const
+{
+    return kpr_doc->formatCollection();
 }
