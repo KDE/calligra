@@ -332,6 +332,7 @@ public:
     // IDL
     virtual void setMode( OPParts::Part::Mode _mode );
     virtual void setFocus( CORBA::Boolean mode );
+    virtual CORBA::Boolean printDlg();
 
     // IDL Slots
     /**
@@ -419,7 +420,7 @@ public:
     /**
      * ToolBar
      */
-    void print();
+    // void print();
     /**
      * ToolBar
      */    
@@ -506,10 +507,6 @@ public:
       
 protected slots:
     // C++
-    /**
-     * Needed to communicate with @ref KSpreadPaperLayout dialog.
-     */
-    void slotChangePaperLayout();
     /**
      * Popup menu
      */
@@ -710,7 +707,6 @@ protected:
   // KFileSelect *saveDlg;
 
     static KSpreadScripts *m_pGlobalScriptsDialog;
-    static KSpreadPaperLayout* m_pPaperLayoutDialog;
 
     /**
      * Tells wether undo is possible right now or not.

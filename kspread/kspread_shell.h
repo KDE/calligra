@@ -24,11 +24,13 @@ public:
   
   virtual bool openDocument( const char *_filename );
   virtual bool saveDocument( const char *_file, const char *_format );
-
+  virtual bool printDlg();
+  
   virtual void cleanUp();
   
 protected:
   Document_ref m_rDoc;
+  OPParts::View_var m_vView;
 };
 
 #endif

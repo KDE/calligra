@@ -45,7 +45,7 @@ PyObject * xcl_Cell( PyObject*, PyObject *args)
 
 /*****************************************************************************
  *
- * KSpread
+ * KSpreadDoc
  *
  *****************************************************************************/
 
@@ -58,9 +58,11 @@ KSpreadDoc::KSpreadDoc()
     m_rightBorder = 20.0;
     m_topBorder = 20.0;
     m_bottomBorder = 20.0;
-    m_paperFormat = A4;
+    m_paperFormat = PG_DIN_A4;
+    m_paperWidth = PG_A4_WIDTH;
+    m_paperHeight = PG_A4_HEIGHT;
     calcPaperSize();
-    m_orientation = QPrinter::Portrait;
+    m_orientation = PG_PORTRAIT;
     m_pMap = 0L;
     
     m_iTableId = 1;
@@ -455,7 +457,7 @@ void KSpreadDoc::setHeadFootLine( const char *_headl, const char *_headm, const 
 }
 
 void KSpreadDoc::setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBorder,
-			      PaperFormat _paper, QPrinter::Orientation _orientation )
+			      KoFormat _paper, KoOrientation _orientation )
 {
   m_leftBorder = _leftBorder;
   m_rightBorder = _rightBorder;
@@ -466,10 +468,7 @@ void KSpreadDoc::setPaperLayout( float _leftBorder, float _topBorder, float _rig
   
   calcPaperSize();
     
-  // TODO
-  // emit signal
-  /* if ( pGui )
-	pGui->canvasWidget()->repaint(); */
+  emit sig_updateView();
 
   m_bModified = TRUE;
 }
@@ -477,24 +476,41 @@ void KSpreadDoc::setPaperLayout( float _leftBorder, float _topBorder, float _rig
 void KSpreadDoc::setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBorder,
 			      const char * _paper, const char* _orientation )
 {
-    PaperFormat f = A4;
-    QPrinter::Orientation o = QPrinter::Portrait;
+    KoFormat f = paperFormat();
+    KoOrientation o = orientation();
     
     if ( strcmp( "A3", _paper ) == 0L )
-	f = A3;
+	f = PG_DIN_A3;
     else if ( strcmp( "A4", _paper ) == 0L )
-	f = A4;
+	f = PG_DIN_A4;
     else if ( strcmp( "A5", _paper ) == 0L )
-	f = A5;
+	f = PG_DIN_A5;
     else if ( strcmp( "Letter", _paper ) == 0L )
-	f = LETTER;
-    else if ( strcmp( "Executive", _paper ) == 0L )
-	f = EXECUTIVE;
+	f = PG_US_LETTER;
+    else if ( strcmp( "Legal", _paper ) == 0L )
+	f = PG_US_LEGAL;
+    else if ( strcmp( "Screen", _paper ) == 0L )
+	f = PG_SCREEN;
+    else if ( strcmp( "Custom", _paper ) == 0L )
+    {
+      m_paperWidth = 0.0;
+      m_paperHeight = 0.0;
+      f = PG_CUSTOM;
+      QString tmp( _paper );
+      m_paperWidth = atof( _paper );
+      int i = tmp.find( 'x' );
+      if ( i != -1 )
+	m_paperHeight = atof( tmp.data() + i + 1 );
+      if ( m_paperWidth < 10.0 )
+	m_paperWidth = PG_A4_WIDTH;
+      if ( m_paperHeight < 10.0 )
+	m_paperWidth = PG_A4_HEIGHT;
+    }
     
     if ( strcmp( "Portrait", _orientation ) == 0L )
-	o = QPrinter::Portrait;
+	o = PG_PORTRAIT;
     else if ( strcmp( "Landscape", _orientation ) == 0L )
-	o = QPrinter::Landscape;
+	o = PG_LANDSCAPE;
     
     setPaperLayout( _leftBorder, _topBorder, _rightBorder, _bottomBorder, f, o );
 }
@@ -503,43 +519,54 @@ void KSpreadDoc::calcPaperSize()
 {
     switch( m_paperFormat )
     {
-    case A5:
-	m_paperWidth = 150.0;
-	m_paperHeight = 210.0;
+    case PG_DIN_A5:
+        m_paperWidth = PG_A5_WIDTH;
+	m_paperHeight = PG_A5_HEIGHT;
 	break;
-    case A4:
-	m_paperWidth = 210.0;
-	m_paperHeight = 297.0;
+    case PG_DIN_A4:
+	m_paperWidth = PG_A4_WIDTH;
+	m_paperHeight = PG_A4_HEIGHT;
 	break;
-    case A3:
-	m_paperWidth = 297.0;
-	m_paperHeight = 420.0;
+    case PG_DIN_A3:
+	m_paperWidth = PG_A3_WIDTH;
+	m_paperHeight = PG_A3_HEIGHT;
 	break;
-    case LETTER:
-	m_paperWidth = 216.0;
-	m_paperHeight = 355.0;
+    case PG_US_LETTER:
+	m_paperWidth = PG_US_LETTER_WIDTH;
+	m_paperHeight = PG_US_LETTER_HEIGHT;
 	break;
-    case EXECUTIVE:
-	m_paperWidth = 184.0;
-	m_paperHeight = 266.0;
+    case PG_US_LEGAL:
+	m_paperWidth = PG_US_LEGAL_WIDTH;
+	m_paperHeight = PG_US_LEGAL_HEIGHT;
 	break;
+    case PG_SCREEN:
+        m_paperWidth = PG_SCREEN_WIDTH;
+        m_paperHeight = PG_SCREEN_HEIGHT;    
+    case PG_CUSTOM:
+        return;
     }
 }
 
-const char* KSpreadDoc::paperFormatString()
+QString KSpreadDoc::paperFormatString()
 {
     switch( m_paperFormat )
     {
-    case A5:
-	return "A5";
-    case A4:
-	return "A4";
-    case A3:
-	return "A3";
-    case LETTER:
-	return "Letter";
-    case EXECUTIVE:
-	return "Executive";
+    case PG_DIN_A5:
+	return QString( "A5" );
+    case PG_DIN_A4:
+	return QString( "A4" );
+    case PG_DIN_A3:
+	return QString( "A3" );
+    case PG_US_LETTER:
+	return QString( "Letter" );
+    case PG_US_LEGAL:
+	return QString( "Legal" );
+    case PG_SCREEN:
+        return QString( "Screen" );
+    case PG_CUSTOM:
+      QString tmp;
+      tmp.sprintf( "%fx%f", m_paperWidth, m_paperHeight );
+      return QString( tmp );
     }
 
     assert( 0 );
@@ -686,17 +713,6 @@ void KSpreadDoc::redo()
   m_pUndoBuffer->redo();
 }
 
-void KSpreadDoc::printMap( QPainter &_painter )
-{
-  // TODO
-  /*
-  KSpreadTable *t;
-  for ( t = m_pMap->firstTable(); t != 0L; t = m_pMap->nextTable() )
-  {
-    t->print( _painter, false );
-  } */
-}
-
 void KSpreadDoc::enableUndo( bool _b )
 {
   KSpreadView *v;
@@ -709,6 +725,52 @@ void KSpreadDoc::enableRedo( bool _b )
   KSpreadView *v;
   for( v = m_lstViews.first(); v != 0L; v = m_lstViews.next() )
     v->enableRedo( _b );
+}
+
+void KSpreadDoc::printMap( QPainter &_painter )
+{
+  // TODO
+  /*
+  KSpreadTable *t;
+  for ( t = m_pMap->firstTable(); t != 0L; t = m_pMap->nextTable() )
+  {
+    t->print( _painter, false );
+  } */
+}
+
+void KSpreadDoc::paperLayoutDlg()
+{
+  KoPageLayout pl;
+  pl.format = paperFormat();
+  pl.orientation = orientation();
+  pl.unit = PG_MM;
+  pl.width = m_paperWidth;
+  pl.height = m_paperHeight;
+  pl.left = leftBorder();
+  pl.right = rightBorder();
+  pl.top = topBorder();
+  pl.bottom = bottomBorder();
+  
+  KoHeadFoot hf;
+  hf.headLeft = headLeft();
+  hf.headRight = headRight();
+  hf.headMid = headMid();
+  hf.footLeft = footLeft();
+  hf.footRight = footRight();
+  hf.footMid = footMid();
+  
+  if ( !KoPageLayoutDia::pageLayout( pl, hf, FORMAT_AND_BORDERS | HEADER_AND_FOOTER ) )
+    return;
+
+  if ( pl.format == PG_CUSTOM )
+  {
+    m_paperWidth = pl.width;
+    m_paperHeight = pl.height;  
+  }
+  
+  setPaperLayout( pl.left, pl.top, pl.right, pl.bottom, pl.format, pl.orientation );
+
+  setHeadFootLine( hf.headLeft, hf.headMid, hf.headRight, hf.footLeft, hf.footMid, hf.footRight );  
 }
 
 KSpreadDoc::~KSpreadDoc()

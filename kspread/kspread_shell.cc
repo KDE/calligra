@@ -16,9 +16,10 @@ void KSpreadShell_impl::cleanUp()
   if ( m_bIsClean )
     return;
 
+  m_vView = 0L;
+  
   DefaultShell_impl::cleanUp();
 
-  mdeb("========DOC=======================\n");
   m_rDoc = 0L;
 }
 
@@ -26,11 +27,9 @@ void KSpreadShell_impl::setDocument( KSpreadDoc *_doc )
 {
   m_rDoc = OPParts::Document::_duplicate( _doc );
 
-  OPParts::View_var v = _doc->createView();  
-  v->setPartShell( this );
-  setRootPart( v );
-
-  mdeb("setDocument %i | %i\n",v->refCount(),v->_refcnt());
+  m_vView = _doc->createView();  
+  m_vView->setPartShell( this );
+  setRootPart( m_vView );
 }
 
 void KSpreadShell_impl::fileNew()
@@ -39,9 +38,9 @@ void KSpreadShell_impl::fileNew()
   
   m_rDoc = OPParts::Document::_duplicate( new KSpreadDoc );
   
-  OPParts::View_var view = m_rDoc->createView();
-  view->setPartShell( this );
-  setRootPart( view );
+  m_vView = m_rDoc->createView();
+  m_vView->setPartShell( this );
+  setRootPart( m_vView );
 
   m_rMenuBar->setItemEnabled( m_idMenuFile_SaveAs, true );
   m_rToolBarFile->setItemEnabled( m_idButtonFile_Print, true );
@@ -55,9 +54,9 @@ bool KSpreadShell_impl::openDocument( const char *_filename )
   if ( !m_rDoc->open( _filename ) )
     return false;
   
-  OPParts::View_var view = m_rDoc->createView();
-  view->setPartShell( this );
-  setRootPart( view );
+  m_vView = m_rDoc->createView();
+  m_vView->setPartShell( this );
+  setRootPart( m_vView );
 
   m_rMenuBar->setItemEnabled( m_idMenuFile_SaveAs, true );
   m_rToolBarFile->setItemEnabled( m_idButtonFile_Print, true );
@@ -73,6 +72,13 @@ bool KSpreadShell_impl::saveDocument( const char *_filename, const char *_format
     _format = "ksp";
   
   return m_rDoc->saveAs( _filename, _format );
+}
+
+bool KSpreadShell_impl::printDlg()
+{
+  assert( !CORBA::is_nil( m_vView ) );
+
+  return m_vView->printDlg();
 }
 
 #include "kspread_shell.moc"

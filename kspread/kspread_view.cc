@@ -12,6 +12,7 @@
 #include <klocale.h>
 
 #include <koPartSelectDia.h>
+#include <koPrintDia.h>
 
 #include "kspread_map.h"
 #include "kspread_table.h"
@@ -28,7 +29,6 @@
  *****************************************************************************/
 
 KSpreadScripts* KSpreadView::m_pGlobalScriptsDialog = 0L;
-KSpreadPaperLayout* KSpreadView::m_pPaperLayoutDialog = 0L;
 
 KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* _doc ) :
   QWidget( _parent, _name ), View_impl(), KSpread::View_skel()
@@ -532,14 +532,12 @@ void KSpreadView::insertRow()
 
 void KSpreadView::fontSelected( const char *_font )
 {
-    printf("FONT %s\n",_font);
     if ( m_pTable != 0L )
       m_pTable->setSelectionFont( QPoint( m_iMarkerColumn, m_iMarkerRow ), _font );
 }
 
 void KSpreadView::fontSizeSelected( const char *_size )
 {
-  printf("SIZE %i\n",atoi(_size));
   if ( m_pTable != 0L )
       m_pTable->setSelectionFont( QPoint( m_iMarkerColumn, m_iMarkerRow ), 0L, atoi( _size ) );
 }
@@ -727,6 +725,20 @@ void KSpreadView::newView()
   shell->setDocument( m_pDoc );
   
   CORBA::release( shell );
+}
+
+CORBA::Boolean KSpreadView::printDlg()
+{
+  // Open some printer dialog
+  QPrinter prt;
+  if ( !KoPrintDia::print( prt, m_pDoc, SLOT( paperLayoutDlg() ) ) )
+    return true;
+  
+  QPainter painter;
+  painter.begin( &prt );
+  // Print the table and tell that m_pDoc is NOT embedded.
+  m_pTable->print( painter, FALSE, &prt );
+  painter.end();
 }
 
 void KSpreadView::insertChart( const QRect& _geometry )
@@ -1026,6 +1038,7 @@ void KSpreadView::slotNewWindow()
 }
 */
 
+/*
 void KSpreadView::print()
 {    
   // Open some printer dialog
@@ -1046,6 +1059,7 @@ void KSpreadView::print()
   m_pTable->print( painter, FALSE, &prt );
   painter.end(); 
 }
+*/
 
 void KSpreadView::openPopupMenu( const QPoint & _point )
 {
@@ -1107,80 +1121,7 @@ void KSpreadView::slotLayoutDlg()
 
 void KSpreadView::paperLayoutDlg()
 {
-  if ( !m_pPaperLayoutDialog )
-    m_pPaperLayoutDialog = new KSpreadPaperLayout;
-  else
-    m_pPaperLayoutDialog->show();
-  
-  switch( m_pDoc->paperFormat() )
-  {
-  case KSpreadDoc::A5:
-    m_pPaperLayoutDialog->setA5();
-    break;
-  case KSpreadDoc::A4:
-    m_pPaperLayoutDialog->setA4();
-    break;
-  case KSpreadDoc::A3:
-    m_pPaperLayoutDialog->setA3();
-    break;
-  case KSpreadDoc::LETTER:
-    m_pPaperLayoutDialog->setLetter();
-    break;
-  case KSpreadDoc::EXECUTIVE:
-    m_pPaperLayoutDialog->setExecutive();
-    break;
-  }
-    
-  m_pPaperLayoutDialog->setLeftBorder( m_pDoc->leftBorder() );
-  m_pPaperLayoutDialog->setRightBorder( m_pDoc->rightBorder() );    
-  m_pPaperLayoutDialog->setTopBorder( m_pDoc->topBorder() );
-  m_pPaperLayoutDialog->setBottomBorder( m_pDoc->bottomBorder() );
-
-  m_pPaperLayoutDialog->setHeadLeft( m_pDoc->headLeft() );
-  m_pPaperLayoutDialog->setHeadRight( m_pDoc->headRight() );
-  m_pPaperLayoutDialog->setHeadMid( m_pDoc->headMid() );
-  m_pPaperLayoutDialog->setFootLeft( m_pDoc->footLeft() );
-  m_pPaperLayoutDialog->setFootRight( m_pDoc->footRight() );
-  m_pPaperLayoutDialog->setFootMid( m_pDoc->footMid() );
-  
-  QObject::connect( m_pPaperLayoutDialog, SIGNAL( applyButtonPressed() ), this, SLOT( slotChangePaperLayout() ) );
-}
-
-void KSpreadView::slotChangePaperLayout()
-{
-  assert( m_pPaperLayoutDialog != 0L );
-  
-  KSpreadDoc::PaperFormat paperFormat;
-  float leftBorder, rightBorder, topBorder, bottomBorder;
-  
-  if ( m_pPaperLayoutDialog->isA3() )
-    paperFormat = KSpreadDoc::A3;   
-  else if ( m_pPaperLayoutDialog->isA4() )
-	paperFormat = KSpreadDoc::A4;
-  else if ( m_pPaperLayoutDialog->isA5() )
-    paperFormat = KSpreadDoc::A5;
-  else if ( m_pPaperLayoutDialog->isLetter() )
-    paperFormat = KSpreadDoc::LETTER;
-  else if ( m_pPaperLayoutDialog->isExecutive() )
-    paperFormat = KSpreadDoc::EXECUTIVE;
-    
-  leftBorder = m_pPaperLayoutDialog->getLeftBorder();
-  rightBorder = m_pPaperLayoutDialog->getRightBorder();    
-  topBorder = m_pPaperLayoutDialog->getTopBorder();
-  bottomBorder = m_pPaperLayoutDialog->getBottomBorder();
-  
-  m_pDoc->setPaperLayout( leftBorder, topBorder, rightBorder, bottomBorder, paperFormat, m_pDoc->orientation() );
-  
-  QString headLeft, headMid, headRight, footLeft, footMid, footRight;
-  
-  headLeft = m_pPaperLayoutDialog->getHeadLeft();
-  headMid = m_pPaperLayoutDialog->getHeadMid();
-  headRight = m_pPaperLayoutDialog->getHeadRight();
-  footLeft = m_pPaperLayoutDialog->getFootLeft();
-  footMid = m_pPaperLayoutDialog->getFootMid();
-  footRight = m_pPaperLayoutDialog->getFootRight();
-  
-  m_pDoc->setHeadFootLine( headLeft, headMid, headRight, footLeft, footMid, footRight );
+  m_pDoc->paperLayoutDlg();
 }
 
 void KSpreadView::multiRow()

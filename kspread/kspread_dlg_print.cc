@@ -15,10 +15,10 @@ KSpreadPrintDlg::KSpreadPrintDlg( KSpreadView *_view, QWidget* parent, const cha
 {
     m_pView = _view;
     
-    // QString dir = kapp->kdedir().copy();
-    // dir += "/printer";
+    QString dir = kapp->kde_configdir().copy();
+    dir += "/printer";
     // TODO
-    QString dir = "/opt/kde/share/printer";
+    // QString dir = "/opt/kde/share/kprinter";
     
     // Read the directory listing
     DIR *dp;
@@ -54,15 +54,15 @@ KSpreadPrintDlg::KSpreadPrintDlg( KSpreadView *_view, QWidget* parent, const cha
     slotPrinter( printer->currentText() );
 }
 
-void KSpreadPrintDlg::slotPrinter( const char * )
+void KSpreadPrintDlg::slotPrinter( const char *_printer )
 {
-    if ( strcmp( printer->currentText(), "File" ) == 0 )
+    if ( strcmp( _printer, "File" ) == 0 )
     {
 	fileName->setEnabled( TRUE );
 	printCmd->setEnabled( FALSE );
 	printerName->setEnabled( FALSE );
     }
-    else if ( strcmp( printer->currentText(), "UNIX Printer" ) == 0 )
+    else if ( strcmp( _printer, "UNIX Printer" ) == 0 )
     {
 	fileName->setEnabled( FALSE );
 	printCmd->setEnabled( TRUE );

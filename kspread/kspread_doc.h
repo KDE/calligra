@@ -22,6 +22,8 @@ class KSpreadDoc;
 #include "kspread_view.h"
 #include "kspread_map.h"
 
+#include "koPageLayoutDia.h"
+
 #define MIME_TYPE "application/x-kspread"
 #define EDITOR "IDL:KSpread/Document:1.0"
 
@@ -35,10 +37,6 @@ class KSpreadDoc : public QObject,
     Q_OBJECT
 public:
     // C++
-    /**
-     * Paper Sizes.
-     */
-    enum PaperFormat { A3, A4, A5, LETTER, EXECUTIVE };
     
     KSpreadDoc();
     ~KSpreadDoc();
@@ -63,7 +61,7 @@ public:
     virtual char* mimeType() { return CORBA::string_dup( MIME_TYPE ); }
   
     virtual CORBA::Boolean isModified() { return m_bModified; }
-
+  
     // C++
     /**
      * @return a pointer to a new KSpreadTable. The KSpreadTable is not added to the map
@@ -115,7 +113,7 @@ public:
     /**
      * @return the orientation of the paper.
      */
-    QPrinter::Orientation orientation() { return m_orientation; }
+    KoOrientation orientation() { return m_orientation; }
     /**
      * @return the ascii name of the paper orientation ( like Portrait, Landscape )
      */
@@ -124,17 +122,17 @@ public:
     /**
      * @return the paper format.
      */
-    PaperFormat paperFormat() { return m_paperFormat; }
+    KoFormat paperFormat() { return m_paperFormat; }
     /**
      * @return the ascii name of the paper format ( like A4, Letter etc. )
      */
-    const char* paperFormatString();
+    QString paperFormatString();
 
     /**
      * Changes the paper layout and repaints the currently displayed KSpreadTable.
      */
     void setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBoder,
-			 PaperFormat _paper, QPrinter::Orientation orientation );
+			 KoFormat _paper, KoOrientation orientation );
     /**
      * A convenience function using a string as paper format and orientation.
      */
@@ -187,10 +185,19 @@ public:
 
     void enableUndo( bool _b );
     void enableRedo( bool _b );
-  
+
+public slots:
+    /**
+     * Open a dialog for the "Page Layout".
+     *
+     * @see KoPageLayoutDia
+     */
+    void paperLayoutDlg();
+
 signals:
     // Document signals
     void sig_addTable( KSpreadTable *_table );
+    void sig_updateView();
   
 protected:
     void initPython();
@@ -221,11 +228,12 @@ protected:
     /**
      * The orientation of the paper.
      */
-    QPrinter::Orientation m_orientation;
+    KoOrientation m_orientation;
     /**
      * Tells about the currently seleced paper size.
      */
-    PaperFormat m_paperFormat;
+    KoFormat m_paperFormat;
+  
     /**
      * The paper width in millimeters. Dont change this value, it is calculated by
      * @ref #calcPaperSize from the value @ref #m_paperFormat.
