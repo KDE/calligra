@@ -205,19 +205,19 @@ void KoAutoFormatDia::setupTab1()
     ( void )new QWidget( tab1 );
 
     cbIgnoreDoubleSpace=new QCheckBox( tab1 );
-    cbIgnoreDoubleSpace->setText( i18n( "Ignore Double Space" ) );
+    cbIgnoreDoubleSpace->setText( i18n( "Suppress Double Spaces" ) );
     cbIgnoreDoubleSpace->resize( cbIgnoreDoubleSpace->sizeHint() );
     cbIgnoreDoubleSpace->setChecked( m_autoFormat.getConfigIgnoreDoubleSpace());
     ( void )new QWidget( tab1 );
 
     cbRemoveSpaceBeginEndLine=new QCheckBox( tab1 );
-    cbRemoveSpaceBeginEndLine->setText( i18n( "Remove space at the begin and end line" ) );
+    cbRemoveSpaceBeginEndLine->setText( i18n( "Remove spaces at the begining and the end of lines" ) );
     cbRemoveSpaceBeginEndLine->resize( cbRemoveSpaceBeginEndLine->sizeHint() );
     cbRemoveSpaceBeginEndLine->setChecked( m_autoFormat.getConfigRemoveSpaceBeginEndLine());
     ( void )new QWidget( tab1 );
 
     cbAutoChangeFormat=new QCheckBox( tab1 );
-    cbAutoChangeFormat->setText( i18n( "Automatic *Bold* _Underline_" ) );
+    cbAutoChangeFormat->setText( i18n( "Automatic *Bold* and  _Underline_ formatting" ) );
     cbAutoChangeFormat->resize( cbAutoChangeFormat->sizeHint() );
     cbAutoChangeFormat->setChecked( m_autoFormat.getConfigAutoChangeFormat());
     ( void )new QWidget( tab1 );
