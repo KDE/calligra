@@ -63,9 +63,9 @@ bool KoWmfPaint::end() {
         // Draw 2 invisible points
         // because QPicture::setBoundingRect() doesn't give expected result (QT3.1.2)
         // setBoundingRect( boundingRect() );
-        mPainter.setPen( Qt::NoPen ); 
-        mPainter.drawPoint( rec.left(), rec.top() );
-        mPainter.drawPoint( rec.right(), rec.bottom() );
+//        mPainter.setPen( Qt::NoPen ); 
+//        mPainter.drawPoint( rec.left(), rec.top() );
+//        mPainter.drawPoint( rec.right(), rec.bottom() );
     }
     return mPainter.end();
 }
