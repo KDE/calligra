@@ -36,7 +36,7 @@ KexiTableList::KexiTableList() {};
 KexiTableList::~KexiTableList() {};
 */
 
-void KexiTableList::setSorting(int key, bool order=true, short type=1)
+void KexiTableList::setSorting(int key, bool order /*=true*/, short type /*=1*/)
 {
 	m_key = key;
 	m_order = (order ? 1 : -1);
