@@ -70,7 +70,6 @@ ConnectionDialog::ConnectionDialog(QWidget *parent)
 	m_table->setInsertingEnabled(true);
 	initTable();
 	m_table->setData(m_data, false);
-//	m_table->setColumnWidth(0, IconSize( KIcon::Small ) + 10);
 	m_table->adjustColumnWidthToContents(0);
 	layout->addWidget(m_table);
 
@@ -82,8 +81,6 @@ ConnectionDialog::ConnectionDialog(QWidget *parent)
 	connect(newItem, SIGNAL(clicked()), this, SLOT(newItem()));
 
 	KPushButton *delItem = new KPushButton(SmallIconSet("editdelete"), i18n("&Remove Connection"), frame);
-//	delItem->setIconSet(BarIconSet("edit_remove"));
-//	delItem->setTextLabel(i18n("&Remove Connection"), true);
 	vlayout->addWidget(delItem);
 	m_buttons.insert(BRemove, delItem);
 	connect(delItem, SIGNAL(clicked()), this, SLOT(removeItem()));
@@ -152,9 +149,13 @@ ConnectionDialog::exec(Form *form)
 	return;
 }
 
-void ConnectionDialog::slotCellSelected(int /*col*/, int row)
+void ConnectionDialog::slotCellSelected(int col, int row)
 {
 	m_buttons[BRemove]->setEnabled( row < m_table->rows() );
+	if(col == 2) // signal col
+		updateSignalList(m_table->itemAt(row));
+	else if(col == 4) // slot col
+		updateSlotList(m_table->itemAt(row));
 }
 
 void ConnectionDialog::slotRowInserted(KexiTableItem* item,bool)
@@ -252,41 +253,18 @@ ConnectionDialog::setStatusError(const QString &msg, KexiTableItem *item)
 }
 
 void
-ConnectionDialog::slotCellChanged(KexiTableItem *item, int col, QVariant value, KexiDB::ResultInfo*)
+ConnectionDialog::slotCellChanged(KexiTableItem *item, int col, QVariant, KexiDB::ResultInfo*)
 {
 	switch(col)
 	{
-		// sender changed, we update the signals list
+		// sender changed, we clear siganl and slot
 		case 1:
-		{
-			ObjectTreeItem *tree = m_form->objectTree()->lookup(value.toString());
-			if(!tree || !tree->widget())
-				return;
-
-			m_signalsColumnData->clear();
-			QStrList signalList = tree->widget()->metaObject()->signalNames(true);
-			QStrListIterator it(signalList);
-			for(; it.current() != 0; ++it)
-			{
-				KexiTableItem *item = new KexiTableItem(2);
-				(*item)[0] = QString(*it);
-				(*item)[1] = (*item)[0];
-				m_signalsColumnData->append(item);
-			}
-			// and we reset the signal value
 			(*item)[2] = QString("");
-			break;
-		}
-		// the signal was changed, update slot list
+		// signal or receiver changed, we clear the slot cell
 		case 2:
-		{
-			updateSlotList(item, value.toString(), (*item)[3].toString());
-			break;
-		}
-		// receiver changed, we update the slots list
 		case 3:
 		{
-			updateSlotList(item, (*item)[2].toString(), value.toString());
+			(*item)[4] = QString("");
 			break;
 		}
 		default:
@@ -295,11 +273,13 @@ ConnectionDialog::slotCellChanged(KexiTableItem *item, int col, QVariant value, 
 }
 
 void
-ConnectionDialog::updateSlotList(KexiTableItem *item, const QString &signal, const QString &widget)
+ConnectionDialog::updateSlotList(KexiTableItem *item)
 {
 	m_slotsColumnData->clear();
+	QString widget = (*item)[1].toString();
+	QString signal = (*item)[2].toString();
 
-	if(widget.isEmpty())// || signal.isEmpty())
+	if((widget.isEmpty()) || signal.isEmpty())
 		return;
 	ObjectTreeItem *tree = m_form->objectTree()->lookup(widget);
 	if(!tree || !tree->widget())
@@ -324,8 +304,25 @@ ConnectionDialog::updateSlotList(KexiTableItem *item, const QString &signal, con
 		(*item)[1] = (*item)[0];
 		m_slotsColumnData->append(item);
 	}
-	// and we reset the slot value
-	(*item)[4] = QString("");
+}
+
+void
+ConnectionDialog::updateSignalList(KexiTableItem *item)
+{
+	ObjectTreeItem *tree = m_form->objectTree()->lookup((*item)[1].toString());
+	if(!tree || !tree->widget())
+		return;
+
+	m_signalsColumnData->clear();
+	QStrList signalList = tree->widget()->metaObject()->signalNames(true);
+	QStrListIterator it(signalList);
+	for(; it.current() != 0; ++it)
+	{
+		KexiTableItem *item = new KexiTableItem(2);
+		(*item)[0] = QString(*it);
+		(*item)[1] = (*item)[0];
+		m_signalsColumnData->append(item);
+	}
 }
 
 void
@@ -362,9 +359,6 @@ ConnectionDialog::newItem()
 {
 	m_table->acceptRowEdit();
 	m_table->setCursor(m_table->rows(), 1);
-//	int idx = m_table->rows() ? m_table->rows() : -1;
-//	m_table->insertItem(new KexiTableItem(5), idx);
-//moved to slotRowInserted()	m_buffer->append(new Connection());
 }
 
 void

@@ -54,7 +54,8 @@ class KFORMEDITOR_EXPORT ConnectionDialog : public KDialogBase
 		void setStatusError(const QString &msg, KexiTableItem *item = 0);
 		void initTable();
 		void updateTableData();
-		void updateSlotList(KexiTableItem *item, const QString &signal, const QString &widget);
+		void updateSlotList(KexiTableItem *item);
+		void updateSignalList(KexiTableItem *item);
 
 	protected slots:
 		void slotCellChanged(KexiTableItem*, int, QVariant, KexiDB::ResultInfo*);
