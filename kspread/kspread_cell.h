@@ -248,6 +248,8 @@ public:
 
     virtual bool saveOasis( KoXmlWriter& xmlwriter , KoGenStyles &mainStyles, int row, int column, int maxCol, int &repeated );
     void saveOasisCellStyle( KoGenStyle &currentCellStyle );
+    QString saveOasisValidation( KoXmlWriter &xmlValidation, int & validNumber );
+    QString KSpreadCell::saveOasisValidationCondition();
 
     bool load( const QDomElement& cell, int _xshift, int _yshift, PasteMode pm = Normal,
 	       Operation op = OverWrite, bool paste = false );
