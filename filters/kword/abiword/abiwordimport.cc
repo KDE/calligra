@@ -534,7 +534,7 @@ bool StructureParser::StartElementImage(StackItem* stackItem, StackItem* stackCu
     // Create the frame set of the image
 
     QDomElement framesetElement=mainDocument.createElement("FRAMESET");
-    framesetElement.setAttribute("frameType",-1); // -1 will be replaced when processing <d>
+    framesetElement.setAttribute("frameType",2);
     framesetElement.setAttribute("frameInfo",0);
     framesetElement.setAttribute("visible",1);
     framesetElement.setAttribute("name",strPictureFrameName);
