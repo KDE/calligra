@@ -188,3 +188,4 @@ VLayer::accept( VVisitor& visitor )
 {
 	visitor.visitVLayer( *this );
 }
+

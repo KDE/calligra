@@ -105,6 +105,8 @@ public:
 	void save( QDomElement& element ) const;
 	void load( const QDomElement& element );
 
+	VSegment* clone() const;
+
 private:
 	VSegment* m_prev;
 	VSegment* m_next;

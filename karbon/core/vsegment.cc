@@ -352,3 +352,9 @@ VSegment::load( const QDomElement& element )
 	}
 }
 
+VSegment*
+VSegment::clone() const
+{
+	return new VSegment( *this );
+}
+

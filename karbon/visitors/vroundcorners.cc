@@ -69,7 +69,10 @@ VRoundCorners::visitVSegmentList( VSegmentList& segmentList )
 
 		newList.close();
 	}
-
+	else
+	{
+		newList.append( segmentList.current()->clone() );
+	}
 
 	segmentList = newList;
 

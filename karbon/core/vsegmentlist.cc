@@ -134,7 +134,7 @@ VSegmentList::VSegmentList( const VSegmentList& list )
 	VSegment* segment = list.m_first;
 	while( segment )
 	{
-		append( new VSegment( *segment ) );
+		append( segment->clone() );
 		segment = segment->m_next;
 	}
 }
@@ -441,7 +441,7 @@ VSegmentList::operator=( const VSegmentList& list )
 	VSegment* segment = list.m_first;
 	while ( segment )
 	{
-		append( new VSegment( *segment ) );
+		append( segment->clone() );
 		segment = segment->m_next;
 	}
 
