@@ -1433,8 +1433,8 @@ void KWFormatContext::makeCounterLayout()
 
     counterText = parag->getCounterText();
 
-    ptCounterWidth = QMAX( font->getPTWidth( parag->getCounterWidth().latin1() ),
-                           font->getPTWidth( parag->getCounterText().latin1() ) );
+    ptCounterWidth = QMAX( font->getPTWidth( parag->getCounterWidth() ),
+                           font->getPTWidth( parag->getCounterText() ) );
     ptCounterAscender = font->getPTAscender();
     ptCounterDescender = font->getPTDescender();
 }

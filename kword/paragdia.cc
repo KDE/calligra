@@ -1141,13 +1141,13 @@ void KWParagDia::numTypeChanged( int _ntype )
 /*================================================================*/
 void KWParagDia::leftTextChanged( const QString & _c )
 {
-    counter.counterLeftText = qstrdup( _c.latin1() );
+    counter.counterLeftText = _c;
 }
 
 /*================================================================*/
 void KWParagDia::rightTextChanged( const QString & _c )
 {
-    counter.counterRightText = qstrdup( _c.latin1() );
+    counter.counterRightText = _c;
 }
 
 /*================================================================*/

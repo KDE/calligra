@@ -154,10 +154,9 @@ bool KWordChild::load( KOMLParser& parser, QValueList<KOMLAttrib>& _attribs )
 bool KWordChild::save( QTextStream& out )
 {
   assert( document() );
-  QString u = document()->url().url();
-  QString mime = document()->mimeType();
 
-  out << indent << "<OBJECT url=\"" << u.ascii() << "\" mime=\"" << mime.ascii() << "\">"
+  out << indent << "<OBJECT url=\"" << document()->url().url() << "\" mime=\""
+      << document()->mimeType() << "\">"
       << geometry() << "</OBJECT>" << endl;
 
   return true;
@@ -1537,7 +1536,7 @@ void KWordDocument::loadFrameSets( KOMLParser& parser, QValueList<KOMLAttrib>& l
 bool KWordDocument::completeLoading( KoStore *_store )
 {
     if ( _store ) {
-        QString str = urlIntern.isEmpty() ? KURL( url() ).path().latin1() : urlIntern.latin1();
+        QString str = urlIntern.isEmpty() ? KURL( url() ).path() : urlIntern;
 
         QStringList::Iterator it = pixmapKeys.begin();
         QStringList::Iterator nit = pixmapNames.begin();
@@ -1599,6 +1598,7 @@ bool KWordDocument::completeLoading( KoStore *_store )
 bool KWordDocument::saveToStream( QIODevice * dev )
 {
     QTextStream out( dev );
+    out.setEncoding(QTextStream::UnicodeUTF8);
     // For now, we always save documents using the current syntax version.
 
     syntaxVersion = CURRENT_SYNTAX_VERSION;
@@ -1632,7 +1632,7 @@ bool KWordDocument::saveToStream( QIODevice * dev )
     out << etag << "</PAPER>" << endl;
     out << indent << "<ATTRIBUTES processing=\"" << static_cast<int>( processingType ) << "\" standardpage=\"" << 1
         << "\" hasHeader=\"" << hasHeader() << "\" hasFooter=\"" << hasFooter()
-        << "\" unit=\"" << correctQString( getUnit() ).latin1() << "\"/>" << endl;
+        << "\" unit=\"" << correctQString( getUnit() ) << "\"/>" << endl;
 
     out << otag << "<FOOTNOTEMGR>" << endl;
     footNoteManager.save( out );
@@ -1674,8 +1674,8 @@ bool KWordDocument::saveToStream( QIODevice * dev )
         if ( !isStoredExtern() )
           pictureName.prepend( url().url() + "/" );
 
-        out << indent << "<KEY key=\"" << it.current()->getFilename().latin1()
-            << "\" name=\"" << pictureName.latin1()
+        out << indent << "<KEY key=\"" << it.current()->getFilename()
+            << "\" name=\"" << pictureName
             << "\"/>" << endl;
         keys.append( it.currentKey() );
         images.append( it.current()->getFilename() );
@@ -1686,7 +1686,7 @@ bool KWordDocument::saveToStream( QIODevice * dev )
         out << otag << "<CPARAGS>" << endl;
         QStringList::Iterator it = contents->begin();
         for ( ; it != contents->ending(); ++it )
-            out << indent << "<PARAG name=\"" << correctQString( *it ).latin1() << "\"/>" << endl;
+            out << indent << "<PARAG name=\"" << correctQString( *it ) << "\"/>" << endl;
         out << etag << "</CPARAGS>" << endl;
     }
 
@@ -1727,7 +1727,7 @@ bool KWordDocument::completeSaving( KoStore *_store )
     if ( !_store )
         return TRUE;
 
-    QString u = KURL( url() ).path().latin1();
+    QString u = KURL( url() ).path();
     QDictIterator<KWImage> it = imageCollection.iterator();
 
     QStringList keys, images;

@@ -53,7 +53,7 @@ void KWImage::incRef()
 /*================================================================*/
 void KWImage::save( QTextStream&out )
 {
-    out << indent << "<FILENAME value=\"" << correctQString( filename ).latin1() << "\"/>" << endl;
+    out << indent << "<FILENAME value=\"" << correctQString( filename ) << "\"/>" << endl;
 }
 
 /*================================================================*/

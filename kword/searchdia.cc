@@ -180,13 +180,10 @@ void KWSearchDia::setupTab1()
     connect( cmFamily, SIGNAL( activated( const QString & ) ), this, SLOT( slotFamily( const QString & ) ) );
 
     cmSize = new QComboBox( true, gSearch );
-    QStrList sizes;
-    QString tmp;
+    QStringList sizes;
     int curr = 0;
-    for ( int i = 4; i <= 100; i++ )
-    {
-        tmp.sprintf( "%d", i );
-        sizes.append( tmp.latin1() );
+    for ( int i = 4; i <= 100; i++ ) {
+        sizes.append( QString::number(i) );
         if ( i == searchEntry->size ) curr = i - 4;
     }
     cmSize->insertStrList( &sizes );
@@ -416,13 +413,10 @@ void KWSearchDia::setupTab2()
     connect( rcmFamily, SIGNAL( activated( const QString & ) ), this, SLOT( rslotFamily( const QString & ) ) );
 
     rcmSize = new QComboBox( true, gReplace );
-    QStrList sizes;
-    QString tmp;
+    QStringList sizes;
     int curr = 0;
-    for ( int i = 4; i <= 100; i++ )
-    {
-        tmp.sprintf( "%d", i );
-        sizes.append( tmp.latin1() );
+    for ( int i = 4; i <= 100; i++ ) {
+        sizes.append( QString::number(i) );
         if ( i == replaceEntry->size ) curr = i - 4;
     }
     rcmSize->insertStrList( &sizes );
@@ -708,11 +702,11 @@ void KWSearchDia::slotCheckVertAlign()
 /*================================================================*/
 void KWSearchDia::slotFamily( const QString & family )
 {
-    searchEntry->family = qstrdup( family.latin1() );
+    searchEntry->family = family;
     view->setSearchEntry( searchEntry );
 
     QFont f = QFont( KGlobalSettings::generalFont() );
-    f.setFamily( qstrdup( family.latin1() ) );
+    f.setFamily( family );
     eSearch->setFont( f );
 }
 
@@ -980,11 +974,11 @@ void KWSearchDia::rslotCheckVertAlign()
 /*================================================================*/
 void KWSearchDia::rslotFamily( const QString & family )
 {
-    replaceEntry->family = qstrdup( family.latin1() );
+    replaceEntry->family = family;
     view->setReplaceEntry( replaceEntry );
 
     QFont f = QFont( KGlobalSettings::generalFont() );
-    f.setFamily( qstrdup( family.latin1() ) );
+    f.setFamily( family );
     eReplace->setFont( f );
 }
 

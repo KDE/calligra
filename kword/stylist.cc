@@ -48,7 +48,7 @@
 #include <klocale.h>
 
 /******************************************************************/
-/* Class: KWStyleManager					  */
+/* Class: KWStyleManager                                          */
 /******************************************************************/
 
 /*================================================================*/
@@ -74,7 +74,7 @@ void KWStyleManager::setupTab1()
 
     lStyleList = new QListBox( tab1 );
     for ( unsigned int i = 0; i < doc->paragLayoutList.count(); i++ )
-	lStyleList->insertItem( doc->paragLayoutList.at( i )->getName() );
+        lStyleList->insertItem( doc->paragLayoutList.at( i )->getName() );
     connect( lStyleList, SIGNAL( selected( int ) ), this, SLOT( editStyle( int ) ) );
     grid1->addWidget( lStyleList, 0, 0 );
 
@@ -189,33 +189,33 @@ void KWStyleManager::setupTab2()
 
     cSmart->setChecked( FALSE );
     if ( doc->getApplyStyleTemplate() & KWordDocument::U_FONT_FAMILY_SAME_SIZE )
-	cFont->setCurrentItem( 1 );
+        cFont->setCurrentItem( 1 );
     if ( doc->getApplyStyleTemplate() & KWordDocument::U_FONT_FAMILY_ALL_SIZE )
-	cFont->setCurrentItem( 2 );
+        cFont->setCurrentItem( 2 );
     if ( doc->getApplyStyleTemplate() & KWordDocument::U_FONT_ALL_SAME_SIZE )
-	cFont->setCurrentItem( 3 );
+        cFont->setCurrentItem( 3 );
     if ( doc->getApplyStyleTemplate() & KWordDocument::U_FONT_ALL_ALL_SIZE )
-	cFont->setCurrentItem( 4 );
+        cFont->setCurrentItem( 4 );
     if ( doc->getApplyStyleTemplate() & KWordDocument::U_COLOR )
-	cColor->setCurrentItem( 1 );
+        cColor->setCurrentItem( 1 );
     if ( doc->getApplyStyleTemplate() & KWordDocument::U_INDENT )
-	cIndent->setCurrentItem( 1 );
+        cIndent->setCurrentItem( 1 );
     if ( doc->getApplyStyleTemplate() & KWordDocument::U_BORDER )
-	cBorder->setCurrentItem( 1 );
+        cBorder->setCurrentItem( 1 );
     if ( doc->getApplyStyleTemplate() & KWordDocument::U_ALIGN )
-	cAlign->setCurrentItem( 1 );
+        cAlign->setCurrentItem( 1 );
     if ( doc->getApplyStyleTemplate() & KWordDocument::U_NUMBERING )
-	cNumbering->setCurrentItem( 1 );
+        cNumbering->setCurrentItem( 1 );
     if ( doc->getApplyStyleTemplate() & KWordDocument::U_TABS )
-	cTabs->setCurrentItem( 1 );
+        cTabs->setCurrentItem( 1 );
     if ( doc->getApplyStyleTemplate() & KWordDocument::U_SMART ) {
-	cSmart->setChecked( TRUE );
-	cFont->setEnabled( FALSE );
-	cColor->setEnabled( FALSE );
+        cSmart->setChecked( TRUE );
+        cFont->setEnabled( FALSE );
+        cColor->setEnabled( FALSE );
     }
 
     connect( cSmart, SIGNAL( clicked() ),
-	     this, SLOT( smartClicked() ) );
+             this, SLOT( smartClicked() ) );
 }
 
 /*================================================================*/
@@ -229,9 +229,9 @@ void KWStyleManager::smartClicked()
 void KWStyleManager::editStyle()
 {
     if ( editor ) {
-	disconnect( editor, SIGNAL( updateStyleList() ), this, SLOT( updateStyleList() ) );
-	delete editor;
-	editor = 0L;
+        disconnect( editor, SIGNAL( updateStyleList() ), this, SLOT( updateStyleList() ) );
+        delete editor;
+        editor = 0L;
     }
 
     editor = new KWStyleEditor( this, doc->paragLayoutList.at( lStyleList->currentItem() ), doc, fontList );
@@ -243,8 +243,7 @@ void KWStyleManager::editStyle()
 /*================================================================*/
 void KWStyleManager::addStyle()
 {
-    QString str;
-    str.sprintf( "%s ( %d )", i18n( "New Style Template" ).ascii(), doc->paragLayoutList.count() );
+    QString str=i18n( "New Style Template ( %d )" ).arg(doc->paragLayoutList.count());
     ( void )new KWParagLayout( doc, true, str );
     lStyleList->insertItem( str );
     lStyleList->setCurrentItem( lStyleList->count() - 1 );
@@ -265,29 +264,29 @@ bool KWStyleManager::apply()
     int f = 0;
 
     if ( cFont->currentItem() == 1 )
-	f = f | KWordDocument::U_FONT_FAMILY_SAME_SIZE;
+        f = f | KWordDocument::U_FONT_FAMILY_SAME_SIZE;
     else if ( cFont->currentItem() == 2 )
-	f = f | KWordDocument::U_FONT_FAMILY_ALL_SIZE;
+        f = f | KWordDocument::U_FONT_FAMILY_ALL_SIZE;
     else if ( cFont->currentItem() == 3 )
-	f = f | KWordDocument::U_FONT_ALL_SAME_SIZE;
+        f = f | KWordDocument::U_FONT_ALL_SAME_SIZE;
     else if ( cFont->currentItem() == 4 )
-	f = f | KWordDocument::U_FONT_ALL_ALL_SIZE;
+        f = f | KWordDocument::U_FONT_ALL_ALL_SIZE;
 
     if ( cColor->currentItem() == 1 )
-	f = f | KWordDocument::U_COLOR;
+        f = f | KWordDocument::U_COLOR;
     if ( cAlign->currentItem() == 1 )
-	f = f | KWordDocument::U_ALIGN;
+        f = f | KWordDocument::U_ALIGN;
     if ( cBorder->currentItem() == 1 )
-	f = f | KWordDocument::U_BORDER;
+        f = f | KWordDocument::U_BORDER;
     if ( cNumbering->currentItem() == 1 )
-	f = f | KWordDocument::U_NUMBERING;
+        f = f | KWordDocument::U_NUMBERING;
     if ( cIndent->currentItem() == 1 )
-	f = f | KWordDocument::U_INDENT;
+        f = f | KWordDocument::U_INDENT;
     if ( cTabs->currentItem() == 1 )
-	f = f | KWordDocument::U_TABS;
+        f = f | KWordDocument::U_TABS;
 
     if ( cSmart->isChecked() )
-	f = f | KWordDocument::U_SMART;
+        f = f | KWordDocument::U_SMART;
 
     doc->setApplyStyleTemplate( f );
     return true;
@@ -307,7 +306,7 @@ void KWStyleManager::updateStyleList()
 {
     lStyleList->clear();
     for ( unsigned int i = 0; i < doc->paragLayoutList.count(); i++ )
-	lStyleList->insertItem( doc->paragLayoutList.at( i )->getName() );
+        lStyleList->insertItem( doc->paragLayoutList.at( i )->getName() );
     doc->updateAllStyleLists();
     lStyleList->setCurrentItem( 0 );
 }
@@ -316,19 +315,19 @@ void KWStyleManager::updateStyleList()
 void KWStyleManager::updateButtons( const QString &s )
 {
     if ( s == QString( "Standard" ) ||
-	 s == QString( "Head 1" ) ||
-	 s == QString( "Head 2" ) ||
-	 s == QString( "Head 3" ) ||
-	 s == QString( "Enumerated List" ) ||
-	 s == QString( "Bullet List" ) ||
-	 s == QString( "Alphabetical List" ) )
-	bDelete->setEnabled( false );
+         s == QString( "Head 1" ) ||
+         s == QString( "Head 2" ) ||
+         s == QString( "Head 3" ) ||
+         s == QString( "Enumerated List" ) ||
+         s == QString( "Bullet List" ) ||
+         s == QString( "Alphabetical List" ) )
+        bDelete->setEnabled( false );
     else
-	bDelete->setEnabled( true );
+        bDelete->setEnabled( true );
 }
 
 /******************************************************************/
-/* Class: KWStylePreview					  */
+/* Class: KWStylePreview                                          */
 /******************************************************************/
 
 /*================================================================*/
@@ -338,9 +337,9 @@ void KWStylePreview::drawContents( QPainter *painter )
     QFontMetrics fm( font() );
 
     painter->fillRect( r.x() + fm.width( 'W' ), r.y() + fm.height(),
-		       r.width() - 2 * fm.width( 'W' ), r.height() - 2 * fm.height(), white );
+                       r.width() - 2 * fm.width( 'W' ), r.height() - 2 * fm.height(), white );
     painter->setClipRect( r.x() + fm.width( 'W' ), r.y() + fm.height(),
-			  r.width() - 2 * fm.width( 'W' ), r.height() - 2 * fm.height() );
+                          r.width() - 2 * fm.width( 'W' ), r.height() - 2 * fm.height() );
 
     QFont f( style->getFormat().getUserFont()->getFontName(), style->getFormat().getPTFontSize() );
     f.setBold( style->getFormat().getWeight() == 75 ? true : false );
@@ -356,12 +355,12 @@ void KWStylePreview::drawContents( QPainter *painter )
     int y = height() / 2 - fm.height() / 2;
 
     painter->drawText( 20 + style->getFirstLineLeftIndent().pt() + style->getLeftIndent().pt(),
-		       y, fm.width( i18n( "KWord, KOffice's Wordprocessor" ) ),
-		       fm.height(), 0, i18n( "KWord, KOffice's Wordprocessor" ) );
+                       y, fm.width( i18n( "KWord, KOffice's Wordprocessor" ) ),
+                       fm.height(), 0, i18n( "KWord, KOffice's Wordprocessor" ) );
 }
 
 /******************************************************************/
-/* Class: KWStyleEditor						  */
+/* Class: KWStyleEditor                                           */
 /******************************************************************/
 
 /*================================================================*/
@@ -400,13 +399,13 @@ void KWStyleEditor::setupTab1()
     grid2->addWidget( eName, 0, 1 );
 
     if ( style->getName() == QString( "Standard" ) ||
-	 style->getName() == QString( "Head 1" ) ||
-	 style->getName() == QString( "Head 2" ) ||
-	 style->getName() == QString( "Head 3" ) ||
-	 style->getName() == QString( "Enumerated List" ) ||
-	 style->getName() == QString( "Bullet List" ) ||
-	 style->getName() == QString( "Alphabetical List" ) )
-	eName->setEnabled( false );
+         style->getName() == QString( "Head 1" ) ||
+         style->getName() == QString( "Head 2" ) ||
+         style->getName() == QString( "Head 3" ) ||
+         style->getName() == QString( "Enumerated List" ) ||
+         style->getName() == QString( "Bullet List" ) ||
+         style->getName() == QString( "Alphabetical List" ) )
+        eName->setEnabled( false );
 
     lFollowing = new QLabel( i18n( "Following Style Template:" ), nwid );
     lFollowing->resize( lFollowing->sizeHint() );
@@ -415,9 +414,9 @@ void KWStyleEditor::setupTab1()
 
     cFollowing = new QComboBox( false, nwid );
     for ( unsigned int i = 0; i < doc->paragLayoutList.count(); i++ ) {
-	cFollowing->insertItem( doc->paragLayoutList.at( i )->getName() );
-	if ( doc->paragLayoutList.at( i )->getName() == style->getFollowingParagLayout() )
-	    cFollowing->setCurrentItem( i );
+        cFollowing->insertItem( doc->paragLayoutList.at( i )->getName() );
+        if ( doc->paragLayoutList.at( i )->getName() == style->getFollowingParagLayout() )
+            cFollowing->setCurrentItem( i );
     }
     cFollowing->resize( cFollowing->sizeHint() );
     grid2->addWidget( cFollowing, 1, 1 );
@@ -489,12 +488,12 @@ void KWStyleEditor::changeFont()
     f.setUnderline( static_cast<bool>( style->getFormat().getUnderline() ) );
 
     if ( KFontDialog::getFont( f ) ) {
-	style->getFormat().setUserFont( doc->findUserFont( f.family() ) );
-	style->getFormat().setPTFontSize( f.pointSize() );
-	style->getFormat().setWeight( f.bold() ? 75 : 50 );
-	style->getFormat().setItalic( static_cast<int>( f.italic() ) );
-	style->getFormat().setUnderline( static_cast<int>( f.underline() ) );
-	preview->repaint( true );
+        style->getFormat().setUserFont( doc->findUserFont( f.family() ) );
+        style->getFormat().setPTFontSize( f.pointSize() );
+        style->getFormat().setWeight( f.bold() ? 75 : 50 );
+        style->getFormat().setItalic( static_cast<int>( f.italic() ) );
+        style->getFormat().setUnderline( static_cast<int>( f.underline() ) );
+        preview->repaint( true );
     }
 }
 
@@ -503,8 +502,8 @@ void KWStyleEditor::changeColor()
 {
     QColor c( style->getFormat().getColor() );
     if ( KColorDialog::getColor( c ) ) {
-	style->getFormat().setColor( c );
-	preview->repaint( true );
+        style->getFormat().setColor( c );
+        preview->repaint( true );
     }
 }
 
@@ -512,9 +511,9 @@ void KWStyleEditor::changeColor()
 void KWStyleEditor::changeSpacing()
 {
     if ( paragDia ) {
-	paragDia->close();
-	delete paragDia;
-	paragDia = 0;
+        paragDia->close();
+        delete paragDia;
+        paragDia = 0;
     }
     paragDia = new KWParagDia( this, "", fontList, KWParagDia::PD_SPACING, doc );
     paragDia->setCaption( i18n( "KWord - Paragraph Spacing" ) );
@@ -531,9 +530,9 @@ void KWStyleEditor::changeSpacing()
 void KWStyleEditor::changeAlign()
 {
     if ( paragDia ) {
-	paragDia->close();
-	delete paragDia;
-	paragDia = 0;
+        paragDia->close();
+        delete paragDia;
+        paragDia = 0;
     }
     paragDia = new KWParagDia( this, "", fontList, KWParagDia::PD_FLOW, doc );
     paragDia->setCaption( i18n( "KWord - Paragraph Flow ( Alignment )" ) );
@@ -546,9 +545,9 @@ void KWStyleEditor::changeAlign()
 void KWStyleEditor::changeBorders()
 {
     if ( paragDia ) {
-	paragDia->close();
-	delete paragDia;
-	paragDia = 0;
+        paragDia->close();
+        delete paragDia;
+        paragDia = 0;
     }
     paragDia = new KWParagDia( this, "", fontList, KWParagDia::PD_BORDERS, doc );
     paragDia->setCaption( i18n( "KWord - Paragraph Borders" ) );
@@ -564,9 +563,9 @@ void KWStyleEditor::changeBorders()
 void KWStyleEditor::changeNumbering()
 {
     if ( paragDia ) {
-	paragDia->close();
-	delete paragDia;
-	paragDia = 0;
+        paragDia->close();
+        delete paragDia;
+        paragDia = 0;
     }
     paragDia = new KWParagDia( this, "", fontList, KWParagDia::PD_NUMBERING, doc );
     paragDia->setCaption( i18n( "KWord - Numbering" ) );
@@ -579,9 +578,9 @@ void KWStyleEditor::changeNumbering()
 void KWStyleEditor::changeTabulators()
 {
     if ( paragDia ) {
-	paragDia->close();
-	delete paragDia;
-	paragDia = 0;
+        paragDia->close();
+        delete paragDia;
+        paragDia = 0;
     }
     paragDia = new KWParagDia( this, "", fontList, KWParagDia::PD_TABS, doc );
     paragDia->setCaption( i18n( "KWord - Tabulators" ) );
@@ -594,24 +593,24 @@ void KWStyleEditor::paragDiaOk()
 {
     switch ( paragDia->getFlags() ) {
     case KWParagDia::PD_SPACING: {
-	style->setParagHeadOffset( paragDia->getSpaceBeforeParag() );
-	style->setParagFootOffset( paragDia->getSpaceAfterParag() );
-	style->setLineSpacing( paragDia->getLineSpacing() );
-	style->setLeftIndent( paragDia->getLeftIndent() );
-	style->setFirstLineLeftIndent( paragDia->getFirstLineIndent() );
+        style->setParagHeadOffset( paragDia->getSpaceBeforeParag() );
+        style->setParagFootOffset( paragDia->getSpaceAfterParag() );
+        style->setLineSpacing( paragDia->getLineSpacing() );
+        style->setLeftIndent( paragDia->getLeftIndent() );
+        style->setFirstLineLeftIndent( paragDia->getFirstLineIndent() );
     } break;
     case KWParagDia::PD_FLOW:
-	style->setFlow( paragDia->getFlow() );
-	break;
+        style->setFlow( paragDia->getFlow() );
+        break;
     case KWParagDia::PD_BORDERS: {
-	style->setLeftBorder( paragDia->getLeftBorder() );
-	style->setRightBorder( paragDia->getRightBorder() );
-	style->setTopBorder( paragDia->getTopBorder() );
-	style->setBottomBorder( paragDia->getBottomBorder() );
+        style->setLeftBorder( paragDia->getLeftBorder() );
+        style->setRightBorder( paragDia->getRightBorder() );
+        style->setTopBorder( paragDia->getTopBorder() );
+        style->setBottomBorder( paragDia->getBottomBorder() );
     } break;
     case KWParagDia::PD_NUMBERING:
-	style->setCounter( paragDia->getCounter() );
-	break;
+        style->setCounter( paragDia->getCounter() );
+        break;
     default: break;
     }
 
@@ -623,16 +622,16 @@ bool KWStyleEditor::apply()
     *ostyle = *style;
 
     if ( eName->text() != style->getName() ) {
-	bool same = false;
-	for ( unsigned int i = 0; i < doc->paragLayoutList.count(); i++ ) {
-	    if ( doc->paragLayoutList.at( i )->getName() == eName->text() )
-		same = true;
-	}
+        bool same = false;
+        for ( unsigned int i = 0; i < doc->paragLayoutList.count(); i++ ) {
+            if ( doc->paragLayoutList.at( i )->getName() == eName->text() )
+                same = true;
+        }
 
-	if ( !same ) {
-	    ostyle->setName( eName->text() );
-	    emit updateStyleList();
-	}
+        if ( !same ) {
+            ostyle->setName( eName->text() );
+            emit updateStyleList();
+        }
     }
     doc->setStyleChanged( style->getName() );
     return true;

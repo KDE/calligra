@@ -82,8 +82,8 @@ void KWCharAnchor::setOrigin( QPoint _origin )
 /*================================================================*/
 void KWCharAnchor::save( QTextStream &out )
 {
-    out << indent << "<ANCHOR type=\"" << correctQString( anchorType() ).latin1() <<
-        "\" instance=\"" << correctQString( anchorInstance() ).latin1() <<
+    out << indent << "<ANCHOR type=\"" << correctQString( anchorType() ) <<
+        "\" instance=\"" << correctQString( anchorInstance() ) <<
         "\"/>" << endl;
 }
 
@@ -1027,6 +1027,7 @@ QString KWString::decoded()
 }
 
 /*================================================================*/
+/* obsolete
 QCString KWString::utf8( bool _decoded )
 {
     QString str;
@@ -1037,6 +1038,7 @@ QCString KWString::utf8( bool _decoded )
 
     return QCString( str.utf8() );
 }
+*/
 
 /*================================================================*/
 void freeChar( KWChar& _char, KWordDocument *_doc, bool allowRemoveFn )
@@ -1077,7 +1079,7 @@ QTextStream& operator<<( QTextStream &out, KWString &_string )
 
     for ( unsigned int i = 0; i < _string.size(); i++ ) {
         if ( _string.data()[ i ].c != KWSpecialChar )
-            out << QString( _string.data()[ i ].c ).utf8();
+            out << QString( _string.data()[ i ].c );
         else
             out << c;
     }

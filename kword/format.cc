@@ -183,7 +183,7 @@ void KWFormat::incRef()
 void KWFormat::save( QTextStream&out )
 {
     out << indent << "<COLOR red=\"" << color.red() << "\" green=\"" << color.green() << "\" blue=\"" << color.blue() << "\"/>" << endl;
-    out << indent << "<FONT name=\"" << correctQString( userFont->getFontName() ).latin1() << "\"/>" << endl;
+    out << indent << "<FONT name=\"" << correctQString( userFont->getFontName() ) << "\"/>" << endl;
     out << indent << "<SIZE value=\"" << ptFontSize << "\"/>" << endl;
     out << indent << "<WEIGHT value=\"" << weight << "\"/>" << endl;
     out << indent << "<ITALIC value=\"" << static_cast<int>( italic ) << "\"/>" << endl;

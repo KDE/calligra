@@ -598,9 +598,9 @@ void KWFrameSet::save( QTextStream&out )
             << "\" runaGapPT=\"" << frame->getRunAroundGap().pt()
             << "\" runaGapMM=\"" << frame->getRunAroundGap().mm()
             << "\" runaGapINCH=\"" << frame->getRunAroundGap().inch() << "\" "
-            << correctQString( frame->leftBrd2String() ).latin1() << correctQString( frame->rightBrd2String() ).latin1()
-            << correctQString( frame->topBrd2String() ).latin1()
-            << correctQString( frame->bottomBrd2String() ).latin1() << "bkRed=\""
+            << correctQString( frame->leftBrd2String() ) << correctQString( frame->rightBrd2String() )
+            << correctQString( frame->topBrd2String() )
+            << correctQString( frame->bottomBrd2String() ) << "bkRed=\""
             << frame->getBackgroundColor().color().red()
             << "\" bkGreen=\"" << frame->getBackgroundColor().color().green()
             << "\" bkBlue=\"" << frame->getBackgroundColor().color().blue()
@@ -948,9 +948,9 @@ void KWTextFrameSet::save( QTextStream&out )
 
     out << otag << "<FRAMESET frameType=\"" << static_cast<int>( getFrameType() )
         << "\" frameInfo=\""
-        << static_cast<int>( frameInfo ) << correctQString( grp ).latin1() << "\" removable=\""
+        << static_cast<int>( frameInfo ) << correctQString( grp ) << "\" removable=\""
         << static_cast<int>( removeableHeader )
-        << "\" visible=\"" << static_cast<int>( visible ) << "\" name=\"" << correctQString( name ).latin1()
+        << "\" visible=\"" << static_cast<int>( visible ) << "\" name=\"" << correctQString( name )
         << "\">" << endl;
 
     KWFrameSet::save( out );
@@ -1874,7 +1874,7 @@ void KWFormulaFrameSet::save( QTextStream&out )
     KWFrameSet::save( out );
 
     out << otag << "<FORMULA>" << endl;
-    out << formulaEdit->text().utf8().data() << endl;
+    out << formulaEdit->text() << endl;
     out << etag << "</FORMULA>" << endl;
 
     out << otag << "<FORMAT>" << endl;

@@ -270,7 +270,7 @@ public:
     void append( KWChar _c );
     void insert( unsigned int _pos, QString _text );
     void insert( unsigned int _pos, KWString *_text );
-    void insert( unsigned int _pos, const char _c );
+    void insert( unsigned int _pos, const char _c );  // FIXME -- i18n?
     void insert( unsigned int _pos, KWCharImage *_image );
     void insert( unsigned int _pos, KWCharTab *_tab );
     void insert( unsigned int _pos, KWCharVariable *_var );
@@ -296,7 +296,7 @@ public:
     KWordDocument *getDocument() { return doc; }
 
     QString decoded();
-    QCString utf8( bool _decoded = true );
+    //QCString utf8( bool _decoded = true );
 
     void clear();
 

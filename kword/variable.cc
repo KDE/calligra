@@ -357,8 +357,8 @@ void KWCustomVariable::recalc()
 void KWCustomVariable::save( QTextStream&out )
 {
     KWVariable::save( out );
-    out << indent << "<CUSTOM name=\"" << correctQString( name ).latin1() << "\" value=\""
-        << correctQString( getValue() ).latin1() << "\"/>" << endl;
+    out << indent << "<CUSTOM name=\"" << correctQString( name ) << "\" value=\""
+        << correctQString( getValue() ) << "\"/>" << endl;
 }
 
 /*================================================================*/
@@ -418,7 +418,7 @@ void KWSerialLetterVariable::recalc()
 void KWSerialLetterVariable::save( QTextStream&out )
 {
     KWVariable::save( out );
-    out << indent << "<SERIALLETTER name=\"" << correctQString( name ).latin1()
+    out << indent << "<SERIALLETTER name=\"" << correctQString( name )
         << "\"/>" << endl;
 }
 

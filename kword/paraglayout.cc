@@ -138,8 +138,8 @@ void KWParagLayout::setFormat( const KWFormat &_f )
 /*================================================================*/
 void KWParagLayout::save( QTextStream&out )
 {
-    out << indent << "<NAME value=\"" << correctQString( name ).latin1() << "\"/>" << endl;
-    out << indent << "<FOLLOWING name=\"" << correctQString( followingParagLayout ).latin1() << "\"/>" << endl;
+    out << indent << "<NAME value=\"" << correctQString( name ) << "\"/>" << endl;
+    out << indent << "<FOLLOWING name=\"" << correctQString( followingParagLayout ) << "\"/>" << endl;
     out << indent << "<FLOW value=\"" << static_cast<int>( flow ) << "\"/>" << endl;
     out << indent << "<OHEAD " << paragHeadOffset << "/>" << endl;
     out << indent << "<OFOOT " << paragFootOffset << "/>" << endl;
@@ -147,13 +147,13 @@ void KWParagLayout::save( QTextStream&out )
     out << indent << "<ILEFT " << leftIndent << "/>" << endl;
     out << indent << "<LINESPACE " << lineSpacing << "/>" << endl;
     out << indent << "<COUNTER type=\"" << static_cast<int>( counter.counterType ) << "\" depth=\"" << counter.counterDepth
-        << "\" bullet=\"" << static_cast<unsigned short>( counter.counterBullet.unicode() ) << "\" start=\""
-        << QString::number(counter.startCounter).latin1() << "\" numberingtype=\""
+        << "\" bullet=\"" << counter.counterBullet.unicode() << "\" start=\""
+        << QString::number(counter.startCounter) << "\" numberingtype=\""
         << static_cast<int>( counter.numberingType ) << "\" lefttext=\""
-        << correctQString( counter.counterLeftText ).latin1() << "\" righttext=\""
-        << correctQString( counter.counterRightText ).latin1() << "\" bulletfont=\""
-        << correctQString( counter.bulletFont ).latin1() << "\" customdef=\""
-        << correctQString( counter.customCounterDef ).latin1() << "\" />" << endl;
+        << correctQString( counter.counterLeftText ) << "\" righttext=\""
+        << correctQString( counter.counterRightText ) << "\" bulletfont=\""
+        << correctQString( counter.bulletFont ) << "\" customdef=\""
+        << correctQString( counter.customCounterDef ) << "\" />" << endl;
     out << indent << "<LEFTBORDER red=\"" << left.color.red() << "\" green=\"" << left.color.green() << "\" blue=\""
         << left.color.blue() << "\" style=\"" << static_cast<int>( left.style ) << "\" width=\"" << left.ptWidth << "\"/>" << endl;
     out << indent << "<RIGHTBORDER red=\"" << right.color.red() << "\" green=\"" << right.color.green() << "\" blue=\""
@@ -323,7 +323,7 @@ void KWParagLayout::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst )
                 else if ( ( *it ).m_strName == "depth" )
                     counter.counterDepth = ( *it ).m_strValue.toInt();
                 else if ( ( *it ).m_strName == "bullet" )
-                    counter.counterBullet = QChar( static_cast<unsigned short>( ( *it ).m_strValue.toInt() ) );
+                    counter.counterBullet = QChar( static_cast<unsigned int>( ( *it ).m_strValue.toInt() ) );
                 else if ( ( *it ).m_strName == "lefttext" )
                     counter.counterLeftText = correctQString( ( *it ).m_strValue );
                 else if ( ( *it ).m_strName == "righttext" )

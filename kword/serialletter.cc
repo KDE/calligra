@@ -126,8 +126,8 @@ void KWSerialLetterDataBase::save( QTextStream&out )
 
     DbRecord::Iterator it = sampleRecord.begin();
     for ( ; it != sampleRecord.end(); ++it )
-        out << indent << "<ENTRY key=\"" << correctQString( it.key() ).utf8().data()
-            << "\" value=\"" << correctQString( *it ).utf8().data() << "\"/>" << endl;
+        out << indent << "<ENTRY key=\"" << correctQString( it.key() )
+            << "\" value=\"" << correctQString( *it ) << "\"/>" << endl;
 
     out << etag << "</SAMPLE>" << endl;
 
@@ -137,8 +137,8 @@ void KWSerialLetterDataBase::save( QTextStream&out )
         out << otag << "<RECORD>" << endl;
         it = ( *it2 ).begin();
         for ( ; it != ( *it2 ).end(); ++it ) {
-            out << indent << "<ENTRY key=\"" << correctQString( it.key() ).utf8().data()
-                << "\" value=\"" << correctQString( *it ).utf8().data() << "\"/>" << endl;
+            out << indent << "<ENTRY key=\"" << correctQString( it.key() )
+                << "\" value=\"" << correctQString( *it ) << "\"/>" << endl;
         }
         out << etag << "</RECORD>" << endl;
     }

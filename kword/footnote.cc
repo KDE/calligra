@@ -211,7 +211,7 @@ void KWFootNoteManager::save( QTextStream&out )
     out << indent << "<START value=\"" << start << "\"/>" << endl;
     out << indent << "<FORMAT superscript=\"" << superscript
         << "\" type=\"" << static_cast<int>( noteType ) << "\"/>" << endl;
-    out << indent << "<FIRSTPARAG ref=\"" << correctQString( firstParag ).latin1() << "\"/>" << endl;
+    out << indent << "<FIRSTPARAG ref=\"" << correctQString( firstParag ) << "\"/>" << endl;
 }
 
 /*================================================================*/
@@ -443,11 +443,11 @@ void KWFootNote::save( QTextStream&out )
     KWFootNoteInternal *fi = 0L;
     for ( fi = parts.first(); fi; fi = parts.next() )
         out << indent << "<PART from=\"" << fi->from << "\" to=\"" << fi->to
-            << "\" space=\"" << correctQString( fi->space ).latin1() << "\"/>" << endl;
+            << "\" space=\"" << correctQString( fi->space ) << "\"/>" << endl;
     out << etag << "</INTERNAL>" << endl;
     out << indent << "<RANGE start=\"" << start << "\" end=\"" << end << "\"/>" << endl;
-    out << indent << "<TEXT before=\"" << correctQString( before ).latin1() << "\" after=\"" << correctQString( after ).latin1() << "\"/>" << endl;
-    out << indent << "<DESCRIPT ref=\"" << correctQString( parag ).latin1() << "\"/>" << endl;
+    out << indent << "<TEXT before=\"" << correctQString( before ) << "\" after=\"" << correctQString( after ) << "\"/>" << endl;
+    out << indent << "<DESCRIPT ref=\"" << correctQString( parag ) << "\"/>" << endl;
 }
 
 /*================================================================*/
