@@ -442,20 +442,17 @@ void KoTemplateChooseDia::setupDialog()
 
 	// new document
 	d->newTab = new QWidget( d->tabWidget, "newTab" );
-	d->tabWidget->insertTab( d->newTab, "" );
-	d->tabWidget->changeTab( d->newTab, i18n( "Create Document" ) );
+	d->tabWidget->insertTab( d->newTab, i18n( "&Create Document" ) );
 	QGridLayout * newTabLayout = new QGridLayout( d->newTab, 1, 1, KDialogBase::marginHint(), KDialogBase::spacingHint());
 
 	// existing document
 	d->existingTab = new QWidget( d->tabWidget, "existingTab" );
-	d->tabWidget->insertTab( d->existingTab, "" );
-	d->tabWidget->changeTab( d->existingTab, i18n( "Open Existing Document" ) );
+	d->tabWidget->insertTab( d->existingTab, i18n( "Open &Existing Document" ) );
 	QGridLayout * existingTabLayout = new QGridLayout( d->existingTab, 1, 1, 0, KDialog::spacingHint());
 
         // recent document
         d->recentTab = new QWidget( d->tabWidget, "recentTab" );
-        d->tabWidget->insertTab( d->recentTab, "" );
-        d->tabWidget->changeTab( d->recentTab, i18n( "Open Recent Document" ) );
+        d->tabWidget->insertTab( d->recentTab, i18n( "Open &Recent Document" ) );
         QGridLayout * recentTabLayout = new QGridLayout( d->recentTab, 1, 1, KDialogBase::marginHint(), KDialog::spacingHint());
 
 	setupTemplateDialog(d->newTab, newTabLayout);
