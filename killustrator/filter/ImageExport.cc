@@ -30,6 +30,8 @@
 #include <qglobal.h>
 #include <qpainter.h>
 #include <kimageio.h>
+#include <kdebug.h>
+
 #include "ImageExport.h"
 #include "GDocument.h"
 
@@ -90,12 +92,14 @@ bool ImageExport::exportToFile (GDocument* doc) {
   // compute the bounding box
   Rect box = doc->boundingBoxForAllObjects ();
   // and copy the affected area to the new pixmap
-  QPixmap *pixmap = new QPixmap (qRound (box.width ()),
-                                 qRound (box.height ()));
+  //the +1 fixes bug #20361, Alex
+  QPixmap *pixmap = new QPixmap (qRound (box.width ())+1,
+                                 qRound (box.height ())+1);
+  //kdDebug()<<"export: box.w=="<<box.width()<<" box.h=="<<box.height()<<endl;
   if (pixmap == 0L)
     return false;
   bitBlt (pixmap, 0, 0, buffer, qRound (box.x ()), qRound (box.y ()),
-          qRound (box.width ()), qRound (box.height ()));
+          qRound (box.width ())+1, qRound (box.height ())+1);
   delete buffer;
 
   // now create an image
