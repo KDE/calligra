@@ -14,8 +14,8 @@ class VPath;
 class VCCmdPolygon : public VCCommand
 {
 public:
-	VCCmdPolygon( KarbonPart* part, const double centerX, const double centerY,
-		const double radius, const uint edges );
+	VCCmdPolygon( KarbonPart* part, double centerX, double centerY,
+		double radius, uint edges, double angle = 0.0 );
 	virtual ~VCCmdPolygon() {}
 
 	// for complex shapes. needed to draw while creation (creation tool):
@@ -26,6 +26,7 @@ private:
 	double m_centerY;
 	double m_radius;
 	uint m_edges;
+	double m_angle;
 };
 
 #endif

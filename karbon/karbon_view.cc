@@ -14,9 +14,11 @@
 #include "karbon_part.h"
 #include "karbon_view.h"
 #include "vctool_ellipse.h"
+#include "vctool_polygon.h"
 #include "vctool_rectangle.h"
 #include "vctool_roundrect.h"
 #include "vctool_sinus.h"
+#include "vctool_spiral.h"
 #include "vctool_star.h"
 #include "vmtool_select.h"
 
@@ -38,13 +40,11 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	m_canvas->viewport()->installEventFilter( this );
 	m_canvas->setGeometry( 0, 0, width(), height() );
 
-
-// TODO: this is temporary =>
-if ( s_currentTool == 0L )
-	s_currentTool = VCToolEllipse::instance( m_part );
-m_canvas->viewport()->setCursor( QCursor( Qt::crossCursor ) );
-m_ellipseToolAction->setChecked( true );
-// TODO: <= this is temporary
+	// initial tool is selection-tool:
+	if ( s_currentTool == 0L )
+		s_currentTool = VMToolSelect::instance( m_part );
+	m_canvas->viewport()->setCursor( QCursor( arrowCursor ) );
+	m_selectToolAction->setChecked( true );
 }
 
 KarbonView::~KarbonView()
@@ -102,43 +102,43 @@ KarbonView::ellipseTool()
 void
 KarbonView::polygonTool()
 {
-	//s_currentTool = VCToolPolygon::instance( m_part );
-	m_canvas->viewport()->setCursor( QCursor( CrossCursor ) );
+	s_currentTool = VCToolPolygon::instance( m_part );
+	m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
 }
 
 void
 KarbonView::rectangleTool()
 {
 	s_currentTool = VCToolRectangle::instance( m_part );
-	m_canvas->viewport()->setCursor( QCursor( CrossCursor ) );
+	m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
 }
 
 void
 KarbonView::roundRectTool()
 {
 	s_currentTool = VCToolRoundRect::instance( m_part );
-	m_canvas->viewport()->setCursor( QCursor( CrossCursor ) );
+	m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
 }
 
 void
 KarbonView::selectTool()
 {
 	s_currentTool = VMToolSelect::instance( m_part );
-	m_canvas->viewport()->setCursor( QCursor( ArrowCursor ) );
+	m_canvas->viewport()->setCursor( QCursor( arrowCursor ) );
 }
 
 void
 KarbonView::sinusTool()
 {
 	s_currentTool = VCToolSinus::instance( m_part );
-	m_canvas->viewport()->setCursor( QCursor( CrossCursor ) );
+	m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
 }
 
 void
 KarbonView::spiralTool()
 {
-	//s_currentTool = VCToolSpiral::instance( m_part );
-	m_canvas->viewport()->setCursor( QCursor( CrossCursor ) );
+	s_currentTool = VCToolSpiral::instance( m_part );
+	m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
 }
 
 void
@@ -211,7 +211,11 @@ KarbonView::initActions()
 	m_zoomAction = new KSelectAction( i18n("&Zoom"), 0, this, SLOT( zoomChanged() ), actionCollection(),
 		"view_zoom" );
 	QStringList stl;
-	stl << i18n("25%") << i18n("50%") << i18n("100%");
+	stl
+		<< i18n( "25%" )
+		<< i18n( "50%" )
+		<< i18n( "100%" )
+		<< i18n( "200%" );
 	m_zoomAction->setItems(stl);
 	m_zoomAction->setCurrentItem(2);
 	m_zoomAction->setEditable(true);

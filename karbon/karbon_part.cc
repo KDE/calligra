@@ -51,7 +51,7 @@ bool
 KarbonPart::initDoc()
 {
 // TODO: remove the whole test code:
-
+/*
 	VCCmdEllipse e( this, 50, 100, 150, 250 );
 	VPath* elly = e.createPath();
 
@@ -85,6 +85,7 @@ KarbonPart::initDoc()
 		obj->transform( m );
 		insertObject( obj );
 	}
+*/
 
 	return true;
 }

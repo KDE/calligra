@@ -12,10 +12,10 @@
 #include "vpath.h"
 
 VCCmdPolygon::VCCmdPolygon( KarbonPart* part,
-		const double centerX, const double centerY,
-		const double radius, const uint edges )
-	: VCCommand( part, i18n("Insert Polygon") ),
-	  m_centerX( centerX ), m_centerY( centerY )
+		double centerX, double centerY,
+		double radius, uint edges, double angle )
+	: VCCommand( part, i18n( "Insert Polygon" ) ), m_centerX( centerX ), m_centerY( centerY ),
+		m_angle( angle )
 {
 	// a polygon should have at least 3 edges:
 	m_edges = edges < 3 ? 3 : edges;
@@ -29,13 +29,16 @@ VCCmdPolygon::createPath()
 {
 	VPath* path = new VPath();
 
-	// we start at 90 degrees:
-	path->moveTo( 0.0, m_radius );
+	// we start at m_angle + VGlobal::pi_2:
+	path->moveTo(
+		m_radius * cos( m_angle + VGlobal::pi_2 ),
+		m_radius * sin( m_angle + VGlobal::pi_2 ) );
+
 	for ( uint i = 0; i < m_edges; ++i )
 	{
 		path->lineTo(
-			m_radius * cos( VGlobal::pi_2 + VGlobal::twopi / m_edges * ( i + 1 ) ),
-			m_radius * sin( VGlobal::pi_2 + VGlobal::twopi / m_edges * ( i + 1 ) ) );
+			m_radius * cos( m_angle + VGlobal::pi_2 + VGlobal::twopi / m_edges * ( i + 1 ) ),
+			m_radius * sin( m_angle + VGlobal::pi_2 + VGlobal::twopi / m_edges * ( i + 1 ) ) );
 	}
 	path->close();
 

@@ -2,8 +2,9 @@
    Copyright (C) 2001, The Karbon Developers
 */
 
-#include <klocale.h>
 #include <math.h>
+
+#include <klocale.h>
 #include <qwmatrix.h>
 
 #include "vccmd_star.h"

@@ -11,10 +11,10 @@
 #include "vpath.h"
 
 VCCmdSpiral::VCCmdSpiral( KarbonPart* part,
-		const double centerX, const double centerY,
-		const double radius, const uint segments, const double fade, const bool cw )
-	: VCCommand( part, i18n("Insert Spiral") ), m_centerX( centerX ), m_centerY( centerY ),
-	  m_clockWise( cw )
+		double centerX, double centerY,
+		double radius, uint segments, double fade, bool cw, double angle )
+	: VCCommand( part, i18n( "Insert Spiral" ) ), m_centerX( centerX ), m_centerY( centerY ),
+		m_clockWise( cw ), m_angle( angle )
 {
 	// it makes sense to have at least one segment:
 	m_segments = segments < 1 ? 1 : segments;
@@ -65,6 +65,8 @@ VCCmdSpiral::createPath()
 	// translate path to center:
 	QWMatrix m;
 	m.translate( m_centerX, m_centerY );
+	// sadly it's not easy possible to simply add m_angle while creation:
+	m.rotate( m_angle * VGlobal::one_pi_180 );
 	path->transform( m );
 
 	return path;

@@ -5,50 +5,48 @@
 #include <qpainter.h>
 
 #include "karbon_view.h"
-#include "vccmd_star.h"	// command
-#include "vcdlg_star.h"	// dialog
-#include "vctool_star.h"
+#include "vccmd_polygon.h"	// command
+#include "vcdlg_polygon.h"	// dialog
+#include "vctool_polygon.h"
 #include "vpath.h"
 
-VCToolStar* VCToolStar::s_instance = 0L;
+VCToolPolygon* VCToolPolygon::s_instance = 0L;
 
-VCToolStar::VCToolStar( KarbonPart* part )
+VCToolPolygon::VCToolPolygon( KarbonPart* part )
 	: VTool( part, true )
 {
 	// create config dialog:
-	m_dialog = new VCDlgStar();
-	m_dialog->setValueOuterR( 100.0 );
-	m_dialog->setValueInnerR( 50.0 );
+	m_dialog = new VCDlgPolygon();
+	m_dialog->setValueRadius( 100.0 );
 	m_dialog->setValueEdges( 5 );
 }
 
-VCToolStar::~VCToolStar()
+VCToolPolygon::~VCToolPolygon()
 {
 	delete( m_dialog );
 }
 
-VCToolStar*
-VCToolStar::instance( KarbonPart* part )
+VCToolPolygon*
+VCToolPolygon::instance( KarbonPart* part )
 {
 	if ( s_instance == 0L )
 	{
-		s_instance = new VCToolStar( part );
+		s_instance = new VCToolPolygon( part );
 	}
 
 	return s_instance;
 }
 
 void
-VCToolStar::drawTemporaryObject(
+VCToolPolygon::drawTemporaryObject(
 	KarbonView* view, const QPoint& p, double d1, double d2 )
 {
 	QPainter painter( view->canvasWidget()->viewport() );
 	
-	VCCmdStar* cmd =
-		new VCCmdStar( part(),
+	VCCmdPolygon* cmd =
+		new VCCmdPolygon( part(),
 			p.x(), p.y(),
 			d1,
-			m_dialog->valueInnerR() * d1 / m_dialog->valueOuterR(),
 			m_dialog->valueEdges(),
 			d2 );
 
@@ -61,26 +59,24 @@ VCToolStar::drawTemporaryObject(
 }
 
 VCommand*
-VCToolStar::createCmd( const QPoint& p, double d1, double d2 )
+VCToolPolygon::createCmd( const QPoint& p, double d1, double d2 )
 {
 	if( d1 <= 1.0 )
 	{
 		if ( m_dialog->exec() )
 			return
-				new VCCmdStar( part(),
+				new VCCmdPolygon( part(),
 					p.x(), p.y(),
-					m_dialog->valueOuterR(),
-					m_dialog->valueInnerR(),
+					m_dialog->valueRadius(),
 					m_dialog->valueEdges() );
 		else
 			return 0L;
 	}
 	else
 		return
-			new VCCmdStar( part(),
+			new VCCmdPolygon( part(),
 				p.x(), p.y(),
 				d1,
-				m_dialog->valueInnerR() * d1 / m_dialog->valueOuterR(),
 				m_dialog->valueEdges(),
 				d2 );
 }

@@ -17,9 +17,11 @@ noinst_HEADERS = \
 	vccmd_star.h \
 	vccommand.h \
 	vctool_ellipse.h \
+	vctool_polygon.h \
 	vctool_rectangle.h \
 	vctool_roundrect.h \
 	vctool_sinus.h \
+	vctool_spiral.h \
 	vctool_star.h \
 	vmcmd_delete.h \
 	vmcmd_select.h \
@@ -37,9 +39,11 @@ libkarbontools_la_SOURCES = \
 	vccmd_star.cc \
 	vccommand.cc \
 	vctool_ellipse.cc \
+	vctool_polygon.cc \
 	vctool_rectangle.cc \
 	vctool_roundrect.cc \
 	vctool_sinus.cc \
+	vctool_spiral.cc \
 	vctool_star.cc \
 	vmcmd_delete.cc \
 	vmcmd_select.cc \

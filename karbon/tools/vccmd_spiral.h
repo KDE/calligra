@@ -14,8 +14,8 @@ class VPath;
 class VCCmdSpiral : public VCCommand
 {
 public:
-	VCCmdSpiral( KarbonPart* part, const double centerX, const double centerY,
-		const double radius, const uint segments, const double fade, const bool cw );
+	VCCmdSpiral( KarbonPart* part, double centerX, double centerY,
+		double radius, uint segments, double fade, bool cw = true, double angle = 0.0 );
  	virtual ~VCCmdSpiral() {}
 
 	// for complex shapes. needed to draw while creation (creation tool):
@@ -28,6 +28,7 @@ private:
 	uint m_segments;
 	double m_fade;
 	bool m_clockWise;
+	double m_angle;
 };
 
 #endif

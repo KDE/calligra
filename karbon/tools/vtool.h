@@ -8,6 +8,10 @@
 #include <math.h>
 #include <qpoint.h>
 
+#include "vglobal.h"
+
+#include <kdebug.h>
+
 class QEvent;
 
 class KarbonPart;
@@ -33,10 +37,11 @@ public:
 	KarbonPart* part() const { return m_part; }
 
 private:
-	inline void recalcCoords();
-
 	// that's our part:
 	KarbonPart* m_part;
+
+protected:	// for selection-tool. it has to reimplement eventFilter.
+	inline void recalcCoords();
 
 	// states:
 	bool m_isDragging;
@@ -66,10 +71,24 @@ VTool::recalcCoords()
 		m_d1 = sqrt(
 			( m_lp.x() - m_fp.x() ) * ( m_lp.x() - m_fp.x() ) +
 			( m_lp.y() - m_fp.y() ) * ( m_lp.y() - m_fp.y() ) );
-		//angle:
-		m_d2 = m_lp.x() - m_fp.x() == 0.0 ? 0.0 :
-			atan( ( m_lp.y() - m_fp.y() ) /  ( m_lp.x() - m_fp.x() ) );
 
+		// angle:
+		if( m_lp.x() - m_fp.x() == 0.0 )	// catch division by zero.
+		{
+kdDebug() << "*" << endl;
+			m_d2 = m_lp.y() - m_fp.y() >= 0.0
+				? +VGlobal::pi_2
+				: -VGlobal::pi_2;
+		}
+		else
+		{
+			m_d2 = atan( ( m_lp.y() - m_fp.y() ) / ( m_lp.x() - m_fp.x() ) );
+		}
+
+		// define pi/2 as "0.0":
+		m_d2 -= VGlobal::pi_2;
+
+kdDebug() << m_d2 << endl;
 		m_p = m_fp;
 	}
 	else

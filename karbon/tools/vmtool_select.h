@@ -22,6 +22,9 @@ public:
 	virtual void drawTemporaryObject(
 		KarbonView* view, const QPoint& p, double d1, double d2 );
 
+	// selection-tool needs it's own event-filter:
+	virtual bool eventFilter( KarbonView* view, QEvent* event );
+
 protected:
 	VMToolSelect( KarbonPart* part );
 
