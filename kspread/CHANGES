@@ -2,6 +2,7 @@
 ==============
 - Fix "Expense Report" template (#86732)
 - Fix #74091 (Fix special paste from cell with formula)
+- Fix untranslatable function descriptions (#69604)
 
 after 1.3
 =========
