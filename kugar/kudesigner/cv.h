@@ -64,6 +64,7 @@ protected:
     void contentsDragMoveEvent ( QDragMoveEvent * );
 //    void contentsDragLeaveEvent ( QDragLeaveEvent * );
 //    void contentsDropEvent ( QDropEvent * );
+    void keyPressEvent( QKeyEvent * );
 
     void startMoveOrResizeOrSelectItem(QCanvasItemList &l, QMouseEvent *e, QPoint &p);
     bool startResizing(QMouseEvent *e, QPoint &p);

@@ -275,9 +275,18 @@ bool CanvasKugarTemplate::removeSection(CanvasBand *section)
     if (section->rtti() > 2000)
     {
         section->hide();
-        ((CanvasReportItem *)section)->section()->items.remove(section);
+        qDebug("%d items of %p in canvas()", canvas()->allItems().remove( section ), section );
+        qDebug("%d items of %p removed from list",canvas()->allItems().remove( section ), section);
+        qDebug("%d items of %p in canvas()", canvas()->allItems().remove( section ), section );
+        qDebug("%d items of %p removed from list",canvas()->allItems().remove( section ), section);
+        int i = canvas()->allItems().remove( section );
+        int j = ((CanvasReportItem *)section)->section()->items.remove(section);
+        qDebug("Deleting section %p (%d removed, %d removed)", section, i,j);
+        qDebug("Items :%d, items:%d", canvas()->allItems().contains( section ),  ((CanvasReportItem *)section)->section()->items.contains( section));
         delete section;
+        section = 0;
         canvas()->update();
+       
         return true;
     }
     if (section->rtti() > 1800)
@@ -294,6 +303,7 @@ bool CanvasKugarTemplate::removeSection(CanvasBand *section)
         removeSection(section, &header, &footer);
         section->hide();
         delete section;
+
         if (header)
         {
             header->hide();

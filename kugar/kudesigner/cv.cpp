@@ -108,7 +108,7 @@ void ReportCanvas::deleteItem(QCanvasItemList &l)
     }
 }
 
-void ReportCanvas::editItem(QCanvasItemList &l)
+void ReportCanvas::editItem(QCanvasItemList &/* l */)
 {
     //display editor for report items or sections
 /*  for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
@@ -193,7 +193,7 @@ void ReportCanvas::placeItem(QCanvasItemList &l, QMouseEvent *e)
 }
 
 
-bool ReportCanvas::startResizing(QMouseEvent *e, QPoint &p)
+bool ReportCanvas::startResizing(QMouseEvent * /*e*/, QPoint &p)
 {
 	if (m_canvas->selected.count()==0) return false;
 	for (CanvasBox *cbx=m_canvas->selected.first();
@@ -213,8 +213,8 @@ bool ReportCanvas::startResizing(QMouseEvent *e, QPoint &p)
 			if (cbx->rtti()>2001)
 			{
         	                CanvasReportItem *item = (CanvasReportItem *)(cbx);
-				resizing_constraint.setX(item->section()->x());
-				resizing_constraint.setY(item->section()->y());
+				resizing_constraint.setX((int)item->section()->x());
+				resizing_constraint.setY((int)item->section()->y());
 				resizing_constraint.setWidth(item->section()->width());
 				resizing_constraint.setHeight(
 					item->section()->height());
@@ -250,7 +250,7 @@ bool ReportCanvas::startResizing(QMouseEvent *e, QPoint &p)
 }
 
 void ReportCanvas::startMoveOrResizeOrSelectItem(QCanvasItemList &l,
-    QMouseEvent *e, QPoint &p)
+    QMouseEvent * /*e*/, QPoint &p)
 {
     //allow user to move any item except for page rectangle
     for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
@@ -508,7 +508,7 @@ void ReportCanvas::contentsMouseMoveEvent(QMouseEvent* e)
 		}
 
 	r->move(newXPos,newYPos);
-	r->setSize(w, h);
+	r->setSize((int)w, (int)h);
         moving_start = p;
         resizing->updateGeomProps();
         canvas()->update();
@@ -518,8 +518,8 @@ void ReportCanvas::contentsMouseMoveEvent(QMouseEvent* e)
     {
 /*        qDebug("x_start = %d, y_start = %d, x_end = %d, y_end = %d", moving_start.x(),
             moving_start.y(), e->pos().x(), e->pos().y());*/
-        selectionRect->setSize(e->pos().x() - selectionRect->x(),
-            e->pos().y() - selectionRect->y());
+        selectionRect->setSize((int) (e->pos().x() - selectionRect->x()),
+            (int) (e->pos().y() - selectionRect->y() ));
         unselectAll();
         QCanvasItemList l = canvas()->collisions(selectionRect->rect());
         for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
@@ -562,14 +562,13 @@ void ReportCanvas::contentsMouseMoveEvent(QMouseEvent* e)
 
 void ReportCanvas::contentsMouseDoubleClickEvent( QMouseEvent *e )
 {
-    CanvasReportItem *item = 0L;
-    
-    if ( m_canvas->selected.count() == 1 )
-        item = static_cast<CanvasReportItem *>( m_canvas->selected.first() );
-    if ( item ) {
-        item->fastProperty();
-        item->hide();
-        item->show();
+    if ( e->button() == Qt::LeftButton && m_canvas->selected.count() == 1 ) {
+        CanvasReportItem *item = static_cast<CanvasReportItem *>( m_canvas->selected.first() );
+        if ( item ) {
+            item->fastProperty();
+            item->hide();
+            item->show();
+        }
     }
 }
 
@@ -662,6 +661,7 @@ void ReportCanvas::updateProperty(QString name, QString value)
     }
 }
 
+
 void ReportCanvas::finishSelection()
 {
     selectionStarted = false;
@@ -729,9 +729,52 @@ void ReportCanvas::contentsDragMoveEvent ( QDragMoveEvent * event) {
 		event->ignore();
 }
 
-void ReportCanvas::contentsDragEnterEvent ( QDragEnterEvent * event) {
+void ReportCanvas::contentsDragEnterEvent ( QDragEnterEvent * /*event*/) {
 //	event->accept();
 }
 
+
+
+void ReportCanvas::keyPressEvent( QKeyEvent *e )
+{
+   qDebug("keyPress (selection : %d)", m_canvas->selected.count());
+    
+    if ( m_canvas->selected.count() == 1 ) {
+        CanvasReportItem *item = static_cast<CanvasReportItem *>( m_canvas->selected.first() );
+        
+        switch ( e->key() ) {
+            case Qt::Key_Delete:
+                qDebug("Deleting selection");
+                ( (MyCanvas*) canvas() )->templ->removeSection( (CanvasBand *) item );
+                clearRequest();
+                return;
+
+            /* Adjust height with - and +  */
+            case Qt::Key_Minus:
+            case Qt::Key_Plus:
+                {
+                    int size = item->props["FontSize"]->value().toInt();
+                                
+                    if ( e->key() == Qt::Key_Minus ) 
+                        size--;
+                    else 
+                        size++;
+
+                    if ( size < 5 )
+                        size = 5;
+                    
+                    if ( size > 50 )
+                        size = 50;
+
+                    updateProperty( "FontSize", QString::number( size ) );
+                    return;
+                }
+
+            default:
+                e->ignore();
+        }
+
+    }
+}
 
 #include "cv.moc"
