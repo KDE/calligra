@@ -1,20 +1,19 @@
-An Ideal "Roadmap" for MSWriteImport Development:
+Current "Roadmap" for MSWriteImport Development:
 
 0.1 Preliminary (plain text)
 0.2 Character formatting
 0.3 Paragraph & page formatting, linebreaks, headers & footers, pictures,
     performance increase
-
-***< we are here >***
-
-0.4 General stability, more speed, initial OLE code
+	 
+    <<< WE ARE HERE >>>
+	 
+0.4 Major REWRITE! Portability, bug fixes, more speed, initial OLE code, counters. Export filter work commences.
 0.5 OLE
-0.6 Counters
-0.7 Portable code ???
-0.8 Code Cleanup and Performance & Stability increases
-0.9.0-0.9.9 Preparation for final release
-1.0 Final release
+0.9 Preparation for final release + full stress testing
+1.0 Final release (until bugs are found etc.)
 
-Last Updated: 2002-01-06
+Last Updated: 2002-05-04
 Clarence Dang <CTRL_CD@bigpond.com>
 
+
+--
