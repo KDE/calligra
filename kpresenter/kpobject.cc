@@ -296,7 +296,7 @@ KoRect KPObject::getBoundingRect( KoZoomHandler *_zoomHandler ) const
     if ( angle == 0.0 )
         return r;
     else
-        return rotateRectObject(_zoomHandler );
+	return rotateRectObject(_zoomHandler );
 }
 
 KoRect KPObject::rotateRectObject(KoZoomHandler *_zoomHandler ) const
@@ -543,6 +543,9 @@ void KPObject::getShadowCoords( double& _x, double& _y ,KoZoomHandler *_zoomHand
 /*======================== paint selection =======================*/
 void KPObject::paintSelection( QPainter *_painter, KoZoomHandler *_zoomHandler )
 {
+    if ( !selected )
+	return;
+
     _painter->save();
     _painter->translate( _zoomHandler->zoomItX(orig.x()), _zoomHandler->zoomItY(orig.y()) );
     Qt::RasterOp rop = _painter->rasterOp();
@@ -552,26 +555,29 @@ void KPObject::paintSelection( QPainter *_painter, KoZoomHandler *_zoomHandler )
     _painter->setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
     _painter->setBrush( Qt::black );
 
-    if ( selected )
-    {
-        _painter->save();
+    KoRect r = rotateRectObject(_zoomHandler );
+    int x = _zoomHandler->zoomItX( r.left() - orig.x() );
+    int y = _zoomHandler->zoomItX( r.top() - orig.y() );
 
-        if ( angle != 0 )
-        {
-            rotateObject(_painter,_zoomHandler);
-        }
-
-        _painter->fillRect( 0, 0, _zoomHandler->zoomItX(6), _zoomHandler->zoomItY(6), Qt::black );
-        _painter->fillRect( 0, _zoomHandler->zoomItY(ext.height() / 2 - 3), _zoomHandler->zoomItX(6), _zoomHandler->zoomItY(6), Qt::black );
-        _painter->fillRect( 0, _zoomHandler->zoomItY(ext.height() - 6), _zoomHandler->zoomItX(6), _zoomHandler->zoomItY(6), Qt::black );
-        _painter->fillRect( _zoomHandler->zoomItX(ext.width() - 6), 0, _zoomHandler->zoomItX(6), _zoomHandler->zoomItY(6), Qt::black );
-        _painter->fillRect( _zoomHandler->zoomItX(ext.width() - 6), _zoomHandler->zoomItY(ext.height() / 2 - 3), _zoomHandler->zoomItX(6), _zoomHandler->zoomItY(6), Qt::black );
-        _painter->fillRect( _zoomHandler->zoomItX(ext.width() - 6), _zoomHandler->zoomItY(ext.height() - 6), _zoomHandler->zoomItX(6), _zoomHandler->zoomItY(6), Qt::black );
-        _painter->fillRect( _zoomHandler->zoomItX(ext.width() / 2 - 3), 0,_zoomHandler->zoomItX(6), _zoomHandler->zoomItY(6), Qt::black );
-        _painter->fillRect( _zoomHandler->zoomItX(ext.width() / 2 - 3), _zoomHandler->zoomItY(ext.height() - 6),_zoomHandler->zoomItX(6), _zoomHandler->zoomItY(6), Qt::black );
-        _painter->restore();
-
-    }
+    _painter->fillRect( x, y,  _zoomHandler->zoomItX(6),
+			_zoomHandler->zoomItY(6), Qt::black );
+    _painter->fillRect( x, y + _zoomHandler->zoomItY( r.height() / 2 - 3),
+			_zoomHandler->zoomItX(6), _zoomHandler->zoomItY(6), Qt::black );
+    _painter->fillRect( x, y + _zoomHandler->zoomItY(r.height() - 6),
+			_zoomHandler->zoomItX(6), _zoomHandler->zoomItY(6), Qt::black );
+    _painter->fillRect( x + _zoomHandler->zoomItX(r.width() - 6), y,
+			_zoomHandler->zoomItX(6), _zoomHandler->zoomItY(6), Qt::black );
+    _painter->fillRect( x + _zoomHandler->zoomItX(r.width() - 6),
+			y + _zoomHandler->zoomItY(r.height() / 2 - 3),
+			_zoomHandler->zoomItX(6), _zoomHandler->zoomItY(6), Qt::black );
+    _painter->fillRect( x + _zoomHandler->zoomItX(r.width() - 6),
+			y + _zoomHandler->zoomItY(r.height() - 6),
+			_zoomHandler->zoomItX(6), _zoomHandler->zoomItY(6), Qt::black );
+    _painter->fillRect( x + _zoomHandler->zoomItX(r.width() / 2 - 3),
+			y,_zoomHandler->zoomItX(6), _zoomHandler->zoomItY(6), Qt::black );
+    _painter->fillRect( x + _zoomHandler->zoomItX(r.width() / 2 - 3),
+			y + _zoomHandler->zoomItY(r.height() - 6),
+			_zoomHandler->zoomItX(6), _zoomHandler->zoomItY(6), Qt::black );
 
     _painter->setRasterOp( rop );
     _painter->restore();
