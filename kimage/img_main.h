@@ -12,6 +12,9 @@ class ImageDocument_impl;
 #include "img_doc.h"
 #include "img_shell.h"
 
+/**
+ * The framework.
+ */
 class ImageApp : public OPApplication
 {
   Q_OBJECT
@@ -19,10 +22,10 @@ public:
   ImageApp( int argc, char** argv );
   ~ImageApp();
   
+  /**
+   * Startup function.
+   */
   virtual void start();
-  
-protected:
-  ImageShell_impl *m_pShell;
 };
 
 #endif

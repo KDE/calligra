@@ -1,5 +1,7 @@
 #include "img_doc.h"
 
+#include <koIMR.h>
+
 ImageDocument_impl::ImageDocument_impl()
 {
   init();
@@ -176,9 +178,12 @@ OPParts::View_ptr ImageDocument_impl::createView()
   return OPParts::View::_duplicate( p );
 }
 
-void ImageDocument_impl::insertObject( const QRect& _rect )
+void ImageDocument_impl::insertObject( const QRect& _rect, const char *_part_name )
 {
-  OPParts::Document_var doc = new ImageDocument_impl;
+  OPParts::Document_var doc = imr_newdoc( _part_name );
+  if ( CORBA::is_nil( doc ) )
+    return;
+  
   ImageChild* ch = new ImageChild( this, _rect, doc );
   m_lstChildren.append( ch );
   
@@ -197,124 +202,6 @@ QListIterator<ImageChild> ImageDocument_impl::childIterator()
   return QListIterator<ImageChild> ( m_lstChildren );
 }
 
-/* OBJECT ImageDocument_impl::saveToStore( Store &_store )
-{
-    TYPE t_doc = _store.registerType( "KDE:KOffice:EmbeddedDoc" );
-    TYPE t_ppm = _store.registerType( "Mime:image:x-ppm" );
-    TYPE t_type = _store.registerType( "KDE:KImage:Image" );
-    OBJECT obj = _store.newObject( t_type );
-
-    PROPERTY p_geometry = _store.registerProperty( "KDE:KOffice:Geometry" );
-    PROPERTY p_list = _store.registerProperty( "KDE:KOffice:EmbeddedDocList" );
-    PROPERTY p_content = _store.registerProperty( "KDE:KOffice:EmbeddedDocContent" );
-    PROPERTY p_mime = _store.registerProperty( "KDE:Store:MimeType" );
-    PROPERTY p_edit = _store.registerProperty( "KDE:Store:Editor" );
-    PROPERTY p_image = _store.registerProperty( "KDE:KImage:Image" );
-
-    _store.writeStringValue( obj, p_mime, MIME_TYPE );
-    _store.writeStringValue( obj, p_edit, EDITOR );
-
-    VALUE value = _store.newValue( obj, p_image, t_ppm );
-    StoreValueDevice *device = _store.getDeviceForValue( value );
-    QDataStream stream;
-    stream.setDevice( device );
-    stream << m_imgImage;
-    stream.unsetDevice();
-    _store.release( device );
-
-    QArray<OBJECT> arr( m_lstChildren.count() );
-    QListIterator<ImageChild> it( m_lstChildren );
-    int i = 0;
-    for( ; it.current(); ++it )
-    {
-      OBJECT o = _store.newObject( t_doc );
-      arr[i++] = o;
-
-      OPParts::Document_var doc = it.current()->document();
-      CORBA::String_var mime = doc->mimeType();
-      _store.writeStringValue( o, p_mime, mime );
-
-      // VALUE val = _store.newValue( o, p_content, TYPE_ID_Store );
-      // _store.appendValue( val );
-      // doc->save( _store.name(), true );
-      // _store.closeValue();
-    }
-
-    _store.writeObjectReferenceArrayValue( obj, p_list, arr );
-
-    return obj;
-}
-
-bool ImageDocument_impl::loadFromStore( Store &_store, OBJECT obj )
-{
-    TYPE t_doc = _store.findType( "KDE:KOffice:EmbeddedDoc" );
-    TYPE t_ppm = _store.findType( "Mime:image:x-ppm" );
-    TYPE t_type = _store.findType( "KDE:KImage:Image" );
-
-    if ( !t_doc || !t_ppm || !t_type )
-      return false;
-    
-    PROPERTY p_geometry = _store.findProperty( "KDE:KOffice:Geometry" );
-    PROPERTY p_list = _store.findProperty( "KDE:KOffice:EmbeddedDocList" );
-    PROPERTY p_content = _store.findProperty( "KDE:KOffice:EmbeddedDocContent" );
-    PROPERTY p_mime = _store.findProperty( "KDE:Store:MimeType" );
-    PROPERTY p_edit = _store.findProperty( "KDE:Store:Editor" );
-    PROPERTY p_image = _store.findProperty( "KDE:KImage:Image" );
-    
-    if ( !p_geometry || !p_list || !p_content || !p_mime || !p_edit || !p_image )
-      return false;
-    
-    QString mime = _store.readStringValue( obj, p_mime );
-    if ( mime != MIME_TYPE )
-      return false;
-
-    VALUE value = _store.readValue( obj, p_image, t_ppm );
-    if ( value == 0L )    
-      return false;
-    
-    StoreValueDevice *dev = _store.getDeviceForValue( value );
-    QDataStream stream;
-    stream.setDevice( dev );   
-    stream >> m_imgImage;
-    stream.unsetDevice();
-    _store.release( dev );
-    delete dev;            
-
-    emit sig_imageModified();
-
-    QArray<OBJECT> arr;
-    if ( readObjectReferenceArrayValue( obj, p_list, arr ) )
-    {
-      int i;
-      int size = arr.size();
-      for( i = 0; i < size; i++ )
-      {
-	OBJECT o = arr[i];
-	QString m = _store.readStringValue( o, p_mime );
-	QString e = _store.readStringValue( o, p_edit );
-	QRect rect;
-	_store.readRectValue( o, p_geoemtry );
-	OPParts::Document_var doc = loadDocumentFromStore( o, m, e );
-	if ( !CORBA::is_nil( doc ) )
-	{
-	  ImageChild *p;
-	  m_lstChildren.append( p = new ImageChild( this, rect, OPParts::Document::_duplicate( doc ) ) );
-	  emit sig_insertObject( p );
-	}
-      }
-    }
-    
-    return true;
-}
-*/
-
-/* OPParts::Document_ptr ImageDocument_impl::loadDocumentFromStore( OBJECT _obj,
-								  const char *_mime, const char *_editor )
-{
-  // HACK
-
-}
-*/
 /**********************************************************
  *
  * ImageChild

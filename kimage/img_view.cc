@@ -13,6 +13,8 @@
 #include <qmsgbox.h>
 #include <qkeycode.h>
 
+#include <koPartSelectDia.h>
+
 #define DEBUG
 
 // Qt bug
@@ -34,7 +36,6 @@ ImageView_impl::ImageView_impl( QWidget *_parent = 0L, const char *_name = 0L ) 
   m_pImageDoc = 0L;
   m_bImageModified = false;
   m_bUnderConstruction = true;
-  m_pRectSelectionHandler = 0L;
   m_bRectSelection = false;
 
   m_lstFrames.setAutoDelete( true );  
@@ -209,8 +210,10 @@ void ImageView_impl::createGUI()
 
     // Edit
     m_idMenuEdit = m_rMenuBar->insertMenu( CORBA::string_dup( "&Edit" ) );
-    m_idMenuEdit_NewImage = m_rMenuBar->insertItem( CORBA::string_dup( "&Insert Image" ), m_idMenuEdit,
-						       this, CORBA::string_dup( "insertImage" ) );
+    m_idMenuEdit_NewImage = m_rMenuBar->insertItem( CORBA::string_dup( "&Insert ..." ), m_idMenuEdit,
+						       this, CORBA::string_dup( "insertObject" ) );
+    m_rMenuBar->insertSeparator( m_idMenuEdit );
+    
     m_idMenuEdit_ImportImage = m_rMenuBar->insertItem( CORBA::string_dup( "Im&port ..." ), m_idMenuEdit,
 						       this, CORBA::string_dup( "importImage" ) );
     m_idMenuEdit_ExportImage = m_rMenuBar->insertItem( CORBA::string_dup( "&Export ..." ), m_idMenuEdit,
@@ -267,12 +270,13 @@ void ImageView_impl::newView()
   CORBA::release( shell );
 }
 
-void ImageView_impl::insertImage()
+void ImageView_impl::insertObject()
 {
-  QObject *p;
+  KoPartEntry* pe = KoPartSelectDia::selectPart();
+  if ( !pe )
+    return;
   
-  setRectSelection( p = new InsertObjectHandler( m_pImageDoc ) );
-  QObject::connect( this, SIGNAL( rectangleSelected( const QRect& ) ), p, SLOT( slotInsertObject( const QRect& ) ) );
+  startRectSelection( pe->name() );
 }
 
 void ImageView_impl::importImage()
@@ -305,23 +309,18 @@ void ImageView_impl::exportImage()
   }
 }
 
-void ImageView_impl::setRectSelection( QObject *_handler )
+void ImageView_impl::startRectSelection( const char *_part_name )
 {
-  if ( m_pRectSelectionHandler )
-    delete m_pRectSelectionHandler;
-  
-  if ( _handler )
-  {
-    m_bRectSelection = true;
-    m_pRectSelectionHandler = _handler;
-  }
-  else
-  {
-    m_bRectSelection = false;
-    m_pRectSelectionHandler = 0L;
-  }
+  m_strNewPart = _part_name;
+  m_bRectSelection = true;
 }
 
+void ImageView_impl::cancelRectSelection()
+{
+  m_bRectSelection = false;
+  update();
+}
+ 
 void ImageView_impl::paintRectSelection()
 {
   QPainter painter;
@@ -338,11 +337,13 @@ void ImageView_impl::keyPressEvent( QKeyEvent *_ev )
     return;
 
   if ( _ev->key() == Key_Escape )
-    setRectSelection( 0L );
+    cancelRectSelection();
 }
 
 void ImageView_impl::mousePressEvent( QMouseEvent *_ev )
 {
+  cout << "Mouse pressed" << endl;
+  
   if ( !m_bRectSelection )
     return;
 
@@ -391,9 +392,8 @@ void ImageView_impl::mouseReleaseEvent( QMouseEvent *_ev )
   else
     m_rctRectSelection.setRight( _ev->pos().x() );
   
-  emit rectangleSelected( m_rctRectSelection );
-  
-  setRectSelection( 0L );
+  m_bRectSelection = false;
+  m_pImageDoc->insertObject( m_rctRectSelection, m_strNewPart );
 }
 
 void ImageView_impl::slotInsertObject( ImageChild *_child )
@@ -428,7 +428,6 @@ void ImageView_impl::slotInsertObject( ImageChild *_child )
   p->setGeometry( _child->geometry() );
   p->show();
   m_lstFrames.append( p );
-  CORBA::release( p );
   
   QObject::connect( p, SIGNAL( sig_geometryEnd( PartFrame_impl* ) ),
 		    this, SLOT( slotGeometryEnd( PartFrame_impl* ) ) );
@@ -467,22 +466,6 @@ void ImageView_impl::slotMoveEnd( PartFrame_impl* _frame )
   ImageFrame *f = (ImageFrame*)_frame;
   // TODO scaling
   m_pImageDoc->changeChildGeometry( f->child(), _frame->partGeometry() );
-}
-
-/**********************************************************
- *
- * InsertObjectHandler
- *
- **********************************************************/
-
-InsertObjectHandler::InsertObjectHandler( ImageDocument_impl *_ptr )
-{
-  m_pDoc = _ptr;
-}
-
-void InsertObjectHandler::slotInsertObject( const QRect& _rect )
-{
-  m_pDoc->insertObject( _rect );
 }
 
 /**********************************************************

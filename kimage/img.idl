@@ -9,7 +9,7 @@ module KImage
 	{
 		slot void toggleFitToWindow();
 		slot void newView();
-		slot void insertImage();
+		slot void insertObject();
 		slot void exportImage();
 		slot void importImage();
 	};

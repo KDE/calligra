@@ -104,9 +104,9 @@ void KImage::ImageView_stub::newView()
 }
 
 
-void KImage::ImageView_stub::insertImage()
+void KImage::ImageView_stub::insertObject()
 {
-  CORBA::Request_var _req = this->_request( "insertImage" );
+  CORBA::Request_var _req = this->_request( "insertObject" );
   _req->result()->value()->type( CORBA::_tc_void );
   _req->send_oneway();
   #ifdef HAVE_EXCEPTIONS
@@ -493,13 +493,13 @@ bool KImage::ImageView_skel::dispatch( CORBA::ServerRequest_ptr _req, CORBA::Env
     newView();
     return true;
   }
-  if( strcmp( _req->op_name(), "insertImage" ) == 0 ) {
+  if( strcmp( _req->op_name(), "insertObject" ) == 0 ) {
     CORBA::NVList_ptr _args;
     _orb()->create_list( 0, _args );
 
     _req->params( _args );
 
-    insertImage();
+    insertObject();
     return true;
   }
   if( strcmp( _req->op_name(), "exportImage" ) == 0 ) {

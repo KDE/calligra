@@ -62,7 +62,7 @@ class ImageView :
 
     virtual void toggleFitToWindow() = 0;
     virtual void newView() = 0;
-    virtual void insertImage() = 0;
+    virtual void insertObject() = 0;
     virtual void exportImage() = 0;
     virtual void importImage() = 0;
   protected:
@@ -82,7 +82,7 @@ class ImageView_stub : virtual public ImageView,
     virtual ~ImageView_stub();
     void toggleFitToWindow();
     void newView();
-    void insertImage();
+    void insertObject();
     void exportImage();
     void importImage();
   private:

@@ -17,6 +17,10 @@ class ImageDocument_impl;
 #define MIME_TYPE "application/x-kimage"
 #define KImageRepoID "IDL:KImage/ImageDocument:1.0"
 
+/**
+ * This class is used to hold informations about embedded
+ * documents.
+ */
 class ImageChild
 {
 public:
@@ -76,17 +80,43 @@ public:
 
   virtual void addView( ImageView_impl *_view );
   virtual void removeView( ImageView_impl *_view );
-  
-  virtual void insertObject( const QRect& _rect );
+
+  /**
+   * This function is called to insert a new child. It emits @ref #sig_insertObject
+   * on demand. Every connected view must then create a view of the inserted
+   * document and display it.
+   *
+   * @param _part_name is the name of the server as registered in the CORBE
+   *                   implementation repository. It is the same name mentioned in
+   *                   the *.kdelnk files in $(KDEDIR)/share/apps/koffice/partlnk.
+   *                   Example:<pre>
+   *                     # KDE Config File
+   *                     [KDE Desktop Entry]
+   *                     Name=KSpread
+   *                     Exec=/home/weis/kde/koffice2/kspread/kspread --server
+   *                     Comment=Torben's Spread Sheet
+   *                     MimeTypes=application/x-kspread,
+   *                     RepoID=IDL:KSpread/Factory:1.0,
+   *                     ActivationMode=shared
+   *                     Type=OpenPart
+   *                     Icon=unknown.xpm
+   *                     MiniIcon=unknown.xpm</pre>
+   *                   Usually you will use the @ref KoPartSelectDia to query the
+   *                   user for this name.
+   * @param _rect is the rectangualr area where the new child should appear.
+   *
+   * @see ImageView_impl::slotInsertObject
+   */
+  virtual void insertObject( const QRect& _rect, const char *_part_name );
+  /**
+   * This function is called to change a childs position and size.
+   * It emits @ref #sig_updateChildGeometry in turn so that all
+   * views become updated.
+   */
   virtual void changeChildGeometry( ImageChild *_child, const QRect& );
   
   virtual QListIterator<ImageChild> childIterator();
   
-  // virtual OBJECT saveToStore( Store &_store );
-  // virtual bool loadFromStore( Store &_store, OBJECT _obj );
-  
-  // virtual void sendWarning( const char * );
-
 signals:
   /**
    * Emitted if the image itself changed, due to the use of filters
@@ -97,7 +127,13 @@ signals:
    * Emitted if a new object has been inserted in the document.
    */
   void sig_insertObject( ImageChild *_child );
+  /**
+   * Emitted if a childs geometry or size has been modified.
+   */
   void sig_updateChildGeometry( ImageChild *_child );
+  /**
+   * Emitted if a child is in the process of being removed.
+   */
   void sig_removeObject( ImageChild *_child );
   void sig_fitToWindow( bool _fit );  
 
