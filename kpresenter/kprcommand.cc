@@ -1497,37 +1497,28 @@ QTextCursor * KPrPasteTextCommand::execute( QTextCursor *c )
         // First line (if appending to non-empty line) : apply offset to formatting, don't apply parag layout
         if ( item == 0 && m_idx > 0 )
         {
-#if 0
-            // First load the default format, but only apply it to our new chars
-            QDomElement layout = paragElem.namedItem( "LAYOUT" ).toElement();
-            if ( !layout.isNull() )
-            {
-                QDomElement formatElem = layout.namedItem( "FORMAT" ).toElement();
-                if ( !formatElem.isNull() )
-                {
-                    QTextFormat f = parag->loadFormat( formatElem, 0L, QFont() );
-                    QTextFormat * defaultFormat = doc->formatCollection()->format( &f );
-                    // Last paragraph (i.e. only one in all) : some of the text might be from before the paste
-                    int endIndex = (item == count-1) ? c->index() : parag->string()->length() - 1;
-                    parag->setFormat( m_idx, endIndex - m_idx, defaultFormat, TRUE );
-                }
-            }
+            KoParagLayout paragLayout = textdoc->textObject()->loadParagLayout(paragElem);
+            parag->setParagLayout( paragLayout );
 
-            parag->loadFormatting( paragElem, m_idx );
-#endif
+            KoTextFormat *fm=textdoc->textObject()->loadFormat( paragElem );
+            kdDebug()<<"format :"<<fm->key()<<endl;
+
+            int endIndex = (item == count-1) ? c->index() : parag->string()->length() - 1;
+            parag->setFormat( m_idx, endIndex - m_idx, fm, TRUE );
+
         }
         else
         {
 #if 0
             if ( item == 0 ) // This paragraph existed, store its parag layout
                 m_oldParagLayout = parag->paragLayout();
-            parag->loadLayout( paragElem );
+#endif
+            KoParagLayout paragLayout = textdoc->textObject()->loadParagLayout(paragElem);
+            parag->setParagLayout( paragLayout );
             // Last paragraph: some of the text might be from before the paste
             int len = (item == count-1) ? c->index() : parag->string()->length();
             // Apply default format
             parag->setFormat( 0, len, parag->paragFormat(), TRUE );
-            parag->loadFormatting( paragElem );
-#endif
         }
         parag->format();
         parag->setChanged( TRUE );

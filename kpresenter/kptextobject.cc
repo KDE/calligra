@@ -502,55 +502,8 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
             paragSpacing = QMAX( QMAX( e.attribute( "distBefore" ).toInt(), e.attribute( "distAfter" ).toInt() ), paragSpacing );
             while ( !n.isNull() ) {
                 if ( n.tagName() == tagTEXT ) {
-                    QString family = n.attribute( attrFamily );
-                    int size = n.attribute( attrPointSize ).toInt();
-                    bool bold=false;
-                    if(n.hasAttribute(attrBold))
-                        bold = (bool)n.attribute( attrBold ).toInt();
-                    bool italic = false;
-                    if(n.hasAttribute(attrItalic))
-                        bold=(bool)n.attribute( attrItalic ).toInt();
-                    bool underline=false;
-                    if(n.hasAttribute( attrUnderline ))
-                        underline = (bool)n.attribute( attrUnderline ).toInt();
-                    bool strikeOut=false;
-                    if(n.hasAttribute(attrStrikeOut))
-                        strikeOut = (bool)n.attribute( attrStrikeOut ).toInt();
+                    KoTextFormat *fm=loadFormat( n );
 
-                    QString color = n.attribute( attrColor );
-                    QFont fn( family );
-                    fn.setPointSize( KoTextZoomHandler::ptToLayoutUnit( size ) );
-                    fn.setBold( bold );
-                    fn.setItalic( italic );
-                    fn.setUnderline( underline );
-                    fn.setStrikeOut( strikeOut );
-                    QColor col( color );
-
-                    //todo FIXME : KoTextFormat
-
-                    KoTextFormat *fm = static_cast<KoTextFormat*> (textDocument()->formatCollection()->format( fn, col ));
-                    kdDebug()<<"******************************************\n";
-                    kdDebug()<<"format :"<<fm->key()<<endl;
-                    kdDebug()<<"******************************************\n";
-                    QString textBackColor=n.attribute(attrTextBackColor);
-                    if(!textBackColor.isEmpty())
-                    {
-                        QColor tmpCol(textBackColor);
-                        tmpCol=tmpCol.isValid() ? tmpCol : QApplication::palette().color( QPalette::Active, QColorGroup::Base );
-                        fm->setTextBackgroundColor(tmpCol);
-                    }
-                    //TODO FIXME : value is correct, but format is not good :(
-                    if(n.hasAttribute(attrVertAlign))
-                        fm->setVAlign( static_cast<QTextFormat::VerticalAlignment>(n.attribute(attrVertAlign).toInt() ) );
-
-                    if(n.hasAttribute(attrLinkName))
-                    {
-                        if(n.hasAttribute(attrHrefName))
-                        {
-                            fm->setAnchorName(n.attribute(attrLinkName));
-                            fm->setAnchorHref(n.attribute(attrHrefName));
-                        }
-                    }
 
                     QString txt = n.firstChild().toText().data();
                     if(n.hasAttribute(attrWhitespace)) {
@@ -591,6 +544,60 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
     ktextobject.document()->setTextSettings( settings );
     ktextobject.updateCurrentFormat();
 #endif
+}
+
+KoTextFormat *KPTextObject::loadFormat( QDomElement &n )
+{
+    QString family = n.attribute( attrFamily );
+    int size = n.attribute( attrPointSize ).toInt();
+    bool bold=false;
+    if(n.hasAttribute(attrBold))
+        bold = (bool)n.attribute( attrBold ).toInt();
+    bool italic = false;
+    if(n.hasAttribute(attrItalic))
+        bold=(bool)n.attribute( attrItalic ).toInt();
+    bool underline=false;
+    if(n.hasAttribute( attrUnderline ))
+        underline = (bool)n.attribute( attrUnderline ).toInt();
+    bool strikeOut=false;
+    if(n.hasAttribute(attrStrikeOut))
+        strikeOut = (bool)n.attribute( attrStrikeOut ).toInt();
+
+    QString color = n.attribute( attrColor );
+    QFont fn( family );
+    fn.setPointSize( KoTextZoomHandler::ptToLayoutUnit( size ) );
+    fn.setBold( bold );
+    fn.setItalic( italic );
+    fn.setUnderline( underline );
+    fn.setStrikeOut( strikeOut );
+    QColor col( color );
+
+    //todo FIXME : KoTextFormat
+
+    KoTextFormat *fm = static_cast<KoTextFormat*> (textDocument()->formatCollection()->format( fn, col ));
+    kdDebug()<<"******************************************\n";
+    kdDebug()<<"format :"<<fm->key()<<endl;
+    kdDebug()<<"******************************************\n";
+    QString textBackColor=n.attribute(attrTextBackColor);
+    if(!textBackColor.isEmpty())
+    {
+        QColor tmpCol(textBackColor);
+        tmpCol=tmpCol.isValid() ? tmpCol : QApplication::palette().color( QPalette::Active, QColorGroup::Base );
+        fm->setTextBackgroundColor(tmpCol);
+    }
+    //TODO FIXME : value is correct, but format is not good :(
+    if(n.hasAttribute(attrVertAlign))
+        fm->setVAlign( static_cast<QTextFormat::VerticalAlignment>(n.attribute(attrVertAlign).toInt() ) );
+
+    if(n.hasAttribute(attrLinkName))
+    {
+        if(n.hasAttribute(attrHrefName))
+        {
+            fm->setAnchorName(n.attribute(attrLinkName));
+            fm->setAnchorHref(n.attribute(attrHrefName));
+        }
+    }
+    return fm;
 }
 
 KoParagLayout KPTextObject::loadParagLayout( QDomElement & parentElem)

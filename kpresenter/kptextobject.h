@@ -105,6 +105,9 @@ public:
 			QDomElement &parentElem,
 			int from /* default 0 */,
 			int to /* default length()-2 */ );
+    KoParagLayout loadParagLayout( QDomElement & parentElem);
+
+    KoTextFormat *loadFormat( QDomElement &n );
 
 signals:
     void repaintChanged( KPTextObject* );
@@ -117,7 +120,6 @@ protected:
     void drawTextObject( QPainter* _painter, bool onlyChanged, QTextCursor* cursor, bool resetChanged );
     void drawText( QPainter* _painter, bool onlyChanged, QTextCursor* cursor, bool resetChanged );
     void drawParags( QPainter *p, int from, int to );
-    KoParagLayout loadParagLayout( QDomElement & parentElem);
     void saveParagLayout( const KoParagLayout& layout, QDomElement & parentElem );
 
 protected slots:
