@@ -27,6 +27,7 @@
 
 #include "koPictureKey.h"
 
+class KoXmlWriter;
 class QPainter;
 class QSize;
 
@@ -97,17 +98,24 @@ public:
     QDragObject* dragObject( QWidget *dragSource = 0L, const char *name = 0L );
 
     bool load(QIODevice* io, const QString& extension);
+    bool loadFromBase64( const QCString& str );
 
     /**
-     * save file
+     * Save picture into a QIODevice
      * @param io QIODevice used for saving
      */
-    bool save(QIODevice* io);
+    bool save(QIODevice* io) const;
 
     /**
-     *  Save picture in the format supported by %KOffice 1.1
+     * Save picture in the format supported by KOffice 1.1
      */
-    bool saveAsKOffice1Dot1(QIODevice* io);
+    bool saveAsKOffice1Dot1(QIODevice* io) const;
+
+    /**
+     * OASIS FlatXML support:
+     * Save picture as base64-encoded data into an XML writer.
+     */
+    bool saveAsBase64( KoXmlWriter& writer ) const;
 
     void setExtension(const QString& extension);
 
@@ -194,6 +202,9 @@ protected:
      * Loads a temporary file, probably from a downloaded file
      */
     bool loadTmp(QIODevice* io);
+
+    /// Find type of image, create base accordingly, and load data
+    bool identifyAndLoad( QByteArray data );
 
     /**
      * @internal

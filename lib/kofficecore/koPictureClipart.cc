@@ -82,13 +82,13 @@ void KoPictureClipart::draw(QPainter& painter, int x, int y, int width, int heig
     drawQPicture(m_clipart, painter, x, y, width, height, sx, sy, sw, sh);
 }
 
-bool KoPictureClipart::load(const QByteArray& array, const QString& extension)
+bool KoPictureClipart::loadData(const QByteArray& array, const QString& extension)
 {
     // Second, create the original clipart
     kdDebug(30003) << "Trying to load clipart... (Size:" << m_rawData.size() << ")" << endl;
     m_rawData=array;
     QBuffer buffer(m_rawData);
-    buffer.open(IO_ReadWrite);
+    buffer.open(IO_ReadOnly);
     bool check = true;
     if (extension=="svg")
     {
@@ -110,14 +110,14 @@ bool KoPictureClipart::load(const QByteArray& array, const QString& extension)
     return check;
 }
 
-bool KoPictureClipart::save(QIODevice* io)
+bool KoPictureClipart::save(QIODevice* io) const
 {
     // We save the raw data, as the SVG supposrt in QPicture is poor
     Q_ULONG size=io->writeBlock(m_rawData); // WARNING: writeBlock returns Q_LONG but size() Q_ULONG!
     return (size==m_rawData.size());
 }
 
-bool KoPictureClipart::saveAsKOffice1Dot1(QIODevice* io, const QString& extension)
+bool KoPictureClipart::saveAsKOffice1Dot1(QIODevice* io, const QString& extension) const
 {
     QPicture picture(3); //compatibility with QT 2.1 and later (KOffice 1.1.x was with QT 2.3.1 or QT 3.0.x)
 

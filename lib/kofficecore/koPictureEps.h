@@ -74,9 +74,9 @@ public:
      */
     virtual void draw(QPainter& painter, int x, int y, int width, int height, int sx = 0, int sy = 0, int sw = -1, int sh = -1, bool fastMode = false);
 
-    virtual bool load(const QByteArray& array, const QString& extension);
+    virtual bool loadData(const QByteArray& array, const QString& extension);
 
-    virtual bool save(QIODevice* io);
+    virtual bool save(QIODevice* io) const;
 
     virtual QSize getOriginalSize(void) const;
 

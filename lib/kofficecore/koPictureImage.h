@@ -75,9 +75,9 @@ public:
 
     virtual QDragObject* dragObject( QWidget *dragSource = 0L, const char *name = 0L );
 
-    virtual bool load(const QByteArray& array, const QString& extension);
+    virtual bool loadData(const QByteArray& array, const QString& extension);
 
-    virtual bool save(QIODevice* io);
+    virtual bool save(QIODevice* io) const;
 
     virtual QSize getOriginalSize(void) const;
 

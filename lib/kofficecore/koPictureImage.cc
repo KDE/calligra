@@ -18,18 +18,18 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include "koPictureImage.h"
+#include "koPictureKey.h"
+
+#include <kdebug.h>
+#include <kmimetype.h>
+
 #include <qbuffer.h>
 #include <qpainter.h>
 #include <qimage.h>
 #include <qpixmap.h>
 #include <qapplication.h>
 #include <qdragobject.h>
-
-#include <kdebug.h>
-#include <kmimetype.h>
-
-#include "koPictureKey.h"
-#include "koPictureImage.h"
 
 KoPictureImage::KoPictureImage(void) : m_cacheIsInFastMode(true)
 {
@@ -125,7 +125,7 @@ void KoPictureImage::draw(QPainter& painter, int x, int y, int width, int height
     }
 }
 
-bool KoPictureImage::load(const QByteArray& array, const QString& /* extension*/ )
+bool KoPictureImage::loadData(const QByteArray& array, const QString& /* extension*/ )
 {
     m_rawData=array;
     // Second, create the original image
@@ -145,9 +145,10 @@ bool KoPictureImage::load(const QByteArray& array, const QString& /* extension*/
     return true;
 }
 
-bool KoPictureImage::save(QIODevice* io)
+bool KoPictureImage::save(QIODevice* io) const
 {
-    // We save the raw data, to avoid damaging the file by many load/save cyvles (especially for JPEG)
+    kdDebug() << k_funcinfo << "writing raw data. size=" << m_rawData.size() << endl;
+    // We save the raw data, to avoid damaging the file by many load/save cycles (especially for JPEG)
     Q_ULONG size=io->writeBlock(m_rawData); // WARNING: writeBlock returns Q_LONG but size() Q_ULONG!
     return (size==m_rawData.size());
 }

@@ -72,19 +72,19 @@ public:
      */
     virtual void draw(QPainter& painter, int x, int y, int width, int height, int sx = 0, int sy = 0, int sw = -1, int sh = -1, bool fastMode = false);
 
-    virtual bool load(const QByteArray& array, const QString& extension);
-    
+    virtual bool loadData(const QByteArray& array, const QString& extension);
+
     /**
      * save file
      * @param io QIODevice used for saving
      */
-    virtual bool save(QIODevice* io);
+    virtual bool save(QIODevice* io) const;
 
     /**
      *  Save picture in the format supported by KOffice 1,1
      */
 
-    virtual bool saveAsKOffice1Dot1(QIODevice* io, const QString& extension);
+    virtual bool saveAsKOffice1Dot1(QIODevice* io, const QString& extension) const;
 
     virtual QSize getOriginalSize(void) const;
 

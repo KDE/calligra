@@ -83,20 +83,20 @@ QImage KoPictureEps::scaleWithGhostScript(const QSize& size, const int resolutio
     // png16m is better, but not always available -> fallback to bmp16m, then fallback to ppm (256 colors)
     // ### TODO: pcx24b is also a true colour format
     // ### TODO: support alpha (other gs devices needed)
-    
+
     const char* deviceTable[] = { "png16m", "bmp16m", "ppm", 0 };
-    
+
     QImage img;
-    
+
     for ( int i = 0; deviceTable[i]; ++i)
     {
         if ( tryScaleWithGhostScript( img, size, resolutionx, resolutiony, deviceTable[i] ) != -1 )
         {
             return img;
         }
-        
+
     }
-    
+
     kdError(30003) << "Image from GhostScript cannot be loaded (in KoPictureEps::scaleWithGhostScript)" << endl;
     return img;
 }
@@ -330,7 +330,7 @@ QString KoPictureEps::readLine( const QByteArray& array, const uint start, const
 }
 
 
-bool KoPictureEps::load(const QByteArray& array, const QString& /* extension */ )
+bool KoPictureEps::loadData(const QByteArray& array, const QString& /* extension */ )
 {
 
     kdDebug(30003) << "KoPictureEps::load" << endl;
@@ -410,7 +410,7 @@ bool KoPictureEps::load(const QByteArray& array, const QString& /* extension */ 
     return true;
 }
 
-bool KoPictureEps::save(QIODevice* io)
+bool KoPictureEps::save(QIODevice* io) const
 {
     // We save the raw data, to avoid damaging the file by many load/save cycles
     Q_ULONG size=io->writeBlock(m_rawData); // WARNING: writeBlock returns Q_LONG but size() Q_ULONG!

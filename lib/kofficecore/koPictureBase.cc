@@ -18,17 +18,19 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qpainter.h>
-#include <qpicture.h>
-#include <qpixmap.h>
-#include <qdragobject.h>
+#include "koPictureBase.h"
+
+#include <koxmlwriter.h>
 
 #include <kdebug.h>
 #include <kconfig.h>
 #include <kglobal.h>
 
-#include "koPictureKey.h"
-#include "koPictureBase.h"
+#include <kmdcodec.h>
+#include <qpainter.h>
+#include <qpicture.h>
+#include <qpixmap.h>
+#include <qdragobject.h>
 
 static int s_useSlowResizeMode = -1; // unset
 
@@ -74,25 +76,36 @@ void KoPictureBase::draw(QPainter& painter, int x, int y, int width, int height,
 
 bool KoPictureBase::load(QIODevice* io, const QString& extension)
 {
-    return load(io->readAll(), extension);
+    return loadData(io->readAll(), extension);
 }
 
-bool KoPictureBase::load(const QByteArray&, const QString&)
+bool KoPictureBase::loadData(const QByteArray&, const QString&)
 {
     // Nothing to load!
     return false;
 }
 
-bool KoPictureBase::save(QIODevice*)
+bool KoPictureBase::save(QIODevice*) const
 {
     // Nothing to save!
     return false;
 }
 
-bool KoPictureBase::saveAsKOffice1Dot1(QIODevice* io, const QString&)
+bool KoPictureBase::saveAsKOffice1Dot1(QIODevice* io, const QString&) const
 {
     // The default is the normla save
     return save(io);
+}
+
+bool KoPictureBase::saveAsBase64( KoXmlWriter& writer ) const
+{
+    QBuffer buffer;
+    buffer.open(IO_ReadWrite);
+    if ( !save( &buffer ) )
+        return false;
+    QCString encoded = KCodecs::base64Encode( buffer.buffer() );
+    writer.addTextNode( encoded );
+    return true;
 }
 
 QSize KoPictureBase::getOriginalSize(void) const

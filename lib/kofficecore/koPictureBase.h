@@ -20,16 +20,18 @@
 #ifndef __koPictureBase_h__
 #define __koPictureBase_h__
 
+#include "koPictureKey.h" // for KoPictureType
+
 #include <qstring.h>
 #include <qimage.h>
 
+class KoXmlWriter;
 class QPainter;
 class QSize;
 class QIODevice;
 class QDragObject;
 
 const char NULL_MIME_TYPE[]="application/x-zerosize";
-const char UNKNOWN_MIME_TYPE[]="application/octet-stream";
 
 // TODO: fix documentation
 
@@ -85,18 +87,24 @@ public:
 
     virtual bool load(QIODevice* io, const QString& extension);
 
-    virtual bool load(const QByteArray& array, const QString& extension);
+    virtual bool loadData(const QByteArray& array, const QString& extension);
 
     /**
      * save file
      * @param io QIODevice used for saving
      */
-    virtual bool save(QIODevice* io);
+    virtual bool save(QIODevice* io) const;
 
     /**
      *  Save picture in the format supported by KOffice 1,1
      */
-    virtual bool saveAsKOffice1Dot1(QIODevice* io, const QString& extension);
+    virtual bool saveAsKOffice1Dot1(QIODevice* io, const QString& extension) const;
+
+    /**
+     * OASIS FlatXML support:
+     * Save picture as base64-encoded data into an XML writer.
+     */
+    virtual bool saveAsBase64( KoXmlWriter& writer ) const;
 
     virtual QSize getOriginalSize(void) const;
 

@@ -33,6 +33,7 @@
 #include "koPictureClipart.h"
 #include "koPictureWmf.h"
 #include "koPictureShared.h"
+#include <kmdcodec.h>
 
 
 KoPictureShared::KoPictureShared(void) : m_base(NULL)
@@ -129,7 +130,7 @@ bool KoPictureShared::loadWmf(QIODevice* io)
         m_base=new KoPictureWmf();
         setExtension("wmf");
     }
-    return m_base->load(array, m_extension);
+    return m_base->loadData(array, m_extension);
 }
 
 bool KoPictureShared::loadTmp(QIODevice* io)
@@ -147,7 +148,11 @@ bool KoPictureShared::loadTmp(QIODevice* io)
     // For an extern file or in the storage, .wmf can mean a real Windows Meta File.
 
     QByteArray array ( io->readAll() );
+    return identifyAndLoad( array );
+}
 
+bool KoPictureShared::identifyAndLoad( QByteArray array )
+{
     if ( array.size() < 5 )
     {
         kdError(30003) << "Picture is less than 5 bytes long!" << endl;
@@ -222,6 +227,8 @@ bool KoPictureShared::loadTmp(QIODevice* io)
             << " Trying to convert to PNG! (in KoPictureShared::loadTmp" << endl;
 
         // Do not trust QBuffer and do not work directly on the QByteArray array
+        // DF: It would be faster to work on array here, and to create a completely
+        // different QBuffer for the writing code!
         QBuffer buf( array.copy() );
         if (!buf.open(IO_ReadOnly))
         {
@@ -262,13 +269,10 @@ bool KoPictureShared::loadTmp(QIODevice* io)
 
     kdDebug(30003) << "Temp file considered to be " << strExtension << endl;
 
-    QBuffer buffer(array);
-    buffer.open(IO_ReadOnly);
     clearAndSetMode(strExtension);
     if (m_base)
-        flag=m_base->load(&buffer,strExtension);
+        flag = m_base->loadData(array,strExtension);
     setExtension(strExtension);
-    buffer.close();
 
     return flag;
 }
@@ -310,7 +314,7 @@ bool KoPictureShared::loadXpm(QIODevice* io)
     return check;
 }
 
-bool KoPictureShared::save(QIODevice* io)
+bool KoPictureShared::save(QIODevice* io) const
 {
     if (!io)
         return false;
@@ -319,12 +323,19 @@ bool KoPictureShared::save(QIODevice* io)
     return false;
 }
 
-bool KoPictureShared::saveAsKOffice1Dot1(QIODevice* io)
+bool KoPictureShared::saveAsKOffice1Dot1(QIODevice* io) const
 {
     if (!io)
         return false;
     if (m_base)
         return m_base->saveAsKOffice1Dot1(io, getExtension());
+    return false;
+}
+
+bool KoPictureShared::saveAsBase64( KoXmlWriter& writer ) const
+{
+    if ( m_base )
+        m_base->saveAsBase64( writer );
     return false;
 }
 
@@ -385,6 +396,15 @@ QString KoPictureShared::getMimeType(void) const
     return QString(NULL_MIME_TYPE);
 }
 
+
+bool KoPictureShared::loadFromBase64( const QCString& str )
+{
+    clear();
+    QByteArray data;
+    KCodecs::base64Decode( str, data );
+    return identifyAndLoad( data );
+}
+
 bool KoPictureShared::load(QIODevice* io, const QString& extension)
 {
     kdDebug(30003) << "KoPictureShared::load(QIODevice*, const QString&) " << extension << endl;
@@ -410,7 +430,7 @@ bool KoPictureShared::load(QIODevice* io, const QString& extension)
     {
         clearAndSetMode(ext);
         if (m_base)
-            flag=m_base->load(io,ext);
+            flag = m_base->load(io, ext);
         setExtension(ext);
     }
     if (!flag)

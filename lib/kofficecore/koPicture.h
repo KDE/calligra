@@ -26,6 +26,7 @@
 
 #include "koPictureKey.h"
 
+class KoXmlWriter;
 class QPainter;
 class QSize;
 class QDragObject;
@@ -105,15 +106,27 @@ public:
     bool load(QIODevice* io, const QString& extension);
 
     /**
-     * save file
+     * Save picture into a QIODevice
      * @param io QIODevice used for saving
      */
-    bool save(QIODevice* io);
+    bool save(QIODevice* io) const;
 
     /**
-     *  Save picture in the format supported by KOffice 1.1
+     * Save picture in the format supported by KOffice 1.1
      */
-    bool saveAsKOffice1Dot1(QIODevice* io);
+    bool saveAsKOffice1Dot1(QIODevice* io) const;
+
+    /**
+     * OASIS FlatXML support:
+     * Save picture as base64-encoded data into an XML writer.
+     * The caller will usually do something like
+     * @code
+     *  writer.startElement( "office:binary-data" );
+     *  m_picture.saveAsBase64( writer );
+     *  writer.endElement();
+     * @endcode
+     */
+    bool saveAsBase64( KoXmlWriter& writer ) const;
 
     /**
      * @return the image extension (e.g. png)
@@ -148,6 +161,11 @@ public:
      * Load the picture from a file named @p fileName
      */
     bool loadFromFile(const QString& fileName);
+
+    /**
+     * Load the picture from base64-encoded data
+     */
+    bool loadFromBase64(const QCString& str);
 
     /**
      * Load a potentially broken XPM file (for old files of KPresenter)

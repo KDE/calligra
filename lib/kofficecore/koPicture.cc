@@ -147,7 +147,7 @@ bool KoPicture::loadXpm(QIODevice* io)
     return m_sharedData->loadXpm(io);
 }
 
-bool KoPicture::save(QIODevice* io)
+bool KoPicture::save(QIODevice* io) const
 {
     if (!io)
         return false;
@@ -156,12 +156,20 @@ bool KoPicture::save(QIODevice* io)
     return false;
 }
 
-bool KoPicture::saveAsKOffice1Dot1(QIODevice* io)
+bool KoPicture::saveAsKOffice1Dot1(QIODevice* io) const
 {
     if (!io)
         return false;
     if (m_sharedData)
         return m_sharedData->saveAsKOffice1Dot1(io);
+    return false;
+}
+
+
+bool KoPicture::saveAsBase64( KoXmlWriter& writer ) const
+{
+    if ( m_sharedData )
+        return m_sharedData->saveAsBase64( writer );
     return false;
 }
 
@@ -210,6 +218,12 @@ bool KoPicture::loadFromFile(const QString& fileName)
     kdDebug(30003) << "KoPicture::loadFromFile " << fileName << endl;
     createSharedData();
     return m_sharedData->loadFromFile(fileName);
+}
+
+bool KoPicture::loadFromBase64( const QCString& str )
+{
+    createSharedData();
+    return m_sharedData->loadFromBase64( str );
 }
 
 QSize KoPicture::getOriginalSize(void) const
@@ -289,4 +303,3 @@ void KoPicture::clearCache(void)
     if (m_sharedData)
         m_sharedData->clearCache();
 }
-
