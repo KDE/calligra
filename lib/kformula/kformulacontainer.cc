@@ -548,7 +548,7 @@ void KFormulaContainer::paste()
         QDomDocument formula;
         formula.setContent(data);
 
-        QList<BasicElement> list;
+        QPtrList<BasicElement> list;
         list.setAutoDelete(true);
 
         FormulaCursor* cursor = getActiveCursor();

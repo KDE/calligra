@@ -252,7 +252,7 @@ void FractionElement::moveDown(FormulaCursor* cursor, BasicElement* from)
  * Reinserts the denominator if it has been removed.
  */
 void FractionElement::insert(FormulaCursor* cursor,
-                             QList<BasicElement>& newChildren,
+                             QPtrList<BasicElement>& newChildren,
                              Direction direction)
 {
     if (cursor->getPos() == denominatorPos) {
@@ -281,7 +281,7 @@ void FractionElement::insert(FormulaCursor* cursor,
  * are senseless and the caller is required to replace us.
  */
 void FractionElement::remove(FormulaCursor* cursor,
-                             QList<BasicElement>& removedChildren,
+                             QPtrList<BasicElement>& removedChildren,
                              Direction direction)
 {
     switch (cursor->getPos()) {

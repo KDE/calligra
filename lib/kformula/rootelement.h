@@ -98,7 +98,7 @@ public:
     /**
      * Reinserts the index if it has been removed.
      */
-    virtual void insert(FormulaCursor*, QList<BasicElement>&, Direction);
+    virtual void insert(FormulaCursor*, QPtrList<BasicElement>&, Direction);
 
     /**
      * Removes all selected children and returns them. Places the
@@ -109,7 +109,7 @@ public:
      * It is possible to remove the denominator. But after this we
      * are senseless and the caller is required to replace us.
      */
-    virtual void remove(FormulaCursor*, QList<BasicElement>&, Direction);
+    virtual void remove(FormulaCursor*, QPtrList<BasicElement>&, Direction);
 
     /**
      * Moves the cursor to a normal place where new elements

@@ -144,7 +144,7 @@ void SequenceElement::calcSizes(const ContextStyle& context, ContextStyle::TextS
         //uint count = children.count();
 
         // Let's do all normal elements that have a base line.
-        QListIterator<BasicElement> it( children );
+        QPtrListIterator<BasicElement> it( children );
         for ( ; it.current(); ++it ) {
             BasicElement* child = it.current();
 
@@ -203,7 +203,7 @@ void SequenceElement::calcSizes(const ContextStyle& context, ContextStyle::TextS
 
 void SequenceElement::setChildrenPositions()
 {
-    QListIterator<BasicElement> it( children );
+    QPtrListIterator<BasicElement> it( children );
     for ( ; it.current(); ++it ) {
         BasicElement* child = it.current();
         if (child->getBaseline() > -1) {
@@ -233,7 +233,7 @@ void SequenceElement::draw(QPainter& painter, const QRect& r,
         return;
 
     if (!isEmpty()) {
-        QListIterator<BasicElement> it( children );
+        QPtrListIterator<BasicElement> it( children );
         for ( ; it.current(); ++it ) {
             BasicElement* child = it.current();
 	    if (!child->isInvisible()) {
@@ -601,7 +601,7 @@ void SequenceElement::goInside(FormulaCursor* cursor)
  * The list will be emptied but stays the property of the caller.
  */
 void SequenceElement::insert(FormulaCursor* cursor,
-                             QList<BasicElement>& newChildren,
+                             QPtrList<BasicElement>& newChildren,
                              Direction direction)
 {
     int pos = cursor->getPos();
@@ -629,7 +629,7 @@ void SequenceElement::insert(FormulaCursor* cursor,
  * The ownership of the list is passed to the caller.
  */
 void SequenceElement::remove(FormulaCursor* cursor,
-                             QList<BasicElement>& removedChildren,
+                             QPtrList<BasicElement>& removedChildren,
                              Direction direction)
 {
     if (cursor->isSelection()) {
@@ -686,7 +686,7 @@ void SequenceElement::remove(FormulaCursor* cursor,
 /**
  * Removes the children at pos and appends it to the list.
  */
-void SequenceElement::removeChild(QList<BasicElement>& removedChildren, int pos)
+void SequenceElement::removeChild(QPtrList<BasicElement>& removedChildren, int pos)
 {
     BasicElement* child = children.at(pos);
     formula()->elementRemoval(child);
@@ -805,7 +805,7 @@ void SequenceElement::getChildrenDom(QDomDocument& doc, QDomElement& elem,
  * puts them into the list.
  * Returns false if an error occures.
  */
-bool SequenceElement::buildChildrenFromDom(QList<BasicElement>& list, QDomNode n)
+bool SequenceElement::buildChildrenFromDom(QPtrList<BasicElement>& list, QDomNode n)
 {
     while (!n.isNull()) {
         if (n.isElement()) {

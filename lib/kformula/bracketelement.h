@@ -110,7 +110,7 @@ public:
      *
      * Here we remove ourselve if we are requested to remove our content.
      */
-    virtual void remove(FormulaCursor*, QList<BasicElement>&, Direction);
+    virtual void remove(FormulaCursor*, QPtrList<BasicElement>&, Direction);
 
     // main child
     //

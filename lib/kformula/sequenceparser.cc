@@ -41,7 +41,7 @@ void SequenceParser::setElementType( uint pos, ElementType* type )
 }
 
 
-ElementType* SequenceParser::parse( QList<BasicElement>& elements )
+ElementType* SequenceParser::parse( QPtrList<BasicElement>& elements )
 {
     list = elements;
     return new SequenceType( this );

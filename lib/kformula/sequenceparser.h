@@ -21,7 +21,7 @@
 #ifndef SEQUENCEPARSER_H
 #define SEQUENCEPARSER_H
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstring.h>
 
 #include "formuladefs.h"
@@ -43,7 +43,7 @@ public:
     /**
      * @returns a parse tree.
      */
-    ElementType* parse(QList<BasicElement>& elements);
+    ElementType* parse(QPtrList<BasicElement>& elements);
 
     /**
      * Reads the next token.
@@ -98,7 +98,7 @@ private:
      * The elements we want to parse. The parser must not change
      * it!
      */
-    QList<BasicElement> list;
+    QPtrList<BasicElement> list;
 
     /**
      * The position up to which we have read. The current

@@ -1,7 +1,7 @@
 
 #include <iostream>
 
-#include <qlist.h>
+#include <qptrlist.h>
 
 #include <kcommand.h>
 
@@ -103,7 +103,7 @@ void TestFormulaCursor::testTextInsertion()
 void TestFormulaCursor::testRemoval()
 {
     cursor->setSelection(false);
-    QList<BasicElement> list;
+    QPtrList<BasicElement> list;
     list.setAutoDelete(true);
 
     // remove to the right: nothing there.
@@ -132,7 +132,7 @@ void TestFormulaCursor::testRemoveIndexElementByMainChild()
 {
     cursor->goInsideElement(element3);
 
-    QList<BasicElement> list;
+    QPtrList<BasicElement> list;
     list.setAutoDelete(true);
 
     cursor->remove(list);
@@ -150,7 +150,7 @@ void TestFormulaCursor::testRemoveBracketElementByMainChild()
 {
     cursor->goInsideElement(element1);
 
-    QList<BasicElement> list;
+    QPtrList<BasicElement> list;
     list.setAutoDelete(true);
 
     cursor->remove(list);
@@ -277,7 +277,7 @@ void TestFormulaCursor::testCursorSaving()
 //     cursor2->moveEnd();
 //     cursor2->moveLeft();
 
-//     QList<BasicElement> list;
+//     QPtrList<BasicElement> list;
 //     list.setAutoDelete(true);
 //     cursor2->remove(list);
 

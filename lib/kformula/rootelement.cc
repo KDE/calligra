@@ -305,7 +305,7 @@ void RootElement::moveDown(FormulaCursor* cursor, BasicElement* from)
  * Reinserts the index if it has been removed.
  */
 void RootElement::insert(FormulaCursor* cursor,
-                         QList<BasicElement>& newChildren,
+                         QPtrList<BasicElement>& newChildren,
                          Direction direction)
 {
     if (cursor->getPos() == indexPos) {
@@ -330,7 +330,7 @@ void RootElement::insert(FormulaCursor* cursor,
  * We remove ourselve if we are requested to remove our content.
  */
 void RootElement::remove(FormulaCursor* cursor,
-                         QList<BasicElement>& removedChildren,
+                         QPtrList<BasicElement>& removedChildren,
                          Direction direction)
 {
     switch (cursor->getPos()) {

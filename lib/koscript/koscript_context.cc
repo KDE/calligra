@@ -275,7 +275,7 @@ void KSModule::setCode( KSParseNode* node )
 
 KSValue* KSSubScope::object( const QString& name, bool insert )
 {
-  QListIterator<KSNamespace> it( m_spaces );
+  QPtrListIterator<KSNamespace> it( m_spaces );
   it.toLast();
   for( ; it.current(); --it )
   {

@@ -34,7 +34,7 @@ MatrixElement::MatrixElement(uint rows, uint columns, BasicElement* parent)
     : BasicElement(parent)
 {
     for (uint r = 0; r < rows; r++) {
-        QList<SequenceElement>* list = new QList<SequenceElement>;
+        QPtrList<SequenceElement>* list = new QPtrList<SequenceElement>;
         list->setAutoDelete(true);
         for (uint c = 0; c < columns; c++) {
             list->append(new SequenceElement(this));
@@ -157,7 +157,7 @@ void MatrixElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
     uint columns = getColumns();
 
     for (uint r = 0; r < rows; r++) {
-        QList<SequenceElement>* list = content.at(r);
+        QPtrList<SequenceElement>* list = content.at(r);
         for (uint c = 0; c < columns; c++) {
             SequenceElement* element = list->at(c);
             element->calcSizes(style, style.convertTextStyleFraction(tstyle),
@@ -174,7 +174,7 @@ void MatrixElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
 
     double yPos = 0;
     for (uint r = 0; r < rows; r++) {
-        QList<SequenceElement>* list = content.at(r);
+        QPtrList<SequenceElement>* list = content.at(r);
         double xPos = 0;
         yPos += toMidlines[r];
         for (uint c = 0; c < columns; c++) {
@@ -491,7 +491,7 @@ bool MatrixElement::readAttributesFromDom(QDomElement& element)
 
     content.clear();
     for (uint r = 0; r < rows; r++) {
-        QList<SequenceElement>* list = new QList<SequenceElement>;
+        QPtrList<SequenceElement>* list = new QPtrList<SequenceElement>;
         list->setAutoDelete(true);
         content.append(list);
         for (uint c = 0; c < cols; c++) {

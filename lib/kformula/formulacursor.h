@@ -153,7 +153,7 @@ public:
      * Ignores the selection.
      * The list will be emptied.
      */
-    void insert(QList<BasicElement>&,
+    void insert(QPtrList<BasicElement>&,
                 BasicElement::Direction = BasicElement::beforeCursor);
 
     /**
@@ -161,7 +161,7 @@ public:
      * The cursor needs to be normal (that is be inside a SequenceElement)
      * for this to have any effect.
      */
-    void remove(QList<BasicElement>&,
+    void remove(QPtrList<BasicElement>&,
                 BasicElement::Direction = BasicElement::beforeCursor);
 
 
@@ -283,7 +283,7 @@ public:
      * Inserts the elements that could be read from the dom into
      * the list. Returns true on success.
      */
-    bool buildElementsFromDom(QDomDocument doc, QList<BasicElement>& list);
+    bool buildElementsFromDom(QDomDocument doc, QPtrList<BasicElement>& list);
 
     // undo/redo support
 

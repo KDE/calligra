@@ -398,7 +398,7 @@ void SymbolElement::moveDown(FormulaCursor* cursor, BasicElement* from)
  * The list will be emptied but stays the property of the caller.
  */
 void SymbolElement::insert(FormulaCursor* cursor,
-                           QList<BasicElement>& newChildren,
+                           QPtrList<BasicElement>& newChildren,
                            Direction direction)
 {
     SequenceElement* index = static_cast<SequenceElement*>(newChildren.take(0));
@@ -438,7 +438,7 @@ void SymbolElement::insert(FormulaCursor* cursor,
  * The ownership of the list is passed to the caller.
  */
 void SymbolElement::remove(FormulaCursor* cursor,
-                           QList<BasicElement>& removedChildren,
+                           QPtrList<BasicElement>& removedChildren,
                            Direction direction)
 {
     int pos = cursor->getPos();

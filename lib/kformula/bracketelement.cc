@@ -19,7 +19,7 @@
 */
 
 #include <iostream>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qpainter.h>
 #include <qpen.h>
 #include <qpointarray.h>
@@ -225,7 +225,7 @@ void BracketElement::moveDown(FormulaCursor* cursor, BasicElement*)
  * Here we remove ourselve if we are requested to remove our content.
  */
 void BracketElement::remove(FormulaCursor* cursor,
-                            QList<BasicElement>& removedChildren,
+                            QPtrList<BasicElement>& removedChildren,
                             Direction direction)
 {
     if (cursor->getPos() == contentPos) {

@@ -139,7 +139,7 @@ public:
      *
      * The list will be emptied but stays the property of the caller.
      */
-    virtual void insert(FormulaCursor*, QList<BasicElement>&, Direction);
+    virtual void insert(FormulaCursor*, QPtrList<BasicElement>&, Direction);
 
     /**
      * Removes all selected children and returns them. Places the
@@ -152,7 +152,7 @@ public:
      *
      * The ownership of the list is passed to the caller.
      */
-    virtual void remove(FormulaCursor*, QList<BasicElement>&, Direction);
+    virtual void remove(FormulaCursor*, QPtrList<BasicElement>&, Direction);
 
     /**
      * Moves the cursor to a normal place where new elements

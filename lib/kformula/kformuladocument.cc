@@ -18,7 +18,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstringlist.h>
 
 #include <kdebug.h>
@@ -121,7 +121,7 @@ struct KFormulaDocument::KFormulaDocument_Impl {
     /**
      * All formulae that belong to this document.
      */
-    QList<KFormulaContainer> formulae;
+    QPtrList<KFormulaContainer> formulae;
 };
 
 

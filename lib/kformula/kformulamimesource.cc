@@ -47,7 +47,7 @@ KFormulaMimeSource::KFormulaMimeSource(QDomDocument formula)
     rootElement = new FormulaElement(this);
     FormulaCursor cursor(rootElement);
 
-    QList<BasicElement> list;
+    QPtrList<BasicElement> list;
     list.setAutoDelete(true);
     if (cursor.buildElementsFromDom(document, list)) {
         cursor.insert(list);

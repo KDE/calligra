@@ -22,7 +22,7 @@
 
 #include <qshared.h>
 #include <qmap.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qstring.h>
 
 #include "koscript_ptr.h"

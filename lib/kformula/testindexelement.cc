@@ -1,7 +1,7 @@
 
 #include <iostream>
 
-#include <qlist.h>
+#include <qptrlist.h>
 
 #include <kcommand.h>
 
@@ -79,7 +79,7 @@ void TestIndexElement::testIndexes()
     assert(indexElement->hasUpperRight());
     assert(indexElement->hasLowerRight());
 
-    QList<BasicElement> list;
+    QPtrList<BasicElement> list;
     list.setAutoDelete(true);
 
     indexElement->moveToUpperLeft(cursor, BasicElement::beforeCursor);
@@ -133,7 +133,7 @@ void TestIndexElement::removeAddIndex(ElementIndexPtr& index)
 {
     assert(index->hasIndex());
 
-    QList<BasicElement> list;
+    QPtrList<BasicElement> list;
     list.setAutoDelete(true);
 
     index->moveToIndex(cursor, BasicElement::beforeCursor);

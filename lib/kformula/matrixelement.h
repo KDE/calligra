@@ -21,7 +21,7 @@
 #ifndef MATRIXELEMENT_H
 #define MATRIXELEMENT_H
 
-#include <qlist.h>
+#include <qptrlist.h>
 
 #include "basicelement.h"
 
@@ -121,13 +121,13 @@ public:
      * Inserts all new children at the cursor position. Places the
      * cursor according to the direction.
      */
-    //virtual void insert(FormulaCursor*, QList<BasicElement>&, Direction);
+    //virtual void insert(FormulaCursor*, QPtrList<BasicElement>&, Direction);
 
     /**
      * Removes all selected children and returns them. Places the
      * cursor to where the children have been.
      */
-    //virtual void remove(FormulaCursor*, QList<BasicElement>&, Direction);
+    //virtual void remove(FormulaCursor*, QPtrList<BasicElement>&, Direction);
 
     /**
      * Moves the cursor to a normal place where new elements
@@ -205,7 +205,7 @@ private:
     /**
      * The elements we contain.
      */
-    QList<QList<SequenceElement> > content;
+    QPtrList<QPtrList<SequenceElement> > content;
 };
 
 KFORMULA_NAMESPACE_END

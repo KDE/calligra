@@ -290,12 +290,12 @@ void FormulaCursor::normalize(BasicElement::Direction direction)
  */
 void FormulaCursor::insert(BasicElement* child, BasicElement::Direction direction)
 {
-    QList<BasicElement> list;
+    QPtrList<BasicElement> list;
     list.append(child);
     insert(list, direction);
 }
 
-void FormulaCursor::insert(QList<BasicElement>& children,
+void FormulaCursor::insert(QPtrList<BasicElement>& children,
                            BasicElement::Direction direction)
 {
     if (readOnly)
@@ -310,7 +310,7 @@ void FormulaCursor::insert(QList<BasicElement>& children,
  * The cursor needs to be normal (that is be inside a SequenceElement)
  * for this to have any effect.
  */
-void FormulaCursor::remove(QList<BasicElement>& children,
+void FormulaCursor::remove(QPtrList<BasicElement>& children,
                            BasicElement::Direction direction)
 {
     if (readOnly)
@@ -344,7 +344,7 @@ void FormulaCursor::replaceSelectionWith(BasicElement* element,
 {
     if (readOnly)
         return;
-    QList<BasicElement> list;
+    QPtrList<BasicElement> list;
     // we suppres deletion here to get an error if something
     // was left in the list.
     //list.setAutoDelete(true);
@@ -381,8 +381,8 @@ BasicElement* FormulaCursor::replaceByMainChildContent(BasicElement::Direction d
 {
     if (readOnly)
         return 0;
-    QList<BasicElement> childrenList;
-    QList<BasicElement> list;
+    QPtrList<BasicElement> childrenList;
+    QPtrList<BasicElement> list;
     BasicElement* element = getElement();
     SequenceElement* mainChild = element->getMainChild();
     if ((mainChild != 0) && (mainChild->countChildren() > 0)) {
@@ -620,7 +620,7 @@ QDomDocument FormulaCursor::copy()
  * Inserts the elements that could be read from the dom into
  * the list. Returns true on success.
  */
-bool FormulaCursor::buildElementsFromDom(QDomDocument doc, QList<BasicElement>& list)
+bool FormulaCursor::buildElementsFromDom(QDomDocument doc, QPtrList<BasicElement>& list)
 {
     if (readOnly)
         return false;
