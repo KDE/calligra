@@ -17,10 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kpclipartcollection.h"
-#include "qwmf.h"
-
-#include <qstring.h>
+#include <kpclipartcollection.h>
+#include <qwmf.h>
 #include <qdom.h>
 
 /******************************************************************/
@@ -118,5 +116,4 @@ void KPClipartCollection::removeRef( const Key &key )
             data.remove( key );
         }
     }
-
 }

@@ -17,9 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "pgconfdia.h"
-#include "pgconfdia.moc"
-#include "kpresenter_doc.h"
+#include <pgconfdia.h>
+#include <kpresenter_doc.h>
 
 #include <qlabel.h>
 #include <qpushbutton.h>
@@ -33,7 +32,6 @@
 #include <qspinbox.h>
 
 #include <klocale.h>
-#include <kapp.h>
 #include <kbuttonbox.h>
 
 /******************************************************************/
@@ -90,7 +88,7 @@ PgConfDia::PgConfDia( QWidget* parent, KPresenterDoc *, const char* name,
     effectCombo->setCurrentItem( static_cast<int>( pageEffect ) );
 
     back->addWidget(page);
-    
+
     slides = new QButtonGroup( 1, Qt::Horizontal, this );
     slides->setCaption( i18n( "Show slides in presentation" ) );
 
@@ -163,3 +161,4 @@ PresSpeed PgConfDia::getPresSpeed()
     return speedSpinBox->value();
 }
 
+#include <pgconfdia.moc>

@@ -21,12 +21,8 @@
 #define kpgradient_h
 
 #include <qcolor.h>
-#include <qsize.h>
-#include <qrect.h>
-
 #include <kpixmap.h>
-
-#include "global.h"
+#include <global.h>
 
 class QPainter;
 

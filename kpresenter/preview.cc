@@ -20,9 +20,8 @@
 #include <qpicture.h>
 #include <qpixmap.h>
 #include <qbitmap.h>
-#include "preview.h"
-#include "preview.moc"
-#include "qwmf.h"
+#include <preview.h>
+#include <qwmf.h>
 #include <qfileinfo.h>
 #include <qscrollview.h>
 
@@ -95,3 +94,5 @@ void KImagePreview::showPreview( const KURL &u )
 	pixmap->setPixmap( QPixmap() );
     }
 }
+
+#include <preview.moc>

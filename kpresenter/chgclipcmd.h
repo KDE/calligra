@@ -20,10 +20,8 @@
 #ifndef chgclipcmd_h
 #define chgclipcmd_h
 
-#include <qstring.h>
-
-#include "command.h"
-#include "kpclipartcollection.h"
+#include <command.h>
+#include <kpclipartcollection.h>
 
 class KPresenterDoc;
 class KPClipartObject;

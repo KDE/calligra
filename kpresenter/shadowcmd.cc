@@ -17,8 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kpresenter_doc.h"
-#include "shadowcmd.h"
+#include <kpresenter_doc.h>
+#include <shadowcmd.h>
 
 /******************************************************************/
 /* Class: ShadowCmd                                               */

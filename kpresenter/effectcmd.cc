@@ -17,8 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "effectcmd.h"
-#include "kpobject.h"
+#include <effectcmd.h>
+#include <kpobject.h>
 
 /******************************************************************/
 /* Class: EffectCmd                                               */
@@ -47,7 +47,7 @@ void EffectCmd::execute()
     KPObject *object = 0;
     for ( unsigned int i = 0; i < objs.count(); ++i ) {
 	object = objs.at( i );
-	
+
 	object->setPresNum( newEffect.presNum );
 	object->setEffect( newEffect.effect );
 	object->setEffect2( newEffect.effect2 );
@@ -63,7 +63,7 @@ void EffectCmd::unexecute()
     KPObject *object = 0;
     for ( unsigned int i = 0; i < objs.count(); ++i ) {
 	object = objs.at( i );
-	
+
 	object->setPresNum( oldEffects[ i ].presNum );
 	object->setEffect( oldEffects[ i ].effect );
 	object->setEffect2( oldEffects[ i ].effect2 );

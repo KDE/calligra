@@ -21,14 +21,10 @@
 #define kpautoformobject_h
 
 #include <qpixmap.h>
-#include <qcolor.h>
-#include <qstring.h>
-#include <qpen.h>
-#include <qbrush.h>
 
-#include "kpobject.h"
-#include "global.h"
-#include "autoformEdit/atfinterpreter.h"
+#include <kpobject.h>
+#include <global.h>
+#include <autoformEdit/atfinterpreter.h>
 
 #define RAD_FACTOR 180.0 / M_PI
 

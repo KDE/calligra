@@ -17,26 +17,20 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kpresenter_view.h"
-#include "effectdia.h"
-#include "effectdia.moc"
-#include "effectcmd.h"
-#include "kpobject.h"
+#include <kpresenter_view.h>
+#include <effectdia.h>
+#include <effectcmd.h>
 
 #include <qpushbutton.h>
-#include <qbuttongroup.h>
 #include <qcombobox.h>
 #include <qlabel.h>
 #include <qgroupbox.h>
 #include <qcheckbox.h>
-#include <qhbox.h>
-#include <qvbox.h>
 #include <qlineedit.h>
 #include <qvaluelist.h>
 #include <qlayout.h>
 #include <qspinbox.h>
 
-#include <kapp.h>
 #include <klocale.h>
 #include <kbuttonbox.h>
 
@@ -234,3 +228,5 @@ void EffectDia::num1Changed( int /*num*/ )
 void EffectDia::num2Changed( int /*num*/ )
 {
 }
+
+#include <effectdia.moc>

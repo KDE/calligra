@@ -17,26 +17,20 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "shadowdia.h"
-#include "shadowdia.moc"
+#include <shadowdia.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
 #include <qspinbox.h>
-#include <kapp.h>
-#include <kcolorbtn.h>
-#include <qrect.h>
+#include <kcolorbutton.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
 
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qgroupbox.h>
-#include <qcolor.h>
 #include <qpainter.h>
-#include <qpen.h>
 #include <qfont.h>
-#include <qstring.h>
 #include <qfontmetrics.h>
 
 #include <stdlib.h>
@@ -219,9 +213,9 @@ ShadowDia::ShadowDia( QWidget* parent, const char* name )
     okBut->setAutoResize( false );	//lukas: obsolete
     okBut->setAutoDefault( true );
     okBut->setDefault( true );
-    
+
     applyBut = new QPushButton( i18n( "Apply" ), this, "BApply" );
-    
+
     cancelBut = new QPushButton( i18n( "Cancel" ), this, "BCancel" );
 
     int butW = QMAX(cancelBut->sizeHint().width(),
@@ -437,6 +431,4 @@ void ShadowDia::distanceChanged( int _val )
     sPreview->setShadowDistance( shadowDistance );
 }
 
-
-
-
+#include <shadowdia.moc>

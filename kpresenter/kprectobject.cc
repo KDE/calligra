@@ -17,14 +17,13 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kprectobject.h"
-#include "kpgradient.h"
+#include <kprectobject.h>
+#include <kpgradient.h>
 
 #include <kdebug.h>
 #include <qregion.h>
 #include <qpainter.h>
 #include <qwmatrix.h>
-#include <iostream>
 using namespace std;
 
 /******************************************************************/
@@ -505,7 +504,3 @@ void KPRectObject::paint( QPainter* _painter )
           _painter->drawRoundRect( pw, pw, ow - 2 * pw, oh - 2 * pw, xRnd, yRnd );
     }
 }
-
-
-
-

@@ -17,9 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kptextobject.h"
-#include "kpgradient.h"
-#include "resizecmd.h"
+#include <kptextobject.h>
+#include <kpgradient.h>
+#include <resizecmd.h>
 
 #include <qwidget.h>
 #include <qpicture.h>
@@ -31,9 +31,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include "kpresenter_view.h"
-#include "kpresenter_doc.h"
-#include <iostream>
+#include <kpresenter_view.h>
+#include <kpresenter_doc.h>
 using namespace std;
 
 /******************************************************************/

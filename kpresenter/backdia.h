@@ -21,27 +21,19 @@
 #define BACKDIA_H
 
 #include <qdialog.h>
-#include <qcolor.h>
-#include <qstring.h>
 #include <qframe.h>
 #include <qdatetime.h>
 
-#include "global.h"
+#include <global.h>
 
 class QLabel;
-class QGroupBox;
 class QComboBox;
 class QPushButton;
 class KColorButton;
-class QButtonGroup;
 class QSlider;
 class KPBackGround;
 class KPresenterDoc;
-class QResizeEvent;
-class QPainter;
-class QRadioButton;
 class QCheckBox;
-class QShowEvent;
 
 /*******************************************************************
  *

@@ -23,7 +23,7 @@
 #include <qpoint.h>
 #include <qcolor.h>
 
-#include "global.h"
+#include <global.h>
 
 class QPainter;
 

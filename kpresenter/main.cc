@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kpresenter_aboutdata.h"
+#include <kpresenter_aboutdata.h>
 
 #include <koApplication.h>
 

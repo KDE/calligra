@@ -25,7 +25,6 @@
 
 class QWidget;
 class QObject;
-class QEvent;
 class QResizeEvent;
 class QComboBox;
 class QLabel;

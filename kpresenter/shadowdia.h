@@ -22,9 +22,8 @@
 
 #include <qdialog.h>
 #include <qframe.h>
-#include <qcolor.h>
 
-#include "global.h"
+#include <global.h>
 
 class QWidget;
 class QSpinBox;

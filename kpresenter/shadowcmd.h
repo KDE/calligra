@@ -21,12 +21,10 @@
 #define shadowcmd_h
 
 #include <qlist.h>
-#include <qcolor.h>
-
-#include "command.h"
-#include "kpobject.h"
+#include <command.h>
 
 class KPresenterDoc;
+class KPObject;
 
 /******************************************************************/
 /* Class: ShadowCmd                                               */

@@ -21,8 +21,6 @@
 #define OPTIONDIA_H
 
 #include <qdialog.h>
-#include <qcolor.h>
-#include <qstring.h>
 
 #include <kcolorbutton.h>
 #include <knuminput.h>

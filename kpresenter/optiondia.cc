@@ -17,19 +17,15 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "optiondia.h"
-#include "optiondia.moc"
+#include <optiondia.h>
 
 #include <qlabel.h>
-#include <qstring.h>
 #include <qgroupbox.h>
 #include <qvbox.h>
 #include <qlayout.h>
 #include <qtabwidget.h>
 
-#include <kapp.h>
 #include <klocale.h>
-#include <knuminput.h>
 #include <kbuttonbox.h>
 
 #include <stdlib.h>
@@ -110,3 +106,5 @@ void OptionDia::slotOkClicked()
     emit applyButtonPressed();
     accept();
 }
+
+#include <optiondia.moc>

@@ -21,10 +21,8 @@
 #define GLOBAL_H
 
 #include <qsize.h>
-
 #include <kiconloader.h>
-
-#include "kpresenter_factory.h"
+#include <kpresenter_factory.h>
 
 #define KPBarIcon( x ) BarIcon( x, KPresenterFactory::global() )
 
@@ -182,9 +180,6 @@ enum ToolEditMode {
     INS_FORMULA = 9,
     INS_AUTOFORM = 10
 };
-
-//static const float ObjSpeed[] = { 70.0, 50.0, 30.0 };
-//static const float PageSpeed[] = { 8.0, 16.0, 32.0 };
 
 // offsets of the effects in the Effect2 enum accoording to a objType
 const int TxtObjOffset = 0;

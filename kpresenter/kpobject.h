@@ -20,19 +20,15 @@
 #ifndef kpobject_h
 #define kpobject_h
 
-#include <qrect.h>
-#include <qsize.h>
 #include <qpoint.h>
 #include <qpen.h>
 #include <qbrush.h>
 #include <qcursor.h>
-#include <qcolor.h>
 
 #include <komlParser.h>
 
-#include "global.h"
-
-#include "kpgradient.h"
+#include <global.h>
+#include <kpgradient.h>
 
 class QPainter;
 class DCOPObject;

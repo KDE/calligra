@@ -17,20 +17,17 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "presstructview.h"
-#include "presstructview.moc"
+#include <presstructview.h>
 
-#include "kpbackground.h"
-#include "kpobject.h"
-#include "kpresenter_doc.h"
-#include "kpresenter_view.h"
-#include "page.h"
+#include <kpbackground.h>
+#include <kpobject.h>
+#include <kpresenter_view.h>
+#include <page.h>
 
 #include <klocale.h>
 #include <kiconloader.h>
 
 #include <qsplitter.h>
-#include <qevent.h>
 #include <qheader.h>
 #include <qwmatrix.h>
 #include <qvbox.h>
@@ -271,3 +268,5 @@ void KPPresStructView::makeStuffVisible( QListViewItem *item )
         view->makeRectVisible( rect );
     }
 }
+
+#include <presstructview.moc>

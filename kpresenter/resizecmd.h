@@ -23,7 +23,7 @@
 #include <qpoint.h>
 #include <qsize.h>
 
-#include "command.h"
+#include <command.h>
 
 class KPresenterDoc;
 class KPObject;

@@ -17,8 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kpresenter_doc.h"
-#include "rotatecmd.h"
+#include <kpresenter_doc.h>
+#include <rotatecmd.h>
 
 /******************************************************************/
 /* Class: RotateCmd                                               */
@@ -64,4 +64,3 @@ void RotateCmd::unexecute()
 
     doc->repaint( false );
 }
-

@@ -23,10 +23,10 @@
 #include <qpoint.h>
 #include <qcolor.h>
 
-#include "command.h"
-#include "kpobject.h"
+#include <command.h>
 
 class KPresenterDoc;
+class KPObject;
 
 /******************************************************************/
 /* Class: SetOptionsCmd                                           */

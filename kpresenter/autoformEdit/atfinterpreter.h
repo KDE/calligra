@@ -21,13 +21,12 @@
 #define ATFINTERP_H
 
 #include <qobject.h>
-#include <qstack.h>
 #include <qpointarray.h>
-#include <qstring.h>
 #include <qlist.h>
-#include <qfile.h>
 #include <qstrlist.h>
 #include <qcstring.h>
+
+class QPointArray;
 
 /******************************************************************/
 /* class ATFInterpreter                                           */

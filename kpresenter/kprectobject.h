@@ -20,8 +20,7 @@
 #ifndef kprectobject_h
 #define kprectobject_h
 
-#include "kpobject.h"
-#include "kpgradient.h"
+#include <kpobject.h>
 
 class KPGradient;
 

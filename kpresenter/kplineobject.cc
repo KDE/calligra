@@ -17,15 +17,14 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kplineobject.h"
-#include "kpresenter_utils.h"
+#include <kplineobject.h>
+#include <kpresenter_utils.h>
 
 #include <qpainter.h>
 #include <qwmatrix.h>
 #include <kdebug.h>
 
 #include <math.h>
-#include <iostream>
 using namespace std;
 
 /******************************************************************/

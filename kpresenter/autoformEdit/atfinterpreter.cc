@@ -17,8 +17,10 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "atfinterpreter.h"
-#include "atfinterpreter.moc"
+#include <atfinterpreter.h>
+
+#include <qstack.h>
+#include <qfile.h>
 
 const char ATFInterpreter::PNT_BG[]   = "POINT{";
 const char ATFInterpreter::X_BG[]     = "X{";
@@ -726,4 +728,4 @@ bool ATFInterpreter::isNum(char c)
     else return false;
 }
 
-
+#include <atfinterpreter.moc>

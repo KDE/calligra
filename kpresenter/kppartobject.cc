@@ -17,17 +17,14 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kppartobject.h"
-#include "kpresenter_doc.h"
-#include "kpresenter_view.h"
-#include "kpgradient.h"
+#include <kppartobject.h>
+#include <kpresenter_doc.h>
+#include <kpresenter_view.h>
+#include <kpgradient.h>
 
 #include <qpicture.h>
-#include <qwidget.h>
 #include <qpainter.h>
-#include <koDocument.h>
 #include <kdebug.h>
-#include <iostream>
 using namespace std;
 
 /******************************************************************/
@@ -501,4 +498,4 @@ void KPPartObject::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst )
     }
 }
 
-#include "kppartobject.moc"
+#include <kppartobject.moc>

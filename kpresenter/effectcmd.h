@@ -23,8 +23,8 @@
 #include <qlist.h>
 #include <qvaluelist.h>
 
-#include "command.h"
-#include "global.h"
+#include <command.h>
+#include <global.h>
 
 class KPObject;
 

@@ -74,5 +74,3 @@ protected slots:
 };
 
 #endif //EFFECTDIA_H
-
-

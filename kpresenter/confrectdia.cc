@@ -17,20 +17,16 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "confrectdia.h"
-#include "confrectdia.moc"
+#include <confrectdia.h>
 
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qgroupbox.h>
-#include <qcolor.h>
 #include <qpainter.h>
-#include <qpen.h>
 #include <qlayout.h>
 
 #include <knuminput.h>
 #include <klocale.h>
-#include <kapp.h>
 #include <kbuttonbox.h>
 
 #include <stdlib.h>
@@ -73,7 +69,7 @@ void RectPreview::drawContents( QPainter* painter )
 ConfRectDia::ConfRectDia( QWidget* parent, const char* name )
     : QDialog( parent, name, true )
 {
-    
+
     // ------------------------ layout
     QVBoxLayout *layout = new QVBoxLayout( this );
     layout->setMargin( 5 );
@@ -83,7 +79,7 @@ ConfRectDia::ConfRectDia( QWidget* parent, const char* name )
 
     // ------------------------ settings
     gSettings = new QGroupBox( 2, Qt::Horizontal, i18n( "Settings" ), this );
-    
+
     lRndX = new QLabel( i18n( "Roundedness X" ), gSettings );
 
     eRndX = new KIntNumInput( gSettings );
@@ -100,7 +96,7 @@ ConfRectDia::ConfRectDia( QWidget* parent, const char* name )
 
     // ------------------------ preview
     rectPreview = new RectPreview( this, "preview" );
-    
+
     hbox->addWidget( rectPreview );
 
     // ------------------------ buttons
@@ -123,7 +119,7 @@ ConfRectDia::ConfRectDia( QWidget* parent, const char* name )
 
     bb->setMaximumHeight( okBut->sizeHint().height() + 5 );
 
-    layout->addWidget( bb );    
+    layout->addWidget( bb );
 }
 
 /*===================== destructor ===============================*/
@@ -155,3 +151,5 @@ void ConfRectDia::setRnds( int _rx, int _ry )
     eRndX->setValue( xRnd );
     eRndY->setValue( yRnd );
 }
+
+#include <confrectdia.moc>

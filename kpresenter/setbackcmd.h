@@ -21,9 +21,8 @@
 #define setbackcmd_h
 
 #include <qcolor.h>
-
-#include "command.h"
-#include "global.h"
+#include <command.h>
+#include <global.h>
 
 class KPresenterDoc;
 

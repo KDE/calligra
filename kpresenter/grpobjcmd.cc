@@ -17,9 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kpresenter_doc.h"
-#include "grpobjcmd.h"
-#include "kpgroupobject.h"
+#include <kpresenter_doc.h>
+#include <grpobjcmd.h>
+#include <kpgroupobject.h>
 
 /******************************************************************/
 /* Class: GroupObjCmd						  */

@@ -17,8 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kpellipseobject.h"
-#include "kpgradient.h"
+#include <kpellipseobject.h>
+#include <kpgradient.h>
 
 #include <kdebug.h>
 #include <qbitmap.h>
@@ -26,7 +26,6 @@
 #include <qpicture.h>
 #include <qpainter.h>
 #include <qwmatrix.h>
-#include <iostream>
 using namespace std;
 
 /******************************************************************/
@@ -485,7 +484,3 @@ void KPEllipseObject::paint( QPainter* _painter )
 
     }
 }
-
-
-
-

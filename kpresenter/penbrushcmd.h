@@ -24,10 +24,10 @@
 #include <qpen.h>
 #include <qbrush.h>
 
-#include "command.h"
-#include "kpobject.h"
+#include <command.h>
 
 class KPresenterDoc;
+class KPObject;
 
 /******************************************************************/
 /* Class: PenBrushCmd						  */
@@ -56,7 +56,7 @@ public:
 	FillType fillType;
 	bool unbalanced;
 	int xfactor, yfactor;
-	
+
 	Brush &operator=( const Brush &_brush ) {
 	    brush = _brush.brush;
 	    gColor1 = _brush.gColor1;

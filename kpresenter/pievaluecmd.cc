@@ -17,10 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kpresenter_doc.h"
-#include "pievaluecmd.h"
-
-#include <qcolor.h>
+#include <kpresenter_doc.h>
+#include <pievaluecmd.h>
+#include <kppieobject.h>
 
 /******************************************************************/
 /* Class: PieValueCmd                                             */

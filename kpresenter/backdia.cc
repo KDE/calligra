@@ -17,28 +17,21 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "page.h"
-#include "preview.h"
-#include "backdia.h"
-#include "backdia.moc"
-#include "kpbackground.h"
-#include "kpresenter_doc.h"
+#include <preview.h>
+#include <backdia.h>
+#include <kpbackground.h>
+#include <kpresenter_doc.h>
 
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <qwidget.h>
 #include <qpainter.h>
 #include <qcombobox.h>
 #include <qslider.h>
 #include <qlayout.h>
 #include <qtabwidget.h>
-#include <qhbox.h>
 #include <qvbox.h>
-#include <qevent.h>
-#include <qradiobutton.h>
 #include <qcheckbox.h>
 #include <qdatetime.h>
-#include <qfiledialog.h>
 
 #include <kcolorbtn.h>
 #include <klocale.h>
@@ -393,7 +386,7 @@ void BackDia::selectPic()
     KURL url;
 
     //url = KFileDialog::getImageOpenURL(); lukas: put this back in KDE 3.0
-    
+
     KFileDialog fd( QString::null, KImageIO::pattern(KImageIO::Reading), 0, 0, true );
     fd.setPreviewWidget( new KImagePreview( &fd ) );
 
@@ -432,3 +425,5 @@ void BackDia::selectClip()
         updateConfiguration();
     }
 }
+
+#include <backdia.moc>

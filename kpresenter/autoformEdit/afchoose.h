@@ -25,7 +25,6 @@
 #include <qmap.h>
 #include <qfileinfo.h>
 
-class QWidget;
 class QLabel;
 class KIconCanvas;
 

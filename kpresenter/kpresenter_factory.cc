@@ -17,19 +17,12 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kpresenter_factory.h"
-#include "kpresenter_doc.h"
-#include "kpresenter_aboutdata.h"
+#include <kpresenter_factory.h>
+#include <kpresenter_doc.h>
+#include <kpresenter_aboutdata.h>
 
-#include <kimageio.h>
-#include <kfiledialog.h>
-#include <kglobal.h>
 #include <kstddirs.h>
 #include <kinstance.h>
-#include <kaboutdata.h>
-#include <qstringlist.h>
-#include <klocale.h>
-#include <kiconloader.h>
 
 extern "C"
 {
@@ -95,4 +88,4 @@ KInstance* KPresenterFactory::global()
     return s_global;
 }
 
-#include "kpresenter_factory.moc"
+#include <kpresenter_factory.moc>

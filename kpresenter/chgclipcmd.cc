@@ -17,9 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kpresenter_doc.h"
-#include "chgclipcmd.h"
-#include "kpclipartobject.h"
+#include <kpresenter_doc.h>
+#include <chgclipcmd.h>
+#include <kpclipartobject.h>
 
 /******************************************************************/
 /* Class: ChgClipCmd                                              */
@@ -54,4 +54,3 @@ void ChgClipCmd::unexecute()
     object->setFileName( oldKey.filename, oldKey.lastModified );
     doc->repaint( object );
 }
-

@@ -17,10 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kpresenter_view.h"
-#include "kpresenter_doc.h"
-#include "pglayoutcmd.h"
-#include "kpbackground.h"
+#include <kpresenter_view.h>
+#include <pglayoutcmd.h>
+#include <kpbackground.h>
 
 #include <koRuler.h>
 
@@ -55,4 +54,3 @@ void PgLayoutCmd::unexecute()
     view->getVRuler()->setPageLayout( oldLayout );
     view->setRanges();
 }
-

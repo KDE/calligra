@@ -17,18 +17,18 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kpresenter_doc.h"
-#include "penbrushcmd.h"
+#include <kpresenter_doc.h>
+#include <penbrushcmd.h>
 
-#include "kplineobject.h"
-#include "kprectobject.h"
-#include "kpellipseobject.h"
-#include "kpautoformobject.h"
-#include "kpclipartobject.h"
-#include "kptextobject.h"
-#include "kppixmapobject.h"
-#include "kppieobject.h"
-#include "kppartobject.h"
+#include <kplineobject.h>
+#include <kprectobject.h>
+#include <kpellipseobject.h>
+#include <kpautoformobject.h>
+#include <kpclipartobject.h>
+#include <kptextobject.h>
+#include <kppixmapobject.h>
+#include <kppieobject.h>
+#include <kppartobject.h>
 
 /******************************************************************/
 /* Class: PenBrushCmd						  */

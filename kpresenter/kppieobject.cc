@@ -17,15 +17,14 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kppieobject.h"
-#include "kpgradient.h"
+#include <kppieobject.h>
+#include <kpgradient.h>
 
 #include <qregion.h>
 #include <qpicture.h>
 #include <qpainter.h>
 #include <qwmatrix.h>
 #include <kdebug.h>
-#include <iostream>
 using namespace std;
 
 /******************************************************************/
@@ -546,7 +545,3 @@ void KPPieObject::paint( QPainter* _painter )
     default: break;
     }
 }
-
-
-
-

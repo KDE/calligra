@@ -20,37 +20,18 @@
 #ifndef kpresenter_view_h
 #define kpresenter_view_h
 
-#include <qwidget.h>
-#include <qlist.h>
-#include <qpen.h>
-#include <qbrush.h>
-#include <qstringlist.h>
-#include <qcolor.h>
-#include <qfont.h>
 #include <qguardedptr.h>
-#include <qsplitter.h>
 
-#include <qrect.h>
-#include <qpoint.h>
-
-#include <koMainWindow.h>
 #include <koView.h>
-
-#include "kpresenter_doc.h"
-#include "global.h"
-#include "ktextedit.h"
-#include "searchdia.h"
+#include <kpresenter_doc.h>
+#include <global.h>
+#include <searchdia.h>
 
 class DCOPObject;
 class KPresenterView;
-class KPresenterShell;
-class KPresenterDoc;
-class KPresenterChild;
 class BackDia;
 class Page;
-class KPPartObject;
 class KoRuler;
-class KPresenterShell;
 class QScrollBar;
 class AFChoose;
 class StyleDia;

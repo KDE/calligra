@@ -20,9 +20,7 @@
 #ifndef chgpixcmd_h
 #define chgpixcmd_h
 
-#include <qstring.h>
-
-#include "command.h"
+#include <command.h>
 
 class KPresenterDoc;
 class KPPixmapObject;

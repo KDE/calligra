@@ -17,18 +17,17 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kppixmapobject.h"
+#include <kppixmapobject.h>
+#include <kpgradient.h>
 
 #include <qpainter.h>
 #include <qwmatrix.h>
 #include <qfileinfo.h>
 #include <qpixmap.h>
-#include <qcstring.h>
 #include <kdebug.h>
 
 // for getenv ()
 #include <stdlib.h>
-#include <iostream>
 using namespace std;
 
 /******************************************************************/

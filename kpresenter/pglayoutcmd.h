@@ -22,7 +22,7 @@
 
 #include <koPageLayoutDia.h>
 
-#include "command.h"
+#include <command.h>
 
 class KPresenterView;
 

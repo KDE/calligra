@@ -17,32 +17,25 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "footer_header.h"
-#include "footer_header.moc"
-#include "kptextobject.h"
-#include "styledia.h"
-#include "global.h"
-#include "kpresenter_doc.h"
-//#include "kpresenter_view.h"
+#include <footer_header.h>
+#include <kptextobject.h>
+#include <styledia.h>
+#include <kpresenter_doc.h>
 
 #include <qtabwidget.h>
 #include <qpoint.h>
-#include <qcolor.h>
 #include <qcheckbox.h>
 #include <qpushbutton.h>
 #include <qhbox.h>
 #include <qpixmap.h>
 #include <qstringlist.h>
-#include <qstrlist.h>
 
 #include <klocale.h>
 #include <kbuttonbox.h>
 #include <kcombobox.h>
-#include <kapp.h>
 #include <kcolordlg.h>
 #include <kiconloader.h>
 #include <kfontdialog.h>
-#include <kglobal.h>
 
 #include <stdlib.h>
 
@@ -728,3 +721,5 @@ void KPFooterHeaderEditor::footerInsertPageNum()
     doc->footer()->getKTextObject()->insertPageNum();
 #endif
 }
+
+#include <footer_header.moc>

@@ -17,9 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kpresenter_doc.h"
-#include "setbackcmd.h"
-#include "kpbackground.h"
+#include <kpresenter_doc.h>
+#include <setbackcmd.h>
+#include <kpbackground.h>
 
 /******************************************************************/
 /* Class: SetBackCmd						  */
@@ -106,4 +106,3 @@ void SetBackCmd::unexecute()
 
     doc->repaint( false );
 }
-

@@ -33,7 +33,6 @@
 #include <qsize.h>
 #include <qvaluelist.h>
 #include <qvaluestack.h>
-#include <qobject.h>
 #include <qdict.h>
 #include <qtextstream.h>
 #include <qpainter.h>

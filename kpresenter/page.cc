@@ -17,46 +17,37 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <koprinter.h>
 #include <qprogressdialog.h>
-#include <qprogressbar.h>
 #include <qdragobject.h>
 #include <qfile.h>
 #include <qtextstream.h>
-#include <qevent.h>
 #include <qpainter.h>
-#include <qscrollbar.h>
-#include <qpaintdevice.h>
 #include <qwmatrix.h>
 #include <qapplication.h>
-#include <qpicture.h>
 #include <qpointarray.h>
 #include <qpopupmenu.h>
 #include <qimage.h>
 #include <qdatetime.h>
 #include <qdropsite.h>
 
-#include "page.h"
-#include "page.moc"
-#include "kpresenter_view.h"
-#include "footer_header.h"
-#include "qwmf.h"
-#include "kpobject.h"
-#include "kpbackground.h"
-#include "kpclipartobject.h"
-#include "kppixmapobject.h"
-#include "movecmd.h"
-#include "resizecmd.h"
-#include "gotopage.h"
-#include "ktextedit.h"
-#include "kptextobject.h"
+#include <page.h>
+#include <kpresenter_view.h>
+#include <footer_header.h>
+#include <qwmf.h>
+#include <kpbackground.h>
+#include <kpclipartobject.h>
+#include <kppixmapobject.h>
+#include <movecmd.h>
+#include <resizecmd.h>
+#include <gotopage.h>
+#include <kptextobject.h>
 
+#include <kapp.h>
 #include <kmimemagic.h>
 #include <kurl.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kglobal.h>
-#include <kapp.h>
 #include <ktempfile.h>
 #include <kdebug.h>
 
@@ -4183,3 +4174,5 @@ bool Page::pagesHelper(const QString &chunk, QValueList<int> &list) {
         list.append(chunk.toInt(&ok));
     return ok;
 }
+
+#include <page.moc>

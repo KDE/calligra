@@ -17,14 +17,13 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kpclipartobject.h"
-#include "kpgradient.h"
+#include <kpclipartobject.h>
+#include <kpgradient.h>
 
 #include <qpainter.h>
 #include <qwmatrix.h>
 #include <qfileinfo.h>
 #include <kdebug.h>
-#include <iostream>
 using namespace std;
 
 /******************************************************************/

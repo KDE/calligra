@@ -24,8 +24,8 @@
 #include <qstring.h>
 #include <qlist.h>
 
-#include "command.h"
-#include "global.h"
+#include <command.h>
+#include <global.h>
 
 /******************************************************************/
 /* Class: CommandHistory                                          */

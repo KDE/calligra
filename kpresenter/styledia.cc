@@ -17,31 +17,26 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "styledia.h"
-#include "styledia.moc"
-#include "generalconfig.h"
+#include <styledia.h>
+#include <generalconfig.h>
 
-#include <kapp.h>
 #include <klocale.h>
 #include <kcolordlg.h>
-#include <kcolorbtn.h>
+#include <kcolorbutton.h>
 
 #include <qlayout.h>
-#include <qhbox.h>
 #include <qvbox.h>
 #include <qpainter.h>
 #include <qwidgetstack.h>
 #include <qlabel.h>
 #include <qcombobox.h>
-#include <qpen.h>
 #include <qbrush.h>
 #include <qslider.h>
 #include <qspinbox.h>
 #include <qcheckbox.h>
-#include <qevent.h>
 
-#include "kpresenter_utils.h"
-#include "kpgradient.h"
+#include <kpresenter_utils.h>
+#include <kpgradient.h>
 
 /******************************************************************/
 /* class Pen and Brush preview					  */
@@ -666,3 +661,5 @@ bool StyleDia::isSticky()
 {
     return sticky->isChecked();
 }
+
+#include <styledia.moc>

@@ -21,13 +21,10 @@
 #define FOOTER_HEADER_H
 
 #include <qvbox.h>
-#include <qevent.h>
-
 #include <ktoolbar.h>
 
-#include "ktextedit.h"
-
 class KPresenterDoc;
+class KToolBar;
 
 class QTabWidget;
 class QCheckBox;

@@ -20,13 +20,8 @@
 #ifndef kpellipseobject_h
 #define kpellipseobject_h
 
-#include "kpobject.h"
-#include "global.h"
-
-#include <qcolor.h>
-#include <qpen.h>
-#include <qbrush.h>
-#include <qpixmap.h>
+#include <kpobject.h>
+#include <global.h>
 
 class KPGradient;
 class QPainter;

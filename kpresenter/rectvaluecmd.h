@@ -21,12 +21,10 @@
 #define rectvaluecmd_h
 
 #include <qlist.h>
-
-#include "command.h"
-#include "kpobject.h"
-#include "kprectobject.h"
+#include <command.h>
 
 class KPresenterDoc;
+class KPObject;
 
 /******************************************************************/
 /* Class: RectValueCmd                                            */

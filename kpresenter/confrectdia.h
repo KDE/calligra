@@ -23,8 +23,6 @@
 #include <qdialog.h>
 #include <qframe.h>
 
-#include "global.h"
-
 class QPainter;
 class QLabel;
 class KIntNumInput;
@@ -92,5 +90,3 @@ signals:
 };
 
 #endif
-
-

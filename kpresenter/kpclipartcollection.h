@@ -22,10 +22,7 @@
 
 #include <qmap.h>
 #include <qdatetime.h>
-#include <qcstring.h>
 #include <qpicture.h>
-
-#include "global.h"
 
 class QDomElement;
 class QDomDocument;

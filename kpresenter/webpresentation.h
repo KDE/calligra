@@ -20,9 +20,6 @@
 #ifndef webpresentation_h
 #define webpresentation_h
 
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qcolor.h>
 #include <qwizard.h>
 #include <qdialog.h>
 
@@ -231,4 +228,3 @@ protected slots:
 
 };
 #endif
-

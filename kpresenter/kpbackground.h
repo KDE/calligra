@@ -20,15 +20,11 @@
 #ifndef kpbackground_h
 #define kpbackground_h
 
-#include <qcolor.h>
-#include <qstring.h>
-#include <qrect.h>
 #include <qsize.h>
-
 #include <komlParser.h>
-#include "global.h"
-#include "kpimage.h"
-#include "kpclipartcollection.h"
+#include <global.h>
+#include <kpimage.h>
+#include <kpclipartcollection.h>
 
 class KPresenterDoc;
 class QPainter;

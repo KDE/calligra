@@ -17,22 +17,17 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "rotatedia.h"
-#include "rotatedia.moc"
+#include <rotatedia.h>
 
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qvbuttongroup.h>
 #include <qlayout.h>
 #include <qradiobutton.h>
-#include <qcolor.h>
 #include <qpainter.h>
-#include <qpen.h>
 #include <qfont.h>
 #include <qfontmetrics.h>
 #include <qwmatrix.h>
-#include <qpoint.h>
-#include <qrect.h>
 #include <qsizepolicy.h>
 
 #include <klocale.h>
@@ -103,7 +98,7 @@ RotateDia::RotateDia( QWidget* parent, const char* name )
     layout->setSpacing( 5 );
     QHBoxLayout *hbox = new QHBoxLayout( layout );
     hbox->setSpacing( 5 );
-       
+
     // ------------------------ angles
     angle = new QVButtonGroup( i18n( "Angle" ), this);
     angle->setExclusive(true);
@@ -117,7 +112,7 @@ RotateDia::RotateDia( QWidget* parent, const char* name )
 
     custom = new KDoubleNumInput(0.0, angle);
     custom->setRange(0.0, 360.0);
-    custom->setSuffix(" °"); 
+    custom->setSuffix(" °");
 
     hbox->addWidget( angle );
 
@@ -231,3 +226,5 @@ void RotateDia::degCustomChanged( double t )
     rPreview->setAngle( t );
     _angle=t;
 }
+
+#include <rotatedia.moc>

@@ -22,11 +22,11 @@
 
 #include <qlist.h>
 
-#include "command.h"
-#include "kpobject.h"
+#include <command.h>
 
 class KPresenterDoc;
 class KPGroupObject;
+class KPObject;
 
 /******************************************************************/
 /* Class: GroupObjCmd						  */
@@ -35,8 +35,8 @@ class KPGroupObject;
 class GroupObjCmd : public Command
 {
 public:
-    GroupObjCmd( const QString &_name, 
-		 const QList<KPObject> &_objects, 
+    GroupObjCmd( const QString &_name,
+		 const QList<KPObject> &_objects,
 		 KPresenterDoc *_doc );
     ~GroupObjCmd();
 
@@ -50,7 +50,7 @@ protected:
     QList<KPObject> objects;
     KPresenterDoc *doc;
     KPGroupObject *grpObj;
-    
+
 };
 
 /******************************************************************/
@@ -60,7 +60,7 @@ protected:
 class UnGroupObjCmd : public Command
 {
 public:
-    UnGroupObjCmd( const QString &_name, 
+    UnGroupObjCmd( const QString &_name,
 		 KPGroupObject *grpObj_,
 		 KPresenterDoc *_doc );
     ~UnGroupObjCmd();
@@ -75,7 +75,7 @@ protected:
     QList<KPObject> objects;
     KPresenterDoc *doc;
     KPGroupObject *grpObj;
-    
+
 };
 
 #endif

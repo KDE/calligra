@@ -20,10 +20,7 @@
 #ifndef PAGE_H
 #define PAGE_H
 
-
-#include <qstring.h>
 #include <qwidget.h>
-#include <qcolor.h>
 #include <qlist.h>
 #include <qpicture.h>
 #include <qvaluelist.h>
@@ -36,9 +33,7 @@
 #include <koQueryTrader.h>
 #include <koprinter.h>
 
-#include "global.h"
-#include "ktextedit.h"
-#include "kpbackground.h"
+#include <global.h>
 
 class KPresenterView;
 class KPresenterDoc;
@@ -47,7 +42,6 @@ class KTextEdit;
 class KPTextObject;
 class KPObject;
 class QPopupMenu;
-class QEvent;
 class QResizeEvent;
 class QPaintEvent;
 class QDragEnterEvent;
@@ -57,9 +51,8 @@ class QDropEvent;
 class QFocusEvent;
 class QMouseEvent;
 class QKeyEvent;
-class QPainter;
-class KPrinter;
 class KPPixmapObject;
+class KPBackGround;
 
 /**********************************************************************/
 /* class Page - There is ONE instance of this class for a given view  */

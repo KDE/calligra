@@ -20,8 +20,7 @@
 #ifndef pgconfcmd_h
 #define pgconfcmd_h
 
-#include "command.h"
-#include "global.h"
+#include <command.h>
 
 #include <qmap.h>
 

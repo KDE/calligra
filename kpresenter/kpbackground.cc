@@ -17,32 +17,20 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "KPresenterBackgroundIface.h"
+#include <KPresenterBackgroundIface.h>
 
-#include "kpbackground.h"
-#include "kpresenter_doc.h"
-#include "qwmf.h"
-#include "kpgradientcollection.h"
-#include "kptextobject.h"
+#include <kpbackground.h>
+#include <kpresenter_doc.h>
+#include <qwmf.h>
+#include <kpgradientcollection.h>
+#include <kptextobject.h>
 
 #include <qpicture.h>
 #include <qpainter.h>
-#include <qpen.h>
-#include <qbrush.h>
-#include <qpixmap.h>
 #include <qfileinfo.h>
-#include <qcstring.h>
-
-#include <komlParser.h>
-#include <komlWriter.h>
-
-#include <kapp.h>
 
 // for getenv ()
 #include <stdlib.h>
-#include <fstream.h>
-#include <iostream>
-
 using namespace std;
 
 /******************************************************************/
@@ -490,11 +478,11 @@ void KPBackGround::load( KOMLParser& parser, QValueList<KOMLAttrib>& lst )
         }
 
         else
-            cerr << "Unknown tag '" << tag.latin1() << "' in CLPARTOBJECT" << endl;
+            qDebug("Unknown tag '%s' in CLPARTOBJECT", tag.latin1());
 
         if ( !parser.close( tag ) )
         {
-            cerr << "ERR: Closing Child" << endl;
+            qDebug("ERR: Closing Child");
             return;
         }
     }

@@ -20,7 +20,7 @@
 #ifndef insertcmd_h
 #define insertcmd_h
 
-#include "command.h"
+#include <command.h>
 
 class KPresenterDoc;
 class KPObject;

@@ -20,14 +20,14 @@
 #ifndef kptextobject_h
 #define kptextobject_h
 
-#include "kpobject.h"
-#include "ktextedit.h"
-#include "kpgradient.h"
+#include <kpobject.h>
+#include <ktextedit.h>
 
 class KPresenterView;
 class KPresenterDoc;
 class QDomElement;
 class TextCmd;
+class KPGradient;
 
 /******************************************************************/
 /* Class: KPTextObject                                            */

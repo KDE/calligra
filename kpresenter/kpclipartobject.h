@@ -20,8 +20,8 @@
 #ifndef kpclipartobject_h
 #define kpclipartobject_h
 
-#include "kpobject.h"
-#include "kpclipartcollection.h"
+#include <kpobject.h>
+#include <kpclipartcollection.h>
 
 #include <qdatetime.h>
 

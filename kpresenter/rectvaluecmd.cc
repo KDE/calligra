@@ -17,10 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kpresenter_doc.h"
-#include "rectvaluecmd.h"
-
-#include <qcolor.h>
+#include <kpresenter_doc.h>
+#include <rectvaluecmd.h>
+#include <kprectobject.h>
 
 /******************************************************************/
 /* Class: RectValueCmd                                            */

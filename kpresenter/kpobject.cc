@@ -17,10 +17,10 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "KPresenterObjectIface.h"
+#include <KPresenterObjectIface.h>
 
-#include "kpobject.h"
-#include "kptextobject.h"
+#include <kpobject.h>
+#include <kptextobject.h>
 
 #include <qpainter.h>
 #include <qwmatrix.h>
@@ -28,10 +28,6 @@
 #include <qregion.h>
 
 #include <komlParser.h>
-#include <komlWriter.h>
-
-#include <kapp.h>
-#include <kdebug.h>
 
 #include <stdlib.h>
 #include <fstream.h>

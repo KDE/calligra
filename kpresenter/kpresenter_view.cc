@@ -19,10 +19,7 @@
 
 #include <koprinter.h>
 #include <qpainter.h>
-#include <qstring.h>
-#include <qkeycode.h>
 #include <qscrollbar.h>
-#include <qevent.h>
 #include <qpopupmenu.h>
 #include <qcursor.h>
 #include <qfileinfo.h>
@@ -31,44 +28,41 @@
 #include <qtoolbutton.h>
 #include <qtooltip.h>
 #include <qdir.h>
-#include <qradiobutton.h>
 #include <qclipboard.h>
+#include <qradiobutton.h>
 
-#include "backdia.h"
-#include "autoformEdit/afchoose.h"
-#include "styledia.h"
-#include "ktextedit.h"
-#include "optiondia.h"
-#include "pgconfdia.h"
-#include "effectdia.h"
-#include "rotatedia.h"
-#include "searchdia.h"
-#include "shadowdia.h"
-#include "presstructview.h"
-#include "setbackcmd.h"
-#include "pgconfcmd.h"
-#include "confpiedia.h"
-#include "confrectdia.h"
-#include "pglayoutcmd.h"
-#include "shadowcmd.h"
-#include "rotatecmd.h"
-#include "kppartobject.h"
-#include "textdialog.h"
-#include "sidebar.h"
-#include "insertpagedia.h"
-#include "preview.h"
+#include <backdia.h>
+#include <autoformEdit/afchoose.h>
+#include <styledia.h>
+#include <optiondia.h>
+#include <pgconfdia.h>
+#include <effectdia.h>
+#include <rotatedia.h>
+#include <shadowdia.h>
+#include <presstructview.h>
+#include <setbackcmd.h>
+#include <pgconfcmd.h>
+#include <confpiedia.h>
+#include <confrectdia.h>
+#include <pglayoutcmd.h>
+#include <shadowcmd.h>
+#include <rotatecmd.h>
+#include <kppartobject.h>
+#include <textdialog.h>
+#include <sidebar.h>
+#include <insertpagedia.h>
+#include <preview.h>
 
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 #include <kstdaction.h>
 #include <kio/netaccess.h>
 
-#include "kpresenter_view.h"
-#include "kpresenter_view.moc"
-#include "page.h"
-#include "webpresentation.h"
-#include "footer_header.h"
-#include "kptextobject.h"
+#include <kpresenter_view.h>
+#include <page.h>
+#include <webpresentation.h>
+#include <footer_header.h>
+#include <kptextobject.h>
 
 #include <klocale.h>
 #include <kcolordlg.h>
@@ -81,7 +75,6 @@
 
 #include <koPartSelectDia.h>
 #include <koQueryTrader.h>
-#include <koDocument.h>
 #include <koPageLayoutDia.h>
 #include <koRuler.h>
 #include <koTemplateCreateDia.h>
@@ -95,7 +88,7 @@
 
 #include <kstddirs.h>
 
-#include "KPresenterViewIface.h"
+#include <KPresenterViewIface.h>
 
 #define DEBUG
 
@@ -2973,3 +2966,5 @@ void KPresenterView::viewShowSideBar()
     else
         sidebar->show();
 }
+
+#include <kpresenter_view.moc>

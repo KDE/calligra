@@ -17,18 +17,13 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "confpiedia.h"
-#include "confpiedia.moc"
+#include <confpiedia.h>
 
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qgroupbox.h>
-#include <qcolor.h>
 #include <qpainter.h>
-#include <qcombobox.h>
 #include <qvalidator.h>
-
-#include <kapp.h>
 
 #include <klocale.h>
 
@@ -190,3 +185,5 @@ void ConfPieDia::typeChanged( int _type )
     type = static_cast<PieType>( _type );
     piePreview->setType( type );
 }
+
+#include <confpiedia.moc>

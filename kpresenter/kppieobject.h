@@ -20,7 +20,7 @@
 #ifndef kppieobject_h
 #define kppieobject_h
 
-#include "kpobject.h"
+#include <kpobject.h>
 
 class KPGradient;
 

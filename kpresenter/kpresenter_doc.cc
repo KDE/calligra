@@ -17,56 +17,38 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kpresenter_doc.h"
-#include "kpresenter_doc.moc"
-#include "kpresenter_view.h"
-#include "page.h"
-#include "ktextedit.h"
-#include "footer_header.h"
-#include "kplineobject.h"
-#include "kprectobject.h"
-#include "kpellipseobject.h"
-#include "kpautoformobject.h"
-#include "kpclipartobject.h"
-#include "kptextobject.h"
-#include "kppixmapobject.h"
-#include "kppieobject.h"
-#include "kppartobject.h"
-#include "kpgroupobject.h"
-#include "movecmd.h"
-#include "insertcmd.h"
-#include "deletecmd.h"
-#include "setoptionscmd.h"
-#include "chgclipcmd.h"
-#include "chgpixcmd.h"
-#include "lowraicmd.h"
-#include "pievaluecmd.h"
-#include "rectvaluecmd.h"
-#include "penbrushcmd.h"
-#include "grpobjcmd.h"
-#include "commandhistory.h"
-#include "styledia.h"
-#include "insertpagedia.h"
+#include <kpresenter_doc.h>
+#include <kpresenter_view.h>
+#include <page.h>
+#include <footer_header.h>
+#include <kplineobject.h>
+#include <kprectobject.h>
+#include <kpellipseobject.h>
+#include <kpautoformobject.h>
+#include <kpclipartobject.h>
+#include <kptextobject.h>
+#include <kppixmapobject.h>
+#include <kppieobject.h>
+#include <kppartobject.h>
+#include <kpgroupobject.h>
+#include <movecmd.h>
+#include <insertcmd.h>
+#include <deletecmd.h>
+#include <setoptionscmd.h>
+#include <chgclipcmd.h>
+#include <chgpixcmd.h>
+#include <lowraicmd.h>
+#include <pievaluecmd.h>
+#include <rectvaluecmd.h>
+#include <penbrushcmd.h>
+#include <grpobjcmd.h>
+#include <styledia.h>
+#include <insertpagedia.h>
 
-#include <qrect.h>
-#include <qpainter.h>
-#include <qcolor.h>
-#include <qevent.h>
-#include <qpixmap.h>
-#include <qwmatrix.h>
-#include <qbrush.h>
-#include <qpen.h>
 #include <qpopupmenu.h>
-#include <qcursor.h>
 #include <qclipboard.h>
 #include <qregexp.h>
 #include <qfileinfo.h>
-#include <qmap.h>
-#include <qdatetime.h>
-#include <qimage.h>
-#include <qpicture.h>
-#include <qbuffer.h>
-#include <qtextstream.h>
 #include <qdom.h>
 
 #include <kurl.h>
@@ -92,8 +74,7 @@
 #include <unistd.h>
 #include <config.h>
 
-#include "KPresenterDocIface.h"
-#include <iostream>
+#include <KPresenterDocIface.h>
 #include <cassert>
 using namespace std;
 
@@ -4201,3 +4182,5 @@ QString KPresenterDoc::selectedForPrinting() const {
         ret.truncate(ret.length()-1);
     return ret;
 }
+
+#include <kpresenter_doc.moc>

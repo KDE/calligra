@@ -21,12 +21,10 @@
 #define kpgradientcollection_h
 
 #include <qlist.h>
-#include <qcolor.h>
-
-#include "kpgradient.h"
-#include "global.h"
+#include <global.h>
 
 class QPixmap;
+class KPGradient;
 
 /******************************************************************/
 /* Class: KPGradientCollection                                    */

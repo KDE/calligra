@@ -36,17 +36,16 @@ class KTextEditFormatCollection;
 
 #include <koPageLayoutDia.h>
 
-#include "kpobject.h"
-#include "global.h"
-#include "kpbackground.h"
+#include <kpobject.h>
+#include <global.h>
+#include <kpbackground.h>
 
-#include "kpimage.h"
-#include "kpgradientcollection.h"
-#include "kpclipartcollection.h"
-#include "commandhistory.h"
+#include <kpimage.h>
+#include <kpgradientcollection.h>
+#include <kpclipartcollection.h>
+#include <commandhistory.h>
 
 #include <komlParser.h>
-#include <komlWriter.h>
 
 class KoDocumentEntry;
 class KPFooterHeaderEditor;

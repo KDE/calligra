@@ -26,13 +26,11 @@
 #include <qbrush.h>
 #include <qcombobox.h>
 #include <qlineedit.h>
-
-#include "global.h"
+#include <global.h>
 
 class QLabel;
 class QGroupBox;
 class QPushButton;
-class QComboBox;
 class QPainter;
 
 /******************************************************************/
@@ -119,5 +117,3 @@ signals:
 };
 
 #endif
-
-

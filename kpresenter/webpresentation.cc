@@ -17,12 +17,10 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "webpresentation.h"
-#include "webpresentation.moc"
+#include <webpresentation.h>
 
-#include "kpresenter_doc.h"
-#include "kpresenter_view.h"
-#include "page.h"
+#include <kpresenter_view.h>
+#include <page.h>
 
 #include <stdlib.h>
 #include <unistd.h>
@@ -33,7 +31,6 @@
 #include <qtextstream.h>
 #include <qvbox.h>
 #include <qhbox.h>
-#include <qpalette.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qcombobox.h>
@@ -41,11 +38,9 @@
 #include <qlineedit.h>
 #include <qlistview.h>
 #include <qfileinfo.h>
-#include <qevent.h>
 #include <qframe.h>
 #include <qfont.h>
 #include <qpixmap.h>
-#include <qsize.h>
 #include <qdatetime.h>
 #include <qdir.h>
 #include <qheader.h>
@@ -53,7 +48,7 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kcolorbtn.h>
+#include <kcolorbutton.h>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 #include <kbuttonbox.h>
@@ -507,7 +502,7 @@ void KPWebPresentationWizard::setupPage2()
     page2 = new QHBox( this );
     page2->setSpacing( 5 );
     page2->setMargin( 5 );
-    
+
     QLabel *helptext = new QLabel( page2 );
     helptext->setMargin( 5 );
     helptext->setBackgroundMode( PaletteLight );
@@ -577,7 +572,7 @@ void KPWebPresentationWizard::setupPage3()
     page3 = new QHBox( this );
     page3->setSpacing( 5 );
     page3->setMargin( 5 );
-    
+
     QLabel *helptext = new QLabel( page3 );
     helptext->setMargin( 5 );
     helptext->setBackgroundMode( PaletteLight );
@@ -619,7 +614,7 @@ void KPWebPresentationWizard::setupPage3()
     }
 
     addPage( page3, i18n( "Slide Titles" ) );
- 
+
     setHelpEnabled(page3, false);  //doesn't do anything currently
 
     setFinish( page3, true );
@@ -896,3 +891,5 @@ void KPWebPresentationCreateDialog::saveConfig()
         webPres.saveConfig();
     }
 }
+
+#include <webpresentation.moc>

@@ -17,10 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kpautoformobject.h"
-#include "kpresenter_utils.h"
-#include "kpgradient.h"
-#include <kpresenter_factory.h>
+#include <kpautoformobject.h>
+#include <kpresenter_utils.h>
+#include <kpgradient.h>
 
 #include <qpointarray.h>
 #include <qlist.h>
@@ -31,10 +30,7 @@
 #include <kstddirs.h>
 #include <kdebug.h>
 
-#include <kapp.h>
-
 #include <math.h>
-#include <iostream>
 using namespace std;
 
 /******************************************************************/

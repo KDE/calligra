@@ -17,14 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kpresenter_doc.h"
-#include "insertcmd.h"
-#include "kpobject.h"
-#include "kptextobject.h"
-
-#include <qpoint.h>
-#include <qrect.h>
-#include <qsize.h>
+#include <kpresenter_doc.h>
+#include <insertcmd.h>
+#include <kptextobject.h>
 
 /******************************************************************/
 /* Class: InsertCmd						  */
@@ -65,4 +60,3 @@ void InsertCmd::unexecute()
     }
     doc->repaint( oldRect );
 }
-

@@ -17,12 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kpresenter_doc.h"
-#include "deletecmd.h"
-
-#include <qrect.h>
-#include <qpoint.h>
-#include <qsize.h>
+#include <kpresenter_doc.h>
+#include <deletecmd.h>
 
 /******************************************************************/
 /* Class: DeleteCmd						  */

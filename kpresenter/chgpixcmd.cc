@@ -17,9 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kpresenter_doc.h"
-#include "chgpixcmd.h"
-#include "kppixmapobject.h"
+#include <kpresenter_doc.h>
+#include <chgpixcmd.h>
+#include <kppixmapobject.h>
 
 /******************************************************************/
 /* Class: ChgPixCmd                                               */
@@ -63,4 +63,3 @@ void ChgPixCmd::unexecute()
     doc->objectList()->insert( pos, oldObject );
     doc->repaint( oldObject );
 }
-

@@ -17,8 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "commandhistory.h"
-#include "commandhistory.moc"
+#include <commandhistory.h>
 
 /******************************************************************/
 /* Class: CommandHistory                                          */
@@ -106,3 +105,5 @@ QString CommandHistory::getRedoName()
     else
         return QString();
 }
+
+#include <commandhistory.moc>

@@ -20,10 +20,8 @@
 #ifndef kplineobject_h
 #define kplineobject_h
 
-#include "kpobject.h"
-#include "global.h"
-
-#include <qpen.h>
+#include <kpobject.h>
+//#include <global.h>
 
 #define RAD_FACTOR 180.0 / M_PI
 

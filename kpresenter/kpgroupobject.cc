@@ -17,21 +17,20 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kpgroupobject.h"
+#include <kpgroupobject.h>
 
-#include "kpresenter_doc.h"
-#include "kplineobject.h"
-#include "kprectobject.h"
-#include "kpellipseobject.h"
-#include "kpautoformobject.h"
-#include "kpclipartobject.h"
-#include "kptextobject.h"
-#include "kppixmapobject.h"
-#include "kppieobject.h"
+#include <kpresenter_doc.h>
+#include <kplineobject.h>
+#include <kprectobject.h>
+#include <kpellipseobject.h>
+#include <kpautoformobject.h>
+#include <kpclipartobject.h>
+#include <kptextobject.h>
+#include <kppixmapobject.h>
+#include <kppieobject.h>
 #include <kdebug.h>
 
 #include <qpainter.h>
-#include <iostream>
 using namespace std;
 
 /******************************************************************/

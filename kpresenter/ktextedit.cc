@@ -17,21 +17,14 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "ktextedit.h"
+#include <ktextedit.h>
 
-#include <qpainter.h>
-#include <qpen.h>
-#include <qbrush.h>
 #include <qpixmap.h>
-#include <qfont.h>
-#include <qcolor.h>
-#include <qsize.h>
 #include <qevent.h>
 #include <qtimer.h>
 #include <qapplication.h>
 #include <qlistbox.h>
 #include <qvbox.h>
-#include <qapplication.h>
 #include <qclipboard.h>
 #include <qcolordialog.h>
 #include <qfontdialog.h>
@@ -41,17 +34,9 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <qstringlist.h>
-#include <qfont.h>
-#include <qtextstream.h>
-#include <qfile.h>
 #include <qregexp.h>
 #include <qapplication.h>
 #include <qclipboard.h>
-#include <qmap.h>
-#include <qfileinfo.h>
-#include <qmime.h>
-#include <qregexp.h>
 #ifdef __DECCXX
 #include <alloca.h>
 #endif

@@ -22,10 +22,10 @@
 
 #include <qdatetime.h>
 
-#include "kpobject.h"
-#include "kpimage.h"
-#include "kpgradient.h"
+#include <kpobject.h>
+#include <kpimage.h>
 
+class KPGradient;
 class QPixmap;
 
 /******************************************************************/

@@ -22,7 +22,7 @@
 
 #include <qlist.h>
 
-#include "command.h"
+#include <command.h>
 
 class KPresenterDoc;
 class KPObject;

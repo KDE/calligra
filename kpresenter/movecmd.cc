@@ -17,11 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kpresenter_doc.h"
-#include "movecmd.h"
-#include "kptextobject.h"
-
-#include <qrect.h>
+#include <kpresenter_doc.h>
+#include <movecmd.h>
+#include <kptextobject.h>
 
 /******************************************************************/
 /* Class: MoveByCmd						  */
@@ -84,7 +82,7 @@ void MoveByCmd::unexecute()
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-MoveByCmd2::MoveByCmd2( QString _name, QList<QPoint> &_diffs, 
+MoveByCmd2::MoveByCmd2( QString _name, QList<QPoint> &_diffs,
 			QList<KPObject> &_objects, KPresenterDoc *_doc )
     : Command( _name ), diffs( _diffs ), objects( _objects )
 {

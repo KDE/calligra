@@ -23,7 +23,7 @@
 #include <qdialog.h>
 #include <qmap.h>
 
-#include "global.h"
+#include <global.h>
 
 class QButtonGroup;
 class QLabel;

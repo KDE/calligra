@@ -23,7 +23,7 @@
 #include <koMainWindow.h>
 #include <koChild.h>
 
-#include "kpobject.h"
+#include <kpobject.h>
 
 #include <qpixmap.h>
 

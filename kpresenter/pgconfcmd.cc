@@ -17,9 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "kpresenter_doc.h"
-#include "pgconfcmd.h"
-#include "kpbackground.h"
+#include <kpresenter_doc.h>
+#include <pgconfcmd.h>
+#include <kpbackground.h>
 
 /******************************************************************/
 /* Class: PgConfCmd                                               */
