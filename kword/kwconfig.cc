@@ -423,10 +423,13 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
 
     m_oldNbRedo=30;
     QString unitType=KoUnit::unitName(unit);
+    //#################"laurent
+    //don't load unitType from config file because unit is
+    //depend from kword file => unit can be different from config file
+
     if( config->hasGroup("Misc") )
     {
         config->setGroup( "Misc" );
-        unitType=config->readEntry("Units",unitType);
         m_oldNbRedo=config->readNumEntry("UndoRedo",m_oldNbRedo);
     }
 
