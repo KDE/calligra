@@ -31,13 +31,14 @@ idl_HEADERS =  koffice.h
 
 ####### Build rules
 
-IDL_FLAGS = --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/store -I$(interfacedir) -I$(srcdir) -I$(idldir)
+IDL_FLAGS = --query-server-for-narrow --relative-paths --any -I$(top_srcdir)/lib/store -I$(interfacedir) -I$(srcdir) -I$(idldir)
 
-BUILT_SOURCES = koffice.h trader.h typerepo.h
+#BUILT_SOURCES = koffice.h trader.h typerepo.h
+BUILT_SOURCES = trader.h typerepo.h
 
-koffice.cc: koffice.h
-koffice.h: koffice.idl $(idldir)/openparts.idl $(idldir)/openparts_ui.idl $(idldir)/kom.idl
-	$(IDL) $(IDL_FLAGS) $(srcdir)/koffice.idl
+#koffice.cc: koffice.h
+#koffice.h: koffice.idl $(idldir)/openparts.idl $(idldir)/openparts_ui.idl $(idldir)/kom.idl
+#	$(IDL) $(IDL_FLAGS) $(srcdir)/koffice.idl
 trader.cc: trader.h
 trader.h: trader.idl
 	$(IDL) $(IDL_FLAGS) $(srcdir)/trader.idl

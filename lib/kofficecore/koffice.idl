@@ -38,7 +38,7 @@ module KOffice
 		 * call this function afterwards and no NEVER call it after you used some of the load functions.
 		 * If the function returns false, you have to destroy the document. It can not be reused.
 		 */
-		boolean init();
+		boolean initDoc();
 
 		boolean isModified();
 
