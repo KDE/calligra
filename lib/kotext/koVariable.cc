@@ -863,9 +863,9 @@ QStringList KoDateVariable::actionTexts()
     QStringList lst;
     lst << i18n( "Current Date (fixed)" );
     lst << i18n( "Current Date (variable)" );
-    lst << i18n( "Date Of Last Printing" );
-    lst << i18n( "Date Of Create Of File" );
-    lst << i18n( "Date Of Modification Of File" );
+    lst << i18n( "Date of Last Printing" );
+    lst << i18n( "Date of Create of File" );
+    lst << i18n( "Date of Modification of File" );
     return lst;
 }
 

@@ -421,7 +421,7 @@ fileLinkPage::fileLinkPage( QWidget *parent , char *name  )
 
   tmpQLabel = new QLabel( this);
   lay2->addWidget(tmpQLabel);
-  tmpQLabel->setText(i18n("Recent File:"));
+  tmpQLabel->setText(i18n("Recent file:"));
 
 
   QComboBox * recentFile = new QComboBox( this );

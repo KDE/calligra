@@ -745,7 +745,7 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit, bool breakLine,
     indentGrid->addWidget( eRight, 3, 1 );
     connect( eRight, SIGNAL( valueChanged( double ) ), this, SLOT( rightChanged( double ) ) );
 
-    QLabel * lFirstLine = new QLabel( i18n("First Line (%1):").arg(unitName), indentFrame );
+    QLabel * lFirstLine = new QLabel( i18n("First line (%1):").arg(unitName), indentFrame );
     lFirstLine->setAlignment( AlignRight );
     indentGrid->addWidget( lFirstLine, 4, 0 );
 

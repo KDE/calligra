@@ -1179,7 +1179,7 @@ void KoCompletionDia::setup()
     connect( m_lbListCompletion, SIGNAL( selected ( const QString & ) ), this, SLOT( slotCompletionWordSelected( const QString & )));
     connect( m_lbListCompletion, SIGNAL( highlighted ( const QString & ) ), this, SLOT( slotCompletionWordSelected( const QString & )));
 
-    pbAddCompletionEntry = new QPushButton( i18n("Add Completion Entry.."), page);
+    pbAddCompletionEntry = new QPushButton( i18n("Add Completion Entry..."), page);
     connect( pbAddCompletionEntry, SIGNAL( clicked() ), this, SLOT( slotAddCompletionEntry()));
 
     pbRemoveCompletionEntry = new QPushButton(i18n( "R&emove Completion Entry"), page  );

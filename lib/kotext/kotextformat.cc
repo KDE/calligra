@@ -974,8 +974,8 @@ QStringList KoTextFormat::fontAttributeList()
     QStringList lst;
     lst <<i18n("Without");
     lst <<i18n("Uppercase");
-    lst <<i18n("LowerCase");
-    lst <<i18n("Small caps");
+    lst <<i18n("Lowercase");
+    lst <<i18n("Small Caps");
     return lst;
 }
 

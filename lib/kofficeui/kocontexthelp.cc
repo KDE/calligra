@@ -421,7 +421,7 @@ void KoContextHelpPopup::keyReleaseEvent( QKeyEvent* e )
 } // KoContextHelpPopup::keyPressEvent
 
 KoContextHelpAction::KoContextHelpAction( KActionCollection* parent, QWidget* popupParent )
-		: KToggleAction( i18n( "Context help" ), BarIcon( "help" ), KShortcut( "CTRL+SHIFT+F1" ), 0, 0, parent, "help_context" )
+		: KToggleAction( i18n( "Context Help" ), BarIcon( "help" ), KShortcut( "CTRL+SHIFT+F1" ), 0, 0, parent, "help_context" )
 {
 	m_popup = new KoContextHelpPopup( 0L );
 	connect( m_popup, SIGNAL( wantsToBeClosed() ), this, SLOT( closePopup() ) );
@@ -459,7 +459,7 @@ KoContextHelpDocker::KoContextHelpDocker( QWidget* parent, const char* name )
 	mainWidget->setMinimumSize( 180, 120 );
 	mainWidget->show();
 	setWidget( mainWidget );
-	setContextHelp( i18n( "Context help" ), i18n( "Here will be shown help according to your actions" ), 0 );
+	setContextHelp( i18n( "Context Help" ), i18n( "Here will be shown help according to your actions" ), 0 );
 } // KoContextHelpDocker::KoContextHelpDocker
 
 KoContextHelpDocker::~KoContextHelpDocker()

@@ -42,7 +42,7 @@ KWEditPersonnalExpression::KWEditPersonnalExpression( QWidget *parent, const cha
 
     QHBoxLayout *horlayout1 = new QHBoxLayout( 0, 0, KDialog::spacingHint(), "horlayout1");
 
-    QLabel *groupnameLabel = new QLabel(i18n("Groupname"), page, "groupnameLabel" );
+    QLabel *groupnameLabel = new QLabel(i18n("Group name:"), page, "groupnameLabel" );
     horlayout1->addWidget( groupnameLabel );
 
     m_groupLineEdit = new QLineEdit( page, "groupLineEdit" );

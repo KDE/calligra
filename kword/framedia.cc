@@ -95,7 +95,7 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame)
         kdDebug() << "ERROR: KWFrameDia::constructor no frame.."<<endl;
         return;
     }
-    setCaption( i18n( "Frame Properties For %1" ).arg( frame->frameSet()->getName() ) );
+    setCaption( i18n( "Frame Properties for %1" ).arg( frame->frameSet()->getName() ) );
     KWFrameSet *fs = frame->frameSet()->getGroupManager();
     if(fs==0L) fs=frame->frameSet();
     frameType = fs->type();
@@ -107,7 +107,7 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame)
 
 /* Contructor when the dialog is used on creation of frame */
 KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame, KWDocument *_doc, FrameSetType _ft )
-    : KDialogBase( Tabbed, i18n("Frame Properties For New Frame"), Ok | Cancel, Ok, parent, "framedialog", true)
+    : KDialogBase( Tabbed, i18n("Frame Properties for New Frame"), Ok | Cancel, Ok, parent, "framedialog", true)
 {
     noSignal=false;
     frameType=_ft;
@@ -382,7 +382,7 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     }
 
     // NewFrameBehavior - now for all type of frames
-    onNewPage = new QGroupBox(i18n("On new Page Creation"),tab1);
+    onNewPage = new QGroupBox(i18n("On New Page Creation"),tab1);
     grid1->addWidget( onNewPage, row, column );
 
     onpGrid = new QGridLayout( onNewPage, 4, 1, KDialog::marginHint(), KDialog::spacingHint() );

@@ -211,7 +211,7 @@ KPTransEffectDia::KPTransEffectDia( QWidget *parent, const char *name,
     QBoxLayout* previewLayout = new QHBoxLayout( previewgrp, 0, 2 );
     previewLayout->setAutoAdd( true );    
 
-    automaticPreview = new QCheckBox( i18n( "Automatic Preview" ), previewgrp );
+    automaticPreview = new QCheckBox( i18n( "Automatic preview" ), previewgrp );
     automaticPreview->setChecked( true );
 
     QWidget* previewspacer = new QWidget( previewgrp );

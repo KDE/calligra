@@ -114,7 +114,7 @@ void KoFontChooser::setupTab1(bool _withSubSuperScript, uint fontListCriteria )
         d->m_lRelativeSize->setEnabled( false );
     }
 
-    grp = new QGroupBox(i18n("Colors:"), page);
+    grp = new QGroupBox(i18n("Colors"), page);
     lay1->addWidget(grp);
     grid = new QGridLayout( grp, 2, 2, KDialog::marginHint(), KDialog::spacingHint() );
     m_colorButton = new QPushButton( i18n( "Change Color..." ), grp );
@@ -180,7 +180,7 @@ void KoFontChooser::setupTab2()
     d->m_shadow= new QCheckBox( i18n("Shadow"), grp);
     grid->addWidget( d->m_shadow, 4, 0);
 
-    d->m_wordByWord = new QCheckBox( i18n("Word By Word"), grp);
+    d->m_wordByWord = new QCheckBox( i18n("Word by word"), grp);
     grid->addWidget( d->m_wordByWord, 5, 0);
 
     lab = new QLabel( i18n("Attribute:"), grp);

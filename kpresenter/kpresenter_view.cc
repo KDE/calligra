@@ -2908,7 +2908,7 @@ void KPresenterView::setupActions()
                                                this, SLOT( textContentsToHeight() ),
                                                actionCollection(), "text_con2hei" );
 
-    actionTextExtendObj2Cont = new KAction( i18n( "&Extend Object to fit Contents" ), 0,
+    actionTextExtendObj2Cont = new KAction( i18n( "&Extend Object to Fit Contents" ), 0,
                                             this, SLOT( textObjectToContents() ),
                                             actionCollection(), "text_obj2cont" );
 
@@ -3115,7 +3115,7 @@ void KPresenterView::setupActions()
     actionExtendObjectHeight = new KAction( i18n( "&Extend Contents to Object Height" ),0, this, SLOT( textContentsToHeight() ),
                                             actionCollection(), "extendobjectheight" );
 
-    actionResizeTextObject = new KAction( i18n( "&Resize Object to fit Contents" ),0, this, SLOT( textObjectToContents() ),
+    actionResizeTextObject = new KAction( i18n( "&Resize Object to Fit Contents" ),0, this, SLOT( textObjectToContents() ),
                                           actionCollection(), "resizetextobject" );
 
 //     actionObjectProperties = new KAction( i18n( "&Properties..." ), "penbrush", 0,
@@ -3219,7 +3219,7 @@ void KPresenterView::setupActions()
                                     actionCollection(), "remove_link" );
 
 
-    actionAddLinkToBookmak = new KAction( i18n( "Add to bookmark" ), 0,
+    actionAddLinkToBookmak = new KAction( i18n( "Add to Bookmark" ), 0,
                                           this, SLOT( addToBookmark() ),
                                           actionCollection(), "add_to_bookmark" );
 
@@ -3338,7 +3338,7 @@ void KPresenterView::setupActions()
                                        this,SLOT(removeComment()),
                                        actionCollection(), "remove_comment");
 
-    actionCopyTextOfComment = new KAction( i18n("Copy Text Of Comment..."), 0,
+    actionCopyTextOfComment = new KAction( i18n("Copy Text of Comment..."), 0,
                                            this,SLOT(copyTextOfComment()),
                                            actionCollection(), "copy_text_comment");
 
@@ -3441,7 +3441,7 @@ void KPresenterView::setupActions()
                                         this, SLOT( slotAddIgnoreAllWord() ),
                                         actionCollection(), "ignore_all" );
 
-    actionAddWordToPersonalDictionary=new KAction( i18n( "Add word to dictionary" ),0,
+    actionAddWordToPersonalDictionary=new KAction( i18n( "Add Word to Dictionary" ),0,
                                                    this, SLOT( addWordToDictionary() ),
                                                    actionCollection(), "add_word_to_dictionary" );
 
@@ -4083,7 +4083,7 @@ void KPresenterView::changePicture( const QString & filename )
     mimetypes += KoPictureFilePreview::clipartMimeTypes();
 
     KFileDialog fd( filename, QString::null, 0, 0, true );
-    fd.setCaption(i18n("Select new Picture"));
+    fd.setCaption(i18n("Select New Picture"));
     fd.setMimeFilter( mimetypes );
     fd.setPreviewWidget( new KoPictureFilePreview( &fd ) );
 

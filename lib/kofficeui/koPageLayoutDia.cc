@@ -482,7 +482,7 @@ void KoPageLayoutDia::setValuesTab1Helper()
 /*================ setup header and footer tab ===================*/
 void KoPageLayoutDia::setupTab2()
 {
-    QWidget *tab2 = addPage(i18n( "Header and Footer" ));
+    QWidget *tab2 = addPage(i18n( "Header && Footer" ));
     QGridLayout *grid2 = new QGridLayout( tab2, 8, 6, KDialog::marginHint(), KDialog::spacingHint() );
 
     // ------------- header ---------------
@@ -607,7 +607,7 @@ void KoPageLayoutDia::setupTab4()
 {
     QString str = KoUnit::unitName(m_unit);
 
-    QWidget *tab4 = addPage(i18n( "Header and Footer" ));
+    QWidget *tab4 = addPage(i18n( "Header && Footer" ));
     QGridLayout *grid4 = new QGridLayout( tab4, 4, 1, KDialog::marginHint(), KDialog::spacingHint() );
 
     QButtonGroup *gHeader = new QButtonGroup( i18n( "Header" ), tab4 );

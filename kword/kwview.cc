@@ -1005,14 +1005,14 @@ void KWView::setupActions()
              this, SLOT( tableStyleSelected( int ) ) );
     updateTableStyleList();
 
-    actionConvertTableToText = new KAction( i18n( "Convert table to text" ), 0,
+    actionConvertTableToText = new KAction( i18n( "Convert Table to Text" ), 0,
                                             this, SLOT( convertTableToText() ),
                                             actionCollection(), "convert_table_to_text" );
     actionSortText= new KAction( i18n( "Sort Text" ), 0,
                                  this, SLOT( sortText() ),
                                  actionCollection(), "sort_text" );
 
-    actionAddPersonalExpression= new KAction( i18n( "Add expression" ), 0,
+    actionAddPersonalExpression= new KAction( i18n( "Add Expression" ), 0,
                                               this, SLOT( addPersonalExpression() ),
                                               actionCollection(), "add_personal_expression" );
 
@@ -1117,7 +1117,7 @@ void KWView::setupActions()
 
 
     // ------------------- Actions with a key binding and no GUI item
-    KAction* actNbsp = new KAction( i18n( "Insert non-breaking Space" ), CTRL+Key_Space,
+    KAction* actNbsp = new KAction( i18n( "Insert Non-Breaking Space" ), CTRL+Key_Space,
                         this, SLOT( slotNonbreakingSpace() ), actionCollection(), "nonbreaking_space" );
     KAction* actSoftHyphen = new KAction( i18n( "Insert Soft Hyphen" ), CTRL+Key_Minus,
                         this, SLOT( slotSoftHyphen() ), actionCollection(), "soft_hyphen" );
@@ -1229,7 +1229,7 @@ void KWView::setupActions()
                                                   this, SLOT( insertDirectCursor() ),
                                                   actionCollection(), "direct_cursor" );
 
-    actionConvertToTextBox = new KAction( i18n( "Convert to text box" ), 0,
+    actionConvertToTextBox = new KAction( i18n( "Convert to Text Box" ), 0,
                                                   this, SLOT( convertToTextBox() ),
                                                   actionCollection(), "convert_to_text_box" );
 
@@ -1238,7 +1238,7 @@ void KWView::setupActions()
                                         this, SLOT( slotAddIgnoreAllWord() ),
                                         actionCollection(), "ignore_all" );
 
-    actionInsertHorizontalLine = new KAction( i18n( "Horizontal line..." ), 0,
+    actionInsertHorizontalLine = new KAction( i18n( "Horizontal Line..." ), 0,
                                         this, SLOT( insertHorizontalLine() ),
                                         actionCollection(), "insert_horizontal_line" );
 
@@ -1246,7 +1246,7 @@ void KWView::setupActions()
                                             this, SLOT( changeHorizontalLine() ),
                                             actionCollection(), "change_horizontal_line" );
 
-    actionAddWordToPersonalDictionary=new KAction( i18n( "Add word to dictionary" ),0,
+    actionAddWordToPersonalDictionary=new KAction( i18n( "Add Word to Dictionary" ),0,
                                                    this, SLOT( addWordToDictionary() ),
                                                    actionCollection(), "add_word_to_dictionary" );
 
@@ -7506,7 +7506,7 @@ KWStatisticsDialog::KWStatisticsDialog( QWidget *_parent, KWDocument *_doc )
 
     m_canceled = true;
     pageSelected = new QFrame( this );
-    tab->addTab( pageSelected,  i18n( "Selected text" ) );
+    tab->addTab( pageSelected,  i18n( "Selected Text" ) );
     // let's see if there's selected text
     bool b = docHasSelection();
     tab->setTabEnabled(pageSelected, b);
@@ -7686,33 +7686,33 @@ void KWStatisticsDialog::addBoxGeneral( QFrame *page, QLabel **resultLabel )
     grid->addRowSpacing( 0, fHeight );
 
     // insert labels
-    QLabel *label1 = new QLabel( i18n( "Number Of Pages:" ), box );
+    QLabel *label1 = new QLabel( i18n( "Number of pages:" ), box );
     grid->addWidget( label1, 1, 0, 1 );
     resultLabel[0] = new QLabel( "", box );
     grid->addWidget( resultLabel[0], 1, 2, 2 );
 
-    QLabel *label2 = new QLabel( i18n( "Number Of Frames:" ), box );
+    QLabel *label2 = new QLabel( i18n( "Number of frames:" ), box );
     grid->addWidget( label2, 2, 0, 1 );
     resultLabel[1] = new QLabel( "", box );
     grid->addWidget( resultLabel[1], 2, 2, 2 );
 
-    QLabel *label3 = new QLabel( i18n( "Number Of Pictures:" ), box );
+    QLabel *label3 = new QLabel( i18n( "Number of pictures:" ), box );
     grid->addWidget( label3, 3, 0, 1 );
     resultLabel[2] = new QLabel( "", box );
     grid->addWidget( resultLabel[2], 3, 2, 2 );
 
 
-    QLabel *label4 = new QLabel( i18n( "Number Of Tables:" ), box );
+    QLabel *label4 = new QLabel( i18n( "Number of tables:" ), box );
     grid->addWidget( label4, 4, 0, 1 );
     resultLabel[3] = new QLabel( "", box );
     grid->addWidget( resultLabel[3], 4, 2, 2 );
 
-    QLabel *label5 = new QLabel( i18n( "Number Of Embedded Objects:" ), box );
+    QLabel *label5 = new QLabel( i18n( "Number of embedded objects:" ), box );
     grid->addWidget( label5, 5, 0, 1 );
     resultLabel[4] = new QLabel( "", box );
     grid->addWidget( resultLabel[4], 5, 2, 2 );
 
-    QLabel *label6 = new QLabel( i18n( "Number Of Formula FrameSet:" ), box );
+    QLabel *label6 = new QLabel( i18n( "Number of formula frameSet:" ), box );
     grid->addWidget( label6, 6, 0, 1 );
     resultLabel[5] = new QLabel( "", box );
     grid->addWidget( resultLabel[5], 6, 2, 2 );
