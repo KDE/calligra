@@ -75,7 +75,8 @@ public slots:
 
 protected:
     void updateChildGeometry();
-    virtual void paint( QPainter *_painter,KoZoomHandler*_zoomHandler, bool drawContour );
+    virtual void paint( QPainter *_painter,KoZoomHandler*_zoomHandler,
+			bool drawingShadow, bool drawContour = FALSE );
 
     bool _enableDrawing;
     KPresenterChild *child;
