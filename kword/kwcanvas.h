@@ -162,18 +162,10 @@ protected:
     virtual void drawContents( QPainter *p, int cx, int cy, int cw, int ch );
     /**
      * The main drawing method.
-     * @param onlyFrameset if 0L, repaint everything, otherwise repaint only what has changed inside this frameset.
-     * @param painter
-     * @param cx, cy, cw, ch the area to be repainted, in contents coordinates
-     * @param resetChanged whether the changed flag should be reset to false while redrawing
-     */
-    void drawDocument( KWFrameSet * onlyFrameset, QPainter *painter, int cx, int cy, int cw, int ch, bool resetChanged = false );
-    /**
-     * Draw the borders of the frames.
      * @param painter
      * @param crect the area to be repainted, in contents coordinates
      */
-    void drawBorders( QPainter *painter, const QRect &crect );
+    void drawDocument( QPainter *painter, const QRect &crect );
 
     virtual void keyPressEvent( QKeyEvent *e );
     virtual void contentsMousePressEvent( QMouseEvent *e );
@@ -188,12 +180,25 @@ protected:
 
     void selectAllFrames( bool select );
     void selectFrame( int mx, int my, bool select );
-   
+
 private slots:
     void slotContentsMoving( int, int );
     void doAutoScroll();
 
 private:
+    /**
+     * Draw the contents of one frameset
+     * @param resetChanged whether the changed flag should be reset to false while redrawing
+     */
+    void drawFrameSet( KWFrameSet * frameset, QPainter * painter,
+                       const QRect & crect, bool onlyChanged, bool resetChanged );
+    /**
+     * Draw the borders of the frames.
+     * @param painter
+     * @param crect the area to be repainted, in contents coordinates
+     */
+    void drawBorders( QPainter *painter, const QRect &crect );
+
     KWDocument *doc;
     KWFrameSetEdit *m_currentFrameSetEdit;
     bool mousePressed;

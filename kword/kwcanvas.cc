@@ -99,11 +99,13 @@ KWCanvas::~KWCanvas()
 
 void KWCanvas::repaintChanged( KWFrameSet * fs, bool resetChanged )
 {
+    assert(fs); // the new code can't support fs being 0L here. Mail me if it happens (DF)
     //kdDebug(32002) << "KWCanvas::repaintChanged this=" << this << " fs=" << fs << endl;
     QPainter p( viewport() );
     p.translate( -contentsX(), -contentsY() );
     p.setBrushOrigin( -contentsX(), -contentsY() );
-    drawDocument( fs, &p, contentsX(), contentsY(), visibleWidth(), visibleHeight(), fs && resetChanged );
+    QRect crect( contentsX(), contentsY(), visibleWidth(), visibleHeight() );
+    drawFrameSet( fs, &p, crect, true, resetChanged );
 }
 
 void KWCanvas::repaintAll( bool erase /* = false */ )
@@ -154,7 +156,7 @@ void KWCanvas::print( QPainter *painter, KPrinter *printer )
 
         painter->translate( 0, -yOffset );
         painter->setBrushOrigin( 0, -yOffset );
-        drawDocument( 0L, painter, pageRect.x(), pageRect.y(), pageRect.width(), pageRect.height() );
+        drawDocument( painter, pageRect );
         kapp->processEvents();
         painter->restore();
     }
@@ -166,40 +168,39 @@ void KWCanvas::drawContents( QPainter *painter, int cx, int cy, int cw, int ch )
     {
         // Note: in drawContents, the painter is already to the contents coordinates
         painter->setBrushOrigin( -contentsX(), -contentsY() );
-        drawDocument( 0L, painter, cx, cy, cw, ch );
+        drawDocument( painter, QRect( cx, cy, cw, ch ) );
     }
 }
 
-void KWCanvas::drawDocument( KWFrameSet * onlyFrameset, QPainter *painter, int cx, int cy, int cw, int ch, bool resetChanged )
+void KWCanvas::drawDocument( QPainter *painter, const QRect &crect )
 {
-    QRect crect( cx, cy, cw, ch );
-    //kdDebug(32002) << "KWCanvas::drawDocument onlyFrameset=" << onlyFrameset << " crect: " << DEBUGRECT( crect ) << endl;
-    bool focus = hasFocus() || viewport()->hasFocus();
-    if ( painter->device()->devType() == QInternal::Printer )
-        focus = false;
+    //kdDebug(32002) << "KWCanvas::drawDocument << " crect: " << DEBUGRECT( crect ) << endl;
 
-    bool onlyChanged = (onlyFrameset != 0L);
+    // Draw all framesets, and borders
+    drawBorders( painter, crect );
 
-    if ( !onlyFrameset )      // no need for borders if we're only repainting the text
-        drawBorders( painter, crect );
-
-    // Draw all framesets
     QListIterator<KWFrameSet> fit = doc->framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet * frameset = fit.current();
-        if ( !onlyFrameset || (frameset == onlyFrameset) ) // Draw all, or draw only one
-        {
-            if ( frameset->isVisible() )
-            {
-                QColorGroup gb = QApplication::palette().active();
-                if ( focus && m_currentFrameSetEdit && frameset == m_currentFrameSetEdit->frameSet() )     // Currently edited frameset
-                    m_currentFrameSetEdit->drawContents( painter, crect, gb, onlyChanged, resetChanged );
-                else
-                    frameset->drawContents( painter, crect, gb, onlyChanged, resetChanged );
-            }
-        }
+        if ( frameset->isVisible() )
+            drawFrameSet( frameset, painter, crect, false, false );
     }
+}
+
+void KWCanvas::drawFrameSet( KWFrameSet * frameset, QPainter * painter,
+                             const QRect & crect, bool onlyChanged, bool resetChanged )
+{
+    bool focus = hasFocus() || viewport()->hasFocus();
+    if ( painter->device()->devType() == QInternal::Printer )
+        focus = false;
+
+    QColorGroup gb = QApplication::palette().active();
+    if ( focus && m_currentFrameSetEdit && frameset == m_currentFrameSetEdit->frameSet() )
+        // Currently edited frameset
+        m_currentFrameSetEdit->drawContents( painter, crect, gb, onlyChanged, resetChanged );
+    else
+        frameset->drawContents( painter, crect, gb, onlyChanged, resetChanged );
 }
 
 void KWCanvas::drawBorders( QPainter *painter, const QRect & crect )
