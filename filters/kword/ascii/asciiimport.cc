@@ -17,6 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <qtextstream.h>
 #include <asciiimport.h>
 #include <asciiimport.moc>
 #include <kdebug.h>
@@ -54,11 +55,11 @@ const bool ASCIIImport::filter(const QCString &fileIn, const QCString &fileOut,
     str += "<PARAGRAPH>\n";
     str += "<TEXT>";
 
-    char * buffer = new char[in.size()];
-    in.readBlock(buffer, in.size());
-    for ( unsigned int i = 0 ;i < in.size() ; ++i )
+    QTextStream stream(&in);
+    while(!stream.atEnd())
     {
-        QChar c = buffer[ i ];
+        QChar c;
+	stream >> c;
         if ( c == QChar( '\n' ) )
         {
             str += "</TEXT>\n";
@@ -80,19 +81,15 @@ const bool ASCIIImport::filter(const QCString &fileIn, const QCString &fileOut,
     str += "</FRAMESETS>\n";
     str += "</DOC>\n";
 
-    QCString cstr=QCString(str.utf8());
-
     KoTarStore out=KoTarStore(QString(fileOut), KoStore::Write);
     if(!out.open("root")) {
         kdError(30502) << "Unable to open output file!" << endl;
         in.close();
         out.close();
-        delete [] buffer;
         return false;
     }
-    out.write((const char*)cstr, cstr.length());
+    out.write((const char*)str.utf8(), str.length());
     out.close();
     in.close();
-    delete [] buffer;
     return true;
 }
