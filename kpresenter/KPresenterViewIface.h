@@ -141,6 +141,9 @@ k_dcop:
 
     // in edit mode
     virtual int getCurrentPageNum();
+
+    // in both modes
+    virtual float getCurrentFaktor();
     
 private:
     KPresenterView *view;

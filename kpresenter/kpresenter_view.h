@@ -116,7 +116,8 @@ public:
     int getPresStepsOfPage();
     int getNumPresPages();
     bool gotoPresPage( int pg );
-
+    float getCurrentFaktor();
+    
 public slots:
     virtual bool printDlg();
     // edit menu
@@ -171,7 +172,7 @@ public slots:
     virtual void extraWebPres();
     virtual void extraGroup();
     virtual void extraUnGroup();
-    
+
     virtual void extraAlignObjLeft();
     virtual void extraAlignObjCenterH();
     virtual void extraAlignObjRight();
@@ -535,7 +536,7 @@ protected:
     QAction *actionExtraLineEnd;
     QAction *actionExtraGroup;
     QAction *actionExtraUnGroup;
-    
+
     QAction *actionScreenConfigPages;
     QAction *actionScreenPresStructView;
     QAction *actionScreenAssignEffect;

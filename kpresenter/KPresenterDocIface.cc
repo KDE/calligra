@@ -37,13 +37,13 @@ QString KPresenterDocIface::url()
 
 DCOPRef KPresenterDocIface::firstView()
 {
-    return DCOPRef( kapp->dcopClient()->appId(), 
+    return DCOPRef( kapp->dcopClient()->appId(),
 		    doc->getFirstView()->dcopObject()->objId() );
 }
 
 DCOPRef KPresenterDocIface::nextView()
 {
-    return DCOPRef( kapp->dcopClient()->appId(), 
+    return DCOPRef( kapp->dcopClient()->appId(),
 		    doc->getNextView()->dcopObject()->objId() );
 }
 
@@ -54,7 +54,7 @@ int KPresenterDocIface::getNumObjects()
 
 DCOPRef KPresenterDocIface::getObject( int num )
 {
-    return DCOPRef( kapp->dcopClient()->appId(), 
+    return DCOPRef( kapp->dcopClient()->appId(),
 		    doc->objectList()->at( num )->dcopObject()->objId() );
 }
 
@@ -65,11 +65,11 @@ int KPresenterDocIface::getNumPages()
 
 DCOPRef KPresenterDocIface::getPage( int num )
 {
-    return DCOPRef( kapp->dcopClient()->appId(), 
+    return DCOPRef( kapp->dcopClient()->appId(),
 		    doc->backgroundList()->at( num )->dcopObject()->objId() );
 }
 
-int KPresenterDocIface::getPageOfObj( int obj )
+int KPresenterDocIface::getPageOfObj( int obj, float faktor )
 {
-    return doc->getPageOfObj( obj, 0, 0, 0 ) - 1;
+    return doc->getPageOfObj( obj, 0, 0, faktor ) - 1;
 }

@@ -2934,6 +2934,15 @@ int KPresenterView::getNumPresPages()
 }
 
 /*================================================================*/
+float KPresenterView::getCurrentFaktor()
+{
+    if ( !presStarted )
+	return 1.0;
+    
+    return page->presFakt();
+}
+
+/*================================================================*/
 bool KPresenterView::gotoPresPage( int pg )
 {
     if ( !presStarted )
