@@ -1,7 +1,0 @@
-[Desktop Entry]
-Encoding=UTF-8
-Icon=wordprocessing
-Type=MimeType
-MimeType=application/x-amipro
-Patterns=*.sam;*.SAM;
-Comment=Lotus AmiPro document
