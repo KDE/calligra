@@ -696,11 +696,11 @@ void CellLayoutDlg::init()
     tab = new QTabDialog( (QWidget*)m_pView, 0L, TRUE );
     tab->setGeometry( tab->x(), tab->y(), 420, 400 );
 
+    floatPage = new CellLayoutPageFloat( tab, this );
+    tab->addTab( floatPage, i18n("&Data Format") );
+
     borderPage = new CellLayoutPageBorder( tab, this );
     tab->addTab( borderPage, i18n("&Border") );
-
-    floatPage = new CellLayoutPageFloat( tab, this );
-    tab->addTab( floatPage, i18n("&Number Format") );
 
     miscPage = new CellLayoutPageMisc( tab, this );
     tab->addTab( miscPage, i18n("&Misc") );
@@ -716,7 +716,7 @@ void CellLayoutDlg::init()
 
     tab->setCancelButton();
 
-    tab->setCaption(i18n("Cell Layout"));
+    tab->setCaption(i18n("Cell Format"));
 
     connect( tab, SIGNAL( applyButtonPressed() ), this, SLOT( slotApply() ) );
 

@@ -351,7 +351,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
                                actionCollection(), "removeCell" );
     m_insertCellCopy = new KAction( i18n("Paste with insertion..."), "insertcellcopy", 0, this, SLOT( slotInsertCellCopy() ),
                                actionCollection(), "insertCellCopy" );
-    m_cellLayout = new KAction( i18n("Cell Layout..."),"cell_layout", CTRL + Key_L, this, SLOT( layoutDlg() ),
+    m_cellLayout = new KAction( i18n("Cell Format..."),"cell_layout", CTRL + ALT + Key_F, this, SLOT( layoutDlg() ),
                                actionCollection(), "cellLayout" );
     m_formulaSelection = new KSelectAction( i18n("Formula Selection"), 0, actionCollection(), "formulaSelection" );
     QStringList lst;
@@ -2109,6 +2109,7 @@ void KSpreadView::popupColumnMenu(const QPoint & _point)
     m_pPopupColumn = new QPopupMenu( this );
 
     m_cellLayout->plug( m_pPopupColumn );
+	m_pPopupColumn->insertSeparator();
     m_cut->plug( m_pPopupColumn );
     m_copy->plug( m_pPopupColumn );
     m_paste->plug( m_pPopupColumn );
@@ -2155,6 +2156,7 @@ void KSpreadView::popupRowMenu(const QPoint & _point )
     m_pPopupRow= new QPopupMenu();
 
     m_cellLayout->plug( m_pPopupRow );
+	m_pPopupRow->insertSeparator();
     m_cut->plug( m_pPopupRow );
     m_copy->plug( m_pPopupRow );
     m_paste->plug( m_pPopupRow );
@@ -2284,6 +2286,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     QRect selection( m_pTable->selectionRect() );
 
     m_cellLayout->plug( m_pPopupMenu );
+	m_pPopupMenu->insertSeparator();
     m_cut->plug( m_pPopupMenu );
     m_copy->plug( m_pPopupMenu );
     m_paste->plug( m_pPopupMenu );
