@@ -21,7 +21,6 @@
 #define KEXICONNSELECTOR_H
 
 #include "kexidbconnectionset.h"
-#include "KexiConnSelectorBase.h"
 #include "KexiStartupFileDialog.h"
 #include <kexidb/driver.h>
 
@@ -31,6 +30,7 @@
 #include <qwidgetstack.h>
 #include <qguardedptr.h>
 
+class KexiConnSelectorBase;
 
 //! helper class
 class ConnectionDataLVItem : public QListViewItem
@@ -62,15 +62,23 @@ public:
     ~KexiConnSelectorWidget();
 	
 	/*! After accepting this dialog this method returns wherher user selected
-	 file- or server- based connection. */
+	 file- or server- based connection (ConnType enum). */
 	int selectedConnectionType() const;
 
 	/*! \return data of selected connection, if server-based connection was selected.
-		Returns NULL if no selection has been made or file-based connection 
-		has been selected.
+	 Returns NULL if no selection has been made or file-based connection 
+	 has been selected. 
+	 @see selectedConnectionType()
 	*/
 	KexiDB::ConnectionData* selectedConnectionData() const;
-		
+
+	/*! \return the name of database file, if server-based connection was selected.
+	 Returns null string if no selection has been made or server-based connection 
+	 has been selected.
+	 @see selectedConnectionType()
+	*/
+	QString selectedFileName();
+
 	//! Usable when we want to do other things for "back" button
 	void disconnectShowSimpleConnButton();
 

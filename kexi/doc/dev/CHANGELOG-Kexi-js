@@ -21,10 +21,6 @@ TODO: rename KexiBrowser to KexiProjectListView
 TODO: rename KexiBrowserItem to KexiProjectListViewItem
 TODO: rename KexiDialogBase to KexiWindowBase
 
-TODO: KexiTableView loads all data from the table: very slow and consumes a lot of memory:
-	(e.g. for each record with 3 fields: 1 integer, 1 text and 1 float ic consumed ~350B)
-  - add an option: for bigger tables load only part of the table data
-  - optimize MySQL record size
 
 TODO: Kexi can use database as only medium for storing _all_ project's data
 	and then can treat .kexi files as:
@@ -137,9 +133,6 @@ TODO:
 - add kexi__parts (p_id integer, p_type) table and appropriate part objects in kexi__objects
 
 
-TODO: add sorting projects information using KexiProjectData::lastOpened
-TODO: also add this info as "Database>Open Recent" menu subentry
-
 
 MOST RECENT TODO:
 - port old ProjectWizard as ConnectionWizard and plug it to "Add connection" action
@@ -153,32 +146,10 @@ MOST RECENT TODO:
 - implement: drag-and-drop of the project file to the outside of Kexi, [difficulty: 2]
 - saveas== saving another shortcut to a project if it is server-based [difficulty: 2]
 
-TODO: improove security for password information in .kexis files
+TODO: improve security for password information in .kexis files
 TODO: for .kexis files' conenction data - if password attr. is not present - ask for password
 IDEA: integrate password information in .kexis files with KWallet
 
-TODO RELATED TO CELL EDITORS AND TABLEVIEWS:
-- signal on situation when user e.g. pressed alpha key when only numeric chars is allowed
-- signal when null/empty value forcell isn't permitted
-- signal when repeated value isn't permitted
-- add support for cut, copy & paste of cell's contents (get shortcuts from KStdAccel)
-
-TODO: pass Field* to KexiInputTableEdit, and there - check if value may be null 
-(using appropriate Field's method -- add these methods to Field; add i18n'd messages on errors), etc.
-TODO: on Connection::updateRow(): pass field's name together with error message 
-    -additional mapping is needed, eg QMap<QString,QString> err;
-    err["KexiDB::Field::name"]="ID";
-
-TODO: win32: Fix saving config files via KConfig (now the files are ugly overwritten)
-
-TODO: add toolbar for toggling views (design-textedit-dataview)
-
-TODO:
-- KMdiChildArea::getCaptionColors - change to KGlobalSettings::inactiveTextColor(), etc.
-  (for win32 - reimpl. KGlobalSettings::inactiveTextColor() with code from getCaptionColors())
-
-HINT: removing Qt::WStaticContents from KExiTableView ctor fixed repaint problem
-  the problem was with repainting when hscrollbar disapperars....
 
 TODO: Put Connection::dropTable() and Conenction::dropQuery() INSIDE TRANSACTION!!!!!!!
 
@@ -244,6 +215,18 @@ TOP REQUESTED FEATURES LIST @ PL EXPO 2004:
 -store last sorting column (and type) and load it on KexiTableView::setData()
  (not it's only cleared)
 - replace KexiDB::RowData usage in KexiTableItem with something faster
+- TODO RELATED TO CELL EDITORS:
+	- signal on situation when user e.g. pressed alpha key when only numeric chars is allowed
+	- signal when null/empty value forcell isn't permitted
+	- signal when repeated value isn't permitted
+	- add support for cut, copy & paste of cell's contents (get shortcuts from KStdAccel)
+HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
+	the problem was with repainting when hscrollbar disapperars....
+- KexiTableView loads all data from the table: very slow and consumes a lot of memory:
+	(e.g. for each record with 3 fields: 1 integer, 1 text and 1 float consumed ~350B)
+  - ctors and dtors are WAY TOO SLOW!
+  - add an option: for bigger tables load only part of the table data
+  - optimize MySQL record size
 
 ==== ALTER TABLE TODO: =============
 -add a function for editing indices (including multi-field indices)
@@ -307,6 +290,8 @@ TOP REQUESTED FEATURES LIST @ PL EXPO 2004:
   (or no window is present). This feature is partially disabled 
   (using PROPEDITOR_VISIBILITY_CHANGES), though,
   --REENABLE when blinking and dock width changes will be removed in KMDI
+- add sorting projects information using KexiProjectData::lastOpened
+- also add this info as "Database>Open Recent" menu subentry
 
 
 TODO: add SharedAction::setVisible() and use QMenuData::setItemVisible() where needed
@@ -391,10 +376,14 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
 --totals (sum, avg)
 -simple docs
 
-TODO: Query des.: fix hiding table (fields are not properly removed)
 
 CCMAIL: dkite@shaw.ca
 
+2004-11-29
+Plugins
+- Migration plugin added (this removed main<->migration circular dependency)
+Kexi Internal Parts
+- API improved
 
 ~~~~ 2004 LT ~~~~
 

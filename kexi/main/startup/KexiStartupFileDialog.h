@@ -30,7 +30,7 @@
 
 
 //! Widget for Kexi files opening/saving
-class KexiStartupFileDialog : public KexiStartupFileDialogBase
+class KEXIMAIN_EXPORT KexiStartupFileDialog : public KexiStartupFileDialogBase
 {
 	Q_OBJECT
 	

@@ -195,12 +195,19 @@ int KexiConnSelectorWidget::selectedConnectionType() const
 
 KexiDB::ConnectionData* KexiConnSelectorWidget::selectedConnectionData() const
 {
-	if (selectedConnectionType()==KexiConnSelectorWidget::FileBased)
+	if (selectedConnectionType()!=KexiConnSelectorWidget::ServerBased)
 		return 0;
 	ConnectionDataLVItem *item = static_cast<ConnectionDataLVItem*>(m_remote->list->selectedItem());
 	if (item)
 		return item->data;
 	return 0;
+}
+
+QString KexiConnSelectorWidget::selectedFileName()
+{
+	if (selectedConnectionType()!=KexiConnSelectorWidget::FileBased)
+		return 0;
+	return m_fileDlg->currentFileName();
 }
 
 void KexiConnSelectorWidget::slotConnectionItemExecuted(QListViewItem *item)

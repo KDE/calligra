@@ -27,7 +27,6 @@
 #include <qwidgetstack.h>
 
 class KexiNewFileDBWidget;
-class KexiProjectSelectorBase;
 class KexiProjectSelectorWidgetPrivate;
 
 /*! Widget that allows to select a kexi project (or database)
@@ -78,6 +77,7 @@ signals:
 
 protected slots:
 	void itemExecuted(QListViewItem*);
+	virtual void languageChange() { KexiProjectSelectorBase::languageChange(); }
 
 protected:
 	KexiProjectSet *m_prj_set;

@@ -20,6 +20,7 @@
 #include "KexiNewProjectWizard.h"
 
 #include "KexiConnSelector.h"
+#include "KexiConnSelectorBase.h"
 #include "KexiNewPrjTypeSelector.h"
 #include "KexiOpenExistingFile.h"
 #include "KexiDBTitlePage.h"
@@ -347,11 +348,9 @@ void KexiNewProjectWizard::done(int r)
 
 QString KexiNewProjectWizard::projectDBName() const
 {
-	if (d->lv_types->currentItem()==d->lvi_server) {
+	if (d->lv_types->currentItem()==d->lvi_server)
 		return m_server_db_name->le_dbname->text();
-	}
-//	return m_conn_sel->m_fileDlg->currentURL().path();
-	return m_conn_sel->m_fileDlg->currentFileName();
+	return m_conn_sel->selectedFileName();
 }
 
 QString KexiNewProjectWizard::projectCaption() const
