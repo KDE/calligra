@@ -36,7 +36,7 @@ class KPrinter;
 class KexiDBRecordSet;
 class KexiDBUpdateRecord;
 class KexiView;
-class KexiTableView;
+class KexiDataTableView;
 class KexiDB;
 class KexiProjectHandlerItem;
 class KexiDataTable;
@@ -80,15 +80,9 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiDialogBase
 
 	protected slots:
 		void init(QString caption, QString identifier, bool embedd);
-		void slotItemChanged(KexiTableItem *i, int col, QVariant oldValue);
 		void slotContextMenu(KexiTableItem *i, int col, const QPoint &pos);
 
 		void slotRemoveCurrentRecord();
-		void slotUpdated(QObject *sender, const QString &table, const QString &field,
-		 uint record, QVariant &value);
-		void slotRemoved(QObject *sender, const QString &table, uint record);
-
-		void recordInsertFinished(KexiDBUpdateRecord*);
 
 		void slotSearchChanged(const QString &);
 		void slotSerachColChanged(int index);
@@ -96,7 +90,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiDialogBase
 
 	private:
 		//gui
-		KexiTableView	*m_tableView;
+		KexiDataTableView	*m_tableView;
 		QStatusBar	*m_statusBar;
 
 # ifndef KEXI_NO_DATATABLE_SEARCH

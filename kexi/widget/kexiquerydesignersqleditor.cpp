@@ -52,6 +52,8 @@ KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(QWidget *parent, const ch
 		}
 		i++;
 	}
+
+	kdDebug() << "KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(): using editor font: " << m_view->font().family() << endl;
 #endif
 //	QPushButton *btnQuery = new QPushButton(i18n("&Query"), this);
 //	btnQuery->setFlat(true);

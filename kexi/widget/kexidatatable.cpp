@@ -45,7 +45,7 @@
 #include "kexiDB/kexidbwatcher.h"
 
 #include "kexidatatable.h"
-#include "kexitableview.h"
+#include "kexidatatableview.h"
 #include "kexitableheader.h"
 #include "kexiproject.h"
 #include "kexiview.h"
@@ -70,7 +70,7 @@ KexiDataTable::init(QString caption, QString identifier, bool embedd)
 	setCaption(i18n("%1 - Table").arg(caption));
 
 	QGridLayout *g = new QGridLayout(this);
-	m_tableView = new KexiTableView(this);
+	m_tableView = new KexiDataTableView(this);
 	m_tableView->m_editOnDubleClick = true;
 	m_statusBar = new QStatusBar(this);
 #ifndef KEXI_NO_DATATABLE_SEARCH
@@ -92,10 +92,10 @@ KexiDataTable::init(QString caption, QString identifier, bool embedd)
 	g->addMultiCellWidget(m_tableView,	1,	1,	0,	2);
 	g->addMultiCellWidget(m_statusBar,	2,	2,	0,	2);
 
-	connect(m_tableView, SIGNAL(itemChanged(KexiTableItem *, int,QVariant)), this, SLOT(slotItemChanged(KexiTableItem *, int,QVariant)));
+//	connect(m_tableView, SIGNAL(itemChanged(KexiTableItem *, int,QVariant)), this, SLOT(slotItemChanged(KexiTableItem *, int,QVariant)));
 //	connect(m_tableView, SIGNAL(contextMenuRequested(KexiTableItem *, int, const QPoint &)), this,
 //	 SLOT(slotContextMenu(KexiTableItem *, int, const QPoint &)));
-	m_tableView->setDeletionPolicy( KexiTableView::SignalDelete );
+	m_tableView->setDeletionPolicy( KexiDataTableView::SignalDelete );
 	connect(m_tableView, SIGNAL(currentItemRemoveRequest()), this, SLOT(slotRemoveCurrentRecord()));
 
 	m_db = m_view->project()->db();
@@ -115,6 +115,10 @@ KexiDataTable::init(QString caption, QString identifier, bool embedd)
 
 void KexiDataTable::setDataSet(KexiDBRecordSet *rec)
 {
+	m_tableView->setDataSet(rec);
+	m_statusBar->message(i18n("%1 records.").arg(m_tableView->records()));
+
+#if 0
 	if(!m_first)
 		m_tableView->clearAll();
 
@@ -185,8 +189,10 @@ void KexiDataTable::setDataSet(KexiDBRecordSet *rec)
 		m_tableView->selectRow( m_tableView->rows()-1 );
 	}*/
 	//m_tableView->update();
-
+//rows
 	m_first = false;
+#endif
+
 }
 
 bool
@@ -195,174 +201,8 @@ KexiDataTable::readOnly()
 	return m_record ? m_record->readOnly() : true;
 }
 
-bool
-KexiDataTable::executeQuery(const QString &queryStatement)
-{
-	kdDebug() << "KexiDataTable::executeQuery(): executing query: '" << queryStatement << "'" << endl;
-	if(queryStatement.isEmpty())
-		return false;
-
-	m_record = kexiProject()->db()->queryRecord(queryStatement, true);
-	if (!m_record) {
-		kdDebug() << "KexiDataTable::executeQuery(): db-error" << endl;
-		kexiProject()->db()->latestError()->toUser(this);
-		return false;
-	}
-
-	kdDebug() << "KexiDataTable::executeQuery(): record: " << m_record << endl;
-
-	setDataSet(m_record);
-	return true;
-}
-
 void
-KexiDataTable::slotItemChanged(KexiTableItem *i, int col,QVariant oldValue)
-{
-	if(i->isInsertItem())
-	{
-		i->setInsertItem(false);
-		i->setHint("UPDATING");//;QVariant(m_record->insert()));
-		KexiDBUpdateRecord *urec=m_record->insert(true);
-		urec->setValue(col,i->getValue(col));
-		m_insertMapping.insert(urec,i);
-
-//		m_record->update(i->getHint().toInt(), col, i->getValue(col));
-
-		if ((!m_record->writeOut(urec))) //i->getHint().toInt(), true))
-		{
-			KMessageBox::detailedError(this, i18n("Error occurred while updating table."), m_record->latestError()->message(),
-			 i18n("Database Error"));
-//			err.toUser(this);
-			return;
-		}
-//		i->setInsertItem(false);
-
-		KexiDBField *fi = m_record->fieldInfo(col);
-		m_db->watcher()->update(this, fi->table(), fi->name(), i->getHint().toUInt(),
-		 i->getValue(col));
-
-		KexiTableItem *newinsert = new KexiTableItem(m_tableView);
-		newinsert->setHint(QVariant(i->getHint().toInt() + 1));
-		newinsert->setInsertItem(true);
-
-		m_tableView->takeInsertItem();
-		m_tableView->recordMarker()->setInsertRow(m_tableView->rows());
-		m_tableView->setInsertItem(newinsert);
-	}
-	else
-	{
-
-
-		QMap<QString,QVariant> fnvm;
-		for (int c=0;c<m_tableView->cols();c++)
-			fnvm[m_tableView->column(c)]=((c==col)?oldValue:i->getValue(c));
-		KexiDBUpdateRecord *ur=m_record->update(fnvm);
-		if (ur) {
-			ur->setValue(col,i->getValue(col));
-			m_record->writeOut();
-		}
-#if 0
-		int record = i->getHint().toInt();
-		kdDebug() << "KexiDataTable::slotItemChanged(" << record << ")" << endl;
-		if(m_record->update(record, col, i->getValue(col)))
-		{
-			m_record->commit(i->getHint().toInt(), false);
-			KexiDBField *fi = m_record->fieldInfo(col);
-			m_db->watcher()->update(this, fi->table(), fi->name(), i->getHint().toUInt(),
-			 i->getValue(col));
-		}
-#endif
-	}
-}
-
-void
-KexiDataTable::recordInsertFinished(KexiDBUpdateRecord* ur) {
-	kdDebug()<<"KexiDataTable::recordInsertFinished:INSERT FINISHED CALLED"<<endl;
-	if (m_insertMapping.contains(ur)) {
-		KexiTableItem *it=m_insertMapping[ur];
-		m_insertMapping.remove(ur);
-		for (int i=0;i<m_tableView->cols();i++)
-			it->setValue(i,ur->value(i));
-	}
-}
-
-void
-KexiDataTable::slotUpdated(QObject *sender, const QString &table, const QString &fieldName,
- uint record, QVariant &value)
-{
-return;
-	kdDebug() << "KexiDataTable::slotUpdated() " << this << endl;
-	kdDebug() << "KexiDataTable::slotUpdated() table: " << table << endl;
-	kdDebug() << "KexiDataTable::slotUpdated() field: " << fieldName << endl;
-	kdDebug() << "KexiDataTable::slotUpdated() record: " << record << endl;
-
-	for(uint f=0; f < m_record->fieldCount(); f++)
-	{
-		KexiDBField *field = m_record->fieldInfo(f);
-		if(table == field->table() && fieldName == field->name())
-		{
-			kdDebug() << "KexiDataTable::slotUpdated(): meta match" << endl;
-			for(int i=0; i < m_tableView->rows(); i++)
-			{
-				KexiTableItem *item = m_tableView->itemAt(i);
-				kdDebug() << "KexiDataTable::slotUpdated(): current record:" << item->getHint().toInt() <<
-				 " " << item->isInsertItem() << endl;
-				if(item->getHint().toUInt() == record)
-				{
-					kdDebug() << "KexiDataTable::slotUpdated(): record match:" << endl;
-					if(!item->isInsertItem())
-					{
-						item->setValue(f, value);
-						m_tableView->updateCell(i, f);
-					}
-					else
-					{
-						item->setInsertItem(false);
-						item->setValue(f, value);
-
-						KexiTableItem *newinsert = new KexiTableItem(m_tableView);
-						newinsert->setHint(QVariant(item->getHint().toInt() + 1));
-						newinsert->setInsertItem(true);
-					}
-
-				}
-			}
-		}
-	}
-}
-
-void
-KexiDataTable::slotRemoved(QObject *sender, const QString &table, uint record)
-{
-	if(sender == this)
-		return;
-
-	kdDebug() << "KexiDataTable::slotRemoved()" << endl;
-	for(uint f=0; f < m_record->fieldCount(); f++)
-	{
-		KexiDBField *field = m_record->fieldInfo(f);
-		if(table == field->table())
-		{
-			kdDebug() << "KexiDataTable::slotRemoved(): table match" << endl;
-
-			for(int i=0; i < m_tableView->rows(); i++)
-			{
-				KexiTableItem *item = m_tableView->itemAt(i);
-				if(item->getHint().toUInt() == record)
-				{
-					kdDebug() << "KexiDataTable::slotRemoved(): record match" << endl;
-					m_tableView->remove(m_tableView->itemAt(i));
-//					m_tableView->setCursor(i, -1);
-//					slotRemoveCurrentRecord();
-				}
-			}
-		}
-	}
-}
-
-
-void
-KexiDataTable::slotContextMenu(KexiTableItem *i, int col, const QPoint &pos)
+KexiDataTable::slotContextMenu(KexiTableItem *i, int, const QPoint &pos)
 {
 	if (i->isInsertItem()) //avoid delete not inserted item
 		return;
@@ -390,12 +230,6 @@ KexiDataTable::print(KPrinter &printer)
 }
 #endif
 
-KexiDataTable::~KexiDataTable()
-{
-	kdDebug()<<"KexiDataTable::~KexiDataTable()"<<endl;
-	if (!m_record) kdDebug()<<"m_record == 0"<<endl;
-	delete m_record;
-}
 
 /*! Sets focus on:
  - first row for read-only table
@@ -474,6 +308,14 @@ KXMLGUIClient *
 KexiDataTable::guiClient()
 {
 	return new TableGUIClient(this);
+}
+
+
+KexiDataTable::~KexiDataTable()
+{
+	kdDebug()<<"KexiDataTable::~KexiDataTable()"<<endl;
+	if (!m_record) kdDebug()<<"m_record == 0"<<endl;
+	delete m_record;
 }
 
 //GUI client implementation follows...
