@@ -1,0 +1,9 @@
+
+This code is in pre-alpha stage.
+
+This is the new kformula library, it will use code from old koffice/kformula
+it will be used by kformula part and in the future it may replace the 
+libkformula.
+
+
+See DESIGN to know the structure of the formulas
