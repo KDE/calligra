@@ -64,7 +64,7 @@ void ProcessParagraphTag ( QDomNode      myNode,
     ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
 
     KWEFKWordLeader* leader=(KWEFKWordLeader*) exportFilter;
-    leader->doFullParagraph(paraText, paraFormatDataList);
+    leader->doFullParagraph(paraText, layout, paraFormatDataList);
 
 }
 
@@ -77,8 +77,8 @@ void ProcessFramesetTag ( QDomNode      myNode,
     int frameInfo=-1;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList.append ( AttrProcessing ( "frameType", "", NULL ) );
-    attrProcessingList.append ( AttrProcessing ( "frameInfo", "", NULL ) );
+    attrProcessingList.append ( AttrProcessing ( "frameType", "int", (void*) &frameType ) );
+    attrProcessingList.append ( AttrProcessing ( "frameInfo", "int", (void*) &frameInfo) );
     attrProcessingList.append ( AttrProcessing ( "removable", "", NULL ) );
     attrProcessingList.append ( AttrProcessing ( "visible",   "", NULL ) );
     attrProcessingList.append ( AttrProcessing ( "name",      "", NULL ) );
@@ -89,7 +89,7 @@ void ProcessFramesetTag ( QDomNode      myNode,
         // TODO: we need something for AbiWord's <section>
         QValueList<TagProcessing> tagProcessingList;
         tagProcessingList.append ( TagProcessing ( "FRAME",     NULL,                NULL ) );
-        //tagProcessingList.append ( TagProcessing ( "PARAGRAPH", ProcessParagraphTag, NULL ) );
+        tagProcessingList.append ( TagProcessing ( "PARAGRAPH", ProcessParagraphTag, NULL ) );
         ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
         // TODO: we need something for AbiWord's </section>
     }
@@ -139,6 +139,8 @@ bool KWEFKWordLeader::doOpenFile(const QString& filenameOut, const QString& to)
 {
     if (m_worker)
         return m_worker->doOpenFile(filenameOut,to);
+    // As it would be the first method to be called, warn if worker is NULL
+    kdError() << "No Worker! (in KWEFKWordLeader::doOpenFile)" << endl;
     return false;
 }
 
@@ -170,10 +172,10 @@ bool KWEFKWordLeader::doCloseDocument(void)
     return false;
 }
 
-bool KWEFKWordLeader::doFullParagraph(QString& paraText, ValueListFormatData& paraFormatDataList)
+bool KWEFKWordLeader::doFullParagraph(QString& paraText, LayoutData& layout, ValueListFormatData& paraFormatDataList)
 {
     if (m_worker)
-        return m_worker->doFullParagraph(paraText, paraFormatDataList);
+        return m_worker->doFullParagraph(paraText, layout, paraFormatDataList);
     return false;
 }
 
