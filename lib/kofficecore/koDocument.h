@@ -284,7 +284,7 @@ protected:
    *
    *  @param _store may be 0L.
    */
-  virtual bool load( istream& in, KoStore* _store );
+  virtual bool load( std::istream& in, KoStore* _store );
 
   /**
    *  This method loads a binary document. It is called by @ref #load.
@@ -298,7 +298,7 @@ protected:
    *  @param _store        Pointer to a Store object. May be 0L.
    *  @return              Loading was successful or not.
    */
-  virtual bool loadBinary( istream& , bool /*_randomaccess*/, KoStore* /*_store*/ );
+  virtual bool loadBinary( std::istream& , bool /*_randomaccess*/, KoStore* /*_store*/ );
 
   /**
    *  This method loads a XML document. It is called by @ref #load.
@@ -370,7 +370,7 @@ protected:
   /**
    *  Saves only an OBJECT tag for this document.
    */
-  virtual bool save( ostream&, const char* format );
+  virtual bool save( std::ostream&, const char* format );
 
   /**
    *  Overload this function with your personal text.

@@ -35,17 +35,17 @@ class QImage;
 class QPicture;
 
 ostream& operator<< ( ostream& outs, const QRect &_rect );
-QRect tagToRect( vector<KOMLAttrib>& _attribs );
+QRect tagToRect( std::vector<KOMLAttrib>& _attribs );
 
 ostream& operator<< ( ostream& outs, const QColor &_rect );
 istream& operator>> ( istream& outs, QColor &_rect );
 QColor strToColor( const char *_buffer );
 
 ostream& operator<< ( ostream& outs, const QPen &_pen );
-QPen tagToPen( vector<KOMLAttrib>& _attribs );
+QPen tagToPen( std::vector<KOMLAttrib>& _attribs );
 
 ostream& operator<< ( ostream& outs, const QFont &_font );
-QFont tagToFont( vector<KOMLAttrib>& _attribs );
+QFont tagToFont( std::vector<KOMLAttrib>& _attribs );
 
 ostream& operator<< ( ostream& outs, const QImage &_img );
 void writeImageToStream( ostream &outs, const QImage &_img, const QString &_format );

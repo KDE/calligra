@@ -53,6 +53,7 @@
 #define STORE_PROTOCOL_LENGTH 4
 // Warning, keep it sync in koTarStore.cc
 
+using namespace std;
 
 /**********************************************************
  *

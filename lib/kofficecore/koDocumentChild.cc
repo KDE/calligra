@@ -27,6 +27,9 @@
 #include <qapplication.h>
 
 #include <kdebug.h>
+#include <cassert>
+
+using namespace std;
 
 // Define the protocol used here for embedded documents' URL
 // This used to "store:" but KURL didn't like it,

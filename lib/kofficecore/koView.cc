@@ -27,6 +27,7 @@
 #include <kdebug.h>
 #include <kparts/plugin.h>
 #include <kparts/event.h>
+#include <cassert>
 
 class KoViewPrivate
 {

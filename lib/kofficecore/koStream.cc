@@ -26,6 +26,8 @@
 #include <qbuffer.h>
 #include <qpicture.h>
 
+using namespace std;
+
 ostream& operator<< ( ostream& outs, const QRect &_rect )
 {
   outs << "<RECT x=" << _rect.left() << " y=" << _rect.top() << " w=" << _rect.width() << " h=" << _rect.height() << " />";

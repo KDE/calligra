@@ -192,7 +192,7 @@ public:
    *  is done in @ref Document_impl. This function just stores information
    *  about the position and id of the embedded document.
    */
-  virtual bool save( ostream& out );
+  virtual bool save( std::ostream& out );
 
   /**
    *  Writes the OBJECT tag, but does NOT write the content of the
@@ -209,7 +209,7 @@ public:
    *  AFTER the 'parser' finished parsing, you must use @ref #loadDocument
    *  to actually load the embedded documents.
    */
-  virtual bool load( KOMLParser& parser, vector<KOMLAttrib>& _attribs );
+  virtual bool load( KOMLParser& parser, std::vector<KOMLAttrib>& _attribs );
 
   /**
    *  Parses the OBJECT tag. This does NOT mean creating the child documents.
@@ -243,7 +243,7 @@ protected:
    * @return TRUE if the tag could be handled. The default implementation
    *         returns FALSE.
    */
-  virtual bool loadTag( KOMLParser& parser, const string& tag, vector<KOMLAttrib>& lst2 );
+  virtual bool loadTag( KOMLParser& parser, const string& tag, std::vector<KOMLAttrib>& lst2 );
 
 private:
 

@@ -59,8 +59,10 @@ KoPartSelectDia::KoPartSelectDia( QWidget* parent, const char* name ) :
 
     okButton = 0;
 
+#ifdef __GNUC__
 #warning "After KRASH the KDialogBase API has to be opened a bit. It´s unacceptable"
 #warning "that one cannot access the buttons (Ok, Cancel, etc.) without a hack!"
+#endif
     QObjectList *lst = queryList( "QPushButton" );
     if ( lst && lst->first() ) {
 	for ( QPushButton *b = (QPushButton*)lst->first(); b; b = (QPushButton*)lst->next() ) {
