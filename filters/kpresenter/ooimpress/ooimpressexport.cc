@@ -580,6 +580,10 @@ void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body 
     QDomNode sounds = doc.namedItem( "SOUNDS" );
     QDomNode helpline = doc.namedItem( "HELPLINES" );
     QDomNode attributeValue = doc.namedItem( "ATTRIBUTES" );
+    QDomNode infiniLoop = doc.namedItem( "INFINITLOOP" );
+    QDomNode manualSwitch = doc.namedItem( "MANUALSWITCH" );
+    QDomNode customSlideShow = doc.namedItem( "CUSTOMSLIDESHOWCONFIG" );
+
 
     QDomNode bgpage = background.firstChild();
 
@@ -620,6 +624,46 @@ void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body 
         appendNote( doccontent, noteElement, drawPage );
         body.appendChild( drawPage );
         m_currentPage++;
+    }
+    int infiniLoopValue = -1;
+    int manualSwitchValue = -1;
+    if ( !infiniLoop.isNull() && infiniLoop.toElement().hasAttribute( "value" ))
+    {
+        bool ok;
+        int val = infiniLoop.toElement().attribute( "value" ).toInt( &ok );
+        if ( ok )
+            infiniLoopValue = val;
+    }
+    if ( !manualSwitch.isNull() && manualSwitch.toElement().hasAttribute( "value" ))
+    {
+        bool ok;
+        int val = manualSwitch.toElement().attribute( "value" ).toInt( &ok );
+        if ( ok )
+            manualSwitchValue = val;
+    }
+    if ( infiniLoopValue != -1 || manualSwitchValue != -1 )
+    {
+        QDomElement settings = doccontent.createElement( "presentation:settings" );
+        if ( infiniLoopValue !=-1 )
+            settings.setAttribute( "presentation:force-manual", ( manualSwitchValue==1 ) ? "true" : "false" );
+        if ( manualSwitchValue != -1 )
+            settings.setAttribute( "presentation:endless", ( infiniLoopValue==1 ) ? "true": "false" );
+        if ( !customSlideShow.isNull() )
+        {
+            for ( QDomNode customPage = customSlideShow.firstChild(); !customPage.isNull();
+                  customPage = customPage.nextSibling() )
+            {
+                QDomElement show = customPage.toElement();
+                if ( !show.isNull() && show.tagName()=="CUSTOMSLIDESHOW" )
+                {
+                    QDomElement showElement = doccontent.createElement( "presentation:show" );
+                    showElement.setAttribute( "presentation:name",show.attribute( "name" ) );
+                    showElement.setAttribute( "presentation:pages",show.attribute( "pages" ) );
+                    settings.appendChild( showElement );
+                }
+            }
+        }
+        body.appendChild( settings );
     }
 }
 
