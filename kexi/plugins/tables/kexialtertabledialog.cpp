@@ -32,6 +32,7 @@
 #include <kexidb/cursor.h>
 #include <kexidb/tableschema.h>
 #include <kexidb/connection.h>
+#include <kexidb/utils.h>
 
 #include <kexiproject.h>
 #include <keximainwindow.h>
@@ -78,6 +79,8 @@ void KexiAlterTableDialog::init()
 	item->push_back(QVariant(""));
 	data->append(item);
 */
+
+	
 	//add column data
 	for(unsigned int i=0; i < m_table->fieldCount(); i++)
 	{
@@ -90,6 +93,16 @@ void KexiAlterTableDialog::init()
 
 		QString typeName = "KexiDB::Field::" + field->typeGroupString();
 		KexiPropertyBuffer *buff = new KexiPropertyBuffer(this, typeName);
+
+		KexiProperty prop("type", QVariant(field->type()), i18n("Type"));
+		prop.setVisible(false);
+		buff->add(prop);
+
+		const QStringList list = KexiDB::typeNamesForGroup(field->typeGroup());
+		if (list.count()>1) {//there are more than 1 type name
+			buff->add(KexiProperty("subType", QVariant(), list, i18n("Subtype")));
+		}
+		
 		buff->add(KexiProperty("primaryKey", QVariant(field->isPrimaryKey(), 4), i18n("Primary Key")));
 		int len = field->length();
 		if(len == 0)

@@ -74,7 +74,7 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditorItem : public KListViewItem
 		static QString	format(const QVariant &s);
 
 		//! \return true if the item has been modified.
-		bool		modified() { return !(m_value==m_oldvalue);}
+//		bool		modified() { return !(m_value==m_oldvalue);}
 
 	protected:
 		/*! Reimplemented from KListViewItem to draw custom contents. Properties names are wriiten in bold if 

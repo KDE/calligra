@@ -164,7 +164,7 @@ KexiPropertyEditor::createEditor(KexiPropertyEditorItem *i, const QRect &geometr
 
 	connect(editor, SIGNAL(changed(KexiPropertySubEditor *)), this,
 		SLOT(slotValueChanged(KexiPropertySubEditor *)));
-	if(!i->modified())
+	if(!i->property()->changed())
 	{
 		editor->setGeometry(geometry);
 		editor->resize(geometry.width(), geometry.height());

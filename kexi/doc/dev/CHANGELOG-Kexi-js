@@ -309,6 +309,8 @@ Detailed TODO for Beta3:
 2004-02-12
 - typeName() added to KexiPropertyBuffer
 - typeString(), typeGroupString() added to KexiDB::Field
+- KexiDB Utils: typeNamesForGroup() and typesForGroup() utility functions added
+- KexiPropertyEditorList crash fixed for StringList type
 
 2004-02-10
 - Property editor is now used globally in Kexi (property buffer's change comes from active KexiView)

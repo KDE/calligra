@@ -298,7 +298,8 @@ KexiPropertyEditorItem::paintCell(QPainter *p, const QColorGroup & cg, int colum
 		
 		QFont f = listView()->font();
 		p->save();
-		if(modified())
+//		if(modified())
+		if (m_property->changed())
 			f.setBold(true);
 		p->setFont(f);
 		p->drawText(QRect(margin,0,width, height()-1), Qt::AlignVCenter, text(0));

@@ -30,22 +30,28 @@ PropComboBox::PropComboBox(QWidget *parent, bool multi)
    : KComboBox(parent)
 {
 	m_listbox = 0;
+	m_eventFilterEnabled = true;
 	if(multi)
 	{
-	m_listbox = new KListBox(this);
-	m_listbox->setSelectionMode(QListBox::Multi);
-	setEditable(true);
-	setListBox(m_listbox);
-	
-	disconnect(m_listbox, 0, this, 0);
-	connect(m_listbox, SIGNAL(selected(QListBoxItem*)), this, SLOT(updateEdit()));
-	connect(m_listbox, SIGNAL(returnPressed(QListBoxItem *)), this, SLOT(hideList()));
+		m_listbox = new KListBox(this);
+		m_listbox->setSelectionMode(QListBox::Multi);
+		setEditable(true);
+		m_eventFilterEnabled = false; //disable filter (crashed!)
+		setListBox(m_listbox);
+		m_eventFilterEnabled = true;
+
+		disconnect(m_listbox, 0, this, 0);
+		connect(m_listbox, SIGNAL(selected(QListBoxItem*)), this, SLOT(updateEdit()));
+		connect(m_listbox, SIGNAL(returnPressed(QListBoxItem *)), this, SLOT(hideList()));
 	}
 }
 
 bool
 PropComboBox::eventFilter(QObject *o, QEvent *e)
 {
+	if (!m_eventFilterEnabled)
+		return false;
+
 	if(o == lineEdit())
 	{
 	if(e->type() == QEvent::KeyPress)

@@ -51,6 +51,7 @@ class KEXIPROPERTYEDITOR_EXPORT PropComboBox : public KComboBox
 		
 	protected:
 		KListBox *m_listbox;
+		bool m_eventFilterEnabled : 1;
 };
 
 class KEXIPROPERTYEDITOR_EXPORT PropertyEditorList : public KexiPropertySubEditor
