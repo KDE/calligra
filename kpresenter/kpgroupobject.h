@@ -17,8 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef kprectobject_h
-#define kprectobject_h
+#ifndef kpgroupobject_h
+#define kpgroupobject_h
 
 #include "kpobject.h"
 
