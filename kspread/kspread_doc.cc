@@ -206,100 +206,112 @@ bool KSpreadDoc::saveChildren( KoStore* _store )
 
 QDomDocument KSpreadDoc::saveXML()
 {
-  //Terminate current cell edition, if any
-  QPtrListIterator<KoView> it( views() );
+    //Terminate current cell edition, if any
+    QPtrListIterator<KoView> it( views() );
 
-  /* don't pull focus away from the editor if this is just a background
-     autosave */
-  if (!isAutosaving())
-  {
-    for (; it.current(); ++it )
-      static_cast<KSpreadView *>( it.current() )->deleteEditor( true );
-  }
-
-  QDomDocument doc = createDomDocument( "spreadsheet", CURRENT_DTD_VERSION );
-  QDomElement spread = doc.documentElement();
-  spread.setAttribute( "editor", "KSpread" );
-  spread.setAttribute( "mime", "application/x-kspread" );
-  spread.setAttribute( "syntaxVersion", CURRENT_SYNTAX_VERSION );
-
-  /* Backwards compatibility with KSpread < 1.2
-     Looks like a hack, but it saves us to define an export filter for this issue.
-
-     In KSpread < 1.2, the paper format was per map, since 1.2 it's per sheet.
-     To enable KSpread < 1.2 to open these files, we store the page layout of the first sheet
-     for the whole map as the map paper layout. */
-  if ( specialOutputFlag() == KoDocument::SaveAsKOffice1dot1 /* so it's KSpread < 1.2 */)
-  {
-    KSpreadTable* firstTable = m_pMap->firstTable();
-
-    QDomElement paper = doc.createElement( "paper" );
-    paper.setAttribute( "format", firstTable->paperFormatString() );
-    paper.setAttribute( "orientation", firstTable->orientationString() );
-    spread.appendChild( paper );
-    QDomElement borders = doc.createElement( "borders" );
-    borders.setAttribute( "left", firstTable->leftBorder() );
-    borders.setAttribute( "top", firstTable->topBorder() );
-    borders.setAttribute( "right", firstTable->rightBorder() );
-    borders.setAttribute( "bottom", firstTable->bottomBorder() );
-    paper.appendChild( borders );
-    QDomElement head = doc.createElement( "head" );
-    paper.appendChild( head );
-    if ( !firstTable->headLeft().isEmpty() )
+    /* don't pull focus away from the editor if this is just a background
+       autosave */
+    if (!isAutosaving())
     {
-      QDomElement left = doc.createElement( "left" );
-      head.appendChild( left );
-      left.appendChild( doc.createTextNode( firstTable->headLeft() ) );
+        for (; it.current(); ++it )
+            static_cast<KSpreadView *>( it.current() )->deleteEditor( true );
     }
-    if ( !firstTable->headMid().isEmpty() )
-    {
-      QDomElement center = doc.createElement( "center" );
-      head.appendChild( center );
-      center.appendChild( doc.createTextNode( firstTable->headMid() ) );
-    }
-    if ( !firstTable->headRight().isEmpty() )
-    {
-      QDomElement right = doc.createElement( "right" );
-      head.appendChild( right );
-      right.appendChild( doc.createTextNode( firstTable->headRight() ) );
-    }
-    QDomElement foot = doc.createElement( "foot" );
-    paper.appendChild( foot );
-    if ( !firstTable->footLeft().isEmpty() )
-    {
-      QDomElement left = doc.createElement( "left" );
-      foot.appendChild( left );
-      left.appendChild( doc.createTextNode( firstTable->footLeft() ) );
-    }
-    if ( !firstTable->footMid().isEmpty() )
-    {
-      QDomElement center = doc.createElement( "center" );
-      foot.appendChild( center );
-      center.appendChild( doc.createTextNode( firstTable->footMid() ) );
-    }
-    if ( !firstTable->footRight().isEmpty() )
-    {
-      QDomElement right = doc.createElement( "right" );
-      foot.appendChild( right );
-      right.appendChild( doc.createTextNode( firstTable->footRight() ) );
-    }
-  }
 
-  QDomElement locale = m_locale.save( doc );
-  spread.appendChild( locale );
+    QDomDocument doc = createDomDocument( "spreadsheet", CURRENT_DTD_VERSION );
+    QDomElement spread = doc.documentElement();
+    spread.setAttribute( "editor", "KSpread" );
+    spread.setAttribute( "mime", "application/x-kspread" );
+    spread.setAttribute( "syntaxVersion", CURRENT_SYNTAX_VERSION );
 
-  if(m_refs.count()!=0)
-  {
-     QDomElement areaname = saveAreaName( doc );
-     spread.appendChild( areaname );
-  }
+    /* Backwards compatibility with KSpread < 1.2
+       Looks like a hack, but it saves us to define an export filter for this issue.
 
-  QDomElement e = m_pMap->save( doc );
-  spread.appendChild( e );
+       In KSpread < 1.2, the paper format was per map, since 1.2 it's per sheet.
+       To enable KSpread < 1.2 to open these files, we store the page layout of the first sheet
+       for the whole map as the map paper layout. */
+    if ( specialOutputFlag() == KoDocument::SaveAsKOffice1dot1 /* so it's KSpread < 1.2 */)
+    {
+        KSpreadTable* firstTable = m_pMap->firstTable();
 
-  setModified( false );
+        QDomElement paper = doc.createElement( "paper" );
+        paper.setAttribute( "format", firstTable->paperFormatString() );
+        paper.setAttribute( "orientation", firstTable->orientationString() );
+        spread.appendChild( paper );
+        QDomElement borders = doc.createElement( "borders" );
+        borders.setAttribute( "left", firstTable->leftBorder() );
+        borders.setAttribute( "top", firstTable->topBorder() );
+        borders.setAttribute( "right", firstTable->rightBorder() );
+        borders.setAttribute( "bottom", firstTable->bottomBorder() );
+        paper.appendChild( borders );
+        QDomElement head = doc.createElement( "head" );
+        paper.appendChild( head );
+        if ( !firstTable->headLeft().isEmpty() )
+        {
+            QDomElement left = doc.createElement( "left" );
+            head.appendChild( left );
+            left.appendChild( doc.createTextNode( firstTable->headLeft() ) );
+        }
+        if ( !firstTable->headMid().isEmpty() )
+        {
+            QDomElement center = doc.createElement( "center" );
+            head.appendChild( center );
+            center.appendChild( doc.createTextNode( firstTable->headMid() ) );
+        }
+        if ( !firstTable->headRight().isEmpty() )
+        {
+            QDomElement right = doc.createElement( "right" );
+            head.appendChild( right );
+            right.appendChild( doc.createTextNode( firstTable->headRight() ) );
+        }
+        QDomElement foot = doc.createElement( "foot" );
+        paper.appendChild( foot );
+        if ( !firstTable->footLeft().isEmpty() )
+        {
+            QDomElement left = doc.createElement( "left" );
+            foot.appendChild( left );
+            left.appendChild( doc.createTextNode( firstTable->footLeft() ) );
+        }
+        if ( !firstTable->footMid().isEmpty() )
+        {
+            QDomElement center = doc.createElement( "center" );
+            foot.appendChild( center );
+            center.appendChild( doc.createTextNode( firstTable->footMid() ) );
+        }
+        if ( !firstTable->footRight().isEmpty() )
+        {
+            QDomElement right = doc.createElement( "right" );
+            foot.appendChild( right );
+            right.appendChild( doc.createTextNode( firstTable->footRight() ) );
+        }
+    }
 
-  return doc;
+    QDomElement locale = m_locale.save( doc );
+    spread.appendChild( locale );
+
+    if(m_refs.count()!=0)
+    {
+        QDomElement areaname = saveAreaName( doc );
+        spread.appendChild( areaname );
+    }
+
+    if( !m_spellListIgnoreAll.isEmpty() )
+    {
+        QDomElement spellCheckIgnore = doc.createElement( "SPELLCHECKIGNORELIST" );
+        spread.appendChild( spellCheckIgnore );
+        for ( QStringList::Iterator it = m_spellListIgnoreAll.begin(); it != m_spellListIgnoreAll.end(); ++it )
+        {
+            QDomElement spellElem = doc.createElement( "SPELLCHECKIGNOREWORD" );
+            spellCheckIgnore.appendChild( spellElem );
+            spellElem.setAttribute( "word", *it );
+        }
+    }
+
+    QDomElement e = m_pMap->save( doc );
+    spread.appendChild( e );
+
+    setModified( false );
+
+    return doc;
 }
 
 bool KSpreadDoc::loadChildren( KoStore* _store )
@@ -348,6 +360,22 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
   QDomElement areaname = spread.namedItem( "areaname" ).toElement();
   if ( !areaname.isNull())
         loadAreaName(areaname);
+
+  QDomElement ignoreAll = spread.namedItem( "SPELLCHECKIGNORELIST").toElement();
+  if ( !ignoreAll.isNull())
+  {
+      QDomElement spellWord=spread.namedItem("SPELLCHECKIGNORELIST").toElement();
+
+      spellWord=spellWord.firstChild().toElement();
+      while ( !spellWord.isNull() )
+      {
+          if ( spellWord.tagName()=="SPELLCHECKIGNOREWORD" )
+          {
+              m_spellListIgnoreAll.append(spellWord.attribute("word"));
+          }
+          spellWord=spellWord.nextSibling().toElement();
+      }
+  }
 
   emit sigProgress( 40 );
   // In case of reload (e.g. from konqueror)

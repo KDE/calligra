@@ -1376,6 +1376,9 @@ void KSpreadView::startKSpell()
                                                        unsigned int ) ) );
   QObject::connect( m_spell.kspell, SIGNAL( done( const QString & ) ),
                     this, SLOT( spellCheckerDone( const QString & ) ) );
+  QObject::connect( m_spell.kspell, SIGNAL( ignoreall (const QString & ) ),
+                    this, SLOT( spellCheckerIgnoreAll( const QString & ) ) );
+
 #if KDE_VERSION >= 305
   QObject::connect( m_spell.kspell, SIGNAL( replaceall( const QString &  ,  const QString & )), this, SLOT( spellCheckerReplaceAll( const QString &  ,  const QString & )));
 #endif
