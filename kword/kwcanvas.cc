@@ -221,7 +221,7 @@ void KWCanvas::drawBorders( KWFrameSet * onlyFrameset, QPainter *painter, const 
                 continue;
 
             // set the background color from the main frameset (why?)
-            painter->setBrush( isAHeader( frameset->getFrameInfo() ) || isAFooter( frameset->getFrameInfo() ) ?
+            painter->setBrush( ( frameset->isAHeader() || frameset->isAFooter() ) ?
                                frameset->getFrame( 0 )->getBackgroundColor() : frame->getBackgroundColor() );
             painter->setPen( lightGray );
             bool should_draw = TRUE;
@@ -276,7 +276,7 @@ void KWCanvas::drawBorders( KWFrameSet * onlyFrameset, QPainter *painter, const 
             {
                 // Draw frame borders
 
-                if ( isAHeader( frameset->getFrameInfo() ) || isAFooter( frameset->getFrameInfo() ) )
+                if ( frameset->isAHeader() || frameset->isAFooter() )
                     frame = frameset->getFrame( 0 );
 
                 if ( frame->getLeftBorder().ptWidth > 0 && frame->getLeftBorder().color !=
@@ -353,7 +353,7 @@ void KWCanvas::drawBorders( KWFrameSet * onlyFrameset, QPainter *painter, const 
             QRegion devReg;
             QArray<QRect>rs = region.rects();
             rs.detach();
-            for ( int i = 0 ; i < rs.size() ; ++i )
+            for ( uint i = 0 ; i < rs.size() ; ++i )
                 rs[i] = painter->xForm( rs[i] );
             devReg.setRects( rs.data(), rs.size() );
             painter->setClipRegion( devReg );
@@ -599,7 +599,8 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right )
 
     // Can't resize the main frame of a WP document
     KWFrame *frame = doc->getFirstSelectedFrame();
-    if ( doc->processingType() == KWDocument::WP  && frame->getFrameSet() == doc->getFrameSet(0))
+    KWFrameSet *fs = frame->getFrameSet();
+    if ( doc->processingType() == KWDocument::WP  && fs == doc->getFrameSet(0))
         return;
 
     // Get the mouse position from QCursor. Trying to get it from KWResizeHandle's
@@ -622,11 +623,9 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right )
     int newRight = frame->right();
     int newBottom = frame->bottom();
 
-    FrameInfo frInfo=frame->getFrameSet()->getFrameInfo();
-
     if (top && newTop != y) {
         bool move=true;
-        if (isAFooter(frInfo))
+        if (fs->isAFooter())
             move=false;
         if (newBottom-y < (int)(minFrameHeight+5))
             y=newBottom-minFrameHeight-5;
@@ -636,7 +635,7 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right )
         if (move) newTop=y;
     } else if (bottom && newBottom != y) {
         bool move=true;
-        if (isAHeader(frInfo))
+        if (fs->isAHeader())
             move=false;
         if (y-newTop < (int)(minFrameHeight+5))
             y=newTop+minFrameHeight+5;
@@ -650,9 +649,9 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right )
 
     if (left && newLeft != x) {
         bool move=true;
-        if (isAHeader(frInfo))
+        if (fs->isAHeader())
             move=false;
-        if (isAFooter(frInfo))
+        if (fs->isAFooter())
             move=false;
         if (newRight-x < (int)minFrameWidth)
             x=newRight-minFrameWidth-5;
@@ -662,8 +661,8 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right )
             newLeft=x;
     } else if (right && newRight != x) {
         bool move=true;
-        if (isAHeader(frInfo)) move=false;
-        if (isAFooter(frInfo)) move=false;
+        if (fs->isAHeader()) move=false;
+        if (fs->isAFooter()) move=false;
         if (x-newLeft < (int)minFrameWidth)
             x=newLeft+minFrameWidth+5;
         if (x > static_cast<int>(doc->ptPaperWidth()))
@@ -1449,26 +1448,26 @@ void KWCanvas::setFrameBackgroundColor( const QBrush &_backColor )
 /*================================================================*/
 void KWCanvas::editFrameProperties()
 {
-    KWFrame *frame=doc->getFirstSelectedFrame();
-    if ( isAHeader(frame->getFrameSet()->getFrameInfo()) )
+    KWFrame *frame = doc->getFirstSelectedFrame();
+    if (!frame)
+        return;
+    KWFrameSet *fs = frame->getFrameSet();
+    if ( fs->isAHeader() )
     {
         KMessageBox::sorry( this, i18n( "This is a Header frame, it can not be edited."), i18n( "Frame Properties"  ) );
         return;
     }
-    if ( isAFooter(frame->getFrameSet()->getFrameInfo()) )
+    if ( fs->isAFooter() )
     {
         KMessageBox::sorry( this, i18n( "This is a Footer frame, it can not be edited."),i18n( "Frame Properties"  ) );
         return;
     }
 
-    if (frame)
-    {
-        KWFrameDia * frameDia = new KWFrameDia( this, frame);
-        connect( frameDia, SIGNAL( changed() ), this, SLOT( frameDiaClosed() ) );
-        frameDia->setCaption(i18n("Frame Properties"));
-        frameDia->show();
-        delete frameDia;
-    }
+    KWFrameDia * frameDia = new KWFrameDia( this, frame);
+    connect( frameDia, SIGNAL( changed() ), this, SLOT( frameDiaClosed() ) );
+    frameDia->setCaption(i18n("Frame Properties"));
+    frameDia->show();
+    delete frameDia;
 }
 
 /*================================================================*/
@@ -1558,20 +1557,21 @@ void KWCanvas::deleteFrame()
         return;
     }
     KWFrame *theFrame = frames.at(0);
+    KWFrameSet *fs = theFrame->getFrameSet();
 
-    if ( isAHeader(theFrame->getFrameSet()->getFrameInfo()) ) {
+    if ( fs->isAHeader() ) {
         KMessageBox::sorry( this, i18n( "This is a Header frame, it can not be deleted."),
                             i18n( "Delete Frame"  ) );
         return;
     }
-    if ( isAFooter(theFrame->getFrameSet()->getFrameInfo()) ) {
+    if ( fs->isAFooter() ) {
         KMessageBox::sorry( this, i18n( "This is a Footer frame, it can not be deleted."),
                             i18n( "Delete Frame"  ) );
         return;
     }
 
     // frame is part of a table?
-    if ( theFrame->getFrameSet()->getGroupManager() ) {
+    if ( fs->getGroupManager() ) {
         int result;
         result = KMessageBox::warningContinueCancel(this,
                                                     i18n( "You are about to delete a table\n"
@@ -1579,12 +1579,12 @@ void KWCanvas::deleteFrame()
                                                           "Are you sure you want to do that?"), i18n("Delete Table"), i18n("&Delete"));
         if (result != KMessageBox::Continue)
             return;
-        deleteTable( theFrame->getFrameSet()->getGroupManager() );
+        deleteTable( fs->getGroupManager() );
         return;
     }
 
-    if ( theFrame->getFrameSet()->getNumFrames() == 1 && theFrame->getFrameSet()->getFrameType() == FT_TEXT) {
-        if ( doc->processingType() == KWDocument::WP && doc->getFrameSetNum( theFrame->getFrameSet() ) == 0 )
+    if ( fs->getNumFrames() == 1 && fs->getFrameType() == FT_TEXT) {
+        if ( doc->processingType() == KWDocument::WP && doc->getFrameSetNum( fs ) == 0 )
             return;
 
         KWTextFrameSet * textfs = 0L;
@@ -1602,7 +1602,7 @@ void KWCanvas::deleteFrame()
                                                               "Frameset '%1'.\n"
                                                               "Doing so will delete this Frameset and all the\n"
                                                               "text contained in it as well!\n\n"
-                                                              "Are you sure you want to do that?").arg(theFrame->getFrameSet()->getName()),
+                                                              "Are you sure you want to do that?").arg(fs->getName()),
                                                         i18n("Delete Frame"), i18n("&Delete"));
 
             if (result != KMessageBox::Continue)
@@ -1617,83 +1617,66 @@ void KWCanvas::deleteFrame()
         stopBlinkCursor();
 #endif
     // do the actual delete.
-    if ( theFrame->getFrameSet()->getNumFrames() > 1 )
+    if ( fs->getNumFrames() > 1 )
     {
-        if( theFrame->getFrameSet()->getFrameType() == FT_TEXT)
+        if( fs->getFrameType() == FT_TEXT)
         {
             FrameIndex index;
-            index.m_iFrameIndex=theFrame->getFrameSet()->getFrameFromPtr(theFrame);
-            index.m_iFrameSetIndex=doc->getFrameSetNum(theFrame->getFrameSet());
+            index.m_iFrameIndex=fs->getFrameFromPtr(theFrame);
+            index.m_iFrameSetIndex=doc->getFrameSetNum(fs);
             KWTextFrameCommand *cmd = new KWTextFrameCommand(i18n("Delete text frame"),doc,index);
             doc->addCommand(cmd);
         }
-        theFrame->getFrameSet()->delFrame( theFrame );
+        fs->delFrame( theFrame );
     }
     else
     {
         FrameIndex index;
-        index.m_iFrameIndex=theFrame->getFrameSet()->getFrameFromPtr(theFrame);
-        index.m_iFrameSetIndex=doc->getFrameSetNum(theFrame->getFrameSet());
+        index.m_iFrameIndex=fs->getFrameFromPtr(theFrame);
+        index.m_iFrameSetIndex=doc->getFrameSetNum(fs);
 
-        if(theFrame->getFrameSet()->getFrameType() == FT_TEXT)
+        // Note: I would have preferred a virtual method in KWFrameSet (DF)
+        if(fs->getFrameType() == FT_TEXT)
         {
             QDomDocument domDoc( "PARAGRAPHS" );
             QDomElement elem = domDoc.createElement( "PARAGRAPHS" );
             domDoc.appendChild( elem );
-            theFrame->getFrameSet()->save(elem);
+            fs->save(elem);
 
             KWTextFrameSetCommand *cmd = new KWTextFrameSetCommand(i18n("Delete text frame"),doc,domDoc,index);
             doc->addCommand(cmd);
              //don't remove frameset Otherwise undo/redo text doesn't work
             //as discuted with david faure
-            //doc->delFrameSet( theFrame->getFrameSet() );
-            theFrame->getFrameSet()->delFrame( theFrame );
+            //doc->delFrameSet( fs );
+            fs->delFrame( theFrame );
         }
-        else if(theFrame->getFrameSet()->getFrameType() == FT_FORMULA)
+        else if(fs->getFrameType() == FT_FORMULA)
         {
             QDomDocument domDoc( "FORMULA" );
             QDomElement elem = domDoc.createElement( "FORMULA" );
             domDoc.appendChild( elem );
-            theFrame->getFrameSet()->save(elem);
+            fs->save(elem);
             KWFormulaFrameCommand *cmd = new KWFormulaFrameCommand(i18n("Delete formula frame"),doc,domDoc,index);
             doc->addCommand(cmd);
-             //don't remove frameset Otherwise undo/redo text doesn't work
-            //as discuted with david faure
-            //doc->delFrameSet( theFrame->getFrameSet() );
-            theFrame->getFrameSet()->delFrame( theFrame );
+            fs->delFrame( theFrame );
         }
-        else if(theFrame->getFrameSet()->getFrameType() == FT_PICTURE )
+        else if(fs->getFrameType() == FT_PICTURE )
         {
             QDomDocument domDoc( "IMAGE" );
             QDomElement elem = domDoc.createElement( "IMAGE" );
             domDoc.appendChild( elem );
-            theFrame->getFrameSet()->save(elem);
+            fs->save(elem);
             KWPictureFrameCommand *cmd = new KWPictureFrameCommand(i18n("Delete picture frame"),doc,domDoc,index);
             doc->addCommand(cmd);
-             //don't remove frameset Otherwise undo/redo text doesn't work
-            //as discuted with david faure
-            //doc->delFrameSet( theFrame->getFrameSet() );
-            theFrame->getFrameSet()->delFrame( theFrame );
+            fs->delFrame( theFrame );
         }
         else
         {
-            doc->delFrameSet( theFrame->getFrameSet() );
+            doc->delFrameSet( fs ); // ## dangerous
         }
     }
-#if 0
-    // set FC to new frameset
-    fc->setFrameSet( 1 );
-    fc->init( dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( 0 ) )->getFirstParag() );
-#endif
     doc->recalcFrames();
     doc->updateAllFrames();
-#if 0
-    recalcAll = TRUE;
-    recalcText();
-    recalcCursor();
-    repaintScreen( TRUE );
-    recalcAll = FALSE;
-#endif
     repaintAll();
 }
 

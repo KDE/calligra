@@ -766,10 +766,10 @@ bool KWFrameSet::hasSelectedFrame()
 bool KWFrameSet::isVisible() const
 {
     return ( visible &&
-             (!isAHeader( frameInfo ) || doc->isHeaderVisible()) &&
-             (!isAFooter( frameInfo ) || doc->isFooterVisible()) &&
-             !isAWrongHeader( frameInfo, doc->getHeaderType() ) &&
-             !isAWrongFooter( frameInfo, doc->getFooterType() ) );
+             (!isAHeader() || doc->isHeaderVisible()) &&
+             (!isAFooter() || doc->isFooterVisible()) &&
+             !isAWrongHeader( doc->getHeaderType() ) &&
+             !isAWrongFooter( doc->getFooterType() ) );
 }
 
 
@@ -1268,21 +1268,21 @@ void KWFormulaFrameSetEdit::cursorChanged( bool visible, bool /*selecting*/ )
 
 
 /*================================================================*/
-bool isAHeader( FrameInfo fi )
+bool KWFrameSet::isAHeader() const
 {
-    return ( fi == FI_FIRST_HEADER || fi == FI_EVEN_HEADER || fi == FI_ODD_HEADER );
+    return ( frameInfo == FI_FIRST_HEADER || frameInfo == FI_EVEN_HEADER || frameInfo == FI_ODD_HEADER );
 }
 
 /*================================================================*/
-bool isAFooter( FrameInfo fi )
+bool KWFrameSet::isAFooter() const
 {
-    return ( fi == FI_FIRST_FOOTER || fi == FI_EVEN_FOOTER || fi == FI_ODD_FOOTER );
+    return ( frameInfo == FI_FIRST_FOOTER || frameInfo == FI_EVEN_FOOTER || frameInfo == FI_ODD_FOOTER );
 }
 
 /*================================================================*/
-bool isAWrongHeader( FrameInfo fi, KoHFType t )
+bool KWFrameSet::isAWrongHeader( KoHFType t ) const
 {
-    switch ( fi ) {
+    switch ( frameInfo ) {
     case FI_FIRST_HEADER: {
         if ( t == HF_FIRST_DIFF ) return false;
         return true;
@@ -1296,14 +1296,12 @@ bool isAWrongHeader( FrameInfo fi, KoHFType t )
     } break;
     default: return false;
     }
-
-    return false;
 }
 
 /*================================================================*/
-bool isAWrongFooter( FrameInfo fi, KoHFType t )
+bool KWFrameSet::isAWrongFooter( KoHFType t ) const
 {
-    switch ( fi ) {
+    switch ( frameInfo ) {
     case FI_FIRST_FOOTER: {
         if ( t == HF_FIRST_DIFF ) return false;
         return true;
@@ -1317,8 +1315,6 @@ bool isAWrongFooter( FrameInfo fi, KoHFType t )
     } break;
     default: return false;
     }
-
-    return false;
 }
 
 #include "kwframe.moc"

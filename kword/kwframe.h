@@ -295,8 +295,13 @@ public:
     virtual ~KWFrameSet() {; }
 
     virtual FrameType getFrameType() { return FT_BASE; }
-    virtual FrameInfo getFrameInfo() { return frameInfo; }
+    FrameInfo getFrameInfo() { return frameInfo; }
     void setFrameInfo( FrameInfo fi ) { frameInfo = fi; }
+
+    bool isAHeader() const;
+    bool isAFooter() const;
+    bool isAWrongHeader( KoHFType t ) const;
+    bool isAWrongFooter( KoHFType t ) const;
 
     // frame management
     //virtual void addFrame( KWFrame _frame );
@@ -621,11 +626,5 @@ protected slots:
 private:
     KFormulaView* formulaView;
 };
-
-
-bool isAHeader( FrameInfo fi );
-bool isAFooter( FrameInfo fi );
-bool isAWrongHeader( FrameInfo fi, KoHFType t );
-bool isAWrongFooter( FrameInfo fi, KoHFType t );
 
 #endif

@@ -2411,7 +2411,7 @@ void KWDocument::updateAllFrames()
 
     for ( i = 0; i < frames.count(); i++ ) {// loop over all known frameSets
         frameset = frames.at( i );
-        if ( isAHeader( frameset->getFrameInfo() ) || isAFooter( frameset->getFrameInfo() ) || !frameset->isVisible() )
+        if ( frameset->isAHeader() || frameset->isAFooter() || !frameset->isVisible() )
             continue;
         if ( frameset->getGroupManager() ) {
             if ( mgrs.findRef( frameset->getGroupManager() ) == -1 ) {
@@ -2493,7 +2493,7 @@ bool KWDocument::canResize( KWFrameSet *frameset, KWFrame *frame, int page, int 
         } else { // headers and footers may always resize - ok this may lead to problems in strange situations, but let's ignore them :- )
 
             // a footer has to moved a bit to the top before he gets resized
-            if ( isAFooter( frameset->getFrameInfo() ) )
+            if ( frameset->isAFooter() )
                 frame->moveTopLeft( QPoint( 0, frame->y() - diff ) );
             return TRUE;
         }

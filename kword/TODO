@@ -31,8 +31,6 @@ Missing or incomplete stuff:
 
 cleanup:
 --------
-- isAHeader is a global function; move to frameset class.
-- isAFooter is a global function; move to frameset class.
 - All enums should belong to a class, making it safe for namespace clashes. Class::Enum-value 
   should be used everywhere
 - groupmanager variable active is used to 'Deactivate' a groupmanager. Deleting would be a better option ;)
