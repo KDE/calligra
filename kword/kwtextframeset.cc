@@ -181,13 +181,27 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup
 
                 gb.setBrush(QColorGroup::Base,frame->getBackgroundColor());
                 QTextParag * lastFormatted = textdoc->draw( p, r.x(), r.y(), r.width(), r.height(), gb, onlyChanged, drawCursor, cursor, resetChanged );
-                QTextParag * lastDrawn = lastFormatted->prev(); // tricky, see QTextDocument::draw
-                if ( onlyChanged && resetChanged && lastDrawn && lastDrawn->rect().bottom() > r.bottom() )
+
+                // The last paragraph of this frame might have a bit in the next frame too.
+                // In that case, and if we're only drawing changed paragraphs, (and resetting changed),
+                // we have to set changed to true again, to draw the bottom of the parag in the next frame.
+                if ( onlyChanged && resetChanged )
                 {
-                  lastDrawn->setChanged( true ); // This paragraph has a bit in the next frame too !
+                    // Finding the "last parag of the frame" is a bit tricky.
+                    // It's usually the one before lastFormatted, except if it's actually lastParag :}  [see QTextDocument::draw]
+                    QTextParag * lastDrawn = lastFormatted->prev();
+                    if ( lastFormatted == textdoc->lastParag() && ( !lastDrawn || lastDrawn->rect().bottom() < r.bottom() ) )
+                        lastDrawn = lastFormatted;
+
+                    //kdDebug(32002) << "KWTextFrameSet::drawContents drawn. onlyChanged=" << onlyChanged << " resetChanged=" << resetChanged << " lastDrawn=" << lastDrawn->paragId() << " lastDrawn's bottom:" << lastDrawn->rect().bottom() << " r.bottom=" << r.bottom() << endl;
+                    if ( lastDrawn && lastDrawn->rect().bottom() > r.bottom() )
+                    {
+                        //kdDebug(32002) << "KWTextFrameSet::drawContents setting lastDrawn " << lastDrawn->paragId() << " to changed" << endl;
+                        lastDrawn->setChanged( true );
+                    }
                 }
 
-                // NOTE: QTextView sets m_lastFormatted to lastDrawn here
+                // NOTE: QTextView sets m_lastFormatted to lastFormatted here
                 // But when scrolling up, this causes to reformat a lot of stuff for nothing.
                 // And updateViewArea takes care of formatting things before we even arrive here.
 
@@ -368,6 +382,7 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
     // paragraph's y position), which makes it easy to implement.
 
     bool linesTogether = parag ? static_cast<KWTextParag *>(parag)->linesTogether() : false;
+    //kdDebug(32002) << "KWTextFrameSet::adjustFlow parag=" << parag << " linesTogether=" << linesTogether << endl;
 
     int totalHeight = 0;
     QListIterator<KWFrame> frameIt( frameIterator() );
@@ -962,8 +977,8 @@ void KWTextFrameSet::formatMore()
     //kdDebug(32002) << "KWTextFrameSet::formatMore finished formatting. Setting m_lastFormatted to " << lastFormatted << endl;
     m_lastFormatted = lastFormatted;
 
-    if ( bottom != -1 && ( ( lastFormatted && bottom + lastFormatted->rect().height() > m_availableHeight ) // next parag will be off page
-                           || bottom > m_availableHeight ) ) // or this parag is already off page
+    if ( bottom != -1 && ( ( bottom > m_availableHeight ) ||   // this parag is already off page
+                           ( lastFormatted && bottom + lastFormatted->rect().height() > m_availableHeight ) ) ) // or next parag will be off page
     {
         kdDebug(32002) << "KWTextFrameSet::formatMore We need more space. bottom=" << bottom << " m_availableHeight=" << m_availableHeight << endl;
         // #### KWFormatContext::makeLineLayout had much code about this,
