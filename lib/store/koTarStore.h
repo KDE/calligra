@@ -60,6 +60,8 @@ public:
 
   virtual bool bad() { return !m_bGood; } // :)
 
+  Mode mode() { return m_mode; }
+
 protected:
   /**
    * Conversion routine

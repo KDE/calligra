@@ -88,6 +88,11 @@ public:
      * Can be used as an argument for the read methods, for instance
      */
     virtual long size() const = 0;
+
+    /**
+     * @return the mode used when opening, read or write
+     */
+    virtual Mode mode() = 0;
 };
 
 #endif

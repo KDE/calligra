@@ -47,6 +47,8 @@ public:
 
   bool bad() { return false; }
 
+  Mode mode() { return m_mode; }
+
   long size() const;
 
 protected:
