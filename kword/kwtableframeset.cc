@@ -1252,6 +1252,13 @@ bool KWTableFrameSet::isVisible()
     return false;
 }
 
+////////////////
+
+KWTableFrameSetEdit::~KWTableFrameSetEdit()
+{
+    delete m_currentCell;
+}
+
 void KWTableFrameSetEdit::mousePressEvent( QMouseEvent * e )
 {
     int mx = e->pos().x();

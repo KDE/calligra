@@ -215,7 +215,7 @@ class KWTableFrameSetEdit : public KWFrameSetEdit
 public:
     KWTableFrameSetEdit( KWTableFrameSet * fs, KWCanvas * canvas )
         : KWFrameSetEdit( fs, canvas ), m_currentCell( 0L ) {}
-    virtual ~KWTableFrameSetEdit() {}
+    virtual ~KWTableFrameSetEdit();
 
     KWTableFrameSet * tableFrameSet() const {
         return static_cast<KWTableFrameSet *>( m_fs );
