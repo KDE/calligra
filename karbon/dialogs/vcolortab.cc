@@ -30,7 +30,7 @@ VColorTab::VColorTab( const VColor &c, QWidget* parent, const char* name )
 	mColorSelector->setMinimumHeight( 165 );
 	mColorSelector->setMinimumWidth( 165 );
 	connect( mColorSelector, SIGNAL( valueChanged( int, int ) ), this, SLOT( slotHSChanged( int, int ) ) );
-	mainLayout->addMultiCellWidget (mColorSelector, 0, 2, 0, 0);
+	mainLayout->addMultiCellWidget(mColorSelector, 0, 2, 0, 0 );
 
 	//Selector
 	mSelector = new KGradientSelector( KSelector::Vertical, mRGBWidget );
@@ -42,8 +42,8 @@ VColorTab::VColorTab( const VColor &c, QWidget* parent, const char* name )
 
 	//Reference
 	QGroupBox* groupbox = new QGroupBox( 2, Vertical, i18n("Reference" ), mRGBWidget );
-	QLabel *mOldText = new QLabel( i18n("Old:"), groupbox );
-	QLabel *mNewText = new QLabel( i18n("New:"), groupbox );
+	new QLabel( i18n("Old:"), groupbox );
+	new QLabel( i18n("New:"), groupbox );
 	mOldColor = new KColorPatch( groupbox );
 	mColorPreview = new KColorPatch( groupbox );
 	QColor color( "black" );
@@ -51,16 +51,16 @@ VColorTab::VColorTab( const VColor &c, QWidget* parent, const char* name )
 
 	mOldColor->setColor( color );
 	mColorPreview->setColor( color );
-	connect( mColorPreview, SIGNAL( colorChanged( QColor* )), this, SLOT (slotUpdate( QColor* ) ) );
+	connect( mColorPreview, SIGNAL( colorChanged( QColor* ) ), this, SLOT( slotUpdate( QColor* ) ) );
 	mainLayout->addWidget( groupbox, 0, 2 );
 
 	//Components
 	QGroupBox* cgroupbox = new QGroupBox( 3, Vertical, i18n("Components"), mRGBWidget );
 
 	//--->RGB
-	QLabel *mRedText = new QLabel( i18n("R:"), cgroupbox );
-	QLabel *mGreenText = new QLabel( i18n("G:"), cgroupbox );
-	QLabel *mBlueText = new QLabel( i18n("B:"), cgroupbox );
+	new QLabel( i18n("R:"), cgroupbox );
+	new QLabel( i18n("G:"), cgroupbox );
+	new QLabel( i18n("B:"), cgroupbox );
 	mRed = new QSpinBox( 0, 255, 1, cgroupbox );
 	mGreen = new QSpinBox( 0, 255, 1, cgroupbox );
 	mBlue = new QSpinBox( 0, 255, 1, cgroupbox );
@@ -69,9 +69,9 @@ VColorTab::VColorTab( const VColor &c, QWidget* parent, const char* name )
 	connect( mBlue, SIGNAL( valueChanged(int) ), this, SLOT( slotUpdateFromRGBSpinBoxes() ) );
 
 	//--->HSV
-	QLabel *mHueText = new QLabel( i18n("H:"), cgroupbox );
-	QLabel *mSatText = new QLabel( i18n("S:"), cgroupbox );
-	QLabel *mBrText = new QLabel( i18n("V:"), cgroupbox );
+	new QLabel( i18n("H:"), cgroupbox );
+	new QLabel( i18n("S:"), cgroupbox );
+	new QLabel( i18n("V:"), cgroupbox );
 	mHue = new QSpinBox( 0, 359, 1, cgroupbox );
 	mSaturation = new QSpinBox( 0, 255, 1, cgroupbox );
 	mValue = new QSpinBox( 0, 255, 1, cgroupbox );
@@ -120,7 +120,7 @@ void VColorTab::slotUpdateFromRGBSpinBoxes()
 	mSelector->blockSignals( true );
 	mColorSelector->setValues( h, s );
 	slotHSChanged( h, s );
-	mSelector->setValue( static_cast<int>(( float( mValue->value() ) / 255.0 ) * 99.0) );
+	mSelector->setValue( static_cast<int>( ( float( mValue->value() ) / 255.0 ) * 99.0 ) );
 	mSelector->blockSignals( false );
 
 	mHue->blockSignals( false );
@@ -136,7 +136,7 @@ void VColorTab::slotUpdateFromHSVSpinBoxes()
 
 	// update gradient selector
 	mSelector->blockSignals( true );
-	mSelector->setValue( static_cast<int>(( float( mValue->value() ) / 255.0 ) * 99.0) );
+	mSelector->setValue( static_cast<int>( ( float( mValue->value() ) / 255.0 ) * 99.0 ) );
 	mSelector->blockSignals( false );
 
 	// set RGB
@@ -166,7 +166,7 @@ VColorTab::getColor()
 	return color;
 }
 
-void VColorTab::slotUpdate(QColor *color)
+void VColorTab::slotUpdate( QColor * )
 {
 	/*mRed->setValue( color->red() );
 	mGreen->setValue( color->green() );
@@ -186,7 +186,7 @@ void VColorTab::slotHSChanged( int h, int s )
 void VColorTab::slotVChanged( int newVal )
 {
 	//QColor color( mHue->value(), mSaturation->value(), newVal, QColor::Hsv );
-	mValue->setValue( static_cast<int>(float( newVal ) / 99.0 * 255.0) );
+	mValue->setValue( static_cast<int>( float( newVal ) / 99.0 * 255.0 ) );
 }
 
 #include "vcolortab.moc"
