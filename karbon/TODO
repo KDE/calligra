@@ -1,4 +1,10 @@
+-	make vselection a visitor
+-	make vselection a pointer
+-	move every selection into vselection
+-	add a point-list to vselection
+
 REAL BUGS:
+-	linewith doesnt update bbox anymore
 -	mirror coordinate-system so origin is bottom-left
 -	scale tool should only scale in one direction while dragging a slection node
 -	painting (NotROP) while shape creation isnt good. creation should instead

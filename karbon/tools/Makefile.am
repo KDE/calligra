@@ -1,10 +1,11 @@
 INCLUDES = $(KOFFICE_INCLUDES) \
 	-I$(srcdir)/.. \
-	-I$(srcdir)/../core \
-	-I$(srcdir)/../visitors \
-	-I$(srcdir)/../dialogs \
 	-I$(srcdir)/../commands \
+	-I$(srcdir)/../core \
+	-I$(srcdir)/../dialogs \
 	-I$(srcdir)/../render \
+	-I$(srcdir)/../shapes \
+	-I$(srcdir)/../visitors \
 	$(all_includes)
 
 noinst_LTLIBRARIES = libkarbontools.la

@@ -33,7 +33,8 @@ libkarbonpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOTEXT) \
 	render/libvpainter.la \
 	core/libkarboncore.la \
 	dialogs/libkarbondialogs.la \
-	widgets/libkarbonwidgets.la
+	widgets/libkarbonwidgets.la \
+	shapes/libkarbonshapes.la
 
 libkarbonpart_la_METASOURCES = AUTO
 
