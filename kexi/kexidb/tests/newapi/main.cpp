@@ -23,7 +23,7 @@ int main(int argc, char** argv)
 		return 0;
 	}
 	QCString drv_name(argv[1]);
-	QCString test_name = QString(argv[2]).lower();
+	QCString test_name = QString(argv[2]).lower().latin1();
 
 	KexiDB::DriverManager manager; // = KexiDB::DriverManager::self();
 	QStringList names = manager.driverNames();
