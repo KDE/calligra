@@ -885,6 +885,8 @@ bool KoDocument::openFile()
     KMimeType::Ptr t = KMimeType::findByURL( u, 0, true );
     if ( t->name() == KMimeType::defaultMimeType() ) {
         kdError(30003) << "No mimetype found for " << m_file << endl;
+        QApplication::restoreOverrideCursor();
+        KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().prettyURL() ) );
         return false;
     }
 
@@ -894,7 +896,11 @@ bool KoDocument::openFile()
         KoFilter::ConversionStatus status;
         importedFile = d->filterManager->import( m_file, status );
         if ( status != KoFilter::OK )
+        {
+            QApplication::restoreOverrideCursor();
+            KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().prettyURL() ) );
             return false;
+        }
         kdDebug(30003) << "KoDocument::openFile - importedFile '" << importedFile
                        << "', status: " << static_cast<int>( status ) << endl;
     }
