@@ -8,7 +8,7 @@
 		<Version data="0.1"/>
 		<Web data="www.thekompany.com"/>
 		<Email data="lndshark@speakeasy.net"/>
-		<Copyright data="Copyright (C) 2000 theKompany.com &amp; Dave Marotti. All rights reserved."/>
+		<Copyright data="Copyright (C) 2000 theKompany.com &amp; Dave Marotti. Distributed under the BSD license."/>
 		<AutoUpdate data="off"/>
 	</KivioSMLStencilSpawnerInfo>
 	<Dimensions w="72.0" h="36.0" defaultAspect="0.75"/>
