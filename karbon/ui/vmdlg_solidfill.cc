@@ -9,7 +9,7 @@
 #include <klocale.h>
 
 #include <qlayout.h>
-#include <kcolordlg.h>
+#include <kcolordialog.h>
 #include <qlabel.h>
 #include <qspinbox.h>
 #include <qgroupbox.h>

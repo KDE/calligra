@@ -1,13 +1,10 @@
 kde_module_LTLIBRARIES = libkarbonepsexport.la
 
-libkarbonepsexport_la_LDFLAGS = $(KDE_PLUGIN) -module -avoid-version -no-undefined
-libkarbonepsexport_la_LIBADD = \
-	$(srcdir)/../../../../koffice/lib/kofficeui/libkofficeui.la
+libkarbonepsexport_la_LDFLAGS = $(KDE_PLUGIN)
+libkarbonepsexport_la_LIBADD = $(LIB_KOFFICEUI)
 
-INCLUDES = \
+INCLUDES = $(KOFFICE_INCLUDES) \
 	-I$(srcdir)/.. \
-	-I$(srcdir)/../../../../koffice/lib/kofficecore \
-	-I$(srcdir)/../../../../koffice/lib/kofficeui \
 	$(all_includes)
 
 service_DATA = karbon_eps_export.desktop

@@ -1,9 +1,5 @@
-INCLUDES = \
-	-I$(srcdir)/.. \
-	-I$(srcdir)/../../lib/kofficeui \
-	-I$(srcdir)/../tools \
-	-I$(srcdir)/../render \
-	$(all_includes)
+INCLUDES = $(KOFFICE_INCLUDES) -I$(srcdir)/.. -I$(srcdir)/../tools \
+	-I$(srcdir)/../render $(all_includes)
 
 noinst_LTLIBRARIES = libkarboncore.la
 
