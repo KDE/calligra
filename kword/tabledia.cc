@@ -73,7 +73,7 @@ void KWTablePreview::paintEvent( QPaintEvent * )
 
 KWTableDia::KWTableDia( QWidget* parent, const char* name, KWCanvas *_canvas, KWDocument *_doc,
 			int rows, int cols, KWTblCellSize wid, KWTblCellSize hei, bool floating )
-    : KDialogBase( Tabbed, i18n("Table settings"), Ok | Cancel, Ok, parent, name, true)
+    : KDialogBase( Tabbed, i18n("Table Settings"), Ok | Cancel, Ok, parent, name, true)
 {
     canvas = _canvas;
     doc = _doc;

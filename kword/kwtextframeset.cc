@@ -2053,7 +2053,7 @@ void KWTextFrameSet::setPageBreaking( QTextCursor * cursor, int pageBreaking )
 
     storeParagUndoRedoInfo( cursor );
     undoRedoInfo.type = UndoRedoInfo::PageBreaking;
-    undoRedoInfo.name = i18n("Change paragraph attribute"); // bleh
+    undoRedoInfo.name = i18n("Change Paragraph Attribute"); // bleh
 
     if ( !textdoc->hasSelection( QTextDocument::Standard ) ) {
         static_cast<KWTextParag *>(cursor->parag())->setPageBreaking( pageBreaking );

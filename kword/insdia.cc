@@ -58,7 +58,7 @@ void KWInsertDia::setupTab1()
 
     grid1 = new QGridLayout( tab1, 3, 1, 15, 7 );
 
-    QButtonGroup *grp = new QButtonGroup( type == ROW ? i18n( "Insert new Row" ) : i18n( "Insert New Column" ), tab1 );
+    QButtonGroup *grp = new QButtonGroup( type == ROW ? i18n( "Insert New Row" ) : i18n( "Insert New Column" ), tab1 );
     grp->setExclusive( true );
 
     grid2 = new QGridLayout( grp, 3, 1, 7, 7 );
