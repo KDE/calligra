@@ -112,6 +112,7 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     d->m_manager = new KParts::PartManager( this );
     d->m_manager->setSelectionPolicy( KParts::PartManager::TriState );
     d->m_manager->setAllowNestedParts( true );
+    d->m_manager->setIgnoreScrollBars( true );
 
     connect( d->m_manager, SIGNAL( activePartChanged( KParts::Part * ) ),
 	     this, SLOT( slotActivePartChanged( KParts::Part * ) ) );
