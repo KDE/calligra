@@ -514,7 +514,7 @@ VSegment::transform( const QWMatrix& m )
 {
 	// only transform if node is selected
 	if( m_isSelected[ 0 ] )
-		setCtrlPoint1( m_point[ 0].transform( m ) );
+		setCtrlPoint1( m_point[ 0 ].transform( m ) );
 	if( m_isSelected[ 1 ] )
 		setCtrlPoint2( m_point[ 1 ].transform( m ) );
 	if( m_isSelected[ 2 ] )

@@ -263,20 +263,26 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 					{
 						if( jtr.current()->prev()  )
 						{
-							if( jtr.current()->prev()->type() == VSegment::curve )
-								// prev 2nd ctrl point to 1st ctrl point
-								painter->moveTo( KoPoint(
-										jtr.current()->prev()->ctrlPoint2().x(),
-										jtr.current()->prev()->ctrlPoint2().y() ) );
-							else
-								// prev knot to 1st ctrl point
-								painter->moveTo( KoPoint(
-										jtr.current()->prev()->knot().x(),
-										jtr.current()->prev()->knot().y() ) );
+							// prev knot to 1st ctrl point
+							painter->moveTo( KoPoint(
+									jtr.current()->prev()->knot().x(),
+									jtr.current()->prev()->knot().y() ) );
 							painter->lineTo( KoPoint(
 									jtr.current()->ctrlPoint1().x(),
 									jtr.current()->ctrlPoint1().y() ) );
+							painter->strokePath();
+					VStroke stroke;
+					stroke.setLineWidth( 1.0 );
+					stroke.setColor( Qt::blue.light().rgb() );
+					painter->setPen( stroke );
+							painter->newPath();
 						}
+						painter->moveTo( KoPoint(
+								jtr.current()->ctrlPoint2().x(),
+								jtr.current()->ctrlPoint2().y() ) );
+						painter->lineTo( KoPoint(
+								jtr.current()->knot().x(),
+								jtr.current()->knot().y() ) );
 					}
 					else if( jtr.current()->ctrlPointFixing() == VSegment::first )
 					{
