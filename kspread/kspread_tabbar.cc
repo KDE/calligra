@@ -17,6 +17,7 @@
    Boston, MA 02111-1307, USA.
 */     
 
+#include <qbitmap.h>
 #include <qmessagebox.h>
 #include <qpntarry.h>
 #include <qstring.h>
@@ -39,6 +40,7 @@ KSpreadTabBar::KSpreadTabBar( KSpreadView *_parent ) : QWidget( (QWidget *)_pare
 
     leftTab = 1;
     activeTab = 0;
+	m_moveTab = 0;
 }
 
 void KSpreadTabBar::addTab( const QString& _text )
@@ -78,6 +80,29 @@ void KSpreadTabBar::removeAllTabs()
     
     repaint();
 }
+
+void KSpreadTabBar::moveTab( int _from, int _to )
+{
+
+    QStringList::Iterator it;
+
+	it = tabsList.at( _from );
+	const QString tabname = *it;
+	cout << "From: " << tabname.ascii() << " To: " << (*(tabsList.at(_to))).ascii() << "\n";
+
+	if ( _from < _to )
+	{
+		tabsList.insert( tabsList.at( _to ), tabname );
+		tabsList.remove( it );
+	}
+	else
+	{
+		tabsList.remove( it );
+		tabsList.insert( tabsList.at( _to ), tabname );
+	}
+	repaint();	
+}
+
 
 void KSpreadTabBar::scrollLeft()
 {
@@ -156,10 +181,12 @@ void KSpreadTabBar::slotRemove( )
     }
 }
 
+
 void KSpreadTabBar::slotRename( )
 {
     renameTab();
 }
+
 
 void KSpreadTabBar::paintEvent( QPaintEvent* )
 {
@@ -202,7 +229,10 @@ void KSpreadTabBar::paintEvent( QPaintEvent* )
 	}
 	else if ( i >= leftTab )
 	{
-	    paintTab( painter, x, text, text_width, text_y, FALSE );
+		if ( m_moveTab == i )
+		    paintTab( painter, x, text, text_width, text_y, false, true );
+		else
+		    paintTab( painter, x, text, text_width, text_y, false );
 	    x += 10 + text_width;
 	}
 	
@@ -215,7 +245,8 @@ void KSpreadTabBar::paintEvent( QPaintEvent* )
     painter.end();
 }
 
-void KSpreadTabBar::paintTab( QPainter & painter, int x, const QString& text, int text_width, int text_y, bool isactive )
+
+void KSpreadTabBar::paintTab( QPainter & painter, int x, const QString& text, int text_width, int text_y, bool isactive, bool ismovemarked )
 {
     QPointArray parr;
     parr.setPoints( 4, x,0, x+10,height()-1, x+10+text_width,height()-1, x+20+text_width,0 );
@@ -234,9 +265,18 @@ void KSpreadTabBar::paintTab( QPainter & painter, int x, const QString& text, in
     painter.drawLine( x + 10 + text_width, height() - 1, x + 20 + text_width, 0 );
     if ( !isactive )
 	painter.drawLine( x, 0, x + 20 + text_width, 0 );
-    
+	if ( ismovemarked ) 
+	{
+		QPointArray movmark;
+		movmark.setPoints(3, x, 0, x + 7, 0, x + 4, 6);
+		QBrush oldBrush = painter.brush();
+		painter.setBrush( QColor( 0, 0, 0 ) );
+		painter.drawPolygon(movmark);
+		painter.setBrush( oldBrush );
+	}
     painter.drawText( x + 10, text_y , text );
 }
+
 
 void KSpreadTabBar::openPopupMenu( const QPoint &_global )
 {
@@ -249,6 +289,7 @@ void KSpreadTabBar::openPopupMenu( const QPoint &_global )
 
     m_pPopupMenu->popup( _global );
 }
+
 
 void KSpreadTabBar::renameTab()
 {
@@ -270,7 +311,6 @@ void KSpreadTabBar::renameTab()
         }	
     }
 }
-
 
 void KSpreadTabBar::mousePressEvent( QMouseEvent* _ev )
 {
@@ -317,10 +357,70 @@ void KSpreadTabBar::mousePressEvent( QMouseEvent* _ev )
 	repaint();
 	emit tabChanged( active_text );
     }
-	if ( _ev->button() == RightButton )
+
+	if ( _ev->button() == LeftButton )
+	{
+		m_bTabMoveFlag = true;
+	}
+	else if ( _ev->button() == RightButton )
 	{
 		openPopupMenu( _ev->globalPos() );
 	}
+}
+
+void KSpreadTabBar::mouseReleaseEvent( QMouseEvent* _ev )
+{
+	if ( _ev->button() == LeftButton && m_moveTab != 0 )
+	{
+		m_pView->doc()->map()->moveTable( (*tabsList.at( activeTab - 1 )).ascii(), (*tabsList.at( m_moveTab - 1 )).ascii());
+		moveTab( activeTab - 1, m_moveTab - 1 );
+		m_bTabMoveFlag = false;
+		if ( activeTab < m_moveTab )
+			m_moveTab--;
+		activeTab = m_moveTab;
+	
+		m_moveTab = 0;
+		repaint();
+	}
+}
+
+void KSpreadTabBar::mouseMoveEvent( QMouseEvent* _ev )
+{
+	if ( !m_bTabMoveFlag )
+		return;
+
+    QPainter painter;
+    painter.begin( this );
+
+    int i = 1;
+    int x = 0;
+   
+    QStringList::Iterator it;
+    for ( it = tabsList.begin(); it != tabsList.end(); ++it ) 
+    {
+		QFontMetrics fm = painter.fontMetrics();
+		int text_width = fm.width( *it );
+		
+		if ( i >= leftTab )
+		{
+		    if ( x <= _ev->pos().x() && _ev->pos().x() <= x + 20 + text_width )
+	    	{
+				if ( activeTab != i && m_moveTab != i )
+				{
+					m_moveTab = i;
+	   				repaint(); 
+				}
+				else if ( activeTab == i && m_moveTab != 0 )
+				{
+					m_moveTab = 0;
+					repaint();
+				}
+			}
+			x += 10 + text_width;
+		}
+		i++;
+    }
+    painter.end();
 }
 
 void KSpreadTabBar::mouseDoubleClickEvent( QMouseEvent*  )

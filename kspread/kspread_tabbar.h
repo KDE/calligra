@@ -49,7 +49,13 @@ public:
      * It is recommended to call @ref #setActiveTab after a call to this function.
      */
     void removeTab( const QString& _text );
-    /**
+    
+	/**
+	 * Moves the tab with number _from befor tab number _to
+	*/
+	void moveTab( int _from, int _to );
+
+	/**
      * Removes all tabs from the bar and repaints the widget.
      */
     void removeAllTabs();
@@ -84,9 +90,11 @@ protected slots:
 protected:
     virtual void paintEvent ( QPaintEvent* _ev );
     virtual void mousePressEvent ( QMouseEvent* _ev );
+    virtual void mouseReleaseEvent ( QMouseEvent* _ev );
     virtual void mouseDoubleClickEvent ( QMouseEvent* _ev );
+	virtual void mouseMoveEvent( QMouseEvent* _ev );
 
-    void paintTab( QPainter & painter, int x, const QString& text, int text_width, int text_y, bool isactive );
+    void paintTab( QPainter & painter, int x, const QString& text, int text_width, int text_y, bool isactive, bool ismovemarked = false );
 
     void openPopupMenu( QPoint &_global );
 
@@ -114,6 +122,16 @@ protected:
      */
     int activeTab;
 
+	/**
+	 * Indicates wheter a tab is being moved using the mouse.
+	 */ 	
+	bool m_bTabMoveFlag;
+
+	/**
+	 * The number of the tab being moved using the mouse.
+     * If this value is 0, that means that no tab is being moved.
+	 */
+	int m_moveTab;
 };
 
 #endif

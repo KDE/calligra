@@ -77,7 +77,12 @@ public:
    * @param _tables becomes removed from the map. This wont delete the table.
    */
   void removeTable( KSpreadTable *_table );
-  
+
+  /**
+   * @param _from is being moved to @param _to.
+   */ 
+  void moveTable( const char* _from, const char* to );
+ 
   KSpreadTable* findTable( const char *_name );
         
   /**
