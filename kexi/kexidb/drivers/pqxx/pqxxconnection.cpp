@@ -30,7 +30,7 @@ pqxxSqlConnection::pqxxSqlConnection(Driver *driver, const ConnectionData &conn_
 //Do any tidying up before the object is deleted
 pqxxSqlConnection::~pqxxSqlConnection()
 {
-    closeDatabase();
+    destroy();
 }
 
 //==================================================================================

@@ -47,7 +47,7 @@ MySqlConnection::MySqlConnection( Driver *driver, const ConnectionData &conn_dat
 
 
 MySqlConnection::~MySqlConnection() {
-	disconnect();
+	destroy();
 }
 
 bool MySqlConnection::drv_connect()
