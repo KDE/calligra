@@ -373,7 +373,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
     state.ignoreGroup = false;
 
     utf8TextCodec=QTextCodec::codecForName("UTF-8");
-    kdDebug(30515) << "UZF-8 asked, given: " << (utf8TextCodec?utf8TextCodec->name():QString("-none-")) << endl;
+    kdDebug(30515) << "UTF-8 asked, given: " << (utf8TextCodec?utf8TextCodec->name():QString("-none-")) << endl;
 
     // Parse RTF document
     while (true)
