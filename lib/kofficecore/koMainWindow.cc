@@ -172,7 +172,10 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
 
     setView( d->m_rootView );
     if ( m_dummyWidget )
+    {
       delete m_dummyWidget;
+      m_dummyWidget = 0L;
+    }
     d->m_rootView->show();
     d->m_rootDoc->addShell( this );
   }
