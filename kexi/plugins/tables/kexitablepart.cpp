@@ -114,15 +114,16 @@ KexiViewBase* KexiTablePart::createView(QWidget *parent, KexiDialogBase* dialog,
 
 	KexiDB::TableSchema *sch = win->project()->dbConnection()->tableSchema(item.name());
 	kdDebug() << "KexiTablePart::execute(): schema is " << sch << endl;
+/*new schema will be crated later
 	if(!sch) {
 		//js TODO add error msg
 		sch = new KexiDB::TableSchema(item.name());
 		sch->setCaption(item.caption());
 		win->project()->dbConnection()->executeQuery(QString("DELETE FROM kexi__objects WHERE o_id = %1").arg(item.identifier()));
-	}
+	}*/
 
 	if (viewMode == Kexi::DesignViewMode) {
-		KexiAlterTableDialog *t = new KexiAlterTableDialog(win, parent, *sch, "altertable");
+		KexiAlterTableDialog *t = new KexiAlterTableDialog(win, parent, sch, "altertable");
 		return t;
 	}
 	else if (viewMode == Kexi::DataViewMode) {

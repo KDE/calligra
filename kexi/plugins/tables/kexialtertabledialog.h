@@ -47,8 +47,11 @@ class KexiAlterTableDialog : public KexiViewBase
 	typedef QPtrVector<KexiPropertyBuffer> FieldsBuffer;
 
 	public:
-		KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent, KexiDB::TableSchema &table, 
-			const char *name = 0);
+		/*! Creates alter table dialog. \a table may be NULL 
+		 if new table should be composed instead of altering existing one. */
+		KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent, 
+			KexiDB::TableSchema *table, const char *name = 0);
+
 		~KexiAlterTableDialog();
 
 		virtual QWidget* mainWidget();
@@ -74,6 +77,9 @@ class KexiAlterTableDialog : public KexiViewBase
 		virtual KexiPropertyBuffer *propertyBuffer();
 
 		void removeCurrentPropertyBuffer();
+
+		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata);
+		virtual bool storeData();
 
 	protected slots:
 		void slotCellSelected(int col, int row);

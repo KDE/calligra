@@ -42,17 +42,20 @@
 #include <kexipropertybuffer.h>
 #include <kexiproperty.h>
 #include "kexipropertyeditor.h"
-
+#include "kexidialogbase.h"
 #include "kexitableview.h"
 
 #define MAX_FIELDS 101 //nice prime number
 
 KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent, 
-	KexiDB::TableSchema &table, const char *name)
+	KexiDB::TableSchema *table, const char *name)
  : KexiViewBase(win, parent, name)
 {
-	m_table = &table; //orig table
-	m_newTable = new KexiDB::TableSchema(*m_table); //deep copy of the original table
+	m_table = table; //orig table
+	if (m_table) //deep copy of the original table
+		m_newTable = new KexiDB::TableSchema(*m_table); 
+	else //new, empty table
+		m_newTable = new KexiDB::TableSchema(m_dialog->partItem()->name());
 	m_fields.resize(MAX_FIELDS);
 	m_fields.setAutoDelete(true);
 	m_row = -99;
@@ -101,7 +104,7 @@ void KexiAlterTableDialog::init()
 		KexiTableItem *item = new KexiTableItem(0);
 		item->push_back(QVariant(field->name()));
 		item->push_back(QVariant(field->typeGroup()-1)); //-1 because type groups are counted from 1
-		item->push_back(QVariant(field->helpText()));
+		item->push_back(QVariant(field->description()));
 		data->append(item);
 
 		createPropertyBuffer( i, field );
@@ -188,7 +191,7 @@ KexiAlterTableDialog::createPropertyBuffer( int row, KexiDB::Field *field )
 	//caption
 	buff->add( new KexiProperty("caption", QVariant(field->caption()), i18n("Caption") ) );
 	//desc
-	prop = new KexiProperty("description", QVariant(field->helpText()));
+	prop = new KexiProperty("description", QVariant(field->description()));
 	prop->setVisible(false);
 	buff->add(prop);
 	//length
@@ -258,6 +261,7 @@ bool KexiAlterTableDialog::beforeSwitchTo(int mode)
 		//todo
 	}
 	else if (mode==Kexi::DataViewMode) {
+#if 0
 		//todo
 		KexiDB::TableSchema *nt = new KexiDB::TableSchema(m_newTable->name());
 		nt->setCaption(m_newTable->caption());
@@ -280,7 +284,6 @@ bool KexiAlterTableDialog::beforeSwitchTo(int mode)
 			}
 		}
 
-#if 0 //js
 		KexiDB::TableSchema *s = mainWin()->project()->dbConnection()->tableSchema(m_newTable->name());
 		if(!s)
 		{
@@ -402,7 +405,7 @@ void KexiAlterTableDialog::slotRowUpdated(KexiTableItem *item)
 			/*precision*/0,
 			/*defaultValue*/QVariant(),
 			/*caption*/QString::null,
-			/*helpText*/description,
+			description,
 			/*width*/0);
 
 		m_newTable->addField( field );
@@ -412,13 +415,10 @@ void KexiAlterTableDialog::slotRowUpdated(KexiTableItem *item)
 		//create new property buffer:
 		KexiPropertyBuffer *newbuff = createPropertyBuffer( m_view->currentRow(), field );
 		//add a special property indicating that this is brand new buffer, 
-		//not just old-changed
+		//not just changed
 		KexiProperty* prop = new KexiProperty("newrow", QVariant());
 		prop->setVisible(false);
 		newbuff->add( prop );
-
-//js TODO:
-//		//add this field to the list of new fields
 
 		//refresh property editor:
 		propertyBufferSwitched();
@@ -451,6 +451,34 @@ void KexiAlterTableDialog::slotRowDeleted()
 	propertyBufferSwitched();
 }
 
+KexiDB::SchemaData* KexiAlterTableDialog::storeNewData(const KexiDB::SchemaData& sdata)
+{
+	if (m_dialog->schemaData()) //must not be
+		return 0;
+	// create new schema:
+	KexiDB::TableSchema *ts = new KexiDB::TableSchema(sdata.name());
+	ts->setName( sdata.name() );
+	ts->setCaption( sdata.caption() );
+	ts->setDescription( sdata.description() );
+
+
+	if (!mainWin()->project()->dbConnection()->createTable(ts)) {
+		delete ts;
+		ts = 0;
+	}
+	return ts;
+}
+
+bool KexiAlterTableDialog::storeData()
+{
+	KexiDB::TableSchema *ts = static_cast<KexiDB::TableSchema*>(m_dialog->schemaData());
+/*** TODO: ALTER TABLE CODE IN KEXIDB!
+	if (!ts || !mainWin()->project()->dbConnection()->alterTable(ts))
+		return 0;
+*/
+	return true;
+}
+
 /*void KexiAlterTableDialog::slotAboutToUpdateRow(
 	KexiTableItem* item, KexiDB::RowEditBuffer* buffer, KexiDB::ResultInfo* result)
 {
@@ -467,6 +495,7 @@ void KexiAlterTableDialog::slotRowDeleted()
 //	allow = true;
 //	m_dirty = m_dirty | result->success;
 }*/
+
 
 
 #include "kexialtertabledialog.moc"
