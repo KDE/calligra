@@ -26,7 +26,8 @@
 #include <qcheckbox.h>
 #include <qrect.h>
 #include <kdialogbase.h>
-
+#include <knuminput.h>
+#include <kconfig.h>
 
 class KSpreadView;
 class KSpreadTable;
@@ -55,6 +56,20 @@ public:
    parameterLocale( KSpreadView* _view,QWidget *parent = 0, char *name = 0);
 };
 
+class configure : public QWidget
+{
+  Q_OBJECT
+public:
+  configure( KSpreadView* _view, QWidget *parent = 0, char *name = 0 );
+  void apply();
+
+protected:
+  KSpreadView* m_pView;
+  KIntNumInput  *nbPage;
+  KConfig* config;
+} ;
+
+
 class KSpreadpreference : public KDialogBase
 {
   Q_OBJECT
@@ -64,6 +79,7 @@ public slots:
   void slotApply();
 private :
   preference *_preferenceConfig;
+  configure * _configure;
 };
 
 

@@ -32,6 +32,7 @@
 #include <kdialogbase.h>
 #include <qvbox.h>
 #include <qlabel.h>
+#include <kconfig.h>
 
 
 KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* /*name*/)
@@ -48,11 +49,14 @@ KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* /*name*/)
 
   page=addVBoxPage(i18n("Local Parameters"), QString::null);
   parameterLocale *_ParamLocal = new  parameterLocale(parent,page );
+  page=addVBoxPage(i18n("Configure "), QString::null);
+  _configure = new  configure(parent,page );
 }
 
 void KSpreadpreference::slotApply()
 {
 _preferenceConfig->apply();
+_configure->apply();
 }
 
  preference::preference( KSpreadView* _view,QWidget *parent , char *name )
@@ -139,7 +143,6 @@ parameterLocale::parameterLocale( KSpreadView* _view,QWidget *parent , char *nam
   lay1->setMargin( 20 );
   lay1->setSpacing( 10 );
   QLabel *label=new QLabel( tmpQGroupBox,"label");
-  //label=new QLabel( tmpQGroupBox,"label7");
   label->setText( i18n("Language : %1").arg( _view->doc()->locale()->language() ));
   lay1->addWidget(label);
   label=new QLabel( tmpQGroupBox,"label6");
@@ -158,7 +161,43 @@ parameterLocale::parameterLocale( KSpreadView* _view,QWidget *parent , char *nam
   label->setText( i18n("Money : %1").arg( _view->doc()->locale()->formatMoney(12.55) ));
   lay1->addWidget(label);
   box->addWidget( tmpQGroupBox);
+}
 
 
+configure::configure( KSpreadView* _view,QWidget *parent , char *name )
+ :QWidget ( parent,name)
+ {
+
+  m_pView = _view;
+  QVBoxLayout *box = new QVBoxLayout( this );
+  box->setMargin( 5 );
+  box->setSpacing( 10 );
+
+  QGroupBox* tmpQGroupBox = new QGroupBox( this, "GroupBox" );
+  tmpQGroupBox->setTitle(i18n("Configuration"));
+  QVBoxLayout *lay1 = new QVBoxLayout(tmpQGroupBox);
+  lay1->setMargin( 20 );
+  lay1->setSpacing( 10 );
+  config = KSpreadFactory::global()->config();
+  int _page=1;
+  if( config->hasGroup("Parameters" ))
+        {
+        config->setGroup( "Parameters" );
+        _page=config->readNumEntry( "NbPage" ) ;
+        }
+
+  nbPage=new KIntNumInput(_page, tmpQGroupBox , 10);
+  nbPage->setRange(1, 10, 1);
+  nbPage->setLabel(i18n("Number of page open at the beginning :"));
+  lay1->addWidget(nbPage);
+
+  box->addWidget( tmpQGroupBox);
+
+}
+
+void configure::apply()
+{
+config->setGroup( "Parameters" );
+config->writeEntry( "NbPage", nbPage->value());
 }
 #include "kspread_dlg_preference.moc"

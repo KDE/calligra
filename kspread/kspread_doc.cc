@@ -125,16 +125,31 @@ bool KSpreadDoc::initDoc()
     ret = KoTemplateChooseDia::choose(  KSpreadFactory::global(), f, "application/x-kspread",
                                         "*.ksp", i18n("KSpread"), KoTemplateChooseDia::NoTemplates );
 
-    if ( ret == KoTemplateChooseDia::File ) {
+    if ( ret == KoTemplateChooseDia::File )
+    {
         KURL url;
         url.setPath(f);
         return openURL( url );
-    } else if ( ret == KoTemplateChooseDia::Empty ) {
+    }
+    else if ( ret == KoTemplateChooseDia::Empty )
+    {
+    KConfig *config = KSpreadFactory::global()->config();
+    int _page=1;
+    if( config->hasGroup("Parameters" ))
+        {
+        config->setGroup( "Parameters" );
+        _page=config->readNumEntry( "NbPage" ) ;
+        }
+
+    for(int i=0;i<_page;i++)
+        {
         KSpreadTable *t = createTable();
         m_pMap->addTable( t );
-        resetURL();
-        return true;
-    } else
+        }
+    resetURL();
+    return true;
+    }
+    else
         return false;
 }
 

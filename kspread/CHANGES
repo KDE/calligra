@@ -1106,3 +1106,8 @@ Add RANDBETWEEN function
 2000-12-05-Montel laurent <lmontel@mandrakesoft.com>
 ----------------------------------------------------
 -Now you can hide/show column/row
+
+2000-12-08-Montel laurent <lmontel@mandrakesoft.com>
+----------------------------------------------------
+-Now you can configure the number of page when you begin kspread (when you don't specify
+a file name)
