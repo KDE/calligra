@@ -32,15 +32,15 @@ XMLTree::XMLTree(const QString & inputFileName)
   doc.setAttribute("mime", "application/x-kspread");
   root->appendChild(doc);
 
-  QDomElement paper = root->createElement("PAPER");
+  QDomElement paper = root->createElement("paper");
   paper.setAttribute("format", "A4");
   paper.setAttribute("orientation", "Portrait");
   doc.appendChild(paper);
 
-  map = root->createElement("MAP");
+  map = root->createElement("map");
   doc.appendChild(map);
 
-  table = root->createElement("TABLE");
+  table = root->createElement("table");
   table.setAttribute("name", inputFileName);
   map.appendChild(table);
 
@@ -68,7 +68,7 @@ const QString XMLTree::part()
 
 bool XMLTree::cell( const QString & contents )
 {
-  QDomElement e = root->createElement("CELL");
+  QDomElement e = root->createElement("cell");
   //e.appendChild(getFormat(xf));
   //e.appendChild(getFont(xf));
 

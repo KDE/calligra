@@ -29,19 +29,19 @@ XMLTree::XMLTree()
   doc.setAttribute("mime", "application/x-kspread");
   root->appendChild(doc);
 
-  paper = root->createElement("PAPER");
+  paper = root->createElement("paper");
   paper.setAttribute("format", "A4");
   paper.setAttribute("orientation", "Portrait");
   doc.appendChild(paper);
 
-  e = root->createElement("PAPERBORDERS");
-  //e.setAttribute("left", 20);
-  //e.setAttribute("top", 20);
-  //e.setAttribute("right", 20);
-  //e.setAttribute("bottom", 20);
+  e = root->createElement("borders");
+  e.setAttribute("left", 20);
+  e.setAttribute("top", 20);
+  e.setAttribute("right", 20);
+  e.setAttribute("bottom", 20);
   paper.appendChild(e);
 
-  map = root->createElement("MAP");
+  map = root->createElement("map");
   doc.appendChild(map);
 }
 
@@ -59,7 +59,7 @@ const QDomDocument * const XMLTree::part()
 const QDomElement XMLTree::getFont(Q_UINT16 xf)
 {
   Q_UINT16 fontid = xfs[xf]->ifnt;
-  QDomElement font = root->createElement("FONT");
+  QDomElement font = root->createElement("font");
 
   if (fontid > 3)
     fontid--;
@@ -79,7 +79,7 @@ const QDomElement XMLTree::getFormat(Q_UINT16 xf)
   int align, pos, precision = -1;
 
   QString s;
-  QDomElement format = root->createElement("FORMAT");
+  QDomElement format = root->createElement("format");
 
   align = (xfs[xf]->info2 & 0x07) == 0 ? 4 :  xfs[xf]->info2 & 0x07;
   format.setAttribute("align", align); // kspread doesn't support align=0
@@ -185,7 +185,7 @@ bool XMLTree::_bottommargin(Q_UINT16 size, QDataStream& body)
 {
   double value;
   body >> value;
-  (paper.namedItem("PAPERBORDERS")).toElement().setAttribute("bottom", value);
+  (paper.namedItem("borders")).toElement().setAttribute("bottom", value);
 
   return true;
 }
@@ -206,7 +206,7 @@ bool XMLTree::_boundsheet(Q_UINT16 size, QDataStream& body)
 
       delete []name;
       
-      e = new QDomElement(root->createElement("TABLE"));
+      e = new QDomElement(root->createElement("table"));
       e->setAttribute("name", s);
       map.appendChild(*e);
       tables.enqueue(e);
@@ -222,7 +222,7 @@ bool XMLTree::_boundsheet(Q_UINT16 size, QDataStream& body)
       QString s = QString::fromLatin1(name, length);
 
       delete []name;
-      e = new QDomElement(root->createElement("TABLE"));
+      e = new QDomElement(root->createElement("table"));
       e->setAttribute("name", s);
       map.appendChild(*e);
       tables.enqueue(e);
@@ -458,7 +458,7 @@ bool XMLTree::_footer(Q_UINT16 size, QDataStream& body)
     body.readRawBytes(name, length);
     QString s = QString::fromLatin1(name, length);
 
-    e = root->createElement("FOOT");
+    e = root->createElement("foot");
     e.setAttribute("left", "");
     //e.setAttribute("center", s);  // Werner: BUG?!?
     e.setAttribute("center", "");
@@ -517,7 +517,7 @@ bool XMLTree::_header(Q_UINT16 size, QDataStream& body)
     body.readRawBytes(name, length);
     QString s = QString::fromLatin1(name, length);
 
-    e = root->createElement("HEAD");
+    e = root->createElement("head");
     e.setAttribute("left", "");
     //e.setAttribute("center", s);  // Werner: BUG?!?
     e.setAttribute("center", "");
@@ -572,7 +572,7 @@ bool XMLTree::_label(Q_UINT16 size, QDataStream& body)
   Q_UINT16 row, column, xf, length;
 
   body >> row >> column >> xf >> length;
-  QDomElement e = root->createElement("CELL");
+  QDomElement e = root->createElement("cell");
   e.appendChild(getFormat(xf));
   e.appendChild(getFont(xf));
 
@@ -597,7 +597,7 @@ bool XMLTree::_leftmargin(Q_UINT16 size, QDataStream& body)
 {
   double value;
   body >> value;
-  (paper.namedItem("PAPERBORDERS")).toElement().setAttribute("left", value);
+  (paper.namedItem("borders")).toElement().setAttribute("left", value);
 
   return true;
 }
@@ -682,7 +682,7 @@ bool XMLTree::_mulrk(Q_UINT16 size, QDataStream& body)
       break;
     }
 
-    QDomElement e = root->createElement("CELL");
+    QDomElement e = root->createElement("cell");
     e.appendChild(getFormat(xf));
     e.appendChild(getFont(xf));
     s.sprintf("%f", value);
@@ -714,7 +714,7 @@ bool XMLTree::_number(Q_UINT16 size, QDataStream& body)
   Q_UINT16 row, column, xf;
   body >> row >> column >> xf >> value;
 
-  QDomElement e = root->createElement("CELL");
+  QDomElement e = root->createElement("cell");
   e.appendChild(getFormat(xf));
   e.appendChild(getFont(xf));
   s.sprintf("%f", value);
@@ -820,7 +820,7 @@ bool XMLTree::_rightmargin(Q_UINT16 size, QDataStream& body)
 {
   double value;
   body >> value;
-  (paper.namedItem("PAPERBORDERS")).toElement().setAttribute("right", value);
+  (paper.namedItem("borders")).toElement().setAttribute("right", value);
 
   return true;
 }
@@ -852,7 +852,7 @@ bool XMLTree::_rk(Q_UINT16 size, QDataStream& body)
     break;
   }
 
-  QDomElement e = root->createElement("CELL");
+  QDomElement e = root->createElement("cell");
   e.appendChild(getFormat(xf));
   e.appendChild(getFont(xf));
   s.sprintf("%f", value);
@@ -1113,7 +1113,7 @@ bool XMLTree::_topmargin(Q_UINT16 size, QDataStream& body)
 {
   double value;
   body >> value;
-  (paper.namedItem("PAPERBORDERS")).toElement().setAttribute("top", value);
+  (paper.namedItem("borders")).toElement().setAttribute("top", value);
 
   return true;
 }

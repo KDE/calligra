@@ -79,21 +79,21 @@ const QDomDocument * const ExcelFilter::part()
   }
   else {
     m_part=QDomDocument("spreadsheet");
-    m_part.setContent(QString("<?xml version=\"1.0\"?>\n"
+    m_part.setContent(QString("<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE spreadsheet > \n"
       "<spreadsheet author=\"Torben Weis\" email=\"weis@kde.org\" editor=\"KSpread\" mime=\"application/x-kspread\" >\n"
-      "<PAPER format=\"A4\" orientation=\"Portrait\">\n"
-      "<PAPERBORDERS left=\"20\" top=\"20\" right=\"20\" bottom=\"20\"/>\n"
-      "<HEAD left=\"\" center=\"\" right=\"\"/>\n"
-      "<FOOT left=\"\" center=\"\" right=\"\"/>\n"
-      "</PAPER>\n"
-      "<MAP>\n"
-      "<TABLE name=\"Table1\">\n"
-      "<CELL row=\"1\" column=\"1\">\n"
-      "<FORMAT align=\"4\" precision=\"-1\" float=\"3\" floatcolor=\"2\" faktor=\"1\"/>\n"
+      "<paper format=\"A4\" orientation=\"Portrait\">\n"
+      "<borders left=\"20\" top=\"20\" right=\"20\" bottom=\"20\"/>\n"
+      "<head left=\"\" center=\"\" right=\"\"/>\n"
+      "<foot left=\"\" center=\"\" right=\"\"/>\n"
+      "</paper>\n"
+      "<map>\n"
+      "<table name=\"Table1\">\n"
+      "<cell row=\"1\" column=\"1\">\n"
+      "<format align=\"4\" precision=\"-1\" float=\"3\" floatcolor=\"2\" faktor=\"1\"/>\n"
       "Sorry :(\n"
-      "</CELL>\n"
-      "</TABLE>\n"
-      "</MAP>\n"
+      "</cell>\n"
+      "</table>\n"
+      "</map>\n"
       "</spreadsheet>"));
     return &m_part;
   }
