@@ -49,7 +49,7 @@ VPath::draw( VPainter *painter, const KoRect& rect,
 	if( state() == state_deleted )
 		return;
 
-	if( !rect.intersects( boundingBox( zoomFactor ) ) )
+	if( zoomFactor != 1 && !rect.intersects( boundingBox( zoomFactor ) ) )
 		return;
 
 	painter->save();
