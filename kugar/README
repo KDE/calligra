@@ -1,6 +1,6 @@
 Kugar - A report creation tool for KDE.
 
-Current version: 1.3
+Current version: 1.2
 
 The current maintainer and the author of Kugar Report Designer
 can be reached via Email: cloudtemple@mksat.net
@@ -66,7 +66,7 @@ See the INSTALL file for details.
 
 RUNNING A SAMPLE REPORT WITH KUGAR:
 
-There are two sample templates and matching datafiles in ./samples.
+There are tree sample templates and matching datafiles in ./samples.
 
 The kugar program takes two commandline arguments:
 	-d <xml data file>
@@ -80,7 +80,7 @@ will be used.
 To use Konqueror to display a sample, just click on the data file (with the
 .kud extension) from within Konqueror.
 
-To create template file run Kugar Report Designer program (kudesign).
+To create template file run Kugar Report Designer program (kudesigner).
 To add report items and sections use toolbuttons and menus,
 to edit their properties just right-click on them,
 to delete - middle-click.
