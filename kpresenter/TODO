@@ -64,7 +64,6 @@ Done:
 Todo:
 -> save/load part element (necessary to modify koDocumentChild)
 -> save/load cubic/quadric/freehand object (define as svg object)
--> save/load picture effect
 
 Bugs:
 -> load text layout format (bug into kpresenter)
@@ -73,7 +72,7 @@ Bugs:
 -> specific object : header/footer is not sticky object into oo
 
 In Progress:
-
+-> save/load picture effect
 Reginald Stadlbauer <reggie@kde.org>
 Laurent Montel <montel@kde.org>
 

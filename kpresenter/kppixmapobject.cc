@@ -98,7 +98,85 @@ DCOPObject* KPPixmapObject::dcopObject()
 
 void KPPixmapObject::saveOasisPictureElement( KoGenStyle &styleobjectauto )
 {
-    //todo
+    switch (m_effect)
+    {
+    case IE_NONE:
+        //nothing
+        break;
+    case IE_CHANNEL_INTENSITY:
+    {
+        //for the moment kpresenter support just one channel
+        QString percent = QString::number( m_ie_par1.toInt() )+"%";
+        KImageEffect::RGBComponent channel = static_cast<KImageEffect::RGBComponent>( m_ie_par2.toInt() );
+        switch( channel )
+        {
+        case KImageEffect::Red:
+            styleobjectauto.addProperty( "draw:red", percent );
+            styleobjectauto.addProperty( "draw:blue", "0%" );
+            styleobjectauto.addProperty( "draw:green", "0%" );
+            break;
+        case KImageEffect::Green:
+            styleobjectauto.addProperty( "draw:green", percent );
+            styleobjectauto.addProperty( "draw:red", "0%" );
+            styleobjectauto.addProperty( "draw:blue", "0%" );
+            break;
+        case KImageEffect::Blue:
+            styleobjectauto.addProperty( "draw:blue", percent );
+            styleobjectauto.addProperty( "draw:red", "0%" );
+            styleobjectauto.addProperty( "draw:green", "0%" );
+            break;
+        case KImageEffect::Gray:
+            break;
+        case KImageEffect::All:
+            break;
+        }
+    }
+    break;
+    case IE_FADE:
+        break;
+    case IE_FLATTEN:
+        break;
+    case IE_INTENSITY:
+        break;
+    case IE_DESATURATE:
+        break;
+    case IE_CONTRAST:
+        break;
+    case IE_NORMALIZE:
+        break;
+    case IE_EQUALIZE:
+        break;
+    case IE_THRESHOLD:
+        break;
+    case IE_SOLARIZE:
+        break;
+    case IE_EMBOSS:
+        break;
+    case IE_DESPECKLE:
+        break;
+    case IE_CHARCOAL:
+        break;
+    case IE_NOISE:
+        break;
+    case IE_BLUR:
+        break;
+    case IE_EDGE:
+        break;
+    case IE_IMPLODE:
+        break;
+    case IE_OIL_PAINT:
+        break;
+    case IE_SHARPEN:
+        break;
+    case IE_SPREAD:
+        break;
+    case IE_SHADE:
+        break;
+    case IE_SWIRL:
+        break;
+    case IE_WAVE:
+        break;
+    }
 }
 
 
