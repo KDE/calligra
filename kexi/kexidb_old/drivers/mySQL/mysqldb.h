@@ -73,7 +73,7 @@ class KEXI_MYSQL_IFACE_EXPORT MySqlDB : public KexiDB
 										const QString& socket, const QString& port,
 										const QString& db, bool create = false);
 
-		void		load(QString, bool) {; }
+		void		load(QString, bool) { }
 		const KexiDBTable* const table(const QString &name);
 
 		/*!
