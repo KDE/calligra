@@ -1976,17 +1976,34 @@ void KSpreadCell::paintDefaultBorders(QPainter& painter, QPoint corner,
 {
   QPen left_pen = leftBorderPen( cellRef.x(), cellRef.y() );
   QPen top_pen = topBorderPen( cellRef.x(), cellRef.y() );
+  QPen right_pen = leftBorderPen( cellRef.x()+1, cellRef.y() );
+  QPen bottom_pen = topBorderPen( cellRef.x(), cellRef.y()+1 );
   ColumnLayout* colLayout = m_pTable->columnLayout(cellRef.x());
   RowLayout* rowLayout = m_pTable->rowLayout(cellRef.y());
   int height = rowLayout->height();
   int width =  colLayout->width();
   /* Each cell is responsible for drawing it's top and left portions of the
-     "default" grid. --Or not drawing it if it shouldn't be there.*/
+     "default" grid. --Or not drawing it if it shouldn't be there.
+     It's even responsible to paint the right and bottom, if it is the last
+     cell on a print out*/
   bool paintTop;
   bool paintLeft;
+  bool paintBottom;
+  bool paintRight;
   KSpreadCell *cell = NULL;
-  paintTop = (top_pen.style() == Qt::NoPen && table()->getShowGrid());
-  paintLeft = (left_pen.style() == Qt::NoPen && table()->getShowGrid());
+
+  paintLeft = ( left_pen.style() == Qt::NoPen && 
+                table()->getShowGrid() );
+  paintRight = ( painter.device()->isExtDev() && // Only on printout
+                 right_pen.style() == Qt::NoPen && 
+                 table()->getShowGrid() &&
+                 table()->isOnNewPageX( cellRef.x() + 1 ) );  //Only when last cell on page
+  paintTop = ( top_pen.style() == Qt::NoPen && 
+               table()->getShowGrid() );
+  paintBottom = ( painter.device()->isExtDev() &&  // Only on printout
+                  bottom_pen.style() == Qt::NoPen && 
+                  table()->getShowGrid() &&
+                  table()->isOnNewPageY( cellRef.y() + 1 ) ); //Only when last cell on page
 
   for (cell = m_ObscuringCells.first(); cell != NULL;
        cell = m_ObscuringCells.next())
@@ -1995,41 +2012,57 @@ void KSpreadCell::paintDefaultBorders(QPainter& painter, QPoint corner,
     paintTop = paintTop && (cell->row() == cellRef.y());
 
   }
+
   /* should we do the left border? */
   if (paintLeft)
   {
     int dt = 0;
     int db = 0;
 
-    if (cellRef.x() > 1)
+    if ( cellRef.x() > 1 )
     {
       QPen t = m_pTable->cellAt( cellRef.x() - 1, cellRef.y() )->topBorderPen( cellRef.x() - 1, cellRef.y() );
       QPen b = m_pTable->cellAt( cellRef.x() - 1, cellRef.y() )->bottomBorderPen( cellRef.x() - 1, cellRef.y() );
 
       if ( t.style() != Qt::NoPen )
         dt = (t.width() + 1 )/2;
-
-    int db = 0;
-    if ( b.style() != Qt::NoPen )
-      db = (t.width() / 2);
+      if ( b.style() != Qt::NoPen )
+        db = (t.width() / 2);
     }
 
     painter.setPen( table()->doc()->defaultGridPen() );
     painter.drawLine( corner.x(), corner.y() + dt, 
                       corner.x(), corner.y() + height - db - dt );
-    
-    if ( painter.device()->isExtDev() ) //On printout we draw even the right line, to get the last line on a page
-    {
-      painter.drawLine( corner.x() + width, corner.y() + dt, 
-                        corner.x() + width, corner.y() + height - db - dt );
-    }
   }
 
-  if (paintTop)
+  /* should we do the right border? */
+  if ( paintRight )
+  {
+    int dt = 0;
+    int db = 0;
+
+    if ( cellRef.x() < KS_colMax )
+    {
+      QPen t = m_pTable->cellAt( cellRef.x() + 1, cellRef.y() )->topBorderPen( cellRef.x() + 1, cellRef.y() );
+      QPen b = m_pTable->cellAt( cellRef.x() + 1, cellRef.y() )->bottomBorderPen( cellRef.x() + 1, cellRef.y() );
+
+      if ( t.style() != Qt::NoPen )
+        dt = (t.width() + 1 )/2;
+      if ( b.style() != Qt::NoPen )
+        db = (t.width() / 2);
+    }
+
+    painter.setPen( table()->doc()->defaultGridPen() );
+    painter.drawLine( corner.x() + width, corner.y() + dt, 
+                      corner.x() + width, corner.y() + height - db - dt );
+  }
+
+  /* should we do the top border? */
+  if ( paintTop )
   {
     int dl = 0;
     int dr = 0;
-    if (cellRef.y() > 1)
+    if ( cellRef.y() > 1 )
     {
       QPen l = m_pTable->cellAt( cellRef.x(), cellRef.y() - 1 )->leftBorderPen( cellRef.x(), cellRef.y() - 1 );
       QPen r = m_pTable->cellAt( cellRef.x(), cellRef.y() - 1 )->rightBorderPen( cellRef.x(), cellRef.y() - 1 );
@@ -2042,12 +2075,26 @@ void KSpreadCell::paintDefaultBorders(QPainter& painter, QPoint corner,
     painter.setPen( table()->doc()->defaultGridPen() );
     painter.drawLine( corner.x() + dl,              corner.y(), 
                       corner.x() + width - dr - dl, corner.y() );
+  }
 
-    if ( painter.device()->isExtDev() ) //On printout we draw even the bottom line, to get the last line on a page
+  /* should we do the bottom border? */
+  if ( paintBottom )
+  {
+    int dl = 0;
+    int dr = 0;
+    if ( cellRef.y() < KS_rowMax )
     {
-      painter.drawLine( corner.x() + dl,              corner.y() + height, 
-                        corner.x() + width - dr - dl, corner.y() + height );
+      QPen l = m_pTable->cellAt( cellRef.x(), cellRef.y() + 1 )->leftBorderPen( cellRef.x(), cellRef.y() + 1 );
+      QPen r = m_pTable->cellAt( cellRef.x(), cellRef.y() + 1 )->rightBorderPen( cellRef.x(), cellRef.y() + 1 );
+
+      if ( l.style() != Qt::NoPen )
+        dl = ( l.width() - 1 ) / 2 + 1;
+      if ( r.style() != Qt::NoPen )
+        dr = r.width() / 2;
     }
+    painter.setPen( table()->doc()->defaultGridPen() );
+    painter.drawLine( corner.x() + dl,              corner.y() + height, 
+                      corner.x() + width - dr - dl, corner.y() + height );
   }
 }
 
