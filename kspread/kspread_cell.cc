@@ -675,10 +675,11 @@ QString KSpreadCell::decodeFormular( const char* _text, int _col, int _row )
 // ##### Are _col and _row really needed ?
 void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 {
-    m_leftBorderPen.setWidth( leftBorderWidth( _col, _row ) );
-    m_topBorderPen.setWidth( topBorderWidth( _col, _row ) );
-    m_fallDiagonalPen.setWidth( fallDiagonalWidth( _col, _row) );
-    m_goUpDiagonalPen.setWidth( goUpDiagonalWidth( _col, _row) );
+    setLeftBorderWidth( leftBorderWidth( _col, _row ));
+    setTopBorderWidth( topBorderWidth( _col, _row ));
+    setTopBorderWidth( topBorderWidth( _col, _row ));
+    setFallDiagonalWidth( fallDiagonalWidth( _col, _row) );
+    setGoUpDiagonalWidth( goUpDiagonalWidth( _col, _row) );
 
     m_nbLines = 0;
     m_bCellTooShort=false;
@@ -822,7 +823,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
         // How may space do we need now ?
         // TODO: We have to initialize sizes here ....
         _painter.save();
-        _painter.setPen( m_textPen.color() );
+        _painter.setPen( textPen(_col,_row).color() );
         _painter.setFont( textFont(_col,_row ));
         m_pVisualFormula->setPos( -1000, -1000 );
         m_pVisualFormula->redraw( _painter );
@@ -889,10 +890,11 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     /**
      * A usual numeric, boolean, date, time or string value.
      */
-
-    m_textPen.setColor( textColor( _col, _row ) );
+    QPen tmpPen;
+    tmpPen.setColor( textColor( _col, _row ) );
+    setTextPen(tmpPen);
     m_conditionIsTrue = false;
-    QPen tmpPen(m_textPen);
+    tmpPen=textPen(_col,_row);
     //
     // Turn the stored value in a string
     //
@@ -2642,7 +2644,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     else if ( m_pVisualFormula )
     {
         _painter.save();
-        _painter.setPen( m_textPen/*.color()??*/ );
+        _painter.setPen( textPen(_col,_row)/*.color()??*/ );
         _painter.setFont( textFont(_col,_row ) );
         // TODO: No better method to set new font ?
         if ( old_layoutflag )
@@ -2656,15 +2658,15 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
      */
     else if ( !m_strOutText.isEmpty() )
     {
-        QPen tmpPen(m_textPen);
+        QPen tmpPen(textPen(_col,_row));
         if ( selected && ( _col != m.left() || _row != m.top() )  )
         {
-            QPen p( m_textPen );
+            QPen p( textPen(_col,_row) );
             p.setColor( defaultColorGroup.highlightedText() );
             _painter.setPen( p );
         }
         else
-            _painter.setPen( m_textPen );
+            _painter.setPen( textPen(_col,_row) );
 
         // #### Torben: This looks like duplication to me
         verifyCondition();
