@@ -128,7 +128,8 @@ void KFloatingDialog::readSettings()
   else if( key == "pixmap")
     m_titleLook = pixmap;
   
-  if (m_titleLook == pixmap )
+  #warning "uncomment this...I'm just to lazy to recompile KDE for some KIconLoader changes right now ;-)"
+  /*if (m_titleLook == pixmap )
     {
       m_pActivePm = new QPixmap;
       m_pInactivePm = new QPixmap;
@@ -143,7 +144,7 @@ void KFloatingDialog::readSettings()
       
       if (m_pActivePm->size() == QSize(0,0))
 		m_titleLook = plain;
-    }
+   }*/
 }
 
 void KFloatingDialog::setBaseWidget(QWidget *w)
