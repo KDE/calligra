@@ -81,6 +81,8 @@ public:
    * Only meaningful if mode is Write, and if backend!=Directory.
    *
    * If the file is remote, the backend Directory cannot be used!
+   *
+   * @since 1.4
    */
   static KoStore* createStore( QWidget* window, const KURL& url, Mode mode, const QCString & appIdentification = "", Backend backend = Auto );
 

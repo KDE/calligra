@@ -31,6 +31,10 @@ class KoTarStore : public KoStoreBase
 public:
     KoTarStore( const QString & _filename, Mode _mode, const QCString & appIdentification );
     KoTarStore( QIODevice *dev, Mode mode, const QCString & appIdentification );
+    /**
+     * KURL-constructor
+     * @since 1.4
+     */
     KoTarStore( QWidget* window, const KURL& url, const QString & _filename, Mode _mode, const QCString & appIdentification );
     ~KoTarStore();
 protected:

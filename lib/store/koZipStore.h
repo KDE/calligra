@@ -31,6 +31,10 @@ class KoZipStore : public KoStoreBase
 public:
     KoZipStore( const QString & _filename, Mode _mode, const QCString & appIdentification );
     KoZipStore( QIODevice *dev, Mode mode, const QCString & appIdentification );
+    /**
+     * KURL-constructor
+     * @since 1.4
+     */
     KoZipStore( QWidget* window, const KURL& _url, const QString & _filename, Mode _mode, const QCString & appIdentification );
     ~KoZipStore();
 
