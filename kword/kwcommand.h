@@ -161,4 +161,22 @@ protected:
     KWDocument *m_pDoc;
 };
 
+/**
+ * Command created when changing backgroundcolor
+ */
+class KWFrameBackGroundColorCommand : public KCommand
+{
+public:
+    KWFrameBackGroundColorCommand( const QString &name,KWDocument *_doc,QList<FrameIndex> &_listFrameIndex, QList<QBrush> &_oldBrush,const QBrush & _newColor ) ;
+    ~KWFrameBackGroundColorCommand() {}
+
+    void execute();
+    void unexecute();
+
+protected:
+    QList<FrameIndex> m_IndexFrame;
+    QList<QBrush> m_oldBackGroundColor;
+    QBrush m_newColor;
+    KWDocument *m_pDoc;
+};
 #endif

@@ -1233,12 +1233,22 @@ void KWCanvas::setFrameBackgroundColor( const QBrush &_backColor )
     if (selectedFrames.count() == 0)
         return;
     KWFrame *frame=0L;
+
+    QList<FrameIndex> frameindexList;
+    QList<QBrush> oldColor;
     for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
     {
+        FrameIndex *index=new FrameIndex;
+        index->m_iFrameIndex=frame->getFrameSet()->getFrameFromPtr(frame);
+        index->m_iFrameSetIndex=doc->getFrameSetNum(frame->getFrameSet());
+        QBrush *_color=new QBrush(frame->getBackgroundColor());
+        frameindexList.append(index);
+        oldColor.append(_color);
         if (_backColor!=frame->getBackgroundColor())
             frame->setBackgroundColor(_backColor);
     }
-    doc->setModified( TRUE );
+    KWFrameBackGroundColorCommand *cmd=new KWFrameBackGroundColorCommand(i18n("Change Frame BackGroundColor"),doc,frameindexList,oldColor,_backColor);
+    doc->addCommand(cmd);
     repaintChanged();
 }
 

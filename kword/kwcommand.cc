@@ -323,3 +323,51 @@ void KWFrameBorderCommand::unexecute()
         lst->getGUI()->canvasWidget()->repaintAll();
     }
 }
+
+KWFrameBackGroundColorCommand::KWFrameBackGroundColorCommand( const QString &name,KWDocument *_doc,QList<FrameIndex> &_listFrameIndex, QList<QBrush> &_oldBrush,const QBrush & _newColor ):
+    KCommand(name),
+    m_IndexFrame(_listFrameIndex),
+    m_oldBackGroundColor(_oldBrush),
+    m_newColor( _newColor),
+    m_pDoc(_doc)
+{
+}
+
+void KWFrameBackGroundColorCommand::execute()
+{
+    FrameIndex *tmp;
+    for ( tmp=m_IndexFrame.first(); tmp != 0; tmp=m_IndexFrame.next() )
+    {
+        KWFrameSet *frameSet =m_pDoc->getFrameSet(tmp->m_iFrameSetIndex);
+        KWFrame *frame=frameSet->getFrame(tmp->m_iFrameIndex);
+        frame->setBackgroundColor(m_newColor);
+    }
+    //update frame
+    QList<KWView> listView=m_pDoc->getAllViews();
+    KWView *lst;
+    for (lst=listView.first(); lst != 0; lst=listView.next() )
+    {
+        lst->getGUI()->canvasWidget()->repaintAll();
+    }
+}
+
+void KWFrameBackGroundColorCommand::unexecute()
+{
+    FrameIndex *tmp;
+    for ( tmp=m_IndexFrame.first(); tmp != 0; tmp=m_IndexFrame.next() )
+    {
+        KWFrameSet *frameSet =m_pDoc->getFrameSet(tmp->m_iFrameSetIndex);
+        KWFrame *frame=frameSet->getFrame(tmp->m_iFrameIndex);
+        QBrush *tmpFrameStruct=m_oldBackGroundColor.at(m_IndexFrame.find(tmp));
+        frame->setBackgroundColor(*tmpFrameStruct);
+    }
+    //update frames
+    QList<KWView> listView=m_pDoc->getAllViews();
+    KWView *lst;
+    for (lst=listView.first(); lst != 0; lst=listView.next() )
+    {
+        lst->getGUI()->canvasWidget()->repaintAll();
+    }
+}
+
+
