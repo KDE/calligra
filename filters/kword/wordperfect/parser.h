@@ -21,8 +21,7 @@
 #ifndef __WP_PARSER_H
 #define __WP_PARSER_H
 
-#include <qptrlist.h>
-#include <qmemarray.h>
+#include <qlist.h>
 #include <qstring.h>
 
 namespace WP
@@ -107,7 +106,7 @@ namespace WP
 
     Token (Type type, QString fontface){ m_type = FontFace; m_fontface = fontface;  }
 
-    Token (const QPtrList < Tab > &tabs)
+    Token (const QList < Tab > &tabs)
     {
       m_type = TabSet;
       m_tabs = tabs;
@@ -130,7 +129,7 @@ namespace WP
     QString fontface (){ return m_fontface; }
     int charset (){ return m_charset; }
     int charcode (){ return m_charcode; }
-    QPtrList < Tab > tabs (){  return m_tabs; }
+    QList < Tab > tabs (){  return m_tabs; }
 
 
   private:
@@ -143,7 +142,7 @@ namespace WP
     int m_red, m_green, m_blue;
     QString m_fontface;
     int m_charset, m_charcode;
-    QPtrList < Tab > m_tabs;
+    QList < Tab > m_tabs;
 
 
 
@@ -153,7 +152,7 @@ namespace WP
   {
     public:
       unsigned type, size, pos;
-      QMemArray<Q_UINT8> data;
+      QArray<Q_UINT8> data;
   };
 
 /**
@@ -180,8 +179,8 @@ namespace WP
 
     QString docTitle, docAuthor, docAbstract;
 
-    QPtrList<Token> tokens;
-    QPtrList<Packet> packets;
+    QList<Token> tokens;
+    QList<Packet> packets;
 
     /**
      * Maps WordPerfect extended character to its Unicode equivalent. Supported character
@@ -196,7 +195,7 @@ namespace WP
 
   private:
 
-    void handleTab ( QMemArray <Q_UINT8> data );
+    void handleTab ( QArray <Q_UINT8> data );
 
     void parsePacketWP5( const QString & filename );
     void parseDocWP5( const QString & filename, int start );

@@ -24,14 +24,14 @@
 #include <qdatastream.h>
 #include <qobject.h>
 #include <qptrlist.h>
-#include <qcstring.h>
+#include <qcstring.h> 
 #include <qarray.h>
 #include <qdom.h>
 
 #include <koFilter.h>
 #include <koStore.h>
 
-class WPImport : public KoFilter
+class WPImport : public KoFilter 
 {
     Q_OBJECT
 
@@ -42,12 +42,14 @@ class WPImport : public KoFilter
 
   public:
 
-    WPImport(KoFilter *parent, const char *name, const QStringList&);
+    WPImport(KoFilter *parent, const char *name);
     WPImport();
 
     virtual ~WPImport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+    virtual bool filter(const QString &fileIn, const QString &fileOut,
+                        const QString &from, const QString &to,
+                        const QString &config=QString::null);
 
 };
 #endif // __WPIMPORT_H

@@ -22,7 +22,7 @@
 #include "parser.h"
 
 #include <qfileinfo.h>
-#include <qptrlist.h>
+#include <qlist.h>
 #include <qstring.h>
 #include <qregexp.h>
 
@@ -132,7 +132,7 @@ KWordFilter::parse (const QString & filename)
   format_pos = 0;
   fmt = flag.asXML();
 
-  for (QPtrListIterator < Token > it (tokens); it; ++it)
+  for (QListIterator < Token > it (tokens); it; ++it)
     {
       unsigned int ucode;
       int attr;
