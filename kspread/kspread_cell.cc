@@ -2499,7 +2499,7 @@ Qt::PenStyle KSpreadCell::bottomBorderStyle( int _col, int _row )
     {
 	RowLayout *rl = m_pTable->rowLayout( _row + 1 );
 	ColumnLayout *cl = m_pTable->columnLayout( _col );
-	
+
 	if ( rl->time() > cl->time() )
 	    return rl->topBorderStyle();
 	else
@@ -2975,6 +2975,66 @@ void KSpreadCell::checkValue()
     if ( m_bValue )
 	m_dValue = atof( ptext );
 
+    //test if text is a percent value
+    if(m_strText.at(m_strText.length()-1)=='%')
+        {
+        QString tmp;
+        tmp=m_strText.left(m_strText.length()-1);
+        tmp=tmp.simplifyWhiteSpace();
+        bool ok;
+        double val=tmp.toDouble(&ok);
+        if(ok)
+                {
+                m_bValue=true;
+                m_dValue=val;
+                m_eFormatNumber=Percentage;
+                m_strText=tmp.setNum(m_dValue);
+                setFaktor(100.0);
+                setPrecision(2);
+                return;
+                }
+
+        }
+
+    int pos=0;
+    bool ok;
+    double val;
+    QString tmp;
+    if((pos=m_strText.find(KGlobal::locale()->currencySymbol()))!=-1)
+        {
+        if(pos==0) // example $ 154.545
+                {
+                tmp=m_strText.right(m_strText.length()-1);
+                tmp=tmp.simplifyWhiteSpace();
+                val=tmp.toDouble(&ok);
+                if(ok)
+                        {
+                        m_bValue=true;
+                        m_dValue=val;
+                        m_eFormatNumber=Money;
+                        m_strText=tmp.setNum(m_dValue);
+                        setFaktor(1.0);
+                        setPrecision(2);
+                        return;
+                        }
+                }
+        else if(pos==(m_strText.length()-1)) //example 125.55 F
+                {
+                tmp=m_strText.left(m_strText.length()-1);
+                tmp=tmp.simplifyWhiteSpace();
+                val=tmp.toDouble(&ok);
+                if(ok)
+                        {
+                        m_bValue=true;
+                        m_dValue=val;
+                        m_eFormatNumber=Money;
+                        m_strText=tmp.setNum(m_dValue);
+                        setFaktor(1.0);
+                        setPrecision(2);
+                        return;
+                        }
+                }
+        }
     /* if ( old_value != bValue )
 	displayDirtyFlag = TRUE; */
 }
