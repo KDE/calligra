@@ -8,6 +8,8 @@
 #include "kotextdocument.h"
 #include "kozoomhandler.h"
 
+#include <assert.h>
+
 class KoTextFormatterTest
 {
 public:
