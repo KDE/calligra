@@ -365,7 +365,7 @@ bool KoDocument::saveFile()
 
     if ( backupFile() ) {
         KIO::UDSEntry entry;
-        if ( KIO::NetAccess::stat( url(), entry ) ) { // this file exists => backup
+        if ( KIO::NetAccess::stat( url(), entry, 0 ) ) { // this file exists => backup
             emit sigStatusBarMessage( i18n("Making backup...") );
             KURL backup;
             if ( d->m_backupPath.isEmpty())
