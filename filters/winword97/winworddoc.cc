@@ -1,7 +1,7 @@
 #include "winworddoc.h"
 #include "winworddoc.moc"
 
-WinWordDoc::WinWordDoc(const QString &, const QString &) : QObject() {
+WinWordDoc::WinWordDoc(const myFile &, const myFile &, const myFile &) : QObject() {
 
     success=true;
     main=0L;

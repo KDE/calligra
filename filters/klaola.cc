@@ -14,21 +14,25 @@ KLaola::KLaola(const myFile &file) {
     bigBlockDepot=0L;
     smallBlockFile=0L;
     bbd_list=0L;
+    ok=true;
 
     if( (file.length % 0x200) != 0 ) {
         kdebug(KDEBUG_ERROR, 31000, "Invalid file size!");
-        exit(-1);
+        ok=false;
     }
+    if(ok) {
+        data=file.data;
+        maxblock = file.length / 0x200 - 2;
     
-    data=file.data;
-    maxblock = file.length / 0x200 - 2;
-    
-    if(!parseHeader())
-        exit(-1);
-    readBigBlockDepot();
-    readSmallBlockDepot();
-    readSmallBlockFile();
-    readRootList();
+        if(!parseHeader())
+            ok=false;
+        if(ok) {
+            readBigBlockDepot();
+            readSmallBlockDepot();
+            readSmallBlockFile();
+            readRootList();
+        }
+    }
 }
 
 KLaola::~KLaola() {
@@ -73,15 +77,16 @@ const QList<OLENode> KLaola::parseRootDir() {
     QList<OLENode> tmpOLENodeList;
     QArray<long> tmp;
 
-    tmp=path.copy();
+    if(ok) {
+        tmp=path.copy();
 
-    path.resize(1);
-    path[0]=0;       // just to be sure...
+        path.resize(1);
+        path[0]=0;       // just to be sure...
 
-    tmpOLENodeList=parseCurrentDir();
+        tmpOLENodeList=parseCurrentDir();
 
-    path=tmp.copy();
-
+        path=tmp.copy();
+    }
     return tmpOLENodeList;
 }
 
@@ -95,60 +100,68 @@ const QList<OLENode> KLaola::parseCurrentDir() {
     unsigned int i;
     bool found;
 
-    for(i=0, tmpList=treeList.first();i<path.size();++i) {
-        tree=tmpList->first();
-        found=false;
+    if(ok) {
+        for(i=0, tmpList=treeList.first();i<path.size();++i) {
+            tree=tmpList->first();
+            found=false;
 
-        do {
-            if(tree==0) {
-                kdebug(KDEBUG_ERROR, 31000, "path seems to be corrupted!");
-                exit(-1);
-            }
-            else if(tree->handle==path[i] && tree->subtree!=-1)
-                found=true;
-            else
-                tree=tmpList->next();
-        } while(!found);
+            do {
+                if(tree==0) {
+                    kdebug(KDEBUG_ERROR, 31000, "path seems to be corrupted!");
+                    ok=false;
+                }
+                else if(tree->handle==path[i] && tree->subtree!=-1)
+                    found=true;
+                else
+                    tree=tmpList->next();
+            } while(!found);
 
-        tmpList=treeList.at(tree->subtree);
+            tmpList=treeList.at(tree->subtree);
+        }
     }
+    if(ok) {
+        for(tree=tmpList->first();tree!=0;tree=tmpList->next()) {
+            node=new OLENode;
 
-    for(tree=tmpList->first();tree!=0;tree=tmpList->next()) {
-        node=new OLENode;
+            info=ppsList.at(tree->handle);
+            node->handle=info->handle;
+            node->name=info->name;
+            node->type=info->type;
 
-        info=ppsList.at(tree->handle);
-        node->handle=info->handle;
-        node->name=info->name;
-        node->type=info->type;
-
-        nodeList.append(node);
+            nodeList.append(node);
+        }
     }
     return nodeList;
 }
 
-bool KLaola::enterDir(const long handle) {
+const bool KLaola::enterDir(const long &handle) {
 
     QList<OLENode> dir;
     OLENode *node;
 
-    dir=parseCurrentDir();
+    if(ok) {
+        dir=parseCurrentDir();
 
-    node=dir.first();
-    while(node!=0) {
-        if(node->handle==handle && node->type==1) {
-            path.resize(path.size()+1);
-            path[path.size()-1]=node->handle;
-            return true;
+        node=dir.first();
+        while(node!=0) {
+            if(node->handle==handle && node->type==1) {
+                path.resize(path.size()+1);
+                path[path.size()-1]=node->handle;
+                return true;
+            }
+            node=dir.next();
         }
-        node=dir.next();
     }
     return false;
 }
 
-bool KLaola::leaveDir() {
-    if(path.size()>1) {
-        path.resize(path.size()-1);
-        return true;
+const bool KLaola::leaveDir() {
+
+    if(ok) {
+        if(path.size()>1) {
+            path.resize(path.size()-1);
+            return true;
+        }
     }
     return false;
 }
@@ -157,45 +170,48 @@ const QArray<long> KLaola::currentPath() const {
     return path;
 }
 
-const OLEInfo KLaola::streamInfo(const long handle) {
+const OLEInfo KLaola::streamInfo(const long &handle) {
 
     OLEInfo *tmp, ret;
 
-    tmp=ppsList.at(handle);
+    if(ok) {
+        tmp=ppsList.at(handle);
 
-    ret.handle=tmp->handle;
-    ret.name=tmp->name;
-    ret.nameSize=tmp->nameSize;
-    ret.type=tmp->type;
-    ret.prev=tmp->prev;
-    ret.next=tmp->next;
-    ret.dir=tmp->dir;
-    ret.ts1s=tmp->ts1s;
-    ret.ts1d=tmp->ts1d;
-    ret.ts2s=tmp->ts2s;
-    ret.ts2d=tmp->ts2d;
-    ret.sb=tmp->sb;
-    ret.size=tmp->size;
-
+        ret.handle=tmp->handle;
+        ret.name=tmp->name;
+        ret.nameSize=tmp->nameSize;
+        ret.type=tmp->type;
+        ret.prev=tmp->prev;
+        ret.next=tmp->next;
+        ret.dir=tmp->dir;
+        ret.ts1s=tmp->ts1s;
+        ret.ts1d=tmp->ts1d;
+        ret.ts2s=tmp->ts2s;
+        ret.ts2d=tmp->ts2d;
+        ret.sb=tmp->sb;
+        ret.size=tmp->size;
+    }
     return ret;
 }
 
-const QString KLaola::stream(const long handle) {
+const QString KLaola::stream(const long &handle) {
 
     OLEInfo *info;
     QString ret;
     char *p;
 
-    info=ppsList.at(handle);
+    if(ok) {
+        info=ppsList.at(handle);
 
-    if(info->size>=0x1000)
-        p=(char*)readBBStream(info->sb);
-    else
-        p=(char*)readSBStream(info->sb);
+        if(info->size>=0x1000)
+            p=(char*)readBBStream(info->sb);
+        else
+            p=(char*)readSBStream(info->sb);
 
-    ret=p;
+        ret=p;
 
-    delete [] p;
+        delete [] p;
+    }
     return ret;
 }
 
@@ -204,11 +220,13 @@ const QArray<long> KLaola::find(const QString &name) {
     QArray<long> ret(static_cast<int>(0));
     int i=0;
 
-    for(OLEInfo *p=ppsList.first();p!=0;p=ppsList.next()) {
-        if(p->name==name) {
-            ret.resize(i+1);
-            ret[i]=p->handle;
-            i++;
+    if(ok) {
+        for(OLEInfo *p=ppsList.first();p!=0;p=ppsList.next()) {
+            if(p->name==name) {
+                ret.resize(i+1);
+                ret[i]=p->handle;
+                i++;
+            }
         }
     }
     return ret;
@@ -223,24 +241,26 @@ void KLaola::testIt() {
 
     kdebug(KDEBUG_INFO, 31000, "testIt()");
 
-    dir=parseRootDir();
+    if(ok) {
+        dir=parseRootDir();
 
-    for(node=dir.first();node!=0;node=dir.next()) {
-        info=streamInfo(node->handle);
+        for(node=dir.first();node!=0;node=dir.next()) {
+            info=streamInfo(node->handle);
 
-        foo.setNum(info.handle);
-        foo+="   ";
-        foo+=info.name;
-        foo+="   ";
+            foo.setNum(info.handle);
+            foo+="   ";
+            foo+=info.name;
+            foo+="   ";
 
-        tmp.setNum(info.sb);
-        foo+=tmp;
-        foo+="   ";
+            tmp.setNum(info.sb);
+            foo+=tmp;
+            foo+="   ";
 
-        tmp.setNum(info.size);
-        foo+=tmp;
+            tmp.setNum(info.size);
+            foo+=tmp;
 
-        kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(foo));
+            kdebug(KDEBUG_INFO, 31000, static_cast<const char*>(foo));
+        }
     }
 }
 

@@ -2,7 +2,8 @@
 #define OLEFILTER_H
 
 #include <qobject.h>
-#include <klaola.h>
+#include "klaola.h"
+#include "ktar.h"
 #include <wordfilter.h>
 #include <myfile.h>
 
@@ -12,21 +13,28 @@ class OLEFilter : public QObject {
 
 public:
 
-    enum Document { Word, Excel, Powerpoint };
+    enum IN { Word, Excel, Powerpoint };
+    enum OUT { KWord, KSpread, KPresenter };
 
-    OLEFilter(const myFile &in, const Document d);
+    OLEFilter(const myFile &in, const QString &nameOut, const IN i, const OUT o);
     ~OLEFilter();
 
-    bool filter();            // manages the filtering process
-    bool store();             // will soon use KTar to store the
-                              // decoded file(s)
+    const bool filter();            // manages the filtering process
+
+protected slots:
+    void slotSavePic(const char *data, const char *nameOUT);
+    void slotPart(const char *nameIN, const char *nameOUT);
 
 private:
-    void parseFile();
+    void convert(const QString &name);
 
-    myFile file;
-    Document document;
+    myFile fileIn;
+    QString fileOutName;
+    IN in;
+    OUT out;
     KLaola *docfile;
+    KTar *fileOut;
+    bool success;
     //WordFilter *wordFilter;
 };
 #endif // OLEFILTER_H

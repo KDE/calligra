@@ -10,13 +10,11 @@ SUBDIRS = winword97
 
 bin_PROGRAMS = ole_filter
 
-ole_filter_SOURCES = main.cc olefilter.cc klaola.cc
+ole_filter_SOURCES = main.cc olefilter.cc klaola.cc ktar.cc
 
-noinst_HEADERS = main.h olefilter.h klaola.h
+noinst_HEADERS = main.h olefilter.h klaola.h ktar.h
 
 METASOURCES = main.moc olefilter.moc
-
-#datasdir = $(kde_datadir)/koffice/filter
 
 ####### Build rules
 

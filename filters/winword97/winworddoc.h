@@ -3,7 +3,6 @@
 
 #include <string.h>
 #include <qobject.h>
-#include <qstring.h>
 #include <kdebug.h>
 #include "klaola.h"
 #include "myfile.h"
@@ -15,7 +14,8 @@ class WinWordDoc : public QObject {
     Q_OBJECT
 
 public:
-    WinWordDoc(const QString &mainStream, const QString &tableStream);
+    WinWordDoc(const myFile &mainStream, const myFile &tableStream,
+               const myFile &dataStream);
     ~WinWordDoc();
 
 signals:

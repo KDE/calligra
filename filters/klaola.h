@@ -50,16 +50,17 @@ public:
     KLaola(const myFile &file);               // see myfile.h!
     ~KLaola();
 
+    const bool isOk() {return ok;};
 
     const QList<OLENode> parseRootDir();
     const QList<OLENode> parseCurrentDir();
 
-    bool enterDir(const long handle);
-    bool leaveDir();
+    const bool enterDir(const long &handle);
+    const bool leaveDir();
     const QArray<long> currentPath() const;
 
-    const OLEInfo streamInfo(const long handle);
-    const QString stream(const long handle);       // Note: 512 byte blocks!
+    const OLEInfo streamInfo(const long &handle);
+    const QString stream(const long &handle);       // Note: 512 byte blocks!
 
     const QArray<long> find(const QString &name);
 
@@ -90,6 +91,8 @@ private:
     QList<QList<OLETree> > treeList;
     QList<OLEInfo> ppsList;
     QArray<long> path;
+
+    bool ok;        // is the file OK?
 
     unsigned char *data;
     unsigned char *bigBlockDepot;

@@ -1,14 +1,28 @@
 #include "olefilter.h"
 #include "olefilter.moc"
 
-OLEFilter::OLEFilter(const myFile &in, const Document d) : QObject(),
-                     file(in), document(d) {
+OLEFilter::OLEFilter(const myFile &in, const QString &nameOut, const IN i,
+                     const OUT o) : QObject(), fileIn(in),
+                     fileOutName(nameOut), in(i), out(o) {
 
-    docfile=new KLaola(file);
-    parseFile();
+    docfile=0L;
+    fileOut=0L;
+    success=false; // later -> true;
+
+    docfile=new KLaola(fileIn);
+    if(!docfile->isOk())
+        success=false;
+    else {
+        fileOut=new KTar(fileOutName);
+        fileOut->open(IO_WriteOnly);
+    }
 }
 
 OLEFilter::~OLEFilter() {
+
+    fileOut->close();
+    delete fileOut;
+    fileOut=0L;
 
     if(docfile) {
         delete docfile;
@@ -16,13 +30,12 @@ OLEFilter::~OLEFilter() {
     }
 }
 
-bool OLEFilter::filter() {
-    return false;
+const bool OLEFilter::filter() {
+    return success;
 }
 
-bool OLEFilter::store() {
-    return false;
+void OLEFilter::slotSavePic(const char *, const char *) {
 }
 
-void OLEFilter::parseFile() {
+void OLEFilter::slotPart(const char *, const char *) {
 }

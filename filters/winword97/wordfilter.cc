@@ -1,12 +1,13 @@
 #include "wordfilter.h"
 #include "wordfilter.moc"
 
-WordFilter::WordFilter(const QString &mainStream, const QString &tableStream) : QObject() {
+WordFilter::WordFilter(const myFile &mainStream, const myFile &tableStream,
+                       const myFile &dataStream) : FilterBase() {
 
-    success=false; //true; only at the moment...
+    success=false; // normally true; only at the moment...
 
     myDoc=0L;
-    myDoc=new WinWordDoc(mainStream, tableStream);
+    myDoc=new WinWordDoc(mainStream, tableStream, dataStream);
     connect(myDoc, SIGNAL(signalFilterError()), this, SLOT(slotFilterError()));
 
     myKwd=0L;
@@ -23,15 +24,6 @@ WordFilter::~WordFilter() {
         delete myKwd;
         myKwd=0L;
     }
-}
-
-bool WordFilter::filter() {
-    // not very interesting at the moment
-    return success;
-}
-
-QString WordFilter::kwdFile() {
-    return myKwd->kwdFile();
 }
 
 void WordFilter::slotFilterError() {

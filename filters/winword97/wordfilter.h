@@ -16,25 +16,23 @@
 #ifndef WORDFILTER_H
 #define WORDFILTER_H
 
-#include <qobject.h>
 #include <kdebug.h>
+#include "filterbase.h"
 #include "winworddoc.h"
 #include "kworddoc.h"
 #include "myfile.h"
 
-class QString;
 
-class WordFilter : public QObject {
+class WordFilter : public FilterBase {
 
     Q_OBJECT
 
 public:
-    WordFilter(const QString &mainStream, const QString &tableStream);
+    WordFilter(const myFile &mainStream, const myFile &tableStream,
+               const myFile &dataStream);
     ~WordFilter();
-    bool filter();
-    QString kwdFile();
 
-public slots:
+protected slots:
     void slotFilterError();
     
 private:

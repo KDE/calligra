@@ -66,23 +66,31 @@ Filter::Filter() : KOMComponent(), KOffice::Filter_skel() {
 void Filter::filter(KOffice::Filter::Data& data, const char *_from,
                     const char *_to) {
 
+    OLEFilter::OUT out;
+    QString to(_to);
 
-    if (QString(_to) != "application/x-kword") {
+    if (to=="application/x-kword")
+        out=OLEFilter::KWord;
+    else if(to=="application/x-kspread")
+        out=OLEFilter::KSpread;
+    else if(to="application/x-kpresenter")
+        out=OLEFilter::KPresenter;
+    else {
         KOffice::Filter::UnsupportedFormat exc;
         exc.format = CORBA::string_dup(_to);
         mico_throw(exc);
         return;
     }
 
-    OLEFilter::Document doc;
+    OLEFilter::IN in;
     QString from(_from);
 
-    if (from == "application/x-winword97")
-        doc=OLEFilter::Word;
-    else if(from == "application/x-excel97")
-        doc=OLEFilter::Excel;
-    else if(from == "application/x-powerpoint97")
-        doc=OLEFilter::Powerpoint;
+    if (from=="application/x-winword97")
+        in=OLEFilter::Word;
+    else if(from=="application/x-excel97")
+        in=OLEFilter::Excel;
+    else if(from=="application/x-powerpoint97")
+        in=OLEFilter::Powerpoint;
     else {
         KOffice::Filter::UnsupportedFormat exc;
         exc.format = CORBA::string_dup(_from);
@@ -91,30 +99,28 @@ void Filter::filter(KOffice::Filter::Data& data, const char *_from,
     }
 
     CORBA::ULong len = data.length();
-    if (len == 0)
+    if (len==0)
         return;
 
     unsigned char *buffer = new unsigned char[len + 1];
     for(CORBA::ULong i = 0;i < len;++i)
         buffer[i] = static_cast<unsigned char>(data[i]);
     buffer[len] = 0;
-    
+
+    QString nameOut="testOLE.kwd.tgz";
+
     docFile.data=buffer;   // see myfile.h
     docFile.length=len;
-    myOLEFilter=new OLEFilter(docFile, doc);
+    myOLEFilter=new OLEFilter(docFile, nameOut, in, out);
 
     QString str;
 
-    if(myOLEFilter->filter()) {
-        // do some KTar magic here :)
-        // myOLEFilter->store();
-    }
-    else {
+    if(!myOLEFilter->filter()) {
         // Ohh, something went wrong...
         // Let's tell the user that this filter is crappy.
 
         str+="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-        "<DOC author=\"Reginald Stadlbauer and Torben Weis\" email=\"reggie@kde.org and weis@kde.org\" editor=\"KWord\" mime=\"application/x-kword\" url=\"/home/koffice/empty.kwd\">\n"
+        "<DOC author=\"Reginald Stadlbauer and Torben Weis\" email=\"reggie@kde.org and weis@kde.org\" editor=\"KWord\" mime=\"application/x-kword\" url=\"error.kwd\">\n"
         " <PAPER format=\"1\" ptWidth=\"595\" ptHeight=\"841\" mmWidth =\"210\" mmHeight=\"297\" inchWidth =\"8.26772\" inchHeight=\"11.6929\" orientation=\"0\" columns=\"1\" ptColumnspc=\"2\" mmColumnspc=\"1\" inchColumnspc=\"0.0393701\" hType=\"0\" fType=\"0\" ptHeadBody=\"9\" ptFootBody=\"9\" mmHeadBody=\"3.5\" mmFootBody=\"3.5\" inchHeadBody=\"0.137795\" inchFootBody=\"0.137795\">\n"
         "  <PAPERBORDERS mmLeft=\"10\" mmTop=\"15\" mmRight=\"10\" mmBottom=\"15\" ptLeft=\"28\" ptTop=\"42\" ptRight=\"28\" ptBottom=\"42\" inchLeft=\"0.393701\" inchTop=\"0.590551\" inchRight=\"0.393701\" inchBottom=\"0.590551\"/>\n"
         " </PAPER>\n"
@@ -165,11 +171,13 @@ void Filter::filter(KOffice::Filter::Data& data, const char *_from,
         "</DOC>\n";
     }
     
+    // will disappear soon
     QCString cstr=QCString(str.utf8());
 
     len = cstr.length();
     data.length(len);
     
+    // will we give back the name?
     for(CORBA::ULong i=0;i<len;++i)
         data[i]=cstr[i];
 
