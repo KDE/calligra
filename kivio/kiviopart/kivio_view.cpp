@@ -139,8 +139,8 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
 {
   m_pluginManager = new PluginManager(this, "Kivio Plugin Manager");
   m_zoomHandler = new KoZoomHandler();
-  zoomHandler()->setZoomAndResolution(100, QPaintDevice::x11AppDpiX(),
-    QPaintDevice::x11AppDpiY());
+  zoomHandler()->setZoomAndResolution(100, KoGlobal::dpiX(),
+    KoGlobal::dpiY());
   m_pDoc = doc;
   m_pActivePage = 0;
   dcop = 0;
@@ -789,8 +789,8 @@ void KivioView::viewZoom(int zoom)
     return;
   }
   
-  zoomHandler()->setZoomAndResolution(zoom, QPaintDevice::x11AppDpiX(),
-    QPaintDevice::x11AppDpiY());
+  zoomHandler()->setZoomAndResolution(zoom, KoGlobal::dpiX(),
+    KoGlobal::dpiY());
   m_pCanvas->update();
   m_pCanvas->updateScrollBars();
   vRuler->setZoom(zoomHandler()->zoomedResolutionY());

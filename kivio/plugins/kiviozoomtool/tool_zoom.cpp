@@ -248,8 +248,8 @@ void ZoomTool::zoomWidth()
 {
   KivioCanvas* canvas = view()->canvasWidget();
   KoZoomHandler zoom;
-  zoom.setZoomAndResolution(100, QPaintDevice::x11AppDpiX(),
-    QPaintDevice::x11AppDpiY());
+  zoom.setZoomAndResolution(100, KoGlobal::dpiX(),
+    KoGlobal::dpiY());
   int cw = QMAX(10,canvas->width()-20);
   KoPageLayout pl = canvas->activePage()->paperLayout();
   float w = zoom.zoomItX(pl.ptWidth);
@@ -264,8 +264,8 @@ void ZoomTool::zoomHeight()
 {
   KivioCanvas* canvas = view()->canvasWidget();
   KoZoomHandler zoom;
-  zoom.setZoomAndResolution(100, QPaintDevice::x11AppDpiX(),
-    QPaintDevice::x11AppDpiY());
+  zoom.setZoomAndResolution(100, KoGlobal::dpiX(),
+    KoGlobal::dpiY());
   int ch = QMAX(10,canvas->height()-20);
   KoPageLayout pl = canvas->activePage()->paperLayout();
   float h = zoom.zoomItY(pl.ptHeight);
@@ -280,8 +280,8 @@ void ZoomTool::zoomPage()
 {
   KivioCanvas* canvas = view()->canvasWidget();
   KoZoomHandler zoom;
-  zoom.setZoomAndResolution(100, QPaintDevice::x11AppDpiX(),
-    QPaintDevice::x11AppDpiY());
+  zoom.setZoomAndResolution(100, KoGlobal::dpiX(),
+    KoGlobal::dpiY());
   int cw = QMAX(10,canvas->width()-20);
   int ch = QMAX(10,canvas->height()-20);
 

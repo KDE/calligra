@@ -469,8 +469,8 @@ void KivioDoc::paintContent( QPainter& painter, const QRect& rect, bool transpar
     return;
 
   KoZoomHandler zoom;
-  zoom.setZoomAndResolution(100, QPaintDevice::x11AppDpiX(),
-    QPaintDevice::x11AppDpiY());
+  zoom.setZoomAndResolution(100, KoGlobal::dpiX(),
+    KoGlobal::dpiY());
   KoRect r = page->getRectForAllStencils();
 
   float zw = (float) rect.width() / (float)zoom.zoomItX(r.width());
@@ -478,8 +478,8 @@ void KivioDoc::paintContent( QPainter& painter, const QRect& rect, bool transpar
   float z = QMIN(zw, zh);
   //kdDebug(43000) << "paintContent: w = " << rect.width() << " h = " << rect.height() << endl;
 
-  zoom.setZoomAndResolution(qRound(z * 100), QPaintDevice::x11AppDpiX(),
-    QPaintDevice::x11AppDpiY());
+  zoom.setZoomAndResolution(qRound(z * 100), KoGlobal::dpiX(),
+    KoGlobal::dpiY());
   KivioScreenPainter ksp(&painter);
   ksp.painter()->translate( - zoom.zoomItX(r.x()), - zoom.zoomItY(r.y()) );
   paintContent(ksp,rect,transparent,page, QPoint(zoom.zoomItX(r.x()), zoom.zoomItY(r.y())), &zoom, false);
@@ -504,8 +504,8 @@ void KivioDoc::printContent( KPrinter &prn )
   // No koffice app supports zooming in paintContent currently.
   // Disable in ALL cases now
   bool doZoom = false;
-  int dpiX = doZoom ? 300 : QPaintDevice::x11AppDpiX();
-  int dpiY = doZoom ? 300 : QPaintDevice::x11AppDpiY();
+  int dpiX = doZoom ? 300 : KoGlobal::dpiX();
+  int dpiY = doZoom ? 300 : KoGlobal::dpiY();
 
   p.start(&prn);
 
@@ -535,8 +535,8 @@ void KivioDoc::printContent( KPrinter &prn )
 bool KivioDoc::exportPage(KivioPage *pPage,const QString &fileName, ExportPageDialog *dlg)
 {
   KoZoomHandler zoom;
-  zoom.setZoomAndResolution(100, QPaintDevice::x11AppDpiX(),
-    QPaintDevice::x11AppDpiY());
+  zoom.setZoomAndResolution(100, KoGlobal::dpiX(),
+    KoGlobal::dpiY());
   QPixmap buffer;
 
   if(dlg->crop())

@@ -157,7 +157,7 @@ QByteArray KivioDragObject::kivioEncoded() const
 QByteArray KivioDragObject::imageEncoded(const char* mimetype) const
 {
   KoZoomHandler zoomHandler;
-  zoomHandler.setZoomAndResolution(100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY());
+  zoomHandler.setZoomAndResolution(100, KoGlobal::dpiX(), KoGlobal::dpiY());
   QPixmap buffer(zoomHandler.zoomItX(m_stencilRect.width()), zoomHandler.zoomItY(m_stencilRect.height()));
   buffer.fill(Qt::white);
   KivioScreenPainter p;

@@ -304,11 +304,11 @@ void KivioLayer::paintContent( KivioPainter& painter, const QRect&, bool , QPoin
 void KivioLayer::printContent( KivioPainter& painter, int xdpi, int ydpi )
 {
   if(!xdpi) {
-    xdpi = QPaintDevice::x11AppDpiX();
+    xdpi = KoGlobal::dpiX();
   }
 
   if(!ydpi) {
-    ydpi = QPaintDevice::x11AppDpiY();
+    ydpi = KoGlobal::dpiY();
   }
 
   KivioStencil *pStencil = m_pStencilList->first();

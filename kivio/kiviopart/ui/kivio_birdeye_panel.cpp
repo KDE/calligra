@@ -155,8 +155,8 @@ void KivioBirdEyePanel::updateView()
   double zy = (double)s1.height()/(double)s2.height();
   double zxy = QMIN(zx,zy);
 
-  m_zoomHandler->setZoomAndResolution(qRound(zxy * 100), QPaintDevice::x11AppDpiX(),
-    QPaintDevice::x11AppDpiY());
+  m_zoomHandler->setZoomAndResolution(qRound(zxy * 100), KoGlobal::dpiX(),
+    KoGlobal::dpiY());
 
   pw = m_zoomHandler->zoomItX(pl.ptWidth);
   ph = m_zoomHandler->zoomItY(pl.ptHeight);

@@ -89,7 +89,7 @@ void KoLineWidthAction::createMenu()
 {
   KPopupMenu* popup = popupMenu();
   KoZoomHandler zoom;
-  zoom.setZoomAndResolution(100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY());
+  zoom.setZoomAndResolution(100, KoGlobal::dpiX(), KoGlobal::dpiY());
   QBitmap mask;
   QPixmap pix(70, 21);
   QPainter p(&pix, popup);

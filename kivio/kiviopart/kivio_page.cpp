@@ -346,11 +346,11 @@ void KivioPage::paintContent( KivioPainter& painter, const QRect& rect, bool tra
 void KivioPage::printContent( KivioPainter& painter, int xdpi, int ydpi )
 {
   if(!xdpi) {
-    xdpi = QPaintDevice::x11AppDpiX();
+    xdpi = KoGlobal::dpiX();
   }
 
   if(!ydpi) {
-    ydpi = QPaintDevice::x11AppDpiY();
+    ydpi = KoGlobal::dpiY();
   }
 
   KivioLayer *pLayer = m_lstLayers.first();
@@ -369,11 +369,11 @@ void KivioPage::printContent( KivioPainter& painter, int xdpi, int ydpi )
 void KivioPage::printSelected( KivioPainter& painter, int xdpi, int ydpi )
 {
   if(!xdpi) {
-    xdpi = QPaintDevice::x11AppDpiX();
+    xdpi = KoGlobal::dpiX();
   }
 
   if(!ydpi) {
-    ydpi = QPaintDevice::x11AppDpiY();
+    ydpi = KoGlobal::dpiY();
   }
 
   KivioStencil *pStencil;

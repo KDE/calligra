@@ -1362,8 +1362,8 @@ void KivioCanvas::setVisibleArea(KoRect r, int margin)
 {
   setUpdatesEnabled(false);
   KoZoomHandler zoom;
-  zoom.setZoomAndResolution(100, QPaintDevice::x11AppDpiX(),
-    QPaintDevice::x11AppDpiY());
+  zoom.setZoomAndResolution(100, KoGlobal::dpiX(),
+    KoGlobal::dpiY());
 
   float cw = width() - 2 * margin;
   float ch = height() - 2 * margin;
@@ -1384,8 +1384,8 @@ void KivioCanvas::setVisibleAreaByWidth(KoRect r, int margin)
 {
   setUpdatesEnabled(false);
   KoZoomHandler zoom;
-  zoom.setZoomAndResolution(100, QPaintDevice::x11AppDpiX(),
-    QPaintDevice::x11AppDpiY());
+  zoom.setZoomAndResolution(100, KoGlobal::dpiX(),
+    KoGlobal::dpiY());
 
   float cw = width() - 2*margin;
   float z = cw / (float)zoom.zoomItX(r.width());
@@ -1402,8 +1402,8 @@ void KivioCanvas::setVisibleAreaByHeight(KoRect r, int margin)
 {
   setUpdatesEnabled(false);
   KoZoomHandler zoom;
-  zoom.setZoomAndResolution(100, QPaintDevice::x11AppDpiX(),
-    QPaintDevice::x11AppDpiY());
+  zoom.setZoomAndResolution(100, KoGlobal::dpiX(),
+    KoGlobal::dpiY());
 
   float ch = height() - 2*margin;
   float z = ch / (float)zoom.zoomItY(r.height());
