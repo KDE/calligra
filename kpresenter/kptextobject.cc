@@ -711,7 +711,10 @@ KoParagLayout KPTextObject::loadParagLayout( QDomElement & parentElem)
     {
         layout.shadowDistance=element.attribute("distance").toInt();
         layout.shadowDirection=element.attribute("direction").toInt();
-        if ( element.hasAttribute("red") )
+        if ( element.hasAttribute(attrColor) ) {
+          layout.shadowColor.setNamedColor(element.attribute(attrColor));
+        }
+        else if ( element.hasAttribute("red") )  //compatibility
         {
             int r = element.attribute("red").toInt();
             int g = element.attribute("green").toInt();
@@ -816,9 +819,7 @@ void KPTextObject::saveParagLayout( const KoParagLayout& layout, QDomElement & p
         element.setAttribute( "direction", layout.shadowDirection );
         if (layout.shadowColor.isValid())
         {
-            element.setAttribute("red", layout.shadowColor.red());
-            element.setAttribute("green", layout.shadowColor.green());
-            element.setAttribute("blue", layout.shadowColor.blue());
+            element.setAttribute(attrColor, layout.shadowColor.name());
         }
     }
 }

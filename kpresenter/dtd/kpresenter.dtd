@@ -141,9 +141,7 @@
 
 		distance		distance between shadow and object
 		direction		direction of the shadow
-		red				red value of the shadow
-		green			green value of the shadow
-		blue			blue value of the shadow
+		color			color of the shadow
 -->
 <!ELEMENT SHADOW EMPTY>
 <!ATTLIST SHADOW
@@ -445,16 +443,13 @@
                                 6 = SD_BOTTOM
                                 7 = SD_LEFT_BOTTOM
                                 8 = SD_LEFT
-            red, green ,blue:   color of shadow
+            color:   color of shadow
 
 -->
 <!ATTLIST SHADOW
     distance CDATA #REQUIRED
     direction CDATA #REQUIRED
-    red CDATA #REQUIRED
-    green CDATA #REQUIRED
-    blue CDATA #REQUIRED>
-
+    color CDATA #REQUIRED
 
 <!ELEMENT PEN EMPTY>
 <!ATTLIST PEN	color   CDATA	#REQUIRED
