@@ -1448,7 +1448,7 @@ void KivioCanvas::setVisibleAreaByHeight(KivioRect r, int margin)
 void KivioCanvas::startPasteMoving()
 {
   setEnabled(false);
-  KivioPoint p = activePage()->getRectForAllStencils().center();
+  KivioPoint p = activePage()->getRectForAllSelectedStencils().center();
   m_origPoint.setCoords(p.x(), p.y());
 
   // Create a new painter object
