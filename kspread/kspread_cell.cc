@@ -4754,7 +4754,6 @@ bool KSpreadCell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, in
         xmlwriter.addAttribute( "table:number-columns-repeated", QString::number( repeated ) );
     }
 
-    saveOasisAnnotation( xmlwriter );
 
     saveOasisValue (xmlwriter);
 
@@ -4787,6 +4786,9 @@ bool KSpreadCell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, in
         xmlwriter.addTextNode(strOutText());
         xmlwriter.endElement();
     }
+
+    saveOasisAnnotation( xmlwriter );
+
     xmlwriter.endElement();
     return true;
 }
