@@ -49,7 +49,7 @@ StampTool::~StampTool() {}
 
 void StampTool::setPattern(const KisPattern *pattern)
 {
-    m_pPattern = pattern;    
+    m_pPattern = (KisPattern*)pattern;    
     
     // use this to establish pattern size and the
     // "hot spot" in center of image, will be the
