@@ -29,8 +29,6 @@
 #include <kdebug.h>
 
 #include <KWEFUtil.h>
-#include <TagProcessing.h>
-#include <KWEFBaseClass.h>
 #include <KWEFBaseWorker.h>
 #include <KWEFKWordLeader.h>
 
@@ -107,6 +105,7 @@ void HtmlWorker::ProcessParagraphData ( QString &paraText, ValueListFormatData &
                 if (partialText==" ")
                 {//Just a space as text. Therefore we must use a non-breaking space.
                     outputText += "&nbsp;";
+                    // FIXME: only needed for <p>&nbsp;</p>, but not for </span> <span>
                 }
                 else
                 {
@@ -599,25 +598,13 @@ bool HtmlWorker::doCloseDocument(void)
     return true;
 }
 
-bool HtmlWorker::doFullDocumentInfo(QDomDocument& info)
+bool HtmlWorker::doFullDocumentInfo(const KWEFDocumentInfo& docInfo)
 {
-    // Search <title> element (be carefull: there are two of them!)
-    QDomNodeList docNodeList = info.elementsByTagName("title");
-
-    // Now find the <title> element that is child of a <about> element
-    for (uint i=0; i<docNodeList.count(); i++)
+    QString strText=docInfo.title;
+    if (!strText.isEmpty())
     {
-        QDomNode node=docNodeList.item(i);
-        kdDebug(30503) << " Parent name: " << node.parentNode().nodeName() << endl;
-        if (node.parentNode().nodeName()=="about")
-        {
-            // We have the one we want!
-            //  Therefore retrieve text of element (may be empty!)
-            QString strText=node.toElement().text();
-            if (!strText.isEmpty())
-                m_strTitle=strText; // Set title only if it is not empty!
-            kdDebug(30503) << "Found new title " << m_strTitle << endl;
-        }
+        m_strTitle=strText; // Set title only if it is not empty!
+        kdDebug(30503) << "Found new title " << m_strTitle << endl;
     }
     return true;
 }

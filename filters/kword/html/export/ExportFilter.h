@@ -36,7 +36,7 @@ public:
     virtual bool doOpenDocument(void);
     virtual bool doCloseDocument(void);
     virtual bool doFullParagraph(QString& paraText, LayoutData& layout, ValueListFormatData& paraFormatDataList);
-    virtual bool doFullDocumentInfo(QDomDocument& info);
+    virtual bool doFullDocumentInfo(const KWEFDocumentInfo& docInfo);
     virtual bool doOpenTextFrameSet(void);
     virtual bool doCloseTextFrameSet(void);
     virtual bool doOpenHead(void); // HTML's <head>

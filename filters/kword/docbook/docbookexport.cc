@@ -23,15 +23,11 @@
 #include <qiodevice.h>
 #include <qtextstream.h>
 #include <qregexp.h>
-#include <qdom.h>
 
 #include <kdebug.h>
 
 #include <KWEFStructures.h>
 #include <KWEFUtil.h>
-#include <TagProcessing.h>
-#include <KWEFBaseClass.h>
-#include <ProcessDocument.h>
 #include <KWEFBaseWorker.h>
 #include <KWEFKWordLeader.h>
 
@@ -51,7 +47,7 @@ public:
     virtual bool doOpenDocument(void);
     virtual bool doCloseDocument(void);
     virtual bool doFullParagraph(QString& paraText, LayoutData& layout, ValueListFormatData& paraFormatDataList);
-    virtual bool doFullDocumentInfo(QDomDocument& info);
+    virtual bool doFullDocumentInfo(const KWEFDocumentInfo& docInfo);
 private:
     void ProcessParagraphData (const QString& paraText, ValueListFormatData& paraFormatDataList, const QString& tag);
     void CloseItemizedList (void);
@@ -375,68 +371,6 @@ bool DocBookWorker::doFullParagraph(QString& paraText, LayoutData& layout, Value
     }
 }
 
-class BookInfo
-{
-public:
-    BookInfo(void) { } // Initiate all QString
-public:
-    // <ABOUT>
-    QString title;
-    QString abstract;
-    // <AUTHOR>
-    QString fullName;
-    QString jobTitle;
-    QString company;
-    QString email;
-    QString telephone;
-    QString fax;
-    QString country;
-    QString postalCode;
-    QString city;
-    QString street;
-};
-
-
-void ProcessAboutTag ( QDomNode   myNode,
-                       void      *tagData,
-                       QString   &outputText,
-                            KWEFBaseClass           *exportFilter )
-{
-    BookInfo *bookInfo = (BookInfo *) tagData;
-
-    AllowNoAttributes (myNode);
-
-    QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList.append ( TagProcessing ( "title",    ProcessTextTag, (void *) &(*bookInfo).title    ) );
-    tagProcessingList.append ( TagProcessing ( "abstract", ProcessTextTag, (void *) &(*bookInfo).abstract ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
-}
-
-
-void ProcessAuthorTag ( QDomNode   myNode,
-                        void      *tagData,
-                        QString   &outputText,
-                            KWEFBaseClass           *exportFilter )
-{
-    BookInfo *bookInfo = (BookInfo *) tagData;
-
-    AllowNoAttributes (myNode);
-
-    QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList.append ( TagProcessing ( "full-name",   ProcessTextTag, (void *) &(*bookInfo).fullName   ) );
-    tagProcessingList.append ( TagProcessing ( "title",       ProcessTextTag, (void *) &(*bookInfo).jobTitle   ) );
-    tagProcessingList.append ( TagProcessing ( "company",     ProcessTextTag, (void *) &(*bookInfo).company    ) );
-    tagProcessingList.append ( TagProcessing ( "email",       ProcessTextTag, (void *) &(*bookInfo).email      ) );
-    tagProcessingList.append ( TagProcessing ( "telephone",   ProcessTextTag, (void *) &(*bookInfo).telephone  ) );
-    tagProcessingList.append ( TagProcessing ( "fax",         ProcessTextTag, (void *) &(*bookInfo).fax        ) );
-    tagProcessingList.append ( TagProcessing ( "country",     ProcessTextTag, (void *) &(*bookInfo).country    ) );
-    tagProcessingList.append ( TagProcessing ( "postal-code", ProcessTextTag, (void *) &(*bookInfo).postalCode ) );
-    tagProcessingList.append ( TagProcessing ( "city",        ProcessTextTag, (void *) &(*bookInfo).city       ) );
-    tagProcessingList.append ( TagProcessing ( "street",      ProcessTextTag, (void *) &(*bookInfo).street     ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
-}
-
-
 void ProcessInfoData ( QString tagName,
                        QString tagText,
                        QString &outputText)
@@ -448,50 +382,33 @@ void ProcessInfoData ( QString tagName,
 }
 
 
-void ProcessDocumentInfoTag ( QDomNode   myNode,
-                              void      *,
-                              QString   &outputText,
-                            KWEFBaseClass           *exportFilter )
+bool DocBookWorker::doFullDocumentInfo(const KWEFDocumentInfo& docInfo)
 {
-    AllowNoAttributes (myNode);
-
-    BookInfo bookInfo;
-    QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList.append ( TagProcessing ( "log",    NULL,             NULL               ) );
-    tagProcessingList.append ( TagProcessing ( "author", ProcessAuthorTag, (void *) &bookInfo ) );
-    tagProcessingList.append ( TagProcessing ( "about",  ProcessAboutTag,  (void *) &bookInfo ) );
-    ProcessSubtags (myNode, tagProcessingList, outputText, exportFilter);
-
     QString bookInfoText;
     QString abstractText;
     QString authorText;
     QString affiliationText;
     QString addressText;
 
-    ProcessInfoData ( "TITLE",       bookInfo.title,      bookInfoText    );
-    ProcessInfoData ( "PARA",        bookInfo.abstract,   abstractText    );
-    ProcessInfoData ( "SURNAME",     bookInfo.fullName,   authorText      );
-    ProcessInfoData ( "JOBTITLE",    bookInfo.jobTitle,   affiliationText );
-    ProcessInfoData ( "ORGNAME",     bookInfo.company,    affiliationText );
-    ProcessInfoData ( "STREET",      bookInfo.street,     addressText     );
-    ProcessInfoData ( "CITY",        bookInfo.city,       addressText     );
-    ProcessInfoData ( "POSTCODE",    bookInfo.postalCode, addressText     );
-    ProcessInfoData ( "COUNTRY",     bookInfo.country,    addressText     );
-    ProcessInfoData ( "EMAIL",       bookInfo.email,      addressText     );
-    ProcessInfoData ( "PHONE",       bookInfo.telephone,  addressText     );
-    ProcessInfoData ( "FAX",         bookInfo.fax,        addressText     );
+    ProcessInfoData ( "TITLE",       docInfo.title,      bookInfoText    );
+    ProcessInfoData ( "PARA",        docInfo.abstract,   abstractText    );
+    ProcessInfoData ( "SURNAME",     docInfo.fullName,   authorText      );
+    ProcessInfoData ( "JOBTITLE",    docInfo.jobTitle,   affiliationText );
+    ProcessInfoData ( "ORGNAME",     docInfo.company,    affiliationText );
+    ProcessInfoData ( "STREET",      docInfo.street,     addressText     );
+    ProcessInfoData ( "CITY",        docInfo.city,       addressText     );
+    ProcessInfoData ( "POSTCODE",    docInfo.postalCode, addressText     );
+    ProcessInfoData ( "COUNTRY",     docInfo.country,    addressText     );
+    ProcessInfoData ( "EMAIL",       docInfo.email,      addressText     );
+    ProcessInfoData ( "PHONE",       docInfo.telephone,  addressText     );
+    ProcessInfoData ( "FAX",         docInfo.fax,        addressText     );
 
     ProcessInfoData ( "ADDRESS",     addressText,         affiliationText );
     ProcessInfoData ( "AFFILIATION", affiliationText,     authorText      );
     ProcessInfoData ( "ABSTRACT",    abstractText,        bookInfoText    );
     ProcessInfoData ( "AUTHOR",      authorText,          bookInfoText    );
-    ProcessInfoData ( "BOOKINFO",    bookInfoText,        outputText      );
-}
+    ProcessInfoData ( "BOOKINFO",    bookInfoText,        m_strDocumentInfo );
 
-bool DocBookWorker::doFullDocumentInfo(QDomDocument& info)
-{
-    QDomNode docNode = info.documentElement ();
-    ProcessDocumentInfoTag (docNode, NULL, m_strDocumentInfo, NULL);
     return true;
 }
 
