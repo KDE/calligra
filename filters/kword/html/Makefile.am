@@ -17,13 +17,15 @@ libhtmlimport_la_SOURCES = htmlimport.cc htmlimport_factory.cc\
 htmlimportsax.cc ImportTags.cc ImportParser.cc\
 ImportListener.cc ImportEntities.cc
 
-libhtmlexport_la_SOURCES = htmlexport.cc htmlexport_factory.cc
+libhtmlexport_la_SOURCES = htmlexport.cc htmlexport_factory.cc\
+ExportDialog.cc
 
 libhtmlexportdia_la_SOURCES = htmlexportdia.cc htmlexportdia_factory.cc
 
 noinst_HEADERS = htmlimport.h htmlimport_factory.h htmlimportsax.h\
 htmlexport.h htmlexport_factory.h htmlexportdia.h htmlexportdia_factory.h\
-ImportTags.h ImportParser.h ImportListener.h ImportEntities.h
+ImportTags.h ImportParser.h ImportListener.h ImportEntities.h\
+ExportDialog.h
 
 METASOURCES = AUTO
 

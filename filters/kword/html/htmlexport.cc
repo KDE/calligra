@@ -48,6 +48,8 @@
 #include <qdom.h>
 #include <qtextstream.h>
 
+#include <ExportDialog.h>
+
 #undef DEBUG_KWORD_TAGS // Debugging KWord's tags and attributes
 
 class ClassExportFilterBase;
@@ -1997,7 +1999,7 @@ bool HTMLExport::filter(const QString  &filenameIn,
                         const QString  &filenameOut,
                         const QString  &from,
                         const QString  &to,
-                        const QString  &param)
+                        const QString  &)
 {
     if ((from != "application/x-kword") || (to != "text/html"))
     {
@@ -2009,6 +2011,22 @@ bool HTMLExport::filter(const QString  &filenameIn,
     // (Can be deleted when the filter will be stable.)
     kdDebug(30503) << "htmlexport.cc " << __DATE__ " " __TIME__ << " " << "$Revision$" << endl;
 #endif
+
+    HtmlExportDialog* dialog = new HtmlExportDialog();
+
+    if (!dialog)
+    {
+        kdError(30503) << "Dialog has not been created Aborting!" << endl;
+        return false;
+    }
+
+    if (!dialog->exec())
+    {
+        kdError(30503) << "Dialog was aborted! Aborting filter!" << endl;
+        return false;
+    }
+
+    QString param=dialog->getState();
 
     ClassExportFilterBase* exportFilter=NULL;
 
@@ -2063,6 +2081,7 @@ bool HTMLExport::filter(const QString  &filenameIn,
     if (!exportFilter)
     {
         kdError(30503) << "No (X)HTML filter created! Aborting! (Memory problem?)" << endl;
+        delete dialog;
         return false;
     }
 
@@ -2070,6 +2089,7 @@ bool HTMLExport::filter(const QString  &filenameIn,
     bool result = exportFilter->filter(filenameIn,filenameOut);
 
     delete exportFilter;
+    delete dialog;
 
     return result;
 }
