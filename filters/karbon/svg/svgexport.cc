@@ -118,6 +118,12 @@ SvgExport::visitVDocument( VDocument& document )
 		"\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">"
 	<< endl;
 
+	// add some PR
+	*m_defs <<
+		"<!-- This file was created using the SVG export filter from Karbon14, a free vector drawing app. -->" << endl;
+	*m_defs <<
+		"<!-- It is part of koffice, the free, integrated office suite for KDE (http://www.koffice.org/). -->" << endl;
+
 	*m_defs <<
 		"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"" <<
 		rect.right() << "\" height=\"" << rect.bottom() << "\">" << endl;
