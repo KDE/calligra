@@ -150,6 +150,16 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
 
 KoMainWindow::~KoMainWindow()
 {
+    // The doc and view might still exist (this is the case when closing the window)
+    if (d->m_rootDoc)
+        d->m_rootDoc->removeShell(this);
+    delete d->m_rootView;
+    if ( d->m_rootDoc && d->m_rootDoc->viewCount() == 0 )
+    {
+        kdDebug(30003) << "Destructor. No more views, deleting old doc " << d->m_rootDoc << endl;
+        delete d->m_rootDoc;
+    }
+
     // Save list of recent files
     KConfig * config = instance() ? instance()->config() : KGlobal::config();
     m_recent->saveEntries( config );
@@ -167,9 +177,10 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
 {
   kdDebug(30003) <<  "KoMainWindow::setRootDocument this = " << this << " doc = " << doc << endl;
   KoView *oldRootView = d->m_rootView;
+  KoDocument *oldRootDoc = d->m_rootDoc;
 
-  if ( d->m_rootDoc )
-    d->m_rootDoc->removeShell( this );
+  if ( oldRootDoc )
+    oldRootDoc->removeShell( this );
 
   d->m_rootDoc = doc;
 
@@ -198,6 +209,11 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
 
   if ( oldRootView )
     delete oldRootView;
+  if ( oldRootDoc && oldRootDoc->viewCount() == 0 )
+  {
+    kdDebug(30003) << "No more views, deleting old doc " << oldRootDoc << endl;
+    delete oldRootDoc;
+  }
 }
 
 void KoMainWindow::setRootDocumentDirect( KoDocument *doc )
@@ -278,7 +294,6 @@ bool KoMainWindow::openDocument( const KURL & url )
     {
         // Replace current empty document
 	setRootDocument( newdoc );
-	delete doc;
     }
     else if ( doc && !doc->isEmpty() )
     {
@@ -348,36 +363,29 @@ bool KoMainWindow::saveDocument( bool saveas )
 
 bool KoMainWindow::queryClose()
 {
-  return closeDocument();
-}
-
-bool KoMainWindow::closeDocument()
-{
-    if ( rootDocument() == 0 )
-	return TRUE;
-
-    if ( rootDocument()->isModified() )
-    {
-	int res = KMessageBox::warningYesNoCancel( 0L,
-           i18n( "The document has been modified\nDo you want to save it ?" ));
-
-        switch(res) {
-        case KMessageBox::Yes :
-	    return saveDocument();
-        case KMessageBox::No :
-          {
-            KoDocument* doc = rootDocument();
-    	    setRootDocument( 0 );
-            delete doc;
-            return TRUE;
-          }
-        default : // case KMessageBox::Cancel :
-            return FALSE;
-        }
-
-    }
-
+  if ( rootDocument() == 0 )
     return TRUE;
+  kdDebug(30003) << "KoMainWindow::queryClose() viewcount=" << rootDocument()->viewCount() << endl;
+  if ( rootDocument()->viewCount() > 1 ) // last view ?
+    return TRUE; // no, so no problem for closing
+
+  if ( rootDocument()->isModified() )
+  {
+      int res = KMessageBox::warningYesNoCancel( 0L,
+                    i18n( "The document has been modified\nDo you want to save it ?" ));
+
+      switch(res) {
+          case KMessageBox::Yes :
+              if (! saveDocument() )
+                  return false;
+          case KMessageBox::No :
+              break;
+          default : // case KMessageBox::Cancel :
+              return FALSE;
+      }
+  }
+
+  return TRUE;
 }
 
 bool KoMainWindow::closeAllDocuments()
@@ -385,8 +393,10 @@ bool KoMainWindow::closeAllDocuments()
     KoMainWindow* win = firstMainWindow();
     for( ; win; win = nextMainWindow() )
     {
-	if ( !win->closeDocument() )
+	if ( !win->queryClose() )
 	    return FALSE;
+        else
+            win->setRootDocument( 0L );
     }
 
     return TRUE;
@@ -406,7 +416,6 @@ void KoMainWindow::slotFileNew()
     if ( doc && doc->isEmpty() )
     {
 	setRootDocument( newdoc );
-	delete doc;
 	return;
     }
     else if ( doc && !doc->isEmpty() )
@@ -479,8 +488,12 @@ void KoMainWindow::slotDocumentInfo()
 
 void KoMainWindow::slotFileClose()
 {
-    if ( closeDocument() )
+    // Close without asking if more than one view
+    if ( rootDocument()->viewCount() > 1 || queryClose() )
+    {
+        setRootDocument( 0L );
 	close();
+    }
 }
 
 void KoMainWindow::slotFilePrint()

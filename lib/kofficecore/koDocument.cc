@@ -140,6 +140,7 @@ KoDocument::KoDocument( QObject* parent, const char* name, bool singleViewMode )
 
 KoDocument::~KoDocument()
 {
+  kdDebug(30003) << "KoDocument::~KoDocument() " << this << endl;
   d->m_shells.setAutoDelete( true );
   d->m_shells.clear();
 
@@ -265,6 +266,11 @@ KoView *KoDocument::firstView()
 KoView *KoDocument::nextView()
 {
   return d->m_views.next();
+}
+
+unsigned int KoDocument::viewCount()
+{
+  return d->m_views.count();
 }
 
 void KoDocument::slotViewDestroyed()

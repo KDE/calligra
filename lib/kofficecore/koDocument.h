@@ -51,7 +51,6 @@ using std::ostream;
  */
 class KoDocument : public KParts::ReadWritePart
 {
-  friend class KoMainWindow;
   Q_OBJECT
 
 public:
@@ -189,6 +188,11 @@ public:
    *  @see firstView
    */
   virtual KoView *nextView();
+
+  /**
+   *  Retrieves the number of views for this document
+   */
+  virtual unsigned int viewCount();
 
   /**
    * Reimplemented from @ref KParts::Part
@@ -371,6 +375,25 @@ public:
   void setViewContainerStates( KoView *view, const QMap<QString,QByteArray> &states );
   QMap<QString,QByteArray> viewContainerStates( KoView *view );
 
+  // [Used to be protected and friend KoMainWindow, but 1 - this sucks
+  // 2 - it prevented reimplementing KoMainWindow stuff (in KoShell)
+  /**
+   * Appends the shell to the list of shells which show this
+   * document as their root document.
+   *
+   * This method is automatically called from @ref KoMainWindow::setRootDocument,
+   * so you dont need to call it.
+   */
+  void addShell( KoMainWindow *shell );
+  /**
+   * Removes the shell from the list. That happens automatically if the shell changes its
+   * root document. Usually you dont need to call this method.
+   */
+  void removeShell( KoMainWindow *shell );
+
+  // Hmm, name clash with the other @save. We want to give access to parent's save()
+  virtual bool save() { return KParts::ReadWritePart::save(); }
+
 signals:
   /**
    * This signal is emitted, if a direct or indirect child document changes
@@ -478,14 +501,9 @@ protected:
   virtual bool completeSaving( KoStore* );
 
   /**
-   *  Saves only an OBJECT tag for this document.
-   *
-   *  This method is obsolete, dont use.
+   * @internal - used by saveNativeFormat
    */
   virtual bool save( ostream&, const char* format );
-
-  // Hmm, name clash. We want to give access to parent's save()
-  virtual bool save() { return KParts::ReadWritePart::save(); }
 
   /**
    *  Overload this function with your personal text.
@@ -531,20 +549,6 @@ protected:
    * to set the url to KURL()
    */
   void resetURL() { m_url = KURL(); }
-
-  /**
-   * Appends the shell to the list of shells which show this
-   * document as their root document.
-   *
-   * This method is automatically called from @ref KoMainWindow::setRootDocument,
-   * so you dont need to call it.
-   */
-  void addShell( KoMainWindow *shell );
-  /**
-   * Removes the shell from the list. That happens automatically if the shell changes its
-   * root document. Usually you dont need to call this method.
-   */
-  void removeShell( KoMainWindow *shell );
 
 private:
 
