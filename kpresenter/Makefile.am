@@ -97,7 +97,7 @@ messages:
 
 kpresenter.h: kpresenter.idl
 	rm -f kpresenter.h
-	$(IDL) --query-server-for-narrow --relative-paths -I$(idldir) kpresenter.idl
+	$(IDL) --query-server-for-narrow --relative-paths -I../lib/kofficecore -I../lib/store -I$(idldir) kpresenter.idl
 
 kpresenter.cc: kpresenter.h
 kpresenter_doc.cc: kpresenter_doc.moc
