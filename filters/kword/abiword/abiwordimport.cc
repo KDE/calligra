@@ -1,4 +1,4 @@
-// $Header$
+// 
 
 /* This file is part of the KDE project
    Copyright 2001, 2002, 2003 Nicolas GOUTTE <goutte@kde.org>
@@ -1633,7 +1633,7 @@ void StructureParser :: createDocument(void)
     elementDoc.setAttribute("xmlns","http://www.koffice.org/DTD/kword");
     elementDoc.setAttribute("editor","AbiWord Import Filter");
     elementDoc.setAttribute("mime","application/x-kword");
-    elementDoc.setAttribute("syntaxVersion",2);
+    elementDoc.setAttribute("syntaxVersion",3);
     mainDocument.appendChild(elementDoc);
 
     QDomElement element;

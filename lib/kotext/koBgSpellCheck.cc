@@ -64,7 +64,10 @@ KoBgSpellCheck::KoBgSpellCheck()
 
 KoBgSpellCheck::~KoBgSpellCheck()
 {
-    delete m_bgSpell.kspell;
+    if ( m_bgSpell.kspell ) {
+        m_bgSpell.kspell->cleanUp();
+        delete m_bgSpell.kspell;
+    }
     delete d->m_pKSpellConfig;
     delete d;
 }
@@ -221,6 +224,7 @@ void KoBgSpellCheck::nextParagraphNeedingCheck()
 
     // repaint the textObject here if it requires it
     // (perhaps there should be a way to repaint just a paragraph.... - JJ)
+    // Well repaintChanged looks for the changed flag in parags and repaints only those - DF
     if(m_bgSpell.needsRepaint)
     {
          slotRepaintChanged( m_bgSpell.currentTextObj );
@@ -247,18 +251,32 @@ void KoBgSpellCheck::nextParagraphNeedingCheck()
         while ( parag && !parag->string()->needsSpellCheck() ) // keep looking
             parag = parag->next();
     }
+    // Still not found? Check from the start up to where we started from
+    if ( !parag ) {
+        parag = m_bgSpell.currentTextObj->textDocument()->firstParag();
+        while ( parag != m_bgSpell.currentParag && !parag->string()->needsSpellCheck() )
+            parag = parag->next();
+        while ( parag != m_bgSpell.currentParag && parag->length() <= 1 ) // empty parag
+        {
+            parag->string()->setNeedsSpellCheck( false ); // nothing to check
+            while ( parag != m_bgSpell.currentParag && !parag->string()->needsSpellCheck() ) // keep looking
+                parag = parag->next();
+        }
+       if ( parag == m_bgSpell.currentParag && !parag->string()->needsSpellCheck() )
+           parag = 0; // wrapped around and found nothing to check
+    }
+
     if ( parag )
         m_bgSpell.currentParag = parag;
     else
-        m_bgSpell.currentParag = 0L; // ###
-
-    if( !m_bgSpell.currentParag)
     {
-        KoTextObject *obj=m_bgSpell.currentTextObj;
-        //kdDebug(32500)<<" obj :"<<obj<<endl;
-        m_bgSpell.currentTextObj=nextTextObject( m_bgSpell.currentTextObj );
+        KoTextObject *obj = m_bgSpell.currentTextObj;
+        // OK, nothing more to do in this textobj
+        obj->setNeedSpellCheck(false);
+
+        m_bgSpell.currentTextObj = nextTextObject( m_bgSpell.currentTextObj );
         //kdDebug(32500)<<" m_bgSpell.currentTextObj="<<m_bgSpell.currentTextObj<<endl;
-        if ( m_bgSpell.currentTextObj && m_bgSpell.currentTextObj!=obj)
+        if ( m_bgSpell.currentTextObj && m_bgSpell.currentTextObj != obj)
         {
             m_bgSpell.currentParag = m_bgSpell.currentTextObj->textDocument()->firstParag();
         }
@@ -334,20 +352,18 @@ void KoBgSpellCheck::spellCheckerMisspelling(const QString &old, int pos )
     KoTextFormat format( *ch->format() );
     format.setMisspelled( true );
     parag->setFormat( pos, old.length(), &format, true, KoTextFormat::Misspelled );
-
-    // set the repaint flags
-    parag->setChanged( true );
-    m_bgSpell.needsRepaint=true;
 }
 
 void KoBgSpellCheck::spellCheckerDone()
 {
+    // Set the repaint flags. This needs to be done even if no misspelling was found,
+    // so that words added to the dictionary become ok again (#56506,#57357)
+    m_bgSpell.currentParag->setChanged( true );
+    m_bgSpell.needsRepaint=true;
+
 #ifdef DEBUG_BGSPELLCHECKING
     kdDebug(32500) << "KoBgSpellCheck::spellCheckerDone" << endl;
 #endif
-    if( m_bgSpell.currentTextObj && m_bgSpell.currentParag==m_bgSpell.currentTextObj->textDocument()->lastParag())
-        // ### and there is no paragraph in the textobject that got the "needsSpellCheck" flag since!
-        m_bgSpell.currentTextObj->setNeedSpellCheck(false);
     // Done checking the current paragraph, schedule the next one
     d->nextParagraphTimer->start( 10, true );
 }
@@ -358,6 +374,7 @@ void KoBgSpellCheck::spellCheckerFinished()
     kdDebug(32500) << "--- KoBgSpellCheck::spellCheckerFinished ---" << endl;
 #endif
     KoSpell::spellStatus status = m_bgSpell.kspell->status();
+    m_bgSpell.kspell->cleanUp();
     delete m_bgSpell.kspell;
     m_bgSpell.kspell = 0;
     m_bgSpell.currentParag = 0;
@@ -408,8 +425,11 @@ void KoBgSpellCheck::stopSpellChecking()
 #ifdef DEBUG_BGSPELLCHECKING
   kdDebug(32500) << "KoBgSpellCheck::stopSpellChecking" << endl;
 #endif
-  delete m_bgSpell.kspell;
-  m_bgSpell.kspell = 0;
+  if ( m_bgSpell.kspell ) {
+      m_bgSpell.kspell->cleanUp();
+      delete m_bgSpell.kspell;
+      m_bgSpell.kspell = 0;
+  }
   m_bgSpell.currentParag = 0;
   m_bgSpell.currentTextObj = 0;
   d->startTimer->stop();

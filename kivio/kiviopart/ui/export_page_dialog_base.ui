@@ -75,9 +75,6 @@ This will cause the entire page to be exported to the file. This means that &lt;
                 <property name="text">
                     <string>&amp;Selected stencils</string>
                 </property>
-                <property name="accel">
-                    <string>Alt+S</string>
-                </property>
                 <property name="toolTip" stdset="0">
                     <string>Export the selected stencils on the current page</string>
                 </property>
@@ -103,9 +100,6 @@ Export only the selected stencils to file.</string>
                 </property>
                 <property name="text">
                     <string>C&amp;rop picture to edges</string>
-                </property>
-                <property name="accel">
-                    <string>Alt+R</string>
                 </property>
                 <property name="toolTip" stdset="0">
                     <string>Don't export extra blank space to file</string>

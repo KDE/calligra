@@ -1,3 +1,10 @@
+koffice (1:1.3.0-2) unstable; urgency=low
+
+  * Built against KDE 3.2.
+  * No longer installs mimetypes required for KDE 3.1 (closes: #236503).
+
+ -- Ben Burton <bab@debian.org>  Sun,  7 Mar 2004 21:37:44 +1100
+
 koffice (1:1.3.0-1) unstable; urgency=low
 
   * New upstream release (1.3-final).

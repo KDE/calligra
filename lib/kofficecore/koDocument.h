@@ -196,6 +196,13 @@ public:
      * Returns the actual mimetype of the document
      */
     QCString mimeType() const;
+    
+    /**
+     * Sets the mime type for the document.
+     * When choosing "save as" this is also the mime type
+     * selected by default.
+     */
+    void setMimeType( const QCString & mimeType );
 
     /**
      * Set the format in which the document should be saved.

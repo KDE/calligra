@@ -55,7 +55,7 @@ OOWriterWorker::OOWriterWorker(void) : m_streamOut(NULL),
     m_paperBorderTop(0.0),m_paperBorderLeft(0.0),
     m_paperBorderBottom(0.0),m_paperBorderRight(0.0), m_zip(NULL), m_pictureNumber(0),
     m_automaticParagraphStyleNumber(0), m_automaticTextStyleNumber(0),
-    m_footnoteNumber(0)
+    m_footnoteNumber(0), m_tableNumber(0), m_textBoxNumber( 0 )
 {
 }
 
@@ -66,14 +66,14 @@ QString OOWriterWorker::escapeOOText(const QString& strText) const
     return KWEFUtil::EscapeSgmlText(NULL,strText,true,true);
 }
 
-
 QString OOWriterWorker::escapeOOSpan(const QString& strText) const
 // We need not only to escape the classical XML stuff but also to take care of spaces and tabs.
-// ### FIXME: be careful of bordercases like <tag> </tag>  or <tag> <tag2/> </tag>
+// Also we must take care about not falling into the rules in XML about white space between 2 opening tags or between 2 closing tags
 {
     QString strReturn;
     QChar ch;
     int spaceNumber = 0; // How many spaces should be written
+    uint spaceSequenceStart = 9999; // Where does the space sequence start (start value must be non-null)
 
     for (uint i=0; i<strText.length(); i++)
     {
@@ -84,11 +84,16 @@ QString OOWriterWorker::escapeOOSpan(const QString& strText) const
             // The next character is not a space (anymore)
             if ( spaceNumber > 0 )
             {
-                strReturn += ' '; // Always write one space
+                if ( spaceSequenceStart )
+                {   // Generate a real space only if we are not at start
+
+                    strReturn += ' ';
+                    --spaceNumber;
+                }
                 if ( spaceNumber > 1 )
                 {
                     strReturn += "<text:s text:c=\"";
-                    strReturn += QString::number( spaceNumber - 1 );
+                    strReturn += QString::number( spaceNumber );
                     strReturn += "\"/>";
                 }
             }
@@ -117,6 +122,7 @@ QString OOWriterWorker::escapeOOSpan(const QString& strText) const
                 else
                 {
                     spaceNumber = 1;
+                    spaceSequenceStart = i;
                 }
                 break;
             }
@@ -785,7 +791,7 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
     return strElement.stripWhiteSpace(); // Remove especially trailing spaces
 }
 
-#undef ALLOW_TABLE
+#define ALLOW_TABLE
 
 QString OOWriterWorker::cellToProperties( const TableCell& cell, QString& key) const
 {
@@ -871,10 +877,11 @@ QString OOWriterWorker::cellToProperties( const TableCell& cell, QString& key) c
 #endif
 }
 
-bool OOWriterWorker::makeTableRows( const QString& tableName, const Table& table )
+bool OOWriterWorker::makeTableRows( const QString& tableName, const Table& table, int firstRowNumber )
 {
+#ifdef ALLOW_TABLE
     *m_streamOut << "<table:table-row>\n";
-    int rowCurrent = 0;
+    int rowCurrent = firstRowNumber;
 
     ulong cellNumber = 0L;
 
@@ -883,6 +890,7 @@ bool OOWriterWorker::makeTableRows( const QString& tableName, const Table& table
     for ( QValueList<TableCell>::ConstIterator itCell ( table.cellList.begin() );
         itCell != table.cellList.end(); ++itCell)
     {
+        // ### TODO: rows
         if ( rowCurrent != (*itCell).row )
         {
             rowCurrent = (*itCell).row;
@@ -916,7 +924,17 @@ bool OOWriterWorker::makeTableRows( const QString& tableName, const Table& table
         }
 
         *m_streamOut << "<table:table-cell table:value-type=\"string\" table:style-name=\""
-            << escapeOOText( automaticCellStyle) << "\">\n";
+            << escapeOOText( automaticCellStyle)
+            << "\"";
+
+#if 0
+        // More than one column width?
+        {
+            *m_streamOut << " table:number-columns-spanned=\"" << (*itCell).m_cols << "\"";
+        }
+#endif
+
+        *m_streamOut << ">\n";
 
         if (!doFullAllParagraphs(*(*itCell).paraList))
         {
@@ -924,67 +942,208 @@ bool OOWriterWorker::makeTableRows( const QString& tableName, const Table& table
         }
 
         *m_streamOut << "</table:table-cell>\n";
+    
+#if 0
+        if ( (*itCell).m_cols > 1 )
+        {
+            // We need to add some placeholder for the "covered" cells
+            for (int i = 1; i < (*itCell).m_cols; ++i)
+            {
+                *m_streamOut << "<table:covered-table-cell/>";
+            }
+        }
+#endif
     }
 
     *m_streamOut << "</table:table-row>\n";
     return true;
+#else
+    return false;
+#endif
 }
+
+#ifdef ALLOW_TABLE
+static uint getColumnWidths( const Table& table, QMemArray<double>& widthArray, int firstRowNumber )
+{
+    bool uniqueColumns = true; // We have not found any horizontally spanned cells yet.
+    uint currentColumn = 0;
+    int tryingRow = firstRowNumber; // We are trying the first row
+    QValueList<TableCell>::ConstIterator itCell;
+
+    for ( itCell = table.cellList.begin();
+        itCell != table.cellList.end(); ++itCell )
+    {
+        kdDebug(30518) << "Column: " << (*itCell).col << " (Row: " << (*itCell).row << ")" << endl;
+
+        if ( (*itCell).row != tryingRow )
+        {
+            if ( uniqueColumns )
+            {
+                 // We had a full row without any horizontally spanned cell, so we have the needed data
+                return currentColumn;
+            }
+            else
+            {
+                // No luck in the previous row, so now try this new one
+                tryingRow = (*itCell).row;
+                uniqueColumns = true;
+                currentColumn = 0;
+            }
+        }
+
+#if 0
+        if ( (*itCell).m_cols > 1 )
+        {
+            // We have a horizontally spanned cell
+            uniqueColumns = false;
+            // Do not waste the time to calculate the width
+            continue;
+        }
+#endif
+
+        const double width = ( (*itCell).frame.right - (*itCell).frame.left );
+
+        if ( currentColumn >= widthArray.size() )
+            widthArray.resize( currentColumn + 4, QGArray::SpeedOptim);
+
+        widthArray.at( currentColumn ) = width;
+        ++currentColumn;
+    }
+
+    // If we are here, it can be:
+    // - the table is either empty or there is not any row without horizontally spanned cells
+    // - we have needed the last row for getting something usable
+
+    return uniqueColumns ? currentColumn : 0;
+}
+#endif
+
+#ifdef ALLOW_TABLE
+static uint getFirstRowColumnWidths( const Table& table, QMemArray<double>& widthArray, int firstRowNumber )
+// Get the column widths only by the first row.
+// This is used when all table rows have horizontally spanned cells.
+{
+    uint currentColumn = 0;
+    QValueList<TableCell>::ConstIterator itCell;
+
+    for ( itCell = table.cellList.begin();
+        itCell != table.cellList.end(); ++itCell )
+    {
+        kdDebug(30518) << "Column: " << (*itCell).col << " (Row: " << (*itCell).row << ")" << endl;
+        if ( (*itCell).row != firstRowNumber )
+            break; // We have finished the first row
+
+#if 0
+        int cols = (*itCell).m_cols;
+        if ( cols < 1)
+            cols = 1;
+#else
+        const int cols = 1;
+#endif
+
+        // ### FIXME: the columns behind a larger cell do not need to be symmetrical
+        const double width = ( (*itCell).frame.right - (*itCell).frame.left ) / cols;
+
+        if ( currentColumn + cols > widthArray.size() )
+            widthArray.resize( currentColumn + 4, QGArray::SpeedOptim);
+
+        for ( int i = 0; i < cols; ++i )
+        {
+            widthArray.at( currentColumn ) = width;
+            ++currentColumn;
+        }
+    }
+    return currentColumn;
+}
+#endif
 
 bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
 {
 #ifdef ALLOW_TABLE
-    const QString automaticTableStyle ( makeAutomaticStyleName( "Table", m_tableNumber ) );
+
+    // Be careful that while being similar the following 5 strings have different purposes
+    const QString automaticTableStyle ( makeAutomaticStyleName( "Table", m_tableNumber ) ); // It also increases m_tableNumber
     const QString tableName( QString( "Table" ) + QString::number( m_tableNumber ) ); // m_tableNumber was already increased
+    const QString translatedName( QString( "Table %1").arg( m_tableNumber ) );
+    const QString automaticFrameStyle ( makeAutomaticStyleName( "TableFrame", m_textBoxNumber ) ); // It also increases m_textBoxNumber
+    const QString translatedFrameName( QString( "Table Frame %1").arg( m_textBoxNumber ) );
 
     kdDebug(30518) << "Processing table " << anchor.key.toString() << " => " << tableName << endl;
 
-    kdDebug(30518) << "Creating automatic table style: " << automaticTableStyle /* << " key: " << styleKey */ << endl;
+    const QValueList<TableCell>::ConstIterator firstCell ( anchor.table.cellList.begin() );
 
-    *m_streamOut << "</text:p>\n"; // Close previous paragraph ### TODO: do it correctly like for HTML
+    if ( firstCell == anchor.table.cellList.end() )
+    {
+        kdError(30518) << "Table has not any cell!" << endl;
+        return false;
+    }
+
+    const int firstRowNumber = (*firstCell).row;
+    kdDebug(30518) << "First row: " << firstRowNumber << endl;
+
+    QMemArray<double> widthArray(4);
+
+    uint numberColumns = getColumnWidths( anchor.table, widthArray, firstRowNumber );
+
+    if ( numberColumns <= 0 )
+    {
+        kdDebug(30518) << "Could not get correct column widths, so approximating" << endl;
+        // There was a problem, the width array cannot be trusted, so try to do a column width array with the first row
+        numberColumns = getFirstRowColumnWidths( anchor.table, widthArray, firstRowNumber );
+        if ( numberColumns <= 0 )
+        {
+            // Still not right? Then it is an error!
+            kdError(30518) << "Cannot get column widths of table " << anchor.key.toString() << endl;
+            return false;
+        }
+    }
+
+    kdDebug(30518) << "Number of columns: " << numberColumns << endl;
+
+
+    double tableWidth = 0.0; // total width of table
+    uint i; // We need the loop variable 2 times
+    for ( i=0; i < numberColumns; ++i )
+    {
+        tableWidth += widthArray.at( i );
+    }
+    kdDebug(30518) << "Table width: " << tableWidth << endl;
+
+    // An inlined table, is an "as-char" text-box
+    *m_streamOut << "<draw:text-box";
+    *m_streamOut << " style:name=\"" << escapeOOText( automaticFrameStyle ) << "\"";
+    *m_streamOut << " draw:name=\"" << escapeOOText( translatedFrameName ) << "\" text:anchor-type=\"as-char\"";
+    *m_streamOut << " svg:width=\"" << tableWidth << "pt\""; // ### TODO: any supplement to the width?
+    //*m_streamOut << " fo:min-height=\"1pt\"";// ### TODO: a better height (can be calulated from the KWord table frames)
+    *m_streamOut << ">\n";
+    
     *m_streamOut << "<table:table table:name=\""
-        << escapeOOText( tableName )
+        << escapeOOText( translatedName )
         << "\" table:style-name=\""
         << escapeOOText( automaticTableStyle )
         << "\" >\n";
 
-    ulong columnNumber = 0L;
-    double tableWidth = 0.0; // total width of table
-    QString delayedAutomaticStyles; // Automatic styles for the columns
 
-    QValueList<TableCell>::ConstIterator itCell;
-
-    for ( itCell=anchor.table.cellList.begin();
-        itCell!=anchor.table.cellList.end(); ++itCell )
-    {
-        kdDebug(30518) << "Column: " << (*itCell).col << endl;
-        if ( (*itCell).row )
-            break; // We have finished the first row
-
-        const double width = (*itCell).frame.right - (*itCell).frame.left;
-        tableWidth += width; // ###TODO any modifier needed?
-
-        const QString automaticColumnStyle ( makeAutomaticStyleName( tableName + ".Column", columnNumber ) );
-        kdDebug(30518) << "Creating automatic column style: " << automaticColumnStyle /* << " key: " << styleKey */ << endl;
-
-        delayedAutomaticStyles += "  <style:style";
-        delayedAutomaticStyles += " style:name=\"" + escapeOOText( automaticColumnStyle ) + "\"";
-        delayedAutomaticStyles += " style:family=\"table-column\"";
-        delayedAutomaticStyles += ">\n";
-        delayedAutomaticStyles += "   <style:properties ";
-        // Despite that some OO specification examples use fo:width, OO specification section 4.19 tells to use style:column-width
-        //  and/or the relative variant: style:rel-column-width
-        delayedAutomaticStyles += " style:column-width=\"" + QString::number( width ) + "pt\" ";
-        delayedAutomaticStyles += "/>\n";
-        delayedAutomaticStyles += "  </style:style>\n";
-
-        // ### TODO: find a way how to use table:number-columns-repeated > 1
-        *m_streamOut << "<table:table-column table:style-name=\""
-            << escapeOOText( automaticColumnStyle )
-            << "\" table:number-columns-repeated=\"1\"/>\n";
-    }
-
-    // Now that we have processed the columns, we can write out the automatic style for the table
-    m_contentAutomaticStyles += "  <style:style";
+    // Now we have enough information to generate the style for the table and its frame
+    
+    kdDebug(30518) << "Creating automatic frame style: " << automaticFrameStyle /* << " key: " << styleKey */ << endl;
+    m_contentAutomaticStyles += "  <style:style"; // for frame
+    m_contentAutomaticStyles += " style:name=\"" + escapeOOText( automaticFrameStyle ) + "\"";
+    m_contentAutomaticStyles += " style:family=\"graphics\"";
+    m_contentAutomaticStyles += " style:parent-style-name=\"Frame\""; // ### TODO: parent style needs to be correctly defined
+    m_contentAutomaticStyles += ">\n";
+    m_contentAutomaticStyles += "   <style:properties "; // ### TODO
+    m_contentAutomaticStyles += " text:anchor-type=\"as-char\""; // ### TODO: needed?
+    m_contentAutomaticStyles += " fo:padding=\"0pt\" fo:border=\"none\"";
+    m_contentAutomaticStyles += " fo:margin-left=\"0pt\"";
+    m_contentAutomaticStyles += " fo:margin-top=\"0pt\"";
+    m_contentAutomaticStyles += " fo:margin-bottom=\"0pt\"";
+    m_contentAutomaticStyles += " fo:margin-right=\"0pt\"";
+    m_contentAutomaticStyles += "/>\n";
+    m_contentAutomaticStyles += "  </style:style>\n";
+    
+    kdDebug(30518) << "Creating automatic table style: " << automaticTableStyle /* << " key: " << styleKey */ << endl;
+    m_contentAutomaticStyles += "  <style:style"; // for table
     m_contentAutomaticStyles += " style:name=\"" + escapeOOText( automaticTableStyle ) + "\"";
     m_contentAutomaticStyles += " style:family=\"table\"";
     m_contentAutomaticStyles += ">\n";
@@ -993,14 +1152,38 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
     m_contentAutomaticStyles += "/>\n";
     m_contentAutomaticStyles += "  </style:style>\n";
 
-    // Now that the automatic style for the table is written, we can write the column's ones
-    m_contentAutomaticStyles += delayedAutomaticStyles;
-    delayedAutomaticStyles = QString::null; // Release memory
+    QValueList<TableCell>::ConstIterator itCell;
 
-    makeTableRows( tableName, anchor.table );
+    ulong columnNumber = 0L;
+
+    for ( i=0; i < numberColumns; ++i )
+    {
+        const QString automaticColumnStyle ( makeAutomaticStyleName( tableName + ".Column", columnNumber ) );
+        kdDebug(30518) << "Creating automatic column style: " << automaticColumnStyle /* << " key: " << styleKey */ << endl;
+
+        m_contentAutomaticStyles += "  <style:style";
+        m_contentAutomaticStyles += " style:name=\"" + escapeOOText( automaticColumnStyle ) + "\"";
+        m_contentAutomaticStyles += " style:family=\"table-column\"";
+        m_contentAutomaticStyles += ">\n";
+        m_contentAutomaticStyles += "   <style:properties ";
+        // Despite that some OO specification examples use fo:width, OO specification section 4.19 tells to use style:column-width
+        //  and/or the relative variant: style:rel-column-width
+        m_contentAutomaticStyles += " style:column-width=\"" + QString::number( widthArray.at( i ) ) + "pt\" ";
+        m_contentAutomaticStyles += "/>\n";
+        m_contentAutomaticStyles += "  </style:style>\n";
+
+        // ### TODO: find a way how to use table:number-columns-repeated for more that one cell's column(s)
+        *m_streamOut << "<table:table-column table:style-name=\""
+            << escapeOOText( automaticColumnStyle )
+            << "\" table:number-columns-repeated=\"1\"/>\n";
+    }
+
+    makeTableRows( tableName, anchor.table, firstRowNumber );
 
     *m_streamOut << "</table:table>\n";
-    *m_streamOut << "<text:p text:style-name=\"Standard\">\n"; // Re-open the "previous" paragraph ### TODO: do it correctly like for HTML
+    
+    *m_streamOut << "</draw:text-box>"; // End of inline
+    
 #endif
     return true;
 }
@@ -1393,7 +1576,8 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
             }
         case LayoutData::LS_MULTIPLE:
             {
-                const QString mult ( QString::number( qRound( layout.lineSpacing ) * 100 ) );
+                // OOWriter 1.1 only allows up to 200%
+                const QString mult ( QString::number( qRound( layout.lineSpacing * 100 ) ) );
                 props += "fo:line-height=\"";
                 props += mult;
                 props += "%\" ";
@@ -1579,9 +1763,12 @@ bool OOWriterWorker::doFullParagraph(const QString& paraText, const LayoutData& 
 bool OOWriterWorker::doOpenStyles(void)
 {
     m_styles += " <office:styles>\n";
-    m_styles += "  <style:style style:name=\"Graphics\" style:family=\"graphics\">"; // ### TODO: what if Grpahics is a normal style
+    m_styles += "  <style:style style:name=\"Graphics\" style:family=\"graphics\">"; // ### TODO: what if Graphics is a normal style
     m_styles += "   <style:properties/>";
     m_styles += "  </style:style>";
+    m_styles += "  <style:style style:name=\"Frame\" style:family=\"graphics\">\n"; // ### TODO: what if Frame is a normal style
+    m_styles += "   <style:properties text:anchor-type=\"paragraph\" style:wrap=\"none\"/>\n";
+    m_styles += "  </style:style>\n";
     return true;
 }
 

@@ -7,6 +7,11 @@ Changes between 1.3 and 1.3.1
 - Fixed "text doesn't immediately run around copied frame on new page" (#73819)
 - Fixed crash when activating text view mode and there's no text frameset (#64952)
 - Allow to save custom shortcuts for 'insert variable' actions
+- Fixed crash when undoing a paste action
+- Fixed crash related to tables and deleting frames
+- Fixed crash when pasting plain text over a selection (#78561)
+- Fixed wrong conversion of values in config dialog when switching units (#65972)
+- OOWriter import/export: many improvements
 
 Last changes for KWord-1.3
 ==========================

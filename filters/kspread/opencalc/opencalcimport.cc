@@ -34,6 +34,7 @@
 #include <kmdcodec.h>
 #include <koFilterChain.h>
 #include <koGlobal.h>
+#include <koUnit.h>
 
 #include <kspread_cell.h>
 #include <kspread_doc.h>
@@ -45,6 +46,8 @@
 #include <kspread_style_manager.h>
 #include <kspread_util.h>
 #include <kspread_value.h>
+
+#include <stylestack.h>
 
 #define SECSPERDAY (24 * 60 * 60)
 
@@ -143,57 +146,6 @@ double timeToNum( int h, int m, int s )
   return (double) secs / (double) SECSPERDAY;
 }
 
-int getFontSize( QString s )
-{
-  int result;
-  int l = s.length();
-  int i;
-  for ( i = 0; i < l; ++i )
-  {
-    if ( !s[i].isNumber() )
-      break;
-  }
-
-  s = s.left( i );
-  bool ok = false;
-  result = s.toInt( &ok );
-  if ( !ok )
-    result = 10; // OpenCalc default font size
-
-  return result;
-}
-
-double convertToPoint( QString s )
-{
-  double mm = 0.0;
-  int p = s.find( "cm" );
-  if ( p != -1 )
-  {
-    s = s.left( p );
-    bool ok = true;
-    double d = s.toDouble( &ok );
-
-    if ( ok )
-      mm = d / 0.035;
-
-    kdDebug(30518) << "Width: " << d << ", new: " << mm << endl;
-  }
-  else
-  {
-    p = s.find( "mm" );
-    if ( p != -1 )
-    {
-      s = s.left( p );
-      bool ok = true;
-      double d = s.toDouble( &ok );
-      if ( ok )
-        mm = d / 100 * 0.035; // TODO check this!
-    }
-  }
-
-  return mm;//( MM_TO_POINT( mm ) < 1 ? 1 : MM_TO_POINT( mm ) );
-}
-
 bool OpenCalcImport::readRowFormat( QDomElement & rowNode, QDomElement * rowStyle,
                                     KSpreadSheet * table, int & row, int & number,
                                     bool isLast )
@@ -221,35 +173,7 @@ bool OpenCalcImport::readRowFormat( QDomElement & rowNode, QDomElement * rowStyl
     {
       if ( property.hasAttribute( "style:row-height" ) )
       {
-        QString sHeight = property.attribute( "style:row-height" );
-        int p = sHeight.find( "cm" );
-        if ( p != -1 )
-        {
-          sHeight = sHeight.left( p );
-
-          kdDebug(30518) << "Parsing height (cm): " << sHeight << endl;
-
-          bool ok = true;
-          double d = sHeight.toDouble( &ok );
-          if ( ok )
-            height = d * 10; // we work with mm
-        }
-        else
-        {
-          p = sHeight.find( "mm" );
-
-          if ( p != -1 )
-          {
-            sHeight = sHeight.left( p );
-
-            kdDebug(30518) << "Parsing height (mm): " << sHeight << endl;
-
-            bool ok = true;
-            double d = sHeight.toDouble( &ok );
-            if ( ok )
-              height = d;
-          }
-        }
+          height = KoUnit::parseValue( property.attribute( "style:row-height" ) , -1 );
       }
 
       if ( property.hasAttribute( "fo:break-before" ) )
@@ -294,7 +218,7 @@ bool OpenCalcImport::readRowFormat( QDomElement & rowNode, QDomElement * rowStyl
     if ( height != -1 )
     {
       kdDebug(30518) << "Setting row height to " << height << endl;
-      rowL->setMMHeight( height );
+      rowL->setHeight( height );
     }
 
     // if ( insertPageBreak ) TODO:
@@ -512,14 +436,27 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
     QDomElement annotation = e.namedItem( "office:annotation" ).toElement();
     if ( !annotation.isNull() )
     {
-      QDomElement comment = annotation.namedItem( "text:p" ).toElement();
-      if ( !comment.isNull() )
-      {
-        if ( !cell )
-          cell = table->nonDefaultCell( columns, row );
+       QString comment;
+        QDomNode node = annotation.firstChild();
+        while( !node.isNull() )
+        {
+            QDomElement commentElement = node.toElement();
+            if( !commentElement.isNull() )
+                if( commentElement.tagName() == "text:p" )
+                {
+                    if( !comment.isEmpty() ) comment.append( '\n' );
+                    comment.append( commentElement.text() );
+                }
 
-        cell->setComment( comment.text() );
-      }
+            node = node.nextSibling();
+        }
+
+        if( !comment.isEmpty() )
+        {
+            if ( !cell )
+                cell = table->nonDefaultCell( columns, row );
+            cell->setComment( comment );
+        }
     }
 
     kdDebug(30518) << "Contains: " << text << endl;
@@ -610,6 +547,11 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
       if ( !cell )
         cell = table->nonDefaultCell( columns, row );
       cell->setCellText( formula );
+    }
+    if ( e.hasAttribute( "table:validation-name" ) )
+    {
+        kdDebug()<<" Celle has a validation :"<<e.attribute( "table:validation-name" )<<endl;
+        loadOasisValidation( cell->getValidity(), e.attribute( "table:validation-name" ) );
     }
     if ( e.hasAttribute( "table:value-type" ) )
     {
@@ -902,7 +844,7 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, KSpreadSheet * table
     kdDebug(30518) << "New column: " << column << endl;
 
     int number     = 1;
-    double width   = POINT_TO_MM( colWidth );
+    double width   = colWidth;
     bool collapsed = ( e.attribute( "table:visibility" ) == "collapse" );
     bool insertPageBreak = false;
     KSpreadFormat styleLayout( table, table->doc()->styleManager()->defaultStyle() );
@@ -973,28 +915,8 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, KSpreadSheet * table
         if ( property.hasAttribute( "style:column-width" ) )
         {
           QString sWidth = property.attribute( "style:column-width" );
+          width = KoUnit::parseValue( property.attribute( "style:column-width" ), width );
           kdDebug(30518) << "Col Width: " << sWidth << endl;
-          int p = sWidth.find( "cm" );
-          if ( p != -1 )
-          {
-            sWidth = sWidth.left( p );
-            bool ok = true;
-            double d = sWidth.toDouble( &ok );
-            if ( ok )
-              width = d * 10; // we work with mm
-          }
-          else
-          {
-            p = sWidth.find( "mm" );
-            if ( p != -1 )
-            {
-              sWidth = sWidth.left( p );
-              bool ok = true;
-              double d = sWidth.toDouble( &ok );
-              if ( ok )
-                width = d;
-            }
-          }
         }
 
         if ( property.hasAttribute( "fo:break-before" ) )
@@ -1022,7 +944,7 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, KSpreadSheet * table
 
       ColumnFormat * col = new ColumnFormat( table, column );
       col->copy( styleLayout );
-      col->setMMWidth( width );
+      col->setWidth( width );
 
       // if ( insertPageBreak )
       //   col->setPageBreak( true )
@@ -1110,7 +1032,7 @@ void OpenCalcImport::loadTableMasterStyle( KSpreadSheet * table,
   QString hleft, hmiddle, hright;
   QString fleft, fmiddle, fright;
 
-  if ( !header.isNull() );
+  if ( !header.isNull() )
   {
     kdDebug(30518) << "Header exists" << endl;
     QDomNode part = header.namedItem( "style:region-left" );
@@ -1137,7 +1059,7 @@ void OpenCalcImport::loadTableMasterStyle( KSpreadSheet * table,
 
   QDomNode footer = style->namedItem( "style:footer" );
 
-  if ( !footer.isNull() );
+  if ( !footer.isNull() )
   {
     QDomNode part = footer.namedItem( "style:region-left" );
     if ( !part.isNull() )
@@ -1161,6 +1083,149 @@ void OpenCalcImport::loadTableMasterStyle( KSpreadSheet * table,
 
   table->print()->setHeadFootLine( hleft, hmiddle, hright,
                                    fleft, fmiddle, fright );
+    if ( style->hasAttribute( "style:page-master-name" ) )
+  {
+      QString masterPageLayoutStyleName=style->attribute( "style:page-master-name" );
+      kdDebug()<<"masterPageLayoutStyleName :"<<masterPageLayoutStyleName<<endl;
+      QDomElement *masterLayoutStyle = m_styles[masterPageLayoutStyleName];
+      kdDebug()<<"masterLayoutStyle :"<<masterLayoutStyle<<endl;
+      if ( !masterLayoutStyle )
+          return;
+      StyleStack styleStack;
+      styleStack.push( *masterLayoutStyle );
+      loadOasisMasterLayoutPage( table, styleStack );
+  }
+}
+
+void OpenCalcImport::loadOasisMasterLayoutPage( KSpreadSheet * table,StyleStack &styleStack )
+{
+    float left = 0.0;
+    float right = 0.0;
+    float top = 0.0;
+    float bottom = 0.0;
+    float width = 0.0;
+    float height = 0.0;
+    QString orientation = "Portrait";
+    QString format;
+
+    // Laurent : Why we stored layout information as Millimeter ?!!!!!
+    // kspread used point for all other attribute
+    // I don't understand :(
+    if ( styleStack.hasAttribute( "fo:page-width" ) )
+    {
+        width = KoUnit::toMM(KoUnit::parseValue( styleStack.attribute( "fo:page-width" ) ) );
+    }
+    if ( styleStack.hasAttribute( "fo:page-height" ) )
+    {
+        height = KoUnit::toMM( KoUnit::parseValue( styleStack.attribute( "fo:page-height" ) ) );
+    }
+    if ( styleStack.hasAttribute( "fo:margin-top" ) )
+    {
+        top = KoUnit::toMM(KoUnit::parseValue( styleStack.attribute( "fo:margin-top" ) ) );
+    }
+    if ( styleStack.hasAttribute( "fo:margin-bottom" ) )
+    {
+        bottom = KoUnit::toMM(KoUnit::parseValue( styleStack.attribute( "fo:margin-bottom" ) ) );
+    }
+    if ( styleStack.hasAttribute( "fo:margin-left" ) )
+    {
+        left = KoUnit::toMM(KoUnit::parseValue( styleStack.attribute( "fo:margin-left" ) ) );
+    }
+    if ( styleStack.hasAttribute( "fo:margin-right" ) )
+    {
+        right = KoUnit::toMM(KoUnit::parseValue( styleStack.attribute( "fo:margin-right" ) ) );
+    }
+    if ( styleStack.hasAttribute( "style:writing-mode" ) )
+    {
+        kdDebug()<<"styleStack.hasAttribute( style:writing-mode ) :"<<styleStack.hasAttribute( "style:writing-mode" )<<endl;
+    }
+    if ( styleStack.hasAttribute( "style:print-orientation" ) )
+    {
+        orientation = ( styleStack.attribute( "style:print-orientation" )=="landscape" ) ? "Landscape" : "Portrait" ;
+    }
+    if ( styleStack.hasAttribute("style:num-format" ) )
+    {
+        kdDebug()<<" num-format :"<<styleStack.attribute("style:num-format" )<<endl;
+        //todo fixme
+    }
+    if ( styleStack.hasAttribute( "fo:background-color" ) )
+    {
+        //todo
+        kdDebug()<<" fo:background-color :"<<styleStack.attribute( "fo:background-color" )<<endl;
+    }
+    if ( styleStack.hasAttribute( "style:print" ) )
+    {
+        //todo parsing
+        QString str = styleStack.attribute( "style:print" );
+        kdDebug()<<" style:print :"<<str<<endl;
+
+        if (str.contains( "headers" ) )
+        {
+            //todo implement it into kspread
+        }
+        if ( str.contains( "grid" ) )
+        {
+            table->print()->setPrintGrid( true );
+        }
+        if ( str.contains( "annotations" ) )
+        {
+            //todo it's not implemented
+        }
+        if ( str.contains( "objects" ) )
+        {
+            //todo it's not implemented
+        }
+        if ( str.contains( "charts" ) )
+        {
+            //todo it's not implemented
+        }
+        if ( str.contains( "drawings" ) )
+        {
+            //todo it's not implemented
+        }
+        if ( str.contains( "formulas" ) )
+        {
+            table->setShowFormula(true);
+        }
+        if ( str.contains( "zero-values" ) )
+        {
+            //todo it's not implemented
+        }
+    }
+    if ( styleStack.hasAttribute( "style:table-centering" ) )
+    {
+        QString str = styleStack.attribute( "style:table-centering" );
+        //not implemented into kspread
+        kdDebug()<<" styleStack.attribute( style:table-centering ) :"<<str<<endl;
+#if 0
+        if ( str == "horizontal" )
+        {
+        }
+        else if ( str == "vertical" )
+        {
+        }
+        else if ( str == "both" )
+        {
+        }
+        else if ( str == "none" )
+        {
+        }
+        else
+            kdDebug()<<" table-centering unknown :"<<str<<endl;
+#endif
+    }
+
+    format = QString( "%1x%2" ).arg( width ).arg( height );
+    kdDebug()<<" format : "<<format<<endl;
+    table->print()->setPaperLayout( left, top, right, bottom, format, orientation );
+
+    kdDebug()<<" left margin :"<<left<<" right :"<<right<<" top :"<<top<<" bottom :"<<bottom<<endl;
+//<style:properties fo:page-width="21.8cm" fo:page-height="28.801cm" fo:margin-top="2cm" fo:margin-bottom="2.799cm" fo:margin-left="1.3cm" fo:margin-right="1.3cm" style:writing-mode="lr-tb"/>
+//          QString format = paper.attribute( "format" );
+//      QString orientation = paper.attribute( "orientation" );
+//        m_pPrint->setPaperLayout( left, top, right, bottom, format, orientation );
+//      }
+
 }
 
 bool OpenCalcImport::parseBody( int numOfTables )
@@ -1216,6 +1281,8 @@ bool OpenCalcImport::parseBody( int numOfTables )
       area = area.nextSibling();
     }
   }
+
+  loadOasisCellValidation( body.toElement() );
 
   KSpreadSheet * table;
   QDomNode sheet = body.namedItem( "table:table" );
@@ -1405,6 +1472,25 @@ void OpenCalcImport::insertStyles( QDomElement const & element )
     n = n.nextSibling();
   }
 }
+
+void OpenCalcImport::loadOasisCellValidation( const QDomElement&body )
+{
+    QDomNode validation = body.namedItem( "table:content-validations" );
+    if ( !validation.isNull() )
+    {
+        QDomElement element = validation.firstChild().toElement();
+        for ( ; !element.isNull() ; element = element.nextSibling().toElement() ) {
+            if ( element.tagName() ==  "table:content-validation" ) {
+                m_validationList.insert( element.attribute("table:name" ), element);
+                kdDebug()<<" validation found :"<<element.attribute("table:name" )<<endl;
+            }
+            else {
+                kdDebug()<<" Tag not recognize :"<<element.tagName()<<endl;
+            }
+        }
+    }
+}
+
 
 QString * OpenCalcImport::loadFormat( QDomElement * element,
                                       KSpreadFormat::FormatType & formatType,
@@ -1729,8 +1815,8 @@ void OpenCalcImport::loadFontStyle( KSpreadFormat * layout, QDomElement const * 
     layout->setTextFontFamily( font->attribute( "fo:font-family" ) );
   if ( font->hasAttribute( "fo:color" ) )
     layout->setTextColor( QColor( font->attribute( "fo:color" ) ) );
-  if ( font->hasAttribute( "fo:size" ) )
-    layout->setTextFontSize( getFontSize( font->attribute( "fo:size" ) ) );
+  if ( font->hasAttribute( "fo:font-size" ) )
+    layout->setTextFontSize(  KoUnit::parseValue( font->attribute( "fo:font-size" ),10.0 ));
   else
     layout->setTextFontSize( 10 );
   if ( font->hasAttribute( "fo:font-style" ) )
@@ -1738,8 +1824,6 @@ void OpenCalcImport::loadFontStyle( KSpreadFormat * layout, QDomElement const * 
     kdDebug(30518) << "italic" << endl;
     layout->setTextFontItalic( true ); // only thing we support
   }
-  if ( font->hasAttribute( "fo:font-weight" ) )
-    layout->setTextFontBold( true ); // only thing we support
   if ( font->hasAttribute( "fo:font-weight" ) )
     layout->setTextFontBold( true ); // only thing we support
   if ( font->hasAttribute( "fo:text-underline" ) || font->hasAttribute( "style:text-underline" ) )
@@ -1765,7 +1849,7 @@ void OpenCalcImport::loadBorder( KSpreadFormat * layout, QString const & borderD
 
   QPen pen;
   QString w = borderDef.left( p );
-  pen.setWidth( (int)convertToPoint( w ) );
+  pen.setWidth( (int)KoUnit::parseValue( w ) );
 
 
   ++p;
@@ -1848,6 +1932,12 @@ void OpenCalcImport::loadStyleProperties( KSpreadFormat * layout, QDomElement co
       layout->setAngle( -a + 1 );
   }
 
+  if (  property.hasAttribute( "fo:margin-left" ) )
+  {
+      kdDebug()<<"margin-left :"<<KoUnit::parseValue( property.attribute( "fo:margin-left" ),0.0 )<<endl;
+      layout->setIndent( KoUnit::parseValue( property.attribute( "fo:margin-left" ),0.0 ) );
+  }
+
   if ( property.hasAttribute( "fo:text-align" ) )
   {
     QString s = property.attribute( "fo:text-align" );
@@ -1902,17 +1992,11 @@ void OpenCalcImport::loadStyleProperties( KSpreadFormat * layout, QDomElement co
       layout->setHideFormula( false );
       layout->setHideAll( false );
     }
-    else if ( prot == "formula-hidden" )
-    {
-      layout->setHideAll( false );
-      layout->setHideFormula( true );
-      layout->setNotProtected( true );
-    }
     kdDebug(30518) << "Cell " << prot << endl;
   }
 
   if ( property.hasAttribute( "fo:padding-left" ) )
-    layout->setIndent( convertToPoint( property.attribute( "fo:padding-left" ) ) );
+    layout->setIndent( KoUnit::parseValue( property.attribute( "fo:padding-left" ) ) );
 
   if ( property.hasAttribute( "fo:vertical-align" ) )
   {
@@ -1924,6 +2008,8 @@ void OpenCalcImport::loadStyleProperties( KSpreadFormat * layout, QDomElement co
     else
       layout->setAlignY( KSpreadFormat::Top );
   }
+  else
+      layout->setAlignY( KSpreadFormat::Bottom );
 
   if ( property.hasAttribute( "fo:wrap-option" ) )
   {
@@ -2170,6 +2256,302 @@ bool OpenCalcImport::createStyleMap( QDomDocument const & styles )
 
   return true;
 }
+
+void OpenCalcImport::loadOasisValidation( KSpreadValidity* val, const QString& validationName )
+{
+    kdDebug()<<"validationName:"<<validationName<<endl;
+    QDomElement element = m_validationList[validationName];
+    if ( element.hasAttribute( "table:condition" ) )
+    {
+        QString valExpression = element.attribute( "table:condition" );
+        kdDebug()<<" element.attribute( table:condition ) "<<valExpression<<endl;
+        //Condition ::= ExtendedTrueCondition | TrueFunction 'and' TrueCondition
+        //TrueFunction ::= cell-content-is-whole-number() | cell-content-is-decimal-number() | cell-content-is-date() | cell-content-is-time()
+        //ExtendedTrueCondition ::= ExtendedGetFunction | cell-content-text-length() Operator Value
+        //TrueCondition ::= GetFunction | cell-content() Operator Value
+        //GetFunction ::= cell-content-is-between(Value, Value) | cell-content-is-not-between(Value, Value)
+        //ExtendedGetFunction ::= cell-content-text-length-is-between(Value, Value) | cell-content-text-length-is-not-between(Value, Value)
+        //Operator ::= '<' | '>' | '<=' | '>=' | '=' | '!='
+        //Value ::= NumberValue | String | Formula
+        //A Formula is a formula without an equals (=) sign at the beginning. See section 8.1.3 for more information.
+        //A String comprises one or more characters surrounded by quotation marks.
+        //A NumberValue is a whole or decimal number. It must not contain comma separators for numbers of 1000 or greater.
+
+        //ExtendedTrueCondition
+        if ( valExpression.contains( "cell-content-text-length()" ) )
+        {
+            //"cell-content-text-length()>45"
+            valExpression = valExpression.remove("cell-content-text-length()" );
+            kdDebug()<<" valExpression = :"<<valExpression<<endl;
+            val->m_allow = Allow_TextLength;
+
+            loadOasisValidationCondition( val, valExpression );
+        }
+        //cell-content-text-length-is-between(Value, Value) | cell-content-text-length-is-not-between(Value, Value)
+        else if ( valExpression.contains( "cell-content-text-length-is-between" ) )
+        {
+            val->m_allow = Allow_TextLength;
+            val->m_cond = Between;
+            valExpression = valExpression.remove( "cell-content-text-length-is-between(" );
+            kdDebug()<<" valExpression :"<<valExpression<<endl;
+            valExpression = valExpression.remove( ")" );
+            bool ok = false;
+            QStringList listVal = QStringList::split( ",", valExpression );
+            kdDebug()<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
+
+            val->valMin = listVal[0].toDouble(&ok);
+            if ( !ok )
+            {
+                val->valMin = listVal[0].toInt(&ok);
+#if 0
+                if ( !ok )
+                    val->valMin = listVal[0];
+#endif
+            }
+            ok=false;
+            val->valMax = listVal[1].toDouble(&ok);
+            if ( !ok )
+            {
+                val->valMax = listVal[1].toInt(&ok);
+#if 0
+
+                if ( !ok )
+                    val->valMax = listVal[1];
+#endif
+            }
+        }
+        else if ( valExpression.contains( "cell-content-text-length-is-not-between" ) )
+        {
+            val->m_allow = Allow_TextLength;
+            val->m_cond = Different;
+            valExpression = valExpression.remove( "cell-content-text-length-is-not-between(" );
+            kdDebug()<<" valExpression :"<<valExpression<<endl;
+            valExpression = valExpression.remove( ")" );
+            kdDebug()<<" valExpression :"<<valExpression<<endl;
+            QStringList listVal = QStringList::split( ",", valExpression );
+            bool ok = false;
+
+            val->valMin = listVal[0].toDouble(&ok);
+            if ( !ok )
+            {
+                val->valMin = listVal[0].toInt(&ok);
+#if 0
+                if ( !ok )
+                   bool ok = false;
+             val->valMin = listVal[0];
+#endif
+            }
+            ok=false;
+            val->valMax = listVal[1].toDouble(&ok);
+            if ( !ok )
+            {
+                val->valMax = listVal[1].toInt(&ok);
+#if 0
+
+                if ( !ok )
+                    val->valMax = listVal[1];
+#endif
+            }
+
+
+
+        }
+        //TrueFunction ::= cell-content-is-whole-number() | cell-content-is-decimal-number() | cell-content-is-date() | cell-content-is-time()
+        else
+        {
+            if (valExpression.contains( "cell-content-is-whole-number()" ) )
+            {
+                val->m_allow =  Allow_Number;
+                valExpression = valExpression.remove( "cell-content-is-whole-number() and " );
+            }
+            else if (valExpression.contains( "cell-content-is-decimal-number()" ) )
+            {
+                val->m_allow = Allow_Integer;
+                valExpression = valExpression.remove( "cell-content-is-decimal-number() and " );
+            }
+            else if (valExpression.contains( "cell-content-is-date()" ) )
+            {
+                val->m_allow = Allow_Date;
+                valExpression = valExpression.remove( "cell-content-is-date() and " );
+            }
+            else if (valExpression.contains( "cell-content-is-time()" ) )
+            {
+                val->m_allow = Allow_Time;
+                valExpression = valExpression.remove( "cell-content-is-time() and " );
+            }
+            kdDebug()<<"valExpression :"<<valExpression<<endl;
+
+            if ( valExpression.contains( "cell-content()" ) )
+            {
+                valExpression = valExpression.remove( "cell-content()" );
+                loadOasisValidationCondition( val, valExpression );
+            }
+            //GetFunction ::= cell-content-is-between(Value, Value) | cell-content-is-not-between(Value, Value)
+            //for the moment we support just int/double value, not text/date/time :(
+            if ( valExpression.contains( "cell-content-is-between(" ) )
+            {
+                valExpression = valExpression.remove( "cell-content-is-between(" );
+                valExpression = valExpression.remove( ")" );
+                QStringList listVal = QStringList::split( "," , valExpression );
+                bool ok = false;
+                kdDebug()<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
+
+                val->valMin = listVal[0].toDouble(&ok);
+                if ( !ok )
+                {
+                    val->valMin = listVal[0].toInt(&ok);
+#if 0
+                    if ( !ok )
+                        val->valMin = listVal[0];
+#endif
+                }
+                ok=false;
+                val->valMax = listVal[1].toDouble(&ok);
+                if ( !ok )
+                {
+                    val->valMax = listVal[1].toInt(&ok);
+#if 0
+
+                    if ( !ok )
+                        val->valMax = listVal[1];
+#endif
+                }
+                val->m_cond = Between;
+            }
+            if ( valExpression.contains( "cell-content-is-not-between(" ) )
+            {
+                valExpression = valExpression.remove( "cell-content-is-not-between(" );
+                valExpression = valExpression.remove( ")" );
+                QStringList listVal = QStringList::split( ",", valExpression );
+                bool ok = false;
+                kdDebug()<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
+                val->valMin = listVal[0].toDouble(&ok);
+                if ( !ok )
+                {
+                    val->valMin = listVal[0].toInt(&ok);
+#if 0
+                    if ( !ok )
+                        val->valMin = listVal[0];
+#endif
+                }
+                ok=false;
+                val->valMax = listVal[1].toDouble(&ok);
+                if ( !ok )
+                {
+                    val->valMax = listVal[1].toInt(&ok);
+#if 0
+                    if ( !ok )
+                        val->valMax = listVal[1];
+#endif
+                }
+                val->m_cond = Different;
+            }
+        }
+    }
+    if ( element.hasAttribute( "table:allow-empty-cell" ) )
+    {
+        //todo implement it into kspread
+        //todo add attribute and config into kspread_cell
+    }
+    if ( element.hasAttribute( "table:base-cell-address" ) )
+    {
+        //todo what is it ?
+    }
+
+    //help is not implemented into kspread
+    QDomElement help = element.namedItem( "table:help-message" ).toElement();
+    if ( !help.isNull() )
+    {
+        if ( help.hasAttribute( "table:title" ) )
+            kdDebug()<<"help.attribute( table:title ) :"<<help.attribute( "table:title" )<<endl;
+        if ( help.hasAttribute( "table:display" ) )
+            kdDebug()<<"help.attribute( table:display ) :"<<help.attribute( "table:display" )<<endl;
+        QDomElement attrText = help.namedItem( "text:p" ).toElement();
+        if ( !attrText.isNull() )
+            kdDebug()<<"help text :"<<attrText.text()<<endl;
+    }
+
+    QDomElement error = element.namedItem( "table:error-message" ).toElement();
+    if ( !error.isNull() )
+    {
+        if ( error.hasAttribute( "table:title" ) )
+            val->title = error.attribute( "table:title" );
+        if ( error.hasAttribute( "table:message-type" ) )
+        {
+            QString str = error.attribute( "table:message-type" );
+            if ( str == "warning" )
+                val->m_action = Warning;
+            else if ( str == "information" )
+                val->m_action = Information;
+            else if ( str == "stop" )
+                val->m_action = Stop;
+            else
+                kdDebug()<<"validation : message type unknown  :"<<str<<endl;
+        }
+
+        if ( error.hasAttribute( "table:display" ) )
+        {
+            kdDebug()<<" display message :"<<error.attribute( "table:display" )<<endl;
+            //val->displayMessage = (error.attribute( "table:display" )=="true");
+        }
+        QDomElement attrText = error.namedItem( "text:p" ).toElement();
+        if ( !attrText.isNull() )
+            val->message = attrText.text();
+    }
+}
+
+
+void OpenCalcImport::loadOasisValidationCondition( KSpreadValidity* val,QString &valExpression )
+{
+    QString value;
+
+    if ( valExpression.contains( "<" ) )
+    {
+        value = valExpression.remove( "<" );
+        val->m_cond = Inferior;
+    }
+    else if(valExpression.contains( ">" ) )
+    {
+        value = valExpression.remove( ">" );
+        val->m_cond = Superior;
+    }
+    else if (valExpression.contains( "<=" ) )
+    {
+        value = valExpression.remove( "<=" );
+        val->m_cond = InferiorEqual;
+    }
+    else if (valExpression.contains( ">=" ) )
+    {
+        value = valExpression.remove( ">=" );
+        val->m_cond = SuperiorEqual;
+    }
+    else if (valExpression.contains( "=" ) )
+    {
+        value = valExpression.remove( "=" );
+        val->m_cond = Equal;
+    }
+    else if (valExpression.contains( "!=" ) )
+    {
+        //add Differentto attribute
+        //value = valExpression.remove( "!=" );
+        //val->m_cond = DifferentTo;
+    }
+    else
+        kdDebug()<<" I don't know how to parse it :"<<valExpression<<endl;
+    kdDebug()<<" value :"<<value<<endl;
+    bool ok = false;
+    val->valMin = value.toDouble(&ok);
+    if ( !ok )
+    {
+        val->valMin = value.toInt(&ok);
+#if 0
+        if ( !ok )
+            val->valMin = value;
+#endif
+    }
+
+}
+
 
 int OpenCalcImport::readMetaData()
 {

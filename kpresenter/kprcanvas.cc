@@ -1,6 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2002-2004 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -317,6 +318,19 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
             }
 
         }
+        else
+        {
+            if ( drawMode && m_drawModeLines.count() )
+            {
+                bufPainter.save();
+                bufPainter.setPen( m_view->kPresenterDoc()->presPen() );
+                for ( int i = 0; i < m_drawModeLines.count(); ++i )
+                {
+                  bufPainter.drawPolyline( m_drawModeLines[i] );
+                }
+                bufPainter.restore();
+            }
+        }
         bufPainter.end();
 
         bitBlt( this, paintEvent->rect().topLeft(), &buffer, paintEvent->rect() );
@@ -446,8 +460,8 @@ void KPrCanvas::drawGrid(QPainter *painter, const QRect &rect2) const
     double offsetX = doc->getGridX();
     double offsetY = doc->getGridY();
 
-    for ( double i = offsetX; ( zoomedX = m_view->zoomHandler()->zoomItX( i ) ) < pageRect.width(); i += offsetX )
-        for ( double j = offsetY; ( zoomedY = m_view->zoomHandler()->zoomItY( j ) ) < pageRect.height(); j += offsetY )
+    for ( double i = offsetX; ( zoomedX = m_view->zoomHandler()->zoomItX( i )+pageRect.left() ) < pageRect.right(); i += offsetX )
+        for ( double j = offsetY; ( zoomedY = m_view->zoomHandler()->zoomItY( j ) +pageRect.top()) < pageRect.bottom(); j += offsetY )
             if( rect2.contains(  zoomedX, zoomedY ) )
                 painter->drawPoint( zoomedX, zoomedY );
 
@@ -570,8 +584,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
     KPObject *kpobject = 0;
 
-    oldMx = contentsPoint.x();
-    oldMy = contentsPoint.y();
+    m_savedMousePos = contentsPoint;
 
     QPoint rasterPoint=applyGrid( e->pos(), true );
 
@@ -1073,8 +1086,6 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             setToolEditMode( TEM_MOUSE );
         }
     } else {
-        oldMx = e->x();
-        oldMy = e->y();
         if ( e->button() == LeftButton ) {
             if ( presMenu->isVisible() ) {
                 presMenu->hide();
@@ -1083,6 +1094,9 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 if ( drawMode ) {
                     setCursor( KPresenterUtils::penCursor() );
                     drawLineInDrawMode = true;
+                    m_drawModeLineIndex = 0;
+                    m_drawModeLines.append( QPointArray() );
+                    m_drawModeLines[m_drawModeLines.count() - 1].putPoints( m_drawModeLineIndex++, 1, e->x(), e->y() );
                 }
                 else
                     m_view->screenNext();
@@ -1171,6 +1185,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 
     if ( drawMode ) {
         drawLineInDrawMode = false;
+        m_drawModeLines[m_drawModeLines.count() - 1].putPoints( m_drawModeLineIndex++, 1, contentsPoint.x(), contentsPoint.y() );
         return;
     }
     bool state = m_view->kPresenterDoc()->snapToGrid();
@@ -1551,6 +1566,9 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 {
     QPoint contentsPoint( e->pos().x()+diffx(), e->pos().y()+diffy() );
+    int oldMx = m_savedMousePos.x();
+    int oldMy = m_savedMousePos.y();
+    m_savedMousePos = contentsPoint;
     KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( contentsPoint );
     if(m_currentTextObjectView)
     {
@@ -1648,7 +1666,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 } else if ( modType != MT_NONE && resizeObjNum ) {
                     int mx = e->x()+diffx();
                     int my = e->y()+diffy();
-                    
+
                     if ( m_view->kPresenterDoc()->snapToGrid() )
                     {
                         mx = applyGridOnPosX( mx );
@@ -1658,9 +1676,6 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                     }
 
                     resizeObject( modType, mx - oldMx, my - oldMy );
-
-                    oldMx = e->x()+diffx();
-                    oldMy = e->y()+diffy();
                 }
             } break;
             case TEM_ZOOM : {
@@ -2003,9 +2018,8 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
         p.begin( this );
         p.setPen( m_view->kPresenterDoc()->presPen() );
         p.drawLine( oldMx, oldMy, e->x(), e->y() );
-        oldMx = e->x();
-        oldMy = e->y();
         p.end();
+        m_drawModeLines[m_drawModeLines.count() - 1].putPoints( m_drawModeLineIndex++, 1, e->x(), e->y() );
     }
 
     if ( !editMode && !drawMode && !presMenu->isVisible() && fillBlack )
@@ -2119,11 +2133,11 @@ void KPrCanvas::limitSizeOfObject()
     QRect pageRect=m_activePage->getZoomPageRect();
 
     if(insRect.right()>pageRect.right()-1)
-        insRect.setRight(pageRect.width()-1);
+        insRect.setRight(pageRect.right()-1);
     else if( insRect.right()<pageRect.left()-1)
         insRect.setRight(pageRect.left()+1);
     if(insRect.bottom()>pageRect.bottom()-1)
-        insRect.setBottom(pageRect.height()-1);
+        insRect.setBottom(pageRect.bottom()-1);
     else if( insRect.bottom()<pageRect.top()-1)
         insRect.setBottom(pageRect.top()+1);
 }
@@ -2133,11 +2147,11 @@ QPoint KPrCanvas::limitOfPoint(const QPoint& _point) const
     QRect pageRect=m_activePage->getZoomPageRect();
     QPoint point(_point);
     if(point.x()>pageRect.right()-1)
-        point.setX(pageRect.width()-1);
+        point.setX(pageRect.right()-1);
     else if( point.x()<pageRect.left()-1)
         point.setX(pageRect.left()+1);
     if(point.y()>pageRect.bottom()-1)
-        point.setY(pageRect.height()-1);
+        point.setY(pageRect.bottom()-1);
     else if( point.y()<pageRect.top()-1)
         point.setY(pageRect.top()+1);
     return point;
@@ -2172,7 +2186,7 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
             slotGotoPage(); break;
         case Key_Home:  // go to first page
             if ( slideListIterator != slideList.begin() ) {
-                gotoPage( 1 );
+                presGotoFirstPage();
                 if ( !spManualSwitch() ) {
                     m_view->setCurrentTimer( 1 );
                     setNextPageTimer( true );
@@ -2181,7 +2195,7 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
             break;
         case Key_End:  // go to last page
             if ( slideListIterator != slideList.end() ) {
-                gotoPage( slideList.count() );
+                gotoPage( *(--slideList.end()) );
                 if ( !spManualSwitch() ) {
                     m_view->setCurrentTimer( 1 );
                     setNextPageTimer( true );
@@ -2409,6 +2423,60 @@ void KPrCanvas::deSelectObj( KPObject *kpobject )
     mouseSelectedObject = false;
     emit objectSelectedChanged();
 }
+bool KPrCanvas::exportPage( int nPage,
+                            int nWidth,
+                            int nHeight,
+                            const KURL& _fileURL,
+                            const char* format,
+                            int quality )
+{
+    bool res = false;
+    const QCursor oldCursor( cursor() );
+    setCursor( waitCursor );
+    QPixmap pix( nWidth, nHeight );
+    drawPageInPix( pix, nPage, 0, true, nWidth, nHeight );
+    if( !pix.isNull() ){
+        // Depending on the desired target size due to rounding
+        // errors during zoom the resulting pixmap *might* be
+        // 1 pixel or 2 pixels wider/higher than desired: we just
+        // remove the additional columns/rows.  This can be done
+        // since KPresenter is leaving a minimal border below/at
+        // the right of the image anyway.
+        const QSize desiredSize(nWidth, nHeight);
+        if( desiredSize != pix.size() )
+            pix.resize( desiredSize );
+        // save the pixmap to the desired file
+        KURL fileURL(_fileURL);
+        if( fileURL.protocol().isEmpty() )
+            fileURL.setProtocol( "file" );
+        const bool bLocalFile = fileURL.isLocalFile();
+        KTempFile* tmpFile = bLocalFile ? NULL : new KTempFile();
+        if( !bLocalFile )
+            tmpFile->setAutoDelete( true );
+        if( bLocalFile || 0 == tmpFile->status() ){
+            QFile file( bLocalFile ? fileURL.path(0) : tmpFile->name() );
+            if ( file.open( IO_ReadWrite ) ) {
+                res = pix.save( &file, format, quality );
+                file.close();
+            }
+            if( !bLocalFile ){
+                if( res ){
+#if KDE_IS_VERSION(3,1,90)
+                    res = KIO::NetAccess::upload( tmpFile->name(), fileURL, this );
+#else
+                    res = KIO::NetAccess::upload( tmpFile->name(), fileURL );
+#endif
+                }
+            }
+        }
+        if( !bLocalFile ){
+            delete tmpFile;
+        }
+    }
+    setCursor( oldCursor );
+    return res;
+}
+
 
 void KPrCanvas::selectAllObj()
 {
@@ -3154,6 +3222,9 @@ bool KPrCanvas::pNext( bool )
 
     goingBack = false;
 
+    // clear drawed lines
+    m_drawModeLines.clear();
+
     //kdDebug(33001) << "\n-------\nKPrCanvas::pNext currPresStep=" << currPresStep << " subPresStep=" << subPresStep << endl;
 
     // First try to go one sub-step further, if any object requires it
@@ -3201,7 +3272,7 @@ bool KPrCanvas::pNext( bool )
         KPresenterDoc * doc = m_view->kPresenterDoc();
         if ( !spManualSwitch() && nextPageTimer ) {
             QValueList<int>::ConstIterator it( slideListIterator );
-            m_view->setCurrentTimer( doc->pageList().at((*it) - 1 )->getPageTimer() * doc->getPresSpeed() );
+            m_view->setCurrentTimer( doc->pageList().at((*it) - 1 )->getPageTimer() / doc->getPresSpeed() );
 
             nextPageTimer = false;
 
@@ -3215,6 +3286,8 @@ bool KPrCanvas::pNext( bool )
 #endif
         QPixmap _pix1( desk.width(), desk.height() );
         drawCurrentPageInPix( _pix1 );
+
+        m_view->setPresentationDuration( currPresPage - 1 );
 
         currPresPage = *( ++slideListIterator );
         subPresStep = 0;
@@ -3261,8 +3334,6 @@ bool KPrCanvas::pNext( bool )
         }
 
         kPchangePages( this, _pix1, _pix2, _pageEffect, pageSpeedFakt() );
-
-        m_view->setPresentationDuration( currPresPage - 2 );
 
 
         if ( !spManualSwitch() )
@@ -3315,6 +3386,9 @@ bool KPrCanvas::pPrev( bool /*manual*/ )
     goingBack = true;
     subPresStep = 0;
 
+    // clear drawed lines
+    m_drawModeLines.clear();
+
     if ( (int)currPresStep > *presStepList.begin() ) {
         QValueList<int>::ConstIterator it = presStepList.find( currPresStep );
         currPresStep = *( --it );
@@ -3327,6 +3401,8 @@ bool KPrCanvas::pPrev( bool /*manual*/ )
             repaint( false );
             return false;
         }
+        m_view->setPresentationDuration( currPresPage - 1);
+
         currPresPage = *( --slideListIterator );
 
         tmpObjs.clear();
@@ -3340,8 +3416,6 @@ bool KPrCanvas::pPrev( bool /*manual*/ )
             tmpObjs.append(oIt.current());
         presStepList = doc->reorderPage( currPresPage - 1 );
         currPresStep = *( --presStepList.end() );
-
-        m_view->setPresentationDuration( currPresPage );
 
         return true;
     }
@@ -3377,14 +3451,46 @@ bool KPrCanvas::isOneObjectSelected() const
 
 // This one is used to generate the pixmaps for the HTML presentation,
 // for the pres-structure-dialog, for the sidebar previews, for template icons.
-void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum, int zoom, bool forceRealVariableValue )
+// Set forceWidth and/or forceHeight to override the zoom factor
+// and obtain a pixmap of the specified width and/or height.
+// By omitting one of them you make sure that the aspect ratio
+// of your page is used for the resulting image.
+void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum, int zoom,
+                               bool forceRealVariableValue,
+                               int forceWidth,
+                               int forceHeight )
 {
     //kdDebug(33001) << "Page::drawPageInPix" << endl;
     currPresPage = pgnum + 1;
 
-    int oldZoom = m_view->kPresenterDoc()->zoomHandler()->zoom();
+    KPresenterDoc *doc = m_view->kPresenterDoc();
+    int oldZoom = doc->zoomHandler()->zoom();
     bool oldDisplayFieldValue = false;
-    m_view->zoomDocument(zoom);
+
+    if( 0 < forceWidth || 0 < forceHeight )
+    {
+        const QRect rect( doc->getPageRect( true ) );
+        const double dRectHeight = static_cast<double>(rect.height());
+        const double dRectWidth  = static_cast<double>(rect.width());
+        double dForceHeight      = static_cast<double>(forceHeight);
+        double dForceWidth       = static_cast<double>(forceWidth);
+
+        // adjust width or height, in case one of them is missing
+        if( 0 >= forceWidth )
+            dForceWidth = dForceHeight * dRectWidth / dRectHeight;
+        else if( 0 >= forceHeight )
+            dForceHeight = dForceWidth * dRectHeight / dRectWidth;
+
+        // set the stretching values
+        doc->zoomHandler()->setResolution( dForceWidth / dRectWidth,
+                                           dForceHeight / dRectHeight );
+        // As of yet (Feb. 2004) the following call results
+        // in a NOP but be prepared for the future...
+        doc->newZoomAndResolution( false, false );
+    }else{
+        m_view->zoomDocument(zoom);
+    }
+
     if ( forceRealVariableValue )
     {
         oldDisplayFieldValue = m_view->kPresenterDoc()->getVariableCollection()->variableSetting()->displayFieldCode();
@@ -3425,7 +3531,6 @@ void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum, int zoom, bool forceRea
     //draw sticky object
     //the numbers for the sticky page have to be recalculated
     KPrPage* saveActivePage = m_activePage;
-    KPresenterDoc *doc = m_view->kPresenterDoc();
     doc->displayActivePage( doc->pageList().at( currPresPage-1 ) );
     setActivePage(doc->pageList().at( currPresPage - 1 ) );
     //setActivePage(m_view->kPresenterDoc()->pageList().at(currPresPage-1));
@@ -3464,13 +3569,13 @@ void KPrCanvas::drawCurrentPageInPix( QPixmap &_pix ) const
     p.end();
 }
 
-void KPrCanvas::printPage( QPainter* painter, int pageNum ) 
+void KPrCanvas::printPage( QPainter* painter, int pageNum )
 {
     //kdDebug(33001) << "KPrCanvas::printPage" << endl;
     KPrPage* saveActivePage = m_activePage;
     KPresenterDoc *doc = m_view->kPresenterDoc();
     KPrPage* page = doc->pageList().at( pageNum );
-    QRect rect = page->getZoomPageRect();  
+    QRect rect = page->getZoomPageRect();
     doc->displayActivePage( page );
     setActivePage( page );
     drawBackground( painter, rect );
@@ -4919,6 +5024,9 @@ void KPrCanvas::slotGotoPage()
 {
     setCursor( blankCursor );
     int pg = currPresPage;
+
+    m_view->setPresentationDuration( pg - 1 );
+
     pg = KPGotoPage::gotoPage( m_view->kPresenterDoc(), slideList, pg, this );
     gotoPage( pg );
 
@@ -4927,8 +5035,6 @@ void KPrCanvas::slotGotoPage()
         setNextPageTimer( true );
     }
 
-    m_view->setPresentationDuration( pg - 1 );
-
     if ( presMenu->isItemChecked ( PM_DM ) )
         setCursor( KPresenterUtils::penCursor() );
 }
@@ -4936,6 +5042,9 @@ void KPrCanvas::slotGotoPage()
 void KPrCanvas::gotoPage( int pg )
 {
     if ( pg != static_cast<int>( currPresPage ) ) {
+        // clear drawed lines
+        m_drawModeLines.clear();
+
         currPresPage = pg;
         kdDebug(33001) << "Page::gotoPage currPresPage=" << currPresPage << endl;
         slideListIterator = slideList.find( currPresPage );
@@ -4959,6 +5068,11 @@ void KPrCanvas::gotoPage( int pg )
         setFocus();
         m_view->refreshPageButton();
     }
+}
+
+void KPrCanvas::presGotoFirstPage()
+{
+    gotoPage( *slideList.begin() );
 }
 
 KPTextObject* KPrCanvas::kpTxtObj() const
@@ -5407,9 +5521,9 @@ void KPrCanvas::moveObject( int x, int y, bool key )
         point.setX( pageRect.left() );
         m_boundingRect.moveTopLeft( point );
     }
-    else if ( ( boundingRect.left()+m_hotSpot.x() > pageRect.width() ) || ( m_boundingRect.right() > pageRect.width() ) )
+    else if ( ( boundingRect.left()+m_hotSpot.x() > pageRect.right( ) ) || ( m_boundingRect.right() > pageRect.right() ) )
     {
-        point.setX( pageRect.width()-m_boundingRect.width() );
+        point.setX( pageRect.right()-m_boundingRect.width() );
         m_boundingRect.moveTopLeft( point );
     }
 
@@ -5422,9 +5536,9 @@ void KPrCanvas::moveObject( int x, int y, bool key )
         point.setY( pageRect.top() );
         m_boundingRect.moveTopLeft( point );
     }
-    else if( ( boundingRect.top()+m_hotSpot.y() > pageRect.height() ) || ( m_boundingRect.bottom() > pageRect.height() ) )
+    else if( ( boundingRect.top()+m_hotSpot.y() > pageRect.bottom() ) || ( m_boundingRect.bottom() > pageRect.bottom() ) )
     {
-        point.setY( pageRect.height() - m_boundingRect.height() );
+        point.setY( pageRect.bottom() - m_boundingRect.height() );
         m_boundingRect.moveTopLeft( point );
     }
 
@@ -5474,8 +5588,8 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
                     (kpobject->isSelected()) && drawContour);
     switch ( _modType ) {
     case MT_RESIZE_LU: {
-        // let the edge of the page be on the grid, this makes it 
-        // also possible to resize a object which is close to the edge 
+        // let the edge of the page be on the grid, this makes it
+        // also possible to resize a object which is close to the edge
         if( (objRect.left() + dx) < (pageRect.left() - 1) )
             dx = pageRect.left() - objRect.left();
         if( (objRect.top() + dy) < (pageRect.top() - 1) )
@@ -5503,7 +5617,7 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
             kpobject->moveBy( KoPoint( dx, 0 ) );
     } break;
     case MT_RESIZE_LD: {
-        if( (objRect.bottom() + dy) > pageRect.height())
+        if( (objRect.bottom() + dy) > pageRect.bottom())
             dy = pageRect.bottom() - objRect.bottom();
         if( (objRect.left() + dx) < (pageRect.left() - 1) )
             dx = pageRect.left() - objRect.left();
@@ -5516,7 +5630,7 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
             kpobject->moveBy( KoPoint( dx, 0 ) );
     } break;
     case MT_RESIZE_RU: {
-        if( (objRect.right() + dx) > pageRect.width() )
+        if( (objRect.right() + dx) > pageRect.right() )
             dx = pageRect.right() - objRect.right();
         if( (objRect.top() + dy) < (pageRect.top() - 1) )
             dy = pageRect.top() - objRect.top();
@@ -5530,7 +5644,7 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
     } break;
     case MT_RESIZE_RT: {
         dy = 0;
-        if( (objRect.right() + dx) > pageRect.width() )
+        if( (objRect.right() + dx) > pageRect.right() )
             dx = pageRect.right() - objRect.right();
         dx = applyGridX( objRect.right() + dx ) - objRect.right();
         if ( keepRatio && ratio != 0.0 )
@@ -5538,9 +5652,9 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
         kpobject->resizeBy( dx, dy );
     } break;
     case MT_RESIZE_RD: {
-        if( (objRect.bottom() + dy) > pageRect.height() )
+        if( (objRect.bottom() + dy) > pageRect.bottom() )
             dy = pageRect.bottom() - objRect.bottom();
-        if( (objRect.right() + dx) > pageRect.width() )
+        if( (objRect.right() + dx) > pageRect.right() )
             dx = pageRect.right() - objRect.right();
         dx = applyGridX( objRect.right() + dx ) - objRect.right();
         dy = applyGridY( objRect.bottom() + dy ) - objRect.bottom();
@@ -5558,11 +5672,11 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
         kpobject->resizeBy( -dx, -dy );
         if ( objSize != kpobject->getSize() )
             kpobject->moveBy( KoPoint( 0, dy ) );
-            
+
     } break;
     case MT_RESIZE_DN: {
         dx = 0;
-        if( (objRect.bottom() + dy) > pageRect.height() )
+        if( (objRect.bottom() + dy) > pageRect.bottom() )
             dy = pageRect.bottom() - objRect.bottom();
         dy = applyGridY( objRect.bottom() + dy ) - objRect.bottom();
         if ( keepRatio && ratio != 0.0 )
@@ -6937,7 +7051,7 @@ QPoint KPrCanvas::applyGrid( const QPoint &pos,bool offset )
     QPoint point( m_view->kPresenterDoc()->zoomHandler()->zoomPoint( newPos ) );
     if ( offset )
       point -= QPoint( diffx(), diffy() );
-    return point;    
+    return point;
 }
 
 int KPrCanvas::applyGridOnPosX( int pos ) const
@@ -7021,7 +7135,7 @@ KoPoint KPrCanvas::applyGrid( const KoPoint &pos )
 {
     if (  !m_view->kPresenterDoc()->snapToGrid() )
         return pos;
-    
+
     KoPoint newPos;
     newPos.setX( applyGridX( pos.x() ) );
     newPos.setY( applyGridY( pos.y() ) );

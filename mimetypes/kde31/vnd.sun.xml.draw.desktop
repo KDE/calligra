@@ -1,0 +1,34 @@
+[Desktop Entry]
+Encoding=UTF-8
+Comment=OpenOffice.org Drawing
+Comment[bg]=Изображение на OpenOffice.org
+Comment[ca]=Dibuix OpenOffice.org
+Comment[cs]=Kresba OpenOffice.org
+Comment[da]=OpenOffice.org-tegning
+Comment[de]=OpenOffice.org-Zeichnung
+Comment[el]=Σχέδιο του OpenOffice.org
+Comment[es]=Dibujo de OpenOffice.org
+Comment[et]=OpenOffice.org joonistus
+Comment[fi]=OpenOffice.org piirros
+Comment[fr]=Dessin OpenOffice.org
+Comment[hu]=OpenOffice.org rajz
+Comment[it]=Disegno OpenOffice.org
+Comment[nb]=OpenOffice.org-tegning
+Comment[nl]=OpenOffice.org-tekening
+Comment[nn]=OpenOffice.org-teikning
+Comment[pt]=Desenho do OpenOffice.org
+Comment[pt_BR]=Desenho do Openoffice.org
+Comment[ru]=Рисунок OpenOffice.org
+Comment[se]=OpenOffice.org sárgun
+Comment[sl]=Risanje za OpenOffice.org
+Comment[sr]=OpenOffice.org-ов цртеж
+Comment[sv]=Openoffice.org-teckning
+Comment[tg]=Расми OpenOffice.org
+Comment[zh_CN]=OpenOffice.org 绘图
+MimeType=application/vnd.sun.xml.draw
+Type=MimeType
+Icon=006_drawing_document.xpm
+Patterns=*.sxd;*.SXD;
+[Property::X-KDE-NativeExtension]
+Type=QString
+Value=.sxd

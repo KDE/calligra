@@ -1,0 +1,38 @@
+SUBDIRS = straight_connector
+lib_LTLIBRARIES =libkivioconnectortool.la
+
+
+INCLUDES = -I$(top_srcdir)/kivio/kiviopart\
+	-I$(top_srcdir)/kivio/kiviopart/kiviosdk\
+	-I$(top_srcdir)/kivio/kiviopart/tools\
+	-I$(top_srcdir)/kivio/plugins/kivioconnectortool/straight_connector \
+	$(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) $(all_includes)
+libkivioconnectortool_la_METASOURCES = AUTO
+libkivioconnectortool_la_SOURCES = \
+		plugin.cpp\
+		tool_connector.cpp
+EXTRA_DIST = \
+		plugin.h\
+		plugin.cpp\
+		kivio_connector.xpm\
+		tool_connector.h\
+		tool_connector.cpp\
+		kivioconnectortool.rc\
+		kivioconnectortool.desktop\
+		kivio_connector_cursor2.xpm\
+		kivio_connector_cursor1.xpm
+
+libkivioconnectortool_la_LDFLAGS = -module $(KDE_PLUGIN)
+libkivioconnectortool_la_LIBADD = $(all_libraries) $(LIB_KOPAINTER) $(top_builddir)/kivio/kiviopart/libkiviopart.la
+
+rc_DATA = kivioconnectortool.rc
+rcdir = $(kde_datadir)/kivio/kpartplugins
+
+desktop_DATA = kivioconnectortool.desktop
+desktopdir = $(kde_servicesdir)
+
+kiviopics_DATA = kivio_connector_cursor1.xpm kivio_connector_cursor2.xpm
+kiviopicsdir = $(kde_datadir)/kivio/pics
+
+kivioicondir = $(kde_datadir)/kivio/icons
+kivioicon_ICON = AUTO

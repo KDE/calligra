@@ -1147,7 +1147,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         int ret = KMessageBox::warningContinueCancel(
             0, i18n("This document was created with a newer version of KWord (syntax version: %1)\n"
                     "Opening it in this version of KWord will lose some information.").arg(m_syntaxVersion),
-            i18n("File Format Mismatch"), i18n("Continue") );
+            i18n("File Format Mismatch"), KStdGuiItem::cont() );
         if ( ret == KMessageBox::Cancel )
         {
             setErrorMessage( "USER_CANCELED" );
@@ -2599,13 +2599,12 @@ bool KWDocument::completeSaving( KoStore *_store )
     }
     if (specialOutputFlag()==SaveAsKOffice1dot1)
     {
-        m_pictureCollection.saveToStoreAsKOffice1Dot1( KoPictureCollection::CollectionImage, _store, savePictures );
+        return m_pictureCollection.saveToStoreAsKOffice1Dot1( KoPictureCollection::CollectionImage, _store, savePictures );
     }
     else
     {
-        m_pictureCollection.saveToStore( KoPictureCollection::CollectionPicture, _store, savePictures );
+        return m_pictureCollection.saveToStore( KoPictureCollection::CollectionPicture, _store, savePictures );
     }
-    return TRUE;
 }
 
 void KWDocument::addView( KoView *_view )

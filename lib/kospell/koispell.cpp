@@ -117,9 +117,10 @@ void KOISpell::startIspell()
         kdError(30006) << "Spelling configuration error, client=" << ksconfig->client() <<endl;
     }
 
-    // TODO: add option -h to ignore HTML (XML) code
     if (ksconfig->client() == KOS_CLIENT_ISPELL || ksconfig->client() == KOS_CLIENT_ASPELL)
     {
+        // -a : pipe mode
+        // -S : sort suggestions by probable correctness
         *proc << "-a" << "-S";
         switch ( type )
         {
@@ -171,8 +172,17 @@ void KOISpell::startIspell()
         //Note to potential debuggers:  -Tlatin2 _is_ being added on the
         //  _first_ try.  But, some versions of ispell will fail with this
         // option, so kspell tries again without it.  That's why as 'ps -ax'
-        // shows "ispell -a -S ..." withou the "-Tlatin2" option.
-
+        // shows "ispell -a -S ..." without the "-Tlatin2" option.
+        /*
+          The background is that -T does not define something like an
+          encoding but -T defines something like a mode. And the potential
+          modes are different for each language. (It is defined in ispell's
+          *.aff files.)
+          
+          Note that ispell called without the appopriate -T means that the
+          language does not have special characters (e.g. accents) anymore.
+         */
+        
         if (trystart<1)
             switch (ksconfig->encoding())
             {
@@ -185,6 +195,14 @@ void KOISpell::startIspell()
             case KOS_E_LATIN3:
                 *proc << "-Tlatin3";
                 break;
+            case KOS_E_LATIN15:
+                /*
+                 There is no known ispell dictionary using ISO-8859-15
+                 but many users are tempted to use that setting. (Bug #33108)
+                 So use ISO-8859-1 instead.
+                */
+                *proc << "-Tlatin1";
+                break;
 
                 // add the other charsets here
             case KOS_E_LATIN4:
@@ -193,10 +211,9 @@ void KOISpell::startIspell()
             case KOS_E_LATIN8:
             case KOS_E_LATIN9:
             case KOS_E_LATIN13:
-            case KOS_E_LATIN15:
 
                 // will work, if this is the default charset in the dictionary
-                kdError(750) << "charsets iso-8859-4 .. iso-8859-15 not supported yet" << endl;
+                kdError(30006) << "charsets iso-8859-4 .. iso-8859-13 not supported yet" << endl;
                 break;
 
             case KOS_E_UTF8:
@@ -217,12 +234,10 @@ void KOISpell::startIspell()
           }
         */
 
-
-        // -a : pipe mode
-        // -S : sort suggestions by probable correctness
     }
     else       // hspell doesn't need all the rest of the options
-        *proc << "-a";
+        *proc << "-a";        // -a : pipe mode
+
     if (trystart==0) //don't connect these multiple times
     {
         connect (proc, SIGNAL (  receivedStderr (KProcess *, char *, int)),
@@ -1023,6 +1038,7 @@ void KOISpell::check2 (KProcIO *)
       //      kdDebug(30006) << "check2() done" << endl;
       newbuffer.truncate (newbuffer.length()-2);
       emitProgress();
+      NOOUTPUT( check2 );
       emit done (newbuffer);
     }
   recursive = false;
@@ -1234,11 +1250,10 @@ KOISpell::modalCheck( QString& text, KOSpellConfig* _kcs )
 				0, _kcs, true, true );
     //qApp->enter_loop();
 
-    while (spell->status()!=Finished)
+    while ((spell->status()==Starting) || (spell->status()==Running) || (spell->status()==Cleaning))
       kapp->processEvents();
 
     text = modaltext;
-
 
     delete spell;
     return modalreturn;

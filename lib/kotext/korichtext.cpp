@@ -495,14 +495,16 @@ void KoTextCursor::insert( const QString &str, bool checkNewLine, QMemArray<KoTe
     } else {
 	QStringList lst = QStringList::split( '\n', s, TRUE );
 	QStringList::Iterator it = lst.begin();
-	int y = string->rect().y() + string->rect().height();
+	//int y = string->rect().y() + string->rect().height();
 	int lastIndex = 0;
 	KoTextFormat *lastFormat = 0;
 	for ( ; it != lst.end(); ) {
 	    if ( it != lst.begin() ) {
 		splitAndInsertEmptyParag( FALSE, TRUE );
 		//string->setEndState( -1 );
+#if 0 // no!
 		string->prev()->format( -1, FALSE );
+#endif
 		if ( lastFormat && formatting && string->prev() ) {
 		    lastFormat->addRef();
 		    string->prev()->string()->setFormat( string->prev()->length() - 1, lastFormat, TRUE );
@@ -532,16 +534,17 @@ void KoTextCursor::insert( const QString &str, bool checkNewLine, QMemArray<KoTe
 
 	    idx += s.length();
 	}
+#if 0  //// useless and wrong. We'll format things and move them down correctly in KoTextObject::insert().
 	string->format( -1, FALSE );
 	int dy = string->rect().y() + string->rect().height() - y;
+#endif
 	KoTextParag *p = string;
 	p->setParagId( p->prev()->paragId() + 1 );
 	p = p->next();
 	while ( p ) {
 	    p->setParagId( p->prev()->paragId() + 1 );
-	    p->move( dy );
+	    //p->move( dy );
 	    p->invalidate( 0 );
-	    //p->setEndState( -1 );
 	    p = p->next();
 	}
     }

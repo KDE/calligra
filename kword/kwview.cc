@@ -5434,15 +5434,12 @@ void KWView::spellCheckerDone( const QString & )
 void KWView::clearSpellChecker()
 {
     kdDebug(32001) << "KWView::clearSpellChecker" << endl;
-    delete m_spell.kospell;
-    m_spell.kospell=0;
-#if 0
-    if ( m_spell.kspell ) {
-        m_spell.kspell->cleanUp();
-        delete m_spell.kspell;
-        m_spell.kspell = 0;
+    if ( m_spell.kospell ) {
+        m_spell.kospell->cleanUp();
+        delete m_spell.kospell;
+        m_spell.kospell = 0;
     }
-#endif
+
     delete m_spell.textIterator;
     m_spell.textIterator = 0L;
     if(m_spell.macroCmdSpellCheck)
@@ -7212,8 +7209,11 @@ void KWView::addWordToDictionary()
     if ( edit && m_doc->backgroundSpellCheckEnabled() )
     {
         QString word = edit->wordUnderCursor( *edit->cursor() );
-        if ( !word.isEmpty())
+        if ( !word.isEmpty()) {
             m_doc->addWordToDictionary( word);
+            // Re-check everything to make this word normal again
+            m_doc->reactivateBgSpellChecking();
+        }
     }
 }
 

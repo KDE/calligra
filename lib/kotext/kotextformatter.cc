@@ -22,6 +22,7 @@
 #include "kotextdocument.h"
 #include "kozoomhandler.h"
 #include "kohyphen/kohyphen.h"
+#include "koparagcounter.h"
 
 #include <kdebug.h>
 
@@ -128,6 +129,11 @@ bool KoTextFormatterCore::format()
     x = left;
     if ( doc && !rtl )
         x += parag->firstLineMargin();
+    // Add the width of the paragraph counter - first line of parag only.
+    if( parag->counter() && !rtl &&
+    	(( parag->counter()->alignment() == Qt::AlignLeft ) || ( parag->counter()->alignment() == Qt::AlignAuto )))
+        x += parag->counterWidth(); // in LU pixels
+
     int curLeft = left;
     y = doc && doc->addMargins() ? parag->topMargin() : 0;
     // #57555, top margin doesn't apply if parag at top of page
@@ -336,7 +342,7 @@ bool KoTextFormatterCore::format()
                 // Breaking after i isn't possible, i is too far already
                 int maxlen = i - wordStart; // we can't accept to break after maxlen
                 QString word = string->mid( wordStart, maxlen );
-                int wordEnd = i + 1;
+                int wordEnd = i;
                 // but we need to compose the entire word, to hyphenate it
                 while ( wordEnd < len && !settings->isBreakable( string, wordEnd ) ) {
                     word += string->at(wordEnd).c;

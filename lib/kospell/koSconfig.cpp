@@ -22,7 +22,7 @@
 #include <qcombobox.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qpushbutton.h>
+#include <kpushbutton.h>
 #include <qwhatsthis.h>
 #include <kapplication.h>
 #include <kconfig.h>
@@ -32,6 +32,7 @@
 #include <kglobal.h>
 #include <klineedit.h>
 #include <klocale.h>
+#include <kstdguiitem.h>
 
 #include "koSconfig.h"
 
@@ -178,7 +179,7 @@ KOSpellConfig::KOSpellConfig( QWidget *parent, const char *name,
 
     if( addHelpButton == true )
     {
-        QPushButton *pushButton = new QPushButton( i18n("&Help"), this );
+        QPushButton *pushButton = new KPushButton( KStdGuiItem::help(), this );
         connect( pushButton, SIGNAL(clicked()), this, SLOT(sHelp()) );
         glay->addWidget(pushButton, 10, 2);
     }
@@ -492,24 +493,14 @@ void KOSpellConfig::fillInDialog ()
 
     if (dictFromList())
     {
+        QString dict = dictionary();
         if (iclient == KOS_CLIENT_ISPELL)
         {
-            for (unsigned int i=0; i<langfnames.count(); i++)
-            {
-                if (langfnames[i] == dictionary())
-                    whichelement=i;
-            }
+            whichelement = langfnames.findIndex( dict );
         }
         else if(iclient == KOS_CLIENT_ASPELL)
         {
-            for (unsigned int i=0; i<listOfLanguageFileName().count(); i++)
-            {
-                if (listOfLanguageFileName()[i] == dictionary())
-                {
-                    whichelement=i;
-                    break;
-                }
-            }
+            whichelement = listOfLanguageFileName().findIndex( dict );
         }
         else if (iclient == KOS_CLIENT_HSPELL)
         {
@@ -521,13 +512,13 @@ void KOSpellConfig::fillInDialog ()
     }
     dictcombo->setMinimumWidth (dictcombo->sizeHint().width());
 
-    if (dictionary().isEmpty() ||  whichelement!=-1)
+    if (dictionary().isEmpty() || whichelement!=-1)
     {
         setDictFromList (TRUE);
         if (whichelement!=-1)
             dictcombo->setCurrentItem(whichelement);
     }
-    else
+    else // i.e. not found
     {
         //don't use langname !!!!!!!!!
         if (langfnames.count()>=1)
@@ -649,11 +640,10 @@ void KOSpellConfig::setDictionary (const QString &s)
 {
     qsdict=s; //.copy();
 
-    if (qsdict.length()>5)
-        if ((signed)qsdict.find(".hash")==(signed)qsdict.length()-5)
-            qsdict.remove (qsdict.length()-5,5);
+    if (qsdict.endsWith(".hash"))
+        qsdict.truncate(qsdict.length()-5);
 
-
+    // ## duplicate code with fillInDialog
     if(dictcombo)
     {
         int whichelement=-1;
@@ -661,25 +651,11 @@ void KOSpellConfig::setDictionary (const QString &s)
         {
             if (iclient == KOS_CLIENT_ISPELL)
             {
-                for (unsigned int i=0; i<langfnames.count(); i++)
-                {
-                    if (langfnames[i] == s )
-                    {
-                        whichelement=i;
-                        break;
-                    }
-                }
+                whichelement = langfnames.findIndex( qsdict );
             }
             else if(iclient == KOS_CLIENT_ASPELL)
             {
-                for (unsigned int i=0; i<listOfLanguageFileName().count(); i++)
-                {
-                    if (listOfLanguageFileName()[i] == s )
-                    {
-                        whichelement=i;
-                        break;
-                    }
-                }
+                whichelement = listOfLanguageFileName().findIndex( qsdict );
             }
 #if 0
             else if (iclient == KOS_CLIENT_HSPELL)
@@ -695,14 +671,16 @@ void KOSpellConfig::setDictionary (const QString &s)
             }
         }
     }
+
+#if 0 // keep the distinction between e.g. british and american, don't resolve all to "en"
     QString ab, desc;
     interpret( qsdict, ab, desc );
     qsdict = ab;
+#endif
 }
 
 void KOSpellConfig::setDictFromList (bool dfl)
 {
-  //  kdebug (KDEBUG_INFO, 750, "sdfl = %d", dfl);
   dictfromlist=dfl;
 }
 
@@ -797,7 +775,6 @@ void
 KOSpellConfig::sPathDictionary(bool on)
 {
   return; //enough for now
-
 
   if (on)
     {
