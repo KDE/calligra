@@ -569,16 +569,26 @@ class ClassExportFilterBase
     public: //Non-virtual
         bool filter(const QString  &filenameIn, const QString  &filenameOut);
         QString escapeText(QString& str) const;
+        QString getHtmlOpeningTagExtraAttributes(void) const;
     public: //virtual
-        virtual bool isXML(void) {return false;}
+        virtual bool isXML(void) const {return false;}
         virtual QString getDocType(void) const = 0;
-        virtual QString getHtmlOpeningTagExtraAttributes(void) const = 0;
         virtual QString getBodyOpeningTagExtraAttributes(void) const = 0;
         virtual void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText) = 0;
         virtual QString getStyleElement(void) {return QString::null;} //Default is no style
     protected:
         QDomDocument qDomDocumentIn;
 };
+
+QString ClassExportFilterBase::getHtmlOpeningTagExtraAttributes(void) const
+{
+	if (isXML())
+	{
+    	// XHTML must return an extra attribute defining its namespace (in the <html> opening tag)
+	    return " xmlns=\"http://www.w3.org/1999/xhtml\""; // Leading space is important!
+	}
+	return QString::null;
+}
 
 static void CreateMissingFormatData(QString &paraText, QValueList<FormatData> &paraFormatDataList)
 {
@@ -1183,7 +1193,6 @@ class ClassExportFilterHtmlTransitional : public ClassExportFilterBase
         virtual ~ClassExportFilterHtmlTransitional(void) {}
     public: //virtual
         virtual QString getDocType(void) const;
-        virtual QString getHtmlOpeningTagExtraAttributes(void) const { return QString::null; }
         virtual QString getBodyOpeningTagExtraAttributes(void) const;
         virtual void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText);
 };
@@ -1207,17 +1216,14 @@ void ClassExportFilterHtmlTransitional::ProcessParagraphData ( QString &paraText
 
 // ClassExportFilterHtmlTransitional (normal XHTML 1.0 Transitional)
 
-class ClassExportFilterXHtmlTransitional : public ClassExportFilterBase
+class ClassExportFilterXHtmlTransitional : public ClassExportFilterHtmlTransitional
 {
     public:
         ClassExportFilterXHtmlTransitional(void) {}
         virtual ~ClassExportFilterXHtmlTransitional(void) {}
     public: //virtual
-        virtual bool isXML(void) {return true;}
+        virtual bool isXML(void) const {return true;}
         virtual QString getDocType(void) const;
-        virtual QString getHtmlOpeningTagExtraAttributes(void) const;
-        virtual QString getBodyOpeningTagExtraAttributes(void) const;
-        virtual void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText);
 };
 
 QString ClassExportFilterXHtmlTransitional::getDocType(void) const
@@ -1227,33 +1233,15 @@ QString ClassExportFilterXHtmlTransitional::getDocType(void) const
     return "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"DTD/xhtml1-transitional.dtd\">";
 }
 
-QString ClassExportFilterXHtmlTransitional::getHtmlOpeningTagExtraAttributes(void) const
-{
-    // XHTML must return an extra attribute defining its namespace (in the <html> opening tag)
-    return " xmlns=\"http://www.w3.org/1999/xhtml\""; // Leading space is important!
-}
-
-QString ClassExportFilterXHtmlTransitional::getBodyOpeningTagExtraAttributes(void) const
-{
-    // Define the background colour as white!
-    return " bgcolor=\"#FFFFFF\""; // Leading space is important!
-}
-
-void ClassExportFilterXHtmlTransitional::ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText)
-{
-    ProcessParagraphDataTransitional(paraText,paraFormatDataList,outputText,this);
-}
-
 // ClassExportFilterHtmlSpartan (HTML 4.01 Strict, only document structure, no (HTML-)deprecated formattings)
 
-class ClassExportFilterHtmlSpartan : public ClassExportFilterHtmlTransitional
+class ClassExportFilterHtmlSpartan : public ClassExportFilterBase
 {
     public:
         ClassExportFilterHtmlSpartan (void) {}
         virtual ~ClassExportFilterHtmlSpartan (void) {}
     public: //virtual
         virtual QString getDocType(void) const;
-        virtual QString getHtmlOpeningTagExtraAttributes(void) const;
         virtual QString getBodyOpeningTagExtraAttributes(void) const;
         virtual void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText);
 };
@@ -1264,14 +1252,8 @@ QString ClassExportFilterHtmlSpartan::getDocType(void) const
     return "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">";
 }
 
-QString ClassExportFilterHtmlSpartan::getHtmlOpeningTagExtraAttributes(void) const
-{
-    return QString::null;
-}
-
 QString ClassExportFilterHtmlSpartan::getBodyOpeningTagExtraAttributes(void) const
 {
-    // Define the background colour as white!
     return QString::null;
 }
 
@@ -1282,17 +1264,14 @@ void ClassExportFilterHtmlSpartan::ProcessParagraphData ( QString &paraText, QVa
 
 // ClassExportFilterXHtmlSpartan (HTML 4.01 Strict, only document structure, no (HTML-)deprecated formattings)
 
-class ClassExportFilterXHtmlSpartan : public ClassExportFilterHtmlTransitional
+class ClassExportFilterXHtmlSpartan : public ClassExportFilterHtmlSpartan
 {
     public:
         ClassExportFilterXHtmlSpartan (void) {}
         virtual ~ClassExportFilterXHtmlSpartan (void) {}
     public: //virtual
-        virtual bool isXML(void) {return true;}
+        virtual bool isXML(void) const {return true;}
         virtual QString getDocType(void) const;
-        virtual QString getHtmlOpeningTagExtraAttributes(void) const;
-        virtual QString getBodyOpeningTagExtraAttributes(void) const;
-        virtual void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText);
 };
 
 QString ClassExportFilterXHtmlSpartan::getDocType(void) const
@@ -1301,39 +1280,31 @@ QString ClassExportFilterXHtmlSpartan::getDocType(void) const
     return "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"DTD/xhtml1-strict.dtd\">";
 }
 
-QString ClassExportFilterXHtmlSpartan::getHtmlOpeningTagExtraAttributes(void) const
-{
-    // XHTML must return an extra attribute defining its namespace (in the <html> opening tag)
-    return " xmlns=\"http://www.w3.org/1999/xhtml\""; // Leading space is important!
-}
-
-QString ClassExportFilterXHtmlSpartan::getBodyOpeningTagExtraAttributes(void) const
-{
-    return QString::null;
-}
-
-void ClassExportFilterXHtmlSpartan::ProcessParagraphData ( QString &paraText, QValueList<FormatData> &, QString &outputText)
-{
-    outputText += escapeText(paraText); //TODO: do the real implementation
-}
-
 // ClassExportFilterHtmlStyle (HTML 4.01 Strict, style using CSS2, no style sheets)
-class ClassExportFilterHtmlStyle : public ClassExportFilterHtmlSpartan
+class ClassExportFilterHtmlStyle : public ClassExportFilterBase
 {
     public:
         ClassExportFilterHtmlStyle (void) {}
         virtual ~ClassExportFilterHtmlStyle (void) {}
     public: //virtual
+        virtual QString getDocType(void) const;
+        virtual QString getBodyOpeningTagExtraAttributes(void) const;
         virtual void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText);
         virtual QString getStyleElement(void);
 };
+
+QString ClassExportFilterHtmlStyle::getDocType(void) const
+{
+    // We are STRICT
+    return "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">";
+}
 
 void ClassExportFilterHtmlStyle::ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText)
 {
     ProcessParagraphDataStyle(paraText,paraFormatDataList,outputText,this);
 }
 
-QString ClassExportFilterHtmlStyle::getStyleElement()
+QString ClassExportFilterHtmlStyle::getStyleElement(void)
 {
     QString str;
     str="<style type=\"text/css\">\n";
@@ -1344,23 +1315,30 @@ QString ClassExportFilterHtmlStyle::getStyleElement()
     return str;
 }
 
+QString ClassExportFilterHtmlStyle::getBodyOpeningTagExtraAttributes(void) const
+{
+    return QString::null;
+}
+
 // ClassExportFilterXHtmlStyle (HTML 4.01 Strict, style using CSS2, no style sheets)
-class ClassExportFilterXHtmlStyle : public ClassExportFilterXHtmlSpartan
+class ClassExportFilterXHtmlStyle : public ClassExportFilterHtmlStyle
 {
     public:
         ClassExportFilterXHtmlStyle (void) {}
         virtual ~ClassExportFilterXHtmlStyle (void) {}
     public: //virtual
-        virtual void ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText);
+        virtual bool isXML(void) const {return true;}
+        virtual QString getDocType(void) const;
         virtual QString getStyleElement(void);
 };
 
-void ClassExportFilterXHtmlStyle::ProcessParagraphData ( QString &paraText, QValueList<FormatData> &paraFormatDataList, QString &outputText)
+QString ClassExportFilterXHtmlStyle::getDocType(void) const
 {
-    ProcessParagraphDataStyle(paraText,paraFormatDataList,outputText,this);
+    // We are STRICT
+    return "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"DTD/xhtml1-strict.dtd\">";
 }
 
-QString ClassExportFilterXHtmlStyle::getStyleElement()
+QString ClassExportFilterXHtmlStyle::getStyleElement(void)
 {
     //NOTE: in XHTML 1.0, you cannot put the style definition into HTML comments
     QString str;
@@ -1433,12 +1411,22 @@ bool HTMLExport::filter(const QString  &filenameIn,
         kdDebug(30503) << "Unknown XHTML option" << endl;
         exportFilter=new ClassExportFilterXHtmlTransitional;
     }
-    else
-    { //HTML 4.01 Transitional
+    else if (param.contains("HTML",false)>0)
+    { //XHTML 1.0 Transitional
         kdDebug(30503) << "Unknown HTML option" << endl;
         exportFilter=new ClassExportFilterHtmlTransitional;
     }
-    //TODO memory failure recovery
+    else
+    { // default: XHTML 1.0 Transitional
+        kdDebug(30503) << "Unknown option" << endl;
+        exportFilter=new ClassExportFilterXHtmlTransitional;
+    }
+
+    if (!exportFilter)
+    {
+        kdError(30503) << "No (X)HTML filter created! Aborting! (Memory problem?)" << endl;
+        return false;
+    }
 
     // Do the work!
     bool result = exportFilter->filter(filenameIn,filenameOut);
