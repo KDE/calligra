@@ -310,12 +310,12 @@ KarbonPart::saveOasis( KoStore *store, KoXmlWriter *manifestWriter )
 	styles = mainStyles.styles( VDocument::STYLE_LINEAR_GRADIENT );
 	it = styles.begin();
 	for( ; it != styles.end() ; ++it )
-		(*it).style->writeStyle( &styleWriter, mainStyles, "svg:linearGradient", (*it).name, "", true,  true /*add draw:name*/);
+		(*it).style->writeStyle( &styleWriter, mainStyles, "svg:linearGradient", (*it).name, 0, true,  true /*add draw:name*/);
 
 	styles = mainStyles.styles( VDocument::STYLE_RADIAL_GRADIENT );
 	it = styles.begin();
 	for( ; it != styles.end() ; ++it )
-		(*it).style->writeStyle( &styleWriter, mainStyles, "svg:radialGradient", (*it).name, "");//, true,  true /*add draw:name*/);
+		(*it).style->writeStyle( &styleWriter, mainStyles, "svg:radialGradient", (*it).name, 0, true,  true /*add draw:name*/);
 
 	styleWriter.endElement(); // office:styles
 
