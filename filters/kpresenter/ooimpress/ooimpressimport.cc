@@ -1268,7 +1268,10 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
             textData = expandWhitespace(n.toElement());
         else if (n.toElement().tagName() == "text:date" // fields
                  || n.toElement().tagName() == "text:time"
-                 || n.toElement().tagName() == "text:page-number")
+                 || n.toElement().tagName() == "text:page-number"
+                 || n.toElement().tagName() == "text:file-name"
+                 || n.toElement().tagName() == "text:author-name"
+                 || n.toElement().tagName() == "text:author-initials")
         {
             textData = "#";     // field placeholder
             appendField(doc, p, n.toElement(), pos);
@@ -2096,6 +2099,58 @@ void OoImpressImport::appendField(QDomDocument& doc, QDomElement& e, const QDomE
         pgNumElem.setAttribute("value", object.text());
 
         variable.appendChild(pgNumElem);
+    }
+    else if (tag == "text:file-name")
+    {
+        QDomElement typeElem = doc.createElement("TYPE");
+        typeElem.setAttribute("key", "STRING");
+        typeElem.setAttribute("type", 8); // VT_FIELD
+        typeElem.setAttribute("text", object.text());
+
+        variable.appendChild(typeElem);
+
+        int subtype = 5;
+
+        if (object.hasAttribute("text:display"))
+        {
+            const QString display = object.attribute("text:display");
+
+            if (display == "path")
+                subtype = 1;    // VST_DIRECTORYNAME
+            else if (display == "name")
+                subtype = 6;    // VST_FILENAMEWITHOUTEXTENSION
+            else if (display == "name-and-extension")
+                subtype = 0;    // VST_FILENAME
+            else
+                subtype = 5;    // VST_PATHFILENAME
+        }
+
+        QDomElement fileNameElem = doc.createElement("FIELD");
+        fileNameElem.setAttribute("subtype", subtype);
+        fileNameElem.setAttribute("value", object.text());
+
+        variable.appendChild(fileNameElem);
+    }
+    else if (tag == "text:author-name"
+             || tag == "text:author-initials")
+    {
+        QDomElement typeElem = doc.createElement("TYPE");
+        typeElem.setAttribute("key", "STRING");
+        typeElem.setAttribute("type", 8); // VT_FIELD
+        typeElem.setAttribute("text", object.text());
+
+        variable.appendChild(typeElem);
+
+        int subtype = 2;        // VST_AUTHORNAME
+
+        if (tag == "text:author-initials")
+            subtype = 16;       // VST_INITIAL
+
+        QDomElement authorElem = doc.createElement("FIELD");
+        authorElem.setAttribute("subtype", subtype);
+        authorElem.setAttribute("value", object.text());
+
+        variable.appendChild(authorElem);
     }
 
     custom.appendChild(variable);
