@@ -20,6 +20,9 @@
 #ifndef INTERVALITEM_H
 #define INTERVALITEM_H
 
+#include <qlistview.h>
+
+
 class IntervalItem : public QListViewItem
 {
 public:
