@@ -290,18 +290,26 @@ void KWTextFrameSet::layout()
     textdoc->invalidate(); // lazy layout, real update follows upon next repaint
 }
 
+// Only interested in the body textframeset, not in header/footer
+#define kdDebugBody(area) if ( getFrameInfo() == FI_BODY ) kdDebug(area)
+
 // Helper for adjust*. Returns marginLeft/marginRight/breakEnd, each for an adjust* method.
 void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRight, int* breakEnd )
 {
-    //kdDebug(32002) << "KWTextFrameSet " << this << " getMargins" << endl;
+    /*kdDebugBody(32002) << "KWTextFrameSet " << this << " getMargins yp=" << yp
+                       << " h=" << h << " called by "
+                       << (marginLeft?"adjustLMargin":marginRight?"adjustRMargin":"adjustFlow")
+                       << endl;*/
     QPoint p;
-    KWFrame * frame = internalToContents( QPoint(0, yp), p ); // we could use the frame returned, maybe
+    KWFrame * frame = internalToContents( QPoint(0, yp), p );
     ASSERT(frame);
     // Everything from there is in contents coordinates.
     int left = frame ? kWordDocument()->zoomItX( frame->left() ) : 0;
     int from = left;
     int to = frame ? kWordDocument()->zoomItX( frame->right() ) : 0;
+    int top = frame ? kWordDocument()->zoomItX( frame->top() ) : 0;
     int width = to - from;
+    int bottomSkip = 0;
 
     // For every frame on top at this height, we'll move from and to towards each other
     // The text flows between 'from' and 'to'
@@ -314,17 +322,19 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
             // Look for intersection between p.y() -- p.y()+h  and frameRect.top() -- frameRect.bottom()
             if ( QMAX( p.y(), frameRect.top() ) <= QMIN( p.y()+h, frameRect.bottom() ) )
             {
-                if ( from < frameRect.left() && to > frameRect.right() )
-                {
-                    int availLeft = frameRect.left() - from;
-                    int availRight = to - frameRect.right();
-                    kdDebug() << "KWTextFrameSet::getMargins availLeft=" << availLeft << " availRight=" << availRight << endl;
-                    if ( availLeft > availRight ) // choose the max
-                        to = frameRect.left();    // flow text at the left of the frame
-                    else
-                        from = frameRect.right(); // flow text at the right of the frame
-                    kdDebug() << "KWTextFrameSet::getMargins from=" << from << " to=" << to << endl;
-                }
+                int availLeft = QMAX( 0, frameRect.left() - from );
+                int availRight = QMAX( 0, to - frameRect.right() );
+                //kdDebugBody(32002) << "getMargins availLeft=" << availLeft
+                //                   << " availRight=" << availRight << endl;
+                if ( availLeft > availRight ) // choose the max
+                    // flow text at the left of the frame
+                    to = QMIN( to, from + availLeft );  // can only go left -> QMIN
+                else
+                    // flow text at the right of the frame
+                    from = QMAX( from, to - availRight ); // can only go right -> QMAX
+                //kdDebugBody(32002) << "getMargins from=" << from << " to=" << to << endl;
+                if ( breakEnd )
+                    bottomSkip = QMAX( bottomSkip, frameRect.bottom() - top );
             }
         }
     }
@@ -332,18 +342,25 @@ void KWTextFrameSet::getMargins( int yp, int h, int* marginLeft, int* marginRigh
     from -= left;
     to -= left;
 
+    // If the available space is too small, give up on it
+    if ( to - from < kWordDocument()->zoomItX( 15 ) )
+        from = to;
+    else
+        bottomSkip = 0; // nothing to skip
+
     if ( marginLeft )
         *marginLeft = from;
     if ( marginRight )
         *marginRight = width - to;
-    // TODO breakEnd
+    if ( breakEnd )
+        *breakEnd = bottomSkip; // in internal coord already
 }
 
 int KWTextFrameSet::adjustLMargin( int yp, int h, int margin, int space )
 {
     int marginLeft;
     getMargins( yp, h, &marginLeft, 0L, 0L );
-    //kdDebug() << "KWTextFrameSet::adjustLMargin " << marginLeft << endl;
+    //kdDebugBody(32002) << "KWTextFrameSet::adjustLMargin " << marginLeft << endl;
     return QTextFlow::adjustLMargin( yp, h, margin + marginLeft, space );
 }
 
@@ -351,7 +368,7 @@ int KWTextFrameSet::adjustRMargin( int yp, int h, int margin, int space )
 {
     int marginRight;
     getMargins( yp, h, 0L, &marginRight, 0L );
-    //kdDebug() << "KWTextFrameSet::adjustRMargin " << marginRight << endl;
+    //kdDebugBody(32002) << "KWTextFrameSet::adjustRMargin " << marginRight << endl;
     return QTextFlow::adjustRMargin( yp, h, margin + marginRight, space );
 }
 
@@ -363,14 +380,17 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int h, QTextParag * parag, bo
     {
         if ( !parag || linesTogether ) // Paragraph-level breaking
         {
-            kdDebug(32002) << "checkVerticalBreak ADJUSTING yp=" << yp << " h=" << h << " breakEnd [new value for yp]=" << breakEnd << endl;
+            kdDebug(32002) << "checkVerticalBreak ADJUSTING yp=" << yp << " h=" << h
+                           << " breakEnd [new value for yp]=" << breakEnd << endl;
             yp = breakEnd;
             return true;
         }
         else // Line-level breaking
         {
             QMap<int, QTextParagLineStart*>& lineStarts = parag->lineStartList();
-            kdDebug(32002) << "checkVerticalBreak parag " << parag->paragId() << ". lineStarts has " << lineStarts.count() << " items" << endl;
+            kdDebug(32002) << "checkVerticalBreak parag " << parag->paragId()
+                           << ". lineStarts has " << lineStarts.count()
+                           << " items" << endl;
 
             int dy = 0;
             int line = 0;
@@ -380,20 +400,25 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int h, QTextParag * parag, bo
                 QTextParagLineStart * ls = it.data();
                 ASSERT( ls );
                 int y = parag->rect().y() + ls->y;
-                kdDebug(32002) << "checkVerticalBreak parag " << parag->paragId() << " line " << line << " ls->y=" << ls->y << " ls->h=" << ls->h
-                               << " y=" << y << " breakBegin=" << breakBegin << " breakEnd=" << breakEnd << endl;
+                /*kdDebug(32002) << "checkVerticalBreak parag " << parag->paragId()
+                               << " line " << line << " ls->y=" << ls->y
+                               << " ls->h=" << ls->h << " y=" << y
+                               << " breakBegin=" << breakBegin
+                               << " breakEnd=" << breakEnd << endl;*/
                 if ( !dy )
                 {
                     if ( QMAX( y, breakBegin ) <= QMIN( y + ls->h, breakEnd ) )
                     {
                         if ( line == 0 ) // First line ? It's like a paragraph breaking then
                         {
-                            kdDebug(32002) << "checkVerticalBreak parag " << parag->paragId() << " BREAKING first line -> parag break" << endl;
+                            kdDebug(32002) << "checkVerticalBreak parag " << parag->paragId()
+                                           << " BREAKING first line -> parag break" << endl;
                             yp = breakEnd;
                             return true;
                         }
                         dy = breakEnd - y;
-                        kdDebug(32002) << "checkVerticalBreak parag " << parag->paragId() << " BREAKING at line " << line << " dy=" << dy << endl;
+                        kdDebug(32002) << "checkVerticalBreak parag " << parag->paragId()
+                                       << " BREAKING at line " << line << " dy=" << dy << endl;
                         ls->y = breakEnd - parag->rect().y();
                     }
                 }
@@ -412,12 +437,15 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
     // This is called since the 'vertical break' QRT flag is true.
     // End of frames/pages lead to those "vertical breaks".
     // What we do, is adjust the Y accordingly,
-    // to implement page-break at the paragraph level (TODO: line-level).
+    // to implement page-break at the paragraph level and at the line level.
     // It's cumulative (the space of one break will be included in the further
     // paragraph's y position), which makes it easy to implement.
 
+    int breaked = false;
     bool linesTogether = parag ? static_cast<KWTextParag *>(parag)->linesTogether() : false;
-    //kdDebug(32002) << "KWTextFrameSet::adjustFlow parag=" << parag << " linesTogether=" << linesTogether << endl;
+    //kdDebugBody(32002) << "KWTextFrameSet::adjustFlow parag=" << parag
+    //                   << " linesTogether=" << linesTogether << " yp=" << yp
+    //                   << " h=" << h << endl;
 
     int totalHeight = 0;
     QListIterator<KWFrame> frameIt( frameIterator() );
@@ -428,13 +456,15 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
         //kdDebug(32002) << "KWTextFrameSet::adjustFlow frameHeight=" << frameHeight << " bottom=" << bottom << endl;
 
         // breakBegin==breakEnd==bottom, since the next frame's top is the same as bottom, in QRT coords.
-        if ( checkVerticalBreak( yp, h, parag, linesTogether, bottom, bottom ) )
+        breaked = ( checkVerticalBreak( yp, h, parag, linesTogether, bottom, bottom ) );
+        if ( breaked )
             break;
         else if ( yp+h < bottom )
             break; // we've been past the parag, so stop here
         totalHeight = bottom;
     }
 
+    // Another case for a vertical break is frames with the RA_SKIP flag
     QList<KWFrame> frames( m_framesOnTop );
     for ( KWFrame *f = frames.first(); f ; f = frames.next() )
     {
@@ -447,15 +477,35 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
                                      contentsToInternal( QPoint( 0, top ), true ).y(),  // we know the frame is on top, so using onlyY is ok
                                      contentsToInternal( QPoint( 0, bottom ), true ).y() ) )
             {
-                kdDebug() << "KWTextFrameSet::adjustFlow breaking around RA_SKIP frame yp="<<yp<<" h=" << h << endl;
+                kdDebug(32002) << "KWTextFrameSet::adjustFlow breaking around RA_SKIP frame yp="<<yp<<" h=" << h << endl;
                 // We don't "break;" here because there could be another such frame below the first one
                 // In fact if they are in the wrong order we could fail to skip both...
                 // Back to the beginning then
                 frames.remove();
                 f = frames.first();
+                breaked = true;
             }
         }
     }
+
+    // And the last case for a vertical break is RA_BOUNDINGRECT frames that
+    // leave no space by their side for any text (e.g. most tables)
+    int breakEnd = 0;
+    getMargins( yp, h, 0L, 0L, &breakEnd );
+    if ( breakEnd )
+    {
+        kdDebug(32002) << "KWTextFrameSet::adjustFlow no-space case. breakEnd=" << breakEnd
+                       << " yp=" << yp << " h=" << h << endl;
+        if ( checkVerticalBreak( yp, h, parag, linesTogether, yp, breakEnd ) )
+        {
+            breaked = true;
+            //kdDebug(32002) << "checkVerticalBreak ok." << endl;
+        }
+        else // shouldn't happen
+            kdWarning(32002) << "checkVerticalBreak didn't find it !?!?!?!??!?!?!?" << endl;
+    }
+
+    // ## TODO loop around those three methods until we don't move anymore ?
 
     int yp_ro = yp;
     QTextFlow::adjustFlow( yp_ro, w, h, parag, FALSE );
@@ -973,7 +1023,8 @@ void KWTextFrameSet::formatMore()
 
     QTextParag *lastFormatted = m_lastFormatted;
     //kdDebug(32002) << "KWTextFrameSet::formatMore lastFormatted id=" << lastFormatted->paragId()
-    //          << " to=" << to << " viewsBottom=" << viewsBottom << " availableHeight=" << m_availableHeight << endl;
+    //               << " to=" << to << " viewsBottom=" << viewsBottom
+    //               << " availableHeight=" << m_availableHeight << endl;
 
     // Stop if we have formatted everything or if we need more space
     // Otherwise, stop formatting after "to" paragraphs,
