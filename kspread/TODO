@@ -98,6 +98,8 @@ General bugs
 	   new line.
   + 86875: KSpread: does not convert automatically between text	      2 ----
 	   and number.
+    * partially done, the rest requires the new formula parser, and it won't
+      be 100% done afterwards, if we use koscript-compat layer for functions
   + 87471: format of whole column does not change.		      1 ----
 
 * Investigate further if these are important.
