@@ -837,6 +837,8 @@ void KIllustratorView::slotDelete()
 
 void KIllustratorView::slotSelectAll()
 {
+    m_selectTool->setChecked( true );
+    tcontroller->toolSelected( Tool::ToolSelect);
     m_pDoc->gdoc()->selectAllObjects ();
 }
 
