@@ -174,7 +174,8 @@ KexiRelationWidget::addTable(KexiDB::TableSchema *t, const QRect &rect)
 
 	const QString tname = t->name().lower();
 	const int count = m_tableCombo->count();
-	for (int i = 0; i < count; i++ ) {
+        int i = 0;
+	for (; i < count; i++ ) {
 		if (m_tableCombo->text(i).lower() == tname )
 			break;
 	}
