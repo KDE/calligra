@@ -449,7 +449,8 @@ signals:
 
 public slots:
     // The default arguments are those used by the formatTimer.
-    void formatMore( int count = 10, bool emitAfterFormatting = true );
+    // The return value is used by ensureFormatted
+    bool formatMore( int count = 10, bool emitAfterFormatting = true );
 
     void emitRepaintChanged() { emit repaintChanged( this ); }
 

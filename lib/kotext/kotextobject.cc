@@ -1530,33 +1530,31 @@ void KoTextObject::ensureFormatted( KoTextParag * parag, bool emitAfterFormattin
         return; // safety test
     while ( !parag->isValid() )
     {
-        if ( !m_lastFormatted || m_availableHeight == -1 || d->abortFormatting ) {
-            d->abortFormatting = false;
-            return; // formatMore will do nothing -> give up
-        }
         // The paragid diff is "a good guess". The >=1 is a safety measure ;)
-        formatMore( QMAX( 1, parag->paragId() - m_lastFormatted->paragId() ), emitAfterFormatting );
+        bool ret = formatMore( QMAX( 1, parag->paragId() - m_lastFormatted->paragId() ), emitAfterFormatting );
+        if ( !ret ) // aborted
+            break;
     }
 }
 
-void KoTextObject::formatMore( int count /* = 10 */, bool emitAfterFormatting /* = true */ )
+bool KoTextObject::formatMore( int count /* = 10 */, bool emitAfterFormatting /* = true */ )
 {
     if ( ( !m_lastFormatted && d->afterFormattingEmitted )
          || !m_visible || m_availableHeight == -1 )
-        return;
+        return false;
 
     if ( !textdoc->lastParag() )
-        return; // safety test
+        return false; // safety test
 
     if ( d->abortFormatting ) {
         d->abortFormatting = false;
-        return;
+        return false;
     }
 
     if ( count == 0 )
     {
         formatTimer->start( interval, TRUE );
-        return;
+        return true;
     }
 
     int bottom = 0;
@@ -1616,7 +1614,7 @@ void KoTextObject::formatMore( int count /* = 10 */, bool emitAfterFormatting /*
                 kdDebug(32500) << "formatMore formatting aborted. " << endl;
 #endif
                 d->abortFormatting = false;
-                return;
+                return false;
             }
 
             if ( parag != m_lastFormatted )
@@ -1650,7 +1648,7 @@ void KoTextObject::formatMore( int count /* = 10 */, bool emitAfterFormatting /*
             abort = true;
         emit afterFormatting( bottom, m_lastFormatted, &abort );
         if ( abort )
-            return;
+            return false;
     }
 
     // Now let's see when we'll need to get back here.
@@ -1673,6 +1671,7 @@ void KoTextObject::formatMore( int count /* = 10 */, bool emitAfterFormatting /*
                        << (double)(m_time.elapsed()) / 1000 << " seconds." << endl;
 #endif
     }
+    return true;
 }
 
 void KoTextObject::abortFormatting()
