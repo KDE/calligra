@@ -203,7 +203,7 @@ SvgExport::exportSegments( QTextStream& s, const QDomElement& node )
 				e.attribute( "x3" ) << "," <<
 				e.attribute( "y3" ) << " ";
 			}
-			if( e.tagName() == "CURVE" )
+			if( e.tagName() == "CURVE2" )
 			{
 			s <<
 				"C" <<
