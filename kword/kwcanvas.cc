@@ -2092,18 +2092,22 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                      m_gui->getView()->editReplace();
                      return true;
                  }
-                 else if( edit && keyev->state()==ControlButton )
+                 else if(keyev->state()==ControlButton )
                  {
-                     KoTextFormat *format=edit->currentFormat();
-                     if(keyev->key()==Key_I)
+                     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit);
+                     if(edit)
                      {
-                         edit->setItalic(!format->font().italic());
-                         return true;
-                     }
-                     else if(keyev->key()==Key_U)
-                     {
-                         edit->setUnderline(!format->font().underline());
-                         return true;
+                         KoTextFormat *format=edit->currentFormat();
+                         if(keyev->key()==Key_I)
+                         {
+                             edit->setItalic(!format->font().italic());
+                             return true;
+                         }
+                         else if(keyev->key()==Key_U)
+                         {
+                             edit->setUnderline(!format->font().underline());
+                             return true;
+                         }
                      }
                  }
              }
