@@ -74,10 +74,10 @@ class KoTemplateChooseDia : public QDialog
 public:
 	enum ReturnType {Cancel,Template,File,Empty};
 
-	KoTemplateChooseDia(QWidget *parent,const char *name,const QString& template_type,bool _hasCancel,bool _onlyTemplates);
+	KoTemplateChooseDia(QWidget *parent,const char *name,const QString& template_type,bool _hasCancel,bool _onlyTemplates, const QString &importFilter, const QString &mimeType );
 	~KoTemplateChooseDia() {;}
 
-	static ReturnType chooseTemplate(const QString& template_type, QString &_template, bool _hasCancel, bool _onlyTemplates = true);
+	static ReturnType chooseTemplate(const QString& template_type, QString &_template, bool _hasCancel, bool _onlyTemplates = true, const QString &importFilter = QString::null, const QString &mimeType = QString::null );
 
 	QString getTemplate() { return templateName; }
 	QString getFullTemplate() { return fullTemplateName; }
@@ -107,6 +107,8 @@ protected:
 	QTabWidget *tabs;
 	ReturnType returnType;
 	QGridLayout *grid;
+	QString m_strImportFilter;
+	QString m_strMimeType;
 	
 private slots:
 	void nameChanged(const QString &);

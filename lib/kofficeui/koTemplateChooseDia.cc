@@ -16,6 +16,8 @@
 #include "koTemplateChooseDia.h"
 #include "koTemplateChooseDia.moc"
 
+#include <koFilterManager.h>
+
 #include <klocale.h>
 #include <kbuttonbox.h>
 #include <kfiledialog.h>
@@ -32,8 +34,8 @@
 
 /*================================================================*/
 KoTemplateChooseDia::KoTemplateChooseDia(QWidget *parent,const char *name,
-					 const QString& _template_type, bool _hasCancel,bool _onlyTemplates)
-	: QDialog(parent,name,true), template_type(_template_type), onlyTemplates(_onlyTemplates)
+					 const QString& _template_type, bool _hasCancel,bool _onlyTemplates, const QString &importFilter, const QString &mimeType )
+	: QDialog(parent,name,true), template_type(_template_type), onlyTemplates(_onlyTemplates), m_strImportFilter( importFilter ), m_strMimeType( mimeType )
 {
 	groupList.setAutoDelete(true);
 	getGroups();
@@ -58,10 +60,10 @@ KoTemplateChooseDia::KoTemplateChooseDia(QWidget *parent,const char *name,
 
 /*================================================================*/
 KoTemplateChooseDia::ReturnType KoTemplateChooseDia::chooseTemplate(const QString& _template_type,
-								    QString &_template,bool _hasCancel,bool _onlyTemplates)
+								    QString &_template,bool _hasCancel,bool _onlyTemplates, const QString &importFilter, const QString &mimeType )
 {
 	bool res = false;
-	KoTemplateChooseDia *dlg = new KoTemplateChooseDia(0,"Template", _template_type, _hasCancel,_onlyTemplates);
+	KoTemplateChooseDia *dlg = new KoTemplateChooseDia(0,"Template", _template_type, _hasCancel,_onlyTemplates, importFilter, mimeType );
 
 	dlg->resize(500,400);
 	dlg->setCaption(i18n("Choose a Template"));
@@ -242,7 +244,12 @@ void KoTemplateChooseDia::chosen()
     {
 		returnType = File;
 
-		fullTemplateName = templateName = lFile->text();
+                QString fileName = lFile->text();
+		
+		if ( !m_strMimeType.isEmpty() )
+		  fileName = KoFilterManager::self()->import( fileName, m_strMimeType );
+
+		fullTemplateName = templateName = fileName;
 		accept();
     }
 	else if (!onlyTemplates && rbEmpty->isChecked())
@@ -309,7 +316,7 @@ void KoTemplateChooseDia::chooseFile()
 	if (QFile::exists(lFile->text()))
 		dir = QFileInfo(lFile->text()).absFilePath();
 
-	QString filename = KFileDialog::getOpenFileName(dir);
+	QString filename = KFileDialog::getOpenFileName( dir, m_strImportFilter );
 	if (!filename.isEmpty() && QFileInfo(filename).isFile() ||
 		(QFileInfo(filename).isSymLink() && !QFileInfo(filename).readLink().isEmpty() &&
 		 QFileInfo(QFileInfo(filename).readLink()).isFile()))
