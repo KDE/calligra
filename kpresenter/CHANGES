@@ -51,3 +51,7 @@ Reggie, 2.3 - 6.3 1999:
 Reggie, 10.3.1999:
 ------------------
 - Fixed focus problems
+
+Reggie, 23.3.1999:
+------------------
+- Fix to avoid segfaults on exit when a textobject is activated

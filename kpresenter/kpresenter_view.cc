@@ -152,6 +152,7 @@ void KPresenterView::init()
 KPresenterView::~KPresenterView()
 {
   sdeb("KPresenterView::~KPresenterView()\n");
+  page->setToolEditMode(TEM_MOUSE);
   cleanUp();
   edeb("...KPresenterView::~KPresenterView() %i\n",_refcnt());
 }
@@ -3838,6 +3839,9 @@ void KPresenterView::restartPresStructView()
 /*==============================================================*/
 void KPresenterView::setTool(ToolEditMode toolEditMode)
 {
+  if (!m_vToolBarTools || !m_vMenuTools)
+    return;
+  
   m_vToolBarTools->setButton(ID_TOOL_MOUSE,false);
   m_vToolBarTools->setButton(ID_TOOL_LINE,false);
   m_vToolBarTools->setButton(ID_TOOL_RECT,false);

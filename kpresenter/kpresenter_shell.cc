@@ -345,7 +345,7 @@ void KPresenterShell::slotFileOpen()
   m_pView->getPage()->setToolEditMode(TEM_MOUSE);
   m_pDoc->enableEmbeddedParts(false);
   QString file = KFileDialog::getOpenFileName( getenv( "HOME" ) );
-
+  
   if ( file.isNull() )
     return;
 
