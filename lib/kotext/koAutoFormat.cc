@@ -1896,6 +1896,8 @@ void KoAutoFormat::changeTextFormat(KoSearchContext *formatOptions, KoTextFormat
         }
         if ( formatOptions->m_optionsMask & KoSearchContext::Family)
         {
+            format->setFamily( formatOptions->m_family );
+            flags |=KoTextFormat::Family;
         }
         if ( formatOptions->m_optionsMask & KoSearchContext::Color)
         {
