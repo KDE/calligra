@@ -274,7 +274,12 @@ bool kspreadfunc_dollar( KSContext& context )
   // do round, because formatMoney doesn't
   value = floor( value * pow(10.0,decimals)+0.5) / pow(10.0,decimals) ;
 
-  QString result = KGlobal::locale()->formatMoney( value, QString::null, decimals );
+  // -30 should be displayed as (30)
+  QString result = KGlobal::locale()->formatMoney( fabs( value ),
+    QString::null, decimals );
+  if( value < 0 )
+    result = "(" + result + ")";
+
   context.setValue( new KSValue( result ) );
   return true;
 }
