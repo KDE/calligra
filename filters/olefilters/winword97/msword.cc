@@ -928,7 +928,6 @@ void MsWord::getPicture(
         *pictureLength -= bytes;
         *pictureData += bytes;
         break;
-    case 0: // TBD: This is not a documented value!
     case 99:
         pictureType = "bmp";
         break;
@@ -937,16 +936,18 @@ void MsWord::getPicture(
         pictureType = "wmf";
         break;
     };
-    //kdDebug(s_area) << "MsWord::getPicture: dxaGoal: " << data.dxaGoal << endl;
-    //kdDebug(s_area) << "MsWord::getPicture: dyaGoal: " << data.dyaGoal << endl;
+    //kdDebug(s_area) << "MsWord::getPicture: cbHeader: " << data.cbHeader << endl;
+    //kdDebug(s_area) << "MsWord::getPicture: dxaGoal: " << (double)data.dxaGoal/1440 << endl;
+    //kdDebug(s_area) << "MsWord::getPicture: dyaGoal: " << (double)data.dyaGoal/1440 << endl;
     //kdDebug(s_area) << "MsWord::getPicture: dxaOrigin: " << data.dxaOrigin << endl;
     //kdDebug(s_area) << "MsWord::getPicture: dyaOrigin: " << data.dyaOrigin << endl;
     //kdDebug(s_area) << "MsWord::getPicture: mm.x: " << data.mfp.xExt << endl;
     //kdDebug(s_area) << "MsWord::getPicture: mm.y: " << data.mfp.yExt << endl;
-    //for (int i = 0; i < 8; i += 1)
+    //U8 *t =m_dataStream + fc;    
+    //if (0)
+    //for (int i = 0; i < 67; i += 1)
     //{
-    //
-    //    kdDebug() <<data.bm_rcWinMF[i] << endl; 
+    //    kdDebug() << i <<" "<< QString::number(t[i], 16) << endl; 
     //}
 }
 

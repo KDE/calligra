@@ -28,12 +28,11 @@ DESCRIPTION
 #include <typeinfo>
 
 void Document::createAttributes(
-    const QString &text,
+    QString &text,
     const PAP &baseStyle,
-    const CHPXarray &chpxs,
+    const CHPXarray &originalChpxs,
     Attributes &attributes)
 {
-    unsigned runs;
     typedef enum
     {
         SPECIAL_CURRENT_PAGE_NUMBER,
@@ -73,100 +72,8 @@ void Document::createAttributes(
         SPECIAL_LONG_DATE,
         SPECIAL_PRINT_MERGE_HELPER_FIELD = 41
     } specialChars;
-    typedef enum
-    {
-        FIELD_TYPE_UNKNOWN_KEYWORD = 1,
-        FIELD_TYPE_POSSIBLE_BOOKMARK,
-        FIELD_TYPE_BOOKMARK_REFERENCE,
-        FIELD_TYPE_INDEX_ENTRY,
-        FIELD_TYPE_FOOTNOTE_REFERENCE,
-        FIELD_TYPE_SET_COMMAND_FOR_PRINT_MERGE,
-        FIELD_TYPE_IF_COMMAND_FOR_PRINT_MERGE,
-        FIELD_TYPE_CREATE_INDEX,
-        FIELD_TYPE_TABLE_OF_CONTENTS_ENTRY,
-        FIELD_TYPE_STYLE_REFERENCE,
-        FIELD_TYPE_DOCUMENT_REFERENCE,
-        FIELD_TYPE_SEQUENCE_MARK,
-        FIELD_TYPE_CREATE_TABLE_OF_CONTENTS,
-        FIELD_TYPE_QUOTE_INFO_VARIABLE,
-        FIELD_TYPE_QUOTE_TITLE_VARIABLE,
-        FIELD_TYPE_QUOTE_SUBJECT_VARIABLE,
-        FIELD_TYPE_QUOTE_AUTHOR_VARIABLE,
-        FIELD_TYPE_QUOTE_KEYWORDS_VARIABLE,
-        FIELD_TYPE_QUOTE_COMMENTS_VARIABLE,
-        FIELD_TYPE_QUOTE_LAST_REVISED_BY_VARIABLE,
-        FIELD_TYPE_QUOTE_CREATION_DATE_VARIABLE,
-        FIELD_TYPE_QUOTE_REVISION_DATE_VARIABLE,
-        FIELD_TYPE_QUOTE_PRINT_DATE_VARIABLE,
-        FIELD_TYPE_QUOTE_REVISION_NUMBER_VARIABLE,
-        FIELD_TYPE_QUOTE_EDIT_TIME_VARIABLE,
-        FIELD_TYPE_QUOTE_NUMBER_OF_PAGES_VARIABLE,
-        FIELD_TYPE_QUOTE_NUMBER_OF_WORDS_VARIABLE,
-        FIELD_TYPE_QUOTE_NUMBER_OF_CHARACTERS_VARIABLE,
-        FIELD_TYPE_QUOTE_FILE_NAME_VARIABLE,
-        FIELD_TYPE_QUOTE_DOCUMENT_TEMPLATE_NAME_VARIABLE,
-        FIELD_TYPE_QUOTE_CURRENT_DATE_VARIABLE,
-        FIELD_TYPE_QUOTE_CURRENT_TIME_VARIABLE,
-        FIELD_TYPE_QUOTE_CURRENT_PAGE_VARIABLE,
-        FIELD_TYPE_EVALUATE_EXPRESSION,
-        FIELD_TYPE_INSERT_LITERAL_TEXT,
-        FIELD_TYPE_INCLUDE_COMMAND_PRINT_MERGE,
-        FIELD_TYPE_PAGE_REFERENCE,
-        FIELD_TYPE_ASK_COMMAND_PRINT_MERGE,
-        FIELD_TYPE_FILL_IN_COMMAND_TO_DISPLAY_PROMPT_PRINT_MERGE,
-        FIELD_TYPE_DATA_COMMAND_PRINT_MERGE,
-        FIELD_TYPE_NEXT_COMMAND_PRINT_MERGE,
-        FIELD_TYPE_NEXTIF_COMMAND_PRINT_MERGE,
-        FIELD_TYPE_SKIPIF_PRINT_MERGE,
-        FIELD_TYPE_INSERTS_NUMBER_OF_CURRENT_PRINT_MERGE_RECORD,
-        FIELD_TYPE_DDE_REFERENCE,
-        FIELD_TYPE_DDE_AUTOMATIC_REFERENCE,
-        FIELD_TYPE_INSERTS_GLOSSARY_ENTRY,
-        FIELD_TYPE_SENDS_CHARACTERS_TO_PRINTER_WITHOUT_TRANSLATION,
-        FIELD_TYPE_FORMULA_DEFINITION,
-        FIELD_TYPE_GOTO_BUTTON,
-        FIELD_TYPE_MACRO_BUTTON,
-        FIELD_TYPE_INSERT_AUTO_NUMBERING_FIELD_IN_OUTLINE_FORMAT,
-        FIELD_TYPE_INSERT_AUTO_NUMBERING_FIELD_IN_LEGAL_FORMAT,
-        FIELD_TYPE_INSERT_AUTO_NUMBERING_FIELD_IN_ARABIC_NUMBER_FORMAT,
-        FIELD_TYPE_READS_A_TIFF_FILE,
-        FIELD_TYPE_LINK,
-        FIELD_TYPE_SYMBOL,
-        FIELD_TYPE_EMBEDDED_OBJECT,
-        FIELD_TYPE_MERGE_FIELDS,
-        FIELD_TYPE_USER_NAME,
-        FIELD_TYPE_USER_INITIAL,
-        FIELD_TYPE_USER_ADDRESS,
-        FIELD_TYPE_BAR_CODE,
-        FIELD_TYPE_DOCUMENT_VARIABLE,
-        FIELD_TYPE_SECTION,
-        FIELD_TYPE_SECTION_PAGES,
-        FIELD_TYPE_INCLUDE_PICTURE,
-        FIELD_TYPE_INCLUDE_TEXT,
-        FIELD_TYPE_FILE_SIZE,
-        FIELD_TYPE_FORM_TEXT_BOX,
-        FIELD_TYPE_FORM_CHECK_BOX,
-        FIELD_TYPE_NOTE_REFERENCE,
-        FIELD_TYPE_CREATE_TABLE_OF_AUTHORITIES,
-        FIELD_TYPE_MARK_TABLE_OF_AUTHORITIES_ENTRY,
-        FIELD_TYPE_MERGE_RECORD_SEQUENCE_NUMBER,
-        FIELD_TYPE_MACRO,
-        FIELD_TYPE_PRIVATE,
-        FIELD_TYPE_INSERT_DATABASE,
-        FIELD_TYPE_AUTOTEXT,
-        FIELD_TYPE_COMPARE_TWO_VALUES,
-        FIELD_TYPE_PLUG_IN_MODULE_PRIVATE,
-        FIELD_TYPE_SUBSCRIBER,
-        FIELD_TYPE_FORM_LIST_BOX,
-        FIELD_TYPE_ADVANCE,
-        FIELD_TYPE_DOCUMENT_PROPERTY,
-        FIELD_TYPE_UNUSED_86,
-        FIELD_TYPE_OCX,
-        FIELD_TYPE_HYPERLINK,
-        FIELD_TYPE_AUTOTEXTLIST,
-        FIELD_TYPE_LIST_ELEMENT,
-        FIELD_TYPE_HTML_CONTROL
-    } fieldTypes;
+    CHPXarray chpxs = originalChpxs;
+    unsigned runs;
 
     runs = chpxs.size();
     attributes.baseStyle = baseStyle;
@@ -183,7 +90,8 @@ void Document::createAttributes(
         exceptionStyle.apply(chpxs[i].data.ptr, chpxs[i].data.count);
         chp = exceptionStyle.getChp();
 
-        // Check the type of data.
+        // Check the type of data. If it is a field, then we collect the
+        // information needed to rewrite the text stream appropriately.
 
         run = 0L;
         if (!chp->fSpec)
@@ -196,6 +104,7 @@ void Document::createAttributes(
 
             // OLE2 and embedded objects.
 
+            m_field.separator = i; //chpxs[i].startFc;
             if (chp->fOle2)
             {
                 kdDebug(s_area) << "Document::createAttributes: OLE2 object" << endl;
@@ -211,13 +120,12 @@ void Document::createAttributes(
             else
             {
                 kdDebug(s_area) << "Document::createAttributes: embedded object" << endl;
-/*
+
                 // TBD: verify object support!
 
-                MsWord::getObject(
-                    chp->fcPic_fcObj_lTagObj,
-                    mimeType);
-*/
+                //MsWord::getObject(
+                    //chp->fcPic_fcObj_lTagObj,
+                    //mimeType);
 
                 Object *object = new Object;
 
@@ -237,75 +145,92 @@ void Document::createAttributes(
 
             // This is either a picture or an Office art object or...
 
-            switch (text[chpxs[i].startFc])
+            switch (text[chpxs[i].startFc].unicode())
             {
             case SPECIAL_PICTURE:
             case SPECIAL_DRAWN_OBJECT:
-                pictureId = 0;
-                pictureLength = 0;
-                if (text[chpxs[i].startFc].unicode() == SPECIAL_PICTURE)
-                {
-                    // A picture.
 
-                    pictureId = chp->fcPic_fcObj_lTagObj;
-                    MsWord::getPicture(
-                        pictureId,
-                        pictureType,
-                        &pictureLength,
-                        &pictureData);
+                // If this picture follows an embedded object, we treat it as
+                // equivalent to the end of a field.
+
+                if (m_field.fieldType == FIELD_TYPE_EMBEDDED_OBJECT)
+                {
+                    m_field.end = i;
+                    kdDebug(s_area) << "Document::createAttributes: field: " <<
+                        m_field.fieldType << ": " <<
+                        chpxs[m_field.start].startFc << "." <<
+                        chpxs[m_field.separator].startFc << "." <<
+                        chpxs[m_field.end].startFc << ": " << endl;
+                    rewriteField(text, chpxs);
                 }
                 else
                 {
-                    // A drawn object, a.k.a. "Office Art".
+                    pictureId = 0;
+                    pictureLength = 0;
+                    if (text[chpxs[i].startFc].unicode() == SPECIAL_PICTURE)
+                    {
+                        // A picture.
 
-                    MsWord::getOfficeArt(
-                        m_characterPosition + chpxs[i].startFc,
-                        &pictureId,
-                        pictureType,
-                        &pictureLength,
-                        &pictureData);
-                }
-                if (pictureLength)
-                {
-                    Image *image = new Image;
+                        pictureId = chp->fcPic_fcObj_lTagObj;
+                        MsWord::getPicture(
+                            pictureId,
+                            pictureType,
+                            &pictureLength,
+                            &pictureData);
+                    }
+                    else
+                    {
+                        // A drawn object, a.k.a. "Office Art".
 
-                    image->start = chpxs[i].startFc;
-                    image->end = chpxs[i].endFc;
-                    m_imageNumber++;
-                    image->id = (unsigned)pictureId;
-                    image->type = pictureType;
-                    image->length = (unsigned)pictureLength;
-                    image->data = (const char *)pictureData;
-// TBD: Kword pictures are broken!
-//                    run = image;
-                }
-                else
-                {
-                    kdError(s_area) << "Document::createAttributes: cannot find picture:" <<
-                        pictureId << endl;
+                        MsWord::getOfficeArt(
+                            m_characterPosition + chpxs[i].startFc,
+                            &pictureId,
+                            pictureType,
+                            &pictureLength,
+                            &pictureData);
+                    }
+                    if (pictureLength)
+                    {
+                        Image *image = new Image;
+
+                        kdDebug(s_area) << "Document::createAttributes: picture type: " << pictureType << endl;
+                        image->start = chpxs[i].startFc;
+                        image->end = chpxs[i].endFc;
+                        m_imageNumber++;
+                        image->id = (unsigned)pictureId;
+                        image->type = pictureType;
+                        image->length = (unsigned)pictureLength;
+                        image->data = (const char *)pictureData;
+    // TBD: Kword pictures are broken!
+                        run = image;
+                    }
+                    else
+                    {
+                        kdError(s_area) << "Document::createAttributes: cannot find picture:" <<
+                            pictureId << endl;
+                    }
                 }
                 break;
             case SPECIAL_FIELD_BEGIN_MARK:
-                kdDebug(s_area) << "Document::createAttributes: field begin" << endl;
                 MsWord::getField(
                     m_characterPosition + chpxs[i].startFc,
                     &fieldType);
-                switch (fieldType)
-                {
-                case FIELD_TYPE_EMBEDDED_OBJECT:
-                    kdDebug(s_area) << "Document::createAttributes: field: embedded object" << endl;
-                    break;
-                default:
-                    kdError(s_area) << "Document::createAttributes: unsupported field type:" <<
-                        fieldType << endl;
-                    break;
-                }
+                m_field.fieldType = static_cast<fieldTypes>(fieldType);
+                m_field.start = i;
+                kdDebug(s_area) << "Document::createAttributes: set field type: " <<
+                    m_field.fieldType << endl;
                 break;
             case SPECIAL_FIELD_SEPARATOR:
-                kdError(s_area) << "Document::createAttributes: field separator" << endl;
+                m_field.separator = i;
                 break;
             case SPECIAL_FIELD_END_MARK:
-                kdError(s_area) << "Document::createAttributes: field end" << endl;
+                m_field.end = i;
+                kdDebug(s_area) << "Document::createAttributes: field: " <<
+                    m_field.fieldType << ": " <<
+                    chpxs[m_field.start].startFc << "." <<
+                    chpxs[m_field.separator].startFc << "." <<
+                    chpxs[m_field.end].startFc << ": " << endl;
+                rewriteField(text, chpxs);
                 break;
             default:
                 kdError(s_area) << "Document::createAttributes: unsupported object type:" <<
@@ -353,10 +278,11 @@ void Document::gotParagraph(
     const CHPXarray &chpxs)
 {
     Attributes attributes;
+    QString cleantext = text;
 
-    createAttributes(text, pap, chpxs, attributes);
-    gotParagraph(text, attributes);
-    m_characterPosition += text.length();
+    createAttributes(cleantext, pap, chpxs, attributes);
+    gotParagraph(cleantext, attributes);
+    m_characterPosition += cleantext.length();
 }
 
 void Document::gotHeadingParagraph(
@@ -365,10 +291,11 @@ void Document::gotHeadingParagraph(
     const CHPXarray &chpxs)
 {
     Attributes attributes;
+    QString cleantext = text;
 
-    createAttributes(text, pap, chpxs, attributes);
-    gotHeadingParagraph(text, attributes);
-    m_characterPosition += text.length();
+    createAttributes(cleantext, pap, chpxs, attributes);
+    gotHeadingParagraph(cleantext, attributes);
+    m_characterPosition += cleantext.length();
 }
 
 void Document::gotListParagraph(
@@ -377,10 +304,11 @@ void Document::gotListParagraph(
     const CHPXarray &chpxs)
 {
     Attributes attributes;
+    QString cleantext = text;
 
-    createAttributes(text, pap, chpxs, attributes);
-    gotListParagraph(text, attributes);
-    m_characterPosition += text.length();
+    createAttributes(cleantext, pap, chpxs, attributes);
+    gotListParagraph(cleantext, attributes);
+    m_characterPosition += cleantext.length();
 }
 
 void Document::gotTableBegin()
@@ -413,3 +341,62 @@ void Document::parse()
     m_imageNumber = 0;
     MsWord::parse();
 }
+
+void Document::rewriteField(
+    QString &text,
+    CHPXarray &chpxs)
+{
+    unsigned lhsLength = chpxs[m_field.separator].startFc - chpxs[m_field.start].startFc;
+    unsigned rhsLength = chpxs[m_field.end].startFc - chpxs[m_field.separator].startFc;
+    unsigned run;
+    int length;
+    QString newLhs;
+    QString newRhs;
+
+    switch (m_field.fieldType)
+    {
+    case FIELD_TYPE_EMBEDDED_OBJECT:
+        break;
+    case 0: // TBD: some (second?, mailto:?) HYPERLINKs look like this!
+    case FIELD_TYPE_HYPERLINK:
+        newRhs = text.mid(chpxs[m_field.separator].startFc, rhsLength);
+        break;
+    default:
+        kdError(s_area) << "Document::rewriteField: unsupported field: " <<
+            m_field.fieldType << endl;
+        return;
+    }
+
+    // Adjust LHS if required.
+
+    {
+        run = m_field.start;
+        text.replace(chpxs[run].startFc, lhsLength, newLhs);
+        length = lhsLength - newLhs.length();
+        chpxs[run].endFc -= length;
+        run++;
+        while (run < chpxs.size())
+        {
+            chpxs[run].startFc -= length;
+            chpxs[run].endFc -= length;
+            run++;
+        }
+    }
+
+    // Adjust RHS if required.
+
+    {
+        run = m_field.separator;
+        text.replace(chpxs[run].startFc, rhsLength, newRhs);
+        length = rhsLength - newRhs.length();
+        chpxs[run].endFc -= length;
+        run++;
+        while (run < chpxs.size())
+        {
+            chpxs[run].startFc -= length;
+            chpxs[run].endFc -= length;
+            run++;
+        }
+    }
+}
+

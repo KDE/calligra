@@ -41,6 +41,14 @@ WordFilter::WordFilter(const myFile &mainStream, const myFile &table0Stream,
         SIGNAL(signalSavePic(const QString &, QString &, const QString &, unsigned int, const char *)),
         this,
         SIGNAL(signalSavePic(const QString &, QString &, const QString &, unsigned int, const char *)));
+
+    // Hook up the embedded part support.
+
+    connect(
+        myDoc,
+        SIGNAL(signalSavePart(const QString &, QString &, QString &, const QString &, const QString &, unsigned int, const char *)),
+        this,
+        SIGNAL(signalSavePart(const QString &, QString &, QString &, const QString &, const QString &, unsigned int, const char *)));
 }
 
 WordFilter::~WordFilter()

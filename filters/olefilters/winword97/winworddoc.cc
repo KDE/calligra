@@ -299,15 +299,47 @@ void WinWordDoc::generateFormats(Attributes &attributes)
             // Send the picture to the outside world and get back the UID.
 
             ourKey = "image" + QString::number(image->id) + "." + image->type;
+if (image->type == "wmf")
+{
+            QString mimeType;
+
+            emit signalSavePart(
+                    ourKey,
+                    uid,
+                    mimeType,
+                    image->type,
+                    "",
+                    image->length,
+                    image->data);
+
+            // Add an entry to the list of embedded objects too. TBD: fix
+            // RECT and FRAME settings.
+
+/*
+            m_embedded.append(
+                "  <EMBEDDED>\n");
+            m_embedded.append("<OBJECT url=\"");
+            m_embedded.append(uid);
+            m_embedded.append("\" mime=\"");
+            m_embedded.append(mimeType);
+            m_embedded.append("\">\n<RECT x=\"30\" y=\"190\" w=\"120\" h=\"80\"/>\n");
+            m_embedded.append("</OBJECT>\n");
+            m_embedded.append("<SETTINGS>\n");
+            m_embedded.append("<FRAME left=\"30\" top=\"190\" right=\"149\" bottom=\"269\" tRed=\"0\" tGreen=\"0\" tBlue=\"0\" bRed=\"0\" bGreen=\"0\" bBlue=\"0\"/>\n");
+            m_embedded.append("</SETTINGS>\n");
+            m_embedded.append(
+                "  </EMBEDDED>\n");
+*/
+}
+else
+{
             emit signalSavePic(
                     ourKey,
                     uid,
                     image->type,
                     image->length,
                     image->data);
-kdError() << "found picture:" <<
- ourKey<< " as " <<
-                        uid << endl;
+kdError() << "found picture:" << ourKey<< " as " << uid << endl;
 
             formats.append("<FORMAT id=\"2\" pos=\"");
             formats.append(QString::number(image->start));
@@ -324,6 +356,7 @@ kdError() << "found picture:" <<
             m_pixmaps.append("\" name=\"");
             m_pixmaps.append(uid);
             m_pixmaps.append("\"/>\n");
+}
         }
         else
         if (typeid(Object) == typeid(*run))
