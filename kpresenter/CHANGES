@@ -589,3 +589,8 @@ Reggie, 10.12.1999:
 - If you insert a pixmap and it's larger than one page it's scaled
   down to fit the page keeing constraints
 
+Reggie 12.12.1999:
+-----------------
+- When a header exists and a new page is inserted the header is not overwritten
+  by the header of the new page (template), if no header already exists, the header
+  of the template is used when inserting a new page. Same for footers.

@@ -68,7 +68,8 @@ METASOURCES =	kpresenter_doc.moc kpresenter_view.moc \
 		presstructview.moc delpagedia.moc inspagedia.moc confpiedia.moc \
 		spacingdia.moc confrectdia.moc \
 		commandhistory.moc gotopage.moc webpresentation.moc \
-		footer_header.moc kpresenter_shell.moc kpresenter_factory.moc
+		footer_header.moc kpresenter_shell.moc kpresenter_factory.moc \
+		preview.moc
 
 kdelnk_DATA = kpresenter.desktop
 kdelnkdir = $(kde_appsdir)/Applications/KOffice

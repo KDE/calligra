@@ -22,6 +22,7 @@
 #include "backdia.moc"
 #include "kpbackground.h"
 #include "kpresenter_doc.h"
+#include "preview.h"
 
 #include <qlabel.h>
 #include <qpushbutton.h>
@@ -37,6 +38,7 @@
 #include <qradiobutton.h>
 #include <qcheckbox.h>
 #include <qdatetime.h>
+#include <qfiledialog.h>
 
 #include <kcolorbtn.h>
 #include <klocale.h>
@@ -385,9 +387,19 @@ int BackDia::getBackYFactor()
 /*=============================================================*/
 void BackDia::selectPic()
 {
-    QString file = KFilePreviewDialog::getOpenFileName( QString::null,
-							KImageIO::pattern(KImageIO::Reading),
-							0 );
+    QString file;
+#ifdef USE_QFD
+    QFileDialog fd( QString::null, i18n( "Pictures (*.gif *.png *.jpg *.jpeg *.xpm *.bmp)\nAll files (*)" ), 0, 0, TRUE );
+    fd.setPreviewMode( FALSE, TRUE );
+    fd.setContentsPreviewWidget( new Preview( &fd ) );
+    fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
+    if ( fd.exec() == QDialog::Accepted )
+	file = fd.selectedFile();
+#else    
+   file  = KFilePreviewDialog::getOpenFileName( QString::null,
+						KImageIO::pattern(KImageIO::Reading),
+						0 );
+#endif
 
     if ( !file.isEmpty() ) {
 	chosenPic = file;
@@ -402,8 +414,18 @@ void BackDia::selectPic()
 /*=============================================================*/
 void BackDia::selectClip()
 {
-    QString file = KFilePreviewDialog::getOpenFileName( QString::null, i18n( "*.WMF *.wmf|Windows Metafiles" ), 0 );
-
+    QString file;
+#ifdef USE_QFD
+    QFileDialog fd( QString::null, i18n( "Windows Metafiles (*.wmf)" ), 0, 0, TRUE );
+    fd.setPreviewMode( FALSE, TRUE );
+    fd.setContentsPreviewWidget( new Preview( &fd ) );
+    fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
+    if ( fd.exec() == QDialog::Accepted )
+	file = fd.selectedFile();
+#else    
+    fiile = KFilePreviewDialog::getOpenFileName( QString::null, i18n( "*.WMF *.wmf|Windows Metafiles" ), 0 );
+#endif
+    
     if ( !file.isEmpty() ) {
 	chosenClip = file;
 	lClipName->setText( chosenClip );

@@ -19,7 +19,9 @@
 
 #include <qpicture.h>
 #include "preview.h"
+#include "preview.moc"
 #include "qwmf.h"
+#include <qscrollview.h>
 
 /**
  * A preview handler for the KFilePreviewDialag that shows
@@ -30,32 +32,30 @@ bool wmfPreviewHandler( const KFileInfo* fInfo, const QString fileName, QString&
     bool res = false;
     QString ext = fileName.right( 3 ).lower();
 
-    if ( fInfo->isFile() && ( ext == "wmf" ) )
-    {
-        QWinMetaFile wmf;
+    if ( fInfo->isFile() && ( ext == "wmf" ) ) {
+	QWinMetaFile wmf;
 
-        if ( wmf.load( fileName.data() ) )
-        {
-            QPicture pic;
-            wmf.paint( &pic );
+	if ( wmf.load( fileName.data() ) ) {
+	    QPicture pic;
+	    wmf.paint( &pic );
 
-            pixmap = QPixmap( 200, 200 );
-            QPainter p;
+	    pixmap = QPixmap( 200, 200 );
+	    QPainter p;
 
-            p.begin( &pixmap );
-            p.setBackgroundColor( Qt::white );
-            pixmap.fill( Qt::white );
+	    p.begin( &pixmap );
+	    p.setBackgroundColor( Qt::white );
+	    pixmap.fill( Qt::white );
 
-            QRect oldWin = p.window();
-            QRect vPort = p.viewport();
-            p.setViewport( 0, 0, 200, 200 );
-            p.drawPicture( pic );
-            p.setWindow( oldWin );
-            p.setViewport( vPort );
-            p.end();
+	    QRect oldWin = p.window();
+	    QRect vPort = p.viewport();
+	    p.setViewport( 0, 0, 200, 200 );
+	    p.drawPicture( pic );
+	    p.setWindow( oldWin );
+	    p.setViewport( vPort );
+	    p.end();
 
-            res = true;
-        }
+	    res = true;
+	}
     }
     return res;
 }
@@ -66,10 +66,78 @@ bool wmfPreviewHandler( const KFileInfo* fInfo, const QString fileName, QString&
  */
 bool pixmapPreviewHandler( const KFileInfo* fInfo, const QString fileName, QString&, QPixmap& pixmap )
 {
-    if ( fInfo->isFile() )
-    {
-        pixmap.load( fileName.data() );
-        return !pixmap.isNull();
+    if ( fInfo->isFile() ) {
+	pixmap.load( fileName.data() );
+	return !pixmap.isNull();
     }
     return false;
+}
+
+class PixmapView : public QScrollView
+{
+public:
+    PixmapView( QWidget *parent )
+	: QScrollView( parent ) {}
+
+    void setPixmap( const QPixmap &pix ) {
+	pixmap = pix;
+	resizeContents( pixmap.size().width(), pixmap.size().height() );
+	viewport()->repaint( FALSE );
+    }
+
+    void setClipart( const QString &s ) {
+	QWinMetaFile wmf;
+
+	if ( wmf.load( s ) ) {
+	    QPicture pic;
+	    wmf.paint( &pic );
+
+	    pixmap = QPixmap( 200, 200 );
+	    QPainter p;
+
+	    p.begin( &pixmap );
+	    p.setBackgroundColor( Qt::white );
+	    pixmap.fill( Qt::white );
+
+	    QRect oldWin = p.window();
+	    QRect vPort = p.viewport();
+	    p.setViewport( 0, 0, 200, 200 );
+	    p.drawPicture( pic );
+	    p.setWindow( oldWin );
+	    p.setViewport( vPort );
+	    p.end();
+	    resizeContents( pixmap.size().width(), pixmap.size().height() );
+	    viewport()->repaint( FALSE );
+	}
+    }
+    
+    void drawContents( QPainter *p, int, int, int, int ) {
+	p->drawPixmap( 0, 0, pixmap );
+    }
+
+private:
+    QPixmap pixmap;
+    
+};
+
+Preview::Preview( QWidget *parent )
+    : QVBox( parent ) 
+{
+    pixmap = new PixmapView( this );
+}
+
+void Preview::showPreview( const QUrl &u ) 
+{
+    if ( u.isLocalFile() ) {
+	QString path = u.path();
+	    QFileInfo fi( path );
+	    if ( fi.extension().lower() == "wmf" )
+		pixmap->setClipart( path );
+	    else {
+		QPixmap pix( path );
+		pixmap->setPixmap( pix );
+	    }
+    } else {
+	pixmap->setPixmap( QPixmap() );
+    }
 }

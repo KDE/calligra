@@ -65,8 +65,10 @@ const QString KoFilterManager::fileSelectorList( const Direction &direction, con
 
     if ( _native_pattern && _native_name )
     {
+#ifndef USE_QFD
         ret += _native_pattern;
         ret += "|";
+#endif
         ret += _native_name;
         ret += " (";
         ret += _native_pattern;
@@ -93,8 +95,10 @@ const QString KoFilterManager::fileSelectorList( const Direction &direction, con
                 s = patterns[j];
                 if ( !ret.isEmpty() )
                     ret += "\n";
+#ifndef USE_QFD
                 ret += s;
                 ret += "|";
+#endif
                 if ( direction == Import )
                     ret += vec[i].importDescription;
                 else
@@ -108,7 +112,9 @@ const QString KoFilterManager::fileSelectorList( const Direction &direction, con
         {
             if ( !ret.isEmpty() )
                 ret += "\n";
+#ifndef USE_QFD
             ret += "*.*|";
+#endif
             if ( direction == Import )
                 ret += vec[i].importDescription;
             else
@@ -120,7 +126,9 @@ const QString KoFilterManager::fileSelectorList( const Direction &direction, con
     {
         if ( !ret.isEmpty() )
             ret += "\n";
+#ifndef USE_QFD
         ret += "*.*|";
+#endif
         ret += i18n( "All files (*.*)" );
     }
     return ret;

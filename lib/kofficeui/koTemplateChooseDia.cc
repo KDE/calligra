@@ -36,6 +36,8 @@
 #include <qlayout.h>
 #include <kstddirs.h>
 
+#include <qfiledialog.h>
+
 /******************************************************************/
 /* Class: KoTemplateChooseDia					  */
 /******************************************************************/
@@ -322,7 +324,13 @@ void KoTemplateChooseDia::chooseFile()
     if ( QFile::exists( lFile->text() ) )
 	dir = QFileInfo( lFile->text() ).absFilePath();
 
-    QString filename = KFileDialog::getOpenFileName( dir, m_strImportFilter );
+    QString filename;
+#ifdef USE_QFD
+    filename = QFileDialog::getOpenFileName( dir, m_strImportFilter );
+#else
+    filename = KFileDialog::getOpenFileName( dir, m_strImportFilter );
+#endif
+    
     if ( !filename.isEmpty() && QFileInfo( filename ).isFile() ||
 	( QFileInfo( filename ).isSymLink() && !QFileInfo( filename ).readLink().isEmpty() &&
 	 QFileInfo( QFileInfo( filename ).readLink() ).isFile() ) )

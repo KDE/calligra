@@ -31,6 +31,7 @@
 #include <qmime.h>
 #include <qmessagebox.h>
 #include <qfileinfo.h>
+#include <qfiledialog.h>
 
 #include <kapp.h>
 #include <kstdaccel.h>
@@ -164,7 +165,11 @@ bool KoMainWindow::saveDocument( const char* _native_format, const char* _native
 
 	bool bOk = true;
 	do {
-	    file = KFileDialog::getSaveFileName( getenv( "HOME" ), filter );
+#ifdef USE_QFD
+	    file = QFileDialog::getSaveFileName( QString::null, filter );
+#else	    
+	    file = KFileDialog::getSaveFileName( QString::null, filter );
+#endif
 	    if ( file.isNull() )
 		return false;
 
@@ -286,7 +291,12 @@ void KoMainWindow::slotFileOpen()
 								nativeFormatMimeType(), nativeFormatPattern(),
 								nativeFormatName(), TRUE );
 
-    QString file = KFileDialog::getOpenFileName( getenv( "HOME" ), filter );
+    QString file;
+#ifdef USE_QFD
+    file = QFileDialog::getOpenFileName( QString::null, filter );
+#else
+    file = KFileDialog::getOpenFileName( QString::null, filter );
+#endif
     if ( file.isNull() )
 	return;
 

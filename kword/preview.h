@@ -23,11 +23,30 @@
 #include <kfiledialog.h>
 
 #include <qstring.h>
+#include <qurl.h>
+#include <qvbox.h>
 
 // WMF preview
 bool wmfPreviewHandler ( const KFileInfo*, const QString fileName, QString&, QPixmap& pixmap );
 
 // Pixmap preview
 bool pixmapPreviewHandler( const KFileInfo*, const QString fileName, QString&, QPixmap& pixmap );
+
+class PixmapView;
+
+class Preview : public QVBox
+{
+    Q_OBJECT
+
+public:
+    Preview( QWidget *parent );
+    
+public slots:
+    void showPreview( const QUrl &u );
+
+private:
+    PixmapView *pixmap;
+
+};
 
 #endif

@@ -23,6 +23,7 @@
 #include "kpresenter_doc.h"
 #include "kpresenter_view.h"
 #include "page.h"
+#include "preview.h"
 
 #include <stdlib.h>
 #include <unistd.h>
@@ -52,6 +53,7 @@
 #include <qdir.h>
 #include <qheader.h>
 #include <qwmatrix.h>
+#include <qfiledialog.h>
 
 #include <klocale.h>
 #include <kcolorbtn.h>
@@ -185,7 +187,7 @@ void KPWebPresentation::initCreation( KProgress *progressBar )
 /*================================================================*/
 void KPWebPresentation::createSlidesPictures( KProgress *progressBar )
 {
-    QPixmap pix( QSize( doc->getPageSize( 0, 0, 0, 1.0, FALSE ).width(), 
+    QPixmap pix( QSize( doc->getPageSize( 0, 0, 0, 1.0, FALSE ).width(),
 			doc->getPageSize( 0, 0, 0, 1.0, FALSE ).height() ) );
     QString filename;
     QString format = imageFormat( imgFormat );
@@ -646,8 +648,12 @@ void KPWebPresentationWizard::slotChoosePath()
     if ( fi.exists() && fi.isDir() )
 	url = path->text();
 
+#ifdef USE_QFD
+    url = QFileDialog::getExistingDirectory( url );
+#else
     url = KFileDialog::getDirectory( url );
-
+#endif
+    
     if ( QFileInfo( url ).exists() && QFileInfo( url ).isDir() )
 	path->setText( url );
 }
@@ -868,8 +874,12 @@ void KPWebPresentationCreateDialog::saveConfig()
     else
 	filename = QString::null;
 
+#ifdef USE_QFD
+    filename = QFileDialog::getOpenFileName( filename, "KPresenter Web-Presentation (*.kpweb)" );
+#else
     filename = KFileDialog::getOpenFileName( filename, "*.kpweb|KPresenter Web-Presentation" );
-
+#endif
+    
     if ( !filename.isEmpty() ) {
 	webPres.setConfig( filename );
 	webPres.saveConfig();

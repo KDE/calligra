@@ -29,6 +29,7 @@
 #include <qscrollview.h>
 #include <qsplitter.h>
 #include <qaction.h>
+#include <qfiledialog.h>
 
 #include "kword_view.h"
 #include "kword_doc.h"
@@ -78,6 +79,8 @@
 #include <stdlib.h>
 #include <X11/Xlib.h>
 #define DEBUG
+
+#include "preview.h"
 
 // /******************************************************************/
 // /* Class: KWordFrame						  */
@@ -1210,8 +1213,19 @@ void KWordView::viewEndNotes()
 /*===============================================================*/
 void KWordView::insertPicture()
 {
-    QString file = KFilePreviewDialog::getOpenFileName( QString::null,
-							KImageIO::pattern(KImageIO::Reading), 0);
+    QString file;
+#ifdef USE_QFD
+    QFileDialog fd( QString::null, i18n( "Pictures (*.gif *.png *.jpg *.jpeg *.xpm *.bmp)\nAll files (*)" ), 0, 0, TRUE );
+    fd.setPreviewMode( FALSE, TRUE );
+    fd.setContentsPreviewWidget( new Preview( &fd ) );
+    fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
+    if ( fd.exec() == QDialog::Accepted )
+	file = fd.selectedFile();
+#else    
+   file  = KFilePreviewDialog::getOpenFileName( QString::null,
+						KImageIO::pattern(KImageIO::Reading),
+						0 );
+#endif
 
     if ( !file.isEmpty() ) m_pKWordDoc->insertPicture( file, gui->getPaperWidget() );
 }
@@ -1487,8 +1501,20 @@ void KWordView::toolsCreatePix()
     if ( !( (KToggleAction*)actionToolsCreatePix )->isChecked() )
 	return;
     gui->getPaperWidget()->mmEdit();
-    QString file = KFilePreviewDialog::getOpenFileName( QString::null,
-							KImageIO::pattern(KImageIO::Reading), 0);
+
+    QString file;
+#ifdef USE_QFD
+    QFileDialog fd( QString::null, i18n( "Pictures (*.gif *.png *.jpg *.jpeg *.xpm *.bmp)\nAll files (*)" ), 0, 0, TRUE );
+    fd.setPreviewMode( FALSE, TRUE );
+    fd.setContentsPreviewWidget( new Preview( &fd ) );
+    fd.setViewMode( QFileDialog::ListView | QFileDialog::PreviewContents );
+    if ( fd.exec() == QDialog::Accepted )
+	file = fd.selectedFile();
+#else    
+   file  = KFilePreviewDialog::getOpenFileName( QString::null,
+						KImageIO::pattern(KImageIO::Reading),
+						0 );
+#endif
 
     if ( !file.isEmpty() ) {
 	gui->getPaperWidget()->mmCreatePix();

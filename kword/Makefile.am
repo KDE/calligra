@@ -1,5 +1,5 @@
 
-KDE_CXXFLAGS = $(USE_RTTI) 
+KDE_CXXFLAGS = $(USE_RTTI)
 INCLUDES = $(KOFFICE_INCLUDES) $(all_includes)
 
 ####### Files
@@ -37,9 +37,9 @@ noinst_HEADERS = char.h kword_doc.h kword_view.h kword_shell.h \
 METASOURCES =	kword_view.moc kword_doc.moc kword_shell.moc paragdia.moc \
 		kword_page.moc framedia.moc stylist.moc kcharselectdia.moc \
 		searchdia.moc tabledia.moc insdia.moc deldia.moc \
-                docstruct.moc kword_undo.moc clipbrd_dnd.moc footnotedia.moc \
-                autoformatdia.moc variabledlgs.moc serialletter.moc \
-		kword_factory.moc
+		docstruct.moc kword_undo.moc clipbrd_dnd.moc footnotedia.moc \
+		autoformatdia.moc variabledlgs.moc serialletter.moc \
+		kword_factory.moc preview.moc
 
 kdelnk_DATA = kword.desktop
 kdelnkdir = $(kde_appsdir)/Applications/KOffice
