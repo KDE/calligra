@@ -16,3 +16,5 @@ services_DATA=kwserialletter_classic.desktop
 servicesdir=$(kde_servicesdir)
 
 SUBDIRS = . $(SQLDIR)
+#SUBDIRS = . $(SQLDIR) kabc
+

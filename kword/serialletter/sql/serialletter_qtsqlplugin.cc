@@ -39,6 +39,7 @@
 KWQTSQLSerialDataSource::KWQTSQLSerialDataSource(KInstance *inst,QObject *parent)
 	: KWQTSQLSerialDataSourceBase(inst,parent)
 {
+  myquery=0;
 }
 
 KWQTSQLSerialDataSource::~KWQTSQLSerialDataSource()
