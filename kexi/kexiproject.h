@@ -102,6 +102,10 @@ protected:
 	bool saveProjectAs(const QString&);
 	bool loadProject(const QString&);
 private:
+	void saveConnectionSettings(QDomDocument&);
+	void saveReferences(QDomDocument&);
+	void loadConnectionSettings(QDomElement&);
+	void loadReferences(QDomElement&);
         KexiDoc*        m_settings;
         KexiDB*         m_db;
         KexiFormManager *m_formManager;

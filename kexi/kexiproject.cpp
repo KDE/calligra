@@ -88,93 +88,59 @@ KoView* KexiProject::createViewInstance( QWidget* parent, const char* name )
     return new KexiView( KexiView::MDIWindowMode,this, parent, name );
 }
 
-bool KexiProject::loadXML( QIODevice *, const QDomDocument & )
+void KexiProject::saveConnectionSettings(QDomDocument &domDoc)
 {
-    // TODO load the document from the QDomDocument
-    return true;
-}
-
-QDomDocument KexiProject::saveXML()
-{
-    // TODO save the document into a QDomDocument
-    return QDomDocument();
-}
-
-void KexiProject::paintContent( QPainter& /*painter*/, const QRect& /*rect*/, bool /*transparent*/,
-                                double /*zoomX*/, double /*zoomY*/)
-{
-}
-
-
-bool
-KexiProject::saveProject()
-{
-	if(m_url.isEmpty())
-		return false;
-
-	KoStore* store = KoStore::createStore(m_url, KoStore::Write, "application/x-kexi");
-	if(store)
-	{
-		emit saving(store);
-	}
-
-	QDomDocument domDoc("KexiProject");
-	domDoc.appendChild(domDoc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
-
-	QDomElement projectElement = domDoc.createElement("KexiProject");
-	domDoc.appendChild(projectElement);
-
+	QDomElement connectionElement = domDoc.createElement("connectionSettings");
+	domDoc.documentElement().appendChild(connectionElement);
+	
+//DB ENGINE
 	QDomElement engineElement = domDoc.createElement("engine");
-	projectElement.appendChild(engineElement);
-
+	connectionElement.appendChild(engineElement);
+	
 	QDomText tEngine = domDoc.createTextNode(m_cred.driver);
 	engineElement.appendChild(tEngine);
-
+	
+//HOST
 	QDomElement hostElement = domDoc.createElement("host");
-	projectElement.appendChild(hostElement);
-
+	connectionElement.appendChild(hostElement);
+	
 	QDomText tHost = domDoc.createTextNode(m_cred.host);
 	hostElement.appendChild(tHost);
 
+//DATABASE NAME	
 	QDomElement nameElement = domDoc.createElement("name");
-	projectElement.appendChild(nameElement);
-
+	connectionElement.appendChild(nameElement);
+	
 	QDomText tName = domDoc.createTextNode(m_cred.database);
 	nameElement.appendChild(tName);
 
+//USER
 	QDomElement userElement = domDoc.createElement("user");
-	projectElement.appendChild(userElement);
-
+	connectionElement.appendChild(userElement);
+	
 	QDomText tUser = domDoc.createTextNode(m_cred.user);
 	userElement.appendChild(tUser);
-
+	
+//PASSWORD STUFF
 	QDomElement passElement = domDoc.createElement("password");
-	projectElement.appendChild(passElement);
+	connectionElement.appendChild(passElement);
 
-//	QDomText tPass = domDoc.createTextNode(m_cred.password);
-//	passElement.appendChild(tPass);
-
-	QDomText tPass;
-
-	if(m_cred.savePassword)
-	{
-		tPass = domDoc.createTextNode(m_cred.password);
-	}
-	else
-	{
-		tPass = domDoc.createTextNode("");
-	}
-
+	QDomText tPass=domDoc.createTextNode(m_cred.savePassword?m_cred.password:"");
 	passElement.appendChild(tPass);
 
 	QDomElement savePassElement = domDoc.createElement("savePassword");
-	projectElement.appendChild(savePassElement);
+	connectionElement.appendChild(savePassElement);
 
 	QDomText tSavePass = domDoc.createTextNode(boolToString(m_cred.savePassword));
 	savePassElement.appendChild(tSavePass);
 
+}
+
+
+void KexiProject::saveReferences(QDomDocument &domDoc)
+{
 	QDomElement refs = domDoc.createElement("references");
-	projectElement.appendChild(refs);
+	domDoc.documentElement().appendChild(refs);
 
 	kdDebug() << "KexiProject::saveProject(): storing " << m_fileReferences.count() << " references" << endl;
 	for(References::Iterator it = m_fileReferences.begin(); it != m_fileReferences.end(); it++)
@@ -193,120 +159,41 @@ KexiProject::saveProject()
 		else
 		{
 			kdDebug() << "KexiProject::saveProject(): creating group: " << ref.group << endl;
-
+			
 			QDomElement group = domDoc.createElement(ref.group);
 			group.appendChild(item);
-
+			
 			m_refGroups.insert(ref.group, group);
 		}
 	}
-
+	
 	for(Groups::Iterator itG = m_refGroups.begin(); itG != m_refGroups.end(); itG++)
 	{
 		refs.appendChild(itG.data());
 	}
-/*
-		QDomElement ref = domDoc.createElement("embedded");
-		refs.appendChild(ref);
 
-		QDomText tref = domDoc.createTextNode((*it));
-		ref.appendChild(tref);
-	}
-
-*/
-	QByteArray data = domDoc.toCString();
-	data.resize(data.size()-1);
-
-	if(store)
-	{
-		if(store->open("/project.xml"))
-		{
-			store->write(data);
-			store->close();
-		}
-
-		delete store;
-                setModified( false);
-//		kexi->mainWindow()->slotProjectModified();
-		return true;
-	}
-
-	return false;
 }
 
-bool
-KexiProject::saveProjectAs(const QString& url)
+QDomDocument KexiProject::saveXML()
 {
-	m_url = url;
-	return saveProject();
+	kdDebug()<<"KexiProject::saveXML()"<<endl;
+	QDomDocument domDoc=createDomDocument( "KexiProject", "1.0" );
+	saveConnectionSettings(domDoc);
+	saveReferences(domDoc);
+
+	setModified(false);
+	return domDoc;
 }
 
-bool
-KexiProject::loadProject(const QString& url)
+
+void KexiProject::loadConnectionSettings(QDomElement &rootElement)
 {
-	m_url = url;
-	KoStore* store = KoStore::createStore(m_url, KoStore::Read, "application/x-kexi");
-
-	if(!store)
-	{
-		return false;
-	}
-
-	store->open("/project.xml");
-	QDomDocument inBuf;
-
-	//error reporting
-	QString errorMsg;
-	int errorLine;
-	int errorCol;
-
-	bool parsed = inBuf.setContent(store->device(), false, &errorMsg, &errorLine, &errorCol);
-	store->close();
-	delete store;
-
-	if(!parsed)
-	{
-		kdDebug() << "coudn't parse:" << endl;
-		kdDebug() << "error: " << errorMsg << " line: " << errorLine << " col: " << errorCol << endl;
-		return false;
-	}
-
-
-	QDomElement projectData = inBuf.namedItem("KexiProject").toElement();
-
-	QDomElement engineElement = projectData.namedItem("engine").toElement();
-	QDomElement hostElement = projectData.namedItem("host").toElement();
-	QDomElement nameElement = projectData.namedItem("name").toElement();
-	QDomElement userElement = projectData.namedItem("user").toElement();
-	QDomElement passElement = projectData.namedItem("password").toElement();
-	QDomElement savePassElement = projectData.namedItem("savePassword").toElement();
-
-	QDomElement fileRefs = projectData.namedItem("references").toElement();
-	QDomNodeList reflist = fileRefs.childNodes();
-	kdDebug() << "KexiProject::loadProject(): looking up references: " << reflist.count() << endl;
-
-	for(int ci = 0; ci < reflist.count(); ci++)
-	{
-		QDomNode groups = reflist.item(ci);
-		QDomNodeList groupList = groups.childNodes();
-		QString groupName = groups.toElement().tagName();
-		kdDebug() << "KexiProject::loadProject(): looking up groups: " << groupList.count() << " for " << groupName << endl;
-		for(int gi = 0; gi < groupList.count(); gi++)
-		{
-			QDomElement item = groupList.item(gi).toElement();
-			QString name = item.attribute("name");
-			QString location = item.attribute("location");
-
-			FileReference ref;
-			ref.group = groupName;
-			ref.name = name;
-			ref.location = location;
-
-				qDebug("KexiProject::openProject(): #ref %s:%s:%s\n",groupName.latin1(),name.latin1(),location.latin1());
-
-			m_fileReferences.append(ref);
-		}
-	}
+	QDomElement engineElement = rootElement.namedItem("engine").toElement();
+	QDomElement hostElement = rootElement.namedItem("host").toElement();
+	QDomElement nameElement = rootElement.namedItem("name").toElement();
+	QDomElement userElement = rootElement.namedItem("user").toElement();
+	QDomElement passElement = rootElement.namedItem("password").toElement();
+	QDomElement savePassElement = rootElement.namedItem("savePassword").toElement();
 
 	Credentials parsedCred;
 	parsedCred.driver   = engineElement.text();
@@ -337,13 +224,63 @@ KexiProject::loadProject(const QString& url)
 	}
 
 	initDbConnection(parsedCred);
-        setModified( mod );
+        setModified( isModified() | mod );
 
-//	kexi->mainWindow()->slotProjectModified();
+}
 
-	kdDebug() << "File opened!" << endl;
 
+void KexiProject::loadReferences(QDomElement &fileRefs)
+{
+	QDomNodeList reflist = fileRefs.childNodes();
+	kdDebug() << "KexiProject::loadProject(): looking up references: " << reflist.count() << endl;
+
+	for(int ci = 0; ci < reflist.count(); ci++)
+	{
+		QDomNode groups = reflist.item(ci);
+		QDomNodeList groupList = groups.childNodes();
+		QString groupName = groups.toElement().tagName();
+		kdDebug() << "KexiProject::loadProject(): looking up groups: " << groupList.count() << " for " << groupName << endl;
+		for(int gi = 0; gi < groupList.count(); gi++)
+		{
+			QDomElement item = groupList.item(gi).toElement();
+			QString name = item.attribute("name");
+			QString location = item.attribute("location");
+
+			FileReference ref;
+			ref.group = groupName;
+			ref.name = name;
+			ref.location = location;
+
+				qDebug("KexiProject::openProject(): #ref %s:%s:%s\n",groupName.latin1(),name.latin1(),location.latin1());
+
+			m_fileReferences.append(ref);
+		}
+	}
+
+}
+
+bool KexiProject::loadXML( QIODevice *, const QDomDocument &domDoc )
+{
+	setModified(false);
+	kdDebug()<<"KexiProject::loadXML"<<endl;
+	QDomElement prE=domDoc.documentElement();
+	for (QDomElement el=prE.firstChild().toElement();!el.isNull();el=el.nextSibling().toElement())
+	{
+		QString tagname=el.tagName();
+		//perhaps the if's should be moved lateron into the methods alone
+		if (tagname=="connectionSettings") loadConnectionSettings(el);
+		else if (tagname=="references") loadReferences(el);
+	}
 	return true;
+}
+
+
+
+
+void KexiProject::paintContent( QPainter& /*painter*/, const QRect& /*rect*/, bool /*transparent*/,
+                                double /*zoomX*/, double /*zoomY*/)
+{
+	
 }
 
 bool KexiProject::initDbConnection(const Credentials &cred, const bool create)
@@ -368,7 +305,6 @@ bool KexiProject::initDbConnection(const Credentials &cred, const bool create)
 		m_cred = cred;
 		kdDebug() << "KexiProject::initDbConnection(): loading succeeded" << endl;
                 setModified( false );
-//		kexi->mainWindow()->slotProjectModified();
 		emit dbAvaible();
 		emit updateBrowsers();
 		m_dbAvaible = true;
