@@ -61,7 +61,7 @@ class KOSpellDlg : public KDialogBase
 
     int m_indexLanguage;
 public:
-    KOSpellDlg (QWidget *parent, const char *name, int indexOfLanguage,
+    KOSpellDlg (QWidget *parent, KOSpellConfig *_ksc, const char *name, int indexOfLanguage,
               bool _modal = FALSE, bool _autocorrect = false );
 
     QString replacement () const

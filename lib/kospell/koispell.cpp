@@ -41,6 +41,7 @@
 #include "koSpelldlg.h"
 #include "koispell.moc"
 #include "koispell.h"
+#include "koSconfig.h"
 
 #include <kwin.h>
 #include <kprocio.h>
@@ -309,7 +310,7 @@ KOISpell::setUpDialog (bool reallyuseprogressbar)
     return;
 
   //Set up the dialog box
-  ksdlg=new KOSpellDlg (parent, "dialog",
+  ksdlg=new KOSpellDlg (parent, ksconfig, "dialog",
 		       progressbar && reallyuseprogressbar, modaldlg );
   ksdlg->setCaption (caption);
   connect (ksdlg, SIGNAL (command (int)), this,

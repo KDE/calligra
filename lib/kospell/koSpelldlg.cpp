@@ -37,6 +37,7 @@
 
 KOSpellDlg::KOSpellDlg(
   QWidget * parent,
+  KOSpellConfig *_ksc,
   const char * name,
   int indexOfLanguage,
   bool _modal,
@@ -63,6 +64,12 @@ KOSpellDlg::KOSpellDlg(
     language->setCurrentItem( indexOfLanguage);
 
     m_previous = new QCheckBox( i18n("Previous word"), w);
+    if( _ksc->client() == KOS_CLIENT_ISPELL)
+    {
+        language->hide();
+        l_language->hide();
+        m_previous->hide();
+    }
 
     QLabel * l_misspelled = new QLabel(i18n("Misspelled word:"), w, "l_misspelled");
 

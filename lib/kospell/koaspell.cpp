@@ -183,7 +183,7 @@ KOASpell::setUpDialog ()
         return;
 
     //Set up the dialog box
-    ksdlg=new KOSpellDlg (parent, "dialog", KOSpellConfig::indexFromLanguageFileName( ksconfig->dictionary()),  modaldlg, autocorrect );
+    ksdlg=new KOSpellDlg (parent, ksconfig,"dialog", KOSpellConfig::indexFromLanguageFileName( ksconfig->dictionary()),  modaldlg, autocorrect );
     ksdlg->setCaption (caption);
 #ifdef Q_WS_X11 // FIXME(E): Implement for Qt/Embedded
     KWin::setIcons (ksdlg->winId(), kapp->icon(), kapp->miniIcon());
