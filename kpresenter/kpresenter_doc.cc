@@ -225,19 +225,6 @@ void KPresenterDoc::draw( QPaintDevice* /*_dev*/, long int /*_width*/, long int 
     warning( "***********************************************" );
 }
 
-/*========================== save ===============================*/
-bool KPresenterDoc::hasToWriteMultipart()
-{
-//     QListIterator<KPresenterChild> it( m_lstChildren );
-//     for( ; it.current(); ++it )
-//     {
-//	   if ( !it.current()->isStoredExtern() )
-//	       return true;
-//     }
-//     return false;
-    return true;
-}
-
 /*======================= make child list intern ================*/
 bool KPresenterDoc::saveChildren( KoStore* _store, const char *_path )
 {

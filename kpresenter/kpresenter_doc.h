@@ -347,15 +347,6 @@ protected:
      * Overloaded function from @ref Document_impl. Saves all children.
      */
     virtual bool saveChildren( KoStore* _store, const char *_path );
-    /*
-     * Overloaded function from @ref KoDocument.
-     *
-     * @return true if one of the direct children wants to
-     *		    be saved embedded. If there are no children or if
-     *		    every direct child saves itself into its own file
-     *		    then false is returned.
-     */
-    virtual bool hasToWriteMultipart();
 
     virtual void draw( QPaintDevice*, long int, long int, float _scale );
 
