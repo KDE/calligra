@@ -1,0 +1,9 @@
+[Desktop Entry]
+Icon=
+Name=Karbon14 PNG Export Filter
+ServiceTypes=KOfficeFilter
+Type=Service
+X-KDE-Export=image/png
+X-KDE-Import=application/x-karbon
+X-KDE-Library=libkarbonpngexport
+X-KDE-Weight=1

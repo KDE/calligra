@@ -1,2 +1,2 @@
-SUBDIRS = eps ai svg
+SUBDIRS = eps ai svg png
 
