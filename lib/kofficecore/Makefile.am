@@ -2,7 +2,7 @@
 
 INCLUDES= $(KOML_INCLUDES) $(KSTORE_INCLUDES) -I$(srcdir)/../ -I$(idldir) $(all_includes) $(MICO_INCLUDES)
 LDFLAGS	= $(MICO_LDFLAGS) $(all_libraries)  -version-info 1:0:0
-libkofficecore_la_LIBADD  = -lkom $(LIB_KFILE) $(LIBMICO) 
+libkofficecore_la_LIBADD  = -lkparts ../koml/libkoml.la ../store/libkstore.la $(LIB_KDEUTIL) $(LIB_KIO)   
 
 ####### Files
 

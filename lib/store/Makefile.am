@@ -1,10 +1,11 @@
 
 lib_LTLIBRARIES = libkstore.la
-LDFLAGS = -version-info 1:0:0
+LDFLAGS = -version-info 1:0:0 $(all_libraries)
 INCLUDES = $(MICO_INCLUDES) -I$(idldir) $(all_includes)
 
 ####### Files
 
+libkstore_la_LIBADD = $(LIB_QT) $(LIBMICO)
 libkstore_la_SOURCES = koStore_idl.cc koStore.cc
 include_HEADERS = koStore.h
 
