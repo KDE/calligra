@@ -2084,6 +2084,12 @@ void KPresenterView::createGUI()
             actionViewShowNoteBar->setChecked(false);
         }
     }
+        KPrPage *initPage=m_pKPresenterDoc->initialActivePage();
+    if (initPage)
+        m_canvas->setActivePage(initPage);
+    else
+        //activate first page
+        m_canvas->setActivePage( m_pKPresenterDoc->pageList().at(0));
 }
 
 /*=============================================================*/

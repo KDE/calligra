@@ -2029,7 +2029,7 @@ void KPrCanvas::startScreenPresentation( float presFakt, int curPgNum /* 1-based
 {
     _presFakt = presFakt;
     m_showOnlyPage = curPgNum;
-    kdDebug(33001) << "Page::startScreenPresentation m_showOnlyPage=" << m_showOnlyPage << endl;
+    kdDebug(33001) << "KPrCanvas::startScreenPresentation m_showOnlyPage=" << m_showOnlyPage << endl;
     kdDebug(33001) << "                              _presFakt=" << _presFakt << endl;
 
     presMenu->setItemChecked( PM_SM, true );
@@ -5114,12 +5114,14 @@ KPrPage* KPrCanvas::activePage()
 void KPrCanvas::setActivePage( KPrPage* _active)
 {
     Q_ASSERT(_active);
+    kdDebug()<<"KPrCanvas::setActivePage( KPrPage* _active) :"<<_active<<endl;
     m_activePage=_active;
 }
 
 void KPrCanvas::slotSetActivePage( KPrPage* _active)
 {
     Q_ASSERT(_active);
+    kdDebug()<<"void KPrCanvas::slotSetActivePage( KPrPage* _active) :"<<_active<<endl;
     m_activePage=_active;
 }
 

@@ -289,6 +289,7 @@ public:
     // Tell all views to stop editing this frameset, if they were doing so
     void terminateEditing( KPTextObject * textObj )
     { emit sig_terminateEditing( textObj ); }
+    KPrPage * initialActivePage();
 
 public slots:
     void movePage( int from, int to );
@@ -326,6 +327,7 @@ protected:
     QDomElement saveObjects( QDomDocument &doc );
     QDomElement saveTitle( QDomDocument &doc );
     QDomElement saveNote( QDomDocument &doc );
+    QDomElement saveAttribute( QDomDocument &doc );
     void loadBackground( const QDomElement &element );
     void loadObjects( const QDomElement &element, bool _paste = false, KPrPage *_page=0L );
     void loadTitle( const QDomElement &element );
@@ -411,6 +413,7 @@ protected:
 private:
     KPresenterView *m_kpresenterView;;
     QPtrList<KPrPage> m_pageList;
+    KPrPage *m_initialActivePage;
 };
 
 #endif

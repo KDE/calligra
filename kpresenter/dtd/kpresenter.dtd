@@ -71,6 +71,17 @@
 <!ATTLIST VARIABLESETTINGS
     startingPageNumber CDATA #REQUIRED>
 
+
+<!--    Contains general attributes. Has no children.
+
+        Attributes:
+            activePage:     select active page.
+-->
+<!ELEMENT ATTRIBUTES
+    EMPTY>
+<!ATTLIST ATTRIBUTES
+    activePage CDATA #REQUIRED>
+
 <!--	Contains all the objects on the pages.
 -->
 <!ELEMENT OBJECTS (OBJECT)*>

@@ -140,6 +140,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
 
     dcop = 0;
     m_kpresenterView = 0;
+    m_initialActivePage=0;
     m_autoFormat = new KoAutoFormat(this);
     _clean = true;
     _spInfinitLoop = false;
@@ -179,7 +180,6 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     KPrPage *newpage=new KPrPage(this);
     m_pageList.insert( 0,newpage);
     emit sig_changeActivePage(newpage );
-
     objStartY = 0;
     setPageLayout( _pageLayout );
     _presPen = QPen( red, 3, SolidLine );
@@ -400,6 +400,8 @@ QDomDocument KPresenterDoc::saveXML()
 
     getVariableCollection()->variableSetting()->save(presenter );
 
+    presenter.appendChild(saveAttribute( doc ));
+
     QDomElement element=doc.createElement("BACKGROUND");
     element.setAttribute("rastX", _rastX);
     element.setAttribute("rastY", _rastY);
@@ -600,6 +602,15 @@ QDomElement KPresenterDoc::saveNote( QDomDocument &doc )
     return notes;
 }
 
+QDomElement KPresenterDoc::saveAttribute( QDomDocument &doc )
+{
+    QDomElement attributes=doc.createElement("ATTRIBUTES");
+    //store first view parameter.
+    int activePage=m_pageList.findRef(m_kpresenterView->getCanvas()->activePage());
+    attributes.setAttribute("activePage",activePage );
+    return attributes;
+}
+
 /*==============================================================*/
 bool KPresenterDoc::completeSaving( KoStore* _store )
 {
@@ -688,7 +699,7 @@ bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
 bool KPresenterDoc::loadXML( const QDomDocument &doc )
 {
     emit sigProgress( 0 );
-
+    int activePage=0;
     delete m_pixmapMap;
     m_pixmapMap = 0L;
     clipartCollectionKeys.clear();
@@ -883,6 +894,9 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
                 }
                 _footer->load(elem);
             }
+        } else if(elem.tagName()=="ATTRIBUTES") {
+            if(elem.hasAttribute("activePage"))
+                activePage=elem.attribute("activePage").toInt();
         } else if(elem.tagName()=="PAGETITLES") {
             loadTitle(elem);
         } else if(elem.tagName()=="PAGENOTES") {
@@ -973,7 +987,8 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
                 (*sit) = true;
         }
     }
-
+    if(activePage!=-1)
+        m_initialActivePage=m_pageList.at(activePage);
     setModified(false);
     emit sigProgress(-1);
     return true;
@@ -1929,6 +1944,11 @@ void KPresenterDoc::appendPixmapKey( KPImageKey key)
 void KPresenterDoc::appendClipartKey(KPClipartKey key)
 {
     usedCliparts.append(key);
+}
+
+KPrPage * KPresenterDoc::initialActivePage()
+{
+    return m_initialActivePage;
 }
 
 #include <kpresenter_doc.moc>
