@@ -1785,7 +1785,7 @@ void KWTextFrameSet::formatMore()
 
                 if ( theFrame->getFrameSet()->isAFooter() )
                 {
-                    double maxFooterSize=footerHearderSizeMax(  theFrame );
+                    double maxFooterSize=footerHeaderSizeMax(  theFrame );
                     wantedPosition = theFrame->top() - m_doc->unzoomItY( difference );
                     if ( wantedPosition != theFrame->top() &&  QMAX(theFrame->bottom()-maxFooterSize,wantedPosition)==wantedPosition )
                     {
@@ -1807,7 +1807,7 @@ void KWTextFrameSet::formatMore()
 
                 if ( theFrame->getFrameSet()->isAHeader() )
                 {
-                    double maxHeaderSize=footerHearderSizeMax(  theFrame );
+                    double maxHeaderSize=footerHeaderSizeMax(  theFrame );
                     resized=QMIN(maxHeaderSize+theFrame->top(),newPosition)==newPosition;
                 }
 
@@ -1964,22 +1964,20 @@ void KWTextFrameSet::formatMore()
     }
 }
 
-double KWTextFrameSet::footerHearderSizeMax(  KWFrame *theFrame )
+double KWTextFrameSet::footerHeaderSizeMax( KWFrame *theFrame )
 {
     double tmp =m_doc->ptPaperHeight()-m_doc->ptBottomBorder()-m_doc->ptTopBorder()-40;//default min 40 for page size
     int page = theFrame->pageNum();
     bool header=theFrame->getFrameSet()->isAHeader();
-    bool state =header ? m_doc->isHeaderVisible():m_doc->isFooterVisible();
-    if(state )
+    if( header ? m_doc->isHeaderVisible():m_doc->isFooterVisible() )
     {
         QListIterator<KWFrameSet> fit = m_doc->framesetsIterator();
-        KWFrame *frm=0L;
         for ( ; fit.current() ; ++fit )
         {
-            state=header ? fit.current()->isAFooter():fit.current()->isAHeader();
+            bool state = header ? fit.current()->isAFooter():fit.current()->isAHeader();
             if(fit.current()->isVisible() && state)
             {
-                frm=fit.current()->getFrame( 0 );
+                KWFrame * frm=fit.current()->getFrame( 0 );
                 if(frm->pageNum()==page )
                     return (tmp-frm->height());
             }

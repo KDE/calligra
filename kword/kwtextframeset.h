@@ -240,7 +240,6 @@ public:
 
     void typingStarted();
     void typingDone();
-    double footerHearderSizeMax(  KWFrame *theFrame );
 public slots:
     void formatMore();
 
@@ -274,6 +273,7 @@ protected:
     bool checkVerticalBreak( int & yp, int h, QTextParag * parag, bool linesTogether, int breakBegin, int breakEnd );
     const QList<KWFrame> & framesInPage( int pageNum ) const;
     void frameResized( KWFrame *theFrame );
+    double footerHeaderSizeMax( KWFrame *theFrame );
 
 private:
     /**
