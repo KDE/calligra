@@ -248,12 +248,12 @@ void OLEFilter::slotGetStream(const int &handle, myFile &stream) {
 // Don't forget the delete [] the stream.data ptr!
 void OLEFilter::slotGetStream(const QString &name, myFile &stream) {
 
-    QArray<int> handle;
+    KLaola::NodeList handle;
 
     handle=docfile->find(name, true);  // search only in current dir!
 
-    if(handle.size()==1)
-        stream=docfile->stream(handle[0]);
+    if (handle.count()==1)
+        stream=docfile->stream(handle.at(0));
     else {
         stream.data=0L;
         stream.length=0;
@@ -263,23 +263,23 @@ void OLEFilter::slotGetStream(const QString &name, myFile &stream) {
 // The recursive method to do all the work
 unsigned OLEFilter::convert(const QString &parentPath, const QString &dirname) {
 
-    QList<OLENode> list=docfile->parseCurrentDir();
-    OLENode *node;
+    KLaola::NodeList list=docfile->parseCurrentDir();
+    KLaola::OLENode *node;
     bool onlyDirs=true;
     unsigned part=0;
     unsigned nextPart=0;
 
     // Search for the directories
     for(node=list.first(); node!=0; node=list.next()) {
-        if(node->type==1) {   // It's a dir!
-            if(docfile->enterDir(node->handle)) {
+        if(node->isDirectory()) {   // It's a dir!
+            if(docfile->enterDir(node)) {
 
                 // Go one level deeper, but don't increase the depth
                 // for ObjectPools.
-                if (node->name == "ObjectPool")
-                    nextPart=convert(parentPath, node->name);
+                if (node->name() == "ObjectPool")
+                    nextPart=convert(parentPath, node->name());
                 else
-                    nextPart=convert(parentPath + '/' + QString::number(part), node->name);
+                    nextPart=convert(parentPath + '/' + QString::number(part), node->name());
                 part++;
 
                 docfile->leaveDir();
@@ -299,15 +299,13 @@ unsigned OLEFilter::convert(const QString &parentPath, const QString &dirname) {
 
         // Find out the correct file type and create the appropriate filter
         do {
-            kdDebug(s_area) << "OLEFilter::convert(): " << node->name << endl;
-            nodeNames += node->name;
-            if(node->name=="WordDocument") {
+            nodeNames.prepend(node->name());
+            if(node->name()=="WordDocument") {
+
+                // WinWord.
 
                 myFile main, table0, table1, data;
-                QArray<int> tmp;
-
-                // WinWord
-                // kdDebug(s_area) << "OLEFilter::convert(): WinWord" << endl;
+                KLaola::NodeList tmp;
 
                 main.data=0L;
                 table0.data=0L;
@@ -315,49 +313,56 @@ unsigned OLEFilter::convert(const QString &parentPath, const QString &dirname) {
                 data.data=0L;
 
                 tmp=docfile->find("WordDocument", true);
-                if(tmp.size()==1)
-                    main=docfile->stream(tmp[0]);
+                if(tmp.count()==1)
+                    main=docfile->stream(tmp.at(0));
 
                 tmp=docfile->find("0Table", true);
-                if(tmp.size()==1)
-                    table0=docfile->stream(tmp[0]);
+                if(tmp.count()==1)
+                    table0=docfile->stream(tmp.at(0));
 
                 tmp=docfile->find("1Table", true);
-                if(tmp.size()==1)
-                    table1=docfile->stream(tmp[0]);
+                if(tmp.count()==1)
+                    table1=docfile->stream(tmp.at(0));
 
                 tmp=docfile->find("Data", true);
-                if(tmp.size()==1)
-                    data=docfile->stream(tmp[0]);
+                if(tmp.count()==1)
+                    data=docfile->stream(tmp.at(0));
 
                 mimeType = "application/x-kword";
+                kdDebug(s_area) << "converting \"" << nodeNames.join(",") << "\" into " << mimeType << endl;
                 myFilter=new WordFilter(main, table0, table1, data);
             }
-            else if(node->name=="Workbook" || node->name=="Book") {
-                // Excel
-                // kdDebug(s_area) << "OLEFilter::convert(): Excel" << endl;
+            else if(node->name()=="Workbook" || node->name()=="Book") {
+
+                // Excel.
 
                 myFile workbook;
                 workbook.data=0L;
 
-                workbook=docfile->stream(node->handle);
+                workbook=docfile->stream(node->handle());
                 mimeType = "application/x-kspread";
+                kdDebug(s_area) << "converting \"" << nodeNames.join(",") << "\" into " << mimeType << endl;
                 myFilter=new ExcelFilter(workbook);
             }
-            else if(node->name=="PowerPoint Document") {
-                // PowerPoint
-                // kdDebug(s_area) << "OLEFilter::convert(): Power Point" << endl;
-                myFilter=new PowerPointFilter();
+            else if(node->name()=="PowerPoint Document") {
+
+                // Powerpoint.
+
                 mimeType = "application/x-kpresenter";
+                kdDebug(s_area) << "converting \"" << nodeNames.join(",") << "\" into " << mimeType << endl;
+                myFilter=new PowerPointFilter();
             }
             else
                 node=list.next();
         } while(!myFilter && node);
 
         if(!myFilter) {
+
             // Unknown type. We turn it into a dummy kword document...
-            myFilter=new FilterBase(nodeNames);
+
+            kdWarning(s_area) << "cannot convert \"" << nodeNames.join(",") << "\"" << endl;
             mimeType = "application/x-kword";
+            myFilter=new FilterBase(nodeNames);
         }
 
         // connect SIGNALs&SLOTs

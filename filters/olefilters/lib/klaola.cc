@@ -26,9 +26,11 @@ KLaola::KLaola(const myFile &file) {
     smallBlockFile=0L;
     bbd_list=0L;
     ok=true;
+//    ppsList.setAutoDelete(true);
+//    m_currentPath.setAutoDelete(true);
 
     if( (file.length % 0x200) != 0 ) {
-        kdError(30510) << "KLaola::KLaola(): Invalid file size!" << endl;
+        kdError(s_area) << "KLaola::KLaola(): Invalid file size!" << endl;
         ok=false;
     }
     if(ok) {
@@ -45,7 +47,12 @@ KLaola::KLaola(const myFile &file) {
             readRootList();
         }
     }
-    //testIt();
+    m_currentPath.clear();
+    testIt();
+
+    // current path=root dirHandle
+    m_currentPath.clear();
+    m_currentPath.append(m_tree.getFirst()->getFirst()->node);
 }
 
 KLaola::~KLaola() {
@@ -58,186 +65,87 @@ KLaola::~KLaola() {
     smallBlockFile=0L;
     delete [] bbd_list;
     bbd_list=0L;
+}
 
-    QList<OLETree> *tmpList;
-    OLETree *node;
-    for(tmpList=treeList.first(); tmpList!=0; tmpList=treeList.next()) {
-        for(node=tmpList->first(); node!=0; node=tmpList->next()) {
-            delete node;
-            node=0L;
-        }
-        delete tmpList;
-        tmpList=0L;
+void KLaola::createTree(const int handle, const short index) {
+
+    Node *node = dynamic_cast<Node *>(ppsList.at(handle));
+    SubTree *subtree;
+
+    TreeNode *tree=new TreeNode;
+    tree->node=node;
+    tree->subtree=-1;
+
+    //QString nix="### entering create tree: handle=";
+    //nix+=QString::number(handle);
+    //nix+=" index=";
+    //nix+=QString::number(index);
+    //kdDebug(s_area) << nix << endl;
+
+    if(node->prevHandle!=-1) {
+        //kdDebug(s_area) << "create tree: prevHandle" << endl;
+        createTree(node->prevHandle, index);
     }
-    OLEInfo *info;
-    for(info=ppsList.first(); info!=0; info=ppsList.next()) {
-        delete info;
-        info=0L;
+    if(node->dirHandle!=-1) {
+        subtree=new SubTree;
+//        subtree->setAutoDelete(true);
+        m_tree.append(subtree);
+        tree->subtree=m_tree.at();
+        //kdDebug(s_area) << "create tree: dirHandle" << endl;
+        createTree(node->dirHandle, tree->subtree);
+    }
+    subtree=m_tree.at(index);
+    //kdDebug(s_area) << "create tree: APPEND " << handle << " tree node " << tree << endl;
+    subtree->append(tree);
+    if(node->nextHandle!=-1) {
+        //kdDebug(s_area) << "create tree: nextHandle" << endl;
+        createTree(node->nextHandle, index);
     }
 }
 
-const QList<OLENode> KLaola::parseRootDir() {
-
-    QList<OLENode> tmpOLENodeList;
-    QArray<int> tmp;
-
-    if(ok) {
-        tmp=path.copy();
-        path.resize(1);
-        path[0]=0;       // just to be sure...
-        tmpOLENodeList=parseCurrentDir();
-        path=tmp.copy();
-    }
-    return tmpOLENodeList;
+const KLaola::NodeList KLaola::currentPath() const {
+    return m_currentPath;
 }
 
-const QList<OLENode> KLaola::parseCurrentDir() {
+bool KLaola::enterDir(const OLENode *dirHandle) {
 
-    OLENode *node;
-    QList<OLETree> *tmpList;
-    QList<OLENode> nodeList;
-    OLETree *tree;
-    OLEInfo *info;
-    unsigned int i;
-    bool found;
+    NodeList nodes;
+    Node *node;
 
     if(ok) {
-        for(i=0, tmpList=treeList.first(); i<path.size(); ++i) {
-            tree=tmpList->first();
-            found=false;
-            do {
-                if(tree==0) {
-                    kdError(30510) << "KLaola::parseCurrentDir(): path seems to be corrupted!" << endl;
-                    ok=false;
-                }
-                else if(tree->handle==path[i] && tree->subtree!=-1)
-                    found=true;
-                else
-                    tree=tmpList->next();
-            } while(!found && ok);
-            tmpList=treeList.at(tree->subtree);
-        }
-    }
-    if(ok) {
-        for(tree=tmpList->first(); tree!=0; tree=tmpList->next()) {
-            node=new OLENode;
-            info=ppsList.at(tree->handle);
-            node->handle=info->handle;
-            node->name=info->name;
-            node->type=info->type;
-            if(info->dir==-1 && info->type==1) {  // this is a strange situation :)
-                node->deadDir=true;
-                kdWarning(30510) << "KLaola::parseCurrentDir(): ######## dead dir ahead ########" << endl;
-            }
-            else
-                node->deadDir=false;
-            nodeList.append(node);
-        }
-    }
-    return nodeList;
-}
-
-const bool KLaola::enterDir(const int &handle) {
-
-    QList<OLENode> dir;
-    OLENode *node;
-
-    if(ok) {
-        dir=parseCurrentDir();
-        node=dir.first();
-        while(node!=0) {
-            if(node->handle==handle && node->type==1 && !node->deadDir) {
-                path.resize(path.size()+1);
-                path[path.size()-1]=node->handle;
+        nodes = parseCurrentDir();
+        for (node = dynamic_cast<Node *>(nodes.first()); node; node = dynamic_cast<Node *>(nodes.next()))
+        {
+            if(node->m_handle==dirHandle->handle() && node->isDirectory() && !node->deadDir) {
+                m_currentPath.append(node);
                 return true;
             }
-            node=dir.next();
         }
     }
     return false;
 }
 
-const bool KLaola::leaveDir() {
+const KLaola::NodeList KLaola::find(const QString &name, const bool onlyCurrentDir) {
 
-    if(ok) {
-        if(path.size()>1) {
-            path.resize(path.size()-1);
-            return true;
-        }
-    }
-    return false;
-}
-
-const QArray<int> KLaola::currentPath() const {
-    return path;
-}
-
-const OLEInfo KLaola::streamInfo(const int &handle) {
-
-    OLEInfo *tmp, ret;
-
-    if(ok) {
-        tmp=ppsList.at(handle);
-        if(tmp) {
-            ret.handle=tmp->handle;
-            ret.name=tmp->name;
-            ret.nameSize=tmp->nameSize;
-            ret.type=tmp->type;
-            ret.prev=tmp->prev;
-            ret.next=tmp->next;
-            ret.dir=tmp->dir;
-            ret.ts1s=tmp->ts1s;
-            ret.ts1d=tmp->ts1d;
-            ret.ts2s=tmp->ts2s;
-            ret.ts2d=tmp->ts2d;
-            ret.sb=tmp->sb;
-            ret.size=tmp->size;
-        }
-    }
-    return ret;
-}
-
-const myFile KLaola::stream(const int &handle) {
-
-    OLEInfo *info;
-    myFile ret;
-
-    if(ok) {
-        info=ppsList.at(handle);
-        if(info) {
-            if(info->size>=0x1000)
-                ret.data=const_cast<unsigned char*>(readBBStream(info->sb));
-            else
-                ret.data=const_cast<unsigned char*>(readSBStream(info->sb));
-            ret.length=info->size;
-        }
-    }
-    return ret;
-}
-
-const QArray<int> KLaola::find(const QString &name, const bool onlyCurrentDir) {
-
-    QArray<int> ret(static_cast<int>(0));
+    OLENode *node;
+    NodeList ret;
     int i=0;
 
     if(ok) {
         if(!onlyCurrentDir) {
-            for(OLEInfo *p=ppsList.first(); p!=0; p=ppsList.next()) {
-                if(p->name==name) {
-                    ret.resize(i+1);
-                    ret[i]=p->handle;
+            for(node=ppsList.first(); node; node=ppsList.next()) {
+                if(node->name()==name) {
+                    ret.append(node);
                     ++i;
                 }
             }
         }
         else {
-            QList<OLENode> list=parseCurrentDir();
-            OLENode *node;
+            NodeList list=parseCurrentDir();
 
-            for(node=list.first(); node!=0; node=list.next()) {
-                if(node->name==name) {
-                    ret.resize(i+1);
-                    ret[i]=node->handle;
+            for(node=list.first(); node; node=list.next()) {
+                if(node->name()==name) {
+                    ret.append(node);
                     ++i;
                 }
             }
@@ -246,36 +154,38 @@ const QArray<int> KLaola::find(const QString &name, const bool onlyCurrentDir) {
     return ret;
 }
 
-void KLaola::testIt() {
+bool KLaola::leaveDir() {
 
-    QList<OLENode> dir;
-    OLENode *node;
-    OLEInfo info;
-    QString foo;
-
-    kdDebug(30510) << "KLaola::testIt() - start -----------" << endl;
-
-    if(ok) {
-        dir=parseRootDir();
-        for(node=dir.first(); node!=0; node=dir.next()) {
-            info=streamInfo(node->handle);
-            foo.setNum(info.handle);
-            foo+="   ";
-            foo+=info.name;
-            foo+="   ";
-            foo+=QString::number(info.sb);
-            foo+="   ";
-            foo+=QString::number(info.size);
-            kdDebug(30510) << foo << endl;
-        }
+    if (ok) {
+        return m_currentPath.removeLast();
     }
-    kdDebug(30510) << "KLaola::testIt() - end -----------" << endl;
+    return false;
 }
 
-const bool KLaola::parseHeader() {
+int KLaola::nextBigBlock(int pos) const
+{
+
+    int x=pos*4;
+    return ( (bigBlockDepot[x+3] << 24) + (bigBlockDepot[x+2] << 16) +
+             (bigBlockDepot[x+1] << 8) + bigBlockDepot[x] );
+}
+
+int KLaola::nextSmallBlock(int pos) const
+{
+
+    if(smallBlockDepot) {
+        int x=pos*4;
+        return ( (smallBlockDepot[x+3] << 24) + (smallBlockDepot[x+2] << 16) +
+                 (smallBlockDepot[x+1] << 8) + smallBlockDepot[x] );
+    }
+    else
+        return -2;   // Emergency Break :)
+}
+
+bool KLaola::parseHeader() {
 
     if(qstrncmp((const char*)data,"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1",8 )!=0) {
-        kdError(30510) << "KLaola::parseHeader(): Invalid file format (unexpected id in header)!" << endl;
+        kdError(s_area) << "KLaola::parseHeader(): Invalid file format (unexpected id in header)!" << endl;
         return false;
     }
 
@@ -288,6 +198,125 @@ const bool KLaola::parseHeader() {
     for(i=0, j=0; i<num_of_bbd_blocks; ++i, j=j+4)
         bbd_list[i]=read32(0x4c+j);
     return true;
+}
+
+KLaola::NodeList KLaola::parseCurrentDir() {
+
+    Node *node;
+    SubTree *subtree;
+    NodeList nodeList;
+    TreeNode *treeNode;
+    unsigned int i;
+    bool found;
+
+    if(ok) {
+        for(i=0, subtree=m_tree.first(); i<m_currentPath.count(); ++i) {
+            treeNode=subtree->first();
+            found=false;
+            do {
+                if(treeNode==0) {
+                    kdError(s_area) << "KLaola::parseCurrentDir(): path seems to be corrupted!" << endl;
+                    ok=false;
+                }
+                else if(treeNode->node->handle()==m_currentPath.at(i)->handle() && treeNode->subtree!=-1) {
+                    found=true;
+                }
+                else
+                    treeNode=subtree->next();
+            } while(!found && ok);
+            subtree=m_tree.at(treeNode->subtree);
+        }
+    }
+    if(ok) {
+        for(treeNode=subtree->first(); treeNode!=0; treeNode=subtree->next()) {
+            node=new Node(*treeNode->node);
+            node->deadDir = (node->dirHandle==-1 && node->isDirectory());
+            // this is a strange situation :)
+            if (node->deadDir)
+                kdWarning(s_area) << "KLaola::parseCurrentDir(): ######## dead dirHandle ahead ########" << endl;
+            nodeList.append(node);
+        }
+    }
+    return nodeList;
+}
+
+KLaola::NodeList KLaola::parseRootDir() {
+
+    NodeList tmpNodeList;
+    NodeList tmp;
+
+    if(ok) {
+        tmp=m_currentPath;
+        m_currentPath.clear();      // current path=root dirHandle
+        m_currentPath.append(m_tree.getFirst()->getFirst()->node);
+        tmpNodeList=parseCurrentDir();
+        m_currentPath=tmp;
+    }
+    return tmpNodeList;
+}
+
+unsigned char KLaola::read8(int i) const
+{
+    return data[i];
+}
+
+unsigned short KLaola::read16(int i) const
+{
+    return ( (data[i+1] << 8) + data[i] );
+}
+
+unsigned int KLaola::read32(int i) const
+{
+    return ( (read16(i+2) << 16) + read16(i) );
+}
+
+const unsigned char *KLaola::readBBStream(int start, bool setmaxSblock)
+{
+
+    int i=0, tmp;
+    unsigned char *p=0;
+
+    tmp=start;
+    while(tmp!=-2 && tmp>=0 && tmp<=static_cast<int>(maxblock)) {
+        ++i;
+        tmp=nextBigBlock(tmp);
+    }
+    if(i!=0) {
+        p=new unsigned char[i*0x200];
+        if(setmaxSblock)
+            maxSblock=i*8-1;
+        i=0;
+        tmp=start;
+        while(tmp!=-2 && tmp>=0 && tmp<=static_cast<int>(maxblock)) {
+            memcpy(&p[i*0x200], &data[(tmp+1)*0x200], 0x200);
+            tmp=nextBigBlock(tmp);
+            ++i;
+        }
+    }
+    return p;
+}
+
+const unsigned char *KLaola::readSBStream(int start) const {
+
+    int i=0, tmp;
+    unsigned char *p=0;
+
+    tmp=start;
+    while(tmp!=-2 && tmp>=0 && tmp<=static_cast<int>(maxSblock)) {
+        ++i;
+        tmp=nextSmallBlock(tmp);
+    }
+    if(i!=0) {
+        p=new unsigned char[i*0x40];
+        i=0;
+        tmp=start;
+        while(tmp!=-2 && tmp>=0 && tmp<=static_cast<int>(maxSblock)) {
+            memcpy(&p[i*0x40], &smallBlockFile[tmp*0x40], 0x40);
+            tmp=nextSmallBlock(tmp);
+            ++i;
+        }
+    }
+    return p;
 }
 
 void KLaola::readBigBlockDepot() {
@@ -315,156 +344,93 @@ void KLaola::readRootList() {
             readPPSEntry((pos+1)*0x200+0x80*i, handle);
         pos=nextBigBlock(pos);
     }
-    QList<OLETree> *tmpList=new QList<OLETree>;
-    treeList.append(tmpList);
+    SubTree *subtree=new SubTree;
+//    subtree->setAutoDelete(true);
+    m_tree.append(subtree);
 
-    createTree(0, 0);   // build the tree with a recursive method :)
-
-    path.resize(1);
-    path[0]=0;   // current path=root dir
+    createTree(0, 0);           // build the tree with a recursive method :)
 }
 
-void KLaola::readPPSEntry(const int &pos, const int &handle) {
+void KLaola::readPPSEntry(int pos, const int handle) {
 
-    OLEInfo *info=new OLEInfo;
+    int nameSize = read16(pos + 0x40);
 
-    info->handle=handle;
-    info->nameSize=read16(pos+0x40);
-    if(info->nameSize!=0) {      // PPS Entry seems to be valid
-        for(int i=0; i<(info->nameSize/2)-1; ++i)
-            info->name+=data[pos+2*i];
-        //kdDebug(30510) << "PPS Entry " << pos << " #####################" << endl;
-        //kdDebug(30510) << info->name << endl;
-        info->type=data[pos+0x42];
-        //kdDebug(30510) << QString::number((int)info->type) << endl;
-        info->prev=static_cast<int>(read32(pos+0x44));
-        //kdDebug(30510) << QString::number((int)info->prev) << endl;
-        info->next=static_cast<int>(read32(pos+0x48));
-        //kdDebug(30510) << QString::number((int)info->next) << endl;
-        info->dir=static_cast<int>(read32(pos+0x4C));
-        //kdDebug(30510) << QString::number((int)info->dir) << endl;
-        info->ts1s=static_cast<int>(read32(pos+0x64));
-        //kdDebug(30510) << QString::number((int)info->ts1s) << endl;
-        info->ts1d=static_cast<int>(read32(pos+0x68));
-        //kdDebug(30510) << QString::number((int)info->ts1d) << endl;
-        info->ts2s=static_cast<int>(read32(pos+0x6C));
-        //kdDebug(30510) << QString::number((int)info->ts2s) << endl;
-        info->ts2d=static_cast<int>(read32(pos+0x70));
-        //kdDebug(30510) << QString::number((int)info->ts2d) << endl;
-        info->sb=static_cast<int>(read32(pos+0x74));
-        //kdDebug(30510) << QString::number((int)info->sb) << endl;
-        info->size=static_cast<int>(read32(pos+0x78));
-        //kdDebug(30510) << QString::number((int)info->size) << endl;
-        //kdDebug(30510) << "##################################" << endl;
-        ppsList.append(info);
+    // Does the PPS Entry seem to be valid?
+
+    if (nameSize)
+    {
+        int i;
+
+        Node *node = new Node();
+        for (i = 0; i < (nameSize / 2) - 1; ++i)
+            node->m_name += read16(pos + 2 * i);
+        node->m_handle = handle;
+        node->type = static_cast<NodeType>(read8(pos + 0x42));
+        node->prevHandle = static_cast<int>(read32(pos + 0x44));
+        node->nextHandle = static_cast<int>(read32(pos + 0x48));
+        node->dirHandle = static_cast<int>(read32(pos + 0x4C));
+        node->ts1s = static_cast<int>(read32(pos + 0x64));
+        node->ts1d = static_cast<int>(read32(pos + 0x68));
+        node->ts2s = static_cast<int>(read32(pos + 0x6C));
+        node->ts2d = static_cast<int>(read32(pos + 0x70));
+        node->sb = read32(pos + 0x74);
+        node->size = read32(pos + 0x78);
+        node->deadDir = false;
+        ppsList.append(node);
     }
 }
 
-void KLaola::createTree(const int &handle, const short &index) {
+myFile KLaola::stream(const OLENode *node) {
 
-    OLEInfo *info=ppsList.at(handle);
-    QList<OLETree> *tmpList;
+    const Node *realNode = dynamic_cast<const Node *>(node);
+    myFile ret;
 
-    OLETree *node=new OLETree;
-    node->handle=handle;
-    node->subtree=-1;
-
-    //QString nix="### entering create tree: handle=";
-    //nix+=QString::number(handle);
-    //nix+=" index=";
-    //nix+=QString::number(index);
-    //kdDebug(30510) << nix << endl;
-
-    if(info->prev!=-1) {
-        //kdDebug(30510) << "create tree: prev" << endl;
-        createTree(info->prev, index);
+    if(ok) {
+        if(realNode->size>=0x1000)
+            ret.data=const_cast<unsigned char*>(readBBStream(realNode->sb));
+        else
+            ret.data=const_cast<unsigned char*>(readSBStream(realNode->sb));
+        ret.length=realNode->size;
     }
-    if(info->dir!=-1) {
-        tmpList=new QList<OLETree>;
-        treeList.append(tmpList);
-        node->subtree=treeList.at();
-        //kdDebug(30510) << "create tree: dir" << endl;
-        createTree(info->dir, node->subtree);
-    }
-    tmpList=treeList.at(index);
-    //kdDebug(30510) << "create tree: APPEND " << handle << endl;
-    tmpList->append(node);
-    if(info->next!=-1) {
-        //kdDebug(30510) << "create tree: next" << endl;
-        createTree(info->next, index);
-    }
+    return ret;
 }
 
-const unsigned char *KLaola::readBBStream(const int &start, const bool setmaxSblock) {
+myFile KLaola::stream(int handle) {
 
-    int i=0, tmp;
-    unsigned char *p=0;
+    OLENode *node;
 
-    tmp=start;
-    while(tmp!=-2 && tmp>=0 && tmp<=static_cast<int>(maxblock)) {
-        ++i;
-        tmp=nextBigBlock(tmp);
-    }
-    if(i!=0) {
-        p=new unsigned char[i*0x200];
-        if(setmaxSblock)
-            maxSblock=i*8-1;
-        i=0;
-        tmp=start;
-        while(tmp!=-2 && tmp>=0 && tmp<=static_cast<int>(maxblock)) {
-            memcpy(&p[i*0x200], &data[(tmp+1)*0x200], 0x200);
-            tmp=nextBigBlock(tmp);
-            ++i;
+    node = ppsList.at(handle);
+    return stream(node);
+}
+
+void KLaola::testIt(QString prefix)
+{
+
+    NodeList nodes;
+    OLENode *node;
+
+    nodes = parseCurrentDir();
+    for (node = nodes.first(); node; node = nodes.next())
+    {
+        kdDebug(s_area) << prefix + node->describe() << endl;
+        if (node->isDirectory())
+        {
+            enterDir(node);
+            testIt(prefix + " ");
         }
     }
-    return p;
 }
 
-const unsigned char *KLaola::readSBStream(const int &start) {
+// Return a human-readable description of a stream.
+QString KLaola::Node::describe() const
+{
+    QString description;
 
-    int i=0, tmp;
-    unsigned char *p=0;
-
-    tmp=start;
-    while(tmp!=-2 && tmp>=0 && tmp<=static_cast<int>(maxSblock)) {
-        ++i;
-        tmp=nextSmallBlock(tmp);
-    }
-    if(i!=0) {
-        p=new unsigned char[i*0x40];
-        i=0;
-        tmp=start;
-        while(tmp!=-2 && tmp>=0 && tmp<=static_cast<int>(maxSblock)) {
-            memcpy(&p[i*0x40], &smallBlockFile[tmp*0x40], 0x40);
-            tmp=nextSmallBlock(tmp);
-            ++i;
-        }
-    }
-    return p;
-}
-
-inline const int KLaola::nextBigBlock(const int &pos) {
-
-    int x=pos*4;
-    return ( (bigBlockDepot[x+3] << 24) + (bigBlockDepot[x+2] << 16) +
-             (bigBlockDepot[x+1] << 8) + bigBlockDepot[x] );
-}
-
-inline const int KLaola::nextSmallBlock(const int &pos) {
-
-    if(smallBlockDepot) {
-        int x=pos*4;
-        return ( (smallBlockDepot[x+3] << 24) + (smallBlockDepot[x+2] << 16) +
-                 (smallBlockDepot[x+1] << 8) + smallBlockDepot[x] );
-    }
-    else
-        return -2;   // Emergency Break :)
-}
-
-inline const unsigned short KLaola::read16(const int &i) {
-    return ( (data[i+1] << 8) + data[i] );
-}
-
-inline const unsigned int KLaola::read32(const int &i) {
-    return ( (read16(i+2) << 16) + read16(i) );
+    description = QString::number(m_handle) + " " +
+                    m_name + "(" +
+                    QString::number(sb) + " " +
+                    QString::number(size) + " bytes)";
+    if (isDirectory())
+        description += ", directory";
+    return description;
 }

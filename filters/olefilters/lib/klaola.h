@@ -29,87 +29,114 @@
 #include <kdebug.h>
 #include <myfile.h>
 
-// If you fetch this struct, you will get all the available
-// OLE-Info for the corresponding stream.
-// Normally you won't use it.
-struct OLEInfo {
-    int handle;        // PPS entry number
-    QString name;       // Name of the stream
-    short nameSize;     // Size of the name
-    char type;          // Type of pps
-    int prev;          // Last pps
-    int next;          // Next pps
-    int dir;           // Dir pps
-    int ts1s;          // Timestamp 1, seconds
-    int ts1d;          // Timestamp 1, days
-    int ts2s;          // Timestamp 2, seconds
-    int ts2d;          // Timestamp 2, days
-    int sb;            // Starting block
-    int size;          // Size of property
-};
-
-// A little bit of OLE-Information. If you want to navigate through
-// the "filesystem" you have to use this struct.
-struct OLENode {
-    int handle;
-    QString name;
-    char type;       // 1=Dir, 2=File/Stream, 5=Root Entry
-    bool deadDir;    // true, if the dir is a "dead end"
-};
-
-
 class KLaola {
 
 public:
     KLaola(const myFile &file);               // see myfile.h!
     ~KLaola();
 
-    const bool isOk() {return ok;}
+    bool isOk() {return ok;}
 
-    const QList<OLENode> parseRootDir();
-    const QList<OLENode> parseCurrentDir();
+    // A little bit of OLE-Information. If you want to navigate through
+    // the "filesystem" you have to use this struct.
+
+    class OLENode {
+    public:
+        virtual ~OLENode() {};
+        virtual unsigned handle() const = 0;
+        virtual QString name() const = 0;
+        virtual bool isDirectory() const = 0;
+        // Return a human-readable description of a stream.
+        virtual QString describe() const = 0;
+    protected:
+        OLENode() {}
+    };
+
+    typedef QList<OLENode> NodeList;
+    NodeList parseRootDir();
+    NodeList parseCurrentDir();
 
     // Wade through the "file system"
-    const bool enterDir(const int &handle);
-    const bool leaveDir();
-    const QArray<int> currentPath() const;
+    bool enterDir(const OLENode *node);
+    bool leaveDir();
+    const NodeList currentPath() const;
 
-    const OLEInfo streamInfo(const int &handle);
-    const myFile stream(const int &handle);    // Note: data - 512 byte blocks, but
-                                                // length is set correctly :)
-                                                // Make sure that you delete [] the data!
-    const QArray<int> find(const QString &name, const bool onlyCurrentDir=false);
-
-    void testIt();                     // dump some info (similar to "lls"
-                                       // of the LAOLA-project)
+    // Return the stream for a given node.
+    //
+    // Note: data - 512 byte blocks, but length is set correctly :)
+    // Make sure that you delete [] the data!
+    myFile stream(const OLENode *node);
+    myFile stream(int handle);
+    const NodeList find(const QString &name, const bool onlyCurrentDir=false);
 
 private:
     KLaola(const KLaola &);
     const KLaola &operator=(const KLaola &);
+    static const int s_area = 30510;
 
-    struct OLETree {
-        int handle;
-        short subtree;
-    };
+    unsigned char read8(int i) const;
+    unsigned short read16(int i) const;
+    unsigned int read32(int i) const;
 
-    const bool parseHeader();
+    bool parseHeader();
     void readBigBlockDepot();
     void readSmallBlockDepot();
     void readSmallBlockFile();
     void readRootList();
-    void readPPSEntry(const int &pos, const int &handle);
-    void createTree(const int &handle, const short &index);
-    const unsigned char *readBBStream(const int &start, const bool setmaxSblock=false);
-    const unsigned char *readSBStream(const int &start);
+    void readPPSEntry(int pos, const int handle);
+    void createTree(const int handle, const short index);
+    const unsigned char *readBBStream(int start, const bool setmaxSblock=false);
+    const unsigned char *readSBStream(int start) const;
+    int nextBigBlock(int pos) const;
+    int nextSmallBlock(int pos) const;
 
-    inline const int nextBigBlock(const int &pos);
-    inline const int nextSmallBlock(const int &pos);
-    inline const unsigned short read16(const int &i);
-    inline const unsigned int read32(const int &i);
+    // dump some info (similar to "lls"
+    // of the LAOLA-project)
+    void testIt(QString prefix = "");
 
-    QList<QList<OLETree> > treeList;
-    QList<OLEInfo> ppsList;
-    QArray<int> path;
+    typedef enum
+    {
+        DIRECTORY = 1,
+        FILE = 2,
+        ROOT_ENTRY = 5
+    } NodeType;
+
+    class Node: public OLENode {
+    public:
+        ~Node() {}
+        unsigned handle() const { return  m_handle; }
+        QString name() const { return m_name; }
+        bool isDirectory() const { return (type == DIRECTORY) || (type == ROOT_ENTRY); }
+        QString describe() const;
+
+        unsigned m_handle;       // PPS entry number
+        QString m_name;
+        NodeType type;
+        int prevHandle;   // Last pps
+        int nextHandle;   // Next pps
+        int dirHandle;    // Dir pps
+        int ts1s;         // Timestamp 1, seconds
+        int ts1d;         // Timestamp 1, days
+        int ts2s;         // Timestamp 2, seconds
+        int ts2d;         // Timestamp 2, days
+        unsigned sb;      // Starting block
+        unsigned size;    // Size of property
+        bool deadDir;     // true, if the dir is a "dead end"
+    };
+
+    // The OLE storage is represented as a tree. Each node in the tree may
+    // refer to a subtree. Each subtree is stored asa list of nodes.
+
+    struct TreeNode
+    {
+        Node *node;
+        short subtree;
+    };
+    typedef QList<TreeNode> SubTree;
+    QList<SubTree> m_tree;
+
+    NodeList ppsList;
+    NodeList m_currentPath;
 
     bool ok;        // is the file OK?
 
