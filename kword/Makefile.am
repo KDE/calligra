@@ -1,8 +1,10 @@
 
 INCLUDES = $(KOFFICE_INCLUDES) $(all_includes) $(MICO_INCLUDES) -I$(idldir)
-LDFLAGS	= $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
+LDFLAGS	= -g $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD = $(KOFFICE_LIBS) -lkspell -lkparts -lkpartsui -lkom $(LIB_KIO) \
-	$(LIB_KFILE) $(LIB_KIMGIO)  $(LIBMICO) 
+	$(LIB_KFILE) $(LIB_KIMGIO)  $(LIBMICO)
+
+CXXFLAGS += -g
 
 ####### Files
 
@@ -34,7 +36,7 @@ idl_HEADERS =  kword.h
 kdelnk_DATA = kword_part.kdelnk
 kdelnkdir = $(kde_datadir)/koffice/partlnk
 
-SUBDIRS = toolbar templates
+SUBDIRS = toolbar templates filters
 
 ####### Implicit rules
 
@@ -72,5 +74,5 @@ insdia.cc: insdia.h
 tabledia.cc: tabledia.h
 deldia.cc: deldia.h
 variable.cc: variable.h
-docstruct.cc: docstruct.h 
+docstruct.cc: docstruct.h
 kword_undo.cc: kword_undo.h

@@ -121,6 +121,8 @@ AC_OUTPUT( \
 	kword/templates/Wordprocessing/Makefile \
 	kword/templates/DTP/Makefile \
 	kword/dtd/Makefile \
+	kword/filters/Makefile \
+	kword/filters/ascii/Makefile \
 	kdiagramm/Makefile \
 	kdiagramm/pics/Makefile \
 	kimage/Makefile \
