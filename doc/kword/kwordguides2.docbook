@@ -1007,7 +1007,8 @@ from the Menu bar </para>
 <listitem>
 <para>When selected, this option will replace the standard keyboard
 quotes, with typographical quotation marks.  If you want to change the
-quotation character, click on one of the buttons. </para>
+quotation character, click on one of the buttons. Clicking on 
+<guibutton>Default</guibutton>, restores the default paragraph marks.</para>
 </listitem>
 </varlistentry>
 
@@ -1016,7 +1017,9 @@ quotation character, click on one of the buttons. </para>
 sentance automatically to Upper Case</guilabel></term>
 <listitem>
 <para>When selected, &kword; will automatically capitalize the first
-letter after a period.</para>
+letter after a period. You can tell &kword; when not to alter capitalization
+in certain instances (ie <quote>Sr.</quote> or <quote>Jr.</quote>.  For more details, see the section entitled
+<link linkend="autocorrection-exceptions">Autocorrection Exceptions</link>.</para>
 </listitem>
 </varlistentry>
 
@@ -1026,7 +1029,9 @@ Lower Case letter</guilabel></term>
 <listitem>
 <para>When selected, &kword; will automatically convert a double capital
 letter (a common typographical error), into a single capital
-letter.</para>
+letter. You can tell &kword; when not to alter capitalization
+in certain instances.  For more details, see the section entitled
+<link linkend="autocorrection-exceptions">Autocorrection Exceptions</link>.</para>
 </listitem>
 </varlistentry>
 </variablelist>
@@ -1054,43 +1059,35 @@ automatically replaced with the text in
 <sect3>
 <title>Adding an autocorrection string</title>
 
-<para>To add an autocorrection string, simply click on the
-<guibutton>Add</guibutton> button.  This will bring up a dialog
-box.</para>
+<para>To add an autocorrection string, simply type the text you want &kword; to 
+check for in the text box directly below the checkbox labeled 
+<guilabel>Active Autocorrection</guilabel> (labeled with a red <emphasis>F</emphasis> 
+in the screenshot).  Then enter the text you want &kword;
+to substitute in the text box to the right (labeled with a red <emphasis>R</emphasis>
+).</para>
 
-<screenshot>
-<mediaobject>
-<imageobject><imagedata fileref="auto3.png" format="PNG"/></imageobject>
-</mediaobject>
-</screenshot>
 
-<para>Enter the text you want &kword; to search for in the text box
-labeled <guilabel>Find</guilabel>.  Alternativly, you can click the
-button to the right of the <guilabel>Find</guilabel> text box, and you
-can select a special character from the table provided.</para>
+<note><para>If you want to insert symbols or special characters not avaialable on your
+keyboard, you can click the
+buttons with three periods on them and select a special character from the table provided.</para></note>
 
-<para>Now enter the text you want to replace it with in the text box
-labeled <guilabel>Replace</guilabel>.  The button to the right of the
-<guilabel>Replace.</guilabel> text box works the same as the button next
-to the <guilabel>Find</guilabel> text box. </para>
-
-<para>When these are entered, click <guibutton>OK</guibutton>. Your text
+<para>When these are entered, click <guibutton>Add</guibutton>. Your text
 strings are now added to the table.</para>
-
-<para>If you select <guibutton>Cancel</guibutton>, your strings will not
-be added.</para>
-
 </sect3>
 
 <sect3>
 <title>Editing an autocorrection string</title>
+<para><emphasis>Changing the text you want to find.</emphasis></para>
+<para>&kword; does not allow you to change the text to search for.
+This is to prevent disasterous mistakes.</para>
+<para>Instead, you must delete the current autocorrection rule and
+add a new text string with the corrected text to find</para>
 
-
+<para><emphasis>Changing the text you want to replace.</emphasis></para>
 <para>Begin by clicking once on the string you want to edit.  It will be
-highlighted.  Now click on the <guibutton>Edit</guibutton> button.  The
-dialog will appear with the familiar fields for you to edit.  When you
-are done, simply select <guibutton>OK</guibutton> to keep your changes,
-or <guibutton>Cancel</guibutton> to forget your changes.</para>
+highlighted and the find and replace text will be listed in the text boxes
+above. You can alter the replacement text. When you
+are done, simply select <guibutton>Modify</guibutton>.</para>
 
 </sect3>
 
@@ -1108,6 +1105,35 @@ button.</para>
 </warning>
 </sect3>
 
+</sect2>
+<sect2 id="autocorrection-exceptions">
+<title>Autocorrection Exceptions</title>
+<para>There are instances where &kword; make make autocorrection changes 
+that are inappropriate.  You can use the third tab of this dialog to define
+<emphasis>exceptions</emphasis> to the rules previously discussed.</para>
+<para>The dialog for exceptions is shown below:</para>
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="auto3.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+<para>To prevent &kword; from deciding an abbreviation or other text is 
+the end of a sentance, simply enter the text fragment in the text box below
+<guilabel>Don't treat as end of sentance</guilabel>.  Then click
+<guibutton>Add</guibutton>.</para>
+<para>As an example:  Adding <quote>Jr.</quote> to this dialog prevents</para>
+<para><quote>Robert Jones Jr. is a friend of the family.</quote></para>
+<para>from being changed to:</para>
+<para><quote>Robert Jones Jr. Is a friend of the family.</quote></para>
+<para>The set of boxes performs a similar function to the first.  Only in
+this instance, text entered in these boxes will stay double capital letters.</para>
+<para>simply enter the text fragment in the text box below
+<guilabel>Accept two uppercase letters in</guilabel>.  Then click
+<guibutton>Add</guibutton>.</para>
+<para>As an example:  Adding <quote>FL</quote> to this dialog prevents</para>
+<para><quote>Sarasota, FL </quote></para>
+<para>from being changed to:</para>
+<para><quote>Sarasota, Fl </quote></para>
 </sect2>
 </sect1>
 </chapter> 
