@@ -88,8 +88,8 @@ void KoTextObject::init()
     connect( textdoc, SIGNAL( paragraphDeleted( KoTextParag* ) ),
              this, SLOT( slotParagraphDeleted( KoTextParag* ) ) );
 
-    connect( this, SIGNAL(paragraphModified( KoTextParag*, KoTextParag::ParagModifyType, int , int ) ),
-             this, SLOT(slotParagraphModified(KoTextParag *, KoTextParag::ParagModifyType, int , int)));
+    connect( this, SIGNAL(paragraphModified( KoTextParag*, int, int , int ) ),
+             this, SLOT(slotParagraphModified(KoTextParag *, int, int , int)));
     connect( this, SIGNAL(paragraphCreated( KoTextParag* )),
              this, SLOT(slotParagraphCreated(KoTextParag *)));
 
@@ -113,7 +113,7 @@ int KoTextObject::availableHeight() const
     return m_availableHeight;
 }
 
-void KoTextObject::slotParagraphModified(KoTextParag *parag, KoTextParag::ParagModifyType _type, int , int)
+void KoTextObject::slotParagraphModified(KoTextParag *parag, int /*KoTextParag::ParagModifyType*/ _type, int , int)
 {
     if ( _type == KoTextParag::ChangeFormat)
         return;

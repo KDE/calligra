@@ -394,7 +394,7 @@ signals:
 
     // Keeping track of text modifications - not emitted during loading/closing.
     void paragraphCreated( KoTextParag* parag );
-    void paragraphModified( KoTextParag* parag, KoTextParag::ParagModifyType, int pos, int length ); // add more args if necessary
+    void paragraphModified( KoTextParag* parag, int /*KoTextParag::ParagModifyType*/, int pos, int length );
     void paragraphDeleted( KoTextParag* parag );
 
 public slots:
@@ -461,7 +461,7 @@ private slots:
      * in the case of undoing a floating-frame insertion, we need to delete
      * the frame first) */
     void slotAfterUndoRedo();
-    void slotParagraphModified(KoTextParag *, KoTextParag::ParagModifyType, int , int);
+    void slotParagraphModified(KoTextParag *, int, int , int);
     void slotParagraphCreated(KoTextParag *);
     void slotParagraphDeleted(KoTextParag *);
 private:
