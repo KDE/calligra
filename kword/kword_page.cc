@@ -4616,3 +4616,25 @@ void KWPage::selectFrame( int mx, int my, bool select )
         }
     }
 }
+
+/*================================================================*/
+void KWPage::selectAll()
+{
+    KWFormatContext *sfc = new KWFormatContext( doc, fc->getFrameSet() );
+    *sfc = *fc;
+
+    KWFormatContext *efc = new KWFormatContext( doc, fc->getFrameSet() );
+    *efc = *fc;
+
+    sfc->init( dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( fc->getFrameSet() - 1 ) )
+               ->getFirstParag() );
+    sfc->cursorGotoLineStart();
+    efc->init( dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( fc->getFrameSet() - 1 ) )
+               ->getLastParag(), true );
+
+    doc->setSelStart( *sfc );
+    doc->setSelEnd( *efc );
+    doc->setSelection( true );
+
+    repaintScreen( true );
+}

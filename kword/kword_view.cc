@@ -781,7 +781,8 @@ void KWordView::editPaste()
 /*===============================================================*/
 void KWordView::editSelectAll()
 {
-
+    gui->getPaperWidget()->selectAll();
+    
     sendFocusEvent();
 }
 
@@ -1941,6 +1942,10 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     pix = OPUIUtils::convertPixmap( ICON( "kwsearch.xpm" ) );
     text = Q2C( i18n( "&Find and Replace..." ) );
     m_idMenuEdit_Find = m_vMenuEdit->insertItem6( pix, text, this, "editFind", CTRL + Key_F, -1, -1 );
+
+    m_vMenuEdit->insertSeparator( -1 );
+    text = Q2C( i18n( "&Select all" ) );
+    m_idMenuEdit_SelectAll = m_vMenuEdit->insertItem4( text, this, "editSelectAll", 0, -1, -1 );
 
     // View
     text = Q2C( i18n( "&View" ) );
