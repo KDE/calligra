@@ -74,11 +74,11 @@ PngExport::convert( const QCString& from, const QCString& to )
 
 	// create image with correct width and height
 	QImage img( int( rect.width() ), int( rect.height() ), 32 );
-	img.setAlphaBuffer( true );
+	//img.setAlphaBuffer( true );
 
 	// Create painter and set up objects to draw
 	VKoPainter p( img.bits(), rect.width(), rect.height() );
-	p.clear( qRgba( 0, 0, 0, 0 ) );
+	p.clear( qRgba( 0xFF, 0xFF, 0xFF, 0xFF ) );
 	p.setWorldMatrix( QWMatrix().translate( -rect.x(), -rect.y() ) );
 	VObjectList objects = doc.selection()->objects();
 	VObjectListIterator itr = objects;
@@ -87,7 +87,7 @@ PngExport::convert( const QCString& from, const QCString& to )
 	doc.selection()->clear();
 
 	// paint shapes over image
-    for ( ; itr.current(); ++itr )
+	for ( ; itr.current(); ++itr )
 		itr.current()->draw( &p, &rect );
 
 	QImage image = img.swapRGB();
