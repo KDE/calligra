@@ -108,6 +108,7 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 	{
 		c.setNamedColor( e.attribute( "stroke" ) );
 		strokecolor.set( c.red() / 255.0, c.green() / 255.0, c.blue() / 255.0 );
+		gc->stroke.setType( VStroke::solid );
 	}
 	if( !e.attribute( "stroke-width" ).isEmpty() )
 		gc->stroke.setLineWidth( e.attribute( "stroke-width" ).toDouble() );
