@@ -67,7 +67,7 @@ public:
 	KexiWindowMode windowMode()const { return m_windowMode;};
 
 #ifndef KEXI_NO_CTXT_HELP
-	KexiContextHelp	*help()const { return m_help; }
+	KexiContextHelp	*help()const { return m_helper; }
 #endif
 	KexiProject *project()const ;
 
@@ -90,36 +90,36 @@ protected:
         virtual void guiActivateEvent( KParts::GUIActivateEvent *ev );
 
 	//various init-functions
-	void			initActions();
-	void			initMainDock();
-	void			initDocBrowser();
+	void initActions();
+	void initMainDock();
+	void initHelper();
+	void initBrowser();
+	virtual void finalizeInit();
 
 	QWidget			*m_mainContent;
 	KDockWidget		*m_mainDock;
 	QWidget			*m_workspace;
 	KexiTabBrowser	  	*m_browser;
 #ifndef KEXI_NO_CTXT_HELP
-	KexiContextHelp		*m_help;
+	KexiContextHelp		*m_helper;
 #endif
 	KexiWindowMode		m_windowMode;
 
-	KexiDoc			*m_doc;
+//	KexiDoc			*m_doc;
 
 
 	KAction			*m_actionRelations;
 #ifndef KEXI_NO_CTXT_HELP
 	KToggleAction		*m_actionHelper;
 #endif
+	KToggleAction		*m_actionBrowser;
 	QPtrList<KAction>	*m_formActionList;
 	KexiFormBase		*m_lastForm;
 
-	bool			m_docLoaded;
+//	bool			m_docLoaded;
 
 protected slots:
 	void			slotActiveWindowChanged(QWidget *w);
-
-	void			finalizeInit();
-	void			initHelper(bool h=true);
 
 	void			slotShowProjectProps();
 	void			slotShowSettings();
@@ -134,7 +134,9 @@ private:
 	KexiProject *m_project;
 	DCOPObject *dcop;
 	QPtrList<QDockWindow> m_dockWins;
-	Windows		m_wins;
+	Windows m_wins;
+
+	friend class KexiProject;
 };
 
 #endif

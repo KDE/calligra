@@ -25,9 +25,9 @@
 #include <kaction.h>
 #include <qlayout.h>
 
-KexiContextHelp::KexiContextHelp(KexiView *view, KToggleAction *a, QWidget *parent, const char *name)
-	: KexiDialogBase(view,parent,name) {
-
+KexiContextHelp::KexiContextHelp(KexiView *view, QWidget *parent, const char *name)
+: KexiDialogBase(view,parent,name) 
+{
 	setCaption(i18n("Context Help"));
 	( new QVBoxLayout(this))->setAutoAdd(true);
 	m_widget=new KoContextHelpWidget(this);
@@ -35,9 +35,7 @@ KexiContextHelp::KexiContextHelp(KexiView *view, KToggleAction *a, QWidget *pare
 		this,SLOT(linkClickedInternal( const QString& )));
 	m_guiClient= new KXMLGUIClient();
         registerAs(KexiDialogBase::ToolWindow);
-	connect(dock(),SIGNAL(visibilityChanged(bool)), this, SLOT(slotVisibilityChanged(bool)));
-
-	m_action = a;
+//	connect(dock(),SIGNAL(visibilityChanged(bool)), this, SLOT(slotVisibilityChanged(bool)));
 }
 
 void KexiContextHelp::setContextHelp( const QString& title, const QString& text, const QPixmap* icon )
@@ -49,16 +47,8 @@ void KexiContextHelp::linkClickedInternal(const QString& link) {
 
 }
 
-
-void
-KexiContextHelp::slotVisibilityChanged(bool v)
-{
-	m_action->setChecked(v);
-}
-
 KXMLGUIClient *KexiContextHelp::guiClient() {
 	return m_guiClient;
-
 }
 
 

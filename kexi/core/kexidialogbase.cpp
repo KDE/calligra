@@ -215,4 +215,35 @@ void KexiDialogBase::activateActions(){;}
 
 void KexiDialogBase::deactivateActions(){;}
 
+/*! If dialog is registered as child of QDockWindow (ie. it is a tool window)
+    showing it equals also showing its parent.
+*/
+void KexiDialogBase::show()
+{
+	if (parentWidget() && parentWidget()->isA("QDockWindow")) {
+		parentWidget()->show();
+		QWidget::show();
+		return;
+	}
+	QWidget::show();
+}
+
+/*! If dialog is registered as child of QDockWindow (ie. it is a tool window)
+    hiding it equals also hiding its parent.
+*/
+void KexiDialogBase::hide()
+{
+	if (parentWidget() && parentWidget()->isA("QDockWindow")) {
+		parentWidget()->hide();
+		return;
+	}
+	QWidget::hide();
+}
+/*! Convenient slot for connecting with KToggleAction::toggle(bool) signal.
+*/
+void KexiDialogBase::setVisible(bool on)
+{
+	on ? show() : hide();
+}
+
 #include "kexidialogbase.moc"

@@ -31,13 +31,12 @@ class KEXICORE_EXPORT KexiContextHelp : public KexiDialogBase
 	Q_OBJECT
 
 	public:
-		KexiContextHelp(KexiView *view, KToggleAction *a, QWidget *parent=0, const char *name=0);
+		KexiContextHelp(KexiView *view, QWidget *parent=0, const char *name=0);
 		~KexiContextHelp();
                 void setContextHelp( const QString& title, const QString& text, const QPixmap* icon = 0 );
 		KXMLGUIClient *guiClient();
 	private slots:
 		void linkClickedInternal(const QString &link);
-		void slotVisibilityChanged(bool v);
 
 	signals:
 		void linkClicked( const QString& link );

@@ -54,28 +54,25 @@
 #include "kexi_factory.h"
 #include "kexi_global.h"
 
-KexiView::KexiView(KexiWindowMode winmode, KexiProject *part,QWidget *parent, const char *name ) : KoView(part,parent,name)
-{
-	m_project=part;
-	m_windowMode=winmode;
-
-	dcop = 0;
-	m_browser = 0;
+KexiView::KexiView(KexiWindowMode winmode, KexiProject *part, QWidget *parent, const char *name )
+: KoView(part,parent,name)
+	,m_browser(0)
 #ifndef KEXI_NO_CTXT_HELP
-	m_help = 0;
+	,m_helper(0)
 #endif
-	m_lastForm = NULL;
+	,m_windowMode(winmode)
+	,m_lastForm(0)
+	,m_project(part)
+	,dcop(0)
+{
 	dcopObject(); // build it
-//	createGUI("kexiui.rc",false);
-
 	setInstance(KexiFactory::global());
 	setXMLFile("kexiui.rc");
-	initActions();
 
 	if(winmode != EmbeddedMode)
 	{
 		initMainDock();
-		QTimer::singleShot(0,this,SLOT(finalizeInit()));
+//		QTimer::singleShot(0,this,SLOT(finalizeInit()));
 	}
 	else
 	{
@@ -112,20 +109,25 @@ void KexiView::updateReadWrite( bool /*readwrite*/ )
 #endif
 }
 
-
+/*!	This function should contain initalization done after hooking parts into view.
+	It is done in KexiProject::createViewInstance() automatically. */
 void KexiView::finalizeInit()
 {
-	initDocBrowser();
-	initHelper();
-
-	if(m_windowMode == MultipleWindowMode)
+	if (m_windowMode != EmbeddedMode)
 	{
-		QDesktopWidget dw;
-		QRect availGeom=dw.availableGeometry(this);
-		move(availGeom.left(),availGeom.top());
-		resize(availGeom.width()-(frameGeometry().width()-geometry().width()),
-			height());
+		initBrowser();
+		initHelper();
+
+		if(m_windowMode == MultipleWindowMode)
+		{
+			QDesktopWidget dw;
+			QRect availGeom=dw.availableGeometry(this);
+			move(availGeom.left(),availGeom.top());
+			resize(availGeom.width()-(frameGeometry().width()-geometry().width()),
+				height());
+		}
 	}
+	initActions();
 }
 
 void KexiView::initMainDock()
@@ -134,32 +136,32 @@ void KexiView::initMainDock()
 	m_workspace = new KexiWorkspaceMDI(this, "kexiworkspace", this);
 }
 
-void KexiView::initDocBrowser()
+void KexiView::initBrowser()
 {
 	m_browser = new KexiTabBrowser(this, m_workspace, "Document Browser");
-	m_browser->show(); //remove later
-	kdDebug() << "KexiView::initDocBrowser: done" << endl;
+	m_browser->show(); //TODO: read settings
+	kdDebug() << "KexiView::initBrowser: done" << endl;
 }
 
-void KexiView::initHelper(bool h)
+void KexiView::initHelper()
 {
 #ifndef KEXI_NO_CTXT_HELP
-	if(h)
-	{
-		m_help=new KexiContextHelp(this,m_actionHelper,m_workspace, "Context Help");
-//add that as we have a help!
-//		m_help->setContextHelp(i18n("Welcome"), i18n("kexi is based on <a href=\"help://kexi#glossary-relationaldatabase\">relational databases</a>. Before you start creating tables you should think about the general database design.<br><br>Further readings:<br><ul><li><a href=\"help://kexi#databasedesign\">Relational Database Design</a></li><li><a href=\"help://kexi#entityrelationship\">The entity relationship model</a></li></ul>"));
-		m_help->setContextHelp(i18n("Welcome"), i18n("%1 is in a early state of development, not all planed features are implemented<br>you can help with kexi development by filing <a href=\"http://bugs.kde.org/wizard.cgi?package=kexi\">feature-requests and bug reports</a><br><br><i>the kexi team wishes you fun and productive work</i>").arg(KEXI_APP_NAME));
-
-	}
-	else
-	{
-		if(m_help)
-			delete m_help;
-	}
+	m_helper=new KexiContextHelp(this, m_workspace, "Context Help");
+  //add that as we have a help!
+	m_helper->setContextHelp(i18n("Welcome"), i18n("%1 is in a early state of development, not all planed features are implemented<br>you can help with kexi development by filing <a href=\"http://bugs.kde.org/wizard.cgi?package=kexi\">feature-requests and bug reports</a><br><br><i>the kexi team wishes you fun and productive work</i>").arg(KEXI_APP_NAME));
 #endif
 }
+/*
+void KexiView::toggleBrowser(bool on)
+{
+	on ? m_browser->show() : m_browser->hide();
+}
 
+void KexiView::toggleHelper(bool on)
+{
+	on ? m_helper->show() : m_helper->hide();
+}
+*/
 void KexiView::initActions()
 {
 	//creating a list of actions for the form-designer
@@ -180,15 +182,16 @@ void KexiView::initActions()
 	 actionCollection(), "kexi_importdata");
 	connect(actionImport, SIGNAL(activated()), m_project, SLOT(slotImportData()));
 
-
-	KToggleAction *actionNav = new KToggleAction(i18n("Show Navigator"), "", CTRL + Key_B,
+	m_actionBrowser = new KToggleAction(i18n("Show Navigator"), "", CTRL + Key_B,
 	 actionCollection(), "show_nav");
+	m_actionBrowser->setChecked(m_browser->isVisible());
+	connect(m_actionBrowser, SIGNAL(toggled(bool)), m_browser, SLOT(setVisible(bool)));
 
 #ifndef KEXI_NO_CTXT_HELP
 	m_actionHelper = new KToggleAction(i18n("Show Context Help"), "", CTRL + Key_H,
 	 actionCollection(), "show_contexthelp");
-	m_actionHelper->setChecked(true);
-	connect(m_actionHelper, SIGNAL(toggled(bool)), this, SLOT(initHelper(bool)));
+	m_actionHelper->setChecked(m_helper->isVisible());
+	connect(m_actionHelper, SIGNAL(toggled(bool)), m_helper, SLOT(setVisible(bool)));
 #endif
 
 	connect(m_project, SIGNAL(dbAvaible()), this, SLOT(slotDBAvaible()));
