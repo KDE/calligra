@@ -325,7 +325,7 @@ void KWTableFrameSet::recalcCols(int _col,int _row) {
         if(col>0) m_redrawFromCol--;
         //if(activeCell) activeCell->frame(0)->setMinFrameHeight(0);
     }
-
+    updateFrames();
     //kdDebug(32004) << "end KWTableFrameSet::recalcCols" << endl;
 }
 
@@ -707,7 +707,13 @@ int KWTableFrameSet::rowEdgeAt( double y ) const
 void KWTableFrameSet::resizeColumn( unsigned int col, double x )
 {
     kdDebug() << k_funcinfo << col << "," << x << endl;
-    m_colPositions[ col ] = x;
+    if ((col != 0) && (x - m_colPositions[ col-1 ] < s_minFrameWidth))
+      m_colPositions[ col ] = m_colPositions[ col-1 ] + s_minFrameWidth;
+    else
+      if ((col != getCols()) && (m_colPositions[ col + 1 ] - x < s_minFrameWidth))
+        m_colPositions[col] = m_colPositions[ col + 1 ] - s_minFrameWidth;
+      else
+        m_colPositions[ col ] = x;
 
     // move all cells right of 'col'
     for (TableIter cell(this); cell; ++cell) {
