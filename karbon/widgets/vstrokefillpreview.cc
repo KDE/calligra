@@ -6,6 +6,9 @@
 #include "vkopainter.h"
 #include "koPoint.h"
 #include "kdebug.h"
+#include <qcolor.h>
+#include "vcolor.h"
+#include "vfill.h"
 
 VStrokeFillPreview::VStrokeFillPreview( QWidget* parent = 0L, const char* name = 0L )
 	: QFrame( parent, name )
@@ -30,7 +33,8 @@ void VStrokeFillPreview::paintEvent( QPaintEvent* /*event*/ )
 
 	m_painter->begin();
 
-	m_painter->setPen( Qt::black );
+	m_painter->setPen( Qt::NoPen );
+	m_painter->setBrush( qRgba( 255, 0, 0, 255) );
 
 	m_painter->newPath();
 	m_painter->moveTo( KoPoint( 10.0, 10.0 ) );
@@ -38,7 +42,23 @@ void VStrokeFillPreview::paintEvent( QPaintEvent* /*event*/ )
 	m_painter->lineTo( KoPoint( 30.0, 40.0 ) );
 	m_painter->lineTo( KoPoint( 10.0, 40.0 ) );
 	m_painter->lineTo( KoPoint( 10.0, 10.0 ) );
-	m_painter->strokePath();
+	m_painter->fillPath();
+
+	VColor color;
+	float r = 0.5, g = 0, b = 0.5;
+	color.setValues( &r, &g, &b );
+	color.setOpacity( 0.5 );
+	VFill fill;
+	fill.setColor( color );
+	m_painter->setBrush( fill );
+
+	m_painter->newPath();
+	m_painter->moveTo( KoPoint( 20.0, 20.0 ) );
+	m_painter->lineTo( KoPoint( 40.0, 20.0 ) );
+	m_painter->lineTo( KoPoint( 40.0, 50.0 ) );
+	m_painter->lineTo( KoPoint( 20.0, 50.0 ) );
+	m_painter->lineTo( KoPoint( 20.0, 20.0 ) );
+	m_painter->fillPath();
 
 	m_painter->end();
 }
