@@ -154,6 +154,10 @@ KSValue::Ptr KSQObject::unpack( KSContext& context, QVariant& var )
     {
 	return new KSValue( var.toString() );
     }
+    if ( var.type() == QVariant::CString )
+    {
+        return new KSValue( QString::fromLatin1( var.toCString() ) );
+    }
     if ( var.type() == QVariant::Int )
     {
 	return new KSValue( var.toInt() );
