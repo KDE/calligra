@@ -786,6 +786,37 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
         strElement += "\" ";
     }
 
+    key += ',';
+
+    if ( force || ( formatOrigin.language != formatData.language ) )
+    {
+        const QString lang ( formatData.language );
+        if ( ! lang.isEmpty() )
+        {
+            const int res = lang.find( '_' );
+
+            if ( res >= 0 )
+            {
+                kdDebug(30520) << "Language: " << lang << " => " << lang.left( res ) << " - " << lang.mid( res + 1 ) << endl;
+                strElement += "fo:language=\"";
+                strElement += lang.left( res );
+                strElement += "\" ";
+                strElement += "fo:country=\"";
+                strElement += lang.mid( res + 1 );
+                strElement += "\" ";
+            }
+            else
+            {
+                kdDebug(30520) << "Language without country: " << lang << endl;
+                strElement += "fo:language=\"";
+                strElement += lang;
+                strElement += "\" ";
+            }
+
+            key+=formatData.language;
+        }
+    }
+
     key += ",";
 
     if ( force || ( formatOrigin.fontAttribute != formatData.fontAttribute ) )
