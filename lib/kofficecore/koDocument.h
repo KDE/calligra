@@ -401,6 +401,13 @@ public:
     bool isAutosaving();
 
     /**
+     * Set whether the next openURL call should check for an auto-saved file
+     * and offer to open it. This is usually true, but can be turned off
+     * (e.g. for the preview module).
+     */
+    void setCheckAutoSaveFile( bool b );
+
+    /**
      * Retrieve the default value for autosave in seconds.
      * Called by the applications to use the correct default in their config
      */

@@ -83,9 +83,10 @@ public:
         m_dcopObject( 0L ),
         filterManager( 0L ),
         m_specialOutputFlag( 0 ),
-        modifiedAfterAutosave( false ),
         m_numOperations( 0 ),
-        m_autosaving( false )
+        modifiedAfterAutosave( false ),
+        m_autosaving( false ),
+        m_shouldCheckAutoSaveFile( true )
         {}
 
     QPtrList<KoView> m_views;
@@ -104,10 +105,11 @@ public:
     QTimer m_autoSaveTimer;
     QString lastErrorMessage; // see openFile()
     int m_autoSaveDelay; // in seconds, 0 to disable.
+    int m_numOperations;
     bool modifiedAfterAutosave;
     bool m_bSingleViewMode;
-    int m_numOperations;
     bool m_autosaving;
+    bool m_shouldCheckAutoSaveFile; // usually true
 };
 
 // Used in singleViewMode
@@ -329,6 +331,11 @@ QCString KoDocument::outputMimeType() const
 int KoDocument::specialOutputFlag() const
 {
     return d->m_specialOutputFlag;
+}
+
+void KoDocument::setCheckAutoSaveFile( bool b )
+{
+    d->m_shouldCheckAutoSaveFile = b;
 }
 
 void KoDocument::slotAutoSave()
@@ -894,7 +901,7 @@ bool KoDocument::openURL( const KURL & _url )
         return false;
     KURL url( _url );
     bool autosaveOpened = false;
-    if ( url.isLocalFile() )
+    if ( url.isLocalFile() && d->m_shouldCheckAutoSaveFile )
     {
         QString file = url.path();
         QString asf = autoSaveFile( file );
