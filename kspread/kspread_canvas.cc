@@ -1146,10 +1146,10 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
     if ( ((KSpreadChild*)it.current())->table() == activeTable() &&
          !m_pView->hasDocumentInWindow( it.current()->document() ) )
     {
-	// HACK rgn -= it.current()->region( painter.worldMatrix() );
+	rgn -= it.current()->region( painter.worldMatrix() );
     }
   }
-  // HACK painter.setClipRegion( rgn );
+  painter.setClipRegion( rgn );
 
   // Draw content
   m_pDoc->paintContent( painter, QRect( tl, br ), FALSE, activeTable() );
@@ -1161,8 +1161,8 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
   it.toFirst();
   for( ; it.current(); ++it )
   {
-      // HACK if ( ((KSpreadChild*)it.current())->table() == activeTable() &&
-      // HACK !m_pView->hasDocumentInWindow( it.current()->document() ) )
+      if ( ((KSpreadChild*)it.current())->table() == activeTable() &&
+	   !m_pView->hasDocumentInWindow( it.current()->document() ) )
     {
       // #### todo: paint only if child is visible inside rect
       painter.save();
@@ -1608,6 +1608,23 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QRect& old_mar
     QPoint br = m.map( QPoint( width(), height() ) );
     QRect view( tl, br );
 
+    //
+    // Clip away children
+    //
+    painter.save();
+
+    QRegion rgn = painter.clipRegion();
+    if ( rgn.isEmpty() )
+	rgn = QRegion( QRect( 0, 0, width(), height() ) );
+    QListIterator<KoDocumentChild> it( m_pDoc->children() );
+    for( ; it.current(); ++it )
+    {
+	if ( ((KSpreadChild*)it.current())->table() == activeTable() &&
+	     !m_pView->hasDocumentInWindow( it.current()->document() ) )
+	    rgn -= it.current()->region( painter.worldMatrix() );
+    }
+    painter.setClipRegion( rgn );
+        
     QPen pen;
     pen.setWidth( 1 );
     painter.setPen( pen );
@@ -1789,6 +1806,25 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QRect& old_mar
 	}
 
 	ypos += row_lay->height();
+    }
+
+    //
+    // Draw the children
+    //
+    painter.restore();
+
+    // Draw children
+    it.toFirst();
+    for( ; it.current(); ++it )
+    {
+	if ( ((KSpreadChild*)it.current())->table() == activeTable() &&
+	     !m_pView->hasDocumentInWindow( it.current()->document() ) )
+        {
+	    // #### todo: paint only if child is visible inside rect
+	    painter.save();
+	    m_pDoc->paintChild( it.current(), painter, m_pView );
+	    painter.restore();
+	}
     }
 
     painter.end();
