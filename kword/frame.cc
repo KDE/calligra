@@ -312,43 +312,43 @@ QCursor KWFrame::getMouseCursor( int mx, int my, bool table )
 }
 
 /*================================================================*/
-QString KWFrame::leftBrd2String()
+QString KWFrame::saveLeftBrd2()
 {
-    QString str;
-    str.sprintf( " lWidth=\"%d\" lRed=\"%d\" lGreen=\"%d\" lBlue=\"%d\" lStyle=\"%d\" ",
-                 brd_left.ptWidth, brd_left.color.red(), brd_left.color.green(), brd_left.color.blue(),
-                 static_cast<int>( brd_left.style ) );
-    return str;
+    e.setAttribute( "rWidth", brd_left.ptWidth() );
+    e.setAttribute( "rRed", brd_left.color.red() );
+    e.setAttribute( "rGreen", brd_left.color.green() );
+    e.setAttribute( "rBlue", brd_left.color.blue() );
+    e.setAttribute( "rStyle", (int)brd_left.style() );
 }
 
 /*================================================================*/
-QString KWFrame::rightBrd2String()
+void KWFrame::saveRightBrd2( QDOM::Element &e )
 {
-    QString str;
-    str.sprintf( " rWidth=\"%d\" rRed=\"%d\" rGreen=\"%d\" rBlue=\"%d\" rStyle=\"%d\" ",
-                 brd_right.ptWidth, brd_right.color.red(), brd_right.color.green(), brd_right.color.blue(),
-                 static_cast<int>( brd_right.style ) );
-    return str;
+    e.setAttribute( "rWidth", brd_right.ptWidth() );
+    e.setAttribute( "rRed", brd_right.color.red() );
+    e.setAttribute( "rGreen", brd_right.color.green() );
+    e.setAttribute( "rBlue", brd_right.color.blue() );
+    e.setAttribute( "rStyle", (int)brd_right.style() );
 }
 
 /*================================================================*/
-QString KWFrame::topBrd2String()
+QString KWFrame::saveTopBrd2()
 {
-    QString str;
-    str.sprintf( " tWidth=\"%d\" tRed=\"%d\" tGreen=\"%d\" tBlue=\"%d\" tStyle=\"%d\" ",
-                 brd_top.ptWidth, brd_top.color.red(), brd_top.color.green(), brd_top.color.blue(),
-                 static_cast<int>( brd_top.style ) );
-    return str;
+    e.setAttribute( "rWidth", brd_top.ptWidth() );
+    e.setAttribute( "rRed", brd_top.color.red() );
+    e.setAttribute( "rGreen", brd_top.color.green() );
+    e.setAttribute( "rBlue", brd_top.color.blue() );
+    e.setAttribute( "rStyle", (int)brd_top.style() );
 }
 
 /*================================================================*/
-QString KWFrame::bottomBrd2String()
+QString KWFrame::saveBottomBrd2()
 {
-    QString str;
-    str.sprintf( " bWidth=\"%d\" bRed=\"%d\" bGreen=\"%d\" bBlue=\"%d\" bStyle=\"%d\" ",
-                 brd_bottom.ptWidth, brd_bottom.color.red(), brd_bottom.color.green(), brd_bottom.color.blue(),
-                 static_cast<int>( brd_bottom.style ) );
-    return str;
+    e.setAttribute( "rWidth", brd_bottom.ptWidth() );
+    e.setAttribute( "rRed", brd_bottom.color.red() );
+    e.setAttribute( "rGreen", brd_bottom.color.green() );
+    e.setAttribute( "rBlue", brd_bottom.color.blue() );
+    e.setAttribute( "rStyle", (int)brd_bottom.style() );
 }
 
 /******************************************************************/
@@ -425,9 +425,9 @@ void KWFrameSet::delFrame( KWFrame *frm, bool remove )
     int _num = frames.findRef( frm );
     if ( _num == -1 )
         return;
-    
+
     KWFrame *f;
-    
+
     bool del = true;
     int i = 0;
     for ( f = frames.first(); f != 0; f = frames.next(), i++ )
@@ -516,38 +516,54 @@ QCursor KWFrameSet::getMouseCursor( unsigned int mx, unsigned int my )
 }
 
 /*================================================================*/
-void KWFrameSet::save( ostream &out )
+QDOM::Element KWFrameSet::save( QDOM::Document &doc )
 {
+    QDOM::Element frameset = doc.createElement( "FRAMESET" );
+    
     KWFrame *frame;
 
-    for ( unsigned int i = 0; i < frames.count(); i++ )
-    {
-        frame = getFrame( i );
-        out << indent << "<FRAME left=\"" << frame->left() << "\" top=\"" << frame->top()
-            << "\" right=\"" << frame->right() << "\" bottom=\"" << frame->bottom()
-            << "\" runaround=\"" << static_cast<int>( frame->getRunAround() )
-            << "\" runaGapPT=\"" << frame->getRunAroundGap().pt()
-            << "\" runaGapMM=\"" << frame->getRunAroundGap().mm()
-            << "\" runaGapINCH=\"" << frame->getRunAroundGap().inch() << "\" "
-            << correctQString( frame->leftBrd2String() ).latin1() << correctQString( frame->rightBrd2String() ).latin1()
-            << correctQString( frame->topBrd2String() ).latin1()
-            << correctQString( frame->bottomBrd2String() ).latin1() << "bkRed=\"" << frame->getBackgroundColor().color().red()
-            << "\" bkGreen=\"" << frame->getBackgroundColor().color().green() << "\" bkBlue=\"" << frame->getBackgroundColor().color().blue()
-
-            << "\" bleftpt=\"" << frame->getBLeft().pt() << "\" bleftmm=\"" << frame->getBLeft().mm()
-            << "\" bleftinch=\"" << frame->getBLeft().inch()
-
-            << "\" brightpt=\"" << frame->getBRight().pt() << "\" brightmm=\"" << frame->getBRight().mm()
-            << "\" brightinch=\"" << frame->getBRight().inch()
-
-            << "\" btoppt=\"" << frame->getBTop().pt() << "\" btopmm=\"" << frame->getBTop().mm()
-            << "\" btopinch=\"" << frame->getBTop().inch()
-
-            << "\" bbottompt=\"" << frame->getBBottom().pt() << "\" bbottommm=\"" << frame->getBBottom().mm()
-            << "\" bbottominch=\"" << frame->getBBottom().inch()
-
-            << "\"/>" << endl;
+    for ( unsigned int i = 0; i < frames.count(); i++ ) {
+	frame = getFrame( i );
+	
+	QDOM::Element frm = doc.createElement( "FRAME" );
+	frm.setAttribute( "left", frame->left() );
+	frm.setAttribute( "right", frame->right() );
+	frm.setAttribute( "top", frame->top() );
+	frm.setAttribute( "runaround", frame->runaround() );
+	frm.setAttribute( "runaGapPT", frame->runaGapPT() );
+	frm.setAttribute( "runaGapMM", frame->runaGapMM() );
+	frm.setAttribute( "runaGapINCH", frame->runaGapINCH() );
+	frame->saveLeftBrd2( frm );
+	frame->saveRightBrd2( frm );
+	frame->saveTopBrd2( frm );
+	frame->saveBottomBrd2( frm );
+	frm.setAttribute( "bkRed", frame->getBackgroundColor().color().red() );
+	frm.setAttribute( "bkGreen", frame->getBackgroundColor().color().green() );
+	frm.setAttribute( "bkBlue", frame->getBackgroundColor().color().blue() );
+	frm.setAttribute( "bleftpt", frame->getBLeft().pt() );
+	frm.setAttribute( "brightpt", frame->getBRight().pt() );
+	frm.setAttribute( "btoppt", frame->getBTop().pt() );
+	frm.setAttribute( "bbottompt", frame->getBBottom().pt() );
+	frm.setAttribute( "bleftinch", frame->getBLeft().inch() );
+	frm.setAttribute( "brightinch", frame->getBRight().inch() );
+	frm.setAttribute( "btopinch", frame->getBTop().inch() );
+	frm.setAttribute( "bbottominch", frame->getBBottom().inch() );
+	frm.setAttribute( "bleftmm", frame->getBLeft().mm() );
+	frm.setAttribute( "brightmm", frame->getBRight().mm() );
+	frm.setAttribute( "btopmm", frame->getBTop().mm() );
+	frm.setAttribute( "bbottommm", frame->getBBottom().mm() );
+	frm.setAttribute( "bottom", frame->bottom() );
+	frm.setAttribute( "bottom", frame->bottom() );
+	frm.setAttribute( "bottom", frame->bottom() );
+	frm.setAttribute( "bottom", frame->bottom() );
+	frm.setAttribute( "bottom", frame->bottom() );
+	frm.setAttribute( "bottom", frame->bottom() );
+	frm.setAttribute( "bottom", frame->bottom() );
+	frm.setAttribute( "bottom", frame->bottom() );
+	frameset.appendChild( frm );
     }
+
+    return frameset;
 }
 
 /*================================================================*/
@@ -867,8 +883,10 @@ void KWTextFrameSet::splitParag( KWParag *_parag, unsigned int _pos )
 }
 
 /*================================================================*/
-void KWTextFrameSet::save( ostream &out )
+QDOM::Element KWTextFrameSet::save( QDOM::Document &doc )
 {
+    QDOM::Element frameset = KWFrameSet::save( doc );
+    
     QString grp = "";
     if ( grpMgr )
     {
@@ -883,24 +901,31 @@ void KWTextFrameSet::save( ostream &out )
         grp += tmp.copy();
     }
 
-    out << otag << "<FRAMESET frameType=\"" << static_cast<int>( getFrameType() )
-        << "\" autoCreateNewFrame=\"" << autoCreateNewFrame << "\" frameInfo=\""
-        << static_cast<int>( frameInfo ) << correctQString( grp ).latin1() << "\" removeable=\"" << static_cast<int>( removeableHeader )
-        << "\" visible=\"" << static_cast<int>( visible ) << "\" name=\"" << correctQString( name ).latin1()
-        << "\">" << endl;
-
-    KWFrameSet::save( out );
-
+    frameset.setAttribute( "frameType", (int)getFrameType() );
+    frameset.setAttribute( "autoCreateNewFrame", autoCreateNewFrame );
+    frameset.setAttribute( "frameInfo", (int)frameInfo );
+    if ( grpMgr ) {
+	unsigned int _row = 0, _col = 0;
+	grpMgr->getFrameSet( this, _row, _col );
+       	KWGroupManager::Cell *cell = grpMgr->getCell( _row, _col );
+	frameset.setAttribute( "row", _row );
+	frameset.setAttribute( "col", _col );
+	frameset.setAttribute( "rows", cell->rows );
+	frameset.setAttribute( "cols", cell->cols );
+    }
+    frameset.setAttribute( "removeable", removeableHeader );
+    frameset.setAttribute( "visible", visible );
+    frameset.setAttribute( "name", name );
+    
     KWParag *parag = getFirstParag();
-    while ( parag )
-    {
-        out << otag << "<PARAGRAPH>" << endl;
-        parag->save( out );
-        parag = parag->getNext();
-        out << etag << "</PARAGRAPH>" << endl;
+    while ( parag ) {
+	QDOM::Element p = parag->save( doc );
+	if ( p.isNull() )
+	    return p;
+	frameset.appendChild( p );
     }
 
-    out << etag << "</FRAMESET>" << endl;
+    return frameset;
 }
 
 /*================================================================*/
@@ -1293,18 +1318,18 @@ void KWPictureFrameSet::setSize( QSize _imgSize )
 }
 
 /*================================================================*/
-void KWPictureFrameSet::save( ostream &out )
+QDOM::Element KWPictureFrameSet::save( QDOM::Document &doc )
 {
-    out << otag << "<FRAMESET frameType=\"" << static_cast<int>( getFrameType() ) << "\" frameInfo=\""
-        << static_cast<int>( frameInfo ) << "\">" << endl;
-
-    KWFrameSet::save( out );
-
-    out << otag << "<IMAGE>" << endl;
-    image->save( out );
-    out << etag << "</IMAGE>" << endl;
-
-    out << etag << "</FRAMESET>" << endl;
+    QDOM::Element frameset = KWFrameSet::save( doc );
+    frameset.setAttribute( "frameType", (int)getFrameType() );
+    frameset.setAttribute( "frameInfo", (int)frameInfo );
+    
+    QDOM::Element img = image->save( doc );
+    if ( img.isNull() )
+	return img;
+    frameset.appendChild( img );
+    
+    return frameset;
 }
 
 /*================================================================*/

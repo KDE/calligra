@@ -170,7 +170,7 @@ public:
     { return defaultUserFont;  }	
     KWParagLayout *getDefaultParagLayout()
     { return defaultParagLayout; }
-    
+
     QList<KWUserFont> userFontList;
 
     QList<KWDisplayFont> displayFontList;
@@ -223,19 +223,19 @@ public:
     { pages = _pages;  }
     KWFormatCollection *getFormatCollection()
     { return &formatCollection; }
-    
-    KWImageCollection *getImageCollection()  
+
+    KWImageCollection *getImageCollection()
     { return &imageCollection; }
-    
+
     void insertPicture( QString _filename, KWPage *_paperWidget );
 
     void setSelStart( KWFormatContext &_fc )
     { selStart = _fc; }
-    
+
     KWFormatContext *getSelStart()
     { return &selStart;  }
     void setSelEnd( KWFormatContext &_fc )
-    { selEnd = _fc; } 
+    { selEnd = _fc; }
 
     KWFormatContext *getSelEnd()
     { return &selEnd; }
@@ -244,7 +244,7 @@ public:
 			KWFormatContext *_selStart = 0L, KWFormatContext *_selEnd = 0L );
     void setSelection( bool _has )
     { hasSelection = _has; }
-    
+
     bool has_selection()
     { return hasSelection; }
 
@@ -373,8 +373,8 @@ protected:
     virtual void draw( QPaintDevice*, CORBA::Long _width, CORBA::Long _height,
 		       CORBA::Float _scale );
 
-    void loadFrameSets( KOMLParser&, vector<KOMLAttrib>& );
-    void loadStyleTemplates( KOMLParser&, vector<KOMLAttrib>& );
+    bool loadFrameSets( QDOM::Element &frameset );
+    bool loadStyleTemplates( QDOM::Element &style );
 
     void addStyleTemplate( KWParagLayout *pl );
 
