@@ -429,8 +429,15 @@ VComposite::accept( VVisitor& visitor )
 	visitor.visitVComposite( *this );
 }
 
-QWMatrix
+void
 VComposite::transform( const QString &transform )
+{
+	VTransformCmd cmd( 0L, parseTransform( transform ) );
+	cmd.visitVComposite( *this );
+}
+
+QWMatrix
+VComposite::parseTransform( const QString &transform )
 {
 	QWMatrix result;
 
@@ -491,8 +498,6 @@ VComposite::transform( const QString &transform )
 		}
 	}
 
-	VTransformCmd cmd( 0L, result );
-	cmd.visitVComposite( *this );
 	return result;
 }
 

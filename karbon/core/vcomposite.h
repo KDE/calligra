@@ -204,7 +204,8 @@ public:
 	void loadSvgPath( const QString & );
 	void saveSvgPath( QString & ) const;
 
-	QWMatrix transform( const QString &transform );
+	void transform( const QString &transform );
+	static QWMatrix parseTransform( const QString &transform );
 
 	void transform( const QWMatrix &mat )
 	{
