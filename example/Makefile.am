@@ -2,7 +2,7 @@
 INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes)
 
 ## The part
-kde_module_LTLIBRARIES = libexamplepart.la
+lib_LTLIBRARIES = libexamplepart.la
 libexamplepart_la_SOURCES = example_part.cc \
                             example_view.cc example_factory.cc
 libexamplepart_la_LDFLAGS = $(KDE_PLUGIN)

@@ -34,7 +34,7 @@ dummy.cc:
 	echo > dummy.cc
 
 ## The part
-kde_module_LTLIBRARIES = libkillustratorpart.la
+lib_LTLIBRARIES = libkillustratorpart.la
 libkillustratorpart_la_SOURCES = KIllustrator_doc.cc \
         KIllustrator_view.cc \
         InsertPartTool.cc GPart.cc KIllustrator_factory.cc \

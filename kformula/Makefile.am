@@ -3,7 +3,7 @@ INCLUDES  = $(KOFFICE_INCLUDES) -I$(top_srcdir)/lib/kformula2 -I$(interfacedir) 
 KDE_CXXFLAGS = $(USE_RTTI)
 
 ## The part
-kde_module_LTLIBRARIES = libkformulapart.la
+lib_LTLIBRARIES = libkformulapart.la
 libkformulapart_la_SOURCES = kformula_doc.cc \
 	kformula_view.cc kformula_factory.cc \
 	matrixwidget.cc

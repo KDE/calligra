@@ -1,7 +1,7 @@
 INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes)
 
 ## The part
-kde_module_LTLIBRARIES = libkrayonpart.la
+lib_LTLIBRARIES = libkrayonpart.la
 libkrayonpart_la_SOURCES = dummy.cc
 
 libkrayonpart_la_LDFLAGS = $(KDE_PLUGIN)

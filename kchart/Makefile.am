@@ -1,7 +1,7 @@
 INCLUDES  = $(KOFFICE_INCLUDES) -I$(top_srcdir)/interfaces -I$(interfacedir) $(all_includes)
 
 ## The part
-kde_module_LTLIBRARIES = libkchartpart.la
+lib_LTLIBRARIES = libkchartpart.la
 libkchartpart_la_SOURCES = kchart_part.cc \
 	kchart_view.cc kchart_factory.cc \
 	engine.cc \

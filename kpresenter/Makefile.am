@@ -4,7 +4,7 @@ INCLUDES = $(KOFFICE_INCLUDES) $(all_includes)
 bin_SCRIPTS = kprconverter.pl
 
 ## The part
-kde_module_LTLIBRARIES = libkpresenterpart.la
+lib_LTLIBRARIES = libkpresenterpart.la
 libkpresenterpart_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc \
 	kpresenter_doc.cc \
 	page.cc ktextedit.cc styledia.cc \

@@ -3,7 +3,7 @@ INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) \
 -I$(top_srcdir)/interfaces $(all_includes)
 
 ## The part
-kde_module_LTLIBRARIES = libkspreadpart.la
+lib_LTLIBRARIES = libkspreadpart.la
 libkspreadpart_la_SOURCES = kspread_locale.cc \
 	kspread_dlg_formula.cc \
 	kspread_functions.cc \

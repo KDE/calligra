@@ -4,7 +4,7 @@ AM_CPPFLAGS = -DQT_NO_CAST_ASCII
 INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes)
 
 ## The part
-kde_module_LTLIBRARIES = libgraphitepart.la
+lib_LTLIBRARIES = libgraphitepart.la
 libgraphitepart_la_SOURCES = graphitepart.cc \
     graphiteview.cc graphitefactory.cc gobject.cc \
     gcanvas.cc gobjectfactory.cc gline.cc \
