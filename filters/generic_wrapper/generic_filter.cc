@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002 Lukas Tinkl <lukas@kde.org>
+   Copyright (C) 2002, 2003 Lukas Tinkl <lukas@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -52,12 +52,14 @@ KoFilter::ConversionStatus GenericFilter::convert( const QCString &from, const Q
         return KoFilter::NotImplemented;
 
     KTrader::OfferList::ConstIterator it;
-    for (it=offers.begin(); it!=offers.end(); ++it) {
+    for (it=offers.begin(); it!=offers.end(); ++it)
+    {
         kdDebug() << "Got a filter script, exec: " << (*it)->exec() <<
             ", imports: " << (*it)->property("X-KDE-Wrapper-Import").toString() <<
             ", exports: " << (*it)->property("X-KDE-Wrapper-Export").toString() << endl;
-        if ((*it)->property("X-KDE-Wrapper-Import").toCString()==from &&
-            (*it)->property("X-KDE-Wrapper-Export").toCString()==to) {
+        if ((*it)->property("X-KDE-Wrapper-Import").toCString()==from
+            && (*it)->property("X-KDE-Wrapper-Export").toCString()==to)
+        {
             m_exec=(*it)->exec();
             m_from=from;
             m_to=to;
@@ -66,11 +68,11 @@ KoFilter::ConversionStatus GenericFilter::convert( const QCString &from, const Q
     }
 
     //decide between import/export
-    if( m_to == "application/x-kword" || m_to == "application/x-kontour" ||
+    if( m_to == "application/x-kword" || m_to == "application/x-karbon" ||
         m_to == "application/x-kspread" || m_to == "application/x-kivio" ||
         m_to == "application/x-kchart" || m_to == "application/x-kpresenter" )
         return doImport();
-    else if ( m_from == "application/x-kword" || m_from == "application/x-kontour" ||
+    else if ( m_from == "application/x-kword" || m_from == "application/x-karbon" ||
               m_from == "application/x-kspread" || m_from == "application/x-kivio" ||
               m_from == "application/x-kchart" || m_from == "application/x-kpresenter" )
         return doExport();
@@ -87,14 +89,16 @@ KoFilter::ConversionStatus GenericFilter::doImport()
 
     m_out = KoStore::createStore(&tempFile, KoStore::Write);
 
-    if(!m_out || !m_out->open("root"))
+    if (!m_out || !m_out->open("root"))
     {
         kdError() << "Unable to create output store!" << endl;
         m_out->close();
         return KoFilter::StorageCreationError;
     }
-    else {
-        QString exec = m_exec + " " + KProcess::quote(m_chain->inputFile()) + " " + KProcess::quote(m_chain->outputFile());
+    else
+    {
+        QString exec = m_exec + " " + KProcess::quote(m_chain->inputFile()) + " "
+                       + KProcess::quote(m_chain->outputFile());
         system(QFile::encodeName(exec));
 
         kdDebug() << "Executing: " << exec << endl;
