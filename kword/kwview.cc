@@ -281,6 +281,8 @@ void KWView::initGui()
     slotFrameSetEditChanged();
     frameSelectedChanged();
     renameButtonTOC(m_doc->isTOC());
+    //at the beginning actionBackgroundColor should be active
+    actionBackgroundColor->setEnabled(true);
 
     QString mode=m_gui->canvasWidget()->viewMode()->type();
     if(mode=="ModePreview")
@@ -3553,8 +3555,7 @@ void KWView::frameSelectedChanged()
         }
     }
 
-    if(  nbFrame >= 1)
-        actionBackgroundColor->setEnabled( frameDifferentOfPart);
+    actionBackgroundColor->setEnabled( (nbFrame >= 1) && frameDifferentOfPart);
 
     if ( frameDifferentOfPart ) {
         KWFrame *frame = m_doc->getFirstSelectedFrame();
