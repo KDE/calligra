@@ -29,12 +29,14 @@
 // class QPixmap;
 
 class QWidget;
+class KLineEdit;
 
 namespace KFormDesigner {
 
 
 class WidgetFactory;
 class Container;
+class ResizeHandleSet;
 
 /**
  * this class holds properties of widgets
@@ -59,7 +61,7 @@ class KFORMEDITOR_EXPORT Widget
 		 * returns the real name e.g. 'Line Edit'
 		 */
 		virtual QString	name() { return m_name; }
-		
+
 		//virtual QString description() { return m_desc; }
 
 		/**
@@ -118,8 +120,23 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		 */
 		virtual QWidget*	create(const QString &classname, QWidget *parent, const char *name,
 					 KFormDesigner::Container *container)=0;
-					 
+
 		virtual void		createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container)=0;
+
+		virtual void		startEditing(const QString &classname, QWidget *w, Container *container)=0;
+
+		virtual KLineEdit*	createEditor(const QString &text, QWidget *w, QRect geometry, int align);
+
+	protected:
+		virtual void  resetEditor();
+		virtual bool  eventFilter(QObject *obj, QEvent *ev);
+	protected slots:
+		virtual void  changeText(const QString &newText){;}
+
+	protected:
+		QWidget *m_widget;
+		KLineEdit  *m_editor;
+		ResizeHandleSet  *m_handles;
 };
 
 }

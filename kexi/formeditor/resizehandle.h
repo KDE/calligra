@@ -39,7 +39,7 @@ namespace KFormDesigner
 	Q_OBJECT
 	public:
 		enum HandlePos {TopLeft=0,TopCenter=2,TopRight=4,LeftCenter=8,RightCenter=16,BottomLeft=32,BottomCenter=64,BottomRight=128};
-	        ResizeHandle(QWidget *parent,QWidget *buddy, HandlePos pos);
+	        ResizeHandle(QWidget *parent,QWidget *buddy, HandlePos pos, bool editing=false);
 	        virtual ~ResizeHandle();
 
 	protected:
@@ -54,6 +54,7 @@ namespace KFormDesigner
 		HandlePos m_pos;
 		QWidget *m_buddy;
 		bool m_dragging;
+		bool m_editing;
 		int m_x;
 		int m_y;
 	};
@@ -66,7 +67,7 @@ namespace KFormDesigner
 	{
 	Q_OBJECT
 	public:
-		ResizeHandleSet(QWidget *modify);
+		ResizeHandleSet(QWidget *modify, bool editing = false);
 		~ResizeHandleSet();
 		void setWidget(QWidget *modify);
 		QWidget *widget() const {return m_widget;};

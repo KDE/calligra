@@ -9,7 +9,7 @@
  ***************************************************************************/
 
 #include <qlabel.h>
-#include <qlineedit.h>
+#include <klineedit.h>
 #include <qpopupmenu.h>
 
 #include <kiconloader.h>
@@ -17,7 +17,10 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+#include "formmanager.h"
+#include "form.h"
 #include "spacer.h"
+#include "objpropbuffer.h"
 #include "stdwidgetfactory.h"
 
 StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *name, const QStringList &)
@@ -91,16 +94,43 @@ StdWidgetFactory::createMenuActions(const QString &classname, QWidget *w, QPopup
 {
 	if(classname == "QLabel")
 	{
-	menu->insertItem(i18n("Change text"), this, SLOT(chText()) );
-	return;
+		menu->insertItem(i18n("Change text"), this, SLOT(chText()) );
+		return;
 	}
 	else if(classname == "QLineEdit")
 	{
-	menu->insertItem(i18n("Change text"), this, SLOT(chText()) );
-	return;
+		menu->insertItem(i18n("Change text"), this, SLOT(chText()) );
+		return;
 	}
 
 	return;
+}
+
+void
+StdWidgetFactory::startEditing(const QString &classname, QWidget *w, KFormDesigner::Container *container)
+{
+	m_container = container;
+	if(classname == "QLineEdit")
+	{
+		QLineEdit *lineedit = static_cast<QLineEdit*>(w);
+		createEditor(lineedit->text(), lineedit, lineedit->geometry(), lineedit->alignment());
+		return;
+	}
+	else if(classname == "QLabel")
+	{
+		m_widget = w;
+		QLabel *label = static_cast<QLabel*>(w);
+		createEditor(label->text(), label, label->geometry(), label->alignment());
+		return;
+	}
+	return;
+}
+
+void
+StdWidgetFactory::changeText(const QString &text)
+{
+	KFormDesigner::ObjectPropertyBuffer *buff = m_container->form()->manager()->buffer();
+	(*buff)["text"]->setValue(text);
 }
 
 StdWidgetFactory::~StdWidgetFactory()

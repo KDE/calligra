@@ -146,6 +146,17 @@ WidgetLibrary::createMenuActions(const QString &c, QWidget *w, QPopupMenu *menu,
 	return;
 }
 
+void
+WidgetLibrary::startEditing(const QString &classname, QWidget *w, Container *container)
+{
+	Widget *wfactory = m_widgets[classname];
+	if(!wfactory)
+		return ;
+
+	wfactory->factory()->startEditing(classname, w, container);
+	return;
+}
+
 QString
 WidgetLibrary::displayName(const QString &classname)
 {

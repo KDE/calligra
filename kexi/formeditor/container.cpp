@@ -228,7 +228,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 				}
 				return true;
 			}
-			if(mev->state() & Qt::LeftButton)
+			if(mev->state() == Qt::LeftButton)
 			{
 				if(!m_toplevel && m_moving == m_container)
 					break;
@@ -274,8 +274,16 @@ Container::eventFilter(QObject *s, QEvent *e)
 			}
 			return false;
 		}
-
 		case QEvent::MouseButtonDblClick:
+		{
+			kdDebug() << "mouse dboule click" << endl;
+			QWidget *w = static_cast<QWidget*>(s);
+			if(!w)
+				return false;
+			m_form->manager()->lib()->startEditing(w->className(), w, this);
+			return false;
+		}
+
 		case QEvent::ContextMenu:
 		case QEvent::Enter:
 		case QEvent::Leave:

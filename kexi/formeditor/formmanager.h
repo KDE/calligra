@@ -71,6 +71,8 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		//! \return A pointer to the WidgetLibrary owned by this Manager.
 		WidgetLibrary*    lib() const { return m_lib; }
+		//! \return A pointer to the ObjectPropertyBuffer owned by this Manager.
+		ObjectPropertyBuffer*  buffer() const { return m_buffer; }
 		/*! \return true if one of the insert buttons was pressed and the forms are ready to create a widget.
 		 \return false otherwise.
 		 */

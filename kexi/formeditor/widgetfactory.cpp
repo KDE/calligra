@@ -17,6 +17,9 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <klineedit.h>
+
+#include "resizehandle.h"
 #include "widgetfactory.h"
 
 
@@ -24,6 +27,59 @@ namespace KFormDesigner {
 WidgetFactory::WidgetFactory(QObject *parent, const char *name)
  : QObject(parent, name)
 {
+	m_editor = 0;
+	m_widget = 0;
+	m_handles = 0;
+}
+
+KLineEdit*
+WidgetFactory::createEditor(const QString &text, QWidget *w, QRect geometry, int align)
+{
+	KLineEdit *editor = new KLineEdit(text, w->parentWidget());
+	editor->setAlignment(align);
+	editor->setPalette(w->palette());
+	editor->setGeometry(geometry);
+	editor->setBackgroundMode(w->backgroundMode());
+	editor->installEventFilter(this);
+	editor->setFrame(w->isA("QLineEdit"));
+	editor->show();
+	editor->setFocus();
+	connect(editor, SIGNAL(textChanged(const QString&)), this, SLOT(changeText(const QString&)));
+
+	m_handles = new ResizeHandleSet(editor, true);
+
+	m_editor = editor;
+	return editor;
+}
+
+bool
+WidgetFactory::eventFilter(QObject *obj, QEvent *ev)
+{
+	if(obj != (QObject *)m_editor)
+		return false;
+
+	if(ev->type() == QEvent::FocusOut)
+		resetEditor();
+	else if(ev->type() == QEvent::KeyPress)
+	{
+		QKeyEvent *e = static_cast<QKeyEvent*>(ev);
+		if((e->key() == Qt::Key_Return) || (e->key() == Qt::Key_Enter))
+			resetEditor();
+	}
+	else if(ev->type() == QEvent::ContextMenu)
+		return true;
+
+	return false;
+}
+
+void
+WidgetFactory::resetEditor()
+{
+	changeText(m_editor->text());
+	m_editor->deleteLater();
+	delete m_handles;
+	m_editor = 0;
+	m_widget = 0;
 }
 
 WidgetFactory::~WidgetFactory()

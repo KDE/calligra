@@ -95,6 +95,8 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 
 		QString  displayName(const QString &classname);
 
+		void    startEditing(const QString &classname, QWidget *w, Container *container);
+
 	signals:
 		void	prepareInsert(const QString &c);
 

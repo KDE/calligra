@@ -37,14 +37,17 @@
 #include <qobjectlist.h>
 
 #include "resizehandle.h"
-//#include "widgetcontainer.h"
 
 namespace KFormDesigner {
 
-	ResizeHandle::ResizeHandle(QWidget *parent,QWidget *buddy, HandlePos pos):QWidget(parent)
+	ResizeHandle::ResizeHandle(QWidget *parent,QWidget *buddy, HandlePos pos, bool editing):QWidget(parent)
 	{
 		m_dragging=false;
-		setBackgroundColor(black);
+		m_editing = editing;
+		if(editing)
+			setBackgroundColor(blue);
+		else
+			setBackgroundColor(black);
 		setFixedWidth(6);
 		setFixedHeight(6);
 		m_pos=pos;
@@ -58,28 +61,28 @@ namespace KFormDesigner {
 	{
 		switch (m_pos)
 		{
-			case TopLeft: 		move(m_buddy->x(),m_buddy->y());
+			case TopLeft: 		move(m_buddy->x()-3,m_buddy->y()-3);
 						setCursor(QCursor(SizeFDiagCursor));
 						break;
-			case TopCenter: 	move(m_buddy->x()+m_buddy->width()/2-3,m_buddy->y());
+			case TopCenter: 	move(m_buddy->x()+m_buddy->width()/2-3,m_buddy->y()-3);
 						setCursor(QCursor(SizeVerCursor));
 						break;
-			case TopRight: 		move(m_buddy->x()+m_buddy->width()-6,m_buddy->y());
+			case TopRight: 		move(m_buddy->x()+m_buddy->width()-3,m_buddy->y()-3);
 						setCursor(QCursor(SizeBDiagCursor));
 						break;
-			case LeftCenter: 	move(m_buddy->x(),m_buddy->y()+m_buddy->height()/2-3);
+			case LeftCenter: 	move(m_buddy->x()-3,m_buddy->y()+m_buddy->height()/2-3);
 						setCursor(QCursor(SizeHorCursor));
 						break;
-			case RightCenter: 	move(m_buddy->x()+m_buddy->width()-6,m_buddy->y()+m_buddy->height()/2-3);
+			case RightCenter: 	move(m_buddy->x()+m_buddy->width()-3,m_buddy->y()+m_buddy->height()/2-3);
 						setCursor(QCursor(SizeHorCursor));
 						break;
-			case BottomLeft: 	move(m_buddy->x(),m_buddy->y()+m_buddy->height()-6);
+			case BottomLeft: 	move(m_buddy->x()-3,m_buddy->y()+m_buddy->height()-3);
 						setCursor(QCursor(SizeBDiagCursor));
 						break;
-			case BottomCenter: 	move(m_buddy->x()+m_buddy->width()/2-3,m_buddy->y()+m_buddy->height()-6);
+			case BottomCenter: 	move(m_buddy->x()+m_buddy->width()/2-3,m_buddy->y()+m_buddy->height()-3);
 						setCursor(QCursor(SizeVerCursor));
 						break;
-			case BottomRight:	move(m_buddy->x()+m_buddy->width()-6,m_buddy->y()+m_buddy->height()-6);
+			case BottomRight:	move(m_buddy->x()+m_buddy->width()-3,m_buddy->y()+m_buddy->height()-3);
 					  	setCursor(QCursor(SizeFDiagCursor));
 						break;
 
@@ -112,6 +115,7 @@ namespace KFormDesigner {
 #endif
 		int m_dotSpacing=10;
 		if (!m_dragging) return;
+		if(m_editing)  return;
 
 		int tmpx=m_buddy->x();
 		int tmpy=m_buddy->y();
@@ -181,17 +185,17 @@ namespace KFormDesigner {
 	{
 	}
 
-	ResizeHandleSet::ResizeHandleSet(QWidget *modify):QObject(modify->parentWidget()),m_widget(modify)
+	ResizeHandleSet::ResizeHandleSet(QWidget *modify, bool editing):QObject(modify->parentWidget()),m_widget(modify)
 	{
 		QWidget *parent=modify->parentWidget();
-		handles[0]=new ResizeHandle(parent,modify,ResizeHandle::TopLeft);
-		handles[1]=new ResizeHandle(parent,modify,ResizeHandle::TopCenter);
-		handles[2]=new ResizeHandle(parent,modify,ResizeHandle::TopRight);
-		handles[3]=new ResizeHandle(parent,modify,ResizeHandle::LeftCenter);
-		handles[4]=new ResizeHandle(parent,modify,ResizeHandle::RightCenter);
-		handles[5]=new ResizeHandle(parent,modify,ResizeHandle::BottomLeft);
-		handles[6]=new ResizeHandle(parent,modify,ResizeHandle::BottomCenter);
-		handles[7]=new ResizeHandle(parent,modify,ResizeHandle::BottomRight);
+		handles[0]=new ResizeHandle(parent,modify,ResizeHandle::TopLeft, editing);
+		handles[1]=new ResizeHandle(parent,modify,ResizeHandle::TopCenter, editing);
+		handles[2]=new ResizeHandle(parent,modify,ResizeHandle::TopRight, editing);
+		handles[3]=new ResizeHandle(parent,modify,ResizeHandle::LeftCenter, editing);
+		handles[4]=new ResizeHandle(parent,modify,ResizeHandle::RightCenter, editing);
+		handles[5]=new ResizeHandle(parent,modify,ResizeHandle::BottomLeft, editing);
+		handles[6]=new ResizeHandle(parent,modify,ResizeHandle::BottomCenter, editing);
+		handles[7]=new ResizeHandle(parent,modify,ResizeHandle::BottomRight, editing);
 	}
 
 	ResizeHandleSet::~ResizeHandleSet()
