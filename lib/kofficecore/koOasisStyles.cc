@@ -32,7 +32,7 @@ KoOasisStyles::~KoOasisStyles()
 
 void KoOasisStyles::createStyleMap( const QDomDocument& doc )
 {
-    QDomElement docElement  = doc.documentElement();
+    const QDomElement docElement  = doc.documentElement();
     // We used to have the office:version check here, but better let the apps do that
     QDomNode fontStyles = docElement.namedItem( "office:font-decls" );
 
@@ -56,8 +56,10 @@ void KoOasisStyles::createStyleMap( const QDomDocument& doc )
     QDomNode masterStyles = docElement.namedItem( "office:master-styles" );
 
     if ( !masterStyles.isNull() ) {
-        QDomElement master = masterStyles.firstChild().toElement();
-        for ( ; !master.isNull() ; master = master.nextSibling().toElement() ) {
+        QDomNode n = masterStyles.firstChild();
+        for ( ; !n.isNull() ; n = n.nextSibling() ) {
+            const QDomElement master = n.toElement();
+            if ( master.isNull() ) continue;
             if ( master.tagName() ==  "style:master-page" ) {
                 QString name = master.attribute( "style:name" );
                 kdDebug(30003) << "Master style: '" << name << "' loaded " << endl;
@@ -71,7 +73,7 @@ void KoOasisStyles::createStyleMap( const QDomDocument& doc )
 
     kdDebug(30003) << "Starting reading in office:styles" << endl;
 
-    QDomElement officeStyle = docElement.namedItem( "office:styles" ).toElement();
+    const QDomElement officeStyle = docElement.namedItem( "office:styles" ).toElement();
 
     if ( !officeStyle.isNull() ) {
         m_officeStyle = officeStyle;
@@ -97,8 +99,9 @@ void KoOasisStyles::insertOfficeStyles( const QDomElement& styles )
 {
     for ( QDomNode n = styles.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
-        QDomElement e = n.toElement();
-        QCString tagName = e.tagName().latin1();
+        const QDomElement e = n.toElement();
+        if ( e.isNull() ) continue;
+        const QCString tagName = e.tagName().latin1();
         if ( tagName == "draw:gradient"
              || tagName == "svg:linearGradient"
              || tagName == "svg:radialGradient"
@@ -109,7 +112,7 @@ void KoOasisStyles::insertOfficeStyles( const QDomElement& styles )
              || tagName == "draw:opacity" )
         {
             Q_ASSERT( e.hasAttribute( "draw:name" ) );
-            QString name = e.attribute( "draw:name" );
+            const QString name = e.attribute( "draw:name" );
             QDomElement* ep = new QDomElement( e );
             m_drawStyles.insert( name, ep );
         }
@@ -124,7 +127,9 @@ void KoOasisStyles::insertStyles( const QDomElement& styles )
     //kdDebug(30003) << "Inserting styles from " << styles.tagName() << endl;
     for ( QDomNode n = styles.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
-        insertStyle( n.toElement() );
+        const QDomElement e = n.toElement();
+        if ( e.isNull() ) continue;
+        insertStyle( e );
     }
 }
 
@@ -176,6 +181,7 @@ void KoOasisStyles::importDataStyle( const QDomElement& parent )
     for( QDomNode node( parent.firstChild() ); !node.isNull(); node = node.nextSibling() )
     {
         const QDomElement e( node.toElement() );
+        if ( e.isNull() ) continue;
         QString tagName = e.tagName();
         if ( !tagName.startsWith( "number:" ) )
             continue;
@@ -343,6 +349,7 @@ void KoOasisStyles::importDataStyle( const QDomElement& parent )
     for( QDomNode node( parent.firstChild() ); !node.isNull(); node = node.nextSibling() )
     {
         const QDomElement e( node.toElement() );
+        if ( e.isNull() ) continue;
         QString tagName = e.tagName();
         if ( !tagName.startsWith( "number:" ) )
             continue;
