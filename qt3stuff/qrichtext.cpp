@@ -2431,10 +2431,10 @@ void QTextDocument::drawParag( QPainter *p, QTextParag *parag, int cx, int cy, i
 
     painter->setBrushOrigin( -ir.x(), -ir.y() );
 
-    painter->fillRect( QRect( 0, 0, ir.width(), ir.height() ),
-                       cg.brush( QColorGroup::Base ) );
-
-    if ( !useDoubleBuffer ) {
+    if ( useDoubleBuffer ) {
+        painter->fillRect( QRect( 0, 0, ir.width(), ir.height() ),
+                           cg.brush( QColorGroup::Base ) );
+    } else {
 	if ( cursor && cursor->parag() == parag ) {
 	    painter->fillRect( QRect( parag->at( cursor->index() )->x, 0, 2, ir.height() ),
 			       cg.brush( QColorGroup::Base ) );
