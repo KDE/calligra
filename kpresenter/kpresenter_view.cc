@@ -56,6 +56,7 @@
 #include "textdialog.h"
 #include "sidebar.h"
 #include "insertpagedia.h"
+#include "preview.h"
 
 #include <kfiledialog.h>
 #include <kmessagebox.h>
@@ -450,8 +451,15 @@ void KPresenterView::insertPicture()
     page->setToolEditMode( TEM_MOUSE );
     page->deSelectAllObj();
 
+    //url = KFileDialog::getImageOpenURL(); lukas: put this back in KDE 3.0
+
+    KFileDialog fd( QString::null, KImageIO::pattern(KImageIO::Reading), 0, 0, true );
+    fd.setCaption(i18n("Insert Picture"));
+    fd.setPreviewWidget( new KImagePreview( &fd ) );
+
     KURL url;
-    url = KFileDialog::getImageOpenURL();
+    if ( fd.exec() == QDialog::Accepted )
+        url = fd.selectedURL();
 
     if( url.isEmpty() || !url.isValid())
         return;
@@ -487,17 +495,20 @@ void KPresenterView::insertClipart()
 
     KFileDialog fd( QString::null, i18n( "*.wmf|Windows Metafiles (*.wmf)" ), 0, 0, true );
     fd.setCaption(i18n("Insert Clipart"));
+    fd.setPreviewWidget( new KImagePreview( &fd ) );
 
     KURL url;
+    if ( fd.exec() == QDialog::Accepted )
+        url = fd.selectedURL();
 
     if( url.isEmpty() || !url.isValid())
-      return;
-
-   QString file;
-   if (!KIO::NetAccess::download( url, file ))
         return;
 
-   if ( !file.isEmpty() )
+    QString file;
+    if (!KIO::NetAccess::download( url, file ))
+        return;
+
+    if ( !file.isEmpty() )
         m_pKPresenterDoc->insertClipart( file, xOffset, yOffset );
 }
 
@@ -2401,8 +2412,15 @@ void KPresenterView::repaint( QRect r, bool erase )
 /*====================== change pciture =========================*/
 void KPresenterView::changePicture( unsigned int, const QString & filename )
 {
+    //url = KFileDialog::getImageOpenURL(); lukas: put this back in KDE 3.0
+
+    KFileDialog fd( filename, KImageIO::pattern(KImageIO::Reading), 0, 0, true );
+    fd.setCaption(i18n("Select new Picture"));
+    fd.setPreviewWidget( new KImagePreview( &fd ) );
+
     KURL url;
-    url = KFileDialog::getImageOpenURL();
+    if ( fd.exec() == QDialog::Accepted )
+      url = fd.selectedURL();
 
     if( url.isEmpty() || !url.isValid())
       return;
@@ -2420,18 +2438,21 @@ void KPresenterView::changeClipart( unsigned int, QString filename )
 {
     KFileDialog fd( filename, i18n( "*.wmf|Windows Metafiles (*.wmf)" ), 0, 0, true );
     fd.setCaption(i18n("Select new Clipart"));
+    fd.setPreviewWidget( new KImagePreview( &fd ) );
 
     KURL url;
+    if ( fd.exec() == QDialog::Accepted )
+        url = fd.selectedURL();
 
     if( url.isEmpty() || !url.isValid() )
-      return;
+        return;
 
     QString file;
     if (!KIO::NetAccess::download( url, file ))
         return;
 
     if ( !file.isEmpty() )
-	m_pKPresenterDoc->changeClipart( file, xOffset, yOffset );
+        m_pKPresenterDoc->changeClipart( file, xOffset, yOffset );
 }
 
 /*====================== resize event ===========================*/

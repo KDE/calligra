@@ -18,6 +18,7 @@
 */
 
 #include "page.h"
+#include "preview.h"
 #include "backdia.h"
 #include "backdia.moc"
 #include "kpbackground.h"
@@ -391,13 +392,14 @@ void BackDia::selectPic()
 {
     KURL url;
 
-    url = KFileDialog::getImageOpenURL();
+    //url = KFileDialog::getImageOpenURL(); lukas: put this back in KDE 3.0
+    
+    KFileDialog fd( QString::null, KImageIO::pattern(KImageIO::Reading), 0, 0, true );
+    fd.setPreviewWidget( new KImagePreview( &fd ) );
 
-    if( url.isEmpty() )
-        return;
-
-    if ( url.isValid() )
+    if ( fd.exec() == QDialog::Accepted )
     {
+        url = fd.selectedURL();
         chosenPic = QString::null;
         if (!KIO::NetAccess::download( url, chosenPic ))
           return;
@@ -406,6 +408,7 @@ void BackDia::selectPic()
         picChanged = true;
         picLastModified = QDateTime();
         updateConfiguration();
+        // Problem : when to remove the temp file ?
     }
 }
 
@@ -414,6 +417,7 @@ void BackDia::selectClip()
 {
     KURL url;
     KFileDialog fd( QString::null, i18n( "*.wmf|Windows Metafiles (*.wmf)" ), 0, 0, true );
+    fd.setPreviewWidget( new KImagePreview( &fd ) );
 
     if ( fd.exec() == QDialog::Accepted )
     {
