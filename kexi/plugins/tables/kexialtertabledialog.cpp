@@ -83,8 +83,11 @@ void KexiAlterTableDialog::init()
 	KexiDB::Field *f = new KexiDB::Field(i18n("Data type"), KexiDB::Field::Enum);
 //		KexiDB::Field::NotEmpty | KexiDB::Field::NotNull);
 	QValueVector<QString> types(KexiDB::Field::LastTypeGroup);
+	int maxTypeNameTextWidth = 0;
+	QFontMetrics fm(font());
 	for (int i=1; i<=KexiDB::Field::LastTypeGroup; i++) {
 		types[i-1] = KexiDB::Field::typeGroupName(i);
+		maxTypeNameTextWidth = QMAX(maxTypeNameTextWidth, fm.width(types[i-1]));
 	}
 	f->setEnumHints(types);
 
@@ -134,7 +137,8 @@ void KexiAlterTableDialog::init()
 	m_view->setNavigatorEnabled(false);
 	m_view->setSortingEnabled(false);//no, sorting is not good idea here
 	m_view->adjustColumnWidthToContents(0); //adjust column width
-	m_view->adjustColumnWidthToContents(1); //adjust column width
+//	m_view->adjustColumnWidthToContents(1); //adjust column width
+	m_view->setColumnWidth(1, maxTypeNameTextWidth + 2*m_view->rowHeight());
 	m_view->setColumnStretchEnabled( true, 2 ); //last column occupies the rest of the area
 	m_view->setAcceptsRowEditAfterCellAccepting( true );
 	m_view->setFilteringEnabled( false );
@@ -267,40 +271,8 @@ KexiAlterTableDialog::createPropertyBuffer( int row, KexiDB::Field *field )
 void
 KexiAlterTableDialog::initActions()
 {
-/*
-	plugSharedAction("edit_delete_row", m_view, SLOT(deleteCurrentRow()));
-	plugSharedAction("edit_delete_row", m_view->popup());
-	m_view->plugSharedAction(sharedAction("edit_delete_row")); //for proper shortcut
 
-	plugSharedAction("edit_delete",m_view, SLOT(deleteAndStartEditCurrentCell()));
-	m_view->plugSharedAction(sharedAction("edit_delete")); //for proper shortcut
-
-	plugSharedAction("data_save_row",m_view, SLOT(acceptRowEdit()));
-	m_view->plugSharedAction(sharedAction("data_save_row")); //for proper shortcut
-
-	slotCellSelected( m_view->currentColumn(), m_view->currentRow() );
-	*/
 }
-
-/*QWidget* KexiAlterTableDialog::mainWidget() 
-{
-	return m_view;
-}*/
-
-/*QSize KexiAlterTableDialog::minimumSizeHint() const
-{
-//	QWidget*const w= (QWidget*const)mainWidget();
-	return m_view->minimumSizeHint();
-//	return mainWidget() ? mainWidget()->minimumSizeHint() : KMdiChildView::minimumSizeHint();
-}
-
-QSize KexiAlterTableDialog::sizeHint() const
-{
-	return m_view->sizeHint();
-}
-*/
-// update actions --------------
-
 
 void KexiAlterTableDialog::slotCellSelected(int, int row)
 {
@@ -309,8 +281,6 @@ void KexiAlterTableDialog::slotCellSelected(int, int row)
 		return;
 	m_row = row;
 	propertyBufferSwitched();
-
-//	m_properties->setBuffer(m_constraints.at(row));
 }
 
 bool KexiAlterTableDialog::beforeSwitchTo(int mode)
