@@ -148,19 +148,19 @@ KontourImport::parseGObject( VObject *object, const QDomElement &e )
 				QValueList<float> list;
 				switch ( strokestyle )
 				{
-					case 2:
+					case 2: // dashed line
 						list << 10 << 5;
 						break;
-					case 3:
+					case 3: // dotted line
 						list << 1 << 5;
 						break;
-					case 4:
+					case 4: // dash-dot
 						list << 10 << 5 << 1 << 5;
 						break;
-					case 5:
+					case 5: // dash-dot-dot
 						list << 10 << 5 << 1 << 5 << 1 << 5;
 						break;
-				};
+				}
 				
 				dash.setArray( list );
 				stroke.dashPattern() = dash;
