@@ -116,7 +116,7 @@ bool pqxxSqlConnection::drv_useDatabase( const QString &dbName )
 
     if (m_data->hostName.isEmpty() || m_data->hostName == "localhost")
     {
-        if (m_data->fileName().isEmpty())
+        if (m_data->localSocketFileName.isEmpty())
         {
             sockets.append("/tmp/.s.PGSQL.5432");
 
@@ -131,7 +131,7 @@ bool pqxxSqlConnection::drv_useDatabase( const QString &dbName )
         }
         else
         {
-            socket=m_data->fileName();
+            socket=m_data->localSocketFileName; //m_data->fileName();
         }
     }
     else
