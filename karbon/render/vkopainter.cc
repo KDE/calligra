@@ -173,7 +173,8 @@ void
 VKoPainter::setPen( const VStroke &stroke )
 {
 	delete m_stroke;
-	m_stroke = new VStroke( stroke.lineWidth(), stroke.lineCap(), stroke.lineJoin() );
+	m_stroke =  new VStroke;
+	*m_stroke = stroke;
 }
 
 // void setBrush( const VBrush & );
