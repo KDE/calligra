@@ -31,7 +31,7 @@
 #include "vcomposite.h"
 #include "vsegment.h"
 #include <vpainter.h>
-
+#include <vtext.h>
 VClipGroup::VClipGroup( VObject* parent, VState state) : VGroup(parent, state) {}
 VClipGroup::VClipGroup( const VClipGroup& group ) : VGroup (group) {}
 
@@ -62,7 +62,7 @@ void VClipGroup::draw( VPainter* painter, const KoRect* rect ) const
 	for ( ; itr.current(); ++itr )
 		itr.current()->draw( painter, rect );
 
-	painter->restore();	
+	painter->restore();
 }
 
 VClipGroup* VClipGroup::clone() const
