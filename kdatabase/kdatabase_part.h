@@ -25,6 +25,12 @@
 
 #include "maindlg.h"
 
+class KDatabasePart;
+class KDBStruct;
+class KDBTable;
+class KDBView;
+class KDBForm;
+
 class KDatabasePart : public KoDocument
 {
     Q_OBJECT
@@ -38,10 +44,62 @@ public:
     virtual bool loadXML( QIODevice *, const QDomDocument & );
     virtual QDomDocument saveXML();
 
+    QDomDocument *getKDBFile();
+private:
+    QDomDocument KDBFile;
+
 protected:
     virtual KoView* createViewInstance( QWidget* parent, const char* name );
 
+};
+
+class KDBTable {
+//This class is meant for viewing and modifying table structure.
+//KDBTableData is for accessing and modifying data.
+public:
+      QString getColumns(QString *tableName);
+      bool insertColumn(QString *tableName, QString *columnInfo);
+      bool modifyColumn(QString *tableName, QString *columnInfo);
+      bool deleteColumn(QString *tableName, QString *columnInfo);
+
+      KDBTable(void);
 
 };
 
+class KDBView {
+//This class is meant for viewing and modifying views.
+public:
+     bool createView(QString *viewName, QString *sSQL);
+     bool modifyView(QString *viewName, QString *newSQL);
+     bool deleteView(QString *viewName);
+
+     KDBView(void);
+};
+
+class KDBForm {
+//This class is meant for viewing and modifying forms. Its just a placeholder for now.
+public:
+    KDBForm(void);
+
+};
+
+
+class KDBStruct {
+
+public:
+    KDBStruct(QDomDocument* KDBFile);
+
+    bool createTable(QString* tableName, QString fieldInfo);
+    bool createView(QString* viewName, QString viewSQL);
+    bool createReport(QString* reportName, QString reportSQL);
+    bool deleteTable(QString* tableName);
+    bool deleteView(QString* viewName);
+    bool deleteReport(QString* reportName);
+    bool renameTable(QString* oldTableName, QString newTableName);
+    bool renameView(QString* oldViewName, QString newViewName);
+    bool renameForm(QString* oldFormName, QString newFormName);
+
+    QString* executeSQL(QString *sSQL, bool returnXML);
+
+};
 #endif

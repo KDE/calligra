@@ -72,9 +72,26 @@ KoView* KDatabasePart::createViewInstance( QWidget* parent, const char* name )
     return new KDatabaseView( this, parent, name );
 }
 
-bool KDatabasePart::loadXML( QIODevice *, const QDomDocument & )
+bool KDatabasePart::loadXML( QIODevice *, const QDomDocument &doc)
 {
-    // TODO load the document from the QDomDocument
+    QString value;
+    QDomElement kdb = doc.documentElement();
+
+    value = kdb.attribute( "mime", QString::null );
+    if ( value.isEmpty() )
+    {
+        kdError(32001) << "No mime type specified!" << endl;
+        setErrorMessage( i18n( "Invalid document. No mimetype specified." ) );
+        return false;
+    }
+    else if ( value != "application/x-kdatabase" )
+    {
+        kdError(32001) << "Unknown mime type " << value << endl;
+        setErrorMessage( i18n( "Invalid document. Expected mimetype application/x-kdatabase, got %1" ).arg( value ) );
+        return false;
+    }
+    KDBFile=doc;
+    kdDebug() << "Load succeeded" << endl;
     return true;
 }
 
@@ -100,6 +117,30 @@ void KDatabasePart::paintContent( QPainter& painter, const QRect& rect, bool /*t
         painter.drawLine( x * 20, top * 20, x * 20, bottom * 20 );
     for( int y = left; y < right; ++y )
         painter.drawLine( left * 20, y * 20, right * 20, y * 20 );
+}
+
+QDomDocument* KDatabasePart::getKDBFile()
+{
+
+return(&KDBFile);
+}
+
+bool KDBStruct::createTable(QString* tableName, QString fieldInfo)
+{
+
+   return(false);
+}
+
+bool KDBStruct::createView(QString* viewName, QString viewSQL)
+{
+
+   return(false);
+}
+
+bool KDBStruct::createReport(QString* reportName, QString reportSQL)
+{
+
+    return(false);
 }
 
 #include "kdatabase_part.moc"
