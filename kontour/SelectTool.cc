@@ -256,7 +256,9 @@ void SelectTool::processButtonReleaseEvent(QMouseEvent *e, GPage *page, Canvas *
   if(state == S_Rubberband)
   {
     QPtrList<GObject> olist;
-    KoRect selRect(KoPoint(r.left() - canvas->xOffset(), r.top() - canvas->yOffset()), KoPoint(r.right() - canvas->xOffset(), r.bottom() - canvas->yOffset()));
+    float zoom = toolController()->view()->activeDocument()->zoomFactor();
+    KoRect selRect(KoPoint((r.left() - canvas->xOffset()) / zoom, (r.top() - canvas->yOffset()) / zoom),
+	               KoPoint((r.right() - canvas->xOffset()) / zoom, (r.bottom() - canvas->yOffset()) / zoom));
     if(page->findObjectsContainedIn(selRect.normalize(), olist))
     {
       QPtrListIterator<GObject> it(olist);
