@@ -113,6 +113,9 @@ Done        Plain
 -           Use KPlato namespace for all KPlato classes
 
               
-For FIXME entries in kplato files, execute "grep grep -A 4 -B 4 -n FIXME *"
-For TODO entries in kplato files, execute "grep grep -A 4 -B 4 -n TODO *"
+You can search the source code for FIXME and TODO entries with:
+find . -name "*.c*" -o -name "*.h" | xargs grep -E "(###|TODO|FIXME|todo)"
+
+Using -A and -B with grep gives you some additional context around the particular comment:
+find . -name "*.c*" -o -name "*.h" | xargs grep -A 3 -B 3 -E "(###|TODO|FIXME|todo)"
 
