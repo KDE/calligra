@@ -798,7 +798,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 
                 rubber = rubber.normalize();
                 rubber.moveBy(diffx(),diffy());
-                KPObject *kpobject = 0;
+                //KPObject *kpobject = 0;
 
                 QPtrListIterator<KPObject> it( getObjectList() );
                 for ( ; it.current() ; ++it )
@@ -3431,7 +3431,7 @@ void KPrCanvas::doObjEffects()
 }
 
 /*======================= draw object ============================*/
-void KPrCanvas::drawObject( KPObject *kpobject, QPixmap *screen, int _x, int _y, int _w, int _h, int _cx, int _cy )
+void KPrCanvas::drawObject( KPObject *kpobject, QPixmap *screen, int /*_x*/, int /*_y*/, int _w, int _h, int _cx, int _cy )
 {
     // ### TODO use _x and _y !! painter translation maybe ?
     if ( kpobject->getDisappear() &&
@@ -3478,7 +3478,7 @@ void KPrCanvas::drawObject( KPObject *kpobject, QPixmap *screen, int _x, int _y,
 }
 
 /*======================== print =================================*/
-void KPrCanvas::print( QPainter *painter, KPrinter *printer, float left_margin, float top_margin )
+void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin*/, float /*top_margin*/ )
 {
     deSelectAllObj();
     printer->setFullPage( true );
@@ -4485,7 +4485,7 @@ void KPrCanvas::scalePixmapToBeOrigIn( const QSize &/*origSize*/, const QSize &c
     m_view->kPresenterDoc()->addCommand( resizeCmd );
 }
 
-void KPrCanvas::setTextBackground( KPTextObject *obj )
+void KPrCanvas::setTextBackground( KPTextObject */*obj*/ )
 {
     // This is called when double-clicking on a text object.
     // What should happen exactly ? (DF)
@@ -4724,11 +4724,11 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
     _repaint( kpobject );
 
     KoRect oldKoBoundingRect = kpobject->getBoundingRect();
-    double _dx = oldKoBoundingRect.x() - 5.0;
-    double _dy = oldKoBoundingRect.y() - 5.0;
+    double _fixme_dx = oldKoBoundingRect.x() - 5.0;
+    double _fixme_dy = oldKoBoundingRect.y() - 5.0;
     double _dw = oldKoBoundingRect.width() + 10.0;
     double _dh = oldKoBoundingRect.height() + 10.0;
-    oldKoBoundingRect.setRect( _dx, _dy, _dw, _dh );
+    oldKoBoundingRect.setRect( _fixme_dx, _fixme_dy, _dw, _dh );
     oldBoundingRect = m_view->zoomHandler()->zoomRect( oldKoBoundingRect );
 }
 
