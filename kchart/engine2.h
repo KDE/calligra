@@ -19,26 +19,26 @@
 /* allows for intersecting 3D lines      */
 /*  (also used for single 3D lines >:-Q  */
 struct YS {
-    int y1;
-    int y2;
-    float slope;
-    QColor lnclr;
-    QColor shclr;
+  int y1;
+  int y2;
+  float slope;
+  QColor lnclr;
+  QColor shclr;
 };
 
 
 #define CX( i, d ) ( cx + ((d)? xdepth_3D:0)+ \
-	(int)((double)(!params->explode.isNull()?params->explode[params->offsetCol+i]:0) * \
-                   sin((double)(slice_angle[0][(i)])) ) )
+	(int)((double)(!params->explode.isNull()?params->explode[params->offsetCol+(i)]:0) * \
+                   sin((double)(slice_angle[(i)][0])) ) )
 
 #define CY( i, d ) ( cy - ((d)? ydepth_3D: 0) - \
-            (int)( (double)(!params->explode.isNull()?params->explode[params->offsetCol+i]:0) * \
-                   cos((double)(slice_angle[0][(i)])) ) )
+            (int)( (double)(!params->explode.isNull()?params->explode[params->offsetCol+(i)]:0) * \
+                   cos((double)(slice_angle[(i)][0])) ) )
 
 
-#define IX( i, f, d ) ( CX( (i), (d) ) + (int)( (double)rad * sin((double)(slice_angle[f][(i)])) ) )
+#define IX( i, f, d ) ( CX( (i), (d) ) + (int)( (double)rad * sin((double)(slice_angle[(i)][(f)])) ) )
 
-#define IY( i, f, d ) ( CY( (i), (d) ) - (int)( (double)rad * cos((double)(slice_angle[f][(i)])) ) )
+#define IY( i, f, d ) ( CY( (i), (d) ) - (int)( (double)rad * cos((double)(slice_angle[(i)][(f)])) ) )
 
 
 /* same as above except o is angle */
@@ -60,11 +60,14 @@ struct YS {
 #define MOD_360( o ) ( (o)>=360? (o)-360: (o) )								/* assume !> 720 */
 
 
-struct tmp_slice_t { int	i;					// original index
-    char	hidden;				// 'behind' top [3D] pie
-    float	angle;				// radian
-    float	slice; };			// radian
-extern float				pie_3D_rad; 	// user requested 3D angle in radians
+struct tmp_slice_t 
+{ 
+  int	i;					// original index
+  char	hidden;				// 'behind' top [3D] pie
+  float	angle;				// radian
+  float	slice; 
+};			// radian
+extern float pie_3D_rad; 	// user requested 3D angle in radians
 
 // degrees (radians) between angle a, and depth angle
 // 1&2, so comparisons can be done.
@@ -81,10 +84,10 @@ extern float	       dist_foo1, dist_foo2; // by Werner
 
 
 struct BS {
-    float y1;
-    float y2;
-    QColor clr;
-    QColor shclr;
+  float y1;
+  float y2;
+  QColor clr;
+  QColor shclr;
 };
 
 #define	NUM_YPOINTS	(sizeof(ypoints) / sizeof(float))

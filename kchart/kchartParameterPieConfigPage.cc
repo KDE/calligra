@@ -10,7 +10,7 @@
 
 #include <kapp.h>
 #include <klocale.h>
-#include <iostream.h>
+#include <kdebug.h>
 
 #include <qlayout.h>
 #include <qlabel.h>
@@ -181,13 +181,13 @@ void KChartParameterPieConfigPage::init()
     		_typeBelow->setChecked(true);
     		break;
     	default:
-    		cout<<"Error in _params->percent_labels\n";
+                                   kdDebug(35001)<<" Error in _params->percent_labels\n";
     		break;
     	}
 }
 void KChartParameterPieConfigPage::apply()
 {
-   
+
     _params->title=title->text();
     _params->label_line=lineLabel->isChecked();
     if(lineLabel->isChecked())
@@ -203,6 +203,6 @@ void KChartParameterPieConfigPage::apply()
     else if(_typeBelow->isChecked())
     	_params->percent_labels=KCHARTPCTTYPE_BELOW;
     else
-    	cout<<"Error in QRadioButton\n";
+    	kdDebug(35001)<<"Error in QRadioButton\n";
     
 }

@@ -9,10 +9,11 @@
 
 #include <kapp.h>
 #include <klocale.h>
+#include <kdebug.h>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qbuttongroup.h>
-#include <iostream.h>
+
 
 KChartComboPage::KChartComboPage(KChartParameters* params,QWidget* parent ) :
     QWidget( parent ),_params( params )
@@ -71,7 +72,7 @@ switch((int)_params->hlc_style)
                  }
           default:
                 {
-                 cout <<"Error in hlc_style\n";
+                  kdDebug(35001)<<"Error in hlc_style\n";
                  break;
                 }
         }
@@ -97,7 +98,7 @@ else if(icap->isChecked())
         }
 else
         {
-        cout <<"Error in groupbutton\n";
+         kdDebug(35001)<<"Error in groupbutton\n";
         }
 }
 

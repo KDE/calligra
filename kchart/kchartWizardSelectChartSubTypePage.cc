@@ -9,12 +9,13 @@
 #include <qlabel.h>
 #include <qcollection.h>
 #include <qobjectlist.h>
-#include <iostream.h>
+#include <qlayout.h>
 
+#include <kdebug.h>
 #include <kiconloader.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <qlayout.h>
+
 
 KChartWizardSelectChartSubTypePage::KChartWizardSelectChartSubTypePage( QWidget* parent,
 						    KChartPart* chart ) :
@@ -68,7 +69,7 @@ KChartWizardSelectChartSubTypePage::KChartWizardSelectChartSubTypePage( QWidget*
                 }
           default:
                 {
-                 cout <<"Error in stack_type\n";
+                 kdDebug(35001)<<"Error in stack_type\n";
                  break;
                 }
         }
@@ -107,7 +108,7 @@ if(chartSubType)
 
  else
         {
-        cout <<"Error in groupbutton\n";
+        kdDebug(35001)<<"Error in groupbutton\n";
         }
  }
 else
