@@ -40,6 +40,8 @@ public:
     QTextCodec* getCodec(void) const;
 private:
     ExportDialogUI* m_dialog;
+private slots:
+    void comboBoxEncodingActivated(int);
 };
 
 #endif /* EXPORT_DIALOG_H */
