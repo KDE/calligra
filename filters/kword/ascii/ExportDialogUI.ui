@@ -144,7 +144,7 @@
                         <cstring>radioEndOfLineCRLF</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Windows style (line feed and carriage return)</string>
+                        <string>&amp;Windows style (carriage return and line feed)</string>
                     </property>
                     <property name="checked">
                         <bool>false</bool>
