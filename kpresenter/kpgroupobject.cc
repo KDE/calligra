@@ -136,6 +136,15 @@ void KPGroupObject::loadOasisGroupObject( KPresenterDoc *_doc, int pos, KPrPage 
     //KPObject::loadOasis( element, context, animation );
     updateObjs = false;
     _doc->loadOasisObject( pos, newpage,element, context, this);
+    QPtrListIterator<KPObject> it( objects );
+    KoRect r=KoRect();
+    for ( ; it.current() ; ++it )
+    {
+        r |= it.current()->getBoundingRect();
+    }
+    setOrig( r.x(), r.y() );
+    setSize( r.width(), r.height() );
+
 //remove duplicate code
     updateObjs = true;
 }
