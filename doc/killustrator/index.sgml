@@ -1,6 +1,6 @@
 <!doctype linuxdoc system>
 
-<!-- KIllustrator Handbuch Version 0.3
+<!-- KIllustrator Handbuch Version 0.3.1
  -->
 
 <!-- I added some comments to mark changes between versions of this handbook. -->
@@ -19,9 +19,9 @@
 <p>English Translation: Ben Skelton, <tt><htmlurl url="mailto:skeltobc@elec.canterbury.ac.nz" name=" skeltobc@elec.canterbury.ac.nz"</tt> and Winter Laite, <tt><htmlurl url="mailto:winlaite@lobo.net" name=winlaite@lobo.net></tt>
 </p>			
 <p>
-<date>Version <!-- __changed -->0.3, 08. September 1999<!-- __endchanged -->
+<date>Version <!-- __changed -->0.3.1, 08. November 1999<!-- __endchanged -->
 <abstract>
-This Handbook describes KIllustrator Version <!-- __changed -->0.7<!-- __endchanged --> by Kai-Uwe Sattler.
+This Handbook describes KIllustrator Version <!-- __changed -->0.7.1<!-- __endchanged --> by Kai-Uwe Sattler.
 </abstract>
 
 <!-- Table of contents -->
@@ -65,6 +65,8 @@ Revision history:
 <item>24/02/1999 snapshot 0.6.3 released 
 <item>06/04/1999 snapshot 0.6.4 released (bug fixes only) 
 <item>09/04/1999 snapshot 0.6.5 released (bug fixes only)
+<item>07/15/1999 snapshot 0.7 released
+<item>10/19/1999 snapshot 0.7.1 released
 </itemize>
 
 <sect>About the handbook
@@ -75,7 +77,7 @@ This handbook refers mainly to the "stand-alone version" of KIllustrator. Specia
 This documentation is a translation of the original German text by Hagen Höpfner.
 
 The current version can be found <!-- __changed-->on <url
-url="http://www.cs.uni-magdeburg.de/~hoepfner/kde/killustrator/killustrator.html"
+url="http://www.cs.uni-magdeburg.de/~hoepfner/kde.html"
 name="his home page">.<!-- __endchanged-->
 
 Original German version: Hagen Höpfner, <htmlurl url="mailto:Hagen.Hoepfner@gmx.de" name="Hagen.Hoepfner@gmx.de">
@@ -130,7 +132,7 @@ The following platforms were successfully tested:
 <item>SuSE 6.0 (Hagen Höpfner) 
 <item>SuSE 6.1 Cebit Beta (Hagen Höpfner)
 <item>SuSE 6.1 (Hagen Höpfner)
-<!-- __new --><item>SuSE 6.2 (Joachim Ansorg) <!-- __endnew -->
+<item>SuSE 6.2 (Joachim Ansorg)
 </itemize>
 
 If you encounter problems, please direct them to Hagen.
@@ -549,13 +551,10 @@ Default drawing parameters such as fill colour, line thickness and style can be 
 <tag/Answer:/ The importing of text is performed by copying/pasting. Copy the text from (as an example) a text editor. In KIllustrator select Paste from the File menu, and position the text as desired.
 
 <P>
-<!-- __new -->
 <tag/Question:/I can't find the Killustrator package in my SuSE distro!
 <tag/Answer:/SuSE didn't compile the different packages as separate applications. Use the complete package.
 
 </descrip>
-
-<!-- __endnew -->
 
 <!-- Chapter 5 ---------------------------------------------------------->
 
@@ -608,7 +607,6 @@ There is surely much more than can and should be improved upon in this handbook.
 <item>Printing
 </itemize>
 Suggestions and errors concerning this handbook in general should be directed toward <htmlurl url="mailto:Hagen.Hoepfner@gmx.de" name="Hagen">. Matters regarding the English translation can be sent to <htmlurl url="mailto:skeltobc@elec.canterbury.ac.nz" name="Ben">. 
-<!-- __new -->
 <chapt>Copyright
 <p>
 <tscreen><verb>
@@ -628,9 +626,6 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 </verb></tscreen>
-
-
-<!-- __endnew -->
 </book>
 
 
