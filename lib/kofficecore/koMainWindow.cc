@@ -467,8 +467,8 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
 
   KXMLGUIFactory *factory = guiFactory();
 
-  QValueList<KXMLGUIServant *> plugins;
-  QValueList<KXMLGUIServant *>::ConstIterator pIt, pBegin, pEnd;
+  QValueList<KXMLGUIClient *> plugins;
+  QValueList<KXMLGUIClient *>::ConstIterator pIt, pBegin, pEnd;
 
   setUpdatesEnabled( false );
 
@@ -476,17 +476,17 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
   {
     //TODO: event stuff
 
-    plugins = KParts::Plugin::pluginServants( d->m_activeView );
+    plugins = KParts::Plugin::pluginClients( d->m_activeView );
     pIt = plugins.fromLast();
     pBegin = plugins.begin();
 
     for (; pIt != pBegin; --pIt )
-      factory->removeServant( *pIt );
+      factory->removeClient( *pIt );
 
     if ( pIt != plugins.end() )
-      factory->removeServant( *pIt );
+      factory->removeClient( *pIt );
 
-    factory->removeServant( (KXMLGUIServant *)d->m_activeView );
+    factory->removeClient( (KXMLGUIClient *)d->m_activeView );
   }
 
   if ( !d->bMainWindowGUIBuilt )
@@ -494,13 +494,13 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
     KParts::GUIActivateEvent ev( true );
     QApplication::sendEvent( this, &ev );
 
-    factory->addServant( this );
+    factory->addClient( this );
 
-    plugins = KParts::Plugin::pluginServants( this );
+    plugins = KParts::Plugin::pluginClients( this );
     pIt = plugins.begin();
     pEnd = plugins.end();
     for (; pIt != pEnd; ++pIt )
-      factory->addServant( *pIt );
+      factory->addClient( *pIt );
 
     d->bMainWindowGUIBuilt = true;
   }
@@ -510,13 +510,13 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
     d->m_activeView = (KoView *)d->m_manager->activeWidget();
     d->m_activePart = newPart;
 
-    factory->addServant( (KXMLGUIServant *)d->m_activeView );
+    factory->addClient( (KXMLGUIClient *)d->m_activeView );
 
-    plugins = KParts::Plugin::pluginServants( d->m_activeView );
+    plugins = KParts::Plugin::pluginClients( d->m_activeView );
     pIt = plugins.begin();
     pEnd = plugins.end();
     for (; pIt != pEnd; ++pIt )
-      factory->addServant( *pIt );
+      factory->addClient( *pIt );
   }
   else
   {

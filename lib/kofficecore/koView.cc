@@ -105,10 +105,10 @@ QAction *KoView::action( const QDomElement &element )
   static QString attrName = QString::fromLatin1( "name" );
   QString name = element.attribute( attrName );
 
-  QAction *act = KXMLGUIBase::action( name.utf8() );
+  QAction *act = KXMLGUIClient::action( name.utf8() );
 
   if ( !act )
-    act = d->m_doc->KXMLGUIBase::action( name.utf8() );
+    act = d->m_doc->KXMLGUIClient::action( name.utf8() );
 
   return act;
 }
