@@ -534,20 +534,28 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     if ( deSelAll && !( e->state() & ShiftButton ) && !( e->state() & ControlButton ) )
                         deSelectAllObj();
 
-                    if ( overObject ) {
+                    if ( overObject )
+                    {
                         if(!kpobject->isSelected())
                             selectObj( kpobject );
                         else if(kpobject->isSelected() &&  (e->state() & ShiftButton))
                             deSelectObj(kpobject);
                         modType = MT_NONE;
                         raiseObject();
-                    } else {
+                    }
+                    else
+                    {
                         modType = MT_NONE;
                         if ( !( e->state() & ShiftButton ) && !( e->state() & ControlButton ) )
                             deSelectAllObj();
                         drawRubber = true;
                         rubber = QRect( e->x(), e->y(), 0, 0 );
                     }
+                    m_boundingRect = KoRect();
+
+                    m_boundingRect=m_activePage->getBoundingRect(m_boundingRect, m_view->zoomHandler());
+                    m_boundingRect=m_view->kPresenterDoc()->stickyPage()->getBoundingRect(m_boundingRect, m_view->zoomHandler());
+
                     m_hotSpot = docPoint - m_boundingRect.topLeft();
                 } break;
                 case INS_FREEHAND: {
