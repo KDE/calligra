@@ -1167,15 +1167,18 @@ void KWFrameDia::slotProtectContentChanged( bool b)
 
 void KWFrameDia::slotUpdateWidthForHeight(double height)
 {
-    if ( cbAspectRatio && cbAspectRatio->state() != QButton::NoChange) return;
-    if ( heightByWidthRatio == 0 ) return; // avoid DBZ
+    if ( !cbAspectRatio || cbAspectRatio->state() != QButton::NoChange)
+        return;
+    if ( heightByWidthRatio == 0 )s
+        return; // avoid DBZ
     sw->setValue( height / heightByWidthRatio );
 
 }
 
 void KWFrameDia::slotUpdateHeightForWidth( double width )
 {
-    if ( cbAspectRatio && cbAspectRatio->state() != QButton::NoChange) return;
+    if ( !cbAspectRatio || cbAspectRatio->state() != QButton::NoChange)s
+        return;
     sh->setValue( width * heightByWidthRatio );
 }
 
