@@ -2584,7 +2584,6 @@ void KSpreadCell::paintPageBorders( QPainter& painter,
 
 void KSpreadCell::paintCellBorders( QPainter& painter, KSpreadView* view,
                                     const QRect& rect, const QPoint &corner, const QPoint &cellRef,
-
                                     int width, int height )
 {
   /* we might not paint some borders if this cell is merged with another in
@@ -2636,10 +2635,20 @@ void KSpreadCell::paintCellBorders( QPainter& painter, KSpreadView* view,
     }
 
     painter.setPen( left_pen );
-    painter.drawLine( QMAX( rect.left(),   corner.x() ),
-                      QMAX( rect.top(),    corner.y() - top ),
-                      QMIN( rect.right(), corner.x() ),
-                      QMIN( rect.bottom(),  corner.y() + height + bottom ) );
+    //If we are on paper printout, we limit the length of the lines
+    //On paper, we always have full cells, on screen not
+    if ( painter.device()->isExtDev() )
+    {
+      painter.drawLine( QMAX( rect.left(),   corner.x() ),
+                        QMAX( rect.top(),    corner.y() - top ),
+                        QMIN( rect.right(),  corner.x() ),
+                        QMIN( rect.bottom(), corner.y() + height + bottom ) );
+    }
+    else
+    {
+      painter.drawLine( corner.x(), corner.y() - top,
+                        corner.x(), corner.y() + height + bottom );
+    }
   }
 
   if ( right_pen.style() != Qt::NoPen && paintRight)
@@ -2658,28 +2667,58 @@ void KSpreadCell::paintCellBorders( QPainter& painter, KSpreadView* view,
     }
 
     painter.setPen( right_pen );
-    painter.drawLine( QMAX( rect.left(),   corner.x() + width ),
-                      QMAX( rect.top(),    corner.y() - top ),
-                      QMIN( rect.right(), corner.x() + width ),
-                      QMIN( rect.bottom(),  corner.y() + height + bottom ) );
+    //If we are on paper printout, we limit the length of the lines
+    //On paper, we always have full cells, on screen not
+    if ( painter.device()->isExtDev() )
+    {
+      painter.drawLine( QMAX( rect.left(),   corner.x() + width ),
+                        QMAX( rect.top(),    corner.y() - top ),
+                        QMIN( rect.right(),  corner.x() + width ),
+                        QMIN( rect.bottom(), corner.y() + height + bottom ) );
+    }
+    else
+    {
+      painter.drawLine( corner.x() + width, corner.y() - top,
+                        corner.x() + width, corner.y() + height + bottom );
+    }
   }
 
   if ( top_pen.style() != Qt::NoPen && paintTop)
   {
     painter.setPen( top_pen );
-    painter.drawLine( QMAX( rect.left(),   corner.x() ),
-                      QMAX( rect.top(),    corner.y() ),
-                      QMIN( rect.right(), corner.x() + width ),
-                      QMIN( rect.bottom(),  corner.y() ) );
+    //If we are on paper printout, we limit the length of the lines
+    //On paper, we always have full cells, on screen not
+    if ( painter.device()->isExtDev() )
+    {
+      painter.drawLine( QMAX( rect.left(),   corner.x() ),
+                        QMAX( rect.top(),    corner.y() ),
+                        QMIN( rect.right(),  corner.x() + width ),
+                        QMIN( rect.bottom(), corner.y() ) );
+    }
+    else
+    {
+      painter.drawLine( corner.x(),         corner.y(),
+                        corner.x() + width, corner.y() );
+    }
   }
 
   if ( bottom_pen.style() != Qt::NoPen && paintBottom )
   {
     painter.setPen( bottom_pen );
-    painter.drawLine( QMAX( rect.left(),   corner.x() ),
-                      QMAX( rect.top(),    corner.y() + height ),
-                      QMIN( rect.right(), corner.x() + width ),
-                      QMIN( rect.bottom(),  corner.y() + height ) );
+    //If we are on paper printout, we limit the length of the lines
+    //On paper, we always have full cells, on screen not
+    if ( painter.device()->isExtDev() )
+    {
+      painter.drawLine( QMAX( rect.left(),   corner.x() ),
+                        QMAX( rect.top(),    corner.y() + height ),
+                        QMIN( rect.right(),  corner.x() + width ),
+                        QMIN( rect.bottom(), corner.y() + height ) );
+    }
+    else
+    {
+      painter.drawLine( corner.x(),         corner.y() + height,
+                        corner.x() + width, corner.y() + height );
+    }
   }
 
 
@@ -2702,10 +2741,20 @@ void KSpreadCell::paintCellBorders( QPainter& painter, KSpreadView* view,
         bottom = 0;
 
     painter.setPen( vert_pen );
-    painter.drawLine( QMAX( rect.left(),   corner.x() ),
-                      QMAX( rect.top(),    corner.y() ),
-                      QMIN( rect.right(), corner.x() ),
-                      QMIN( rect.bottom(),  corner.y() + bottom ) );
+    //If we are on paper printout, we limit the length of the lines
+    //On paper, we always have full cells, on screen not
+    if ( painter.device()->isExtDev() )
+    {
+      painter.drawLine( QMAX( rect.left(),   corner.x() ),
+                        QMAX( rect.top(),    corner.y() ),
+                        QMIN( rect.right(),  corner.x() ),
+                        QMIN( rect.bottom(), corner.y() + bottom ) );
+    }
+    else
+    {
+      painter.drawLine( corner.x(), corner.y(),
+                        corner.x(), corner.y() + bottom );
+    }
   }
 
   // Fix the borders which meet at the top right corner
@@ -2721,10 +2770,20 @@ void KSpreadCell::paintCellBorders( QPainter& painter, KSpreadView* view,
         bottom = 0;
 
     painter.setPen( vert_pen );
-    painter.drawLine( QMAX( rect.left(),   corner.x() + width ),
-                      QMAX( rect.top(),    corner.y() ),
-                      QMIN( rect.right(), corner.x() + width ),
-                      QMIN( rect.bottom(),  corner.y() + bottom ) );
+    //If we are on paper printout, we limit the length of the lines
+    //On paper, we always have full cells, on screen not
+    if ( painter.device()->isExtDev() )
+    {
+      painter.drawLine( QMAX( rect.left(),   corner.x() + width ),
+                        QMAX( rect.top(),    corner.y() ),
+                        QMIN( rect.right(),  corner.x() + width ),
+                        QMIN( rect.bottom(), corner.y() + bottom ) );
+    }
+    else
+    {
+      painter.drawLine( corner.x() + width, corner.y(),
+                        corner.x() + width, corner.y() + bottom );
+    }
   }
 
   // Bottom
@@ -2743,10 +2802,20 @@ void KSpreadCell::paintCellBorders( QPainter& painter, KSpreadView* view,
           bottom = 0;
 
       painter.setPen( vert_pen );
-      painter.drawLine( QMAX( rect.left(),   corner.x() ),
-                        QMAX( rect.top(),    corner.y() + height - bottom ),
-                        QMIN( rect.right(), corner.x() ),
-                        QMIN( rect.bottom(),  corner.y() + height ) );
+      //If we are on paper printout, we limit the length of the lines
+      //On paper, we always have full cells, on screen not
+      if ( painter.device()->isExtDev() )
+      {
+        painter.drawLine( QMAX( rect.left(),   corner.x() ),
+                          QMAX( rect.top(),    corner.y() + height - bottom ),
+                          QMIN( rect.right(),  corner.x() ),
+                          QMIN( rect.bottom(), corner.y() + height ) );
+      }
+      else
+      {
+        painter.drawLine( corner.x(), corner.y() + height - bottom,
+                          corner.x(), corner.y() + height );
+      }
     }
 
     // Fix the borders which meet at the bottom right corner
@@ -2762,10 +2831,20 @@ void KSpreadCell::paintCellBorders( QPainter& painter, KSpreadView* view,
           bottom = 0;
 
       painter.setPen( vert_pen );
-      painter.drawLine( QMAX( rect.left(),   corner.x() + width ),
-                        QMAX( rect.top(),    corner.y() + height - bottom ),
-                        QMIN( rect.right(), corner.x() + width ),
-                        QMIN( rect.bottom(),  corner.y() + height ) );
+      //If we are on paper printout, we limit the length of the lines
+      //On paper, we always have full cells, on screen not
+      if ( painter.device()->isExtDev() )
+      {
+        painter.drawLine( QMAX( rect.left(),   corner.x() + width ),
+                          QMAX( rect.top(),    corner.y() + height - bottom ),
+                          QMIN( rect.right(),  corner.x() + width ),
+                          QMIN( rect.bottom(), corner.y() + height ) );
+      }
+      else
+      {
+        painter.drawLine( corner.x() + width, corner.y() + height - bottom,
+                          corner.x() + width, corner.y() + height );
+      }
     }
   }
 }
