@@ -59,6 +59,7 @@
 #include "kspread_tabbar.h"
 #include "kspread_view.h"
 #include "kspread_dlg_formula.h"
+#include "kspread_dlg_formula2.h"
 #include "kspread_dlg_special.h"
 #include "kspread_dlg_goto.h"
 #include "kspread_dlg_replace.h"
@@ -1040,7 +1041,10 @@ void KSpreadView::formulaSelection( const QString &_math )
 
     if( _math == i18n("Others...") )
     {
-	KSpreaddlgformula* dlg = new KSpreaddlgformula( this, "Formula Editor" );
+        // Old formula dialog
+	//KSpreaddlgformula* dlg = new KSpreaddlgformula( this, "Formula Editor" );
+        // Laurent's new formula dialog
+	KSpreadDlgFormula2* dlg = new KSpreadDlgFormula2( this, "Formula Editor" );
 	dlg->show();
 	return;
     }

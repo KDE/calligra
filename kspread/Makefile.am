@@ -21,7 +21,7 @@ libkspread_la_SOURCES = kspread_canvas.cc \
 	kspread_dlg_scripts.cc kspread_cell.cc kspread_table.cc \
 	kspread_dlg_cons.cc kspread_util.cc \
 	kspread_editors.cc kspread_dlg_tabname.cc \
-	kspread_dlg_formula.cc kspread_dlg_create.cc \
+	kspread_dlg_formula.cc kspread_dlg_formula2.cc kspread_dlg_create.cc \
 	kspread_dlg_special.cc kspread_dlg_goto.cc  kspread_dlg_replace.cc \
 	kspread_dlg_sort.cc kspread_dlg_anchor.cc kspread_dlg_conditional.cc\
 	kspread_dlg_resize.cc kspread_factory.cc kspread_handler.cc \
