@@ -120,6 +120,12 @@ enum KoUnit {
     PG_INCH = 2
 };
 
+/**
+ * Header/Footer type.
+ * 0 ... Header/Footer is the same on all pages
+ * 2 ... Header/Footer for the first page differs
+ * 3 ... Header/Footer for even - odd pages are different
+ */
 enum KoHFType {
     HF_SAME = 0,
     HF_FIRST_DIFF = 2,
@@ -132,38 +138,30 @@ struct KoPageLayout
     KoFormat format;
     KoOrientation orientation;
 
-    // WARNING: using these values is obsolote!!!!!!!!!!!
-    double width;
-    double height;
-    double left;
-    double right;
-    double top;
-    double bottom;
-
     KoUnit unit;
 
-    unsigned int ptWidth;
-    unsigned int ptHeight;
-    unsigned int ptLeft;
-    unsigned int ptRight;
-    unsigned int ptTop;
-    unsigned int ptBottom;
-    float mmWidth;
-    float mmHeight;
-    float mmLeft;
-    float mmTop;
-    float mmRight;
-    float mmBottom;
-    float inchWidth;
-    float inchHeight;
-    float inchLeft;
-    float inchTop;
-    float inchRight;
-    float inchBottom;
+    double ptWidth;
+    double ptHeight;
+    double ptLeft;
+    double ptRight;
+    double ptTop;
+    double ptBottom;
+    double mmWidth;
+    double mmHeight;
+    double mmLeft;
+    double mmTop;
+    double mmRight;
+    double mmBottom;
+    double inchWidth;
+    double inchHeight;
+    double inchLeft;
+    double inchTop;
+    double inchRight;
+    double inchBottom;
 
     bool operator==( const KoPageLayout& l ) const {
 	if ( unit != l.unit )
-	    return FALSE;
+	    return false;
 	switch( unit ) {
 	case PG_PT: {
 	    return ( ptWidth == l.ptWidth &&
@@ -190,8 +188,7 @@ struct KoPageLayout
 		     inchBottom == l.inchBottom );
 	}
 	}
-	return FALSE;
-	
+	return false;
     }
 };
 
@@ -210,9 +207,9 @@ struct KoHeadFoot
 struct KoColumns
 {
     int columns;
-    unsigned int ptColumnSpacing;
-    float mmColumnSpacing;
-    float inchColumnSpacing;
+    double ptColumnSpacing;
+    double mmColumnSpacing;
+    double inchColumnSpacing;
 };
 
 // structure for KWord header-Footer
@@ -220,12 +217,12 @@ struct KoKWHeaderFooter
 {
     KoHFType header;
     KoHFType footer;
-    unsigned int ptHeaderBodySpacing;
-    unsigned int ptFooterBodySpacing;
-    float mmHeaderBodySpacing;
-    float mmFooterBodySpacing;
-    float inchHeaderBodySpacing;
-    float inchFooterBodySpacing;
+    double ptHeaderBodySpacing;
+    double ptFooterBodySpacing;
+    double mmHeaderBodySpacing;
+    double mmFooterBodySpacing;
+    double inchHeaderBodySpacing;
+    double inchFooterBodySpacing;
 };
 
 /**
@@ -259,12 +256,12 @@ protected:
     void drawContents( QPainter* );
 
     // vars
-    int pgWidth;
-    int pgHeight;
-    int pgX;
-    int pgY;
-    int pgW;
-    int pgH;
+    double pgWidth;
+    double pgHeight;
+    double pgX;
+    double pgY;
+    double pgW;
+    double pgH;
     int columns;
 
 };

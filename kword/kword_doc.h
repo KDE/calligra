@@ -166,16 +166,16 @@ public:
     KWParag* findFirstParagOfPage( unsigned int _page, unsigned int _frameset );
     KWParag* findFirstParagOfRect( unsigned int _ypos, unsigned int _page, unsigned int _frameset );
 
-    unsigned int getPTTopBorder() { return zoomIt( pageLayout.ptTop ); }
-    unsigned int getPTBottomBorder() { return zoomIt( pageLayout.ptBottom ); }
-    unsigned int getPTLeftBorder() { return zoomIt( pageLayout.ptLeft ); }
-    unsigned int getPTRightBorder() { return zoomIt( pageLayout.ptRight ); }
-    unsigned int getPTPaperHeight() { return zoomIt( pageLayout.ptHeight ); }
-    unsigned int getPTPaperWidth() { return zoomIt( pageLayout.ptWidth ); }
-    unsigned int getPTColumnWidth() { return zoomIt( ptColumnWidth ); }
-    unsigned int getPTColumnSpacing() { return zoomIt( pageColumns.ptColumnSpacing ); }
-    float getMMPaperHeight() { return zoomIt( pageLayout.mmHeight ); }
-    float getINCHPaperHeight() { return zoomIt( pageLayout.inchHeight ); }
+    unsigned int getPTTopBorder() { return static_cast<unsigned int>(zoomIt( pageLayout.ptTop )); }
+    unsigned int getPTBottomBorder() { return static_cast<unsigned int>(zoomIt( pageLayout.ptBottom )); }
+    unsigned int getPTLeftBorder() { return static_cast<unsigned int>(zoomIt( pageLayout.ptLeft )); }
+    unsigned int getPTRightBorder() { return static_cast<unsigned int>(zoomIt( pageLayout.ptRight )); }
+    unsigned int getPTPaperHeight() { return static_cast<unsigned int>(zoomIt( pageLayout.ptHeight )); }
+    unsigned int getPTPaperWidth() { return static_cast<unsigned int>(zoomIt( pageLayout.ptWidth )); }
+    unsigned int getPTColumnWidth() { return static_cast<unsigned int>(zoomIt( ptColumnWidth )); }
+    unsigned int getPTColumnSpacing() { return static_cast<unsigned int>(zoomIt( pageColumns.ptColumnSpacing )); }
+    double getMMPaperHeight() { return zoomIt( pageLayout.mmHeight ); }
+    double getINCHPaperHeight() { return zoomIt( pageLayout.inchHeight ); }
 
     unsigned int getColumns() { return pageColumns.columns; }
 

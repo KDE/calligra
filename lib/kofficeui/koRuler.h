@@ -24,9 +24,9 @@
 #ifndef koRuler_h
 #define koRuler_h
 
-#include "koPageLayoutDia.h"
+#include <koPageLayoutDia.h>
 
-#include "kapp.h"
+#include <kapp.h>
 
 #include <qframe.h>
 #include <qwidget.h>
@@ -45,17 +45,17 @@
 #include <qpopupmenu.h>
 #include <qpoint.h>
 
-#include "koTabChooser.h"
+#include <koTabChooser.h>
 
-#define _MM_TO_POINT 2.83465
+#define _MM_TO_POINT 2.83465058
 #define _INCH_TO_POINT 72.0
 
-#define cPOINT_TO_MM( px ) ( ( float )px/2.83465 )
-#define cMM_TO_POINT( mm ) ( int( ( float )mm*2.83465 ) )
-#define cPOINT_TO_INCH( px ) ( ( float )px/72.0 )
-#define cINCH_TO_POINT( inch ) ( int( ( float )inch*72.0 ) )
-#define cMM_TO_INCH( mm ) ( mm/25.4 )
-#define cINCH_TO_MM( inch ) ( inch*25.4 )
+#define cPOINT_TO_MM( px ) ( px*0.352777167 )
+#define cMM_TO_POINT( mm ) ( mm*2.83465058  )
+#define cPOINT_TO_INCH( px ) ( px*0.01388888888889 )
+#define cINCH_TO_POINT( inch ) ( inch*72.0 )
+#define cMM_TO_INCH( mm ) ( mm*0.039370147 )
+#define cINCH_TO_MM( inch ) ( inch*25.399956 )
 
 /******************************************************************/
 /* Struct: KoTabulator						  */
@@ -64,9 +64,9 @@
 enum KoTabulators { T_LEFT = 0, T_CENTER = 1, T_RIGHT = 2, T_DEC_PNT = 3 };
 
 struct KoTabulator {
-    int ptPos;
-    float mmPos;
-    float inchPos;
+    double ptPos;
+    double mmPos;
+    double inchPos;
     KoTabulators type;
 };
 
@@ -105,9 +105,10 @@ public:
     void setOffset( int _diffx, int _diffy )
     { diffx = _diffx; diffy = _diffy; repaint( false ); }
 
-    void setLeftIndent( float _left )
+    // FIXME (Werner)
+    void setLeftIndent( double _left )
     { i_left = makeIntern( _left ); repaint( false ); }
-    void setFirstIndent( float _first )
+    void setFirstIndent( double _first )
     { i_first = makeIntern( _first ); repaint( false ); }
 
     void setTabList( const QList<KoTabulator>* _tabList );
@@ -140,7 +141,7 @@ protected:
     void mouseDoubleClickEvent( QMouseEvent* );
     void resizeEvent( QResizeEvent *e );
 
-    unsigned int makeIntern( float _v );
+    unsigned int makeIntern( double _v );
     double zoomIt(const double &value) const;
     int zoomIt(const int &value) const;
     unsigned int zoomIt(const unsigned int &value) const;

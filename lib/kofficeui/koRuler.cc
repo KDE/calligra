@@ -21,7 +21,7 @@
 
 /******************************************************************/
 
-#include "koRuler.h"
+#include <koRuler.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kiconloader.h>
@@ -145,8 +145,8 @@ void KoRuler::drawHorizontal( QPainter *_painter )
 
     double dist;
     int j = 0;
-    double pw = static_cast<double>( layout.ptWidth );
-    pw=zoomIt(pw);
+    double pw = zoomIt(layout.ptWidth);
+    int i_pw=double2Int(pw);
     QString str;
     QFont font = QFont( "helvetica", 8 ); // Ugh... hardcoded (Werner)
     QFontMetrics fm( font );
@@ -156,12 +156,12 @@ void KoRuler::drawHorizontal( QPainter *_painter )
 
     QRect r;
     if ( !d->whileMovingBorderLeft )
-	r.setLeft( -diffx + zoomIt(layout.ptLeft) );
+	r.setLeft( -diffx + double2Int(zoomIt(layout.ptLeft)) );
     else
 	r.setLeft( d->oldMx );
     r.setTop( 0 );
     if ( !d->whileMovingBorderRight )
-	r.setRight( -diffx + pw - zoomIt(layout.ptRight) );
+	r.setRight( -diffx + i_pw - double2Int(zoomIt(layout.ptRight)) );
     else
 	r.setRight( d->oldMx );
     r.setBottom( height() );
@@ -182,6 +182,7 @@ void KoRuler::drawHorizontal( QPainter *_painter )
 	str=QString::number(j++);
 	if ( unit == "pt" && j!=1)
 	    str+="00";
+	// FIXME (double2Int())
 	p.drawText( double2Int(i) - diffx - fm.width( str ) * 0.5, ( height() - fm.height() ) * 0.5,
 		    fm.width( str ), height(), AlignLeft | AlignTop, str );
     }
@@ -199,9 +200,9 @@ void KoRuler::drawHorizontal( QPainter *_painter )
     p.setPen( QPen( black ) );
     //p.drawLine( pw - diffx - 1, 1, pw - diffx - 1, height() - 1 );
     int constant=zoomIt(1);
-    p.drawLine( pw - diffx + constant, 1, pw - diffx + constant, height() - 1 );
+    p.drawLine( i_pw - diffx + constant, 1, i_pw - diffx + constant, height() - 1 );
     p.setPen( QPen( white ) );
-    p.drawLine( pw - diffx, 1, pw - diffx, height() - 1 );
+    p.drawLine( i_pw - diffx, 1, i_pw - diffx, height() - 1 );
 
     p.setPen( QPen( black ) );
     //p.drawLine( -diffx - 2, 1, -diffx - 2, height() - 1 );
@@ -238,8 +239,8 @@ void KoRuler::drawTabs( QPainter &_painter )
 
     for ( unsigned int i = 0;i < d->tabList.count();i++ ) {
 	_tab = d->tabList.at( i );
-	ptPos = zoomIt(_tab->ptPos) - diffx + ( frameStart == -1 ? static_cast<int>( zoomIt(layout.ptLeft) ) :
-						zoomIt(frameStart) );
+	ptPos = double2Int(zoomIt(_tab->ptPos)) - diffx + ( frameStart == -1 ? double2Int( zoomIt(layout.ptLeft) ) :
+							    zoomIt(frameStart) );
 	switch ( _tab->type ) {
 	case T_LEFT: {
 	    ptPos -= 4;
@@ -277,10 +278,10 @@ void KoRuler::drawVertical( QPainter *_painter )
 
     double dist;
     int j = 0;
-    double ph = static_cast<double>( layout.ptHeight );
-    ph=zoomIt(ph);
+    double ph = zoomIt(layout.ptHeight);
+    int i_ph=double2Int(ph);
     QString str;
-    QFont font = QFont( "helvetica", 8 );  // Hardcode? (Werner)
+    QFont font = QFont( "helvetica", 8 );  // Hardcode the size? (Werner)
     QFontMetrics fm( font );
 
     p.setPen( QPen( black, 1, SolidLine ) );
@@ -289,12 +290,12 @@ void KoRuler::drawVertical( QPainter *_painter )
     QRect r;
 
     if ( !d->whileMovingBorderTop )
-	r.setTop( -diffy + zoomIt(layout.ptTop) );
+	r.setTop( -diffy + double2Int(zoomIt(layout.ptTop)) );
     else
 	r.setTop( d->oldMy );
     r.setLeft( 0 );
     if ( !d->whileMovingBorderBottom )
-	r.setBottom( -diffy + ph - zoomIt(layout.ptBottom) );
+	r.setBottom( -diffy + i_ph - double2Int(zoomIt(layout.ptBottom)) );
     else
 	r.setBottom( d->oldMy );
     r.setRight( width() );
@@ -315,6 +316,7 @@ void KoRuler::drawVertical( QPainter *_painter )
 	str=QString::number(j++);
 	if ( unit == "pt" && j!=1 )
 	    str+="00";
+	// FIXME (Werner)
 	p.drawText( ( width() - fm.width( str ) ) * 0.5, double2Int(i) - diffy - fm.height() * 0.5,
 		    width(), fm.height(), AlignLeft | AlignTop, str );
     }
@@ -331,9 +333,9 @@ void KoRuler::drawVertical( QPainter *_painter )
 
     p.setPen( QPen( black ) );
     //p.drawLine( 1, ph - diffy - 1, width() - 1, ph - diffy - 1 );
-    p.drawLine( 1, ph - diffy + 1, width() - 1, ph - diffy + 1 );
+    p.drawLine( 1, i_ph - diffy + 1, width() - 1, i_ph - diffy + 1 );
     p.setPen( QPen( white ) );
-    p.drawLine( 1, ph - diffy, width() - 1, ph - diffy );
+    p.drawLine( 1, i_ph - diffy, width() - 1, i_ph - diffy );
 
     p.setPen( QPen( black ) );
     //p.drawLine( 1, -diffy - 2, width() - 1, -diffy - 2 );
@@ -414,16 +416,16 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
 	    p.begin( d->canvas );
 	    p.setRasterOp( NotROP );
 	    p.setPen( QPen( black, 1, SolidLine ) );
-	    int pt=zoomIt(d->tabList.at(d->currTab)->ptPos);
-	    pt+= (frameStart == -1 ? zoomIt(layout.ptLeft) : zoomIt(frameStart));
+	    int pt=double2Int(zoomIt(d->tabList.at(d->currTab)->ptPos));
+	    pt+= (frameStart == -1 ? double2Int(zoomIt(layout.ptLeft)) : zoomIt(frameStart));
 	    p.drawLine( pt, 0, pt, d->canvas->height() );
 	    p.end();
 	}
     } else if ( d->tabChooser && ( d->flags & F_TABS ) && d->tabChooser->getCurrTabType() != 0 ) {
-	int pw = static_cast<int>(zoomIt(layout.ptWidth));
-	int left = static_cast<int>(zoomIt(layout.ptLeft));
+	int pw = double2Int(zoomIt(layout.ptWidth));
+	int left = double2Int(zoomIt(layout.ptLeft));
 	left -= diffx;
-        int right = static_cast<int>(zoomIt(layout.ptRight));
+        int right = double2Int(zoomIt(layout.ptRight));
 	right = pw - right - diffx;
 	
 	if( e->x()-left < 0 || right-e->x() < 0 )
@@ -444,7 +446,7 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
 	    break;
 	default: break;
 	}
-	_tab->ptPos = unZoomIt(e->x() + diffx - zoomIt( frameStart == -1 ? static_cast<int>( layout.ptLeft ) : frameStart ));
+	_tab->ptPos = static_cast<double>(unZoomIt(e->x() + diffx - frameStart == -1 ? double2Int(zoomIt(layout.ptLeft)) : zoomIt(frameStart) ));
 	_tab->mmPos = cPOINT_TO_MM( _tab->ptPos );
 	_tab->inchPos = cPOINT_TO_INCH( _tab->ptPos );
 
@@ -527,8 +529,8 @@ void KoRuler::mouseReleaseEvent( QMouseEvent *e )
 	    p.begin( d->canvas );
 	    p.setRasterOp( NotROP );
 	    p.setPen( QPen( black, 1, SolidLine ) );
-	    int pt=zoomIt(d->tabList.at(d->currTab)->ptPos);
-	    pt+= (frameStart == -1 ? zoomIt(layout.ptLeft) : zoomIt(frameStart));
+	    int pt=double2Int(zoomIt(d->tabList.at(d->currTab)->ptPos));
+	    pt+= (frameStart == -1 ? double2Int(zoomIt(layout.ptLeft)) : zoomIt(frameStart));
 	    p.drawLine( pt, 0, pt, d->canvas->height() );
 	    p.end();
 	}
@@ -549,16 +551,17 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 {
     hasToDelete = false;
 
-    int pw = static_cast<int>(zoomIt(layout.ptWidth));
-    int ph = static_cast<int>(zoomIt(layout.ptHeight));
-    int left = static_cast<int>(zoomIt(layout.ptLeft));
+    int pw = double2Int(zoomIt(layout.ptWidth));
+    int ph = double2Int(zoomIt(layout.ptHeight));
+    int left = double2Int(zoomIt(layout.ptLeft));
     left -= diffx;
-    int top = static_cast<int>(zoomIt(layout.ptTop));
+    int top = double2Int(zoomIt(layout.ptTop));
     top -= diffy;
-    int right = static_cast<int>(zoomIt(layout.ptRight));
+    int right = double2Int(zoomIt(layout.ptRight));
     right = pw - right - diffx;
-    int bottom = static_cast<int>(zoomIt(layout.ptBottom));
+    int bottom = double2Int(zoomIt(layout.ptBottom));
     bottom = ph - bottom - diffy;
+    // FIXME
     int ip_left = zoomIt(i_left);
     int ip_first = zoomIt(i_first);
 
@@ -596,8 +599,8 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 		    int pos;
 		    d->currTab = -1;
 		    for ( unsigned int i = 0; i < d->tabList.count(); i++ ) {
-			pos = zoomIt(d->tabList.at( i )->ptPos) - diffx + ( frameStart == -1 ?
-									     static_cast<int>(zoomIt(layout.ptLeft)) :
+			pos = double2Int(zoomIt(d->tabList.at( i )->ptPos)) - diffx + ( frameStart == -1 ?
+									     double2Int(zoomIt(layout.ptLeft)) :
 									     zoomIt(frameStart));
 			if ( mx > pos - 5 && mx < pos + 5 ) {
 			    setCursor( sizeHorCursor );
@@ -609,7 +612,7 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 		}
 	    } else {
 		// Note: All limits should be 0, but KWord crashes currently, when the
-		// page is too small! (Werner)
+		// page is too small (infinite loop in the line breaking algorithm)! (Werner)
 		switch ( d->action ) {
 		    case A_BR_LEFT: {
 			if ( d->canvas && mx+diffx < right-10 ) {
@@ -619,9 +622,9 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 			    p.setPen( QPen( black, 1, SolidLine ) );
 			    p.drawLine( d->oldMx, 0, d->oldMx, d->canvas->height() );
 			    p.drawLine( mx, 0, mx, d->canvas->height() );
-			    layout.left = layout.mmLeft = cPOINT_TO_MM(unZoomIt(mx + diffx));
-			    layout.inchLeft = cMM_TO_INCH(layout.mmLeft);
-			    layout.ptLeft = unZoomIt(mx + diffx);
+			    layout.ptLeft = static_cast<double>(unZoomIt(mx + diffx));
+			    layout.mmLeft = cPOINT_TO_MM(layout.ptLeft);
+			    layout.inchLeft = cPOINT_TO_INCH(layout.ptLeft);
 			    if( ip_first > right-left-15 ) {
 				ip_first=right-left-15;
 				ip_first=ip_first<0 ? 0 : ip_first;
@@ -649,8 +652,8 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 			    p.drawLine( d->oldMx, 0, d->oldMx, d->canvas->height() );
 			    p.drawLine( mx, 0, mx, d->canvas->height() );
 			    p.end();
-			    layout.right = layout.mmRight = cPOINT_TO_MM(unZoomIt(static_cast<int>( pw - ( mx + diffx )) ) );
-			    layout.ptRight = unZoomIt(pw - ( mx + diffx ));
+			    layout.ptRight = static_cast<double>(unZoomIt(pw - ( mx + diffx )));
+			    layout.mmRight = cPOINT_TO_MM( layout.ptRight );
 			    layout.inchRight = cPOINT_TO_INCH( layout.ptRight );
 			    if( ip_first > right-left-15 ) {
 				ip_first=right-left-15;
@@ -719,14 +722,14 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 			    p.begin( d->canvas );
 			    p.setRasterOp( NotROP );
 			    p.setPen( QPen( black, 1, SolidLine ) );
-			    int pt=zoomIt(d->tabList.at( d->currTab )->ptPos);
-			    int fr=(frameStart == -1 ? static_cast<int>(zoomIt(layout.ptLeft)) : zoomIt(frameStart) );
+			    int pt=double2Int(zoomIt(d->tabList.at( d->currTab )->ptPos));
+			    int fr=(frameStart == -1 ? double2Int(zoomIt(layout.ptLeft)) : zoomIt(frameStart) );
 			    p.drawLine( pt + fr, 0, pt + fr, d->canvas->height() );
-			    d->tabList.at( d->currTab )->ptPos = unZoomIt( mx - fr );
+			    d->tabList.at( d->currTab )->ptPos = static_cast<double>(unZoomIt( mx - fr ));
 			    d->tabList.at( d->currTab )->mmPos = cPOINT_TO_MM( d->tabList.at( d->currTab )->ptPos );
 			    d->tabList.at( d->currTab )->inchPos = cPOINT_TO_INCH( d->tabList.at( d->currTab )->ptPos );
-			    pt=zoomIt(d->tabList.at( d->currTab )->ptPos);
-			    fr=(frameStart == -1 ? static_cast<int>(zoomIt(layout.ptLeft)) : zoomIt(frameStart) );
+			    pt=mx-fr; //double2Int(zoomIt(d->tabList.at( d->currTab )->ptPos));
+			    //fr=(frameStart == -1 ? double2Int(zoomIt(layout.ptLeft)) : zoomIt(frameStart) );
 			    p.drawLine( pt + fr, 0, pt + fr, d->canvas->height() );
 			    p.end();
 			    d->oldMx = mx;
@@ -760,8 +763,8 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 			    p.drawLine( 0, d->oldMy, d->canvas->width(), d->oldMy );
 			    p.drawLine( 0, my, d->canvas->width(), my );
 			    p.end();
-			    layout.top = layout.mmTop = cPOINT_TO_MM(unZoomIt(my + diffy));
-			    layout.ptTop = unZoomIt(my + diffy);
+			    layout.ptTop = static_cast<double>(unZoomIt(my + diffy));
+			    layout.mmTop = cPOINT_TO_MM( layout.ptTop );
 			    layout.inchTop = cPOINT_TO_INCH( layout.ptTop );
 			    d->oldMx = mx;
 			    d->oldMy = my;
@@ -777,8 +780,8 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 			    p.drawLine( 0, d->oldMy, d->canvas->width(), d->oldMy );
 			    p.drawLine( 0, my, d->canvas->width(), my );
 			    p.end();
-			    layout.bottom = layout.mmBottom = cPOINT_TO_MM( static_cast<int>( unZoomIt(ph - ( my + diffy )) ) );
-			    layout.ptBottom = unZoomIt(ph - ( my + diffy ));
+			    layout.ptBottom = static_cast<double>(unZoomIt(ph - ( my + diffy )));
+			    layout.mmBottom = cPOINT_TO_MM( layout.ptBottom );
 			    layout.inchBottom = cPOINT_TO_INCH( layout.ptBottom );
 			    d->oldMx = mx;
 			    d->oldMy = my;
@@ -834,10 +837,10 @@ void KoRuler::setTabList( const QList<KoTabulator>* _tabList )
 }
 
 /*================================================================*/
-unsigned int KoRuler::makeIntern( float _v )
+unsigned int KoRuler::makeIntern( double _v )
 {
-    if ( unit == "mm" ) return cMM_TO_POINT( _v );
-    if ( unit == "inch" ) return cINCH_TO_POINT( _v );
+    if ( unit == "mm" ) return static_cast<unsigned int>(double2Int(cMM_TO_POINT( _v )));
+    if ( unit == "inch" ) return static_cast<unsigned int>(double2Int(cINCH_TO_POINT( _v )));
     return static_cast<unsigned int>( _v );
 }
 
@@ -891,4 +894,4 @@ void KoRuler::setZoom( const double& zoom )
     repaint( false );
 }
 
-#include "koRuler.moc"
+#include <koRuler.moc>

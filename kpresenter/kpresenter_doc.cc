@@ -593,11 +593,11 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 		else if ( ( *it ).m_strName == "orientation" )
 		    __pgLayout.orientation = ( KoOrientation )atoi( ( *it ).m_strValue.c_str() );
 		else if ( ( *it ).m_strName == "width" ) {
-		    __pgLayout.width = __pgLayout.mmWidth = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
+		    __pgLayout.mmWidth = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
 		    __pgLayout.ptWidth = MM_TO_POINT( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
 		    __pgLayout.inchWidth = MM_TO_INCH( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
 		} else if ( ( *it ).m_strName == "height" ) {
-		    __pgLayout.height = __pgLayout.mmHeight = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
+		    __pgLayout.mmHeight = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
 		    __pgLayout.ptHeight = MM_TO_POINT( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
 		    __pgLayout.inchHeight = MM_TO_INCH( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
 		}
@@ -606,13 +606,13 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 		else if ( ( *it ).m_strName == "inchWidth" )
 		    __pgLayout.inchWidth = atof( ( *it ).m_strValue.c_str() );
 		else if ( ( *it ).m_strName == "mmWidth" )
-		    __pgLayout.mmWidth = __pgLayout.width = atof( ( *it ).m_strValue.c_str() );
+		    __pgLayout.mmWidth = atof( ( *it ).m_strValue.c_str() );
 		else if ( ( *it ).m_strName == "ptHeight" )
 		    __pgLayout.ptHeight = atoi( ( *it ).m_strValue.c_str() );
 		else if ( ( *it ).m_strName == "inchHeight" )
 		    __pgLayout.inchHeight = atof( ( *it ).m_strValue.c_str() );
 		else if ( ( *it ).m_strName == "mmHeight" )
-		    __pgLayout.mmHeight = __pgLayout.height = atof( ( *it ).m_strValue.c_str() );
+		    __pgLayout.mmHeight = atof( ( *it ).m_strValue.c_str() );
 		else if ( ( *it ).m_strName == "unit" )
 		    __pgLayout.unit = static_cast<KoUnit>( atoi( ( *it ).m_strValue.c_str() ) );
 		else
@@ -627,19 +627,19 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 		    vector<KOMLAttrib>::const_iterator it = lst.begin();
 		    for( ; it != lst.end(); it++ ) {
 			if ( ( *it ).m_strName == "left" ) {
-			    __pgLayout.left = __pgLayout.mmLeft = ( double )atof( ( *it ).m_strValue.c_str() );
+			    __pgLayout.mmLeft = ( double )atof( ( *it ).m_strValue.c_str() );
 			    __pgLayout.ptLeft = MM_TO_POINT( ( double )atof( ( *it ).m_strValue.c_str() ) );
 			    __pgLayout.inchLeft = MM_TO_INCH( ( double )atof( ( *it ).m_strValue.c_str() ) );
 			} else if ( ( *it ).m_strName == "top" ) {
-			    __pgLayout.top = __pgLayout.mmTop = ( double )atof( ( *it ).m_strValue.c_str() );
+			    __pgLayout.mmTop = ( double )atof( ( *it ).m_strValue.c_str() );
 			    __pgLayout.ptTop = MM_TO_POINT( ( double )atof( ( *it ).m_strValue.c_str() ) );
 			    __pgLayout.inchTop = MM_TO_INCH( ( double )atof( ( *it ).m_strValue.c_str() ) );
 			} else if ( ( *it ).m_strName == "right" ) {
-			    __pgLayout.right = __pgLayout.mmRight = ( double )atof( ( *it ).m_strValue.c_str() );
+			    __pgLayout.mmRight = ( double )atof( ( *it ).m_strValue.c_str() );
 			    __pgLayout.ptRight = MM_TO_POINT( ( double )atof( ( *it ).m_strValue.c_str() ) );
 			    __pgLayout.inchRight = MM_TO_INCH( ( double )atof( ( *it ).m_strValue.c_str() ) );
 			} else if ( ( *it ).m_strName == "bottom" ) {
-			    __pgLayout.bottom = __pgLayout.mmBottom = ( double )atof( ( *it ).m_strValue.c_str() );
+			    __pgLayout.mmBottom = ( double )atof( ( *it ).m_strValue.c_str() );
 			    __pgLayout.ptBottom = MM_TO_POINT( ( double )atof( ( *it ).m_strValue.c_str() ) );
 			    __pgLayout.inchBottom = MM_TO_INCH( ( double )atof( ( *it ).m_strValue.c_str() ) );
 			}
@@ -648,25 +648,25 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 			else if ( ( *it ).m_strName == "inchLeft" )
 			    __pgLayout.inchLeft = atof( ( *it ).m_strValue.c_str() );
 			else if ( ( *it ).m_strName == "mmLeft" )
-			    __pgLayout.mmLeft = __pgLayout.left = atof( ( *it ).m_strValue.c_str() );
+			    __pgLayout.mmLeft = atof( ( *it ).m_strValue.c_str() );
 			else if ( ( *it ).m_strName == "ptRight" )
 			    __pgLayout.ptRight = atoi( ( *it ).m_strValue.c_str() );
 			else if ( ( *it ).m_strName == "inchRight" )
 			    __pgLayout.inchRight = atof( ( *it ).m_strValue.c_str() );
 			else if ( ( *it ).m_strName == "mmRight" )
-			    __pgLayout.mmRight = __pgLayout.right = atof( ( *it ).m_strValue.c_str() );
+			    __pgLayout.mmRight = atof( ( *it ).m_strValue.c_str() );
 			else if ( ( *it ).m_strName == "ptTop" )
 			    __pgLayout.ptTop = atoi( ( *it ).m_strValue.c_str() );
 			else if ( ( *it ).m_strName == "inchTop" )
 			    __pgLayout.inchTop = atof( ( *it ).m_strValue.c_str() );
 			else if ( ( *it ).m_strName == "mmTop" )
-			    __pgLayout.mmTop = __pgLayout.top = atof( ( *it ).m_strValue.c_str() );
+			    __pgLayout.mmTop = atof( ( *it ).m_strValue.c_str() );
 			else if ( ( *it ).m_strName == "ptBottom" )
 			    __pgLayout.ptBottom = atoi( ( *it ).m_strValue.c_str() );
 			else if ( ( *it ).m_strName == "inchBottom" )
 			    __pgLayout.inchBottom = atof( ( *it ).m_strValue.c_str() );
 			else if ( ( *it ).m_strName == "mmBottom" )
-			    __pgLayout.mmBottom = __pgLayout.bottom = atof( ( *it ).m_strValue.c_str() );
+			    __pgLayout.mmBottom = atof( ( *it ).m_strValue.c_str() );
 			else
 			    cerr << "Unknown attrib 'PAPERBORDERS:" << ( *it ).m_strName << "'" << endl;
 		    }
@@ -3144,12 +3144,12 @@ int KPresenterDoc::getPageOfObj( int objNum, int diffx, int diffy, float fakt )
 /*================== get size of page ===========================*/
 QRect KPresenterDoc::getPageSize( unsigned int num, int diffx, int diffy, float fakt , bool decBorders )
 {
-    int pw, ph, bl = _pageLayout.ptLeft;
-    int br = _pageLayout.ptRight;
-    int bt = _pageLayout.ptTop;
-    int bb = _pageLayout.ptBottom;
-    int wid = _pageLayout.ptWidth;
-    int hei = _pageLayout.ptHeight;
+    int pw, ph, bl = static_cast<int>(_pageLayout.ptLeft);
+    int br = static_cast<int>(_pageLayout.ptRight);
+    int bt = static_cast<int>(_pageLayout.ptTop);
+    int bb = static_cast<int>(_pageLayout.ptBottom);
+    int wid = static_cast<int>(_pageLayout.ptWidth);
+    int hei = static_cast<int>(_pageLayout.ptHeight);
 
     if ( !decBorders ) {
 	br = 0;
@@ -3170,19 +3170,19 @@ QRect KPresenterDoc::getPageSize( unsigned int num, int diffx, int diffy, float 
 /*================================================================*/
 int KPresenterDoc::getLeftBorder()
 {
-    return _pageLayout.ptLeft;
+    return static_cast<int>(_pageLayout.ptLeft);
 }
 
 /*================================================================*/
 int KPresenterDoc::getTopBorder()
 {
-    return _pageLayout.ptTop;
+    return static_cast<int>(_pageLayout.ptTop);
 }
 
 /*================================================================*/
 int KPresenterDoc::getBottomBorder()
 {
-    return _pageLayout.ptBottom;
+    return static_cast<int>(_pageLayout.ptBottom);
 }
 
 /*================================================================*/

@@ -799,12 +799,12 @@ void KSpreadDoc::paperLayoutDlg()
     pl.format = paperFormat();
     pl.orientation = orientation();
     pl.unit = PG_MM;
-    pl.width = m_paperWidth;
-    pl.height = m_paperHeight;
-    pl.left = leftBorder();
-    pl.right = rightBorder();
-    pl.top = topBorder();
-    pl.bottom = bottomBorder();
+    pl.mmWidth = m_paperWidth;
+    pl.mmHeight = m_paperHeight;
+    pl.mmLeft = leftBorder();
+    pl.mmRight = rightBorder();
+    pl.mmTop = topBorder();
+    pl.mmBottom = bottomBorder();
 
     KoHeadFoot hf;
     hf.headLeft = headLeft();
@@ -819,11 +819,11 @@ void KSpreadDoc::paperLayoutDlg()
 
     if ( pl.format == PG_CUSTOM )
     {
-	m_paperWidth = pl.width;
-	m_paperHeight = pl.height;
+	m_paperWidth = pl.mmWidth;
+	m_paperHeight = pl.mmHeight;
     }
 
-    setPaperLayout( pl.left, pl.top, pl.right, pl.bottom, pl.format, pl.orientation );
+    setPaperLayout( pl.mmLeft, pl.mmTop, pl.mmRight, pl.mmBottom, pl.format, pl.orientation );
 
     setHeadFootLine( hf.headLeft, hf.headMid, hf.headRight, hf.footLeft, hf.footMid, hf.footRight );
 }

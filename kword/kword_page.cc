@@ -2006,7 +2006,7 @@ void KWPage::paintText( QPainter &painter, KWFormatContext *paintfc, int i, QPai
 }
 
 /*================================================================*/
-void KWPage::finishPainting( QPaintEvent *e, QPainter &painter )
+void KWPage::finishPainting( QPaintEvent */*e*/, QPainter &painter )
 {
     KWFormatContext _fc( doc, fc->getFrameSet() );
     _fc = *fc;
@@ -3372,10 +3372,10 @@ void KWPage::setRuler2Frame( unsigned int _frameset, unsigned int _frame )
 	}
     }
 
-    _layout.left = _layout.mmLeft = POINT_TO_MM( frame->left() );
-    _layout.top = _layout.mmTop = POINT_TO_MM( frame->top() ) - page * doc->getMMPaperHeight();
-    _layout.right = _layout.mmRight = _layout.mmWidth - POINT_TO_MM( frame->right() );
-    _layout.bottom = _layout.mmBottom = _layout.mmHeight - POINT_TO_MM( frame->bottom() )
+    _layout.mmLeft = POINT_TO_MM( frame->left() );
+    _layout.mmTop = POINT_TO_MM( frame->top() ) - page * doc->getMMPaperHeight();
+    _layout.mmRight = _layout.mmWidth - POINT_TO_MM( frame->right() );
+    _layout.mmBottom = _layout.mmHeight - POINT_TO_MM( frame->bottom() )
 		     + page * doc->getMMPaperHeight();
     _layout.ptLeft = frame->left();
     _layout.inchLeft = POINT_TO_INCH( frame->left() );

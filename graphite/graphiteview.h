@@ -40,6 +40,9 @@ public:
 
     virtual QWidget *canvas() { return m_canvas; }
 
+    virtual int leftBorder() const { return 20; }
+    virtual int topBorder() const { return 20; }
+
 protected slots:
     void slotViewZoom(int item);
 

@@ -231,10 +231,6 @@ void KWordDocument::setPageLayout( KoPageLayout _layout, KoColumns _cl, KoKWHead
 	pageHeaderFooter = _hf;
     } else {
 	pageLayout = _layout;
-	pageLayout.left = 0;
-	pageLayout.right = 0;
-	pageLayout.top = 0;
-	pageLayout.bottom = 0;
 	pageLayout.ptLeft = 0;
 	pageLayout.ptRight = 0;
 	pageLayout.ptTop = 0;
@@ -278,34 +274,34 @@ void KWordDocument::recalcFrames( bool _cursor, bool _fast )
 	for ( unsigned int k = 0; k < getNumFrameSets(); k++ ) {
 	    if ( getFrameSet( k )->getFrameInfo() == FI_FIRST_HEADER && hasHeader() ) {
 		firstHeader = dynamic_cast<KWTextFrameSet*>( getFrameSet( k ) );
-		firstHeadOffset = pageHeaderFooter.ptHeaderBodySpacing +
-		    getFrameSet( k )->getFrame( 0 )->height();
+		firstHeadOffset = static_cast<int>(pageHeaderFooter.ptHeaderBodySpacing +
+		    getFrameSet( k )->getFrame( 0 )->height());
 	    }
 	    if ( getFrameSet( k )->getFrameInfo() == FI_EVEN_HEADER && hasHeader() ) {
 		evenHeader = dynamic_cast<KWTextFrameSet*>( getFrameSet( k ) );
-		evenHeadOffset = pageHeaderFooter.ptHeaderBodySpacing +
-		    getFrameSet( k )->getFrame( 0 )->height();
+		evenHeadOffset = static_cast<int>(pageHeaderFooter.ptHeaderBodySpacing +
+		    getFrameSet( k )->getFrame( 0 )->height());
 	    }
 	    if ( getFrameSet( k )->getFrameInfo() == FI_ODD_HEADER && hasHeader() ) {
 		oddHeader = dynamic_cast<KWTextFrameSet*>( getFrameSet( k ) );
-		oddHeadOffset = pageHeaderFooter.ptHeaderBodySpacing +
-		    getFrameSet( k )->getFrame( 0 )->height();
+		oddHeadOffset = static_cast<int>(pageHeaderFooter.ptHeaderBodySpacing +
+		    getFrameSet( k )->getFrame( 0 )->height());
 	    }
 
 	    if ( getFrameSet( k )->getFrameInfo() == FI_FIRST_FOOTER && hasFooter() ) {
 		firstFooter = dynamic_cast<KWTextFrameSet*>( getFrameSet( k ) );
-		firstFootOffset = pageHeaderFooter.ptFooterBodySpacing +
-		    getFrameSet( k )->getFrame( 0 )->height();
+		firstFootOffset = static_cast<int>(pageHeaderFooter.ptFooterBodySpacing +
+		    getFrameSet( k )->getFrame( 0 )->height());
 	    }
 	    if ( getFrameSet( k )->getFrameInfo() == FI_EVEN_FOOTER && hasFooter() ) {
 		evenFooter = dynamic_cast<KWTextFrameSet*>( getFrameSet( k ) );
-		evenFootOffset = pageHeaderFooter.ptFooterBodySpacing +
-		    getFrameSet( k )->getFrame( 0 )->height();
+		evenFootOffset = static_cast<int>(pageHeaderFooter.ptFooterBodySpacing +
+		    getFrameSet( k )->getFrame( 0 )->height());
 	    }
 	    if ( getFrameSet( k )->getFrameInfo() == FI_ODD_FOOTER && hasFooter() ) {
 		oddFooter = dynamic_cast<KWTextFrameSet*>( getFrameSet( k ) );
-		oddFootOffset = pageHeaderFooter.ptFooterBodySpacing +
-		    getFrameSet( k )->getFrame( 0 )->height();
+		oddFootOffset = static_cast<int>(pageHeaderFooter.ptFooterBodySpacing +
+		    getFrameSet( k )->getFrame( 0 )->height());
 	    }
 	}
 	if ( hasHeader() ) {
@@ -365,9 +361,9 @@ void KWordDocument::recalcFrames( bool _cursor, bool _fast )
 
 	    for ( int i = 0; i < pageColumns.columns; i++ ) {
 		if ( j * pageColumns.columns + i < frameset->getNumFrames() ) {
-		    frameset->getFrame( j * pageColumns.columns + i )->setRect( 
-                        getPTLeftBorder() + i * ( ptColumnWidth + getPTColumnSpacing() ), 
-                        j * getPTPaperHeight() + getPTTopBorder() + headOffset, 
+		    frameset->getFrame( j * pageColumns.columns + i )->setRect(
+                        getPTLeftBorder() + i * ( ptColumnWidth + getPTColumnSpacing() ),
+                        j * getPTPaperHeight() + getPTTopBorder() + headOffset,
                         ptColumnWidth,
                         getPTPaperHeight() - getPTTopBorder() - getPTBottomBorder() -
                          headOffset - footOffset );
@@ -897,11 +893,11 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 		else if ( ( *it ).m_strName == "orientation" )
 		    __pgLayout.orientation = ( KoOrientation )atoi( ( *it ).m_strValue.c_str() );
 		else if ( ( *it ).m_strName == "width" ) {
-		    __pgLayout.width = __pgLayout.mmWidth = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
+		    __pgLayout.mmWidth = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
 		    __pgLayout.ptWidth = MM_TO_POINT( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
 		    __pgLayout.inchWidth = MM_TO_INCH( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
 		} else if ( ( *it ).m_strName == "height" ) {
-		    __pgLayout.height = __pgLayout.mmHeight = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
+		    __pgLayout.mmHeight = static_cast<double>( atof( ( *it ).m_strValue.c_str() ) );
 		    __pgLayout.ptHeight = MM_TO_POINT( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
 		    __pgLayout.inchHeight = MM_TO_INCH( static_cast<double>( atof( ( *it ).m_strValue.c_str() ) ) );
 		} else if ( ( *it ).m_strName == "columns" )
@@ -927,13 +923,13 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 		else if ( ( *it ).m_strName == "inchWidth" )
 		    __pgLayout.inchWidth = atof( ( *it ).m_strValue.c_str() );
 		else if ( ( *it ).m_strName == "mmWidth" )
-		    __pgLayout.mmWidth = __pgLayout.width = atof( ( *it ).m_strValue.c_str() );
+		    __pgLayout.mmWidth = atof( ( *it ).m_strValue.c_str() );
 		else if ( ( *it ).m_strName == "ptHeight" )
 		    __pgLayout.ptHeight = atoi( ( *it ).m_strValue.c_str() );
 		else if ( ( *it ).m_strName == "inchHeight" )
 		    __pgLayout.inchHeight = atof( ( *it ).m_strValue.c_str() );
 		else if ( ( *it ).m_strName == "mmHeight" )
-		    __pgLayout.mmHeight = __pgLayout.height = atof( ( *it ).m_strValue.c_str() );
+		    __pgLayout.mmHeight = atof( ( *it ).m_strValue.c_str() );
 		else if ( ( *it ).m_strName == "ptHeadBody" )
 		    __hf.ptHeaderBodySpacing = atoi( ( *it ).m_strValue.c_str() );
 		else if ( ( *it ).m_strName == "inchHeadBody" )
@@ -964,19 +960,19 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 		    vector<KOMLAttrib>::const_iterator it = lst.begin();
 		    for( ; it != lst.end(); it++ ) {
 			if ( ( *it ).m_strName == "left" ) {
-			    __pgLayout.left = __pgLayout.mmLeft = ( double )atof( ( *it ).m_strValue.c_str() );
+			    __pgLayout.mmLeft = ( double )atof( ( *it ).m_strValue.c_str() );
 			    __pgLayout.ptLeft = MM_TO_POINT( ( double )atof( ( *it ).m_strValue.c_str() ) );
 			    __pgLayout.inchLeft = MM_TO_INCH( ( double )atof( ( *it ).m_strValue.c_str() ) );
 			} else if ( ( *it ).m_strName == "top" ) {
-			    __pgLayout.top = __pgLayout.mmTop = ( double )atof( ( *it ).m_strValue.c_str() );
+			    __pgLayout.mmTop = ( double )atof( ( *it ).m_strValue.c_str() );
 			    __pgLayout.ptTop = MM_TO_POINT( ( double )atof( ( *it ).m_strValue.c_str() ) );
 			    __pgLayout.inchTop = MM_TO_INCH( ( double )atof( ( *it ).m_strValue.c_str() ) );
 			} else if ( ( *it ).m_strName == "right" ) {
-			    __pgLayout.right = __pgLayout.mmRight = ( double )atof( ( *it ).m_strValue.c_str() );
+			    __pgLayout.mmRight = ( double )atof( ( *it ).m_strValue.c_str() );
 			    __pgLayout.ptRight = MM_TO_POINT( ( double )atof( ( *it ).m_strValue.c_str() ) );
 			    __pgLayout.inchRight = MM_TO_INCH( ( double )atof( ( *it ).m_strValue.c_str() ) );
 			} else if ( ( *it ).m_strName == "bottom" ) {
-			    __pgLayout.bottom = __pgLayout.mmBottom = ( double )atof( ( *it ).m_strValue.c_str() );
+			    __pgLayout.mmBottom = ( double )atof( ( *it ).m_strValue.c_str() );
 			    __pgLayout.ptBottom = MM_TO_POINT( ( double )atof( ( *it ).m_strValue.c_str() ) );
 			    __pgLayout.inchBottom = MM_TO_INCH( ( double )atof( ( *it ).m_strValue.c_str() ) );
 			} else if ( ( *it ).m_strName == "ptLeft" )
@@ -984,25 +980,25 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 			else if ( ( *it ).m_strName == "inchLeft" )
 			    __pgLayout.inchLeft = atof( ( *it ).m_strValue.c_str() );
 			else if ( ( *it ).m_strName == "mmLeft" )
-			    __pgLayout.mmLeft = __pgLayout.left = atof( ( *it ).m_strValue.c_str() );
+			    __pgLayout.mmLeft = atof( ( *it ).m_strValue.c_str() );
 			else if ( ( *it ).m_strName == "ptRight" )
 			    __pgLayout.ptRight = atoi( ( *it ).m_strValue.c_str() );
 			else if ( ( *it ).m_strName == "inchRight" )
 			    __pgLayout.inchRight = atof( ( *it ).m_strValue.c_str() );
 			else if ( ( *it ).m_strName == "mmRight" )
-			    __pgLayout.mmRight = __pgLayout.right = atof( ( *it ).m_strValue.c_str() );
+			    __pgLayout.mmRight = atof( ( *it ).m_strValue.c_str() );
 			else if ( ( *it ).m_strName == "ptTop" )
 			    __pgLayout.ptTop = atoi( ( *it ).m_strValue.c_str() );
 			else if ( ( *it ).m_strName == "inchTop" )
 			    __pgLayout.inchTop = atof( ( *it ).m_strValue.c_str() );
 			else if ( ( *it ).m_strName == "mmTop" )
-			    __pgLayout.mmTop = __pgLayout.top = atof( ( *it ).m_strValue.c_str() );
+			    __pgLayout.mmTop = atof( ( *it ).m_strValue.c_str() );
 			else if ( ( *it ).m_strName == "ptBottom" )
 			    __pgLayout.ptBottom = atoi( ( *it ).m_strValue.c_str() );
 			else if ( ( *it ).m_strName == "inchBottom" )
 			    __pgLayout.inchBottom = atof( ( *it ).m_strValue.c_str() );
 			else if ( ( *it ).m_strName == "mmBottom" )
-			    __pgLayout.mmBottom = __pgLayout.bottom = atof( ( *it ).m_strValue.c_str() );
+			    __pgLayout.mmBottom = atof( ( *it ).m_strValue.c_str() );
 			else
 			    cerr << "Unknown attrib 'PAPERBORDERS:" << ( *it ).m_strName << "'" << endl;
 		    }
@@ -1194,8 +1190,8 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
     if ( !_first_footer ) {
 	KWTextFrameSet *fs = new KWTextFrameSet( this );
 	fs->setFrameInfo( FI_FIRST_FOOTER );
-	KWFrame *frame = new KWFrame(fs, getPTLeftBorder(), getPTPaperHeight() - 
-            getPTTopBorder() - 20, getPTPaperWidth() - getPTLeftBorder() - 
+	KWFrame *frame = new KWFrame(fs, getPTLeftBorder(), getPTPaperHeight() -
+            getPTTopBorder() - 20, getPTPaperWidth() - getPTLeftBorder() -
             getPTRightBorder(), 20 );
         frame->setFrameBehaviour(Ignore);
 	fs->addFrame( frame );
@@ -1205,8 +1201,8 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
     if ( !_even_footer ) {
 	KWTextFrameSet *fs = new KWTextFrameSet( this );
 	fs->setFrameInfo( FI_EVEN_FOOTER );
-	KWFrame *frame = new KWFrame(fs, getPTLeftBorder(), getPTPaperHeight() - 
-            getPTTopBorder() - 20, getPTPaperWidth() - getPTLeftBorder() - 
+	KWFrame *frame = new KWFrame(fs, getPTLeftBorder(), getPTPaperHeight() -
+            getPTTopBorder() - 20, getPTPaperWidth() - getPTLeftBorder() -
             getPTRightBorder(), 20 );
         frame->setFrameBehaviour(Ignore);
 	fs->addFrame( frame );
@@ -1216,8 +1212,8 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
     if ( !_odd_footer ) {
 	KWTextFrameSet *fs = new KWTextFrameSet( this );
 	fs->setFrameInfo( FI_ODD_FOOTER );
-	KWFrame *frame = new KWFrame(fs, getPTLeftBorder(), getPTPaperHeight() - 
-            getPTTopBorder() - 20, getPTPaperWidth() - getPTLeftBorder() - 
+	KWFrame *frame = new KWFrame(fs, getPTLeftBorder(), getPTPaperHeight() -
+            getPTTopBorder() - 20, getPTPaperWidth() - getPTLeftBorder() -
             getPTRightBorder(), 20 );
         frame->setFrameBehaviour(Ignore);
 	fs->addFrame( frame );
@@ -3137,7 +3133,7 @@ void KWordDocument::appendPage( unsigned int _page, bool /*redrawBackgroundWhenA
         frameSet = getFrameSet( i );
         // don't add tables! A table cell ( frameset ) _must_ not have more than one frame!
         if ( frameSet->getGroupManager()) continue;
-    
+
         unsigned int numFrames=frameSet->getNumFrames();
         for (unsigned int j =0; j < numFrames; j++) {
             frame = frameSet->getFrame(j);

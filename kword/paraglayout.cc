@@ -473,7 +473,7 @@ bool KWParagLayout::getNextTab( unsigned int _ptPos, unsigned int _lBorder, unsi
     unsigned int ptPos = 0;
 
     for ( unsigned int i = 0; i < tabList.count(); i++ ) {
-	ptPos = tabList.at( i )->ptPos + _lBorder;
+	ptPos = static_cast<int>(tabList.at( i )->ptPos) + _lBorder;
 	if ( ptPos > _ptPos && ptPos < _rBorder && ( _best == -1 ||
 						     ptPos < static_cast<unsigned int>( tabList.at( _best )->ptPos ) ) )
 	    _best = i;
@@ -483,13 +483,13 @@ bool KWParagLayout::getNextTab( unsigned int _ptPos, unsigned int _lBorder, unsi
     }
 
     if ( _best != -1 ) {
-	_tabPos = tabList.at( _best )->ptPos + _lBorder;
+	_tabPos = static_cast<int>(tabList.at( _best )->ptPos) + _lBorder;
 	_tabType = tabList.at( _best )->type;
 	return true;
     }
 
     if ( _mostLeft != -1 ) {
-	_tabPos = tabList.at( _mostLeft )->ptPos + _lBorder;
+	_tabPos = static_cast<int>(tabList.at( _mostLeft )->ptPos) + _lBorder;
 	_tabType = tabList.at( _mostLeft )->type;
 	return true;
     }

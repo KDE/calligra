@@ -1456,8 +1456,8 @@ if(!m_bVerticalText && !m_rotateAngle)
         }
  else if(m_rotateAngle!=0)
         {
-        m_iOutTextHeight = cos(m_rotateAngle*M_PI/180)*(fm.ascent() + fm.descent())+abs((int)(fm.width( m_strOutText )*sin(m_rotateAngle*M_PI/180)));
-        m_iOutTextWidth = abs((int)(sin(m_rotateAngle*M_PI/180)*(fm.ascent() + fm.descent())))+fm.width( m_strOutText )*cos(m_rotateAngle*M_PI/180);
+        m_iOutTextHeight = static_cast<int>(std::cos(m_rotateAngle*M_PI/180)*(fm.ascent() + fm.descent())+abs((int)(fm.width( m_strOutText )*sin(m_rotateAngle*M_PI/180))));
+        m_iOutTextWidth = static_cast<int>(std::abs((int)(sin(m_rotateAngle*M_PI/180)*(fm.ascent() + fm.descent())))+fm.width( m_strOutText )*cos(m_rotateAngle*M_PI/180));
         //kdDebug(36001)<<"m_iOutTextWidth"<<m_iOutTextWidth<<"m_iOutTextHeight"<<m_iOutTextHeight<<endl;
         }
   else
@@ -2109,7 +2109,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     if(angle>0)
         x=_tx + m_iTextX + dx;
     else
-        x=_tx + m_iTextX + dx-(fm.descent() + fm.ascent())*sin(angle*M_PI/180);
+        x=static_cast<int>(_tx + m_iTextX + dx-fm.descent() + fm.ascent())*sin(angle*M_PI/180);
     int y;
     if(angle>0)
         y=_ty + m_iTextY + dy;

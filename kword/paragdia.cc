@@ -1448,7 +1448,7 @@ void KWParagDia::setTabList( const QList<KoTabulator> *tabList )
 
     QListIterator<KoTabulator> it(*tabList);
     for ( it.toFirst(); !it.atLast(); ++it ) {
-	str.sprintf( "%d", tabList->current()->ptPos );
+	str.sprintf( "%f", tabList->current()->ptPos );
 	lTabs->insertItem( str );
     }
 }
