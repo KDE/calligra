@@ -54,6 +54,11 @@ Linespacing is encoded using tag:
   <:S+-3> double
   <:S+480> custom, 480/20 = 24 pt
 
+Font: tag <:f...>
+Example: <:f240,2Arial,255,0,0> means "Arial" font
+of size 240/20 = 12 pt, with red color (R=255,G=0,B=0).
+Simple tag <:f> means back to default font.
+
 Special characters are escaped or encoded because 
 they have special meaning. Known so far: 
    < encoded as <<

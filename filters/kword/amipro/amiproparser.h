@@ -25,6 +25,8 @@ class QStringList;
 #include <qvaluelist.h>
 #include <qcolor.h>
 
+class AmiProStyle;
+
 class AmiProFormat
 {
   public:
@@ -40,11 +42,10 @@ class AmiProFormat
     AmiProFormat( const AmiProFormat& );
     AmiProFormat& operator=( const AmiProFormat& );
     void assign( const AmiProFormat& );
+    void applyStyle( const AmiProStyle& );
 };
 
 typedef QValueList<AmiProFormat> AmiProFormatList;
-
-class AmiProStyle;
 
 class AmiProLayout
 {
@@ -125,6 +126,7 @@ class AmiProParser
     bool setResult( int );
     bool parseParagraph( const QString& partext );
     bool parseStyle( const QStringList& line );
+    AmiProStyle findStyle( const QString& name );
 
     bool handleTag( const QString& tag );
     bool processOpenDocument();

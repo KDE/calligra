@@ -221,6 +221,9 @@ bool AmiProParser::parseParagraph( const QString& partext )
         for( i++; (i < partext.length()) && (partext[i] != '@'); i++)
           styleName += partext[i];
         m_layout.name = styleName;
+        AmiProStyle style = findStyle( styleName );
+        m_currentFormat.applyStyle( style );
+        m_formatList.append( m_currentFormat ); 
       }
     }
 
@@ -243,16 +246,10 @@ bool AmiProParser::parseParagraph( const QString& partext )
     format.len = nextpos - format.pos;
   }
 
-  if( !m_layout.name.isEmpty() )
-  {
-    AmiProStyleList::iterator it;
-    for( it=m_styleList.begin(); it!=m_styleList.end(); ++it )
-    {
-       AmiProStyle& style = *it;
-       if( style.name == m_layout.name )
-         m_layout.applyStyle( style );
-    }
-  } 
+  // copy layout for referred style
+  if( m_layout.name.isEmpty() ) m_layout.name = "Body Text";
+  AmiProStyle style = findStyle( m_layout.name );
+  m_layout.applyStyle( style );
 
   bool result = true;
 
@@ -290,6 +287,18 @@ bool AmiProParser::parseStyle( const QStringList& lines )
   if( m_listener )
     return m_listener->doDefineStyle( style );
   return true;
+}
+
+AmiProStyle AmiProParser::findStyle( const QString& name )
+{
+  AmiProStyleList::iterator it;
+  for( it=m_styleList.begin(); it!=m_styleList.end(); ++it )
+  {
+    AmiProStyle& style = *it;
+    if( style.name == name )
+      return style;
+  }
+  return AmiProStyle();
 }
 
 bool AmiProParser::handleTag( const QString& tag )
@@ -446,6 +455,28 @@ bool AmiProParser::handleTag( const QString& tag )
   if( tag == "+C" )
     m_layout.align = AmiProLayout::Justify;
 
+  // font
+  if( tag.left( 2 ) == ":f" )
+  {
+    QString fontdesc = tag.right( tag.length()-2 );
+    QStringList desc = QStringList::split( ",", fontdesc );
+    if( desc.count() > 0 ) m_currentFormat.fontSize = desc[0].toFloat() / 20.0;
+    if( desc.count() > 1 )
+    {
+      QString fontFamily = desc[1];
+      if( fontFamily[0].isDigit() ) fontFamily.remove( 0, 1 );
+      m_currentFormat.fontFamily = fontFamily;
+    }
+    if( desc.count() > 4 )
+    {
+      unsigned red = desc[2].toUInt();
+      unsigned green = desc[3].toUInt();
+      unsigned blue = desc[4].toUInt();
+      m_currentFormat.fontColor.setRgb( red, green, blue );
+    }
+    m_formatList.append( m_currentFormat );
+  }
+
   return true;
 }
 
@@ -487,6 +518,21 @@ AmiProFormat& AmiProFormat::operator=(  const AmiProFormat& f )
 {
   assign( f );
   return *this;
+}
+
+void AmiProFormat::applyStyle( const AmiProStyle& style )
+{
+  fontFamily = style.fontFamily;
+  fontSize = style.fontSize;
+  fontColor = style.fontColor;
+  bold = style.bold;
+  italic = style.italic;
+  underline = style.underline;
+  word_underline = style.word_underline;
+  double_underline = style.double_underline;
+  subscript = style.subscript;
+  superscript = style.superscript;
+  strikethrough = style.strikethrough;
 }
 
 // paragraph layout
