@@ -19,7 +19,6 @@
 
 #include "variable.h"
 #include <koVariable.h>
-#include <koUtils.h>
 #include "mailmerge.h"
 #include "kwdoc.h"
 
