@@ -986,3 +986,7 @@ Montel laurent <montell@club-internet.fr>
 ----------------------------------------------------
 * Implemented Undo for "Paste"
 * Bugs fixes
+
+2000-09-18-Montel laurent <montell@club-internet.fr>
+----------------------------------------------------
+* Improved Undo for "delete". Now works when you delete a column or row

@@ -263,7 +263,7 @@ void KSpreadUndoRemoveRow::undo()
     KSpreadTable* table = doc()->map()->findTable( m_tableName );
     if ( !table )
 	return;
-    
+
     doc()->undoBuffer()->lock();
 
     table->insertRow( m_iRow );
@@ -561,9 +561,53 @@ KSpreadUndoDelete::KSpreadUndoDelete( KSpreadDoc *_doc, KSpreadTable* table, QRe
 {
     m_tableName = table->tableName();
     m_selection = _selection;
+    createListCell( m_data, m_lstColumn,m_lstRow,table );
 
-    QDomDocument doc = table->saveCellRect( _selection );
+}
 
+KSpreadUndoDelete::~KSpreadUndoDelete()
+{
+}
+
+void KSpreadUndoDelete::createListCell( QCString &listCell,QValueList<columnSize> &listCol,QValueList<rowSize> &listRow, KSpreadTable* table )
+{
+    listRow.clear();
+    listCol.clear();
+    //copy a column(s)
+    if(m_selection.bottom()==0x7FFF)
+    {
+        for( int y =m_selection.left() ; y <=m_selection.right() ; ++y )
+        {
+           ColumnLayout *cl=table->columnLayout(y);
+           if(!cl->isDefault())
+                {
+                columnSize tmpSize;
+                tmpSize.columnNumber=y;
+                tmpSize.columnWidth=cl->width();
+                listCol.append(tmpSize);
+                }
+        }
+    }
+    //copy a row(s)
+    else if(m_selection.right()==0x7FFF)
+    {
+        //save size of row(s)
+        for( int y =m_selection.top() ; y <=m_selection.bottom() ; ++y )
+        {
+           RowLayout *rw=table->rowLayout(y);
+           if(!rw->isDefault())
+                {
+                rowSize tmpSize;
+                tmpSize.rowNumber=y;
+                tmpSize.rowHeight=rw->height();
+                listRow.append(tmpSize);
+                }
+        }
+
+    }
+
+    //save all cells in area
+    QDomDocument doc = table->saveCellRect( m_selection );
     // Save to buffer
     QString buffer;
     QTextStream str( &buffer, IO_WriteOnly );
@@ -573,24 +617,42 @@ KSpreadUndoDelete::KSpreadUndoDelete( KSpreadDoc *_doc, KSpreadTable* table, QRe
     // data in a QCString in a way that
     // QCString::length() == QCString().size().
     // This allows us to treat the QCString like a QByteArray later on.
-    m_data = buffer.utf8();
-    int len = m_data.length();
-    char tmp = m_data[ len - 1 ];
-    m_data.resize( len );
-    *( m_data.data() + len - 1 ) = tmp;
+    listCell = buffer.utf8();
+    int len = listCell.length();
+    char tmp = listCell[ len - 1 ];
+    listCell.resize( len );
+    *( listCell.data() + len - 1 ) = tmp;
+
 }
 
-KSpreadUndoDelete::~KSpreadUndoDelete()
-{
-}
 
 void KSpreadUndoDelete::undo()
 {
     KSpreadTable* table = doc()->map()->findTable( m_tableName );
     if ( !table )
 	return;
+    createListCell( m_dataRedo, m_lstRedoColumn,m_lstRedoRow,table );
 
     doc()->undoBuffer()->lock();
+    if(m_selection.bottom()==0x7FFF)
+    {
+        QValueList<columnSize>::Iterator it2;
+        for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
+        {
+           ColumnLayout *cl=table->nonDefaultColumnLayout((*it2).columnNumber);
+           cl->setWidth((*it2).columnWidth);
+        }
+    }
+    else if(m_selection.right()==0x7FFF)
+    {
+        QValueList<rowSize>::Iterator it2;
+        for ( it2 = m_lstRow.begin(); it2 != m_lstRow.end(); ++it2 )
+        {
+           RowLayout *rw=table->nonDefaultRowLayout((*it2).rowNumber);
+           rw->setHeight((*it2).rowHeight);
+        }
+    }
+
     table->deleteCells( m_selection );
     table->paste( m_data, m_selection.topLeft() );
     table->recalc( true );
@@ -600,17 +662,36 @@ void KSpreadUndoDelete::undo()
 
 void KSpreadUndoDelete::redo()
 {
-    doc()->undoBuffer()->lock();
 
     KSpreadTable* table = doc()->map()->findTable( m_tableName );
     if ( !table )
 	return;
 
+    doc()->undoBuffer()->lock();
+    if(m_selection.bottom()==0x7FFF)
+    {
+        QValueList<columnSize>::Iterator it2;
+        for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
+        {
+           ColumnLayout *cl=table->nonDefaultColumnLayout((*it2).columnNumber);
+           cl->setWidth((*it2).columnWidth);
+        }
+    }
+    else if(m_selection.right()==0x7FFF)
+    {
+        QValueList<rowSize>::Iterator it2;
+        for ( it2 = m_lstRedoRow.begin(); it2 != m_lstRedoRow.end(); ++it2 )
+        {
+           RowLayout *rw=table->nonDefaultRowLayout((*it2).rowNumber);
+           rw->setHeight((*it2).rowHeight);
+        }
+    }
+
     //move next line to refreshView
     //because I must know what is the real rect
     //that I must refresh, when there is cell Merged
 
-
+    table->paste( m_dataRedo, m_selection.topLeft() );
     //table->deleteCells( m_selection );
     table->refreshView( m_selection );
     doc()->undoBuffer()->unlock();
@@ -1393,6 +1474,8 @@ KSpreadUndoCellPaste::~KSpreadUndoCellPaste()
 
 void KSpreadUndoCellPaste::createListCell( QCString &listCell,QValueList<columnSize> &listCol,QValueList<rowSize> &listRow, KSpreadTable* table )
 {
+    listCol.clear();
+    listRow.clear();
     //copy a column(s)
     if(nbCol!=0)
     {

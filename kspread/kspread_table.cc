@@ -4230,6 +4230,18 @@ void KSpreadTable::deleteSelection( const QPoint& _marker )
     if ( r.left() == 0 )
         r = QRect( _marker.x(), _marker.y(), 1, 1 );
 
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+        {
+            KSpreadUndoDelete *undo = new KSpreadUndoDelete( m_pDoc, this, r );
+            m_pDoc->undoBuffer()->appendUndo( undo );
+        }
+
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+        {
+            KSpreadUndoDelete *undo = new KSpreadUndoDelete( m_pDoc, this, r );
+            m_pDoc->undoBuffer()->appendUndo( undo );
+        }
+
     // Entire rows selected ?
     if ( r.right() == 0x7fff )
     {
@@ -4254,11 +4266,6 @@ void KSpreadTable::deleteSelection( const QPoint& _marker )
     }
     else
     {
-        if ( !m_pDoc->undoBuffer()->isLocked() )
-        {
-            KSpreadUndoDelete *undo = new KSpreadUndoDelete( m_pDoc, this, r );
-            m_pDoc->undoBuffer()->appendUndo( undo );
-        }
 
         deleteCells( r );
     }

@@ -178,9 +178,16 @@ public:
     virtual void undo();
     virtual void redo();
 
+    void createListCell( QCString &listCell,QValueList<columnSize> &listCol,QValueList<rowSize> &listRow, KSpreadTable* table );
+
 protected:
     QRect m_selection;
     QCString m_data;
+    QCString m_dataRedo;
+    QValueList<columnSize> m_lstColumn;
+    QValueList<columnSize> m_lstRedoColumn;
+    QValueList<rowSize> m_lstRow;
+    QValueList<rowSize> m_lstRedoRow;
     QString m_tableName;
 };
 
@@ -402,6 +409,7 @@ protected:
     int yshift;
     QString m_tableName;
 };
+
 
 class KSpreadUndo
 {
