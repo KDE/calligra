@@ -27,7 +27,7 @@
 #include "textformat.h"
 
 /*******************************************/
-/* getColorBlue                            */
+/* getColorXXXX                            */
 /*******************************************/
 int TextFormat::getColorBlue () const
 {
@@ -37,9 +37,6 @@ int TextFormat::getColorBlue () const
 		return 0;
 }
 
-/*******************************************/
-/* getColorGreen                           */
-/*******************************************/
 int TextFormat::getColorGreen() const
 {
 	if(_textcolor!= 0)
@@ -48,13 +45,37 @@ int TextFormat::getColorGreen() const
 		return 0;
 }
 
-/*******************************************/
-/* getColorRed                             */
-/*******************************************/
 int TextFormat::getColorRed  () const
 {
 	if(_textcolor!= 0)
 		return _textcolor->red();
+	else
+		return 0;
+}
+
+/*******************************************/
+/* getBkColorXXX                           */
+/*******************************************/
+int TextFormat::getBkColorBlue () const
+{
+	if(_backcolor!= 0)
+		return _backcolor->blue();
+	else
+		return 0;
+}
+
+int TextFormat::getBkColorGreen() const
+{
+	if(_backcolor!= 0)
+		return _backcolor->green();
+	else
+		return 0;
+}
+
+int TextFormat::getBkColorRed  () const
+{
+	if(_backcolor!= 0)
+		return _backcolor->red();
 	else
 		return 0;
 }
@@ -68,6 +89,17 @@ void TextFormat::setColor (const int r, const int g, const int b)
 		_textcolor = new QColor(r, g, b);
 	else
 		_textcolor->setRgb(r, g, b);
+}
+
+/*******************************************/
+/* setBkColor                              */
+/*******************************************/
+void TextFormat::setBkColor (const int r, const int g, const int b)
+{
+	if(_backcolor == 0)
+		_backcolor = new QColor(r, g, b);
+	else
+		_backcolor->setRgb(r, g, b);
 }
 
 /*******************************************/
@@ -100,8 +132,30 @@ void TextFormat::analyseTextFormat(const QDomNode balise)
 		analyseColor(getChild(balise, "COLOR"));
 	if(isChild(balise, "SIZE"))
 		analyseSize(getChild(balise, "SIZE"));
+	if(isChild(balise, "TEXTBACKGROUNDCOLOR"))
+		analyseBackgroundColor(getChild(balise, "TEXTBACKGROUNDCOLOR"));
 
 	kdDebug() << "END OF A FORMAT" << endl;
+}
+
+void TextFormat::analyseBackgroundColor(const QDomNode balise)
+{
+	/* <TEXTBACKGROUNDCOLOR red="0" green="0" blue="0"/> */
+	int  red   = 0, 
+	     blue  = 0,
+	     green = 0;
+
+	red = getAttr(balise, "red").toInt();
+	green = getAttr(balise, "green").toInt();
+	blue = getAttr(balise, "blue").toInt();
+
+	if(!(red == 255 && green == 255 && blue == 255))
+	{
+		kdDebug() << "bk color = " << red << "," << green << "," << blue << endl;
+		/* white color is default value */
+		setBkColor(red, green, blue);
+		FileHeader::instance()->useColor();
+	}
 }
 
 /*******************************************/
@@ -201,7 +255,7 @@ void TextFormat::analyseAlign(const QDomNode balise)
 /*******************************************/
 void TextFormat::analyseColor(const QDomNode balise)
 {
-	/* <COLOR red="0" green="0" blue="0"> */
+	/* <COLOR red="0" green="0" blue="0"/> */
 	int  red   = 0, 
 	     blue  = 0,
 	     green = 0;
@@ -210,9 +264,10 @@ void TextFormat::analyseColor(const QDomNode balise)
 	green = getAttr(balise, "green").toInt();
 	blue = getAttr(balise, "blue").toInt();
 
-	if(!(red == green == blue == 0))
+	if(!(red == 0 && green == 0 && blue == 0))
 	{
 		/* black color is default value */
+		kdDebug() << "color = " << red << "," << green << "," << blue << endl;
 		setColor(red, green, blue);
 		FileHeader::instance()->useColor();
 	}
@@ -227,4 +282,5 @@ void TextFormat::analyseSize(const QDomNode balise)
 {
 	/* <SIZE value="11"> */
 	setSize(getAttr(balise, "value").toInt());
+	kdDebug() << "font size : " << getSize() << endl;
 }

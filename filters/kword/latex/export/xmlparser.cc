@@ -1,7 +1,7 @@
 /*
 ** A program to convert the XML rendered by KOffice into LATEX.
 **
-** Copyright (C) 2000-2002 Robert JACOLIN
+** Copyright (C) 2000-2003 Robert JACOLIN
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public
@@ -83,8 +83,8 @@ XmlParser::XmlParser()
 
 XmlParser::~XmlParser()
 {
-	if(_in != NULL)
-		_in->close();
+	/*if(_in != NULL)
+		_in->close();*/
 }
 
 QDomNode XmlParser::getChild(QDomNode balise, QString name)

@@ -56,6 +56,7 @@ class TextFormat: public Format
 	bool         _strikeout;
 	EAlign       _vertalign;
 	QColor*      _textcolor;
+	QColor*      _backcolor;
 
 	public:
 		/**
@@ -64,10 +65,12 @@ class TextFormat: public Format
 		 * Creates a new instance of TextFormat.
 		 *
 		 */
-		TextFormat(): _size(11), _weight(0), _italic(false),
+		TextFormat(): _weight(0), _italic(false),
 				_underline(false), _strikeout(0)
 		{
 			_textcolor = 0;
+			_backcolor = 0;
+			_size = Config::instance()->getDefaultFontSize();
 			setPos(0);
 			setLength(0);
 		}
@@ -92,10 +95,15 @@ class TextFormat: public Format
 		int          getColorGreen() const;
 		int          getColorRed  () const;
 
+		int          getBkColorBlue () const;
+		int          getBkColorGreen() const;
+		int          getBkColorRed  () const;
+		
 		bool         isItalic     () const { return (_italic    == true); }
 		bool         isUnderlined () const { return (_underline == true); }
 		bool         isStrikeout  () const { return (_strikeout == true); }
 		bool         isColor      () const { return (_textcolor != 0);    }
+		bool         isBkColored  () const { return (_backcolor != 0);    }
 
 		/**
 		 * Modifiers
@@ -110,6 +118,7 @@ class TextFormat: public Format
 		void setPolice     (QString p)             { _police    = p; }
 		void setAlign      (const int a)           { _vertalign = (EAlign) a; }
 		void setColor      (const int, const int, const int);
+		void setBkColor    (const int, const int, const int);
 
 		/**
 		 * Helpfull functions
@@ -124,6 +133,7 @@ class TextFormat: public Format
 		void analyseAlign     (const QDomNode);
 		void analyseColor     (const QDomNode);
 		void analyseSize      (const QDomNode);
+		void analyseBackgroundColor(const QDomNode);
 };
 
 #endif /* __KWORD_TEXTFORMAT_H__ */

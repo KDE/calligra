@@ -116,6 +116,19 @@ void Formula::getFormula(QDomNode p, int indent)
 				_formula = _formula + "</" + p.nodeName() + ">\n";
 			}
 			break;
+		/*case QDomNode::AttributeNode:
+		case QDomNode::CDATASectionNode:
+		case QDomNode::EntityReferenceNode:
+		case QDomNode::EntityNode:
+		case QDomNode::ProcessingInstructionNode:
+		case QDomNode::CommentNode:
+		case QDomNode::DocumentNode:
+		case QDomNode::DocumentTypeNode:
+		case QDomNode::DocumentFragmentNode:
+		case QDomNode::NotationNode:
+		case QDomNode::BaseNode:
+		case QDomNode::CharacterDataNode:
+			break;*/
                         //default:
                         //kdError() << "Can't happen" << endl;
                         //break;

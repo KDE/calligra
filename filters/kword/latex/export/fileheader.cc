@@ -195,7 +195,10 @@ void FileHeader::generateLatinPreambule(QTextStream &out)
 			out << "";
 	}
 	/* The font and the type of the doc. can not be changed, hmm ? */
-	out << "11pt]{";
+	out << Config::instance()->getDefaultFontSize() << "pt";
+	if(Config::instance()->getQuality() == "draft")
+		out << ", draft";
+	out << "]{";
 	out << Config::instance()->getClass() << "}" << endl;
 }
 
@@ -260,7 +263,10 @@ void FileHeader::generateUnicodePreambule(QTextStream &out)
 			out << "";
 	}
 	/* The font and the type of the doc. can not be changed, hmm ? */
-	out << "11pt]{";
+	out << Config::instance()->getDefaultFontSize() << "pt";
+	if(Config::instance()->getQuality() == "draft")
+		out << ", draft";
+	out << "]{";
 	out << Config::instance()->getClass() << "}" << endl;
 }
 

@@ -91,6 +91,9 @@ void Document::analyse(const QDomNode balise)
 				elt = new Formula;
 				elt->analyse(getChild(balise, index));
 				break;
+			case ST_HLINE:
+				kdDebug() << "HLINE" << endl;
+				break;
 			default:
 				kdDebug() << "error " << elt->getType() << " " << ST_TEXT << endl;
 		}
@@ -176,7 +179,6 @@ void Document::analysePixmaps(const QDomNode balise)
 SType Document::getTypeFrameset(const QDomNode balise)
 {
 	SType type = ST_NONE;
-
 	type = (SType) getAttr(balise, "frameType").toInt();
 	return type;
 }

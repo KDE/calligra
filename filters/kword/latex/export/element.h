@@ -33,8 +33,10 @@ enum SType
 	ST_NONE,
 	ST_TEXT,
 	ST_PICTURE,
-	ST_PART,		/* This last Type mustn't be */
-	ST_FORMULA		/* displayed where they are. */
+	ST_PART,			/* This last Type mustn't be */
+	ST_FORMULA,		/* displayed where they are. */
+	ST_CLIPART,
+	ST_HLINE
 };
 
 enum SSect

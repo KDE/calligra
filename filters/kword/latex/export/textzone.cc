@@ -304,7 +304,7 @@ void TextZone::analyse()
 	/* Format the text */
 	_texte = _texte.mid(getPos(), getLength());
 	
-	kdDebug() << "Chaine de " << _texte.length() << " caractères :" << endl;
+	kdDebug() << "String of " << _texte.length() << " caracters :" << endl;
 	kdDebug() << _texte.latin1() << endl;
 	kdDebug() << "END ZONE" << endl;
 }
@@ -382,8 +382,10 @@ void TextZone::generate_format_begin(QTextStream & out)
 		out << "\\uline{";
 	if (isStrikeout())
 		out << "\\sout{";
+	
 	/* Size */
-	if(getSize() != 11)
+	if(getSize() != Config::instance()->getDefaultFontSize() &&
+			Config::instance()->isKwordStyleUsed())
 	{
 		out << "\\fontsize{" << getSize() << "}{1}%" << endl;
 		Config::instance()->writeIndent(out);
@@ -391,14 +393,27 @@ void TextZone::generate_format_begin(QTextStream & out)
 		Config::instance()->writeIndent(out);
 	}
 
+	/* background color */
+	if(isBkColored())
+	{
+		float red, green, blue;
+
+		red   = ((float) getBkColorRed()) / 255;
+		green = ((float) getBkColorGreen()) / 255;
+		blue  = ((float) getBkColorBlue()) / 255;
+
+		out << "\\colorbox[rgb]{";
+		out << red << ", " << green << ", " << blue << "}{";
+	}
+	
 	/* Color */
 	if(isColor())
 	{
-		double red, green, blue;
+		float red, green, blue;
 
-		red   = getColorRed()  / 255;
-		green = getColorGreen()/ 255;
-		blue  = getColorBlue() / 255;
+		red   = ((float) getColorRed()) / 255;
+		green = ((float) getColorGreen()) / 255;
+		blue  = ((float) getColorBlue()) / 255;
 
 		out << "\\textcolor[rgb]{";
 		out << red << ", " << green << ", " << blue << "}{";
@@ -434,13 +449,13 @@ void TextZone::generate_format_end(QTextStream & out)
 		out << "}$";
 
 	/* Color */
-	if(isColor())
+	if(isColor() || isBkColored())
 		out << "}";
 
 	/* Size */
-	if(getSize() != 11)
+	if(getSize() != Config::instance()->getDefaultFontSize() && Config::instance()->isKwordStyleUsed())
 	{
-		out << "\\fontsize{11}{1}%" << endl;
+		out << "\\fontsize{" << Config::instance()->getDefaultFontSize() << "}{1}%" << endl;
 		Config::instance()->writeIndent(out);
 		out << "\\selectfont" << endl;
 		Config::instance()->writeIndent(out);

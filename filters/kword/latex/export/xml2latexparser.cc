@@ -64,7 +64,7 @@ void Xml2LatexParser::generate()
 		if(!Config::instance()->isEmbeded())
 			FileHeader::instance()->generate(_out);
 		_document.generate(_out, !Config::instance()->isEmbeded());
-		_out << getDocument();
+		//_out << getDocument();
 		_file.close();
 	}
 	else

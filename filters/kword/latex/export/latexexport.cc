@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+	 								2003 Robert Jacolin <rjacolin@ifrance.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,7 +26,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <qtextcodec.h>
-#include "latexexportdia.h"
+#include "kwordlatexexportdia.h"
 
 typedef KGenericFactory<LATEXExport, KoFilter> LATEXExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkwordlatexexport, LATEXExportFactory( "kwordlatexfilter" ) );
@@ -51,7 +52,7 @@ KoFilter::ConversionStatus LATEXExport::convert( const QCString& from, const QCS
     /* input file Reading */
     in->close();
 
-    LATEXExportDia* dialog = new LATEXExportDia(in);
+    KWordLatexExportDia* dialog = new KWordLatexExportDia(in);
     dialog->setOutputFile(m_chain->outputFile());
 
     dialog->exec();
