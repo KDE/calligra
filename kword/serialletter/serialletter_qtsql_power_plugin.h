@@ -17,8 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef _SERIALLETTER_QTSQL_PLUGIN_H_
-#define _SERIALLETTER_QTSQL_PLUGIN_H_
+#ifndef _SERIALLETTER_QTSQL_POWER_PLUGIN_H_
+#define _SERIALLETTER_QTSQL_POWER_PLUGIN_H_
 
 #include <qdom.h>
 #include <klocale.h>
