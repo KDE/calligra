@@ -1802,7 +1802,7 @@ void KoPageVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*
         {
             writer.addAttribute( "text:select-page", "current" );
         }
-        writer.addTextNode( m_varValue.toInt() );
+        writer.addTextNode( m_varValue.toString() );
         writer.endElement();
     }
     break;
@@ -1821,7 +1821,6 @@ void KoPageVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*
     }
     break;
     }
-    kdDebug()<<" variable pgnum \n";
 }
 
 void KoPageVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
