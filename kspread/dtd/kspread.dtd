@@ -101,7 +101,7 @@
 
 		name	the name of the table
 -->
-<!ELEMENT TABLE (CELL|CHART)*>
+<!ELEMENT TABLE (CELL|CHART|COLUMN)*>
 <!ATTLIST TABLE  name    CDATA #REQUIRED>
 
 
@@ -133,6 +133,18 @@
                         float            CDATA #REQUIRED
                         floatcolor       CDATA #REQUIRED
                         faktor           CDATA #REQUIRED>
+
+
+<!--	Describes one column
+
+		Attributes:
+
+		column	the column number
+		width	the width of the column
+-->
+<!ELEMENT COLUMN EMPTY>
+<!ATTLIST CELL  column  CDATA #REQUIRED
+                width   CDATA #REQUIRED>
 
 
 <!--	Describes an embedded chart.
