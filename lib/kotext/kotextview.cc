@@ -58,6 +58,7 @@ KoTextView::KoTextView( KoTextObject *textobj )
     inDoubleClick = FALSE;
     mightStartDrag = FALSE;
     possibleTripleClick = FALSE;
+    afterTripleClick = FALSE;
     m_currentFormat = 0;
     //updateUI( true, true );
 }
@@ -517,8 +518,16 @@ void KoTextView::handleMouseReleaseEvent()
     m_textobj->emitShowCursor();
 }
 
-void KoTextView::handleMouseDoubleClickEvent( QMouseEvent*, const QPoint& /* Currently unused */ )
+void KoTextView::handleMouseDoubleClickEvent( QMouseEvent*ev, const QPoint& i/* Currently unused */ )
 {
+  //after a triple click it's not a double click but a simple click
+  //but as triple click didn't exist it's necessary to do it.
+    if(afterTripleClick)
+      {
+	handleMousePressEvent( ev, i );
+	return;
+      }
+
     inDoubleClick = TRUE;
     *m_cursor = selectWordUnderCursor();
     textObject()->selectionChangedNotify();
@@ -545,7 +554,7 @@ void KoTextView::handleMouseTripleClickEvent( QMouseEvent*ev, const QPoint& /* C
         showCursor();
         return;
     }
-
+    afterTripleClick= true;
     inDoubleClick = FALSE;
     *m_cursor = selectParagUnderCursor();
     textObject()->selectionChangedNotify();
@@ -553,7 +562,12 @@ void KoTextView::handleMouseTripleClickEvent( QMouseEvent*ev, const QPoint& /* C
     // But auto-copy in readonly mode, since there is no action available in that case.
     if ( !m_bReadWrite )
         emit copy();
+    QTimer::singleShot(QApplication::doubleClickInterval(),this,SLOT(afterTripleClickTimeout()));
 
+}
+void KoTextView::afterTripleClickTimeout()
+{
+  afterTripleClick=false;
 }
 
 

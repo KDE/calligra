@@ -174,6 +174,7 @@ private slots:
     void blinkCursor();
     void setCursor( QTextCursor * _cursor ) { *m_cursor = *_cursor; }
     void tripleClickTimeout();
+    void afterTripleClickTimeout();
 private:
     enum CursorAction { // keep in sync with QTextEdit
         MoveBackward,
@@ -209,6 +210,7 @@ private:
     bool mightStartDrag;
     bool m_bReadWrite;
     bool possibleTripleClick;
+    bool afterTripleClick;
 };
 
 #endif
