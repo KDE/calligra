@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>583</width>
+            <width>600</width>
             <height>397</height>
         </rect>
     </property>
@@ -149,7 +149,7 @@
                         <cstring>ignoreDouble</cstring>
                     </property>
                     <property name="text">
-                        <string>ignore doublicated delimiters</string>
+                        <string>Ignore duplicated delimiters</string>
                     </property>
                 </widget>
             </grid>

@@ -102,7 +102,7 @@
                         <cstring>ignoreDouble</cstring>
                     </property>
                     <property name="text">
-                        <string>ignore doublicated delimiters</string>
+                        <string>Ignore duplicated delimiters</string>
                     </property>
                 </widget>
             </grid>

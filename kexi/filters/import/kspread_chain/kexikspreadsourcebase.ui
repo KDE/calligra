@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>600</width>
+            <width>930</width>
             <height>486</height>
         </rect>
     </property>
@@ -40,7 +40,7 @@
                         <cstring>syncDataArea</cstring>
                     </property>
                     <property name="text">
-                        <string>Use current selection</string>
+                        <string>Use Current Selection</string>
                     </property>
                 </widget>
                 <widget class="KLineEdit" row="0" column="2">
@@ -53,23 +53,23 @@
                         <cstring>textLabel1_2</cstring>
                     </property>
                     <property name="text">
-                        <string>Data area</string>
+                        <string>Data area:</string>
                     </property>
                 </widget>
                 <widget class="KComboBox" row="3" column="1" rowspan="1" colspan="2">
                     <item>
                         <property name="text">
-                            <string>End of selection</string>
+                            <string>End of Selection</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>First empty row/column within selection</string>
+                            <string>First Empty Row/Column Within Selection</string>
                         </property>
                     </item>
                     <item>
                         <property name="text">
-                            <string>Expand selection till first empty row/column</string>
+                            <string>Expand Selection Untill First Empty Row/Column</string>
                         </property>
                     </item>
                     <property name="name">
@@ -86,7 +86,7 @@
                         <cstring>textLabel1_3</cstring>
                     </property>
                     <property name="text">
-                        <string>Data record is a</string>
+                        <string>Data record is a:</string>
                     </property>
                 </widget>
                 <widget class="KComboBox" row="2" column="2">
@@ -109,7 +109,7 @@
                         <cstring>syncHeader</cstring>
                     </property>
                     <property name="text">
-                        <string>Use current selection</string>
+                        <string>Use Current Selection</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="2">
@@ -117,7 +117,7 @@
                         <cstring>useHeader</cstring>
                     </property>
                     <property name="text">
-                        <string>Header row/column</string>
+                        <string>Header row/column:</string>
                     </property>
                 </widget>
             </grid>
@@ -144,4 +144,12 @@
     </vbox>
 </widget>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kcombobox.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kcombobox.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+</includehints>
 </UI>

@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>526</width>
+            <width>758</width>
             <height>454</height>
         </rect>
     </property>
@@ -20,7 +20,7 @@
             <cstring>openFilePage</cstring>
         </property>
         <attribute name="title">
-            <string>Open file</string>
+            <string>Open File</string>
         </attribute>
     </widget>
     <widget class="QWidget">
@@ -28,7 +28,7 @@
             <cstring>loadingImportPluginPage</cstring>
         </property>
         <attribute name="title">
-            <string>Loading import plugin</string>
+            <string>Loading Import Plugin</string>
         </attribute>
         <hbox>
             <property name="name">
@@ -60,7 +60,7 @@
             <cstring>destinationTablePage</cstring>
         </property>
         <attribute name="title">
-            <string>Import destination:</string>
+            <string>Import Destination</string>
         </attribute>
         <vbox>
             <property name="name">
@@ -71,7 +71,7 @@
                     <cstring>buttonGroup1</cstring>
                 </property>
                 <property name="title">
-                    <string>Please choose where you would like to import the data to</string>
+                    <string>Please Choose Where You Would Like to Import the Data To</string>
                 </property>
                 <property name="exclusive">
                     <bool>true</bool>
@@ -85,7 +85,7 @@
                             <cstring>destination_newTable</cstring>
                         </property>
                         <property name="text">
-                            <string>New Table</string>
+                            <string>New table</string>
                         </property>
                     </widget>
                     <widget class="QRadioButton" row="1" column="0">
@@ -93,7 +93,7 @@
                             <cstring>destination_existingTable</cstring>
                         </property>
                         <property name="text">
-                            <string>Existing Table</string>
+                            <string>Existing table</string>
                         </property>
                     </widget>
                     <widget class="QComboBox" row="1" column="2">
@@ -148,7 +148,7 @@
             <cstring>existingTablePage</cstring>
         </property>
         <attribute name="title">
-            <string>Mapping between source and destination fields</string>
+            <string>Mapping Between source and destination Fields</string>
         </attribute>
         <vbox>
             <property name="name">
@@ -193,7 +193,7 @@
             <cstring>newTablePage</cstring>
         </property>
         <attribute name="title">
-            <string>Setup new table</string>
+            <string>Setup New Table</string>
         </attribute>
         <vbox>
             <property name="name">
@@ -215,27 +215,66 @@
                             <property name="text">
                                 <string>Name</string>
                             </property>
+                            <property name="pixmap">
+                                <pixmap></pixmap>
+                            </property>
                         </column>
                         <column>
                             <property name="text">
                                 <string>Type</string>
                             </property>
-                        </column>
-                        <column>
-                            <property name="text">
-                                <string>Default value</string>
+                            <property name="pixmap">
+                                <pixmap></pixmap>
                             </property>
                         </column>
                         <column>
                             <property name="text">
-                                <string>Primary key</string>
+                                <string>Default Value</string>
+                            </property>
+                            <property name="pixmap">
+                                <pixmap></pixmap>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string>Primary Key</string>
+                            </property>
+                            <property name="pixmap">
+                                <pixmap></pixmap>
                             </property>
                         </column>
                         <column>
                             <property name="text">
                                 <string>Allow NULL</string>
                             </property>
+                            <property name="pixmap">
+                                <pixmap></pixmap>
+                            </property>
                         </column>
+                        <row>
+                            <property name="text">
+                                <string>1</string>
+                            </property>
+                            <property name="pixmap">
+                                <pixmap></pixmap>
+                            </property>
+                        </row>
+                        <row>
+                            <property name="text">
+                                <string>2</string>
+                            </property>
+                            <property name="pixmap">
+                                <pixmap></pixmap>
+                            </property>
+                        </row>
+                        <row>
+                            <property name="text">
+                                <string>3</string>
+                            </property>
+                            <property name="pixmap">
+                                <pixmap></pixmap>
+                            </property>
+                        </row>
                         <property name="name">
                             <cstring>newTable_fields</cstring>
                         </property>
@@ -267,7 +306,7 @@
                                     <cstring>newTable_addField</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Add new field</string>
+                                    <string>Add New Field</string>
                                 </property>
                             </widget>
                             <widget class="KPushButton">
@@ -275,7 +314,7 @@
                                     <cstring>newTable_deleteField</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Delete field</string>
+                                    <string>Delete Field</string>
                                 </property>
                             </widget>
                             <widget class="KPushButton">
@@ -283,7 +322,7 @@
                                     <cstring>newTable_moveFieldDown</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Move field down</string>
+                                    <string>Move Field Down</string>
                                 </property>
                             </widget>
                             <widget class="KPushButton">
@@ -291,7 +330,7 @@
                                     <cstring>newTable_moveFieldUp</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Move field up</string>
+                                    <string>Move Field Up</string>
                                 </property>
                             </widget>
                         </hbox>
@@ -314,12 +353,42 @@
                             <property name="text">
                                 <string>Destination Field</string>
                             </property>
+                            <property name="pixmap">
+                                <pixmap></pixmap>
+                            </property>
                         </column>
                         <column>
                             <property name="text">
                                 <string>Source</string>
                             </property>
+                            <property name="pixmap">
+                                <pixmap></pixmap>
+                            </property>
                         </column>
+                        <row>
+                            <property name="text">
+                                <string>1</string>
+                            </property>
+                            <property name="pixmap">
+                                <pixmap></pixmap>
+                            </property>
+                        </row>
+                        <row>
+                            <property name="text">
+                                <string>2</string>
+                            </property>
+                            <property name="pixmap">
+                                <pixmap></pixmap>
+                            </property>
+                        </row>
+                        <row>
+                            <property name="text">
+                                <string>3</string>
+                            </property>
+                            <property name="pixmap">
+                                <pixmap></pixmap>
+                            </property>
+                        </row>
                         <property name="name">
                             <cstring>newTable_mapping</cstring>
                         </property>
@@ -357,4 +426,11 @@
     </widget>
 </widget>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+</includehints>
 </UI>

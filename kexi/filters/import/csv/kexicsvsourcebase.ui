@@ -58,7 +58,7 @@
                         <cstring>ignoreDouble</cstring>
                     </property>
                     <property name="text">
-                        <string>ignore duplicated delimiters</string>
+                        <string>Ignore duplicated delimiters</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox" row="2" column="1">

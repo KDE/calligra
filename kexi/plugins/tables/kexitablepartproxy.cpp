@@ -87,8 +87,8 @@ KexiTablePartProxy::groupContext()
 	KexiPartPopupMenu *m = new KexiPartPopupMenu(this);
 	m->insertAction(i18n("Create Table..."), SLOT(slotCreate()));
 // perhaps this should become a submenu
-	m->insertAction(i18n("Import Tables/Data from file..."),SLOT(slotFileImport()));
-	m->insertAction(i18n("Import Tables/Data from remote server..."),SLOT(slotServerImport()));
+	m->insertAction(i18n("Import Tables/Data From File..."),SLOT(slotFileImport()));
+	m->insertAction(i18n("Import Tables/Data From Remote Server..."),SLOT(slotServerImport()));
 
 	return m;
 }*/

@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>476</width>
-            <height>208</height>
+            <height>238</height>
         </rect>
     </property>
     <property name="caption">
@@ -32,7 +32,7 @@
                 <cstring>textLabel4</cstring>
             </property>
             <property name="text">
-                <string>event:</string>
+                <string>Event:</string>
             </property>
         </widget>
         <widget class="QButtonGroup" row="1" column="0" rowspan="1" colspan="4">

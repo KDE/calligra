@@ -197,7 +197,7 @@ void KexiView::initActions()
 	 actionCollection(), "project_props");
 	connect(actionProjectProps, SIGNAL(activated()), this, SLOT(slotShowProjectProps()));
 
-	KSelectAction *actionViewMode = new KSelectAction(i18n("View mode"), KShortcut(),
+	KSelectAction *actionViewMode = new KSelectAction(i18n("View Mode"), KShortcut(),
 		actionCollection(),"view_viewmode");
 
 	actionViewMode->setItems(m_possibleModes);
@@ -208,11 +208,11 @@ void KexiView::initActions()
 	 actionCollection(), "kexi_settings");
 	connect(actionSettings, SIGNAL(activated()), this, SLOT(slotShowSettings()));
 
-	KAction *actionFileImport = new KAction(i18n("Import file based data..."), "", "",
+	KAction *actionFileImport = new KAction(i18n("Import File Based Data..."), "", "",
 	 actionCollection(), "kexi_importfiledata");
 	connect(actionFileImport, SIGNAL(activated()), m_project, SLOT(slotImportFileData()));
 
-	KAction *actionServerImport = new KAction(i18n("Import remote server based data..."), "", "",
+	KAction *actionServerImport = new KAction(i18n("Import Remote Server Based Data..."), "", "",
 	 actionCollection(), "kexi_importserverdata");
 	connect(actionServerImport, SIGNAL(activated()), m_project, SLOT(slotImportServerData()));
 #endif
