@@ -79,9 +79,12 @@ VSelection::append()
 void
 VSelection::append( VObject* object )
 {
-	m_objects.append( object );
-	object->setState( selected );
-	invalidateBoundingBox();
+	if( object->state() != deleted )
+	{
+		m_objects.append( object );
+		object->setState( selected );
+		invalidateBoundingBox();
+	}
 }
 
 bool
@@ -124,7 +127,8 @@ VSelection::clear()
 	{
 		op.visit( *itr.current() );
 
-		itr.current()->setState( normal );
+		if( itr.current()->state() != deleted )
+			itr.current()->setState( normal );
 	}
 
 	m_objects.clear();
