@@ -5337,14 +5337,12 @@ QString KSpreadCell::convertFormulaToOasisFormat( const QString & formula ) cons
 
 void KSpreadCell::loadOasisConditional( QDomElement * style )
 {
-    kdDebug()<<"void KSpreadCell::loadOasisConditional( QDomElement * style )********************\n";
     if ( style )//safe
     {
         QDomElement elementItem = style->firstChild().toElement();
         elementItem = elementItem.firstChild().toElement();
         if ( !elementItem.isNull() )
         {
-            kdDebug()<<" has a conditional attribute :!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
             delete d->extra()->conditions;
             d->extra()->conditions = new KSpreadConditions( this );
             d->extra()->conditions->loadOasisConditions( elementItem );
@@ -5585,6 +5583,7 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
 {
     kdDebug()<<"validationName:"<<validationName<<endl;
     QDomElement element = table()->doc()->loadingInfo()->validation( validationName);
+    delete d->extra()->validity;
     d->extra()->validity = new KSpreadValidity;
     if ( element.hasAttribute( "table:condition" ) )
     {
@@ -5793,35 +5792,35 @@ void KSpreadCell::loadOasisValidationValue( const QStringList &listVal )
 void KSpreadCell::loadOasisValidationCondition( QString &valExpression )
 {
     QString value;
-    if (valExpression.contains( "<=" ) )
+    if (valExpression.find( "<=" )==0 )
     {
-        value = valExpression.remove( "<=" );
+        value = valExpression.remove( 0,2 );
         d->extra()->validity->m_cond = InferiorEqual;
     }
-    else if (valExpression.contains( ">=" ) )
+    else if (valExpression.find( ">=" )==0 )
     {
-        value = valExpression.remove( ">=" );
+        value = valExpression.remove( 0,2 );
         d->extra()->validity->m_cond = SuperiorEqual;
     }
-    else if (valExpression.contains( "!=" ) )
+    else if (valExpression.find( "!=" )==0 )
     {
         //add Differentto attribute
-        value = valExpression.remove( "!=" );
+        value = valExpression.remove( 0,2 );
         d->extra()->validity->m_cond = DifferentTo;
     }
-    else if ( valExpression.contains( "<" ) )
+    else if ( valExpression.find( "<" )==0 )
     {
-        value = valExpression.remove( "<" );
+        value = valExpression.remove( 0,1 );
         d->extra()->validity->m_cond = Inferior;
     }
-    else if(valExpression.contains( ">" ) )
+    else if(valExpression.find( ">" )==0 )
     {
-        value = valExpression.remove( ">" );
+        value = valExpression.remove( 0,1 );
         d->extra()->validity->m_cond = Superior;
     }
-    else if (valExpression.contains( "=" ) )
+    else if (valExpression.find( "=" )==0 )
     {
-        value = valExpression.remove( "=" );
+        value = valExpression.remove( 0,1 );
         d->extra()->validity->m_cond = Equal;
     }
     else
