@@ -63,7 +63,9 @@ void KoBgSpellCheck::startBackgroundSpellCheck()
 {
     if ( !m_bSpellCheckEnabled || !m_bgSpell.currentTextObj )
         return;
+#ifdef DEBUG_BGSPELLCHECKING
     kdDebug() << "KoBgSpellCheck::startBackgroundSpellCheck" << endl;
+#endif
 
     m_bgSpell.currentParag = m_bgSpell.currentTextObj->textDocument()->firstParag();
     nextParagraphNeedingCheck();
@@ -107,7 +109,9 @@ void KoBgSpellCheck::spellCheckerReady()
 // Output: currentTextObj+currentParag set to next parag to check. Both 0 if end.
 void KoBgSpellCheck::nextParagraphNeedingCheck()
 {
+#ifdef DEBUG_BGSPELLCHECKING
     kdDebug() << "KoBgSpellCheck::nextParagraphNeedingCheck" <<m_bgSpell.currentTextObj <<endl;
+#endif
     if ( !m_bgSpell.currentTextObj ) {
         m_bgSpell.currentParag = 0L;
         return;
@@ -146,10 +150,14 @@ void KoBgSpellCheck::spellCheckNextParagraph()
     //kdDebug() << "KoBgSpellCheck::spellCheckNextParagraph" << endl;
 
     nextParagraphNeedingCheck();
+#ifdef DEBUG_BGSPELLCHECKING
     kdDebug() << "fs=" << m_bgSpell.currentTextObj << " parag=" << m_bgSpell.currentParag << endl;
+#endif
     if ( !m_bgSpell.currentTextObj || !m_bgSpell.currentParag )
     {
+#ifdef DEBUG_BGSPELLCHECKING
         kdDebug() << "KoBgSpellCheck::spellCheckNextParagraph scheduling restart" << endl;
+#endif
         // We arrived to the end of the paragraphs. Jump to startBackgroundSpellCheck,
         // it will check if we still have something to do.
         QTimer::singleShot( 100, this, SLOT( startBackgroundSpellCheck() ));
@@ -161,8 +169,9 @@ void KoBgSpellCheck::spellCheckNextParagraph()
     KoTextFormat format( *static_cast<KoTextFormat *>(ch->format()) );
     format.setMisspelled( false );
     m_bgSpell.currentParag->setFormat( 0, m_bgSpell.currentParag->length()-1, &format, true, QTextFormat::Misspelled );
-
+#ifdef DEBUG_BGSPELLCHECKING
     kdDebug() << "KoBgSpellCheck::spellCheckNextParagraph spell checking parag " << m_bgSpell.currentParag->paragId() << endl;
+#endif
     // Now spell-check that paragraph
     QString text = m_bgSpell.currentParag->string()->toString();
     text.remove( text.length() - 1, 1 ); // trailing space
@@ -171,13 +180,17 @@ void KoBgSpellCheck::spellCheckNextParagraph()
 
 void KoBgSpellCheck::spellCheckerMisspelling( const QString &old, const QStringList &, unsigned int pos )
 {
+#ifdef DEBUG_BGSPELLCHECKING
     kdDebug() << "KoBgSpellCheck::spellCheckerMisspelling old=" << old << " pos=" << pos << endl;
+#endif
     KoTextObject * fs = m_bgSpell.currentTextObj;
     Q_ASSERT( fs );
     if ( !fs ) return;
     Qt3::QTextParag* parag = m_bgSpell.currentParag;
     if ( !parag ) return;
+#ifdef DEBUG_BGSPELLCHECKING
     kdDebug() << "KoBgSpellCheck::spellCheckerMisspelling parag=" << parag << " (id=" << parag->paragId() << ", length=" << parag->length() << ") pos=" << pos << " length=" << old.length() << endl;
+#endif
     KoTextStringChar *ch = parag->at( pos );
     KoTextFormat format( *static_cast<KoTextFormat *>(ch->format()) );
     format.setMisspelled( true );
@@ -189,7 +202,9 @@ void KoBgSpellCheck::spellCheckerMisspelling( const QString &old, const QStringL
 
 void KoBgSpellCheck::spellCheckerDone( const QString & )
 {
+#ifdef DEBUG_BGSPELLCHECKING
     kdDebug() << "KoBgSpellCheck::spellCheckerDone" << endl;
+#endif
     if(m_bgSpell.currentParag)
         m_bgSpell.currentParag->string()->setNeedsSpellCheck( false );
     if( m_bgSpell.currentTextObj)
@@ -200,7 +215,9 @@ void KoBgSpellCheck::spellCheckerDone( const QString & )
 
 void KoBgSpellCheck::spellCheckerFinished()
 {
+#ifdef DEBUG_BGSPELLCHECKING
     kdDebug() << "--- KoBgSpellCheck::spellCheckerFinished ---" << endl;
+#endif
     KSpell::spellStatus status = m_bgSpell.kspell->status();
     delete m_bgSpell.kspell;
     m_bgSpell.kspell = 0;
