@@ -1589,10 +1589,10 @@ void FormatRecord::setData( unsigned size, const unsigned char* data )
   
   setIndex( readU16( data ) );
 
-  // FIXME how about excel < 97 ?
-  UString fs = EString::fromUnicodeString( data+2, size-2 ).str();
+  UString fs = ( version() >= Excel97 ) ? 
+    EString::fromUnicodeString( data+2, size-2 ).str() :
+    EString::fromByteString( data+2, false, size-2 ).str();
   setFormatString( fs );
-  
 }
 
 // ========== LABEL ========== 
