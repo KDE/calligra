@@ -10,6 +10,7 @@ Status field
 DONE    Task is all done
 done    This subtask is done
 ****	This (sub)task cannot be fixed with the current technology.
+        It has to wait until something in the internals is fixed.
 
 INGE	Inge is working on this task
 inge	Inge is working on this subtask
@@ -56,7 +57,7 @@ General bugs
     does not "take".
 
 * Printing
-  + 68190: Empty document generates 2 printed pages (testcase)	      1 ----
+  + 68190: Empty document generates 2 printed pages (testcase)	      1 ****
 	See analysis below
   + 70073: printing with kspread gives big black areas		      1 ----
   + 72798: selective print comes up with "nothing to print"	      1 ----
@@ -64,9 +65,9 @@ General bugs
   + 85155: RIGHT ALIGN TEXT CUT WHEN PRINTING			      1 ----
   + 87367: Ugly postscript rendering of cell borders.		      1 ----
   + 88252: content larger than column are not print as PDF	      1 DONE
-  + 95159: Many blank pages when printing spreadsheet to PDF file.    1 DONE
+  + 95159: Many blank pages when printing spreadsheet to PDF file.    1 ****
 	Duplicate bug.  See analysis below
-  + 100643: KSpread prints a completely empty page at the end of      1 DONE
+  + 100643: KSpread prints a completely empty page at the end of      1 ****
 	    the document.
 	Duplicate bug.  See analysis below
   + 101074: Charts are really small when printed from KSpread	      1 ----
@@ -149,6 +150,7 @@ Things not in bugzilla
 
 Analysis of various bugs
 
+* Printing.
   + 68190: Empty document generates 2 printed pages (testcase)
   + 95159: Many blank pages when printing spreadsheet to PDF file.
   + 100643: KSpread prints a completely empty page at the end of
@@ -190,8 +192,8 @@ Things to do after the release of KOffice 1.4
   + Use the new StyleCluster.					      1 RAPH
     This would dramatically reduce memory consumption and allows 
     styles for empty cells.
-    - Use new StyleCluster
-    - Remove old KSpreadFormat
+    - Use new StyleCluster						--
+    - Remove old KSpreadFormat						--
 
   + Speed up selection.						      1 RAPH
     (probably improved with StyleCluster?)
@@ -200,12 +202,16 @@ Things to do after the release of KOffice 1.4
   + Rich text in cells.						      1 ----
 	Use KoText.
 
-  + code cleanups to layout processing (KSpreadCell::makeLayout/setCellText are nightmares!)
-    (Tomas) setCellText is no longer a nightmare, makeLayout still is ;)
-  + evaluation of how best to increase floating point precision (GnuMP?)
-    (Tomas) this will work by converting all functions to compute using
-    ValueCalc, and nothing else, then modifying Value* to support GnuMP.
-    The conversion step shall be done as a part of converting to the new parser.
+  + code cleanups to layout processing				      1 ----
+	(KSpreadCell::makeLayout/setCellText are nightmares!) (Tomas)
+	setCellText is no longer a nightmare, makeLayout still is ;)
+
+  + Evaluation of how best to increase floating point precision.      3 ----
+	Suggestion:  GnuMP.    (Tomas)
+	This will work by converting all functions to compute using
+	ValueCalc, and nothing else, then modifying Value* to 
+	support GnuMP.  The conversion step shall be done as a part 
+	of converting to the new parser.
 
 * GUI
   + Sheet layout:						      2 ----
@@ -216,17 +222,18 @@ Things to do after the release of KOffice 1.4
 * General features
   + Insert manual page break					      2 ----
   + Split view							      1 ----
-  + "Freeze/Unfreeze Panes"       2 ----
-    Started but had some problems caused by the
-        scrollbars, it works, but not very nice (not committed (Norbert))
-    (Tomas) maybe not as important if we get split view to work correctly
+  + "Freeze/Unfreeze Panes"					      2 ----
+	Started but had some problems caused by the scrollbars, it 
+	works, but not very nice (not committed (Norbert)).
+        Maybe not as important if we get split view to work correctly.
 
-  + Matrix operations             2 TOMA
+  + Matrix operations						      2 TOMA
       I have plans to do these things in a very clean and simple way.
       The only drawback is that it probably won't be excel-compatible.
       Further research and/or discussion might be needed here.
       I'll inform koffice-devel when the right time comes ;)
-  + Locked areas (for formulas with a matrix as result)  2 TOMA
+
+  + Locked areas (for formulas with a matrix as result)		      2 TOMA
 
 * Major features (big effort)
   + Script, Script-Editor (like VBA in Excel)			      2 ----
