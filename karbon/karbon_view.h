@@ -75,7 +75,6 @@ public:
 
 	QLabel* statusMessage() const { return m_status; }
 
-	void selectionChanged();
 
 public slots:
 	// editing:
@@ -101,6 +100,7 @@ public slots:
 	void configure();
 
 	void setLineWidth();
+	void selectionChanged();
 
 protected slots:
 	// object related operations:

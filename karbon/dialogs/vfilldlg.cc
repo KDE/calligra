@@ -174,6 +174,8 @@ void VFillDlg::slotApplyButtonPressed()
 
 	if( m_part )
 		m_part->addCommand( new VFillCmd( &m_part->document(), VFill( color ) ), true );
+
+	emit fillChanged();
 }
 
 void VFillDlg::slotUpdate(QColor *color)

@@ -38,6 +38,9 @@ private:
 	KColorPatch* mColorPreview;
 	KarbonPart *m_part;
 
+signals:
+	void fillChanged();
+
 private slots:
 	void slotUpdateFromRGBSpinBoxes();
 	void slotUpdateFromHSVSpinBoxes();

@@ -56,7 +56,10 @@ VShapeTool::eventFilter( QEvent* event )
 			m_calcPolar ? m_d2 : m_d2 / view()->zoom() );
 
 		if( cmd )
+		{
 			view()->part()->addCommand( cmd, true );
+			view()->selectionChanged();
+		}
 		else
 		{
 			// erase old object:
