@@ -573,10 +573,9 @@ void KoTextObject::pasteText( QTextCursor * cursor, const QString & text, KoText
 }
 
 
-void KoTextObject::applyStyle( QTextCursor * cursor, const KoStyle * newStyle,
+KCommand *KoTextObject::applyStyle( QTextCursor * cursor, const KoStyle * newStyle,
                                int selectionId,
-                               int paragLayoutFlags, int formatFlags,
-                               bool createUndoRedo, bool interactive )
+                               int paragLayoutFlags, int formatFlags, bool createUndoRedo, bool interactive, bool emitCommand )
 {
     KoTextDocument * textdoc = textDocument();
     if ( interactive )
@@ -692,12 +691,14 @@ void KoTextObject::applyStyle( QTextCursor * cursor, const KoStyle * newStyle,
         formatMore();
         emit repaintChanged( this );
         emit updateUI( true );
-        if ( createUndoRedo )
+        if ( createUndoRedo && emitCommand )
             emit newCommand( macroCmd );
         emit showCursor();
     }
 
     undoRedoInfo.clear();
+
+    return macroCmd;
 }
 
 void KoTextObject::applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged )
@@ -775,6 +776,15 @@ void KoTextObject::applyStyleChange( KoStyle * changedStyle, int paragLayoutChan
     formatMore();
     emit repaintChanged( this );
     emit updateUI( true );
+}
+
+KCommand *KoTextObject::setFormatCommand( KoTextFormat *format, int flags, bool zoomFont )
+{
+    textDocument()->selectAll( KoTextDocument::Temp );
+    KoTextFormat* current = currentFormat();
+    KCommand *cmd = setFormatCommand( 0L, current, format, flags, zoomFont, KoTextDocument::Temp );
+    textDocument()->removeSelection( KoTextDocument::Temp );
+    return cmd;
 }
 
 KCommand * KoTextObject::setFormatCommand( QTextCursor * cursor, KoTextFormat * & currentFormat, KoTextFormat *format, int flags, bool zoomFont, int selectionId )
@@ -1575,7 +1585,7 @@ void KoTextObject::changeCaseOfText(QTextCursor *cursor,KoChangeCaseDia::TypeOfC
         emit newCommand( macroCmd );
 }
 
-QString KoTextObject::textChangedCase(const QString _text,KoChangeCaseDia::TypeOfCase _type)
+QString KoTextObject::textChangedCase(const QString& _text,KoChangeCaseDia::TypeOfCase _type)
 {
     QString text(_text);
     switch(_type)
@@ -1632,11 +1642,19 @@ const KoParagLayout * KoTextObject::currentParagLayoutFormat() const
     return &(parag->paragLayout());
 }
 
-void KoTextObject::setParagLayoutFormat( KoParagLayout *newLayout,int flags,int marginIndex)
+KCommand *KoTextObject::setParagLayoutFormatCommand( KoParagLayout *newLayout,int flags,int marginIndex)
 {
     KoTextDocument *textdoc = textDocument();
     textdoc->selectAll( KoTextDocument::Temp );
     QTextCursor *cursor = new QTextCursor( textDocument() );
+    KCommand* cmd = setParagLayoutFormatCommand( cursor, KoTextDocument::Standard, newLayout, flags, marginIndex );
+    textdoc->removeSelection( KoTextDocument::Temp );
+    delete cursor;
+    return cmd;
+}
+
+KCommand *KoTextObject::setParagLayoutFormatCommand( QTextCursor* cursor, int selectionId, KoParagLayout *newLayout, int flags, int marginIndex)
+{
     KCommand *cmd =0L;
     KoParagCounter c;
     if(newLayout->counter)
@@ -1644,25 +1662,21 @@ void KoTextObject::setParagLayoutFormat( KoParagLayout *newLayout,int flags,int 
     switch(flags)
     {
     case KoParagLayout::Alignment:
-    {
-        cmd = setAlignCommand( cursor, newLayout->alignment ,KoTextDocument::Temp );
+        cmd = setAlignCommand( cursor, newLayout->alignment, selectionId );
         break;
-    }
     case KoParagLayout::Margins:
-        cmd= setMarginCommand( cursor, (QStyleSheetItem::Margin)marginIndex, newLayout->margins[marginIndex] ,KoTextDocument::Temp );
+        cmd = setMarginCommand( cursor, (QStyleSheetItem::Margin)marginIndex, newLayout->margins[marginIndex], selectionId );
         break;
     case KoParagLayout::Tabulator:
-        cmd= setTabListCommand( cursor, newLayout->tabList(),KoTextDocument::Temp  );
+        cmd = setTabListCommand( cursor, newLayout->tabList(), selectionId );
         break;
     case KoParagLayout::BulletNumber:
-        cmd= setCounterCommand( cursor, c,KoTextDocument::Temp   );
+        cmd = setCounterCommand( cursor, c, selectionId );
         break;
     default:
         break;
     }
-    textdoc->removeSelection( KoTextDocument::Temp );
-    if (cmd)
-        emit newCommand( cmd );
+    return cmd;
 }
 
 void KoTextObject::setFormat( KoTextFormat * newFormat, int flags, bool zoomFont )
@@ -1698,68 +1712,162 @@ void KoTextObject::printRTDebug(int info)
 }
 #endif
 
-void KoTextFormatInterface::setBold(bool on) {
+////// Implementation of the KoTextFormatInterface "interface"
+
+#if 0
+void KoTextFormatInterface::setFormat( KoTextFormat * newFormat, int flags, bool zoomFont )
+{
+    KoTextFormat *format = currentFormat();
+    KCommand *cmd = setFormatCommand(format, newFormat, flags, zoomFont);
+    emitNewCommand( cmd );
+}
+
+void KoTextFormatInterface::setBold(bool on)
+{
+    KCommand *cmd = setBoldCommand( on );
+    emitNewCommand( cmd );
+}
+
+void KoTextFormatInterface::setItalic( bool on )
+{
+    KCommand *cmd = setItalicCommand( on );
+    emitNewCommand( cmd );
+}
+
+void KoTextFormatInterface::setUnderline( bool on )
+{
+    KCommand *cmd = setUnderlineCommand( on );
+    emitNewCommand ( cmd );
+}
+
+void KoTextFormatInterface::setStrikeOut( bool on )
+{
+    KCommand *cmd = setStrikeOutCommand( on );
+    emitNewCommand( cmd );
+}
+
+void KoTextFormatInterface::setTextBackgroundColor(const QColor & col)
+{
+    KCommand *cmd = setTextBackgroundColorCommand( col );
+    emitNewCommand( cmd );
+}
+
+void KoTextFormatInterface::setPointSize( int s )
+{
+    KCommand *cmd = setPointSizeCommand( s );
+    emitNewCommand( cmd );
+}
+
+void KoTextFormatInterface::setFamily(const QString &font)
+{
+    KCommand *cmd = setFamilyCommand( font );
+    emitNewCommand( cmd );
+}
+
+void KoTextFormatInterface::setFont( const QFont &font, bool _subscript, bool _superscript, const QColor &col,const QColor &backGroundColor, int flags )
+{
+    KCommand *cmd = setFontCommand( font, _subscript, _superscript, col, backGroundColor, flags );
+    emitNewCommand( cmd );
+}
+void KoTextFormatInterface::setTextColor(const QColor &color)
+{
+    KCommand *cmd = setTextColorCommand( color );
+    emitNewCommand( cmd );
+}
+
+void KoTextFormatInterface::setTextSubScript(bool on)
+{
+    KCommand *cmd = setTextSubScriptCommand( on );
+    emitNewCommand( cmd );
+}
+
+void KoTextFormatInterface::setTextSuperScript(bool on)
+{
+    KCommand *cmd = setTextSuperScriptCommand( on );
+    emitNewCommand( cmd );
+}
+
+void KoTextFormatInterface::setDefaultFormat()
+{
+    KCommand *cmd = setDefaultFormatCommand();
+    emitNewCommand( cmd );
+}
+
+#endif
+
+KCommand *KoTextFormatInterface::setBoldCommand(bool on)
+{
     KoTextFormat format( *currentFormat() );
     format.setBold( on );
-    setFormat( &format, QTextFormat::Bold );
+    return setFormatCommand( &format, QTextFormat::Bold );
 }
 
-void KoTextFormatInterface::setItalic( bool on ) {
+KCommand *KoTextFormatInterface::setItalicCommand( bool on)
+{
     KoTextFormat format( *currentFormat() );
     format.setItalic( on );
-    setFormat( &format, QTextFormat::Italic );
+    return setFormatCommand( &format, QTextFormat::Italic );
 }
 
-void KoTextFormatInterface::setUnderline( bool on ) {
+KCommand *KoTextFormatInterface::setUnderlineCommand( bool on )
+{
     KoTextFormat format( *currentFormat() );
     format.setUnderline( on );
-    setFormat( &format, QTextFormat::Underline );
+    return setFormatCommand( &format, QTextFormat::Underline );
 }
 
-void KoTextFormatInterface::setStrikeOut( bool on ) {
+KCommand *KoTextFormatInterface::setStrikeOutCommand( bool on )
+{
     KoTextFormat format( *currentFormat() );
     format.setStrikeOut( on );
-    setFormat( &format, KoTextFormat::StrikeOut );
+    return setFormatCommand( &format, KoTextFormat::StrikeOut );
 }
 
-void KoTextFormatInterface::setTextBackgroundColor(const QColor & col) {
+KCommand *KoTextFormatInterface::setTextBackgroundColorCommand(const QColor & col)
+{
     KoTextFormat format( *currentFormat() );
     format.setTextBackgroundColor( col );
-    setFormat( &format, KoTextFormat::TextBackgroundColor );
+    return setFormatCommand( &format, KoTextFormat::TextBackgroundColor );
 }
 
-QColor KoTextFormatInterface::textBackgroundColor() const {
+KCommand *KoTextFormatInterface::setPointSizeCommand( int s )
+{
+    KoTextFormat format( *currentFormat() );
+    format.setPointSize( s );
+    return setFormatCommand( &format, QTextFormat::Size, true /* zoom the font size */ );
+}
+
+KCommand *KoTextFormatInterface::setFamilyCommand(const QString &font)
+{
+    KoTextFormat format( *currentFormat() );
+    format.setFamily( font );
+    return setFormatCommand( &format, QTextFormat::Family );
+}
+
+QColor KoTextFormatInterface::textBackgroundColor() const
+{
     return currentFormat()->textBackgroundColor();
 }
 
-QColor KoTextFormatInterface::textColor() const {
+QColor KoTextFormatInterface::textColor() const
+{
     return currentFormat()->color();
 }
 
-QFont KoTextFormatInterface::textFont() const {
+QFont KoTextFormatInterface::textFont() const
+{
     QFont fn( currentFormat()->font() );
     // "unzoom" the font size
     fn.setPointSize( static_cast<int>( KoTextZoomHandler::layoutUnitPtToPt( fn.pointSize() ) ) );
     return fn;
 }
 
-QString KoTextFormatInterface::textFontFamily()const {
+QString KoTextFormatInterface::textFontFamily()const
+{
     return currentFormat()->font().family();
 }
 
-void KoTextFormatInterface::setPointSize( int s ){
-    KoTextFormat format( *currentFormat() );
-    format.setPointSize( s );
-    setFormat( &format, QTextFormat::Size, true /* zoom the font size */ );
-}
-
-void KoTextFormatInterface::setFamily(const QString &font){
-    KoTextFormat format( *currentFormat() );
-    format.setFamily( font );
-    setFormat( &format, QTextFormat::Family );
-}
-
-void KoTextFormatInterface::setFont( const QFont &font, bool _subscript, bool _superscript, const QColor &col,const QColor &backGroundColor, int flags )
+KCommand *KoTextFormatInterface::setFontCommand( const QFont &font, bool _subscript, bool _superscript, const QColor &col,const QColor &backGroundColor, int flags )
 {
     KoTextFormat format( *currentFormat() );
     format.setFont( font );
@@ -1775,73 +1883,108 @@ void KoTextFormatInterface::setFont( const QFont &font, bool _subscript, bool _s
     else
         format.setVAlign(QTextFormat::AlignSubScript);
 
-    setFormat( &format, flags, true /* zoom the font size */);
+    return setFormatCommand( &format, flags, true /* zoom the font size */);
 }
 
-void KoTextFormatInterface::setTextColor(const QColor &color) {
+KCommand *KoTextFormatInterface::setTextColorCommand(const QColor &color)
+{
     KoTextFormat format( *currentFormat() );
     format.setColor( color );
-    setFormat( &format, QTextFormat::Color );
+    return setFormatCommand( &format, QTextFormat::Color );
 }
 
-void KoTextFormatInterface::setTextSubScript(bool on)
+KCommand *KoTextFormatInterface::setTextSubScriptCommand(bool on)
 {
     KoTextFormat format( *currentFormat() );
     if(!on)
         format.setVAlign(QTextFormat::AlignNormal);
     else
         format.setVAlign(QTextFormat::AlignSubScript);
-    setFormat( &format, QTextFormat::VAlign );
+    return setFormatCommand( &format, QTextFormat::VAlign );
 }
 
-void KoTextFormatInterface::setTextSuperScript(bool on)
+KCommand *KoTextFormatInterface::setTextSuperScriptCommand(bool on)
 {
     KoTextFormat format( *currentFormat() );
     if(!on)
         format.setVAlign(QTextFormat::AlignNormal);
     else
         format.setVAlign(QTextFormat::AlignSuperScript);
-    setFormat( &format, QTextFormat::VAlign );
+    return setFormatCommand( &format, QTextFormat::VAlign );
 }
 
-void KoTextFormatInterface::setDefaultFormat() {
+KCommand *KoTextFormatInterface::setDefaultFormatCommand()
+{
     Qt3::QTextFormatCollection * coll = currentFormat()->parent();
     Q_ASSERT(coll);
     if(coll)
     {
         KoTextFormat * format = static_cast<KoTextFormat *>(coll->defaultFormat());
-        setFormat( format, QTextFormat::Format );
+        return setFormatCommand( format, QTextFormat::Format );
     }
+    return 0L;
 }
 
-void KoTextFormatInterface::setAlign(int align)
+KCommand *KoTextFormatInterface::setAlignCommand(int align)
 {
     KoParagLayout format( *currentParagLayoutFormat() );
     format.alignment=align;
-    setParagLayoutFormat(&format,KoParagLayout::Alignment);
+    return setParagLayoutFormatCommand(&format,KoParagLayout::Alignment);
+}
+
+#if 0
+void KoTextFormatInterface::setAlign(int align)
+{
+    KCommand *cmd = setAlignCommand( align );
+    emitNewCommand( cmd );
 }
 
 void KoTextFormatInterface::setMargin(QStyleSheetItem::Margin m, double margin)
 {
-    KoParagLayout format( *currentParagLayoutFormat() );
-    format.margins[m]=margin;
-    setParagLayoutFormat(&format,KoParagLayout::Margins,(int)m);
+    KCommand *cmd = setMarginCommand( m, margin );
+    emitNewCommand( cmd );
 }
 
 void KoTextFormatInterface::setTabList(const KoTabulatorList & tabList )
 {
-    KoParagLayout format( *currentParagLayoutFormat() );
-    format.setTabList(tabList);
-    setParagLayoutFormat(&format,KoParagLayout::Tabulator);
+    KCommand *cmd = setTabListCommand( tabList );
+    emitNewCommand( cmd );
 }
 
 void KoTextFormatInterface::setCounter(const KoParagCounter & counter )
 {
+    KCommand *cmd = setCounterCommand( counter );
+    emitNewCommand( cmd );
+}
+
+void KoTextFormatInterface::setParagLayoutFormat( KoParagLayout *newLayout, int flags, int marginIndex)
+{
+    KCommand *cmd = setParagLayoutFormatCommand(newLayout, flags, marginIndex);
+    emitNewCommand( cmd );
+}
+#endif
+
+KCommand *KoTextFormatInterface::setMarginCommand(QStyleSheetItem::Margin m, double margin)
+{
+    KoParagLayout format( *currentParagLayoutFormat() );
+    format.margins[m]=margin;
+    return setParagLayoutFormatCommand(&format,KoParagLayout::Margins,(int)m);
+}
+
+KCommand *KoTextFormatInterface::setTabListCommand(const KoTabulatorList & tabList )
+ {
+    KoParagLayout format( *currentParagLayoutFormat() );
+    format.setTabList(tabList);
+    return setParagLayoutFormatCommand(&format,KoParagLayout::Tabulator);
+}
+
+KCommand *KoTextFormatInterface::setCounterCommand(const KoParagCounter & counter )
+{
     KoParagLayout format( *currentParagLayoutFormat() );
     if(!format.counter)
         format.counter = new KoParagCounter;
-    *format.counter= counter;
-    setParagLayoutFormat(&format,KoParagLayout::BulletNumber);
+    *format.counter = counter;
+    return setParagLayoutFormatCommand(&format,KoParagLayout::BulletNumber);
 }
 
 #include "kotextobject.moc"

@@ -43,42 +43,43 @@ void KoTextViewIface::insertText( const QString &text )
 
 void KoTextViewIface::setBold(bool b)
 {
-    m_textView->setBold(b);
+    // ### leaks the commands away
+    m_textView->setBoldCommand(b);
 }
 
 void KoTextViewIface::setItalic(bool on)
 {
-    m_textView->setItalic(on);
+    m_textView->setItalicCommand(on);
 }
 
 void KoTextViewIface::setUnderline(bool on)
 {
-    m_textView->setUnderline(on);
+    m_textView->setUnderlineCommand(on);
 }
 
 void KoTextViewIface::setStrikeOut(bool on)
 {
-    m_textView->setStrikeOut(on);
+    m_textView->setStrikeOutCommand(on);
 }
 
 void KoTextViewIface::setPointSize( int s )
 {
-    m_textView->setPointSize(s);
+    m_textView->setPointSizeCommand(s);
 }
 
 void KoTextViewIface::setTextSubScript(bool on)
 {
-    m_textView->setTextSubScript(on);
+    m_textView->setTextSubScriptCommand(on);
 }
 
 void KoTextViewIface::setTextSuperScript(bool on)
 {
-    m_textView->setTextSuperScript(on);
+    m_textView->setTextSuperScriptCommand(on);
 }
 
 void KoTextViewIface::setDefaultFormat()
 {
-    m_textView->setDefaultFormat();
+    m_textView->setDefaultFormatCommand();
 }
 
 QColor KoTextViewIface::textColor() const
@@ -98,33 +99,33 @@ QColor KoTextViewIface::textBackgroundColor()const
 
 void KoTextViewIface::setTextColor(const QColor &color)
 {
-    m_textView->setTextColor(color);
+    m_textView->setTextColorCommand(color);
 }
 
 void KoTextViewIface::setTextBackgroundColor(const QColor &color)
 {
-    m_textView->setTextBackgroundColor(color);
+    m_textView->setTextBackgroundColorCommand(color);
 }
 
 void KoTextViewIface::setAlign(int align)
 {
-    m_textView->setAlign(align);
+    m_textView->setAlignCommand(align);
 }
 
 void KoTextViewIface::setAlign(const QString &align)
 {
     if( align=="AlignLeft")
-        m_textView->setAlign(Qt::AlignLeft);
+        m_textView->setAlignCommand(Qt::AlignLeft);
     else if (align=="AlignRight")
-        m_textView->setAlign(Qt::AlignRight);
+        m_textView->setAlignCommand(Qt::AlignRight);
     else if (align=="AlignCenter")
-        m_textView->setAlign(Qt::AlignCenter);
+        m_textView->setAlignCommand(Qt::AlignCenter);
     else if (align=="AlignJustify")
-        m_textView->setAlign(Qt::AlignJustify);
+        m_textView->setAlignCommand(Qt::AlignJustify);
     else
     {
-        kdDebug()<<"Align value don't recognize...\n";
-        m_textView->setAlign(Qt::AlignLeft);
+        kdDebug()<<"Align value not recognized...\n";
+        m_textView->setAlignCommand(Qt::AlignLeft);
     }
 }
 

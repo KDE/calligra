@@ -37,44 +37,71 @@ class KoTextFormat;
  * For KoTextView, it's the format under the cursor.
  * For KoTextObject, it's the global format.
  * By changing this format and calling setFormat (with the appropriate flags),
- * it's possible (for KPresenter and other apps which treat a textobject as a whole,
- * unlike KWord), to implement "setBold", "setItalic" etc. only once, whether it applies
+ * it's possible to implement "setBold", "setItalic" etc. only once, whether it applies
  * to a text selection or to complete text objects.
  */
 class KoTextFormatInterface
 {
 public:
+    KoTextFormatInterface() {}
+
     /** Interface for accessing the current format */
     virtual KoTextFormat * currentFormat() const = 0;
+
     /** Interface for setting the modified format */
-    virtual void setFormat( KoTextFormat * newFormat, int flags, bool zoomFont = false ) = 0;
+    virtual KCommand *setFormatCommand( KoTextFormat *format, int flags, bool zoomFont = false ) = 0;
 
-    virtual const KoParagLayout * currentParagLayoutFormat() const =0;
+    /** Interface for accessing the current parag layout */
+    virtual const KoParagLayout * currentParagLayoutFormat() const = 0;
 
-    virtual void setParagLayoutFormat( KoParagLayout *newLayout,int flags, int marginIndex=-1)=0;
+    /** Interface for changing the paragraph layout.
+     * @param flags one of the KoParagLayout flags
+     * @param marginIndex type of margin. Only used if flags==KoParagLayout::Margins
+     */
+    virtual KCommand *setParagLayoutFormatCommand( KoParagLayout *newLayout, int flags, int marginIndex=-1) = 0;
 
-    void setBold(bool on);
-    void setItalic(bool on);
-    void setUnderline(bool on);
-    void setStrikeOut(bool on);
-    void setTextColor(const QColor &color);
-    void setPointSize( int s );
-    void setFamily(const QString &font);
-    void setFont(const QFont &font, bool _subscript, bool _superscript, const QColor &col, const QColor &backGroundColor, int flags);
-    void setTextSubScript(bool on);
-    void setTextSuperScript(bool on);
+    void setParagLayoutFormat( KoParagLayout *newLayout,int flags, int marginIndex=-1);
+    void setFormat( KoTextFormat * newFormat, int flags, bool zoomFont = false );
 
-    void setDefaultFormat();
+    // Warning: use the methods that return a command! The others just leak the commands away
+    //void setBold(bool on);
+    KCommand *setBoldCommand(bool on);
+    //void setItalic(bool on);
+    KCommand *setItalicCommand(bool on);
+    //void setUnderline(bool on);
+    KCommand *setUnderlineCommand(bool on);
+    //void setStrikeOut(bool on);
+    KCommand *setStrikeOutCommand(bool on);
+    //void setTextColor(const QColor &color);
+    KCommand *setTextColorCommand(const QColor &color);
+    //void setPointSize( int s );
+    KCommand *setPointSizeCommand( int s );
+    //void setFamily(const QString &font);
+    KCommand *setFamilyCommand(const QString &font);
+    //void setFont(const QFont &font, bool _subscript, bool _superscript, const QColor &col, const QColor &backGroundColor, int flags);
+    KCommand *setFontCommand(const QFont &font, bool _subscript, bool _superscript, const QColor &col, const QColor &backGroundColor, int flags);
+    //void setTextSubScript(bool on);
+    KCommand *setTextSubScriptCommand(bool on);
+    //void setTextSuperScript(bool on);
+    KCommand *setTextSuperScriptCommand(bool on);
 
-    void setTextBackgroundColor(const QColor &);
+    //void setDefaultFormat();
+    KCommand *setDefaultFormatCommand();
 
-    void setAlign(int align);
+    //void setTextBackgroundColor(const QColor &);
+    KCommand *setTextBackgroundColorCommand(const QColor &);
 
-    void setMargin(QStyleSheetItem::Margin m, double margin);
+    //void setAlign(int align);
+    KCommand *setAlignCommand(int align);
 
-    void setTabList(const KoTabulatorList & tabList );
+    //void setMargin(QStyleSheetItem::Margin m, double margin);
+    KCommand *setMarginCommand(QStyleSheetItem::Margin m, double margin);
 
-    void setCounter(const KoParagCounter & counter );
+    //void setTabList(const KoTabulatorList & tabList );
+    KCommand *setTabListCommand(const KoTabulatorList & tabList );
+
+    //void setCounter(const KoParagCounter & counter );
+    KCommand *setCounterCommand(const KoParagCounter & counter );
 
     QColor textColor() const;
     QFont textFont() const;
@@ -174,6 +201,9 @@ public:
     void highlightPortion( Qt3::QTextParag * parag, int index, int length );
     void removeHighlight();
 
+    /** Implementation of setFormatCommand from KoTextFormatInterface - apply change to the whole document */
+    KCommand *setFormatCommand( KoTextFormat *format, int flags, bool zoomFont = false );
+
     /** Set format changes on selection or current cursor.
         Returns a command if the format was applied to a selection */
     KCommand *setFormatCommand( QTextCursor * cursor, KoTextFormat * & currentFormat, KoTextFormat *format, int flags, bool zoomFont = false, int selectionId = KoTextDocument::Standard );
@@ -203,10 +233,10 @@ public:
 
     KCommand * setShadowCommand( QTextCursor * cursor,double dist, short int direction, const QColor &col,int selectionId= KoTextDocument::Standard  );
 
-    void applyStyle( QTextCursor * cursor, const KoStyle * style,
+    KCommand* applyStyle( QTextCursor * cursor, const KoStyle * style,
                      int selectionId = KoTextDocument::Standard,
                      int paragLayoutFlags = KoParagLayout::All, int formatFlags = QTextFormat::Format,
-                     bool createUndoRedo = true, bool interactive = true );
+                     bool createUndoRedo = true, bool interactive = true, bool emitCommand = true );
     /** Update the paragraph that use the given style, after this style was changed.
      *  The flags tell which changes should be applied.
      *  @param paragLayoutChanged paragraph flags
@@ -233,7 +263,10 @@ public:
     /**
      * Support for changing the format in the whole textobject
      */
-    virtual void setParagLayoutFormat( KoParagLayout *newLayout,int flags, int marginIndex=-1);
+    virtual KCommand *setParagLayoutFormatCommand( KoParagLayout *newLayout, int flags, int marginIndex=-1);
+
+    // common for setParagLayoutFormatCommand above and KoTextView::setParagLayoutFormatCommand
+    KCommand *setParagLayoutFormatCommand( QTextCursor* cursor, int selectionId, KoParagLayout *newLayout, int flags, int marginIndex );
 
     /**
      * Support for changing the format in the whole textobject
@@ -266,8 +299,8 @@ public:
 
     void emitNewCommand(KCommand *cmd);
 
-    void changeCaseOfText(QTextCursor *cursor,KoChangeCaseDia::TypeOfCase _type);
-    QString textChangedCase(const QString _text,KoChangeCaseDia::TypeOfCase _type);
+    void changeCaseOfText(QTextCursor *cursor, KoChangeCaseDia::TypeOfCase _type);
+    QString textChangedCase(const QString& _text, KoChangeCaseDia::TypeOfCase _type);
     KCommand *changeCaseOfTextParag(int cursorPosStart, int cursorPosEnd,KoChangeCaseDia::TypeOfCase _type,QTextCursor *cursor, KoTextParag *parag);
 
 #ifndef NDEBUG

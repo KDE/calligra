@@ -30,6 +30,7 @@
 #include <krun.h>
 #include <kmessagebox.h>
 #include <koVariable.h>
+#include <kcommand.h>
 #include "KoTextViewIface.h"
 
 class KoTextView::KoTextViewPrivate
@@ -96,7 +97,7 @@ KoTextView::~KoTextView()
 KoTextViewIface* KoTextView::dcopObject()
 {
     if ( !dcop )
-	dcop = new KoTextViewIface( this );
+        dcop = new KoTextViewIface( this );
 
     return dcop;
 }
@@ -583,10 +584,10 @@ void KoTextView::handleMouseDoubleClickEvent( QMouseEvent*ev, const QPoint& i/* 
   //after a triple click it's not a double click but a simple click
   //but as triple click didn't exist it's necessary to do it.
     if(afterTripleClick)
-      {
-	handleMousePressEvent( ev, i );
-	return;
-      }
+    {
+        handleMousePressEvent( ev, i );
+        return;
+    }
 
     inDoubleClick = TRUE;
     *m_cursor = selectWordUnderCursor();
@@ -680,9 +681,14 @@ void KoTextView::focusOutEvent()
     hideCursor();
 }
 
-void KoTextView::setFormat( KoTextFormat * newFormat, int flags, bool zoomFont)
+/*void KoTextView::setFormat( KoTextFormat * newFormat, int flags, bool zoomFont)
 {
     textObject()->setFormat( m_cursor, m_currentFormat, newFormat, flags, zoomFont );
+}*/
+
+KCommand* KoTextView::setFormatCommand( KoTextFormat * newFormat, int flags, bool zoomFont)
+{
+    return textObject()->setFormatCommand( m_cursor, m_currentFormat, newFormat, flags, zoomFont );
 }
 
 void KoTextView::dragStarted()
@@ -954,13 +960,22 @@ void KoTextView::insertNonbreakingSpace()
                           false /* no newline */, true, i18n("Insert non-breaking space") );
 }
 
-void KoTextView::insertSpecialChar(QChar _c)
+void KoTextView::insertSpecialChar(QChar _c, const QString& font)
 {
+    KCommand* cmd = textObject()->setFamilyCommand( font );
     if(textObject()->hasSelection() )
-        textObject()->emitNewCommand(textObject()->replaceSelectionCommand(
-            cursor(), _c, KoTextDocument::Standard, i18n("Insert Special Char")));
+    {
+        KMacroCommand* macroCmd = new KMacroCommand( i18n("Insert Special Char") );
+        macroCmd->addCommand( cmd );
+        macroCmd->addCommand( textObject()->replaceSelectionCommand(
+                                  cursor(), _c, KoTextDocument::Standard, QString::null) );
+        textObject()->emitNewCommand( macroCmd );
+    }
     else
+    {
+        Q_ASSERT( cmd == 0L ); // no selection -> setting font doesn't change doc
         textObject()->insert( cursor(), currentFormat(), _c, false /* no newline */, true, i18n("Insert Special Char") );
+    }
 }
 
 const KoParagLayout * KoTextView::currentParagLayoutFormat() const
@@ -969,8 +984,10 @@ const KoParagLayout * KoTextView::currentParagLayoutFormat() const
     return &(parag->paragLayout());
 }
 
-void KoTextView::setParagLayoutFormat( KoParagLayout *newLayout,int flags,int marginIndex)
+//void KoTextView::setParagLayoutFormat( KoParagLayout *newLayout,int flags,int marginIndex)
+KCommand* KoTextView::setParagLayoutFormatCommand( KoParagLayout *newLayout,int flags,int marginIndex)
 {
+#if 0
     KCommand *cmd =0L;
     KoParagCounter c;
     if(newLayout->counter)
@@ -996,6 +1013,8 @@ void KoTextView::setParagLayoutFormat( KoParagLayout *newLayout,int flags,int ma
     }
     if (cmd)
        textObject()->emitNewCommand( cmd );
+#endif
+    return textObject()->setParagLayoutFormatCommand( m_cursor, KoTextDocument::Standard, newLayout, flags, marginIndex );
 }
 
 void KoTextView::changeCaseOfText(KoChangeCaseDia::TypeOfCase _type)

@@ -83,10 +83,12 @@ public:
      */
     virtual const KoParagLayout * currentParagLayoutFormat() const;
 
-    void setParagLayoutFormat( KoParagLayout *newLayout,int flags,int marginIndex=-1);
+    //void setParagLayoutFormat( KoParagLayout *newLayout,int flags,int marginIndex=-1);
+    virtual KCommand* setParagLayoutFormatCommand( KoParagLayout *newLayout, int flags, int marginIndex=-1);
 
     /** Implement the KoTextFormatInterface */
-    virtual void setFormat( KoTextFormat * newFormat, int flags, bool zoomFont);
+    //void setFormat( KoTextFormat * newFormat, int flags, bool zoomFont);
+    virtual KCommand* setFormatCommand( KoTextFormat * newFormat, int flags, bool zoomFont = false);
 
     // -- Paragraph settings --
     KCommand * setCounterCommand( const KoParagCounter & counter );
@@ -122,7 +124,7 @@ public:
     void insertSoftHyphen();
     void insertLineBreak();
     void insertNonbreakingSpace();
-    void insertSpecialChar(QChar _c);
+    void insertSpecialChar(QChar _c, const QString& font);
     void changeCaseOfText(KoChangeCaseDia::TypeOfCase _type);
     void referenceLink(QString & href);
     KoLinkVariable * linkVariable();
