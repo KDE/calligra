@@ -98,7 +98,10 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	setInstance( KarbonFactory::instance() );
 	setAcceptDrops( true );
 
-	setXMLFile( QString::fromLatin1( "karbon.rc" ) );
+	if ( !part->isReadWrite() )
+		setXMLFile( QString::fromLatin1( "karbon_readonly.rc" ) );
+	else
+		setXMLFile( QString::fromLatin1( "karbon.rc" ) );
 	m_strokeFillPreview = 0L;
 	m_done = false;
 	initActions();
