@@ -282,3 +282,55 @@ QRect ChannelData::tileRect(int tileNo)
 	tr.moveBy(tilesRect.x(), tilesRect.y());
 	return(tr);
 }
+
+void ChannelData::rotate180()
+{
+	uchar *tmp,tmpC, buf[TILE_SIZE*channels];
+	
+	
+	for(int y=0; y<=(yTilesNo-1)/2; y++) {
+		for(int x=0; x<xTilesNo; x++) {
+			tmp=tileInfo[y*xTilesNo+x];
+			tileInfo[y*xTilesNo+x]=tileInfo[(yTilesNo-y-1)*xTilesNo+x];
+			tileInfo[(yTilesNo-y-1)*xTilesNo+x]=tmp;
+		}
+	}
+
+	for(int y=0; y<yTilesNo; y++) {
+		for(int x=0; x<xTilesNo; x++) {
+			tmp=tileInfo[y*xTilesNo+x];
+			if (tmp) {
+				for(int line=0; line<TILE_SIZE/2; line++) {
+					uchar *top=tmp+line*TILE_SIZE*channels;
+					uchar *bot=tmp+(TILE_SIZE-line-1)*TILE_SIZE*channels;
+					memcpy(buf, top, TILE_SIZE*channels);
+					memcpy(top, bot, TILE_SIZE*channels);
+					memcpy(bot, buf, TILE_SIZE*channels);
+				}
+			}
+		}
+	}
+	
+	tilesRect.moveBy(0, imageRect.top()-tilesRect.top() -
+									 (tilesRect.bottom()-imageRect.bottom()));
+
+// 	for(int y=0; y<yTilesNo; y++) {
+// 		for(int x=0; x<xTilesNo; x++) {
+// 			tmp=tileInfo[y*xTilesNo+x];
+// 			if (tmp) {
+// 				for(int line=0; line<TILE_SIZE/2; line++) {
+// 					uchar *top=tmp+line*TILE_SIZE*channels;
+// 					uchar *bot=tmp+(TILE_SIZE-line)*TILE_SIZE*channels-channels;
+// 					for(int pix=TILE_SIZE*channels; pix ; pix--) {
+// 						for(int c=channels; c ; c--) {
+// 							tmpC=*bot;
+// 							*bot++=*top;
+// 							*top++=tmpC;
+// 						}
+// 						bot-=channels;
+// 					}
+// 				}
+// 			}
+// 		}
+// 	}
+}

@@ -123,6 +123,8 @@ public slots:
   virtual void slotActivateZoomTool();
   virtual void slotActivateGradientTool();
 
+	virtual void slotRotateLayer180();
+
   void changeUndo( QString, bool);
   void changeRedo( QString, bool);
 
@@ -175,6 +177,8 @@ protected:
   long m_idMenuView_Preferences;
 
   OpenPartsUI::Menu_var m_vMenuImage;
+	long m_idMenuImage_Rotate180;
+
   OpenPartsUI::Menu_var m_vMenuPlugIns;
   OpenPartsUI::Menu_var m_vMenuOptions;
 

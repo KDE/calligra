@@ -695,4 +695,12 @@ void Canvas::setBackgroundLayer( unsigned int _layer )
   }
 }
 
+int Canvas::rotateLayer180(Layer *_layer)
+{
+	_layer = layerPtr( _layer );
+	_layer->rotate180();
+}
+
+
+
 #include "canvas.moc"

@@ -79,6 +79,9 @@ module KImageShop
 		slot void slotGradientDialog();
 		slot void slotGradientEditorDialog();
 		slot void slotPreferences();
+
+		// Image menu
+		slot void slotRotateLayer180();
 	};
 
 	interface Document : KOffice::Document, KOffice::Print

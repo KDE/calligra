@@ -70,6 +70,8 @@ public:
 
 	// Debugging
 	void dumpTileBlock();
+	void rotate180();
+
 
  private:
 	enum    cSpace colorSpace;

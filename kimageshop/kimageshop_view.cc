@@ -357,10 +357,10 @@ bool KImageShopView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr menubar )
   m_vMenuView->setCheckable( true );
   m_vMenuView->setItemChecked( m_idMenuView_LayerDialog, true );
 
-/*
   // image menu
   menubar->insertMenu( i18n( "&Image" ), m_vMenuImage, -1, -1 );
-
+  m_idMenuImage_Rotate180 = m_vMenuImage->insertItem( i18n( "&Rotate 180" ), this, "slotRotateLayer180", 0 );
+/*
   // plugins menu
   menubar->insertMenu( i18n( "&Plugins" ), m_vMenuPlugIns, -1, -1 );
 
@@ -1013,6 +1013,11 @@ void  KImageShopView::slotSetFGColor(const KColor& c)
 void  KImageShopView::slotSetBGColor(const KColor& c)
 {
   m_bg = c;
+}
+
+void KImageShopView::slotRotateLayer180()
+{
+	m_pDoc->rotateLayer180(0);
 }
 
 #include "kimageshop_view.moc"

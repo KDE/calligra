@@ -180,12 +180,17 @@ Layer::allocateRect(QRect _r)
 	dataChannels->allocateRect(_r);
 }
 
-void
-Layer::setPixel(int x, int y, uint pixel)
+void Layer::setPixel(int x, int y, uint pixel)
 {
 	printf("layer::setPixel(%d,%d, %d)\n",x,y,pixel);
 	dataChannels->setPixel(x,y, pixel);
 }
 
+
+void Layer::rotate180()
+{
+	alphaChannel->rotate180();
+	dataChannels->rotate180();
+}
 
 #include "layer.moc"

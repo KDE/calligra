@@ -69,6 +69,8 @@ class Layer : public QObject {
 	void    allocateRect(QRect _r);
 	void    setPixel(int x, int y, uint val);
 
+	void    rotate180();
+
  signals:
 	void layerPropertiesChanged();
 

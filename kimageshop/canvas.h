@@ -104,6 +104,8 @@ public:
   void paintBrush( QPoint pt, const Brush *brush );
   LayerList layerList() { return layers; };
 
+	rotateLayer180(Layer *_layer);
+
 public slots:
 
   void setCurrentLayerOpacity( double opacity )
