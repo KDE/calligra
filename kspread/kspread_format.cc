@@ -2603,6 +2603,7 @@ void RowFormat::setHide( bool _hide )
 	    // Lower maximum size by height of row
 	    m_pTable->adjustSizeMaxY ( - dblHeight() );
 	    m_bHide = _hide; //hide must be set after we requested the height
+            m_pTable->emit_updateRow( this, m_iRow );
 	}
 	else
 	{
@@ -2853,6 +2854,7 @@ void ColumnFormat::setHide( bool _hide )
 	    // Lower maximum size by width of column
 	    m_pTable->adjustSizeMaxX ( - dblWidth() );
 	    m_bHide = _hide; //hide must be set after we requested the width
+            m_pTable->emit_updateColumn( this, m_iColumn );
 	}
 	else
         {
