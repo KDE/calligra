@@ -395,11 +395,11 @@ void KivioView::setupActions()
 
   KAction *action;
 
-  m_groupAction = new KAction( i18n("Group Selected Stencils"), "group_stencils", CTRL+Key_G, this, SLOT(groupStencils()), actionCollection(), "groupStencils" );
-  m_ungroupAction = new KAction( i18n("Ungroup Selected Stencils"), "ungroup_stencils", CTRL+SHIFT+Key_G, this, SLOT(ungroupStencils()), actionCollection(), "ungroupStencils" );
+  m_groupAction = new KAction( i18n("Group Selected Stencils"), "group", CTRL+Key_G, this, SLOT(groupStencils()), actionCollection(), "groupStencils" );
+  m_ungroupAction = new KAction( i18n("Ungroup Selected Stencils"), "ungroup", CTRL+SHIFT+Key_G, this, SLOT(ungroupStencils()), actionCollection(), "ungroupStencils" );
 
-  m_stencilToFront = new KAction( i18n("Bring to Front"), "bring_stencil_to_front", 0, this, SLOT(bringStencilToFront()), actionCollection(), "bringStencilToFront" );
-  m_stencilToBack = new KAction( i18n("Send to Back"), "send_stencil_to_back", 0, this, SLOT(sendStencilToBack()), actionCollection(), "sendStencilToBack" );
+  m_stencilToFront = new KAction( i18n("Bring to Front"), "bring_forward", 0, this, SLOT(bringStencilToFront()), actionCollection(), "bringStencilToFront" );
+  m_stencilToBack = new KAction( i18n("Send to Back"), "send_backward", 0, this, SLOT(sendStencilToBack()), actionCollection(), "sendStencilToBack" );
 
   m_menuTextFormatAction = new KAction(i18n("&Text..."), 0, 0, this, SLOT(textFormat()),
   actionCollection(), "textFormat");
@@ -431,13 +431,13 @@ void KivioView::setupActions()
   m_setTextColor = new TKSelectColorAction( i18n("Set Text Color"), TKSelectColorAction::TextColor, actionCollection(), "setTextColor" );
   connect( m_setTextColor, SIGNAL(activated()), SLOT(setTextColor()) );
 
-  m_setBold = new KToggleAction( i18n("Toggle Bold Text"), "font_bold", 0, actionCollection(), "setFontBold" );
+  m_setBold = new KToggleAction( i18n("Toggle Bold Text"), "text_bold", 0, actionCollection(), "setFontBold" );
   connect( m_setBold, SIGNAL(toggled(bool)), SLOT(toggleFontBold(bool)) );
 
-  m_setItalics = new KToggleAction( i18n("Toggle Italics Text"), "font_italic", 0, actionCollection(), "setFontItalics" );
+  m_setItalics = new KToggleAction( i18n("Toggle Italics Text"), "text_italic", 0, actionCollection(), "setFontItalics" );
   connect( m_setItalics, SIGNAL(toggled(bool)), SLOT(toggleFontItalics(bool)) );
 
-  m_setUnderline = new KToggleAction( i18n("Toggle Underline Text"), "font_under", 0, actionCollection(), "setFontUnderline" );
+  m_setUnderline = new KToggleAction( i18n("Toggle Underline Text"), "text_under", 0, actionCollection(), "setFontUnderline" );
   connect( m_setUnderline, SIGNAL(toggled(bool)), SLOT(toggleFontUnderline(bool)));
 
   m_textAlignLeft = new KToggleAction( i18n( "Align &Left" ), "text_left", CTRL + Key_L,
