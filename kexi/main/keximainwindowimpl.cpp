@@ -610,19 +610,24 @@ KexiMainWindowImpl::initActions()
 #endif
 #endif
 
-#ifdef KEXI_DISABLE_FORMS
+#ifdef KEXI_FORMS_SUPPORT
+	slotOptionsEnableForms(true, true);
+#else
+	slotOptionsEnableForms(false, true);
+
+# if 0
 	KToggleAction *toggleaction = new KToggleAction(i18n("Enable Forms"), "", 0, actionCollection(), "options_enable_forms");
-# if KDE_IS_VERSION(3,2,90)
+#  if KDE_IS_VERSION(3,2,90)
 	toggleaction->setCheckedState(i18n("Disable Forms"));
-# endif
+#  endif
 	d->config->setGroup("Unfinished");
 	if (d->config->readBoolEntry("EnableForms", false)) {
 		slotOptionsEnableForms( true, true );
 		toggleaction->setChecked(true);
 	}
 	connect(toggleaction, SIGNAL(toggled(bool)), this, SLOT(slotOptionsEnableForms(bool)));
-#else
-	slotOptionsEnableForms(true, true);
+# endif //0
+
 #endif
 
 	d->action_configure = KStdAction::preferences(this, SLOT(slotShowSettings()), actionCollection());
