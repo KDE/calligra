@@ -368,6 +368,7 @@ public:
 
     void TextColor();
     void BackgroundColor();
+    void sortincr();
 
     virtual void cleanUp();
 
@@ -522,6 +523,7 @@ protected:
     CORBA::Long m_idButtonLayout_Chart;
     CORBA::Long m_idButtonLayout_Text_Color;
     CORBA::Long m_idButtonLayout_bg_Color;
+    CORBA::Long m_idButtonLayout_sort_incr;
 
     OpenPartsUI::Menu_var m_vMenuEdit;
     CORBA::Long m_idMenuEdit_Undo;

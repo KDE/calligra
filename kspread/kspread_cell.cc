@@ -125,6 +125,38 @@ void KSpreadCell::copyLayout( int _column, int _row )
   setMultiRow( o->multiRow() );
 }
 
+void KSpreadCell::copyALL( KSpreadCell *cell)
+{
+
+  setText(cell->text());
+  setAlign( cell->align() );
+  setTextFont( cell->textFont() );
+  setTextColor( cell->textColor() );
+  setBgColor( cell->bgColor( ) );
+  //When you use column() and row() it don't work
+
+  //setLeftBorderWidth( cell->leftBorderWidth( ) );
+  //setLeftBorderStyle( cell->leftBorderStyle(  ) );
+  //setLeftBorderColor( cell->leftBorderColor(  ) );
+ // setTopBorderWidth( cell->topBorderWidth(  ) );
+  //setTopBorderStyle( cell->topBorderStyle(  ) );
+  //setTopBorderColor( cell->topBorderColor(  ) );
+  //setBottomBorderWidth( cell->bottomBorderWidth( ) );
+  //setBottomBorderStyle( cell->bottomBorderStyle(  ) );
+  //setBottomBorderColor( cell->bottomBorderColor( ) );
+  //setRightBorderWidth( cell->rightBorderWidth( ) );
+  //setRightBorderStyle( cell->rightBorderStyle( ) );
+  //setRightBorderColor( cell->rightBorderColor(  ) );
+  setPrecision( cell->precision() );
+  setPrefix( cell->prefix() );
+  setPostfix( cell->postfix() );
+  setFloatFormat( cell->floatFormat() );
+  setFloatColor( cell->floatColor() );
+  setFaktor( cell->faktor() );
+  setMultiRow( cell->multiRow() );
+
+}
+
 void KSpreadCell::forceExtraCells( int _col, int _row, int _x, int _y )
 {
   // Unobscure the objects we obscure right now

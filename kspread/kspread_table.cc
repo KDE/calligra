@@ -1187,6 +1187,104 @@ bool KSpreadTable::replace( const QPoint &_marker,QString _find,QString _replace
     }
 }
 
+void KSpreadTable::onlyRow()
+{
+
+QRect r( selectionRect() );
+KSpreadCell *tmp = new KSpreadCell( this, 0, 0 );
+for ( int d = r.left();  d<= r.right(); d++ )
+	{
+	KSpreadCell *cell1 = cellAt( d,r.top() );
+	for ( int y = r.left(); y <= r.right(); y++ )
+		{
+		KSpreadCell *cell2 = cellAt( y,r.top());
+		if(strcmp(cell2->text(), cell1->text())>0)
+			{
+			tmp->copyALL(cell1);
+			cell1->copyALL(cell2);
+			cell2->copyALL(tmp);
+			}
+		}
+	}
+emit sig_updateView( this, r );
+}
+
+void KSpreadTable::onlyColumn()
+{
+
+QRect r( selectionRect() );
+KSpreadCell *tmp = new KSpreadCell( this, 0, 0 );
+for ( int d = r.top();  d<= r.bottom(); d++ )
+	{
+	KSpreadCell *cell1 = cellAt( r.right(), d );
+	for ( int y = r.top(); y <= r.bottom(); y++ )
+		{
+		KSpreadCell *cell2 = cellAt( r.right(), y );
+		if(strcmp(cell2->text(), cell1->text())>0)
+			{
+			tmp->copyALL(cell1);
+			cell1->copyALL(cell2);
+			cell2->copyALL(tmp);
+			}
+		}
+	}
+emit sig_updateView( this, r );
+}
+
+void KSpreadTable::Row(int ref_row)
+{
+QRect r( selectionRect() );
+KSpreadCell *tmp = new KSpreadCell( this, 0, 0 );
+for ( int d = r.left();  d<= r.right(); d++ )
+	{
+	KSpreadCell *cell1 = cellAt( d,ref_row  );
+	for ( int y = r.left(); y <= r.right(); y++ )
+		{
+		KSpreadCell *cell2 = cellAt( y,ref_row );
+		if(strcmp(cell2->text(), cell1->text())>0)
+			{
+			for(int x=r.top();x<=r.bottom();x++)
+				{
+				KSpreadCell *ref1 = cellAt( d,x );
+				KSpreadCell *ref2 = cellAt( y,x );
+				tmp->copyALL(ref1);
+				ref1->copyALL(ref2);
+				ref2->copyALL(tmp);
+				}
+			}
+		}
+	}
+emit sig_updateView( this, r );
+}
+
+void KSpreadTable::Column(int ref_column)
+{
+QRect r( selectionRect() );
+KSpreadCell *tmp = new KSpreadCell( this, 0, 0 );
+for ( int d = r.top();  d<= r.bottom(); d++ )
+	{
+	KSpreadCell *cell1 = cellAt( ref_column, d );
+	for ( int y = r.top(); y <= r.bottom(); y++ )
+		{
+		KSpreadCell *cell2 = cellAt( ref_column, y );
+		if(strcmp(cell2->text(), cell1->text())>0)
+			{
+			for(int x=r.left();x<=r.right();x++)
+				{
+				KSpreadCell *ref1 = cellAt( x, d );
+				KSpreadCell *ref2 = cellAt( x, y );
+				tmp->copyALL(ref1);
+				ref1->copyALL(ref2);
+				ref2->copyALL(tmp);
+				}
+			}
+		}
+	}
+emit sig_updateView( this, r );
+}
+
+
+
 void KSpreadTable::setSelectionMultiRow( const QPoint &_marker)
 {
     m_pDoc->setModified( true );

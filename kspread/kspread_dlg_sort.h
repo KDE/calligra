@@ -37,10 +37,10 @@ class KSpreadsort : public QDialog
 {
   Q_OBJECT
 public:
-  KSpreadsort( KSpreadView* parent, const char* name,const QPoint &_marker );
-
-
+  KSpreadsort( KSpreadView* parent, const char* name );
   void init();
+  enum sort_type { ONLY,ONLY_ROW,ONLY_COLUMN,ALL};
+
 public slots:
   void slotOk();
   void slotClose();
@@ -57,9 +57,10 @@ protected:
   QComboBox *combo;
   QPushButton* m_pOk;
   QPushButton* m_pClose;
-  QPoint  marker;
   QStringList list_column;
   QStringList list_row;
+  sort_type _sort;
+  QRect r;
 
 };
 

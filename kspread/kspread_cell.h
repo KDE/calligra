@@ -116,6 +116,8 @@ public:
      */
     void copyLayout( KSpreadCell *_cell ) { copyLayout( _cell->column(), _cell->row() ); }
 
+
+    void copyALL( KSpreadCell *cell);
     /**
      * Paints the cell.
      */

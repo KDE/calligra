@@ -687,6 +687,9 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
   m_idButtonLayout_bg_Color = m_vToolBarLayout->insertButton2( pix, 15 , SIGNAL( clicked() ), this, "BackgroundColor",
 							  true, (wstr=Q2C( i18n( "Background Color" ))), -1 );
 
+  pix = OPUIUtils::convertPixmap( BarIcon("sort_incr") );
+  m_idButtonLayout_sort_incr = m_vToolBarLayout->insertButton2( pix, 16, SIGNAL( clicked() ), this, "sortincr", true, ( wstr = Q2C( i18n( "Sort Increase" ) ) ), -1 );
+
   m_vToolBarLayout->enable( OpenPartsUI::Show );
   //laurent
 
@@ -909,6 +912,7 @@ if ( m_pTable != 0L )
     }
 }
 
+
 QString KSpreadView::colorToPixString( QColor c, PType _type )
 {
     int r, g, b;
@@ -995,6 +999,7 @@ QString KSpreadView::colorToPixString( QColor c, PType _type )
 
     return QString( pix );
 }
+
 
 
 void KSpreadView::helpUsing()
@@ -1156,6 +1161,30 @@ void KSpreadView::italic()
     m_pTable->setSelectionFont( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), 0L, -1, -1, 1 );
 }
 
+void KSpreadView::sortincr()
+{
+QRect r( activeTable()-> selectionRect() );
+if ( r.left() == 0 || r.top() == 0 ||
+       r.right() == 0 || r.bottom() == 0 )
+  	{
+  	QMessageBox::warning( 0L, i18n("Error"), i18n("One cell was selected!"),
+			   i18n("Ok") );
+	}
+else if( r.right() ==0x7FFF)
+	{
+	 QMessageBox::warning( 0L, i18n("Error"), i18n("Area too large!"),
+			   i18n("Ok") );
+	}
+else if(r.bottom()==0x7FFF)
+	{
+	 QMessageBox::warning( 0L, i18n("Error"), i18n("Area too large!"),
+			   i18n("Ok") );
+	}
+else
+	{
+	activeTable()->Column( r.left());
+	}	
+}
 void KSpreadView::reloadScripts()
 {
   // TODO
@@ -1366,8 +1395,7 @@ void KSpreadView::replace()
 
 void KSpreadView::sort()
 {
-//don't work for the moment
-  KSpreadsort* dlg = new KSpreadsort( this, "Sort" ,QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
+  KSpreadsort* dlg = new KSpreadsort( this, "Sort" );
   dlg->show();
 }
 

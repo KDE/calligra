@@ -3,5 +3,5 @@ toolbar_DATA = abort.png bold.png center.png chart.png colin.png \
 	colout.png done.png italic.png left.png money.png \
 	multirow.png neonpen.png paste.png percent.png precminus.png \
 	precplus.png right.png rowin.png rowout.png \
-	tab_first.png tab_last.png tab_left.png tab_right.png
+	tab_first.png tab_last.png tab_left.png tab_right.png sort_incr.png
 

@@ -369,6 +369,12 @@ public:
     void paste( const QPoint &_marker,Special_paste=ALL );
 
     bool replace( const QPoint &_marker,QString _find,QString _replace );
+    void onlyRow();
+    void onlyColumn();
+    void Row(int ref_row);
+    void Column(int ref_column);
+
+
     /**
      * Unselects all selected columns/rows/cells and redraws these cells.
      */
