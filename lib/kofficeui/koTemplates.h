@@ -51,8 +51,8 @@ private:
     QString m_name, m_file, m_picture;
     bool m_hidden;
     mutable bool m_touched;
-    QPixmap m_pixmap;
     bool m_cached;
+    QPixmap m_pixmap;
 };
 
 
