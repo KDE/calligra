@@ -294,6 +294,13 @@ void KprKword::convert()
                     outFormatElem.appendChild( e );
                 }
 
+                if( textElem.attribute("VERTALIGN").toInt())
+                {
+                    QDomElement e = outdoc.createElement("VERTALIGN");
+                    e.setAttribute( "value", textElem.attribute("VERTALIGN").toInt() );
+                    outFormatElem.appendChild( e );
+                }
+
                 if ( !outFormatElem.firstChild().isNull() )
                 {
                     outFormatElem.setAttribute( "id", 1 ); // normal exte
