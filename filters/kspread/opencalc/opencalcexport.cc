@@ -213,9 +213,16 @@ bool OpenCalcExport::exportDocInfo( KoStore * store, KSpreadDoc const * const ks
   data.appendChild( meta.createTextNode( aboutPage->abstract() ) );
   officeMeta.appendChild( data );
 
+  const QDateTime dt ( QDateTime::currentDateTime() );
+  if ( dt.isValid() )
+  {
+    data = meta.createElement( "dc:date" );
+    data.appendChild( meta.createTextNode( dt.toString( Qt::ISODate ) ) );
+    officeMeta.appendChild( data );
+  }
+
   /* TODO:
     <meta:creation-date>2003-01-08T23:57:31</meta:creation-date>
-    <dc:date>2003-01-08T23:58:05</dc:date>
     <dc:language>en-US</dc:language>
     <meta:editing-cycles>2</meta:editing-cycles>
     <meta:editing-duration>PT38S</meta:editing-duration>
