@@ -1,6 +1,7 @@
 Changes after KWord-1.3
 =======================
 - Reorganized and simplified GUI of the configuration dialog
+- Support for "protect content" in all types of framesets
 
 Changes between KWord-1.3-rc and KWord-1.3
 ==========================================
