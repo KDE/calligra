@@ -6,3 +6,5 @@
 -	add validators to all tool-dialog input-fields
 -	polygonizing a sinus shapes results in a asymetric polyline
 	(probably error in sinus generation).
+-	examine the problem with non closed paths
+-	implement gradients after libart code reorganisations (Rob)
