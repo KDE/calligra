@@ -32,6 +32,24 @@
 #define SECSPERDAY 86400
 #define HALFSEC ( 0.5 / SECSPERDAY )
 
+// namespace is necessary so that e.g. string doesn't conflict with the STL string
+namespace KSpreadDB
+{
+enum Comp { isEqual, isLess, isGreater, lessEqual, greaterEqual, notEqual };
+enum Type { numeric, string };
+
+struct Condition
+{
+  Comp     comp;
+  int      index;
+  double   value;
+  QString  stringValue;
+  Type     type;
+};
+
+typedef QValueList<Condition> ConditionList;
+}
+
 class EDate : public QDate
 {
  public:
@@ -49,7 +67,7 @@ void addMonths( QDate & date, int months );
 
 void subMonths( QDate & date, int months );
 
-/*	0: US 30 / 360 
+/*	0: US 30 / 360
  *	1: real days
  *	2: real days / 360
  *	3: real days / 365
@@ -57,7 +75,7 @@ void subMonths( QDate & date, int months );
  */
 int daysPerYear( QDate const & date, int basis );
 
-/*	0: US 30 / 360 
+/*	0: US 30 / 360
  *	1: real days
  *	2: real days / 360
  *	3: real days / 365
@@ -77,13 +95,29 @@ double gaussinv_helper( double x );
  *********************************************************************/
 bool approx_equal( double a, double b );
 
-bool kspreadfunc_average_helper( KSContext & context, QValueList<KSValue::Ptr> & args, 
+bool kspreadfunc_average_helper( KSContext & context, QValueList<KSValue::Ptr> & args,
                                  double & result,int & number, bool aMode );
-bool kspreadfunc_stddev_helper( KSContext & context, QValueList<KSValue::Ptr> & args, 
+bool kspreadfunc_stddev_helper( KSContext & context, QValueList<KSValue::Ptr> & args,
                                 double & result, double & avera, bool aMode );
 
-bool kspreadfunc_variance_helper( KSContext & context, QValueList<KSValue::Ptr> & args, 
+bool kspreadfunc_variance_helper( KSContext & context, QValueList<KSValue::Ptr> & args,
                                   double & result, double avera, bool aMode );
 
+/**
+  This method parses the condition in string text to the condition cond.
+  It sets the condition's type and value.
+*/
+void getCond( KSpreadDB::Condition &cond, QString text );
+
+/**
+  Returns true if double value d matches the condition cond, built with getCond().
+  Otherwise, it returns false.
+*/
+bool conditionMatches( KSpreadDB::Condition &cond, const double &d );
+/**
+  Returns true if string value d matches the condition cond, built with getCond().
+  Otherwise, it returns false.
+*/
+bool conditionMatches( KSpreadDB::Condition &cond, const QString &d );
 
 #endif

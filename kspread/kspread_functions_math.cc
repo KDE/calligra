@@ -103,6 +103,7 @@ bool kspreadfunc_sqrt( KSContext& context );
 bool kspreadfunc_sqrtpi( KSContext& context );
 bool kspreadfunc_subtotal( KSContext& context );
 bool kspreadfunc_sum( KSContext& context );
+bool kspreadfunc_sumif( KSContext& context );
 bool kspreadfunc_suma( KSContext& context );
 bool kspreadfunc_sumsq( KSContext& context );
 bool kspreadfunc_trunc( KSContext& context );
@@ -176,6 +177,7 @@ void KSpreadRegisterMathFunctions()
   repo->registerFunction( "SQRTPI",        kspreadfunc_sqrtpi );
   repo->registerFunction( "SUBTOTAL",      kspreadfunc_subtotal );
   repo->registerFunction( "SUM",           kspreadfunc_sum );
+  repo->registerFunction( "SUMIF",         kspreadfunc_sumif );
   repo->registerFunction( "SUMA",          kspreadfunc_suma );
   repo->registerFunction( "SUMSQ",         kspreadfunc_sumsq );
   repo->registerFunction( "TRUNC",         kspreadfunc_trunc );
@@ -543,6 +545,83 @@ bool kspreadfunc_sum( KSContext & context )
   if ( b )
     context.setValue( new KSValue( result ) );
 
+  return b;
+}
+
+static bool kspreadfunc_sumif_helper( KSContext & context, KSValue *value,
+                                      QValueList<KSValue::Ptr> &args,
+                                      KSpreadDB::Condition &cond,
+                                      double & result, int &vpos, int &hpos )
+{
+  if ( KSUtil::checkType( context, value, KSValue::DoubleType, false ) )
+  {
+    if ( conditionMatches( cond, value->doubleValue() ) ) {
+      if( hpos == -1 )
+        result += value->doubleValue();
+      else {
+        result += (args[2]->listValue()[vpos])-> listValue()[hpos]->doubleValue();
+        ++hpos;
+      }
+    }
+    return true;
+  }
+
+  if ( KSUtil::checkType( context, value, KSValue::ListType, false ) ) {
+    QValueList<KSValue::Ptr> values = value->listValue();
+    QValueList<KSValue::Ptr>::Iterator it = values.begin();
+    QValueList<KSValue::Ptr>::Iterator end = values.end();
+
+    for( ; it != end; ++it ) {
+      if( !kspreadfunc_sumif_helper( context, *it, args, cond, result, vpos, hpos ) )
+        return false;
+      if ( vpos != -1 && KSUtil::checkType( context, *it, KSValue::ListType, false ) ){
+        ++vpos;
+        hpos = 0;
+      }
+    }
+    return true;
+  }
+  return false;
+}
+
+bool kspreadfunc_sumif( KSContext & context )
+{
+  double result = 0.0;
+  int hpos = -1; int vpos = -1; // these values become >=0 if there's a seperate sumrange
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  // starting sanity checks
+  if( KSUtil::checkArgumentsCount( context, 3, "SUMIF", true ) ) {
+  
+    QValueList<KSValue::Ptr> checkRange = args[0]->listValue();
+    QValueList<KSValue::Ptr> sumRange   = args[2]->listValue();
+
+    if( checkRange.count() <= sumRange.count() ) {
+      for( uint i = 0 ; i < checkRange.count() ; ++i ) {
+        if ( checkRange[i]->listValue().count() > sumRange[i]->listValue().count() )
+          return false;
+      }
+      // the ranges do match, make hpos and vpos > -1
+      hpos = 0;
+      vpos = 0;
+    } else return false;
+
+  } else if ( !KSUtil::checkArgumentsCount( context, 2, "SUMIF", false ) )
+      return false;
+    
+  if( !KSUtil::checkType( context, args[1], KSValue::StringType ) )
+    return false;
+  // end of sanity checks
+
+  KSValue *value = args[0];
+  KSpreadDB::Condition cond;
+  getCond( cond, args[1]->stringValue() );
+
+  bool b = kspreadfunc_sumif_helper( context, value, args, cond, result, vpos, hpos );
+
+  if ( b ) {
+    context.setValue( new KSValue( result ) );
+  }
   return b;
 }
 
@@ -1982,20 +2061,23 @@ bool kspreadfunc_countblank( KSContext& context )
   return b;
 }
 
-static int kspreadfunc_countif_helper( KSContext& context, KSValue* value,
-                                       const QString& criteria )
+static int kspreadfunc_countif_helper( KSContext& context, KSValue *value,
+                                       const QString &criteria )
 {
   if( KSUtil::checkType( context, value, KSValue::DoubleType, false ) )
   {
-    bool ok = false;
-    double num = KGlobal::locale()->readNumber( criteria, &ok );
-    if( !ok ) return 0;
-    return num == value->doubleValue() ? 1 : 0;
+    KSpreadDB::Condition cond;
+    getCond( cond, criteria );
+
+    return conditionMatches( cond, value->doubleValue() ) ? 1 : 0;
   }
 
   if( KSUtil::checkType( context, value, KSValue::StringType, false ) )
   {
-    return criteria == value->stringValue() ? 1 : 0;
+    KSpreadDB::Condition cond;
+    getCond( cond, criteria );
+
+    return conditionMatches( cond, value->stringValue() ) ? 1 : 0;
   }
 
   if( KSUtil::checkType( context, value, KSValue::BoolType, false ) )
@@ -2022,8 +2104,6 @@ static int kspreadfunc_countif_helper( KSContext& context, KSValue* value,
 }
 
 // Function: COUNTIF
-// This is a lot simplified !!
-// Not really Excel-compatible as it understands only "equals to" relation
 bool kspreadfunc_countif( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();

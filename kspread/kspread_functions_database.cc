@@ -44,24 +44,6 @@
 #include <qrect.h>
 #include <qvaluelist.h>
 
-// namespace is necessary so that e.g. string doesn't conflict with the STL string
-namespace KSpreadDB
-{
-enum Comp { isEqual, isLess, isGreater, lessEqual, greaterEqual, notEqual };
-enum Type { numeric, string };
-
-struct Condition
-{
-  Comp     comp;
-  int      index;
-  double   value;
-  QString  stringValue;
-  Type     type;
-};
-
-typedef QValueList<Condition> ConditionList;
-}
-
 // prototypes
 bool kspreadfunc_daverage( KSContext & context );
 bool kspreadfunc_dcount( KSContext & context );
@@ -116,63 +98,24 @@ static bool approx_equal (double a, double b)
 }
  */
 
-void getCond( KSpreadDB::Condition & cond, QString text )
+bool conditionMatches( KSpreadDB::Condition &cond, KSpreadCell * cell )
 {
-  cond.comp = KSpreadDB::isEqual;
-  text = text.stripWhiteSpace();
-
-  if ( text.startsWith( "<=" ) )
+  if ( !cell || cell->isEmpty() || cell->isDefault() )
   {
-    cond.comp = KSpreadDB::lessEqual;
-    text = text.remove( 0, 2 );
-  }
-  else if ( text.startsWith( ">=" ) )
-  {
-    cond.comp = KSpreadDB::greaterEqual;
-    text = text.remove( 0, 2 );
-  }
-  else if ( text.startsWith( "!=" ) || text.startsWith( "<>" ) )
-  {
-    cond.comp = KSpreadDB::notEqual;
-    text = text.remove( 0, 2 );
-  }
-  else if ( text.startsWith( "==" ) )
-  {
-    cond.comp = KSpreadDB::isEqual;
-    text = text.remove( 0, 2 );
-  }
-  else if ( text.startsWith( "<" ) )
-  {
-    cond.comp = KSpreadDB::isLess;
-    text = text.remove( 0, 1 );
-  }
-  else if ( text.startsWith( ">" ) )
-  {
-    cond.comp = KSpreadDB::isGreater;
-    text = text.remove( 0, 1 );
-  }
-  else if ( text.startsWith( "=" ) )
-  {
-    cond.comp = KSpreadDB::isEqual;
-    text = text.remove( 0, 1 );
+    kdDebug() << "Match: Cell is empty " << endl;
+    return false;
   }
 
-  text = text.stripWhiteSpace();
+  if ( cond.type == KSpreadDB::numeric && cell->value().isNumber() ) {
+    double d = cell->value().asFloat();
+    return conditionMatches( cond, d );
+  }
+  if ( cond.type == KSpreadDB::string && cell->value().isString() ) {
+    QString d = cell->strOutText();
+    return conditionMatches( cond, d );
+  }
 
-  bool ok = false;
-  double d = text.toDouble( &ok );
-  if ( ok )
-  {
-    cond.type = KSpreadDB::numeric;
-    cond.value = d;
-    kdDebug() << "Numeric: " << d << ", Op: " << cond.comp << endl;
-  }
-  else
-  {
-    cond.type = KSpreadDB::string;
-    cond.stringValue = text;
-    kdDebug() << "String: " << text << ", Op: " << cond.comp << endl;
-  }
+  return false;
 }
 
 int getFieldIndex( QString const & fieldname, QRect const & database, KSpreadSheet * table )
@@ -249,116 +192,6 @@ void parseConditions( QPtrList<KSpreadDB::ConditionList> * result, QRect const &
     result->append( criteria );
   }
   kdDebug() << "Criterias: " << result->count() << endl;
-}
-
-bool conditionMatches( KSpreadDB::Condition cond, KSpreadCell * cell )
-{
-  if ( !cell || cell->isEmpty() || cell->isDefault() )
-  {
-    kdDebug() << "Match: Cell is empty " << endl;
-    return false;
-  }
-
-  if ( cond.type == KSpreadDB::numeric )
-  {
-    if ( !cell->value().isNumber() )
-      return false;
-
-    double d = cell->value().asFloat();
-
-    kdDebug() << "Comparing: " << d << " - " << cond.value << "; Comp: " << cond.comp << endl;
-
-    switch ( cond.comp )
-    {
-     case KSpreadDB::isEqual:
-      if ( approx_equal( d, cond.value ) )
-        return true;
-
-      return false;
-
-     case KSpreadDB::isLess:
-      if ( d < cond.value )
-        return true;
-
-      return false;
-
-     case KSpreadDB::isGreater:
-      if ( d > cond.value )
-        return true;
-
-      return false;
-
-     case KSpreadDB::lessEqual:
-      if ( d <= cond.value )
-        return true;
-
-      return false;
-
-     case KSpreadDB::greaterEqual:
-      if ( d >= cond.value )
-        return true;
-
-      return false;
-
-     case KSpreadDB::notEqual:
-      if ( d != cond.value )
-        return true;
-
-      return false;
-
-     default:
-      return false;
-    }
-  }
-  else
-  {
-    QString d = cell->strOutText();
-    kdDebug() << "String: " << d << endl;
-
-    switch ( cond.comp )
-    {
-     case KSpreadDB::isEqual:
-      if ( d == cond.stringValue )
-        return true;
-
-      return false;
-
-     case KSpreadDB::isLess:
-      if ( d < cond.stringValue )
-        return true;
-
-      return false;
-
-     case KSpreadDB::isGreater:
-      if ( d > cond.stringValue )
-        return true;
-
-      return false;
-
-     case KSpreadDB::lessEqual:
-      if ( d <= cond.stringValue )
-        return true;
-
-      return false;
-
-     case KSpreadDB::greaterEqual:
-      if ( d >= cond.stringValue )
-        return true;
-
-      return false;
-
-     case KSpreadDB::notEqual:
-      if ( d != cond.stringValue )
-        return true;
-
-      return false;
-
-     default:
-      return false;
-    }
-  }
-
-  return true;
 }
 
 QPtrList<KSpreadCell> * getCellList( QRect const & db, KSpreadSheet * table, int column, QPtrList<KSpreadDB::ConditionList> * conditions )

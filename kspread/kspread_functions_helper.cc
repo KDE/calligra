@@ -563,3 +563,157 @@ bool kspreadfunc_variance_helper( KSContext & context, QValueList<KSValue::Ptr> 
   return true;
 }
 
+void getCond( KSpreadDB::Condition & cond, QString text )
+{
+  cond.comp = KSpreadDB::isEqual;
+  text = text.stripWhiteSpace();
+
+  if ( text.startsWith( "<=" ) )
+  {
+    cond.comp = KSpreadDB::lessEqual;
+    text = text.remove( 0, 2 );
+  }
+  else if ( text.startsWith( ">=" ) )
+  {
+    cond.comp = KSpreadDB::greaterEqual;
+    text = text.remove( 0, 2 );
+  }
+  else if ( text.startsWith( "!=" ) || text.startsWith( "<>" ) )
+  {
+    cond.comp = KSpreadDB::notEqual;
+    text = text.remove( 0, 2 );
+  }
+  else if ( text.startsWith( "==" ) )
+  {
+    cond.comp = KSpreadDB::isEqual;
+    text = text.remove( 0, 2 );
+  }
+  else if ( text.startsWith( "<" ) )
+  {
+    cond.comp = KSpreadDB::isLess;
+    text = text.remove( 0, 1 );
+  }
+  else if ( text.startsWith( ">" ) )
+  {
+    cond.comp = KSpreadDB::isGreater;
+    text = text.remove( 0, 1 );
+  }
+  else if ( text.startsWith( "=" ) )
+  {
+    cond.comp = KSpreadDB::isEqual;
+    text = text.remove( 0, 1 );
+  }
+
+  text = text.stripWhiteSpace();
+
+  bool ok = false;
+  double d = text.toDouble( &ok );
+  if ( ok )
+  {
+    cond.type = KSpreadDB::numeric;
+    cond.value = d;
+    kdDebug() << "Numeric: " << d << ", Op: " << cond.comp << endl;
+  }
+  else
+  {
+    cond.type = KSpreadDB::string;
+    cond.stringValue = text;
+    kdDebug() << "String: " << text << ", Op: " << cond.comp << endl;
+  }
+}
+
+bool conditionMatches( KSpreadDB::Condition &cond, const double &d )
+{
+  kdDebug() << "Comparing: " << d << " - " << cond.value << "; Comp: " << cond.comp << endl;
+
+  switch ( cond.comp )
+  {
+    case KSpreadDB::isEqual:
+    if ( approx_equal( d, cond.value ) )
+      return true;
+
+    return false;
+
+    case KSpreadDB::isLess:
+    if ( d < cond.value )
+      return true;
+
+    return false;
+
+    case KSpreadDB::isGreater:
+    if ( d > cond.value )
+      return true;
+
+    return false;
+
+    case KSpreadDB::lessEqual:
+    if ( d <= cond.value )
+      return true;
+
+    return false;
+
+    case KSpreadDB::greaterEqual:
+    if ( d >= cond.value )
+      return true;
+
+    return false;
+
+    case KSpreadDB::notEqual:
+    if ( d != cond.value )
+      return true;
+
+    return false;
+
+    default:
+    return false;
+  }
+}
+
+bool conditionMatches( KSpreadDB::Condition &cond, const QString &d )
+{
+  kdDebug() << "String: " << d << endl;
+
+  switch ( cond.comp )
+  {
+    case KSpreadDB::isEqual:
+    if ( d == cond.stringValue )
+      return true;
+
+    return false;
+
+    case KSpreadDB::isLess:
+    if ( d < cond.stringValue )
+      return true;
+
+    return false;
+
+    case KSpreadDB::isGreater:
+    if ( d > cond.stringValue )
+      return true;
+
+    return false;
+
+    case KSpreadDB::lessEqual:
+    if ( d <= cond.stringValue )
+      return true;
+
+    return false;
+
+    case KSpreadDB::greaterEqual:
+    if ( d >= cond.stringValue )
+      return true;
+
+    return false;
+
+    case KSpreadDB::notEqual:
+    if ( d != cond.stringValue )
+      return true;
+
+    return false;
+
+    default:
+    return false;
+  }
+
+  return true;
+}

@@ -312,6 +312,7 @@
 	<Syntax>COUNTIF(range;criteria)</Syntax>
 	<Example>COUNTIF(A2:A3;"14") returns 1 if A1 is -4 and A2 is 14</Example>
 	<Related>COUNT</Related>
+        <Related>SUMIF</Related>
       </Help>
     </Function>
 
@@ -359,6 +360,7 @@
 	<Example>SUM(12.5;2) equals 14.5</Example>
 	<Related>SUMA</Related>
 	<Related>SUMSQ</Related>
+        <Related>SUMIF</Related>
       </Help>
     </Function>
 
@@ -376,6 +378,31 @@
 	<Example>SUMA(12.5; 2; TRUE) equals 15.5</Example>
 	<Related>SUM</Related>
 	<Related>SUMSQ</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>SUMIF</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Check Range</Comment>
+        <Type range="true">Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Criteria</Comment>
+        <Type>String</Type>
+      </Parameter>
+      <Parameter optional="true">
+        <Comment>Sum Range</Comment>
+        <Type range="true">Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The SUMIF() function calculates the sum of all values given as parameters which match the criteria. The sum range is optional. If not supplied, the values in the check range are summed. The length of the check range should be equal or less than the length of the sum range.</Text>
+	<Syntax>SUMIF(checkrange;criteria;sumrange)</Syntax>
+        <Example>SUMIF(A1:A4;">1") sums all values in range A1:A4 which match >1</Example>
+        <Example>SUMIF(A1:A4;"=0";B1:B4) sums all values in range B1:B4 if the corresponding value in A1:A4 matches =0</Example>
+	<Related>SUM</Related>
+	<Related>COUNTIF</Related>
       </Help>
     </Function>
 

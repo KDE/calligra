@@ -10,21 +10,22 @@ since 1.3
 - multiple steps undo and redo
 - fix problem where hidden sheet is simply appended in the tab bar
   (when it is shown again).
+- fix bug #81026: SUMIF() function added.
 
 changes for 1.3.3
-================= 
+=================
 - fix bug #78747: problem with duration format (hh:mm:ss)
 - fix bug #74091: wrong special paste from cell with formula
 - fix bug #76679: time shown with one second offset
 
 changes for 1.3.2
-================= 
+=================
 - fix condition cell attribute (multi condition)
 - fix bug #69798: SEXDEC parse error
 - fix enable/disable action into validation dialogbox
 - fix disable/enable "show table" menu item
 - fix bug #69066: crash when viewing a KSpread document in Konqueror
-  
+
 changes for 1.3.1
 =================
 - fix bug #77844: undo not working after deleting multiple cells
