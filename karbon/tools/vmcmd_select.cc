@@ -7,7 +7,7 @@
 #include "vmcmd_select.h"
 #include "vpath.h"
 
-VCCmdSelect::VCCmdSelect( KarbonPart* part,
+VMCmdSelect::VMCmdSelect( KarbonPart* part,
 		const double tlX, const double tlY,
 		const double brX, const double brY )
 	: VCommand( part, i18n("Select Object") ), m_object( 0L ),
@@ -16,23 +16,23 @@ VCCmdSelect::VCCmdSelect( KarbonPart* part,
 }
 
 void
-VCCmdSelect::execute()
+VMCmdSelect::execute()
 {
 	if ( m_object )
 		m_object->setState( VObject::normal );
 	else
-		m_part->selectObjects( QRect( m_tlX, m_tlY, m_brX, m_brY ) );
+		m_part->selectObjects( QRect( m_tlX, m_tlY, m_brX - m_tlX, m_brY - m_tlY).normalize() );
 }
 
 void
-VCCmdSelect::unexecute()
+VMCmdSelect::unexecute()
 {
 	if ( m_object )
 		m_object->setState( VObject::normal );
 }
 
 VPath*
-VCCmdSelect::createPath()
+VMCmdSelect::createPath()
 {
 	VPath* path = new VPath();
 

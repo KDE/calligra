@@ -11,12 +11,12 @@
 
 class VPath;
 
-class VCCmdSelect : public VCommand
+class VMCmdSelect : public VCommand
 {
 public:
-	VCCmdSelect( KarbonPart* part, const double tlX, const double tlY,
+	VMCmdSelect( KarbonPart* part, const double tlX, const double tlY,
 		 const double brX, const double brY );
-	virtual ~VCCmdSelect() {}
+	virtual ~VMCmdSelect() {}
 
 	virtual void execute();
 	virtual void unexecute();

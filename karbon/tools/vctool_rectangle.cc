@@ -83,6 +83,9 @@ VCToolRectangle::eventFilter( KarbonView* view, QEvent* event )
 		}
 		else
 		{
+			// Adjust to real contents coords
+			m_tl = view->canvasWidget()->viewportToContents(m_tl);
+			m_br = view->canvasWidget()->viewportToContents(m_br);
 			m_part->addCommand(
 				new VCCmdRectangle( m_part, m_tl.x(), m_tl.y(), m_br.x(), m_br.y() ) );
 		}

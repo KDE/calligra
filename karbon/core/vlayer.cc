@@ -39,7 +39,7 @@ VLayer::selectObjects( const QRect &rect )
 	QPtrListIterator<VObject> itr = m_objects;
     for ( ; itr.current() ; ++itr )
     {
-		if( rect.contains( itr.current()->boundingBox() ) )
+		if( rect.contains( itr.current()->boundingBox(), true ) )
 			itr.current()->setState( VObject::selected );
     }
 }

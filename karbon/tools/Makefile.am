@@ -3,7 +3,7 @@ INCLUDES = -I$(srcdir)/.. -I$(srcdir)/../core -I$(srcdir)/../ui -I$(srcdir)/../.
 noinst_LTLIBRARIES = libkarbontools.la
 
 noinst_HEADERS = \
-	vccmd_select.h \
+	vmcmd_select.h \
 	vccmd_ellipse.h \
 	vccmd_polygon.h \
 	vccmd_rectangle.h \
