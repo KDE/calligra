@@ -18,7 +18,7 @@
 #ifndef KEXIBROWSER_H
 #define KEXIBROWSER_H
 
-#include <qwidget.h>
+#include <klistview.h>
 
 /**
   *@author lucijan busch
@@ -28,15 +28,13 @@ class QListViewItem;
 
 class KIconLoader;
 class Kexi;
-class KListView;
-//class KListViewItem;
 class KexiBrowserItem;
 
-class KexiBrowser : public QWidget  {
+class KexiBrowser : public KListView {
    Q_OBJECT
 
 public:
-	KexiBrowser(Kexi *mainWin=0, QWidget *parent=0, const char *name=0);
+	KexiBrowser(QWidget *parent=0, const char *name=0);
 	~KexiBrowser();
 	
 	void addTableItem(QString name);
@@ -53,10 +51,7 @@ protected:
 
 	KIconLoader		*iconLoader;
 	
-	Kexi*			m_mainWin;
 	QWidget*		m_parent;
-
-	KListView*		m_list;
 
 	KexiBrowserItem*	m_database;
 	

@@ -32,18 +32,16 @@
 #include <kstandarddirs.h>
 #include <klistview.h>
 
-#include "kexiglobal.h"
-#include "kexi.h"
-#include "kexidb.h"
+#include "kexiapplication.h"
+#include "keximainwindow.h"
 #include "kexibrowser.h"
 #include "kexidoc.h"
+#include "kexiproject.h"
 
 #include "kexicreateproject.h"
 
-KexiCreateProject::KexiCreateProject(Kexi *main, QWidget *parent, const char *name, bool modal, WFlags f) : KWizard(parent,name,modal,f)
+KexiCreateProject::KexiCreateProject(QWidget *parent, const char *name, bool modal, WFlags f) : KWizard(parent,name,modal,f)
 {
-	m_main = main;
-	
 	setCaption(i18n("create project"));
 
 	m_wpic = QPixmap(locate("data","kexi/createproject.png"));
@@ -87,17 +85,16 @@ QWidget *KexiCreateProject::generatePage0()
 	
 	
 	//checking drivers and making them avaible	
-	QStringList engines = g_Global->g_db->engines();
-	for(QStringList::Iterator it = engines.begin(); it != engines.end(); ++it)
+	QStringList drivers = QSqlDatabase::drivers();
+	for(QStringList::Iterator it = drivers.begin(); it != drivers.end(); ++it)
 	{
-		kdDebug() << "found engine: " << *it << endl;
+		kdDebug() << "found driver:" << *it << endl;
 		m_cEngine->insertItem(*it);
 	}
 	
 	QString description = "<b>";
 	description += m_cEngine->currentText();
 	description += "</b><br><hr><br>";
-	//description += g_Global->g_manager->m_interfaceList->find(m_cEngine->currentText())->description();
 	iEngine->setText(description);
 	
 	g0->addMultiCellWidget(pic0,	0,	2,	0,	0);
@@ -147,12 +144,12 @@ QWidget *KexiCreateProject::generatePage2()
 	QWidget *p2 = new QWidget(this);
 	QGridLayout *g2 = new QGridLayout(p2);
 	
-	QLabel *pic2 = new QLabel("", p2);
+	QLabel *pic2 = new QLabel(QString::null, p2);
 	pic2->setPixmap(m_wpic);
 	
 	//QLabel *lLog = new QLabel(i18n("connection log"), p2);
 	m_connectionLog = new KListView(p2);
-	m_connectionLog->addColumn(i18n("log message"));
+	m_connectionLog->addColumn(i18n("Log Message"));
 	
 	g2->addWidget(pic2, 0, 0);
 	g2->addWidget(m_connectionLog, 0, 1);
@@ -162,7 +159,7 @@ QWidget *KexiCreateProject::generatePage2()
 
 void KexiCreateProject::engineSelectionChanged(const QString &engineName)
 {
-	kdDebug() << "engine is changeing to " << engineName << endl;
+	kdDebug() << "engine is changing to " << engineName << endl;
 }
 
 
@@ -173,28 +170,25 @@ void KexiCreateProject::nextClicked(const QString &pageTitle)
 		kdDebug() << "it's time to connect to the db..." << endl;
 		
 		m_connectionLog->clear();
-		if(g_Global->g_db->connectDB(m_cEngine->currentText(), m_dbHost->text(), m_dbName->text(), m_dbUser->text(), m_dbPass->text()))
+
+		Credentials projCred;
+		
+		projCred.host = m_dbHost->text();
+		projCred.database = m_dbName->text();
+//      projCred.port = <default> // ## Add Port
+		projCred.driver = m_cEngine->currentText();
+		projCred.user = m_dbUser->text();
+		projCred.password = m_dbPass->text();
+		
+		if(kexi->project()->initDbConnection(projCred))
 		{
 			KListViewItem *i = new KListViewItem(m_connectionLog, i18n("1. connected to the database"));
-/*			KListViewItem *i2 = new KListViewItem(m_connectionLog, i18n("2. checking content"));
-			QSqlQuery query("show tables;", g_Global->g_db->m_db);
-			while(query.next())
-			{
-				QString tblName = query.value(0).toString();
-				kdDebug() << "table: " << tblName << endl;
-				m_main->m_browser->addTableItem(tblName);
-			}
-*/
-			KexiDoc *doc = new KexiDoc();
-			doc->setAttr(m_cEngine->currentText(), m_dbHost->text(), m_dbName->text(), m_dbUser->text(), m_dbPass->text());
-//			doc->saveAs("");
-			m_main->setDocument(doc);
 			setFinishEnabled(m_page2, true);
 		}
 		else
 		{
 			QString msg = i18n("Connection failed: ");
-			msg += g_Global->g_db->m_db->lastError().databaseText();
+			//msg += kexi->project()->db()->lastError().databaseText();
 			KListViewItem *i = new KListViewItem(m_connectionLog, msg);
 		}
 		

@@ -1,11 +1,9 @@
 bin_PROGRAMS = kexi
 
-kexi_SOURCES = kexidoc.cpp kexidialogbase.cpp kexibrowseritem.cpp kexidb.cpp kexiworkspace.cpp kexiinterfacetemplate.cpp kexiformbase.cpp kexiinterfacemanager.cpp kexiinterface.cpp kexicreateproject.cpp kexibrowser.cpp kexi.cpp main.cpp 
-kexi_LDADD   =  $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT) $(LIBSOCKET)
+kexi_SOURCES = kexidoc.cpp kexidialogbase.cpp kexibrowseritem.cpp kexiworkspace.cpp kexiinterfacetemplate.cpp kexiformbase.cpp kexiinterfacemanager.cpp kexiinterface.cpp kexicreateproject.cpp kexibrowser.cpp keximainwindow.cpp kexiapplication.cpp main.cpp kexiproject.cpp 
+kexi_LDADD   =  $(LIB_KIO) $(LIB_KDEUI) $(LIB_KDECORE) $(LIB_QT) $(LIBSOCKET)
 
 SUBDIRS = . interfaces pics 
-
-EXTRA_DIST = kexiui.rc kexi.desktop kexiinterfacetemplate.h kexiinterfacetemplate.cpp kexiglobal.h main.cpp kexi.cpp kexi.h kexiformbase.cpp kexiformbase.h kexiinterfacemanager.cpp kexiinterfacemanager.h kexiinterface.cpp kexiinterface.h kexibrowser.cpp kexibrowser.h kexicreateproject.cpp kexicreateproject.h 
 
 install-data-local:
 	$(mkinstalldirs) $(kde_appsdir)/Applications/

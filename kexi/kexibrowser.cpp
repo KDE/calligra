@@ -28,57 +28,48 @@
 #include <qpoint.h>
 #include <qlistview.h>
 
-#include "kexi.h"
+#include "keximainwindow.h"
+#include "kexiapplication.h"
 #include "kexibrowser.h"
 #include "kexiformbase.h"
 #include "kexiworkspace.h"
 #include "kexibrowseritem.h"
 
 
-KexiBrowser::KexiBrowser(Kexi *mainWin, QWidget *parent, const char *name ) : QWidget(parent,name)
+KexiBrowser::KexiBrowser(QWidget *parent, const char *name ) : KListView(parent,name)
 {
-	m_mainWin = mainWin;
 	m_parent = parent;
 
 	iconLoader = KGlobal::iconLoader();
 
-	QVBoxLayout *l = new QVBoxLayout(this);
+	header()->hide();
+	setRootIsDecorated(true);
 	
-	m_list = new KListView(this);
+	addColumn(i18n("Database content"));
+	setResizeMode(QListView::LastColumn);
 	
-	m_list->header()->hide();
-	m_list->setRootIsDecorated(true);
-	
-	m_list->addColumn(i18n("Database content"));
-	m_list->setResizeMode(QListView::LastColumn);
-	
-//	generateView();
-		
-	l->addWidget(m_list);
-	
-	
-	connect(m_list, SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint &)),
+	connect(this, SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint &)),
 		SLOT(slotContextMenu(KListView*, QListViewItem *, const QPoint&)));
 	
-	connect(m_list, SIGNAL(executed(QListViewItem *)), SLOT(slotCreate()));
+	connect(this, SIGNAL(executed(QListViewItem *)), SLOT(slotCreate()));
 }
 
 void KexiBrowser::addTableItem(QString name)
 {
 	KexiBrowserItem *tblItem = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Table, m_tables, name);
 	tblItem->setPixmap(0, iconLoader->loadIcon("table", KIcon::Small));
-	m_list->setOpen(m_tables, true);
+	setOpen(m_tables, true);
 }
 
 void KexiBrowser::clearView()
 {
-	m_list->clear();
+	clear();
 	generateView();
 }
 
 void KexiBrowser::generateView()
 {
-	m_database = new KexiBrowserItem(KexiBrowserItem::Parent, KexiBrowserItem::Table, m_list, i18n("Database"));
+	m_database = new KexiBrowserItem(KexiBrowserItem::Parent, KexiBrowserItem::Table, this, i18n("Database"));
 	m_tables = new KexiBrowserItem(KexiBrowserItem::Parent, KexiBrowserItem::Table, m_database, i18n("Tables"));
 	m_queries = new KexiBrowserItem(KexiBrowserItem::Parent, KexiBrowserItem::Query, m_database, i18n("Queries"));
 	m_forms = new KexiBrowserItem(KexiBrowserItem::Parent, KexiBrowserItem::Form, m_database, i18n("Forms"));
@@ -90,13 +81,13 @@ void KexiBrowser::generateView()
 	m_forms->setPixmap(0, iconLoader->loadIcon("forms", KIcon::Small));
 	m_reports->setPixmap(0, iconLoader->loadIcon("reports", KIcon::Small));
 
-	m_list->setOpen(m_database, true);
+	setOpen(m_database, true);
 }
 
 
 void KexiBrowser::slotContextMenu(KListView* , QListViewItem *i, const QPoint &p)
 {
-	#warning "TODO: look up the type, wich we have to create"
+	// TODO: look up the type, wich we have to create
 	KexiBrowserItem *r = static_cast<KexiBrowserItem *>(i);
 	kdDebug() << "context menu requested..." << endl;
 		
@@ -125,8 +116,8 @@ void KexiBrowser::slotContextMenu(KListView* , QListViewItem *i, const QPoint &p
 
 void KexiBrowser::slotCreate()
 {
-	KexiFormBase *fb = new KexiFormBase(m_mainWin->workspace(), "form");
-	m_mainWin->workspace()->addItem(fb);
+	KexiFormBase *fb = new KexiFormBase(kexi->mainWindow()->workspace(), "form");
+	kexi->mainWindow()->workspace()->addItem(fb);
 	fb->show();
 }
 

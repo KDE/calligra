@@ -25,7 +25,6 @@
   *@author lucijan busch
   */
 
-class Kexi;
 class KComboBox;
 class KLineEdit;
 class KListView;
@@ -34,7 +33,7 @@ class KexiCreateProject : public KWizard  {
    Q_OBJECT
 
 	public: 
-		KexiCreateProject(Kexi *main=0, QWidget *parent=0, const char *name=0, bool modal=false, WFlags f=0);
+		KexiCreateProject(QWidget *parent=0, const char *name=0, bool modal=false, WFlags f=0);
 		~KexiCreateProject();
 
 		
@@ -42,8 +41,6 @@ class KexiCreateProject : public KWizard  {
 		QWidget *generatePage0();
 		QWidget *generatePage1();
 		QWidget *generatePage2();
-		
-		Kexi			*m_main;
 		
 		bool			m_engineLoaded;
 		QString			m_loadedEngine;

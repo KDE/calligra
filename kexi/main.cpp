@@ -18,15 +18,11 @@
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
 #include <klocale.h>
-#include <kapplication.h>
 
-#include "kexiglobal.h"
-#include "kexi.h"
-#include "kexidb.h"
-//#include "kexiinterfacemanager.h"
+#include "kexiapplication.h"
 
 static const char *description =
-	I18N_NOOP("Kexi");
+	I18N_NOOP("A Database Frontend");
 // INSERT A DESCRIPTION FOR YOUR APPLICATION HERE
 	
 	
@@ -37,28 +33,18 @@ static KCmdLineOptions options[] =
   // INSERT YOUR COMMANDLINE OPTIONS HERE
 };
 
-KexiGlobal *g_Global = 0;
-
 int main(int argc, char *argv[])
 {
 
 	KAboutData aboutData( "kexi", I18N_NOOP("Kexi"),
-		"0.0.1", description, KAboutData::License_GPL,
-		"(c) 2002, lucijan busch", 0, 0, "lucijan@gmx.at");
-	aboutData.addAuthor("lucijan busch","developer & maintainer", "lucijan@gmx.at");
-	aboutData.addAuthor("Daniel Molkentin","developer",  "molkentin@kde.org");
+		"0.1", description, KAboutData::License_GPL,
+		"(c) 2002, Lucijan Busch", 0, 0, "lucijan@gmx.at");
+	aboutData.addAuthor("Lucijan Busch","Developer & Maintainer", "lucijan@gmx.at");
+	aboutData.addAuthor("Daniel Molkentin","Developer",  "molkentin@kde.org");
 	KCmdLineArgs::init( argc, argv, &aboutData );
 	KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
 
-	KApplication app;
-
-	g_Global = new KexiGlobal;	
-	 
-		
-	g_Global->g_db = new KexiDB();
-	
-	Kexi *kexi = new Kexi();
-	kexi->show();
+	KexiApplication app;
 
 	return app.exec();
 }  
