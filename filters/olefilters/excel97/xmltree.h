@@ -50,6 +50,26 @@ private:
 	int m_fr, m_lr, m_fc, m_lc;
 };
 
+class PenFormat
+{
+public:
+	PenFormat()
+		{ }
+	
+	void setWidth(int width)
+		{ m_width = width; }
+	void setStyle(int style)
+		{ m_style = style; }
+	
+	int width()
+		{ return m_width; }
+	int style()
+		{ return m_style; }
+
+private:
+	int m_width, m_style;	
+};
+
 class XMLTree : public QObject
 {
 	Q_OBJECT
@@ -79,6 +99,8 @@ private:
 	void getDate(int date, int& year, int& month, int& day);
 	void getTime( double time, int &hour,int  &min, int &second);
 
+	PenFormat borderStyleToQtStyle(int penStyle);
+	
 	struct format_rec {
 		Q_UINT8 cch;
 		char* rgch;

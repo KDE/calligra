@@ -56,7 +56,7 @@ const char *LegendLocationText[] =
 
 typedef enum {
 	WGT_MODE_MIN		= -2,
-	WGT_MODE_HAIRLINE		= -1,
+	WGT_MODE_HAIRLINE	= -1,
 	WGT_MODE_NORMAL		= 0,
 	WGT_MODE_MEDIUM		= 1,
 	WGT_MODE_WIDE 		= 2,
@@ -64,16 +64,16 @@ typedef enum {
 } LineWeight;
 
 typedef enum {
-	PAT_MODE_SOLID 		= 0,
-	PAT_MODE_DASH 		= 1,
-	PAT_MODE_DOT 		= 2,
+	PAT_MODE_SOLID 			= 0,
+	PAT_MODE_DASH	 		= 1,
+	PAT_MODE_DOT 			= 2,
 	PAT_MODE_DASH_DOT 		= 3,
-	PAT_MODE_DASH_DOT_DOT 	= 4,
-	PAT_MODE_NONE 		= 5,
+	PAT_MODE_DASH_DOT_DOT	= 4,
+	PAT_MODE_NONE 			= 5,
 	PAT_MODE_DARK_GRAY 		= 6,
 	PAT_MODE_MED_GRAY 		= 7,
 	PAT_MODE_LIGHT_GRAY 	= 8,
-	PAT_MODE_MAX 		= 9
+	PAT_MODE_MAX 			= 9
 } LinePattern;
 
 typedef enum {
@@ -88,27 +88,44 @@ typedef enum {
 	CHART_BLANK_SKIP		= 0,
 	CHART_BLANK_ZERO		= 1,
 	CHART_BLANK_INTERPOLATE	= 2,
-	CHART_BLANK_MAX		= 3
+	CHART_BLANK_MAX			= 3
 } ChartBlank;
 
 typedef enum {
-	AXIS_X			= 0,
-	AXIS_Y			= 1,
-	AXIS_SERIES			= 2,
-	AXIS_MAX			= 3
+	AXIS_X		= 0,
+	AXIS_Y		= 1,
+	AXIS_SERIES	= 2,
+	AXIS_MAX	= 3
 } Axis;
 
 typedef enum {
-	LEGEND_LOCATION_BOTTOM	= 0,
-	LEGEND_LOCATION_CORNER	= 1,
-	LEGEND_LOCATION_TOP		= 2,
-	LEGEND_LOCATION_LEFT	= 3,
-	LEGEND_LOCATION_RIGHT	= 4,
+	LEGEND_LOCATION_BOTTOM		= 0,
+	LEGEND_LOCATION_CORNER		= 1,
+	LEGEND_LOCATION_TOP			= 2,
+	LEGEND_LOCATION_LEFT		= 3,
+	LEGEND_LOCATION_RIGHT		= 4,
 	LEGEND_LOCATION_INVALID1	= 5,
 	LEGEND_LOCATION_INVALID2	= 6,
 	LEGEND_LOCATION_NOT_DOCKED	= 7,
-	LEGEND_LOCATION_MAX		= 8
+	LEGEND_LOCATION_MAX			= 8
 } LegendLocation;
+
+typedef enum {
+	STYLE_BORDER_NONE 					= 0,
+	STYLE_BORDER_THIN 					= 1,
+	STYLE_BORDER_MEDIUM 				= 2,
+	STYLE_BORDER_DASHED 				= 3,
+	STYLE_BORDER_DOTTED 				= 4,
+	STYLE_BORDER_THICK 					= 5,
+	STYLE_BORDER_DOUBLE 				= 6,
+	STYLE_BORDER_HAIR 					= 7,
+	STYLE_BORDER_MEDIUM_DASH 			= 8,
+	STYLE_BORDER_DASH_DOT 				= 9,
+	STYLE_BORDER_MEDIUM_DASH_DOT 		= 10,
+	STYLE_BORDER_DASH_DOT_DOT 			= 11,
+	STYLE_BORDER_MEDIUM_DASH_DOT_DOT	= 12,
+	STYLE_BORDER_SLANTED_DASH_DOT 		= 13
+} BorderStyle;
 
 const char *palette[65] = {
 	"#000000", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff",
@@ -124,7 +141,6 @@ const char *palette[65] = {
 	"#993300", "#993366", "#333399", "#333333", "#ffffff"
 };
 
-const int borderStyles[] = {1, 1, 2, 3, 1, 0, 1, 0, 4, 0, 5, 0, 0, 0};
 const int ndays[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 const int ldays[] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
@@ -201,9 +217,74 @@ void XMLTree::getFont(Q_UINT16, QDomElement &f, Q_UINT16 fontid)
 	f.appendChild(font);
 }
 
+PenFormat XMLTree::borderStyleToQtStyle(int penStyle)
+{
+	PenFormat pen;
+	int penWidth = 1, qtPenStyle;
+	switch(penStyle)
+	{
+		case STYLE_BORDER_NONE:
+			qtPenStyle = NoPen;
+			break;
+		case STYLE_BORDER_THIN:
+			penWidth = 2;
+			qtPenStyle = SolidLine;
+			break;
+		case STYLE_BORDER_MEDIUM:
+			penWidth = 3;
+			qtPenStyle = SolidLine;
+			break;
+		case STYLE_BORDER_DASHED:
+			qtPenStyle = DashLine;
+			break;
+		case STYLE_BORDER_DOTTED:
+			qtPenStyle = DotLine;
+			break;
+		case STYLE_BORDER_THICK:
+			penWidth = 4;
+			qtPenStyle = SolidLine;
+			break;
+		case STYLE_BORDER_DOUBLE:
+			// FIXME: How to do that? (Niko)
+			qtPenStyle = SolidLine;
+			break;
+		case STYLE_BORDER_HAIR:
+			penWidth = 1;
+			qtPenStyle = SolidLine;
+			break;
+		case STYLE_BORDER_MEDIUM_DASH:
+			penWidth = 3;
+			qtPenStyle = DashLine;
+			break;
+		case STYLE_BORDER_DASH_DOT:
+			qtPenStyle = DashDotLine;
+			break;
+		case STYLE_BORDER_MEDIUM_DASH_DOT:
+			penWidth = 3;
+			qtPenStyle = DashDotLine;
+			break;
+		case STYLE_BORDER_DASH_DOT_DOT:
+			qtPenStyle = DashDotDotLine;
+			break;
+		case STYLE_BORDER_MEDIUM_DASH_DOT_DOT:
+			penWidth = 3;
+			qtPenStyle = DashDotDotLine;
+			break;
+		case STYLE_BORDER_SLANTED_DASH_DOT:
+			// FIXME: How to dh that? (Niko)
+			qtPenStyle = DashDotLine;
+			break;
+	}
+
+	pen.setWidth(penWidth);
+	pen.setStyle(qtPenStyle);
+
+	return pen;
+}
+
 void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
 {
-	int penWidth, penStyle;
+	int penStyle;
 	QDomElement border, pen;
 
 	pen = root->createElement("pen");
@@ -212,20 +293,16 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
 	pen.setAttribute("color", palette[(fonts[fontid]->icv) & 0x7f]);
 	f.appendChild(pen);
 
-	if ((xfs[xf]->borderStyle & 0x0f) != 0) {
+	if((xfs[xf]->borderStyle & 0x0f) != 0)
+	{
 		border = root->createElement("left-border");
 		pen = root->createElement("pen");
 		penStyle = xfs[xf]->borderStyle & 0x0f;
-		if (penStyle == 1)
-			penWidth = 2;
-		else if (penStyle == 5)
-			penWidth = 4;
-		else
-			penWidth = 1;
-		pen.setAttribute("width", penWidth);
-		if(borderStyles[penStyle-1]==0)
-			kdDebug(s_area)<<"Border style not supported\n";
-		pen.setAttribute("style", borderStyles[penStyle-1]);
+
+		PenFormat qtpen = borderStyleToQtStyle(penStyle);
+
+		pen.setAttribute("width", qtpen.width());
+		pen.setAttribute("style", qtpen.style());
 		pen.setAttribute("color", ((xfs[xf]->sideBColor ) & 0x7f) == 64 ?
 				"#000000" : palette[(xfs[xf]->sideBColor  ) & 0x7f]);
 		/*palette[xfs[xf]->sideBColor & 0x7f]);*/
@@ -237,16 +314,11 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
 		border = root->createElement("right-border");
 		pen = root->createElement("pen");
 		penStyle = (xfs[xf]->borderStyle >> 4) & 0x0f;
-		if (penStyle == 1)
-			penWidth = 2;
-		else if (penStyle == 5)
-			penWidth = 4;
-		else
-			penWidth = 1;
-		pen.setAttribute("width", penWidth);
-		pen.setAttribute("style", borderStyles[penStyle-1]);
-		if(borderStyles[penStyle-1]==0)
-			kdDebug(s_area)<<"Border style not supported\n";
+		
+		PenFormat qtpen = borderStyleToQtStyle(penStyle);
+		
+		pen.setAttribute("width", qtpen.width());
+		pen.setAttribute("style", qtpen.style());
 		pen.setAttribute("color", ((xfs[xf]->sideBColor >>7 ) & 0x7f) == 64 ?
 				"#000000" : palette[(xfs[xf]->sideBColor >>7 ) & 0x7f]);
 
@@ -260,16 +332,11 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
 		border = root->createElement("top-border");
 		pen = root->createElement("pen");
 		penStyle = (xfs[xf]->borderStyle >> 8) & 0x0f;
-		if (penStyle == 1)
-			penWidth = 2;
-		else if (penStyle == 5)
-			penWidth = 4;
-		else
-			penWidth = 1;
-		pen.setAttribute("width", penWidth);
-		if(borderStyles[penStyle-1]==0)
-			kdDebug(s_area)<<"Border style not supported\n";
-		pen.setAttribute("style", borderStyles[penStyle-1]);
+		
+		PenFormat qtpen = borderStyleToQtStyle(penStyle);
+		
+		pen.setAttribute("width", qtpen.width());
+		pen.setAttribute("style", qtpen.style());
 		pen.setAttribute("color", ((xfs[xf]->topBColor ) & 0x7f) == 64 ?
 				"#000000" : palette[(xfs[xf]->topBColor ) & 0x7f]);
 		/*palette[xfs[xf]->topBColor & 0x7f]);*/
@@ -281,16 +348,11 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
 		border = root->createElement("bottom-border");
 		pen = root->createElement("pen");
 		penStyle = (xfs[xf]->borderStyle >> 12) & 0x0f;
-		if (penStyle == 1)
-			penWidth = 2;
-		else if (penStyle == 5)
-			penWidth = 4;
-		else
-			penWidth = 1;
-		pen.setAttribute("width", penWidth);
-		if(borderStyles[penStyle-1]==0)
-			kdDebug(s_area)<<"Border style not supported\n";
-		pen.setAttribute("style", borderStyles[penStyle-1]);
+		
+		PenFormat qtpen = borderStyleToQtStyle(penStyle);
+		
+		pen.setAttribute("width", qtpen.width());
+		pen.setAttribute("style", qtpen.style());
 		pen.setAttribute("color",  ((xfs[xf]->topBColor >> 7) & 0x7f) == 64 ?
 				"#000000" : palette[(xfs[xf]->topBColor >> 7) & 0x7f]);
 
@@ -313,18 +375,11 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
 			case 3:
 				border = root->createElement("fall-diagonal");
 				pen = root->createElement("pen");
-				if (penStyle == 1)
-					penWidth = 2;
-				else if (penStyle == 2)
-					penWidth = 3;
-				else if (penStyle == 5)
-					penWidth = 4;
-				else
-					penWidth = 1;
-				pen.setAttribute("width", penWidth);
-				pen.setAttribute("style", borderStyles[penStyle-1]);
-				if(borderStyles[penStyle-1]==0)
-					kdDebug(s_area)<<"Border style not supported\n";
+
+				PenFormat qtpen = borderStyleToQtStyle(penStyle);
+				
+				pen.setAttribute("width", qtpen.width());
+				pen.setAttribute("style", qtpen.style());
 				pen.setAttribute("color", ((xfs[xf]->topBColor >> 14) & 0x7f) == 64 ?
 						"#000000" : palette[(xfs[xf]->topBColor >> 14) & 0x7f]);
 				border.appendChild(pen);
@@ -334,18 +389,11 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
 		}
 
 		pen = root->createElement("pen");
-		if (penStyle == 1)
-			penWidth = 2;
-		else if (penStyle == 2)
-			penWidth = 3;
-		else if (penStyle == 5)
-			penWidth = 4;
-		else
-			penWidth = 1;
-		pen.setAttribute("width", penWidth);
-		if(borderStyles[penStyle-1]==0)
-			kdDebug(s_area)<<"Border style not supported\n";
-		pen.setAttribute("style", borderStyles[penStyle-1]);
+
+		PenFormat qtpen = borderStyleToQtStyle(penStyle);
+		
+		pen.setAttribute("width", qtpen.width());
+		pen.setAttribute("style", qtpen.style());
 		// the following is necessary to handle Excels "Automatic" color option
 		// somehow this is only needed for diagonal borders
 		pen.setAttribute("color", ((xfs[xf]->topBColor >> 14) & 0x7f) == 64 ?
