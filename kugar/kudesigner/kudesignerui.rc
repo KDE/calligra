@@ -1,7 +1,7 @@
 <!DOCTYPE kpartgui>
 <kpartgui name="kudesigner" version="0.1">
 <MenuBar>
-  <Menu name="sections"><text>&amp;Sections</text>
+  <Menu name="sections"><text>Sec&amp;tions</text>
     <Action name="rheader"/>
     <Action name="pheader"/>
     <Action name="dheader"/>
@@ -21,7 +21,7 @@
     <Action name="line"/>
   </Menu>
 </MenuBar>
-<ToolBar name="sectionsToolBar" noMerge="1"><text>Sections Toolbar</text>
+<ToolBar name="sectionsToolBar" position="bottom" noMerge="1"><text>Sections Toolbar</text>
     <Action name="rheader"/>
     <Action name="pheader"/>
     <Action name="dheader"/>
@@ -30,7 +30,7 @@
     <Action name="pfooter"/>
     <Action name="rfooter"/>
 </ToolBar>
-<ToolBar name="itemsToolBar" noMerge="1"><text>Items Toolbar</text>
+<ToolBar name="itemsToolBar" position="left" noMerge="1"><text>Items Toolbar</text>
     <Action name="nothing" group="item operations"/>
     <Separator/>
     <Action name="label" group="item operations"/>
