@@ -603,7 +603,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     m_topBorderPen.setWidth( topBorderWidth( _col, _row ) );
     m_fallDiagonalPen.setWidth( fallDiagonalWidth( _col, _row) );
     m_goUpDiagonalPen.setWidth( goUpDiagonalWidth( _col, _row) );
-    
+
     m_nbLines = 0;
 
     //
@@ -667,7 +667,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 
 	m_richWidth = w;
 	m_richHeight = h;
-	
+
 	// Occupy the needed extra cells in horizontal direction
 	max_width = width( _col );
 	ende = ( max_width >= w );
@@ -754,11 +754,11 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 	QSize size = m_pVisualFormula->size();
 	int h = size.height();
 	int w = size.width();
-	
+
 	kdDebug(36001) << "Formula w=" << w << " h=" << h << endl;
 	m_richWidth=w;
 	m_richHeight=h;
-	
+
 	// Occupy the needed extra cells in horizontal direction
 	max_width = width( _col );
 	ende = ( max_width >= w );
@@ -816,11 +816,11 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 
     m_textPen.setColor( textColor() );
     m_conditionIsTrue = false;
-    
+
     //
     // Turn the stored value in a string
     //
-    
+
     if ( isFormular() && m_pTable->getShowFormular() )
     {
 	m_strOutText = m_strText;
@@ -899,14 +899,14 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 	m_strOutText = "";
 	if ( prefix() != 0L )
 	    m_strOutText += prefix();
-	
+
 	m_strOutText += localizedNumber;
 
 	if ( postfix() != 0L )
 	    m_strOutText += postfix();
 
 	verifyCondition();
-    
+
 	// Find the correct color which depends on the conditions
 	// and the sign of the value.
 	if ( floatColor() == KSpreadCell::NegRed && v < 0.0 )
@@ -948,9 +948,9 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     }
 
     _painter.setPen( m_textPen );
-  
+
     // verifyCondition();
-  
+
     //
     // Determine the correct font
     //
@@ -976,13 +976,13 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 
     // Calculate text dimensions
     textSize(_painter);
-    
+
     QFontMetrics fm = _painter.fontMetrics();
 
     //
     // Calculate the size of the cell
     //
-    
+
     RowLayout *rl = m_pTable->rowLayout( m_iRow );
     ColumnLayout *cl = m_pTable->columnLayout( m_iColumn );
 
@@ -1003,14 +1003,14 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 	    h += rl->height() ;
 	}
     }
-    
+
     m_iExtraWidth = w;
     m_iExtraHeight = h;
 
     // Some space for the little button of the combo box
     if ( m_style == ST_Select )
-	w -= 16;    
-    
+	w -= 16;
+
     // Do we need to break the line into multiple lines and are we allowed to
     // do so?
     int lines = 1;
@@ -1051,16 +1051,16 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 	    }
 	    while( o.find( ' ', pos ) != -1 );
         }
-	
+
         m_iOutTextHeight *= lines;
-	
+
 	if( lines != 1 )
 	    m_nbLines = lines - 1;
 	else
 	    m_nbLines = lines;
-	
+
 	m_iTextX = 0;
-	
+
 	// Calculate the maximum width
 	QString t;
 	int i;
@@ -1151,7 +1151,7 @@ QString KSpreadCell::createFormat(double value)
     int p = (m_iPrecision == -1) ? 8 : m_iPrecision;
     QString localizedNumber= KGlobal::locale()->formatNumber( value, p );
     int pos = 0;
-    
+
     switch( m_eFormatNumber)
     {
     case Number :
@@ -1233,7 +1233,7 @@ QString KSpreadCell::createFractionFormat(double value)
 	    kdDebug(36001)<<"Error in Fraction format\n";
 	    break;
 	}
-	
+
         double calc = 0;
         int index1 = 1;
         double diff = result;
@@ -1248,7 +1248,7 @@ QString KSpreadCell::createFractionFormat(double value)
 	}
         tmp = tmp.setNum( floor(value) ) + " " + tmp.setNum( index1 ) + "/" + tmp.setNum( index );
     }
-    
+
     return tmp;
 }
 
@@ -1258,7 +1258,7 @@ void KSpreadCell::verifyCondition()
     double v = m_dValue * m_dFaktor;
     m_conditionIsTrue = false;
     KSpreadConditional *tmpCondition = 0;
-    
+
     if(m_bValue && !m_pTable->getShowFormular())
     {
 	for(int i=0;i<3;i++)
@@ -1322,14 +1322,14 @@ void KSpreadCell::verifyCondition()
 		    break;
 
                 case Between :
-		    if( ( v > QMIN(tmpCondition->val1, tmpCondition->val2 ) ) && 
+		    if( ( v > QMIN(tmpCondition->val1, tmpCondition->val2 ) ) &&
 			( v < QMAX(tmpCondition->val1, tmpCondition->val2 ) ) )
 		    {
                         m_conditionIsTrue=true;
                         m_numberOfCond=i;
 		    }
 		    break;
-		    
+
                 case Different :
 		    if( ( v < QMIN(tmpCondition->val1, tmpCondition->val2 ) ) ||
 			( v > QMAX(tmpCondition->val1, tmpCondition->val2) ) )
@@ -1474,7 +1474,7 @@ void KSpreadCell::textSize( QPainter &_paint )
         m_iOutTextWidth = fm.width( m_strOutText.at(0));
         m_iOutTextHeight = (fm.ascent() + fm.descent())*(m_strOutText.length());
     }
-    
+
     m_fmAscent=fm.ascent();
 }
 
@@ -1502,7 +1502,7 @@ void KSpreadCell::conditionAlign(QPainter &_paint,int _col,int _row)
     {
 	_paint.setFont( m_textFont );
     }
-    
+
     textSize(_paint);
 
     offsetAlign(_col,_row);
@@ -1934,7 +1934,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     _painter.drawLineSegments( a, 0, 3 );
     _painter.drawPoint( a[6] ); */
       QApplication::style().drawComboButton(  &_painter, _tx + dx + 1, _ty + dy + 1, w - 2*dx - 1, h - 2*dy - 1, defaultColorGroup, selected/*,  TRUE, &fill*/ );
-      
+
       // QApplication::style().drawComboButton(  &_painter, _tx + dx + 1, _ty + dy + 1, w - 2*dx - 1, h - 2*dy - 1, defaultColorGroup, selected, /* TRUE, &fill*/ );
   }
 
@@ -2596,7 +2596,7 @@ const QColor& KSpreadCell::rightBorderColor( int _col, int _row )
     {
 	RowLayout *rl = m_pTable->rowLayout( _row );
 	ColumnLayout *cl = m_pTable->columnLayout( _col + 1 );
-	
+
 	if ( rl->time() > cl->time() )
 	    return rl->leftBorderColor();
 	else
@@ -3010,7 +3010,7 @@ void KSpreadCell::checkValue()
     QString stringPm=i18n("pm");
     QString stringAm=i18n("am");
     bool valid=false;
-    if(!(tmpTime=KGlobal::locale()->readTime(m_strText)).isNull())
+    if((tmpTime=KGlobal::locale()->readTime(m_strText)).isValid())
         {
         valid=true;
         }
@@ -3286,7 +3286,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
 	format.setAttribute( "style", (int)style() );
     if ( verticalText() )
 	format.setAttribute( "verticaltext", "yes" );
-    if ( isForceExtraCells() )	
+    if ( isForceExtraCells() )
     {
 	format.setAttribute( "colspan", extraXCells() );
 	format.setAttribute( "rowspan", extraYCells() );
@@ -3417,7 +3417,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
         {
 	    QDomElement text = doc.createElement( "text" );
 	    text.appendChild( doc.createCDATASection( m_strText ) );
-	    cell.appendChild( text );	
+	    cell.appendChild( text );
 	}
 	else if( (getFormatNumber()==ShortDate || getFormatNumber()==TextDate)&& m_bDate )
         {
@@ -3511,13 +3511,13 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 
 	if ( f.hasAttribute( "bgcolor" ) )
 	    setBgColor( QColor( f.attribute( "bgcolor" ) ) );
-	
+
 	if ( f.hasAttribute( "multirow" ) )
 	    setMultiRow( true );
 
 	if ( f.hasAttribute( "verticaltext" ) )
 	    setVerticalText( true );
-	
+
 	if ( f.hasAttribute( "colspan" ) )
         {
 	    int i = f.attribute("colspan").toInt( &ok );
@@ -3532,7 +3532,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    if ( i > 0 )
 		m_bForceExtraCells = true;
 	}
-	
+
 	if ( f.hasAttribute( "rowspan" ) )
         {
 	    int i = f.attribute("rowspan").toInt( &ok );
@@ -3563,7 +3563,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    }
 	    m_iPrecision = i;
 	}
-	
+
 	if ( f.hasAttribute( "float" ) )
         {
 	    FloatFormat a = (FloatFormat)f.attribute("float").toInt( &ok );
@@ -3576,7 +3576,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    // Assignment
 	    setFloatFormat( a );
 	}
-	
+
 	if ( f.hasAttribute( "floatcolor" ) )
         {
 	    FloatColor a = (FloatColor)f.attribute("floatcolor").toInt( &ok );
@@ -3589,7 +3589,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    // Assignment
 	    setFloatColor( a );
 	}
-	
+
 	if ( f.hasAttribute( "faktor" ) )
         {
 	    m_dFaktor = f.attribute("faktor").toDouble( &ok );
@@ -3628,7 +3628,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 		if ( !ok ) return false;
 	    }
 	}
-	
+
         QDomElement strike = f.namedItem( "strike" ).toElement();
 	if ( !strike.isNull() )
         {
@@ -3638,7 +3638,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 		if ( !ok ) return false;
 	    }
 	}
-	
+
 	QDomElement left = f.namedItem( "left-border" ).toElement();
 	if ( !left.isNull() && pm != NoBorder )
         {
@@ -3713,7 +3713,7 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    QDomElement font = first.namedItem( "font" ).toElement();
 	    if ( !font.isNull() )
 		m_firstCondition->fontcond=toFont(font) ;
-		
+
 	}
 
 	QDomElement second = condition.namedItem( "second" ).toElement();
@@ -3742,9 +3742,9 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    QDomElement font = second.namedItem( "font" ).toElement();
 	    if ( !font.isNull() )
 		m_secondCondition->fontcond=toFont(font) ;
-		
+
 	}
-  	 	
+
 	QDomElement third = condition.namedItem( "third" ).toElement();
 	if(!third.isNull())
         {
