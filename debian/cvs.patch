@@ -115,7 +115,18 @@
  						   I18N_NOOP("Kugar"),
  						   VERSION);
  
---- kugar/part/Makefile.am
+--- kugar/part/kugar.desktop
+--- kugar/part/kugar.desktop
+@@ -6,7 +6,7 @@
+ Icon=kugar
+ MimeType=application/x-kugar;
+ Type=Application
+-DocPath=
++DocPath=kugar/index.html
+ Comment=Report Generator
+ Comment[af]=RAPORT GENEREERDER
+ Comment[az]=Raport Yaradıcısı
++++ kugar/part/Makefile.am
 +++ kugar/part/Makefile.am
 @@ -2,7 +2,7 @@
  
