@@ -444,35 +444,38 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
                              h_pix, drawSelections, lastFormat, i, selectionStarts,
                              selectionEnds, cg, rightToLeft, zh );
 
-    // Draw "invisible chars"
-    int end = QMIN( start + len, length() - 1 ); // don't look at the trailing space
-    for ( int idx = start ; idx < end ; ++idx )
+    if ( !textDocument()->drawingShadow())
     {
-        QTextStringChar &ch = string()->at(idx);
-        if ( ch.isCustom() || ch.c.isSpace() )
-            continue;
-        if ( !lastFormat->inFont( ch.c ) )
+        // Draw "invisible chars"
+        int end = QMIN( start + len, length() - 1 ); // don't look at the trailing space
+        for ( int idx = start ; idx < end ; ++idx )
         {
-            //kdDebug() << "KoTextParag::drawParagString char not in font" << endl;
-            int w = ch.pixelwidth;
-            int height = zh->layoutUnitToPixelY( ch.ascent() ) / 2; // we use half ascent and 0 descent
-            int x = zh->layoutUnitToPixelX( ch.x ) + ch.pixelxadj;
-            painter.save();
-            QPen pen( cg.color( QColorGroup::Text ) );
-            painter.setPen( pen );
-            painter.drawRect( x, lastY_pix + baseLine_pix - height, w, height );
-            painter.restore();
+            QTextStringChar &ch = string()->at(idx);
+            if ( ch.isCustom() || ch.c.isSpace() )
+                continue;
+            if ( !lastFormat->inFont( ch.c ) )
+            {
+                int w = ch.pixelwidth;
+                int height = zh->layoutUnitToPixelY( ch.ascent() ) / 2; // we use half ascent and 0 descent
+                int x = zh->layoutUnitToPixelX( ch.x ) + ch.pixelxadj;
+                kdDebug(32001) << "KoTextParag::drawParagString char not in font"
+                               << " (code=" << ch.c.unicode() << ", x=" << x << " w=" << w << " h=" << height << endl;
+                painter.save();
+                QPen pen( cg.color( QColorGroup::Text ) );
+                painter.setPen( pen );
+                painter.drawRect( x, lastY_pix + baseLine_pix - height, w, height );
+                painter.restore();
+            }
         }
+
+        if ( textDocument()->drawFormattingChars() )
+            drawFormattingChars( painter, s, start, len,
+                                 startX, lastY, baseLine, h,
+                                 startX_pix, lastY_pix, baseLine_pix, bw, h_pix,
+                                 drawSelections,
+                                 lastFormat, i, selectionStarts,
+                                 selectionEnds, cg, rightToLeft );
     }
-
-    if ( textDocument()->drawFormattingChars() && !textDocument()->drawingShadow())
-        drawFormattingChars( painter, s, start, len,
-                             startX, lastY, baseLine, h,
-                             startX_pix, lastY_pix, baseLine_pix, bw, h_pix,
-                             drawSelections,
-                             lastFormat, i, selectionStarts,
-                             selectionEnds, cg, rightToLeft );
-
 }
 
 // Copied from QTextParag
