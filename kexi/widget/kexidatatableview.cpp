@@ -105,29 +105,13 @@ bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
 	uint i = 0;
 	KexiDB::Field::Vector vector = m_cursor->query()->fieldsExpanded();
 	KexiTableViewData *tv_data = new KexiTableViewData(m_cursor);
+/* moved to KexiTableViewData ctor
 	KexiTableViewColumn* col;
 	for (i=0;i<vector.count();i++) {
 		KexiDB::Field *f = vector[i];// = list->first();
 		col=new KexiTableViewColumn(*m_cursor->query(), *f);
-/*		col.type = f->type();
-		if (!f->caption().isEmpty())
-			col.caption = f->caption();
-		else {
-			//reuse alias if available:
-			col.caption = m_cursor->query()->alias(f);
-			//last hance: use field name
-			if (col.caption.isEmpty())
-				col.caption = f->name();
-		}*/
-		/*TEMPORARY: not editable -- TODO: set editable if supported*/
-//		tv_data->columns.append( col );
 		tv_data->addColumn( col );
-
-//		addColumn(fname, f->variantType(), 
-//			false/*TEMPORARY: not editable*/
-//		);
-//		f = list->next();
-	}
+	}*/
 
 	QString caption = m_cursor->query()->caption();
 	if (caption.isEmpty()) {
