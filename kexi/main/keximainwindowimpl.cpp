@@ -609,7 +609,7 @@ KexiMainWindowImpl::initActions()
 
 	//TOOLS MENU
 #ifndef KEXI_NO_MIGRATION
-	new KAction(i18n("Import Data"), "toolsdatamigrate", 0, this, SLOT(slotMigrationWizard()), actionCollection(), "tools_data_migration");
+	new KAction(i18n("Import Data..."), "toolsdatamigrate", 0, this, SLOT(slotMigrationWizard()), actionCollection(), "tools_data_migration");
 #endif	
 
 	//SETTINGS MENU
