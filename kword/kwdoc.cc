@@ -2729,57 +2729,53 @@ void KWDocument::appendPage( /*unsigned int _page*/ )
 #endif
     m_pages++;
 
-    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
-    for ( ; fit.current() ; ++fit )
+    // Look at frames on pages thisPageNum and thisPageNum-1 (for sheetside stuff)
+    QPtrList<KWFrame> framesToLookAt = framesInPage( thisPageNum, false );
+
+    QPtrList<KWFrame> framesToAlsoLookAt = framesInPage( thisPageNum-1, false ); // order doesn't matter
+    // Merge into single list. Other alternative, two loops, code inside moved to another method.
+    QPtrListIterator<KWFrame> frameAlsoIt( framesToAlsoLookAt );
+    for ( ; frameAlsoIt.current(); ++frameAlsoIt )
+        framesToLookAt.append( frameAlsoIt.current() );
+
+    QPtrListIterator<KWFrame> frameIt( framesToLookAt );
+    for ( ; frameIt.current(); ++frameIt )
     {
-        KWFrameSet * frameSet = fit.current();
+        KWFrame * frame = frameIt.current();
+        KWFrameSet* frameSet = frame->frameSet();
+
         // don't add tables! A table cell ( frameset ) _must_ not have cells auto-added to them!
         if ( frameSet->type() == FT_TABLE ) continue;
 
+        /* copy the frame if: - it is on this page or
+           - it is on the former page and the frame is set to double sided.
+           - AND the frame is set to be reconnected or copied
+           -  */
 #ifdef DEBUG_PAGES
-        kdDebug(32002) << "KWDocument::appendPage looking at frameset " << frameSet->getName() << endl;
+        kdDebug(32002) << "KWDocument::appendPage looking at frame " << frame << ", pageNum=" << frame->pageNum() << " from " << frameSet->getName() << endl;
+        static const char * newFrameBh[] = { "Reconnect", "NoFollowup", "Copy" };
+        kdDebug(32002) << "   frame->newFrameBehavior()==" << newFrameBh[frame->newFrameBehavior()] << endl;
 #endif
-        // KWFrameSet::addFrame triggers a reshuffle in the frames list (KWTextFrameSet::updateFrames)
-        // which destroys the iterators -> append the new frames at the end.
-        QPtrList<KWFrame> newFrames;
-
-        QPtrListIterator<KWFrame> frameIt( frameSet->frameIterator() );
-        for ( ; frameIt.current(); ++frameIt )
+        if ( (frame->pageNum() == thisPageNum ||
+              (frame->pageNum() == thisPageNum -1 && frame->sheetSide() != KWFrame::AnySide) )
+             &&
+             ( ( frame->newFrameBehavior()==KWFrame::Reconnect && frameSet->type() == FT_TEXT ) ||  // (*)
+               ( frame->newFrameBehavior()==KWFrame::Copy && !frameSet->isAHeader() && !frameSet->isAFooter() ) ) // (**)
+            )
         {
-            KWFrame * frame = frameIt.current();
-            /* copy the frame if: - it is on this page or
-                                  - it is on the former page and the frame is set to double sided.
-                                  - AND the frame is set to be reconnected or copied
-                                  -  */
-#ifdef DEBUG_PAGES
-            kdDebug(32002) << "   frame=" << frame << " frame->pageNum()=" << frame->pageNum() << endl;
-            static const char * newFrameBh[] = { "Reconnect", "NoFollowup", "Copy" };
-            kdDebug(32002) << "   frame->newFrameBehavior()==" << newFrameBh[frame->newFrameBehavior()] << endl;
-#endif
-            if ( (frame->pageNum() == thisPageNum ||
-                  (frame->pageNum() == thisPageNum -1 && frame->sheetSide() != KWFrame::AnySide) )
-                 &&
-                 ( ( frame->newFrameBehavior()==KWFrame::Reconnect && frameSet->type() == FT_TEXT ) ||  // (*)
-                   ( frame->newFrameBehavior()==KWFrame::Copy && !frameSet->isAHeader() && !frameSet->isAFooter() ) ) // (**)
-                )
-            {
-                // (*) : Reconnect only makes sense for text frames
-                // (**) : NewFrameBehavior == Copy is handled here except for headers/footers, which
-                // are created in recalcFrames() anyway.
+            // (*) : Reconnect only makes sense for text frames
+            // (**) : NewFrameBehavior == Copy is handled here except for headers/footers, which
+            // are created in recalcFrames() anyway.
 
-                KWFrame *frm = frame->getCopy();
-                frm->moveBy( 0, ptPaperHeight() );
-                //frm->setPageNum( frame->pageNum()+1 );
-                newFrames.append( frm );
+            KWFrame *frm = frame->getCopy();
+            frm->moveBy( 0, ptPaperHeight() );
+            //frm->setPageNum( frame->pageNum()+1 );
+            frameSet->addFrame( frm );
 
-                if ( frame->newFrameBehavior()==KWFrame::Copy )
-                    frm->setCopy( true );
-                //kdDebug(32002) << "   => created frame " << frm << endl;
-            }
+            if ( frame->newFrameBehavior()==KWFrame::Copy )
+                frm->setCopy( true );
+            //kdDebug(32002) << "   => created frame " << frm << endl;
         }
-        QPtrListIterator<KWFrame> newFrameIt( newFrames );
-        for ( ; newFrameIt.current() ; ++newFrameIt )
-            frameSet->addFrame( newFrameIt.current() );
     }
     emit newContentsSize();
 
