@@ -1074,6 +1074,9 @@ bool KWFrameDia::applyChanges()
     KWFrame *frameCopy = frame->getCopy(); // keep a copy of the original (for undo/redo)
     bool isNewFrame = frame->frameSet() == 0L; // true if we are creating a newframe
     QString name=QString::null;
+
+    KMacroCommand * macroCmd=0L;
+
     if ( tab3 )
     {
         // Frame/Frameset belonging, and frameset naming
@@ -1165,15 +1168,16 @@ bool KWFrameDia::applyChanges()
         }
         else
         {
+            if(!macroCmd)
+                macroCmd = new KMacroCommand( i18n("Rename frameset") );
             // Rename frameset
             KWFrameSetPropertyCommand *cmd = new KWFrameSetPropertyCommand( i18n("Rename frameset"), frame->frameSet(), KWFrameSetPropertyCommand::FSP_NAME, name );
-            doc->addCommand(cmd);
+            macroCmd->addCommand(cmd);
 	    cmd->execute();
             //frame->frameSet()->setName( name );
         }
     }
 
-    KMacroCommand * macroCmd=0L;
     if ( tab1 )
     {
         // Copy
@@ -1259,8 +1263,10 @@ bool KWFrameDia::applyChanges()
             KWTextFrameSet *_frameSet = new KWTextFrameSet( doc, name );
             _frameSet->addFrame( frame );
             doc->addFrameSet( _frameSet );
+            if(!macroCmd)
+                macroCmd = new KMacroCommand( i18n("Create text frame") );
             KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create text frame"), frame) ;
-            doc->addCommand(cmd);
+            macroCmd->addCommand(cmd);
         }
 
     }
