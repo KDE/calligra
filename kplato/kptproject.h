@@ -89,13 +89,13 @@ public:
 
     QPtrList<KPTAppointment> appointments(const KPTTask *task);
 
-	void addTask( KPTNode* task, KPTNode* position );
-	void addSubTask( KPTNode* task, KPTNode* position );
-	void deleteTask( KPTNode* task );
-	void indentTask( KPTNode* task );
-	void unindentTask( KPTNode* task );
-	void moveTaskUp( KPTNode* task );
-	void moveTaskDown( KPTNode* task );
+    bool addTask( KPTNode* task, KPTNode* position );
+    bool addSubTask( KPTNode* task, KPTNode* position );
+    bool deleteTask( KPTNode* task );
+    bool indentTask( KPTNode* task );
+    bool unindentTask( KPTNode* task );
+    bool moveTaskUp( KPTNode* task );
+    bool moveTaskDown( KPTNode* task );
 
     KPTNode *node(int id);
     int mapNode(KPTNode *node);

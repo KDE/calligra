@@ -274,9 +274,7 @@ void KPTView::slotEditPaste() {
 
 void KPTView::slotViewGantt() {
     //kdDebug()<<k_funcinfo<<endl;
-	m_ganttview->clear();
     m_tab->raiseWidget(m_ganttview);
-	m_ganttview->draw(getPart()->getProject());
 }
 
 void KPTView::slotViewPert() {
@@ -329,8 +327,6 @@ void KPTView::slotProjectCalculate() {
 
 void KPTView::projectCalculate() {
     getPart()->getProject().calculate();
-//    KPTDateTime *t = getPart()->getProject().getStartTime();
-//    delete t;
 }
 
 void KPTView::slotReportDesign() {
@@ -485,8 +481,13 @@ void KPTView::slotOpenNode() {
             // and hence, create a milestone
             KPTTask *task = dynamic_cast<KPTTask *>(node);
             KPTTaskDialog *dia = new KPTTaskDialog(*task);
-            if (dia->exec())
-                slotUpdate(true);
+            if (dia->exec()) {
+                KMacroCommand *m = dia->buildCommand();
+                if (m) {
+                    getPart()->addCommand(m);
+                    slotUpdate(true);
+                }
+            }
             delete dia;
             break;
         }
@@ -519,10 +520,10 @@ void KPTView::slotIndentTask()
 	KPTNode* task = currentTask();
 
 	// tell the model to do the work for us
-	getProject().indentTask( task );
-
-	// display the changes
-	slotUpdate(true);
+    if (getProject().indentTask( task )) {
+        // display the changes
+        slotUpdate(true);
+    }
 }
 
 void KPTView::slotUnindentTask()
@@ -532,10 +533,10 @@ void KPTView::slotUnindentTask()
 	KPTNode* task = currentTask();
 
 	// tell the model to do the work for us
-	getProject().unindentTask( task );
-
-	// display the changes
-	slotUpdate(true);
+    if (getProject().unindentTask( task )) {
+        // display the changes
+        slotUpdate(true);
+    }
 }
 
 void KPTView::slotMoveTaskUp()
@@ -546,6 +547,7 @@ void KPTView::slotMoveTaskUp()
 	if ( 0 == task ) {
 		// is always != 0. At least we would get the KPTProject, but you never know who might change that
 		// so better be careful
+		kdError()<<k_funcinfo<<"No current task"<<endl;
 		return;
 	}
 
@@ -554,10 +556,10 @@ void KPTView::slotMoveTaskUp()
 		return;
 	}
 	// tell the model to do the work for us
-	getProject().moveTaskUp( task );
-
-	// display the changes
-	slotUpdate(true);
+    if (getProject().moveTaskUp( task )) {
+        // display the changes
+        slotUpdate(true);
+    }
 }
 
 void KPTView::slotMoveTaskDown()
@@ -576,10 +578,10 @@ void KPTView::slotMoveTaskDown()
 		return;
 	}
 	// tell the model to do the work for us
-	getProject().moveTaskDown( task );
-
-	// display the changes
-	slotUpdate(true);
+    if (getProject().moveTaskDown( task )) {
+        // display the changes
+        slotUpdate(true);
+    }
 }
 
 void KPTView::slotEditResource() {
@@ -631,14 +633,14 @@ void KPTView::slotChanged()
 
 void KPTView::slotUpdate(bool calculate)
 {
-    //kdDebug()<<k_funcinfo<<"calculate="<<calculate<<endl;
+    kdDebug()<<k_funcinfo<<"calculate="<<calculate<<endl;
     if (calculate)
 	    projectCalculate();
 
 	if (m_tab->visibleWidget() == m_ganttview)
 	{
 	    //m_ganttview->hide();
-    	m_ganttview->draw(getPart()->getProject());
+        m_ganttview->drawChanges(getProject());
 	    m_ganttview->show();
 	}
 	else if (m_tab->visibleWidget() == m_pertview)
@@ -648,7 +650,7 @@ void KPTView::slotUpdate(bool calculate)
 	}
 	else if (m_tab->visibleWidget() == m_resourceview)
 	{
-    	m_resourceview->draw(getPart()->getProject());
+    	m_resourceview->draw(getProject());
 	    m_resourceview->show();
 	}
 	else if (m_tab->visibleWidget() == m_reportview)

@@ -327,6 +327,12 @@ public:
     // Reimplement this
     virtual KPTDuration calcDuration(const KPTDateTime &/*time*/, const KPTDuration &/*effort*/, bool /*backward*/) { return KPTDuration::zeroDuration;}
 
+    KPTNode *siblingBefore();
+    KPTNode *childBefore(KPTNode *node);
+    KPTNode *siblingAfter();
+    KPTNode *childAfter(KPTNode *node);
+    bool moveChildUp(KPTNode *node);
+    bool moveChildDown(KPTNode *node);
 protected:
     QPtrList<KPTNode> m_nodes;
     QPtrList<KPTRelation> m_dependChildNodes;

@@ -437,78 +437,80 @@ QPtrList<KPTResourceGroup> &KPTProject::resourceGroups() {
      return m_resourceGroups;
 }
 
-void KPTProject::addTask( KPTNode* task, KPTNode* position )
+bool KPTProject::addTask( KPTNode* task, KPTNode* position )
 {
 	// we want to add a task at the given position. => the new node will
 	// become next sibling right after position.
 	if ( 0 == position ) {
       kdError()<<k_funcinfo<<"position=0, could not add task: "<<task->name()<<endl;
-	  return;
+	  return false;
 	}
     //kdDebug()<<k_funcinfo<<"Add "<<task->name()<<" after "<<position->name()<<endl;
 	// in case we want to add to the main project, we make it child element
 	// of the root element.
 	if ( KPTNode::Type_Project == position->type() ) {
-        addSubTask(task, position);
-		return;
+        return addSubTask(task, position);
 	}
 	// find the position
 	// we have to tell the parent that we want to delete one of its children
 	KPTNode* parentNode = position->getParent();
 	if ( !parentNode ) {
 		kdDebug()<<k_funcinfo<<"parent node not found???"<<endl;
-		return;
+		return false;
 	}
 	int index = parentNode->findChildNode( position );
 	if ( -1 == index ) {
 		// ok, it does not exist
 		kdDebug()<<k_funcinfo<<"Task not found???"<<endl;
-		return;
+		return false;
 	}
 	parentNode->insertChildNode( index+1, task );
 	task->setParent( parentNode ); // tell the node about it
+    return true;
 }
 
-void KPTProject::addSubTask( KPTNode* task, KPTNode* position )
+bool KPTProject::addSubTask( KPTNode* task, KPTNode* position )
 {
 	// we want to add a subtask to the node "position". It will become
 	// position's last child.
 	if ( 0 == position ) {
       kdError()<<k_funcinfo<<"No parent, can not add subtask: "<<task->name()<<endl;
-	  return;
+	  return false;
 	}
 	position->addChildNode(task);
 	task->setParent( position ); // tell the node about it
     task->setId(mapNode(task));
+    return true;
 }
 
-void KPTProject::deleteTask( KPTNode* task )
+bool KPTProject::deleteTask( KPTNode* task )
 {
 	if ( 0 == task ) {
 		// is always != 0. At least we would get the KPTProject, but you
 		// never know who might change that, so better be careful
-		return;
+		return false;
 	}
 
 	if ( KPTNode::Type_Project == task->type() ) {
 		kdDebug()<<k_funcinfo<<"The root node cannot be deleted"<<endl;
-		return;
+		return false;
 	}
 
     task->setDeleted(true);
+    return true;
 }
 
-void KPTProject::indentTask( KPTNode* task )
+bool KPTProject::indentTask( KPTNode* task )
 {
 	if ( 0 == task ) {
 		// should always be != 0. At least we would get the KPTProject,
 		// but you never know who might change that, so better be careful
-		return;
+		return false;
 	}
 
 	if ( KPTNode::Type_Project == task->type() ) {
 		kdDebug()<<k_funcinfo<<"The root node cannot be indented"<<endl;
-		return;
+		return false;
 	}
 
 	// we have to find the parent of task to manipulate its list of children
@@ -517,59 +519,62 @@ void KPTProject::indentTask( KPTNode* task )
 		int index = parentNode->findChildNode( task );
 		if ( -1 == index ) {
 			kdDebug()<<k_funcinfo<<"Tasknot found???"<<endl;
-			return;
+			return false;
 		}
 		if ( 0 == index ) {
 			kdDebug()<<k_funcinfo<<"Task already is first child and cannot be indented"<<endl;
-			return;
+			return false;
 		}
-		KPTNode* newParent = parentNode->getChildNode( index -1);
+		KPTNode* newParent = task->siblingBefore();
 		if ( 0 == newParent) {
 			kdDebug()<<k_funcinfo<<"new parent node not found"<<endl;
-			return;
+			return false;
 		}
 		parentNode->delChildNode( task, false ); // false: do not delete objekt
 		newParent->addChildNode( task );
 		task->setParent( newParent ); // tell the node about it
+        return true;
 	}
+    return false;
 }
 
-void KPTProject::unindentTask( KPTNode* task )
+bool KPTProject::unindentTask( KPTNode* task )
 {
 	if ( 0 == task ) {
 		// is always != 0. At least we would get the KPTProject, but you
 		// never know who might change that, so better be careful
-		return;
+		return false;
 	}
 
 	if ( KPTNode::Type_Project == task->type() ) {
 		kdDebug()<<k_funcinfo<<"The root node cannot be unindented"<<endl;
-		return;
+		return false;
 	}
 
 	// we have to find the parent of task to manipulate its list of children
 	// and we need the parent's parent too
 	KPTNode* parentNode = task->getParent();
 	if ( !parentNode ) {
-		return;
+		return false;
 	}
 	KPTNode* grandParentNode = parentNode->getParent();
 	if ( !grandParentNode ) {
 		kdDebug()<<k_funcinfo<<"This node already is at the top level"<<endl;
-		return;
+		return false;
 	}
 	int index = parentNode->findChildNode( task );
 	if ( -1 == index ) {
 		kdDebug()<<k_funcinfo<<"Tasknot found???"<<endl;
-		return;
+		return false;
 	}
 	parentNode->delChildNode( task, false ); // false: do not delete objekt
 	grandParentNode->addChildNode( task, parentNode );
 	task->setParent( grandParentNode ); // tell the node about it
+    return true;
 }
 
 
-void KPTProject::moveTaskUp( KPTNode* task )
+bool KPTProject::moveTaskUp( KPTNode* task )
 {
 	// we have to find the parent of task to manipulate its list of children
 	KPTNode* parentNode = task->getParent();
@@ -577,19 +582,20 @@ void KPTProject::moveTaskUp( KPTNode* task )
 		int index = parentNode->findChildNode( task );
 		if ( -1 == index ) {
 			kdDebug()<<k_funcinfo<<"Tasknot found???"<<endl;
-			return;
+			return false;
 		}
 		if ( 0 == index ) {
 			kdDebug()<<k_funcinfo<<"Task already is at top position"<<endl;
-			return;
+			return false;
 		}
-		parentNode->delChildNode( task, false ); // false: do not delete objekt
-		parentNode->insertChildNode( index-1, task );
+        return parentNode->moveChildUp(task);
 	}
+    kdDebug()<<k_funcinfo<<"No parent found"<<endl;
+    return false;
 }
 
 
-void KPTProject::moveTaskDown( KPTNode* task )
+bool KPTProject::moveTaskDown( KPTNode* task )
 {
 	// we have to find the parent of task to manipulate its list of children
 	KPTNode* parentNode = task->getParent();
@@ -597,18 +603,18 @@ void KPTProject::moveTaskDown( KPTNode* task )
 		int index = parentNode->findChildNode( task );
 		if ( -1 == index ) {
 			kdDebug()<<k_funcinfo<<"Tasknot found???"<<endl;
-			return;
+			return false;
 		}
 		// let parent have 2 children: child 0 and child 1 (zero-based index)
 		// then 0 is the last child that can be moved down.
 		kdDebug()<<k_funcinfo<<"Current number of children: " << parentNode->numChildren() <<endl;
 		if ( index + 1 >= parentNode->numChildren() ) {
 			kdDebug()<<k_funcinfo<<"Task already is at bottom position"<<endl;
-			return;
+			return false;
 		}
-		parentNode->delChildNode( task, false ); // false: do not delete objekt
-		parentNode->insertChildNode( index+1, task );
-	}
+        return parentNode->moveChildDown( task );
+    }
+    return false;
 }
 
 // TODO: find a more elegant/efficient solution to this id stuff

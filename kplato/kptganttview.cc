@@ -19,6 +19,7 @@
 
 #include "kptganttview.h"
 
+#include "kptpart.h"
 #include "kptview.h"
 #include "kptcanvasitem.h"
 #include "kptnode.h"
@@ -110,8 +111,6 @@ void KPTGanttView::draw(KPTProject &project)
     drawRelations();
     
     currentItemChanged(m_gantt->firstChild());
-    if (m_currentItem)
-        m_gantt->setSelected(m_currentItem, true);
     
     if (m_firstTime) {
         m_gantt->centerTimelineAfterShow(project.startTime().addDays(-1));
@@ -120,9 +119,381 @@ void KPTGanttView::draw(KPTProject &project)
     m_gantt->setUpdateEnabled(true);
 }
 
-
-void KPTGanttView::drawChildren(KDGanttViewSummaryItem *parentItem, KPTNode &parentNode)
+void KPTGanttView::drawChanges(KPTProject &project)
 {
+    //kdDebug()<<k_funcinfo<<endl;
+    m_gantt->setUpdateEnabled(false);
+    removeDeleted(m_gantt->firstChild());
+    updateChildren(&project); // don't draw project
+    
+    m_taskLinks.clear();
+    drawRelations();
+    
+    m_gantt->setUpdateEnabled(true);
+}
+
+KDGanttViewItem *KPTGanttView::findItem(KPTNode *node)
+{
+    return findItem(node, m_gantt->firstChild());
+}
+
+KDGanttViewItem *KPTGanttView::findItem(KPTNode *node, KDGanttViewItem *item)
+{
+    for (; item; item = item->nextSibling()) {
+        if (node == getNode(item)) {
+            return item;
+        }
+        KDGanttViewItem *i = findItem(node, item->firstChild());
+        if (i)
+            return i;
+    }
+    return 0;
+}
+
+KPTNode *KPTGanttView::getNode(KDGanttViewItem *item) {
+    if (item) {
+        if (item->type() == KDGanttViewItem::Event){
+            return static_cast<KPTGanttViewEventItem *>(item)->getTask();
+        } else if (item->type() == KDGanttViewItem::Task) {
+            return static_cast<KPTGanttViewTaskItem *>(item)->getTask();
+        } else if (item->type() == KDGanttViewItem::Summary) {
+            return static_cast<KPTGanttViewSummaryItem *>(item)->getNode();
+        }
+    }
+    return 0;
+}
+
+void KPTGanttView::removeDeleted(KDGanttViewItem *item)
+{
+    KDGanttViewItem *nextItem;
+    for (; item; item = nextItem) {
+        nextItem = item->nextSibling();
+        KPTNode *n = getNode(item);
+        if (n->isDeleted()) {
+            deleteItem(item); // delete me and my children
+        } else {
+            removeDeleted(item->firstChild()); // check my children
+        }
+    }
+}
+
+void KPTGanttView::deleteItem(KDGanttViewItem *item)
+{
+    //kdDebug()<<k_funcinfo<<item->listViewText()<<endl;
+    if (item->parent())
+        item->parent()->takeItem(item);
+    else
+        item->listView()->takeItem(item);
+    delete item;
+}
+
+KDGanttViewItem *KPTGanttView::correctType(KDGanttViewItem *item, KPTNode *node)
+{
+    //kdDebug()<<k_funcinfo<<item->listViewText()<<": "<<item->type()<<" node: "<<node->type()<<endl;
+    switch (node->type()) {
+        case KPTNode::Type_Project:
+            return item;
+            break;
+        case KPTNode::Type_Summarytask:
+        case KPTNode::Type_Subproject:
+            if (item->type() == KDGanttViewItem::Summary)
+                return item;
+            break;
+        case KPTNode::Type_Task:
+            if (item->type() == KDGanttViewItem::Task)
+                return item;
+            break;
+        case KPTNode::Type_Milestone:
+            if (item->type() == KDGanttViewItem::Event)
+                return item;
+            break;
+        default:
+            return item;
+            break;
+    }
+    KDGanttViewItem *newItem = addNode(item->parent(), node, item);
+    newItem->setOpen(item->isOpen());
+    deleteItem(item);
+    return newItem;
+}
+
+void KPTGanttView::correctPosition(KDGanttViewItem *item, KPTNode *node)
+{
+    KDGanttViewItem *after = findItem(node->siblingBefore());
+    if (after) {
+        item->moveItem(after);
+    }
+}
+
+void KPTGanttView::reparent(KDGanttViewItem *item, KDGanttViewItem *newparent, KDGanttViewItem *oldparent)
+{
+//    kdDebug()<<k_funcinfo<<item->listViewText()<<" new: "<<(newparent ? newparent->listViewText() : "top")<<" old: "<<(oldparent ? oldparent->listViewText() : "top")<<endl;
+    if (newparent == oldparent)
+        return;
+        
+    QListView *lv = item->listView();
+    
+    if (oldparent) oldparent->takeItem(item);
+    else lv->takeItem(item);
+    
+    if (newparent) newparent->insertItem(item);
+    else lv->insertItem(item);
+}
+
+void KPTGanttView::correctParent(KDGanttViewItem *item, KPTNode *node)
+{
+    KDGanttViewItem *p = findItem(node->getParent());
+    reparent(item, p, item->parent());
+}
+
+void KPTGanttView::updateChildren(KPTNode *parentNode)
+{
+    //kdDebug()<<k_funcinfo<<endl;
+    if (parentNode->isDeleted())
+        return;
+    QPtrListIterator<KPTNode> nit(parentNode->childNodeIterator());
+    for (; nit.current(); ++nit )
+    {
+        updateNode(nit.current());
+    }
+}
+
+void KPTGanttView::updateNode(KPTNode *node)
+{
+    //kdDebug()<<k_funcinfo<<node->name()<<endl;
+    KDGanttViewItem *item = findItem(node);
+    if (!item) {
+        item = addNode(findItem(node->getParent()), node, findItem(node->siblingBefore()));
+        return;
+    }
+    item = correctType(item, node);
+    correctParent(item, node);
+    correctPosition(item, node);
+        
+    modifyNode(node);
+    
+    if (node->type() == KPTNode::Type_Summarytask)
+        updateChildren(node);
+}
+
+void KPTGanttView::modifyChildren(KPTNode *node)
+{
+    //kdDebug()<<k_funcinfo<<endl;
+    QPtrListIterator<KPTNode> nit(node->childNodeIterator());
+    for ( nit.toLast(); nit.current(); --nit ) {
+        modifyNode(nit.current());
+        modifyChildren(nit.current());
+    }
+}
+
+void KPTGanttView::modifyNode(KPTNode *node)
+{
+    //kdDebug()<<k_funcinfo<<endl;
+    KDGanttViewItem *item = findItem(node);
+    if (!item) {
+        kdDebug()<<k_funcinfo<<" Item not found"<<endl;
+        return;
+    }
+    if (node->type() == KPTNode::Type_Project) {
+        return modifyProject(item, node);
+    }
+    if (node->type() == KPTNode::Type_Subproject) {
+        return modifyProject(item, node);
+    }
+    if (node->type() == KPTNode::Type_Summarytask) {
+        return modifySummaryTask(item, static_cast<KPTTask *>(node));
+    }
+    if (node->type() == KPTNode::Type_Task) {
+        return modifyTask(item, static_cast<KPTTask *>(node));
+    }
+    if (node->type() == KPTNode::Type_Milestone) {
+        return modifyMilestone(item, static_cast<KPTTask *>(node));
+    }
+    return;
+}
+
+void KPTGanttView::modifyProject(KDGanttViewItem *item, KPTNode *node)
+{
+    //kdDebug()<<k_funcinfo<<endl;
+    if (node->isDeleted())
+        return;
+    KPTDateTime time = node->startTime();
+    KPTDuration dur = node->duration();
+    if (dur == KPTDuration::zeroDuration)
+        dur.addSeconds(1); // avoid bug in KDGannt
+    item->setStartTime(time);
+    item->setEndTime(node->endTime());
+    //item->setOpen(true);
+
+}
+
+void KPTGanttView::modifySummaryTask(KDGanttViewItem *item, KPTTask *task)
+{
+    //kdDebug()<<k_funcinfo<<endl;
+    if (task->isDeleted())
+        return;
+    KPTDateTime time = task->startTime();
+    KPTDuration dur = task->duration();
+    if (dur == KPTDuration::zeroDuration)
+        dur.addSeconds(1); // avoid bug in KDGannt
+    item->setStartTime(time);
+    item->setEndTime(task->endTime());
+    //item->setOpen(true);
+    if (m_showSlack) { // Test
+        item->setListViewText(1, "  " +  task->getEarliestStart().toString(Qt::ISODate));
+        item->setListViewText(2, "  " +  task->startTime().toString(Qt::ISODate));
+        item->setListViewText(3,  "  " + task->endTime().toString(Qt::ISODate));
+        item->setListViewText(4, "  " +  task->getLatestFinish().toString(Qt::ISODate));
+    }
+}
+
+void KPTGanttView::modifyTask(KDGanttViewItem *item, KPTTask *task)
+{
+    //kdDebug()<<k_funcinfo<<endl;
+    if (task->isDeleted())
+        return;
+    KPTDateTime time = task->startTime();
+    KPTDuration dur = task->duration();
+    if (dur == KPTDuration::zeroDuration)
+        dur.addSeconds(1); // avoid bug in KDGannt
+    item->setStartTime(time);
+    item->setEndTime(task->endTime());
+    if (task->resourceOverbooked() || task->resourceError()) {
+        QColor c(yellow);
+        item->setColors(c,c,c);
+        //kdDebug()<<k_funcinfo<<"Task: "<<task->name()<<" resourceError="<<task->resourceError()<<endl;
+    }
+    //item->setOpen(true);
+    if (m_showSlack) { // Test
+        item->setListViewText(1, "  " +  task->getEarliestStart().toString(Qt::ISODate));
+        item->setListViewText(2, "  " +  task->startTime().toString(Qt::ISODate));
+        item->setListViewText(3,  "  " + task->endTime().toString(Qt::ISODate));
+        item->setListViewText(4, "  " +  task->getLatestFinish().toString(Qt::ISODate));
+    }
+}
+
+void KPTGanttView::modifyMilestone(KDGanttViewItem *item, KPTTask *task)
+{
+    //kdDebug()<<k_funcinfo<<endl;
+    if (task->isDeleted()) {
+        return;
+    }
+    item->setStartTime(task->startTime());
+    //item->setOpen(true);
+    if (m_showSlack) { // Test
+        item->setListViewText(1, "  " +  task->getEarliestStart().toString(Qt::ISODate));
+        item->setListViewText(2, "  " +  task->startTime().toString(Qt::ISODate));
+        item->setListViewText(3,  "  " + task->endTime().toString(Qt::ISODate));
+        item->setListViewText(4, "  " +  task->getLatestFinish().toString(Qt::ISODate));
+    }
+}
+
+KDGanttViewItem *KPTGanttView::addNode( KDGanttViewItem *parentItem, KPTNode *node, KDGanttViewItem *after)
+{
+    //kdDebug()<<k_funcinfo<<endl;
+    if (node->type() == KPTNode::Type_Project) {
+        return addProject(parentItem, node, after);
+    }
+    if (node->type() == KPTNode::Type_Subproject) {
+        return addSubProject(parentItem, node, after);
+    }
+    if (node->type() == KPTNode::Type_Summarytask) {
+        return addSummaryTask(parentItem, static_cast<KPTTask *>(node), after);
+    }
+    if (node->type() == KPTNode::Type_Task) {
+        return addTask(parentItem, static_cast<KPTTask *>(node), after);
+    }
+    if (node->type() == KPTNode::Type_Milestone) {
+        return addMilestone(parentItem, static_cast<KPTTask *>(node), after);
+    }
+    return 0;
+}
+
+KDGanttViewItem *KPTGanttView::addProject(KDGanttViewItem *parentItem, KPTNode *node, KDGanttViewItem *after)
+{
+    //kdDebug()<<k_funcinfo<<endl;
+    if (node->isDeleted())
+        return 0;
+    KPTGanttViewSummaryItem *item;
+    if ( parentItem) {
+        item = new KPTGanttViewSummaryItem(parentItem, node);
+    } else {
+        // we are on the top level
+        item = new KPTGanttViewSummaryItem(m_gantt, node);
+    }
+    if (after)
+        item->moveItem(after);
+    modifyProject(item, node);
+    return item;
+}
+
+KDGanttViewItem *KPTGanttView::addSubProject(KDGanttViewItem *parentItem, KPTNode *node, KDGanttViewItem *after)
+{
+    //kdDebug()<<k_funcinfo<<endl;    
+    return addProject(parentItem, node, after);
+}
+
+KDGanttViewItem *KPTGanttView::addSummaryTask(KDGanttViewItem *parentItem, KPTTask *task, KDGanttViewItem *after)
+{
+    //kdDebug()<<k_funcinfo<<endl;
+    if (task->isDeleted())
+        return 0;
+    // display summary item
+    KPTGanttViewSummaryItem *item;
+    if ( parentItem) {
+        item = new KPTGanttViewSummaryItem(parentItem, task);
+    } else {
+        // we are on the top level
+        item = new KPTGanttViewSummaryItem(m_gantt, task);
+    }
+    if (after)
+        item->moveItem(after);
+    modifySummaryTask(item, task);
+    return item;
+}
+
+KDGanttViewItem *KPTGanttView::addTask(KDGanttViewItem *parentItem, KPTTask *task, KDGanttViewItem *after)
+{
+    //kdDebug()<<k_funcinfo<<endl;
+    if (task->isDeleted())
+        return 0;
+    // display task item
+    KPTGanttViewTaskItem *item;
+    if ( parentItem ) {
+        item = new KPTGanttViewTaskItem(parentItem, task);
+    }
+    else {
+        // we are on the top level
+        item = new KPTGanttViewTaskItem(m_gantt, task);
+    }
+    if (after)
+        item->moveItem(after);
+    modifyTask(item, task);
+    return item;
+}
+
+KDGanttViewItem *KPTGanttView::addMilestone(KDGanttViewItem *parentItem, KPTTask *task, KDGanttViewItem *after)
+{
+    //kdDebug()<<k_funcinfo<<endl;
+    if (task->isDeleted()) {
+        return 0;
+    }
+    KPTGanttViewEventItem *item;
+    if ( parentItem ) {
+        item = new KPTGanttViewEventItem(parentItem, task);
+    } else {
+        // we are on the top level
+        item = new KPTGanttViewEventItem(m_gantt, task);
+    }
+    if (after)
+        item->moveItem(after);
+    modifyMilestone(item, task);
+    return item;
+}
+
+void KPTGanttView::drawChildren(KDGanttViewItem *parentItem, KPTNode &parentNode)
+{
+    //kdDebug()<<k_funcinfo<<endl;
     if (parentNode.isDeleted())
         return;
 	QPtrListIterator<KPTNode> nit(parentNode.childNodeIterator());
@@ -149,135 +520,43 @@ void KPTGanttView::drawChildren(KDGanttViewSummaryItem *parentItem, KPTNode &par
 	}
 }
 
-void KPTGanttView::drawProject(KDGanttViewSummaryItem *parentItem, KPTNode *node)
+
+void KPTGanttView::drawProject(KDGanttViewItem *parentItem, KPTNode *node)
 {
-    if (node->isDeleted())
-        return;
-    KPTDateTime time = node->startTime();
-    KPTDuration dur = node->duration();
-    if (dur == KPTDuration::zeroDuration)
-        dur.addSeconds(1); // avoid bug in KDGannt
-    KPTGanttViewSummaryItem *item;
-    if ( parentItem) {
-      item = new KPTGanttViewSummaryItem(parentItem, node);
-    } else {
-        // we are on the top level
-        item = new KPTGanttViewSummaryItem(m_gantt, node);
-    }
-
-    item->setStartTime(time);
-    item->setEndTime(node->endTime());
-    item->setOpen(true);
-
+    //kdDebug()<<k_funcinfo<<endl;
+    KPTGanttViewSummaryItem *item = dynamic_cast<KPTGanttViewSummaryItem*>(addProject(parentItem, node));
     drawChildren(item, *node);
 }
 
-void KPTGanttView::drawSubProject(KDGanttViewSummaryItem *parentItem, KPTNode *node)
+void KPTGanttView::drawSubProject(KDGanttViewItem *parentItem, KPTNode *node)
 {
-    if (node->isDeleted())
-        return;
-    KPTDateTime time = node->startTime();
-    KPTDuration dur = node->duration();
-    if (dur == KPTDuration::zeroDuration)
-        dur.addSeconds(1); // avoid bug in KDGannt
-    // display summary item
-    KPTGanttViewSummaryItem *item;
-    if ( parentItem) {
-        item = new KPTGanttViewSummaryItem(parentItem, node);
-    } else {
-        // we are on the top level
-        item = new KPTGanttViewSummaryItem(m_gantt, node);
-    }
-    item->setStartTime(time);
-    item->setEndTime(node->endTime());
-    item->setOpen(true);
-
+    //kdDebug()<<k_funcinfo<<endl;
+    KPTGanttViewSummaryItem *item = dynamic_cast<KPTGanttViewSummaryItem*>(addSubProject(parentItem, node));
     drawChildren(item, *node);
 }
 
-void KPTGanttView::drawSummaryTask(KDGanttViewSummaryItem *parentItem, KPTTask *task)
+void KPTGanttView::drawSummaryTask(KDGanttViewItem *parentItem, KPTTask *task)
 {
-    if (task->isDeleted())
-        return;
-    KPTDateTime time = task->startTime();
-    KPTDuration dur = task->duration();
-    if (dur == KPTDuration::zeroDuration)
-        dur.addSeconds(1); // avoid bug in KDGannt
-    // display summary item
-    KPTGanttViewSummaryItem *item;
-    if ( parentItem) {
-        item = new KPTGanttViewSummaryItem(parentItem, task);
-    } else {
-        // we are on the top level
-        item = new KPTGanttViewSummaryItem(m_gantt, task);
-    }
-    item->setStartTime(time);
-    item->setEndTime(task->endTime());
-    item->setOpen(true);
-    if (m_showSlack) { // Test
-        item->setListViewText(1, "  " +  item->getNode()->getEarliestStart().toString(Qt::ISODate));
-        item->setListViewText(2, "  " +  item->getNode()->startTime().toString(Qt::ISODate));
-        item->setListViewText(3,  "  " + item->getNode()->endTime().toString(Qt::ISODate));
-        item->setListViewText(4, "  " +  item->getNode()->getLatestFinish().toString(Qt::ISODate));
-    }
-
+    //kdDebug()<<k_funcinfo<<endl;
+    KPTGanttViewSummaryItem *item = dynamic_cast<KPTGanttViewSummaryItem*>(addSummaryTask(parentItem, task));
     drawChildren(item, *task);
-
 }
 
-void KPTGanttView::drawTask(KDGanttViewSummaryItem *parentItem, KPTTask *task)
+void KPTGanttView::drawTask(KDGanttViewItem *parentItem, KPTTask *task)
 {
-    if (task->isDeleted())
-        return;
-    KPTDateTime time = task->startTime();
-    KPTDuration dur = task->duration();
-    if (dur == KPTDuration::zeroDuration)
-        dur.addSeconds(1); // avoid bug in KDGannt
-    // display task item
-    KPTGanttViewTaskItem *item;
-    if ( parentItem ) {
-        item = new KPTGanttViewTaskItem(parentItem, task);
-    }
-    else {
-        // we are on the top level
-        item = new KPTGanttViewTaskItem(m_gantt, task);
-    }
-    item->setStartTime(time);
-    item->setEndTime(task->endTime());
-    item->setOpen(true);
-    if (task->resourceOverbooked() || task->resourceError()) {
-        QColor c(yellow);
-        item->setColors(c,c,c);
-        //kdDebug()<<k_funcinfo<<"Task: "<<task->name()<<" resourceError="<<task->resourceError()<<endl;
-    }
-    if (m_showSlack) { // Test
-        item->setListViewText(1, "  " +  item->getTask()->getEarliestStart().toString(Qt::ISODate));
-        item->setListViewText(2, "  " +  item->getTask()->startTime().toString(Qt::ISODate));
-        item->setListViewText(3, "  " +  item->getTask()->endTime().toString(Qt::ISODate));
-        item->setListViewText(4, "  " +  item->getTask()->getLatestFinish().toString(Qt::ISODate));
-    }
+    //kdDebug()<<k_funcinfo<<endl;
+    addTask(parentItem, task);
 }
 
-void KPTGanttView::drawMilestone(KDGanttViewSummaryItem *parentItem, KPTTask *task)
+void KPTGanttView::drawMilestone(KDGanttViewItem *parentItem, KPTTask *task)
 {
-    if (task->isDeleted())
-        return;
-    KPTDateTime time = task->startTime();
-    KPTGanttViewEventItem *item;
-    if ( parentItem ) {
-        item = new KPTGanttViewEventItem(parentItem, task);
-    } else {
-        // we are on the top level
-        item = new KPTGanttViewEventItem(m_gantt, task);
-    }
-    item->setStartTime(time);
-    item->setOpen(true);
-    if (m_showSlack) { // Test
-        item->setListViewText(1, "  " +  item->getTask()->getEarliestStart().toString(Qt::ISODate));
-        item->setListViewText(2, "  " +  item->getTask()->startTime().toString(Qt::ISODate));
-        item->setListViewText(3, "  " +  item->getTask()->endTime().toString(Qt::ISODate));
-        item->setListViewText(4, "  " +  item->getTask()->getLatestFinish().toString(Qt::ISODate));
-    }
+    //kdDebug()<<k_funcinfo<<endl;
+    addMilestone(parentItem, task);
+}
+
+void KPTGanttView::addTaskLink(KDGanttViewTaskLink *link) {
+    //kdDebug()<<k_funcinfo<<endl;
+    m_taskLinks.append(link);
 }
 
 void KPTGanttView::drawRelations()
@@ -303,27 +582,28 @@ void KPTGanttView::drawChildRelations(KDGanttViewItem *item)
 
 void KPTGanttView::drawRelations(KDGanttViewItem *item)
 {
+    //kdDebug()<<k_funcinfo<<endl;
     if (!item) return;
 
     KPTGanttViewSummaryItem *summaryItem = dynamic_cast<KPTGanttViewSummaryItem *>(item);
     if (summaryItem)
     {
         //kdDebug()<<k_funcinfo<<"Summary item: "<<summaryItem->listViewText()<<endl;
-        summaryItem->insertRelations();
+        summaryItem->insertRelations(this);
         return;
     }
     KPTGanttViewTaskItem *taskItem = dynamic_cast<KPTGanttViewTaskItem *>(item);
     if (taskItem)
     {
         //kdDebug()<<k_funcinfo<<"Task item: "<<taskItem->listViewText()<<endl;
-        taskItem->insertRelations();
+        taskItem->insertRelations(this);
         return;
     }
     KPTGanttViewEventItem *milestoneItem = dynamic_cast<KPTGanttViewEventItem *>(item);
     if (milestoneItem)
     {
         //kdDebug()<<k_funcinfo<<"Milestone item: "<<milestoneItem->listViewText()<<endl;
-        milestoneItem->insertRelations();
+        milestoneItem->insertRelations(this);
         return;
     }
     kdDebug()<<k_funcinfo<<"Unknown item type: "<<item->listViewText()<<endl;
@@ -331,13 +611,15 @@ void KPTGanttView::drawRelations(KDGanttViewItem *item)
 
 void KPTGanttView::currentItemChanged(KDGanttViewItem* item)
 {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<(item ? item->listViewText() : "null")<<endl;
     m_taskView->clear();
+    m_gantt->setSelected(item, true);
     m_currentItem = item;
     KPTGanttViewTaskItem *taskItem = dynamic_cast<KPTGanttViewTaskItem *>(item);
-    if (taskItem)
+    if (taskItem) {
         m_taskView->draw(taskItem->getTask());
-
+        return;
+    }
     KPTGanttViewEventItem *msItem = dynamic_cast<KPTGanttViewEventItem *>(item);
     if (msItem)
         m_taskView->draw(msItem->getTask());
@@ -345,34 +627,7 @@ void KPTGanttView::currentItemChanged(KDGanttViewItem* item)
 
 KPTNode *KPTGanttView::currentNode()
 {
-    KDGanttViewItem *curr = m_currentItem;
-	if (!curr)
-    {
-		// if we do not have a current item here we return 0.
-		// The caller may then decide to use the KPTProject
-		// root node, but that decision is up to the caller
-		return 0;
-	}
-	if (curr->type() == KDGanttViewItem::Summary)
-	{
-	    KPTGanttViewSummaryItem *item = (KPTGanttViewSummaryItem *)curr;
-		//kdDebug()<<k_funcinfo<<"Summary item="<<item<<endl;
-		return item->getNode();
-	}
-	else if (curr->type() == KDGanttViewItem::Task)
-	{
-		KPTGanttViewTaskItem *item = (KPTGanttViewTaskItem *)curr;
-		//kdDebug()<<k_funcinfo<<"Task item="<<item<<endl;
-		return item->getTask();
-	}
-	else if (curr->type() == KDGanttViewItem::Event)
-	{
-		KPTGanttViewEventItem *item = (KPTGanttViewEventItem *)curr;
-		//kdDebug()<<k_funcinfo<<"Event item="<<item<<endl;
-		return item->getTask();
-	}
-	kdDebug()<<k_funcinfo<<"No item="<<endl;
-	return 0;
+    return getNode(m_currentItem);
 }
 
 void KPTGanttView::popupMenuRequested(KDGanttViewItem * /*item*/, const QPoint & pos, int)

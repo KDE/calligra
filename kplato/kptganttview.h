@@ -35,7 +35,10 @@ class QSpinBox;
 
 class KDGanttView;
 class KDGanttViewSummaryItem;
+class KDGanttViewTaskItem;
+class KDGanttViewEventItem;
 class KDGanttViewItem;
+class KDGanttViewTaskLink;
 
 class KPrinter;
 
@@ -52,6 +55,7 @@ class KPTGanttView : public QSplitter
     void zoom(double zoom);
 
     void draw(KPTProject &project);
+    void drawChanges(KPTProject &project);
     KPTView *mainView();
 
     KPTNode *currentNode();
@@ -69,12 +73,40 @@ private slots:
     void slotItemDoubleClicked(KDGanttViewItem*);
 
 private:
-    void drawChildren(KDGanttViewSummaryItem *item, KPTNode &node);
-    void drawProject(KDGanttViewSummaryItem *parentItem, KPTNode *node);
-    void drawSubProject(KDGanttViewSummaryItem *parentItem, KPTNode *node);
-    void drawSummaryTask(KDGanttViewSummaryItem *parentItem, KPTTask *task);
-    void drawTask(KDGanttViewSummaryItem *parentItem, KPTTask *task);
-    void drawMilestone(KDGanttViewSummaryItem *parentItem, KPTTask *task);
+    KDGanttViewItem *findItem(KPTNode *node);
+    KDGanttViewItem *findItem(KPTNode *node, KDGanttViewItem *item);
+    KPTNode *getNode(KDGanttViewItem *item);
+    void removeDeleted(KDGanttViewItem *item);
+    void deleteItem(KDGanttViewItem *item);
+    void reparent(KDGanttViewItem *item, KDGanttViewItem *newparent, KDGanttViewItem *oldparent);
+    KDGanttViewItem *correctType(KDGanttViewItem *item, KPTNode *node);
+    void correctPosition(KDGanttViewItem *item, KPTNode *node);
+    void correctParent(KDGanttViewItem *item, KPTNode *node);
+
+    void updateChildren(KPTNode *node);
+    void updateNode(KPTNode *node);
+    
+    void modifyChildren(KPTNode *node);
+    void modifyNode(KPTNode *node);    
+    void modifyProject(KDGanttViewItem *item, KPTNode *node);
+    void modifySummaryTask(KDGanttViewItem *item, KPTTask *task);
+    void modifyTask(KDGanttViewItem *item, KPTTask *task);
+    void modifyMilestone(KDGanttViewItem *item, KPTTask *task);
+    
+    KDGanttViewItem *addNode(KDGanttViewItem *parentItem, KPTNode *node,KDGanttViewItem *after=0);
+    
+    KDGanttViewItem *addProject(KDGanttViewItem *parentItem, KPTNode *node, KDGanttViewItem *after=0);
+    KDGanttViewItem *addSubProject(KDGanttViewItem *parentItem, KPTNode *node, KDGanttViewItem *after=0);
+    KDGanttViewItem *addSummaryTask(KDGanttViewItem *parentItem, KPTTask *task, KDGanttViewItem *after=0);
+    KDGanttViewItem *addTask(KDGanttViewItem *parentItem, KPTTask *task, KDGanttViewItem *after=0);
+    KDGanttViewItem *addMilestone(KDGanttViewItem *parentItem, KPTTask *task, KDGanttViewItem *after=0);
+    
+    void drawChildren(KDGanttViewItem *item, KPTNode &node);
+    void drawProject(KDGanttViewItem *parentItem, KPTNode *node);
+    void drawSubProject(KDGanttViewItem *parentItem, KPTNode *node);
+    void drawSummaryTask(KDGanttViewItem *parentItem, KPTTask *task);
+    void drawTask(KDGanttViewItem *parentItem, KPTTask *task);
+    void drawMilestone(KDGanttViewItem *parentItem, KPTTask *task);
 
     void drawRelations();
     void drawRelations(KDGanttViewItem *item);
@@ -88,5 +120,6 @@ private:
     class KPTTaskAppointmentsView *m_taskView;
     bool m_showSlack;
     bool m_firstTime;
+    QPtrList<KDGanttViewTaskLink> m_taskLinks;
 };
  #endif

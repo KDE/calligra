@@ -440,6 +440,81 @@ void KPTNode::resetVisited() {
     }
 }
 
+KPTNode *KPTNode::siblingBefore() {
+    //kdDebug()<<k_funcinfo<<endl;
+    if (getParent())
+        return getParent()->childBefore(this);
+    return 0;
+}
+
+KPTNode *KPTNode::childBefore(KPTNode *node) {
+    //kdDebug()<<k_funcinfo<<endl;
+    KPTNode *n;
+    int index = m_nodes.findRef(node);
+    for (index--; index >= 0; index--) {
+        n = m_nodes.at(index);
+        if (!n->isDeleted()) {
+            //kdDebug()<<k_funcinfo<<node->name()<<": "<<n->name()<<endl;
+            return n;
+        }
+    }
+    return 0;
+}
+
+KPTNode *KPTNode::siblingAfter() {
+    //kdDebug()<<k_funcinfo<<endl;
+    if (getParent())
+        return getParent()->childAfter(this);
+    return 0;
+}
+
+KPTNode *KPTNode::childAfter(KPTNode *node) {
+    //kdDebug()<<k_funcinfo<<endl;
+    KPTNode *n;
+    int index = m_nodes.findRef(node);
+    for (index++; index < m_nodes.count(); index++) {
+        n = m_nodes.at(index);
+        if (!n->isDeleted())
+            return n;
+    }
+    return 0;
+}
+
+bool KPTNode::moveChildUp(KPTNode* node)
+{
+    int index = findChildNode(node);
+    //kdDebug()<<k_funcinfo<<"index="<<index<<endl;
+    if (index == -1) {
+        kdDebug()<<k_funcinfo<<"Tasknot found???"<<endl;
+        return false;
+    }
+    for (index--; index >= 0; index--) {
+        if (!m_nodes.at(index)->isDeleted()) {
+            delChildNode(node, false); // false: do not delete objekt
+            insertChildNode(index, node);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool KPTNode::moveChildDown(KPTNode* node)
+{
+    int index = findChildNode(node);
+    if (index == -1) {
+        kdDebug()<<k_funcinfo<<"Tasknot found???"<<endl;
+        return false;
+    }
+    for (index++; index < m_nodes.count(); index++) {
+        if (!m_nodes.at(index)->isDeleted()) {
+            delChildNode(node, false); // false: do not delete objekt
+            insertChildNode(index, node);
+            return true;
+        }
+    }
+    return false;
+}
+
 ////////////////////////////////////   KPTEffort   ////////////////////////////////////////////
 
 KPTEffort::KPTEffort( KPTDuration e, KPTDuration p, KPTDuration o) {
