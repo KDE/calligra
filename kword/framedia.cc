@@ -186,7 +186,7 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
 
         // Picture frame
     } else if(frameType==FT_PICTURE) {
-        aspectRatio = new QCheckBox (i18n("Retain original aspect-ratio"),tab1);
+        aspectRatio = new QCheckBox (i18n("Retain original aspect ratio"),tab1);
         aspectRatio->setEnabled(false);
         grid1->addWidget(aspectRatio,1,0);
 

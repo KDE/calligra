@@ -203,7 +203,7 @@ void KWTableDia::setupTab2()
     grid->addWidget( bgBody, 2, 2 );
 
     cbHeaderOnAllPages = new QCheckBox( i18n( "When a table flows over multiple pages, "
-					      "copy header to each page begin" ), tab2 );
+					      "copy header to the top of each page." ), tab2 );
     grid->addMultiCellWidget( cbHeaderOnAllPages, 3, 3, 0, 2 );
 
     grid->addRowSpacing( 0, lStyles->height() );

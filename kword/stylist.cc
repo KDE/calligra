@@ -405,8 +405,8 @@ void KWStylePreview::drawContents( QPainter *painter ) {
 
     painter->drawText( 20 + (int)( style->paragLayout().margins[QStyleSheetItem::MarginFirstLine]
                                    + style->paragLayout().margins[QStyleSheetItem::MarginLeft] ),
-                       y, fm.width( i18n( "KWord, KOffice's Wordprocessor" ) ),
-                       fm.height(), 0, i18n( "KWord, KOffice's Wordprocessor" ) );
+                       y, fm.width( i18n( "KWord, KOffice's Word Processor" ) ),
+                       fm.height(), 0, i18n( "KWord, KOffice's Word Processor" ) );
 }
 
 /////////////

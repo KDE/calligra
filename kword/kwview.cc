@@ -1134,12 +1134,12 @@ void KWView::editDeleteFrame()
     KWFrameSet *fs = theFrame->getFrameSet();
 
     if ( fs->isAHeader() ) {
-        KMessageBox::sorry( this, i18n( "This is a Header frame, it can not be deleted."),
+        KMessageBox::sorry( this, i18n( "This is a header frame. It can not be deleted."),
                             i18n( "Delete Frame"  ) );
         return;
     }
     if ( fs->isAFooter() ) {
-        KMessageBox::sorry( this, i18n( "This is a Footer frame, it can not be deleted."),
+        KMessageBox::sorry( this, i18n( "This is a footer frame. It can not be deleted."),
                             i18n( "Delete Frame"  ) );
         return;
     }
@@ -1148,8 +1148,8 @@ void KWView::editDeleteFrame()
     if ( fs->getGroupManager() ) {
         int result;
         result = KMessageBox::warningContinueCancel(this,
-                                                    i18n( "You are about to delete a table\n"
-                                                          "Doing so will delete all the text in the table\n"
+                                                    i18n( "You are about to delete a table.\n"
+                                                          "Doing so will delete all the text in the table.\n"
                                                           "Are you sure you want to do that?"), i18n("Delete Table"), i18n("&Delete"));
         if (result != KMessageBox::Continue)
             return;
@@ -1708,7 +1708,7 @@ void KWView::toolsCreatePix()
 
     if( !url.isLocalFile() )
     {
-      KMessageBox::sorry( 0L, i18n( "Only local files supported yet." ) );
+      KMessageBox::sorry( 0L, i18n( "Only local files are currently supported." ) );
       return;
     }
 

@@ -1365,12 +1365,12 @@ void KWCanvas::editFrameProperties()
     KWFrameSet *fs = frame->getFrameSet();
     if ( fs->isAHeader() )
     {
-        KMessageBox::sorry( this, i18n( "This is a Header frame, it can not be edited."), i18n( "Frame Properties"  ) );
+        KMessageBox::sorry( this, i18n( "This is a header frame. It can not be edited."), i18n( "Frame Properties"  ) );
         return;
     }
     if ( fs->isAFooter() )
     {
-        KMessageBox::sorry( this, i18n( "This is a Footer frame, it can not be edited."),i18n( "Frame Properties"  ) );
+        KMessageBox::sorry( this, i18n( "This is a footer frame. It can not be edited."),i18n( "Frame Properties"  ) );
         return;
     }
 
