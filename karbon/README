@@ -1,0 +1,17 @@
+Karbon 0.0.0.1
+==============
+
+KIllustrator has some nasty design limitations and an awkward name ;).
+Karbon will be a rewrite with some general and powerfull concepts in mind,
+based on some years of experience with the big guys.
+It will be a koffice-app, dont worry. The changes are so holoistic that it
+very probable wont fit into KIllu without breaking it. But KIllu is fine and
+working, but it's limited. So here we are.
+
+This _not_ yet another vector app. It wont go away, since i need it myself.
+
+Im finishing my degree right now, so karbon is in planing stage till
+march/april. I will add the class design in some weeks, which is nearly
+finished.
+
+Lenny (kudling@kde.org)

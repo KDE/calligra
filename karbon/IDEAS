@@ -1,0 +1,22 @@
+Food for thought:
+=================
+General info:
+- FAQ for comp.graphics.algorithms:
+  http://www.landfield.com/faqs/graphics/algorithms-faq/
+- Graphics Gems Repository
+  http://www.acm.org/tog/GraphicsGems/
+  (especially http://www.acm.org/tog/GraphicsGems/gemsiv/curve_isect/)
+
+Similar projects:
+- Sodipodi
+  http://sodipodi.sourceforge.net/
+- Sketch Development Guide:
+  http://sketch.sourceforge.net/Doc/devguide.html
+- Adobe Illustrator Fileformat Specification:
+  http://partners.adobe.com/asn/developer/PDFS/TN/5007.AI7FileFormat.pdf
+- Postscript Specs (since .AI is basically .PS):
+  http://partners.adobe.com/asn/developer/technotes.html#postscript
+- Adobe Illustrator Features:
+  http://www.adobe.com/products/illustrator/features.html
+- Autotrace
+  http://homepages.go.com/~martweb/AutoTrace.htm
