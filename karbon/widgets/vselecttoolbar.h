@@ -18,8 +18,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-/* This is the color slider widget that is used to select color or color components */
-
 /* vselecttoolbar.h */
 #ifndef VSELECTTOOLBAR_H
 #define VSELECTTOOLBAR_H
@@ -27,19 +25,24 @@
 #include <ktoolbar.h>
 
 class KoUnitDoubleSpinBox;
+class KarbonView;
 
 class VSelectToolBar : public KToolBar
 {
 	Q_OBJECT
 public:
-	VSelectToolBar( QWidget* parent = 0L, const char* name = 0L );
+	VSelectToolBar( KarbonView *view, const char* name = 0L );
 	~VSelectToolBar();
+
+public slots:
+	void slotSelectionChanged();
 
 private:
 	KoUnitDoubleSpinBox *m_x;
 	KoUnitDoubleSpinBox *m_y;
 	KoUnitDoubleSpinBox *m_width;
 	KoUnitDoubleSpinBox *m_height;
+	KarbonView			*m_view;
 };
 
 #endif

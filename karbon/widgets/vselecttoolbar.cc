@@ -23,11 +23,16 @@
 #include <qlabel.h>
 
 #include <klocale.h>
+#include <kdebug.h>
 
 #include "koUnitWidgets.h"
 #include "vselecttoolbar.h"
+#include "karbon_view.h"
+#include "karbon_part.h"
+#include "vselection.h"
+#include <koRect.h>
 
-VSelectToolBar::VSelectToolBar( QWidget* parent, const char* name ) : KToolBar( parent, name )
+VSelectToolBar::VSelectToolBar( KarbonView *view, const char* name ) : KToolBar( view, name ), m_view( view )
 {
 	setCaption( i18n( "Object Properties" ) );
 	QLabel *x_label = new QLabel( i18n( "X:" ), this );
@@ -48,11 +53,23 @@ VSelectToolBar::VSelectToolBar( QWidget* parent, const char* name ) : KToolBar( 
 	insertWidget( 7, h_label->width(), h_label );
 	m_height = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
 	insertWidget( 8, m_height->width(), m_height );
-	
+
+	connect( m_view, SIGNAL( selectionChange() ), this, SLOT( slotSelectionChanged() ) );
 }
 
 VSelectToolBar::~VSelectToolBar()
 {
+}
+
+void
+VSelectToolBar::slotSelectionChanged()
+{
+	kdDebug() << "VSelectToolBar::slotSelectionChanged()" << endl;
+	KoRect rect = m_view->part()->document().selection()->boundingBox();
+	m_x->setValue( rect.topLeft().x() );
+	m_y->setValue( rect.topLeft().y() );
+	m_width->setValue( rect.width() );
+	m_height->setValue( rect.height() );
 }
 
 #include "vselecttoolbar.moc"

@@ -876,6 +876,8 @@ KarbonView::selectionChanged()
 		m_groupObjects->setEnabled( false );
 		m_ungroupObjects->setEnabled( false );
 	}
+
+	emit selectionChange();
 }
 
 void KarbonView::setUnit( KoUnit::Unit /*_unit*/ )

@@ -157,6 +157,7 @@ protected slots:
 
 signals:
 	void zoomChanged( double );
+	void selectionChange();
 
 protected:
 	virtual void updateReadWrite( bool rw );
