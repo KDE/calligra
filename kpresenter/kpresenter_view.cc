@@ -572,6 +572,7 @@ void KPresenterView::editPaste()
             QCursor c = cursor();
             setCursor( waitCursor );
             m_canvas->activePage()->insertPicture( tmpFile.name() );
+            //m_canvas->picViewOrigHelper(-1, -1);
             setCursor( c );
         }
     } else {
@@ -5049,7 +5050,7 @@ void KPresenterView::insertLink()
         return;
     QString link;
     QString ref;
-    if(KoInsertLinkDia::createLinkDia(link, ref))
+    if(KoInsertLinkDia::createLinkDia(link, ref, QStringList()))
     {
         if(!link.isEmpty() && !ref.isEmpty())
             edit->insertLink(link, ref);
@@ -5068,7 +5069,7 @@ void KPresenterView::changeLink()
             QString oldLinkName=var->value();
             QString link=oldLinkName;
             QString ref=oldhref;
-            if(KoInsertLinkDia::createLinkDia(link, ref))
+            if(KoInsertLinkDia::createLinkDia(link, ref, QStringList()))
             {
                 if(!link.isEmpty() && !ref.isEmpty())
                 {
