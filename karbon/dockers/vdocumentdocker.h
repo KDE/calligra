@@ -136,11 +136,11 @@ public slots:
 	void updateLayers();
 
 	void selectionChanged( QListViewItem* item, const QPoint&, int col );
-	void renameLayer( QListViewItem* item, const QPoint&, int col );
+	void renameItem( QListViewItem* item, const QPoint&, int col );
 	void addLayer();
-	void raiseLayer();
-	void lowerLayer();
-	void deleteLayer();
+	void raiseItem();
+	void lowerItem();
+	void deleteItem();
 
 private slots:
 	void slotButtonClicked( int ID );

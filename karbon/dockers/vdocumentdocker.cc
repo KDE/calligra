@@ -438,7 +438,7 @@ VLayersTab::VLayersTab( KarbonView* view, QWidget* parent )
 	m_layersListView->setRootIsDecorated( true );
 
 	connect( m_layersListView, SIGNAL( clicked( QListViewItem*, const QPoint&, int ) ), this, SLOT( selectionChanged( QListViewItem*, const QPoint&, int ) ) );
-	connect( m_layersListView, SIGNAL( rightButtonClicked( QListViewItem*, const QPoint&, int ) ), this, SLOT( renameLayer( QListViewItem*, const QPoint&, int ) ) );
+	connect( m_layersListView, SIGNAL( rightButtonClicked( QListViewItem*, const QPoint&, int ) ), this, SLOT( renameItem( QListViewItem*, const QPoint&, int ) ) );
 	connect( m_buttonGroup, SIGNAL( clicked( int ) ), this, SLOT( slotButtonClicked( int ) ) );
 
 	layout->activate();
@@ -457,11 +457,11 @@ VLayersTab::slotButtonClicked( int ID )
 		case 0:
 			addLayer(); break;
 		case 1:
-			raiseLayer(); break;
+			raiseItem(); break;
 		case 2:
-			lowerLayer(); break;
+			lowerItem(); break;
 		case 3:
-			deleteLayer(); break;
+			deleteItem(); break;
 	}
 } // VLayersTab::slotButtonClicked
 
@@ -528,7 +528,7 @@ VLayersTab::selectionChanged( QListViewItem* item, const QPoint &, int col )
 } // VLayersTab::selectionChanged
 
 void
-VLayersTab::renameLayer( QListViewItem* item, const QPoint&, int col )
+VLayersTab::renameItem( QListViewItem* item, const QPoint&, int col )
 {
 	if ( ( item ) && col == 0 )
 	{
@@ -557,7 +557,7 @@ VLayersTab::renameLayer( QListViewItem* item, const QPoint&, int col )
 			}
 		}
 	}
-} // VLayersTab::renameLayer
+} // VLayersTab::renameItem
 
 void
 VLayersTab::addLayer()
@@ -577,7 +577,7 @@ VLayersTab::addLayer()
 } // VLayersTab::addLayer
 
 void
-VLayersTab::raiseLayer()
+VLayersTab::raiseItem()
 {
 	VCommand *cmd = 0L;
 	VLayerListViewItem* layerItem = dynamic_cast<VLayerListViewItem *>( m_layersListView->selectedItem() );
@@ -599,10 +599,10 @@ VLayersTab::raiseLayer()
 		m_view->part()->addCommand( cmd, true );
 		updatePreviews();
 	}
-} // VLayersTab::raiseLayer
+} // VLayersTab::raiseItem
 
 void
-VLayersTab::lowerLayer()
+VLayersTab::lowerItem()
 {
 	VCommand *cmd = 0L;
 	VLayerListViewItem* layerItem = dynamic_cast<VLayerListViewItem *>( m_layersListView->selectedItem() );
@@ -623,10 +623,10 @@ VLayersTab::lowerLayer()
 		m_view->part()->addCommand( cmd, true );
 		updatePreviews();
 	}
-} // VLayersTab::lowerLayer
+} // VLayersTab::lowerItem
 
 void
-VLayersTab::deleteLayer()
+VLayersTab::deleteItem()
 {
 	VCommand *cmd = 0L;
 	VLayerListViewItem* layerItem = dynamic_cast< VLayerListViewItem *>( m_layersListView->selectedItem() );
@@ -650,7 +650,7 @@ VLayersTab::deleteLayer()
 			delete item;
 		}
 	}
-} // VLayersTab::deleteLayer
+} // VLayersTab::deleteItem
 
 void
 VLayersTab::updatePreviews()
