@@ -46,8 +46,8 @@ class KSpreadValue
       Integer,
       Float,
       String,
+      Array,
       CellRange, // not used yet
-      Array,     // not used yet
       Error
     } Type;
 
@@ -130,6 +130,11 @@ class KSpreadValue
     KSpreadValue( const QDate& date );
 
     /**
+     * Create an array of values.
+     */
+    KSpreadValue( unsigned columns, unsigned rows );
+
+    /**
      * Returns the type of the value.
      */
     Type type() const;
@@ -164,6 +169,11 @@ class KSpreadValue
      * Returns true if the type of this value is string.
      */
     bool isString() const { return type() == String; }
+
+    /**
+     * Returns true if the type of this value is string.
+     */
+    bool isArray() const { return type() == Array; }
 
     /**
      * Returns true if this value holds error information.
@@ -262,6 +272,28 @@ class KSpreadValue
      * Returns the time representation of this value.
      */
     QTime asTime() const;
+
+    /**
+     * Return an element in the array value. Do not call if isArray() is false.
+     */
+    KSpreadValue element( unsigned column, unsigned row ) const;
+    
+    /**
+     * Sets an element in the array value. Do not use if isArray() is false.
+     */
+    void setElement( unsigned column, unsigned row, const KSpreadValue& value );
+    
+    /**
+     * If this value is an array, return the number of columns.
+     * Note that return value is undefined if isArray() returns false.
+     */
+    unsigned columns() const;
+    
+    /**
+     * If this value is an array, return the number of rows.
+     * Note that return value is undefined if isArray() returns false.
+     */
+    unsigned rows() const;
 
     /**
      * Returns error message associated with this value.

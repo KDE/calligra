@@ -27,6 +27,77 @@
 #include <qtextstream.h>
 
 
+// helper class for array implementation
+class ValueArray
+{
+public:
+  KSpreadValue** ptr;
+  unsigned columns;
+  unsigned rows;
+  
+  ValueArray(): ptr(0), columns(0), rows(0) {};
+  
+  ~ValueArray()
+  { 
+    clear();
+   };  
+   
+  ValueArray( const ValueArray& va )
+  {
+    operator=( va );
+  }
+  
+  ValueArray& operator= ( const ValueArray& va )
+  {
+    init( va.columns, va.rows );
+    unsigned count = columns * rows;
+    for( unsigned i = 0; i < count; i++ )
+      if( va.ptr[i] )
+        ptr[i] = new KSpreadValue( *va.ptr[i] );
+    return *this;
+  }
+   
+  void clear()
+  {
+    if( !ptr ) return;
+    unsigned count = columns * rows;
+    if( !count ) return;
+    for( unsigned i = 0; i < count; i++ )
+      delete ptr[i];
+    delete [] ptr;
+    ptr = 0;
+  }
+  
+  void init( unsigned c, unsigned r )
+  {
+    if( ptr ) clear();
+    columns = c; rows = r;
+    unsigned count = columns * rows;
+    ptr = new (KSpreadValue*)[count];
+    for( unsigned i = 0; i < count; i++ )
+      ptr[i] = (KSpreadValue*)0;
+  }
+  
+  KSpreadValue* at( unsigned c, unsigned r )
+  {
+    if( !ptr ) return 0;
+    if( c >= columns ) return 0;
+    if( r >= rows ) return 0;
+    return ptr[r*columns+c];
+  };
+  
+  void set( unsigned c, unsigned r, KSpreadValue* v )
+  {
+    if( !ptr ) return;
+    if( c >= columns ) return;
+    if( r >= rows ) return;
+    delete ptr[r*columns+c];
+    ptr[r*columns+c] = v;
+  }
+  
+};
+
+
 // helper class for KSpreadValue
 class KSpreadValueData
 {
@@ -42,6 +113,7 @@ class KSpreadValueData
     long i;
     double f;
     QString s;
+    ValueArray a;
 
     // create empty data
     KSpreadValueData(): type( KSpreadValue::Empty ),
@@ -168,6 +240,14 @@ KSpreadValue::KSpreadValue( const QDate& dt )
 {
   d = KSpreadValueData::null();
   setValue( dt );
+}
+
+// create an array value
+KSpreadValue::KSpreadValue( unsigned columns, unsigned rows )
+{
+  d = new KSpreadValueData;
+  d->type = Array;
+  d->a.init( columns, rows );
 }
 
 // assign value from other
@@ -361,6 +441,32 @@ QTime KSpreadValue::asTime() const
   return dt;
 }
 
+KSpreadValue KSpreadValue::element( unsigned column, unsigned row ) const
+{
+  if( d->type != Array ) return empty();
+  KSpreadValue* v = d->a.at( column, row );
+  return v ? KSpreadValue( *v ) : empty();
+}
+
+void KSpreadValue::setElement( unsigned column, unsigned row, const KSpreadValue& v )
+{
+  if( d->type != Array ) return;
+  detach();
+  d->a.set( column, row, new KSpreadValue( v ) );
+}
+
+unsigned KSpreadValue::columns() const
+{
+  if( d->type != Array ) return 0;
+  return d->a.columns;
+}
+
+unsigned KSpreadValue::rows() const
+{
+  if( d->type != Array ) return 0;
+  return d->a.rows;
+}
+
 // reference to empty value
 const KSpreadValue& KSpreadValue::empty()
 {
@@ -439,6 +545,7 @@ void KSpreadValue::detach()
     case Integer: n->i = d->i; break;
     case Float:   n->f = d->f; break;
     case String:  n->s = d->s; break;
+    case Array:   n->a = d->a; break;
     case Error:   n->s = d->s; break;
     default: break;
     }
