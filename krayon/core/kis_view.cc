@@ -23,8 +23,6 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-// ANSI C
-#include <assert.h>
 
 // qt includes
 #include <qevent.h>
@@ -77,6 +75,7 @@
 #include "kis_pluginserver.h"
 #include "kis_selection.h"
 #include "kfloatingdialog.h"
+#include "KRayonViewIface.h"
 
 // sidebar
 #include "kis_brushchooser.h"
@@ -126,6 +125,9 @@ KisView::KisView( KisDoc* doc, QWidget* parent, const char* name )
 	setInstance(KisFactory::global());
 	setXMLFile("krayon.rc");
 	m_pTool = 0;
+	m_dcop = 0;
+	dcopObject(); // build it
+
 	QObject::connect(m_doc, SIGNAL(docUpdated()), this, SLOT( slotDocUpdated ( ) ) );
 	QObject::connect( m_doc, SIGNAL( docUpdated( const QRect& ) ), this, SLOT( slotDocUpdated ( const QRect& ) ) );
 	QObject::connect( this, SIGNAL( embeddImage( const QString& ) ), this, SLOT( slotEmbeddImage( const QString& ) ) );
@@ -160,7 +162,17 @@ KisView::KisView( KisDoc* doc, QWidget* parent, const char* name )
 */
 KisView::~KisView()
 {
+  delete m_dcop;
 }
+
+DCOPObject* KisView::dcopObject()
+{
+    if ( !m_dcop )
+	m_dcop = new KRayonViewIface( this );
+
+    return m_dcop;
+}
+
 
 /*
     Set up painter object for use of QPainter methods to draw
@@ -1107,7 +1119,7 @@ void KisView::slotDocUpdated(const QRect& rect)
 
 	p.begin(m_pCanvas);
 	p.setClipRect(ur);
-	assert(p.hasClipping());
+	Q_ASSERT(p.hasClipping());
 	p.scale(zoomFactor(), zoomFactor());
 	p.translate(xt, yt);
 
@@ -1431,8 +1443,8 @@ void KisView::activateTool(KisTool* t)
 */
 void KisView::tool_properties()
 {
-	assert(m_pTool);
-	m_pTool -> optionsDialog();
+        if(m_pTool)
+	  m_pTool -> optionsDialog();
 }
 
 /*---------------------------
@@ -2518,14 +2530,15 @@ void KisView::setZoomFactor(float zf)
 
 void KisView::slotSetBrush(KisBrush* b)
 {
-	assert(b);
-	assert(m_pBrush);
-	m_pBrush = b;
+  if(b && m_pBrush)
+    {
+      m_pBrush = b;
 
-	if (m_pTool) {
-		m_pTool -> setBrush(b);
-		m_pTool -> setCursor();
-	}
+      if (m_pTool) {
+	m_pTool -> setBrush(b);
+	m_pTool -> setCursor();
+      }
+    }
 }
 
 void KisView::slotSetKrayon(KisKrayon* k)
@@ -2541,8 +2554,8 @@ void KisView::slotSetPattern(KisPattern* p)
 	m_pPattern = p;
 
 	// set pattern for other things that use patterns
-	assert(m_pSideBar);
-	assert(m_doc);
+	Q_ASSERT(m_pSideBar);
+	Q_ASSERT(m_doc);
 	m_pSideBar -> slotSetPattern(*p);
 	m_doc -> frameBuffer() -> setPattern(p);
 }
@@ -2705,7 +2718,7 @@ void KisView::setupTools()
 	for (ktvector_size_type i = 0; i < m_tools.size(); i++) {
 		KisTool *p = m_tools[i];
 
-		assert(p);
+		Q_ASSERT(p);
 		p -> setupAction(actionCollection());
 	}
 

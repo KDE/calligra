@@ -84,6 +84,7 @@ class ColorChangerTool;
 class FillTool;
 class StampTool;
 class QButton;
+class DCOPObject;
 
 
 class KisView : public KoView {
@@ -93,7 +94,8 @@ class KisView : public KoView {
 public:  
 	KisView(KisDoc *doc, QWidget *parent = 0, const char *name = 0 );
 	virtual ~KisView();
-    
+	virtual DCOPObject* dcopObject();
+
 	inline void setActiveTool(KisTool *tool);
 	inline KisTool* getActiveTool();
 	inline KisDoc* getKisDocument();
@@ -178,9 +180,7 @@ public:
     
     void zoom_in();
     void zoom_out();
-    
-  protected slots:
- 
+     
     // edit action slots
     void undo();
     void redo();
@@ -245,6 +245,8 @@ public:
     void leftSidebar();
     void saveOptions();
     void preferences();
+
+  protected slots:
 
     // scrollbar slots
     void scrollH(int);
@@ -332,6 +334,7 @@ private:
     int         m_xPaintOffset;
     int         m_yPaintOffset;    
     bool        buttonIsDown;
+    DCOPObject *m_dcop;
 
  protected:
 	ktvector m_tools;
