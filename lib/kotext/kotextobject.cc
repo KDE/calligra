@@ -643,6 +643,7 @@ void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
     textdoc->setSelectionEnd( KoTextDocument::Temp, cursor );
     //kdDebug(32500) << "KoTextObject::insert setting format " << currentFormat << endl;
     textdoc->setFormat( KoTextDocument::Temp, currentFormat, KoTextFormat::Format );
+    textdoc->setFormat( KoTextDocument::InputMethodPreedit, currentFormat, KoTextFormat::Format );
     textdoc->removeSelection( KoTextDocument::Temp );
 
     // Speed optimization: if we only type a char, and it doesn't
@@ -1402,7 +1403,7 @@ void KoTextObject::removeSelectedText( KoTextCursor * cursor, int selectionId, c
     emit ensureCursorVisible();
     emit updateUI( true );
     emit showCursor();
-    if(selectionId==KoTextDocument::Standard)
+    if(selectionId==KoTextDocument::Standard || selectionId==KoTextDocument::InputMethodPreedit)
         selectionChangedNotify();
     if ( createUndoRedo)
         undoRedoInfo.clear();

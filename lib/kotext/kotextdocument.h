@@ -51,6 +51,7 @@ class Q_EXPORT KoTextDocument : public QObject
 public:
     enum SelectionIds {
 	Standard = 0,
+        InputMethodPreedit = 1,
 	Temp = 32000 // This selection must not be drawn, it's used e.g. by undo/redo to
 	// remove multiple lines with removeSelectedText()
     };

@@ -392,6 +392,57 @@ void KoTextView::handleKeyReleaseEvent( QKeyEvent * e )
     }
 }
 
+void KoTextView::handleImStartEvent( QIMEvent * e )
+{
+    // nothing to do
+    ;
+}
+
+void KoTextView::handleImComposeEvent( QIMEvent * e )
+{
+    // remove old preedit
+    if ( textDocument()->hasSelection( KoTextDocument::Standard ) )
+        textDocument()->removeSelection( KoTextDocument::Standard );
+    if ( textDocument()->hasSelection( KoTextDocument::InputMethodPreedit ) )
+        textDocument()->removeSelectedText( KoTextDocument::InputMethodPreedit, m_cursor );
+
+    // insert preedit
+    int preeditStartIdx = m_cursor->index();
+    textDocument()->setSelectionStart( KoTextDocument::InputMethodPreedit, m_cursor );
+    insertText( e->text() );
+    textDocument()->setSelectionEnd( KoTextDocument::InputMethodPreedit, m_cursor );
+
+    // selection
+    int preeditSelStart = preeditStartIdx + e->cursorPos();
+    int preeditSelEnd   = preeditSelStart + e->selectionLength();
+    m_cursor->setIndex( preeditSelStart );
+    textDocument()->setSelectionStart( KoTextDocument::Standard, m_cursor );
+    m_cursor->setIndex( preeditSelEnd );
+    textDocument()->setSelectionEnd( KoTextDocument::Standard, m_cursor );
+
+    // set cursor pos
+    m_cursor->setIndex( preeditSelStart );
+
+    textObject()->emitUpdateUI( true );
+    textObject()->emitShowCursor();
+    textObject()->selectionChangedNotify();
+}
+
+void KoTextView::handleImEndEvent( QIMEvent * e )
+{
+    // remove old preedit
+    if ( textDocument()->hasSelection( KoTextDocument::Standard ) )
+        textDocument()->removeSelection( KoTextDocument::Standard  );
+    if ( textDocument()->hasSelection( KoTextDocument::InputMethodPreedit ) )
+        textDocument()->removeSelectedText( KoTextDocument::InputMethodPreedit, m_cursor );
+
+    insertText( e->text() );
+
+    textObject()->emitUpdateUI( true );
+    textObject()->emitShowCursor();
+    textObject()->selectionChangedNotify();
+}
+
 void KoTextView::completion()
 {
     doCompletion(m_cursor, m_cursor->parag(),

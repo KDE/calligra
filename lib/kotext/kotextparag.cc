@@ -762,15 +762,36 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &str, int st
 	for ( int j = 0; j < nSels; ++j ) {
 	    if ( start >= selectionStarts[ j ] && start < selectionEnds[ j ] ) {
                 inSelection = true;
-		if ( j == KoTextDocument::Standard )
-		    painter.fillRect( startX_pix, lastY_pix, bw_pix, h_pix, cg.color( QColorGroup::Highlight ) );
-		else
-		    painter.fillRect( startX_pix, lastY_pix, bw_pix, h_pix, doc ? doc->selectionColor( j ) : cg.color( QColorGroup::Highlight ) );
-                break;
+                switch (j) {
+                case KoTextDocument::Standard:
+                    painter.fillRect( startX_pix, lastY_pix, bw_pix, h_pix, cg.color( QColorGroup::Highlight ) );
+                    break;
+                case KoTextDocument::InputMethodPreedit:
+                    // no highlight
+                    break;
+                default:
+                    painter.fillRect( startX_pix, lastY_pix, bw_pix, h_pix, doc ? doc->selectionColor( j ) : cg.color( QColorGroup::Highlight ) );
+                    break;
+                }
 	    }
 	}
         if ( !inSelection )
             drawSelections = false; // save time in drawParagStringInternal
+    }
+
+    // Draw InputMethod Preedit Underline
+    const int nSels = doc ? doc->numSelections() : 1;
+    for ( int j = 0; j < nSels; j++ ) {
+        if ( start >= selectionStarts[ j ] && start < selectionEnds[ j ] ) {
+            if ( j == KoTextDocument::InputMethodPreedit ) {
+                QColor textColor( format->color() );
+                painter.setPen( QPen( textColor ) );
+
+                QPoint p1( startX_pix, lastY_pix + h_pix - 1 );
+                QPoint p2( startX_pix + bw_pix, lastY_pix + h_pix - 1 );
+                painter.drawLine( p1, p2 );
+            }
+        }
     }
 
     if ( draw_len > 0 )

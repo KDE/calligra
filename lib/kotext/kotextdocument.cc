@@ -75,7 +75,7 @@ void KoTextDocument::init()
     m_pageBreakEnabled = false;
     //minw = 0;
     align = Qt::AlignAuto;
-    nSelections = 1;
+    nSelections = 2;
     addMargs = FALSE;
 
     underlLinks = TRUE;
@@ -104,6 +104,7 @@ void KoTextDocument::init()
 
     selectionColors[ Standard ] = QApplication::palette().color( QPalette::Active, QColorGroup::Highlight );
     selectionText[ Standard ] = TRUE;
+    selectionText[ InputMethodPreedit ] = FALSE;
     commandHistory = new KoTextDocCommandHistory( 100 );
     tStopWidth = formatCollection()->defaultFormat()->width( 'x' ) * 8;
 }
