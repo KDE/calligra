@@ -29,41 +29,42 @@ module KImage
 	interface View : KOffice::View
 	{
 		// Edit
-		slot void editImage();
-		slot void importImage();
-		slot void exportImage();
-		slot void pageLayout();
-		slot void preferences();
+		slot void editEditImage();
+		slot void editImportImage();
+		slot void editExportImage();
+		slot void editPageLayout();
+		slot void editPreferences();
 
 		// View
-		slot void fitToView();
-		slot void fitWithProportions();
-		slot void originalSize();
-		slot void centered();
-		slot void infoImage();
-		slot void backgroundColor();
+		slot void viewFitToView();
+		slot void viewFitWithProportions();
+		slot void viewOriginalSize();
+		slot void viewCentered();
+		slot void viewInfoImage();
+		slot void viewBackgroundColor();
 
 		// Transform
-		slot void rotateRight();
-		slot void rotateLeft();
-		slot void flipVertical();
-		slot void flipHorizontal();
-		slot void zoomFactor();
-		slot void zoomIn10();
-		slot void zoomOut10();
-		slot void zoomDouble();
-		slot void zoomHalf();
-		slot void zoomMax();
-		slot void zoomMaxAspect();
+		slot void transformRotateRight();
+		slot void transformRotateLeft();
+		slot void transformRotateAngle();
+		slot void transformFlipVertical();
+		slot void transformFlipHorizontal();
+		slot void transformZoomFactor();
+		slot void transformZoomIn10();
+		slot void transformZoomOut10();
+		slot void transformZoomDouble();
+		slot void transformZoomHalf();
+		slot void transformZoomMax();
+		slot void transformZoomMaxAspect();
 
 		// Filter
 
 		// Plug-Ins
 
 		// Extras
-		slot void runGimp();
-		slot void runXV();
-		slot void runCommand();
+		slot void extrasRunGimp();
+		slot void extrasRunXV();
+		slot void extrasRunCommand();
 	};
 
 	interface Document : KOffice::Document, KOffice::Print

@@ -144,26 +144,17 @@ public:
   /**
    * Changes the paper layout and repaints the currently displayed KSpreadTable.
    */
-  void setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBoder,
-		       KoFormat _paper, KoOrientation orientation );
-  void setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBorder,
-		       const char * _paper, const char* _orientation );
+  void setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBoder, KoFormat _paper, KoOrientation orientation );
+  void setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBorder, const char * _paper, const char* _orientation );
   
-  void setHeadFootLine( const char *_headl, const char *_headm, const char *_headr,
-			const char *_footl, const char *_footm, const char *_footr );
+  void setHeadFootLine( const char *_headl, const char *_headm, const char *_headr,	const char *_footl, const char *_footm, const char *_footr );
 
-  QString headLeft( int _p, const char *_t  ) { if ( m_headLeft.isNull() ) return "";
-  return completeHeading( m_headLeft.data(), _p, _t ); }
-  QString headMid( int _p, const char *_t ) { if ( m_headMid.isNull() ) return "";
-  return completeHeading( m_headMid.data(), _p, _t ); }
-  QString headRight( int _p, const char *_t ) { if ( m_headRight.isNull() ) return "";
-  return completeHeading( m_headRight.data(), _p, _t ); }
-  QString footLeft( int _p, const char *_t ) { if ( m_footLeft.isNull() ) return "";
-  return completeHeading( m_footLeft.data(), _p, _t ); }
-  QString footMid( int _p, const char *_t ) { if ( m_footMid.isNull() ) return "";
-  return completeHeading( m_footMid.data(), _p, _t ); }
-  QString footRight( int _p, const char *_t ) { if ( m_footRight.isNull() ) return "";
-  return completeHeading( m_footRight.data(), _p, _t ); }
+  QString headLeft( int _p, const char *_t  ) { if ( m_headLeft.isNull() ) return ""; return completeHeading( m_headLeft.data(), _p, _t ); }
+  QString headMid( int _p, const char *_t ) { if ( m_headMid.isNull() ) return ""; return completeHeading( m_headMid.data(), _p, _t ); }
+  QString headRight( int _p, const char *_t ) { if ( m_headRight.isNull() ) return ""; return completeHeading( m_headRight.data(), _p, _t ); }
+  QString footLeft( int _p, const char *_t ) { if ( m_footLeft.isNull() ) return ""; return completeHeading( m_footLeft.data(), _p, _t ); }
+  QString footMid( int _p, const char *_t ) { if ( m_footMid.isNull() ) return ""; return completeHeading( m_footMid.data(), _p, _t ); }
+  QString footRight( int _p, const char *_t ) { if ( m_footRight.isNull() ) return ""; return completeHeading( m_footRight.data(), _p, _t ); }
 
   QString completeHeading( const char *_data, int _page, const char *_table );
 
@@ -178,14 +169,22 @@ public:
 
   QString orientationString();
   QString paperFormatString();
-  
+
   bool openDocument( const char *_filename, const char *_format = 0L );
   bool saveDocument( const char *_filename, const char *_format = 0L );
 
+  /**
+   * Returns the image, that is stored in the document.
+   * 
+   * @result The returned image.
+   */
   const QImage& image() { return m_image; }
-  int xOffset() { return m_iXOffset; }
-  int yOffset() { return m_iYOffset; }
 
+  /**
+   * Transforms the image with the given matrix.
+   * 
+   * @param The matrix to transform the image.
+   */
   void transformImage( const QWMatrix& matrix );
   
 signals:
@@ -194,58 +193,98 @@ signals:
   
 protected:
   virtual bool completeLoading( KOStore::Store_ptr /* _store */ );
-  
+
+  /**
+   * Indicates whether an image is loaded or not.
+   */
   bool m_bEmpty;
 
+  /**
+   * List of views, that are connectet to the document.
+   */
   QList<KImageView> m_lstViews;
 
   /**
    * The orientation of the paper.
    */
   KoOrientation m_orientation;
+
   /**
    * Tells about the currently seleced paper size.
    */
   KoFormat m_paperFormat;
-  
+
   /**
    * The paper width in millimeters. Dont change this value, it is calculated by
    * @ref #calcPaperSize from the value @ref #m_paperFormat.
    */
   float m_paperWidth;
+
   /**
    * The paper height in millimeters. Dont change this value, it is calculated by
    * @ref #calcPaperSize from the value @ref #m_paperFormat.
    */
   float m_paperHeight;    
+
   /**
    * The left border in millimeters.
    */
   float m_leftBorder;
+
   /**
    * The right border in millimeters.
    */
   float m_rightBorder;
+
   /**
    * The top border in millimeters.
    */
   float m_topBorder;
+
   /**
    * The right border in millimeters.
    */
   float m_bottomBorder;
-  
+
+  /**
+   * The text in the left field of the headline.
+   */
   QString m_headLeft;
+
+  /**
+   * The text in the right field of the headline.
+   */
   QString m_headRight;
+
+  /**
+   * The text in the middle field of the headline.
+   */
   QString m_headMid;
+
+  /**
+   * The text in the left field of the footline.
+   */
   QString m_footLeft;
+
+  /**
+   * The text in the right field of the footline.
+   */
   QString m_footRight;
+
+  /**
+   * The text in the middle field of the footline.
+   */
   QString m_footMid;
 
+  /**
+   * The image, that is stored in the document.
+   */
   QImage m_image;
+
+  /**
+   * The image format of the image in the document.
+   */
   QString m_strImageFormat;
-  int m_iXOffset;
-  int m_iYOffset;
 };
 
 #endif

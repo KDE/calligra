@@ -49,35 +49,42 @@ public:
     KImageDoc* doc() { return m_pDoc; }
 
     // IDL
-    void fitToView();
-    void fitWithProportions();
-    void originalSize();
-    void editImage();
-    void pageLayout();
-    void importImage();
-    void exportImage();
-    void infoImage();
-    void centered();
-    void rotateRight();
-    void rotateLeft();
-    void flipVertical();
-    void flipHorizontal();
-    void backgroundColor();
-    void zoomFactor();
-    void zoomIn10();
-    void zoomOut10();
-    void zoomDouble();
-    void zoomHalf();
-    void zoomMax();
-    void zoomMaxAspect();
-    void preferences();
-    void runGimp();
-    void runXV();
-    void runCommand();
+    void editEditImage();
+    void editImportImage();
+    void editExportImage();
+    void editPageLayout();
+    void editPreferences();
+
+    void viewFitToView();
+    void viewFitWithProportions();
+    void viewOriginalSize();
+    void viewCentered();
+    void viewInfoImage();
+    void viewBackgroundColor();
+    
+    void transformRotateRight();
+    void transformRotateLeft();
+    void transformRotateAngle();
+    void transformFlipVertical();
+    void transformFlipHorizontal();
+    void transformZoomFactor();
+    void transformZoomIn10();
+    void transformZoomOut10();
+    void transformZoomDouble();
+    void transformZoomHalf();
+    void transformZoomMax();
+    void transformZoomMaxAspect();
+    
+    void extrasRunGimp();
+    void extrasRunXV();
+    void extrasRunCommand();
 
     virtual void cleanUp();
 
     CORBA::Boolean printDlg();
+
+private:
+	QString tmpFilename();
   
 public slots:
     // Document signals
@@ -128,6 +135,7 @@ protected:
   OpenPartsUI::Menu_var m_vMenuTransform;
   CORBA::Long m_idMenuTransform_RotateRight;
   CORBA::Long m_idMenuTransform_RotateLeft;
+  CORBA::Long m_idMenuTransform_RotateAngle;
   CORBA::Long m_idMenuTransform_FlipVertical;
   CORBA::Long m_idMenuTransform_FlipHorizontal;
   CORBA::Long m_idMenuTransform_ZoomFactor;
@@ -160,9 +168,6 @@ protected:
   QPixmap m_pixmap;
   int m_drawMode;
   int m_centerMode;
-  
-  int m_iXOffset;
-  int m_iYOffset;
 };
 
 #endif

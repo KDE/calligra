@@ -2,19 +2,23 @@ SUBDIRS = pics
 
 INCLUDES  = $(MICO_INCLUDES) $(KOFFICE_INCLUDES) $(all_includes) -I$(idldir)
 LDFLAGS   = $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
-LDADD = $(LIB_KOFFICEUI) $(LIB_KIMGIO)
+LDADD = $(LIB_KOFFICEUI) $(LIB_KIMGIO) -lkparts -lkpartsui -lkom -lmico2.2.3
 
 ####### Files
 
 bin_PROGRAMS = kimage.bin
 
 kimage_bin_SOURCES = kimage_main.cc kimage_shell.cc kimage_doc.cc \
-		     kimage.cc kimage_view.cc
+                     kimage.cc kimage_view.cc preferencesdlg.cc \
+                     kinputdialog.cc kintegerinputdialog.cc
 
 noinst_HEADERS = kimage_main.h kimage_shell.h kimage_doc.h \
-	         kimage.h kimage_view.h
+                 kimage.h kimage_view.h preferencesdlg.h \
+                 kinputdialog.h kintegerinputdialog.h
 
-METASOURCES = kimage_main.moc kimage_shell.moc kimage_doc.moc kimage_view.moc
+METASOURCES = kimage_main.moc kimage_shell.moc kimage_doc.moc \
+              kimage_view.moc preferencesdlg.moc kinputdialog.moc \
+              kintegerinputdialog.moc
 
 idl_DATA = kimage.idl
 idl_HEADERS = kimage.h
@@ -47,3 +51,6 @@ kimage_doc.cc: kimage.h
 kimage_main.cc: kimage.h
 kimage_shell.cc: kimage.h
 kimage_view.cc: kimage.h
+preferencesdlg.cc: preferencesdlg.h
+kinputdialog.cc: kinputdialog.h
+kintegerinputdialog.cc: kintegerinputdialog.h

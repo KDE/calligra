@@ -62,9 +62,6 @@ KImageDoc::KImageDoc()
   calcPaperSize();
   m_orientation = PG_PORTRAIT;
 
-  m_iXOffset = 0;
-  m_iYOffset = 0;
-
   kimgioRegister();
 
   m_lstViews.setAutoDelete( false );
@@ -105,10 +102,9 @@ void KImageDoc::removeView( KImageView* _view )
 
 KImageView* KImageDoc::createImageView()
 {
-  KImageView *p = new KImageView( 0L, 0L, this );
-  //p->QWidget::show();
-  m_lstViews.append( p );
+  KImageView* p = new KImageView( 0L, 0L, this );
 
+  m_lstViews.append( p );
   return p;
 }
 
@@ -119,7 +115,7 @@ OpenParts::View_ptr KImageDoc::createView()
 
 void KImageDoc::viewList( OpenParts::Document::ViewList*& _list )
 {
-  (*_list).length( m_lstViews.count() );
+  _list->length( m_lstViews.count() );
 
   int i = 0;
   QListIterator<KImageView> it( m_lstViews );
@@ -190,12 +186,12 @@ bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
   vector<KOMLAttrib>::const_iterator it = lst.begin();
   for( ; it != lst.end(); it++ )
   {
-    if ( (*it).m_strName == "mime" )
+    if ( it->m_strName == "mime" )
     {
-      if ( (*it).m_strValue != "application/x-kimage" )
+      if ( it->m_strValue != "application/x-kimage" )
       {
-	cerr << "Unknown mime type " << (*it).m_strValue << endl;
-	return false;
+		cerr << "Unknown mime type " << it->m_strValue << endl;
+		return false;
       }
     }
   }
@@ -216,101 +212,101 @@ bool KImageDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
       vector<KOMLAttrib>::const_iterator it = lst.begin();
       for( ; it != lst.end(); it++ )
       {
-	if ( (*it).m_strName == "format" )
+	if ( it->m_strName == "format" )
 	{
-	  format = (*it).m_strValue.c_str();
+	  format = it->m_strValue.c_str();
 	}
-	else if ( (*it).m_strName == "orientation" )
+	else if ( it->m_strName == "orientation" )
 	{
-	  orientation = (*it).m_strValue.c_str();
+	  orientation = it->m_strValue.c_str();
 	}
 	else
-	  cerr << "Unknown attrib PAPER:'" << (*it).m_strName << "'" << endl;
+	  cerr << "Unknown attrib PAPER:'" << it->m_strName << "'" << endl;
       }
 
       // PAPERBORDERS, HEAD, FOOT
       while( parser.open( 0L, tag ) )
       {
-	KOMLParser::parseTag( tag.c_str(), name, lst );
+		KOMLParser::parseTag( tag.c_str(), name, lst );
 
-	if ( name == "PAPERBORDERS" )
-	{
-	  KOMLParser::parseTag( tag.c_str(), name, lst );
-	  vector<KOMLAttrib>::const_iterator it = lst.begin();
-	  for( ; it != lst.end(); it++ )
-	  {
-	    if ( (*it).m_strName == "left" )
-	    {
-	      left = atof( (*it).m_strValue.c_str() );
-	    }
-	    else if ( (*it).m_strName == "top" )
-	    {
-	      top = atof( (*it).m_strValue.c_str() );
-	    }
-	    else if ( (*it).m_strName == "right" )
-	    {
-	      right = atof( (*it).m_strValue.c_str() );
-	    }
-	    else if ( (*it).m_strName == "bottom" )
-	    {
-	      bottom = atof( (*it).m_strValue.c_str() );
-	    }
-	    else
-	      cerr << "Unknown attrib 'PAPERBORDERS:" << (*it).m_strName << "'" << endl;
-	  }
-	}
+		if ( name == "PAPERBORDERS" )
+		{
+		  KOMLParser::parseTag( tag.c_str(), name, lst );
+		  vector<KOMLAttrib>::const_iterator it = lst.begin();
+		  for( ; it != lst.end(); it++ )
+		  {
+		    if ( it->m_strName == "left" )
+		    {
+		      left = atof( it->m_strValue.c_str() );
+		    }
+		    else if ( it->m_strName == "top" )
+		    {
+		      top = atof( it->m_strValue.c_str() );
+		    }
+		    else if ( it->m_strName == "right" )
+		    {
+		      right = atof( it->m_strValue.c_str() );
+		    }
+		    else if ( it->m_strName == "bottom" )
+		    {
+		      bottom = atof( it->m_strValue.c_str() );
+		    }
+		    else
+		      cerr << "Unknown attrib 'PAPERBORDERS:" << it->m_strName << "'" << endl;
+		  }
+		}
       	else if ( name == "HEAD" )
-	{
-	  KOMLParser::parseTag( tag.c_str(), name, lst );
-	  vector<KOMLAttrib>::const_iterator it = lst.begin();
-	  for( ; it != lst.end(); it++ )
-	  {
-	    if ( (*it).m_strName == "left" )
-	    {
-	      hl = (*it).m_strValue.c_str();
+		{
+		  KOMLParser::parseTag( tag.c_str(), name, lst );
+		  vector<KOMLAttrib>::const_iterator it = lst.begin();
+		  for( ; it != lst.end(); it++ )
+		  {
+		    if ( it->m_strName == "left" )
+		    {
+		      hl = it->m_strValue.c_str();
+		    }
+		    else if ( it->m_strName == "center" )
+		    {
+		      hm = it->m_strValue.c_str();
+		    }
+		    else if ( it->m_strName == "right" )
+		    {
+		      hr = it->m_strValue.c_str();
+		    }
+	        else
+	          cerr << "Unknown attrib 'HEAD:" << it->m_strName << "'" << endl;
+	      }
 	    }
-	    else if ( (*it).m_strName == "center" )
+        else if ( name == "FOOT" )
 	    {
-	      hm = (*it).m_strValue.c_str();
-	    }
-	    else if ( (*it).m_strName == "right" )
-	    {
-	      hr = (*it).m_strValue.c_str();
+		  KOMLParser::parseTag( tag.c_str(), name, lst );
+		  vector<KOMLAttrib>::const_iterator it = lst.begin();
+		  for( ; it != lst.end(); it++ )
+		  {
+	 	    if ( it->m_strName == "left" )
+	        {
+	          fl = it->m_strValue.c_str();
+	        }
+	        else if ( it->m_strName == "center" )
+	        {
+	        	fm = it->m_strValue.c_str();
+	        }
+	        else if ( it->m_strName == "right" )
+	        {
+	          fr = it->m_strValue.c_str();
+	        }
+	        else
+	          cerr << "Unknown attrib 'FOOT:" << it->m_strName << "'" << endl;
+	      }
 	    }
 	    else
-	      cerr << "Unknown attrib 'HEAD:" << (*it).m_strName << "'" << endl;
-	  }
-	}
-      	else if ( name == "FOOT" )
-	{
-	  KOMLParser::parseTag( tag.c_str(), name, lst );
-	  vector<KOMLAttrib>::const_iterator it = lst.begin();
-	  for( ; it != lst.end(); it++ )
-	  {
-	    if ( (*it).m_strName == "left" )
-	    {
-	      fl = (*it).m_strValue.c_str();
-	    }
-	    else if ( (*it).m_strName == "center" )
-	    {
-	      fm = (*it).m_strValue.c_str();
-	    }
-	    else if ( (*it).m_strName == "right" )
-	    {
-	      fr = (*it).m_strValue.c_str();
-	    }
-	    else
-	      cerr << "Unknown attrib 'FOOT:" << (*it).m_strName << "'" << endl;
-	  }
-	}
-	else
-	  cerr << "Unknown tag '" << tag << "' in PAPER" << endl;
+		  cerr << "Unknown tag '" << tag << "' in PAPER" << endl;
 	
-	if ( !parser.close( tag ) )
+	    if ( !parser.close( tag ) )
         {
-	  debug( "ERR: Closing PAPER" );
-	  return false;
-	}
+	      debug( "ERR: Closing PAPER" );
+	      return false;
+	    }
       }
     }
     else

@@ -23,6 +23,7 @@
 #include "kimage_view.h"
 
 #include <koAboutDia.h>
+#include <klocale.h>
 #include <kfiledialog.h>
 #include <opMainWindowIf.h>
 #include <kapp.h>
