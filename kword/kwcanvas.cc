@@ -1758,7 +1758,7 @@ void KWCanvas::insertPicture( const QString & filename, bool isClipart )
 void KWCanvas::insertPart()
 {
     setMouseMode( MM_EDIT );
-    KoDocumentEntry m_partEntry = KoPartSelectDia::selectPart( this );
+    m_partEntry = KoPartSelectDia::selectPart( this );
     if ( m_partEntry.isEmpty() )
         return;
     setMouseMode( MM_CREATE_PART );
