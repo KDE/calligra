@@ -1,4 +1,6 @@
 #include <kinstance.h>
+#include <klocale.h>
+#include <kaboutdata.h>
 
 #include <kgraph_part.h>
 #include <kgraph_factory.h>
@@ -9,6 +11,9 @@ extern "C" {
         return new KGraphFactory;
     }
 };
+
+static const char *description=I18N_NOOP("KGraph - Graphs for Engineers");
+static const char *version="0.1";
 
 KInstance *KGraphFactory::s_global=0;
 
@@ -42,8 +47,13 @@ QObject *KGraphFactory::create(QObject *parent, const char *name, const char *cl
 }
 
 KInstance *KGraphFactory::global() {
-    if (!s_global)
-        s_global=new KInstance("kgraph");
+    if (!s_global) {
+        KAboutData *aboutData=new KAboutData("kgraph", I18N_NOOP("KGraph"),
+			      version, description, KAboutData::License_GPL, 
+			      "(c) 2000, Werner Trobin"); 
+        aboutData->addAuthor("Werner Trobin", 0, "wtrobin@carinthia.com");     
+        s_global=new KInstance(aboutData);
+    }
     return s_global;
 }
 #include <kgraph_factory.moc>

@@ -13,14 +13,7 @@
 KGraphPart::KGraphPart(QObject *parent, const char *name, bool singleViewMode)
     : KoDocument(parent, name, singleViewMode) {
 
-    //kDebugInfo(31000, "PART: vor setInstance()");
-    //setInstance(KGraphFactory::global());
-    //kDebugInfo(31000, "PART: nach setInstance()");
-    //setXMLFile("kgraph.rc");
-    //kDebugInfo(31000, "PART: nach setXMLFile()");
-
     KStdAction::cut(this, SLOT( a_editcut() ), actionCollection(), "editcut" );
-    kDebugInfo(31000, "PART: cut action");
 }
 
 bool KGraphPart::initDoc() {

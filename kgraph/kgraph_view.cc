@@ -3,7 +3,7 @@
 //#include <kaction.h>
 //#include <kstdaction.h>
 #include <klocale.h>
-#include <kdebug.h>
+//#include <kdebug.h>
 
 #include <kgraph_global.h>
 #include <kgraph_part.h>
@@ -12,11 +12,9 @@
 
 KGraphView::KGraphView(KGraphPart *part, QWidget *parent, const char *name)
     : KoView(part, parent, name) {
-    kDebugInfo(31000, "VIEW: im CTOR");
+    
     setInstance(KGraphFactory::global());
-    kDebugInfo(31000, "VIEW: nach setInstance()");
     setXMLFile("kgraph.rc");
-    kDebugInfo(31000, "VIEW: nach setXMLFile()");
 }
 
 void KGraphView::paintEvent(QPaintEvent *ev) {

@@ -25,8 +25,8 @@
 #include <kcmdlineargs.h>
 #include <klocale.h>
 
-static const char* description=I18N_NOOP("KGraph - Graphs for Engineers");
-static const char* version="0.1";
+#include <kgraph_factory.h>
+
 
 static const KCmdLineOptions options[]=
 {
@@ -36,12 +36,8 @@ static const KCmdLineOptions options[]=
 
 int main(int argc, char **argv) {
 
-    KAboutData aboutData( "kgraph", I18N_NOOP("KGraph"),
-        version, description, KAboutData::License_GPL,
-        "(c) 2000, Werner Trobin");
-    aboutData.addAuthor("Werner Trobin",0, "wtrobin@carinthia.com");
-    KCmdLineArgs::init( argc, argv, &aboutData );
-    KCmdLineArgs::addCmdLineOptions( options );
+    KCmdLineArgs::init(argc, argv, KGraphFactory::global()->aboutData());
+    KCmdLineArgs::addCmdLineOptions(options);
   
     KoApplication app;
 
