@@ -4941,7 +4941,7 @@ KoTextParagLineStart *KoTextFormatterBase::bidiReorderLine( KoTextParag * /*para
     return ls;
 }
 
-bool KoTextFormatterBase::isStrechable( KoTextString *string, int pos ) const
+bool KoTextFormatterBase::isStretchable( KoTextString *string, int pos ) const
 {
     if ( string->at( pos ).c == QChar(160) ) //non-breaking space
 	return true;

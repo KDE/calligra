@@ -517,7 +517,7 @@ KoTextParagLineStart *KoTextFormatter::koFormatLine(
                 start = j+1;
                 break;
             }
-	    if( isStrechable( string, j ) ) {
+	    if( isStretchable( string, j ) ) {
 		numSpaces++;
 	    }
 	}
@@ -527,7 +527,7 @@ KoTextParagLineStart *KoTextFormatter::koFormatLine(
             KoTextStringChar &chr = string->at( k );
             if ( toAdd != 0 )
                 moveChar( chr, zh, toAdd, toAddPix );
-	    if( isStrechable( string, k ) && numSpaces ) {
+	    if( isStretchable( string, k ) && numSpaces ) {
 		int s = space / numSpaces;
 		toAdd += s;
                 toAddPix = zh->layoutUnitToPixelX( toAdd );
@@ -598,7 +598,7 @@ KoTextParagLineStart *KoTextFormatter::koBidiReorderLine(
                 start = j+1;
                 break;
             }
-	    if( isStrechable( text, j ) ) {
+	    if( isStretchable( text, j ) ) {
 		numSpaces++;
 	    }
 	}

@@ -1402,7 +1402,7 @@ protected:
 						    KoTextStringChar *last, int align, int space );
 #endif
     virtual bool isBreakable( KoTextString *string, int pos ) const;
-    virtual bool isStrechable( KoTextString *string, int pos ) const;
+    virtual bool isStretchable( KoTextString *string, int pos ) const;
     void insertLineStart( KoTextParag *parag, int index, KoTextParagLineStart *ls );
 
     int thisminw;
