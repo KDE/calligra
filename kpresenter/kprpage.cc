@@ -3268,6 +3268,8 @@ bool KPrPage::oneObjectTextExist()
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
+        if ( (it.current()== m_doc->header() && !m_doc->hasHeader())|| (it.current()== m_doc->footer() && !m_doc->hasFooter()))
+            continue;
         if (  it.current()->getType()==OT_TEXT)
             return true;
     }
