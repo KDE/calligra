@@ -489,7 +489,8 @@ KoTextParagLineStart *KoTextFormatter::koFormatLine(
         }
     } else if ( align & Qt::AlignJustify ) {
 	int numSpaces = 0;
-	for ( int j = last; j >= start; --j ) {
+        // End at "last-1", the last space ends up with a width of 0
+	for ( int j = last-1; j >= start; --j ) {
             //// Start at last tab, if any. BR #40472 specifies that justifying should start after the last tab.
             if ( string->at( j ).c == '\t' ) {
                 start = j+1;
@@ -568,7 +569,7 @@ KoTextParagLineStart *KoTextFormatter::koBidiReorderLine(
     else if ( align & Qt::AlignRight )
 	x += space;
     else if ( align & Qt::AlignJustify ) {
-	for ( int j = last; j >= start; --j ) {
+	for ( int j = last - 1; j >= start; --j ) {
             //// Start at last tab, if any. BR #40472 specifies that justifying should start after the last tab.
             if ( text->at( j ).c == '\t' ) {
                 start = j+1;
