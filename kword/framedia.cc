@@ -940,7 +940,7 @@ void KWFrameDia::setupTab4() { // TAB Geometry
     grid4->addMultiCellWidget( grp1, row, (++row), 0,1 );
 
     if(frame) {
-        QGroupBox *grp2 = new QGroupBox( i18n("Margins in %1").arg(doc->getUnitName()), tab4 );
+        QGroupBox *grp2 = new QGroupBox( i18n("Margins (%1)").arg(doc->getUnitName()), tab4 );
         mGrid = new QGridLayout( grp2, 6, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
         synchronize=new QCheckBox( i18n("Synchronize changes"), grp2 );

@@ -1021,7 +1021,7 @@ void StyleDia::setupTabGeometry()
     pGrid->addWidget( m_lineHeight, 4, 1 );
 
 
-    QGroupBox *grp2 = new QGroupBox( i18n("Margins in %1").arg(m_doc->getUnitName()), tab );
+    QGroupBox *grp2 = new QGroupBox( i18n("Margins (%1)").arg(m_doc->getUnitName()), tab );
     QGridLayout *mGrid = new QGridLayout( grp2, 6, 2, KDialog::marginHint(), KDialog::spacingHint() );
     mGrid->addRowSpacing(0, fontMetrics().height()/2);
 
