@@ -130,7 +130,6 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
         toolEditMode = TEM_MOUSE;
         tmpObjs.setAutoDelete( false );
         setAcceptDrops( true );
-        inEffect = false;
         m_ratio = 0.0;
         m_keepRatio = false;
         mouseSelectedObject = false;
@@ -317,7 +316,7 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
         }
         else
         {
-            PresStep step( m_step.m_pageNumber, m_step.m_step, m_step.m_subStep, false, true && !goingBack );
+            PresStep step( m_step.m_pageNumber, m_step.m_step, m_step.m_subStep, false, !goingBack );
             drawPresPage( &bufPainter, crect, step );
         }
 
@@ -2099,8 +2098,8 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
                 m_view->autoScreenPresStopTimer();
             slotGotoPage(); break;
         case Key_Home:  // go to first page
-            if ( presentationSlidesIterator != presentationSlides.begin() ) {
-                gotoPage( *presentationSlides.begin() );
+            if ( m_presentationSlidesIterator != m_presentationSlides.begin() ) {
+                gotoPage( *m_presentationSlides.begin() );
                 if ( !spManualSwitch() ) {
                     m_view->setCurrentTimer( 1 );
                     setNextPageTimer( true );
@@ -2108,8 +2107,8 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
             }
             break;
         case Key_End:  // go to last page
-            if ( presentationSlidesIterator != presentationSlides.end() ) {
-                gotoPage( *(--presentationSlides.end()) );
+            if ( m_presentationSlidesIterator != m_presentationSlides.end() ) {
+                gotoPage( *(--m_presentationSlides.end()) );
                 if ( !spManualSwitch() ) {
                     m_view->setCurrentTimer( 1 );
                     setNextPageTimer( true );
@@ -3075,18 +3074,18 @@ void KPrCanvas::startScreenPresentation( float presFakt, int curPgNum /* 1-based
         tmpObjs.append( oIt.current() );
 
     // add all selected slides
-    presentationSlides.clear();
+    m_presentationSlides.clear();
     QValueList<int> selected = doc->selectedSlides();
     for ( QValueList<int>::Iterator it = selected.begin() ; it != selected.end(); ++ it )
     {
         // ARGLLLRGLRLGRLG selectedSlides gets us 0-based numbers,
         // and here we want 1-based numbers !
         int slideno = *it + 1;
-        presentationSlides.append( slideno );
+        m_presentationSlides.append( slideno );
     }
 
     // no slide selected ? end the slide show immediately...
-    if( !presentationSlides.count() )
+    if( !m_presentationSlides.count() )
     {
         //kdDebug(33001) << "No slide: end the slide show" << endl;
         stopScreenPresentation();
@@ -3095,10 +3094,10 @@ void KPrCanvas::startScreenPresentation( float presFakt, int curPgNum /* 1-based
 
     // find first selected slide after curPgNum
     unsigned slide = 0;
-    for( unsigned i = 0; i<presentationSlides.count(); i++ )
-        if( presentationSlides[i] >= curPgNum )
+    for( unsigned i = 0; i<m_presentationSlides.count(); i++ )
+        if( m_presentationSlides[i] >= curPgNum )
         {
-            slide = presentationSlides[i];
+            slide = m_presentationSlides[i];
             break;
         }
 
@@ -3159,9 +3158,9 @@ bool KPrCanvas::pNext( bool )
     KPresenterDoc * doc = m_view->kPresenterDoc();
     
     // Then try to see if there is still one step to do in the current page
-    if ( m_step.m_step < *( --pageEffectSteps.end() ) )
+    if ( m_step.m_step < *( --m_pageEffectSteps.end() ) )
     {
-        QValueList<int>::ConstIterator it = pageEffectSteps.find( m_step.m_step );
+        QValueList<int>::ConstIterator it = m_pageEffectSteps.find( m_step.m_step );
         m_step.m_step = *( ++it );
         m_step.m_subStep = 0;
         //kdDebug(33001) << "Page::pNext setting currentEffectStep to " << currentEffectStep << endl;
@@ -3182,11 +3181,11 @@ bool KPrCanvas::pNext( bool )
     }
 
     // No more steps in this page, try to go to the next page
-    QValueList<int>::ConstIterator test(  presentationSlidesIterator );
-    if ( ++test != presentationSlides.end() )
+    QValueList<int>::ConstIterator test(  m_presentationSlidesIterator );
+    if ( ++test != m_presentationSlides.end() )
     {
         if ( !spManualSwitch() && nextPageTimer ) {
-            QValueList<int>::ConstIterator it( presentationSlidesIterator );
+            QValueList<int>::ConstIterator it( m_presentationSlidesIterator );
             m_view->setCurrentTimer( doc->pageList().at((*it) - 1 )->getPageTimer() * doc->getPresSpeed() );
 
             nextPageTimer = false;
@@ -3202,7 +3201,7 @@ bool KPrCanvas::pNext( bool )
         QPixmap _pix1( desk.width(), desk.height() );
         drawCurrentPageInPix( _pix1 );
 
-        m_step.m_pageNumber = *( ++presentationSlidesIterator ) - 1;
+        m_step.m_pageNumber = *( ++m_presentationSlidesIterator ) - 1;
         m_step.m_subStep = 0;
         //kdDebug(33001) << "Page::pNext going to page " << m_step.m_pageNumber << endl;
 
@@ -3215,8 +3214,8 @@ bool KPrCanvas::pNext( bool )
         for (; oIt.current(); ++oIt )
             tmpObjs.append(oIt.current());
 
-        pageEffectSteps = doc->getPageEffectSteps( m_step.m_pageNumber );
-        m_step.m_step = *pageEffectSteps.begin();
+        m_pageEffectSteps = doc->getPageEffectSteps( m_step.m_pageNumber );
+        m_step.m_step = *m_pageEffectSteps.begin();
 
 #if KDE_IS_VERSION(3,1,90)
         QPixmap _pix2( desk.width(), desk.height() );
@@ -3231,7 +3230,7 @@ bool KPrCanvas::pNext( bool )
         */    
         drawCurrentPageInPix( _pix2 );
 
-        QValueList<int>::ConstIterator it( presentationSlidesIterator );
+        QValueList<int>::ConstIterator it( m_presentationSlidesIterator );
         --it;
 
         if ( !spManualSwitch() )
@@ -3303,19 +3302,19 @@ bool KPrCanvas::pPrev( bool /*manual*/ )
     goingBack = true;
     m_step.m_subStep = 0;
 
-    if ( m_step.m_step > *pageEffectSteps.begin() ) {
-        QValueList<int>::ConstIterator it = pageEffectSteps.find( m_step.m_step );
+    if ( m_step.m_step > *m_pageEffectSteps.begin() ) {
+        QValueList<int>::ConstIterator it = m_pageEffectSteps.find( m_step.m_step );
         m_step.m_step = *( --it );
         repaint( false );
         return false;
     } else {
-        if ( presentationSlidesIterator == presentationSlides.begin() ) {
-            pageEffectSteps = m_view->kPresenterDoc()->getPageEffectSteps( m_step.m_pageNumber );
-            m_step.m_step = *pageEffectSteps.begin();
+        if ( m_presentationSlidesIterator == m_presentationSlides.begin() ) {
+            m_pageEffectSteps = m_view->kPresenterDoc()->getPageEffectSteps( m_step.m_pageNumber );
+            m_step.m_step = *m_pageEffectSteps.begin();
             repaint( false );
             return false;
         }
-        m_step.m_pageNumber = *( --presentationSlidesIterator ) - 1;
+        m_step.m_pageNumber = *( --m_presentationSlidesIterator ) - 1;
 
         tmpObjs.clear();
         KPresenterDoc * doc = m_view->kPresenterDoc();
@@ -3326,8 +3325,8 @@ bool KPrCanvas::pPrev( bool /*manual*/ )
         QPtrListIterator<KPObject> oIt( getObjectList() );
         for (; oIt.current(); ++oIt )
             tmpObjs.append(oIt.current());
-        pageEffectSteps = doc->getPageEffectSteps( m_step.m_pageNumber );
-        m_step.m_step = *( --pageEffectSteps.end() );
+        m_pageEffectSteps = doc->getPageEffectSteps( m_step.m_pageNumber );
+        m_step.m_step = *( --m_pageEffectSteps.end() );
 
         m_view->setPresentationDuration( m_step.m_pageNumber + 1 );
 
@@ -4178,7 +4177,7 @@ void KPrCanvas::doObjEffects()
         QPainter p;
         p.begin( this );
         p.drawPixmap( 0, 0, screen_orig );
-        PresStep step( m_step.m_pageNumber, m_step.m_step, m_step.m_subStep, false, true && !goingBack );
+        PresStep step( m_step.m_pageNumber, m_step.m_step, m_step.m_subStep, false, !goingBack );
         drawPresPage( &p, QRect( 0, 0, kapp->desktop()->width(), kapp->desktop()->height() ), step );
         p.end();
     }
@@ -4187,7 +4186,7 @@ void KPrCanvas::doObjEffects()
         //kdDebug(33001) << "KPrCanvas::doObjEffects effects" << endl;
         QPainter p;
         p.begin( screen );
-        PresStep step( m_step.m_pageNumber, m_step.m_step, m_step.m_subStep, false, true && !goingBack );
+        PresStep step( m_step.m_pageNumber, m_step.m_step, m_step.m_subStep, false, !goingBack );
         drawPresPage( &p, QRect( 0, 0, kapp->desktop()->width(), kapp->desktop()->height() ), step );
         p.end();
         bitBlt( this, 0, 0, screen );
@@ -4926,7 +4925,7 @@ void KPrCanvas::slotGotoPage()
 {
     setCursor( blankCursor );
     int pg = m_step.m_pageNumber + 1;
-    pg = KPGotoPage::gotoPage( m_view->kPresenterDoc(), presentationSlides, pg, this );
+    pg = KPGotoPage::gotoPage( m_view->kPresenterDoc(), m_presentationSlides, pg, this );
     gotoPage( pg );
 
     if ( !spManualSwitch() ) {
@@ -4946,12 +4945,11 @@ void KPrCanvas::gotoPage( int pg )
     if ( page != m_step.m_pageNumber ) {
         m_step.m_pageNumber = page;
         kdDebug(33001) << "Page::gotoPage m_step.m_pageNumber =" << m_step.m_pageNumber << endl;
-        //presentationSlidesIterator = presentationSlides.find( currPresPage );
-        presentationSlidesIterator = presentationSlides.find( m_step.m_pageNumber + 1 );
+        m_presentationSlidesIterator = m_presentationSlides.find( m_step.m_pageNumber + 1 );
         editMode = false;
         drawMode = false;
-        pageEffectSteps = m_view->kPresenterDoc()->getPageEffectSteps( m_step.m_pageNumber );
-        m_step.m_step = *pageEffectSteps.begin();
+        m_pageEffectSteps = m_view->kPresenterDoc()->getPageEffectSteps( m_step.m_pageNumber );
+        m_step.m_step = *m_pageEffectSteps.begin();
         m_step.m_subStep = 0;
         //change active page
         m_activePage=m_view->kPresenterDoc()->pageList().at( m_step.m_pageNumber );

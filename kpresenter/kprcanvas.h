@@ -141,11 +141,11 @@ public:
 
     /// returns the current page of the presentation 1 based
     unsigned int presPage() const { return m_step.m_pageNumber + 1; }
-    /// returns the current step of the presetation
+    /// returns the current step of the presentation
     int presStep() const { return m_step.m_step; }
     float presFakt() const { return _presFakt; }
-    int numPresSteps() const { return pageEffectSteps.count(); }
-    int numPresPages() const { return presentationSlides.count(); }
+    int numPresSteps() const { return m_pageEffectSteps.count(); }
+    int numPresPages() const { return m_presentationSlides.count(); }
 
     bool canAssignEffect( QPtrList<KPObject> &objs ) const;
 
@@ -406,7 +406,7 @@ signals:
 protected:
 
     /**
-     * Class for keeping a presntation step
+     * Class for keeping a presentation step
      * m_pageNumber the current page number 0 based
      * m_step       the current effect step 0 based
      * m_subStep    the current sub step 0 based for text animation
@@ -665,16 +665,16 @@ private:
     bool editMode, goingBack, drawMode;
     bool drawLineInDrawMode;
     bool mouseSelectedObject;
-    /// step actual step of the presentation
+    /// information about current step of the presentation
     PresStep m_step;
     float _presFakt;
     int m_showOnlyPage; // 1-based (-1 = all)
     /// list of all effect steps occuring on the active page
-    QValueList<int> pageEffectSteps;
+    QValueList<int> m_pageEffectSteps;
     /// List of the slides used in the presentation
-    QValueList<int> presentationSlides;
+    QValueList<int> m_presentationSlides;
     /// Iterator over the slides of a presentation
-    QValueList<int>::Iterator presentationSlidesIterator;
+    QValueList<int>::Iterator m_presentationSlidesIterator;
     int PM_DM, PM_SM;
     int firstX, firstY;
     int delPageId;
@@ -706,7 +706,6 @@ private:
     // (those that remain on screen between two steps)
     QPtrList <KPObject> tmpObjs;
     QString autoform;
-    bool inEffect;
     QPixmap buffer;
 
     KPTextView *m_currentTextObjectView;
