@@ -1587,7 +1587,10 @@ void KWCanvas::copySelectedFrames()
                 if ( frame == firstFrame )
                 {
                     fs->save( parentElem, false );
-                    parentElem = parentElem.namedItem( "FRAMESET" ).toElement(); // Save the frame inside the frameset
+                    // Get the last FRAMESET element, the one we just added
+                    QDomNodeList listFramesets = parentElem.elementsByTagName( "FRAMESET" );
+                    // Save the frame inside the frameset tag
+                    parentElem = listFramesets.item( listFramesets.count() - 1 ).toElement();
                 }
                 // Save the frame information
                 QDomElement frameElem = parentElem.ownerDocument().createElement( "FRAME" );
