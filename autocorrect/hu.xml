@@ -1,0 +1,128 @@
+<!DOCTYPE autocorrection>
+<Word>
+ <items>
+  <item find="linux" replace="Linux" />
+  <item find="egz" replace="egy" />
+  <item find="eyg" replace="egy" />
+  <item find="eggy" replace="egy" />
+  <item find="aaz" replace="az" />
+  <item find="átalában" replace="általában" />
+  <item find="eggyütt" replace="együtt" />
+  <item find="konkurrencia" replace="konkurencia" />
+  <item find="konkurrens" replace="konkurens" />
+  <item find="mindehez" replace="mindehhez" />
+  <item find="mindahoz" replace="mindahhoz" />
+  <item find="ehez" replace="ehhez" />
+  <item find="ahoz" replace="ahhoz" />
+  <item find="szervíz" replace="szerviz" />
+  <item find="márkaszervíz" replace="márkaszerviz" />
+  <item find="autómatikus" replace="automatikus" />
+  <item find="autómata" replace="automata" />
+  <item find="árúház" replace="áruház" />
+  <item find="ifjuság" replace="ifjúság" />
+  <item find="mozsdó" replace="mosdó" />
+  <item find="koléga" replace="kolléga" />
+  <item find="kolégium" replace="kollégium" />
+  <item find="helyszin" replace="helyszín" />
+  <item find="müködik" replace="működik" />
+  <item find="müködtet" replace="működtet" />
+  <item find="tipus" replace="típus" />
+  <item find="Széchényi" replace="Széchenyi" />
+  <item find="Kosuth" replace="Kossuth" />
+  <item find="komunista" replace="kommunista" />
+  <item find="faszista" replace="fasiszta" />
+  <item find="harmónika" replace="harmonika" />
+  <item find="kelett" replace="kellett" />
+  <item find="harmónikus" replace="harmonikus" />
+  <item find="kilóméter" replace="kilométer" />
+  <item find="kilógramm" replace="kilogramm" />
+  <item find="mehanikus" replace="mechanikus" />
+  <item find="karier" replace="karrier" />
+  <item find="Szovjetúnió" replace="Szovjetunió" />
+  <item find="síma" replace="sima" />
+  <item find="ventillátor" replace="ventilátor" />
+  <item find="cimke" replace="címke" />
+  <item find="htp://" replace="http://" />
+  <item find="htpp://" replace="http://" />
+  <item find="http:\\" replace="http://" />
+  </items>
+ <UpperCaseExceptions>
+  <word exception="dr." />
+  <word exception="jan." />
+  <word exception="feb." />
+  <word exception="márc." />
+  <word exception="ápr." />
+  <word exception="máj." />
+  <word exception="jún." />
+  <word exception="júl." />
+  <word exception="aug." />
+  <word exception="szept." />
+  <word exception="okt." />
+  <word exception="nov." />
+  <word exception="dec." />
+  <word exception="pl." />
+  <word exception="stb." />
+  <word exception="min." />
+  <word exception="max." />
+  <word exception="tel." />
+  <word exception="id." />
+ <word exception="ifj." />
+  <word exception="özv." />
+ <word exception="Kft." />
+ <word exception="Bt." />
+ <word exception="Rt." />
+ <word exception="Bp." />
+ <word exception="u." />
+ <word exception="sgt." />
+ <word exception="krt." />
+ <word exception="I." />
+ <word exception="II." />
+ <word exception="III." />
+ <word exception="IV." />
+ <word exception="V." />
+ <word exception="VI." />
+ <word exception="VII." />
+ <word exception="VIII." />
+ <word exception="IX." />
+ <word exception="X." />
+ <word exception="XI." />
+ <word exception="XII." />
+ <word exception="XIII." />
+ <word exception="XIV." />
+ <word exception="XV." />
+ <word exception="XVI." />
+ <word exception="XVII." />
+ <word exception="XVIII." />
+ <word exception="XIX." />
+ <word exception="XX." />
+ <word exception="XXI." />
+ <word exception="XXII." />
+ </UpperCaseExceptions>
+ <TwoUpperLetterExceptions>
+  <word exception="KOffice" />
+  <word exception="KWord" />
+  <word exception="KSpread" />
+  <word exception="KPresenter" />
+  <word exception="KMail" />
+  <word exception="KTuberling" />
+  <word exception="KNode" />
+  <word exception="KStars" />
+  <word exception="KDevelop" />
+  <word exception="KBabel" />
+  <word exception="KPat" />
+  <word exception="MHz" />
+  <word exception="MWh" />
+  <word exception="GHz" />
+  <word exception="MW" />
+  <word exception="GW" />
+  <word exception="GWh" />
+  <word exception="MJ" />
+  <word exception="MT" />
+ </TwoUpperLetterExceptions>
+ <DoubleQuote>
+  <doublequote begin="&#201C;" end="&#201D;" />
+ </DoubleQuote>
+ <SimpleQuote>
+  <simplequote begin="&#2018;" end="&#2019;" />
+ </SimpleQuote>
+</Word>
