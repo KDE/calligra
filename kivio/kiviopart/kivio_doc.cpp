@@ -302,11 +302,11 @@ bool KivioDoc::loadStencilSpawnerSet( const QString &desc )
         d.setSorting( QDir::Name );
 
         const QFileInfoList *list = d.entryInfoList();
-        QFileInfoListIterator it( *list );
+        QFileInfoListIterator listIT( *list );
         QFileInfo *fi;
 
         // Loop through the outer directories (like BasicFlowcharting)
-        while( (fi=it.current()) )
+        while( (fi=listIT.current()) )
         {
             if( fi->fileName() != "." &&
                 fi->fileName() != ".." )
@@ -349,7 +349,7 @@ bool KivioDoc::loadStencilSpawnerSet( const QString &desc )
                     ++innerIT;
                 }
             }
-            ++it;
+            ++listIT;
         }
     }
 

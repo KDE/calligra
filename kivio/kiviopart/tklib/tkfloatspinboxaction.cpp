@@ -141,7 +141,7 @@ void TKFloatSpinBoxAction::setButtonSymbols( TKFloatSpinBox::ButtonSymbols value
 void TKFloatSpinBoxAction::setDecimals( int value )
 {
   SETVALUE(m_decimal,setDecimals)
-  void updateLayout();
+  (void) updateLayout();
 }
 
 void TKFloatSpinBoxAction::setWrapping( bool value )
@@ -152,13 +152,13 @@ void TKFloatSpinBoxAction::setWrapping( bool value )
 void TKFloatSpinBoxAction::setMinValue( float value )
 {
   SETVALUE(m_minvalue,setMinValue)
-  void updateLayout();
+  (void) updateLayout();
 }
 
 void TKFloatSpinBoxAction::setMaxValue( float value )
 {
   SETVALUE(m_maxvalue,setMaxValue)
-  void updateLayout();
+  (void) updateLayout();
 }
 
 void TKFloatSpinBoxAction::setLineStep( float value )
@@ -169,19 +169,19 @@ void TKFloatSpinBoxAction::setLineStep( float value )
 void TKFloatSpinBoxAction::setPrefix( const QString& value )
 {
   SETVALUE(m_prefix,setPrefix)
-  void updateLayout();
+  (void) updateLayout();
 }
 
 void TKFloatSpinBoxAction::setSuffix( const QString& value )
 {
   SETVALUE(m_suffix,setSuffix)
-  void updateLayout();
+  (void) updateLayout();
 }
 
 void TKFloatSpinBoxAction::setMinimumStyle(bool value )
 {
   SETVALUE(m_minimum,setMinimumStyle)
-  void updateLayout();
+  (void) updateLayout();
 }
 
 

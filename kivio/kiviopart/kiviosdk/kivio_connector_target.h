@@ -50,7 +50,7 @@ public:
     inline float x() { return m_position.x(); }
     inline float y() { return m_position.y(); }
 
-    inline void setId( int id );
+    void setId( int id );
     inline int id() { return m_id; }
 
     void setX( float );
