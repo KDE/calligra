@@ -799,12 +799,68 @@ now produces a thick space.
 </para>
 </sect2>
 
+
 <sect2>
 <title>Configuring Toolbars</title>
 <para>The <menuchoice>
 <guimenu>Settings</guimenu><guimenuitem>Configure Toolbars...</guimenuitem></menuchoice>
-Is not implemented at this time.</para>
+Is used to add additional buttons to the toolbars.</para>
+
+<screenshot>
+<screeninfo>Picture of toolbars dialog</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="toolbars.png" format="PNG"/>
+	  </imageobject>
+	</mediaobject>
+</screenshot>
+
+
+<itemizedlist>
+
+<listitem>
+<para>To add a button to the File toolbar, 
+</para>
+
+<screenshot>
+<screeninfo>Picture of toolbars dialog</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="file-toolbar.png" format="PNG"/>
+	  </imageobject>
+	</mediaobject>
+</screenshot>
+
+<para>  make sure <guilabel>File
+  &lt;KOfficeShell&gt;</guilabel> is displayed in the top combo box.
+</para></listitem>
+
+<listitem><para>
+Click on one of the items in the left hand pane. This item will now have a
+blue background showing that it has been selected.
+</para></listitem>
+
+<listitem><para>
+Next click on the <keysym>Right arrow</keysym> button to place it in
+the right pane.
+</para></listitem>
+
+<listitem><para>
+Click on <userinput><guilabel>Apply</guilabel></userinput> and then
+click on <userinput><guilabel>OK</guilabel></userinput>
+</para></listitem>
+</itemizedlist>
+
+
+<para>The new Item should be in the toolbar. <inlinemediaobject><imageobject>
+	    <imagedata fileref="file-toolbar2.png" format="PNG"/>
+	  </imageobject></inlinemediaobject></para>
+
+
 </sect2>
+
+
+
 
 <sect2>
 <title>Configuring &kformula;</title>
@@ -900,7 +956,7 @@ the path integral about a closed contour. Below is the result of
 <para>The <menuchoice>
 <guimenu>Edit</guimenu>
 <guimenuitem>Edit Formula String</guimenuitem>
-</menuchoice> allows the user to edit the ASCII formulas that have been copied from other applications,
+</menuchoice> allows the user to edit the <acronym>ASCII</acronym> formulas that have been copied from other applications,
 such as Scilab, and  transform them directly into mathematical type. An example will make this clear. Below 
 is a screenshot of <literal>INRIA</literal> Scilab.
 </para>
