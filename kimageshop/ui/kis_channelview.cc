@@ -40,7 +40,7 @@
 #include "kis_framebutton.h"
 #include "kis_factory.h"
 
-#define KISBarIcon( x ) BarIcon( x, KisFactory::global() )
+//#define KISBarIcon( x ) BarIcon( x, KisFactory::global() )
 
 KisChannelView::KisChannelView( KisDoc *_doc, QWidget *_parent, const char *_name )
   : QWidget( _parent, _name )
@@ -52,13 +52,13 @@ KisChannelView::KisChannelView( KisDoc *_doc, QWidget *_parent, const char *_nam
 
   QHBox *buttons = new QHBox( this );
   layout->addWidget( buttons );
-  
+
   KisFrameButton* pbAddChannel = new KisFrameButton( buttons );
-  pbAddChannel->setPixmap( KISBarIcon( "newlayer" ) );
+  pbAddChannel->setPixmap( BarIcon( "newlayer" ) );
   connect( pbAddChannel, SIGNAL( clicked() ), channeltable, SLOT( slotAddChannel() ) );
-  
+
   KisFrameButton* pbRemoveChannel = new KisFrameButton( buttons );
-  pbRemoveChannel->setPixmap( KISBarIcon( "deletelayer" ) );
+  pbRemoveChannel->setPixmap( BarIcon( "deletelayer" ) );
   connect( pbRemoveChannel, SIGNAL( clicked() ), channeltable, SLOT( slotRemoveChannel() ) );
 }
 
@@ -94,7 +94,7 @@ void ChannelTable::init( KisDoc* doc )
   if( !m_linkIcon->load( _icon ) )
 	QMessageBox::critical( this, "Canvas", "Can't find link.png" );
   m_linkRect = QRect( QPoint( 25,( CELLHEIGHT - m_linkIcon->height() ) / 2 ), m_linkIcon->size() );
-  
+
   // HACK - the size of the preview image should be configurable somewhere
   m_previewRect = QRect( QPoint( 40, (CELLHEIGHT - m_linkIcon->height() ) /2 ),
 			 QSize( 15, 15 ) );
@@ -106,7 +106,7 @@ void ChannelTable::init( KisDoc* doc )
   //  m_selected = m_doc->layerList().count() - 1;
 
   QPopupMenu *submenu = new QPopupMenu();
- 
+
   m_contextmenu = new QPopupMenu();
 
   m_contextmenu->setCheckable(TRUE);

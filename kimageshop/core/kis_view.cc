@@ -66,7 +66,7 @@
 #include "kis_tool_colorpicker.h"
 #include "kis_tool_eraser.h"
 
-#define KISBarIcon( x ) BarIcon( x, KisFactory::global() )
+//#define KISBarIcon( x ) BarIcon( x, KisFactory::global() )
 
 KisView::KisView( KisDoc* doc, QWidget* parent, const char* name )
     : KoView( doc, parent, name )
@@ -198,19 +198,19 @@ void KisView::setupTabBar()
 
   // tabbar control buttons
   m_pTabFirst = new QPushButton( this );
-  m_pTabFirst->setPixmap( QPixmap( KISBarIcon( "tab_first" ) ) );
+  m_pTabFirst->setPixmap( QPixmap( BarIcon( "tab_first" ) ) );
   QObject::connect( m_pTabFirst, SIGNAL( clicked() ), m_pTabBar, SLOT( slotScrollFirst() ) );
 
   m_pTabLeft = new QPushButton( this );
-  m_pTabLeft->setPixmap( QPixmap( KISBarIcon( "tab_left" ) ) );
+  m_pTabLeft->setPixmap( QPixmap( BarIcon( "tab_left" ) ) );
   QObject::connect( m_pTabLeft, SIGNAL( clicked() ), m_pTabBar, SLOT( slotScrollLeft() ) );
 
   m_pTabRight = new QPushButton( this );
-  m_pTabRight->setPixmap( QPixmap( KISBarIcon( "tab_right" ) ) );
+  m_pTabRight->setPixmap( QPixmap( BarIcon( "tab_right" ) ) );
   QObject::connect( m_pTabRight, SIGNAL( clicked() ), m_pTabBar, SLOT( slotScrollRight() ) );
 
   m_pTabLast = new QPushButton( this );
-  m_pTabLast->setPixmap( QPixmap( KISBarIcon( "tab_last" ) ) );
+  m_pTabLast->setPixmap( QPixmap( BarIcon( "tab_last" ) ) );
   QObject::connect( m_pTabLast, SIGNAL( clicked() ), m_pTabBar, SLOT( slotScrollLast() ) );
 }
 
@@ -589,11 +589,11 @@ void KisView::canvasGotPaintEvent( QPaintEvent*e )
 	  p.eraseRect(e->rect());
 	  return;
 	}
-  
+
   QPainter p;
   QRect ur = e->rect();
   p.begin( m_pCanvas );
-  
+
   // FIXME: Michael, you scale the whole image, that makes it dog slow, scale just the are you need.
   p.scale( zoomFactor(), zoomFactor() );
 
@@ -741,13 +741,13 @@ void KisView::paste()
 void KisView::zoom( int _x, int _y, float zf )
 {
   debug( "KisView::zoom" );
-  
+
   debug( "zoom factor : %f", zf );
-  
+
   if (zf == 0) zf = 1;
 
   setZoomFactor( zf );
-  
+
   int x = static_cast<int> (_x * zf - docWidth() / 2);
   int y = static_cast<int> (_y * zf - docHeight() / 2);
 
@@ -755,7 +755,7 @@ void KisView::zoom( int _x, int _y, float zf )
   if (y < 0) y = 0;
 
   scrollTo( QPoint( x, y ) );
-  
+
   m_pCanvas->update();
 }
 
@@ -766,7 +766,7 @@ void KisView::zoom_in( int x, int y )
   float zf = zoomFactor();
 
   zf *= 2;
-  
+
   zoom( x, y, zf);
 }
 
@@ -777,7 +777,7 @@ void KisView::zoom_out( int x, int y )
   float zf = zoomFactor();
 
   zf /= 2;
-  
+
   zoom( x, y, zf);
 }
 
@@ -845,27 +845,27 @@ void KisView::insert_layer_image()
 
 void KisView::layer_rotate180()
 {
- 
+
 }
 
 void KisView::layer_rotateleft90()
 {
-  
+
 }
 
 void KisView::layer_rotateright90()
 {
- 
+
 }
 
 void KisView::layer_mirrorX()
 {
- 
+
 }
 
 void KisView::layer_mirrorY()
 {
- 
+
 }
 
 /*

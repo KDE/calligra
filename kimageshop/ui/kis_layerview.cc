@@ -45,7 +45,7 @@
 #include "kis_framebutton.h"
 #include "integerwidget.h"
 
-#define KISBarIcon( x ) BarIcon( x, KisFactory::global() )
+//#define KISBarIcon( x ) BarIcon( x, KisFactory::global() )
 
 using namespace std;
 
@@ -59,21 +59,21 @@ KisLayerView::KisLayerView( KisDoc *_doc, QWidget *_parent, const char *_name )
 
   QHBox *buttons = new QHBox( this );
   layout->addWidget( buttons );
-  
+
   KisFrameButton* pbAddLayer = new KisFrameButton( buttons );
-  pbAddLayer->setPixmap( KISBarIcon( "newlayer" ) );
+  pbAddLayer->setPixmap( BarIcon( "newlayer" ) );
   connect( pbAddLayer, SIGNAL( clicked() ), layertable, SLOT( slotAddLayer() ) );
-  
+
   KisFrameButton* pbRemoveLayer = new KisFrameButton( buttons );
-  pbRemoveLayer->setPixmap( KISBarIcon( "deletelayer" ) );
+  pbRemoveLayer->setPixmap( BarIcon( "deletelayer" ) );
   connect( pbRemoveLayer, SIGNAL( clicked() ), layertable, SLOT( slotRemoveLayer() ) );
-  
+
   KisFrameButton* pbUp = new KisFrameButton( buttons );
-  pbUp->setPixmap( KISBarIcon( "raiselayer" ) );
+  pbUp->setPixmap( BarIcon( "raiselayer" ) );
   connect( pbUp, SIGNAL( clicked() ), layertable, SLOT( slotRaiseLayer() ) );
 
   KisFrameButton* pbDown = new KisFrameButton( buttons );
-  pbDown->setPixmap( KISBarIcon( "lowerlayer" ) );
+  pbDown->setPixmap( BarIcon( "lowerlayer" ) );
   connect( pbDown, SIGNAL( clicked() ), layertable, SLOT( slotLowerLayer() ) );
 }
 
@@ -109,7 +109,7 @@ void LayerTable::init( KisDoc* doc )
   if( !m_linkIcon->load( _icon ) )
 	QMessageBox::critical( this, "Canvas", "Can't find link.png" );
   m_linkRect = QRect( QPoint( 25,( CELLHEIGHT - m_linkIcon->height() ) / 2 ), m_linkIcon->size() );
-  
+
   // HACK - the size of the preview image should be configurable somewhere
   m_previewRect = QRect( QPoint( 40, (CELLHEIGHT - m_linkIcon->height() ) /2 ),
 			 QSize( 15, 15 ) );
@@ -163,9 +163,9 @@ void LayerTable::paintCell( QPainter* _painter, int _row, int )
     _painter->fillRect( 0, 0, cellWidth( 0 ) - 1, cellHeight() - 1, gray);
   }
 
-  style().drawPanel( _painter, m_eyeRect.x(), 
+  style().drawPanel( _painter, m_eyeRect.x(),
 		     m_eyeRect.y(),
-		     m_eyeRect.width(), 
+		     m_eyeRect.width(),
 		     m_eyeRect.height(), colorGroup(),
 		      true );
   if( m_doc->current()->layerList().at( _row )->visible() )
@@ -173,9 +173,9 @@ void LayerTable::paintCell( QPainter* _painter, int _row, int )
     _painter->drawPixmap( m_eyeRect.topLeft(), *m_eyeIcon );
   }
 
-  style().drawPanel( _painter, m_linkRect.x(), 
+  style().drawPanel( _painter, m_linkRect.x(),
 		     m_linkRect.y(),
-		     m_linkRect.width() , 
+		     m_linkRect.width() ,
 		     m_linkRect.height(), colorGroup(),
 		     true );
   if( m_doc->current()->layerList().at( _row )->linked() )
@@ -184,7 +184,7 @@ void LayerTable::paintCell( QPainter* _painter, int _row, int )
   }
 
   //  style().drawPanel( _painter, m_previewRect.topLeft(), ....
-  
+
   _painter->drawRect( 0, 0, cellWidth( 0 ) - 1, cellHeight() - 1);
   _painter->drawText( 80, 20, m_doc->current()->layerList().at( _row )->name() );
 }
@@ -322,7 +322,7 @@ void LayerTable::slotAddLayer()
 
   QString name;
   name.sprintf("layer %d", img->layerList().count());
-  
+
   img->addLayer( img->imageExtents(), KisColor::white(), true, name );
 
   QRect updateRect = img->layerList().at( img->layerList().count() - 1 )->imageExtents();
@@ -459,7 +459,7 @@ LayerPropertyDialog::LayerPropertyDialog( QString _layername, uchar _opacity, QW
   QLabel *label2 = new QLabel( m_spin, i18n( "Opacity" ), this );
   layout->addWidget( label2, 1, 0 );
 */
-  
+
   m_opacity = new IntegerWidget( 0, 255, this );
   m_opacity->setValue( _opacity );
   m_opacity->setTickmarks( QSlider::Below );
