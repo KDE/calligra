@@ -587,7 +587,7 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n )
         else if ( value == "single" )
             underline = true;
         else
-            underline = (bool).toInt();
+            underline = (bool)value.toInt();
     }
     bool strikeOut=false;
     if(n.hasAttribute(attrStrikeOut))
