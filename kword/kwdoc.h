@@ -507,6 +507,7 @@ public:
     void initConfig();
     void saveConfig();
     void initUnit();
+    void startBackgroundSpellCheck();
 
 
 signals:
@@ -525,11 +526,6 @@ public slots:
     void slotRepaintChanged( KWFrameSet * frameset );
     void slotRepaintAllViews() { repaintAllViews( false ); }
     void slotRepaintVariable();
-
-    /**
-     * Starts the background spell-checking, asynchronously, if enabled.
-     */
-    void startBackgroundSpellCheck();
 
 protected slots:
     void slotDocumentRestored();

@@ -250,6 +250,7 @@ KWDocument::~KWDocument()
     delete m_varFormatCollection;
     delete m_slDataBase;
     delete dcop;
+    delete m_bgSpellCheck;
 }
 
 void KWDocument::initConfig()
