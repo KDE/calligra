@@ -3025,6 +3025,8 @@ void KPresenterView::objectSelectedChanged()
 {
     bool state=m_canvas->isOneObjectSelected();
     bool headerfooterselected=false;
+    bool rw = koDocument()->isReadWrite();
+
     if(m_canvas->numberOfObjectSelected()==1)
     {
         KPObject *obj=m_canvas->getSelectedObj();
@@ -3114,12 +3116,18 @@ void KPresenterView::objectSelectedChanged()
     actionFormatParag->setEnabled(val);
     actionInsertVariable->setEnabled(val);
     actionTextInsertPageNum->setEnabled(val);
+
+
+    bool hasSelection = false ;
     if(edit)
     {
         double leftMargin =edit->currentParagLayout().margins[QStyleSheetItem::MarginLeft];
         actionTextDepthMinus->setEnabled( val && leftMargin>0);
+        hasSelection = edit->textObject()->hasSelection();
     }
-    actionChangeCase->setEnabled( isText);
+
+    actionChangeCase->setEnabled( (val && rw && hasSelection ) || (rw && !edit && isText));
+
     if(!edit)
     {
         actionEditCopy->setEnabled(state);
