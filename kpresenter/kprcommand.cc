@@ -1445,9 +1445,11 @@ void BrushCmd::unexecute()
 /*================================================================*/
 PgConfCmd::PgConfCmd( const QString &_name, bool _manualSwitch, bool _infiniteLoop,
                       bool _showPresentationDuration, QPen _pen,
+                      PresSpeed _presSpeed,
                       QValueList<bool> _selectedSlides,
                       bool _oldManualSwitch, bool _oldInfiniteLoop,
                       bool _oldShowPresentationDuration, QPen _oldPen,
+                      PresSpeed _oldPresSpeed,
                       QValueList<bool> _oldSelectedSlides,
                       KPresenterDoc *_doc )
     : KNamedCommand( _name )
@@ -1462,6 +1464,8 @@ PgConfCmd::PgConfCmd( const QString &_name, bool _manualSwitch, bool _infiniteLo
     oldShowPresentationDuration = _oldShowPresentationDuration;
     oldPen = _oldPen;
     oldSelectedSlides = _oldSelectedSlides;
+    presSpeed = _presSpeed;
+    oldPresSpeed = _oldPresSpeed;
     doc = _doc;
 }
 
@@ -1472,6 +1476,7 @@ void PgConfCmd::execute()
     doc->setInfiniteLoop( infiniteLoop );
     doc->setPresentationDuration( showPresentationDuration );
     doc->setPresPen( pen );
+    doc->setPresSpeed( presSpeed );
 
     QPtrList<KPrPage> pages = doc->pageList();
     unsigned count = selectedSlides.count();
@@ -1487,6 +1492,7 @@ void PgConfCmd::unexecute()
     doc->setInfiniteLoop( oldInfiniteLoop );
     doc->setPresentationDuration( oldShowPresentationDuration );
     doc->setPresPen( oldPen );
+    doc->setPresSpeed( oldPresSpeed );
 
     QPtrList<KPrPage> pages = doc->pageList();
     unsigned count = oldSelectedSlides.count();
@@ -1500,28 +1506,27 @@ void PgConfCmd::unexecute()
 /******************************************************************/
 
 /*================================================================*/
-TransEffectCmd::TransEffectCmd( const QString &_name, PageEffect _pageEffect, PresSpeed _presSpeed,
+TransEffectCmd::TransEffectCmd( const QString &_name, PageEffect _pageEffect, PresSpeed _transSpeed,
                       bool _soundEffect, const QString& _soundFileName,
                       bool _autoAdvance, int _slideTime,
-                      PageEffect _oldPageEffect, PresSpeed _oldPresSpeed,
+                      PageEffect _oldPageEffect, PresSpeed _oldTransSpeed,
                       bool _oldSoundEffect, const QString& _oldSoundFileName,
                       bool _oldAutoAdvance, int _oldSlideTime,
-                      KPresenterDoc *_doc, KPrPage *_page )
+                      KPrPage *_page )
     : KNamedCommand( _name )
 {
     pageEffect = _pageEffect;
-    presSpeed = _presSpeed;
+    transSpeed = _transSpeed;
     soundEffect = _soundEffect;
     soundFileName = _soundFileName;
     autoAdvance = _autoAdvance;
     slideTime = _slideTime;
     oldPageEffect = _oldPageEffect;
-    oldPresSpeed = _oldPresSpeed;
+    oldTransSpeed = _oldTransSpeed;
     oldSoundEffect = _oldSoundEffect;
     oldSoundFileName = _oldSoundFileName;
     oldAutoAdvance = _oldAutoAdvance;
     oldSlideTime = _oldSlideTime;
-    doc = _doc;
     m_page=_page;
 }
 
@@ -1529,7 +1534,7 @@ TransEffectCmd::TransEffectCmd( const QString &_name, PageEffect _pageEffect, Pr
 void TransEffectCmd::execute()
 {
     m_page->setPageEffect( pageEffect );
-    doc->setPresSpeed( presSpeed );
+    /////// TODO m_page->setTransSpeed( transSpeed );
     m_page->setPageSoundEffect( soundEffect );
     m_page->setPageSoundFileName( soundFileName );
     // TODO m_page->setAutoAdvance( autoAdvance );
@@ -1540,7 +1545,7 @@ void TransEffectCmd::execute()
 void TransEffectCmd::unexecute()
 {
     m_page->setPageEffect( oldPageEffect );
-    doc->setPresSpeed( oldPresSpeed );
+    /////// TODO m_page->setTransSpeed( oldTransSpeed );
     m_page->setPageSoundEffect( oldSoundEffect );
     m_page->setPageSoundFileName( oldSoundFileName );
     // TODO m_page->setAutoAdvance( oldAutoAdvance );

@@ -530,10 +530,12 @@ class PgConfCmd : public KNamedCommand
 public:
     PgConfCmd( const QString &_name, bool _manualSwitch, bool _infiniteLoop,
                bool _showPresentationDuration, QPen _pen,
-               QValueList<bool> _selectedSlides, 
+               PresSpeed _presSpeed,
+               QValueList<bool> _selectedSlides,
                bool _oldManualSwitch, bool _oldInfiniteLoop,
-               bool _oldShowPresentationDuration, QPen _oldPen, 
-               QValueList<bool> _oldSelectedSlides, 
+               bool _oldShowPresentationDuration, QPen _oldPen,
+               PresSpeed _oldPresSpeed,
+               QValueList<bool> _oldSelectedSlides,
                KPresenterDoc *_doc );
 
     virtual void execute();
@@ -545,6 +547,7 @@ protected:
     bool showPresentationDuration, oldShowPresentationDuration;
     QPen pen, oldPen;
     QValueList<bool> selectedSlides, oldSelectedSlides;
+    PresSpeed presSpeed, oldPresSpeed;
     KPresenterDoc *doc;
 };
 
@@ -555,20 +558,20 @@ protected:
 class TransEffectCmd : public KNamedCommand
 {
 public:
-    TransEffectCmd( const QString &_name, PageEffect _pageEffect, PresSpeed _presSpeed, 
-               bool _soundEffect, const QString& _soundFileName, 
-               bool _autoAdvance, int _slideTime, 
-               PageEffect _oldPageEffect, PresSpeed _oldPresSpeed, 
-               bool _oldSoundEffect, const QString& _oldSoundFileName, 
-               bool _oldAutoAdvance, int _oldSlideTime, 
-               KPresenterDoc *_doc, KPrPage *_page );
+    TransEffectCmd( const QString &_name, PageEffect _pageEffect, PresSpeed _transSpeed,
+               bool _soundEffect, const QString& _soundFileName,
+               bool _autoAdvance, int _slideTime,
+               PageEffect _oldPageEffect, PresSpeed _oldTransSpeed,
+               bool _oldSoundEffect, const QString& _oldSoundFileName,
+               bool _oldAutoAdvance, int _oldSlideTime,
+               KPrPage *_page );
 
     virtual void execute();
     virtual void unexecute();
 
 protected:
     PageEffect pageEffect, oldPageEffect;
-    PresSpeed presSpeed, oldPresSpeed;
+    PresSpeed transSpeed, oldTransSpeed;
     bool soundEffect, oldSoundEffect;
     QString soundFileName, oldSoundFileName;
     bool autoAdvance, oldAutoAdvance;

@@ -38,6 +38,7 @@ class QListView;
 
 class KIntNumInput;
 class KColorButton;
+class QSlider;
 
 /******************************************************************/
 /* class PgConfDia                                                */
@@ -57,6 +58,7 @@ public:
     bool getPresentationDuration()const;
     QPen getPen() const;
     QValueList<bool> getSelectedSlides() const;
+    PresSpeed getPresSpeed() const;
 
 protected:
 
@@ -67,20 +69,21 @@ protected:
     KIntNumInput* penWidth;
 
     QListView *slides;
+    QSlider *speedSlider;
 
     void setupPageGeneral();
     void setupPageSlides();
-
-protected slots:
-    void selectAllSlides();
-    void deselectAllSlides();
-    void manualSwitchToggled( bool state );
 
 public slots:
     void confDiaOk() { emit pgConfDiaOk(); }
 
 signals:
     void pgConfDiaOk();
+
+protected slots:
+    void selectAllSlides();
+    void deselectAllSlides();
+    void manualSwitchToggled( bool state );
 
 };
 

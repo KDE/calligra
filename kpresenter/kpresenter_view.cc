@@ -277,7 +277,6 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     checkConcavePolygon = false;
     cornersValue = 3;
     sharpnessValue = 0;
-    m_presentationDurationList = QValueList<int>();
     tbAlign = Qt::AlignLeft;
     tbFont = font();
     tbColor = black;
@@ -1595,6 +1594,7 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
         if ( kPresenterDoc()->presentationDuration() ) {
             m_presentationDuration.start();
 
+            // ### make m_presentationDuration a QMemArray
             for ( unsigned int i = 0; i < kPresenterDoc()->pageList().count(); ++i )
                 m_presentationDurationList.append( 0 ); // initialization
         }
@@ -1668,7 +1668,7 @@ void KPresenterView::screenStop()
 
         if ( kPresenterDoc()->presentationDuration() && !m_presentationDurationList.isEmpty() ) {
             openThePresentationDurationDialog();
-            m_presentationDurationList = QValueList<int>();
+            m_presentationDurationList.clear();
         }
     }
 }
@@ -3059,7 +3059,7 @@ void KPresenterView::setupActions()
                                             this, SLOT( screenAssignEffect() ),
                                             actionCollection(), "screen_assigneffect");
 
-    actionScreenTransEffect = new KAction( i18n( "&Slide Transition..." ),
+    actionScreenTransEffect = new KAction( i18n( "Slide &Transition..." ),
                                            "effect", 0,
                                            this, SLOT( screenTransEffect() ),
                                            actionCollection(), "screen_transeffect");
@@ -3070,7 +3070,7 @@ void KPresenterView::setupActions()
                                      this, SLOT( screenStart() ),
                                      actionCollection(), "screen_start" );
 
-    actionScreenStartFromFirst = new KAction( i18n( "&Start From First Slide" ),
+    actionScreenStartFromFirst = new KAction( i18n( "Start From &First Slide" ),
                                      "1rightarrow", 0,
                                      this, SLOT( screenStartFromFirst() ),
                                      actionCollection(), "screen_startfromfirst" );
@@ -3882,11 +3882,13 @@ void KPresenterView::pgConfOk()
     PgConfCmd *pgConfCmd = new PgConfCmd( i18n( "Configure Slide Show" ),
                         pgConfDia->getManualSwitch(), pgConfDia->getInfiniteLoop(),
                         pgConfDia->getPresentationDuration(), pgConfDia->getPen(),
+                        pgConfDia->getPresSpeed(),
                         pgConfDia->getSelectedSlides(),
                         kPresenterDoc()->spManualSwitch(),
                         kPresenterDoc()->spInfiniteLoop(),
                         kPresenterDoc()->presentationDuration(),
                         kPresenterDoc()->presPen(),
+                        kPresenterDoc()->getPresSpeed(),
                         selectedSlides,
                         kPresenterDoc() );
     pgConfCmd->execute();
@@ -3906,7 +3908,7 @@ kdDebug() << "======= KPresenterView::transEffectOK\n";
                                           page->getPageEffect(), kPresenterDoc()->getPresSpeed(),
                                           page->getPageSoundEffect(), page->getPageSoundFileName(),
                                           /* TODO page->getAutoAdvance() */ false, page->getPageTimer(),
-                                          kPresenterDoc(), page );
+                                          page );
     transEffectCmd->execute();
     kPresenterDoc()->addCommand( transEffectCmd );
 }
@@ -6304,9 +6306,12 @@ int KPresenterView::getPresentationDuration() const
 
 void KPresenterView::setPresentationDuration( int _pgNum )
 {
-    // kdDebug(33001) << "KPresenterView::setPresentationDuration( " << _pgNum << " )" << endl;
-    *m_presentationDurationList.at( _pgNum ) = getPresentationDuration();
-    restartPresentationDuration();
+    if ( kPresenterDoc()->presentationDuration() )
+    {
+        // kdDebug(33001) << "KPresenterView::setPresentationDuration( " << _pgNum << " )" << endl;
+        *m_presentationDurationList.at( _pgNum ) = getPresentationDuration();
+        restartPresentationDuration();
+    }
 }
 
 void KPresenterView::restartPresentationDuration()
@@ -6534,7 +6539,7 @@ void KPresenterView::textStyleSelected( KoStyle *_sty )
         {
             KoTextObject *textObject = it.current()->textObject();
             textObject->textDocument()->selectAll( KoTextDocument::Temp );
-            KCommand *cmd = textObject->applyStyle( 0L, _sty,
+            KCommand *cmd = textObject->applyStyleCommand( 0L, _sty,
                                                     KoTextDocument::Temp, KoParagLayout::All, KoTextFormat::Format,
                                                     true, true );
             textObject->textDocument()->removeSelection( KoTextDocument::Temp );

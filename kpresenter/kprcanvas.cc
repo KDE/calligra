@@ -3211,7 +3211,7 @@ bool KPrCanvas::pNext( bool )
     {
         if ( !spManualSwitch() && nextPageTimer ) {
             QValueList<int>::ConstIterator it( slideListIterator );
-            m_view->setCurrentTimer( m_view->kPresenterDoc()->pageList().at((*it) - 1 )->getPageTimer() );
+            m_view->setCurrentTimer( m_view->kPresenterDoc()->pageList().at((*it) - 1 )->getPageTimer() * m_view->kPresenterDoc()->getPresSpeed() );
 
             nextPageTimer = false;
 
@@ -3262,8 +3262,7 @@ bool KPrCanvas::pNext( bool )
 
         kPchangePages( this, _pix1, _pix2, _pageEffect, pageSpeedFakt() );
 
-        if ( m_view->kPresenterDoc()->presentationDuration() )
-            m_view->setPresentationDuration( currPresPage - 2 );
+        m_view->setPresentationDuration( currPresPage - 2 );
 
 
         if ( !spManualSwitch() )
@@ -3335,8 +3334,7 @@ bool KPrCanvas::pPrev( bool /*manual*/ )
         presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage - 1 );
         currPresStep = *( --presStepList.end() );
 
-        if ( m_view->kPresenterDoc()->presentationDuration() )
-            m_view->setPresentationDuration( currPresPage );
+        m_view->setPresentationDuration( currPresPage );
 
         return true;
     }
@@ -4919,8 +4917,7 @@ void KPrCanvas::slotGotoPage()
         setNextPageTimer( true );
     }
 
-    if ( m_view->kPresenterDoc()->presentationDuration() )
-        m_view->setPresentationDuration( pg - 1 );
+    m_view->setPresentationDuration( pg - 1 );
 
     if ( presMenu->isItemChecked ( PM_DM ) )
         setCursor( KPresenterUtils::penCursor() );

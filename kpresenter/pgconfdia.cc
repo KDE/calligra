@@ -37,6 +37,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <knuminput.h>
+#include <qslider.h>
 
 /******************************************************************/
 /* class PgConfDia                                                */
@@ -72,6 +73,19 @@ void PgConfDia::setupPageGeneral()
 
     presentationDuration = new QCheckBox( i18n( "Show presentation &duration" ), generalPage );
     presentationDuration->setChecked( m_doc->presentationDuration() );
+
+    new QLabel( i18n("Speed:"), generalPage );
+
+    QWidget* sp = new QWidget( generalPage );
+    QBoxLayout* speedLayout = new QHBoxLayout( sp, 0, 2 );
+    speedLayout->setAutoAdd( true );
+
+    new QLabel( i18n("Slow"), sp );
+    speedSlider = new QSlider( 1, 10, 1, 1, Qt::Horizontal, sp );
+    speedSlider->setValue( m_doc->getPresSpeed() );
+    speedSlider->setTickmarks( QSlider::Below );
+    speedSlider->setTickInterval( 1 );
+    new QLabel( i18n("Fast"), sp );
 
     // presentation pen (color and width)
 
@@ -200,6 +214,13 @@ void PgConfDia::deselectAllSlides()
 void PgConfDia::manualSwitchToggled( bool state )
 {
     infiniteLoop->setEnabled( !state );
+}
+
+PresSpeed PgConfDia::getPresSpeed() const
+{
+    int value = speedSlider->value();
+    if( value <= 0 ) value = 1;
+    return static_cast<PresSpeed>(value);
 }
 
 #include <pgconfdia.moc>
