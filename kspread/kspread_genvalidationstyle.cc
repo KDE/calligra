@@ -139,9 +139,11 @@ QString KSpreadGenValidationStyle::createValidationCondition( KSpreadValidity* _
         //nothing
         break;
     case Allow_Number:
+        //FIXME todo
         break;
     case Allow_Text:
         //doesn't exist into oo spec
+        result = "cell-content-is-text()";
         break;
     case Allow_Time:
         result = createTimeValidationCondition( _val );

@@ -5611,6 +5611,10 @@ void KSpreadCell::loadOasisValidation( const QString& validationName )
 
             loadOasisValidationCondition( valExpression );
         }
+        else if ( valExpression.contains( "cell-content-is-text()" ) )
+        {
+            d->extra()->validity->m_allow = Allow_Text;
+        }
         //cell-content-text-length-is-between(Value, Value) | cell-content-text-length-is-not-between(Value, Value)
         else if ( valExpression.contains( "cell-content-text-length-is-between" ) )
         {
