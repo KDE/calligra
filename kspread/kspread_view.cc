@@ -1308,6 +1308,8 @@ void KSpreadView::slotScrollToLastTable()
 void KSpreadView::insertTable()
 {
   m_pCanvas->closeEditor();
+  activeTable()->setScrollPosX(m_pHorzScrollBar->value());
+  activeTable()->setScrollPosY(m_pVertScrollBar->value());
   KSpreadTable *t = m_pDoc->createTable();
   m_pDoc->addTable( t );
   m_pHorzScrollBar->setValue(t->getScrollPosX());
