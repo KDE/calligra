@@ -1433,7 +1433,7 @@ void KWTextFrameSet::fixParagWidth( KWTextParag* parag )
             // keep in sync with KWTextFrameSet::formatVertically
             QString str = i18n( "--- Frame Break ---" );
             int width = refFontMetrics.width( str );
-            parag->setWidth( parag->rect().width() + width ); // TODO QMIN( textDocument()->width(), ... ) ?
+            parag->setWidth( QMIN( parag->rect().width() + width, textDocument()->width() ) );
         }
         else // default KoTextFormatter implementation
             parag->fixParagWidth( true );
