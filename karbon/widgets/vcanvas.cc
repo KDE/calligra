@@ -145,13 +145,15 @@ VCanvas::eventFilter( QObject* object, QEvent* event )
 	if( event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease )
 		return m_view->keyEvent( event );
 
-	QMouseEvent* mouseEvent = static_cast<QMouseEvent*>( event );
+	QMouseEvent* mouseEvent = dynamic_cast<QMouseEvent*>( event );
 
-	KoPoint canvasCoordinate = toContents( KoPoint( mouseEvent->pos() ) );
 	if( mouseEvent && m_view )
+	{
+		KoPoint canvasCoordinate = toContents( KoPoint( mouseEvent->pos() ) );
 		return m_view->mouseEvent( mouseEvent, canvasCoordinate );
-	else
-		return false;
+	}
+
+	return false;
 }
 
 
