@@ -201,6 +201,8 @@ VSelectTool::mouseButtonRelease()
 		view()->selectionChanged();
 		view()->part()->repaintAllViews( true );
 	}
+	else
+		m_state = normal;
 }
 
 void
