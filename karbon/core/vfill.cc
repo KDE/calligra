@@ -23,7 +23,7 @@
 #include "vfill.h"
 
 VFill::VFill()
-	: m_type( none ), m_fillRule( evenOdd )
+	: m_type( none ), m_fillRule( winding )
 {
 	/*m_gradient.addStop( VColor( Qt::red.rgb() ), 0.0 );
 	m_gradient.addStop( VColor( Qt::yellow.rgb() ), 1.0 );
