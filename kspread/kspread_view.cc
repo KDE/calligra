@@ -3997,6 +3997,8 @@ void KSpreadView::print( KPrinter &prt )
 
     //Restore original orientation
     print->setPaperOrientation( _orient );
+
+    m_pCanvas->repaint();
 }
 
 void KSpreadView::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
@@ -6440,7 +6442,7 @@ void KSpreadView::guiActivateEvent( KParts::GUIActivateEvent *ev )
       }*/
   }
 
-  KoView::guiActivateEvent( ev );	
+  KoView::guiActivateEvent( ev );
 }
 
 void KSpreadView::openPopupMenuMenuPage( const QPoint & _point )
