@@ -203,6 +203,8 @@ private:
   KAction *m_addStyle;
   KAction *m_deleteStyle;
 
+  KAction *m_convertToPath;
+
   KAction *m_options;
 
   /* Tools */

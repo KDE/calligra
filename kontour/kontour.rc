@@ -55,7 +55,7 @@
    <Action name="transformRotation"/>
    <Action name="transformMirror"/>
    <Action name="distribute"/>
-   <Action name="convertToCurve"/>
+   <Action name="convertToPath"/>
    <Separator/>
    <Action name="textAlongPath"/>
    

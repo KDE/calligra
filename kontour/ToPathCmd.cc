@@ -22,55 +22,58 @@
 
 */
 
-#include <ToCurveCmd.h>
+#include "ToPathCmd.h"
 
 #include <klocale.h>
 
-#include <GDocument.h>
-#include <GCurve.h>
+#include "GDocument.h"
 #include "GPage.h"
+#include "GPath.h"
 
-ToCurveCmd::ToCurveCmd (GDocument* doc)
-  : Command(i18n("Convert to curve"))
+ToPathCmd::ToPathCmd(GDocument *aGDoc):
+Command(aGDoc, i18n("Convert to path"))
 {
-  document = doc;
-  QPtrListIterator<GObject> it(doc->activePage()->getSelection());
-  for (; it.current(); ++it) {
-    (*it)->ref ();
+  QPtrListIterator<GObject> it(document()->activePage()->getSelection());
+  for(; it.current(); ++it)
+  {
+    (*it)->ref();
     objects.append(*it);
   }
 }
 
-ToCurveCmd::~ToCurveCmd () {
+ToPathCmd::~ToPathCmd()
+{
   GObject *o;
-  for (o=objects.first(); o!=0L; o=objects.next())
+  for(o = objects.first(); o != 0L; o = objects.next())
     o->unref ();
-  for (o=curves.first(); o!=0L; o=curves.next())
-    o->unref ();
+  for(o = paths.first(); o != 0L; o = paths.next())
+    o->unref();
 }
 
-void ToCurveCmd::execute () {
-  document->setAutoUpdate (false);
-  for (GObject *i = objects.first(); i !=0L; i=objects.next()) {
-    unsigned int idx = document->activePage()->findIndexOfObject (i);
-    GCurve *curve = i->convertToCurve ();
-    if (curve) {
-      curves.append(curve);
-      document->activePage()->deleteObject (i);
-      document->activePage()->insertObjectAtIndex (curve, idx);
-      document->activePage()->selectObject (curve);
+void ToPathCmd::execute()
+{
+  for(GObject *i = objects.first(); i != 0L; i = objects.next())
+  {
+    unsigned int idx = document()->activePage()->findIndexOfObject(i);
+    GPath *path = i->convertToPath();
+    if(path)
+    {
+      paths.append(path);
+      document()->activePage()->deleteObject(i);
+      document()->activePage()->insertObjectAtIndex(path, idx);
+      document()->activePage()->selectObject(path);
     }
   }
-  document->setAutoUpdate (true);
 }
 
-void ToCurveCmd::unexecute () {
-  GCurve *c=curves.first();
-  GObject *o=objects.first();
-  for ( ; c != 0L; c=curves.next(), o=objects.next()) {
-    unsigned int idx = document->activePage()->findIndexOfObject (c);
-    document->activePage()->deleteObject (c);
-    document->activePage()->insertObjectAtIndex (o, idx);
+void ToPathCmd::unexecute()
+{
+  GPath *c = paths.first();
+  GObject *o = objects.first();
+  for(; c != 0L; c = paths.next(), o = objects.next())
+  {
+    unsigned int idx = document()->activePage()->findIndexOfObject(c);
+    document()->activePage()->deleteObject(c);
+    document()->activePage()->insertObjectAtIndex(o, idx);
   }
 }
-

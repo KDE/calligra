@@ -43,11 +43,13 @@
 #include <kiconloader.h>
 #include <kconfig.h>
 #include <kparts/event.h>
+#include <koColorChooser.h>
 
 #include "kontour_global.h"
 #include "kontour_doc.h"
 #include "kontour_factory.h"
 #include "GDocument.h"
+#include "GPage.h"
 #include "Canvas.h"
 #include "Ruler.h"
 #include "TabBar.h"
@@ -58,8 +60,8 @@
 #include "OvalTool.h"
 #include "ZoomTool.h"
 #include "LayerPanel.h"
-#include <koColorChooser.h>
 #include "DeleteCmd.h"
+#include "ToPathCmd.h"
 
 KontourView::KontourView(QWidget *parent, const char *name, KontourDocument *doc)
 :KoView(doc, parent, name)
@@ -182,8 +184,8 @@ void KontourView::setupActions()
   new KAction(i18n("&Rotation..."), 0, this, SLOT(slotTransformRotation()), actionCollection(), "transformRotation");
   new KAction(i18n("&Mirror..."), 0, this, SLOT(slotTransformMirror()), actionCollection(), "transformMirror");
 
-  m_distribute = new KAction( i18n("&Align/Distribute..."), 0, this, SLOT( slotDistribute() ), actionCollection(), "distribute" );
-  new KAction( i18n("&Convert to Path"), 0, this, SLOT( slotConvertToPath() ), actionCollection(), "convertToPath" );
+  m_distribute = new KAction( i18n("&Align/Distribute..."), 0, this, SLOT(slotDistribute()), actionCollection(), "distribute");
+  m_convertToPath = new KAction(i18n("&Convert to Path"), 0, this, SLOT(slotConvertToPath()), actionCollection(), "convertToPath");
 
   /* Effects menu */
 
@@ -277,6 +279,7 @@ void KontourView::setupCanvas()
   layout->addMultiCellWidget(vBar, 0, 1, 2, 2);
   layout->addMultiCellLayout(tabLayout, 2, 2, 0, 1);
 
+  connect(mCanvas, SIGNAL(rmbAtSelection(int,int)), this, SLOT(popupForSelection()));
   connect(mCanvas, SIGNAL(mousePositionChanged(int, int)), hRuler, SLOT(updatePointer(int, int)));
   connect(mCanvas, SIGNAL(mousePositionChanged(int, int)), vRuler, SLOT(updatePointer(int, int)));
 
@@ -284,9 +287,6 @@ void KontourView::setupCanvas()
   connect(mCanvas, SIGNAL(offsetYChanged(int)), vRuler, SLOT(updateOffset(int)));
 
   connect(activeDocument(), SIGNAL(zoomFactorChanged(double)), this, SLOT(slotZoomFactorChanged()));
-
-
-//    connect(canvas,SIGNAL(rightButtonAtSelectionClicked(int,int)),this,SLOT(popupForSelection()));
 
   /* helpline creation */
   connect(hRuler, SIGNAL(drawHelpline(int, int, bool)), mCanvas, SLOT(drawTmpHelpline(int, int, bool)));
@@ -477,7 +477,7 @@ void KontourView::updateReadWrite(bool readwrite)
 {
 }
 
-void KontourView::popupForSelection ()
+void KontourView::popupForSelection()
 {
   if(objMenu)
     delete objMenu;
@@ -494,6 +494,7 @@ void KontourView::popupForSelection ()
   m_backOne->plug( objMenu );
   objMenu->insertSeparator ();
   m_properties->plug( objMenu );*/
+  m_convertToPath->plug(objMenu);
   objMenu->popup(QCursor::pos());
 }
 
@@ -741,8 +742,8 @@ void KontourView::slotDistribute()
 
 void KontourView::slotConvertToPath()
 {
-//  if( !m_pDoc->gdoc()->activePage()->selectionIsEmpty() )
-//        cmdHistory.addCommand (new ToCurveCmd (m_pDoc->gdoc()), true);
+  if(!activeDocument()->activePage()->selectionIsEmpty())
+    mDoc->history()->addCommand(new ToPathCmd(activeDocument()));
 }
 
 void KontourView::slotBlend()

@@ -486,12 +486,12 @@ void Canvas::propagateMouseEvent(QMouseEvent *e)
       if(obj)
         emit rightButtonAtObjectClicked(e->x(), e->y(), obj);
       else */
-        emit rightButtonClicked(e->x(), e->y());
+//        emit rightButtonClicked(e->x(), e->y());
     }
     else
     {
       /* pop up menu for the current selection */
-      emit rightButtonAtSelectionClicked(e->x(), e->y());
+      emit rmbAtSelection(e->x(), e->y());
     }
     return;
   }

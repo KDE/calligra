@@ -58,6 +58,7 @@ libkontourpart_la_SOURCES = \
 	Handle.cc \
 	Command.cc \
 	DeleteCmd.cc \
+	ToPathCmd.cc \
 	CreateOvalCmd.cc \
 	CreateRectCmd.cc \
 	OptionsDialog.cc \

@@ -87,9 +87,7 @@ signals:
   void offsetYChanged(int v);
   void mousePositionChanged(int x, int y);
 
-  void rightButtonAtObjectClicked (int x, int y, GObject *obj);
-  void rightButtonAtSelectionClicked (int x, int y);
-  void rightButtonClicked (int x, int y);
+  void rmbAtSelection(int x, int y);
   void backSpaceCalled();
 
 private slots:

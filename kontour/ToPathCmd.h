@@ -22,27 +22,26 @@
 
 */
 
-#ifndef ToCurveCmd_h_
-#define ToCurveCmd_h_
+#ifndef __ToCurveCmd_h__
+#define __ToCurveCmd_h__
 
-#include <Command.h>
+#include "Command.h"
 
-class GDocument;
 class GObject;
-class GCurve;
+class GPath;
 
-class ToCurveCmd : public Command {
+class ToPathCmd : public Command
+{
 public:
-  ToCurveCmd (GDocument* doc);
-  ~ToCurveCmd ();
+  ToPathCmd(GDocument* aGDoc);
+  ~ToPathCmd();
 
-  void execute ();
-  void unexecute ();
+  void execute();
+  void unexecute();
 
 private:
-  GDocument* document;
   QPtrList<GObject> objects;
-  QPtrList<GCurve> curves;
+  QPtrList<GPath> paths;
 };
 
 #endif
