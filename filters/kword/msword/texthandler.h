@@ -101,6 +101,7 @@ protected:
 
 private:
     wvWare::SharedPtr<wvWare::Parser> m_parser;
+    QString m_listSuffixes[9]; // The suffix for every list level seen so far
     QDomElement m_framesetElement;
     int m_sectionNumber;
     int m_footNoteNumber; // number of footnote _vars_ written out

@@ -1,9 +1,5 @@
 This file lists the major things missing in the current implementation of the
 consumer (consumer == this KWord filter, consuming the wv2 callbacks).
-I have no idea if it will be possible to keep that simple structure, or if it
-will be necessary to switch to a more powerful design. Remember: right now
-the filter is just hacked up to test wv2 a bit (and it has surprising
-similarities to the ascii import filter).
 
 The full documentation for the structures named below can be found at:
 http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/wvware/wv2/src/generator/generator_wword8.htm
@@ -14,5 +10,5 @@ Missing (not in any particular order):
 - The filter should read the STTBFASSOC (a bunch of strings containing the
   author, title, keywords,...) for documentinfo.xml
 
-If you have any problems implementing them or if you have suggestions for a
-better wv2 API please contact Werner Trobin <trobin@kde.org>
+If you want to help, please contact Werner Trobin <trobin@kde.org> and
+David Faure <faure@kde.org>

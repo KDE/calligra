@@ -160,7 +160,7 @@ void Document::processStyles()
     {
         const wvWare::Style* style = styles.styleByIndex( i );
         Q_ASSERT( style );
-        //kdDebug() << k_funcinfo << "style " << i << " " << style << endl;
+        kdDebug() << k_funcinfo << "style " << i << " " << style << endl;
         if ( style && style->type() == wvWare::Style::sgcPara )
         {
             QDomElement styleElem = m_mainDocument.createElement("STYLE");
@@ -171,7 +171,7 @@ void Document::processStyles()
             element.setAttribute( "value", name.string() );
             styleElem.appendChild( element );
 
-            //kdDebug() << k_funcinfo << "Style " << i << ": " << name.string() << endl;
+            kdDebug() << k_funcinfo << "Style " << i << ": " << name.string() << endl;
 
             const wvWare::Style* followingStyle = styles.styleByID( style->followingStyle() );
             if ( followingStyle && followingStyle != style )

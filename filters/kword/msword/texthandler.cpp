@@ -735,9 +735,10 @@ void KWordTextHandler::writeCounter( QDomElement& parentElement, const wvWare::P
         // stuff, into what KWord can do right now.
         QString prefix, suffix;
         bool depthFound = false;
-        bool otherDepthFound = false;
+        int displayLevels = 1;
         // We parse <0>.<2>.<1>. as "level 2 with suffix='.'" (no prefix)
         // But "Section <0>)" has both prefix and suffix.
+        // The common case is <0>.<1>.<2> (display-levels=3)
         for ( int i = 0 ; i < text.length() ; ++i )
         {
             short ch = text[i].unicode();
@@ -750,7 +751,9 @@ void KWordTextHandler::writeCounter( QDomElement& parentElement, const wvWare::P
                         depthFound = true;
                     suffix = QString::null;
                 } else {
-                    otherDepthFound = true;
+                    Q_ASSERT( ch < pap.ilvl ); // Can't see how level 1 would have a <0> in it...
+                    if ( ch < pap.ilvl )
+                        ++displayLevels; // we found a 'parent level', to be displayed
                     prefix = QString::null; // get rid of previous prefixes
                 }
             } else { // Normal character
@@ -760,14 +763,16 @@ void KWordTextHandler::writeCounter( QDomElement& parentElement, const wvWare::P
                     prefix += QChar(ch);
             }
         }
-        if ( otherDepthFound )
+        if ( displayLevels > 1 )
         {
             // This is a hierarchical list numbering e.g. <1>.<0>.
             // (unless this is about a heading, in which case we've set numberingtype to 1 already
             // so it will indeed look like that).
-            // Instead of importing this as ".<0>.", we drop the prefix,
-            // we assume it's part of the upper level's counter text
-            prefix = QString::null;
+            // The question is whether the '.' is the suffix of the parent level already..
+            if ( depth > 0 && !prefix.isEmpty() && m_listSuffixes[ depth - 1 ] == prefix )  {
+                prefix = QString::null; // it's already the parent's suffix -> remove it
+                kdDebug() << "depth=" << depth << " parent suffix is " << prefix << " -> clearing" << endl;
+            }
             if ( isHeading )
                 numberingType = 1;
         }
@@ -780,10 +785,13 @@ void KWordTextHandler::writeCounter( QDomElement& parentElement, const wvWare::P
             counterElement.setAttribute( "type", Conversion::numberFormatCode( nfc ) );
             counterElement.setAttribute( "lefttext", prefix );
             counterElement.setAttribute( "righttext", suffix );
+            counterElement.setAttribute( "display-levels", displayLevels );
+            kdDebug() << "storing suffix " << suffix << " for depth " << depth << endl;
+            m_listSuffixes[ depth ] = suffix;
         }
         else
         {
-            kdWarning() << "Not supported: counter text without the depth in it" << endl;
+            kdWarning() << "Not supported: counter text without the depth in it:" << Conversion::string(text).string() << endl;
         }
         // listInfo->alignment() is not supported in KWord
         // listInfo->isLegal() hmm
@@ -797,6 +805,8 @@ void KWordTextHandler::writeCounter( QDomElement& parentElement, const wvWare::P
 void KWordTextHandler::setFrameSetElement( const QDomElement& frameset )
 {
     m_framesetElement = frameset;
+    for ( uint i = 0 ; i < 9 ; ++i )
+        m_listSuffixes[i] = QString::null;
 }
 
 QDomDocument KWordTextHandler::mainDocument() const
