@@ -225,9 +225,9 @@ void KSpreadConsolidate::slotOk()
         bool novalue=true;
         QString formel;
 	if ( f == F_AVERAGE )
-	  formel = "=(";
+	  formel = "=AVERAGE(";
 	else if ( f == F_SUM )
-	  formel = "=";
+	  formel = "=SUM(";
 	else
 	  Q_ASSERT( 0 );
 
@@ -251,8 +251,8 @@ void KSpreadConsolidate::slotOk()
 	  // Built formula
 	  if ( f == F_SUM || f == F_AVERAGE )
 	  {
-	    if ( formel.length() > 2 )
-	      formel += "+";
+	    if ( it != ranges.begin() )
+	      formel += ";";
 	    formel += (*it).tableName;
 	    formel += "!";
 	    formel += util_cellName( x + (*it).range.left(), y + (*it).range.top() );
@@ -261,12 +261,9 @@ void KSpreadConsolidate::slotOk()
 	    Q_ASSERT( 0 );
 	}
 
+	formel += ")";
 	if ( f == F_AVERAGE )
 	{
-	  char buffer[ 100 ];
-	  sprintf( buffer, "%i", h );
-	  formel += ") / ";
-	  formel += buffer;
 	  dbl /= (double)h;
 	}
 
@@ -331,9 +328,9 @@ void KSpreadConsolidate::slotOk()
 	double dbl = 0.0;
 	QString formel;
 	if ( f == F_AVERAGE )
-	  formel = "=(";
+	  formel = "=AVERAGE(";
 	else if ( f == F_SUM )
-	  formel = "=";
+	  formel = "=SUM(";
 	else
 	  Q_ASSERT( 0 );
 
@@ -362,8 +359,8 @@ void KSpreadConsolidate::slotOk()
 		// Create formula
 		if ( f == F_SUM || f == F_AVERAGE )
 		{
-		  if ( formel != "=" )
-		    formel += "+";
+		  if ( it != ranges.begin() )
+		    formel += ";";
 		  formel += (*it).tableName;
 		  formel += "!";
 		  formel += util_cellName( i, y + (*it).range.top() );
@@ -375,12 +372,9 @@ void KSpreadConsolidate::slotOk()
 	  }
 	}
 
+	formel += ")";
 	if ( f == F_AVERAGE )
 	{
-	  char buffer[ 100 ];
-	  sprintf( buffer, "%i", count );
-	  formel += ") / ";
-	  formel += buffer;
 	  dbl /= (double)count;
 	}
 
@@ -443,9 +437,9 @@ void KSpreadConsolidate::slotOk()
 	double dbl = 0.0;
 	QString formel;
 	if ( f == F_AVERAGE )
-	  formel = "=(";
+	  formel = "=AVERAGE(";
 	else if ( f == F_SUM )
-	  formel = "=";
+	  formel = "=SUM(";
 	else
 	  Q_ASSERT( 0 );
 
@@ -475,8 +469,8 @@ void KSpreadConsolidate::slotOk()
 		// Create formula
 		if ( f == F_SUM || f == F_AVERAGE )
 		{
-		  if ( formel != "=" )
-		    formel += "+";
+		  if ( it != ranges.begin() )
+		    formel += ";";
 		  formel += (*it).tableName;
 		  formel += "!";
 		  formel += util_cellName( x + (*it).range.left(), i );
@@ -488,12 +482,9 @@ void KSpreadConsolidate::slotOk()
 	  }
 	}
 
+	formel += ")";
 	if ( f == F_AVERAGE )
 	{
-	  char buffer[ 100 ];
-	  sprintf( buffer, "%i", count );
-	  formel += ") / ";
-	  formel += buffer;
 	  dbl /= (double)count;
 	}
 
@@ -625,9 +616,9 @@ void KSpreadConsolidate::slotOk()
 	double dbl = 0.0;
 	QString formel;
 	if ( f == F_AVERAGE )
-	  formel = "=(";
+	  formel = "=AVERAGE(";
 	else if ( f == F_SUM )
-	  formel = "=";
+	  formel = "=SUM(";
 	else
 	  Q_ASSERT( 0 );
 
@@ -645,8 +636,8 @@ void KSpreadConsolidate::slotOk()
 	    // Create formula
 	    if ( f == F_SUM || f == F_AVERAGE )
 	    {
-	      if ( formel != "=" )
-              formel += "+";
+	      if ( it != ranges.begin() )
+                formel += ";";
 	      formel += (*lit).table;
 	      formel += "!";
 	      formel += util_cellName( (*lit).x, (*lit).y );
@@ -656,12 +647,9 @@ void KSpreadConsolidate::slotOk()
 	  }
 	}
 
+	formel += ")";
 	if ( f == F_AVERAGE )
 	{
-	  char buffer[ 100 ];
-	  sprintf( buffer, "%i", count );
-	  formel += ") / ";
-	  formel += buffer;
 	  dbl /= (double)count;
 	}
 
