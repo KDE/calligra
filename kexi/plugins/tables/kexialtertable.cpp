@@ -44,6 +44,7 @@ KexiAlterTable::KexiAlterTable(KexiView *view, QWidget *parent,
 	getFields();
 	setCaption(i18n("%1 - Table Editor").arg(m_table));
 	registerAs(DocumentWindow);
+	m_tableFields.setAutoDelete(true);
 }
 
 void
