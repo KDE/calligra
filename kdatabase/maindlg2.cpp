@@ -59,7 +59,7 @@ void MainDlg2::slotTblItemClicked(QListViewItem *itemClicked){
 
      if(!(itemClicked == NULL)) {
         kdDebug() << "KDatabase:MainDlg tbl Item Clicked - " << itemClicked->text(0) << endl;
-        myTblDesigner=new clsTblDesigner();
+        myTblDesigner=new clsTblDesigner2();
         myTblDesigner->populateTblDesigner(itemClicked->text(0));
         myTblDesigner->show();
         }
@@ -113,10 +113,9 @@ bool MainDlg2::refreshTableView(QDomNode tableSection){
     QPtrListIterator<QString> myIterator(myList);
     if(!(myIterator.isEmpty())) {
        while(!(myIterator==NULL)) {
-//         KListViewItem myItem=new KListViewItem(this->tabWidget->QWidget8->);
-         QListViewItem myItem=new QListViewItem(KListView1,myIterator.current()->latin1());
-//         myItemName= myIterator.current()->latin1();
-//         myItem.setText(0,myItemName);
+         QString tmpTable = myIterator.current()->latin1();
+         ++myIterator;
+         QListViewItem myItem=new QListViewItem(KListView1,tmpTable,myIterator.current()->latin1());
          ++myIterator;
          }
       }

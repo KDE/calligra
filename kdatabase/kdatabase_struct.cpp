@@ -57,8 +57,10 @@ QPtrList<QString> KDBStruct::getTables(){
     while(!myTableWalker.isNull()) {
         myElement = myTableWalker.toElement();
         const QString* tableName = new QString(myElement.attribute("name"));
+        const QString* tableDescript = new QString(myElement.attribute("description"));
         tableList.append(tableName);
-        kdDebug() << "In while loop...last value was " << &tableName << endl;
+        tableList.append(tableDescript);
+        kdDebug() << "In while loop...last table was " << &tableName << endl;
         myTableWalker = myTableWalker.nextSibling();
         }
 

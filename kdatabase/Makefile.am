@@ -4,8 +4,8 @@ INCLUDES  = $(KOFFICE_INCLUDES) $(all_includes)
 ## The part
 kde_module_LTLIBRARIES = libkdatabasepart.la
 libkdatabasepart_la_SOURCES = kdatabase_part.cc \
-	kdatabase_view.cc kdatabase_factory.cc tabdialog1.ui maindlg2.cpp \
-        kdatabase_qbuilder.ui qbuilddlg.cpp kdatabase_tabledesigner.ui clstbldesigner.cpp \
+	kdatabase_view.cc kdatabase_factory.cc maindlg2.cpp \
+        kdatabase_qbuilder.ui qbuilddlg.cpp clstbldesigner2.cpp \
         kdatabase_struct.cpp
 libkdatabasepart_la_LDFLAGS = $(KDE_PLUGIN)
 libkdatabasepart_la_LIBADD = $(LIB_KOFFICEUI)

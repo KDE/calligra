@@ -2,7 +2,7 @@
                           maindlg2.h  -  description
                              -------------------
     begin                : Sat Apr 27 2002
-    copyright            : (C) 2002 by root
+    copyright            : (C) 2002 by Chris Machemer
     email                : machey@ceinetworks.com
  ***************************************************************************/
 
@@ -18,7 +18,7 @@
 #define MAINDLG2_H
 
 #include <kdialog.h>
-#include <clstbldesigner.h>
+#include <clstbldesigner2.h>
 #include <qbuilddlg.h>
 #include <qpaintdevice.h>
 #include "kdatabase_struct.h"
@@ -48,7 +48,7 @@ private:
    bool refreshViewView(QDomNode viewSection);
    bool refreshFormView(QDomNode formSection);
 
-    clsTblDesigner* myTblDesigner;
+    clsTblDesigner2* myTblDesigner;
     QBuildDlg* myQueryBuilder;
     KDBStruct* myStruct;
 
