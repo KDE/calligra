@@ -573,20 +573,19 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
     // Move the bounding rect containing all the selected frames
     KoRect oldBoundingRect = m_boundingRect;
     int page = doc->getPageOfRect( m_boundingRect );
-    kdDebug() << "KWCanvas::mmEditFrameMove cx=" << cx << " page=" << page
-              << "  boundingrect=" << DEBUGRECT(m_boundingRect) << endl;
+    //kdDebug() << "KWCanvas::mmEditFrameMove cx=" << cx << " page=" << page
+    //          << "  boundingrect=" << DEBUGRECT(m_boundingRect) << endl;
 
     // (x and y separately for a better behaviour at limit of page)
     KoPoint p( m_boundingRect.topLeft() );
-    kdDebug() << "KWCanvas::mmEditFrameMove hotspot.x=" << m_hotSpot.x() << " cx=" << cx << endl;
+    //kdDebug() << "KWCanvas::mmEditFrameMove hotspot.x=" << m_hotSpot.x() << " cx=" << cx << endl;
     p.setX( cx - m_hotSpot.x() );
-    kdDebug() << "KWCanvas::mmEditFrameMove p.x is now " << p.x() << endl;
+    //kdDebug() << "KWCanvas::mmEditFrameMove p.x is now " << p.x() << endl;
     m_boundingRect.moveTopLeft( p );
-    kdDebug() << "KWCanvas::mmEditFrameMove boundingrect now " << DEBUGRECT(m_boundingRect) << endl;
-    // But not out of the page it was on initially
+    //kdDebug() << "KWCanvas::mmEditFrameMove boundingrect now " << DEBUGRECT(m_boundingRect) << endl;
+    // But not out of the margins
     if ( m_boundingRect.left() < 0 )
     {
-        kdDebug() << "left<0" << endl;
         m_boundingRect.moveBy( -m_boundingRect.left(), 0 );
         adjustPosNeeded = true;
     }
@@ -599,6 +598,7 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
     p = m_boundingRect.topLeft();
     p.setY( cy - m_hotSpot.y() );
     m_boundingRect.moveTopLeft( p );
+    /* -- Don't limit to the current page. Let the user move a frame between pages --
     if ( m_boundingRect.top() < page * doc->ptPaperHeight() )
     {
         m_boundingRect.moveBy( 0, page * doc->ptPaperHeight() - m_boundingRect.top() );
@@ -609,11 +609,12 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
         m_boundingRect.moveBy( 0, ( page+1 ) * doc->ptPaperHeight() - m_boundingRect.bottom() );
         adjustPosNeeded = true;
     }
+    */
 
-    kdDebug() << "boundingRect moved by " << m_boundingRect.left() - oldBoundingRect.left() << ","
+    /*kdDebug() << "boundingRect moved by " << m_boundingRect.left() - oldBoundingRect.left() << ","
               << m_boundingRect.top() - oldBoundingRect.top() << endl;
     kdDebug() << " boundingX+hotspotX=" << m_boundingRect.left() + m_hotSpot.x() << endl;
-    kdDebug() << " cx=" << cx << endl;
+    kdDebug() << " cx=" << cx << endl;*/
 
     QList<KWTableFrameSet> tablesMoved;
     tablesMoved.setAutoDelete( FALSE );
@@ -852,6 +853,7 @@ void KWCanvas::mrCreateText()
         delete frameDia;
     }
     setMouseMode( MM_EDIT );
+    doc->repaintAllViews();
 }
 
 void KWCanvas::mrCreatePixmap()

@@ -190,8 +190,6 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
         grid1->setRowStretch( i, 0 );
     grid1->setRowStretch( rows, 1 );
 
-    grid1->addRowSpacing(rows,0);
-
     // formula frame
     if(frameType==FT_FORMULA) {
         autofit = new QCheckBox (i18n("Autofit framesize"),tab1);
@@ -208,21 +206,18 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     } else if(frameType==FT_TEXT) {
 
         // AutoCreateNewFrame policy.
-        endOfFrame = new QGroupBox(i18n("If text is too long for frame:"),tab1);
+        endOfFrame = new QGroupBox(i18n("If text is too long for frame:"), tab1 );
         grid1->addWidget( endOfFrame, 1, 0 );
 
-        eofGrid= new QGridLayout (endOfFrame,4,1,KDialog::marginHint(), KDialog::spacingHint());
+        eofGrid= new QGridLayout (endOfFrame, 4, 1, KDialog::marginHint(), KDialog::spacingHint());
         rAppendFrame = new QRadioButton( i18n( "Create a new page" ), endOfFrame );
-        rAppendFrame->resize( rAppendFrame->sizeHint() );
-        eofGrid->addWidget( rAppendFrame, 0, 0 );
+        eofGrid->addWidget( rAppendFrame, 1, 0 );
 
         rResizeFrame = new QRadioButton( i18n( "Resize last frame" ), endOfFrame );
-        rResizeFrame->resize( rResizeFrame->sizeHint() );
-        eofGrid->addWidget( rResizeFrame, 1, 0 );
+        eofGrid->addWidget( rResizeFrame, 2, 0 );
 
         rNoShow = new QRadioButton( i18n( "Don't show the extra text" ), endOfFrame );
-        rNoShow->resize( rNoShow->sizeHint() );
-        eofGrid->addWidget( rNoShow, 2, 0 );
+        eofGrid->addWidget( rNoShow, 3, 0 );
         QButtonGroup *grp = new QButtonGroup( endOfFrame );
         grp->hide();
         grp->setExclusive( true );
@@ -230,16 +225,8 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
         grp->insert( rResizeFrame );
         grp->insert( rNoShow );
 
-        eofGrid->addRowSpacing(0,rAppendFrame->height());
-        eofGrid->addRowSpacing(1,rResizeFrame->height());
-        eofGrid->addRowSpacing(2,rNoShow->height());
-        eofGrid->addRowSpacing(3,0);
-        eofGrid->setRowStretch( 0, 0 );
-        eofGrid->setRowStretch( 1, 0 );
-        eofGrid->setRowStretch( 2, 0 );
-        eofGrid->setRowStretch( 3, 1 );
-        eofGrid->activate();
-        grid1->addRowSpacing(1,endOfFrame->height());
+        eofGrid->addRowSpacing( 0, KDialog::marginHint() + 5 );
+
         if(frame->getFrameBehaviour() == AutoExtendFrame) {
             rResizeFrame->setChecked(true);
         } else if (frame->getFrameBehaviour() == AutoCreateNewFrame) {
@@ -252,21 +239,18 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
         onNewPage = new QGroupBox(i18n("On new page creation:"),tab1);
         grid1->addWidget( onNewPage, 1, 1 );
 
-        onpGrid = new QGridLayout (onNewPage,3,1,KDialog::marginHint(), KDialog::spacingHint());
+        onpGrid = new QGridLayout( onNewPage, 4, 1, KDialog::marginHint(), KDialog::spacingHint() );
         reconnect = new QRadioButton (i18n ("Reconnect frame to current flow"), onNewPage);
-        reconnect->resize( reconnect->sizeHint() );
         connect( reconnect, SIGNAL( clicked() ), this, SLOT( setFrameBehaviourInputOn() ) );
-        onpGrid ->addWidget( reconnect, 0, 0 );
+        onpGrid ->addWidget( reconnect, 1, 0 );
 
         noFollowup = new QRadioButton (i18n ("Don't create a followup frame"), onNewPage);
-        noFollowup ->resize( noFollowup ->sizeHint() );
         connect( noFollowup, SIGNAL( clicked() ), this, SLOT( setFrameBehaviourInputOn() ) );
-        onpGrid ->addWidget( noFollowup, 1, 0 );
+        onpGrid ->addWidget( noFollowup, 2, 0 );
 
         copyRadio= new QRadioButton (i18n ("Place a copy of this frame"), onNewPage);
-        copyRadio->resize( copyRadio->sizeHint() );
         connect( copyRadio, SIGNAL( clicked() ), this, SLOT( setFrameBehaviourInputOff() ) );
-        onpGrid ->addWidget( copyRadio, 2, 0);
+        onpGrid ->addWidget( copyRadio, 3, 0);
 
         QButtonGroup *grp2 = new QButtonGroup( onNewPage );
         grp2->hide();
@@ -274,7 +258,6 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
         grp2->insert( reconnect );
         grp2->insert( noFollowup );
         grp2->insert( copyRadio );
-        onpGrid->activate();
         grid1->addRowSpacing(1,onNewPage->height());
         if(frame->getNewFrameBehaviour() == Reconnect) {
             reconnect->setChecked(true);
@@ -290,19 +273,19 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
         sideHeads->setEnabled(false);
         grid1->addWidget(sideHeads,2,0);
 
-        sideGrid = new QGridLayout (sideHeads,3,2,KDialog::marginHint(), KDialog::spacingHint());
+        sideGrid = new QGridLayout( sideHeads, 4, 2, KDialog::marginHint(), KDialog::spacingHint() );
         sideTitle1 = new QLabel ( i18n("Size ( %1 ):").arg(doc->getUnitName()),sideHeads);
         sideTitle1->resize(sideTitle1->sizeHint());
-        sideGrid->addWidget(sideTitle1,0,0);
+        sideGrid->addWidget(sideTitle1,1,0);
         sideWidth= new QLineEdit(sideHeads,"");
         sideWidth->setMaxLength(6);
-        sideGrid->addWidget(sideWidth,0,1);
+        sideGrid->addWidget(sideWidth,1,1);
         sideTitle2 = new QLabel( i18n("Gap size ( %1 ):").arg(doc->getUnitName()),sideHeads);
         sideTitle2->resize(sideTitle2->sizeHint());
-        sideGrid->addWidget(sideTitle2,1,0);
+        sideGrid->addWidget(sideTitle2,2,0);
         sideGap = new QLineEdit(sideHeads,"");
         sideGap->setMaxLength(6);
-        sideGrid->addWidget(sideGap,1,1);
+        sideGrid->addWidget(sideGap,2,1);
         sideAlign = new QComboBox (false,sideHeads);
         sideAlign->setAutoResize(false);
         sideAlign->insertItem ( i18n("Left"));
@@ -310,18 +293,8 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
         sideAlign->insertItem ( i18n("Closest to binding"));
         sideAlign->insertItem ( i18n("Closest to page edge"));
         sideAlign->resize(sideAlign->sizeHint());
-        sideGrid->addMultiCellWidget(sideAlign,2,2,0,1);
-        sideGrid->addRowSpacing(0,sideTitle1->height());
-        sideGrid->addRowSpacing(0,sideWidth->height());
-        sideGrid->addRowSpacing(1,sideTitle2->height());
-        sideGrid->addRowSpacing(1,sideGap->height());
-        sideGrid->addRowSpacing(2,sideAlign->height());
-
-        sideGrid->addColSpacing(0,sideTitle1->width());
-        sideGrid->addColSpacing(0,sideTitle2->width());
-        sideGrid->addColSpacing(1,sideGap->width());
-        sideGrid->activate();
-        grid1->addRowSpacing(2,sideHeads->height());
+        sideGrid->addMultiCellWidget(sideAlign,3,3,0,1);
+        sideGrid->addRowSpacing( 0, KDialog::marginHint() + 5 );
 
         // init for sideheads.
         sideWidth->setText("0");
@@ -333,11 +306,11 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
     }
 
     //kdDebug() << "setup tab 1 exit"<<endl;
-    grid1->activate();
 }
 
 
-void KWFrameDia::setupTab2(){ // TAB Text Runaround
+void KWFrameDia::setupTab2() // TAB Text Runaround
+{
     //kdDebug() << "setup tab 2 text runaround"<<endl;
 
     tab2 =  addPage( i18n( "Text run around" ) );
@@ -351,50 +324,35 @@ void KWFrameDia::setupTab2(){ // TAB Text Runaround
     QPixmap pixmap = KWBarIcon( "run_not" );
     lRunNo = new QLabel( runGroup );
     lRunNo->setBackgroundPixmap( pixmap );
-    lRunNo->resize( pixmap.size() );
-    runGrid->addWidget( lRunNo, 0, 0 );
+    lRunNo->setFixedSize( pixmap.size() );
+    runGrid->addWidget( lRunNo, 1, 0 );
     runGrid->addColSpacing( 0, pixmap.width());
 
     pixmap = KWBarIcon( "run_bounding" );
     lRunBounding = new QLabel( runGroup );
     lRunBounding->setBackgroundPixmap( pixmap );
-    lRunBounding->resize( pixmap.size() );
-    runGrid->addWidget( lRunBounding, 1, 0 );
+    lRunBounding->setFixedSize( pixmap.size() );
+    runGrid->addWidget( lRunBounding, 2, 0 );
 
     pixmap = KWBarIcon( "run_skip" );
     lRunContur = new QLabel( runGroup );
     lRunContur->setBackgroundPixmap( pixmap );
-    lRunContur->resize( pixmap.size() );
-    runGrid->addWidget( lRunContur, 2, 0 );
+    lRunContur->setFixedSize( pixmap.size() );
+    runGrid->addWidget( lRunContur, 3, 0 );
 
     rRunNo = new QRadioButton( i18n( "&Run through this frame" ), runGroup );
-    rRunNo->resize( rRunNo->sizeHint() );
-    runGrid->addWidget( rRunNo, 0, 1 );
+    runGrid->addWidget( rRunNo, 1, 1 );
     connect( rRunNo, SIGNAL( clicked() ), this, SLOT( runNoClicked() ) );
 
     rRunBounding = new QRadioButton( i18n( "Run around the &bounding rectangle of this frame" ), runGroup );
-    rRunBounding->resize( rRunBounding->sizeHint() );
-    runGrid->addWidget( rRunBounding, 1, 1 );
+    runGrid->addWidget( rRunBounding, 2, 1 );
     connect( rRunBounding, SIGNAL( clicked() ), this, SLOT( runBoundingClicked() ) );
 
     rRunContur = new QRadioButton( i18n( "&Not run around this frame" ), runGroup );
-    rRunContur->resize( rRunContur->sizeHint() );
-    runGrid->addWidget( rRunContur, 2, 1 );
+    runGrid->addWidget( rRunContur, 3, 1 );
     connect( rRunContur, SIGNAL( clicked() ), this, SLOT( runConturClicked() ) );
 
-    runGrid->addColSpacing( 1, rRunNo->width() );
-    runGrid->setColStretch( 0, 0 );
-    runGrid->setColStretch( 1, 0 );
-    runGrid->setColStretch( 2, 1 );
-
-    runGrid->addRowSpacing( 0, lRunNo->height() );
-    runGrid->addRowSpacing( 0, rRunNo->height() );
-    runGrid->addRowSpacing( 1, lRunBounding->height() );
-    runGrid->addRowSpacing( 1, rRunBounding->height() );
-    runGrid->addRowSpacing( 2, lRunContur->height() );
-    runGrid->addRowSpacing( 2, rRunContur->height() );
-
-    runGrid->activate();
+    runGrid->addRowSpacing( 0, KDialog::marginHint() + 5 );
 
     grid2->addWidget( runGroup, 0, 0 );
     grid2->addMultiCellWidget( runGroup, 0, 0, 0, 1 );
@@ -412,15 +370,6 @@ void KWFrameDia::setupTab2(){ // TAB Text Runaround
     eRGap->setFrame( true );
     eRGap->resize( eRGap->sizeHint() );
     grid2->addWidget( eRGap, 1, 1 );
-    grid2->addColSpacing( 1, eRGap->width());
-    grid2->setColStretch( 0, 0 );
-    grid2->setColStretch( 1, 1 );
-
-    grid2->addRowSpacing( 0, runGroup->height() );
-    grid2->addRowSpacing( 1, lRGap->height() );
-    grid2->addRowSpacing( 1, eRGap->height() );
-    grid2->setRowStretch( 2, 1 );
-    grid2->activate();
 
     RunAround ra = RA_NO;
     if ( frame )
@@ -517,17 +466,6 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
 
     grid3->addWidget( row, 2, 0 );
 
-    grid3->addColSpacing( 0, lFrameSet->width() );
-    grid3->addColSpacing( 0, row->width() );
-    grid3->setColStretch( 0, 1 );
-
-    grid3->addRowSpacing( 0, lFrameSet->height() );
-    grid3->addRowSpacing( 1, lFrameSList->height() );
-    grid3->addRowSpacing( 2, eFrameSetName->height() );
-    grid3->setRowStretch( 1, 1 );
-
-    grid3->activate();
-
     bool found=true;
     while (found) {
         numTxtFrameSets++;
@@ -555,7 +493,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     tab4 = addPage( i18n( "Geometry" ) );
     grid4 = new QGridLayout( tab4, 4, 1, KDialog::marginHint(), KDialog::spacingHint() );
 
-    floating = new QCheckBox (i18n("Frame is floating"), tab1);
+    floating = new QCheckBox (i18n("Frame is floating"), tab4);
     connect( floating, SIGNAL( toggled(bool) ), this, SLOT( slotFloatingToggled(bool) ) );
     int row = 0;
     grid4->addMultiCellWidget( floating, row, row, 0, 1 );
@@ -635,32 +573,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     sh->resize( sh->sizeHint() );
     pGrid->addWidget( sh, 4, 1 );
 
-
-    pGrid->addRowSpacing( 0, 7 );
-    pGrid->addRowSpacing( 1, lx->height() );
-    pGrid->addRowSpacing( 1, ly->height() );
-    pGrid->addRowSpacing( 2, sx->height() );
-    pGrid->addRowSpacing( 2, sy->height() );
-    pGrid->addRowSpacing( 3, lw->height() );
-    pGrid->addRowSpacing( 3, lh->height() );
-    pGrid->addRowSpacing( 4, sw->height() );
-    pGrid->addRowSpacing( 4, sh->height() );
-    pGrid->setRowStretch( 0, 0 );
-    pGrid->setRowStretch( 1, 0 );
-    pGrid->setRowStretch( 2, 0 );
-    pGrid->setRowStretch( 3, 0 );
-    pGrid->setRowStretch( 4, 0 );
-
-    pGrid->addColSpacing( 0, lx->width() );
-    pGrid->addColSpacing( 0, sx->width() );
-    pGrid->addColSpacing( 0, lw->width() );
-    pGrid->addColSpacing( 0, sw->width() );
-    pGrid->addColSpacing( 1, ly->width() );
-    pGrid->addColSpacing( 1, sy->width() );
-    pGrid->addColSpacing( 1, lh->width() );
-    pGrid->addColSpacing( 1, sh->width() );
-    pGrid->setColStretch( 0, 1 );
-    pGrid->setColStretch( 1, 1 );
+    pGrid->addRowSpacing( 0, KDialog::spacingHint() + 5 );
 
     grid4->addWidget( grp1, ++row, 0 );
 
@@ -719,44 +632,9 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     smb->resize( smb->sizeHint() );
     mGrid->addWidget( smb, 4, 1 );
 
-    mGrid->addRowSpacing( 0, 7 );
-    mGrid->addRowSpacing( 1, lml->height() );
-    mGrid->addRowSpacing( 1, lmr->height() );
-    mGrid->addRowSpacing( 2, sml->height() );
-    mGrid->addRowSpacing( 2, smr->height() );
-    mGrid->addRowSpacing( 3, lmt->height() );
-    mGrid->addRowSpacing( 3, lmb->height() );
-    mGrid->addRowSpacing( 4, smt->height() );
-    mGrid->addRowSpacing( 4, smb->height() );
-    mGrid->setRowStretch( 0, 0 );
-    mGrid->setRowStretch( 1, 0 );
-    mGrid->setRowStretch( 2, 0 );
-    mGrid->setRowStretch( 3, 0 );
-    mGrid->setRowStretch( 4, 0 );
+    mGrid->addRowSpacing( 0, KDialog::spacingHint() + 5 );
 
-    mGrid->addColSpacing( 0, lml->width() );
-    mGrid->addColSpacing( 0, sml->width() );
-    mGrid->addColSpacing( 0, lmt->width() );
-    mGrid->addColSpacing( 0, smt->width() );
-    mGrid->addColSpacing( 1, lmr->width() );
-    mGrid->addColSpacing( 1, smr->width() );
-    mGrid->addColSpacing( 1, lmb->width() );
-    mGrid->addColSpacing( 1, smb->width() );
-    mGrid->setColStretch( 0, 1 );
-    mGrid->setColStretch( 1, 1 );
-
-    mGrid->activate();
     grid4->addWidget( grp2, ++row, 0 );
-
-    /*grid4->addRowSpacing( 0, grp1->height() );
-    grid4->addRowSpacing( 1, grp2->height() );
-    grid4->setRowStretch( 0, 0 );
-    grid4->setRowStretch( 1, 0 );*/
-    grid4->setRowStretch( row, 1 );
-
-    //grid4->addColSpacing( 0, grp1->width() );
-    //grid4->addColSpacing( 0, grp2->width() );
-    grid4->setColStretch( 0, 1 );
 
     double l, r, t, b;
     doc->getFrameMargins( l, r, t, b );
@@ -1019,7 +897,6 @@ void KWFrameDia::updateFrames()
 
     doc->updateAllFrames();
     doc->layout();
-    doc->repaintAllViews();
 
     if(frames.count()==1)
     {

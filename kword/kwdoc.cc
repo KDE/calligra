@@ -283,7 +283,7 @@ void KWDocument::initEmpty()
 void KWDocument::setPageLayout( KoPageLayout _layout, KoColumns _cl, KoKWHeaderFooter _hf )
 {
     if ( m_processingType == WP ) {
-        //kdDebug() << "KWDocument::setPageLayout WP" << endl;
+        kdDebug() << "KWDocument::setPageLayout WP" << endl;
         m_pageLayout = _layout;
         m_pageColumns = _cl;
         m_pageHeaderFooter = _hf;
@@ -339,8 +339,6 @@ void KWDocument::recalcFrames()
         return;
 
     KWFrameSet *frameset = frames.at( 0 );
-
-    unsigned int frms = frameset->getNumFrames();
 
     double ptColumnWidth = this->ptColumnWidth();
 
@@ -424,10 +422,11 @@ void KWDocument::recalcFrames()
         }
     }
 
-    if ( m_processingType == WP ) { // why?
+    if ( m_processingType == WP ) { // In WP mode the pages are created automatically. In DTP not...
 
         int headOffset = 0, footOffset = 0;
         int oldPages = m_pages;
+        unsigned int frms = frameset->getNumFrames();
 
         // Determine number of pages - first from the text frames
         m_pages = static_cast<int>( ceil( static_cast<double>( frms ) / static_cast<double>( m_pageColumns.columns ) ) );
@@ -445,7 +444,7 @@ void KWDocument::recalcFrames()
             }
         }
         int pages2=static_cast<int>( ceil( maxBottom / ptPaperHeight() ) );
-        //kdDebug(32002) << "KWDocument::recalcFrames, WP, m_pages=" << m_pages << " pages2=" << pages2 << " ptPaperHeight=" << ptPaperHeight() << endl;
+        kdDebug(32002) << "KWDocument::recalcFrames, WP, m_pages=" << m_pages << " pages2=" << pages2 << " ptPaperHeight=" << ptPaperHeight() << endl;
 
         m_pages=QMAX(pages2, m_pages);
         if ( m_pages != oldPages )
@@ -1033,7 +1032,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptTopBorder(),
             ptPaperWidth() - ptLeftBorder() - ptRightBorder(), 20 );
         kdDebug(32001) << "KWDocument::loadXML KWFrame created " << frame << endl;
-        frame->setFrameBehaviour(Ignore);
+        frame->setFrameBehaviour(AutoExtendFrame);
         fs->addFrame( frame );
         frames.append( fs );
     }
@@ -1043,7 +1042,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         fs->setFrameInfo( FI_EVEN_HEADER );
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptTopBorder(),
             ptPaperWidth() - ptLeftBorder() - ptRightBorder(), 20 );
-        frame->setFrameBehaviour(Ignore);
+        frame->setFrameBehaviour(AutoExtendFrame);
         fs->addFrame( frame );
         frames.append( fs );
     }
@@ -1053,7 +1052,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         fs->setFrameInfo( FI_ODD_HEADER );
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptTopBorder(),
             ptPaperWidth() - ptLeftBorder() - ptRightBorder(), 20 );
-        frame->setFrameBehaviour(Ignore);
+        frame->setFrameBehaviour(AutoExtendFrame);
         fs->addFrame( frame );
         frames.append( fs );
     }
@@ -1064,7 +1063,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptPaperHeight() -
             ptTopBorder() - 20, ptPaperWidth() - ptLeftBorder() -
             ptRightBorder(), 20 );
-        frame->setFrameBehaviour(Ignore);
+        frame->setFrameBehaviour(AutoExtendFrame);
         fs->addFrame( frame );
         frames.append( fs );
     }
@@ -1075,7 +1074,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptPaperHeight() -
             ptTopBorder() - 20, ptPaperWidth() - ptLeftBorder() -
             ptRightBorder(), 20 );
-        frame->setFrameBehaviour(Ignore);
+        frame->setFrameBehaviour(AutoExtendFrame);
         fs->addFrame( frame );
         frames.append( fs );
     }
@@ -1086,7 +1085,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         KWFrame *frame = new KWFrame(fs, ptLeftBorder(), ptPaperHeight() -
             ptTopBorder() - 20, ptPaperWidth() - ptLeftBorder() -
             ptRightBorder(), 20 );
-        frame->setFrameBehaviour(Ignore);
+        frame->setFrameBehaviour(AutoExtendFrame);
         fs->addFrame( frame );
         frames.append( fs );
     }
