@@ -243,8 +243,16 @@ void KPresenterDoc::setUnit( KoUnit::Unit _unit )
     }
 }
 
+void KPresenterDoc::saveConfig()
+{
+    KConfig *config = KPresenterFactory::global()->config();
+    config->setGroup( "Interface" );
+    config->writeEntry( "Zoom", m_zoomHandler->zoom() );
+}
+
 void KPresenterDoc::initConfig()
 {
+    int zoom;
     KConfig* config = KPresenterFactory::global()->config();
     if( config->hasGroup("Interface") ) {
         config->setGroup( "Interface" );
@@ -256,7 +264,10 @@ void KPresenterDoc::initConfig()
         setIndentValue(indent);
         m_maxRecentFiles = config->readNumEntry( "NbRecentFile", 10 );
         setShowRuler(config->readBoolEntry("Rulers",true));
+        zoom = config->readNumEntry( "Zoom", 100 );
     }
+    else
+        zoom=100;
 
     QColor oldBgColor = Qt::white;
     if(  config->hasGroup( "KPresenter Color" ) ) {
@@ -290,6 +301,7 @@ void KPresenterDoc::initConfig()
 
     // Apply configuration, without creating an undo/redo command
     replaceObjs( false );
+    setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false, false );
 }
 
 KoStyle* KPresenterDoc::standardStyle()
@@ -309,6 +321,8 @@ DCOPObject* KPresenterDoc::dcopObject()
 /*==============================================================*/
 KPresenterDoc::~KPresenterDoc()
 {
+    if(isReadWrite())
+        saveConfig();
     //_commands.clear(); // done before deleting the objectlist (e.g. for lowraicmd)
     headerFooterEdit->allowClose();
     delete headerFooterEdit;
@@ -543,7 +557,7 @@ QDomElement KPresenterDoc::saveObjects( QDomDocument &doc )
             if (_sticky)
                 object.setAttribute("sticky", static_cast<int>(_sticky));
 
-            QPoint orig =oIt.current()->getOrig();
+            QPoint orig =m_zoomHandler->zoomPoint(oIt.current()->getOrig());
             if ( saveOnlyPage != -1 )
                 yoffset=0;
             //add yoffset to compatibility with koffice 1.1
@@ -1408,7 +1422,7 @@ void KPresenterDoc::repaint( KPObject *kpobject )
     QPtrListIterator<KoView> it( views() );
     for( ; it.current(); ++it )
     {
-	r = kpobject->getBoundingRect(  );
+	r = m_zoomHandler->zoomRect(kpobject->getBoundingRect(  ));
 	r.moveTopLeft( QPoint( r.x() - ((KPresenterView*)it.current())->getCanvas()->diffx(),
 			       r.y() - ((KPresenterView*)it.current())->getCanvas()->diffy() ) );
 	it.current()->update( r );
@@ -1929,6 +1943,50 @@ void KPresenterDoc::appendClipartKey(KPClipartKey key)
 KPrPage * KPresenterDoc::initialActivePage()
 {
     return m_initialActivePage;
+}
+
+
+void KPresenterDoc::updateZoomRuler()
+{
+    QPtrListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+    {
+        ((KPresenterView*)it.current())->getHRuler()->setZoom( m_zoomHandler->zoomedResolutionX() );
+        ((KPresenterView*)it.current())->getVRuler()->setZoom( m_zoomHandler->zoomedResolutionY() );
+        ((KPresenterView*)it.current())->slotUpdateRuler();
+    }
+}
+
+void KPresenterDoc::setZoomAndResolution( int zoom, int dpiX, int dpiY, bool updateViews, bool forPrint )
+{
+    m_zoomHandler->setZoomAndResolution( zoom, dpiX, dpiY, updateViews, forPrint );
+
+    newZoomAndResolution( updateViews, forPrint );
+}
+
+void KPresenterDoc::newZoomAndResolution( bool updateViews, bool forPrint )
+{
+#if 0
+    // Update all fonts
+    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
+    for ( ; fit.current() ; ++fit )
+        fit.current()->zoom( forPrint );
+#endif
+//update background
+    //updateAllFrames();
+#if 0
+    if ( updateViews )
+    {
+        emit newContentsSize();
+        repaintAllViews( true );
+    }
+#endif
+    //fixme
+#if 0
+    for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ ) {
+        m_pageList.at(i)->background()->restore();
+    }
+#endif
 }
 
 #include <kpresenter_doc.moc>

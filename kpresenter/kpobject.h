@@ -29,12 +29,16 @@
 
 #include <kpgradient.h>
 #include <klocale.h>
+#include <koPoint.h>
+#include <koSize.h>
+#include <koRect.h>
 
 class QPainter;
 class DCOPObject;
 class QDomDocumentFragment;
 class QDomDocument;
 class QDomElement;
+class KoZoomHandler;
 
 /******************************************************************/
 /* Class: KPObject                                                */
@@ -53,24 +57,24 @@ public:
     { selected = _selected; }
     virtual void rotate( float _angle )
     { angle = _angle; }
-    virtual void setSize( QSize _size )
+    virtual void setSize( const KoSize & _size )
     { setSize( _size.width(), _size.height() ); }
-    virtual void setSize( int _width, int _height )
-    { ext = QSize( _width > 20 ? _width : 20, _height > 20 ? _height : 20 ); }
-    virtual void setOrig( QPoint _point )
+    virtual void setSize(double _width, double _height )
+    { ext = KoSize( _width > 20 ? _width : 20, _height > 20 ? _height : 20 ); }
+    virtual void setOrig( const KoPoint & _point )
     { orig = _point; }
-    virtual void setOrig( int _x, int _y )
-    { orig = QPoint( _x, _y ); }
-    virtual void moveBy( QPoint _point )
+    virtual void setOrig( double _x, double _y )
+    { orig = KoPoint( _x, _y ); }
+    virtual void moveBy( const KoPoint &_point )
     { orig = orig + _point; }
-    virtual void moveBy( int _dx, int _dy )
-    { orig = orig + QPoint( _dx, _dy ); }
-    virtual void resizeBy( QSize _size )
+    virtual void moveBy( double _dx, double _dy )
+    { orig = orig + KoPoint( _dx, _dy ); }
+    virtual void resizeBy( const KoSize & _size )
     { resizeBy( _size.width(), _size.height() ); }
-    virtual void resizeBy( int _dx, int _dy )
-    { ext = ext + QSize( _dx + ext.width() > 20 ? _dx : 0, _dy + ext.height() > 20 ? _dy : 0 ); }
+    virtual void resizeBy( double _dx,double _dy )
+    { ext = ext + KoSize( _dx + ext.width() > 20 ? _dx : 0, _dy + ext.height() > 20 ? _dy : 0 ); }
 
-    virtual void setShadowParameter(int _distance,ShadowDirection _direction,QColor _color)
+    virtual void setShadowParameter(int _distance,ShadowDirection _direction,const QColor &_color)
     {
 	    shadowDistance = _distance;
 	    shadowDirection = _direction;
@@ -81,7 +85,7 @@ public:
     { shadowDistance = _distance; }
     virtual void setShadowDirection( ShadowDirection _direction )
     { shadowDirection = _direction; }
-    virtual void setShadowColor( QColor _color )
+    virtual void setShadowColor( const QColor & _color )
     { shadowColor = _color; }
     virtual void setEffect( Effect _effect )
     { effect = _effect; }
@@ -103,9 +107,9 @@ public:
     { appearSoundEffect = b; }
     virtual void setDisappearSoundEffect( bool b )
     { disappearSoundEffect = b; }
-    virtual void setAppearSoundEffectFileName( QString _a_fileName )
+    virtual void setAppearSoundEffectFileName( const QString & _a_fileName )
     { a_fileName = _a_fileName; }
-    virtual void setDisappearSoundEffectFileName( QString _d_fileName )
+    virtual void setDisappearSoundEffectFileName( const QString &_d_fileName )
     { d_fileName = _d_fileName; }
 
     virtual QDomDocumentFragment save( QDomDocument& doc, int offset );
@@ -116,7 +120,7 @@ public:
     virtual QString getTypeString() const
     { return QString(); }
 
-    virtual QRect getBoundingRect( ) const;
+    virtual KoRect getBoundingRect( ) const;
     virtual bool isSelected() const
     { return selected; }
     virtual float getAngle() const
@@ -127,9 +131,9 @@ public:
     { return shadowDirection; }
     virtual QColor getShadowColor() const
     { return shadowColor; }
-    virtual QSize getSize() const
+    virtual KoSize getSize() const
     { return ext; }
-    virtual QPoint getOrig() const
+    virtual KoPoint getOrig() const
     { return orig; }
     virtual Effect getEffect() const
     { return effect; }
@@ -161,9 +165,6 @@ public:
     virtual void drawSelection( bool _dSelection )
     { dSelection = _dSelection; }
 
-    virtual void zoom( float _fakt );
-    virtual void zoomOrig();
-    virtual bool isZoomed() const { return zoomed; }
     virtual void setOwnClipping( bool _ownClipping )
     { ownClipping = _ownClipping; }
     virtual void setSubPresStep( int _subPresStep )
@@ -171,11 +172,11 @@ public:
     virtual void doSpecificEffects( bool _specEffects, bool _onlyCurrStep = true )
     { specEffects = _specEffects; onlyCurrStep = _onlyCurrStep; }
 
-    virtual void draw( QPainter *_painter );
+    virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler );
 
-    virtual bool contains( QPoint _point ) const;
-    virtual bool intersects( QRect _rect ) const;
-    virtual QCursor getCursor( QPoint _point, ModifyType &_modType ) const;
+    virtual bool contains( const KoPoint &_point ) const;
+    virtual bool intersects( const KoRect & _rect ) const;
+    virtual QCursor getCursor( const KoPoint &_point, ModifyType &_modType ) const;
 
     virtual void activate( QWidget * /*_widget*/)
     {; }
@@ -199,18 +200,18 @@ public:
 
     static void setupClipRegion( QPainter *painter, const QRegion &clipRegion );
 
-    virtual void setOrigPointInGroup( QPoint _point ) { origTopLeftPointInGroup = _point; }
-    virtual QPoint getOrigPointInGroup() { return origTopLeftPointInGroup; }
+    virtual void setOrigPointInGroup( const KoPoint &_point ) { origTopLeftPointInGroup = _point; }
+    virtual KoPoint getOrigPointInGroup()const { return origTopLeftPointInGroup; }
 
-    virtual void setOrigSizeInGroup( QSize _size ) { origSizeInGroup = _size; }
-    virtual QSize getOrigSizeInGroup() { return origSizeInGroup; }
+    virtual void setOrigSizeInGroup( const KoSize &_size ) { origSizeInGroup = _size; }
+    virtual KoSize getOrigSizeInGroup() const{ return origSizeInGroup; }
 
 protected:
     /**
      * Modifies x and y to add the shadow offsets
      */
     void getShadowCoords( int& _x, int& _y ) const;
-    virtual void paintSelection( QPainter *_painter );
+    virtual void paintSelection( QPainter *_painter,KoZoomHandler *_zoomHandler );
     virtual void doDelete();
 
     QDomElement createValueElement(const QString &tag, int value, QDomDocument &doc);
@@ -230,8 +231,8 @@ protected:
                          const QString &battr="blue") const;
 
     float angle;
-    QPoint orig;
-    QSize ext;
+    KoPoint orig;
+    KoSize ext;
     int shadowDistance;
     ShadowDirection shadowDirection;
     QColor shadowColor;
@@ -247,7 +248,6 @@ protected:
     bool disappearSoundEffect:1;
     bool selected:1;
     bool dSelection:1;
-    bool zoomed:1;
     bool specEffects:1;
     bool onlyCurrStep:1;
     bool ownClipping:1;
@@ -257,8 +257,8 @@ protected:
     bool sticky:1;
 
     float presFakt;
-    QPoint oldOrig;
-    QSize oldExt;
+    KoPoint oldOrig;
+    KoSize oldExt;
     int subPresStep;
     int cmds;
 
@@ -273,8 +273,8 @@ protected:
         &tagDISAPPEAR, &attrDoit, &attrNum, &tagFILLTYPE,
         &tagGRADIENT, &tagPEN, &tagBRUSH, &attrValue;
 
-    QPoint origTopLeftPointInGroup;
-    QSize origSizeInGroup;
+    KoPoint origTopLeftPointInGroup;
+    KoSize origSizeInGroup;
 
 private:
     // Don't copy or assign it
@@ -287,24 +287,24 @@ class KP2DObject : public KPObject
 {
 public:
     KP2DObject();
-    KP2DObject( QPen _pen, QBrush _brush, FillType _fillType,
-                QColor _gColor1, QColor _gColor2, BCType _gType,
+    KP2DObject( const QPen &_pen, const QBrush &_brush, FillType _fillType,
+                const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                   bool _unbalanced, int _xfactor, int _yfactor );
     virtual ~KP2DObject() { if ( gradient ) delete gradient; }
 
     KP2DObject &operator=( const KP2DObject & );
 
-    virtual void setSize( int _width, int _height );
-    virtual void resizeBy( int _dx, int _dy );
+    virtual void setSize( double _width, double _height );
+    virtual void resizeBy( double _dx, double _dy );
 
-    virtual void setPen( QPen _pen )
+    virtual void setPen( const QPen &_pen )
     { pen = _pen; }
-    virtual void setBrush( QBrush _brush )
+    virtual void setBrush( const QBrush &_brush )
     { brush = _brush; }
     virtual void setFillType( FillType _fillType );
-    virtual void setGColor1( QColor _gColor1 )
+    virtual void setGColor1( const QColor &_gColor1 )
     { if ( gradient ) gradient->setColor1( _gColor1 ); gColor1 = _gColor1; }
-    virtual void setGColor2( QColor _gColor2 )
+    virtual void setGColor2( const QColor &_gColor2 )
     { if ( gradient ) gradient->setColor2( _gColor2 ); gColor2 = _gColor2; }
     virtual void setGType( BCType _gType )
     { if ( gradient ) gradient->setBackColorType( _gType ); gType = _gType; }
@@ -337,10 +337,10 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, int offset );
     virtual int load(const QDomElement &element);
 
-    virtual void draw( QPainter *_painter );
+    virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler );
 
 protected:
-    virtual void paint( QPainter */*_painter*/ ) {}
+    virtual void paint( QPainter */*_painter*/,KoZoomHandler*_zoomHandler  ) {}
 
     QPen pen;
     QBrush brush;

@@ -132,7 +132,7 @@ KPTextObject::~KPTextObject()
 }
 
 /*======================= set size ===============================*/
-void KPTextObject::setSize( int _width, int _height )
+void KPTextObject::setSize( double _width, double _height )
 {
     KPObject::setSize( _width, _height );
     if ( move )
@@ -144,11 +144,11 @@ void KPTextObject::setSize( int _width, int _height )
     slotAvailableHeightNeeded();
     m_textobj->formatMore();
     if ( fillType == FT_GRADIENT && gradient )
-        gradient->setSize( getSize() );
+        gradient->setSize( getSize().toQSize() );
 }
 
 /*======================= set size ===============================*/
-void KPTextObject::resizeBy( int _dx, int _dy )
+void KPTextObject::resizeBy( double _dx, double _dy )
 {
     KPObject::resizeBy( _dx, _dy );
     if ( move )
@@ -159,7 +159,7 @@ void KPTextObject::resizeBy( int _dx, int _dy )
     slotAvailableHeightNeeded();
     m_textobj->formatMore();
     if ( fillType == FT_GRADIENT && gradient )
-        gradient->setSize( getSize() );
+        gradient->setSize( getSize().toQSize() );
 }
 
 /*========================= save =================================*/
@@ -218,39 +218,40 @@ int KPTextObject::load(const QDomElement &element)
 }
 
 /*========================= draw =================================*/
-void KPTextObject::draw( QPainter *_painter )
+void KPTextObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler )
 {
     if ( move )
     {
-        KPObject::draw( _painter );
+        KPObject::draw( _painter,_zoomHandler );
         return;
     }
 
-    draw( _painter, false, 0L, true );
+    draw( _painter,_zoomHandler, false, 0L, true );
 }
 
-void KPTextObject::draw( QPainter *_painter,
+void KPTextObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
                          bool onlyChanged, QTextCursor* cursor, bool resetChanged )
 {
     _painter->save();
+#if 0 //FIXMS
     setupClipRegion( _painter, getBoundingRect(  ) );
-
-    int ox = orig.x();// - _diffx;
-    int oy = orig.y();// - _diffy;
+#endif
+    double ox = orig.x();// - _diffx;
+    double oy = orig.y();// - _diffy;
     //kdDebug() << "Painting text object at " << ox << "," << oy << ":" << m_textobj->textDocument()->text() << endl;
-    int ow = ext.width();
-    int oh = ext.height();
+    double ow = ext.width();
+    double oh = ext.height();
 
     _painter->setPen( pen );
     _painter->setBrush( brush );
 
     // Handle the rotation, draw the background/border, then call drawText()
     int penw = pen.width() / 2;
-    _painter->translate( ox, oy );
+    _painter->translate( _zoomHandler->zoomItX(ox),_zoomHandler->zoomItY( oy) );
     if ( angle == 0 )
     {
       if ( fillType == FT_BRUSH || !gradient )
-        _painter->drawRect( penw, penw, ext.width() - 2 * penw, ext.height() - 2 * penw );
+        _painter->drawRect( penw, penw, _zoomHandler->zoomItX( ext.width() - 2 * penw), _zoomHandler->zoomItY( ext.height() - 2 * penw) );
       else
         _painter->drawPixmap( penw, penw, *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
 
@@ -275,16 +276,16 @@ void KPTextObject::draw( QPainter *_painter,
 
 
       if ( fillType == FT_BRUSH || !gradient )
-        _painter->drawRect( rr.left() + xPos + penw, rr.top() + yPos + penw, ext.width() - 2 * penw, ext.height() - 2 * penw );
+        _painter->drawRect( _zoomHandler->zoomItX(rr.left() + xPos + penw), _zoomHandler->zoomItY(rr.top() + yPos + penw), _zoomHandler->zoomItX(ext.width() - 2 * penw), _zoomHandler->zoomItY(ext.height() - 2 * penw) );
       else
         _painter->drawPixmap( rr.left() + xPos + penw, rr.top() + yPos + penw, *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
 
-      _painter->translate( rr.left() + xPos, rr.top() + yPos );
+      _painter->translate( _zoomHandler->zoomItX(rr.left() + xPos), _zoomHandler->zoomItY( rr.top() + yPos) );
       drawText( _painter, onlyChanged, cursor, resetChanged );
     }
     _painter->restore();
 
-    KPObject::draw( _painter );
+    KPObject::draw( _painter,m_doc->zoomHandler() );
 }
 
 // This method simply draws the paragraphs in the given painter
@@ -329,26 +330,6 @@ int KPTextObject::getSubPresSteps() const
     for ( ; parag ; parag = parag->next() )
         paragraphs++;
     return paragraphs;
-}
-
-/*========================= zoom =================================*/
-void KPTextObject::zoom( float _fakt )
-{
-    kdDebug()<<"KPTextObject::zoom( float _fakt ) :"<< _fakt<<endl;
-    KPObject::zoom( _fakt );
-    int _zoom = (int)( 100.0 * _fakt );
-    kPresenterDocument()->zoomHandler()->setZoomAndResolution( _zoom, QPaintDevice::x11AppDpiX(),
-                                                               QPaintDevice::x11AppDpiY(), false, false );
-}
-
-/*==================== zoom orig =================================*/
-void KPTextObject::zoomOrig()
-{
-    kdDebug()<<"KPTextObject::zoomOrig()\n";
-    KPObject::zoomOrig();
-
-    kPresenterDocument()->zoomHandler()->setZoomAndResolution( 100, QPaintDevice::x11AppDpiX(),
-                                                               QPaintDevice::x11AppDpiY(), false, false );
 }
 
 /*================================================================*/
@@ -885,7 +866,7 @@ void KPTextObject::drawParags( QPainter *painter, const QColorGroup& cg, int fro
 void KPTextObject::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, KPrCanvas* canvas )
 {
     // Painter is already translated for diffx/diffy, but not for the object yet
-    p->translate( orig.x(), orig.y() );
+    p->translate( m_doc->zoomHandler()->zoomItX( orig.x()), m_doc->zoomHandler()->zoomItY(orig.y()) );
     KoTextParag* parag = static_cast<KoTextParag *>(cursor->parag());
 
     QPoint topLeft = cursor->topParag()->rect().topLeft();         // in QRT coords
@@ -1398,13 +1379,14 @@ void KPTextView::dragMoveEvent( QDragMoveEvent *e, const QPoint & )
         e->ignore();
         return;
     }
-
+#if 0 //FIXME
     QPoint iPoint=e->pos() - kpTextObject()->getOrig();
     iPoint=kpTextObject()->kPresenterDocument()->zoomHandler()->pixelToLayoutUnit( QPoint(iPoint.x()+ m_canvas->diffx(),iPoint.y()+m_canvas->diffy()) );
 
     textObject()->emitHideCursor();
     placeCursor( iPoint );
     textObject()->emitShowCursor();
+#endif
     e->acceptAction(); // here or out of the if ?
 }
 void KPTextView::dragLeaveEvent( QDragLeaveEvent * )
@@ -1415,6 +1397,7 @@ void KPTextView::dragLeaveEvent( QDragLeaveEvent * )
 
 void KPTextView::dropEvent( QDropEvent * e )
 {
+#if 0 //FIXME
     if ( kpTextObject()->kPresenterDocument()->isReadWrite() && KPrTextDrag::canDecode( e ) )
     {
         e->acceptAction();
@@ -1515,6 +1498,7 @@ void KPTextView::dropEvent( QDropEvent * e )
         }
         kpTextObject()->kPresenterDocument()->addCommand(macroCmd);
     }
+#endif
 }
 
 

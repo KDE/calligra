@@ -37,18 +37,18 @@ public:
 
     KPGroupObject &operator=( const KPGroupObject & );
 
-    virtual void setSize( int _width, int _height );
-    virtual void setOrig( QPoint _point );
-    virtual void setOrig( int _x, int _y );
-    virtual void moveBy( QPoint _point );
-    virtual void moveBy( int _dx, int _dy );
-    virtual void resizeBy( QSize _size );
-    virtual void resizeBy( int _dx, int _dy );
+    virtual void setSize( double _width, double _height );
+    virtual void setOrig( KoPoint _point );
+    virtual void setOrig( double _x, double _y );
+    virtual void moveBy( KoPoint _point );
+    virtual void moveBy( double _dx, double _dy );
+    virtual void resizeBy( KoSize _size );
+    virtual void resizeBy( double _dx, double _dy );
 
     virtual void rotate( float _angle );
     virtual void setShadowDistance( int _distance );
     virtual void setShadowDirection( ShadowDirection _direction );
-    virtual void setShadowColor( QColor _color );
+    virtual void setShadowColor( const QColor &_color );
     virtual void setEffect( Effect _effect );
     virtual void setEffect2( Effect2 _effect2 );
     virtual void setPresNum( int _presNum );
@@ -59,8 +59,8 @@ public:
     virtual void setDisappearTimer( int _disappearTimer );
     virtual void setAppearSoundEffect( bool b );
     virtual void setDisappearSoundEffect( bool b );
-    virtual void setAppearSoundEffectFileName( QString _a_fileName );
-    virtual void setDisappearSoundEffectFileName( QString _d_fileName );
+    virtual void setAppearSoundEffectFileName( const QString &_a_fileName );
+    virtual void setDisappearSoundEffectFileName( const QString &_d_fileName );
 
     virtual ObjType getType() const
     { return OT_GROUP; }
@@ -70,7 +70,7 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, int offset );
     virtual int load(const QDomElement &element, KPresenterDoc *doc);
 
-    virtual void draw( QPainter *_painter );
+    virtual void draw( QPainter *_painter, KoZoomHandler *_zoomhandler );
 
     void setUpdateObjects( bool b ) {
         updateObjs = b;
@@ -80,8 +80,6 @@ public:
         return objects;
     }
 
-    virtual void zoom( float _fakt );
-    virtual void zoomOrig();
     virtual void setOwnClipping( bool _ownClipping );
     virtual void setSubPresStep( int _subPresStep );
     virtual void doSpecificEffects( bool _specEffects, bool _onlyCurrStep = true );

@@ -48,19 +48,19 @@ public:
     virtual int load(const QDomElement &element);
 
     virtual void rotate( float _angle );
-    virtual void setSize( int _width, int _height );
-    virtual void setOrig( QPoint _point );
-    virtual void setOrig( int _x, int _y );
-    virtual void moveBy( QPoint _point );
-    virtual void moveBy( int _dx, int _dy );
-    virtual void resizeBy( int _dx, int _dy );
+    virtual void setSize( double _width, double _height );
+    virtual void setOrig( KoPoint _point );
+    virtual void setOrig( double _x, double _y );
+    virtual void moveBy( KoPoint _point );
+    virtual void moveBy( double _dx, double _dy );
+    virtual void resizeBy( double _dx, double _dy );
 
     virtual ObjType getType() const
     { return OT_PART; }
     virtual QString getTypeString() const
     { return i18n("Embedded object"); }
 
-    virtual void draw( QPainter *_painter );
+    virtual void draw( QPainter *_painter,KoZoomHandler *_zoomhandler );
 
     virtual void activate( QWidget *_widget, int diffx, int diffy );
     virtual void deactivate();
@@ -73,7 +73,7 @@ public slots:
     void slot_changed(KoChild *child);
 
 protected:
-    virtual void paint( QPainter *_painter );
+    virtual void paint( QPainter *_painter,KoZoomHandler*_zoomHandler );
 
     bool _enableDrawing;
     KPresenterChild *child;

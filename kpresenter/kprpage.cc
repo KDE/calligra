@@ -47,6 +47,7 @@
 #include <qclipboard.h>
 #include <kozoomhandler.h>
 #include <kprcommand.h>
+#include "koPointArray.h"
 #include "kprtextdocument.h"
 
 #include <koRect.h>
@@ -914,7 +915,7 @@ void KPrPage::raiseObjs()
     m_doc->raiseAndLowerObject = true;
 }
 
-void KPrPage::insertLine( QRect r, QPen pen, LineEnd lb, LineEnd le, LineType lt )
+void KPrPage::insertLine( const KoRect &r, const QPen & pen, LineEnd lb, LineEnd le, LineType lt )
 {
     KPLineObject *kplineobject = new KPLineObject( pen, lb, le, lt );
     kplineobject->setOrig( r.x(), r.y() );
@@ -928,7 +929,7 @@ void KPrPage::insertLine( QRect r, QPen pen, LineEnd lb, LineEnd le, LineType lt
 }
 
 /*===================== insert a rectangle =======================*/
-void KPrPage::insertRectangle( QRect r, QPen pen, QBrush brush, FillType ft, QColor g1, QColor g2,
+void KPrPage::insertRectangle( const KoRect &r, const QPen & pen, const QBrush &brush, FillType ft, const QColor &g1, const QColor &g2,
 				     BCType gt, int rndX, int rndY, bool unbalanced, int xfactor, int yfactor )
 {
     KPRectObject *kprectobject = new KPRectObject( pen, brush, ft, g1, g2, gt, rndX, rndY,
@@ -942,7 +943,7 @@ void KPrPage::insertRectangle( QRect r, QPen pen, QBrush brush, FillType ft, QCo
 }
 
 /*===================== insert a circle or ellipse ===============*/
-void KPrPage::insertCircleOrEllipse( QRect r, QPen pen, QBrush brush, FillType ft, QColor g1, QColor g2,
+void KPrPage::insertCircleOrEllipse( const KoRect &r, const QPen &pen, const QBrush & brush, FillType ft, const QColor &g1, const QColor &g2,
 					   BCType gt, bool unbalanced, int xfactor, int yfactor )
 {
     KPEllipseObject *kpellipseobject = new KPEllipseObject( pen, brush, ft, g1, g2, gt,
@@ -956,7 +957,7 @@ void KPrPage::insertCircleOrEllipse( QRect r, QPen pen, QBrush brush, FillType f
 }
 
 /*================================================================*/
-void KPrPage::insertPie( QRect r, QPen pen, QBrush brush, FillType ft, QColor g1, QColor g2,
+void KPrPage::insertPie( const KoRect &r, const QPen &pen, const QBrush &brush, FillType ft, const QColor &g1, const QColor &g2,
 			       BCType gt, PieType pt, int _angle, int _len, LineEnd lb, LineEnd le,
 			       bool unbalanced, int xfactor, int yfactor )
 {
@@ -971,7 +972,7 @@ void KPrPage::insertPie( QRect r, QPen pen, QBrush brush, FillType ft, QColor g1
 }
 
 /*===================== insert a textobject =====================*/
-void KPrPage::insertTextObject( const QRect& r, const QString& text, KPresenterView *_view )
+void KPrPage::insertTextObject( const KoRect& r, const QString& text, KPresenterView *_view )
 {
     KPTextObject *kptextobject = new KPTextObject( m_doc );
     kptextobject->setOrig( r.x(), r.y() );
@@ -994,8 +995,8 @@ void KPrPage::insertTextObject( const QRect& r, const QString& text, KPresenterV
 }
 
 /*======================= insert an autoform ====================*/
-void KPrPage::insertAutoform( QRect r, QPen pen, QBrush brush, LineEnd lb, LineEnd le, FillType ft,
-                              QColor g1, QColor g2, BCType gt, const QString &fileName, bool unbalanced,
+void KPrPage::insertAutoform( const KoRect &r, const QPen &pen, const QBrush &brush, LineEnd lb, LineEnd le, FillType ft,
+                              const QColor &g1, const QColor &g2, BCType gt, const QString &fileName, bool unbalanced,
                               int xfactor, int yfactor ){
     KPAutoformObject *kpautoformobject = new KPAutoformObject( pen, brush, fileName, lb, le, ft,
 							       g1, g2, gt, unbalanced, xfactor, yfactor );
@@ -1007,7 +1008,7 @@ void KPrPage::insertAutoform( QRect r, QPen pen, QBrush brush, LineEnd lb, LineE
     m_doc->addCommand( insertCmd );
 }
 
-void KPrPage::insertFreehand( const QPointArray &points, QRect r, QPen pen,
+void KPrPage::insertFreehand( const KoPointArray &points, const KoRect &r, const QPen &pen,
                                     LineEnd lb, LineEnd le )
 {
     QSize size( r.width(), r.height() );
@@ -1020,7 +1021,7 @@ void KPrPage::insertFreehand( const QPointArray &points, QRect r, QPen pen,
     m_doc->addCommand( insertCmd );
 }
 
-void KPrPage::insertPolyline( const QPointArray &points, QRect r, QPen pen,
+void KPrPage::insertPolyline( const KoPointArray &points, const KoRect &r, const QPen &pen,
                                     LineEnd lb, LineEnd le )
 {
     QSize size( r.width(), r.height() );
@@ -1034,7 +1035,7 @@ void KPrPage::insertPolyline( const QPointArray &points, QRect r, QPen pen,
 }
 
 /*================ insert a quadric bezier curve =================*/
-void KPrPage::insertQuadricBezierCurve( const QPointArray &points, const QPointArray &allPoints, QRect r, QPen pen,
+void KPrPage::insertQuadricBezierCurve( const KoPointArray &points, const KoPointArray &allPoints, const KoRect &r, const QPen &pen,
                                             LineEnd lb, LineEnd le )
 {
     QSize size( r.width(), r.height() );
@@ -1049,7 +1050,7 @@ void KPrPage::insertQuadricBezierCurve( const QPointArray &points, const QPointA
 }
 
 /*================= insert a cubic bezier curve ==================*/
-void KPrPage::insertCubicBezierCurve( const QPointArray &points, const QPointArray &allPoints, QRect r, QPen pen,
+void KPrPage::insertCubicBezierCurve( const KoPointArray &points, const KoPointArray &allPoints, const KoRect &r, const QPen &pen,
                                             LineEnd lb, LineEnd le )
 {
     QSize size( r.width(), r.height() );
@@ -1065,8 +1066,8 @@ void KPrPage::insertCubicBezierCurve( const QPointArray &points, const QPointArr
 }
 
 /*======================= insert polygon ===========================*/
-void KPrPage::insertPolygon( const QPointArray &points, QRect r, QPen pen, QBrush brush, FillType ft,
-                                   QColor g1, QColor g2, BCType gt, bool unbalanced, int xfactor, int yfactor,
+void KPrPage::insertPolygon( const KoPointArray &points, const KoRect &r, const QPen &pen, const QBrush &brush, FillType ft,
+                                   const QColor &g1, const QColor &g2, BCType gt, bool unbalanced, int xfactor, int yfactor,
                                    bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue )
 {
     QSize size( r.width(), r.height() );
@@ -1314,14 +1315,14 @@ void KPrPage::insertClipart( const QString &filename )
     m_doc->addCommand( insertCmd );
 }
 
-void KPrPage::insertObject( const QRect& _rect, KoDocumentEntry& _e )
+void KPrPage::insertObject( const KoRect& _rect, KoDocumentEntry& _e )
 {
 
     KoDocument* doc = _e.createDoc( m_doc );
     if ( !doc || !doc->initDoc() ) {
 	return;
     }
-
+#if 0 //FIXME
     KPresenterChild* ch = new KPresenterChild( m_doc, doc, _rect );
 
     m_doc->insertObject( ch );
@@ -1335,7 +1336,7 @@ void KPrPage::insertObject( const QRect& _rect, KoDocumentEntry& _e )
     insertCmd->execute();
     m_doc->addCommand( insertCmd );
     //emit sig_insertObject( ch, kppartobject );
-
+#endif
     m_doc->repaint( false );
 }
 
@@ -1524,7 +1525,7 @@ bool KPrPage::setLineBegin( LineEnd lb )
 
 
 /*===================== set pen and brush ========================*/
-bool KPrPage::setPenBrush( QPen pen, QBrush brush, LineEnd lb, LineEnd le, FillType ft, QColor g1, QColor g2,
+bool KPrPage::setPenBrush( const QPen &pen, const QBrush &brush, LineEnd lb, LineEnd le, FillType ft, const QColor &g1, const QColor &g2,
 				 BCType gt, bool unbalanced, int xfactor, int yfactor, bool sticky )
 {
     KPObject *kpobject = 0;
@@ -1911,7 +1912,7 @@ bool KPrPage::setPolygonSettings( bool _checkConcavePolygon, int _cornersValue, 
     return ret;
 }
 
-bool KPrPage::setPenColor( QColor c, bool fill )
+bool KPrPage::setPenColor( const QColor &c, bool fill )
 {
     KPObject *kpobject = 0;
     bool ret = false;
@@ -2080,7 +2081,7 @@ bool KPrPage::setPenColor( QColor c, bool fill )
     return ret;
 }
 
-bool KPrPage::setBrushColor( QColor c, bool fill )
+bool KPrPage::setBrushColor( const QColor &c, bool fill )
 {
     KPObject *kpobject = 0;
     bool ret = false;
@@ -2339,7 +2340,7 @@ void KPrPage::deletePage( )
     deleteObjs( false );
 }
 
-void KPrPage::setBackColor( QColor backColor1, QColor backColor2, BCType bcType,
+void KPrPage::setBackColor(const  QColor &backColor1, const QColor &backColor2, BCType bcType,
 				  bool unbalanced, int xfactor, int yfactor )
 {
     kpbackground->setBackColor1( backColor1 );
@@ -2355,7 +2356,7 @@ void KPrPage::setBackPixmap( const KPImageKey & key )
     kpbackground->setBackPixmap( key.filename(), key.lastModified() );
 }
 
-bool KPrPage::getBackUnbalanced(  )
+bool KPrPage::getBackUnbalanced(  )const
 {
     return kpbackground->getBackUnbalanced();
 }
@@ -2396,67 +2397,67 @@ void KPrPage::setPageSoundFileName(  const QString &fileName )
 }
 
 
-BackType KPrPage::getBackType(  )
+BackType KPrPage::getBackType(  )const
 {
     return kpbackground->getBackType();
 }
 
-BackView KPrPage::getBackView( )
+BackView KPrPage::getBackView( )const
 {
     return kpbackground->getBackView();
 }
 
-KoImageKey KPrPage::getBackPixKey( )
+KoImageKey KPrPage::getBackPixKey( )const
 {
     return kpbackground->getBackPixKey();
 }
 
-KPClipartKey KPrPage::getBackClipKey(  )
+KPClipartKey KPrPage::getBackClipKey(  )const
 {
     return kpbackground->getBackClipKey();
 }
 
-QColor KPrPage::getBackColor1( )
+QColor KPrPage::getBackColor1( )const
 {
     return kpbackground->getBackColor1();
 }
 
-QColor KPrPage::getBackColor2(  )
+QColor KPrPage::getBackColor2(  )const
 {
     return kpbackground->getBackColor2();
 }
 
-int KPrPage::getBackXFactor(  )
+int KPrPage::getBackXFactor(  )const
 {
     return kpbackground->getBackXFactor();
 }
 
-int KPrPage::getBackYFactor(  )
+int KPrPage::getBackYFactor(  )const
 {
     return kpbackground->getBackYFactor();
 }
 
-BCType KPrPage::getBackColorType( )
+BCType KPrPage::getBackColorType( )const
 {
     return kpbackground->getBackColorType();
 }
 
-PageEffect KPrPage::getPageEffect( )
+PageEffect KPrPage::getPageEffect( )const
 {
     return kpbackground->getPageEffect();
 }
 
-int KPrPage::getPageTimer(  )
+int KPrPage::getPageTimer(  )const
 {
     return kpbackground->getPageTimer();
 }
 
-bool KPrPage::getPageSoundEffect( )
+bool KPrPage::getPageSoundEffect( )const
 {
     return kpbackground->getPageSoundEffect();
 }
 
-QString KPrPage::getPageSoundFileName(  )
+QString KPrPage::getPageSoundFileName(  )const
 {
     return kpbackground->getPageSoundFileName();
 }

@@ -26,7 +26,8 @@
 #include <qpixmap.h>
 #include <qdom.h>
 #include <kdebug.h>
-
+#include <koSize.h>
+#include <kozoomhandler.h>
 // for getenv ()
 #include <stdlib.h>
 using namespace std;
@@ -64,44 +65,44 @@ KPPixmapObject &KPPixmapObject::operator=( const KPPixmapObject & )
 }
 
 /*======================= set size ===============================*/
-void KPPixmapObject::setSize( int _width, int _height )
+void KPPixmapObject::setSize( double _width, double _height )
 {
     KPObject::setSize( _width, _height );
     if ( move ) return;
 
     if ( ext == orig_size )
-        ext = image.size();
+        ext = KoSize::fromQSize(image.size());
 
-    image = image.scale( ext );
+    image = image.scale( ext.toQSize() );
 
     if ( fillType == FT_GRADIENT && gradient )
-        gradient->setSize( getSize() );
+        gradient->setSize( getSize().toQSize() );
 }
 
 /*======================= set size ===============================*/
-void KPPixmapObject::resizeBy( int _dx, int _dy )
+void KPPixmapObject::resizeBy( double _dx, double _dy )
 {
     KPObject::resizeBy( _dx, _dy );
     if ( move ) return;
 
     if ( ext == orig_size )
-        ext = image.size();
+        ext = KoSize::fromQSize(image.size());
 
-    image = image.scale( ext );
+    image = image.scale( ext.toQSize() );
 
     if ( fillType == FT_GRADIENT && gradient )
-        gradient->setSize( getSize() );
+        gradient->setSize( getSize().toQSize() );
 }
 
 /*================================================================*/
-void KPPixmapObject::setPixmap( const KPImageKey & key, const QSize &/*_size*/ )
+void KPPixmapObject::setPixmap( const KPImageKey & key, const KoSize &/*_size*/ )
 {
     image = imageCollection->findImage( key );
 
     if ( ext == orig_size )
-        ext = image.size();
+        ext = KoSize::fromQSize(image.size());
 
-    image = image.scale( ext );
+    image = image.scale( ext.toQSize() );
 
 }
 
@@ -161,29 +162,29 @@ int KPPixmapObject::load(const QDomElement &element)
             }
 
             if ( ext == orig_size )
-                ext = image.size();
+                ext = KoSize::fromQSize(image.size());
 
-            image = image.scale( ext );
+            image = image.scale( ext.toQSize() );
         }
     }
     return offset;
 }
 
 /*========================= draw =================================*/
-void KPPixmapObject::draw( QPainter *_painter )
+void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler )
 {
     if ( move )
     {
-        KPObject::draw( _painter );
+        KPObject::draw( _painter,_zoomHandler );
         return;
     }
 
     if ( image.isNull() ) return;
 
-    int ox = orig.x();
-    int oy = orig.y();
-    int ow = ext.width();
-    int oh = ext.height();
+    double ox = orig.x();
+    double oy = orig.y();
+    double ow = ext.width();
+    double oh = ext.height();
 
     _painter->save();
 
@@ -205,11 +206,11 @@ void KPPixmapObject::draw( QPainter *_painter )
 
             QSize bs = image.size();
 
-            _painter->drawRect( sx, sy, bs.width(), bs.height() );
+            _painter->drawRect( _zoomHandler->zoomItX(sx), _zoomHandler->zoomItY(sy), _zoomHandler->zoomItX(bs.width()), _zoomHandler->zoomItY(bs.height()) );
         }
         else
         {
-            _painter->translate( ox, oy );
+            _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
 
             QSize bs = image.size();
             QRect br = QRect( 0, 0, bs.width(), bs.height() );
@@ -232,8 +233,8 @@ void KPPixmapObject::draw( QPainter *_painter )
 
             int dx = 0, dy = 0;
             getShadowCoords( dx, dy );
-            _painter->drawRect( rr.left() + pixXPos + dx, rr.top() + pixYPos + dy,
-                                bs.width(), bs.height() );
+            _painter->drawRect( _zoomHandler->zoomItX(rr.left() + pixXPos + dx), _zoomHandler->zoomItY(rr.top() + pixYPos + dy),
+                                _zoomHandler->zoomItX(bs.width()), _zoomHandler->zoomItY(bs.height()) );
         }
     }
     _painter->restore();
@@ -259,15 +260,15 @@ void KPPixmapObject::draw( QPainter *_painter )
         _painter->setPen( Qt::NoPen );
         _painter->setBrush( brush );
         if ( fillType == FT_BRUSH || !gradient )
-            _painter->drawRect( ox + penw, oy + penw, ext.width() - 2 * penw, ext.height() - 2 * penw );
+            _painter->drawRect( _zoomHandler->zoomItX(ox + penw), _zoomHandler->zoomItY(oy + penw), _zoomHandler->zoomItX(ext.width() - 2 * penw), _zoomHandler->zoomItY(ext.height() - 2 * penw) );
         else
-            _painter->drawPixmap( ox + penw, oy + penw, *gradient->getGradient(),
+            _painter->drawPixmap( _zoomHandler->zoomItX(ox + penw), _zoomHandler->zoomItY(oy + penw), *gradient->getGradient(),
                                   0, 0, ow - 2 * penw, oh - 2 * penw );
 
         if( scaleImage ) {
             // draw high resolution image
             QWMatrix oldMapping = _painter->worldMatrix();
-            _painter->translate( ox, oy );
+            _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
             _painter->scale( ((double)realImageSize.width())/imageSize.width(),
                              ((double)realImageSize.height())/imageSize.height() );
             _painter->drawPixmap( 0, 0, drawImage );
@@ -277,9 +278,9 @@ void KPPixmapObject::draw( QPainter *_painter )
 
         _painter->setPen( pen );
         _painter->setBrush( Qt::NoBrush );
-        _painter->drawRect( ox + penw, oy + penw, ow - 2 * penw, oh - 2 * penw );
+        _painter->drawRect( _zoomHandler->zoomItX(ox + penw), _zoomHandler->zoomItY(oy + penw), _zoomHandler->zoomItX(ow - 2 * penw), _zoomHandler->zoomItY(oh - 2 * penw) );
     } else {
-        _painter->translate( ox, oy );
+        _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
 
         QSize bs = image.size();
         QRect br = QRect( 0, 0, bs.width(), bs.height() );
@@ -301,15 +302,15 @@ void KPPixmapObject::draw( QPainter *_painter )
         _painter->setBrush( brush );
 
         if ( fillType == FT_BRUSH || !gradient )
-            _painter->drawRect( rr.left() + pixXPos + penw, rr.top() + pixYPos + penw,
-                                ext.width() - 2 * penw, ext.height() - 2 * penw );
+            _painter->drawRect( _zoomHandler->zoomItX(rr.left() + pixXPos + penw), _zoomHandler->zoomItY(rr.top() + pixYPos + penw),
+                                _zoomHandler->zoomItX(ext.width() - 2 * penw), _zoomHandler->zoomItY(ext.height() - 2 * penw) );
         else
-            _painter->drawPixmap( rr.left() + pixXPos + penw, rr.top() + pixYPos + penw,
+            _painter->drawPixmap( _zoomHandler->zoomItX(rr.left() + pixXPos + penw), _zoomHandler->zoomItY(rr.top() + pixYPos + penw),
                                   *gradient->getGradient(), 0, 0, ow - 2 * penw, oh - 2 * penw );
 
         // create mapping to image space
        	QWMatrix oldMapping = _painter->worldMatrix();
-       	_painter->translate( rr.left() + pixXPos, rr.top() + pixYPos );
+       	_painter->translate( _zoomHandler->zoomItX(rr.left() + pixXPos), _zoomHandler->zoomItX(rr.top() + pixYPos) );
        	_painter->scale( ((double)realImageSize.width())/imageSize.width(),
                          ((double)realImageSize.height())/imageSize.height() );
         _painter->drawPixmap( 0, 0, drawImage );
@@ -317,10 +318,10 @@ void KPPixmapObject::draw( QPainter *_painter )
 
         _painter->setPen( pen );
         _painter->setBrush( Qt::NoBrush );
-        _painter->drawRect( rr.left() + pixXPos + penw, rr.top() + pixYPos + penw, ow - 2 * penw, oh - 2 * penw );
+        _painter->drawRect( _zoomHandler->zoomItX(rr.left() + pixXPos + penw), _zoomHandler->zoomItY(rr.top() + pixYPos + penw), _zoomHandler->zoomItX(ow - 2 * penw), _zoomHandler->zoomItY(oh - 2 * penw) );
     }
 
     _painter->restore();
 
-    KPObject::draw( _painter );
+    KPObject::draw( _painter,_zoomHandler );
 }

@@ -56,7 +56,7 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, int offset );
     virtual int load(const QDomElement &element);
 
-    virtual void draw( QPainter *_painter );
+    virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler );
 
     KPClipartCollection::Key getKey() const
     { return m_clipart.key(); }

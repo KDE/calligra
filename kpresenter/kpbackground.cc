@@ -81,12 +81,12 @@ void KPBackGround::setBackPixmap( const QString &_filename, QDateTime _lastModif
     {
     case BV_ZOOM: pixSize = QSize( ext.width(), ext.height() );
         break;
-    case BV_TILED: case BV_CENTER: pixSize = orig_size;
+    case BV_TILED: case BV_CENTER: pixSize = orig_size.toQSize();
         break;
     }
 
     backImage = imageCollection->findOrLoad( _filename, _lastModified );
-    if ( pixSize == orig_size )
+    if ( pixSize == orig_size.toQSize() )
         pixSize = backImage.size();
 
     backImage = backImage.scale( pixSize );
@@ -356,7 +356,7 @@ void KPBackGround::load( const QDomElement &element )
                 backImage = imageCollection->loadXPMImage( key, _data );
             }
 
-            if ( ext == orig_size )
+            if ( ext == orig_size.toQSize() )
                 ext = backImage.size();
 
             backImage = backImage.scale( ext );
@@ -506,7 +506,7 @@ void KPBackGround::drawHeaderFooter( QPainter *_painter )
 
         doc->header()->setSize( ext.width(), doc->header()->textObject()->document()->lastParag()->rect().bottom() + 1 );
 #endif
-        m_page->kPresenterDoc()->header()->draw( _painter );
+        m_page->kPresenterDoc()->header()->draw( _painter,m_page->kPresenterDoc()->zoomHandler() );
 #if 0
         if ( doc->header()->textObject()->isModified() )
             doc->header()->textObject()->resize( s );
@@ -534,7 +534,7 @@ void KPBackGround::drawHeaderFooter( QPainter *_painter )
             pgnum = 0;
         doc->footer()->textObject()->setPageNum( ++pgnum );
 #endif
-        m_page->kPresenterDoc()->footer()->draw( _painter );
+        m_page->kPresenterDoc()->footer()->draw( _painter,m_page->kPresenterDoc()->zoomHandler() );
 #if 0
         if ( doc->footer()->textObject()->isModified() )
             doc->footer()->textObject()->resize( s.width(), s.height() );
@@ -549,7 +549,7 @@ void KPBackGround::drawBorders( QPainter *_painter )
 {
     _painter->setPen( QApplication::palette().active().color( QColorGroup::Dark ) );
     _painter->setBrush( Qt::NoBrush );
-    _painter->drawRect( 0, 0, ext.width() + 1, ext.height() + 1 );
+    _painter->drawRect( 0, 0, m_page->getZoomPageRect().width() + 1, m_page->getZoomPageRect().height() + 1 );
 }
 
 /*================================================================*/

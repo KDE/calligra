@@ -24,9 +24,10 @@
 #include <qpoint.h>
 #include <qcolor.h>
 #include <qsize.h>
-
+#include <kozoomhandler.h>
+#include <koPoint.h>
 /*========================== draw a figure =======================*/
-void drawFigure( LineEnd figure, QPainter* painter, QPoint coord, QColor color, int _w, float angle )
+void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const QColor &color,int  _w, float angle, KoZoomHandler*_zoomHandler)
 {
     painter->setPen( Qt::NoPen );
     painter->setBrush( Qt::NoBrush );
@@ -38,32 +39,32 @@ void drawFigure( LineEnd figure, QPainter* painter, QPoint coord, QColor color, 
         int _h = _w;
         if ( _h % 2 == 0 ) _h--;
         painter->save();
-        painter->translate( coord.x(), coord.y() );
+        painter->translate( _zoomHandler->zoomItX(coord.x()), _zoomHandler->zoomItY( coord.y()) );
         painter->rotate( angle );
         painter->scale( 1, 1 );
-        painter->fillRect( -3 - _w / 2, -3 - _h / 2, 6 + _w, 6 + _h, color );
+        painter->fillRect( _zoomHandler->zoomItX(-3 - _w / 2),_zoomHandler->zoomItY( -3 - _h / 2),_zoomHandler->zoomItX( 6 + _w),_zoomHandler->zoomItY( 6 + _h), color );
         painter->restore();
     } break;
     case L_CIRCLE:
     {
         painter->save();
-        painter->translate( coord.x(), coord.y() );
+        painter->translate( _zoomHandler->zoomItX(coord.x()), _zoomHandler->zoomItY(coord.y()) );
         painter->setBrush( color );
-        painter->drawEllipse( -3 - _w / 2, -3 - _w / 2, 6 + _w, 6 + _w );
+        painter->drawEllipse( _zoomHandler->zoomItX(-3 - _w / 2), _zoomHandler->zoomItY(-3 - _w / 2),_zoomHandler->zoomItX( 6 + _w), _zoomHandler->zoomItY(6 + _w) );
         painter->restore();
     } break;
     case L_ARROW:
     {
-        QPoint p1( -5 - _w / 2, -3 - _w / 2 );
-        QPoint p2( 5 + _w / 2, 0 );
-        QPoint p3( -5 - _w / 2, 3 + _w / 2 );
+        QPoint p1( _zoomHandler->zoomItX(-5 - _w / 2), _zoomHandler->zoomItY(-3 - _w / 2) );
+        QPoint p2( _zoomHandler->zoomItX(5 + _w / 2), 0 );
+        QPoint p3( _zoomHandler->zoomItX(-5 - _w / 2), _zoomHandler->zoomItY(3 + _w / 2) );
         QPointArray pArray( 3 );
-        pArray.setPoint( 0, p1 );
-        pArray.setPoint( 1, p2 );
-        pArray.setPoint( 2, p3 );
+        pArray.setPoint( 0, _zoomHandler->zoomPoint(p1) );
+        pArray.setPoint( 1, _zoomHandler->zoomPoint(p2) );
+        pArray.setPoint( 2, _zoomHandler->zoomPoint(p3) );
 
         painter->save();
-        painter->translate( coord.x(), coord.y() );
+        painter->translate( _zoomHandler->zoomItX(coord.x()),_zoomHandler->zoomItY( coord.y()) );
         painter->rotate( angle );
         painter->scale( 1, 1 );
         painter->setBrush( color );
@@ -73,9 +74,9 @@ void drawFigure( LineEnd figure, QPainter* painter, QPoint coord, QColor color, 
     default: break;
     }
 }
-
+//todo used kozoomhandled
 /*================== get bounding with of figure =================*/
-QSize getBoundingSize( LineEnd figure, int _w )
+KoSize getBoundingSize( LineEnd figure, double _w, KoZoomHandler*_zoomHandler )
 {
     switch ( figure )
     {
@@ -83,16 +84,16 @@ QSize getBoundingSize( LineEnd figure, int _w )
     {
         int _h = _w;
         if ( _h % 2 == 0 ) _h--;
-        return QSize( 10 + _w, 10 + _h );
+        return KoSize( _zoomHandler->zoomItX( 10 + _w), _zoomHandler->zoomItY( 10 + _h) );
     } break;
     case L_CIRCLE:
-        return QSize( 10 + _w, 10 + _w );
+        return KoSize(  _zoomHandler->zoomItX(10 + _w), _zoomHandler->zoomItY(10 + _w) );
         break;
     case L_ARROW:
-        return QSize( 14 + _w, 14 + _w );
+        return KoSize( _zoomHandler->zoomItX( 14 + _w),_zoomHandler->zoomItY( 14 + _w) );
         break;
     default: break;
     }
 
-    return QSize( 0, 0 );
+    return KoSize( 0, 0 );
 }

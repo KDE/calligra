@@ -37,7 +37,8 @@ int KPresenterObjectIface::getType()
 
 QRect KPresenterObjectIface::getBoundingRect()
 {
-    return obj->getBoundingRect( );
+    //FIXME
+    return QRect(); //obj->getBoundingRect( );
 }
 
 bool KPresenterObjectIface::isSelected()
@@ -67,12 +68,13 @@ QColor KPresenterObjectIface::getShadowColor()
 
 QSize KPresenterObjectIface::getSize()
 {
-    return obj->getSize();
+    return QSize();//return obj->getSize();
 }
 
 QPoint KPresenterObjectIface::getOrig()
 {
-    return obj->getOrig();
+    return QPoint();
+    //return obj->getOrig();
 }
 
 int KPresenterObjectIface::getEffect()

@@ -34,7 +34,7 @@
 #include <qslider.h>
 #include <qspinbox.h>
 #include <qcheckbox.h>
-
+#include <kozoomhandler.h>
 #include <kpresenter_utils.h>
 #include <kpgradient.h>
 
@@ -46,6 +46,8 @@
 PBPreview::PBPreview( QWidget* parent, const char* name, PaintType _paintType )
     : QFrame( parent, name )
 {
+    //FIXME zoom
+    _zoomHandler=new KoZoomHandler();
     paintType = _paintType;
     pen = QPen( black, 1, SolidLine );
     brush = QBrush( white, SolidPattern );
@@ -81,22 +83,22 @@ void PBPreview::drawContents( QPainter *painter )
     if ( paintType == Pen ) {
 	painter->fillRect( 0, 0, contentsRect().width(), contentsRect().height(),
 			   colorGroup().base() );
-	QSize diff1( 0, 0 ), diff2( 0, 0 );
+	KoSize diff1( 0, 0 ), diff2( 0, 0 );
 	int _w = pen.width();
 
 	if ( lineBegin != L_NORMAL )
-	    diff1 = getBoundingSize( lineBegin, _w );
+	    diff1 = getBoundingSize( lineBegin, _w,_zoomHandler );
 
 	if ( lineEnd != L_NORMAL )
-	    diff2 = getBoundingSize( lineEnd, _w );
+	    diff2 = getBoundingSize( lineEnd, _w,_zoomHandler );
 
 	if ( lineBegin != L_NORMAL )
 	    drawFigure( lineBegin, painter, QPoint( diff1.width() / 2, contentsRect().height() / 2 ),
-			pen.color(), _w, 180.0 );
+			pen.color(), _w, 180.0,_zoomHandler );
 
 	if ( lineEnd != L_NORMAL )
 	    drawFigure( lineEnd, painter, QPoint( contentsRect().width() - diff2.width() / 2,
-						  contentsRect().height() / 2 ), pen.color(), _w, 0.0 );
+						  contentsRect().height() / 2 ), pen.color(), _w, 0.0,_zoomHandler );
 
 	painter->setPen( pen );
 	painter->drawLine( diff1.width() / 2, contentsRect().height() / 2,

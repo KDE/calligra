@@ -32,8 +32,8 @@ class KPRectObject : public KP2DObject
 {
 public:
     KPRectObject();
-    KPRectObject( QPen _pen, QBrush _brush, FillType _fillType,
-                  QColor _gColor1, QColor _gColor2, BCType _gType, int _xRnd, int _yRnd,
+    KPRectObject( const QPen &_pen, const QBrush &_brush, FillType _fillType,
+                  const QColor &_gColor1, const QColor &_gColor2, BCType _gType, int _xRnd, int _yRnd,
                   bool _unbalanced, int _xfactor, int _yfactor );
     virtual ~KPRectObject() {}
 
@@ -53,7 +53,7 @@ public:
     virtual int load(const QDomElement &element);
 
 protected:
-    virtual void paint( QPainter *_painter );
+    virtual void paint( QPainter *_painter,KoZoomHandler*_zoomHandler );
 
     int xRnd, yRnd;
 };

@@ -5,7 +5,7 @@ bin_SCRIPTS = kprconverter.pl
 
 ## The part
 kde_module_LTLIBRARIES = libkpresenterpart.la
-libkpresenterpart_la_SOURCES = kprcanvas.cc kprpage.cc searchdia.cc backdia.cc webpresentation.cc kpresenter_view.cc \
+libkpresenterpart_la_SOURCES = koPointArray.cc kprcanvas.cc kprpage.cc searchdia.cc backdia.cc webpresentation.cc kpresenter_view.cc \
 	kpresenter_doc.cc \
 	styledia.cc kpresenter_sound_player.cc \
 	pgconfdia.cc effectdia.cc kprcommand.cc \
@@ -49,7 +49,7 @@ kpresenter_LDADD = kpresenter.la
 dummy.cc:
 	echo > dummy.cc
 
-noinst_HEADERS = kprcanvas.h kprpage.h kpresenter_doc.h kpresenter_view.h \
+noinst_HEADERS = koPointArray.h kprcanvas.h kprpage.h kpresenter_doc.h kpresenter_view.h \
 		backdia.h styledia.h \
 		global.h kprcommand.h kpresenter_sound_player.h \
 		pgconfdia.h effectdia.h kpresenter_utils.h \

@@ -34,20 +34,20 @@ class KPEllipseObject : public KP2DObject
 {
 public:
     KPEllipseObject();
-    KPEllipseObject( QPen _pen, QBrush _brush, FillType _fillType,
-                     QColor _gColor1, QColor _gColor2, BCType _gType,
+    KPEllipseObject( const QPen &_pen, const QBrush &_brush, FillType _fillType,
+                     const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                      bool _unbalanced, int _xfactor, int _yfactor );
     virtual ~KPEllipseObject() {}
 
     KPEllipseObject &operator=( const KPEllipseObject & );
 
-    virtual void setSize( int _width, int _height );
-    virtual void resizeBy( int _dx, int _dy );
+    virtual void setSize( double _width, double _height );
+    virtual void resizeBy( double _dx, double _dy );
 
     virtual void setFillType( FillType _fillType );
-    virtual void setGColor1( QColor _gColor1 )
+    virtual void setGColor1( const QColor &_gColor1 )
     { KP2DObject::setGColor1(_gColor1); redrawPix = true; }
-    virtual void setGColor2( QColor _gColor2 )
+    virtual void setGColor2( const QColor &_gColor2 )
     { KP2DObject::setGColor2(_gColor2); redrawPix = true; }
     virtual void setGType( BCType _gType )
     { KP2DObject::setGType(_gType); redrawPix = true; }
@@ -58,7 +58,7 @@ public:
     { return i18n("Ellipse"); }
 
 protected:
-    virtual void paint( QPainter *_painter );
+    virtual void paint( QPainter *_painter,KoZoomHandler *_zoomHandler );
 
     QPixmap pix;
     bool redrawPix;

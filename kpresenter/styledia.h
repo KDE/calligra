@@ -36,6 +36,7 @@ class KPGradient;
 class QResizeEvent;
 class QWidgetStack;
 class QLabel;
+class KoZoomHandler;
 
 /******************************************************************/
 /* class Pen and Brush preview					  */
@@ -71,7 +72,7 @@ private:
     QBrush brush;
     LineEnd lineBegin, lineEnd;
     KPGradient *gradient;
-
+    KoZoomHandler *_zoomHandler;
 };
 
 /******************************************************************/

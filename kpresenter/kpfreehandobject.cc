@@ -19,7 +19,7 @@
 
 #include <kpfreehandobject.h>
 #include <kpresenter_utils.h>
-
+#include <kozoomhandler.h>
 #include <qpainter.h>
 #include <qwmatrix.h>
 #include <qdom.h>
@@ -42,12 +42,12 @@ KPFreehandObject::KPFreehandObject()
 }
 
 /*================== overloaded constructor ======================*/
-KPFreehandObject::KPFreehandObject(  const QPointArray &_points, QSize _size, QPen _pen,
+KPFreehandObject::KPFreehandObject(  const KoPointArray &_points, const QSize &_size, const QPen &_pen,
                                      LineEnd _lineBegin, LineEnd _lineEnd )
     : KPObject(), pen( _pen )
 {
-    points = QPointArray( _points );
-    origPoints = QPointArray( _points );
+    points = KoPointArray( _points );
+    origPoints = KoPointArray( _points );
     origSize = _size;
     lineBegin = _lineBegin;
     lineEnd = _lineEnd;
@@ -65,10 +65,10 @@ QDomDocumentFragment KPFreehandObject::save( QDomDocument& doc,int offset )
     fragment.appendChild( KPObject::createPenElement( "PEN", pen, doc ) );
     if ( !points.isNull() ) {
         QDomElement elemPoints = doc.createElement( "POINTS" );
-	QPointArray::ConstIterator it;
+	KoPointArray::ConstIterator it;
         for ( it = points.begin(); it != points.end(); ++it ) {
             QDomElement elemPoint = doc.createElement( "Point" );
-            QPoint point = (*it);
+            KoPoint point = (*it);
             elemPoint.setAttribute( "point_x", point.x() );
             elemPoint.setAttribute( "point_y", point.y() );
 
@@ -100,12 +100,12 @@ int KPFreehandObject::load( const QDomElement &element )
         unsigned int index = 0;
         while ( !elemPoint.isNull() ) {
             if ( elemPoint.tagName() == "Point" ) {
-                int tmpX = 0;
-                int tmpY = 0;
+                double tmpX = 0;
+                double tmpY = 0;
                 if( elemPoint.hasAttribute( "point_x" ) )
-                    tmpX = elemPoint.attribute( "point_x" ).toInt();
+                    tmpX = elemPoint.attribute( "point_x" ).toDouble();
                 if( elemPoint.hasAttribute( "point_y" ) )
-                    tmpY = elemPoint.attribute( "point_y" ).toInt();
+                    tmpY = elemPoint.attribute( "point_y" ).toDouble();
 
                 points.putPoints( index, 1, tmpX,tmpY );
             }
@@ -113,7 +113,7 @@ int KPFreehandObject::load( const QDomElement &element )
             ++index;
         }
         origPoints = points;
-        origSize = ext;
+        origSize = ext.toQSize();
     }
 
     e = element.namedItem( "LINEBEGIN" ).toElement();
@@ -135,17 +135,17 @@ int KPFreehandObject::load( const QDomElement &element )
 }
 
 /*========================= draw =================================*/
-void KPFreehandObject::draw( QPainter *_painter )
+void KPFreehandObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler )
 {
     if ( move ) {
-        KPObject::draw( _painter );
+        KPObject::draw( _painter, _zoomHandler );
         return;
     }
 
-    int ox = orig.x();
-    int oy = orig.y();
-    int ow = ext.width();
-    int oh = ext.height();
+    double ox = orig.x();
+    double oy = orig.y();
+    double ow = ext.width();
+    double oh = ext.height();
 
     _painter->save();
 
@@ -158,11 +158,11 @@ void KPFreehandObject::draw( QPainter *_painter )
             int sy = oy;
             getShadowCoords( sx, sy );
 
-            _painter->translate( sx, sy );
-            paint( _painter );
+            _painter->translate( _zoomHandler->zoomItX(sx), _zoomHandler->zoomItY( sy) );
+            paint( _painter,_zoomHandler );
         }
         else {
-            _painter->translate( ox, oy );
+            _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
 
             QRect br = QRect( 0, 0, ow, oh );
             int pw = br.width();
@@ -182,7 +182,7 @@ void KPFreehandObject::draw( QPainter *_painter )
             m.translate( rr.left() + xPos + sx, rr.top() + yPos + sy );
 
             _painter->setWorldMatrix( m, true );
-            paint( _painter );
+            paint( _painter,_zoomHandler );
         }
 
         pen = tmpPen;
@@ -191,10 +191,10 @@ void KPFreehandObject::draw( QPainter *_painter )
     _painter->restore();
 
     _painter->save();
-    _painter->translate( ox, oy );
+    _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
 
     if ( angle == 0 )
-        paint( _painter );
+        paint( _painter,_zoomHandler );
     else {
         QRect br = QRect( 0, 0, ow, oh );
         int pw = br.width();
@@ -210,16 +210,16 @@ void KPFreehandObject::draw( QPainter *_painter )
         m.translate( rr.left() + xPos, rr.top() + yPos );
 
         _painter->setWorldMatrix( m, true );
-        paint( _painter );
+        paint( _painter,_zoomHandler );
     }
 
     _painter->restore();
 
-    KPObject::draw( _painter );
+    KPObject::draw( _painter,_zoomHandler );
 }
 
 /*===================== get angle ================================*/
-float KPFreehandObject::getAngle( QPoint p1, QPoint p2 )
+float KPFreehandObject::getAngle( const QPoint &p1, const QPoint &p2 )
 {
     float _angle = 0.0;
 
@@ -254,35 +254,35 @@ float KPFreehandObject::getAngle( QPoint p1, QPoint p2 )
 }
 
 /*======================== paint =================================*/
-void KPFreehandObject::paint( QPainter* _painter )
+void KPFreehandObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler )
 {
     int _w = pen.width();
+    QPen pen2(pen);
+    pen2.setWidth(_zoomHandler->zoomItX( pen2.width()));
 
-    QPointArray pointArray = points;
+    QPointArray pointArray = points.toQPointArray();
     if ( !move && _w > 1 ) {
         double fx = (double)( (double)( ext.width() - _w ) / (double)ext.width() );
         double fy = (double)( (double)( ext.height() - _w ) / (double)ext.height() );
-
         unsigned int index = 0;
-        QPointArray tmpPoints;
-        QPointArray::ConstIterator it;
+        KoPointArray tmpPoints;
+        KoPointArray::ConstIterator it;
         for ( it = points.begin(); it != points.end(); ++it ) {
-            QPoint point = (*it);
-            int tmpX = (int)( (double)point.x() * fx );
-            int tmpY = (int)( (double)point.y() * fy );
+            KoPoint point = (*it);
+            double tmpX = _zoomHandler->zoomItX(( (double)point.x() * fx ));
+            double tmpY = _zoomHandler->zoomItY(( (double)point.y() * fy ));
 
             if ( tmpX == 0 )
                 tmpX = _w;
             if ( tmpY == 0 )
                 tmpY = _w;
-
             tmpPoints.putPoints( index, 1, tmpX,tmpY );
             ++index;
         }
-        pointArray = tmpPoints;
+        pointArray = tmpPoints.toQPointArray();
     }
 
-    _painter->setPen( pen );
+    _painter->setPen( pen2 );
     _painter->drawPolyline( pointArray );
 
 
@@ -299,7 +299,7 @@ void KPFreehandObject::paint( QPainter* _painter )
             QPoint point = (*it1);
             if ( startPoint != point ) {
                 float angle = getAngle( startPoint, point );
-                drawFigure( lineBegin, _painter, startPoint, pen.color(), _w, angle );
+                drawFigure( lineBegin, _painter, startPoint, pen.color(), _w, angle,_zoomHandler );
 
                 break;
             }
@@ -319,7 +319,7 @@ void KPFreehandObject::paint( QPainter* _painter )
             QPoint point = (*it2);
             if ( endPoint != point ) {
                 float angle = getAngle( endPoint, point );
-                drawFigure( lineEnd, _painter, endPoint, pen.color(), _w, angle );
+                drawFigure( lineEnd, _painter, endPoint, pen.color(), _w, angle,_zoomHandler );
 
                 break;
             }
@@ -327,7 +327,7 @@ void KPFreehandObject::paint( QPainter* _painter )
     }
 }
 
-void KPFreehandObject::setSize( int _width, int _height )
+void KPFreehandObject::setSize( double _width, double _height )
 {
     KPObject::setSize( _width, _height );
 
@@ -337,12 +337,12 @@ void KPFreehandObject::setSize( int _width, int _height )
     updatePoints( fx, fy );
 }
 
-void KPFreehandObject::resizeBy( QSize _size )
+void KPFreehandObject::resizeBy( KoSize _size )
 {
     resizeBy( _size.width(), _size.height() );
 }
 
-void KPFreehandObject::resizeBy( int _dx, int _dy )
+void KPFreehandObject::resizeBy( double _dx, double _dy )
 {
     KPObject::resizeBy( _dx, _dy );
 
@@ -355,12 +355,12 @@ void KPFreehandObject::resizeBy( int _dx, int _dy )
 void KPFreehandObject::updatePoints( double _fx, double _fy )
 {
     unsigned int index = 0;
-    QPointArray tmpPoints;
-    QPointArray::ConstIterator it;
+    KoPointArray tmpPoints;
+    KoPointArray::ConstIterator it;
     for ( it = origPoints.begin(); it != origPoints.end(); ++it ) {
-        QPoint point = (*it);
-        int tmpX = (int)( (double)point.x() * _fx );
-        int tmpY = (int)( (double)point.y() * _fy );
+        KoPoint point = (*it);
+        double tmpX = ( (double)point.x() * _fx );
+        double tmpY = ( (double)point.y() * _fy );
 
         tmpPoints.putPoints( index, 1, tmpX,tmpY );
         ++index;

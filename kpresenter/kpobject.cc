@@ -32,6 +32,10 @@
 #include <fstream.h>
 #include <math.h>
 
+#include <kozoomhandler.h>
+#include <koRect.h>
+#include <koSize.h>
+#include <koPoint.h>
 
 /******************************************************************/
 /* Class: KPObject                                                */
@@ -89,8 +93,6 @@ KPObject::KPObject()
     shadowDistance = 0;
     dSelection = true;
     selected = false;
-    presFakt = 0.0;
-    zoomed = false;
     ownClipping = true;
     subPresStep = 0;
     specEffects = false;
@@ -173,10 +175,10 @@ int KPObject::load(const QDomElement &element) {
     QDomElement e=element.namedItem(tagORIG).toElement();
     if(!e.isNull()) {
         if(e.hasAttribute(attrX))
-            orig.setX(e.attribute(attrX).toInt());
+            orig.setX(e.attribute(attrX).toDouble());
         if(e.hasAttribute(attrY))
         {
-            offset=e.attribute(attrY).toInt();
+            offset=e.attribute(attrY).toDouble();
             orig.setY(0);
         }
         origTopLeftPointInGroup = orig;
@@ -184,9 +186,9 @@ int KPObject::load(const QDomElement &element) {
     e=element.namedItem(tagSIZE).toElement();
     if(!e.isNull()) {
         if(e.hasAttribute(attrWidth))
-            ext.setWidth(e.attribute(attrWidth).toInt());
+            ext.setWidth(e.attribute(attrWidth).toDouble());
         if(e.hasAttribute(attrHeight))
-            ext.setHeight(e.attribute(attrHeight).toInt());
+            ext.setHeight(e.attribute(attrHeight).toDouble());
 
         origSizeInGroup = ext;
     }
@@ -279,16 +281,16 @@ int KPObject::load(const QDomElement &element) {
 }
 
 /*======================= get bounding rect ======================*/
-QRect KPObject::getBoundingRect( ) const
+KoRect KPObject::getBoundingRect( ) const
 {
-    QRect r( orig.x() , orig.y(),
+    KoRect r( orig.x() , orig.y(),
              ext.width(), ext.height() );
 
     if ( shadowDistance > 0 )
     {
         int sx = r.x(), sy = r.y();
         getShadowCoords( sx, sy );
-        QRect r2( sx, sy, r.width(), r.height() );
+        KoRect r2( sx, sy, r.width(), r.height() );
         r = r.unite( r2 );
     }
 
@@ -298,41 +300,41 @@ QRect KPObject::getBoundingRect( ) const
     {
         QWMatrix mtx;
         mtx.rotate( angle );
-        QRect rr = mtx.map( r );
+        KoRect rr = KoRect::fromQRect(mtx.mapRect( r.toQRect() ));
 
         int diffw = std::abs( rr.width() - r.width() );
         int diffh = std::abs( rr.height() - r.height() );
 
-        return QRect( r.x() - diffw, r.y() - diffh,
+        return KoRect( r.x() - diffw, r.y() - diffh,
                       r.width() + diffw * 2, r.height() + diffh * 2 );
     }
 }
 
 /*======================== contain point ? =======================*/
-bool KPObject::contains( QPoint _point ) const
+bool KPObject::contains( const KoPoint &_point ) const
 {
     if ( angle == 0.0 )
     {
-        QRect r( orig.x() , orig.y() ,
+        KoRect r( orig.x() , orig.y() ,
                  ext.width(), ext.height() );
         return r.contains( _point );
     }
     else
     {
-        QRect br = QRect( 0, 0, ext.width(), ext.height() );
+        KoRect br = KoRect( 0, 0, ext.width(), ext.height() );
         int pw = br.width();
         int ph = br.height();
-        QRect rr = br;
+        KoRect rr = br;
         int yPos = -rr.y();
         int xPos = -rr.x();
-        rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
+        rr.moveTopLeft( KoPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
         QWMatrix m;
         m.translate( pw / 2, ph / 2 );
         m.rotate( angle );
         m.translate( rr.left() + xPos, rr.top() + yPos );
 
-        QRect r = m.map( br );
+        KoRect r = KoRect::fromQRect(m.mapRect( br.toQRect() ));
         r.moveBy( orig.x() , orig.y() );
 
         return r.contains( _point );
@@ -340,30 +342,30 @@ bool KPObject::contains( QPoint _point ) const
 }
 
 /*================================================================*/
-bool KPObject::intersects( QRect _rect ) const
+bool KPObject::intersects( const KoRect &_rect ) const
 {
     if ( angle == 0.0 )
     {
-        QRect r( orig.x(), orig.y(),
+        KoRect r( orig.x(), orig.y(),
                  ext.width(), ext.height() );
         return r.intersects( _rect );
     }
     else
     {
-        QRect br = QRect( 0, 0, ext.width(), ext.height() );
+        KoRect br = KoRect( 0, 0, ext.width(), ext.height() );
         int pw = br.width();
         int ph = br.height();
-        QRect rr = br;
+        KoRect rr = br;
         int yPos = -rr.y();
         int xPos = -rr.x();
-        rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
+        rr.moveTopLeft( KoPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
         QWMatrix m;
         m.translate( pw / 2, ph / 2 );
         m.rotate( angle );
         m.translate( rr.left() + xPos, rr.top() + yPos );
 
-        QRect r = m.map( br );
+        KoRect r = KoRect::fromQRect(m.mapRect( br.toQRect() ));
         r.moveBy( orig.x(), orig.y() );
 
         return r.intersects( _rect );
@@ -371,7 +373,7 @@ bool KPObject::intersects( QRect _rect ) const
 }
 
 /*======================== get cursor ============================*/
-QCursor KPObject::getCursor( QPoint _point, ModifyType &_modType ) const
+QCursor KPObject::getCursor( const KoPoint &_point, ModifyType &_modType ) const
 {
     int px = _point.x();
     int py = _point.y();
@@ -381,7 +383,7 @@ QCursor KPObject::getCursor( QPoint _point, ModifyType &_modType ) const
     int ow = ext.width();
     int oh = ext.height();
 
-    QRect r( ox, oy, ow, oh );
+    KoRect r( ox, oy, ow, oh );
 
     if ( !r.contains( _point ) )
         return Qt::arrowCursor;
@@ -438,46 +440,14 @@ QCursor KPObject::getCursor( QPoint _point, ModifyType &_modType ) const
     return Qt::sizeAllCursor;
 }
 
-/*========================= zoom =================================*/
-void KPObject::zoom( float _fakt )
-{
-    presFakt = _fakt;
-
-    zoomed = true;
-
-    oldOrig = orig;
-    oldExt = ext;
-
-    orig.setX( static_cast<int>( static_cast<float>( orig.x() ) * presFakt ) );
-    orig.setY( static_cast<int>( static_cast<float>( orig.y() ) * presFakt ) );
-    ext.setWidth( static_cast<int>( static_cast<float>( ext.width() ) * presFakt ) );
-    ext.setHeight( static_cast<int>( static_cast<float>( ext.height() ) * presFakt ) );
-
-    setSize( ext );
-    setOrig( orig );
-}
-
-/*==================== zoom orig =================================*/
-void KPObject::zoomOrig()
-{
-    Q_ASSERT(zoomed);
-    zoomed = false;
-
-    orig = oldOrig;
-    ext = oldExt;
-
-    setSize( ext );
-    setOrig( orig );
-}
-
 /*======================== draw ==================================*/
-void KPObject::draw( QPainter *_painter )
+void KPObject::draw( QPainter *_painter,KoZoomHandler *_zoomHandler )
 {
     if ( dSelection )
     {
         _painter->save();
-        _painter->translate( orig.x() , orig.y() );
-        paintSelection( _painter );
+        _painter->translate( _zoomHandler->zoomItX(orig.x()) , _zoomHandler->zoomItY( orig.y()) );
+        paintSelection( _painter, _zoomHandler );
         _painter->restore();
     }
 }
@@ -535,7 +505,7 @@ void KPObject::getShadowCoords( int& _x, int& _y ) const
 }
 
 /*======================== paint selection =======================*/
-void KPObject::paintSelection( QPainter *_painter )
+void KPObject::paintSelection( QPainter *_painter,KoZoomHandler *_zoomHandler )
 {
     _painter->save();
     Qt::RasterOp rop = _painter->rasterOp();
@@ -548,13 +518,13 @@ void KPObject::paintSelection( QPainter *_painter )
 
         if ( angle != 0 )
         {
-            QRect br = QRect( 0, 0, ext.width(), ext.height() );
+            KoRect br = KoRect( 0, 0, ext.width(), ext.height() );
             int pw = br.width();
             int ph = br.height();
-            QRect rr = br;
+            KoRect rr = br;
             int yPos = -rr.y();
             int xPos = -rr.x();
-            rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
+            rr.moveTopLeft( KoPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
             QWMatrix m;
             m.translate( pw / 2, ph / 2 );
@@ -566,7 +536,7 @@ void KPObject::paintSelection( QPainter *_painter )
 
         _painter->setPen( QPen( Qt::black, 1, Qt::DotLine ) );
         _painter->setBrush( Qt::NoBrush );
-        _painter->drawRect( 0, 0, ext.width(), ext.height() );
+        _painter->drawRect( 0, 0, _zoomHandler->zoomItX(ext.width()), _zoomHandler->zoomItY( ext.height()) );
 
         _painter->restore();
     }
@@ -576,14 +546,14 @@ void KPObject::paintSelection( QPainter *_painter )
 
     if ( selected )
     {
-        _painter->fillRect( 0, 0, 6, 6, Qt::black );
-        _painter->fillRect( 0, ext.height() / 2 - 3, 6, 6, Qt::black );
-        _painter->fillRect( 0, ext.height() - 6, 6, 6, Qt::black );
-        _painter->fillRect( ext.width() - 6, 0, 6, 6, Qt::black );
-        _painter->fillRect( ext.width() - 6, ext.height() / 2 - 3, 6, 6, Qt::black );
-        _painter->fillRect( ext.width() - 6, ext.height() - 6, 6, 6, Qt::black );
-        _painter->fillRect( ext.width() / 2 - 3, 0, 6, 6, Qt::black );
-        _painter->fillRect( ext.width() / 2 - 3, ext.height() - 6, 6, 6, Qt::black );
+        _painter->fillRect( 0, 0, _zoomHandler->zoomItX(6), _zoomHandler->zoomItY(6), Qt::black );
+        _painter->fillRect( 0, _zoomHandler->zoomItY(ext.height() / 2 - 3), _zoomHandler->zoomItX(6), _zoomHandler->zoomItY(6), Qt::black );
+        _painter->fillRect( 0, _zoomHandler->zoomItY(ext.height() - 6), _zoomHandler->zoomItX(6), _zoomHandler->zoomItY(6), Qt::black );
+        _painter->fillRect( _zoomHandler->zoomItX(ext.width() - 6), 0, _zoomHandler->zoomItX(6), _zoomHandler->zoomItY(6), Qt::black );
+        _painter->fillRect( _zoomHandler->zoomItX(ext.width() - 6), _zoomHandler->zoomItY(ext.height() / 2 - 3), _zoomHandler->zoomItX(6), _zoomHandler->zoomItY(6), Qt::black );
+        _painter->fillRect( _zoomHandler->zoomItX(ext.width() - 6), _zoomHandler->zoomItY(ext.height() - 6), _zoomHandler->zoomItX(6), _zoomHandler->zoomItY(6), Qt::black );
+        _painter->fillRect( _zoomHandler->zoomItX(ext.width() / 2 - 3), 0,_zoomHandler->zoomItX(6), _zoomHandler->zoomItY(6), Qt::black );
+        _painter->fillRect( _zoomHandler->zoomItX(ext.width() / 2 - 3), _zoomHandler->zoomItY(ext.height() - 6),_zoomHandler->zoomItX(6), _zoomHandler->zoomItY(6), Qt::black );
     }
 
     _painter->setRasterOp( rop );
@@ -727,8 +697,8 @@ KP2DObject::KP2DObject()
     yfactor = 100;
 }
 
-KP2DObject::KP2DObject( QPen _pen, QBrush _brush, FillType _fillType,
-                        QColor _gColor1, QColor _gColor2, BCType _gType,
+KP2DObject::KP2DObject( const QPen &_pen, const QBrush &_brush, FillType _fillType,
+                        const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                         bool _unbalanced, int _xfactor, int _yfactor )
     : KPObject(), pen( _pen ), brush( _brush ), gColor1( _gColor1 ), gColor2( _gColor2 )
 {
@@ -750,22 +720,22 @@ KP2DObject &KP2DObject::operator=( const KP2DObject & )
     return *this;
 }
 
-void KP2DObject::setSize( int _width, int _height )
+void KP2DObject::setSize( double _width, double _height )
 {
     KPObject::setSize( _width, _height );
     if ( move ) return;
 
     if ( fillType == FT_GRADIENT && gradient )
-        gradient->setSize( getSize() );
+        gradient->setSize( getSize().toQSize() );
 }
 
-void KP2DObject::resizeBy( int _dx, int _dy )
+void KP2DObject::resizeBy( double _dx, double _dy )
 {
     KPObject::resizeBy( _dx, _dy );
     if ( move ) return;
 
     if ( fillType == FT_GRADIENT && gradient )
-        gradient->setSize( getSize() );
+        gradient->setSize( getSize().toQSize() );
 }
 
 void KP2DObject::setFillType( FillType _fillType )
@@ -778,7 +748,7 @@ void KP2DObject::setFillType( FillType _fillType )
         gradient = 0;
     }
     if ( fillType == FT_GRADIENT && !gradient )
-        gradient = new KPGradient( gColor1, gColor2, gType, getSize(), unbalanced, xfactor, yfactor );
+        gradient = new KPGradient( gColor1, gColor2, gType, getSize().toQSize(), unbalanced, xfactor, yfactor );
 }
 
 QDomDocumentFragment KP2DObject::save( QDomDocument& doc,int offset )
@@ -833,18 +803,18 @@ int KP2DObject::load(const QDomElement &element)
     return offset;
 }
 
-void KP2DObject::draw( QPainter *_painter )
+void KP2DObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler )
 {
     if ( move )
     {
-        KPObject::draw( _painter );
+        KPObject::draw( _painter,_zoomHandler );
         return;
     }
 
-    int ox = orig.x();
-    int oy = orig.y();
-    int ow = ext.width();
-    int oh = ext.height();
+    double ox = orig.x();
+    double oy = orig.y();
+    double ow = ext.width();
+    double oh = ext.height();
 
     _painter->save();
 
@@ -862,20 +832,20 @@ void KP2DObject::draw( QPainter *_painter )
             int sy = oy;
             getShadowCoords( sx, sy );
 
-            _painter->translate( sx, sy );
-            paint( _painter );
+            _painter->translate( _zoomHandler->zoomItX(sx), _zoomHandler->zoomItY( sy) );
+            paint( _painter, _zoomHandler );
         }
         else
         {
-            _painter->translate( ox, oy );
+            _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
 
-            QRect br = QRect( 0, 0, ow, oh );
+            KoRect br = KoRect( 0, 0, ow, oh );
             int pw = br.width();
             int ph = br.height();
-            QRect rr = br;
+            KoRect rr = br;
             int yPos = -rr.y();
             int xPos = -rr.x();
-            rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
+            rr.moveTopLeft( KoPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
             int sx = 0;
             int sy = 0;
@@ -887,7 +857,7 @@ void KP2DObject::draw( QPainter *_painter )
             m.translate( rr.left() + xPos + sx, rr.top() + yPos + sy );
 
             _painter->setWorldMatrix( m, true );
-            paint( _painter );
+            paint( _painter,_zoomHandler );
         }
 
         pen = tmpPen;
@@ -899,30 +869,30 @@ void KP2DObject::draw( QPainter *_painter )
     _painter->restore();
 
     _painter->save();
-    _painter->translate( ox, oy );
+    _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
 
     if ( angle == 0 )
-        paint( _painter );
+        paint( _painter,_zoomHandler );
     else
     {
-        QRect br = QRect( 0, 0, ow, oh );
+        KoRect br = KoRect( 0, 0, ow, oh );
         int pw = br.width();
         int ph = br.height();
-        QRect rr = br;
+        KoRect rr = br;
         int yPos = -rr.y();
         int xPos = -rr.x();
-        rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
+        rr.moveTopLeft( KoPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
         QWMatrix m;
         m.translate( pw / 2, ph / 2 );
         m.rotate( angle );
-        m.translate( rr.left() + xPos, rr.top() + yPos );
+        m.translate( _zoomHandler->zoomItX(rr.left() + xPos), _zoomHandler->zoomItY(rr.top() + yPos) );
 
         _painter->setWorldMatrix( m, true );
-        paint( _painter );
+        paint( _painter,_zoomHandler );
     }
 
     _painter->restore();
 
-    KPObject::draw( _painter );
+    KPObject::draw( _painter,_zoomHandler );
 }

@@ -84,7 +84,7 @@ public:
     virtual int load(const QDomElement &element);
 
 protected:
-    virtual void paint( QPainter *_painter );
+    virtual void paint( QPainter *_painter,KoZoomHandler*_zoomHandler );
 
     PieType pieType;
     int p_angle, p_len;

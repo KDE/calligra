@@ -46,7 +46,9 @@
 using namespace Qt3;
 #include <kdebug.h>
 #include "kprvariable.h"
-
+#include <koRect.h>
+#include <koSize.h>
+#include <koPoint.h>
 
 /******************************************************************/
 /* Class: ShadowCmd                                               */
@@ -378,7 +380,7 @@ void DeleteCmd::execute()
     QPtrList<KPObject> list (m_page->objectList());
     for ( unsigned int i = 0; i < objects.count(); i++ )
     {
-	oldRect = objects.at( i )->getBoundingRect();
+	oldRect = doc->zoomHandler()->zoomRect(objects.at( i )->getBoundingRect());
 	if ( list.findRef( objects.at( i ) ) != -1 )
 	{
             m_page->takeObject(objects.at(i));
@@ -496,7 +498,7 @@ GroupObjCmd::~GroupObjCmd()
 /*==============================================================*/
 void GroupObjCmd::execute()
 {
-    QRect r = objects.first()->getBoundingRect( );
+    QRect r = doc->zoomHandler()->zoomRect(objects.first()->getBoundingRect( ));
     KPObject *obj = 0;
 
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
@@ -506,12 +508,12 @@ void GroupObjCmd::execute()
 	obj->setSelected( false );
         m_page->takeObject(obj);
 	obj->removeFromObjList();
-	r = r.unite( obj->getBoundingRect( ) );
+	r = r.unite( doc->zoomHandler()->zoomRect(obj->getBoundingRect( )) );
     }
 
     grpObj->setUpdateObjects( false );
     grpObj->setOrigPointInGroup( QPoint( r.x(), r.y() ) );
-    grpObj->setOrigSizeInGroup( QSize( r.width(), r.height() ) );
+    grpObj->setOrigSizeInGroup( KoSize( r.width(), r.height() ) );
     grpObj->setOrig( r.x(), r.y() );
     grpObj->setSize( r.width(), r.height() );
     m_page->appendObject( grpObj );
@@ -590,7 +592,7 @@ void UnGroupObjCmd::execute()
 /*==============================================================*/
 void UnGroupObjCmd::unexecute()
 {
-    QRect r = objects.first()->getBoundingRect(  );
+    QRect r = doc->zoomHandler()->zoomRect( objects.first()->getBoundingRect(  ));
 
     KPObject *obj = 0;
 
@@ -599,7 +601,7 @@ void UnGroupObjCmd::unexecute()
 	obj->setSelected( false );
 	m_page->takeObject(obj);
 	obj->removeFromObjList();
-	r = r.unite( obj->getBoundingRect( ) );
+	r = r.unite( doc->zoomHandler()->zoomRect(obj->getBoundingRect( ) ));
     }
 
     grpObj->setUpdateObjects( false );
@@ -646,7 +648,7 @@ void InsertCmd::execute()
 /*====================== unexecute ===============================*/
 void InsertCmd::unexecute()
 {
-    QRect oldRect = object->getBoundingRect(  );
+    QRect oldRect = doc->zoomHandler()->zoomRect(object->getBoundingRect(  ));
     QPtrList<KPObject> list(m_page->objectList());
     if ( list.findRef( object ) != -1 ) {
 	m_page->takeObject(  object );
@@ -733,7 +735,7 @@ void MoveByCmd::execute()
     QRect oldRect;
 
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
-	oldRect = objects.at( i )->getBoundingRect(  );
+	oldRect = doc->zoomHandler()->zoomRect(objects.at( i )->getBoundingRect(  ));
 	objects.at( i )->moveBy( diff );
 	if ( objects.at( i )->getType() == OT_TEXT )
         {
@@ -753,7 +755,7 @@ void MoveByCmd::unexecute()
     QRect oldRect;
 
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
-	oldRect = objects.at( i )->getBoundingRect( );
+	oldRect = doc->zoomHandler()->zoomRect(objects.at( i )->getBoundingRect( ));
 	objects.at( i )->moveBy( -diff.x(), -diff.y() );
 	if ( objects.at( i )->getType() == OT_TEXT )
         {
@@ -804,7 +806,7 @@ void MoveByCmd2::execute()
     QRect oldRect;
 
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
-	oldRect = objects.at( i )->getBoundingRect(  );
+	oldRect = doc->zoomHandler()->zoomRect( objects.at( i )->getBoundingRect(  ));
 	objects.at( i )->moveBy( *diffs.at( i ) );
 	if ( objects.at( i )->getType() == OT_TEXT )
         {
@@ -824,7 +826,7 @@ void MoveByCmd2::unexecute()
     QRect oldRect;
 
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
-	oldRect = objects.at( i )->getBoundingRect(  );
+	oldRect = doc->zoomHandler()->zoomRect(objects.at( i )->getBoundingRect(  ));
 	objects.at( i )->moveBy( -diffs.at( i )->x(), -diffs.at( i )->y() );
 	if ( objects.at( i )->getType() == OT_TEXT )
         {
@@ -1532,9 +1534,11 @@ void ResizeCmd::execute()
 {
     QRect oldRect;
 
-    oldRect = object->getBoundingRect( );
+    oldRect = doc->zoomHandler()->zoomRect( object->getBoundingRect( ));
     object->moveBy( m_diff );
+#if 0 //FIXME
     object->resizeBy( r_diff );
+#endif
     if ( object->getType() == OT_TEXT )
     {
 	( (KPTextObject*)object )->recalcPageNum( doc );
@@ -1556,7 +1560,7 @@ void ResizeCmd::unexecute( bool _repaint )
 {
     QRect oldRect;
 
-    oldRect = object->getBoundingRect( );
+    oldRect = doc->zoomHandler()->zoomRect(object->getBoundingRect( ));
     object->moveBy( -m_diff.x(), -m_diff.y() );
     object->resizeBy( -r_diff.width(), -r_diff.height() );
     if ( object->getType() == OT_TEXT )

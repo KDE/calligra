@@ -224,6 +224,7 @@ public:
     virtual DCOPObject* dcopObject();
 
     void initConfig();
+    void saveConfig();
 
     bool raiseAndLowerObject;
 
@@ -290,6 +291,10 @@ public:
     void terminateEditing( KPTextObject * textObj )
     { emit sig_terminateEditing( textObj ); }
     KPrPage * initialActivePage();
+
+    void updateZoomRuler();
+    void setZoomAndResolution( int zoom, int dpiX, int dpiY, bool updateViews, bool forPrint );
+    void newZoomAndResolution( bool updateViews, bool forPrint );
 
 public slots:
     void movePage( int from, int to );

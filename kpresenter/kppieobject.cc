@@ -25,6 +25,7 @@
 #include <qdom.h>
 #include <qpainter.h>
 #include <kdebug.h>
+#include <kozoomhandler.h>
 using namespace std;
 
 /******************************************************************/
@@ -123,25 +124,26 @@ int KPPieObject::load(const QDomElement &element)
 }
 
 /*======================== paint =================================*/
-void KPPieObject::paint( QPainter* _painter )
+void KPPieObject::paint( QPainter* _painter,KoZoomHandler*_zoomHandler )
 {
-    int ow = ext.width();
-    int oh = ext.height();
-
-    _painter->setPen( pen );
-    int pw = pen.width() / 2;
+    double ow = ext.width();
+    double oh = ext.height();
+    QPen pen2(pen);
+    pen2.setWidth(_zoomHandler->zoomItX( pen2.width()));
+    _painter->setPen( pen2 );
+    double pw = pen.width() / 2;
     _painter->setBrush( brush );
 
     switch ( pieType )
     {
     case PT_PIE:
-        _painter->drawPie( pw, pw, ow - 2 * pw, oh - 2 * pw, p_angle, p_len );
+        _painter->drawPie( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY( pw), _zoomHandler->zoomItX( ow - 2 * pw), _zoomHandler->zoomItY( oh - 2 * pw), p_angle, p_len );
         break;
     case PT_ARC:
-        _painter->drawArc( pw, pw, ow - 2 * pw, oh - 2 * pw, p_angle, p_len );
+        _painter->drawArc( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), _zoomHandler->zoomItX(ow - 2 * pw), _zoomHandler->zoomItY(oh - 2 * pw), p_angle, p_len );
         break;
     case PT_CHORD:
-        _painter->drawChord( pw, pw, ow - 2 * pw, oh - 2 * pw, p_angle, p_len );
+        _painter->drawChord( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), _zoomHandler->zoomItX(ow - 2 * pw), _zoomHandler->zoomItY(oh - 2 * pw), p_angle, p_len );
         break;
     default: break;
     }

@@ -26,6 +26,7 @@
 #include <qdom.h>
 #include <qpicture.h>
 #include <qpainter.h>
+#include <kozoomhandler.h>
 using namespace std;
 
 /******************************************************************/
@@ -40,8 +41,8 @@ KPEllipseObject::KPEllipseObject()
 }
 
 /*================== overloaded constructor ======================*/
-KPEllipseObject::KPEllipseObject( QPen _pen, QBrush _brush, FillType _fillType,
-                                  QColor _gColor1, QColor _gColor2, BCType _gType,
+KPEllipseObject::KPEllipseObject( const QPen &_pen, const QBrush &_brush, FillType _fillType,
+                                  const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                                   bool _unbalanced, int _xfactor, int _yfactor)
     : KP2DObject( _pen, _brush, _fillType, _gColor1, _gColor2, _gType, _unbalanced, _xfactor, _yfactor )
 {
@@ -51,7 +52,7 @@ KPEllipseObject::KPEllipseObject( QPen _pen, QBrush _brush, FillType _fillType,
     {
         gradient = new KPGradient( gColor1, gColor2, gType, QSize( 1, 1 ), unbalanced, xfactor, yfactor );
         redrawPix = true;
-        pix.resize( getSize() );
+        pix.resize( getSize().toQSize() );
     }
     else
         gradient = 0;
@@ -64,30 +65,30 @@ KPEllipseObject &KPEllipseObject::operator=( const KPEllipseObject & )
 }
 
 /*================================================================*/
-void KPEllipseObject::setSize( int _width, int _height )
+void KPEllipseObject::setSize( double _width, double _height )
 {
     KPObject::setSize( _width, _height );
     if ( move ) return;
 
     if ( fillType == FT_GRADIENT && gradient )
     {
-        gradient->setSize( getSize() );
+        gradient->setSize( getSize().toQSize() );
         redrawPix = true;
-        pix.resize( getSize() );
+        pix.resize( getSize().toQSize() );
     }
 }
 
 /*================================================================*/
-void KPEllipseObject::resizeBy( int _dx, int _dy )
+void KPEllipseObject::resizeBy( double _dx, double _dy )
 {
     KPObject::resizeBy( _dx, _dy );
     if ( move ) return;
 
     if ( fillType == FT_GRADIENT && gradient )
     {
-        gradient->setSize( getSize() );
+        gradient->setSize( getSize().toQSize() );
         redrawPix = true;
-        pix.resize( getSize() );
+        pix.resize( getSize().toQSize() );
     }
 }
 
@@ -103,31 +104,33 @@ void KPEllipseObject::setFillType( FillType _fillType )
     }
     if ( fillType == FT_GRADIENT && !gradient )
     {
-        gradient = new KPGradient( gColor1, gColor2, gType, getSize(), unbalanced, xfactor, yfactor );
+        gradient = new KPGradient( gColor1, gColor2, gType, getSize().toQSize(), unbalanced, xfactor, yfactor );
         redrawPix = true;
-        pix.resize( getSize() );
+        pix.resize( getSize().toQSize() );
     }
 }
 
 /*======================== paint =================================*/
-void KPEllipseObject::paint( QPainter* _painter )
+void KPEllipseObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler )
 {
-    int ow = ext.width();
-    int oh = ext.height();
-    int pw = pen.width() / 2;
+    double ow = ext.width();
+    double oh = ext.height();
+    double pw = pen.width() / 2;
+    QPen pen2(pen);
+    pen2.setWidth(_zoomHandler->zoomItX( pen2.width()));
 
     if ( drawShadow || fillType == FT_BRUSH || !gradient )
     {
-        _painter->setPen( pen );
+        _painter->setPen( pen2 );
         _painter->setBrush( brush );
-        _painter->drawEllipse( pw, pw, ow - 2 * pw, oh - 2 * pw );
+        _painter->drawEllipse( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), _zoomHandler->zoomItX(ow - 2 * pw), _zoomHandler->zoomItY(oh - 2 * pw) );
     }
     else
     {
         if ( redrawPix )
         {
             redrawPix = false;
-            QRegion clipregion( 0, 0, ow - 2 * pw, oh - 2 * pw, QRegion::Ellipse );
+            QRegion clipregion( 0, 0, _zoomHandler->zoomItX(ow - 2 * pw), _zoomHandler->zoomItY(oh - 2 * pw), QRegion::Ellipse );
 
             pix.fill( Qt::white );
 
@@ -140,11 +143,11 @@ void KPEllipseObject::paint( QPainter* _painter )
             pix.setMask( pix.createHeuristicMask() );
         }
 
-        _painter->drawPixmap( pw, pw, pix, 0, 0, ow - 2 * pw, oh - 2 * pw );
+        _painter->drawPixmap( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), pix, 0, 0, _zoomHandler->zoomItX(ow - 2 * pw), _zoomHandler->zoomItY(oh - 2 * pw) );
 
-        _painter->setPen( pen );
+        _painter->setPen( pen2 );
         _painter->setBrush( Qt::NoBrush );
-        _painter->drawEllipse( pw, pw, ow - 2 * pw, oh - 2 * pw );
+        _painter->drawEllipse( _zoomHandler->zoomItX(pw), _zoomHandler->zoomItY(pw), _zoomHandler->zoomItX(ow - 2 * pw), _zoomHandler->zoomItY(oh - 2 * pw) );
 
     }
 }

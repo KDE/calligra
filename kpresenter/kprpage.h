@@ -33,7 +33,7 @@ class KoDocumentEntry;
 class KoRect;
 class KoPageLayout;
 class KCommand;
-
+class KoPointArray;
 class KPrPage
 {
 public:
@@ -105,31 +105,31 @@ public:
     bool setLineEnd( LineEnd le );
     bool setLineBegin( LineEnd lb );
 
-    bool setPenBrush( QPen pen, QBrush brush, LineEnd lb, LineEnd le, FillType ft, QColor g1, QColor g2,
+    bool setPenBrush( const QPen &pen, const QBrush &brush, LineEnd lb, LineEnd le, FillType ft,const  QColor& g1, const QColor &g2,
 			   BCType gt, bool unbalanced, int xfactor, int yfactor, bool sticky );
 
     QPen getPen( const QPen & pen );
 
     // insert an object
-    virtual void insertObject( const QRect&, KoDocumentEntry& );
+    virtual void insertObject( const KoRect&, KoDocumentEntry& );
 
-    void insertRectangle( QRect r, QPen pen, QBrush brush, FillType ft, QColor g1, QColor g2,BCType gt, int rndX, int rndY, bool unbalanced, int xfactor, int yfactor );
+    void insertRectangle( const KoRect &r, const QPen & pen, const QBrush &brush, FillType ft, const QColor &g1, const QColor & g2,BCType gt, int rndX, int rndY, bool unbalanced, int xfactor, int yfactor );
 
-    void insertCircleOrEllipse( QRect r, QPen pen, QBrush brush, FillType ft, QColor g1, QColor g2, BCType gt, bool unbalanced, int xfactor, int yfactor );
+    void insertCircleOrEllipse( const KoRect &r, const QPen &pen, const QBrush &brush, FillType ft, const QColor &g1, const QColor &g2, BCType gt, bool unbalanced, int xfactor, int yfactor );
 
-    void insertPie( QRect r, QPen pen, QBrush brush, FillType ft, QColor g1, QColor g2,BCType gt, PieType pt, int _angle, int _len, LineEnd lb,LineEnd le,bool unbalanced, int xfactor, int yfactor );
+    void insertPie( const KoRect &r, const QPen &pen, const QBrush &brush, FillType ft, const QColor &g1, const QColor &g2,BCType gt, PieType pt, int _angle, int _len, LineEnd lb,LineEnd le,bool unbalanced, int xfactor, int yfactor );
 
-    void insertTextObject( const QRect& r, const QString& text = QString::null, KPresenterView *_view = 0L );
-    void insertLine( QRect r, QPen pen, LineEnd lb, LineEnd le, LineType lt );
+    void insertTextObject( const KoRect& r, const QString& text = QString::null, KPresenterView *_view = 0L );
+    void insertLine( const KoRect &r, const QPen &pen, LineEnd lb, LineEnd le, LineType lt );
 
-    void insertAutoform( QRect r, QPen pen, QBrush brush, LineEnd lb, LineEnd le, FillType ft,QColor g1, QColor g2, BCType gt, const QString &fileName, bool unbalanced,int xfactor, int yfactor );
+    void insertAutoform( const KoRect &r, const QPen &pen, const QBrush &brush, LineEnd lb, LineEnd le, FillType ft,const QColor &g1, const QColor &g2, BCType gt, const QString &fileName, bool unbalanced,int xfactor, int yfactor );
 
-    void insertFreehand( const QPointArray &points, QRect r, QPen pen,LineEnd lb, LineEnd le );
-    void insertPolyline( const QPointArray &points, QRect r, QPen pen,LineEnd lb, LineEnd le );
-    void insertQuadricBezierCurve( const QPointArray &points, const QPointArray &allPoints, QRect r, QPen pen,LineEnd lb, LineEnd le );
-    void insertCubicBezierCurve( const QPointArray &points, const QPointArray &allPoints, QRect r, QPen pen,LineEnd lb, LineEnd le );
+    void insertFreehand( const KoPointArray &points, const KoRect &r, const QPen &pen,LineEnd lb, LineEnd le );
+    void insertPolyline( const KoPointArray &points, const KoRect &r, const QPen &pen,LineEnd lb, LineEnd le );
+    void insertQuadricBezierCurve( const KoPointArray &points, const KoPointArray &allPoints, const KoRect &r, const QPen &pen,LineEnd lb, LineEnd le );
+    void insertCubicBezierCurve( const KoPointArray &points, const KoPointArray &allPoints, const KoRect &r, const QPen &pen,LineEnd lb, LineEnd le );
 
-    void insertPolygon( const QPointArray &points, QRect r, QPen pen, QBrush brush, FillType ft,QColor g1, QColor g2, BCType gt, bool unbalanced, int xfactor, int yfactor, bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue );
+    void insertPolygon( const KoPointArray &points, const KoRect &r, const QPen &pen, const QBrush &brush, FillType ft,const QColor &g1, const QColor &g2, BCType gt, bool unbalanced, int xfactor, int yfactor, bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue );
 
 
     void alignObjsLeft();
@@ -143,8 +143,8 @@ public:
     bool setPieSettings( PieType pieType, int angle, int len );
     bool setRectSettings( int _rx, int _ry );
     bool setPolygonSettings( bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue );
-    bool setPenColor( QColor c, bool fill );
-    bool setBrushColor( QColor c, bool fill );
+    bool setPenColor( const QColor &c, bool fill );
+    bool setBrushColor( const QColor &c, bool fill );
 
     void slotRepaintVariable();
     void recalcPageNum();
@@ -160,10 +160,10 @@ public:
 
     void makeUsedPixmapList();
 
-    void setBackColor( QColor backColor1, QColor backColor2, BCType bcType,
+    void setBackColor( const QColor &backColor1, const QColor &backColor2, BCType bcType,
 			    bool unbalanced, int xfactor, int yfactor );
     void setBackPixmap( const KPImageKey & key );
-    bool getBackUnbalanced(  );
+    bool getBackUnbalanced(  )const;
     void setBackClipart(  const KPClipartKey & key );
     void setBackView( BackView backView );
     void setBackType( BackType backType );
@@ -172,19 +172,19 @@ public:
     void setPageTimer(  int pageTimer );
     void setPageSoundEffect(  bool soundEffect );
     void setPageSoundFileName(  const QString &fileName );
-    BackType getBackType(  );
-    BackView getBackView( );
-    KoImageKey getBackPixKey( );
-    KPClipartKey getBackClipKey(  );
-    QColor getBackColor1( );
-    QColor getBackColor2();
-    int getBackXFactor();
-    int getBackYFactor(  );
-    BCType getBackColorType( );
-    PageEffect getPageEffect( );
-    int getPageTimer(  );
-    bool getPageSoundEffect( );
-    QString getPageSoundFileName();
+    BackType getBackType(  ) const ;
+    BackView getBackView( )const ;
+    KoImageKey getBackPixKey( )const ;
+    KPClipartKey getBackClipKey(  )const ;
+    QColor getBackColor1( )const ;
+    QColor getBackColor2()const ;
+    int getBackXFactor()const ;
+    int getBackYFactor( )const;
+    BCType getBackColorType( )const;
+    PageEffect getPageEffect( )const;
+    int getPageTimer(  )const;
+    bool getPageSoundEffect( )const;
+    QString getPageSoundFileName()const;
 
     QValueList<int> reorderPage();
 

@@ -29,9 +29,9 @@
 
 #include <koRuler.h>
 #include <koQueryTrader.h>
-
+#include <koPointArray.h>
 #include <global.h>
-
+#include <koRect.h>
 #define RAD_FACTOR 180.0 / M_PI
 
 class KoTextFormatInterface;
@@ -62,7 +62,6 @@ class KoTextObject;
 class KoParagCounter;
 class KPrPage;
 class KPrinter;
-
 class KPTextView;
 
 /**
@@ -240,7 +239,7 @@ protected:
     virtual void mouseDoubleClickEvent( QMouseEvent *e );
     virtual void wheelEvent( QWheelEvent *e );
     virtual void resizeEvent( QResizeEvent *e );
-    int getObjectAt( int x, int y );
+    int getObjectAt( const KoPoint&pos );
     virtual void focusInEvent( QFocusEvent* ) {}
     virtual void focusOutEvent( QFocusEvent* ) {}
     virtual void enterEvent( QEvent *e );
@@ -270,7 +269,7 @@ protected:
     unsigned int pageNums();
     float objSpeedFakt();
     float pageSpeedFakt();
-    bool calcRatio( int &dx, int &dy, KPObject *kpobject, double ratio ) const;
+    bool calcRatio( double &dx, double &dy, KPObject *kpobject, double ratio ) const;
 
     void _repaint( bool erase=true );
     void _repaint( QRect r );
@@ -282,19 +281,19 @@ protected:
     void drawObject( KPObject*, QPixmap*, int, int, int, int, int, int );
 
     void insertTextObject( const QRect& );
-    void insertLineH( QRect, bool );
-    void insertLineV( QRect, bool );
-    void insertLineD1( QRect, bool );
-    void insertLineD2( QRect, bool );
-    void insertRect( QRect );
-    void insertEllipse( QRect );
-    void insertPie( QRect );
-    void insertObject( QRect );
-    void insertAutoform( QRect, bool );
-    void insertFreehand( const QPointArray &_pointArray );
-    void insertPolyline( const QPointArray &_pointArray );
-    void insertCubicBezierCurve( const QPointArray &_pointArray );
-    void insertPolygon( const QPointArray &_pointArray );
+    void insertLineH( const QRect&, bool );
+    void insertLineV( const QRect&, bool );
+    void insertLineD1( const QRect&, bool );
+    void insertLineD2( const QRect&, bool );
+    void insertRect( const QRect& );
+    void insertEllipse( const QRect& );
+    void insertPie( const QRect& );
+    void insertObject( const QRect& );
+    void insertAutoform( const QRect&, bool );
+    void insertFreehand( const KoPointArray &_pointArray );
+    void insertPolyline( const KoPointArray &_pointArray );
+    void insertCubicBezierCurve( const KoPointArray &_pointArray );
+    void insertPolygon( const KoPointArray &_pointArray );
 
     void selectNext();
     void selectPrev();
@@ -332,7 +331,7 @@ private:
 
     void playSound( const QString &soundFileName );
 
-    QRect getDrawRect( const QPointArray &_points );
+    KoRect getDrawRect( const KoPointArray &_points );
 
     void drawPolygon( const QPoint &startPoint, const QPoint &endPoint );
 
@@ -384,7 +383,7 @@ private:
 
     KPresenterSoundPlayer *soundPlayer;
 
-    QPointArray m_pointArray, m_oldCubicBezierPointArray;
+    KoPointArray m_pointArray, m_oldCubicBezierPointArray;
     QPoint m_dragStartPoint, m_dragEndPoint, m_dragSymmetricEndPoint;
     QPoint m_CubicBezierSecondPoint, m_CubicBezierThirdPoint;
     unsigned int m_indexPointArray;

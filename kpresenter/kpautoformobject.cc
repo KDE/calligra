@@ -30,7 +30,7 @@
 #include <qwmatrix.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
-
+#include <kozoomhandler.h>
 #include <math.h>
 using namespace std;
 
@@ -48,8 +48,8 @@ KPAutoformObject::KPAutoformObject()
 }
 
 /*================== overloaded constructor ======================*/
-KPAutoformObject::KPAutoformObject( QPen _pen, QBrush _brush, QString _filename, LineEnd _lineBegin, LineEnd _lineEnd,
-                                    FillType _fillType, QColor _gColor1, QColor _gColor2, BCType _gType,
+KPAutoformObject::KPAutoformObject( const QPen & _pen, const QBrush &_brush, const QString & _filename, LineEnd _lineBegin, LineEnd _lineEnd,
+                                    FillType _fillType, const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                                     bool _unbalanced, int _xfactor, int _yfactor)
     : KP2DObject( _pen, _brush, _fillType, _gColor1, _gColor2, _gType, _unbalanced, _xfactor, _yfactor ),
       filename( _filename ), atfInterp()
@@ -63,7 +63,7 @@ KPAutoformObject::KPAutoformObject( QPen _pen, QBrush _brush, QString _filename,
     {
         gradient = new KPGradient( gColor1, gColor2, gType, QSize( 1, 1 ), unbalanced, xfactor, yfactor );
         redrawPix = true;
-        pix.resize( getSize() );
+        pix.resize( getSize().toQSize() );
     }
     else
         gradient = 0;
@@ -76,35 +76,35 @@ KPAutoformObject &KPAutoformObject::operator=( const KPAutoformObject & )
 }
 
 /*================================================================*/
-void KPAutoformObject::setSize( int _width, int _height )
+void KPAutoformObject::setSize( double _width, double _height )
 {
     KPObject::setSize( _width, _height );
     if ( move ) return;
 
     if ( fillType == FT_GRADIENT && gradient )
     {
-        gradient->setSize( getSize() );
+        gradient->setSize( getSize().toQSize() );
         redrawPix = true;
-        pix.resize( getSize() );
+        pix.resize( getSize().toQSize() );
     }
 }
 
 /*================================================================*/
-void KPAutoformObject::resizeBy( int _dx, int _dy )
+void KPAutoformObject::resizeBy( double _dx, double _dy )
 {
     KPObject::resizeBy( _dx, _dy );
     if ( move ) return;
 
     if ( fillType == FT_GRADIENT && gradient )
     {
-        gradient->setSize( getSize() );
+        gradient->setSize( getSize().toQSize() );
         redrawPix = true;
-        pix.resize( getSize() );
+        pix.resize( getSize().toQSize() );
     }
 }
 
 /*====================== set filename ============================*/
-void KPAutoformObject::setFileName( QString _filename )
+void KPAutoformObject::setFileName( const QString & _filename )
 {
     filename = _filename;
     atfInterp.load( filename );
@@ -122,9 +122,9 @@ void KPAutoformObject::setFillType( FillType _fillType )
     }
     if ( fillType == FT_GRADIENT && !gradient )
     {
-        gradient = new KPGradient( gColor1, gColor2, gType, getSize(), unbalanced, xfactor, yfactor );
+        gradient = new KPGradient( gColor1, gColor2, gType, getSize().toQSize(), unbalanced, xfactor, yfactor );
         redrawPix = true;
-        pix.resize( getSize() );
+        pix.resize( getSize().toQSize() );
     }
 }
 
@@ -201,7 +201,7 @@ int KPAutoformObject::load(const QDomElement &element)
 }
 
 /*===================== get angle ================================*/
-float KPAutoformObject::getAngle( QPoint p1, QPoint p2 )
+float KPAutoformObject::getAngle( const QPoint &p1, const QPoint &p2 )
 {
     float _angle = 0.0;
 
@@ -240,15 +240,17 @@ float KPAutoformObject::getAngle( QPoint p1, QPoint p2 )
 }
 
 /*======================== paint =================================*/
-void KPAutoformObject::paint( QPainter* _painter )
+void KPAutoformObject::paint( QPainter* _painter, KoZoomHandler *_zoomHandler )
 {
     unsigned int pw = 0, pwOrig = 0, px, py;
+    QPen pen2(pen);
+    pen2.setWidth(_zoomHandler->zoomItX( pen2.width()));
 
-    _painter->setPen( pen );
-    pwOrig = pen.width() + 3;
+    _painter->setPen( pen2 );
+    pwOrig = pen2.width() + 3;
     _painter->setBrush( brush );
 
-    QPointArray pntArray = atfInterp.getPointArray( ext.width(), ext.height() );
+    QPointArray pntArray = atfInterp.getPointArray( _zoomHandler->zoomItX( ext.width()),_zoomHandler->zoomItY( ext.height()) );
     QPtrList<ATFInterpreter::AttribList> atrLs = atfInterp.getAttribList();
     QPointArray pntArray2( pntArray.size() );
     for ( unsigned int i = 0; i < pntArray.size(); i++ )
@@ -325,14 +327,14 @@ void KPAutoformObject::paint( QPainter* _painter )
         }
         else
         {
-            QSize diff1( 0, 0 ), diff2( 0, 0 );
-            int _w = pen.width();
+            KoSize diff1( 0, 0 ), diff2( 0, 0 );
+            double _w = pen.width();
 
             if ( lineBegin != L_NORMAL )
-                diff1 = getBoundingSize( lineBegin, _w );
+                diff1 = getBoundingSize( lineBegin, _w,_zoomHandler );
 
             if ( lineEnd != L_NORMAL )
-                diff2 = getBoundingSize( lineEnd, _w );
+                diff2 = getBoundingSize( lineEnd, _w,_zoomHandler );
 
             if ( pntArray.size() > 1 )
             {
@@ -368,7 +370,7 @@ void KPAutoformObject::paint( QPainter* _painter )
                         break;
                     }
 
-                    drawFigure( lineBegin, _painter, pnt3, pen.color(), _w, _angle );
+                    drawFigure( lineBegin, _painter, pnt3, pen.color(), _w, _angle, _zoomHandler );
                 }
 
                 if ( lineEnd != L_NORMAL )
@@ -404,7 +406,7 @@ void KPAutoformObject::paint( QPainter* _painter )
                         break;
                     }
 
-                    drawFigure( lineEnd, _painter, pnt3, pen.color(), _w, _angle );
+                    drawFigure( lineEnd, _painter, pnt3, pen.color(), _w, _angle,_zoomHandler );
                 }
             }
 

@@ -108,9 +108,13 @@ public:
     virtual void setupPrinter( KPrinter &printer );
     virtual void print( KPrinter &printer );
 
-    KoZoomHandler* zoomHandler() const { return m_zoomHandler; }
-
     void showFormat( const KoTextFormat &format );
+
+    void showZoom( int zoom ); // show a zoom value in the combo
+    void setZoom( int zoom, bool updateViews ); // change the zoom value
+    void changeZoomMenu( int zoom=-1);
+
+    KoZoomHandler *zoomHandler();
 
 signals:
     void currentPageChanged( int );
@@ -133,6 +137,7 @@ public slots:
     // view menu
     void viewShowSideBar();
     void viewShowNoteBar();
+    void viewZoom( const QString &s );
 
     // insert menu
     void insertPage();
@@ -540,9 +545,6 @@ private:
     // document
     KPresenterDoc *m_pKPresenterDoc;
 
-    // zoom handler
-    KoZoomHandler* m_zoomHandler;
-
     // flags
     bool continuePres, exitPres;
     bool m_screenSaverWasEnabled;
@@ -756,6 +758,9 @@ private:
     KAction *actionDecreaseFontSize;
     KAction *actionChangeCase;
     KAction *actionRefreshAllVariable;
+
+    KSelectAction *actionViewZoom;
+
     QTimer automaticScreenPresTimer;
     QTime automaticScreenPresTime;
     int automaticScreenPresWaitTime;

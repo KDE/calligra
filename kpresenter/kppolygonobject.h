@@ -21,7 +21,7 @@
 #define kppolygonobject_h
 
 #include <qpointarray.h>
-
+#include "koPointArray.h"
 #include <kpobject.h>
 
 class KPGradient;
@@ -35,8 +35,8 @@ class KPPolygonObject : public KP2DObject
 {
 public:
     KPPolygonObject();
-    KPPolygonObject( const QPointArray &_points, QSize _size, QPen _pen, QBrush _brush,
-                     FillType _fillType, QColor _gColor1, QColor _gColor2, BCType _gType,
+    KPPolygonObject( const KoPointArray &_points, const QSize &_size, const QPen &_pen, const QBrush &_brush,
+                     FillType _fillType, const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                      bool _unbalanced, int _xfactor, int _yfactor,
                      bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue );
 
@@ -44,13 +44,13 @@ public:
 
     KPPolygonObject &operator=( const KPPolygonObject & );
 
-    virtual void setSize( int _width, int _height );
-    virtual void resizeBy( QSize _size );
-    virtual void resizeBy( int _dx, int _dy );
+    virtual void setSize( double _width, double _height );
+    virtual void resizeBy( const KoSize &_size );
+    virtual void resizeBy( double _dx, double _dy );
 
     virtual void setFillType( FillType _fillType );
-    virtual void setGColor1( QColor _gColor1 ) { KP2DObject::setGColor1( _gColor1 ); redrawPix = true; }
-    virtual void setGColor2( QColor _gColor2 ) { KP2DObject::setGColor2( _gColor2 ); redrawPix = true; }
+    virtual void setGColor1( const QColor &_gColor1 ) { KP2DObject::setGColor1( _gColor1 ); redrawPix = true; }
+    virtual void setGColor2( const QColor &_gColor2 ) { KP2DObject::setGColor2( _gColor2 ); redrawPix = true; }
     virtual void setGType( BCType _gType ) { KP2DObject::setGType( _gType ); redrawPix = true; }
 
     virtual FillType getFillType() const { return fillType; }
@@ -68,13 +68,13 @@ public:
     virtual int load( const QDomElement &element );
 
 protected:
-    void paint( QPainter *_painter );
+    void paint( QPainter *_painter,KoZoomHandler*_zoomHandler );
 
     void updatePoints( double _fx, double _fy );
 
     void drawPolygon();
 
-    QPointArray origPoints, points;
+    KoPointArray origPoints, points;
     QSize origSize;
     bool checkConcavePolygon;
     int cornersValue;

@@ -52,8 +52,8 @@ public:
     KPTextObject( KPresenterDoc *doc );
     virtual ~KPTextObject();
 
-    virtual void setSize( int _width, int _height );
-    virtual void resizeBy( int _dx, int _dy );
+    virtual void setSize( double _width, double _height );
+    virtual void resizeBy( double _dx, double _dy );
 
     virtual void setDrawEditRect( bool b )
     { drawEditRect = b; }
@@ -76,12 +76,9 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, int offset );
     virtual int load(const QDomElement &element);
 
-    virtual void draw( QPainter *_painter );
-    void draw( QPainter *_painter, bool onlyChanged, QTextCursor* cursor, bool resetChanged );
+    virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler );
+    void draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool onlyChanged, QTextCursor* cursor, bool resetChanged );
     void drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, KPrCanvas* /*canvas*/ );
-
-    virtual void zoom( float _fakt );
-    virtual void zoomOrig();
 
     virtual void extendObject2Contents( KPresenterView *view = 0 );
 

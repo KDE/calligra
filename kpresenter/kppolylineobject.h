@@ -21,7 +21,7 @@
 #define kppolylineobject_h
 
 #include <qpointarray.h>
-
+#include "koPointArray.h"
 #include <kpobject.h>
 
 #define RAD_FACTOR 180.0 / M_PI
@@ -36,12 +36,12 @@ class KPPolylineObject : public KPObject
 {
 public:
     KPPolylineObject();
-    KPPolylineObject( const QPointArray &_points, QSize _size, QPen _pen, LineEnd _lineBegin, LineEnd _lineEnd );
+    KPPolylineObject( const KoPointArray &_points, const QSize &_size, const QPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
     virtual ~KPPolylineObject() {}
 
     KPPolylineObject &operator=( const KPPolylineObject & );
 
-    virtual void setPen( QPen _pen ) { pen = _pen; }
+    virtual void setPen( const QPen &_pen ) { pen = _pen; }
     virtual void setLineBegin( LineEnd _lineBegin ) { lineBegin = _lineBegin; }
     virtual void setLineEnd( LineEnd _lineEnd ) { lineEnd = _lineEnd; }
 
@@ -55,19 +55,19 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, int offset );
     virtual int load( const QDomElement &element );
 
-    virtual void draw( QPainter *_painter );
+    virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler );
 
-    virtual void setSize( int _width, int _height );
-    virtual void resizeBy( QSize _size );
-    virtual void resizeBy( int _dx, int _dy );
+    virtual void setSize( double _width, double _height );
+    virtual void resizeBy( const KoSize &_size );
+    virtual void resizeBy( double _dx, double _dy );
 
 protected:
-    float getAngle( QPoint p1, QPoint p2 );
-    void paint( QPainter *_painter );
+    float getAngle( const QPoint &p1, const QPoint &p2 );
+    void paint( QPainter *_painter,KoZoomHandler*_zoomHandler );
 
     void updatePoints( double _fx, double _fy );
 
-    QPointArray origPoints, points;
+    KoPointArray origPoints, points;
     QSize origSize;
     QPen pen;
     LineEnd lineBegin, lineEnd;

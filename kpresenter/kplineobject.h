@@ -34,13 +34,13 @@ class KPLineObject : public KPObject
 {
 public:
     KPLineObject();
-    KPLineObject( QPen _pen, LineEnd _lineBegin, LineEnd _lineEnd, LineType _lineType );
+    KPLineObject( const QPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd, LineType _lineType );
     virtual ~KPLineObject()
     {}
 
     KPLineObject &operator=( const KPLineObject & );
 
-    virtual void setPen( QPen _pen )
+    virtual void setPen( const QPen &_pen )
     { pen = _pen; }
     virtual void setLineBegin( LineEnd _lineBegin )
     { lineBegin = _lineBegin; }
@@ -66,11 +66,11 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, int offset );
     virtual int load(const QDomElement &element);
 
-    virtual void draw( QPainter *_painter );
+    virtual void draw( QPainter *_painter,KoZoomHandler *_zoomhandler );
 
 protected:
-    float getAngle( QPoint p1, QPoint p2 );
-    void paint( QPainter *_painter );
+    float getAngle( const QPoint &p1, const QPoint &p2 );
+    void paint( QPainter *_painter,KoZoomHandler*_zoomHandler );
 
     QPen pen;
     LineEnd lineBegin, lineEnd;

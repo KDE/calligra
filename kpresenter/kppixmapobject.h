@@ -24,7 +24,7 @@
 
 #include <kpobject.h>
 #include <kpimage.h>
-
+#include <koSize.h>
 class KPGradient;
 class QPixmap;
 
@@ -43,10 +43,10 @@ public:
 
     KPPixmapObject &operator=( const KPPixmapObject & );
 
-    virtual void setSize( int _width, int _height );
-    virtual void setSize( QSize _size )
+    virtual void setSize( double _width, double _height );
+    virtual void setSize( const KoSize &_size )
     { setSize( _size.width(), _size.height() ); }
-    virtual void resizeBy( int _dx, int _dy );
+    virtual void resizeBy( double _dx, double _dy );
 
     // Only used as a default value in the filedialog, in changePicture
     // Don't use for anything else
@@ -56,7 +56,7 @@ public:
     KPImageKey getKey() const
     { return image.key(); }
 
-    void setPixmap( const KPImageKey & key, const QSize &_size = orig_size );
+    void setPixmap( const KPImageKey & key, const KoSize &_size = orig_size );
 
     void reload()
     { setPixmap( image.key(), ext ); }
@@ -69,7 +69,7 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, int offset );
     virtual int load(const QDomElement &element);
 
-    virtual void draw( QPainter *_painter );
+    virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler );
 
 protected:
     KPPixmapObject() {}

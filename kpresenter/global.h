@@ -23,7 +23,7 @@
 #include <qsize.h>
 #include <kiconloader.h>
 #include <kpresenter_factory.h>
-
+#include <koSize.h>
 #define KPBarIcon( x ) BarIcon( x, KPresenterFactory::global() )
 
 #define MAX_UNDO_REDO 100
@@ -194,7 +194,7 @@ enum ToolEditMode {
 // offsets of the effects in the Effect2 enum accoording to a objType
 const int TxtObjOffset = 0;
 
-const QSize orig_size( -1, -1 );
+const KoSize orig_size( -1, -1 );
 
 #undef SHOW_INFO
 

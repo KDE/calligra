@@ -114,6 +114,7 @@
 #include "kprtextdocument.h"
 
 #include <koChangeCaseDia.h>
+#include <qregexp.h>
 
 #include <koSearchDia.h>
 #include "searchdia.h"
@@ -245,8 +246,6 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     m_findReplace = 0L;
 
     m_pKPresenterDoc = _doc;
-    // Currently unused (formatting needs a zoom handler, so we use the one in KPresenterDocument)
-    m_zoomHandler = new KoZoomHandler();
 
     createGUI();
 
@@ -348,7 +347,6 @@ KPresenterView::~KPresenterView()
     delete rb_lend;
     delete dcop;
     delete m_canvas; // it's a child widget, but it emits a signal on destruction
-    delete m_zoomHandler;
     delete m_specialCharDlg;
     delete m_sbPageLabel;
     delete notebar;
@@ -2669,6 +2667,14 @@ void KPresenterView::setupActions()
                                   this, SLOT( changeCaseOfText() ),
                                   actionCollection(), "change_case" );
 
+    actionViewZoom = new KSelectAction( i18n( "Zoom" ), "viewmag", 0,
+                                        actionCollection(), "view_zoom" );
+    connect( actionViewZoom, SIGNAL( activated( const QString & ) ),
+             this, SLOT( viewZoom( const QString & ) ) );
+    actionViewZoom->setEditable(true);
+    actionViewZoom->setComboWidth( 50 );
+    changeZoomMenu( );
+
 }
 
 void KPresenterView::textSubScript()
@@ -3341,6 +3347,7 @@ void KPresenterView::updateReadWrite( bool readwrite )
         for (; aIt != aEnd; ++aIt )
             (*aIt)->setEnabled( readwrite );
         refreshPageButton();
+        actionViewZoom->setEnabled( true );
     }
 }
 
@@ -4594,7 +4601,7 @@ void KPresenterView::slotUpdateRuler()
         KPTextObject *txtobj= m_canvas->applicableTextObjects().first();
         if ( txtobj )
         {
-            QRect r= txtobj->getBoundingRect( );
+            QRect r= zoomHandler()->zoomRect(txtobj->getBoundingRect( ));
             getHRuler()->setFrameStartEnd( r.left() + m_canvas->diffx()/*- pc.x()*/, r.right()+m_canvas->diffx() /*- pc.x()*/ );
             getVRuler()->setFrameStartEnd( r.top()+ m_canvas->diffy()/*- pc.y()*/, r.bottom()+m_canvas->diffy()/*- pc.y()*/ );
             if( getHRuler())
@@ -4707,6 +4714,131 @@ void KPresenterView::refreshAllVariable()
     m_pKPresenterDoc->recalcVariables( VT_ALL );
 }
 
+void KPresenterView::changeZoomMenu( int zoom )
+{
+    QStringList lst;
+    if(zoom>0)
+    {
+#if 0
+	if( lst.contains( i18n( "Zoom to width" ) ) == 0 )
+	    lst << i18n( "Zoom to width" );
+        if( lst.contains( i18n( "Zoom to Whole Page" ) )==0)
+            lst << i18n( "Zoom to Whole Page" );
+#endif
+        QValueList<int> list;
+        QString z;
+        int val;
+        bool ok;
+        QStringList itemsList = actionViewZoom->items();
+        for (QStringList::Iterator it = itemsList.begin() ; it != itemsList.end() ; ++it)
+        {
+            z = (*it).replace( QRegExp( "%" ), "" );
+            z = z.simplifyWhiteSpace();
+            val=z.toInt(&ok);
+            //zoom : limit inferior=10
+            if(ok && val>9  &&list.contains(val)==0)
+                list.append( val );
+        }
+        //necessary at the beginning when we read config
+        //this value is not in combo list
+        if(list.contains(zoom)==0)
+            list.append( zoom );
 
+        qHeapSort( list );
+
+        for (QValueList<int>::Iterator it = list.begin() ; it != list.end() ; ++it)
+            lst.append( (QString::number(*it)+'%') );
+    }
+    else
+    {
+#if 0
+          lst << i18n( "Zoom to width" );
+          lst << i18n( "Zoom to Whole Page" );
+#endif
+          lst << "33%";
+          lst << "50%";
+          lst << "75%";
+          lst << "100%";
+          lst << "125%";
+          lst << "150%";
+          lst << "200%";
+          lst << "250%";
+          lst << "350%";
+          lst << "400%";
+          lst << "450%";
+          lst << "500%";
+    }
+    actionViewZoom->setItems( lst );
+}
+
+void KPresenterView::showZoom( int zoom )
+{
+    QStringList list = actionViewZoom->items();
+    QString zoomStr = QString::number( zoom ) + '%';
+    actionViewZoom->setCurrentItem( list.findIndex(zoomStr)  );
+}
+
+void KPresenterView::viewZoom( const QString &s )
+{
+    QString z( s );
+    bool ok=false;
+    int zoom = 0;
+#if 0
+    if ( z == i18n("Zoom to width") )
+    {
+        zoom = qRound( static_cast<double>(m_canvas->visibleWidth() * 100 ) / (m_doc->resolutionX() * m_pKPresenterDoc->ptPaperWidth() ) );
+        ok = true;
+    }
+    else if ( z == i18n("Zoom to Whole Page") )
+    {
+        double height = m_doc->resolutionY() * m_doc->ptPaperHeight();
+        double width = m_doc->resolutionX() * m_doc->ptPaperWidth();
+        zoom = QMIN( qRound( static_cast<double>(canvas->visibleHeight() * 100 ) / height ),
+                     qRound( static_cast<double>(canvas->visibleWidth() * 100 ) / width ) );
+        ok = true;
+    }
+    else
+#endif
+    {
+    	z = z.replace( QRegExp( "%" ), "" );
+    	z = z.simplifyWhiteSpace();
+    	zoom = z.toInt(&ok);
+    }
+    if( !ok || zoom<10 ) //zoom should be valid and >10
+        zoom = zoomHandler()->zoom();
+    //refresh menu
+    changeZoomMenu( zoom );
+    //refresh menu item
+    showZoom(zoom);
+    //apply zoom if zoom!=m_doc->zoom()
+    if( zoom != zoomHandler()->zoom() )
+    {
+        setZoom( zoom, true );
+#if 0
+        KWTextFrameSetEdit * edit = currentTextEdit();
+        if ( edit )
+            edit->ensureCursorVisible();
+#endif
+    }
+
+    m_canvas->setFocus();
+
+}
+
+
+void KPresenterView::setZoom( int zoom, bool updateViews )
+{
+    m_pKPresenterDoc->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), updateViews, false );
+    m_pKPresenterDoc->updateZoomRuler();
+
+    // Also set the zoom in KoView (for embedded views)
+    //kdDebug() << "KWView::showZoom setting koview zoom to " << m_doc->zoomedResolutionY() << endl;
+    KoView::setZoom( zoomHandler()->zoomedResolutionY() /* KoView only supports one zoom */ );
+}
+
+KoZoomHandler *KPresenterView::zoomHandler()
+{
+    return m_pKPresenterDoc->zoomHandler();
+}
 
 #include <kpresenter_view.moc>

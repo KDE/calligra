@@ -38,25 +38,25 @@ class KPAutoformObject : public KP2DObject
 {
 public:
     KPAutoformObject();
-    KPAutoformObject( QPen _pen, QBrush _brush, QString _filename, LineEnd _lineBegin, LineEnd _lineEnd,
-                      FillType _fillType, QColor _gColor1, QColor _gColor2, BCType _gType,
+    KPAutoformObject( const QPen & _pen, const QBrush &_brush, const QString &_filename, LineEnd _lineBegin, LineEnd _lineEnd,
+                      FillType _fillType, const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                       bool _unbalanced, int _xfactor, int _yfactor);
     virtual ~KPAutoformObject() {}
 
     KPAutoformObject &operator=( const KPAutoformObject & );
 
-    virtual void setSize( int _width, int _height );
-    virtual void resizeBy( int _dx, int _dy );
+    virtual void setSize( double _width, double _height );
+    virtual void resizeBy( double _dx, double _dy );
 
-    virtual void setFileName( QString _filename );
+    virtual void setFileName( const QString &_filename );
     virtual void setLineBegin( LineEnd _lineBegin )
     { lineBegin = _lineBegin; }
     virtual void setLineEnd( LineEnd _lineEnd )
     { lineEnd = _lineEnd; }
     virtual void setFillType( FillType _fillType );
-    virtual void setGColor1( QColor _gColor1 )
+    virtual void setGColor1( const QColor &_gColor1 )
     { KP2DObject::setGColor1(_gColor1); redrawPix = true; }
-    virtual void setGColor2( QColor _gColor2 )
+    virtual void setGColor2( const QColor &_gColor2 )
     { KP2DObject::setGColor2(_gColor2); redrawPix = true; }
     virtual void setGType( BCType _gType )
     { KP2DObject::setGType(_gType); redrawPix = true; }
@@ -77,8 +77,8 @@ public:
     virtual int load(const QDomElement &element);
 
 protected:
-    float getAngle( QPoint p1, QPoint p2 );
-    virtual void paint( QPainter *_painter );
+    float getAngle( const QPoint &p1, const QPoint &p2 );
+    virtual void paint( QPainter *_painter, KoZoomHandler *_zoomHandler );
 
     QString filename;
     LineEnd lineBegin, lineEnd;

@@ -64,7 +64,7 @@ KPGroupObject &KPGroupObject::operator=( const KPGroupObject & )
 }
 
 /*================================================================*/
-void KPGroupObject::setSize( int _width, int _height )
+void KPGroupObject::setSize( double _width, double _height )
 {
     KPObject::setSize( _width, _height );
 
@@ -77,13 +77,13 @@ void KPGroupObject::setSize( int _width, int _height )
 }
 
 /*================================================================*/
-void KPGroupObject::setOrig( QPoint _point )
+void KPGroupObject::setOrig( KoPoint _point )
 {
     setOrig(_point.x(), _point.y());
 }
 
 /*================================================================*/
-void KPGroupObject::setOrig( int _x, int _y )
+void KPGroupObject::setOrig( double _x, double _y )
 {
     int dx = 0;
     int dy = 0;
@@ -99,26 +99,26 @@ void KPGroupObject::setOrig( int _x, int _y )
 }
 
 /*================================================================*/
-void KPGroupObject::moveBy( QPoint _point )
+void KPGroupObject::moveBy( KoPoint _point )
 {
     moveBy(_point.x(), _point.y());
 }
 
 /*================================================================*/
-void KPGroupObject::moveBy( int _dx, int _dy )
+void KPGroupObject::moveBy( double _dx, double _dy )
 {
     KPObject::moveBy( _dx, _dy );
     updateCoords( _dx, _dy );
 }
 
 /*================================================================*/
-void KPGroupObject::resizeBy( QSize _size )
+void KPGroupObject::resizeBy( KoSize _size )
 {
     resizeBy(_size.width(), _size.height());
 }
 
 /*================================================================*/
-void KPGroupObject::resizeBy( int _dx, int _dy )
+void KPGroupObject::resizeBy( double _dx, double _dy )
 {
     KPObject::resizeBy( _dx, _dy );
 
@@ -244,20 +244,20 @@ int KPGroupObject::load(const QDomElement &element, KPresenterDoc *doc)
 }
 
 /*================================================================*/
-void KPGroupObject::draw( QPainter *_painter )
+void KPGroupObject::draw( QPainter *_painter,KoZoomHandler *_zoomhandler )
 {
     if ( move ) {
-        KPObject::draw( _painter );
+        KPObject::draw( _painter,_zoomhandler );
         return;
     }
 
     KPObject *kpobject = 0;
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
         kpobject = objects.at( i );
-        kpobject->draw( _painter );
+        kpobject->draw( _painter,_zoomhandler );
     }
 
-    KPObject::draw( _painter );
+    KPObject::draw( _painter,_zoomhandler );
 }
 
 /*================================================================*/
@@ -265,7 +265,7 @@ void KPGroupObject::updateSizes( double fx, double fy )
 {
     if ( !updateObjs )
         return;
-
+#if 0 //FIXME
     KPObject *kpobject = 0;
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
         kpobject = objects.at( i );
@@ -289,6 +289,7 @@ void KPGroupObject::updateSizes( double fx, double fy )
 
         kpobject->setSize( _w, _h );
     }
+#endif
 }
 
 /*================================================================*/
@@ -338,7 +339,7 @@ void KPGroupObject::setShadowDirection( ShadowDirection _direction )
 }
 
 /*================================================================*/
-void KPGroupObject::setShadowColor( QColor _color )
+void KPGroupObject::setShadowColor( const QColor &_color )
 {
     KPObject::setShadowColor( _color );
 
@@ -445,29 +446,6 @@ void KPGroupObject::setDisappearTimer( int _disappearTimer )
         objects.at( i )->setDisappearTimer( _disappearTimer );
 }
 
-/*================================================================*/
-void KPGroupObject::zoom( float _fakt )
-{
-    KPObject::zoom( _fakt );
-
-    if ( !updateObjs )
-        return;
-
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->zoom( _fakt );
-}
-
-/*================================================================*/
-void KPGroupObject::zoomOrig()
-{
-    KPObject::zoomOrig();
-
-    if ( !updateObjs )
-        return;
-
-    for ( unsigned int i = 0; i < objects.count(); i++ )
-        objects.at( i )->zoomOrig();
-}
 
 /*================================================================*/
 void KPGroupObject::setOwnClipping( bool _ownClipping )
@@ -530,7 +508,7 @@ void KPGroupObject::setDisappearSoundEffect( bool b )
 }
 
 /*================================================================*/
-void KPGroupObject::setAppearSoundEffectFileName( QString _a_fileName )
+void KPGroupObject::setAppearSoundEffectFileName( const QString &_a_fileName )
 {
     KPObject::setAppearSoundEffectFileName( _a_fileName );
 
@@ -542,7 +520,7 @@ void KPGroupObject::setAppearSoundEffectFileName( QString _a_fileName )
 }
 
 /*================================================================*/
-void KPGroupObject::setDisappearSoundEffectFileName( QString _d_fileName )
+void KPGroupObject::setDisappearSoundEffectFileName( const QString &_d_fileName )
 {
     KPObject::setDisappearSoundEffectFileName( _d_fileName );
 
