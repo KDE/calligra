@@ -1506,7 +1506,8 @@ void KoParagLayout::save( QDomElement & parentElem )
     {
         element = doc.createElement( "COUNTER" );
         parentElem.appendChild( element );
-        counter->save( element );
+        if ( counter )
+            counter->save( element );
     }
 
     KoTabulatorList::Iterator it = m_tabList.begin();
