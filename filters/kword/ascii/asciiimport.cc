@@ -36,6 +36,8 @@
 #include <asciiimport.h>
 #include <asciiimport.moc>
 
+#include <algorithm>          // needed for max(a,b)
+
 ASCIIImport::ASCIIImport(KoFilter *parent, const char *name) :
                      KoFilter(parent, name) {
 }
