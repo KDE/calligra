@@ -72,7 +72,6 @@
 #include "kspread_changes.h"
 #include "kspread_sheetprint.h"
 #include "kspread_map.h"
-#include "kspread_dlg_scripts.h"
 #include "kspread_dlg_changes.h"
 #include "kspread_dlg_csv.h"
 #include "kspread_dlg_cons.h"
