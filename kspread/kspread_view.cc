@@ -461,6 +461,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 
 KSpreadView::~KSpreadView()
 {
+    deleteEditor( true );
     if ( !m_transformToolBox.isNull() )
 	delete (&*m_transformToolBox);
     /*if(m_sbCalcLabel)
