@@ -215,13 +215,16 @@ bool KIllustratorDocument::insertNewTemplate (int, int, bool clean) {
     QFileInfo fileInfo (templ);
     QString fileName (fileInfo.dirPath (true) + "/" + 
 		      fileInfo.baseName () + ".kil");
-    // load it 
+    // load it  
+    bool ok = loadNativeFormat (fileName);
     setModified (true);
-    return true;
+    return ok;
   } else if (ret == KoTemplateChooseDia::File) {
     // load it 
-    setModified (true);
-    return true;
+    KURL url;
+    url.setPath (templ);
+    bool ok = openURL (url);
+    return ok;
   } else if ( ret == KoTemplateChooseDia::Empty ){
     return true;
   } else

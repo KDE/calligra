@@ -56,6 +56,7 @@ bool EPSExport::exportToFile (GDocument* doc) {
   printer.setCreator ("KIllustrator");
   printer.setOutputFileName (outputFileName ());
   printer.setOutputToFile (true);
+  printer.setFullPage (true);
   switch (doc->pageLayout ().format) {
   case PG_DIN_A4:
     printer.setPageSize (QPrinter::A4);
