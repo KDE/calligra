@@ -116,6 +116,10 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
     else
         lDepth->hide();
 
+    cbRestart = new QCheckBox( i18n( "Restart numbering at this paragraph" ), gStyle );
+    grid->addWidget( cbRestart, 5, 1 );
+    connect( cbRestart, SIGNAL( toggled(bool) ), this, SLOT( restartChanged(bool) ) );
+
     connect( sSuffix, SIGNAL( textChanged (const QString &) ), this, SLOT( suffixChanged(const QString &) ) );
     connect( sPrefix, SIGNAL( textChanged (const QString &) ), this, SLOT( prefixChanged(const QString &) ) );
     connect( spnStart, SIGNAL( valueChanged (int) ), this, SLOT( startChanged(int) ) );
@@ -132,6 +136,7 @@ KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTyp
         spnDepth->setEnabled( false );
         lStart->setEnabled( false );
         lCustom->setEnabled( false );
+        cbRestart->setEnabled( false );
     }
 }
 
@@ -207,6 +212,7 @@ void KoCounterStyleWidget::displayStyle( KoParagCounter::Style style )
     unsigned int i;
     for (i=0; stylesList.count() > i && stylesList.at(i)->style() != style; i++);
     lstStyle->setCurrentItem(i);
+
     bCustom->setText( m_counter.customBulletCharacter() );
     if ( !m_counter.customBulletFont().isEmpty() )
         bCustom->setFont( QFont( m_counter.customBulletFont() ) );
@@ -216,6 +222,8 @@ void KoCounterStyleWidget::displayStyle( KoParagCounter::Style style )
 
     spnDepth->setValue( m_counter.depth() );
     spnStart->setValue( m_counter.startNumber() );
+
+    cbRestart->setChecked( m_counter.restartCounter() );
 }
 
 void KoCounterStyleWidget::display( const KoParagLayout & lay ) {
@@ -309,6 +317,7 @@ void KoCounterStyleWidget::numStyleChanged() {
     bool hasStart = !sr->isBullet() && !sr->style() == KoParagCounter::STYLE_NONE;
     lStart->setEnabled( hasStart );
     spnStart->setEnabled( hasStart );
+    cbRestart->setEnabled( hasStart );
     changeKWSpinboxType(sr->style() );
 }
 
@@ -1380,6 +1389,7 @@ KoParagCounterWidget::KoParagCounterWidget( bool disableAll, QWidget * parent, c
     connect( m_styleWidget, SIGNAL( sig_suffixChanged (const QString &) ), this, SLOT( suffixChanged(const QString &) ) );
     connect( m_styleWidget, SIGNAL( sig_prefixChanged (const QString &) ), this, SLOT( prefixChanged(const QString &) ) );
     connect( m_styleWidget, SIGNAL( sig_startChanged(int) ), this, SLOT( startChanged(int) ) );
+    connect( m_styleWidget, SIGNAL( sig_restartChanged(bool) ), this, SLOT( restartChanged(bool) ) );
     connect( m_styleWidget, SIGNAL( sig_depthChanged (int) ), this, SLOT( depthChanged(int) ) );
     connect( m_styleWidget, SIGNAL( changeCustomBullet( const QString & , QChar ) ), this, SLOT( slotChangeCustomBullet( const QString & , QChar ) ) );
 

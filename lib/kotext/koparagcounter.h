@@ -88,6 +88,13 @@ public:
     Style style() const;
     void setStyle( Style s );
 
+    /**
+     * Should this counter start at "startNumber" (instead of
+     * being the 'last counter of the same type + 1')
+     */
+    bool restartCounter() const;
+    void setRestartCounter( bool restart );
+
     /** Does this counter have a bullet style?
      */
     bool isBullet() const;
@@ -139,8 +146,13 @@ private:
      */
     KoTextParag *parent( const KoTextParag *paragraph );
 
-    Numbering m_numbering;
-    Style m_style;
+    char m_numbering; // Numbering
+    char m_style;     // Style
+    bool m_restartCounter;
+    // you can add 7 bools here if you use :1 on all (including m_restartCounter)
+    char padding; // unused, feel free to use
+    class Private;
+    Private *d; // define operator= and copy ctor when using this!
     unsigned int m_depth;
     int m_startNumber;
     QString m_prefix;

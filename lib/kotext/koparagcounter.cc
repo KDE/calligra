@@ -31,6 +31,7 @@ KoParagCounter::KoParagCounter()
     m_style = STYLE_NONE;
     m_depth = 0;
     m_startNumber = 1;
+    m_restartCounter = false;
     m_prefix = QString::null;
     m_suffix = '.';
     m_customBullet.character = QChar( '-' );
@@ -45,6 +46,7 @@ bool KoParagCounter::operator==( const KoParagCounter & c2 ) const
             m_style==c2.m_style &&
             m_depth==c2.m_depth &&
             m_startNumber==c2.m_startNumber &&
+            m_restartCounter==c2.m_restartCounter &&
             m_prefix==c2.m_prefix &&
             m_suffix==c2.m_suffix &&
             m_customBullet.character==c2.m_customBullet.character &&
@@ -102,7 +104,7 @@ void KoParagCounter::load( QDomElement & element )
     m_numbering = static_cast<Numbering>( element.attribute("numberingtype", "2").toInt() );
     m_style = static_cast<Style>( element.attribute("type").toInt() );
     // Old docs have this:
-    if ( m_numbering == NUM_LIST && m_style == STYLE_NONE )
+    if ( (Numbering)m_numbering == NUM_LIST && (Style)m_style == STYLE_NONE )
         m_numbering = NUM_NONE;
     m_depth = element.attribute("depth").toInt();
     m_customBullet.character = QChar( element.attribute("bullet").toInt() );
@@ -121,6 +123,8 @@ void KoParagCounter::load( QDomElement & element )
         m_startNumber = s.lower()[0].latin1() - 'a' + 1;
     m_customBullet.font = element.attribute("bulletfont");
     m_custom = element.attribute("customdef");
+    QString restart = element.attribute("restart");
+    m_restartCounter = (restart == "true") || (restart == "1");
     invalidate();
 }
 
@@ -129,6 +133,12 @@ int KoParagCounter::number( const KoTextParag *paragraph )
     // Return cached value if possible.
     if ( m_cache.number != -1 )
         return m_cache.number;
+
+    // Should we start a new list?
+    if ( m_restartCounter ) {
+        m_cache.number = m_startNumber;
+        return m_startNumber;
+    }
 
     // Go looking for another paragraph at the same level or higher level.
     KoTextParag *otherParagraph = paragraph->prev();
@@ -148,7 +158,7 @@ int KoParagCounter::number( const KoTextParag *paragraph )
         {
             otherCounter = otherParagraph->counter();
             if ( otherCounter &&                                        // ...numbered paragraphs.
-                ( otherCounter->m_numbering == NUM_CHAPTER ) &&         // ...same number type.
+                ( (Numbering)otherCounter->m_numbering == NUM_CHAPTER ) &&         // ...same number type.
                 ( otherCounter->m_depth <= m_depth ) )        // ...same or higher level.
             {
                 if ( ( otherCounter->m_depth == m_depth ) &&
@@ -175,7 +185,7 @@ int KoParagCounter::number( const KoTextParag *paragraph )
             otherCounter = otherParagraph->counter();
             if ( otherCounter )                                         // ...numbered paragraphs.
             {
-                if ( ( otherCounter->m_numbering == NUM_LIST ) &&       // ...same number type.
+                if ( ( (Numbering)otherCounter->m_numbering == NUM_LIST ) &&       // ...same number type.
                     ( otherCounter->m_depth <= m_depth ) )    // ...same or higher level.
                 {
                     if ( ( otherCounter->m_depth == m_depth ) &&
@@ -192,7 +202,7 @@ int KoParagCounter::number( const KoTextParag *paragraph )
                     break;
                 }
                 else
-                if ( otherCounter->m_numbering == NUM_CHAPTER )        // ...heading number type.
+                if ( (Numbering)otherCounter->m_numbering == NUM_CHAPTER )        // ...heading number type.
                 {
                     m_cache.number = m_startNumber;
                     break;
@@ -213,7 +223,7 @@ int KoParagCounter::number( const KoTextParag *paragraph )
 
 KoParagCounter::Numbering KoParagCounter::numbering() const
 {
-    return m_numbering;
+    return static_cast<Numbering>(m_numbering);
 }
 
 // Go looking for another paragraph at a higher level.
@@ -226,7 +236,7 @@ KoTextParag *KoParagCounter::parent( const KoTextParag *paragraph )
     KoTextParag *otherParagraph = paragraph->prev();
     KoParagCounter *otherCounter;
 
-    switch ( m_numbering )
+    switch ( (Numbering)m_numbering )
     {
     case NUM_NONE:
         // This should not occur!
@@ -239,7 +249,7 @@ KoTextParag *KoParagCounter::parent( const KoTextParag *paragraph )
         {
             otherCounter = otherParagraph->counter();
             if ( otherCounter &&                                        // ...numbered paragraphs.
-                ( otherCounter->m_numbering == NUM_CHAPTER ) &&         // ...same number type.
+                ( (Numbering)otherCounter->m_numbering == NUM_CHAPTER ) &&         // ...same number type.
                 ( otherCounter->m_depth < m_depth ) )         // ...higher level.
             {
                 break;
@@ -254,13 +264,13 @@ KoTextParag *KoParagCounter::parent( const KoTextParag *paragraph )
             otherCounter = otherParagraph->counter();
             if ( otherCounter )                                         // ...numbered paragraphs.
             {
-                if ( ( otherCounter->m_numbering == NUM_LIST ) &&       // ...same number type.
+                if ( ( (Numbering)otherCounter->m_numbering == NUM_LIST ) &&       // ...same number type.
                     ( otherCounter->m_depth < m_depth ) )     // ...higher level.
                 {
                     break;
                 }
                 else
-                if ( otherCounter->m_numbering == NUM_CHAPTER )         // ...heading number type.
+                if ( (Numbering)otherCounter->m_numbering == NUM_CHAPTER )         // ...heading number type.
                 {
                     otherParagraph = 0L;
                     break;
@@ -283,7 +293,7 @@ void KoParagCounter::save( QDomElement & element )
 {
     element.setAttribute( "type", static_cast<int>( m_style ) );
     element.setAttribute( "depth", m_depth );
-    if ( m_style == STYLE_CUSTOMBULLET )
+    if ( (Style)m_style == STYLE_CUSTOMBULLET )
     {
         element.setAttribute( "bullet", m_customBullet.character.unicode() );
         if ( !m_customBullet.font.isEmpty() )
@@ -296,10 +306,12 @@ void KoParagCounter::save( QDomElement & element )
     if ( m_startNumber != 1 )
         element.setAttribute( "start", m_startNumber );
     // Don't need to save NUM_FOOTNOTE, it's updated right after loading
-    if ( m_numbering != NUM_NONE && m_numbering != NUM_FOOTNOTE )
+    if ( (Numbering)m_numbering != NUM_NONE && (Numbering)m_numbering != NUM_FOOTNOTE )
         element.setAttribute( "numberingtype", static_cast<int>( m_numbering ) );
     if ( !m_custom.isEmpty() )
         element.setAttribute( "customdef", m_custom );
+    if ( m_restartCounter )
+        element.setAttribute( "restart", "true" );
 }
 
 void KoParagCounter::setCustom( QString c )
@@ -371,7 +383,7 @@ KoParagCounter::Style KoParagCounter::style() const
     case STYLE_BOXBULLET:
     case STYLE_CIRCLEBULLET:
     case STYLE_CUSTOMBULLET:
-        if ( m_numbering == NUM_CHAPTER )
+        if ( (Numbering)m_numbering == NUM_CHAPTER )
         {
             // Shome mishtake surely!
             return STYLE_NUM;
@@ -380,12 +392,23 @@ KoParagCounter::Style KoParagCounter::style() const
     default:
         break;
     }
-    return m_style;
+    return static_cast<Style>(m_style);
 }
 
 QString KoParagCounter::suffix() const
 {
     return m_suffix;
+}
+
+bool KoParagCounter::restartCounter() const
+{
+    return m_restartCounter;
+}
+
+void KoParagCounter::setRestartCounter( bool restart )
+{
+    m_restartCounter = restart;
+    invalidate();
 }
 
 QString KoParagCounter::text( const KoTextParag *paragraph )
@@ -395,7 +418,7 @@ QString KoParagCounter::text( const KoTextParag *paragraph )
         return m_cache.text;
 
     // Chapter numbering: recurse to find the text of the preceeding level.
-    if ( m_numbering == NUM_CHAPTER && parent( paragraph ) )
+    if ( (Numbering)m_numbering == NUM_CHAPTER && parent( paragraph ) )
     {
         m_cache.text = m_cache.parent->counter()->text( m_cache.parent );
 
@@ -413,7 +436,7 @@ QString KoParagCounter::text( const KoTextParag *paragraph )
     switch ( style() )
     {
     case STYLE_NONE:
-        if ( m_numbering == NUM_LIST )
+        if ( (Numbering)m_numbering == NUM_LIST )
             tmp = ' ';
         break;
     case STYLE_NUM:
@@ -450,7 +473,7 @@ QString KoParagCounter::text( const KoTextParag *paragraph )
     tmp.prepend( paragraph->string()->isRightToLeft() ? suffix() : prefix() );
     tmp.append( paragraph->string()->isRightToLeft() ? prefix() : suffix() );
 
-    if ( m_numbering == NUM_CHAPTER )
+    if ( (Numbering)m_numbering == NUM_CHAPTER )
     {
         // Find the number of missing parents, and add dummy text for them.
         int missingParents;
