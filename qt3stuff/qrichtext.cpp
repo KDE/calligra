@@ -1682,8 +1682,8 @@ void QTextDocument::selectionStart( int id, int &paragId, int &index )
     if ( it == selections.end() )
 	return;
     QTextDocumentSelection &sel = *it;
-    paragId = QMIN( sel.startCursor.parag()->paragId(), sel.endCursor.parag()->paragId() );
-    index = sel.startCursor.index();
+    paragId = !sel.swapped ? sel.startCursor.parag()->paragId() : sel.endCursor.parag()->paragId();
+    index = !sel.swapped ? sel.startCursor.index() : sel.endCursor.index();
 }
 
 QTextCursor QTextDocument::selectionStartCursor( int id)
@@ -1714,11 +1714,8 @@ void QTextDocument::selectionEnd( int id, int &paragId, int &index )
     if ( it == selections.end() )
 	return;
     QTextDocumentSelection &sel = *it;
-    paragId = QMAX( sel.startCursor.parag()->paragId(), sel.endCursor.parag()->paragId() );
-    if ( paragId == sel.startCursor.parag()->paragId() )
-	index = sel.startCursor.parag()->selectionEnd( id );
-    else
-	index = sel.endCursor.parag()->selectionEnd( id );
+    paragId = sel.swapped ? sel.startCursor.parag()->paragId() : sel.endCursor.parag()->paragId();
+    index = sel.swapped ? sel.startCursor.index() : sel.endCursor.index();
 }
 
 QTextParag *QTextDocument::selectionStart( int id )
