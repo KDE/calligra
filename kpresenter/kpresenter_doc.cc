@@ -948,14 +948,14 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
                 _txtBackCol.setRgb(red, green, blue);
             loadBackground(elem);
         } else if(elem.tagName()=="HEADER") {
-            if ( _clean || !hasHeader() ) {
+            if ( _clean /*don't reload header footer, header/footer was created at the beginning || !hasHeader()*/ ) {
                 if(elem.hasAttribute("show")) {
                     setHeader(static_cast<bool>(elem.attribute("show").toInt()));
                 }
                 _header->load(elem);
             }
         } else if(elem.tagName()=="FOOTER") {
-            if ( _clean || !hasFooter() ) {
+            if ( _clean /*|| !hasFooter()*/ ) {
                 if(elem.hasAttribute("show")) {
                     setFooter( static_cast<bool>(elem.attribute("show").toInt() ) );
                 }
