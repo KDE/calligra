@@ -25,7 +25,7 @@
 
 #include "xml2texgraphparser.h"
 
-Xml2TexgraphParser::Xml2TexgraphParser(QString filename, const char *data): XmlParser(data), _file(filename.latin1())
+Xml2TexgraphParser::Xml2TexgraphParser(QString filename, const char *data): XmlParser(data), _file(filename)
 {
 	kdDebug() << filename.latin1() << endl;
 	_filename = filename;
