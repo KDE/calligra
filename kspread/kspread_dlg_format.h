@@ -23,7 +23,7 @@ public:
     KSpreadFormatDlg( KSpreadView* view, const char* name = 0 );
 
 private slots:
-    bool slotActivated( int index );
+    void slotActivated( int index );
     void slotOk();
 
 private:

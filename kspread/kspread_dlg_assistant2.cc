@@ -57,7 +57,7 @@ KSpreadassistant2::KSpreadassistant2( KSpreadcreate* parent, const char* name)
 
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
 
-  connect( m_pView, SIGNAL( sig_selectionChanged( KSpreadTable*, const QRect& ) ),
+  connect( m_pView, SIGNAL( sig_chooseSelectionChanged( KSpreadTable*, const QRect& ) ),
 	   this, SLOT( slotSelectionChanged( KSpreadTable*, const QRect& ) ) );
 
   m_pView->canvasWidget()->startChoose();

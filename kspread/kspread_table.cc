@@ -507,6 +507,17 @@ void KSpreadTable::recalc(bool m_depend)
     }
 }
 
+void KSpreadTable::setChooseRect( const QRect &_sel )
+{
+    if ( _sel == m_chooseRect )
+	return;
+
+    QRect old( m_chooseRect );
+    m_chooseRect = _sel;
+
+    emit sig_changeChooseSelection( this, old, m_chooseRect );
+}
+
 void KSpreadTable::unselect()
 {
     if ( m_rctSelection.left() == 0 )
@@ -1034,7 +1045,7 @@ void KSpreadTable::removeLeftCell(const QPoint &_marker)
     m_dctCells.setAutoDelete( FALSE );
     // Delete column
     QIntDictIterator<KSpreadCell> it( m_dctCells );
-    for ( ; it.current(); it) //++it )
+    while( it.current() )
     {
 	int key = it.current()->row() + ( it.current()->column() * 0x10000 );
 	if ( it.current()->column() == _marker.x() && it.current()->row()==_marker.y() && !it.current()->isDefault() )
@@ -1046,7 +1057,7 @@ void KSpreadTable::removeLeftCell(const QPoint &_marker)
 	}
 	else
 	{
-	++it;
+	    ++it;
 	}
     }
 
@@ -1093,20 +1104,20 @@ void KSpreadTable::removeTopCell(const QPoint &_marker)
 
     // Remove row
     QIntDictIterator<KSpreadCell> it( m_dctCells );
-    for ( ; it.current(); it)// ++it )
+    while( it.current() )
     {
 	int key = it.current()->row() + ( it.current()->column() * 0x10000 );
 
 	if ( it.current()->row() == _marker.y() && it.current()->column()==_marker.x() && !it.current()->isDefault() )
-		{
-	    	KSpreadCell *cell = it.current();
-	    	m_dctCells.remove( key );
-	     	delete cell;
-		}
+        {
+	    KSpreadCell *cell = it.current();
+	    m_dctCells.remove( key );
+	    delete cell;
+	}
 	else
-		{
-		++it;
-		}
+        {
+	    ++it;
+	}
     }
 
     kauto_array<KSpreadCell*> list( m_dctCells.count());
@@ -2498,7 +2509,7 @@ int KSpreadTable::adjustRow(const QPoint &_marker,int _row)
 	    }
 	}
     }
-    
+
     //add 4 because long_max is the long of the text
     //but column has borders
     if( long_max == 0 )

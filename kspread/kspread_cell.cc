@@ -734,6 +734,9 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
       // Hmm we should use QChar here and QString a lot more around
       // here... (David)
       debug( "decimal_point is '%c'", decimal_point );
+      // HACK
+      if ( decimal_point == 0 )
+	  decimal_point = ".";
     }
 
     QString f2;
@@ -2103,7 +2106,7 @@ void KSpreadCell::setText( const QString& _text )
    *  Special handling for selection boxes
    */
   if ( m_style == ST_Select && !m_pTable->isLoading() )
-  {      
+  {
       if ( m_bCalcDirtyFlag )
 	  calc();
       if ( m_bLayoutDirtyFlag )
@@ -2649,7 +2652,7 @@ void KSpreadCell::setStyle( Style _s )
       s->parse( m_strText );
   checkValue();
   m_bLayoutDirtyFlag = true;
-  
+
   if ( !m_pTable->isLoading() )
       update();
 }

@@ -19,6 +19,7 @@
 */
 
 #include <qprinter.h>
+#include <kbuttonbox.h>
 
 #include "kspread_dlg_create.h"
 #include "kspread_view.h"
@@ -26,7 +27,7 @@
 #include "kspread_doc.h"
 #include "kspread_table.h"
 #include "kspread_util.h"
-#include "kspread_dlg_assistant2.h"
+// #include "kspread_dlg_assistant2.h"
 #include "kspread_editors.h"
 #include "kspread_tabbar.h"
 
@@ -34,12 +35,21 @@
 #include <klocale.h>
 
 #include <qlayout.h>
+#include <qapplication.h>
 
 KSpreadcreate::KSpreadcreate( KSpreadView* parent, const QString& _name )
     : QDialog( parent, _name )
 {
     m_pView = parent;
     setCaption( _name );
+
+    f_param = 0;
+    s_param = 0;
+    t_param = 0;
+    fo_param = 0;
+    fi_param = 0;
+
+    m_focus = 0;
 
     if ( !m_pView->canvasWidget()->editor() )
     {
@@ -49,168 +59,192 @@ KSpreadcreate::KSpreadcreate( KSpreadView* parent, const QString& _name )
 
     ASSERT( m_pView->canvasWidget()->editor() );
 	
-    name = _name;
+    m_funcName = _name;
     first_element  = 0;
 
     // Save the name of the active table.
     m_tableName = m_pView->activeTable()->tableName();
 
-    dx = m_pView->canvasWidget()->markerColumn();
-    dy = m_pView->canvasWidget()->markerRow();
+    m_column = m_pView->canvasWidget()->markerColumn();
+    m_row = m_pView->canvasWidget()->markerRow();
 
-    old_text = m_pView->canvasWidget()->editor()->text();
+    m_oldText = m_pView->canvasWidget()->editor()->text();
 
     init();
-    m_pView->canvasWidget()->startChoose();
+
     connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
     connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
+
+    connect( m_pView, SIGNAL( sig_chooseSelectionChanged( KSpreadTable*, const QRect& ) ),
+	     this, SLOT( slotSelectionChanged( KSpreadTable*, const QRect& ) ) );
+
+    m_pView->canvasWidget()->startChoose();
+
+    qApp->installEventFilter( this );
 }
 
 KSpreadcreate::~KSpreadcreate()
 {
- m_pView->canvasWidget()->endChoose();
+}
+
+bool KSpreadcreate::eventFilter( QObject* obj, QEvent* ev )
+{
+    if ( obj == f_param && ev->type() == QEvent::FocusIn )
+	m_focus = f_param;
+    else if ( obj == s_param && ev->type() == QEvent::FocusIn )
+	m_focus = s_param;
+    else if ( obj == t_param && ev->type() == QEvent::FocusIn )
+	m_focus = t_param;
+    else if ( obj == fo_param && ev->type() == QEvent::FocusIn )
+	m_focus = fo_param;
+    else if ( obj == fi_param && ev->type() == QEvent::FocusIn )
+	m_focus = fi_param;
+    else
+	return FALSE;
+
+    if ( m_focus )
+	m_pView->canvasWidget()->startChoose();
+
+    return FALSE;
 }
 
 void KSpreadcreate::init()
 {
     QString exp_funct;
-    QHBoxLayout *lay3 = new QHBoxLayout( this );
-    lay3->setMargin( 5 );
-    lay3->setSpacing( 10 );
 
-    QGridLayout *lay1 = new QGridLayout( lay3,12,2);
-    lay1->setSpacing( 5 );
+    QVBoxLayout *lay1 = new QVBoxLayout( this, 6, 6 );
+    // lay1->setSpacing( 5 );
 
     QLabel *tmp_label;
-    if(name=="cos" || name=="sin" || name=="tan" || name=="acos" || name=="asin" || name=="atan" ||
-       name=="cosh" || name=="sinh" || name=="tanh" || name=="acosh" || name=="asinh" || name=="atanh" ||
-       name=="degre" || name=="radian" )
+    if(m_funcName=="cos" || m_funcName=="sin" || m_funcName=="tan" || m_funcName=="acos" || m_funcName=="asin" || m_funcName=="atan" ||
+       m_funcName=="cosh" || m_funcName=="sinh" || m_funcName=="tanh" || m_funcName=="acosh" || m_funcName=="asinh" || m_funcName=="atanh" ||
+       m_funcName=="degre" || m_funcName=="radian" )
     {
   	nb_param = 1;
   	QLabel *tmp_label = new QLabel( this);
-  	if( name == "radian")
+  	if( m_funcName == "radian")
 	    tmp_label->setText(i18n("Angle (deg)"));
   	else
 	    tmp_label->setText(i18n("Angle (rd)"));
 
-      	lay1->addWidget(tmp_label,0,0);
+      	lay1->addWidget(tmp_label);
 	f_param = new QLineEdit( this );
-  	lay1->addWidget(f_param,1,0);
+  	lay1->addWidget(f_param);
   	
   	tmp_label = new QLabel( this);
-  	lay1->addWidget(tmp_label,2,0);
-	exp_funct=name+"("+"Double"+")";
+  	lay1->addWidget(tmp_label);
+	exp_funct=m_funcName+"("+"Double"+")";
   	tmp_label->setText(exp_funct);
   	edit[0]=type_double;
     }
-    else if( name == "PI" )
+    else if( m_funcName == "PI" )
     {
 	nb_param = 0;
-	exp_funct=name+"()";
+	exp_funct=m_funcName+"()";
 	tmp_label = new QLabel( this);
-  	lay1->addWidget(tmp_label,0,0);
+  	lay1->addWidget(tmp_label);
   	tmp_label->setText(exp_funct);
     }
-   else if( name=="right" || name=="left" || name=="REPT" )
+   else if( m_funcName=="right" || m_funcName=="left" || m_funcName=="REPT" )
    {
         nb_param=2;
         tmp_label = new QLabel( this);
-  	lay1->addWidget(tmp_label,0,0);
+  	lay1->addWidget(tmp_label);
         tmp_label->setText(i18n("Text"));
         f_param = new QLineEdit( this );
-  	lay1->addWidget(f_param,1,0);
+  	lay1->addWidget(f_param);
   	
   	tmp_label = new QLabel( this);
-  	lay1->addWidget(tmp_label,2,0);
-        if( name=="right"||name=="left")
+  	lay1->addWidget(tmp_label);
+        if( m_funcName=="right"||m_funcName=="left")
 		tmp_label->setText(i18n("Number of characters"));
-        else if(name=="REPT")
+        else if(m_funcName=="REPT")
         	tmp_label->setText(i18n("Number of repetitions"));
         s_param=new QLineEdit( this );
-  	lay1->addWidget(s_param,3,0);
-  	exp_funct=name+"("+"String,Double"+")";
+  	lay1->addWidget(s_param);
+  	exp_funct=m_funcName+"("+"String,Double"+")";
   	
   	tmp_label = new QLabel( this);
-  	lay1->addWidget(tmp_label,4,0);
+  	lay1->addWidget(tmp_label);
   	tmp_label->setText(exp_funct);
   	edit[0]=type_string;
   	edit[1]=type_double;
 
    }
-   else if ( name=="sqrt" || name=="ln" || name=="log" || name=="exp" ||
-	     name=="fabs" || name=="floor" || name=="ceil" || name=="ENT" )
+   else if ( m_funcName=="sqrt" || m_funcName=="ln" || m_funcName=="log" || m_funcName=="exp" ||
+	     m_funcName=="fabs" || m_funcName=="floor" || m_funcName=="ceil" || m_funcName=="ENT" )
    {
        nb_param=1;
    	
        tmp_label = new QLabel( this);
-       lay1->addWidget(tmp_label,0,0);
+       lay1->addWidget(tmp_label);
        tmp_label->setText(i18n("Double"));
 
        f_param = new QLineEdit( this );
-       lay1->addWidget(f_param,1,0);
+       lay1->addWidget(f_param);
   	
-       exp_funct=name+"("+"Double"+")";
+       exp_funct=m_funcName+"("+"Double"+")";
        tmp_label = new QLabel( this);
-       lay1->addWidget(tmp_label,2,0);
+       lay1->addWidget(tmp_label);
        tmp_label->setText(exp_funct);
        edit[0]=type_double;
    }
-   else if (name=="ISLOGIC"||name=="ISTEXT"||name=="ISNUM")
+   else if (m_funcName=="ISLOGIC"||m_funcName=="ISTEXT"||m_funcName=="ISNUM")
    	{
    	nb_param=1;
    	
    	tmp_label = new QLabel( this);
-  	lay1->addWidget(tmp_label,0,0);
+  	lay1->addWidget(tmp_label);
    	tmp_label->setText(i18n("Value"));
 
         f_param = new QLineEdit( this );
-  	lay1->addWidget(f_param,1,0);
+  	lay1->addWidget(f_param);
   	
-  	exp_funct=name+"("+"Value"+")";
+  	exp_funct=m_funcName+"("+"Value"+")";
   	tmp_label = new QLabel( this);
-  	lay1->addWidget(tmp_label,2,0);
+  	lay1->addWidget(tmp_label);
   	tmp_label->setText(exp_funct);
-  	if(name=="ISTEXT")
+  	if(m_funcName=="ISTEXT")
   		edit[0]=type_string;
   	else	
   		edit[0]=type_double;
    	}
-   else if( name=="sum" || name=="max" || name=="min" ||
-	    name=="multiply" || name=="average" || name=="variance" || name=="stddev")
+   else if( m_funcName=="sum" || m_funcName=="max" || m_funcName=="min" ||
+	    m_funcName=="multiply" || m_funcName=="average" || m_funcName=="variance" || m_funcName=="stddev")
    {
    	nb_param=5;
    	
    	tmp_label = new QLabel( this);
-  	lay1->addWidget(tmp_label,0,0);
+  	lay1->addWidget(tmp_label);
    	tmp_label->setText(i18n("Double"));
         f_param = new QLineEdit( this );
-  	lay1->addWidget(f_param,1,0);
+  	lay1->addWidget(f_param);
   	
   	tmp_label = new QLabel( this);
-  	lay1->addWidget(tmp_label,2,0);
+  	lay1->addWidget(tmp_label);
   	tmp_label->setText(i18n("Double"));
         s_param = new QLineEdit( this );
-  	lay1->addWidget(s_param,3,0);
+  	lay1->addWidget(s_param);
   	
   	tmp_label = new QLabel( this);
-  	lay1->addWidget(tmp_label,4,0);
+  	lay1->addWidget(tmp_label);
   	tmp_label->setText(i18n("Double"));
 	t_param = new QLineEdit( this );
-  	lay1->addWidget(t_param,5,0);
+  	lay1->addWidget(t_param);
   	
   	tmp_label = new QLabel( this);
-  	lay1->addWidget(tmp_label,6,0);
+  	lay1->addWidget(tmp_label);
   	tmp_label->setText(i18n("Double"));
         fo_param = new QLineEdit( this );
-  	lay1->addWidget(fo_param,7,0);
+  	lay1->addWidget(fo_param);
   	
   	tmp_label = new QLabel( this);
-  	lay1->addWidget(tmp_label,8,0);
+  	lay1->addWidget(tmp_label);
   	tmp_label->setText(i18n("Double"));
         fi_param = new QLineEdit( this );
-  	lay1->addWidget(fi_param,9,0);
+  	lay1->addWidget(fi_param);
   	
-  	exp_funct=name+"("+"Double,Double,..."+")";
+  	exp_funct=m_funcName+"("+"Double,Double,..."+")";
   	tmp_label = new QLabel( this);
   	lay1->addWidget(tmp_label,10,0);
   	tmp_label->setText(exp_funct);
@@ -220,120 +254,120 @@ void KSpreadcreate::init()
   	edit[3]=type_double;
   	edit[4]=type_double;
    }
-   else if (name=="if")
+   else if (m_funcName=="if")
    {
        nb_param=3;
        tmp_label = new QLabel( this);
-       lay1->addWidget(tmp_label,0,0);
+       lay1->addWidget(tmp_label);
        tmp_label->setText(i18n("Exp logic"));
        f_param = new QLineEdit( this );
-       lay1->addWidget(f_param,1,0);
+       lay1->addWidget(f_param);
   	
        tmp_label = new QLabel( this);
-       lay1->addWidget(tmp_label,2,0);
+       lay1->addWidget(tmp_label);
        tmp_label->setText(i18n("if true"));
        s_param = new QLineEdit( this );
-       lay1->addWidget(s_param,3,0);
+       lay1->addWidget(s_param);
   	
        tmp_label = new QLabel( this);
-       lay1->addWidget(tmp_label,4,0);
+       lay1->addWidget(tmp_label);
        tmp_label->setText(i18n("if false"));
        t_param = new QLineEdit( this );
-       lay1->addWidget(t_param,5,0);
+       lay1->addWidget(t_param);
   	
-       exp_funct=name+"("+"Exp logic,if true,if false"+")";
+       exp_funct=m_funcName+"("+"Exp logic,if true,if false"+")";
        tmp_label = new QLabel( this);
-       lay1->addWidget(tmp_label,6,0);
+       lay1->addWidget(tmp_label);
        tmp_label->setText(exp_funct);
        edit[0]=type_logic;
        edit[1]=type_string;
        edit[2]=type_string;
    }
-   else if (name=="not")
+   else if (m_funcName=="not")
    {
        nb_param=1;
        tmp_label = new QLabel( this);
-       lay1->addWidget(tmp_label,0,0);
+       lay1->addWidget(tmp_label);
        tmp_label->setText(i18n("Exp Logic"));
        f_param = new QLineEdit( this );
-       lay1->addWidget(f_param,1,0);
+       lay1->addWidget(f_param);
   	
-       exp_funct=name+"("+"Exp Logic"+")";
+       exp_funct=m_funcName+"("+"Exp Logic"+")";
        tmp_label = new QLabel( this);
-       lay1->addWidget(tmp_label,2,0);
+       lay1->addWidget(tmp_label);
        tmp_label->setText(exp_funct);
        edit[0]=type_logic;
    }
-   else if (name=="EXACT")
+   else if (m_funcName=="EXACT")
    {
        nb_param=2;
        tmp_label = new QLabel( this);
-       lay1->addWidget(tmp_label,0,0);
+       lay1->addWidget(tmp_label);
        tmp_label->setText(i18n("Text"));
 
        f_param = new QLineEdit( this );
-       lay1->addWidget(f_param,1,0);
+       lay1->addWidget(f_param);
   	
        tmp_label = new QLabel( this);
-       lay1->addWidget(tmp_label,2,0);
+       lay1->addWidget(tmp_label);
        tmp_label->setText(i18n("Text"));
        s_param=new QLineEdit( this );
-       lay1->addWidget(s_param,3,0);
-       exp_funct=name+"("+"String,String"+")";
+       lay1->addWidget(s_param);
+       exp_funct=m_funcName+"("+"String,String"+")";
        tmp_label = new QLabel( this);
-       lay1->addWidget(tmp_label,4,0);
+       lay1->addWidget(tmp_label);
        tmp_label->setText(exp_funct);
        edit[0]=type_string;
        edit[1]=type_string;
    }
-   else if (name=="len")
+   else if (m_funcName=="len")
    {
        nb_param=1;
        tmp_label = new QLabel( this);
-       lay1->addWidget(tmp_label,0,0);
+       lay1->addWidget(tmp_label);
        tmp_label->setText(i18n("Text"));
        f_param = new QLineEdit( this );
-       lay1->addWidget(f_param,1,0);
-       exp_funct=name+"("+"String"+")";
+       lay1->addWidget(f_param);
+       exp_funct=m_funcName+"("+"String"+")";
        tmp_label = new QLabel( this);
-       lay1->addWidget(tmp_label,2,0);
+       lay1->addWidget(tmp_label);
        tmp_label->setText(exp_funct);
        edit[0]=type_string;
    }
-   else if(name=="join")
+   else if(m_funcName=="join")
    {
        nb_param=5;
        tmp_label = new QLabel( this);
-       lay1->addWidget(tmp_label,0,0);
+       lay1->addWidget(tmp_label);
        tmp_label->setText(i18n("Text"));
        f_param = new QLineEdit( this );
-       lay1->addWidget(f_param,1,0);
+       lay1->addWidget(f_param);
   	
        tmp_label = new QLabel( this);
-       lay1->addWidget(tmp_label,2,0);
+       lay1->addWidget(tmp_label);
        tmp_label->setText(i18n("Text"));
        s_param = new QLineEdit( this );
-       lay1->addWidget(s_param,3,0);
+       lay1->addWidget(s_param);
   	
        tmp_label = new QLabel( this);
-       lay1->addWidget(tmp_label,4,0);
+       lay1->addWidget(tmp_label);
        tmp_label->setText(i18n("Text"));
        t_param = new QLineEdit( this );
-       lay1->addWidget(t_param,5,0);
+       lay1->addWidget(t_param);
   	
        tmp_label = new QLabel( this);
-       lay1->addWidget(tmp_label,6,0);
+       lay1->addWidget(tmp_label);
        tmp_label->setText(i18n("Text"));
        fo_param = new QLineEdit( this );
-       lay1->addWidget(fo_param,7,0);
+       lay1->addWidget(fo_param);
   	
        tmp_label = new QLabel( this);
-       lay1->addWidget(tmp_label,8,0);
+       lay1->addWidget(tmp_label);
        tmp_label->setText(i18n("Text"));
        fi_param = new QLineEdit( this );
-       lay1->addWidget(fi_param,9,0);
+       lay1->addWidget(fi_param);
   	
-       exp_funct=name+"("+"String,String,..."+")";
+       exp_funct=m_funcName+"("+"String,String,..."+")";
        tmp_label = new QLabel( this);
        lay1->addWidget(tmp_label,10,0);
        tmp_label->setText(exp_funct);
@@ -343,30 +377,30 @@ void KSpreadcreate::init()
        edit[3]=type_string;
        edit[4]=type_string;
    }
-   else if(name=="STXT")
+   else if(m_funcName=="STXT")
    {
        nb_param=3;
        tmp_label = new QLabel( this);
-       lay1->addWidget(tmp_label,0,0);
+       lay1->addWidget(tmp_label);
        tmp_label->setText(i18n("Text"));
        f_param = new QLineEdit( this );
-       lay1->addWidget(f_param,1,0);
+       lay1->addWidget(f_param);
   	
   	tmp_label = new QLabel( this);
-  	lay1->addWidget(tmp_label,2,0);
+  	lay1->addWidget(tmp_label);
   	tmp_label->setText(i18n("Position of start"));
         s_param = new QLineEdit( this );
-  	lay1->addWidget(s_param,3,0);
+  	lay1->addWidget(s_param);
   	
   	tmp_label = new QLabel( this);
-  	lay1->addWidget(tmp_label,4,0);
+  	lay1->addWidget(tmp_label);
   	tmp_label->setText(i18n("Number of characters"));
 	
 	t_param = new QLineEdit( this );
-  	lay1->addWidget(t_param,5,0);
-  	exp_funct=name+"("+"String,Double,Double"+")";
+  	lay1->addWidget(t_param);
+  	exp_funct=m_funcName+"("+"String,Double,Double"+")";
   	tmp_label = new QLabel( this);
-  	lay1->addWidget(tmp_label,6,0);
+  	lay1->addWidget(tmp_label);
   	tmp_label->setText(exp_funct);
    	edit[0]=type_string;
    	edit[1]=type_double;
@@ -375,11 +409,20 @@ void KSpreadcreate::init()
    else
        ASSERT( 0 );
 
-    m_pOk = new QPushButton( i18n("OK"), this );
+    KButtonBox *bb = new KButtonBox( this );
+    bb->addStretch();
+    m_pOk = bb->addButton( i18n("OK") );
+    m_pOk->setDefault( TRUE );
+    m_pClose = bb->addButton( i18n( "Close" ) );
+    bb->layout();
+
+    lay1->addWidget( bb );
+
+    /* m_pOk = new QPushButton( i18n("OK"), this );
     lay1->addWidget(m_pOk,11,0);
     m_pClose = new QPushButton( i18n("Cancel"), this );
-    lay1->addWidget(m_pClose,11,1);
-    if( nb_param>0)
+    lay1->addWidget(m_pClose,11,1); */
+    /* if( nb_param>0)
     {
 	f_select = new QPushButton( i18n("Select..."), this );
 	lay1->addWidget(f_select,1,1);
@@ -408,33 +451,35 @@ void KSpreadcreate::init()
 	fi_select = new QPushButton( i18n("Select..."), this );
 	lay1->addWidget(fi_select,9,1);
  	connect( fi_select, SIGNAL( clicked() ), this, SLOT( slotFIselect() ) );
-    }
+	} */
 }
 
 
 void KSpreadcreate::slotOk()
 {
+    m_pView->canvasWidget()->endChoose();
+	
     // It was no formula ? Make it one
-    if(old_text.find("=",0)==-1)
-	old_text="="+old_text;
+    if(m_oldText.find("=",0)==-1)
+	m_oldText="="+m_oldText;
     // Text was empty ?
-    else if(old_text.isEmpty())
-	old_text="=";
+    else if(m_oldText.isEmpty())
+	m_oldText="=";
 
     // Switch back to the old table
     if(m_pView->activeTable()->tableName() !=  m_tableName )
 	m_pView->changeTable( m_tableName );
 
     // Revert the marker to its original position
-    m_pView->canvasWidget()->setMarkerColumn(dx);
-    m_pView->canvasWidget()->setMarkerRow(dy);
+    m_pView->canvasWidget()->setMarkerColumn( m_column );
+    m_pView->canvasWidget()->setMarkerRow( m_row );
 
     ASSERT( m_pView->canvasWidget()->editor() );
 	
     QString formula = create_formula();
     int pos=m_pView->canvasWidget()->editor()->cursorPosition()+ formula.length();
-    m_pView->canvasWidget()->editor()->setText( old_text + formula );
-    m_pView->canvasWidget()->editor()->setFocus();
+    m_pView->canvasWidget()->editor()->setText( m_oldText + formula );
+    // m_pView->canvasWidget()->editor()->setFocus();
     m_pView->canvasWidget()->editor()->setCursorPosition( pos );
 
     accept();
@@ -443,7 +488,7 @@ void KSpreadcreate::slotOk()
 QString KSpreadcreate::create_formula()
 {
     QString formula;
-    formula=name+"(";
+    formula=m_funcName+"(";
     if( nb_param>0)
     {
 	if(!f_param->text().isEmpty())
@@ -564,7 +609,7 @@ QString KSpreadcreate::make_formula( const QString& _text,int nb_line)
     return text;
 }
 
-
+/*
 void KSpreadcreate::slotFselect()
 {
     set_nbbutton(1);
@@ -630,18 +675,45 @@ void KSpreadcreate::setText(QString text)
 		break;
 	}
 }
-
+*/
 void KSpreadcreate::slotClose()
 {
+    m_pView->canvasWidget()->endChoose();
+
     // Switch back to the old table
     if(m_pView->activeTable()->tableName() !=  m_tableName )
 	m_pView->changeTable( m_tableName );
 
     // Revert the marker to its original position
-    m_pView->canvasWidget()->setMarkerColumn(dx);
-    m_pView->canvasWidget()->setMarkerRow(dy);
+    m_pView->canvasWidget()->setMarkerColumn( m_column );
+    m_pView->canvasWidget()->setMarkerRow( m_row );
 
     reject();
+}
+
+void KSpreadcreate::slotSelectionChanged( KSpreadTable* _table, const QRect& _selection )
+{
+    if ( !m_focus )
+	return;
+
+    if ( _selection.left() == 0 )
+	return;
+
+    if ( _selection.left() >= _selection.right() && _selection.top() >= _selection.bottom() )
+    {
+	// f_param->setText("Arsch");
+	int dx = _selection.right();
+	int dy = _selection.bottom();
+	QString tmp;
+	tmp.setNum( dy );
+	tmp = _table->tableName() + "!" + util_columnLabel( dx ) + tmp;
+	m_focus->setText( tmp );
+    }
+    else
+    {
+	QString area = util_rangeName( _table, _selection );
+	m_focus->setText( area );
+    }
 }
 
 #include "kspread_dlg_create.moc"

@@ -62,6 +62,7 @@
  </Menu>
  <Menu name="Data"><text>Data</text>
   <Action name="consolidate"/>
+  <Action name="oszi"/>
  </Menu>
  <Menu name="Extra"><text>Extra</text>
   <PluginAction name="kspreadcalc" plugin="libkspreadcalc" major="1" minor="0"/>
@@ -114,6 +115,7 @@
   <Action name="multiRow"/>
  </ToolBar>
  <ToolBar>
+  <Action name="autoSum"/>
   <Action name="function"/>
   <Action name="formulaSelection"/>
  </ToolBar>

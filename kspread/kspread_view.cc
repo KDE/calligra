@@ -67,6 +67,8 @@
 #include "kspread_global.h"
 #include "kspread_editors.h"
 #include "kspread_dlg_format.h"
+#include "kspread_dlg_oszi.h"
+#include "kspread_dlg_create.h"
 
 #include "handler.h"
 #include "toolbox.h"
@@ -116,22 +118,29 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 
     // Edit Bar
     m_pToolWidget = new QFrame( this );
-    m_pToolWidget->setFrameStyle( 49 );
+    // m_pToolWidget->setFrameStyle( 49 );
 
+    QHBoxLayout* hbox = new QHBoxLayout( m_pToolWidget );
+    hbox->addSpacing( 2 );
+	
     m_pPosWidget = new QLabel( m_pToolWidget );
     m_pPosWidget->setAlignment( AlignCenter );
     m_pPosWidget->setFrameStyle( QFrame::WinPanel|QFrame::Sunken );
-    m_pPosWidget->setGeometry( 2,2,50,26 );
-
+    m_pPosWidget->setMinimumWidth( 50 );
+    hbox->addWidget( m_pPosWidget );
+    hbox->addSpacing( 6 );
+    
     m_pCancelButton = newIconButton( "abort", TRUE, m_pToolWidget );
-    m_pCancelButton->setGeometry( 60, 2, 26, 26 );
+    hbox->addWidget( m_pCancelButton );
     m_pOkButton = newIconButton( "done", TRUE, m_pToolWidget );
-    m_pOkButton->setGeometry( 90, 2, 26, 26 );
+    hbox->addWidget( m_pOkButton );
+    hbox->addSpacing( 6 );
 
     m_pEditWidget = new KSpreadEditWidget( m_pToolWidget, this );
-    m_pEditWidget->setGeometry( 125, 2, 200, 26 );
     m_pEditWidget->setFocusPolicy( QWidget::StrongFocus );
-
+    hbox->addWidget( m_pEditWidget, 2 );
+    hbox->addSpacing( 2 );
+	
     QObject::connect( m_pCancelButton, SIGNAL( clicked() ), m_pEditWidget, SLOT( slotAbortEdit() ) );
     QObject::connect( m_pOkButton, SIGNAL( clicked() ), m_pEditWidget, SLOT( slotDoneEdit() ) );
 
@@ -263,7 +272,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 				actionCollection(), "formulaSum" );
     m_formulaProduct = new KAction( i18n("Formula Product"), KSBarIcon("product"), 0, this, SLOT( formulaProduct() ),
 				    actionCollection(), "formulaProduct" );
-     m_formulaSelection = new KSelectAction( i18n("Formula Selection"), 0, actionCollection(), "formulaSelection" );
+    m_formulaSelection = new KSelectAction( i18n("Formula Selection"), 0, actionCollection(), "formulaSelection" );
     QStringList lst;
     lst.append( "sum");
     lst.append( "cos");
@@ -272,6 +281,8 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_formulaSelection->setItems( lst );
     connect( m_formulaSelection, SIGNAL( activated( const QString& ) ),
 	     this, SLOT( formulaSelection( const QString& ) ) );
+    m_autoSum = new KAction( i18n("AutoSum"), KSBarIcon("black-sum"), 0, this, SLOT( autoSum() ),
+				    actionCollection(), "autoSum" );
     m_sortDec = new KAction( i18n("Sort descreasing"), KSBarIcon("sort_decrease"), 0, this, SLOT( sortDec() ),
 				    actionCollection(), "sortDec" );
     m_sortInc = new KAction( i18n("Sort increasing"), KSBarIcon("sort_incr"), 0, this, SLOT( sortInc() ),
@@ -291,6 +302,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_borderColor = new KColorAction( i18n("Border Color"), KColorAction:: FrameColor, 0, this, SLOT( changeBorderColor() ),
 			       actionCollection(), "borderColor" );
     m_tableFormat = new KAction( i18n("Table Format"), 0, this, SLOT( tableFormat() ), actionCollection(), "tableFormat" );
+    m_oszi = new KAction( i18n("Oszilloscope"), 0, this, SLOT( oszilloscope() ), actionCollection(), "oszi" );
 
     connect( this, SIGNAL( childSelected( PartChild* ) ),
 	     this, SLOT( slotChildSelected( PartChild* ) ) );
@@ -307,188 +319,260 @@ KSpreadView::~KSpreadView()
 }
 
 // ##### TODO: Move that to KSpreadCanvas
-bool KSpreadView::eventKeyPressed( QKeyEvent* _event )
+bool KSpreadView::eventKeyPressed( QKeyEvent* _event, bool choose )
 {
-  if ( m_pTable == 0L )
-    return true;
+    if ( m_pTable == 0L )
+	return true;
 
-  int x, y;
-  RowLayout *rl;
-  ColumnLayout *cl;
-  KSpreadCell *cell;
-  // Flag that indicates whether we make a selection right now
-  bool make_select = FALSE;
+    int x, y;
+    RowLayout *rl;
+    ColumnLayout *cl;
+    KSpreadCell *cell;
+    // Flag that indicates whether we make a selection right now
+    bool make_select = FALSE;
 
-  QRect selection( m_pTable->selectionRect() );
+    QRect selection;
+    int marker_column;
+    int marker_row;
+    void (KSpreadCanvas::*hideMarker)();
+    void (KSpreadCanvas::*showMarker)();
+    void (KSpreadCanvas::*setMarkerColumn)(int);
+    void (KSpreadCanvas::*setMarkerRow)(int);
+    int (KSpreadCanvas::*markerColumn)() const;
+    int (KSpreadCanvas::*markerRow)() const;
+    if ( choose )
+    {
+	selection = m_pTable->chooseRect();
+	// No selection until now ? => select the current cell
+	if ( selection.left() == 0 )
+	    selection = QRect( m_pCanvas->chooseMarkerColumn(), m_pCanvas->chooseMarkerRow(), 1, 1 );
+	marker_column = m_pCanvas->chooseMarkerColumn();
+	marker_row = m_pCanvas->chooseMarkerRow();
+	hideMarker = &KSpreadCanvas::hideChooseMarker;
+	showMarker = &KSpreadCanvas::showChooseMarker;
+	setMarkerRow = &KSpreadCanvas::setChooseMarkerRow;
+	setMarkerColumn = &KSpreadCanvas::setChooseMarkerColumn;
+	markerRow = &KSpreadCanvas::chooseMarkerRow;
+	markerColumn = &KSpreadCanvas::chooseMarkerColumn;
+    }
+    else
+    {
+	selection = m_pTable->selectionRect();
+	marker_column = m_pCanvas->markerColumn();
+	marker_row = m_pCanvas->markerRow();
+	hideMarker = &KSpreadCanvas::hideMarker;
+	showMarker = &KSpreadCanvas::showMarker;
+	setMarkerRow = &KSpreadCanvas::setMarkerRow;
+	setMarkerColumn = &KSpreadCanvas::setMarkerColumn;
+	markerRow = &KSpreadCanvas::markerRow;
+	markerColumn = &KSpreadCanvas::markerColumn;
+    }
 
-  // Are we making a selection right now ? Go thru this only if no selection is made
-  // or if we neither selected complete rows nor columns.
-  if ( ( _event->state() & ShiftButton ) == ShiftButton &&
-       ( selection.left() == 0 || ( selection.right() != 0 && selection.bottom() != 0 ) ) &&
-       ( _event->key() == Key_Down || _event->key() == Key_Up || _event->key() == Key_Left || _event->key() == Key_Right ) )
-    make_select = TRUE;
+    // Are we making a selection right now ? Go thru this only if no selection is made
+    // or if we neither selected complete rows nor columns.
+    if ( ( _event->state() & ShiftButton ) == ShiftButton &&
+	 ( selection.left() == 0 || ( selection.right() != 0 && selection.bottom() != 0 ) ) &&
+	 ( _event->key() == Key_Down || _event->key() == Key_Up || _event->key() == Key_Left || _event->key() == Key_Right ) )
+	make_select = TRUE;
 
-  // Do we have an old selection ? If yes, unselect everything
-  if ( selection.left() != 0 && !make_select )
-    m_pTable->unselect();
+    // Do we have an old selection ? If yes, unselect everything
+    if ( selection.left() != 0 && !make_select )
+    {
+	if ( choose )
+	    m_pTable->setChooseRect( QRect( marker_column, marker_row, 1, 1 ) );
+	else
+	    m_pTable->unselect();
+    }
 
-  switch( _event->key() )
+    switch( _event->key() )
     {
     case Key_Return:
     case Key_Enter:
     case Key_Down:	
-	m_pCanvas->hideMarker();
+	// Note: choose is only TRUE, if we get Key_Down
+	
+	(m_pCanvas->*hideMarker)();
 
 	if ( selection.left() == 0 && make_select )
-	    selection.setCoords( m_pCanvas->markerColumn(), m_pCanvas->markerRow(), m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+	    selection = QRect( marker_column, marker_row, 1, 1 );
 
-	cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+	cell = m_pTable->cellAt( marker_column, marker_row );
 	// Are we leaving a cell with extra size ?
 	if ( cell->isForceExtraCells() )
-	  m_pCanvas->setMarkerRow( m_pCanvas->markerRow() + 1 + cell->extraYCells() );
+	  (m_pCanvas->*setMarkerRow)( marker_row + 1 + cell->extraYCells() );
 	else
-  	  m_pCanvas->setMarkerRow( m_pCanvas->markerRow() + 1 );
+  	  (m_pCanvas->*setMarkerRow)( marker_row + 1 );
 
-	cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+	cell = m_pTable->cellAt( marker_column, marker_row );
 	// Go to the upper left corner of the obscuring object
 	if ( cell->isObscured() && cell->isObscuringForced() )
 	{
-	  m_pCanvas->setMarkerRow( cell->obscuringCellsRow() );
-	  m_pCanvas->setMarkerColumn( cell->obscuringCellsColumn() );
+	  (m_pCanvas->*setMarkerRow)( cell->obscuringCellsRow() );
+	  (m_pCanvas->*setMarkerColumn)( cell->obscuringCellsColumn() );
 	}
 
-	y = m_pTable->rowPos( m_pCanvas->markerRow(), m_pCanvas );
-	rl = m_pTable->rowLayout( m_pCanvas->markerRow() );
+	y = m_pTable->rowPos( (m_pCanvas->*markerRow)(), m_pCanvas );
+	rl = m_pTable->rowLayout( (m_pCanvas->*markerRow)() );
 	if ( y + rl->height( m_pCanvas ) > m_pCanvas->height() )
 	  vertScrollBar()->setValue( m_pCanvas->yOffset() + ( y + rl->height( m_pCanvas )
-								    - m_pCanvas->height() ) );
-
-	// If we have been at the top of the selection ...
-	if ( selection.top() == m_pCanvas->markerRow() - 1 && selection.top() != selection.bottom() && make_select )
-	    selection.setTop( m_pCanvas->markerRow() );
-	else if ( make_select )
-	    selection.setBottom( m_pCanvas->markerRow() );
+							      - m_pCanvas->height() ) );
 
 	if ( make_select )
-	  m_pTable->setSelection( selection, m_pCanvas );
-	
-	m_pCanvas->showMarker();
+        {
+	    // If we have been at the top of the selection ...
+	    if ( selection.bottom() == marker_row )
+		selection.setBottom( (m_pCanvas->*markerRow)() );
+	    else if ( make_select )
+		selection.setTop( (m_pCanvas->*markerRow)() );
 
-	updateEditWidget();
+	    if ( choose )
+		m_pTable->setChooseRect( selection );
+	    else
+		m_pTable->setSelection( selection, m_pCanvas );
+	}
+	else if ( choose )
+	    m_pTable->setChooseRect( QRect( m_pCanvas->chooseMarkerColumn(), m_pCanvas->chooseMarkerRow(), 1, 1 ) );
+	
+	(m_pCanvas->*showMarker)();
+
+	if ( !choose )
+	    updateEditWidget();
 	break;
 
     case Key_Up:	
-	m_pCanvas->hideMarker();
+	(m_pCanvas->*hideMarker)();
 
 	if ( selection.left() == 0 && make_select )
-	    selection.setCoords( m_pCanvas->markerColumn(), m_pCanvas->markerRow(), m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+	    selection = QRect( marker_column, marker_row, 1, 1 );
 
-	m_pCanvas->setMarkerRow( m_pCanvas->markerRow() - 1 );
-	cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+	(m_pCanvas->*setMarkerRow)( marker_row - 1 );
+	cell = m_pTable->cellAt( marker_column, marker_row );
 	// Go to the upper left corner of the obscuring object
 	if ( cell->isObscured() && cell->isObscuringForced() )
 	{
-	  m_pCanvas->setMarkerRow( cell->obscuringCellsRow() );
-	  m_pCanvas->setMarkerColumn( cell->obscuringCellsColumn() );
+	  (m_pCanvas->*setMarkerRow)( cell->obscuringCellsRow() );
+	  (m_pCanvas->*setMarkerColumn)( cell->obscuringCellsColumn() );
 	}
 	
-	y = m_pTable->rowPos( m_pCanvas->markerRow(), m_pCanvas );
-	rl = m_pTable->rowLayout( m_pCanvas->markerRow() );
+	y = m_pTable->rowPos( (m_pCanvas->*markerRow)(), m_pCanvas );
+	rl = m_pTable->rowLayout( (m_pCanvas->*markerRow)() );
 	if ( y < 0 )
 	    vertScrollBar()->setValue( m_pCanvas->yOffset() + y );
 
-	// If we have been at the top of the selection ...
-	if ( selection.top() == m_pCanvas->markerRow() + 1 && make_select )
-	    selection.setTop( m_pCanvas->markerRow() );
-	else if ( make_select )
-	    selection.setBottom( m_pCanvas->markerRow() );
-
 	if ( make_select )
-	  m_pTable->setSelection( selection, m_pCanvas );
+        {
+	    // If we have been at the top of the selection ...
+	    if ( selection.top() == marker_row )
+		selection.setTop( (m_pCanvas->*markerRow)() );
+	    else if ( make_select )
+		selection.setBottom( (m_pCanvas->*markerRow)() );
 
-	m_pCanvas->showMarker();
+	    if ( choose )
+		m_pTable->setChooseRect( selection );
+	    else
+		m_pTable->setSelection( selection, m_pCanvas );
+	}
+	else if ( choose )
+	    m_pTable->setChooseRect( QRect( m_pCanvas->chooseMarkerColumn(), m_pCanvas->chooseMarkerRow(), 1, 1 ) );
 
-	updateEditWidget();
+	(m_pCanvas->*showMarker)();
+
+	if ( !choose )
+	    updateEditWidget();
+	
 	break;
 
     case Key_Left:
-	m_pCanvas->hideMarker();
+	(m_pCanvas->*hideMarker)();
 	
 	if ( selection.left() == 0 && make_select )
-	    selection.setCoords( m_pCanvas->markerColumn(), m_pCanvas->markerRow(), m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+	    selection = QRect( marker_column, marker_row, 1, 1 );
 
-	m_pCanvas->setMarkerColumn( m_pCanvas->markerColumn() - 1 );
-	cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+	(m_pCanvas->*setMarkerColumn)( marker_column - 1 );
+	cell = m_pTable->cellAt( marker_column, marker_row );
 	// Go to the upper left corner of the obscuring object
 	if ( cell->isObscured() && cell->isObscuringForced() )
 	{
-	  m_pCanvas->setMarkerRow( cell->obscuringCellsRow() );
-	  m_pCanvas->setMarkerColumn( cell->obscuringCellsColumn() );
+	  (m_pCanvas->*setMarkerRow)( cell->obscuringCellsRow() );
+	  (m_pCanvas->*setMarkerColumn)( cell->obscuringCellsColumn() );
 	}
 
-	x = m_pTable->columnPos( m_pCanvas->markerColumn(), m_pCanvas );
-	cl = m_pTable->columnLayout( m_pCanvas->markerColumn() );
+	x = m_pTable->columnPos( (m_pCanvas->*markerColumn)(), m_pCanvas );
+	cl = m_pTable->columnLayout( (m_pCanvas->*markerColumn)() );
 	if ( x < 0 )
 	  horzScrollBar()->setValue( m_pCanvas->xOffset() + x );
 
-	// If we have been at the left side of the selection ...
-	if ( selection.left() == m_pCanvas->markerColumn() + 1 && make_select )
-	    selection.setLeft( m_pCanvas->markerColumn() );
-	else if ( make_select )
-	    selection.setRight( m_pCanvas->markerColumn() );
-
 	if ( make_select )
-	  m_pTable->setSelection( selection, m_pCanvas );
+        {
+	    // If we have been at the left side of the selection ...
+	    if ( selection.left() == marker_column )
+		selection.setLeft( (m_pCanvas->*markerColumn)() );
+	    else
+		selection.setRight( (m_pCanvas->*markerColumn)() );
 
-	m_pCanvas->showMarker();
+	    if ( choose )
+		m_pTable->setChooseRect( selection );
+	    else
+		m_pTable->setSelection( selection, m_pCanvas );
+	}
+	else if ( choose )
+	    m_pTable->setChooseRect( QRect( m_pCanvas->chooseMarkerColumn(), m_pCanvas->chooseMarkerRow(), 1, 1 ) );
 
-	updateEditWidget();
+	(m_pCanvas->*showMarker)();
+
+	if ( !choose )
+	    updateEditWidget();
+	
 	break;
 
     case Key_Right:
-	m_pCanvas->hideMarker();
+	(m_pCanvas->*hideMarker)();
 
 	if ( selection.left() == 0 && make_select )
-	    selection.setCoords( m_pCanvas->markerColumn(), m_pCanvas->markerRow(), m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+	    selection = QRect( marker_column, marker_row, 1, 1 );
 
-	cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+	cell = m_pTable->cellAt( marker_column, marker_row );
 	// Are we leaving a cell with extra size ?
 	if ( cell->isForceExtraCells() )
-	  m_pCanvas->setMarkerColumn( m_pCanvas->markerColumn() + 1 + cell->extraXCells() );
+	  (m_pCanvas->*setMarkerColumn)( marker_column + 1 + cell->extraXCells() );
 	else
-	  m_pCanvas->setMarkerColumn( m_pCanvas->markerColumn() + 1 );
+	  (m_pCanvas->*setMarkerColumn)( marker_column + 1 );
 
-	cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
+	cell = m_pTable->cellAt( marker_column, marker_row );
 	// Go to the upper left corner of the obscuring object ( if there is one )
 	if ( cell->isObscured() && cell->isObscuringForced() )
 	{
-	  m_pCanvas->setMarkerRow( cell->obscuringCellsRow() );
-	  m_pCanvas->setMarkerColumn( cell->obscuringCellsColumn() );
+	  (m_pCanvas->*setMarkerRow)( cell->obscuringCellsRow() );
+	  (m_pCanvas->*setMarkerColumn)( cell->obscuringCellsColumn() );
 	}
 
-	x = m_pTable->columnPos( m_pCanvas->markerColumn(), m_pCanvas );
-	cl = m_pTable->columnLayout( m_pCanvas->markerColumn() );
+	x = m_pTable->columnPos( (m_pCanvas->*markerColumn)(), m_pCanvas );
+	cl = m_pTable->columnLayout( (m_pCanvas->*markerColumn)() );
 	if ( x + cl->width( m_pCanvas ) > m_pCanvas->width() )
 	    horzScrollBar()->setValue( m_pCanvas->xOffset() + ( x + cl->width( m_pCanvas )
 								- m_pCanvas->width() ) );
 
-	// If we have been at the right side of the selection ...
-	if ( selection.right() == m_pCanvas->markerColumn() - 1 && make_select )
-	    selection.setRight( m_pCanvas->markerColumn() );
-	else if ( make_select )
-	    selection.setLeft( m_pCanvas->markerColumn() );
-
 	if ( make_select )
-	  m_pTable->setSelection( selection, m_pCanvas );
+        {
+	    // If we have been at the right side of the selection ...
+	    if ( selection.right() == marker_column )
+		selection.setRight( (m_pCanvas->*markerColumn)() );
+	    // We have been on the left side ....
+	    else
+		selection.setLeft( (m_pCanvas->*markerColumn)() );
 
-	m_pCanvas->showMarker();
+	    if ( choose )
+		m_pTable->setChooseRect( selection );
+	    else
+		m_pTable->setSelection( selection, m_pCanvas );
+	}
+	else if ( choose )
+	    m_pTable->setChooseRect( QRect( m_pCanvas->chooseMarkerColumn(), m_pCanvas->chooseMarkerRow(), 1, 1 ) );
+	
+	(m_pCanvas->*showMarker)();
 
-	updateEditWidget();
-	break;
-
-    case Key_Escape:
-	if ( m_pCanvas->editDirtyFlag() )
-	    updateEditWidget();	
+	if ( !choose )
+	    updateEditWidget();
 	break;
     }
 
@@ -644,21 +728,64 @@ void KSpreadView::formulaProduct()
     canvasWidget()->insertFormulaChar(PRODUCT );
 }
 
-void KSpreadView::showFormulaToolBar( bool show )
-{
-    // ###### TORBEN: Todo
-    /* if( look )
-	m_vToolBarFormula->enable( OpenPartsUI::Show );
-	else if(look==false)
-	{
-	 m_vToolBarFormula->enable( OpenPartsUI::Hide );  	
-	 } */
-}
-
 void KSpreadView::tableFormat()
 {
     KSpreadFormatDlg dlg( this );
     dlg.exec();
+}
+
+void KSpreadView::autoSum()
+{
+    // ######## Torben: Make sure that this can not be called
+    // when canvas has a running editor
+    if ( m_pCanvas->editor() )
+	return;
+    
+    m_pCanvas->createEditor( KSpreadCanvas::CellEditor );
+    m_pCanvas->editor()->setText( "=sum()" );
+    m_pCanvas->editor()->setCursorPosition( 5 );
+    
+    // Try to find numbers above
+    if ( m_pCanvas->markerRow() > 1 )
+    {
+	KSpreadCell* cell = 0;
+	int r = m_pCanvas->markerRow();
+	do
+        {
+	    cell = activeTable()->cellAt( m_pCanvas->markerColumn(), --r );
+	}
+	while ( cell && cell->isValue() );
+	
+	if ( r + 1 < m_pCanvas->markerRow() )
+        {
+	    m_pTable->setChooseRect( QRect( m_pCanvas->markerColumn(), r + 1, 1, m_pCanvas->markerRow() - r - 1 ) );
+	    return;
+	}
+    }
+    
+    // Try to find numbers left
+    if ( m_pCanvas->markerColumn() > 1 )
+    {
+	KSpreadCell* cell = 0;
+	int c = m_pCanvas->markerColumn();
+	do
+        {
+	    cell = activeTable()->cellAt( --c, m_pCanvas->markerRow() );
+	}
+	while ( cell && cell->isValue() );
+	
+	if ( c + 1 < m_pCanvas->markerColumn() )
+        {
+	    m_pTable->setChooseRect( QRect( c + 1, m_pCanvas->markerRow(), m_pCanvas->markerColumn() - c - 1, 1 ) );
+	    return;
+	}
+    }
+}
+
+void KSpreadView::oszilloscope()
+{
+    QDialog* dlg = new KSpreadOsziDlg( this );
+    dlg->show();
 }
 
 void KSpreadView::changeTextColor()
@@ -845,7 +972,10 @@ void KSpreadView::formulaSelection( const QString &_math )
 	return;
     }
 
-    if ( !m_pCanvas->editor() )
+    KSpreadcreate* dlg = new KSpreadcreate( this, _math );
+    dlg->show();
+    
+    /* if ( !m_pCanvas->editor() )
     {
 	m_pCanvas->createEditor( KSpreadCanvas::CellEditor );
 	m_pCanvas->editor()->setText( "=" );
@@ -863,7 +993,7 @@ void KSpreadView::formulaSelection( const QString &_math )
     int pos = cursor + _math.length() + 1;
     m_pCanvas->editor()->setText( m_pCanvas->editor()->text().insert( cursor, function ) );
     m_pCanvas->editor()->setCursorPosition( pos );
-    m_pCanvas->editor()->setFocus();
+    m_pCanvas->editor()->setFocus(); */
 }
 
 void KSpreadView::fontSizeSelected( int _size )
@@ -1129,6 +1259,8 @@ void KSpreadView::addTable( KSpreadTable *_t )
 		      SLOT( slotUpdateVBorder( KSpreadTable * ) ) );
     QObject::connect( _t, SIGNAL( sig_changeSelection( KSpreadTable *, const QRect &, const QRect & ) ),
 		      SLOT( slotChangeSelection( KSpreadTable *, const QRect &, const QRect & ) ) );
+    QObject::connect( _t, SIGNAL( sig_changeChooseSelection( KSpreadTable *, const QRect &, const QRect & ) ),
+		      SLOT( slotChangeChooseSelection( KSpreadTable *, const QRect &, const QRect & ) ) );
     QObject::connect( _t, SIGNAL( sig_insertChild( KSpreadChild* ) ), SLOT( slotInsertChild( KSpreadChild* ) ) );
     QObject::connect( _t, SIGNAL( sig_updateChildGeometry( KSpreadChild* ) ),
 		      SLOT( slotUpdateChildGeometry( KSpreadChild* ) ) );
@@ -1477,10 +1609,10 @@ void KSpreadView::resizeEvent( QResizeEvent * )
     m_pToolWidget->show();
     m_pToolWidget->setGeometry( 0, 0, width(), 30 );
     int top = 30;
-    m_pPosWidget->setGeometry( 2,2,50,26 );
-    m_pCancelButton->setGeometry( 60, 2, 26, 26 );
-    m_pOkButton->setGeometry( 90, 2, 26, 26 );
-    m_pEditWidget->setGeometry( 125, 2, 200, 26 );
+    // m_pPosWidget->setGeometry( 2,2,50,26 );
+    // m_pCancelButton->setGeometry( 60, 2, 26, 26 );
+    // m_pOkButton->setGeometry( 90, 2, 26, 26 );
+    // m_pEditWidget->setGeometry( 125, 2, 200, 26 );
 	
     m_pTabBarFirst->setGeometry( 0, height() - 16, 16, 16 );
     m_pTabBarFirst->show();
@@ -2051,6 +2183,18 @@ void KSpreadView::slotUpdateVBorder( KSpreadTable *_table )
 	return;
 
     m_pVBorderWidget->update();
+}
+
+void KSpreadView::slotChangeChooseSelection( KSpreadTable *_table, const QRect &_old, const QRect &_new )
+{
+    // Do we display this table ?
+    if ( _table != m_pTable )
+	return;
+
+    m_pCanvas->updateChooseMarker( _old, _new );
+	
+    // Emit a signal for internal use
+    emit sig_chooseSelectionChanged( _table, _new );
 }
 
 void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old, const QRect &_new )

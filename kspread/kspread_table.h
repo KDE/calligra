@@ -330,6 +330,20 @@ public:
      */
     void setText( int row, int column, const QString& text );
 
+    /**
+     * @return the rectangle of the choose selection.
+     *
+     * @see #setChooseRect
+     */
+    QRect chooseRect() const { return m_chooseRect; }
+    /**
+     * Set the rectangle of the choose selection. This will trigger
+     * the signal @ref #sig_changeChooseSelection.
+     *
+     * @see #chooseRect
+     */
+    void setChooseRect( const QRect& rect );
+    
     QRect selectionRect() const { return m_rctSelection; }
     void setSelection( const QRect &_rect, KSpreadCanvas *_canvas = 0L );
 
@@ -576,6 +590,7 @@ signals:
     void sig_updateHBorder( KSpreadTable *_table );
     void sig_updateVBorder( KSpreadTable *_table );
     void sig_changeSelection( KSpreadTable *_table, const QRect &_old, const QRect &_new );
+    void sig_changeChooseSelection( KSpreadTable *_table, const QRect &_old, const QRect &_new );
     void sig_insertChild( KSpreadChild *_child );
     void sig_updateChildGeometry( KSpreadChild *_child );
     void sig_removeChild( KSpreadChild *_child );
@@ -626,6 +641,15 @@ protected:
      */
     QRect m_rctSelection;
 
+    /**
+     * Contains the selection of a choose. If @ref QRect::left() returns 0, then
+     * there is no selection.
+     *
+     * @ref #chooseRect
+     * @ref #setChooseRect
+     */
+    QRect m_chooseRect;
+    
     /**
      * Indicates whether the table should paint the page breaks.
      * Doing so costs some time, so by default it should be turned off.

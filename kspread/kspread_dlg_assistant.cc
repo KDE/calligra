@@ -33,7 +33,7 @@
 
 
 KSpreadassistant::KSpreadassistant( KSpreadView* parent, const char* name,QString _formula)
-	: QDialog( 0L, name )
+	: QDialog( parent, name )
 {
   m_pView = parent;
 

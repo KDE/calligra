@@ -59,13 +59,13 @@ KSpreadFormatDlg::KSpreadFormatDlg( KSpreadView* view, const char* name )
     }
 
     slotActivated( 0 );
-    
+
     connect( ok, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
     connect( close, SIGNAL( clicked() ), this, SLOT( reject() ) );
     connect( m_combo, SIGNAL( activated( int ) ), this, SLOT( slotActivated( int ) ) );
 }
 
-bool KSpreadFormatDlg::slotActivated( int index )
+void KSpreadFormatDlg::slotActivated( int index )
 {
     QString img = KSpreadFactory::global()->dirs()->findResource( "table-styles", m_entries[ index ].image );
     if ( img.isEmpty() )
@@ -73,7 +73,7 @@ bool KSpreadFormatDlg::slotActivated( int index )
 	QString str( i18n( "Could not find image %1" ) );
 	str = str.arg( m_entries[ index ].image );
 	QMessageBox::critical( this, i18n("KSpread Error"), str );
-	return FALSE;
+	return;
     }
 
     QPixmap pix( img );
@@ -82,7 +82,7 @@ bool KSpreadFormatDlg::slotActivated( int index )
 	QString str( i18n( "Could not load image %1" ) );
 	str = str.arg( img );
 	QMessageBox::critical( this, i18n("KSpread Error"), str );
-	return FALSE;
+	return;
     }
 	
     m_label->setPixmap( pix );
@@ -113,7 +113,7 @@ void KSpreadFormatDlg::slotOk()
     }
 	
     QRect r = m_view->activeTable()->selectionRect();
-    
+
     //
     // Set colors, borders etc.
     //
@@ -150,7 +150,7 @@ void KSpreadFormatDlg::slotOk()
     }
     cell = m_view->activeTable()->nonDefaultCell( r.right() + 1, r.top() );
     cell->setLeftBorderPen( m_cells[3].leftPen );
-    
+
     // Left row
     for( y = r.top() + 1; y <= r.bottom(); ++y )
     {
@@ -171,7 +171,7 @@ void KSpreadFormatDlg::slotOk()
 	else
 	    cell->setTopBorderPen( m_cells[8].topPen );
     }
-    
+
     // Body
     for( x = r.left() + 1; x <= r.right(); ++x )
 	for( y = r.top() + 1; y <= r.bottom(); ++y )
@@ -193,7 +193,7 @@ void KSpreadFormatDlg::slotOk()
 	    else
 		cell->setTopBorderPen( m_cells[ 9 + ( ( x - r.left() - 1 ) % 2 ) ].topPen );
 	}
-    
+
     // Outer right border
     for( y = r.top(); y <= r.bottom(); ++y )
     {
@@ -205,7 +205,7 @@ void KSpreadFormatDlg::slotOk()
 	else
 	    cell->setLeftBorderPen( m_cells[7].leftPen );
     }
-    
+
     // Outer bottom border
     for( x = r.left(); x <= r.right(); ++x )
     {
@@ -217,9 +217,9 @@ void KSpreadFormatDlg::slotOk()
 	else
 	    cell->setTopBorderPen( m_cells[13].topPen );
     }
-    
+
     m_view->activeTable()->setSelection( QRect( 0, 0, 0, 0 ) );
-    
+
     accept();
 }
 
@@ -231,7 +231,7 @@ bool KSpreadFormatDlg::parseXML( const QDomDocument& doc )
 	Cell cell;
 	m_cells.append( cell );
     }
- 
+
     QDomElement e = doc.documentElement().firstChild().toElement();
     for( ; !e.isNull(); e = e.nextSibling().toElement() )
     {
@@ -249,7 +249,7 @@ bool KSpreadFormatDlg::parseXML( const QDomDocument& doc )
 	    cell.align = KSpreadCell::Undefined;
 	    cell.floatFormat = KSpreadCell::OnlyNegSigned;
 	    cell.floatColor = KSpreadCell::AllBlack;
-	    
+	
 	    QDomElement f = e.namedItem( "format" ).toElement();
 	    if ( !f.isNull() )
 	    {
@@ -298,10 +298,10 @@ bool KSpreadFormatDlg::parseXML( const QDomDocument& doc )
 			cell.topPen = pen.toPen();
 		}
 	    }
-	    
+	
 	    m_cells[ (row-1)*4 + (column-1) ] = cell;
 	}
     }
-    
+
     return TRUE;
 }

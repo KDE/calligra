@@ -25,11 +25,13 @@ libkspread_la_SOURCES = kspread_canvas.cc \
 	kspread_dlg_special.cc kspread_dlg_goto.cc  kspread_dlg_replace.cc \
 	kspread_dlg_sort.cc kspread_dlg_anchor.cc \
 	kspread_dlg_resize.cc kspread_factory.cc kspread_handler.cc \
-	kspread_events.cc  kspread_dlg_assistant2.cc kspread_dlg_show.cc \
+	kspread_events.cc kspread_dlg_show.cc \
 	kspread_dlg_insert.cc KSpreadDocIface.skel KSpreadMapIface.skel \
 	KSpreadTableIface.skel KSpreadDocIface.cc KSpreadMapIface.cc \
 	KSpreadTableIface.cc KSpreadCellIface.cc KSpreadCellIface.skel \
-	KSpreadAppIface.cc KSpreadAppIface.skel kspread_dlg_format.cc
+	KSpreadAppIface.cc KSpreadAppIface.skel kspread_dlg_format.cc \
+	kspread_dlg_oszi.cc \
+	qtai_bar.cpp qtai_base.cpp qtai_meter.cpp qtai_plot.cpp qtai_strip.cpp
 
 kspread_SOURCES = main.cc
 
@@ -45,9 +47,10 @@ noinst_HEADERS = kspread_shell.h kspread_doc.h \
 	kspread_dlg_sort.h kspread_dlg_create.h kspread_dlg_anchor.h  \
 	kspread_dlg_resize.h kspread_factory.h kspread_handler.h \
 	kspread_events.h kspread_global.h  \
-	kspread_dlg_assistant2.h kspread_dlg_show.h kspread_dlg_insert.h \
+	kspread_dlg_show.h kspread_dlg_insert.h \
 	KSpreadCellIface.h KSpreadMapIface.h KSpreadTableIface.h KSpreadDocIface.h \
-	KSpreadAppIface.h kspread_dlg_format.h
+	KSpreadAppIface.h kspread_dlg_format.h kspread_dlg_oszi.h \
+	qtai_bar.h qtai_base.h qtai_meter.h qtai_plot.h qtai_strip.h
 
 libkspread_la_METASOURCES = AUTO
 

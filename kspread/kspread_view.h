@@ -93,7 +93,7 @@ public:
     void popupRowMenu(const QPoint & _point ) ;
     void popupColumnMenu( const QPoint & _point);
 
-    void showFormulaToolBar( bool show );
+    // void showFormulaToolBar( bool show );
 
     /**
      * Used by @ref KSpreadEditWidget. Sets the text of the active cell.
@@ -212,6 +212,8 @@ public slots:
     void borderRemove();
     void changeBorderColor();
     void tableFormat();
+    void oszilloscope();
+    void autoSum();
     void slotInsertRow();
     void slotRemoveRow();
     void slotInsertColumn();
@@ -273,6 +275,7 @@ public slots:
     void slotUpdateHBorder( KSpreadTable *_table );
     void slotUpdateVBorder( KSpreadTable *_table );
     void slotChangeSelection( KSpreadTable *_table, const QRect &_old, const QRect &_new );
+    void slotChangeChooseSelection( KSpreadTable *_table, const QRect &_old, const QRect &_new );
     void slotAddTable( KSpreadTable *_table );
     void slotInsertChild( KSpreadChild *_child );
     void slotRemoveChild( KSpreadChild *_child );
@@ -285,9 +288,10 @@ public slots:
 
 signals:
     void sig_selectionChanged( KSpreadTable* _table, const QRect& _selection );
+    void sig_chooseSelectionChanged( KSpreadTable* _table, const QRect& _selection );
 
 protected:
-    bool eventKeyPressed( QKeyEvent* _event );
+    bool eventKeyPressed( QKeyEvent* _event, bool choose );
 	
     virtual void keyPressEvent ( QKeyEvent * _ev );
     virtual void resizeEvent( QResizeEvent *_ev );
@@ -395,6 +399,8 @@ private:
     KAction* m_borderRemove;
     KColorAction* m_borderColor;
     KAction* m_tableFormat;
+    KAction* m_oszi;
+    KAction* m_autoSum;
     
     /**
      * Pointer to the last popup menu.
