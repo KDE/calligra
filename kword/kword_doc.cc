@@ -1278,26 +1278,23 @@ void KWordDocument::drawSelection(QPainter &_painter,int xOffset,int yOffset)
 	}
     }
 
-  int _x = 0,_y = 0,_w = 0,_h = 0;
-
-  _x = tmpFC1.getPTPos();
-  _y = tmpFC1.getPTY();
-  _h = tmpFC1.getLineHeight();
-
-  while (!(tmpFC1.getParag() == tmpFC2.getParag() && tmpFC1.getTextPos() == tmpFC2.getTextPos()))
+  if (tmpFC1.getPTY() == tmpFC2.getPTY())
+    _painter.drawRect(tmpFC1.getPTPos() - xOffset,tmpFC2.getPTY() - yOffset,
+		      tmpFC2.getPTPos() - tmpFC1.getPTPos(),tmpFC2.getLineHeight());
+  else
     {
-      _w = tmpFC1.getPTPos() - _x;
-      tmpFC1.cursorGotoRight(_painter);
-      if (tmpFC1.isCursorAtLineStart())
+      _painter.drawRect(tmpFC1.getPTPos() - xOffset,tmpFC1.getPTY() - yOffset,
+			tmpFC1.getPTLeft() + tmpFC1.getPTWidth() - tmpFC1.getPTPos(),tmpFC1.getLineHeight());
+      tmpFC1.makeNextLineLayout(_painter);
+      
+      while (tmpFC1.getPTY() < tmpFC2.getPTY())
 	{
-	  _painter.drawRect(_x - xOffset,_y - yOffset,_w,_h);
-	  _x = tmpFC1.getPTPos();
-	  _y = tmpFC1.getPTY();
-	  _h = tmpFC1.getLineHeight();
+	  _painter.drawRect(tmpFC1.getPTLeft() - xOffset,tmpFC1.getPTY() - yOffset,tmpFC1.getPTWidth(),tmpFC1.getLineHeight());
+	  tmpFC1.makeNextLineLayout(_painter);
 	}
+      
+      _painter.drawRect(tmpFC2.getPTLeft() - xOffset,tmpFC2.getPTY() - yOffset,tmpFC2.getPTPos() - tmpFC2.getPTLeft(),tmpFC2.getLineHeight());
     }
-  _w = tmpFC1.getPTPos() - _x;
-  _painter.drawRect(_x - xOffset,_y - yOffset,_w,_h);
 
   _painter.setRasterOp(rop);
   _painter.restore();

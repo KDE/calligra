@@ -973,10 +973,7 @@ void KWPage::paintEvent(QPaintEvent* e)
 	case FT_TEXT:
 	  {
 	    KWParag *p = 0L;
-	    if (firstVisiblePage != lastVisiblePage)
-	      p = doc->findFirstParagOfRect(yOffset,firstVisiblePage,i);
-	    else
-	      p = doc->findFirstParagOfRect(e->rect().y() + yOffset,firstVisiblePage,i);
+	    p = doc->findFirstParagOfRect(e->rect().y() + yOffset,firstVisiblePage,i);
 
 	    if (p)
 	      {
@@ -986,6 +983,8 @@ void KWPage::paintEvent(QPaintEvent* e)
 		bool bend = false;
 		while (!bend)
 		  {
+		    if (paintfc->getFrameSet() == 1 && doc->getProcessingType() == KWordDocument::WP &&
+			static_cast<int>(paintfc->getParag()->getPTYStart() - yOffset) > height() && doc->getColumns() == 1) break;
 		    if (doc->getFrameSet(i)->getFrame(paintfc->getFrame() - 1)->isMostRight() && 
 			doc->getFrameSet(i)->getNumFrames() > paintfc->getFrame() &&
 			doc->getFrameSet(i)->getFrame(paintfc->getFrame())->top() - 
@@ -1007,6 +1006,33 @@ void KWPage::paintEvent(QPaintEvent* e)
 	}
     }
   delete paintfc;
+
+  KWFormatContext _fc(doc,fc->getFrameSet());
+  _fc = *fc;
+  KWFrameSet *frameSet = doc->getFrameSet(_fc.getFrameSet() - 1);
+  unsigned int _x = frameSet->getFrame(_fc.getFrame() - 1)->x() - xOffset;
+  unsigned int _wid = frameSet->getFrame(_fc.getFrame() - 1)->width();
+  if (e->rect().intersects(QRect(_x + frameSet->getFrame(_fc.getFrame() - 1)->getLeftIndent(_fc.getPTY(),_fc.getLineHeight()),
+				 _fc.getPTY() - yOffset,
+				 _wid - frameSet->getFrame(_fc.getFrame() - 1)->getLeftIndent(_fc.getPTY(),_fc.getLineHeight()) -
+				 frameSet->getFrame(_fc.getFrame() - 1)->getRightIndent(_fc.getPTY(),_fc.getLineHeight()),
+				 _fc.getLineHeight())))
+    {
+      if (!e->rect().contains(QRect(_x + frameSet->getFrame(_fc.getFrame() - 1)->getLeftIndent(_fc.getPTY(),_fc.getLineHeight()),
+				    _fc.getPTY() - yOffset,
+				    _wid - frameSet->getFrame(_fc.getFrame() - 1)->getLeftIndent(_fc.getPTY(),_fc.getLineHeight()) -
+				    frameSet->getFrame(_fc.getFrame() - 1)->getRightIndent(_fc.getPTY(),_fc.getLineHeight()),
+				    _fc.getLineHeight())))
+	painter.setClipping(false);
+    }
+
+  painter.fillRect(_x + frameSet->getFrame(_fc.getFrame() - 1)->getLeftIndent(_fc.getPTY(),_fc.getLineHeight()),
+		   _fc.getPTY() - yOffset,
+		   _wid - frameSet->getFrame(_fc.getFrame() - 1)->getLeftIndent(_fc.getPTY(),_fc.getLineHeight()) -
+		   frameSet->getFrame(_fc.getFrame() - 1)->getRightIndent(_fc.getPTY(),_fc.getLineHeight()),
+		   _fc.getLineHeight(),QBrush(white));
+  doc->printLine(_fc,painter,xOffset,yOffset,width(),height());
+
   if (doc->has_selection()) doc->drawSelection(painter,xOffset,yOffset);
   
   doc->drawMarker(*fc,&painter,xOffset,yOffset);
@@ -1014,7 +1040,13 @@ void KWPage::paintEvent(QPaintEvent* e)
 
   painter.end();
 
-  if (!paint_directly) drawBuffer();
+  if (!paint_directly) 
+    {
+      if (painter.hasClipping())
+	drawBuffer(e->rect());
+      else
+	drawBuffer();
+    }
 }
 
 /*================================================================*/

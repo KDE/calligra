@@ -428,3 +428,10 @@ Reggie, 30.11.1998:
 -------------------
 - Scrolling works fine again
 - Lots of fixes again
+
+Reggie, 1.12.1998:
+------------------
+- More speed improvements
+- Selecting text is faster too now (There are still problems when selecting text with the mouse 
+  and scrolling - selcting text with keyboard + scrolling works quite fine)
+- Small fixes again

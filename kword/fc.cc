@@ -933,10 +933,10 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 
     // Does this line still fit on this frame ?
     if (!document->isPTYInFrame(frameSet - 1,frame - 1,ptY + getLineHeight()))
-    {
+      {
 	// Can we jump to the next frame ?
 	if (frame < document->getFrameSet(frameSet - 1)->getNumFrames())
-	{
+	  {
 	    frame++;
 	    if (document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->top() >
 		static_cast<int>(page) * static_cast<int>(document->getPTPaperHeight()))
@@ -945,15 +945,15 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 	    parag->setEndFrame(frame);
 	    ptY = document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->top();
 	    return makeLineLayout(_painter);
-	}
+	  }
 	else // append a page
-	{
+	  {
 	    if (!dynamic_cast<KWTextFrameSet*>(document->getFrameSet(frameSet - 1))->getAutoCreateNewFrame())
 	      {
 		outOfFrame = true;
 		return false;
 	      }
-
+	    
 	    document->appendPage(page - 1,_painter);
 	    page++;
 	    frame++;
@@ -961,9 +961,9 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 	    parag->setEndFrame(frame);
 	    ptY = document->getFrameSet(frameSet - 1)->getFrame(frame - 1)->top();
 	    return makeLineLayout(_painter);
-	}
-    }
-
+	  }
+      }
+    
     //debug("start: %d, end: %d",lineStartPos,lineEndPos);
 
     compare_formats = true;
