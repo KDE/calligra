@@ -6529,6 +6529,17 @@ QDomElement KSpreadTable::saveXML( QDomDocument& doc )
     printrange.setAttribute( "top-rect", top );
     table.appendChild( printrange );
 
+    // Print repeat columns
+    QDomElement printRepeatColumns = doc.createElement( "printrepeatcolumns" );
+    printRepeatColumns.setAttribute( "left", m_printRepeatColumns.first );
+    printRepeatColumns.setAttribute( "right", m_printRepeatColumns.second );
+    table.appendChild( printRepeatColumns );
+
+    // Print repeat rows
+    QDomElement printRepeatRows = doc.createElement( "printrepeatrows" );
+    printRepeatRows.setAttribute( "top", m_printRepeatRows.first );
+    printRepeatRows.setAttribute( "bottom", m_printRepeatRows.second );
+    table.appendChild( printRepeatRows );
 
     // Save all cells.
     KSpreadCell* c = m_cells.firstCell();
@@ -6722,6 +6733,24 @@ bool KSpreadTable::loadXML( const QDomElement& table )
           bottom = KS_rowMax;
         }
         m_printRange = QRect( QPoint( left, top ), QPoint( right, bottom ) );
+      }
+
+      // load print repeat columns
+      QDomElement printrepeatcolumns = table.namedItem( "printrepeatcolumns" ).toElement();
+      if ( !printrepeatcolumns.isNull() )
+      {
+        int left = printrepeatcolumns.attribute( "left" ).toInt();
+        int right = printrepeatcolumns.attribute( "right" ).toInt();
+        m_printRepeatColumns = qMakePair( left, right );
+      }
+
+      // load print repeat rows
+      QDomElement printrepeatrows = table.namedItem( "printrepeatrows" ).toElement();
+      if ( !printrepeatrows.isNull() )
+      {
+        int top = printrepeatrows.attribute( "top" ).toInt();
+        int bottom = printrepeatrows.attribute( "bottom" ).toInt();
+        m_printRepeatRows = qMakePair( top, bottom );
       }
 
     // Load the cells

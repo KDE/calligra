@@ -188,7 +188,7 @@
                 formular          show/hide formular
                 lcmode            write on LxCx area selected 
 -->
-<!ELEMENT table (paper|cell|chart|column|row|print-rect)*>
+<!ELEMENT table (paper|cell|chart|column|row|printrange-rect|printrepeatcolumns|printrepeatrows)*>
 <!ATTLIST table  name               CDATA #REQUIRED
                  columnnumber       CDATA #REQUIRED
                  borders            CDATA #REQUIRED     
@@ -364,6 +364,27 @@
                            right-rect     CDATA #IMPLIED
                            bottom-rect    CDATA #IMPLIED
                            top-rect       CDATA #IMPLIED>
+
+
+<!--	Describe the repeated columns on printout.
+        Attributes:
+
+         left   value of the left column
+         right  value of the right column
+-->
+<!ELEMENT printrepeatcolumns  EMPTY>
+<!ATTLIST printrepeatcolumns  left      CDATA #IMPLIED
+                              right     CDATA #IMPLIED>
+
+<!--	Describe the repeated rows on printout.
+        Attributes:
+
+         top     value of the top row
+         bottom  value of the bottom row
+-->
+<!ELEMENT printrepeatrows  EMPTY>
+<!ATTLIST printrepeatrows  row        CDATA #IMPLIED
+                           bottom     CDATA #IMPLIED>
 
 
 <!--	Describes an embedded chart.
