@@ -24,6 +24,8 @@ KoText:
 - Fixed hyphenation checkbox not correctly set in font dialog
 - Font dialog usability: turn radiobuttons superscript/subscript into
   checkboxes to make it possible to deactivate both.
+- Usability in style dialog: when creating a new style, select it as the
+  'next style' for itself (#45868).
 
 KoSpell:
 - Improved configure check for libaspell
