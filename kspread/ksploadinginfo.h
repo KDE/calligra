@@ -29,6 +29,7 @@ public:
     void addWordInAreaList( const QString & word) { m_areaNamed.append( word ); }
     bool findWordInAreaList(const QString & word) const { return (m_areaNamed.find( word ) != m_areaNamed.end());}
     void appendValidation( const QString &name, const QDomElement &element){ m_validationList.insert( name, element);}
+    QDomElement validation( const QString &name) { return m_validationList[name];}
 private:
     QStringList m_areaNamed;
     QMap<QString,QDomElement> m_validationList;

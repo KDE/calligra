@@ -5325,6 +5325,11 @@ bool KSpreadCell::loadOasis( const QDomElement &element, const KoOasisStyles& oa
 void KSpreadCell::loadOasisValidation( const QString& validationName )
 {
     kdDebug()<<"validationName:"<<validationName<<endl;
+    QDomElement element = table()->doc()->loadingInfo()->validation( validationName);
+    for ( ; !element.isNull() ; element = element.nextSibling().toElement() ) {
+        kdDebug()<<" Tag recognize :"<<element.tagName()<<endl;
+
+    }
 }
 
 bool KSpreadCell::load( const QDomElement & cell, int _xshift, int _yshift,
