@@ -1,3 +1,4 @@
+#MIN_CONFIG
 
 KDE_CHECK_MICO()
 KDE_CHECK_MINI_STL([AC_MSG_ERROR([compile mico with --disable-mini-stl])])
