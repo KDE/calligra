@@ -38,8 +38,9 @@ QString KoGenStyles::lookup( const KoGenStyle& style, const QString& name, bool 
         if ( !style.parentName().isEmpty() ) {
             KoGenStyle testStyle( style );
             const KoGenStyle* parentStyle = this->style( style.parentName() ); // ## linear search
-            Q_ASSERT( parentStyle ); // hmm? parent not in collection yet?
-            if ( parentStyle ) {
+            if( !parentStyle ) {
+                kdDebug(30003) << "KoGenStyles::lookup(" << name << "): parent style '" << style.parentName() << "' not found in collection" << endl;
+            } else {
                 testStyle.m_parentName = parentStyle->m_parentName;
                 if ( *parentStyle == testStyle )
                     return style.parentName();

@@ -89,7 +89,6 @@ bool KoStyleStack::hasAttribute( const QString& name, const QString& detail, con
     }
     QValueList<QDomElement>::ConstIterator it = m_stack.end();
     QString nameProperties = typeProperties.isEmpty() ? "style:properties" : ( "style:"+typeProperties+"-properties" );
-    kdDebug()<<"hasAttribute nameProperties : "<<nameProperties<<endl;
     if ( fullName == name )
     {
         while ( it != m_stack.begin() )
@@ -123,7 +122,6 @@ QString KoStyleStack::attribute( const QString& name, const QString& detail, con
     }
     QValueList<QDomElement>::ConstIterator it = m_stack.end();
     QString nameProperties = typeProperties.isEmpty() ? "style:properties" : ( "style:"+typeProperties+"-properties" );
-    kdDebug()<<"nameProperties :::::::::::::::::::::::: "<<nameProperties<<endl;
     if ( fullName == name )
     {
 

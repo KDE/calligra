@@ -1794,12 +1794,15 @@ void KoTextParag::loadOasis( const QDomElement& parent, KoOasisContext& context,
     invalidate( 0 );
 }
 
-void KoTextParag::saveOasis( KoXmlWriter& writer, KoGenStyles& mainStyles ) const
+void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
 {
+    KoGenStyles& mainStyles = context.mainStyles();
+
     // Write paraglayout to styles (with parent == the parag's style)
     QString parentStyleName;
     if ( m_layout.style )
-        parentStyleName = m_layout.style->name();
+        parentStyleName = context.styleAutoName( m_layout.style );
+
     KoGenStyle autoStyle( KoGenStyle::STYLE_AUTO, "paragraph", parentStyleName );
     m_layout.saveOasis( autoStyle );
     QString autoStyleName = mainStyles.lookup( autoStyle, "P", true );

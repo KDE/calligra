@@ -864,6 +864,7 @@ public:
     virtual void join( KoTextParagData * ) {}
 };*/
 class KoOasisContext;
+class KoSavingContext;
 class KoStyleCollection;
 class KoTextParag
 {

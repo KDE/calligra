@@ -1874,18 +1874,18 @@ KWFrame* KWTextFrameSet::loadOasis( const QDomElement &tag, KoOasisContext& cont
     return frame;
 }
 
-void KWTextFrameSet::saveOasisContent( KoXmlWriter& writer, KoGenStyles& mainStyles ) const
+void KWTextFrameSet::saveOasisContent( KoXmlWriter& writer, KoSavingContext& context ) const
 {
     if ( frames.isEmpty() ) // Deleted frameset -> don't save
         return;
     // TODO save protectContent
-    m_textobj->saveOasisContent( writer, mainStyles );
+    m_textobj->saveOasisContent( writer, context );
 }
 
-void KWTextFrameSet::saveOasis( KoXmlWriter& writer, KoGenStyles& mainStyles ) const
+void KWTextFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
 {
     // TODO save the frame stuff
-    saveOasisContent( writer, mainStyles );
+    saveOasisContent( writer, context );
 }
 
 void KWTextFrameSet::load( QDomElement &attributes, bool loadFrames )

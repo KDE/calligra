@@ -98,3 +98,11 @@ bool KoOasisContext::pushListLevelStyle( const QString& listStyleName, // for de
 KoOasisContext::~KoOasisContext()
 {
 }
+
+////
+
+KoSavingContext::KoSavingContext( KoGenStyles& mainStyles )
+    : m_mainStyles( mainStyles )
+{
+
+}

@@ -24,6 +24,7 @@
 #include <config.h>
 #endif
 
+class KoSavingContext;
 class KoGenStyles;
 class KWDocument;
 class KPrinter;
@@ -830,7 +831,7 @@ protected:
 
     void loadOasisHeaderFooter( const QDomElement& headerFooter, bool hasEvenOdd, QDomElement& style, KoOasisContext& context );
     void saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) const;
-    void saveOasisBody( KoXmlWriter& writer, KoGenStyles& mainStyles ) const;
+    void saveOasisBody( KoXmlWriter& writer, KoSavingContext& context ) const;
 
 private:
     void endOfLoading();

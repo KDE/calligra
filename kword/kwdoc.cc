@@ -2551,9 +2551,11 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     m_syntaxVersion = CURRENT_SYNTAX_VERSION; // todo clean this up
 
     KoGenStyles mainStyles;
+    KoSavingContext savingContext( mainStyles );
 
-    // Save user styles as KoGenStyles
-    m_styleColl->saveOasis( mainStyles, KoGenStyle::STYLE_USER );
+    // Save user styles as KoGenStyle objects
+    KoSavingContext::StyleNameMap map = m_styleColl->saveOasis( mainStyles, KoGenStyle::STYLE_USER );
+    savingContext.setStyleNameMap( map );
 
     KTempFile contentTmpFile;
     contentTmpFile.setAutoDelete( true );
@@ -2562,7 +2564,7 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     contentTmpWriter.startElement( "office:body" );
     contentTmpWriter.startElement( "office:text" );
 
-    saveOasisBody( contentTmpWriter, mainStyles );
+    saveOasisBody( contentTmpWriter, savingContext );
     // TODO save the content into contentTmpWriter!
     // TODO save embedded objects
 
@@ -2652,13 +2654,13 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
     stylesWriter.endDocument();
 }
 
-void KWDocument::saveOasisBody( KoXmlWriter& writer, KoGenStyles& mainStyles ) const
+void KWDocument::saveOasisBody( KoXmlWriter& writer, KoSavingContext& context ) const
 {
     if ( m_processingType == WP ) {
         // Write out the main text frameset's contents
         KWTextFrameSet *frameset = dynamic_cast<KWTextFrameSet *>( m_lstFrameSet.getFirst() );
         if ( frameset ) {
-            frameset->saveOasisContent( writer, mainStyles );
+            frameset->saveOasisContent( writer, context );
         }
         // TODO write out the other (non-inline) framesets
     } else {

@@ -20,6 +20,8 @@
 #ifndef KOOASISCONTEXT_H
 #define KOOASISCONTEXT_H
 
+class KoStyle;
+class KoGenStyles;
 class QDomElement;
 class KoDocument;
 class KoOasisStyles;
@@ -29,6 +31,7 @@ class KoVariableCollection;
 
 #include <koStyleStack.h>
 #include "koliststylestack.h"
+#include <qmap.h>
 
 /**
  * Used during loading of Oasis format (and discarded at the end of the loading).
@@ -90,6 +93,40 @@ private:
 
     KoListStyleStack m_listStyleStack;
     QString m_currentListStyleName;
+
+    class Private;
+    Private *d;
+};
+
+/**
+ * Used during saving to Oasis format (and discarded at the end of the saving).
+ *
+ * @author David Faure <faure@kde.org>
+ */
+class KoSavingContext
+{
+public:
+    KoSavingContext( KoGenStyles& mainStyles );
+
+    KoGenStyles& mainStyles() { return m_mainStyles; }
+
+    typedef QMap<KoStyle*, QString> StyleNameMap;
+
+    /// Called after saving the user styles.
+    /// Associates every KoStyle with its automatic name (style:name attribute)
+    void setStyleNameMap( const StyleNameMap& map ) { m_styleNameMap = map; }
+
+    /// @return the automatic name for a KoStyle
+    QString styleAutoName( KoStyle* style ) const {
+        StyleNameMap::const_iterator it = m_styleNameMap.find( style );
+        if ( it != m_styleNameMap.end() )
+            return *it;
+        return QString::null;
+    }
+
+private:
+    KoGenStyles& m_mainStyles;
+    StyleNameMap m_styleNameMap;
 
     class Private;
     Private *d;

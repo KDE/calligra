@@ -205,7 +205,7 @@ public:
     KoTextParag* loadList( const QDomElement& list, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * styleColl );
     KoTextParag* loadOasisText( const QDomElement &bodyElem, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * styleColl );
 
-    void saveOasisContent( KoXmlWriter& writer, KoGenStyles& mainStyles ) const;
+    void saveOasisContent( KoXmlWriter& writer, KoSavingContext& context ) const;
 
     virtual KoTextParag *createParag( KoTextDocument *d, KoTextParag *pr = 0, KoTextParag *nx = 0, bool updateIds = TRUE );
 

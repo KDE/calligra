@@ -67,7 +67,8 @@ public:
     void loadOasisStyleTemplates( KoOasisContext& context );
     /// Save the entire style collection to OASIS
     /// @p styleType is the STYLE_* value for this style.
-    void saveOasis( KoGenStyles& styles, int styleType ) const;
+    /// Return a the auto-name for each style, to be used when saving the document.
+    QMap<KoStyle*, QString> saveOasis( KoGenStyles& styles, int styleType ) const;
 
 private:
     QPtrList<KoStyle> m_styleList;

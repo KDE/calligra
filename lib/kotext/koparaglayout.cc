@@ -501,7 +501,7 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
             QString type = tabStop.attribute( "style:type" ); // left, right, center or char
 
             KoTabulator tab;
-            tab.ptWidth = 0.5; // ############ feature not in file format - remove?
+            tab.ptPos = KoUnit::parseValue( tabStop.attribute( "style:position" ) );
             if ( type == "center" )
                 tab.type = T_CENTER;
             else if ( type == "right" )
@@ -515,26 +515,40 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
             else //if ( type == "left" )
                 tab.type = T_LEFT;
 
-            tab.ptPos = KoUnit::parseValue( tabStop.attribute( "style:position" ) );
+            tab.ptWidth = KoUnit::parseValue( tabStop.attribute( "style:leader-width" ), 0.5 );
 
-            // TODO Convert leaderChar's unicode value to the KOffice enum
-            // (blank/dots/line/dash/dash-dot/dash-dot-dot, 0 to 5)
-            QString leaderChar = tabStop.attribute( "style:leader-char" ); // single character
             tab.filling = TF_BLANK;
-            if ( !leaderChar.isEmpty() )
+            if ( tabStop.attribute( "style:leader-type" ) == "single" )
             {
-                QChar ch = leaderChar[0];
-                switch (ch.latin1()) {
-                case '.':
-                    tab.filling = TF_DOTS; break;
-                case '-':
-                case '_':  // TODO in KWord: differentiate --- and ___
-                    tab.filling = TF_LINE; break;
-                default:
-                    // KWord doesn't have support for "any char" as filling.
-                    // Instead it has dash-dot and dash-dot-dot - but who uses that in a tabstop?
-                    // ########## TODO: remove?
-                    break;
+                QString leaderStyle = tabStop.attribute( "style:leader-style" );
+                if ( leaderStyle == "solid" )
+                    tab.filling = TF_LINE;
+                else if ( leaderStyle == "dotted" )
+                    tab.filling = TF_DOTS;
+                else if ( leaderStyle == "dash" )
+                    tab.filling = TF_DASH;
+                else if ( leaderStyle == "dot-dash" )
+                    tab.filling = TF_DASH_DOT;
+                else if ( leaderStyle == "dot-dot-dash" )
+                    tab.filling = TF_DASH_DOT_DOT;
+            }
+            else
+            {
+                // Fallback: convert leaderChar's unicode value
+                QString leaderChar = tabStop.attribute( "style:leader-text" );
+                if ( !leaderChar.isEmpty() )
+                {
+                    QChar ch = leaderChar[0];
+                    switch (ch.latin1()) {
+                    case '.':
+                        tab.filling = TF_DOTS; break;
+                    case '-':
+                    case '_':  // TODO in KWord: differentiate --- and ___
+                        tab.filling = TF_LINE; break;
+                    default:
+                        // KWord doesn't have support for "any char" as filling.
+                        break;
+                    }
                 }
             }
             tabList.append( tab );
@@ -852,7 +866,6 @@ void KoParagLayout::saveOasis( KoGenStyle& gs ) const
     buffer.close();
     QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
     gs.addChildElement( "style:tab-stops", elementContents );
-    kdDebug() << k_funcinfo << elementContents << endl;
 
     // TODO finish
 }

@@ -148,7 +148,7 @@ public:
     /// Load from XML
     void loadOasis( const QDomElement& e, KoOasisContext& context, KoStyleCollection *styleCollection );
     /// Save to XML
-    void saveOasis( KoXmlWriter& writer, KoGenStyles& mainStyles ) const;
+    void saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const;
 
     void loadOasisSpan( const QDomElement& parent, KoOasisContext& context, uint& pos );
 

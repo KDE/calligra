@@ -153,9 +153,9 @@ public:
     KWFrame* loadOasis( const QDomElement &bodyElem, KoOasisContext& context );
 
     /// Save the contents of a frame (i.e. the text)
-    void saveOasisContent( KoXmlWriter& writer, KoGenStyles& mainStyles ) const;
+    void saveOasisContent( KoXmlWriter& writer, KoSavingContext& context ) const;
     /// Save a complete textbox (frame and text)
-    void saveOasis( KoXmlWriter& writer, KoGenStyles& mainStyles ) const;
+    void saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const;
 
     virtual void finalize();
     virtual void zoom( bool forPrint );

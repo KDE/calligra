@@ -24,6 +24,8 @@
 #include "koChangeCaseDia.h"
 #include "kostyle.h"
 #include "kotextdocument.h"
+
+class KoSavingContext;
 class KCommand;
 class KoTextFormat;
 //#define TIMING_FORMAT
@@ -397,7 +399,7 @@ public:
     KCommand *changeCaseOfTextParag(int cursorPosStart, int cursorPosEnd,KoChangeCaseDia::TypeOfCase _type,KoTextCursor *cursor, KoTextParag *parag);
 
     void loadOasisContent( const QDomElement &bodyElem, KoOasisContext& context, KoStyleCollection * styleColl );
-    void saveOasisContent( KoXmlWriter& writer, KoGenStyles& mainStyles ) const;
+    void saveOasisContent( KoXmlWriter& writer, KoSavingContext& context ) const;
 
 #ifndef NDEBUG
     void printRTDebug(int);

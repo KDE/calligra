@@ -1564,12 +1564,12 @@ KoTextParag* KoTextDocument::loadList( const QDomElement& list, KoOasisContext& 
     return lastParagraph;
 }
 
-void KoTextDocument::saveOasisContent( KoXmlWriter& writer, KoGenStyles& mainStyles ) const
+void KoTextDocument::saveOasisContent( KoXmlWriter& writer, KoSavingContext& context ) const
 {
     KoTextParag* parag = firstParag();
     while ( parag ) {
         // TODO Oasis: list stuff
-        parag->saveOasis( writer, mainStyles );
+        parag->saveOasis( writer, context );
         parag = parag->next();
     }
 }
