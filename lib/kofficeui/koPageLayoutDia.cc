@@ -39,6 +39,7 @@
 #include <qcheckbox.h>
 
 #include <kiconloader.h>
+#include <kmessagebox.h>
 
 /******************************************************************/
 /* class KoPagePreview                                            */
@@ -852,6 +853,28 @@ void KoPageLayoutDia::nSpaceChanged( double _val )
 {
     cl.ptColumnSpacing = KoUnit::ptFromUnit( _val, m_unit );
     updatePreview( layout );
+}
+
+/* Validation when closing. Error messages are never liked, but
+  better let the users enter all values in any order, and have one
+  final validation, than preventing them from entering values. */
+void KoPageLayoutDia::slotOk()
+{
+    if ( layout.ptLeft + layout.ptRight > layout.ptWidth )
+    {
+        KMessageBox::error( this,
+            i18n("The page width is smaller than the left and right margins."),
+                            i18n("Page Layout Problem") );
+        return;
+    }
+    if ( layout.ptTop + layout.ptBottom > layout.ptHeight )
+    {
+        KMessageBox::error( this,
+            i18n("The page height is smaller than the top and bottom margins."),
+                            i18n("Page Layout Problem") );
+        return;
+    }
+    KDialogBase::slotOk(); // accept
 }
 
 #include <koPageLayoutDia.moc>

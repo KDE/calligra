@@ -152,12 +152,12 @@ public:
     /**
      *  Returns the layout
      */
-    KoPageLayout getLayout() { return layout; };
+    KoPageLayout getLayout() { return layout; } // BIC: make const
 
     /**
      *  Returns the header and footer information
      */
-    KoHeadFoot getHeadFoot();
+    KoHeadFoot getHeadFoot(); // BIC: make const
 
     /**
      *  Returns the unit
@@ -233,10 +233,10 @@ public slots:
     void topChanged();
     void bottomChanged();
 
-private slots:
-    // take changes
-    void Ok() {}
+protected slots:
+    virtual void slotOk();
 
+private slots:
     // combos and radios
     void unitChanged( int );
     void formatChanged( int );

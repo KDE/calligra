@@ -24,8 +24,6 @@
 #ifndef koRuler_h
 #define koRuler_h
 
-#include <koPageLayoutDia.h>
-
 #include <qframe.h>
 #include <qpixmap.h>
 
@@ -236,7 +234,7 @@ public:
     void setPageLayoutMenuItemEnabled(bool b);
 
 signals:
-    void newPageLayout( KoPageLayout );
+    void newPageLayout( KoPageLayout ); // BIC: pass a const ref
     void newLeftIndent( double );
     void newFirstIndent( double );
     void newRightIndent( double );
