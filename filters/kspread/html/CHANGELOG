@@ -1,0 +1,5 @@
+=== KOffice 1.4 ===
+- New dialog to let the user control HTML output
+  - Linkage of custom stylesheets.
+  - Make borders optional.
+  - Let the user choose between UTF8 or his locale charset.

@@ -19,8 +19,10 @@
 */
 
 #include <htmlexport.h>
+#include <exportdialog.h>
 
 #include <qfile.h>
+#include <qtextcodec.h>
 
 #include <kdebug.h>
 #include <kgenericfactory.h>
@@ -51,7 +53,8 @@ class Cell {
 
 
 HTMLExport::HTMLExport(KoFilter *, const char *, const QStringList&) :
-                     KoFilter() {
+    KoFilter()
+{
 }
 
 // HTML enitities, AFAIK we don't need to escape " to &quot; (dnaber):
@@ -64,6 +67,11 @@ const QString strGt  ("&gt;");
 // approach is because we don't want to export formulas but values !
 KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCString& to )
 {
+    ExportDialog dialog;
+    int result = dialog.exec();
+    if( result == QDialog::Rejected )
+      return KoFilter::UserCancelled;
+
     KoDocument* document = m_chain->inputDocument();
     QString file( m_chain->outputFile() );
     if ( !document )
@@ -89,7 +97,7 @@ KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCSt
     }
 
     QString html_table_tag = "table";
-    QString html_table_options = " border=\"1\"";
+    QString html_table_options = QString(" border=\"%1\"").arg( dialog.useBorders() ? "1" : "0" );
     QString html_row_tag = "tr";
     QString html_row_options = "";
     QString html_cell_tag = "td";
@@ -129,12 +137,21 @@ KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCSt
     str += "<head>\n";
     // TODO: possibility of choosing other encodings
     str += "<meta http-equiv=\"Content-Type\" ";
-    str += "content=\"text/html; charset=UTF-8\">\n";
+    str += QString("content=\"text/html; charset=%1\">\n").arg( dialog.encoding()->mimeName() );
     str += "<meta name=\"Generator\" ";
     str += "content=\"KSpread HTML Export Filter Version = ";
-    str += KOFFICE_VERSION_STRING; 
+    str += KOFFICE_VERSION_STRING;
     str += "\">\n";
     // I have no idea where to get the document name from :-(  table->tableName()
+
+    // Insert stylesheet
+    if( !dialog.customStyleURL().isEmpty() )
+    {
+      str += "<link ref=\"stylesheet\" type=\"text/css\" href=\"";
+      str += dialog.customStyleURL();
+      str += "\" title=\"Style\" >\n";
+    }
+
     str += "<title>" + title + "</title>\n";
     str += "</head>\n";
     str += QString("<body bgcolor=\"#FFFFFF\" dir=\"%1\">\n").arg(
@@ -346,7 +363,7 @@ KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCSt
         return KoFilter::FileNotFound;
     }
     QTextStream streamOut(&out);
-    streamOut.setEncoding( QTextStream::UnicodeUTF8 ); // TODO: possibility of choosing other encodings
+    streamOut.setCodec( dialog.encoding() );
     streamOut << str << endl;
     out.close();
 

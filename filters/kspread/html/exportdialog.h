@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001 Eva Brucherseifer <eva@kde.org>
-   based on kspread csv export filter by David Faure
+   Copyright (C) 2005 Bram Schoenmakers <bramschoenmakers@kde.nl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,22 +17,38 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef HTMLEXPORT_TEST_H
-#define HTMLEXPORT_TEST_H
+#ifndef EXPORTDIALOG_H
+#define EXPORTDIALOG_H
 
-#include <koFilter.h>
+#include <kdialogbase.h>
 
-class ExportDialog;
+class ExportWidget;
 
-class HTMLExport : public KoFilter {
+class ExportDialog : public KDialogBase
+{
+  Q_OBJECT
+  public:
+    ExportDialog( QWidget *parent = 0, const char *name = 0 );
+    ~ExportDialog();
 
-    Q_OBJECT
+    /**
+      Returns preferred encoding. Defaults to UTF-8.
+     */
+    QTextCodec *encoding() const;
 
-public:
-    HTMLExport(KoFilter *parent, const char*name, const QStringList&);
-    virtual ~HTMLExport() {}
+    /**
+      Returns a valid URL if the custom button was selected.
+      Else, it will return QString::null.
+    */
+    QString customStyleURL() const;
 
-    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+    /**
+      Returns true if borders should be shown, false if borders
+      should be hidden.
+     */
+    bool useBorders() const;
+  private:
+    ExportWidget *m_mainwidget;
 };
-#endif
 
+#endif
