@@ -368,6 +368,7 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			parsePath( path, b );
 			obj = path;
 		}
+		if( !obj ) continue;
 		parseStyle( obj, b );
 		if( grp )
 			grp->append( obj );
