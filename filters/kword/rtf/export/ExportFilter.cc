@@ -358,26 +358,26 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
             }
             else if (4==(*paraFormatDataIt).id)
             {
-                if (0==(*paraFormatDataIt).variable.m_type) // variable date
+                if (0==(*paraFormatDataIt).variable.m_type) // date
                 {
-                   // ### TODO: fixed date
-                   str += "\\chdate";
+                   // ### TODO: fixed/variable date, exact custom formats
+                   str += "{\\field{\\*\\fldinst{DATE \\\\* MERGEFORMAT }}}";
                 }
-                else if (2==(*paraFormatDataIt).variable.m_type) // variable time
+                else if (2==(*paraFormatDataIt).variable.m_type) // time
                 {
-                   // ### TODO: fixed time
-                   str += "\\chtime";
+                   // ### TODO: fixed/variable time, exact custom formats
+                   str += "{\\field{\\*\\fldinst{TIME \\\\* MERGEFORMAT }}}";
                 }
                 else if (4==(*paraFormatDataIt).variable.m_type)
                 {
                     QString strFieldType;
                     if ((*paraFormatDataIt).variable.isPageNumber())
                     {
-                        str += "\\chpgn ";
+                        str += "{\\field{\\*\\fldinst{PAGE \\\\* MERGEFORMAT }}}";
                     }
                     else if ((*paraFormatDataIt).variable.isPageCount())
                     {
-                        str += "{\\field{\\*\\fldinst{NUMPAGES}}}";
+                        str += "{\\field{\\*\\fldinst{NUMPAGES \\\\* MERGEFORMAT }}}";
                     }
                     else
                     {
