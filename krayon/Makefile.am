@@ -27,7 +27,7 @@ dummy.cc:
 kdelnk_DATA = krayon.desktop
 kdelnkdir = $(kde_appsdir)/Office
 
-kdemime_DATA = x-krayon.desktop
+#kdemime_DATA = x-krayon.desktop
 kdemimedir = $(kde_mimedir)/application
 
 rcdir = $(kde_datadir)/krayon
