@@ -271,8 +271,10 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 		}
 	}
 
-	gc->fill.setColor( fillcolor );
-	gc->stroke.setColor( strokecolor );
+	if( gc->fill.type() == VFill::solid )
+		gc->fill.setColor( fillcolor );
+	if( gc->stroke.type() == VStroke::solid )
+		gc->stroke.setColor( strokecolor );
 	obj->setFill( gc->fill );
 	obj->setStroke( gc->stroke );
 	obj->transform( gc->matrix );
