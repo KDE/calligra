@@ -251,6 +251,7 @@ void KWView::initGui()
     updatePageInfo();
     slotFrameSetEditChanged();
     frameSelectedChanged();
+    m_doc->findTOCStyle();
 }
 
 void KWView::setupActions()

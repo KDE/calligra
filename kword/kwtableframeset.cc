@@ -1174,7 +1174,7 @@ void KWTableFrameSet::group()
 }
 
 KCommand *KWTableFrameSet::joinCells(unsigned int colBegin,unsigned int rowBegin, unsigned int colEnd,unsigned int rowEnd) {
-    //kdDebug()<<"colBegin :"<<colBegin<<" rowBegin :"<<rowBegin<<" colEnd :"<<colEnd<<" rowEnd :"<<rowEnd<<endl;
+    kdDebug()<<"colBegin :"<<colBegin<<" rowBegin :"<<rowBegin<<" colEnd :"<<colEnd<<" rowEnd :"<<rowEnd<<endl;
     Cell *firstCell = getCell(rowBegin, colBegin);
     if(colBegin==0 && rowBegin==0 && colEnd==0 && rowEnd==0)
     {
@@ -1237,6 +1237,8 @@ KCommand *KWTableFrameSet::joinCells(unsigned int colBegin,unsigned int rowBegin
     // update firstcell properties te reflect the merge
     firstCell->m_cols=colEnd-colBegin+1;
     firstCell->m_rows=rowEnd-rowBegin+1;
+    kdDebug()<<"=colEnd-colBegin+1; :"<<colEnd-colBegin+1<<endl;
+    kdDebug()<<"=rowEnd-rowBegin+1  :"<<rowEnd-rowBegin+1<<endl;
     firstCell->getFrame(0)->setRight(right);
     firstCell->getFrame(0)->setBottom(bottom);
     firstCell->getFrame(0)->updateResizeHandles();

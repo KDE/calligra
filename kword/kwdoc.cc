@@ -2996,7 +2996,9 @@ void KWDocument::renameButtonTOC(const QString & _name)
 {
     QListIterator<KWView> it( m_lstViews );
     for ( ; it.current() ; ++it )
+    {
         it.current()->renameButtonTOC(_name);
+    }
 }
 
 void KWDocument::refreshMenuExpression()
@@ -3018,6 +3020,20 @@ void KWDocument::updateZoomRuler()
     {
         it.current()->getGUI()->getHorzRuler()->setZoom( zoomedResolutionX() );
         it.current()->getGUI()->getVertRuler()->setZoom( zoomedResolutionY() );
+    }
+}
+
+void KWDocument::findTOCStyle()
+{
+    KWStyle* tmpStyle;
+    for ( tmpStyle=m_styleList.first(); tmpStyle != 0; tmpStyle=m_styleList.next() )
+    {
+        if ( tmpStyle->name().startsWith( "Contents Head" ) || tmpStyle->name() == "Contents Title" )
+        {
+            renameButtonTOC(i18n("Update Table of &Contents"));
+            return;
+        }
+
     }
 }
 

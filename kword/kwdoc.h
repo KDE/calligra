@@ -481,6 +481,8 @@ public:
 
     void updateZoomRuler();
 
+    void findTOCStyle();
+
     // Convert a color into a color to be displayed for it
     // (when using color schemes, we still want to print black on white)
     static QColor resolveTextColor( const QColor & col, QPainter * painter );
