@@ -242,3 +242,6 @@ void KOSpell::moveDlg (int x, int y)
   pt2=parent->mapToGlobal (pt);
   ksdlg->move (pt2.x(),pt2.y());
 }
+
+QString KOSpell::modaltext;
+int KOSpell::modalreturn = 0;

@@ -72,14 +72,6 @@ protected:
     AspellSpeller * speller;
     AspellConfig * config;
 
-    bool usedialog;
-    bool personaldict;
-    bool dialogwillsprocess;
-
-    static QString modaltext;
-    static int modalreturn;
-    static QWidget* modalWidgetHack;
-    static QStringList modalListText;
 
     void dialog (const QString & word, QStringList & sugg);
 

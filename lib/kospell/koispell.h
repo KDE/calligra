@@ -105,11 +105,10 @@ protected:
 
     KProcIO *proc;
 
-    bool usedialog;
+
     bool texmode;
     bool dlgon;
-    bool personaldict;
-    bool dialogwillprocess;
+
     bool progressbar;
     bool dialogsetup;
 
@@ -125,10 +124,7 @@ protected:
      * Used for @ref #modalCheck.
      */
     bool modaldlg;
-    static QString modaltext;
-    static int modalreturn;
-    static QWidget* modalWidgetHack;
-    static QStringList modalListText;
+
 
     int parseOneResponse (const QString &_buffer, QString &word, QStringList &sugg);
     QString funnyWord (const QString & word);

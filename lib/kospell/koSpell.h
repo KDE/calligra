@@ -310,6 +310,13 @@ protected:
     unsigned int posinline;
     unsigned int lastlastline;
     unsigned int offset;
+    bool usedialog;
+    static QString modaltext;
+    static int modalreturn;
+
+    bool personaldict;
+    bool dialogwillprocess;
+
     KOSpellConfig *ksconfig;
     spellStatus m_status;
     int lastpos;

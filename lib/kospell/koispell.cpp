@@ -255,9 +255,10 @@ void KOISpell::startIspell()
     }
 }
 
-QStringList KOISpell::resultCheckWord( const QString &/*_word*/ )
+QStringList KOISpell::resultCheckWord( const QString &_word )
 {
-    return QStringList();
+    checkWord (_word, false);
+    return suggestions();
 }
 
 
@@ -1155,14 +1156,10 @@ KOISpell::modalCheck( QString& text, KOSpellConfig* _kcs )
     modalreturn = 0;
     modaltext = text;
 
-    /*modalWidgetHack = new QWidget(0,0,WType_Modal);
-    modalWidgetHack->setGeometry(-10,-10,2,2);
-    */
 
     // kdDebug(30006) << "KOISpell1" << endl;
     KOISpell* spell = new KOISpell( 0L, i18n("Spell Checker"), 0 ,
 				0, _kcs, true, true );
-    //modalWidgetHack->show();
     //qApp->enter_loop();
 
     while (spell->status()!=Finished)
@@ -1170,8 +1167,6 @@ KOISpell::modalCheck( QString& text, KOSpellConfig* _kcs )
 
     text = modaltext;
 
-    //delete modalWidgetHack;
-    //modalWidgetHack = 0;
 
     delete spell;
     return modalreturn;
@@ -1207,7 +1202,6 @@ void KOISpell::slotModalDone( const QString &/*_buffer*/ )
     //kdDebug(30006) << "ABOUT TO EXIT LOOP" << endl;
     //qApp->exit_loop();
 
-    //modalWidgetHack->close(true);
     slotModalSpellCheckerFinished();
 }
 
@@ -1215,9 +1209,5 @@ void KOISpell::slotModalSpellCheckerFinished( )
 {
     modalreturn=(int)this->status();
 }
-
-QString KOISpell::modaltext;
-int KOISpell::modalreturn = 0;
-QWidget* KOISpell::modalWidgetHack = 0;
 
 

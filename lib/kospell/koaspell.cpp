@@ -596,8 +596,7 @@ void KOASpell::slotModalSpellCheckerFinished()
 {
     modalreturn=(int)this->status();
 }
-QString KOASpell::modaltext;
-int KOASpell::modalreturn = 0;
+
 
 #endif
 
