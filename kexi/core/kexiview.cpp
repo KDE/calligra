@@ -256,21 +256,19 @@ KexiView::slotDBAvaible()
 void
 KexiView::slotShowProjectProps()
 {
-	KexiProjectProperties *p = new KexiProjectProperties(this, project()->dbConnection());
-	if(p->exec())
+	KexiProjectProperties p(this, project()->dbConnection());
+	if(p.exec())
 	{
-		project()->db()->setEncoding(p->encoding());
-		project()->dbConnection()->setEncoding(p->encoding());
+		project()->db()->setEncoding(p.encoding());
+		project()->dbConnection()->setEncoding(p.encoding());
 	}
-
-	delete p;
 }
 
 void
 KexiView::slotShowSettings()
 {
-	KexiSettings *s = new KexiSettings(this);
-	s->exec();
+	KexiSettings s(this);
+	s.exec();
 }
 
 
