@@ -470,7 +470,10 @@ int Counter::width( const KWTextParag *paragraph )
     // Now calculate width.
     QTextFormat *format = paragraph->paragFormat();
     m_cache.width = 0;
-    for ( unsigned int i = 0; i < m_cache.text.length(); i++ )
-        m_cache.width += format->width( m_cache.text, i );
+    QString text = m_cache.text;
+    if ( !text.isEmpty() )
+        text.append( ' ' ); // append a trailing space, see KWTextParag::drawLabel
+    for ( unsigned int i = 0; i < text.length(); i++ )
+        m_cache.width += format->width( text, i );
     return m_cache.width;
 }

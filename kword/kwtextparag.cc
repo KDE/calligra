@@ -185,6 +185,13 @@ void KWTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
     if ( !m_layout.counter ) // shouldn't happen
         return;
 
+    if ( m_layout.counter->numbering() == Counter::NUM_NONE )
+    {   // Garbage collect unnneeded counter.
+        delete m_layout.counter;
+        m_layout.counter = 0L;
+        return;
+    }
+
     int size = m_layout.counter->width( this );
 
     // Draw the complete label.
@@ -236,8 +243,10 @@ void KWTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
     else
     {
         // There are no bullets...any parent bullets have already been suppressed.
-        // Just draw the text!
-        p->drawText( x - size, y - h + base, m_layout.counter->text( this ) );
+        // Just draw the text! Note: one space is always appended.
+        QString counterText = m_layout.counter->text( this );
+        if ( !counterText.isEmpty() )
+            p->drawText( x - size, y - h + base, counterText + ' ' );
     }
     p->setFont( oldFont );
 }
