@@ -18,18 +18,14 @@
 
 #include <iostream.h>
 
-// include files for QT
 #include <qdir.h>
 #include <qstrlist.h>
 #include <qprinter.h>
 #include <qpainter.h>
 #include <qheader.h>
 
-// include files for KDE
 #include <kiconloader.h>
-#include <kmessagebox.h>
 #include <kfiledialog.h>
-
 #include <kstdaccel.h>
 
 #include <opMenu.h>
@@ -43,7 +39,6 @@
 #include <koPartSelectDia.h>
 #include <koAboutDia.h>
 
-// application specific includes
 #include "ktables.h"
 #include "ktables_shell.h"
 #include "ktables_view.h"
@@ -55,36 +50,35 @@
 
 KtablesApp::KtablesApp()
 {
-	//config=kapp->getConfig();
+  //config=kapp->getConfig();
 	
-	m_pDoc = 0;
+  m_pDoc = 0;
 	
   ///////////////////////////////////////////////////////////////////
   // call inits to invoke all other construction parts
   initStatusBar();
 	
-	//readOptions();
-
+  //readOptions();
 }
 
 KtablesApp::~KtablesApp()
 {
-	cleanUp();
+  cleanUp();
 }
 
-void
-KtablesApp::cleanUp()
+void KtablesApp::cleanUp()
 {
-	kdebug( KDEBUG_INFO,0,"KtablesApp::cleanUp()" );
-	KoMainWindow::cleanUp();
+  kdebug( KDEBUG_INFO,0,"KtablesApp::cleanUp()" );
+
+  KoMainWindow::cleanUp();
 }
 
-void
-KtablesApp::createFileMenu(OPMenuBar *p_mbar)
+void KtablesApp::createFileMenu(OPMenuBar *p_mbar)
 {
-	kdebug( KDEBUG_INFO,0,"KtablesApp::createFileMenu" );
+  kdebug( KDEBUG_INFO, 0, "KtablesApp::createFileMenu" );
+
   // Do we loose control over the menubar ?
-  if ( p_mbar == 0L )
+  if( p_mbar == 0L )
   {
     m_pFileMenu = 0L;
     return;
@@ -92,7 +86,7 @@ KtablesApp::createFileMenu(OPMenuBar *p_mbar)
 
   bool bInsertFileMenu = false;
   m_pFileMenu = p_mbar->fileMenu();
-  if ( m_pFileMenu == 0L )
+  if( m_pFileMenu == 0L )
   {
     bInsertFileMenu = true;
     debug("Creating File Menu in koMainWindow.cc");
@@ -105,29 +99,52 @@ KtablesApp::createFileMenu(OPMenuBar *p_mbar)
   // menuBar entry file_menu
   KStdAccel stdAccel;
 
-  m_pFileMenu->insertItem(Icon("mini/ktablesapp.xpm"), i18n("New &Window"), this, SLOT(slotFileNewWindow()),0 );
-  m_pFileMenu->insertSeparator();
-  m_idMenuFile_New    =
-    m_pFileMenu->insertItem(Icon("filenew.xpm"), i18n("&New"),this,SLOT(slotFileNew()),stdAccel.openNew() );
-  m_idMenuFile_Open   =
-    m_pFileMenu->insertItem(Icon("fileopen.xpm"), i18n("&Open..."),this,SLOT(slotFileOpen()),stdAccel.open() );
+//CORBA::WString_var text;
+//OpenPartsUI::Pixmap_var pix
 
-  m_idMenuFile_Close  =
-    m_pFileMenu->insertItem(i18n("&Close"),this,SLOT(slotFileClose()),stdAccel.close() );
-  m_pFileMenu->insertSeparator();
-  m_idMenuFile_Save   =
-    m_pFileMenu->insertItem(Icon("filefloppy.xpm") ,i18n("&Save"),this,SLOT(slotFileSave()),stdAccel.save() );
-  m_idMenuFile_SaveAs =
-    m_pFileMenu->insertItem(i18n("Save &As..."),this,SLOT(slotFileSaveAs()) );
-  m_pFileMenu->insertSeparator();
-  m_idMenuFile_Print  =
-    m_pFileMenu->insertItem(Icon("fileprint.xpm"), i18n("&Print..."),this,SLOT(slotFilePrint()),stdAccel.print() );
-  m_pFileMenu->insertSeparator();
-  m_idMenuFile_Quit   =
-    m_pFileMenu->insertItem(i18n("E&xit"),this,SLOT(slotFileQuit()),stdAccel.quit() );
-  if (bInsertFileMenu)
-    p_mbar->insertItem( i18n( "&File" ), m_pFileMenu, -1, 0 );
+  QString text;
+  QPixmap pix;
 
+  text = i18n("New &Window");
+  pix = BarIcon( "ktablesapp.xpm" );
+  m_pFileMenu->insertItem( pix, text, this, SLOT( slotFileNewWindow() ), 0 );
+
+  m_pFileMenu->insertSeparator();
+
+  text = i18n("&New");
+  pix = BarIcon("filenew.xpm");
+  m_idMenuFile_New = m_pFileMenu->insertItem( pix, text, this, SLOT( slotFileNew() ), stdAccel.openNew() );
+
+  text = i18n("&Open...");
+  pix = BarIcon("fileopen.xpm");
+  m_idMenuFile_Open = m_pFileMenu->insertItem( pix, text, this, SLOT( slotFileOpen() ), stdAccel.open() );
+
+  text = i18n("&Close");
+  m_idMenuFile_Close = m_pFileMenu->insertItem( text, this, SLOT( slotFileClose() ), stdAccel.close() );
+
+  m_pFileMenu->insertSeparator();
+
+  text = i18n("&Save");
+  pix = BarIcon("fileclose.xpm");
+  m_idMenuFile_Save =  m_pFileMenu->insertItem( pix, text, this, SLOT( slotFileSave() ), stdAccel.save() );
+
+  text = i18n("Save &As...");
+  m_idMenuFile_SaveAs = m_pFileMenu->insertItem( text, this, SLOT( slotFileSaveAs() ) );
+
+  m_pFileMenu->insertSeparator();
+
+  text = i18n("&Print...");
+  pix = BarIcon("fileprint.xpm");
+  m_idMenuFile_Print = m_pFileMenu->insertItem( pix, text, this, SLOT( slotFilePrint() ), stdAccel.print() );
+
+  m_pFileMenu->insertSeparator();
+
+  text = i18n("E&xit");
+  m_idMenuFile_Quit = m_pFileMenu->insertItem( text, this, SLOT( slotFileQuit() ), stdAccel.quit() );
+
+  text = i18n( "&File" );
+  if( bInsertFileMenu )
+    p_mbar->insertItem( text, m_pFileMenu, -1, 0 );
 }
 	
 void KtablesApp::initStatusBar()

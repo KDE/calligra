@@ -1,7 +1,7 @@
 
 INCLUDES = $(KOFFICE_INCLUDES) $(all_includes) $(MICO_INCLUDES) -I../kdb
 LDFLAGS = -g $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
-LDADD = ../../lib/kofficeui/libkofficeui.la ../kdb/libkdb.la
+LDADD = ../../lib/kofficeui/libkofficeui.la ../kdb/libkdb.la ../lib/katabasecore/libkatabasecore.la
 
 SUBDIRS = pics
 
