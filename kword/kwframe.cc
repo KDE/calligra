@@ -1402,35 +1402,13 @@ void KWPictureFrameSet::load( QDomElement &attributes, bool loadFrames )
     }
 }
 
-void KWPictureFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &,
+void KWPictureFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &crect,
                                    QColorGroup &, bool, bool, KWFrameSetEdit * )
 {
-    QSize screenSize ( kWordDocument()->zoomItX( frame->width() ), kWordDocument()->zoomItY( frame->height() ) );
-
-    bool scaleImage =  painter->device()->isExtDev()
-                      && ( m_image.size().width()<m_image.originalSize().width()
-                           || m_image.size().height()<m_image.originalSize().height() );
-    if( scaleImage ) {
-        if( m_image.size().width()>0 && m_image.size().height()>0 ) {
-
-            // use full resolution of image
-            double xScale = double(screenSize.width())/m_image.originalSize().width();
-            double yScale = double(screenSize.height())/m_image.originalSize().height();
-
-            if( xScale>0 && yScale>0 ) {
-                m_image = m_image.scale( m_image.originalSize() );
-                painter->scale( xScale, yScale );
-                painter->drawPixmap( 0, 0, m_image.pixmap() );
-                painter->scale( 1/xScale, 1/yScale );
-            }
-
-        }
-    } else {
-        if ( screenSize!=m_image.image().size() )
-            m_image = m_image.scale( screenSize );
-        painter->drawPixmap( 0, 0, m_image.pixmap() );
-    }
-
+    kdDebug() << "KWPictureFrameSet::drawFrame crect=" << DEBUGRECT(crect) << endl;
+    // TODO: test passing crect into the sx, sy, sw and sh parameters
+    m_image.draw( *painter, 0, 0, kWordDocument()->zoomItX( frame->width() ), kWordDocument()->zoomItY( frame->height() ),
+                  crect.x(), crect.y(), crect.width(), crect.height() );
 }
 
 KWFrame *KWPictureFrameSet::frameByBorder( const QPoint & nPoint )

@@ -2103,18 +2103,7 @@ void KWDocument::createEmptyRegion( const QRect & crect, QRegion & emptyRegion, 
 void KWDocument::eraseEmptySpace( QPainter * painter, const QRegion & emptySpaceRegion, const QBrush & brush )
 {
     painter->save();
-    // Translate emptySpaceRegion in device coordinates
-    // ( ARGL why on earth isn't QPainter::setClipRegion in transformed coordinate system ?? )
-    QRegion devReg;
-    QMemArray<QRect>rs = emptySpaceRegion.rects();
-    rs.detach();
-    for ( uint i = 0 ; i < rs.size() ; ++i )
-    {
-        //kdDebug() << "KWDocument::drawBorders emptySpaceRegion includes: " << DEBUGRECT( rs[i] ) << endl;
-        rs[i] = painter->xForm( rs[i] );
-    }
-    devReg.setRects( rs.data(), rs.size() );
-    painter->setClipRegion( devReg );
+    painter->setClipRegion( emptySpaceRegion, QPainter::CoordPainter );
     painter->setPen( Qt::NoPen );
 
     //kdDebug() << "KWDocument::eraseEmptySpace emptySpaceRegion: " << DEBUGRECT( emptySpaceRegion.boundingRect() ) << endl;
