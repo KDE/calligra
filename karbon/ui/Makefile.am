@@ -17,7 +17,7 @@ noinst_HEADERS = \
 	vcdlg_star.h \
 	vmdlg_solidfill.h \
 	vtoolcontainer.h \
-	vtranslate.h
+	vmpanel_color.h
 
 libkarbonui_la_SOURCES = \
 	dummy.cc \
@@ -30,7 +30,7 @@ libkarbonui_la_SOURCES = \
 	vcdlg_star.cc \
 	vmdlg_solidfill.cc \
 	vtoolcontainer.cc \
-	vtranslate.cc
+	vmpanel_color.cc
 
 libkarbonui_la_METASOURCES = \
 	AUTO
