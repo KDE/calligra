@@ -1568,7 +1568,10 @@ bool KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool &cancelled, bool 
 			//TODO: ask if we'd continue and return true/false
 			return false;
 		}
-		d->nav->updateItemName( dlg->partItem(), dlg->dirty() );
+	}
+	else {
+		//not dirty now
+		d->nav->updateItemName( dlg->partItem(), false );
 	}
 
 	KXMLGUIClient *client = dlg->guiClient();
