@@ -228,7 +228,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_default = new KAction( i18n("Default"), 0, this, SLOT( defaultSelection() ), actionCollection(), "default" );
     m_undo = KStdAction::undo( this, SLOT( undo() ), actionCollection(), "undo" );
     m_redo = KStdAction::redo( this, SLOT( redo() ), actionCollection(), "redo" );
-    m_paperLayout = new KAction( i18n("Paper Layout"), 0, this, SLOT( paperLayoutDlg() ), actionCollection(), "paperLayout" );
+    m_paperLayout = new KAction( i18n("Paper Layout..."), 0, this, SLOT( paperLayoutDlg() ), actionCollection(), "paperLayout" );
     m_insertTable = new KAction( i18n("Insert Table"), 0, this, SLOT( insertTable() ), actionCollection(), "insertTable" );
     m_removeTable = new KAction( i18n("Remove Table"), 0, this, SLOT( removeTable() ), actionCollection(), "removeTable" );
     m_showTable = new KAction(i18n("Show Table"),0 ,this,SLOT( showTable()), actionCollection(), "showTable" );
@@ -238,14 +238,14 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_editLocalScripts = new KAction( i18n("Edit Local Scripts"), 0, this, SLOT( editLocalScripts() ), actionCollection(), "editLocalScripts" );
     m_reloadScripts = new KAction( i18n("Reload Scripts"), 0, this, SLOT( reloadScripts() ), actionCollection(), "reloadScripts" );
     m_newView = new KAction( i18n("New View"), 0, this, SLOT( newView() ), actionCollection(), "newView" );
-    m_gotoCell = new KAction( i18n("Goto Cell"), 0, this, SLOT( gotoCell() ), actionCollection(), "gotoCell" );
+    m_gotoCell = new KAction( i18n("Goto Cell..."), 0, this, SLOT( gotoCell() ), actionCollection(), "gotoCell" );
     m_showPageBorders = new KToggleAction( i18n("Show page borders"), 0, actionCollection(), "showPageBorders");
     connect( m_showPageBorders, SIGNAL( toggled( bool ) ), this, SLOT( togglePageBorders( bool ) ) );
     m_replace = new KAction( i18n("Replace"), 0, this, SLOT( replace() ), actionCollection(), "replace" );
-     m_conditional = new KAction( i18n("Conditional"), 0, this, SLOT( conditional() ), actionCollection(), "conditional" );
+     m_conditional = new KAction( i18n("Relational cell attributes..."), 0, this, SLOT( conditional() ), actionCollection(), "conditional" );
     m_sort = new KAction( i18n("Sort"), 0, this, SLOT( sort() ), actionCollection(), "sort" );
     m_createAnchor = new KAction( i18n("Create Anchor"), 0, this, SLOT( createAnchor() ), actionCollection(), "createAnchor" );
-    m_consolidate = new KAction( i18n("Consolidate"), 0, this, SLOT( consolidate() ), actionCollection(), "consolidate" );
+    m_consolidate = new KAction( i18n("Consolidate..."), 0, this, SLOT( consolidate() ), actionCollection(), "consolidate" );
     m_help = new KAction( i18n("KSpread Help"), 0, this, SLOT( help() ), actionCollection(), "help" );
     m_insertChart = new KAction( i18n("InsertChart"), KSBarIcon("chart"), 0, this, SLOT( insertChart() ), actionCollection(), "insertChart" );
     m_multiRow = new KToggleAction( i18n("Multi Row"), KSBarIcon("multirow"), 0, actionCollection(), "multiRow" );
@@ -262,7 +262,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 				  actionCollection(), "insertColumn" );
     m_insertRow = new KAction( i18n("Insert Row"), KSBarIcon("rowin"), 0, this, SLOT( insertRow() ),
 			       actionCollection(), "insertRow" );
-    m_cellLayout = new KAction( i18n("Cell Layout"), CTRL + Key_L, this, SLOT( layoutDlg() ),
+    m_cellLayout = new KAction( i18n("Cell Layout..."), CTRL + Key_L, this, SLOT( layoutDlg() ),
 			       actionCollection(), "cellLayout" );
     m_formulaPower = new KAction( i18n("Formula Power"), KSBarIcon("index2"), 0, this, SLOT( formulaPower() ),
 				actionCollection(), "formulaPower" );
@@ -319,7 +319,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_borderOutline = new KAction( i18n("Border Outline"), KSBarIcon("borderoutline"), 0, this, SLOT( borderOutline() ), actionCollection(), "borderOutline" );
     m_borderColor = new KColorAction( i18n("Border Color"), KColorAction:: FrameColor, 0, this, SLOT( changeBorderColor() ),
 			       actionCollection(), "borderColor" );
-    m_tableFormat = new KAction( i18n("Table Format"), 0, this, SLOT( tableFormat() ), actionCollection(), "tableFormat" );
+    m_tableFormat = new KAction( i18n("Table Style..."), 0, this, SLOT( tableFormat() ), actionCollection(), "tableFormat" );
     m_oszi = new KAction( i18n("Oszilloscope"), 0, this, SLOT( oszilloscope() ), actionCollection(), "oszi" );
     m_scripts = new KScriptMenu( DCOPRef( kapp->dcopClient()->appId(), dcopObject()->objId() ), KSpreadFactory::global(),
 				 i18n("Scripts"), actionCollection(), "scripts" );
