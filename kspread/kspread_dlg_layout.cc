@@ -748,11 +748,11 @@ void CellLayoutDlg::slotApply()
         }
         if(positionPage->getSizeHeight()!=heigthSize)
         {
-            for ( int x = top; x <= bottom; x++ )
+            for ( int x = top; x <= bottom; x++ ) // The loop seems to be doubled, already done in resizeRow: Philipp -> fixme
                 m_pView->vBorderWidget()->resizeRow(positionPage->getSizeHeight(),x,false );
 
         }
-        if(positionPage->getSizeWidth()!=widthSize)
+        if(positionPage->getSizeWidth()!=widthSize) // The loop seems to be doubled, already done in resizeColumn: Philipp -> fixme
         {
             for ( int x = left; x <= right; x++ )
                 m_pView->hBorderWidget()->resizeColumn(positionPage->getSizeWidth(),x,false );
@@ -780,7 +780,7 @@ void CellLayoutDlg::slotApply()
                 //table->doc()->undoBuffer()->appendUndo( undo2 );
                 macroUndo->addCommand(undo2);
             }
-            for ( int x = top; x <= bottom; x++ )
+            for ( int x = top; x <= bottom; x++ ) // The loop seems to be doubled, already done in resizeRow: Philipp -> fixme
                 m_pView->vBorderWidget()->resizeRow(positionPage->getSizeHeight(),x,false );
         }
     }
@@ -806,7 +806,7 @@ void CellLayoutDlg::slotApply()
                 //table->doc()->undoBuffer()->appendUndo( undo2 );
                 macroUndo->addCommand(undo2);
             }
-            for ( int x = left; x <= right; x++ )
+            for ( int x = left; x <= right; x++ ) // The loop seems to be doubled, already done in resizeColumn: Philipp -> fixme
                 m_pView->hBorderWidget()->resizeColumn(positionPage->getSizeWidth(),x,false );
         }
     }

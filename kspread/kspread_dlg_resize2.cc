@@ -147,18 +147,18 @@ void KSpreadresize2::slotOk()
       {
       case resize_row:
 	if(m_pDefault->isChecked())
-	  for(int i=rect.top();i<=rect.bottom();i++)
-	    m_pView->vBorderWidget()->resizeRow(20,i,false );
+	  for(int i=rect.top();i<=rect.bottom();i++) //The loop seems to be doubled, already done in resizeRow: Philipp -> fixme
+	    m_pView->vBorderWidget()->resizeRow( 20, i, false );
 	else
-	  for(int i=rect.top();i<=rect.bottom();i++)
+	  for(int i=rect.top();i<=rect.bottom();i++) //The loop seems to be doubled, already done in resizeRow: Philipp -> fixme
 	    m_pView->vBorderWidget()->resizeRow(new_size,i,false );
 	break;
       case resize_column:
 	if(m_pDefault->isChecked())
-	  for(int i=rect.left();i<=rect.right();i++)
-	    m_pView->hBorderWidget()->resizeColumn(60,i,false );
+	  for(int i=rect.left();i<=rect.right();i++) //The loop seems to be doubled, already done in resizeColumn: Philipp -> fixme
+	    m_pView->hBorderWidget()->resizeColumn( 60, i, false );
 	else
-	  for(int i=rect.left();i<=rect.right();i++)
+	  for(int i=rect.left();i<=rect.right();i++) //The loop seems to be doubled, already done in resizeColumn: Philipp -> fixme
 	    m_pView->hBorderWidget()->resizeColumn(new_size,i,false );
 	break;
       default :
