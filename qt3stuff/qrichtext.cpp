@@ -2726,6 +2726,9 @@ void QTextString::insert( int index, const QString &s, QTextFormat *f )
 #else
 	data[ (int)index + i ].c = s[ i ];
 #endif
+#ifdef DEBUG_COLLECTION
+	qDebug("QTextString::insert setting format %p to character %d",f,(int)index+i);
+#endif
 	data[ (int)index + i ].setFormat( f );
     }
     textChanged = TRUE;
@@ -3439,11 +3442,20 @@ void QTextParag::setFormat( int index, int len, QTextFormat *f, bool useCollecti
 	    invalidate( 0 );
 	}
 	if ( flags == -1 || flags == QTextFormat::Format || !fc ) {
+#ifdef DEBUG_COLLECTION
+	    qDebug(" QTextParag::setFormat, will use format(f) %p %s", f, f->key().latin1());
+#endif
 	    if ( fc )
 		f = fc->format( f );
 	    str->setFormat( i + index, f, useCollection );
 	} else {
+#ifdef DEBUG_COLLECTION
+	    qDebug(" QTextParag::setFormat, will use format(of,f,flags) ");
+#endif
 	    QTextFormat *fm = fc->format( of, f, flags );
+#ifdef DEBUG_COLLECTION
+	    qDebug(" QTextParag::setFormat, format(of,f,flags) returned %p %s ", fm,fm->key().latin1());
+#endif
 	    str->setFormat( i + index, fm, useCollection );
 	}
     }
@@ -4893,7 +4905,7 @@ QTextFormat *QTextFormatCollection::format( QTextFormat *f )
 {
     if ( f->parent() == this ) {
 #ifdef DEBUG_COLLECTION
-	qDebug( "need '%s', best case!", f->key().latin1() );
+	qDebug( " format(f) need '%s', best case!", f->key().latin1() );
 #endif
 	lastFormat = f;
 	lastFormat->addRef();
@@ -4902,7 +4914,7 @@ QTextFormat *QTextFormatCollection::format( QTextFormat *f )
 
     if ( f == lastFormat || ( lastFormat && f->key() == lastFormat->key() ) ) {
 #ifdef DEBUG_COLLECTION
-	qDebug( "need '%s', good case!", f->key().latin1() );
+	qDebug( " format(f) need '%s', good case!", f->key().latin1() );
 #endif
 	lastFormat->addRef();
 	return lastFormat;
@@ -4922,7 +4934,7 @@ QTextFormat *QTextFormatCollection::format( QTextFormat *f )
     QTextFormat *fm = cKey.find( f->key() );
     if ( fm ) {
 #ifdef DEBUG_COLLECTION
-	qDebug( "need '%s', normal case!", f->key().latin1() );
+	qDebug( " format(f) need '%s', normal case!", f->key().latin1() );
 #endif
 	lastFormat = fm;
 	lastFormat->addRef();
@@ -4930,7 +4942,7 @@ QTextFormat *QTextFormatCollection::format( QTextFormat *f )
     }
 
 #ifdef DEBUG_COLLECTION
-    qDebug( "need '%s', worst case!", f->key().latin1() );
+    qDebug( " format(f) need '%s', worst case!", f->key().latin1() );
 #endif
     lastFormat = createFormat( *f );
     lastFormat->collection = this;
@@ -4942,7 +4954,7 @@ QTextFormat *QTextFormatCollection::format( QTextFormat *of, QTextFormat *nf, in
 {
     if ( cres && kof == of->key() && knf == nf->key() && cflags == flags ) {
 #ifdef DEBUG_COLLECTION
-	qDebug( "mix of '%s' and '%s, best case!", of->key().latin1(), nf->key().latin1() );
+	qDebug( " format(of,nf,flags) mix of '%s' and '%s, best case!", of->key().latin1(), nf->key().latin1() );
 #endif
 	cres->addRef();
 	return cres;
@@ -4958,13 +4970,13 @@ QTextFormat *QTextFormatCollection::format( QTextFormat *of, QTextFormat *nf, in
     QTextFormat *fm = cKey.find( cres->key() );
     if ( !fm ) {
 #ifdef DEBUG_COLLECTION
-	qDebug( "mix of '%s' and '%s, worst case!", of->key().latin1(), nf->key().latin1() );
+	qDebug( " format(of,nf,flags) mix of '%s' and '%s, worst case!", of->key().latin1(), nf->key().latin1() );
 #endif
 	cres->collection = this;
 	cKey.insert( cres->key(), cres );
     } else {
 #ifdef DEBUG_COLLECTION
-	qDebug( "mix of '%s' and '%s, good case!", of->key().latin1(), nf->key().latin1() );
+	qDebug( " format(of,nf,flags) mix of '%s' and '%s, good case!", of->key().latin1(), nf->key().latin1() );
 #endif
 	delete cres;
 	cres = fm;
@@ -4978,7 +4990,7 @@ QTextFormat *QTextFormatCollection::format( const QFont &f, const QColor &c )
 {
     if ( cachedFormat && cfont == f && ccol == c ) {
 #ifdef DEBUG_COLLECTION
-	qDebug( "format of font and col '%s' - best case", cachedFormat->key().latin1() );
+	qDebug( " format of font and col '%s' - best case", cachedFormat->key().latin1() );
 #endif
 	cachedFormat->addRef();
 	return cachedFormat;
@@ -4991,7 +5003,7 @@ QTextFormat *QTextFormatCollection::format( const QFont &f, const QColor &c )
 
     if ( cachedFormat ) {
 #ifdef DEBUG_COLLECTION
-	qDebug( "format of font and col '%s' - good case", cachedFormat->key().latin1() );
+	qDebug( " format of font and col '%s' - good case", cachedFormat->key().latin1() );
 #endif
 	cachedFormat->addRef();
 	return cachedFormat;
@@ -5001,7 +5013,7 @@ QTextFormat *QTextFormatCollection::format( const QFont &f, const QColor &c )
     cachedFormat->collection = this;
     cKey.insert( cachedFormat->key(), cachedFormat );
 #ifdef DEBUG_COLLECTION
-    qDebug( "format of font and col '%s' - worst case", cachedFormat->key().latin1() );
+    qDebug( " format of font and col '%s' - worst case", cachedFormat->key().latin1() );
 #endif
     return cachedFormat;
 }
@@ -6733,9 +6745,9 @@ QTextFormat::QTextFormat()
     missp = FALSE;
     ha = AlignNormal;
     collection = 0;
-#ifdef DEBUG_COLLECTION
-    qDebug("QTextFormat simple ctor, no addRef ! %p",this);
-#endif
+//#ifdef DEBUG_COLLECTION
+//    qDebug("QTextFormat simple ctor, no addRef ! %p",this);
+//#endif
 }
  
 QTextFormat::QTextFormat( const QStyleSheetItem *style )
@@ -6870,18 +6882,19 @@ void QTextFormat::addRef()
 {
     ref++;
 #ifdef DEBUG_COLLECTION
-    qDebug( "add ref of '%s' to %d (%p) (coll %p)", k.latin1(), ref, this, collection );
+    if ( collection )
+        qDebug( "  add ref of '%s' to %d (%p) (coll %p)", k.latin1(), ref, this, collection );
 #endif
 }
  
 void QTextFormat::removeRef()
 {
     ref--;
-#ifdef DEBUG_COLLECTION
-    qDebug( "remove ref of '%s' to %d (%p) (coll %p)", k.latin1(), ref, this, collection );
-#endif
     if ( !collection )
         return;
+#ifdef DEBUG_COLLECTION
+    qDebug( "  remove ref of '%s' to %d (%p) (coll %p)", k.latin1(), ref, this, collection );
+#endif
     if ( ref == 0 )
         collection->remove( this );
 }
