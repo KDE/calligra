@@ -1970,9 +1970,12 @@ void KSpreadCell::paintBackground(QPainter& painter, QPoint corner,
   RowLayout* rowLayout = m_pTable->rowLayout(cellRef.y());
   int width = (m_iExtraXCells ? m_iExtraWidth : colLayout->width());
   int height =  (m_iExtraYCells ? m_iExtraHeight : rowLayout->height());
-
+  KSpreadCell* cell = m_pTable->cellAt(marker);
+  QPoint bottomRight(marker.x() + cell->extraXCells(),
+                     marker.y() + cell->extraYCells());
+  QRect markerArea(marker, bottomRight);
   // Determine the correct background color
-  if ( selected && ( cellRef.x() != marker.x() || cellRef.y() != marker.y() ))
+  if ( selected && !markerArea.contains(cellRef))
   {
     painter.setBackgroundColor( defaultColorGroup.highlight() );
   }
