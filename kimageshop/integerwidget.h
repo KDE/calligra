@@ -35,7 +35,7 @@ class IntegerWidget : public QWidget
   Q_OBJECT
 
 public:
-  IntegerWidget( int min, int max, QWidget *parent, const char *name );
+  IntegerWidget( int min, int max, QWidget *parent = 0, const char *name = 0 );
   ~IntegerWidget();
 
   int 		value();
@@ -74,3 +74,8 @@ signals:
 
 
 #endif // INTEGERWIDGET_H
+
+
+
+
+
