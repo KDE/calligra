@@ -29,25 +29,14 @@ KEmacs::KEmacs()
     emacsPID = 1;
 
     // Is emacs running ?
-
-    // First try the fuser trick
-    QString command;
-    command.sprintf("/usr/sbin/fuser -s -n tcp %d",21490 + getuid());
-    int ret = system( command.data() );
+    int ret = system( "gnuclient -q" );
     if ( ret != 0 )
     {
-        // If it didn't work (fuser not present or xemacs not launched),
-        // try gnuclient -q (might create a new window !)
-        ret = system( "gnuclient -q" );
+        ret = system( "emacs &" ); // shouldn't that be 'xemacs' ?
         if ( ret != 0 )
-        {
-            ret = system( "emacs &" ); // shouldn't that be 'xemacs' ?
-            if ( ret != 0 )
-                emacsPID = 0;
-            sleep( 5 );
-        }
+            emacsPID = 0;
+        sleep( 5 );
     }
-    
 }
 
 KEmacs::~KEmacs()

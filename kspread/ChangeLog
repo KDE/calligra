@@ -1,3 +1,11 @@
+1999-03-01  David Faure  <faure@kde.org>
+
+	* kspread_view.cc (runLocalScript):
+	New menu item : 'run local scripts'.
+	Usage : 'edit local scripts', type the script, then
+	'reload scripts' (will save & close the buffer), then 'run local
+	scripts'. Will have to find a better User Interface !
+	
 6.2.1999 - Reggie:
 ------------------
 - Fixes for drawing cell borders and cell backgrounds in KoPrintExt
