@@ -1,6 +1,6 @@
 lib_LTLIBRARIES = libkformeditor.la
 
-INCLUDES = -I.. $(all_includes)
+INCLUDES = -I$(srcdir)/.. $(all_includes)
 
 SUBDIRS = .
 
