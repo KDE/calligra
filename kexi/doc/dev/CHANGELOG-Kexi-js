@@ -306,6 +306,21 @@ TODO: add SharedAction::setVisible() and use QMenuData::setItemVisible() where n
 
 CC_MAIL: dkite@shaw.ca
 
+
+
+2004-04-13
+Forms
+- linkage fixes for win32
+- some null-checks added
+- widget deletion is now delayed (because of problems with qt/win32 events)
+Table Views
+- KexiTableView::maximizeColumnsWidth() added
+Relations Editor
+- Combo box is updated on table hidding
+- popup menu titles added 
+Kexi Alter Table
+- columns' data is better updated
+
 2004-04-06..08
 KexiDB
 	- Reference class renamed to Relationship, documentation improved
