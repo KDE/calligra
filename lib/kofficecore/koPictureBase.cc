@@ -21,6 +21,7 @@
 #include <qpainter.h>
 #include <qpicture.h>
 #include <qpixmap.h>
+#include <qdragobject.h>
 
 #include <kdebug.h>
 #include <kconfig.h>
@@ -120,7 +121,12 @@ bool KoPictureBase::isSlowResizeModeAllowed(void) const
     return s_useSlowResizeMode != 0;
 }
 
-QDragObject* KoPictureBase::dragObject( QWidget *, const char * )
+QDragObject* KoPictureBase::dragObject( QWidget * dragSource, const char * name )
 {
-    return 0L;
+    QImage image;
+    image=generatePixmap(getOriginalSize(),true);
+    if (image.isNull())
+        return 0L;
+    else
+        return new QImageDrag( image, dragSource, name );
 }
