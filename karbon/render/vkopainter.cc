@@ -114,8 +114,14 @@ VKoPainter::end()
 void
 VKoPainter::blit( const QRect &r )
 {
-	xlib_draw_rgb_32_image( m_target->handle(), gc, r.x(), r.y(), r.width(), r.height(),
-							XLIB_RGB_DITHER_NONE, m_buffer + (r.x() * 4) + (r.y() *  m_width * 4), m_width * 4 );
+	kdDebug() << "m_width : " << m_width << endl;
+	kdDebug() << "m_height : " << m_height << endl;
+	int x		= QMAX( 0, r.x() );
+	int y		= QMAX( 0, r.y() );
+	int width	= QMIN( m_width, r.x() + r.width() );
+	int height	= QMIN( m_height, r.x() + r.height() );
+	xlib_draw_rgb_32_image( m_target->handle(), gc, x, y, width - x, height - y,
+							XLIB_RGB_DITHER_NONE, m_buffer + (x * 4) + (y * m_width * 4), m_width * 4 );
 }
 
 void
@@ -394,7 +400,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 
 	art_u32 strokeColor = 0;
 	// stroke
-	if( m_stroke )
+	if( m_stroke && m_stroke->type() != stroke_none )
 	{
 		ArtPathStrokeCapType capStyle = ART_PATH_STROKE_CAP_BUTT;
 		ArtPathStrokeJoinType joinStyle = ART_PATH_STROKE_JOIN_MITER;
@@ -436,7 +442,7 @@ VKoPainter::drawVPath( ArtVpath *vec )
 			joinStyle = ART_PATH_STROKE_JOIN_BEVEL;
 
 		// zoom stroke width;
-		strokeSvp = art_svp_vpath_stroke( vec, ART_PATH_STROKE_JOIN_ROUND/*joinStyle*/, capStyle, ratio * m_stroke->lineWidth(), 5.0, 0.25 );
+		strokeSvp = art_svp_vpath_stroke( vec, joinStyle, capStyle, ratio * m_stroke->lineWidth(), 5.0, 0.25 );
 	}
 
 	int x0, y0, x1, y1;

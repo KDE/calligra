@@ -121,14 +121,14 @@ void VStrokeDlg::slotOKClicked()
 		stroke.setLineCap ( cap_butt );
 	}
 
-	//switch ( m_join ) {
-	//case 1:
-//		stroke.setLineJoin ( join_round ); break;
-//	case 2:
-		stroke.setLineJoin ( join_bevel );// break;
-//	default:
-//		stroke.setLineJoin ( join_miter );
-//	}
+	switch ( m_join ) {
+	case 1:
+		stroke.setLineJoin ( join_round ); break;
+	case 2:
+		stroke.setLineJoin ( join_bevel ); break;
+	default:
+		stroke.setLineJoin ( join_miter );
+	}
 
 	float w = m_setLineWidth->value();
 	stroke.setLineWidth ( w );
