@@ -165,7 +165,7 @@ bool KexiProject::initDoc()
 
 			m_projectDB=m_projectConnection->connectDB(m_dbInterfaceManager);
 			if (!m_projectDB) {
-				KMessageBox::error(0, i18n("The CQL++ module for accessing the"
+				KMessageBox::error(0, i18n("The CQL++ module for accessing the "
 					"project file failed to initialize"));
 					return false;
 			}

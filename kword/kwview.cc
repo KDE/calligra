@@ -1012,7 +1012,7 @@ void KWView::setupActions()
                                      this, SLOT( changeCaseOfText() ),
                                      actionCollection(), "change_case" );
     actionChangeCase->setToolTip( i18n( "Alter the capitalization of selected text." ) );
-    actionChangeCase->setWhatsThis( i18n( "Alter the capitalization of selected text to one of five pre-defined patterns.<p>You can also switch all letters from uppercase to lower case and from lower case to upper case in one move." ) );
+    actionChangeCase->setWhatsThis( i18n( "Alter the capitalization of selected text to one of five pre-defined patterns.<p>You can also switch all letters from upper case to lower case and from lower case to upper case in one move." ) );
 
     //------------------------ Settings menu
     actionConfigure = KStdAction::preferences(this, SLOT(configure()), actionCollection(), "configure" );

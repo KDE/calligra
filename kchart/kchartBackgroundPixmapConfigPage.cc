@@ -139,7 +139,7 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
     tiledRB = new QRadioButton( i18n( "Tiled" ), right );
     QWhatsThis::add( tiledRB,
                      i18n( "If you check this box, the selected image will "
-                           "be used as background tile. If the image is "
+                           "be used as a background tile. If the image is "
                            "larger then the selected area, you will only see "
                            "the upper left part of it." ) );
     QButtonGroup* alignmentBG;

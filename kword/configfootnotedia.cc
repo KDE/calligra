@@ -116,7 +116,7 @@ void KWConfigFootNoteDia::setupTab3()
 
     QLabel *lSize = new QLabel( i18n("arg is a unit such as pt", "&Width (%1):").arg("pt"), page );
     lSize->setBuddy( spWidth );
-    comment= i18n ("The width is the thickness of the separator line, set to 0 for no seperator line.");
+    comment= i18n ("The width is the thickness of the separator line, set to 0 for no separator line.");
     QWhatsThis::add(lSize, comment);
     QWhatsThis::add(spWidth, comment);
     layout->addWidget( lSize, 1, 0 );
@@ -126,7 +126,7 @@ void KWConfigFootNoteDia::setupTab3()
 
     QLabel *lWidth = new QLabel( i18n("&Size on page:"), page, "lWidth" );
     lWidth->setBuddy( spLength );
-    comment= i18n ("The size of the separator line can be defined in a percentage of the width of the page.");
+    comment= i18n ("The size of the separator line can be defined as a percentage of the width of the page.");
     QWhatsThis::add(spLength, comment);
     QWhatsThis::add(lWidth, comment);
     layout->addWidget( lWidth, 0, 0 );
@@ -147,7 +147,7 @@ void KWConfigFootNoteDia::setupTab3()
     m_cbLineType->insertStringList( lst );
     m_cbLineType->setCurrentItem( static_cast<int>(m_doc->footNoteSeparatorLineType()));
     comment= i18n ("The separator line can be drawn as a solid line or as a line which has a "
-        "pattern; the pattern can be set in the style-type");
+        "pattern; the pattern can be set in the style-type.");
     QWhatsThis::add(styleLabel, comment);
     QWhatsThis::add(m_cbLineType, comment);
     styleLayout->addWidget( m_cbLineType );

@@ -67,7 +67,7 @@ KChartColorConfigPage::KChartColorConfigPage( KChartParams* params,
     grid->addWidget( _xtitleCB, 2, 1 );
     wtstr = i18n( "This color is used for displaying titles for the "
                   "X (horizontal) axis. This setting overrides the setting "
-                  "<i>Title Color</i>" );
+                  "<i>Title Color</i>." );
     QWhatsThis::add( xtitleLA, wtstr );
     QWhatsThis::add( _xtitleCB, wtstr );
 
@@ -79,7 +79,7 @@ KChartColorConfigPage::KChartColorConfigPage( KChartParams* params,
     grid->addWidget( _ytitleCB, 3, 1 );
     wtstr = i18n( "This color is used for displaying titles for the "
                   "Y (vertical) axis. This setting overrides the setting "
-                  "<i>Title Color</i>" );
+                  "<i>Title Color</i>." );
     QWhatsThis::add( ytitleLA, wtstr );
     QWhatsThis::add( _ytitleCB, wtstr );
 
@@ -92,7 +92,7 @@ KChartColorConfigPage::KChartColorConfigPage( KChartParams* params,
     wtstr = i18n( "This color is used for displaying titles for the "
                   "second Y (vertical) axis. It only takes effect if the "
                   "chart is configured to have a second Y axis. This setting "
-                  "overrides the setting <i>Title Color</i>" );
+                  "overrides the setting <i>Title Color</i>." );
     QWhatsThis::add( ytitle2LA, wtstr );
     QWhatsThis::add( _ytitle2CB, wtstr );
 
@@ -127,7 +127,7 @@ KChartColorConfigPage::KChartColorConfigPage( KChartParams* params,
     wtstr = i18n( "Here you can configure the color that is used for "
                   "labelling the second Y (vertical) axis. Of course, "
                   "this setting only takes effect if the chart is "
-                  "configured to have two vertical axes" );
+                  "configured to have two vertical axes." );
     QWhatsThis::add( ylabel2LA, wtstr );
     QWhatsThis::add( _ylabel2CB, wtstr );
 

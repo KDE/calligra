@@ -35,10 +35,10 @@ KAboutData *newKexiAboutData()
 		KEXI_VERSION, description, KAboutData::License_LGPL,
 		I18N_NOOP(	"(c) 2002, 2003, Kexi Team\n"
 					"(c) 2003, OpenOffice Polska Ltd.\n"), 
-		I18N_NOOP(	"This software is developed by Kexi Team - international group\n"
+		I18N_NOOP(	"This software is developed by Kexi Team - an international group\n"
 					"of independent developers, with additional assistance and support\n"
-					"from OpenOffice Polska company.\n\n"
-					"Visit Company Home Page: http://www.openoffice.com.pl"),
+					"from the OpenOffice Polska company.\n\n"
+					"Visit the company Home Page: http://www.openoffice.com.pl"),
 		"http://www.koffice.org/kexi",
 		"submit@bugs.kde.org"
 	);

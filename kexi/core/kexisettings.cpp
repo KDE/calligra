@@ -32,7 +32,7 @@ KexiSettings::KexiSettings(QWidget *parent)
 {
 	addPage(i18n("Printing"), i18n("Default Printer Settings"), ListIcon("print_printer"));
 	QFrame *lnf = addPage(i18n("Look & Feel"), i18n("Look & Feel"), ListIcon("looknfeel"));
-	QCheckBox *showBGAltering = new QCheckBox(i18n("Use backgroundaltering for tables"), lnf);
+	QCheckBox *showBGAltering = new QCheckBox(i18n("Use background altering for tables"), lnf);
 	showBGAltering->setChecked(true);
 	QGridLayout *gLnf = new QGridLayout(lnf);
 	QSpacerItem *vSpace = new QSpacerItem(20, 60);

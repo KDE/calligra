@@ -178,7 +178,7 @@ void KexiView::initHelper()
 #ifndef KEXI_NO_CTXT_HELP
 	m_helper=new KexiContextHelp(this, 0, "Context Help");
 	//add that as we have a help!
-	m_helper->setContextHelp(i18n("Welcome"), i18n("%1 is in a early state of development, not all planed features are implemented<br>you can help with kexi development by filing <a href=\"http://bugs.kde.org/wizard.cgi?package=kexi\">feature-requests and bug reports</a><br><br><i>the kexi team wishes you fun and productive work</i>").arg(KEXI_APP_NAME));
+	m_helper->setContextHelp(i18n("Welcome"), i18n("%1 is in a early state of development and not all planned features are implemented.<br>You can help with kexi development by filing <a href=\"http://bugs.kde.org/wizard.cgi?package=kexi\">feature requests and bug reports</a>.<br><br><i>The kexi team wishes you fun and productive work.</i>").arg(KEXI_APP_NAME));
 	m_actionHelper->setChecked(m_helper->isVisible());
 	connect(m_actionHelper, SIGNAL(toggled(bool)), m_helper, SLOT(setVisible(bool)));
 #endif
@@ -396,7 +396,7 @@ KexiView::setupPrinter(KPrinter &printer)
 	if (active)
 		active->setupPrinter(printer);
 #else
-	KEXI_UNFINISHED(i18n("Setup printer"));
+	KEXI_UNFINISHED(i18n("Set up printer"));
 #endif //!KEXI_NO_PRINT
 }
 

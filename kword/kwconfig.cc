@@ -271,13 +271,13 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
     pgUpDownMovesCaret->setChecked(oldPgUpDownMovesCaret);
     QWhatsThis::add( pgUpDownMovesCaret, i18n(
                          "If this option is enabled, the PageUp and PageDown keys "
-                         "move the text caret, similar to other KDE applications. "
-                         "If it is disabled, they move the scrollbars, similar to most other word processors." ) );
+                         "move the text caret, as in other KDE applications. "
+                         "If it is disabled, they move the scrollbars, as in most other word processors." ) );
 
     recentFiles=new KIntNumInput( oldNbRecentFiles, gbInterfaceGroup );
     recentFiles->setRange(1, 20, 1);
     recentFiles->setLabel(i18n("Number of recent &files:"));
-    QWhatsThis::add( recentFiles, i18n("The amount of files remembered in the file open dialog and in the "
+    QWhatsThis::add( recentFiles, i18n("The number of files remembered in the file open dialog and in the "
                     "recent files menu item") );
 
     QString suffix = KoUnit::unitName( unit ).prepend(' ');
@@ -306,9 +306,9 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
     indent->setSuffix( suffix );
     indent->setLabel(i18n("&Paragraph indent by toolbar buttons:"));
     QWhatsThis::add( indent, i18n("Configure the indent width used when using the 'Increase' "
-                    "or 'Decrease' indentation buttons on a paragraph.<p>The lower the value "
+                    "or 'Decrease' indentation buttons on a paragraph.<p>The lower the value, "
                     "the more often the buttons will have to be pressed to gain the same "
-                    "indentation") );
+                    "indentation.") );
 
     m_nbPagePerRow=new KIntNumInput( indent, nbPagePerRow, gbInterfaceGroup );
     m_nbPagePerRow->setRange(1, 10, 1);
@@ -703,7 +703,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
     columnSpacing->setSuffix( suffix );
     columnSpacing->setLabel(i18n("Default column spacing:"));
     QWhatsThis::add( columnSpacing, i18n("When setting a document to use more than one column "
-                "this distance will be used to seperate the columns. This value is merely a default "
+                "this distance will be used to separate the columns. This value is merely a default "
                 "setting as the column spacing can be changed per document") );
 
     QWidget *fontContainer = new QWidget(gbDocumentDefaults);

@@ -128,7 +128,7 @@ VConfigInterfacePage::VConfigInterfacePage( KarbonView* view,
 
 	m_recentFiles = new KIntNumInput( m_oldRecentFiles, tmpQGroupBox );
 	m_recentFiles->setRange( 1, 20, 1 );
-	m_recentFiles->setLabel( i18n( "Number of recent file:" ) );
+	m_recentFiles->setLabel( i18n( "Number of recent files:" ) );
 
 	m_copyOffset = new KIntNumInput( m_oldCopyOffset, tmpQGroupBox );
 	m_copyOffset->setRange( 1, 50, 1 );

@@ -30,7 +30,7 @@
 #include "kexiprojectproperties.h"
 
 KexiProjectProperties::KexiProjectProperties(QWidget *parent, KexiDBConnection *dbconn)
- : KDialogBase(IconList, i18n("Projects Properties"), KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, parent, 0, true)
+ : KDialogBase(IconList, i18n("Project's Properties"), KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, parent, 0, true)
 {
 	QPixmap pixdb = KGlobal::instance()->iconLoader()->loadIcon("db", KIcon::NoGroup, KIcon::SizeMedium );
 	QFrame *dbFrame = addPage(i18n("Database"), i18n("Database Settings"), pixdb);
