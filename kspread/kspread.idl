@@ -57,6 +57,22 @@ module KSpread
 		unsigned long column;
 		unsigned long row;
 	};
+
+	struct EventSetText
+	{
+		string text;
+	};
+	const string eventSetText = "UserEvent/KSpread/SetText";
+	typedef EventSetText typeSetText;
+
+	struct EventKeyPressed
+	{
+		long key;
+		long state;
+		long ascii;
+	};
+	const string eventKeyPressed = "UserEvent/KSpread/KeyPressed";
+	typedef EventKeyPressed typeKeyPressed;
 };
 
 #endif

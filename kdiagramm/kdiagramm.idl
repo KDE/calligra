@@ -1,0 +1,27 @@
+#ifndef __kdiagramm_idl__
+#define __kdiagramm_idl__
+
+#include <openparts.idl>
+#include <koffice.idl>
+#include <openparts_ui.idl>
+#include <chart.idl>
+
+module KDiagramm
+{
+	interface View : KOffice::View
+	{
+		slot void modeLines();
+		slot void modeAreas();
+		slot void modeBars();
+		slot void modeCakes();
+
+		slot void editData();
+	};
+
+	interface Document : KOffice::Document, Chart::SimpleChart
+	{
+	};
+};
+
+#endif
+

@@ -2369,9 +2369,9 @@ void KSpreadTable::insertChart( const QRect& _rect, const char *_arg, const QRec
   }
   
   ChartChild* ch = new ChartChild( m_pDoc, this, _rect, doc );
-  /* ch->setDataArea( _data );
+  ch->setDataArea( _data );
   ch->setChart( chart ); 
-  ch->update();*/
+  ch->update(); 
   
   // chart->showWizard();
   

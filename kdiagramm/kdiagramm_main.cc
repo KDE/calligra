@@ -1,14 +1,12 @@
 #include <qprinter.h>
-#include "kspread_main.h"
+#include "kdiagramm_main.h"
 #include <koScanParts.h>
-#include <koScanTools.h>
-#include <koScanPlugins.h>
 #include <koIMR.h>
 #include <koFactory.h>
 #include <koDocument.h>
 #include <opAutoLoader.h>
-#include "kspread_shell.h"
-#include "kspread_doc.h"
+#include "kdiagramm_shell.h"
+#include "kdiagramm_doc.h"
 
 // DEBUG
 #include <iostream>
@@ -17,32 +15,30 @@ bool g_bWithGUI = true;
 
 list<string> g_openFiles;
 
-KOFFICE_DOCUMENT_FACTORY( KSpreadDoc, KSpreadFactory )
-typedef OPAutoLoader<KSpreadFactory> KSpreadAutoLoader;
+KOFFICE_DOCUMENT_FACTORY( KDiagrammDoc, KDiagrammFactory )
+typedef OPAutoLoader<KDiagrammFactory> KDiagrammAutoLoader;
 
-KSpreadApp::KSpreadApp( int &argc, char** argv ) : 
-  OPApplication( argc, argv, "kspread" )
+KDiagrammApp::KDiagrammApp( int &argc, char** argv ) : 
+  OPApplication( argc, argv, "kdiagramm" )
 {
   getLocale()->insertCatalogue("koffice");
   m_pShell = 0L;
 }
 
-KSpreadApp::~KSpreadApp()
+KDiagrammApp::~KDiagrammApp()
 {
 }
 
-void KSpreadApp::start()
+void KDiagrammApp::start()
 {
   if ( g_bWithGUI )
   {
     imr_init();
     koScanParts();
-    koScanTools();
-    koScanPlugins();
-    
+
     if ( g_openFiles.size() == 0 )
     {
-      m_pShell = new KSpreadShell;
+      m_pShell = new KDiagrammShell;
       m_pShell->show();
       m_pShell->newDocument();
     }
@@ -51,7 +47,7 @@ void KSpreadApp::start()
       list<string>::iterator it = g_openFiles.begin();
       for( ; it != g_openFiles.end(); ++it )
       {
-	m_pShell = new KSpreadShell;
+	m_pShell = new KDiagrammShell;
 	m_pShell->show();
 	m_pShell->openDocument( it->c_str(), "" );
       }
@@ -61,9 +57,9 @@ void KSpreadApp::start()
 
 int main( int argc, char **argv )
 {
-  KSpreadAutoLoader loader( "IDL:KOffice/DocumentFactory:1.0", "KSpread" );
+  KDiagrammAutoLoader loader( "IDL:KOffice/DocumentFactory:1.0", "KDiagramm" );
 
-  KSpreadApp app( argc, argv );
+  KDiagrammApp app( argc, argv );
 
   int i = 1;
   if ( strcmp( argv[i], "-s" ) == 0 || strcmp( argv[i], "--server" ) == 0 )
@@ -82,4 +78,4 @@ int main( int argc, char **argv )
   return 0;
 }
 
-#include "kspread_main.moc"
+#include "kdiagramm_main.moc"

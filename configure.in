@@ -86,6 +86,8 @@ AC_OUTPUT( \
 	kword/templates/Makefile \
 	kword/templates/Wordprocessing/Makefile \
 	kword/templates/DTP/Makefile \
+	kdiagramm/Makefile \
+	kdiagramm/pics/Makefile \
 	lib/Makefile \
 	lib/kofficecore/Makefile \
 	lib/kofficeui/Makefile \
@@ -95,6 +97,8 @@ AC_OUTPUT( \
 	lib/store/Makefile \
 	tools/Makefile \
 	tools/spell/Makefile \
+	plugins/Makefile \
+	plugins/recorder/Makefile \
 	po/Makefile \
 	po/de/Makefile \
 	po/pt/Makefile \

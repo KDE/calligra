@@ -10,9 +10,10 @@ LIBADD  = -lkom -lkfile -lkdeui -lkdecore -lqt -lkdecore \
 lib_LTLIBRARIES = libkofficecore.la
 BUILT_SOURCES =  moc_koFrame.cc moc_koMainWindow.cc
 libkofficecore_la_SOURCES = koDocument.cc koView.cc koffice.cc koFrame.cc koIMR.cc koScanParts.cc koStream.cc \
-			    koMediator.cc koPrintExt.cc koMainWindow.cc koScanTools.cc $(BUILT_SOURCES)
+			    koMediator.cc koPrintExt.cc koMainWindow.cc koScanTools.cc koScanPlugins.cc \
+			    $(BUILT_SOURCES)
 include_HEADERS = koffice.h koView.h koFrame.h koIMR.h koScanParts.h koStream.h koDocument.h koPrintExt.h koFactory.h \
-		  koMainWindow.h koMediator.h koScanTools.h
+		  koMainWindow.h koMediator.h koScanTools.h koScanPlugins.h
 
 idl_DATA = koffice.idl
 idl_HEADERS =  koffice.h

@@ -21,6 +21,7 @@ class KoToolEntry;
 #include <opMenu.h>
 #include <opToolBar.h>
 #include <koFrame.h>
+#include <koScanPlugins.h>
 #include <openparts_ui.h>
 #include <datatools.h>
 
@@ -117,6 +118,12 @@ public:
   
     void updateCellRect( const QRect &_rect );
 
+    /**
+     * Used by @ref KSpreadView
+     */
+    void setEditDirtyFlag( bool _flag ) { m_bEditDirtyFlag = _flag; }
+    bool editDirtyFlag() { return m_bEditDirtyFlag; }
+  
 protected:
     virtual void keyPressEvent ( QKeyEvent* _ev );    
     virtual void paintEvent ( QPaintEvent* _ev );    
@@ -624,7 +631,9 @@ protected:
     virtual bool mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar );
     virtual bool mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory );
     virtual bool mappingToolDone( DataTools::Answer& _answer );
-
+    virtual bool mappingEventSetText( KSpread::typeSetText& _event );
+    virtual bool mappingEventKeyPressed( KSpread::typeKeyPressed& _event );
+  
     virtual void keyPressEvent ( QKeyEvent * _ev );
     virtual void resizeEvent( QResizeEvent *_ev );
 
@@ -794,6 +803,8 @@ protected:
      KoToolEntry* entry;
    };
    QList<ToolEntry> m_lstTools;
+
+   KoPluginManager m_pluginManager;
 };
 
 #endif

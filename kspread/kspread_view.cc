@@ -44,7 +44,8 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* _doc 
   m_bInitialized = false;
   
   setWidget( this );
-
+  m_pluginManager.setView( this );
+  
   OPPartIf::setFocusPolicy( OpenParts::Part::ClickFocus ); 
 
   m_lstFrames.setAutoDelete( true );  
@@ -187,7 +188,7 @@ void KSpreadView::cleanUp()
   
   if ( m_bIsClean )
     return;
-
+  
   cerr << "1a) Deactivate Frames" << endl;
   
   QListIterator<KSpreadChildFrame> it( m_lstFrames );
@@ -208,6 +209,7 @@ void KSpreadView::cleanUp()
   
   m_pDoc->removeView( this );
 
+  m_pluginManager.cleanUp();
   KoViewIf::cleanUp();
 
   cerr << "2) VIEW void KOMBase::incRef() = " << m_ulRefCount << endl;
@@ -225,10 +227,233 @@ bool KSpreadView::event( const char* _event, const CORBA::Any& _value )
   MAPPING( OpenPartsUI::eventCreateMenuBar, OpenPartsUI::typeCreateMenuBar_var, mappingCreateMenubar );
   MAPPING( OpenPartsUI::eventCreateToolBar, OpenPartsUI::typeCreateToolBar_var, mappingCreateToolbar );
   MAPPING( DataTools::eventDone, DataTools::typeDone, mappingToolDone );
+  MAPPING( KSpread::eventSetText, KSpread::typeSetText, mappingEventSetText );
+  MAPPING( KSpread::eventKeyPressed, KSpread::typeKeyPressed, mappingEventKeyPressed );
 
   END_EVENT_MAPPER;
   
   return false;
+}
+
+bool KSpreadView::mappingEventKeyPressed( KSpread::typeKeyPressed& _event )
+{
+  if ( m_pTable == 0L )
+    return true;
+
+  int x, y;
+  RowLayout *rl;
+  ColumnLayout *cl;
+  KSpreadCell *cell;
+  // Flag that indicates wether we make a selection right now
+  bool make_select = FALSE;
+  
+  QRect selection( m_pTable->selection() );
+  
+  // Are we making a selection right now ? Go thru this only if no selection is made
+  // or if we neither selected complete rows nor columns.
+  if ( ( _event.state & ShiftButton ) == ShiftButton &&
+       ( selection.left() == 0 || ( selection.right() != 0 && selection.bottom() != 0 ) ) && 
+       ( _event.key == Key_Down || _event.key == Key_Up || _event.key == Key_Left || _event.key == Key_Right ) )
+    make_select = TRUE;
+
+  // Do we have an old selection ? If yes, unselect everything
+  if ( selection.left() != 0 && !make_select )
+    m_pTable->unselect();
+    
+  switch( _event.key )
+    {
+    case Key_Return:
+    case Key_Enter:
+    case Key_Down:	
+	hideMarker();
+
+	if ( selection.left() == 0 && make_select )
+	    selection.setCoords( m_iMarkerColumn, m_iMarkerRow, m_iMarkerColumn, m_iMarkerRow );
+
+	cell = m_pTable->cellAt( m_iMarkerColumn, m_iMarkerRow );
+	// Are we leaving a cell with extra size ?
+	if ( cell->isForceExtraCells() )
+	    setMarkerRow( m_iMarkerRow + 1 + cell->extraYCells() );
+	else
+	    setMarkerRow( m_iMarkerRow + 1 );
+
+	cell = m_pTable->cellAt( m_iMarkerColumn, m_iMarkerRow );
+	// Go to the upper left corner of the obscuring object
+	if ( cell->isObscured() && cell->isObscuringForced() )
+	{
+	    setMarkerRow( cell->obscuringCellsRow() );
+	    setMarkerColumn( cell->obscuringCellsColumn() );
+	}
+
+	y = m_pTable->rowPos( m_iMarkerRow, this );
+	rl = m_pTable->rowLayout( m_iMarkerRow );
+	if ( y + rl->height( this ) > height() )
+	  vertScrollBar()->setValue( yOffset() + ( y + rl->height( this ) - height() ) );
+
+	// If we have been at the top of the selection ...
+	if ( selection.top() == m_iMarkerRow - 1 && selection.top() != selection.bottom() && make_select )
+	    selection.setTop( m_iMarkerRow );
+	else if ( make_select )
+	    selection.setBottom( m_iMarkerRow );
+
+	if ( make_select )
+	  m_pTable->setSelection( selection );
+	
+	showMarker();
+
+	cell = m_pTable->cellAt( m_iMarkerColumn, m_iMarkerRow );
+	if ( cell->text() != 0L )
+	    editWidget()->setText( cell->text() );
+	else
+	    editWidget()->setText( "" );
+
+	break;
+
+    case Key_Up:	
+	hideMarker();
+
+	if ( selection.left() == 0 && make_select )
+	    selection.setCoords( m_iMarkerColumn, m_iMarkerRow, m_iMarkerColumn, m_iMarkerRow );
+
+	setMarkerRow( m_iMarkerRow - 1 );
+	cell = m_pTable->cellAt( m_iMarkerColumn, m_iMarkerRow );
+	// Go to the upper left corner of the obscuring object
+	if ( cell->isObscured() && cell->isObscuringForced() )
+	{
+	    setMarkerRow( cell->obscuringCellsRow() );
+	    setMarkerColumn( cell->obscuringCellsColumn() );
+	}
+	
+	y = m_pTable->rowPos( m_iMarkerRow, this );
+	rl = m_pTable->rowLayout( m_iMarkerRow );
+	if ( y < 0 )
+	    vertScrollBar()->setValue( yOffset() + y );
+
+	// If we have been at the top of the selection ...
+	if ( selection.top() == m_iMarkerRow + 1 && make_select )
+	    selection.setTop( m_iMarkerRow );
+	else if ( make_select )
+	    selection.setBottom( m_iMarkerRow );
+
+	if ( make_select )
+	  m_pTable->setSelection( selection );
+
+	showMarker();
+
+	cell = m_pTable->cellAt( m_iMarkerColumn, m_iMarkerRow );
+	if ( cell->text() != 0L )
+	    editWidget()->setText( cell->text() );
+	else
+	    editWidget()->setText( "" );
+
+	break;
+
+    case Key_Left:
+	hideMarker();
+	
+	if ( selection.left() == 0 && make_select )
+	    selection.setCoords( m_iMarkerColumn, m_iMarkerRow, m_iMarkerColumn, m_iMarkerRow );
+
+	setMarkerColumn( m_iMarkerColumn - 1 );
+	cell = m_pTable->cellAt( m_iMarkerColumn, m_iMarkerRow );
+	// Go to the upper left corner of the obscuring object
+	if ( cell->isObscured() && cell->isObscuringForced() )
+	{
+	    setMarkerRow( cell->obscuringCellsRow() );
+	    setMarkerColumn( cell->obscuringCellsColumn() );
+	}
+
+	x = m_pTable->columnPos( m_iMarkerColumn, this );
+	cl = m_pTable->columnLayout( m_iMarkerColumn );
+	if ( x < 0 )
+	  horzScrollBar()->setValue( xOffset() + x );
+
+	// If we have been at the left side of the selection ...
+	if ( selection.left() == m_iMarkerColumn + 1 && make_select )
+	    selection.setLeft( m_iMarkerColumn );
+	else if ( make_select )
+	    selection.setRight( m_iMarkerColumn );
+
+	if ( make_select )
+	  m_pTable->setSelection( selection );
+
+	showMarker();
+
+	cell = m_pTable->cellAt( m_iMarkerColumn, m_iMarkerRow );
+	if ( cell->text() != 0L )
+	    editWidget()->setText( cell->text() );
+	else
+	    editWidget()->setText( "" );
+
+	break;
+
+    case Key_Right:
+	hideMarker();
+
+	if ( selection.left() == 0 && make_select )
+	    selection.setCoords( m_iMarkerColumn, m_iMarkerRow, m_iMarkerColumn, m_iMarkerRow );
+
+	cell = m_pTable->cellAt( m_iMarkerColumn, m_iMarkerRow );
+	// Are we leaving a cell with extra size ?
+	if ( cell->isForceExtraCells() )
+	    setMarkerColumn( m_iMarkerColumn + 1 + cell->extraXCells() );
+	else
+	    setMarkerColumn( m_iMarkerColumn + 1 );
+
+	cell = m_pTable->cellAt( m_iMarkerColumn, m_iMarkerRow );
+	// Go to the upper left corner of the obscuring object ( if there is one )
+	if ( cell->isObscured() && cell->isObscuringForced() )
+	{
+	  setMarkerRow( cell->obscuringCellsRow() );
+	  setMarkerColumn( cell->obscuringCellsColumn() );
+	}
+
+	x = m_pTable->columnPos( m_iMarkerColumn, this );
+	cl = m_pTable->columnLayout( m_iMarkerColumn );
+	if ( x + cl->width( this ) > width() )
+	    horzScrollBar()->setValue( xOffset() + ( x + cl->width( this ) - width() ) );
+
+	// If we have been at the right side of the selection ...
+	if ( selection.right() == m_iMarkerColumn - 1 && make_select )
+	    selection.setRight( m_iMarkerColumn );
+	else if ( make_select )
+	    selection.setLeft( m_iMarkerColumn );
+
+	if ( make_select )
+	  m_pTable->setSelection( selection );
+
+	showMarker();
+
+	cell = m_pTable->cellAt( m_iMarkerColumn, m_iMarkerRow );
+	if ( cell->text() != 0L )
+	    editWidget()->setText( cell->text() );
+	else
+	    editWidget()->setText( "" );
+
+	break;
+
+    case Key_Escape:
+	if ( m_pCanvasWidget->editDirtyFlag() )
+	{
+	  cell = m_pTable->cellAt( m_iMarkerColumn, m_iMarkerRow );
+	  if ( cell->text() != 0L )
+	    editWidget()->setText( cell->text() );
+	  else
+	    editWidget()->setText( "" );
+	}
+	break;
+    }
+
+  return true;
+}
+
+bool KSpreadView::mappingEventSetText( KSpread::typeSetText& _event )
+{
+  cerr << "GOT EventSetText ´" << _event.text.in() << "´" << endl;
+  
+  m_pTable->setText( m_iMarkerRow, m_iMarkerColumn, _event.text.in() );
+
+  return true;
 }
 
 bool KSpreadView::mappingToolDone( DataTools::Answer& _answer )
@@ -256,6 +481,9 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
     cerr << "Setting to nil" << endl;
     m_vToolBarEdit = 0L;
     m_vToolBarLayout = 0L;
+
+    m_pluginManager.fillToolBar( _factory );
+
     cerr << "niled" << endl;
     return true;
   }
@@ -395,6 +623,8 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
 
   m_vToolBarLayout->enable( OpenPartsUI::Show );
 
+  m_pluginManager.fillToolBar( _factory );
+  
   return true;
 }
 
@@ -860,7 +1090,7 @@ void KSpreadView::markChildPicture( KSpreadChildPicture *_pic )
 void KSpreadView::insertChart( const QRect& _geometry )
 {
   // HACK: Ask the trader for the server name
-  m_pTable->insertChart( _geometry, "KChart", m_pTable->selection() );
+  m_pTable->insertChart( _geometry, "KDiagramm", m_pTable->selection() );
 }
 
 void KSpreadView::insertChild( const QRect& _geometry, const char *_arg )
@@ -1492,7 +1722,13 @@ void KSpreadView::setText( const char *_text )
   if ( m_pTable == 0L )
     return;
   
-  m_pTable->setText( m_iMarkerRow, m_iMarkerColumn, _text );
+  KSpread::typeSetText event;
+  event.text = CORBA::string_dup( _text );
+  CORBA::Any any;
+  any <<= event;
+  receive( KSpread::eventSetText, any );
+  
+  // m_pTable->setText( m_iMarkerRow, m_iMarkerColumn, _text );
 }
 
 //---------------------------------------------
@@ -2423,345 +2659,106 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
   KSpreadTable *table = m_pView->activeTable();
   if ( !table )
     return;
-
-  int x, y;
-  RowLayout *rl;
-  ColumnLayout *cl;
-  KSpreadCell *cell;
-  // Flag that indicates wether we make a selection right now
-  bool make_select = FALSE;
-  
-  QRect selection( table->selection() );
-  
-  // Are we making a selection right now ? Go thru this only if no selection is made
-  // or if we neither selected complete rows nor columns.
-  if ( ( _ev->state() & ShiftButton ) == ShiftButton &&
-       ( selection.left() == 0 || ( selection.right() != 0 && selection.bottom() != 0 ) ) && 
-       ( _ev->key() == Key_Down || _ev->key() == Key_Up || _ev->key() == Key_Left || _ev->key() == Key_Right ) )
-    make_select = TRUE;
-
-  // Do we have an old selection ? If yes, unselect everything
-  if ( selection.left() != 0 && !make_select )
-    table->unselect();
     
   switch( _ev->key() )
     {
+      /**
+       * Handle in KSpreadView event handler
+       */
     case Key_Return:
     case Key_Enter:
     case Key_Down:
-	_ev->accept();
 	if ( m_pView->markerRow() == 0xFFFF )
 	  return;
 
-	if ( m_bEditDirtyFlag )
+	if ( editDirtyFlag() )
 	{
 	  m_pView->setText( m_pView->editWidget()->text() );
-	  m_bEditDirtyFlag = FALSE;
+	  setEditDirtyFlag( FALSE );
 	}
-	
-	m_pView->hideMarker();
-
-	if ( selection.left() == 0 && make_select )
-	{
-	    selection.setCoords( m_pView->markerColumn(), m_pView->markerRow(), m_pView->markerColumn(), m_pView->markerRow() );
-	    // cell = table->cellAt( m_pView->markerColumn(), m_pView->markerRow() );
-	    // m_pView->drawCell( cell, m_pView->markerColumn(), m_pView->markerRow(), TRUE );
-	}
-
-	cell = table->cellAt( m_pView->markerColumn(), m_pView->markerRow() );
-	// Are we leaving a cell with extra size ?
-	if ( cell->isForceExtraCells() )
-	    m_pView->setMarkerRow( m_pView->markerRow() + 1 + cell->extraYCells() );
-	else
-	    m_pView->setMarkerRow( m_pView->markerRow() + 1 );
-
-	cell = table->cellAt( m_pView->markerColumn(), m_pView->markerRow() );
-	// Go to the upper left corner of the obscuring object
-	if ( cell->isObscured() && cell->isObscuringForced() )
-	{
-	    m_pView->setMarkerRow( cell->obscuringCellsRow() );
-	    m_pView->setMarkerColumn( cell->obscuringCellsColumn() );
-	}
-
-	y = table->rowPos( m_pView->markerRow(), m_pView );
-	rl = table->rowLayout( m_pView->markerRow() );
-	if ( y + rl->height( m_pView ) > height() )
-	  m_pView->vertScrollBar()->setValue( m_pView->yOffset() + ( y + rl->height( m_pView ) - height() ) );
-
-	// If we have been at the top of the selection ...
-	if ( selection.top() == m_pView->markerRow() - 1 && selection.top() != selection.bottom() && make_select )
-	{
-	    selection.setTop( m_pView->markerRow() );
-	    /* for ( int i = selection.left(); i <= selection.right(); i++ )
-	    {
-	      cell = table->cellAt( i, m_pView->markerRow() - 1 );
-	      m_pView->drawCell( cell, i, m_pView->markerRow() - 1, TRUE );
-	    } */
-	}
-	else if ( make_select )
-	{
-	    selection.setBottom( m_pView->markerRow() );
-	    /* for ( int i = selection.left(); i <= selection.right(); i++ )
-	    {
-		cell = table->cellAt( i, m_pView->markerRow() );
-		m_pView->drawCell( cell, i, m_pView->markerRow(), TRUE );
-	    } */
-	}
-
-	if ( make_select )
-	  table->setSelection( selection );
-	
-	m_pView->showMarker();
-
-	cell = table->cellAt( m_pView->markerColumn(), m_pView->markerRow() );
-	if ( cell->text() != 0L )
-	    m_pView->editWidget()->setText( cell->text() );
-	else
-	    m_pView->editWidget()->setText( "" );
-
 	break;
-
+	
     case Key_Up:
-	_ev->accept();
 	if ( m_pView->markerRow() == 1 )
 	    return;
 
-	if ( m_bEditDirtyFlag )
+	if ( editDirtyFlag() )
 	{
-	    m_pView->setText( m_pView->editWidget()->text() );
-	    m_bEditDirtyFlag = FALSE;
+	  m_pView->setText( m_pView->editWidget()->text() );
+	  setEditDirtyFlag( FALSE );
 	}
-	
-	m_pView->hideMarker();
-
-	if ( selection.left() == 0 && make_select )
-	{
-	    selection.setCoords( m_pView->markerColumn(), m_pView->markerRow(), m_pView->markerColumn(), m_pView->markerRow() );
-	    // cell = table->cellAt( m_pView->markerColumn(), m_pView->markerRow() );
-	    // m_pView->drawCell( cell, m_pView->markerColumn(), m_pView->markerRow(), TRUE );
-	}
-
-	m_pView->setMarkerRow( m_pView->markerRow() - 1 );
-	cell = table->cellAt( m_pView->markerColumn(), m_pView->markerRow() );
-	// Go to the upper left corner of the obscuring object
-	if ( cell->isObscured() && cell->isObscuringForced() )
-	{
-	    m_pView->setMarkerRow( cell->obscuringCellsRow() );
-	    m_pView->setMarkerColumn( cell->obscuringCellsColumn() );
-	}
-	
-	y = table->rowPos( m_pView->markerRow(), m_pView );
-	rl = table->rowLayout( m_pView->markerRow() );
-	if ( y < 0 )
-	    m_pView->vertScrollBar()->setValue( m_pView->yOffset() + y );
-
-	// If we have been at the top of the selection ...
-	if ( selection.top() == m_pView->markerRow() + 1 && make_select )
-	{
-	    selection.setTop( m_pView->markerRow() );
-	    /* for ( int i = selection.left(); i <= selection.right(); i++ )
-	    {
-		obj = table->cellAt( i, m_pView->markerRow() );
-		drawObject( obj, i, m_pView->markerRow(), TRUE );
-	    } */
-	}
-	else if ( make_select )
-	{
-	    selection.setBottom( m_pView->markerRow() );
-	    /* for ( int i = selection.left(); i <= selection.right(); i++ )
-	    {
-		obj = table->cellAt( i, m_pView->markerRow() + 1 );
-		drawObject( obj, i, m_pView->markerRow() + 1, TRUE );
-	    } */
-	}
-
-	if ( make_select )
-	  table->setSelection( selection );
-
-	m_pView->showMarker();
-
-	cell = table->cellAt( m_pView->markerColumn(), m_pView->markerRow() );
-	if ( cell->text() != 0L )
-	    m_pView->editWidget()->setText( cell->text() );
-	else
-	    m_pView->editWidget()->setText( "" );
-
 	break;
-
+	
     case Key_Left:
-	_ev->accept();
 	if ( m_pView->markerColumn() == 1 )
 	    return;
 
-	if ( m_bEditDirtyFlag )
+	if ( editDirtyFlag() )
 	{
 	  m_pView->setText( m_pView->editWidget()->text() );
-	  m_bEditDirtyFlag = FALSE;
+	  setEditDirtyFlag( FALSE );
 	}
-
-	m_pView->hideMarker();
-	
-	if ( selection.left() == 0 && make_select )
-	{
-	    selection.setCoords( m_pView->markerColumn(), m_pView->markerRow(), m_pView->markerColumn(), m_pView->markerRow() );
-	    // obj = table->cellAt( m_pView->markerColumn(), m_pView->markerRow() );
-	    // drawObject( obj, m_pView->markerColumn(), m_pView->markerRow(), TRUE );
-	}
-
-	m_pView->setMarkerColumn( m_pView->markerColumn() - 1 );
-	cell = table->cellAt( m_pView->markerColumn(), m_pView->markerRow() );
-	// Go to the upper left corner of the obscuring object
-	if ( cell->isObscured() && cell->isObscuringForced() )
-	{
-	    m_pView->setMarkerRow( cell->obscuringCellsRow() );
-	    m_pView->setMarkerColumn( cell->obscuringCellsColumn() );
-	}
-
-	x = table->columnPos( m_pView->markerColumn(), m_pView );
-	cl = table->columnLayout( m_pView->markerColumn() );
-	if ( x < 0 )
-	  m_pView->horzScrollBar()->setValue( m_pView->xOffset() + x );
-
-	// If we have been at the left side of the selection ...
-	if ( selection.left() == m_pView->markerColumn() + 1 && make_select )
-	{
-	    selection.setLeft( m_pView->markerColumn() );
-	    /* for ( int i = selection.top(); i <= selection.bottom(); i++ )
-	    {
-		obj = table->cellAt( m_pView->markerColumn(), i );
-		drawObject( obj, m_pView->markerColumn(), i, TRUE );
-	    } */
-	}
-	else if ( make_select )
-	{
-	    selection.setRight( m_pView->markerColumn() );
-	    /* for ( int i = selection.top(); i <= selection.bottom(); i++ )
-	    {
-		obj = table->cellAt( m_pView->markerColumn() + 1, i );
-		drawObject( obj, m_pView->markerColumn() + 1, i, TRUE );
-	    } */
-	}
-
-	if ( make_select )
-	  table->setSelection( selection );
-
-	m_pView->showMarker();
-
-	cell = table->cellAt( m_pView->markerColumn(), m_pView->markerRow() );
-	if ( cell->text() != 0L )
-	    m_pView->editWidget()->setText( cell->text() );
-	else
-	    m_pView->editWidget()->setText( "" );
-
 	break;
 
     case Key_Right:
-	_ev->accept();
 	if ( m_pView->markerColumn() == 0xFFFF )
 	    return;
-	
-	if ( m_bEditDirtyFlag )
+
+	if ( editDirtyFlag() )
 	{
 	  m_pView->setText( m_pView->editWidget()->text() );
-	  m_bEditDirtyFlag = FALSE;
+	  setEditDirtyFlag( FALSE );
 	}
-
-	m_pView->hideMarker();
-
-	if ( selection.left() == 0 && make_select )
-	{
-	    selection.setCoords( m_pView->markerColumn(), m_pView->markerRow(), m_pView->markerColumn(), m_pView->markerRow() );
-	    // obj = table->cellAt( m_pView->markerColumn(), m_pView->markerRow() );
-	    // drawObject( obj, m_pView->markerColumn(), m_pView->markerRow(), TRUE );
-	}
-
-	cell = table->cellAt( m_pView->markerColumn(), m_pView->markerRow() );
-	// Are we leaving a cell with extra size ?
-	if ( cell->isForceExtraCells() )
-	    m_pView->setMarkerColumn( m_pView->markerColumn() + 1 + cell->extraXCells() );
-	else
-	    m_pView->setMarkerColumn( m_pView->markerColumn() + 1 );
-
-	cell = table->cellAt( m_pView->markerColumn(), m_pView->markerRow() );
-	// Go to the upper left corner of the obscuring object ( if there is one )
-	if ( cell->isObscured() && cell->isObscuringForced() )
-	{
-	  m_pView->setMarkerRow( cell->obscuringCellsRow() );
-	  m_pView->setMarkerColumn( cell->obscuringCellsColumn() );
-	}
-
-	x = table->columnPos( m_pView->markerColumn(), m_pView );
-	cl = table->columnLayout( m_pView->markerColumn() );
-	if ( x + cl->width( m_pView ) > width() )
-	    m_pView->horzScrollBar()->setValue( m_pView->xOffset() + ( x + cl->width( m_pView ) - width() ) );
-
-	// If we have been at the right side of the selection ...
-	if ( selection.right() == m_pView->markerColumn() - 1 && make_select )
-	{
-	    selection.setRight( m_pView->markerColumn() );
-	    /* for ( int i = selection.top(); i <= selection.bottom(); i++ )
-	    {
-		obj = table->cellAt( m_pView->markerColumn(), i );
-		drawObject( obj, m_pView->markerColumn(), i, TRUE );
-	    } */
-	}
-	else if ( make_select )
-	{
-	    selection.setLeft( m_pView->markerColumn() );
-	    /* for ( int i = selection.top(); i <= selection.bottom(); i++ )
-	    {
-		obj = table->cellAt( m_pView->markerColumn() - 1, i );
-		drawObject( obj, m_pView->markerColumn() - 1, i, TRUE );
-	    } */
-	}
-
-	if ( make_select )
-	  table->setSelection( selection );
-
-	m_pView->showMarker();
-
-	cell = table->cellAt( m_pView->markerColumn(), m_pView->markerRow() );
-	if ( cell->text() != 0L )
-	    m_pView->editWidget()->setText( cell->text() );
-	else
-	    m_pView->editWidget()->setText( "" );
-
 	break;
 
+	/**
+	 * Handle here
+	 */
     case Key_Escape:
-	_ev->accept();
-
-	if ( m_bEditDirtyFlag )
-	{
-	  cell = table->cellAt( m_pView->markerColumn(), m_pView->markerRow() );
-	  if ( cell->text() != 0L )
-	    m_pView->editWidget()->setText( cell->text() );
-	  else
-	    m_pView->editWidget()->setText( "" );
-	}
-	break;
-	
+      _ev->accept();
+      if ( editDirtyFlag() )
+      {
+	KSpreadCell* cell = table->cellAt( m_pView->markerColumn(), m_pView->markerRow() );
+	if ( cell->text() != 0L )
+	  m_pView->editWidget()->setText( cell->text() );
+	else
+	  m_pView->editWidget()->setText( "" );
+	m_bEditDirtyFlag = false;
+      }
+      return;
+  
     default:
-	char buffer[2];
-	if ( _ev->ascii() == 0 )
-	{
-	  _ev->accept();
-	  // _ev->ignore();
-	  return;
-	}
-	
-	buffer[0] = _ev->ascii();
-	buffer[1] = 0;
-	
-	// m_pView->editWidget()->setText( buffer );
-	// m_pView->editWidget()->setFocus();
-	if ( !m_bEditDirtyFlag )
-	    m_pView->editWidget()->setText( "" );
-	
-	m_pView->editWidget()->publicKeyPressEvent( _ev );
-	m_bEditDirtyFlag = TRUE;
-	break;
+      char buffer[2];
+      if ( _ev->ascii() == 0 )
+      {
+	_ev->accept();
+	return;
+      }
+      
+      buffer[0] = _ev->ascii();
+      buffer[1] = 0;
+      
+      if ( !m_bEditDirtyFlag )
+	m_pView->editWidget()->setText( "" );
+      
+      m_pView->editWidget()->publicKeyPressEvent( _ev );
+      m_bEditDirtyFlag = TRUE;
+      return;
     }
+
+  /**
+   * Tell the KSpreadView event handler and enable
+   * makro recording by the way.
+   */
+  _ev->accept();
+
+  KSpread::typeKeyPressed event;
+  event.key = _ev->key();
+  event.state = _ev->state();
+  event.ascii = _ev->ascii();
+  CORBA::Any any;
+  any <<= event;
+  m_pView->receive( KSpread::eventKeyPressed, any );
 }
 
 void KSpreadCanvas::updateCellRect( const QRect &_rect )
