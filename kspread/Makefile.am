@@ -8,6 +8,7 @@ bin_PROGRAMS = kspread
 lib_LTLIBRARIES = kspread.la libkspreadpart.la
 
 libkspreadpart_la_SOURCES = kspread_dlg_formula.cc \
+	kspread_functions.cc \
 	kspread_canvas.cc \
 	kspread_doc.cc \
 	kspread_undo.cc kspread_view.cc kspread_tabbar.cc \
@@ -45,7 +46,7 @@ kspread_LDADD = kspread.la
 dummy.cc:
 	echo > dummy.cc
 
-noinst_HEADERS = kspread_doc.h \
+noinst_HEADERS = kspread_doc.h kspread_functions.h \
 	kspread_undo.h kspread_view.h kspread_tabbar.h \
 	kspread_autofill.h kspread_interpreter.h \
 	kspread_layout.h kspread_map.h kspread_dlg_layout.h \

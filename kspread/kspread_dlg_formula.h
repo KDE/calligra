@@ -40,9 +40,9 @@ class KSpreadView;
 class KSpreadTable;
 class KSpreadCell;
 
-enum KSpreadParameterType { type_double, type_string, type_logic, type_int };
+#include "kspread_functions.h"
 
-struct KSpreadFunctionDescription
+struct KSpreadFunc
 {
   int nb_param;
   QString firstElementLabel;
@@ -68,10 +68,10 @@ class KSpreadDlgFormula : public QDialog
     Q_OBJECT
 public:
     KSpreadDlgFormula( KSpreadView* parent, const char* name,const QString& formulaName=0);
-    
+
 private:
     void changeFunction();
-    
+
     /**
      * Turns the @p text into a parameter of the desired type. The returned string is
      * of a form that can be understood by kscript.
@@ -82,7 +82,7 @@ private:
      * list for the function.
      */
     QString createFormula();
-    
+
 private slots:
     /**
      * Called by the Ok button.
@@ -129,22 +129,22 @@ private slots:
      * Called if the user pressed return in @ref #searchFunct.
      */
     void slotPressReturn();
-    
+
 public:
     /**
      * Find out which widget got focus.
      */
     bool eventFilter( QObject* obj, QEvent* ev );
-    
+
 private:
     KSpreadView* m_pView;
     QPushButton* m_pOk;
     QPushButton* m_pClose;
-    
+
     QTabWidget* m_tabwidget;
     QTextBrowser* m_browser;
     QWidget* m_input;
-    
+
     QPushButton *selectFunction;
     QComboBox *typeFunction;
     QListBox *functions;
@@ -166,14 +166,14 @@ private:
      * logical focus but not the other way round.
      */
     QLineEdit* m_focus;
-    
+
     int m_column;
     int m_row;
     QString m_oldText;
-    
+
   QString m_funcName;
   QString m_tableName;
-  KSpreadFunctionDescription funct;
+  KSpreadFunc funct;
 
   QString m_rightText;
   QString m_leftText;

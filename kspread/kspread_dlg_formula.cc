@@ -95,15 +95,15 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
 
     m_browser = new QTextBrowser( m_tabwidget );
     m_browser->setMinimumWidth( 300 );
-    
+
     m_tabwidget->addTab( m_browser, i18n("&Help") );
     int index = m_tabwidget->currentPageIndex();
-    
+
     m_input = new QWidget( m_tabwidget );
     QVBoxLayout *grid2 = new QVBoxLayout( m_input, KDialog::marginHint(), KDialog::spacingHint() );
 
     // grid2->setResizeMode (QLayout::Minimum);
-    
+
     label1 = new QLabel(m_input);
     grid2->addWidget( label1 );
 
@@ -135,12 +135,12 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
     grid2->addWidget( fiveElement );
 
     grid2->addStretch( 10 );
-    
+
     m_tabwidget->addTab( m_input, i18n("&Edit") );
     m_tabwidget->setTabEnabled( m_input, FALSE );
-    
+
     m_tabwidget->setCurrentPage( index );
-    
+
     // Create the Ok and Cancel buttons
     KButtonBox *bb = new KButtonBox( this );
     bb->addStretch();
@@ -291,7 +291,7 @@ void KSpreadDlgFormula::slotOk()
         m_pView->canvasWidget()->editor()->setFocus();
         m_pView->canvasWidget()->editor()->setCursorPosition( pos );
     }
-    
+
     accept();
 }
 
@@ -336,33 +336,33 @@ void KSpreadDlgFormula::slotChangeText( const QString& )
     // Test the lock
     if( !refresh_result )
 	return;
-    
+
     if ( m_focus == 0 )
 	return;
 
     QString tmp = m_leftText+m_funcName+"(";
     tmp += createFormula();
     tmp = tmp+ ")" + m_rightText;
-    
+
     result->setText( tmp );
 }
 
 QString KSpreadDlgFormula::createFormula()
 {
     QString tmp( "" );
-    
+
     bool first = TRUE;
-    
+
     int count = funct.nb_param;
     if ( funct.multiple )
 	count = 5;
-    
+
     if(!firstElement->text().isEmpty() && count >= 1 )
     {
         tmp=tmp+createParameter(firstElement->text(),funct.firstElementType);
 	first = FALSE;
     }
-    
+
     if(!secondElement->text().isEmpty() && count >= 2 )
     {
 	first = FALSE;
@@ -395,7 +395,7 @@ QString KSpreadDlgFormula::createFormula()
         else
 	    tmp=tmp+createParameter(fiveElement->text(),funct.fiveElementType);
     }
-    
+
     return(tmp);
 }
 
@@ -403,24 +403,24 @@ QString KSpreadDlgFormula::createParameter( const QString& _text, KSpreadParamet
 {
     if ( _text.isEmpty() )
 	return QString( "" );
-    
+
     QString text;
-    
+
     switch( elementType )
     {
-    case type_string:
+    case KSpread_String:
 	{			
 	    // Does the text start with quotes?
 	    if ( _text[0] == '"' )
 	    {
 		text = "\"";
-	    
+	
 		// Escape quotes
 		QString tmp = _text;
 		int pos;
 		while( ( pos = tmp.find( '"', 1 ) ) != -1 )
 		    tmp.replace( pos, 1, "\\\"" );
-	    
+	
 		text += tmp;
 		text += "\"";
 	    }
@@ -431,13 +431,13 @@ QString KSpreadDlgFormula::createParameter( const QString& _text, KSpreadParamet
 		if( !p.isValid() && !r.isValid() )
 		{
 		    text = "\"";
-	    
+	
 		    // Escape quotes
 		    QString tmp = _text;
 		    int pos;
 		    while( ( pos = tmp.find( '"', 1 ) ) != -1 )
 			tmp.replace( pos, 1, "\\\"" );
-	    
+	
 		    text += tmp;
 		    text += "\"";
 		}
@@ -446,14 +446,16 @@ QString KSpreadDlgFormula::createParameter( const QString& _text, KSpreadParamet
             }
         }
 	return text;
-    case type_double:
+    case KSpread_Float:
 	return _text;
-    case type_int:
+    case KSpread_Boolean:
 	return _text;
-    case type_logic:
+    case KSpread_Int:
+	return _text;
+    case KSpread_Any:
 	return _text;
     }
-    
+
     // Never reached
     return text;
 }
@@ -462,7 +464,7 @@ void KSpreadDlgFormula::slotDoubleClicked( QListBoxItem* item )
 {
     if ( !item )
 	return;
-    
+
     m_focus = 0;
     int old_length = result->text().length();
 
@@ -479,9 +481,9 @@ void KSpreadDlgFormula::slotDoubleClicked( QListBoxItem* item )
         m_focus = firstElement;
         firstElement->setFocus();
         firstElement->show();
-        if(funct.firstElementType==type_double)
+        if(funct.firstElementType==KSpread_Float)
             firstElement->setValidator( new KFloatValidator( firstElement ) );
-        else if( funct.firstElementType==type_int)
+        else if( funct.firstElementType==KSpread_Int)
             firstElement->setValidator( new KIntValidator( firstElement ) );
         else
             firstElement->setValidator( 0 );
@@ -494,13 +496,13 @@ void KSpreadDlgFormula::slotDoubleClicked( QListBoxItem* item )
 	label1->hide();
 	firstElement->hide();
     }
-    
+
     if( funct.nb_param > 1 )
     {
         secondElement->show();
-        if(funct.secondElementType==type_double)
+        if(funct.secondElementType==KSpread_Float)
             secondElement->setValidator( new KFloatValidator( secondElement ) );
-        else if( funct.secondElementType==type_int)
+        else if( funct.secondElementType==KSpread_Int)
             secondElement->setValidator( new KIntValidator( secondElement ) );
         else
             secondElement->setValidator( 0 );
@@ -516,9 +518,9 @@ void KSpreadDlgFormula::slotDoubleClicked( QListBoxItem* item )
     if( funct.nb_param > 2 )
     {
         thirdElement->show();
-        if(funct.thirdElementType==type_double)
+        if(funct.thirdElementType==KSpread_Float)
             thirdElement->setValidator( new KFloatValidator( thirdElement ) );
-        else if( funct.thirdElementType==type_int)
+        else if( funct.thirdElementType==KSpread_Int)
             thirdElement->setValidator( new KIntValidator( thirdElement ) );
         else
             thirdElement->setValidator( 0 );
@@ -530,13 +532,13 @@ void KSpreadDlgFormula::slotDoubleClicked( QListBoxItem* item )
 	label3->hide();
 	thirdElement->hide();
     }
-    
+
     if( funct.nb_param > 3 )
     {
         fourElement->show();
-        if(funct.fourElementType==type_double)
+        if(funct.fourElementType==KSpread_Float)
             fourElement->setValidator( new KFloatValidator( fourElement ) );
-        else if( funct.fourElementType==type_int)
+        else if( funct.fourElementType==KSpread_Int)
             fourElement->setValidator( new KIntValidator( fourElement ) );
         else
             fourElement->setValidator( 0 );
@@ -552,9 +554,9 @@ void KSpreadDlgFormula::slotDoubleClicked( QListBoxItem* item )
     if( funct.nb_param > 4 )
     {
         fiveElement->show();
-        if(funct.fiveElementType==type_double)
+        if(funct.fiveElementType==KSpread_Float)
             fiveElement->setValidator( new KFloatValidator( fiveElement ) );
-        else if( funct.fiveElementType==type_int)
+        else if( funct.fiveElementType==KSpread_Int)
             fiveElement->setValidator( new KIntValidator( fiveElement ) );
         else
             fiveElement->setValidator( 0 );
@@ -566,7 +568,7 @@ void KSpreadDlgFormula::slotDoubleClicked( QListBoxItem* item )
 	label5->hide();
 	fiveElement->hide();
     }
-    
+
     if( funct.nb_param > 5 )
     {
         kdDebug(36001) << "Error in param->nb_param" << endl;
@@ -587,7 +589,7 @@ void KSpreadDlgFormula::slotDoubleClicked( QListBoxItem* item )
     }
     int pos = result->cursorPosition();
     result->setText( m_leftText+functions->text( functions->currentItem() ) + "()" + m_rightText);
-    
+
     //
     // Put focus somewhere is there are no QLineEdits visible
     //
@@ -602,16 +604,16 @@ void KSpreadDlgFormula::slotSelected( const QString& function )
 {
     if( functions->currentItem() !=- 1 )
         selectFunction->setEnabled( TRUE );
-    
+
     // Lock
     refresh_result = false;
-    
+
     m_funcName = function;
     changeFunction();
 
     // Set the help text
     m_browser->setText( funct.help );
-    
+
     m_focus=0;
 
     m_tabwidget->setCurrentPage( 0 );
@@ -804,7 +806,7 @@ void KSpreadDlgFormula::slotActivated( const QString& category )
         functions->insertStringList(tmp);
         listFunct.setItems(tmp);
     }
-    
+
     // Go to the first function in the list.
     functions->setCurrentItem(0);
     slotSelected( functions->text(0) );
@@ -812,7 +814,7 @@ void KSpreadDlgFormula::slotActivated( const QString& category )
 
 void KSpreadDlgFormula::changeFunction()
 {
-    KSpreadFunctionDescription tmp;
+    KSpreadFunc tmp;
     tmp.nb_param=0;
     tmp.multiple=false;
     QString tmp1;
@@ -968,7 +970,7 @@ void KSpreadDlgFormula::changeFunction()
                 }
         else
                 tmp.help=i18n("Help");
-        tmp.firstElementType=type_double;
+        tmp.firstElementType=KSpread_Float;
     }
     else if( m_funcName == "PI")
     {
@@ -1054,8 +1056,8 @@ void KSpreadDlgFormula::changeFunction()
                 tmp1+=tmp2;
         }
         tmp.help=tmp1;
-        tmp.firstElementType=type_string;
-        tmp.secondElementType=type_int;
+        tmp.firstElementType=KSpread_String;
+        tmp.secondElementType=KSpread_Int;
     }
     else if( m_funcName=="lower" || m_funcName=="upper")
     {
@@ -1079,7 +1081,7 @@ void KSpreadDlgFormula::changeFunction()
         }
         tmp.help=tmp1;
 
-        tmp.firstElementType=type_string;
+        tmp.firstElementType=KSpread_String;
     }
     else if ( m_funcName=="sqrt" || m_funcName=="ln" || m_funcName=="log" || m_funcName=="exp" ||
               m_funcName=="fabs" || m_funcName=="floor" || m_funcName=="ceil" || m_funcName=="ENT" )
@@ -1087,7 +1089,7 @@ void KSpreadDlgFormula::changeFunction()
         tmp.nb_param=1;
         tmp.firstElementLabel=i18n("Double");
 
-        tmp.firstElementType=type_double;
+        tmp.firstElementType=KSpread_Float;
         if(m_funcName=="ln")
                 {
                 tmp1=i18n("The ln() function returns the\n"
@@ -1204,9 +1206,9 @@ void KSpreadDlgFormula::changeFunction()
 
         }
         if(m_funcName=="ISTEXT")
-            tmp.firstElementType=type_string;
+            tmp.firstElementType=KSpread_String;
         else
-            tmp.firstElementType=type_double;
+            tmp.firstElementType=KSpread_Float;
         tmp.help=tmp1;
     }
     else if( m_funcName=="sum" || m_funcName=="max" || m_funcName=="min" ||
@@ -1278,11 +1280,11 @@ void KSpreadDlgFormula::changeFunction()
         }
 
         tmp.help=tmp1;
-        tmp.firstElementType=type_double;
-        tmp.secondElementType=type_double;
-        tmp.thirdElementType=type_double;
-        tmp.fourElementType=type_double;
-        tmp.fiveElementType=type_double;
+        tmp.firstElementType=KSpread_Float;
+        tmp.secondElementType=KSpread_Float;
+        tmp.thirdElementType=KSpread_Float;
+        tmp.fourElementType=KSpread_Float;
+        tmp.fiveElementType=KSpread_Float;
         tmp.multiple=true;
     }
     else if (m_funcName=="if")
@@ -1301,9 +1303,9 @@ void KSpreadDlgFormula::changeFunction()
         tmp1+=i18n("Example : \n");
         tmp1+=i18n("A1=4, A2=6, if(A1>A2,5,3) returns 3\n");
         tmp.help=tmp1;
-        tmp.firstElementType=type_logic;
-        tmp.firstElementType=type_string;
-        tmp.firstElementType=type_string;
+        tmp.firstElementType=KSpread_Boolean;
+        tmp.firstElementType=KSpread_String;
+        tmp.firstElementType=KSpread_String;
     }
     else if( m_funcName=="dayOfYear")
     {
@@ -1317,9 +1319,9 @@ void KSpreadDlgFormula::changeFunction()
         tmp1+=i18n("Example : \n");
         tmp1+=i18n("dayOfYear(2000,12,1) returns 336\ndayOfYear(2000,2,29) return 60");
         tmp.help=tmp1;
-        tmp.firstElementType=type_int;
-        tmp.secondElementType=type_int;
-        tmp.thirdElementType=type_int;
+        tmp.firstElementType=KSpread_Int;
+        tmp.secondElementType=KSpread_Int;
+        tmp.thirdElementType=KSpread_Int;
     }
     else if (m_funcName=="date")
     {
@@ -1333,9 +1335,9 @@ void KSpreadDlgFormula::changeFunction()
         tmp1+=i18n("Example : \n");
         tmp1+=i18n("date(2000,5,5) returns Friday 05 May 2000");
         tmp.help=tmp1;
-        tmp.firstElementType=type_int;
-        tmp.secondElementType=type_int;
-        tmp.thirdElementType=type_int;
+        tmp.firstElementType=KSpread_Int;
+        tmp.secondElementType=KSpread_Int;
+        tmp.thirdElementType=KSpread_Int;
     }
     else if (m_funcName=="time")
     {
@@ -1349,9 +1351,9 @@ void KSpreadDlgFormula::changeFunction()
         tmp1+=i18n("Example : \n");
         tmp1+=i18n("time(8,5,5) returns 08:05:05");
         tmp.help=tmp1;
-        tmp.firstElementType=type_int;
-        tmp.secondElementLabel=type_int;
-        tmp.thirdElementLabel=type_int;
+        tmp.firstElementType=KSpread_Int;
+        tmp.secondElementLabel=KSpread_Int;
+        tmp.thirdElementLabel=KSpread_Int;
     }
     else if (m_funcName=="day")
     {
@@ -1364,7 +1366,7 @@ void KSpreadDlgFormula::changeFunction()
         tmp1+=i18n("Example : \n");
         tmp1+=i18n("day(1) returns Monday (if the week starts on Monday)");
         tmp.help=tmp1;
-        tmp.firstElementType=type_int;
+        tmp.firstElementType=KSpread_Int;
     }
     else if (m_funcName=="month")
     {
@@ -1376,7 +1378,7 @@ void KSpreadDlgFormula::changeFunction()
         tmp1+=i18n("Example : \n");
         tmp1+=i18n("month(5) returns May");
         tmp.help=tmp1;
-        tmp.firstElementType=type_int;
+        tmp.firstElementType=KSpread_Int;
     }
     else if (m_funcName=="fact")
     {
@@ -1388,7 +1390,7 @@ void KSpreadDlgFormula::changeFunction()
         tmp1+=i18n("Example : \n");
         tmp1+=i18n("fact(10) returns 3628800\nfact(0) returns 1");
         tmp.help=tmp1;
-        tmp.firstElementType=type_int;
+        tmp.firstElementType=KSpread_Int;
 
     }
 
@@ -1423,8 +1425,8 @@ void KSpreadDlgFormula::changeFunction()
                 tmp1+=i18n("PERMUT(8,5) equals 6720\nPERMUT(1,1) equals 1");
         }
         tmp.help=tmp1;
-        tmp.firstElementType=type_int;
-        tmp.secondElementType=type_int;
+        tmp.firstElementType=KSpread_Int;
+        tmp.secondElementType=KSpread_Int;
     }
     else if (m_funcName=="not")
     {
@@ -1438,7 +1440,7 @@ void KSpreadDlgFormula::changeFunction()
         tmp1+=i18n("not(False) returns True\nnot(True) returns False");
         tmp.help=tmp1;
 
-        tmp.firstElementType=type_logic;
+        tmp.firstElementType=KSpread_Boolean;
     }
     else if (m_funcName=="EXACT"||m_funcName=="find")
     {
@@ -1471,8 +1473,8 @@ void KSpreadDlgFormula::changeFunction()
                 "find(\"kspread\",\"Koffice\") returns False");
         }
         tmp.help=tmp1;
-        tmp.firstElementType=type_string;
-        tmp.secondElementType=type_string;
+        tmp.firstElementType=KSpread_String;
+        tmp.secondElementType=KSpread_String;
     }
     else if (m_funcName=="mid")
     {
@@ -1487,9 +1489,9 @@ void KSpreadDlgFormula::changeFunction()
         tmp1+=i18n("Example : \n");
         tmp1+=i18n("mid(\"Koffice\",2,3) returns ffi");
         tmp.help=tmp1;
-        tmp.firstElementType=type_string;
-        tmp.secondElementType=type_int;
-        tmp.thirdElementType=type_int;
+        tmp.firstElementType=KSpread_String;
+        tmp.secondElementType=KSpread_Int;
+        tmp.thirdElementType=KSpread_Int;
     }
     else if (m_funcName=="len")
     {
@@ -1502,7 +1504,7 @@ void KSpreadDlgFormula::changeFunction()
         tmp1+=i18n("len(\"hello\") returns 5\nlen(\"kspread\") returns 7");
         tmp.help=tmp1;
 
-        tmp.firstElementType=type_string;
+        tmp.firstElementType=KSpread_String;
     }
     else if(m_funcName=="join")
     {
@@ -1518,11 +1520,11 @@ void KSpreadDlgFormula::changeFunction()
         tmp1+=i18n("Example : \n");
         tmp1+=i18n("join(\"kspread\",\"koffice\",\"kde\") returns kspreadkofficekde\n");
         tmp.help=tmp1;
-        tmp.firstElementType=type_string;
-        tmp.secondElementType=type_string;
-        tmp.thirdElementType=type_string;
-        tmp.fourElementType=type_string;
-        tmp.fiveElementType=type_string;
+        tmp.firstElementType=KSpread_String;
+        tmp.secondElementType=KSpread_String;
+        tmp.thirdElementType=KSpread_String;
+        tmp.fourElementType=KSpread_String;
+        tmp.fiveElementType=KSpread_String;
         tmp.multiple=true;
     }
 
@@ -1572,11 +1574,11 @@ void KSpreadDlgFormula::changeFunction()
         }
         tmp.help=tmp1;
 
-        tmp.firstElementType=type_logic;
-        tmp.secondElementType=type_logic;
-        tmp.thirdElementType=type_logic;
-        tmp.fourElementType=type_logic;
-        tmp.fiveElementType=type_logic;
+        tmp.firstElementType=KSpread_Boolean;
+        tmp.secondElementType=KSpread_Boolean;
+        tmp.thirdElementType=KSpread_Boolean;
+        tmp.fourElementType=KSpread_Boolean;
+        tmp.fiveElementType=KSpread_Boolean;
         tmp.multiple=true;
     }
     else if(m_funcName=="BINO" || m_funcName=="INVBINO")
@@ -1619,9 +1621,9 @@ void KSpreadDlgFormula::changeFunction()
 
         }
         tmp.help=tmp1;
-        tmp.firstElementType=type_int;
-        tmp.secondElementType=type_int;
-        tmp.thirdElementType=type_double;
+        tmp.firstElementType=KSpread_Int;
+        tmp.secondElementType=KSpread_Int;
+        tmp.thirdElementType=KSpread_Float;
     }
     else if(m_funcName=="FV" || m_funcName=="PV" )
     {
@@ -1637,9 +1639,9 @@ void KSpreadDlgFormula::changeFunction()
         tmp.secondElementLabel=i18n("Interest Rate");
         tmp.thirdElementLabel=i18n("Periods");
         tmp.help=m_funcName+"("+"Double,Double,Double"+")";
-        tmp.firstElementType=type_double;
-        tmp.secondElementType=type_double;
-        tmp.thirdElementType=type_double;
+        tmp.firstElementType=KSpread_Float;
+        tmp.secondElementType=KSpread_Float;
+        tmp.thirdElementType=KSpread_Float;
     }
     else if(m_funcName=="PV_annuity" || m_funcName=="FV_annuity")
     {
@@ -1650,11 +1652,11 @@ void KSpreadDlgFormula::changeFunction()
         tmp.fourElementLabel=i18n("Initial Amount");
         tmp.fiveElementLabel=i18n("Paid Start Of Period");
         tmp.help=m_funcName+"("+"double,...,double,bool"+")";
-        tmp.firstElementType=type_double;
-        tmp.secondElementType=type_double;
-        tmp.thirdElementType=type_double;
-        tmp.fourElementType=type_double;
-        tmp.fiveElementType=type_logic;
+        tmp.firstElementType=KSpread_Float;
+        tmp.secondElementType=KSpread_Float;
+        tmp.thirdElementType=KSpread_Float;
+        tmp.fourElementType=KSpread_Float;
+        tmp.fiveElementType=KSpread_Boolean;
     }
     else if(m_funcName=="compound" )
     {
@@ -1664,10 +1666,10 @@ void KSpreadDlgFormula::changeFunction()
         tmp.thirdElementLabel=i18n("Periods per Year");
         tmp.fourElementLabel=i18n("Years");
         tmp.help=m_funcName+"("+"Double,Double,..."+")";
-        tmp.firstElementType=type_double;
-        tmp.secondElementType=type_double;
-        tmp.thirdElementType=type_double;
-        tmp.fiveElementType=type_double;
+        tmp.firstElementType=KSpread_Float;
+        tmp.secondElementType=KSpread_Float;
+        tmp.thirdElementType=KSpread_Float;
+        tmp.fiveElementType=KSpread_Float;
     }
     else if(m_funcName=="continuous" )
     {
@@ -1676,9 +1678,9 @@ void KSpreadDlgFormula::changeFunction()
         tmp.secondElementLabel=i18n("Interest Rate");
         tmp.thirdElementLabel=i18n("Years");
         tmp.help=m_funcName+"("+"Double,Double,Double"+")";
-        tmp.firstElementType=type_double;
-        tmp.secondElementType=type_double;
-        tmp.thirdElementType=type_double;
+        tmp.firstElementType=KSpread_Float;
+        tmp.secondElementType=KSpread_Float;
+        tmp.thirdElementType=KSpread_Float;
     }
     else if( m_funcName=="effective" || m_funcName=="nominal"  )
     {
@@ -1693,29 +1695,9 @@ void KSpreadDlgFormula::changeFunction()
         }
         tmp.secondElementLabel=i18n("Periods per Year");
         tmp.help=m_funcName+"("+"Double,Double"+")";
-        tmp.firstElementType=type_double;
-        tmp.secondElementType=type_double;
+        tmp.firstElementType=KSpread_Float;
+        tmp.secondElementType=KSpread_Float;
     }
-    /*else if(m_funcName=="STXT")
-    {
-        tmp.nb_param=3;
-        tmp.firstElementLabel=i18n("Text");
-        tmp.secondElementLabel=i18n("Position of start");
-        tmp.thirdElementLabel=i18n("Number of characters");
-        tmp.nb_param=3;
-
-        tmp1=i18n("The STXT functions returns a substring.\n"
-                "The first parameter is the string, the second\n"
-                "is the position of start and the third is\n"
-                "the number of characters chosen.\n");
-        tmp1+=i18n("Syntax : %1(String,Int,Int)\n").arg(m_funcName);
-        tmp1+=i18n("Example : \n");
-        tmp1+=i18n("STXT(\"kspread\",2,2) returns pr\n");
-        tmp.help=tmp1;
-        tmp.firstElementType=type_string;
-        tmp.secondElementType=type_int;
-        tmp.thirdElementType=type_int;
-    } */
     else if (m_funcName=="pow"  )
     {
         tmp.nb_param=2;
@@ -1728,8 +1710,8 @@ void KSpreadDlgFormula::changeFunction()
         tmp1+=i18n("Example : \n");
         tmp1+=i18n("pow(1.2,3.4) equals 1.8572.\npow(2,3) equals 8");
         tmp.help=tmp1;
-        tmp.firstElementType=type_double;
-        tmp.secondElementType=type_double;
+        tmp.firstElementType=KSpread_Float;
+        tmp.secondElementType=KSpread_Float;
     }
     else if (m_funcName=="MOD" )
     {
@@ -1743,8 +1725,8 @@ void KSpreadDlgFormula::changeFunction()
         tmp1+=i18n("Example : \n");
         tmp1+=i18n("MOD(12,5) returns 2\n MOD(5,5) returns 0");
         tmp.help=tmp1;
-        tmp.firstElementType=type_double;
-        tmp.secondElementType=type_double;
+        tmp.firstElementType=KSpread_Float;
+        tmp.secondElementType=KSpread_Float;
     }
     else if (m_funcName=="sign")
     {
@@ -1758,7 +1740,7 @@ void KSpreadDlgFormula::changeFunction()
         tmp1+=i18n("Example : \n");
         tmp1+=i18n("sign(5) equals 5.\nsign(-5) equals -1.\nsign(0) equals 0.\n");
         tmp.help=tmp1;
-        tmp.firstElementType=type_double;
+        tmp.firstElementType=KSpread_Float;
     }
     else if (m_funcName=="INV")
     {
@@ -1769,7 +1751,7 @@ void KSpreadDlgFormula::changeFunction()
         tmp1+=i18n("Example : \n");
         tmp1+=i18n("INV(-5) equals 5.\nINV(-5) equals 5.\nINV(0) equals 0.\n");
         tmp.help=tmp1;
-        tmp.firstElementType=type_double;
+        tmp.firstElementType=KSpread_Float;
     }
 
 
@@ -1787,8 +1769,8 @@ void KSpreadDlgFormula::changeFunction()
         tmp1+=i18n("Example : \n");
         tmp1+=i18n("atan2(0.5,1.0) equals 1.107149.\natan2(-0.5,2.0) equals 1.815775.");
         tmp.help=tmp1;
-        tmp.firstElementType=type_double;
-        tmp.secondElementType=type_double;
+        tmp.firstElementType=KSpread_Float;
+        tmp.secondElementType=KSpread_Float;
     }
     else if (m_funcName=="DECBIN" ||m_funcName=="DECHEX" || m_funcName=="DECOCT")
     {
@@ -1812,7 +1794,7 @@ void KSpreadDlgFormula::changeFunction()
                 tmp1+=i18n("DECHEX(12) returns c \nDECHEX(55) returns 37.");
         else if( m_funcName=="DECOCT")
                 tmp1+=i18n("DECOCT(12) returns 14 \nDECOCT(55) returns 67.");
-        tmp.firstElementType=type_int;
+        tmp.firstElementType=KSpread_Int;
         tmp.help=tmp1;
     }
 
