@@ -61,6 +61,18 @@ void KPTTaskGeneralPanel::setStartValues(KPTTask &task, KPTStandardWorktime *wor
     leaderfield->setText(task.leader());
     descriptionfield->setText(task.description());
     idfield->setText(task.id());
+    
+    setEstimateFields(KPTDurationWidget::Days|KPTDurationWidget::Hours|KPTDurationWidget::Minutes);
+    if (workTime) {
+        kdDebug()<<k_funcinfo<<"daylength="<<workTime->durationDay().hours()<<endl;
+        m_dayLength = workTime->durationDay().hours();
+        setEstimateScales(m_dayLength);
+    }
+    setEstimateFieldUnit(0, i18n("days"));
+    setEstimateFieldUnit(1, i18n("hours"));
+    setEstimateFieldUnit(2, i18n("minutes"));
+    setEstimateType(task.effort()->type());
+    
     setSchedulingType(task.constraint());
     if (task.constraintStartTime().isValid()) {
         setStartDateTime(task.constraintStartTime());
@@ -82,15 +94,6 @@ void KPTTaskGeneralPanel::setStartValues(KPTTask &task, KPTStandardWorktime *wor
         setEndTime(QTime());
         scheduleEndTime->setEnabled(false);
     }
-    setEstimateType(task.effort()->type());
-    setEstimateFields(KPTDurationWidget::Days|KPTDurationWidget::Hours|KPTDurationWidget::Minutes);
-    if (workTime) {
-        m_dayLength = workTime->durationDay().hours();
-        setEstimateScales(m_dayLength);
-    }
-    setEstimateFieldUnit(0, i18n("days"));
-    setEstimateFieldUnit(1, i18n("hours"));
-    setEstimateFieldUnit(2, i18n("minutes"));
     
     setEstimate(task.effort()->expected()); 
     setOptimistic(task.effort()->optimisticRatio());
