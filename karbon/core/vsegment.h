@@ -280,7 +280,6 @@ public:
 	 * Calculates the parameter of the nearest point on this segment
 	 * to the point p. This function is pretty expensive.
 	 */
-// TODO: isnt finished yet.
 	double nearestPointParam( const KoPoint& p ) const;
 
 
@@ -336,7 +335,6 @@ public:
 	/**
 	 * Returns true, if this segment intersects the other segment.
 	 */
-	// TODO: Treats beziers as lines currently.
 	bool intersects( const VSegment& segment ) const;
 
 
@@ -363,8 +361,7 @@ public:
 
 	void draw( VPainter* painter ) const;
 
-	void transform( const QWMatrix& m );
-
+	// TODO: remove this backward compatibility function after koffice 1.3.x.
 	void load( const QDomElement& element );
 
 
@@ -377,14 +374,12 @@ private:
 	/**
 	 * Calculates the solutions of y(x) = 0 ( 0 <= x <= 1 ).
 	 */
-// TODO: isnt finished yet.
-	void roots( QValueList<double>& params ) const;
+	void rootParams( QValueList<double>& params ) const;
 
 	/**
-	 * Calculates how often the control polygon crosses the y(x)=0 axis
-	 * (how often it changes the sign).
+	 * Calculates how often the control polygon crosses the x-axis.
 	 */
-	int signChanges() const;
+	int polyZeros() const;
 
 
 	/**

@@ -110,17 +110,21 @@ VSegment::setDegree( unsigned short deg )
 void
 VSegment::draw( VPainter* painter ) const
 {
+	// Don't draw a deleted segment.
 	if( state() == deleted )
 		return;
 
 
-	if( type() == curve )
+	if( prev() )
 	{
-		painter->curveTo( point( 0 ), point( 1 ), point( 2 ) );
-	}
-	else if( type() == line )
-	{
-		painter->lineTo( knot() );
+		if( degree() == 3 )
+		{
+			painter->curveTo( point( 0 ), point( 1 ), point( 2 ) );
+		}
+		else
+		{
+			painter->lineTo( knot() );
+		}
 	}
 	else
 	{
@@ -131,7 +135,10 @@ VSegment::draw( VPainter* painter ) const
 bool
 VSegment::isFlat( double flatness ) const
 {
-	if( !prev() || degree() == 1 )
+	// Lines and "begin" segments are flat.
+	if(
+		!prev() ||
+		degree() == 1 )
 	{
 		return true;
 	}
@@ -438,8 +445,8 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 	 * is located nearest to the input point p.
 	 * The basic idea is best described (because it is freely available) in "Phoenix:
 	 * An Interactive Curve Design System Based on the Automatic Fitting of
-	 * Hand-Sketched Curves", Philip J. Schneider (master thesis, university of
-	 * washington).
+	 * Hand-Sketched Curves", Philip J. Schneider (Master thesis, University of
+	 * Washington).
 	 *
 	 * For the nearest point q = C(t) on this segment, the first derivative is
 	 * orthogonal to the distance vector "C(t) - p". In other words we are looking for
@@ -462,7 +469,7 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 	 *                 | C'(t_i) | * | C(t_i) - p |
 	 *
 	 * But first we need to find a first guess t_0 to start with. The solution for this
-	 * problem is called "Approximate Inversion Method". Let's write f(t) explicitely:
+	 * problem is called "Approximate Inversion Method". Let's write f(t) explicitly:
 	 *
 	 *         n                     n-1
 	 * f(t) = SUM c_i * B^n_i(t)  *  SUM d_j * B^{n-1}_j(t)
@@ -578,7 +585,7 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 	// Find roots.
 	QValueList<double> params;
 
-	newCurve.current()->roots( params );
+	newCurve.current()->rootParams( params );
 
 
 // TODO
@@ -586,7 +593,7 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 }
 
 void
-VSegment::roots( QValueList<double>& params ) const
+VSegment::rootParams( QValueList<double>& params ) const
 {
 	if( !prev() )
 	{
@@ -594,9 +601,9 @@ VSegment::roots( QValueList<double>& params ) const
 	}
 
 
-	// Evaluate the number of crossing the y=0 axis (sign changes)
-	// which is >= number of roots.
-	switch( signChanges() )
+	// Calculate how often the control polygon crosses the x-axis
+	// This is the upper limit for the number of roots.
+	switch( polyZeros() )
 	{
 		// No solutions.
 		case 0:
@@ -624,7 +631,7 @@ VSegment::roots( QValueList<double>& params ) const
 }
 
 int
-VSegment::signChanges() const
+VSegment::polyZeros() const
 {
 	if( !prev() )
 	{
@@ -637,8 +644,6 @@ VSegment::signChanges() const
 	int sign = VGlobal::sign( prev()->knot().y() );
 	int oldSign;
 
-	// Check how many times the control polygon crosses the
-	// y=0 axis.
 	for( unsigned short i = 1; i <= degree(); ++i )
 	{
 		oldSign = sign;
@@ -657,7 +662,7 @@ bool
 VSegment::isSmooth( const VSegment& next ) const
 {
 	// Return false if this segment is a "begin".
-	if( type() == begin )
+	if( !prev() )
 		return false;
 
 
@@ -732,7 +737,7 @@ VSegment::splitAt( double t )
 	// Create new segment.
 	VSegment* segment = new VSegment( degree() );
 
-	// Set segment type.
+	// Set segment state.
 	segment->m_state = m_state;
 
 
@@ -926,14 +931,7 @@ VSegment::next() const
 	return segment;
 }
 
-void
-VSegment::transform( const QWMatrix& m )
-{
-	for( unsigned short i = 0; i < degree(); ++i )
-		if( pointIsSelected( i ) )
-			setPoint( i, point( i ).transform( m ) );
-}
-
+// TODO: remove this backward compatibility function after koffice 1.3.x
 void
 VSegment::load( const QDomElement& element )
 {

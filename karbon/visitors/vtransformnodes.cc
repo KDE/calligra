@@ -61,7 +61,12 @@ VTransformNodes::visitVPath( VPath& path )
 				path.current()->prev()->setPoint( 1, path.current()->prev()->point( 1 ).transform( m2 ) );
 			}
 		}
-		path.current()->transform( m_matrix );
+
+		for( uint i = 0; i < path.current()->degree(); ++i )
+		{
+			if( path.current()->pointIsSelected( i ) )
+				path.current()->setPoint( i, path.current()->point( i ).transform( m_matrix ) );
+		}
 
 		if( !success() )
 			setSuccess();

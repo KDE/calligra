@@ -420,7 +420,7 @@ VPath::pointIsInside( const KoPoint& p ) const
 	// not inside the boundingbox, it cannot be inside the path either.
 	if(
 		!isClosed() ||
-		!boundingBox().contains( p ) )
+		!boundingBox().contains( p, true ) )
 	{
 		return false;
 	}
@@ -429,7 +429,7 @@ VPath::pointIsInside( const KoPoint& p ) const
 	// First check if the point is inside the knot polygon (beziers are treated
 	// as lines).
 
-	/* The algorithm is taken from "Fast Winding Number Inclusion of a Point
+	/* This algorithm is taken from "Fast Winding Number Inclusion of a Point
 	 * in a Polygon" by Dan Sunday, geometryalgorithms.com.
 	 */
 
@@ -470,9 +470,16 @@ VPath::pointIsInside( const KoPoint& p ) const
 		segment = segment->next();
 	}
 
-	// If point is not inside the knot polygon, check if point is between
-	// the knot polygon and the bezier curves.
+	// Then check if the point is located in between the knot polygon
+	// and the bezier curves.
+
+	/* We rotate each segment in order to make their chord (the line between
+	 * the previous knot and the knot ) parallel to the x-axis. Then we
+	 * calculate y(xp) on the segment for the rotated input point (xp,yp)
+	 * and compare y(xp) with yp.
+	 */
 // TODO
+
 
 	return static_cast<bool>( windingNumber );
 }
@@ -514,9 +521,8 @@ VPath::counterClockwise() const
 	 * the cross product of the edges fore and aft of it."
 	 */
 
-	if(
-		!isClosed()
-		|| isEmpty() )
+	// A non closed path does not have a winding.
+	if( !isClosed() )
 	{
 		return false;
 	}
@@ -573,6 +579,7 @@ VPath::revert()
 	if( isEmpty() )
 		return;
 
+
 	VPath list( parent() );
 	list.moveTo( getLast()->knot() );
 
@@ -594,7 +601,7 @@ VPath::boundingBox() const
 {
 	if( m_boundingBoxIsInvalid )
 	{
-		// clear:
+		// Reset the boundingbox.
 		m_boundingBox = KoRect();
 
 		VSegment* segment = m_first;
@@ -627,18 +634,33 @@ VPath::saveSvgPath( QString &d ) const
 
 	while( segment )
 	{
-		switch( segment->type() )
+		if( segment->degree() <= 2 )
 		{
-			case VSegment::begin:
-				d += QString( "M%1 %2" ).arg( segment->point( 0 ).x() ).arg( segment->point( 0 ).y() );
-				break;
+			// Line.
+			if( segment->prev() )
+			{
+				d += QString( "L%1 %2" ).
+						arg( segment->knot().x() ).arg( segment->knot().y() );
+			}
+			// Moveto.
+			else
+			{
+				d += QString( "M%1 %2" ).
+						arg( segment->knot().x() ).arg( segment->knot().y() );
+			}
 
-			case VSegment::line:
-				d += QString( "L%1 %2" ).arg( segment->point( 0 ).x() ).arg( segment->point( 0 ).y() );
-				break;
-
-			case VSegment::curve:
-				d += QString( "C%1 %2 %3 %4 %5 %6" ).arg( segment->point( 0 ).x() ).arg( segment->point( 0 ).y() ).arg( segment->point( 1 ).x() ).arg( segment->point( 1 ).y() ).arg( segment->point( 2 ).x() ).arg( segment->point( 2 ).y() );
+		}
+		// Bezier ( degree >= 3 ).
+		else
+		{
+			// We currently treat all beziers as cubic beziers.
+			d += QString( "C%1 %2 %3 %4 %5 %6" ).
+						arg( segment->point( segment->degree() - 3 ).x() ).
+						arg( segment->point( segment->degree() - 3 ).y() ).
+						arg( segment->point( segment->degree() - 2 ).x() ).
+						arg( segment->point( segment->degree() - 2 ).y() ).
+						arg( segment->knot().x() ).
+						arg( segment->knot().y() );
 		}
 
 		segment = segment->m_next;

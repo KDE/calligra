@@ -116,7 +116,11 @@ VTransformCmd::visitVPath( VPath& path )
 
 	while( segment )
 	{
-		segment->transform( m_mat );
+		for( unsigned short i = 0; i < segment->degree(); ++i )
+		{
+			if( segment->pointIsSelected( i ) )
+				segment->setPoint( i, segment->point( i ).transform( m_mat ) );
+		}
 
 		segment = segment->next();
 	}
@@ -214,8 +218,12 @@ VTranslateBezierCmd::execute()
 			{
 				m_segmenttwo = m_segment->prev();
 				for( uint i = 0;i < m_segmenttwo->degree();i++ )
+				{
 					m_segmenttwo->selectPoint( i, i == 1 );
-				m_segmenttwo->transform( m2 );
+
+					if( i == 1 )
+						m_segmenttwo->setPoint( i, m_segmenttwo->point( i ).transform( m2 ) );
+				}
 			}
 		}
 		else
@@ -224,13 +232,22 @@ VTranslateBezierCmd::execute()
 			if( m_segmenttwo )
 			{
 				for( uint i = 0;i < m_segmenttwo->degree();i++ )
+				{
 					m_segmenttwo->selectPoint( i, i == 0 );
-				m_segmenttwo->transform( m2 );
+
+					if( i == 0 )
+						m_segmenttwo->setPoint( i, m_segmenttwo->point( i ).transform( m2 ) );
+				}
 			}
 		}
+
 		for( uint i = 0;i < m_segment->degree();i++ )
+		{
 			m_segment->selectPoint( i, i == ( m_firstControl ? 0 : 1 ) );
-		m_segment->transform( m_mat );
+
+			if( i == m_firstControl ? 0 : 1 )
+				m_segment->setPoint( i, m_segment->point( i ).transform( m_mat ) );
+		}
 	}
 	setSuccess( true );
 }
@@ -242,14 +259,23 @@ VTranslateBezierCmd::unexecute()
 	if( m_segment )
 	{
 		for( uint i = 0;i < m_segment->degree();i++ )
+		{
 			m_segment->selectPoint( i, i == ( m_firstControl ? 0 : 1 ) );
-		m_segment->transform( m_mat.invert() );
+	
+			if( i == m_firstControl ? 0 : 1 )
+				m_segment->setPoint( i, m_segment->point( i ).transform( m_mat.invert() ) );
+		}
+
 		if( m_segmenttwo )
 		{
 			uint index = m_firstControl ? 1 : 0;
 			for( uint i = 0;i < m_segmenttwo->degree();i++ )
+			{
 				m_segmenttwo->selectPoint( i, i == index );
-			m_segmenttwo->transform( m2.invert() );
+
+			if( i == index )
+				m_segmenttwo->setPoint( i, m_segmenttwo->point( i ).transform( m2.invert() ) );
+			}
 		}
 	}
 	setSuccess( false );
