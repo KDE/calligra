@@ -9,9 +9,9 @@
 class KWordCharacterHandler : public wvWare::SpecialCharHandler
 {
 public:
-    virtual wvWare::U8 hardLineBreak( wvWare::U32 index );
-    virtual wvWare::U8 nonBreakingHyphen( wvWare::U32 index );
-    virtual wvWare::U8 nonRequiredHyphen( wvWare::U32 index );
+    virtual wvWare::U8 hardLineBreak();
+    virtual wvWare::U8 nonBreakingHyphen();
+    virtual wvWare::U8 nonRequiredHyphen();
 };
 
 class Document : public wvWare::LLDocument

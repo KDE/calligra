@@ -6,19 +6,19 @@
 #include <parser.h>
 
 
-wvWare::U8 KWordCharacterHandler::hardLineBreak( wvWare::U32 )
+wvWare::U8 KWordCharacterHandler::hardLineBreak()
 {
     kdDebug() << "KWordCharacterHandler::hardLineBreak" << endl;
     return '\n';
 }
 
-wvWare::U8 KWordCharacterHandler::nonBreakingHyphen( wvWare::U32 )
+wvWare::U8 KWordCharacterHandler::nonBreakingHyphen()
 {
     kdDebug() << "KWordCharacterHandler::nonBreakingHyphen" << endl;
     return '-'; // normal hyphen for now
 }
 
-wvWare::U8 KWordCharacterHandler::nonRequiredHyphen( wvWare::U32 )
+wvWare::U8 KWordCharacterHandler::nonRequiredHyphen()
 {
     kdDebug() << "KWordCharacterHandler::nonRequiredHyphen" << endl;
     return 0xad; // soft hyphen, according to kword.dtd
