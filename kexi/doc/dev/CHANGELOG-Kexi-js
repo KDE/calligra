@@ -332,7 +332,25 @@ TODO:
 ===================== Kexi 0.1 Beta 4 =====================
 
 
-
+2004-07-07
+Core
+- KexiDialogBase: Never Ending Story: Shared actions are invalidated on activate()
+- ObjectStatus general purpose class introduced. KexiDialogBase now uses this 
+  to indicate errors.
+- KexiPart::Part: if newly opened dialog (KexiDialogBase) cannot display 1st view, it's closed 
+ (via close()) and error message is set up
+- KexiPart, KexiProject: 
+  const Kexi::ObjectStatus& lastOperationStatus() added for not-kexidb errors
+KexiMainWindow
+- formpart is now available by default; menu for switching it off is hidden
+- more errors taken from KexiProject are friendly displayed :)
+Query GUI Editor
+- saved layout (etc.) is loaded in afterSwitchFrom() for mode==Kexi::NoViewMode, 
+  instead of doing it in the ctor
+SQL View
+- switching to other views improved: msgbox is displayed for invalid sql texts
+- Intelligence Built In: we're doing our best to avoid regenerate the same 
+query from almost unchanged sql text
 
 2004-07-02..05
 XMLGUI
