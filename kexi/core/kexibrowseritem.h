@@ -25,9 +25,6 @@
 
 #include "kexipartitem.h"
 
-class KexiProjectHandlerProxy;
-class KexiProjectHandlerItem;
-
 namespace KexiPart
 {
 	class Info;

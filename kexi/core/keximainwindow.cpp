@@ -65,7 +65,9 @@ class KexiMainWindow::Private
 {
 	public:
 		KexiProject	*prj;
+#ifndef KEXI_NO_CTXT_HELP
 		KexiContextHelp *ctxH;
+#endif
 		KexiBrowser	*nav;
 		KexiDialogDict	dialogs;
 		KXMLGUIClient   *curDialogGUIClient;
@@ -208,12 +210,6 @@ KexiMainWindow::initActions()
 	d->action_view_nav = new KAction(i18n("Navigator"), "", ALT + Key_1,
 		this, SLOT(slotViewNavigator()), actionCollection(), "view_navigator");
 
-#ifndef KEXI_NO_CTXT_HELP
-//	d->action_show_helper = new KToggleAction(i18n("Show Context Help"), "", CTRL + Key_H,
-//	 actionCollection(), "options_show_contexthelp");
-#endif
-
-
 	new KAction(i18n("From File ..."), "fileopen", 0, 
 		this, SLOT(slotImportFile()), actionCollection(), "import_file");
 	new KAction(i18n("From Server ..."), "server", 0, 
@@ -351,21 +347,6 @@ bool KexiMainWindow::openProject(KexiProjectData *projectData)
 		showErrorMessage(i18n("You have requested selected objects to be opened automatically on startup. Several objects cannot be opened."),
 			not_found_msg );
 
-/*
-		QString obj_mime = QString("kexi/") + (*it).first;
-		QString obj_identifier = obj_mime + "/" + obj_name;
-		KexiProjectHandler *hd = handlerForMime(obj_mime);
-		KexiProjectHandlerProxy *pr = hd ? hd->proxy(view) : 0;
-		if (!pr || !pr->executeItem(obj_identifier)) {
-			if (!not_found_msg.isEmpty())
-				not_found_msg += ",<br>";
-			not_found_msg += (pr ? pr->part()->name() : I18N_NOOP("Unknown object")) + " \"" + obj_name + "\"";
-		}
-	}
-	if (!not_found_msg.isEmpty())
-		KMessageBox::sorry(0, "<p><b>" + I18N_NOOP("Requested objects cannot be opened:") + "</b><p>" + not_found_msg );
-*/
-
 	return true;
 }
 
@@ -403,6 +384,7 @@ bool KexiMainWindow::closeProject()
 }
 
 void KexiMainWindow::initContextHelp() {
+#ifndef KEXI_NO_CTXT_HELP
 	d->ctxH=new KexiContextHelp(this,this);
 	d->ctxH->setContextHelp(i18n("Welcome"),i18n("The <B>KEXI team</B> wishes you a lot of productive work, "
 		"with this product. <BR><HR><BR>If you have found a <B>bug</B> or have a <B>feature</B> request, please don't "
@@ -410,6 +392,7 @@ void KexiMainWindow::initContextHelp() {
 		"tracking system </A>.<BR><HR><BR>If you would like to <B>join</B> our effort, the <B>development</B> documentation "
 		"at <A href=\"http://www.kexi-project.org\">www.kexi-project.org</A> is a good starting point."),0);
 	addToolWindow(d->ctxH,KDockWidget::DockRight,getMainDockWidget(),20);
+#endif
 }
 
 void
@@ -441,6 +424,11 @@ KexiMainWindow::initNavigator()
 				continue;
 			}
 			p->createGUIClient(this);*/
+
+			//load part - we need this to have GUI merged with part's actions
+			//js: FUTURE TODO - don't do that when DESIGN MODE is OFF 
+			(void)Kexi::partManager().part(it);
+
 			//lookup project's objects (part items)
 			//js: FUTURE TODO - don't do that when DESIGN MODE is OFF 
 			KexiPart::ItemDict *item_dict = d->prj->items(it);
@@ -872,9 +860,14 @@ bool KexiMainWindow::eventFilter( QObject *obj, QEvent * e )
 {
 //	kdDebug() << "eventFilter: " <<e->type() << " " <<obj->name()<<endl;
 	//keep focus in main window:
-	if (obj==d->nav && e->type()==QEvent::Hide) {
-		setFocus();
-		return false;
+	if (obj==d->nav) {
+//		kdDebug() << "NAV" << endl;
+		if (e->type()==QEvent::FocusIn) {
+			return false;
+		} else if (e->type()==QEvent::Hide) {
+			setFocus();
+			return false;
+		}
 	}
 	if (d->block_KMdiMainFrm_eventFilter)//we don't want KMDI to eat our event!
 		return false;
@@ -900,7 +893,7 @@ KexiMainWindow::executeObject(KexiPart::Item* item)
 
 	KexiPart::Part *part = Kexi::partManager().part(item->mime());
 	if (!part) {
-		//TOOD js: error msg
+		//TODO js: error msg
 		return false;
 	}
 	return part->execute(this, *item) != 0;

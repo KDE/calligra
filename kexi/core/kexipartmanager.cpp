@@ -66,10 +66,10 @@ Manager::~Manager()
 Part *
 Manager::part(Info *i)
 {
-	kdDebug() << "Manager::part()" << endl;
-
 	if(!i || i->broken())
 		return 0;
+
+	kdDebug() << "Manager::part( id = " << i->projectPartID() << " )" << endl;
 
 	Part *p = m_parts[i->projectPartID()];
 	
