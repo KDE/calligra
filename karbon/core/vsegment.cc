@@ -35,6 +35,7 @@ VSegment::VSegment( unsigned short deg )
 	m_degree = deg;
 
 	m_nodes = new VNodeData[ degree() ];
+
 	for( unsigned short i = 0; i < degree(); ++i )
 		selectPoint( i );
 
@@ -453,23 +454,8 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 	 * solutions of f(t) = ( C(t) - p ) * C'(t) = 0.
 	 * ( C(t) - p ) is a nth degree curve, C'(t) a n-1th degree curve => f(t) is a
 	 * (2n - 1)th degree curve and thus has up to 2n - 1 distinct solutions.
-	 * To solve it, we apply the Newton Raphson iteration: a parameter approximation t_i leads
-	 * to the next approximation t_{i+1}
-	 *
-	 *                  f(t_i)
-	 * t_{i+1} = t_i - -------
-	 *                 f'(t_i)
-	 *
-	 * Convergence criteria are then
-	 *
-	 * 1) Point coincidence: | C(t_i) - p | <= tolerance1
-	 *
-	 * 2) Zero cosine: | C'(t_i) * ( C(t_i) - p ) |
-	 *                 ---------------------------- <= tolerance2
-	 *                 | C'(t_i) | * | C(t_i) - p |
-	 *
-	 * But first we need to find a first guess t_0 to start with. The solution for this
-	 * problem is called "Approximate Inversion Method". Let's write f(t) explicitly:
+	 * We solve the problem f(t) = 0 by using something called "Approximate Inversion Method".
+	 * Let's write f(t) explicitly:
 	 *
 	 *         n                     n-1
 	 * f(t) = SUM c_i * B^n_i(t)  *  SUM d_j * B^{n-1}_j(t)
@@ -494,9 +480,9 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 
 	c[ 0 ] = prev()->knot() - p;
 
-	for( unsigned short i = 0; i < degree(); ++i )
+	for( unsigned short i = 1; i <= degree(); ++i )
 	{
-		c[ i + 1 ] = point( i ) - p;
+		c[ i ] = point( i - 1 ) - p;
 	}
 
 
@@ -505,31 +491,36 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 
 	d[ 0 ] = point( 0 ) - prev()->knot();
 
-	for( unsigned short j = 0; j < degree() - 1; ++j )
+	for( unsigned short j = 1; j <= degree() - 1; ++j )
 	{
-		d[ j + 1 ] = point( j + 1 ) - point( j );
+		d[ j ] = 3.0 * ( point( j ) - point( j - 1 ) );
 	}
 
 
 	// Calculate the z_{ij}.
 	double* z = new double[ degree() * ( degree() + 1 ) ];
 
-	for( unsigned short j = 0; j < degree(); ++j )
+	for( unsigned short j = 0; j <= degree() - 1; ++j )
 	{
 		for( unsigned short i = 0; i <= degree(); ++i )
 		{
 			z[ j * ( degree() + 1 ) + i ] =
-				VGlobal::binomialCoeff( degree(), i ) *
-				VGlobal::binomialCoeff( degree() - i, j ) /
-				VGlobal::binomialCoeff( 2 * degree() - 1, i + j );
+				static_cast<double>(
+					VGlobal::binomialCoeff( degree(), i ) *
+					VGlobal::binomialCoeff( degree() - i, j ) )
+				/
+				static_cast<double>(
+					VGlobal::binomialCoeff( 2 * degree() - 1, i + j ) );
+kdDebug() << z[ j * ( degree() + 1 ) + i ] << endl;
 		}
+kdDebug() << "\n" << endl;
 	}
 
 
 	// Calculate the dot products of c_i and d_i.
 	double* products = new double[ degree() * ( degree() + 1 ) ];
 
-	for( unsigned short j = 0; j < degree(); ++j )
+	for( unsigned short j = 0; j <= degree() - 1; ++j )
 	{
 		for( unsigned short i = 0; i <= degree(); ++i )
 		{
@@ -545,10 +536,9 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 
 	// Calculate the control points of the new 2n-1th degree curve.
 	VPath newCurve( 0L );
-
-	// Set up control points in the ( u, f(u) )-plane.
 	newCurve.append( new VSegment( 2 * degree() ) );
 
+	// Set up control points in the ( u, f(u) )-plane.
 	for( unsigned short u = 1; u <= 2 * degree(); ++u )
 	{
 		newCurve.current()->setPoint(
@@ -559,7 +549,7 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 	}
 
 	// Set f(u)-values.
-	for( unsigned short k = 0; k < 2 * degree() - 1; ++k )
+	for( unsigned short k = 1; k < 2 * degree() - 1; ++k )
 	{
 		int min = QMIN( k, degree() );
 
@@ -572,7 +562,7 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 
 			newCurve.getLast()->m_nodes[ i + j  - 1 ].m_vector.setY(
 				newCurve.getLast()->m_nodes[ i + j  - 1 ].m_vector.y() +
-					products[ j * ( degree() + 1 ) + i ] *
+				products[ j * ( degree() + 1 ) + i ] *
 					z[ j * ( degree() + 1 ) + i ] );
 		}
 	}
@@ -588,8 +578,40 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 	newCurve.current()->rootParams( params );
 
 
-// TODO
-	return 0.0;
+	// Now compare the distances of the candidate points.
+	double resultParam;
+	double distanceSquared;
+	double oldDistanceSquared;
+	KoPoint dist;
+
+	// First candidate is the previous knot.
+	dist = prev()->knot() - p;
+	distanceSquared = dist * dist;
+	resultParam = 0.0;
+
+	// Iterate over the found candidate params.
+	for( QValueListConstIterator<double> itr = params.begin(); itr != params.end(); ++itr )
+	{
+kdDebug() << *itr << endl;
+		pointDerivativesAt( *itr, &dist );
+		dist -= p;
+		oldDistanceSquared = distanceSquared;
+		distanceSquared = dist * dist;
+
+		if( distanceSquared < oldDistanceSquared )
+			resultParam = *itr;
+	}
+
+	// Last candidate is the knot.
+	dist = knot() - p;
+	oldDistanceSquared = distanceSquared;
+	distanceSquared = dist * dist;
+
+	if( distanceSquared < oldDistanceSquared )
+		resultParam = 1.0;
+
+
+	return resultParam;
 }
 
 void
@@ -603,35 +625,41 @@ VSegment::rootParams( QValueList<double>& params ) const
 
 	// Calculate how often the control polygon crosses the x-axis
 	// This is the upper limit for the number of roots.
-	switch( polyZeros() )
+	switch( controlPolygonZeros() )
 	{
 		// No solutions.
 		case 0:
+kdDebug() << "nosolution" << endl;
 			return;
 		// Exactly one solution.
 		case 1:
+kdDebug() << "one solution" << endl;
 			if( isFlat() )
 			{
-				// TODO
+				// Calculate intersection of chord with x-axis.
+				KoPoint chord = knot() - prev()->knot();
+
+kdDebug() << "result" << endl;
+kdDebug() << ( chord.x() * prev()->knot().y() - chord.y() * prev()->knot().x() ) / - chord.y() << endl;
+				params.append(
+					( chord.x() * prev()->knot().y() - chord.y() * prev()->knot().x() )
+					/ - chord.y() );
+
 				return;
 			}
-			// TODO
 			break;
 	}
 
-	// Many solutions. Do recursive subdivision.
-	QValueList<double> params1;
-	QValueList<double> params2;
+	// Many solutions. Do recursive midpoint subdivision.
+	VPath path( *this );
+	path.insert( path.current()->splitAt( 0.5 ) );
 
-	// TODO
-
-	// Add params of the sub segments (if any).
-	params += params1;
-	params += params2;
+	path.current()->rootParams( params );
+	path.next()->rootParams( params );
 }
 
 int
-VSegment::polyZeros() const
+VSegment::controlPolygonZeros() const
 {
 	if( !prev() )
 	{
@@ -639,23 +667,24 @@ VSegment::polyZeros() const
 	}
 
 
-	int changes = 0;
+	int signChanges = 0;
 
 	int sign = VGlobal::sign( prev()->knot().y() );
 	int oldSign;
 
-	for( unsigned short i = 1; i <= degree(); ++i )
+	for( unsigned short i = 0; i < degree(); ++i )
 	{
 		oldSign = sign;
-		sign = VGlobal::sign( point( i - 1 ).y() );
+		sign = VGlobal::sign( point( i ).y() );
 
 		if( sign != oldSign )
 		{
-			++changes;
+			++signChanges;
 		}
 	}
 
-	return changes;
+
+	return signChanges;
 }
 
 bool
@@ -857,7 +886,7 @@ VSegment::intersects( const VSegment& segment ) const
 	}
 
 
-	// FIXME: this just dumbs down beziers to lines!
+	//TODO: this just dumbs down beziers to lines!
 	return linesIntersect( segment.prev()->knot(), segment.knot(), prev()->knot(), knot() );
 }
 

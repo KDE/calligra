@@ -81,7 +81,11 @@
 #include "vstatebutton.h"
 #include <kdeversion.h>
 
+// Only for debugging.
 #include <kdebug.h>
+#include "vcomposite.h"
+#include "vpath.h"
+#include "vsegment.h"
 
 #include "koUnitWidgets.h"
 
@@ -484,28 +488,31 @@ KarbonView::dummyForTesting()
 {
 	kdDebug() << "KarbonView::dummyForTesting()" << endl;
 
-	VPath s( 0L );
-	s.moveTo( KoPoint( 100, 100 ) );
-	s.lineTo( KoPoint( 100, 300 ) );
-	s.lineTo( KoPoint( 400, 300 ) );
-	s.lineTo( KoPoint( 400, 100 ) );
-	s.close();
-	kdDebug() << "***" << s.counterClockwise() << endl;
+	VPath p( 0L );
+	p.moveTo( KoPoint( 235.61, 177.628 ) );
+	p.curveTo( KoPoint( 499.791, 462.572 ), KoPoint( 82.4413, 334.715 ), KoPoint( 66.8293, 192.397 ) );
 
-	VPath t( 0L );
-	t.moveTo( KoPoint( 100, 100 ) );
-	t.lineTo( KoPoint( 100, 300 ) );
-	t.lineTo( KoPoint( 400, 300 ) );
-	t.lineTo( KoPoint( 400, 100 ) );
-	t.close();
+	KoPoint input( 152, 250 );
 
-	t.revert();
+	VPath q( 0L );
+	q.moveTo( input );
 
-	kdDebug() << "***" << t.counterClockwise() << endl;
+	KoPoint output =
+		p.getLast()->pointAt(
+			p.getLast()->nearestPointParam( input ) );
 
-	//	part()->document().append( p );
+	q.lineTo( output );
 
-	//	part()->repaintAllViews();
+
+	VComposite* comp = new VComposite( 0L );
+	comp->combinePath( p );
+	part()->document().append( comp );
+
+	comp = new VComposite( 0L );
+	comp->combinePath( q );
+	part()->document().append( comp );
+
+	part()->repaintAllViews();
 }
 
 void

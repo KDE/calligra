@@ -372,14 +372,15 @@ public:
 
 private:
 	/**
-	 * Calculates the solutions of y(x) = 0 ( 0 <= x <= 1 ).
+	 * Calculates the solutions of y(x) = 0 where 0 <= x <= 1. The
+	 * returned parameters are not ordered.
 	 */
 	void rootParams( QValueList<double>& params ) const;
 
 	/**
 	 * Calculates how often the control polygon crosses the x-axis.
 	 */
-	int polyZeros() const;
+	int controlPolygonZeros() const;
 
 
 	/**
