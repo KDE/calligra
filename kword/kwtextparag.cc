@@ -215,6 +215,14 @@ void KoTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
             x -= format->width( suffix, i );
         int width = format->width( ' ' );
         int height = format->height();
+        QString prefix = m_layout.counter->prefix()+ ' '/*the trailing space*/;
+
+        int posPrefix=0;
+        for ( unsigned int i = 0; i < prefix.length(); i++ )
+            posPrefix += format->width( prefix,i);
+
+        p->drawText( x-posPrefix, y - h + base, prefix );
+
         QRect er( x - width, y - h + height / 2 - width / 2, width, width );
         // Draw the bullet.
         switch ( m_layout.counter->style() )
@@ -243,6 +251,7 @@ void KoTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
             default:
                 break;
         }
+        p->drawText( x , y - h + base, suffix );
         // TODO draw suffix text ?
     }
     else
