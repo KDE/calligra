@@ -28,6 +28,8 @@ class QDomDocument;
 namespace KFormDesigner {
 
 class ObjectTreeItem;
+class Container;
+class WidgetLibrary;
 
 class KFORMEDITOR_EXPORT Spacer : public QWidget
 {
@@ -39,6 +41,7 @@ class KFORMEDITOR_EXPORT Spacer : public QWidget
 
 		static bool showProperty(const QString &name);
 		static void saveSpacer(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domDoc);
+		static void loadSpacer(const QString &wname, Container *container, WidgetLibrary *lib, const QDomElement &el, QWidget *parent);
 
 	private:
 		void paintEvent(QPaintEvent *ev);

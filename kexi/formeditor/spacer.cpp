@@ -26,7 +26,9 @@
 
 #include "objecttree.h"
 #include "container.h"
+#include "form.h"
 #include "formIO.h"
+#include "widgetlibrary.h"
 
 #include "spacer.h"
 
@@ -83,6 +85,29 @@ Spacer::saveSpacer(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 	type.appendChild(valueE);
 	propertyE.appendChild(type);
 	tclass.appendChild(propertyE);
+}
+
+void
+Spacer::loadSpacer(const QString &wname, Container *container, WidgetLibrary *lib, const QDomElement &el, QWidget *parent)
+{
+	QWidget *w = lib->createWidget("Spacer", parent, wname.latin1(), container);
+	ObjectTreeItem *tree =  new ObjectTreeItem("Spacer", wname, w);
+	container->form()->objectTree()->addChild(container->tree(), tree);
+
+	for(QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling())
+	{
+		if(n.toElement().tagName() == "property")
+		{
+			QString name = n.toElement().attribute("name");
+			if((name != "geometry") && (name != "name"))
+				continue;
+
+			QVariant val = FormIO::readProp(n.toElement().firstChild(), w, name);
+			w->setProperty(name.latin1(), val);
+			tree->addModProperty(name);
+		}
+	}
+	w->show();
 }
 
 }

@@ -630,10 +630,11 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 		
 	}
 
-	QWidget *w;
 	if(el.tagName() == "spacer")
-		w = lib->createWidget("Spacer", parent, wname.latin1(), container);
-	else if(!parent)
+		Spacer::loadSpacer(wname, container, lib, el, parent);
+
+	QWidget *w;
+	if(!parent)
 		w = lib->createWidget(el.attribute("class"), container->widget(), wname.latin1(), container);
 	else
 		w = lib->createWidget(el.attribute("class"), parent, wname.latin1(), container);
@@ -642,10 +643,7 @@ FormIO::loadWidget(Container *container, WidgetLibrary *lib, const QDomElement &
 	ObjectTreeItem *tree;
 	if (!container->form()->objectTree()->lookup(wname))
 	{
-		if(el.tagName() == "spacer")
-			tree =  new ObjectTreeItem("Spacer", wname, w);
-		else
-			tree =  new ObjectTreeItem(el.attribute("class"), wname, w);
+		tree =  new ObjectTreeItem(el.attribute("class"), wname, w);
 		container->form()->objectTree()->addChild(container->tree(), tree);
 	}
 	else
