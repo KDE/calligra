@@ -53,6 +53,9 @@ class KoVariableSettings
     int startingPage()const{return m_startingPageNumber;}
     void setStartingPage(int _startingPageNumber){ m_startingPageNumber=m_startingPageNumber;}
 
+    int startingPageNumber()const{return startingPage();}
+    void setStartingPageNumber(int _startingPageNumber){setStartingPage(_startingPageNumber);}
+
     bool displayLink()const{return m_displayLink;}
     void setDisplayLink( bool b){ m_displayLink=b;}
 
