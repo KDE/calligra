@@ -23,7 +23,7 @@ your document.</para>
 <tip>
 <para>If you are familiar with Styles in &Microsoft;
 <application>Word</application>, &kword; text styles perform the same
-functions.  You can skip to the next section.</para>
+functions.  You can <link linkend="style-select">skip to the next section</link>.</para>
 </tip>
 
 <para>As an example, if we look at a section of a document, and assign
@@ -139,12 +139,11 @@ like.</para>
 
 <para>Use the buttons labeled <link linkend="style-font">Font</link>,
 <link
-linkend="style-space">Indent and Spacing</link>, <link
-linkend="style-align">Aligns</link>, <link
+linkend="style-space">Indent &amp; Spacing</link>, <link
+linkend="style-align">General Layout</link>, <link
 linkend="style-borders">Borders</link>, <link
-linkend="style-numbering">Bullets/Numbering</link>, <link
-linkend="style-tabulators">Tabulators</link>, and <link
-linkend="style-shadow">Shadow</link> to create the text style.</para>
+linkend="style-numbering">Bullets/Numbering</link>, and <link
+linkend="style-tabulators">Tabulators</link>, to create the text style.</para>
 
 <para>Click <guibutton>OK</guibutton> to create your new text style.</para>
 <para>Click <guibutton>Cancel</guibutton> to abort the creation of the
@@ -164,8 +163,8 @@ all text formated with this text style.</para>
 <sect4 id="style-space">
 <title>Changing Paragraph Spacing and Indents</title>
 
-<para>The tab labeled <guilabel>Indents and Spacing</guilabel> is used to adjust
-spacing between lines, paragraph indentation and the spacing between paragraphs.</para>
+<para>The tab labeled <guilabel>Indents &amp; Spacing</guilabel> is used to adjust
+spacing between lines, and paragraph indentation.</para>
 
 <para>This tab functions identically to the same tab in the <link linkend="indents-and-spaces">Format Paragraph</link> dialog.
 Changes to this tab affect to
@@ -175,7 +174,7 @@ all text formated with this text style.</para>
 <sect4 id="style-align">
 <title>Changing Paragraph Alignment</title>
 
-<para>The tab labeled <guilabel>Aligns</guilabel> determines how the text is placed <emphasis>within
+<para>The tab labeled <guilabel>General Layout</guilabel> determines how the text is placed <emphasis>within
 the line</emphasis>.  With other applications, you may have referred to
 this as <emphasis>Alignment</emphasis>, or
 <emphasis>Justification</emphasis>.</para>
@@ -219,13 +218,6 @@ For more information see the section entitled <link linkend="tab-stops">Tab Stop
 
 </sect4>
 
-<sect4 id="style-shadow">
-<title>Changing text style shadowing.</title>
-
-<para>Using the tab labeled <guilabel>Shadow</guilabel> it is possible to change the artificial shadowing of text within the text style.</para>
-
-<para>This tab functions identically to the same tab in the <link linkend="format-characters">Format Character</link> dialog.</para>
-</sect4>
 </sect3>
 <sect3 id="style-add-text">
 <title>Creating a text style based on formatted text</title>
@@ -319,9 +311,8 @@ will revert to <quote>Standard</quote>.</para>
 linkend="style-space">Indent and Spacing</link>, <link
 linkend="style-align">Aligns</link>, <link
 linkend="style-borders">Borders</link>, <link
-linkend="style-numbering">Bullets/Numbering</link>, <link
-linkend="style-tabulators">Tabulators</link>, and <link
-linkend="style-shadow">Shadow</link> to alter the look of  the text style.</para>
+linkend="style-numbering">Bullets/Numbering</link>, and <link
+linkend="style-tabulators">Tabulators</link> to alter the look of  the text style.</para>
 
 <para>Click <guibutton>OK</guibutton> to commit your changes.</para>
 

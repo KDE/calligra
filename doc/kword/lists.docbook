@@ -66,17 +66,17 @@ will appear.  Select <guimenuitem>Paragraph...</guimenuitem>.</para>
 </mediaobject>
 </screenshot>
 
-<para>To format the selected text as a list, select <guilabel>List</guilabel> from the top section of the dialog box.</para>
+<para>To format the selected text as a list, select the radio button labeled <guilabel>List</guilabel> from the top section of the dialog box.</para>
 
 <para>There is a list of five bullets types and five enumerating styles along the left
 side of the dialog box.  Select the desired list style from the list on the left.</para>
 </sect3>
 <sect3 id="list-look"><title>Changing the look of the list</title>
 
-<para>The text box labeled <guilabel>Prefix Text</guilabel> allows the user to add text before
+<para>The text box labeled <guilabel>Prefix text</guilabel> allows the user to add text before
 the enumeration or bullet.</para>
 
-<para>The text box labeled <guilabel>Suffix Text</guilabel> allows the user to add text after
+<para>The text box labeled <guilabel>Suffix text</guilabel> allows the user to add text after
 the enumeration or bullet.</para>
 
 <para>For example:  If <quote>Step</quote> is typed into the <guilabel>Prefix Text</guilabel>
@@ -87,8 +87,6 @@ box, and <quote>-</quote> is typed into the <guilabel>Suffix Text</guilabel> tex
 <member>Step 2 - Add 1/4 tablespoon of yeast.</member>
 <member>Step 3 - ....</member>
 </simplelist></informalexample>
-</sect3>
-<sect3 id="list-count"><title>Changing the start point of the list</title>
 
 <para>If an enumerated list style is selected, the starting number/letter for the list can be set in the spin box
 labeled <guilabel>Start at</guilabel>.  If you have selected a bulleted list style, this box will be inactive.</para>
@@ -116,13 +114,36 @@ you are adding a subsection to the list.  </para>
 </mediaobject>
 </screenshot>
 
-<para>Adjust the depth setting and watch the preview section of the dialog for an example of how
-this will look.</para>
+<para>Adjust the depth setting to determine where in the list this text occurs.</para>
+<para>By adjusting the spin box labeled <guilabel>Display levels:</guilabel> you can determine if previous levels are displayed.  For example, with a list where <guilabel>Depth</guilabel> is set to three and 
+<guilabel>Display levesl:</guilabel> is set to one might be: </para>
+ 
+<informalexample><simplelist>
+<member>i. This is a step</member>
+<member>ii. This is anothe step</member>
+</simplelist></informalexample>
+
+<para>If you change the <guilabel>Display levelP</guilabel> to two, it would change to: </para>
+
+<informalexample><simplelist>
+<member>A.i. This is a step</member>
+<member>A.ii. This is anothe step</member>
+</simplelist></informalexample>
+
+<para> You can always referr to the preview section of the dialog for an example of how
+your list will look.</para>
+
+
+
 </sect3>
 
 <sect3 id="lists-custom-bullets"><title>Custom Bullets</title>
 <para>If you select <guilabel>Custom Bullet</guilabel> from the list of styles, you can click on the button labeled 
 <guilabel>Custom Character</guilabel> to choose the letter or symbol you want for your bulleted list.</para>
+</sect3>
+<sect3 id="lists-restart"><title>Restart new list</title>
+<para>If you select the radio button labeled <guilabel>Restart numbering at this paragraph</guilabel> &kword; will start 
+numbering your list a the beginning.</para>
 </sect3>
 <sect3 id="lists-multiline"><title> Multiple paragraphs in one list element</title>
 <para>Each new paragraph represents a new list element.  Sometimes, however, it will be desireable to have multiple 
