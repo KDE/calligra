@@ -390,7 +390,7 @@ void KoMainWindow::slotFileNew()
     KoDocument* doc = rootDocument();
 
     KoDocument* newdoc = createDoc();
-    if ( !newdoc->initDoc() )
+    if ( !newdoc || !newdoc->initDoc() )
     {
 	delete newdoc;
 	return;
