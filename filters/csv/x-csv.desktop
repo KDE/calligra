@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=MimeType
+MimeType=application/x-csv
+Icon=unknown.xpm
+Patterns=*.csv;*.CSV;
+Comment=File with comma separated values
+DefaultApp=kspread
