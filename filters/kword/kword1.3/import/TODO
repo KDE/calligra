@@ -21,6 +21,15 @@ Pictures
 Tables
 ...
 
+=== Changelog of the ol filter ===
+- Support for text images (created by KWord 0.8 or re-saved by KWord 1.2/1.3)
+- Improved character and paragraph formatting
+- Bookmarks
+- Import KWord documents in raw XML
+- Notes (also known as annotations)
+- Tables
+
+
 === Abiword's rtftest.rtf test file ===
 shadow (RTF import problem)
 wave (RTF import problem?)
