@@ -75,12 +75,13 @@ void Relationship::createIndices( QuerySchema *query, Field *field1, Field *fiel
 		kdWarning() << "Relationship::addRelationship(): relationship's fields cannot be asterisks" << endl;
 		return;
 	}
-	if (!query->hasField(field1) && !query->hasField(field2)) {
-		kdWarning() << "Relationship::addRelationship(): fields do not belong to this query" << endl;
-		return;
-	}
 	if (field1->table() == field2->table()) {
 		kdWarning() << "Relationship::addRelationship(): fields cannot belong to the same table" << endl;
+		return;
+	}
+//	if (!query->hasField(field1) && !query->hasField(field2)) {
+	if (!query->contains(field1->table()) || !query->contains(field2->table())) {
+		kdWarning() << "Relationship::addRelationship(): fields do not belong to this query" << endl;
 		return;
 	}
 //@todo: check more things: -types
