@@ -951,6 +951,37 @@
     </Function>
 
     <Function>
+      <Name>count</Name>
+      <Type>Float</Type>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Floating point values</Comment>
+	<Type range="true">Float</Type>
+      </Parameter>
+      <Help>
+	<Text>This function returns the numbers of interger or floating argument passed.</Text>
+	<Syntax>count( Value;Value;Value... )</Syntax>
+	<Example>count(-5;"kspread";2) returns 2</Example>
+	<Example>count(5) returns 1</Example>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>fact</Name>
       <Type>Float</Type>
       <Parameter>

@@ -130,11 +130,15 @@ static bool kspreadfunc_sin( KSContext& context )
 
   if ( !KSUtil::checkArgumentsCount( context, 1, "sin", true ) )
     return false;
-
+  double val=0.0;
   if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
+    {
+      if( !KSUtil::checkType( context, args[0], KSValue::Empty, true ) )
+	return false;
+    }
+  val=args[0]->doubleValue();
 
-  context.setValue( new KSValue( sin( args[0]->doubleValue() ) ) );
+  context.setValue( new KSValue( sin( val ) ) );
 
   return true;
 }
@@ -148,11 +152,16 @@ static bool kspreadfunc_cos( KSContext& context )
 
   if ( !KSUtil::checkArgumentsCount( context, 1, "cos", true ) )
     return false;
-
+  double val=0.0;
   if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
+    {
+      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
+	return false;
+    }
+  else
+    val=args[0]->doubleValue();
 
-  context.setValue( new KSValue( cos( args[0]->doubleValue() ) ) );
+  context.setValue( new KSValue( cos( val ) ) );
 
   return true;
 }
@@ -163,11 +172,16 @@ static bool kspreadfunc_sqrt( KSContext& context )
 
   if ( !KSUtil::checkArgumentsCount( context, 1, "sqrt", true ) )
     return false;
-
+  double val=0.0;
   if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
+    {
+      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
+	return false;
+    }
+  else
+    val=args[0]->doubleValue();
 
-  context.setValue( new KSValue( sqrt( args[0]->doubleValue() ) ) );
+  context.setValue( new KSValue( sqrt( val ) ) );
 
   return true;
 }
@@ -197,10 +211,16 @@ static bool kspreadfunc_fabs( KSContext& context )
   if ( !KSUtil::checkArgumentsCount( context, 1, "fabs", true ) )
     return false;
 
+  double val=0.0;
   if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
+    {
+      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
+	return false;
+    }
+  else
+    val=args[0]->doubleValue();
 
-  context.setValue( new KSValue( fabs( args[0]->doubleValue() ) ) );
+  context.setValue( new KSValue( fabs(val ) ) );
 
   return true;
 }
@@ -211,11 +231,16 @@ static bool kspreadfunc_tan( KSContext& context )
 
   if ( !KSUtil::checkArgumentsCount( context, 1, "tan", true ) )
     return false;
-
+  
+  double val=0.0;
   if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
-
-  context.setValue( new KSValue( tan( args[0]->doubleValue() ) ) );
+    {
+      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
+	return false;
+    }
+  else
+    val=args[0]->doubleValue();
+  context.setValue( new KSValue( tan(val) ) );
 
   return true;
 }
@@ -227,10 +252,16 @@ static bool kspreadfunc_exp( KSContext& context )
   if ( !KSUtil::checkArgumentsCount( context, 1, "exp",true ) )
     return false;
 
+  double val=0.0;
   if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
+    {
+      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
+	return false;
+    }
+  else
+    val=args[0]->doubleValue();
 
-  context.setValue( new KSValue( exp( args[0]->doubleValue() ) ) );
+  context.setValue( new KSValue( exp( val ) ) );
 
   return true;
 }
@@ -257,10 +288,16 @@ static bool kspreadfunc_floor( KSContext& context )
   if ( !KSUtil::checkArgumentsCount( context, 1, "floor", true ) )
     return false;
 
+  double val=0.0;
   if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
+    {
+      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
+	return false;
+    }
+  else
+    val=args[0]->doubleValue();
 
-  context.setValue( new KSValue( floor( args[0]->doubleValue() ) ) );
+  context.setValue( new KSValue( floor( val ) ) );
 
   return true;
 }
@@ -272,10 +309,16 @@ static bool kspreadfunc_atan( KSContext& context )
   if ( !KSUtil::checkArgumentsCount( context, 1, "atan", true ) )
     return false;
 
+  double val=0.0;
   if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
+    {
+      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
+	return false;
+    }
+  else
+    val=args[0]->doubleValue();
 
-  context.setValue( new KSValue( atan( args[0]->doubleValue() ) ) );
+  context.setValue( new KSValue( atan( val ) ) );
 
   return true;
 }
@@ -287,10 +330,16 @@ static bool kspreadfunc_ln( KSContext& context )
   if ( !KSUtil::checkArgumentsCount( context, 1, "ln", true ) )
     return false;
 
+  double val=0.0;
   if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
+    {
+      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
+	return false;
+    }
+  else
+    val=args[0]->doubleValue();
 
-  context.setValue( new KSValue( log( args[0]->doubleValue() ) ) );
+  context.setValue( new KSValue( log( val ) ) );
 
   return true;
 }
@@ -320,10 +369,16 @@ static bool kspreadfunc_asin( KSContext& context )
   if ( !KSUtil::checkArgumentsCount( context, 1, "asin", true ) )
     return false;
 
+  double val=0.0;
   if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
+    {
+      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
+	return false;
+    }
+  else
+    val=args[0]->doubleValue();
 
-  context.setValue( new KSValue( asin( args[0]->doubleValue() ) ) );
+  context.setValue( new KSValue( asin( val ) ) );
 
   return true;
 }
@@ -335,10 +390,17 @@ static bool kspreadfunc_acos( KSContext& context )
   if ( !KSUtil::checkArgumentsCount( context, 1, "acos", true ) )
     return false;
 
+  double val=0.0;
   if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
+    {
+      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
+	return false;
+    }
+  else
+    val=args[0]->doubleValue();
 
-  context.setValue( new KSValue( acos( args[0]->doubleValue() ) ) );
+
+  context.setValue( new KSValue( acos( val ) ) );
 
   return true;
 }
@@ -350,10 +412,16 @@ static bool kspreadfunc_log( KSContext& context )
   if ( !KSUtil::checkArgumentsCount( context, 1, "log", true ) )
     return false;
 
+  double val=0.0;
   if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
+    {
+      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
+	return false;
+    }
+  else
+    val=args[0]->doubleValue();
 
-  context.setValue( new KSValue( log10( args[0]->doubleValue() ) ) );
+  context.setValue( new KSValue( log10( val ) ) );
 
   return true;
 }
@@ -365,10 +433,16 @@ static bool kspreadfunc_asinh( KSContext& context )
   if ( !KSUtil::checkArgumentsCount( context, 1, "asinh", true ) )
     return false;
 
+  double val=0.0;
   if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
+    {
+      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
+	return false;
+    }
+  else
+    val=args[0]->doubleValue();
 
-  context.setValue( new KSValue( asinh( args[0]->doubleValue() ) ) );
+  context.setValue( new KSValue( asinh( val ) ) );
 
   return true;
 }
@@ -380,10 +454,16 @@ static bool kspreadfunc_acosh( KSContext& context )
   if ( !KSUtil::checkArgumentsCount( context, 1, "acosh", true ) )
     return false;
 
+  double val=0.0;
   if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
+    {
+      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
+	return false;
+    }
+  else
+    val=args[0]->doubleValue();
 
-  context.setValue( new KSValue( acosh( args[0]->doubleValue() ) ) );
+  context.setValue( new KSValue( acosh( val ) ) );
 
   return true;
 }
@@ -395,10 +475,17 @@ static bool kspreadfunc_atanh( KSContext& context )
   if ( !KSUtil::checkArgumentsCount( context, 1, "atanh", true ) )
     return false;
 
+  double val=0.0;
   if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
+    {
+      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
+	return false;
+    }
+  else
+    val=args[0]->doubleValue();
 
-  context.setValue( new KSValue( atanh( args[0]->doubleValue() ) ) );
+
+  context.setValue( new KSValue( atanh( val ) ) );
 
   return true;
 }
@@ -410,10 +497,16 @@ static bool kspreadfunc_tanh( KSContext& context )
   if ( !KSUtil::checkArgumentsCount( context, 1, "tanh", true ) )
     return false;
 
+  double val=0.0;
   if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
+    {
+      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
+	return false;
+    }
+  else
+    val=args[0]->doubleValue();
 
-  context.setValue( new KSValue( tanh( args[0]->doubleValue() ) ) );
+  context.setValue( new KSValue( tanh( val ) ) );
 
   return true;
 }
@@ -425,10 +518,16 @@ static bool kspreadfunc_sinh( KSContext& context )
   if ( !KSUtil::checkArgumentsCount( context, 1, "sinh", true ) )
     return false;
 
+  double val=0.0;
   if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
+    {
+      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
+	return false;
+    }
+  else
+    val=args[0]->doubleValue();
 
-  context.setValue( new KSValue( sinh( args[0]->doubleValue() ) ) );
+  context.setValue( new KSValue( sinh( val ) ) );
 
   return true;
 }
@@ -440,10 +539,16 @@ static bool kspreadfunc_cosh( KSContext& context )
   if ( !KSUtil::checkArgumentsCount( context, 1, "cosh", true ) )
     return false;
 
+  double val=0.0;
   if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
+    {
+      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
+	return false;
+    }
+  else
+    val=args[0]->doubleValue();
 
-  context.setValue( new KSValue( cosh( args[0]->doubleValue() ) ) );
+  context.setValue( new KSValue( cosh( val ) ) );
 
   return true;
 }
@@ -455,10 +560,16 @@ static bool kspreadfunc_degree( KSContext& context )
   if ( !KSUtil::checkArgumentsCount( context, 1, "degree", true ) )
     return false;
 
+  double val=0.0;
   if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
+    {
+      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
+	return false;
+    }
+  else
+    val=args[0]->doubleValue();
 
-  context.setValue( new KSValue( (args[0]->doubleValue()*180)/M_PI  ));
+  context.setValue( new KSValue( (val*180)/M_PI  ));
 
   return true;
 }
@@ -470,10 +581,17 @@ static bool kspreadfunc_radian( KSContext& context )
   if ( !KSUtil::checkArgumentsCount( context, 1, "radian", true ) )
     return false;
 
+  double val=0.0;
   if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
+    {
+      if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ))
+	return false;
+    }
+  else
+    val=args[0]->doubleValue();
 
-  context.setValue( new KSValue( (args[0]->doubleValue()*M_PI )/180  ));
+
+  context.setValue( new KSValue( (val*M_PI )/180  ));
 
   return true;
 }
@@ -495,7 +613,7 @@ static bool kspreadfunc_sum_helper( KSContext& context, QValueList<KSValue::Ptr>
       {
       result += (*it)->doubleValue();
       }
-    else
+    else if ( !KSUtil::checkType( context, *it, KSValue::Empty, true ) )
       return false;
   }
 
@@ -529,7 +647,7 @@ static bool kspreadfunc_sumsq_helper( KSContext& context, QValueList<KSValue::Pt
       {
       result += ((*it)->doubleValue()*(*it)->doubleValue());
       }
-    else
+    else if ( !KSUtil::checkType( context, *it, KSValue::Empty, true ) )
       return false;
   }
 
@@ -571,7 +689,7 @@ static bool kspreadfunc_max_helper( KSContext& context, QValueList<KSValue::Ptr>
       if(result <  (*it)->doubleValue())
         result =(*it)->doubleValue();
     }
-    else
+    else if ( !KSUtil::checkType( context, *it, KSValue::Empty, true ) )  
       return false;
   }
 
@@ -616,7 +734,7 @@ static bool kspreadfunc_min_helper( KSContext& context, QValueList<KSValue::Ptr>
       if(result >  (*it)->doubleValue())
         result =(*it)->doubleValue();
     }
-    else
+    else if ( !KSUtil::checkType( context, *it, KSValue::Empty, true ) )
       return false;
   }
 
@@ -655,7 +773,7 @@ static bool kspreadfunc_average_helper( KSContext& context, QValueList<KSValue::
       result += (*it)->doubleValue();
       number++;
       }
-    else
+    else if ( !KSUtil::checkType( context, *it, KSValue::Empty, true ) )
       return false;
   }
 
@@ -670,7 +788,10 @@ static bool kspreadfunc_average( KSContext& context )
   bool b = kspreadfunc_average_helper( context, context.value()->listValue(), result ,number);
 
   if ( number == 0 )
-      return false;
+    {
+    context.setValue( new KSValue( i18n("#DIV/0") ) );
+    return true;
+    }
 
   if ( b )
     context.setValue( new KSValue( result / (double)number ) );
@@ -694,7 +815,7 @@ static bool kspreadfunc_variance_helper( KSContext& context, QValueList<KSValue:
       {
       result += ( (*it)->doubleValue() - avera ) * ( (*it)->doubleValue() - avera );
       }
-    else
+    else if ( !KSUtil::checkType( context, *it, KSValue::Empty, true ) )
       return false;
   }
 
@@ -740,7 +861,7 @@ static bool kspreadfunc_stddev_helper( KSContext& context, QValueList<KSValue::P
     {
       result += (((*it)->doubleValue()-avera)*((*it)->doubleValue()-avera));
     }
-    else
+    else if ( !KSUtil::checkType( context, *it, KSValue::Empty, true ) )
       return false;
   }
 
@@ -783,7 +904,7 @@ static bool kspreadfunc_mult_helper( KSContext& context, QValueList<KSValue::Ptr
     }
     else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
       result *= (*it)->doubleValue();
-    else
+    else if ( !KSUtil::checkType( context, *it, KSValue::Empty, true ) )
       return false;
   }
 
@@ -1143,10 +1264,16 @@ static bool kspreadfunc_INT( KSContext& context )
 
   if ( !KSUtil::checkArgumentsCount( context, 1, "INT", true ) )
     return false;
+  double val=0.0;
   if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
+    {
+    if(!KSUtil::checkType( context, args[0], KSValue::Empty, true ) )
+      return false;
+    }
+  else
+    val=args[0]->doubleValue();
 
-  context.setValue( new KSValue((int)args[0]->doubleValue()));
+  context.setValue( new KSValue((int)val));
   return true;
 }
 
@@ -1940,15 +2067,19 @@ static bool kspreadfunc_sign( KSContext& context )
 
   if ( !KSUtil::checkArgumentsCount( context, 1, "sign", true ) )
     return false;
-
+  double val=0.0;
   if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
+    {
+      if ( !KSUtil::checkType( context, args[0], KSValue::Empty, true ) )
+	return false;
+    }
+  val=args[0]->doubleValue();
 
-  if(args[0]->doubleValue()>0)
+  if(val>0)
     value=1;
-  else if(args[0]->doubleValue()<0)
+  else if(val<0)
     value=-1;
-  else if(args[0]->doubleValue()==0)
+  else if(val==0)
     value=0;
 
   context.setValue( new KSValue( value ) );
@@ -1978,12 +2109,16 @@ static bool kspreadfunc_inv( KSContext& context )
 
   if ( !KSUtil::checkArgumentsCount( context, 1, "INV",true ) )
     return false;
-
+  double val=0.0;
   if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
-    return false;
+    {
+      if ( !KSUtil::checkType( context, args[0], KSValue::Empty, true ) )
+	return false;
+    }
+  val=args[0]->doubleValue();
 
 
-  context.setValue( new KSValue( args[0]->doubleValue()*(-1) ) );
+  context.setValue( new KSValue( val*(-1) ) );
 
   return true;
 }
@@ -3330,7 +3465,7 @@ static bool kspreadfunc_sumproduct_helper( KSContext& context, QValueList<KSValu
       {
       result +=( (*it)->doubleValue()*(*it2)->doubleValue());
       }
-    else
+    else if (!( KSUtil::checkType( context, *it, KSValue::Empty, true ) || KSUtil::checkType( context, *it2, KSValue::Empty, true )))
       return false;
   }
 
@@ -3379,7 +3514,7 @@ static bool kspreadfunc_sumx2py2_helper( KSContext& context, QValueList<KSValue:
       {
       result +=( pow((*it)->doubleValue(),2)+pow((*it2)->doubleValue(),2));
       }
-    else
+    else if(!(KSUtil::checkType( context, *it, KSValue::Empty, true ) || KSUtil::checkType( context, *it2, KSValue::Empty, true )))
       return false;
   }
 
@@ -3429,7 +3564,7 @@ static bool kspreadfunc_sumx2my2_helper( KSContext& context, QValueList<KSValue:
       {
       result +=( pow((*it)->doubleValue(),2)-pow((*it2)->doubleValue(),2));
       }
-    else
+    else if(!(KSUtil::checkType( context, *it, KSValue::Empty, true ) || KSUtil::checkType( context, *it2, KSValue::Empty, true )))
       return false;
   }
 
@@ -3478,7 +3613,7 @@ static bool kspreadfunc_sumxmy2_helper( KSContext& context, QValueList<KSValue::
       {
       result +=pow(( (*it)->doubleValue()-(*it2)->doubleValue()),2);
       }
-    else
+    else if(!(KSUtil::checkType( context, *it, KSValue::Empty, true ) || KSUtil::checkType( context, *it2, KSValue::Empty, true )))
       return false;
   }
 
@@ -3638,6 +3773,41 @@ static bool kspreadfunc_iseven( KSContext& context )
  context.setValue( new KSValue(result));
 
   return true;
+}
+
+
+static bool kspreadfunc_count_helper( KSContext& context, QValueList<KSValue::Ptr>& args, double& result)
+{
+  QValueList<KSValue::Ptr>::Iterator it = args.begin();
+  QValueList<KSValue::Ptr>::Iterator end = args.end();
+
+  for( ; it != end; ++it )
+  {
+    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
+      {
+	
+	if ( !kspreadfunc_count_helper( context, (*it)->listValue(), result ) )
+	  return false;
+      }
+    else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
+      {
+	result++;
+      }
+  }
+  
+  return true;
+}
+
+static bool kspreadfunc_count( KSContext& context )
+{
+  double result = 0.0;
+
+  bool b = kspreadfunc_count_helper( context, context.value()->listValue(), result );
+
+  if ( b )
+    context.setValue( new KSValue( result ) );
+
+  return b;
 }
 
 
@@ -3879,6 +4049,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "RANDBETWEEN", new KSValue( new KSBuiltinFunction( module, "RANDBETWEEN", kspreadfunc_randbetween ) ) );
   module->addObject( "LOGn", new KSValue( new KSBuiltinFunction( module, "LOGn", kspreadfunc_logn ) ) );
   module->addObject( "SQRTn", new KSValue( new KSBuiltinFunction( module, "SQRTn", kspreadfunc_sqrtn ) ) );
+  module->addObject( "count", new KSValue( new KSBuiltinFunction( module, "count", kspreadfunc_count ) ) );
   return module;
 }
 
@@ -3940,7 +4111,9 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
       return false;
     }
 
-    if ( cell->isDefault() || (cell->isObscured() && cell->isObscuringForced()))
+    if ( cell->isDefault())
+      context.setValue( new KSValue(  KSValue::Empty/*0.0*/ ) );
+    else if(cell->isObscured() && cell->isObscuringForced())
       context.setValue( new KSValue( 0.0 ) );
     else if ( cell->isValue() )
       context.setValue( new KSValue( cell->valueDouble() ) );
@@ -3951,7 +4124,7 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
     else if ( cell->isDate() )
       context.setValue( new KSValue( cell->valueDate() ) );
     else if ( cell->valueString().isEmpty() )
-      context.setValue( new KSValue( 0.0 ) );
+      context.setValue( new KSValue( /*0.0*/  KSValue::Empty ) );
     else
       context.setValue( new KSValue( cell->valueString() ) );
     return true;
@@ -3992,7 +4165,7 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
         }
 
         if ( cell->isDefault() )
-          c = new KSValue( 0.0 );
+          c = new KSValue( /*0.0*/ KSValue::Empty);
         else if ( cell->isValue() )
           c = new KSValue( cell->valueDouble() );
         else if ( cell->isBool() )
@@ -4002,7 +4175,7 @@ bool KSpreadInterpreter::processExtension( KSContext& context, KSParseNode* node
         else if ( cell->isTime() )
           c = new KSValue( cell->valueTime() );
         else if ( cell->valueString().isEmpty() )
-          c = new KSValue( 0.0 );
+          c = new KSValue( /*0.0*/ KSValue::Empty );
         else
           c = new KSValue( cell->valueString() );
         if ( !(cell->isObscured() && cell->isObscuringForced()) )
