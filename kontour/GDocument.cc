@@ -33,6 +33,9 @@
 #include "kontour_doc.h"
 #include "GPage.h"
 
+// Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
+static const char * CURRENT_DTD_VERSION = "1.1";
+
 GDocument::GDocument(KontourDocument *aDoc)
 {
   mDoc = aDoc;
@@ -91,7 +94,7 @@ void GDocument::zoomFactor(double factor)
   mYGridZ = mYGrid * factor;
   while(mYGridZ < Kontour::minGridDistance)
     mYGridZ *= 2.0;
-  
+
   double scale = factor / mZoomFactor;
   mZoomFactor = factor;
   changeCanvas();
@@ -132,7 +135,7 @@ void GDocument::showHelplines(bool flag)
   mShowHelplines = flag;
   setModified();
 }
-  
+
 void GDocument::snapToHelplines(bool flag)
 {
   mSnapToHelplines = flag;
@@ -176,7 +179,7 @@ void GDocument::updateVertHelpline(int idx, double pos)
 {
   mVertHelplines[idx] = pos;
 }
-  
+
 void GDocument::addHorizHelpline(double pos)
 {
   mHorizHelplines.append(pos);
@@ -189,13 +192,11 @@ void GDocument::addVertHelpline(double pos)
 
 QDomDocument GDocument::saveToXml()
 {
-  QDomDocument document("kontour");
-  document.appendChild(document.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
-  QDomElement kontour = document.createElement("kontour");
+  QDomDocument document = createDomDocument( "kontour", CURRENT_DTD_VERSION );
+  QDomElement kontour = doc.documentElement();
   kontour.setAttribute("editor", "Kontour 2.0");
   kontour.setAttribute("mime", "application/x-kontour");
   kontour.setAttribute("version", "1");
-  document.appendChild(kontour);
 
   QDomElement head = document.createElement("head");
   head.setAttribute("cpn", mCurPageNum);
