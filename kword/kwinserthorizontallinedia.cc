@@ -51,6 +51,7 @@ KWinsertHorizontalLineDia::KWinsertHorizontalLineDia( KWDocument *_doc, QWidget 
         pix.load( *it );
         m_listHorizLine->insertItem( new QListBoxPixmap ( pix ));
     }
+    connect (m_listHorizLine, SIGNAL( doubleClicked ( QListBoxItem *)), this, SLOT( accept()));
     resize( 300, 200);
 }
 
