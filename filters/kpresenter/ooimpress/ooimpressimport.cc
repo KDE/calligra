@@ -429,6 +429,7 @@ QDomElement OoImpressImport::parseLineObject( QDomDocument& doc, const QDomEleme
 QDomElement OoImpressImport::parseTextBox( QDomDocument& doc, const QDomElement& textBox )
 {
     QDomElement textObjectElement = doc.createElement( "TEXTOBJ" );
+    //lukas: TODO the text box can have a style as well (presentation:style-name)!
 
     for ( QDomNode text = textBox.firstChild(); !text.isNull(); text = text.nextSibling() )
     {
@@ -458,6 +459,7 @@ QDomElement OoImpressImport::parseTextBox( QDomDocument& doc, const QDomElement&
 QDomElement OoImpressImport::parseList( QDomDocument& doc, const QDomElement& list )
 {
     // take care of nested lists
+    //kdDebug() << k_funcinfo << "parsing list"<< endl;
     int indentation = 0;
     QDomElement e;
     for ( QDomNode n = list.firstChild(); !n.isNull(); n = n.firstChild() )
@@ -470,10 +472,10 @@ QDomElement OoImpressImport::parseList( QDomDocument& doc, const QDomElement& li
     }
 
     QDomElement p = parseParagraph( doc, e );
-    if (indentation)
+    if (indentation != 0)
     {
         QDomElement indent = doc.createElement( "INDENTS" );
-        indent.setAttribute( "left", MM_TO_POINT( indentation ) );
+        indent.setAttribute( "left", MM_TO_POINT( indentation ) ); //lukas: is MM always correct?
         p.appendChild( indent );
     }
 
@@ -510,7 +512,8 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
 
     QDomElement text = doc.createElement( "TEXT" );
     text.appendChild( doc.createTextNode( paragraph.text() ) );
-    p.appendChild( text );
+
+    kdDebug() << k_funcinfo << "Para text is: " << paragraph.text() << endl;
 
     // parse the text-properties if available
     QDomNode textSpan = paragraph.namedItem( "text:span" );
@@ -535,9 +538,10 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
         if ( properties.hasAttribute( "style:text-underline" ) )
         {
             text.setAttribute( "underline", 1 );
-            text.setAttribute( "underlinestyleline", "solid" );
+            text.setAttribute( "underlinestyleline", "solid" );  //lukas: TODO support more underline styles
         }
     }
+    p.appendChild( text );
 
     return p;
 }
