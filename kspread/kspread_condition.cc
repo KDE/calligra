@@ -291,7 +291,7 @@ QString KSpreadConditions::saveOasisConditionValue( KSpreadConditional &conditio
         value+=")";
         break;
     case DifferentTo:
-        value="cell-content()!=";
+        value="cell-content()!="; //FIXME not good here !
         value+=QString::number( condition.val1 );
         break;
     case Different:
@@ -371,17 +371,139 @@ void KSpreadConditions::loadOasisConditions( const QDomElement & element )
     kdDebug()<<"void KSpreadConditions::loadOasisConditions( const QDomElement & element )\n";
     QDomElement elementItem = element.firstChild().toElement();
     elementItem = elementItem.firstChild().toElement();
+    KSpreadStyleManager * manager = m_cell->sheet()->doc()->styleManager();
 
     while ( !elementItem.isNull() )
     {
         kdDebug()<<"elementItem.tagName() :"<<elementItem.tagName()<<endl;
         if ( elementItem.tagName()== "style:map"  )
         {
+            bool ok = true;
             kdDebug()<<"elementItem.attribute(style:condition ) :"<<elementItem.attribute("style:condition" )<<endl;
+            KSpreadConditional newCondition;
+            loadOasisConditionValue( elementItem.attribute("style:condition" ), newCondition );
+            if ( elementItem.hasAttribute( "style:apply-style-name" ) )
+            {
+                kdDebug()<<"elementItem.attribute( style:apply-style-name ) :"<<elementItem.attribute( "style:apply-style-name" )<<endl;
+                newCondition.styleName = new QString( elementItem.attribute( "style:apply-style-name" ) );
+                newCondition.style = manager->style( *newCondition.styleName );
+                if ( !newCondition.style )
+                    ok = false;
+                else
+                    ok = true;
+            }
+
+            if ( ok )
+                m_condList.append( newCondition );
+            else
+                kdDebug(36001) << "Error loading condition " << elementItem.nodeName()<< endl;
         }
         elementItem = elementItem.nextSibling().toElement();
     }
 }
+
+void KSpreadConditions::loadOasisConditionValue( const QString &styleCondition, KSpreadConditional &newCondition )
+{
+    QString val( styleCondition );
+    if ( val.contains( "cell-content()" ) )
+    {
+        val = val.remove( "cell-content()" );
+        loadOasisCondition( val,newCondition );
+    }
+    //GetFunction ::= cell-content-is-between(Value, Value) | cell-content-is-not-between(Value, Value)
+    //for the moment we support just int/double value, not text/date/time :(
+    if ( val.contains( "cell-content-is-between(" ) )
+    {
+        val = val.remove( "cell-content-is-between(" );
+        val = val.remove( ")" );
+        QStringList listVal = QStringList::split( "," , val );
+        loadOasisValidationValue( listVal, newCondition );
+        newCondition.cond = Between;
+    }
+    if ( val.contains( "cell-content-is-not-between(" ) )
+    {
+        val = val.remove( "cell-content-is-not-between(" );
+        val = val.remove( ")" );
+        QStringList listVal = QStringList::split( ",", val );
+        loadOasisValidationValue( listVal,newCondition );
+        newCondition.cond = Different;
+    }
+
+}
+
+
+void KSpreadConditions::loadOasisCondition( QString &valExpression, KSpreadConditional &newCondition )
+{
+    QString value;
+    if (valExpression.contains( "<=" ) )
+    {
+        value = valExpression.remove( "<=" );
+        newCondition.cond = InferiorEqual;
+    }
+    else if (valExpression.contains( ">=" ) )
+    {
+        value = valExpression.remove( ">=" );
+        newCondition.cond = SuperiorEqual;
+    }
+    else if (valExpression.contains( "!=" ) )
+    {
+        //add Differentto attribute
+        value = valExpression.remove( "!=" );
+        newCondition.cond = DifferentTo;
+    }
+    else if ( valExpression.contains( "<" ) )
+    {
+        value = valExpression.remove( "<" );
+        newCondition.cond = Inferior;
+    }
+    else if(valExpression.contains( ">" ) )
+    {
+        value = valExpression.remove( ">" );
+        newCondition.cond = Superior;
+    }
+    else if (valExpression.contains( "=" ) )
+    {
+        value = valExpression.remove( "=" );
+        newCondition.cond = Equal;
+    }
+    else
+        kdDebug()<<" I don't know how to parse it :"<<valExpression<<endl;
+    kdDebug()<<" value :"<<value<<endl;
+    bool ok = false;
+    newCondition.val1 = value.toDouble(&ok);
+    if ( !ok )
+    {
+        newCondition.val1 = value.toInt(&ok);
+        if ( !ok )
+            kdDebug()<<" Try to parse this value :"<<value<<endl;
+
+    }
+}
+
+
+void KSpreadConditions::loadOasisValidationValue( const QStringList &listVal, KSpreadConditional &newCondition )
+{
+    bool ok = false;
+    kdDebug()<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
+
+    newCondition.val1 = listVal[0].toDouble(&ok);
+    if ( !ok )
+    {
+        newCondition.val1 = listVal[0].toInt(&ok);
+        if ( !ok )
+            kdDebug()<<" Try to parse this value :"<<listVal[0]<<endl;
+    }
+    ok=false;
+    newCondition.val2 = listVal[1].toDouble(&ok);
+    if ( !ok )
+    {
+        newCondition.val2 = listVal[1].toInt(&ok);
+        if ( !ok )
+            kdDebug()<<" Try to parse this value :"<<listVal[1]<<endl;
+
+    }
+}
+
 
 void KSpreadConditions::loadConditions( const QDomElement & element )
 {

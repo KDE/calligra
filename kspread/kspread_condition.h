@@ -123,6 +123,10 @@ class KSpreadConditions
   KSpreadConditions() {}
 
     QString saveOasisConditionValue(KSpreadConditional &cond);
+    void loadOasisConditionValue( const QString &styleCondition, KSpreadConditional &newCondition );
+    void loadOasisValidationValue( const QStringList &listVal, KSpreadConditional &newCondition );
+    void loadOasisCondition( QString &valExpression, KSpreadConditional &newCondition );
+
 
   const KSpreadCell * m_cell;
   QValueList<KSpreadConditional> m_condList;

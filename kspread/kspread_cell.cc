@@ -5787,18 +5787,7 @@ void KSpreadCell::loadOasisValidationValue( const QStringList &listVal )
 void KSpreadCell::loadOasisValidationCondition( QString &valExpression )
 {
     QString value;
-
-    if ( valExpression.contains( "<" ) )
-    {
-        value = valExpression.remove( "<" );
-        d->extra()->validity->m_cond = Inferior;
-    }
-    else if(valExpression.contains( ">" ) )
-    {
-        value = valExpression.remove( ">" );
-        d->extra()->validity->m_cond = Superior;
-    }
-    else if (valExpression.contains( "<=" ) )
+    if (valExpression.contains( "<=" ) )
     {
         value = valExpression.remove( "<=" );
         d->extra()->validity->m_cond = InferiorEqual;
@@ -5808,16 +5797,26 @@ void KSpreadCell::loadOasisValidationCondition( QString &valExpression )
         value = valExpression.remove( ">=" );
         d->extra()->validity->m_cond = SuperiorEqual;
     }
-    else if (valExpression.contains( "=" ) )
-    {
-        value = valExpression.remove( "=" );
-        d->extra()->validity->m_cond = Equal;
-    }
     else if (valExpression.contains( "!=" ) )
     {
         //add Differentto attribute
         value = valExpression.remove( "!=" );
         d->extra()->validity->m_cond = DifferentTo;
+    }
+    else if ( valExpression.contains( "<" ) )
+    {
+        value = valExpression.remove( "<" );
+        d->extra()->validity->m_cond = Inferior;
+    }
+    else if(valExpression.contains( ">" ) )
+    {
+        value = valExpression.remove( ">" );
+        d->extra()->validity->m_cond = Superior;
+    }
+    else if (valExpression.contains( "=" ) )
+    {
+        value = valExpression.remove( "=" );
+        d->extra()->validity->m_cond = Equal;
     }
     else
         kdDebug()<<" I don't know how to parse it :"<<valExpression<<endl;
