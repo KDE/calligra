@@ -28,6 +28,8 @@ class VPolygon : public VComposite
 public:
 	VPolygon( VObject* parent,
 		const KoPoint& center, double radius, uint edges, double angle = 0.0 );
+
+	virtual QString name() const;
 };
 
 #endif

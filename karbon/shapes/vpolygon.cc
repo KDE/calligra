@@ -69,3 +69,11 @@ VPolygon::VPolygon( VObject* parent,
 	cmd.visit( *this );
 }
 
+QString
+VPolygon::name() const
+{
+	QString result = VObject::name();
+	return !result.isEmpty() ? result : "Polygon";
+}
+
+

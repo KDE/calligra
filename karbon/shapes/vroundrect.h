@@ -28,6 +28,8 @@ class VRoundRect : public VComposite
 public:
 	VRoundRect( VObject* parent,
 		const KoPoint& topLeft, double width, double height, double edgeRadius );
+
+	virtual QString name() const;
 };
 
 #endif

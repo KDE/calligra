@@ -46,3 +46,10 @@ VEllipse::VEllipse( VObject* parent,
 	cmd.visit( *this );
 }
 
+QString
+VEllipse::name() const
+{
+	QString result = VObject::name();
+	return !result.isEmpty() ? result : "Ellipse";
+}
+

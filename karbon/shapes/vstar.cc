@@ -75,3 +75,10 @@ VStar::VStar( VObject* parent,
 	cmd.visit( *this );
 }
 
+QString
+VStar::name() const
+{
+	QString result = VObject::name();
+	return !result.isEmpty() ? result : "Star";
+}
+

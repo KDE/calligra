@@ -28,6 +28,8 @@ class VEllipse : public VComposite
 public:
 	VEllipse( VObject* parent,
 		const KoPoint& topLeft, double width, double height );
+
+	virtual QString name() const;
 };
 
 #endif

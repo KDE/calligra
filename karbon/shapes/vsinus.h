@@ -28,6 +28,8 @@ class VSinus : public VComposite
 public:
 	VSinus( VObject* parent,
 		const KoPoint& topLeft, double width, double height, uint periods );
+
+	virtual QString name() const;
 };
 
 #endif

@@ -115,3 +115,11 @@ VSinus::VSinus( VObject* parent,
 	cmd.visit( *this );
 }
 
+QString
+VSinus::name() const
+{
+	QString result = VObject::name();
+	return !result.isEmpty() ? result : "Sinus";
+}
+
+

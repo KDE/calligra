@@ -29,6 +29,8 @@ public:
 	VStar( VObject* parent,
 		const KoPoint& center, double outerRadius, double innerRadius,
 		uint edges, double angle = 0.0 );
+
+	virtual QString name() const;
 };
 
 #endif

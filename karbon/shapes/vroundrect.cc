@@ -58,3 +58,10 @@ VRoundRect::VRoundRect( VObject* parent,
 	close();
 }
 
+QString
+VRoundRect::name() const
+{
+	QString result = VObject::name();
+	return !result.isEmpty() ? result : "Round Rectangle";
+}
+
