@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXITABLEPART_H
-#define KEXITABLEPART_H
+#ifndef KEXIFORMPART_H
+#define KEXITFORMPART_H
 
 #include <qdom.h>
 #include <qcstring.h>
