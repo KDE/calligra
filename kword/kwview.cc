@@ -121,6 +121,8 @@
 #include <koSpell.h>
 #endif
 
+#include "kwinsertpagedia.h"
+
 
 KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDocument* _doc )
     : KoView( _doc, _parent, _name )
@@ -3246,12 +3248,14 @@ void KWView::insertPage()
         if ( edit )
             edit->insertWPPage();
     } else {
-        // TODO use a kpr-like dialog for "after or before current page?"
-        // (would look better with radibuttons than with the combobox)
-        // If 'before', subtract 1 to the page number
-        KCommand* cmd = new KWInsertRemovePageCommand( m_doc, KWInsertRemovePageCommand::Insert, m_currentPage );
-        cmd->execute();
-        m_doc->addCommand( cmd );
+        KWInsertPageDia dlg( this, "insertpage");
+        if ( dlg.exec())
+        {
+            // If 'before', subtract 1 to the page number
+            KCommand* cmd = new KWInsertRemovePageCommand( m_doc, KWInsertRemovePageCommand::Insert, dlg.getInsertPagePos()==KW_INSERTPAGEAFTER ?  m_currentPage : (m_currentPage -1));
+            cmd->execute();
+            m_doc->addCommand( cmd );
+        }
     }
 }
 
