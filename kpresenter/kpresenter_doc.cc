@@ -733,14 +733,20 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
             lastObj = _objectList->count() - 1;
             loadObjects(elem);
         } else if(elem.tagName()=="INFINITLOOP") {
-            if(elem.hasAttribute("value"))
-                _spInfinitLoop = static_cast<bool>(elem.attribute("value").toInt());
+            if(_clean) {
+                if(elem.hasAttribute("value"))
+                    _spInfinitLoop = static_cast<bool>(elem.attribute("value").toInt());
+            }
         } else if(elem.tagName()=="PRESSPEED") {
-            if(elem.hasAttribute("value"))
-                presSpeed = static_cast<PresSpeed>(elem.attribute("value").toInt());
+            if(_clean) {
+                if(elem.hasAttribute("value"))
+                    presSpeed = static_cast<PresSpeed>(elem.attribute("value").toInt());
+            }
         } else if(elem.tagName()=="MANUALSWITCH") {
-            if(elem.hasAttribute("value"))
-                _spManualSwitch = static_cast<bool>(elem.attribute("value").toInt());
+            if(_clean) {
+                if(elem.hasAttribute("value"))
+                    _spManualSwitch = static_cast<bool>(elem.attribute("value").toInt());
+            }
         } else if(elem.tagName()=="PRESSLIDES") {
             if(elem.hasAttribute("value") && elem.attribute("value").toInt()==0)
                 allSlides = TRUE;
@@ -2994,16 +3000,8 @@ int KPresenterDoc::insertPage( int _page, InsertPos _insPos, bool chooseTemplate
     else
         objStartY = getPageRect( _page - 1, 0, 0 ).y() + getPageRect( _page - 1, 0, 0 ).height();
 
-    QColor tmp_txtBackCol = _txtBackCol;
-    unsigned int tmp_RastX = _rastX;
-    unsigned int tmp_RastY = _rastY;
-
     loadNativeFormat( fileName );
     objStartY = 0;
-
-    _txtBackCol = tmp_txtBackCol;
-    _rastX = tmp_RastX;
-    _rastY = tmp_RastY;
 
     _clean = true;
     setModified(true);
