@@ -43,6 +43,8 @@
 #include "SetPropertyCmd.h"
 #include "Arrow.h"
 #include "LineStyle.h"
+#include "PStateManager.h"
+#include "units.h"
 
 PropertyEditor::PropertyEditor (CommandHistory* history, GDocument* doc, 
 				QWidget* parent, const char* name) : 
@@ -423,7 +425,10 @@ void PropertyEditor::helpPressed () {
 
 void PropertyEditor::readProperties () {
     char buf[25];
-
+    PStateManager *psm = PStateManager::instance ();
+    MeasurementUnit munit = psm->defaultMeasurementUnit ();
+    const char* ustr = unitToString (munit);
+    
     if (document->selectionCount () == 1) {
       QListIterator<GObject> it (document->getSelection ());
       GObject* object = it.current ();
@@ -431,13 +436,17 @@ void PropertyEditor::readProperties () {
       // Info tab
       Rect boundingBox = object->boundingBox ();
       infoLabel[0]->setText (object->typeName ());
-      sprintf (buf, "%5.2f pt", boundingBox.left ());
+      sprintf (buf, "%5.2f %s", cvtPtToUnit (munit, boundingBox.left ()),
+	       ustr);
       infoLabel[1]->setText (buf);     
-      sprintf (buf, "%5.2f pt", boundingBox.top ());
+      sprintf (buf, "%5.2f %s", cvtPtToUnit (munit, boundingBox.top ()),
+	       ustr);
       infoLabel[2]->setText (buf);     
-      sprintf (buf, "%5.2f pt", boundingBox.width ());
+      sprintf (buf, "%5.2f %s", cvtPtToUnit (munit, boundingBox.width ()),
+	       ustr);
       infoLabel[3]->setText (buf);     
-      sprintf (buf, "%5.2f pt", boundingBox.height ());
+      sprintf (buf, "%5.2f %s", cvtPtToUnit (munit, boundingBox.height ()),
+	       ustr);
       infoLabel[4]->setText (buf);     
     
       // Outline tab
@@ -446,18 +455,15 @@ void PropertyEditor::readProperties () {
       penColorField->setColor (oInfo.color);
       penStyleField->setCurrentItem (oInfo.style);
       if (object->isA ("GPolyline")) {
-//	assert (oInfo.ckind == GObject::OutlineInfo::Custom_Line); 
 	leftArrows->setCurrentItem (oInfo.startArrowId);
 	rightArrows->setCurrentItem (oInfo.endArrowId);
       }
       else if (object->isA ("GPolygon")) {
 	GPolygon* polygon = (GPolygon *) object;
-	if (/*oInfo.ckind == GObject::OutlineInfo::Custom_Rectangle && */
-	    polygon->isRectangle ())
+	if (polygon->isRectangle ())
 	  roundnessSlider->setValue (oInfo.roundness);
       }
       else if (object->isA ("GOval")) {
-//	assert (oInfo.ckind == GObject::OutlineInfo::Custom_Ellipse);
 	switch (oInfo.shape) {
 	case GObject::OutlineInfo::ArcShape:
 	  ellipseKind[1]->setOn (true);
@@ -488,21 +494,23 @@ void PropertyEditor::readProperties () {
 	infoLabel[0]->setText (i18n ("no selection"));
       else
 	infoLabel[0]->setText (i18n ("multiple selection"));
-      sprintf (buf, "%5.2f pt", boundingBox.left ());
+      sprintf (buf, "%5.2f %s", cvtPtToUnit (munit, boundingBox.left ()),
+	       ustr);
       infoLabel[1]->setText (buf);     
-      sprintf (buf, "%5.2f pt", boundingBox.top ());
+      sprintf (buf, "%5.2f %s", cvtPtToUnit (munit, boundingBox.top ()),
+	       ustr);
       infoLabel[2]->setText (buf);     
-      sprintf (buf, "%5.2f pt", boundingBox.width ());
+      sprintf (buf, "%5.2f %s", cvtPtToUnit (munit, boundingBox.width ()),
+	       ustr);
       infoLabel[3]->setText (buf);     
-      sprintf (buf, "%5.2f pt", boundingBox.height ());
+      sprintf (buf, "%5.2f %s", cvtPtToUnit (munit, boundingBox.height ()),
+	       ustr);
       infoLabel[4]->setText (buf);     
     
       // Outline tab
       GObject::OutlineInfo oInfo = GObject::getDefaultOutlineInfo ();
       widthField->setValue (oInfo.width);
       penColorField->setColor (oInfo.color);
-      //      leftArrows->setCurrentItem (oInfo.startId);
-      //      rightArrows->setCurrentItem (oInfo.endId);
 
       // Fill tab
       GObject::FillInfo fInfo = GObject::getDefaultFillInfo ();
