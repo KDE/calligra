@@ -124,4 +124,6 @@ usr/share/templates/Presentation.desktop
 usr/share/templates/TextDocument.desktop
 usr/share/templates/SpreadSheet.desktop
 usr/share/templates/Illustration.desktop
-
+usr/share/services/kword_applixword_import.desktop
+usr/lib/libapplixwordimport.so
+usr/lib/libapplixwordimport.la
