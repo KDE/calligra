@@ -45,6 +45,14 @@ KoPicture::KoPicture(const KoPicture &other)
     (*this)=other;
 }
 
+QString KoPicture::uniquePictureId() const
+{
+    if ( m_sharedData )
+        return m_sharedData->uniquePictureId();
+    else
+        return QString::null;
+}
+
 KoPicture& KoPicture::operator=( const KoPicture &other )
 {
     //kdDebug(30003) << "KoPicture::= before" << endl;
@@ -97,6 +105,7 @@ void KoPicture::setKey(const KoPictureKey& key)
 {
     m_key=key;
 }
+
 
 bool KoPicture::isNull(void) const
 {

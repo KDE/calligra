@@ -177,6 +177,8 @@ public:
      * especially if the application somehow caches the KoPicture too.
      */
     void clearCache(void);
+    
+    QString uniquePictureId() const;
 
 protected:
     /**
@@ -207,6 +209,8 @@ protected:
 protected:
     KoPictureBase* m_base;
     QString m_extension;
+    uint m_pictureId;
+    static uint s_uniqueValue;
 };
 
 #endif /* __koPictureShared_h__ */

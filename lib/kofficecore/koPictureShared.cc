@@ -34,8 +34,16 @@
 #include "koPictureWmf.h"
 #include "koPictureShared.h"
 
+uint KoPictureShared::s_uniqueValue = 0;
+
 KoPictureShared::KoPictureShared(void) : m_base(NULL)
 {
+    m_pictureId=s_uniqueValue++;
+}
+
+QString KoPictureShared::uniquePictureId() const
+{
+    return "Pictures"+ QString::number(m_pictureId);
 }
 
 KoPictureShared::~KoPictureShared(void)
@@ -385,11 +393,11 @@ bool KoPictureShared::load(QIODevice* io, const QString& extension)
         flag=loadTmp(io);
     else if ( ext == "bz2" )
     {
-        flag = loadCompressed( io, "application/x-bzip2", "tmp" );    
+        flag = loadCompressed( io, "application/x-bzip2", "tmp" );
     }
     else if ( ext == "gz" )
     {
-        flag = loadCompressed( io, "application/x-gzip", "tmp" );    
+        flag = loadCompressed( io, "application/x-gzip", "tmp" );
     }
     else if ( ext == "svgz" )
     {
@@ -420,7 +428,7 @@ bool KoPictureShared::loadFromFile(const QString& fileName)
     QFile file(fileName);
     if (!file.open(IO_ReadOnly))
         return false;
-    
+
     bool flag = false;
     const int pos=fileName.findRev('.');
     if (pos==-1)
@@ -511,7 +519,7 @@ bool KoPictureShared::loadCompressed( QIODevice* io, const QString& mimeType, co
         return false;
     }
 
-        
+
     if ( !in->open( IO_ReadOnly ) )
     {
         kdError(30003) << "Cannot open file for uncompressing! Aborting!" << endl;
@@ -522,7 +530,7 @@ bool KoPictureShared::loadCompressed( QIODevice* io, const QString& mimeType, co
     const bool flag = load( in, extension );
 
     in->close();
-    delete in;  
+    delete in;
 
     return flag;
 }

@@ -151,7 +151,10 @@ QString KoPictureCollection::getFileNameAsKOffice1Dot1(const Type pictureType, K
 QString KoPictureCollection::getOasisFileName(KoPicture& picture)
 {
     QString storeURL( "Pictures/");
-    storeURL+=picture.getKey().toString();
+    if ( !picture.uniquePictureId().isEmpty() )
+        storeURL+=picture.uniquePictureId();
+    else
+        storeURL+=picture.getKey().toString();
     storeURL+='.';
     storeURL+=picture.getExtensionAsKOffice1Dot1();
     return storeURL;

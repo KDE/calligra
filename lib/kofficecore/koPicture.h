@@ -213,6 +213,7 @@ public:
      */
     void clearCache(void);
 
+    QString uniquePictureId() const;
 protected:
     /**
      * @internal
