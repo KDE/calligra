@@ -21,8 +21,11 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <iostream.h>
+
 #include <qpainter.h>
 #include <qpen.h>
+#include <qstring.h>
 
 #include "artwork.h"
 #include "contextstyle.h"
@@ -49,6 +52,18 @@ void Artwork::scale(double factor)
 }
 
 
+void Artwork::calcCharSize(const ContextStyle& style, int height, char ch)
+{
+    QFont f = style.getSymbolFont();
+    f.setPointSize(height);
+    fontSize = height;
+
+    QFontMetrics fm(f);
+    QRect bound = fm.boundingRect(ch);
+    setWidth(bound.width());
+    setHeight(bound.height());
+}
+
 /**
  * We set our height to 1000. Our width depends on the symbol.
  * The user is expected to scale this down to the size he
@@ -56,7 +71,7 @@ void Artwork::scale(double factor)
  */
 void Artwork::calcSizes(const ContextStyle& style, int parentSize)
 {
-    setHeight(1000);
+    setHeight(parentSize);
     switch (type) {
     case LeftSquareBracket:
     case RightSquareBracket:
@@ -71,13 +86,13 @@ void Artwork::calcSizes(const ContextStyle& style, int parentSize)
         setWidth(8);
         break;
     case Integral:
-        setWidth(7000.0/12/2);
+        setWidth(7.0/12/2*parentSize);
         break;
     case Sum:
-        setWidth(1000);
+        calcCharSize(style, parentSize, 'S');
         break;
     case Product:
-        setWidth(1000);
+        calcCharSize(style, parentSize, 'P');
         break;
     case Arrow:
         setWidth(2000);
@@ -91,7 +106,6 @@ void Artwork::draw(QPainter& painter, const ContextStyle& style,
     int myX = origin.x() + getX();
     int myY = origin.y() + getY();
 
-    painter.setBrush(style.getDefaultColor());
     painter.setPen(style.getDefaultColor());
     
     switch (type) {
@@ -126,13 +140,13 @@ void Artwork::draw(QPainter& painter, const ContextStyle& style,
         drawEmpty(painter, myX, myY, getHeight());
         break;
     case Integral:
-        drawIntegral(painter, myX, myY+getHeight()/2, getHeight()/2);
+        drawIntegral(painter, style, myX, myY+getHeight()/2, getHeight()/2);
         break;
     case Sum:
-        drawSum(painter, myX, myY+getHeight()/2, getHeight());
+        drawSum(painter, style, myX, myY);
         break;
     case Product:
-        drawProduct(painter, myX, myY+getHeight()/2, getHeight());
+        drawProduct(painter, style, myX, myY);
         break;
     case Arrow:
         drawArrow(painter, myX, myY+getHeight()/2, getHeight());
@@ -146,7 +160,7 @@ void Artwork::draw(QPainter& painter, const ContextStyle& style,
 }
 
 
-void Artwork::drawIntegral(QPainter& painter, int x, int y, int size)
+void Artwork::drawIntegral(QPainter& painter, const ContextStyle& style, int x, int y, int size)
 {
     QPointArray a;
     //size = size * 4 / 3;
@@ -164,42 +178,34 @@ void Artwork::drawIntegral(QPainter& painter, int x, int y, int size)
 		size / 16 + size / 24, size - size / 16,                 // 11
 		size / 4 - size / 12 + size / 24, size - size / 8);      // 12
     a.translate(x, y);
+    painter.setBrush(style.getDefaultColor());
     painter.drawPolygon(a);
 }
 
-void Artwork::drawSum(QPainter& painter, int x, int y, int size)
+void Artwork::drawSum(QPainter& painter, const ContextStyle& style, int x, int y)
 {
-    QPointArray a;
-    //size = size * 6 / 5;
-    a.setPoints(10,
-		size, -size / 2,                               // 1
-		0, -size / 2,                                  // 2
-		size / 2, 0,                                   // 3
-		0, size / 2,                                   // 4
-		size, size / 2,                                // 5
-		size, size / 2 - size / 16,                    // 6
-		size / 8, size / 2 - size / 16,                // 7
-		size / 2 + size / 16, 0,                       // 8
-		size / 8, -size / 2 + size / 16,               // 9
-		size, -size / 2 + size / 16);                  // 10
-    a.translate(x, y);
-    painter.drawPolygon(a);
+    QFont f = style.getSymbolFont();
+    f.setPointSize(fontSize);
+
+    QFontMetrics fm(f);
+    QRect bound = fm.boundingRect('S');
+    painter.setFont(f);
+    painter.drawText(x-bound.x(), y+getHeight(), QString(QChar('S')));
+    //painter.drawRect(bound);
+    //cerr << bound.x() << " " << bound.y() << " " << bound.width() << " " << bound.height() << endl;
 }
 
-void Artwork::drawProduct(QPainter& painter, int x, int y, int size)
+void Artwork::drawProduct(QPainter& painter, const ContextStyle& style, int x, int y)
 {
-    //size = size * 6 / 5;
-    painter.setPen(QPen(Qt::black, size / 8));
-    painter.drawLine(x, y - size / 2, x + size, y - size / 2);
-    painter.drawLine(x, y + size / 2, x + size / 2 - size / 8, y + size / 2);
-    painter.drawLine(x + size / 2 + size / 8, y + size / 2,
-                     x + size, y + size / 2);
-    painter.setPen(QPen(Qt::black, size / 6));
-    painter.drawLine(x + size / 4 - size / 16, y - size / 2,
-                     x + size / 4 - size / 16, y + size / 2);
-    painter.drawLine(x + size - size / 4 + size / 16, y - size / 2,
-                     x + size - size / 4 + size / 16, y + size / 2);
-    painter.setPen(QPen(Qt::black, 1));
+    QFont f = style.getSymbolFont();
+    f.setPointSize(fontSize);
+
+    QFontMetrics fm(f);
+    QRect bound = fm.boundingRect('P');
+    painter.setFont(f);
+    painter.drawText(x-bound.x(), y+getHeight(), QString(QChar('P')));
+    //painter.drawRect(bound);
+    //cerr << bound.x() << " " << bound.y() << " " << bound.width() << " " << bound.height() << endl;
 }
 
 void Artwork::drawArrow(QPainter& painter, int x, int y, int size)
@@ -218,7 +224,7 @@ void Artwork::drawLeftSquareBracket(QPainter& painter, const ContextStyle& style
 {
     int width = getWidth()-2;
     int thickness = width/4+1;
-    int unit = width - thickness;
+    //int unit = width - thickness;
         
     painter.setBrush(style.getDefaultColor());
     painter.setPen(Qt::NoPen);

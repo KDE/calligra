@@ -102,10 +102,12 @@ BasicElement* SymbolElement::goToPos(FormulaCursor* cursor, bool& handled,
 void SymbolElement::calcSizes(const ContextStyle& style, int parentSize)
 {
     int mySize = parentSize;
-    symbol.calcSizes(style, mySize);
+    int dist = style.getDistance();
+
+    symbol.calcSizes(style, mySize*2);
     content->calcSizes(style, mySize);
 
-    symbol.scale(((double)parentSize)/symbol.getHeight()*2);
+    //symbol.scale(((double)parentSize)/symbol.getHeight()*2);
     
     int upperWidth = 0;
     int upperHeight = 0;
@@ -113,7 +115,7 @@ void SymbolElement::calcSizes(const ContextStyle& style, int parentSize)
         upper->setSizeReduction(style);
         upper->calcSizes(style, mySize);
         upperWidth = upper->getWidth();
-        upperHeight = upper->getHeight();
+        upperHeight = upper->getHeight() + dist;
     }
 
     int lowerWidth = 0;
@@ -122,19 +124,20 @@ void SymbolElement::calcSizes(const ContextStyle& style, int parentSize)
         lower->setSizeReduction(style);
         lower->calcSizes(style, mySize);
         lowerWidth = lower->getWidth();
-        lowerHeight = lower->getHeight();
+        lowerHeight = lower->getHeight() + dist;
     }
 
     // widths
     int xOffset = QMAX(symbol.getWidth(), QMAX(upperWidth, lowerWidth));
     symbol.setX(xOffset - symbol.getWidth());
-    content->setX(xOffset);
+    content->setX(xOffset + dist/2);
 
     setWidth(QMAX(content->getX() + content->getWidth(),
                   QMAX(upperWidth, lowerWidth)));
     
     // heights
-    int toMidline = QMAX(content->getMidline(), upperHeight + symbol.getHeight()/2);
+    int toMidline = QMAX(content->getMidline(),
+                         upperHeight + symbol.getHeight()/2);
     int fromMidline = QMAX(content->getHeight() - content->getMidline(),
                            lowerHeight + symbol.getHeight()/2);
     setHeight(toMidline + fromMidline);
@@ -159,7 +162,7 @@ void SymbolElement::calcSizes(const ContextStyle& style, int parentSize)
         else {
             lower->setX(xOffset - lowerWidth);
         }
-        lower->setY(toMidline + symbol.getHeight()/2);
+        lower->setY(toMidline + symbol.getHeight()/2 + dist);
     }
 }
 

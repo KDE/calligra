@@ -84,16 +84,24 @@ protected:
     void drawRightRoundBracket(QPainter& painter, const ContextStyle& style, int x, int y, int size);
 
     void drawEmpty(QPainter& painter, int x, int y, int size);
-    void drawIntegral(QPainter& painter, int x, int y, int size);
-    void drawSum(QPainter& painter, int x, int y, int size);
-    void drawProduct(QPainter& painter, int x, int y, int size);
+    void drawIntegral(QPainter& painter, const ContextStyle& style, int x, int y, int size);
     void drawArrow(QPainter& painter, int x, int y, int size);
 
+    void drawProduct(QPainter& painter, const ContextStyle& style, int x, int y);
+    void drawSum(QPainter& painter, const ContextStyle& style, int x, int y);
+
 private:
+
+    void calcCharSize(const ContextStyle& style, int height, char ch);
     
     QSize size;
     QPoint point;
 
+    /**
+     * Used if we are a character.
+     */
+    int fontSize;
+    
     SymbolType type;
 };
 
