@@ -14,7 +14,7 @@
 
 #include <qlabel.h>
 #include <qpainter.h>
-
+bool mousePressed;
 /****************************************************************
  *
  * KSpreadEditWidget
@@ -140,6 +140,7 @@ KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* 
 
   setBackgroundMode( NoBackground );
   setEditorActivate(false);
+  mousePressed = false;
 }
 
 
@@ -226,9 +227,9 @@ void KSpreadCanvas::gotoLocation( const KSpreadPoint& _cell )
   int xpos = table->columnPos( _cell.pos.x(), this );
   int ypos = table->rowPos( _cell.pos.y(), this );
 
-  if ( xpos < 0 || xpos > width() - 100 * zoom() )
+  if ( xpos < 0 || xpos > width()-100 * zoom() )
   {
-    slotScrollHorz( xOffset() -220 + xpos + width()/2 );
+    slotScrollHorz( xOffset()  + xpos -220+ width()/2 );
   }
 
   if ( ypos < 0 || ypos > height() - 50 * zoom() )
@@ -508,6 +509,7 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
 
 void KSpreadCanvas::mouseReleaseEvent( QMouseEvent *_ev )
 {
+  mousePressed = false;
   KSpreadTable *table = activeTable();
   if ( !table )
     return;
@@ -605,7 +607,7 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent *_ev )
 void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 {
   KSpreadTable *table = activeTable();
-
+  mousePressed = true;
   if ( !table )
     return;
 
@@ -657,6 +659,8 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 
   QRect selection( table->selectionRect() );
 
+  int old_column=markerColumn();
+  int old_row=markerRow();
   // Check whether we clicked in the little marker in the lower right
   // corner of a cell or a marked area.
   {
@@ -741,9 +745,49 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   if ( _ev->button() == LeftButton || !selection.contains( QPoint( col, row ) ) )
     table->unselect();
 
-  setMarkerColumn( col );
-  setMarkerRow( row );
+  if ((selection.right() != 0x7fff && selection.bottom() != 0x7fff)&& mousePressed && ( _ev->state() & ControlButton ))
+  	{
+  	if( (col!=old_column)||(row!=old_row))
+  		{
+  		if(old_column>col)
+  			{
+  			int tmp=col;
+  			col=old_column;
+  			old_column=tmp;
+  			}
+  		if(old_row>row)
+  			{
+  			int tmp=row;
+  			row=old_row;
+  			old_row=tmp;
+  			}
+  		if( selection.left()!=0&&selection.right()!=0
+  			&&selection.top()!=0&&selection.bottom()!=0)
+  			{
+  			//if you have a selection and you go up in the table
+  			//so bottom is the bottom of the selection
+  			//not the markercolumn
+  			if(selection.bottom()>row)
+  				row=selection.bottom();
+  			if(selection.right()>col)
+  				col=selection.right();
+  			}
+  		selection.setLeft(old_column);
+  		selection.setRight( col );
+  		selection.setTop(old_row);
+  		selection.setBottom( row );
+  		table->setSelection( selection, this );
+    		//always put Marker in top and left
+    		//otherwise all functions don't work
+    		setMarkerColumn( old_column );
+  		setMarkerRow( old_row );
+                showMarker();
+                return;
+      		}
+  	}
 
+  setMarkerColumn( col );
+  setMarkerRow( row );	
   KSpreadCell *cell = table->cellAt( markerColumn(), markerRow() );
 
   // Go to the upper left corner of the obscuring object
@@ -1651,6 +1695,19 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
   m_bResize = FALSE;
 }
 
+void KSpreadVBorder::resizeRow(int resize )
+{
+KSpreadTable *table = m_pCanvas->activeTable();
+assert( table );
+RowLayout *rl = table->nonDefaultRowLayout( m_iSelectionAnchor );
+//number of column
+int x = table->rowPos( m_iSelectionAnchor, m_pCanvas );
+if ( ( m_pCanvas->zoom() * (float)(resize) ) < 20.0 )
+	rl->setHeight( 20, m_pCanvas );	
+else
+	rl->setHeight( resize, m_pCanvas );
+}
+
 void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
 {
   KSpreadTable *table = m_pCanvas->activeTable();
@@ -1882,6 +1939,19 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
 
   m_bSelection = FALSE;
   m_bResize = FALSE;
+}
+
+void KSpreadHBorder::resizeColumn(int resize )
+{
+KSpreadTable *table = m_pCanvas->activeTable();
+assert( table );
+ColumnLayout *cl = table->nonDefaultColumnLayout( m_iSelectionAnchor );
+//number of column
+int x = table->columnPos( m_iSelectionAnchor, m_pCanvas );
+if ( ( m_pCanvas->zoom() * (float)(resize) ) < 20.0 )
+	cl->setWidth( 20, m_pCanvas );	
+else
+	cl->setWidth( resize, m_pCanvas );
 }
 
 void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )

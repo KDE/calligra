@@ -63,6 +63,8 @@
 #include "kspread_dlg_replace.h"
 #include "kspread_dlg_sort.h"
 #include "kspread_dlg_anchor.h"
+#include "kspread_dlg_resize.h"
+
 /*****************************************************************************
  *
  * KSpreadView
@@ -2004,11 +2006,21 @@ void KSpreadView::PopupMenuColumn(const QPoint & _point)
 
     m_pPopupColumn= new QPopupMenu();
 
-    m_pPopupColumn->insertItem( "Insert Column", this, SLOT( slotInsertColumn() ) );
-    m_pPopupColumn->insertItem( "Remove Column", this, SLOT( slotRemoveColumn() ) );
+    m_pPopupColumn->insertItem( i18n("Insert Column"), this, SLOT( slotInsertColumn() ) );
+    m_pPopupColumn->insertItem( i18n("Remove Column"), this, SLOT( slotRemoveColumn() ) );
+    m_pPopupColumn->insertItem( i18n("Resize"), this, SLOT( slotResizeColumn() ) );
 
     QObject::connect( m_pPopupColumn, SIGNAL( activated( int ) ), this, SLOT( slotActivateTool( int ) ) );
     m_pPopupColumn->popup( _point );
+}
+
+void KSpreadView::slotResizeColumn()
+{
+if ( !m_pTable )
+       return;
+KSpreadresize* dlg = new KSpreadresize( this, "Resize column",KSpreadresize::resize_column );
+dlg->show();
+
 }
 
 void KSpreadView::slotInsertColumn()
@@ -2032,13 +2044,21 @@ void KSpreadView::PopupMenuRow(const QPoint & _point )
 
     m_pPopupRow= new QPopupMenu();
 
-    m_pPopupRow->insertItem( "Insert Row", this, SLOT( slotInsertRow() ) );
-    m_pPopupRow->insertItem( "Remove Row", this, SLOT( slotRemoveRow() ) );
-
+    m_pPopupRow->insertItem( i18n("Insert Row"), this, SLOT( slotInsertRow() ) );
+    m_pPopupRow->insertItem( i18n("Remove Row"), this, SLOT( slotRemoveRow() ) );
+    m_pPopupRow->insertItem( i18n("Resize"), this, SLOT( slotResizeRow() ) );
     QObject::connect( m_pPopupRow, SIGNAL( activated( int ) ), this, SLOT( slotActivateTool( int ) ) );
     m_pPopupRow->popup( _point );
 }
 
+void KSpreadView::slotResizeRow()
+{
+if ( !m_pTable )
+       return;
+KSpreadresize* dlg = new KSpreadresize( this, "Resize row",KSpreadresize::resize_row );
+dlg->show();
+
+}
 
 void KSpreadView::slotInsertRow()
 {

@@ -459,6 +459,8 @@ protected slots:
 
     void slotRemoveColumn();
 
+    void slotResizeColumn();
+    void slotResizeRow();
 
 public slots:
     // Document signals

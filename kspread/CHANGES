@@ -77,3 +77,8 @@ inside so you can add text in this cell.
 -Add new button on formula toolbar (SUM and Product)
 -bugfix
 -Now you can copy a function with "
+
+1999-09-23 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Now you can create a area when you click and press CTRL
+-Add new dialog box for resize column or row

@@ -339,6 +339,7 @@ class KSpreadHBorder : public QWidget
 public:
     KSpreadHBorder( QWidget *_parent, KSpreadCanvas *_canvas, KSpreadView *_view  );
     int markerColumn(){return  m_iSelectionAnchor;}
+    void resizeColumn(int resize);
 protected:
     virtual void paintEvent ( QPaintEvent* _ev ); 
     virtual void mousePressEvent( QMouseEvent* _ev );
@@ -389,6 +390,7 @@ class KSpreadVBorder : public QWidget
 public:
     KSpreadVBorder( QWidget *_parent, KSpreadCanvas *_canvas, KSpreadView *_view );
     int markerRow(){return  m_iSelectionAnchor;}
+    void resizeRow(int resize);
 protected:
     virtual void paintEvent ( QPaintEvent* _ev ); 
     virtual void mousePressEvent( QMouseEvent* _ev );
