@@ -148,7 +148,7 @@ void KPClipartObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler )
         _painter->translate( _zoomHandler->zoomItX(ox) /*+1*/, _zoomHandler->zoomItY(oy) /*+1*/ );
         if ( br.width() && br.height() )
             //_painter->scale( (double)(ext.width()-2) / (double)br.width(), (double)(ext.height()-2) / (double)br.height() );
-            _painter->scale( (double)(ext.width()) / (double)br.width(), (double)(ext.height()) / (double)br.height() );
+            _painter->scale( (double)(_zoomHandler->zoomItX( ext.width())) / (double) br.width(), (double)(_zoomHandler->zoomItY( ext.height())) / (double) br.height() );
         _painter->drawPicture( *m_clipart.picture() );
         _painter->restore();
 
@@ -158,7 +158,7 @@ void KPClipartObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler )
     } else {
         _painter->translate( _zoomHandler->zoomItX(ox), _zoomHandler->zoomItY(oy) );
 
-        QRect br( QPoint( 0, 0 ), ext.toQSize() );
+        QRect br( QPoint( 0, 0 ), QPoint(_zoomHandler->zoomItX(ext.width()),_zoomHandler->zoomItY(ext.height()) ));
         int pw = br.width();
         int ph = br.height();
         QRect rr = br;
