@@ -173,7 +173,7 @@ VKoPainter::moveTo( const KoPoint &p )
 		m_path[ m_index ].code = ART_MOVETO;
 	}
 	else
-		m_path[ m_index ].code = ART_MOVETO_OPEN;
+		m_path[ m_index ].code = ART_MOVETO;
 
 	m_path[ m_index ].x3	= p.x() * m_zoomFactor;
 	m_path[ m_index ].y3	= p.y() * m_zoomFactor;

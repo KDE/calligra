@@ -1,6 +1,5 @@
 REAL BUGS:
 -	mirror coordinate-system so origin is bottom-left
--	add a vpainter::closePath() which fixes combined.karbon
 -	dont always fill shapes especially when no fillShape() is called
 -	select first/last segment's knot if one of each other's knot is selected
 -	scale tool should only scale in one direction while dragging a slection node
