@@ -899,7 +899,13 @@ void KSpreadUndoCellLayout::copyLayout(QValueList<layoutCell> & list,
                                        QValueList<layoutRow> & listRow,
                                        KSpreadTable * table )
 {
+    QValueList<layoutCell>::Iterator it2;
+  for ( it2 = list.begin(); it2 != list.end(); ++it2 )
+  {
+      delete (*it2).l;
+  }
   list.clear();
+
   KSpreadCell * cell;
   int bottom = m_rctRect.bottom();
   int right  = m_rctRect.right();
@@ -1176,6 +1182,11 @@ KSpreadUndoSort::KSpreadUndoSort( KSpreadDoc * _doc, KSpreadTable * _table, cons
 void KSpreadUndoSort::copyAll(QValueList<layoutTextCell> & list, QValueList<layoutColumn> & listCol,
                               QValueList<layoutRow> & listRow, KSpreadTable * table )
 {
+  QValueList<layoutTextCell>::Iterator it2;
+  for ( it2 = list.begin(); it2 != list.end(); ++it2 )
+  {
+      delete (*it2).l;
+  }
   list.clear();
 
   if ( util_isColumnSelected( m_rctRect ) )
