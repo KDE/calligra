@@ -253,8 +253,8 @@ void KoTemplateChooseDia::setupDialog()
         int i=1;
         QString key=QString( "File%1" ).arg( i );
         QString value=d->m_global->config()->readEntry( key, QString::null );
-        if(value.startsWith("file:"))
-            value=value.mid(5);
+        KURL url(value);
+        value=url.isLocalFile() ? url.path() : url.prettyURL();
         QString squeezed=KStringHandler::csqueeze(value);
         while( !squeezed.isNull() ) {
             lst.append( squeezed );
@@ -262,8 +262,8 @@ void KoTemplateChooseDia::setupDialog()
             ++i;
             key=QString( "File%1" ).arg( i );
             value=d->m_global->config()->readEntry( key, QString::null );
-            if(value.startsWith("file:"))
-                value=value.mid(5);
+            url=value;
+            value=url.isLocalFile() ? url.path() : url.prettyURL();
             squeezed=KStringHandler::csqueeze(value);
         }
 
