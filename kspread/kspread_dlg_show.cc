@@ -44,9 +44,9 @@ KSpreadshow::KSpreadshow( KSpreadView* parent, const char* name )
 
   KButtonBox *bb = new KButtonBox( this );
   bb->addStretch();
-  m_pOk = bb->addButton( i18n("OK") );
+  m_pOk = bb->addButton( i18n("&OK") );
   m_pOk->setDefault( TRUE );
-  m_pClose = bb->addButton( i18n( "Close" ) );
+  m_pCancel= bb->addButton( i18n( "&Cancel" ) );
   bb->layout();
   lay1->addWidget( bb );
   QString text;
@@ -60,7 +60,7 @@ KSpreadshow::KSpreadshow( KSpreadView* parent, const char* name )
   if(!list->count())
   	m_pOk->setEnabled(false);
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
-  connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
+  connect( m_pCancel, SIGNAL( clicked() ), this, SLOT( slotCancel() ) );
   connect( list, SIGNAL(doubleClicked(QListBoxItem *)),this,SLOT(slotDoubleClicked(QListBoxItem *)));
   resize( 200, 150 );
 
@@ -84,7 +84,7 @@ void KSpreadshow::slotOk()
   accept();
 }
 
-void KSpreadshow::slotClose()
+void KSpreadshow::slotCancel()
 {
   reject();
 }

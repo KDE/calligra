@@ -52,7 +52,7 @@ KSpreadreference::KSpreadreference( KSpreadView* parent, const char* name )
   bb->addStretch();
   m_pOk = bb->addButton( i18n("OK") );
   m_pOk->setDefault( TRUE );
-  m_pClose = bb->addButton( i18n( "Close" ) );
+  m_pCancel= bb->addButton( i18n( "&Cancel" ) );
   bb->layout();
   lay1->addWidget( bb );
   QString text;
@@ -69,7 +69,7 @@ KSpreadreference::KSpreadreference( KSpreadView* parent, const char* name )
   	m_pRemove->setEnabled(false);
   	}
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
-  connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
+  connect( m_pCancel, SIGNAL( clicked() ), this, SLOT( slotCancel() ) );
   connect( m_pRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
   connect( list, SIGNAL(doubleClicked(QListBoxItem *)),this,SLOT(slotDoubleClicked(QListBoxItem *)));
   connect( list, SIGNAL(highlighted ( QListBoxItem * ) ),this,SLOT(slotHighlighted(QListBoxItem * )));
@@ -166,7 +166,7 @@ void KSpreadreference::slotOk()
   accept();
 }
 
-void KSpreadreference::slotClose()
+void KSpreadreference::slotCancel()
 {
   reject();
 }

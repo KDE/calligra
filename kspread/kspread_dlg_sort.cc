@@ -59,14 +59,14 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView* parent, const char* name)
   bb->addStretch();
   m_pOk = bb->addButton( i18n("Sort") );
   m_pOk->setDefault( TRUE );
-  m_pClose = bb->addButton( i18n( "Close" ) );
+  m_pCancel = bb->addButton( i18n( "&Cancel" ) );
   bb->layout();
   lay1->addWidget( bb);
 
   init();
 
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
-  connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
+  connect( m_pCancel, SIGNAL( clicked() ), this, SLOT( slotCancel() ) );
   connect( grp, SIGNAL(pressed(int)),this,SLOT(slotpress(int)));
 }
 
@@ -178,7 +178,7 @@ void KSpreadSortDlg::slotOk()
 }
 
 
-void KSpreadSortDlg::slotClose()
+void KSpreadSortDlg::slotCancel()
 {
     reject();
 }

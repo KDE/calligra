@@ -42,12 +42,12 @@ public:
 
 public slots:
   void slotOk();
-  void slotClose();
+  void slotCancel();
   void slotChangeState();
 protected:
   KSpreadView* m_pView;
   QPushButton* m_pOk;
-  QPushButton* m_pClose;
+  QPushButton* m_pCancel;
   QPoint  marker;
   KIntNumInput *m_pSize2;
   QCheckBox *m_pDefault;

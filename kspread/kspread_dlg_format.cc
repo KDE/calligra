@@ -33,9 +33,9 @@ KSpreadFormatDlg::KSpreadFormatDlg( KSpreadView* view, const char* name )
 
     KButtonBox *bb = new KButtonBox( this );
     bb->addStretch();
-    QPushButton* ok = bb->addButton( i18n("OK") );
+    QPushButton* ok = bb->addButton( i18n("&OK") );
     ok->setDefault( TRUE );
-    QPushButton* close = bb->addButton( i18n( "Close" ) );
+    QPushButton* cancel= bb->addButton( i18n( "&Cancel" ) );
     bb->layout();
 
     vbox->addWidget( bb );
@@ -62,7 +62,7 @@ KSpreadFormatDlg::KSpreadFormatDlg( KSpreadView* view, const char* name )
     slotActivated( 0 );
 
     connect( ok, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
-    connect( close, SIGNAL( clicked() ), this, SLOT( reject() ) );
+    connect( cancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
     connect( m_combo, SIGNAL( activated( int ) ), this, SLOT( slotActivated( int ) ) );
 }
 

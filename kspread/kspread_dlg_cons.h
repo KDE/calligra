@@ -41,7 +41,7 @@ public:
   
 public slots:
   void slotOk();
-  void slotClose();
+  void slotCancel();
   void slotAdd();
   void slotRemove();
 
@@ -56,7 +56,7 @@ protected:
   QListBox* m_pRefs;
   QComboBox* m_pFunction;
   QPushButton* m_pOk;
-  QPushButton* m_pClose;
+  QPushButton* m_pCancel;
   QPushButton* m_pAdd;
   QPushButton* m_pRemove;
   QCheckBox* m_pRow;

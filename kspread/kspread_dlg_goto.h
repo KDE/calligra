@@ -37,7 +37,7 @@ public:
 
 public slots:
   void slotOk();
-  void slotClose();
+  void slotCancel();
   void textChanged ( const QString &_text );
 
 
@@ -46,7 +46,7 @@ protected:
   
   QLineEdit* m_nameCell;
   QPushButton* m_pOk;
-  QPushButton* m_pClose;
+  QPushButton* m_pCancel;
 };
 
 #endif

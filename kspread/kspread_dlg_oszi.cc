@@ -77,9 +77,9 @@ KSpreadOsziDlg::KSpreadOsziDlg( KSpreadView* view, const char* name )
 
     KButtonBox *bb = new KButtonBox( this );
     bb->addStretch();
-    QPushButton* ok = bb->addButton( i18n("&Calc") );
+    QPushButton* ok = bb->addButton( i18n("C&alc") );
     ok->setDefault( TRUE );
-    QPushButton* close = bb->addButton( i18n( "Cl&ose" ) );
+    QPushButton* cancel = bb->addButton( i18n( "&Cancel" ) );
     bb->layout();
 
     QVBoxLayout* vbox = new QVBoxLayout( hbox, 6 );
@@ -95,7 +95,7 @@ KSpreadOsziDlg::KSpreadOsziDlg( KSpreadView* view, const char* name )
     lay->addWidget( bb );
 	
     connect( ok, SIGNAL( clicked() ), this, SLOT( slotCalc() ) );
-    connect( close, SIGNAL( clicked() ), this, SLOT( reject() ) );
+    connect( cancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
 
     static int xmax = 200;
     static int xmin = -200;

@@ -37,14 +37,14 @@ public:
 
 public slots:
   void slotOk();
-  void slotClose();
+  void slotCancel();
   void slotTextChanged();
 protected:
 
   KSpreadView* m_pView;
   QMultiLineEdit *multiLine; 
   QPushButton* m_pOk;
-  QPushButton* m_pClose;
+  QPushButton* m_pCancel;
   QPoint  marker;
 
 };

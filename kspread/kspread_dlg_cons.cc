@@ -77,11 +77,11 @@ KSpreadConsolidate::KSpreadConsolidate( KSpreadView* parent, const char* name )
   m_pCopy = new QCheckBox( i18n("Copy data"), this );
   grid1->addWidget(m_pCopy,11,0);
 
-  m_pOk = new QPushButton( i18n("OK"), this );
+  m_pOk = new QPushButton( i18n("&OK"), this );
   grid1->addWidget(m_pOk,0,1);
   m_pOk->setEnabled( false );
-  m_pClose = new QPushButton( i18n("Cancel"), this );
-  grid1->addWidget(m_pClose,1,1);
+  m_pCancel= new QPushButton( i18n("&Cancel"), this );
+  grid1->addWidget(m_pCancel,1,1);
 
   m_pAdd = new QPushButton( i18n("Add"), this );
   grid1->addWidget(m_pAdd,2,1);
@@ -90,7 +90,7 @@ KSpreadConsolidate::KSpreadConsolidate( KSpreadView* parent, const char* name )
 
 
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
-  connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
+  connect( m_pCancel, SIGNAL( clicked() ), this, SLOT( slotCancel() ) );
   connect( m_pAdd, SIGNAL( clicked() ), this, SLOT( slotAdd() ) );
   connect( m_pRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
   connect( m_pRef, SIGNAL( returnPressed() ), this, SLOT( slotReturnPressed() ) );
@@ -675,7 +675,7 @@ void KSpreadConsolidate::slotOk()
   delete this;
 }
 
-void KSpreadConsolidate::slotClose()
+void KSpreadConsolidate::slotCancel()
 {
   reject();
   delete this;

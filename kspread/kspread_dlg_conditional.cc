@@ -306,14 +306,14 @@ KSpreadconditional::KSpreadconditional( KSpreadView* parent, const char* name,co
 
   KButtonBox *bb = new KButtonBox( this );
   bb->addStretch();
-  m_pOk = bb->addButton( i18n("OK") );
+  m_pOk = bb->addButton( i18n("&OK") );
   m_pOk->setDefault( TRUE );
-  m_pClose = bb->addButton( i18n( "Close" ) );
+  m_pCancel= bb->addButton( i18n( "&Cancel" ) );
   bb->layout();
   grid1->addWidget(bb,3,0);
   init();
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
-  connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
+  connect( m_pCancel, SIGNAL( clicked() ), this, SLOT( slotCancel() ) );
 
 }
 
@@ -533,7 +533,7 @@ if(firstCond->typeOfCondition()!=None)
 }
 
 
-void KSpreadconditional::slotClose()
+void KSpreadconditional::slotCancel()
 {
 reject();
 }

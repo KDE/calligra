@@ -37,7 +37,7 @@ public:
 
 public slots:
   void slotOk();
-  void slotClose();
+  void slotCancel();
   void slotDoubleClicked(QListBoxItem *);
   void slotRemove();
   void slotHighlighted(QListBoxItem *);
@@ -46,7 +46,7 @@ protected:
 
   QListBox * list;
   QPushButton* m_pOk;
-  QPushButton* m_pClose;
+  QPushButton* m_pCancel;
   QPushButton* m_pRemove;
   QLabel *rangeName;
 };

@@ -45,9 +45,9 @@ KSpreadShowColRow::KSpreadShowColRow( KSpreadView* parent, const char* name,Show
 
   KButtonBox *bb = new KButtonBox( this );
   bb->addStretch();
-  m_pOk = bb->addButton( i18n("OK") );
+  m_pOk = bb->addButton( i18n("&OK") );
   m_pOk->setDefault( TRUE );
-  m_pClose = bb->addButton( i18n( "Close" ) );
+  m_pCancel= bb->addButton( i18n( "&Cancel" ) );
   bb->layout();
   lay1->addWidget( bb );
   bool showColNumber=m_pView->activeTable()->getShowColumnNumber();
@@ -98,7 +98,7 @@ KSpreadShowColRow::KSpreadShowColRow( KSpreadView* parent, const char* name,Show
   //selection multiple
   list->setSelectionMode(QListBox::Multi);
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
-  connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
+  connect( m_pCancel, SIGNAL( clicked() ), this, SLOT( slotCancel() ) );
   connect( list, SIGNAL(doubleClicked(QListBoxItem *)),this,SLOT(slotDoubleClicked(QListBoxItem *)));
   resize( 200, 150 );
 
@@ -131,7 +131,7 @@ void KSpreadShowColRow::slotOk()
   accept();
 }
 
-void KSpreadShowColRow::slotClose()
+void KSpreadShowColRow::slotCancel()
 {
   reject();
 }

@@ -37,13 +37,13 @@ public:
 
 public slots:
     void slotOk();
-    void slotClose();
+    void slotCancel();
 
 private:
   KSpreadView* m_pView;
 
   QPushButton* m_pOk;
-  QPushButton* m_pClose;
+  QPushButton* m_pCancel;
   QRadioButton *rb1;
   QRadioButton *rb2;
   QRect  rect;
