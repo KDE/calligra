@@ -3,4 +3,13 @@ Changes from 1.1 to 1.2
 - bug fixes :-)
 - support up to 2^15 columns
 - add support for spell-check
+- new statistical functions: CHIDIST, FDIST, TDIST, CONFIDENCE, 
+  POISSON, GAMMALN, NORMINV, NORMSINV, WEIBULL, EXPONDIST, 
+  NORMDIST, NORMSDIST, FISHER, FISHERINV, LOGNORMDIST,
+  BETADIST, GAMMADIST, PHI, GAUSS, MEDIAN
+- new conversion functions: INT2BOOL, CharToAscii, AsciiToChar,
+  BOOL2STRING, NUM2STRING, BOOL2INT
+- new functions: DIV, LCD, PRODUCT, LCM, TOGGLE, TRIM, ABS,
+- new text functions: COMPARE, CLEAN, SLEEK, PROPER, REPLACE
+- new date/time functions: DAYS, WEEKS, MONTHS, YEARS
 - move functions in kspread_interpreter into several kspread_functions_*.cc
