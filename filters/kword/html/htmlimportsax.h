@@ -19,5 +19,82 @@
    Boston, MA 02111-1307, USA.
 */
 
+#ifndef HTMLIMPORTSAX_H
+#define HTMLIMPORTSAX_H
+
+#include<qxml.h>
+#include<qdom.h>
+
 bool saxfilter(QXmlInputSource& source, const QString &fileOut);
 bool saxfilter(const QString &fileIn, const QString &fileOut);
+
+class CSS2Styles
+{
+public:
+    CSS2Styles() {};
+    CSS2Styles(QString newName, void* newValue) : name(newName), value(newValue) {};
+    virtual ~CSS2Styles() {};
+    QString name;
+    void* value;
+};
+
+void TreatCSS2Styles(QString strProps,QValueList<CSS2Styles> &css2StylesList);
+
+enum StackItemElementType{
+    ElementTypeUnknown  = 0,
+    ElementTypeBottom,      // Bottom of the stack
+    ElementTypeHtml,        // <html>
+    ElementTypeBody,        // <body>
+    ElementTypeParagraph,   // <p>
+    ElementTypeSpan,        // <span>
+    ElementTypeDisplayNone  // Do not display, nor its children!
+};
+
+class StackItem
+{
+public:
+    StackItem()
+    {
+        elementName="-none-";
+        fontName="times"; //Default font
+        fontSize=0; //No explicit font size
+        italic=false;
+        bold=false;
+        underline=false;
+        strikeout=false;
+        red=0;
+        green=0;
+        blue=0;
+        textPosition=0;
+    }
+    ~StackItem()
+    {
+    }
+public:
+    StackItemElementType elementType;
+    QDomNode    stackNode,stackNode2;
+    QString     elementName; // Name of the element
+
+    QString     fontName;
+    int         fontSize;
+    int         pos; //Position
+    bool        italic;
+    bool        bold;
+    bool        underline;
+    bool        strikeout;
+    int         red;
+    int         green;
+    int         blue;
+    int         textPosition; //Normal (0), subscript(1), superscript (2)
+};
+
+bool TransformCSS2ToStackItem(StackItem* stackItem, StackItem* stackCurrent, QString strStyle);
+bool StartElementSpan(StackItem* stackItem, StackItem* stackCurrent, const QString& strStyleLocal, const QString& strStyleAttribute);
+bool charactersElementSpan (StackItem* stackItem, const QString & ch);
+bool EndElementSpan (StackItem* stackItem, StackItem* stackCurrent);
+bool StartElementP(StackItem* stackItem, StackItem* stackCurrent, QDomElement& mainFramesetElement,
+        const QString& strStyleLocal, const QString& strStyleAttribute, const QString& strAlign);
+bool charactersElementP (StackItem* stackItem, const QString & ch);
+bool EndElementP (StackItem* stackItem);
+
+#endif // HTMLIMPORTSAX_H

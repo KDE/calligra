@@ -39,18 +39,8 @@
 // Tags in lower case (e.g. <p>) are HTML's ones.
 // Tags in upper case (e.g. <TEXT>) are KWord's ones.
 
-class CSS2Styles
-{
-public:
-    CSS2Styles() {};
-    CSS2Styles(QString newName, void* newValue) : name(newName), value(newValue) {};
-    virtual ~CSS2Styles() {};
-    QString name;
-    void* value;
-};
-
 // Treat the "style" attribute of tags and split it in separates names and values
-static void TreatCSS2Styles(QString strProps,QValueList<CSS2Styles> &css2StylesList)
+void TreatCSS2Styles(QString strProps,QValueList<CSS2Styles> &css2StylesList)
 {
     if (strProps.isEmpty())
         return;
@@ -103,55 +93,6 @@ static void TreatCSS2Styles(QString strProps,QValueList<CSS2Styles> &css2StylesL
     }
 }
 
-enum StackItemElementType{
-    ElementTypeUnknown  = 0,
-    ElementTypeBottom,      // Bottom of the stack
-    ElementTypeHtml,        // <html>
-    ElementTypeBody,        // <body>
-    ElementTypeParagraph,   // <p>
-    ElementTypeSpan,        // <span>
-    ElementTypeDisplayNone  // Do not display, nor its children!
-};
-
-class StackItem
-{
-public:
-    StackItem()
-    {
-        elementName="-none-";
-        fontName="times"; //Default font
-        fontSize=0; //No explicit font size
-        italic=false;
-        bold=false;
-        underline=false;
-        strikeout=false;
-        red=0;
-        green=0;
-        blue=0;
-        textPosition=0;
-    }
-    ~StackItem()
-    {
-    }
-public:
-    StackItemElementType elementType;
-    QDomNode    stackNode,stackNode2;
-    QString     elementName; // Name of the element
-
-    QString     fontName;
-    int         fontSize;
-    int         pos; //Position
-    bool        italic;
-    bool        bold;
-    bool        underline;
-    bool        strikeout;
-    int         red;
-    int         green;
-    int         blue;
-    int         textPosition; //Normal (0), subscript(1), superscript (2)
-};
-
-
 class StructureParser : public QXmlDefaultHandler
 {
 public:
@@ -183,7 +124,7 @@ private:
     MapTag mapTag;
 };
 
-static bool TransformCSS2ToStackItem(StackItem* stackItem, StackItem* /* stackCurrent */, QString strStyle)
+bool TransformCSS2ToStackItem(StackItem* stackItem, StackItem* /* stackCurrent */, QString strStyle)
 {
     // TODO: do real CSS2 (this is just a very narrow part of its possibilities)
     // Initialize the QStrings with the previous values of the properties they represent!

@@ -27,6 +27,7 @@
 
 #include "htmlimportwell.h"
 #include "htmlimportsax.h"
+#include "ImportListener.h"
 
 HTMLImport::HTMLImport(KoFilter *parent, const char*name) :
                      KoFilter(parent, name) {
@@ -97,10 +98,18 @@ bool HTMLImport::filter(const QString &fileIn, const QString &fileOut,
         kdDebug(30503) << "Calling XHTML filter" << endl;
         result=saxfilter(fileIn,fileOut);
     }
+#if 1
+    else
+    {
+        kdDebug(30503) << "Calling HTML filter" << endl;
+        result=HtmlFilter(fileIn,fileOut);
+    }
+#else
     else
     { // We have not a XML file, so we must make two passes
         kdDebug(30503) << "Calling two pass filter" << endl;
         result=TwoPassFilter(fileIn,fileOut);
     }
+#endif
     return result;
 }
