@@ -198,7 +198,7 @@ VConfigMiscPage::VConfigMiscPage( KarbonView* view, QVBox* box, char* name )
 	tmpQGroupBox->setTitle( i18n( "Misc" ) );
 
 	QGridLayout* grid = new QGridLayout(
-							tmpQGroupBox, 8, 1, KDialog::marginHint() + 7, KDialog::spacingHint() );
+							tmpQGroupBox, 4, 2, KDialog::marginHint() + 7, KDialog::spacingHint() );
 
 	m_oldUndoRedo = 30;
 
@@ -217,13 +217,9 @@ VConfigMiscPage::VConfigMiscPage( KarbonView* view, QVBox* box, char* name )
 	m_undoRedo->setLabel( i18n( "Undo/redo limit:" ) );
 	m_undoRedo->setRange( 10, 60, 1 );
 
-	grid->addWidget( m_undoRedo, 0, 0 );
+	grid->addMultiCellWidget( m_undoRedo, 0, 0, 0, 1 );
 
-
-	QHBox *lay = new QHBox( box );
-	lay->setSpacing( KDialog::spacingHint() );
-	/*QLabel *unitLabel =*/
-	new QLabel(  i18n(  "Units:" ),  lay );
+	grid->addWidget( new QLabel(  i18n(  "Units:" ), tmpQGroupBox ), 1, 0 );
 
 	QStringList listUnit;
 	listUnit << KoUnit::unitDescription( KoUnit::U_MM );
@@ -231,8 +227,9 @@ VConfigMiscPage::VConfigMiscPage( KarbonView* view, QVBox* box, char* name )
 	listUnit << KoUnit::unitDescription( KoUnit::U_DM );
 	listUnit << KoUnit::unitDescription( KoUnit::U_INCH );
 	listUnit << KoUnit::unitDescription( KoUnit::U_PT );
-	m_unit = new QComboBox( lay );
+	m_unit = new QComboBox( tmpQGroupBox );
 	m_unit->insertStringList( listUnit );
+	grid->addWidget( m_unit, 1, 1 );
 	m_oldUnit = 0;
 
 	switch( KoUnit::unit( unitType ) )
