@@ -23,6 +23,8 @@
 #define KWORD_1_3_OASIS_GENERATOR
 
 class QString;
+class QTextStream;
+class KZip;
 class KWord13Document;
 
 class KWord13OasisGenerator
@@ -36,6 +38,18 @@ public:
 protected:
     QString escapeOOText(const QString& strText) const;
     QString escapeOOSpan(const QString& strText) const;
+protected: // ZIP methods
+    bool zipPrepareWriting(const QString& name);
+    bool zipDoneWriting(void);
+    bool zipWriteData(const char* str);
+    bool zipWriteData(const QByteArray& array);
+    bool zipWriteData(const QCString& cstr);
+    bool zipWriteData(const QString& str); ///< Assumes UTF-8
+protected:
+    KZip* m_zip; ///< Output OOWriter file
+    uint m_size; ///< Size of ZIP entry
+    QTextStream* m_streamOut;
+    QByteArray m_contentBody; ///< office:body element of content.xml
 };
 
 #endif // KWORD_1_3_OASIS_GENERATOR

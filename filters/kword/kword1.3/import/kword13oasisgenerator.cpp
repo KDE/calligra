@@ -20,14 +20,16 @@
 */
 
 #include <qstring.h>
+#include <qtextstream.h>
 
 #include <kdebug.h>
+#include <kzip.h>
 
 #include <kword13document.h>
 
 #include "kword13oasisgenerator.h"
 
-KWord13OasisGenerator::KWord13OasisGenerator( void )
+KWord13OasisGenerator::KWord13OasisGenerator( void ) : m_zip( 0 ), m_streamOut( 0 )
 {
 }
 
@@ -203,10 +205,97 @@ QString KWord13OasisGenerator::escapeOOSpan(const QString& strText) const
     return strReturn;
 }
 
+bool KWord13OasisGenerator::zipPrepareWriting(const QString& name)
+{
+    if (!m_zip)
+        return false;
+    m_size=0;
+    return m_zip->prepareWriting(name, QString::null, QString::null, 0);
+}
+
+bool KWord13OasisGenerator::zipDoneWriting(void)
+{
+    if (!m_zip)
+        return false;
+    return m_zip->doneWriting(m_size);
+}
+
+bool KWord13OasisGenerator::zipWriteData(const char* str)
+{
+    if (!m_zip)
+        return false;
+    const uint size=strlen(str);
+    m_size+=size;
+    return m_zip->writeData(str,size);
+}
+
+bool KWord13OasisGenerator::zipWriteData(const QByteArray& array)
+{
+    if (!m_zip)
+        return false;
+    const uint size=array.size();
+    m_size+=size;
+    return m_zip->writeData(array.data(),size);
+}
+
+bool KWord13OasisGenerator::zipWriteData(const QCString& cstr)
+{
+    if (!m_zip)
+        return false;
+    const uint size=cstr.length();
+    m_size+=size;
+    return m_zip->writeData(cstr.data(),size);
+}
+
+bool KWord13OasisGenerator::zipWriteData(const QString& str)
+{
+    return zipWriteData(str.utf8());
+}
+
 
 
 bool KWord13OasisGenerator::generate ( const QString& fileName, KWord13Document& kwordDocument )
 {
+    m_streamOut = new QTextStream( m_contentBody, IO_WriteOnly );
+    m_streamOut->setEncoding( QTextStream::UnicodeUTF8 );
+    
+    // ### TODO
+    
+    m_zip = new KZip( fileName ); // How to check failure?
+
+    if (!m_zip->open(IO_WriteOnly))
+    {
+        kdError(30520) << "Could not open ZIP file for writing! Aborting!" << endl;
+        delete m_zip;
+        m_zip=NULL;
+        return false;
+    }
+
+    m_zip->setCompression( KZip::NoCompression );
+    m_zip->setExtraField( KZip::NoExtraField );
+
+    const QCString appId( "application/vnd.sun.xml.writer" );
+
+    m_zip->writeFile( "mimetype", QString::null, QString::null, appId.length(), appId.data() );
+
+    m_zip->setCompression( KZip::DeflateCompression );
+
+    // ### TODO
+    if (m_zip)
+    {
+        kdDebug(30520) << "Writing content..." << endl;
+    // ### TODO        writeContentXml();
+        kdDebug(30520) << "Writing meta..." << endl;
+    // ### TODO        writeMetaXml();
+        kdDebug(30520) << "Writing styles..." << endl;
+    // ### TODO        writeStylesXml();
+        kdDebug(30520) << "Closing ZIP..." << endl;
+        m_zip->close();
+    }
+    kdDebug(30520) << "Deleting ZIP..." << endl;
+    delete m_zip;
+    m_zip=NULL;
+    
     return true;
 }
 
