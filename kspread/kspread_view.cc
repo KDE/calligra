@@ -243,13 +243,13 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
                               SLOT( precisionMinus() ), actionCollection(), "precminus");
     m_money = new KToggleAction( i18n("Money format"), "money", 0, actionCollection(), "money");
     connect( m_money, SIGNAL( toggled( bool ) ), this, SLOT( moneyFormat( bool ) ) );
-    m_alignLeft = new KToggleAction( i18n("Align left"), "left", 0, actionCollection(), "left");
+    m_alignLeft = new KToggleAction( i18n("Align left"), "text_left", 0, actionCollection(), "left");
     connect( m_alignLeft, SIGNAL( toggled( bool ) ), this, SLOT( alignLeft( bool ) ) );
     m_alignLeft->setExclusiveGroup( "Align" );
-    m_alignCenter = new KToggleAction( i18n("Align center"), "center", 0, actionCollection(), "center");
+    m_alignCenter = new KToggleAction( i18n("Align center"), "text_center", 0, actionCollection(), "center");
     connect( m_alignCenter, SIGNAL( toggled( bool ) ), this, SLOT( alignCenter( bool ) ) );
     m_alignCenter->setExclusiveGroup( "Align" );
-    m_alignRight = new KToggleAction( i18n("Align right"), "right", 0, actionCollection(), "right");
+    m_alignRight = new KToggleAction( i18n("Align right"), "text_right", 0, actionCollection(), "right");
     connect( m_alignRight, SIGNAL( toggled( bool ) ), this, SLOT( alignRight( bool ) ) );
     m_alignRight->setExclusiveGroup( "Align" );
 
@@ -390,7 +390,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
                         actionCollection(), "insertMathExpr" );
     (void) new KAction( i18n("&Series..."),"series", 0, this, SLOT( insertSeries() ), actionCollection(), "series" );
     (void) new KAction( i18n("&Hyperlink..."), 0, this, SLOT( insertHyperlink() ), actionCollection(), "insertHyperlink" );
-    (void) new KAction( i18n("&Object..."), "parts", 0, this, SLOT( insertObject() ),
+    (void) new KAction( i18n("&Object..."), "frame_query", 0, this, SLOT( insertObject() ),
                         actionCollection(), "insertPart");
     (void) new KAction( i18n("&Chart"), "frame_chart", 0, this, SLOT( insertChart() ), actionCollection(), "insertChart" );
 
