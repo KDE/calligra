@@ -143,8 +143,8 @@ k_dcop:
     virtual int getCurrentPageNum();
 
     // in both modes
-    virtual float getCurrentFaktor();
-    
+    virtual double getCurrentFaktor();
+
 private:
     KPresenterView *view;
 

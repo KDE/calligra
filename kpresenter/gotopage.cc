@@ -8,7 +8,7 @@
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
    Library General Public License for more details.
 
    You should have received a copy of the GNU Library General Public License
@@ -29,12 +29,12 @@
 #include <klocale.h>
 
 /******************************************************************/
-/* class KPGotoPage                                               */
+/* class KPGotoPage						  */
 /******************************************************************/
 
 /*================================================================*/
 KPGotoPage::KPGotoPage( const QValueList<int> &slides, int start,
-                        QWidget *parent, const char *name, WFlags f )
+			QWidget *parent, const char *name, WFlags f )
     : QFrame( parent, name, f ), _default( start ), page( start )
 {
     label = new QLabel( i18n( "Goto Page:" ), this );
@@ -47,9 +47,9 @@ KPGotoPage::KPGotoPage( const QValueList<int> &slides, int start,
     unsigned int i = 0;
     for ( unsigned int j = 0; it != slides.end(); ++it, ++j )
     {
-        spinbox->insertItem( QString( "%1" ).arg( *it ), -1 );
-        if ( *it == start )
-            i = j;
+	spinbox->insertItem( QString( "%1" ).arg( *it ), -1 );
+	if ( *it == start )
+	    i = j;
     }
     spinbox->setCurrentItem( i );
 
@@ -65,10 +65,10 @@ KPGotoPage::KPGotoPage( const QValueList<int> &slides, int start,
     spinbox->setFocus();
 
     resize( spinbox->width() + label->width() + 16,
-            QMAX( spinbox->height(), label->height() ) + 10 );
+	    QMAX( spinbox->height(), label->height() ) + 10 );
 
     move( ( kapp->desktop()->width() - width() ) / 2,
-          ( kapp->desktop()->height() - height() ) / 2 );
+	  ( kapp->desktop()->height() - height() ) / 2 );
 
     show();
 }
@@ -77,7 +77,7 @@ KPGotoPage::KPGotoPage( const QValueList<int> &slides, int start,
 int KPGotoPage::gotoPage( const QValueList<int> &slides, int start, QWidget *parent)
 {
     KPGotoPage dia( slides, start,parent, 0L,
-                    Qt::WStyle_Customize | Qt::WStyle_NoBorder | Qt::WStyle_Tool | Qt::WType_Popup );
+		    Qt::WStyle_Customize | Qt::WStyle_NoBorder | Qt::WStyle_Tool | Qt::WType_Popup );
 
     kapp->enter_loop();
 
@@ -93,49 +93,49 @@ bool KPGotoPage::eventFilter( QObject * /*obj*/, QEvent *e )
 
     if ( e->type() == QEvent::KeyPress )
     {
-        QKeyEvent *ke = dynamic_cast<QKeyEvent*>( e );
-        if ( ke->key() == Key_Enter || ke->key() == Key_Return )
-        {
-            page = spinbox->currentText().toInt();
+	QKeyEvent *ke = dynamic_cast<QKeyEvent*>( e );
+	if ( ke->key() == Key_Enter || ke->key() == Key_Return )
+	{
+	    page = spinbox->currentText().toInt();
 
-            spinbox->releaseMouse();
-            spinbox->releaseKeyboard();
+	    spinbox->releaseMouse();
+	    spinbox->releaseKeyboard();
 
-            kapp->exit_loop();
-            hide();
+	    kapp->exit_loop();
+	    hide();
 
-            return true;
-        }
-        else if ( ke->key() == Key_Escape )
-        {
-            page = _default;
+	    return true;
+	}
+	else if ( ke->key() == Key_Escape )
+	{
+	    page = _default;
 
-            spinbox->releaseMouse();
-            spinbox->releaseKeyboard();
+	    spinbox->releaseMouse();
+	    spinbox->releaseKeyboard();
 
-            kapp->exit_loop();
-            hide();
+	    kapp->exit_loop();
+	    hide();
 
-            return true;
-        }
-        else if ( ke->key() == Key_Down )
-        {
-            if ( spinbox->currentItem() < spinbox->count() )
-            {
-                spinbox->setCurrentItem( spinbox->currentItem() + 1 );
-                page = spinbox->currentText().toInt();
-            }
-            return true;
-        }
-        else if ( ke->key() == Key_Up )
-        {
-            if ( spinbox->currentItem() > 0 )
-            {
-                spinbox->setCurrentItem( spinbox->currentItem() - 1 );
-                page = spinbox->currentText().toInt();
-            }
-            return true;
-        }
+	    return true;
+	}
+	else if ( ke->key() == Key_Down )
+	{
+	    if ( spinbox->currentItem() < spinbox->count() )
+	    {
+		spinbox->setCurrentItem( spinbox->currentItem() + 1 );
+		page = spinbox->currentText().toInt();
+	    }
+	    return true;
+	}
+	else if ( ke->key() == Key_Up )
+	{
+	    if ( spinbox->currentItem() > 0 )
+	    {
+		spinbox->setCurrentItem( spinbox->currentItem() - 1 );
+		page = spinbox->currentText().toInt();
+	    }
+	    return true;
+	}
     }
     return false;
 }

@@ -69,7 +69,7 @@ DCOPRef KPresenterDocIface::getPage( int num )
 		    doc->backgroundList()->at( num )->dcopObject()->objId() );
 }
 
-int KPresenterDocIface::getPageOfObj( int obj, float faktor )
+int KPresenterDocIface::getPageOfObj( int obj, double faktor )
 {
     return doc->getPageOfObj( obj, 0, 0, faktor ) - 1;
 }

@@ -509,4 +509,4 @@ Reggie, 6.11.1999:
 ------------------
 - Fixed some crashing code
 - Improved presentation structure viewer a bit
-
+- More fixes (mainly for scripting)

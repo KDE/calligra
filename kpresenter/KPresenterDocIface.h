@@ -41,7 +41,7 @@ k_dcop:
     virtual DCOPRef getObject( int num );
     virtual int getNumPages();
     virtual DCOPRef getPage( int num );
-    int getPageOfObj( int obj, float faktor );
+    int getPageOfObj( int obj, double faktor );
 
 private:
     KPresenterDoc *doc;

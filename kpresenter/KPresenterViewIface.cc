@@ -470,8 +470,8 @@ int KPresenterViewIface::getCurrentPageNum()
     return view->getCurrPgNum();
 }
 
-float KPresenterViewIface::getCurrentFaktor()
+double KPresenterViewIface::getCurrentFaktor()
 {
-    return view->getCurrentFaktor();
+    return (double)view->getCurrentFaktor();
 }
 
