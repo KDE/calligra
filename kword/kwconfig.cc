@@ -400,7 +400,7 @@ void ConfigureMiscPage::apply()
 
 void ConfigureMiscPage::slotDefault()
 {
-    //todo
+   columnSpacing->setValue(KWUnit::userValue( 3, m_pView->kWordDocument()->getUnit() ));
 }
 
 #include "kwconfig.moc"
