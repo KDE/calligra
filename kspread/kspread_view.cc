@@ -5,6 +5,7 @@
 #include <kapp.h>
 #include <qpushbt.h>
 #include <qmsgbox.h>
+#include <qprndlg.h>
 #include <iostream.h>
 #include <stdlib.h>
 #include <qobjcoll.h>
@@ -37,6 +38,9 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* _doc 
   Control_impl::setFocusPolicy( OPControls::Control::ClickFocus ); 
 
   m_lstFrames.setAutoDelete( true );  
+#ifdef USE_PICTURE
+  m_lstPictures.setAutoDelete( true );
+#endif
 
   m_pDoc = _doc;
 
@@ -682,18 +686,42 @@ void KSpreadView::newView()
 CORBA::Boolean KSpreadView::printDlg()
 {
   // Open some printer dialog
-  QPrinter prt;
+  /* QPrinter prt;
   if ( !KoPrintDia::print( prt, m_pDoc, SLOT( paperLayoutDlg() ) ) )
-    return true;
+    return true; */
   
-  QPainter painter;
-  painter.begin( &prt );
-  // Print the table and tell that m_pDoc is NOT embedded.
-  m_pTable->print( painter, FALSE, &prt );
-  painter.end();
-
+  QPrinter prt;
+  if ( QPrintDialog::getPrinterSetup( &prt ) )
+  {    
+    QPainter painter;
+    painter.begin( &prt );
+    // Print the table and tell that m_pDoc is NOT embedded.
+    m_pTable->print( painter, &prt );
+    painter.end();
+  }
+  
   return true;
 }
+
+#ifdef USE_PICTURES
+void KSpreadView::markChildPicture( KSpreadChildPicture *_pic )
+{
+  KSpreadChildFrame *p = new KSpreadChildFrame( this, (KSpreadChild*)_pic->child() );
+  p->setGeometry( _pic->geometry() );
+  p->attach( _pic->picture() );
+  p->partChangedState( OPParts::Part::Marked );
+  p->show();
+
+  m_lstFrames.append( p );
+  
+  QObject::connect( p, SIGNAL( sig_geometryEnd( PartFrame_impl* ) ),
+		    this, SLOT( slotChildGeometryEnd( PartFrame_impl* ) ) );
+  QObject::connect( p, SIGNAL( sig_moveEnd( PartFrame_impl* ) ),
+		    this, SLOT( slotChildMoveEnd( PartFrame_impl* ) ) );  
+
+  m_lstPictures.removeRef( _pic );
+}
+#endif
 
 void KSpreadView::insertChart( const QRect& _geometry )
 {
@@ -719,62 +747,34 @@ void KSpreadView::slotInsertChild( KSpreadChild *_child )
   if ( _child->table() != m_pTable )
     return;
 
-  OPParts::Document_var doc = _child->document();
-  OPParts::View_var v;
-
-  try
-  { 
-    /* CORBA::Object_var obj;
-    obj = doc->createView();
-    if( !CORBA::is_nil( obj ) )
-    {
-      // Narrow by hand
-      CORBA::Object_ptr p = obj;
-      OPParts::View_ptr view_stub = new OPParts::View_stub;
-      view_stub->CORBA::Object::operator=( *p );
-      v = view_stub;
-    }
-    else
-      cerr << "Shit! We did not get a view!!!" << endl; */
-    cout << "SYNC1\n" << endl;
-    v = doc->createView();
-    cout << "SYNC2\n" << endl;
-  }
-  catch ( OPParts::Document::MultipleViewsNotSupported &_ex )
+#ifdef USE_PICTURE
+  if ( _child->draw( false ) )
   {
-    // HACK
-    printf("void KSpreadView::slotInsertObject( const QRect& _rect, OPParts::Document_ptr _doc )\n");
-    printf("Could not create view\n");
-    exit(1);
+    cout << "!!!!!!!! DOING IT WITH A PICTURE !!!!!!!!!" << endl;
+    
+    KSpreadChildPicture *p = new KSpreadChildPicture( this, _child );
+    m_lstPictures.append( p );
+    update();
+    return;
   }
+#endif
 
-  if ( CORBA::is_nil( v ) )
-  {
-    printf("void KSpreadView::slotInsertObject( const QRect& _rect, OPParts::Document_ptr _doc )\n");
-    printf("return value is 0L\n");
-    exit(1);
-  }
-
-  v->setMode( OPParts::Part::ChildMode );
-  v->setPartShell( partShell() );
-
-  cout << "SYNC3\n" << endl;
   KSpreadChildFrame *p = new KSpreadChildFrame( this, _child );
-  cout << "SYNC3b\n" << endl;
-  p->show();
-  cout << "SYNC4\n" << endl;
   p->setGeometry( _child->geometry() );
-  cout << "SYNC5\n" << endl;
-  p->attach( v );
-  cout << "SYNC6\n" << endl;
-
   m_lstFrames.append( p );
-  
+
+  OPParts::PartShell_var shell = partShell();
+  OPParts::View_var v = _child->createView( shell );
+  if ( !CORBA::is_nil( v ) )
+    p->attach( v );
+
   QObject::connect( p, SIGNAL( sig_geometryEnd( PartFrame_impl* ) ),
 		    this, SLOT( slotChildGeometryEnd( PartFrame_impl* ) ) );
   QObject::connect( p, SIGNAL( sig_moveEnd( PartFrame_impl* ) ),
 		    this, SLOT( slotChildMoveEnd( PartFrame_impl* ) ) );  
-} 
+
+  p->show();
+}
 
 void KSpreadView::slotChildGeometryEnd( PartFrame_impl* _frame )
 {
@@ -1960,36 +1960,27 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     m_ptGeometryStart = _ev->pos();
     m_ptGeometryEnd = _ev->pos();
     m_bGeometryStarted = FALSE;
-    // m_eAction = DefaultAction;
     m_eMouseAction = ChildGeometry;
-      
-      /* KPart *bp = pKSpread->shell()->newPart( "kchart", m_pView->canvasWidget() );
-
-	ChartPart *cp = (ChartPart*)bp;
-	cp->visual()->hide();
-
-	cp->setKSpreadTable( this );
-	QString r = "A1:D3";
-	if ( selection.left() != 0 && selection.right() != 0x7fff && selection.bottom() != 0x7fff )
-	{
-	    QString t = table->columnLabel( selection.left() );
-	    QString t2 = table->columnLabel( selection.right() );
-	    r.sprintf( "%s%i:%s%i", t.data(), selection.top(), t2.data(), selection.bottom() );
-	}
-	
-	if ( cp->wizard( r ) )
-	{
-	    cp->visual()->setGeometry( _ev->pos().x(), _ev->pos().y(), 200, 200 );
-	    cp->visual()->show();
-	    appendPart( cp );
-	    unselect();
-	}
-	else
-	    delete bp;
-	    */
-	return;
+    return;
   }
-  
+
+#ifdef USE_PICTURE
+  if ( _ev->button() == LeftButton )
+  {
+    QPoint p( _ev->pos().x() + m_pView->xOffset(), _ev->pos().y() + m_pView->yOffset() );
+    
+    QListIterator<KSpreadChildPicture> it = m_pView->pictures();
+    for( ; it != 0L; ++it )
+    {
+      if ( it.current()->geometry().contains( p ) )
+      {
+	m_pView->markChildPicture( it.current() );
+	return;
+      }
+    }
+  }
+#endif
+
   QRect selection( table->selection() );
   
   // Get the position and size of the marker
@@ -2156,7 +2147,22 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
 
     ypos += row_lay->height( m_pView );
   }
-  
+
+#ifdef USE_PICTURES
+  QListIterator<KSpreadChildPicture> it = m_pView->pictures();
+  for( ; it != 0L; ++it )
+  {
+    // if ( it.current()->geometry().intersects( _ev->rect() ) )
+    {
+      painter.translate( it.current()->geometry().left() - m_pView->xOffset(),
+			 it.current()->geometry().top() - m_pView->yOffset() );
+      painter.drawPicture( *(it.current()->picture() ) );
+      painter.translate( - it.current()->geometry().left() - m_pView->xOffset(),
+			 - it.current()->geometry().top() - m_pView->yOffset() );
+    }
+  }
+#endif
+
   painter.end();
 
   m_pView->showMarker();
@@ -3128,6 +3134,34 @@ KSpreadChildFrame::KSpreadChildFrame( KSpreadView* _view, KSpreadChild* _child )
 {
   m_pView = _view;
   m_pChild = _child;
+
+  QObject::connect( this, SIGNAL( sig_attachPart( PartFrame_impl* ) ), this, SLOT( slotAttachPart( PartFrame_impl* ) ) );
 }
+
+void KSpreadChildFrame::slotAttachPart( PartFrame_impl* )
+{
+  OPParts::PartShell_var shell = m_pView->partShell();
+  OPParts::View_var v = m_pChild->createView( shell );
+  if ( !CORBA::is_nil( v ) )
+    attach( v );
+}
+
+/**********************************************************
+ *
+ * KSpreadChildPicture
+ *
+ **********************************************************/
+
+#ifdef USE_PICTURE
+KSpreadChildPicture::KSpreadChildPicture( KSpreadView* _view, KSpreadChild* _child )
+  : KoDocumentChildPicture( _child )
+{
+  m_pView = _view;
+}
+
+KSpreadChildPicture::~KSpreadChildPicture()
+{
+}
+#endif
 
 #include "kspread_view.moc"

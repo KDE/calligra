@@ -15,6 +15,7 @@
 #include <qbuffer.h>
 #include <qmsgbox.h>
 #include <qclipbrd.h>
+#include <qpicture.h>
 
 #include "kspread_table.h"
 #include "kspread_view.h"
@@ -1300,7 +1301,7 @@ void KSpreadTable::deleteSelection( const QPoint &_marker )
 	pGui->canvasWidget()->repaint(); */
 }
     
-void KSpreadTable::print( QPainter &painter, bool _asChild, QPrinter *_printer )
+void KSpreadTable::print( QPainter &painter, QPrinter *_printer )
 {
     unsigned int pages = 1;
 
@@ -1320,21 +1321,15 @@ void KSpreadTable::print( QPainter &painter, bool _asChild, QPrinter *_printer )
     QList<QRect> page_list;
     page_list.setAutoDelete( TRUE );
     
-    // Calculate the printable area
-    // QRect rect = painter.window();
-    QRect rect( (int)(MM_TO_POINT * m_pDoc->leftBorder() ), (int)(MM_TO_POINT * m_pDoc->topBorder() ),
-		(int)(MM_TO_POINT * m_pDoc->printableWidth() ),
-		(int)(MM_TO_POINT * m_pDoc->printableHeight() ) );
-
-    if ( _asChild )
-	rect.setCoords( 0, 0, (int)m_pDoc->printableWidth(), (int)m_pDoc->printableHeight() );
+    QRect rect;
+    rect.setCoords( 0, 0, (int)m_pDoc->printableWidth(), (int)m_pDoc->printableHeight() );
     
     // Up to this row everything is already printed
     int bottom = 0;
     // Start of the next page
     int top = 1;
     // Calculate all pages, but if we are embedded, print only the first one
-    while ( bottom < cell_range.bottom() && ( page_list.count() == 0 || !_asChild ) )
+    while ( bottom < cell_range.bottom() && page_list.count() == 0 )
     {
 	// Up to this column everything is already printed
 	int right = 0;
@@ -1378,130 +1373,112 @@ void KSpreadTable::print( QPainter &painter, bool _asChild, QPrinter *_printer )
 	
 	top = bottom + 1;
     }
-
+    
     int pagenr = 1;
     
     // Print all pages in the list
     QRect *p;
     for ( p = page_list.first(); p != 0L; p = page_list.next() )
     {
-	// print head line only if we are not embedded
-	if ( !_asChild )
-	{
-	    QFont font( "Times", 10 );
-	    painter.setFont( font );
-	    QFontMetrics fm = painter.fontMetrics();
-	    int w = fm.width( m_pDoc->headLeft( pagenr, m_strName ) );
-	    if ( w > 0 )
-		painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() ),
-				  (int)( MM_TO_POINT * 10.0 ), m_pDoc->headLeft( pagenr, m_strName ) );
-	    w = fm.width( m_pDoc->headMid( pagenr, m_strName ) );
-	    if ( w > 0 )
-		painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() +
-					 ( MM_TO_POINT * m_pDoc->printableWidth() - (float)w ) / 2.0 ),
-				  (int)( MM_TO_POINT * 10.0 ), m_pDoc->headMid( pagenr, m_strName ) );
-	    w = fm.width( m_pDoc->headRight( pagenr, m_strName ) );
-	    if ( w > 0 )
-		painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() +
-					 MM_TO_POINT * m_pDoc->printableWidth() - (float)w ),
-				  (int)( MM_TO_POINT * 10.0 ), m_pDoc->headRight( pagenr, m_strName ) );
-	    
-	    // print foot line
-	    w = fm.width( m_pDoc->footLeft( pagenr, m_strName ) );
-	    if ( w > 0 )
-		painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() ),
-				  (int)( MM_TO_POINT * ( m_pDoc->paperHeight() - 10.0 ) ),
-				  m_pDoc->footLeft( pagenr, m_strName ) );
-	    w = fm.width( m_pDoc->footMid( pagenr, m_strName ) );
-	    if ( w > 0 )
-		painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() +
-					 ( MM_TO_POINT * m_pDoc->printableWidth() - (float)w ) / 2.0 ),
-				  (int)( MM_TO_POINT * ( m_pDoc->paperHeight() - 10.0 ) ),
-				  m_pDoc->footMid( pagenr, m_strName ) );
-	    w = fm.width( m_pDoc->footRight( pagenr, m_strName ) );
-	    if ( w > 0 )
-		painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() +
-					 MM_TO_POINT * m_pDoc->printableWidth() - (float)w ),
-				  (int)( MM_TO_POINT * ( m_pDoc->paperHeight() - 10.0 ) ),
-				  m_pDoc->footRight( pagenr, m_strName ) );
-	}
+	// print head line
+      QFont font( "Times", 10 );
+      painter.setFont( font );
+      QFontMetrics fm = painter.fontMetrics();
+      int w = fm.width( m_pDoc->headLeft( pagenr, m_strName ) );
+      if ( w > 0 )
+	painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() ),
+			  (int)( MM_TO_POINT * 10.0 ), m_pDoc->headLeft( pagenr, m_strName ) );
+      w = fm.width( m_pDoc->headMid( pagenr, m_strName ) );
+      if ( w > 0 )
+	painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() +
+				 ( MM_TO_POINT * m_pDoc->printableWidth() - (float)w ) / 2.0 ),
+			  (int)( MM_TO_POINT * 10.0 ), m_pDoc->headMid( pagenr, m_strName ) );
+      w = fm.width( m_pDoc->headRight( pagenr, m_strName ) );
+      if ( w > 0 )
+	painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() +
+				 MM_TO_POINT * m_pDoc->printableWidth() - (float)w ),
+			  (int)( MM_TO_POINT * 10.0 ), m_pDoc->headRight( pagenr, m_strName ) );
+      
+      // print foot line
+      w = fm.width( m_pDoc->footLeft( pagenr, m_strName ) );
+      if ( w > 0 )
+	painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() ),
+			  (int)( MM_TO_POINT * ( m_pDoc->paperHeight() - 10.0 ) ),
+			  m_pDoc->footLeft( pagenr, m_strName ) );
+      w = fm.width( m_pDoc->footMid( pagenr, m_strName ) );
+      if ( w > 0 )
+	painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() +
+				 ( MM_TO_POINT * m_pDoc->printableWidth() - (float)w ) / 2.0 ),
+			  (int)( MM_TO_POINT * ( m_pDoc->paperHeight() - 10.0 ) ),
+			  m_pDoc->footMid( pagenr, m_strName ) );
+      w = fm.width( m_pDoc->footRight( pagenr, m_strName ) );
+      if ( w > 0 )
+	painter.drawText( (int)( MM_TO_POINT * m_pDoc->leftBorder() +
+				 MM_TO_POINT * m_pDoc->printableWidth() - (float)w ),
+			  (int)( MM_TO_POINT * ( m_pDoc->paperHeight() - 10.0 ) ),
+			  m_pDoc->footRight( pagenr, m_strName ) );
 	
-	// Translate the coordinate system to match the left and upper border.
-	// But if we are embedded, we just skip this.
-	if ( !_asChild )
-	    painter.translate( MM_TO_POINT * m_pDoc->leftBorder(),
-			       MM_TO_POINT * m_pDoc->rightBorder() );
-
-	// Print the page
-	printPage( painter, p );
-	
-	// Draw all parts on this page
-	/*
-	int xpos = columnPos( p->left() );
-	int ypos = rowPos( p->top() );
-	int xpos2 = columnPos( p->right() + 1 );
-	int ypos2 = rowPos( p->bottom() + 1 );
-	QRect r;
-	r.setCoords( xpos, ypos, xpos2, ypos2 );
-	
-	KPart *part;
-	for ( part = partList.first(); part != 0L; part = partList.next() )
-	{
-	    QRect r2( part->visual()->x(), part->visual()->y(), part->visual()->width(), part->visual()->height() );
-	    if ( r.intersects( r2 ) )
-	    {
-		painter.translate( part->visual()->x() + xOffset() - xpos,
-				   part->visual()->y() + yOffset() - ypos );
-		part->print( painter );
-		painter.translate( -( part->visual()->x() + xOffset() - xpos ),
-				   -( part->visual()->y() + yOffset() - ypos ) );
-	    }
-	}
-	*/
-
-	// If we are embedded, we just skip this.
-	if ( !_asChild )
-	    painter.translate( - MM_TO_POINT * m_pDoc->leftBorder(),
-			       - MM_TO_POINT * m_pDoc->rightBorder() );
-
-	if ( pages <= page_list.count() && !_asChild )
-	    _printer->newPage();
-	pagenr++;
+      painter.translate( MM_TO_POINT * m_pDoc->leftBorder(),
+			 MM_TO_POINT * m_pDoc->rightBorder() );
+      // Print the page
+      printPage( painter, p );
+      painter.translate( - MM_TO_POINT * m_pDoc->leftBorder(),
+			 - MM_TO_POINT * m_pDoc->rightBorder() );
+      
+      if ( pages < page_list.count() )
+	_printer->newPage();
+      pagenr++;
     }
 }
 
-
 void KSpreadTable::printPage( QPainter &_painter, QRect *page_range )
 {
-    int xpos;
-    int ypos = 0;
-    int x,y;
-        
-    for ( y = page_range->top(); y <= page_range->bottom() + 1; y++ )
-    {
-	RowLayout *row_lay = rowLayout( y );
-	xpos = 0;
+  int xpos;
+  int ypos = 0;
+  int x,y;
+  
+  for ( y = page_range->top(); y <= page_range->bottom() + 1; y++ )
+  {
+    RowLayout *row_lay = rowLayout( y );
+    xpos = 0;
  
- 	for ( x = page_range->left(); x <= page_range->right() + 1; x++ )
-	{
-	    ColumnLayout *col_lay = columnLayout( x );
+    for ( x = page_range->left(); x <= page_range->right() + 1; x++ )
+    {
+      ColumnLayout *col_lay = columnLayout( x );
 
-	    // painter.window();	    
-	    KSpreadCell *cell = cellAt( x, y );
-	    if ( y > page_range->bottom() && x > page_range->right() )
-	    { /* Do nothing */ }
-	    else if ( y > page_range->bottom() )
-		cell->print( _painter, xpos, ypos, x, y, col_lay, row_lay, FALSE, TRUE );
-	    else if ( x > page_range->right() )
-		cell->print( _painter, xpos, ypos, x, y, col_lay, row_lay, TRUE, FALSE );
-	    else
-		cell->print( _painter, xpos, ypos, x, y, col_lay, row_lay, FALSE, FALSE ); 
-
-	    xpos += col_lay->width();
-	}
-
-	ypos += row_lay->height();
+      // painter.window();	    
+      KSpreadCell *cell = cellAt( x, y );
+      if ( y > page_range->bottom() && x > page_range->right() )
+	{ /* Do nothing */ }
+      else if ( y > page_range->bottom() )
+	cell->print( _painter, xpos, ypos, x, y, col_lay, row_lay, FALSE, TRUE );
+      else if ( x > page_range->right() )
+	cell->print( _painter, xpos, ypos, x, y, col_lay, row_lay, TRUE, FALSE );
+      else
+	cell->print( _painter, xpos, ypos, x, y, col_lay, row_lay, FALSE, FALSE ); 
+      
+      xpos += col_lay->width();
     }
+
+    ypos += row_lay->height();
+  }
+
+  // Draw the children
+  QListIterator<KSpreadChild> chl( m_lstChildren );
+  for( ; chl.current(); ++chl )
+  {
+    cout << "Printing child ....." << endl;
+    // HACK, dont display images that reside outside the paper
+    _painter.translate( chl.current()->geometry().left(),
+			chl.current()->geometry().top() );
+    QPicture* pic;
+    pic = chl.current()->draw();
+    cout << "Fetched picture data" << endl;
+    _painter.drawPicture( *pic );
+    cout << "Played" << endl;
+    _painter.translate( - chl.current()->geometry().left(),
+			- chl.current()->geometry().top() );
+  }
 }
 
 bool KSpreadTable::saveCellRect( ostream &out, const QRect &_rect )
@@ -2337,11 +2314,11 @@ void KSpreadTable::insertChart( const QRect& _rect, const char *_arg, const QRec
   }
   
   ChartChild* ch = new ChartChild( m_pDoc, this, _rect, doc );
-  ch->setDataArea( _data );
-  ch->setChart( chart );
-  ch->update();
+  /* ch->setDataArea( _data );
+  ch->setChart( chart ); 
+  ch->update();*/
   
-  chart->showWizard();
+  // chart->showWizard();
   
   insertChild( ch );
 }

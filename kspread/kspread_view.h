@@ -10,6 +10,8 @@ class KSpreadScripts;
 class KSpreadTable;
 class KSpreadDoc;
 class KSpreadPaperLayout;
+class KSpreadChildPicture;
+class KSpreadChildFrame;
 
 #include <part_frame_impl.h>
 #include <view_impl.h>
@@ -26,10 +28,20 @@ class KSpreadPaperLayout;
 #include "kspread_table.h"
 #include "kspread.h"
 
-class KSpreadDoc;
-
 #define YBORDER_WIDTH 50
 #define XBORDER_HEIGHT 14
+
+#ifdef USE_PICTURES
+class KSpreadChildPicture : public KoDocumentChildPicture
+{
+public:
+  KSpreadChildPicture( KSpreadView*, KSpreadChild* );
+  virtual ~KSpreadChildPicture();
+  
+protected:
+  KSpreadView *m_pView;
+};
+#endif
 
 class KSpreadChildFrame : public PartFrame_impl
 {
@@ -42,6 +54,9 @@ public:
    * @return the view owning this frame.
    */
   KSpreadView* view() { return m_pView; }
+
+public slots:
+  void slotAttachPart( PartFrame_impl* );
   
 protected:
   KSpreadChild *m_pChild;
@@ -335,6 +350,11 @@ public:
      */
     void insertChild( const QRect& _geometry, const char *_arg );
 
+#ifdef USE_PICTURE
+    QListIterator<KSpreadChildPicture> pictures() { return QListIterator<KSpreadChildPicture>( m_lstPictures ); }
+
+    void markChildPicture( KSpreadChildPicture *_pic );
+#endif
     // IDL
     virtual void setMode( OPParts::Part::Mode _mode );
     virtual void setFocus( CORBA::Boolean mode );
@@ -746,6 +766,9 @@ protected:
     int m_iYOffset;
 
     QList<KSpreadChildFrame> m_lstFrames;
+#ifdef USE_PICTURES
+    QList<KSpreadChildPicture> m_lstPictures;
+#endif
 };
 
 #endif

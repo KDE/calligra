@@ -392,7 +392,7 @@ public:
      */
     void autofill( QRect &src, QRect &dest );
 
-    void print( QPainter &painter, bool _asChild, QPrinter *_printer );
+    void print( QPainter &painter, QPrinter *_printer );
 
     void insertChart( const QRect& _geometry, const char *_arg, const QRect& _data );
     void insertChild( const QRect& _geometry, const char *_arg );
