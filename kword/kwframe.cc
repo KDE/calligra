@@ -519,7 +519,7 @@ void KWFrameSet::updateAnchors()
         }
     }
     m_anchorParag->setChanged( true );
-    kdDebug() << "KWFrameSet::updateAnchors emit repaintChanged" << endl;
+    //kdDebug() << "KWFrameSet::updateAnchors emit repaintChanged" << endl;
     emit repaintChanged( m_anchorTextFs );
 }
 
@@ -573,7 +573,7 @@ void KWFrameSet::updateFrames()
         if ( !foundThis || !frameSet->isVisible() || frameSet->isFloating() )
             continue;
 
-        kdDebug() << "KWFrameSet::updateFrames considering frameset " << frameSet << endl;
+        //kdDebug() << "KWFrameSet::updateFrames considering frameset " << frameSet << endl;
         QListIterator<KWFrame> frameIt( frameSet->frameIterator() );
         for ( ; frameIt.current(); ++frameIt )
         {
@@ -590,8 +590,8 @@ void KWFrameSet::updateFrames()
             }
         }
     }
-    kdDebug(32002) << "KWTextFrameSet " << this << " updateFrames() : frame on top:"
-                   << m_framesOnTop.count() << endl;
+    //kdDebug(32002) << "KWTextFrameSet " << this << " updateFrames() : frame on top:"
+    //               << m_framesOnTop.count() << endl;
 
     if ( isFloating() )
     { // The frame[s] might have been resized -> invalidate the parag to recompute widths & heights

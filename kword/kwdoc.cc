@@ -2152,11 +2152,11 @@ KWFrameSet *KWDocument::getFirstSelectedFrameSet() {
 /*================================================================*/
 void KWDocument::updateAllFrames()
 {
-    kdDebug(32002) << "KWDocument::updateAllFrames " << frames.count() << " framesets." << endl;
+    //kdDebug(32002) << "KWDocument::updateAllFrames " << frames.count() << " framesets." << endl;
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
-        kdDebug() << "KWDocument::updateAllFrames updating " << fit.current() << endl;
+        //kdDebug() << "KWDocument::updateAllFrames updating " << fit.current() << endl;
         fit.current()->updateFrames();
     }
 }

@@ -832,8 +832,8 @@ void KWTextFrameSet::zoom()
     if ( !m_origFontSizes.isEmpty() )
         unzoom();
     QTextFormatCollection * coll = textdoc->formatCollection();
-    double factor = kWordDocument()->zoomedResolutionY();
-    //kdDebug(32002) << this << " KWTextFrameSet::zoom " << factor << " coll=" << coll << " " << coll->dict().count() << " items " << endl;
+    double factor = kWordDocument()->zoomedResolutionY() * 72.0 / QPaintDevice::x11AppDpiY();
+    kdDebug(32002) << this << " KWTextFrameSet::zoom " << factor << " coll=" << coll << " " << coll->dict().count() << " items " << endl;
     /*kdDebug(32002) << this << " firstparag:" << textdoc->firstParag()
                    << " format:" << textdoc->firstParag()->paragFormat()
                    << " first-char's format:" << textdoc->firstParag()->at(0)->format()
@@ -1250,10 +1250,10 @@ void KWTextFrameSet::formatMore()
         if ( frames.count() > 1 && !lastFormatted && !isAHeader() && !isAFooter()
              && bottom < m_availableHeight - kWordDocument()->zoomItY( frames.last()->height() ) )
         {
-            kdDebug(32002) << "KWTextFrameSet::formatMore too much space (" << m_availableHeight << ") , trying to remove last frame" << endl;
+            kdDebug(32002) << "KWTextFrameSet::formatMore too much space (" << bottom << ", " << m_availableHeight << ") , trying to remove last frame" << endl;
             int lastPage = m_doc->getPages() - 1;
             // Last frame is empty -> try removing last page, and more if necessary
-            while ( frames.count() > 1 && bottom < m_availableHeight - kWordDocument()->zoomItY( frames.last()->height() ) )
+            while ( lastPage > 0 && frames.count() > 1 && bottom < m_availableHeight - kWordDocument()->zoomItY( frames.last()->height() ) )
             {
                 delFrame(frames.last());
                 m_doc->removePage( lastPage );
