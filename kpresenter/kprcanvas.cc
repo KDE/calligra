@@ -91,6 +91,7 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
     m_tmpHelpPoint = -1;
     tmpHelpPointPos = KoPoint( -1, -1);
     m_keyPressEvent = false;
+    m_drawSymetricLine = false;
     if ( parent ) {
         mousePressed = false;
 	drawContour = false;
@@ -1353,6 +1354,11 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
     }break;
     case INS_LINE: {
         if ( insRect.width() != 0 && insRect.height() != 0 ) {
+            if ( m_drawSymetricLine)
+            {
+              insRect.moveBy( -insRect.width(), -insRect.height());
+              insRect.setSize( 2*insRect.size() );
+            }
             if ( insRect.top() == insRect.bottom() ) {
                 bool reverse = insRect.left() > insRect.right();
                 insRect = insRect.normalize();
@@ -1638,7 +1644,17 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 		p.setBrush( NoBrush );
 		p.setRasterOp( NotROP );
 		if ( insRect.width() != 0 && insRect.height() != 0 )
-		    p.drawLine( insRect.topLeft(), insRect.bottomRight() );
+                {
+                    if ( !m_drawSymetricLine)
+                        p.drawLine( insRect.topLeft(), insRect.bottomRight() );
+                    else
+                    {
+                        QRect tmpRect( insRect );
+                        tmpRect.moveBy( -insRect.width(), -insRect.height());
+                        tmpRect.setSize( 2*insRect.size() );
+                        p.drawLine( tmpRect.topLeft(), tmpRect.bottomRight() );
+                    }
+                }
 
                 int right = ( ( e->x() + diffx() ) / rastX() ) * rastX() - diffx();
                 int bottom = ( ( e->y() + diffy() ) / rastY() ) * rastY() - diffy();
@@ -1654,7 +1670,17 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 insRect.setRight( right );
                 insRect.setBottom( bottom );
                 limitSizeOfObject();
-		p.drawLine( insRect.topLeft(), insRect.bottomRight() );
+
+                QRect lineRect( insRect );
+                if ( e->state() & AltButton )
+                {
+                    m_drawSymetricLine = true;
+                    lineRect.moveBy( -insRect.width(), -insRect.height());
+                    lineRect.setSize( 2*insRect.size() );
+                }
+                else
+                    m_drawSymetricLine = false;
+		p.drawLine( lineRect.topLeft(), lineRect.bottomRight() );
 		p.end();
 
 		mouseSelectedObject = true;
