@@ -3362,6 +3362,7 @@ void KWTextFrameSetEdit::ensureCursorVisible()
     if ( m_currentFrame )
         hintNPoint = frameSet()->kWordDocument()->zoomPoint( m_currentFrame->topLeft() );
     KWFrame * frame = textFrameSet()->internalToNormalWithHint( QPoint(x, y), p, hintNPoint );
+    //kdDebug() << "KWTextFrameSetEdit::ensureCursorVisible frame=" << frame << " m_currentFrame=" << m_currentFrame << endl;
     if ( frame && m_currentFrame != frame )
     {
         m_currentFrame = frame;
@@ -3377,7 +3378,13 @@ void KWTextFrameSetEdit::mousePressEvent( QMouseEvent *e, const QPoint & nPoint,
     mightStartDrag = FALSE;
 
     QPoint iPoint;
-    m_currentFrame = textFrameSet()->normalToInternal( nPoint, iPoint, true );
+    KWFrame * frame = textFrameSet()->normalToInternal( nPoint, iPoint, true );
+    if ( frame && m_currentFrame != frame )
+    {
+        m_currentFrame = frame;
+        m_canvas->gui()->getView()->updatePageInfo();
+    }
+
     if ( m_currentFrame )
     {
         mousePos = iPoint;

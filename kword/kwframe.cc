@@ -451,13 +451,21 @@ void KWFrameSet::deleteAllCopies()
 
 void KWFrameSet::createEmptyRegion( const QRect & crect, QRegion & emptyRegion, KWViewMode *viewMode )
 {
+    int paperHeight = m_doc->paperHeight();
+    //kdDebug() << "KWFrameSet::createEmptyRegion " << getName() << endl;
     QListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt )
     {
         QRect outerRect( viewMode->normalToView( frameIt.current()->outerRect() ) );
+        //kdDebug() << "KWFrameSet::createEmptyRegion outerRect=" << DEBUGRECT( outerRect ) << " crect=" << DEBUGRECT( crect ) << endl;
         outerRect &= crect; // This is important, to avoid calling subtract with a Y difference > 65536
         if ( !outerRect.isEmpty() )
+        {
             emptyRegion = emptyRegion.subtract( outerRect );
+            //kdDebug() << "KWFrameSet::createEmptyRegion emptyRegion now: " << endl; DEBUGREGION( emptyRegion );
+        }
+        if ( crect.bottom() + paperHeight < outerRect.top() )
+            return; // Ok, we're far below the crect, abort.
     }
 }
 

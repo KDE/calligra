@@ -45,9 +45,17 @@ void KWViewMode::drawOnePageBorder( QPainter * painter, const QRect & crect, con
     pageRect.rRight() -= 1;
     pageRect.rBottom() -= 1;
     // The empty space to clear up inside this page
-    QRegion pageEmptyRegion = emptySpaceRegion.intersect( pageRect ).intersect( crect );
-    if ( !pageEmptyRegion.isEmpty() )
-        m_canvas->kWordDocument()->eraseEmptySpace( painter, pageEmptyRegion, QApplication::palette().active().brush( QColorGroup::Base ) );
+    QRect pagecrect = pageRect.intersect( crect );
+    if ( !pagecrect.isEmpty() )
+    {
+        //kdDebug() << "KWViewMode::drawOnePageBorder : emptySpaceRegion: " << endl; DEBUGREGION( emptySpaceRegion );
+        //kdDebug() << "KWViewMode::drawOnePageBorder pagecrect=" << DEBUGRECT( pagecrect ) << endl;
+
+        QRegion pageEmptyRegion = emptySpaceRegion.intersect( pagecrect );
+        //kdDebug() << "RESULT: pageEmptyRegion: " << endl; DEBUGREGION( pageEmptyRegion );
+        if ( !pageEmptyRegion.isEmpty() )
+            m_canvas->kWordDocument()->eraseEmptySpace( painter, pageEmptyRegion, QApplication::palette().active().brush( QColorGroup::Base ) );
+    }
 }
 
 QRect KWViewMode::drawRightShadow( QPainter * painter, const QRect & crect, const QRect & pageRect, int topOffset )

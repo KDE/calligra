@@ -1348,10 +1348,15 @@ bool KWTableFrameSet::contains( double mx, double my ) {
 
 void KWTableFrameSet::createEmptyRegion( const QRect & crect, QRegion & emptyRegion, KWViewMode *viewMode )
 {
+    // Avoid iterating over all cells if we are out of view
+    if ( !viewMode->normalToView( m_doc->zoomRect( boundingRect() ) ).intersects( crect ) )
+        return;
     QListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt )
     {
         QRect outerRect( viewMode->normalToView( frameIt.current()->outerRect() ) );
+        //kdDebug() << "KWTableFrameSet::createEmptyRegion outerRect=" << DEBUGRECT( outerRect )
+        //          << " crect=" << DEBUGRECT( crect ) << endl;
         outerRect &= crect;
         if ( !outerRect.isEmpty() )
             emptyRegion = emptyRegion.subtract( outerRect );

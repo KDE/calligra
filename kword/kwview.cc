@@ -818,7 +818,7 @@ void KWView::updatePageInfo()
         KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
         if ( edit )
             m_currentPage = edit->currentFrame()->pageNum();
-        /*kdDebug() << this << " KWView::updatePageInfo m_currentPage=" << m_currentPage
+        /*kdDebug() << (void*)this << " KWView::updatePageInfo m_currentPage=" << m_currentPage
                   << " m_sbPageLabel=" << m_sbPageLabel
                   << endl;*/
 
