@@ -73,11 +73,41 @@ VMToolShear::drawTemporaryObject( KarbonView* view )
 	// already selected, so must be a handle operation (move, scale etc.)
 	if( !part()->selection().isEmpty() && ( rect.contains( fp ) ) )
 	{
+		if( VMToolHandle::instance( m_part )->activeNode() == NODE_LT )
+		{
+		}
+		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_MT )
+		{
+			m_s1 = 0;
+			m_s2 = ( m_lp.y() - m_fp.y() ) / double( rect.height() / 2 );
+		}
+		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_RT )
+		{
+		}
+		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_RM)
+		{
+			m_s1 = ( m_lp.x() - m_fp.x() ) / double( rect.width() / 2 );
+			m_s2 = 0;
+		}
+		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_RB )
+		{
+		}
+		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_MB )
+		{
+			m_s1 = 0;
+			m_s2 = ( m_lp.y() - m_fp.y() ) / double( rect.height() / 2 );
+		}
+		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_LB )
+		{
+		}
+		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_LM )
+		{
+			m_s1 = ( m_lp.x() - m_fp.x() ) / double( rect.width() / 2 );
+			m_s2 = 0;
+		}
 		// shear operation
 		QWMatrix mat;
 		mat.translate( m_fp.x() / view->zoomFactor(), m_fp.y() / view->zoomFactor() );
-		m_s1 = ( m_lp.x() - m_fp.x() ) / double( rect.width() / 2 );
-		m_s2 = ( m_lp.y() - m_fp.y() ) / double( rect.height() / 2 );
 		mat.shear( m_s1, m_s2 );
 		mat.translate(	- ( m_fp.x() + view->canvasWidget()->contentsX() ) / view->zoomFactor(),
 						- ( m_fp.y() + view->canvasWidget()->contentsY() ) / view->zoomFactor() );
