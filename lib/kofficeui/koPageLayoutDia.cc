@@ -381,33 +381,33 @@ void KoPageLayoutDia::setupTab1()
 
     // --------------- page margins ---------------
     QVGroupBox *marginsFrame = new QVGroupBox( i18n( "Margins" ), tab1 );
+    marginsFrame->setColumnLayout( 0, Qt::Vertical );
+    marginsFrame->setMargin( KDialog::marginHint() );
     grid1->addWidget( marginsFrame, 3, 0 );
     
-    QWidget *dummyWidget = new QWidget( marginsFrame );
-    
-    QGridLayout *marginsLayout = new QGridLayout( dummyWidget, 3, 3,
-       0, KDialog::spacingHint() );
+    QGridLayout *marginsLayout = new QGridLayout( marginsFrame->layout(), 3, 3,
+       KDialog::spacingHint() );
 
     // left margin
-    ebrLeft = new KDoubleNumInput( dummyWidget, "Left" );
+    ebrLeft = new KDoubleNumInput( marginsFrame, "Left" );
     marginsLayout->addWidget( ebrLeft, 1, 0 );
     connect( ebrLeft, SIGNAL( valueChanged( double ) ), this, SLOT( leftChanged() ) );
     if ( !enableBorders ) ebrLeft->setEnabled( false );
 
     // right margin
-    ebrRight = new KDoubleNumInput( dummyWidget, "Right" );
+    ebrRight = new KDoubleNumInput( marginsFrame, "Right" );
     marginsLayout->addWidget( ebrRight, 1, 2 );
     connect( ebrRight, SIGNAL( valueChanged( double ) ), this, SLOT( rightChanged() ) );
     if ( !enableBorders ) ebrRight->setEnabled( false );
 
     // top margin
-    ebrTop = new KDoubleNumInput( dummyWidget, "Top" );
+    ebrTop = new KDoubleNumInput( marginsFrame, "Top" );
     marginsLayout->addWidget( ebrTop, 0, 1 , Qt::AlignCenter );
     connect( ebrTop, SIGNAL( valueChanged( double ) ), this, SLOT( topChanged() ) );
     if ( !enableBorders ) ebrTop->setEnabled( false );
 
     // bottom margin
-    ebrBottom = new KDoubleNumInput( dummyWidget, "Bottom" );
+    ebrBottom = new KDoubleNumInput( marginsFrame, "Bottom" );
     marginsLayout->addWidget( ebrBottom, 2, 1, Qt::AlignCenter );
     connect( ebrBottom, SIGNAL( valueChanged( double ) ), this, SLOT( bottomChanged() ) );
     if ( !enableBorders ) ebrBottom->setEnabled( false );
