@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -81,9 +81,9 @@ void PathTextTool::deactivate (GDocument*, Canvas* canvas) {
 }
 
 void PathTextTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
-  if (e->type () == Event_KeyPress) {
+  if (e->type () == QEvent::KeyPress) {
     QKeyEvent *ke = (QKeyEvent *) e;
-    if (ke->key () == Key_Escape) {
+    if (ke->key () == Qt::Key_Escape) {
       /*
        * Abort the last operation
        */
@@ -91,13 +91,13 @@ void PathTextTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
       emit operationDone ();
     }
   }
-  else if (e->type () == Event_MouseButtonPress) {
+  else if (e->type () == QEvent::MouseButtonPress) {
     QMouseEvent *me = (QMouseEvent *) e;
     if (me->button () == LeftButton) {
       int xpos = me->x (), ypos = me->y ();
       GObject *obj = 0L;
 
-      if (textObj && 
+      if (textObj &&
 	  (obj = doc->findContainingObject (xpos, ypos)) != 0L) {
 	TextAlongPathCmd *cmd = new TextAlongPathCmd (doc, textObj, obj);
 	history->addCommand (cmd, true);

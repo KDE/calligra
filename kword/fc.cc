@@ -1248,7 +1248,7 @@ void KWFormatContext::makeCounterLayout(QPainter &_painter)
 void KWFormatContext::apply( KWFormat &_format )
 {
   if (compare_formats && _format == *((KWFormat*)this)) return;
-
+  
   KWFormat::apply(_format);
   if (_format.getVertAlign() != VA_NORMAL)
     displayFont = document->findDisplayFont(userFont,(2 * _format.getPTFontSize()) / 3,_format.getWeight(),

@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -125,7 +125,7 @@ KIllustrator::KIllustrator (const char* url) : KTMainWindow () {
   layerDialog = 0L;
   initMenu ();
   initStatusBar ();
-  
+
   document = new GDocument ();
   connect (document, SIGNAL (wasModified (bool)),
 	   this, SLOT (documentIsModifiedSlot (bool)));
@@ -136,9 +136,9 @@ KIllustrator::KIllustrator (const char* url) : KTMainWindow () {
   toolbar->show ();
   statusbar->show ();
   adjustSize ();
-  
+
   dropZone = new KDNDDropZone (canvas, DndURL);
-  connect (dropZone, SIGNAL(dropAction (KDNDDropZone *)), 
+  connect (dropZone, SIGNAL(dropAction (KDNDDropZone *)),
 	   this, SLOT (dropActionSlot (KDNDDropZone *)));
 
   Canvas::initZoomFactors (zFactors);
@@ -201,10 +201,10 @@ void KIllustrator::closeEvent (QCloseEvent*) {
 
 void KIllustrator::setupMainView () {
   QPixmap pixmap;
-  
+
   QWidget *w = new QWidget (this);
   gridLayout = new QGridLayout (w, 2, 2);
-  
+
   MeasurementUnit mu = psm->defaultMeasurementUnit ();
   hRuler = new Ruler (Ruler::Horizontal, mu, w);
   vRuler = new Ruler (Ruler::Vertical, mu, w);
@@ -214,7 +214,7 @@ void KIllustrator::setupMainView () {
   viewport = new QwViewport (w);
 
   canvas = new Canvas (document, 72.0, viewport, viewport->portHole ());
-  connect (canvas, SIGNAL(sizeChanged ()), 
+  connect (canvas, SIGNAL(sizeChanged ()),
            viewport, SLOT(resizeScrollBars ()));
   connect (canvas, SIGNAL(visibleAreaChanged (int, int)),
 	   hRuler, SLOT(updateVisibleArea (int, int)));
@@ -244,88 +244,88 @@ void KIllustrator::setupMainView () {
   gridLayout->setColStretch (1, 20);
 
   setView (w);
-  
+
   restoreRulerStatus ();
 
   tcontroller = new ToolController (this);
   Tool* tool;
-  tcontroller->registerTool (ID_TOOL_SELECT, 
+  tcontroller->registerTool (ID_TOOL_SELECT,
 			     tool = new SelectionTool (&cmdHistory));
   connect (tool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
 
-  tcontroller->registerTool (ID_TOOL_EDITPOINT, 
+  tcontroller->registerTool (ID_TOOL_EDITPOINT,
 			     editPointTool = new EditPointTool (&cmdHistory));
   connect (editPointTool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
-  connect (editPointTool, SIGNAL(operationDone ()), 
+  connect (editPointTool, SIGNAL(operationDone ()),
   	   this, SLOT (resetTools ()));
 
-  tcontroller->registerTool (ID_TOOL_FREEHAND, 
+  tcontroller->registerTool (ID_TOOL_FREEHAND,
 			     tool = new FreeHandTool (&cmdHistory));
   connect (tool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
-  connect (tool, SIGNAL(operationDone ()), 
+  connect (tool, SIGNAL(operationDone ()),
   	   this, SLOT (resetTools ()));
 
-  tcontroller->registerTool (ID_TOOL_LINE, 
+  tcontroller->registerTool (ID_TOOL_LINE,
 			     tool = new PolylineTool (&cmdHistory));
   connect (tool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
-  connect (tool, SIGNAL(operationDone ()), 
+  connect (tool, SIGNAL(operationDone ()),
   	   this, SLOT (resetTools ()));
 
-  tcontroller->registerTool (ID_TOOL_BEZIER, 
+  tcontroller->registerTool (ID_TOOL_BEZIER,
 			     tool = new BezierTool (&cmdHistory));
   connect (tool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
-  connect (tool, SIGNAL(operationDone ()), 
+  connect (tool, SIGNAL(operationDone ()),
   	   this, SLOT (resetTools ()));
 
-  tcontroller->registerTool (ID_TOOL_RECTANGLE, 
+  tcontroller->registerTool (ID_TOOL_RECTANGLE,
 			     tool = new RectangleTool (&cmdHistory));
   connect (tool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
-  connect (tool, SIGNAL(operationDone ()), 
+  connect (tool, SIGNAL(operationDone ()),
   	   this, SLOT (resetTools ()));
 
-  tcontroller->registerTool (ID_TOOL_POLYGON, 
+  tcontroller->registerTool (ID_TOOL_POLYGON,
 			     tool = new PolygonTool (&cmdHistory));
   connect (tool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
-  connect (tool, SIGNAL(operationDone ()), 
+  connect (tool, SIGNAL(operationDone ()),
   	   this, SLOT (resetTools ()));
 
-  tcontroller->registerTool (ID_TOOL_ELLIPSE, 
+  tcontroller->registerTool (ID_TOOL_ELLIPSE,
 			     tool = new OvalTool (&cmdHistory));
   connect (tool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
-  connect (tool, SIGNAL(operationDone ()), 
+  connect (tool, SIGNAL(operationDone ()),
   	   this, SLOT (resetTools ()));
 
-  tcontroller->registerTool (ID_TOOL_TEXT, 
+  tcontroller->registerTool (ID_TOOL_TEXT,
 			     tool = new TextTool (&cmdHistory));
   connect (tool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
-  connect (tool, SIGNAL(operationDone ()), 
+  connect (tool, SIGNAL(operationDone ()),
   	   this, SLOT (resetTools ()));
 
-  tcontroller->registerTool (ID_TOOL_ZOOM, 
+  tcontroller->registerTool (ID_TOOL_ZOOM,
 			     tool = new ZoomTool (&cmdHistory));
   connect (tool, SIGNAL(modeSelected(const char*)),
 	   this, SLOT(showCurrentMode(const char*)));
-  connect (tool, SIGNAL(operationDone ()), 
+  connect (tool, SIGNAL(operationDone ()),
   	   this, SLOT (resetTools ()));
 
-  tcontroller->registerTool (ID_TOOL_PATHTEXT, 
+  tcontroller->registerTool (ID_TOOL_PATHTEXT,
 			     tool = new PathTextTool (&cmdHistory));
-  connect (tool, SIGNAL(operationDone ()), 
+  connect (tool, SIGNAL(operationDone ()),
   	   this, SLOT (resetTools ()));
 
   canvas->setToolController (tcontroller);
 
   setUndoStatus(false, false);
-  connect(&cmdHistory, SIGNAL(changed(bool, bool)), 
+  connect(&cmdHistory, SIGNAL(changed(bool, bool)),
 	  SLOT(setUndoStatus(bool, bool)));
 
   setFocusPolicy (QWidget::StrongFocus);
@@ -338,20 +338,20 @@ void KIllustrator::initToolBars () {
 
   /* main toolbar */
   toolbar = new KToolBar (this);
-  
+
   toolbar->insertButton (loader->loadIcon ("filenew2.xpm"), ID_FILE_NEW, true,
 			 i18n ("New Document"));
   toolbar->insertButton (loader->loadIcon ("fileopen.xpm"), ID_FILE_OPEN, true,
 			 i18n ("Open Document"));
-  toolbar->insertButton (loader->loadIcon ("filefloppy.xpm"), ID_FILE_SAVE, 
+  toolbar->insertButton (loader->loadIcon ("filefloppy.xpm"), ID_FILE_SAVE,
 			 true, i18n ("Save Document"));
   toolbar->insertSeparator ();
-  toolbar->insertButton (loader->loadIcon ("fileprint.xpm"), ID_FILE_PRINT, 
+  toolbar->insertButton (loader->loadIcon ("fileprint.xpm"), ID_FILE_PRINT,
 			 true, i18n ("Print Document"));
   toolbar->insertSeparator ();
   toolbar->insertButton (loader->loadIcon ("editcopy.xpm"), ID_EDIT_COPY, true,
 			 i18n ("Copy"));
-  toolbar->insertButton (loader->loadIcon ("editpaste.xpm"), ID_EDIT_PASTE, 
+  toolbar->insertButton (loader->loadIcon ("editpaste.xpm"), ID_EDIT_PASTE,
 			 true, i18n ("Paste"));
   toolbar->insertButton (loader->loadIcon ("editcut.xpm"), ID_EDIT_CUT, true,
 			 i18n ("Cut"));
@@ -364,9 +364,9 @@ void KIllustrator::initToolBars () {
     zoomStrList.append (buf);
   }
 
-  toolbar->insertCombo (&zoomStrList, 10, true, SIGNAL(activated(int)), 
+  toolbar->insertCombo (&zoomStrList, 10, true, SIGNAL(activated(int)),
 			this, SLOT(zoomFactorSlot (int)),
-			true, 0L, 85);
+			true, QString::null, 85);
   KCombo* combo = toolbar->getCombo (10);
 
   for (int i = 0; i < (int) zFactors.size (); i++) {
@@ -384,55 +384,55 @@ void KIllustrator::initToolBars () {
   toolPalette = new KToolBar (this);
   KRadioGroup* toolGroup = new KRadioGroup (toolPalette);
 
-  toolPalette->insertButton (loader->loadIcon ("selecttool.xpm"), 
+  toolPalette->insertButton (loader->loadIcon ("selecttool.xpm"),
 			     ID_TOOL_SELECT, true, i18n ("Selection Mode"));
   toolPalette->setToggle (ID_TOOL_SELECT);
   toolGroup->addButton (ID_TOOL_SELECT);
 
-  toolPalette->insertButton (loader->loadIcon ("pointtool.xpm"), 
+  toolPalette->insertButton (loader->loadIcon ("pointtool.xpm"),
 			     ID_TOOL_EDITPOINT, true, i18n ("Edit Point"));
   toolPalette->setToggle (ID_TOOL_EDITPOINT);
   toolGroup->addButton (ID_TOOL_EDITPOINT);
 
-  toolPalette->insertButton (loader->loadIcon ("freehandtool.xpm"), 
-			     ID_TOOL_FREEHAND, true, 
+  toolPalette->insertButton (loader->loadIcon ("freehandtool.xpm"),
+			     ID_TOOL_FREEHAND, true,
 			     i18n ("Create Freehand Line"));
   toolPalette->setToggle (ID_TOOL_FREEHAND);
   toolGroup->addButton (ID_TOOL_FREEHAND);
 
-  toolPalette->insertButton (loader->loadIcon ("linetool.xpm"), 
+  toolPalette->insertButton (loader->loadIcon ("linetool.xpm"),
 			     ID_TOOL_LINE, true, i18n ("Create Polyline"));
   toolPalette->setToggle (ID_TOOL_LINE);
   toolGroup->addButton (ID_TOOL_LINE);
 
-  toolPalette->insertButton (loader->loadIcon ("beziertool.xpm"), 
-			     ID_TOOL_BEZIER, true, 
+  toolPalette->insertButton (loader->loadIcon ("beziertool.xpm"),
+			     ID_TOOL_BEZIER, true,
 			     i18n ("Create Bezier Curve"));
   toolPalette->setToggle (ID_TOOL_BEZIER);
   toolGroup->addButton (ID_TOOL_BEZIER);
 
-  toolPalette->insertButton (loader->loadIcon ("recttool.xpm"), 
-			     ID_TOOL_RECTANGLE, true, 
+  toolPalette->insertButton (loader->loadIcon ("recttool.xpm"),
+			     ID_TOOL_RECTANGLE, true,
 			     i18n ("Create Rectangle"));
   toolPalette->setToggle (ID_TOOL_RECTANGLE);
   toolGroup->addButton (ID_TOOL_RECTANGLE);
 
-  toolPalette->insertButton (loader->loadIcon ("polygontool.xpm"), 
+  toolPalette->insertButton (loader->loadIcon ("polygontool.xpm"),
 			     ID_TOOL_POLYGON, true, i18n ("Create Polygon"));
   toolPalette->setToggle (ID_TOOL_POLYGON);
   toolGroup->addButton (ID_TOOL_POLYGON);
 
-  toolPalette->insertButton (loader->loadIcon ("ellipsetool.xpm"), 
+  toolPalette->insertButton (loader->loadIcon ("ellipsetool.xpm"),
 			     ID_TOOL_ELLIPSE, true, i18n ("Create Ellipse"));
   toolPalette->setToggle (ID_TOOL_ELLIPSE);
   toolGroup->addButton (ID_TOOL_ELLIPSE);
 
-  toolPalette->insertButton (loader->loadIcon ("texttool.xpm"), 
+  toolPalette->insertButton (loader->loadIcon ("texttool.xpm"),
 			     ID_TOOL_TEXT, true, i18n ("Create Text"));
   toolPalette->setToggle (ID_TOOL_TEXT);
   toolGroup->addButton (ID_TOOL_TEXT);
 
-  toolPalette->insertButton (loader->loadIcon ("zoomtool.xpm"), 
+  toolPalette->insertButton (loader->loadIcon ("zoomtool.xpm"),
 			     ID_TOOL_ZOOM, true, i18n ("Zoom In"));
   toolPalette->setToggle (ID_TOOL_ZOOM);
   toolGroup->addButton (ID_TOOL_ZOOM);
@@ -475,44 +475,44 @@ void KIllustrator::initToolBars () {
   /* the "edit point" toolbar */
   editPointToolbar = new KToolBar (this);
   KRadioGroup* toolGroup2 = new KRadioGroup (editPointToolbar);
-  editPointToolbar->insertButton (loader->loadIcon ("moveNode.xpm"), 
+  editPointToolbar->insertButton (loader->loadIcon ("moveNode.xpm"),
 			     ID_TOOL_EP_MOVE, true, i18n ("Move Point"));
   editPointToolbar->setToggle (ID_TOOL_EP_MOVE);
   toolGroup2->addButton (ID_TOOL_EP_MOVE);
-  editPointToolbar->insertButton (loader->loadIcon ("newNode.xpm"), 
+  editPointToolbar->insertButton (loader->loadIcon ("newNode.xpm"),
 			     ID_TOOL_EP_ADD, true, i18n ("Insert Point"));
   editPointToolbar->setToggle (ID_TOOL_EP_ADD);
   toolGroup2->addButton (ID_TOOL_EP_ADD);
-  editPointToolbar->insertButton (loader->loadIcon ("deleteNode.xpm"), 
+  editPointToolbar->insertButton (loader->loadIcon ("deleteNode.xpm"),
 			     ID_TOOL_EP_DEL, true, i18n ("Remove Point"));
   editPointToolbar->setToggle (ID_TOOL_EP_DEL);
   toolGroup2->addButton (ID_TOOL_EP_DEL);
-  editPointToolbar->insertButton (loader->loadIcon ("split.xpm"), 
+  editPointToolbar->insertButton (loader->loadIcon ("split.xpm"),
 			     ID_TOOL_EP_SPLIT, true, i18n ("Split Line"));
   editPointToolbar->setToggle (ID_TOOL_EP_SPLIT);
   toolGroup2->addButton (ID_TOOL_EP_SPLIT);
   /*
-  editPointToolbar->insertButton (loader->loadIcon ("joinNodes.xpm"), 
+  editPointToolbar->insertButton (loader->loadIcon ("joinNodes.xpm"),
 			     ID_TOOL_EP_JOIN, true, i18n ("Join Lines"));
   editPointToolbar->setToggle (ID_TOOL_EP_JOIN);
   toolGroup2->addButton (ID_TOOL_EP_JOIN);
   */
-  connect (editPointToolbar, SIGNAL (clicked(int)), 
+  connect (editPointToolbar, SIGNAL (clicked(int)),
 	   this, SLOT (menuCallback (int)));
   editPointToolbar->enable (KToolBar::Hide);
   editPointToolbar->move (10000, 10000);
   editPointToolbar->setBarPos (KToolBar::Floating);
   editPointToolbar->setFullWidth ();
   addToolBar (editPointToolbar);
-  
+
   // Saving of toolbar positions
   restoreToolbarStatus ();
 
-  connect (toolbar, SIGNAL (moved(BarPosition)), 
+  connect (toolbar, SIGNAL (moved(BarPosition)),
 	   this, SLOT (saveToolbarStatus ()));
-  connect (toolPalette, SIGNAL (moved(BarPosition)), 
+  connect (toolPalette, SIGNAL (moved(BarPosition)),
 	   this, SLOT (saveToolbarStatus ()));
-  connect (colorPalette, SIGNAL (moved(BarPosition)), 
+  connect (colorPalette, SIGNAL (moved(BarPosition)),
 	   this, SLOT (saveToolbarStatus ()));
 }
 
@@ -525,7 +525,7 @@ void KIllustrator::initMenu () {
   extras = new QPopupMenu ();
   help = new QPopupMenu ();
   openRecent = new QPopupMenu ();
-  
+
   file->insertItem (i18n ("&New..."), ID_FILE_NEW);
   file->setAccel (CTRL + Key_N, ID_FILE_NEW);
   file->insertItem (i18n ("&Open..."), ID_FILE_OPEN);
@@ -557,7 +557,7 @@ void KIllustrator::initMenu () {
   file->setAccel (CTRL + Key_Q, ID_FILE_EXIT);
 
   connect (file, SIGNAL (activated (int)), SLOT (menuCallback (int)));
-  
+
   QPopupMenu* insert = new QPopupMenu ();
   insert->insertItem (i18n ("&Bitmap..."), ID_INSERT_BITMAP);
   insert->insertItem (i18n ("&Clipart..."), ID_INSERT_CLIPART);
@@ -611,17 +611,17 @@ void KIllustrator::initMenu () {
   layout->insertItem (i18n ("Align to Helplines"), ID_LAYOUT_ALIGN_HLINES);
   layout->setItemChecked (ID_LAYOUT_ALIGN_HLINES, false);
   connect (layout, SIGNAL (activated (int)), SLOT (menuCallback (int)));
-  
+
   QPopupMenu* transformations = new QPopupMenu ();
-  transformations->insertItem (i18n ("Position"), 
+  transformations->insertItem (i18n ("Position"),
 			       ID_TRANSFORM_POSITION);
-  transformations->insertItem (i18n ("Dimension"), 
+  transformations->insertItem (i18n ("Dimension"),
 			       ID_TRANSFORM_DIMENSION);
-  transformations->insertItem (i18n ("Rotation"), 
+  transformations->insertItem (i18n ("Rotation"),
 			       ID_TRANSFORM_ROTATION);
-  transformations->insertItem (i18n ("Mirror"), 
+  transformations->insertItem (i18n ("Mirror"),
 			       ID_TRANSFORM_MIRROR);
-  connect (transformations, SIGNAL (activated (int)), 
+  connect (transformations, SIGNAL (activated (int)),
 	   SLOT (menuCallback (int)));
 
   arrangement->insertItem (i18n ("Transform"), transformations);
@@ -634,8 +634,8 @@ void KIllustrator::initMenu () {
   arrangement->insertItem (i18n ("Forward One"),
 			   ID_ARRANGE_1_FORWARD);
   arrangement->setAccel (CTRL + Key_PageUp, ID_ARRANGE_1_FORWARD);
-  arrangement->insertItem (i18n ("Back One"), 
-			   ID_ARRANGE_1_BACK); 
+  arrangement->insertItem (i18n ("Back One"),
+			   ID_ARRANGE_1_BACK);
   arrangement->setAccel (CTRL + Key_PageDown, ID_ARRANGE_1_BACK);
   arrangement->insertSeparator ();
   arrangement->insertItem (i18n ("Group"), ID_ARRANGE_GROUP);
@@ -661,7 +661,7 @@ void KIllustrator::initMenu () {
     help->insertItem (i18n ("About &KDE..."), ID_HELP_ABOUT_KDE);
   */
   connect (help, SIGNAL (activated (int)), SLOT (menuCallback (int)));
-  
+
   menubar = new KMenuBar (this);
 
   menubar->insertItem (i18n ("&File"), file);
@@ -671,7 +671,7 @@ void KIllustrator::initMenu () {
   menubar->insertItem (i18n ("&Arrange"), arrangement);
   menubar->insertItem (i18n ("Ex&tras"), extras);
   menubar->insertItem (i18n ("&Help"), help);
-  
+
   setMenu (menubar);
 
   popupMenu = new QPopupMenu ();
@@ -685,8 +685,8 @@ void KIllustrator::initMenu () {
   popupMenu->insertItem (i18n ("To Front"), ID_ARRANGE_FRONT);
   popupMenu->insertItem (i18n ("To Back"), ID_ARRANGE_BACK);
   popupMenu->insertItem (i18n ("Forward One"), ID_ARRANGE_1_FORWARD);
-  popupMenu->insertItem (i18n ("Back One"), ID_ARRANGE_1_BACK); 
-  
+  popupMenu->insertItem (i18n ("Back One"), ID_ARRANGE_1_BACK);
+
   // Save position of menubar
   restoreMenubarStatus ();
   connect (menubar, SIGNAL (moved (menuPosition)), SLOT (saveMenubarStatus ()));
@@ -724,7 +724,7 @@ void KIllustrator::showCurrentMode (const char* msg) {
 }
 
 void KIllustrator::updateSettings () {
-  MeasurementUnit munit = 
+  MeasurementUnit munit =
     PStateManager::instance ()->defaultMeasurementUnit ();
   hRuler->setMeasurementUnit (munit);
   vRuler->setMeasurementUnit (munit);
@@ -744,12 +744,12 @@ void KIllustrator::menuCallback (int item) {
       resetTools ();
     }
     break;
-  case ID_FILE_OPEN: 
+  case ID_FILE_OPEN:
     {
       if (askForSave ()) {
-	QString fname = 
-	  KFilePreviewDialog::getOpenFileURL((const char *) lastOpenDir, 
-					     "*.kil | KIllustrator File", 
+	QString fname =
+	  KFilePreviewDialog::getOpenFileURL((const char *) lastOpenDir,
+					     "*.kil | KIllustrator File",
 					     this);
 	if (! fname.isEmpty ()) {
           KURL u (fname);
@@ -825,7 +825,7 @@ void KIllustrator::menuCallback (int item) {
     break;
   case ID_INSERT_BITMAP:
     {
-      QString fname = KFilePreviewDialog::getOpenFileName 
+      QString fname = KFilePreviewDialog::getOpenFileName
 	     ((const char *) lastBitmapDir, "*.gif *.GIF | GIF Images\n"
 	         "*.jpg *.jpeg *.JPG *.JPEG | JPEG Images\n"
 	         "*.png | PNG Images\n"
@@ -835,7 +835,7 @@ void KIllustrator::menuCallback (int item) {
        if (! fname.isEmpty ()) {
          QFileInfo finfo (fname);
          lastBitmapDir = finfo.dirPath ();
-	 InsertPixmapCmd *cmd = new InsertPixmapCmd (document, 
+	 InsertPixmapCmd *cmd = new InsertPixmapCmd (document,
 						     (const char *) fname);
 	 cmdHistory.addCommand (cmd, true);
        }
@@ -843,13 +843,13 @@ void KIllustrator::menuCallback (int item) {
     }
   case ID_INSERT_CLIPART:
     {
-      QString fname = KFilePreviewDialog::getOpenFileName 
-	      ((const char *) lastClipartDir, 
+      QString fname = KFilePreviewDialog::getOpenFileName
+	      ((const char *) lastClipartDir,
 	       "*.wmf *.WMF | Windows Metafiles", this);
       if (! fname.isEmpty ()) {
         QFileInfo finfo (fname);
         lastClipartDir = finfo.dirPath ();
-	InsertClipartCmd *cmd = new InsertClipartCmd (document, 
+	InsertClipartCmd *cmd = new InsertClipartCmd (document,
 						      (const char *) fname);
 	cmdHistory.addCommand (cmd, true);
       }
@@ -858,10 +858,10 @@ void KIllustrator::menuCallback (int item) {
   case ID_EDIT_PROPERTIES:
     {
       int result = 1;
-      
+
       if (document->selectionIsEmpty ()) {
-	result = 
-	  KMsgBox::yesNo (this, "Warning", 
+	result =
+	  KMsgBox::yesNo (this, "Warning",
 			  i18n ("This action will set the default\nproperties for new objects !\nWould you like to do it ?"),
 			  KMsgBox::QUESTION, i18n ("Yes"), i18n ("No"));
       }
@@ -880,7 +880,7 @@ void KIllustrator::menuCallback (int item) {
     canvas->setOutlineMode (false);
     break;
   case ID_VIEW_LAYERS:
-    if (!layerDialog) 
+    if (!layerDialog)
       layerDialog = new LayerDialog ();
     layerDialog->manageDocument (document);
     layerDialog->show ();
@@ -920,7 +920,7 @@ void KIllustrator::menuCallback (int item) {
       KoPageLayout pLayout = document->pageLayout ();
       KoHeadFoot header;
 	
-      if (KoPageLayoutDia::pageLayout (pLayout, header, 
+      if (KoPageLayoutDia::pageLayout (pLayout, header,
 				       FORMAT_AND_BORDERS)) {
 	document->setPageLayout (pLayout);
       }
@@ -983,7 +983,7 @@ void KIllustrator::menuCallback (int item) {
     loadPalette ();
     break;
   case ID_EXTRAS_SCRIPTS:
-    if (!scriptDialog) 
+    if (!scriptDialog)
       scriptDialog = new ScriptDialog ();
     scriptDialog->setActiveDocument (document);
     scriptDialog->show ();
@@ -1069,7 +1069,7 @@ bool KIllustrator::closeWindow (KIllustrator* win) {
   if (win->askForSave ()) {
 //    win->close ();
       delete win;
-    
+
     if (windows.count () == 0) {
       PStateManager::instance ()->saveDefaultSettings ();
 
@@ -1087,12 +1087,12 @@ void KIllustrator::setUndoStatus(bool undoPossible, bool redoPossible)
   edit->setItemEnabled(ID_EDIT_UNDO, undoPossible);
 
   QString label = i18n("Undo");
-  if (undoPossible) 
+  if (undoPossible)
       label += " " + cmdHistory.getUndoName();
   edit->changeItem(label, ID_EDIT_UNDO);
-  
+
   edit->setItemEnabled(ID_EDIT_REDO, redoPossible);
-  
+
   label = i18n("Redo");
   if (redoPossible)
       label += " " + cmdHistory.getRedoName();
@@ -1110,10 +1110,10 @@ void KIllustrator::quit () {
 
 bool KIllustrator::askForSave () {
   if (document->isModified ()) {
-    int result = 
-      KMsgBox::yesNoCancel (this, "Message", 
+    int result =
+      KMsgBox::yesNoCancel (this, "Message",
 			    i18n ("This Document has been modified.\nWould you like to save it ?"),
-			    KMsgBox::QUESTION | KMsgBox::DB_FIRST, 
+			    KMsgBox::QUESTION | KMsgBox::DB_FIRST,
 			    i18n ("Yes"), i18n ("No"), i18n ("Cancel"));
     if (result == 1)
       saveFile ();
@@ -1136,7 +1136,7 @@ void KIllustrator::saveFile () {
 
     document->saveToXml (os);
     document->setFileName ((const char *) document->fileName ());
-    PStateManager::instance ()->addRecentFile ((const char *) 
+    PStateManager::instance ()->addRecentFile ((const char *)
 					       document->fileName ());
     setUnsavedData (false);
   }
@@ -1150,11 +1150,11 @@ void KIllustrator::saveAsFile () {
   if (! fname.isEmpty ()) {
     if (access ((const char *) fname, W_OK) == 0) {
       // there is already a file with the same name
-      int result = 
-	KMsgBox::yesNoCancel (this, "Message", 
+      int result =
+	KMsgBox::yesNoCancel (this, "Message",
 			      i18n ("This Document already exists.\nWould you like to override it ?"),
-			      KMsgBox::QUESTION, i18n ("Yes"), 
-			      i18n ("No"), 
+			      KMsgBox::QUESTION, i18n ("Yes"),
+			      i18n ("No"),
 			      i18n ("Cancel"));
       if (result != 1)
 	return;
@@ -1190,11 +1190,11 @@ void KIllustrator::backupFile (const QString& fname) {
 void KIllustrator::selectColor (int flag, int idx, const QBrush& b) {
   if (flag == 0) {
     setPenColor (b);
-    ColorField* cfield = 
+    ColorField* cfield =
       (ColorField *) colorPalette->getWidget (selectedColorIdx);
     assert (cfield);
     cfield->highlight (false);
-    
+
     cfield = (ColorField *) colorPalette->getWidget (idx);
     assert (cfield);
     cfield->highlight (true);
@@ -1209,17 +1209,17 @@ void KIllustrator::setPenColor (const QBrush& b) {
   oInfo.mask = GObject::OutlineInfo::Color | GObject::OutlineInfo::Style;;
   oInfo.color = b.color ();
   oInfo.style = (b.style () == NoBrush ? NoPen : SolidLine);
-  
+
   GObject::FillInfo fInfo;
   fInfo.mask = 0;
-    
+
   if (! document->selectionIsEmpty ()) {
     SetPropertyCmd *cmd = new SetPropertyCmd (document, oInfo, fInfo);
     cmdHistory.addCommand (cmd, true);
   }
   else {
-    int result = 
-      KMsgBox::yesNo (this, "Warning", 
+    int result =
+      KMsgBox::yesNo (this, "Warning",
 		      i18n ("This action will set the default\nproperties for new objects !\nWould you like to do it ?"),
 		      KMsgBox::QUESTION, i18n ("Yes"), i18n ("No"));
     if (result == 1)
@@ -1230,7 +1230,7 @@ void KIllustrator::setPenColor (const QBrush& b) {
 void KIllustrator::setFillColor (const QBrush& b) {
   GObject::OutlineInfo oInfo;
   oInfo.mask = 0;
-  
+
   GObject::FillInfo fInfo;
   fInfo.mask = GObject::FillInfo::Color | GObject::FillInfo::FillStyle;
   fInfo.color = b.color ();
@@ -1244,8 +1244,8 @@ void KIllustrator::setFillColor (const QBrush& b) {
     cmdHistory.addCommand (cmd, true);
   }
   else {
-    int result = 
-      KMsgBox::yesNo (this, "Warning", 
+    int result =
+      KMsgBox::yesNo (this, "Warning",
 		      i18n ("This action will set the default\nproperties for new objects !\nWould you like to do it ?"),
 		      KMsgBox::QUESTION, i18n ("Yes"), i18n ("No"));
     if (result == 1)
@@ -1285,7 +1285,7 @@ void KIllustrator::about (int id) {
 void KIllustrator::zoomFactorSlot (int idx) {
   if (canvas) {
     canvas->setZoomFactor (zFactors[idx]);
-    // set focus to the canvas 
+    // set focus to the canvas
     canvas->setFocus ();
   }
 }
@@ -1307,14 +1307,14 @@ QString KIllustrator::getExportFileName (FilterManager *filterMgr) {
     if (! lastExport.isEmpty ()) {
 	int pos = lastExport.findRev ('.', -1, false);
 	if (pos != -1) {
-	    extension = 
+	    extension =
 		lastExport.right (lastExport.length () - pos - 1);
 	    defaultExt = (const char *) extension;
 	}
     }
     QString filter = filterMgr->exportFilters (defaultExt);
-    
-    KFileDialog *dlg = new KFileDialog ((const char *) lastExportDir, 
+
+    KFileDialog *dlg = new KFileDialog ((const char *) lastExportDir,
 					(const char *) filter, this,
 					0L, true, false);
     dlg->setCaption (i18n ("Save As"));
@@ -1337,13 +1337,13 @@ QString KIllustrator::getExportFileName (FilterManager *filterMgr) {
 void KIllustrator::exportToFile () {
   FilterManager* filterMgr = FilterManager::instance ();
   QString filter = filterMgr->exportFilters ();
-  
+
   QString fname = getExportFileName (filterMgr);
 
   if (! fname.isEmpty ()) {
-    FilterInfo* filterInfo = filterMgr->findFilter (fname, 
+    FilterInfo* filterInfo = filterMgr->findFilter (fname,
 						    FilterInfo::FKind_Export);
-    
+
     if (filterInfo) {
       ExportFilter* filter = filterInfo->exportFilter ();
       if (filter->setup (document, filterInfo->extension ())) {
@@ -1352,11 +1352,11 @@ void KIllustrator::exportToFile () {
 	lastExport = fname;
       }
       else
-	QMessageBox::critical (this, i18n ("KIllustrator Error"), 
+	QMessageBox::critical (this, i18n ("KIllustrator Error"),
 			       i18n ("Cannot export to file"), i18n ("OK"));
     }
     else
-      QMessageBox::critical (this, i18n ("KIllustrator Error"), 
+      QMessageBox::critical (this, i18n ("KIllustrator Error"),
 			     i18n ("Unknown export format"), i18n ("OK"));
   }
   resetTools ();
@@ -1365,17 +1365,17 @@ void KIllustrator::exportToFile () {
 void KIllustrator::importFromFile () {
   FilterManager* filterMgr = FilterManager::instance ();
   QString filter = filterMgr->importFilters ();
-  
-  QString fname = 
-    KFilePreviewDialog::getOpenFileName ((const char *) lastImportDir, 
+
+  QString fname =
+    KFilePreviewDialog::getOpenFileName ((const char *) lastImportDir,
 					 (const char *) filter, this);
   if (! fname.isEmpty ()) {
     QFileInfo finfo ((const char *) fname);
     if (!finfo.isFile () || !finfo.isReadable ())
       return;
 
-    lastImportDir = finfo.dirPath (); 
-    FilterInfo* filterInfo = filterMgr->findFilter (fname, 
+    lastImportDir = finfo.dirPath ();
+    FilterInfo* filterInfo = filterMgr->findFilter (fname,
 						    FilterInfo::FKind_Import);
     if (filterInfo) {
       ImportFilter* filter = filterInfo->importFilter ();
@@ -1384,18 +1384,18 @@ void KIllustrator::importFromFile () {
 	filter->importFromFile (document);
       }
       else
-	QMessageBox::critical (this, i18n ("KIllustrator Error"), 
+	QMessageBox::critical (this, i18n ("KIllustrator Error"),
 			       i18n ("Cannot import from file"), i18n ("OK"));
     }
     else
-      QMessageBox::critical (this, i18n ("KIllustrator Error"), 
+      QMessageBox::critical (this, i18n ("KIllustrator Error"),
 			     i18n ("Unknown import format"), i18n ("OK"));
   }
   resetTools ();
 }
 
 void KIllustrator::showTransformationDialog (int id) {
-  TransformationDialog *transformationDialog = 
+  TransformationDialog *transformationDialog =
     new TransformationDialog (&cmdHistory);
   connect (document, SIGNAL (selectionChanged ()), transformationDialog,
 	   SLOT (update ()));
@@ -1425,7 +1425,7 @@ void KIllustrator::popupForObject (int x, int y, GObject* obj) {
 void KIllustrator::resetTools () {
   if (toolPalette->isButtonOn (ID_TOOL_EDITPOINT))
     return;
-  
+
   if (! toolPalette->isButtonOn (ID_TOOL_SELECT))
     toolPalette->toggleButton (ID_TOOL_SELECT);
   tcontroller->toolSelected (ID_TOOL_SELECT);
@@ -1450,7 +1450,7 @@ void KIllustrator::documentIsModifiedSlot (bool flag) {
 }
 
 void KIllustrator::saveProperties (KConfig* config) {
-  if (document->objectCount () > 0 && 
+  if (document->objectCount () > 0 &&
       strcmp (document->fileName (), UNNAMED_FILE) != 0)
     config->writeEntry ("Name", document->fileName ());
 }
@@ -1493,11 +1493,11 @@ void KIllustrator::saveRulerStatus (bool show_it) {
 }
 
 void KIllustrator::restoreToolbarStatus () {
-  KConfig* config = kapp->getConfig ();   
+  KConfig* config = kapp->getConfig ();
   QString oldgroup = config->group ();
 
   config->setGroup ("Toolbar Positions");
-  
+
   QString str = config->readEntry ("toolbar");
   if (! str.isNull ()) {
     if (str == "Left")
@@ -1508,8 +1508,8 @@ void KIllustrator::restoreToolbarStatus () {
       toolbar->setBarPos (KToolBar::Bottom);
     else
       toolbar->setBarPos (KToolBar::Top);
-  }  
-  
+  }
+
   str = config->readEntry ("toolpalette");
   if (! str.isNull ()) {
     if (str == "Top")
@@ -1520,8 +1520,8 @@ void KIllustrator::restoreToolbarStatus () {
       toolPalette->setBarPos (KToolBar::Bottom);
     else
       toolPalette->setBarPos (KToolBar::Left);
-  }  
-  
+  }
+
   str = config->readEntry ("colorpalette");
   if (! str.isNull ()) {
     if (str == "Left")
@@ -1532,15 +1532,15 @@ void KIllustrator::restoreToolbarStatus () {
       colorPalette->setBarPos (KToolBar::Bottom);
     else
       colorPalette->setBarPos (KToolBar::Right);
-  }  
-  
+  }
+
   config->setGroup (oldgroup);
 }
 
 void KIllustrator::saveToolbarStatus () {
   KConfig* config = kapp->getConfig ();
   QString oldgroup = config->group ();
-  
+
   config->setGroup ("Toolbar Positions");
   QString str;
   if ( toolbar->barPos() == KToolBar::Left )
@@ -1552,7 +1552,7 @@ void KIllustrator::saveToolbarStatus () {
   else
     str = "Top";
   config->writeEntry( "toolbar", str.data() );
-  
+
   if ( toolPalette->barPos() == KToolBar::Left )
     str = "Left";
   else if ( toolPalette->barPos() == KToolBar::Right )
@@ -1562,7 +1562,7 @@ void KIllustrator::saveToolbarStatus () {
   else
     str = "Top";
   config->writeEntry( "toolpalette", str.data() );
-  
+
   if ( colorPalette->barPos() == KToolBar::Left )
     str = "Left";
   else if ( colorPalette->barPos() == KToolBar::Right )
@@ -1572,42 +1572,42 @@ void KIllustrator::saveToolbarStatus () {
   else
     str = "Top";
   config->writeEntry( "colorpalette", str.data() );
-  
+
   config->setGroup (oldgroup);
   config->sync ();
 }
- 
+
 void KIllustrator::restoreMenubarStatus () {
-  KConfig* config = kapp->getConfig ();   
+  KConfig* config = kapp->getConfig ();
   QString oldgroup = config->group ();
-  
+
   QString str = config->readEntry ("Menubar Position");
   if (! str.isNull ()) {
     if (str == "Bottom")
       menubar->setMenuBarPos (KMenuBar::Bottom);
     else
       menubar->setMenuBarPos (KMenuBar::Top);
-  }  
-  
+  }
+
    config->setGroup (oldgroup);
 }
 
 void KIllustrator::saveMenubarStatus () {
   KConfig* config = kapp->getConfig ();
   QString oldgroup = config->group ();
-  
+
   QString str;
   if ( menubar->menuBarPos() == KMenuBar::Bottom )
     str = "Bottom";
   else
     str = "Top";
   config->writeEntry( "Menubar Position", str.data() );
-  
+
   config->setGroup (oldgroup);
   config->sync ();
 }
- 
-bool KIllustrator::parseColorPalette (const char* fname, 
+
+bool KIllustrator::parseColorPalette (const char* fname,
 				      vector<QColor>& colors) {
   ifstream in (fname);
   if (in.fail ()) {
@@ -1639,7 +1639,7 @@ bool KIllustrator::parseColorPalette (const char* fname,
 void KIllustrator::loadPalette () {
   QString pfile = KFileDialog::getOpenFileName ((const char *) lastPaletteDir);
   QFileInfo finfo (pfile);
-  lastPaletteDir = finfo.dirPath (); 
+  lastPaletteDir = finfo.dirPath ();
   if (! pfile.isEmpty ()) {
     vector<QColor> new_palette;
     if (parseColorPalette ((const char *) pfile, new_palette)) {
@@ -1669,9 +1669,9 @@ void KIllustrator::updateGridSettings () {
   if (canvas->snapToGrid () != layout->isItemChecked (ID_LAYOUT_ALIGN_GRID))
     layout->setItemChecked (ID_LAYOUT_ALIGN_GRID, canvas->snapToGrid ());
   view->setItemChecked (ID_VIEW_GRID, canvas->showGrid ());
-  if (canvas->alignToHelplines () != 
+  if (canvas->alignToHelplines () !=
       layout->isItemChecked (ID_LAYOUT_ALIGN_HLINES))
-    layout->setItemChecked (ID_LAYOUT_ALIGN_HLINES, 
+    layout->setItemChecked (ID_LAYOUT_ALIGN_HLINES,
 			    canvas->alignToHelplines ());
   view->setItemChecked (ID_VIEW_HELPLINES, canvas->showHelplines ());
 }

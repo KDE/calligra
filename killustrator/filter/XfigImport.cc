@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -95,7 +95,7 @@ struct PSFont {
   { "helvetica", QFont::Normal, true },   // Helvetica Narrow Oblique
   { "helvetica", QFont::Bold, false },    // Helvetica Narrow Bold
   { "helvetica", QFont::Bold, true },     // Helvetica Narrow Bold Oblique
-  { "newcenturyschoolbook", QFont::Normal, false },// New Century Schoolbook 
+  { "newcenturyschoolbook", QFont::Normal, false },// New Century Schoolbook
   { "newcenturyschoolbook", QFont::Normal, true }, // New Century Italic
   { "newcenturyschoolbook", QFont::Bold, false },  // New Century Bold
   { "newcenturyschoolbook", QFont::Bold, true },   // New Century Bold Italic
@@ -108,7 +108,7 @@ struct PSFont {
   { "zapfdingbats", QFont::Normal, false }, // Zapf Dingbats
 };
 
-bool greater_than (const pair<int, GObject*>& x, 
+bool greater_than (const pair<int, GObject*>& x,
 		const pair<int, GObject*>& y) {
   return x.first > y.first;
 }
@@ -138,16 +138,16 @@ bool XfigImport::setup (GDocument* doc, const char* format) {
   fig_resolution = 1200.0 / 72.0;
   coordinate_system = 2;
 
-  colorTable.insert (0, new QColor (black));
-  colorTable.insert (1, new QColor (blue));
-  colorTable.insert (2, new QColor (green));
-  colorTable.insert (3, new QColor (cyan));
-  colorTable.insert (4, new QColor (red));
-  colorTable.insert (5, new QColor (magenta));
-  colorTable.insert (6, new QColor (yellow));
-  colorTable.insert (7, new QColor (white));
+  colorTable.insert (0, new QColor (Qt::black));
+  colorTable.insert (1, new QColor (Qt::blue));
+  colorTable.insert (2, new QColor (Qt::green));
+  colorTable.insert (3, new QColor (Qt::cyan));
+  colorTable.insert (4, new QColor (Qt::red));
+  colorTable.insert (5, new QColor (Qt::magenta));
+  colorTable.insert (6, new QColor (Qt::yellow));
+  colorTable.insert (7, new QColor (Qt::white));
 
-  for (int i = 0; i <= 23; i++) 
+  for (int i = 0; i <= 23; i++)
       colorTable.insert (i + 8, new QColor (colors[i]));
 
   objList.clear ();
@@ -193,7 +193,7 @@ bool XfigImport::importFromFile (GDocument *doc) {
       layout.orientation = PG_LANDSCAPE;
   else if (::strcmp (buf, "Portrait") == 0)
       layout.orientation = PG_PORTRAIT;
-  else 
+  else
       cerr << "ERROR: invalid orientation" << endl;
 
   // justification (don't know how to handle this)
@@ -205,21 +205,21 @@ bool XfigImport::importFromFile (GDocument *doc) {
       layout.unit = PG_MM;
   else if (::strcmp (buf, "Inches") == 0)
       layout.unit = PG_INCH;
-  else 
+  else
       cerr << "ERROR: invalid units" << endl;
 
   if (version >= 320) {
       // paper size (don't know how to handle this)
       fin.getline (buf, 255);
-      
+
       // magnification
       float magnification;
       fin >> magnification;
       fin.ignore (INT_MAX, '\n');
-      
+
       //multiple page (not supported yet)
       fin.getline (buf, 255);
-      
+
       // transparent color (not supported yet)
       int transColor;
       fin >> transColor;
@@ -301,7 +301,7 @@ void XfigImport::parseColorObject (istream& fin) {
 
 void XfigImport::parseArc (istream& fin, GDocument* doc) {
   int sub_type, line_style, thickness, pen_color, fill_color,
-    depth, pen_style, area_fill, cap_style, direction, 
+    depth, pen_style, area_fill, cap_style, direction,
     forward_arrow, backward_arrow, x1, y1, x2, y2, x3, y3;
   float center_x, center_y;
   float style_val;
@@ -360,7 +360,7 @@ void XfigImport::parseArc (istream& fin, GDocument* doc) {
 
 void XfigImport::parseEllipse (istream& fin, GDocument* doc) {
   int sub_type, line_style, thickness, pen_color, fill_color,
-    depth, pen_style, area_fill, direction, center_x, center_y, 
+    depth, pen_style, area_fill, direction, center_x, center_y,
     radius_x, radius_y, start_x, start_y, end_x, end_y;
   float style_val, angle;
   GOval *obj = new GOval ();
@@ -388,15 +388,15 @@ void XfigImport::parseEllipse (istream& fin, GDocument* doc) {
 
 void XfigImport::parsePolyline (istream& fin, GDocument* doc) {
   int sub_type, line_style, thickness, pen_color, fill_color,
-    depth, pen_style, area_fill, join_style, cap_style, radius, 
+    depth, pen_style, area_fill, join_style, cap_style, radius,
     forward_arrow, backward_arrow, npoints;
   float style_val;
   GPolyline *obj = NULL;
 
   // first line
   fin >> sub_type >> line_style >> thickness >> pen_color >> fill_color
-      >> depth >> pen_style >> area_fill >> style_val >> join_style 
-      >> cap_style >> radius >> forward_arrow >> backward_arrow 
+      >> depth >> pen_style >> area_fill >> style_val >> join_style
+      >> cap_style >> radius >> forward_arrow >> backward_arrow
       >> npoints;
   fin.ignore (INT_MAX, '\n');
 
@@ -433,7 +433,7 @@ void XfigImport::parsePolyline (istream& fin, GDocument* doc) {
   if (forward_arrow > 0) {
 
     // forward arrow line
-    fin >> arrow_type >> arrow_style >> arrow_thickness 
+    fin >> arrow_type >> arrow_style >> arrow_thickness
 	>> arrow_width >> arrow_height;
     oinfo.endArrowId = arrow_ids[arrow_type];
     if (oinfo.endArrowId == 1 && arrow_style == 0)
@@ -496,7 +496,7 @@ void XfigImport::parseSpline (istream& fin, GDocument* doc) {
   if (forward_arrow > 0) {
 
     // forward arrow line
-    fin >> arrow_type >> arrow_style >> arrow_thickness 
+    fin >> arrow_type >> arrow_style >> arrow_thickness
 	>> arrow_width >> arrow_height;
     oinfo.endArrowId = arrow_ids[arrow_type];
     if (oinfo.endArrowId == 1 && arrow_style == 0)
@@ -560,7 +560,7 @@ void XfigImport::parseText (istream& fin, GDocument* doc) {
     // PostScript font
     if (font == -1)
       font = 0;
-    qfont = QFont (psFontTable[font].family, qRound (font_size), 
+    qfont = QFont (psFontTable[font].family, qRound (font_size),
 		   psFontTable[font].weight, psFontTable[font].italic);
   }
   else {
@@ -592,8 +592,8 @@ void XfigImport::parseText (istream& fin, GDocument* doc) {
     fin.get (c);
     if (c == '\\') {
       fin.get (ocode, 4);
-      int code = (ocode[0] - '0') * 64 + 
-	(ocode[1] - '0') * 8 + 
+      int code = (ocode[0] - '0') * 64 +
+	(ocode[1] - '0') * 8 +
 	(ocode[2] - '0');
       if (code == 1)
 	finished = true;
@@ -613,19 +613,19 @@ void XfigImport::parseText (istream& fin, GDocument* doc) {
   else if (sub_type == 2) {
     GText::TextInfo ti = obj->getTextInfo ();
     ti.align = GText::TextInfo::AlignRight;
-    obj->setTextInfo (ti);             
+    obj->setTextInfo (ti);
   }
   Coord origin (x / fig_resolution, y / fig_resolution - qfont.pointSize ());
   obj->setOrigin (origin);
 
   if (angle != 0) {
-    // rotate the text 
+    // rotate the text
     float nangle = angle * RAD_FACTOR;
     QWMatrix m1, m2, m3;
     Coord rotCenter;
- 
+
     if (sub_type == 0) {
-      rotCenter = Coord (obj->boundingBox ().left (), 
+      rotCenter = Coord (obj->boundingBox ().left (),
 			 obj->boundingBox ().bottom ());
     }
     else if (sub_type == 1) {
@@ -633,7 +633,7 @@ void XfigImport::parseText (istream& fin, GDocument* doc) {
 			 obj->boundingBox ().bottom ());
     }
     else if (sub_type == 2) {
-      rotCenter = Coord (obj->boundingBox ().right (), 
+      rotCenter = Coord (obj->boundingBox ().right (),
 			 obj->boundingBox ().bottom ());
     }
     m1.translate (-rotCenter.x (), -rotCenter.y ());
@@ -670,17 +670,17 @@ void XfigImport::buildDocument (GDocument *doc) {
   doc->setAutoUpdate (true);
 }
 
-void XfigImport::setProperties (GObject* obj, int pen_color, int style, 
+void XfigImport::setProperties (GObject* obj, int pen_color, int style,
 				int thickness, int area_fill, int fill_color) {
   if (pen_color >= 0)
     obj->setOutlineColor (*colorTable[pen_color]);
 
   if (style < 1)
-    obj->setOutlineStyle (SolidLine);
+    obj->setOutlineStyle (Qt::SolidLine);
   else if (style == 1)
-    obj->setOutlineStyle (DashLine);
+    obj->setOutlineStyle (Qt::DashLine);
   else if (style == 2)
-    obj->setOutlineStyle (DotLine);
+    obj->setOutlineStyle (Qt::DotLine);
 
   obj->setOutlineWidth (thickness * 72.0 / 80.0);
 

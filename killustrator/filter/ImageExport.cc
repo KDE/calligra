@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -40,7 +40,7 @@ ImageExport::ImageExport () {
 #ifdef HAVE_QIMGIO
   qInitImageIO ();
 #endif
-  QImageIO::defineIOHandler ("GIF", "^GIF[0-9][0-9][a-z]", 0, 
+  QImageIO::defineIOHandler ("GIF", "^GIF[0-9][0-9][a-z]", 0,
 			     0, write_gif_image);
 }
 
@@ -78,10 +78,10 @@ bool ImageExport::exportToFile (GDocument* doc) {
   if (buffer == 0L)
     return false;
 
-  buffer->fill (white);
+  buffer->fill (Qt::white);
   Painter p;
   p.begin (buffer);
-  p.setBackgroundColor (white);
+  p.setBackgroundColor (Qt::white);
   p.eraseRect (0, 0, w, h);
   p.scale (RESOLUTION / 72.0, RESOLUTION / 72.0);
 
@@ -93,11 +93,11 @@ bool ImageExport::exportToFile (GDocument* doc) {
   // compute the bounding box
   Rect box = doc->boundingBoxForAllObjects ();
   // and copy the affected area to the new pixmap
-  QPixmap *pixmap = new QPixmap (qRound (box.width ()), 
+  QPixmap *pixmap = new QPixmap (qRound (box.width ()),
 				 qRound (box.height ()));
   if (pixmap == 0L)
     return false;
-  bitBlt (pixmap, 0, 0, buffer, qRound (box.x ()), qRound (box.y ()), 
+  bitBlt (pixmap, 0, 0, buffer, qRound (box.x ()), qRound (box.y ()),
           qRound (box.width ()), qRound (box.height ()));
   delete buffer;
 

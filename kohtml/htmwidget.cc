@@ -26,13 +26,14 @@
 #include "htmwidget.moc"
 
 #include <iostream.h>
+#include <qapplication.h>
 
 KMyHTMLWidget::KMyHTMLWidget(QWidget *parent = 0L, const char *name = 0L,
                       const char *pixDir = 0L)
-:KHTMLWidget(parent, name, pixDir)		      
+:KHTMLWidget(parent, name, pixDir)		
 {
-}		      
-		      
+}		
+		
 KMyHTMLWidget::~KMyHTMLWidget()
 {
 }
@@ -42,11 +43,11 @@ void KMyHTMLWidget::draw(QPaintDevice *dev, int width, int height)
   cerr << "drawinggggggg" << endl;
 
 //  if (painter) delete painter
-  
+
   QPainter::redirect(this, dev);
   QPaintEvent pe(QRect(x_offset, y_offset, x_offset+width, y_offset+height));
   QApplication::sendEvent(this, &pe);
   QPainter::redirect(this, 0);
-  
+
   cerr << "done :-))))))" << endl;
 }

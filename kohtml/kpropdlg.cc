@@ -154,7 +154,7 @@ KPropDlg::~KPropDlg()
 QFrame *KPropDlg::addPage( int parentindex, const char *title, int position )
 {
 	QVBoxLayout *templayout;
-	QFrame *page; 
+	QFrame *page;
 
 
 	if( DlgType == TABS )
@@ -196,12 +196,12 @@ void KPropDlg::showPage(QWidget *w)
 	// bring the new page up front
 	w->raise();
 	
-	// deactivate old page 
+	// deactivate old page
 	if( ActivePage )
 	{
 		ActivePage->setEnabled( FALSE );
 		ActivePage->hide();
-	} 
+	}
 	// and select new one
 	ActivePage=w;
 	ActivePage->setEnabled( TRUE );
@@ -234,7 +234,7 @@ bool KPropDlg::showPage(int index)
 
 	// printf("display page %d, %X\n", index, page);
 	
-	if( page == 0 ) 
+	if( page == 0 )
 	{	warning("error in page num %d", index);
 		return FALSE;
 	}
@@ -434,21 +434,21 @@ void KPropDlg::applyConfig()
 
 void KPropDlg::connectConfig( QObject * propconf )
 {
-	connect( this, 
-			SIGNAL( setConfig() ), 
-			propconf, 
-			SLOT( setConfig() ) 
+	connect( this,
+			SIGNAL( setConfig() ),
+			propconf,
+			SLOT( setConfig() )
 			);
-	connect( this, 
-			SIGNAL( getConfig() ), 
-			propconf, 
-			SLOT( getConfig() ) 
+	connect( this,
+			SIGNAL( getConfig() ),
+			propconf,
+			SLOT( getConfig() )
 			);
 }
 
 bool KPropDlg::eventFilter( QObject *obj, QEvent *ev )
 {
-	if( ev->type() == Event_Resize )
+	if( ev->type() == QEvent::Resize )
 	{
 		adjustPageHeight();
 		if( ( (QResizeEvent*)ev )->size().height() < minimumPageHeight )

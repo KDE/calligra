@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -83,16 +83,16 @@ QString CommandHistory::getUndoName()
   if (index > 0) {
     Command* cmd = history.at (index - 1);
     return cmd->getName();
-  } else 
-    return 0;
+  } else
+    return QString::null;
 }
 
 QString CommandHistory::getRedoName()
 {
   if (index < history.count ())
     return history.at (index)->getName();
-  else 
-    return 0;
+  else
+    return QString::null;
 }
 
 void CommandHistory::dump () {

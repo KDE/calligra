@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -46,7 +46,7 @@ FreeHandTool::FreeHandTool (CommandHistory* history) : Tool (history) {
 }
 
 void FreeHandTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
-  if (e->type () == Event_MouseButtonPress) {
+  if (e->type () == QEvent::MouseButtonPress) {
     QMouseEvent *me = (QMouseEvent *) e;
     if (me->button () != LeftButton)
       return;
@@ -63,7 +63,7 @@ void FreeHandTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     }
     else {
       newObj = true;
-      
+
       QList<GObject> olist;
     // look for existing polylines with a point near the mouse pointer
       if (doc->findContainingObjects (xpos, ypos, olist)) {
@@ -71,10 +71,10 @@ void FreeHandTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 	while (it.current ()) {
 	  if (it.current ()->isA ("GPolyline")) {
 	    GPolyline* obj = (GPolyline *) it.current ();
-	    if ((last = 
+	    if ((last =
 		 obj->getNeighbourPoint (Coord (xpos, ypos))) != -1
 		&& (last == 0 || last == (int) obj->numOfPoints () - 1)) {
-	      line = obj; 
+	      line = obj;
 	      newObj = false;
 	      if (last != 0)
 		// it's not the first point of the line, so update the
@@ -82,7 +82,7 @@ void FreeHandTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 		last += 1;
 	      points.clear ();
 	      break;
-	    } 
+	    }
 	  }
 	  ++it;
 	}
@@ -98,7 +98,7 @@ void FreeHandTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     }
 //    line->addPoint (last, Coord (xpos, ypos));
   }
-  else if (e->type () == Event_MouseMove) {
+  else if (e->type () == QEvent::MouseMove) {
     if (line == 0L || !buttonIsDown)
       return;
     QMouseEvent *me = (QMouseEvent *) e;
@@ -115,7 +115,7 @@ void FreeHandTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
         points.append (new Coord (xpos, ypos));
     }
   }
-  else if (e->type () == Event_MouseButtonRelease) {
+  else if (e->type () == QEvent::MouseButtonRelease) {
     buttonIsDown = false;
     if (line == 0L)
       return;
@@ -135,7 +135,7 @@ void FreeHandTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 
     doc->unselectAllObjects ();
 
-    if (last > 0 && line->numOfPoints () >= 3 && 
+    if (last > 0 && line->numOfPoints () >= 3 &&
 	  line->getNeighbourPoint (Coord (xpos, ypos)) == 0) {
 	// the polyline is closed, so convert it into a polygon
 	GPolygon* obj = new GPolygon (line->getPoints ());
@@ -157,16 +157,16 @@ void FreeHandTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
 	  points.removeFirst ();
 	  if (last != 0)
 	    last = last - points.count () + 1;
-	  AddLineSegmentCmd *cmd =  
+	  AddLineSegmentCmd *cmd =
 	    new AddLineSegmentCmd (doc, line, last, points);
 	  history->addCommand (cmd);
 	}
       }
       line = 0L; last = 0;
     }
-  else if (e->type () == Event_KeyPress) {
+  else if (e->type () == QEvent::KeyPress) {
     QKeyEvent *ke = (QKeyEvent *) e;
-    if (ke->key () == Key_Escape)
+    if (ke->key () == Qt::Key_Escape)
       emit operationDone ();
   }
   return;

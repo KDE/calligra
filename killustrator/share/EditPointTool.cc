@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -62,7 +62,7 @@ EditPointTool::EditPointTool (CommandHistory* history) : Tool (history) {
   mode = MovePoint;
   cursor = new QCursor (QBitmap (right_ptr_width,
 				 right_ptr_height,
-				 right_ptr_bits, true), 
+				 right_ptr_bits, true),
 			QBitmap (right_ptrmsk_width,
 				 right_ptrmsk_height,
 				 right_ptrmsk_bits, true),
@@ -93,12 +93,12 @@ void EditPointTool::setMode (Mode m) {
   }
 }
 
-void EditPointTool::processEvent (QEvent* e, GDocument *doc, 
+void EditPointTool::processEvent (QEvent* e, GDocument *doc,
 				  Canvas* canvas) {
   if (doc->selectionIsEmpty ())
     return;
 
-  if (e->type () == Event_MouseButtonPress) {
+  if (e->type () == QEvent::MouseButtonPress) {
     QMouseEvent *me = (QMouseEvent *) e;
     float xpos = me->x (), ypos = me->y ();
     canvas->snapPositionToGrid (xpos, ypos);
@@ -134,7 +134,7 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc,
       }
     }
   }
-  else if (e->type () == Event_MouseMove) {
+  else if (e->type () == QEvent::MouseMove) {
     if (mode == InsertPoint)
       return;
 
@@ -174,7 +174,7 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc,
       }
     }
   }
-  else if (e->type () == Event_MouseButtonRelease) {
+  else if (e->type () == QEvent::MouseButtonRelease) {
     if (obj == 0L)
       return;
 
@@ -185,11 +185,11 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc,
       if (pointIdx != -1) {
 	float dx = xpos - lastPos.x ();
 	float dy = ypos - lastPos.y ();
-	if (dx != 0 || dy != 0) 
+	if (dx != 0 || dy != 0)
 	  obj->movePoint (pointIdx, dx, dy);
 	
 	EditPointCmd *cmd = new EditPointCmd (doc, obj, pointIdx,
-					      xpos - startPos.x (), 
+					      xpos - startPos.x (),
 					      ypos - startPos.y ());
 	history->addCommand (cmd);
       }

@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -28,7 +28,7 @@
 Coord Coord::transform (const QWMatrix& m) const {
   float x, y;
 
-  m.map (x_, y_, &x, &y);
+  m.map ((double)x_, (double)y_, (double*)&x, (double*)&y);
   return Coord (x, y);
 }
 
@@ -49,7 +49,7 @@ QDataStream& operator<< (QDataStream& s, const Coord& c) {
 
 QDataStream& operator>> (QDataStream& s, Coord& c) {
   float x, y;
-  
+
   s >> x >> y;
   c.x (x); c.y (y);
   return s;
@@ -121,10 +121,10 @@ Rect Rect::transform (const QWMatrix& m) const {
   Rect result;
   if (m.m12 () == 0.0F && m.m21 () == 0.0F) {
     result = Rect (topLeft ().transform (m), bottomRight ().transform (m));
-  } 
+  }
   else {
     int i;
-    Coord p[4] = { Coord (x1_, y1_), Coord (x1_, y2_), 
+    Coord p[4] = { Coord (x1_, y1_), Coord (x1_, y2_),
 		   Coord (x2_, y2_), Coord (x2_, y1_) };
     for (i = 0; i < 4; i++)
       p[i] = p[i].transform (m);
@@ -145,7 +145,7 @@ Rect Rect::transform (const QWMatrix& m) const {
 }
 
 ostream& operator<< (ostream& os, const Rect& r) {
-    os << '[' << r.left () << ", " << r.top () << " - " 
+    os << '[' << r.left () << ", " << r.top () << " - "
        << r.right () << ", " << r.bottom () << ']';
     return os;
 }

@@ -297,7 +297,7 @@ unsigned short QWinMetaFile::calcCheckSum(WmfPlaceableHeader* apmfh)
 {
   WORD*  lpWord;
   WORD   wResult, i;
-  
+
   // Start with the first word
   wResult = *(lpWord = (WORD*)(apmfh));
   // XOR in each of the other 9 words
@@ -343,7 +343,7 @@ bool QWinMetaFile::paint(const QPaintDevice* aTarget)
   for (cmd=mFirstCmd; cmd; cmd=cmd->next)
   {
     idx = cmd->funcIndex;
-    if (idx < 0) 
+    if (idx < 0)
     {
       debug("invalid index %d", idx);
       continue;
@@ -351,7 +351,7 @@ bool QWinMetaFile::paint(const QPaintDevice* aTarget)
 
     if (mSingleStep || metaFuncTab[idx].method==0)
     {
-      fprintf(stderr, "QWinMetaFile: %s%s", 
+      fprintf(stderr, "QWinMetaFile: %s%s",
 	      metaFuncTab[idx].method==0?"unimplemented ":"",
 	      metaFuncTab[idx].name);
       for (i=0; i<cmd->numParm; i++)
@@ -564,7 +564,7 @@ void QWinMetaFile::polypolygon(short num, short* parm)
   int polyCount = parm[0];
   int vertices[polyCount];
   bool bgMode = FALSE;
-  RasterOp rop = mPainter.rasterOp();
+  Qt::RasterOp rop = mPainter.rasterOp();
   QBrush fgBrush(mPainter.brush());
   QBrush bgBrush(mPainter.brush());
   bgBrush.setColor(mPainter.backgroundColor());
@@ -646,26 +646,26 @@ void QWinMetaFile::setBkColor(short num, short* parm)
 //-----------------------------------------------------------------------------
 void QWinMetaFile::setBkMode(short num, short* parm)
 {
-  if (parm[0]==1) mPainter.setBackgroundMode(TransparentMode);
-  else mPainter.setBackgroundMode(OpaqueMode);
+  if (parm[0]==1) mPainter.setBackgroundMode(Qt::TransparentMode);
+  else mPainter.setBackgroundMode(Qt::OpaqueMode);
 }
 
 
 //-----------------------------------------------------------------------------
 void QWinMetaFile::setRop(short num, short* parm)
 {
-  RasterOp opTab[] =
+  Qt::RasterOp opTab[] =
   {
-    CopyROP/*none*/, 
-    CopyROP, CopyROP, EraseROP, NotCopyROP,    /*  1...4 */
-    CopyROP, NotROP, XorROP, CopyROP,          /*  5...8 */
-    NotEraseROP, NotXorROP, CopyROP, NotOrROP, /*  9..12 */
-    CopyROP, CopyROP, OrROP, CopyROP           /* 13..16 */
+    Qt::CopyROP/*none*/,
+    Qt::CopyROP, Qt::CopyROP, Qt::EraseROP, Qt::NotCopyROP,    /*  1...4 */
+    Qt::CopyROP, Qt::NotROP, Qt::XorROP, Qt::CopyROP,          /*  5...8 */
+    Qt::NotEraseROP, Qt::NotXorROP, Qt::CopyROP, Qt::NotOrROP, /*  9..12 */
+    Qt::CopyROP, Qt::CopyROP, Qt::OrROP, Qt::CopyROP           /* 13..16 */
   };
-  RasterOp rop;
+  Qt::RasterOp rop;
 
   if (parm[0]>0 && parm[0]<=16) rop = opTab[parm[0]];
-  else rop = CopyROP;
+  else rop = Qt::CopyROP;
 
   mPainter.setRasterOp(rop);
 }
@@ -674,29 +674,29 @@ void QWinMetaFile::setRop(short num, short* parm)
 //-----------------------------------------------------------------------------
 void QWinMetaFile::createBrushIndirect(short num, short* parm)
 {
-  static BrushStyle hatchedStyleTab[] =
-  { 
-    HorPattern, 
-    FDiagPattern, 
-    BDiagPattern, 
-    CrossPattern, 
-    DiagCrossPattern
+  static Qt::BrushStyle hatchedStyleTab[] =
+  {
+    Qt::HorPattern,
+    Qt::FDiagPattern,
+    Qt::BDiagPattern,
+    Qt::CrossPattern,
+    Qt::DiagCrossPattern
   };
-  static BrushStyle styleTab[] =
-  { SolidPattern, 
-    NoBrush,
-    FDiagPattern,   /* hatched */
-    Dense4Pattern,  /* should be custom bitmap pattern */
-    HorPattern,     /* should be BS_INDEXED (?) */
-    VerPattern,     /* should be device-independend bitmap */
-    Dense6Pattern,  /* should be device-independend packed-bitmap */
-    Dense2Pattern,  /* should be BS_PATTERN8x8 */
-    Dense3Pattern   /* should be device-independend BS_DIBPATTERN8x8 */
+  static Qt::BrushStyle styleTab[] =
+  { Qt::SolidPattern,
+    Qt::NoBrush,
+    Qt::FDiagPattern,   /* hatched */
+    Qt::Dense4Pattern,  /* should be custom bitmap pattern */
+    Qt::HorPattern,     /* should be BS_INDEXED (?) */
+    Qt::VerPattern,     /* should be device-independend bitmap */
+    Qt::Dense6Pattern,  /* should be device-independend packed-bitmap */
+    Qt::Dense2Pattern,  /* should be BS_PATTERN8x8 */
+    Qt::Dense3Pattern   /* should be device-independend BS_DIBPATTERN8x8 */
   };
-  BrushStyle style;
+  Qt::BrushStyle style;
   short arg;
   WinObjBrushHandle* handle = createBrush();
-  
+
   arg = parm[0];
   if (arg==2)
   {
@@ -705,7 +705,7 @@ void QWinMetaFile::createBrushIndirect(short num, short* parm)
     else
     {
       debug("QWinMetaFile::createBrushIndirect: invalid hatched brush %d",arg);
-      style = SolidPattern;
+      style = Qt::SolidPattern;
     }
   }
   else if (arg>=0 && arg<9)
@@ -713,7 +713,7 @@ void QWinMetaFile::createBrushIndirect(short num, short* parm)
   else
   {
     debug("QWinMetaFile::createBrushIndirect: invalid brush %d", arg);
-    style = SolidPattern;
+    style = Qt::SolidPattern;
   }
   //  debug("createBrushIndirect: %d/%d -> %d", parm[0], parm[3], (short)style);
 
@@ -725,17 +725,17 @@ void QWinMetaFile::createBrushIndirect(short num, short* parm)
 //-----------------------------------------------------------------------------
 void QWinMetaFile::createPenIndirect(short num, short* parm)
 {
-  static PenStyle styleTab[] =
-  { SolidLine, DashLine, DotLine, DashDotLine, DashDotDotLine,
-    NoPen, SolidLine };
-  PenStyle style;
+  static Qt::PenStyle styleTab[] =
+  { Qt::SolidLine, Qt::DashLine, Qt::DotLine, Qt::DashDotLine, Qt::DashDotDotLine,
+    Qt::NoPen, Qt::SolidLine };
+  Qt::PenStyle style;
   WinObjPenHandle* handle = createPen();
 
   if (parm[0]>=0 && parm[0]<6) style=styleTab[parm[0]];
   else
   {
     debug("QWinMetaFile::createPenIndirect: invalid pen %d", parm[0]);
-    style = SolidLine;
+    style = Qt::SolidLine;
   }
   // if (parm[1]<=0) style=NoPen;
 

@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -55,21 +55,21 @@ void InsertPartTool::setPartEntry (KoDocumentEntry& entry) {
 }
 
 void InsertPartTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
-  if (e->type () == Event_KeyPress) {
+  if (e->type () == (QEvent::Type)2 /*QEvent::KeyPress*/) {
     QKeyEvent *ke = (QKeyEvent *) e;
-    if (ke->key () == Key_Escape) {
+    if (ke->key () == Qt::Key_Escape) {
       /*
        * Abort the last operation
        */
       emit operationDone ();
     }
   }
-  else if (e->type () == Event_MouseButtonPress) {
+  else if (e->type () == QEvent::MouseButtonPress) {
     QMouseEvent *me = (QMouseEvent *) e;
-    x = me->x (); y = me->y (); 
+    x = me->x (); y = me->y ();
     width = height = 0;
   }
-  else if (e->type () == Event_MouseMove) {
+  else if (e->type () == QEvent::MouseMove) {
     if (x == -1 || y == -1)
       return;
 
@@ -89,7 +89,7 @@ void InsertPartTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     painter.restore ();
     painter.end ();
   }
-  else if (e->type () == Event_MouseButtonRelease) {
+  else if (e->type () == QEvent::MouseButtonRelease) {
     if (validEntry) {
        KIllustratorDocument *kdoc = (KIllustratorDocument *) doc;
        kdoc->insertPart (QRect (x, y, width, height), docEntry);
