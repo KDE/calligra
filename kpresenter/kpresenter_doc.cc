@@ -290,6 +290,8 @@ void KPresenterDoc::saveConfig()
     config->writeEntry( "AllowAutoFormat" , m_bAllowAutoFormat );
     config->writeEntry( "ShowGrid" , m_bShowGrid );
     config->writeEntry( "GridToFront" , m_bGridToFont );
+    config->writeEntry( "ResolutionX", m_gridX );
+    config->writeEntry( "ResolutionY", m_gridY );
     config->writeEntry( "HelpLineToFront" , m_bHelplinesToFront );
 }
 
@@ -312,6 +314,9 @@ void KPresenterDoc::initConfig()
         setAllowAutoFormat( config->readBoolEntry( "AllowAutoFormat" , true ));
         setShowGrid( config->readBoolEntry( "ShowGrid" , false ));
         setGridToFront(  config->readBoolEntry( "GridToFront" , false ));
+        setGridX( config->readDoubleNumEntry( "ResolutionX", MM_TO_POINT( 10.0 ) ));
+        setGridY( config->readDoubleNumEntry( "ResolutionY", MM_TO_POINT( 10.0 ) ));
+
         setHelpLineToFront( config->readBoolEntry( "HelpLineToFront" , false ));
     }
     else
