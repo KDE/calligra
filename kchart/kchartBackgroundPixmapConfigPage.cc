@@ -107,9 +107,12 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
 
     QHBox* intensityHB = new QHBox( right );
     intensityHB->setSpacing( 10 );
-    QLabel* intensityLA = new QLabel( i18n( "&Intensity in %:" ), intensityHB );
+    QLabel* intensityLA = new QLabel(
+      // xgettext:no-c-format
+      i18n( "&Intensity in %:" ), intensityHB );
     intensitySB = new QSpinBox( 1, 100, 1, intensityHB );
     intensityLA->setBuddy( intensitySB );
+    // xgettext:no-c-format
     QString ttstr = i18n( "Here you can select how much the image should be "
                           "brightened up so that it does not disturb the "
                           "selected area too much.<br> Different images require "
