@@ -358,6 +358,7 @@ void KWDocument::updateRuler()
         viewPtr->getGUI()->getVertRuler()->setPageLayout( m_pageLayout );
         viewPtr->getGUI()->canvasWidget()->repaintAll( true );
     }
+    layout();
 }
 
 double KWDocument::ptColumnWidth() const
