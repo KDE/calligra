@@ -36,10 +36,14 @@ public:
     virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
 
 private:
-
+     
     QDomElement GetCellStyle(QDomDocument gnumeric_doc,KSpreadCell * cell,
 			     int currentcolumn,
 			     int currentrow);
+    void addAttributeItem(QDomDocument gnumeric_doc, QDomElement attributes, const QString& type, const QString& name, bool value);
+    void addSummaryItem(QDomDocument gnumeric_doc, QDomElement summary, const QString& name, const QString& value);
+    bool hasBorder(KSpreadCell *cell, int currentcolumn, int currentrow);
+   
 };
 #endif
 
