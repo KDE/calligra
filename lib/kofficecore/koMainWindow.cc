@@ -19,6 +19,7 @@
 
 #include <config.h>
 
+#include "koApplication.h"
 #include "koMainWindow.h"
 #include "koDocument.h"
 #include "koFilterManager.h"
@@ -33,15 +34,15 @@
 #include <qfileinfo.h>
 #include <qfiledialog.h>
 
-#include <kapp.h>
-#include <kstdaccel.h>
-#include <klocale.h>
-#include <kglobal.h>
-#include <kmimetype.h>
-#include <kfiledialog.h>
-#include <kmessagebox.h>
-#include <kaction.h>
 #include <kaboutdialog.h>
+#include <kaction.h>
+#include <kapp.h>
+#include <kfiledialog.h>
+#include <kglobal.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <kmimetype.h>
+#include <kstdaccel.h>
 #include <kstddirs.h>
 
 #ifdef HAVE_UNISTD_H
@@ -107,7 +108,7 @@ KoMainWindow* KoMainWindow::nextMainWindow()
     return s_lstMainWindows->next();
 }
 
-bool KoMainWindow::openDocument( const KURL & url, bool isTempFile )
+bool KoMainWindow::openDocument( const KURL & url )
 {
     KoDocument* doc = document();
 	
@@ -115,8 +116,6 @@ bool KoMainWindow::openDocument( const KURL & url, bool isTempFile )
     if ( !newdoc->loadFromURL( url ) )
     {
 	delete newdoc;
-        if ( isTempFile )
-          //unlink( url.path().ascii() );
 	return FALSE;
     }
 
@@ -137,30 +136,22 @@ bool KoMainWindow::openDocument( const KURL & url, bool isTempFile )
         // We had no document, set the new one
         setRootPart( newdoc );
     }
-    if ( isTempFile )
-    {
-        // We opened a temporary file (result of an import filter)
-        // Set document URL to empty - we don't want to save in /tmp !
-        newdoc->setURL(KURL());
-        // and remove temp file
-        unlink( url.path().ascii() );
-    }
     return TRUE;
 }
 
-bool KoMainWindow::saveDocument( const char* _native_format, const char* _native_pattern,
-				 const char* _native_name, bool saveas )
+bool KoMainWindow::saveDocument( bool saveas )
 {
     KoDocument* pDoc = document();
 
     KURL url = pDoc->url();
-    QString outputMimeType ( _native_format );
+    QCString _native_format ( KOAPP->nativeFormatMimeType() );
+    QCString outputMimeType ( _native_format );
 
     if ( !url.hasPath() || saveas )
     {
 	QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Export,
-								    _native_format, _native_pattern,
-								    _native_name, TRUE );
+								    _native_format, nativeFormatPattern(),
+                                                                    nativeFormatName(), TRUE );
 	QString file;
 
 	bool bOk = true;
@@ -175,7 +166,7 @@ bool KoMainWindow::saveDocument( const char* _native_format, const char* _native
 
 	    if ( QFileInfo( file ).extension().isEmpty() ) {
 		// assume a that the the native patterns ends with .extension
-		QString s( _native_pattern );
+		QString s( nativeFormatPattern() );
 		QString extension = s.mid( s.find( "." ) );
 		file += extension;
 	    }
@@ -236,7 +227,7 @@ bool KoMainWindow::closeDocument()
 
         switch(res) {
         case 0 :
-	    return saveDocument( nativeFormatMimeType(), nativeFormatPattern(), nativeFormatName() );
+	    return saveDocument();
         case 1 :
           {
             KoDocument* doc = document();
@@ -296,7 +287,7 @@ void KoMainWindow::slotFileNew()
 void KoMainWindow::slotFileOpen()
 {
     QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Import,
-								nativeFormatMimeType(), nativeFormatPattern(),
+								KOAPP->nativeFormatMimeType(), nativeFormatPattern(),
 								nativeFormatName(), TRUE );
 
     QString file;
@@ -308,26 +299,17 @@ void KoMainWindow::slotFileOpen()
     if ( file.isNull() )
 	return;
 
-    QString importedFile = KoFilterManager::self()->import( file, nativeFormatMimeType() );
-    if ( importedFile.isEmpty() )
-	return;
-
-    bool isTempFile = ( importedFile != file );
-    if ( !openDocument( importedFile, isTempFile ) )
-    {
-        KMessageBox::error( this, i18n( "Could not open\n%1" ).arg(importedFile) );
-    }
-
+    (void) openDocument( KURL(file) );
 }
 
 void KoMainWindow::slotFileSave()
 {
-    saveDocument( nativeFormatMimeType(), nativeFormatPattern(), nativeFormatName() );
+    saveDocument();
 }
 
 void KoMainWindow::slotFileSaveAs()
 {
-    saveDocument( nativeFormatMimeType(), nativeFormatPattern(), nativeFormatName(), TRUE );
+    saveDocument( TRUE );
 }
 
 void KoMainWindow::slotFileClose()

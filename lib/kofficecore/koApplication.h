@@ -23,6 +23,8 @@
 #include <kstartparams.h>
 #include <kapp.h>
 
+#define KOAPP ((KoApplication *)KApplication::kApplication())
+
 /**
  *  Base class for all KOffice apps
  *
@@ -46,7 +48,7 @@ public:
      *  @param argc     Number of arguments on the command line.
      *  @param argv     Array of arguments on the comment line.
      *  @param rappName Name of the app.
-     *  @param rNativeMimeType Name of the native mimetype, to load from command line
+     *  @param rNativeMimeType Name of the native mimetype, for instance "application/x-kspread"
      */
     KoApplication( int &argc, char **argv, const QCString& rAppName, const QCString& rNativeMimeType );
 
@@ -67,6 +69,12 @@ public:
      *  Shows a KOffice specific about dialog for this app.
      */
     void aboutKDE() { /*aboutKDE();*/ }
+
+    /**
+     * MimeType of the native file format for this application
+     * For example "application/x-kspread".
+     */
+    QCString nativeFormatMimeType() { return m_nativeMimeType; }
 
 protected:
 

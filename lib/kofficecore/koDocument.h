@@ -44,7 +44,7 @@ class KoDocumentChildPicture;
 class KoDocument : public ContainerPart
 {
   Q_OBJECT
-    
+
 public:
 
   /**
@@ -64,7 +64,7 @@ public:
   virtual bool initDoc() = 0;
 
   /**
-   *  Retrieves, if the document is modified or not. 
+   *  Retrieves, if the document is modified or not.
    */
   virtual bool isModified() const;
 
@@ -91,11 +91,20 @@ public:
 
   /**
    *  Loads a document from a given URL.
+   *  Applies a filter if necessary, and calls loadNativeFormat in any case
+   *  You should never have to reimplement.
    */
   virtual bool loadFromURL( const KURL& url );
 
   /**
+   *  Loads a document in the native format from a given URL.
+   *  Reimplement if your native format isn't XML.
+   */
+  virtual bool loadNativeFormat( const KURL& url );
+
+  /**
    *  Loads a document from a store.
+   *  You should never have to reimplement.
    * @param url An internal url, like tar:/1/2
    */
   virtual bool loadFromStore( KoStore* store, const KURL& url );
@@ -228,7 +237,7 @@ protected:
    *  Retrieves a comment of the document.
    */
   virtual QString comment() const;
-  
+
   /**
    *  An example implementation may look like this one:
    *  <PRE>
@@ -286,7 +295,7 @@ public:
    *  about the position and id of the embedded document.
    */
   virtual bool save( ostream& out );
-  
+
   /**
    *  Writes the OBJECT tag, but does NOT write the content of the
    *  embedded documents. Saving the embedded documents themselves
@@ -296,14 +305,14 @@ public:
    *  Use this function if your application uses the DOM.
    */
   virtual QDomElement save( QDomDocument& doc );
-  
+
   /**
    *  Parses the OBJECT tag. This does NOT mean creating the child documents.
    *  AFTER the 'parser' finished parsing, you must use @ref #loadDocument
    *  to actually load the embedded documents.
    */
   virtual bool load( KOMLParser& parser, vector<KOMLAttrib>& _attribs );
-  
+
   /**
    *  Parses the OBJECT tag. This does NOT mean creating the child documents.
    *  AFTER the 'parser' finished parsing, you must use @ref #loadDocument
@@ -312,7 +321,7 @@ public:
    *  Use this function if your application uses the DOM.
    */
   virtual bool load( const QDomElement& element );
-  
+
   /**
    *  Actually loads the document from the disk/net or from the store,
    *  depending on @ref #url
@@ -340,14 +349,14 @@ private:
    *  calling @ref #loadDocument.
    */
   QString m_tmpURL;
-  
+
   /**
    * This variable is
    *  set after parsing the OBJECT tag in @ref #load and is reset after
    *  calling @ref #loadDocument.
    */
   QRect m_tmpGeometry;
-  
+
   /**
    * This variable is
    *  set after parsing the OBJECT tag in @ref #load and is reset after

@@ -58,12 +58,6 @@ public:
     KoDocument* document() { return (KoDocument*)rootPart(); }
 
     /**
-     * MimeType of the native file format of the document.
-     * For example "application/x-kspread".
-     */
-    virtual QString nativeFormatMimeType() const = 0;
-
-    /**
      * The pattern of the native file format, for example "*.ksp".
      */
     virtual QString nativeFormatPattern() const = 0;
@@ -162,28 +156,21 @@ protected:
     /**
      * Load the desired document and show it.
      * @param url the URL to open
-     * @param isTempFile true if the file is the result of an import filter
      *
      * @return TRUE on success.
      */
-    virtual bool openDocument( const KURL & url, bool isTempFile );
+    virtual bool openDocument( const KURL & url );
 
     /**
      * Saves the document, asking for a filename if necessary.
-     * Reset the URL of the document to "" in slotFileSaveAs
      *
-     * @param _native_format the standard mimetype for your document
-     *                       Will allow to use filters if saving to another format
-     * @param _native_pattern *.kwd for KWord
-     * @param _native_name optional. KWord for KWord :)
      * @param _saveas if set to TRUE the user is always prompted for a filename
      *
      * @return TRUE on success or on cancel, false on error
      *         (don't display anything in this case, the error dialog box is also implemented here
      *         but restore the original URL in slotFileSaveAs)
      */
-    virtual bool saveDocument( const char* _native_format, const char* _native_pattern,
-			       const char* _native_name = 0L, bool _saveas = FALSE );
+    virtual bool saveDocument( bool _saveas = FALSE );
 
 private:
 

@@ -20,14 +20,15 @@
 #include <fstream>
 
 #include "koDocument.h"
+#include "koApplication.h"
 #include "koStream.h"
 #include "koQueryTypes.h"
+#include "koFilterManager.h"
 
+#include <koStore.h>
 #include <koBinaryStore.h>
 #include <koTarStore.h>
 #include <koStoreStream.h>
-
-#include <koStore.h>
 
 #include <komlWriter.h>
 #include <komlMime.h>
@@ -36,8 +37,8 @@
 #include <klocale.h>
 #include <kapp.h>
 #include <kdebug.h>
+#include <kmessagebox.h>
 
-#include <qmessagebox.h>
 #include <qpainter.h>
 #include <qcolor.h>
 #include <qpicture.h>
@@ -81,17 +82,17 @@ bool KoDocumentChild::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
       m_tmpMimeType = (*it).m_strValue.c_str();
     }
     else
-      kdebug( KDEBUG_INFO, 30003, "Unknown attrib 'OBJECT:%s'", (*it).m_strName.c_str() );
+      kDebugInfo( 30003, "Unknown attrib 'OBJECT:%s'", (*it).m_strName.c_str() );
   }
 
   if ( m_tmpURL.isEmpty() )
   {	
-    kdebug( KDEBUG_INFO, 30003, "Empty 'url' attribute in OBJECT" );
+    kDebugInfo( 30003, "Empty 'url' attribute in OBJECT" );
     return false;
   }
   else if ( m_tmpMimeType.isEmpty() )
   {
-    kdebug( KDEBUG_INFO, 30003, "Empty 'mime' attribute in OBJECT" );
+    kDebugInfo( 30003, "Empty 'mime' attribute in OBJECT" );
     return false;
   }
 
@@ -113,18 +114,18 @@ bool KoDocumentChild::load( KOMLParser& parser, vector<KOMLAttrib>& _attribs )
       setGeometry( m_tmpGeometry );
     }
     else
-      kdebug( KDEBUG_INFO, 30003, "Unknown tag '%s' in OBJECT", tag.c_str() );
+      kDebugInfo( 30003, "Unknown tag '%s' in OBJECT", tag.c_str() );
 
     if ( !parser.close( tag ) )
     {
-      kdebug( KDEBUG_INFO, 30003, "ERR: Closing Child in OBJECT" );
+      kDebugInfo( 30003, "ERR: Closing Child in OBJECT" );
       return false;
     }
   }
 
   if ( !brect )
   {
-    kdebug( KDEBUG_INFO, 30003, "Missing RECT in OBJECT" );
+    kDebugInfo( 30003, "Missing RECT in OBJECT" );
     return false;
   }
 
@@ -140,12 +141,12 @@ bool KoDocumentChild::load( const QDomElement& element )
 
     if ( m_tmpURL.isEmpty() )
     {	
-	kdebug( KDEBUG_INFO, 30003, "Empty 'url' attribute in OBJECT" );
+	kDebugInfo( 30003, "Empty 'url' attribute in OBJECT" );
 	return false;
     }
     if ( m_tmpMimeType.isEmpty() )
     {
-	kdebug( KDEBUG_INFO, 30003, "Empty 'mime' attribute in OBJECT" );
+	kDebugInfo( 30003, "Empty 'mime' attribute in OBJECT" );
 	return false;
     }
 
@@ -162,7 +163,7 @@ bool KoDocumentChild::load( const QDomElement& element )
 
     if ( !brect )
     {
-	kdebug( KDEBUG_INFO, 30003, "Missing RECT in OBJECT" );
+	kDebugInfo( 30003, "Missing RECT in OBJECT" );
 	return false;
     }
 
@@ -178,12 +179,12 @@ bool KoDocumentChild::loadDocument( KoStore* _store )
 {
   assert( !m_tmpURL.isEmpty() );
 
-  kdebug( KDEBUG_INFO, 30003, QString("Trying to load %1").arg(m_tmpURL) );
+  kDebugInfo( 30003, QString("Trying to load %1").arg(m_tmpURL) );
 
   KoDocumentEntry e = KoDocumentEntry::queryByMimeType( m_tmpMimeType );
   if ( e.isEmpty() )
   {
-    kdebug( KDEBUG_INFO, 30003, "ERROR: Could not create child document" );
+    kDebugInfo( 30003, "ERROR: Could not create child document" );
     return false;
   }
 
@@ -267,8 +268,8 @@ KoDocument::KoDocument( QObject* parent, const char* name )
 bool KoDocument::saveChildren( KoStore* /*_store*/, const char */*_path*/ )
 {
   // Lets assume that we do not have children
-  kdebug( KDEBUG_WARN, 30003, "KoDocument::saveChildren( KoStore*, const char * )");
-  kdebug( KDEBUG_WARN, 30003, "Not implemented ( not really an error )" );
+  kDebugWarning( 30003, "KoDocument::saveChildren( KoStore*, const char * )");
+  kDebugWarning( 30003, "Not implemented ( not really an error )" );
   return true;
 }
 
@@ -276,19 +277,19 @@ bool KoDocument::saveToURL( const KURL &url, const QCString &_format )
 {
   if ( url.isMalformed() )
   {
-    kdebug( KDEBUG_INFO, 30003, "malformed URL" );
+    kDebugInfo( 30003, "malformed URL" );
     return false;
   }
 
   if ( !url.isLocalFile() )
   {
-    QMessageBox::critical( (QWidget*)0L, i18n("KOffice Error"), i18n( "Can not save to remote URL\n" ), i18n( "OK" ) );
+    KMessageBox::error( 0L, i18n( "Can not save to remote URL (not implemented yet)" ) );
     return false;
   }
 
   if ( hasToWriteMultipart() )
   {
-    kdebug( KDEBUG_INFO, 30003, "Saving to store" );
+    kDebugInfo( 30003, "Saving to store" );
 
     //Use this to save to a binary store (deprecated)
     //KoStore * store = new KoBinaryStore ( url.path(), KOStore::Write );
@@ -302,7 +303,7 @@ bool KoDocument::saveToURL( const KURL &url, const QCString &_format )
       return false;
     }
 
-    kdebug( KDEBUG_INFO, 30003, "Saving root" );
+    kDebugInfo( 30003, "Saving root" );
     if ( store->open( "root", _format ) )
     {
       ostorestream out( store );
@@ -318,7 +319,7 @@ bool KoDocument::saveToURL( const KURL &url, const QCString &_format )
       return false;
 
     bool ret = completeSaving( store );
-    kdebug( KDEBUG_INFO, 30003, "Saving done" );
+    kDebugInfo( 30003, "Saving done" );
     delete store;
     return ret;
   }
@@ -327,10 +328,7 @@ bool KoDocument::saveToURL( const KURL &url, const QCString &_format )
     ofstream out( url.path() );
     if ( !out )
     {
-      QString tmp = i18n("Could not write to\n" );
-      tmp += url.path();
-      kdebug( KDEBUG_INFO, 30003, tmp );
-      QMessageBox::critical( (QWidget*)0L, i18n("KOffice Error"), tmp, i18n( "OK" ) );
+      KMessageBox::error( 0L, i18n("Could not write to\n%1" ).arg(url.path()) );
       return false;
     }
 
@@ -340,7 +338,7 @@ bool KoDocument::saveToURL( const KURL &url, const QCString &_format )
 
 bool KoDocument::saveToStore( KoStore* _store, const QCString & _format, const QString & _path )
 {
-  kdebug( KDEBUG_INFO, 30003, "Saving document to store" );
+  kDebugInfo( 30003, "Saving document to store" );
 
   // Use the path as the internal url
   setURL( _path );
@@ -362,26 +360,56 @@ bool KoDocument::saveToStore( KoStore* _store, const QCString & _format, const Q
   if ( !completeSaving( _store ) )
     return false;
 
-  kdebug( KDEBUG_INFO, 30003, "Saved document to store" );
+  kDebugInfo( 30003, "Saved document to store" );
 
   return true;
 }
 
 bool KoDocument::loadFromURL( const KURL & url )
 {
+  kDebugInfo( 30003, QString("KoDocument::loadFromURL( %1 )").arg(url.url()) );
+  // TODO : assert local url
+  QString file = url.path();
+
   QApplication::setOverrideCursor( waitCursor );
-  kdebug( KDEBUG_INFO, 30003, QString("KoDocument::loadFromURL( %1 )").arg(url.url()) );
+  // Launch a filter if we need one for this url ?
+  QString importedFile = KoFilterManager::self()->import( file, KOAPP->nativeFormatMimeType() );
+
+  // The filter, if any, has been applied. It's all native format now.
+  bool loadOk = (!importedFile.isEmpty()) &&        // Empty = an error occured in the filter
+    loadNativeFormat( importedFile );
+
+  if (!loadOk)
+    KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg(importedFile) );
+
+  if ( importedFile != file )
+  {
+    // We opened a temporary file (result of an import filter)
+    // Set document URL to empty - we don't want to save in /tmp !
+    setURL(KURL());
+    // and remove temp file
+    unlink( importedFile.ascii() );
+  }
+  QApplication::restoreOverrideCursor();
+  return loadOk;
+}
+
+bool KoDocument::loadNativeFormat( const KURL & url )
+{
+  QApplication::setOverrideCursor( waitCursor );
+
+  kDebugInfo( 30003, QString("KoDocument::loadNativeFormat( %1 )").arg(url.url()) );
 
   if ( url.isMalformed() )
   {
-    kdebug( KDEBUG_WARN, 30003, QString("Malformed URL %1").arg(url.url()) );
+    kDebugWarning( 30003, QString("Malformed URL %1").arg(url.url()) );
     QApplication::restoreOverrideCursor();
     return false;
   }
 
   if ( !url.isLocalFile() )
   {
-    kdebug( KDEBUG_INFO, 30003, "Can not load remote URL (not implemented yet)" );
+    kDebugInfo( 30003, "Can not load remote URL (not implemented yet)" );
     QApplication::restoreOverrideCursor();
     return false;
   }
@@ -389,7 +417,7 @@ bool KoDocument::loadFromURL( const KURL & url )
   ifstream in( url.path() );
   if ( !in )
   {
-    kdebug( KDEBUG_WARN, 30003, QString("Could not open %1").arg(url.path()) );
+    kDebugWarning( 30003, QString("Could not open %1").arg(url.path()) );
     QApplication::restoreOverrideCursor();
     return false;
   }
@@ -399,7 +427,7 @@ bool KoDocument::loadFromURL( const KURL & url )
   in.get( buf[0] ); in.get( buf[1] ); in.get( buf[2] ); in.get( buf[3] ); buf[4] = 0;
   in.unget(); in.unget(); in.unget(); in.unget();
 
-  //kdebug( KDEBUG_INFO, 30003, "PATTERN=%s", buf );
+  //kDebugInfo( 30003, "PATTERN=%s", buf );
 
   // Store the URL as the Document URL
   setURL( url );
@@ -448,7 +476,7 @@ bool KoDocument::loadFromURL( const KURL & url )
 
     if ( !loadChildren( store ) )
     {	
-      kdebug( KDEBUG_INFO, 30003, "ERROR: Could not load children" );
+      kDebugInfo( 30003, "ERROR: Could not load children" );
       delete store;
       QApplication::restoreOverrideCursor();
       return false;
@@ -475,7 +503,7 @@ bool KoDocument::loadFromStore( KoStore* _store, const KURL & url )
 
   if ( !loadChildren( _store ) )
   {	
-    kdebug( KDEBUG_INFO, 30003, "ERROR: Could not load children" );
+    kDebugInfo( 30003, "ERROR: Could not load children" );
     return false;
   }
 
@@ -484,13 +512,13 @@ bool KoDocument::loadFromStore( KoStore* _store, const KURL & url )
 
 bool KoDocument::load( istream& in, KoStore* _store )
 {
-  kdebug( KDEBUG_INFO, 30003, "KoDocument::load( istream& in, KoStore* _store )");
+  kDebugInfo( 30003, "KoDocument::load( istream& in, KoStore* _store )");
   // Try to find out whether it is a mime multi part file
   char buf[5];
   in.get( buf[0] ); in.get( buf[1] ); in.get( buf[2] ); in.get( buf[3] ); buf[4] = 0;
   in.unget(); in.unget(); in.unget(); in.unget();
 
-  kdebug( KDEBUG_INFO, 30003, "PATTERN2=%s", buf );
+  kDebugInfo( 30003, "PATTERN2=%s", buf );
 
   // Load XML ?
   if ( strncasecmp( buf, "<?xm", 4 ) == 0 )
