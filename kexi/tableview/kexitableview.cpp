@@ -1945,18 +1945,8 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 	case Key_Meta:
 		e->ignore();
 		break;
-
-	case Key_Left:
-		if (nobtn)
-			curCol = QMAX(0, curCol - 1);
-		break;
-	case Key_Right:
-		if (nobtn)
-			curCol = QMIN(columns() - 1, curCol + 1);
-		break;
 	case Key_Up:
 		if (nobtn) {
-//			curRow = QMAX(0, curRow - 1);
 			selectPrevRow();
 			e->accept();
 			return;
@@ -2045,7 +2035,8 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 		break;
 	default:
 		//others:
-		if (nobtn && e->key()==Key_Tab) {
+		if (nobtn && (e->key()==Key_Tab || e->key()==Key_Right)) {
+//! \todo add option for stopping at 1st column for Key_left
 			//tab
 			if (acceptEditor()) {
 				if (curCol == (columns() - 1)) {
@@ -2059,8 +2050,11 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 			}
 		}
 		else if ((e->state()==ShiftButton && e->key()==Key_Tab)
-		 || (e->state()==NoButton && e->key()==Key_Backtab)
-		 || (e->state()==ShiftButton && e->key()==Key_Backtab)) {
+		 || (nobtn && e->key()==Key_Backtab)
+		 || (e->state()==ShiftButton && e->key()==Key_Backtab)
+		 || (nobtn && e->key()==Key_Left)
+			) {
+//! \todo add option for stopping at last column
 			//backward tab
 			if (acceptEditor()) {
 				if (curCol == 0) {

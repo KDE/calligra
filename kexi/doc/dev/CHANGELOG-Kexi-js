@@ -314,6 +314,10 @@ KexiDB Drivers
 - move to SQLITE3 (later it will be harder to do)
 -....
 
+2004-08-21
+Table View
+- Key_Left, Key_Right now by default behaves like Key_BackTab, Key_Tab
+
 2004-08-20
 KexiDB, Table View
 - Kexi now supports and shows autonumber (sequences) column, see
