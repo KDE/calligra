@@ -114,7 +114,7 @@ void TKFloatSpinBoxAction::slotActivated(float value)
       if (r) {                                                                  \
         TKFloatSpinBox* fsb = (TKFloatSpinBox*)r->child("widget");                  \
         if (fsb) {                                                              \
-          fsb->##method(value);                                                 \
+          fsb->method(value);                                                 \
         }                                                                       \
       }                                                                         \
     } else {                                                                    \
@@ -122,7 +122,7 @@ void TKFloatSpinBoxAction::slotActivated(float value)
       if (r) {                                                                  \
         TKFloatSpinBox* fsb = (TKFloatSpinBox*)r->child("widget");                  \
         if (fsb) {                                                              \
-          fsb->##method(value);                                                 \
+          fsb->method(value);                                                 \
         }                                                                       \
       }                                                                         \
     }                                                                           \
