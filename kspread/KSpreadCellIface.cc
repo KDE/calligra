@@ -25,6 +25,13 @@ void KSpreadCellIface::setText( const QString& text )
     cell->setCellText( text );
 }
 
+void KSpreadCellIface::setComment( const QString& comment )
+{
+    KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
+    cell->setComment( comment +"\n");
+    cell->update();
+}
+
 void KSpreadCellIface::setValue( int value )
 {
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
@@ -48,6 +55,7 @@ void KSpreadCellIface::setBgColor(const QString& _c)
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     QColor c(_c);
     cell->setBgColor(c);
+    cell->update();
 }
 
 void KSpreadCellIface::setBgColor(int r,int g,int b)
@@ -55,6 +63,7 @@ void KSpreadCellIface::setBgColor(int r,int g,int b)
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     QColor c(r,g,b);
     cell->setBgColor(c);
+    cell->update();
 }
 
 QString KSpreadCellIface::bgColor() const
@@ -74,6 +83,7 @@ void KSpreadCellIface::setTextColor(int r,int g,int b)
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     QColor c(r,g,b);
     cell->setTextColor(c);
+    cell->update();
 }
 
 void KSpreadCellIface::setTextColor(const QString& _c)
@@ -81,4 +91,5 @@ void KSpreadCellIface::setTextColor(const QString& _c)
     KSpreadCell* cell = m_table->nonDefaultCell( m_point.x(), m_point.y() );
     QColor c(_c);
     cell->setTextColor(c);
+    cell->update();
 }

@@ -27,7 +27,7 @@ k_dcop:
     virtual void setTextColor(const QString& _c);
     virtual void setTextColor(int r,int g,int b);
     virtual QString textColor()const ;
-
+    virtual void setComment(const QString &_comment);
 private:
     QPoint m_point;
     KSpreadTable* m_table;

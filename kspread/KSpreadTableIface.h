@@ -26,7 +26,7 @@ k_dcop:
     virtual QRect selection() const;
     virtual void setSelection( const QRect& selection );
     virtual QString name() const;
-
+    
 private:
     KSpreadTable* m_table;
     KSpreadCellProxy* m_proxy;

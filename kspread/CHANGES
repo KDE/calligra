@@ -738,4 +738,5 @@ it works.
 ----------------------------------------------------
 -Now you can Merge cell and Dissociate cell (when they merged)
 but there are against a lot of bug.
- 
+-bug fix
+-Add new script function (setComment(QString))

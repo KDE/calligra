@@ -109,6 +109,7 @@ QString KSpreadTableIface::name() const
     return m_table->tableName();
 }
 
+
 bool KSpreadTableIface::processDynamic( const QCString& fun, const QByteArray& data,
 					QCString& replyType, QByteArray &replyData )
 {
