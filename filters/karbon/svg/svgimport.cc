@@ -304,6 +304,7 @@ SvgImport::parsePA( GraphicsContext *gc, const QString &command, const QString &
 			unsigned int end = params.findRev(")");
 			QString key = params.mid( start, end - start );
 			gc->fill.gradient() = m_gradients[ key ];
+			gc->fill.gradient().transform( gc->matrix );
 			gc->fill.setType( VFill::grad );
 		}
 		else
