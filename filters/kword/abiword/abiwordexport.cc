@@ -199,12 +199,6 @@ bool AbiWordWorker::doOpenFile(const QString& filenameOut, const QString& )
     }
 
     m_streamOut=new QTextStream(m_ioDevice);
-    if (!m_ioDevice)
-    {
-        kdError(30506) << "Could not create output stream! Aborting!" << endl;
-        m_ioDevice->close();
-        return false;
-    }
 
     // We only export in UTF-8 (are there AbiWord ports that cannot read UTF-8? Be careful SVG uses UTF-8 too!)
     m_streamOut->setEncoding( QTextStream::UnicodeUTF8 );
