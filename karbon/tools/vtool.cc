@@ -33,9 +33,6 @@ VTool::eventFilter( QEvent* event )
 
 		mouseButtonPress( m_firstPoint );
 
-		// Draw new object:
-		draw();
-
 		m_mouseButtonIsDown = true;
 
 		return true;
@@ -45,9 +42,6 @@ VTool::eventFilter( QEvent* event )
 	{
 		QPoint canvasCoordinate = view()->canvasWidget()->viewportToContents(
 			mouseEvent->pos() );
-
-		// Erase old object:
-		draw();
 
 		m_lastPoint.setX( canvasCoordinate.x() * view()->zoom() );
 		m_lastPoint.setY( canvasCoordinate.y() * view()->zoom() );
@@ -61,9 +55,6 @@ VTool::eventFilter( QEvent* event )
 		else
 			mouseMove( m_lastPoint );
 
-		// Draw new object:
-		draw();
-
 		return true;
 	}
 
@@ -71,9 +62,6 @@ VTool::eventFilter( QEvent* event )
 	{
 		QPoint canvasCoordinate = view()->canvasWidget()->viewportToContents(
 			mouseEvent->pos() );
-
-		// Erase old object:
-		draw();
 
 		m_lastPoint.setX( canvasCoordinate.x() * view()->zoom() );
 		m_lastPoint.setY( canvasCoordinate.y() * view()->zoom() );
@@ -86,9 +74,6 @@ VTool::eventFilter( QEvent* event )
 		}
 		else if( m_mouseButtonIsDown )	// False if canceled.
 			mouseButtonRelease( m_lastPoint );
-
-		// Draw new object:
-		draw();
 
 		m_mouseButtonIsDown = false;
 
@@ -108,22 +93,13 @@ VTool::eventFilter( QEvent* event )
 			m_isDragging = false;
 			m_mouseButtonIsDown = true;
 
-			// Erase old object:
-			draw();
-
 			return true;
 		}
 
 		// If SHIFT is pressed, some tools create a "square" object while dragging:
 		if( keyEvent->key() == Qt::Key_Shift && m_isDragging )
 		{
-			// Erase old object:
-			draw();
-
 			mouseDragShiftPressed( m_lastPoint );
-
-			// Draw new object:
-			draw();
 
 			return true;
 		}
@@ -131,13 +107,7 @@ VTool::eventFilter( QEvent* event )
 		// If Ctrl is pressed, some tools create a "centered" object while dragging:
 		if ( keyEvent->key() == Qt::Key_Control && m_isDragging )
 		{
-			// Erase old object:
-			draw();
-
 			mouseDragCtrlPressed( m_lastPoint );
-
-			// Draw new object:
-			draw();
 
 			return true;
 		}
@@ -150,26 +120,14 @@ VTool::eventFilter( QEvent* event )
 
 		if( keyEvent->key() == Qt::Key_Shift && m_isDragging )
 		{
-			// Erase old object:
-			draw();
-
 			mouseDragShiftReleased( m_lastPoint );
-
-			// Draw new object:
-			draw();
 
 			return true;
 		}
 
 		if( keyEvent->key() == Qt::Key_Control && m_isDragging )
 		{
-			// Erase old object:
-			draw();
-
 			mouseDragCtrlReleased( m_lastPoint );
-
-			// Draw new object:
-			draw();
 
 			return true;
 		}

@@ -37,12 +37,21 @@ VShapeTool::draw()
 void
 VShapeTool::mouseDrag( const KoPoint& current )
 {
+	// Erase old object:
+	draw();
+
 	recalc();
+
+	// Draw new object:
+	draw();
 }
 
 void
 VShapeTool::mouseDragRelease( const KoPoint& /*current*/ )
 {
+	// Erase old object:
+	draw();
+
 	recalc();
 
 	VShapeCmd* cmd = new VShapeCmd(
@@ -60,34 +69,61 @@ VShapeTool::mouseDragRelease( const KoPoint& /*current*/ )
 void
 VShapeTool::mouseDragShiftPressed( const KoPoint& current )
 {
+	// Erase old object:
+	draw();
+
 	m_isSquare = true;
 	recalc();
+
+	// Draw new object:
+	draw();
 }
 
 void
 VShapeTool::mouseDragCtrlPressed( const KoPoint& current )
 {
+	// Erase old object:
+	draw();
+
 	m_isCentered = true;
 	recalc();
+
+	// Draw new object:
+	draw();
 }
 
 void
 VShapeTool::mouseDragShiftReleased( const KoPoint& current )
 {
+	// Erase old object:
+	draw();
+
 	m_isSquare = false;
 	recalc();
+
+	// Draw new object:
+	draw();
 }
 
 void
 VShapeTool::mouseDragCtrlReleased( const KoPoint& current )
 {
+	// Erase old object:
+	draw();
+
 	m_isCentered = false;
 	recalc();
+
+	// Draw new object:
+	draw();
 }
 
 void
 VShapeTool::cancel()
 {
+	// Erase old object:
+	draw();
+
 	m_isSquare = false;
 	m_isCentered = false;
 }

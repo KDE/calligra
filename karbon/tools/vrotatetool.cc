@@ -27,10 +27,12 @@
 VRotateTool::VRotateTool( KarbonView* view )
 	: VTool( view )
 {
+	m_objects.setAutoDelete( true );
 }
 
 VRotateTool::~VRotateTool()
 {
+	m_objects.clear();
 }
 
 void
@@ -43,11 +45,22 @@ VRotateTool::activate()
 void
 VRotateTool::draw()
 {
-// TODO: put the calculation stuff into recalc()
-/*
-	VPainter *painter = view()->painterFactory()->editpainter();
+	VPainter* painter = view()->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
 
+	VObjectListIterator itr = m_objects;
+	for( ; itr.current(); ++itr )
+	{
+		itr.current()->draw( painter, itr.current()->boundingBox() );
+	}
+
+	painter->setZoomFactor( 1.0 );
+
+	view()->painterFactory()->painter()->end();
+
+
+
+/*
 	// already selected, so must be a handle operation (move, scale etc.)
 	if(
 		view()->part()->document().selection()->objects().count() > 0 &&
@@ -96,12 +109,6 @@ VRotateTool::draw()
 		VObjectListIterator itr2 = list;
 		for( ; itr2.current() ; ++itr2 )
 		{
-			if( VPath* path = dynamic_cast<VPath*>( itr2.current() ) )
-			{
-				//path->insertKnots( 5 );
-//				path->convertToCurves();
-//				path->whirlPinch( KoPoint( sp.x() / view()->zoom(), sp.y() / view()->zoom() ), m_angle / VGlobal::pi_180, 1.0 );
-			}
 			itr2.current()->transform( mat );
 			itr2.current()->setState( VObject::edit );
 			itr2.current()->draw( painter, itr2.current()->boundingBox() );
@@ -147,29 +154,75 @@ VRotateTool::setCursor( const KoPoint& /*current*/ ) const
 }
 
 void
-VRotateTool::mouseButtonPress( const KoPoint& current )
+VRotateTool::mouseButtonPress( const KoPoint& /*current*/ )
 {
 //	m_activeNode = view()->part()->document().selection()->handleNode( current ) );
+	recalc();
+
+	// Draw new object:
+	draw();
 }
 
 void
-VRotateTool::mouseDrag( const KoPoint& current )
+VRotateTool::mouseDrag( const KoPoint& /*current*/ )
 {
+	// Erase old object:
+	draw();
+
 	recalc();
+
+	// Draw new object:
+	draw();
 }
 
 void
-VRotateTool::mouseDragRelease( const KoPoint& current )
+VRotateTool::mouseDragRelease( const KoPoint& /*current*/ )
 {
-	recalc();
-
 	view()->part()->addCommand(
-		new VRotateCmd( &view()->part()->document(), m_center, m_angle / VGlobal::pi_180 ),
+		new VRotateCmd(
+			&view()->part()->document(),
+			m_center,
+			m_angle ),
 		true );
+
+	view()->selectionChanged();
 }
 
 void
 VRotateTool::recalc()
 {
+	// Get center:
+	m_center = view()->part()->document().selection()->boundingBox().center();
+
+	// Calculate angle between vector (last - center) and (first - center):
+	m_angle = VGlobal::one_pi_180 * (
+			atan2(
+				last().y() - m_center.y(),
+				last().x() - m_center.x() )
+		-
+			atan2(
+				first().y() - m_center.y(),
+				first().x() - m_center.x() ) );
+
+	// Build affine matrix:
+	QWMatrix mat;
+	mat.translate( m_center.x(), m_center.y() );
+	mat.rotate( m_angle );
+	mat.translate( -m_center.x(), -m_center.y() );
+
+
+	// Copy selected objects and transform:
+	m_objects.clear();
+	VObject* copy;
+
+	VObjectListIterator itr = view()->part()->document().selection()->objects();
+	for ( ; itr.current() ; ++itr )
+	{
+		copy = itr.current()->clone();
+		copy->transform( mat );
+		copy->setState( VObject::edit );
+
+		m_objects.append( copy );
+	}
 }
 

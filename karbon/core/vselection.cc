@@ -25,7 +25,7 @@ VSelection::VSelection( const VSelection& selection )
 
 	VObjectListIterator itr = selection.m_objects;
 	for ( ; itr.current() ; ++itr )
-		append( itr.current() );
+		append( itr.current()->clone() );
 }
 
 VSelection::~VSelection()

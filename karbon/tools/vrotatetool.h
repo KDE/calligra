@@ -33,6 +33,9 @@ private:
 	double m_angle;
 
 	VHandleNode m_activeNode;
+
+	// A list of temporary objects:
+	VObjectList m_objects;
 };
 
 #endif
