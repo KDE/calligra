@@ -51,14 +51,13 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     QGridLayout *grid1 = new QGridLayout(gb1->layout(),9,1);
 
     grid = new QCheckBox( i18n( "Grid" ), gb1 );
-    grid1->addWidget(grid,0,0);
-
-
-    xaxis = new QCheckBox( i18n( "X-axis" ), gb1 );
-    grid1->addWidget(xaxis,1,0);
+    grid1->addWidget(grid, 0, 0);
 
     yaxis = new QCheckBox( i18n( "Y-axis" ), gb1);
-    grid1->addWidget(yaxis,2,0);
+    grid1->addWidget(yaxis, 1, 0);
+
+    xaxis = new QCheckBox( i18n( "X-axis" ), gb1 );
+    grid1->addWidget(xaxis, 2, 0);
 
 #if 0
     xlabel = new QCheckBox( i18n( "Has X-label" ), gb1 );
@@ -79,23 +78,27 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     QButtonGroup* gb2 = new QButtonGroup( 0, Qt::Vertical, i18n("Title"), this );
     gb2->layout()->setSpacing(KDialog::spacingHint());
     gb2->layout()->setMargin(KDialog::marginHint());
-    QGridLayout *grid2 = new QGridLayout(gb2->layout(),8,2);
+    QGridLayout *grid2 = new QGridLayout(gb2->layout(),8,3);
 
     QLabel *tmpLabel = new QLabel( i18n( "Y-title:" ), gb2 );
     grid2->addWidget(tmpLabel,2,0);
 
     ytitle= new QLineEdit( gb2 );
     ytitle->setMaximumWidth(130);
-    grid2->addWidget(ytitle,3,0);
+    grid2->addWidget(ytitle, 2, 1);
     ytitle->setEnabled(false);
 
     tmpLabel = new QLabel( i18n( "X-title:" ), gb2 );
-    grid2->addWidget(tmpLabel,4,0);
+    grid2->addWidget(tmpLabel, 3, 0);
 
     xtitle= new QLineEdit( gb2 );
     xtitle->setMaximumWidth(130);
-    grid2->addWidget(xtitle,5,0);
+    grid2->addWidget(xtitle, 3, 1);
     xtitle->setEnabled(false);
+
+    // Make the widgets collect in the upper left corner.
+    grid2->setColStretch(2, 1);
+    grid2->setRowStretch(7, 1);
 
 #if 0
     tmpLabel = new QLabel( i18n( "Y-label format:" ), gb2 );
@@ -122,9 +125,11 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
 #endif
     layout->addWidget(gb1,0,0);
     layout->addWidget(gb2,0,1);
+
+#if 0
     grid1->activate();
     grid2->activate();
-
+#endif
     /*connect( grid, SIGNAL( toggled( bool ) ),
       this, SLOT( changeState( bool ) ) );*/
     /*connect( xaxis, SIGNAL( toggled( bool ) ),

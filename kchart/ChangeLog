@@ -1,5 +1,11 @@
 2005-03-12  Inge Wallin  <inge@lysator.liu.se>
 
+	Fix the bad layout of the title buttonbox.
+	* kchartParameterConfigPage.cc (KChartParameterConfigPage): Change
+	the layout slightly, and add row and col stretch.
+
+	----------------------------------------------------------------
+
 	Load row and column headers from XML file.
 	* kchart_part.cc (loadXML): Get the legend and axis label strings
 	from the KDChart parameters and store in the column and row

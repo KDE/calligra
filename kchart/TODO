@@ -5,16 +5,18 @@ Item								   Prio Status
 ------------------------------------------------------------------------------
 
 * Bugs
-  + 77839: Program hangs when only one value for pie chart 	      1	----
+  + 77839: Program hangs when only one value for pie chart 	      1	KDCH
 	   and value = 0.
-  + 41612: No titles for axes					      1	----
+       Fixed by new KDChart version
+  + 41612: No titles for axes					      1	KDCH
+       Fixed by new KDChart version
   + 100004: Manual should describe stand-alone charting  	      2	----
             (see below also)
-  + 101007: Error in reading back axis labels.			      1 ----
+  + 101007: Error in reading back axis labels.			      1 DONE
       - Store row and column labels separately in the document		done
       - Load old type files without separately stored labels.		done
       ----------------------------------------------------------------
-      I don't know if the following is needed once we have a new 
+      I don't think the following is needed once we have a new 
       version of KDChart.
       - Save row and column labels	 				--
       - Load row and column labels	 				--
