@@ -372,7 +372,7 @@ QStringList MySQLMigrate::examineEnumField(const QString& table,
 		
 		QChar next = vals[index + len];
 		if (next != QChar(',') && next != QChar(')')) {
-			kdDebug() << "MySQLMigrate::examineEnumField:5 " << next << endl;
+			kdDebug() << "MySQLMigrate::examineEnumField:5 " << (char)next << endl;
 		}
 		index += len + 1;
 	}

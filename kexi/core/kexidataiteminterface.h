@@ -30,7 +30,7 @@ class KEXICORE_EXPORT KexiDataItemChangesListener
 {
 	public:
 		KexiDataItemChangesListener();
-		~KexiDataItemChangesListener();
+		virtual ~KexiDataItemChangesListener();
 
 		//! Implement this to react for change of \a item.
 		//! Called by KexiDataItemInterface::valueChanged()
@@ -42,7 +42,7 @@ class KEXICORE_EXPORT KexiDataItemInterface
 {
 	public:
 		KexiDataItemInterface();
-		~KexiDataItemInterface();
+		virtual ~KexiDataItemInterface();
 
 		//! \return the name of the data source for this widget
 		//! Data source usually means here a table or query or field name name.

@@ -17,16 +17,14 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-
 #ifndef KEXIDBFORM_H
 #define KEXIDBFORM_H
 
-#include <kexigradientwidget.h>
-
 #include <qpixmap.h>
 
+#include <kexigradientwidget.h>
 #include <kexidataiteminterface.h>
-#include "form.h"
+#include <form.h>
 
 //! A DB-aware form widget
 //class KexiDBForm : public QWidget, public KFormDesigner::FormWidget, public KexiDataItemInterface
