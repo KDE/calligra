@@ -1,7 +1,7 @@
 /*
    $Id$
    This file is part of the KDE project
-   Copyright (C) 2001 Daniel Naber <daniel.naber@t-online.de>
+   Copyright (C) 2001,2002 Daniel Naber <daniel.naber@t-online.de>
 */
 /***************************************************************************
  This program is free software; you can redistribute it and/or
@@ -28,12 +28,14 @@
 #include <qlayout.h>
 #include <qlistbox.h>
 #include <qobject.h>
+#include <qpushbutton.h>
 #include <qregexp.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qtabdialog.h>
 #include <qtabwidget.h>
 #include <qtextbrowser.h>
+#include <qtooltip.h>
 #include <qwidget.h>
 #include <qvbox.h>
 
@@ -45,6 +47,7 @@
 #include <kdialogbase.h>
 #include <kgenericfactory.h>
 #include <klibloader.h>
+#include <klineedit.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kprocess.h>
@@ -64,7 +67,15 @@ public:
 
 protected slots:
     void slotFindTerm();
-    void slotFindTerm(const QString &term);
+    void slotFindTerm(const QString &term, bool add_to_history = true);
+
+    void slotUpdateNavButtons();
+    void slotGotoHistory(int index);
+
+    void slotSetReplaceTerm(const QString &term);
+
+    void slotBack();
+    void slotForward();
 
     void thesExited(KProcess *proc);
     void receivedThesStdout(KProcess *proc, char *result, int len);
@@ -82,6 +93,10 @@ protected:
     QString formatLine(QString l);
     QStringList sortQStringList(QStringList list);
 
+    int m_history_pos;
+    
+    bool m_replacement;        // does this dialog offer a replace button etc.?
+    
     KProcess *m_thesproc;
     QString m_thesproc_stdout;
     QString m_thesproc_stderr;
@@ -91,14 +106,23 @@ protected:
     QString m_wnproc_stderr;
 
     Mode m_mode;
-    
+
+    QFrame *m_page;    
+    QVBoxLayout *m_top_layout;
+
     KDialogBase *m_dialog;
     QTabWidget *m_tab;
     QVBox *vbox;
     QVBox *vbox2;
     
+    QPushButton *m_back;
+    QPushButton *m_forward;
+    
     KHistoryCombo *m_edit;
     QLabel *m_edit_label;
+
+    QLabel *m_replace_label;
+    KLineEdit *m_replace;
 
     // WordNet:
     QTextBrowser *m_resultbox;

@@ -1,7 +1,7 @@
 /*
    $Id$
    This file is part of the KDE project
-   Copyright (C) 2001 Daniel Naber <daniel.naber@t-online.de>
+   Copyright (C) 2001,2002 Daniel Naber <daniel.naber@t-online.de>
    This is a thesaurus based on a subset of WordNet. It also offers a 
    mostly-complete WordNet 1.7 frontend (WordNet is a powerful lexical 
    database/thesaurus)
@@ -24,13 +24,14 @@
 
 /*
 TODO:
--Make dialog non-modal???
--Add back/forward buttons
--If no match was found, use KSpell to offer alternative spellings?
--Don't start WordNet before its tab is activated?
--Also "Replace" with text selection in m_resultbox?
+-update user doc
+-more documentation in the source code
+-back/forward buttons: use icons
 -Be more verbose if the result is empty
 -See the TODO's in the source below
+
+-If no match was found, use KSpell to offer alternative spellings?
+-Don't start WordNet before its tab is activated?
 -Maybe remove more uncommon words. However, the "polysemy/familiarity
  count" is sometimes very low for quite common word, e.g. "sky".
 
@@ -67,16 +68,29 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     m_dialog->setHelp(QString::null, "thesaurus");
     m_dialog->resize(500, 400);
     
-    QFrame *page = m_dialog->plainPage();
-    QVBoxLayout *topLayout = new QVBoxLayout(page, KDialog::marginHint(), KDialog::spacingHint());
+    m_replacement = false;
+    m_history_pos = 1;
+    
+    m_page = m_dialog->plainPage();
+    QVBoxLayout *m_top_layout = new QVBoxLayout(m_page, KDialog::marginHint(), KDialog::spacingHint());
 
-    m_edit = new KHistoryCombo(page);
-    m_edit_label = new QLabel(m_edit, i18n("&Search for:"), page);
-    topLayout->addWidget(m_edit_label);
-    topLayout->addWidget(m_edit);
+    QHBoxLayout *row1 = new QHBoxLayout(m_top_layout);
+    m_edit = new KHistoryCombo(m_page);
+    m_edit_label = new QLabel(m_edit, i18n("&Search for:"), m_page);
+    row1->addWidget(m_edit_label, 0);
+    row1->addWidget(m_edit, 1);
+    m_back = new QPushButton("<", m_page);        // fixme: icon
+    QToolTip::add(m_back, i18n("Back"));
+    row1->addWidget(m_back, 0);
+    m_forward = new QPushButton(">", m_page);    // fixme: icon
+    QToolTip::add(m_forward, i18n("Forward"));
+    row1->addWidget(m_forward, 0);
 
-    m_tab = new QTabWidget(page);
-    topLayout->addWidget(m_tab);
+    connect(m_back, SIGNAL(clicked()), this, SLOT(slotBack()));
+    connect(m_forward, SIGNAL(clicked()), this, SLOT(slotForward()));
+    
+    m_tab = new QTabWidget(m_page);
+    m_top_layout->addWidget(m_tab);
 
     //
     // Thesaurus Tab
@@ -102,6 +116,25 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     vbox_hypo = new QVBox(hbox);
     (void) new QLabel(i18n("More specific words"), vbox_hypo);
     m_thes_hypo = new QListBox(vbox_hypo);
+
+    //
+    // single click -- keep display unambiguous and remove other selections:
+    //
+    
+    connect(m_thes_syn, SIGNAL(clicked(QListBoxItem *)), m_thes_hyper, SLOT(clearSelection()));
+    connect(m_thes_syn, SIGNAL(clicked(QListBoxItem *)), m_thes_hypo, SLOT(clearSelection()));
+    connect(m_thes_syn, SIGNAL(highlighted(const QString &)),
+        this, SLOT(slotSetReplaceTerm(const QString &)));
+
+    connect(m_thes_hyper, SIGNAL(clicked(QListBoxItem *)), m_thes_syn, SLOT(clearSelection()));
+    connect(m_thes_hyper, SIGNAL(clicked(QListBoxItem *)), m_thes_hypo, SLOT(clearSelection()));
+    connect(m_thes_hyper, SIGNAL(highlighted(const QString &)),
+        this, SLOT(slotSetReplaceTerm(const QString &)));
+
+    connect(m_thes_hypo, SIGNAL(clicked(QListBoxItem *)), m_thes_syn, SLOT(clearSelection()));
+    connect(m_thes_hypo, SIGNAL(clicked(QListBoxItem *)), m_thes_hyper, SLOT(clearSelection()));
+    connect(m_thes_hypo, SIGNAL(highlighted(const QString &)),
+        this, SLOT(slotSetReplaceTerm(const QString &)));
 
     // double click:
     connect(m_thes_syn, SIGNAL(selected(const QString &)),
@@ -135,11 +168,17 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     //
     m_edit->setTrapReturnKey(true);        // Do not use Return as default key...
     connect(m_edit, SIGNAL(returnPressed(const QString&)), this, SLOT(slotFindTerm(const QString&)));
-    connect(m_edit, SIGNAL(activated(const QString &)), this, SLOT(slotFindTerm(const QString &)));
-    connect(m_edit, SIGNAL(returnPressed(const QString&)), m_edit, SLOT(addToHistory(const QString&)));
+    connect(m_edit, SIGNAL(activated(int)), this, SLOT(slotGotoHistory(int)));
+
+    QHBoxLayout *row2 = new QHBoxLayout( m_top_layout );
+    m_replace = new KLineEdit(m_page);
+    m_replace_label = new QLabel(m_replace, i18n("&Replace with:"), m_page);
+    row2->addWidget(m_replace_label, 0);
+    row2->addWidget(m_replace, 1);
 
     // Set focus
     m_edit->setFocus();
+    slotUpdateNavButtons();
     
     //
     // The external command stuff
@@ -147,8 +186,7 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     
     // calling the 'wn' binary
     m_wnproc = new KProcess;
-    connect(m_wnproc, SIGNAL(processExited(KProcess*)),
-        this, SLOT(wnExited(KProcess*)));
+    connect(m_wnproc, SIGNAL(processExited(KProcess*)), this, SLOT(wnExited(KProcess*)));
     connect(m_wnproc, SIGNAL(receivedStdout(KProcess*,char*,int)),
         this, SLOT(receivedWnStdout(KProcess*, char*, int)));
     connect(m_wnproc, SIGNAL(receivedStderr(KProcess*,char*,int)),
@@ -156,8 +194,7 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
 
     // grep'ing the text file
     m_thesproc = new KProcess;
-    connect(m_thesproc, SIGNAL(processExited(KProcess*)),
-        this, SLOT(thesExited(KProcess*)));
+    connect(m_thesproc, SIGNAL(processExited(KProcess*)), this, SLOT(thesExited(KProcess*)));
     connect(m_thesproc, SIGNAL(receivedStdout(KProcess*,char*,int)),
         this, SLOT(receivedThesStdout(KProcess*, char*, int)));
     connect(m_thesproc, SIGNAL(receivedStderr(KProcess*,char*,int)),
@@ -198,11 +235,17 @@ bool Thesaurus::run(const QString& command, void* data, const QString& datatype,
     }
 
     if ( command == "thesaurus" ) {
+        // not called from an application like KWord, so make it possible
+        // to replace text:
+        m_replacement = true;
         m_dialog->setButtonOKText(i18n("&Replace"));
     } else if ( command == "thesaurus_standalone" ) {
         // not called from any application, but from KThesaurus
+        m_replacement = false;
         m_dialog->showButtonOK(false);
         m_dialog->setButtonCancelText(i18n("Close"));
+        m_replace->setEnabled(false);
+        m_replace_label->setEnabled(false);
     } else {
         kdDebug(31000) << "Thesaurus does only accept the command 'thesaurus' or 'thesaurus_standalone'" << endl;
         kdDebug(31000) << "The command " << command << " is not accepted" << endl;
@@ -214,8 +257,7 @@ bool Thesaurus::run(const QString& command, void* data, const QString& datatype,
     buffer = buffer.stripWhiteSpace();
     QRegExp re("[.,;!?\"'()\\[\\]]");
     buffer.replace(re, "");
-    buffer = buffer.left(100);		// limit maximum length
-    m_edit->insertItem(buffer, 0);
+    buffer = buffer.left(100);        // limit maximum length
 
     m_wnproc_stdout = "";
     m_wnproc_stderr = "";
@@ -223,17 +265,63 @@ bool Thesaurus::run(const QString& command, void* data, const QString& datatype,
     m_thesproc_stdout = "";
     m_thesproc_stderr = "";
 
-    slotFindTerm(buffer);
+    if( ! buffer.isEmpty() ) {
+        slotFindTerm(buffer);
+    }
 
     if( m_dialog->exec() == QDialog::Accepted ) {    // Replace
-        QString replace_text;
-        replace_text = m_edit->currentText();
-        *((QString*)data) = replace_text;
+        *((QString*)data) = m_replace->text();
     }
 
     return TRUE;
 }
 
+
+void Thesaurus::slotUpdateNavButtons()
+{
+    if( m_history_pos <= 1 ) {    // 1 = first position
+        m_back->setEnabled(false);
+    } else {
+        m_back->setEnabled(true);
+    }
+    if( m_history_pos >= m_edit->count() ) {
+        m_forward->setEnabled(false);
+    } else {
+        m_forward->setEnabled(true);
+    }
+}
+
+void Thesaurus::slotGotoHistory(int index)
+{
+    m_history_pos = m_edit->count() - index;
+    slotFindTerm(m_edit->text(index), false);
+}
+
+// Back button
+void Thesaurus::slotBack()
+{
+    m_history_pos--;
+    int pos = m_edit->count() - m_history_pos;
+    m_edit->setCurrentItem(pos);
+    slotFindTerm(m_edit->text(pos), false);
+}
+
+// Forward button
+void Thesaurus::slotForward()
+{
+    m_history_pos++;
+    int pos = m_edit->count() - m_history_pos;
+    m_edit->setCurrentItem(pos);
+    slotFindTerm(m_edit->text(pos), false);
+}
+
+// Triggered when a word is selected.
+void Thesaurus::slotSetReplaceTerm(const QString &term)
+{
+    if( m_replacement ) {
+        m_replace->setText(term);
+    }
+}
 
 // Triggered when Return is pressed.
 void Thesaurus::slotFindTerm()
@@ -241,15 +329,19 @@ void Thesaurus::slotFindTerm()
     findTerm(m_edit->currentText());
 }
 
-
-// Triggered when a link is clicked.
-void Thesaurus::slotFindTerm(const QString &term)
+// Triggered when a word is clicked / a list item is double-clicked.
+void Thesaurus::slotFindTerm(const QString &term, bool add_to_history)
 {
+    slotSetReplaceTerm(term);
     if( term.startsWith("http://") ) {
         (void) new KRun(KURL(term));
     } else {
-        m_edit->insertItem(term, 0);
-        m_edit->setCurrentItem(0);
+        if( add_to_history ) {
+            m_edit->insertItem(term, 0);
+            m_history_pos = m_edit->count();
+            m_edit->setCurrentItem(0);
+        }
+        slotUpdateNavButtons();
         findTerm(term);
     }
 }
@@ -534,7 +626,7 @@ void Thesaurus::wnExited(KProcess *)
             // Escape XML:
             l = l.replace(QRegExp("<"), "&lt;");
             l = l.replace(QRegExp(">"), "&gt;");
-            // TODO: 
+            // TODO?: 
             // move "=>" in own column?
             l = formatLine(l);
             // Table layout:
