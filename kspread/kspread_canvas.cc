@@ -3466,7 +3466,6 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
   int top_row = table->topRow( _ev->rect().y(), dblYpos, m_pCanvas );
   int bottom_row = table->bottomRow( _ev->rect().bottom(), m_pCanvas );
   dblYpos = dblYpos / m_pCanvas->zoom(); //unzoom the ypos
-  int scaledHeight;
   int scaledYpos = qRound( int( dblYpos ) * m_pCanvas->zoom() );
 
   QFont normalFont = painter.font();
@@ -3490,7 +3489,7 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
     const RowLayout *row_lay = table->rowLayout( y );
 
     //The height is the height of a column plus the the rest of the double ypos values, rounded because of scaling
-    scaledHeight = qRound( int( dblYpos + row_lay->dblHeight() ) * m_pCanvas->zoom() ) - scaledYpos;
+    int scaledHeight = qRound( int( dblYpos + row_lay->dblHeight() ) * m_pCanvas->zoom() ) - scaledYpos;
 
     if ( selected )
     {
@@ -3510,8 +3509,7 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
       qDrawShadePanel( &painter, 0, scaledYpos, YBORDER_WIDTH, scaledHeight, colorGroup(), FALSE, 1, &fill );
     }
 
-    char buffer[ 20 ];
-    sprintf( buffer, "%i", y );
+    QString rowText = QString::number( y );
 
     // Reset painter
     painter.setFont( normalFont );
@@ -3521,11 +3519,11 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
       painter.setPen( colorGroup().highlightedText() );
     else if ( highlighted || current )
       painter.setFont( boldFont );
-    int len = painter.fontMetrics().width(buffer );
+    int len = painter.fontMetrics().width( rowText );
     if(!row_lay->isHide())
         painter.drawText( ( YBORDER_WIDTH-len )/2, scaledYpos +
                           ( scaledHeight + painter.fontMetrics().ascent() -
-                            painter.fontMetrics().descent() ) / 2, buffer );
+                            painter.fontMetrics().descent() ) / 2, rowText );
 
     dblYpos += row_lay->dblHeight();
     scaledYpos = qRound( int( dblYpos ) * m_pCanvas->zoom() );
@@ -4026,7 +4024,6 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
   int left_col = table->leftColumn( _ev->rect().x(), dblXpos, m_pCanvas );
   int right_col = table->rightColumn( _ev->rect().right(), m_pCanvas );
   dblXpos = dblXpos / m_pCanvas->zoom(); //unzoom the xpos
-  int scaledWidth;
   int scaledXpos = qRound( int( dblXpos ) * m_pCanvas->zoom() );
 
   QFont normalFont = painter.font();
@@ -4052,7 +4049,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
     const ColumnLayout *col_lay = table->columnLayout( x );
 
     //The width is the width of a column plus the delta between dblXpos and xpos
-    scaledWidth = qRound( int( dblXpos + col_lay->dblWidth() ) * m_pCanvas->zoom() ) - scaledXpos;
+    int scaledWidth = qRound( int( dblXpos + col_lay->dblWidth() ) * m_pCanvas->zoom() ) - scaledXpos;
 
     if ( selected )
     {
@@ -4083,12 +4080,12 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
       painter.setFont( boldFont );
     if(!m_pView->activeTable()->getShowColumnNumber())
     {
-        int len = painter.fontMetrics().width( util_encodeColumnLabelText( x ) );
+        QString colText = util_encodeColumnLabelText( x );
+        int len = painter.fontMetrics().width( colText );
         if(!col_lay->isHide())
             painter.drawText( scaledXpos + ( scaledWidth - len ) / 2,
                   ( XBORDER_HEIGHT + painter.fontMetrics().ascent() -
-                    painter.fontMetrics().descent() ) / 2,
-                    util_encodeColumnLabelText( x ) );
+                    painter.fontMetrics().descent() ) / 2, colText );
     }
     else
     {
