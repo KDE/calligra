@@ -316,6 +316,22 @@ KexiDB Drivers
 
 TODO: add kexi__toremove table, and use it to remove objects on begin connection
 
+2004-09-14
+TableView
+- hack added for KDownArrowPushButton for drawing with thinkeramik style. 
+- convenient ctor added for KexiTableViewData
+KexiDB
+- Driver::escapeIdentifier() : "" are only added if there is a space inside the name.
+  This keeps SQL statements more readable, especially in SQL View.
+-	DriverBehaviour::QUOTATION_MARKS_FOR_IDENTIFIER added
+- Driver::drv_escapeIdentifier() added:
+	This method is used by escapeIdentifier().
+	Implement escaping for any character like " or ' as your 
+	database engine requires. Do not append or prepend any quotation 
+	marks characters - it is automatically done by escapeIdentifier() using
+	DriverBehaviour::QUOTATION_MARKS_FOR_IDENTIFIER.
+
+
 2004-08-25
 Core
 - KexiSharedActionHost::invalidateSharedActions(QObject *o)

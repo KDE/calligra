@@ -298,10 +298,10 @@ bool KexiQueryDesignerSQLView::slotCheckQuery()
 	kdDebug() << "KexiQueryDesignerSQLView::slotCheckQuery()" << endl;
 	KexiQueryPart::TempData * temp = tempData();
 	KexiDB::Parser *parser = mainWin()->project()->sqlParser();
-	parser->parse( sqlText );
+	const bool ok = parser->parse( sqlText );
 	delete d->parsedQuery;
 	d->parsedQuery = parser->query();
-	if (!d->parsedQuery || !parser->error().type().isEmpty()) {
+	if (!d->parsedQuery || !ok || !parser->error().type().isEmpty()) {
 		KexiDB::ParserError err = parser->error();
 		setStatusError(err.error());
 		d->editor->jump(err.at());

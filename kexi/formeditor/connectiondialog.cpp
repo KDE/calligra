@@ -99,8 +99,6 @@ ConnectionDialog::ConnectionDialog(QWidget *parent)
 void
 ConnectionDialog::initTable()
 {
-	QValueList<QVariant> empty_list;
-
 	KexiTableViewColumn *col0 = new KexiTableViewColumn(i18n("OK?"), KexiDB::Field::Text);
 	col0->field()->setSubType("KIcon");
 	col0->setReadOnly(true);
@@ -108,14 +106,12 @@ ConnectionDialog::initTable()
 	m_data->addColumn(col0);
 
 	KexiTableViewColumn *col1 = new KexiTableViewColumn(i18n("Sender"), KexiDB::Field::Enum);
-	m_widgetsColumnData = new KexiTableViewData( empty_list, empty_list,
-		KexiDB::Field::Text, KexiDB::Field::Text);
+	m_widgetsColumnData = new KexiTableViewData(KexiDB::Field::Text, KexiDB::Field::Text);
 	col1->setRelatedData( m_widgetsColumnData );
 	m_data->addColumn(col1);
 
 	KexiTableViewColumn *col2 = new KexiTableViewColumn(i18n("Signal"), KexiDB::Field::Enum);
-	m_signalsColumnData = new KexiTableViewData( empty_list, empty_list,
-		KexiDB::Field::Text, KexiDB::Field::Text);
+	m_signalsColumnData = new KexiTableViewData(KexiDB::Field::Text, KexiDB::Field::Text);
 	col2->setRelatedData( m_signalsColumnData );
 	m_data->addColumn(col2);
 
@@ -124,8 +120,7 @@ ConnectionDialog::initTable()
 	m_data->addColumn(col3);
 
 	KexiTableViewColumn *col4 = new KexiTableViewColumn(i18n("Slot"), KexiDB::Field::Enum);
-	m_slotsColumnData = new KexiTableViewData( empty_list, empty_list,
-		KexiDB::Field::Text, KexiDB::Field::Text);
+	m_slotsColumnData = new KexiTableViewData(KexiDB::Field::Text, KexiDB::Field::Text);
 	col4->setRelatedData( m_slotsColumnData );
 	m_data->addColumn(col4);
 

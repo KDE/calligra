@@ -171,15 +171,12 @@ KexiQueryDesignerGuiEditor::initTableColumns()
 {
 	KexiTableViewColumn *col1 = new KexiTableViewColumn(i18n("Field"), KexiDB::Field::Enum);
 
-	QValueList<QVariant> empty_list;
-	d->fieldColumnData = new KexiTableViewData( empty_list, empty_list,
-		KexiDB::Field::Text, KexiDB::Field::Text);
+	d->fieldColumnData = new KexiTableViewData(KexiDB::Field::Text, KexiDB::Field::Text);
 	col1->setRelatedData( d->fieldColumnData );
 	d->data->addColumn(col1);
 
 	KexiTableViewColumn *col2 = new KexiTableViewColumn(i18n("Table"), KexiDB::Field::Enum);
-	d->tablesColumnData = new KexiTableViewData( empty_list, empty_list,
-		KexiDB::Field::Text, KexiDB::Field::Text);
+	d->tablesColumnData = new KexiTableViewData(KexiDB::Field::Text, KexiDB::Field::Text);
 	col2->setRelatedData( d->tablesColumnData );
 	d->data->addColumn(col2);
 
