@@ -2624,13 +2624,20 @@ bool KPresenterDoc::backgroundSpellCheckEnabled() const
 }
 
 
-void KPresenterDoc::reactivateBgSpellChecking()
+void KPresenterDoc::reactivateBgSpellChecking(bool refreshTextObj)
 {
-
     QPtrListIterator<KPrPage> it( m_pageList );
+    KPrPage *activePage=0L;
+    if(m_kpresenterView && m_kpresenterView->getCanvas())
+        activePage=m_kpresenterView->getCanvas()->activePage();
     for ( ; it.current(); ++it )
-        it.current()->reactivateBgSpellChecking();
-    m_stickyPage->reactivateBgSpellChecking();
+    {
+        if( it.current()!=activePage)
+            it.current()->reactivateBgSpellChecking(false );
+        else
+            it.current()->reactivateBgSpellChecking( true);
+    }
+    m_stickyPage->reactivateBgSpellChecking(refreshTextObj);
     startBackgroundSpellCheck();
 }
 

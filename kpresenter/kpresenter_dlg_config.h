@@ -78,6 +78,7 @@ private:
     QCheckBox *_dontCheckTilteCase;
     QCheckBox *cbBackgroundSpellCheck;
     KConfig* config;
+    bool oldSpellCheck;
 };
 
 class ConfigureMiscPage : public QObject

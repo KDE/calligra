@@ -249,7 +249,7 @@ public:
     KPPixmapObject * picViewOrigHelper();
     void applyStyleChange( KoStyle *changedStyle, int paragLayoutChanged, int formatChanged );
 
-    void reactivateBgSpellChecking();
+    void reactivateBgSpellChecking(bool refreshTextObj);
 
 protected:
 

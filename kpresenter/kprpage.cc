@@ -3446,12 +3446,16 @@ void KPrPage::applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, 
   }
 }
 
-void KPrPage::reactivateBgSpellChecking()
+void KPrPage::reactivateBgSpellChecking(bool refreshTextObj)
 {
     QPtrListIterator<KPObject> oIt(m_objectList )  ;
     for ( ; oIt.current() ; ++oIt )
     {
         if(oIt.current()->getType()==OT_TEXT)
+        {
             static_cast<KPTextObject*>( oIt.current() )->textObject()->setBeedSpellCheck(true);
+            if(refreshTextObj)
+                m_doc->repaint( oIt.current() );
+        }
     }
 }

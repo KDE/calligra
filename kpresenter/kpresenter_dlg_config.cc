@@ -308,7 +308,8 @@ ConfigureSpellPage::ConfigureSpellPage( KPresenterView *_view, QVBox *box, char 
   grid1->addWidget(_dontCheckTilteCase,3,0);
 
   cbBackgroundSpellCheck=new QCheckBox(i18n("Show misspelled words in document"),tmpQGroupBox);
-  cbBackgroundSpellCheck->setChecked( m_pView->kPresenterDoc()->backgroundSpellCheckEnabled() );
+  oldSpellCheck=m_pView->kPresenterDoc()->backgroundSpellCheckEnabled();
+  cbBackgroundSpellCheck->setChecked( oldSpellCheck );
   grid1->addWidget(cbBackgroundSpellCheck,4,0);
 
 
@@ -343,9 +344,12 @@ void ConfigureSpellPage::apply()
   config->writeEntry( "SpellCheck", cbBackgroundSpellCheck->isChecked() );
 
   doc->setDontCheckTitleCase(state);
+
+  state = cbBackgroundSpellCheck->isChecked();
+  doc->reactivateBgSpellChecking(oldSpellCheck!=state);
   //FIXME reactivate just if there is a changes.
-  doc->reactivateBgSpellChecking();
-  doc->enableBackgroundSpellCheck( cbBackgroundSpellCheck->isChecked() );
+  if( oldSpellCheck!=state)
+      doc->enableBackgroundSpellCheck( state );
 
 }
 

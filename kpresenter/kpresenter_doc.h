@@ -341,7 +341,8 @@ public:
 
     void startBackgroundSpellCheck();
 
-    void reactivateBgSpellChecking();
+    //refresh obj when we active or disactive
+    void reactivateBgSpellChecking(bool refreshTextObj=false);
     KPTextObject* nextTextFrameSet(KPTextObject *obj);
 
 
