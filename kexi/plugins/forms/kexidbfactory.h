@@ -42,8 +42,8 @@ class KexiSubForm : public QScrollView
 		~KexiSubForm() {}
 
 		//! \return the name of the subform inside the db
-		QString   formName() const { return m_formName; }
-		void      setFormName(const QString &name);
+		QString formName() const { return m_formName; }
+		void setFormName(const QString &name);
 
 	private:
 		KFormDesigner::FormManager *m_manager;
@@ -55,10 +55,18 @@ class KexiSubForm : public QScrollView
 class KexiDBLineEdit : public KLineEdit
 {
 	Q_OBJECT
+	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true);
 
 	public:
 		KexiDBLineEdit(QWidget *parent, const char *name=0);
 		virtual ~KexiDBLineEdit();
+
+		//! \return the name of the data source for this widget
+		QString dataSource() const { return m_dataSource; }
+		void setDataSource(const QString &ds) { m_dataSource = ds; }
+	
+	protected:
+		QString m_dataSource;
 };
 
 //! Kexi Factory (DB widgets + subform)

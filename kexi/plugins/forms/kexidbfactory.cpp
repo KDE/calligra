@@ -119,7 +119,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 /* @todo allow to inherit from stdwidgets' KLineEdit */
 	KFormDesigner::WidgetInfo *wLineEdit = new KFormDesigner::WidgetInfo(this);
 	wLineEdit->setPixmap("lineedit");
-	wLineEdit->setClassName("KLineEdit");
+	wLineEdit->setClassName("KexiDBLineEdit");
 	wLineEdit->addAlternateClassName("QLineEdit", true/*override*/);
 	wLineEdit->addAlternateClassName("KLineEdit", true/*override*/);
 	wLineEdit->setIncludeFileName("klineedit.h");
@@ -150,7 +150,7 @@ KexiDBFactory::create(const QString &c, QWidget *p, const char *n, KFormDesigner
 	{
 		w = new KexiSubForm(container->form()->manager(), p, n);
 	}
-	else if(c == "KLineEdit")
+	else if(c == "KexiDBLineEdit")
 	{
 		w = new KexiDBLineEdit(p, n);
 		w->setCursor(QCursor(Qt::ArrowCursor));
@@ -173,7 +173,7 @@ void
 KexiDBFactory::startEditing(const QString &classname, QWidget *w, KFormDesigner::Container *container)
 {
 	m_container = container;
-	if(classname == "KLineEdit")
+	if(classname == "KexiDBLineEdit")
 	{
 //! @todo this code should not be copied here but 
 //! just inherited StdWidgetFactory::clearWidgetContent() should be called 
@@ -187,7 +187,7 @@ KexiDBFactory::clearWidgetContent(const QString &classname, QWidget *w)
 {
 //! @todo this code should not be copied here but 
 //! just inherited StdWidgetFactory::clearWidgetContent() should be called 
-	if(classname == "KLineEdit")
+	if(classname == "KexiDBLineEdit")
 		static_cast<KLineEdit*>(w)->clear();
 }
 
@@ -196,6 +196,8 @@ KexiDBFactory::autoSaveProperties(const QString &classname)
 {
 	if(classname == "KexiSubForm")
 		return QStringList("formName");
+	if(classname == "KexiDBLineEdit")
+		return QStringList("dataSource");
 	return QStringList();
 }
 
