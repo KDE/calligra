@@ -371,8 +371,7 @@ void KontourView::setupPanels()
   mRightDock->moveDockWindow(mPaintDock);
 
   /* Transform properties panel */
-  mTransformPanel = new TransformPanel();
-  connect(mTransformPanel, SIGNAL(changeTransform(KCommand *)), this, SLOT(changeTransform(KCommand *)));
+  mTransformPanel = new TransformPanel(this);
   mRightDock->moveDockWindow(mTransformPanel);
 }
 
@@ -589,82 +588,6 @@ void KontourView::popupForRulers()
   rulerMenu->popup(QCursor::pos());
 }
 
-/*void KontourView::changeOutlineColor(const KoColor &c)
-{
-  // if there is a selection, change its outline color
-  if(activeDocument() && activeDocument()->activePage() &&
-    !activeDocument()->activePage()->selectionIsEmpty())
-  {
-    activeDocument()->activePage()->changeOutlineStyles(c);
-	activeDocument()->styles()->current()->outlineColor(c);
-  }
-}
-
-void KontourView::changePaintColor(const KoColor &c)
-{
-  // if there is a selection, change its paint color
-  if(activeDocument() && activeDocument()->activePage() &&
-    !activeDocument()->activePage()->selectionIsEmpty())
-  {
-    activeDocument()->activePage()->changePaintStyles(c);
-	activeDocument()->styles()->current()->fillColor(c);
-  }
-}
-
-void KontourView::changeFilled(bool filled)
-{
-  if(activeDocument() && activeDocument()->activePage() &&
-    !activeDocument()->activePage()->selectionIsEmpty())
-  {
-    activeDocument()->activePage()->changeFilled(filled);
-  }
-}
-
-void KontourView::changeStroked(bool stroked)
-{
-  if(activeDocument() && activeDocument()->activePage() &&
-    !activeDocument()->activePage()->selectionIsEmpty())
-  {
-    activeDocument()->activePage()->changeStroked(stroked);
-  }
-}
-
-void KontourView::changeLinewidth(unsigned int lwidth)
-{
-  if(activeDocument() && activeDocument()->activePage() &&
-      !activeDocument()->activePage()->selectionIsEmpty())
-  {
-    activeDocument()->activePage()->changeOutlineStyles(lwidth);
-  }
-}
-
-void KontourView::changeBrushStyle(Qt::BrushStyle bstyle)
-{
-  if(activeDocument() && activeDocument()->activePage() &&
-      !activeDocument()->activePage()->selectionIsEmpty())
-  {
-    activeDocument()->activePage()->changeOutlineStyles(bstyle);
-  }
-}
-
-void KontourView::changeJoinStyle(Qt::PenJoinStyle style)
-{
-  if(activeDocument() && activeDocument()->activePage() &&
-      !activeDocument()->activePage()->selectionIsEmpty())
-  {
-    activeDocument()->activePage()->changeOutlineStyles(style);
-  }
-}*/
-
-void KontourView::changeTransform(KCommand *command)
-{
-  if(activeDocument() && activeDocument()->activePage() &&
-     !activeDocument()->activePage()->selectionIsEmpty() && command)
-  {
-	mDoc->history()->addCommand(command);
-  }
-}
-
 void KontourView::changeSelection()
 {
   GPage *page = activeDocument()->activePage();
@@ -672,6 +595,8 @@ void KontourView::changeSelection()
     return;
   if(mOutlinePanel)
     mOutlinePanel->slotUpdate();
+  if(mTransformPanel)
+    mTransformPanel->slotUpdate();
   if(page->selectionIsEmpty())
   {
     m_copy->setEnabled(false);
@@ -695,7 +620,6 @@ void KontourView::changeSelection()
     m_forwardOne->setEnabled(true);
     m_backOne->setEnabled(true);
     m_duplicate->setEnabled(true);
-    mTransformPanel->setContext(page->getSelection().first()->matrix(), page);
   }
   if(page->objectCount() == page->selectionCount())
     m_selectAll->setEnabled(false);

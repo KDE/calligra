@@ -64,38 +64,6 @@ void GSegment::movePoint(int idx, double dx, double dy, bool ctrlPressed)
   // TODO Ctrl Pressed
 }
 
-/*      GBegin      */
-
-GBegin::GBegin()
-{
-  points.resize(1);
-  points[0].setX(0.0);
-  points[0].setY(0.0);
-}
-
-GBegin::GBegin(const QDomElement &element)
-{
-  points.resize(1);
-}
-
-const char GBegin::type() const
-{
-  return 'b';
-}
-
-QDomElement GBegin::writeToXml(QDomDocument &document)
-{
-  QDomElement begin = document.createElement("b");
-  begin.setAttribute("x", points[0].x());
-  begin.setAttribute("y", points[0].y());
-  return begin;
-}
-
-double GBegin::length() const
-{
-  return 0.0;
-}
-
 /*        GMove      */
 
 GMove::GMove()
@@ -106,6 +74,8 @@ GMove::GMove()
 GMove::GMove(const QDomElement &element)
 {
   points.resize(1);
+  points[0].setX(element.attribute("x").toDouble());
+  points[0].setY(element.attribute("y").toDouble());
 }
 
 const char GMove::type() const
@@ -126,7 +96,7 @@ double GMove::length() const
   return 0.0;
 }
 
-//-----------
+/*        GLine      */
 
 GLine::GLine()
 {
@@ -136,6 +106,9 @@ GLine::GLine()
 GLine::GLine(const QDomElement &element)
 {
   points.resize(1);
+  points[0].setX(element.attribute("x").toDouble());
+  points[0].setY(element.attribute("y").toDouble());
+  kdDebug() << "LINETO x=" << points[0].x() << " y=" << points[0].y() << endl;
 }
 
 const char GLine::type() const
@@ -166,6 +139,12 @@ GCubicBezier::GCubicBezier()
 GCubicBezier::GCubicBezier(const QDomElement &element)
 {
   points.resize(3);
+  points[0].setX(element.attribute("x").toDouble());
+  points[0].setY(element.attribute("y").toDouble());
+  points[1].setX(element.attribute("x1").toDouble());
+  points[1].setY(element.attribute("y1").toDouble());
+  points[2].setX(element.attribute("x2").toDouble());
+  points[2].setY(element.attribute("y2").toDouble());
 }
 
 const char GCubicBezier::type() const
@@ -176,10 +155,12 @@ const char GCubicBezier::type() const
 QDomElement GCubicBezier::writeToXml(QDomDocument &document)
 {
   QDomElement arc = document.createElement("c");
-  arc.setAttribute("x1", points[0].x());
-  arc.setAttribute("y1", points[0].y());
-  arc.setAttribute("x2", points[1].x());
-  arc.setAttribute("y2", points[1].y());
+  arc.setAttribute("x", points[0].x());
+  arc.setAttribute("y", points[0].y());
+  arc.setAttribute("x1", points[1].x());
+  arc.setAttribute("y1", points[1].y());
+  arc.setAttribute("x2", points[2].x());
+  arc.setAttribute("y2", points[2].y());
   return arc;
 }
 
@@ -201,6 +182,24 @@ GPath::GPath(const QDomElement &element):
 GObject(element.namedItem("go").toElement())
 {
   segments.setAutoDelete(true);
+  GSegment *seg;
+  QDomNode n = element.firstChild();
+  while(!n.isNull())
+  {
+    QDomElement child = n.toElement();
+    if(child.tagName() == "m")
+      seg = new GMove(child);
+    else if(child.tagName() == "l")
+      seg = new GLine(child);
+    else if(child.tagName() == "c")
+      seg = new GCubicBezier(child);
+    else
+      seg = 0L;
+    if(seg)
+    segments.append(seg);
+    n = n.nextSibling();
+  }
+  calcBoundingBox();
 }
 
 GPath::GPath(const GPath &obj):
@@ -208,6 +207,7 @@ GObject(obj)
 {
   segments.setAutoDelete(true);
   segments = obj.segments;
+  calcBoundingBox();
 }
 
 GObject *GPath::copy() const
@@ -223,7 +223,7 @@ void GPath::closed(bool aClosed)
 void GPath::beginTo(const double x, const double y)
 {
   segments.clear();
-  GBegin *seg = new GBegin;
+  GMove *seg = new GMove;
   seg->point(0, KoPoint(x, y));
   segments.append(seg);
   calcBoundingBox();
@@ -360,13 +360,7 @@ void GPath::draw(QPainter &p, bool withBasePoints, bool outline, bool withEditMa
   for(QPtrListIterator<GSegment> seg(segments); seg.current(); ++seg)
   {
     GSegment *s = *seg;
-    if(s->type() == 'b')
-    {
-      c = s->point(0).transform(tmpMatrix);
-      x = static_cast<int>(c.x());
-      y = static_cast<int>(c.y());
-    }
-    else if(s->type() == 'm')
+    if(s->type() == 'm')
     {
       c = s->point(0).transform(tmpMatrix);
       x = static_cast<int>(c.x());
@@ -392,6 +386,7 @@ void GPath::draw(QPainter &p, bool withBasePoints, bool outline, bool withEditMa
       c = s->point(2).transform(tmpMatrix);
       x2 = static_cast<int>(c.x());
       y2 = static_cast<int>(c.y());
+      kdDebug() << "DRAW: x=" << xc << " y=" << yc << " x1" << x1 << " y1=" << y1 << " x2=" << x2 << " y2=" << y2 << endl;
       QPointArray a(4);
       a.setPoint(0, x, y);
       a.setPoint(1, x1, y1);
@@ -440,7 +435,7 @@ bool GPath::contains(const KoPoint &p)
   for(QPtrListIterator<GSegment> seg(segments); seg.current(); ++seg)
   {
     GSegment *s = *seg;
-    if(s->type() == 'b' || s->type() == 'm')
+    if(s->type() == 'm')
     {
       x = s->point(0).x();
       y = s->point(0).y();

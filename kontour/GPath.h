@@ -58,24 +58,6 @@ protected:
 };
 
 /**
- * Begin segment.
- *
- */
-
-class GBegin : public GSegment
-{
-public:
-  GBegin();
-  GBegin(const QDomElement &element);
-
-  const char type() const;
-
-  QDomElement writeToXml(QDomDocument &document);
-
-  double length() const;
-};
-
-/**
  * Move segment.
  *
  */

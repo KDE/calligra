@@ -111,7 +111,6 @@ private:
 private slots:
   void popupForSelection();
   void popupForRulers();
-  void changeTransform(KCommand *);
   void changeSelection();
 
   void slotZoomFactorChanged();

@@ -25,33 +25,32 @@
 
 #include <qdockwindow.h>
 
-class QWMatrix;
+class KontourView;
+class QPushButton;
 class QTabWidget;
 class QSpinBox;
-class QGroupBox;
-class KIntNumInput;
-class GPage;
-class Handle;
-class KCommand;
+
 class TransformPanel : public QDockWindow
 {
   Q_OBJECT
 public:
-  TransformPanel(QWidget *parent = 0L, const char *name = 0L);
+  TransformPanel(KontourView *aView, QWidget *parent = 0L, const char *name = 0L);
 
 public slots:
-  void setContext(const QWMatrix &, GPage *);
+  void slotUpdate();
 
 private slots:
-  void slotDupPressed();
   void slotApplyPressed();
+  void slotDupPressed();
   void slotRelativeToggled(bool);
 
-signals:
-  void changeTransform(KCommand *);
-
 private:
+  KontourView   *mView;
+  QWidget       *mTransformPanel;
   QTabWidget    *mTab;
+  QPushButton   *mApplyBtn;
+  QPushButton   *mDuplicateBtn;
+
   QWidget       *mTranslate;
   QSpinBox      *mHorizBox;
   QSpinBox      *mVertBox;
@@ -61,10 +60,8 @@ private:
   QSpinBox      *mShearAngleXBox;
   QSpinBox      *mShearAngleYBox;
   QWidget       *mScale;
-  QSpinBox      *mScaleX;
-  QSpinBox      *mScaleY;
-  GPage         *mPage;
-  Handle        *mHandle; // not strictly necessary, so convenience
+  QSpinBox      *mScaleXBox;
+  QSpinBox      *mScaleYBox;
   bool          mTRelative : 1;
   bool          mRRelative : 1;
 };
