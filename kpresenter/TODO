@@ -36,6 +36,8 @@ KPresenter after koffice 1.3
 ============================
 Todo:
 - Hide/show header/footer by page (allow by oasis format)
+- Create compatibility for saving in old format for page effect speed.
+
 
 In Progress:
 -> implement custom slide show (save/load/change works)
