@@ -3233,7 +3233,6 @@ void KPresenterView::setupActions()
     connect( actionViewZoom, SIGNAL( activated( const QString & ) ),
              this, SLOT( viewZoom( const QString & ) ) );
     actionViewZoom->setEditable(true);
-    actionViewZoom->setComboWidth( 50 );
     changeZoomMenu( );
 
     actionFormatStylist = new KAction( i18n( "&Stylist..." ), ALT + CTRL + Key_S,
@@ -5636,6 +5635,10 @@ void KPresenterView::slotApplyParag()
     else
         delete macroCommand;
 
+    // Set "oldLayout" in KoParagDia from the current paragraph's settings
+    // Otherwise "isBlahChanged" will return wrong things when doing A -> B -> A
+    KoParagLayout lay = static_cast<KoTextParag *>(edit->cursor()->parag())->paragLayout();
+    m_paragDlg->setParagLayout( lay );
 }
 
 void KPresenterView::textDefaultFormat()
