@@ -128,7 +128,7 @@ public:
     virtual void drawFrame( KWFrame * frame, QPainter *painter, const QRect & crect,
                             QColorGroup &cg, bool onlyChanged, bool resetChanged, KWFrameSetEdit * edit );
 
-    void drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, KWCanvas *canvas );
+    void drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, KWCanvas *canvas, KWFrame *currentFrame );
 
     void insert( QTextCursor * cursor, KWTextFormat * currentFormat, const QString &text,
                  bool checkNewLine, bool removeSelected, const QString & commandName,

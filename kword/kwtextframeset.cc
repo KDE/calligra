@@ -120,6 +120,9 @@ int KWTextFrameSet::availableHeight() const
 
 KWFrame * KWTextFrameSet::normalToInternal( QPoint nPoint, QPoint &iPoint, bool mouseSelection ) const
 {
+#ifdef DEBUG_NTI
+    kdDebug() << "KWTextFrameSet::normalToInternal nPoint:" << nPoint.x() << "," << nPoint.y() << " mouseSelection=" << mouseSelection << endl;
+#endif
     // Find the frame that contains nPoint. To go fast, we look them up by page number.
     int pageNum = nPoint.y() / m_doc->paperHeight();
     QListIterator<KWFrame> frameIt( framesInPage( pageNum ) );
@@ -342,81 +345,51 @@ void KWTextFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &
     //m_currentDrawnFrame = 0L;
 }
 
-void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, KWCanvas *canvas )
+void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVisible, KWCanvas *canvas, KWFrame *frame )
 {
     // This redraws the paragraph where the cursor is - with a small clip region around the cursor
-
     m_currentDrawnCanvas = canvas;
     KWViewMode *viewMode = canvas->viewMode();
-    QListIterator<KWFrame> frameIt( frameIterator() );
-    int totalHeight = 0;
-    bool drawn = false;
-    KWFrame * lastRealFrame = 0L;
-    int lastRealFrameTop = 0;
-    for ( ; frameIt.current(); ++frameIt )
+
+    QRect normalFrameRect( m_doc->zoomRect( *frame ) );
+    QPoint topLeft = cursor->topParag()->rect().topLeft();         // in QRT coords
+    int h = cursor->parag()->lineHeightOfChar( cursor->index() );  //
+    QPoint nPoint;
+    QPoint hintNPoint = m_doc->zoomPoint( frame->topLeft() );
+    if ( internalToNormalWithHint( topLeft, nPoint, hintNPoint ) )
     {
-        KWFrame *frame = frameIt.current();
-        if ( !frame->isValid() )
-            continue;
+        QPoint cPoint = viewMode->normalToView( nPoint );     // from normal to view contents
+        // very small clipping around the cursor
+        QRect clip = QRect( cPoint.x() + cursor->x() - 5, cPoint.y() + cursor->y(), 10, h );
 
-        QRect normalFrameRect( m_doc->zoomRect( *frame ) );
-        //QRect frameRect( viewMode->normalToView( normalFrameRect ) );
-        // The parag is in the qtextdoc coordinates -> first translate frame to qtextdoc coords
-        QRect rf( normalFrameRect );
-        int offsetX = normalFrameRect.left();
-        int offsetY = normalFrameRect.top() - ( ( frame->isCopy() && lastRealFrame ) ? lastRealFrameTop : totalHeight );
+        //kdDebug(32002) << "KWTextFrameSet::drawCursor "
+        //               << " topLeft=(" << topLeft.x() << "," << topLeft.y() << ")  h=" << h << endl;
+        //kdDebug(32002) << this << " Clip for cursor: " << DEBUGRECT(clip) << endl;
 
-        rf.moveBy( -offsetX, -offsetY ); // rf is now in QRT internal coords
-
-        rf = rf.intersect( cursor->topParag()->rect() );
-        if ( !rf.isEmpty() )
+        QRegion reg = frameClipRegion( p, frame, clip, viewMode, true );
+        if ( !reg.isEmpty() )
         {
-            QPoint topLeft = cursor->topParag()->rect().topLeft();         // in QRT coords
-            int h = cursor->parag()->lineHeightOfChar( cursor->index() );  //
-            QPoint nPoint( topLeft.x() + offsetX, topLeft.y() + offsetY ); // from QRT to normal
-            QPoint cPoint = viewMode->normalToView( nPoint );     // from normal to view contents
-            // very small clipping around the cursor
-            QRect clip = QRect( cPoint.x() + cursor->x() - 5, cPoint.y() + cursor->y(), 10, h );
+            cursor->parag()->setChanged( TRUE );      // To force the drawing to happen
+            p->save();
 
-            /*kdDebug(32002) << "KWTextFrameSet::drawCursor "
-                             << " topLeft=(" << topLeft.x() << "," << topLeft.y() << ")  h=" << h << endl;
-              kdDebug(32002) << this << " Clip for cursor: " << DEBUGRECT(clip) << endl;*/
+            p->setClipRegion( reg );
+            // translate to qrt coords - after setting the clip region !
+            p->translate( cPoint.x() - topLeft.x(), cPoint.y() - topLeft.y() );
 
-            QRegion reg = frameClipRegion( p, frame, clip, viewMode, true );
-            if ( !reg.isEmpty() )
-            {
-                cursor->parag()->setChanged( TRUE );      // To force the drawing to happen
-                p->save();
+            // The settings come from this frame
+            KWFrame * settings = settingsFrame( frame );
 
-                p->setClipRegion( reg );
-                // translate to qrt coords - after setting the clip region !
-                p->translate( cPoint.x() - topLeft.x(), cPoint.y() - topLeft.y() );
+            QPixmap *pix = 0;
+            QColorGroup cg = QApplication::palette().active();
+            QBrush bgBrush( settings->getBackgroundColor() );
+            bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), p ) );
+            cg.setBrush( QColorGroup::Base, bgBrush );
 
-                // The settings come from this frame
-                KWFrame * settingsFrame = ( frame->isCopy() && lastRealFrame ) ? lastRealFrame : frame;
-
-                QPixmap *pix = 0;
-                QColorGroup cg = QApplication::palette().active();
-                QBrush bgBrush( settingsFrame->getBackgroundColor() );
-                bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), p ) );
-                cg.setBrush( QColorGroup::Base, bgBrush );
-
-                textdoc->drawParag( p, cursor->parag(), topLeft.x() - cursor->totalOffsetX() + cursor->x() - 5,
-                                    topLeft.y() - cursor->totalOffsetY() + cursor->y(), 10, h,
-                                    pix, cg, cursorVisible, cursor );
-                p->restore();
-            }
-            drawn = true;
+            textdoc->drawParag( p, cursor->parag(), topLeft.x() - cursor->totalOffsetX() + cursor->x() - 5,
+                                topLeft.y() - cursor->totalOffsetY() + cursor->y(), 10, h,
+                                pix, cg, cursorVisible, cursor );
+            p->restore();
         }
-        else
-            if ( drawn ) // Ok, we've drawn it, and now we're after it -> exit
-                break;   // Note that we might go into the above block twice, if parag is over two frames.
-        if ( !lastRealFrame || !frame->isCopy() )
-        {
-            lastRealFrame = frame;
-            lastRealFrameTop = totalHeight;
-        }
-        totalHeight += normalFrameRect.height();
     }
     m_currentDrawnCanvas = 0L;
 }
@@ -971,7 +944,7 @@ const QList<KWFrame> & KWTextFrameSet::framesInPage( int pageNum ) const
 {
     if ( pageNum < m_firstPage || pageNum >= m_framesInPage.size() + m_firstPage )
     {
-        kdWarning() << "framesInPage called for pageNum=" << pageNum << ". "
+        kdWarning() << getName() << " framesInPage called for pageNum=" << pageNum << ". "
                     << " Min value: " << m_firstPage
                     << " Max value: " << m_framesInPage.size() + m_firstPage - 1 << endl;
         return m_emptyList; // QList<KWFrame>() doesn't work, it's a temporary
@@ -1801,6 +1774,12 @@ bool KWTextFrameSet::isFrameEmpty( KWFrame * frame )
 
 bool KWTextFrameSet::canRemovePage( int num )
 {
+    //kdDebug() << "KWTextFrameSet(" << getName() << ")::canRemovePage " << num << endl;
+
+    // No frame on that page ? ok for us then
+    if ( num < m_firstPage || num >= m_framesInPage.size() + m_firstPage )
+        return true;
+
     QListIterator<KWFrame> frameIt( framesInPage( num ) );
     for ( ; frameIt.current(); ++frameIt )
     {
@@ -3707,12 +3686,15 @@ void KWTextFrameSetEdit::drawCursor( bool visible )
         return;
     if ( !frameSet()->kWordDocument()->isReadWrite() )
         return;
+    if ( !m_currentFrame )
+        return;
 
     QPainter p( m_canvas->viewport() );
     p.translate( -m_canvas->contentsX(), -m_canvas->contentsY() );
     p.setBrushOrigin( -m_canvas->contentsX(), -m_canvas->contentsY() );
 
-    textFrameSet()->drawCursor( &p, cursor, visible, m_canvas );
+    //QRect crect( m_canvas->contentsX(), m_canvas->contentsY(), m_canvas->visibleWidth(), m_canvas->visibleHeight() );
+    textFrameSet()->drawCursor( &p, cursor, visible, m_canvas, m_currentFrame );
     cursorVisible = visible;
 }
 
