@@ -24,9 +24,8 @@
 #ifndef confpolygondia_h
 #define confpolygondia_h
 
-#include <qdialog.h>
+#include <kdialogbase.h>
 #include <qframe.h>
-#include <qradiobutton.h>
 
 class QPainter;
 class QLabel;
@@ -67,7 +66,7 @@ protected:
 /* class ConfPolygonDia                                           */
 /******************************************************************/
 
-class ConfPolygonDia : public QDialog
+class ConfPolygonDia : public KDialogBase
 {
     Q_OBJECT
 
@@ -85,8 +84,6 @@ protected:
     KIntNumInput *m_corners, *m_sharpness;
     QGroupBox *gSettings;
     PolygonPreview *polygonPreview;
-    QPushButton *okBut, *applyBut, *cancelBut;
-
     bool checkConcavePolygon;
     int cornersValue;
     int sharpnessValue;

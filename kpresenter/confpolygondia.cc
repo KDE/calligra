@@ -25,7 +25,6 @@
 
 #include <qbuttongroup.h>
 #include <qvbuttongroup.h>
-#include <qpushbutton.h>
 #include <qgroupbox.h>
 #include <qpainter.h>
 #include <qlayout.h>
@@ -36,6 +35,7 @@
 
 #include <stdlib.h>
 #include <math.h>
+#include <qradiobutton.h>
 
 /******************************************************************/
 /* class PolygonPreview                                           */
@@ -130,21 +130,21 @@ void PolygonPreview::slotSharpnessValue( int value )
 /*==================== constructor ===============================*/
 ConfPolygonDia::ConfPolygonDia( QWidget *parent, const char *name, bool _checkConcavePolygon,
                                 int _cornersValue, int _sharpnessValue )
-    : QDialog( parent, name, true )
+    : KDialogBase( parent, name, true )
 {
     checkConcavePolygon = _checkConcavePolygon;
     cornersValue = _cornersValue;
     sharpnessValue = _sharpnessValue;
 
     // ------------------------ layout
-    QVBoxLayout *layout = new QVBoxLayout( this );
-    layout->setMargin( 5 );
-    layout->setSpacing( 5 );
+    QWidget *page = new QWidget( this );
+    setMainWidget(page);
+    QVBoxLayout *layout = new QVBoxLayout( page, 0, spacingHint() );
     QHBoxLayout *hbox = new QHBoxLayout( layout );
     hbox->setSpacing( 5 );
 
     // ------------------------ settings
-    gSettings = new QGroupBox( 1, Qt::Horizontal, i18n( "Settings" ), this );
+    gSettings = new QGroupBox( 1, Qt::Horizontal, i18n( "Settings" ), page );
 
     QButtonGroup *group = new QVButtonGroup( i18n( "Convex/Concave" ), gSettings );
 
@@ -175,7 +175,7 @@ ConfPolygonDia::ConfPolygonDia( QWidget *parent, const char *name, bool _checkCo
     hbox->addWidget( gSettings );
 
     // ------------------------ preview
-    polygonPreview = new PolygonPreview( this, "preview", checkConcavePolygon, cornersValue, sharpnessValue );
+    polygonPreview = new PolygonPreview( page, "preview", checkConcavePolygon, cornersValue, sharpnessValue );
     hbox->addWidget( polygonPreview );
 
     connect ( m_convexPolygon, SIGNAL( clicked() ), polygonPreview,
@@ -187,28 +187,9 @@ ConfPolygonDia::ConfPolygonDia( QWidget *parent, const char *name, bool _checkCo
     connect( m_sharpness, SIGNAL( valueChanged( int ) ), polygonPreview,
              SLOT( slotSharpnessValue( int ) ) );
 
-
-    // ------------------------ buttons
-    KButtonBox *bb = new KButtonBox( this );
-    bb->addStretch();
-
-    okBut = bb->addButton( i18n( "OK" ) );
-    okBut->setAutoRepeat( false );
-    okBut->setAutoDefault( true );
-    okBut->setDefault( true );
-    applyBut = bb->addButton( i18n( "Apply" ) );
-    cancelBut = bb->addButton( i18n( "Cancel" ) );
-
-    connect( okBut, SIGNAL( clicked() ), this, SLOT( Apply() ) );
-    connect( applyBut, SIGNAL( clicked() ), this, SLOT( Apply() ) );
-    connect( cancelBut, SIGNAL( clicked() ), this, SLOT( reject() ) );
-    connect( okBut, SIGNAL( clicked() ), this, SLOT( accept() ) );
-
-    bb->layout();
-
-    bb->setMaximumHeight( okBut->sizeHint().height() + 5 );
-
-    layout->addWidget( bb );
+    connect( this, SIGNAL( okClicked() ), this, SLOT( Apply() ) );
+    connect( this, SIGNAL( applyClicked() ), this, SLOT( Apply() ) );
+    connect( this, SIGNAL( okClicked() ), this, SLOT( accept() ) );
 }
 
 /*===================== destructor ===============================*/

@@ -29,6 +29,14 @@
 #include <knuminput.h>
 #include <kbuttonbox.h>
 
+#include <qpen.h>
+#include <qbrush.h>
+#include <qcombobox.h>
+#include <global.h>
+
+#include <knuminput.h>
+#include <qcombobox.h>
+
 #include <stdlib.h>
 
 /******************************************************************/
@@ -81,17 +89,18 @@ void PiePreview::drawContents( QPainter* painter )
 
 /*==================== constructor ===============================*/
 ConfPieDia::ConfPieDia( QWidget* parent, const char* name )
-    : QDialog( parent, name, true )
+    : KDialogBase( parent, name, true )
 {
   // ------------------------ layout
-  QVBoxLayout *layout = new QVBoxLayout( this );
-  layout->setMargin( 5 );
-  layout->setSpacing( 5 );
+  QWidget *page = new QWidget( this );
+  setMainWidget(page);
+  QVBoxLayout *layout = new QVBoxLayout( page, 0, spacingHint() );
+
   QHBoxLayout *hbox = new QHBoxLayout( layout );
   hbox->setSpacing( 5 );
-  
+
   // ------------------------ settings
-  gSettings = new QGroupBox( 2, Qt::Horizontal, i18n( "Settings" ), this );
+  gSettings = new QGroupBox( 2, Qt::Horizontal, i18n( "Settings" ), page );
 
   lType = new QLabel( i18n( "Type:" ), gSettings );
 
@@ -101,7 +110,7 @@ ConfPieDia::ConfPieDia( QWidget* parent, const char* name )
   cType->insertItem( i18n( "Chord" ) );
 
   connect( cType, SIGNAL( activated( int ) ), this, SLOT( typeChanged( int ) ) );
-  
+
   lAngle = new QLabel( i18n( "Angle:" ), gSettings );
 
   eAngle = new KIntNumInput( gSettings );
@@ -117,31 +126,13 @@ ConfPieDia::ConfPieDia( QWidget* parent, const char* name )
   hbox->addWidget( gSettings );
 
   // ------------------------ preview
-  piePreview = new PiePreview( this, "preview" );
+  piePreview = new PiePreview( page, "preview" );
 
   hbox->addWidget( piePreview );
 
-  // ------------------------ buttons
-  KButtonBox *bb = new KButtonBox( this );
-  bb->addStretch();
-
-  okBut = bb->addButton( i18n( "OK" ) );
-  okBut->setAutoRepeat( false );
-  okBut->setAutoDefault( true );
-  okBut->setDefault( true );
-  applyBut = bb->addButton( i18n( "Apply" ) );
-  cancelBut = bb->addButton( i18n( "Cancel" ) );
-
-  connect( okBut, SIGNAL( clicked() ), this, SLOT( Apply() ) );
-  connect( applyBut, SIGNAL( clicked() ), this, SLOT( Apply() ) );
-  connect( cancelBut, SIGNAL( clicked() ), this, SLOT( reject() ) );
-  connect( okBut, SIGNAL( clicked() ), this, SLOT( accept() ) );
-
-  bb->layout();
-
-  bb->setMaximumHeight( okBut->sizeHint().height() + 5 );
-
-  layout->addWidget( bb );  
+  connect( this, SIGNAL( okClicked() ), this, SLOT( Apply() ) );
+  connect( this, SIGNAL( applyClicked() ), this, SLOT( Apply() ) );
+  connect( this, SIGNAL( okClicked() ), this, SLOT( accept() ) );
 }
 
 /*===================== destructor ===============================*/

@@ -20,19 +20,18 @@
 #ifndef confpiedia_h
 #define confpiedia_h
 
-#include <qdialog.h>
+#include <kdialogbase.h>
 #include <qframe.h>
-#include <qpen.h>
-#include <qbrush.h>
-#include <qcombobox.h>
 #include <global.h>
-
+#include <qcombobox.h>
+#include <qpen.h>
 #include <knuminput.h>
-
+#include <qbrush.h>
 class QLabel;
 class QGroupBox;
 class QPushButton;
 class QPainter;
+class QComboBox;
 
 /******************************************************************/
 /* class PiePreview                                               */
@@ -69,7 +68,7 @@ protected:
 /* class ConfPieDia                                               */
 /******************************************************************/
 
-class ConfPieDia : public QDialog
+class ConfPieDia : public KDialogBase
 {
     Q_OBJECT
 
@@ -98,7 +97,6 @@ protected:
     KIntNumInput *eAngle, *eLen;
     QGroupBox *gSettings;
     PiePreview *piePreview;
-    QPushButton *okBut, *applyBut, *cancelBut;
     QComboBox *cType;
 
     int angle, len;

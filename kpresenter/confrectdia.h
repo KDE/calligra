@@ -20,7 +20,7 @@
 #ifndef confrectdia_h
 #define confrectdia_h
 
-#include <qdialog.h>
+#include <kdialogbase.h>
 #include <qframe.h>
 
 class QPainter;
@@ -55,7 +55,7 @@ protected:
 /* class ConfRectDia                                              */
 /******************************************************************/
 
-class ConfRectDia : public QDialog
+class ConfRectDia : public KDialogBase
 {
     Q_OBJECT
 
@@ -75,8 +75,6 @@ protected:
     KIntNumInput *eRndX, *eRndY;
     QGroupBox *gSettings;
     RectPreview *rectPreview;
-    QPushButton *okBut, *applyBut, *cancelBut;
-
     int xRnd, yRnd;
 
 protected slots:

@@ -51,18 +51,18 @@
 
 /*================================================================*/
 EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject>& _objs, KPresenterView *_view )
-    : QDialog( parent, name, true ), objs( _objs )
+    : KDialogBase( parent, name, true ), objs( _objs )
 {
     view = _view;
     KPObject *obj = objs.at( 0 );
     soundPlayer1 = 0;
     soundPlayer2 = 0;
 
-    topLayout = new QVBoxLayout(this, 4);
-    topLayout->setMargin( 10 );
-    topLayout->setSpacing( 10 );
+    QWidget *page = new QWidget( this );
+    setMainWidget(page);
+    topLayout = new QVBoxLayout( page, 0, spacingHint() );
 
-    QGroupBox *grp1 = new QGroupBox(i18n( "Appear" ), this );
+    QGroupBox *grp1 = new QGroupBox(i18n( "Appear" ), page );
     topLayout->addWidget(grp1);
     QGridLayout *upperRow = new QGridLayout(grp1, 5, 4, 15);
 
@@ -180,11 +180,11 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
     connect( buttonTestStopSoundEffect1, SIGNAL( clicked() ), this, SLOT( stopSound1() ) );
 
 
-    disappear = new QCheckBox( i18n( "Disappear" ), this );
+    disappear = new QCheckBox( i18n( "Disappear" ), page );
     disappear->setChecked( obj->getDisappear() );
     topLayout->addWidget(disappear);
 
-    QGroupBox *grp2 = new QGroupBox(i18n( "Disappear" ), this);
+    QGroupBox *grp2 = new QGroupBox(i18n( "Disappear" ), page);
     topLayout->addWidget(grp2);
     QGridLayout *lowerRow = new QGridLayout(grp2, 4, 4, 15);
 
@@ -272,27 +272,10 @@ EffectDia::EffectDia( QWidget* parent, const char* name, const QPtrList<KPObject
     connect( buttonTestStopSoundEffect2, SIGNAL( clicked() ), this, SLOT( stopSound2() ) );
 
 
-    KButtonBox *bb = new KButtonBox(this);
-    bb->addStretch();
-    topLayout->addWidget(bb);
-
-    okBut = bb->addButton( i18n( "OK" ) );
-    okBut->setAutoRepeat( false );
-    //Laurent comment it : fix QT_NO_COMPAT
-    //okBut->setAutoResize( false );
-    okBut->setAutoDefault( true );
-    okBut->setDefault( true );
-
-    cancelBut = bb->addButton( i18n( "Cancel" ) );
-
-    bb->layout();
     topLayout->activate();
 
-    bb->setMaximumHeight( bb->sizeHint().height() );
-
-    connect( okBut, SIGNAL( clicked() ), this, SLOT( slotEffectDiaOk() ) );
-    connect( cancelBut, SIGNAL( clicked() ), this, SLOT( reject() ) );
-    connect( okBut, SIGNAL( clicked() ), this, SLOT( accept() ) );
+    connect( this, SIGNAL( okClicked() ), this, SLOT( slotEffectDiaOk() ) );
+    connect( this, SIGNAL( okClicked() ), this, SLOT( accept() ) );
     connect( disappear, SIGNAL( clicked() ), this, SLOT( disappearChanged() ) );
     disappearChanged();
     appearSoundEffectChanged();

@@ -20,7 +20,7 @@
 #ifndef EFFECTDIA_H
 #define EFFECTDIA_H
 
-#include <qdialog.h>
+#include <kdialogbase.h>
 #include <qptrlist.h>
 
 class KPresenterView;
@@ -41,7 +41,7 @@ class KPresenterSoundPlayer;
 /* class EffectDia                                                */
 /******************************************************************/
 
-class EffectDia : public QDialog
+class EffectDia : public KDialogBase
 {
     Q_OBJECT
 
@@ -61,7 +61,6 @@ protected:
     QComboBox *cEffect, *cEffect2, *cDisappear;
     QLabel *lEffect, *lEffect2, *lNum, *lDisappear, *lDEffect;
     QSpinBox *eNum,*eDisappear;
-    QPushButton *cancelBut, *okBut;
     QCheckBox *disappear;
     QBoxLayout *topLayout;
     KIntNumInput *timerOfAppear, *timerOfDisappear;

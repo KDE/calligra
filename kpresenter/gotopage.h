@@ -20,7 +20,7 @@
 #ifndef gotopage_h
 #define gotopage_h
 
-#include <qdialog.h>
+#include <kdialogbase.h>
 #include <qvaluelist.h>
 
 class QWidget;
@@ -33,12 +33,12 @@ class KPresenterDoc;
 /* class KPGotoPage                                               */
 /******************************************************************/
 
-class KPGotoPage : public QDialog {
-
+class KPGotoPage : public KDialogBase 
+{
 public:
     KPGotoPage( const KPresenterDoc *doc, float fakt,
 		const QValueList<int> &slides, int start,
-		QWidget *parent = 0L, const char *name = 0L, WFlags f = 0 );
+		QWidget *parent = 0L, const char *name = 0L );
 
     static int gotoPage( const KPresenterDoc *doc, float fakt,
 			 const QValueList<int> &slides, int start,

@@ -20,7 +20,6 @@
 #include <confrectdia.h>
 
 #include <qlabel.h>
-#include <qpushbutton.h>
 #include <qgroupbox.h>
 #include <qpainter.h>
 #include <qlayout.h>
@@ -67,18 +66,20 @@ void RectPreview::drawContents( QPainter* painter )
 
 /*==================== constructor ===============================*/
 ConfRectDia::ConfRectDia( QWidget* parent, const char* name )
-    : QDialog( parent, name, true )
+    : KDialogBase( parent, name, true )
 {
 
     // ------------------------ layout
-    QVBoxLayout *layout = new QVBoxLayout( this );
-    layout->setMargin( 5 );
-    layout->setSpacing( 5 );
+    QWidget *page = new QWidget( this );
+    setMainWidget(page);
+    QVBoxLayout *layout = new QVBoxLayout( page, 0, spacingHint() );
+
+
     QHBoxLayout *hbox = new QHBoxLayout( layout );
     hbox->setSpacing( 5 );
 
     // ------------------------ settings
-    gSettings = new QGroupBox( 2, Qt::Horizontal, i18n( "Settings" ), this );
+    gSettings = new QGroupBox( 2, Qt::Horizontal, i18n( "Settings" ), page );
 
     lRndX = new QLabel( i18n( "Roundedness X" ), gSettings );
 
@@ -95,31 +96,13 @@ ConfRectDia::ConfRectDia( QWidget* parent, const char* name )
     hbox->addWidget( gSettings );
 
     // ------------------------ preview
-    rectPreview = new RectPreview( this, "preview" );
+    rectPreview = new RectPreview( page, "preview" );
 
     hbox->addWidget( rectPreview );
 
-    // ------------------------ buttons
-    KButtonBox *bb = new KButtonBox( this );
-    bb->addStretch();
-
-    okBut = bb->addButton( i18n( "OK" ) );
-    okBut->setAutoRepeat( false );
-    okBut->setAutoDefault( true );
-    okBut->setDefault( true );
-    applyBut = bb->addButton( i18n( "Apply" ) );
-    cancelBut = bb->addButton( i18n( "Cancel" ) );
-
-    connect( okBut, SIGNAL( clicked() ), this, SLOT( Apply() ) );
-    connect( applyBut, SIGNAL( clicked() ), this, SLOT( Apply() ) );
-    connect( cancelBut, SIGNAL( clicked() ), this, SLOT( reject() ) );
-    connect( okBut, SIGNAL( clicked() ), this, SLOT( accept() ) );
-
-    bb->layout();
-
-    bb->setMaximumHeight( okBut->sizeHint().height() + 5 );
-
-    layout->addWidget( bb );
+    connect( this, SIGNAL( okClicked() ), this, SLOT( Apply() ) );
+    connect( this, SIGNAL( applyClicked() ), this, SLOT( Apply() ) );
+    connect( this, SIGNAL( okClicked() ), this, SLOT( accept() ) );
 }
 
 /*===================== destructor ===============================*/

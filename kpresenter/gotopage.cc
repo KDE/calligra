@@ -36,29 +36,23 @@
 /*================================================================*/
 KPGotoPage::KPGotoPage( const KPresenterDoc *doc, float fakt,
 			const QValueList<int> &slides, int start,
-			QWidget *parent, const char *name, WFlags f )
-    : QDialog( parent, name, true, f ), oldPage(start)
+			QWidget *parent, const char *name )
+    : KDialogBase( parent, name, true, i18n("Goto Page..."), Ok|Cancel)
+    , oldPage(start)
 {
-    setCaption(i18n("Goto Page..."));
 
-    QVBoxLayout *ml = new QVBoxLayout( this, KDialog::marginHint(),
-				       KDialog::spacingHint() );
-    QLabel *label = new QLabel( i18n( "Goto Page:" ), this );
+    QWidget *page = new QWidget( this );
+    setMainWidget(page);
+    QVBoxLayout *ml = new QVBoxLayout( page, KDialog::marginHint(),
+                                         KDialog::spacingHint());
+    QLabel *label = new QLabel( i18n( "Goto Page:" ), page );
     ml->addWidget( label );
-    spinbox = new QListBox( this );
+    spinbox = new QListBox( page );
     connect( spinbox, SIGNAL(doubleClicked( QListBoxItem* )),
 	     this, SLOT(accept()) );
     connect( spinbox, SIGNAL(returnPressed( QListBoxItem* )),
 	     this, SLOT(accept()) );
     ml->addWidget( spinbox );
-
-    QHBoxLayout *box=new QHBoxLayout(ml);
-    QPushButton *button=new QPushButton(i18n("OK"), this);
-    connect(button, SIGNAL(clicked()), this, SLOT(accept()));
-    box->addWidget(button);
-    button=new QPushButton(i18n("Cancel"), this);
-    connect(button, SIGNAL(clicked()), this, SLOT(reject()));
-    box->addWidget(button);
 
     QValueList<int>::ConstIterator it = slides.begin();
     for ( ; it != slides.end(); ++it ) {
@@ -83,8 +77,7 @@ int KPGotoPage::gotoPage( const KPresenterDoc *doc, float fakt,
 			  const QValueList<int> &slides, int start,
 			  QWidget *parent)
 {
-    KPGotoPage dia( doc, fakt, slides, start,parent, 0L,
-                    0 /*Qt::WStyle_Customize | Qt::WStyle_NoBorder | Qt::WStyle_Tool | Qt::WType_Popup*/ );
+    KPGotoPage dia( doc, fakt, slides, start,parent, 0L );
     dia.exec();
     dia.resetCursor();
     return dia.page();
