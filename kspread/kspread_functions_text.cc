@@ -432,7 +432,7 @@ bool kspreadfunc_proper(KSContext & context)
         continue;
       }
 
-      if (str[i] == ' ')
+      if (str[i] == ' ' || str[i] == '-')
         first = true;
     }
   }
