@@ -907,6 +907,8 @@ VKoPainter::drawRect( const KoRect &r )
 	lineTo( r.bottomRight() );
 	lineTo( r.bottomLeft() );
 	lineTo( r.topLeft() );
+	fillPath();
+	strokePath();
 }
 
 void
