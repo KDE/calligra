@@ -29,7 +29,7 @@
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
 
-#include "kwChangeCaseDia.h"
+#include "kwchangecasedia.h"
 #include "kwview.h"
 #include "defs.h"
 
@@ -38,7 +38,7 @@ KWChangeCaseDia::KWChangeCaseDia( QWidget *parent, const char *name )
     : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
 {
 
-    setCaption( i18n("Change case: ") );
+    setCaption( i18n("Change case") );
     QVBox *page = makeVBoxMainWidget();
 
     QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n( "Case:" ),page );
@@ -70,4 +70,4 @@ TypeOfCase KWChangeCaseDia::getTypeOfCase()
     return type;
 }
 
-#include "kwChangeCaseDia.moc"
+#include "kwchangecasedia.moc"

@@ -60,7 +60,7 @@
 #include "kwcommand.h"
 #include "fontdia.h"
 #include "counter.h"
-#include "kwChangeCaseDia.h"
+#include "kwchangecasedia.h"
 #include "kweditpersonnalexpressiondia.h"
 
 #include <koMainWindow.h>
@@ -2049,8 +2049,7 @@ void KWView::tableSplitCells(int cols, int rows)
     //int rows=1, cols=2;
     if ( !table->splitCell(rows,cols) ) {
         KMessageBox::sorry( this,
-                            i18n("You have to select a joined cell."),
-                            //i18n("There is not enough space to split the cell into that many parts"),
+                            i18n("There is not enough space to split the cell into that many parts, make it bigger first"),
                             i18n("Split Cells") );
     }
     //KoRect r = doc->zoomRect( table->boundingRect() );
