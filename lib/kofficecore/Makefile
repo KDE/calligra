@@ -77,12 +77,22 @@ LIBDL = -ldl
 LIBJPEG = -ljpeg
 LIBMICO = -lmico2.2.1 -ldl
 LIBOBJS = @LIBOBJS@
+LIBPNG = @LIBPNG@
 LIBPTHREAD = -lpthread
 LIBPYTHON = -lpython1.5
 LIBQIMGIO = 
 LIBSOCKET = 
-LIBTOOL = $(SHELL) $(top_builddir)/libtool
+LIBTIFF = @LIBTIFF@
+LIBTOOL = $(SHELL) $(top_builddir)/libtool --silent
 LIBUCB = 
+LIB_KDECORE = -lkdecore -lXext $(LIB_QT)
+LIB_KDEUI = -lkdeui $(LIB_KDECORE)
+LIB_KFILE = -lkfile $(LIB_KFM) $(LIB_KDEUI)
+LIB_KFM = -lkfm $(LIB_KDECORE)
+LIB_KHTMLW = @LIB_KHTMLW@
+LIB_KIMGIO = @LIB_KIMGIO@
+LIB_QT = -lqt $(LIB_X11)
+LIB_X11 = -lX11 $(LIBSOCKET)
 LN_S = ln -s
 MAKEINFO = makeinfo
 MICO_INCLUDES = -I/usr/local/include
@@ -107,7 +117,7 @@ XPMLIB = @XPMLIB@
 X_EXTRA_LIBS = 
 X_INCLUDES = -I/usr/X11R6/include
 X_LDFLAGS = -L/usr/X11R6/lib
-all_includes = -I/opt/kde/include -I/usr/lib/qt/include 
+all_includes = -I/opt/kde/include -I/usr/lib/qt/include  -I/usr/X11R6/include
 all_libraries = -L/opt/kde/lib  -L/usr/X11R6/lib
 idldir = $(includedir)/idl
 install_root = 
@@ -164,7 +174,7 @@ libkofficecore_la_LIBADD =
 libkofficecore_la_OBJECTS =  koffice.lo koView.lo koFrame.lo koIMR.lo \
 koScanParts.lo koStream.lo koMediator.lo koDocument.lo koPrintExt.lo \
 koMainWindow.lo moc_koFrame.lo moc_koMainWindow.lo
-CXXFLAGS = -g -Wall
+CXXFLAGS = -O2 -Wall
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --mode=compile $(CXX) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CXXFLAGS)
 CXXLINK = $(LIBTOOL) --mode=link $(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@

@@ -17,6 +17,9 @@
 KoMainWindow::KoMainWindow( const char *_name )
 {
   m_pFileMenu = 0L;
+  m_pHelpMenu = 0L;
+  m_pFrame = 0L;
+  m_pKoInterface = 0L;
   
   connect( this, SIGNAL( activePartChanged( unsigned long, unsigned long ) ),
 	   this, SLOT( slotActivePartChanged( unsigned long, unsigned long ) ) );
