@@ -112,6 +112,7 @@ bool kspreadfunc_or( KSContext& context );
 bool kspreadfunc_nor( KSContext& context );
 bool kspreadfunc_and( KSContext& context );
 bool kspreadfunc_nand( KSContext& context );
+bool kspreadfunc_xor( KSContext& context );
 bool kspreadfunc_if( KSContext& context );
 bool kspreadfunc_islogic( KSContext& context );
 bool kspreadfunc_istext( KSContext& context );
@@ -411,11 +412,37 @@ static bool kspreadfunc_select( KSContext& context )
   return b;
 }
 
+typedef struct
+{
+  const char *name;
+  bool (*function)( KSContext& );
+} functionEntry;
+
+static const functionEntry funcTab[] = {
+  // trigonometric
+  { "cos", kspreadfunc_cos }, 
+
+  // compatibility with KSpread 1.0
+  { "ENT", kspreadfunc_INT },
+
+  // end marker
+  { NULL, NULL }
+};
+
 static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
 {
   KSModule::Ptr module = new KSModule( interp, "kspread" );
 
-  module->addObject( "cos", new KSValue( new KSBuiltinFunction( module, "cos", kspreadfunc_cos ) ) );
+  unsigned count = sizeof(funcTab)/sizeof(funcTab[0]);
+  for( unsigned i=0; i<count; i++ )
+  {
+    QString name = funcTab[i].name;
+    bool (*function)(KSContext&) = funcTab[i].function;
+    if( function ) module->addObject( name, new KSValue( 
+      new KSBuiltinFunction( module, name, function ) ) );
+  }
+
+  //module->addObject( "cos", new KSValue( new KSBuiltinFunction( module, "cos", kspreadfunc_cos ) ) );
   module->addObject( "sin", new KSValue( new KSBuiltinFunction( module, "sin", kspreadfunc_sin ) ) );
   module->addObject( "sum", new KSValue( new KSBuiltinFunction( module, "sum", kspreadfunc_sum ) ) );
   module->addObject( "DIV", new KSValue( new KSBuiltinFunction( module, "DIV", kspreadfunc_div ) ) );
@@ -453,6 +480,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "AND", new KSValue( new KSBuiltinFunction( module, "AND", kspreadfunc_and) ) );
   module->addObject( "NOR", new KSValue( new KSBuiltinFunction( module, "NOR", kspreadfunc_nor) ) );
   module->addObject( "NAND", new KSValue( new KSBuiltinFunction( module, "NAND", kspreadfunc_nand) ) );
+  module->addObject( "XOR", new KSValue( new KSBuiltinFunction( module, "XOR", kspreadfunc_xor) ) );
 
   module->addObject( "stddev", new KSValue( new KSBuiltinFunction( module, "stderr", kspreadfunc_stddev) ) );
   module->addObject( "join", new KSValue( new KSBuiltinFunction( module, "join", kspreadfunc_join) ) );

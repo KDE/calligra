@@ -129,6 +129,37 @@
     </Function>
 
     <Function>
+      <Name>XOR</Name>
+      <Type>Boolean</Type>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Parameter optional="true">
+	<Comment>Boolean values</Comment>
+	<Type range="true">Boolean</Type>
+      </Parameter>
+      <Help>
+	<Text>The XOR() function returns True if the number of True values is even. Otherwise it returns False.</Text>
+	<Syntax>XOR(value;value;...)</Syntax>
+	<Example>XOR(False;False;False) returns True</Example>
+	<Example>XOR(True;False) returns False</Example>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>NOT</Name>
       <Type>Boolean</Type>
       <Parameter>

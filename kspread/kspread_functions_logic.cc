@@ -119,6 +119,39 @@ bool kspreadfunc_nand( KSContext& context )
   return b;
 }
 
+static bool kspreadfunc_xor_helper( KSContext& context, QValueList<KSValue::Ptr>& args, bool& first )
+{
+  QValueList<KSValue::Ptr>::Iterator it = args.begin();
+  QValueList<KSValue::Ptr>::Iterator end = args.end();
+
+  for( ; it != end; ++it )
+  {
+    if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
+    {
+      if ( !kspreadfunc_and_helper( context, (*it)->listValue(), first ) )
+        return false;
+    }
+    else if ( KSUtil::checkType( context, *it, KSValue::BoolType, true ) )
+      first = first ^ (*it)->boolValue();
+    else
+      return false;
+  }
+
+  return true;
+}
+
+// Function: XOR
+bool kspreadfunc_xor( KSContext& context )
+{
+  bool first = true;
+  bool b = kspreadfunc_xor_helper( context, context.value()->listValue(), first );
+
+  if ( b )
+    context.setValue( new KSValue( first ) );
+
+  return b;
+}
+
 // Function: IF
 bool kspreadfunc_if( KSContext& context )
 {
