@@ -495,7 +495,8 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
     //kdDebug(32500) << "KoTextParag::drawParagStringInternal start=" << start << " len=" << len << endl;
     //kdDebug(32500) << "In pixels:  startX=" << startX << " lastY=" << lastY << " baseLine=" << baseLine
     //               << " bw=" << bw << " h=" << h << " rightToLeft=" << rightToLeft << endl;
-
+    if ( textDocument()->drawingShadow() && !lastFormat->shadowText())
+        return;
     // 1) Sort out the color
     QColor textColor( lastFormat->color() );
     if ( textDocument()->drawingShadow() ) // Use shadow color if drawing a shadow
