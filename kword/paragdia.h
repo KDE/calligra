@@ -24,53 +24,31 @@
 #include <qstringlist.h>
 #include <qlist.h>
 #include <koRuler.h>
-#include <qspinbox.h>
 
 #include "kwtextparag.h"
 #include "counter.h"
 
-class KWDocument;
-class QWidget;
-class QGridLayout;
-class QLabel;
-class QGroupBox;
-class QComboBox;
-class QRadioButton;
 class KButtonBox;
-class QPushButton;
-class KColorDialog;
 class KColorButton;
-class QButtonGroup;
-class QListBox;
-class QLineEdit;
-class KWParagLayout;
-class KWPagePreview;
-class KWPagePreview2;
+class KColorDialog;
 class KWBorderPreview;
+class KWDocument;
 class KWNumPreview;
+class KWPagePreview2;
+class KWPagePreview;
+class KWParagLayout;
+class KWSpinBox;
+class QButtonGroup;
 class QCheckBox;
-
-/******************************************************************/
-/* Class: KWSpinBox                                               */
-/******************************************************************/
-class KWSpinBox : public QSpinBox
-{
-    Q_OBJECT
-
-public:
-    enum counterType{ NONE,NUM,ALPHAB_L,ALPHAB_U,ROM_NUM_L,ROM_NUM_U};
-
-    KWSpinBox( int minValue, int maxValue, int step = 1,
-           QWidget * parent = 0, const char * name = 0 );
-    KWSpinBox( QWidget * parent = 0, const char * name = 0 );
-    virtual ~KWSpinBox();    
-    virtual QString mapValueToText( int value );
-    void setCounterType(counterType _type);
- private:
-    counterType m_Etype;
-
-};
-
+class QComboBox;
+class QGridLayout;
+class QGroupBox;
+class QLabel;
+class QLineEdit;
+class QListBox;
+class QPushButton;
+class QRadioButton;
+class QWidget;
 
 /******************************************************************/
 /* Class: KWParagDia                                              */

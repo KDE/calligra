@@ -1203,14 +1203,19 @@ void KWDocument::loadStyleTemplates( QDomElement stylesElem )
         QDomElement styleElem = listStyles.item( item ).toElement();
 
         KWStyle *sty = new KWStyle( styleElem, m_defaultFont );
-        //kdDebug(32001) << "KWDocument::addStyleTemplate style's name is " << sty->name() << endl;
         addStyleTemplate( sty );
         followingStyles.append(styleElem.namedItem("FOLLOWING").toElement().attribute("name"));
     }
 
+    ASSERT( followingStyles.count() == m_styleList.count() );
+    //kdDebug() << "KWDocument::loadStyleTemplates followingStyles:" << followingStyles.count() << endl;
+    //kdDebug() << "KWDocument::loadStyleTemplates m_styleList:" << m_styleList.count() << endl;
+
     unsigned int i=0;
     for( QValueList<QString>::Iterator it = followingStyles.begin(); it != followingStyles.end(); ++it ) {
-        m_styleList.at(i++)->setFollowingStyle(findStyle(*it));
+        KWStyle * style = findStyle(*it);
+        //kdDebug() << "KWDocument::loadStyleTemplates setFollowingStyle " << style << endl;
+        m_styleList.at(i++)->setFollowingStyle( style );
     }
 
 }
@@ -1225,6 +1230,7 @@ void KWDocument::addStyleTemplate( KWStyle * sty )
     {
         if ( p->name() == sty->name() )
         {
+            kdDebug() << "KWDocument::addStyleTemplate replacing style " << p->name() << endl;
             // Replace existing style
             *p = *sty;
             //if ( p->name() == "Standard" ) defaultParagLayout = p;
@@ -1832,7 +1838,7 @@ QStringList KWDocument::fontList()
     return *m_fontList;
 }
 
-KWStyle* KWDocument::findStyle( const QString & _name, bool noFallback )
+KWStyle* KWDocument::findStyle( const QString & _name )
 {
     // Caching, to speed things up
     if ( m_lastStyle && m_lastStyle->name() == _name )
@@ -1847,10 +1853,7 @@ KWStyle* KWDocument::findStyle( const QString & _name, bool noFallback )
         }
     }
 
-    if ( noFallback )
-        return 0L;
-    qWarning( "Style '%s` is unknown, using default style", _name.latin1() );
-    return m_styleList.first();
+    return 0L;
 }
 
 /*================================================================*/
@@ -1904,10 +1907,11 @@ void KWDocument::updateAllStyleLists()
 }
 
 /*================================================================*/
-void KWDocument::applyStyleChange( const QString & changedStyle )
+void KWDocument::applyStyleChange( KWStyle * changedStyle )
 {
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit ) {
+        // ###### TODO virtual method in KWFrameSet, so that KWTableFrameSet works too
         KWTextFrameSet * frameSet = dynamic_cast<KWTextFrameSet*>( fit.current() );
         if ( frameSet )
             frameSet->applyStyleChange( changedStyle );

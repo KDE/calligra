@@ -214,11 +214,9 @@ public:
 
     const QList<KWStyle> & styleList() const { return m_styleList; }
     /**
-     * Look for a style named @p name. If not found, it will
-     * either return 0L (if noFallback is true) or (by default) it will
-     * return the default style (first one in the list of styles).
+     * Look for a style named @p name. If not found, it will return 0L.
      */
-    KWStyle* findStyle( const QString & name, bool noFallback = false );
+    KWStyle* findStyle( const QString & name );
     /**
      * Return style number @p i.
      */
@@ -258,7 +256,7 @@ public:
     int applyStyleChangeMask() { return styleMask; }
     void setApplyStyleChangeMask( int _f ) { styleMask = _f; }
 
-    void applyStyleChange( const QString & changedStyle );
+    void applyStyleChange( KWStyle * changedStyle );
     void updateAllStyleLists();
 
     bool isHeaderVisible() const { return m_headerVisible; }
@@ -423,11 +421,11 @@ public:
 
     void addStyleTemplate( KWStyle *style );
 
-    void removeStyleTemplate ( KWStyle *style);
+    void removeStyleTemplate ( KWStyle *style );
 
-    void moveDownStyleTemplate ( const QString & _styleName);
+    void moveDownStyleTemplate ( const QString & _styleName );
 
-    void moveUpStyleTemplate ( const QString & _styleName);
+    void moveUpStyleTemplate ( const QString & _styleName );
 
 #ifndef NDEBUG
     void printDebug();

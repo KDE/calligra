@@ -73,7 +73,7 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
 
     m_lastFormatted = textdoc->firstParag();
     // Apply 'Standard' style to paragraph
-    KWStyle * style = _doc->findStyle( "Standard", true );
+    KWStyle * style = _doc->findStyle( "Standard" );
     if ( m_lastFormatted && style )
     {
 	static_cast<KWTextParag*>(m_lastFormatted)->setParagLayout( style->paragLayout() );
@@ -854,7 +854,7 @@ void KWTextFrameSet::load( QDomElement &attributes )
     {
         // Create an empty one, then. See KWTextDocument ctor.
         textdoc->clear( true );
-        static_cast<KWTextParag *>( textdoc->firstParag() )->setStyleName( "Standard" );
+        static_cast<KWTextParag *>( textdoc->firstParag() )->setStyle( m_doc->findStyle( "Standard" ) );
     }
     else
         textdoc->setLastParag( lastParagraph );
@@ -982,29 +982,27 @@ QTextFormat * KWTextFrameSet::zoomFormatFont( const QTextFormat * f )
     return fcf;
 }
 
-void KWTextFrameSet::applyStyleChange( const QString & changedStyle )
+void KWTextFrameSet::applyStyleChange( KWStyle * changedStyle )
 {
-    //kdDebug(32001) << "KWTextFrameSet::applyStyleChange " << changedStyle << endl;
+    kdDebug(32001) << "KWTextFrameSet::applyStyleChange " << changedStyle->name() << endl;
     QTextDocument * textdoc = textDocument();
     emit hideCursor();
-    KWStyle * style = m_doc->findStyle( changedStyle, true );
     KWTextParag *p = static_cast<KWTextParag *>(textdoc->firstParag());
     while ( p ) {
-        if ( p->styleName() == changedStyle )
+        if ( p->style() == changedStyle )
         {
+#if 0 // TODO, how to know a style has been deleted
             if ( style == 0L ) // style has been deleted
             {
-                p->setStyleName( QString::null ); // so get rid of its name, keep current formatting
+                p->setStyle( m_doc->findStyle( "Standard" ) ); // keeps current formatting
                 // TODO, make this undoable !
             }
             else
+#endif
             {
                 // Apply this style again, to get the changes
                 // To get undo/redo and to reuse code, we call applyStyle with a temp selection
                 // Using Temp+1 to avoid conflicting with QRT's internals (just in case)
-#if 0
-                KWStyle styleApplied=*style;
-#endif
                 QTextCursor start( textdoc );
                 QTextCursor end( textdoc );
                 start.setParag( p );
@@ -1014,6 +1012,7 @@ void KWTextFrameSet::applyStyleChange( const QString & changedStyle )
                 end.setIndex( p->string()->length()-1 );
                 textdoc->setSelectionEnd( QTextDocument::Temp+1, &end );
 #if 0
+                KWStyle styleApplied=*style;
                 if ( (m_doc->applyStyleChangeMask() & KWDocument::U_BORDER) == 0)
                 {
                     styleApplied.paragLayout().leftBorder=p->leftBorder();
@@ -1045,9 +1044,9 @@ void KWTextFrameSet::applyStyleChange( const QString & changedStyle )
                     styleApplied.paragLayout().margins[QStyleSheetItem::MarginFirstLine]=p->margin(QStyleSheetItem::MarginFirstLine);
                     styleApplied.paragLayout().margins[QStyleSheetItem::MarginBottom]=p->margin(QStyleSheetItem::MarginBottom);
                     styleApplied.paragLayout().margins[QStyleSheetItem::MarginTop]=p->margin(QStyleSheetItem::MarginTop);
-                    }
+                }
 #endif
-                applyStyle( 0L, style, QTextDocument::Temp+1 );
+                applyStyle( 0L, changedStyle, QTextDocument::Temp+1 );
                 textdoc->removeSelection( QTextDocument::Temp+1 );
             }
         }
@@ -3241,10 +3240,13 @@ void KWTextFrameSetEdit::updateUI()
 	m_canvas->gui()->getView()->showParagBorders( m_paragLayout.leftBorder, m_paragLayout.rightBorder, m_paragLayout.topBorder, m_paragLayout.bottomBorder );
     }
 
-    if ( m_paragLayout.styleName() != parag->styleName() )
+    if ( m_paragLayout.style != parag->style() )
     {
-        m_paragLayout.setStyleName( parag->styleName() );
-        m_canvas->gui()->getView()->showStyle( m_paragLayout.styleName() );
+        m_paragLayout.style = parag->style();
+        if ( m_paragLayout.style )
+            m_canvas->gui()->getView()->showStyle( m_paragLayout.style->name() );
+        else
+            kdWarning() << "Paragraph " << parag->paragId() << " has no style" << endl;
     }
 
     if( m_paragLayout.margins[QStyleSheetItem::MarginLeft] != parag->margin(QStyleSheetItem::MarginLeft)

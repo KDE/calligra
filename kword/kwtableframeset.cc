@@ -1344,6 +1344,12 @@ void KWTableFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegio
         // Draw borders either as the user defined them, or using the view settings.
         // Borders should be drawn _outside_ of the frame area
         // otherwise the frames will erase the border when painting themselves.
+
+        //    Border::drawBorders( *painter, m_doc, frameRect,
+        //         frame->getLeftBorder(), frame->getRightBorder(),
+        //         frame->getTopBorder(), frame->getBottomBorder(),
+        //         1, viewSetting );
+
         QPen pen;
         double width;
         int w;

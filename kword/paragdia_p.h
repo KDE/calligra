@@ -24,9 +24,32 @@
 // to reduce compile-time dependencies.
 
 #include <qgroupbox.h>
-#include <counter.h>
+#include "counter.h"
+#include <qspinbox.h>
 class QWidget;
 class QPainter;
+
+
+/******************************************************************/
+/* Class: KWSpinBox                                               */
+/******************************************************************/
+class KWSpinBox : public QSpinBox
+{
+    Q_OBJECT
+
+public:
+    enum counterType{ NONE,NUM,ALPHAB_L,ALPHAB_U,ROM_NUM_L,ROM_NUM_U};
+
+    KWSpinBox( int minValue, int maxValue, int step = 1,
+           QWidget * parent = 0, const char * name = 0 );
+    KWSpinBox( QWidget * parent = 0, const char * name = 0 );
+    virtual ~KWSpinBox();
+    virtual QString mapValueToText( int value );
+    void setCounterType(counterType _type);
+ private:
+    counterType m_Etype;
+
+};
 
 /******************************************************************/
 /* class KWPagePreview                                            */

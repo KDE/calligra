@@ -17,49 +17,45 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qwhatsthis.h>
 #include "paragdia.h"
 #include "paragdia_p.h"
 #include "kwdoc.h"
 #include "counter.h"
 #include "defs.h"
 
-#include <kcharselectdia.h>
-#include <qwidget.h>
-#include <qlayout.h>
-#include <qlabel.h>
+#include <qbrush.h>
+#include <qbuttongroup.h>
+#include <qcheckbox.h>
+#include <qcolor.h>
+#include <qcombobox.h>
 #include <qframe.h>
 #include <qgroupbox.h>
-#include <qcombobox.h>
-#include <qpen.h>
-#include <qbrush.h>
-#include <qpainter.h>
-#include <qcolor.h>
-#include <qradiobutton.h>
-#include <qpushbutton.h>
-#include <qbuttongroup.h>
 #include <qhbuttongroup.h>
-#include <qlistbox.h>
-#include <qspinbox.h>
+#include <qlabel.h>
+#include <qlayout.h>
 #include <qlineedit.h>
+#include <qlistbox.h>
+#include <qpainter.h>
+#include <qpen.h>
+#include <qpushbutton.h>
+#include <qradiobutton.h>
+#include <qspinbox.h>
 #include <qvalidator.h>
-#include <qcheckbox.h>
+#include <qwhatsthis.h>
+#include <qwidget.h>
 
-#include <kiconloader.h>
-#include <klocale.h>
 #include <kapp.h>
 #include <kbuttonbox.h>
+#include <kcharselectdia.h>
 #include <kcolorbtn.h>
-#include <kglobal.h>
 #include <kdebug.h>
+#include <kglobal.h>
+#include <kiconloader.h>
+#include <klocale.h>
 #include <kmessagebox.h>
 #include <knumvalidator.h>
 #include <koRuler.h>
 #include <kwutils.h>
-
-#include <stdlib.h>
-#include <stdio.h>
-
 
 KWSpinBox::KWSpinBox( QWidget * parent, const char * name )
     : QSpinBox(parent,name)
@@ -91,7 +87,7 @@ QString KWSpinBox::mapValueToText( int value )
     if(value==0 && m_Etype==NUM)
         return QString("0");
     else if(value==0 && m_Etype!=NUM)
-        return QString("");
+        return QString::null;
 
     switch(m_Etype)
     {
@@ -107,13 +103,11 @@ QString KWSpinBox::mapValueToText( int value )
             return makeRomanNumber( value ).upper();
         case NONE:
         default:
-            return QString("");
+            return QString::null;
     }
     //never here
-    return QString("");
+    return QString::null;
 }
-
-
 
 
 

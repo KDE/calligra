@@ -35,7 +35,8 @@ public:
     // Create a style from a saved document
     KWStyle( QDomElement & styleElem, const QFont & defaultFont );
 
-    QString name() const { return m_paragLayout.styleName(); }
+    QString name() const { return m_name; }
+    void setName( const QString & name ) { m_name = name; }
 
     const KWParagLayout & paragLayout() const { return m_paragLayout; }
     KWParagLayout & paragLayout()  { return m_paragLayout; }
@@ -45,15 +46,14 @@ public:
     const QTextFormat & format() const { return m_format; }
     QTextFormat & format() { return m_format; }
 
-    //QString followingStyle() const { return m_followingStyle; }
     KWStyle *followingStyle() { return m_followingStyle; }
     void setFollowingStyle( KWStyle *fst ) { m_followingStyle = fst; }
-    //void setFollowingStyle( const QString & fst ) { m_followingStyle = fst; }
 
     void save( QDomElement parentElem );
 
 private:
     KWParagLayout m_paragLayout;
+    QString m_name;
     QTextFormat m_format;
     KWStyle *m_followingStyle;
 };

@@ -87,6 +87,8 @@ public:
     //int docFontSize( float zoomedFontSize ) const; // zoomed -> doc
     float zoomedFontSize( int docFontSize ) const; // doc -> zoomed
 
+    QTextFormat * zoomFormatFont( const QTextFormat * f );
+
     /** returns a deep copy of self (and all it contains) */
     KWTextFrameSet *getCopy();
 
@@ -151,7 +153,7 @@ public:
     void setBorders( QTextCursor * cursor, Border leftBorder, Border rightBorder, Border topBorder, Border bottomBorder );
     void setMargin( QTextCursor * cursor, QStyleSheetItem::Margin m, double margin );
     void applyStyle( QTextCursor * cursor, const KWStyle * style, int selectionId = QTextDocument::Standard );
-    void applyStyleChange( const QString & changedStyle );
+    void applyStyleChange( KWStyle * changedStyle );
 
     void setTabList( QTextCursor * cursor,const KoTabulatorList & tabList );
 
@@ -195,7 +197,6 @@ protected:
     void copyCharFormatting( QTextStringChar * ch, int index /*in text*/, bool moveCustomItems );
     void readFormats( QTextCursor &c1, QTextCursor &c2, int oldLen, bool copyParagLayouts = false, bool moveCustomItems = false );
     void setLastFormattedParag( QTextParag *parag );
-    QTextFormat * zoomFormatFont( const QTextFormat * f );
     void getMargins( int yp, int h, int* marginLeft, int* marginRight, int* breakEnd );
     bool checkVerticalBreak( int & yp, int h, QTextParag * parag, bool linesTogether, int breakBegin, int breakEnd );
 

@@ -328,26 +328,24 @@ void KWTextParag::copyParagData( QTextParag *_parag )
     KWTextParag * parag = static_cast<KWTextParag *>(_parag);
     KWDocument * doc = textDocument()->textFrameSet()->kWordDocument();
     // Style of the previous paragraph
-    KWStyle * style = doc->findStyle( parag->styleName(), true );
+    KWStyle * style = parag->style();
     // Obey "following style" setting
     bool styleApplied = false;
-    if ( style && style->followingStyle() )
+    if ( style )
     {
         KWStyle * newStyle = style->followingStyle();
-        if (!newStyle)
-            kdWarning() << "Following style " << style->followingStyle() << " not found" << endl;
-        else if ( style != newStyle ) // if same style, keep paragraph-specific changes as usual
+        if ( newStyle && style != newStyle ) // if same style, keep paragraph-specific changes as usual
         {
             setParagLayout( newStyle->paragLayout() );
-            QTextFormat * format = document()->formatCollection()->format( &newStyle->format() );
+            QTextFormat * format = textDocument()->textFrameSet()->zoomFormatFont( &newStyle->format() );
             setFormat( format );
             format->addRef();
             string()->setFormat( 0, format, true ); // prepare format for text insertion
             styleApplied = true;
         }
     }
-    else if (!style)
-        kdWarning() << "Paragraph style '" << parag->styleName() << "' not found" << endl;
+    else
+        kdWarning() << "Paragraph has no style " << paragId() << endl;
 
     // No "following style" setting, or same style -> copy layout & format of previous paragraph
     if (!styleApplied)
@@ -706,10 +704,7 @@ void KWTextParag::loadLayout( QDomElement & attributes )
         setParagLayout( paragLayout );
 
         // Load default format from style.
-        KWStyle *existingStyle = doc->findStyle( m_layout.styleName(), true );
-        if ( !existingStyle )
-            kdDebug() << "KWTextParag::loadLayout no style named " << m_layout.styleName() << " found!" << endl;
-        QTextFormat *defaultFormat = existingStyle ? &existingStyle->format() : 0L;
+        QTextFormat *defaultFormat = style() ? &style()->format() : 0L;
         QDomElement formatElem = layout.namedItem( "FORMAT" ).toElement();
         if ( !formatElem.isNull() )
         {
@@ -856,7 +851,7 @@ void KWTextParag::setParagLayout( const KWParagLayout & layout )
 
     setTabList( layout.tabList() );
     // Don't call setStyle from here, it would overwrite any paragraph-specific settings
-    setStyleName( layout.styleName() );
+    setStyle( layout.style );
 }
 
 #ifndef NDEBUG
@@ -876,7 +871,7 @@ void KWTextParag::printRTDebug( int info )
       kdDebug() << "        align=" << item->alignment() << " leftMargin=" << item->margin(QStyleSheetItem::MarginLeft) << " rightMargin=" << item->margin(QStyleSheetItem::MarginRight) << " topMargin=" << item->margin(QStyleSheetItem::MarginTop) << " bottomMargin=" << item->margin(QStyleSheetItem::MarginBottom) << endl;
       kdDebug() << "        displaymode=" << dm[item->displayMode()] << endl;
       }*/
-    kdDebug() << "  Style: " << styleName() << endl;
+    kdDebug() << "  Style: " << ( style() ? style()->name().local8Bit().data() : "NO STYLE" ) << endl;
     kdDebug() << "  Text: '" << string()->toString() << "'" << endl;
     if ( info == 0 ) // paragraph info
     {
@@ -946,7 +941,7 @@ void KWParagLayout::operator=( const KWParagLayout &layout )
     else
         counter = 0L;
     lineSpacing = layout.lineSpacing;
-    setStyleName( layout.styleName() );
+    style = layout.style;
     setTabList( layout.tabList() );
 }
 
@@ -960,35 +955,39 @@ KWParagLayout::KWParagLayout( QDomElement & parentElem, KWDocument *doc )
 {
     initialise();
 
-    // Name of the style. If there is no style, then we do not supply
-    // any default!
-    QDomElement element = parentElem.namedItem( "NAME" ).toElement();
-    if ( !element.isNull() )
+    // Only when loading paragraphs, not when loading styles
+    // This is a hack, a better design would be to pass the reference style as parameter
+    // instead of the doc.
+    if ( doc )
     {
-        m_styleName = element.attribute( "value" );
-        if ( doc )
+        // Name of the style. If there is no style, then we do not supply
+        // any default!
+        QDomElement element = parentElem.namedItem( "NAME" ).toElement();
+        if ( !element.isNull() )
         {
+            QString styleName = element.attribute( "value" );
             // Default all the layout stuff from the style.
-            KWStyle *existingStyle = doc->findStyle( m_styleName );
-            if (existingStyle)
+            style = doc->findStyle( styleName );
+            if (style)
             {
-                *this = existingStyle->paragLayout();
+                *this = style->paragLayout();
             }
             else
             {
-                kdError(32001) << "Cannot find style \"" << m_styleName << "\"" << endl;
+                kdError(32001) << "Cannot find style \"" << styleName << "\"" << endl;
             }
         }
-    }
-    else
-    {
-        kdError(32001) << "Missing NAME tag in LAYOUT" << endl;
+        else
+        {
+            kdError(32001) << "Missing NAME tag in LAYOUT ( for a paragraph )" << endl;
+        }
     }
 
     // Load the paragraph tabs - forget about the ones from the style first.
     // We can't apply the 'default comes from the style' in this case, because
     // there is no way to differenciate between "I want no tabs in the parag"
     // and "use default from style".
+    QDomElement element;
     m_tabList.clear();
     QDomNodeList listTabs = parentElem.elementsByTagName ( "TABULATOR" );
     unsigned int count = listTabs.count();
@@ -1117,7 +1116,7 @@ void KWParagLayout::save( QDomElement & parentElem )
     QDomDocument doc = parentElem.ownerDocument();
     QDomElement element = doc.createElement( "NAME" );
     parentElem.appendChild( element );
-    element.setAttribute( "value", m_styleName );
+    element.setAttribute( "value", style->name() );
 
     element = doc.createElement( "FLOW" );
     parentElem.appendChild( element );
@@ -1201,9 +1200,4 @@ void KWParagLayout::save( QDomElement & parentElem )
         element.setAttribute( "type", (*it).type );
         element.setAttribute( "ptpos", (*it).ptPos );
     }
-}
-
-void KWParagLayout::setStyleName( const QString &styleName )
-{
-    m_styleName = styleName;
 }

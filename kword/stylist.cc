@@ -88,14 +88,14 @@ void KWStyleManager::setupWidget() {
     QVBoxLayout *Form1Layout = new QVBoxLayout( this );
     Form1Layout->setSpacing( 6 );
     Form1Layout->setMargin( 11 );
- 
+
     QFrame *Frame1 = new QFrame( this);
     Frame1->setFrameShape( QFrame::StyledPanel );
     Frame1->setFrameShadow( QFrame::Raised );
     QGridLayout *Frame1Layout = new QGridLayout( Frame1 );
     Frame1Layout->setSpacing( 6 );
     Frame1Layout->setMargin( 11 );
- 
+
     QList<KWStyle> styles = const_cast<QList<KWStyle> & >(m_doc->styleList());
     numStyles = styles.count();
     m_stylesList = new QListBox( Frame1, "stylesList" );
@@ -106,37 +106,37 @@ void KWStyleManager::setupWidget() {
 
 kdDebug() << " style " << i << ": " << styles.at(i)->name() << " (" << styles.at(i) << ") with following: " << styles.at(i)->followingStyle()->name() << " (" << styles.at(i)->followingStyle() << ")" << endl;
     }
- 
+
     Frame1Layout->addMultiCellWidget( m_stylesList, 0, 0, 0, 1 );
- 
+
     m_deleteButton = new QPushButton( Frame1, "deleteButton" );
     m_deleteButton->setText( i18n( "&Delete" ) );
     connect( m_deleteButton, SIGNAL( clicked() ), this, SLOT( deleteStyle() ) );
- 
+
     Frame1Layout->addWidget( m_deleteButton, 1, 1 );
- 
+
     QPushButton *newButton = new QPushButton( Frame1, "newButton" );
     newButton->setText( i18n( "New" ) );
     connect( newButton, SIGNAL( clicked() ), this, SLOT( addStyle() ) );
- 
+
     Frame1Layout->addWidget( newButton, 1, 0 );
- 
+
     m_tabs = new QTabWidget( Frame1);
     Frame1Layout->addMultiCellWidget( m_tabs, 0, 1, 2, 2 );
     Form1Layout->addWidget( Frame1 );
- 
+
     QHBoxLayout *Layout2 = new QHBoxLayout;
     Layout2->setSpacing( 6 );
     Layout2->setMargin( 0 );
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
     Layout2->addItem( spacer );
- 
+
     m_okButton = new QPushButton( this );
     m_okButton->setText( i18n( "&OK" ) );
     m_okButton->setDefault(true);
     connect( m_okButton, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
     Layout2->addWidget( m_okButton );
- 
+
     m_cancelButton = new QPushButton( this);
     m_cancelButton->setText( i18n( "&Cancel" ) );
     connect( m_cancelButton, SIGNAL( clicked() ), this, SLOT( slotCancel() ) );
@@ -154,33 +154,33 @@ void KWStyleManager::addGeneralTab() {
     tabLayout->setMargin( 11 );
 
     preview = new KWStylePreview( i18n( "Preview" ), tab, m_currentStyle );
- 
+
     tabLayout->addMultiCellWidget( preview, 2, 2, 0, 1 );
- 
+
     m_nameString = new QLineEdit( tab );
     m_nameString->resize(m_nameString->sizeHint() );
     connect( m_nameString, SIGNAL( textChanged( const QString &) ), this, SLOT( renameStyle(const QString &) ) );
- 
+
     tabLayout->addWidget( m_nameString, 0, 1 );
- 
+
     QLabel *nameLabel = new QLabel( tab );
     nameLabel->setText( i18n( "Name:" ) );
     nameLabel->resize(nameLabel->sizeHint());
     nameLabel->setAlignment( AlignRight | AlignVCenter );
 
     tabLayout->addWidget( nameLabel, 0, 0 );
- 
+
     m_styleCombo = new QComboBox( FALSE, tab, "styleCombo" );
- 
+
     for ( unsigned int i = 0; i < m_stylesList->count(); i++ ) {
         m_styleCombo->insertItem( m_stylesList->text(i));
     }
 
     tabLayout->addWidget( m_styleCombo, 1, 1 );
- 
+
     QLabel *nextStyleLabel = new QLabel( tab );
     nextStyleLabel->setText( i18n( "Next style:" ) );
- 
+
     tabLayout->addWidget( nextStyleLabel, 1, 0 );
     m_tabs->insertTab( tab, i18n( "General" ) );
 }
@@ -219,11 +219,11 @@ kdDebug() << " style " << i << ": " << m_changedStyles.at(i)->name() << " (" << 
 KWStyle * KWStyleManager::copyStyle(KWStyle *orig) {
 kdDebug() << "creating new style: " << orig->name() << endl;
     KWStyle *style = new KWStyle("a");
-    
-    style->format()=orig->format();
-    style->setFollowingStyle(orig->followingStyle());
-    style->paragLayout()=orig->paragLayout();
-    style->paragLayout().setStyleName( orig->name());
+
+    style->format() = orig->format();
+    style->setFollowingStyle( orig->followingStyle() );
+    style->paragLayout() = orig->paragLayout();
+    style->setName( orig->name() );
     return style;
 }
 
@@ -232,7 +232,7 @@ void KWStyleManager::updateGUI() {
         m_tabsList.at(i)->update();
     }
     m_nameString->setText(m_currentStyle->name());
-    
+
     for ( int i = 0; i < m_styleCombo->count(); i++ ) {
         if ( m_styleCombo->text( i ) == m_currentStyle->followingStyle()->name() ) {
             m_styleCombo->setCurrentItem( i );
@@ -253,7 +253,7 @@ void KWStyleManager::save() {
         for (unsigned int i =0; m_tabsList.count(); i++) {
             m_tabsList.at(i)->save();
         }
-        m_currentStyle->paragLayout().setStyleName( m_nameString->text());
+        m_currentStyle->setName( m_nameString->text() );
 kdDebug() << "following style1: " << m_styleCombo->currentText() << endl;
 kdDebug() << "following style2: " << getStyleByName(m_styleCombo->currentText()) << endl;
 kdDebug() << "following style3: " << m_changedStyles.at(getStyleByName(m_styleCombo->currentText())) << endl;
@@ -269,10 +269,10 @@ void KWStyleManager::addStyle() {
     KWStyle *oldStyle=m_currentStyle;
     m_currentStyle =new KWStyle(str);
 
-    m_currentStyle->format()=oldStyle->format();
-    m_currentStyle->paragLayout()=oldStyle->paragLayout();
-    m_currentStyle->setFollowingStyle(oldStyle->followingStyle());
-    m_currentStyle->paragLayout().setStyleName( str );
+    m_currentStyle->format() = oldStyle->format();
+    m_currentStyle->paragLayout() = oldStyle->paragLayout();
+    m_currentStyle->setFollowingStyle( oldStyle->followingStyle() );
+    m_currentStyle->setName( str );
 
     noSignals=true;
     m_origStyles.append(0L);
@@ -287,7 +287,7 @@ void KWStyleManager::addStyle() {
 
 void KWStyleManager::deleteStyle() {
 
-    save(); 
+    save();
 
     unsigned int cur = getStyleByName(m_stylesList->currentText());
     KWStyle *s = m_changedStyles.at(cur);
@@ -332,8 +332,8 @@ kdDebug() << "update style " <<  m_changedStyles.at(i)->name() << " (" << i << "
             KWStyle *changed = m_changedStyles.at(i);
             //orig->format()=changed->format();
             orig->setFollowingStyle(changed->followingStyle());
-            orig->paragLayout()=changed->paragLayout();
-            orig->paragLayout().setStyleName( changed->name());
+            orig->paragLayout() = changed->paragLayout();
+            orig->setName( changed->name() );
         } else {
 kdDebug() << "has not changed " <<  m_changedStyles.at(i)->name() << " (" << i << ")" <<  endl;
         }
@@ -545,7 +545,7 @@ bool KWStyleEditor::apply() {
         }
 
         if ( !same ) {
-            ostyle->paragLayout().setStyleName( eName->text() );
+            ostyle->setName( eName->text() );
             emit updateStyleList();
         }
     }
@@ -554,9 +554,9 @@ bool KWStyleEditor::apply() {
     ostyle->setFollowingStyle( cFollowing->currentText() );
 
     // ### TODO a dirty flag for this !
-    doc->applyStyleChange(eName->text());
+    doc->applyStyleChange( ostyle );
 */
-    return true; 
+    return true;
 }
 
 void KWStyleEditor::slotOk() {

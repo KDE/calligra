@@ -58,8 +58,8 @@ void KWContents::createContents()
     for ( QTextParag *p = textdoc->firstParag(); p ; p = p->next() )
     {
         KWTextParag * parag = static_cast<KWTextParag *>(p);
-        if ( parag->styleName().startsWith( "Contents Head" ) ||
-            parag->styleName() == "Contents Title" )
+        if ( parag->style() && ( parag->style()->name().startsWith( "Contents Head" ) ||
+            parag->style()->name() == "Contents Title" ) )
         {
             kdDebug() << "KWContents::createContents Deleting paragraph " << p << endl;
             // This paragraph is part of the TOC -> remove
@@ -191,7 +191,7 @@ KWStyle * KWContents::findOrCreateTOCStyle( int depth )
         name = QString( "Contents Head %1" ).arg( depth+1 );
     else
         name = "Contents Title";
-    KWStyle * style = m_doc->findStyle( name, true );
+    KWStyle * style = m_doc->findStyle( name );
     if ( !style )
     {
         style = new KWStyle( name );

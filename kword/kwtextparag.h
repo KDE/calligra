@@ -35,6 +35,7 @@ class KWTextDocument;
 class KWTextCustomItem;
 class KWDocument;
 class KWTextParag;
+class KWStyle;
 class Counter;
 
 /**
@@ -63,15 +64,13 @@ public:
     Counter* counter; // can be 0 if no counter set
     bool linesTogether; // whether to keep all lines on the same page if the parag is at the end of a frame
 
-    void setStyleName( const QString &styleName );
-    QString styleName() const { return m_styleName; }
+    KWStyle* style;
 
     void setTabList( const KoTabulatorList & tabList ) { m_tabList = tabList; }
     KoTabulatorList tabList() const { return m_tabList; }
 
     void operator=( const KWParagLayout & );
 private:
-    QString m_styleName;
     KoTabulatorList m_tabList;
 
     // Common setup.
@@ -130,8 +129,8 @@ public:
     int counterWidth() const;
 
     // Style
-    QString styleName() const { return m_layout.styleName(); }
-    void setStyleName( const QString & style ) { m_layout.setStyleName( style ); }
+    KWStyle *style() const { return m_layout.style; }
+    void setStyle( KWStyle * style ) { m_layout.style = style; } // doesn't _apply_ the style
 
     // Whether to keep all lines on the same page if the parag is at the end of a frame
     void setLinesTogether( bool b );
