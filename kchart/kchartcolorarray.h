@@ -7,10 +7,10 @@
 #ifndef KCHARTCOLORARRAY
 #define KCHARTCOLORARRAY
 
-#include <qvector.h>
+#include <qptrvector.h>
 #include <qcolor.h>
 
-typedef QVector<QColor> _KChartColorArray;
+typedef QPtrVector<QColor> _KChartColorArray;
 
 class KChartColorArray : protected _KChartColorArray
 {

@@ -65,8 +65,8 @@ protected:
     uint findRightPie( uint pie );
     QPoint pointOnCircle( const QRect& rect, int angle );
 
-    QArray < int > _startAngles;
-    QArray < int > _angleLens;
+    QMemArray < int > _startAngles;
+    QMemArray < int > _angleLens;
 
     QRect _position;
     uint _size;

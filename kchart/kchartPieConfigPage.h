@@ -41,7 +41,7 @@ private:
     QListView *list;
     QSpinBox *angle;
     QSpinBox *depth;
-    QArray<int> value;
+    QMemArray<int> value;
     int pos;
 };
 

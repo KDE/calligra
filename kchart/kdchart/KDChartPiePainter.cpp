@@ -227,7 +227,7 @@ void KDChartPiePainter::paintData( QPainter* painter,
         // least one other pie, otherwise the loop would already have
         // been terminated by the loop condition.
         if ( currentpie == frontmostpie ) {
-            ASSERT( !todostack.isEmpty() );
+            Q_ASSERT( !todostack.isEmpty() );
             // QValueStack::exchange() would be nice here...
             uint secondpie = todostack.pop();
             if ( currentpie == secondpie )
@@ -370,8 +370,8 @@ void KDChartPiePainter::draw3DEffect( QPainter* painter,
         startAngle -= 5760;
     while ( endAngle >= 5760 )
         endAngle -= 5760;
-    ASSERT( startAngle >= 0 && startAngle <= 360 * 16 );
-    ASSERT( endAngle >= 0 && endAngle <= 360 * 16 );
+    Q_ASSERT( startAngle >= 0 && startAngle <= 360 * 16 );
+    Q_ASSERT( endAngle >= 0 && endAngle <= 360 * 16 );
 
     int centerY = drawPosition.center().y();
 

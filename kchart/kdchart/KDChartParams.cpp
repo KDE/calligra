@@ -499,7 +499,7 @@ void KDChartParams::setDefaultAxesTypes()
             break;
         default: {
             qDebug( "IMPLEMENTATION ERROR: axis type missing in KDChartParams::setDefaultAxesTypes()" );
-            ASSERT( !this );
+            Q_ASSERT( !this );
         }
         }
 
@@ -643,7 +643,7 @@ void KDChartParams::setDefaultAxesTypes()
         break;
     default: {
         qDebug( "IMPLEMENTATION ERROR: type missing in KDChartParams::setDefaultAxesTypes()" );
-        ASSERT( !this );
+        Q_ASSERT( !this );
     }
     }
 
@@ -706,7 +706,7 @@ void KDChartParams::activateDefaultAxes()
         break;
     default: {
         qDebug( "IMPLEMENTATION ERROR: type missing in KDChartParams::activateDefaultAxes()" );
-        ASSERT( !this );
+        Q_ASSERT( !this );
     }
     }
 }
@@ -1405,7 +1405,7 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                         if( tagName == "Dataset" ) {
                             readIntNode( element, dataset );
                         } else if( tagName == "ModeAndChart" ) {
-                            ASSERT( dataset != -1 ); // there must have been a dataset tag before
+                            Q_ASSERT( dataset != -1 ); // there must have been a dataset tag before
                             if( element.hasAttribute( "Mode" ) &&
                                 element.hasAttribute( "Chart" ) ) {
                                 KDChartParams::SourceMode sourceMode = KDChartParams::stringToChartSourceMode( element.attribute( "Mode" ) );
@@ -2373,7 +2373,7 @@ static bool readColorMapNode( const QDomElement& element,
             if( tagName == "Dataset" ) {
                 readIntNode( element, curDataset );
             } else if( tagName == "Color" ) {
-                ASSERT( curDataset != -1 ); // there was a Dataset tag before
+                Q_ASSERT( curDataset != -1 ); // there was a Dataset tag before
                 QColor color;
                 readColorNode( element, color );
                 value->insert( curDataset, color );
@@ -2401,7 +2401,7 @@ static bool readDoubleMapNode( const QDomElement& element,
             if( tagName == "Value" ) {
                 readIntNode( element, curValue );
             } else if( tagName == "Factor" ) {
-                ASSERT( curValue != -1 ); // there was a Value tag before
+                Q_ASSERT( curValue != -1 ); // there was a Value tag before
                 double doubleValue;
                 readDoubleNode( element, doubleValue );
                 value->insert( curValue, doubleValue );

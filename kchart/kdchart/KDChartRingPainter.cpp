@@ -141,7 +141,7 @@ void KDChartRingPainter::paintData( QPainter* painter,
 
     // We need the row sums anyway later, so we can just as well compute them
     // here, because we need them in case of relative ring thicknesses.
-    QArray<double> rowsums;
+    QMemArray<double> rowsums;
     double totalSum = 0.0;
     rowsums.resize( datasetEnd+1 ); // not datasetNum!
     for( int d1 = datasetStart; d1 <= datasetEnd; d1++ ) {
@@ -149,7 +149,7 @@ void KDChartRingPainter::paintData( QPainter* painter,
         totalSum += rowsums[d1];
     }
 
-    QArray<uint> ringthicknesses;
+    QMemArray<uint> ringthicknesses;
     ringthicknesses.resize( datasetEnd+1 ); // not datasetNum!
 
     // constant ring thickness

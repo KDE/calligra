@@ -99,7 +99,7 @@ void KDChartWidget::mousePressEvent( QMouseEvent* event )
 
     _mousePressedOnRegion = 0;
     KDChartDataRegion* current = 0;
-    QListIterator < KDChartDataRegion > it( _dataRegions );
+    QPtrListIterator < KDChartDataRegion > it( _dataRegions );
     while ( ( current = it.current() ) ) {
         ++it;
         if ( current->region.contains( event->pos() ) ) {
@@ -127,7 +127,7 @@ void KDChartWidget::mouseReleaseEvent( QMouseEvent* event )
         return ;
 
     KDChartDataRegion* current = 0;
-    QListIterator < KDChartDataRegion > it( _dataRegions );
+    QPtrListIterator < KDChartDataRegion > it( _dataRegions );
     while ( ( current = it.current() ) ) {
         ++it;
         if ( current->region.contains( event->pos() ) ) {

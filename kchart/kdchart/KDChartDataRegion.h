@@ -26,7 +26,7 @@
 #define __KDCHARTDATAREGION__
 
 #include <qregion.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 /*!
   \internal
@@ -46,6 +46,6 @@ struct KDChartDataRegion
 };
 
 
-typedef QList < KDChartDataRegion > KDChartDataRegionList;
+typedef QPtrList < KDChartDataRegion > KDChartDataRegionList;
 
 #endif
