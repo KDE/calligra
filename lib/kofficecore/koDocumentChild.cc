@@ -180,7 +180,10 @@ bool KoDocumentChild::loadDocument( KoStore* _store )
   else
   {
       // Reference to an external document. Hmmm...
-      res = document()->openURL( m_tmpURL );
+      if ( KURL(m_tmpURL).isLocalFile() )
+          res = document()->openURL( m_tmpURL );
+      else // temporarily disabling remote files for security reasons
+          return false;
       // Still waiting...
       QApplication::setOverrideCursor( waitCursor );
   }
