@@ -285,7 +285,7 @@ public:
 	*/
 	void clearRowEditBuffer();
 
-	/*! Updates internal row edit buffer: currently edited column (number \colnum) 
+	/*! Updates internal row edit buffer: currently edited column \a col (number \a colnum) 
 	 has now assigned new value of \a newval.
 	 Uses column's caption to address the column in buffer 
 	 if the buffer is of simple type, or db-aware buffer if (isDBAware()==true).
@@ -293,15 +293,24 @@ public:
 	 If \a allowSignals is true (the default), aboutToChangeCell() signal is emitted.
 	 Note that \a newval may be changed in aboutToChangeCell() signal handler.
 	 \sa KexiDB::RowEditBuffer */
-	bool updateRowEditBufferRef(KexiTableItem *item, int colnum, QVariant& newval, 
-		bool allowSignals = true);
+	bool updateRowEditBufferRef(KexiTableItem *item, 
+		int colnum, KexiTableViewColumn* col, QVariant& newval, bool allowSignals = true);
 
-	/*! Added for conveniency. Like above but \a newval is passed by value. */
-	inline bool updateRowEditBuffer(KexiTableItem *item, int colnum, QVariant newval, 
-		bool allowSignals = true)
+	/*! Added for convenience. Like above but \a newval is passed by value. */
+	inline bool updateRowEditBuffer(KexiTableItem *item, int colnum, KexiTableViewColumn* col, 
+		QVariant newval, bool allowSignals = true)
 	{
 		QVariant newv(newval);
-		return updateRowEditBufferRef(item, colnum, newv, allowSignals);
+		return updateRowEditBufferRef(item, colnum, col, newv, allowSignals);
+	}
+
+	/*! Added for convenience. Like above but it's assumed that \a item item's columns are ordered
+	 like in table view, not like in form view. Don't use this with form views. */
+	inline bool updateRowEditBuffer(KexiTableItem *item, int colnum, 
+		QVariant newval, bool allowSignals = true)
+	{
+		KexiTableViewColumn* col = columns.at(colnum);
+		return col ? updateRowEditBufferRef(item, colnum, col, newval, allowSignals) : false;
 	}
 
 	inline KexiDB::RowEditBuffer* rowEditBuffer() const { return m_pRowEditBuffer; }

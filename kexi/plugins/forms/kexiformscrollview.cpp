@@ -20,7 +20,6 @@
 
 #include "kexiformscrollview.h"
 #include "kexiformview.h"
-#include "kexidbform.h"
 
 #include <formeditor/form.h>
 #include <formeditor/formmanager.h>
@@ -350,14 +349,14 @@ int KexiFormScrollView::columns() const
 	return dbFormWidget()->orderedDataAwareWidgets()->count(); //m_dataItems.count();
 }
 
-uint KexiFormScrollView::fieldNumberForColumn(int col)
+/*uint KexiFormScrollView::fieldNumberForColumn(int col)
 {
 	KexiFormDataItemInterface *item = dynamic_cast<KexiFormDataItemInterface*>(dbFormWidget()->orderedDataAwareWidgets()->at( col ));
 	if (!item)
 		return -1;
 	KexiFormDataItemInterfaceToIntMap::ConstIterator it(m_fieldNumbersForDataItems.find( item ));
 	return it!=m_fieldNumbersForDataItems.constEnd() ? it.data() : -1;
-}
+}*/
 
 bool KexiFormScrollView::columnEditable(int col)
 {

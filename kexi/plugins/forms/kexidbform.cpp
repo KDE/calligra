@@ -341,6 +341,10 @@ bool KexiDBForm::eventFilter( QObject * watched, QEvent * e )
 						d->orderedFocusWidgetsIterator.toFirst();
 					}
 					else if (watched == d->orderedFocusWidgetsIterator.current()) {
+/*	QEvent fe( QEvent::FocusOut );
+	QFocusEvent::setReason(QFocusEvent::Tab);
+	QApplication::sendEvent( d->orderedFocusWidgetsIterator.current(), &fe );
+	QFocusEvent::resetReason();*/
 						++d->orderedFocusWidgetsIterator; //next
 					}
 					else

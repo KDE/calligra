@@ -466,6 +466,8 @@ Main Window
 - hiding property editor's dock when not needed
 Table/Form Views
 - database cursor deleted when not needed
+Forms
+- writing data changes implemented
 
 2005-03-25
 Forms

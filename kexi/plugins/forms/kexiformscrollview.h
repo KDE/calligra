@@ -23,6 +23,7 @@
 
 #include "kexiscrollview.h"
 #include "kexidataprovider.h"
+#include "kexidbform.h"
 #include <widget/utils/kexirecordnavigator.h>
 #include <widget/utils/kexisharedactionclient.h>
 #include <widget/tableview/kexidataawareobjectiface.h>
@@ -30,8 +31,6 @@
 namespace KFormDesigner {
 	class Form;
 }
-
-class KexiDBForm;
 
 //! @short KexiFormScrollView class provides a widget for displaying data in a form view
 /*! This class also implements:
@@ -77,7 +76,14 @@ class KexiFormScrollView :
 
 		/*! \return field number within data model connected to a data-aware
 		 widget at column \a col. */
-		uint fieldNumberForColumn(int col);
+		virtual uint fieldNumberForColumn(int col) {
+			KexiFormDataItemInterface *item = dynamic_cast<KexiFormDataItemInterface*>(
+				dbFormWidget()->orderedDataAwareWidgets()->at( col ));
+			if (!item)
+				return -1;
+			KexiFormDataItemInterfaceToIntMap::ConstIterator it(m_fieldNumbersForDataItems.find( item ));
+			return it!=m_fieldNumbersForDataItems.constEnd() ? it.data() : -1;
+		}
 
 	public slots:
 		/*! Reimplemented to update resize policy. */

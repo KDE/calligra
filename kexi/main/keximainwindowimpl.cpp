@@ -1286,10 +1286,6 @@ void KexiMainWindowImpl::slotLastChildViewClosed() //slotLastChildFrmClosed()
 
 	if (d->propEditorToolWindow)
 		d->propEditorToolWindow->hide();
-//	if (d->propEditor) {
-		//KDockWidget *dw = (KDockWidget *)d->propEditor->parentWidget();
-		//dw->hide();
-//	}
 }
 
 void KexiMainWindowImpl::slotChildViewIsDetachedNow(QWidget*)

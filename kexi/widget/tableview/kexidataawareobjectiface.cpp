@@ -872,7 +872,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 	//try to get the value entered:
 	if (res == KexiValidator::Ok) {
 		if (!setNull && !valueChanged
-			|| setNull && m_currentItem->at(m_curCol).isNull()) {
+			|| setNull && m_currentItem->at( fieldNumberForColumn(m_curCol) ).isNull()) {
 			kdDebug() << "KexiDataAwareObjectInterface::acceptEditor(): VALUE NOT CHANGED." << endl;
 			removeEditor();
 			m_inside_acceptEditor = false;
@@ -929,7 +929,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 //		emit aboutToChangeCell(d->pCurrentItem, newval, allow);
 //		if (allow) {
 		//send changes to the backend
-		if (m_data->updateRowEditBufferRef(m_currentItem, m_curCol,newval)) {
+		if (m_data->updateRowEditBufferRef(m_currentItem, m_curCol, column( m_curCol), newval)) {
 			kdDebug() << "KexiDataAwareObjectInterface::acceptEditor(): ------ EDIT BUFFER CHANGED TO:" << endl;
 			m_data->rowEditBuffer()->debug();
 		} else {
@@ -954,7 +954,8 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 
 	if (res == KexiValidator::Ok) {
 		removeEditor();
-		/*emit*/ itemChanged(m_currentItem, m_curRow, m_curCol, m_currentItem->at(m_curCol));
+		/*emit*/ itemChanged(m_currentItem, m_curRow, m_curCol, 
+			m_currentItem->at( fieldNumberForColumn(m_curCol) ));
 		/*emit*/ itemChanged(m_currentItem, m_curRow, m_curCol);
 	}
 	m_inside_acceptEditor = false;
@@ -1325,13 +1326,13 @@ const QVariant* KexiDataAwareObjectInterface::bufferedValueAt(int col)
 			if (cv)
 				return cv;
 
-			return &m_currentItem->at(col);
+			return &m_currentItem->at( fieldNumberForColumn(col) );
 		}
 		const QVariant *cv = m_data->rowEditBuffer()->at( tvcol->field()->name() );
 		if (cv)
 			return cv;
 	}
-	return &m_currentItem->at(col);
+	return &m_currentItem->at( fieldNumberForColumn(col) );
 }
 
 void KexiDataAwareObjectInterface::startEditOrToggleValue()

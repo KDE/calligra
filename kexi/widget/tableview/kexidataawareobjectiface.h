@@ -350,6 +350,10 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		 (see KexiFormScrollView::fieldNumberForColumn()). */
 		virtual KexiTableViewColumn* column(int col);
 
+		/*! \return field number within data model connected to a data-aware
+		 widget at column \a col. */
+		virtual uint fieldNumberForColumn(int col) { return col; }
+
 		const QVariant* bufferedValueAt(int col);
 
 		//! \return a type of column \a col - one of KexiDB::Field::Type

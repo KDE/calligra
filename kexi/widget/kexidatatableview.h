@@ -48,6 +48,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTableView : public KexiTableView
 		 Cursor will be opened (with open()) if it is not yet opened.
 		 Cursor must be defined on query schema, not raw statement (see Connection::prepareQuery()
 		 and Connection::executeQuery()), otherwise the table view remain not filled with data.
+		 Cursor \a cursor will not be owned by this object.
 		 */
 		KexiDataTableView(QWidget *parent, const char *name, KexiDB::Cursor *cursor);
 
@@ -55,7 +56,8 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTableView : public KexiTableView
 
 //		virtual void initActions(KActionCollection *col);
 
-		/*! Fills table view with data using \a cursor. \return true on success. */
+		/*! Fills table view with data using \a cursor. \return true on success.
+		 Cursor \a cursor will not be owned by this object. */
 		bool setData(KexiDB::Cursor *cursor);
 
 		/*! \return cursor used as data source for this table view, 

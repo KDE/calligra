@@ -22,6 +22,7 @@
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>
 #include "kexitableview.h"
+#include "kexidatatableview.h"
 #include "keximainwindow.h"
 
 KexiAlterTable_DataView::KexiAlterTable_DataView(KexiMainWindow *win, QWidget *parent, 
@@ -32,6 +33,9 @@ KexiAlterTable_DataView::KexiAlterTable_DataView(KexiMainWindow *win, QWidget *p
 
 KexiAlterTable_DataView::~KexiAlterTable_DataView()
 {
+	if (dynamic_cast<KexiDataTableView*>(tableView())->cursor())
+		mainWin()->project()->dbConnection()->deleteCursor( 
+			dynamic_cast<KexiDataTableView*>(tableView())->cursor() );
 }
 
 tristate KexiAlterTable_DataView::beforeSwitchTo(int mode, bool &dontStore)

@@ -146,6 +146,8 @@ class KexiFormView : public KexiDataAwareView
 		 If user selected an existing, predefined (stored) query, m_queryIsOwned will be false,
 		 so the query object will not be destroyed. */
 		bool m_queryIsOwned;
+
+		KexiDB::Cursor *m_cursor;
 //moved		KexiTableViewData *m_data;
 //moved		KexiTableItem *m_currentRow;
 //moved		int m_currentRowNumber;

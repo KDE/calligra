@@ -438,7 +438,7 @@ void KexiTableViewData::clearRowEditBuffer()
 }
 
 bool KexiTableViewData::updateRowEditBufferRef(KexiTableItem *item, 
-	int colnum, QVariant& newval, bool allowSignals)
+	int colnum, KexiTableViewColumn* col, QVariant& newval, bool allowSignals)
 {
 	m_result.clear();
 	if (allowSignals)
@@ -446,15 +446,18 @@ bool KexiTableViewData::updateRowEditBufferRef(KexiTableItem *item,
 	if (!m_result.success)
 		return false;
 
-	kdDebug() << "KexiTableViewData::updateRowEditBufferRef() column #" << colnum << " = " << newval.toString() << endl;
-	KexiTableViewColumn* col = columns.at(colnum);
+	kdDebug() << "KexiTableViewData::updateRowEditBufferRef() column #" 
+		<< colnum << " = " << newval.toString() << endl;
+//	KexiTableViewColumn* col = columns.at(colnum);
 	if (!col) {
-		kdDebug() << "KexiTableViewData::updateRowEditBufferRef(): column #" << colnum<<" not found! col==0" << endl;
+		kdDebug() << "KexiTableViewData::updateRowEditBufferRef(): column #" 
+			<< colnum << " not found! col==0" << endl;
 		return false;
 	}
 	if (m_pRowEditBuffer->isDBAware()) {
 		if (!(col->fieldinfo)) {
-			kdDebug() << "KexiTableViewData::updateRowEditBufferRef(): column #" << colnum<<" not found!" << endl;
+			kdDebug() << "KexiTableViewData::updateRowEditBufferRef(): column #" 
+				<< colnum << " not found!" << endl;
 			return false;
 		}
 //		if (!(static_cast<KexiDBTableViewColumn*>(col)->field)) {

@@ -49,6 +49,7 @@ KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent,
  , m_resizeMode(KexiFormView::ResizeDefault)
  , m_query(0)
  , m_queryIsOwned(false)
+ , m_cursor(0)
 // , m_firstFocusWidget(0)
 {
 	m_delayedFormContentsResizeOnShow = false;
@@ -140,6 +141,8 @@ KexiFormView::~KexiFormView()
 //	delete m_provider;
 	if (m_queryIsOwned)
 		delete m_query;
+	KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
+	conn->deleteCursor(m_cursor);
 //	delete m_data;
 }
 
@@ -340,7 +343,7 @@ void KexiFormView::initDataSource()
 	m_scrollView->setMainWidget(m_dbform);
 //			if (m_cursor)
 //				m_conn->deleteCursor(m_cursor);
-	KexiDB::Cursor *cursor = 0;
+//	KexiDB::Cursor *cursor = 0;
 	if (m_queryIsOwned)
 		delete m_query;
 	m_query = new KexiDB::QuerySchema();
@@ -370,7 +373,7 @@ void KexiFormView::initDataSource()
 			m_query = 0;
 		}
 		else {
-			cursor = conn->executeQuery( *m_query );
+			m_cursor = conn->executeQuery( *m_query );
 		}
 		m_scrollView->invalidateDataSources( invalidSources, m_query );
 		ok = cursor!=0;
@@ -379,9 +382,9 @@ void KexiFormView::initDataSource()
 	if (ok) {
 //! @todo PRIMITIVE!! data setting:
 //! @todo KexiTableViewData is not great name for data class here... rename/move?
-		KexiTableViewData* data = new KexiTableViewData(cursor);
+		KexiTableViewData* data = new KexiTableViewData(m_cursor);
 		data->preloadAllRows();
-		conn->deleteCursor(cursor);
+//not needed here: cursor will be owned		conn->deleteCursor(cursor);
 
 ///*! @todo few backends return result count for free! - no need to reopen() */
 //			int resultCount = -1;
