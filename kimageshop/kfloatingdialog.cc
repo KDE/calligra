@@ -400,6 +400,10 @@ void KFloatingDialog::mouseMoveEvent(QMouseEvent *e)
 		if(m_pParent && m_docked)
 		{
 			QPoint newPos = m_pParent->mapFromGlobal(QCursor::pos()) - m_pos;
+			if (newPos.x() < 0)
+				newPos.setX(0);
+			if (newPos.y() < 0)
+				newPos.setY(0);
 			move(newPos);
 		}
 		else

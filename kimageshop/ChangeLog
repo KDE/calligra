@@ -1,4 +1,8 @@
-1999-08-18  Matthias Elter  <me@kde.org>
+Wed Aug 18 12:34:28 1999  Matthias Elter  <me@kde.org>
+
+	* tniy fixes all over the place
+
+Wed Aug 18 10:30:18 1999  Matthias Elter  <me@kde.org>
 
 	* KFD
 	Fixed most of the remaining KFD problems.

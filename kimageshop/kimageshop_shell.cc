@@ -39,6 +39,7 @@ QList<KImageShopShell>* KImageShopShell::s_lstShells = 0L;
 
 KImageShopShell::KImageShopShell()
 {
+  setCaption("KImageShop");
   m_pDoc = 0L;
   m_pView = 0L;
 
