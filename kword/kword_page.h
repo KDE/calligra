@@ -1,16 +1,16 @@
 /******************************************************************/
-/* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
-/* Version: 0.0.1                                                 */
-/* Author: Reginald Stadlbauer, Torben Weis                       */
-/* E-Mail: reggie@kde.org, weis@kde.org                           */
-/* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
-/* needs c++ library Qt (http://www.troll.no)                     */
-/* written for KDE (http://www.kde.org)                           */
-/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
-/* needs OpenParts and Kom (weis@kde.org)                         */
-/* License: GNU GPL                                               */
+/* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998	  */
+/* Version: 0.0.1						  */
+/* Author: Reginald Stadlbauer, Torben Weis			  */
+/* E-Mail: reggie@kde.org, weis@kde.org				  */
+/* Homepage: http://boch35.kfunigraz.ac.at/~rs			  */
+/* needs c++ library Qt (http://www.troll.no)			  */
+/* written for KDE (http://www.kde.org)				  */
+/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)	  */
+/* needs OpenParts and Kom (weis@kde.org)			  */
+/* License: GNU GPL						  */
 /******************************************************************/
-/* Module: Page (header)                                          */
+/* Module: Page (header)					  */
 /******************************************************************/
 
 #ifndef kword_page_h
@@ -39,7 +39,7 @@ class QPopupMenu;
 class KWFrameDia;
 
 /******************************************************************/
-/* Class: KWPage                                                  */
+/* Class: KWPage						  */
 /******************************************************************/
 
 class KWPage : public QScrollView
@@ -146,9 +146,9 @@ public:
     void setPartEntry( KoDocumentEntry e ) { partEntry = e; }
 
     bool find( QString _expr, KWSearchDia::KWSearchEntry *_format, bool _first, bool _cs, bool _whole,
-               bool _regexp, bool _wildcard, bool &_addlen, bool _select = true );
+	       bool _regexp, bool _wildcard, bool &_addlen, bool _select = true );
     bool findRev( QString _expr, KWSearchDia::KWSearchEntry *_format, bool _first, bool _cs, bool _whole,
-                  bool _regexp, bool _wildcard, bool &_addlen, bool _select = true );
+		  bool _regexp, bool _wildcard, bool &_addlen, bool _select = true );
     void replace( QString _expr, KWSearchDia::KWSearchEntry *_format, bool _addlen );
 
     void removeSelection();
@@ -225,6 +225,7 @@ protected:
     unsigned int ptColumnWidth();
     unsigned int ptColumnSpacing();
 
+    bool focusNextPrevChild( bool next );
     void enterEvent( QEvent * )
     { setFocus(); }
     void focusInEvent( QFocusEvent * );
@@ -322,7 +323,7 @@ protected:
     MouseMode mouseMode;
     QPopupMenu *mm_menu, *frame_edit_menu;
     int mm_edit, mm_edit_frame, mm_create_text, mm_create_pix, mm_create_clipart, mm_create_table,
-        mm_create_formula, mm_create_part, mm_create_kspread_table;
+	mm_create_formula, mm_create_part, mm_create_kspread_table;
 
     int oldMx, oldMy;
     bool deleteMovingRect;

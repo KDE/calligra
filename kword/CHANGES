@@ -1378,3 +1378,7 @@ Reggie, 13.7.1999:
 -----------------
 - Code cleanups
 - Improved pasting (it make a format diff like M$-Word now)
+
+Reggie, 13.7.1999:
+-----------------
+- Tabs (Tab key) works again
