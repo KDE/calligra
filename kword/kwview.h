@@ -342,7 +342,7 @@ public slots:
     void saveClipart();
 
     void autoSpellCheck();
-
+    void goToFootEndNote();
 protected slots:
     void spellCheckerReady();
     void spellCheckerMisspelling( const QString &, const QStringList &, unsigned int );
@@ -545,6 +545,8 @@ private:
     KAction *actionEditFootEndNote;
 
     KAction *actionChangeFootNoteType;
+
+    KAction *actionGoToFootEndNote;
 
     KoCharSelectDia *m_specialCharDlg;
     KoFontDia *m_fontDlg;

@@ -85,6 +85,7 @@
 #include <klocale.h>
 #include <kimageio.h>
 #include <koPictureFilePreview.h>
+#include "kwtextdocument.h"
 
 #undef Bool
 #include <kspell.h>
@@ -1003,6 +1004,12 @@ void KWView::setupActions()
     actionAllowBgSpellCheck = new KToggleAction( i18n( "AutoSpellCheck" ), 0,
                                             this, SLOT( autoSpellCheck() ),
                                             actionCollection(), "tool_auto_spellcheck" );
+
+
+    actionGoToFootEndNote = new KAction( i18n( "Go to Foot End Note" ), 0,
+                                            this, SLOT( goToFootEndNote() ),
+                                            actionCollection(), "goto_footendnote" );
+
 
 }
 
@@ -4283,7 +4290,11 @@ void KWView::openPopupMenuEditFrame( const QPoint & _point )
                 actionList.append(separator);
                 actionList.append(actionConfigureHeaderFooter);
             }
-
+            else if (frameSet->isFootEndNote())
+            {
+                actionList.append(separator);
+                actionList.append(actionGoToFootEndNote);
+            }
             bool state = !frameSet->isHeaderOrFooter() && !frameSet->isFootEndNote();
             state = state && (m_doc->processingType() == KWDocument::WP &&frameSet!=m_doc->frameSet( 0 ));
             if(state)
@@ -5246,6 +5257,30 @@ void KWView::changeFootNoteType()
 void KWView::autoSpellCheck()
 {
     m_doc->changeBgSpellCheckingState( actionAllowBgSpellCheck->isChecked() );
+}
+
+void KWView::goToFootEndNote()
+{
+    KWFrame * frm = m_doc->getFirstSelectedFrame();
+    if ( frm )
+    {
+        KWFootNoteFrameSet *footNoteFrameSet = dynamic_cast<KWFootNoteFrameSet *>(frm->frameSet());
+        if ( footNoteFrameSet )
+        {
+            KWFootNoteVariable* var=footNoteFrameSet->footNoteVariable();
+            KoTextParag *parag = var->paragraph();
+            int index = var->index();
+            KWTextDocument *textDoc = static_cast<KWTextDocument *>(var->textDocument());
+            KWTextFrameSet *frameSet =textDoc->textFrameSet();
+            m_gui->canvasWidget()->checkCurrentTextEdit(frameSet);
+            KWTextFrameSetEdit * edit = currentTextEdit();
+            if ( edit )
+            {
+                edit->setCursor( parag, index );
+            }
+
+        }
+    }
 }
 
 /******************************************************************/
