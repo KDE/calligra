@@ -11,14 +11,14 @@
 
 #include "numSlider.h"
 
-numSlider::numSlider( QWidget *parent=0, const char *name=0 )
+numSlider::numSlider( QWidget *parent, const char *name )
 	: QWidget(parent, name)
 {
 	init(0, 10, 0, 0, QBoxLayout::LeftToRight);
 }
 
-numSlider::numSlider( QBoxLayout::Direction aDir, QWidget *parent=0,
-											const char *name=0 )
+numSlider::numSlider( QBoxLayout::Direction aDir, QWidget *parent,
+											const char *name )
 	: QWidget(parent, name)
 {
 	init(0, 10, 0, 0, aDir);
@@ -26,7 +26,7 @@ numSlider::numSlider( QBoxLayout::Direction aDir, QWidget *parent=0,
 
 numSlider::numSlider(double minValue, double maxValue, int decimals,
 										 double value, QBoxLayout::Direction aDir,
-										 QWidget *parent=0, const char *name=0 )
+										 QWidget *parent, const char *name )
 	: QWidget(parent, name)
 {
 	init(minValue, maxValue, decimals, value, aDir);

@@ -12,8 +12,7 @@
 #include "layer.h"
 #include "misc.h"
 
-
-layer::layer(int ch, bool hasAlpha=true)
+layer::layer(int ch, bool hasAlpha)
 	: QObject()
 {
 	channels=ch;

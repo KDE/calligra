@@ -16,7 +16,7 @@
 #include "misc.h"
 
 
-channel::channel(int w=0, int h=0)
+channel::channel(int w, int h)
 {
 // 	puts("new channel");
 	xTilesNo=0;
@@ -80,7 +80,7 @@ channel::getPixel(int x, int y)
 //    init - is used only when the channel is created
 
 void
-channel::resizeChannel(QPoint newPoint, bool init=false)
+channel::resizeChannel(QPoint newPoint, bool init)
 {
 	if ((!init) && imageRect.contains(newPoint))
 		return;

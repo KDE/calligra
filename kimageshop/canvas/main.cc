@@ -9,7 +9,7 @@
 //
 //   For more information see at the file COPYING in this package
 
-#include <qimageio.h>
+#include <kimgio.h>
 #include <qlabel.h>
 #include <qimage.h>
 #include "channel.h"
@@ -31,8 +31,7 @@ int main(int argc, char **argv)
 
   QApplication app(argc, argv);
 	
-	//kimgioRegister();
-	qInitImageIO();	
+	kimgioRegister();
 
 	dbg=true;
 
