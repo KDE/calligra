@@ -35,6 +35,7 @@
 #include <kexidb/connection.h>
 #include <kexipart.h>
 #include <widgetlibrary.h>
+#include <kexigradientwidget.h>
 
 #include "kexidbform.h"
 #include "kexiformview.h"
@@ -82,7 +83,7 @@ KexiSubForm::setFormName(const QString &name)
 
 	// we create the container widget
 	delete m_widget;
-	m_widget = new QWidget(viewport(), "kexisubform_widget");
+	m_widget = new KexiGradientWidget(viewport(), "kexisubform_widget");
 	m_widget->show();
 	addChild(m_widget);
 	m_form = new Form(m_manager, this->name());
