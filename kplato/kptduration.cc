@@ -19,6 +19,9 @@
 
 #include "kptduration.h"
 
+// Set the value of KPTDuration::zeroDuration to zero.
+const KPTDuration KPTDuration::zeroDuration( 0, 0 );
+
 KPTDuration::KPTDuration() {
     zero = QDateTime(QDate(0,1,1));
     m_theTime = QDateTime(QDate(0,1,1));
@@ -42,7 +45,7 @@ void KPTDuration::add(KPTDuration time) {
     set(m_theTime.addSecs(zero.secsTo(time.m_theTime)));
 }
 
-void KPTDuration::substract(KPTDuration time) {
+void KPTDuration::subtract(KPTDuration time) {
     set(m_theTime.addDays(time.m_theTime.daysTo(zero)));
     set(m_theTime.addSecs(time.m_theTime.secsTo(zero)));
 }

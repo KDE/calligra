@@ -20,6 +20,7 @@
 #ifndef kptnode_h
 #define kptnode_h
 
+#include<vector>
 #include <qlist.h> 
 #include <qstring.h> 
 #include "defs.h"
@@ -27,12 +28,20 @@
 #include "kptduration.h"
 
 class KPTEffort;
+class KPTProject;
 
 /**
  * This class represents any node in the project, a node can be a project to a subproject and any task.
  * This class is basically an abstract interface to make the design more OO.
  */
 class KPTNode {
+  /* Many KPTProject functions deal with lists of KPTNode objects. Although
+   * KPTNode protected functions can be called for any KPTNode in a list
+   * from a KPTNode function (data hiding is at class level) KPTProject can't
+   * call the same functions unless we explicitly allow this. A friend
+   * declaration is a simple solution.
+   */
+  friend class KPTProject;
     public:
 
         KPTNode();
@@ -119,7 +128,63 @@ class KPTNode {
 
         void setName(QString name) { m_name=name; }
         QString name() const { return m_name; }
-
+ protected:
+    /**
+     * For pert/cpm it is useful to have a hidden start node for each
+     * user-visible node. For KPTProject objects, this will be a
+     * separate KPTNode object. A KPTTask is its own start node.
+     * @return The start node.
+     */
+    virtual KPTNode* start_node(){ return this; }
+    /**
+     * For pert/cpm it is useful to have a hidden end node for each
+     * user-visible node. For KPTProject objects, this will be a
+     * separate KPTNode object. A KPTTask is its own end node.
+     * @return The end node.
+     */
+    virtual KPTNode* end_node(){ return this; }
+    /**
+     * Occasionally we may want to take a start node or end node and
+     * find which node it is the start or end node of.
+     * @return The KPTNode object that has this as a start node
+     * or end node.
+     */
+    KPTNode* owner_node() {
+      return this == this->end_node() ? this : m_parent;
+    }
+    /**
+     * Initialise the lists of nodes successors.list and
+     * predecessors.list so that they match the time-dependencies of this
+     * node. Although the lists contain nodes, refer to them as arcs
+     * because we are interested in the relation between the nodes.
+     */
+    void initialise_arcs();
+    /**
+     * Set up the arcs so that pert/cpm will work.
+     *
+     * Precondition: initialise_arcs() has been called.
+     */
+    void set_up_arcs();
+    /**
+     * Set up values for unvisited arcs. This is a helper function for
+     * pert/cpm. Inititially pert/cpm will not have looked at any
+     * relations or arcsand so we have to set initial values.
+     *
+     * Precondition: set_up_arcs() has been called.
+     */
+    void set_unvisited_values();
+ private:
+    typedef KPTDuration KPTNode::*start_type;
+ protected:
+    /**
+     * Set values of earliest start or latest finish for start and
+     * end node of this  node and all subnodes
+     * KPTProject object.
+     * @param time The time to set all values to.
+     * @param start Either KPTNode::earliestStart or KPTNode::latestFinish.
+     */
+    void set_pert_values( const KPTDuration& time,
+                  start_type start );
     protected:
         QList<KPTNode> m_nodes;
         QList<KPTRelation> m_dependChildNodes;
@@ -131,6 +196,27 @@ class KPTNode {
         KPTDuration m_startTime, m_endTime; // both entered during the project, not at the initial calculation.
         // effort variables.
         KPTEffort* m_effort;
+
+    struct dependencies {
+      /**
+       * An efficiently reconstructable list of successor/predecessor
+       * nodes. These are the implicit ones rather than the nodes
+       * explicitly created as KPTRelation objects.
+       */
+      std::vector<KPTNode*> list;
+      /**
+       * The total number of successors/predecessors. Sum of sizes of
+       * list and m_depend*Nodes.
+       */
+      unsigned int number;
+      /**
+       * The number of successors/predecessors not yet visited.
+       * Used internally by pert/cpm algorithm.
+       */
+      unsigned int unvisited;
+    } predecessors, successors;
+    KPTDuration earliestStart;
+    KPTDuration latestFinish;
 };
 
 /** 
@@ -146,7 +232,11 @@ class KPTEffort {
 
         const KPTDuration& optimistic() {return m_optimisticDuration;}
         const KPTDuration& pessimistic() {return m_pessimisticDuration;}
-        const KPTDuration& expected() {return m_expectedDuration;}
+    const KPTDuration& expected() {return m_expectedDuration;}
+    /**
+     * No effort.
+     */
+    static const KPTEffort zeroEffort;
 
     private:
        KPTDuration m_optimisticDuration;

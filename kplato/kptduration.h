@@ -36,7 +36,7 @@ class KPTDuration {
         ~KPTDuration();
 
         void add(KPTDuration time);
-        void substract(KPTDuration time);
+        void subtract(KPTDuration time);
         void const set(KPTDuration newTime);
         void const set(QDateTime newTime);
 
@@ -49,6 +49,11 @@ class KPTDuration {
         KPTDuration &operator = ( const KPTDuration &d ) { set(d); return *this;}
 
         QString toString() const { return m_theTime.time().toString(); }
+
+    /**
+     * This is useful for occasions where we need a zero duration.
+     */
+    static const KPTDuration zeroDuration;
 
     private:
         QDateTime zero, m_theTime;

@@ -49,6 +49,15 @@ class KPTRelation {
          */
         const KPTDuration &lag() const { return m_lag; }
 
+    /**
+     * @return The parent dependent node.
+     */
+    KPTNode *parent() const { return m_parent; }
+    /**
+     * @return The child dependent node.
+     */
+    KPTNode *child() const { return m_child; }
+
         enum Result {
           SUCCESS = 0l,
           HASCHILDREN = 1l,

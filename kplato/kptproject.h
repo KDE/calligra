@@ -22,7 +22,11 @@
 
 #include "kptduration.h"
 #include "kptnode.h"
+#include "kptterminalnode.h"
 #include "defs.h"
+
+#include<list>
+#include<algorithm>
 
 class KPTResource;
 
@@ -59,6 +63,54 @@ class KPTProject : public KPTNode {
         /** Retrieve the calculated float of this node
          */
         KPTDuration *getFloat();
-
+    /**
+     * Carry out PERT/CPM calculations on current project.
+     * Eventually, this will need to can specify which type of duration
+     * calculation will be used.
+     */
+    void pert_cpm();
+ protected:
+    /**
+     * @return The start node.
+     */
+    virtual KPTNode* start_node(){ return &startNode; }
+    /**
+     * @return The end node.
+     */
+    virtual KPTNode* end_node(){ return &endNode; }
+ private:
+    /**
+     * Class to handle find_if function. This really is necessary
+     * if we want to use find_if.
+     */
+    class no_unvisited {
+    private:
+      typedef const KPTNode::dependencies KPTNode::*dep_type;
+    public:
+      no_unvisited( dep_type deps )
+        : deps(deps) {}
+      bool operator()( KPTNode* node ) const
+        { return (node->*deps).unvisited == 0; }
+    private:
+      dep_type deps;
+    };
+    /**
+     * Forward pass. This and backward_pass could be implemented as
+     * function objects with function pointer parameters, but the
+     * code would be less easy to read and debug.
+     * @param nodelist. A list of nodes to work on.
+     */
+    void forward_pass( std::list<KPTNode*> nodelist );
+    /**
+     * Backward pass.
+     * @param nodelist. A list of nodes to work on.
+     */
+    void backward_pass( std::list<KPTNode*> nodelist );
+    KPTTerminalNode startNode;
+    KPTTerminalNode endNode;
+    //DELETE THE FOLLOWING IT'S FOR DEBUG PURPOSES ONLY
+ public:
+    static void pert_test();
+    static void printTree(KPTNode *n, QString s);
 };
 #endif

@@ -138,6 +138,83 @@ void KPTNode::delDependParentNode( int number, bool remove) {
         m_dependParentNodes.take(number);
 }
 
+void KPTNode::initialise_arcs() {
+  // Clear all lists of arcs and set unvisited to zero
+  start_node()->successors.list.clear();
+  start_node()->successors.unvisited = 0;
+  start_node()->successors.number = 0;
+  start_node()->predecessors.list.clear();
+  start_node()->predecessors.unvisited = 0;
+  start_node()->predecessors.number = 0;
+  if( end_node() != start_node() ) {
+    end_node()->successors.list.clear();
+    end_node()->successors.unvisited = 0;
+    end_node()->successors.number = 0;
+    end_node()->predecessors.list.clear();
+    end_node()->predecessors.unvisited = 0;
+    end_node()->predecessors.number = 0;
+  }
+  // Now do the same for each subnode
+  for( QListIterator<KPTNode> i( childNodeIterator() ); i.current(); ++i )
+      i.current()->initialise_arcs();
+}
+
+void KPTNode::set_up_arcs() {
+  // Call this function for all nodes by recursive descent
+  // and set up implicit arcs.
+  for( QListIterator<KPTNode> i( childNodeIterator() ); i.current(); ++i )
+    {
+      i.current()->set_up_arcs();
+      // Now add implicit arcs:
+      // First, i.current() cannot start until this has started.
+      start_node()->successors.list.push_back( i.current()->start_node() );
+      // Now add the corresponding predecessor.
+      i.current()->start_node()->predecessors.list.push_back( start_node() );
+      // Second, this cannot finish until i.current() has finished.
+      i.current()->end_node()->successors.list.push_back( end_node() );
+      // Now add the corresponding predecessor.
+      end_node()->predecessors.list.push_back( i.current()->end_node() );
+    }
+  // Now add extra arcs from start_node to end_node if these are different.
+  // This is necessary because if a subnode can act as a container then
+  // it can contain nothing and then the arcs guarantee that
+  // start_node has a successor and end_node a predecessor.
+  if( start_node() != end_node() ) {
+    start_node()->successors.list.push_back( end_node() );
+    end_node()->predecessors.list.push_back( start_node() );
+  }
+}
+
+void KPTNode::set_unvisited_values() {
+  // Call this function for all nodes by recursive descent
+  for( QListIterator<KPTNode> i( childNodeIterator() ); i.current(); ++i )
+    {
+      i.current()->set_unvisited_values();
+    }
+  // set the actual values.
+  start_node()->successors.unvisited
+    = start_node()->successors.number
+    = start_node()->successors.list.size();
+  end_node()->predecessors.unvisited
+    = end_node()->predecessors.number
+    = end_node()->predecessors.list.size();
+  start_node()->predecessors.unvisited
+    = start_node()->predecessors.number
+    = start_node()->predecessors.list.size() + numDependParentNodes();
+  end_node()->successors.unvisited
+    = end_node()->successors.number
+    = end_node()->successors.list.size() + numDependChildNodes();
+}
+
+void KPTNode::set_pert_values( const KPTDuration& time,
+                   start_type start ) {
+  start_node()->*start = time;
+  if( start_node() != end_node() )
+    end_node()->*start = time;
+  for( QListIterator<KPTNode> i( childNodeIterator() ); i.current(); ++i )
+    i.current()->set_pert_values( time, start );
+}
+
 KPTEffort::KPTEffort( KPTDuration e, KPTDuration p, KPTDuration o) {
   m_expectedDuration = e;
   m_pessimisticDuration = p;
@@ -146,3 +223,7 @@ KPTEffort::KPTEffort( KPTDuration e, KPTDuration p, KPTDuration o) {
 
 KPTEffort::~KPTEffort() {
 }
+
+const KPTEffort KPTEffort::zeroEffort( KPTDuration::zeroDuration,
+                       KPTDuration::zeroDuration,
+                       KPTDuration::zeroDuration );

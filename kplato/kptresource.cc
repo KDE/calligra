@@ -39,7 +39,7 @@ KPTRisk* KPTResourceGroup::getRisk(int) {
 
 void KPTResourceGroup::removeResource(int) {
 }
-	
+    
 void KPTResourceGroup::addRequiredResource(KPTResourceGroup*) {
 }
 
