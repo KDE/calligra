@@ -42,7 +42,7 @@ public:
   KformViewerDoc* doc();
 
   virtual void cleanUp();
-  CORBA::Boolean printDlg();
+  bool printDlg();
 
 public slots:
 

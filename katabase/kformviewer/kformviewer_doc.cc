@@ -55,7 +55,7 @@ KformViewerDoc::~KformViewerDoc()
 {
 }
 
-CORBA::Boolean KformViewerDoc::initDoc()
+bool KformViewerDoc::initDoc()
 {
   return true;
 }
@@ -101,15 +101,14 @@ OpenParts::View_ptr KformViewerDoc::createView()
   return OpenParts::View::_duplicate( createFormView() );
 }
 
-void KformViewerDoc::viewList( OpenParts::Document::ViewList*& _list )
+void KformViewerDoc::viewList( OpenParts::Document::ViewList & _list )
 {
-  _list->length( m_lstViews.count() );
+  _list.clear();
 
-  int i = 0;
   QListIterator<KformViewerView> it( m_lstViews );
   for( ; it.current(); ++it )
   {
-    (*_list)[i++] = OpenParts::View::_duplicate( it.current() );
+    _list.append( OpenParts::View::_duplicate( it.current() ) );
   }
 }
 
@@ -367,7 +366,7 @@ bool KformViewerDoc::completeLoading( KOStore::Store_ptr  )
   kdebug( KDEBUG_INFO, 0, "------------------------ COMPLETION DONE --------------------" );
 
 /*
-  CORBA::String_var str = url();
+  QString str = url();
   QString u = str.in();
   u += "/image";
   if ( _store->open( u, 0L ) )
@@ -385,15 +384,10 @@ bool KformViewerDoc::completeLoading( KOStore::Store_ptr  )
   return true;
 }
 
-void KformViewerDoc::draw( QPaintDevice* , CORBA::Long _width, CORBA::Long _height,
-		      CORBA::Float  )
+void KformViewerDoc::draw( QPaintDevice* , long int _width, long int _height,
+		      float  )
 {
   kdebug( KDEBUG_INFO, 0, "DRAWING w=%li h=%li", _width, _height );
-}
-
-char* KformViewerDoc::mimeType()
-{
-  return CORBA::string_dup( MIME_TYPE );
 }
 
 bool KformViewerDoc::isEmpty()

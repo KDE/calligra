@@ -43,7 +43,7 @@ public:
   KformEditorDoc* doc();
 
   virtual void cleanUp();
-  CORBA::Boolean printDlg();
+  bool printDlg();
 
   void editUndo();
   void editRedo();
@@ -87,54 +87,54 @@ protected:
 private:
 
   OpenPartsUI::Menu_var m_vMenuEdit;
-  CORBA::Long m_idMenuEdit_Undo;
-  CORBA::Long m_idMenuEdit_Redo;
-  CORBA::Long m_idMenuEdit_Cut;
-  CORBA::Long m_idMenuEdit_Copy;
-  CORBA::Long m_idMenuEdit_Paste;
-  CORBA::Long m_idMenuEdit_FormSize;
-  CORBA::Long m_idMenuEdit_Background;
+  long int m_idMenuEdit_Undo;
+  long int m_idMenuEdit_Redo;
+  long int m_idMenuEdit_Cut;
+  long int m_idMenuEdit_Copy;
+  long int m_idMenuEdit_Paste;
+  long int m_idMenuEdit_FormSize;
+  long int m_idMenuEdit_Background;
 
   OpenPartsUI::Menu_var m_vMenuInsert;
-  CORBA::Long m_idMenuInsert_Button;
-  CORBA::Long m_idMenuInsert_Label;
-  CORBA::Long m_idMenuInsert_LineEdit;
-  CORBA::Long m_idMenuInsert_ListBox;
-  CORBA::Long m_idMenuInsert_CheckBox;
+  long int m_idMenuInsert_Button;
+  long int m_idMenuInsert_Label;
+  long int m_idMenuInsert_LineEdit;
+  long int m_idMenuInsert_ListBox;
+  long int m_idMenuInsert_CheckBox;
 
   OpenPartsUI::Menu_var m_vMenuAlignment;
-  CORBA::Long m_idMenuAlignment_FitViewToForm;
-  CORBA::Long m_idMenuAlignment_Center;
-  CORBA::Long m_idMenuAlignment_Left;
-  CORBA::Long m_idMenuAlignment_HorizontalCenter;
-  CORBA::Long m_idMenuAlignment_Right;
-  CORBA::Long m_idMenuAlignment_Top;
-  CORBA::Long m_idMenuAlignment_VerticalCenter;
-  CORBA::Long m_idMenuAlignment_Bottom;
+  long int m_idMenuAlignment_FitViewToForm;
+  long int m_idMenuAlignment_Center;
+  long int m_idMenuAlignment_Left;
+  long int m_idMenuAlignment_HorizontalCenter;
+  long int m_idMenuAlignment_Right;
+  long int m_idMenuAlignment_Top;
+  long int m_idMenuAlignment_VerticalCenter;
+  long int m_idMenuAlignment_Bottom;
 
   OpenPartsUI::ToolBar_var m_vToolBarEdit;
-  CORBA::Long m_idToolBarEdit_Undo;
-  CORBA::Long m_idToolBarEdit_Redo;
-  CORBA::Long m_idToolBarEdit_Cut;
-  CORBA::Long m_idToolBarEdit_Copy;
-  CORBA::Long m_idToolBarEdit_Paste;
+  long int m_idToolBarEdit_Undo;
+  long int m_idToolBarEdit_Redo;
+  long int m_idToolBarEdit_Cut;
+  long int m_idToolBarEdit_Copy;
+  long int m_idToolBarEdit_Paste;
 
   OpenPartsUI::ToolBar_var m_vToolBarInsert;
-  CORBA::Long m_idToolBarInsert_Button;
-  CORBA::Long m_idToolBarInsert_Label;
-  CORBA::Long m_idToolBarInsert_LineEdit;
-  CORBA::Long m_idToolBarInsert_ListBox;
-  CORBA::Long m_idToolBarInsert_CheckBox;
+  long int m_idToolBarInsert_Button;
+  long int m_idToolBarInsert_Label;
+  long int m_idToolBarInsert_LineEdit;
+  long int m_idToolBarInsert_ListBox;
+  long int m_idToolBarInsert_CheckBox;
 
   OpenPartsUI::ToolBar_var m_vToolBarAlignment;
-  CORBA::Long m_idToolBarAlignment_FitViewToForm;
-  CORBA::Long m_idToolBarAlignment_Center;
-  CORBA::Long m_idToolBarAlignment_Left;
-  CORBA::Long m_idToolBarAlignment_HorizontalCenter;
-  CORBA::Long m_idToolBarAlignment_Right;
-  CORBA::Long m_idToolBarAlignment_Top;
-  CORBA::Long m_idToolBarAlignment_VerticalCenter;
-  CORBA::Long m_idToolBarAlignment_Bottom;
+  long int m_idToolBarAlignment_FitViewToForm;
+  long int m_idToolBarAlignment_Center;
+  long int m_idToolBarAlignment_Left;
+  long int m_idToolBarAlignment_HorizontalCenter;
+  long int m_idToolBarAlignment_Right;
+  long int m_idToolBarAlignment_Top;
+  long int m_idToolBarAlignment_VerticalCenter;
+  long int m_idToolBarAlignment_Bottom;
 
   OpenPartsUI::StatusBar_var m_vStatusBar;
   

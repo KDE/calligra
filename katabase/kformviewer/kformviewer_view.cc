@@ -206,7 +206,7 @@ void KformViewerView::helpUsing()
   kapp->invokeHTMLHelp( "kformviewer/kimage.html", QString::null );
 }
 
-CORBA::Boolean KformViewerView::printDlg()
+bool KformViewerView::printDlg()
 {
   QPrinter prt;
 

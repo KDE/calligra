@@ -48,17 +48,17 @@ public:
   virtual bool loadXML( KOMLParser&, KOStore::Store_ptr );
   virtual void cleanUp();
   virtual void removeView( KformViewerView* _view );
-  virtual CORBA::Boolean initDoc();
+  virtual bool initDoc();
   virtual KOffice::MainWindow_ptr createMainWindow();
 
   virtual OpenParts::View_ptr createView();
   virtual KformViewerView* createFormView( QWidget* _parent = 0 );
-  virtual void viewList( OpenParts::Document::ViewList*& _list ); 
+  virtual void viewList( OpenParts::Document::ViewList & _list ); 
   virtual int viewCount();
   virtual bool isEmpty();
-  virtual void draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height, CORBA::Float _scale );
+  virtual void draw( QPaintDevice* _dev, long int _width, long int _height, float _scale );
 
-  char* mimeType();
+  QCString mimeType() { return MIME_TYPE; }
   virtual bool hasToWriteMultipart() { return false; };
 
   uint getFormWidth() { return m_FormWidth; };

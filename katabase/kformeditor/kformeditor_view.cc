@@ -114,7 +114,7 @@ void KformEditorView::init()
 
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
-    CORBA::String_var text = Q2C( i18n( "Form editor started" ) );
+    QString text = i18n( "Form editor started" ) ;
     m_vStatusBar->insertItem( text, 1);
 
     m_vStatusBar->enable( ::OpenPartsUI::Show );
@@ -217,30 +217,30 @@ bool KformEditorView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fac
     return true;
   }
 
-  CORBA::WString_var tooltip;
+  QString tooltip;
   OpenPartsUI::Pixmap_var pix;
 
   m_vToolBarEdit = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
 
   m_vToolBarEdit->setFullWidth( false );
 
-  tooltip = Q2C( i18n( "Undo" ) );
+  tooltip = i18n( "Undo" ) ;
   pix = OPICON( "undo" ) ;
   m_idToolBarEdit_Undo = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "editUndo", true, tooltip, -1 );
 
-  tooltip = Q2C( i18n( "Redo" ) );
+  tooltip = i18n( "Redo" ) ;
   pix = OPICON( "redo" );
   m_idToolBarEdit_Redo = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "editRedo", true, tooltip, -1 );
 
-  tooltip = Q2C( i18n( "Cut" ) );
+  tooltip = i18n( "Cut" ) ;
   pix = OPICON( "editcut" );
   m_idToolBarEdit_Cut = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "editCut", true, tooltip, -1 );
 
-  tooltip = Q2C( i18n( "Copy" ) );
+  tooltip = i18n( "Copy" ) ;
   pix = OPICON( "editcopy" );
   m_idToolBarEdit_Copy = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "editCopy", true, tooltip, -1 );
 
-  tooltip = Q2C( i18n( "Past" ) );
+  tooltip = i18n( "Past" ) ;
   pix = OPICON( "editpaste" );
   m_idToolBarEdit_Paste = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "editPaste", true, tooltip, -1 );
 
@@ -250,23 +250,23 @@ bool KformEditorView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fac
 
   m_vToolBarInsert->setFullWidth( false );
 
-  tooltip = Q2C( i18n( "Insert button" ) );
+  tooltip = i18n( "Insert button" ) ;
   pix = OPICON( "button" );
   m_idToolBarInsert_Button = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertButton", true, tooltip, -1 );
 
-  tooltip = Q2C( i18n( "Insert label" ) );
+  tooltip = i18n( "Insert label" ) ;
   pix = OPICON( "label" );
   m_idToolBarInsert_Label = m_vToolBarInsert->insertButton2( pix, 2, SIGNAL( clicked() ), this, "insertLabel", true, tooltip, -1 );
 
-  tooltip = Q2C( i18n( "Insert lineedit" ) );
+  tooltip = i18n( "Insert lineedit" ) ;
   pix = OPICON( "lineedit" );
   m_idToolBarInsert_LineEdit = m_vToolBarInsert->insertButton2( pix, 3, SIGNAL( clicked() ), this, "insertLineEdit", true, tooltip, -1 );
 
-  tooltip = Q2C( i18n( "Insert listbox" ) );
+  tooltip = i18n( "Insert listbox" ) ;
   pix = OPICON( "listbox" );
   m_idToolBarInsert_ListBox = m_vToolBarInsert->insertButton2( pix, 4, SIGNAL( clicked() ), this, "insertListBox", true, tooltip, -1 );
 
-  tooltip = Q2C( i18n( "Insert checkbox" ) );
+  tooltip = i18n( "Insert checkbox" ) ;
   pix = OPICON( "checkbox" );
   m_idToolBarInsert_CheckBox = m_vToolBarInsert->insertButton2( pix, 5, SIGNAL( clicked() ), this, "insertCheckBox", true, tooltip, -1 );
 
@@ -276,47 +276,47 @@ bool KformEditorView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fac
 
   m_vToolBarAlignment->setFullWidth( false );
 
-  tooltip = Q2C( i18n( "Fit view to form" ) );
+  tooltip = i18n( "Fit view to form" ) ;
   pix = OPICON( "unknown" );
   m_idToolBarAlignment_Center = m_vToolBarAlignment->insertButton2( pix, 6, SIGNAL( clicked() ), this, "alignmentFitViewToForm", true, tooltip, -1 );
 
   m_vToolBarAlignment->insertSeparator( -1 );
 
-  tooltip = Q2C( i18n( "Center widgets" ) );
+  tooltip = i18n( "Center widgets" ) ;
   pix = OPICON( "unknown" );
   m_idToolBarAlignment_Center = m_vToolBarAlignment->insertButton2( pix, 6, SIGNAL( clicked() ), this, "alignmentCenter", true, tooltip, -1 );
 
-  tooltip = Q2C( i18n( "Widgets left" ) );
+  tooltip = i18n( "Widgets left" ) ;
   pix = OPICON( "unknown" );
   m_idToolBarAlignment_Left = m_vToolBarAlignment->insertButton2( pix, 6, SIGNAL( clicked() ), this, "alignmentLeft", true, tooltip, -1 );
 
-  tooltip = Q2C( i18n( "Widgets horizontal center" ) );
+  tooltip = i18n( "Widgets horizontal center" ) ;
   pix = OPICON( "unknown" );
   m_idToolBarAlignment_HorizontalCenter = m_vToolBarAlignment->insertButton2( pix, 6, SIGNAL( clicked() ), this, "alignmentHorizontalCenter", true, tooltip, -1 );
 
-  tooltip = Q2C( i18n( "Widgets right" ) );
+  tooltip = i18n( "Widgets right" ) ;
   pix = OPICON( "unknown" );
   m_idToolBarAlignment_Right = m_vToolBarAlignment->insertButton2( pix, 6, SIGNAL( clicked() ), this, "alignmentRight", true, tooltip, -1 );
 
-  tooltip = Q2C( i18n( "Widgets top" ) );
+  tooltip = i18n( "Widgets top" ) ;
   pix = OPICON( "unknown" );
   m_idToolBarAlignment_Top = m_vToolBarAlignment->insertButton2( pix, 6, SIGNAL( clicked() ), this, "alignmentTop", true, tooltip, -1 );
 
-  tooltip = Q2C( i18n( "Widgets vertical center" ) );
+  tooltip = i18n( "Widgets vertical center" ) ;
   pix = OPICON( "unknown" );
   m_idToolBarAlignment_VerticalCenter = m_vToolBarAlignment->insertButton2( pix, 6, SIGNAL( clicked() ), this, "alignmentVerticalCenter", true, tooltip, -1 );
 
-  tooltip = Q2C( i18n( "Widgets bottom" ) );
+  tooltip = i18n( "Widgets bottom" ) ;
   pix = OPICON( "unknown" );
   m_idToolBarAlignment_Bottom = m_vToolBarAlignment->insertButton2( pix, 6, SIGNAL( clicked() ), this, "alignmentBottom", true, tooltip, -1 );
 
   m_vToolBarAlignment->insertSeparator( -1 );
 
-  tooltip = Q2C( i18n( "Horizontal balance" ) );
+  tooltip = i18n( "Horizontal balance" ) ;
   pix = OPICON( "unknown" );
   m_idToolBarAlignment_Bottom = m_vToolBarAlignment->insertButton2( pix, 6, SIGNAL( clicked() ), this, "alignmentBottom", true, tooltip, -1 );
 
-tooltip = Q2C( i18n( "Vertical balance" ) );
+tooltip = i18n( "Vertical balance" ) ;
   pix = OPICON( "unknown" );
   m_idToolBarAlignment_Bottom = m_vToolBarAlignment->insertButton2( pix, 6, SIGNAL( clicked() ), this, "alignmentBottom", true, tooltip, -1 );
 
@@ -336,120 +336,120 @@ bool KformEditorView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     return true;
   }
 
-  CORBA::WString_var text;
+  QString text;
   OpenPartsUI::Pixmap_var pix;
 
-  text = Q2C( i18n( "&Edit" ) );
+  text = i18n( "&Edit" ) ;
   _menubar->insertMenu( text, m_vMenuEdit, -1, -1 );
 
-  text = Q2C( i18n( "&Undo" ) );
+  text = i18n( "&Undo" ) ;
   pix = OPICON( "undo" );
   m_vMenuEdit->insertItem6( pix, text, this, "editUndo", CTRL + Key_U, -1, -1 ); 
 
-  text = Q2C( i18n( "&Redo" ) );
+  text = i18n( "&Redo" ) ;
   pix = OPICON( "redo" );
   m_vMenuEdit->insertItem6( pix, text, this, "editRedo", CTRL + Key_R, -1, -1 );
 
   m_vMenuEdit->insertSeparator( -1 );
 
-  text = Q2C( i18n( "&Cut" ) );
+  text = i18n( "&Cut" ) ;
   pix = OPICON( "editcut" );
   m_vMenuEdit->insertItem6( pix, text, this, "editCut", CTRL + Key_X, -1, -1 );
 
-  text = Q2C( i18n( "C&opy" ) );
+  text = i18n( "C&opy" ) ;
   pix = OPICON( "editcopy" );
   m_vMenuEdit->insertItem6(  pix, text, this, "editCopy", CTRL + Key_C, -1, -1 );
 
-  text = Q2C( i18n( "&Paste" ) );
+  text = i18n( "&Paste" ) ;
   pix = OPICON( "editpaste" );
   m_vMenuEdit->insertItem6(  pix, text, this, "editPaste", CTRL + Key_V, -1, -1 );
 
   m_vMenuEdit->insertSeparator( -1 );
 
-  text = Q2C( i18n( "&Size of form" ) );
+  text = i18n( "&Size of form" ) ;
   m_idMenuEdit_FormSize = m_vMenuEdit->insertItem( text, this, "editFormSize", 0 );
 
-  text = Q2C( i18n( "&Background" ) );
+  text = i18n( "&Background" ) ;
   m_idMenuEdit_Background = m_vMenuEdit->insertItem( text, this, "editBackground", 0 );
 
   m_vMenuEdit->insertSeparator( -1 );
 
-  text = Q2C( i18n( "&Form properties" ) );
+  text = i18n( "&Form properties" ) ;
   m_idMenuEdit_FormSize = m_vMenuEdit->insertItem( text, this, "editFormSize", 0 );
 
-  text = Q2C( i18n( "&Insert" ) );
+  text = i18n( "&Insert" ) ;
   _menubar->insertMenu( text, m_vMenuInsert, -1, -1 );
 
-  text = Q2C( i18n( "&Button" ) );
+  text = i18n( "&Button" ) ;
   pix = OPICON( "button" );
   m_vMenuInsert->insertItem6( pix, text, this, "insertButton", 0, -1, -1 );
 
-  text = Q2C( i18n( "&Checkbox" ) );
+  text = i18n( "&Checkbox" ) ;
   pix = OPICON( "checkbox" );
   m_vMenuInsert->insertItem6( pix, text, this, "insertCheckBox", 0, -1, -1 );
 
-  text = Q2C( i18n( "&Label" ) );
+  text = i18n( "&Label" ) ;
   pix = OPICON( "label" );
   m_vMenuInsert->insertItem6( pix, text, this, "insertLabel", 0, -1, -1 );
 
-  text = Q2C( i18n( "Line&edit" ) );
+  text = i18n( "Line&edit" ) ;
   pix = OPICON( "lineedit" );
   m_vMenuInsert->insertItem6( pix, text, this, "insertLineEdit", 0, -1, -1 );
 
-  text = Q2C( i18n( "List&box" ) );
+  text = i18n( "List&box" ) ;
   pix = OPICON( "listbox" );
   m_vMenuInsert->insertItem6( pix, text, this, "insertListBox", 0, -1, -1 );
 
   // TODO: make own CORBA func for "insert subform"
 
-  text = Q2C( i18n( "&Subform" ) );
+  text = i18n( "&Subform" ) ;
   pix = OPICON( "unknown" );
   m_vMenuInsert->insertItem6( pix, text, this, "insertListBox", 0, -1, -1 );
 
-  text = Q2C( i18n( "&Alignment" ) );
+  text = i18n( "&Alignment" ) ;
   _menubar->insertMenu( text, m_vMenuAlignment, -1, -1 );
 
-  text = Q2C( i18n( "&Fit view to form" ) );
+  text = i18n( "&Fit view to form" ) ;
   pix = OPICON( "unknown" );
   m_vMenuAlignment->insertItem6( pix, text, this, "alignmentFitViewToForm", CTRL + Key_X, -1, -1 );
 
   m_vMenuAlignment->insertSeparator( -1 );
 
-  text = Q2C( i18n( "&Center widgets" ) );
+  text = i18n( "&Center widgets" ) ;
   pix = OPICON( "unknown" );
   m_vMenuAlignment->insertItem6( pix, text, this, "alignmentCenter", CTRL + Key_X, -1, -1 );
 
-  text = Q2C( i18n( "&Left" ) );
+  text = i18n( "&Left" ) ;
   pix = OPICON( "unknown" );
   m_vMenuAlignment->insertItem6( pix, text, this, "alignmentLeft", CTRL + Key_X, -1, -1 );
 
-  text = Q2C( i18n( "&Horizontal center" ) );
+  text = i18n( "&Horizontal center" ) ;
   pix = OPICON( "unknown" );
   m_vMenuAlignment->insertItem6( pix, text, this, "alignmentHorizontalCenter", CTRL + Key_X, -1, -1 );
 
-  text = Q2C( i18n( "&Right" ) );
+  text = i18n( "&Right" ) ;
   pix = OPICON( "unknown" );
   m_vMenuAlignment->insertItem6( pix, text, this, "alignmentRight", CTRL + Key_X, -1, -1 );
 
-  text = Q2C( i18n( "&Top" ) );
+  text = i18n( "&Top" ) ;
   pix = OPICON( "unknown" );
   m_vMenuAlignment->insertItem6( pix, text, this, "alignmentTop", CTRL + Key_X, -1, -1 );
 
-  text = Q2C( i18n( "&Vertical center" ) );
+  text = i18n( "&Vertical center" ) ;
   pix = OPICON( "unknown" );
   m_vMenuAlignment->insertItem6( pix, text, this, "alignmentVerticalCenter", CTRL + Key_X, -1, -1 );
 
-  text = Q2C( i18n( "&Bottom" ) );
+  text = i18n( "&Bottom" ) ;
   pix = OPICON( "unknown" );
   m_vMenuAlignment->insertItem6( pix, text, this, "alignmentBottom", CTRL + Key_X, -1, -1 );
 
   m_vMenuAlignment->insertSeparator( -1 );
 
-  text = Q2C( i18n( "&Horizontal balance" ) );
+  text = i18n( "&Horizontal balance" ) ;
   pix = OPICON( "unknown" );
   m_vMenuAlignment->insertItem6( pix, text, this, "alignmentBottom", CTRL + Key_X, -1, -1 );
 
-  text = Q2C( i18n( "&Vertical balance" ) );
+  text = i18n( "&Vertical balance" ) ;
   pix = OPICON( "unknown" );
   m_vMenuAlignment->insertItem6( pix, text, this, "alignmentBottom", CTRL + Key_X, -1, -1 );
 
@@ -461,7 +461,7 @@ void KformEditorView::helpUsing()
   kapp->invokeHTMLHelp( "kformeditor/kimage.html", QString::null );
 }
 
-CORBA::Boolean KformEditorView::printDlg()
+bool KformEditorView::printDlg()
 {
   QPrinter prt;
 
@@ -485,7 +485,7 @@ void KformEditorView::editUndo()
 {
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
-    CORBA::WString_var text = Q2C( i18n ( "Undo" ) );
+    QString text = i18n ( "Undo" ) ;
  
     m_vStatusBar->changeItem( text, 1 );
   }
@@ -495,7 +495,7 @@ void KformEditorView::editRedo()
 {
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
-    CORBA::WString_var text = Q2C( i18n ( "Redo" ) );
+    QString text = i18n ( "Redo" ) ;
 
     m_vStatusBar->changeItem( text, 1 );
   }
@@ -505,7 +505,7 @@ void KformEditorView::editCut()
 {
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
-    CORBA::WString_var text = Q2C( i18n ( "Cut widgets" ) );
+    QString text = i18n ( "Cut widgets" ) ;
  
     m_vStatusBar->changeItem( text, 1 );
   }
@@ -515,7 +515,7 @@ void KformEditorView::editCopy()
 {
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
-    CORBA::WString_var text = Q2C( i18n ( "Copy widgets" ) );
+    QString text = i18n ( "Copy widgets" ) ;
  
     m_vStatusBar->changeItem( text, 1 );
   }
@@ -525,7 +525,7 @@ void KformEditorView::editPaste()
 {
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
-    CORBA::WString_var text = Q2C( i18n ( "Paste widgets" ) );
+    QString text = i18n ( "Paste widgets" ) ;
  
     m_vStatusBar->changeItem( text, 1 );
   }
@@ -535,7 +535,7 @@ void KformEditorView::editFormSize()
 {
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
-    CORBA::WString_var text = Q2C( i18n ( "Change form size" ) );
+    QString text = i18n ( "Change form size" ) ;
  
     m_vStatusBar->changeItem( text, 1 );
   }
@@ -545,7 +545,7 @@ void KformEditorView::editBackground()
 {
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
-    CORBA::WString_var text = Q2C( i18n ( "Change background" ) );
+    QString text = i18n ( "Change background" ) ;
  
     m_vStatusBar->changeItem( text, 1 );
   }
@@ -570,7 +570,7 @@ void KformEditorView::insertButton()
 {
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
-    CORBA::WString_var text = Q2C( i18n ( "Insert Button" ) );
+    QString text = i18n ( "Insert Button" ) ;
  
     m_vStatusBar->changeItem( text, 1 );
   }
@@ -580,7 +580,7 @@ void KformEditorView::insertLabel()
 {
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
-    CORBA::WString_var text = Q2C( i18n ( "Insert Label" ) );
+    QString text = i18n ( "Insert Label" ) ;
  
     m_vStatusBar->changeItem( text, 1 );
   }
@@ -590,7 +590,7 @@ void KformEditorView::insertLineEdit()
 {
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
-    CORBA::WString_var text = Q2C( i18n ( "Insert LineEdit" ) );
+    QString text = i18n ( "Insert LineEdit" ) ;
  
     m_vStatusBar->changeItem( text, 1 );
   }
@@ -600,7 +600,7 @@ void KformEditorView::insertListBox()
 {
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
-    CORBA::WString_var text = Q2C( i18n ( "Insert ListBox" ) );
+    QString text = i18n ( "Insert ListBox" ) ;
  
     m_vStatusBar->changeItem( text, 1 );
   }
@@ -610,7 +610,7 @@ void KformEditorView::insertCheckBox()
 {
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
-    CORBA::WString_var text = Q2C( i18n ( "Insert CheckBox" ) );
+    QString text = i18n ( "Insert CheckBox" ) ;
  
     m_vStatusBar->changeItem( text, 1 );
   }
@@ -620,7 +620,7 @@ void KformEditorView::alignmentFitViewToForm()
 {
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
-    CORBA::WString_var text = Q2C( i18n ( "Fit view to form" ) );
+    QString text = i18n ( "Fit view to form" ) ;
  
     m_vStatusBar->changeItem( text, 1 );
   }
@@ -630,7 +630,7 @@ void KformEditorView::alignmentCenter()
 {
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
-    CORBA::WString_var text = Q2C( i18n ( "Center the selected widgets" ) );
+    QString text = i18n ( "Center the selected widgets" ) ;
  
     m_vStatusBar->changeItem( text, 1 );
   }
@@ -640,7 +640,7 @@ void KformEditorView::alignmentLeft()
 {
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
-    CORBA::WString_var text = Q2C( i18n ( "Position the selected widgets to left" ) );
+    QString text = i18n ( "Position the selected widgets to left" ) ;
  
     m_vStatusBar->changeItem( text, 1 );
   }
@@ -650,7 +650,7 @@ void KformEditorView::alignmentHorizontalCenter()
 {
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
-    CORBA::WString_var text = Q2C( i18n ( "Position the selected widgets to horizontal center" ) );
+    QString text = i18n ( "Position the selected widgets to horizontal center" ) ;
  
     m_vStatusBar->changeItem( text, 1 );
   }
@@ -660,7 +660,7 @@ void KformEditorView::alignmentRight()
 {
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
-    CORBA::WString_var text = Q2C( i18n ( "Position the selected widgets to right" ) );
+    QString text = i18n ( "Position the selected widgets to right" ) ;
  
     m_vStatusBar->changeItem( text, 1 );
   }
@@ -670,7 +670,7 @@ void KformEditorView::alignmentTop()
 {
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
-    CORBA::WString_var text = Q2C( i18n ( "Position the selected widgets to top" ) );
+    QString text = i18n ( "Position the selected widgets to top" ) ;
  
     m_vStatusBar->changeItem( text, 1 );
   }
@@ -680,7 +680,7 @@ void KformEditorView::alignmentVerticalCenter()
 {
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
-    CORBA::WString_var text = Q2C( i18n ( "Position the selected widgets to vertical center" ) );
+    QString text = i18n ( "Position the selected widgets to vertical center" ) ;
  
     m_vStatusBar->changeItem( text, 1 );
   }
@@ -690,7 +690,7 @@ void KformEditorView::alignmentBottom()
 {
   if( !CORBA::is_nil( m_vStatusBar ) )
   {
-    CORBA::WString_var text = Q2C( i18n ( "Position the selected widgets to bottom" ) );
+    QString text = i18n ( "Position the selected widgets to bottom" ) ;
  
     m_vStatusBar->changeItem( text, 1 );
   }
