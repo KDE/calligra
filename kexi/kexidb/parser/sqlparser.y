@@ -676,6 +676,17 @@ USER_DEFINED_NAME
 		{
 			item->setTable(schema);
 		}
+
+		if(!item->isQueryAsterisk())
+		{
+			KexiDB::Field *f = schema->field(item->name());
+			if(!f)
+			{
+				KexiDB::ParserError err(i18n("FIeld List Error Error"), i18n("Unknow column '%1' in table '%2'").arg(item->name()).arg(schema->name()), ctoken, current);
+				parser->setError(err);
+				yyerror("field list error");
+			}	
+		}
 	}
 }
 ;

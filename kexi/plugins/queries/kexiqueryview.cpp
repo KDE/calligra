@@ -19,6 +19,7 @@
 
 #include <kexiproject.h>
 #include <kexidb/connection.h>
+#include <kexidb/parser/parser.h>
 #include <keximainwindow.h>
 
 #include "kexiquerydocument.h"
@@ -34,9 +35,28 @@ KexiQueryView::KexiQueryView(KexiMainWindow *win, QWidget *parent, KexiQueryDocu
 bool
 KexiQueryView::afterSwitchFrom(int)
 {
-	if (m_doc) {
+	if (m_doc && m_doc->schema())
+	{
 		KexiDB::Cursor *rec = mainWin()->project()->dbConnection()->executeQuery(*m_doc->schema());
+		QString statement = mainWin()->project()->dbConnection()->selectStatement(*m_doc->schema());
+		if(!rec && !statement.isEmpty())
+		{
+			KexiDB::Parser *parser = new KexiDB::Parser(mainWin()->project()->dbConnection());
+			parser->parse(statement);
+			m_doc->setSchema(parser->select());
+
+			if(parser->operation() == KexiDB::Parser::OP_Error)
+				m_doc->addHistoryItem(statement, parser->error().error());
+//			else
+				//m_doc->addHistoryItem(statement, mainWin()->project()->dbConnection()->serverErrorMsg());
+				//m_doc->addHistoryItem(statement, "The user is stupid");
+
+//			delete parser;
+			return true;
+		}
 		setData(rec);
+
+		m_doc->addHistoryItem(statement, "");
 	}
 	return true;
 }

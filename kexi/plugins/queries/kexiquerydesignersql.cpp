@@ -48,6 +48,7 @@ KexiQueryDesignerSQL::KexiQueryDesignerSQL(KexiMainWindow *mainWin, QWidget *par
 	b->addWidget(l);
 
 	connect(parent, SIGNAL(queryExecuted(QString, bool, const QString &)), m_history, SLOT(addEvent(QString, bool, const QString &)));
+	m_history->setHistory(doc->history());
 
 //	connect(m_editor, SIGNAL(execQ()), parent, SLOT(fastQuery()));
 }
@@ -59,10 +60,14 @@ KexiQueryDesignerSQL::beforeSwitchTo(int)
 		KexiDB::Parser *parser = new KexiDB::Parser(mainWin()->project()->dbConnection());
 		parser->parse(getQuery());
 		m_doc->setSchema(parser->select());
-		delete parser;
 
 		if(parser->operation() == KexiDB::Parser::OP_Error)
+		{
+			m_history->addEvent(getQuery(), false, parser->error().error());
+			kdDebug() << "KexiQueryDesignerSQL::beforeSwitchTo(): syntax error!" << endl;
 			return false;
+		}
+		delete parser;
 	}
 
 	return true;

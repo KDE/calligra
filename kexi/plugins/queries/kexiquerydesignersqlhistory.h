@@ -37,9 +37,9 @@ class KEXI_HAND_QUERY_EXPORT HistoryEntry
 		QRect	geometry(int y, int width, QFontMetrics f);
 		void	drawItem(QPainter *p, int width, const QColorGroup &cg);
 
-		void	setSelected(bool selected) { m_selected = selected; }
+		void	setSelected(bool selected, const QColorGroup &cg);
 		bool	isSelected() { return m_selected; }
-		void	highlight();
+		void	highlight(const QColorGroup &selected);
 
 		QString	statement() { return m_statement; }
 		void updateTime(const QTime &execTime);
@@ -68,6 +68,8 @@ class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerSQLHistory : public QScrollView
 		void		addEntry(HistoryEntry *e);
 		void		contextMenu(const QPoint &pos, HistoryEntry *e);
 
+		void		setHistory(History *h);
+
 	public slots:
 		void		addEvent(QString q, bool s, const QString &error);
 
@@ -80,7 +82,7 @@ class KEXI_HAND_QUERY_EXPORT KexiQueryDesignerSQLHistory : public QScrollView
 		void	contentsMousePressEvent(QMouseEvent * e);
 
 	private:
-		History		m_history;
+		History		*m_history;
 		HistoryEntry	*m_selected;
 };
 

@@ -21,6 +21,7 @@
 #define KEXIQUERYDOCUMENT_H
 
 #include <qobject.h>
+#include "kexiquerydesignersqlhistory.h"
 
 namespace KexiDB
 {
@@ -41,12 +42,14 @@ class KexiQueryDocument
 		void			setSchema(KexiDB::QuerySchema *s);
 		KexiDB::QuerySchema	*schema() { return m_schema; }
 
-		void			addHistoryItem(const QString &time, const QString &query, const QString &error);
+		void			addHistoryItem(const QString &query, const QString &error);
+		History			*history() { return m_history; }
 
 	private:
 		KexiDB::QuerySchema	*m_schema;
 		int			m_id;
 		KexiDB::Connection	*m_connection;
+		History			*m_history;
 };
 
 #endif

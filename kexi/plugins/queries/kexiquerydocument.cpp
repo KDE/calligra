@@ -10,6 +10,7 @@ KexiQueryDocument::KexiQueryDocument(int id, KexiDB::Connection *c, KexiDB::Quer
 	m_id = id;
 	m_schema = s;
 	m_connection = c;
+	m_history = new History();
 }
 
 KexiQueryDocument::~KexiQueryDocument()
@@ -28,7 +29,19 @@ KexiQueryDocument::setSchema(KexiDB::QuerySchema *s)
 }
 
 void
-KexiQueryDocument::addHistoryItem(const QString &time, const QString &query, const QString &error)
+KexiQueryDocument::addHistoryItem(const QString &query, const QString &error)
 {
+	HistoryEntry *he=m_history->last();
+	if (he)
+	{
+		if (he->statement() == query)
+		{
+			he->updateTime(QTime::currentTime());
+			return;
+		}
+	}
+
+	HistoryEntry *e = new HistoryEntry(error.isEmpty(), QTime::currentTime(), query, 0, error);
+	m_history->append(e);
 }
 
