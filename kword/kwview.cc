@@ -275,6 +275,11 @@ void KWView::initGui()
 
     showFormulaToolbar( FALSE );
 
+    // Prevention against applyMainWindowSettings hiding the statusbar
+    KStatusBar * sb = statusBar();
+    if ( sb )
+        sb->show();
+
     updatePageInfo();
     slotFrameSetEditChanged();
     frameSelectedChanged();

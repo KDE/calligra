@@ -2601,8 +2601,8 @@ void KWDocument::setKSpellConfig(KSpellConfig _kspell)
 }
 
 #ifndef NDEBUG
-void KWDocument::printDebug() {
-
+void KWDocument::printDebug()
+{
     kdDebug() << "----------------------------------------"<<endl;
     kdDebug() << "                 Debug info"<<endl;
     kdDebug() << "Document:" << this <<endl;
