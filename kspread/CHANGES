@@ -3,8 +3,14 @@ Changes from 1.1 to 1.2
 
 Until RC1:
 ------------
+New:
+- Like all of KOffice: a readonly GUI for embedding into Konqueror
+- More DCOP calls
 
+Bugfixes:
 - bug fixes
+- Fix cancel add embedded document.
+- Fix mem leak
 
 
 Until beta2:
