@@ -49,7 +49,7 @@
 #include "kexiproject.h"
 
 KexiDataTable::KexiDataTable(KexiView *view,QWidget *parent, QString caption, const char *name, bool embedd)
-	: KexiDialogBase(view,parent, name)
+	: KexiDialogBase(view,parent, name),m_record(0)
 {
 	QGridLayout *g = new QGridLayout(this);
 	m_tableView = new KexiTableView(this);
@@ -182,6 +182,7 @@ KexiDataTable::slotSearchChanged(const QString &findQuery)
 
 KexiDataTable::~KexiDataTable()
 {
+	delete m_record;
 }
 
 #include "kexidatatable.moc"
