@@ -377,7 +377,8 @@ Container::deleteItem()
 		{
 			kdDebug() << "deleting item : " << w->name() << endl;
 			form()->objectTree()->removeChild(w->name());
-			delete w;
+			//delete w;
+			form()->manager()->deleteWidgetLater( w );
 		}
 		m_selected.clear();
 		m_form->setCurrentWidget(m_container);

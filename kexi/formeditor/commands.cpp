@@ -21,6 +21,7 @@
 
 #include <kdebug.h>
 #include <klocale.h>
+#include <kpopupmenu.h>
 
 #include "formIO.h"
 #include "container.h"

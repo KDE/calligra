@@ -23,6 +23,7 @@
 #include <qobject.h>
 #include <qdom.h>
 #include <qptrlist.h>
+#include <qtimer.h>
 
 class QWidget;
 class QWorkspace;
@@ -162,6 +163,11 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		  */
 		void windowChanged(QWidget *w);
 
+		//! Used to delayed widgets' deletion (in Container::deleteItem())
+		void deleteWidgetLater( QWidget *w );
+
+	protected slots:
+		void deleteWidgetLaterTimeout();
 
 	protected:
 		void initForm(Form *form);
@@ -191,6 +197,10 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		KActionCollection	*m_collection;
 		KMainWindow 		*m_client;
+
+		//! Used to delayed widgets deletion
+		QTimer m_deleteWidgetLater_timer;
+		QPtrList<QWidget> m_deleteWidgetLater_list;
 
 		friend class CutWidgetCommand;
 		friend class Form;

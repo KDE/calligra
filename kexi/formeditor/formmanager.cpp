@@ -47,8 +47,8 @@
 
 #include "formmanager.h"
 
-namespace KFormDesigner
-{
+using namespace KFormDesigner;
+
 
 FormManager::FormManager(QWidget *container, QObject *parent=0, const char *name=0)
    : QObject(parent, name)
@@ -72,6 +72,9 @@ FormManager::FormManager(QWidget *container, QObject *parent=0, const char *name
 	m_popup->insertItem(i18n("Remove Item"), this, SLOT(deleteWidget()));
 	m_treeview = 0;
 	m_editor = 0;
+
+	m_deleteWidgetLater_list.setAutoDelete(true);
+	connect( &m_deleteWidgetLater_timer, SIGNAL(timeout()), this, SLOT(deleteWidgetLaterTimeout()));
 }
 
 void
@@ -437,6 +440,19 @@ FormManager::showPropertyBuffer(ObjectPropertyBuffer *buff)
 	emit bufferSwitched(buff);
 }
 
+void 
+FormManager::deleteWidgetLater( QWidget *w )
+{
+	w->hide();
+	w->reparent(0, WType_TopLevel, QPoint(0,0));
+	m_deleteWidgetLater_list.append( w );
+	m_deleteWidgetLater_timer.start( 100, true );
+}
+
+void
+FormManager::deleteWidgetLaterTimeout()
+{
+	m_deleteWidgetLater_list.clear();
 }
 
 #include "formmanager.moc"
