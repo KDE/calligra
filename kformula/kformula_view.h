@@ -111,7 +111,7 @@ private:
 
     KAction* formulaStringAction;
 
-    static int window_counter;
+    static bool first_window;
 
     DCOPObject *m_dcop;
 };

@@ -19,3 +19,30 @@ elsevier's Esstix fonts. You can find them at
 </p>
 </html>
 </tip>
+
+<tip category="KFormula|Keyboard">
+<html>
+<p>...that you can use the keys <tt>^</tt> and <tt>_</tt> to create 
+right upper and lower indices? If you type <tt>Ctrl-^</tt> or 
+<tt>Ctrl-_</tt> instead, you will get a left index.
+</p>
+</html>
+</tip>
+
+<tip category="KFormula|Keyboard">
+<html>
+<p>...that you can insert any of the many supported symbols by typing its
+name? Simply press the backslash key, type the symbol's name and press
+space.
+</p>
+</html>
+</tip>
+
+<tip category="KFormula|Keyboard">
+<html>
+<p>...that you can insert Greek letters very easily by typing the
+corresponding latin letter and pressing Ctrl-G afterwards?
+</p>
+</html>
+</tip>
+

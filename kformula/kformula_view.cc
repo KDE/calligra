@@ -46,7 +46,7 @@ class KPrinter;
 #include "kformulawidget.h"
 
 
-int KFormulaPartView::window_counter = 0;
+bool KFormulaPartView::first_window = true;
 
 KFormulaPartView::KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent, const char* _name)
         : KoView( _doc, _parent, _name ), m_pDoc(_doc)
@@ -148,10 +148,10 @@ KFormulaPartView::KFormulaPartView(KFormulaDoc* _doc, QWidget* _parent, const ch
     connect( formula, SIGNAL( statusMsg( const QString& ) ),
              this, SLOT( slotActionStatusText( const QString& ) ) );
 
-    if ( window_counter == 0 ) {
+    if ( !_doc->isEmbedded() && first_window ) {
         QTimer::singleShot( 200, this, SLOT(slotShowTipOnStart()) );
+        first_window = false;
     }
-    window_counter++;
 }
 
 
