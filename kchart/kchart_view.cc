@@ -151,7 +151,7 @@ void KChartView::edit()
         return;
     }
     ed.getData(dat);
-    qDebug( "***Before calling editor: cols = %d, rows = %d, usedCols = %d, usedRows = %d", dat->cols(), dat->rows(), dat->usedCols(), dat->usedRows() );
+    qDebug( "***After calling editor: cols = %d, rows = %d, usedCols = %d, usedRows = %d", dat->cols(), dat->rows(), dat->usedCols(), dat->usedRows() );
     repaint();
 }
 

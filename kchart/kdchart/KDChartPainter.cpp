@@ -210,12 +210,19 @@ void KDChartPainter::paint( QPainter* painter,
     setupGeometry
         ( painter, data, actLegendFont, actLegendTitleFont );
     if ( !paint2nd ) {
+        qDebug( "KDChartPainter::paint() 1" );
         paintHeader( painter, data );
+        qDebug( "KDChartPainter::paint() 2" );
         paintFooter( painter, data );
+        qDebug( "KDChartPainter::paint() 3" );
         paintLegend( painter, data, actLegendFont, actLegendTitleFont );
+        qDebug( "KDChartPainter::paint() 4" );
         paintAxes( painter, data );
+        qDebug( "KDChartPainter::paint() 5" );
     }
+    qDebug( "KDChartPainter::paint() 6" );
     paintData( painter, data, paint2nd, regions );
+    qDebug( "KDChartPainter::paint() 7" );
 }
 
 

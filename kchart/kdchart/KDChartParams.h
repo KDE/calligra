@@ -5032,7 +5032,7 @@ public:
        \return the XML document that represents the parameters
        \sa loadXML
     */
-    QDomDocument saveXML() const;
+    QDomDocument saveXML( bool withPI = true ) const;
 
 
     friend QTextStream& operator<<( QTextStream& s, const KDChartParams& p );

@@ -64,6 +64,7 @@ void KDChart::paint( QPainter* painter, KDChartParams* params,
 throw( KDChartUnknownTypeException )
 #endif
 {
+    qDebug( "KDChart::paint()" );
     // Check whether there already is painter and, if that is the
     // case, whether the painter still has the correct type (the chart
     // type might have changed in the meantime).
@@ -104,10 +105,12 @@ throw( KDChartUnknownTypeException )
     //       since all axes computations are only done when
     //       the first chart is painted but will be needed for both of course.
     //
+    qDebug( "Before calling painters" );
     if ( cpainter )   // can be 0 if no exceptions are used
         cpainter->paint( painter, data, false, regions );
     if ( cpainter2 )  // can be 0 if no exceptions are used
         cpainter2->paint( painter, data, true, regions );
+    qDebug( "After calling painters" );
 }
 
 

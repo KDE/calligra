@@ -203,7 +203,7 @@ void KChartPart::loadConfig( KConfig *conf )
                             rightparams );
     _params->setAxisParams( KDChartAxisParams::AxisPosBottom,
                             bottomparams );
-  
+
     //   hlc_style = (KChartHLCStyle)conf->readNumEntry("hlc_style", hlc_style);
     //   hlc_cap_width = conf->readNumEntry("hlc_cap_width", hlc_cap_width);
     //   // TODO: Annotation font
@@ -289,7 +289,7 @@ void KChartPart::saveConfig( KConfig *conf )
     conf->writeEntry( "YLabelColor", leftparams.axisLabelsColor() );
     conf->writeEntry( "YLabel2Color", rightparams.axisLabelsColor() );
     conf->writeEntry( "GridColor", leftparams.axisGridColor() );
-    
+
     //   conf->writeEntry("hlc_style", (int)hlc_style);
     //   conf->writeEntry("hlc_cap_width", hlc_cap_width );
     //   // TODO: Annotation type!!!
@@ -328,7 +328,7 @@ void KChartPart::saveConfig( KConfig *conf )
 
 QDomDocument KChartPart::saveXML()
 {
-    return _params->saveXML();
+    return _params->saveXML( false );
 }
 
 
@@ -342,6 +342,9 @@ bool KChartPart::loadXML( QIODevice*, const QDomDocument& doc )
 
 /**
  * $Log$
+ * Revision 1.58  2001/06/11 15:56:28  kalle
+ * Connected most color stuff (where applicable)
+ *
  * Revision 1.57  2001/06/11 14:37:40  kalle
  * - Resurrected most of the widget (not everything connected yet)
  * - Implemented loading and saving

@@ -722,20 +722,23 @@ QTextStream& operator<<( QTextStream& s, const KDChartParams& p )
 }
 
 
-QDomDocument KDChartParams::saveXML() const
+QDomDocument KDChartParams::saveXML( bool withPI ) const
 {
     // Create an inital DOM document
     QString docstart = "<ChartParams/>";
 
     QDomDocument doc( "ChartParams" );
     doc.setContent( docstart );
-    doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
+    if( withPI )
+        doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
 
     QDomElement docRoot = doc.documentElement();
-    docRoot.setAttribute( "xmlns", "http://www.klaralvdalens-datakonsult.se/kdchart" );
-    docRoot.setAttribute( "xmlns:xsi", "http://www.w3.org/2000/10/XMLSchema-instance" );
-    docRoot.setAttribute( "xsi:schemaLocation", "http://www.klaralvdalens-datakonsult.se/kdchart" );
-
+    if( withPI ) {
+        docRoot.setAttribute( "xmlns", "http://www.klaralvdalens-datakonsult.se/kdchart" );
+        docRoot.setAttribute( "xmlns:xsi", "http://www.w3.org/2000/10/XMLSchema-instance" );
+        docRoot.setAttribute( "xsi:schemaLocation", "http://www.klaralvdalens-datakonsult.se/kdchart" );
+    }
+    
     // the ChartType element
     QDomElement chartTypeElement = doc.createElement( "ChartType" );
     docRoot.appendChild( chartTypeElement );
