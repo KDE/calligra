@@ -54,8 +54,10 @@ void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt)
 	myDock->setDockWindowTransient(m_mainWindow,true);
 
 	if (wt==DocumentWindow) {
-		if ((s_activeDocumentWindow==0) || (s_activeDocumentWindow->myDock==0))
-			myDock->toDesktop();
+		if ((s_activeDocumentWindow==0) || (s_activeDocumentWindow->myDock==0)) {
+			myDock->manualDock(m_mainWindow->getMainDockWidget(),KDockWidget::DockTop, 100);
+x//			myDock->toDesktop();
+		}
 		else
 			myDock->manualDock(s_activeDocumentWindow->myDock,KDockWidget::DockCenter);
 		s_DocumentWindows->insert(0,this);
@@ -63,14 +65,15 @@ void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt)
 	}
 	else {
 		if ((s_activeToolWindow==0) || (s_activeToolWindow->myDock==0))
-			myDock->toDesktop();
+			myDock->manualDock(m_mainWindow->getMainDockWidget(),KDockWidget::DockLeft, 20);
+//			myDock->toDesktop();
 		else
 			myDock->manualDock(s_activeToolWindow->myDock,KDockWidget::DockCenter);
 		s_ToolWindows->insert(0,this);
 		s_activeToolWindow=this;
 	}
+	
 	myDock->makeDockVisible();
-
 }
 
 void KexiDialogBase::closeEvent(QCloseEvent *ev)
