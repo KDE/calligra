@@ -2866,7 +2866,6 @@ void QTextDocument::updateFontAttributes( const QFont &f, const QFont &old )
 
 void QTextStringChar::setFormat( QTextFormat *f )
 {
-    qDebug("QTextStringChar::setFormat %p %s",f,f?f->key().latin1():"");
     if ( type == Regular ) {
 	d.format = f;
     } else {
