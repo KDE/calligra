@@ -728,11 +728,11 @@ void KoAutoFormat::doAutoIncludeAbreviation(QTextCursor *textEditCursor, KoTextP
 
     if( s->length() < 2 )
         return;
-
     for (int i=0; i<=(s->length() - 1);i++)
     {
-        QString word;
         QString wordAfter;
+        QString word;
+
         for ( int j = i ; j < s->length() - 1; j++ )
         {
             QChar ch = s->at( j ).c;
@@ -740,7 +740,6 @@ void KoAutoFormat::doAutoIncludeAbreviation(QTextCursor *textEditCursor, KoTextP
                 break;
             word.append( ch );
         }
-
         if ( isMark( word.at(word.length()-1)) )
         {
             for ( int j = i+word.length()+1 ; j < s->length() - 1; j++ )
@@ -750,13 +749,17 @@ void KoAutoFormat::doAutoIncludeAbreviation(QTextCursor *textEditCursor, KoTextP
                     break;
                 wordAfter.append( ch );
             }
-            if( word.length()>2 && !wordAfter.isEmpty() && wordAfter.at(0)==wordAfter.at(0).lower())
+            if( word.length()>1 && !wordAfter.isEmpty() && wordAfter.at(0)==wordAfter.at(0).lower())
             {
                 if ( upperCaseExceptions.findIndex(word )==-1)
                     upperCaseExceptions.append( word );
             }
         }
-        i+=word.length()+wordAfter.length()+1;
+        i+=word.length();
+        if( !wordAfter.isEmpty())
+        {
+            i+=wordAfter.length()+1;
+        }
     }
 
 }
