@@ -2977,7 +2977,7 @@ int KSpreadTable::adjustColumn( const QPoint& _marker, int _col )
 		int col = c->column();
 		if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
 		{
-		    if( !c->isEmpty() && !c->extraXCells() && !c->isObscured())
+		    if( !c->isEmpty() && !c->isObscured())
 		    {
 
 	                if( c->textWidth() > long_max )
@@ -3004,7 +3004,7 @@ int KSpreadTable::adjustColumn( const QPoint& _marker, int _col )
 	for ( int y = r.top(); y <= r.bottom(); y++ )
 	{
 	    KSpreadCell *cell = cellAt( x, y );
-	    if( cell != m_pDefaultCell && !cell->isEmpty() && !cell->extraXCells()
+	    if( cell != m_pDefaultCell && !cell->isEmpty()
             && !cell->isObscured())
 	    {
 
@@ -3041,7 +3041,7 @@ int KSpreadTable::adjustRow(const QPoint &_marker,int _row)
 		int row = c->row();
 		if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
 		{
-		    if(!c->isEmpty() && !c->extraYCells() && !c->isObscured())
+		    if(!c->isEmpty() && !c->isObscured())
 		    {
 
 	  		if(c->textHeight()>long_max)
@@ -3065,7 +3065,7 @@ int KSpreadTable::adjustRow(const QPoint &_marker,int _row)
 	for ( int x = r.left(); x <= r.right(); x++ )
 	{
 	    KSpreadCell *cell = cellAt( x, y );
-	    if(cell != m_pDefaultCell && !cell->isEmpty()&& !cell->extraYCells()
+	    if(cell != m_pDefaultCell && !cell->isEmpty()
             && !cell->isObscured())
 	    {
 
