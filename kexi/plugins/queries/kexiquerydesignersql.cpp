@@ -72,7 +72,7 @@ bool
 KexiQueryDesignerSQL::afterSwitchFrom(int)
 {
 	kdDebug() << "KexiQueryDesignerSQL::afterSwitchFrom()" << endl;
-	if (m_doc) {
+	if (m_doc && m_doc->schema()) {
 		m_editor->setText(m_doc->schema()->connection()->selectStatement(*m_doc->schema()));
 	}
 	return true;
