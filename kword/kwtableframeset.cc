@@ -2293,10 +2293,27 @@ void KWTableFrameSetEdit::setCurrentCell( const KoPoint & dPoint )
 
 void KWTableFrameSetEdit::setCurrentCell( KWFrameSet * fs, bool eraseSelection )
 {
+    bool oldProtectContent = false;
+    KWTextFrameSet *textframeSet=0L;
+    if ( m_currentCell )
+        textframeSet = dynamic_cast<KWTextFrameSet *>(m_currentCell->frameSet());
+    if ( textframeSet )
+        oldProtectContent = textframeSet->protectContent();
+
     if ( m_currentCell )
         m_currentCell->terminate(eraseSelection);
     delete m_currentCell;
     m_currentCell =  fs->createFrameSetEdit( m_canvas );
+    textframeSet=dynamic_cast<KWTextFrameSet *>(m_currentCell->frameSet());
+    if ( textframeSet )
+    {
+        if ( oldProtectContent != textframeSet->protectContent())
+        {
+            m_canvas->kWordDocument()->updateTextFrameSetEdit();
+        }
+    }
+
+
     m_currentFrame = fs->frame( 0 );
     //refresh koruler
     m_canvas->gui()->getView()->slotUpdateRuler();
