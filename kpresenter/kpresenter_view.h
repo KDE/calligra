@@ -91,7 +91,7 @@ class KoTextIterator;
 
 class KoSpell;
 #ifdef HAVE_LIBKSPELL2
-#include "kospell.h"
+#include <kspell2/broker.h>
 namespace KSpell2 {
     class Dialog;
 }

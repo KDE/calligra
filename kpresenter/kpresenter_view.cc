@@ -154,6 +154,7 @@
 #include <kspell2/broker.h>
 #include <kspell2/defaultdictionary.h>
 #include <kspell2/dialog.h>
+#include "kospell.h"
 using namespace KSpell2;
 #endif
 
@@ -4845,66 +4846,6 @@ void KPresenterView::startKSpell()
 #endif
 }
 
-#if 0
-void KPresenterView::spellCheckerReady()
-{
-    kdDebug()<<"void KPresenterView::spellCheckerReady() ******************\n";
-    // Spell-check the next paragraph
-    Q_ASSERT( m_spell.textIterator );
-    if ( !m_spell.textIterator->atEnd() )
-    {
-        bool textIsEmpty = true;
-        QString text;
-        while ( textIsEmpty && !m_spell.textIterator->atEnd() )
-        {
-            text = m_spell.textIterator->currentText();
-            // Determine if text has any non-space character, otherwise there's nothing to spellcheck
-            for ( uint i = 0 ; i < text.length() ; ++ i )
-                if ( !text[i].isSpace() ) {
-                    textIsEmpty = false;
-                    break;
-                }
-            if ( textIsEmpty )
-                ++(*m_spell.textIterator);
-        }
-        if ( !textIsEmpty )
-        {
-            kdDebug() << "Checking " << text << endl;
-            text += '\n'; // end of paragraph
-            text += '\n'; // empty line required by kspell
-            m_spell.kospell->check( text);
-            kdDebug()<<" check :"<<text<<endl;
-            // ??? textfs->textObject()->setNeedSpellCheck(true);
-            return;
-        }
-    }
-
-    // Done
-    if ( m_spell.textIterator->options() & KFindDialog::SelectedText )
-    {
-        KMessageBox::information(this,
-                                 i18n("Spellcheck selection finished."),
-                                 i18n("Spell Checking"));
-    }
-
-    //kdDebug(33001) << "KPresenterView::spellCheckerReady done" << endl;
-    if(!switchInOtherPage(i18n( "Do you want to spellcheck new slide?")))
-    {
-        // Done
-        m_pKPresenterDoc->setReadWrite(true);
-        clearSpellChecker();
-    }
-    else
-    {
-        QValueList<KoTextObject *> objects;
-        objects = spellAddTextObject();
-        delete m_spell.textIterator;
-        m_spell.textIterator = new KoTextIterator( objects, 0L, 0 );
-
-        spellCheckerReady();
-    }
-}
-#endif
 
 
 void KPresenterView::spellCheckerCancel()
@@ -4937,6 +4878,10 @@ void KPresenterView::clearSpellChecker(bool cancelSpellCheck)
 {
 #ifdef HAVE_LIBKSPELL2
     kdDebug() << "KPresenterView::clearSpellChecker()" << endl;
+    delete m_spell.textIterator;
+    m_spell.textIterator = 0L;
+
+
     delete m_spell.kospell;
     m_spell.kospell = 0;
     m_initSwitchPage = -1;
@@ -4959,8 +4904,6 @@ void KPresenterView::clearSpellChecker(bool cancelSpellCheck)
 
     m_spell.replaceAll.clear();
 
-    delete m_spell.textIterator;
-    m_spell.textIterator = 0L;
 #endif
 }
 
@@ -6848,6 +6791,7 @@ void KPresenterView::addWordToDictionary()
         QString word = edit->wordUnderCursor( *edit->cursor() );
         if ( !word.isEmpty() )
             m_pKPresenterDoc->addWordToDictionary( word );
+        m_pKPresenterDoc->reactivateBgSpellChecking();
     }
 }
 

@@ -4214,9 +4214,12 @@ KPresenterView *KPresenterDoc::firstView() const
 
 void KPresenterDoc::addWordToDictionary( const QString & word)
 {
-    //FIXME !!!!
-    //if ( m_bgSpellCheck )
-    //m_bgSpellCheck->addPersonalDictonary( word );
+#ifdef HAVE_LIBKSPELL2
+    if ( m_bgSpellCheck )
+    {
+        //m_bgSpellCheck->addPersonalDictonary( word );
+    }
+#endif
 }
 
 #include "kpresenter_doc.moc"
