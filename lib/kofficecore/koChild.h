@@ -45,8 +45,9 @@ public:
 
   /**
    *  Sets a new geometry for this child document.
+   *  Use noEmit = true if you do not want the 'changed'-signal to be emitted
    */
-  virtual void setGeometry( const QRect &rect );
+  virtual void setGeometry( const QRect &rect, bool noEmit = false );
 
   /**
    * @return the rectangle that would be used to display this

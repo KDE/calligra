@@ -69,7 +69,7 @@ KoChild::~KoChild()
   delete d;
 }
 
-void KoChild::setGeometry( const QRect &rect )
+void KoChild::setGeometry( const QRect &rect, bool noEmit )
 {
   if ( !d->m_lock )
     d->m_old = framePointArray();
@@ -78,7 +78,7 @@ void KoChild::setGeometry( const QRect &rect )
 
   updateMatrix();
 
-  if ( !d->m_lock )
+  if ( !d->m_lock && !noEmit )
     emit changed( this );
 }
 
