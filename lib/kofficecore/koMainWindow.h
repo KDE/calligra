@@ -127,6 +127,8 @@ public:
 
     void reloadRecentFileList();
 
+    void updateCaption( const QString caption, bool mod ); // BCI: make virtual
+
 signals:
     /**
      * This signal is emitted if the document has been saved successfully.

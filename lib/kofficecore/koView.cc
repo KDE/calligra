@@ -147,11 +147,13 @@ KoView::KoView( KoDocument *document, QWidget *parent, const char *name )
       connect( coll, SIGNAL( clearStatusText() ),
                this, SLOT( slotClearStatusText() ) );
   }
+  d->m_doc->setCurrent();
 }
 
 KoView::~KoView()
 {
   kdDebug(30003) << "KoView::~KoView " << this << endl;
+  d->m_doc->setCurrent( false );
   delete d->m_dcopObject;
   if ( koDocument() && !koDocument()->isSingleViewMode() )
   {

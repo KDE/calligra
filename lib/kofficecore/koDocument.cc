@@ -89,7 +89,8 @@ public:
         m_shouldCheckAutoSaveFile( true ),
         m_backupFile( true ),
         m_backupPath( QString::null ),
-        m_doNotSaveExtDoc( false ) 
+        m_doNotSaveExtDoc( false ),
+        m_current( false )
         {}
 
     QPtrList<KoView> m_views;
@@ -116,6 +117,7 @@ public:
     bool m_backupFile;
     QString m_backupPath;
     bool m_doNotSaveExtDoc; // makes it possible to save only internally stored child documents
+    bool m_current; 
 };
 
 // Used in singleViewMode
@@ -1459,24 +1461,56 @@ int KoDocument::queryCloseExternalChildren()
     return KMessageBox::Ok;
 }
 
-void KoDocument::setTitleModified()
+void KoDocument::setTitleModified( const QString caption, bool mod )
 {
-    //kdDebug()<<k_funcinfo<<" this doc: "<<url().url()<<" shells="<<shellCount()<<endl;
-    if ( !isStoredExtern() )  //###TODO: Handle caption when external embedded doc is selected/modified
+    //kdDebug()<<k_funcinfo<<" url: "<<url().url()<<" caption: "<<caption<<" mod: "<<mod<<endl;
+    KoDocument *doc = dynamic_cast<KoDocument *>( parent() );
+    if ( doc )
     {
-        KoDocument *doc = dynamic_cast<KoDocument *>( parent() );
-        if ( doc )
-        {
-            //kdDebug()<<k_funcinfo<<" Embedded in: "<<doc->url().url()<<endl;
-            doc->setTitleModified();
-        }
+        doc->setTitleModified( caption, mod );
         return;
     }
-        
-    // Update caption in all related windows
+    // we must be root doc so update caption in all related windows
     QPtrListIterator<KoMainWindow> it( d->m_shells );
     for (; it.current(); ++it )
-        it.current()->updateCaption();
+        it.current()->updateCaption( caption, mod );
+}
+
+void KoDocument::setTitleModified()
+{
+    //kdDebug()<<k_funcinfo<<" url: "<<url().url()<<" extern: "<<isStoredExtern()<<" current: "<<d->m_current<<endl;
+    KoDocument *doc = dynamic_cast<KoDocument *>( parent() );
+    QString caption;
+    if ( isStoredExtern() && d->m_current )
+    {
+        // Get caption from document info (title(), in about page)
+        if ( documentInfo() )
+        {
+            KoDocumentInfoPage * page = documentInfo()->page( QString::fromLatin1("about") );
+            if (page)
+                caption = static_cast<KoDocumentInfoAbout *>(page)->title();
+        }
+        if ( caption.isEmpty() )
+            caption = url().prettyURL();             // Fall back to document URL
+            
+        //kdDebug()<<k_funcinfo<<" url: "<<url().url()<<" caption: "<<caption<<endl;
+        if ( doc )
+        {
+            doc->setTitleModified( caption, isModified() );
+            return;
+        }
+        else
+        {
+            // we must be root doc so update caption in all related windows
+            setTitleModified( caption, isModified() );
+            return;
+        }
+    }
+    if ( doc )
+    {
+        // internal doc or not current doc, so pass on the buck
+        doc->setTitleModified();
+    }
 }
 
 bool KoDocument::loadChildren( KoStore* )
@@ -1646,6 +1680,47 @@ QString KoDocument::backupPath()const
     return d->m_backupPath;
 }
 
+void KoDocument::setCurrent( bool on )
+{
+    //kdDebug()<<k_funcinfo<<" url: "<<url().url()<<" set to: "<<on<<endl;
+    KoDocument *doc = dynamic_cast<KoDocument *>( parent() );
+    if ( doc )
+    {
+        if ( !isStoredExtern() )
+        {
+            // internal doc so set next external to current (for safety) 
+            doc->setCurrent( true );
+            return;
+        }
+        // only externally stored docs shall have file name in title
+        d->m_current = on;    
+        if ( !on )
+        {
+            doc->setCurrent( true );    // let my next external parrent take over
+            return;
+        }
+        doc->forceCurrent( false ); // everybody else should keep off
+    }
+    else
+        d->m_current = on;
+        
+    setTitleModified();
+}
 
+void KoDocument::forceCurrent( bool on )
+{
+    //kdDebug()<<k_funcinfo<<" url: "<<url().url()<<" force to: "<<on<<endl;
+    d->m_current = on;
+    KoDocument *doc = dynamic_cast<KoDocument *>( parent() );
+    if ( doc )
+    {
+        doc->forceCurrent( false );
+    }
+}
+
+bool KoDocument::isCurrent() const
+{
+    return d->m_current;
+}
 #include <koDocument.moc>
 #include <koDocument_p.moc>

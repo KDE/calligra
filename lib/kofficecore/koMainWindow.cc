@@ -435,8 +435,8 @@ void KoMainWindow::updateCaption()
   //kdDebug(30003) << "KoMainWindow::updateCaption()" << endl;
   if ( !d->m_rootDoc )
     setCaption(QString::null);
-  else
-  {
+  else if ( rootDocument()->isCurrent() )
+  {   
       QString caption;
       // Get caption from document info (title(), in about page)
       if ( rootDocument()->documentInfo() )
@@ -451,6 +451,12 @@ void KoMainWindow::updateCaption()
 
       setCaption( caption, rootDocument()->isModified() );
   }
+}
+
+void KoMainWindow::updateCaption( QString caption, bool mod )
+{
+  //kdDebug(30003)<<"KoMainWindow::updateCaption("<<caption<<","<<mod<<")"<<endl;
+  setCaption( caption, mod );
 }
 
 KoDocument *KoMainWindow::rootDocument() const

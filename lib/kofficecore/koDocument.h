@@ -518,7 +518,21 @@ public:
 
     QString backupPath()const;
 
-
+    /**
+     * Indicates that this document is currently viewed 
+     * and thus should control the title caption.
+     * Also resets current flag for all parents.
+     */
+    void setCurrent( bool on = true );
+    
+    /**
+     * Sets current flag for this document and all its parents
+     */
+    void forceCurrent( bool on );
+    bool isCurrent() const;
+    
+    void setTitleModified( const QString caption, bool mod );
+        
 signals:
     /**
      * This signal is emitted, if a direct or indirect child document changes
