@@ -1,3 +1,9 @@
+koffice (1:1.1.0-final-5) unstable; urgency=low
+
+  * Updated parameters for alpha build.
+
+ -- Ben Burton <benb@acm.org>  Sun, 23 Sep 2001 23:07:01 -0500
+
 koffice (1:1.1.0-final-4) unstable; urgency=low
 
   * objprelink: now you see it, now you don't (removed).
