@@ -20,19 +20,18 @@
 #ifndef KEXIPARTDATASOURCE_H
 #define KEXIPARTDATASOURCE_H
 
-#include "kexi.h"
-
-
 class KexiProject;
 namespace KexiDB
 {
 	class FieldList;
+	class Cursor;
 }
 
 namespace KexiPart
 {
 
 	class Item;
+	class Part;
 /**
  * this class provides a datasource framework for e.g. tables and queries
  * using this framework one can query for

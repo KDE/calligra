@@ -32,6 +32,8 @@
 
 #include <kexidb/object.h>
 
+#include "kexipartdatasource.h"
+
 namespace KexiDB
 {
 	class Connection;
@@ -41,7 +43,7 @@ namespace KexiPart
 {
 	class Info;
 	class Part;
-	class DataSource;
+//	class DataSource;
 
 	struct Missing
 	{
