@@ -99,7 +99,7 @@ public:
    *  @return TRUE if the document can handle the requested mimetype.
    */
   bool supportsMimeType( const char* _mimetype ) const
-  { return ( mimeTypes.find( _m ) != mimeTypes.end() ); }
+  { return ( mimeTypes.find( _mimetype ) != mimeTypes.end() ); }
 
   /**
    *  Uses the factory of the component (@ref #reference) to create
