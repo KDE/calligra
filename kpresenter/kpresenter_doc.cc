@@ -3187,7 +3187,11 @@ int KPresenterDoc::insertPage( int _page, InsertPos _insPos, bool chooseTemplate
 
     if ( _insPos == IP_AFTER )
 	_page++;
-    objStartY = getPageRect( _page - 1, 0, 0 ).y() + getPageRect( _page - 1, 0, 0 ).height();
+
+    if ( _page == 0 )
+        objStartY = -1;
+    else
+        objStartY = getPageRect( _page - 1, 0, 0 ).y() + getPageRect( _page - 1, 0, 0 ).height();
     loadNativeFormat( fileName );
     objStartY = 0;
     _clean = true;
