@@ -2,10 +2,10 @@
 #include <qfile.h>
 #include <qxml.h>
 
-#include "kwordparser.h"
-#include "kworddocument.h"
+#include "kword13parser.h"
+#include "kword13document.h"
 
-int main( int argc, char **argv )
+int tempmain( int argc, char **argv )
 {
     QApplication a( argc, argv );		// QApplication required!
 
