@@ -136,6 +136,8 @@ public:
     void processImageRequests();
     void processAnchorRequests();
 
+    virtual KoDocument *hitTest( const QPoint &pos, const QWMatrix &matrix );
+
     int syntaxVersion( ) const { return m_syntaxVersion; }
 
     // Called by KWFrame*'s loading code to emit correct progress info
