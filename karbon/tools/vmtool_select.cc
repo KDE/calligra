@@ -53,7 +53,8 @@ VMToolSelect::drawTemporaryObject( KarbonView* view )
 
 		// move operation
 		QWMatrix mat;
-		mat.translate( m_lp.x() - m_fp.x(), m_lp.y() - m_fp.y() );
+		mat.translate(	( m_lp.x() - m_fp.x() ) / view->zoomFactor(),
+						( m_lp.y() - m_fp.y() ) / view->zoomFactor() );
 
 		// TODO :  makes a copy of the selection, do assignment operator instead
 		VObjectListIterator itr = part()->selection();
@@ -77,12 +78,12 @@ VMToolSelect::drawTemporaryObject( KarbonView* view )
 	else
 	{
 		painter->setPen( Qt::DotLine );
-		painter->drawRect( m_fp.x(), m_fp.y(), m_lp.x() - m_fp.x(), m_lp.y() - m_fp.y() );
-		/*painter.moveTo( m_fp.x(), m_fp.y() );
-		painter.lineTo( m_lp.x(), m_fp.y() );
-		painter.lineTo( m_lp.x(), m_lp.y() );
-		painter.lineTo( m_fp.x(), m_lp.y() );
-		painter.lineTo( m_fp.x(), m_fp.y() );*/
+		painter->moveTo( KoPoint( m_fp.x(), m_fp.y() ) );
+		painter->lineTo( KoPoint( m_lp.x(), m_fp.y() ) );
+		painter->lineTo( KoPoint( m_lp.x(), m_lp.y() ) );
+		painter->lineTo( KoPoint( m_fp.x(), m_lp.y() ) );
+		painter->lineTo( KoPoint( m_fp.x(), m_fp.y() ) );
+		painter->strokePath();
 
 		m_state = normal;
 	}
@@ -123,8 +124,8 @@ VMToolSelect::eventFilter( KarbonView* view, QEvent* event )
 				new VMCmdTranslate(
 					part(),
 					part()->selection(),
-					qRound( lp.x() - fp.x() ),
-					qRound( lp.y() - fp.y() ) ),
+					qRound( ( lp.x() - fp.x() ) / view->zoomFactor() ),
+					qRound( ( lp.y() - fp.y() ) / view->zoomFactor() ) ),
 				true );
 
 //			part()->repaintAllViews();
@@ -138,10 +139,10 @@ VMToolSelect::eventFilter( KarbonView* view, QEvent* event )
 
 			part()->selectObjectsWithinRect(
 				QRect(
-					qRound( view->zoomFactor() * fp.x() ),
-					qRound( view->zoomFactor() * fp.y() ),
-					qRound( view->zoomFactor() * ( lp.x() - fp.x() ) ),
-					qRound( view->zoomFactor() * ( lp.y() - fp.y() ) ) ).normalize(),
+					qRound( /*view->zoomFactor() */ fp.x() ),
+					qRound( /*view->zoomFactor() */ fp.y() ),
+					qRound( /*view->zoomFactor() */ ( lp.x() - fp.x() ) ),
+					qRound( /*view->zoomFactor() */ ( lp.y() - fp.y() ) ) ).normalize(),
 				view->zoomFactor(),
 				true );
 				

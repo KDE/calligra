@@ -123,8 +123,8 @@ VKoPainter::moveTo( const KoPoint &p )
 	m_index = 0;
 
 	m_path[ m_index ].code = ART_MOVETO;
-	m_path[ m_index ].x3	= p.x();
-	m_path[ m_index ].y3	= p.y();
+	m_path[ m_index ].x3	= p.x() * m_zoomFactor;
+	m_path[ m_index ].y3	= p.y() * m_zoomFactor;
 
 	m_index++;
 }
@@ -133,8 +133,8 @@ void
 VKoPainter::lineTo( const KoPoint &p )
 {
 	m_path[ m_index ].code = ART_LINETO;
-	m_path[ m_index ].x3	= p.x();
-	m_path[ m_index ].y3	= p.y();
+	m_path[ m_index ].x3	= p.x() * m_zoomFactor;
+	m_path[ m_index ].y3	= p.y() * m_zoomFactor;
 
 	m_index++;
 }
@@ -143,12 +143,12 @@ void
 VKoPainter::curveTo( const KoPoint &p1, const KoPoint &p2, const KoPoint &p3 )
 {
 	m_path[ m_index ].code = ART_CURVETO;
-	m_path[ m_index ].x1	= p1.x();
-	m_path[ m_index ].y1	= p1.y();
-	m_path[ m_index ].x2	= p2.x();
-	m_path[ m_index ].y2	= p2.y();
-	m_path[ m_index ].x3	= p3.x();
-	m_path[ m_index ].y3	= p3.y();
+	m_path[ m_index ].x1	= p1.x() * m_zoomFactor;
+	m_path[ m_index ].y1	= p1.y() * m_zoomFactor;
+	m_path[ m_index ].x2	= p2.x() * m_zoomFactor;
+	m_path[ m_index ].y2	= p2.y() * m_zoomFactor;
+	m_path[ m_index ].x3	= p3.x() * m_zoomFactor;
+	m_path[ m_index ].y3	= p3.y() * m_zoomFactor;
 
 	m_index++;
 }
@@ -302,8 +302,8 @@ VKoPainter::drawVPath( ArtVpath *vec )
 	affine[3] = m_zoomFactor;//m_matrix.m22();
 	affine[4] = 0;//m_matrix.dx();
 	affine[5] = 0;//m_matrix.dy();
-	ArtVpath *temp = art_vpath_affine_transform( vec, affine );
-	vec = temp;
+	//ArtVpath *temp = art_vpath_affine_transform( vec, affine );
+	//vec = temp;
 
 	int r = 0;
 	int g = 0;
