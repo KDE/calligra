@@ -1420,6 +1420,15 @@ bool Connection::setupObjectSchemaData( int objectID, SchemaData &sdata )
 	return setupObjectSchemaData( data, sdata );
 }
 
+bool Connection::findObjectSchemaData( int objectType, const QString& objectName, SchemaData &sdata )
+{
+	RowData data;
+	if (!querySingleRecord(QString("select o_id, o_type, o_name, o_caption, o_desc from kexi__objects where o_type=%1 and o_name=%2")
+		.arg(objectType).arg(m_driver->valueToSQL(Field::Text, objectName)), data))
+		return false;
+	return setupObjectSchemaData( data, sdata );
+}
+
 bool Connection::storeObjectSchemaData( SchemaData &sdata, bool newObject )
 {
 	TableSchema *ts = m_tables_byname["kexi__objects"];

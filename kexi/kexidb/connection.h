@@ -507,6 +507,15 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 \return true on success. */
 		bool storeObjectSchemaData( SchemaData &sdata, bool newObject );
 
+		/*! Added for convenience. 
+		 \sa setupObjectSchemaData( const KexiDB::RowData &data, SchemaData &sdata ) */
+		bool setupObjectSchemaData( int objectID, SchemaData &sdata );
+
+		/*! Finds object schema data for object of type \a obejctType and name \a objectName.
+		 If the object is found, resulted schema is stored in \a sdata and true is returned,
+		 otherwise false is returned. */
+		bool findObjectSchemaData( int objectType, const QString& objectName, SchemaData &sdata );
+
 	protected:
 		/*! Used by Driver */
 		Connection( Driver *driver, ConnectionData &conn_data );
@@ -714,10 +723,6 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 			corresponding to given object. */
 		bool setupObjectSchemaData( const KexiDB::RowData &data, SchemaData &sdata );
 
-		/*! Added for convenience. 
-		 \sa setupObjectSchemaData( const KexiDB::RowData &data, SchemaData &sdata ) */
-		bool setupObjectSchemaData( int objectID, SchemaData &sdata );
-		
 		/*! Setups full table schema for table \a t using 'kexi__*' system tables. 
 			Used internally by tableSchema() methods. */
 		KexiDB::TableSchema* setupTableSchema( const KexiDB::RowData &data );
