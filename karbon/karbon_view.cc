@@ -252,12 +252,15 @@ KarbonView::ellipseTool()
 void
 KarbonView::polygonTool()
 {
-	if( s_currentTool == VCToolPolygon::instance( m_part ) )
-		( (VShapeTool *) s_currentTool )->showDialog();
-	else
+	if( shell()->rootView() == this )
 	{
-		s_currentTool = VCToolPolygon::instance( m_part );
-		m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
+		if( s_currentTool == VCToolPolygon::instance( m_part ) )
+			( (VShapeTool *) s_currentTool )->showDialog();
+		else
+		{
+			s_currentTool = VCToolPolygon::instance( m_part );
+			m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
+		}
 	}
 }
 
@@ -271,12 +274,15 @@ KarbonView::rectangleTool()
 void
 KarbonView::roundRectTool()
 {
-	if( s_currentTool == VCToolRoundRect::instance( m_part ) )
-		( (VShapeTool *) s_currentTool )->showDialog();
-	else
+	if( shell()->rootView() == this )
 	{
-		s_currentTool = VCToolRoundRect::instance( m_part );
-		m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
+		if( s_currentTool == VCToolRoundRect::instance( m_part ) )
+			( (VShapeTool *) s_currentTool )->showDialog();
+		else
+		{
+			s_currentTool = VCToolRoundRect::instance( m_part );
+			m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
+		}
 	}
 }
 
@@ -333,36 +339,45 @@ KarbonView::shearTool()
 void
 KarbonView::sinusTool()
 {
-	if( s_currentTool == VCToolSinus::instance( m_part ) )
-		( (VShapeTool *) s_currentTool )->showDialog();
-	else
+	if( shell()->rootView() == this )
 	{
-		s_currentTool = VCToolSinus::instance( m_part );
-		m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
+		if( s_currentTool == VCToolSinus::instance( m_part ) )
+			( (VShapeTool *) s_currentTool )->showDialog();
+		else
+		{
+			s_currentTool = VCToolSinus::instance( m_part );
+			m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
+		}
 	}
 }
 
 void
 KarbonView::spiralTool()
 {
-	if( s_currentTool == VCToolSpiral::instance( m_part ) )
-		( (VShapeTool *) s_currentTool )->showDialog();
-	else
+	if( shell()->rootView() == this )
 	{
-		s_currentTool = VCToolSpiral::instance( m_part );
-		m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
+		if( s_currentTool == VCToolSpiral::instance( m_part ) )
+			( (VShapeTool *) s_currentTool )->showDialog();
+		else
+		{
+			s_currentTool = VCToolSpiral::instance( m_part );
+			m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
+		}
 	}
 }
 
 void
 KarbonView::starTool()
 {
-	if( s_currentTool == VCToolStar::instance( m_part ) )
-		( (VShapeTool *) s_currentTool )->showDialog();
-	else
+	if( shell()->rootView() == this )
 	{
-		s_currentTool = VCToolStar::instance( m_part );
-		m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
+		if( s_currentTool == VCToolStar::instance( m_part ) )
+			( (VShapeTool *) s_currentTool )->showDialog();
+		else
+		{
+			s_currentTool = VCToolStar::instance( m_part );
+			m_canvas->viewport()->setCursor( QCursor( crossCursor ) );
+		}
 	}
 }
 
@@ -402,15 +417,21 @@ KarbonView::zoomChanged()
 void
 KarbonView::solidFillClicked()
 {
-	VMDlgSolidFill* m_solidFillDialog = new VMDlgSolidFill( m_part );
-	m_solidFillDialog->show();
+	if( shell()->rootView() == this )
+	{
+		VMDlgSolidFill* m_solidFillDialog = new VMDlgSolidFill( m_part );
+		m_solidFillDialog->show();
+	}
 }
 
 void
 KarbonView::strokeClicked()
 {
-	VMDlgStroke* m_strokeDialog = new VMDlgStroke( m_part );
-	m_strokeDialog->show();
+	if( shell()->rootView() == this )
+	{
+		VMDlgStroke* m_strokeDialog = new VMDlgStroke( m_part );
+		m_strokeDialog->show();
+	}
 }
 
 void
