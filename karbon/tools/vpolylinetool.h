@@ -39,7 +39,7 @@ class VComposite;
 /**
  * The polyline tool.
  *
- * When the tool is doActivated, you draw your polyline until the tool is 
+ * When the tool is activated, you draw your polyline until the tool is 
  * deactivated.
  * When the mouse button is pressed, you add a Bezier node and sets the vector by 
  * dragging it.
