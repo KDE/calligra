@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="kexi" version="112">
+<kpartgui name="kexi" version="113">
 <MenuBar noMerge="0">
   <Menu name="file" noMerge="1">
     <text>&amp;Project</text>
@@ -22,9 +22,9 @@
       <Action name="import_file" />
       <Action name="import_server" />
     </Menu>
-    <Menu name="project_export">
+    <!-- Menu name="project_export">
       <text>&amp;Export</text>
-    </Menu>
+    </Menu -->
     <Separator />
     <Action name="project_relations"/>
     <Action name="project_properties"/>
