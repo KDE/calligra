@@ -1638,6 +1638,11 @@ void Page::setDecreaseFontSize()
 /*===================== set text alignment =======================*/
 void Page::setTextAlign( int align )
 {
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    for ( ; it.current() ; ++it )
+        it.current()->setAlign(align);
+#if 0
     // TODO parag-level settings in KoTextFormatInterface
     if ( m_currentTextObjectView ) {
         KCommand *cmd =m_currentTextObjectView->setAlignCommand( align );
@@ -1651,13 +1656,14 @@ void Page::setTextAlign( int align )
             kpobject = objectList()->at( i );
             if ( kpobject->isSelected() && kpobject->getType() == OT_TEXT )
             {
-#if 0
+//#if 0
                 dynamic_cast<KPTextObject*>( kpobject )->textObjectView()->document()->setAlignmentToAll( align );
-#endif
+//#endif
             }
         }
         repaint( FALSE );
     }
+#endif
 }
 
 /*================================================================*/
