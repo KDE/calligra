@@ -61,6 +61,8 @@ TODO: [complexity=small] add dynamic resize for dict members like Connection::m_
 TODO: [complexity=big] make KexiDB really ASYNC, multithreaded!
 TODO: [complexity=big] add command line kexi tools
 
+TODO: install kexi-specific icons in apps/kexi/icons not is global
+
 TODO(GUI):
 -add "Change data source" button in project wizard
 -after pressing this button, show "connections selection dialog"
@@ -87,6 +89,11 @@ TODO: add schema to kexi__* tables on createTable()
 TODO: add support for creation temporary databases
 TODO: Connection::selectStatement( KexiDB::QuerySchema& querySchema ) :
 		--add WHERE and other sql parts
+
+
+TODO: use KShared and KSharedPtr for Transaction and DriverManger class instead
+TODO: add kexi's global.h 
+TODO: add Q_LLONG to kexi global.h is not exists
 
 TODO: add to field's properties list: input mask, validation rule, column width
 
@@ -145,6 +152,9 @@ Jowenn's KexiDataProvider class functionality seems to be something like kexidb 
 
 </RENAME_PROPOSALS>
 
+TODO:
+- add kexi__parts (p_id integer, p_type) table and appropriate part objects in kexi__objects
+
 TODO: (tableview):
 - add top-left putton that allow select all rows
 - enable clicked vheader button to select given row
@@ -153,9 +163,33 @@ TODO: (tableview):
 - enable up/down moving even when cell editor is activated
 
 TODO:
-- In mysql and pgsql drivers Connection::fileName() is reused for socket names.
+- In mysql and pgsql drivers ConnectionData::fileName() is reused for socket names.
   It's not ok. Add another member: localSocketFileName(), because fileName() 
   is for file-based engines only.
+
+TODO:  CURSOR
+- m_readAhead: in Cursor::open():
+	if (!m_readAhead) // jowenn: to ensure before first state, without cluttering implementation code
+		m_readAhead = drv_getNextRecord(); //true if any record in this query
+  ---FIX THIS for other drivers than SQLITE
+
+TODO: Change "File" menu entry to "Database"
+TODO: add sorting projects information using KexiProjectData::lastOpened
+TODO: also add this info as "Database>Open Recent" menu subentry
+
+2003-10-29
+- KexiProjectSelectorWidget introduced
+- KexiProjectData structure added
+
+2003-10-28
+- KexiStartupDialog introduced
+- KexiDB::ConnectionData: now offers (optional) driverName info
+- KexiDB::Driver::Info (short usefull structure) is now offered by DriverManager
+- ConnectionData::localSocketFileName optional attribute added
+ 
+2003-10-23
+- new icons for few kexi-specific contexts;
+- most icons are installed into Kexi app dir
 
 2003-10-22
 - KexiTableView: 
@@ -164,7 +198,7 @@ TODO:
  - better "ensure visible" code when scrolling on small area
  - inserting rows code completed
  - vheader repaint fixed
- 
+
 2003-10-21
 - tests/newapi : Now all test types accept <db_name>
 - KexiTableView: 

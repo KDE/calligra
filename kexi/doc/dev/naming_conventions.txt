@@ -94,3 +94,9 @@ use \param tag, e.g.:
 -example above shows that adding e.g. own nick inside the brackets what can help 
 to recognise who marked given fragment.
 
+4. Indentation
+We ae use the rule as in the rest of KDE code.
+example:
+	QString		objectName(); //wrong
+	QString objectName(); //wrong
+rule: dont use tabs between words.
