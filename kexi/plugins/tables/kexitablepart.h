@@ -22,6 +22,7 @@
 #define KEXITABLEPART_H
 
 #include <kexipart.h>
+#include <kexipartitem.h>
 
 class KexiMainWin;
 
@@ -33,7 +34,7 @@ class KexiTablePart : public KexiPart::Part
 		KexiTablePart(QObject *parent, const char *name, const QStringList &);
 		~KexiTablePart();
 
-		virtual void	execute(KexiMainWindow *win, const QString &table);
+		virtual void	execute(KexiMainWindow *win, const KexiPart::Item &);
 		virtual void    createGUIClient(KexiMainWindow *win);
 };
 

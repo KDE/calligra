@@ -50,9 +50,9 @@ KexiTablePart::KexiTablePart(QObject *parent, const char *name, const QStringLis
 }
 
 void
-KexiTablePart::execute(KexiMainWindow *win, const QString &table)
+KexiTablePart::execute(KexiMainWindow *win, const KexiPart::Item &item)
 {
-	KexiDB::TableSchema *sch = win->project()->dbConnection()->tableSchema(table);
+	KexiDB::TableSchema *sch = win->project()->dbConnection()->tableSchema(item.name());
 	kdDebug() << "KexiTablePart::execute(): schema is " << sch << endl;
 	if(!sch)
 		return;
@@ -63,7 +63,8 @@ KexiTablePart::execute(KexiMainWindow *win, const QString &table)
 	if(!c)
 		return;
 
-	KexiDataTable *t = new KexiDataTable(win, i18n("%1 - Table").arg(table), c);
+	KexiDataTable *t = new KexiDataTable(win, i18n("%1 - Table").arg(item.name()), c);
+	t->setDocID(item.identifier());
 }
 
 void
