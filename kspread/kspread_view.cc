@@ -1722,10 +1722,12 @@ void KSpreadView::resizeEvent( QResizeEvent * )
     m_pTabBar->setGeometry( 64, height() - 16, width() / 2 - 64, 16 );
     m_pTabBar->show();
 
-    // TODO: move the scrollbars to KSpreadCanvas, but keep those resize statements
+    // David's suggestion: move the scrollbars to KSpreadCanvas, but keep those resize statements
     m_pHorzScrollBar->setGeometry( width() / 2, height() - 16, width() / 2 - 16, 16 );
+    m_pHorzScrollBar->setSteps( 20 /*linestep*/, m_pHorzScrollBar->width() /*pagestep*/);
     m_pHorzScrollBar->show();
     m_pVertScrollBar->setGeometry( width() - 16, top , 16, height() - 16 - top );
+    m_pVertScrollBar->setSteps( 20 /*linestep*/, m_pVertScrollBar->height() /*pagestep*/);
     m_pVertScrollBar->show();
 
     m_pFrame->setGeometry( 0, top, width() - 16, height() - 16 - top );
