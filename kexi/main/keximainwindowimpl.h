@@ -53,15 +53,11 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		//! Project data of currently opened project or NULL if no project here yet.
 		virtual KexiProject *project();
 
-		/**
-		 * registers a dialog for watching and adds it to the view
-		 */
+		/*! Registers dialog \a dlg for watching and adds it to the main window's stack. */
 		virtual void registerChild(KexiDialogBase *dlg);
 
-		/**
-		 * activates a window by it's document identifier
-		 * @returns false if doc couldn't be raised or isn't opened
-		 */
+		/*! Activates a window by it's document identifier.
+		 \return false if doc couldn't be raised or isn't opened. */
 		bool activateWindow(int id);
 
 		/*! Like above, using \a dlg passed explicity. Above method just calls this one. */
@@ -122,48 +118,42 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 			const QString& messageWhenAskingForName = QString::null );
 
 	protected:
-		/**
-		 * Creates navigator (if it's not yet created),
-		 * lookups items for current project and fills the nav. with not-opened items
+		/*!
+		 Creates navigator (if it's not yet created),
+		 lookups items for current project and fills the nav. with not-opened items
 		 */
 		void initNavigator();
 		
 		void initContextHelp();
 		
 		void initPropertyEditor();
-		
+
 		//! reimplementation of events
 //		virtual void	closeEvent(QCloseEvent *);
 
-		/**
-		 * creates standard actions like new, open, save ...
-		 */
+		/*! Creates standard actions like new, open, save ... */
 		void		initActions();
 		
-		/**
-		 * sets up the window from user settings (e.g. mdi mode)
-		 */
+		/*! Sets up the window from user settings (e.g. mdi mode). */
 		void		restoreSettings();
 
-		/**
-		 * writes user settings back
-		 */
+		/*! Writes user settings back. */
 		void		storeSettings();
 		
-		/** Invalidates availability of all actions for current application state.
-		*/
+		/*! Invalidates availability of all actions for current application state. */
 		void invalidateActions();
 
-		/** Invalidates action availability for current application state.
-		 These actions are dependent on curently selected dialog.
-		*/
+		/*! Invalidates action availability for current application state.
+		 These actions are dependent on curently selected dialog. */
 		void invalidateSharedActions(QWidget *w);
 
-		/** Invalidates action availability for current application state.
-		 These actions are only dependent on project availbility, not on curently selected dialog.
-		*/
+		/*! Invalidates action availability for current application state.
+		 These actions only depend on project availability, not on curently selected dialog. */
 		void invalidateProjectWideActions();
 
+		/*! Invalidates action availability for current application state.
+		 These actions only depend on curently selected dialog and currently selected view 
+		 (KexiViewBase derived object) within this dialog. */
 		void invalidateViewModeActions();
 
 		/*! Opens project pointed by \a projectData, \return true on success.
@@ -227,15 +217,10 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		 */
 //js		void		parseCmdLineOptions();
 
-		/**
-		 * this slot is called if a window changes
-		 */
+		/*! This slot is called if a window changes */
 		void activeWindowChanged(KMdiChildView *dlg);
 
-		/**
-		 * this slot is called if a window gets colsed
-		 * and will unregister stuff
-		 */
+		/*! Tthis slot is called if a window gets colsed and will unregister stuff */
 		void childClosed(KMdiChildView *dlg);
 
 		void slotPartLoaded(KexiPart::Part* p);
@@ -248,6 +233,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow
 		//! Shows an error message signaled by project's objects, connections, etc.
 		void showErrorMessage(const QString&,KexiDB::Object *obj);
 		void showErrorMessage(const QString &title, const QString &details = QString::null);
+		void showErrorMessage(const QString &message, Kexi::ObjectStatus *status);
 
 		//! internal - creates and initializes kexi project
 		void createKexiProject(KexiProjectData* new_data);

@@ -474,16 +474,20 @@ KexiMainWindowImpl::initActions()
 #endif
 #endif
 
+#ifdef KEXI_DISABLE_FORMS
 	KToggleAction *toggleaction = new KToggleAction(i18n("Enable Forms"), "", 0, actionCollection(), "options_enable_forms");
-#if KDE_IS_VERSION(3,2,90)
+# if KDE_IS_VERSION(3,2,90)
 	toggleaction->setCheckedState(i18n("Disable Forms"));
-#endif
+# endif
 	d->config->setGroup("Unfinished");
 	if (d->config->readBoolEntry("EnableForms", false)) {
 		slotOptionsEnableForms( true, true );
 		toggleaction->setChecked(true);
 	}
 	connect(toggleaction, SIGNAL(toggled(bool)), this, SLOT(slotOptionsEnableForms(bool)));
+#else
+	slotOptionsEnableForms(true, true);
+#endif
 
 	d->action_configure = KStdAction::preferences(this, SLOT(slotShowSettings()), actionCollection());
 	action->setWhatsThis(i18n("Lets you configure Kexi."));
@@ -1409,7 +1413,6 @@ KexiMainWindowImpl::activateWindow(KexiDialogBase *dlg)
 void
 KexiMainWindowImpl::childClosed(KMdiChildView *v)
 {
-	kdDebug() << "KexiMainWindowImpl::unregisterWindow()" << endl;
 	KexiDialogBase *dlg = static_cast<KexiDialogBase *>(v);
 	d->dialogs.remove(dlg->id());
 
@@ -1456,6 +1459,8 @@ KexiMainWindowImpl::createKexiProject(KexiProjectData* new_data)
 {
 	d->prj = new KexiProject( new_data );
 	connect(d->prj, SIGNAL(error(const QString&,KexiDB::Object*)), this, SLOT(showErrorMessage(const QString&,KexiDB::Object*)));
+	connect(d->prj, SIGNAL(error(const QString&,const QString&)), this, SLOT(showErrorMessage(const QString&,const QString&)));
+
 	if (d->nav)
 		connect(d->prj, SIGNAL(itemRemoved(const KexiPart::Item&)), d->nav, SLOT(slotRemoveItem(const KexiPart::Item&)));
 }
@@ -1674,17 +1679,17 @@ void KexiMainWindowImpl::switchToViewMode(Kexi::ViewMode mode)
 	}
 	if (!d->curDialog->supportsViewMode( mode )) {
 		showErrorMessage(i18n("Selected view mode is not supported for \"%1\" object.")
-		.arg(d->curDialog->partItem()->name()),
+			.arg(d->curDialog->partItem()->name()),
 		i18n("Selected view mode (%1) is not supported by this object type (%2)")
-		.arg(Kexi::nameForViewMode(mode))
-		.arg(d->curDialog->part()->instanceName()) );
+			.arg(Kexi::nameForViewMode(mode))
+			.arg(d->curDialog->part()->instanceName()) );
 		d->toggleLastCheckedMode();
 		return;
 	}
 	bool cancelled;
 	if (!d->curDialog->switchToViewMode( mode, cancelled )) {
-		showErrorMessage(i18n("Switching to other view failed."),
-		Kexi::nameForViewMode(mode) );
+		showErrorMessage(i18n("Switching to other view failed (%1).").arg(Kexi::nameForViewMode(mode)),
+			d->curDialog);
 		d->toggleLastCheckedMode();
 		return;
 	}
@@ -1707,84 +1712,16 @@ void KexiMainWindowImpl::switchToViewMode(Kexi::ViewMode mode)
 void KexiMainWindowImpl::slotViewDataMode()
 {
 	switchToViewMode(Kexi::DataViewMode);
-/*
-	if (!d->curDialog) {
-		d->toggleLastCheckedMode();
-		return;
-	}
-	if (!d->curDialog->supportsViewMode( Kexi::DataViewMode )) {
-		showErrorMessage(i18n("Selected view mode is not supported for \"%1\" object.")
-		.arg(d->curDialog->partItem()->name()),
-		i18n("Selected view mode (%1) is not supported by this object type (%2)")
-		.arg(Kexi::nameForViewMode(Kexi::DataViewMode)
-		.arg(d->curDialog->part()->instanceName()) );
-		d->toggleLastCheckedMode();
-		return;
-	}
-	bool cancelled;
-	if (!d->curDialog->switchToViewMode( Kexi::DataViewMode, cancelled )) {
-		showErrorMessage(i18n("Switching to other view failed."));
-		d->toggleLastCheckedMode();
-		return;
-	}
-	if (cancelled) {
-		d->toggleLastCheckedMode();
-		return;
-	}
-	invalidateSharedActions();
-	*/
 }
 
 void KexiMainWindowImpl::slotViewDesignMode()
 {
 	switchToViewMode(Kexi::DesignViewMode);
-/*
-	if (!d->curDialog) {
-		d->toggleLastCheckedMode();
-		return;
-	}
-	if (!d->curDialog->supportsViewMode( Kexi::DesignViewMode )) {
-		// js TODO error...
-		d->toggleLastCheckedMode();
-		return;
-	}
-	bool cancelled;
-	if (!d->curDialog->switchToViewMode( Kexi::DesignViewMode, cancelled )) {
-		// js TODO error...
-		return;
-	}
-	if (cancelled) {
-		d->toggleLastCheckedMode();
-		return;
-	}
-	invalidateSharedActions();
-*/
 }
 
 void KexiMainWindowImpl::slotViewTextMode()
 {
 	switchToViewMode(Kexi::TextViewMode);
-/*	if (!d->curDialog) {
-		d->toggleLastCheckedMode();
-		return;
-	}
-	if (!d->curDialog->supportsViewMode( Kexi::TextViewMode )) {
-		// js TODO error...
-		d->toggleLastCheckedMode();
-		return;
-	}
-	bool cancelled;
-	if (!d->curDialog->switchToViewMode( Kexi::TextViewMode, cancelled )) {
-		// js TODO error...
-		d->toggleLastCheckedMode();
-		return;
-	}
-	if (cancelled) {
-		d->toggleLastCheckedMode();
-		return;
-	}
-	invalidateSharedActions();
-*/
 }
 
 void
@@ -1814,19 +1751,22 @@ KexiMainWindowImpl::showErrorMessage(const QString &title, KexiDB::Object *obj)
 	}
 	QString details;
 	KexiDB::getHTMLErrorMesage(obj, msg, details);
-
-/*	msg += ("<p>"+obj->errorMsg());
-	QString details;
-	if (!obj->serverErrorMsg().isEmpty())
-		details += "<p><b>" +i18n("Message from server:") + "</b> " + obj->serverErrorMsg();
-	QString resname = obj->serverResultName();
-	if (!resname.isEmpty())
-		details += (QString("<p><b>")+i18n("Server result name:")+"</b> "+resname);
-	if (!details.isEmpty()) {
-		details += (QString("<p><b>")+i18n("Result number:")+"</b> "+QString::number(obj->serverResult()));
-//		KMessageBox::detailedError(this, msg, details);
-	}*/
 	showErrorMessage(msg, details);
+}
+
+void
+KexiMainWindowImpl::showErrorMessage(const QString &message, Kexi::ObjectStatus *status)
+{
+	if (status && status->error()) {
+		QString msg = message;
+		if (status->message.isEmpty())
+			msg += (QString("<br><br>") + status->message);
+		showErrorMessage(msg, status->description);
+	}
+	else {
+		showErrorMessage(message);
+	}
+	status->clearStatus();
 }
 
 void KexiMainWindowImpl::closeWindow(KMdiChildView *pWnd, bool layoutTaskBar)
@@ -2094,7 +2034,7 @@ bool KexiMainWindowImpl::eventFilter( QObject *obj, QEvent * e )
 		KexiVDebug << "MouseButtonPress EVENT " <<  (w ? w->name() : 0) << endl;
 		if (w) {
 			w->setFocus();
-			invalidateSharedActions();
+			invalidateSharedActions(d->curDialog);
 		}
 	}
 	QWidget *w = findWindow(static_cast<QWidget*>(obj));
@@ -2135,10 +2075,11 @@ bool KexiMainWindowImpl::eventFilter( QObject *obj, QEvent * e )
 		//d->nav->setFocus();
 		d->focus_before_popup->setFocus();
 		d->focus_before_popup=0;
+		invalidateSharedActions(d->curDialog);
 		return true;
 	}
 
-	//remember currently focued windowl invalidate act.
+	//remember currently focued window invalidate act.
 	if (e->type()==QEvent::FocusOut) {
 		if (static_cast<QFocusEvent*>(e)->reason()==QFocusEvent::Popup) {
 			if (Kexi::hasParent(d->curDialog, focus_w)) {
@@ -2146,7 +2087,7 @@ bool KexiMainWindowImpl::eventFilter( QObject *obj, QEvent * e )
 				d->focus_before_popup=d->curDialog;
 			}
 			else {
-				invalidateSharedActions(focus_w);
+//not needed???			invalidateSharedActions(focus_w);
 				d->focus_before_popup=focus_w;
 			}
 		}
