@@ -7,41 +7,13 @@
 #define __VSEGMENT_H__
 
 #include <qptrlist.h>
+
 #include <koPoint.h>
 #include <koRect.h>
 
 #include "vglobal.h"
 
 class QDomElement;
-
-// all classes which have to traverse a segment list should derive from this class.
-// it hides the implementation details of segments.
-
-class VSegment;
-class VSegmentList;
-
-class VSegmentListTraverser
-{
-public:
-	VSegmentListTraverser();
-	virtual ~VSegmentListTraverser() {}
-
-	bool traverse( const VSegmentList& list );
-
-	// if one of these operations should fail, it returns false.
-	virtual bool begin( const KoPoint& p ) = 0;
-	virtual bool curveTo( const KoPoint& p1, const KoPoint& p2, const KoPoint& p3 ) = 0;
-	virtual bool curve1To( const KoPoint& p2, const KoPoint& p3 ) = 0;
-	virtual bool curve2To( const KoPoint& p1, const KoPoint& p3 ) = 0;
-	virtual bool lineTo( const KoPoint& p ) = 0;
-	virtual bool end( const KoPoint& p ) = 0;
-
-	const KoPoint& previousPoint() const { return m_previousPoint; }
-	void setPreviousPoint( const KoPoint& p ) { m_previousPoint = p; }
-
-private:
-	KoPoint m_previousPoint;
-};
 
 
 // line- and all the various other (bezier-)segment types are so similar in practise
