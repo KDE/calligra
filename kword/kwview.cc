@@ -3011,7 +3011,8 @@ void KWView::spellCheckerReady()
 {
     for ( unsigned int i = m_spell.spellCurrFrameSetNum + 1; i < m_spell.textFramesets.count(); i++ ) {
         KWTextFrameSet *textfs = m_spell.textFramesets.at( i );
-
+        if(!textfs->isVisible())
+            continue;
         m_spell.spellCurrFrameSetNum = i; // store as number, not as pointer, to implement "go to next frameset" when done
         //kdDebug() << "KWView::spellCheckerReady spell-checking frameset " << m_spellCurrFrameSetNum << endl;
 
@@ -3033,6 +3034,7 @@ void KWView::spellCheckerReady()
     m_spell.kspell->cleanUp();
     delete m_spell.kspell;
     m_spell.kspell = 0;
+    m_spell.textFramesets.clear();
     m_spell.ignoreWord.clear();
 }
 
@@ -3100,7 +3102,10 @@ void KWView::spellCheckerDone( const QString & )
         startKSpell();
     }
     else
+    {
+        m_spell.textFramesets.clear();
         m_ignoreWord.clear();
+    }
 }
 
 void KWView::spellCheckerFinished()
@@ -3121,7 +3126,8 @@ void KWView::spellCheckerFinished()
     ASSERT( fs );
     if ( fs )
         fs->removeHighlight();
-
+    m_spell.textFramesets.clear();
+    m_ignoreWord.clear();
     KWTextFrameSetEdit * edit = currentTextEdit();
     if (edit)
         edit->drawCursor( TRUE );
