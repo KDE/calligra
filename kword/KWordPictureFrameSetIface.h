@@ -29,7 +29,7 @@
 class KWPictureFrameSet;
 class KWordViewIface;
 
-class KWordPictureFrameSetIface :  virtual public KWordFrameSetIface
+class KWordPictureFrameSetIface : public KWordFrameSetIface
 {
     K_DCOP
 public:
@@ -38,6 +38,7 @@ public:
 k_dcop:
     bool keepAspectRatio() const;
     void setKeepAspectRatio( bool b );
+    void loadImage( QString );
 
 private:
     KWPictureFrameSet *m_frame;

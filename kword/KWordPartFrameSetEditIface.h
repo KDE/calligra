@@ -27,7 +27,7 @@
 #include <qcolor.h>
 class KWPartFrameSetEdit;
 
-class KWordPartFrameSetEditIface :  virtual public DCOPObject
+class KWordPartFrameSetEditIface : public DCOPObject
 {
     K_DCOP
 public:

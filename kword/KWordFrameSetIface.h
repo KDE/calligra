@@ -28,7 +28,7 @@
 #include <qbrush.h>
 class KWFrameSet;
 
-class KWordFrameSetIface :  virtual public DCOPObject
+class KWordFrameSetIface : public DCOPObject
 {
     K_DCOP
 public:

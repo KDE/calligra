@@ -27,7 +27,7 @@
 #include <qstringlist.h>
 class KWDocument;
 
-class KWordDocIface : virtual public KoDocumentIface
+class KWordDocIface : public KoDocumentIface
 {
     K_DCOP
 public:

@@ -29,7 +29,7 @@
 class KWTableFrameSet;
 class KWordViewIface;
 
-class KWordTableFrameSetIface :  virtual public KWordFrameSetIface
+class KWordTableFrameSetIface : public KWordFrameSetIface
 {
     K_DCOP
 public:

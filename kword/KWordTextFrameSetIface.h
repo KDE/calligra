@@ -30,7 +30,7 @@
 class KWTextFrameSet;
 class KWordViewIface;
 
-class KWordTextFrameSetIface :  virtual public KWordFrameSetIface
+class KWordTextFrameSetIface : public KWordFrameSetIface
 {
     K_DCOP
 public:

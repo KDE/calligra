@@ -28,7 +28,7 @@
 #include <KoTextViewIface.h>
 class KWTextFrameSetEdit;
 
-class KWordTextFrameSetEditIface :  virtual public KoTextViewIface
+class KWordTextFrameSetEditIface : public KoTextViewIface
 {
     K_DCOP
 public:

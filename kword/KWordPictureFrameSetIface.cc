@@ -19,12 +19,13 @@
 
 #include "KWordPictureFrameSetIface.h"
 #include "kwframe.h"
+#include "kwdoc.h"
 #include <kapplication.h>
 #include <dcopclient.h>
 
 
 KWordPictureFrameSetIface::KWordPictureFrameSetIface( KWPictureFrameSet *_frame )
-    : KWordFrameSetIface( _frame)
+    : KWordFrameSetIface( _frame )
 {
    m_frame = _frame;
 }
@@ -37,4 +38,10 @@ bool KWordPictureFrameSetIface::keepAspectRatio() const
 void KWordPictureFrameSetIface::setKeepAspectRatio( bool b )
 {
   m_frame->setKeepAspectRatio(b);
+}
+
+void KWordPictureFrameSetIface::loadImage( QString image )
+{
+  m_frame->loadImage( image, QSize() );
+  m_frame->kWordDocument()->slotRepaintChanged( m_frame );
 }

@@ -29,7 +29,7 @@
 class KWFormulaFrameSet;
 class KWordViewIface;
 
-class KWordFormulaFrameSetIface :  virtual public KWordFrameSetIface
+class KWordFormulaFrameSetIface : public KWordFrameSetIface
 {
     K_DCOP
 public:
