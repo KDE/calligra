@@ -2739,6 +2739,29 @@ static bool kspreadfunc_fdist( KSContext& context ) {
   return true;
 }
 
+static bool kspreadfunc_chidist( KSContext& context ) {
+  //returns the chi-distribution
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 2, "CHIDIST", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
+    return false;
+
+  double fChi = args[0]->doubleValue();
+  double fDF = args[1]->intValue();
+  
+  if (fDF < 1 || fDF >= 1.0E5 || fChi < 0.0 )
+    return false;
+  
+  context.setValue( new KSValue(GetChiDist(fChi, fDF)));
+  
+  return true;
+}
+
 static bool kspreadfunc_fv( KSContext& context )
 {
 /* Returns future value, given current value, interest rate and time */
@@ -5248,6 +5271,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "CONFIDENCE", new KSValue( new KSBuiltinFunction( module, "CONFIDENCE", kspreadfunc_confidence) ) );
   module->addObject( "TDIST", new KSValue( new KSBuiltinFunction( module, "TDIST", kspreadfunc_tdist) ) );
   module->addObject( "FDIST", new KSValue( new KSBuiltinFunction( module, "FDIST", kspreadfunc_fdist) ) );
+  module->addObject( "CHIDIST", new KSValue( new KSBuiltinFunction( module, "CHIDIST", kspreadfunc_chidist) ) );
 
   return module;
 }

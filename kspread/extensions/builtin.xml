@@ -2879,6 +2879,26 @@
         <Example>FDIST(0.8;8;12) yields 0.61</Example>
       </Help>
     </Function>
+    
+    <Function>
+      <Name>CHIDIST</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>number</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>degrees of freedom</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Help>
+        <Text>
+          Returns the probability value from the indicated Chi square that a hypothesis is confirmed. CHIDIST compares the Chi square value to be given for a random sample that is calculated from the sum of (observed value-expected value)^2/expected value for all values with the theoretical Chi square distribution and determines from this the probability of error for the hypothesis to be tested.
+        </Text>
+        <Syntax>CHIDIST(number;degrees_freedom)</Syntax>
+        <Example>CHIDIST(13.27;5) returns 0.021</Example>
+      </Help>
+    </Function>
 
   </Group>
   <Group>
