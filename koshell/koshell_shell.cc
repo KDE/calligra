@@ -20,6 +20,7 @@
 */
 
 #include <qhbox.h>
+#include <assert.h>
 
 #include "koshell_shell.h"
 
