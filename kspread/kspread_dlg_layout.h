@@ -231,11 +231,14 @@ public slots:
     void init();
     void slotChangeValue(int);
     void formatChanged(int);
+    void currencyChanged(const QString &);
 protected:
     QLineEdit* postfix;
     KIntNumInput* precision;
     QLineEdit* prefix;
     QComboBox *format;
+    QComboBox *currency;
+    QLabel    *currencyLabel;
     QRadioButton *number;
     QRadioButton *percent;
     QRadioButton *date;
@@ -531,7 +534,9 @@ public:
     KSpreadCell::FloatFormat floatFormat;
     bool bFloatFormat;
     KSpreadCell::FloatColor floatColor;
+    KSpreadCell::Currency   cCurrency;
     bool bFloatColor;
+    bool bCurrency;
     QColor textColor;
     bool bTextColor;
     bool bTextFontBold;

@@ -1094,7 +1094,7 @@ void KSpreadCell::setOutputText()
   }
   else if( isTime() )
   {
-    m_strOutText=util_timeFormat( locale(), valueTime(), formatType() );
+    m_strOutText = util_timeFormat( locale(), valueTime(), formatType() );
   }
   else if ( isNumeric() )
   {
@@ -1126,8 +1126,9 @@ void KSpreadCell::setOutputText()
       int start=0;
       if(localizedNumber.find('%')!=-1)
         start=2;
-      else if(localizedNumber.find( locale()->currencySymbol())==((int)(localizedNumber.length()-locale()->currencySymbol().length())))
-        start=locale()->currencySymbol().length()+1;
+      else if (localizedNumber.find( locale()->currencySymbol()) == ((int)(localizedNumber.length() - 
+                                                                           locale()->currencySymbol().length())))
+        start=locale()->currencySymbol().length() + 1;
       else if((start=localizedNumber.find('E'))!=-1)
         start=localizedNumber.length()-start;
       else
@@ -1215,11 +1216,11 @@ QString KSpreadCell::createFormat( double value, int _col, int _row )
         }
         break;
     case Money:
-        localizedNumber = locale()->formatMoney(value,locale()->currencySymbol(),p );
+        localizedNumber = locale()->formatMoney(value, m_currency.symbol, p );
         if( floatFormat( _col, _row) == KSpreadCell::AlwaysSigned && value >= 0 )
         {
-            if(locale()->positiveSign().isNull())
-                localizedNumber='+'+localizedNumber;
+            if (locale()->positiveSign().isNull())
+                localizedNumber = '+' + localizedNumber;
         }
         break;
     case Scientific:
@@ -1692,7 +1693,7 @@ bool KSpreadCell::calc(bool delay)
     }
     else
     {
-      m_strFormulaOut = util_timeFormat(locale(), valueTime(), formatType());
+      m_strFormulaOut = util_timeFormat(locale(), valueTime(), tmpFormat);
     }
   }
   else if ( context.value()->type() == KSValue::DateType)
@@ -3608,6 +3609,50 @@ void KSpreadCell::setValue( double _d )
     clearAllErrors();
     m_dataType = NumericData;
     m_dValue = _d;
+    setFlag(Flag_LayoutDirty);
+    m_content = Text;
+
+    // Do not update formulas and stuff here
+    if ( !m_pTable->isLoading() )
+        update();
+}
+
+void KSpreadCell::setDate( QDate const & date, FormatType type )
+{
+    clearAllErrors();
+    m_strText = util_dateFormat( locale(), date, type);
+    m_Date = date;
+
+    // Free all content data
+    delete m_pQML;
+    m_pQML = 0;
+
+    clearFormula();
+
+    clearAllErrors();
+    m_dataType = type;
+    setFlag(Flag_LayoutDirty);
+    m_content = Text;
+
+    // Do not update formulas and stuff here
+    if ( !m_pTable->isLoading() )
+        update();
+}
+
+void KSpreadCell::setTime( QTime const & time, FormatType type )
+{
+    clearAllErrors();
+    m_strText = util_timeFormat( locale(), time, type);
+    m_Time = time;
+
+    // Free all content data
+    delete m_pQML;
+    m_pQML = 0;
+
+    clearFormula();
+
+    clearAllErrors();
+    m_dataType = type;
     setFlag(Flag_LayoutDirty);
     m_content = Text;
 

@@ -34,6 +34,7 @@ class DCOPObject;
 #include "kspread_global.h"
 
 class KLocale;
+class KSpreadCurrency;
 
 /**
  */
@@ -43,10 +44,11 @@ public:
     enum Align { Left = 1, Center = 2, Right = 3, Undefined = 4 };
     enum AlignY { Top = 1, Middle = 2, Bottom =3 };
     enum FloatFormat { AlwaysSigned = 1, AlwaysUnsigned = 2, OnlyNegSigned = 3 };
-    enum FloatColor { NegRed = 1, AllBlack = 2 };
+    enum FloatColor { NegRed = 1, AllBlack = 2, NegBrackets = 3, NegRedBrackets = 4 };
     enum FormatType { Number=0, Text_format=5, Money=10, Percentage=25, Scientific=30,
                       ShortDate=35, TextDate=36, Time=50, SecondeTime=51,
-                      Time_format1=52, Time_format2=53, Time_format3=54,
+                      Time_format1=52, Time_format2=53, Time_format3=54, Time_format4=55,
+                      Time_format5=56, Time_format6=57,
                       fraction_half=70,fraction_quarter=71,fraction_eighth=72,fraction_sixteenth=73,
                       fraction_tenth=74,fraction_hundredth=75,fraction_one_digit=76,
                       fraction_two_digits=77,fraction_three_digits=78,
@@ -54,7 +56,9 @@ public:
                       date_format5=204,date_format6=205,date_format7=206,date_format8=207,
                       date_format9=208,date_format10=209,date_format11=210,date_format12=211,
                       date_format13=212,date_format14=213,date_format15=214,date_format16=215,
-                      date_format17=216 };
+                      date_format17=216,date_format18=217,date_format19=218,date_format20=219,
+                      date_format21=220,date_format22=221,date_format23=222,date_format24=223,
+                      date_format25=224,date_format26=225};
 
     enum Properties{ PAlign  = 0x01,
 		     PAlignY = 0x02,
@@ -81,6 +85,12 @@ public:
                      PComment = 0x400000,
                      PIndent = 0x800000,
 		     PDontPrintText = 0x1000000};
+
+    struct Currency
+    {
+      int type;
+      QString symbol;
+    };
 
     KSpreadLayout( KSpreadTable *_table );
     virtual ~KSpreadLayout();
@@ -206,6 +216,9 @@ public:
     virtual void setIndent( int _indent );
 
     virtual void setDontPrintText ( bool _b);
+
+    virtual void setCurrency( int type, QString const & symbol );
+
     ////////////////////////////////
     //
     // Methods for querying layout stuff.
@@ -315,8 +328,13 @@ public:
 
     virtual bool hasProperty( Properties p ) const;
 
+    /**
+     * returns false if no currency information is set or
+     * doesn't apply
+     */
+    virtual bool currencyInfo( Currency & currency) const;
 
-
+    QString getCurrencySymbol() const { return m_currency.symbol; }
 
 protected:
     virtual const QPen& rightBorderPen() const;
@@ -462,6 +480,12 @@ protected:
     * Give indent
     */
     int m_indent;
+
+    /**
+     * Currency information:
+     * about which currency from which country
+     */
+    Currency m_currency;
 
 private:
     void setProperty( Properties p );
@@ -754,6 +778,56 @@ protected:
     ColumnLayout* m_next;
     ColumnLayout* m_prev;
     DCOPObject*m_dcop;
+};
+
+class KSpreadCurrency
+{
+ public:
+
+  typedef enum F1 { Gnumeric, OpenCalc, ApplixSpread, 
+                    GobeProductiveSpread, HancomSheet } currencyFormat;
+
+  KSpreadCurrency();
+  ~KSpreadCurrency();
+  
+  KSpreadCurrency(int index);
+  
+  /**
+   * If code doesn't fit to index the index gets ignored
+   */
+  KSpreadCurrency(int index, QString const & code);
+
+  /**
+   * code: e.g. EUR, USD,..
+   * Looks up index, if code found more than once: saved without country info
+   * currencyFormat: in Gnumeric the code is: [$EUR] 
+   *                 saves some work in the filter...
+   */
+  KSpreadCurrency(QString const & code, currencyFormat format);
+  KSpreadCurrency & operator=(int type);
+  KSpreadCurrency & operator=(char const * code);
+  bool operator==(KSpreadCurrency const & cur) const;
+  bool operator==(int type) const;
+  operator int() const;
+
+  QString getCode() const;
+  QString getCountry() const;
+  QString getName() const;
+  QString getDisplayCode() const;
+  int     getIndex() const;
+    
+  static QString getChooseString(int type, bool & ok);
+  static QString getDisplaySymbol(int type);
+  static QString getCurrencyCode( int type);
+
+  /**
+   * Code for use in Gnumeric export filter
+   */
+  QString getExportCode(currencyFormat format) const;
+
+ private:
+  int     m_type;
+  QString m_code;
 };
 
 #endif
