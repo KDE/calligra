@@ -79,7 +79,7 @@ void KWPgNumVariable::recalc()
 {
     if ( m_subtype == VST_PGNUM_TOTAL )
     {
-        m_pgNum = m_doc->getPages()+m_varColl->variableSetting()->startingPage()-1;
+        m_varType = QVariant(m_doc->getPages()+m_varColl->variableSetting()->startingPage()-1);
         resize();
     }
     // The other cases are handled by the more dynamic code in KWTextFrameSet::drawFrame()
@@ -103,7 +103,7 @@ KWMailMergeVariable::KWMailMergeVariable( KoTextDocument *textdoc, const QString
 
 QString KWMailMergeVariable::value() const
 {
-    return m_doc->getMailMergeDataBase()->getValue( m_name );
+    return m_doc->getMailMergeDataBase()->getValue( m_varType.toString() );
 }
 
 QString KWMailMergeVariable::text()
