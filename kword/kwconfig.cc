@@ -102,6 +102,7 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent ,
     int m_iGridX=10;
     int m_iGridY=10;
     int m_iIndent=10;
+    int m_iNumOfRecentFile=10;
     KWUnit tmpIndent;
     tmpIndent.setMM(10.0);
     if( config->hasGroup("Interface" ))
@@ -111,6 +112,7 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent ,
             m_iGridY=config->readNumEntry("GridY",10);
             double val=config->readDoubleNumEntry("Indent",POINT_TO_MM(10.0));
             tmpIndent.setPT(val);
+            m_iNumOfRecentFile=config->readNumEntry("NbRecentFile",10);
         }
     m_iIndent=(int)tmpIndent.value( unit );
     QLabel *text=new QLabel(tmpQGroupBox);
@@ -149,6 +151,15 @@ configureInterfacePage::configureInterfacePage( KWView *_view, QWidget *parent ,
     indent->setRange(1, 50, 1);
     grid1->addWidget(indent,5,0);
 
+    text=new QLabel(tmpQGroupBox);
+    text->setText(i18n("Number of recent file:"));
+    grid1->addWidget(text,6,0);
+
+    oldNbRecentFiles=m_iNumOfRecentFile;
+    recentFiles=new KIntNumInput(m_iNumOfRecentFile, tmpQGroupBox , 10);
+    recentFiles->setRange(1, 20, 1);
+    grid1->addWidget(recentFiles,7,0);
+
     box->addWidget( tmpQGroupBox);
 }
 
@@ -156,25 +167,31 @@ void configureInterfacePage::apply()
 {
     int valX=gridX->value();
     int valY=gridY->value();
+    int nbRecent=recentFiles->value();
 
     KWUnit tmpIndent = KWUnit::createUnit( (double)indent->value(), KWUnit::unitType( m_pView->getGUI()->getDocument()->getUnit() ));
     config->setGroup( "Interface" );
     if(valX!=m_pView->getGUI()->getDocument()->gridX())
-        {
-            config->writeEntry( "GridX",valX );
-            m_pView->getGUI()->getDocument()->setGridX(valX);
-        }
+    {
+        config->writeEntry( "GridX",valX );
+        m_pView->getGUI()->getDocument()->setGridX(valX);
+    }
     if(valY!=m_pView->getGUI()->getDocument()->gridY())
-        {
-            config->writeEntry( "GridY",valY );
-            m_pView->getGUI()->getDocument()->setGridY(valY);
-        }
+    {
+        config->writeEntry( "GridY",valY );
+        m_pView->getGUI()->getDocument()->setGridY(valY);
+    }
     KWUnit _ind=m_pView->getGUI()->getDocument()->getIndentValue();
     if(tmpIndent.pt()!=_ind.pt())
-        {
-            config->writeEntry( "Indent", tmpIndent.pt());
-            m_pView->getGUI()->getDocument()->setIndentValue( tmpIndent );
-        }
+    {
+        config->writeEntry( "Indent", tmpIndent.pt());
+        m_pView->getGUI()->getDocument()->setIndentValue( tmpIndent );
+    }
+    if(nbRecent!=oldNbRecentFiles)
+    {
+        config->writeEntry( "NbRecentFile", nbRecent);
+        m_pView->changeNbOfRecentFiles(nbRecent);
+    }
 }
 
 void configureInterfacePage::slotDefault()

@@ -173,7 +173,13 @@ void KWView::initConfig()
       double val=config->readDoubleNumEntry("Indent",POINT_TO_MM(10.0));
       indent.setPT(val);
       getGUI()->getDocument()->setIndentValue(indent);
+      changeNbOfRecentFiles(config->readNumEntry("NbRecentFile",10));
     }
+}
+
+void KWView::changeNbOfRecentFiles(int _nb)
+{
+    shell()->setMaxRecentItems( _nb );
 }
 
 /*=============================================================*/

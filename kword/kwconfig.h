@@ -24,7 +24,6 @@
 #include <kconfig.h>
 #include <kspell.h>
 #include <knuminput.h>
-//#include "kwunit.h"
 
 class KWView;
 
@@ -51,6 +50,8 @@ private:
   KWView* m_pView;
   KIntNumInput *gridX,*gridY;
   KIntNumInput *indent;
+  KIntNumInput * recentFiles;
+  int oldNbRecentFiles;
   KConfig* config;
 };
 

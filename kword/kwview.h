@@ -132,7 +132,7 @@ public:
     void initConfig();
 
     void updatePopupMenuChangeAction();
-
+    void changeNbOfRecentFiles(int _nb);
 
 public slots:
     void fileStatistics();
