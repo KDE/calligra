@@ -62,7 +62,7 @@ void KImageShell::slotFileOpen()
 							        nativeFormatName(), TRUE );
 */
 
-  QString filter = "*.kim|KImage (*.kim)\n*.jpg|JPEG (*.jpeg)\n*.bmp|Bitmap (*.bmp)\n*.png|PNG (*.png)\n*.gif|GIF (*.gif)\n*.*|All files (*.*)";
+  QString filter = "*.*|All files (*.*)\n*.kim|KImage (*.kim)\n*.jpg|JPEG (*.jpeg)\n*.bmp|Bitmap (*.bmp)\n*.png|PNG (*.png)\n*.gif|GIF (*.gif)\n*.*|";
 
   QString file = KFileDialog::getOpenFileName( getenv( "HOME" ), filter );
   if ( file.isNull() )
