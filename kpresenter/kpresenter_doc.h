@@ -65,7 +65,6 @@ class KOSpellConfig;
 #include <kostyle.h>
 #include <kocommandhistory.h>
 class KoDocumentEntry;
-class KPFooterHeaderEditor;
 class KPTextObject;
 class StyleDia;
 class KPPartObject;
