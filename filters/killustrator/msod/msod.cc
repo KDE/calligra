@@ -36,20 +36,326 @@ Msod::Msod(
 {
     m_dpi = dpi;
     m_images.setAutoDelete(true);
+    m_opt = new Options(*this);
+    m_shape.data = 0L;
+    m_shape.length = 0;
 }
 
 Msod::~Msod()
 {
+    delete [] m_shape.data;
+    delete m_opt;
 }
 
-double Msod::from1616ToDouble(U32 value)
+void Msod::drawShape(
+    unsigned shapeType,
+    U32 bytes,
+    QDataStream &operands)
 {
-    return (value >> 16) + 65535.0 / (double)(value & 0xffff);
-}
+    static const char *funcTab[] =
+    {
+        "UNKNOWN",                  // Unknown
+        "RECTANGLE",                // Rectangle
+        "ROUNDRECTANGLE",           // Roundrectangle
+        "ELLIPSE",                  // Ellipse
+        "DIAMOND",                  // Diamond
+        "ISOCELESTRIANGLE",         // Isocelestriangle
+        "RIGHTTRIANGLE",            // Righttriangle
+        "PARALLELOGRAM",            // Parallelogram
+        "TRAPEZOID",                // Trapezoid
+        "HEXAGON",                  // Hexagon
+        "OCTAGON",                  // Octagon
+        "PLUS",                     // Plus
+        "STAR",                     // Star
+        "ARROW",                    // Arrow
+        "THICKARROW",               // Thickarrow
+        "HOMEPLATE",                // Homeplate
+        "CUBE",                     // Cube
+        "BALLOON",                  // Balloon
+        "SEAL",                     // Seal
+        "ARC",                      // Arc
+        "LINE",                     // Line
+        "PLAQUE",                   // Plaque
+        "CAN",                      // Can
+        "DONUT",                    // Donut
+        "TEXTSIMPLE",               // Textsimple
+        "TEXTOCTAGON",              // Textoctagon
+        "TEXTHEXAGON",              // Texthexagon
+        "TEXTCURVE",                // Textcurve
+        "TEXTWAVE",                 // Textwave
+        "TEXTRING",                 // Textring
+        "TEXTONCURVE",              // Textoncurve
+        "TEXTONRING",               // Textonring
+        "STRAIGHTCONNECTOR1",       // Straightconnector1
+        "BENTCONNECTOR2",           // Bentconnector2
+        "BENTCONNECTOR3",           // Bentconnector3
+        "BENTCONNECTOR4",           // Bentconnector4
+        "BENTCONNECTOR5",           // Bentconnector5
+        "CURVEDCONNECTOR2",         // Curvedconnector2
+        "CURVEDCONNECTOR3",         // Curvedconnector3
+        "CURVEDCONNECTOR4",         // Curvedconnector4
+        "CURVEDCONNECTOR5",         // Curvedconnector5
+        "CALLOUT1",                 // Callout1
+        "CALLOUT2",                 // Callout2
+        "CALLOUT3",                 // Callout3
+        "ACCENTCALLOUT1",           // Accentcallout1
+        "ACCENTCALLOUT2",           // Accentcallout2
+        "ACCENTCALLOUT3",           // Accentcallout3
+        "BORDERCALLOUT1",           // bordercallout1
+        "BORDERCALLOUT2",           // Bordercallout2
+        "BORDERCALLOUT3",           // Bordercallout3
+        "ACCENTBORDERCALLOUT1",     // Accentbordercallout1
+        "ACCENTBORDERCALLOUT2",     // Accentbordercallout2
+        "ACCENTBORDERCALLOUT3",     // Accentbordercallout3
+        "RIBBON",                   // Ribbon
+        "RIBBON2",                  // Ribbon2
+        "CHEVRON",                  // Chevron
+        "PENTAGON",                 // Pentagon
+        "NOSMOKING",                // Nosmoking
+        "SEAL8",                    // Seal8
+        "SEAL16",                   // Seal16
+        "SEAL32",                   // Seal32
+        "WEDGERECTCALLOUT",         // Wedgerectcallout
+        "WEDGERRECTCALLOUT",        // Wedgerrectcallout
+        "WEDGEELLIPSECALLOUT",      // Wedgeellipsecallout
+        "WAVE",                     // Wave
+        "FOLDEDCORNER",             // Foldedcorner
+        "LEFTARROW",                // Leftarrow
+        "DOWNARROW",                // Downarrow
+        "UPARROW",                  // Uparrow
+        "LEFTRIGHTARROW",           // Leftrightarrow
+        "UPDOWNARROW",              // Updownarrow
+        "IRREGULARSEAL1",           // Irregularseal1
+        "IRREGULARSEAL2",           // Irregularseal2
+        "LIGHTNINGBOLT",            // Lightningbolt
+        "HEART",                    // Heart
+        "PICTUREFRAME",             // PictureFrame
+        "QUADARROW",                // Quadarrow
+        "LEFTARROWCALLOUT",         // Leftarrowcallout
+        "RIGHTARROWCALLOUT",        // Rightarrowcallout
+        "UPARROWCALLOUT",           // Uparrowcallout
+        "DOWNARROWCALLOUT",         // Downarrowcallout
+        "LEFTRIGHTARROWCALLOUT",    // Leftrightarrowcallout
+        "UPDOWNARROWCALLOUT",       // Updownarrowcallout
+        "QUADARROWCALLOUT",         // Quadarrowcallout
+        "BEVEL",                    // Bevel
+        "LEFTBRACKET",              // Leftbracket
+        "RIGHTBRACKET",             // Rightbracket
+        "LEFTBRACE",                // Leftbrace
+        "RIGHTBRACE",               // Rightbrace
+        "LEFTUPARROW",              // Leftuparrow
+        "BENTUPARROW",              // Bentuparrow
+        "BENTARROW",                // Bentarrow
+        "SEAL24",                   // Seal24
+        "STRIPEDRIGHTARROW",        // Stripedrightarrow
+        "NOTCHEDRIGHTARROW",        // Notchedrightarrow
+        "BLOCKARC",                 // Blockarc
+        "SMILEYFACE",               // Smileyface
+        "VERTICALSCROLL",           // Verticalscroll
+        "HORIZONTALSCROLL",         // Horizontalscroll
+        "CIRCULARARROW",            // Circulararrow
+        "NOTCHEDCIRCULARARROW",     // Notchedcirculararrow
+        "UTURNARROW",               // Uturnarrow
+        "CURVEDRIGHTARROW",         // Curvedrightarrow
+        "CURVEDLEFTARROW",          // Curvedleftarrow
+        "CURVEDUPARROW",            // Curveduparrow
+        "CURVEDDOWNARROW",          // Curveddownarrow
+        "CLOUDCALLOUT",             // Cloudcallout
+        "ELLIPSERIBBON",            // Ellipseribbon
+        "ELLIPSERIBBON2",           // Ellipseribbon2
+        "FLOWCHARTPROCESS",         // Flowchartprocess
+        "FLOWCHARTDECISION",        // Flowchartdecision
+        "FLOWCHARTINPUTOUTPUT",     // Flowchartinputoutput
+        "FLOWCHARTPREDEFINEDPROCESS",   // Flowchartpredefinedprocess
+        "FLOWCHARTINTERNALSTORAGE",   // Flowchartinternalstorage
+        "FLOWCHARTDOCUMENT",        // Flowchartdocument
+        "FLOWCHARTMULTIDOCUMENT",   // Flowchartmultidocument
+        "FLOWCHARTTERMINATOR",      // Flowchartterminator
+        "FLOWCHARTPREPARATION",     // Flowchartpreparation
+        "FLOWCHARTMANUALINPUT",     // Flowchartmanualinput
+        "FLOWCHARTMANUALOPERATION",   // Flowchartmanualoperation
+        "FLOWCHARTCONNECTOR",       // Flowchartconnector
+        "FLOWCHARTPUNCHEDCARD",     // Flowchartpunchedcard
+        "FLOWCHARTPUNCHEDTAPE",     // Flowchartpunchedtape
+        "FLOWCHARTSUMMINGJUNCTION",   // Flowchartsummingjunction
+        "FLOWCHARTOR",              // Flowchartor
+        "FLOWCHARTCOLLATE",         // Flowchartcollate
+        "FLOWCHARTSORT",            // Flowchartsort
+        "FLOWCHARTEXTRACT",         // Flowchartextract
+        "FLOWCHARTMERGE",           // Flowchartmerge
+        "FLOWCHARTOFFLINESTORAGE",   // Flowchartofflinestorage
+        "FLOWCHARTONLINESTORAGE",   // Flowchartonlinestorage
+        "FLOWCHARTMAGNETICTAPE",    // Flowchartmagnetictape
+        "FLOWCHARTMAGNETICDISK",    // Flowchartmagneticdisk
+        "FLOWCHARTMAGNETICDRUM",    // Flowchartmagneticdrum
+        "FLOWCHARTDISPLAY",         // Flowchartdisplay
+        "FLOWCHARTDELAY",           // Flowchartdelay
+        "TEXTPLAINTEXT",            // Textplaintext
+        "TEXTSTOP",                 // Textstop
+        "TEXTTRIANGLE",             // Texttriangle
+        "TEXTTRIANGLEINVERTED",     // Texttriangleinverted
+        "TEXTCHEVRON",              // Textchevron
+        "TEXTCHEVRONINVERTED",      // Textchevroninverted
+        "TEXTRINGINSIDE",           // Textringinside
+        "TEXTRINGOUTSIDE",          // Textringoutside
+        "TEXTARCHUPCURVE",          // Textarchupcurve
+        "TEXTARCHDOWNCURVE",        // Textarchdowncurve
+        "TEXTCIRCLECURVE",          // Textcirclecurve
+        "TEXTBUTTONCURVE",          // Textbuttoncurve
+        "TEXTARCHUPPOUR",           // Textarchuppour
+        "TEXTARCHDOWNPOUR",         // Textarchdownpour
+        "TEXTCIRCLEPOUR",           // Textcirclepour
+        "TEXTBUTTONPOUR",           // Textbuttonpour
+        "TEXTCURVEUP",              // Textcurveup
+        "TEXTCURVEDOWN",            // Textcurvedown
+        "TEXTCASCADEUP",            // Textcascadeup
+        "TEXTCASCADEDOWN",          // Textcascadedown
+        "TEXTWAVE1",                // Textwave1
+        "TEXTWAVE2",                // Textwave2
+        "TEXTWAVE3",                // Textwave3
+        "TEXTWAVE4",                // Textwave4
+        "TEXTINFLATE",              // Textinflate
+        "TEXTDEFLATE",              // Textdeflate
+        "TEXTINFLATEBOTTOM",        // Textinflatebottom
+        "TEXTDEFLATEBOTTOM",        // Textdeflatebottom
+        "TEXTINFLATETOP",           // Textinflatetop
+        "TEXTDEFLATETOP",           // Textdeflatetop
+        "TEXTDEFLATEINFLATE",       // Textdeflateinflate
+        "TEXTDEFLATEINFLATEDEFLATE",   // Textdeflateinflatedeflate
+        "TEXTFADERIGHT",            // Textfaderight
+        "TEXTFADELEFT",             // Textfadeleft
+        "TEXTFADEUP",               // Textfadeup
+        "TEXTFADEDOWN",             // Textfadedown
+        "TEXTSLANTUP",              // Textslantup
+        "TEXTSLANTDOWN",            // Textslantdown
+        "TEXTCANUP",                // Textcanup
+        "TEXTCANDOWN",              // Textcandown
+        "FLOWCHARTALTERNATEPROCESS",   // Flowchartalternateprocess
+        "FLOWCHARTOFFPAGECONNECTOR",   // Flowchartoffpageconnector
+        "CALLOUT90",                // Callout90
+        "ACCENTCALLOUT90",          // Accentcallout90
+        "BORDERCALLOUT90",          // Bordercallout90
+        "ACCENTBORDERCALLOUT90",    // Accentbordercallout90
+        "LEFTRIGHTUPARROW",         // Leftrightuparrow
+        "SUN",                      // Sun
+        "MOON",                     // Moon
+        "BRACKETPAIR",              // Bracketpair
+        "BRACEPAIR",                // Bracepair
+        "SEAL4",                    // Seal4
+        "DOUBLEWAVE",               // Doublewave
+        "ACTIONBUTTONBLANK",        // Actionbuttonblank
+        "ACTIONBUTTONHOME",         // Actionbuttonhome
+        "ACTIONBUTTONHELP",         // Actionbuttonhelp
+        "ACTIONBUTTONINFORMATION",  // Actionbuttoninformation
+        "ACTIONBUTTONFORWARDNEXT",  // Actionbuttonforwardnext
+        "ACTIONBUTTONBACKPREVIOUS", // Actionbuttonbackprevious
+        "ACTIONBUTTONEND",          // Actionbuttonend
+        "ACTIONBUTTONBEGINNING",    // Actionbuttonbeginning
+        "ACTIONBUTTONRETURN",       // Actionbuttonreturn
+        "ACTIONBUTTONDOCUMENT",     // Actionbuttondocument
+        "ACTIONBUTTONSOUND",        // Actionbuttonsound
+        "ACTIONBUTTONMOVIE",        // Actionbuttonmovie
+        "HOSTCONTROL",              // Hostcontrol
+        "TEXTBOX",                  // Textbox
+    };
+    struct
+    {
+        U32 spid;                       // The shape id
+        union
+        {
+            U32 info;
+            struct
+            {
+                U32 fGroup : 1;         // This shape is a group shape
+                U32 fChild : 1;         // Not a top-level shape
+                U32 fPatriarch : 1;     // This is the topmost group shape.
+                                        // Exactly one of these per drawing.
+                U32 fDeleted : 1;       // The shape has been deleted
+                U32 fOleShape : 1;      // The shape is an OLE object
+                U32 fHaveMaster : 1;    // Shape has a hspMaster property
+                U32 fFlipH : 1;         // Shape is flipped horizontally
+                U32 fFlipV : 1;         // Shape is flipped vertically
+                U32 fConnector : 1;     // Connector type of shape
+                U32 fHaveAnchor : 1;    // Shape has an anchor of some kind
+                U32 fBackground : 1;    // Background shape
+                U32 fHaveSpt : 1;       // Shape has a shape type property
+                U32 reserved : 20;      // Not yet used
+            } fields;
+        } grfPersistent;
+    } data;
 
-//
-//
-//
+    // Scan lookup table for operation.
+
+    operands >> data.spid >> data.grfPersistent.info;
+    bytes -= sizeof(data);
+    kdDebug(s_area) << "shape-id: " << data.spid << " type: " << funcTab[shapeType] <<
+        (data.grfPersistent.fields.fGroup ? " group" : "") <<
+        (data.grfPersistent.fields.fChild ? " child" : "") <<
+        (data.grfPersistent.fields.fPatriarch ? " patriarch" : "") <<
+        (data.grfPersistent.fields.fDeleted ? " deleted" : "") <<
+        (data.grfPersistent.fields.fOleShape ? " oleshape" : "") <<
+        (data.grfPersistent.fields.fHaveMaster ? " master" : "") <<
+        (data.grfPersistent.fields.fFlipH ? " flipv" : "") <<
+        (data.grfPersistent.fields.fConnector ? " connector" : "") <<
+        (data.grfPersistent.fields.fHaveAnchor ? " anchor" : "") <<
+        (data.grfPersistent.fields.fBackground ? " background" : "") <<
+        (data.grfPersistent.fields.fHaveSpt ? " spt" : "") <<
+        " operands: " << bytes << endl;
+    if (data.grfPersistent.fields.fDeleted || !m_isRequiredDrawing)
+        return;
+
+    // An active shape! Let's draw it...
+
+    switch (shapeType)
+    {
+    case 0:
+        if (m_opt->m_pVertices)
+        {
+            gotPolyline(m_dc, *m_opt->m_pVertices);
+        }
+        break;
+    case 1:
+        if (bytes > 7)
+        {
+            QPoint topLeft;
+            QSize size;
+
+            topLeft = normalisePoint(operands);
+            size = normaliseSize(operands);
+            QRect rect(topLeft, size);
+            QPointArray points(4);
+
+                kdDebug(s_area) << "left " << topLeft.x()<< endl;
+                kdDebug(s_area) << "top " << topLeft.y()<< endl;
+                kdDebug(s_area) << "width " << size.width()<< endl;
+                kdDebug(s_area) << "height " << size.height()<< endl;
+            points.setPoint(0, topLeft);
+            points.setPoint(1, rect.topRight());
+            points.setPoint(2, rect.bottomRight());
+            points.setPoint(3, rect.bottomLeft());
+            gotRectangle(m_dc, points);
+        }
+    case 20:
+        if (bytes > 7)
+        {
+            QPoint lineFrom;
+            QPoint lineTo;
+
+            lineTo = normalisePoint(operands);
+            QPointArray points(2);
+            points.setPoint(0, lineFrom);
+            points.setPoint(1, lineTo);
+                kdDebug(s_area) << "from x " << lineFrom.x()<< endl;
+                kdDebug(s_area) << "from y " << lineFrom.y()<< endl;
+                kdDebug(s_area) << "from x " << lineTo.x()<< endl;
+                kdDebug(s_area) << "from y " << lineTo.y()<< endl;
+            gotPolyline(m_dc, points);
+        }
+        break;
+    default:
+        break;
+    }
+}
 
 void Msod::invokeHandler(
     Header &op,
@@ -603,190 +909,7 @@ void Msod::opOleobject(
 
 void Msod::opOpt(Header &, U32 bytes, QDataStream &operands)
 {
-    Option option;
-    U16 length = 0;
-    U16 complexLength = 0;
-
-    double m_rotation = 0.0;
-    U32 m_pib = 0;
-    QString m_pibName = QString::null;
-    U32 m_pibFlags = 0;
-    U32 m_pictureId = 0;
-    bool m_fNoHitTestPicture = false;
-    bool m_pictureGray = false;
-    bool m_pictureBiLevel = false;
-    bool m_pictureActive = false;
-
-    U32 m_shapePath = 1;
-    bool m_fFilled = true;
-    bool m_fHitTestFill = true;
-    bool m_fillShape = true;
-    bool m_fillUseRect = false;
-    bool m_fNoFillHitTest = false;
-
-    U32 m_lineWidth = 9525;
-
-    bool m_fArrowheadsOK = false;
-    bool m_fLine = true;
-    bool m_fHitTestLine = true;
-    bool m_lineFillShape = true;
-    bool m_fNoLineDrawDash = false;
-
-    U32 m_bWMode = 1;
-
-    bool m_fOleIcon = false;
-    bool m_fPreferRelativeResize = false;
-    bool m_fLockShapeType = false;
-    bool m_fDeleteAttachedObject = false;
-    bool m_fBackground = false;
-
-    // First process all simple options, and add all complex options to a list.
-
-    QList<Option> complexOpts;
-    complexOpts.setAutoDelete(true);
-    bool unsupported;
-    while (length + complexLength < (int)bytes)
-    {
-        operands >> option.opcode.info >> option.value;
-        length += 6;
-
-        // Defer processing of complex options.
-
-        if (option.opcode.fields.fComplex)
-        {
-            complexLength += option.value;
-            complexOpts.append(new Option(option));
-            continue;
-        }
-
-        // Now squirrel away the option value.
-
-        unsupported = false;
-        switch (option.opcode.fields.pid)
-        {
-        case 4:
-            m_rotation = from1616ToDouble(option.value);
-            break;
-        case 260:
-            if (option.opcode.fields.fBid)
-            {
-                m_pib = option.value;
-                if (m_isRequiredDrawing)
-                {
-                    Image *image = m_images[m_pib - 1];
-
-                    // If it is an embedded WMF we don't bother with the
-                    // part; we just extract it as more vector graphics.
-
-                    if (image->extension == "wmf")
-                    {
-                        QByteArray  a;
-                        a.setRawData(image->data, image->length);
-                        QDataStream s(a, IO_ReadOnly);
-                        KWmf::parse(s, image->length);
-                        a.resetRawData(image->data, image->length);
-                    }
-                    else
-                    {
-                        gotPicture(
-                            m_pib,
-                            image->extension,
-                            image->length,
-                            image->data);
-                    }
-                }
-            }
-            else
-            {
-                kdError(s_area) << "Cannot handle IMsoBlip" << endl;
-            }
-            break;
-        case 262:
-            m_pibFlags = option.value;
-            break;
-        case 267:
-            m_pictureId = option.value;
-            break;
-        case 319:
-            m_fNoHitTestPicture = (option.value & 0x0008) != 0;
-            m_pictureGray = (option.value & 0x0004) != 0;
-            m_pictureBiLevel = (option.value & 0x0002) != 0;
-            m_pictureActive = (option.value & 0x0001) != 0;
-            break;
-        case 324:
-            m_shapePath = option.value;
-            break;
-        case 447:
-            m_fFilled = (option.value & 0x0010) != 0;
-            m_fHitTestFill = (option.value & 0x0008) != 0;
-            m_fillShape = (option.value & 0x0004) != 0;
-            m_fillUseRect = (option.value & 0x0002) != 0;
-            m_fNoFillHitTest = (option.value & 0x0001) != 0;
-            break;
-        case 459:
-            m_lineWidth = option.value;
-            break;
-        case 511:
-            m_fArrowheadsOK = (option.value & 0x0010) != 0;
-            m_fLine = (option.value & 0x0008) != 0;
-            m_fHitTestLine = (option.value & 0x0004) != 0;
-            m_lineFillShape = (option.value & 0x0002) != 0;
-            m_fNoLineDrawDash = (option.value & 0x0001) != 0;
-            break;
-        case 772:
-            m_bWMode = option.value;
-            break;
-        case 831:
-            m_fOleIcon = (option.value & 0x0010) != 0;
-            m_fPreferRelativeResize = (option.value & 0x0008) != 0;
-            m_fLockShapeType = (option.value & 0x0004) != 0;
-            m_fDeleteAttachedObject = (option.value & 0x0002) != 0;
-            m_fBackground = (option.value & 0x0001) != 0;
-            break;
-        default:
-            unsupported = true;
-            kdDebug(s_area) << "opOpt: unsupported simple option: " <<
-                option.opcode.fields.pid << endl;
-            break;
-        }
-        if (!unsupported)
-            kdDebug(s_area) << "opOpt: simple option: " <<
-                option.opcode.fields.pid << endl;
-    }
-
-    // Now empty the list of complex options.
-
-    while (complexOpts.count())
-    {
-        Q_INT16 c;
-
-        option = *complexOpts.getFirst();
-        complexOpts.removeFirst();
-        unsupported = false;
-        switch (option.opcode.fields.pid)
-        {
-        case 261:
-            while (true)
-            {
-                operands >> c;
-                complexLength -= 2;
-                if (!c)
-                    break;
-                m_pibName += QChar(c);
-            };
-            break;
-        default:
-            unsupported = true;
-            kdDebug(s_area) << "opOpt: unsupported complex option: " <<
-                option.opcode.fields.pid << endl;
-            break;
-        }
-        if (!unsupported)
-            kdDebug(s_area) << "opOpt: complex option: " <<
-                option.opcode.fields.pid << endl;
-    }
-
-    skip(complexLength, operands);
+    m_opt->walk(bytes, operands);
 }
 
 void Msod::opRegroupitems(
@@ -812,306 +935,30 @@ void Msod::opSolvercontainer(Header &, U32 bytes, QDataStream &operands)
 
 void Msod::opSp(Header &op, U32 bytes, QDataStream &operands)
 {
-    typedef void (Msod::*method)(Header &op, U32 bytes, QDataStream &operands);
+    // We want to defer the act of drawing a shape until we have seen any options
+    // that may affect it. Thus, we merely store the data away, and let opSpContainer
+    // do all the ahrd work.
 
-    typedef struct
-    {
-        const char *name;
-        method handler;
-    } shapeEntry;
-
-    static const shapeEntry funcTab[] =
-    {
-        { NULL,                     0 },
-        { "RECTANGLE",              &Msod::shpRectangle },
-        { "ROUNDRECTANGLE",         0 /* &Msod::shpRoundrectangle */ },
-        { "ELLIPSE",                0 /* &Msod::shpEllipse */ },
-        { "DIAMOND",                0 /* &Msod::shpDiamond */ },
-        { "ISOCELESTRIANGLE",       0 /* &Msod::shpIsocelestriangle */ },
-        { "RIGHTTRIANGLE",          0 /* &Msod::shpRighttriangle */ },
-        { "PARALLELOGRAM",          0 /* &Msod::shpParallelogram */ },
-        { "TRAPEZOID",              0 /* &Msod::shpTrapezoid */ },
-        { "HEXAGON",                0 /* &Msod::shpHexagon */ },
-        { "OCTAGON",                0 /* &Msod::shpOctagon */ },
-        { "PLUS",                   0 /* &Msod::shpPlus */ },
-        { "STAR",                   0 /* &Msod::shpStar */ },
-        { "ARROW",                  0 /* &Msod::shpArrow */ },
-        { "THICKARROW",             0 /* &Msod::shpThickarrow */ },
-        { "HOMEPLATE",              0 /* &Msod::shpHomeplate */ },
-        { "CUBE",                   0 /* &Msod::shpCube */ },
-        { "BALLOON",                0 /* &Msod::shpBalloon */ },
-        { "SEAL",                   0 /* &Msod::shpSeal */ },
-        { "ARC",                    0 /* &Msod::shpArc */ },
-        { "LINE",                   &Msod::shpLine },
-        { "PLAQUE",                 0 /* &Msod::shpPlaque */ },
-        { "CAN",                    0 /* &Msod::shpCan */ },
-        { "DONUT",                  0 /* &Msod::shpDonut */ },
-        { "TEXTSIMPLE",             0 /* &Msod::shpTextsimple */ },
-        { "TEXTOCTAGON",            0 /* &Msod::shpTextoctagon */ },
-        { "TEXTHEXAGON",            0 /* &Msod::shpTexthexagon */ },
-        { "TEXTCURVE",              0 /* &Msod::shpTextcurve */ },
-        { "TEXTWAVE",               0 /* &Msod::shpTextwave */ },
-        { "TEXTRING",               0 /* &Msod::shpTextring */ },
-        { "TEXTONCURVE",            0 /* &Msod::shpTextoncurve */ },
-        { "TEXTONRING",             0 /* &Msod::shpTextonring */ },
-        { "STRAIGHTCONNECTOR1",     0 /* &Msod::shpStraightconnector1 */ },
-        { "BENTCONNECTOR2",         0 /* &Msod::shpBentconnector2 */ },
-        { "BENTCONNECTOR3",         0 /* &Msod::shpBentconnector3 */ },
-        { "BENTCONNECTOR4",         0 /* &Msod::shpBentconnector4 */ },
-        { "BENTCONNECTOR5",         0 /* &Msod::shpBentconnector5 */ },
-        { "CURVEDCONNECTOR2",       0 /* &Msod::shpCurvedconnector2 */ },
-        { "CURVEDCONNECTOR3",       0 /* &Msod::shpCurvedconnector3 */ },
-        { "CURVEDCONNECTOR4",       0 /* &Msod::shpCurvedconnector4 */ },
-        { "CURVEDCONNECTOR5",       0 /* &Msod::shpCurvedconnector5 */ },
-        { "CALLOUT1",               0 /* &Msod::shpCallout1 */ },
-        { "CALLOUT2",               0 /* &Msod::shpCallout2 */ },
-        { "CALLOUT3",               0 /* &Msod::shpCallout3 */ },
-        { "ACCENTCALLOUT1",         0 /* &Msod::shpAccentcallout1 */ },
-        { "ACCENTCALLOUT2",         0 /* &Msod::shpAccentcallout2 */ },
-        { "ACCENTCALLOUT3",         0 /* &Msod::shpAccentcallout3 */ },
-        { "BORDERCALLOUT1",         0 /* &Msod::shpbordercallout1 */ },
-        { "BORDERCALLOUT2",         0 /* &Msod::shpBordercallout2 */ },
-        { "BORDERCALLOUT3",         0 /* &Msod::shpBordercallout3 */ },
-        { "ACCENTBORDERCALLOUT1",   0 /* &Msod::shpAccentbordercallout1 */ },
-        { "ACCENTBORDERCALLOUT2",   0 /* &Msod::shpAccentbordercallout2 */ },
-        { "ACCENTBORDERCALLOUT3",   0 /* &Msod::shpAccentbordercallout3 */ },
-        { "RIBBON",                 0 /* &Msod::shpRibbon */ },
-        { "RIBBON2",                0 /* &Msod::shpRibbon2 */ },
-        { "CHEVRON",                0 /* &Msod::shpChevron */ },
-        { "PENTAGON",               0 /* &Msod::shpPentagon */ },
-        { "NOSMOKING",              0 /* &Msod::shpNosmoking */ },
-        { "SEAL8",                  0 /* &Msod::shpSeal8 */ },
-        { "SEAL16",                 0 /* &Msod::shpSeal16 */ },
-        { "SEAL32",                 0 /* &Msod::shpSeal32 */ },
-        { "WEDGERECTCALLOUT",       0 /* &Msod::shpWedgerectcallout */ },
-        { "WEDGERRECTCALLOUT",      0 /* &Msod::shpWedgerrectcallout */ },
-        { "WEDGEELLIPSECALLOUT",    0 /* &Msod::shpWedgeellipsecallout */ },
-        { "WAVE",                   0 /* &Msod::shpWave */ },
-        { "FOLDEDCORNER",           0 /* &Msod::shpFoldedcorner */ },
-        { "LEFTARROW",              0 /* &Msod::shpLeftarrow */ },
-        { "DOWNARROW",              0 /* &Msod::shpDownarrow */ },
-        { "UPARROW",                0 /* &Msod::shpUparrow */ },
-        { "LEFTRIGHTARROW",         0 /* &Msod::shpLeftrightarrow */ },
-        { "UPDOWNARROW",            0 /* &Msod::shpUpdownarrow */ },
-        { "IRREGULARSEAL1",         0 /* &Msod::shpIrregularseal1 */ },
-        { "IRREGULARSEAL2",         0 /* &Msod::shpIrregularseal2 */ },
-        { "LIGHTNINGBOLT",          0 /* &Msod::shpLightningbolt */ },
-        { "HEART",                  0 /* &Msod::shpHeart */ },
-        { "PICTUREFRAME",           &Msod::shpPictureFrame },
-        { "QUADARROW",              0 /* &Msod::shpQuadarrow */ },
-        { "LEFTARROWCALLOUT",       0 /* &Msod::shpLeftarrowcallout */ },
-        { "RIGHTARROWCALLOUT",      0 /* &Msod::shpRightarrowcallout */ },
-        { "UPARROWCALLOUT",         0 /* &Msod::shpUparrowcallout */ },
-        { "DOWNARROWCALLOUT",       0 /* &Msod::shpDownarrowcallout */ },
-        { "LEFTRIGHTARROWCALLOUT",  0 /* &Msod::shpLeftrightarrowcallout */ },
-        { "UPDOWNARROWCALLOUT",     0 /* &Msod::shpUpdownarrowcallout */ },
-        { "QUADARROWCALLOUT",       0 /* &Msod::shpQuadarrowcallout */ },
-        { "BEVEL",                  0 /* &Msod::shpBevel */ },
-        { "LEFTBRACKET",            0 /* &Msod::shpLeftbracket */ },
-        { "RIGHTBRACKET",           0 /* &Msod::shpRightbracket */ },
-        { "LEFTBRACE",              0 /* &Msod::shpLeftbrace */ },
-        { "RIGHTBRACE",             0 /* &Msod::shpRightbrace */ },
-        { "LEFTUPARROW",            0 /* &Msod::shpLeftuparrow */ },
-        { "BENTUPARROW",            0 /* &Msod::shpBentuparrow */ },
-        { "BENTARROW",              0 /* &Msod::shpBentarrow */ },
-        { "SEAL24",                 0 /* &Msod::shpSeal24 */ },
-        { "STRIPEDRIGHTARROW",      0 /* &Msod::shpStripedrightarrow */ },
-        { "NOTCHEDRIGHTARROW",      0 /* &Msod::shpNotchedrightarrow */ },
-        { "BLOCKARC",               0 /* &Msod::shpBlockarc */ },
-        { "SMILEYFACE",             0 /* &Msod::shpSmileyface */ },
-        { "VERTICALSCROLL",         0 /* &Msod::shpVerticalscroll */ },
-        { "HORIZONTALSCROLL",       0 /* &Msod::shpHorizontalscroll */ },
-        { "CIRCULARARROW",          0 /* &Msod::shpCirculararrow */ },
-        { "NOTCHEDCIRCULARARROW",   0 /* &Msod::shpNotchedcirculararrow */ },
-        { "UTURNARROW",             0 /* &Msod::shpUturnarrow */ },
-        { "CURVEDRIGHTARROW",       0 /* &Msod::shpCurvedrightarrow */ },
-        { "CURVEDLEFTARROW",        0 /* &Msod::shpCurvedleftarrow */ },
-        { "CURVEDUPARROW",          0 /* &Msod::shpCurveduparrow */ },
-        { "CURVEDDOWNARROW",        0 /* &Msod::shpCurveddownarrow */ },
-        { "CLOUDCALLOUT",           0 /* &Msod::shpCloudcallout */ },
-        { "ELLIPSERIBBON",          0 /* &Msod::shpEllipseribbon */ },
-        { "ELLIPSERIBBON2",         0 /* &Msod::shpEllipseribbon2 */ },
-        { "FLOWCHARTPROCESS",       0 /* &Msod::shpFlowchartprocess */ },
-        { "FLOWCHARTDECISION",      0 /* &Msod::shpFlowchartdecision */ },
-        { "FLOWCHARTINPUTOUTPUT",   0 /* &Msod::shpFlowchartinputoutput */ },
-        { "FLOWCHARTPREDEFINEDPROCESS", 0 /* &Msod::shpFlowchartpredefinedprocess */ },
-        { "FLOWCHARTINTERNALSTORAGE", 0 /* &Msod::shpFlowchartinternalstorage */ },
-        { "FLOWCHARTDOCUMENT",      0 /* &Msod::shpFlowchartdocument */ },
-        { "FLOWCHARTMULTIDOCUMENT", 0 /* &Msod::shpFlowchartmultidocument */ },
-        { "FLOWCHARTTERMINATOR",    0 /* &Msod::shpFlowchartterminator */ },
-        { "FLOWCHARTPREPARATION",   0 /* &Msod::shpFlowchartpreparation */ },
-        { "FLOWCHARTMANUALINPUT",   0 /* &Msod::shpFlowchartmanualinput */ },
-        { "FLOWCHARTMANUALOPERATION", 0 /* &Msod::shpFlowchartmanualoperation */ },
-        { "FLOWCHARTCONNECTOR",     0 /* &Msod::shpFlowchartconnector */ },
-        { "FLOWCHARTPUNCHEDCARD",   0 /* &Msod::shpFlowchartpunchedcard */ },
-        { "FLOWCHARTPUNCHEDTAPE",   0 /* &Msod::shpFlowchartpunchedtape */ },
-        { "FLOWCHARTSUMMINGJUNCTION", 0 /* &Msod::shpFlowchartsummingjunction */ },
-        { "FLOWCHARTOR",            0 /* &Msod::shpFlowchartor */ },
-        { "FLOWCHARTCOLLATE",       0 /* &Msod::shpFlowchartcollate */ },
-        { "FLOWCHARTSORT",          0 /* &Msod::shpFlowchartsort */ },
-        { "FLOWCHARTEXTRACT",       0 /* &Msod::shpFlowchartextract */ },
-        { "FLOWCHARTMERGE",         0 /* &Msod::shpFlowchartmerge */ },
-        { "FLOWCHARTOFFLINESTORAGE", 0 /* &Msod::shpFlowchartofflinestorage */ },
-        { "FLOWCHARTONLINESTORAGE", 0 /* &Msod::shpFlowchartonlinestorage */ },
-        { "FLOWCHARTMAGNETICTAPE",  0 /* &Msod::shpFlowchartmagnetictape */ },
-        { "FLOWCHARTMAGNETICDISK",  0 /* &Msod::shpFlowchartmagneticdisk */ },
-        { "FLOWCHARTMAGNETICDRUM",  0 /* &Msod::shpFlowchartmagneticdrum */ },
-        { "FLOWCHARTDISPLAY",       0 /* &Msod::shpFlowchartdisplay */ },
-        { "FLOWCHARTDELAY",         0 /* &Msod::shpFlowchartdelay */ },
-        { "TEXTPLAINTEXT",          0 /* &Msod::shpTextplaintext */ },
-        { "TEXTSTOP",               0 /* &Msod::shpTextstop */ },
-        { "TEXTTRIANGLE",           0 /* &Msod::shpTexttriangle */ },
-        { "TEXTTRIANGLEINVERTED",   0 /* &Msod::shpTexttriangleinverted */ },
-        { "TEXTCHEVRON",            0 /* &Msod::shpTextchevron */ },
-        { "TEXTCHEVRONINVERTED",    0 /* &Msod::shpTextchevroninverted */ },
-        { "TEXTRINGINSIDE",         0 /* &Msod::shpTextringinside */ },
-        { "TEXTRINGOUTSIDE",        0 /* &Msod::shpTextringoutside */ },
-        { "TEXTARCHUPCURVE",        0 /* &Msod::shpTextarchupcurve */ },
-        { "TEXTARCHDOWNCURVE",      0 /* &Msod::shpTextarchdowncurve */ },
-        { "TEXTCIRCLECURVE",        0 /* &Msod::shpTextcirclecurve */ },
-        { "TEXTBUTTONCURVE",        0 /* &Msod::shpTextbuttoncurve */ },
-        { "TEXTARCHUPPOUR",         0 /* &Msod::shpTextarchuppour */ },
-        { "TEXTARCHDOWNPOUR",       0 /* &Msod::shpTextarchdownpour */ },
-        { "TEXTCIRCLEPOUR",         0 /* &Msod::shpTextcirclepour */ },
-        { "TEXTBUTTONPOUR",         0 /* &Msod::shpTextbuttonpour */ },
-        { "TEXTCURVEUP",            0 /* &Msod::shpTextcurveup */ },
-        { "TEXTCURVEDOWN",          0 /* &Msod::shpTextcurvedown */ },
-        { "TEXTCASCADEUP",          0 /* &Msod::shpTextcascadeup */ },
-        { "TEXTCASCADEDOWN",        0 /* &Msod::shpTextcascadedown */ },
-        { "TEXTWAVE1",              0 /* &Msod::shpTextwave1 */ },
-        { "TEXTWAVE2",              0 /* &Msod::shpTextwave2 */ },
-        { "TEXTWAVE3",              0 /* &Msod::shpTextwave3 */ },
-        { "TEXTWAVE4",              0 /* &Msod::shpTextwave4 */ },
-        { "TEXTINFLATE",            0 /* &Msod::shpTextinflate */ },
-        { "TEXTDEFLATE",            0 /* &Msod::shpTextdeflate */ },
-        { "TEXTINFLATEBOTTOM",      0 /* &Msod::shpTextinflatebottom */ },
-        { "TEXTDEFLATEBOTTOM",      0 /* &Msod::shpTextdeflatebottom */ },
-        { "TEXTINFLATETOP",         0 /* &Msod::shpTextinflatetop */ },
-        { "TEXTDEFLATETOP",         0 /* &Msod::shpTextdeflatetop */ },
-        { "TEXTDEFLATEINFLATE",     0 /* &Msod::shpTextdeflateinflate */ },
-        { "TEXTDEFLATEINFLATEDEFLATE", 0 /* &Msod::shpTextdeflateinflatedeflate */ },
-        { "TEXTFADERIGHT",          0 /* &Msod::shpTextfaderight */ },
-        { "TEXTFADELEFT",           0 /* &Msod::shpTextfadeleft */ },
-        { "TEXTFADEUP",             0 /* &Msod::shpTextfadeup */ },
-        { "TEXTFADEDOWN",           0 /* &Msod::shpTextfadedown */ },
-        { "TEXTSLANTUP",            0 /* &Msod::shpTextslantup */ },
-        { "TEXTSLANTDOWN",          0 /* &Msod::shpTextslantdown */ },
-        { "TEXTCANUP",              0 /* &Msod::shpTextcanup */ },
-        { "TEXTCANDOWN",            0 /* &Msod::shpTextcandown */ },
-        { "FLOWCHARTALTERNATEPROCESS", 0 /* &Msod::shpFlowchartalternateprocess */ },
-        { "FLOWCHARTOFFPAGECONNECTOR", 0 /* &Msod::shpFlowchartoffpageconnector */ },
-        { "CALLOUT90",              0 /* &Msod::shpCallout90 */ },
-        { "ACCENTCALLOUT90",        0 /* &Msod::shpAccentcallout90 */ },
-        { "BORDERCALLOUT90",        0 /* &Msod::shpBordercallout90 */ },
-        { "ACCENTBORDERCALLOUT90",  0 /* &Msod::shpAccentbordercallout90 */ },
-        { "LEFTRIGHTUPARROW",       0 /* &Msod::shpLeftrightuparrow */ },
-        { "SUN",                    0 /* &Msod::shpSun */ },
-        { "MOON",                   0 /* &Msod::shpMoon */ },
-        { "BRACKETPAIR",            0 /* &Msod::shpBracketpair */ },
-        { "BRACEPAIR",              0 /* &Msod::shpBracepair */ },
-        { "SEAL4",                  0 /* &Msod::shpSeal4 */ },
-        { "DOUBLEWAVE",             0 /* &Msod::shpDoublewave */ },
-        { "ACTIONBUTTONBLANK",      0 /* &Msod::shpActionbuttonblank */ },
-        { "ACTIONBUTTONHOME",       0 /* &Msod::shpActionbuttonhome */ },
-        { "ACTIONBUTTONHELP",       0 /* &Msod::shpActionbuttonhelp */ },
-        { "ACTIONBUTTONINFORMATION", 0 /* &Msod::shpActionbuttoninformation */ },
-        { "ACTIONBUTTONFORWARDNEXT", 0 /* &Msod::shpActionbuttonforwardnext */ },
-        { "ACTIONBUTTONBACKPREVIOUS", 0 /* &Msod::shpActionbuttonbackprevious */ },
-        { "ACTIONBUTTONEND",        0 /* &Msod::shpActionbuttonend */ },
-        { "ACTIONBUTTONBEGINNING",  0 /* &Msod::shpActionbuttonbeginning */ },
-        { "ACTIONBUTTONRETURN",     0 /* &Msod::shpActionbuttonreturn */ },
-        { "ACTIONBUTTONDOCUMENT",   0 /* &Msod::shpActionbuttondocument */ },
-        { "ACTIONBUTTONSOUND",      0 /* &Msod::shpActionbuttonsound */ },
-        { "ACTIONBUTTONMOVIE",      0 /* &Msod::shpActionbuttonmovie */ },
-        { "HOSTCONTROL",            0 /* &Msod::shpHostcontrol */ },
-        { "TEXTBOX",                0 /* &Msod::shpTextbox */ },
-    };
-    unsigned i;
-    method result;
-
-    // Scan lookup table for operation.
-
-    if (op.opcode.fields.inst < sizeof(funcTab)/sizeof(funcTab[0]))
-    {
-        i = op.opcode.fields.inst;
-    }
-    else
-    {
-        i = 0;
-    }
-
-    // Invoke handler.
-
-    result = funcTab[i].handler;
-    if (!result)
-    {
-        if (funcTab[i].name)
-            kdWarning(s_area) << "opSp: unsupported shape: " <<
-                funcTab[i].name <<
-                " operands: " << bytes << endl;
-        else
-            kdWarning(s_area) << "opSp: unsupported shape: " <<
-                op.opcode.fields.inst <<
-                " operands: " << bytes << endl;
-
-        // Skip data we cannot use.
-
-        skip(bytes, operands);
-    }
-    else
-    {
-        struct
-        {
-            U32 spid;                       // The shape id
-            union
-            {
-                U32 info;
-                struct
-                {
-                    U32 fGroup : 1;         // This shape is a group shape
-                    U32 fChild : 1;         // Not a top-level shape
-                    U32 fPatriarch : 1;     // This is the topmost group shape.
-                                            // Exactly one of these per drawing.
-                    U32 fDeleted : 1;       // The shape has been deleted
-                    U32 fOleShape : 1;      // The shape is an OLE object
-                    U32 fHaveMaster : 1;    // Shape has a hspMaster property
-                    U32 fFlipH : 1;         // Shape is flipped horizontally
-                    U32 fFlipV : 1;         // Shape is flipped vertically
-                    U32 fConnector : 1;     // Connector type of shape
-                    U32 fHaveAnchor : 1;    // Shape has an anchor of some kind
-                    U32 fBackground : 1;    // Background shape
-                    U32 fHaveSpt : 1;       // Shape has a shape type property
-                    U32 reserved : 20;      // Not yet used
-                } fields;
-            } grfPersistent;
-        } data;
-
-        operands >> data.spid >> data.grfPersistent.info;
-        kdDebug(s_area) << "shape-id: " << data.spid << endl;
-        bytes -= sizeof(data);
-        kdDebug(s_area) << "opSp: opcode: " << funcTab[i].name <<
-            (data.grfPersistent.fields.fGroup ? " group" : "") <<
-            (data.grfPersistent.fields.fChild ? " child" : "") <<
-            (data.grfPersistent.fields.fPatriarch ? " patriarch" : "") <<
-            (data.grfPersistent.fields.fDeleted ? " deleted" : "") <<
-            (data.grfPersistent.fields.fOleShape ? " oleshape" : "") <<
-            (data.grfPersistent.fields.fHaveMaster ? " master" : "") <<
-            (data.grfPersistent.fields.fFlipH ? " flipv" : "") <<
-            (data.grfPersistent.fields.fConnector ? " connector" : "") <<
-            (data.grfPersistent.fields.fHaveAnchor ? " anchor" : "") <<
-            (data.grfPersistent.fields.fBackground ? " background" : "") <<
-            (data.grfPersistent.fields.fHaveSpt ? " spt" : "") <<
-            " operands: " << bytes << endl;
-        if (data.grfPersistent.fields.fDeleted || !m_isRequiredDrawing)
-            skip(bytes, operands);
-        else
-            (this->*result)(op, bytes, operands);
-    }
+    m_shape.type = op.opcode.fields.inst;
+    m_shape.length = bytes;
+    m_shape.data = new char [bytes];
+    operands.readRawBytes(m_shape.data, bytes);
 }
 
 void Msod::opSpcontainer(Header &, U32 bytes, QDataStream &operands)
 {
     walk(bytes, operands);
+
+    // Having gathered all the information for this shape, we can now draw it.
+
+    QByteArray  a;
+    a.setRawData(m_shape.data, m_shape.length);
+    QDataStream s(a, IO_ReadOnly);
+    s.setByteOrder(QDataStream::LittleEndian); // Great, I love Qt !
+    drawShape(m_shape.type, m_shape.length, s);
+    a.resetRawData(m_shape.data, m_shape.length);
+    delete [] m_shape.data;
+    m_shape.data = 0L;
 }
 
 void Msod::opSpgr(Header &, U32 bytes, QDataStream &operands)
@@ -1156,52 +1003,6 @@ void Msod::opTextbox(
     skip(bytes, operands);
 }
 
-void Msod::shpLine(Header &, U32 bytes, QDataStream &operands)
-{
-    QPoint lineFrom;
-    QPoint lineTo;
-
-    if (bytes < 8)
-        return;
-    lineTo = normalisePoint(operands);
-    QPointArray points(2);
-    points.setPoint(0, lineFrom);
-    points.setPoint(1, lineTo);
-        kdDebug(s_area) << "from x " << lineFrom.x()<< endl;
-        kdDebug(s_area) << "from y " << lineFrom.y()<< endl;
-        kdDebug(s_area) << "from x " << lineTo.x()<< endl;
-        kdDebug(s_area) << "from y " << lineTo.y()<< endl;
-    gotPolyline(m_dc, points);
-}
-
-void Msod::shpPictureFrame(Header &, U32 bytes, QDataStream &operands)
-{
-    skip(bytes, operands);
-}
-
-void Msod::shpRectangle(Header &, U32 bytes, QDataStream &operands)
-{
-    QPoint topLeft;
-    QSize size;
-
-    if (bytes < 8)
-        return;
-    topLeft = normalisePoint(operands);
-    size = normaliseSize(operands);
-    QRect rect(topLeft, size);
-    QPointArray points(4);
-
-        kdDebug(s_area) << "left " << topLeft.x()<< endl;
-        kdDebug(s_area) << "top " << topLeft.y()<< endl;
-        kdDebug(s_area) << "width " << size.width()<< endl;
-        kdDebug(s_area) << "height " << size.height()<< endl;
-    points.setPoint(0, topLeft);
-    points.setPoint(1, rect.topRight());
-    points.setPoint(2, rect.bottomRight());
-    points.setPoint(3, rect.bottomLeft());
-    gotRectangle(m_dc, points);
-}
-
 void Msod::skip(U32 bytes, QDataStream &operands)
 {
     if ((int)bytes < 0)
@@ -1237,5 +1038,287 @@ void Msod::walk(U32 bytes, QDataStream &operands)
 
         invokeHandler(op, op.cbLength, operands);
         length += op.cbLength + 8;
+    }
+}
+
+Msod::Options::Options(
+    Msod &parent) :
+        m_parent(parent)
+{
+    m_pVertices = 0L;
+    initialise();
+}
+
+Msod::Options::~Options()
+{
+    delete m_pVertices;
+}
+
+double Msod::Options::from1616ToDouble(U32 value)
+{
+    return (value >> 16) + 65535.0 / (double)(value & 0xffff);
+}
+
+void Msod::Options::initialise()
+{
+    m_rotation = 0.0;
+
+    m_lTxid = 0;
+
+    m_pib = 0;
+    m_pibName = QString::null;
+    m_pibFlags = 0;
+    m_pictureId = 0;
+    m_fNoHitTestPicture = false;
+    m_pictureGray = false;
+    m_pictureBiLevel = false;
+    m_pictureActive = false;
+
+    m_geoLeft = 0;
+    m_geoTop = 0;
+    m_geoRight = 21600;
+    m_geoBottom = 21600;
+    m_shapePath = 1;
+    delete m_pVertices;
+    m_pVertices = 0L;
+    m_fShadowOK = true;
+    m_f3DOK = true;
+    m_fLineOK = true;
+    m_fGTextOK = false;
+    m_fFillShadeShapeOK = false;
+    m_fFillOK = true;
+
+    m_fFilled = true;
+    m_fHitTestFill = true;
+    m_fillShape = true;
+    m_fillUseRect = false;
+    m_fNoFillHitTest = false;
+
+    m_lineColor = 0;
+    m_lineBackColor = 0xffffff;
+    m_lineType = 0;
+    m_lineWidth = 9525;
+
+    m_fArrowheadsOK = false;
+    m_fLine = true;
+    m_fHitTestLine = true;
+    m_lineFillShape = true;
+    m_fNoLineDrawDash = false;
+
+    m_bWMode = 1;
+
+    m_fOleIcon = false;
+    m_fPreferRelativeResize = false;
+    m_fLockShapeType = false;
+    m_fDeleteAttachedObject = false;
+    m_fBackground = false;
+}
+
+void Msod::Options::walk(U32 bytes, QDataStream &operands)
+{
+    Header op;
+    U16 length = 0;
+    U16 complexLength = 0;
+
+    // Reset all options to default values.
+
+    initialise();
+
+    // First process all simple options, and add all complex options to a list.
+
+    QList<Header> complexOpts;
+    complexOpts.setAutoDelete(true);
+    bool unsupported;
+    while (length + complexLength < (int)bytes)
+    {
+        operands >> op.opcode.info >> op.value;
+        length += 6;
+
+        // Defer processing of complex options.
+
+        if (op.opcode.fields.fComplex)
+        {
+            complexLength += op.value;
+            complexOpts.append(new Header(op));
+            continue;
+        }
+
+        // Now squirrel away the option value.
+
+        unsupported = false;
+        switch (op.opcode.fields.pid)
+        {
+        case 4:
+            m_rotation = from1616ToDouble(op.value);
+            break;
+        case 128:
+            m_lTxid = op.value;
+            break;
+        case 260:
+            if (op.opcode.fields.fBid)
+            {
+                m_pib = op.value;
+                if (m_parent.m_isRequiredDrawing)
+                {
+                    Image *image = m_parent.m_images[m_pib - 1];
+
+                    // If it is an embedded WMF we don't bother with the
+                    // part; we just extract it as more vector graphics.
+
+                    if (image->extension == "wmf")
+                    {
+                        QByteArray  a;
+                        a.setRawData(image->data, image->length);
+                        QDataStream s(a, IO_ReadOnly);
+                        m_parent.KWmf::parse(s, image->length);
+                        a.resetRawData(image->data, image->length);
+                    }
+                    else
+                    {
+                        m_parent.gotPicture(
+                            m_pib,
+                            image->extension,
+                            image->length,
+                            image->data);
+                    }
+                }
+            }
+            else
+            {
+                kdError(s_area) << "Cannot handle IMsoBlip" << endl;
+            }
+            break;
+        case 262:
+            m_pibFlags = op.value;
+            break;
+        case 267:
+            m_pictureId = op.value;
+            break;
+        case 319:
+            m_fNoHitTestPicture = (op.value & 0x0008) != 0;
+            m_pictureGray = (op.value & 0x0004) != 0;
+            m_pictureBiLevel = (op.value & 0x0002) != 0;
+            m_pictureActive = (op.value & 0x0001) != 0;
+            break;
+        case 320:
+            m_geoLeft = op.value;
+            kdWarning(s_area) << "left: " <<    op.value << endl;
+            break;
+        case 321:
+            m_geoTop = op.value;
+            kdWarning(s_area) << "top: " <<    op.value << endl;
+            break;
+        case 322:
+            m_geoRight = op.value;
+            kdWarning(s_area) << "right: " <<    op.value << endl;
+            break;
+        case 323:
+            m_geoBottom = op.value;
+            kdWarning(s_area) << "bottom: " <<    op.value << endl;
+            break;
+        case 324:
+            m_shapePath = op.value;
+            break;
+        case 383:
+            m_fShadowOK = (op.value & 0x0020) != 0;
+            m_f3DOK = (op.value & 0x0010) != 0;
+            m_fLineOK = (op.value & 0x0008) != 0;
+            m_fGTextOK = (op.value & 0x0004) != 0;
+            m_fFillShadeShapeOK = (op.value & 0x0002) != 0;
+            m_fFillOK = (op.value & 0x0001) != 0;
+            break;
+        case 447:
+            m_fFilled = (op.value & 0x0010) != 0;
+            m_fHitTestFill = (op.value & 0x0008) != 0;
+            m_fillShape = (op.value & 0x0004) != 0;
+            m_fillUseRect = (op.value & 0x0002) != 0;
+            m_fNoFillHitTest = (op.value & 0x0001) != 0;
+            break;
+        case 448:
+            m_lineColor = op.value;
+            break;
+        case 450:
+            m_lineBackColor = op.value;
+            break;
+        case 452:
+            m_lineType = op.value;
+            break;
+        case 459:
+            m_lineWidth = op.value;
+            break;
+        case 511:
+            m_fArrowheadsOK = (op.value & 0x0010) != 0;
+            m_fLine = (op.value & 0x0008) != 0;
+            m_fHitTestLine = (op.value & 0x0004) != 0;
+            m_lineFillShape = (op.value & 0x0002) != 0;
+            m_fNoLineDrawDash = (op.value & 0x0001) != 0;
+            break;
+        case 772:
+            m_bWMode = op.value;
+            break;
+        case 831:
+            m_fOleIcon = (op.value & 0x0010) != 0;
+            m_fPreferRelativeResize = (op.value & 0x0008) != 0;
+            m_fLockShapeType = (op.value & 0x0004) != 0;
+            m_fDeleteAttachedObject = (op.value & 0x0002) != 0;
+            m_fBackground = (op.value & 0x0001) != 0;
+            break;
+        default:
+            unsupported = true;
+            kdWarning(s_area) << "unsupported simple option: " <<
+                op.opcode.fields.pid << endl;
+            break;
+        }
+        if (!unsupported)
+            kdDebug(s_area) << "simple option: " <<
+                op.opcode.fields.pid << endl;
+    }
+
+    // Now empty the list of complex options.
+
+    while (complexOpts.count())
+    {
+        Q_INT16 t16;
+        unsigned i;
+
+        op = *complexOpts.getFirst();
+        complexOpts.removeFirst();
+        unsupported = false;
+        switch (op.opcode.fields.pid)
+        {
+        case 261:
+            while (true)
+            {
+                operands >> t16;
+                if (!t16)
+                    break;
+                m_pibName += QChar(t16);
+            };
+            break;
+        case 325:
+            m_pVertices = new QPointArray(op.value / 4);
+            for (i = 0; i < m_pVertices->count(); i++)
+            {
+                m_pVertices->setPoint(i, m_parent.normalisePoint(operands));
+            };
+            break;
+        case 326:
+            operands >> t16;
+            i = t16;
+            operands >> t16;
+            operands >> t16;
+            m_parent.skip(i * t16, operands);
+            break;
+        default:
+            unsupported = true;
+            kdWarning(s_area) << "unsupported complex option: " <<
+                op.opcode.fields.pid << " operands: " << op.value << endl;
+            m_parent.skip(op.value, operands);
+            break;
+        }
+        if (!unsupported)
+            kdDebug(s_area) << "complex option: " <<
+                op.opcode.fields.pid << " operands: " << op.value  << endl;
+        complexLength -= op.value;
     }
 }

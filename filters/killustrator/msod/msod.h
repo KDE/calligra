@@ -114,10 +114,20 @@ private:
     unsigned m_requestedShapeId;
     bool m_isRequiredDrawing;
     const char *m_delayStream;
+    struct
+    {
+        unsigned type;
+        char *data;
+        unsigned length;
+    } m_shape;
 
     QPoint normalisePoint(
         QDataStream &operands);
     QSize normaliseSize(
+        QDataStream &operands);
+    void drawShape(
+        unsigned shapeType,
+        U32 bytes,
         QDataStream &operands);
 
     // Common Header (MSOBFH)
@@ -207,30 +217,94 @@ private:
     void opSpgr(Header &op, U32 bytes, QDataStream &operands);
     void opSpgrcontainer(Header &op, U32 bytes, QDataStream &operands);
     void opSplitmenucolors(Header &op, U32 bytes, QDataStream &operands);
-    void opTextbox(Header &op, U32 bytes, QDataStream &operands);                                                               // do nothing
-
-    void shpLine(Header &op, U32 bytes, QDataStream &operands);                                                               // do nothing
-    void shpPictureFrame(Header &op, U32 bytes, QDataStream &operands);                                                               // do nothing
-    void shpRectangle(Header &op, U32 bytes, QDataStream &operands);                                                               // do nothing
+    void opTextbox(Header &op, U32 bytes, QDataStream &operands);
 
     // Option handling.
 
-    typedef struct
+    class Options
     {
-        union
-        {
-            U16 info;
-            struct
-            {
-                U16 pid: 14;
-                U16 fBid: 1;
-                U16 fComplex: 1;
-            } fields;
-        } opcode;
-        U32 value;
-    } Option;
+    public:
+        Options(Msod &parent);
+        ~Options();
+        void walk(
+            U32 bytes,
+            QDataStream &operands);
 
-    double from1616ToDouble(U32 value);
+        double m_rotation;
+
+        U32 m_lTxid;
+
+        U32 m_pib;
+        QString m_pibName;
+        U32 m_pibFlags;
+        U32 m_pictureId;
+        bool m_fNoHitTestPicture;
+        bool m_pictureGray;
+        bool m_pictureBiLevel;
+        bool m_pictureActive;
+
+        U32 m_geoLeft;
+        U32 m_geoTop;
+        U32 m_geoRight;
+        U32 m_geoBottom;
+        U32 m_shapePath;
+        QPointArray *m_pVertices;
+        bool m_fShadowOK;
+        bool m_f3DOK;
+        bool m_fLineOK;
+        bool m_fGTextOK;
+        bool m_fFillShadeShapeOK;
+        bool m_fFillOK;
+
+        bool m_fFilled;
+        bool m_fHitTestFill;
+        bool m_fillShape;
+        bool m_fillUseRect;
+        bool m_fNoFillHitTest;
+
+        U32 m_lineColor;
+        U32 m_lineBackColor;
+        U32 m_lineType;
+        U32 m_lineWidth;
+
+        bool m_fArrowheadsOK;
+        bool m_fLine;
+        bool m_fHitTestLine;
+        bool m_lineFillShape;
+        bool m_fNoLineDrawDash;
+
+        U32 m_bWMode;
+
+        bool m_fOleIcon;
+        bool m_fPreferRelativeResize;
+        bool m_fLockShapeType;
+        bool m_fDeleteAttachedObject;
+        bool m_fBackground;
+
+    private:
+        Msod &m_parent;
+
+        typedef struct
+        {
+            union
+            {
+                U16 info;
+                struct
+                {
+                    U16 pid: 14;
+                    U16 fBid: 1;
+                    U16 fComplex: 1;
+                } fields;
+            } opcode;
+            U32 value;
+        } Header;
+
+        void initialise();
+        double from1616ToDouble(U32 value);
+    };
+    friend class Msod::Options;
+
+    Options *m_opt;
 };
 
 #endif
