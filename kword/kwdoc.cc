@@ -1462,6 +1462,11 @@ void KWDocument::loadStyleTemplates( QDomElement stylesElem )
     QValueList<QString> followingStyles;
     QPtrList<KWStyle> m_styleList(m_styleColl->styleList());
     QDomNodeList listStyles = stylesElem.elementsByTagName( "STYLE" );
+    if( listStyles.count() > 0) { // we are going to import at least one style.
+        KWStyle *s = m_styleColl->findStyle("Standard");
+        if(s) // delete the standard style.
+            m_styleColl->removeStyleTemplate(s);
+    }
     for (unsigned int item = 0; item < listStyles.count(); item++) {
         QDomElement styleElem = listStyles.item( item ).toElement();
 
