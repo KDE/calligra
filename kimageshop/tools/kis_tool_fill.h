@@ -34,7 +34,7 @@ struct fillinfo
    int right;
    int top;
    int bottom;
-   unsigned char or, og, ob, r, g, b;
+   unsigned char o_r, o_g, o_b, r, g, b;
 };
 
 struct fillpixelinfo

@@ -38,13 +38,13 @@ Fill::~Fill() {}
 
 int Fill::is_old_pixel_value(struct fillinfo *info, int x, int y)
 {
-   unsigned char or = fLayer->pixel(0, x, y);
-   unsigned char og = fLayer->pixel(1, x, y);   
-   unsigned char ob = fLayer->pixel(2, x, y);   
+   unsigned char o_r = fLayer->pixel(0, x, y);
+   unsigned char o_g = fLayer->pixel(1, x, y);   
+   unsigned char o_b = fLayer->pixel(2, x, y);   
 
-   if ((or == info->or) 
-   && (og == info->og) 
-   && (ob == info->ob))
+   if ((o_r == info->o_r) 
+   && (o_g == info->o_g) 
+   && (o_b == info->o_b))
       return 1;
    
    return 0;
@@ -147,9 +147,9 @@ void Fill::seed_flood_fill( int x, int y, QRect & frect )
     fillinfo.b = nBlue; 
 
     // original color at mouse click position 
-    fillinfo.or =  sRed; 
-    fillinfo.og =  sGreen; 
-    fillinfo.ob =  sBlue; 
+    fillinfo.o_r =  sRed; 
+    fillinfo.o_g =  sGreen; 
+    fillinfo.o_b =  sBlue; 
    
     flood_fill(&fillinfo, x, y);
 }
