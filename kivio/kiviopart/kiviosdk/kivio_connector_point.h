@@ -27,7 +27,7 @@ class KivioConnectorTarget;
 class KivioStencil;
 
 
-class KDE_EXPORT KivioConnectorPoint
+class KIVIO_EXPORT KivioConnectorPoint
 {
 protected:
     // The position of this connector point

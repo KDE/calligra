@@ -8,6 +8,8 @@
 #include <qdom.h>
 #include <qptrlist.h>
 
+#include <koffice_export.h>
+
 #include "kivio_stencil.h"
 #include "kivio_text_style.h"
 
@@ -20,7 +22,7 @@ class KivioIntraStencilData;
 class KivioStencil;
 
 
-class KDE_EXPORT Kivio1DStencil : public KivioStencil
+class KIVIO_EXPORT Kivio1DStencil : public KivioStencil
 {
 protected:
     QPtrList <KivioConnectorPoint> *m_pConnectorPoints;

@@ -16,6 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+#include <koffice_export.h>
 #include <koApplication.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
@@ -30,7 +31,7 @@ static const KCmdLineOptions options[]=
   KCmdLineLastOption
 };
 
-extern "C" KDE_EXPORT int kdemain( int argc, char **argv )
+extern "C" KIVIO_EXPORT int kdemain( int argc, char **argv )
 {
   KCmdLineArgs::init( argc, argv, newKivioAboutData() );
   KCmdLineArgs::addCmdLineOptions( options );

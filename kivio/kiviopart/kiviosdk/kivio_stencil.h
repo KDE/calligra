@@ -28,6 +28,7 @@
 #include <koPoint.h>
 #include <kglobalsettings.h>
 #include <koRect.h>
+#include <koffice_export.h>
 
 #include "kivio_line_style.h"
 
@@ -113,7 +114,7 @@ typedef enum
 
 
 
-class KDE_EXPORT KivioStencil
+class KIVIO_EXPORT KivioStencil
 {
   protected:
     // Dimensions, size

@@ -83,7 +83,7 @@ struct KivioArrowHeadData
 };
 
 
-class KDE_EXPORT KivioArrowHead
+class KIVIO_EXPORT KivioArrowHead
 {
   protected:
     /**
