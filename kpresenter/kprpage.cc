@@ -240,6 +240,12 @@ void KPrPage::pasteObjs( const QByteArray & data,int nbCopy, double angle, doubl
 
     if (macro)
         m_doc->addCommand(macro);
+    //update sidebar
+    if ( m_doc->refreshSideBar())
+    {
+        int pos=m_doc->pageList().findRef(this);
+        m_doc->updateSideBarItem(pos);
+    }
 
     m_doc->setModified(true);
 }

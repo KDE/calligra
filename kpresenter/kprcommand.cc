@@ -2411,6 +2411,7 @@ KPrFlipObjectCommand::KPrFlipObjectCommand( const QString &name, KPresenterDoc *
     m_object(_obj),
     horizontal(_horizontal)
 {
+    m_page = m_doc->findSideBarPage( _obj );
 }
 
 void KPrFlipObjectCommand::execute()
@@ -2480,6 +2481,11 @@ void KPrFlipObjectCommand::flipObject()
         }
     }
 
+    if ( m_doc->refreshSideBar())
+    {
+        int pos=m_doc->pageList().findRef(m_page);
+        m_doc->updateSideBarItem(pos, (m_page == m_doc->stickyPage()) ? true: false );
+    }
 }
 
 KPrGeometryPropertiesCommand::KPrGeometryPropertiesCommand( const QString &_name, QValueList<bool> &_lst, QPtrList<KPObject> &_objects, bool _newValue,  KPresenterDoc *_doc, KgpType _type):
@@ -2556,6 +2562,7 @@ KPrCloseObjectCommand::KPrCloseObjectCommand( const QString &_name, KPObject *_o
       objects( _obj ),
       doc(_doc)
 {
+    m_page = doc->findSideBarPage( _obj );
 }
 
 KPrCloseObjectCommand::~KPrCloseObjectCommand()
@@ -2610,6 +2617,12 @@ void KPrCloseObjectCommand::closeObject(bool close)
             doc->repaint( obj );
         }
     }
+    if ( doc->refreshSideBar())
+    {
+        int pos=doc->pageList().findRef(m_page);
+        doc->updateSideBarItem(pos, (m_page == doc->stickyPage()) ? true: false );
+    }
+
 }
 
 MarginsStruct::MarginsStruct( KPTextObject *obj )

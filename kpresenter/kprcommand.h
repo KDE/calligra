@@ -992,6 +992,7 @@ protected:
     KPresenterDoc *m_doc;
     KPObject *m_object;
     bool horizontal;
+    KPrPage *m_page;
 };
 
 class KPrGeometryPropertiesCommand : public KNamedCommand
@@ -1041,6 +1042,7 @@ protected:
 
     KPObject *objects;
     KPresenterDoc * doc;
+    KPrPage *m_page;
 };
 
 struct MarginsStruct {
