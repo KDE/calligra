@@ -16,7 +16,7 @@ class VPath;
 class VMCmdStroke : public VCommand
 {
 public:
-	VMCmdStroke( KarbonPart* part, const VColor &color );
+	VMCmdStroke( KarbonPart* part, const VColor &color, float opacity = -1 );
 	virtual ~VMCmdStroke() {}
 
 	virtual void execute();
@@ -25,6 +25,7 @@ public:
 private:
 	VObjectList m_objects;
 	VColor m_color;
+	float m_opacity;
 };
 
 #endif

@@ -5,6 +5,7 @@
 #include <qbuttongroup.h>
 #include <kpixmap.h>
 #include <kstandarddirs.h>
+#include <kdualcolorbtn.h>
 #include <qtoolbutton.h>
 #include <kdualcolorbutton.h>
 #include <koMainWindow.h>
@@ -133,6 +134,15 @@ VToolContainer::VToolContainer( KoView* parent, const char* /*name*/ )
 	dlggroup->insert( button, Gradient);
 	dlggroup->setInsideSpacing(2);
 	dlggroup->setInsideMargin(5);
+
+	//dialog buttons
+	m_dualColorButton = new KDualColorButton( this );
+    connect( m_dualColorButton, SIGNAL(fgChanged(const QColor &)), this,
+					        SIGNAL(strokeColorChanged(const QColor &)));
+    connect( m_dualColorButton, SIGNAL(bgChanged(const QColor &)), this,
+					        SIGNAL(fillColorChanged(const QColor &)));
+	m_dualColorButton->setMaximumWidth( 30 );
+	m_dualColorButton->setMaximumHeight( 30 );
 }
 
 VToolContainer::~VToolContainer() { }

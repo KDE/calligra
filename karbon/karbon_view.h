@@ -93,6 +93,8 @@ protected slots:
 	//toolbox dialogs - slots
 	void solidFillClicked();
 	void strokeClicked();
+	void slotStrokeColorChanged( const QColor & );
+	void slotFillColorChanged( const QColor & );
 
 protected:
 	virtual void updateReadWrite( bool rw );

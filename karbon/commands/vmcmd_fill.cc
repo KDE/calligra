@@ -8,11 +8,11 @@
 #include "vmcmd_fill.h"
 #include "vfill.h"
 
-VMCmdFill::VMCmdFill( KarbonPart* part, const VColor &color )
-	: VCommand( part, i18n( "Fill Objects" ) ), m_color( color )
+VMCmdFill::VMCmdFill( KarbonPart* part, const VColor &color, float opacity )
+	: VCommand( part, i18n( "Fill Objects" ) ), m_color( color ), m_opacity( opacity )
 {
 	m_objects = m_part->selection();
-	m_part->deselectAllObjects();
+	//m_part->deselectAllObjects();
 
 	if( m_objects.count() == 1 )
 		setName( i18n( "Fill Object" ) );
@@ -24,6 +24,9 @@ VMCmdFill::execute()
 	VObjectListIterator itr( m_objects );
 	for ( ; itr.current() ; ++itr )
 	{
+		//if( m_opacity == -1 )
+		//	m_color.setOpacity( itr.current()->fill().color().opacity() );
+
 		itr.current()->fill().setColor( m_color );
 	}
 }

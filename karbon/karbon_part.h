@@ -10,6 +10,7 @@
 #include <koDocument.h>
 
 #include "vlayer.h"
+#include "vcolor.h"
 
 class QRect;
 
@@ -57,6 +58,10 @@ public:
 	void moveSelectionToTop();
 	void moveSelectionToBottom();
 
+	void setDefaultStrokeColor( const VColor &color ) { m_defaultStrokeColor = color; }
+	void setDefaultFillColor( const VColor &color ) { m_defaultFillColor = color; }
+	void applyDefaultColors( VObject & ) const;
+
 public slots:
     void repaintAllViews( bool erase = false );
     void slotDocumentRestored();
@@ -72,6 +77,9 @@ private:
 	VObjectList m_selection;		// a list of selected objects.
 
 	VCommandHistory* m_commandHistory;	// everybody loves undo/redo.
+
+	VColor m_defaultStrokeColor;
+	VColor m_defaultFillColor;
 };
 
 #endif

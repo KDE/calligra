@@ -28,6 +28,8 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
         connect( m_commandHistory, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
         connect( m_commandHistory, SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
 
+	float r = 1.0, g = 1.0, b = 1.0;
+	m_defaultFillColor.setValues( &r, &g, &b, 0L );
 }
 
 KarbonPart::~KarbonPart()
@@ -269,16 +271,24 @@ KarbonPart::addCommand( VCommand* cmd, bool repaint  )
 		repaintAllViews();
 }
 
-void KarbonPart::slotDocumentRestored()
+void
+KarbonPart::slotDocumentRestored()
 {
     setModified( false );
 }
 
-void KarbonPart::slotCommandExecuted()
+void
+KarbonPart::slotCommandExecuted()
 {
     setModified( true );
 }
 
+void
+KarbonPart::applyDefaultColors( VObject &obj ) const
+{
+	obj.stroke().setColor( m_defaultStrokeColor );	
+	obj.fill().setColor( m_defaultFillColor );	
+}
 
 void
 KarbonPart::purgeHistory()

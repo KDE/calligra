@@ -16,7 +16,7 @@ class VPath;
 class VMCmdFill : public VCommand
 {
 public:
-	VMCmdFill( KarbonPart* part, const VColor &color );
+	VMCmdFill( KarbonPart* part, const VColor &color, float opacity = -1 );
 	virtual ~VMCmdFill() {}
 
 	virtual void execute();
@@ -25,6 +25,7 @@ public:
 private:
 	VObjectList m_objects;
 	VColor m_color;
+	float m_opacity;
 };
 
 #endif

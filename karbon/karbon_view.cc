@@ -36,6 +36,8 @@
 #include "vmdlg_stroke.h"
 #include "vmpanel_color.h"
 #include "vccmd_text.h"
+#include "vmcmd_stroke.h"
+#include "vmcmd_fill.h"
 #include "vtext.h"
 
 #include <kdebug.h>
@@ -353,6 +355,32 @@ KarbonView::strokeClicked()
 }
 
 void
+KarbonView::slotStrokeColorChanged( const QColor &c )
+{
+	kdDebug() << "In KarbonView::slotStrokeColorChanged" << endl;
+	VColor color;
+	float r = float( c.red() ) / 255.0, g = float( c.green() ) / 255.0, b = float( c.blue() ) / 255.0;
+
+	color.setValues( &r, &g, &b, 0L );
+	m_part->setDefaultStrokeColor( color );
+
+	m_part->addCommand( new VMCmdStroke( m_part, color ), true );
+}
+
+void
+KarbonView::slotFillColorChanged( const QColor &c )
+{
+	kdDebug() << "In KarbonView::slotFillColorChanged" << endl;
+	VColor color;
+	float r = float( c.red() ) / 255.0, g = float( c.green() ) / 255.0, b = float( c.blue() ) / 255.0;
+
+	color.setValues( &r, &g, &b, 0L );
+	m_part->setDefaultFillColor( color );
+
+	m_part->addCommand( new VMCmdFill( m_part, color ), true );
+}
+
+void
 KarbonView::viewColorManager()
 {
 	VColorPanel* m_ColorPanel = new VColorPanel ( this );
@@ -511,6 +539,8 @@ KarbonView::initActions()
 	connect( m_toolbox, SIGNAL(textToolActivated()), this, SLOT(textTool()) );
 	connect( m_toolbox, SIGNAL(solidFillActivated()), this, SLOT(solidFillClicked()) );
 	connect( m_toolbox, SIGNAL(strokeActivated()), this, SLOT(strokeClicked()) );
+	connect( m_toolbox, SIGNAL(strokeColorChanged(const QColor &)), this, SLOT(slotStrokeColorChanged(const QColor &)) );
+	connect( m_toolbox, SIGNAL(fillColorChanged(const QColor &)), this, SLOT(slotFillColorChanged(const QColor &)) );
 	shell()->moveDockWindow( m_toolbox, Qt::DockLeft );
 	m_toolbox->show();
 }

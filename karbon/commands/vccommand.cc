@@ -14,6 +14,8 @@ VCCommand::execute()
 	else
 	{
 		m_object = createPath();
+
+		m_part->applyDefaultColors( *m_object );
 		// add path:
 		m_part->insertObject( m_object );
 		m_part->selectObject( *m_object, true );
