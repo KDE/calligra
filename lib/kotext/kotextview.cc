@@ -1060,6 +1060,7 @@ void KoTextView::insertSpecialChar(QChar _c, const QString& font)
     else
     {
         textObject()->insert( cursor(), newFormat, _c, false, true, i18n("Insert Special Char"));
+        delete newFormat;
     }
 }
 
