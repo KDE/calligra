@@ -99,6 +99,8 @@ KexiDBField::typeName(ColumnType sqltype)
 		case SQLBit:
 			return "Bool";
 	}
+	
+	return QString::null;
 }
 
 QString

@@ -18,17 +18,27 @@
  */
 
 #include <qregexp.h>
+#include <qevent.h>
+#include <qlayout.h>
 
 #include <kglobal.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 #include "kexiinputtableedit.h"
 
 KexiInputTableEdit::KexiInputTableEdit(QVariant value, QVariant::Type type, QString ov, bool mark, QWidget *parent, const char *name)
- : QLineEdit(parent, name)
+ : KexiTableEdit()
 {
 	m_type = type;
 	m_value = value;
+	m_view = new QLineEdit(this, "tableLineEdit");
+	m_view->installEventFilter(this);
+	m_view->setFrame(false);
+	(new QVBoxLayout(this))->addWidget(m_view);
+	QPalette p(m_view->palette());
+	p.setColor(QColorGroup::Base, QColor(200,200,255));
+	m_view->setPalette(p);
 	
 	if(ov != QString::null)
 	{
@@ -36,25 +46,25 @@ KexiInputTableEdit::KexiInputTableEdit(QVariant value, QVariant::Type type, QStr
 		{
 			case QVariant::Double:
 				if(ov == KGlobal::_locale->decimalSymbol() || ov == KGlobal::_locale->monetaryDecimalSymbol())
-					setText(ov);
+					m_view->setText(ov);
 					
 			case QVariant::Int:
 				if(ov == KGlobal::_locale->negativeSign())
-					setText(ov);
+					m_view->setText(ov);
 
 			case QVariant::UInt:
 				if(ov == "1" || ov == "2" || ov == "3" || ov == "4" || ov == "5" || ov == "6" || ov == "7" || ov == "8" || ov == "9" || ov == "0")
-					setText(ov); 
+					m_view->setText(ov); 
 					break;
 				
 				if(ov == "=")
 					m_calculatedCell = true;
-					setText(ov);
+					m_view->setText(ov);
 					break;
 				
 
 			default:
-				setText(ov);
+				m_view->setText(ov);
 				break;
 		}
 	}
@@ -62,82 +72,106 @@ KexiInputTableEdit::KexiInputTableEdit(QVariant value, QVariant::Type type, QStr
 	{
 //		qDebug("KexiInputTableEdit::KexiInputTableEdit(): have to mark! (%i)", text().length());
 //		setText(value.toString());
-		insert(value.toString());
-		qDebug("KexiInputTableEdit::KexiInputTableEdit(): have to mark! (%i)", text().length());
-		setSelection(0, text().length());
-		selectAll();
+		m_view->insert(value.toString());
+		qDebug("KexiInputTableEdit::KexiInputTableEdit(): have to mark! (%i)", m_view->text().length());
+		m_view->setSelection(0, m_view->text().length());
+		m_view->selectAll();
 	}
 
 	m_calculatedCell = false;
 }
 
-void
-KexiInputTableEdit::keyPressEvent(QKeyEvent *ev)
+bool
+KexiInputTableEdit::eventFilter(QObject* watched, QEvent* e)
 {
-	switch(m_type)
+	if(watched == m_view)
 	{
-		case QVariant::Double:
-			if(ev->text() == KGlobal::_locale->decimalSymbol() || ev->text() == KGlobal::_locale->monetaryDecimalSymbol())
-				QLineEdit::keyPressEvent(ev);
-		case QVariant::Int:
-			if(ev->text() == KGlobal::_locale->negativeSign())
-				QLineEdit::keyPressEvent(ev);
-
-		case QVariant::UInt:
-			if(m_calculatedCell)
-			{
-				QLineEdit::keyPressEvent(ev);
-				break;
-			}
+		if(e->type() == QEvent::KeyPress)
+		{
+			QKeyEvent* ev = static_cast<QKeyEvent*>(e);
+			kdDebug() << "KeyPress = " << ev->text() << endl;
 			
-			switch(ev->key())
+			switch(m_type)
 			{
-				case Key_0:
-				case Key_1:
-				case Key_2:
-				case Key_3:
-				case Key_4:
-				case Key_5:
-				case Key_6:
-				case Key_7:
-				case Key_8:
-				case Key_9:
-				case Key_Return:
-				case Key_Enter:
-				case Key_Insert:
-				case Key_Delete:
-				case Key_Pause:
-				case Key_Print:
-				case Key_Home:
-				case Key_End:
-				case Key_Left:
-				case Key_Up:
-				case Key_Right:
-				case Key_Down:
-				case Key_Prior:
-				case Key_Next:
-				case Key_Escape:
-					QLineEdit::keyPressEvent(ev);
-					break;
+				case QVariant::Double:
+					if(ev->text() == KGlobal::_locale->decimalSymbol() || ev->text() == KGlobal::_locale->monetaryDecimalSymbol())
+						return false;
+						
+					return true;
 				
-				case Key_Equal:
-					m_calculatedCell = true;
+				case QVariant::Int:
+					if(ev->text() == KGlobal::_locale->negativeSign())
+						return false;
+						
+					return true;
+
+				case QVariant::UInt:
+					if(m_calculatedCell)
+					{
+						return false;
+						break;
+					}
+
+					switch(ev->key())
+					{
+						case Key_0:
+						case Key_1:
+						case Key_2:
+						case Key_3:
+						case Key_4:
+						case Key_5:
+						case Key_6:
+						case Key_7:
+						case Key_8:
+						case Key_9:
+						case Key_Return:
+						case Key_Enter:
+						case Key_Insert:
+						case Key_Delete:
+						case Key_Pause:
+						case Key_Print:
+						case Key_Home:
+						case Key_End:
+						case Key_Left:
+						case Key_Up:
+						case Key_Right:
+						case Key_Down:
+						case Key_Prior:
+						case Key_Next:
+						case Key_Escape:
+							return false;
+							break;
+
+						case Key_Equal:
+							m_calculatedCell = true;
+							return true;
+							break;
+
+						case Key_Backspace:
+							if(m_view->text() == "=")
+								m_calculatedCell = false;
+							return false;
+
+						default:
+							return true;
+							break;
+					}
+
 					break;
-				
-				case Key_Backspace:
-					if(text() == "=")
-						m_calculatedCell = false;
-					QLineEdit::keyPressEvent(ev);
 
 				default:
+					return false;
 					break;
 			}
-			
-			break;
-		
-		default:
-			QLineEdit::keyPressEvent(ev);
-			break;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	else
+	{
+		return KexiTableEdit::eventFilter(watched, e);
 	}
 }
 
@@ -154,8 +188,8 @@ KexiInputTableEdit::value()
 //			QString v;
 			if(!m_calculatedCell)
 			{
-				qDebug("KexiInputTableEdit::value() converting => %s", text().latin1());
-				v = text().replace(QRegExp("\\" + KGlobal::_locale->thousandsSeparator()), "");
+				qDebug("KexiInputTableEdit::value() converting => %s", m_view->text().latin1());
+				v = m_view->text().replace(QRegExp("\\" + KGlobal::_locale->thousandsSeparator()), "");
 				v = v.replace(QRegExp("\\" + KGlobal::_locale->decimalSymbol()), ".");
 				v = v.replace(QRegExp("\\" + KGlobal::_locale->negativeSign()), "-");
 				qDebug("KexiInputTableEdit::value() converting => %s", v.latin1());
@@ -165,11 +199,11 @@ KexiInputTableEdit::value()
 			{
 				//ok here should the formula be parsed so, just feel like in perl :)
 				double result = 0;
-				QString real = text().right(text().length() - 1);
+				QString real = m_view->text().right(m_view->text().length() - 1);
 				real = real.replace(QRegExp("\\" + KGlobal::_locale->thousandsSeparator()), "");
 				real = real.replace(QRegExp("\\" + KGlobal::_locale->decimalSymbol()), ".");
 //				qDebug("KexiInputTableEdit::value() calculating '%s'", real.latin1());
-				QStringList values = QStringList::split(QRegExp("[\+|\*|\/|-]"), real, false);
+				QStringList values = QStringList::split(QRegExp("[\\+|\\*|\\/|-]"), real, false);
 				QStringList ops = QStringList::split(QRegExp("[0-9]{1,8}(?:\\.[0-9]+)?"), real, false);
 
 				double lastValue = 0;
@@ -218,9 +252,21 @@ KexiInputTableEdit::value()
 			break;
 		
 		default:
-			return QVariant(text());
+			return QVariant(m_view->text());
 	}
 //	return QVariant(0);
+}
+
+void
+KexiInputTableEdit::end(bool mark)
+{
+	m_view->end(mark);
+}
+
+void
+KexiInputTableEdit::backspace()
+{
+	m_view->backspace();
 }
 
 KexiInputTableEdit::~KexiInputTableEdit()

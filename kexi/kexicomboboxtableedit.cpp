@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2002   Peter Simonsson <psn@linux.se>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -17,39 +17,23 @@
    Boston, MA 02111-1307, USA.
  */
 
-#ifndef KEXIINPUTTABLEEDIT_H
-#define KEXIINPUTTABLEEDIT_H
+#include <qlayout.h>
 
-#include <qlineedit.h>
-#include <qvariant.h>
+#include "kexicomboboxtableedit.h"
 
-#include "kexitableedit.h"
 
-class KexiInputTableEdit : public KexiTableEdit
+KexiComboBoxTableEdit::KexiComboBoxTableEdit(KexiDBField::ColumnType t, const QStringList list, QWidget *parent,
+ const char *name) : KexiTableEdit(parent, name)
 {
-	Q_OBJECT
+	m_view = new KComboBox(this, "tableCombo");
+	m_view->clear();
+	m_view->insertStringList(list);
+	m_view->setCurrentItem(static_cast<int>(t));
+	(new QVBoxLayout(this))->addWidget(m_view);
+}
 
-	public:
-		KexiInputTableEdit(QVariant value, QVariant::Type type, QString ov=QString::null, bool mark=false, QWidget *parent=0, const char *name=0);
-		~KexiInputTableEdit();
 
-		virtual QVariant value();
-		virtual bool eventFilter(QObject* watched, QEvent* e);
-		void end(bool mark);
-		void backspace();
-
-	protected:
-		void showHintButton();
-		
-		QVariant::Type	m_type;
-		QVariant	m_value;
-
-		bool		m_calculatedCell;
-	
-		QLineEdit* m_view;
-
-	signals:
-		void hintClicked();
-};
-
-#endif
+QVariant KexiComboBoxTableEdit::value()
+{
+	return QVariant(m_view->currentItem());
+}

@@ -32,6 +32,7 @@
 #include <qscrollview.h>
 #include <qtimer.h>
 #include <qvariant.h>
+#include <qptrlist.h>
 
 #include "kexitablerm.h"
 #include "kexitablelist.h"
@@ -44,7 +45,7 @@ class QTimer;
 class KexiTableHeader;
 class KexiTableRM;
 class KexiTableItem;
-class KexiInputTableEdit;
+class KexiTableEdit;
 //class KexiTableList;
 
 /*
@@ -78,7 +79,8 @@ public:
 		ColumnAutoIncrement
 	};
 
-	virtual void addColumn(QString name, QVariant::Type type, bool editable, int width=100, bool autoinc=false);
+	virtual void addColumn(QString name, QVariant::Type type, bool editable, QVariant defaultValue = QVariant(""),
+		int width=100, bool autoinc=false);
 
 	void setSorting(int col, bool ascending=true);
 
@@ -209,7 +211,7 @@ protected:
 	QHeader			*m_pTopHeader;
 	KexiTableHeader		*m_pVerticalHeader;
 	KexiTableRM		*m_pRecordMarker;
-	KexiInputTableEdit	*m_pEditor;
+	KexiTableEdit	*m_pEditor;
 
 	int			m_numRows;
 	int			m_numCols;
@@ -227,6 +229,7 @@ protected:
 	KexiTableList		m_contents;
 	QMemArray<QVariant::Type>	*m_pColumnTypes;
 	QMemArray<int>		*m_pColumnModes;
+	QPtrList<QVariant>		*m_pColumnDefaults;
 
 	bool			m_needAutoScroll;
 	QTimer			*m_scrollTimer;

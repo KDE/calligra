@@ -49,7 +49,9 @@
 #include "kexidatetableedit.h"
 #endif
 
+#include "kexitableedit.h"
 #include "kexiinputtableedit.h"
+#include "kexicomboboxtableedit.h"
 
 KexiTableView::KexiTableView(QWidget *parent, const char *name)
 :QScrollView(parent, name, Qt::WRepaintNoErase | Qt::WStaticContents | Qt::WResizeNoErase)
@@ -78,8 +80,8 @@ KexiTableView::KexiTableView(QWidget *parent, const char *name)
 	m_pUpdateTimer = new QTimer(this);
 
 	m_pColumnTypes = new QMemArray<QVariant::Type>;
-
 	m_pColumnModes = new QMemArray<int>;
+	m_pColumnDefaults = new QPtrList<QVariant>;
 	m_deletionPolicy = NoDelete;
 	m_additionPolicy = NoAdd;
 
@@ -124,7 +126,8 @@ KexiTableView::KexiTableView(QWidget *parent, const char *name)
 }
 
 
-void KexiTableView::addColumn(QString name, QVariant::Type type, bool editable, int width, bool autoinc)
+void KexiTableView::addColumn(QString name, QVariant::Type type, bool editable, QVariant defaultValue,
+ int width, bool autoinc)
 {
 	m_numCols++;
 	m_pColumnTypes->resize(m_numCols);
@@ -145,8 +148,8 @@ void KexiTableView::addColumn(QString name, QVariant::Type type, bool editable, 
 		m_pColumnModes->at(m_numCols-1) = ColumnReadOnly;
 	}
 
+	m_pColumnDefaults->append(new QVariant(defaultValue));
 	m_pTopHeader->addLabel(name, width);
-
 	m_pTopHeader->setUpdatesEnabled(true);
 }
 
@@ -224,6 +227,7 @@ void KexiTableView::clearAll()
 
 	m_pColumnTypes->resize(0);
 	m_pColumnModes->resize(0);
+	m_pColumnDefaults->clear();
 }
 
 int KexiTableView::findString(const QString &string)
@@ -322,6 +326,7 @@ KexiTableView::~KexiTableView()
 
 	delete m_pColumnTypes;
 	delete m_pColumnModes;
+	delete m_pColumnDefaults;
 
 	if(m_pBufferPm)
 		delete m_pBufferPm;
@@ -583,12 +588,9 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, const Q
 		}
 		case QVariant::StringList:
 		{
-			QComboBox *b = new QComboBox(this);
-			b->setGeometry(0, 0, x2, y2);
-			b->insertItem("[No Table]");
-			style().drawComplexControl(QStyle::CC_ComboBox, p, b, QRect(0, 0, x2, y2), colorGroup(), QStyle::Style_Enabled);
-			p->drawText(4, 0, w - 31, h - 3, AlignLeft | SingleLine | AlignLeft, "[No Table]");
-		
+			QStringList sl = m_pColumnDefaults->at(col)->toStringList();
+			p->drawText(x, 0, w - (x+x), h, AlignLeft | SingleLine | AlignVCenter,
+				sl[item->getInt(col)]);
 			break;
 		}
 		case QVariant::String:
@@ -891,29 +893,25 @@ void KexiTableView::createEditor(int row, int col, QString addText/* = QString::
 
 	switch(columnType(col))
 	{
-		case QVariant::Date:
-			#ifdef USE_KDE
-			m_pEditor = new KexiDateTableEdit(val, viewport(), "inPlaceEd");
-			qDebug("date editor created...");
+		case QVariant::StringList:
+			m_pEditor = new KexiComboBoxTableEdit(static_cast<KexiDBField::ColumnType>(val.toInt()),
+				m_pColumnDefaults->at(col)->toStringList(), viewport(), "inPlaceEd");
 			break;
-			#endif
-
+		case QVariant::Date:
+			m_pEditor = new KexiDateTableEdit(val, viewport(), "inPlaceEd");
+			kdDebug() << "date editor created..." << endl;
+			break;
 		default:
-//			m_pEditor = new QLineEdit(val + addText, viewport(), "inPlaceEd");
 			m_pEditor = new KexiInputTableEdit(val, columnType(col), addText, false, viewport(), "inPlaceEd");
-			m_pEditor->end(false);
+			static_cast<KexiInputTableEdit*>(m_pEditor)->end(false);
 			if(backspace)
-				m_pEditor->backspace();
+				static_cast<KexiInputTableEdit*>(m_pEditor)->backspace();
 
 			break;
 	}
 
 	m_pEditor->resize(columnWidth(m_curCol)-1, rowHeight(m_curRow)-1);
 	moveChild(m_pEditor, columnPos(m_curCol), rowPos(m_curRow));
-	QPalette p(m_pEditor->palette());
-	p.setColor(QColorGroup::Base, QColor(200,200,255));
-	m_pEditor->setPalette(p);
-	m_pEditor->setFrame(false);
 	m_pEditor->show();
 	m_pEditor->setFocus();
 }

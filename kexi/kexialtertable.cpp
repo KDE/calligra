@@ -41,8 +41,18 @@ KexiAlterTable::KexiAlterTable(QWidget *parent, QString table, const char *name)
 	l->addWidget(m_statusbar);
 	
 	//Cols
+	kdDebug() << "KexuiAlterTable::KexuiAlterTable(...): Add the columns to the tableview" << endl;
 	m_view->addColumn(i18n("Field Name"), QVariant::String, true);
-	m_view->addColumn(i18n("Datatype"), QVariant::String, true);
+	
+	QStringList strings;
+	strings.append(i18n("Choose Datatype"));
+	
+	for(int i = 1; i < 18; i++)
+	{
+		strings.append(KexiDBField::typeName(static_cast<KexiDBField::ColumnType>(i)));
+	}
+	
+	m_view->addColumn(i18n("Datatype"), QVariant::StringList, true, QVariant(strings));
 	m_view->addColumn(i18n("Length"), QVariant::Int, true);
 	m_view->addColumn(i18n("Required"), QVariant::Bool, true);
 	m_view->addColumn(i18n("Default Value"), QVariant::String, true);
@@ -51,6 +61,7 @@ KexiAlterTable::KexiAlterTable(QWidget *parent, QString table, const char *name)
 	connect(m_view, SIGNAL(itemChanged(KexiTableItem *, int)), this, SLOT(slotItemChanged(KexiTableItem *, int)));
 	setCaption(i18n(m_table + " - Table Editor"));
 	registerAs(DocumentWindow);
+	kdDebug() << "Ready" << endl;
 	initTable();
 }
 

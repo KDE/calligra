@@ -8,7 +8,7 @@ main.cpp kexiproject.cpp kexiformmanager.cpp kexicreateprojectpageengine.cpp kex
 kexicreateprojectpagedb.cpp kexicreateprojectpagefile.cpp kexicreateprojectpageauth.cpp kexicreateprojectpageauth.h \
 kexiprojectproperties.cpp kexiprojectpropertiesdb.cpp kexialtertable.cpp kexiquerydesigner.cpp \
 kexiquerydesignerguieditor.cpp kexiquerydesignerguitables.cpp kexirelation.cpp kexirelationview.cpp \
-kexiformbase.cpp
+kexiformbase.cpp kexicomboboxtableedit.cpp
 
 kexi_LDADD   = $(LIB_KPARTS) kexiDB/libkexidb.la formeditor/libkformeditor.la -lkstore
 
