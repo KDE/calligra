@@ -86,8 +86,39 @@ public:
   virtual ~KWordView_impl();
 
   // IDL  
+  virtual void editUndo();
+  virtual void editRedo();
+  virtual void editCut();
+  virtual void editCopy();
+  virtual void editPaste();
+  virtual void editSelectAll();
+  virtual void editFind();
+  virtual void editFindReplace();
+
   virtual void newView();
 
+  virtual void insertPicture();
+  virtual void insertTable();
+  virtual void insertClipart();
+  virtual void insertPart();
+
+  virtual void formatFont();
+  virtual void formatColor();
+  virtual void formatParagraph();
+  virtual void formatPage();
+  virtual void formatNumbering();
+  virtual void formatStyle();
+
+  virtual void extraSpelling();
+  virtual void extraStylist();
+  virtual void extraOptions();
+
+  virtual void helpContents();
+  virtual void helpAbout();
+  virtual void helpAboutKOffice();
+  virtual void helpAboutKDE();
+
+  virtual void textStyleSelected(const char *size);
   virtual void textSizeSelected(const char *size);
   virtual void textFontSelected(const char *font);
   virtual void textBold();
@@ -97,12 +128,9 @@ public:
   virtual void textAlignLeft();
   virtual void textAlignCenter();
   virtual void textAlignRight();
+  virtual void textAlignBlock();
   virtual void textEnumList();
   virtual void textUnsortList();
-
-  virtual void extraLayout();
-
-  virtual void helpAbout();
 
   virtual void setMode(OPParts::Part::Mode _mode);
   virtual void setFocus(CORBA::Boolean mode);
@@ -164,18 +192,24 @@ protected:
  
   // insert menu
   CORBA::Long m_idMenuInsert;
-  CORBA::Long m_idMenuInsert_Page;
   CORBA::Long m_idMenuInsert_Picture;
   CORBA::Long m_idMenuInsert_Clipart;
   CORBA::Long m_idMenuInsert_Table;
   CORBA::Long m_idMenuInsert_Part;
  
+  // format menu
+  CORBA::Long m_idMenuFormat;
+  CORBA::Long m_idMenuFormat_Font;
+  CORBA::Long m_idMenuFormat_Color;
+  CORBA::Long m_idMenuFormat_Paragraph;
+  CORBA::Long m_idMenuFormat_Page;
+  CORBA::Long m_idMenuFormat_Numbering;
+  CORBA::Long m_idMenuFormat_Style;
+
   // extra menu
   CORBA::Long m_idMenuExtra;
-  CORBA::Long m_idMenuExtra_Font;
-  CORBA::Long m_idMenuExtra_Color;
-  CORBA::Long m_idMenuExtra_Format;
-  CORBA::Long m_idMenuExtra_Layout;
+  CORBA::Long m_idMenuExtra_Spelling;
+  CORBA::Long m_idMenuExtra_Stylist;
   CORBA::Long m_idMenuExtra_Options;
 
   // help menu
@@ -206,6 +240,7 @@ protected:
 
   // text toolbar
   ToolBar_ref m_rToolBarText;
+  CORBA::Long m_idComboText_Style;
   CORBA::Long m_idComboText_FontSize;
   CORBA::Long m_idComboText_FontList;
   CORBA::Long m_idButtonText_Bold;

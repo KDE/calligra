@@ -209,6 +209,46 @@ void KWordView_impl::createGUI()
   setFormat(format,false);
 }
 
+/*===============================================================*/
+void KWordView_impl::editUndo()
+{
+}
+
+/*===============================================================*/
+void KWordView_impl::editRedo()
+{
+}
+
+/*===============================================================*/
+void KWordView_impl::editCut()
+{
+}
+
+/*===============================================================*/
+void KWordView_impl::editCopy()
+{
+}
+
+/*===============================================================*/
+void KWordView_impl::editPaste()
+{
+}
+
+/*===============================================================*/
+void KWordView_impl::editSelectAll()
+{
+}
+
+/*===============================================================*/
+void KWordView_impl::editFind()
+{
+}
+
+/*===============================================================*/
+void KWordView_impl::editFindReplace()
+{
+}
+
 /*================================================================*/
 void KWordView_impl::newView()
 {
@@ -222,6 +262,109 @@ void KWordView_impl::newView()
   shell->setDocument(m_pKWordDoc);
   
   CORBA::release(shell);
+}
+
+/*===============================================================*/
+void KWordView_impl::insertPicture()
+{
+}
+
+/*===============================================================*/
+void KWordView_impl::insertTable()
+{
+}
+
+/*===============================================================*/
+void KWordView_impl::insertClipart()
+{
+}
+
+/*===============================================================*/
+void KWordView_impl::insertPart()
+{
+}
+
+/*===============================================================*/
+void KWordView_impl::formatFont()
+{
+}
+
+/*===============================================================*/
+void KWordView_impl::formatColor()
+{
+}
+
+/*===============================================================*/
+void KWordView_impl::formatParagraph()
+{
+}
+
+/*===============================================================*/
+void KWordView_impl::formatPage()
+{
+  KoPageLayout pgLayout;
+  KoColumns cl;
+  m_pKWordDoc->getPageLayout(pgLayout,cl);
+
+  KoHeadFoot hf;
+  
+  if (KoPageLayoutDia::pageLayout(pgLayout,hf,cl,FORMAT_AND_BORDERS | COLUMNS)) 
+    m_pKWordDoc->setPageLayout(pgLayout,cl);
+}
+
+/*===============================================================*/
+void KWordView_impl::formatNumbering()
+{
+}
+
+/*===============================================================*/
+void KWordView_impl::formatStyle()
+{
+}
+
+/*===============================================================*/
+void KWordView_impl::extraSpelling()
+{
+}
+
+/*===============================================================*/
+void KWordView_impl::extraStylist()
+{
+}
+
+/*===============================================================*/
+void KWordView_impl::extraOptions()
+{
+}
+
+/*===============================================================*/
+void KWordView_impl::helpContents()
+{
+}
+
+/*===============================================================*/
+void KWordView_impl::helpAbout()
+{
+  QMessageBox::information(this,"KWord",
+			   "KWord  0.0.1 alpha\n\n"
+			   "(c) by Torben Weis <weis@kde.org> and \n"
+			   "Reginald Stadlbauer <reggie@kde.org> 1998\n\n"
+			   "KWord is under GNU GPL");
+}
+
+/*===============================================================*/
+void KWordView_impl::helpAboutKOffice()
+{
+}
+
+/*===============================================================*/
+void KWordView_impl::helpAboutKDE()
+{
+}
+
+/*====================== text style selected  ===================*/
+void KWordView_impl::textStyleSelected(const char *size)
+{
 }
 
 /*======================= text size selected  ===================*/
@@ -290,6 +433,11 @@ void KWordView_impl::textAlignRight()
 {
 }
 
+/*======================= text align block ======================*/
+void KWordView_impl::textAlignBlock()
+{
+}
+
 /*====================== enumerated list ========================*/
 void KWordView_impl::textEnumList()
 {
@@ -298,29 +446,6 @@ void KWordView_impl::textEnumList()
 /*====================== unsorted list ==========================*/
 void KWordView_impl::textUnsortList()
 {
-}
-
-/*===============================================================*/
-void KWordView_impl::extraLayout()
-{
-  KoPageLayout pgLayout;
-  KoKWord kw;
-  m_pKWordDoc->getPageLayout(pgLayout,kw);
-
-  KoHeadFoot hf;
-  
-  if (KoPageLayoutDia::pageLayout(pgLayout,hf,kw,FORMAT_AND_BORDERS | KWORD_SPECIAL)) 
-    m_pKWordDoc->setPageLayout(pgLayout,kw);
-}
-
-/*===============================================================*/
-void KWordView_impl::helpAbout()
-{
-  QMessageBox::information(this,"KWord",
-			   "KWord  0.0.1 alpha\n\n"
-			   "(c) by Torben Weis <weis@kde.org> and \n"
-			   "Reginald Stadlbauer <reggie@kde.org> 1998\n\n"
-			   "KWord is under GNU GPL");
 }
 
 /*================================================================*/
@@ -428,17 +553,28 @@ void KWordView_impl::setupMenu()
 						 CORBA::string_dup(i18n("&Objects...")),m_idMenuInsert,
 						 this,CORBA::string_dup("insertObjects"));
 
+  // format menu
+  m_idMenuFormat = m_rMenuBar->insertMenu(CORBA::string_dup(i18n("&Format")));
+  m_idMenuFormat_Font = m_rMenuBar->insertItem(CORBA::string_dup(i18n("&Font...")),m_idMenuFormat,
+					      this,CORBA::string_dup("formatFont"));
+  m_idMenuFormat_Color = m_rMenuBar->insertItem(CORBA::string_dup(i18n("&Color...")),m_idMenuFormat,
+					       this,CORBA::string_dup("formatColor"));
+  m_idMenuFormat_Paragraph = m_rMenuBar->insertItem(CORBA::string_dup(i18n("Paragraph...")),m_idMenuFormat,
+						    this,CORBA::string_dup("formatParagraph"));
+  m_idMenuFormat_Page = m_rMenuBar->insertItem(CORBA::string_dup(i18n("Page...")),m_idMenuFormat,
+					       this,CORBA::string_dup("formatPage"));
+  m_rMenuBar->insertSeparator(m_idMenuFormat);
+  m_idMenuFormat_Numbering = m_rMenuBar->insertItem(CORBA::string_dup(i18n("Numbering...")),m_idMenuFormat,
+						    this,CORBA::string_dup("formatNumbering"));
+  m_idMenuFormat_Style = m_rMenuBar->insertItem(CORBA::string_dup(i18n("&Style...")),m_idMenuFormat,
+						this,CORBA::string_dup("formatStyle"));
+
   // extra menu
   m_idMenuExtra = m_rMenuBar->insertMenu(CORBA::string_dup(i18n("&Extra")));
-  m_idMenuExtra_Font = m_rMenuBar->insertItem(CORBA::string_dup(i18n("&Font...")),m_idMenuExtra,
-					      this,CORBA::string_dup("extraFont"));
-  m_idMenuExtra_Color = m_rMenuBar->insertItem(CORBA::string_dup(i18n("&Color...")),m_idMenuExtra,
-					       this,CORBA::string_dup("extraColor"));
-  m_idMenuExtra_Format = m_rMenuBar->insertItem(CORBA::string_dup(i18n("Format...")),m_idMenuExtra,
-						this,CORBA::string_dup("extraFormat"));
-  m_rMenuBar->insertSeparator(m_idMenuExtra);
-  m_idMenuExtra_Layout = m_rMenuBar->insertItem(CORBA::string_dup(i18n("Pa&ge Layout...")),m_idMenuExtra,
-						this,CORBA::string_dup("extraLayout"));
+  m_idMenuExtra_Spelling = m_rMenuBar->insertItem(CORBA::string_dup(i18n("&Spelling...")),m_idMenuExtra,
+						   this,CORBA::string_dup("extraSpelling"));
+  m_idMenuExtra_Stylist = m_rMenuBar->insertItem(CORBA::string_dup(i18n("&Stylist...")),m_idMenuExtra,
+						 this,CORBA::string_dup("extraStylist"));
   m_rMenuBar->insertSeparator(m_idMenuExtra);
   m_idMenuExtra_Options = m_rMenuBar->insertItem(CORBA::string_dup(i18n("&Options...")),m_idMenuExtra,
 						 this,CORBA::string_dup("extraOptions"));
@@ -560,6 +696,10 @@ void KWordView_impl::setupTextToolbar()
       m_rToolBarText = m_vToolBarFactory->createToolBar(this,CORBA::string_dup(i18n("Text")));
       m_rToolBarText->setFullWidth(false);
 
+      // style combobox
+      m_idComboText_Style = m_rToolBarText->insertCombo(false,CORBA::string_dup(i18n("Style")),200,
+							this,CORBA::string_dup("textStyleSelected"));
+
       // size combobox
       m_idComboText_FontSize = m_rToolBarText->insertCombo(true,CORBA::string_dup(i18n("Font Size")),60,
 							   this,CORBA::string_dup("textSizeSelected"));
@@ -654,8 +794,8 @@ void KWordView_impl::setupTextToolbar()
       pix = loadPixmap(tmp);
       m_idButtonText_ABlock = m_rToolBarText->insertButton(CORBA::string_dup(pix),CORBA::string_dup(i18n("Align Block")),
 							   this,CORBA::string_dup("textAlignBlock"));
-      m_rToolBarText->setToggle(m_idButtonText_ARight,true);
-      m_rToolBarText->setButton(m_idButtonText_ARight,false);
+      m_rToolBarText->setToggle(m_idButtonText_ABlock,true);
+      m_rToolBarText->setButton(m_idButtonText_ABlock,false);
 
       m_rToolBarText->insertSeparator();
 

@@ -130,11 +130,11 @@ public:
   /**
    * Sets the paper size and recalculates the papers width and height.
    */
-  void setPageLayout(KoPageLayout _layout,KoKWord _kw)
-    { pageLayout = _layout; otherLayout = _kw; calcColumnWidth(); updateAllViews(0L); }
+  void setPageLayout(KoPageLayout _layout,KoColumns _cl)
+    { pageLayout = _layout; pageColumns = _cl; calcColumnWidth(); updateAllViews(0L); }
 
-  void getPageLayout(KoPageLayout& _layout,KoKWord& _kw)
-    { _layout = pageLayout; _kw = otherLayout; }
+  void getPageLayout(KoPageLayout& _layout,KoColumns& _cl)
+    { _layout = pageLayout; _cl = pageColumns; }
     
   /**
    * @return the default user font.
@@ -194,9 +194,9 @@ public:
   unsigned int getPTPaperHeight() { return MM_TO_POINT(pageLayout.height); }
   unsigned int getPTPaperWidth() { return MM_TO_POINT(pageLayout.width); }
   unsigned int getPTColumnWidth() { return ptColumnWidth; }
-  unsigned int getPTColumnSpacing() { return MM_TO_POINT(otherLayout.columnSpacing); }
+  unsigned int getPTColumnSpacing() { return MM_TO_POINT(pageColumns.columnSpacing); }
     
-  unsigned int getColumns() { return otherLayout.columns; }
+  unsigned int getColumns() { return pageColumns.columns; }
   
   void print() {}
   
@@ -256,7 +256,7 @@ protected:
   void calcColumnWidth();
     
   KoPageLayout pageLayout;
-  KoKWord otherLayout;
+  KoColumns pageColumns;
     
   /**
    * Width of a column in unzoomed points. This value is automatically calculated,

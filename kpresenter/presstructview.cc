@@ -35,8 +35,8 @@ PresStructViewer::PresStructViewer(QWidget *parent,const char *name,KPresenterDo
 
   list = new KTabListBox(panner,"",2);
   list->setTableFlags(list->tableFlags() | Tbl_smoothHScrolling | Tbl_smoothVScrolling);
-  list->setColumn(0,i18n("Description"),200);
-  list->setColumn(1,i18n("Value"),200);
+  list->setColumn(0,i18n("Description"),250);
+  list->setColumn(1,i18n("Value"),190);
 
   panner->activate(treelist,list);
 
@@ -217,6 +217,10 @@ void PresStructViewer::fillWithObjInfo(KPObject *_obj,int _num)
   list->appendItem(i18n("Shadow Direction"));
   list->changeItemPart(i18n(ShadowDirectionName[static_cast<int>(_obj->getShadowDirection())]),
 		       list->count() - 1,1);
+
+  str.sprintf("%d",_obj->getPresNum());
+  list->appendItem(i18n("Appearing number in the Presentation"));
+  list->changeItemPart(str,list->count() - 1,1);
 
   list->appendItem(i18n("Effect"));
   list->changeItemPart(i18n(EffectName[static_cast<int>(_obj->getEffect())]),

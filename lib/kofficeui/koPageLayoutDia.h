@@ -54,7 +54,7 @@
 // enums
 const int FORMAT_AND_BORDERS = 1;
 const int HEADER_AND_FOOTER = 2;
-const int KWORD_SPECIAL = 4;
+const int COLUMNS = 4;
 
 enum KoFormat {PG_DIN_A3 = 0,PG_DIN_A4 = 1,PG_DIN_A5 = 2,PG_US_LETTER = 3,PG_US_LEGAL = 4,PG_SCREEN = 5,PG_CUSTOM = 6,PG_DIN_B5 = 7,PG_US_EXECUTIVE = 8};
 enum KoOrientation {PG_PORTRAIT = 0,PG_LANDSCAPE = 1};
@@ -81,7 +81,8 @@ struct KoHeadFoot
   QString footRight;
 };
 
-struct KoKWord
+// structure for columns
+struct KoColumns
 {
   int columns;
   int columnSpacing;
@@ -103,6 +104,7 @@ public:
   
   // set page layout
   void setPageLayout(KoPageLayout);
+  void setPageColumns(KoColumns);
 
 protected:
   
@@ -111,6 +113,7 @@ protected:
 
   // vars
   int pgWidth,pgHeight,pgX,pgY,pgW,pgH;
+  int columns;
 
 };
 
@@ -127,12 +130,12 @@ public:
   // constructor - destructor
   KoPageLayoutDia(QWidget*,const char*,KoPageLayout,KoHeadFoot,int);
   KoPageLayoutDia(QWidget* parent,const char* name,KoPageLayout _layout,KoHeadFoot _hf,
-		  KoKWord _kw,int tabs);
+		  KoColumns _kw,int tabs);
   ~KoPageLayoutDia();              
 
   // show page layout dialog
   static bool pageLayout(KoPageLayout&,KoHeadFoot&,int);
-  static bool pageLayout(KoPageLayout&,KoHeadFoot&,KoKWord&,int);
+  static bool pageLayout(KoPageLayout&,KoHeadFoot&,KoColumns&,int);
 
   // get a standard page layout
   static KoPageLayout standardLayout();
@@ -140,7 +143,7 @@ public:
   // should NOT be used by an app - just for internal use!
   KoPageLayout getLayout() {return layout;};
   KoHeadFoot getHeadFoot();
-  KoKWord getKWord();
+  KoColumns getColumns();
 
 protected:
 
@@ -160,7 +163,7 @@ protected:
   QLabel *lpgFormat,*lpgOrientation,*lpgUnit,*lpgWidth,*lpgHeight,*lbrLeft,*lbrRight,*lbrTop,*lbrBottom;
   QComboBox *cpgFormat,*cpgOrientation,*cpgUnit;
   KRestrictedLine *epgWidth,*epgHeight,*ebrLeft,*ebrRight,*ebrTop,*ebrBottom;
-  KoPagePreview *pgPreview;
+  KoPagePreview *pgPreview,*pgPreview2;
   QLabel *lHeadLeft,*lHeadMid,*lHeadRight,*lHead;
   QLineEdit *eHeadLeft,*eHeadMid,*eHeadRight;
   QLabel *lFootLeft,*lFootMid,*lFootRight,*lFoot,*lMacros1,*lMacros2;
@@ -171,7 +174,7 @@ protected:
   // layout
   KoPageLayout layout;
   KoHeadFoot hf;
-  KoKWord kw;
+  KoColumns cl;
 
   bool retPressed;
 
@@ -193,6 +196,10 @@ private slots:
   void topChanged();
   void bottomChanged();
   void rPressed() {retPressed = true;}
+
+  // spinboxes
+  void nColChanged();
+  void nSpaceChanged();
 
 };
 #endif //KOPGLAYOUTDIA_H

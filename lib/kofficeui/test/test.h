@@ -19,7 +19,7 @@
 
 KoPageLayout layout;
 KoHeadFoot hf;
-KoKWord kw;
+KoColumns cl;
 
 class MyTest : public QWidget
 {
@@ -33,7 +33,7 @@ public slots:
   void aKImage() {KoAboutDia::about(KoAboutDia::KImage,"0.0.1");}
   void aKPresenter() {KoAboutDia::about(KoAboutDia::KPresenter,"0.0.1");}
   void aKAutoformEdit() {KoAboutDia::about(KoAboutDia::KAutoformEdit,"0.0.1");}
-  void pgLayout() {KoPageLayoutDia::pageLayout(layout,hf,kw,FORMAT_AND_BORDERS | HEADER_AND_FOOTER | KWORD_SPECIAL);}
+  void pgLayout() {KoPageLayoutDia::pageLayout(layout,hf,cl,FORMAT_AND_BORDERS | HEADER_AND_FOOTER | COLUMNS);}
   void selectPart() {KoPartSelectDia::selectPart();}
   void print() {QPrinter prt; KoPrintDia::print( prt );}
 };

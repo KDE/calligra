@@ -92,8 +92,8 @@ CORBA::Boolean KWordDocument_impl::init()
     
   pages = 1;
 
-  otherLayout.columns = 1; //STANDARD_COLUMNS;
-  otherLayout.columnSpacing = STANDARD_COLUMN_SPACING;
+  pageColumns.columns = 1; //STANDARD_COLUMNS;
+  pageColumns.columnSpacing = STANDARD_COLUMN_SPACING;
 
   calcColumnWidth();
 
@@ -352,8 +352,8 @@ KWParagLayout* KWordDocument_impl::findParagLayout(const char *_name)
 /*================================================================*/
 void KWordDocument_impl::calcColumnWidth()
 {
-  ptColumnWidth = (getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder() - getPTColumnSpacing() * (otherLayout.columns - 1)) 
-    / otherLayout.columns;
+  ptColumnWidth = (getPTPaperWidth() - getPTLeftBorder() - getPTRightBorder() - getPTColumnSpacing() * (pageColumns.columns - 1)) 
+    / pageColumns.columns;
 }
 
 /*================================================================*/

@@ -25,6 +25,7 @@ KoPagePreview::KoPagePreview(QWidget* parent,const char *name,KoPageLayout _layo
   : QGroupBox(i18n("Page Preview"),parent,name)
 {
   setPageLayout(_layout);
+  columns = 1;
 }
 
 /*====================== destructor ==============================*/
@@ -54,9 +55,19 @@ void KoPagePreview::setPageLayout(KoPageLayout _layout)
   repaint(true);
 }
 
+/*=================== set layout =================================*/
+void KoPagePreview::setPageColumns(KoColumns _columns)
+{
+  columns = _columns.columns;
+  repaint(true);
+}
+
 /*======================== draw contents =========================*/
 void KoPagePreview::drawContents(QPainter *painter)
 {
+  int cw = 0;
+  cw = pgW / columns;
+
   painter->setBrush(white);
   painter->setPen(QPen(black));
 
@@ -72,10 +83,11 @@ void KoPagePreview::drawContents(QPainter *painter)
     painter->setPen(NoPen);
   else
     painter->setPen(lightGray);
-  painter->drawRect((int)((width() - pgWidth) / 2) + pgX,
-		    (int)((height() - pgHeight) / 2) + pgY,
-		    pgW,pgH);
-  
+      
+  for (int i = 0;i < columns;i++)
+    painter->drawRect((int)((width() - pgWidth) / 2) + pgX + i * cw,
+		      (int)((height() - pgHeight) / 2) + pgY,
+		      cw,pgH);
 }
 
 /******************************************************************/
@@ -86,8 +98,13 @@ void KoPagePreview::drawContents(QPainter *painter)
 KoPageLayoutDia::KoPageLayoutDia(QWidget* parent,const char* name,KoPageLayout _layout,KoHeadFoot _hf,int tabs)
   : QTabDialog(parent,name,true)
 {
+  pgPreview = 0;
+  pgPreview2 = 0;
+
   layout = _layout;
   hf = _hf;
+
+  cl.columns = 1;
 
   if (tabs & FORMAT_AND_BORDERS) setupTab1();
   if (tabs & HEADER_AND_FOOTER) setupTab2();
@@ -104,16 +121,19 @@ KoPageLayoutDia::KoPageLayoutDia(QWidget* parent,const char* name,KoPageLayout _
 
 /*==================== constructor ===============================*/
 KoPageLayoutDia::KoPageLayoutDia(QWidget* parent,const char* name,KoPageLayout _layout,KoHeadFoot _hf,
-				 KoKWord _kw,int tabs)
+				 KoColumns _cl,int tabs)
   : QTabDialog(parent,name,true)
 {
+  pgPreview = 0;
+  pgPreview2 = 0;
+
   layout = _layout;
   hf = _hf;
-  kw = _kw;
+  cl = _cl;
 
   if (tabs & FORMAT_AND_BORDERS) setupTab1();
   if (tabs & HEADER_AND_FOOTER) setupTab2();
-  if (tabs & KWORD_SPECIAL) setupTab3();
+  if (tabs & COLUMNS) setupTab3();
 
   setCancelButton( i18n( "Cancel" ) );
   setOkButton( i18n( "Ok" ) );
@@ -149,17 +169,17 @@ bool KoPageLayoutDia::pageLayout(KoPageLayout& _layout,KoHeadFoot& _hf,int _tabs
 }
 
 /*======================= show dialog ============================*/
-bool KoPageLayoutDia::pageLayout(KoPageLayout& _layout,KoHeadFoot& _hf,KoKWord& _kw,int _tabs)
+bool KoPageLayoutDia::pageLayout(KoPageLayout& _layout,KoHeadFoot& _hf,KoColumns& _cl,int _tabs)
 {
   bool res = false;
-  KoPageLayoutDia *dlg = new KoPageLayoutDia(0,"PageLayout",_layout,_hf,_kw,_tabs);
+  KoPageLayoutDia *dlg = new KoPageLayoutDia(0,"PageLayout",_layout,_hf,_cl,_tabs);
 
   if (dlg->exec() == QDialog::Accepted)
     {
       res = true;
       if (_tabs & FORMAT_AND_BORDERS) _layout = dlg->getLayout();
       if (_tabs & HEADER_AND_FOOTER) _hf = dlg->getHeadFoot();
-      if (_tabs & KWORD_SPECIAL) _kw = dlg->getKWord();
+      if (_tabs & COLUMNS) _cl = dlg->getColumns();
     }
 
   delete dlg;
@@ -199,12 +219,12 @@ KoHeadFoot KoPageLayoutDia::getHeadFoot()
 }
 
 /*================================================================*/
-KoKWord KoPageLayoutDia::getKWord()
+KoColumns KoPageLayoutDia::getColumns()
 {
-  kw.columns = nColumns->getValue();
-  kw.columnSpacing = nCSpacing->getValue();
+  cl.columns = nColumns->getValue();
+  cl.columnSpacing = nCSpacing->getValue();
 
-  return kw;
+  return cl;
 }
 
 /*================ setup format and borders tab ==================*/
@@ -212,7 +232,7 @@ void KoPageLayoutDia::setupTab1()
 {
   tab1 = new QWidget(this);
 
-  grid1 = new QGridLayout(tab1,4,2,15,7);
+  grid1 = new QGridLayout(tab1,5,2,15,7);
 
   // ------------- unit _______________
   // label unit
@@ -431,7 +451,7 @@ void KoPageLayoutDia::setupTab1()
 
   // ------------- preview -----------
   pgPreview = new KoPagePreview(tab1,"Preview",layout);
-  grid1->addMultiCellWidget(pgPreview,2,3,1,1);
+  grid1->addMultiCellWidget(pgPreview,2,4,1,1);
 
   // --------------- main grid ------------------
   grid1->addColSpacing(0,lpgUnit->width());
@@ -439,7 +459,7 @@ void KoPageLayoutDia::setupTab1()
   grid1->addColSpacing(0,formatFrame->width());
   grid1->addColSpacing(0,borderFrame->width());
   grid1->addColSpacing(1,280);
-  //grid1->setColStretch(1,1);
+  grid1->setColStretch(1,1);
 
   grid1->addRowSpacing(0,lpgUnit->height());
   grid1->addRowSpacing(1,cpgUnit->height());
@@ -447,12 +467,9 @@ void KoPageLayoutDia::setupTab1()
   grid1->addRowSpacing(2,120);
   grid1->addRowSpacing(3,borderFrame->height());
   grid1->addRowSpacing(3,120);
-  //grid1->setRowStretch(1,1);
+  grid1->setRowStretch(4,1);
 
   grid1->activate();
-//   tab1->resize(0,0);
-//   tab1->setMaximumSize(tab1->size());
-//   tab1->setMinimumSize(tab1->size());
 
   addTab(tab1,i18n("Format and Borders"));
 
@@ -617,9 +634,6 @@ void KoPageLayoutDia::setupTab2()
   grid2->addRowSpacing(7,2*lMacros2->height());
 
   grid2->activate();
-//   tab2->resize(0,0);
-//   tab2->setMaximumSize(tab2->size());
-//   tab2->setMinimumSize(tab2->size());
   
   addTab(tab2,i18n("Header and Footer"));
 }
@@ -629,7 +643,7 @@ void KoPageLayoutDia::setupTab3()
 {
   tab3 = new QWidget(this);
 
-  grid3 = new QGridLayout(tab3,3,3,15,7);
+  grid3 = new QGridLayout(tab3,5,2,15,7);
 
   lColumns = new QLabel(i18n("Columns:"),tab3);
   lColumns->resize(lColumns->sizeHint());
@@ -639,43 +653,56 @@ void KoPageLayoutDia::setupTab3()
   nColumns->resize(nColumns->sizeHint());
   grid3->addWidget(nColumns,1,0);
   nColumns->setEditable(false);
-  nColumns->setRange(1,5);
-  nColumns->setValue(kw.columns);
+  nColumns->setRange(1,9);
+  nColumns->setValue(cl.columns);
+  connect(nColumns,SIGNAL(valueIncreased()),this,SLOT(nColChanged()));
+  connect(nColumns,SIGNAL(valueDecreased()),this,SLOT(nColChanged()));
 
   lCSpacing = new QLabel(i18n("Columns Spacing (mm):"),tab3);
   lCSpacing->resize(lCSpacing->sizeHint());
-  grid3->addWidget(lCSpacing,0,1);
+  grid3->addWidget(lCSpacing,2,0);
 
   nCSpacing = new KNumericSpinBox(tab3);
   nCSpacing->resize(nCSpacing->sizeHint());
-  grid3->addWidget(nCSpacing,1,1);
+  grid3->addWidget(nCSpacing,3,0);
   nCSpacing->setEditable(false);
   nCSpacing->setRange(0,100);
-  nCSpacing->setValue(kw.columnSpacing);
+  nCSpacing->setValue(cl.columnSpacing);
+  connect(nCSpacing,SIGNAL(valueIncreased()),this,SLOT(nSpaceChanged()));
+  connect(nCSpacing,SIGNAL(valueDecreased()),this,SLOT(nSpaceChanged()));
+
+  // ------------- preview -----------
+  pgPreview2 = new KoPagePreview(tab3,"Preview",layout);
+  grid3->addMultiCellWidget(pgPreview2,0,4,1,1);
 
   // --------------- main grid ------------------
   grid3->addColSpacing(0,lColumns->width());
   grid3->addColSpacing(0,nColumns->width());
-  grid3->addColSpacing(1,lCSpacing->width());
-  grid3->addColSpacing(1,nCSpacing->width());
-  grid3->setColStretch(2,1);
+  grid3->addColSpacing(0,lCSpacing->width());
+  grid3->addColSpacing(0,nCSpacing->width());
+  grid3->addColSpacing(1,pgPreview2->width());
+  grid3->setColStretch(1,1);
 
   grid3->addRowSpacing(0,lColumns->height());
   grid3->addRowSpacing(1,nColumns->height());
-  grid3->setRowStretch(2,1);
+  grid3->addRowSpacing(2,lCSpacing->height());
+  grid3->addRowSpacing(3,nCSpacing->height());
+  grid3->setRowStretch(4,1);
 
   grid3->activate();
-//   tab3->resize(0,0);
-//   tab3->setMaximumSize(tab3->size());
-//   tab3->setMinimumSize(tab3->size());
   
-  addTab(tab3,i18n("Columns, etc"));
+  addTab(tab3,i18n("Columns"));
+  if (pgPreview) pgPreview->setPageColumns(cl);
+  pgPreview2->setPageColumns(cl);
 }
 
 /*====================== update the preview ======================*/
 void KoPageLayoutDia::updatePreview(KoPageLayout)
 {
-  pgPreview->setPageLayout(layout);
+  if (pgPreview) pgPreview->setPageLayout(layout);
+  if (pgPreview) pgPreview->setPageColumns(cl);
+  if (pgPreview2) pgPreview2->setPageLayout(layout);
+  if (pgPreview2) pgPreview2->setPageColumns(cl);
 }
 
 /*===================== unit changed =============================*/
@@ -892,7 +919,7 @@ void KoPageLayoutDia::rightChanged()
   retPressed = false;
 }
 
-/*===================== top border changed =======================*/
+/*===================== top border changed =========================*/
 void KoPageLayoutDia::topChanged()
 {
   if (strlen(ebrTop->text()) == 0 && retPressed)
@@ -902,7 +929,7 @@ void KoPageLayoutDia::topChanged()
   retPressed = false;
 }
 
-/*===================== bottom border changed =======================*/
+/*===================== bottom border changed ======================*/
 void KoPageLayoutDia::bottomChanged()
 {
   if (strlen(ebrBottom->text()) == 0 && retPressed)
@@ -910,4 +937,18 @@ void KoPageLayoutDia::bottomChanged()
   layout.bottom = atof(ebrBottom->text());
   updatePreview(layout);
   retPressed = false;
+}
+
+/*==================================================================*/
+void KoPageLayoutDia::nColChanged()
+{
+  cl.columns = nColumns->getValue();
+  updatePreview(layout);
+}
+
+/*==================================================================*/
+void KoPageLayoutDia::nSpaceChanged()
+{
+  cl.columnSpacing = nCSpacing->getValue();
+  updatePreview(layout);
 }

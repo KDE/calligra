@@ -25,8 +25,8 @@ void MyApp::start()
   w->setMinimumSize(w->size());
   layout = KoPageLayoutDia::standardLayout();
 
-  kw.columns = 2;
-  kw.ptColumnSpacing = 2;
+  cl.columns = 2;
+  cl.columnSpacing = 2;
 
   QPushButton* aboutKOffice = new QPushButton("About Koffice...",w);
   aboutKOffice->move(10,10);

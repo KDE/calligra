@@ -7,8 +7,39 @@ module KWord
 {
   interface KWordView : OPParts::View
     {
+      slot void editUndo();
+      slot void editRedo();
+      slot void editCut();
+      slot void editCopy();
+      slot void editPaste();
+      slot void editSelectAll();
+      slot void editFind();
+      slot void editFindReplace();
+      
       slot void newView();
-
+      
+      slot void insertPicture();
+      slot void insertTable();
+      slot void insertClipart();
+      slot void insertPart();
+      
+      slot void formatFont();
+      slot void formatColor();
+      slot void formatParagraph();
+      slot void formatPage();
+      slot void formatNumbering();
+      slot void formatStyle();
+      
+      slot void extraSpelling();
+      slot void extraStylist();
+      slot void extraOptions();
+      
+      slot void helpContents();
+      slot void helpAbout();
+      slot void helpAboutKOffice();
+      slot void helpAboutKDE();
+      
+      slot void textStyleSelected(in string size);
       slot void textSizeSelected(in string size);
       slot void textFontSelected(in string font);
       slot void textBold();
@@ -18,12 +49,9 @@ module KWord
       slot void textAlignLeft();
       slot void textAlignCenter();
       slot void textAlignRight();
+      slot void textAlignBlock();
       slot void textEnumList();
       slot void textUnsortList();
-
-      slot void helpAbout();
-      
-      slot void extraLayout();
     };
 
   interface KWordDocument : OPParts::Document, OPParts::Print
