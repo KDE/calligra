@@ -3090,4 +3090,17 @@ void KPresenterDoc::updateObjectSelected()
 	((KPresenterView*)it.current())->objectSelectedChanged();
 }
 
+void KPresenterDoc::setDontCheckUpperWord(bool _b)
+{
+    m_bDontCheckUpperWord=_b;
+    m_bgSpellCheck->setIgnoreUpperWords( _b);
+}
+
+void KPresenterDoc::setDontCheckTitleCase(bool _b)
+{
+    m_bDontCheckTitleCase=_b;
+    m_bgSpellCheck->setIgnoreTitleCase( _b );
+}
+
+
 #include <kpresenter_doc.moc>

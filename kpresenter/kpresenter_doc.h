@@ -252,10 +252,10 @@ public:
     KSpellConfig * getKSpellConfig()const {return m_pKSpellConfig;}
 
     bool dontCheckUpperWord() const { return m_bDontCheckUpperWord; }
-    void setDontCheckUpperWord(bool _b) { m_bDontCheckUpperWord=_b;}
+    void setDontCheckUpperWord(bool _b);
 
     bool dontCheckTitleCase() const {return  m_bDontCheckTitleCase;}
-    void setDontCheckTitleCase(bool _b) {m_bDontCheckTitleCase=_b;}
+    void setDontCheckTitleCase(bool _b);
 
     bool showStatusBar() const { return m_bShowStatusBar;}
     void setShowStatusBar( bool _status ) { m_bShowStatusBar = _status;}
