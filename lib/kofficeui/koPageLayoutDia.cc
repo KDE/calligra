@@ -36,6 +36,7 @@
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
 #include <qvalidator.h>
+#include <knumvalidator.h>
 #include <qspinbox.h>
 #include <qtl.h>
 
@@ -388,7 +389,7 @@ void KoPageLayoutDia::setupTab1()
 
     // linedit width
     epgWidth = new QLineEdit( formatFrame, "Width" );
-    epgWidth->setValidator( new QDoubleValidator( epgWidth ) );
+    epgWidth->setValidator( new KFloatValidator( 0,9999,epgWidth ) );
     epgWidth->setText( i18n("000.00") );
     epgWidth->setMaxLength( 6 );
     epgWidth->setEchoMode( QLineEdit::Normal );
@@ -406,7 +407,7 @@ void KoPageLayoutDia::setupTab1()
 
     // linedit height
     epgHeight = new QLineEdit( formatFrame, "Height" );
-    epgHeight->setValidator( new QDoubleValidator( epgHeight ) );
+    epgHeight->setValidator( new KFloatValidator( 0,9999,epgHeight ) );
     epgHeight->setText( i18n("000.00") );
     epgHeight->setMaxLength( 6 );
     epgHeight->setEchoMode( QLineEdit::Normal );
@@ -450,7 +451,7 @@ void KoPageLayoutDia::setupTab1()
 
     // linedit left
     ebrLeft = new QLineEdit( borderFrame, "Left" );
-    ebrLeft->setValidator( new QDoubleValidator( ebrLeft ) );
+    ebrLeft->setValidator( new KFloatValidator( 0,9999,ebrLeft ) );
     ebrLeft->setText( i18n("000.00") );
     ebrLeft->setMaxLength( 6 );
     ebrLeft->setEchoMode( QLineEdit::Normal );
@@ -467,7 +468,7 @@ void KoPageLayoutDia::setupTab1()
 
     // linedit right
     ebrRight = new QLineEdit( borderFrame, "Right" );
-    ebrRight->setValidator( new QDoubleValidator( ebrRight ) );
+    ebrRight->setValidator( new KFloatValidator( 0,9999,ebrRight ) );
     ebrRight->setText( i18n("000.00") );
     ebrRight->setMaxLength( 6 );
     ebrRight->setEchoMode( QLineEdit::Normal );
@@ -484,7 +485,7 @@ void KoPageLayoutDia::setupTab1()
 
     // linedit top
     ebrTop = new QLineEdit( borderFrame, "Top" );
-    ebrTop->setValidator( new QDoubleValidator( ebrTop ) );
+    ebrTop->setValidator( new KFloatValidator( 0,9999,ebrTop ) );
     ebrTop->setText( i18n("000.00") );
     ebrTop->setMaxLength( 6 );
     ebrTop->setEchoMode( QLineEdit::Normal );
@@ -501,7 +502,7 @@ void KoPageLayoutDia::setupTab1()
 
     // linedit bottom
     ebrBottom = new QLineEdit( borderFrame, "Bottom" );
-    ebrBottom->setValidator( new QDoubleValidator( ebrBottom ) );
+    ebrBottom->setValidator( new KFloatValidator( 0,9999,ebrBottom ) );
     ebrBottom->setText( i18n("000.00") );
     ebrBottom->setMaxLength( 6 );
     ebrBottom->setEchoMode( QLineEdit::Normal );
@@ -709,7 +710,7 @@ void KoPageLayoutDia::setupTab3()
     grid3->addWidget( lCSpacing, 2, 0 );
 
     nCSpacing = new QLineEdit( tab3, "" );
-    nCSpacing->setValidator( new QDoubleValidator( nCSpacing ) );
+    nCSpacing->setValidator( new KFloatValidator( 0,9999,nCSpacing ) );
     nCSpacing->setText( i18n("0.00") );
     nCSpacing->setMaxLength( 5 );
     nCSpacing->setEchoMode( QLineEdit::Normal );
@@ -791,7 +792,7 @@ void KoPageLayoutDia::setupTab4()
     headerGrid->addWidget( lHSpacing, 4, 0 );
 
     nHSpacing = new QLineEdit( gHeader, "" );
-    nHSpacing->setValidator( new QDoubleValidator( nHSpacing ) );
+    nHSpacing->setValidator( new KFloatValidator( 0,9999,nHSpacing ) );
     nHSpacing->setText( i18n("0.00") );
     nHSpacing->setMaxLength( 5 );
     nHSpacing->setEchoMode( QLineEdit::Normal );
@@ -855,7 +856,7 @@ void KoPageLayoutDia::setupTab4()
     footerGrid->addWidget( lFSpacing, 4, 0 );
 
     nFSpacing = new QLineEdit( gFooter, "" );
-    nFSpacing->setValidator( new QDoubleValidator( nFSpacing ) );
+    nFSpacing->setValidator( new KFloatValidator( 0,9999,nFSpacing ));
     nFSpacing->setText( i18n("0.00") );
     nFSpacing->setMaxLength( 5 );
     nFSpacing->setEchoMode( QLineEdit::Normal );
