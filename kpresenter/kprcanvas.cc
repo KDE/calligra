@@ -127,6 +127,7 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
     setKeyCompression( true );
     installEventFilter( this );
     KCursor::setAutoHideCursor( this, true, true );
+    m_zoomBeforePresentation=100;
     m_activePage=m_view->kPresenterDoc()->pageList().getFirst();
     connect( m_view->kPresenterDoc(), SIGNAL( sig_terminateEditing( KPTextObject * ) ),
              this, SLOT( terminateEditing( KPTextObject * ) ) );
@@ -2019,9 +2020,9 @@ void KPrCanvas::startScreenPresentation( float presFakt, int curPgNum /* 1-based
     //kdDebug(33001) << "Page::startScreenPresentation Zooming backgrounds" << endl;
     // Zoom backgrounds to the correct size for full screen
     KPresenterDoc * doc = m_view->kPresenterDoc();
-
+    m_zoomBeforePresentation=doc->zoomHandler()->zoom();
     // ## TODO get rid of presFakt
-    doc->zoomHandler()->setZoomAndResolution( qRound(_presFakt*100), QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+    doc->zoomHandler()->setZoomAndResolution( qRound(_presFakt*m_zoomBeforePresentation), QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
     doc->newZoomAndResolution(false,false);
 
     if(m_showOnlyPage==-1)
@@ -2072,7 +2073,7 @@ void KPrCanvas::stopScreenPresentation()
 
     KPresenterDoc * doc = m_view->kPresenterDoc();
     _presFakt = 1.0;
-    doc->zoomHandler()->setZoomAndResolution( 100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+    doc->zoomHandler()->setZoomAndResolution( m_zoomBeforePresentation, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
     doc->newZoomAndResolution(false,false);
     goingBack = false;
     currPresPage = 1;
@@ -4114,6 +4115,7 @@ void KPrCanvas::gotoPage( int pg )
         currPresPage = pg;
         kdDebug(33001) << "Page::gotoPage currPresPage=" << currPresPage << endl;
         slideListIterator = slideList.find( currPresPage-1 );
+        kdDebug() << "KPrCanvas::gotoPage after find iterator:" << endl;
         editMode = false;
         drawMode = false;
         presStepList = m_view->kPresenterDoc()->reorderPage( currPresPage-1);

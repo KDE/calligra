@@ -403,6 +403,8 @@ private:
 
     KoRect m_boundingRect; // when moving object(s)
     KoPoint m_hotSpot; // when moving frame(s)
+
+    int m_zoomBeforePresentation;
 };
 
 #endif //PAGE_H
