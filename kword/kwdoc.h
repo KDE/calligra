@@ -180,6 +180,10 @@ public:
     bool isOutOfPage( QRect & r, int page ) const;
 
     void updateAllViewportSizes();
+
+    //update koRuler in each view
+    void updateRuler();
+
     void setUnitToAll();
     void repaintAllViews( bool erase = false );
     void repaintAllViewsExcept( KWView *_view, bool _erase = false );

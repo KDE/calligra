@@ -1610,9 +1610,7 @@ void KWView::formatPage()
         doc->addCommand(cmd);
 
         doc->setPageLayout( pgLayout, cl, kwhf );
-        gui->getVertRuler()->setPageLayout( pgLayout );
-        gui->getHorzRuler()->setPageLayout( pgLayout );
-        gui->canvasWidget()->repaintAll(true);
+        doc->updateRuler();
 
         QList<KWFrame> selectedFrames = doc->getSelectedFrames();
         KWFrame *frame=0L;
@@ -2718,10 +2716,7 @@ void KWView::newPageLayout( KoPageLayout _layout )
     KWPageLayoutCommand *cmd =new KWPageLayoutCommand( i18n("Change Layout"),doc,gui,tmpOldLayout,tmpNewLayout ) ;
     doc->addCommand(cmd);
 
-
-    gui->getHorzRuler()->setPageLayout( _layout );
-    gui->getVertRuler()->setPageLayout( _layout );
-    gui->canvasWidget()->repaintAll(true);
+    doc->updateRuler();
 
     QList<KWFrame> selectedFrames = doc->getSelectedFrames();
     KWFrame *frame=0L;

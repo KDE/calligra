@@ -346,6 +346,17 @@ void KWDocument::setPageLayout( KoPageLayout _layout, KoColumns _cl, KoKWHeaderF
     updateAllFrames();
 }
 
+void KWDocument::updateRuler()
+{
+    //refresh koRuler in each view
+    for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() )
+    {
+        viewPtr->getGUI()->getHorzRuler()->setPageLayout( m_pageLayout);
+        viewPtr->getGUI()->getVertRuler()->setPageLayout( m_pageLayout );
+        viewPtr->getGUI()->canvasWidget()->repaintAll( true );
+    }
+}
+
 double KWDocument::ptColumnWidth() const
 {
     return ( ptPaperWidth() - ptLeftBorder() - ptRightBorder() -
