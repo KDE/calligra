@@ -19,6 +19,7 @@
 #include "kchartLegendConfigPage.h"
 #include "kchartHeaderFooterConfigPage.h"
 #include "kchartLine3dConfigPage.h"
+#include "kchartParameterPolarConfigPage.h"
 
 #include <kapplication.h>
 #include <klocale.h>
@@ -42,7 +43,8 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
     _backgroundpixpage(0),
     _parameterLegend(0),
     _headerfooterpage(0),
-    _linepage3d(0)
+    _linepage3d(0),
+    _polarpage(0)
 {
     // Geometry page
     //_geompage = new KChartGeometryConfigPage( this );
@@ -106,10 +108,15 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
             _parameter3dpage = new KChartParameter3dConfigPage(_params,this );
             addTab( _parameter3dpage,i18n("3D Parameters"));
         }
-        if( _params->chartType() == KDChartParams::Line)
+        else if( _params->chartType() == KDChartParams::Line)
         {
             _linepage3d= new KChartLine3dConfigPage(_params,this);
             addTab( _linepage3d,i18n("3D Line Parameters"));
+        }
+        else if( _params->chartType() == KDChartParams::Polar)
+        {
+            _polarpage=new KChartParameterPolarConfigPage(_params,this);
+            addTab( _polarpage,i18n("Polar Parameters"));
         }
 
         init3dPage();
@@ -224,6 +231,8 @@ void KChartConfigDialog::apply()
 
     if(_headerfooterpage)
         _headerfooterpage->apply();
+    if( _polarpage)
+        _polarpage->apply();
 }
 
 void KChartConfigDialog::defaults()
@@ -291,6 +300,8 @@ void KChartConfigDialog::defaults()
 
     if(_headerfooterpage)
         _headerfooterpage->init();
+    if(_polarpage)
+        _polarpage->init();
 }
 
 
