@@ -256,7 +256,7 @@ KoTextCursor * KoParagFormatCommand::unexecute( KoTextCursor *c )
     return c;
 }
 
-KoTextFormatCommand::KoTextFormatCommand(KoTextDocument *d, int sid, int sidx, int eid, int eidx, const QMemArray<KoTextStringChar> &old, KoTextFormat *f, int fl )
+KoTextFormatCommand::KoTextFormatCommand(KoTextDocument *d, int sid, int sidx, int eid, int eidx, const QMemArray<KoTextStringChar> &old, const KoTextFormat *f, int fl )
     : KoTextDocFormatCommand(d, sid, sidx, eid, eidx, old, f, fl)
 {
 }

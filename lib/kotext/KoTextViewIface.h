@@ -48,7 +48,6 @@ k_dcop:
     void setTextSuperScript(bool on);
     void setUnderlineColor( const QColor & color );
     void setDefaultFormat();
-    void setTextShadow( bool _shadow);
     void setRelativeTextSize( double _size);
 
     QColor textColor() const;
@@ -63,7 +62,7 @@ k_dcop:
     bool textStrikeOut()const;
     bool textSubScript() const;
     bool textSuperScript() const;
-    bool textShadow() const;
+    // TODO text shadow
     double relativeTextSize() const;
     bool wordByWord() const;
 
@@ -90,7 +89,6 @@ k_dcop:
     void moveCursorLineEnd(bool select);
     void moveCursorLineStart(bool select);
 
-    QColor paragraphShadowColor() const;
     bool paragraphHasBorder() const;
 
     //return line spacing in pt
@@ -155,8 +153,8 @@ k_dcop:
     bool setNoteVariableText(const QString & note) const;
 
     void removeComment();
-    QString underlineLineStyle() const;
-    QString strikeOutLineStyle()const;
+    QString underlineStyle() const;
+    QString strikeOutStyle()const;
 
     void setLanguage(const QString & _lang);
     QString language() const;

@@ -42,14 +42,31 @@ public:
             bool _withSubSuperScript = true, uint fontListCriteria=0);
     virtual ~KoFontChooser();
 
+    /// Set the text format to be displayed.
+    /// This contains all the attributes - no need to use setFont etc.
+    void setFormat( const KoTextFormat& format );
+
+    /// @return the modified text format, once the dialog is closed.
+    /// This contains all the attributes - no need to use newFont() etc.
+    KoTextFormat newFormat() const;
+
+    /// @return a bitfield (see KoTextFormat) which identifies which
+    /// parts of the text format have been modified.
+    int changedFlags() const { return m_changedFlags; }
+
+protected:
     void setFont( const QFont &_font, bool _subscript, bool _superscript );
     void setColor( const QColor & col );
     void setBackGroundColor( const QColor & col );
 
-    bool getSuperScript() const { return m_superScript->isChecked(); }
-    bool getSubScript() const { return m_subScript->isChecked(); }
+    bool superScript() const { return m_superScript->isChecked(); }
+    bool subScript() const { return m_subScript->isChecked(); }
+    KoTextFormat::VerticalAlignment vAlign() const {
+        return m_subScript->isChecked() ? KoTextFormat::AlignSubScript :
+            m_superScript->isChecked() ? KoTextFormat::AlignSuperScript :
+            KoTextFormat::AlignNormal; }
 
-    QFont getNewFont() const { return m_newFont; }
+    QFont newFont() const { return m_newFont; }
     QColor color() const;
     QColor backGroundColor() const { return m_backGroundColor;}
     QColor underlineColor() const { return m_underlineColor ; }
@@ -57,42 +74,44 @@ public:
     void setUnderlineColor( const QColor & col );
 
 
-    KoTextFormat::UnderlineLineType getUnderlineLineType();
-    KoTextFormat::UnderlineLineStyle getUnderlineLineStyle();
-    KoTextFormat::StrikeOutLineType getStrikeOutLineType();
-    KoTextFormat::StrikeOutLineStyle getStrikeOutLineStyle();
+    KoTextFormat::UnderlineType underlineType() const;
+    KoTextFormat::UnderlineStyle underlineStyle() const;
+    KoTextFormat::StrikeOutType strikeOutType() const;
+    KoTextFormat::StrikeOutStyle strikeOutStyle() const;
 
-    void setUnderlineLineType(KoTextFormat::UnderlineLineType nb);
-    void setStrikeOutlineType(KoTextFormat::StrikeOutLineType nb);
-    void setUnderlineLineStyle(KoTextFormat::UnderlineLineStyle _t);
-    void setStrikeOutLineStyle(KoTextFormat::StrikeOutLineStyle _t);
+    void setUnderlineType(KoTextFormat::UnderlineType nb);
+    void setStrikeOutlineType(KoTextFormat::StrikeOutType nb);
+    void setUnderlineStyle(KoTextFormat::UnderlineStyle _t);
+    void setStrikeOutStyle(KoTextFormat::StrikeOutStyle _t);
 
-    void setShadowText( bool _b);
-    bool getShadowText()const;
+    void setShadow( double shadowDistanceX, double shadowDistanceY, const QColor& shadowColor );
+    double shadowDistanceX() const;
+    double shadowDistanceY() const;
+    QColor shadowColor() const;
 
-    bool getWordByWord()const;
+    bool wordByWord()const;
     void setWordByWord( bool _b);
 
-    bool getHyphenation() const;
+    bool hyphenation() const;
     void setHyphenation( bool _b);
 
-    QString getLanguage() const;
+    QString language() const;
     void setLanguage( const QString & );
 
-    KoTextFormat::AttributeStyle getFontAttribute()const;
+    KoTextFormat::AttributeStyle fontAttribute() const;
     void setFontAttribute( KoTextFormat::AttributeStyle _att);
 
 
-    double getRelativeTextSize()const;
+    double relativeTextSize() const;
     void setRelativeTextSize(double _size);
 
-    int getOffsetFromBaseLine()const;
+    int offsetFromBaseLine() const;
     void setOffsetFromBaseLine(int _offset);
 
-    int changedFlags() const { return m_changedFlags; }
     void setupTab1(bool _withSubSuperScript, uint fontListCriteria );
     void setupTab2();
     void updatePositionButton();
+
 protected slots:
     void slotSuperScriptClicked();
     void slotSubScriptClicked();
@@ -105,7 +124,7 @@ protected slots:
     void slotChangeUnderlining( int);
 
     void slotChangeStrikeOutType( int );
-    void slotShadowClicked();
+    void slotShadowChanged();
     void slotRelativeSizeChanged( int );
     void slotOffsetFromBaseLineChanged( int );
     void slotChangeAttributeFont( int );
@@ -140,33 +159,10 @@ class KoFontDia : public KDialogBase
 {
     Q_OBJECT
 public:
+    KoFontDia( const KoTextFormat& initialFormat,
+               QWidget* parent, const char* name );
 
-    /**
-     * Flags for FontAttibute
-     */
-    enum FontAttributeFlags {
-        FontAttributeSubscript = 1,
-        FontAttributeSuperScript = 2,
-        FontAttributeShadowText = 4,
-        FontAttributeWordByWord = 8,
-        FontAttributeHyphenation = 16
-    };
-
-    KoFontDia( QWidget* parent, const char* name, const QFont &_font,
-               FontAttributeFlags flags,
-               const QColor & color,
-	       const QColor & backGroundColor,
-               const QColor & underlineColor,
-               KoTextFormat::UnderlineLineStyle _nbLine,
-               KoTextFormat::UnderlineLineType _underlineType,
-               KoTextFormat::StrikeOutLineType _strikeOutType,
-               KoTextFormat::StrikeOutLineStyle _strikeOutLine,
-               KoTextFormat::AttributeStyle _fontAttribute,
-               const QString &_language,
-               double _relativeSize,
-               int _offsetFromBaseLine,
-               bool _withSubSuperScript=true );
-
+    /*
     bool getHyphenation() const { return m_chooser->getHyphenation(); }
     bool getSuperScript() const { return m_chooser->getSuperScript(); }
     bool getSubScript() const { return m_chooser->getSubScript(); }
@@ -174,12 +170,16 @@ public:
     QColor color() const { return m_chooser->color(); }
     QColor backGroundColor() const {return m_chooser->backGroundColor();}
     QColor underlineColor() const { return m_chooser->underlineColor() ; }
-    KoTextFormat::UnderlineLineType getUnderlineLineType() const { return m_chooser->getUnderlineLineType();}
-    KoTextFormat::StrikeOutLineType getStrikeOutLineType() const { return m_chooser->getStrikeOutLineType();}
+    KoTextFormat::UnderlineType getUnderlineType() const { return m_chooser->getUnderlineType();}
+    KoTextFormat::StrikeOutType getStrikeOutType() const { return m_chooser->getStrikeOutType();}
 
-    KoTextFormat::UnderlineLineStyle getUnderlineLineStyle() const { return m_chooser->getUnderlineLineStyle();}
-    KoTextFormat::StrikeOutLineStyle getStrikeOutLineStyle() const { return m_chooser->getStrikeOutLineStyle();}
-    bool getShadowText()const{ return m_chooser->getShadowText();}
+    KoTextFormat::UnderlineStyle getUnderlineStyle() const { return m_chooser->getUnderlineStyle();}
+    KoTextFormat::StrikeOutStyle getStrikeOutStyle() const { return m_chooser->getStrikeOutStyle();}
+
+    double shadowDistanceX() const { return m_chooser->shadowDistanceX(); }
+    double shadowDistanceY() const { return m_chooser->shadowDistanceY(); }
+    QColor shadowColor() const { return m_chooser->shadowColor(); }
+
     double getRelativeTextSize()const{ return m_chooser->getRelativeTextSize();}
 
     int getOffsetFromBaseLine() const {return m_chooser->getOffsetFromBaseLine();}
@@ -187,19 +187,23 @@ public:
 
     QString getLanguage() const { return m_chooser->getLanguage();}
 
+    KoTextFormat::AttributeStyle getFontAttribute()const { return m_chooser->getFontAttribute();}
+    */
+
     int changedFlags() const { return m_chooser->changedFlags(); }
 
-    KoTextFormat::AttributeStyle getFontAttribute()const { return m_chooser->getFontAttribute();}
+    KoTextFormat newFormat() const { return m_chooser->newFormat(); }
 
 protected slots:
     void slotReset();
     virtual void slotApply();
     virtual void slotOk();
 signals:
-     void applyFont();
+    void applyFont();
 
 private:
     KoFontChooser * m_chooser;
+    /*
     QFont m_font;
     bool m_bSubscript;
     bool m_bSuperscript;
@@ -207,17 +211,18 @@ private:
     QColor m_color;
     QColor m_backGroundColor;
     QColor m_underlineColor;
-    KoTextFormat::UnderlineLineType m_underlineType;
-    KoTextFormat::UnderlineLineStyle m_underlineLineStyle;
-    KoTextFormat::StrikeOutLineStyle m_strikeOutLineStyle;
-    KoTextFormat::StrikeOutLineType m_strikeOutType;
-    bool m_bShadowText;
+    KoTextFormat::UnderlineType m_underlineType;
+    KoTextFormat::UnderlineStyle m_underlineStyle;
+    KoTextFormat::StrikeOutStyle m_strikeOutStyle;
+    KoTextFormat::StrikeOutType m_strikeOutType;
     double m_relativeSize;
     int m_offsetBaseLine;
     bool m_bWordByWord;
     bool m_bHyphenation;
     KoTextFormat::AttributeStyle m_fontAttribute;
     QString m_language;
+    */
+    KoTextFormat m_initialFormat;
 };
 
 #endif

@@ -92,7 +92,7 @@ public:
 
     /** Implement the KoTextFormatInterface */
     //void setFormat( KoTextFormat * newFormat, int flags, bool zoomFont);
-    virtual KCommand* setFormatCommand( KoTextFormat * newFormat, int flags, bool zoomFont = false);
+    virtual KCommand* setFormatCommand( const KoTextFormat * newFormat, int flags, bool zoomFont = false);
 
     // -- Paragraph settings --
     KCommand * setCounterCommand( const KoParagCounter & counter );
@@ -102,7 +102,6 @@ public:
     KCommand * setBordersCommand( const KoBorder& leftBorder, const KoBorder& rightBorder, const KoBorder& bottomBorder, const KoBorder& topBorder );
     KCommand * setMarginCommand( QStyleSheetItem::Margin m, double margin );
     KCommand * setTabListCommand( const KoTabulatorList & tabList );
-    KCommand * setShadowCommand( double dist, short int direction, const QColor &col );
     void applyStyle( const KoStyle * style );
 
     void dragStarted();

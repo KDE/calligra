@@ -17,6 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include "koFontDia_p.h"
 #include "koFontDia.h"
 #include "korichtext.h"
 
@@ -37,14 +38,339 @@
 #include <qvbox.h>
 #include <qhgroupbox.h>
 #include <qhbuttongroup.h>
+#include <kcolorbutton.h>
+#include <kiconloader.h>
 
+KoShadowPreview::KoShadowPreview( QWidget* parent, const char* name )
+    : QFrame( parent, name )
+{
+    setFrameStyle( WinPanel | Sunken );
+    setBackgroundColor( white );
+}
+
+void KoShadowPreview::drawContents( QPainter* painter )
+{
+    QFont font(KoGlobal::defaultFont().family(), 30, QFont::Bold);
+    QFontMetrics fm( font );
+
+    QString text = "KOffice"; // i18n?
+    QRect br = fm.boundingRect( text );
+    int x = ( width() - br.width() ) / 2;
+    int y = ( height() - br.height() ) / 2 + br.height();
+    painter->save();
+
+    int sx = x + qRound(shadowDistanceX);
+    int sy = y + qRound(shadowDistanceY);
+
+    painter->setFont( font );
+    painter->setPen( shadowColor );
+    painter->drawText( sx, sy, text );
+
+    painter->setPen( blue );
+    painter->drawText( x, y, text );
+
+    painter->restore();
+}
+/*
+    int sx = 0, sy = 0;
+
+    switch ( shadowDirection )
+    {
+    case SD_LEFT_UP:
+        sx = x - shadowDistance;
+        sy = y - shadowDistance;
+        break;
+    case SD_UP:
+        sx = x;
+        sy = y - shadowDistance;
+        break;
+    case SD_RIGHT_UP:
+        sx = x + shadowDistance;
+        sy = y - shadowDistance;
+        break;
+    case SD_RIGHT:
+        sx = x + shadowDistance;
+        sy = y;
+        break;
+    case SD_RIGHT_BOTTOM:
+        sx = x + shadowDistance;
+        sy = y + shadowDistance;
+        break;
+    case SD_BOTTOM:
+        sx = x;
+        sy = y + shadowDistance;
+        break;
+    case SD_LEFT_BOTTOM:
+        sx = x - shadowDistance;
+        sy = y + shadowDistance;
+        break;
+    case SD_LEFT:
+        sx = x - shadowDistance;
+        sy = y;
+        break;
+    }
+*/
+
+KoTextShadowWidget::KoTextShadowWidget( QWidget * parent, const char * name )
+  : QWidget( parent, name )
+{
+    QGridLayout *grid = new QGridLayout( this, 8, 2, KDialog::marginHint(), KDialog::spacingHint() );
+
+    QGroupBox *shadowBox = new QGroupBox( i18n( "Shadow" ), this, "shadow" );
+    grid->addMultiCellWidget( shadowBox, 0, 3,0,0 );
+
+    QGridLayout *grid2 = new QGridLayout( shadowBox, 4, 2, 2*KDialog::marginHint(), 2*KDialog::spacingHint() );
+
+    QLabel *lcolor = new QLabel( i18n( "Co&lor:" ), shadowBox );
+    grid2->addWidget(lcolor,0,0);
+    color = new KColorButton( black,
+                              black,
+                              shadowBox );
+    lcolor->setBuddy( color );
+    grid2->addWidget(color,1,0);
+    connect( color, SIGNAL( changed( const QColor& ) ), this, SLOT( colorChanged( const QColor& ) ) );
+
+    QLabel *ldistance = new QLabel( i18n( "&Distance (pt):" ), shadowBox );
+    grid2->addWidget(ldistance,2,0);
+
+    distance = new QSpinBox( 0, 20, 1, shadowBox );
+    distance->setSuffix(i18n("pt"));
+    ldistance->setBuddy( distance );
+    connect( distance, SIGNAL( valueChanged( int ) ), this, SLOT( distanceChanged( int ) ) );
+    grid2->addWidget(distance,3,0);
+
+    QLabel *ldirection = new QLabel( i18n( "Di&rection:" ), shadowBox );
+    grid2->addWidget(ldirection,0,1);
+
+    QGridLayout *grid3 = new QGridLayout( 0L, 3, 3, KDialog::marginHint(), KDialog::spacingHint() );
+
+    lu = new QPushButton( shadowBox );
+    grid3->addWidget(lu,0,0);
+    lu->setToggleButton( true );
+        ldirection->setBuddy( lu );
+    u = new QPushButton( shadowBox );
+    grid3->addWidget(u,0,1);
+    u->setToggleButton( true );
+    ru = new QPushButton( shadowBox );
+    grid3->addWidget(ru,0,2);
+    ru->setToggleButton( true );
+    r = new QPushButton( shadowBox );
+    grid3->addWidget(r,1,2);
+    r->setToggleButton( true );
+    rb = new QPushButton( shadowBox );
+    grid3->addWidget(rb,2,2);
+    rb->setToggleButton( true );
+    b = new QPushButton( shadowBox );
+    grid3->addWidget(b,2,1);
+    b->setToggleButton( true );
+    lb = new QPushButton( shadowBox );
+    grid3->addWidget(lb,2,0);
+    lb->setToggleButton( true );
+    l = new QPushButton( shadowBox );
+    grid3->addWidget(l,1,0);
+    l->setToggleButton( true );
+
+    lu->setPixmap( BarIcon( "shadowLU" ) );
+    u->setPixmap( BarIcon( "shadowU" ) );
+    ru->setPixmap( BarIcon( "shadowRU" ) );
+    r->setPixmap( BarIcon( "shadowR" ) );
+    rb->setPixmap( BarIcon( "shadowRB" ) );
+    b->setPixmap( BarIcon( "shadowB" ) );
+    lb->setPixmap( BarIcon( "shadowLB" ) );
+    l->setPixmap( BarIcon( "shadowL" ) );
+
+    connect( lu, SIGNAL( clicked() ), this, SLOT( luChanged() ) );
+    connect( u, SIGNAL( clicked() ), this, SLOT( uChanged() ) );
+    connect( ru, SIGNAL( clicked() ), this, SLOT( ruChanged() ) );
+    connect( r, SIGNAL( clicked() ), this, SLOT( rChanged() ) );
+    connect( rb, SIGNAL( clicked() ), this, SLOT( rbChanged() ) );
+    connect( b, SIGNAL( clicked() ), this, SLOT( bChanged() ) );
+    connect( lb, SIGNAL( clicked() ), this, SLOT( lbChanged() ) );
+    connect( l, SIGNAL( clicked() ), this, SLOT( lChanged() ) );
+
+
+    grid2->addMultiCellLayout (grid3, 1,3, 1, 1 );
+
+    m_shadowPreview = new KoShadowPreview( this, "preview" );
+    grid->addMultiCellWidget( m_shadowPreview, 0, 3, 1, 1 );
+}
+
+void KoTextShadowWidget::setShadowDirection( short int sd )
+{
+    m_shadowDirection = sd;
+    m_shadowPreview->setShadowDistanceX( shadowDistanceX() );
+    m_shadowPreview->setShadowDistanceY( shadowDistanceY() );
+
+    lu->setOn( false );
+    u->setOn( false );
+    ru->setOn( false );
+    r->setOn( false );
+    rb->setOn( false );
+    b->setOn( false );
+    lb->setOn( false );
+    l->setOn( false );
+
+    switch ( m_shadowDirection )
+    {
+    case SD_LEFT_UP:
+        lu->setOn( true );
+        break;
+    case SD_UP:
+        u->setOn( true );
+        break;
+    case SD_RIGHT_UP:
+        ru->setOn( true );
+        break;
+    case SD_RIGHT:
+        r->setOn( true );
+        break;
+    case SD_RIGHT_BOTTOM:
+        rb->setOn( true );
+        break;
+    case SD_BOTTOM:
+        b->setOn( true );
+        break;
+    case SD_LEFT_BOTTOM:
+        lb->setOn( true );
+        break;
+    case SD_LEFT:
+        l->setOn( true );
+        break;
+    }
+}
+
+void KoTextShadowWidget::setShadow( double shadowDistanceX, double shadowDistanceY, const QColor& shadowColor )
+{
+    // Figure out shadow direction from x and y distance
+    // Ugly temporary code
+    m_shadowDirection = SD_RIGHT_BOTTOM;
+    if ( shadowDistanceX > 0 ) // right
+        if ( shadowDistanceY == 0 )
+            m_shadowDirection = SD_RIGHT;
+        else
+            m_shadowDirection = shadowDistanceY > 0 ? SD_RIGHT_BOTTOM : SD_RIGHT_UP;
+    else if ( shadowDistanceX == 0 ) // top/bottom
+            m_shadowDirection = shadowDistanceY > 0 ? SD_BOTTOM : SD_UP;
+    else // left
+        if ( shadowDistanceY == 0 )
+            m_shadowDirection = SD_LEFT;
+        else
+            m_shadowDirection = shadowDistanceY > 0 ? SD_LEFT_BOTTOM : SD_LEFT_UP;
+
+    m_shadowDistance = QMAX( QABS(shadowDistanceX), QABS(shadowDistanceY) );
+    m_shadowPreview->setShadowDistanceX( shadowDistanceX );
+    m_shadowPreview->setShadowDistanceY( shadowDistanceY );
+    // TODO turn distance into a KDoubleNumInput
+    distance->setValue( (int)m_shadowDistance );
+
+    m_shadowColor = shadowColor;
+    m_shadowPreview->setShadowColor( m_shadowColor );
+    color->setColor( m_shadowColor.isValid() ? m_shadowColor: gray  );
+}
+
+void KoTextShadowWidget::luChanged()
+{
+    setShadowDirection( SD_LEFT_UP );
+}
+
+void KoTextShadowWidget::uChanged()
+{
+    setShadowDirection( SD_UP );
+}
+
+void KoTextShadowWidget::ruChanged()
+{
+    setShadowDirection( SD_RIGHT_UP );
+}
+
+void KoTextShadowWidget::rChanged()
+{
+    setShadowDirection( SD_RIGHT );
+}
+
+void KoTextShadowWidget::rbChanged()
+{
+    setShadowDirection( SD_RIGHT_BOTTOM );
+}
+
+void KoTextShadowWidget::bChanged()
+{
+    setShadowDirection( SD_BOTTOM );
+}
+
+void KoTextShadowWidget::lbChanged()
+{
+    setShadowDirection( SD_LEFT_BOTTOM );
+}
+
+void KoTextShadowWidget::lChanged()
+{
+    setShadowDirection( SD_LEFT );
+}
+
+void KoTextShadowWidget::colorChanged( const QColor& col )
+{
+    m_shadowColor = col;
+    m_shadowPreview->setShadowColor( col );
+    emit changed();
+}
+
+void KoTextShadowWidget::distanceChanged( int _val )
+{
+    m_shadowDistance = _val;
+    m_shadowPreview->setShadowDistanceX( shadowDistanceX() );
+    m_shadowPreview->setShadowDistanceY( shadowDistanceY() );
+    emit changed();
+}
+
+QString KoTextShadowWidget::tabName() {
+    return i18n( "S&hadow" );
+}
+
+double KoTextShadowWidget::shadowDistanceX() const
+{
+    switch ( m_shadowDirection )
+    {
+    case SD_LEFT_BOTTOM:
+    case SD_LEFT:
+    case SD_LEFT_UP:
+        return - m_shadowDistance;
+    case SD_UP:
+    case SD_BOTTOM:
+        return 0;
+    case SD_RIGHT_UP:
+    case SD_RIGHT:
+    case SD_RIGHT_BOTTOM:
+        return m_shadowDistance;
+    }
+    return 0;
+}
+
+double KoTextShadowWidget::shadowDistanceY() const
+{
+    switch ( m_shadowDirection )
+    {
+    case SD_LEFT_UP:
+    case SD_UP:
+    case SD_RIGHT_UP:
+        return - m_shadowDistance;
+    case SD_LEFT:
+    case SD_RIGHT:
+        return 0;
+    case SD_LEFT_BOTTOM:
+    case SD_BOTTOM:
+    case SD_RIGHT_BOTTOM:
+        return m_shadowDistance;
+    }
+    return 0;
+}
 
 class KoFontChooser::KoFontChooserPrivate
 {
 public:
     QComboBox *m_strikeOut;
     QColor m_textColor;
-    QCheckBox *m_shadow;
+    KoTextShadowWidget *m_shadowWidget;
     KIntNumInput *m_relativeSize;
     QLabel *m_lRelativeSize;
     KIntNumInput *m_offsetBaseLine;
@@ -64,6 +390,10 @@ KoFontChooser::KoFontChooser( QWidget* parent, const char* name, bool _withSubSu
     d = new KoFontChooserPrivate;
     setupTab1(_withSubSuperScript, fontListCriteria );
     setupTab2();
+    // More modular solution: one widget per tab....
+    d->m_shadowWidget = new KoTextShadowWidget( this );
+    connect( d->m_shadowWidget, SIGNAL(changed()), this, SLOT(slotShadowChanged()) );
+    addTab( d->m_shadowWidget, d->m_shadowWidget->tabName() );
     m_changedFlags = 0;
 }
 
@@ -175,11 +505,11 @@ void KoFontChooser::setupTab2()
     lab->setBuddy( m_underlining );
     grid->addWidget( m_underlining, 1, 0);
 
-    m_underlining->insertStringList( KoTextFormat::underlineStyleList() );
+    m_underlining->insertStringList( KoTextFormat::underlineTypeList() );
 
     m_underlineType = new QComboBox(grp );
     grid->addWidget( m_underlineType, 1, 1);
-    m_underlineType->insertStringList( KoTextFormat::underlineLineStyleList() );
+    m_underlineType->insertStringList( KoTextFormat::underlineStyleList() );
 
 
     m_underlineColorButton = new QPushButton( i18n( "Change Co&lor..." ), grp );
@@ -191,15 +521,12 @@ void KoFontChooser::setupTab2()
     d->m_strikeOut = new QComboBox( grp );
     lab2->setBuddy( d->m_strikeOut );
     grid->addWidget( d->m_strikeOut, 3, 0);
-    d->m_strikeOut->insertStringList( KoTextFormat::strikeOutStyleList() );
+    d->m_strikeOut->insertStringList( KoTextFormat::strikeOutTypeList() );
 
 
     m_strikeOutType= new QComboBox(grp );
     grid->addWidget( m_strikeOutType, 3, 1);
-    m_strikeOutType->insertStringList( KoTextFormat::strikeOutLineStyleList() );
-
-    d->m_shadow= new QCheckBox( i18n("S&hadow"), grp);
-    grid->addWidget( d->m_shadow, 4, 0);
+    m_strikeOutType->insertStringList( KoTextFormat::strikeOutStyleList() );
 
     d->m_wordByWord = new QCheckBox( i18n("&Word by word"), grp);
     grid->addWidget( d->m_wordByWord, 5, 0);
@@ -244,7 +571,6 @@ void KoFontChooser::setupTab2()
     connect( m_underlining,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeUnderlining( int )));
     connect( m_strikeOutType,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeStrikeOutType( int )));
     connect( m_underlineType,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeUnderlineType( int )));
-    connect( d->m_shadow, SIGNAL(clicked()), this, SLOT( slotShadowClicked() ) );
     connect( d->m_wordByWord, SIGNAL(clicked()), this, SLOT( slotWordByWordClicked() ) );
     connect( d->m_language,  SIGNAL( activated ( int  ) ), this, SLOT( slotChangeLanguage( int )));
     connect( d->m_hyphenation, SIGNAL( clicked()), this, SLOT( slotHyphenationClicked()));
@@ -257,27 +583,17 @@ void KoFontChooser::updatePositionButton()
     d->m_lRelativeSize->setEnabled( state );
 }
 
-bool KoFontChooser::getShadowText()const
-{
-    return d->m_shadow->isChecked();
-}
-
-void KoFontChooser::setShadowText( bool _b)
-{
-    d->m_shadow->setChecked( _b);
-}
-
 void KoFontChooser::setLanguage( const QString & _tag)
 {
     d->m_language->setCurrentItem (KoGlobal::languageIndexFromTag( _tag));
 }
 
-QString KoFontChooser::getLanguage() const
+QString KoFontChooser::language() const
 {
     return KoGlobal::tagOfLanguage( d->m_language->currentText() );
 }
 
-KoTextFormat::AttributeStyle KoFontChooser::getFontAttribute()const
+KoTextFormat::AttributeStyle KoFontChooser::fontAttribute()const
 {
 #ifdef ATTRCOMBO
     int currentItem = d->m_fontAttribute->currentItem ();
@@ -329,7 +645,7 @@ void KoFontChooser::setFontAttribute( KoTextFormat::AttributeStyle _att)
 #endif
 }
 
-bool KoFontChooser::getWordByWord()const
+bool KoFontChooser::wordByWord()const
 {
     return d->m_wordByWord->isChecked();
 }
@@ -340,7 +656,7 @@ void KoFontChooser::setWordByWord( bool _b)
 }
 
 
-double KoFontChooser::getRelativeTextSize()const
+double KoFontChooser::relativeTextSize()const
 {
     return ((double)d->m_relativeSize->value()/100.0);
 }
@@ -350,7 +666,7 @@ void KoFontChooser::setRelativeTextSize(double _size)
     d->m_relativeSize->setValue( (int)(_size * 100) );
 }
 
-int KoFontChooser::getOffsetFromBaseLine()const
+int KoFontChooser::offsetFromBaseLine()const
 {
     return d->m_offsetBaseLine->value();
 }
@@ -413,7 +729,7 @@ void KoFontChooser::slotFontChanged(const QFont & f)
     m_newFont = f;
 }
 
-bool KoFontChooser::getHyphenation() const
+bool KoFontChooser::hyphenation() const
 {
     return d->m_hyphenation->isChecked();
 }
@@ -451,7 +767,7 @@ void KoFontChooser::slotSuperScriptClicked()
 
 void KoFontChooser::slotRelativeSizeChanged( int )
 {
-   m_changedFlags |= KoTextFormat::VAlign;
+    m_changedFlags |= KoTextFormat::VAlign;
 }
 
 void KoFontChooser::slotOffsetFromBaseLineChanged( int )
@@ -459,7 +775,7 @@ void KoFontChooser::slotOffsetFromBaseLineChanged( int )
     m_changedFlags |= KoTextFormat::OffsetFromBaseLine;
 }
 
-void KoFontChooser::slotShadowClicked()
+void KoFontChooser::slotShadowChanged()
 {
     m_changedFlags |= KoTextFormat::ShadowText;
 }
@@ -523,7 +839,7 @@ void KoFontChooser::slotUnderlineColor()
     }
 }
 
-KoTextFormat::UnderlineLineType KoFontChooser::getUnderlineLineType()
+KoTextFormat::UnderlineType KoFontChooser::underlineType() const
 {
     switch (m_underlining->currentItem () )
     {
@@ -548,7 +864,7 @@ KoTextFormat::UnderlineLineType KoFontChooser::getUnderlineLineType()
 
 }
 
-KoTextFormat::StrikeOutLineType KoFontChooser::getStrikeOutLineType()
+KoTextFormat::StrikeOutType KoFontChooser::strikeOutType() const
 {
     switch (d->m_strikeOut->currentItem () )
     {
@@ -570,7 +886,7 @@ KoTextFormat::StrikeOutLineType KoFontChooser::getStrikeOutLineType()
 }
 
 
-void KoFontChooser::setStrikeOutlineType(KoTextFormat::StrikeOutLineType nb)
+void KoFontChooser::setStrikeOutlineType(KoTextFormat::StrikeOutType nb)
 {
     switch ( nb )
     {
@@ -593,7 +909,7 @@ void KoFontChooser::setStrikeOutlineType(KoTextFormat::StrikeOutLineType nb)
 }
 
 
-void KoFontChooser::setUnderlineLineType(KoTextFormat::UnderlineLineType nb)
+void KoFontChooser::setUnderlineType(KoTextFormat::UnderlineType nb)
 {
     switch ( nb )
     {
@@ -619,7 +935,7 @@ void KoFontChooser::setUnderlineLineType(KoTextFormat::UnderlineLineType nb)
     m_changedFlags = 0;
 }
 
-void KoFontChooser::setUnderlineLineStyle(KoTextFormat::UnderlineLineStyle _t)
+void KoFontChooser::setUnderlineStyle(KoTextFormat::UnderlineStyle _t)
 {
     switch ( _t )
     {
@@ -647,7 +963,7 @@ void KoFontChooser::setUnderlineLineStyle(KoTextFormat::UnderlineLineStyle _t)
     m_changedFlags = 0;
 }
 
-void KoFontChooser::setStrikeOutLineStyle(KoTextFormat::StrikeOutLineStyle _t)
+void KoFontChooser::setStrikeOutStyle(KoTextFormat::StrikeOutStyle _t)
 {
     switch ( _t )
     {
@@ -673,7 +989,7 @@ void KoFontChooser::setStrikeOutLineStyle(KoTextFormat::StrikeOutLineStyle _t)
     m_changedFlags = 0;
 }
 
-KoTextFormat::UnderlineLineStyle KoFontChooser::getUnderlineLineStyle()
+KoTextFormat::UnderlineStyle KoFontChooser::underlineStyle() const
 {
     switch ( m_underlineType->currentItem() )
     {
@@ -697,7 +1013,7 @@ KoTextFormat::UnderlineLineStyle KoFontChooser::getUnderlineLineStyle()
     }
 }
 
-KoTextFormat::StrikeOutLineStyle KoFontChooser::getStrikeOutLineStyle()
+KoTextFormat::StrikeOutStyle KoFontChooser::strikeOutStyle() const
 {
 
     switch ( m_strikeOutType->currentItem() )
@@ -740,45 +1056,88 @@ void KoFontChooser::slotChangeStrikeOutType( int /*i*/ )
     m_changedFlags |= KoTextFormat::StrikeOut;
 }
 
-KoFontDia::KoFontDia( QWidget* parent, const char* name, const QFont &_font,
-                      FontAttributeFlags flags,
-                      const QColor & color,
-                      const QColor & backGroundColor ,
-                      const QColor & underlineColor,
-                      KoTextFormat::UnderlineLineStyle _underlineLine,
-                      KoTextFormat::UnderlineLineType _underlineType,
-                      KoTextFormat::StrikeOutLineType _strikeOutType,
-                      KoTextFormat::StrikeOutLineStyle _strikeOutLine,
-                      KoTextFormat::AttributeStyle _fontAttribute,
-                      const QString &_language,
-                      double _relativeSize,
-                      int _offsetFromBaseLine,
-                      bool _withSubSuperScript )
+
+void KoFontChooser::setShadow( double shadowDistanceX, double shadowDistanceY, const QColor& shadowColor )
+{
+    d->m_shadowWidget->setShadow( shadowDistanceX, shadowDistanceY, shadowColor );
+}
+
+double KoFontChooser::shadowDistanceX() const
+{
+    return d->m_shadowWidget->shadowDistanceX();
+}
+
+double KoFontChooser::shadowDistanceY() const
+{
+    return d->m_shadowWidget->shadowDistanceY();
+}
+
+QColor KoFontChooser::shadowColor() const
+{
+    return d->m_shadowWidget->shadowColor();
+}
+
+void KoFontChooser::setFormat( const KoTextFormat& format )
+{
+    setFont( format.font(),
+                        format.vAlign() & KoTextFormat::AlignSubScript,
+                        format.vAlign() & KoTextFormat::AlignSuperScript );
+    setColor( format.color() );
+    setBackGroundColor( format.textBackgroundColor() );
+    setUnderlineColor( format.textUnderlineColor() );
+
+    setUnderlineType( format.underlineType() );
+    setUnderlineStyle( format.underlineStyle() );
+
+    setStrikeOutlineType( format.strikeOutType() );
+    setStrikeOutStyle( format.strikeOutStyle() );
+
+    setShadow( format.shadowDistanceX(), format.shadowDistanceY(), format.shadowColor() );
+
+    setWordByWord( format.wordByWord() );
+    setRelativeTextSize( format.relativeTextSize() );
+    setOffsetFromBaseLine( format.offsetFromBaseLine() );
+    setFontAttribute( format.attributeFont() );
+    setLanguage( format.language() );
+
+    updatePositionButton();
+}
+
+KoTextFormat KoFontChooser::newFormat() const
+{
+    return KoTextFormat( newFont(),
+                         vAlign(),
+                         color(),
+                         backGroundColor(),
+                         underlineColor(),
+                         underlineType(),
+                         underlineStyle(),
+                         strikeOutType(),
+                         strikeOutStyle(),
+                         fontAttribute(),
+                         language(),
+                         relativeTextSize(),
+                         offsetFromBaseLine(),
+                         wordByWord(),
+                         hyphenation(),
+                         shadowDistanceX(),
+                         shadowDistanceY(),
+                         shadowColor() );
+}
+
+//////////
+
+KoFontDia::KoFontDia( const KoTextFormat& initialFormat, QWidget* parent, const char* name )
     : KDialogBase( parent, name, true,
                    i18n("Select Font"), Ok|Cancel|User1|Apply, Ok ),
-      m_font(_font),
-      m_bSubscript( flags & FontAttributeSubscript ),
-      m_bSuperscript(flags & FontAttributeSuperScript ),
-      m_color( color),
-      m_backGroundColor( backGroundColor),
-      m_underlineColor( underlineColor ),
-      m_underlineType( _underlineType ),
-      m_underlineLineStyle( _underlineLine ),
-      m_strikeOutLineStyle( _strikeOutLine ),
-      m_strikeOutType( _strikeOutType),
-      m_bShadowText( flags & FontAttributeShadowText),
-      m_relativeSize( _relativeSize ),
-      m_offsetBaseLine( _offsetFromBaseLine),
-      m_bWordByWord( flags & FontAttributeWordByWord ),
-      m_bHyphenation( flags & FontAttributeHyphenation),
-      m_fontAttribute( _fontAttribute),
-      m_language ( _language )
+      m_initialFormat(initialFormat)
 {
     setButtonText( KDialogBase::User1, i18n("&Reset") );
 
-    m_chooser = new KoFontChooser( this, "kofontchooser", _withSubSuperScript, KFontChooser::SmoothScalableFonts);
+    m_chooser = new KoFontChooser( this, "kofontchooser", true /*_withSubSuperScript*/,
+                                   KFontChooser::SmoothScalableFonts);
     setMainWidget( m_chooser );
-    connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotReset()));
+    connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotReset()) );
 
     slotReset();
 }
@@ -796,23 +1155,8 @@ void KoFontDia::slotOk()
 
 void KoFontDia::slotReset()
 {
-    m_chooser->setFont( m_font, m_bSubscript, m_bSuperscript );
-    m_chooser->setColor( m_color );
-    m_chooser->setBackGroundColor(m_backGroundColor);
-    m_chooser->setUnderlineColor( m_underlineColor );
-
-    m_chooser->setUnderlineLineType(m_underlineType);
-    m_chooser->setUnderlineLineStyle(m_underlineLineStyle);
-
-    m_chooser->setStrikeOutlineType( m_strikeOutType);
-    m_chooser->setStrikeOutLineStyle(m_strikeOutLineStyle);
-    m_chooser->setShadowText( m_bShadowText);
-    m_chooser->setWordByWord( m_bWordByWord );
-    m_chooser->setRelativeTextSize( m_relativeSize);
-    m_chooser->setOffsetFromBaseLine( m_offsetBaseLine );
-    m_chooser->setFontAttribute( m_fontAttribute );
-    m_chooser->setLanguage( m_language );
-    m_chooser->updatePositionButton();
+    m_chooser->setFormat( m_initialFormat );
 }
 
 #include "koFontDia.moc"
+#include "koFontDia_p.moc"

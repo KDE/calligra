@@ -130,17 +130,6 @@ QColor KoTextViewIface::textUnderlineColor() const
     return m_textView->textUnderlineColor();
 }
 
-bool KoTextViewIface::textShadow() const
-{
-    return m_textView->textShadow();
-}
-
-void KoTextViewIface::setTextShadow( bool _shadow)
-{
-    KCommand *cmd=m_textView->setShadowTextCommand(_shadow);
-    delete cmd;
-}
-
 double KoTextViewIface::relativeTextSize() const
 {
     return m_textView->relativeTextSize();
@@ -298,11 +287,6 @@ void KoTextViewIface::moveCursorLineEnd(bool select)
 void KoTextViewIface::moveCursorLineStart(bool select)
 {
   m_textView->moveCursor(KoTextView::MoveLineStart,select);
-}
-
-QColor KoTextViewIface::paragraphShadowColor() const
-{
-    return m_textView->cursor()->parag()->shadowColor();
 }
 
 bool KoTextViewIface::paragraphHasBorder() const
@@ -610,14 +594,14 @@ void KoTextViewIface::removeComment()
     removeComment();
 }
 
-QString KoTextViewIface::underlineLineStyle() const
+QString KoTextViewIface::underlineStyle() const
 {
-    return KoTextFormat::underlineStyleToString( m_textView->underlineLineStyle() );
+    return KoTextFormat::underlineStyleToString( m_textView->underlineStyle() );
 }
 
-QString KoTextViewIface::strikeOutLineStyle()const
+QString KoTextViewIface::strikeOutStyle()const
 {
-    return KoTextFormat::strikeOutStyleToString( m_textView->strikeOutLineStyle() );
+    return KoTextFormat::strikeOutStyleToString( m_textView->strikeOutStyle() );
 }
 
 void KoTextViewIface::addBookmarks(const QString &url)

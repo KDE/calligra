@@ -2052,23 +2052,26 @@ void KoAutoFormat::changeTextFormat(KoSearchContext *formatOptions, KoTextFormat
         }
         if ( formatOptions->m_optionsMask & KoSearchContext::WordByWord)
         {
-            format->setWordByWord( formatOptions->m_options & KoSearchContext::WordByWord);
+            format->setWordByWord( formatOptions->m_options & KoSearchContext::WordByWord );
             flags |=KoTextFormat::WordByWord;
         }
         if ( formatOptions->m_optionsMask & KoSearchContext::Shadow)
         {
-            format->setShadowText( formatOptions->m_options & KoSearchContext::WordByWord);
+            if ( formatOptions->m_options & KoSearchContext::Shadow )
+                format->setShadow( 1, 1, Qt::gray );
+            else
+                format->setShadow( 0, 0, QColor() );
             flags |=KoTextFormat::ShadowText;
         }
 
         if ( formatOptions->m_optionsMask & KoSearchContext::Underline)
         {
-            format->setUnderlineLineType(formatOptions->m_underline);
+            format->setUnderlineType(formatOptions->m_underline);
             flags |=KoTextFormat::ExtendUnderLine;
         }
         if ( formatOptions->m_optionsMask & KoSearchContext::StrikeOut)
         {
-            format->setStrikeOutLineType(formatOptions->m_strikeOut);
+            format->setStrikeOutType(formatOptions->m_strikeOut);
             flags |= KoTextFormat::StrikeOut;
         }
         if ( formatOptions->m_optionsMask & KoSearchContext::VertAlign)

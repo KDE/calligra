@@ -279,12 +279,6 @@ void KoStyle::propagateChanges( int paragLayoutFlag, int formatFlag )
         m_paragLayout.counter = m_parentStyle->paragLayout().counter;
     if ( !(paragLayoutFlag & KoParagLayout::Tabulator) )
         m_paragLayout.setTabList(m_parentStyle->paragLayout().tabList());
-    if ( !(paragLayoutFlag & KoParagLayout::Shadow) )
-    {
-        m_paragLayout.shadowDistance = m_parentStyle->paragLayout().shadowDistance;
-        m_paragLayout.shadowDirection = m_parentStyle->paragLayout().shadowDirection;
-        m_paragLayout.shadowColor = m_parentStyle->paragLayout().shadowColor;
-    }
 #if 0
     if ( paragLayoutFlag == KoParagLayout::All )
     {

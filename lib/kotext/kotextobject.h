@@ -48,8 +48,12 @@ public:
 
     virtual bool rtl() const = 0;
 
-    /** Interface for setting the modified format */
-    virtual KCommand *setFormatCommand( KoTextFormat *format, int flags, bool zoomFont = false ) = 0;
+    /**
+     * Interface for setting the modified format
+     * @param format can be a temporary format
+     * @param zoomFont set to true if the font size was used-speficied (e.g. in KoFontDia)
+     */
+    virtual KCommand *setFormatCommand( const KoTextFormat *format, int flags, bool zoomFont = false ) = 0;
 
     /** Interface for accessing the current parag layout */
     virtual const KoParagLayout * currentParagLayoutFormat() const = 0;
@@ -84,8 +88,6 @@ public:
     KCommand *setPointSizeCommand( int s );
     //void setFamily(const QString &font);
     KCommand *setFamilyCommand(const QString &font);
-    //void setFont(const QFont &font, bool _subscript, bool _superscript, const QColor &col, const QColor &backGroundColor, int flags);
-    KCommand *setFontCommand(const QFont &font, int fontFlags,  const QColor &col, const QColor &backGroundColor, const QColor &underlineColor, KoTextFormat::UnderlineLineStyle _underlineLineStyle, KoTextFormat::UnderlineLineType _underlineType, KoTextFormat::StrikeOutLineType _strikeOutType, KoTextFormat::StrikeOutLineStyle _strikeOutStyle, KoTextFormat::AttributeStyle _fontAttribute,  double _relativeTextSize, int _offsetFromBaseLine, const QString &_lang, int flags);
     //void setTextSubScript(bool on);
     KCommand *setTextSubScriptCommand(bool on);
     //void setTextSuperScript(bool on);
@@ -111,7 +113,7 @@ public:
 
     KCommand *setLanguageCommand(const QString &);
 
-    KCommand *setShadowTextCommand( bool _b );
+    KCommand *setShadowTextCommand( double shadowDistanceX, double shadowDistanceY, const QColor& shadowColor );
 
     KCommand *setHyphenationCommand( bool _b );
 
@@ -132,10 +134,10 @@ public:
     QColor textBackgroundColor()const;
     QColor textUnderlineColor()const;
 
-    KoTextFormat::UnderlineLineType underlineLineType()const;
-    KoTextFormat::StrikeOutLineType strikeOutLineType()const;
-    KoTextFormat::UnderlineLineStyle underlineLineStyle()const;
-    KoTextFormat::StrikeOutLineStyle strikeOutLineStyle()const;
+    KoTextFormat::UnderlineType underlineType()const;
+    KoTextFormat::StrikeOutType strikeOutType()const;
+    KoTextFormat::UnderlineStyle underlineStyle()const;
+    KoTextFormat::StrikeOutStyle strikeOutStyle()const;
 
 
 
@@ -147,7 +149,9 @@ public:
     bool textItalic() const;
     bool textSubScript() const;
     bool textSuperScript() const;
-    bool textShadow() const;
+    double shadowDistanceX() const;
+    double shadowDistanceY() const;
+    QColor shadowColor() const;
     KoTextFormat::AttributeStyle fontAttribute() const;
     double relativeTextSize() const;
     int offsetFromBaseLine()const;
@@ -252,11 +256,11 @@ public:
     void removeHighlight( bool repaint );
 
     /** Implementation of setFormatCommand from KoTextFormatInterface - apply change to the whole document */
-    KCommand *setFormatCommand( KoTextFormat *format, int flags, bool zoomFont = false );
+    KCommand *setFormatCommand( const KoTextFormat *format, int flags, bool zoomFont = false );
 
     /** Set format changes on selection or current cursor.
         Returns a command if the format was applied to a selection */
-    KCommand *setFormatCommand( KoTextCursor * cursor, KoTextFormat ** currentFormat, KoTextFormat *format, int flags, bool zoomFont = false, int selectionId = KoTextDocument::Standard );
+    KCommand *setFormatCommand( KoTextCursor * cursor, KoTextFormat ** currentFormat, const KoTextFormat *format, int flags, bool zoomFont = false, int selectionId = KoTextDocument::Standard );
 
     /** Selections ids */
     enum SelectionIds {
@@ -281,7 +285,6 @@ public:
     KCommand * setMarginCommand( KoTextCursor * cursor, QStyleSheetItem::Margin m, double margin, int selectionId = KoTextDocument::Standard);
     KCommand* setTabListCommand( KoTextCursor * cursor,const KoTabulatorList & tabList , int selectionId = KoTextDocument::Standard );
 
-    KCommand * setShadowCommand( KoTextCursor * cursor,double dist, short int direction, const QColor &col,int selectionId= KoTextDocument::Standard  );
     KCommand * setParagDirectionCommand( KoTextCursor * cursor, QChar::Direction d, int selectionId = KoTextDocument::Standard );
 
     /**

@@ -854,7 +854,7 @@ void KoTextView::focusOutEvent()
     textObject()->setFormat( m_cursor, m_currentFormat, newFormat, flags, zoomFont );
 }*/
 
-KCommand* KoTextView::setFormatCommand( KoTextFormat * newFormat, int flags, bool zoomFont)
+KCommand* KoTextView::setFormatCommand( const KoTextFormat * newFormat, int flags, bool zoomFont)
 {
     return textObject()->setFormatCommand( m_cursor, &m_currentFormat, newFormat, flags, zoomFont );
 }
@@ -942,11 +942,6 @@ KCommand * KoTextView::setMarginCommand( QStyleSheetItem::Margin m, double margi
 KCommand * KoTextView::setTabListCommand( const KoTabulatorList & tabList )
 {
     return textObject()->setTabListCommand( m_cursor, tabList );
-}
-
-KCommand * KoTextView::setShadowCommand( double dist, short int direction, const QColor &col )
-{
-    return textObject()->setShadowCommand( m_cursor,dist, direction, col);
 }
 
 KoTextDocument * KoTextView::textDocument() const

@@ -747,7 +747,7 @@ public:
 class KoTextDocFormatCommand : public KoTextDocCommand
 {
 public:
-    KoTextDocFormatCommand( KoTextDocument *d, int sid, int sidx, int eid, int eidx, const QMemArray<KoTextStringChar> &old, KoTextFormat *f, int fl );
+    KoTextDocFormatCommand( KoTextDocument *d, int sid, int sidx, int eid, int eidx, const QMemArray<KoTextStringChar> &old, const KoTextFormat *f, int fl );
     virtual ~KoTextDocFormatCommand();
 
     Commands type() const { return Format; }
@@ -941,7 +941,7 @@ public:
 
     QMap<int, KoTextParagLineStart*> &lineStartList();
 
-    void setFormat( int index, int len, KoTextFormat *f, bool useCollection = TRUE, int flags = -1 );
+    void setFormat( int index, int len, const KoTextFormat *f, bool useCollection = TRUE, int flags = -1 );
 
     void setAlignment( uint a );
     void setAlignmentDirect( uint a ) { align = a; }

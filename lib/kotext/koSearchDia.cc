@@ -416,7 +416,7 @@ void KoFindReplace::replaceWithAttribut( KoTextCursor * cursor, int index )
     if ( m_replaceContext.m_optionsMask & KoSearchContext::Underline)
     {
         flags |= KoTextFormat::ExtendUnderLine;
-        newFormat->setUnderlineLineType( m_replaceContext.m_underline );
+        newFormat->setUnderlineType( m_replaceContext.m_underline );
 
     }
     if ( m_replaceContext.m_optionsMask & KoSearchContext::VertAlign)
@@ -427,22 +427,26 @@ void KoFindReplace::replaceWithAttribut( KoTextCursor * cursor, int index )
     if ( m_replaceContext.m_optionsMask & KoSearchContext::StrikeOut)
     {
         flags |= KoTextFormat::StrikeOut;
-        newFormat->setStrikeOutLineType( m_replaceContext.m_strikeOut);
+        newFormat->setStrikeOutType( m_replaceContext.m_strikeOut);
     }
     if ( m_replaceContext.m_optionsMask & KoSearchContext::BgColor)
     {
         newFormat->setTextBackgroundColor(m_replaceContext.m_backGroundColor);
-        flags |=KoTextFormat::TextBackgroundColor;
+        flags |= KoTextFormat::TextBackgroundColor;
     }
     if (m_replaceContext.m_optionsMask & KoSearchContext::Shadow)
     {
         flags |= KoTextFormat::ShadowText;
-        newFormat->setShadowText( (bool)(m_replaceContext.m_options & KoSearchContext::Shadow) );
+        // If shadow has been selected, we set a shadow (any shadow) in the new format
+        if ( m_replaceContext.m_options & KoSearchContext::Shadow )
+            newFormat->setShadow( 1, 1, Qt::gray );
+        else
+            newFormat->setShadow( 0, 0, QColor() );
     }
     if (m_replaceContext.m_optionsMask & KoSearchContext::WordByWord)
     {
         flags |= KoTextFormat::WordByWord;
-        newFormat->setShadowText( (bool)(m_replaceContext.m_options & KoSearchContext::WordByWord) );
+        newFormat->setWordByWord( (bool)(m_replaceContext.m_options & KoSearchContext::WordByWord) );
     }
     if (m_replaceContext.m_optionsMask & KoSearchContext::Language)
     {
@@ -794,8 +798,8 @@ void KoFormatDia::ctxOptions( )
     m_ctx->m_color = m_colorItem->color();
     m_ctx->m_backGroundColor = m_bgColorItem->color();
     m_ctx->m_vertAlign = (KoTextFormat::VerticalAlignment)m_vertAlignItem->currentItem();
-    m_ctx->m_underline = (KoTextFormat::UnderlineLineType)m_underlineItem->currentItem();
-    m_ctx->m_strikeOut = (KoTextFormat::StrikeOutLineType)m_strikeOutItem->currentItem();
+    m_ctx->m_underline = (KoTextFormat::UnderlineType)m_underlineItem->currentItem();
+    m_ctx->m_strikeOut = (KoTextFormat::StrikeOutType)m_strikeOutItem->currentItem();
     m_ctx->m_attribute = ( KoTextFormat::AttributeStyle)m_fontAttributeItem->currentItem();
     m_ctx->m_language = KoGlobal::listTagOfLanguages()[m_languageItem->currentItem()];
 
@@ -819,7 +823,9 @@ bool KoFindReplace::validateMatch( const QString & /*text*/, int index, int matc
         }
         if (m_searchContext.m_optionsMask & KoSearchContext::Shadow)
         {
-            if ( (!format->shadowText() && (m_searchContext.m_options & KoSearchContext::Shadow)) || (format->shadowText() && ((m_searchContext.m_options & KoSearchContext::Shadow)==0)))
+            bool hasShadow = format->shadowDistanceX() != 0 || format->shadowDistanceY() != 0;
+            if ( (!hasShadow && (m_searchContext.m_options & KoSearchContext::Shadow))
+                 || (hasShadow && ((m_searchContext.m_options & KoSearchContext::Shadow)==0)) )
                 return false;
         }
 
@@ -859,12 +865,12 @@ bool KoFindReplace::validateMatch( const QString & /*text*/, int index, int matc
         }
         if ( m_searchContext.m_optionsMask & KoSearchContext::Underline)
         {
-            if ( format->underlineLineType() != m_searchContext.m_underline )
+            if ( format->underlineType() != m_searchContext.m_underline )
                 return false;
         }
         if ( m_searchContext.m_optionsMask & KoSearchContext::StrikeOut)
         {
-            if ( format->strikeOutLineType() != m_searchContext.m_strikeOut )
+            if ( format->strikeOutType() != m_searchContext.m_strikeOut )
                 return false;
         }
 

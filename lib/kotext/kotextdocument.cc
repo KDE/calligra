@@ -200,12 +200,7 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
     kdDebug(32500) << "KoTextDocument::drawParagWYSIWYG " << (void*)parag << " id:" << parag->paragId() << endl;
 #endif
     m_drawingFlags = drawingFlags;
-    int sx = 0, sy = 0;
-    if ( parag->shadowDistance() )
-    {
-        sx = parag->shadowX( zoomHandler );
-        sy = parag->shadowY( zoomHandler );
-    }
+    int sx = 0, sy = 0; // used to be for shadow (which has now moved to KoTextFormat)
     QPainter *painter = 0;
     // Those three rects are in pixels, in the document coordinates (0,0 == topleft of first parag)
     QRect rect = parag->pixelRect( zoomHandler ); // the parag rect
@@ -304,17 +299,6 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
     // But the buffer-pixmap below starts at Y. We need to translate by -Y
     // so that the painting happens at the right place.
     painter->translate( 0, -offsetY );
-
-    if ( sx != 0 || sy != 0 )
-    {
-        painter->save();
-        painter->translate( sx, sy );
-        m_bDrawingShadow = true;
-        parag->paint( *painter, cg, drawCursor ? cursor : 0, FALSE /*don't draw selections*/,
-                      crect_lu.x(), crect_lu.y(), crect_lu.width(), crect_lu.height() );
-        painter->restore();
-    }
-    m_bDrawingShadow = false;
 
     parag->paint( *painter, cg, drawCursor ? cursor : 0, (m_drawingFlags & DrawSelections),
                   crect_lu.x(), crect_lu.y(), crect_lu.width(), crect_lu.height() );

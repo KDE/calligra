@@ -641,15 +641,15 @@ QString KoVariable::text(bool realValue)
     return fmt->displayedString( str);
 }
 
-void KoVariable::drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix, int ascentpix, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, int offset )
+void KoVariable::drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix, int ascentpix, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, int offset, bool drawingShadow )
 {
     KoTextFormat * fmt = format();
     KoZoomHandler * zh = textDocument()->paintingZoomHandler();
     QFont font( fmt->screenFont( zh ) );
-    drawCustomItemHelper( p, x, y, wpix, hpix, ascentpix, cg, selected, offset, fmt, font, fmt->color() );
+    drawCustomItemHelper( p, x, y, wpix, hpix, ascentpix, cg, selected, offset, fmt, font, fmt->color(), drawingShadow );
 }
 
-void KoVariable::drawCustomItemHelper( QPainter* p, int x, int y, int wpix, int hpix, int ascentpix, const QColorGroup& cg, bool selected, int offset, KoTextFormat* fmt, const QFont& font, QColor textColor )
+void KoVariable::drawCustomItemHelper( QPainter* p, int x, int y, int wpix, int hpix, int ascentpix, const QColorGroup& cg, bool selected, int offset, KoTextFormat* fmt, const QFont& font, QColor textColor, bool drawingShadow )
 {
     // Important: the y value already includes the difference between the parag baseline
     // and the char's own baseline (ascent) (see paintDefault in korichtext.cpp)
@@ -661,10 +661,9 @@ void KoVariable::drawCustomItemHelper( QPainter* p, int x, int y, int wpix, int 
     if ( fmt->textBackgroundColor().isValid() )
         p->fillRect( x, y, wpix, hpix, fmt->textBackgroundColor() );
 
-    if ( textDocument()->drawingShadow() ) // Use shadow color if drawing a shadow
+    if ( drawingShadow ) // Use shadow color if drawing a shadow
     {
-        KoTextParag * parag = paragraph();
-        textColor = parag->shadowColor();
+        textColor = fmt->shadowColor();
         p->setPen( textColor );
     }
     else if ( selected )
@@ -1711,7 +1710,7 @@ QStringList KoLinkVariable::actionTexts()
 }
 
 
-void KoLinkVariable::drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix, int ascentpix, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, int offset )
+void KoLinkVariable::drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix, int ascentpix, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, int offset, bool drawingShadow )
 {
     KoTextFormat * fmt = format();
     KoZoomHandler * zh = textDocument()->paintingZoomHandler();
@@ -1722,7 +1721,7 @@ void KoLinkVariable::drawCustomItem( QPainter* p, int x, int y, int wpix, int hp
         font.setUnderline( true );
     QColor textColor = displayLink ? cg.color( QColorGroup::Link ) : fmt->color();
 
-    drawCustomItemHelper( p, x, y, wpix, hpix, ascentpix, cg, selected, offset, fmt, font, textColor );
+    drawCustomItemHelper( p, x, y, wpix, hpix, ascentpix, cg, selected, offset, fmt, font, textColor, drawingShadow );
 }
 
 
@@ -1779,7 +1778,7 @@ QString KoNoteVariable::text(bool realValue)
 
 }
 
-void KoNoteVariable::drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix, int ascentpix, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected, int offset )
+void KoNoteVariable::drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix, int ascentpix, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected, int offset, bool drawingShadow )
 {
     if ( !m_varColl->variableSetting()->displayComment())
         return;
@@ -1804,7 +1803,7 @@ void KoNoteVariable::drawCustomItem( QPainter* p, int x, int y, int wpix, int hp
         p->drawRect( x, y, wpix, hpix );
     }
     //call it for use drawCustomItemHelper just for draw font effect
-    KoVariable::drawCustomItem( p, x, y, wpix, hpix, ascentpix, cx, cy, cw, ch, cg, selected, offset );
+    KoVariable::drawCustomItem( p, x, y, wpix, hpix, ascentpix, cx, cy, cw, ch, cg, selected, offset, drawingShadow );
 
     p->restore();
 }

@@ -83,8 +83,8 @@ public:
     QColor m_backGroundColor;
     int m_size;
     KoTextFormat::VerticalAlignment m_vertAlign;
-    KoTextFormat::UnderlineLineType m_underline;
-    KoTextFormat::StrikeOutLineType m_strikeOut;
+    KoTextFormat::UnderlineType m_underline;
+    KoTextFormat::StrikeOutType m_strikeOut;
     KoTextFormat::AttributeStyle m_attribute;
 
     QStringList m_strings; // history

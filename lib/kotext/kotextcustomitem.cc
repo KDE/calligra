@@ -100,7 +100,18 @@ void KoTextCustomItem::draw(QPainter* p, int _x, int _y, int cx, int cy, int cw,
     if ( fmt->vAlign() == KoTextFormat::AlignSuperScript )
         offset = -( hpix - p->fontMetrics().height() );
 
-    drawCustomItem(p, x, y, wpix, hpix, ascentpix, cx, cy, cw, ch, cg, selected, offset);
+    if ( fmt->shadowDistanceX() != 0 || fmt->shadowDistanceY() != 0 ) {
+        int sx = fmt->shadowX( zh );
+        int sy = fmt->shadowY( zh );
+        if ( sx != 0 || sy != 0 )
+        {
+            p->save();
+            p->translate( sx, sy );
+            drawCustomItem(p, x, y, wpix, hpix, ascentpix, cx, cy, cw, ch, cg, selected, offset, true);
+            p->restore();
+        }
+    }
+    drawCustomItem(p, x, y, wpix, hpix, ascentpix, cx, cy, cw, ch, cg, selected, offset,  false);
 }
 
 ////////////////

@@ -238,8 +238,8 @@ KoTextCursor *KoTextDocDeleteCommand::unexecute( KoTextCursor *c )
 }
 
 KoTextDocFormatCommand::KoTextDocFormatCommand( KoTextDocument *d, int sid, int sidx, int eid, int eidx,
-					const QMemArray<KoTextStringChar> &old, KoTextFormat *f, int fl )
-    : KoTextDocCommand( d ), startId( sid ), startIndex( sidx ), endId( eid ), endIndex( eidx ), format( f ), oldFormats( old ), flags( fl )
+					const QMemArray<KoTextStringChar> &old, const KoTextFormat *f, int fl )
+    : KoTextDocCommand( d ), startId( sid ), startIndex( sidx ), endId( eid ), endIndex( eidx ), oldFormats( old ), flags( fl )
 {
     format = d->formatCollection()->format( f );
     for ( int j = 0; j < (int)oldFormats.size(); ++j ) {
@@ -1956,7 +1956,7 @@ QString KoTextDocument::selectedText( int id, bool withCustom ) const
     return s;
 }
 
-void KoTextDocument::setFormat( int id, KoTextFormat *f, int flags )
+void KoTextDocument::setFormat( int id, const KoTextFormat *f, int flags )
 {
     QMap<int, KoTextDocumentSelection>::ConstIterator it = selections.find( id );
     if ( it == selections.end() )
@@ -3641,8 +3641,9 @@ int KoTextParag::leftGap() const
     return x;
 }
 
-void KoTextParag::setFormat( int index, int len, KoTextFormat *f, bool useCollection, int flags )
+void KoTextParag::setFormat( int index, int len, const KoTextFormat *_f, bool useCollection, int flags )
 {
+    Q_ASSERT( useCollection ); // just for info
     if ( index < 0 )
 	index = 0;
     if ( index > str->length() - 1 )
@@ -3656,35 +3657,34 @@ void KoTextParag::setFormat( int index, int len, KoTextFormat *f, bool useCollec
     KoTextFormat *of;
     for ( int i = 0; i < len; ++i ) {
 	of = str->at( i + index ).format();
-	if ( !changed && f->key() != of->key() )
+	if ( !changed && _f->key() != of->key() )
 	    changed = TRUE;
         // ######## Is this test exhaustive?
 	if ( invalid == -1 &&
-	     ( f->font().family() != of->font().family() ||
-	       f->pointSize() != of->pointSize() ||
-	       f->font().weight() != of->font().weight() ||
-	       f->font().italic() != of->font().italic() ||
-	       f->vAlign() != of->vAlign() ||
-               f->relativeTextSize() != of->relativeTextSize() ||
-               f->offsetFromBaseLine() != of->offsetFromBaseLine() ||
-               f->wordByWord() != of->wordByWord()  ||
-               f->attributeFont() != of->attributeFont() ||
-               f->language() != of->language()) ||
-               f->hyphenation() != of->hyphenation()) {
+	     ( _f->font().family() != of->font().family() ||
+	       _f->pointSize() != of->pointSize() ||
+	       _f->font().weight() != of->font().weight() ||
+	       _f->font().italic() != of->font().italic() ||
+	       _f->vAlign() != of->vAlign() ||
+               _f->relativeTextSize() != of->relativeTextSize() ||
+               _f->offsetFromBaseLine() != of->offsetFromBaseLine() ||
+               _f->wordByWord() != of->wordByWord()  ||
+               _f->attributeFont() != of->attributeFont() ||
+               _f->language() != of->language()) ||
+               _f->hyphenation() != of->hyphenation()) {
 	    invalidate( 0 );
 	}
 	if ( flags == -1 || flags == KoTextFormat::Format || !fc ) {
 #ifdef DEBUG_COLLECTION
-	    kdDebug(32500) << " KoTextParag::setFormat, will use format(f) " << f << " " << f->key() << endl;
+	    kdDebug(32500) << " KoTextParag::setFormat, will use format(f) " << f << " " << _f->key() << endl;
 #endif
-	    if ( fc )
-		f = fc->format( f );
+            KoTextFormat* f = fc ? fc->format( _f ) : const_cast<KoTextFormat *>( _f );
 	    str->setFormat( i + index, f, useCollection );
 	} else {
 #ifdef DEBUG_COLLECTION
-	    kdDebug(32500) << " KoTextParag::setFormat, will use format(of,f,flags) of=" << of << " " << of->key() << ", f=" << f << " " << f->key() << endl;
+	    kdDebug(32500) << " KoTextParag::setFormat, will use format(of,f,flags) of=" << of << " " << of->key() << ", f=" << _f << " " << _f->key() << endl;
 #endif
-	    KoTextFormat *fm = fc->format( of, f, flags );
+	    KoTextFormat *fm = fc->format( of, _f, flags );
 #ifdef DEBUG_COLLECTION
 	    kdDebug(32500) << " KoTextParag::setFormat, format(of,f,flags) returned " << fm << " " << fm->key() << " " << endl;
 #endif

@@ -96,10 +96,6 @@ KoStyleManager::KoStyleManager( QWidget *_parent,KoUnit::Unit unit, const QPtrLi
     newTab->setWidget( new KoParagTabulatorsWidget( unit, -1, newTab ) );
     addTab( newTab );
 
-    newTab = new KoStyleParagTab( m_tabs );
-    newTab->setWidget( new KoParagShadowWidget( newTab ) );
-    addTab( newTab );
-
     QListBoxItem * item = m_stylesList->findItem (activeStyleName);
     if ( item )
         m_stylesList->setCurrentItem( m_stylesList->index(item) );
@@ -643,6 +639,9 @@ KoStyleFontTab::~KoStyleFontTab()
 
 void KoStyleFontTab::update()
 {
+    m_chooser->setFormat( m_style->format() );
+
+#if 0
     bool subScript = m_style->format().vAlign() == KoTextFormat::AlignSubScript;
     bool superScript = m_style->format().vAlign() == KoTextFormat::AlignSuperScript;
     QFont fn = m_style->format().font();
@@ -656,10 +655,10 @@ void KoStyleFontTab::update()
 
     m_chooser->setUnderlineColor( m_style->format().textUnderlineColor());
 
-    m_chooser->setUnderlineLineType(m_style->format().underlineLineType());
-    m_chooser->setUnderlineLineStyle(m_style->format().underlineLineStyle());
-    m_chooser->setStrikeOutLineStyle(m_style->format().strikeOutLineStyle());
-    m_chooser->setStrikeOutlineType(m_style->format().strikeOutLineType());
+    m_chooser->setUnderlineType(m_style->format().underlineType());
+    m_chooser->setUnderlineStyle(m_style->format().underlineStyle());
+    m_chooser->setStrikeOutStyle(m_style->format().strikeOutStyle());
+    m_chooser->setStrikeOutlineType(m_style->format().strikeOutType());
     m_chooser->setShadowText( m_style->format().shadowText());
     m_chooser->setFontAttribute( m_style->format().attributeFont());
     m_chooser->setWordByWord( m_style->format().wordByWord());
@@ -667,10 +666,13 @@ void KoStyleFontTab::update()
     m_chooser->setOffsetFromBaseLine( m_style->format().offsetFromBaseLine());
     m_chooser->setLanguage( m_style->format().language());
     m_chooser->setHyphenation( m_style->format().hyphenation());
+#endif
 }
 
 void KoStyleFontTab::save()
 {
+    m_style->format() = m_chooser->newFormat();
+#if 0
     QFont fn = m_chooser->getNewFont();
     kdDebug()<<" save fn.bold() :"<<fn.bold()<<" fn.italic():"<<fn.italic()<<endl;
     kdDebug()<<" save fn.family() :"<<fn.family()<<endl;
@@ -687,10 +689,10 @@ void KoStyleFontTab::save()
         m_style->format().setTextBackgroundColor(m_chooser->backGroundColor());
 
     m_style->format().setTextUnderlineColor(m_chooser->underlineColor());
-    m_style->format().setUnderlineLineType (m_chooser->getUnderlineLineType());
-    m_style->format().setUnderlineLineStyle (m_chooser->getUnderlineLineStyle());
-    m_style->format().setStrikeOutLineStyle( m_chooser->getStrikeOutLineStyle() );
-    m_style->format().setStrikeOutLineType (m_chooser->getStrikeOutLineType());
+    m_style->format().setUnderlineType (m_chooser->getUnderlineType());
+    m_style->format().setUnderlineStyle (m_chooser->getUnderlineStyle());
+    m_style->format().setStrikeOutStyle( m_chooser->getStrikeOutStyle() );
+    m_style->format().setStrikeOutType (m_chooser->getStrikeOutType());
     m_style->format().setShadowText(m_chooser->getShadowText());
     m_style->format().setWordByWord( m_chooser->getWordByWord());
     m_style->format().setRelativeTextSize( m_chooser->getRelativeTextSize());
@@ -699,6 +701,7 @@ void KoStyleFontTab::save()
 
     m_style->format().setLanguage( m_chooser->getLanguage());
     m_style->format().setHyphenation( m_chooser->getHyphenation());
+#endif
 }
 
 QString KoStyleFontTab::tabName()

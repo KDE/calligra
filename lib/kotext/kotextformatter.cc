@@ -633,7 +633,7 @@ KoTextParagLineStart *KoTextFormatter::koFormatLine(
 	if ( (((!format->underline())&&
                (!format->doubleUnderline())&&
                (!format->waveUnderline())&&
-               (format->underlineLineType()!=KoTextFormat::U_SIMPLE_BOLD))
+               (format->underlineType()!=KoTextFormat::U_SIMPLE_BOLD))
               || i == last)
              && nc )
 	{
@@ -649,7 +649,7 @@ KoTextParagLineStart *KoTextFormatter::koFormatLine(
 	else if(format->underline()||
                 format->waveUnderline()||
                 format->doubleUnderline()||
-                (format->underlineLineType() == KoTextFormat::U_SIMPLE_BOLD))
+                (format->underlineType() == KoTextFormat::U_SIMPLE_BOLD))
 	{
 	    ++nc;
 	    current += format->pointSize(); //pointSize() is independent of {Sub,Super}Script in contrast to height()

@@ -112,7 +112,7 @@ public:
     KoTextCursor selectionStartCursor( int id );
     KoTextCursor selectionEndCursor( int id );
     void selectionEnd( int id, int &paragId, int &index );
-    void setFormat( int id, KoTextFormat *f, int flags );
+    void setFormat( int id, const KoTextFormat *f, int flags );
     KoTextParag *selectionStart( int id );
     KoTextParag *selectionEnd( int id );
     int numSelections() const { return nSelections; }
@@ -315,8 +315,6 @@ public:
                            bool resetChanged = TRUE,
                            uint drawingFlags = KoTextDocument::DrawSelections );
 
-    /** Set by drawParagWYSIWYG, used by KoTextParag::drawParagStringInternal */
-    bool drawingShadow() const { return m_bDrawingShadow; }
     /** Set by drawParagWYSIWYG, used by KoTextParag::drawParagString */
     bool drawFormattingChars() const { return (m_drawingFlags & DrawFormattingChars); }
     /** Set by drawParagWYSIWYG, used by KoTextParag::drawParagStringInternal */
@@ -355,7 +353,6 @@ private:
     // (due to the pixelx/pixelww stuff in KoTextFormatter)
     KoZoomHandler * m_zoomHandler;
     bool m_bDestroying;
-    bool m_bDrawingShadow;
     uint m_drawingFlags;
 
     //// End of kotext additions

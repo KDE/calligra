@@ -40,23 +40,24 @@ void KoTextFormat::KoTextFormatPrivate::clearCache()
 
 KoTextFormat::KoTextFormat()
 {
-    linkColor = TRUE;
+    //linkColor = TRUE;
     ref = 0;
     missp = FALSE;
-    ha = AlignNormal;
+    va = AlignNormal;
     collection = 0;
     //// kotext: WYSIWYG works much much better with scalable fonts -> force it to be scalable
     fn.setStyleStrategy( QFont::ForceOutline );
     d = new KoTextFormatPrivate;
     m_textUnderlineColor=QColor();
-    m_underlineLine = U_NONE;
-    m_strikeOutLine = S_NONE;
-    m_underlineLineStyle = U_SOLID;
-    m_strikeOutLineStyle = S_SOLID;
+    m_underlineType = U_NONE;
+    m_strikeOutType = S_NONE;
+    m_underlineStyle = U_SOLID;
+    m_strikeOutStyle = S_SOLID;
     m_language = KGlobal::locale()->language();
     d->m_bHyphenation = false;
     d->m_underLineWidth = 1.0;
-    d->m_bShadowText = true;
+    d->m_shadowDistanceX = 0;
+    d->m_shadowDistanceY = 0;
     d->m_relativeTextSize = 0.66;
     d->m_offsetFromBaseLine= 0;
     d->m_bWordByWord = false;
@@ -68,7 +69,7 @@ KoTextFormat::KoTextFormat()
 }
 
 KoTextFormat::KoTextFormat( const QFont &f, const QColor &c, const QString &_language, bool hyphenation, double ulw, KoTextFormatCollection *parent )
-    : fn( f ), col( c ), /*fm( QFontMetrics( f ) ),*/ linkColor( TRUE )
+    : fn( f ), col( c ) /*fm( QFontMetrics( f ) ),*/ //linkColor( TRUE )
 {
 #ifdef DEBUG_COLLECTION
     kdDebug(32500) << "KoTextFormat with font & color & parent (" << parent << "), addRef. " << this << endl;
@@ -89,17 +90,17 @@ KoTextFormat::KoTextFormat( const QFont &f, const QColor &c, const QString &_lan
     //asc = fm.ascent();
     //dsc = fm.descent();
     missp = FALSE;
-    ha = AlignNormal;
-    //memset( widths, 0, 256 * sizeof( ushort ) );
+    va = AlignNormal;
     //// kotext
     d = new KoTextFormatPrivate;
     m_textUnderlineColor = QColor();
-    m_underlineLine = U_NONE;
-    m_strikeOutLine = S_NONE;
-    m_underlineLineStyle = U_SOLID;
-    m_strikeOutLineStyle = S_SOLID;
+    m_underlineType = U_NONE;
+    m_strikeOutType = S_NONE;
+    m_underlineStyle = U_SOLID;
+    m_strikeOutStyle = S_SOLID;
     m_language = _language;
-    d->m_bShadowText = true;
+    d->m_shadowDistanceX = 0;
+    d->m_shadowDistanceY = 0;
     d->m_relativeTextSize= 0.66;
     d->m_offsetFromBaseLine = 0;
     d->m_bWordByWord = false;
@@ -110,7 +111,54 @@ KoTextFormat::KoTextFormat( const QFont &f, const QColor &c, const QString &_lan
     ////
     generateKey();
     addRef();
-    //updateStyleFlags();
+}
+
+KoTextFormat::KoTextFormat( const QFont &_font,
+                            VerticalAlignment _valign,
+                            const QColor & _color,
+                            const QColor & _backGroundColor,
+                            const QColor & _underlineColor,
+                            KoTextFormat::UnderlineType _underlineType,
+                            KoTextFormat::UnderlineStyle _underlineStyle,
+                            KoTextFormat::StrikeOutType _strikeOutType,
+                            KoTextFormat::StrikeOutStyle _strikeOutStyle,
+                            KoTextFormat::AttributeStyle _fontAttribute,
+                            const QString &_language,
+                            double _relativeTextSize,
+                            int _offsetFromBaseLine,
+                            bool _wordByWord,
+                            bool _hyphenation,
+                            double _shadowDistanceX,
+                            double _shadowDistanceY,
+                            const QColor& _shadowColor )
+{
+    ref = 0;
+    collection = 0;
+    fn = _font;
+    col = _color;
+    missp = false;
+    va = _valign;
+    d = new KoTextFormatPrivate;
+    m_textBackColor = _backGroundColor;
+    m_textUnderlineColor = _underlineColor;
+    m_underlineType = _underlineType;
+    m_strikeOutType = _strikeOutType;
+    m_underlineStyle = _underlineStyle;
+    m_strikeOutStyle = _strikeOutStyle;
+    m_language = _language;
+    d->m_bHyphenation = _hyphenation;
+    d->m_underLineWidth = 1.0;
+    d->m_shadowDistanceX = _shadowDistanceX;
+    d->m_shadowDistanceY = _shadowDistanceY;
+    d->m_shadowColor = _shadowColor;
+    d->m_relativeTextSize = _relativeTextSize;
+    d->m_offsetFromBaseLine = _offsetFromBaseLine;
+    d->m_bWordByWord = _wordByWord;
+    m_attributeFont = _fontAttribute;
+    d->m_charStyle = 0L;
+    ////
+    generateKey();
+    addRef();
 }
 
 KoTextFormat::KoTextFormat( const KoTextFormat &f )
@@ -145,27 +193,28 @@ KoTextFormat& KoTextFormat::operator=( const KoTextFormat &f )
     //fm = f.fm;
     //leftBearing = f.leftBearing;
     //rightBearing = f.rightBearing;
-    //memset( widths, 0, 256 * sizeof( ushort ) );
     //hei = f.hei;
     //asc = f.asc;
     //dsc = f.dsc;
     missp = f.missp;
-    ha = f.ha;
+    va = f.va;
     k = f.k;
-    linkColor = f.linkColor;
+    //linkColor = f.linkColor;
     //// kotext addition
     delete d;
     d = new KoTextFormatPrivate;
     m_textBackColor=f.m_textBackColor;
     m_textUnderlineColor=f.m_textUnderlineColor;
-    m_underlineLine = f.m_underlineLine;
-    m_strikeOutLine = f.m_strikeOutLine;
-    m_underlineLineStyle = f.m_underlineLineStyle;
-    m_strikeOutLineStyle = f.m_strikeOutLineStyle;
+    m_underlineType = f.m_underlineType;
+    m_strikeOutType = f.m_strikeOutType;
+    m_underlineStyle = f.m_underlineStyle;
+    m_strikeOutStyle = f.m_strikeOutStyle;
     m_language = f.m_language;
     d->m_bHyphenation=f.d->m_bHyphenation;
     d->m_underLineWidth=f.d->m_underLineWidth;
-    d->m_bShadowText = f.d->m_bShadowText;
+    d->m_shadowDistanceX = f.d->m_shadowDistanceX;
+    d->m_shadowDistanceY = f.d->m_shadowDistanceY;
+    d->m_shadowColor = f.d->m_shadowColor;
     d->m_relativeTextSize = f.d->m_relativeTextSize;
     d->m_offsetFromBaseLine = f.d->m_offsetFromBaseLine;
     d->m_bWordByWord = f.d->m_bWordByWord;
@@ -186,7 +235,6 @@ void KoTextFormat::update()
     //hei = fm.height();
     //asc = fm.ascent();
     //dsc = fm.descent();
-    //memset( widths, 0, 256 * sizeof( ushort ) );
     generateKey();
     //updateStyleFlags();
     //// kotext
@@ -213,27 +261,27 @@ void KoTextFormat::copyFormat( const KoTextFormat & nf, int flags )
 	missp = nf.missp;
     if ( flags & KoTextFormat::VAlign )
     {
-	ha = nf.ha;
+	va = nf.va;
         setRelativeTextSize( nf.relativeTextSize());
     }
     ////// kotext addition
     if ( flags & KoTextFormat::StrikeOut )
     {
-        setStrikeOutLineStyle( nf.strikeOutLineStyle() );
-        setStrikeOutLineType (nf.strikeOutLineType());
+        setStrikeOutStyle( nf.strikeOutStyle() );
+        setStrikeOutType (nf.strikeOutType());
     }
     if( flags & KoTextFormat::TextBackgroundColor)
         setTextBackgroundColor(nf.textBackgroundColor());
     if( flags & KoTextFormat::ExtendUnderLine)
     {
         setTextUnderlineColor(nf.textUnderlineColor());
-        setUnderlineLineType (nf.underlineLineType());
-        setUnderlineLineStyle (nf.underlineLineStyle());
+        setUnderlineType (nf.underlineType());
+        setUnderlineStyle (nf.underlineStyle());
     }
     if( flags & KoTextFormat::Language)
         setLanguage(nf.language());
     if( flags & KoTextFormat::ShadowText)
-        setShadowText(nf.shadowText());
+        setShadow(nf.shadowDistanceX(), nf.shadowDistanceY(), nf.shadowColor());
     if( flags & KoTextFormat::OffsetFromBaseLine)
         setOffsetFromBaseLine(nf.offsetFromBaseLine());
     if( flags & KoTextFormat::WordByWord)
@@ -268,9 +316,9 @@ void KoTextFormat::setMisspelled( bool b )
 
 void KoTextFormat::setVAlign( VerticalAlignment a )
 {
-    if ( a == ha )
+    if ( a == va )
 	return;
-    ha = a;
+    va = a;
     update();
 }
 
@@ -340,6 +388,8 @@ int KoTextFormat::minRightBearing() const
 }
 #endif
 
+// ## Maybe we need a binary form for speed when NDEBUG, and to keep the
+// ## readable form when !NDEBUG, like QFont does?
 void KoTextFormat::generateKey()
 {
     k = fn.key();
@@ -347,7 +397,7 @@ void KoTextFormat::generateKey()
     if ( col.isValid() ) // just to shorten the key in the common case
         k += QString::number( (uint)col.rgb() );
     k += '/';
-    k += QString::number( (int)isMisspelled() ); // a digit each, no need for '/'
+    k += QString::number( (int)isMisspelled() ); // 1 digit, no need for '/'
     k += QString::number( (int)vAlign() );
     //// kotext addition
     k += '/';
@@ -357,29 +407,33 @@ void KoTextFormat::generateKey()
     if ( m_textUnderlineColor.isValid())
         k += QString::number( (uint)m_textUnderlineColor.rgb() );
     k += '/';
-    k += QString::number( (int)m_underlineLine ); // a digit each, no need for '/'
-    k += QString::number( (int)m_strikeOutLine );
-    k += '/';
-    k += QString::number( (int)m_underlineLineStyle );
-    k += '/';
-    k += QString::number( (int)m_strikeOutLineStyle);
+    k += QString::number( (int)m_underlineType ); // a digit each, no need for '/'
+    k += QString::number( (int)m_strikeOutType );
+    k += QString::number( (int)m_underlineStyle );
+    k += QString::number( (int)m_strikeOutStyle );
     k += '/';
     k += m_language;
     k += '/';
-    k += QString::number( (int)d->m_bShadowText);
+    if ( d->m_shadowDistanceX != 0 || d->m_shadowDistanceY != 0 )
+    {
+        k += QString::number( d->m_shadowDistanceX );
+        k += '/';
+        k += QString::number( d->m_shadowDistanceY );
+        k += '/';
+        k += QString::number( (uint)d->m_shadowColor.rgb() );
+    }
     k += '/';
     k += QString::number( d->m_relativeTextSize);
     k += '/';
     k += QString::number( d->m_offsetFromBaseLine);
     k += '/';
-    k += QString::number( (int)d->m_bWordByWord);
-    k += '/';
+    k += QString::number( (int)d->m_bWordByWord); // boolean -> 1 digit -> no '/'
     k += QString::number( (int)m_attributeFont);
     k += '/';
-    k += QString::number( (int)d->m_bHyphenation);
-    k += '/';
+    k += QString::number( (int)d->m_bHyphenation); // boolean -> 1 digit -> no '/'
     k += QString::number( (double)d->m_underLineWidth);
     ////
+    // Keep in sync with method below
 }
 
 // This is used to create "simple formats", with font and color etc., but without
@@ -401,28 +455,22 @@ QString KoTextFormat::getKey( const QFont &fn, const QColor &col, bool misspelle
     k += '/';
     k += QString::number( (int)U_NONE );
     k += QString::number( (int)S_NONE ); // no double-underline in a "simple format"
-    k += '/';
     k += QString::number( (int)U_SOLID );
-    k += '/';
     k += QString::number( (int)S_SOLID ); // no double-underline in a "simple format"
     k += '/';
     //k += QString::null; // spellcheck language
-    k += "/1";
     k += '/';
-    k += "0"; //no shadow
+      //no shadow
     k += '/';
     k += "0.66"; //relative text size
     k += '/';
     k += "0"; // no offset from base line
     k += '/';
     k += "0"; //no wordbyword attribute
-    k += '/';
     k += "0"; //no font attribute
     k += '/';
     k += "0"; //no hyphen
-    k += '/';
     k += "0"; //no ulw
-
 
     ////
     return k;
@@ -449,35 +497,35 @@ void KoTextFormat::removeRef()
         collection->remove( this );
 }
 
-void KoTextFormat::setStrikeOutLineType (StrikeOutLineType _type)
+void KoTextFormat::setStrikeOutType (StrikeOutType _type)
 {
-    if ( m_strikeOutLine == _type )
+    if ( m_strikeOutType == _type )
         return;
-    m_strikeOutLine = _type;
+    m_strikeOutType = _type;
     update();
 }
 
-void KoTextFormat::setUnderlineLineType (UnderlineLineType _type)
+void KoTextFormat::setUnderlineType (UnderlineType _type)
 {
-    if ( m_underlineLine == _type )
+    if ( m_underlineType == _type )
         return;
-    m_underlineLine = _type;
+    m_underlineType = _type;
     update();
 }
 
-void KoTextFormat::setUnderlineLineStyle (UnderlineLineStyle _type)
+void KoTextFormat::setUnderlineStyle (UnderlineStyle _type)
 {
-    if ( m_underlineLineStyle == _type )
+    if ( m_underlineStyle == _type )
         return;
-    m_underlineLineStyle = _type;
+    m_underlineStyle = _type;
     update();
 }
 
-void KoTextFormat::setStrikeOutLineStyle( StrikeOutLineStyle _type )
+void KoTextFormat::setStrikeOutStyle( StrikeOutStyle _type )
 {
-    if ( m_strikeOutLineStyle == _type )
+    if ( m_strikeOutStyle == _type )
         return;
-    m_strikeOutLineStyle = _type;
+    m_strikeOutStyle = _type;
     update();
 }
 
@@ -496,11 +544,15 @@ void KoTextFormat::setTextUnderlineColor(const QColor &_col)
     update();
 }
 
-void KoTextFormat::setShadowText(bool _b)
+void KoTextFormat::setShadow( double shadowDistanceX, double shadowDistanceY, const QColor& shadowColor )
 {
-    if ( d->m_bShadowText == _b )
+    if ( d->m_shadowDistanceX == shadowDistanceX &&
+         d->m_shadowDistanceY == shadowDistanceY &&
+         d->m_shadowColor == shadowColor )
         return;
-    d->m_bShadowText=_b;
+    d->m_shadowDistanceX = shadowDistanceX;
+    d->m_shadowDistanceY = shadowDistanceY;
+    d->m_shadowColor = shadowColor;
     update();
 }
 
@@ -546,8 +598,8 @@ int KoTextFormat::compare( const KoTextFormat & format ) const
     if ( fn.italic() != format.fn.italic() )
         flags |= KoTextFormat::Italic;
     if ( textUnderlineColor()!=format.textUnderlineColor() ||
-         underlineLineType()!= format.underlineLineType() ||
-         underlineLineStyle() != format.underlineLineStyle())
+         underlineType()!= format.underlineType() ||
+         underlineStyle() != format.underlineStyle())
         flags |= KoTextFormat::ExtendUnderLine;
     if ( fn.family() != format.fn.family() )
         flags |= KoTextFormat::Family;
@@ -558,14 +610,16 @@ int KoTextFormat::compare( const KoTextFormat & format ) const
     if ( vAlign() != format.vAlign() ||
         relativeTextSize() != format.relativeTextSize())
         flags |= KoTextFormat::VAlign;
-    if ( strikeOutLineType() != format.strikeOutLineType()
-        || underlineLineStyle() != format.underlineLineStyle())
+    if ( strikeOutType() != format.strikeOutType()
+        || underlineStyle() != format.underlineStyle())
         flags |= KoTextFormat::StrikeOut;
     if ( textBackgroundColor() != format.textBackgroundColor() )
         flags |= KoTextFormat::TextBackgroundColor;
     if ( language() != format.language() )
         flags |= KoTextFormat::Language;
-    if ( shadowText() != format.shadowText() )
+    if ( d->m_shadowDistanceX != format.shadowDistanceX()
+         || d->m_shadowDistanceY != format.shadowDistanceY()
+         || d->m_shadowColor != format.shadowColor() )
         flags |= KoTextFormat::ShadowText;
     if ( offsetFromBaseLine() != format.offsetFromBaseLine() )
         flags |= KoTextFormat::OffsetFromBaseLine;
@@ -853,8 +907,86 @@ KoCharStyle *KoTextFormat::style() const
     return d->m_charStyle;
 }
 
+QString KoTextFormat::shadowAsCss(  double shadowDistanceX, double shadowDistanceY, const QColor& shadowColor )
+{
+    // http://www.w3.org/TR/REC-CSS2/text.html#text-shadow-props
+    // none | [<color> || <length (h)> <length (v)> <length (blur radius, not used here)>] ...
+    // => none or color length length
+    if ( shadowDistanceX != 0 || shadowDistanceY != 0 )
+    {
+        QString css = shadowColor.name() + " ";
+        css += QString::number(shadowDistanceX) + "pt ";
+        css += QString::number(shadowDistanceY) + "pt";
+        return css;
+    }
+    return "none";
+}
+
+QString KoTextFormat::shadowAsCss() const
+{
+    return shadowAsCss( d->m_shadowDistanceX, d->m_shadowDistanceY, d->m_shadowColor );
+}
+
+void KoTextFormat::parseShadowFromCss( const QString& _css )
+{
+    QString css = _css.simplifyWhiteSpace();
+    if ( css.isEmpty() || css == "none" )
+    {
+        d->m_shadowDistanceX = 0;
+        d->m_shadowDistanceY = 0;
+        d->m_shadowColor = QColor();
+    } else
+    {
+        QStringList tokens = QStringList::split(' ', css);
+        if ( tokens.isEmpty() ) {
+            kdWarning(32500) << "Parse error in text-shadow: " << css << endl;
+            return;
+        }
+        // Check which token looks like a colour
+        QColor col( tokens.first() );
+        if ( col.isValid() )
+            tokens.pop_front();
+        else if ( tokens.count() > 1 )
+        {
+            col.setNamedColor( tokens.last() );
+            if ( col.isValid() )
+                tokens.pop_back();
+        }
+        d->m_shadowColor = col; // whether valid or not
+        // Parse x distance
+        if ( !tokens.isEmpty() ) {
+            d->m_shadowDistanceX = KoUnit::parseValue( tokens.first() );
+            tokens.pop_front();
+        }
+        // Parse y distance
+        if ( !tokens.isEmpty() ) {
+            d->m_shadowDistanceY = KoUnit::parseValue( tokens.first() );
+            tokens.pop_front();
+        }
+        // We ignore whatever else is in the string (e.g. blur radius, other shadows)
+    }
+}
+
+QColor KoTextFormat::shadowColor() const
+{
+    if ( d->m_shadowColor.isValid() )
+        return d->m_shadowColor;
+    else // CSS says "[If] no color has been specified, the shadow will have the same color as the [text] itself"
+        return col;
+}
+
+int KoTextFormat::shadowX( KoZoomHandler *zh ) const
+{
+    return zh->zoomItX( d->m_shadowDistanceX );
+}
+
+int KoTextFormat::shadowY( KoZoomHandler *zh ) const
+{
+    return zh->zoomItY( d->m_shadowDistanceY );
+}
+
 //static
-QString KoTextFormat::underlineStyleToString( KoTextFormat::UnderlineLineStyle _lineType )
+QString KoTextFormat::underlineStyleToString( KoTextFormat::UnderlineStyle _lineType )
 {
     QString strLineType;
     switch ( _lineType )
@@ -878,7 +1010,7 @@ QString KoTextFormat::underlineStyleToString( KoTextFormat::UnderlineLineStyle _
     return strLineType;
 }
 
-QString KoTextFormat::strikeOutStyleToString( KoTextFormat::StrikeOutLineStyle _lineType )
+QString KoTextFormat::strikeOutStyleToString( KoTextFormat::StrikeOutStyle _lineType )
 {
     QString strLineType;
     switch ( _lineType )
@@ -902,7 +1034,7 @@ QString KoTextFormat::strikeOutStyleToString( KoTextFormat::StrikeOutLineStyle _
     return strLineType;
 }
 
-KoTextFormat::UnderlineLineStyle KoTextFormat::stringToUnderlineStyle( const QString & _str )
+KoTextFormat::UnderlineStyle KoTextFormat::stringToUnderlineStyle( const QString & _str )
 {
     if ( _str =="solid")
         return KoTextFormat::U_SOLID;
@@ -918,7 +1050,7 @@ KoTextFormat::UnderlineLineStyle KoTextFormat::stringToUnderlineStyle( const QSt
         return KoTextFormat::U_SOLID;
 }
 
-KoTextFormat::StrikeOutLineStyle KoTextFormat::stringToStrikeOutStyle( const QString & _str )
+KoTextFormat::StrikeOutStyle KoTextFormat::stringToStrikeOutStyle( const QString & _str )
 {
     if ( _str =="solid")
         return KoTextFormat::S_SOLID;
@@ -989,7 +1121,7 @@ void KoTextFormat::setLanguage( const QString & _lang)
     update();
 }
 
-QStringList KoTextFormat::underlineStyleList()
+QStringList KoTextFormat::underlineTypeList()
 {
     QStringList lst;
     lst <<i18n("Without");
@@ -1000,7 +1132,7 @@ QStringList KoTextFormat::underlineStyleList()
     return lst;
 }
 
-QStringList KoTextFormat::strikeOutStyleList()
+QStringList KoTextFormat::strikeOutTypeList()
 {
     QStringList lst;
     lst <<i18n("Without");
@@ -1020,7 +1152,7 @@ QStringList KoTextFormat::fontAttributeList()
     return lst;
 }
 
-QStringList KoTextFormat::underlineLineStyleList()
+QStringList KoTextFormat::underlineStyleList()
 {
     QStringList lst;
     lst <<i18n("Solid Line");
@@ -1031,7 +1163,7 @@ QStringList KoTextFormat::underlineLineStyleList()
     return lst;
 }
 
-QStringList KoTextFormat::strikeOutLineStyleList()
+QStringList KoTextFormat::strikeOutStyleList()
 {
     QStringList lst;
     lst <<i18n("Solid Line");
@@ -1047,9 +1179,14 @@ QStringList KoTextFormat::strikeOutLineStyleList()
 void KoTextFormat::printDebug()
 {
     QString col = color().isValid() ? color().name() : QString("(default)");
-    kdDebug(32500) << "format '" << key() << "' (" << (void*)this << "): refcount: " << ref << "    realfont: " << QFontInfo( font() ).family() << " color: " << col << endl;
+    kdDebug(32500) << "format '" << key() << "' (" << (void*)this << "):"
+                   << " refcount: " << ref
+                   << " realfont: " << QFontInfo( font() ).family()
+                   << " color: " << col << " shadow=" << shadowAsCss() << endl;
 }
 #endif
+
+////////////////
 
 KoTextFormatCollection::KoTextFormatCollection()
     : cKey( 307 )//, sheet( 0 )
@@ -1139,7 +1276,7 @@ KoTextFormat *KoTextFormatCollection::format( const KoTextFormat *f )
     return lastFormat;
 }
 
-KoTextFormat *KoTextFormatCollection::format( KoTextFormat *of, KoTextFormat *nf, int flags )
+KoTextFormat *KoTextFormatCollection::format( const KoTextFormat *of, const KoTextFormat *nf, int flags )
 {
     if ( cres && kof == of->key() && knf == nf->key() && cflags == flags ) {
 #ifdef DEBUG_COLLECTION
@@ -1255,4 +1392,5 @@ void KoTextFormatCollection::debug()
     }
     kdDebug(32500) << "------------ KoTextFormatCollection: debug --------------- END" << endl;
 }
+
 #endif

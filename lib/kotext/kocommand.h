@@ -129,7 +129,7 @@ protected:
 class KoTextFormatCommand : public KoTextDocFormatCommand
 {
 public:
-    KoTextFormatCommand( KoTextDocument *d, int sid, int sidx, int eid, int eidx, const QMemArray<KoTextStringChar> &old, KoTextFormat *f, int fl );
+    KoTextFormatCommand( KoTextDocument *d, int sid, int sidx, int eid, int eidx, const QMemArray<KoTextStringChar> &old, const KoTextFormat *f, int fl );
     virtual ~KoTextFormatCommand();
 
     KoTextCursor *execute( KoTextCursor *c );

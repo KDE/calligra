@@ -41,7 +41,9 @@ class KoTextParag;
  * formatting of that character (font, bold, italic, underline, misspelled etc.).
  *
  * Formats are stored in KoTextFormatCollection and are shared for all
- * characters with the same format.
+ * characters with the same format. The API rule is that a const KoTextFormat*
+ * is a temporary format (out of collection) and a KoTextFormat* is a format
+ * from the collection.
  */
 class KoTextFormat
 {
@@ -80,7 +82,10 @@ public:
     double m_relativeTextSize;
     double m_underLineWidth;
     KoCharStyle *m_charStyle;
-    bool m_bShadowText;
+
+    double m_shadowDistanceX; // 0 in both x and y means no shadow
+    double m_shadowDistanceY;
+    QColor m_shadowColor;
     bool m_bWordByWord;
     bool m_bHyphenation;
 };
@@ -96,17 +101,62 @@ public:
 	Color = 32,
 	Misspelled = 64,
 	VAlign = 128,
+        // 256 is free for use
+        StrikeOut = 512, // style and type strikeout
+        TextBackgroundColor = 1024,
+        ExtendUnderLine = 2048, // color, style and type of underline
+        Language = 4096,
+        ShadowText = 8192,
+        OffsetFromBaseLine = 16384,
+        WordByWord = 32768,
+        Attribute = 65536, // lower/upper/smallcaps
+        Hyphenation = 131072,
+        UnderLineWidth = 262144,
+
 	Font = Bold | Italic | Underline | Family | Size,
-	Format = Font | Color | Misspelled | VAlign
+        // Format means "everything"
+	Format = Font | Color | Misspelled | VAlign | StrikeOut | TextBackgroundColor |
+                 ExtendUnderLine | Language | ShadowText | OffsetFromBaseLine |
+                 WordByWord | Attribute | Hyphenation | UnderLineWidth
     };
 
     enum VerticalAlignment { AlignNormal, AlignSubScript, AlignSuperScript }; // QRT now has it in another order, but it's too late, we use this order in KWord's file format now !
+    enum UnderlineType { U_NONE = 0, U_SIMPLE = 1, U_DOUBLE = 2, U_SIMPLE_BOLD = 3, U_WAVE = 4};
+    enum StrikeOutType { S_NONE = 0, S_SIMPLE = 1, S_DOUBLE = 2, S_SIMPLE_BOLD = 3};
+    enum UnderlineStyle { U_SOLID = 0 , U_DASH = 1, U_DOT = 2, U_DASH_DOT = 3, U_DASH_DOT_DOT = 4};
+    enum StrikeOutStyle { S_SOLID = 0 , S_DASH = 1, S_DOT = 2, S_DASH_DOT = 3, S_DASH_DOT_DOT = 4};
+
+    enum AttributeStyle { ATT_NONE = 0, ATT_UPPER = 1, ATT_LOWER = 2 , ATT_SMALL_CAPS};
+
 
     KoTextFormat();
     ~KoTextFormat();
 
-    //KoTextFormat( const QStyleSheetItem *s );
-    KoTextFormat( const QFont &f, const QColor &c, const QString &_language, bool hyphenation, double ulw, KoTextFormatCollection *parent = 0 );
+    /// A simple text format
+    // (I think hyphenation and ulw are wrong here)
+    KoTextFormat( const QFont &f, const QColor &c, const QString &_language,
+                  bool hyphenation, double ulw, KoTextFormatCollection *parent = 0 );
+
+    /// A complete text format (used by KoFontDia)
+    KoTextFormat( const QFont &_font,
+                  VerticalAlignment _valign,
+                  const QColor & _color,
+                  const QColor & _backGroundColor,
+                  const QColor & _underlineColor,
+                  KoTextFormat::UnderlineType _underlineType,
+                  KoTextFormat::UnderlineStyle _underlineStyle,
+                  KoTextFormat::StrikeOutType _strikeOutType,
+                  KoTextFormat::StrikeOutStyle _strikeOutStyle,
+                  KoTextFormat::AttributeStyle _fontAttribute,
+                  const QString &_language,
+                  double _relativeTextSize,
+                  int _offsetFromBaseLine,
+                  bool _wordByWord,
+                  bool _hyphenation,
+                  double _shadowDistanceX,
+                  double _shadowDistanceY,
+                  const QColor& shadowColor );
+
     KoTextFormat( const KoTextFormat &fm );
     //KoTextFormat makeTextFormat( const QStyleSheetItem *style, const QMap<QString,QString>& attr ) const;
     KoTextFormat& operator=( const KoTextFormat &fm );
@@ -128,7 +178,7 @@ public:
     int height() const;
     int ascent() const;
     int descent() const;
-    bool useLinkColor() const;
+    //bool useLinkColor() const;
 
     void setBold( bool b );
     void setItalic( bool b );
@@ -153,26 +203,15 @@ public:
     /** Return a set of flags showing the differences between this and 'format' */
     int compare( const KoTextFormat & format ) const;
 
-    /** Extending the base KoTextFormat enum */
-    enum { StrikeOut = 512, TextBackgroundColor = 1024, ExtendUnderLine = 2048 , Language = 4096, ShadowText = 8192, OffsetFromBaseLine = 16384, WordByWord = 32768, Attribute = 65536, Hyphenation = 131072, UnderLineWidth = 262144 };
-
-    enum UnderlineLineType { U_NONE = 0, U_SIMPLE = 1, U_DOUBLE = 2, U_SIMPLE_BOLD = 3, U_WAVE = 4};
-    enum StrikeOutLineType { S_NONE = 0, S_SIMPLE = 1, S_DOUBLE = 2, S_SIMPLE_BOLD = 3};
-    enum UnderlineLineStyle { U_SOLID = 0 , U_DASH = 1, U_DOT = 2, U_DASH_DOT = 3, U_DASH_DOT_DOT = 4};
-    enum StrikeOutLineStyle { S_SOLID = 0 , S_DASH = 1, S_DOT = 2, S_DASH_DOT = 3, S_DASH_DOT_DOT = 4};
-
-    enum AttributeStyle { ATT_NONE = 0, ATT_UPPER = 1, ATT_LOWER = 2 , ATT_SMALL_CAPS};
-
     /** Call this when a text color is set to 'invalid', meaning 'whatever the
      * default for the color scheme is' */
     static QColor defaultTextColor( QPainter * painter );
 
-    void setStrikeOutLineType (StrikeOutLineType _type);
-    StrikeOutLineType strikeOutLineType()const {return m_strikeOutLine;}
+    void setStrikeOutType (StrikeOutType _type);
+    StrikeOutType strikeOutType()const {return m_strikeOutType;}
 
-
-    void setStrikeOutLineStyle( StrikeOutLineStyle _type );
-    StrikeOutLineStyle strikeOutLineStyle()const {return m_strikeOutLineStyle;}
+    void setStrikeOutStyle( StrikeOutStyle _type );
+    StrikeOutStyle strikeOutStyle()const {return m_strikeOutStyle;}
 
 
     void setTextBackgroundColor(const QColor &);
@@ -181,11 +220,11 @@ public:
     void setTextUnderlineColor(const QColor &);
     QColor textUnderlineColor()const {return m_textUnderlineColor;}
 
-    void setUnderlineLineType (UnderlineLineType _type);
-    UnderlineLineType underlineLineType()const {return m_underlineLine;}
+    void setUnderlineType (UnderlineType _type);
+    UnderlineType underlineType()const {return m_underlineType;}
 
-    void setUnderlineLineStyle (UnderlineLineStyle _type);
-    UnderlineLineStyle underlineLineStyle()const {return m_underlineLineStyle;}
+    void setUnderlineStyle (UnderlineStyle _type);
+    UnderlineStyle underlineStyle()const {return m_underlineStyle;}
 
     void setLanguage( const QString & _lang);
     QString language() const { return m_language;}
@@ -193,6 +232,8 @@ public:
     void setHyphenation( bool b );
     bool hyphenation() const { return d->m_bHyphenation; }
 
+    // This settings is a bit different - it's cached into the KoTextFormat,
+    // but it's not directly settable by the user.
     void setUnderLineWidth( double ulw );
     double underLineWidth() const { return d->m_underLineWidth; }
 
@@ -200,8 +241,20 @@ public:
     void setAttributeFont( KoTextFormat::AttributeStyle _att );
     KoTextFormat::AttributeStyle attributeFont() const { return m_attributeFont;}
 
-    bool shadowText() const { return d->m_bShadowText;}
-    void setShadowText(bool _b);
+
+    double shadowDistanceX() const { return d->m_shadowDistanceX; }
+    double shadowDistanceY() const { return d->m_shadowDistanceY; }
+    QColor shadowColor() const;
+    /// Return the amount of pixels for the horizontal shadow distance at a given zoom level
+    int shadowX( KoZoomHandler *zh ) const;
+    /// Return the amount of pixels for the vertical shadow distance at a given zoom level
+    int shadowY( KoZoomHandler *zh ) const;
+    void setShadow( double shadowDistanceX, double shadowDistanceY, const QColor& shadowColor );
+    /// Return css string for the shadow, used when saving
+    QString shadowAsCss() const;
+    static QString shadowAsCss( double shadowDistanceX, double shadowDistanceY, const QColor& shadowColor );
+    /// Load shadow attributes from a css string, used when loading
+    void parseShadowFromCss( const QString& css );
 
     double relativeTextSize() const { return d->m_relativeTextSize;}
     void setRelativeTextSize( double _size );
@@ -213,12 +266,12 @@ public:
     bool wordByWord() const { return d->m_bWordByWord;}
     void setWordByWord( bool _b );
 
-    bool doubleUnderline() const { return (m_underlineLine==U_DOUBLE ); }
-    bool waveUnderline() const { return (m_underlineLine==U_WAVE ); }
-    bool underline() const { return (m_underlineLine==U_SIMPLE ); }
-    bool strikeOut() const { return (m_strikeOutLine==S_SIMPLE ); }
-    bool doubleStrikeOut() const { return (m_strikeOutLine==S_DOUBLE ); }
-    bool isStrikedOrUnderlined() const { return ((m_underlineLine != U_NONE) ||(m_strikeOutLine!=S_NONE));}
+    bool doubleUnderline() const { return (m_underlineType==U_DOUBLE ); }
+    bool waveUnderline() const { return (m_underlineType==U_WAVE ); }
+    bool underline() const { return (m_underlineType==U_SIMPLE ); }
+    bool strikeOut() const { return (m_strikeOutType==S_SIMPLE ); }
+    bool doubleStrikeOut() const { return (m_strikeOutType==S_DOUBLE ); }
+    bool isStrikedOrUnderlined() const { return ((m_underlineType != U_NONE) ||(m_strikeOutType!=S_NONE));}
 
     /**
      * @return the reference point size, i.e. the size specified by the user.
@@ -279,20 +332,20 @@ public:
 
     void applyCharStyle( KoCharStyle *_style );
     KoCharStyle *style() const;
-    static QString underlineStyleToString( UnderlineLineStyle _lineType );
-    static QString strikeOutStyleToString( StrikeOutLineStyle _lineType );
-    static UnderlineLineStyle stringToUnderlineStyle( const QString & _str );
-    static StrikeOutLineStyle stringToStrikeOutStyle( const QString & _str );
+    static QString underlineStyleToString( UnderlineStyle _lineType );
+    static QString strikeOutStyleToString( StrikeOutStyle _lineType );
+    static UnderlineStyle stringToUnderlineStyle( const QString & _str );
+    static StrikeOutStyle stringToStrikeOutStyle( const QString & _str );
 
     static QString attributeFontToString( KoTextFormat::AttributeStyle _attr );
     static AttributeStyle stringToAttributeFont( const QString & _str );
 
     QString displayedString( const QString& c )const;
+    static QStringList underlineTypeList();
+    static QStringList strikeOutTypeList();
+    static QStringList fontAttributeList();
     static QStringList underlineStyleList();
     static QStringList strikeOutStyleList();
-    static QStringList fontAttributeList();
-    static QStringList underlineLineStyleList();
-    static QStringList strikeOutLineStyleList();
 
 #ifndef NDEBUG
     void printDebug();
@@ -307,10 +360,10 @@ private:
 
     QColor m_textBackColor;
     QColor m_textUnderlineColor;
-    UnderlineLineType m_underlineLine;
-    StrikeOutLineType m_strikeOutLine;
-    UnderlineLineStyle m_underlineLineStyle;
-    StrikeOutLineStyle m_strikeOutLineStyle;
+    UnderlineType m_underlineType;
+    StrikeOutType m_strikeOutType;
+    UnderlineStyle m_underlineStyle;
+    StrikeOutStyle m_strikeOutStyle;
     QString m_language;
     AttributeStyle m_attributeFont;
     class KoTextFormatPrivate;
@@ -319,8 +372,8 @@ private:
     QFont fn;
     QColor col;
     uint missp : 1;
-    uint linkColor : 1;
-    VerticalAlignment ha;
+    //uint linkColor : 1;
+    VerticalAlignment va;
     KoTextFormatCollection *collection;
     int ref;
     QString k;
@@ -345,7 +398,7 @@ public:
     void setDefaultFormat( KoTextFormat *f );
     KoTextFormat *defaultFormat() const;
     virtual KoTextFormat *format( const KoTextFormat *f );
-    virtual KoTextFormat *format( KoTextFormat *of, KoTextFormat *nf, int flags );
+    virtual KoTextFormat *format( const KoTextFormat *of, const KoTextFormat *nf, int flags );
     virtual KoTextFormat *format( const QFont &f, const QColor &c , const QString &_language, bool hyphen, double ulw );
     virtual void remove( KoTextFormat *f );
     virtual KoTextFormat *createFormat( const KoTextFormat &f ) { return new KoTextFormat( f ); }
@@ -389,7 +442,7 @@ inline bool KoTextFormat::isMisspelled() const
 
 inline KoTextFormat::VerticalAlignment KoTextFormat::vAlign() const
 {
-    return ha;
+    return va;
 }
 
 inline bool KoTextFormat::operator==( const KoTextFormat &f ) const
@@ -407,10 +460,10 @@ inline QString KoTextFormat::key() const
     return k;
 }
 
-inline bool KoTextFormat::useLinkColor() const
-{
-    return linkColor;
-}
+//inline bool KoTextFormat::useLinkColor() const
+//{
+//    return linkColor;
+//}
 
 inline void KoTextFormatCollection::setDefaultFormat( KoTextFormat *f )
 {

@@ -24,6 +24,8 @@
 #include <qdom.h>
 #include <kdebug.h>
 
+QString* KoParagLayout::shadowCssCompat = 0L;
+
 // Create a default KoParagLayout.
 KoParagLayout::KoParagLayout()
 {
@@ -47,9 +49,6 @@ void KoParagLayout::operator=( const KoParagLayout &layout )
     lineSpacing = layout.lineSpacing;
     lineSpacingType = layout.lineSpacingType;
     style = layout.style;
-    shadowDistance = layout.shadowDistance;
-    shadowColor = layout.shadowColor;
-    shadowDirection = layout.shadowDirection;
     direction = layout.direction;
     setTabList( layout.tabList() );
 }
@@ -94,10 +93,6 @@ int KoParagLayout::compare( const KoParagLayout & layout ) const
     //    flags |= Style;
     if ( m_tabList != layout.m_tabList )
         flags |= Tabulator;
-    if ( shadowDistance != layout.shadowDistance
-         || ( shadowDistance > 0 && shadowColor != layout.shadowColor )
-         || ( shadowDistance > 0 && shadowDirection != layout.shadowDirection ) )
-         flags |= Shadow;
 
     // This method is used for the GUI stuff only, so we don't have a flag
     // for the Direction value.
@@ -118,9 +113,6 @@ void KoParagLayout::initialise()
     bottomBorder.setPenWidth( 0);
     pageBreaking = 0;
     style = 0L;
-    shadowDistance = 0;
-    shadowColor = QColor();
-    shadowDirection = SD_RIGHT_BOTTOM;
     direction = QChar::DirON;
     m_tabList.clear();
 }
@@ -338,18 +330,47 @@ void KoParagLayout::loadParagLayout( KoParagLayout& layout, const QDomElement& p
         layout.counter->load( element );
     }
 
+    // Compatibility with KOffice-1.2
     element = parentElem.namedItem( "SHADOW" ).toElement();
     if ( !element.isNull() )
     {
-        layout.shadowDistance=element.attribute("distance").toInt();
-        layout.shadowDirection=element.attribute("direction").toInt();
+        int shadowDistance = element.attribute("distance").toInt();
+        int shadowDirection = element.attribute("direction").toInt();
+        QColor shadowColor;
         if ( element.hasAttribute("red") )
         {
             int r = element.attribute("red").toInt();
             int g = element.attribute("green").toInt();
             int b = element.attribute("blue").toInt();
-            layout.shadowColor.setRgb( r, g, b );
+            shadowColor.setRgb( r, g, b );
         }
+        int distanceX = 0;
+        int distanceY = 0;
+        switch ( shadowDirection )
+        {
+        case 1: // KoParagLayout::SD_LEFT_UP:
+        case 2: // KoParagLayout::SD_UP:
+        case 3: // KoParagLayout::SD_RIGHT_UP:
+            distanceX = - shadowDistance;
+        case 7: // KoParagLayout::SD_LEFT_BOTTOM:
+        case 6: // KoParagLayout::SD_BOTTOM:
+        case 5: // KoParagLayout::SD_RIGHT_BOTTOM:
+            distanceX = shadowDistance;
+        }
+        switch ( shadowDirection )
+        {
+        case 7: // KoParagLayout::SD_LEFT_BOTTOM:
+        case 8: // KoParagLayout::SD_LEFT:
+        case 1: //KoParagLayout::SD_LEFT_UP:
+            distanceY = - shadowDistance;
+        case 3: // KoParagLayout::SD_RIGHT_UP:
+        case 4: // KoParagLayout::SD_RIGHT:
+        case 5: // KoParagLayout::SD_RIGHT_BOTTOM:
+            distanceY = shadowDistance;
+        }
+        if ( !shadowCssCompat )
+            shadowCssCompat = new QString; // ### memory leak
+        *shadowCssCompat = KoTextFormat::shadowAsCss( distanceX, distanceY, shadowColor );
     }
 }
 
@@ -491,18 +512,5 @@ void KoParagLayout::saveParagLayout( QDomElement & parentElem, int alignment ) c
         element.setAttribute( "filling", (*it).filling );
         element.setAttribute( "width", (*it).ptWidth );
         element.setAttribute( "alignchar", QString((*it).alignChar) );
-    }
-    if(layout.shadowDistance!=0)
-    {
-        element = doc.createElement( "SHADOW" );
-        parentElem.appendChild( element );
-        element.setAttribute( "distance", layout.shadowDistance );
-        element.setAttribute( "direction", layout.shadowDirection );
-        if (layout.shadowColor.isValid())
-        {
-            element.setAttribute("red", layout.shadowColor.red());
-            element.setAttribute("green", layout.shadowColor.green());
-            element.setAttribute("blue", layout.shadowColor.blue());
-        }
     }
 }

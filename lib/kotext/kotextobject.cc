@@ -909,7 +909,7 @@ void KoTextObject::applyStyleChange( StyleChangeDefMap changed )
 }
 
 /** Implementation of setFormatCommand from KoTextFormatInterface - apply change to the whole document */
-KCommand *KoTextObject::setFormatCommand( KoTextFormat *format, int flags, bool zoomFont )
+KCommand *KoTextObject::setFormatCommand( const KoTextFormat *format, int flags, bool zoomFont )
 {
     textDocument()->selectAll( KoTextDocument::Temp );
     KCommand *cmd = setFormatCommand( 0L, 0L, format, flags, zoomFont, KoTextDocument::Temp );
@@ -917,7 +917,7 @@ KCommand *KoTextObject::setFormatCommand( KoTextFormat *format, int flags, bool 
     return cmd;
 }
 
-KCommand * KoTextObject::setFormatCommand( KoTextCursor * cursor, KoTextFormat ** pCurrentFormat, KoTextFormat *format, int flags, bool /*zoomFont*/, int selectionId )
+KCommand * KoTextObject::setFormatCommand( KoTextCursor * cursor, KoTextFormat ** pCurrentFormat, const KoTextFormat *format, int flags, bool /*zoomFont*/, int selectionId )
 {
     KCommand *ret = 0;
     if ( protectContent() )
@@ -1298,55 +1298,6 @@ KCommand * KoTextObject::setTabListCommand( KoTextCursor * cursor, const KoTabul
     emit showCursor();
     emit updateUI( true );
     return new KoTextCommand( this, /*cmd, */i18n("Change Tabulator") );
-}
-
-KCommand * KoTextObject::setShadowCommand( KoTextCursor * cursor,double dist, short int direction, const QColor &col,int selectionId )
-{
-    if ( protectContent() )
-        return 0L;
-    KoTextDocument * textdoc = textDocument();
-    if ( !textdoc->hasSelection( selectionId, true ) && cursor &&
-         cursor->parag()->shadowColor() == col &&
-         cursor->parag()->shadowDirection() == direction &&
-         cursor->parag()->shadowDistance() == dist )
-        return 0L; // No change needed.
-
-    emit hideCursor();
-    storeParagUndoRedoInfo( cursor, selectionId );
-
-    if ( !textdoc->hasSelection( selectionId, true ) && cursor ) {
-        cursor->parag()->setShadow( dist, direction, col );
-        setLastFormattedParag( cursor->parag() );
-    }
-    else
-    {
-        KoTextParag *start = textDocument()->selectionStart( selectionId );
-        KoTextParag *end = textDocument()->selectionEnd( selectionId );
-        setLastFormattedParag( start );
-        for ( ; start && start != end->next() ; start = start->next() )
-            start->setShadow( dist, direction, col );
-    }
-
-    formatMore( 2 );
-    emit repaintChanged( this );
-    undoRedoInfo.newParagLayout.shadowDistance=dist;
-    undoRedoInfo.newParagLayout.shadowColor=col;
-    undoRedoInfo.newParagLayout.shadowDirection=direction;
-    KoTextParagCommand *cmd = new KoTextParagCommand(
-        textdoc, undoRedoInfo.id, undoRedoInfo.eid,
-        undoRedoInfo.oldParagLayouts, undoRedoInfo.newParagLayout,
-        KoParagLayout::Shadow);
-    textdoc->addCommand( cmd );
-    undoRedoInfo.clear();
-    emit showCursor();
-    emit updateUI( true );
-    KMacroCommand *macro = new KMacroCommand(i18n("Change Shadow"));
-    macro->addCommand( new KoTextCommand( this, /*cmd, */i18n("Change Shadow") ));
-
-    KCommand *cmd2= setShadowTextCommand( true );
-    if ( cmd2 )
-        macro->addCommand( cmd2 );
-    return macro;
 }
 
 KCommand * KoTextObject::setParagDirectionCommand( KoTextCursor * cursor, QChar::Direction d, int selectionId )
@@ -2032,87 +1983,6 @@ void KoTextObject::printRTDebug(int info)
 
 ////// Implementation of the KoTextFormatInterface "interface"
 
-#if 0
-void KoTextFormatInterface::setFormat( KoTextFormat * newFormat, int flags, bool zoomFont )
-{
-    KoTextFormat *format = currentFormat();
-    KCommand *cmd = setFormatCommand(format, newFormat, flags, zoomFont);
-    emitNewCommand( cmd );
-}
-
-void KoTextFormatInterface::setBold(bool on)
-{
-    KCommand *cmd = setBoldCommand( on );
-    emitNewCommand( cmd );
-}
-
-void KoTextFormatInterface::setItalic( bool on )
-{
-    KCommand *cmd = setItalicCommand( on );
-    emitNewCommand( cmd );
-}
-
-void KoTextFormatInterface::setUnderline( bool on )
-{
-    KCommand *cmd = setUnderlineCommand( on );
-    emitNewCommand ( cmd );
-}
-
-void KoTextFormatInterface::setStrikeOut( bool on )
-{
-    KCommand *cmd = setStrikeOutCommand( on );
-    emitNewCommand( cmd );
-}
-
-void KoTextFormatInterface::setTextBackgroundColor(const QColor & col)
-{
-    KCommand *cmd = setTextBackgroundColorCommand( col );
-    emitNewCommand( cmd );
-}
-
-void KoTextFormatInterface::setPointSize( int s )
-{
-    KCommand *cmd = setPointSizeCommand( s );
-    emitNewCommand( cmd );
-}
-
-void KoTextFormatInterface::setFamily(const QString &font)
-{
-    KCommand *cmd = setFamilyCommand( font );
-    emitNewCommand( cmd );
-}
-
-void KoTextFormatInterface::setFont( const QFont &font, bool _subscript, bool _superscript, const QColor &col,const QColor &backGroundColor, int flags )
-{
-    KCommand *cmd = setFontCommand( font, _subscript, _superscript, col, backGroundColor, flags );
-    emitNewCommand( cmd );
-}
-void KoTextFormatInterface::setTextColor(const QColor &color)
-{
-    KCommand *cmd = setTextColorCommand( color );
-    emitNewCommand( cmd );
-}
-
-void KoTextFormatInterface::setTextSubScript(bool on)
-{
-    KCommand *cmd = setTextSubScriptCommand( on );
-    emitNewCommand( cmd );
-}
-
-void KoTextFormatInterface::setTextSuperScript(bool on)
-{
-    KCommand *cmd = setTextSuperScriptCommand( on );
-    emitNewCommand( cmd );
-}
-
-void KoTextFormatInterface::setDefaultFormat()
-{
-    KCommand *cmd = setDefaultFormatCommand();
-    emitNewCommand( cmd );
-}
-
-#endif
-
 KCommand *KoTextFormatInterface::setBoldCommand(bool on)
 {
     KoTextFormat format( *currentFormat() );
@@ -2130,7 +2000,7 @@ KCommand *KoTextFormatInterface::setItalicCommand( bool on)
 KCommand *KoTextFormatInterface::setUnderlineCommand( bool on )
 {
     KoTextFormat format( *currentFormat() );
-    format.setUnderlineLineType( on ? KoTextFormat::U_SIMPLE : KoTextFormat::U_NONE);
+    format.setUnderlineType( on ? KoTextFormat::U_SIMPLE : KoTextFormat::U_NONE);
     return setFormatCommand( &format, KoTextFormat::ExtendUnderLine );
 }
 
@@ -2144,14 +2014,14 @@ KCommand *KoTextFormatInterface::setUnderlineColorCommand( const QColor &color )
 KCommand *KoTextFormatInterface::setDoubleUnderlineCommand( bool on )
 {
     KoTextFormat format( *currentFormat() );
-    format.setUnderlineLineType( on ? KoTextFormat::U_DOUBLE : KoTextFormat::U_NONE);
+    format.setUnderlineType( on ? KoTextFormat::U_DOUBLE : KoTextFormat::U_NONE);
     return setFormatCommand( &format, KoTextFormat::ExtendUnderLine );
 }
 
 KCommand *KoTextFormatInterface::setStrikeOutCommand( bool on )
 {
     KoTextFormat format( *currentFormat() );
-    format.setStrikeOutLineType( on ? KoTextFormat::S_SIMPLE : KoTextFormat::S_NONE);
+    format.setStrikeOutType( on ? KoTextFormat::S_SIMPLE : KoTextFormat::S_NONE);
     return setFormatCommand( &format, KoTextFormat::StrikeOut );
 }
 
@@ -2227,9 +2097,19 @@ bool KoTextFormatInterface::textSuperScript() const
     return (currentFormat()->vAlign()==KoTextFormat::AlignSuperScript);
 }
 
-bool KoTextFormatInterface::textShadow() const
+double KoTextFormatInterface::shadowDistanceX() const
 {
-    return (currentFormat()->shadowText());
+    return currentFormat()->shadowDistanceX();
+}
+
+double KoTextFormatInterface::shadowDistanceY() const
+{
+    return currentFormat()->shadowDistanceY();
+}
+
+QColor KoTextFormatInterface::shadowColor() const
+{
+    return currentFormat()->shadowColor();
 }
 
 KoTextFormat::AttributeStyle KoTextFormatInterface::fontAttribute() const
@@ -2257,24 +2137,24 @@ bool KoTextFormatInterface::hyphenation()const
     return ( currentFormat()->hyphenation());
 }
 
-KoTextFormat::UnderlineLineType KoTextFormatInterface::underlineLineType()const
+KoTextFormat::UnderlineType KoTextFormatInterface::underlineType()const
 {
-    return currentFormat()->underlineLineType();
+    return currentFormat()->underlineType();
 }
 
-KoTextFormat::StrikeOutLineType KoTextFormatInterface::strikeOutLineType()const
+KoTextFormat::StrikeOutType KoTextFormatInterface::strikeOutType()const
 {
-    return currentFormat()->strikeOutLineType();
+    return currentFormat()->strikeOutType();
 }
 
-KoTextFormat::UnderlineLineStyle KoTextFormatInterface::underlineLineStyle()const
+KoTextFormat::UnderlineStyle KoTextFormatInterface::underlineStyle()const
 {
-    return currentFormat()->underlineLineStyle();
+    return currentFormat()->underlineStyle();
 }
 
-KoTextFormat::StrikeOutLineStyle KoTextFormatInterface::strikeOutLineStyle()const
+KoTextFormat::StrikeOutStyle KoTextFormatInterface::strikeOutStyle()const
 {
-    return currentFormat()->strikeOutLineStyle();
+    return currentFormat()->strikeOutStyle();
 }
 
 QFont KoTextFormatInterface::textFont() const
@@ -2293,37 +2173,6 @@ QString KoTextFormatInterface::textFontFamily()const
 QString KoTextFormatInterface::language() const
 {
     return currentFormat()->language();
-}
-
-KCommand *KoTextFormatInterface::setFontCommand(const QFont &font, int fontFlags,  const QColor &col, const QColor &backGroundColor, const QColor &underlineColor, KoTextFormat::UnderlineLineStyle _underlineLineStyle, KoTextFormat::UnderlineLineType _underlineType, KoTextFormat::StrikeOutLineType _strikeOutType, KoTextFormat::StrikeOutLineStyle _strikeOutStyle, KoTextFormat::AttributeStyle _fontAttribute,  double _relativeTextSize, int _offsetFromBaseLine,  const QString &_lang, int flags)
-{
-    KoTextFormat format( *currentFormat() );
-    format.setFont( font );
-    format.setColor( col );
-    format.setTextBackgroundColor(backGroundColor);
-    format.setTextUnderlineColor( underlineColor );
-    format.setUnderlineLineType (_underlineType);
-    format.setUnderlineLineStyle (_underlineLineStyle);
-    format.setStrikeOutLineStyle(_strikeOutStyle );
-    format.setStrikeOutLineType ( _strikeOutType );
-    format.setShadowText( fontFlags & KoFontDia::FontAttributeShadowText);
-    format.setRelativeTextSize( _relativeTextSize);
-    format.setOffsetFromBaseLine( _offsetFromBaseLine);
-    format.setWordByWord( fontFlags & KoFontDia::FontAttributeWordByWord );
-    format.setAttributeFont( _fontAttribute);
-    format.setLanguage( _lang );
-    format.setHyphenation( fontFlags & KoFontDia::FontAttributeHyphenation);
-    if(!(fontFlags & KoFontDia::FontAttributeSubscript))
-    {
-        if(!(fontFlags & KoFontDia::FontAttributeSuperScript))
-            format.setVAlign(KoTextFormat::AlignNormal);
-        else
-            format.setVAlign(KoTextFormat::AlignSuperScript);
-    }
-    else
-        format.setVAlign(KoTextFormat::AlignSubScript);
-
-    return setFormatCommand( &format, flags, true /* zoom the font size */);
 }
 
 KCommand *KoTextFormatInterface::setTextColorCommand(const QColor &color)
@@ -2380,10 +2229,10 @@ KCommand *KoTextFormatInterface::setHyphenationCommand( bool _b )
 }
 
 
-KCommand *KoTextFormatInterface::setShadowTextCommand( bool _b )
+KCommand *KoTextFormatInterface::setShadowTextCommand( double shadowDistanceX, double shadowDistanceY, const QColor& shadowColor )
 {
     KoTextFormat format( *currentFormat() );
-    format.setShadowText( _b );
+    format.setShadow( shadowDistanceX, shadowDistanceY, shadowColor );
     return setFormatCommand( &format, KoTextFormat::ShadowText );
 }
 

@@ -113,21 +113,12 @@ public:
     /** Set tabulator positions */
     void setTabList( const KoTabulatorList &tabList );
 
-    /** Get shadow distance */
-    double shadowDistance() const { return m_layout.shadowDistance; }
     /** Return the X for the shadow distance in pixels (zoomed) */
     int shadowX( KoZoomHandler *zh ) const;
     /** Return the Y for the shadow distance in pixels (zoomed) */
     int shadowY( KoZoomHandler *zh ) const;
     /** Return the Y for the shadow distance in pt */
     double shadowDistanceY() const;
-
-    /** Get shadow color */
-    QColor shadowColor() const { return m_layout.shadowColor; }
-    /** Get shadow direction */
-    short int shadowDirection() const { return m_layout.shadowDirection; }
-    /** Set shadow distance, direction and color */
-    void setShadow( double dist, short int direction, const QColor &col );
 
     /** Set a @p custom item at position @p index, with format @p currentFormat (convenience method) */
     void setCustomItem( int index, KoTextCustomItem * custom, KoTextFormat * currentFormat );
@@ -170,7 +161,7 @@ protected:
     void drawParagStringInternal( QPainter &painter, const QString &s, int start, int len, int startX,
                                   int lastY, int baseLine, int bw, int h, bool drawSelections,
                                   KoTextFormat *lastFormat, const QMemArray<int> &selectionStarts,
-                                  const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, int line, KoZoomHandler* zh );
+                                  const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, int line, KoZoomHandler* zh, bool drawingShadow );
 
     /** Hook for KWTextParag. Default implementation does nothing. See KWTextParag for params meaning */
     virtual void drawFormattingChars( QPainter &, const QString &, int, int, // start, len

@@ -165,8 +165,7 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
     KoTextFormat *format = KoParagCounter::counterFormat( this );
     p->save();
 
-    //QColor textColor( format->color() );
-    QColor textColor( textDocument()->drawingShadow() ? shadowColor():format->color());
+    QColor textColor( format->color() );
     if ( !textColor.isValid() ) // Resolve the color at this point
         textColor = KoTextFormat::defaultTextColor( p );
     p->setPen( QPen( textColor ) );
@@ -215,8 +214,9 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
             int posY =y + base - format->offsetFromBaseLine();
             //we must move to bottom text because we create
             //shadow to 'top'.
-            if ( shadowY( zh ) < 0)
-                posY -=shadowY( zh );
+            int sy = format->shadowY( zh );
+            if ( sy < 0)
+                posY -= sy;
 
             p->drawText( xLeft, posY, prefix );
         }
@@ -241,6 +241,7 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
                 p->drawEllipse( er );
                 break;
             case KoParagCounter::STYLE_CUSTOMBULLET:
+            {
                 // The user has selected a symbol from a special font. Override the paragraph
                 // font with the given family. This conserves the right size etc.
                 if ( !m_layout.counter->customBulletFont().isEmpty() )
@@ -251,14 +252,16 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
                 }
                 KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ), textColor, xBullet, base, width, y, height, ' ' );
 
-                posY =y + base- format->offsetFromBaseLine();
+                posY = y + base- format->offsetFromBaseLine();
                 //we must move to bottom text because we create
                 //shadow to 'top'.
-                if ( shadowY( zh ) < 0)
-                    posY -=shadowY( zh );
+                int sy = format->shadowY( zh );
+                if ( sy < 0)
+                    posY -= sy;
 
                 p->drawText( xBullet, posY, m_layout.counter->customBulletCharacter() );
                 break;
+            }
             default:
                 break;
         }
@@ -274,8 +277,9 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
             int posY =y + base- format->offsetFromBaseLine();
             //we must move to bottom text because we create
             //shadow to 'top'.
-            if ( shadowY( zh ) < 0)
-                posY -=shadowY( zh );
+            int sy = format->shadowY( zh );
+            if ( sy < 0)
+                posY -= sy;
 
             p->drawText( xBullet + width, posY, suffix, -1 );
         }
@@ -294,8 +298,9 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
             int posY =y + base - format->offsetFromBaseLine();
             //we must move to bottom text because we create
             //shadow to 'top'.
-            if ( shadowY( zh ) < 0)
-                posY -=shadowY( zh );
+            int sy = format->shadowY( zh );
+            if ( sy < 0)
+                posY -= sy;
 
             p->drawText( xLeft, posY , counterText, -1 );
         }
@@ -364,7 +369,8 @@ int KoTextParag::firstLineMargin() const
 int KoTextParag::lineSpacing( int line ) const
 {
     KoZoomHandler * zh = textDocument()->formattingZoomHandler();
-    int shadow = QABS( zh->ptToLayoutUnitPixY( shadowDistanceY() ) );
+    // TODO add shadow in KoTextFormatter!
+    int shadow = 0; //QABS( zh->ptToLayoutUnitPixY( shadowDistanceY() ) );
     if ( m_layout.lineSpacingType == KoParagLayout::LS_SINGLE )
         return shadow;
     else if ( m_layout.lineSpacingType == KoParagLayout::LS_CUSTOM )
@@ -474,7 +480,7 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, KoTextCursor 
     paintLines( painter, cg, cursor, drawSelections, clipx, clipy, clipw, cliph );
 
     // Now draw paragraph border
-    if ( m_layout.hasBorder() && !textDocument()->drawingShadow() )
+    if ( m_layout.hasBorder() )
     {
         KoZoomHandler * zh = textDocument()->paintingZoomHandler();
         assert(zh);
@@ -490,7 +496,7 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, KoTextCursor 
         r.setRight( zh->layoutUnitToPixelX(documentWidth()) - 2 - KoBorder::zoomWidthX( m_layout.rightBorder.width(), zh, 0 ) );
         r.setTop( zh->layoutUnitToPixelY(lineY( 0 )) );
         int lastLine = lines() - 1;
-        r.setBottom( static_cast<int>( zh->layoutUnitToPixelY(lineY( lastLine ) + lineHeight( lastLine ) ) )+QABS( shadowY( zh ) ));
+        r.setBottom( static_cast<int>( zh->layoutUnitToPixelY(lineY( lastLine ) + lineHeight( lastLine ) ) ) /*+ QABS( format->shadowY( zh ) )*/ );
         // If we don't have a bottom border, we need go as low as possible ( to touch the next parag's border ).
         // If we have a bottom border, then we rather exclude the linespacing. Just looks nicer IMHO.
         if ( m_layout.bottomBorder.width() > 0 )
@@ -710,11 +716,20 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &str, int st
     int h_pix = zh->layoutUnitToPixelY( lastY, h );
 #ifdef DEBUG_PAINT
     kdDebug(32500) << "KoTextParag::drawParagString h(LU)=" << h << " lastY(LU)=" << lastY
-            << " h(PIX)=" << h_pix << " lastY(PIX)=" << lastY_pix << endl;
+                   << " h(PIX)=" << h_pix << " lastY(PIX)=" << lastY_pix << endl;
 #endif
 
     if ( format->textBackgroundColor().isValid() )
         painter.fillRect( startX_pix, lastY_pix, bw_pix, h_pix, format->textBackgroundColor() );
+
+    // Apply offset from shadow
+    // ## we add pixels to pixels, we could also recalculate from LUs
+    if ( format->shadowDistanceX() < 0 ) {
+        startX_pix -= format->shadowX( zh );
+    }
+    if ( format->shadowDistanceY() < 0 ) {
+        lastY_pix -= format->shadowY( zh );
+    }
 
     // don't want to draw line breaks but want them when drawing formatting chars
     int draw_len = len;
@@ -722,24 +737,41 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &str, int st
     int draw_bw = bw_pix;
     if ( at( start + len - 1 )->c == '\n' )
     {
-      draw_len--;
-      draw_bw -= at( start + len - 1 )->pixelwidth;
-      if ( rightToLeft && draw_len > 0 )
-        draw_startX = at( start + draw_len - 1 )->x;
+        draw_len--;
+        draw_bw -= at( start + len - 1 )->pixelwidth;
+        if ( rightToLeft && draw_len > 0 )
+            draw_startX = at( start + draw_len - 1 )->x;
     }
 
     if ( draw_len > 0 )
     {
-      int draw_startX_pix = zh->layoutUnitToPixelX( draw_startX ) /* + at( rightToLeft ? start+draw_len-1 : start )->pixelxadj*/;
+        int draw_startX_pix = zh->layoutUnitToPixelX( draw_startX ) /* + at( rightToLeft ? start+draw_len-1 : start )->pixelxadj*/;
 
-      drawParagStringInternal( painter, str, start, draw_len, draw_startX_pix,
-                               lastY_pix, baseLine_pix,
-                               draw_bw,
-                               h_pix, drawSelections, format, selectionStarts,
-                               selectionEnds, cg, rightToLeft, line, zh );
+        if ( format->shadowDistanceX() != 0 || format->shadowDistanceY() != 0 ) {
+            int sx = format->shadowX( zh );
+            int sy = format->shadowY( zh );
+            if ( sx != 0 || sy != 0 )
+            {
+                painter.save();
+                painter.translate( sx, sy );
+                drawParagStringInternal( painter, str, start, draw_len, draw_startX_pix,
+                                         lastY_pix, baseLine_pix,
+                                         draw_bw,
+                                         h_pix, FALSE /*drawSelections*/,
+                                         format, selectionStarts,
+                                         selectionEnds, cg, rightToLeft, line, zh, true );
+                painter.restore();
+            }
+        }
+
+        drawParagStringInternal( painter, str, start, draw_len, draw_startX_pix,
+                                 lastY_pix, baseLine_pix,
+                                 draw_bw,
+                                 h_pix, drawSelections, format, selectionStarts,
+                                 selectionEnds, cg, rightToLeft, line, zh, false );
     }
 
-    if ( !textDocument()->drawingShadow() && textDocument()->drawFormattingChars() )
+    if ( textDocument()->drawFormattingChars() )
     {
         drawFormattingChars( painter, str, start, len,
                              startX, lastY, baseLine, h,
@@ -757,19 +789,17 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &str, int st
 void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, int start, int len, int startX,
                                    int lastY, int baseLine, int bw, int h, bool drawSelections,
                                    KoTextFormat *format, const QMemArray<int> &selectionStarts,
-                                   const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, int line, KoZoomHandler* zh )
+                                   const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft, int line, KoZoomHandler* zh, bool drawingShadow )
 {
 #ifdef DEBUG_PAINT
     kdDebug(32500) << "KoTextParag::drawParagStringInternal start=" << start << " len=" << len << " : '" << s.mid(start,len) << "'" << endl;
     kdDebug(32500) << "In pixels:  startX=" << startX << " lastY=" << lastY << " baseLine=" << baseLine
                    << " bw=" << bw << " h=" << h << " rightToLeft=" << rightToLeft << endl;
 #endif
-    if ( textDocument()->drawingShadow() && !format->shadowText())
+    if ( drawingShadow && format->shadowDistanceX() == 0 && format->shadowDistanceY() == 0 )
         return;
     // 1) Sort out the color
-    QColor textColor( format->color() );
-    if ( textDocument()->drawingShadow() ) // Use shadow color if drawing a shadow
-        textColor = shadowColor();
+    QColor textColor( drawingShadow ? format->shadowColor() : format->color() );
     if ( !textColor.isValid() ) // Resolve the color at this point
         textColor = KoTextFormat::defaultTextColor( &painter );
 
@@ -824,11 +854,12 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
     if ( str[ start ] != '\t' && str[ start ].unicode() != 0xad ) {
         str = format->displayedString( str );
 	if ( format->vAlign() == KoTextFormat::AlignNormal ) {
-            int posY =lastY + baseLine - format->offsetFromBaseLine();
+            int posY = lastY + baseLine - format->offsetFromBaseLine();
             //we must move to bottom text because we create
             //shadow to 'top'.
-            if ( shadowY( zh ) < 0)
-                posY -=shadowY( zh );
+            int sy = format->shadowY( zh );
+            if ( sy < 0)
+                posY -= sy;
 	    painter.drawText( startX, posY, str, start, len, dir );
 #ifdef BIDI_DEBUG
 	    painter.save();
@@ -848,15 +879,17 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
             int posY =lastY + baseLine - ( painter.fontMetrics().height() / 2 )-format->offsetFromBaseLine();
             //we must move to bottom text because we create
             //shadow to 'top'.
-            if ( shadowY( zh ) < 0)
-                posY -=shadowY( zh );
+            int sy = format->shadowY( zh );
+            if ( sy < 0)
+                posY -= sy;
 	    painter.drawText( startX, posY, str, start, len, dir );
 	} else if ( format->vAlign() == KoTextFormat::AlignSubScript ) {
             int posY =lastY + baseLine + ( painter.fontMetrics().height() / 6 )-format->offsetFromBaseLine();
             //we must move to bottom text because we create
             //shadow to 'top'.
-            if ( shadowY( zh ) < 0)
-                posY -=shadowY( zh );
+            int sy = format->shadowY( zh );
+            if ( sy < 0)
+                posY -= sy;
 	    painter.drawText( startX, posY, str, start, len, dir );
 	}
     }
@@ -911,7 +944,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
     if(
 		painter.device()->devType() != QInternal::Printer &&
 		format->isMisspelled() &&
-		!textDocument()->drawingShadow() &&
+		!drawingShadow &&
 		textDocument()->drawingMissingSpellLine() )
 	{
 		painter.save();
@@ -969,8 +1002,6 @@ bool KoTextParag::lineHyphenated( int l ) const
 /** Draw the cursor mark. Reimplemented from KoTextParag to convert coordinates first. */
 void KoTextParag::drawCursor( QPainter &painter, KoTextCursor *cursor, int curx, int cury, int curh, const QColorGroup &cg )
 {
-    if ( textDocument()->drawingShadow() )
-        return; // No shadow of the cursor ;)
     KoZoomHandler * zh = textDocument()->paintingZoomHandler();
     int x = zh->layoutUnitToPixelX( curx ) /*+ cursor->parag()->at( cursor->index() )->pixelxadj*/;
     //kdDebug(32500) << "  drawCursor: LU: [cur]x=" << curx << ", cury=" << cury << " -> PIX: x=" << x << ", y=" << zh->layoutUnitToPixelY( cury ) << endl;
@@ -1165,58 +1196,6 @@ int KoTextParag::nextTab( int chnum, int x )
     return KoTextParag::nextTabDefault( chnum, x );
 }
 
-void KoTextParag::setShadow( double dist, short int direction, const QColor &col )
-{
-    m_layout.shadowDistance = dist;
-    m_layout.shadowDirection = direction;
-    m_layout.shadowColor = col;
-    invalidate(0);
-}
-
-double KoTextParag::shadowDistanceY() const
-{
-    switch ( m_layout.shadowDirection )
-    {
-    case KoParagLayout::SD_LEFT_UP:
-    case KoParagLayout::SD_UP:
-    case KoParagLayout::SD_RIGHT_UP:
-        return - m_layout.shadowDistance;
-    case KoParagLayout::SD_LEFT:
-    case KoParagLayout::SD_RIGHT:
-        return 0;
-    case KoParagLayout::SD_LEFT_BOTTOM:
-    case KoParagLayout::SD_BOTTOM:
-    case KoParagLayout::SD_RIGHT_BOTTOM:
-        return m_layout.shadowDistance;
-    }
-    return 0;
-}
-
-
-int KoTextParag::shadowX( KoZoomHandler *zh ) const
-{
-    switch ( m_layout.shadowDirection )
-    {
-    case KoParagLayout::SD_LEFT_BOTTOM:
-    case KoParagLayout::SD_LEFT:
-    case KoParagLayout::SD_LEFT_UP:
-        return - zh->zoomItX( m_layout.shadowDistance );
-    case KoParagLayout::SD_UP:
-    case KoParagLayout::SD_BOTTOM:
-        return 0;
-    case KoParagLayout::SD_RIGHT_UP:
-    case KoParagLayout::SD_RIGHT:
-    case KoParagLayout::SD_RIGHT_BOTTOM:
-        return zh->zoomItX( m_layout.shadowDistance );
-    }
-    return 0;
-}
-
-int KoTextParag::shadowY( KoZoomHandler *zh ) const
-{
-    return zh->zoomItY(shadowDistanceY());
-}
-
 void KoTextParag::applyStyle( KoStyle *style )
 {
     setParagLayout( style->paragLayout() );
@@ -1248,8 +1227,6 @@ void KoTextParag::setParagLayout( const KoParagLayout & layout, int flags )
         setCounter( layout.counter );
     if ( flags & KoParagLayout::Tabulator )
         setTabList( layout.tabList() );
-    if ( flags & KoParagLayout::Shadow )
-        setShadow( layout.shadowDistance, layout.shadowDirection,layout.shadowColor );
     if ( flags == KoParagLayout::All )
     {
         setDirection( static_cast<QChar::Direction>(layout.direction) );
@@ -1447,7 +1424,7 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
 	dim=dim?dim:1; //width of line should be at least 1
         p->save();
 
-        switch( format->underlineLineStyle())
+        switch( format->underlineStyle())
         {
         case KoTextFormat::U_SOLID:
             p->setPen( QPen( col, dim, Qt::SolidLine ) );
@@ -1479,16 +1456,16 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
         }
     }
     else if ( format->underline() ||
-                format->underlineLineType() == KoTextFormat::U_SIMPLE_BOLD)
+                format->underlineType() == KoTextFormat::U_SIMPLE_BOLD)
     {
 
         QColor col = format->textUnderlineColor().isValid() ? format->textUnderlineColor(): color ;
         p->save();
-	int dim=(format->underlineLineType() == KoTextFormat::U_SIMPLE_BOLD)?static_cast<int>(2*dimd):static_cast<int>(dimd);
+	int dim=(format->underlineType() == KoTextFormat::U_SIMPLE_BOLD)?static_cast<int>(2*dimd):static_cast<int>(dimd);
 	dim=dim?dim:1; //width of line should be at least 1
         y += static_cast<int>(1.875*dimd);
 
-        switch( format->underlineLineStyle() )
+        switch( format->underlineStyle() )
         {
         case KoTextFormat::U_SOLID:
             p->setPen( QPen( col, dim, Qt::SolidLine ) );
@@ -1554,13 +1531,13 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
 	dimd*=format->relativeTextSize();
     y = lastY + baseLine + offset - format->offsetFromBaseLine();
 
-    if ( format->strikeOutLineType() == KoTextFormat::S_SIMPLE
-         || format->strikeOutLineType() == KoTextFormat::S_SIMPLE_BOLD)
+    if ( format->strikeOutType() == KoTextFormat::S_SIMPLE
+         || format->strikeOutType() == KoTextFormat::S_SIMPLE_BOLD)
     {
-        unsigned int dim = (format->strikeOutLineType() == KoTextFormat::S_SIMPLE_BOLD)? static_cast<int>(2*dimd) : static_cast<int>(dimd);
+        unsigned int dim = (format->strikeOutType() == KoTextFormat::S_SIMPLE_BOLD)? static_cast<int>(2*dimd) : static_cast<int>(dimd);
         p->save();
 
-        switch( format->strikeOutLineStyle() )
+        switch( format->strikeOutStyle() )
         {
         case KoTextFormat::S_SOLID:
             p->setPen( QPen( color, dim, Qt::SolidLine ) );
@@ -1587,12 +1564,12 @@ void KoTextParag::drawFontEffects( QPainter * p, KoTextFormat *format, KoZoomHan
         font.setStrikeOut( FALSE );
         p->setFont( font );
     }
-    else if ( format->strikeOutLineType() == KoTextFormat::S_DOUBLE )
+    else if ( format->strikeOutType() == KoTextFormat::S_DOUBLE )
     {
         unsigned int dim = static_cast<int>(dimd);
         p->save();
 
-        switch( format->strikeOutLineStyle() )
+        switch( format->strikeOutStyle() )
         {
         case KoTextFormat::S_SOLID:
             p->setPen( QPen( color, dim, Qt::SolidLine ) );

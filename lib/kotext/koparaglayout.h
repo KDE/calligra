@@ -47,9 +47,8 @@ public:
            Borders = 16,
            Tabulator = 32,
            PageBreaking = 64,
-           Shadow = 128,
            /* Style is maybe missing */
-           All = Alignment | BulletNumber | Margins | LineSpacing | Borders | Tabulator | PageBreaking | Shadow
+           All = Alignment | BulletNumber | Margins | LineSpacing | Borders | Tabulator | PageBreaking
     } Flags;
 
     /** Page breaking flags */
@@ -85,22 +84,12 @@ public:
     SpacingType lineSpacingType;
     double lineSpacingValue() const { return lineSpacing;}
     void setLineSpacingValue(double _value) { lineSpacing = _value;}
-    double shadowDistance;
-    QColor shadowColor;
-    enum {
-        SD_LEFT_UP = 1,
-        SD_UP = 2,
-        SD_RIGHT_UP = 3,
-        SD_RIGHT = 4,
-        SD_RIGHT_BOTTOM = 5,
-        SD_BOTTOM = 6,
-        SD_LEFT_BOTTOM = 7,
-        SD_LEFT = 8
-    } ShadowDirection;
-    char shadowDirection; // SD_*
+
+    static QString* shadowCssCompat; // used for compat with koffice-1.2 when loading
+    char unused;          // for future use
     char pageBreaking;    // Page breaking flags
     char direction;       // QChar::Direction
-    char unused;          // for future use
+    char unused2;         // for future use
     KoBorder leftBorder, rightBorder, topBorder, bottomBorder;
     /** can be 0 if no counter set */
     KoParagCounter* counter;
