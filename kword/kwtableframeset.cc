@@ -81,7 +81,8 @@ void KWTableFrameSet::moveFloatingFrame( int /*frameNum TODO */, const KoPoint &
     double dy = position.y() - m_rowPositions[0];
 
     moveBy( dx, dy);
-    kWordDocument()->updateAllFrames();
+    // Already done by moveBy, and see comment there (DF).
+    //kWordDocument()->updateAllFrames();
 }
 
 QSize KWTableFrameSet::floatingFrameSize( int /*frameNum TODO */ )
@@ -676,7 +677,12 @@ void KWTableFrameSet::moveBy( double dx, double dy ) {
         for(cell=m_cells.first();cell;cell=m_cells.next())
             position(cell);
 
-        m_doc->updateAllFrames();
+        // DF: That's far too much invalidating!
+        // With inline tables, this leads to an infinite loop in formatting:
+        // formatting -> anchor moved -> moveBy() -> invalidate everything! -> formatting from 0 etc.
+        //m_doc->updateAllFrames();
+
+        // ### It should probably be replaced with something more adapted, e.g. updateFrames on the cells only.
     }
 }
 
