@@ -251,13 +251,11 @@ UndoRedoPageObjectsList::~UndoRedoPageObjectsList()
     {
       if (objPtr_old->graphObj)
 	delete objPtr_old->graphObj;
-      if (objPtr_old->textObj)
+     if (objPtr_old->textObj)
 	delete objPtr_old->textObj;
     }
 
   ptr_old->clear();
-  delete ptr_old;
-  delete ptr_old;
 }
 
 /*========================== set old =============================*/
@@ -408,24 +406,23 @@ UndoRedoDeletePageObjects::~UndoRedoDeletePageObjects()
 {
   if (ptr_list && ptr_objs && !ptr_list->isEmpty() && !ptr_objs->isEmpty())
     {
-      PageObjects *po;
-      int index;
+//       PageObjects *po;
+//       int index;
       
-      for (po = ptr_objs->first();po != 0;po = ptr_objs->next())
-	{
-	  index = ptr_list->findRef(po);
-	  if (index == -1) 
-	    {
-	      if (po->graphObj)
-		delete po->graphObj;
-	      if (po->textObj)
-		delete po->textObj;
-	      delete po;
-	    }
-	}
+//       for (po = ptr_objs->first();po != 0;po = ptr_objs->next())
+// 	{
+// 	  index = ptr_list->findRef(po);
+// 	  if (index == -1) 
+// 	    {
+// 	      if (po->graphObj)
+// 		delete po->graphObj;
+// 	      if (po->textObj)
+// 		delete po->textObj;
+// 	      delete po;
+// 	    }
+// 	}
 
       ptr_objs->clear();
-      delete ptr_objs;
     }
 }
 

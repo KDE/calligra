@@ -119,7 +119,7 @@ KPresenterDocument_impl::KPresenterDocument_impl()
   objStartNum = 0;
   setPageLayout(_pageLayout,0,0);
   pixCache.setAutoDelete(true);
-  undo_redo = new UndoRedoAdmin(64);
+  undo_redo = new UndoRedoAdmin(128);
   QObject::connect(undo_redo,SIGNAL(undo_redo_change(QString,bool,QString,bool)),this,SLOT(undoRedoChange(QString,bool,QString,bool)));
   _presPen = QPen(red,3,SolidLine);
 }
@@ -162,7 +162,7 @@ KPresenterDocument_impl::KPresenterDocument_impl(const CORBA::BOA::ReferenceData
   objStartNum = 0;
   insertNewTemplate(0,0,true);
   pixCache.setAutoDelete(true);
-  undo_redo = new UndoRedoAdmin(64);
+  undo_redo = new UndoRedoAdmin(128);
   QObject::connect(undo_redo,SIGNAL(undo_redo_change(QString,bool,QString,bool)),this,SLOT(undoRedoChange(QString,bool,QString,bool)));
   _presPen = QPen(red,3,SolidLine);
 }
