@@ -470,7 +470,7 @@ if( config->hasGroup("Parameters" ))
         m_pDoc->setShowColHeader(config->readBoolEntry("Column Header",true));
         m_pDoc->setShowRowHeader(config->readBoolEntry("Row Header",true));
         m_pDoc->setCompletionMode((KGlobalSettings::Completion)config->readNumEntry("Completion Mode",(int)(KGlobalSettings::CompletionAuto)));
-        m_pDoc->setCompletionMode((KGlobalSettings::Completion)config->readNumEntry("Completion Mode",(int)(KGlobalSettings::CompletionAuto)));
+        m_pDoc->setMoveToValue((MoveTo)config->readNumEntry("Move",(int)(Bottom)));
         m_pDoc->setIndentValue(config->readNumEntry( "Indent",10 ) );
         }
 }

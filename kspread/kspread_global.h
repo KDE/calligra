@@ -16,5 +16,6 @@ enum Conditional { None, Equal,Superior,Inferior,SuperiorEqual,InferiorEqual,Bet
 enum Action { Stop, Warning, Information};
 enum Allow { Allow_All, Allow_Number, Allow_Text,Allow_Time,Allow_Date,Allow_Integer,Allow_TextLength};
 enum Series { Column,Row,Linear,Geometric };
+enum MoveTo { Bottom,Left,Top,Right };
 
 #endif

@@ -291,6 +291,10 @@ public:
   */
   int getIndentValue() {return m_iIndentValue;}
   void setIndentValue(int _val) {m_iIndentValue=_val;}
+
+  MoveTo getMoveToValue() {return m_EMoveTo;}
+  void setMoveToValue(MoveTo _moveTo) {m_EMoveTo=_moveTo;}
+
 public slots:
   /**
    * Open a dialog for the "Page Layout".
@@ -521,6 +525,8 @@ protected:
   bool m_bShowRowHeader;
 
   int m_iIndentValue;
+
+  MoveTo m_EMoveTo;
 };
 
 #endif

@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 1999 Montel Laurent <lmontel@mandrakesoft.com>
+   Copyright (C) 1999, 2000 Montel Laurent <lmontel@mandrakesoft.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -65,20 +64,34 @@ public:
   configure( KSpreadView* _view, QWidget *parent = 0, char *name = 0 );
   void apply();
   void slotDefault();
-
-  void initComboBox();
 protected:
   KSpreadView* m_pView;
   KIntNumInput  *nbPage;
-  KIntNumInput  *valIndent;
+
   QCheckBox *showVScrollBar;
   QCheckBox *showHScrollBar;
   QCheckBox *showColHeader;
   QCheckBox *showRowHeader;
   KConfig* config;
-  QComboBox *typeCompletion;
 } ;
 
+
+class miscParameters : public QWidget
+{
+  Q_OBJECT
+public:
+  miscParameters( KSpreadView* _view, QWidget *parent = 0, char *name = 0 );
+  void apply();
+  void slotDefault();
+
+  void initComboBox();
+protected:
+  KSpreadView* m_pView;
+  KIntNumInput  *valIndent;
+  KConfig* config;
+  QComboBox *typeCompletion;
+  QComboBox *typeOfMove;
+} ;
 
 class KSpreadpreference : public KDialogBase
 {
@@ -89,8 +102,10 @@ public slots:
   void slotApply();
   void slotDefault();
 private :
+  KSpreadView* m_pView;
   preference *_preferenceConfig;
   configure * _configure;
+  miscParameters *_miscParameter;
 };
 
 

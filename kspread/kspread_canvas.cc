@@ -1370,31 +1370,126 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
       {
       case Key_Return:
       case Key_Enter:
-	  if ( !m_bChoose && markerRow() == 0xFFFF )
-	      return;
-	  if ( m_bChoose && chooseMarkerRow() == 0xFFFF )
-	      return;
+                switch( m_pView->doc()->getMoveToValue())
+                        {
+                        case Bottom :
+                                {
+	                if ( !m_bChoose && markerRow() == 0xFFFF )
+	                        return;
+	                if ( m_bChoose && chooseMarkerRow() == 0xFFFF )
+	                        return;
 
-	  if ( m_bChoose )
-	      chooseGotoLocation( chooseMarkerColumn(), QMIN( 0x7FFF, chooseMarkerRow() + 1 ), 0, make_select );
-	  else
-	      {
-		  QRect selection = activeTable()->selectionRect();
-		  if( selection.left() == 0 )
-		      gotoLocation( markerColumn(), QMIN( 0x7FFF, markerRow() + 1 ), 0, make_select,false,true  );
-		  else
-		      {
-			  if(markerColumn()<selection.right()&&markerRow()<selection.bottom() )
-			      gotoLocation( markerColumn(), QMIN( 0x7FFF, markerRow() + 1 ), 0, make_select,true ,true);
-			  else if( markerRow()==selection.bottom() && markerColumn()<selection.right())
-			      gotoLocation( markerColumn()+1, QMIN( 0x7FFF, selection.top() ), 0, make_select,true, true );
-			  else if( markerRow()==selection.bottom() && markerColumn()==selection.right())
-			      gotoLocation( selection.left(), QMIN( 0x7FFF, selection.top() ), 0, make_select,true,true );
-			  else if(markerColumn()==selection.right() && markerRow()<selection.bottom())
-			      gotoLocation( markerColumn(), QMIN( 0x7FFF, markerRow() + 1 ), 0, make_select,true,true );
-		      }
-                        }
+	                if ( m_bChoose )
+	                        chooseGotoLocation( chooseMarkerColumn(), QMIN( 0x7FFF, chooseMarkerRow() + 1 ), 0, make_select );
+	                else
+	                        {
+		              QRect selection = activeTable()->selectionRect();
+		                if( selection.left() == 0 )
+		                        gotoLocation( markerColumn(), QMIN( 0x7FFF, markerRow() + 1 ), 0, make_select,false,true  );
+		                else
+		                        {
+			        if(markerColumn()<selection.right()&&markerRow()<selection.bottom() )
+			                gotoLocation( markerColumn(), QMIN( 0x7FFF, markerRow() + 1 ), 0, make_select,true ,true);
+			        else if( markerRow()==selection.bottom() && markerColumn()<selection.right())
+			                gotoLocation( markerColumn()+1, QMIN( 0x7FFF, selection.top() ), 0, make_select,true, true );
+			        else if( markerRow()==selection.bottom() && markerColumn()==selection.right())
+			                gotoLocation( selection.left(), QMIN( 0x7FFF, selection.top() ), 0, make_select,true,true );
+			        else if(markerColumn()==selection.right() && markerRow()<selection.bottom())
+			                gotoLocation( markerColumn(), QMIN( 0x7FFF, markerRow() + 1 ), 0, make_select,true,true );
+		                        }
+                                        }
+                                return;
+                                }
+                          case Top :
+                                {
+	                if ( !m_bChoose && markerRow() == 1 )
+	                        return;
+	                if ( m_bChoose && chooseMarkerRow() ==1 )
+	                        return;
+	                if ( m_bChoose )
+	                        chooseGotoLocation( chooseMarkerColumn(), QMIN( 0x7FFF, chooseMarkerRow() + 1 ), 0, make_select );
+	                else
+	                        {
+		              QRect selection = activeTable()->selectionRect();
+		                if( selection.left() == 0 )
+		                        gotoLocation( markerColumn(), QMAX( 1, markerRow() - 1 ), 0, make_select,false,true  );
+		                else
+		                        {
+                                                                if( markerRow()==selection.top() && markerColumn()==selection.left())
+			                gotoLocation( selection.right(), QMAX( 1, selection.bottom() ), 0, make_select,true,true );
+                                                                else if(markerColumn()==selection.right() && markerRow()>selection.top())
+			                gotoLocation( markerColumn(), QMAX( 1, markerRow() - 1 ), 0, make_select,true,true );
+                                                                else if(markerColumn()<selection.right()&&markerRow()>selection.top() )
+			                gotoLocation( markerColumn(), QMAX( 1, markerRow() - 1 ), 0, make_select,true ,true);
+			        else if( markerRow()==selection.top() && markerColumn()<=selection.right())
+			                gotoLocation( markerColumn()-1, QMAX( 1, selection.bottom() ), 0, make_select,true, true );
+
+		                        }
+                                        }
+                                return;
+                                }
+                          case Left :
+                                {
+	                if ( !m_bChoose && markerColumn() == 1 )
+	                        return;
+	                if ( m_bChoose && chooseMarkerColumn() == 1 )
+	                        return;
+
+	                if ( m_bChoose )
+	                        chooseGotoLocation( QMAX(chooseMarkerColumn()-1,1),  chooseMarkerRow() , 0, make_select );
+	                else
+	                        {
+		              QRect selection = activeTable()->selectionRect();
+		                if( selection.left() == 0 )
+		                        gotoLocation( QMAX(markerColumn()-1,1),  markerRow() , 0, make_select,false,true  );
+		                else
+		                        {
+                                                                if( markerRow()==selection.top() && markerColumn()==selection.left())
+			                gotoLocation( selection.right(),selection.bottom() , 0, make_select,true,true );
+                                                                else if(markerColumn()>selection.left() && markerRow()<=selection.bottom())
+			                gotoLocation(QMAX(markerColumn()-1,1),  markerRow() , 0, make_select,true,true );
+                                                                else if(markerColumn()==selection.right()&&markerRow()==selection.bottom() && markerColumn()!=selection.left())
+			                gotoLocation( QMAX(markerColumn()-1,1), markerRow(), 0, make_select,true ,true);
+                                                                else if(markerColumn()==selection.right()&&markerRow()==selection.bottom() && markerColumn()==selection.left())
+			                gotoLocation( markerColumn(),QMAX( markerRow()-1,1), 0, make_select,true ,true);
+			             else if( markerColumn()==selection.left() && markerRow()<=selection.bottom())
+			                gotoLocation( selection.right(),QMAX( 1, markerRow()-1 ) , 0, make_select,true, true );
+
+		                        }
+                                        }
+                                return;
+                                }
+                          case Right :
+                                {
+	                if ( !m_bChoose && markerColumn() == 26*26)
+	                        return;
+	                if ( m_bChoose && chooseMarkerColumn() == 26*26 )
+	                        return;
+	                if ( m_bChoose )
+	                        chooseGotoLocation( QMIN(  26*26,chooseMarkerColumn()+1),chooseMarkerRow() , 0, make_select );
+	                else
+	                        {
+		              QRect selection = activeTable()->selectionRect();
+		                if( selection.left() == 0 )
+		                        gotoLocation( QMIN(  26*26,markerColumn()+1),  markerRow() , 0, make_select,false,true  );
+		                else
+		                        {
+                                                                if( markerRow()==selection.top() && markerColumn()==selection.left() && markerColumn()!=selection.right())
+			                gotoLocation( QMIN(markerColumn()+1,26*26), markerRow(), 0, make_select,true,true );
+                                                                else if( markerRow()==selection.top() && markerColumn()==selection.left() && markerColumn()==selection.right())
+                                                                        gotoLocation( markerColumn(), QMIN(markerRow()+1,0x7FFF), 0, make_select,true,true );
+                                                                else if(markerColumn()<selection.right() && markerRow()<=selection.bottom())
+			                gotoLocation(QMIN(markerColumn()+1,26*26),  markerRow() , 0, make_select,true,true );
+                                                                else if(markerColumn()==selection.right()&&markerRow()==selection.bottom() )
+			                gotoLocation( selection.left(), selection.top(), 0, make_select,true ,true);
+			             else if( markerColumn()==selection.right() && markerRow()<=selection.bottom())
+			                gotoLocation( selection.left(), QMIN( 0x7FFF, markerRow()+1 ), 0, make_select,true, true );
+		                        }
+                                        }
+                                return;
+                          }
 	  return;
+                }
       case Key_Down:
 
 	  if ( !m_bChoose && markerRow() == 0xFFFF )
@@ -1569,7 +1664,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	  return;
       default:
 	  
-	  
+
 	  // No null character ...
 	  if ( _ev->text().isEmpty() || !m_pView->koDocument()->isReadWrite() )
 	      {

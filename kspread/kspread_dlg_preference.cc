@@ -42,6 +42,7 @@ KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* /*name*/)
                                     KDialogBase::Ok)
 
 {
+  m_pView=parent;
   QVBox *page=addVBoxPage(i18n("Preference"), QString::null);
 
   _preferenceConfig = new  preference(parent,page );
@@ -49,19 +50,25 @@ KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* /*name*/)
 
   page=addVBoxPage(i18n("Local Parameters"), QString::null);
   parameterLocale *_ParamLocal = new  parameterLocale(parent,page );
-  page=addVBoxPage(i18n("Configure "), QString::null);
+  page=addVBoxPage(i18n("Interface"), QString::null);
   _configure = new  configure(parent,page );
+  page=addVBoxPage(i18n("Misc"), QString::null);
+  _miscParameter = new  miscParameters(parent,page );
+
 }
 
 void KSpreadpreference::slotApply()
 {
 _preferenceConfig->apply();
 _configure->apply();
+_miscParameter->apply();
+m_pView->doc()->refreshInterface();
 }
 
 void KSpreadpreference::slotDefault()
 {
 _configure->slotDefault();
+_miscParameter->slotDefault();
 }
 
  preference::preference( KSpreadView* _view,QWidget *parent , char *name )
@@ -194,7 +201,6 @@ configure::configure( KSpreadView* _view,QWidget *parent , char *name )
   lay1->setSpacing( 10 );
   config = KSpreadFactory::global()->config();
   int _page=1;
-  int _indent=10;
   if( config->hasGroup("Parameters" ))
         {
         config->setGroup( "Parameters" );
@@ -203,7 +209,6 @@ configure::configure( KSpreadView* _view,QWidget *parent , char *name )
         vertical=config->readBoolEntry("Vert ScrollBar",true);
         colHeader=config->readBoolEntry("Column Header",true);
         rowHeader=config->readBoolEntry("Row Header",true);
-        _indent=config->readNumEntry( "Indent" ,10) ;
         }
 
   nbPage=new KIntNumInput(_page, tmpQGroupBox , 10);
@@ -226,57 +231,10 @@ configure::configure( KSpreadView* _view,QWidget *parent , char *name )
   lay1->addWidget(showRowHeader);
   showRowHeader->setChecked(rowHeader);
 
-  QLabel *label=new QLabel(tmpQGroupBox);
-  label->setText(i18n("Completion mode :"));
-  lay1->addWidget(label);
-
-  typeCompletion=new QComboBox( tmpQGroupBox);
-  QStringList listType;
-  listType+=i18n("None");
-  listType+=i18n("Manual");
-  listType+=i18n("Popup");
-  listType+=i18n("Automatic");
-  listType+=i18n("Semi-Automatic");
-  typeCompletion->insertStringList(listType);
-  typeCompletion->setCurrentItem(0);
-  lay1->addWidget(typeCompletion);
-
-
-  valIndent=new KIntNumInput(_indent, tmpQGroupBox , 10);
-  valIndent->setRange(1, 100, 1);
-  valIndent->setLabel(i18n("Value of indent :"));
-  lay1->addWidget(valIndent);
-
-  initComboBox();
   box->addWidget( tmpQGroupBox);
 
 }
 
-void configure::initComboBox()
-{
-switch( m_pView->doc()->completionMode( ))
-        {
-        case  KGlobalSettings::CompletionNone:
-                typeCompletion->setCurrentItem(0);
-                break;
-        case  KGlobalSettings::CompletionAuto:
-                typeCompletion->setCurrentItem(3);
-                break;
-        case  KGlobalSettings::CompletionMan:
-                typeCompletion->setCurrentItem(4);
-                break;
-        case  KGlobalSettings::CompletionShell:
-                typeCompletion->setCurrentItem(1);
-                break;
-        case  KGlobalSettings::CompletionPopup:
-                typeCompletion->setCurrentItem(2);
-                break;
-        default :
-                typeCompletion->setCurrentItem(0);
-                break;
-        }
-
-}
 
 void configure::slotDefault()
 {
@@ -284,9 +242,7 @@ showHScrollBar->setChecked(true);
 showRowHeader->setChecked(true);
 showVScrollBar->setChecked(true);
 showColHeader->setChecked(true);
-valIndent->setValue(10);
 nbPage->setValue(1);
-typeCompletion->setCurrentItem(3);
 }
 
 
@@ -334,6 +290,125 @@ if( m_pView->vBorderWidget()->isVisible()!=showRowHeader->isChecked())
                 m_pView->vBorderWidget()->hide();
         m_pView->doc()->setShowRowHeader(showRowHeader->isChecked());
         }
+}
+
+
+miscParameters::miscParameters( KSpreadView* _view,QWidget *parent , char *name )
+ :QWidget ( parent,name)
+ {
+  m_pView = _view;
+
+  QVBoxLayout *box = new QVBoxLayout( this );
+  box->setMargin( 5 );
+  box->setSpacing( 10 );
+
+  QGroupBox* tmpQGroupBox = new QGroupBox( this, "GroupBox" );
+  tmpQGroupBox->setTitle(i18n("Misc"));
+  QVBoxLayout *lay1 = new QVBoxLayout(tmpQGroupBox);
+  lay1->setMargin( 20 );
+  lay1->setSpacing( 10 );
+  config = KSpreadFactory::global()->config();
+  int _indent=10;
+  if( config->hasGroup("Parameters" ))
+        {
+        config->setGroup( "Parameters" );
+        _indent=config->readNumEntry( "Indent" ,10) ;
+        }
+
+  QLabel *label=new QLabel(tmpQGroupBox);
+  label->setText(i18n("Completion mode :"));
+  lay1->addWidget(label);
+
+  typeCompletion=new QComboBox( tmpQGroupBox);
+  QStringList listType;
+  listType+=i18n("None");
+  listType+=i18n("Manual");
+  listType+=i18n("Popup");
+  listType+=i18n("Automatic");
+  listType+=i18n("Semi-Automatic");
+  typeCompletion->insertStringList(listType);
+  typeCompletion->setCurrentItem(0);
+  lay1->addWidget(typeCompletion);
+
+
+  valIndent=new KIntNumInput(_indent, tmpQGroupBox , 10);
+  valIndent->setRange(1, 100, 1);
+  valIndent->setLabel(i18n("Value of indent :"));
+  lay1->addWidget(valIndent);
+
+  label=new QLabel(tmpQGroupBox);
+  label->setText(i18n("Press enter to move selection to:"));
+  lay1->addWidget(label);
+  typeOfMove=new QComboBox( tmpQGroupBox);
+  listType.clear();
+  listType+=i18n("Bottom");
+  listType+=i18n("Top");
+  listType+=i18n("Right");
+  listType+=i18n("Left");
+  typeOfMove->insertStringList(listType);
+  typeOfMove->setCurrentItem(0);
+  lay1->addWidget(typeOfMove);
+
+  initComboBox();
+  box->addWidget( tmpQGroupBox);
+
+}
+
+void miscParameters::initComboBox()
+{
+switch( m_pView->doc()->completionMode( ))
+        {
+        case  KGlobalSettings::CompletionNone:
+                typeCompletion->setCurrentItem(0);
+                break;
+        case  KGlobalSettings::CompletionAuto:
+                typeCompletion->setCurrentItem(3);
+                break;
+        case  KGlobalSettings::CompletionMan:
+                typeCompletion->setCurrentItem(4);
+                break;
+        case  KGlobalSettings::CompletionShell:
+                typeCompletion->setCurrentItem(1);
+                break;
+        case  KGlobalSettings::CompletionPopup:
+                typeCompletion->setCurrentItem(2);
+                break;
+        default :
+                typeCompletion->setCurrentItem(0);
+                break;
+        }
+switch( m_pView->doc()->getMoveToValue( ))
+        {
+        case  Bottom:
+                typeOfMove->setCurrentItem(0);
+                break;
+        case  Left:
+                typeOfMove->setCurrentItem(3);
+                break;
+        case  Top:
+                typeOfMove->setCurrentItem(1);
+                break;
+        case  Right:
+                typeOfMove->setCurrentItem(2);
+                break;
+        default :
+                typeOfMove->setCurrentItem(0);
+                break;
+        }
+
+}
+
+void miscParameters::slotDefault()
+{
+valIndent->setValue(10);
+typeCompletion->setCurrentItem(3);
+typeOfMove->setCurrentItem(0);
+}
+
+
+void miscParameters::apply()
+{
+config->setGroup( "Parameters" );
 KGlobalSettings::Completion tmpCompletion=KGlobalSettings::CompletionNone;
 
 switch(typeCompletion->currentItem())
@@ -354,17 +429,42 @@ switch(typeCompletion->currentItem())
                 tmpCompletion=KGlobalSettings::CompletionMan;
                 break;
         }
+
+
 if(tmpCompletion!=m_pView->doc()->completionMode())
         {
-        m_pView->doc()->setCompletionMode(KGlobalSettings::CompletionMan);
-        config->writeEntry( "Completion Mode", (int)KGlobalSettings::CompletionMan);
+        m_pView->doc()->setCompletionMode(tmpCompletion);
+        config->writeEntry( "Completion Mode", (int)tmpCompletion);
         }
+
+MoveTo tmpMoveTo=Bottom;
+switch(typeOfMove->currentItem())
+        {
+        case 0:
+                tmpMoveTo=Bottom;
+                break;
+        case 1:
+                tmpMoveTo=Top;
+                break;
+        case 2:
+                tmpMoveTo=Right;
+                break;
+        case 3:
+                tmpMoveTo=Left;
+                break;
+        }
+if(tmpMoveTo!=m_pView->doc()->getMoveToValue())
+        {
+        m_pView->doc()->setMoveToValue(tmpMoveTo);
+        config->writeEntry( "Move", (int)tmpMoveTo);
+        }
+
+
 if(valIndent->value()!=m_pView->doc()->getIndentValue())
         {
         m_pView->doc()->setIndentValue( valIndent->value());
         config->writeEntry( "Indent", valIndent->value());
         }
-
-m_pView->doc()->refreshInterface();
 }
+
 #include "kspread_dlg_preference.moc"
