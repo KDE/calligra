@@ -46,7 +46,7 @@ VCanvas::focusInEvent( QFocusEvent * )
 }
 
 void
-VCanvas::ViewportToContents( int vx, int vy, int &x, int &y ) const
+VCanvas::toContents( int vx, int vy, int x, int y ) const
 {
 	x = vx;
 	y = vy + contentsY();// - ( contentsHeight() / m_view->zoom() ) + y;
@@ -54,7 +54,7 @@ VCanvas::ViewportToContents( int vx, int vy, int &x, int &y ) const
 }
 
 QPoint
-VCanvas::ViewportToContents( const QPoint &p ) const
+VCanvas::toContents( const QPoint &p ) const
 {
 	QPoint p2 = p;
 	p2.setY( ( contentsHeight() / m_view->zoom() ) - ( p.y() + contentsY() ) );

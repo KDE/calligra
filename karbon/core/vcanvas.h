@@ -22,8 +22,8 @@ public:
 
 	void repaintAll( bool drawVObjects = true );
 	void setYMirroring( bool edit );
-	void ViewportToContents( int vx, int vy, int &x, int &y ) const;
-	QPoint ViewportToContents( const QPoint & ) const;
+	void toContents( int vx, int vy, int x, int y ) const;
+	QPoint toContents( const QPoint & ) const;
 
 	QPixmap *pixmap() { return m_pixmap; }
 

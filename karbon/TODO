@@ -3,7 +3,6 @@ REAL BUGS:
 -	select first/last segment's knot if one of each other's knot is selected
 -	if selecting many shapes, the fill/stroke state should be "unknown",
 	preview widgets needs to paint questionmarks or something in this case
--	revert() in vpath::combine() doesnt work
 
 TODO:
 -	scratch your head about how to do undo/redo of path operations best like
