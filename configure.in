@@ -126,6 +126,7 @@ AC_OUTPUT( \
 	kword/dtd/Makefile \
 	kword/filters/Makefile \
 	kword/filters/ascii/Makefile \
+	kword/filters/html/Makefile \
 	kword/filters/winword97/Makefile \
 	kdiagramm/Makefile \
 	kdiagramm/pics/Makefile \
