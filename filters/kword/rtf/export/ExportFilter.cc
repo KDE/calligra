@@ -701,9 +701,13 @@ void RTFWorker::writeStyleData(void)
         it!=m_styleList.end();
         count++, it++)
     {
+        *m_streamOut << "{";
         if (count>0) // \s0 is not written out
             *m_streamOut << "\\s" << count;
 
+        *m_streamOut << layoutToRtf((*it),(*it),true);
+
+        // \snext must be the last keyword before the style name
         // Find the number of the following style
         uint counter=0;  // counts position in style table starting at 0
         QValueList < LayoutData > ::ConstIterator it2;
@@ -716,8 +720,8 @@ void RTFWorker::writeStyleData(void)
             }
         }
 
-        *m_streamOut << layoutToRtf((*it),(*it),true);
         *m_streamOut << " " << (*it).styleName << ";";
+        *m_streamOut << "}";
         *m_streamOut << m_eol;
     }
 
