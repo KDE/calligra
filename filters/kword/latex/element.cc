@@ -28,10 +28,12 @@
 /*******************************************/
 Element::Element()
 {
-	_type    = ST_AUCUN;
-	_hinfo   = SI_NONE;
-	_name    = 0;
-	_suivant = 0;
+	_type      = ST_NONE;
+	_hinfo     = SI_NONE;
+	_name      = 0;
+	_suivant   = 0;
+	_removable = false;
+	_visible   = true;
 }
 
 /*******************************************/
@@ -49,10 +51,10 @@ Element::~Element()
 /*******************************************/
 void Element::analyse(const Markup * balise_initiale)
 {
-	// ANALYSE A FRAMESET MARKUP
+	/* ANALYSE A FRAMESET MARKUP */
 	
-	// Parameters Analyse
-	kdDebug() << "ANALYSE DES PARAMETRES D'UNE FRAMESET (Element)" << endl;
+	/* Parameters Analyse */
+	kdDebug() << "FRAMESET PARAMETERS ANALYSE (Element)" << endl;
 	analyseParam(balise_initiale);
 }
 
@@ -61,9 +63,9 @@ void Element::analyse(const Markup * balise_initiale)
 /*******************************************/
 void Element::analyseParam(const Markup *balise)
 {
-	// <FRAMESET frameType="1" frameInfo="0" removable="0" visible="1"
-	// name="Supercadre 1">
-	Arg *arg;
+	/* <FRAMESET frameType="1" frameInfo="0" removable="0" visible="1"
+	 * name="Supercadre 1"> */
+	Arg *arg = 0;
 
 	for(arg= balise->pArg; arg!= 0; arg= arg->pNext)
 	{
@@ -75,8 +77,23 @@ void Element::analyseParam(const Markup *balise)
 		else if(strcmp(arg->zName, "FRAMETYPE")== 0)
 		{
 			// TO FINISH
-			kdDebug() << "TYPE : TEXTE" << endl;
-			_type = ST_TEXTE;
+			kdDebug() << "TYPE : " << arg->zValue << endl;
+			switch(atoi(arg->zValue))
+			{
+				case 0: _type = ST_NONE;
+					break;
+				case 1: _type = ST_TEXT;
+					break;
+				case 2: _type = ST_PICTURE;
+					break;
+				case 3: _type = ST_PART;
+					break;
+				case 4: _type = ST_FORMULA;
+					break;
+				default:
+					_type = ST_NONE;
+					kdDebug() << "error : frameinfo unknown!" << endl;
+			}
 		}
 		else if(strcmp(arg->zName, "FRAMEINFO")== 0)
 		{
@@ -109,6 +126,34 @@ void Element::analyseParam(const Markup *balise)
 					_section = SS_NONE;
 					kdDebug() << "error : frameinfo unknown!" << endl;
 			}
+		}
+		else if(strcmp(arg->zName, "REMOVABLE") == 0)
+		{
+			setRemovable(atoi(arg->zValue));
+		}
+		else if(strcmp(arg->zName, "VISIBLE") == 0)
+		{
+			setVisible(atoi(arg->zValue));
+		}
+		else if(strcmp(arg->zName, "GRPMNG") == 0)
+		{
+			/* It's a table !! */
+		}
+		else if(strcmp(arg->zName, "ROW") == 0)
+		{
+
+		}
+		else if(strcmp(arg->zName, "COL") == 0)
+		{
+
+		}
+		else if(strcmp(arg->zName, "ROWS") == 0)
+		{
+
+		}
+		else if(strcmp(arg->zName, "COLS") == 0)
+		{
+
 		}
 	}
 	kdDebug() << "FIN PARAM" << endl;

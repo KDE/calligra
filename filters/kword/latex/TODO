@@ -1,28 +1,32 @@
 VERSION 1
-	- texte			DONE
-		* accent	DONE
+	- texte						DONE
+		* accent				DONE
 		* big parag must be truncated.
 		* ...
-	- layout		DONE
-	- titre			DONE
-	- puce			DONE
-	- paper			DONE
-	- footer, header	DONE
+	- layout					DONE
+	- titre						DONE
+	- puce						DONE
+	- paper						DONE
+	- footer, header				DONE
 		* analyser l'entete puis tester s'il y a un entete, pieds
 		* de page, ...				DONE
 		* Use  hType for  hedaers/footers	DONE
 		* Use either \fancyhead or \chead	DONE
-		- add a parameter useformat to generate method	DONE
-		- put header/footer different place if it's center, ...
-		 to do that --> isCenter method for Texte class
-	- clean codes :)))	DONE
-	- commentaires		DONE
-	- footnote
-	- stocker toutes les infos fournies par defaut DONE
+		- add a parameter useformat to generate
+		  method				DONE
+		- put header/footer different place if
+		  it's center, ...
+		  to do that --> isCenter method for
+		  Texte class
+	- clean codes :)))	
+	- commentaires					DONE
+	- footnote					DONE AT 80 %
+	- Get all default informations			DONE
 
 VERSION 2
 	- table
-	- picture
+	- picture					DONE AT 50 %
+	- variable
 	- personalization
 
 VERSION 3

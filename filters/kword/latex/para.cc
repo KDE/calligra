@@ -24,6 +24,7 @@
 #include "para.h"
 #include "texte.h"		/* father class.        */
 #include "format.h"		/* children classes.    */
+#include "picturezone.h"
 #include "textzone.h"
 #include "footnote.h"
 
@@ -39,6 +40,7 @@ Para::Para(Texte* texte)
 	_name      = 0;
 	_info      = EP_NONE;	/* the parag is not a footnote */
 	_hardbrk   = EP_FLOW;	/* and it's not a new page */
+	_currentPos= 0;		/* At the beginning of the paragraph */
 }
 
 /*******************************************/
@@ -59,7 +61,7 @@ Para::~Para()
 /*******************************************/
 /* DEPRECATED.                             */
 /*******************************************/
-bool Para::isColored() const
+/*bool Para::isColored() const
 {
 	bool color;
 	FormatIter iter;
@@ -73,17 +75,17 @@ bool Para::isColored() const
 		iter.next();
 	}
 	return color;
-}
+}*/
 
 /*******************************************/
-/* IsUnderlined                            */
+/* isUlined                                */
 /*******************************************/
 /* Return TRUE if there is at least one    */
 /* text zone which use uline.              */
 /*******************************************/
 /* DEPRECATED.                             */
 /*******************************************/
-bool Para::isUlined() const
+/*bool Para::isUlined() const
 {
 	bool uline;
 	FormatIter iter;
@@ -97,7 +99,7 @@ bool Para::isUlined() const
 		iter.next();
 	}
 	return uline;
-}
+}*/
 
 /*******************************************/
 /* GetFrameType                            */
@@ -171,13 +173,14 @@ void Para::analyse(const Markup * balise_initiale)
 		{
 			analyseBrk(balise);
 		}
-		/*else if(strcmp(balise->token.zText, "FORMATS")== 0)
+		else if(strcmp(balise->token.zText, "FORMATS")== 0)
 		{
+			// Garder pour la nouvelle dtd
 			// IMPORTANT ==> police + style
 			kdDebug() << "FORMATS" << endl;
 			analyseFormats(balise);
 			
-		}*/
+		}
 		else if(strcmp(balise->token.zText, "LAYOUT")== 0)
 		{
 			kdDebug() << "LAYOUT" << endl;
@@ -262,6 +265,7 @@ void Para::analyseLayoutPara(const Markup *balise_initiale)
 {
 	Token* savedToken = 0;
 	Markup* balise    = 0;
+	Format* zone      = 0;
 
 	savedToken = enterTokenChild(balise_initiale);
 	analyseLayout(balise_initiale);
@@ -271,6 +275,50 @@ void Para::analyseLayoutPara(const Markup *balise_initiale)
 		kdDebug() << balise->token.zText << endl;
 		if(strcmp(balise->token.zText, "FORMAT")== 0)
 		{
+			//analyseFormat(balise);
+			/* No more format : verify if all the text zone has been formated */
+			if(_currentPos != _texte.length())
+			{
+				zone = new TextZone(_texte, this);
+				((TextZone*) zone)->setPos(_currentPos);
+				((TextZone*) zone)->setLength(_currentPos - _texte.length());
+				zone->analyse(0);
+				if(_lines == 0)
+					_lines = new ListeFormat;
+				/* add the text */
+				_lines->addLast(zone);
+				_currentPos = _currentPos + ((TextZone*) zone)->getLength();
+			
+			}
+		}
+		else
+			kdDebug() << " FORMAT FIELD UNKNOWN" << endl;
+	}
+	setTokenCurrent(savedToken);
+
+}
+
+/*******************************************/
+/* AnalyseFormats                          */
+/*******************************************/
+/* Analyse several formats.                */
+/*  keep the type (picture, text, variable,*/
+/* footnote) and put the zone in a list.   */
+/*******************************************/
+void Para::analyseFormats(const Markup *balise_initiale)
+{
+	Token* savedToken = 0;
+	Markup* balise    = 0;
+
+	savedToken = enterTokenChild(balise_initiale);
+	//analyseLayout(balise_initiale);
+	while((balise = getNextMarkup()) != NULL)
+	{
+		kdDebug() << balise << endl;
+		kdDebug() << balise->token.zText << endl;
+		if(strcmp(balise->token.zText, "FORMAT")== 0)
+		{
+			kdDebug() << "A FORMAT !!!" << endl;
 			analyseFormat(balise);
 		}
 		else
@@ -289,40 +337,68 @@ void Para::analyseLayoutPara(const Markup *balise_initiale)
 /*******************************************/
 void Para::analyseFormat(const Markup *balise)
 {
-	Format *zone = 0;
+	Format *zone      = 0;
+	Format *zoneFirst = 0;
+
 	kdDebug() << "ANALYSE FORMAT BODY" << endl;
 	switch(getTypeFormat(balise))
 	{
 		case EF_ERROR: kdDebug() << "Id format error" << endl;
 			break;
-		case EF_TEXTZONE: /* It's a text line */
-				zone = new TextZone(_texte, this);
+		case EF_TEXTZONE: /* It's a text line (1) */
+				if(_currentPos != _texte.length())
+				{
+					zone = new TextZone(_texte, this);
+					zone->analyse(balise);
+					if(((TextZone*) zone)->getPos() != _currentPos)
+					{
+						if(_lines == 0)
+							_lines = new ListeFormat;
+						/* Create first a default format */
+						zoneFirst = new TextZone(_texte, this);
+						((TextZone*) zoneFirst)->setPos(_currentPos);
+						((TextZone*) zoneFirst)->setLength(((TextZone*) zone)->getPos() - _currentPos);
+						zoneFirst->analyse(0);
+						/* Add the text without format */
+						_lines->addLast(zoneFirst);
+						_currentPos = _currentPos + ((TextZone*) zoneFirst)->getLength();
+					}
+				}
 			break;
-		case EF_FOOTNOTE: /* It's a footnote */
-				zone = new Footnote(this);
+		case EF_PICTURE: /* It's a picture (2) */
+				zone = new PictureZone(this);
+				zone->analyse(balise);
 			break;
-		case EF_PICTURE: /* It's a picture */
-		//		zone = new PictureZone(this);
-			break;
-		case EF_VARIABLE: /* It's a variable */
+		case EF_VARIABLE: /* It's a variable (4) */
 		//		zone = new VariableZone(this);
+		//		zone->analyse(balise);
+			break;
+		case EF_FOOTNOTE: /* It's a footnote (5) */
+				zone = new Footnote(this);
+				zone->analyse(balise);
+			break;
+		case EF_ANCHOR: /* It's an anchor (6) */
+		//		zone = new Anchor(this);
+		//		zone->analyse(baslie);
 			break;
 		default: /* Unknown */
 				kdDebug() << "Format not yet supported" << endl;
 		}
 	if(zone != 0)
 	{
-		zone->analyse(balise);
 		if(_lines == 0)
 			_lines = new ListeFormat;
-
 		/* add the text */
 		_lines->addLast(zone);
+		_currentPos = _currentPos + ((TextZone*) zone)->getLength();
 	}
 }
 
 /*******************************************/
 /* Generate                                */
+/*******************************************/
+/* Generate each text zone with the parag. */
+/* markup.                                 */
 /*******************************************/
 void Para::generate(QTextStream &out)
 {
@@ -354,7 +430,9 @@ void Para::generate(QTextStream &out)
 			iter.next();
 		}
 	}
-	
+	/* To separate the paragraphs */
+	out << endl;
+
 	if(getInfo() != EP_FOOTNOTE && getFrameType() != SS_HEADERS &&
 	   getFrameType() != SS_FOOTERS)
 	{
@@ -369,6 +447,8 @@ void Para::generate(QTextStream &out)
 /*******************************************/
 /* GenerateDebut                           */
 /*******************************************/
+/* Generate the begining paragraph markup. */
+/*******************************************/
 void Para::generateDebut(QTextStream &out)
 {
 	/* if it's a chapter */
@@ -377,8 +457,9 @@ void Para::generateDebut(QTextStream &out)
 		/* switch the type, the depth do*/
 		generateTitle(out);
 	}
-	else
+	else if(_lines != 0)
 	{
+		/* If the paragraph had text */
 		if(_previous == 0 || _previous->getEnv() != getEnv() || getInfo() == EP_FOOTNOTE)
 		{
 			/* It's a parag. */
@@ -394,16 +475,16 @@ void Para::generateDebut(QTextStream &out)
 					break;
 			}
 		}
-		if(isList())
+		if(isEnum())
 		{
 			/* if it's a list */
 			if(_previous == 0 || !_previous->isList() ||
-				(_previous->isList() && _previous->getCounterDepth() < getCounterDepth()) ||
-				(_previous->isList() && _previous->getCounterType() != getCounterType()))
+			  (_previous->isList() && _previous->getCounterDepth() < getCounterDepth()) ||
+			  (_previous->isList() && _previous->getCounterType() != getCounterType()))
 			{
 				switch(getCounterType())
 				{
-					case TL_STANDARD:
+					case TL_NONE:
 						break;
 					case TL_ARABIC:
 						   out << "\\begin{enumerate}" << endl;
@@ -420,8 +501,23 @@ void Para::generateDebut(QTextStream &out)
 					case TL_CLNUMBER: /* I, II, ... */
 						out << "\\begin{enumerate}[I]" << endl;
 						break;
-					case TL_BULLET:
-						     out << "\\begin{itemize}" << endl;
+					case TL_CUSTOM_SIMPLE: /* - */
+						out << "\\begin{enumerate}[" << getCounterBullet() << "]" << endl;
+						break;
+					case TL_CUSTOM_COMPLEX: /* - */
+						out << "\\begin{enumerate}[" << getCounterBullet() << "]" << endl;
+						break;
+					case TL_CIRCLE_BULLET:
+						out << "\\begin{itemize}" << endl;
+						break;
+					case TL_SQUARE_BULLET:
+						out << "\\begin{itemize}" << endl;
+						break;
+					case TL_DISC_BULLET:
+						out << "\\begin{itemize}" << endl;
+						break;
+					default:
+						out << "\\begin{itemize}[SPECIAL]" << endl;
 				}
 			}
 			out << "\\item ";
@@ -432,37 +528,53 @@ void Para::generateDebut(QTextStream &out)
 /*******************************************/
 /* GenerateFin                             */
 /*******************************************/
+/* Generate the closing paragraph markup.  */
+/*******************************************/
 void Para::generateFin(QTextStream &out)
 {
 	/* Close a title of chapter */
 	if(isChapter())
 		out << "}" << endl;
-	if(isList())
+	else if(isList())
 	{
 		/* It's a list */
-		if(_next == 0 || !_next->isList() ||
+		if(_next == 0 || !_next->isEnum() ||
 			(_next->isList() && _next->getCounterDepth() < getCounterDepth()) ||
-			(_next->isList() && _next->getCounterType() != getCounterType()))
+			(_next->isList() && _next->getCounterType() != getCounterType() &&
+			_next->getCounterDepth() < getCounterDepth()))
 		{
 			out << endl;
 			/* but the next parag is not a same list */
 			switch(getCounterType())
 			{
-				case TL_STANDARD: out << endl;
+				case TL_NONE: out << endl;
 					break;
 				case TL_ARABIC:
 				case TL_LLETTER:  /* a, b, ... */
 				case TL_CLETTER:  /* A, B, ... P. 250*/
 				case TL_LLNUMBER: /* i, ii, ... */
 				case TL_CLNUMBER: /* I, II, ... */
+				case TL_CUSTOM_SIMPLE: /* - */
+				case TL_CUSTOM_COMPLEX: /* - */
 					       out << endl << "\\end{enumerate}" << endl;
 					break;
-				case TL_BULLET:
-					     out << endl << "\\end{itemize}" << endl;
+				case TL_CIRCLE_BULLET:
+						out << endl << "\\end{itemize}" << endl;
+				case TL_SQUARE_BULLET:
+				case TL_DISC_BULLET:
+						out << endl << "\\end{itemize}" << endl;
+					break;
+				default:
+						out << endl << "no suported" << endl;
+			}
+			if(((getCounterDepth() - 1) >= 0) && _next!= 0 && !_next->isEnum())
+			{
+				/* We must close all the enums */
+				out << "enum to finish" << endl;
 			}
 		}
 	}
-	if((_previous && !_previous->isChapter()) || !_previous)
+	if(((_previous && !_previous->isChapter()) || !_previous) && _lines != 0)
 	{
 		if((_next == 0 || _next->getEnv() != getEnv()) && !isChapter())
 		{

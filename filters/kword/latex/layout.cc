@@ -30,29 +30,35 @@
 QString Layout::_last_name;
 EType   Layout::_last_counter;
 
+/*******************************************/
+/* Constructor                             */
+/*******************************************/
 Layout::Layout()
 {
 	_last_name     =  "STANDARD";
-	_last_counter  =  TL_STANDARD;
+	_last_counter  =  TL_NONE;
 	_env           =  ENV_LEFT;
-	_counterType   =  TL_STANDARD;
+	_counterType   =  TL_NONE;
 	_counterDepth  =  0;
 	_counterBullet =  0;
 	_counterStart  =  0;
 	_numberingType = -1;
 }
 
+/*******************************************/
+/* analyseLAyout                           */
+/*******************************************/
 void Layout::analyseLayout(const Markup * balise_initiale)
 {
 	Token*  savedToken = 0;
 	Markup* balise     = 0;
 
-	// Markup type : FORMAT id="1" pos="0" len="17">...</FORMAT>
+	/* Markup type : FORMAT id="1" pos="0" len="17">...</FORMAT> */
 	
-	// No parameters for this markup
+	/* No parameters for this markup */
 	kdDebug() << "ANALYSE OF THE BEGINING OF A LAYOUT" << endl;
 	
-	// Analyse children markups
+	/* Analyse children markups */
 	savedToken = enterTokenChild(balise_initiale);
 	
 	while((balise = getNextMarkup()) != NULL)
@@ -77,11 +83,11 @@ void Layout::analyseLayout(const Markup * balise_initiale)
 			kdDebug() << "COUNTER : " << endl;
 			analyseCounter(balise);
 		}
-		/*else if(strcmp(balise->token.zText, "FORMAT")== 0)
+		else if(strcmp(balise->token.zText, "FORMAT")== 0)
 		{
 			kdDebug() << "FORMAT : " << endl;
 			Format::analyse(balise);
-		}*/
+		}
 	}
 	kdDebug() << "END OF THE BEGINING OF A LAYOUT" << endl;
 	setTokenCurrent(savedToken);
@@ -89,7 +95,7 @@ void Layout::analyseLayout(const Markup * balise_initiale)
 
 void Layout::analyseName(const Markup *balise)
 {
-	//<NAME value="times">
+	/* <NAME value="times"> */
 	Arg* arg = 0;
 
 	for(arg= balise->pArg; arg; arg= arg->pNext)
@@ -103,9 +109,14 @@ void Layout::analyseName(const Markup *balise)
 	}
 }
 
+/*******************************************/
+/* analyseFollowing                        */
+/*******************************************/
+/* Get info about folowing. Ununsefull.    */
+/*******************************************/
 void Layout::analyseFollowing(const Markup *balise)
 {
-	//<FOLLOWING name="times">
+	/* <FOLLOWING name="times"> */
 	Arg* arg = 0;
 
 	for(arg= balise->pArg; arg; arg= arg->pNext)
@@ -119,25 +130,44 @@ void Layout::analyseFollowing(const Markup *balise)
 	}
 }
 
+/*******************************************/
+/* analyseEnv                              */
+/*******************************************/
+/* Get informations about environment.     */
+/*******************************************/
 void Layout::analyseEnv(const Markup *balise)
 {
-	//<FLOW value="0">
+	/* <FLOW value="0"> */
 	Arg* arg = 0;
 
 	for(arg= balise->pArg; arg; arg= arg->pNext)
 	{
 		kdDebug() << "PARAM " << arg->zName << endl;
-		if(strcmp(arg->zName, "VALUE")== 0)
+		if(strcmp(arg->zName, "ALIGN")== 0)
 		{
-			setEnv(atoi(arg->zValue));
+			if(strcmp(arg->zValue, "justify")== 0)
+				setEnv(ENV_NONE);
+			else if(strcmp(arg->zValue, "left")== 0)
+				setEnv(ENV_LEFT);
+			else if(strcmp(arg->zValue, "right")== 0)
+				setEnv(ENV_RIGHT);
+			else if(strcmp(arg->zValue, "center")== 0)
+				setEnv(ENV_CENTER);
 			kdDebug() << arg->zValue << endl;
 		}
 	}
 }
 
+/*******************************************/
+/* analyseCounter                          */
+/*******************************************/
+/* Get all informations about counter.     */
+/* If I use a counter, I must include a tex*/
+/* package.                                */
+/*******************************************/
 void Layout::analyseCounter(const Markup *balise)
 {
-	//<COUNTER type="1">
+	/* <COUNTER type="1"> */
 	Arg* arg = 0;
 
 	for(arg= balise->pArg; arg; arg= arg->pNext)
@@ -146,7 +176,7 @@ void Layout::analyseCounter(const Markup *balise)
 		if(strcmp(arg->zName, "TYPE")== 0)
 		{
 			setCounterType(atoi(arg->zValue));
-			if(getCounterType() > TL_ARABIC && getCounterType() < TL_BULLET)
+			if(getCounterType() > TL_ARABIC && getCounterType() < TL_DISC_BULLET)
 			{
 				kdDebug() <<  getCounterType() << endl;
 				_fileHeader->useEnumerate();

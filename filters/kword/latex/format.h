@@ -35,7 +35,8 @@ enum _EFormat
 	EF_PICTURE,		/* 2 */
 	EF_TABULATOR,		/* 3 */
 	EF_VARIABLE,		/* 4 */
-	EF_FOOTNOTE		/* 5 */
+	EF_FOOTNOTE,		/* 5 */
+	EF_ANCHOR		/* 6 */
 };
 
 typedef enum _EFormat EFormat;

@@ -26,6 +26,9 @@
 #include "fileheader.h"		/* for the use of _fileHeader (color and underlined) */
 #include "textformat.h"
 
+/*******************************************/
+/* getColorBlue                            */
+/*******************************************/
 int TextFormat::getColorBlue () const
 {
 	if(_textcolor!= 0)
@@ -34,6 +37,9 @@ int TextFormat::getColorBlue () const
 		return 0;
 }
 
+/*******************************************/
+/* getColorGreen                           */
+/*******************************************/
 int TextFormat::getColorGreen() const
 {
 	if(_textcolor!= 0)
@@ -42,6 +48,9 @@ int TextFormat::getColorGreen() const
 		return 0;
 }
 
+/*******************************************/
+/* getColorRed                             */
+/*******************************************/
 int TextFormat::getColorRed  () const
 {
 	if(_textcolor!= 0)
@@ -50,6 +59,9 @@ int TextFormat::getColorRed  () const
 		return 0;
 }
 
+/*******************************************/
+/* setColor                                */
+/*******************************************/
 void TextFormat::setColor (const int r, const int g, const int b)
 {
 	if(_textcolor == 0)
@@ -58,7 +70,11 @@ void TextFormat::setColor (const int r, const int g, const int b)
 		_textcolor->setRgb(r, g, b);
 }
 
-/* Get the set of info. about a text format */
+/*******************************************/
+/* analyseTextFormat                       */
+/*******************************************/
+/* Get the set of info. about a text format*/
+/*******************************************/
 void TextFormat::analyseTextFormat(const Markup * balise_initiale)
 {
 	Token*  savedToken = 0;
@@ -66,11 +82,11 @@ void TextFormat::analyseTextFormat(const Markup * balise_initiale)
 
 	// MARKUPS FORMAT id="1" pos="0" len="17">...</FORMAT>
 	
-	// Parameters Analyse
+	/* Parameters Analyse */
 	analyseParam(balise_initiale);
 	kdDebug() << "ANALYSE A ZONE" << endl;
 	
-	// Children Markups Analyse
+	/* Children Markups Analyse */
 	savedToken = enterTokenChild(balise_initiale);
 	
 	while((balise = getNextMarkup()) != NULL)
@@ -92,27 +108,41 @@ void TextFormat::analyseTextFormat(const Markup * balise_initiale)
 		}
 		else if(strcmp(balise->token.zText, "WEIGHT")== 0)
 		{
-			kdDebug() << "WEIGTH : " << endl;
-			analyseWeigth(balise);
+			kdDebug() << "WEIGHT : " << endl;
+			analyseWeight(balise);
 		}
 		else if(strcmp(balise->token.zText, "VERTALIGN")== 0)
 		{
 			kdDebug() << "VERTALIGN : " << endl;
 			analyseAlign(balise);
 		}
+		else if(strcmp(balise->token.zText, "STRIKEOUT")== 0)
+		{
+			kdDebug() << "STRIKEOUT : " << endl;
+			analyseStrikeout(balise);
+		}
 		else if(strcmp(balise->token.zText, "COLOR")== 0)
 		{
 			kdDebug() << "COLOR : " << endl;
 			analyseColor(balise);
 		}
+		else if(strcmp(balise->token.zText, "SIZE")== 0)
+		{
+			kdDebug() << "SIZE : " << endl;
+			analyseSize(balise);
+		}
 	}
 	kdDebug() << "END OF A ZONE" << endl;
 }
 
-/* Get the zone where the format is applied */
+/*******************************************/
+/* analyseParam                            */
+/*******************************************/
+/* Get the zone where the format is applied*/
+/*******************************************/
 void TextFormat::analyseParam(const Markup *balise)
 {
-	//<FORMAT id="1" pos="0" len="17">
+	/* <FORMAT id="1" pos="0" len="17"> */
 	Arg *arg = 0;
 
 	for(arg= balise->pArg; arg; arg= arg->pNext)
@@ -128,15 +158,19 @@ void TextFormat::analyseParam(const Markup *balise)
 		}
 		else if(strcmp(arg->zName, "LEN")== 0)
 		{
-			setTaille (atoi(arg->zValue));
+			setLength (atoi(arg->zValue));
 		}
 	}
 }
 
-/* Get the text font! */
+/*******************************************/
+/* analyseFont                             */
+/*******************************************/
+/* Get the text font!                      */
+/*******************************************/
 void TextFormat::analyseFont(const Markup *balise)
 {
-	//<FONT name="times">
+	/* <FONT name="times"> */
 	Arg *arg = 0;
 
 	for(arg= balise->pArg; arg; arg= arg->pNext)
@@ -150,10 +184,14 @@ void TextFormat::analyseFont(const Markup *balise)
 	}
 }
 
-/* Verift if it's a italic text */
+/*******************************************/
+/* analyseItalic                           */
+/*******************************************/
+/* Verify if it's a italic text.           */
+/*******************************************/
 void TextFormat::analyseItalic(const Markup *balise)
 {
-	//<FONT name="times">
+	/* <ITALIC value="1"> */
 	Arg* arg = 0;
 
 	for(arg= balise->pArg; arg; arg= arg->pNext)
@@ -162,33 +200,65 @@ void TextFormat::analyseItalic(const Markup *balise)
 		if(strcmp(arg->zName, "VALUE")== 0)
 		{
 			kdDebug() << arg->zName << endl;
-			setItalic(arg->zValue);
+			setItalic(atoi(arg->zValue));
 		}
 	}
 }
 
-/* Verift if it's a underlined text */
+/*******************************************/
+/* analyseUnderlined                       */
+/*******************************************/
+/* Verify if it's a underlined text.       */
+/*******************************************/
 void TextFormat::analyseUnderlined(const Markup *balise)
 {
-	//<FONT name="times">
+	/* <UNDERLINE value="1"> */
 	Arg* arg = 0;
 
 	for(arg= balise->pArg; arg; arg= arg->pNext)
 	{
-		//kdDebug() << "PARAM " << arg->zName << endl;
+		kdDebug() << "PARAM " << arg->zName << endl;
 		if(strcmp(arg->zName, "VALUE")== 0)
 		{
-			kdDebug() << arg->zName << endl;
-			setUnderlined(arg->zValue);
-			_fileHeader->useUnderline();
+			setUnderlined(atoi(arg->zValue));
+			if(isUnderlined())
+				_fileHeader->useUnderline();
+			kdDebug() << "Underlined ? " << isUnderlined() << endl;
 		}
 	}
 }
 
-/* Get the text weigth */
-void TextFormat::analyseWeigth(const Markup *balise)
+/*******************************************/
+/* analyseStrikeout                        */
+/*******************************************/
+/* Verify if it's a strikeout text.        */
+/*******************************************/
+void TextFormat::analyseStrikeout(const Markup *balise)
 {
-	//<FONT name="times">
+	/* <STRIKEOUT value="1" /> */
+	Arg* arg = 0;
+
+	for(arg= balise->pArg; arg; arg= arg->pNext)
+	{
+		kdDebug() << "PARAM " << arg->zName << endl;
+		if(strcmp(arg->zName, "VALUE")== 0)
+		{
+			setStrikeout(atoi(arg->zValue));
+			if(isStrikeout())
+				_fileHeader->useUnderline();
+			kdDebug() << "Strikeout ? " << isUnderlined() << endl;
+		}
+	}
+}
+
+/*******************************************/
+/* analyseWeigth                           */
+/*******************************************/
+/* Get the text weigth.                    */
+/*******************************************/
+void TextFormat::analyseWeight(const Markup *balise)
+{
+	/* <WEIGHT value="75" /> */
 	Arg* arg = 0;
 
 	for(arg= balise->pArg; arg; arg= arg->pNext)
@@ -202,10 +272,14 @@ void TextFormat::analyseWeigth(const Markup *balise)
 	}
 }
 
-/* Get the text align */
+/*******************************************/
+/* analyseAlign                            */
+/*******************************************/
+/* Get the text align.                     */
+/*******************************************/
 void TextFormat::analyseAlign(const Markup *balise)
 {
-	//<VERTALIGN name="0">
+	/* <VERTALIGN value="0"> */
 	Arg* arg = 0;
 
 	for(arg= balise->pArg; arg; arg= arg->pNext)
@@ -219,10 +293,14 @@ void TextFormat::analyseAlign(const Markup *balise)
 	}
 }
 
-/* Get the text color */
+/*******************************************/
+/* analyseColor                            */
+/*******************************************/
+/* Get the text color.                     */
+/*******************************************/
 void TextFormat::analyseColor(const Markup *balise)
 {
-	//<COLOR red="0" green="0" blue="0">
+	/* <COLOR red="0" green="0" blue="0"> */
 	Arg* arg   = 0;
 	int  red   = 0, 
 	     blue  = 0,
@@ -247,6 +325,32 @@ void TextFormat::analyseColor(const Markup *balise)
 			blue = atoi(arg->zValue);
 		}
 	}
-	setColor(red, green, blue);
-	_fileHeader->useColor();
+
+	if(!(red == green == blue == 0))
+	{
+		/* black color is default value */
+		setColor(red, green, blue);
+		_fileHeader->useColor();
+	}
+}
+
+/*******************************************/
+/* analyseSize                             */
+/*******************************************/
+/* Get the text size.                      */
+/*******************************************/
+void TextFormat::analyseSize(const Markup *balise)
+{
+	/* <SIZE value="11"> */
+	Arg* arg = 0;
+
+	for(arg= balise->pArg; arg; arg= arg->pNext)
+	{
+		//kdDebug() << "PARAM " << arg->zName << endl;
+		if(strcmp(arg->zName, "VALUE")== 0)
+		{
+			kdDebug() << arg->zName << endl;
+			setSize(atoi(arg->zValue));
+		}
+	}
 }

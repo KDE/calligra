@@ -29,13 +29,18 @@
 
 enum _EType
 {
-	TL_STANDARD,
-	TL_ARABIC,	/* 1, 2, ... */
-	TL_LLETTER,	/* a, b, ... */
-	TL_CLETTER,	/* A, B, ... */
-	TL_LLNUMBER,	/* i, ii, ... */
-	TL_CLNUMBER,	/* I, II, ... */
-	TL_BULLET	/* - */
+	TL_NONE,		/* NONE       */
+	TL_ARABIC,		/* 1, 2, ...  */
+	TL_LLETTER,		/* a, b, ...  */
+	TL_CLETTER,		/* A, B, ...  */
+	TL_LLNUMBER,		/* i, ii, ... */
+	TL_CLNUMBER,		/* I, II, ... */
+	TL_CUSTOM_SIMPLE,	/* */
+	TL_CUSTOM_COMPLEX,	/* */
+	TL_CIRCLE_BULLET,	/* o */
+	TL_SQUARE_BULLET,	/* * */
+	TL_DISC_BULLET		/* o */
+	
 };
 
 enum _EEnv
@@ -71,6 +76,7 @@ class Layout: public TextFormat
 
 		bool    isChapter        () const { return (_numberingType == 1); }
 		bool    isList           () const { return (_numberingType == 0); }
+		bool    isEnum           () const { return (_counterType != TL_NONE); }
 		bool    isLastSame       () const { return (_name == _last_name); }
 		bool    isNextSame       () const { return (_following == _name); }
 		//EType getType          () const { return _type;          }

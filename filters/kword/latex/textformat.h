@@ -45,11 +45,13 @@ class TextFormat: public Format
 	int      _weight;
 	bool     _italic;
 	bool     _underline;
+	bool     _strikeout;
 	EAlign   _vertalign;
 	QColor*  _textcolor;
 
 	public:
-		TextFormat(): _pos(0), _taille(0), _size(11), _weight(0), _italic(false), _underline(false)
+		TextFormat(): _pos(0), _taille(0), _size(11), _weight(0), _italic(false),
+				_underline(false), _strikeout(0)
 		{
 			_textcolor = 0;
 		}
@@ -59,21 +61,23 @@ class TextFormat: public Format
 		int    getLength    () const { return _taille;    }
 		int    getSize      () const { return _size;      }
 		int    getWeight    () const { return _weight;    }
-		bool   isItalic     () const { return _italic;    }
-		bool   isUnderlined () const { return _underline; }
+		bool   isItalic     () const { return (_italic     == true); }
+		bool   isUnderlined () const { return (_underline  == true); }
+		bool   isStrikeout  () const { return (_strikeout  == true); }
 		EAlign getAlign     () const { return _vertalign; }
-		bool   isColor      () const { return (_textcolor!= 0); }
+		bool   isColor      () const { return (_textcolor != 0);     }
 		int    getColorBlue () const;
 		int    getColorGreen() const;
 		int    getColorRed  () const;
 
 		//void setId         (const int id)  { _id        = id;   }
 		void setPos        (const int pos) { _pos       = pos;  }
-		void setTaille     (const int t)   { _taille    = t; }
+		void setLength     (const int t)   { _taille    = t; }
 		void setSize       (const int t)   { _size      = t; }
 		void setWeight     (const int w)   { _weight    = w; }
-		void setItalic     (bool i)  { _italic    = i; }
-		void setUnderlined (bool u)  { _underline = u; }
+		void setItalic     (bool i)        { _italic    = i; }
+		void setUnderlined (bool u)        { _underline = u; }
+		void setStrikeout  (bool s)        { _strikeout = s; }
 		void setPolice     (const char *p) { _police    = p; }
 		void setAlign      (const int a)   { _vertalign = (EAlign) a; }
 		void setColor (const int, const int, const int);
@@ -83,9 +87,11 @@ class TextFormat: public Format
 		void analyseFont      (const Markup*);
 		void analyseItalic    (const Markup*);
 		void analyseUnderlined(const Markup*);
-		void analyseWeigth    (const Markup*);
+		void analyseStrikeout (const Markup*);
+		void analyseWeight    (const Markup*);
 		void analyseAlign     (const Markup*);
 		void analyseColor     (const Markup*);
+		void analyseSize      (const Markup*);
 };
 
 #endif /* __KWORD_TEXTFORMAT_H__ */

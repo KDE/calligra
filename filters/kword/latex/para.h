@@ -28,6 +28,7 @@
 				   variable. */
 #include "layout.h"		/* set of informations about the paragraph style. */
 #include "element.h"		/* to use the father class. */
+//#include "heap.h"		/* to manage a heap. */
 
 enum EP_INFO
 {
@@ -67,6 +68,8 @@ class Para: public Layout
 
 	/* USEFULL DATA */
 	Texte*         _element;	/* Father frame */
+	unsigned int   _currentPos;	/* Begining of the text for use the good format */
+	//Heap           _heapEnum;	/* opened enum but not closed */
 
 	public:
 		/**
@@ -91,11 +94,11 @@ class Para: public Layout
 		/**
 		 * @return true if the paragraph has a colored word.
 		 */
-		bool     isColored    () const;
+		//bool     isColored    () const;
 		/**
 		 * @return true if the paragraph has a underlined word.
 		 */
-		bool     isUlined     () const;
+		//bool     isUlined     () const;
 		Para*    getNext      () const { return _next;      }
 		Para*    getPrevious  () const { return _previous;  }
 		/**
@@ -141,6 +144,7 @@ class Para: public Layout
 		void analyseBrk       (const Markup*);
 		void analyseLayoutPara(const Markup*);
 		void analyseFormat    (const Markup*);
+		void analyseFormats   (const Markup*);
 
 		/**
 		 * If the paragraph is a title, generate the command.

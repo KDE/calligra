@@ -23,21 +23,33 @@
 #include <kdebug.h>		/* for kdDebug() stream */
 #include "texte.h"
 
+/*******************************************/
+/* Constructor                             */
+/*******************************************/
 Texte::Texte()
 {
-	_left      = 0;
-	_right     = 0;
-	_top       = 0;
-	_bottom    = 0;
-	_runaround = false;
-	_footnotes = 0;
+	_left              = 0;
+	_right             = 0;
+	_top               = 0;
+	_bottom            = 0;
+	_runaround         = TA_NONE;
+	_runaroundGap      = 0;
+	_autoCreate        = TC_EXTEND;
+	_newFrameBehaviour = TF_RECONNECT;
+	_sheetSide         = TS_ANYSIDE;
+	_footnotes         = 0;
 
-	setType(ST_TEXTE);
+	setType(ST_TEXT);
 	setSection(SS_BODY);
 }
 
-/* Return TRUE if there is at least one parag. which use color */
-bool Texte::hasColor()
+/*******************************************/
+/* hasColor                                */
+/*******************************************/
+/* Return TRUE if there is at least one    */
+/* parag. which use color.                 */
+/*******************************************/
+/*bool Texte::hasColor() const
 {
 	bool color;
 	ParaIter iter;
@@ -52,10 +64,15 @@ bool Texte::hasColor()
 		iter.next();
 	}
 	return color;
-}
+}*/
 
-/* Return TRUE if there is at least one parag. which use underline */
-bool Texte::hasUline()
+/*******************************************/
+/* hasUline                                */
+/*******************************************/
+/* Return TRUE if there is at least one    */
+/* parag. which use underline.             */
+/*******************************************/
+/*bool Texte::hasUline() const
 {
 	bool uline;
 	ParaIter iter;
@@ -69,8 +86,11 @@ bool Texte::hasUline()
 		iter.next();
 	}
 	return uline;
-}
+}*/
 
+/*******************************************/
+/* searchFootnote                          */
+/*******************************************/
 Para* Texte::searchFootnote(const QString name)
 {
 	ParaIter iter;
@@ -90,6 +110,9 @@ Para* Texte::searchFootnote(const QString name)
 	return 0;
 }
 
+/*******************************************/
+/* analyse                                 */
+/*******************************************/
 void Texte::analyse(const Markup * balise_initiale)
 {
 	Token* savedToken = 0;
@@ -100,7 +123,7 @@ void Texte::analyse(const Markup * balise_initiale)
 	/* Parameters Analyse */
 	Element::analyse(balise_initiale);
 
-	kdDebug() << "ANALYSE D'UNE FRAME (Texte)" << endl;
+	kdDebug() << "FRAME ANALYSE (Texte)" << endl;
 
 	/* Chlidren markups Analyse */
 	savedToken = enterTokenChild(balise_initiale);
@@ -135,6 +158,9 @@ void Texte::analyse(const Markup * balise_initiale)
 	kdDebug() << "END OF A FRAME" << endl;
 }
 
+/*******************************************/
+/* analyseParamFrame                       */
+/*******************************************/
 void Texte::analyseParamFrame(const Markup *balise)
 {
 	/*<FRAME left="28" top="42" right="566" bottom="798" runaround="1" />*/
@@ -159,9 +185,32 @@ void Texte::analyseParamFrame(const Markup *balise)
 		{
 			_bottom = atoi(arg->zValue);
 		}
+		else if(strcmp(arg->zName, "RUNAROUND")== 0)
+		{
+			setRunAround(atoi(arg->zValue));
+		}
+		else if(strcmp(arg->zName, "RUNAROUNDGAP")== 0)
+		{
+			setAroundGap(atoi(arg->zValue));
+		}
+		else if(strcmp(arg->zName, "AUTOCREATENEWFRAME")== 0)
+		{
+			setAutoCreate(atoi(arg->zValue));
+		}
+		else if(strcmp(arg->zName, "NEWFRAMEBEHAVIOUR")== 0)
+		{
+			setNewFrame(atoi(arg->zValue));
+		}
+		else if(strcmp(arg->zName, "SHEETSIDE")== 0)
+		{
+			setSheetSide(atoi(arg->zValue));
+		}
 	}
 }
 
+/*******************************************/
+/* generate                                */
+/*******************************************/
 void Texte::generate(QTextStream &out)
 {
 	ParaIter iter;

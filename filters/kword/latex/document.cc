@@ -19,6 +19,8 @@
 **
 */
 
+#include <stdlib.h>		/* for atoi function    */
+
 #include <kdebug.h>
 
 #include "document.h"
@@ -57,26 +59,29 @@ void Document::analyse(const Markup * balise_initiale)
 			kdDebug() <<"ANALYSE OF A FRAMESET" << endl;
 			switch(getTypeFrameset(balise))
 			{
-				case ST_AUCUN: 
+				case ST_NONE: 
 					kdDebug() << "NONE" << endl;
 					break;
-				case ST_IMAGE:
-					kdDebug() << "PICTURE" << endl;
-					// elt = new Image;
-					// elt->analyse(balise);
-					break;
-				case ST_TEXTE: 
+				case ST_TEXT: 
 					kdDebug() << "TEXT" << endl;
 					elt = new Texte;
 					elt->analyse(balise);
 					break;
-				case ST_PARTS:
+				case ST_PICTURE:
+					kdDebug() << "PICTURE" << endl;
+					// elt = new Image;
+					// elt->analyse(balise);
+					break;
+				case ST_PART:
+					break;
+				case ST_FORMULA:
 					break;
 				default:
-					kdDebug() << "error " << elt->getType() << " " << ST_TEXTE << endl;
+					kdDebug() << "error " << elt->getType() << " " << ST_TEXT << endl;
 			}
 			
 			/* 3. Add the Element in one of the lists */
+			/* ATTENTION : IF it's a table add the frame in a special list */
 			kdDebug() << "INFO : " << elt->getSection();
 			switch(elt->getSection())
 			{
@@ -105,7 +110,7 @@ void Document::analyse(const Markup * balise_initiale)
 SType Document::getTypeFrameset(const Markup *balise)
 {
 	Arg*  arg  = 0;
-	SType type = ST_AUCUN;
+	SType type = ST_NONE;
 
 	for(arg= balise->pArg; arg!= 0; arg= arg->pNext)
 	{
@@ -113,8 +118,23 @@ SType Document::getTypeFrameset(const Markup *balise)
 		if(strcmp(arg->zName, "FRAMETYPE")== 0)
 		{
 			// A FINIR
-			kdDebug() << "TYPE : TEXT" << endl;
-			type = ST_TEXTE;
+			kdDebug() << "TYPE : " << arg->zValue<< endl;
+			switch(atoi(arg->zValue))
+			{
+				case 0: type = ST_NONE;
+					break;
+				case 1: type = ST_TEXT;
+					break;
+				case 2: type = ST_PICTURE;
+					break;
+				case 3: type = ST_PART;
+					break;
+				case 4: type = ST_FORMULA;
+					break;
+				default:
+					type = ST_NONE;
+					kdDebug() << "error : frameinfo unknown!" << endl;
+			}
 		}
 	}
 	kdDebug() << "END TYPE" << endl;
@@ -157,8 +177,13 @@ void Document::generate(QTextStream &out)
 			iter2.next();
 		}
 	}
+	/* Specify what header/footer style to use */
 	if(getFileHeader()->hasHeader() || getFileHeader()->hasFooter())
 		out << "\\pagestyle{fancy}" << endl;
+	else
+	{
+		out << "\\pagestyle{empty}" << endl;
+	}
 
 	/* Body */
 	kdDebug() << endl << "body : " << _corps.getSize() << endl;
@@ -175,13 +200,14 @@ void Document::generate(QTextStream &out)
 void Document::generateTypeHeader(QTextStream &out, Element *header)
 {
 	kdDebug() << "generate header" << endl;
-	if(_fileHeader->getHeadType() == TH_ALL && header->getInfo() == SI_EVEN)
+	if((_fileHeader->getHeadType() == TH_ALL ||
+		_fileHeader->getHeadType() == TH_FIRST) && header->getInfo() == SI_EVEN)
 	{
-		out << "\\lhead{}" << endl;
-		out << "\\chead{";
+		out << "\\fancyhead[L]{}" << endl;
+		out << "\\fancyhead[C]{";
 		header->generate(out);
 		out << "}" << endl;
-		out << "\\rhead{}" << endl;
+		out << "\\fancyhead[R]{}" << endl;
 	}
 	if(_fileHeader->getHeadType() == TH_EVODD)
 	{
@@ -212,7 +238,7 @@ void Document::generateTypeHeader(QTextStream &out, Element *header)
 		out << "\\markright{";
 		header->generate(out);
 		out << "}" << endl;
-		out << "\\thispagestyle{fancy}" << endl;
+		out << "\\thispagestyle{myheadings}" << endl;
 	}
 }
 
@@ -223,11 +249,11 @@ void Document::generateTypeFooter(QTextStream &out, Element *footer)
 {
 	if(_fileHeader->getFootType() == TH_ALL && footer->getInfo() == SI_EVEN)
 	{
-		out << "\\lfoot{}" << endl;
-		out << "\\cfoot{";
+		out << "\\fancyfoot[L]{}" << endl;
+		out << "\\fancyfoot[C]{";
 		footer->generate(out);
 		out << "}" << endl;
-		out << "\\rfoot{}" << endl;
+		out << "\\fancyfoot[R]{}" << endl;
 	}
 	else if(_fileHeader->getFootType() == TH_EVODD)
 	{

@@ -67,6 +67,12 @@ enum THeadfoot
 	TH_EVODD
 };
 
+enum TProcType
+{
+	TP_NORMAL,
+	TP_DTP
+};
+
 /***********************************************************************/
 /* Class: FileHeader                                                   */
 /***********************************************************************/
@@ -80,21 +86,23 @@ class FileHeader: public XmlParser
 {
 	/* PAPER */
 	TFormat   _format;
-	double    _width[4],
-		  _height[4];
+	double    _width,
+		  _height;
 	TOrient   _orientation;
 	TColonne  _colonne;
-	double    _columnSpc[4];
+	double    _columnSpacing;
 	THeadfoot _headType;
 	THeadfoot _footType;
-	double    _footBody[4];
-	double    _headBody[4];
+	TProcType _processing;
+	int       _standardPage;
+	double    _footBody;
+	double    _headBody;
 
 	/* PAPERBORDERS */
-	double    _leftBorder[4],
-		  _rightBorder[4],
-		  _bottomBorder[4],
-		  _topBorder[4];
+	double    _leftBorder,
+		  _rightBorder,
+		  _bottomBorder,
+		  _topBorder;
 
 	/* ATTRIBUTES */
 	TUnit    _unite;
@@ -108,6 +116,7 @@ class FileHeader: public XmlParser
 	bool     _hasColor;
 	bool     _hasUnderline;
 	bool     _hasEnumerate;
+	bool     _hasGraphics;
 	
 	public:
 		/**
@@ -123,17 +132,20 @@ class FileHeader: public XmlParser
 		/**
 		 * Accessors
 		 */
-		TFormat   getFormat     () const { return _format;      }
-		TOrient   getOrientation() const { return _orientation; }
-		TColonne  getColumns    () const { return _colonne;     }
-		THeadfoot getHeadType   () const { return _headType;    }
-		THeadfoot getFootType   () const { return _footType;    }
-		TUnit     getUnit       () const { return _unite;       }
-		bool      hasHeader     () const { return _hasHeader;   }
-		bool      hasFooter     () const { return _hasFooter;   }
-		bool      hasColor      () const { return _hasColor;    }
-		bool      hasUnderline  () const { return _hasUnderline;}
-		bool      hasEnumerate  () const { return _hasEnumerate;}
+		TFormat   getFormat     () const { return _format;       }
+		TOrient   getOrientation() const { return _orientation;  }
+		TColonne  getColumns    () const { return _colonne;      }
+		THeadfoot getHeadType   () const { return _headType;     }
+		THeadfoot getFootType   () const { return _footType;     }
+		TUnit     getUnit       () const { return _unite;        }
+		TProcType getProcessing () const { return _processing;   }
+		int       getStandardPge() const { return _standardPage; }
+		bool      hasHeader     () const { return _hasHeader;    }
+		bool      hasFooter     () const { return _hasFooter;    }
+		bool      hasColor      () const { return _hasColor;     }
+		bool      hasUnderline  () const { return _hasUnderline; }
+		bool      hasEnumerate  () const { return _hasEnumerate; }
+		bool      hasGraphics   () const { return _hasGraphics;  }
 
 		/**
 		 * Modifiors
@@ -145,11 +157,14 @@ class FileHeader: public XmlParser
 		void setColumns    (TColonne c) { _colonne      = c;              }
 		void setColumns    (int c)      { _colonne      = (TColonne) c;   }
 		void setUnit       (int u)      { _unite        = (TUnit) u;      }
+		void setProcessing (int p)      { _processing   = (TProcType) p;  }
+		void setStandardPge(int s)      { _standardPage = s;              }
 		void setHeadType   (int ht)     { _headType     = (THeadfoot) ht; }
 		void setFootType   (int ft)     { _footType     = (THeadfoot) ft; }
 		void useColor      ()           { _hasColor     = true;           }
 		void useUnderline  ()           { _hasUnderline = true;           }
 		void useEnumerate  ()           { _hasEnumerate = true;           }
+		void useGraphics   ()           { _hasGraphics  = true;           }
 
 		void analysePaper     (const Markup *);
 		void analyseAttributs (const Markup *);

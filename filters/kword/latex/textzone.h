@@ -43,6 +43,7 @@ class TextZone: public TextFormat
 		/* Specify if the text must be formated */
 		bool useFormat() const;
 		QString getTexte() const { return _texte; }
+
 		void setTexte(QString texte) { _texte = texte; }
 		//void setPara(Para* para) { _para = para; }
 		QString escapeLatin1(QString);

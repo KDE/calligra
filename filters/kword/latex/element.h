@@ -28,10 +28,11 @@
 
 enum SType
 {
-	ST_AUCUN,
-	ST_IMAGE,
-	ST_TEXTE,
-	ST_PARTS
+	ST_NONE,
+	ST_TEXT,
+	ST_PICTURE,
+	ST_PART,
+	ST_FORMULA
 };
 
 enum SSect
@@ -67,18 +68,22 @@ class Element: public XmlParser
 
 		virtual ~Element();
 
-		virtual bool  hasColor() = 0;
-		virtual bool  hasUline() = 0;
+		/*virtual bool  hasColor() const = 0;
+		virtual bool  hasUline() const = 0;*/
 		
-		SSect    getSection() const { return _section; }
-		SType    getType()    const { return _type;    }
-		SInfo    getInfo()    const { return _hinfo;   }
-		Element* getNext()    const { return _suivant; }
+		SSect    getSection()  const { return _section;   }
+		SType    getType()     const { return _type;      }
+		SInfo    getInfo()     const { return _hinfo;     }
+		Element* getNext()     const { return _suivant;   }
+		bool     isVisible()   const { return _visible;   }
+		bool     isRemovable() const { return _removable; }
 		
-		void setType(SType t)       { _type    = t;    }
-		void setSection(SSect s)    { _section = s;    }
-		void setNext(Element *elt)  { _suivant = elt;  }
-		
+		void setType(SType t)       { _type      = t;   }
+		void setSection(SSect s)    { _section   = s;   }
+		void setNext(Element *elt)  { _suivant   = elt; }
+		void setVisible(bool v)     { _visible   = v;   }
+		void setRemovable(bool r)   { _removable = r;   }
+
 		virtual void analyse(const Markup*);
 		virtual void generate(QTextStream&) = 0;
 

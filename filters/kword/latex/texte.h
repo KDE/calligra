@@ -26,6 +26,34 @@
 #include "element.h"
 #include "listepara.h"
 
+enum TAround
+{
+	TA_NONE,
+	TA_FRAME,
+	TA_TEXT
+};
+
+enum TCreate
+{
+	TC_EXTEND,
+	TC_CREATE,
+	TC_IGNORE
+};
+
+enum TNFrame
+{
+	TF_RECONNECT,
+	TF_NOCREATION,
+	TF_COPY
+};
+
+enum TSide
+{
+	TS_ANYSIDE,
+	TS_ODDPAGE,
+	TS_EVENPAGE
+};
+
 class Texte: public Element
 {
 	/* DATA MARKUP */
@@ -33,7 +61,11 @@ class Texte: public Element
 		 _top,
 		 _right,
 		 _bottom;
-	bool     _runaround;
+	TAround  _runaround;
+	double   _runaroundGap;
+	TCreate _autoCreate;
+	TNFrame _newFrameBehaviour;
+	TSide   _sheetSide;
 
 	/* CHILD MARKUP */
 	ListPara  _parags;
@@ -44,9 +76,20 @@ class Texte: public Element
 		virtual ~Texte() {
 			kdDebug() << "Destruction of a txt" << endl; }
 		
-		bool  hasColor();
-		bool  hasUline();
-		
+		/*bool    hasColor      () const;
+		bool    hasUline      () const;*/
+		TAround getRunAround  () const { return _runaround;         }
+		double  getAroundGap  () const { return _runaroundGap;      }
+		TCreate getAutoCreate () const { return _autoCreate;        }
+		TNFrame getNewFrame   () const { return _newFrameBehaviour; }
+		TSide   getSheetSide  () const { return _sheetSide;         }
+
+		void setRunAround (const int a)    { _runaround = (TAround) a;  }
+		void setAroundGap (const double r) { _runaroundGap = r;         }
+		void setAutoCreate(const int a)    { _autoCreate = (TCreate) a; }
+		void setNewFrame  (const int n)    { _newFrameBehaviour = (TNFrame) n; }
+		void setSheetSide (const int s)    { _sheetSide = (TSide) s;    }
+
 		Para* searchFootnote(const QString);
 	
 		void analyse(const Markup*);
