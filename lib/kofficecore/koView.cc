@@ -56,10 +56,11 @@ public:
 };
 
 KoView::KoView( KoDocument *document, QWidget *parent, const char *name )
- : QWidget( parent, name ), PartBase( this )
+ : QWidget( parent, name )
 {
   d = new KoViewPrivate;
   d->m_doc = document;
+  PartBase::setObject( this );
 
   setFocusPolicy( StrongFocus );
 
