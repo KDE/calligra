@@ -549,6 +549,7 @@ don't put a </?xml...> at the end of the file!).
                 The text that is printed left of the first numeral
         righttext
                 The text that is printed right of the last numeral
+                A usual value for this one is ". " (dot space), for instance.
 
         bullet  The character code (in UTF-8) that is the custom bullet (for type=6)
         bulletfont
