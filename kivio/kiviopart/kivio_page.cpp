@@ -967,7 +967,7 @@ void KivioPage::cut()
     }
     if( safe==false )
     {
-       KMessageBox::information(NULL, i18n("One of the stencils has protection from deletion.  You cannot cut or delete this stencil."), i18n("Protection From Delete") );
+       KMessageBox::information(NULL, i18n("One of the stencils has protection from deletion. You cannot cut or delete this stencil."), i18n("Protection From Delete") );
 
        return;
     }

@@ -119,7 +119,7 @@
             <property>
                 <name>whatsThis</name>
                 <string>&lt;b&gt;All Stencils&lt;/b&gt;&lt;br&gt;
-This will cause the entire page to be exported to the file.  This means that &lt;i&gt;all&lt;/i&gt; stencils will be exported.</string>
+This will cause the entire page to be exported to the file. This means that &lt;i&gt;all&lt;/i&gt; stencils will be exported.</string>
             </property>
         </widget>
         <widget>
@@ -181,7 +181,7 @@ Export only the selected stencils to file.</string>
             <property>
                 <name>whatsThis</name>
                 <string>&lt;b&gt;Crop picture to edges&lt;/b&gt;&lt;br&gt;
-This will eliminate all blank portions of the drawing.  The picture will only be as large as the stencils it contains.  If your stencils are located in the upper right corner of the page, then only the upper right corner will be exported.</string>
+This will eliminate all blank portions of the drawing. The picture will only be as large as the stencils it contains. If your stencils are located in the upper right corner of the page, then only the upper right corner will be exported.</string>
             </property>
         </widget>
     </widget>
@@ -215,7 +215,7 @@ This will eliminate all blank portions of the drawing.  The picture will only be
         <property>
             <name>whatsThis</name>
             <string>&lt;b&gt;Quality&lt;/b&gt;&lt;br&gt;
-Not all file formats use this.  But for those that do, this affects the quality of the image that gets exported.  100 is the maximum quality.  The higher the number, the better the picture looks.  The downside is the higher the number, the larger the filesize.</string>
+Not all file formats use this. But for those that do, this affects the quality of the image that gets exported. 100 is the maximum quality. The higher the number, the better the picture looks. The downside is the higher the number, the larger the filesize.</string>
         </property>
     </widget>
     <widget>
@@ -244,7 +244,7 @@ Not all file formats use this.  But for those that do, this affects the quality 
         <property>
             <name>whatsThis</name>
             <string>&lt;b&gt;Border&lt;/b&gt;&lt;br&gt;
-Places a blank border around the edges of the image.  This can be used if for one reason or another, the stencils don't fit into the export page with a 0-pixel border (default).</string>
+Places a blank border around the edges of the image. This can be used if for one reason or another, the stencils don't fit into the export page with a 0-pixel border (default).</string>
         </property>
     </widget>
     <widget>
