@@ -691,14 +691,14 @@ void KFormulaView::addMatrix()
 
 void KFormulaView::addIntegral()
 {
-    debug("##adding Integral");
-    m_pDoc->addMatrixElement("MCL004003001006NNNNNN");
+    debug("adding Integral");
+    m_pDoc->addPrefixedElement("IS000");
 }
 
 void KFormulaView::addSymbol()
 {
     debug("##adding Symbol");
-    m_pDoc->addMatrixElement("MCR004003001006NNNNNN");
+    m_pDoc->addPrefixedElement("IF050");
 }
 
 void KFormulaView::reduce()

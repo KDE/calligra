@@ -6,6 +6,7 @@
 #include "RootElement.h"
 #include "BracketElement.h"
 #include "MatrixElement.h"
+#include "PrefixedElement.h"
 
 #include <koIMR.h>
 #include <komlMime.h>
@@ -25,7 +26,7 @@
 
 #include <component_impl.h>
 
-#define FIXEDSPACE 1             // Space between 2 blocks
+//#define FIXEDSPACE 1             // Space between 2 blocks
 
 KFormulaDocument::KFormulaDocument()
 {
@@ -146,6 +147,34 @@ void KFormulaDocument::addRootElement()
     }
     setActiveElement(newElement);  
     //RootElement need a child[0] i.e. root content
+    newElement = new BasicElement(this,theActiveElement,4);
+    theActiveElement->setChild(newElement,0);
+    setActiveElement(newElement); //I prefere to AutoActivate RootContent 
+    emitModified();
+}
+
+void KFormulaDocument::addPrefixedElement(QString cont)
+{   
+    BasicElement *newElement;
+    if(theActiveElement==0L)
+	setActiveElement(theFirstElement);
+  
+    //If current Element is a Basic, change it into a Prefixed
+    if (typeid(*theActiveElement) == typeid(BasicElement)) {
+	warning("substitueted");
+	newElement = new PrefixedElement(this);
+	theActiveElement->substituteElement(newElement);
+	delete theActiveElement;
+	theActiveElement = 0;
+    } else {
+	BasicElement *nextElement=theActiveElement->getNext();
+	if(nextElement!=0L){       //If there's a next insert root before next
+	    nextElement->insertElement(newElement=new PrefixedElement(this));
+	} else  //If there isn't a next append only.
+	    activeElement()->setNext(newElement=new PrefixedElement(this,theActiveElement));
+    }
+    setActiveElement(newElement);  
+    theActiveElement->setContent(cont);
     newElement = new BasicElement(this,theActiveElement,4);
     theActiveElement->setChild(newElement,0);
     setActiveElement(newElement); //I prefere to AutoActivate RootContent 

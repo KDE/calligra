@@ -91,11 +91,11 @@ class KFormulaDocument : public QObject,
     void addTextElement();
     void addRootElement();
     void addIndex(int index);
-    void addFractionElement(QString cont);
-    
+    void addFractionElement(QString cont);    
     void addMatrixElement(QString cont);
-    /*void addIntegralElement();
-
+    void addPrefixedElement(QString cont);
+    
+    /*
       void addSymbolElement();
       void addDecorationElement();
     */    void addBracketElement(QString cont);
