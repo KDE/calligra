@@ -38,7 +38,10 @@ class KEXI_DB_EXPORT Cursor
 		virtual ~Cursor();
 		/*! \return connection used for the cursor */
 		Connection* connection() { return m_conn; }
-		/*! Opens the cursor using \a statement */
+		/*! Opens the cursor using \a statement. 
+		 Omit \a statement if cursor is already initialized with statement 
+		 at creation time. If \a statement is not empty, existing statement
+		 (if any) is overwritten. */
 		bool open( const QString& statement = QString::null );
 		/*! Closes previously opened cursor. 
 			If the cursor is closed, nothing happens. */
@@ -49,8 +52,12 @@ class KEXI_DB_EXPORT Cursor
 		virtual bool moveLast();
 		/*! Moves current position to the next record and retrieves it. */
 		virtual bool moveNext();
+		/*! Moves current position to the next record and retrieves it. */
+		virtual bool movePrev();
 		/*! \return true if current position is after last record. */
 		bool eof();
+		/*! \return true if current position is before first record. */
+		bool bof();
 		/*! \return current internal position of the query. */
 		int at();
 		QString statement() { return m_statement; }
@@ -58,7 +65,8 @@ class KEXI_DB_EXPORT Cursor
 		/*! Closes and then opens again the same cursor. 
 			Cursor must be opened before calling this method. */
 		bool reopen();
-
+		/*! \return number of fields available for this cursor. */
+		int fieldCount() { return m_fieldCount; }
 		virtual QVariant value(int i) = 0;
 
 	protected:
@@ -66,20 +74,22 @@ class KEXI_DB_EXPORT Cursor
 		Cursor(Connection* conn, const QString& statement = QString::null );
 		virtual bool drv_open() = 0;
 		virtual bool drv_close() = 0;
-		virtual bool drv_moveFirst() = 0;
-		virtual bool drv_getRecord() = 0;
+//		virtual bool drv_moveFirst() = 0;
+		virtual bool drv_getNextRecord() = 0;
+		virtual bool drv_getPrevRecord() = 0;
 
 		Connection *m_conn;
 //		CursorData *m_data;
 		QString m_statement;
 		bool m_opened;
-//		bool m_beforeFirst;
+		bool m_beforeFirst;
 		bool m_atLast;
 		bool m_afterLast;
 //		bool m_atLast;
 		bool m_validRecord; //! true if valid record is currently retrieved @ current position
 		bool m_readAhead;
 		int m_at;
+		int m_fieldCount;
 	private:
 		class Private;
 		Private *d;

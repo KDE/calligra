@@ -58,8 +58,9 @@ class KEXIDB_SQLITE_DRIVER_EXPORT SQLiteCursor : public Cursor
 		SQLiteCursor(Connection* conn, const QString& statement = QString::null );
 		virtual bool drv_open();
 		virtual bool drv_close();
-		virtual bool drv_moveFirst();
-		virtual bool drv_getRecord();
+//		virtual bool drv_moveFirst();
+		virtual bool drv_getNextRecord();
+		virtual bool drv_getPrevRecord();
 
 		virtual void drv_storeCurrentRecord();
 

@@ -99,18 +99,18 @@ bool SQLiteCursor::drv_close()
 	return true;
 }
 
-//! nothing to do
-bool SQLiteCursor::drv_moveFirst()
-{
-	return true;
-}
+////! nothing to do
+//bool SQLiteCursor::drv_moveFirst()
+//{
+//	return true;
+//}
 
-bool SQLiteCursor::drv_getRecord()
+bool SQLiteCursor::drv_getNextRecord()
 {
 //  const char *dd = m_data->curr_coldata ? m_data->curr_coldata[0] : 0;
 
 	int res;
-	if (!m_readAhead) {
+	if (!m_readAhead) {//we have no record that was read ahead
 		res = sqlite_step(
 			m_data->vm,
 			&m_data->curr_cols,
@@ -129,7 +129,7 @@ bool SQLiteCursor::drv_getRecord()
 			return false;
 		}
 	}
-	else
+	else //we have a record that was read ahead: eat this
 		m_readAhead = false;
 
 	m_at++;
@@ -141,6 +141,14 @@ bool SQLiteCursor::drv_getRecord()
 	kdDebug()<<"m_at == "<<m_at<<endl;
 	m_validRecord = true;
 	return true;
+}
+
+bool SQLiteCursor::drv_getPrevRecord()
+{
+#ifndef Q_WS_WIN
+#warning todo
+#endif
+	return false;//rm this
 }
 
 

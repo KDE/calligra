@@ -36,9 +36,15 @@ Cursor::Cursor(Connection* conn, const QString& statement)
 	, m_afterLast(false)
 	, m_readAhead(false)
 	, m_at(0)
+	, m_fieldCount(0)//do not know
 {
 	assert(m_conn);
 	m_conn->m_cursors.insert(this,this);
+#ifndef Q_WS_WIN
+#warning TODO
+#endif
+//TODO(js) if the statement is not empty update m_fieldCount
+// (change this when KexiDB::Query will be used here)
 }
 
 Cursor::~Cursor()
@@ -54,16 +60,23 @@ bool Cursor::open( const QString& statement )
 		if (!close())
 			return false;
 	}
-	if (!statement.isEmpty())
+	if (!statement.isEmpty()) {
 		m_statement = statement;
+#ifndef Q_WS_WIN
+#warning TODO
+#endif
+//TODO(js) if the statement is not empty update m_fieldCount
+// (change this when KexiDB::Query will be used here)
+	}
 	m_opened = drv_open();
 //	m_beforeFirst = true;
 	m_afterLast = false;
 	m_at = 0;
 	if (!m_opened)
 		return false;
-	m_readAhead = drv_getRecord();
-	m_afterLast = !m_readAhead;
+	m_readAhead = drv_getNextRecord();
+	m_afterLast = !m_readAhead; //we are after last if there is no record
+	m_beforeFirst = !m_readAhead; //we are before first if there is no record
 //	m_validRecord = false; //no record retrieved
 	return true;
 }
@@ -106,6 +119,7 @@ bool Cursor::moveFirst()
 //		m_beforeFirst = false;
 		m_afterLast = false;
 		m_readAhead = false; //1st record had been read
+		m_beforeFirst = false;
 //	}
 	return m_validRecord;
 }
@@ -120,14 +134,15 @@ bool Cursor::moveLast()
 //		if (!reopen())
 //			return false;
 //	}
-	if (!drv_getRecord()) { //at least next record must be retrieved
+	if (!drv_getNextRecord()) { //at least next record must be retrieved
 //		m_beforeFirst = false;
 		m_afterLast = true;
 		m_validRecord = false;
 		m_atLast = false;
+		m_beforeFirst = false;
 		return false; //no records
 	}
-	while (drv_getRecord()) //move after last rec.
+	while (drv_getNextRecord()) //move after last rec.
 		;
 //	m_beforeFirst = false;
 	m_afterLast = false;
@@ -155,11 +170,19 @@ bool Cursor::moveNext()
 {
 	if (!m_opened || m_afterLast)
 		return false;
-	if (drv_getRecord()) {
+	if (drv_getNextRecord()) {
 //		m_validRecord = true;
 		return true;
 	}
 	return false;
+}
+
+bool Cursor::movePrev()
+{
+#ifndef Q_WS_WIN
+#warning todo
+#endif
+	return false;//rm this
 }
 
 /*
@@ -200,6 +223,14 @@ bool moveNext()
 bool Cursor::eof()
 {
 	return m_afterLast;
+}
+
+bool Cursor::bof()
+{
+#ifndef Q_WS_WIN
+#warning todo
+#endif
+	return false;//rm this
 }
 
 int Cursor::at()
