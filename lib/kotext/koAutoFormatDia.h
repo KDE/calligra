@@ -112,6 +112,8 @@ protected:
 
     QPushButton *pbSimpleQuote1, *pbSimpleQuote2, *pbSimpleDefault;
 
+    QPushButton *pbRemoveCompletionEntry;
+
     KCharSelect *charselect;
     KoAutoFormatLineEdit *m_find, *m_replace;
     KListView *m_pListView;
@@ -152,6 +154,9 @@ protected slots:
     void slotAddEntry();
     void chooseBulletStyle();
     void defaultBulletStyle();
+
+    void slotRemoveCompletionEntry();
+
 };
 #endif
 

@@ -214,6 +214,10 @@ public:
     QStringList listTwoUpperLetterException() {return twoUpperLetterException;}
 
     QStringList listCompletion();
+
+    KCompletion *getCompletion() { return m_listCompletion; }
+
+
     // Read/save config ( into kwordrc )
     void readConfig();
     void saveConfig();

@@ -348,9 +348,6 @@ void KoAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KoTextParag *parag
 
         QString word=getWordAfterSpace(parag,index);
 
-        if( m_listCompletion->items().count() < m_nbMaxCompletionWord && word.length()>= m_minCompletionWordLength )
-            m_listCompletion->addItem( word );
-
         if ( m_autoChangeFormat && index > 3)
         {
             doAutoChangeFormat( textEditCursor, parag,index, word, txtObj );
@@ -381,6 +378,9 @@ void KoAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KoTextParag *parag
     if ( ( ch.isSpace() || ch.isPunct() ) && index > 0 )
     {
         QString lastWord = getLastWord(parag, index);
+        if( m_listCompletion->items().count() < m_nbMaxCompletionWord && lastWord.length()>= m_minCompletionWordLength )
+            m_listCompletion->addItem( lastWord );
+
         detectStartOfLink(lastWord);
         //kdDebug() << "KoAutoFormat::doAutoFormat lastWord=" << lastWord << endl;
         if ( !doAutoCorrect( textEditCursor, parag, index, txtObj ) )

@@ -35,6 +35,7 @@
 #include <qspinbox.h>
 #include <kdebug.h>
 #include <knuminput.h>
+#include <kcompletion.h>
 
 KoAutoFormatLineEdit::KoAutoFormatLineEdit ( QWidget * parent, const char * name )
     : QLineEdit(parent,name)
@@ -407,6 +408,11 @@ void KoAutoFormatDia::setupTab5()
     m_listCompletion = new QListBox( tab5 );
     m_listCompletion->insertStringList(m_autoFormat.listCompletion());
 
+
+    pbRemoveCompletionEntry = new QPushButton(i18n( "Remove Completion Entry"), tab5  );
+    connect( pbRemoveCompletionEntry, SIGNAL( clicked() ), this, SLOT( slotRemoveCompletionEntry()));
+
+
     QLabel *lab=new QLabel( i18n("Min. word length:"), tab5);
     lab->resize( lab->sizeHint() );
 
@@ -431,6 +437,15 @@ void KoAutoFormatDia::setupTab5()
 
 }
 
+void KoAutoFormatDia::slotRemoveCompletionEntry()
+{
+    QString text = m_listCompletion->currentText();
+    if( !text.isEmpty() )
+    {
+        m_autoFormat.getCompletion()->removeItem( text );
+        m_listCompletion->removeItem( m_listCompletion->currentItem () );
+    }
+}
 
 void KoAutoFormatDia::slotRemoveEntry()
 {
