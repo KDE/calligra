@@ -17,18 +17,16 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <koMainWindow.h>
-#include <koDocument.h>
-#include <koView.h>
-#include <koFilterManager.h>
-#include <koDocumentInfo.h>
-#include <koDocumentInfoDlg.h>
-#include <koQueryTrader.h>
+#include "koMainWindow.h"
+#include "koDocument.h"
+#include "koView.h"
+#include "koFilterManager.h"
+#include "koDocumentInfo.h"
+#include "koDocumentInfoDlg.h"
+#include "koQueryTrader.h"
 #include "KoMainWindowIface.h"
 
 #include <kprinter.h>
-#include <qobjectlist.h>
-
 #include <kdeversion.h>
 #include <kstdaction.h>
 #include <kapplication.h>
@@ -42,24 +40,20 @@
 #include <kprogress.h>
 #include <kpushbutton.h>
 #include <kdebug.h>
-#if ! KDE_IS_VERSION( 3,1,90 )
-#include <kdebugclasses.h>
-#endif
 #include <ktempfile.h>
 #include <krecentdocument.h>
 #include <kparts/partmanager.h>
 #include <kparts/plugin.h>
 #include <kparts/event.h>
-
-#include <unistd.h>
-#include <stdlib.h>
 #include <klocale.h>
 #include <kstatusbar.h>
 #include <kdiroperator.h>
+#include <kglobalsettings.h>
 
-#if KDE_IS_VERSION(3,1,90)
-# include <kglobalsettings.h>
-#endif
+#include <qobjectlist.h>
+
+#include <unistd.h>
+#include <stdlib.h>
 
 class KoPartManager : public KParts::PartManager
 {
