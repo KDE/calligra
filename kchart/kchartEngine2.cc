@@ -16,6 +16,7 @@
 #include <math.h>
 #include <kdebug.h>
 #include <kpixmapeffect.h>
+#include <kstaticdeleter.h>
 
 void KChartEngine::drawAnnotation() {
   int x1 = PX(params->annotation->point+(params->do_bar()?1:0));
@@ -178,12 +179,15 @@ void KChartEngine::drawThumbnails() {
 #endif
 }
 
+namespace FunkyKChartDeleter {
+static KStaticDeleter<KPixmap> sd;
+};
 
 void KChartEngine::drawBackgroundImage()
 {
     static KPixmap *backpix=0L;
     if(backpix==0L)
-        backpix=new KPixmap();
+        backpix=FunkyKChartDeleter::sd.setObject(new KPixmap);
 
   if( params->backgroundPixmap.isNull() ) {
         return;
