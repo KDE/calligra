@@ -21,7 +21,6 @@
 #define __VSELECTNODESTOOL_H__
 
 #include "vtool.h"
-#include "vselection.h"
 
 class VSelectNodesTool : public VTool
 {

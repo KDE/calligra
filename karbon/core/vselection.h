@@ -33,6 +33,7 @@ class KoPoint;
 class QObject;
 class VPainter;
 class VVisitor;
+class VSegment;
 
 typedef QPtrList<VObject> VObjectList;
 typedef QPtrListIterator<VObject> VObjectListIterator;
@@ -111,7 +112,7 @@ public:
 	const VObjectList& objects() const { return m_objects; }
 
 
-	bool pathNode( const KoRect& rect );
+	QPtrList<VSegment> getSegments( const KoRect& rect );
 
 	/**
 	 * Deselects all nodes.

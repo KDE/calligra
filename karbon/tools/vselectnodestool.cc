@@ -31,9 +31,11 @@
 #include "vpainter.h"
 #include "vpainterfactory.h"
 #include "vselectnodestool.h"
+#include "vselectnodes.h"
 #include "vtransformcmd.h"
-#include "vtransformnodes.h"
 #include "vdrawselection.h"
+#include "vselection.h"
+#include "vtransformnodes.h"
 
 #include <kdebug.h>
 
@@ -67,25 +69,16 @@ VSelectNodesTool::draw()
 
 	double tolerance = 1.0 / view()->zoom();
 
+	KoRect selrect( last().x() - tolerance, last().y() - tolerance,
+					2 * tolerance + 1.0, 2 * tolerance + 1.0 );
+	QPtrList<VSegment> segments = view()->part()->document().selection()->getSegments( selrect );
 	if( view()->part()->document().selection()->objects().count() > 0 &&
-		m_state != dragging &&
-		( m_state == moving || view()->part()->document().selection()->pathNode(
-			KoRect(
-				last().x() - tolerance,
-				last().y() - tolerance,
-				2 * tolerance + 1.0,
-				2 * tolerance + 1.0 ) ) ) )
+		m_state != dragging && ( m_state == moving || segments.count() > 0 ) )
 	{
 		if( m_state == normal )
 		{
-
-			view()->part()->document().selection()->append(
-				KoRect(
-					first().x() - tolerance,
-					first().y() - tolerance,
-					2 * tolerance + 1.0,
-					2 * tolerance + 1.0 ).normalize(),
-				false, true );
+			if( segments.count() == 1 && segments.at( 0 )->knotIsSelected() == false )
+				view()->part()->document().selection()->append( selrect.normalize(), false, true );
 			m_state = moving;
 			recalc();
 		}
@@ -122,12 +115,12 @@ VSelectNodesTool::setCursor() const
 
 	double tolerance = 1.0 / view()->zoom();
 
-	if( view()->part()->document().selection()->pathNode(
+	if( view()->part()->document().selection()->getSegments(
 		KoRect(
 			last().x() - tolerance,
 			last().y() - tolerance,
 			2 * tolerance + 1,
-			2 * tolerance * 1 ) ) )
+			2 * tolerance * 1 ) ).count() > 0 )
 	{
 		view()->canvasWidget()->viewport()->setCursor( QCursor( Qt::CrossCursor ) );
 	}

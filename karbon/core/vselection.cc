@@ -259,19 +259,16 @@ VSelection::handleNode( const KoPoint &point ) const
 	return node_none;
 }
 
-bool
-VSelection::pathNode( const KoRect& rect )
+QPtrList<VSegment>
+VSelection::getSegments( const KoRect& rect )
 {
 	VTestNodes op( rect );
 
 	VObjectListIterator itr = m_objects;
 	for( ; itr.current(); ++itr )
-	{
-		if( op.visit( *itr.current() ) )
-			return true;
-	}
+		op.visit( *itr.current() );
 
-	return false;
+	return op.result();
 }
 
 void
