@@ -1,16 +1,37 @@
+/* This file is part of the KDE libraries
+    Copyright (C) 2000 Simon Hausmann <hausmann@kde.org>
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License version 2 as published by the Free Software Foundation.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
+
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+    Boston, MA 02111-1307, USA.
+*/
+
 #include "kcoloractions.h"
-#include <qcstring.h>
 #include "kcoloractions.moc"
-#include <qpopupmenu.h>
+#include <kcolordlg.h>
+#include <klocale.h>
+#include <kpopupmenu.h>
+#include <ktoolbar.h>
+#include <qcstring.h>
+#include <qdrawutil.h>
 #include <qtoolbar.h>
 #include <qtoolbutton.h>
-#include <qdrawutil.h>
-#include <ktoolbar.h>
 
 KColorAction::KColorAction( const QString& text, int accel,
 			    QObject* parent, const char* name )
     : KAction( text, accel, parent, name )
 {
+    typ = TextColor;
     init();
 }
 
@@ -19,6 +40,7 @@ KColorAction::KColorAction( const QString& text, int accel,
 			    const char* name )
     : KAction( text, accel, receiver, slot, parent, name )
 {
+    typ = TextColor;
     init();
 }
 
@@ -26,8 +48,8 @@ KColorAction::KColorAction( const QString& text, Type type, int accel,
 			    QObject* parent, const char* name )
     : KAction( text, accel, parent, name )
 {
+    typ = type;
     init();
-    setType( type );
 }
 
 KColorAction::KColorAction( const QString& text, Type type, int accel,
@@ -35,13 +57,14 @@ KColorAction::KColorAction( const QString& text, Type type, int accel,
 			    const char* name )
     : KAction( text, accel, receiver, slot, parent, name )
 {
+    typ = type;
     init();
-    setType( type );
 }
 
 KColorAction::KColorAction( QObject* parent, const char* name )
     : KAction( parent, name )
 {
+    typ = TextColor;
     init();
 }
 
@@ -76,7 +99,6 @@ KColorAction::Type KColorAction::type() const
 void KColorAction::init()
 {
     col = Qt::black;
-    typ = TextColor;
     createPixmap();
 }
 
@@ -192,6 +214,69 @@ void KColorAction::createPixmap()
     setIconSet( QIconSet( pixmap ) );
 }
 
+/////////////////
+
+// A KColorAction with a popupmenu for changing the color
+KSelectColorAction::KSelectColorAction( const QString& text, Type type,
+                                          int accel, QObject* parent, const char* name )
+  : KColorAction(text,type,accel,parent,name)
+{
+  initPopup();
+}
+
+KSelectColorAction::KSelectColorAction( const QString& text, Type type, int accel,
+                    QObject* receiver, const char* slot, QObject* parent, const char* name )
+  : KColorAction(text,type,accel,receiver,slot,parent,name)
+{
+  initPopup();
+}
+
+KSelectColorAction::~KSelectColorAction()
+{
+  delete m_popup;
+}
+
+void KSelectColorAction::initPopup()
+{
+  m_popup = new KPopupMenu();
+  // TODO: insert rectangular widgets of various colors in the popup
+  m_popup->insertItem(i18n("Other..."),this, SLOT( changeColor() ) );
+}
+
+void KSelectColorAction::changeColor()
+{
+  QColor color;
+  if ( KColorDialog::getColor( color ) )
+  {
+    setColor( color );
+    emit activated();
+  }
+}
+
+int KSelectColorAction::plug(QWidget* widget, int index)
+{
+  if ( widget->inherits( "KToolBar" ) )
+  {
+    KToolBar *bar = (KToolBar *)widget;
+
+    int id_ = KAction::getToolButtonID();
+    bar->insertButton( iconSet().pixmap(), id_, SIGNAL( clicked() ), this,
+                       SLOT( slotActivated() ), isEnabled(), plainText(),
+                       index );
+
+    addContainer( bar, id_ );
+
+    connect( bar, SIGNAL( destroyed() ), this, SLOT( slotDestroyed() ) );
+
+    bar->setDelayedPopup( id_, popupMenu(), true );
+
+    return containerCount() - 1;
+  }
+  return KColorAction::plug( widget, index );
+}
+
+/////////////////
+
 KColorBar::KColorBar( const QValueList<QColor> &cols,
 		      QWidget *parent, const char *name )
     : QWidget( parent, name ), colors( cols )
@@ -237,14 +322,16 @@ void KColorBar::paintEvent( QPaintEvent * )
     p.end();
 }
 
+////////////
+
 KColorBarAction::KColorBarAction( const QString &text, int accel,
 				  QObject *r, const char *leftClickSlot_, const char *rightClickSlot_,
 				  const QValueList<QColor> &cols, QObject *parent, const char *name )
-    : KAction( text, accel, parent, name ), colors( cols )
+  : KAction( text, accel, parent, name ), colors( cols ),
+    receiver( r ),
+    leftClickSlot ( leftClickSlot_ ),
+    rightClickSlot ( rightClickSlot_ )
 {
-    receiver = r;
-    leftClickSlot = qstrdup( leftClickSlot_ );
-    rightClickSlot = qstrdup( rightClickSlot_ );
 }
 
 int KColorBarAction::plug( QWidget *widget, int index )
