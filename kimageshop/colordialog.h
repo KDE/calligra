@@ -76,6 +76,17 @@ class RGBWidget : public QWidget
   RGBWidget(QWidget *parent = 0L);
   ~RGBWidget();
 
+ public slots:
+  void slotSetColor(const QColor&);
+
+ protected slots:
+  void slotRedChanged(const QColor&);
+  void slotGreenChanged(const QColor&);
+  void slotBlueChanged(const QColor&);
+
+ signals:
+  void colorChanged(const QColor&);
+
  protected:
   ColorSlider *m_pRSlider;
   ColorSlider *m_pGSlider;

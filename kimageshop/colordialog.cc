@@ -111,6 +111,34 @@ RGBWidget::RGBWidget(QWidget *parent) : QWidget(parent)
   m_pVLayout->addWidget(m_pBSlider);
 
 }
+
+void RGBWidget::slotSetColor(const QColor&c)
+{
+  m_pRSlider->slotSetColor1(c);
+  m_pRSlider->slotSetColor2(QColor(255, c.green(), c.blue()));
+
+  m_pGSlider->slotSetColor1(c);
+  m_pGSlider->slotSetColor2(QColor(c.red(), 255, c.blue()));
+
+  m_pBSlider->slotSetColor1(c);
+  m_pBSlider->slotSetColor2(QColor(c.red(), c.green(), 255));
+}
+  
+void RGBWidget::slotRedChanged(const QColor& c)
+{
+  emit colorChanged(c);
+}
+
+void RGBWidget::slotGreenChanged(const QColor& c)
+{
+  emit colorChanged(c);
+}
+
+void RGBWidget::slotBlueChanged(const QColor& c)
+{
+  emit colorChanged(c);
+}
+
 RGBWidget::~RGBWidget()
 {
   delete m_pRSlider;

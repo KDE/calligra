@@ -43,7 +43,7 @@ class ColorSlider : public QWidget
   void slotSetColor1(const QColor&);
   void slotSetColor2(const QColor&);
   
-  // for internal use
+ protected slots:
   void slotSetValue(int);
 
  signals:
