@@ -108,29 +108,42 @@ void KPrInsertHelpLineDia::slotRadioButtonClicked()
 }
 
 
-KPrInsertHelpPointDia::KPrInsertHelpPointDia( QWidget *parent, const KoRect & _pageRect , KPresenterDoc *_doc, const char *name)
-    : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
+KPrInsertHelpPointDia::KPrInsertHelpPointDia( QWidget *parent, const KoRect & _pageRect , KPresenterDoc *_doc, double posX, double posY, const char *name)
+    : KDialogBase( parent, name , true, "", Ok|Cancel| User1, Ok, true ),
+      m_bRemovePoint( false )
 {
     limitOfPage=_pageRect;
     m_doc=_doc;
+    setButtonText( KDialogBase::User1, i18n("Remove") );
     setCaption( i18n("Add new help point") );
     QVBox *page = makeVBoxMainWidget();
     QLabel *lab=new QLabel(i18n("Position ( x ) :(%1)").arg(m_doc->getUnitName()), page);
     positionX = new KLineEdit(page);
-    positionX->setText( KoUnit::userValue( 0.00, m_doc->getUnit() ) );
+    positionX->setText( KoUnit::userValue( posX, m_doc->getUnit() ) );
     positionX->setValidator( new KFloatValidator( limitOfPage.left(), limitOfPage.right() ,true,positionX ) );
 
 
     lab=new QLabel(i18n("Position ( y ) :(%1)").arg(m_doc->getUnitName()), page);
     positionY = new KLineEdit(page);
-    positionY->setText( KoUnit::userValue( 0.00, m_doc->getUnit() ) );
+    positionY->setText( KoUnit::userValue( posY, m_doc->getUnit() ) );
     positionY->setValidator( new KFloatValidator( limitOfPage.top(), limitOfPage.bottom() ,true,positionY ) );
+
+    showButton( KDialogBase::User1, (posX!=0.0 || posY!=0.0) );
+
+    connect( this, SIGNAL( user1Clicked() ), this ,SLOT( slotRemoveHelpPoint() ));
+
     resize( 300,100 );
 }
 
-KoPoint KPrInsertHelpPointDia::newPosition()
+KoPoint KPrInsertHelpPointDia::newPosition() const
 {
     return KoPoint( KoUnit::fromUserValue( positionX->text(), m_doc->getUnit() ), KoUnit::fromUserValue( positionY->text(), m_doc->getUnit() ));
+}
+
+void KPrInsertHelpPointDia::slotRemoveHelpPoint()
+{
+    m_bRemovePoint = true;
+    KDialogBase::slotOk();
 }
 
 #include "kprhelplinedia.moc"

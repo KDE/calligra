@@ -5971,31 +5971,17 @@ void KPresenterView::removeHelpPoint()
 
 void KPresenterView::changeHelpPointPosition()
 {
-    double pos = 0.0;
-    double limitTop = 0.0;
-    double limitBottom = 0.0;
     KoRect r=m_canvas->activePage()->getPageRect();
-/*
-    if ( m_canvas->tmpHorizHelpLine() != -1)
-    {
-        pos = m_pKPresenterDoc->horizHelplines()[m_canvas->tmpHorizHelpLine()];
-        limitTop = r.top();
-        limitBottom = r.bottom();
-    }
-    else if ( m_canvas->tmpVertHelpLine() != -1)
-    {
-        pos = m_pKPresenterDoc->vertHelplines()[m_canvas->tmpVertHelpLine()];
-        limitTop = r.left();
-        limitBottom = r.right();
-    }
-
-    KPrMoveHelpLineDia *dlg= new KPrMoveHelpLineDia(this, pos, limitTop , limitBottom,  m_pKPresenterDoc);
+    KoPoint pos = m_pKPresenterDoc->helpPoints()[m_canvas->tmpHelpPoint()];
+    KPrInsertHelpPointDia *dlg= new KPrInsertHelpPointDia(this, r, m_pKPresenterDoc, pos.x(),pos.y() );
     if ( dlg->exec())
     {
-        m_canvas->changeHelpLinePosition( dlg->newPosition() );
+        if( dlg->removePoint() )
+            m_canvas->removeHelpPoint();
+        else
+            m_canvas->changeHelpPointPosition( dlg->newPosition() );
     }
     delete dlg;
-*/
 }
 
 void KPresenterView::openPopupMenuHelpPoint( const QPoint & _point )
