@@ -113,9 +113,9 @@ int KoTextObject::availableHeight() const
     return m_availableHeight;
 }
 
-void KoTextObject::slotParagraphModified(KoTextParag *parag, int /*KoTextParag::ParagModifyType*/ _type, int , int)
+void KoTextObject::slotParagraphModified(KoTextParag *parag, int /*ParagModifyType*/ _type, int , int)
 {
-    if ( _type == KoTextParag::ChangeFormat)
+    if ( _type == ChangeFormat)
         return;
     m_needsSpellCheck = true;
     if (parag )
@@ -436,7 +436,7 @@ void KoTextObject::doKeyboardAction( KoTextCursor * cursor, KoTextFormat * & /*c
             undoRedoInfo.text += "\n";
             undoRedoInfo.oldParagLayouts << paragLayout;
         } else
-            emit paragraphModified( old, KoTextParag::RemoveChar, cursor->index(), 1 );
+            emit paragraphModified( old, RemoveChar, cursor->index(), 1 );
     } break;
     case ActionBackspace: {
         // Remove counter
@@ -472,7 +472,7 @@ void KoTextObject::doKeyboardAction( KoTextCursor * cursor, KoTextFormat * & /*c
                 undoRedoInfo.id = cursor->parag()->paragId();
                 undoRedoInfo.oldParagLayouts.prepend( paragLayout );
             } else
-                emit paragraphModified( cursor->parag(), KoTextParag::RemoveChar, cursor->index(),1 );
+                emit paragraphModified( cursor->parag(), RemoveChar, cursor->index(),1 );
             m_lastFormatted = cursor->parag();
         }
     } break;
@@ -531,7 +531,7 @@ void KoTextObject::doKeyboardAction( KoTextCursor * cursor, KoTextFormat * & /*c
                 for ( int i = cursor->index(); i < cursor->parag()->length(); ++i )
                     copyCharFormatting( cursor->parag(), i, oldLen + i - cursor->index(), true );
                 cursor->killLine();
-                emit paragraphModified( cursor->parag(),KoTextParag::RemoveChar, cursor->index(), cursor->parag()->length()-cursor->index() );
+                emit paragraphModified( cursor->parag(), RemoveChar, cursor->index(), cursor->parag()->length()-cursor->index() );
             }
         }
         break;
@@ -661,7 +661,7 @@ void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
         clearUndoRedoInfo();
 
     // Notifications
-    emit paragraphModified( oldCursor.parag(), KoTextParag::AddChar, cursor->index(), txt.length());
+    emit paragraphModified( oldCursor.parag(), AddChar, cursor->index(), txt.length() );
     // TODO
     // if (checkNewLine)
     //     emit paragraphCreated for every paragraph from oldCursor->parag()->next() until cursor->parag()

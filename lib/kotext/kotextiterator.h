@@ -105,14 +105,20 @@ public:
      */
     QPair<int, QString> currentTextAndIndex() const;
 
+signals:
+    /**
+     * Emitted when the current paragraph has been modified by the user.
+     * Apps will often want to call setData again
+     */
+    void currentParagraphModified( int modifyType, int pos, int length );
+
 protected:
     void connectTextObjects();
     void nextTextObject();
 
 protected slots:
     void slotParagraphDeleted( KoTextParag* parag );
-    //void slotTextObjectDeleted();
-    //void slotTextDocumentDeleted();
+    void slotParagraphModified( KoTextParag* parag, int /*ParagModifyType*/, int pos, int length );
 
 private:
     // The reason we use a QValueList of pointers instead of QPtrList

@@ -437,8 +437,9 @@ signals:
     void showFormatObject(const KoTextFormat &);
 
     // Keeping track of text modifications - not emitted during loading/closing.
+    enum ParagModifyType{ AddChar = 0, RemoveChar = 1, ChangeFormat = 2 };
     void paragraphCreated( KoTextParag* parag );
-    void paragraphModified( KoTextParag* parag, int /*KoTextParag::ParagModifyType*/, int pos, int length );
+    void paragraphModified( KoTextParag* parag, int /*ParagModifyType*/, int pos, int length );
     void paragraphDeleted( KoTextParag* parag );
 
 public slots:

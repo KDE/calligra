@@ -191,6 +191,12 @@ void KoFindReplace::connectFind( KFind* find )
     connect( find, SIGNAL( findNext() ),
              this, SLOT( slotFindNext() ) );
     m_bInit = true;
+    m_currentParagraphModified = false;
+    m_matchingIndex = -1;
+
+    // Also connect to the textiterator
+    connect( &m_textIterator, SIGNAL( currentParagraphModified( int, int, int ) ),
+             this, SLOT( slotCurrentParagraphModified( int, int, int ) ) );
 }
 
 KoFindReplace::~KoFindReplace()
@@ -238,8 +244,8 @@ bool KoFindReplace::findNext()
     KFind::Result res = KFind::NoMatch;
     while ( res == KFind::NoMatch && !m_textIterator.atEnd() ) {
         //kdDebug(32500) << "findNext loop. m_bInit=" << m_bInit << " needData=" << needData() << endl;
-        if ( needData() ) {
-            if ( !m_bInit ) {
+        if ( needData() || m_currentParagraphModified ) {
+            if ( !m_bInit && !m_currentParagraphModified ) {
                 ++m_textIterator;
                 if ( m_textIterator.atEnd() )
                     break;
@@ -247,7 +253,10 @@ bool KoFindReplace::findNext()
             m_bInit = false;
             QPair<int, QString> c = m_textIterator.currentTextAndIndex();
             m_offset = c.first;
-            setData( c.second );
+            if ( !m_currentParagraphModified )
+                setData( c.second );
+            else
+                setData( c.second, m_matchingIndex );
         }
 
         if ( m_find )
@@ -319,9 +328,17 @@ void KoFindReplace::setOptions(long opt)
     m_textIterator.setOptions( opt );
 }
 
+void KoFindReplace::slotCurrentParagraphModified( int, int pos, int )
+{
+    if ( pos >= m_offset )
+        m_currentParagraphModified = true;
+    // (this bool forces the next findNext() to call setData again)
+}
+
 // slot connected to the 'highlight' signal
 void KoFindReplace::highlight( const QString &, int matchingIndex, int matchingLength )
 {
+    m_matchingIndex = matchingIndex;
     if ( m_lastTextObjectHighlighted )
         m_lastTextObjectHighlighted->removeHighlight(true);
     m_lastTextObjectHighlighted = m_textIterator.currentTextObject();
@@ -334,6 +351,7 @@ void KoFindReplace::replace( const QString &text, int matchingIndex,
                              int replacementLength, int matchedLength )
 {
     //kdDebug(32500) << "KoFindReplace::replace m_offset=" << m_offset << " matchingIndex=" << matchingIndex << " matchedLength=" << matchedLength << " options=" << options() << endl;
+    m_matchingIndex = matchingIndex;
     int index = m_offset + matchingIndex;
 
     // highlight might not have happened (if 'prompt on replace' is off)

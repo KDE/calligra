@@ -164,16 +164,19 @@ void KoTextIterator::connectTextObjects()
     for( ; it != m_lstObjects.end(); ++it ) {
         connect( (*it), SIGNAL( paragraphDeleted( KoTextParag* ) ),
                  this, SLOT( slotParagraphDeleted( KoTextParag* ) ) );
-#if 0
-        // We need to connect to destroyed() from KoTextDocument and KoTextObject
-        // independently, since the textdoc doesn't know the textobj, and the parags
-        // only know the textdoc...
-        connect( (*it), SIGNAL( destroyed() ),
-                 this, SLOT( slotTextObjectDeleted() ) );
-        connect( (*it)->textDocument(), SIGNAL( destroyed() ),
-                 this, SLOT( slotTextDocumentDeleted() ) );
-#endif
+        connect( (*it), SIGNAL( paragraphModified( KoTextParag*, int, int, int ) ),
+                 this, SLOT( slotParagraphModified( KoTextParag*, int, int, int ) ) );
+        // We don't connect to destroyed(), because for undo/redo purposes,
+        // we never really delete textdocuments nor textobjects.
+        // So this is never called.
+        // Instead the textobject is simply set to invisible, and this is handled by nextTextObject
     }
+}
+
+void KoTextIterator::slotParagraphModified( KoTextParag* parag, int modifyType, int pos, int length )
+{
+    if ( parag == m_currentParag )
+        emit currentParagraphModified( modifyType, pos, length );
 }
 
 void KoTextIterator::slotParagraphDeleted( KoTextParag* parag )
@@ -212,36 +215,6 @@ void KoTextIterator::slotParagraphDeleted( KoTextParag* parag )
     kdDebug(32500) << "firstParag:" << m_firstParag << " (" << m_firstParag->paragId() << ") -  lastParag:" << m_lastParag << " (" << m_lastParag->paragId() << ") m_currentParag:" << m_currentParag << " (" << m_currentParag->paragId() << ")" << endl;
 #endif
 }
-
-// Hmm, for undo/redo purposes, we never really delete textdocuments nor textobjects
-// So this is never called.
-// Instead the textobject is simply set to invisible, so this is handled by nextTextObject
-#if 0
-void KoTextIterator::slotTextObjectDeleted()
-{
-    kdDebug(32500) << k_funcinfo << this << endl;
-    const QObject* textobj = sender();
-    if ( *m_currentTextObj == textobj )
-        nextTextObject(); // also takes care of m_currentParag
-    KoTextObject* hackTextObj = (KoTextObject *)(textobj);
-    m_lstObjects.remove( hackTextObj );
-    // TODO find new values for m_firstParag and m_lastParag if 0.
-}
-
-void KoTextIterator::slotTextDocumentDeleted()
-{
-    kdDebug(32500) << k_funcinfo << this << endl;
-    const QObject* textdoc = sender();
-    if ( m_lastParag && m_lastParag->textDocument() == textdoc ) {
-        m_lastParag = 0L; // i.e. never stop (!)
-        kdDebug(32500) << "Ouch, now m_lastParag is 0L, we will never stop." << endl;
-    }
-    if ( m_firstParag && m_firstParag->textDocument() == textdoc ) {
-        m_firstParag = 0L; // i.e. can't start (!)
-        kdDebug(32500) << "Ouch, now m_firstParag is 0L, we cannot start again." << endl;
-    }
-}
-#endif
 
 // Go to next paragraph that we must iterate over
 void KoTextIterator::operator++()
@@ -321,7 +294,7 @@ QPair<int, QString> KoTextIterator::currentTextAndIndex() const
     Q_ASSERT( m_currentParag );
     Q_ASSERT( m_currentParag->string() );
     QString str = m_currentParag->string()->toString();
-    str.truncate( str.length() - 1 ); // damn trailing space
+    str.truncate( str.length() - 1 ); // remove trailing space
     bool forw = ! ( m_options & KFindDialog::FindBackwards );
     if ( m_currentParag == m_firstParag )
     {

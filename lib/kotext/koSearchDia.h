@@ -256,6 +256,7 @@ protected slots:
     void dialogClosed();
     void highlight( const QString &text, int matchingIndex, int matchingLength );
     void replace( const QString &text, int replacementIndex, int replacedLength, int searchLength );
+    void slotCurrentParagraphModified( int, int, int );
 
 private:
     void connectFind( KFind* find );
@@ -269,9 +270,11 @@ private:
     bool m_searchContextEnabled;
     bool m_doCounting;
     bool m_bInit;
+    bool m_currentParagraphModified;
 
     KMacroCommand *m_macroCmd;
     int m_offset;
+    int m_matchingIndex; // can be removed once we use kde-3.2 (for kfind::index())
 
     KoTextIterator m_textIterator;
 
