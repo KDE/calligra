@@ -64,82 +64,12 @@ VShearTool::draw()
 		itr.current()->draw( painter, &itr.current()->boundingBox() );
 
 	painter->setZoomFactor( 1.0 );
-/*
-	VPainter *painter = view()->painterFactory()->editpainter();
-	painter->setRasterOp( Qt::NotROP );
-
-	KoRect rect = view()->part()->document().selection()->boundingBox();
-
-	// already selected, so must be a handle operation (move, scale etc.)
-	if( view()->part()->document().selection()->objects().count() > 0 && m_activeNode != node_mm )
-	{
-		if( m_activeNode == node_lt )
-		{
-		}
-		else if( m_activeNode == node_mt )
-		{
-			m_s1 = 0;
-			m_s2 = ( m_lp.y() - m_fp.y() ) / double( ( rect.height() / 2 ) * view()->zoom() );
-		}
-		else if( m_activeNode == node_rt )
-		{
-		}
-		else if( m_activeNode == node_rm)
-		{
-			m_s1 = ( m_lp.x() - m_fp.x() ) / double( ( rect.width() / 2 ) * view()->zoom() );
-			m_s2 = 0;
-		}
-		else if( m_activeNode == node_rb )
-		{
-		}
-		else if( m_activeNode == node_mb )
-		{
-			m_s1 = 0;
-			m_s2 = ( m_lp.y() - m_fp.y() ) / double( ( rect.height() / 2 ) * view()->zoom() );
-		}
-		else if( m_activeNode == node_lb )
-		{
-		}
-		else if( m_activeNode == node_lm )
-		{
-			m_s1 = ( m_lp.x() - m_fp.x() ) / double( ( rect.width() / 2 ) * view()->zoom() );
-			m_s2 = 0;
-		}
-		// shear operation
-		QWMatrix mat;
-		mat.translate( m_fp.x() / view()->zoom(), m_fp.y() / view()->zoom() );
-		mat.shear( m_s1, m_s2 );
-		mat.translate(	- ( m_fp.x() + view()->canvasWidget()->contentsX() ) / view()->zoom(),
-						- ( m_fp.y() + view()->canvasWidget()->contentsY() ) / view()->zoom() );
-
-		// TODO :  makes a copy of the selection, do assignment operator instead
-		VObjectListIterator itr = view()->part()->document().selection()->objects();
-		VObjectList list;
-		list.setAutoDelete( true );
-	    for( ; itr.current() ; ++itr )
-		{
-			list.append( itr.current()->clone() );
-		}
-		painter->setZoomFactor( view()->zoom() );
-		VObjectListIterator itr2 = list;
-		for( ; itr2.current() ; ++itr2 )
-		{
-			itr2.current()->transform( mat );
-			itr2.current()->setState( VObject::edit );
-			itr2.current()->draw( painter, itr2.current()->boundingBox() );
-		}
-		painter->setZoomFactor( 1.0 );
-	}
-
-	view()->painterFactory()->painter()->end();
-*/
 }
 
 void
 VShearTool::setCursor() const
 {
-/*
-	switch( view()->part()->document().selection()->handleNode( p ) )
+	switch( view()->part()->document().selection()->handleNode( last() ) )
 	{
 		case node_lt:
 		case node_rb:
@@ -165,14 +95,13 @@ VShearTool::setCursor() const
 			view()->canvasWidget()->viewport()->
 				setCursor( QCursor( Qt::arrowCursor ) );
 	}
-*/
 }
 
 void
 VShearTool::mouseButtonPress()
 {
 	view()->painterFactory()->painter()->end();
-//	m_activeNode = view()->part()->document().selection()->handleNode( mouse_event->pos() );
+	m_activeNode = view()->part()->document().selection()->handleNode( first() );
 	recalc();
 
 	// Draw new object:
@@ -204,46 +133,48 @@ void
 VShearTool::recalc()
 {
 	KoRect rect = view()->part()->document().selection()->boundingBox();
-		/*if( m_activeNode == node_lt )
-		{
-		}
-		else if( m_activeNode == node_mt )
-		{
-			m_s1 = 0;
-			m_s2 = ( last().y() - first().y() ) / double( ( rect.height() / 2 ) * view()->zoom() );
-		}
-		else if( m_activeNode == node_rt )
-		{
-		}
-		else if( m_activeNode == node_rm)
-		{*/
-			m_s1 = ( last().x() - first().x() ) / double( ( rect.width() / 2 ) * view()->zoom() );
-			m_s2 = 0;
-		/*}
-		else if( m_activeNode == node_rb )
-		{
-		}
-		else if( m_activeNode == node_mb )
-		{
-			m_s1 = 0;
-			m_s2 = ( last().y() - first().y() ) / double( ( rect.height() / 2 ) * view()->zoom() );
-		}
-		else if( m_activeNode == node_lb )
-		{
-		}
-		else if( m_activeNode == node_lm )
-		{
-			m_s1 = ( last().x() - first().x() ) / double( ( rect.width() / 2 ) * view()->zoom() );
-			m_s2 = 0;
-		}*/
+
+	if( m_activeNode == node_lt )
+	{
+	}
+	else if( m_activeNode == node_mt )
+	{
+		m_s1 = 0;
+		m_s2 = ( last().y() - first().y() ) / double( ( rect.height() / 2 ) * view()->zoom() );
+	}
+	else if( m_activeNode == node_rt )
+	{
+	}
+	else if( m_activeNode == node_rm)
+	{
+		m_s1 = ( last().x() - first().x() ) / double( ( rect.width() / 2 ) * view()->zoom() );
+		m_s2 = 0;
+	}
+	else if( m_activeNode == node_rb )
+	{
+	}
+	else if( m_activeNode == node_mb )
+	{
+		m_s1 = 0;
+		m_s2 = ( last().y() - first().y() ) / double( ( rect.height() / 2 ) * view()->zoom() );
+	}
+	else if( m_activeNode == node_lb )
+	{
+	}
+	else if( m_activeNode == node_lm )
+	{
+		m_s1 = ( last().x() - first().x() ) / double( ( rect.width() / 2 ) * view()->zoom() );
+		m_s2 = 0;
+	}
+
+	// Get center:
+	KoPoint m_center = view()->part()->document().selection()->boundingBox().center();
 
 	// Build affine matrix:
-		QWMatrix mat;
-		mat.translate( first().x() / view()->zoom(), first().y() / view()->zoom() );
-		mat.shear( m_s1, m_s2 );
-		mat.translate(	- first().x() / view()->zoom(),
-						- first().y() / view()->zoom() );
-
+	QWMatrix mat;
+	mat.translate( m_center.x(), m_center.y() );
+	mat.shear( m_s1, m_s2 );
+	mat.translate( -m_center.x(), -m_center.y() );
 
 	// Copy selected objects and transform:
 	m_objects.clear();
