@@ -1,0 +1,9 @@
+<!DOCTYPE kpartgui>
+<kpartgui name="kexidatatable" version="1">
+
+<ToolBar name="table" fullWidth="false" noMerge="1">
+  <text>Table</text>
+  <Action name="tablepart_filter"/>
+</ToolBar>
+
+</kpartgui>

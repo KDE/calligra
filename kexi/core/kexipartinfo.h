@@ -80,12 +80,13 @@ class Info
 		 */
 		bool 			broken() { return m_broken; }
 
+#if 0
 		/**
 		 * returns the instance of this @ref KexiProjectPart
 		 * dlopens it if needed
 		 */
 		Part 			*instance();
-
+#endif
 	protected:
 		friend class Manager;
 		friend class KexiProject;

@@ -41,6 +41,7 @@ class Part : public QObject
 		virtual ~Part();
 
 		virtual void	execute(KexiMainWindow *win, const QString &oname)=0;
+		virtual void	createGUIClient(KexiMainWindow *win)=0;
 		
 		Info		*info() { return m_info; }
 

@@ -1,17 +1,11 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexitablepart" version="3">
+<kpartgui name="kexitablepart" version="4">
 
 <MenuBar>
 	<Menu name="create">
 		<!-- text>&amp;Create</text -->
 		<Action name="tablepart_create"/>
-		<Action name="tablepart_filter"/>
 	</Menu>
 </MenuBar>
-
-<ToolBar name="table" fullWidth="false" noMerge="1">
-  <text>Table</text>
-  <Action name="tablepart_filter"/>
-</ToolBar>
 
 </kpartgui>

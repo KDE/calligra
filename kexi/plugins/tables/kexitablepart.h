@@ -14,6 +14,7 @@ class KexiTablePart : public KexiPart::Part
 		~KexiTablePart();
 
 		virtual void	execute(KexiMainWindow *win, const QString &table);
+		virtual void    createGUIClient(KexiMainWindow *win);
 };
 
 #endif

@@ -40,6 +40,7 @@
 #include "kexibrowser.h"
 #include "kexidialogbase.h"
 #include "kexipartmanager.h"
+#include "kexipart.h"
 #include "kexistartupdlg.h"
 #include "kexiproject.h"
 #include "kexiprojectdata.h"
@@ -311,6 +312,8 @@ KexiMainWindow::initBrowser()
 		{
 			kdDebug() << "KexiMainWindow::initBrowser(): adding " << it->groupName() << endl;
 			m_browser->addGroup(it);
+			KexiPart::Part *p=Kexi::partManager.part(it);
+			if (p) p->createGUIClient(this);
 		}
 	}
 	

@@ -45,7 +45,6 @@ class KexiDialogBase : public KMdiChildView, public KXMLGUIClient
 	private:
 		KexiMainWindow *m_parentWindow;
 		bool m_isRegistered;
-		friend class KexiMainWindow;
 		KexiContextHelpInfo *m_contextHelpInfo;
 };
 
