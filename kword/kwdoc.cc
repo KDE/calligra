@@ -1595,7 +1595,8 @@ bool KWDocument::completeLoading( KoStore *_store )
             m_imageCollection.readFromStore( _store, *m_pixmapMap, prefix );
             delete m_pixmapMap;
             m_pixmapMap = 0L;
-        } else if ( m_clipartMap ) {
+        }
+        if ( m_clipartMap ) {
             m_clipartCollection.readFromStore( _store, *m_clipartMap, prefix );
             delete m_clipartMap;
             m_clipartMap = 0L;
@@ -1805,7 +1806,7 @@ QDomDocument KWDocument::saveXML()
         }
         if ( !frameSet->isDeleted() && frameSet->type() == FT_CLIPART )
         {
-            KoClipartKey key = static_cast<KWPictureFrameSet *>( frameSet )->key();
+            KoClipartKey key = static_cast<KWClipartFrameSet *>( frameSet )->key();
             if ( !saveCliparts.contains( key ) )
                 saveCliparts.append( key );
         }
@@ -1893,7 +1894,7 @@ bool KWDocument::completeSaving( KoStore *_store )
         }
         if ( !frameSet->isDeleted() && frameSet->type() == FT_CLIPART )
         {
-            KoClipartKey key = static_cast<KWPictureFrameSet *>( frameSet )->key();
+            KoClipartKey key = static_cast<KWClipartFrameSet *>( frameSet )->key();
             if ( !saveCliparts.contains( key ) )
                 saveCliparts.append( key );
         }
