@@ -12,6 +12,7 @@ AC_SUBST(LIB_KSTORE, '$(top_builddir)/lib/store/libkstore.la')
 AC_SUBST(LIB_KOTEXT, '$(top_builddir)/lib/kotext/libkotext.la')
 AC_SUBST(LIB_KOPAINTER, '$(top_builddir)/lib/kopainter/libkopainter.la')
 AC_SUBST(LIB_KWMF, '$(top_builddir)/lib/kwmf/libkwmf.la')
+AC_SUBST(LIB_KOWMF, '$(top_builddir)/lib/kwmf/libkowmf.la')
 AC_SUBST(LIB_KFORMULA, '$(top_builddir)/lib/kformula/libkformula.la')
 AC_SUBST(LIB_KOSCRIPT, '$(top_builddir)/lib/koscript/libkoscript.la')
 
