@@ -48,7 +48,7 @@ void InsertPartTool::activate (GDocument *_doc, Canvas *_canvas)
    doc = _doc;
    canvas = _canvas;
    canvas->setCursor(Qt::arrowCursor);
-   m_toolController->emitModeSelected(m_id,i18n("Insert kOffice parts"));
+   m_toolController->emitModeSelected(m_id,i18n("Insert KOffice parts"));
 }
 
 void InsertPartTool::deactivate (GDocument*, Canvas* )
