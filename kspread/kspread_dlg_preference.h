@@ -65,7 +65,7 @@ public slots:
  protected:
    QLabel *m_shortDate,*m_time,*m_money,*m_date,*m_language,*m_number;
    QPushButton *m_updateButton;
-   KSpreadView* m_pView;	
+   KSpreadView* m_pView;
    bool m_bUpdateLocale;
 };
 
@@ -150,7 +150,7 @@ protected:
   int paper;
   int orientation;
   int unit;
-  
+
   KConfig* config;
 } ;
 
@@ -161,12 +161,15 @@ public:
   configureSpellPage( KSpreadView* _view, QVBox *box, char *name = 0 );
   void apply();
   void slotDefault();
+private slots:
+    void slotClearIgnoreAllHistory();
 protected:
   KSpreadView * m_pView;
   KSpellConfig * _spellConfig;
   KConfig * config;
   QCheckBox * m_dontCheckUpperWord;
   QCheckBox * m_dontCheckTitleCase;
+    QPushButton * clearIgnoreAllHistory;
 } ;
 
 class KSpreadpreference : public KDialogBase

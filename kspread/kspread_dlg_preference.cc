@@ -878,12 +878,22 @@ configureSpellPage::configureSpellPage( KSpreadView* _view,QVBox *box , char *na
   m_dontCheckTitleCase= new QCheckBox(i18n("Ignore title case words"),tmpQGroupBox);
   grid1->addWidget(m_dontCheckTitleCase,3,0);
 
+  clearIgnoreAllHistory= new QPushButton( i18n("Clear Ignore All Word History"),tmpQGroupBox);
+  grid1->addMultiCellWidget(clearIgnoreAllHistory,5,5,0,1);
+  connect( clearIgnoreAllHistory, SIGNAL(clicked()),this, SLOT(slotClearIgnoreAllHistory()));
+
+
   if( config->hasGroup("KSpell kspread") )
   {
     config->setGroup( "KSpell kspread" );
     m_dontCheckUpperWord->setChecked(config->readBoolEntry("KSpell_IgnoreUppercaseWords", false));
     m_dontCheckTitleCase->setChecked(config->readBoolEntry("KSpell_IgnoreTitleCaseWords", false));
   }
+}
+
+void configureSpellPage::slotClearIgnoreAllHistory()
+{
+    m_pView->doc()->clearIgnoreWordAll();
 }
 
 void configureSpellPage::apply()

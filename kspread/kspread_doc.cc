@@ -311,7 +311,7 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
 {
     emit sigProgress( 0 );
   m_bLoading = TRUE;
-
+  m_spellListIgnoreAll.clear();
   // <spreadsheet>
   QDomElement spread = doc.documentElement();
 
@@ -846,5 +846,18 @@ void KSpreadDoc::setUnit( KoUnit::Unit _unit )
 {
     m_unit = _unit;
 }
+
+void KSpreadDoc::addIgnoreWordAll( const QString & word)
+{
+    if( m_spellListIgnoreAll.findIndex( word )==-1)
+        m_spellListIgnoreAll.append( word );
+}
+
+void KSpreadDoc::clearIgnoreWordAll( )
+{
+    m_spellListIgnoreAll.clear();
+}
+
+
 #include "kspread_doc.moc"
 

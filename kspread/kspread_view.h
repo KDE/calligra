@@ -394,6 +394,8 @@ public slots:
     void spellCheckerCorrected( const QString &, const QString &, unsigned int);
     void spellCheckerDone( const QString & );
     void spellCheckerFinished( );
+    void spellCheckerIgnoreAll( const QString & word);
+    void spellCheckerReplaceAll( const QString &,  const QString &);
     void startKSpell();
 
     virtual int leftBorder() const;
@@ -569,8 +571,6 @@ private:
 
     KoPartSelectAction *m_insertPart;
 
-    // Spell-checking
-    QStringList     m_ignoreWord;
     struct
     {
       KSpreadSpell *   kspell;
@@ -584,7 +584,7 @@ private:
       unsigned int    spellEndCellX;
       unsigned int    spellEndCellY;
       bool            spellCheckSelection;
-      QStringList     ignoreWord;
+        QStringList replaceAll;
     } m_spell;
 
     bool spellSwitchToOtherTable();

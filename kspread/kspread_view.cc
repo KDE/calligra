@@ -277,11 +277,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_popupListChoose=0;
     m_spell.kspell = 0;
     // a few words to ignore when spell checking
-    m_ignoreWord << "KOffice" << "KSpread" << "KWord" << "Konqueror"
-                 << "KMail" << "KPresenter" << "Kivio" << "Kontour"
-                 << "Kugar" << "Krita" << "KChart" << "KPlato"
-                 << "KFormula" << "Karbon" << "Kate" << "Noatun" << "noatun"
-                 << "Kabooble" << "KOrganizer";
 
     m_dcop = 0;
     dcopObject(); // build it
@@ -1350,12 +1345,17 @@ void KSpreadView::extraSpelling()
 
 void KSpreadView::startKSpell()
 {
-  m_spell.kspell = new KSpreadSpell( this, i18n( "Spell Checking" ), this,
+    if(m_pDoc->getKSpellConfig())
+    {
+        m_pDoc->getKSpellConfig()->setIgnoreList(m_pDoc->spellListIgnoreAll());
+#if KDE_VERSION >= 305
+        m_pDoc->getKSpellConfig()->setReplaceAllList(m_spell.replaceAll);
+#endif
+
+    }
+    m_spell.kspell = new KSpreadSpell( this, i18n( "Spell Checking" ), this,
                                      SLOT( spellCheckerReady() ),
                                      m_pDoc->getKSpellConfig() );
-
-  m_spell.ignoreWord = m_ignoreWord;
-  m_spell.kspell->ksConfig().setIgnoreList(m_spell.ignoreWord);
 
   m_spell.kspell->setIgnoreUpperWords(m_pDoc->dontCheckUpperWord());
   m_spell.kspell->setIgnoreTitleCase(m_pDoc->dontCheckTitleCase());
@@ -1376,6 +1376,22 @@ void KSpreadView::startKSpell()
                                                        unsigned int ) ) );
   QObject::connect( m_spell.kspell, SIGNAL( done( const QString & ) ),
                     this, SLOT( spellCheckerDone( const QString & ) ) );
+#if KDE_VERSION >= 305
+  QObject::connect( m_spell.kspell, SIGNAL( replaceall( const QString &  ,  const QString & )), this, SLOT( spellCheckerReplaceAll( const QString &  ,  const QString & )));
+#endif
+
+}
+
+void KSpreadView::spellCheckerReplaceAll( const QString &orig, const QString & replacement)
+{
+    m_spell.replaceAll.append( orig);
+    m_spell.replaceAll.append( replacement);
+}
+
+
+void KSpreadView::spellCheckerIgnoreAll( const QString & word)
+{
+    m_pDoc->addIgnoreWordAll( word );
 }
 
 
@@ -1470,6 +1486,10 @@ void KSpreadView::spellCleanup()
   m_spell.firstSpellTable   = 0L;
   m_spell.currentSpellTable = 0L;
   m_spell.currentCell       = 0L;
+#if KDE_VERSION >= 305
+  m_spell.replaceAll.clear();
+#endif
+
 
   KMessageBox::information( this, i18n( "Spell checking is complete." ) );
   // not supported yet
@@ -1586,9 +1606,6 @@ void KSpreadView::spellCheckerDone( const QString & )
 {
   int result = m_spell.kspell->dlgResult();
 
-  // store ignore word
-  m_ignoreWord += m_spell.kspell->ksConfig().ignoreList();
-
   m_spell.kspell->cleanUp();
   delete m_spell.kspell;
   m_spell.kspell = 0L;
@@ -1616,6 +1633,9 @@ void KSpreadView::spellCheckerDone( const QString & )
       }
     }
   }
+#if KDE_VERSION >= 305
+        m_spell.replaceAll.clear();
+#endif
 
   // Not implemented yet
   //        if(m_spell.macroCmdSpellCheck)
@@ -1631,6 +1651,9 @@ void KSpreadView::spellCheckerFinished()
   m_spell.kspell->cleanUp();
   delete m_spell.kspell;
   m_spell.kspell = 0L;
+#if KDE_VERSION >= 305
+  m_spell.replaceAll.clear();
+#endif
 
   bool kspellNotConfigured=false;
 
@@ -2965,7 +2988,7 @@ void KSpreadView::setupPrinter( KPrinter &prt )
 
     prt.setFullPage( TRUE );
     prt.setResolution ( 72 );
-    
+
 }
 
 void KSpreadView::print( KPrinter &prt )
@@ -2973,7 +2996,7 @@ void KSpreadView::print( KPrinter &prt )
 
     //store the current setting in a temporary variable
     KoOrientation _orient =  m_pTable->orientation();
-    
+
     QPainter painter;
 
     painter.begin( &prt );
@@ -3583,7 +3606,7 @@ void KSpreadView::slotListChoosePopupMenu( )
  m_popupListChoose = new QPopupMenu();
  int id = 0;
  QRect selection( m_pTable->selectionRect() );
- if ( selection.left() == 0 ) 
+ if ( selection.left() == 0 )
    selection.setCoords(m_pCanvas->markerColumn(),m_pCanvas->markerRow(),
 		       m_pCanvas->markerColumn(),m_pCanvas->markerRow());
  KSpreadCell *cell = m_pTable->cellAt( m_pCanvas->markerColumn(), m_pCanvas->markerRow() );
@@ -3596,7 +3619,7 @@ void KSpreadView::slotListChoosePopupMenu( )
    while ( c )
    {
      if ( !c->isObscuringForced()
-          && !( col == m_pCanvas->markerColumn() 
+          && !( col == m_pCanvas->markerColumn()
                 && c->row() == m_pCanvas->markerRow()) )
      {
        if ( c->isString() && c->text() != tmp && !c->text().isEmpty() )
@@ -3605,7 +3628,7 @@ void KSpreadView::slotListChoosePopupMenu( )
            itemList.append(c->text());
        }
      }
-     
+
      c = m_pTable->getNextCellDown( col, c->row() );
    }
  }
@@ -4686,8 +4709,8 @@ void KSpreadView::insertTable( KSpreadTable* table )
 }
 
 QColor KSpreadView::borderColor() const
-{ 
-  return m_borderColor->color(); 
+{
+  return m_borderColor->color();
 }
 
 #include "kspread_view.moc"

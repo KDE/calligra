@@ -303,6 +303,10 @@ public:
 	return defaultValue;
   }
 
+    void addIgnoreWordAll( const QString & word);
+    void clearIgnoreWordAll( );
+    QStringList spellListIgnoreAll() const { return m_spellListIgnoreAll;}
+
 
 public slots:
 
@@ -467,7 +471,7 @@ protected:
   KSpellConfig *m_pKSpellConfig;
   bool m_bDontCheckUpperWord;
   bool m_bDontCheckTitleCase;
-
+    QStringList m_spellListIgnoreAll;
   KoUnit::Unit m_unit;
 };
 
