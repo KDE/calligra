@@ -234,7 +234,6 @@ int KOSpell::widthDlg() const { return ksdlg->width(); }
 void
 KOSpell::setUpDialog ()
 {
-    kdDebug()<<" KOSpell::setUpDialog (bool reallyuseprogressbar)*******\n";
     if (ksdlg)
         return;
     initConfig();
@@ -383,6 +382,7 @@ void KOSpell::previousWord()
 
 bool KOSpell::check( const QString &_buffer, bool _usedialog )
 {
+    usedialog = _usedialog;
     origbuffer = _buffer;
     if ( ( totalpos = origbuffer.length() ) == 0 )
     {
@@ -414,7 +414,7 @@ bool KOSpell::check( const QString &_buffer, bool _usedialog )
     qs=origbuffer.mid (0,i);
     lastline=i; //the character position, not a line number
 
-    if (usedialog)
+    if (_usedialog)
         ksdlg->show();
     else
         ksdlg->hide();
