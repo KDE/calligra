@@ -87,11 +87,12 @@ KexiQueryPartProxy::slotCreateQuery()
     if(ok && name.length() > 0)
     {
 		KexiQueryPartItem *it=new KexiQueryPartItem(part(), name, "kexi/query", name);
-        part()->items()->insert(it->fullIdentifier(),it);
         KexiQueryDesigner *kqd = new KexiQueryDesigner(kexiView(), 0, it, false);
+        part()->items()->insert(it->fullIdentifier(),it);
 //        KexiQueryDesigner *kqd = new KexiQueryDesigner(kexiView(), 0, "query",it, false);
         emit m_queryPart->itemListChanged(part());
         kexiView()->project()->addFileReference(FileReference("Queries",name,"/query/" + name + ".query"));
+		kqd->setIcon( it->handler()->itemPixmap() );
 		kqd->show();
         kexiView()->project()->setModified(true);
     }
@@ -100,7 +101,9 @@ KexiQueryPartProxy::slotCreateQuery()
 void
 KexiQueryPartProxy::slotOpen(const QString& identifier)
 {
-	KexiProjectHandlerItem *it=(*(part()->items()))[part()->localIdentifier(identifier)];
+//	KexiProjectHandlerItem *it=(*(part()->items()))[part()->localIdentifier(identifier)];
+	part()->debug();
+	KexiProjectHandlerItem *it=part()->items()->find(identifier);
 	if (!it) return;
 
 	if(kexiView()->activateWindow(it->identifier()))
@@ -118,7 +121,9 @@ KexiQueryPartProxy::slotOpen(const QString& identifier)
 void
 KexiQueryPartProxy::slotEdit(const QString &identifier)
 {
-	KexiProjectHandlerItem *it=(*(part()->items()))[part()->localIdentifier(identifier)];
+//	KexiProjectHandlerItem *it=(*(part()->items()))[part()->localIdentifier(identifier)];
+	part()->debug();
+	KexiProjectHandlerItem *it=part()->items()->find(identifier);
 	if (!it) return;
 
 	if(kexiView()->activateWindow(it->identifier()))

@@ -2,7 +2,8 @@
    Copyright (C) 2002 Till Busch <till@bux.at>
    Lucijan Busch <lucijan@gmx.at>
    Daniel Molkentin <molkentin@kde.org>
-   Copyright (C) 2003   Joseph Wenninger<jowenn@kde.org>
+   Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
+   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -36,16 +37,16 @@
 
 #include <config.h>
 
-//#ifdef USE_KDE
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kapp.h>
+#include <kiconloader.h>
 
 #ifndef KEXI_NO_PRINT
 # include <kprinter.h>
 # include <kdeprint/driver.h>
 #endif
-//#endif
 
 #include "kexitablerm.h"
 #include "kexitableview.h"
@@ -76,6 +77,9 @@ KexiTableView::KexiTableView(QWidget *parent, const char *name, KexiTableList *c
 	m_curCol = -1;
 	m_pCurrentItem = 0;
 	m_pInsertItem = 0;
+	m_pContextMenu = new QPopupMenu(this);
+	menu_id_addRecord = m_pContextMenu->insertItem(i18n("Add Record"), this, SLOT(addRecord()), CTRL+Key_Insert);
+	menu_id_removeRecord = m_pContextMenu->insertItem(kapp->iconLoader()->loadIcon("button_cancel", KIcon::Small), i18n("Remove Record"), this, SLOT(removeRecord()), CTRL+Key_Delete);
 
 	m_rowHeight = fontMetrics().lineSpacing();
 	if(m_rowHeight < 17)
@@ -91,7 +95,8 @@ KexiTableView::KexiTableView(QWidget *parent, const char *name, KexiTableList *c
 	m_pColumnModes = new QMemArray<int>;
 	m_pColumnDefaults = new QPtrList<QVariant>;
 	m_deletionPolicy = NoDelete;
-	m_additionPolicy = NoAdd;
+	//m_additionPolicy = NoAdd;
+  setAdditionPolicy( NoAdd );
 
 	setMargins(14, fontMetrics().height() + 4, 0, 0);
 
@@ -116,8 +121,6 @@ KexiTableView::KexiTableView(QWidget *parent, const char *name, KexiTableList *c
 
 //	enableClipper(true);
 	setBackgroundMode(PaletteBackground);
-
-	m_pContextMenu = 0;
 
 	if(!contents)
 	{
@@ -214,8 +217,16 @@ void KexiTableView::remove(KexiTableItem *item, bool moveCursor/*=true*/)
 
 void KexiTableView::removeRecord()
 {
-	emit itemRemoveRequest(m_pCurrentItem);
-	emit currentItemRemoveRequest();
+	if (m_deletionPolicy == NoDelete)
+    return;
+  if (m_deletionPolicy == ImmediateDelete && m_pCurrentItem) {
+    remove(m_pCurrentItem);
+  } else if (m_deletionPolicy == AskDelete) {
+    //TODO(js)
+  } else if (m_deletionPolicy == SignalDelete) {
+  	emit itemRemoveRequest(m_pCurrentItem);
+	  emit currentItemRemoveRequest();
+  }
 }
 
 void KexiTableView::addRecord()
@@ -751,7 +762,15 @@ void KexiTableView::contentsMousePressEvent( QMouseEvent* e )
 //	kdDebug()<<"void KexiTableView::contentsMousePressEvent( QMouseEvent* e ) by now the current items should be set, if not -> error + crash"<<endl;
 	if(e->button() == RightButton)
 	{
-		emit contextMenuRequested(m_pCurrentItem, m_curRow, e->globalPos());
+    //show own context menu if configured
+    if (updateContextMenu()) {
+      selectRow(m_curRow);
+    	m_pContextMenu->exec(e->globalPos());
+    }
+    else {
+  		emit contextMenuRequested(m_pCurrentItem, m_curCol, e->globalPos());
+//  		emit contextMenuRequested(m_pCurrentItem, m_curRow, e->globalPos());
+    }
 	}
 	else if(e->button() == LeftButton)
 	{
@@ -1370,7 +1389,7 @@ void KexiTableView::editorCancel()
 void KexiTableView::setAdditionPolicy(AdditionPolicy policy)
 {
 	m_additionPolicy = policy;
-	updateContextMenu();
+//	updateContextMenu();
 }
 
 KexiTableView::AdditionPolicy KexiTableView::additionPolicy()
@@ -1381,7 +1400,7 @@ KexiTableView::AdditionPolicy KexiTableView::additionPolicy()
 void KexiTableView::setDeletionPolicy(DeletionPolicy policy)
 {
 	m_deletionPolicy = policy;
-	updateContextMenu();
+//	updateContextMenu();
 }
 
 KexiTableView::DeletionPolicy KexiTableView::deletionPolicy()
@@ -1389,19 +1408,27 @@ KexiTableView::DeletionPolicy KexiTableView::deletionPolicy()
 	return m_deletionPolicy;
 }
 
-void KexiTableView::updateContextMenu()
+/*! Updates visibility/accesibility of popup menu items,
+  returns false if no items are visible after update. */
+bool KexiTableView::updateContextMenu()
 {
-    delete m_pContextMenu;
-    m_pContextMenu = 0L;
+  // delete m_pContextMenu;
+  //  m_pContextMenu = 0L;
+//  m_pContextMenu->clear();
+//	if(m_pCurrentItem && m_pCurrentItem->isInsertItem())
+//    return;
 
-	if(m_additionPolicy != NoAdd || m_deletionPolicy != NoDelete)
-	{
-		m_pContextMenu = new QPopupMenu(this);
-		if(m_additionPolicy != NoAdd)
-			m_pContextMenu->insertItem(i18n("Add Record"), this, SLOT(addRecord()), ALT+Key_Insert);
-		if(m_deletionPolicy != NoDelete)
-			m_pContextMenu->insertItem(i18n("Remove Record"), this, SLOT(removeRecord()), ALT+Key_Delete);
-	}
+//	if(m_additionPolicy != NoAdd || m_deletionPolicy != NoDelete)
+//	{
+//		m_pContextMenu = new QPopupMenu(this);
+  m_pContextMenu->setItemVisible(menu_id_addRecord, m_additionPolicy != NoAdd);
+  m_pContextMenu->setItemVisible(menu_id_removeRecord, m_deletionPolicy != NoDelete
+    && m_pCurrentItem && !m_pCurrentItem->isInsertItem());
+  for (int i=0; i<(int)m_pContextMenu->count(); i++) {
+    if (m_pContextMenu->isItemVisible( m_pContextMenu->idAt(i) ))
+      return true;
+  }
+  return false;
 }
 
 void KexiTableView::slotAutoScroll()

@@ -58,17 +58,24 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiView *view,QWidget *p
 	m_tables = view->project()->handlerForMime("kexi/relation")->embeddReadOnly(hSplitter, view);
 	QSplitter *vSplitter = new QSplitter(Horizontal, hSplitter);
 //	m_tables = new KexiRelationDialog(view,this, "querytables", true);
+
 	m_designTable = new KexiTableView(vSplitter, "designer", item->designData());
 	m_designTable->m_editOnDubleClick = true;
+//	m_designTable->setAdditionPolicy( KexiTableView::AutoAdd );
+	m_designTable->setDeletionPolicy( KexiTableView::ImmediateDelete );
+
 	connect(m_designTable, SIGNAL(dropped(QDropEvent *)), this, SLOT(slotDropped(QDropEvent *)));
 	connect(m_designTable, SIGNAL(itemChanged(KexiTableItem *, int)), this, SLOT(slotItemChanged(KexiTableItem *, int)));
 	connect(m_designTable, SIGNAL(itemSelected(KexiTableItem *)), this, SLOT(slotItemSelected(KexiTableItem *)));
 	connect(m_designTable, SIGNAL(contextMenuRequested(KexiTableItem *, int, const QPoint &)), this,
 	 SLOT(slotContextMenuRequested(KexiTableItem *, int, const QPoint &)));
 
+#ifndef KEXI_NO_UNFINISHED
 	m_paramList=new KexiParameterListEditor(vSplitter);
 	connect(m_paramList->addParameter,SIGNAL(clicked()),this,SLOT(slotAddParameter()));
-
+#else
+	m_paramList=0;
+#endif
 	m_designTable->viewport()->setAcceptDrops(true);
 	m_designTable->addDropFilter("kexi/field");
 
@@ -197,6 +204,7 @@ void
 KexiQueryDesignerGuiEditor::getParameters(KexiDataProvider::ParameterList &list)
 {
 	list.clear();
+#ifndef KEXI_NO_UNFINISHED
 	kdDebug()<<"KexiQueryDesignerGuiEditor::getParameters()"<<endl;
 	for ( QListViewItem *it=m_paramList->list->firstChild();it;it=it->nextSibling())
 	{
@@ -204,15 +212,18 @@ KexiQueryDesignerGuiEditor::getParameters(KexiDataProvider::ParameterList &list)
 		list.append(KexiDataProvider::Parameter(it->text(0),
 			KexiDataProvider::Parameter::Text));
 	}
+#endif
 }
 
 void
 KexiQueryDesignerGuiEditor::setPrameters(KexiDataProvider::ParameterList &l)
 {
+#ifndef KEXI_NO_UNFINISHED
 	for(KexiDataProvider::ParameterList::Iterator it = l.begin(); it != l.end(); ++it)
 	{
 		new KListViewItem(m_paramList->list, (*it).name, "type");
 	}
+#endif
 }
 
 QString
@@ -402,12 +413,14 @@ KexiQueryDesignerGuiEditor::~KexiQueryDesignerGuiEditor() {
 void
 KexiQueryDesignerGuiEditor::slotAddParameter()
 {
+#ifndef KEXI_NO_UNFINISHED
 	KexiAddParamDialog d(this);
 	if (d.exec()==QDialog::Accepted)
 	{
 		kdDebug() << "KexiQueryDesignerGuiEditor::slotAddParameter(): name=" << d.parameterName() << endl;
 		new KListViewItem(m_paramList->list, QString("kexi_" + d.parameterName()), "type");
 	}
+#endif
 }
 
 void
@@ -445,8 +458,10 @@ void KexiQueryDesignerGuiEditor::setUpTable()
 
 void KexiQueryDesignerGuiEditor::slotContextMenuRequested(KexiTableItem *, int col, const QPoint &)
 {
-	KexiFilterDlg *d = new KexiFilterDlg(m_view->project(), this);
-	d->exec();
+#ifndef KEXI_NO_FILTER_DLG
+	KexiFilterDlg dlg(m_view->project(), this);
+	dlg.exec();
+#endif
 }
 
 void KexiQueryDesignerGuiEditor::slotRemoveParameter() {

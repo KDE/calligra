@@ -90,7 +90,9 @@ void KexiQueryPart::load (KoStore *ks)
 	{
 		kdDebug() << "KexiQueryPart::getQueries() added " << (*it).name << endl;
 		KexiQueryPartItem *qpi;
-		list->insert( (*it).name,qpi=new KexiQueryPartItem(this, (*it).name, "kexi/query", (*it).name));
+		qpi=new KexiQueryPartItem(this, (*it).name, "kexi/query", (*it).name);
+    list->insert( qpi->fullIdentifier(), qpi );
+//		list->insert( (*it).name,qpi=new KexiQueryPartItem(this, (*it).name, "kexi/query", (*it).name));
 		qpi->load(ks);
 	}
 

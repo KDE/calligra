@@ -116,9 +116,11 @@ KexiQueryDesignerSQLHistory::contextMenu(const QPoint &pos, HistoryEntry *e)
 {
 	QPopupMenu p(this);
 	p.insertItem(SmallIcon("editcopy"), i18n("Copy to Clipboard"), this, SLOT(slotToClipboard()));
+#ifndef KEXI_NO_UNFINISHED
 	p.insertSeparator();
 	p.insertItem(SmallIcon("edit"), i18n("Edit"));
 	p.insertItem(SmallIcon("reload"), i18n("Requery"));
+#endif
 
 	p.exec(pos);
 }

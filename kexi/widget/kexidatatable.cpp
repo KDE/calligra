@@ -81,8 +81,9 @@ KexiDataTable::init(QString caption, QString identifier, bool embedd)
 	g->addMultiCellWidget(m_statusBar,	2,	2,	0,	1);
 
 	connect(m_tableView, SIGNAL(itemChanged(KexiTableItem *, int,QVariant)), this, SLOT(slotItemChanged(KexiTableItem *, int,QVariant)));
-	connect(m_tableView, SIGNAL(contextMenuRequested(KexiTableItem *, int, const QPoint &)), this,
-	 SLOT(slotContextMenu(KexiTableItem *, int, const QPoint &)));
+//	connect(m_tableView, SIGNAL(contextMenuRequested(KexiTableItem *, int, const QPoint &)), this,
+//	 SLOT(slotContextMenu(KexiTableItem *, int, const QPoint &)));
+	m_tableView->setDeletionPolicy( KexiTableView::SignalDelete );
 	connect(m_tableView, SIGNAL(currentItemRemoveRequest()), this, SLOT(slotRemoveCurrentRecord()));
 
 	m_db = m_view->project()->db();
