@@ -1,6 +1,0 @@
-1) Edit koffice/Makefile and look for 'TOPSUBDIRS.' Move 'filters'
-   to the end of this line.
-2) Edit koffice/filters/kspread/csv/Makefile.am and uncomment all the
-   lines (i.e. remove the '#' chars).
-3) Delete 'kspread_csv_export.desktop' in the Makefile.am
-4) Delete $KDEDIR/share/services/kspread_csv_export.desktop'

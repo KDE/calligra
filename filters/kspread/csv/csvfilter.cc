@@ -46,18 +46,7 @@ const bool CSVFilter::I_filter(const QCString &file, const QCString &from,
     QTextStream inputStream(&in);
     XMLTree tree(document);
 
-    /*
-    KGlobal::locale()->enableNumericLocale();
-    kDebugInfo( 31501, "Decimal Symbol : %s", KGlobal::locale()->decimalSymbol().ascii());
-    QChar decimal_point = KGlobal::locale()->decimalSymbol()[0];
-     I've dropped the idea of determining the separator automatically
-     after trying to load an English CSV file into a French kspread... :-)
-    // English-speaking countries : decimal_point = '.', CSV delimiter = ','
-    // France :                     decimal_point = ',', CSV delimiter = ';'
-    // Germany (Austria) :          decimal_point = ',', CSV delimiter = ';'
-    // I need more input !!!
-    */
-    QChar csv_delimiter; // = (decimal_point == ',') ? ';' : ',';
+    QChar csv_delimiter;
 
     // is there a config info or do we have to use a dialog box?
     if(config!=QString::null) {
@@ -66,15 +55,22 @@ const bool CSVFilter::I_filter(const QCString &file, const QCString &from,
         csv_delimiter=QChar(config[0]);
     }
     else {
+        QString firstLine = inputStream.readLine();
+        firstLine.truncate(100);
         switch (QMessageBox::information( 0L, i18n( "Information needed" ),
-                                  i18n( "What is the separator used in this file ?" ),
-                                  i18n( "Comma" ), i18n( "Semicolon" ) )) {
+                                  i18n( "What is the separator used in this file ? First line is \n%1" ).arg(firstLine),
+                                  i18n( "Comma" ), i18n( "Semicolon" ), i18n( "Tabulator" ) )) {
+            case 2:
+                csv_delimiter = '\t';
+                break;
             case 1:
                 csv_delimiter = ';';
                 break;
             default:
                 csv_delimiter = ','; // "Comma" chosen or Escape typed
         }
+        // Now rewind to the beginning of the file
+        in.at(0);
     }
 
     QChar x;
@@ -131,22 +127,26 @@ const bool CSVFilter::I_filter(const QCString &file, const QCString &from,
     }
 
     //for debuggging only
-    //kdDebug(30003) << "XXYYYYYYZZ" << endl;
-    //QString s=tree.part();
-    //kdDebug(30003) << "Size: " << s.length() << endl
-    //		   << "String: " << s << endl;
-    //kdDebug(30003) << "XXYYYYYYZZ" << endl;
+#if 0
+    kdDebug(31501) << "XXYYYYYYZZ" << endl;
+    QString tmp=tree.part();
+    kdDebug(31501) << "Size: " << tmp.length() << endl
+    		   << "String: " << tmp << endl;
+    kdDebug(31501) << "XXYYYYYYZZ" << endl;
 
-    //KoTarStore out=KoTarStore(QString(fileOut), KoStore::Write);
-    //if(!out.open("root", "")) {
-    //    kDebugError( 31501, "Unable to open output file!");
-    //    in.close();
-    //    out.close();
-    //    return false;
-    //}
-    //out.write((const char*)tmp, tmp.length());
-    //kDebugInfo( 31501, "%s", tmp.data());
-    //out.close();
+#if 0
+    KoTarStore out=KoTarStore("/tmp/debug_csvfilter.tgz", KoStore::Write);
+    if(!out.open("root", "")) {
+        kDebugError( 31501, "Unable to open output file!");
+        in.close();
+        out.close();
+        return false;
+    }
+    out.write((const char*)tmp, tmp.length());
+    kDebugInfo( 31501, "%s", tmp.data());
+    out.close();
+#endif
+#endif
 
     in.close();
     return bSuccess;
