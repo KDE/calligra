@@ -322,6 +322,9 @@ QString KPBackGround::saveOasisBackgroundPageStyle( KoStore *store, KoXmlWriter 
     if ( !transition.isEmpty() )
         stylepageauto.addProperty( "presentation:transition-style", transition );
 
+    if ( !m_page->isSlideSelected() )
+        stylepageauto.addProperty( "presentation:visibility", "hidden" );
+
     switch ( backType )
     {
     case BT_COLOR:
@@ -404,6 +407,16 @@ void KPBackGround::loadOasis(KoOasisContext & context )
 {
     KoStyleStack& styleStack = context.styleStack();
     kdDebug()<<"KPBackGround::loadOasis()\n";
+
+    if ( styleStack.hasAttribute( "presentation:visibility", QString::null, "drawing-page" ) )
+    {
+        QString str =  styleStack.attribute( "presentation:visibility", QString::null, "drawing-page" );
+        if ( str=="hidden" )
+            m_page->slideSelected( false );
+        else
+            kdDebug()<<" presentation:visibility parameter not implemented :"<<str<<endl;
+    }
+
     kdDebug()<<"stylePage->hasAttribute( draw:fill ) :"<<styleStack.hasAttribute( "draw:fill", QString::null, "drawing-page" )<<endl;
 
     if ( styleStack.hasAttribute( "draw:fill", QString::null, "drawing-page" ) )
