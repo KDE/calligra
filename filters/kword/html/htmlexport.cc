@@ -50,10 +50,9 @@
 #include <htmlexport.h>
 #include <htmlexport.moc>
 
-#include <ExportTagProcessing.h>
-#include <ExportDialog.h>
-
-#undef DEBUG_KWORD_TAGS // Debugging KWord's tags and attributes
+#include "ExportTagProcessing.h"
+#include "ExportDialog.h"
+#include "ExportFilterBase.h"
 
 // Every tag has its own processing function. All of those functions
 // have the same parameters since the functions are passed to
@@ -76,106 +75,6 @@
 //          LAYOUT
 //            NAME value=
 
-// FormatData is a container for data retreived from the FORMAT tag
-// and its subtags to be used in the PARAGRAPH tag.
-
-class FormatData
-{
-    public:
-        FormatData ()
-        { init(); }
-        FormatData ( int p,
-                     int l  ) : pos (p), len (l), realLen (l)
-        { init(); }
-
-        QString fontName;
-
-        int  pos; // Start of text to which this format applies
-        int  len; // Len of text to which this format applies
-        int  realLen; //Real length of text (in case "len" is not the truth!)
-
-        int  weight;
-        int  fontSize;
-        QColor colour;
-        int  verticalAlignment;
-
-        bool italic;
-        bool underline;
-        bool strikeout;
-
-        bool missing;
-    private:
-        void init()
-        {
-            //Initialize member variables
-            // (initialize all variables, even those to 0!)
-            weight=0;
-            fontSize=-1;
-            colour=QColor();
-            verticalAlignment=0;
-            italic=false;
-            underline=false;
-            strikeout=false;
-            fontName=QString::null;
-            missing=false;
-        }
-};
-
-class ValueListFormatData : public QValueList<FormatData>
-{
-public:
-    ValueListFormatData (void) { }
-    virtual ~ValueListFormatData (void) { }
-};
-
-// Counter structure, for LayoutData
-class CounterData
-{
-public:
-    CounterData()
-        : numbering (NUM_NONE), style (STYLE_NONE), depth(0), start(0), customCharacter(0)
-        {}
-
-    enum Numbering
-    {
-        NUM_LIST = 0,       // Numbered as a list item.
-        NUM_CHAPTER = 1,    // Numbered as a heading.
-        NUM_NONE = 2        // No counter.
-    };
-    enum Style
-    {
-        STYLE_NONE = 0,
-        STYLE_NUM = 1, STYLE_ALPHAB_L = 2, STYLE_ALPHAB_U = 3,
-        STYLE_ROM_NUM_L = 4, STYLE_ROM_NUM_U = 5, STYLE_CUSTOMBULLET = 6,
-        STYLE_CUSTOM = 7, STYLE_CIRCLEBULLET = 8, STYLE_SQUAREBULLET = 9,
-        STYLE_DISCBULLET = 10
-    };
-    Numbering numbering;
-    Style style;
-    /*unsigned*/ int depth;
-    int start;
-    QString lefttext;
-    QString righttext;
-
-    int /*QChar*/ customCharacter;
-    QString customFont;
-    //QString custom;
-};
-
-// Paragraph layout
-class LayoutData
-{
-public:
-    LayoutData():indentFirst(0.0), indentLeft(0.0), indentRight(0.0)
-      { }
-
-    QString styleName;
-    QString alignment;
-    CounterData counter;
-    FormatData formatData;
-    double indentFirst, indentLeft, indentRight;
-
-};
 
 static void ProcessLayoutNameTag ( QDomNode myNode, void *tagData, QString &, ClassExportFilterBase* )
 {
@@ -461,31 +360,6 @@ static void ProcessTextTag ( QDomNode myNode, void *tagData, QString &, ClassExp
 
     AllowNoSubtags (myNode);
 }
-
-class ClassExportFilterBase
-{
-    public:
-        ClassExportFilterBase(void) : inList(false) {}
-        virtual ~ClassExportFilterBase(void) {}
-    public: //Non-virtual
-        bool filter(const QString  &filenameIn, const QString  &filenameOut);
-        QString escapeText(const QString& str) const;
-        QString getHtmlOpeningTagExtraAttributes(void) const;
-    public: //virtual
-        virtual bool isXML(void) const {return false;}
-        virtual QString getDocType(void) const = 0;
-        virtual QString getBodyOpeningTagExtraAttributes(void) const = 0;
-        virtual void ProcessParagraphData ( QString &paraText, ValueListFormatData &paraFormatDataList, QString &outputText) = 0;
-        virtual QString getStyleElement(void) {return QString::null;} //Default is no style
-        virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered)=0;
-        virtual QString getParagraphElement(const QString& strTag, const QString& strParagraphText, LayoutData& layout)=0;
-    public: // Public variables
-        bool inList; // Are we currently in a list?
-        bool orderedList; // Is the current list ordered or not (undefined, if we are not in a list)
-        CounterData::Style typeList; // What is the style of the current list (undefined, if we are not in a list)
-    protected:
-        QDomDocument qDomDocumentIn;
-};
 
 QString ClassExportFilterBase::getHtmlOpeningTagExtraAttributes(void) const
 {
