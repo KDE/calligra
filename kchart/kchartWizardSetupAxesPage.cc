@@ -81,7 +81,7 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
     tmpLabel=new QLabel(tmpQGroupBox);
     tmpLabel->setText(i18n("Depth 3D : "));
     grid2->addWidget(tmpLabel,1,0);
-    depth = new QSpinBox(1, 20, 1, tmpQGroupBox);
+    depth = new QSpinBox(1, 40, 1, tmpQGroupBox);
     depth->setValue( _chart->params()->threeDBarDepth() );
     grid2->addWidget(depth,1,1);
 
