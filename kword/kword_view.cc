@@ -621,7 +621,7 @@ void KWordView_impl::setupMenu()
   pix = loadPixmap(tmp);
   m_idMenuInsert_Table = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
 						 CORBA::string_dup(i18n("&Objects...")),m_idMenuInsert,
-						 this,CORBA::string_dup("insertObjects"));
+						 this,CORBA::string_dup("insertPart"));
 
   // format menu
   m_idMenuFormat = m_rMenuBar->insertMenu(CORBA::string_dup(i18n("&Format")));
@@ -752,7 +752,7 @@ void KWordView_impl::setupInsertToolbar()
       pix = loadPixmap(tmp);
       m_idButtonInsert_Part = m_rToolBarInsert->insertButton(CORBA::string_dup(pix),
 							     CORBA::string_dup(i18n("Insert Object")),
-							     this,CORBA::string_dup("insertObject"));
+							     this,CORBA::string_dup("insertPart"));
    }
 }
 
