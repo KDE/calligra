@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
-<kpartgui name="Karbon" version="1">
+<kpartgui name="Karbon" version="2">
 <MenuBar>
 	<Menu name="edit">
 		<text>&amp;Edit</text>
@@ -17,6 +17,7 @@
 </MenuBar>
 <ToolBar name="view_toolbar" fullWidth="false">
 	<Text>View</Text>
+	<Separator/>
 	<Action name="view_mode"/>
 	<Action name="view_zoom"/>
 </ToolBar>
