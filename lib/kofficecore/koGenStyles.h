@@ -190,6 +190,9 @@ public:
         m_attributes.insert( attrName, QString::number( attrValue ) );
     }
 
+    void addAttributePt( const QString& attrName, int attrValue );
+    void addAttributePt( const QString& attrName, double attrValue );
+
     /**
      *  Write the definition of this style to @p writer, using the OASIS format.
      *  @param writer the KoXmlWriter in which @p elementName will be created and filled in

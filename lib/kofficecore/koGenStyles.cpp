@@ -169,6 +169,22 @@ void KoGenStyle::addPropertyPt( const QString& propName, double propValue, Prope
     m_properties[type].insert( propName, str );
 }
 
+void KoGenStyle::addAttributePt( const QString& attrName, int attrValue )
+{
+    QString str;
+    str.setNum( attrValue );
+    str += "pt";
+    m_attributes.insert( attrName, str );
+}
+
+void KoGenStyle::addAttributePt( const QString& attrName, double attrValue )
+{
+    QString str;
+    str.setNum( attrValue, 'g', DBL_DIG );
+    str += "pt";
+    m_attributes.insert( attrName, str );
+}
+
 #ifndef NDEBUG
 void KoGenStyle::printDebug() const
 {
