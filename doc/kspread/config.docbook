@@ -29,28 +29,46 @@
 </mediaobject>
 <para>Search through the list box to find the action you want to add or
 change the shortcut keys for and select it by <mousebutton>left</mousebutton>
-clicking on the name. You will then be able to change the shortcut by 
-selecting the <guilabel>None</guilabel>, <guilabel>Default</guilabel> or 
+clicking on the name. By entering the name of the action in the search bar at the
+top you can quickly find the desired action. You will then be able to change the shortcut
+by selecting the <guilabel>None</guilabel>, <guilabel>Default</guilabel> or
 <guilabel>Custom</guilabel> radio button or by clicking on the large button in 
 the <guilabel>Shortcut for Selected Action</guilabel> area.</para>
-<para>The <guilabel>Define Shortcut</guilabel> dialog box will then open.
+<para>The <guilabel>Configure Shortcut</guilabel> dialog box will then open.
 </para>
 <mediaobject>
 <imageobject>
 <imagedata fileref="shortcut2.png" format="PNG"/>
 </imageobject>
 <textobject>
-<phrase>Shortcut config screenshot 2</phrase>
+<phrase>Simple shortcut configuration</phrase>
 </textobject>
 </mediaobject>
-<para>Choose whether you want to change the <guilabel>Primary</guilabel> or 
-<guilabel>Alternate</guilabel> shortcut then press the key combination you
-want to act as the shortcut, for example <keycombo action="simul">
-&Ctrl;&Shift;<keycap>S</keycap></keycombo>. 
-If the <guilabel>Auto-Close</guilabel> box is checked the dialog will vanish 
-as soon as you enter the key combination, otherwise it will remain until you 
-press <guibutton>OK</guibutton> or <guibutton>Cancel</guibutton>. Clicking on 
-the little black icon with a white cross in it clears the shortcut.</para>
+<para>You can now simply press the key combination you want to act as the
+shortcut, for example <keycombo action="simul">
+&Ctrl;&Shift;<keycap>S</keycap></keycombo>. The <guilabel>Configure
+Shortcut</guilabel> dialog box will then close by itself as soon as the shortcut
+is configured.
+</para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="shortcut3.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Advanced shortcut configuration</phrase>
+</textobject>
+</mediaobject>
+<para>
+You can also click on the <guibutton>Advanced</guibutton> button in the
+<guilabel>Configure Shortcut</guilabel> dialog to get more options.
+There you can configure a primary shortcut and a secondary shortcut.
+You can even choose multi-key mode, which lets you add additional
+keys to the shortcut.
+</para>
+<para>
+Configuring the shortcut with the simple dialog sets the primary
+shortcut.
+</para>
 
 <sect2 id="userdefmenus">
 <title>User Defined Menus</title>
