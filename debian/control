@@ -5,10 +5,17 @@ Priority: optional
 Maintainer: Ivan E. Moore II <rkrusty@debian.org>
 Standards-Version: 3.1.1
 
+Package: koffice-dev
+Architecture: any
+Section: devel
+Depends: koffice-libs (= ${Source-Version}), libc6-dev, kdelibs3-dev
+Description: Core libraries for KOffice (Development files)
+ Core libraries for Koffice (Development files)
+
 Package: koffice-libs
 Architecture: any
 Section: x11
-Replaces: koffice
+Replaces: koffice, koffice-common
 Depends: ${shlibs:Depends}, kdebase-libs
 Conflicts: koffice
 Suggests: kdebase
@@ -17,32 +24,10 @@ Description: KDE Office Suite (Common libraries and binaries)
  .
  This package contains all common architecture specific files.
 
-Package: koffice-common
-Architecture: all
-Section: x11
-Depends: koffice-libs
-Suggests: kdebase, kword, kchart, kspread, killustrator, kpresenter, kivio
-Description: KDE Office Suite (Common files)
- KDE Office Suite
- .
- This package contains all common non-architecture specific files.
-
-Package: task-koffice
-Architecture: all
-Section: x11
-Depends: koffice-libs, koffice-common, kchart, kword, kspread, killustrator, kpresenter
-Suggests: kdebase, kivio
-Description: KDE Office Suite
- KDE Office Suite
- . 
- This Task depends on each of the following KOffice components:
- .
- kchart, kspread, killustrator, kpresenter, and kword
-
 Package: kchart
 Architecture: any
 Section: x11
-Depends: ${shlibs:Depends}, koffice-libs (= ${Source-Version}), koffice-common
+Depends: ${shlibs:Depends}, koffice-libs (= ${Source-Version})
 Suggests: kdebase
 Description: KDE Office Suite - KChart
  KDE Office Suite - KChart
@@ -52,7 +37,7 @@ Description: KDE Office Suite - KChart
 Package: kspread
 Architecture: any
 Section: x11
-Depends: ${shlibs:Depends}, koffice-libs (= ${Source-Version}), koffice-common
+Depends: ${shlibs:Depends}, koffice-libs (= ${Source-Version})
 Suggests: kdebase
 Description: KDE Office Suite - KSpread
  KDE Office Suite - KSpread
@@ -62,7 +47,7 @@ Description: KDE Office Suite - KSpread
 Package: killustrator
 Architecture: any
 Section: x11
-Depends: ${shlibs:Depends}, koffice-libs (= ${Source-Version}), koffice-common
+Depends: ${shlibs:Depends}, koffice-libs (= ${Source-Version})
 Suggests: kdebase
 Description: KDE Office Suite - KIllustrator
  KDE Office Suite - KIllustrator
@@ -72,7 +57,7 @@ Description: KDE Office Suite - KIllustrator
 Package: kpresenter
 Architecture: any
 Section: x11
-Depends: ${shlibs:Depends}, koffice-libs (= ${Source-Version}), koffice-common
+Depends: ${shlibs:Depends}, koffice-libs (= ${Source-Version})
 Suggests: kdebase
 Description: KDE Office Suite - KPresenter
  KDE Office Suite - KPresenter
@@ -82,17 +67,33 @@ Description: KDE Office Suite - KPresenter
 Package: kword
 Architecture: any
 Section: x11
-Depends: ${shlibs:Depends}, koffice-libs (= ${Source-Version}), koffice-common
+Depends: ${shlibs:Depends}, koffice-libs (= ${Source-Version})
 Suggests: kdebase
 Description: KDE Office Suite - KWord
  KDE Office Suite - KWord
  .
  A Professional Text editor based on QT and KDE
 
-Package: koffice-dev
+Package: koshell
 Architecture: any
-Section: devel
-Depends: koffice-libs (= ${Source-Version}), libc6-dev, kdelibs3-dev
-Description: Core libraries for KOffice (Development files)
- Core libraries for Koffice (Development files)
+Section: x11
+Replaces: koffice-libs (<< 2.0-final-7), koffice-common (<< 2.0-final-7)
+Depends: ${shlibs:Depends}, koffice-libs (= ${Source-Version})
+Recommends: kchart, kword, kspread, killustrator, kpresenter, kivio
+Suggests: kdebase
+Description: KDE Office Workspace
+ KDE Office Workspace
+ .
+ A desktop with easy one-click Office launchers.
 
+Package: task-koffice
+Architecture: all
+Section: x11
+Depends: koffice-libs, kchart, kword, kspread, killustrator, kpresenter, koshell, kdelibs3, kdebase-libs, libqt2.2
+Suggests: kdebase, kivio
+Description: KDE Office Suite
+ KDE Office Suite
+ .
+ This Task depends on each of the following KOffice components:
+ .
+ kchart, kspread, killustrator, kpresenter, and kword

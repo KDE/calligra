@@ -3,8 +3,11 @@ koffice (2.0-final-7) unstable; urgency=low
   * More upstream fixes
   * Fixing build-depends for archs that are not x4
   * fixing shlibs
+  * Getting rid of koffice-common
+  * Cleaning up build rules
+  * Providing lintian overrides
  
- -- Ivan E. Moore II <rkrusty@debian.org>  Mon, 20 Nov 2000 16:15:00 -0700
+ -- Ivan E. Moore II <rkrusty@debian.org>  Tue, 21 Nov 2000 05:30:00 -0700
 
 koffice (2.0-final-6) unstable; urgency=low
  

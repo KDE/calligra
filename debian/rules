@@ -41,62 +41,36 @@ install: build
 	dh_testdir
 	dh_clean
 	-rm -f debian/undocumented
-	mkdir -p debian/tmp/etc/kde2
+	install -d debian/tmp/etc/kde2
+	install -d debian/tmp/usr/share/lintian/overrides
 	make install DESTDIR=`pwd`/debian/tmp/
 	perl -w admin/debianrules cleanup
+	cp debian/*.override debian/tmp/usr/share/lintian/overrides/
+	for i in `ls debian/tmp/usr/share/lintian/overrides/`; do \
+		mv debian/tmp/usr/share/lintian/overrides/$$i debian/tmp/usr/share/lintian/overrides/`echo $$i | sed -e 's#.override##'`; \
+	done
+
 	
 binary-indep: build install
 	dh_testroot
 	dh_testdir
+
+
+binary-arch: build install
+	dh_testdir
+	dh_testroot
 	dh_installdirs
 	install -d debian/task-koffice/usr/share/doc/task-koffice/
 	for i in `find debian/ -type l -name "common"`; do \
 		rm $$i ;\
 		ln -s ../common $$i ;\
 	done
-	dh_movefiles -pkoffice-common usr/share/apps/koffice/* \
-		usr/share/services/* usr/share/icons/* \
-		usr/share/doc/kde/HTML/en/katabase/* \
-		usr/share/doc/kde/HTML/en/koffice/* \
-		usr/share/doc/kde/HTML/en/doc/* \
-		usr/share/doc/koffice/lib/* \
-		usr/share/doc/koffice/kimageshop/* \
-		usr/share/doc/koffice/koshell/* \
-		usr/share/doc/koffice/kformula/* \
-		usr/share/doc/koffice/graphite/* \
-		usr/share/doc/koffice/filters/* \
-		usr/share/doc/koffice/example/* \
-		usr/share/mimelnk/text/x-csv.desktop \
-		usr/share/servicetypes/* 
-
 	cp debian/README.task debian/task-koffice/usr/share/doc/task-koffice/README
-	-rm -f debian/koffice-common/usr/share/icons/locolor/16x16/actions/wizard.png
-	-rm -f debian/koffice-common/usr/share/icons/locolor/16x16/actions/bottom.png
-	-rm -f debian/koffice-common/usr/share/icons/locolor/16x16/actions/rotate.png
-	-rm -f debian/koffice-common/usr/share/icons/locolor/16x16/actions/top.png
+	-rm -f debian/tmp/usr/share/icons/locolor/16x16/actions/wizard.png
+	-rm -f debian/tmp/usr/share/icons/locolor/16x16/actions/bottom.png
+	-rm -f debian/tmp/usr/share/icons/locolor/16x16/actions/rotate.png
+	-rm -f debian/tmp/usr/share/icons/locolor/16x16/actions/top.png 
 
-	dh_installdocs -pkoffice-common
-	dh_installdocs -ptask-koffice
-	dh_installchangelogs -pkoffice-common
-	dh_installchangelogs -ptask-koffice
-	dh_perl -pkoffice-common
-	dh_compress -pkoffice-common
-	dh_compress -ptask-koffice
-	dh_fixperms -pkoffice-common
-	dh_installdeb -pkoffice-common
-	dh_installdeb -ptask-koffice
-	dh_shlibdeps -pkoffice-common
-	dh_gencontrol -pkoffice-common
-	dh_gencontrol -ptask-koffice
-	dh_md5sums -pkoffice-common
-	dh_builddeb -pkoffice-common
-	dh_md5sums -ptask-koffice
-	dh_builddeb -ptask-koffice
-
-
-binary-arch: build install binary-indep
-	dh_testdir
-	dh_testroot
 	for i in `find debian/tmp/usr/bin | sed -e 's#^debian/tmp/usr/bin/##'  | grep -v "debian/tmp"`; do \
 		echo "$$i.1" >> debian/undocumented ;\
 	done
@@ -104,62 +78,31 @@ binary-arch: build install binary-indep
 		echo "$$i.1" >> debian/undocumented ; \
 	done
 	dh_undocumented
-	list=`cd debian/tmp && find ./ -type l -name "lib*.so" | sed -e 's#^./##'` ;\
-	dh_movefiles -pkoffice-dev $$list usr/lib/*.a usr/include/kde
-	dh_movefiles -pkchart usr/bin/kchart usr/share/apps/kchart/* \
-		etc/kde2/applnk/Office/kchart.desktop \
-		usr/share/mimelnk/application/x-kchart.desktop \
-		usr/share/man/man1/kchart*
-	dh_movefiles -pkillustrator usr/bin/killustrator \
-		usr/share/apps/killustrator/* \
-		usr/share/doc/kde/HTML/en/killustrator/* \
-		usr/share/doc/koffice/killustrator/* \
-		etc/kde2/applnk/Office/killustrator.desktop \
-		usr/share/mimelnk/application/x-killustrator.desktop \
-		usr/share/man/man1/killustrator*
-	dh_movefiles -pkpresenter usr/bin/kpresenter \
-		usr/share/apps/kpresenter/* \
-		usr/share/doc/kde/HTML/en/kpresenter/* \
-		usr/share/doc/koffice/kpresenter/* \
-		etc/kde2/applnk/Office/kpresenter.desktop \
-		usr/share/mimelnk/application/x-kpresenter.desktop \
-		usr/share/man/man1/kpresenter*
-	dh_movefiles -pkspread usr/bin/kspread \
-		usr/share/apps/kspread/* \
-		usr/share/doc/kde/HTML/en/kspread/*  \
-		usr/share/doc/koffice/kspread/* \
-		etc/kde2/applnk/Office/kspread.desktop \
-		usr/share/mimelnk/application/x-kspread.desktop \
-		usr/share/man/man1/kspread*
-	dh_movefiles -pkword usr/bin/kword \
-		usr/share/apps/kword/* \
-		usr/share/doc/kde/HTML/en/kword/* \
-		usr/share/doc/koffice/kword/* \
-		etc/kde2/applnk/Office/kword.desktop \
-		usr/share/mimelnk/application/x-kword.desktop \
-		usr/share/man/man1/kword*
+	dh_movefiles
 	dh_installdocs
 	dh_installmenu
-	dh_installchangelogs
+	dh_installchangelogs -ptask-koffice
+	dh_installchangelogs -pkoffice-libs
+	dh_installchangelogs -pkword kword/CHANGES
+	dh_installchangelogs -pkspread kspread/ChangeLog
+	dh_installchangelogs -pkpresenter kpresenter/CHANGES
+	dh_installchangelogs -pkoshell
+	dh_installchangelogs -pkillustrator
+	dh_installchangelogs -pkchart kchart/CHANGES
+	dh_installchangelogs -pkoffice-dev
 	dh_installmime
 	dh_strip
 	dh_perl
 	dh_compress
 	dh_fixperms
-	-chmod 644 debian/tmp/usr/bin/kprconverter.pl
+	-chmod 644 debian/kpresenter/usr/bin/kprconverter.pl
 	dh_suidregister
-	dh_makeshlibs 
+	dh_makeshlibs -pkoffice-libs
 	dh_installdeb
 	dh_shlibdeps
 	dh_gencontrol
 	dh_md5sums 
-	dh_builddeb -pkword
-	dh_builddeb -pkspread
-	dh_builddeb -pkillustrator
-	dh_builddeb -pkpresenter
-	dh_builddeb -pkchart
-	dh_builddeb -pkoffice-dev
-	dh_builddeb -pkoffice-libs
+	dh_builddeb
 
 # Below here is fairly generic really
 

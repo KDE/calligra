@@ -1,0 +1,3 @@
+# modules
+kchart: no-shlibs-control-file usr/lib/kchart.so
+kchart: no-shlibs-control-file usr/lib/libkchartpart.so

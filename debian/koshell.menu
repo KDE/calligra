@@ -1,4 +1,4 @@
-?package(koffice-libs):\
+?package(koshell):\
 	needs=x11\
 	section=Apps/Tools\
 	hints="KDE"\

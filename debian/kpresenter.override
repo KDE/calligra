@@ -1,0 +1,3 @@
+# modules
+kpresenter: no-shlibs-control-file usr/lib/kpresenter.so
+kpresenter: no-shlibs-control-file usr/lib/libkpresenterpart.so
