@@ -505,7 +505,7 @@ void KWView::setupActions()
 
     actionFormatColor = new TKSelectColorAction( i18n( "Text Color..." ), TKSelectColorAction::TextColor,
                                      this, SLOT( textColor() ),
-                                     actionCollection(), "format_color" );
+                                     actionCollection(), "format_color", false );
 
 #if KDE_VERSION < 220
     // Necessary with kdelibs-2.1.x, because those actions are only in the toolbar
@@ -557,12 +557,15 @@ void KWView::setupActions()
     actionBorderWidth->setItems( lst );
 
 
-    actionBorderColor = new TKSelectColorAction( i18n("Border Color"), TKSelectColorAction::LineColor, actionCollection(), "border_color" );
+    actionBorderColor = new TKSelectColorAction( i18n("Border Color"), TKSelectColorAction::LineColor, actionCollection(), "border_color", false );
     connect(actionBorderColor,SIGNAL(activated()),SLOT(borderColor()));
 
 
-    actionBackgroundColor = new TKSelectColorAction( i18n( "Background Color" ), TKSelectColorAction::FillColor, actionCollection(),"border_backgroundcolor");
+    actionBackgroundColor = new TKSelectColorAction( i18n( "Background Color" ), TKSelectColorAction::FillColor, actionCollection(),"border_backgroundcolor", false );
     connect(actionBackgroundColor,SIGNAL(activated()),SLOT(backgroundColor() ));
+
+    actionTbBackgroundColor = new TKSelectColorAction( i18n( "Background Color" ), TKSelectColorAction::FillColor, actionCollection(),"border_tb_backgroundcolor", false );
+    connect(actionTbBackgroundColor,SIGNAL(activated()),SLOT(tbBackgroundColor() ));
 
     // ---------------------- Table menu
 
@@ -2654,8 +2657,19 @@ void KWView::backgroundColor()
     // This action is disabled when no frame is selected.
     // So here we know that a frame is selected.
     QColor backColor = actionBackgroundColor->color();
+    actionTbBackgroundColor->setCurrentColor( backColor );
     if ( m_gui )
         m_gui->canvasWidget()->setFrameBackgroundColor( backColor );
+}
+
+void KWView::tbBackgroundColor()
+{
+    // This action is disabled when no frame is selected.
+    // So here we know that a frame is selected.
+    QColor backColor = actionTbBackgroundColor->color();
+    actionBackgroundColor->setCurrentColor( backColor );
+     if ( m_gui )
+         m_gui->canvasWidget()->setFrameBackgroundColor( backColor );
 }
 
 void KWView::borderSet()
@@ -3108,6 +3122,7 @@ void KWView::frameSelectedChanged()
         }
     }
     actionBackgroundColor->setEnabled( frameDifferentOfPart );
+    actionTbBackgroundColor->setEnabled( frameDifferentOfPart );
 
     actionEditCopy->setEnabled( nbFrame >= 1 );
 

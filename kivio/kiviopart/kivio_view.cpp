@@ -347,9 +347,9 @@ void KivioView::setupActions()
   (void) new KAction( i18n("Send To Back"), "send_stencil_to_back", 0, this, SLOT(sendStencilToBack()), actionCollection(), "sendStencilToBack" );
 
   /* Create the fg color button */
-  m_setFGColor = new TKSelectColorAction( i18n("Set Foreground Color"), TKSelectColorAction::LineColor, actionCollection(), "setFGColor" );
+  m_setFGColor = new TKSelectColorAction( i18n("Set Foreground Color"), TKSelectColorAction::LineColor, actionCollection(), "setFGColor", false );
   connect(m_setFGColor,SIGNAL(activated()),SLOT(setFGColor()));
-  m_setBGColor = new TKSelectColorAction( i18n("Set Background Color"), TKSelectColorAction::FillColor, actionCollection(), "setBGColor" );
+  m_setBGColor = new TKSelectColorAction( i18n("Set Background Color"), TKSelectColorAction::FillColor, actionCollection(), "setBGColor", false );
   connect(m_setBGColor,SIGNAL(activated()),SLOT(setBGColor()));
 
   // Text bar
@@ -359,7 +359,7 @@ void KivioView::setupActions()
   m_setFontSize = new KFontSizeAction( i18n( "Set Font Size" ), 0, actionCollection(), "setFontSize" );
   connect( m_setFontSize, SIGNAL(activated(const QString&)), SLOT(setFontSize(const QString&)) );
 
-  m_setTextColor = new TKSelectColorAction( i18n("Set Text Color"), TKSelectColorAction::TextColor, actionCollection(), "setTextColor" );
+  m_setTextColor = new TKSelectColorAction( i18n("Set Text Color"), TKSelectColorAction::TextColor, actionCollection(), "setTextColor", false );
   connect( m_setTextColor, SIGNAL(activated()), SLOT(setTextColor()) );
 
   m_setBold = new KToggleAction( i18n("Toggle Bold Text"), "font_bold", 0, actionCollection(), "setFontBold" );
