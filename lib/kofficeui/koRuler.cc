@@ -191,25 +191,36 @@ void KoRuler::drawHorizontal( QPainter *_painter )
     else
         dist = MM_TO_POINT ( 10.0 * m_zoom );
 
+    int maxwidth = 0;
     for ( double i = 0.0;i <= (double)totalw;i += dist ) {
         str=QString::number(j++);
         if ( unit == "pt" && j!=1)
             str+="00";
-        p.drawText( qRound(i) - diffx - qRound(fm.width( str ) * 0.5),
+        int textwidth = fm.width( str );
+        p.drawText( qRound(i) - diffx - qRound(textwidth * 0.5),
                     qRound(( height() - fm.height() ) * 0.5),
-                    fm.width( str ), height(), AlignLeft | AlignTop, str );
+                    textwidth, height(), AlignLeft | AlignTop, str );
+        maxwidth = QMAX( maxwidth, textwidth );
     }
 
     // Draw the medium-sized lines
-    for ( double i = dist * 0.5;i <= (double)totalw;i += dist ) {
-        int ii=qRound(i);
-        p.drawLine( ii - diffx, 5, ii - diffx, height() - 5 );
+    // Only if we have enough space (i.e. not at 33%)
+    if ( dist > maxwidth + 1 )
+    {
+        for ( double i = dist * 0.5;i <= (double)totalw;i += dist ) {
+            int ii=qRound(i);
+            p.drawLine( ii - diffx, 5, ii - diffx, height() - 5 );
+        }
     }
 
     // Draw the small lines
-    for ( double i = dist * 0.25;i <= (double)totalw;i += dist * 0.5 ) {
-        int ii=qRound(i);
-        p.drawLine( ii - diffx, 7, ii - diffx, height() - 7 );
+    // Only if we have enough space (i.e. not at 33%)
+    if ( dist * 0.5 > maxwidth + 1 )
+    {
+        for ( double i = dist * 0.25;i <= (double)totalw;i += dist * 0.5 ) {
+            int ii=qRound(i);
+            p.drawLine( ii - diffx, 7, ii - diffx, height() - 7 );
+        }
     }
 
     // Draw ending bar (at page width)
@@ -324,25 +335,34 @@ void KoRuler::drawVertical( QPainter *_painter )
     else
         dist = MM_TO_POINT ( 10.0 * m_zoom );
 
+    int maxheight = 0;
     for ( double i = 0.0;i <= (double)totalh;i += dist ) {
         str=QString::number(j++);
         if ( unit == "pt" && j!=1 )
             str+="00";
+        int textheight = fm.height();
+        maxheight = QMAX( maxheight, textheight );
         p.drawText( qRound(( width() - fm.width( str ) ) * 0.5),
-                    qRound(i) - diffy - qRound(fm.height() * 0.5),
-                    width(), fm.height(), AlignLeft | AlignTop, str );
+                    qRound(i) - diffy - qRound(textheight * 0.5),
+                    width(), textheight, AlignLeft | AlignTop, str );
     }
 
     // Draw the medium-sized lines
-    for ( double i = dist * 0.5;i <= (double)totalh;i += dist ) {
-        int ii=qRound(i);
-        p.drawLine( 5, ii - diffy, width() - 5, ii - diffy );
+    if ( dist > maxheight + 1 )
+    {
+        for ( double i = dist * 0.5;i <= (double)totalh;i += dist ) {
+            int ii=qRound(i);
+            p.drawLine( 5, ii - diffy, width() - 5, ii - diffy );
+        }
     }
 
     // Draw the small lines
-    for ( double i = dist * 0.25;i <=(double)totalh;i += dist *0.5 ) {
-        int ii=qRound(i);
-        p.drawLine( 7, ii - diffy, width() - 7, ii - diffy );
+    if ( dist * 0.5 > maxheight + 1 )
+    {
+        for ( double i = dist * 0.25;i <=(double)totalh;i += dist *0.5 ) {
+            int ii=qRound(i);
+            p.drawLine( 7, ii - diffy, width() - 7, ii - diffy );
+        }
     }
 
     // Draw ending bar (at page height)
