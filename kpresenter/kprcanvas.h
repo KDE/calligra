@@ -127,15 +127,25 @@ public:
     // All pages if curPgNum is -1, otherwise just curPgNum (1-based)
     void startScreenPresentation( float presFakt, int curPgNum = -1);
     void stopScreenPresentation();
+    
+    /**
+     * Go to the next step in the presentation.
+     */
     bool pNext( bool );
+    
+    /**
+     * Go back one step in the presentation.
+     */
     bool pPrev( bool );
     void setNextPageTimer( bool _nextPageTimer ) { nextPageTimer = _nextPageTimer; }
 
-    unsigned int presPage() const { return currPresPage; } // 1 based
-    int presStep() const { return currPresStep; }
+    /// returns the current page of the presentation 1 based
+    unsigned int presPage() const { return m_step.m_pageNumber + 1; }
+    /// returns the current step of the presetation
+    int presStep() const { return m_step.m_step; }
     float presFakt() const { return _presFakt; }
-    int numPresSteps() const { return presStepList.count(); }
-    int numPresPages() const { return slideList.count(); }
+    int numPresSteps() const { return pageEffectSteps.count(); }
+    int numPresPages() const { return presentationSlides.count(); }
 
     bool canAssignEffect( QPtrList<KPObject> &objs ) const;
 
@@ -395,6 +405,35 @@ signals:
 
 protected:
 
+    /**
+     * Class for keeping a presntation step
+     * m_pageNumber the current page number 0 based
+     * m_step       the current effect step 0 based
+     * m_subStep    the current sub step 0 based for text animation
+     * m_animate    true if the current step should be animated
+     * m_animateSub true if the current sub step should be animated
+     */  
+    class PresStep
+    {
+    public:
+        PresStep() 
+        : m_pageNumber( 0 ), m_step( 0 ), m_subStep( 0 ), 
+          m_animate( false ), m_animateSub( false ) 
+        {};
+        PresStep( unsigned int pageNumber, unsigned int step, unsigned int subStep, 
+                  bool animate = false, bool animateSub = false )
+        : m_pageNumber( pageNumber ), m_step( step ), m_subStep( subStep ), 
+          m_animate( animate ), m_animateSub( animateSub ) 
+        {};
+
+        int m_pageNumber;
+        int m_step;
+        int m_subStep;
+        bool m_animate;
+        bool m_animateSub;
+    };
+
+
     struct PicCache
     {
         QPicture pic;
@@ -403,18 +442,57 @@ protected:
     };
 
     // functions for displaying
+    /**
+     * This method is used for repainting the canvas.
+     */
     virtual void paintEvent( QPaintEvent* );
-    void drawBackground( QPainter*, const QRect& ) const;
+    
+    /**
+     * Draws the background of page to painter.
+     * Set edit to true if in edit mode, false in presentation mode.
+     */
+    void drawBackground( QPainter* painter, const QRect& rect, KPrPage * page, bool edit = false ) const;
 
-    //draw all object : object in current page + object in sticky page
-    void drawObjects( QPainter*, const QRect&, bool drawCursor,
-                      SelectionMode selectionMode, bool doSpecificEffects ) const;
-
-    void drawObjectsInPage(QPainter *painter, const KoRect& rect2, bool drawCursor,
-                           SelectionMode selectionMode, bool doSpecificEffects,
-                           const QPtrList<KPObject> & obj) const;
-
+    /**
+     * Draw obj to painter.
+     */
     void drawAllObjectsInPage( QPainter *painter, const QPtrList<KPObject> & obj ) const;
+    
+    /**
+     * Draw _objects shown at step to painter.
+     * This method is used for presentation mode, printing.
+     */
+    void drawObjectsPres( QPainter *painter, const QPtrList<KPObject> &_objects, PresStep step ) const;
+    
+    /**
+     * Draw _objects to painter. 
+     * Only rect is painted.
+     * This method is used for edit mode.
+     */
+    void drawObjectsEdit( QPainter *painter, const KoRect &rect, const QPtrList<KPObject> &_objects, SelectionMode selectionMode ) const;
+
+    /**
+     * Draw _objects to painter. 
+     * contour if true only countor of selected objects is drawn
+     * selectionMode selected objects use this selection mode
+     * textView if set print editable textobject (used by drawObjectsEdit)
+     * This method is used by drawObjectsPres and drawObjectsEdit.
+     */
+    void drawObjects( QPainter *painter, const QPtrList<KPObject> &objects, SelectionMode selectionMode, 
+                      bool contour, KPTextView * textView ) const;
+    
+    /**
+     * Draw _objects of page to painter.
+     * This method is used for edit mode.
+     */
+    void drawEditPage( QPainter *painter, const QRect &_rect, 
+                       KPrPage *page, SelectionMode selectionMode ) const;
+    
+    /**
+     * Draw _objects of page shown at step to painter.
+     * This method is used for presentation mode, printing.
+     */
+    void drawPresPage( QPainter *painter, const QRect &_rect, PresStep step ) const;
 
     // draw all helpline
     void drawHelplines(QPainter *painter, const QRect &rect2) const;
@@ -464,8 +542,21 @@ protected:
     void _repaint( const QRect &r );
     void _repaint( KPObject *o );
 
-    void printPage( QPainter*, int pageNum );
+    /**
+     * Draw page defined in step to painter.
+     * This method is used for printing a presentation.
+     */
+    void printPage( QPainter*, PresStep step );
+    
+    /**
+     * This method animates the objects in the presentation.
+     */
     void doObjEffects();
+    
+    /**
+     * Draw object to screen.
+     * This method is used by doObjEffects for animating a object.
+     */
     void drawObject( KPObject*, QPixmap*, int, int, int, int, int, int );
 
     KPPartObject *insertObject( const QRect& );
@@ -574,12 +665,16 @@ private:
     bool editMode, goingBack, drawMode;
     bool drawLineInDrawMode;
     bool mouseSelectedObject;
-    unsigned int currPresPage, currPresStep, subPresStep;
-    unsigned int oldPresPage, oldPresStep, oldSubPresStep;
+    /// step actual step of the presentation
+    PresStep m_step;
     float _presFakt;
     int m_showOnlyPage; // 1-based (-1 = all)
-    QValueList<int> presStepList, slideList;
-    QValueList<int>::Iterator slideListIterator;
+    /// list of all effect steps occuring on the active page
+    QValueList<int> pageEffectSteps;
+    /// List of the slides used in the presentation
+    QValueList<int> presentationSlides;
+    /// Iterator over the slides of a presentation
+    QValueList<int>::Iterator presentationSlidesIterator;
     int PM_DM, PM_SM;
     int firstX, firstY;
     int delPageId;
