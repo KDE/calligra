@@ -23,6 +23,8 @@
 
 #include <kapp.h>
 #include <klocale.h>
+#include <kregistry.h>
+#include <kregfactories.h>
 #include <kmimetypes.h>
 #include <kmimemagic.h>
 
@@ -54,6 +56,7 @@ KoFilterManager* KoFilterManager::self()
 }
 
 vector<KoFilterEntry> koQueryFilters( const char *_constr = "", int _count = 100 );
+KRegistry * registry = 0L;
 
 QString KoFilterManager::fileSelectorList( Direction direction, const char *_format,
 					   const char *_native_pattern,
@@ -69,8 +72,24 @@ QString KoFilterManager::fileSelectorList( Direction direction, const char *_for
   constr += "'";
   vector<KoFilterEntry> vec = koQueryFilters( constr );
   
-  // KMimeType::initStatic();
-  KMimeMagic::initStatic();
+  if (!registry)
+  {
+      // KMimeType::initStatic();
+ 
+      registry = new KRegistry;
+      registry->addFactory( new KMimeTypeFactory );
+
+      registry->load( "/tmp/dumpkoffice" );
+      if ( registry->isModified() )
+      {
+          registry->save( "/tmp/dumpkoffice" );
+          registry->clearModified();
+      }
+
+      KMimeType::check();
+
+      KMimeMagic::initStatic();
+  }
 
   QString ret;
 
