@@ -79,7 +79,14 @@ CqlDB::load(QString file)
 QStringList
 CqlDB::tables()
 {
-	return QStringList();
+	QStringList tables;
+	TableIdList *tlist = m_db->getTableIds("PUBLIC");
+	for(TableId *table = tlist->first(); table; table = tlist->next())
+	{
+		tables.append(QString(table->tableName().text()));
+	}
+
+	return tables;
 }
 
 bool
@@ -99,15 +106,14 @@ CqlDB::query(QString statement)
 	}
 	catch(CqlException& ex)
 	{
+		throw new KexiDBError(0, "query faild");
 		cerr << ex << endl;
 	}
 
+	//FIXME just for now commiting after every query:
+//	m_db->executeImmediate("COMMIT WORK;");
 	kdDebug() << "CqlDB::query() query executed" << endl;
 
-
-//	Cursor *cursor = new Cursor(*m_db);
-//	kdDebug() << "CqlDB::query() dbg0: " << cursor << ":" << m_db << endl;
-//	cursor->open();
 	kdDebug() << "CqlDB::query(): cursor created" << endl;
 
 	return true;
@@ -120,6 +126,19 @@ CqlDB::queryRecord(QString statement, bool buffer)
 	query(statement);
 	CqlRecord *record = new CqlRecord(m_db);
 
+	Cursor *cursor = new Cursor(*m_db);
+	try
+	{
+		cursor->open();
+	}
+	catch(CqlException &ex)
+	{
+		cerr << ex << endl;
+		throw new KexiDBError(0, "read error");
+		return 0;
+	}
+
+	
 	kdDebug() << "CqlDB::queryRecord(): record created" << endl;
 	return record;
 }
