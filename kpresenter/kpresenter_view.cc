@@ -460,6 +460,7 @@ void KPresenterView::print( KPrinter &prt )
     painter.end();
 
     zoomDocument(oldZoom);
+    m_canvas->repaint();
     kdDebug() << "KPresenterView::print zoom&res reset" << endl;
 }
 
