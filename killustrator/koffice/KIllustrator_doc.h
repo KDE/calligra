@@ -62,7 +62,6 @@ public:
 
     bool load (std::istream& is, KoStore* store);
     bool loadChildren (KoStore* store);
-    bool hasToWriteMultipart ();
 
     /**
      * Overloaded @ref Part::createView

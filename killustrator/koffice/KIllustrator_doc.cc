@@ -128,11 +128,6 @@ bool KIllustratorDocument::completeSaving (KoStore* store)
   return true;
 }
 
-bool KIllustratorDocument::hasToWriteMultipart ()
-{
-    return (children().count() > 0 );
-}
-
 void KIllustratorDocument::insertPart (const QRect& rect, KoDocumentEntry& e)
 {
     KoDocument* doc = e.createDoc();
