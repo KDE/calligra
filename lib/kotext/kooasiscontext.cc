@@ -38,6 +38,8 @@ void KoOasisContext::fillStyleStack( const QDomElement& object, const char* nsUR
 
 void KoOasisContext::addStyles( const QDomElement* style )
 {
+    Q_ASSERT( style );
+    if ( !style ) return;
     // this recursive function is necessary as parent styles can have parents themselves
     if ( style->hasAttributeNS( KoXmlNS::style, "parent-style-name" ) ) {
         const QString parentStyleName = style->attributeNS( KoXmlNS::style, "parent-style-name", QString::null );

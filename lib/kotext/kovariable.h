@@ -289,6 +289,7 @@ public:
     const QPtrList<KoVariable>& getVariables() const {
         return variables;
     }
+    void clear();
 
     bool customVariableExist(const QString &varname)const ;
 

@@ -1818,7 +1818,7 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
 
     KoGenStyle autoStyle( KoGenStyle::STYLE_AUTO, "paragraph", parentStyleName );
     paragFormat()->save( autoStyle );
-    m_layout.saveOasis( autoStyle );
+    m_layout.saveOasis( autoStyle, false );
 
     QString autoParagStyleName = mainStyles.lookup( autoStyle, "P", true );
 

@@ -363,9 +363,9 @@ bool KoDocument::saveFile()
 
     // The output format is set by koMainWindow, and by openFile
     QCString outputMimeType = d->outputMimeType;
-    Q_ASSERT( !outputMimeType.isEmpty() );
+    //Q_ASSERT( !outputMimeType.isEmpty() ); // happens when using the DCOP method saveAs
     if ( outputMimeType.isEmpty() )
-        outputMimeType = nativeFormatMimeType();
+        outputMimeType = d->outputMimeType = nativeFormatMimeType();
 
     QApplication::setOverrideCursor( waitCursor );
 
@@ -1508,8 +1508,9 @@ bool KoDocument::openFile()
 #endif
 
         // remove temp file - uncomment this to debug import filters
-        if(!importedFile.isEmpty())
+        if(!importedFile.isEmpty()) {
             QFile::remove( importedFile );
+	}
     }
 
     if ( ok && d->m_bSingleViewMode )

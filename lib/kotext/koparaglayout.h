@@ -123,7 +123,9 @@ public:
     /// Load this parag layout from Oasis XML
     static void loadOasisParagLayout( KoParagLayout& layout, KoOasisContext& context );
     /// Save this parag layout to Oasis XML
-    void saveOasis( KoGenStyle& gs ) const;
+    /// @param savingStyle true if this is saved as part of a user style,
+    /// false when saving a paragraph
+    void saveOasis( KoGenStyle& gs, bool savingStyle ) const;
 
     /// Convert an alignment string into an alignment flag (load)
     static Qt::AlignmentFlags loadOasisAlignment( const QCString& str );

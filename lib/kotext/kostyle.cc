@@ -63,8 +63,9 @@ QStringList KoStyleCollection::translatedStyleNames() const
 
 void KoStyleCollection::loadOasisStyleTemplates( KoOasisContext& context )
 {
-    QValueList<QString> followingStyles;
-    uint nStyles = context.oasisStyles().userStyles().count();
+    QStringList followingStyles;
+    QValueVector<QDomElement> userStyles = context.oasisStyles().userStyles();
+    uint nStyles = userStyles.count();
     if( nStyles ) { // we are going to import at least one style.
         KoParagStyle *s = findStyle("Standard");
         //kdDebug() << "loadOasisStyleTemplates looking for Standard, to delete it. Found " << s << endl;
@@ -72,22 +73,23 @@ void KoStyleCollection::loadOasisStyleTemplates( KoOasisContext& context )
             removeStyleTemplate(s);
     }
     for (unsigned int item = 0; item < nStyles; item++) {
-        QDomElement styleElem = context.oasisStyles().userStyles()[item];
+        QDomElement styleElem = userStyles[item];
+	Q_ASSERT( !styleElem.isNull() );
         // TODO check style:family/style:class (for other styles than paragraph styles)
 
         KoParagStyle *sty = new KoParagStyle( QString::null );
         // Load the style
         sty->loadStyle( styleElem, context );
-        // the real value of followingStyle is set below after loading all styles
-        sty->setFollowingStyle( sty );
         // Style created, now let's try to add it
         sty = addStyleTemplate( sty );
+        // the real value of followingStyle is set below after loading all styles
+        sty->setFollowingStyle( sty );
 
         kdDebug() << " Loaded style " << sty->name() << endl;
 
         if(styleList().count() > followingStyles.count() )
         {
-            QString following = styleElem.attributeNS( KoXmlNS::style, "next-style-name", QString::null );
+            const QString following = styleElem.attributeNS( KoXmlNS::style, "next-style-name", QString::null );
             followingStyles.append( following );
         }
         else
@@ -100,9 +102,13 @@ void KoStyleCollection::loadOasisStyleTemplates( KoOasisContext& context )
     }
 
     unsigned int i=0;
-    for( QValueList<QString>::Iterator it = followingStyles.begin(); it != followingStyles.end(); ++it ) {
-        KoParagStyle * style = findStyle(*it);
-        styleAt(i++)->setFollowingStyle( style );
+    for( QValueList<QString>::ConstIterator it = followingStyles.begin(); it != followingStyles.end(); ++it, ++i ) {
+        const QString followingStyleName = *it;
+	if ( !followingStyleName.isEmpty() ) {
+            KoParagStyle * style = findStyle( followingStyleName );
+	    if ( style )
+                styleAt(i)->setFollowingStyle( style );
+	}
     }
 
     // TODO the same thing for style inheritance (style:parent-style-name) and setParentStyle()
@@ -122,7 +128,7 @@ QMap<KoParagStyle*, QString> KoStyleCollection::saveOasis( KoGenStyles& styles, 
     QString refStyleName;
 
     for( QPtrListIterator<KoParagStyle> p( m_styleList ); *p; ++p ) {
-        QString name = (*p)->saveStyle( styles, styleType, refStyleName );
+        const QString name = (*p)->saveStyle( styles, styleType, refStyleName );
         autoNames.insert( *p, name );
         if ( refStyleName.isEmpty() ) // i.e. first style
             refStyleName = name;
@@ -132,9 +138,10 @@ QMap<KoParagStyle*, QString> KoStyleCollection::saveOasis( KoGenStyles& styles, 
     // "two styles being only different due to their following-style"; the
     // display-name will also be different, and will ensure they get two kogenstyles.
     for( QPtrListIterator<KoParagStyle> p( m_styleList ); *p; ++p ) {
-        if ( (*p)->followingStyle() && (*p)->followingStyle() != (*p) ) {
-            QString fsname = autoNames[ (*p)->followingStyle() ];
-            KoGenStyle* gs = styles.styleForModification( autoNames[ *p ] );
+        KoParagStyle* style = *p;
+        if ( style->followingStyle() && style->followingStyle() != style ) {
+            const QString fsname = autoNames[ style->followingStyle() ];
+            KoGenStyle* gs = styles.styleForModification( autoNames[style] );
             Q_ASSERT( gs );
             if ( gs )
                 gs->addAttribute( "style:next-style-name", fsname );
@@ -468,7 +475,7 @@ void KoParagStyle::saveStyle( QDomElement & parentElem )
     {
         QDomElement element = parentElem.ownerDocument().createElement( "FOLLOWING" );
         parentElem.appendChild( element );
-        element.setAttribute( "name", followingStyle()->name() );
+        element.setAttribute( "name", followingStyle()->displayName() );
     }
     // TODO save parent style, and inherited flags.
 
@@ -578,7 +585,7 @@ QString KoParagStyle::saveStyle( KoGenStyles& genStyles, int styleType, const QS
         gs.addAttribute( "style:list-style-name", autoListStyleName );
     }
 
-    m_paragLayout.saveOasis( gs );
+    m_paragLayout.saveOasis( gs, true );
 
     m_format.save( gs );
 

@@ -441,6 +441,13 @@ KoVariableCollection::~KoVariableCollection()
     delete m_variableSettings;
 }
 
+void KoVariableCollection::clear()
+{ 
+    variables.clear();
+    varValues.clear();
+    m_varSelected = 0;
+}
+
 void KoVariableCollection::registerVariable( KoVariable *var )
 {
     if ( !var )
