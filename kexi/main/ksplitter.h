@@ -27,6 +27,8 @@
 #include <qwidget.h>
 #include <qpushbutton.h>
 
+#include <kdeversion.h>
+
 #ifndef NO_KDE2
 #include <netwm_def.h>
 #endif
@@ -41,9 +43,9 @@ class KDockContainer;
  *
  * @author Max Judin.
  */
-class KDEUI_EXPORT KDockSplitter : public QWidget
+class KDockSplitter : public QWidget
 {
-  Q_OBJECT
+  //Q_OBJECT
 public:
   /**
    * Constructor.
@@ -73,12 +75,28 @@ public:
    * Return the separator position in percent (%), so the range is [0..100]
    * @return separator position in percent
    */
-  int separatorPosInPercent();
+  inline int separatorPosInPercent() 
+#if KDE_VERSION >= KDE_MAKE_VERSION(3,4,89)
+	;
+#else
+	{
+//		kdDebug() << "^^^^^^^^^^^^^^^^^^^^^ separatorPosInPercent() " << separatorPos() / (factor/100) << " " << separatorPos() / 100 << endl;
+		return separatorPos() / 100;
+	}
+#endif
   /**
    * Set the separator position in percent (%), so the range must be [0..100]
    * @param percent separator position in percent
    */
-  void setSeparatorPosInPercent(int percent);
+  inline void setSeparatorPosInPercent(int percent)
+#if KDE_VERSION >= KDE_MAKE_VERSION(3,4,89)
+	;
+#else
+	{
+//		kdDebug() << "^^^^^^^^^^^^^^^^^^^^^ setSeparatorPosInPercent() " << percent << " " << separatorPos() / 100 << endl;
+		setSeparatorPos( percent * 100, false );
+	}
+#endif
 
   /**
    * Return the separator position in the range [0..100000]

@@ -353,6 +353,7 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 	}
 
 	setManagedDockPositionModeEnabled(true);//TODO(js): remove this if will be default in kmdi :)
+	manager()->setSplitterHighResolution(true);
   manager()->setSplitterKeepSize(true);
 	setStandardMDIMenuEnabled(false);
 	setAsDefaultHost(); //this is default host now.
@@ -1059,7 +1060,12 @@ KexiMainWindowImpl::initNavigator()
 //			ds->setKeepSize(true);
 			
 			d->config->setGroup("MainWindow");
-			ds->setSeparatorPosInPercent(d->config->readNumEntry("LeftDockPosition", 15/* % */));
+# if KDE_VERSION >= KDE_MAKE_VERSION(3,4,0)
+			ds->setSeparatorPosInPercent( d->config->readNumEntry("LeftDockPosition", 15/* % */));
+# else
+			//there were problems on KDE < 3.4
+			ds->setSeparatorPosInPercent( 15 );
+# endif
 		}
 #endif
 	}
