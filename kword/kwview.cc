@@ -410,14 +410,10 @@ void KWView::setupActions()
                                         this, SLOT( textAlignBlock() ),
                                         actionCollection(), "format_alignblock" );
     actionFormatAlignBlock->setExclusiveGroup( "align" );
-    actionFormatEnumList = new KToggleAction( i18n( "Enumerated List" ), "enumList", 0,
-                                              this, SLOT( textEnumList() ),
-                                              actionCollection(), "format_enumlist" );
-    actionFormatEnumList->setExclusiveGroup( "style" );
-    actionFormatUnsortList = new KToggleAction( i18n( "Bullet List" ), "unsortedList", 0,
-                                              this, SLOT( textUnsortList() ),
-                                              actionCollection(), "format_unsortlist" );
-    actionFormatUnsortList->setExclusiveGroup( "style" );
+    actionFormatList = new KToggleAction( i18n( "List" ), "enumList", 0,
+                                              this, SLOT( textList() ),
+                                              actionCollection(), "format_list" );
+    actionFormatList->setExclusiveGroup( "style" );
     actionFormatSuper = new KToggleAction( i18n( "Superscript" ), "super", 0,
                                               this, SLOT( textSuperScript() ),
                                               actionCollection(), "format_super" );
@@ -820,8 +816,7 @@ void KWView::showAlign( int align ) {
 /*================================================================*/
 void KWView::showCounter( Counter &c )
 {
-    actionFormatEnumList->setChecked( ( c.numbering() == Counter::NUM_LIST ) && ( c.style() == Counter::STYLE_NUM ) );
-    actionFormatUnsortList->setChecked( ( c.numbering() == Counter::NUM_LIST ) && ( c.style() == Counter::STYLE_DISCBULLET ) );
+    actionFormatList->setChecked( c.numbering() == Counter::NUM_LIST );
 }
 
 /*================================================================*/
@@ -2082,11 +2077,11 @@ void KWView::textAlignBlock()
         edit->setAlign(Qt3::AlignJustify);
 }
 
-/*====================== enumerated list ========================*/
-void KWView::textEnumList()
+/*====================== list ========================*/
+void KWView::textList()
 {
     Counter c;
-    if(actionFormatEnumList->isChecked())
+    if ( actionFormatList->isChecked() )
     {
         c.setNumbering( Counter::NUM_LIST );
         c.setStyle( Counter::STYLE_NUM );
@@ -2098,25 +2093,6 @@ void KWView::textEnumList()
     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
     ASSERT(edit);
     if ( edit )
-        edit->setCounter( c );
-}
-
-/*====================== unsorted list ==========================*/
-void KWView::textUnsortList()
-{
-    Counter c;
-    if(actionFormatUnsortList->isChecked())
-    {
-        c.setNumbering( Counter::NUM_LIST );
-        c.setStyle( Counter::STYLE_DISCBULLET );
-    }
-    else
-    {
-        c.setNumbering( Counter::NUM_NONE );
-    }
-    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
-    if ( edit )
-    ASSERT(edit);
         edit->setCounter( c );
 }
 

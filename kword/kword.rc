@@ -159,8 +159,7 @@
   <Action name="format_alignright"/>
   <Action name="format_alignblock"/>
   <Separator/>
-  <Action name="format_enumlist"/>
-  <Action name="format_unsortlist"/>
+  <Action name="format_list"/>
   <Separator/>
   <Action name="format_super"/>
   <Action name="format_sub"/>

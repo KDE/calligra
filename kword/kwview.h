@@ -219,8 +219,7 @@ public slots:
     void textAlignCenter();
     void textAlignRight();
     void textAlignBlock();
-    void textEnumList();
-    void textUnsortList();
+    void textList();
     void textSuperScript();
     void textSubScript();
     void textIncreaseIndent();
@@ -360,8 +359,7 @@ protected:
     KAction *actionFormatStylist;
     KAction *actionFormatIncreaseIndent;
     KAction *actionFormatDecreaseIndent;
-    KToggleAction *actionFormatEnumList;
-    KToggleAction *actionFormatUnsortList;
+    KToggleAction *actionFormatList;
     KToggleAction *actionFormatSuper;
     KToggleAction *actionFormatSub;
 
