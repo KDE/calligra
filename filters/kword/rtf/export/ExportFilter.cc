@@ -246,6 +246,7 @@ bool RTFWorker::makeImage(const FrameAnchor& anchor)
             return true;
         }
     }
+    // ### TODO: SVG, QPicture
 
     // load the image, this isn't necessary for converted image
     if( !image.size() )
@@ -429,6 +430,7 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
             }
             else if (4==(*paraFormatDataIt).id)
             {
+                // ### TODO: put dtae/time fields into own method.
                 if ( (0==(*paraFormatDataIt).variable.m_type) // date
                     || (2==(*paraFormatDataIt).variable.m_type) ) // time
                 {
@@ -793,6 +795,7 @@ void RTFWorker::writeFontData(void)
             }
         }
 #endif
+        // ### TODO: check if QFontInfo::fixedPitch is really working
         *m_streamOut << "\\fcharset0\\fprq" << (info.fixedPitch()?1:2) << " "; // font definition
         *m_streamOut << escapeRtfText(info.family()); // ### TODO: does RTF allows brackets in the font names?
         *m_streamOut <<  ";}" << m_eol; // end font table entry
@@ -1012,7 +1015,7 @@ QString RTFWorker::escapeRtfText ( const QString& text ) const
             // encode this as decimal unicode with a replacement character.
             escapedText += "\\u";
             escapedText += QString::number ( ch, 10 );
-            // We decompose the character. If it works, the first character is whitout any accents.
+            // We decompose the character. If it works, the first character is whitout any accent.
             // (Of course this only works with Latin letters.)
             // WARNING: QChar::decomposition is not re-entrant in Qt 3.x
             QChar replacement ( QCh.decomposition().at(0) );
@@ -1125,7 +1128,6 @@ QString RTFWorker::textFormatToRtf(const TextFormatting& formatOrigin,
         const int size=formatData.fontSize;
         if (size>0)
         {
-            // We use absolute font sizes.
             strElement+="\\fs";
             strElement+=QString::number(2*size,10);
         }
@@ -1170,6 +1172,7 @@ QString RTFWorker::textFormatToRtf(const TextFormatting& formatOrigin,
         {
             strElement+=lookupColor("\\cb", formatData.bgColor);
             strElement+=lookupColor("\\highlight", formatData.bgColor); // MS Word wants this
+            // ### FIXME: \highlight is not allowed in style definitions (RTF 1.6)
         }
     }
 
@@ -1222,7 +1225,7 @@ QString RTFWorker::textFormatToRtf(const TextFormatting& formatOrigin,
         if ( formatData.strikeout )
         {
             if( formatData.strikeoutType == "double" )
-                strElement+="\\striked1"; // 1 needed! (The exception that confirm the rule!)
+                strElement+="\\striked1"; // 1 needed! (The exception that confirms the rule!)
             else
                 strElement+="\\strike";
         }
@@ -1301,7 +1304,7 @@ QString RTFWorker::layoutToRtf(const LayoutData& layoutOrigin,
        if(layout.keepLinesTogether) strLayout += "\\keep";
     }
 
-    // Note: there seems to be too much problem of using a page break in a layout
+    // Note: there seems to be too many problems of using a page break in a layout
     // - KWord's RTF import filter makes the page break immediately (also in styles)
     // - AbiWord's RTF import does not like \*\pgbrk
     // ### TODO: decide if we really remove this code
@@ -1343,7 +1346,7 @@ QString RTFWorker::layoutToRtf(const LayoutData& layoutOrigin,
            strLayout += QString("\\sl-%1\\slmult0").arg(int(layout.lineSpacing)*20);
 
         else
-        kdWarning(30515) << "Curious lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
+            kdWarning(30515) << "Curious lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
     }
 
     if (!layout.tabulatorList.isEmpty()
