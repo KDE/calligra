@@ -2472,7 +2472,7 @@ void KSpreadTable::borderBottom( const QPoint &_marker,const QColor &_color )
     QRect r( m_rctSelection );
     if ( m_rctSelection.left()==0 )
         r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
-
+    QPen pen( _color,2,SolidLine);
     if ( !m_pDoc->undoBuffer()->isLocked() )
         {
             KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
@@ -2486,20 +2486,15 @@ void KSpreadTable::borderBottom( const QPoint &_marker,const QColor &_color )
       for( ;c; c = c->nextCell() )
       {
         int row = c->row();
-        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
-        &&!c->isObscuringForced())
+        if ( m_rctSelection.bottom() == row &&!c->isObscuringForced())
         {
           c->clearProperty( KSpreadCell::PBottomBorder );
           c->clearNoFallBackProperties( KSpreadCell::PBottomBorder );
         }
       }
 
-      for(int i=m_rctSelection.top();i<=m_rctSelection.bottom();i++)
-        {
-        RowLayout *rw=nonDefaultRowLayout(i);
-        QPen pen( _color,2,SolidLine);
-        rw->setBottomBorderPen(pen);
-        }
+      RowLayout *rw=nonDefaultRowLayout(m_rctSelection.bottom());
+      rw->setBottomBorderPen(pen);
 
       emit sig_updateView( this );
       return;
@@ -2512,16 +2507,13 @@ void KSpreadTable::borderBottom( const QPoint &_marker,const QColor &_color )
     }
     else
     {
-        for ( int x = r.left(); x <= r.right(); x++ )
-                {
-                int y = r.bottom();
-                KSpreadCell *cell = nonDefaultCell( x, y );
-                if(!cell->isObscuringForced())
-                        {
-                        QPen pen( _color,2,SolidLine);
-                        cell->setBottomBorderPen(pen);
-                        }
-                }
+    for ( int x = r.left(); x <= r.right(); x++ )
+        {
+        int y = r.bottom();
+        KSpreadCell *cell = nonDefaultCell( x, y );
+        if(!cell->isObscuringForced())
+                cell->setBottomBorderPen(pen);
+        }
     emit sig_updateView( this, r );
     }
 }
@@ -2538,30 +2530,11 @@ void KSpreadTable::borderRight( const QPoint &_marker,const QColor &_color )
         KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
         m_pDoc->undoBuffer()->appendUndo( undo );
     }
-
-        // Complete rows selected ?
+    QPen pen( _color,2,SolidLine);
+    // Complete rows selected ?
     if ( selected && m_rctSelection.right() == 0x7FFF )
     {
-      KSpreadCell* c = m_cells.firstCell();
-      for( ;c; c = c->nextCell() )
-      {
-        int row = c->row();
-        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
-        &&!c->isObscuringForced())
-        {
-          c->clearProperty( KSpreadCell::PRightBorder );
-          c->clearNoFallBackProperties( KSpreadCell::PRightBorder );
-        }
-      }
-
-      for(int i=m_rctSelection.top();i<=m_rctSelection.bottom();i++)
-        {
-        RowLayout *rw=nonDefaultRowLayout(i);
-        QPen pen( _color,2,SolidLine);
-        rw->setRightBorderPen(pen);
-        }
-
-      emit sig_updateView( this );
+      //nothing
       return;
     }
     // Complete columns selected ?
@@ -2571,36 +2544,27 @@ void KSpreadTable::borderRight( const QPoint &_marker,const QColor &_color )
       for( ;c; c = c->nextCell() )
       {
         int col = c->column();
-        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
-        &&!c->isObscuringForced())
+        if ( m_rctSelection.right() == col &&!c->isObscuringForced())
         {
           c->clearProperty( KSpreadCell::PRightBorder );
           c->clearNoFallBackProperties( KSpreadCell::PRightBorder );
         }
       }
 
-      for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
-        {
-        ColumnLayout *cl=nonDefaultColumnLayout(i);
-        QPen pen( _color,2,SolidLine);
-        cl->setRightBorderPen(pen);
-        }
-
+      ColumnLayout *cl=nonDefaultColumnLayout(m_rctSelection.right());
+      cl->setRightBorderPen(pen);
       emit sig_updateView( this );
       return;
     }
     else
     {
-        for ( int y = r.top(); y <= r.bottom(); y++ )
-                {
-                int x = r.right();
-                KSpreadCell *cell = nonDefaultCell( x, y );
-                if(!cell->isObscuringForced())
-                        {
-                        QPen pen( _color,2,SolidLine);
-                        cell->setRightBorderPen(pen);
-                        }
-                }
+    for ( int y = r.top(); y <= r.bottom(); y++ )
+        {
+        int x = r.right();
+        KSpreadCell *cell = nonDefaultCell( x, y );
+        if(!cell->isObscuringForced())
+                cell->setRightBorderPen(pen);
+        }
     emit sig_updateView( this, r );
     }
 }
@@ -2617,30 +2581,22 @@ void KSpreadTable::borderLeft( const QPoint &_marker, const QColor &_color )
         KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
         m_pDoc->undoBuffer()->appendUndo( undo );
     }
-        // Complete rows selected ?
+
+    QPen pen( _color,2,SolidLine);
+    // Complete rows selected ?
     if ( selected && m_rctSelection.right() == 0x7FFF )
     {
-      KSpreadCell* c = m_cells.firstCell();
-      for( ;c; c = c->nextCell() )
-      {
-        int row = c->row();
-        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
-        &&!c->isObscuringForced())
+    for ( int y = r.top(); y <= r.bottom(); y++ )
         {
-          c->clearProperty( KSpreadCell::PLeftBorder );
-          c->clearNoFallBackProperties( KSpreadCell::PLeftBorder );
+        int x = r.left();
+        KSpreadCell *cell = nonDefaultCell( x, y );
+        if(!cell->isObscuringForced())
+                cell->setLeftBorderPen(pen);
         }
-      }
-
-      for(int i=m_rctSelection.top();i<=m_rctSelection.bottom();i++)
-        {
-        RowLayout *rw=nonDefaultRowLayout(i);
-        QPen pen( _color,2,SolidLine);
-        rw->setLeftBorderPen(pen);
-        }
-
-      emit sig_updateView( this );
-      return;
+    QRect rect;
+    rect.setCoords(r.left(),r.top(),1,r.bottom());
+    emit sig_updateView( this, rect );
+    return;
     }
     // Complete columns selected ?
     else if ( selected && m_rctSelection.bottom() == 0x7FFF )
@@ -2649,36 +2605,26 @@ void KSpreadTable::borderLeft( const QPoint &_marker, const QColor &_color )
       for( ;c; c = c->nextCell() )
       {
         int col = c->column();
-        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
-        &&!c->isObscuringForced())
+        if ( col==m_rctSelection.left() &&!c->isObscuringForced())
         {
           c->clearProperty( KSpreadCell::PLeftBorder );
           c->clearNoFallBackProperties( KSpreadCell::PLeftBorder );
         }
       }
-
-      for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
-        {
-        ColumnLayout *cl=nonDefaultColumnLayout(i);
-        QPen pen( _color,2,SolidLine);
-        cl->setLeftBorderPen(pen);
-        }
-
+      ColumnLayout *cl=nonDefaultColumnLayout(m_rctSelection.left());
+      cl->setLeftBorderPen(pen);
       emit sig_updateView( this );
       return;
     }
     else
     {
-        for ( int y = r.top(); y <= r.bottom(); y++ )
-                {
-                int x = r.left();
-                KSpreadCell *cell = nonDefaultCell( x, y );
-                if(!cell->isObscuringForced())
-                        {
-                        QPen pen( _color,2,SolidLine);
-                        cell->setLeftBorderPen(pen);
-                        }
-                }
+    for ( int y = r.top(); y <= r.bottom(); y++ )
+        {
+        int x = r.left();
+        KSpreadCell *cell = nonDefaultCell( x, y );
+        if(!cell->isObscuringForced())
+                cell->setLeftBorderPen(pen);
+        }
     emit sig_updateView( this, r );
     }
 }
@@ -2695,7 +2641,68 @@ void KSpreadTable::borderTop( const QPoint &_marker,const QColor &_color )
             KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
             m_pDoc->undoBuffer()->appendUndo( undo );
         }
+    QPen pen( _color,2,SolidLine);
+    // Complete rows selected ?
+    if ( selected && m_rctSelection.right() == 0x7FFF )
+    {
+      KSpreadCell* c = m_cells.firstCell();
+      for( ;c; c = c->nextCell() )
+      {
+        int row = c->row();
+        if ( m_rctSelection.top() == row &&!c->isObscuringForced())
+        {
+          c->clearProperty( KSpreadCell::PTopBorder );
+          c->clearNoFallBackProperties( KSpreadCell::PTopBorder );
+        }
+      }
 
+      RowLayout *rw=nonDefaultRowLayout(m_rctSelection.top());
+      rw->setTopBorderPen(pen);
+
+      emit sig_updateView( this );
+      return;
+    }
+    // Complete columns selected ?
+    else if ( selected && m_rctSelection.bottom() == 0x7FFF )
+    {
+    for ( int x = r.left(); x <= r.right(); x++ )
+        {
+        int y = r.top();
+        KSpreadCell *cell = nonDefaultCell( x, y );
+        if(!cell->isObscuringForced())
+                cell->setTopBorderPen(pen);
+        }
+    QRect rect;
+    rect.setCoords(r.left(),r.top(),r.right(),1);
+    emit sig_updateView( this,rect );
+    return;
+    }
+    else
+    {
+    for ( int x = r.left(); x <= r.right(); x++ )
+        {
+        int y = r.top();
+        KSpreadCell *cell = nonDefaultCell( x, y );
+        if(!cell->isObscuringForced())
+                cell->setTopBorderPen(pen);
+        }
+    emit sig_updateView( this, r );
+    }
+}
+
+void KSpreadTable::borderOutline( const QPoint &_marker,const QColor &_color )
+{
+    bool selected = ( m_rctSelection.left() != 0 );
+    QRect r( m_rctSelection );
+    if ( m_rctSelection.left()==0 )
+        r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+        {
+        KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
+        m_pDoc->undoBuffer()->appendUndo( undo );
+        }
+    QPen pen( _color,2,SolidLine);
     // Complete rows selected ?
     if ( selected && m_rctSelection.right() == 0x7FFF )
     {
@@ -2708,64 +2715,73 @@ void KSpreadTable::borderTop( const QPoint &_marker,const QColor &_color )
         {
           c->clearProperty( KSpreadCell::PTopBorder );
           c->clearNoFallBackProperties( KSpreadCell::PTopBorder );
+          c->clearProperty( KSpreadCell::PRightBorder );
+          c->clearNoFallBackProperties( KSpreadCell::PRightBorder );
+          c->clearProperty( KSpreadCell::PLeftBorder );
+          c->clearNoFallBackProperties( KSpreadCell::PLeftBorder );
+          c->clearProperty( KSpreadCell::PBottomBorder );
+          c->clearNoFallBackProperties( KSpreadCell::PBottomBorder );
         }
       }
 
-      for(int i=m_rctSelection.top();i<=m_rctSelection.bottom();i++)
-        {
-        RowLayout *rw=nonDefaultRowLayout(i);
-        QPen pen( _color,2,SolidLine);
-        rw->setTopBorderPen(pen);
-        }
-
+      RowLayout *rw=nonDefaultRowLayout(m_rctSelection.top());
+      rw->setTopBorderPen(pen);
+      rw=nonDefaultRowLayout(m_rctSelection.bottom());
+      rw->setBottomBorderPen(pen);
+      for ( int y = r.top(); y <= r.bottom(); y++ )
+      {
+        int x = r.left();
+        KSpreadCell *cell = nonDefaultCell( x, y );
+        if(!cell->isObscuringForced())
+                cell->setLeftBorderPen(pen);
+      }
       emit sig_updateView( this );
       return;
     }
     // Complete columns selected ?
     else if ( selected && m_rctSelection.bottom() == 0x7FFF )
     {
+      KSpreadCell* c = m_cells.firstCell();
+      for( ;c; c = c->nextCell() )
+      {
+        int row = c->row();
+        if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
+        &&!c->isObscuringForced())
+        {
+          c->clearProperty( KSpreadCell::PTopBorder );
+          c->clearNoFallBackProperties( KSpreadCell::PTopBorder );
+          c->clearProperty( KSpreadCell::PRightBorder );
+          c->clearNoFallBackProperties( KSpreadCell::PRightBorder );
+          c->clearProperty( KSpreadCell::PLeftBorder );
+          c->clearNoFallBackProperties( KSpreadCell::PLeftBorder );
+          c->clearProperty( KSpreadCell::PBottomBorder );
+          c->clearNoFallBackProperties( KSpreadCell::PBottomBorder );
+        }
+      }
+
+      ColumnLayout *cl=nonDefaultColumnLayout(m_rctSelection.left());
+      cl->setLeftBorderPen(pen);
+      cl=nonDefaultColumnLayout(m_rctSelection.right());
+      cl->setRightBorderPen(pen);
       for ( int x = r.left(); x <= r.right(); x++ )
-                {
-                int y = r.top();
-                KSpreadCell *cell = nonDefaultCell( x, y );
-                if(!cell->isObscuringForced())
-                        {
-                        QPen pen( _color,2,SolidLine);
-                        cell->setTopBorderPen(pen);
-                        }
-                }
-    QRect rect;
-    rect.setCoords(r.left(),r.top(),r.right(),1);
-    emit sig_updateView( this,rect );
+      {
+        int y = r.top();
+        KSpreadCell *cell = cellAt( x, y );
+        if(!cell->isObscuringForced())
+        {
+         if ( cell == m_pDefaultCell )
+         {
+            cell = new KSpreadCell( this, x, y );
+            m_cells.insert( cell, x, y );
+         }
+         cell->setTopBorderPen(pen);
+        }
+      }
+    emit sig_updateView( this );
     return;
     }
     else
     {
-        for ( int x = r.left(); x <= r.right(); x++ )
-                {
-                int y = r.top();
-                KSpreadCell *cell = nonDefaultCell( x, y );
-                if(!cell->isObscuringForced())
-                        {
-                        QPen pen( _color,2,SolidLine);
-                        cell->setTopBorderPen(pen);
-                        }
-                }
-    emit sig_updateView( this, r );
-    }
-}
-
-void KSpreadTable::borderOutline( const QPoint &_marker,const QColor &_color )
-{
-    QRect r( m_rctSelection );
-    if ( m_rctSelection.left()==0 )
-        r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
-
-    if ( !m_pDoc->undoBuffer()->isLocked() )
-        {
-            KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
-            m_pDoc->undoBuffer()->appendUndo( undo );
-        }
     for ( int x = r.left(); x <= r.right(); x++ )
     {
         int y = r.top();
@@ -2777,9 +2793,7 @@ void KSpreadTable::borderOutline( const QPoint &_marker,const QColor &_color )
             cell = new KSpreadCell( this, x, y );
             m_cells.insert( cell, x, y );
          }
-         cell->setTopBorderStyle( SolidLine );
-         cell->setTopBorderColor( _color );
-         cell->setTopBorderWidth( 2 );
+         cell->setTopBorderPen(pen);
         }
     }
     for ( int y = r.top(); y <= r.bottom(); y++ )
@@ -2787,22 +2801,14 @@ void KSpreadTable::borderOutline( const QPoint &_marker,const QColor &_color )
         int x = r.left();
         KSpreadCell *cell = nonDefaultCell( x, y );
         if(!cell->isObscuringForced())
-        {
-        cell->setLeftBorderStyle( SolidLine );
-        cell->setLeftBorderColor( _color );
-        cell->setLeftBorderWidth( 2 );
-        }
+                cell->setLeftBorderPen(pen);
     }
     for ( int y = r.top(); y <= r.bottom(); y++ )
     {
         int x = r.right();
         KSpreadCell *cell = nonDefaultCell( x, y );
         if(!cell->isObscuringForced())
-        {
-        cell->setRightBorderStyle( SolidLine );
-        cell->setRightBorderColor( _color );
-        cell->setRightBorderWidth( 2 );
-        }
+                cell->setRightBorderPen(pen);
     }
     for ( int x = r.left(); x <= r.right(); x++ )
     {
@@ -2811,18 +2817,15 @@ void KSpreadTable::borderOutline( const QPoint &_marker,const QColor &_color )
         if(!cell->isObscuringForced())
         {
         if ( cell == m_pDefaultCell )
-        {
+            {
             cell = new KSpreadCell( this, x, y );
             m_cells.insert( cell, x, y );
-        }
-        cell->setBottomBorderStyle( SolidLine );
-        cell->setBottomBorderColor( _color );
-        cell->setBottomBorderWidth( 2 );
+            }
+        cell->setBottomBorderPen(pen);
         }
     }
-
     emit sig_updateView( this, r );
-
+    }
 }
 
 void KSpreadTable::borderAll( const QPoint &_marker,const QColor &_color )
@@ -2931,7 +2934,7 @@ void KSpreadTable::borderRemove( const QPoint &_marker )
         KSpreadUndoCellLayout *undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
         m_pDoc->undoBuffer()->appendUndo( undo );
     }
-
+    QPen pen( black,1,NoPen);
     if ( selected && m_rctSelection.right() == 0x7FFF )
     {
       KSpreadCell* c = m_cells.firstCell();
@@ -2959,7 +2962,7 @@ void KSpreadTable::borderRemove( const QPoint &_marker )
       for(int i=m_rctSelection.top();i<=m_rctSelection.bottom();i++)
         {
         RowLayout *rw=nonDefaultRowLayout(i);
-        QPen pen( black,1,NoPen);
+
         rw->setTopBorderPen(pen);
         rw->setRightBorderPen(pen);
         rw->setLeftBorderPen(pen);
@@ -2994,10 +2997,9 @@ void KSpreadTable::borderRemove( const QPoint &_marker )
           c->clearNoFallBackProperties( KSpreadCell::PGoUpDiagonal);
         }
       }
-      for(int i=m_rctSelection.top();i<=m_rctSelection.bottom();i++)
+      for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
         {
         ColumnLayout *cl=nonDefaultColumnLayout(i);
-        QPen pen( black,1,NoPen);
         cl->setTopBorderPen(pen);
         cl->setRightBorderPen(pen);
         cl->setLeftBorderPen(pen);
@@ -3012,18 +3014,17 @@ void KSpreadTable::borderRemove( const QPoint &_marker )
     {
     for ( int x = r.left(); x <= r.right(); x++ )
         {
-                for(int y = r.top();y <= r.bottom(); y++ )
+        for(int y = r.top();y <= r.bottom(); y++ )
                 {
-                        KSpreadCell *cell = cellAt( x, y );
-                        if(!cell->isObscuringForced())
+                KSpreadCell *cell = cellAt( x, y );
+                if(!cell->isObscuringForced())
                         {
-                                QPen pen( black,1,NoPen);
-                                cell->setTopBorderPen(pen);
-                                cell->setRightBorderPen(pen);
-                                cell->setLeftBorderPen(pen);
-                                cell->setBottomBorderPen(pen);
-                                cell->setFallDiagonalPen( pen );
-                                cell->setGoUpDiagonalPen(pen );
+                        cell->setTopBorderPen(pen);
+                        cell->setRightBorderPen(pen);
+                        cell->setLeftBorderPen(pen);
+                        cell->setBottomBorderPen(pen);
+                        cell->setFallDiagonalPen( pen );
+                        cell->setGoUpDiagonalPen(pen );
                         }
                 }
 

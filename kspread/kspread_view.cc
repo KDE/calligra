@@ -1110,17 +1110,7 @@ void KSpreadView::borderTop()
 void KSpreadView::borderOutline()
 {
   if ( m_pTable != 0L )
-  {
-    QRect selection( m_pTable->selectionRect() );
-    if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
-    {
-      KMessageBox::error( this, i18n("Area too large!") );
-    }
-    else
-    {
       m_pTable->borderOutline( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) ,m_borderColor->color());
-    }
-  }
 }
 
 void KSpreadView::borderAll()
