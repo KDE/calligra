@@ -1456,10 +1456,7 @@ KWPartFrameSet::KWPartFrameSet( KWDocument *_doc, KWChild *_child, const QString
     : KWFrameSet( _doc )
 {
     child = _child;
-    m_lock = false;
     kdDebug() << "KWPartFrameSet::KWPartFrameSet" << endl;
-    connect( child, SIGNAL( changed( KoChild * ) ),
-             this, SLOT( slotChildChanged() ) );
     if ( name.isEmpty() )
         m_name = _doc->generateFramesetName( i18n( "Object %1" ) );
     else
@@ -1497,16 +1494,6 @@ void KWPartFrameSet::updateFrames()
 {
     if( frames.isEmpty() ) // Deleted frameset -> don't refresh
         return;
-
-    if ( !m_lock )
-    {
-        m_lock = true; // setGeometry emits changed() !
-        KoRect frect = *frames.first();
-        //kdDebug() << "KWPartFrameSet::updateFrames frames.first()=" << DEBUGRECT(frect)
-        //          << " child set to " << DEBUGRECT( kWordDocument()->zoomRect( frect ) ) << endl;
-        child->setGeometry( kWordDocument()->zoomRect( frect ) );
-        m_lock = false;
-    }
     KWFrameSet::updateFrames();
 }
 
@@ -1522,31 +1509,39 @@ void KWPartFrameSet::load( QDomElement &attributes, bool loadFrames )
     KWFrameSet::load( attributes, loadFrames );
 }
 
-void KWPartFrameSet::slotChildChanged()
-{
-    KWFrame *frame = frames.first();
-    if ( frame && !m_lock )
-    {
-        QRect r = getChild()->geometry();
-        // Make "frame" follow the child's geometry (but frame is unzoomed)
-        //kdDebug() << "KWPartFrameSet::slotChildChanged child's geometry " << DEBUGRECT( r ) << endl;
-        frame->setCoords( r.left() / kWordDocument()->zoomedResolutionX(), r.top() / kWordDocument()->zoomedResolutionY(),
-                          r.right() / kWordDocument()->zoomedResolutionX(), r.bottom() / kWordDocument()->zoomedResolutionY() );
-        //kdDebug() << "KWPartFrameSet::slotChildChanged frame set to " << DEBUGRECT( *frame ) << endl;
-        m_lock = true;
-        kWordDocument()->frameChanged( frame ); // this triggers updateFrames
-        m_lock = false;
-    }
-}
 
 KWFrameSetEdit * KWPartFrameSet::createFrameSetEdit( KWCanvas * canvas )
 {
     return new KWPartFrameSetEdit( this, canvas );
 }
 
+KWPartFrameSetEdit::KWPartFrameSetEdit( KWPartFrameSet * fs, KWCanvas * canvas )
+    : KWFrameSetEdit( fs, canvas )
+{
+    QObject::connect( partFrameSet()->getChild(), SIGNAL( changed( KoChild * ) ),
+             this, SLOT( slotChildChanged() ) );
+}
+
 KWPartFrameSetEdit::~KWPartFrameSetEdit()
 {
     kdDebug() << "KWPartFrameSetEdit::~KWPartFrameSetEdit" << endl;
+}
+
+
+void KWPartFrameSetEdit::slotChildChanged()
+{
+    QList<KWFrame>listFrame=partFrameSet()->frameIterator();
+    KWFrame *frame = listFrame.first();
+    if ( frame  )
+    {
+        QRect r(m_canvas->viewMode()->viewToNormal(partFrameSet()->getChild()->geometry()));
+        // Make "frame" follow the child's geometry (but frame is unzoomed)
+        //kdDebug() << "KWPartFrameSet::slotChildChanged child's geometry " << DEBUGRECT( r ) << endl;
+        frame->setCoords( r.left() / partFrameSet()->kWordDocument()->zoomedResolutionX(), r.top() / partFrameSet()->kWordDocument()->zoomedResolutionY(),
+                          r.right() / partFrameSet()->kWordDocument()->zoomedResolutionX(), r.bottom() / partFrameSet()->kWordDocument()->zoomedResolutionY() );
+        //kdDebug() << "KWPartFrameSet::slotChildChanged frame set to " << DEBUGRECT( *frame ) << endl;
+        partFrameSet()->kWordDocument()->frameChanged( frame ); // this triggers updateFrames
+    }
 }
 
 void KWPartFrameSetEdit::mousePressEvent( QMouseEvent *e, const QPoint &, const KoPoint & )
@@ -1556,6 +1551,11 @@ void KWPartFrameSetEdit::mousePressEvent( QMouseEvent *e, const QPoint &, const 
 
     // activate child part
     partFrameSet()->updateFrames();
+    QList<KWFrame>listFrame=partFrameSet()->frameIterator();
+    KWFrame *frame = listFrame.first();
+    KoRect frect = *frame;
+    partFrameSet()->getChild()->setGeometry( m_canvas->viewMode()->normalToView(partFrameSet()->kWordDocument()->zoomRect( frect )) );
+
     KoDocument* part = partFrameSet()->getChild()->document();
     if ( !part )
         return;
@@ -1563,6 +1563,8 @@ void KWPartFrameSetEdit::mousePressEvent( QMouseEvent *e, const QPoint &, const 
     //kdDebug() << "Child activated. part="<<part<<" child="<<child<<endl;
     view->partManager()->addPart( part, false );
     view->partManager()->setActivePart( part, view );
+
+
 }
 
 void KWPartFrameSetEdit::mouseDoubleClickEvent( QMouseEvent *, const QPoint &, const KoPoint & )

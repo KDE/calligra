@@ -674,19 +674,16 @@ public:
     // RMB -> normal frame popup
     virtual QString getPopupName() { return "frame_popup"; }
 
-protected slots:
-    void slotChildChanged();
 
 protected:
     KWChild *child;
-    bool m_lock;
 };
 
-class KWPartFrameSetEdit : public KWFrameSetEdit
+class KWPartFrameSetEdit :  public QObject, public KWFrameSetEdit
 {
+    Q_OBJECT
 public:
-    KWPartFrameSetEdit( KWPartFrameSet * fs, KWCanvas * canvas )
-        : KWFrameSetEdit( fs, canvas ) {}
+    KWPartFrameSetEdit( KWPartFrameSet * fs, KWCanvas * canvas );
     virtual ~KWPartFrameSetEdit();
 
     KWPartFrameSet * partFrameSet() const
@@ -697,6 +694,10 @@ public:
     // Events forwarded by the canvas (when being in "edit" mode)
     virtual void mousePressEvent( QMouseEvent *, const QPoint &, const KoPoint & );
     virtual void mouseDoubleClickEvent( QMouseEvent *, const QPoint &, const KoPoint & );
+    
+
+protected slots:
+    void slotChildChanged();
 };
 
 /******************************************************************/
