@@ -143,10 +143,18 @@ SvgExport::visitVDocument( VDocument& document )
 	*m_body << "</svg>" << endl;
 }
 
+QString
+SvgExport::getID( VObject *obj )
+{
+	if( obj && !obj->name().isEmpty() )
+		return QString( " id=\"%1\"" ).arg( obj->name() );
+	return QString();
+}
+
 void
 SvgExport::visitVGroup( VGroup& group )
 {
-	*m_body << "<g>" << endl;
+	*m_body << "<g" << getID( &group ) << ">" << endl;
 	VVisitor::visitVGroup( group );
 	*m_body << "</g>" << endl;
 }
@@ -154,7 +162,7 @@ SvgExport::visitVGroup( VGroup& group )
 void
 SvgExport::visitVComposite( VComposite& composite )
 {
-	*m_body << "<path";
+	*m_body << "<path" << getID( &composite );
 
 	VVisitor::visitVComposite( composite );
 

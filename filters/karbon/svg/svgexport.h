@@ -60,6 +60,7 @@ private:
 	void getFill( const VFill& fill  );
 	void getGradient( const VGradient& grad );
 	void getHexColor( QTextStream *, const VColor& color  );
+	QString getID( VObject *obj );
 
 	QTextStream* m_stream;
 	QTextStream* m_defs;
