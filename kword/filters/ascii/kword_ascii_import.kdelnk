@@ -6,6 +6,7 @@ Exec=kword_ascii.bin --server
 Comment=Reggie's KWord Ascii Filter
 Comment[da]=Reggie's KWord Ascii filter
 Comment[de]=Reggies KWord ASCII-Filter
+Comment[fr]=Filtre Ascii pour le KWord de Reggie
 Comment[pt_BR]=Filtro do KWord
 Comment[sk]=Reggieho KWord Ascii Filter
 Export=application/x-kword
