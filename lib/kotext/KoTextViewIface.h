@@ -126,6 +126,8 @@ k_dcop:
     //return false if there is not a note variable
     bool setNoteVariableText(const QString & note);
 
+    void removeComment();
+
 private:
     KoTextView *m_textView;
 

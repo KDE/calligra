@@ -1132,7 +1132,6 @@ void KoTextView::removeComment()
             KoNoteVariable *var=dynamic_cast<KoNoteVariable *>(ch->customItem());
             if( var )
             {
-                kdDebug()<<" variablePosition :"<<variablePosition<<" m_cursor->index() :"<<m_cursor->index()<<endl;
                 if( variablePosition == m_cursor->index() )
                     m_cursor->setIndex( m_cursor->index() );
                 else

@@ -452,3 +452,8 @@ bool KoTextViewIface::setNoteVariableText(const QString & note)
     else
         return false;
 }
+
+void KoTextViewIface::removeComment()
+{
+    removeComment();
+}
