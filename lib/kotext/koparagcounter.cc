@@ -248,7 +248,7 @@ void KoParagCounter::loadOasisListStyle( const QDomElement& listStyle,
 
 void KoParagCounter::saveOasis( KoGenStyle& listStyle ) const
 {
-    Q_ASSERT( m_style != STYLE_NONE );
+    Q_ASSERT( (Style)m_style != STYLE_NONE );
     // We're supposed to invent a display:name and save it in the list style, so OOo displays it.
     // Not really easy, since we don't have user-visible list styles. Bah.
 
