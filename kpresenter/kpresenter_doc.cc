@@ -735,9 +735,10 @@ void KPresenterDoc::compatibilityFromOldFileFormat()
                 m_pageList.at(i)->background()->setPageEffectSpeed( newValue );
             }
         }
-        delete m_loadingInfo;
-        m_loadingInfo = 0L;
     }
+    delete m_loadingInfo;
+    m_loadingInfo = 0L;
+
 }
 
 void KPresenterDoc::enableEmbeddedParts( bool f )
