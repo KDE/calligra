@@ -763,6 +763,13 @@ void OoImpressImport::appendBrush( QDomDocument& doc, QDomElement& e )
         }
         else if ( fill == "gradient" )
         {
+            // We have to set a brush with brushstyle != no background fill
+            // otherwise the properties dialog for the object won't
+            // display the preview for the gradient.
+            QDomElement brush = doc.createElement( "BRUSH" );
+            brush.setAttribute( "style", 1 );
+            e.appendChild( brush );
+
             QDomElement gradient = doc.createElement( "GRADIENT" );
             QString style = m_styleStack.attribute( "draw:fill-gradient-name" );
 
