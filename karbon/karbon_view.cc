@@ -285,10 +285,12 @@ KarbonView::resizeEvent( QResizeEvent* /*event*/ )
 	m_horizRuler->setGeometry( space, 0, width() - space, space );
 	m_vertRuler->setGeometry( 0, space, space, height() - space );
 	m_canvas->setGeometry( space, space, width() - space, height() - space );
-	m_horizRuler->setOffset( -m_canvas->pageOffsetX(), 0 );
-	m_horizRuler->setFrameStartEnd( /*m_canvas->pageOffsetX() - m_canvas->contentsX()*/0, part()->document().width() * zoom() - m_canvas->contentsX() );
-	m_vertRuler->setOffset( 0, -m_canvas->pageOffsetY() );
-	m_vertRuler->setFrameStartEnd( 0/*- m_canvas->contentsY()*/, part()->document().height() * zoom() - m_canvas->contentsY() );
+	int xoff = m_canvas->contentsX() - m_canvas->pageOffsetX();
+	m_horizRuler->setOffset( xoff, 0 );
+	m_horizRuler->setFrameStartEnd( -m_canvas->pageOffsetX(), int( part()->document().width() * zoom() ) );
+	int yoff = -m_canvas->pageOffsetY() - m_canvas->contentsY();
+	m_vertRuler->setOffset( 0, yoff );
+	m_vertRuler->setFrameStartEnd( 0, int( part()->document().height() * zoom() ) );
 	reorganizeGUI();
 }
 
@@ -741,10 +743,12 @@ KarbonView::zoomChanged( const KoPoint &p )
 	m_canvas->repaintAll();
 	m_canvas->viewport()->setUpdatesEnabled( true );
 
-	m_horizRuler->setOffset( -m_canvas->pageOffsetX(), 0 );
-	m_horizRuler->setFrameStartEnd( /*m_canvas->pageOffsetX() - m_canvas->contentsX()*/0, part()->document().width() * zoomFactor - m_canvas->contentsX() );
-	m_vertRuler->setOffset( 0, -m_canvas->pageOffsetY() );
-	m_vertRuler->setFrameStartEnd( 0/*- m_canvas->contentsY()*/, part()->document().height() * zoomFactor - m_canvas->contentsY() );
+	int xoff = m_canvas->contentsX() - m_canvas->pageOffsetX();
+	m_horizRuler->setOffset( xoff, 0 );
+	m_horizRuler->setFrameStartEnd( /*m_canvas->pageOffsetX()*/ - m_canvas->contentsX(), int( part()->document().width() * zoomFactor ) );
+	int yoff = -m_canvas->pageOffsetY() - m_canvas->contentsY();
+	m_vertRuler->setOffset( 0, yoff );
+	m_vertRuler->setFrameStartEnd( 0, int( part()->document().height() * zoomFactor ) );
 
 	m_canvas->viewport()->setFocus();
 
@@ -1060,10 +1064,20 @@ KarbonView::pageLayout()
 void
 KarbonView::canvasContentsMoving( int x, int y )
 {
+kdDebug() << x << " ! " << y << endl;
 	if( m_canvas->horizontalScrollBar()->isVisible() )
-		m_horizRuler->setOffset( x - 20, 0 );
+	{	
+		int xoff = -m_canvas->pageOffsetX() + m_canvas->contentsX() + x;
+		m_horizRuler->setOffset( x - m_canvas->pageOffsetX(), 0 );
+		m_horizRuler->setFrameStartEnd( /*m_canvas->pageOffsetX()*/ -x + m_canvas->pageOffsetX(), int( part()->document().width() * zoom() ) );
+		//m_horizRuler->setOffset( x - 20 + m_canvas->pageOffsetX(), 0 );
+	}
 	if( m_canvas->verticalScrollBar()->isVisible() )
-		m_vertRuler->setOffset( 0, y - 20 );
+	{
+		m_vertRuler->setOffset( 0, y - m_canvas->pageOffsetY() );
+		m_vertRuler->setFrameStartEnd( /*m_canvas->pageOffsetX()*/ y - m_canvas->pageOffsetY(), int( part()->document().height() * zoom() ) );
+		//m_vertRuler->setOffset( 0, y - 20 + m_canvas->pageOffsetY() );
+	}
 }
 
 void

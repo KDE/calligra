@@ -42,7 +42,7 @@ VCanvas::pageOffsetX() const
 		return int( ( viewport()->width() - zoomedWidth ) / 2.0 );
 	}
 	else
-		return 20;
+		return int( ( contentsWidth() - zoomedWidth ) / 2.0 );
 }
 
 int
@@ -55,7 +55,7 @@ VCanvas::pageOffsetY() const
 		return int( ( viewport()->height() - zoomedHeight ) / 2.0 );
 	}
 	else
-		return 20;
+		return int( ( contentsHeight() - zoomedHeight ) / 2.0 );
 }
 
 VCanvas::VCanvas( QWidget *parent, KarbonViewBase* view, KarbonPartBase* part )
