@@ -72,7 +72,7 @@ public:
 
 	virtual void activate();
 
-	virtual QString name() { return "Clipart tool"; }
+	virtual QString name() { return "Clipart Tool"; }
 	virtual QString icon() { return "14_clipart"; }
 	virtual QString contextHelp();
 	virtual QWidget* optionsWidget() { return m_optionsWidget; }

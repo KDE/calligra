@@ -3039,7 +3039,7 @@ void KPresenterView::setupActions()
                                            this, SLOT( screenConfigPages() ),
                                            actionCollection(), "screen_configpages" );
 
-    actionScreenPresStructView = new KAction( i18n( "&Open Presentation Structure Editor..." ), 0,
+    actionScreenPresStructView = new KAction( i18n( "&Open Presentation Structure Editor" ), 0,
                                               this, SLOT( screenPresStructView() ),
                                               actionCollection(), "screen_presstruct" );
 
@@ -3153,7 +3153,7 @@ void KPresenterView::setupActions()
                                  SLOT( chPic() ), actionCollection(), "change_picture" );
 
 
-    actionImageEffect = new KAction( i18n("Image &effect..."), 0, this,
+    actionImageEffect = new KAction( i18n("Image &Effect..."), 0, this,
                                      SLOT(imageEffect()), actionCollection(), "image_effect");
 
 

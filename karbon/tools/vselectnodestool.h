@@ -30,7 +30,7 @@ public:
 
 	virtual void activate();
 
-	virtual QString name() { return i18n( "Select nodes tool" ); }
+	virtual QString name() { return i18n( "Select Nodes Tool" ); }
 	virtual QString icon() { return "14_selectnodes"; }
 	virtual QString category() { return "manipulation"; }
 	virtual QString statusText();

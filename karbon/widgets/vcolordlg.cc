@@ -27,7 +27,7 @@
 #include "vfillcmd.h"
 
 VColorDlg::VColorDlg( VColor& color, QWidget* parent, const char* name )
-	: KDialogBase ( parent, name, true, i18n( "Choose color" ),
+	: KDialogBase ( parent, name, true, i18n( "Choose Color" ),
 		KDialogBase::Ok | KDialogBase::Cancel )
 {
 	m_colortab = new VColorTab( color, this, name );

@@ -353,7 +353,7 @@ VConfigDefaultPage::VConfigDefaultPage( KarbonView* view,
 	m_autoSave->setSpecialValueText( i18n( "No auto save" ) );
 	m_autoSave->setSuffix( i18n( "min" ) );
 
-	m_createBackupFile = new QCheckBox( i18n( "Create Backup File" ), gbDocumentSettings );
+	m_createBackupFile = new QCheckBox( i18n( "Create backup file" ), gbDocumentSettings );
 	m_createBackupFile->setChecked( m_oldBackupFile );
 }
 

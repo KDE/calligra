@@ -34,7 +34,7 @@ public:
 	VPolygonTool( KarbonView *view );
 	virtual ~VPolygonTool();
 
-	virtual QString name() { return i18n( "Polygon tool" ); }
+	virtual QString name() { return i18n( "Polygon Tool" ); }
 	virtual QWidget *optionsWidget() { return m_optionsWidget; }
 	
 	virtual VComposite *shape( bool interactive = false ) const;

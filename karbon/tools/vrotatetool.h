@@ -33,7 +33,7 @@ public:
 
 	virtual void activate();
 
-	virtual QString name() { return i18n( "Rotate tool" ); }
+	virtual QString name() { return i18n( "Rotate Tool" ); }
 	virtual QString icon() { return "14_rotate"; }
 	virtual QString category() { return "manipulation"; }
 	virtual QString statusText();

@@ -40,7 +40,7 @@ public:
 	virtual ~VRectangleTool();
 
 	virtual QWidget* optionsWidget() { return m_optionsWidget; }
-	virtual QString name() { return i18n( "Rectangle tool" ); }
+	virtual QString name() { return i18n( "Rectangle Tool" ); }
 	virtual QString icon() { return "14_rectangle"; }
 
 	virtual VComposite* shape( bool interactive = false ) const;

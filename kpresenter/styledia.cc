@@ -984,7 +984,7 @@ void StyleDia::setupTabGeometry()
     else
         protectContent = 0L;
 
-    QGroupBox *grp1 = new QGroupBox( i18n("Position in %1").arg(m_doc->getUnitName()), tab );
+    QGroupBox *grp1 = new QGroupBox( i18n("Position (%1)").arg(m_doc->getUnitName()), tab );
     layout->addWidget( grp1 );
     QGridLayout *pGrid = new QGridLayout( grp1, 8, 2, KDialog::marginHint(), KDialog::spacingHint() );
     pGrid->addRowSpacing(0, fontMetrics().height()/2);

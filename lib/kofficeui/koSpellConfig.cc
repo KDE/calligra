@@ -83,7 +83,7 @@ KoSpellConfigWidget::KoSpellConfigWidget( QWidget *_parent, KSpellConfig *_confi
     tab->addTab(tmpQGroupBox2, i18n("IgnoreAll"));
 
 
-    QVGroupBox* tmpQGroupBox3 = new QVGroupBox( i18n("Personal dictionary"), tab, "GroupBox3" );
+    QVGroupBox* tmpQGroupBox3 = new QVGroupBox( i18n("Personal Dictionary"), tab, "GroupBox3" );
     m_dictionary =  new KEditListBox( i18n("Word:"),
                                       tmpQGroupBox3, "dictionary" , false,
                                       KEditListBox::Add|KEditListBox::Remove );

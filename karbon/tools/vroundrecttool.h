@@ -46,7 +46,7 @@ public:
 
 	virtual QString name()
 	{
-		return i18n( "Round rectangle tool" );
+		return i18n( "Round Rectangle Tool" );
 	}
 
 	virtual QString icon()

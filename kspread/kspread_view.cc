@@ -525,7 +525,7 @@ void KSpreadView::initializeInsertActions()
                            "insertHyperlink" );
   tmpAction->setToolTip(i18n("Insert an internet hyperlink."));
 
-  m_insertPart=new KoPartSelectAction( i18n("&Object..."), "frame_query", this,
+  m_insertPart=new KoPartSelectAction( i18n("&Object"), "frame_query", this,
                                        SLOT( insertObject() ),
                                        actionCollection(), "insertPart");
   m_insertPart->setToolTip(i18n("Insert an object from another program."));

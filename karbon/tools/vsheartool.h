@@ -31,7 +31,7 @@ public:
 
 	virtual void activate();
 
-	virtual QString name() { return i18n( "Shear tool" ); }
+	virtual QString name() { return i18n( "Shear Tool" ); }
 	virtual QString icon() { return "14_shear"; }
 	virtual QString category() { return "manipulation"; }
 	virtual QString statusText();

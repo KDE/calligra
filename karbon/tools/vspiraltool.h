@@ -40,7 +40,7 @@ public:
 	virtual ~VSpiralTool();
 
 	virtual QWidget *optionsWidget() { return m_optionsWidget; }
-	virtual QString name() { return i18n( "Spiral tool" ); }
+	virtual QString name() { return i18n( "Spiral Tool" ); }
 	virtual QString icon() { return "14_spiral"; }
 
 	virtual VComposite* shape( bool interactive = false ) const;

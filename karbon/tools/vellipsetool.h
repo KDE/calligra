@@ -37,7 +37,7 @@ public:
 	VEllipseTool( KarbonView *view );
 	virtual ~VEllipseTool();
 
-	virtual QString name() { return i18n( "Ellipse tool" ); }
+	virtual QString name() { return i18n( "Ellipse Tool" ); }
 	virtual QString icon() { return "14_ellipse"; }
 	virtual QWidget *optionsWidget() { return m_optionsWidget; }
 	

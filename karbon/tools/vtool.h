@@ -64,7 +64,7 @@ public:
 	/**
 	 * The name of the tool.
 	 */
-	virtual QString name() { return i18n( "Unnamed tool" ); }
+	virtual QString name() { return i18n( "Unnamed Tool" ); }
 
 	/**
 	 * The context help of the tool.

@@ -356,8 +356,8 @@ VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget* parent )
 	fxLayout2->addWidget( m_textAlignment = new QComboBox( fxWidget ), 1, 1 );
 	fxLayout2->addWidget( new QLabel( i18n( "Position:" ), fxWidget ), 1, 2 );
 	fxLayout2->addWidget( m_textPosition = new QComboBox( fxWidget ), 1, 3 );
-	fxLayout2->addMultiCellWidget( m_editBasePath = new QPushButton( i18n( "Edit base path" ), fxWidget ), 2, 2, 0, 1 );
-	fxLayout2->addMultiCellWidget( m_convertToShapes = new QPushButton( i18n( "Convert to shapes" ), fxWidget ), 2, 2, 2, 3 );
+	fxLayout2->addMultiCellWidget( m_editBasePath = new QPushButton( i18n( "Edit Base Path" ), fxWidget ), 2, 2, 0, 1 );
+	fxLayout2->addMultiCellWidget( m_convertToShapes = new QPushButton( i18n( "Convert to Shapes" ), fxWidget ), 2, 2, 2, 3 );
 	fxLayout2->setColStretch( 1, 1 );
 	fxLayout2->setColStretch( 3, 1 );
 
@@ -698,7 +698,7 @@ VTextTool::accept()
 	{
 		cmd = new VTextCmd(
 				  &view()->part()->document(),
-				  i18n( "Change text" ),
+				  i18n( "Change Text" ),
 				  m_text,
 				  m_editedText->font(),
 				  m_editedText->basePath(),
@@ -718,7 +718,7 @@ VTextTool::accept()
 
 		cmd = new VTextCmd(
 				  &view()->part()->document(),
-				  i18n( "Insert text" ),
+				  i18n( "Insert Text" ),
 				  m_text );
 	}
 
@@ -753,7 +753,7 @@ VTextTool::convertToShapes()
 
 	VTextToCompositeCmd* cmd = new VTextToCompositeCmd(
 								   &view()->part()->document(),
-								   i18n( "Text conversion" ),
+								   i18n( "Text Conversion" ),
 								   m_text );
 
 	view()->part()->addCommand( cmd, true );

@@ -66,7 +66,7 @@ public:
 
 	virtual void activate();
 
-	virtual QString name() { return i18n( "Pattern tool" ); }
+	virtual QString name() { return i18n( "Pattern Tool" ); }
 	virtual QString icon() { return "14_pattern"; }
 	virtual QString contextHelp();
 	virtual QWidget* optionsWidget() { return m_optionsWidget; }

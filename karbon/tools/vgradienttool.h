@@ -34,7 +34,7 @@ public:
 
 	virtual void activate();
 
-	virtual QString name() { return i18n( "Gradient tool" ); }
+	virtual QString name() { return i18n( "Gradient Tool" ); }
 	virtual QString icon() { return "14_gradient"; }
 	virtual QString contextHelp();
 	virtual QWidget* optionsWidget();

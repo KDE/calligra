@@ -78,7 +78,7 @@ KPConfig::KPConfig( KPresenterView* parent )
                         BarIcon("colorize", KIcon::SizeMedium) );
     _colorBackground = new configureColorBackground( parent, page );
 
-    page = addVBoxPage( i18n("Spelling"), i18n("Spell checker behavior"),
+    page = addVBoxPage( i18n("Spelling"), i18n("Spell Checker Behavior"),
                         BarIcon("spellcheck", KIcon::SizeMedium) );
     _spellPage=new ConfigureSpellPage(parent, page);
 
@@ -664,7 +664,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage(KPresenterView *_view, QVBox *b
     gbDocumentSettings->setMargin( 10 );
     gbDocumentSettings->setInsideSpacing( KDialog::spacingHint() );
 
-    m_createBackupFile = new QCheckBox( i18n("Create Backup File"), gbDocumentSettings);
+    m_createBackupFile = new QCheckBox( i18n("Create backup file"), gbDocumentSettings);
     m_createBackupFile->setChecked( m_oldBackupFile );
 
 
@@ -912,7 +912,7 @@ ConfigurePathPage::ConfigurePathPage( KPresenterView *_view, QVBox *box, char *n
     (void) new QListViewItem( m_pPathView, i18n("Picture path"),doc->picturePath() );
     (void) new QListViewItem( m_pPathView, i18n("Backup path"),doc->backupPath() );
 
-    m_modifyPath = new QPushButton( i18n("Modify path..."), gbPathGroup);
+    m_modifyPath = new QPushButton( i18n("Modify Path..."), gbPathGroup);
     connect( m_modifyPath, SIGNAL( clicked ()), this, SLOT( slotModifyPath()));
     connect( m_pPathView, SIGNAL( doubleClicked (QListViewItem *, const QPoint &, int  )), this, SLOT( slotModifyPath()));
     connect( m_pPathView, SIGNAL( selectionChanged ( QListViewItem * )), this, SLOT( slotSelectionChanged(QListViewItem * )));

@@ -62,10 +62,10 @@ KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* /*name*/)
   QVBox *page5=addVBoxPage(i18n("Color"), QString::null,BarIcon("colorize",KIcon::SizeMedium) );
   _colorParameter=new colorParameters(parent,page5 );
 
-  QVBox *page6=addVBoxPage(i18n("Page layout"), QString::null,BarIcon("edit",KIcon::SizeMedium) );
+  QVBox *page6=addVBoxPage(i18n("Page Layout"), QString::null,BarIcon("edit",KIcon::SizeMedium) );
   _layoutPage=new configureLayoutPage(parent,page6 );
 
-  QVBox *page7 = addVBoxPage( i18n("Spelling"), i18n("Spell checker behavior"),
+  QVBox *page7 = addVBoxPage( i18n("Spelling"), i18n("Spell Checker Behavior"),
                           BarIcon("spellcheck", KIcon::SizeMedium) );
   _spellPage=new configureSpellPage(parent,page7);
 
@@ -307,7 +307,7 @@ configure::configure( KSpreadView* _view, QVBox *box , char *name )
   autoSaveDelay->setSpecialValueText(i18n("No autosave"));
   autoSaveDelay->setSuffix(i18n("min"));
 
-  m_createBackupFile = new QCheckBox( i18n("Create Backup File"), tmpQGroupBox );
+  m_createBackupFile = new QCheckBox( i18n("Create backup file"), tmpQGroupBox );
   m_createBackupFile->setChecked( m_oldBackupFile );
 
   showVScrollBar=new QCheckBox(i18n("Show &vertical scrollbar"),tmpQGroupBox);

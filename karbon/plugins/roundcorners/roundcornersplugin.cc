@@ -63,7 +63,7 @@ VRoundCornersDlg::VRoundCornersDlg( QWidget* parent, const char* name )
 	// add input:
 	QGroupBox* group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
 
-	new QLabel( i18n( "Round Corners:" ), group );
+	new QLabel( i18n( "Round corners:" ), group );
 	m_radius = new KDoubleNumInput( group );
 	group->setMinimumWidth( 300 );
 

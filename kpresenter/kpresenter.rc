@@ -528,7 +528,7 @@
   </Menu>
   <Separator/>
   <Action name="pic_original_size"/>
-  <Menu name="Align Objects"><text>&amp;Scale to show the Picture 1:1 in</text>
+  <Menu name="Align Objects"><text>&amp;Scale to Show the Picture 1:1 In</text>
    <Action name="pic_640_480"/>
    <Action name="pic_800_600"/>
    <Action name="pic_1024_768"/>

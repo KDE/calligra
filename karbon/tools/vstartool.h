@@ -39,7 +39,7 @@ public:
 	virtual ~VStarTool();
 
 	virtual QWidget* optionsWidget() { return m_optionsWidget; }
-	virtual QString name() { return i18n( "Star tool" ); }
+	virtual QString name() { return i18n( "Star Tool" ); }
 	virtual QString icon() { return "14_star"; }
 
 	virtual VComposite* shape( bool interactive = false ) const;

@@ -737,7 +737,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, cha
         m_oldBackupFile=config->readBoolEntry("BackupFile",m_oldBackupFile);
     }
 
-    m_createBackupFile = new QCheckBox( i18n("Create Backup File"), gbDocumentSettings);
+    m_createBackupFile = new QCheckBox( i18n("Create backup file"), gbDocumentSettings);
     m_createBackupFile->setChecked( m_oldBackupFile );
 
     new QLabel(i18n("Starting page number:"), gbDocumentSettings);
@@ -885,7 +885,7 @@ ConfigurePathPage::ConfigurePathPage( KWView *_view, QVBox *box, char *name )
     (void) new QListViewItem( m_pPathView, i18n("Backup path"),doc->backupPath() );
     (void) new QListViewItem( m_pPathView, i18n("Horizontal Line path"),doc->horizontalLinePath().join(";") );
 
-    m_modifyPath = new QPushButton( i18n("Modify path..."), gbPathGroup);
+    m_modifyPath = new QPushButton( i18n("Modify Path..."), gbPathGroup);
     connect( m_modifyPath, SIGNAL( clicked ()), this, SLOT( slotModifyPath()));
     connect( m_pPathView, SIGNAL( doubleClicked (QListViewItem *, const QPoint &, int  )), this, SLOT( slotModifyPath()));
     connect( m_pPathView, SIGNAL( selectionChanged ( QListViewItem * )), this, SLOT( slotSelectionChanged(QListViewItem * )));

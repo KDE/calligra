@@ -149,7 +149,7 @@ public:
 	VTextTool( KarbonView* view, const char* name );
 	~VTextTool();
 
-	virtual QString name() { return i18n( "Text tool" ); }
+	virtual QString name() { return i18n( "Text Tool" ); }
 	virtual QString icon() { return "14_text"; }
 
 	virtual QString contextHelp();

@@ -73,7 +73,7 @@ VImageTool::deactivate()
 void
 VImageTool::mouseButtonRelease()
 {
-	QString fname = KFileDialog::getOpenFileName( QString::null, "*.jpg *.gif *.png", view(), i18n( "Choose the image to add" ) );
+	QString fname = KFileDialog::getOpenFileName( QString::null, "*.jpg *.gif *.png", view(), i18n( "Choose Image to Add" ) );
 	if( !fname.isEmpty() )
 	{
 		VImage *image = new VImage( 0L, fname );

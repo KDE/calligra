@@ -882,7 +882,7 @@ void KWFrameDia::setupTab4() { // TAB Geometry
         Absolute
     */
 
-    grp1 = new QGroupBox( i18n("Position in %1").arg(doc->getUnitName()), tab4 );
+    grp1 = new QGroupBox( i18n("Position (%1)").arg(doc->getUnitName()), tab4 );
     pGrid = new QGridLayout( grp1, 5, 2, KDialog::marginHint(), KDialog::spacingHint() );
 
     lx = new QLabel( i18n( "Left:" ), grp1 );

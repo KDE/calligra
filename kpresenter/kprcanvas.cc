@@ -1349,7 +1349,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
             if ( !resizeObjNum ) break;
 	    kpobject = resizeObjNum;
             if ( firstX != mx || firstY != my ) {
-                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize Object Left and Up" ), mv, sz,
+                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize Object Left && Up" ), mv, sz,
                                                       kpobject, m_view->kPresenterDoc() );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
@@ -1363,7 +1363,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 	    if ( !resizeObjNum ) break;
 	    kpobject =  resizeObjNum;
             if ( firstX != mx || firstY != my ) {
-                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize Object Left and Down" ), mv, sz,
+                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize Object Left && Down" ), mv, sz,
                                                       kpobject, m_view->kPresenterDoc() );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
@@ -1377,7 +1377,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
             if ( !resizeObjNum ) break;
 	    kpobject =  resizeObjNum;
             if ( firstX != mx || firstY != my ) {
-                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize Object Right and Up" ), mv, sz,
+                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize Object Right && Up" ), mv, sz,
                                                       kpobject, m_view->kPresenterDoc() );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();
@@ -1391,7 +1391,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 	    if ( !resizeObjNum ) break;
 	    kpobject = resizeObjNum;
             if ( firstX != mx || firstY != my ) {
-                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize Object Right and Down" ), mv, sz,
+                ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Resize Object Right && Down" ), mv, sz,
                                                       kpobject, m_view->kPresenterDoc() );
                 resizeCmd->unexecute( false );
                 resizeCmd->execute();

@@ -423,7 +423,7 @@ VLayersTab::renameLayer( QListViewItem* item, const QPoint&, int col )
 	{
 		VLayerListViewItem* layerItem = (VLayerListViewItem*)item;
 		bool ok = true;
-		QString name = QInputDialog::getText( i18n( "Current layer" ), i18n( "Change the name of the current layer:" ),
+		QString name = QInputDialog::getText( i18n( "Current Layer" ), i18n( "Change the name of the current layer:" ),
 																QLineEdit::Normal, layerItem->layer()->name(), &ok, this );
 		if (ok)
 		{
@@ -437,13 +437,13 @@ void
 VLayersTab::addLayer()
 {
 	bool ok = true;
-	QString name = QInputDialog::getText( i18n( "New layer" ), i18n( "Enter the name of the new layer:" ),
+	QString name = QInputDialog::getText( i18n( "New Layer" ), i18n( "Enter the name of the new layer:" ),
 	                             QLineEdit::Normal, i18n( "New layer" ), &ok, this );
 	if (ok)
 	{
 		VLayer* layer = new VLayer( m_document );
 		layer->setName( name );
-		VLayerCmd* cmd = new VLayerCmd( m_document, i18n("Delete layer"),
+		VLayerCmd* cmd = new VLayerCmd( m_document, i18n("Delete Layer"),
 				layer, VLayerCmd::addLayer );
 		m_view->part()->addCommand( cmd, true );
 		updateLayers();
@@ -458,7 +458,7 @@ VLayersTab::raiseLayer()
 		return;
 	if ( m_document->canRaiseLayer( layerItem->layer()))
 	{
-		VLayerCmd* cmd = new VLayerCmd( m_document, i18n( "Raise layer" ),
+		VLayerCmd* cmd = new VLayerCmd( m_document, i18n( "Raise Layer" ),
 		                                layerItem->layer(), VLayerCmd::raiseLayer );
 		m_view->part()->addCommand( cmd, true );
 		updatePreviews();
@@ -474,7 +474,7 @@ VLayersTab::lowerLayer()
 	VLayer *layer = layerItem->layer();
 	if ( m_document->canLowerLayer( layer))
 	{
-		VLayerCmd* cmd = new VLayerCmd( m_document, i18n( "Lower layer" ), layer, VLayerCmd::lowerLayer );
+		VLayerCmd* cmd = new VLayerCmd( m_document, i18n( "Lower Layer" ), layer, VLayerCmd::lowerLayer );
 		m_view->part()->addCommand( cmd, true );
 		updatePreviews();
 	}
@@ -487,7 +487,7 @@ VLayersTab::deleteLayer()
 	if( !layerItem || !layerItem->layer() )
 		return;
 	VLayer *layer = layerItem->layer();
-	VLayerCmd* cmd = new VLayerCmd( m_document, i18n( "Delete layer" ), layer, VLayerCmd::deleteLayer );
+	VLayerCmd* cmd = new VLayerCmd( m_document, i18n( "Delete Layer" ), layer, VLayerCmd::deleteLayer );
 	m_view->part()->addCommand( cmd, true );
 	updateLayers();
 } // VLayersTab::deleteLayer

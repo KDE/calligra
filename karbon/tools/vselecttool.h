@@ -52,7 +52,7 @@ public:
 	virtual void activate();
 
 	virtual QWidget* optionsWidget() { return m_optionsWidget; }
-	virtual QString name() { return i18n( "Select tool" ); }
+	virtual QString name() { return i18n( "Select Tool" ); }
 	virtual QString icon() { return "14_select"; }
 	virtual QString category() { return "manipulation"; }
 	virtual QString statusText();
