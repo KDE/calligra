@@ -32,6 +32,8 @@
 
 #include <koPartSelectDia.h>
 
+#include <kapp.h>
+
 #define DEBUG
 
 // Qt bug
@@ -800,7 +802,6 @@ void KWordGUI::showGUI(bool __show)
 /*================================================================*/
 void KWordGUI::setRanges()
 {
-  debug("here");
   if (s_vert && s_horz && doc && paperWidget)
     {
       int wid = doc->getPTPaperWidth();
@@ -845,7 +846,7 @@ void KWordGUI::resizeEvent(QResizeEvent *e)
 /*================================================================*/
 void KWordGUI::keyPressEvent(QKeyEvent* e)
 {
-  paperWidget->keyPressEvent(e);
+  kapp->notify(paperWidget,e);
 }
 
 /*================================================================*/

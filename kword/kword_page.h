@@ -26,6 +26,9 @@
 #include <qkeycode.h>
 #include <qpixmap.h>
 
+#include <X11/Xlib.h>
+#include <kapp.h>
+
 class KWordGUI;
 class KWordDocument_impl;
 
@@ -100,10 +103,12 @@ protected:
   void calcVisiblePages();
 
   void drawBuffer();
-
+  void copyBuffer();
+  
   KWordDocument_impl *doc;
   bool markerIsVisible;
- 
+  bool paint_directly,has_to_copy;
+
   /**
    * The xOffset in zoomed pixels.
    */

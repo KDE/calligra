@@ -29,8 +29,8 @@ public:
     KWFormatContext( KWordDocument_impl *_doc );
     ~KWFormatContext();
 
-    void init( KWParag *_parag, QPainter &_painter );
-    void enterNextParag( QPainter &_painter );
+    void init( KWParag *_parag, QPainter &_painter, bool _updateCounters = true );
+    void enterNextParag( QPainter &_painter, bool _updateCounters = true );
     void skipCurrentParag( QPainter &_painter );
     void gotoStartOfParag( QPainter &_painter );
     void cursorGotoLine( unsigned int _textpos, QPainter &_painter );

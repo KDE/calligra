@@ -20,7 +20,7 @@ KWFormatContext::~KWFormatContext()
 }
 
 
-void KWFormatContext::init( KWParag *_parag, QPainter &_painter )
+void KWFormatContext::init( KWParag *_parag, QPainter &_painter, bool _updateCounters = true )
 {
     // Offset from the top of the page
     ptY = document->getPTTopBorder();
@@ -29,7 +29,7 @@ void KWFormatContext::init( KWParag *_parag, QPainter &_painter )
 
     // Enter the first paragraph
     parag = 0L;
-    enterNextParag( _painter );
+    enterNextParag( _painter, _updateCounters );
 
     // Loop until we got the paragraph
     while ( parag != _parag )
@@ -37,13 +37,13 @@ void KWFormatContext::init( KWParag *_parag, QPainter &_painter )
 	// Skip the current paragraph
 	skipCurrentParag( _painter );
 	// Go to the next one
-	enterNextParag( _painter );
+	enterNextParag( _painter, _updateCounters );
     }
 
     // gotoLine( 0, _painter );
 }
 
-void KWFormatContext::enterNextParag( QPainter &_painter )
+void KWFormatContext::enterNextParag( QPainter &_painter, bool _updateCounters = true )
 {
     // Set the context to the given paragraph
     if (parag != 0L){
@@ -63,13 +63,17 @@ void KWFormatContext::enterNextParag( QPainter &_painter )
     // Vertical position ...
     parag->setPTYStart( ptY );
 
-    // Initialize our paragraph counter stuff
-    int cnr = parag->getParagLayout()->getCounterNr();
-    int dep = parag->getParagLayout()->getCounterDepth();
-    if ( cnr != -1 )
-	counters[cnr][dep]++;
-    parag->updateCounters( this );
-    
+    if (_updateCounters)
+      {
+	// Initialize our paragraph counter stuff
+	int cnr = parag->getParagLayout()->getCounterNr();
+	int dep = parag->getParagLayout()->getCounterDepth();
+	
+	if ( cnr != -1 )
+	  counters[cnr][dep]++;
+	parag->updateCounters( this );
+      }
+
     // We are at the beginning of our paragraph
     lineStartPos = 0;
     
@@ -260,7 +264,17 @@ void KWFormatContext::cursorGotoUp( QPainter &_painter )
 	if ( parag->getPrev() == 0L )
 	    return;
 	// Enter the prev paragraph
-	init( parag->getPrev(), _painter );
+	
+	// decrease counter here, and don't let
+	// enterParagraph update the counter
+	int cnr = parag->getPrev()->getParagLayout()->getCounterNr();
+	int dep = parag->getPrev()->getParagLayout()->getCounterDepth();
+	
+	if ( cnr != -1 )
+	  counters[cnr][dep]--;
+	parag->getPrev()->updateCounters( this );
+	
+	init( parag->getPrev(), _painter, false );
 	int ret;
 	do
 	{
@@ -276,7 +290,7 @@ void KWFormatContext::cursorGotoUp( QPainter &_painter )
     else {
 	// Re-Enter the current paragraph
 	unsigned int tmpPos = lineStartPos;
-	init (parag, _painter);
+	init (parag, _painter, false);
 	do {
 	    makeLineLayout( _painter );
 	    if (lineEndPos < tmpPos){

@@ -521,7 +521,7 @@ void KWordDocument_impl::drawMarker(KWFormatContext &_fc,QPainter *_painter,int 
     
   _painter->setRasterOp(NotROP);
   QPen pen;
-  pen.setWidth(1);
+  pen.setWidth(2);
   _painter->setPen(pen);
   
   _painter->drawLine(_fc.getPTPos() - xOffset,

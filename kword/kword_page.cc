@@ -26,6 +26,7 @@
 KWPage::KWPage(QWidget *parent,KWordDocument_impl *_doc,KWordGUI *_gui)
   : QWidget(parent,""), buffer(width(),height())
 { 
+  setBackgroundColor(white);
   buffer.fill(white);
   doc = _doc;
   gui = _gui;
@@ -34,6 +35,8 @@ KWPage::KWPage(QWidget *parent,KWordDocument_impl *_doc,KWordGUI *_gui)
   yOffset = 0;
 
   markerIsVisible = true;
+  paint_directly = false;
+  has_to_copy = false;
     
   calcVisiblePages();
 
@@ -44,6 +47,8 @@ KWPage::KWPage(QWidget *parent,KWordDocument_impl *_doc,KWordGUI *_gui)
   fc->cursorGotoLine(0,painter);
   painter.end();
   drawBuffer();
+
+  setCursor(ibeamCursor);
 }
 
 // these methods are implemented here, because it didn't compile for
@@ -61,7 +66,13 @@ unsigned int KWPage::ptColumnSpacing() { return doc->getPTColumnSpacing(); }
 void KWPage::paintEvent(QPaintEvent* e)
 {
   QPainter painter;
-  painter.begin(&buffer);
+  if (paint_directly)
+    painter.begin(this);
+  else
+    {
+      if (has_to_copy) copyBuffer();
+      painter.begin(&buffer);
+    }
   painter.setClipRect(e->rect());
 
   painter.eraseRect(e->rect().x() - xOffset,e->rect().y() - yOffset,
@@ -118,12 +129,23 @@ void KWPage::paintEvent(QPaintEvent* e)
   doc->drawMarker(*fc,&painter,xOffset,yOffset);
     
   painter.end();
-  drawBuffer();
+
+  if (!paint_directly) drawBuffer();
 }
 
 /*================================================================*/
 void KWPage::keyPressEvent(QKeyEvent *e)
 {
+  XKeyboardControl kbdc;
+  XKeyboardState kbds;
+  bool repeat = true;
+
+  // HACK
+  XGetKeyboardControl(kapp->getDisplay(),&kbds);
+  repeat = kbds.global_auto_repeat;
+  kbdc.auto_repeat_mode = false;
+  XChangeKeyboardControl(kapp->getDisplay(),KBAutoRepeatMode,&kbdc);
+  
   QPainter painter;
 
   painter.begin(this);
@@ -154,6 +176,8 @@ void KWPage::keyPressEvent(QKeyEvent *e)
       break;
     default:
       {
+	if (has_to_copy) copyBuffer();
+
 	draw_buffer = true;
 	char tmpString[2] = {0,0};
 	tmpString[0] = (char)e->ascii();
@@ -194,6 +218,10 @@ void KWPage::keyPressEvent(QKeyEvent *e)
   markerIsVisible = true;
     
   painter.end();
+
+  // HACK
+  kbdc.auto_repeat_mode = repeat;
+  XChangeKeyboardControl(kapp->getDisplay(),KBAutoRepeatMode,&kbdc);
 }
 
 /*================================================================*/
@@ -215,7 +243,7 @@ void KWPage::scrollToCursor(KWFormatContext &_fc)
   int oy = yOffset, ox = xOffset;
   if (cy < 0)
     {
-      oy = _fc.getPTY() - 10;
+      oy = _fc.getPTY();
       if (oy < 0) oy = 0;
     }
   else if (cy > 0)
@@ -235,55 +263,107 @@ void KWPage::scrollToCursor(KWFormatContext &_fc)
 /*================================================================*/
 void KWPage::scrollToOffset(int _x,int _y,KWFormatContext &_fc)
 {
-  //int dx = _x - xOffset;
-  //int dy = _y - yOffset;
-  
   QPainter painter;
-  painter.begin(&buffer);
+  painter.begin(this);
   doc->drawMarker(_fc,&painter,xOffset,yOffset);
   painter.end();
-  drawBuffer();
     
-  xOffset = _x;
-  yOffset = _y;
-
-  gui->scrollTo(xOffset,yOffset);
-  //scroll(-dx,-dy);
-  //gui->getHorzScrollBar()->setValue(xOffset);
-  //gui->getVertScrollBar()->setValue(yOffset);
-  //gui->setOffset(xOffset,yOffset);
+  gui->getHorzScrollBar()->setValue(_x);
+  gui->getVertScrollBar()->setValue(_y);
   
-//   painter.begin(&buffer);
-//   doc->drawMarker(_fc,&painter,yOffset,yOffset);
-//   painter.end();
-//   drawBuffer();
+  painter.begin(this);
+  doc->drawMarker(_fc,&painter,xOffset,yOffset);
+  painter.end();
 }
 
 /*================================================================*/
 void KWPage::scroll(int dx,int dy)
 { 
-  // has to be implemented better !
-  // is unefficient now
-  xOffset -= dx; 
-  yOffset -= dy; 
-  buffer.fill(white);
-  repaint(false);
+  unsigned int ox = xOffset,oy = yOffset;
+
+  xOffset -= dx;
+  yOffset -= dy;
   calcVisiblePages(); 
+
+  int x1,y1,x2,y2,w = width(),h = height();
+
+  if (dx > 0) 
+    {
+      x1 = 0;
+      x2 = dx;
+      w -= dx;
+    } 
+  else 
+    {
+      x1 = -dx;
+      x2 = 0;
+      w += dx;
+    }
+
+  if (dy > 0) 
+    {
+      y1 = 0;
+      y2 = dy;
+      h -= dy;
+    } 
+  else 
+    {
+      y1 = -dy;
+      y2 = 0;
+      h += dy;
+    }
+
+  bitBlt(this,x2,y2,this,x1,y1,w,h);
+
+  paint_directly = true;
+
+  if (yOffset > oy)
+    {
+      dy = abs(dy);
+      repaint(0,height() - abs(dy),width(),abs(dy),true);
+    }
+  else
+    {
+      dy = abs(dy);
+      repaint(0,0,width(),abs(dy),true);
+    }
+
+  if (xOffset > ox)
+    {
+      dx = abs(dx);
+      repaint(width() - abs(dx),0,abs(dx),height(),true);
+    }
+  else
+    {
+      dx = abs(dx);
+      repaint(0,0,abs(dx),height(),true);
+    }
+
+  paint_directly = false;
+  has_to_copy = true;
 }
 
 /*================================================================*/
 int KWPage::isCursorYVisible(KWFormatContext &_fc)
 {
-  if ((int )_fc.getPTY() - yOffset < 0)
+  if ((int)_fc.getPTY() - (int)yOffset < 0)
     return -1;
+
   if (_fc.getPTY() - (unsigned int)yOffset + _fc.getLineHeight() > (unsigned int)height())
     return 1;
+
   return 0;
 }
 
 /*================================================================*/
-int KWPage::isCursorXVisible(KWFormatContext &)
+int KWPage::isCursorXVisible(KWFormatContext &_fc)
 {
+  if ((int)_fc.getPTPos() - (int)xOffset < 0)
+    return -1;
+
+  if (_fc.getPTPos() - (unsigned int)xOffset + 2 > (unsigned int)width())
+    return 1;
+
   return 0;
 }
 
@@ -302,4 +382,11 @@ void KWPage::drawBuffer()
   painter.begin(this);
   painter.drawPixmap(0,0,buffer);
   painter.end();
+}
+
+/*================================================================*/
+void KWPage::copyBuffer()
+{
+  bitBlt(&buffer,0,0,this,0,0,width(),height());
+  has_to_copy = false;
 }
