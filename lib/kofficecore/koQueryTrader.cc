@@ -165,7 +165,7 @@ KOffice::Document_ptr KoDocumentEntry::createDoc()
 
 KoDocumentEntry KoDocumentEntry::queryByMimeType( const char *mimetype )
 {
-  QString constr( "'%1' in MimeTypes" );
+  QString constr( "'%1' in ServiceTypes" );
   constr = constr.arg( mimetype );
 
   QValueList<KoDocumentEntry> vec = query( constr );
