@@ -1,0 +1,27 @@
+/* XPM */
+/* Drawn  by Andreas Thienemann for the K Desktop Environment */
+/* See http://www.kde.org */
+static char*keyboard[]={
+"16 16 5 1",
+"b c #ffffff",
+"c c #c0c0c0",
+"a c #808080",
+"# c #000000",
+". c None",
+"......###.......",
+".....#aaa#......",
+"....#aabbb#.....",
+"...#aabb#bb#....",
+"..#aabb#bbbb#...",
+".#aabb####bbb#..",
+"#bbbb#b#bbbbbc#.",
+"#aabbbb#bbbbccc#",
+"#aaabbb#bbbccc#.",
+".#aaabbbbbccc#..",
+"..#aaabbbccc#...",
+"...#aaabccc#....",
+"....#aabcc#.....",
+".....#abc#......",
+"......#b#.......",
+".......#........"};
+

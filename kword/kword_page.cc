@@ -69,6 +69,8 @@ KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
   hiliteFrameSet = -1;
 
   frameDia = 0;
+  pixmap_name = "";
+  doRaster = true;
 }
 
 unsigned int KWPage::ptLeftBorder() { return doc->getPTLeftBorder(); }
@@ -409,8 +411,11 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 	  {
 	    int mx = e->x() + xOffset;
 	    int my = e->y() + yOffset;
-	    mx = (mx / doc->getRastX()) * doc->getRastX();
-	    my = (my / doc->getRastY()) * doc->getRastY();
+	    if (doRaster)
+	      {
+		mx = (mx / doc->getRastX()) * doc->getRastX();
+		my = (my / doc->getRastY()) * doc->getRastY();
+	      }
 
 	    QPainter p;
 	    p.begin(this);
@@ -458,6 +463,7 @@ void KWPage::mouseMoveEvent(QMouseEvent *e)
 	default: break;
 	}
     }
+  doRaster = true;
 }
 
 /*================================================================*/
@@ -574,7 +580,7 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 	      my = (my / doc->getRastX()) * doc->getRastY();
 	      oldMy = my;
 	    } break;
-	  case MM_CREATE_TEXT: case MM_CREATE_PIX:
+	  case MM_CREATE_TEXT:
 	    {
 	      mx = (mx / doc->getRastX()) * doc->getRastX();
 	      oldMx = mx;
@@ -582,6 +588,22 @@ void KWPage::mousePressEvent(QMouseEvent *e)
 	      oldMy = my;
 	      insRect = KRect(mx,my,0,0);
 	      deleteMovingRect = false;
+	    } break;
+	  case MM_CREATE_PIX:
+	    {
+	      if (!pixmap_name.isEmpty()) 
+		{
+		  QPixmap _pix(pixmap_name);
+		  mx = (mx / doc->getRastX()) * doc->getRastX();
+		  oldMx = mx;
+		  my = (my / doc->getRastX()) * doc->getRastY();
+		  oldMy = my;
+		  insRect = KRect(mx,my,0,0);
+		  deleteMovingRect = false;
+		  doRaster = false;
+ 		  QCursor::setPos(mapToGlobal(QPoint(mx + _pix.width(),my + _pix.height())));
+		}
+	      else pixmap_name = "";
 	    } break;
 	  default: break;
 	  }
@@ -687,33 +709,18 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
       {
 	repaint(false);
 
-	if (insRect.width() != 0 && insRect.height() != 0)
+	if (insRect.width() != 0 && insRect.height() != 0 && !pixmap_name.isEmpty())
 	  {
-	    QString file = KFileDialog::getOpenFileName(0,
-							i18n("*.gif *GIF *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM "
-							     "*.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW *.jpg *.JPG *.jpeg *.JPEG"
-							     "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|All pictures\n"
-							     "*.gif *.GIF|GIF-Pictures\n"
-							     "*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
-							     "*.bmp *.BMP|Windows Bitmaps\n"
-							     "*.xbm *.XBM|XWindow Pitmaps\n"
-							     "*.xpm *.XPM|Pixmaps\n"
-							     "*.pnm *.PNM *.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW "
-							     "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|PNM-Pictures"),0);
-	    
-	    if (!file.isEmpty()) 
-	      {
-		KWPictureFrameSet *frameset = new KWPictureFrameSet(doc);
-		frameset->setFileName(file,KSize(insRect.width(),insRect.height()));
-		KWFrame *frame = new KWFrame(insRect.x() + xOffset,insRect.y() + yOffset,insRect.width(),insRect.height());
-		frameset->addFrame(frame);
-		doc->addFrameSet(frameset);
-		repaint(false);
-	      }
+	    KWPictureFrameSet *frameset = new KWPictureFrameSet(doc);
+	    frameset->setFileName(pixmap_name,KSize(insRect.width(),insRect.height()));
+	    KWFrame *frame = new KWFrame(insRect.x() + xOffset,insRect.y() + yOffset,insRect.width(),insRect.height());
+	    frameset->addFrame(frame);
+	    doc->addFrameSet(frameset);
+	    repaint(false);
 	  }
-
+	mmEdit();
       } break;
-    default: break;
+    default: repaint(false);
     }
 }
 
@@ -2239,6 +2246,26 @@ void KWPage::setMouseMode(MouseMode _mm)
 	setCursor(crossCursor);
 	mm_menu->setItemChecked(mm_create_pix,true);
       } break;
+    case MM_CREATE_CLIPART:
+      {
+	setCursor(crossCursor);
+	mm_menu->setItemChecked(mm_create_clipart,true);
+      } break;
+    case MM_CREATE_TABLE:
+      {
+	setCursor(crossCursor);
+	mm_menu->setItemChecked(mm_create_table,true);
+      } break;
+    case MM_CREATE_FORMULA:
+      {
+	setCursor(crossCursor);
+	mm_menu->setItemChecked(mm_create_formula,true);
+      } break;
+    case MM_CREATE_PART:
+      {
+	setCursor(crossCursor);
+	mm_menu->setItemChecked(mm_create_part,true);
+      } break;
     }
 
   repaint(false);
@@ -2256,6 +2283,10 @@ void KWPage::setupMenus()
   mm_edit_frame = mm_menu->insertItem(i18n("Edit Frames"),this,SLOT(mmEditFrame()));
   mm_create_text = mm_menu->insertItem(i18n("Create Text-Frame"),this,SLOT(mmCreateText()));
   mm_create_pix = mm_menu->insertItem(i18n("Create Pixmap-Frame"),this,SLOT(mmCreatePix()));
+  mm_create_clipart = mm_menu->insertItem(i18n("Create Clipart-Frame"),this,SLOT(mmClipart()));
+  mm_create_table = mm_menu->insertItem(i18n("Create Table-Frame"),this,SLOT(mmTable()));
+  mm_create_formula = mm_menu->insertItem(i18n("Create Formula-Frame"),this,SLOT(mmFormula()));
+  mm_create_part = mm_menu->insertItem(i18n("Create Part-Frame"),this,SLOT(mmPart()));
   mm_menu->setCheckable(true);
 
   frame_edit_menu = new QPopupMenu();
@@ -2270,6 +2301,10 @@ void KWPage::mmUncheckAll()
   mm_menu->setItemChecked(mm_edit_frame,false);
   mm_menu->setItemChecked(mm_create_text,false);
   mm_menu->setItemChecked(mm_create_pix,false);
+  mm_menu->setItemChecked(mm_create_clipart,false);
+  mm_menu->setItemChecked(mm_create_table,false);
+  mm_menu->setItemChecked(mm_create_formula,false);
+  mm_menu->setItemChecked(mm_create_part,false);
 }
 
 /*================================================================*/

@@ -21,9 +21,8 @@ module KWord
       slot void newView();
       
       slot void insertPicture();
-      slot void insertTable();
       slot void insertClipart();
-      slot void insertPart();
+      slot void insertSpecialChar();
       
       slot void formatFont();
       slot void formatColor();
@@ -40,6 +39,10 @@ module KWord
       slot void toolsEditFrame();
       slot void toolsCreateText();
       slot void toolsCreatePix();
+      slot void toolsClipart();
+      slot void toolsTable();
+      slot void toolsFormula();
+      slot void toolsPart();
 
       slot void helpContents();
       slot void helpAbout();

@@ -102,9 +102,8 @@ public:
   virtual void newView();
 
   virtual void insertPicture();
-  virtual void insertTable();
   virtual void insertClipart();
-  virtual void insertPart();
+  virtual void insertSpecialChar();
 
   virtual void formatFont();
   virtual void formatColor();
@@ -121,6 +120,10 @@ public:
   virtual void toolsEditFrame();
   virtual void toolsCreateText();
   virtual void toolsCreatePix();
+  virtual void toolsClipart();
+  virtual void toolsTable();
+  virtual void toolsFormula();
+  virtual void toolsPart();
 
   virtual void helpContents();
   virtual void helpAbout();
@@ -222,8 +225,7 @@ protected:
   OpenPartsUI::Menu_var m_vMenuInsert;
   CORBA::Long m_idMenuInsert_Picture;
   CORBA::Long m_idMenuInsert_Clipart;
-  CORBA::Long m_idMenuInsert_Table;
-  CORBA::Long m_idMenuInsert_Part;
+  CORBA::Long m_idMenuInsert_SpecialChar;
  
   // format menu
   OpenPartsUI::Menu_var m_vMenuFormat;
@@ -246,6 +248,10 @@ protected:
   CORBA::Long m_idMenuTools_EditFrame;
   CORBA::Long m_idMenuTools_CreateText;
   CORBA::Long m_idMenuTools_CreatePix;
+  CORBA::Long m_idMenuTools_Clipart;
+  CORBA::Long m_idMenuTools_Table;
+  CORBA::Long m_idMenuTools_Formula;
+  CORBA::Long m_idMenuTools_Part;
 
   // help menu
   OpenPartsUI::Menu_var m_vMenuHelp;
@@ -263,8 +269,7 @@ protected:
   OpenPartsUI::ToolBar_var m_vToolBarInsert;
   CORBA::Long m_idButtonInsert_Picture;
   CORBA::Long m_idButtonInsert_Clipart;
-  CORBA::Long m_idButtonInsert_Table;
-  CORBA::Long m_idButtonInsert_Part;
+  CORBA::Long m_idButtonInsert_SpecialChar;
 
   // text toolbar
   OpenPartsUI::ToolBar_var m_vToolBarText;
@@ -297,6 +302,10 @@ protected:
   CORBA::Long m_idButtonTools_EditFrame;
   CORBA::Long m_idButtonTools_CreateText;
   CORBA::Long m_idButtonTools_CreatePix;
+  CORBA::Long m_idButtonTools_Clipart;
+  CORBA::Long m_idButtonTools_Table;
+  CORBA::Long m_idButtonTools_Formula;
+  CORBA::Long m_idButtonTools_Part;
 
   QList<KWordFrame> m_lstFrames;
 
@@ -344,6 +353,10 @@ protected:
   static const int ID_UNDO = 27;
   static const int ID_ENUM_LIST = 28;
   static const int ID_USORT_LIST = 29;
+  static const int ID_TOOL_CREATE_TABLE = 30;
+  static const int ID_TOOL_CREATE_FORMULA = 31;
+  static const int ID_TOOL_CREATE_PART = 32;
+  static const int ID_TOOL_CREATE_CLIPART = 33;
 
 };
 

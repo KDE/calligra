@@ -42,7 +42,8 @@
 class KWordGUI;
 class KWordDocument;
 
-enum MouseMode {MM_EDIT = 0,MM_EDIT_FRAME = 1,MM_CREATE_TEXT = 2,MM_CREATE_PIX = 3};
+enum MouseMode {MM_EDIT = 0,MM_EDIT_FRAME = 1,MM_CREATE_TEXT = 2,MM_CREATE_PIX = 3,MM_CREATE_CLIPART = 4,MM_CREATE_TABLE = 5,\
+		MM_CREATE_FORMULA = 6,MM_CREATE_PART = 7};
 
 /******************************************************************/
 /* Class: KWPage                                                  */
@@ -158,6 +159,8 @@ public:
     { hiliteFrameSet = _f; repaint(false); }
 
   void forceFullUpdate();
+  void setPixmapFilename(QString f)
+    { pixmap_name = f; }
   
 public slots:
   void newLeftIndent(int _left); 
@@ -171,6 +174,14 @@ public slots:
     { setMouseMode(MM_CREATE_TEXT); mmUncheckAll(); mm_menu->setItemChecked(mm_create_text,true); }
   void mmCreatePix()
     { setMouseMode(MM_CREATE_PIX); mmUncheckAll(); mm_menu->setItemChecked(mm_create_pix,true); }
+  void mmClipart()
+    { setMouseMode(MM_CREATE_CLIPART); mmUncheckAll(); mm_menu->setItemChecked(mm_create_clipart,true); }
+  void mmTable()
+    { setMouseMode(MM_CREATE_TABLE); mmUncheckAll(); mm_menu->setItemChecked(mm_create_table,true); }
+  void mmFormula()
+    { setMouseMode(MM_CREATE_FORMULA); mmUncheckAll(); mm_menu->setItemChecked(mm_create_formula,true); }
+  void mmPart()
+    { setMouseMode(MM_CREATE_PART); mmUncheckAll(); mm_menu->setItemChecked(mm_create_part,true); }
   void femProps();
   void tabListChanged(QList<KoTabulator> *_tablist);
 
@@ -250,7 +261,7 @@ protected:
 
   MouseMode mouseMode;
   QPopupMenu *mm_menu,*frame_edit_menu;
-  int mm_edit,mm_edit_frame,mm_create_text,mm_create_pix;
+  int mm_edit,mm_edit_frame,mm_create_text,mm_create_pix,mm_create_clipart,mm_create_table,mm_create_formula,mm_create_part;
 
   int oldMx,oldMy;
   bool deleteMovingRect;
@@ -260,7 +271,9 @@ protected:
   KWFrameDia *frameDia;
   KRect insRect;
 
-  bool redrawAllWhileScrolling;
+  bool redrawAllWhileScrolling,doRaster;
+  QString pixmap_name;
+
 };
 
 #endif

@@ -410,6 +410,10 @@ void KWordView::uncheckAllTools()
       m_vMenuTools->setItemChecked(m_idMenuTools_EditFrame,false);
       m_vMenuTools->setItemChecked(m_idMenuTools_CreateText,false);
       m_vMenuTools->setItemChecked(m_idMenuTools_CreatePix,false);
+      m_vMenuTools->setItemChecked(m_idMenuTools_Clipart,false);
+      m_vMenuTools->setItemChecked(m_idMenuTools_Table,false);
+      m_vMenuTools->setItemChecked(m_idMenuTools_Formula,false);
+      m_vMenuTools->setItemChecked(m_idMenuTools_Part,false);
     }
 
   if (m_vToolBarTools)
@@ -418,6 +422,10 @@ void KWordView::uncheckAllTools()
       m_vToolBarTools->setButton(ID_TOOL_EDIT_FRAME,false);
       m_vToolBarTools->setButton(ID_TOOL_CREATE_TEXT,false);
       m_vToolBarTools->setButton(ID_TOOL_CREATE_PIX,false);
+      m_vToolBarTools->setButton(ID_TOOL_CREATE_CLIPART,false);
+      m_vToolBarTools->setButton(ID_TOOL_CREATE_TABLE,false);
+      m_vToolBarTools->setButton(ID_TOOL_CREATE_FORMULA,false);
+      m_vToolBarTools->setButton(ID_TOOL_CREATE_PART,false);
     }
 }
 
@@ -440,6 +448,18 @@ void KWordView::setTool(MouseMode _mouseMode)
 	case MM_CREATE_PIX:
 	  m_vMenuTools->setItemChecked(m_idMenuTools_CreatePix,true);
 	  break;
+	case MM_CREATE_CLIPART:
+	  m_vMenuTools->setItemChecked(m_idMenuTools_Clipart,true);
+	  break;
+	case MM_CREATE_TABLE:
+	  m_vMenuTools->setItemChecked(m_idMenuTools_Table,true);
+	  break;
+	case MM_CREATE_FORMULA:
+	  m_vMenuTools->setItemChecked(m_idMenuTools_Formula,true);
+	  break;
+	case MM_CREATE_PART:
+	  m_vMenuTools->setItemChecked(m_idMenuTools_Part,true);
+	  break;
 	}
     }
 
@@ -458,6 +478,18 @@ void KWordView::setTool(MouseMode _mouseMode)
 	  break;
 	case MM_CREATE_PIX:
 	  m_vToolBarTools->setButton(ID_TOOL_CREATE_PIX,true);
+	  break;
+	case MM_CREATE_CLIPART:
+	  m_vToolBarTools->setButton(ID_TOOL_CREATE_CLIPART,true);
+	  break;
+	case MM_CREATE_TABLE:
+	  m_vToolBarTools->setButton(ID_TOOL_CREATE_TABLE,true);
+	  break;
+	case MM_CREATE_FORMULA:
+	  m_vToolBarTools->setButton(ID_TOOL_CREATE_FORMULA,true);
+	  break;
+	case MM_CREATE_PART:
+	  m_vToolBarTools->setButton(ID_TOOL_CREATE_PART,true);
 	  break;
 	}
     }
@@ -578,17 +610,12 @@ void KWordView::insertPicture()
 }
 
 /*===============================================================*/
-void KWordView::insertTable()
-{
-}
-
-/*===============================================================*/
 void KWordView::insertClipart()
 {
 }
 
 /*===============================================================*/
-void KWordView::insertPart()
+void KWordView::insertSpecialChar()
 {
 }
 
@@ -708,7 +735,49 @@ void KWordView::toolsCreateText()
 /*===============================================================*/
 void KWordView::toolsCreatePix()
 {
-  gui->getPaperWidget()->mmCreatePix();
+  gui->getPaperWidget()->mmEdit();
+  QString file = KFileDialog::getOpenFileName(0,
+					      i18n("*.gif *GIF *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM "
+						   "*.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW *.jpg *.JPG *.jpeg *.JPEG"
+						   "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|All pictures\n"
+						   "*.gif *.GIF|GIF-Pictures\n"
+						   "*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
+						   "*.bmp *.BMP|Windows Bitmaps\n"
+						   "*.xbm *.XBM|XWindow Pitmaps\n"
+						   "*.xpm *.XPM|Pixmaps\n"
+						   "*.pnm *.PNM *.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW "
+						   "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|PNM-Pictures"),0);
+  if (!file.isEmpty())
+    {
+      gui->getPaperWidget()->mmCreatePix();
+      gui->getPaperWidget()->setPixmapFilename(file);
+    }
+  else
+    gui->getPaperWidget()->mmEdit();
+}
+
+/*===============================================================*/
+void KWordView::toolsClipart()
+{
+  gui->getPaperWidget()->mmClipart();
+}
+
+/*===============================================================*/
+void KWordView::toolsTable()
+{
+  gui->getPaperWidget()->mmTable();
+}
+
+/*===============================================================*/
+void KWordView::toolsFormula()
+{
+  gui->getPaperWidget()->mmFormula();
+}
+
+/*===============================================================*/
+void KWordView::toolsPart()
+{
+  gui->getPaperWidget()->mmPart();
 }
 
 /*===============================================================*/
@@ -1109,26 +1178,38 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   pix = OPUIUtils::convertPixmap(ICON("clipart.xpm"));
   m_idMenuInsert_Clipart = m_vMenuInsert->insertItem6( pix, i18n("&Clipart..."), this, "insertClipart", Key_F3, -1, -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("table.xpm"));
-  m_idMenuInsert_Table = m_vMenuInsert->insertItem6( pix, i18n("&Table..."), this, "insertTable", Key_F4, -1, -1 );
+  m_vMenuInsert->insertSeparator( -1 );
 
-  pix = OPUIUtils::convertPixmap(ICON("parts.xpm"));
-  m_idMenuInsert_Table = m_vMenuInsert->insertItem6( pix, i18n("&Objects..."), this, "insertPart", Key_F5, -1, -1 );
+  pix = OPUIUtils::convertPixmap(ICON("char.xpm"));
+  m_idMenuInsert_SpecialChar = m_vMenuInsert->insertItem6( pix, i18n("&Special Character..."), this, 
+							   "insertSpecialChar", ALT + Key_C, -1, -1 );
 
   // tools menu
   _menubar->insertMenu( i18n( "&Tools" ), m_vMenuTools, -1, -1 );
 
   pix = OPUIUtils::convertPixmap(ICON("edittool.xpm"));
-  m_idMenuTools_Edit = m_vMenuTools->insertItem6(pix, i18n("&Edit Text"), this, "toolsEdit", Key_F6, -1, -1 );
+  m_idMenuTools_Edit = m_vMenuTools->insertItem6(pix, i18n("&Edit Text"), this, "toolsEdit", Key_F4, -1, -1 );
 
   pix = OPUIUtils::convertPixmap(ICON("editframetool.xpm"));
-  m_idMenuTools_EditFrame = m_vMenuTools->insertItem6(pix, i18n("&Edit Frames"), this, "toolsEditFrame", Key_F7, -1, -1 );
+  m_idMenuTools_EditFrame = m_vMenuTools->insertItem6(pix, i18n("&Edit Frames"), this, "toolsEditFrame", Key_F5, -1, -1 );
 
   pix = OPUIUtils::convertPixmap(ICON("textframetool.xpm"));
-  m_idMenuTools_CreateText = m_vMenuTools->insertItem6(pix, i18n("&Create Text Frame"), this, "toolsCreateText", Key_F8, -1, -1 );
+  m_idMenuTools_CreateText = m_vMenuTools->insertItem6(pix, i18n("&Create Text Frame"), this, "toolsCreateText", Key_F6, -1, -1 );
 
   pix = OPUIUtils::convertPixmap(ICON("picframetool.xpm"));
-  m_idMenuTools_CreatePix = m_vMenuTools->insertItem6(pix, i18n("&Create Picture Frame"), this, "toolsCreatePix", Key_F9, -1, -1 );
+  m_idMenuTools_CreatePix = m_vMenuTools->insertItem6(pix, i18n("&Create Picture Frame"), this, "toolsCreatePix", Key_F7, -1, -1 );
+
+  pix = OPUIUtils::convertPixmap(ICON("clipart.xpm"));
+  m_idMenuTools_Clipart = m_vMenuTools->insertItem6(pix, i18n("&Create Clipart Frame"), this, "toolsClipart", Key_F8, -1, -1 );
+
+  pix = OPUIUtils::convertPixmap(ICON("table.xpm"));
+  m_idMenuTools_Table = m_vMenuTools->insertItem6(pix, i18n("&Create Table Frame"), this, "toolsTable", Key_F9, -1, -1 );
+
+  pix = OPUIUtils::convertPixmap(ICON("formula.xpm"));
+  m_idMenuTools_Formula = m_vMenuTools->insertItem6(pix, i18n("&Create Formula Frame"), this, "toolsFormula", Key_F10, -1, -1 );
+
+  pix = OPUIUtils::convertPixmap(ICON("parts.xpm"));
+  m_idMenuTools_Part = m_vMenuTools->insertItem6(pix, i18n("&Create Part Frame"), this, "toolsPart", Key_F11, -1, -1 );
 
   m_vMenuTools->setCheckable(true);
   m_vMenuTools->setItemChecked(m_idMenuTools_Edit,true);
@@ -1231,13 +1312,12 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   pix = OPUIUtils::convertPixmap(ICON("clipart.xpm"));
   m_idButtonInsert_Clipart = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertClipart", true, i18n("Insert Clipart"), -1);
 
-  // line
-  pix = OPUIUtils::convertPixmap(ICON("table.xpm"));
-  m_idButtonInsert_Table = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertTable", true, i18n("Insert Table"), -1);
+  m_vToolBarInsert->insertSeparator(-1);
 
-  // parts
-  pix = OPUIUtils::convertPixmap(ICON("parts.xpm"));
-  m_idButtonInsert_Part = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertPart", true, i18n("Insert Object"), -1);
+  // special char
+  pix = OPUIUtils::convertPixmap(ICON("char.xpm"));
+  m_idButtonInsert_SpecialChar = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertSpecialChar", 
+								  true, i18n("Insert Special Character"), -1);
 
   m_vToolBarInsert->enable( OpenPartsUI::Show );
 
@@ -1269,6 +1349,30 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   m_idButtonTools_CreatePix = m_vToolBarTools->insertButton2( pix, ID_TOOL_CREATE_PIX, SIGNAL( clicked() ), this, "toolsCreatePix", 
 							       true, i18n("Create Picture Frame"), -1);
   m_vToolBarTools->setToggle(ID_TOOL_CREATE_PIX,true);
+
+  // create clip frame
+  pix = OPUIUtils::convertPixmap(ICON("clipart.xpm"));
+  m_idButtonTools_Clipart = m_vToolBarTools->insertButton2( pix, ID_TOOL_CREATE_CLIPART, SIGNAL( clicked() ), this, "toolsClipart", 
+							    true, i18n("Create Clipart Frame"), -1);
+  m_vToolBarTools->setToggle(ID_TOOL_CREATE_CLIPART,true);
+
+  // create table frame
+  pix = OPUIUtils::convertPixmap(ICON("table.xpm"));
+  m_idButtonTools_Table = m_vToolBarTools->insertButton2( pix, ID_TOOL_CREATE_TABLE, SIGNAL( clicked() ), this, "toolsTable", 
+							  true, i18n("Create Table Frame"), -1);
+  m_vToolBarTools->setToggle(ID_TOOL_CREATE_TABLE,true);
+
+  // create formula frame
+  pix = OPUIUtils::convertPixmap(ICON("formula.xpm"));
+  m_idButtonTools_Formula = m_vToolBarTools->insertButton2( pix, ID_TOOL_CREATE_FORMULA, SIGNAL( clicked() ), this, "toolsFormula", 
+							    true, i18n("Create Formula Frame"), -1);
+  m_vToolBarTools->setToggle(ID_TOOL_CREATE_FORMULA,true);
+
+  // create part frame
+  pix = OPUIUtils::convertPixmap(ICON("parts.xpm"));
+  m_idButtonTools_Part = m_vToolBarTools->insertButton2( pix, ID_TOOL_CREATE_PART, SIGNAL( clicked() ), this, "toolsPart", 
+							 true, i18n("Create Part Frame"), -1);
+  m_vToolBarTools->setToggle(ID_TOOL_CREATE_PART,true);
 
   m_vToolBarTools->enable( OpenPartsUI::Show );
 
