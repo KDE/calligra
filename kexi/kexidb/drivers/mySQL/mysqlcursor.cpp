@@ -31,6 +31,7 @@ MySqlCursor::MySqlCursor(KexiDB::Connection* conn, const QString& statement, uin
 	, m_lengths(0)
 	, m_numRows(0)
 {
+	m_options |= Buffered;
 }
 
 MySqlCursor::MySqlCursor(Connection* conn, QuerySchema& query, uint options )
@@ -40,6 +41,7 @@ MySqlCursor::MySqlCursor(Connection* conn, QuerySchema& query, uint options )
 	, m_lengths(0)
 	, m_numRows(0)
 {
+	m_options |= Buffered;
 }
 
 MySqlCursor::~MySqlCursor() {
@@ -89,37 +91,14 @@ bool MySqlCursor::drv_moveFirst() {
 void MySqlCursor::drv_getNextRecord() {
 	m_row=mysql_fetch_row(m_res);
 	if (m_row) {
-		m_at++;
-		m_validRecord=true;
-		m_afterLast=false;
 		m_lengths=mysql_fetch_lengths(m_res);
 		m_result=FetchOK;
 		/*return true;*/
 	} else {
-		m_at=m_numRows+1;
-		m_validRecord = false;
-		m_afterLast = true;
 		m_result=FetchEnd;
 		/*return false;	*/
 	}
 	/*return true;*/
-}
-
-bool MySqlCursor::drv_getPrevRecord() {
-	MYSQL_ROW_OFFSET ro=mysql_row_tell(m_res);
-	if (m_at>1) {
-		m_at--;
-		mysql_data_seek(m_res,m_at-1);
-		m_row=mysql_fetch_row(m_res);
-		m_validRecord=true;
-		m_afterLast=false;
-		m_lengths=mysql_fetch_lengths(m_res);
-		return true;
-	}
-	m_at=0;
-	m_validRecord=false;
-	m_afterLast=false;
-	return false;
 }
 
 
@@ -141,13 +120,23 @@ void MySqlCursor::drv_appendCurrentRecordToBuffer() {
 
 
 void MySqlCursor::drv_bufferMovePointerNext() {
+	m_row=mysql_fetch_row(m_res);
+	m_lengths=mysql_fetch_lengths(m_res);
 }
 
 void MySqlCursor::drv_bufferMovePointerPrev() {
+	MYSQL_ROW_OFFSET ro=mysql_row_tell(m_res);
+	mysql_data_seek(m_res,m_at);
+	m_row=mysql_fetch_row(m_res);
+	m_lengths=mysql_fetch_lengths(m_res);
 }
 
 
 void MySqlCursor::drv_bufferMovePointerTo(Q_LLONG to) {
+	MYSQL_ROW_OFFSET ro=mysql_row_tell(m_res);
+	mysql_data_seek(m_res,to);
+	m_row=mysql_fetch_row(m_res);
+	m_lengths=mysql_fetch_lengths(m_res);
 }
 
 

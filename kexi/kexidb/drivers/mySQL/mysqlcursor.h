@@ -40,7 +40,7 @@ public:
         virtual bool drv_close();
         virtual bool drv_moveFirst();
         virtual void drv_getNextRecord();
-        virtual bool drv_getPrevRecord();
+        //virtual bool drv_getPrevRecord();
 	virtual QVariant value(int) const;
 
 

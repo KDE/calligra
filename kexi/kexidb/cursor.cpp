@@ -264,7 +264,7 @@ bool Cursor::movePrev()
 	}
 
 	m_at--;
-	if (m_at_buffer) {//we already have got a pointer to buffer
+	if (m_at_buffer ) {//we already have got a pointer to buffer
 		drv_bufferMovePointerPrev(); //just move to prev record in the buffer
 	} else {//we have no pointer
 		//compute a place in the buffer that contain next record's data
@@ -273,6 +273,7 @@ bool Cursor::movePrev()
 	}
 //		setError( NOT_SUPPORTED,  )
 	m_validRecord=true;
+	m_afterLast=false;
 	return true;
 }
 
@@ -325,9 +326,10 @@ bool Cursor::getNextRecord()
 
 	if ((m_options & Buffered)) {//this cursor is buffered:
 		KexiDBDbg << "m_at < m_records_in_buf :: " << (long)m_at << " < " << m_records_in_buf << endl;
+		if (m_at==-1) m_at=0;
 		if (m_at < m_records_in_buf) {//we have next record already buffered:
 ///		if (m_at < (m_records_in_buf-1)) {//we have next record already buffered:
-			if (m_at_buffer) {//we already have got a pointer to buffer
+			if (m_at_buffer && (m_at!=0)) {//we already have got a pointer to buffer
 				drv_bufferMovePointerNext(); //just move to next record in the buffer
 			} else {//we have no pointer
 				//compute a place in the buffer that contain next record's data
@@ -349,7 +351,7 @@ bool Cursor::getNextRecord()
 					KexiDBDrvDbg<<"m_result != FetchOK ********"<<endl;
 					m_validRecord = false;
 					m_afterLast = true;
-					m_at = -1;
+					m_at = m_records_in_buf;
 					if (m_result == FetchEnd) {
 						return false;
 					}
