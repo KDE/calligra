@@ -569,28 +569,25 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */, int t
 }
 
 //static
-QTextFormat KWTextParag::loadFormat( QDomElement &formatElem, QTextFormat * refFormat )
+QTextFormat KWTextParag::loadFormat( QDomElement &formatElem, QTextFormat * refFormat, const QFont & defaultFont )
 {
     QTextFormat format;
     if ( refFormat )
         format = *refFormat;
     QFont font = format.font();
-    // Since most fields might be missing, maybe it would be faster
-    // to iterate over the children... Not sure it makes any real difference though.
-    QDomElement elem = formatElem.namedItem( "WEIGHT" ).toElement();
-    if ( !elem.isNull() )
-        font.setWeight( elem.attribute( "value" ).toInt() );
-    elem = formatElem.namedItem( "COLOR" ).toElement();
-    if ( !elem.isNull() )
-    {
-        QColor col( elem.attribute("red").toInt(),
-                    elem.attribute("green").toInt(),
-                    elem.attribute("blue").toInt() );
-        format.setColor( col );
-    }
+    QDomElement elem;
     elem = formatElem.namedItem( "FONT" ).toElement();
     if ( !elem.isNull() )
+    {
         font.setFamily( elem.attribute("name") );
+    }
+    else if ( !refFormat )
+    {   // No reference format and no FONT tag -> use default font
+        font = defaultFont;
+    }
+    elem = formatElem.namedItem( "WEIGHT" ).toElement();
+    if ( !elem.isNull() )
+        font.setWeight( elem.attribute( "value" ).toInt() );
     elem = formatElem.namedItem( "SIZE" ).toElement();
     if ( !elem.isNull() )
         font.setPointSize( elem.attribute("value").toInt() );
@@ -603,11 +600,21 @@ QTextFormat KWTextParag::loadFormat( QDomElement &formatElem, QTextFormat * refF
     elem = formatElem.namedItem( "STRIKEOUT" ).toElement();
     if ( !elem.isNull() )
         font.setStrikeOut( elem.attribute("value").toInt() == 1 );
+
+    format.setFont( font );
+
     elem = formatElem.namedItem( "VERTALIGN" ).toElement();
     if ( !elem.isNull() )
         format.setVAlign( static_cast<QTextFormat::VerticalAlignment>( elem.attribute("value").toInt() ) );
-
-    format.setFont( font );
+    elem = formatElem.namedItem( "COLOR" ).toElement();
+    if ( !elem.isNull() )
+    {
+        QColor col( elem.attribute("red").toInt(),
+                    elem.attribute("green").toInt(),
+                    elem.attribute("blue").toInt() );
+        format.setColor( col );
+    }
+    //kdDebug() << "KWTextParag::loadLayout format=" << format.key() << endl;
     return format;
 }
 
@@ -630,7 +637,7 @@ void KWTextParag::loadLayout( QDomElement & attributes )
         if ( !formatElem.isNull() )
         {
             // Load paragraph format
-            QTextFormat f = loadFormat( formatElem, defaultFormat );
+            QTextFormat f = loadFormat( formatElem, defaultFormat, doc->defaultFont() );
             setFormat( document()->formatCollection()->format( &f ) );
         }
         else // No paragraph format
@@ -667,6 +674,8 @@ void KWTextParag::load( QDomElement &attributes )
 
 void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
 {
+    KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
+    KWDocument * doc = textdoc->textFrameSet()->kWordDocument();
     QDomElement formatsElem = attributes.namedItem( "FORMATS" ).toElement();
     if ( !formatsElem.isNull() )
     {
@@ -682,7 +691,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
                 switch( id ) {
                 case 1: // Normal text
                 {
-                    QTextFormat f = loadFormat( formatElem, paragFormat() );
+                    QTextFormat f = loadFormat( formatElem, paragFormat(), doc->defaultFont() );
                     //kdDebug(32002) << "KWTextParag::loadFormatting applying formatting from " << index << " to " << index+len << endl;
                     setFormat( index, len, document()->formatCollection()->format( &f ) );
                     break;
@@ -690,8 +699,6 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
                 case 2: // Picture
                 {
                     ASSERT( len == 1 );
-                    KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
-                    KWDocument * doc = textdoc->textFrameSet()->kWordDocument();
                     KWTextImage * custom = new KWTextImage( textdoc, QString::null );
                     kdDebug() << "KWTextParag::loadFormatting insertCustomItem" << endl;
                     setCustomItem( index, custom, paragFormat() );

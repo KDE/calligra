@@ -27,14 +27,14 @@ KWStyle::KWStyle( const QString & name )
     m_format.setColor( Qt::black );
 }
 
-KWStyle::KWStyle( QDomElement & styleElem )
+KWStyle::KWStyle( QDomElement & styleElem, const QFont & defaultFont )
     : m_paragLayout( styleElem ) // Load the paraglayout from the <STYLE> element
 {
     m_followingStyle = styleElem.namedItem("FOLLOWING").toElement().attribute("name");
 
     QDomElement formatElem = styleElem.namedItem( "FORMAT" ).toElement();
     if ( !formatElem.isNull() )
-        m_format = KWTextParag::loadFormat( formatElem, 0L );
+        m_format = KWTextParag::loadFormat( formatElem, 0L, defaultFont );
     else
         kdWarning(32001) << "No FORMAT tag in <STYLE>" << endl; // This leads to problems in applyStyle().
 }

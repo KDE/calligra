@@ -41,6 +41,7 @@ Counter::Counter()
 
 bool Counter::operator==( const Counter & c2 ) const
 {
+    // ## This is kinda wrong. Unused fields (depending on the counter style) shouldn't be compared.
     return (m_numbering==c2.m_numbering &&
             m_style==c2.m_style &&
             m_depth==c2.m_depth &&
@@ -271,12 +272,16 @@ void Counter::save( QDomElement & element )
     element.setAttribute( "type", static_cast<int>( m_style ) );
     element.setAttribute( "depth", m_depth );
     element.setAttribute( "bullet", m_customBullet.character.unicode() );
-    element.setAttribute( "lefttext", m_prefix );
-    element.setAttribute( "righttext", m_suffix );
+    if ( !m_prefix.isEmpty() )
+        element.setAttribute( "lefttext", m_prefix );
+    if ( !m_suffix.isEmpty() )
+        element.setAttribute( "righttext", m_suffix );
     element.setAttribute( "start", m_startNumber );
     element.setAttribute( "numberingtype", static_cast<int>( m_numbering ) );
-    element.setAttribute( "bulletfont", m_customBullet.font );
-    element.setAttribute( "customdef", m_custom );
+    if ( !m_customBullet.font.isEmpty() )
+        element.setAttribute( "bulletfont", m_customBullet.font );
+    if ( !m_custom.isEmpty() )
+        element.setAttribute( "customdef", m_custom );
 }
 
 void Counter::setCustom( QString c )

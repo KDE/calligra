@@ -356,7 +356,7 @@ QTextCursor * KWPasteCommand::execute( QTextCursor *c )
                 QDomElement formatElem = layout.namedItem( "FORMAT" ).toElement();
                 if ( !formatElem.isNull() )
                 {
-                    QTextFormat f = parag->loadFormat( formatElem, 0L );
+                    QTextFormat f = parag->loadFormat( formatElem, 0L, QFont() );
                     QTextFormat * defaultFormat = doc->formatCollection()->format( &f );
                     // Last paragraph (i.e. only one in all) : some of the text might be from before the paste
                     int endIndex = (item == count-1) ? c->index() : parag->string()->length() - 1;

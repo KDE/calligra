@@ -33,7 +33,7 @@ public:
     KWStyle( const QString & name );
 
     // Create a style from a saved document
-    KWStyle( QDomElement & styleElem );
+    KWStyle( QDomElement & styleElem, const QFont & defaultFont );
 
     // Create a style from another style (UI for that is missing,
     // but this already happens when loading styles)

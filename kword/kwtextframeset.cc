@@ -46,7 +46,7 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc )
 {
     //kdDebug() << "KWTextFrameSet::KWTextFrameSet " << this << endl;
     m_availableHeight = -1;
-    textdoc = new KWTextDocument( this, 0, new KWTextFormatCollection );
+    textdoc = new KWTextDocument( this, 0, new KWTextFormatCollection( _doc ) );
     textdoc->setFormatter( new QTextFormatterBreakWords );
     textdoc->setFlow( this );
     textdoc->setVerticalBreak( true );              // get QTextFlow methods to be called
@@ -809,6 +809,7 @@ void KWTextFrameSet::load( QDomElement &attributes )
     {
         // Create an empty one, then. See KWTextDocument ctor.
         textdoc->clear( true );
+        static_cast<KWTextParag *>( textdoc->firstParag() )->setStyleName( "Standard " );
     }
     else
         textdoc->setLastParag( lastParagraph );

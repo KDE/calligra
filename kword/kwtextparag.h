@@ -138,7 +138,7 @@ public:
 
     // Public for KWStyle
     static QDomElement saveFormat( QDomDocument & doc, QTextFormat * curFormat, QTextFormat * refFormat, int pos, int len );
-    static QTextFormat loadFormat( QDomElement &formatElem, QTextFormat * refFormat );
+    static QTextFormat loadFormat( QDomElement &formatElem, QTextFormat * refFormat, const QFont & defaultFont );
 
     void save( QDomElement &parentElem, int from = 0, int to = -1 );
     void load( QDomElement &attributes );

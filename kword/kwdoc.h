@@ -54,6 +54,7 @@ class KWVariableFormat;
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qrect.h>
+#include <qfont.h>
 
 /******************************************************************/
 /* Class: KWChild                                              */
@@ -199,6 +200,8 @@ public:
      * Return style number @p i.
      */
     KWStyle* styleAt( int i ) { return m_styleList.at(i); }
+
+    QFont defaultFont() const { return m_defaultFont; }
 
     int getPages() const { return m_pages; }
     //void setPages( int _pages ) { m_pages = _pages;  }
@@ -520,6 +523,7 @@ private:
 
     KSpellConfig *m_pKSpellConfig;
 
+    QFont m_defaultFont;
     bool _viewFormattingChars, _viewFrameBorders, _viewTableGrid;
 
     // The document that is used by all formulas

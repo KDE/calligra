@@ -22,6 +22,8 @@
 #include "qrichtext_p.h"
 using namespace Qt3;
 
+class KWDocument;
+
 /**
  * KWord's reimplementation of QTextFormat, to add setPixelSizeFloat().
  */
@@ -49,7 +51,7 @@ protected:
 class KWTextFormatCollection : public QTextFormatCollection
 {
 public:
-    KWTextFormatCollection();
+    KWTextFormatCollection( KWDocument * doc );
     virtual ~KWTextFormatCollection() {}
 
     virtual QTextFormat *format( const QFont &f, const QColor &c );

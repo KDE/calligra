@@ -38,6 +38,8 @@
 #include <kstddirs.h>
 #include <kiconloader.h>
 #include <kglobal.h>
+#include <kglobalsettings.h>
+#include <kcharsets.h>
 
 #include <kformuladocument.h>
 
@@ -147,6 +149,10 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
 
     spellCheck = FALSE;
     contents = new KWContents( this );
+
+    // Get default font from KDE
+    m_defaultFont = KGlobalSettings::generalFont();
+    KGlobal::charsets()->setQFont(m_defaultFont, KGlobal::locale()->charset());
 
     // Set no-op initial values (for setZoomAndResolution)
     m_zoomedResolutionX = 1;
@@ -1168,7 +1174,7 @@ void KWDocument::loadStyleTemplates( QDomElement stylesElem )
     {
         QDomElement styleElem = listStyles.item( item ).toElement();
 
-        KWStyle *sty = new KWStyle( styleElem );
+        KWStyle *sty = new KWStyle( styleElem, m_defaultFont );
         //kdDebug(32001) << "KWDocument::addStyleTemplate style's name is " << sty->name() << endl;
         addStyleTemplate( sty );
     }
