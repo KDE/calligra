@@ -418,8 +418,14 @@ void KPTView::slotOpenNode() {
         case KPTNode::Type_Task: {
             KPTTask *task = dynamic_cast<KPTTask *>(node);
             KPTTaskDialog *dia = new KPTTaskDialog(*task, getProject().resourceGroups());
-            if (dia->exec())
-                slotUpdate(true);
+            if (dia->exec()) {
+                KMacroCommand *m = dia->buildCommand();
+                if (m) {
+                    m->execute();
+                    getPart()->addCommand(m);
+                    slotUpdate(true);
+                }
+            }
             delete dia;
             break;
         }

@@ -25,6 +25,7 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <klocale.h>
+#include <kcommand.h>
 
 #include <qlistbox.h>
 #include <qpushbutton.h>
@@ -226,6 +227,12 @@ void KPTRequestResourcesPanel::unitsChanged(int units) {
         selectedGroup->m_units = units;
         sendChanged();
     }
+}
+
+//FIXME
+KMacroCommand *KPTRequestResourcesPanel::buildCommand() {
+    slotOk();
+    return 0;
 }
 
 void KPTRequestResourcesPanel::slotOk() {

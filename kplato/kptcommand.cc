@@ -43,7 +43,7 @@ void KPTCalendarAddCmd::unexecute() {
     kdDebug()<<k_funcinfo<<m_cal->name()<<endl;
 }
 
-KPTCalendarDeleteCmd::KPTCalendarDeleteCmd(KPTProject &project,KPTCalendar *cal, QString name)
+KPTCalendarDeleteCmd::KPTCalendarDeleteCmd(KPTCalendar *cal, QString name)
     : KNamedCommand(name) {
     m_cal = cal;
 }
@@ -54,5 +54,76 @@ void KPTCalendarDeleteCmd::execute() {
 
 void KPTCalendarDeleteCmd::unexecute() {
     m_cal->setDeleted(false);
+}
+
+
+KPTNodeModifyNameCmd::KPTNodeModifyNameCmd(KPTNode &node, QString nodename, QString name)
+    : KNamedCommand(name),
+      m_node(node),
+      newName(nodename),
+      oldName(node.name()) {
+
+}
+void KPTNodeModifyNameCmd::execute() {
+    m_node.setName(newName);
+}
+void KPTNodeModifyNameCmd::unexecute() {
+    m_node.setName(oldName);
+}
+
+KPTNodeModifyLeaderCmd::KPTNodeModifyLeaderCmd(KPTNode &node, QString leader, QString name)
+    : KNamedCommand(name),
+      m_node(node),
+      newLeader(leader),
+      oldLeader(node.leader()) {
+
+}
+void KPTNodeModifyLeaderCmd::execute() {
+    m_node.setLeader(newLeader);
+}
+void KPTNodeModifyLeaderCmd::unexecute() {
+    m_node.setLeader(oldLeader);
+}
+
+KPTNodeModifyDescriptionCmd::KPTNodeModifyDescriptionCmd(KPTNode &node, QString description, QString name)
+    : KNamedCommand(name),
+      m_node(node),
+      newDescription(description),
+      oldDescription(node.description()) {
+
+}
+void KPTNodeModifyDescriptionCmd::execute() {
+    m_node.setDescription(newDescription);
+}
+void KPTNodeModifyDescriptionCmd::unexecute() {
+    m_node.setDescription(oldDescription);
+}
+
+KPTNodeModifyConstraintCmd::KPTNodeModifyConstraintCmd(KPTNode &node, KPTNode::ConstraintType c, QString name)
+    : KNamedCommand(name),
+      m_node(node),
+      newConstraint(c),
+      oldConstraint(static_cast<KPTNode::ConstraintType>(node.constraint())) {
+
+}
+void KPTNodeModifyConstraintCmd::execute() {
+    m_node.setConstraint(newConstraint);
+}
+void KPTNodeModifyConstraintCmd::unexecute() {
+    m_node.setConstraint(oldConstraint);
+}
+
+KPTNodeModifyConstraintTimeCmd::KPTNodeModifyConstraintTimeCmd(KPTNode &node, QDateTime dt, QString name)
+    : KNamedCommand(name),
+      m_node(node),
+      newTime(dt),
+      oldTime(node.constraintTime()) {
+
+}
+void KPTNodeModifyConstraintTimeCmd::execute() {
+    m_node.setConstraintTime(newTime);
+}
+void KPTNodeModifyConstraintTimeCmd::unexecute() {
+    m_node.setConstraintTime(oldTime);
 }
 

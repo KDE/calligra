@@ -168,7 +168,7 @@ KMacroCommand *KPTCalendarListDialog::buildCommand() {
     for (; it.current(); ++it) {
         //kdDebug()<<k_funcinfo<<"deleted: "<<it.current()->calendar->name()<<endl;
         if (it.current()->original) {
-            cmd->addCommand(new KPTCalendarDeleteCmd(project, it.current()->original));
+            cmd->addCommand(new KPTCalendarDeleteCmd(it.current()->original));
             modified = true;
         }
     }

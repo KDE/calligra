@@ -20,6 +20,8 @@
 #ifndef KPTCOMMAND_H
 #define KPTCOMMAND_H
 
+#include "kptnode.h"
+
 #include <kcommand.h>
 
 class QString;
@@ -29,7 +31,7 @@ class KPTCalendar;
 class KPTCalendarAddCmd : public KNamedCommand
 {
 public:
-    KPTCalendarAddCmd::KPTCalendarAddCmd(KPTProject &project,KPTCalendar *cal, QString name=0);
+    KPTCalendarAddCmd(KPTProject &project, KPTCalendar *cal, QString name=0);
     void execute();
     void unexecute();
 
@@ -40,12 +42,77 @@ private:
 class KPTCalendarDeleteCmd : public KNamedCommand
 {
 public:
-    KPTCalendarDeleteCmd::KPTCalendarDeleteCmd(KPTProject &project,KPTCalendar *cal, QString name=0);
+    KPTCalendarDeleteCmd(KPTCalendar *cal, QString name=0);
     void execute();
     void unexecute();
 
 private:
     KPTCalendar *m_cal;
+};
+
+class KPTNodeModifyNameCmd : public KNamedCommand
+{
+public:
+    KPTNodeModifyNameCmd(KPTNode &node, QString nodename, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    KPTNode &m_node;
+    QString newName;
+    QString oldName;
+};
+
+class KPTNodeModifyLeaderCmd : public KNamedCommand
+{
+public:
+    KPTNodeModifyLeaderCmd(KPTNode &node, QString leader, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    KPTNode &m_node;
+    QString newLeader;
+    QString oldLeader;
+};
+
+class KPTNodeModifyDescriptionCmd : public KNamedCommand
+{
+public:
+    KPTNodeModifyDescriptionCmd(KPTNode &node, QString description, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    KPTNode &m_node;
+    QString newDescription;
+    QString oldDescription;
+};
+
+class KPTNodeModifyConstraintCmd : public KNamedCommand
+{
+public:
+    KPTNodeModifyConstraintCmd(KPTNode &node, KPTNode::ConstraintType c, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    KPTNode &m_node;
+    KPTNode::ConstraintType newConstraint;
+    KPTNode::ConstraintType oldConstraint;
+};
+
+class KPTNodeModifyConstraintTimeCmd : public KNamedCommand
+{
+public:
+    KPTNodeModifyConstraintTimeCmd(KPTNode &node, QDateTime dt, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    KPTNode &m_node;
+    QDateTime newTime;
+    QDateTime oldTime;
 };
 
 #endif //KPTCOMMAND_H

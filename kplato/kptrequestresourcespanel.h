@@ -33,6 +33,7 @@ class KPTResourceGroup;
 class KPTResource;
 class KPTResourceGroupRequest;
 class KPTResourceRequest;
+class KMacroCommand;
 
 class KPTResourceTableItem {
 public:
@@ -75,6 +76,8 @@ class KPTRequestResourcesPanel : public RequestResourcesPanelBase {
 public:
     KPTRequestResourcesPanel (QWidget *parent, KPTTask &task, QPtrList<KPTResourceGroup> &resourceGroups);
 
+    KMacroCommand *buildCommand();
+    
 public slots:
 	void slotOk();
 

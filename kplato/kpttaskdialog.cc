@@ -20,6 +20,7 @@
 #include "kpttaskdialog.h"
 #include "kptrequestresourcespanel.h"
 #include "kpttask.h"
+#include "kptcommand.h"
 
 #include <qlayout.h>
 #include <qlabel.h>
@@ -29,6 +30,7 @@
 #include <kdatepicker.h>
 #include <kabc/addressee.h>
 #include <kabc/addresseedialog.h>
+#include <kcommand.h>
 
 #include <qtextedit.h>
 #include <qdatetimeedit.h>
@@ -76,19 +78,46 @@ KPTTaskDialog::KPTTaskDialog(KPTTask &task, QPtrList<KPTResourceGroup> &resource
 }
 
 
-void KPTTaskDialog::slotOk() {
+KMacroCommand *KPTTaskDialog::buildCommand() {
+    KMacroCommand *cmd = new KMacroCommand(i18n("Modify task"));
+    bool modified = false;
+    
     KPTDuration dt = KPTDuration();
 
-    task.setName(dia->namefield->text());
-    task.setLeader(dia->leaderfield->text());
-    task.setDescription(dia->descriptionfield->text());
-
+    if (task.name() != dia->namefield->text()) {
+        cmd->addCommand(new KPTNodeModifyNameCmd(task, dia->namefield->text()));
+        modified = true;
+    }
+    if (task.leader() != dia->leaderfield->text()) {
+        cmd->addCommand(new KPTNodeModifyLeaderCmd(task, dia->leaderfield->text()));
+        modified = true;
+    }
+    if (task.description() != dia->descriptionfield->text()) {
+        cmd->addCommand(new KPTNodeModifyDescriptionCmd(task, dia->descriptionfield->text()));
+        modified = true;
+    }
     KPTNode::ConstraintType c = (KPTNode::ConstraintType)dia->scheduling();
-    task.setConstraint(c);
-    if (c == KPTNode::FinishNotLater || c == KPTNode::StartNotEarlier || c == KPTNode::MustStartOn)
-        task.setConstraintTime(dia->schedulerDateTime());
+    if (c != task.constraint()) {
+        cmd->addCommand(new KPTNodeModifyConstraintCmd(task, c));
+        modified = true;
+    }
+    if (c == KPTNode::FinishNotLater || c == KPTNode::StartNotEarlier || c == KPTNode::MustStartOn) {
+        cmd->addCommand(new KPTNodeModifyConstraintTimeCmd(task, dia->schedulerDateTime()));
+        modified = true;
+    }
+    KMacroCommand *m = resourcesTab->buildCommand();
+    if (m) {
+        cmd->addCommand(m);
+        modified = true;
+    }
+    if (modified)
+        return cmd;
+      
+    delete cmd;
+    return 0;
+}
 
-    resourcesTab->slotOk();
+void KPTTaskDialog::slotOk() {
     accept();
 }
 

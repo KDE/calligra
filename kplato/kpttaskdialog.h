@@ -31,6 +31,7 @@
 class KPTRequestResourcesPanel;
 class KPTTask;
 class KLineEdit;
+class KMacroCommand;
 class QTextEdit;
 class QDateTimeEdit;
 class QSpinBox;
@@ -64,6 +65,8 @@ class KPTTaskDialog : public KDialogBase {
 public:
     KPTTaskDialog(KPTTask &task, QPtrList<KPTResourceGroup> &resourceGroups, QWidget *parent=0, const char *name=0);
 
+    KMacroCommand *buildCommand();
+    
 protected slots:
     void slotOk();
     void slotSchedulingChanged(int activated);
