@@ -51,6 +51,8 @@ void KWTextParag::drawFormattingChars( QPainter &painter, const QString & /*s*/,
             bool drawFormattingBreak = doc->viewFormattingBreak();
             bool drawFormattingEndParag = doc->viewFormattingEndParag();
             bool drawFormattingTabs = doc->viewFormattingTabs();
+            if ( !drawFormattingSpace && !drawFormattingBreak && !drawFormattingEndParag && !drawFormattingTabs)
+                return;
             painter.save();
             QPen pen( cg.color( QColorGroup::Highlight ) );
             painter.setPen( pen );
