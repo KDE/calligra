@@ -25,16 +25,12 @@
 /*================================================================*/
 void KWTextChangeCommand::execute()
 {
-}
-
-/*================================================================*/
-void KWTextChangeCommand::unexecute()
-{
   QList<KWParag> old;
+  old.setAutoDelete(false);
 
   KWParag *parag = dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(frameset))->getFirstParag();
 
-  KWParag *parag1 = 0L,*parag2 = 0L,*tmp = 0L;
+  KWParag *parag1 = 0L,*parag2 = 0L;
 
   while (parag)
     {
@@ -57,8 +53,8 @@ void KWTextChangeCommand::unexecute()
       parag = dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(frameset))->getFirstParag();
       while (parag != parag2)
 	{
-	  tmp = parag;
-	  parag = tmp->getNext();
+	  old.append(parag);
+	  parag = parag->getNext();
 	}
       dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(frameset))->setFirstParag(parags.first());
       parag2->setPrev(parags.last());
@@ -69,8 +65,8 @@ void KWTextChangeCommand::unexecute()
       parag = parag1->getNext();
       while (parag)
 	{
-	  tmp = parag;
-	  parag = tmp->getNext();
+	  old.append(parag);
+	  parag = parag->getNext();
 	}
       parag1->setNext(parags.first());
     }
@@ -80,15 +76,89 @@ void KWTextChangeCommand::unexecute()
       parag = parag1->getNext();
       while (parag != parag2)
 	{
-	  tmp = parag;
-	  parag = tmp->getNext();
+	  old.append(parag);
+	  parag = parag->getNext();
 	}
-
       parag1->setNext(parags.first());
       parag2->setPrev(parags.last());
     }
 
   fc->setTextPos(textPos);
+
+  parags.clear();
+  parags = old;
+  parags.setAutoDelete(false);
+}
+
+/*================================================================*/
+void KWTextChangeCommand::unexecute()
+{
+  QList<KWParag> old;
+  old.setAutoDelete(false);
+  
+  KWParag *parag = dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(frameset))->getFirstParag();
+
+  KWParag *parag1 = 0L,*parag2 = 0L;
+
+  while (parag)
+    {
+      if (parag->getParagName() == before)
+	parag1 = parag;
+      
+      if (parag->getParagName() == after)
+	parag2 = parag;
+
+      if (parag1 && parag2) break;
+      
+      parag = parag->getNext();
+    }
+
+  if (!parag1 && !parag2)
+    {
+      dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(frameset))->setFirstParag(parags.first());
+      old.append(dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(frameset))->getFirstParag());
+    }
+
+  else if (!parag1 && parag2)
+    {
+      parag = dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(frameset))->getFirstParag();
+      while (parag != parag2)
+	{
+	  old.append(parag);
+	  parag = parag->getNext();
+	}
+      dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(frameset))->setFirstParag(parags.first());
+      parag2->setPrev(parags.last());
+    }
+  
+  else if (parag1 && !parag2)
+    {
+      parag = parag1->getNext();
+      while (parag)
+	{
+	  old.append(parag);
+	  parag = parag->getNext();
+	}
+      parag1->setNext(parags.first());
+    }
+
+  if (parag1 && parag2)
+    {
+      parag = parag1->getNext();
+      while (parag != parag2)
+	{
+	  old.append(parag);
+	  parag = parag->getNext();
+	}
+      parag1->setNext(parags.first());
+      parag2->setPrev(parags.last());
+    }
+
+  fc->setTextPos(textPos);
+
+  parags.clear();
+  parags = old;
+  parags.setAutoDelete(false);
 }
 
 /******************************************************************/

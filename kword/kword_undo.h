@@ -58,7 +58,7 @@ class KWTextChangeCommand : public KWCommand
 {
 public:
   KWTextChangeCommand(QString _name,KWordDocument *_doc,KWFormatContext *_fc,unsigned int _textPos) 
-    : KWCommand(_name) { doc = _doc; fc = _fc; textPos = _textPos; }
+    : KWCommand(_name) { doc = _doc; fc = _fc; textPos = _textPos; parags.setAutoDelete(false); }
 
   virtual KWCommandType getType() { return TEXT_CHANGE; }
 
