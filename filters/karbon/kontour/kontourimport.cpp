@@ -97,6 +97,7 @@ KontourImport::parseGObject( VObject *object, const QDomElement &e )
 			case 4: 
 					{
 					VGradient grad;
+					// set color stops
 					grad.clearStops();
 					QColor c;
 					c.setNamedColor( e.attribute( "gradcolor1" ) );
@@ -105,6 +106,10 @@ KontourImport::parseGObject( VObject *object, const QDomElement &e )
 					c.setNamedColor( e.attribute( "gradcolor2" ) );
 					VColor color2( c );
 					grad.addStop( color2, 1.0, 0.5 );
+					// set coords
+					KoRect bbox = object->boundingBox();
+					grad.setOrigin( KoPoint( bbox.left(), bbox.y() ) );
+					grad.setVector( KoPoint( bbox.right(), bbox.y() ) );
 					grad.setType( (VGradient::VGradientType)e.attribute( "gradstyle" ).toInt() );
 					fill.setType( VFill::grad );
 					fill.gradient() = grad;
