@@ -37,7 +37,7 @@
 #include <qfile.h>
 
 typedef KGenericFactory<QpImport, KoFilter> QPROImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libqproimport, QPROImportFactory( "kspreadqprofilter" ) )
+K_EXPORT_COMPONENT_FACTORY( libqproimport, QPROImportFactory( "kofficefilters" ) )
 
 // ---------------------------------------------------------------
 

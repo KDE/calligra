@@ -28,6 +28,3 @@ METASOURCES = AUTO
 
 service_DATA = kspread_latex_export.desktop
 servicedir = $(kde_servicesdir)
-
-messages: rc.cpp
-	$(XGETTEXT) *.cc *.cpp -o $(podir)/kspreadlatexexportfilter.pot
