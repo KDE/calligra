@@ -298,6 +298,12 @@ void DragBarButton::leaveEvent( QEvent* ev )
 void DragBarButton::setOrientation(Orientation orientation)
 {
   m_orientation = orientation;
+  
+  if(m_orientation == Qt::Vertical) {
+    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+  } else {
+    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
+  }
 }
 
 #include "stencilbarbutton.moc"
