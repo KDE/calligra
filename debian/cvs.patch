@@ -151,17 +151,6 @@
  libkugarpart_la_LIBADD = ../lib/libkugar.la $(LIB_KPARTS) $(LIB_KDEPRINT)
  
  libkugarpart_la_METASOURCES = AUTO
---- kugar/part/kugar.desktop
-+++ kugar/part/kugar.desktop
-@@ -2,7 +2,7 @@
- Name=Kugar
- Name[eo]=Raportilo
- Exec=kugar
--Icon=
-+Icon=kugar
- MimeType=application/x-kugar;
- Type=Application
- DocPath=
 --- kugar/part/kugar_part.cpp
 +++ kugar/part/kugar_part.cpp
 @@ -78,7 +78,7 @@
@@ -195,17 +184,6 @@
  kword_la_LIBADD = ../lib/kofficecore/libkofficecore.la
  
  ## The executable
---- lib/kwmf/Makefile.am
-+++ lib/kwmf/Makefile.am
-@@ -2,7 +2,7 @@
- 
- INCLUDES= -I$(srcdir) $(all_includes)
- # Why is it a -module ? Shouldn't it have -version-info instead ? (DF)
--libkwmf_la_LDFLAGS	= -module -avoid-version -no-undefined
-+libkwmf_la_LDFLAGS	= -module -no-undefined
- libkwmf_la_LIBADD = $(KOFFICE_LIBS)
- 
- ####### Files
 --- admin/Makefile.common
 +++ admin/Makefile.common
 @@ -86,22 +86,32 @@

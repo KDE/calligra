@@ -5,4 +5,9 @@ Description: KOffice is Beta!!!
  Most day to day functions will work.  However, there may be crashes.
  The main reason for including this version of KOffice at this time is to
  work out packaging problems and non-documentation related bugs.
+Description-de: KOffice ist eine Beta-Version!
+ Diese Version von KOffice ist eine Betaversion vor Version 1.1
+ Die meisten Funktionen werden funktionieren. Es kann aber auch
+ zu abstürzen kommen. Der Hauptgrund für diese Version ist es,
+ Paket-Probleme und andere Bugs in diesem Zusammenhang zu beseitigen.
 

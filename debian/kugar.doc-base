@@ -1,9 +1,0 @@
-Document: kugar
-Title: Kugar Reference
-Author: Phil Thompson <phil@river-bank.demon.co.uk>
-Abstract: A business report maker for the KDE Office Suite.
-Section: Apps/Tools
-
-Format: HTML
-Index: /usr/share/doc/kugar/html/index.html
-Files: /usr/share/doc/kugar/html/*.html

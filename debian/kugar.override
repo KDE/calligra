@@ -3,4 +3,4 @@ kugar: non-dev-pkg-with-shlib-symlink usr/lib/libkugarpart.so.0.0.0 usr/lib/libk
 # This is inserted by debhelper and is legal.
 kugar: postrm-calls-ldconfig
 # Menu item.
-kugar: menu-item-contains-unknown-tag kderemove /usr/lib/menu/kugar:7
+kugar: menu-item-contains-unknown-tag kderemove /usr/lib/menu/kugar:8

@@ -1,5 +1,5 @@
 # There is no -dev package; this module is a plug-in.
-koffice-libs: non-dev-pkg-with-shlib-symlink usr/lib/libkwmf.so.0.0.0 usr/lib/libkwmf.so
+koffice-libs: non-dev-pkg-with-shlib-symlink usr/lib/libkwmf.so.1.0.0 usr/lib/libkwmf.so
 # These are all modules in /usr/lib/kde2/.
 koffice-libs: shlib-missing-in-control-file libabiwordexport.so usr/lib/kde2/libabiwordexport.so
 koffice-libs: shlib-missing-in-control-file libabiwordimport.so usr/lib/kde2/libabiwordimport.so
@@ -13,9 +13,11 @@ koffice-libs: shlib-missing-in-control-file libdocbookexport.so usr/lib/kde2/lib
 koffice-libs: shlib-missing-in-control-file libhtmlexport.so usr/lib/kde2/libhtmlexport.so
 koffice-libs: shlib-missing-in-control-file libhtmlexportdia.so usr/lib/kde2/libhtmlexportdia.so
 koffice-libs: shlib-missing-in-control-file libhtmlimport.so usr/lib/kde2/libhtmlimport.so
+koffice-libs: shlib-missing-in-control-file libkofficescan.so usr/lib/kde2/libkofficescan.so
 koffice-libs: shlib-missing-in-control-file libkprkword.so usr/lib/kde2/libkprkword.so
 koffice-libs: shlib-missing-in-control-file libkspelltool.so usr/lib/kde2/libkspelltool.so
 koffice-libs: shlib-missing-in-control-file liblatexexport.so usr/lib/kde2/liblatexexport.so
+koffice-libs: shlib-missing-in-control-file liblatexexportdia.so usr/lib/kde2/liblatexexportdia.so
 koffice-libs: shlib-missing-in-control-file libmsodimport.so usr/lib/kde2/libmsodimport.so
 koffice-libs: shlib-missing-in-control-file libolefilter.so usr/lib/kde2/libolefilter.so
 koffice-libs: shlib-missing-in-control-file librtfexport.so usr/lib/kde2/librtfexport.so

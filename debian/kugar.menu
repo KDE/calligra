@@ -4,5 +4,6 @@
 	hints="KDE"\
 	kderemove="1"\
 	title="Kugar"\
+	icon="/usr/share/pixmaps/kugar.xpm"\
 	command=kugar
 

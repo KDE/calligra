@@ -1,3 +1,9 @@
+koffice (1:1.1-beta3-1) unstable; urgency=low
+
+  * New upstream release (closes: Bug#75750, Bug#90686, Bug#98370, Bug#101017).
+
+ -- Ben Burton <benb@acm.org>  Sun, 17 Jun 2001 16:28:44 -0500
+
 koffice (1:1.1-beta2-3) unstable; urgency=low
 
   * Added arm/m68k to the libtool linux arch list in the hope of closing

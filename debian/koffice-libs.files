@@ -20,6 +20,7 @@ usr/lib/kde2/*import*
 usr/lib/kde2/*filter*
 usr/lib/kde2/libkprkword.*
 usr/lib/kde2/libkspelltool.*
+usr/lib/kde2/libkofficescan.*
 usr/share/apps/koffice/*
 usr/share/mimelnk/application/x-quattropro.desktop
 usr/share/mimelnk/image/x-msod.desktop
@@ -31,6 +32,7 @@ usr/share/services/*import*
 usr/share/services/kodocinfopropspage.desktop
 usr/share/services/kprkword.desktop
 usr/share/services/kspelltool.desktop
+usr/share/services/kspelltool_kword.desktop
 usr/share/servicetypes/*
 usr/share/templates/*
 usr/share/templates/.source/*

@@ -1,5 +1,6 @@
 # There is no -dev package.
 kchart: non-dev-pkg-with-shlib-symlink usr/lib/kchart.so.0.0.0 usr/lib/kchart.so
+kchart: non-dev-pkg-with-shlib-symlink usr/lib/libkdchart.so.0.0.0 usr/lib/libkdchart.so
 # These are modules in /usr/lib/kde2/.
 kchart: shlib-missing-in-control-file libkchartpart.so usr/lib/kde2/libkchartpart.so
 # This is inserted by debhelper and is legal.

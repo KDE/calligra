@@ -1,3 +1,4 @@
 usr/share/apps/kugar/templates/sample1.kut usr/share/doc/kugar/examples/sample1.kut
 usr/share/apps/kugar/templates/sample2.kut usr/share/doc/kugar/examples/sample2.kut
 usr/share/doc/kde/HTML/en/kugar usr/share/doc/kugar/html
+usr/share/doc/kde/HTML/en/common usr/share/doc/kde/HTML/en/kugar/common
