@@ -61,12 +61,14 @@
 #include "kspread_view.h"
 #include "commands.h"
 #include "ksploadinginfo.h"
+#include "damages.h"
 
 #include "KSpreadDocIface.h"
 
 #include "koApplication.h"
 
 using namespace std;
+using namespace KSpread;
 
 static const int CURRENT_SYNTAX_VERSION = 1;
 // Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
@@ -122,6 +124,8 @@ public:
   KCompletion listCompletion;
 
   int numOperations;
+  
+  QValueList<KSpread::Damage*> damages;
 
   // document properties
   KSpreadLocale locale;
@@ -2356,6 +2360,23 @@ void KSpreadDoc::addView( KoView *_view )
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
 	((KSpreadView*)it.current())->closeEditor();
+}
+
+void KSpreadDoc::addDamage( Damage* damage )
+{
+    d->damages.append( damage );
+  
+    if( d->damages.count() == 1 )
+        QTimer::singleShot( 0, this, SLOT( flushDamages() ) );
+}
+
+void KSpreadDoc::flushDamages()
+{
+    emit damagesFlushed( d->damages );
+    QValueList<Damage*>::Iterator it;
+    for( it = d->damages.begin(); it != d->damages.end(); ++it )
+      delete *it;
+    d->damages.clear();
 }
 
 

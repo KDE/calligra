@@ -62,6 +62,7 @@ class KSpellConfig;
 #include <qpainter.h>
 #include <qrect.h>
 #include <qstring.h>
+#include <qvaluelist.h>
 
 #include "kspread_interpreter.h"
 #include "kspread_locale.h"
@@ -82,6 +83,12 @@ class KSpreadPlugin
   virtual ~KSpreadPlugin() {}
   virtual QDomElement saveXML( QDomDocument & doc ) const = 0;
 };
+
+namespace KSpread
+{
+class Damage;
+};
+
 
 class DocPrivate;
 
@@ -648,11 +655,16 @@ public:
     KSPLoadingInfo * loadingInfo() const;
   void increaseNumOperation();
   void decreaseNumOperation();
+    
+  void addDamage( KSpread::Damage* damage );
+  
 public slots:
 
   //void newView(); obsloete (Werner)
 
   void refreshInterface();
+  
+  void flushDamages();
 
 signals:
   // Document signals
@@ -675,6 +687,8 @@ signals:
 
   void sig_addAreaName( const QString & );
   void sig_removeAreaName( const QString & );
+  
+  void damagesFlushed( const QValueList<KSpread::Damage*>& damages );
 
 protected:
   KoView* createViewInstance( QWidget* parent, const char* name );
