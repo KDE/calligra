@@ -1,4 +1,4 @@
-INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) -I$(top_srcdir)/krita -I$(top_srcdir)/krita/core $(all_includes) 
+INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) -I$(top_srcdir)/krita -I$(top_srcdir)/krita/core -I$(top_srcdir)/krita/ui $(all_includes) 
 
 kde_module_LTLIBRARIES = libmagickimport.la
 
