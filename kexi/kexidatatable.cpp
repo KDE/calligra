@@ -77,12 +77,12 @@ KexiDataTable::executeQuery(QString queryStatement)
 	{
 		if(!m_record->fieldInfo(i)->auto_increment())
 		{
-			m_tableView->addColumn(m_record->fieldName(i), m_record->type(i), true);
+			m_tableView->addColumn(m_record->fieldName(i), m_record->type(i), !m_record->readOnly());
 			kdDebug() << "KexiDataTable::executeQuery(): adding usual column" << endl;
 		}
 		else
 		{
-			m_tableView->addColumn(m_record->fieldName(i), m_record->type(i), true, 100, true);
+			m_tableView->addColumn(m_record->fieldName(i), m_record->type(i), !m_record->readOnly(), 100, true);
 			kdDebug() << "KexiDataTable::executeQuery(): adding auto-inc columns" << endl;
 		}
 	}
@@ -90,10 +90,12 @@ KexiDataTable::executeQuery(QString queryStatement)
 	int record = 0;
 	while(m_record->next())
 	{
+		kdDebug() << "KexiDataTable::executeQuery(): next()" << endl;
 		KexiTableItem *it = new KexiTableItem(m_tableView);
 		for(uint i = 0; i < m_record->fieldCount(); i++)
 		{
 //			it->setInsertItem(false);
+			kdDebug() << "KexiDataTable::executeQuery(): value()" << endl;
 			it->setValue(i, m_record->value(i));
 //			it->setInsertItem(false);
 		}
@@ -101,14 +103,12 @@ KexiDataTable::executeQuery(QString queryStatement)
 		record++;
 	}
 
-	KexiTableItem *insert = new KexiTableItem(m_tableView);
-//	insert->setInsertItem(true);
-	insert->setHint(QVariant(record));
-	insert->setInsertItem(true);
-	kdDebug() << "KexiDataTable::executeQuery(): inserted auto-item at: " << record << endl;
-
-	kdDebug() << "KexiDataTable::executeQuery(): query " << m_record->fieldCount() << " columns affected" << endl;
-
+	if(!m_record->readOnly())
+	{
+		KexiTableItem *insert = new KexiTableItem(m_tableView);
+		insert->setHint(QVariant(record));
+		insert->setInsertItem(true);
+	}
 }
 
 void

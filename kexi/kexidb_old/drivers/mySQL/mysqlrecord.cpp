@@ -246,6 +246,9 @@ MySqlRecord::next()
 	if(MySqlResult::next())
 	{
 //		m_keyContent = value(m_keyField);
+		if(readOnly())
+			return true;
+		
 		kdDebug() << "MySqlRecord::next(): hint: " << MySqlResult::currentRecord() - 1<< ", " << value(m_keyField).toString() << endl;
 		m_keyBuffer.insert(MySqlResult::currentRecord() - 1, value(m_keyField));
 		m_lastItem++;

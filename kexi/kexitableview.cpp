@@ -591,7 +591,8 @@ void KexiTableView::contentsMouseDoubleClickEvent(QMouseEvent *e)
 	contentsMousePressEvent(e);
 
 	if(m_pCurrentItem)
-	{	if(m_editOnDubleClick)
+	{
+		if(m_editOnDubleClick && columnEditable(m_curCol))
 		{
 			createEditor(m_curRow, m_curCol, QString::null);
 		}
