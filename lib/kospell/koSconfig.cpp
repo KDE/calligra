@@ -656,7 +656,7 @@ void KOSpellConfig::createListOfLanguages()
     kdDebug(750) << "KOSpellConfig::getAvailDictsAspell "
                  << dir.filePath() << " " << dir.dirPath() << endl;
 
-    QDir thedir (dir.filePath(),"*.multi");
+    QDir thedir (dir.filePath(),"*");
 
     kdDebug(750) << "KOSpellConfig" << thedir.path() << "\n" << endl;
     kdDebug(750) << "entryList().count()="

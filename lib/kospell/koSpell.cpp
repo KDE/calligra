@@ -188,7 +188,7 @@ bool KOSpell::initConfig()
     config = new_aspell_config();
     kdDebug()<<" ksconfig->dictionary() :"<<ksconfig->dictionary()<<endl;
 
-    aspell_config_replace(config, "lang", ksconfig->dictionary().isEmpty() ? "fr": ksconfig->dictionary().latin1());
+    aspell_config_replace(config, "lang", ksconfig->dictionary().isEmpty() ? "de": ksconfig->dictionary().latin1());
     switch (ksconfig->encoding())
     {
     case KOS_E_LATIN1:
@@ -625,10 +625,14 @@ void KOSpell::setIgnoreTitleCase(bool _ignore)
 
 void KOSpell::changeSpellLanguage( int index )
 {
-    AspellConfig * config2 = aspell_config_clone(config);
-    aspell_config_replace(config2, "lang",KOSpellConfig::listOfLanguageFileName()[index].latin1() );
-    //possible_err = new_aspell_speller(spell_config2);
-    delete_aspell_config(config2);
+
+    AspellConfig * spell_config2 = aspell_config_clone(config);
+
+    aspell_config_replace(spell_config2, "lang",KOSpellConfig::listOfLanguageFileName()[index].latin1());
+
+    /*possible_err =*/ new_aspell_speller(spell_config2);
+
+    delete_aspell_config(spell_config2);
 }
 
 
