@@ -50,6 +50,16 @@ void ColorFrame::slotSetColor2(const QColor& c)
   repaint();
 }
 
+int ColorFrame::contentsWidth()
+{
+  return contentsRect().width();
+}
+
+int ColorFrame::contentsHeight()
+{
+  return contentsRect().height();
+}
+
 void ColorFrame::drawContents(QPainter *p)
 {
   QRect r = contentsRect();

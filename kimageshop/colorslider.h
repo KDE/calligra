@@ -21,9 +21,12 @@
 #ifndef __colorslider_h__
 #define __colorslider_h__
 
+#include <qpoint.h>
 #include <qwidget.h>
+#include <qframe.h>
 
-#include "colorframe.h"
+class ColorFrame;
+class SliderWidget;
 
 class ColorSlider : public QWidget
 {
@@ -34,18 +37,41 @@ class ColorSlider : public QWidget
   virtual ~ColorSlider();
 
  protected:
-  virtual void mousePressEvent (QMouseEvent *);
+  virtual void resizeEvent (QResizeEvent *);
   
  public slots:
   void slotSetColor1(const QColor&);
   void slotSetColor2(const QColor&);
+  
+  // for internal use
+  void slotSetValue(int);
 
  signals:
   void  colorSelected(const QColor&);
 
  protected:
-  QWidget     m_pSlider;
-  ColorFrame  m_pColorFrame;
+  SliderWidget *m_pSlider;
+  ColorFrame   *m_pColorFrame;
+};
+
+class SliderWidget : public QFrame
+{
+  Q_OBJECT
+ 
+ public:
+  SliderWidget(QWidget *parent = 0L);
+
+ protected:
+  virtual void mousePressEvent (QMouseEvent *); 
+  virtual void mouseReleaseEvent (QMouseEvent *); 
+  virtual void mouseMoveEvent (QMouseEvent *); 
+  
+ signals:
+  void  positionChanged(int);
+
+ protected:
+  bool   m_dragging;
+  QPoint m_myPos;
 };
 
 #endif

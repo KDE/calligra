@@ -36,6 +36,8 @@ class ColorFrame : public QFrame
   virtual ~ColorFrame();
 
   const QColor colorAt(const QPoint&);
+  int contentsWidth();
+  int contentsHeight();
 
  protected:
   virtual void drawContents (QPainter *);

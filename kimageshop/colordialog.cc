@@ -28,6 +28,7 @@
 #include <kdebug.h>
 
 #include "kdualcolorbtn.h"
+#include "colorframe.h"
 #include "colorslider.h"
 #include "colordialog.h"
 
@@ -100,11 +101,11 @@ RGBWidget::RGBWidget(QWidget *parent) : QWidget(parent)
   m_pGSlider = new ColorSlider(this);
   m_pBSlider = new ColorSlider(this);
 
-  m_pRSlider->setMaximumHeight(30);
-  m_pGSlider->setMaximumHeight(30);
-  m_pBSlider->setMaximumHeight(30);
+  m_pRSlider->setMaximumHeight(32);
+  m_pGSlider->setMaximumHeight(32);
+  m_pBSlider->setMaximumHeight(32);
 
-  m_pVLayout = new QVBoxLayout(this, 2);
+  m_pVLayout = new QVBoxLayout(this, 3);
   m_pVLayout->addWidget(m_pRSlider);
   m_pVLayout->addWidget(m_pGSlider);
   m_pVLayout->addWidget(m_pBSlider);
