@@ -20,6 +20,7 @@
 #include <koxmlwriter.h>
 #include "../../store/tests/xmlwritertest.h"
 #include <kdebug.h>
+#include <assert.h>
 
 int main( int, char** ) {
 
