@@ -36,6 +36,45 @@ VGradientTool::~VGradientTool()
 }
 
 void
+VGradientTool::mouseReleased( QMouseEvent *mouse_event )
+{
+	if( !m_isDragging ) return;
+
+	m_lp.setX( mouse_event->pos().x() );
+	m_lp.setY( mouse_event->pos().y() );
+
+	KoPoint fp = view()->canvasWidget()->viewportToContents( QPoint( m_fp.x(), m_fp.y() ) );
+	KoPoint lp = view()->canvasWidget()->viewportToContents( QPoint( m_lp.x(), m_lp.y() ) );
+
+	VGradient gradient;
+	gradient.clearStops();
+	gradient.addStop( VColor( m_dialog->startColor().rgb() ), 0.0, 0.5 );
+	gradient.addStop( VColor( m_dialog->endColor().rgb() ), 1.0, 0.5 );
+	gradient.setOrigin( fp * ( 1.0 / view()->zoom() ) );
+	gradient.setVector( lp * ( 1.0 / view()->zoom() ) );
+	gradient.setType( (VGradient::VGradientType)m_dialog->gradientType() );
+	gradient.setRepeatMethod( (VGradient::VGradientRepeatMethod)m_dialog->gradientRepeat() );
+
+	if( m_dialog->gradientFill() )
+	{
+		VFill fill;
+		fill.gradient() = gradient;
+		fill.setType( VFill::grad );
+		view()->part()->addCommand(
+			new VFillCmd( &view()->part()->document(), fill ), true );
+	}
+	else
+	{
+		view()->part()->addCommand(
+			new VStrokeCmd( &view()->part()->document(), &gradient ), true );
+	}
+
+	view()->selectionChanged();
+
+	m_isDragging = false;
+}
+
+void
 VGradientTool::mousePressed( QMouseEvent *mouse_event )
 {
 	view()->painterFactory()->painter()->end();
@@ -68,78 +107,6 @@ VGradientTool::drawTemporaryObject()
 	painter->moveTo( KoPoint( m_lp.x(), m_lp.y() ) );
 	painter->lineTo( KoPoint( m_fp.x(), m_fp.y() ) );
 	painter->strokePath();
-}
-
-bool
-VGradientTool::eventFilter( QEvent* event )
-{
-	QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
-
-	if ( event->type() == QEvent::MouseMove )
-	{
-		mouseMoved( static_cast<QMouseEvent *>( event ) );
-		return true;
-	}
-
-	if ( event->type() == QEvent::MouseButtonRelease && m_isDragging )
-	{
-		m_lp.setX( mouse_event->pos().x() );
-		m_lp.setY( mouse_event->pos().y() );
-
-		KoPoint fp = view()->canvasWidget()->viewportToContents( QPoint( m_fp.x(), m_fp.y() ) );
-		KoPoint lp = view()->canvasWidget()->viewportToContents( QPoint( m_lp.x(), m_lp.y() ) );
-
-		VGradient gradient;
-		gradient.clearStops();
-		gradient.addStop( VColor( m_dialog->startColor().rgb() ), 0.0, 0.5 );
-		gradient.addStop( VColor( m_dialog->endColor().rgb() ), 1.0, 0.5 );
-		gradient.setOrigin( fp * ( 1.0 / view()->zoom() ) );
-		gradient.setVector( lp * ( 1.0 / view()->zoom() ) );
-		gradient.setType( (VGradient::VGradientType)m_dialog->gradientType() );
-		gradient.setRepeatMethod( (VGradient::VGradientRepeatMethod)m_dialog->gradientRepeat() );
-
-		if( m_dialog->gradientFill() )
-		{
-			VFill fill;
-			fill.gradient() = gradient;
-			fill.setType( VFill::grad );
-			view()->part()->addCommand(
-				new VFillCmd( &view()->part()->document(), fill ), true );
-		}
-		else
-		{
-			view()->part()->addCommand(
-				new VStrokeCmd( &view()->part()->document(), &gradient ), true );
-		}
-
-		view()->selectionChanged();
-
-		m_isDragging = false;
-
-		return true;
-	}
-
-	// handle pressing of keys:
-	if ( event->type() == QEvent::KeyPress )
-	{
-		QKeyEvent* key_event = static_cast<QKeyEvent*>( event );
-
-		// cancel dragging with ESC-key:
-		if ( key_event->key() == Qt::Key_Escape && m_isDragging )
-		{
-			cancel();
-			return true;
-		}
-	}
-
-	// the whole story starts with this event:
-	if ( event->type() == QEvent::MouseButtonPress )
-	{
-		mousePressed( static_cast<QMouseEvent *>( event ) );
-		return true;
-	}
-
-	return false;
 }
 
 void

@@ -29,6 +29,20 @@ VShearTool::~VShearTool()
 }
 
 void
+VShearTool::mouseReleased( QMouseEvent * )
+{
+	if( !m_isDragging ) return;
+
+	KoPoint fp = view()->canvasWidget()->viewportToContents( QPoint( m_fp.x(), m_fp.y() ) );
+
+	view()->part()->addCommand(
+		new VShearCmd( &view()->part()->document(), fp * (1.0 / view()->zoom() ), m_s1, m_s2 ),
+		true );
+
+	m_isDragging = false;
+}
+
+void
 VShearTool::mousePressed( QMouseEvent *mouse_event )
 {
 	view()->painterFactory()->painter()->end();
@@ -158,51 +172,7 @@ VShearTool::drawTemporaryObject()
 bool
 VShearTool::eventFilter( QEvent* event )
 {
-	QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
-	setCursor( mouse_event->pos() );
-
-	if ( event->type() == QEvent::MouseMove )
-	{
-		mouseMoved( static_cast<QMouseEvent *>( event ) );
-		return true;
-	}
-
-	if ( event->type() == QEvent::MouseButtonRelease && m_isDragging )
-	{
-		m_lp.setX( mouse_event->pos().x() );
-		m_lp.setY( mouse_event->pos().y() );
-
-		KoPoint fp = view()->canvasWidget()->viewportToContents( QPoint( m_fp.x(), m_fp.y() ) );
-
-		view()->part()->addCommand(
-			new VShearCmd( &view()->part()->document(), fp * (1.0 / view()->zoom() ), m_s1, m_s2 ),
-			true );
-
-		m_isDragging = false;
-
-		return true;
-	}
-
-	// handle pressing of keys:
-	if ( event->type() == QEvent::KeyPress )
-	{
-		QKeyEvent* key_event = static_cast<QKeyEvent*>( event );
-
-		// cancel dragging with ESC-key:
-		if ( key_event->key() == Qt::Key_Escape && m_isDragging )
-		{
-			cancel();
-			return true;
-		}
-	}
-
-	// the whole story starts with this event:
-	if ( event->type() == QEvent::MouseButtonPress )
-	{
-		mousePressed( static_cast<QMouseEvent *>( event ) );
-		return true;
-	}
-
-	return false;
+	setCursor( static_cast<QMouseEvent*> ( event )->pos() );
+	return VTool::eventFilter( event );
 }
 

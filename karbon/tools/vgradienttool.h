@@ -20,14 +20,13 @@ public:
 
 	virtual void activate();
 
-	virtual bool eventFilter( QEvent* event );
-
 	// draw the object while it is edited:
 	void drawTemporaryObject();
 
 	virtual void showDialog() const;
 protected:
 	virtual void mousePressed( QMouseEvent * );
+	virtual void mouseReleased( QMouseEvent * );
 
 private:
 	VGradientDlg* m_dialog;

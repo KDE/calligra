@@ -34,6 +34,18 @@ VRotateTool::~VRotateTool()
 }
 
 void
+VRotateTool::mouseReleased( QMouseEvent * )
+{
+	if( !m_isDragging ) return;
+
+	view()->part()->addCommand(
+		new VRotateCmd( &view()->part()->document(), m_sp, m_angle / VGlobal::pi_180 ),
+		true );
+
+	m_isDragging = false;
+}
+
+void
 VRotateTool::mousePressed( QMouseEvent *mouse_event )
 {
 	view()->painterFactory()->painter()->end();
@@ -164,47 +176,6 @@ VRotateTool::eventFilter( QEvent* event )
 {
 	QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
 	setCursor( mouse_event->pos() );
-
-	if ( event->type() == QEvent::MouseMove )
-	{
-		mouseMoved( static_cast<QMouseEvent *> ( event ) );
-		return true;
-	}
-
-	if ( event->type() == QEvent::MouseButtonRelease && m_isDragging )
-	{
-		m_lp.setX( mouse_event->pos().x() );
-		m_lp.setY( mouse_event->pos().y() );
-
-		view()->part()->addCommand(
-			new VRotateCmd( &view()->part()->document(), m_sp, m_angle / VGlobal::pi_180 ),
-			true );
-
-		m_isDragging = false;
-
-		return true;
-	}
-
-	// handle pressing of keys:
-	if ( event->type() == QEvent::KeyPress )
-	{
-		QKeyEvent* key_event = static_cast<QKeyEvent*>( event );
-
-		// cancel dragging with ESC-key:
-		if ( key_event->key() == Qt::Key_Escape && m_isDragging )
-		{
-			cancel();
-			return true;
-		}
-	}
-
-	// the whole story starts with this event:
-	if ( event->type() == QEvent::MouseButtonPress )
-	{
-		mousePressed( static_cast<QMouseEvent *>( event ) );
-		return true;
-	}
-
-	return false;
+	return VTool::eventFilter( event );;
 }
 

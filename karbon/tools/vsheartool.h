@@ -26,6 +26,7 @@ public:
 protected:
 	void setCursor( const QPoint & ) const;
 	virtual void mousePressed( QMouseEvent * );
+	virtual void mouseReleased( QMouseEvent * );
 
 private:
 	double m_s1, m_s2;
