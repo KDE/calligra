@@ -98,7 +98,7 @@ static void ProcessParagraphTag ( QDomNode         myNode,
     CreateMissingFormatData (paraData.text, paraData.formattingList);
 
 
-    if ( paraData.formattingList.count () == 0 && paraData.text.length () )
+    if ( paraData.formattingList.isEmpty () && !paraData.text.isEmpty () )
     {
         if ( paraData.layout.formatData.id == 1 )
         {
