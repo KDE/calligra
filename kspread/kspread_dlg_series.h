@@ -31,12 +31,12 @@ class KSpreadView;
 class KSpreadTable;
 class KSpreadCell;
 
-class KSpreadseries : public QDialog
+class KSpreadSeriesDlg : public QDialog
 {
   Q_OBJECT
 public:
   
-KSpreadseries(KSpreadView* parent, const char* name,const QPoint &_marker);  
+KSpreadSeriesDlg(KSpreadView* parent, const char* name,const QPoint &_marker);  
 
 KSpreadTable* table;
 

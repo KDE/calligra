@@ -30,17 +30,20 @@
 #include <klocale.h>
 #include <qrect.h>
 #include <kdebug.h>
+#include <kbuttonbox.h>
 
 
-KSpreadsort::KSpreadsort( KSpreadView* parent, const char* name)
-	: QDialog( parent, name,TRUE )
+KSpreadSortDlg::KSpreadSortDlg( KSpreadView* parent, const char* name)
+	: QDialog( parent, name, TRUE )
 {
   m_pView = parent;
+  
   setCaption( i18n("Sort") );
+
   QVBoxLayout *lay1 = new QVBoxLayout( this );
   lay1->setMargin( 5 );
   lay1->setSpacing( 10 );
-  QGridLayout *lay2 = new QGridLayout( lay1,3,2 );
+  QGridLayout *lay2 = new QGridLayout( lay1,2,2 );
   lay2->setSpacing( 15 );
 
   QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n("Sort by"),this);
@@ -50,18 +53,20 @@ KSpreadsort::KSpreadsort( KSpreadView* parent, const char* name)
   rb_row = new QRadioButton( i18n("Row"), grp );
   rb_column = new QRadioButton( i18n("Column"), grp );
 
-
   combo=new QComboBox(this);
   lay2->addWidget(combo,0,1);
 
   decrease=new QCheckBox(i18n("Decrease mode"),this);
   lay2->addWidget(decrease,1,0);
 
-  m_pOk = new QPushButton( i18n("Sort"), this );
+  KButtonBox *bb = new KButtonBox( this );
+  bb->addStretch();
+  m_pOk = bb->addButton( i18n("Sort") );
+  m_pOk->setDefault( TRUE );
+  m_pClose = bb->addButton( i18n( "Close" ) );
+  bb->layout();
+  lay1->addWidget( bb);
 
-  lay2->addWidget(m_pOk,2,0);
-  m_pClose = new QPushButton( i18n("Close"), this );
-  lay2->addWidget(m_pClose,2,1);
   init();
 
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
@@ -69,93 +74,115 @@ KSpreadsort::KSpreadsort( KSpreadView* parent, const char* name)
   connect( grp, SIGNAL(pressed(int)),this,SLOT(slotpress(int)));
 }
 
-void KSpreadsort::init()
+void KSpreadSortDlg::init()
 {
-  r=QRect( m_pView->activeTable()-> selectionRect() );
+    QRect r = m_pView->activeTable()-> selectionRect();
 
-  // Selection is only one row
-  if(r.top()==r.bottom())
-  {
-    rb_column->setEnabled(false);
-    rb_row->setChecked(true);
-  }
-  // only one column
-  else if(r.left()==r.right())
-  {
-    rb_row->setEnabled(false);
-    rb_column->setChecked(true);
-  }
-  else
-  {
-    rb_column->setChecked(true);
-  }
+    // Entire columns selected ?
+    if ( r.bottom() == 0x7fff )
+    {
+	rb_row->setEnabled(false);
+	rb_column->setChecked(true);
+	
+	for(int i=r.left();i<=r.right();i++)
+	    list_column += i18n("Column %1").arg(util_columnLabel(i));
+    }
+    // Entire rows selected ?
+    else if ( r.right() == 0x7fff )
+    {
+	rb_column->setEnabled(false);
+	rb_row->setChecked(true);
 
-  for(int i=r.left();i<=r.right();i++)
-    list_column += i18n("Column %1").arg(util_columnLabel(i));
-
-  for(int i=r.top();i<=r.bottom();i++)
-    list_row += i18n("Row %1").arg(i);
-
-  if ( rb_row->isChecked() )
-    slotpress(0);
-  else
-    slotpress(1);
-}
-
-void KSpreadsort::slotpress(int id)
-{
-switch(id)
-	{
-	case 0 :
-		combo->clear();
-		combo->insertStringList(list_row);
-		break;
-	case 1 :
-		combo->clear();
-		combo->insertStringList(list_column);
-		break;
-	default :
-	        kdDebug(36001) << "Error in signal : pressed(int id)" << endl;
-		break;
+	for(int i=r.top();i<=r.bottom();i++)
+	    list_row += i18n("Row %1").arg(i);    
+    }
+    else
+    {
+	// Selection is only one row
+	if( r.top() == r.bottom() )
+        {
+	    rb_column->setEnabled(false);
+	    rb_row->setChecked(true);
+	}
+	// only one column
+	else if(r.left()==r.right())
+        {
+	    rb_row->setEnabled(false);
+	    rb_column->setChecked(true);
+	}
+	else
+        {
+	    rb_column->setChecked(true);
 	}
 
+	for(int i=r.left();i<=r.right();i++)
+	    list_column += i18n("Column %1").arg(util_columnLabel(i));
+
+	for(int i=r.top();i<=r.bottom();i++)
+	    list_row += i18n("Row %1").arg(i);
+    }
+    
+    // Initialize the combo box
+    if ( rb_row->isChecked() )
+	slotpress(0);
+    else
+	slotpress(1);
 }
 
-void KSpreadsort::slotOk()
+void KSpreadSortDlg::slotpress(int id)
 {
-  if( rb_row->isChecked())
-  {
-    if(!decrease->isChecked())
+    switch(id)
     {
-      m_pView->activeTable()->sortByRow(combo->currentItem()+r.top());
+    case 0 :
+	combo->clear();
+	combo->insertStringList(list_row);
+	break;
+    case 1 :
+	combo->clear();
+	combo->insertStringList(list_column);
+	break;
+    default :
+	kdDebug(36001) << "Error in signal : pressed(int id)" << endl;
+	break;
+    }
+}
+
+void KSpreadSortDlg::slotOk()
+{
+    QRect r = m_pView->activeTable()-> selectionRect();
+    
+    if( rb_row->isChecked())
+    {
+	if(!decrease->isChecked())
+        {
+	    m_pView->activeTable()->sortByRow(combo->currentItem()+r.top());
+	}
+	else
+        {
+	    m_pView->activeTable()->sortByRow(combo->currentItem()+r.top(),KSpreadTable::Decrease);
+	}
+    }
+    else if(rb_column->isChecked())
+    {
+	if(!decrease->isChecked())
+        {
+	    m_pView->activeTable()->sortByColumn(combo->currentItem()+r.left());
+	}
+	else
+        {
+	    m_pView->activeTable()->sortByColumn(combo->currentItem()+r.left(),KSpreadTable::Decrease);
+	}
     }
     else
     {
-      m_pView->activeTable()->sortByRow(combo->currentItem()+r.top(),KSpreadTable::Decrease);
+	kdDebug(36001) << "Err in radiobutton" << endl;
     }
 
-  }
-  else if(rb_column->isChecked())
-  {
-    if(!decrease->isChecked())
-    {
-      m_pView->activeTable()->sortByColumn(combo->currentItem()+r.left());
-    }
-    else
-    {
-      m_pView->activeTable()->sortByColumn(combo->currentItem()+r.left(),KSpreadTable::Decrease);
-    }
-  }
-  else
-  {
-    kdDebug(36001) << "Err in radiobutton" << endl;
-  }
-
-  accept();
+    accept();
 }
 
 
-void KSpreadsort::slotClose()
+void KSpreadSortDlg::slotClose()
 {
     reject();
 }

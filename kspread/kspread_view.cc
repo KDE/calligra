@@ -289,7 +289,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     connect( m_showPageBorders, SIGNAL( toggled( bool ) ), this, SLOT( togglePageBorders( bool ) ) );
     m_replace = new KAction( i18n("Find and Replace..."), "find",CTRL + Key_F, this, SLOT( replace() ), actionCollection(), "replace" );
     m_conditional = new KAction( i18n("Relational cell attributes..."), 0, this, SLOT( conditional() ), actionCollection(), "conditional" );
-    m_sort = new KAction( i18n("Sort"), 0, this, SLOT( sort() ), actionCollection(), "sort" );
+    m_sort = new KAction( i18n("Sort ..."), 0, this, SLOT( sort() ), actionCollection(), "sort" );
     m_consolidate = new KAction( i18n("Consolidate..."), 0, this, SLOT( consolidate() ), actionCollection(), "consolidate" );
     m_mergeCell = new KAction( i18n("Merge cells"),"mergecell" ,0, this, SLOT( mergeCell() ), actionCollection(), "mergecell" );
     m_dissociateCell = new KAction( i18n("Dissociate cells"),"dissociatecell" ,0, this, SLOT( dissociateCell() ), actionCollection(), "dissociatecell" );
@@ -355,8 +355,8 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
                         actionCollection(), "insertMathExpr" );
     (void) new KAction( i18n("&Formula"), "formula", 0, this, SLOT( insertFormula() ),
                         actionCollection(), "insertFormula" );
-    (void) new KAction( i18n("&Series ..."),"series", 0, this, SLOT( series() ), actionCollection(), "series" );
-    (void) new KAction( i18n("&Anchor ..."), 0, this, SLOT( createAnchor() ), actionCollection(), "createAnchor" );
+    (void) new KAction( i18n("&Series ..."),"series", 0, this, SLOT( insertSeries() ), actionCollection(), "series" );
+    (void) new KAction( i18n("&Hyperlink ..."), 0, this, SLOT( insertHyperlink() ), actionCollection(), "insertHyperlink" );
     (void) new KAction( i18n("&Object ..."), "parts", 0, this, SLOT( insertObject() ),
                         actionCollection(), "insertPart");
     (void) new KAction( i18n("&Chart"), "chart", 0, this, SLOT( insertChart() ), actionCollection(), "insertChart" );
@@ -1269,7 +1269,7 @@ void KSpreadView::sortInc()
   if ( r.left() == 0 || r.top() == 0 ||
        r.right() == 0 || r.bottom() == 0 )
   {
-    KMessageBox::error( this, i18n("One cell was selected!") );
+    KMessageBox::error( this, i18n("You must select multiple cells.") );
   }
   else if( r.right() ==0x7FFF)
   {
@@ -1292,7 +1292,7 @@ void KSpreadView::sortDec()
     if ( r.left() == 0 || r.top() == 0 ||
 	 r.right() == 0 || r.bottom() == 0 )
     {
-  	KMessageBox::error( this, i18n("One cell was selected!") );
+  	KMessageBox::error( this, i18n("You must select multiple cells.") );
     }
     else if( r.right() ==0x7FFF)
     {
@@ -1684,16 +1684,16 @@ void KSpreadView::changeAngle()
 
 void KSpreadView::mergeCell()
 {
-if ( !m_pTable )
+    if ( !m_pTable )
         return;
-m_pTable->mergeCell(QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
+    m_pTable->mergeCell( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
 }
 
 void KSpreadView::dissociateCell()
 {
-if ( !m_pTable )
+    if ( !m_pTable )
         return;
-m_pTable->dissociateCell(QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
+    m_pTable->dissociateCell( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
 }
 
 void KSpreadView::consolidate()
@@ -1704,14 +1704,14 @@ void KSpreadView::consolidate()
 
 void KSpreadView::gotoCell()
 {
-    KSpreadgoto* dlg = new KSpreadgoto( this, "GotoCell" );
-    dlg->show();
+    KSpreadGotoDlg dlg( this, "GotoCell" );
+    dlg.exec();
 }
 
 void KSpreadView::replace()
 {
-  KSpreadreplace* dlg = new KSpreadreplace( this, "Replace" ,QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
-  dlg->show();
+    KSpreadReplaceDlg dlg( this, "Replace" ,QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
+    dlg.exec();
 }
 
 void KSpreadView::conditional()
@@ -1740,35 +1740,29 @@ void KSpreadView::conditional()
 
 }
 
-void KSpreadView::series()
+void KSpreadView::insertSeries()
 {
-  KSpreadseries* dlg = new KSpreadseries( this, "Series",QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
-  dlg->show();
-
+    KSpreadSeriesDlg dlg( this, "Series", QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+    dlg.exec();
 }
 
 void KSpreadView::sort()
 {
-  QRect selection( m_pTable->selectionRect() );
-  if(selection.left()==0)
+    QRect selection( m_pTable->selectionRect() );
+    if(selection.left()==0)
     {
-    KMessageBox::error( this, i18n("One cell was selected!") );
+	KMessageBox::error( this, i18n("You must select multiple cells") );
+	return;
     }
-  else if((selection.right()==0x7FFF) ||(selection.bottom()==0x7FFF))
-  	{
-  	KMessageBox::error( this, i18n("Area too large!"));
-	}
-   else
-        {
-        KSpreadsort* dlg = new KSpreadsort( this, "Sort" );
-        dlg->show();
-        }
+
+    KSpreadSortDlg dlg( this, "Sort" );
+    dlg.exec();
 }
 
-void KSpreadView::createAnchor()
+void KSpreadView::insertHyperlink()
 {
-  KSpreadanchor* dlg = new KSpreadanchor( this, "Create Anchor" ,QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
-  dlg->show();
+    KSpreadLinkDlg dlg( this, "Create Hyperlink" );
+    dlg.exec();
 }
 
 bool KSpreadView::printDlg()

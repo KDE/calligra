@@ -60,7 +60,7 @@
   <Action name="insertMathExpr"/>
   <Action name="insertFormula"/>
   <Action name="series"/>
-  <Action name="createAnchor"/>
+  <Action name="insertHyperlink"/>
   <Action name="insertPart"/>
   <Action name="insertChart"/>
  </Menu>

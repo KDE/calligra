@@ -283,8 +283,6 @@ public:
     void equalizeRow();
     void equalizeColumn();
 
-    // #### void showComment(int row=-1,int col=-1);
-
     void updatePosWidget();
 
     // Created by the view since it's layout is managed there,

@@ -34,19 +34,19 @@ class KSpreadView;
 class KSpreadTable;
 class KSpreadCell;
 
-class KSpreadsort : public QDialog
+class KSpreadSortDlg : public QDialog
 {
   Q_OBJECT
 public:
-  KSpreadsort( KSpreadView* parent, const char* name );
-  void init();
+  KSpreadSortDlg( KSpreadView* parent, const char* name );
 
-public slots:
+private slots:
   void slotOk();
   void slotClose();
   void slotpress(int id);
 
-protected:
+private:
+  void init();
 
   KSpreadView* m_pView;
   QButtonGroup *grp;
@@ -57,7 +57,6 @@ protected:
   QPushButton* m_pClose;
   QStringList list_column;
   QStringList list_row;
-  QRect r;
   QCheckBox *decrease;
 };
 

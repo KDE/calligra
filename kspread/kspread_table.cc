@@ -38,6 +38,7 @@
 #include <qtextstream.h>
 #include <qdragobject.h>
 #include <qmime.h>
+#include <qintdict.h>
 
 #include <klocale.h>
 #include <kglobal.h>
@@ -2543,6 +2544,40 @@ void KSpreadTable::sortByRow( int ref_row, SortingOrder mode )
     QRect r( selectionRect() );
     ASSERT( mode == Increase || mode == Decrease );
 
+    // It may not happen that entire columns are selected.
+    ASSERT( r.right() != 0x7fff );
+    
+    // Are entire rows selected ?
+    if ( r.right() == 0x7FFF )
+    {
+	r.setLeft( 0x7fff );
+	r.setRight( 0 );
+	
+	// Determine a correct left and right.
+	// Iterate over all cells to find out which cells are
+	// located in the selected rows.
+	QIntDictIterator<KSpreadCell> it( m_dctCells );
+	for( ; it.current(); ++it )
+        {
+	    int key = it.currentKey();
+	    int row = key & 0xffff;
+	    int col = key / 0x10000;
+
+	    // Is the cell in the selected columns ?
+	    if ( row >= r.top() && row <= r.bottom() )
+	    {
+		if ( col > r.right() )
+		    r.rRight() = col;
+		if ( col < r.left() )
+		    r.rLeft() = col;
+	    }
+	}
+	
+	// Any cells to sort here ?
+	if ( r.right() < r.left() )
+	    return;
+    }
+
     // Sorting algorithm: David's :). Well, I guess it's called minmax or so.
     // For each row, we look for all columns under it and we find the one to swap with it.
     // Much faster than the awful bubbleSort...
@@ -2580,13 +2615,48 @@ void KSpreadTable::sortByRow( int ref_row, SortingOrder mode )
 
 void KSpreadTable::sortByColumn(int ref_column,SortingOrder mode)
 {
-    //kdDebug() << "KSpreadTable::sortByColumn Ref_column=" << ref_column << endl;
     ASSERT( mode == Increase || mode == Decrease );
+    
     QRect r( selectionRect() );
+    
+    // It may not happen that entire rows are selected.
+    ASSERT( r.right() != 0x7fff );
+    
+    // Are entire columns selected ?
+    if ( r.bottom() == 0x7FFF )
+    {
+	r.setTop( 0x7fff );
+	r.setBottom( 0 );
+	
+	// Determine a correct top and bottom.
+	// Iterate over all cells to find out which cells are
+	// located in the selected columns.
+	QIntDictIterator<KSpreadCell> it( m_dctCells );
+	for( ; it.current(); ++it )
+        {
+	    int key = it.currentKey();
+	    int row = key & 0xffff;
+	    int col = key / 0x10000;
+
+	    // Is the cell in the selected columns ?
+	    if ( col >= r.left() && col <= r.right() )
+	    {
+		if ( row > r.bottom() )
+		    r.rBottom() = row;
+		if ( row < r.top() )
+		    r.rTop() = row;
+	    }
+	}
+	
+	// Any cells to sort here ?
+	if ( r.bottom() < r.top() )
+	    return;
+    }
 
     // Sorting algorithm: David's :). Well, I guess it's called minmax or so.
     // For each row, we look for all rows under it and we find the one to swap with it.
     // Much faster than the awful bubbleSort...
+    // Torben: Asymptotically it is alltogether O(n^2) :-)
     for ( int d = r.top(); d <= r.bottom(); d++ )
     {
         // Look for which row we want to swap with the one number d

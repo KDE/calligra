@@ -34,8 +34,8 @@
 #include <qrangecontrol.h>
 #include <kmessagebox.h>
 
-KSpreadgoto::KSpreadgoto( KSpreadView* parent, const char* name )
-	: QDialog( parent, name,TRUE )
+KSpreadGotoDlg::KSpreadGotoDlg( KSpreadView* parent, const char* name )
+	: QDialog( parent, name, TRUE )
 {
   m_pView = parent;
 
@@ -63,7 +63,7 @@ KSpreadgoto::KSpreadgoto( KSpreadView* parent, const char* name )
 }
 
 
-void KSpreadgoto::slotOk()
+void KSpreadGotoDlg::slotOk()
 {
     QString tmp_upper;
     if(!name_cell->text().isEmpty())
@@ -87,7 +87,7 @@ void KSpreadgoto::slotOk()
         }
 }
 
-void KSpreadgoto::slotClose()
+void KSpreadGotoDlg::slotClose()
 {
     reject();
 }

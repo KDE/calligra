@@ -687,7 +687,7 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
 	KSpreadCell *cell = table->cellAt( markerColumn(), markerRow() );
 	int w = cell->width( markerColumn(), this );
 	int h = cell->height( markerRow(), this );
-      
+
 	corner = QRect( x + w - 2, y + h -1, 5, 5 );
     }
     else // if we have a rectangular selection ( not complete rows or columns )
@@ -702,7 +702,7 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
 	int y2 = table->rowPos( selection.bottom(), this );
 	int th = cell->height( selection.bottom(), this );
 	int h = ( y2 - y ) + th;
-      
+
 	corner = QRect( x + w - 2, y + h -1, 5, 5 );
     }
 
@@ -1316,7 +1316,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
   // Are we making a selection right now ? Go thru this only if no selection is made
   // or if we neither selected complete rows nor columns.
   bool make_select = ( _ev->state() & ShiftButton ) == ShiftButton &&
-    ( bChangingCells || _ev->key() == Key_Home || _ev->key() == Key_End );
+                     ( bChangingCells || _ev->key() == Key_Home || _ev->key() == Key_End );
 
   switch( _ev->key() )
   {
@@ -1668,15 +1668,6 @@ void KSpreadCanvas::drawMarker( QPainter * _painter )
 {
   bool own_painter = FALSE;
 
-  //delete labelComment when you change position
-  /* #####
-  if(labelComment)
-        {
-        delete labelComment;
-        labelComment=0;
-        }
-  */
-  
   if ( _painter == 0L )
   {
     _painter = new QPainter();
@@ -1792,29 +1783,6 @@ void KSpreadCanvas::updateChooseMarker( const QRect& _old, const QRect& _new )
   ((KSpreadTextEditor*)m_pEditor)->blockCheckChoose( FALSE );
   m_pEditor->setCursorPosition( pos + length_namecell );
   kdDebug(36001) << "old=" << old << " len=" << length_namecell << " pos=" << pos << endl;
-  // m_pEditor->setText(m_pEditor->text().left(length_text-old)+ name_cell);
-
-  /*
-    //####### Torben: That looks too hacky
-    if( m_pEditor->text().right(1)=="=")
-    {
-    m_pEditor->setText(m_pEditor->text()+ name_cell);
-    }
-    else
-    {
-    //######### TODO: TORBEN: There are more operators!!!
-    if( (m_pEditor->text().right(1)!="+") && (m_pEditor->text().right(1)!="-") &&
-    (m_pEditor->text().right(1)!="*") &&(m_pEditor->text().right(1)!="/"))
-    {
-    m_pEditor->setText(m_pEditor->text().left(length_text-old)+ name_cell);
-    }
-    else
-    {
-    m_pEditor->setText(m_pEditor->text()+ name_cell);
-    }
-    }
-  */
-  // m_pEditor->setFocus();
 }
 
 void KSpreadCanvas::updatePosWidget()
@@ -2085,69 +2053,6 @@ void KSpreadCanvas::equalizeColumn()
   }
 
 }
-
-/* ####
-void KSpreadCanvas::showComment(int _row,int _col)
-{
-QPainter painter;
-  int row=_row;
-  int col=_col;
-  //KSpreadCell* cell = activeTable()->cellAt( marker() );
-  if(_row==-1 && _col==-1)
-        {
-        row=markerRow();
-        col=markerColumn();
-        }
-
-  KSpreadCell* cell = activeTable()->cellAt( col,row );
-  QString tmp;
-  int pos=0;
-  int pos1=0;
-  int index=0;
-  int line=0;
-  int start=0;
-  if(labelComment)
-  {
-    delete labelComment;
-    labelComment=0;
-  }
-  tmp=cell->getComment();
-  int len=tmp.length();
-  do
-  {
-    pos=tmp.find("\n",pos);
-    if(QMAX((pos-pos1),index)!=index)
-    {
-      index=QMAX((pos-pos1),index);
-      start=pos1;
-    }
-    pos++;
-    pos1=pos;
-    line++;
-  }
-  while(pos!=len);
-  painter.begin( this );
-
-  len = painter.fontMetrics().width(tmp.mid(start,index));
-  //remove '\n' at the end
-  tmp=tmp.mid(0,tmp.length()-1);
-  int hei =painter.fontMetrics().height()*(line);
-  painter.end();
-
-  labelComment=new QLabel(this);
-  labelComment->setBackgroundColor( yellow ); // TODO find a better color (in the colorGroup)
-  //int xpos = activeTable()->columnPos( markerColumn(), this );
-  //int ypos = activeTable()->rowPos( markerRow(), this );
-  //int w = cell->width( markerColumn(), this );
-  int xpos = activeTable()->columnPos( col, this );
-  int ypos = activeTable()->rowPos( row, this );
-  int w = cell->width( col, this );
-  //labelComment->setAlignment(Qt::AlignVCenter);
-  labelComment->setGeometry(xpos +w +10, ypos + 10,len, hei ) ;
-  labelComment->setText(tmp);
-  labelComment->show();
-}
-*/
 
 /****************************************************************
  *
@@ -2946,9 +2851,6 @@ void KSpreadToolTip::maybeTip( const QPoint& p )
     KSpreadTable *table = m_canvas->activeTable();
     if ( !table )
 	return;
-
-    // Get the current selected rectangle
-    QRect selection( table->selectionRect() );
 
     // Over which cell is the mouse ?
     int ypos, xpos;

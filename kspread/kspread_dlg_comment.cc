@@ -66,10 +66,6 @@ KSpreadComment::KSpreadComment( KSpreadView* parent, const char* name,const QPoi
 
 void KSpreadComment::slotOk()
 {
-    // if(multiLine->text().find("\n",multiLine->text().length()-1)==-1)
-    // m_pView->activeTable()->setSelectionComment(marker,multiLine->text()+"\n");
-    //    else
-    
     m_pView->activeTable()->setSelectionComment(marker,multiLine->text().stripWhiteSpace() );
     accept();
 }

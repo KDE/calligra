@@ -179,9 +179,9 @@ public slots:
     void togglePageBorders( bool );
     void replace();
     void conditional();
-    void series();
+    void insertSeries();
     void sort();
-    void createAnchor();
+    void insertHyperlink();
     void consolidate();
     void insertTable();
     void removeTable();

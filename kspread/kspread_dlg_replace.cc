@@ -31,7 +31,7 @@
 #include <kbuttonbox.h>
 #include <kmessagebox.h>
 
-KSpreadreplace::KSpreadreplace( KSpreadView* parent, const char* name,const QPoint &_marker)
+KSpreadReplaceDlg::KSpreadReplaceDlg( KSpreadView* parent, const char* name,const QPoint &_marker)
 	: QDialog( parent, name,TRUE )
 {
   m_pView = parent;
@@ -72,48 +72,51 @@ KSpreadreplace::KSpreadreplace( KSpreadView* parent, const char* name,const QPoi
   m_pClose = bb->addButton( i18n( "Close" ) );
   bb->layout();
   lay1->addWidget( bb);
+  
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
+}
 
+void KSpreadReplaceDlg::slotOk()
+{
+    // Search == Replace ?
+    if ( l_replace->text() == l_find->text() )
+    {
+	accept();
+	return;
+    }
+    
+    // Nothing to find ?
+    if ( l_find->text().isEmpty() )
+    {
+	 KMessageBox::error( this, i18n("You must enter some text to search for.") );
+	 return;
+    }
+    
+    // Do the replacement.
+    if( !( m_pView->activeTable()->replace( marker,l_find->text(),
+					    l_replace->text(),
+					    sensitive->isChecked(),
+					    wholeWordOnly->isChecked() ) ) )
+    {
+	KMessageBox::information( this, i18n("No text was replaced.") );
+    }
+
+    // Refresh the editWidget
+    KSpreadCell *cell = m_pView->activeTable()->cellAt( m_pView->canvasWidget()->markerColumn(),
+							m_pView->canvasWidget()->markerRow() );
+    if ( cell->text() != 0L )
+	m_pView->editWidget()->setText( cell->text() );
+    else
+	m_pView->editWidget()->setText( "" );
+
+    accept();
 }
 
 
-void KSpreadreplace::slotOk()
+void KSpreadReplaceDlg::slotClose()
 {
-if(l_replace->text()==l_find->text())
-	{
-	KMessageBox::error( this, i18n("Text find and text replace are same") );
-	l_find->setText("");
-	l_replace->setText("");
-	}
-else if(l_replace->text().isEmpty() || l_find->text().isEmpty())
-	{
-	 KMessageBox::error( this, i18n("A Qlineedit is empty") );
-	}
-else
-	{
-	if(!(m_pView->activeTable()->replace( marker,l_find->text(),l_replace->text(),sensitive->isChecked(),wholeWordOnly->isChecked())))
-		{
-		 KMessageBox::error( this, i18n("Not any text replaces") );
-	        }
-	 else
-	 	{
-		//refresh editWidget
-		KSpreadCell *cell = m_pView->activeTable()->cellAt( m_pView->canvasWidget()->markerColumn(), m_pView->canvasWidget()->markerRow() );
-		if ( cell->text() != 0L )
-			m_pView->editWidget()->setText( cell->text() );
-		 else
-			m_pView->editWidget()->setText( "" );
-
-		accept();
-		}
-	}
-}
-
-
-void KSpreadreplace::slotClose()
-{
-reject();
+    reject();
 }
 
 #include "kspread_dlg_replace.moc"

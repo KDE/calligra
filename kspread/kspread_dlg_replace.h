@@ -32,11 +32,11 @@ class KSpreadView;
 class KSpreadTable;
 class KSpreadCell;
 
-class KSpreadreplace : public QDialog
+class KSpreadReplaceDlg : public QDialog
 {
   Q_OBJECT
 public:
-  KSpreadreplace( KSpreadView* parent, const char* name,const QPoint &_marker );
+  KSpreadReplaceDlg( KSpreadView* parent, const char* name,const QPoint &_marker );
 
 public slots:
   void slotOk();

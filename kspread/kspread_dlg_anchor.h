@@ -6,17 +6,17 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 #ifndef __kspread_dlg_anchor__
 #define __kspread_dlg_anchor__
@@ -31,28 +31,27 @@ class KSpreadView;
 class KSpreadTable;
 class KSpreadCell;
 
-class KSpreadanchor : public QDialog
+class KSpreadLinkDlg : public QDialog
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
-  KSpreadanchor( KSpreadView* parent, const char* name,const QPoint &_marker );
-  QString create_anchor();
+    KSpreadLinkDlg( KSpreadView* parent, const char* name );
+
 public slots:
-  void slotOk();
-  void slotClose();
+    void slotOk();
+    void slotClose();
 
-protected:
+private:
+    QString createLink();
 
-  KSpreadView* m_pView;
-  
-  QLineEdit* text;
-  QLineEdit* l_cell;
-  QPushButton* m_pOk;
-  QPushButton* m_pClose;
-  QPoint  marker;
-  QCheckBox *bold;
-  QCheckBox *italic;
+    KSpreadView* m_pView;
 
+    QLineEdit* text;
+    QLineEdit* l_cell;
+    QPushButton* m_pOk;
+    QPushButton* m_pClose;
+    QCheckBox *bold;
+    QCheckBox *italic;
 };
 
 #endif

@@ -33,7 +33,7 @@
 #include <kmessagebox.h>
 #include <knumvalidator.h>
 
-KSpreadseries::KSpreadseries( KSpreadView* parent, const char* name,const QPoint &_marker)
+KSpreadSeriesDlg::KSpreadSeriesDlg( KSpreadView* parent, const char* name,const QPoint &_marker)
 	: QDialog( parent, name,TRUE )
 {
   m_pView = parent;
@@ -127,7 +127,7 @@ KSpreadseries::KSpreadseries( KSpreadView* parent, const char* name,const QPoint
 }
 
 
-void KSpreadseries::slotOk()
+void KSpreadSeriesDlg::slotOk()
 {
 
 Series mode=Column;
@@ -173,7 +173,7 @@ else
 }
 
 
-void KSpreadseries::slotClose()
+void KSpreadSeriesDlg::slotClose()
 {
 reject();
 }

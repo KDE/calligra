@@ -30,11 +30,11 @@ class KSpreadView;
 class KSpreadTable;
 class KSpreadCell;
 
-class KSpreadgoto : public QDialog
+class KSpreadGotoDlg : public QDialog
 {
   Q_OBJECT
 public:
-  KSpreadgoto( KSpreadView* parent, const char* name);
+  KSpreadGotoDlg( KSpreadView* parent, const char* name);
 
 public slots:
   void slotOk();

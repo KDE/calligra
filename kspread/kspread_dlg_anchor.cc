@@ -32,16 +32,17 @@
 #include <kbuttonbox.h>
 #include <kmessagebox.h>
 
-KSpreadanchor::KSpreadanchor( KSpreadView* parent, const char* name,const QPoint &_marker)
-	: QDialog( parent, name,TRUE )
+KSpreadLinkDlg::KSpreadLinkDlg( KSpreadView* parent, const char* name )
+	: QDialog( parent, name, TRUE )
 {
   m_pView = parent;
-  marker= _marker;
-  setCaption( i18n("Create anchor") );
+
+  setCaption( i18n("Create Hyperlink") );
+
   QVBoxLayout *lay1 = new QVBoxLayout( this );
   lay1->setMargin( 5 );
   lay1->setSpacing( 10 );
-  QVBoxLayout *lay2 = new QVBoxLayout( lay1); 
+  QVBoxLayout *lay2 = new QVBoxLayout( lay1);
   lay2->setSpacing( 5 );
 
   QLabel* tmpQLabel;
@@ -64,11 +65,11 @@ KSpreadanchor::KSpreadanchor( KSpreadView* parent, const char* name,const QPoint
   bold=new QCheckBox(i18n("Bold"),this);
 
   lay2->addWidget(bold);
-  
+
   italic=new QCheckBox(i18n("Italic"),this);
 
   lay2->addWidget(italic);
-  
+
   text->setFocus();
   KButtonBox *bb = new KButtonBox( this );
   bb->addStretch();
@@ -79,77 +80,66 @@ KSpreadanchor::KSpreadanchor( KSpreadView* parent, const char* name,const QPoint
   lay2->addWidget( bb);
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
-
 }
 
-
-void KSpreadanchor::slotOk()
+void KSpreadLinkDlg::slotOk()
 {
-KSpreadCell *cell = m_pView->activeTable()->cellAt( m_pView->canvasWidget()->markerColumn(), m_pView->canvasWidget()->markerRow() );
-if(l_cell->text().isEmpty()||text->text().isEmpty())
-	{
+    KSpreadCell *cell = m_pView->activeTable()->cellAt( m_pView->canvasWidget()->markerColumn(),
+							m_pView->canvasWidget()->markerRow() );
+    if( l_cell->text().isEmpty() || text->text().isEmpty() )
+    {
 	KMessageBox::error( this, i18n("Area Text or cell is empty!") );
+	return;
+    }
+    else
+    {
+	if( !cell->isDefault() )
+        {
+	    int ret = KMessageBox::warningYesNo( this, i18n("Cell is not empty.\nDo you want to continue?"));
+	    if ( ret != 3 )
+		reject();
 	}
-else if(!cell->isDefault())
-	{
-	int ret = KMessageBox::warningYesNo( this, i18n("Cell is not empty.\nDo you want to continue?"));
- 	if ( ret == 3 )
- 		{
- 		QString tmp;
- 		tmp=create_anchor();
- 		m_pView->canvasWidget()->setFocus();
-  		m_pView->setText( tmp );
-		m_pView->editWidget()->setText( tmp );
-		accept();
- 		}
- 	else
- 		{
- 		 accept();
-                }
-    	}
-
-else
-	{
+	
 	//refresh editWidget
 	QString tmp;
-	tmp=create_anchor();
+	tmp = createLink();
 
  	m_pView->canvasWidget()->setFocus();
   	m_pView->setText( tmp );
  	m_pView->editWidget()->setText( tmp );
 	accept();
-
-	}
+    }
 }
 
-QString KSpreadanchor::create_anchor()
+QString KSpreadLinkDlg::createLink()
 {
-QString end_anchor;
-QString anchor;
-anchor="!<a href=\""+m_pView->activeTable()->tableName()+"!"+l_cell->text().upper()+"\""+">";
-if(bold->isChecked()&&!italic->isChecked())
-	{
-	anchor+="<b>"+text->text()+"</b></a>";
-	}
-else if (!bold->isChecked()&&italic->isChecked())
-	{
-	anchor+="<i>"+text->text()+"</i></a>";
-	}
-else if(bold->isChecked()&&italic->isChecked())
-	{
-	anchor+="<i><b>"+text->text()+"</b></i></a>";
-	}
-else
-	{
-	anchor+=text->text()+"</a>";
-	}
+    QString end_link;
+    QString link;
+    link = "!<a href=\""+m_pView->activeTable()->tableName()+"!"+l_cell->text().upper()+"\""+">";
 
-return anchor;
+    if(bold->isChecked()&&!italic->isChecked())
+    {
+	link+="<b>"+text->text()+"</b></a>";
+    }
+    else if (!bold->isChecked()&&italic->isChecked())
+    {
+	link+="<i>"+text->text()+"</i></a>";
+    }
+    else if(bold->isChecked()&&italic->isChecked())
+    {
+	link+="<i><b>"+text->text()+"</b></i></a>";
+    }
+    else
+    {
+	link+=text->text()+"</a>";
+    }
+
+    return link;
 }
 
-void KSpreadanchor::slotClose()
+void KSpreadLinkDlg::slotClose()
 {
-reject();
+    reject();
 }
 
 
