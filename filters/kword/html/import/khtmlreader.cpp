@@ -53,7 +53,9 @@ bool KHTMLReader::filter(KURL url) {
 
 	_html->view()->resize(600,530);
 	_html->setAutoloadImages(false);
-
+	_html->setJScriptEnabled(false);
+	_html->setPluginsEnabled(false);
+	_html->setJavaEnabled(false);
 	if (_html->openURL(url) == false) {
 		qWarning("openURL returned false");
 		return false;
