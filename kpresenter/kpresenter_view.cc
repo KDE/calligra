@@ -3348,7 +3348,7 @@ void KPresenterView::setupActions()
                                        this, SLOT( flipVertical() ),
                                        actionCollection(), "vertical_flip" );
 
-    actionDuplicateObj = new KAction( i18n( "Duplicate Object" ), 0,
+    actionDuplicateObj = new KAction( i18n( "Duplicate Object..." ), 0,
                                        this, SLOT( duplicateObj() ),
                                        actionCollection(), "duplicate_obj" );
 

@@ -205,7 +205,6 @@ void KPrPage::pasteObjs( const QByteArray & data,int nbCopy, double angle, doubl
                 delete store;
                 return;
             }
-            kdDebug() <<"paste object content !"<< domDoc.toCString() << endl;
             QDomElement topElem = domDoc.documentElement();
 
             for ( int i = 0 ; i < nbCopy ; i++ )
@@ -223,9 +222,14 @@ void KPrPage::pasteObjs( const QByteArray & data,int nbCopy, double angle, doubl
 
             m_doc->loadPictureMap( topElem );
             store->close();
-            m_doc->loadImagesFromStore( store );
-            m_doc->insertEmbedded( store, topElem, macro, this );
-            //m_doc->completePasting();
+            int nbNewPartObject = -1;
+            int nbElementBefore = m_objectList.count();
+            for ( int i = 0 ; i < nbCopy ; i++ )
+            {
+                m_doc->insertEmbedded( store, topElem, macro, this );
+                if ( nbNewPartObject ==-1 )
+                    nbNewObject = nbNewObject + (m_objectList.count() - nbElementBefore);
+            }
         }
     }
     delete store;
