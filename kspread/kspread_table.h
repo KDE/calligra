@@ -801,8 +801,6 @@ public:
     void insertChart( const QRect& _geometry, KoDocumentEntry&, const QRect& _data );
     void changeChildGeometry( KSpreadChild *_child, const QRect& _geometry );
 
-    void update();
-
     const QColorGroup& colorGroup() { return m_pWidget->colorGroup(); }
 
     int id() { return m_id; }

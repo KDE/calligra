@@ -4962,18 +4962,6 @@ bool KSpreadTable::loadXML( const QDomElement& table )
   return true;
 }
 
-void KSpreadTable::update()
-{
-  kdDebug(36001) << "KSpreadTable::update()" << endl;
-  KSpreadCell* c = m_cells.firstCell();
-  for( ;c; c = c->nextCell() )
-  {
-      if ( c->isFormula() )
-          c->makeFormula();
-      //if ( c->calcDirtyFlag() )
-          c->update();
-  }
-}
 
 bool KSpreadTable::loadChildren( KoStore* _store )
 {

@@ -1511,6 +1511,8 @@ bool KSpreadCell::makeFormula()
   if ( m_pCode )
     delete m_pCode;
 
+  m_lstDepends.clear();
+
   KSContext context;
 
   // We have to transform the numerical values back into a non-localized form,
@@ -1669,6 +1671,11 @@ bool KSpreadCell::calc( bool _makedepend )
     }
   }
   //  kdDebug(36002) << util_cellName( m_iColumn, m_iRow ) << " calc() Now calculating." << endl;
+
+  if (m_pCode == NULL)
+  {
+    makeFormula();
+  }
 
   KSContext& context = m_pTable->doc()->context();
   if ( !m_pCode || !m_pTable->doc()->interpreter()->evaluate( context, m_pCode, m_pTable ) )
@@ -3207,16 +3214,17 @@ void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
   m_bError = false;
   m_strText = _text;
 
-  if (updateDepends)
-    m_lstDepends.clear();
-
   // Free all content data
   if ( m_pQML )
+  {
     delete m_pQML;
-  m_pQML = 0;
-  if ( isFormula() )
-    clearFormula();
+    m_pQML = NULL;
+  }
 
+  if ( isFormula() )
+  {
+    clearFormula();
+  }
   /**
    * A real formula "=A1+A2*3" was entered.
    */
@@ -3227,8 +3235,12 @@ void KSpreadCell::setDisplayText( const QString& _text, bool updateDepends )
     m_content = Formula;
 
     if ( !m_pTable->isLoading() )
-        if ( !makeFormula() )
-            kdError(36002) << "ERROR: Syntax ERROR" << endl;
+    {
+      if ( !makeFormula() )
+      {
+	kdError(36002) << "ERROR: Syntax ERROR" << endl;
+      }
+    }
   }
   /**
    * QML

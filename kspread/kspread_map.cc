@@ -147,7 +147,7 @@ void KSpreadMap::update()
 {
   QPtrListIterator<KSpreadTable> it( m_lstTables );
   for( ; it.current(); ++it )
-    it.current()->update();
+    it.current()->calc();
 }
 
 KSpreadTable* KSpreadMap::findTable( const QString & _name )
