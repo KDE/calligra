@@ -47,7 +47,7 @@ KWDeleteDia::KWDeleteDia( QWidget *parent, const char *name, KWTableFrameSet *_t
     m_toRemove.clear();
 
     setupTab1();
-    setButtonOK( KGuiItem( 
+    setButtonOK( KGuiItem(
         i18n("&Delete"), type == ROW ?
     	i18n("Delete the row from the table.") :
     	i18n("Delete the column from the table.")) );
@@ -82,7 +82,7 @@ void KWDeleteDia::setupTab1()
         rowList += QString::number(val+1);
         m_toRemove.push_back(val);
     }
-    int count = m_toRemove.count();
+    unsigned int count = m_toRemove.count();
     Q_ASSERT(count > 0);
 
     QString message;
