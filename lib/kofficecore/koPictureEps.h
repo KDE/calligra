@@ -95,6 +95,8 @@ protected:
     QImage scaleWithGhostScript( const QSize& size, const int resolutionx, const int resolutiony );
     bool extractPostScriptStream( void );
 
+private:
+    int tryScaleWithGhostScript(QImage &image, const QSize& size, const int resolutionx, const int resolutiony, const char* device );
 
 private:
     QByteArray m_rawData;

@@ -23,7 +23,7 @@
 
 #include <qbuffer.h>
 #include <qpainter.h>
-#include <qpaintdevicemetrics.h> 
+#include <qpaintdevicemetrics.h>
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qregexp.h>
@@ -71,23 +71,39 @@ bool KoPictureEps::isNull(void) const
 }
 
 QImage KoPictureEps::scaleWithGhostScript(const QSize& size, const int resolutionx, const int resolutiony )
-// Based on the code of the file kdelibs/kimgio/eps.cpp
 {
-    kdDebug(30003) << "Sampling with GhostScript! (in KoPictureEps::scaleWithGhostScript)" << endl;
-    
     if (!m_boundingBox.width() || !m_boundingBox.height())
     {
         kdDebug(30003) << "EPS image has a null size! (in KoPictureEps::scaleWithGhostScript)" << endl;
         return QImage();
     }
 
+    // PNG16 is better, but PPM is more widely available -> use ppm if png16m failed
+    QImage img;
+    int ret = tryScaleWithGhostScript(img, size, resolutionx, resolutiony, "png16m");
+    if ( ret == -1 )
+    {
+        ret = tryScaleWithGhostScript(img, size, resolutionx, resolutiony, "ppm");
+        if ( ret == -1 )
+            kdError(30003) << "Image from GhostScript cannot be loaded (in KoPictureEps::scaleWithGhostScript)" << endl;
+    }
+    return img;
+}
+
+// Helper method for scaleWithGhostScript. Returns 1 on success, 0 on error, -1 if nothing generated
+// (in which case another 'output device' can be tried)
+int KoPictureEps::tryScaleWithGhostScript(QImage &image, const QSize& size, const int resolutionx, const int resolutiony, const char* device )
+// Based on the code of the file kdelibs/kimgio/eps.cpp
+{
+    kdDebug(30003) << "Sampling with GhostScript! (in KoPictureEps::tryScaleWithGhostScript)" << endl;
+
     KTempFile tmpFile;
     tmpFile.setAutoDelete(true);
 
     if ( tmpFile.status() )
     {
-        kdError(30003) << "No KTempFile! (in KoPictureEps::scaleWithGhostScript)" << endl;
-        return QImage();
+        kdError(30003) << "No KTempFile! (in KoPictureEps::tryScaleWithGhostScript)" << endl;
+        return 0; // error
     }
 
     const int wantedWidth = size.width();
@@ -115,9 +131,10 @@ QImage KoPictureEps::scaleWithGhostScript(const QSize& size, const int resolutio
         cmdBuf += QString::number( resolutiony );
 #endif
     }
-    
-    cmdBuf += " -dSAFER -dPARANOIDSAFER -dNOPAUSE -sDEVICE=png16m "; // Device was formally ppm
-    //cmdBuf += "-c 255 255 255 setrgbcolor fill 0 0 0 setrgbcolor";
+
+    cmdBuf += " -dSAFER -dPARANOIDSAFER -dNOPAUSE -sDEVICE=";
+    cmdBuf += device;
+    //cmdBuf += " -c 255 255 255 setrgbcolor fill 0 0 0 setrgbcolor";
     cmdBuf += " -";
     cmdBuf += " -c showpage quit";
 
@@ -127,8 +144,8 @@ QImage KoPictureEps::scaleWithGhostScript(const QSize& size, const int resolutio
 
     if ( ghostfd == 0 )
     {
-        kdError(30003) << "No connection to GhostScript (in KoPictureEps::scaleWithGhostScript)" << endl;
-        return QImage();
+        kdError(30003) << "No connection to GhostScript (in KoPictureEps::tryScaleWithGhostScript)" << endl;
+        return 0; // error
     }
 
     fprintf (ghostfd, "\n%d %d translate\n", -qRound(m_boundingBox.left()*xScale), -qRound(m_boundingBox.top()*yScale));
@@ -141,20 +158,19 @@ QImage KoPictureEps::scaleWithGhostScript(const QSize& size, const int resolutio
     pclose ( ghostfd );
 
     // load image
-    QImage image;
     if( !image.load (tmpFile.name()) )
     {
-        kdError(30003) << "Image from GhostScript cannot be loaded (in KoPictureEps::scaleWithGhostScript)" << endl;
-        return QImage();
+        // It failed - maybe the device isn't supported by gs
+        return -1;
     }
     if ( image.size() != size ) // this can happen due to rounding problems
     {
-        //kdDebug() << "fixing size to " << size.width() << "x" << size.height()
+        //kdDebug(30003) << "fixing size to " << size.width() << "x" << size.height()
         //          << " (was " << image.width() << "x" << image.height() << ")" << endl;
         image = image.scale( size ); // hmm, smoothScale instead?
     }
     kdDebug(30003) << "Image parameters: " << image.width() << "x" << image.height() << "x" << image.depth() << endl;
-    return image;
+    return 1; // success
 }
 
 void KoPictureEps::scaleAndCreatePixmap(const QSize& size, bool fastMode, const int resolutionx, const int resolutiony )
@@ -199,7 +215,7 @@ void KoPictureEps::scaleAndCreatePixmap(const QSize& size, bool fastMode, const 
         QApplication::restoreOverrideCursor();
         m_cacheIsInFastMode=false;
         m_cachedSize=size;
-        
+
         kdDebug(30003) << "Time: " << (time.elapsed()/1000.0) << " s" << endl;
     }
     kdDebug(30003) << "New size: " << size << endl;
@@ -212,7 +228,7 @@ void KoPictureEps::draw(QPainter& painter, int x, int y, int width, int height, 
 
     QSize screenSize( width, height );
     //kdDebug() << "KoPictureEps::draw screenSize=" << screenSize.width() << "x" << screenSize.height() << endl;
-    
+
     QPaintDeviceMetrics metrics (painter.device());
     kdDebug(30003) << "Metrics: X: " << metrics.logicalDpiX() << " x Y: " << metrics.logicalDpiX() << " (in KoPictureEps::draw)" << endl;
 
@@ -263,7 +279,7 @@ bool KoPictureEps::extractPostScriptStream( void )
 
 bool KoPictureEps::load(const QByteArray& array, const QString& /* extension */ )
 {
-    
+
     kdDebug(30003) << "KoPictureEps::load" << endl;
     // First, read the raw data
     m_rawData=array;
@@ -312,10 +328,10 @@ bool KoPictureEps::load(const QByteArray& array, const QString& /* extension */ 
     QRegExp exp("([0-9]+\\.?[0-9]*)\\s([0-9]+\\.?[0-9]*)\\s([0-9]+\\.?[0-9]*)\\s([0-9]+\\.?[0-9]*)");
     exp.search(lineBox);
     kdDebug(30003) << "Reg. Exp. Found: " << exp.capturedTexts() << endl;
-    rect.setLeft(exp.cap(1).toInt());
-    rect.setTop(exp.cap(2).toInt());
-    rect.setRight(exp.cap(3).toInt());
-    rect.setBottom(exp.cap(4).toInt());
+    rect.setLeft((int)exp.cap(1).toDouble());
+    rect.setTop((int)exp.cap(2).toDouble());
+    rect.setRight((int)exp.cap(3).toDouble());
+    rect.setBottom((int)exp.cap(4).toDouble());
     m_boundingBox=rect;
     m_originalSize=rect.size();
     kdDebug(30003) << "Rect: " << rect << " Size: "  << m_originalSize << endl;
