@@ -224,7 +224,7 @@ EpsExport::visitVSegmentList( VSegmentList& segmentList )
 					itr.current()->knot2().y() << " " <<
 					"m\n";
 			break;
-			case segment_end:
+			default:
 			break;
 		}
 	}

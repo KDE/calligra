@@ -197,7 +197,7 @@ SvgExport::visitVSegmentList( VSegmentList& segmentList )
 					itr.current()->knot2().x() << " " <<
 					itr.current()->knot2().y();
 			break;
-			case segment_end:
+			default:
 			break;
 		}
 	}
