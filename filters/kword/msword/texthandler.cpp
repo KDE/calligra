@@ -53,7 +53,6 @@ wvWare::U8 KWordReplacementHandler::nonRequiredHyphen()
 
 KWordTextHandler::KWordTextHandler( wvWare::SharedPtr<wvWare::Parser> parser )
     : m_parser( parser ), m_sectionNumber( 0 ), m_footNoteNumber( 0 ), m_endNoteNumber( 0 ),
-      m_previousOutlineLSID( 0 ), m_previousEnumLSID( 0 ),
       m_currentStyle( 0L ), m_index( 0 ),
       m_currentTable( 0L ),
       m_bInParagraph( false ),
@@ -778,9 +777,7 @@ void KWordTextHandler::writeCounter( QDomElement& parentElement, const wvWare::P
             kdWarning() << "Not supported: counter text without the depth in it:" << Conversion::string(text).string() << endl;
         }
 
-        if ( listInfo->startAtOverridden() ||
-             ( m_previousOutlineLSID != 0 && m_previousOutlineLSID != listInfo->lsid() ) ||
-             ( m_previousEnumLSID != 0 && m_previousEnumLSID != listInfo->lsid() ) )
+        if ( listInfo->startAtOverridden() )
             counterElement.setAttribute( "restart", "true" );
 
         // listInfo->alignment() is not supported in KWord
@@ -788,10 +785,6 @@ void KWordTextHandler::writeCounter( QDomElement& parentElement, const wvWare::P
         // listInfo->notRestarted() [by higher level of lists] not supported
         // listInfo->followingchar() ignored, it's always a space in KWord currently
     }
-    if ( numberingType == 1 )
-        m_previousOutlineLSID = listInfo->lsid();
-    else
-        m_previousEnumLSID = listInfo->lsid();
     counterElement.setAttribute( "numberingtype", numberingType );
     parentElement.appendChild( counterElement );
 }
