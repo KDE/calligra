@@ -38,6 +38,7 @@
 #include <kedittoolbar.h>
 #include <kdeversion.h>
 #include <kglobalsettings.h>
+#include <kuser.h>
 
 #include "kexibrowser.h"
 #include "kexiactionproxy.h"
@@ -59,7 +60,6 @@
 #include "startup/KexiNewProjectWizard.h"
 #include "startup/KexiStartup.h"
 #include "kexicontexthelp.h"
-#include <unistd.h>
 
 typedef QIntDict<KexiDialogBase> KexiDialogDict;
 
@@ -353,7 +353,7 @@ void KexiMainWindow::startup(KexiProjectData *projectData)
 			conndata->name = "Local pgsql connection";
 			conndata->driverName = "postgresql";
 			conndata->hostName = "localhost"; // -- default //"host.net";
-			conndata->userName = getlogin(); //-- temporary e.g."jarek"
+			conndata->userName = KUser().loginName(); //-- temporary e.g."jarek"
 		Kexi::connset().addConnectionData(conndata);
 
 		//some recent projects data
