@@ -200,6 +200,7 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		QString m_origCaption; //helper
 		KexiDB::SchemaData* m_schemaData;
 //		bool m_neverSaved : 1; //!< true, if this dialog's contents were never saved 
+		bool m_destroying : 1; //!< true after entering to the dctor
 
 		friend class KexiMainWindow;
 //		friend class KexiMainWindowImpl;

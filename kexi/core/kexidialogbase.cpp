@@ -42,6 +42,7 @@ KexiDialogBase::KexiDialogBase(KexiMainWindow *parent, const QString &caption)
  , m_isRegistered(false)
  , m_origCaption(caption)
  , m_schemaData(0)
+ , m_destroying(false)
 // , m_neverSaved(false)
 {
 	m_supportedViewModes = 0; //will be set by KexiPart
@@ -62,10 +63,13 @@ KexiDialogBase::KexiDialogBase(KexiMainWindow *parent, const QString &caption)
 
 KexiDialogBase::~KexiDialogBase()
 {
+	m_destroying = true;
 }
 
 KexiViewBase *KexiDialogBase::selectedView() const
 {
+	if (m_destroying)
+		return 0;
 	return static_cast<KexiViewBase*>(m_stack->visibleWidget());
 }
 
@@ -87,7 +91,7 @@ void KexiDialogBase::addView(KexiViewBase *view, int mode)
 
 QSize KexiDialogBase::minimumSizeHint() const
 {
-	QWidget *v = m_stack->visibleWidget();
+	KexiViewBase *v = selectedView();
 	if (!v)
 		return KMdiChildView::minimumSizeHint();
 	return v->minimumSizeHint() + QSize(0, mdiParent() ? mdiParent()->captionHeight() : 0);

@@ -322,9 +322,16 @@ CC_MAIL: dkite@shaw.ca
 
 2004-03-11
 Main Window
-	-fix: object's name and caption enteredy by user is used to create this object
+	-fix: object's name and caption entered by user is used to create this object
+	-brand new objects have changed part item id --this is updated in main window's
+	  structs as well
+	-in removeObject(): if object's dialog is opened -it's quietly closed before removing
+	-added check/hack to avoid inf. recursion between removeObject() and closeDialog()
 Kexi Dialogs
 	-'neverSaved' flag is cleared on first successful saving
+	-active view is 0 on its parent dialog destruction
+Alter Table Dialog
+	-'name' and 'description' properties are updated on change
 
 2004-03-10
 Table View
