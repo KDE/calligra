@@ -20,16 +20,17 @@
 **
 */
 
-#ifndef kword_latex_header
-#define kword_latex_header
+#ifndef __KWORD_HEADER_H__
+#define __KWORD_HEADER_H__
 
 #include <qtextstream.h>
-#include "xmlparse.h"
+#include "xmlparser.h"
 
 enum _TFormat
 {
 	TF_A3,
 	TF_A4,
+	TF_A5,
 	TF_USLETTER,
 	TF_USLEGAL,
 	TF_SCREEN,
@@ -46,29 +47,69 @@ enum _TUnit
 	TU_INCH
 };
 
+enum _TOrient
+{
+	TO_PORTRAIT,
+	TO_LANDSCAPE
+};
+
+enum _TColonne
+{
+	TC_1,
+	TC_2,
+	TC_MORE
+};
+
 typedef enum _TFormat TFormat;
 typedef enum _TUnit TUnit;
+typedef enum _TOrient TOrient;
+typedef enum _TColonne TColonne;
 
-
-class Header
+class Header: public XmlParser
 {
 	// PAPER
-	TFormat _format;
-	double _largeur, _hauteur;
-	double _margeGauche, _margeDroite, _margeHaut, _margeBas;
+	TFormat  _format;
+	TOrient  _orientation;
+	TColonne _colonne;
+	double   _largeur,
+		 _hauteur;
+	double   _margeGauche, 
+		 _margeDroite,
+		 _margeHaut,
+		 _margeBas;
 	
 	// ATTRIBUTES
-	TUnit _unite;
+	TUnit    _unite;
+	bool     _hasHeader;
+	bool     _hasFooter;
 
 	// FOOTNOTEMGR
 
 	public:
 		Header();
+
+		virtual ~Header();
+
+		TFormat  getFormat     ()       { return _format;      }
+		TOrient  getOrientation()       { return _orientation; }
+		TColonne getColumns    ()       { return _colonne;     }
+		bool  hasHeader        () const { return _hasHeader; }
+		bool  hasFooter        () const { return _hasFooter; }
+
+		void setFormat     (TFormat f)  { _format      = f;            }
+		void setFormat     (int f)      { _format      = (TFormat) f;  }
+		void setOrientation(TOrient o)  { _orientation = o;            }
+		void setOrientation(int o)      { _orientation = (TOrient) o;  }
+		void setColumns    (TColonne c) { _colonne     = c;            }
+		void setColumns    (int c)      { _colonne     = (TColonne) c; }
+		void setUnit       (int u)      { _unite       = (TUnit) u;    }
+
+		void analysePaper    (const Markup *);
+		void analyseAttributs(const Markup *);
+
 		void generate(QTextStream &);
-		void setPaper(Markup *);
-		void setAttributs(Markup *);
 
 	private:
 };
 
-#endif
+#endif /* __KWORD_HEADER_H__ */

@@ -1,34 +1,32 @@
-/* 
- * @memo Projet d'Infographie : Fichier en-tête de la classe Groupe.
- * 
- * @name groupe.hxx
- * Ce fichier contient les déclarations de la classe Groupe développée
- * dans le cadre d'un projet d'infographie de 3e année.\\
- * Consulter la documentaion relative à Groupe.cxx pour obtenir de plus amples
- * informations sur l'implémentation.
- * @author Robert Jacolin
- * @version 0.0.1 \\
- * CREATION     : 15/12/2000 \\
- * MODIFICATION :                                      
- * @see Ellipse.hxx Droite.hxx Hyperbole.hxx Cercle.hxx Figure.hxx
- */
-
-#ifndef __ELEMENTT_H__
-#define __ELEMENTT_H__
+/*
+** Header file for inclusion with kword_xml2latex.c
+**
+** Copyright (C) 2000 Robert JACOLIN
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Library General Public
+** License as published by the Free Software Foundation; either
+** version 2 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Library General Public License for more details.
+**
+** To receive a copy of the GNU Library General Public License, write to the
+** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+** Boston, MA  02111-1307, USA.
+**
+*/
+#ifndef __KWORD_ELEMENTT_H__
+#define __KWORD_ELEMENTT_H__
 
 #include "textzone.h"
 
-/**
-* La classe Groupe permet de manipuler un ensemble de figures quelconques.
-* Pour cela, il fournit un classe pour gérer un liste de figure (classe 
-* Groupe) ainsi qu'un itérateur (Groupe_Iterator).
-* La liste de figures peut etre vide. 
-* @memo Liste de figures, parcourt d'une liste de figures
-*/
 class ElementT
 {
-	TextZone*  _texte;         /* Pointeur sur l'element de donnee */
-	ElementT* _next;           /* Pointeur sur l'element suivant.  */
+	TextZone* _text;
+	ElementT* _next;
 
 	private:
 
@@ -36,48 +34,45 @@ class ElementT
 		
 	public:
 /**
- * @name Constructeurs
+ * @name Constructors
  */
 //@{
-	/// Constructeur par défaut
+	/// Default Constructor
 	ElementT() { 
-		_texte = 0;
-		_next  = 0;
+		_text = 0;
+		_next = 0;
 	}
-	/// Constructeur par recopie
+	/// Recopy Constructor
 	ElementT(ElementT * eltt) {
-		_texte = eltt->get_texte();
-		_next  = eltt->get_next();
+		_text = eltt->getText();
+		_next = eltt->getNext();
 	}
 //@}
 
 /**
- * @name Destructeurs
+ * @name Destructors
  */
 //@{
-	  /// Destructeur
-	virtual ~ElementT() {
-		rem_texte();
-		rem_next();
-	}
+	  /// Destructor
+	virtual ~ElementT();
 //@}
 
 /**
- * @name Accesseurs
+ * @name Accessors
  */
 //@{
-	TextZone* get_texte () const { return _texte; }
-	ElementT* get_next  () const { return _next;  }
+	TextZone* getText () const { return _text;  }
+	ElementT* getNext () const { return _next;  }
 //@}
 
 /**
- * @name Modifieurs
+ * @name Modifiors
  */
 //@{
-	void set_texte (const TextZone*);        /* Ajoute une figure à la fin */
-	void rem_texte ();                       /* Enleve la derniere ou      */
-	void set_next  (ElementT*);              /* la premiere figure.        */
-	void rem_next  ();
+	void setText (TextZone*);
+	void remText ();
+	void setNext (ElementT*);
+	void remNext ();
 //@}
 
 /**
@@ -88,12 +83,12 @@ class ElementT
 	ElementT& operator = (const ElementT &);
  //@}
 /**
- * ^name Fonctions de delegation
+ * @name Fonctions de delegation
  */
 //@{
 
 //@}
 };
 
-#endif /* __ELEMENTT_H__ */
+#endif /* __KWORD_ELEMENTT_H__ */
 

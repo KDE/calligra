@@ -1,59 +1,82 @@
 /*******************************************************/ 
-/* ELEMENTT.CXX                                        */
+/* ELEMENTT.CC                                         */
 /*******************************************************/
-/* Implémente les méthodes de l'objet ElementT         */
+/* Implement methods for ElementT object               */
 /* CREATION     : 16/12/2000                           */
 /* MODIFICATION :                                      */
 /*                                                     */
 /*******************************************************/
+/*
+** A program to convert the XML rendered by KWord into LATEX.
+**
+** Copyright (C) 2000 Robert JACOLIN
+**
+** This library is free software; you can redistribute it and/or
+** modify it under the terms of the GNU Library General Public
+** License as published by the Free Software Foundation; either
+** version 2 of the License, or (at your option) any later version.
+**
+** This library is distributed in the hope that it will be useful,
+** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+** Library General Public License for more details.
+**
+** To receive a copy of the GNU Library General Public License, write to the
+** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+** Boston, MA  02111-1307, USA.
+**
+*/
 
-/* EN-TETES */
+/* INCLUDES */
+#include <kdebug.h>
 #include "elementt.h"
 
-/* METHODES PRIVEES        */
+/* PROVATE METHODS         */
 
-/* METHODES PROTEGEES      */
+/* PROTECTED METHODS       */
 
-/* METHODES PUBLIQUES      */
+/* PUBLIC METHODS          */
 
-/* Constructeurs           */
+/* Constructors            */
 
-/* Destructeurs            */
-
-/* Accesseurs              */
-
-/* Modifieurs              */
-void ElementT::set_texte(const TextZone* text)
+/* Destructors             */
+ElementT::~ElementT()
 {
-	if(_texte == 0)
-		_texte = new TextZone;
-	_texte = (TextZone*)text;	
+	kdDebug() << "Destruction d'un elementT" << endl;
+	remText();
 }
 
-void ElementT::rem_texte()
+/* Accessors               */
+
+/* Modifiors               */
+void ElementT::setText(TextZone* text)
 {
-	delete _texte;
-	_texte = 0;
+	if(_text == 0)
+		_text = new TextZone;
+	_text = text;	
 }
 
-void ElementT::set_next(ElementT* next)
+void ElementT::remText()
+{
+	delete _text;
+	_text = 0;
+}
+
+void ElementT::setNext(ElementT* next)
 {
 	_next = next;
 }
 
-void ElementT::rem_next()
+void ElementT::remNext()
 {
 	delete _next;
 	_next = 0;
 }
 
-/* Operateurs              */
+/* Operators               */
 ElementT& ElementT::operator = (const ElementT & elt)
 {
-	_texte = elt.get_texte();
-	_next  = elt.get_next();
+	_text = elt.getText();
+	_next = elt.getNext();
 	return *this;
 }
-
-/* Fonctions de delegation */
-

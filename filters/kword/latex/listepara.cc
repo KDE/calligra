@@ -1,3 +1,8 @@
+
+/* BUGS : latex don't support alpha list with one command !!! the
+ * command generated doesn't exist :))))
+ */
+
 /*
 ** A program to convert the XML rendered by KWord into LATEX.
 **
@@ -19,25 +24,27 @@
 **
 */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/stat.h>
-#include <string.h>
-#include <kdebug.h>
-#include <iostream.h>
+#include <kdebug.h>		/* for kdDebug() stream */
 #include "listepara.h"
 
 ListPara::ListPara()
 {
-	cout << "create liste para vide" << endl;
-	_start = 0;
-	_end   = 0;
-	_size  = 0;
+	kdDebug() << "Create liste para empty" << endl;
+	_start  = 0;
+	_end    = 0;
+	_size   = 0;
+}
+
+ListPara::~ListPara()
+{
+	kdDebug() << "Destruction of a list of parag" << endl;
+	vider();
+	kdDebug() << "ok" << endl;
 }
 
 void ListPara::initialiser(Para *elt)
 {
-	cout << "initialisation liste para a " << elt << endl;
+	kdDebug() << "initialise a list of parag at " << elt << endl;
 	_end = _start = elt;
 }
 
@@ -50,128 +57,265 @@ void ListPara::add(Para *elt)
 	}
 	else
 	{
-		cout << "ajout d'un parag." << endl;
+		kdDebug() << "add a parag." << endl;
 		_end->setNext(elt);
-		_end = elt;
+		elt->setPrevious(_end);
+		_end  = elt;
 		_size = _size + 1;
 	}
 }
 
+void ListPara::rem()
+{
+	Para *first_saved = 0;
 
+	first_saved = _start;
+	_start      = _start->getNext();
+	delete first_saved;
+	_size  = _size - 1;
+}
+
+void ListPara::vider()
+{
+	while(_start != 0)
+	{
+		rem();
+	}
+}
+
+/***********************************************************/
 Para::Para()
 {
-	_texte   = 0;
-	_liste   = 0;
-	_suivant = 0;
+	_liste    = 0;
+	_next     = 0;
+	_previous = 0;
+}
+
+Para::~Para()
+{
+	kdDebug() << "Destruction of a parag." << endl;
+	if(_liste != 0)
+		delete _liste;
 }
 
 void Para::analyse(const Markup * balise_initiale)
 {
-	Token *savedToken;
-	Token *p;
+	Token* savedToken = 0;
+	Markup* balise    = 0;
 
-	// ON A UNE BALISE DE TYPE PARAGRAPH
-	Markup *balise;
+	// MARKUP TYPE :  PARAGRAPH
+
+	// Analyse of the parameters
+	kdDebug() << "ANALYSE A PARAGRAPH" << endl;
 	
-	// Analyse des paramètres
-	//analyse_param(balise_initiale);
-	cout << "ANALYSE D'UN PARAGRAPHE" << endl;
-	
-	// Analyse des balises filles
+	// Analyse of the children markups
 	savedToken = enterTokenChild(balise_initiale);
-	//PrintXml(savedToken, 2);
 	while((balise = getNextMarkup()) != 0)
 	{
 		if(strcmp(balise->token.zText, "TEXT")== 0)
 		{
-			//_texte = balise->pContent->zText;
-			//PrintXml(balise->pContent, 2);
-			for(p = balise->pContent; p; p = p->pNext)
+			for(Token *p = balise->pContent; p!= 0; p = p->pNext)
 			{
-				if(_texte == 0)
-					_texte = strdup(p->zText);
-				else
-					strcat(_texte, p->zText);
+				if(p->zText!= 0)
+				{
+					_texte += p->zText;
+				}
 			}
-			cout << "TEXTE : " << _texte << endl;
-			// 1. Creer un fils suivant le type 
-			// 2. elt.analyse(balise);
-			// 3. Ajouter l'Element dans une des listes
-			// switch(elt.getSection())
-			// {
-			// 	case TS_ENTETE: _enTete.add(elt);
-			// 		break;
-			// 	case TS_CORPS: _corps.add(elt);
-			// 		break;
-			// 	default: 
-			// }
+			kdDebug() << "TEXTE : " << _texte.latin1() << endl;
 		}
 		else if(strcmp(balise->token.zText, "FORMATS")== 0)
 		{
 			// IMPORTANT ==> police + style
-			cout << "FORMATS" << endl;
-			analyse_formats(balise);
+			kdDebug() << "FORMATS" << endl;
+			analyseFormats(balise);
 			
 		}
 		else if(strcmp(balise->token.zText, "LAYOUT")== 0)
 		{
+			kdDebug() << "LAYOUT" << endl;
+			analyseLayout(balise);
+			// Hey, it's a title : not use
+			// the format
+			if(isChapter())
+			{
+				TextZoneIter iter;
+				iter.setList(_liste);
+				while(!iter.isTerminate())
+				{
+					kdDebug() << "NOT USE FORMAT" << endl;
+					iter.getCourant()->notUseFormat();
+					iter.next();
+				}
+			}
 		}
 	}
-	cout << "FIN DE PARAGRAPHE" << endl;
-	setTokenCurrent(savedToken);
+	kdDebug() << "END OF PARAGRAPH" << endl;
 }
 
-void Para::analyse_formats(const Markup *balise_initiale)
+void Para::analyseFormats(const Markup *balise_initiale)
 {
-	Token *savedToken = 0;
-	Markup *balise = 0;
+	Token* savedToken = 0;
+	Markup* balise    = 0;
 
 	savedToken = enterTokenChild(balise_initiale);
 	while((balise = getNextMarkup()) != NULL)
 	{
 		TextZone *texte = new TextZone(_texte);
-		cout << "FORMAT" << endl;
 		if(strcmp(balise->token.zText, "FORMAT")== 0)
 		{
 			texte->analyse(balise);
-			cout << "ok" << endl;
+			// If it's the first element
 			if(_liste == 0)
 				_liste = new ListeTextZone;
-			_liste->add_last(texte);
+			// add the text
+			_liste->addLast(texte);
 		}
-		cout << "FIN FORMAT" << endl;
+		else
+			kdDebug() << " FORMAT FIELD UNKNOWN" << endl;
 	}
 	setTokenCurrent(savedToken);
-	cout << "FIN FORMATS" << endl;
 }
-
-/*void Para::analyse_param(const Markup *balise)
-{
-	
-}*/
 
 void Para::generate(QTextStream &out)
 {
-	//fprintf(out, "\\begin{document}\n");
-	// Parcourir les elements pour generer le fichier.
-	// Pour chaque entete - footnote
-	// _entete.genere(_outputFile);
-	// Pour chaque corps de texte
-	// _element.genere(_outputFile);
-	cout << "  GENERATION PARA" << endl;
+
+	kdDebug() << "  GENERATION PARA" << endl;
+	/* If a parag. have text :))) */
 	if(_liste != 0)
 	{
-		TextZoneIter iter(_liste);
-		cout << "  NB ZONE : " << _liste->get_size() << endl;
-		while(!iter.is_terminate())
+		/* If a parag. have a special format (begining) */
+		generateDebut(out);
+		setLastName();
+		setLastCounter();
+
+		TextZoneIter iter;
+		kdDebug() << "  NB ZONE : " << _liste->getSize() << endl;
+		iter.setList(_liste);
+		while(!iter.isTerminate())
 		{
-			iter.get_courant()->generate(out);
+			iter.getCourant()->generate(out);
 			iter.next();
 		}
+		/* id than above : a parag. have a special format. (end) */
+		generateFin(out);
 	}
-	out << endl;
-	cout << "PARA GENERATED" << endl;
-	//out << _texte << endl;
-	//fprintf(out, "%s\n", _texte);
+	kdDebug() << "PARA GENERATED" << endl;
 }
 
+void Para::generateDebut(QTextStream &out)
+{
+	/* if it's a chapter */
+	if(isChapter())
+	{
+		/* switch the type, the depth do*/
+		generateTitle(out);
+	}
+	else if(isList())
+	{
+		/* if it's a list */
+		if(_previous == 0 || !_previous->isList() ||
+			(_previous->isList() && _previous->getCounterDepth() < getCounterDepth()))
+		{
+			switch(getCounterType())
+			{
+				case STANDARD:
+					break;
+				case ARABIC:
+					   out << "\\begin{enumerate}" << endl;
+					break;
+				/*case ALPHA:
+					    out << "\\item ";
+					break;*/
+				case BULLET:
+					     out << "\\begin{itemize}" << endl;
+			}
+		}
+		out << "\\item ";
+	}
+	else
+	{
+		/* It's a parag. */
+		switch(getEnv())
+		{
+			case ENV_LEFT: out << "\\begin{flushleft}" << endl;
+				break;
+			case ENV_RIGHT: out << "\\begin{flushright}" << endl;
+				break;
+			case ENV_CENTER: out << "\\begin{center}" << endl;
+				break;
+			case ENV_NONE: /* Nothing to do */
+				break;
+		}
+	}
+}
+
+void Para::generateFin(QTextStream &out)
+{
+	/* Close a title of chapter */
+	if(isChapter())
+		out << "}" << endl;
+	else if(isList())
+	{
+		/* It's a list */
+		out << endl;
+		if(_next == 0 || !_next->isList() ||
+			(_next->isList() && _next->getCounterDepth() > getCounterDepth()))
+		{
+			/* but the next parag is not a same list */
+			switch(getCounterType())
+			{
+				case STANDARD: out << endl;
+					break;
+				case ARABIC: 
+					       out << "\\end{enumerate}" << endl;
+					break;
+				/*case ALPHA:
+					    out << "\\end{alphabetic}" << endl;
+					break;*/
+				case BULLET:
+					     out << "\\end{itemize}" << endl;
+			}
+		}
+	}
+	else
+	{
+		/* It's a parag. */
+		/* Close an environment */
+		out << endl;
+		switch(getEnv())
+		{
+			case ENV_LEFT: out << "\\end{flushleft}" << endl;
+				break;
+			case ENV_RIGHT: out << "\\end{flushright}" << endl;
+				break;
+			case ENV_CENTER: out << "\\end{center}" << endl;
+				break;
+			case ENV_NONE: /* Nothing to do */
+				break;
+		}
+	}
+}
+
+void Para::generateTitle(QTextStream &out)
+{
+	switch(getCounterDepth())
+	{
+		case 0:
+			out << "\\section{";
+			break;
+		case 1:
+			out << "\\subsection{";
+			break;
+		case 2:
+			out << "\\subsubsection{";
+			break;
+		case 3:
+			out << "\\paragraph{";
+			break;
+		case 4:
+			out << "\\subparagraph{";
+			break;
+		default:
+			out << "% section too deep" << endl;
+	}
+}

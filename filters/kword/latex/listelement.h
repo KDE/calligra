@@ -20,8 +20,8 @@
 **
 */
 
-#ifndef kword_listelement
-#define kword_listelement
+#ifndef __KWORD_LISTELEMENT_H__
+#define __KWORD_LISTELEMENT_H__
 
 #include "element.h"
 
@@ -32,6 +32,8 @@ class ListElement
 
 	public:
 		ListElement();
+		virtual ~ListElement();
+		
 		void initialiser(Element*);
 		void add(Element*);
 		Element* getFirst() const { return _start; }
@@ -48,52 +50,58 @@ class ElementIter {
 	
 	public:
 /**
- * @name Constructeurs
+ * @name Constructors
  */
 //@{
-	/// Constructeur par défaut
+	/// Default Constructor
 	ElementIter()               { _courant = 0;             }
-	/// Constructeur
-	ElementIter(ListElement l)  { _courant = l.getFirst();  }
-	/// Constructeur
-	ElementIter(ListElement *l) { _courant = l->getFirst(); }
+	/// Constructor
+	ElementIter(ListElement &l) { _courant = l.getFirst();  }
+	/// Constructor
+	ElementIter(ListElement *l) { 
+		if(l != 0)
+			_courant = l->getFirst();
+		else
+			_courant = 0;
+	}
 //@}
 
 /**
- * @name Destructeurs
+ * @name Destructors
  */
 //@{
-	  /// Destructeur
+	  /// Destructor
 	virtual ~ElementIter() { }
 //@}
 
 /**
- * @name Accesseurs
+ * @name Accessors
  */
 //@{	
 
-	Element* get_courant()  const { return _courant; }
-	bool     is_terminate() const { return (_courant == 0); }
+	Element* getCourant()  const { return _courant; }
+	bool     isTerminate() const { return (_courant == 0); }
 //@}
 
 /**
- * @name Modifieurs
+ * @name Modifiors
  */
 //@{
-	void next() { _courant = _courant->getNext(); }
+	void next()                  { _courant = _courant->getNext(); }
+	void setList(ListElement *l) { _courant = l->getFirst();       }
 //@}
 
 /**
- * @name Operateurs
+ * @name Operators
  */
 //@{
  //@}
 /**
- * @name Fonctions de delegation
+ * @name Functions de delegation
  */
 //@{
 
 //@}
 
 };
-#endif
+#endif /* __KWORD_LISTELEMENT_H__ */

@@ -23,9 +23,6 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <qtextcodec.h>
-#include <iostream.h>
-
-//void mainFunc(const char*,const char*);
 
 LATEXExport::LATEXExport(KoFilter *parent, const char *name) :
                      KoFilter(parent, name) {
@@ -44,7 +41,7 @@ const bool LATEXExport::filter(const QString &fileIn, const QString &fileOut,
         in.close();
         return false;
     }
-    // Lecture du fichier d'entree
+    // inout file Reading
     QCString buf( in.size() );
     int count = in.read( buf.data(), in.size() );
     if ( count != in.size() ) {
@@ -53,24 +50,17 @@ const bool LATEXExport::filter(const QString &fileIn, const QString &fileOut,
       return false;
     }
     in.close();
-
-    // Here comes the difficult part: choosing the charset to use for the
-    // HTML file.
-    // * Using the user's locale is stupid (someone can send me a czech document)
-    // * UTF 8 is the logical choice, but unicode fonts are still very much missing
-    // * TODO: ask the charset to use with a combobox in a filter dialog
+ 
     QCString charset( "utf-8" );
 
     int begin = buf.find( "<DOC" ); // skip <?...?>
 
-    // Conversion ==> /tmp/kword2latex
-    printf("LATEX FILTER --> BEGIN\n");
+    kdDebug() << "LATEX FILTER --> BEGIN" << endl;
     Xml2LatexParser LATEXParser(fileOut, (const char*) buf + begin, charset);
     LATEXParser.analyse();
-    cout << "---------- generate file -------------" << endl;
+    kdDebug() << "---------- generate file -------------" << endl;
     LATEXParser.generate();
-    printf("LATEX FILTER --> END\n");
-//mainFunc( (const char*)buf + begin, charset );
+    kdDebug() << "LATEX FILTER --> END" << endl;
 
     // Copie du fichier temporaire dans le fichier finale
     // It would certainly be more efficient if the filter was writing

@@ -19,20 +19,22 @@
 **
 */
 
-/*#include <stdio.h>
-#include <stdlib.h>
-#include <sys/stat.h>
-#include <string.h>*/
-#include <iostream.h>
-
 #include <kdebug.h>
 
 #include "document.h"
 #include "texte.h"
 
+/* CONSTRUCTORS */
 Document::Document()
 {
 }
+
+/* DESTRUCTORS */
+Document::~Document()
+{
+	kdDebug() << "Corps Destructor" << endl;
+}
+
 
 void Document::analyse(const Markup * balise_initiale)
 {
@@ -41,105 +43,154 @@ void Document::analyse(const Markup * balise_initiale)
 	setTokenCurrent(balise_initiale->pContent);
 	while((balise = getNextMarkup()) != 0)
 	{
-		cout << balise << endl;
-		cout << balise->token.zText << endl;
+		kdDebug() << balise << endl;
+		kdDebug() << balise->token.zText << endl;
 		if(strcmp(balise->token.zText, "FRAMESET")== 0)
 		{
-			//Element *elt = new Element;
-			Texte *elt = new Texte;
-			cout <<"ANALYSE D'UNE FRAMESET" << endl;
-			// 1. Creer un fils suivant le type 
-			//elt->analyse(balise);
-			//printf("%d\n", elt->getType());
-			// 2. Ajouter les parametres specifiques a la frame
-			//cout << elt->getType() << endl;
-			switch(get_type_frameset(balise))
+			Element *elt = 0;
+			kdDebug() <<"ANALYSE D'UNE FRAMESET" << endl;
+			switch(getTypeFrameset(balise))
 			{
-				case ST_AUCUN:
-					cout << "AUCUN" << endl;
+				case ST_AUCUN: 
+					kdDebug() << "AUCUN" << endl;
 					break;
 				case ST_IMAGE:
-					cout << "IMAGE" << endl;
-					// ((Image*) elt)->analyse(balise);
+					kdDebug() << "IMAGE" << endl;
+					// elt = new Image;
+					// elt->analyse(balise);
 					break;
-				case ST_TEXTE: //Texte *elt = new Texte;
-					cout << "TEXTE" << endl;
+				case ST_TEXTE: 
+					kdDebug() << "TEXTE" << endl;
+					elt = new Texte;
 					elt->analyse(balise);
 					break;
 				case ST_PARTS:
 					break;
-				default: cerr << "erreur " << elt->getType() << " " << ST_TEXTE << endl;
+				default:
+					kdDebug() << "erreur " << elt->getType() << " " << ST_TEXTE << endl;
 			}
 			
 			// 3. Ajouter l'Element dans une des listes
-			cout << "INFO : " << elt->getSection();
+			kdDebug() << "INFO : " << elt->getSection();
 			switch(elt->getSection())
 			{
-				case SS_ENTETE: cout << " ENTETE" << endl;
+				case SS_PIEDS: kdDebug() << "FOOTER" <<endl;
+					       _footer.add(elt);
+					       break;
+				case SS_ENTETE: kdDebug() << " HEADER" << endl;
 						_enTete.add(elt);
 					break;
 				case SS_CORPS: 	_corps.add(elt);
-						cout << " CORPS" << endl;
+						kdDebug() << " CORPS" << endl;
 					break;
-				default: cout << "INCONNU" << endl;
+				default: kdDebug() << "INCONNU" << endl;
 					break;
 			}
 		}
-		cout << "FIN D'ANALYSE DE FRAMESET" << endl;
+		kdDebug() << "FIN D'ANALYSE DE FRAMESET" << endl;
 	}
 	
 }
 
-SType Document::get_type_frameset(const Markup *balise)
+SType Document::getTypeFrameset(const Markup *balise)
 {
-	// <FRAMESET frameType="1" frameInfo="0" removable="0" visible="1"
-	// name="Supercadre 1">
-	Arg *arg;
+	Arg*  arg  = 0;
 	SType type = ST_AUCUN;
 
 	for(arg= balise->pArg; arg!= 0; arg= arg->pNext)
 	{
-		cout << "param : " << arg->zName << " " << arg->zValue << endl;
+		kdDebug() << "param : " << arg->zName << " " << arg->zValue << endl;
 		if(strcmp(arg->zName, "FRAMETYPE")== 0)
 		{
 			// A FINIR
-			cout << "TYPE : TEXTE" << endl;
+			kdDebug() << "TYPE : TEXTE" << endl;
 			type = ST_TEXTE;
 		}
 	}
-	cout << "FIN TYPE" << endl;
+	kdDebug() << "FIN TYPE" << endl;
 	return type;
 }
 
 void Document::generate(QTextStream &out)
 {
-	ElementIter iter1(_enTete);
-	ElementIter iter2(_corps);
+	ElementIter iter1;
+	ElementIter iter2;
+	ElementIter iter3;
+
+	kdDebug() << "DOC. GENERATION." << endl;
+	
+	// For each header
+	if(getHeader()->hasHeader())
+	{
+		kdDebug() << "header : " << _enTete.getSize() << endl;
+		iter1.setList(&_enTete);
+
+		while(!iter1.isTerminate())
+		{
+			generateTypeHeader(out, iter1.getCourant());
+			iter1.next();
+		}
+	}
+	
+	// For each footer
+	if(getHeader()->hasFooter())
+	{
+		kdDebug() << "footer : " << _enTete.getSize() << endl;
+		iter2.setList(&_footer);
+
+		while(!iter2.isTerminate())
+		{
+			generateTypeFooter(out, iter2.getCourant());
+			iter2.next();
+		}
+	}
+	if(getHeader()->hasHeader() || getHeader()->hasFooter())
+		out << "\\pagestyle{fancy}" << endl;
+
+	// Body
+	kdDebug() << endl << "body : " << _corps.getSize() << endl;
 
 	out << "\\begin{document}" << endl;
-	// Pour chaque entete - footnote
-	cout << "entete : " << _enTete.getSize() << endl;
-	while(!iter1.is_terminate())
-	{
-		cout << ".";
-		//iter1.get_courant()->generate(out);
-		cout << "\\";
-		iter1.next();
-		cout << iter1.get_courant() << endl;
-	}
-
-	cout << endl << "corps : " << _corps.getSize() << endl;
-	// Pour chaque corps d etexte
-	while(!iter2.is_terminate())
-	{
-		cout << "." << endl;
-		if(iter2.get_courant()->getType() == ST_TEXTE)
-		{
-			((Texte *) iter2.get_courant())->generate(out);
-		}
-		iter2.next();
-	}
-	cout << endl;
+	_corps.getFirst()->generate(out);
 	out << "\\end{document}" << endl;
 }
 
+void Document::generateTypeHeader(QTextStream &out, Element *header)
+{
+	out << "\\fancyhead[C";
+	switch(header->getInfo())
+	{
+		case SI_NONE:
+		case SI_FIRST:
+			break;
+		case SI_ODD:
+			out << "O";
+			break;
+		case SI_EVEN:
+			out << "E";
+			break;
+	}
+	out << "]{";
+	header->generate(out);
+	out << "}" << endl;
+}
+
+void Document::generateTypeFooter(QTextStream &out, Element *footer)
+{
+	out << "\\fancyfoot[C";
+	switch(footer->getInfo())
+	{
+		case SI_NONE:
+		case SI_FIRST:
+			break;
+		case SI_ODD:
+			out << "O";
+			break;
+		case SI_EVEN:
+			out << "E";
+			break;
+	}
+	out << "]{";
+	footer->generate(out);
+	out << "}" << endl;
+}

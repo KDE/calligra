@@ -1,5 +1,6 @@
+
 /*
-** A program to convert the XML rendered by KWord into LATEX.
+** Header file for inclusion with kword_xml2latex.c
 **
 ** Copyright (C) 2000 Robert JACOLIN
 **
@@ -19,46 +20,25 @@
 **
 */
 
-#include <kdebug.h>		/* for kdDebug stream */
-#include "listelement.h"
+#ifndef __KWORD_FRAME_H__
+#define __KWORD_FRAME_H__
 
-ListElement::ListElement()
+#include <qtextstream.h>
+#include "listepara.h"
+
+
+class Frame
 {
-	_start = 0;
-	_end   = 0;
-	_size  = 0;
-}
 
-ListElement::~ListElement()
-{
-	Element *elt = 0;
-	kdDebug() << "Destruction of a list of elements" << endl;
-	while(_start != 0)
-	{
-		elt    = _start;
-		_start = _start->getNext();
-		delete elt;
-		_size = _size - 1;
-	}
-}
+	public:
+		Framee();
+		Frame();
+		virtual ~Frame();
 
-void ListElement::initialiser(Element *elt)
-{
-	_end  = _start = elt;
-}
+		void analyse(const Markup*);
+		void generate(QTextStream&);
+	private:
 
-void ListElement::add(Element *elt)
-{
-	if(_start == 0)
-	{
-		initialiser(elt);
-		_size = 1;
-	}
-	else
-	{
-		_end->setNext(elt);
-		_end = elt;
-		_size = _size + 1;
-	}
-}
+};
 
+#endif /* __KWORD_FRAME_H__ */

@@ -1,3 +1,5 @@
+/* TODO : Manage File problems !
+ */
 /*
 ** A program to convert the XML rendered by KWord into LATEX.
 **
@@ -19,94 +21,80 @@
 **
 */
 
-/*#include <stdio.h>
-#include <stdlib.h>
-#include <sys/stat.h>
-#include <string.h>*/
-#include <iostream.h>
-
 #include <kdebug.h>
 
 #include "xml2latexparser.h"
-//#include "xmlparse.h"
 
 Xml2LatexParser::Xml2LatexParser(QString filename, const char *data, const char *charset): XmlParser(data, charset), _file(filename.latin1())
 {
-	cout << filename.latin1() << endl;
+	kdDebug() << filename.latin1() << endl;
 	_filename = filename;
+	_document.setHeader(&_header);
 }
 
 void Xml2LatexParser::analyse()
 {
-	Markup *balise;
-	Token *savedToken;
+	Markup* balise     = 0;
+	Token*  savedToken = 0;
 
- 	// LIT un premier bloc --> c'est une entete
-	// _header.setPaper(bloc);
-	// LIT un 2e bloc --> encore
-	// _header.setAttributs(bloc);
-	//...
-	// LIT un bloc -->       c'est un FRAMESET
-	// _document.addBloc(bloc);
-	// Recupere les balise
 	while((balise = getNextMarkup()) != 0)
 	{
 		if(strcmp(balise->token.zText, "DOC") == 0)
 		{
-			cout << "ENTETE -> DOC" << endl;
+			kdDebug() << "ENTETE -> DOC" << endl;
 			savedToken = enterTokenChild(balise);
 			//_header.analyse();
 
 		}
 		else if(strcmp(balise->token.zText, "PAPER") == 0)
 		{
-			cout <<"ENTETE -> PAPER" << endl;
-			_header.setPaper(balise);
+			kdDebug() <<"ENTETE -> PAPER" << endl;
+			_header.analysePaper(balise);
 		}
 		else if(strcmp(balise->token.zText, "ATTRIBUTES") == 0)
 		{
-			cout <<"ENTETE -> ATTRIBUTES" << endl;
-			_header.setAttributs(balise);
+			kdDebug() <<"ENTETE -> ATTRIBUTES" << endl;
+			_header.analyseAttributs(balise);
 		}
 		else if(strcmp(balise->token.zText, "FRAMESETS") == 0)
 		{
-			cout <<"ENTETE -> FRAMESETS" << endl;
-			//PrintXml(getTokenCurrent(), 3);
+			kdDebug() <<"ENTETE -> FRAMESETS" << endl;
 			_document.analyse(balise);
-			cout <<"ENTETE -> FIN FRAMESETS" << endl;
+			kdDebug() <<"ENTETE -> FIN FRAMESETS" << endl;
 		}
 		else if(strcmp(balise->token.zText, "STYLES") == 0)
 		{
-			cout <<"ENTETE -> STYLES" << endl;
+			kdDebug() <<"ENTETE -> STYLES" << endl;
 			// not implemented
 			// _style.analyse(balise);
 		}
 		else if(strcmp(balise->token.zText, "PIXMAPS") == 0)
 		{
-			cout <<"ENTETE -> PIXMAPS" << endl;
+			kdDebug() <<"ENTETE -> PIXMAPS" << endl;
 			// not implemented
 			// _pixmaps.analyse(balise);
 		}
 		else if(strcmp(balise->token.zText, "SERIALL") == 0)
 		{
-			cout <<"ENTETE -> SERIALL" << endl;
+			kdDebug() <<"ENTETE -> SERIALL" << endl;
 			// not implemented
 			// _seriall.analyse();
 		}
 	}
-	cout << "FIN ANALYSE" << endl;
+	kdDebug() << "FIN ANALYSE" << endl;
 }
 
 void Xml2LatexParser::generate()
 {
 	if(_file.open(IO_WriteOnly))
 	{
-		cout << "GENERATION" << endl;
+		kdDebug() << "GENERATION" << endl;
 		_out.setDevice(&_file);
 		_header.generate(_out);
 		_document.generate(_out);
-		//_out << getDocument();
-		// Parcourir l'entete et le document pour generer le fichier.
+		_out << getDocument();
 	}
+	else
+		kdDebug() << "Can't use the file ..." << endl;
 	_file.close();
 }

@@ -20,36 +20,73 @@
 **
 */
 
-#ifndef kword_latexformat
-#define kword_latexformat
+#ifndef __KWORD_FORMAT_H__
+#define __KWORD_FORMAT_H__
 
 #include <qstring.h>
+#include <qcolor.h>
+#include "xmlparser.h"
 
-class Format
+enum _EAlign
+{
+	EA_NONE,
+	EA_SUB,
+	EA_SUPER
+};
+
+typedef enum _EAlign EAlign;
+
+class Format: public XmlParser
 {
 	QString  _police;
 	int      _id;
 	int      _pos;
-	int      _taille;
+	int      _taille;	/* Length of the string */
+	int      _size;		/* Size of the police */
 	int      _weight;
 	bool     _italic;
+	bool     _underline;
+	EAlign   _vertalign;
+	QColor*  _textcolor;
 
 	public:
-		Format(): _id(0), _pos(0), _taille(0), _weight(0), _italic(false) {}
+		Format(): _id(0), _pos(0), _taille(0), _size(11), _weight(0), _italic(false), _underline(false)
+		{
+			_textcolor = 0;
+		}
+		virtual ~Format() {}
 
-		bool is_italic () { return _italic; }
-		
-		void set_id     (const int id)  { _id  = id;   }
-		void set_pos    (const int pos) { _pos = pos;  }
-		void set_taille (const int t)   { _taille = t; }
-		void set_weight (const int w)   { _weight = w; }
-		void set_italic (const bool i)  { _italic = i; }
-		void set_police (const char *p) { _police = p; }
+		int    getPos       () const { return _pos;       }
+		int    getLength    () const { return _taille;    }
+		int    getSize      () const { return _size;      }
+		int    getWeight    () const { return _weight;    }
+		bool   isItalic     () const { return _italic;    }
+		bool   isUnderlined () const { return _underline; }
+		EAlign getAlign     () const { return _vertalign; }
+		bool   isColor      () const { return (_textcolor!= 0); }
+		int    getColorBlue () const;
+		int    getColorGreen() const;
+		int    getColorRed  () const;
 
-		int  get_pos    () const { return _pos;    }
-		int  get_length () const { return _taille; }
-		int  get_weight () const { return _weight; }
-		bool is_italic  () const { return _italic; }
+		void setId         (const int id)  { _id        = id;   }
+		void setPos        (const int pos) { _pos       = pos;  }
+		void setTaille     (const int t)   { _taille    = t; }
+		void setSize       (const int t)   { _size      = t; }
+		void setWeight     (const int w)   { _weight    = w; }
+		void setItalic     (const bool i)  { _italic    = i; }
+		void setUnderlined (const bool u)  { _underline = u; }
+		void setPolice     (const char *p) { _police    = p; }
+		void setAlign      (const int a)   { _vertalign = (EAlign) a; }
+		void setColor (const int, const int, const int);
+
+		void analyseFormat    (const Markup*);
+		void analyseParam     (const Markup*);
+		void analyseFont      (const Markup*);
+		void analyseItalic    (const Markup*);
+		void analyseUnderlined(const Markup*);
+		void analyseWeigth    (const Markup*);
+		void analyseAlign     (const Markup*);
+		void analyseColor     (const Markup*);
 };
 
-#endif
+#endif /* __KWORD_FORMAT_H__ */

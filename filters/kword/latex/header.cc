@@ -19,48 +19,134 @@
 **
 */
 
+#include <stdlib.h>
+
 #include <kdebug.h>
+
 #include "header.h"
 
 Header::Header()
 {
+	_hasHeader = false;
+	_hasFooter = false;
 }
 
-void Header::setPaper(Markup * balise)
+Header::~Header()
 {
-	Arg *arg;
+	kdDebug() << "Header Destructor" << endl;
+}
 
-	for(arg= balise->pArg; arg; arg= arg->pNext)
+void Header::analysePaper(const Markup * balise_initiale)
+{
+	Markup* balise = 0;
+	Arg*    arg    = 0;
+
+	// Get parameters
+	for(arg= balise_initiale->pArg; arg; arg= arg->pNext)
 	{
 		if(strcmp(arg->zName, "FORMAT")== 0)
 		{
-			//_format = arg->zValue;
+			setFormat(atoi(arg->zValue));
+		}
+		else if(strcmp(arg->zName, "ORIENTATION")== 0)
+		{
+			setOrientation(atoi(arg->zValue));
+		}
+		else if(strcmp(arg->zName, "COLUMNS")== 0)
+		{
+			if(atoi(arg->zValue) > 2)
+				setColumns(TC_MORE);
+			else
+				setColumns(atoi(arg->zValue) - 1);
 		}
 	}
-	// Parcours des enfants --> PAPERBORDERS
-	
+
+	setTokenCurrent(balise_initiale->pContent);
+	// Analyse children markups --> PAPERBORDERS
+	while((balise = getNextMarkup()) != 0)
+	{
+		kdDebug() << balise << endl;
+		kdDebug() << balise->token.zText << endl;
+		if(strcmp(balise->token.zText, "PAPERBORDERS")== 0)
+		{
+			/* Nothing done now */
+		}
+	}
 	
 }
 
-void Header::setAttributs(Markup *balise)
+void Header::analyseAttributs(const Markup *balise)
 {
-	Arg *arg;
+	Arg* arg = 0;
 
 	for(arg= balise->pArg; arg; arg= arg->pNext)
 	{
 		if(strcmp(arg->zName, "UNIT")== 0)
 		{
-			//_unit = arg->zValue;
+			setUnit(atoi(arg->zValue));
+		}
+		else if(strcmp(arg->zName, "HASHEADER")== 0)
+		{
+			_hasHeader = atoi(arg->zValue);
+		}
+		else if(strcmp(arg->zName, "HASFOOTER")== 0)
+		{
+			_hasFooter = atoi(arg->zValue);
 		}
 	}
 }
 
 void Header::generate(QTextStream &out)
 {
-	out << "\\documentclass[a4paper,11pt]{article}" << endl;
-	//fprintf(out, "\\documentclass[a4paper,11pt]{article}\n");
-	// Parcourir l'entete et le document pour generer le fichier.
-	// _header.genere(_outputFile);
-	// _document.genere(_outputFile);
+	kdDebug() << "GENERATION OF THE FILE HEADER" << endl;
+	out << "\\documentclass";
+	switch(getFormat())
+	{
+		case TF_A3:
+			out << "";
+			break;
+		case TF_A4:
+			out << "[a4paper, ";
+			break;
+		case TF_A5:
+			out << "[a5paper, ";
+			break;
+		case TF_USLETTER:
+			out << "[letterpaper, ";
+			break;
+		case TF_USLEGAL:
+			out << "[legalpaper, ";
+			break;
+		case TF_SCREEN:
+			out << "";
+			break;
+		case TF_CUSTOM:
+			out << "";
+			break;
+		case TF_B3:
+			out << "";
+			break;
+		case TF_USEXECUTIVE:
+			out << "[executivepaper, ";
+			break;
+	}
+	if(getOrientation() == TO_LANDSCAPE)
+		out << "landscape, ";
+	/* To change : will use a special latexcommand to able to
+	 * obtain more than one column :))
+	 */
+	switch(getColumns())
+	{
+		case TC_1:
+			out << "onecolumn, ";
+			break;
+		case TC_2:
+			out << "twocolumn, ";
+			break;
+		case TC_MORE:
+			out << "";
+	}
+	/* the font and the type of the doc. can not be changed, hmm ? */
+	out << "11pt]{article}" << endl;
 }
 

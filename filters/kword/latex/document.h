@@ -20,37 +20,46 @@
 **
 */
 
-#ifndef kword_latex_document
-#define kword_latex_document
+#ifndef __KWORD_DOCUMENT_H__
+#define __KWORD_DOCUMENT_H__
 
+#include "header.h"
 #include "listelement.h"
-#include "xmlparse.h"
-#include <qfile.h>
 #include <qtextstream.h>
 
 enum _EGenerate
 {
-	LATEX,
-	KWORD,
-	CONFIG
+	E_LATEX,
+	E_KWORD,
+	E_CONFIG
 };
 
 typedef enum _EGenerate EGenerate;
 
 class Document: public XmlParser
 {
+	Header*     _header;
 	ListElement _enTete;
+	ListElement _footer;
 	ListElement _corps;
-	EGenerate _generation;
+	EGenerate   _generation;
 
 	public:
 		Document();
 
+		virtual ~Document();
+
+		SType getTypeFrameset(const Markup *);
+		Header* getHeader() const { return _header; }
+
+		void setHeader(Header *h) { _header = h; }
+
 		void  generate(QTextStream&);
 		void  analyse(const Markup *);
-		SType get_type_frameset(const Markup *);
 
 	private:
+		void generateTypeHeader(QTextStream&, Element*);
+		void generateTypeFooter(QTextStream&, Element*);
 };
 
-#endif
+#endif /* __KWORD_DOCUMENT_H__ */

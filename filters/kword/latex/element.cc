@@ -19,57 +19,35 @@
 **
 */
 
-#include <stdio.h>
 #include <stdlib.h>
-#include <sys/stat.h>
-#include <string.h>
-#include <iostream.h>
 #include <kdebug.h>
 #include "element.h"
 
 Element::Element()
 {
-	_type = ST_AUCUN;
-	_name = 0;
+	_type    = ST_AUCUN;
+	_hinfo   = SI_NONE;
+	_name    = 0;
 	_suivant = 0;
 }
 
+Element::~Element()
+{
+	kdDebug() << "Element Destructor" << endl;
+	if(_name != 0)
+		delete _name;
+}
+	
 void Element::analyse(const Markup * balise_initiale)
 {
-	//Token *savedToken;
-	//Markup *balise = 0;
-
-	// ON A UNE BALISE DE TYPE FRAMESET
+	// ANALYSE A FRAMESET MARKUP
 	
-	// Analyse des paramètres
-	printf("ANALYSE DES PARAMETRES D'UNE FRAMESET\n");
-	analyse_param(balise_initiale);
-	// Analyse des parametres d'une FRAME
-	//
-	//savedToken = enterTokenChild(balise_initiale);
-	/*while((balise = getNextMarkup()) != 0)
-	{
-
-		if(strcmp(balise->token.zText, "FRAME")== 0)
-		{
-			// 1. Creer un fils suivant le type 
-			// 2. elt.analyse(balise);
-			// 3. Ajouter l'Element dans une des listes
-			// switch(elt.getSection())
-			// {
-			// 	case TS_ENTETE: _enTete.add(elt);
-			// 		break;
-			// 	case TS_CORPS: _corps.add(elt);
-			// 		break;
-			// 	default: 
-			// }
-		}
-	}
-	setTokenCurrent(savedToken);
-	*/
+	// Parameters Analyse
+	kdDebug() << "ANALYSE DES PARAMETRES D'UNE FRAMESET (Element)" << endl;
+	analyseParam(balise_initiale);
 }
 
-void Element::analyse_param(const Markup *balise)
+void Element::analyseParam(const Markup *balise)
 {
 	// <FRAMESET frameType="1" frameInfo="0" removable="0" visible="1"
 	// name="Supercadre 1">
@@ -77,49 +55,48 @@ void Element::analyse_param(const Markup *balise)
 
 	for(arg= balise->pArg; arg!= 0; arg= arg->pNext)
 	{
-		cout << "param : " << arg->zName << " " << arg->zValue << endl;
+		kdDebug() << "param : " << arg->zName << " " << arg->zValue << endl;
 		if(strcmp(arg->zName, "NAME")== 0)
 		{
-			_name= strdup(arg->zValue);
+			_name = strdup(arg->zValue);
 		}
 		else if(strcmp(arg->zName, "FRAMETYPE")== 0)
 		{
-			// A FINIR
-			cout << "TYPE : TEXTE" << endl;
+			// TO FINISH
+			kdDebug() << "TYPE : TEXTE" << endl;
 			_type = ST_TEXTE;
 		}
 		else if(strcmp(arg->zName, "FRAMEINFO")== 0)
 		{
-			cout << "INFO :" << arg->zValue << endl;
+			kdDebug() << "INFO :" << arg->zValue << endl;
 			switch(atoi(arg->zValue))
 			{
 				case 0: _section = SS_CORPS;
 					break;
 				case 1: _section = SS_ENTETE;
+					_hinfo   = SI_FIRST;
 					break;
 				case 2: _section = SS_ENTETE;
+					_hinfo   = SI_ODD;
 					break;
 				case 3: _section = SS_ENTETE;
+					_hinfo   = SI_EVEN;
 					break;
-				case 4: _section = SS_ENTETE;
+				case 4: _section = SS_PIEDS;
+					_hinfo   = SI_FIRST;
 					break;
-				case 5: _section = SS_ENTETE;
+				case 5: _section = SS_PIEDS;
+					_hinfo   = SI_ODD;
 					break;
-				case 6: _section = SS_ENTETE;
+				case 6: _section = SS_PIEDS;
+					_hinfo   = SI_EVEN;
 					break;
 				case 7: _section = SS_ENTETE;
 					break;
-				default: cerr << "erreur frameinfo inconnue!" << endl;
+				default:
+					kdDebug() << "error : frameinfo unknown!" << endl;
 			}
 		}
 	}
-	cout << "FIN PARAM" << endl;
+	kdDebug() << "FIN PARAM" << endl;
 }
-
-/*void Element::generate(QTextStream &out)
-{
-	// A priori inutile puisque surcharge par Texte, Image, ...
-	//out << "%%%%%%%%%%%%%%%%%%%%%%%%%\n% Nouvelle zone" << endl;
-	//fprintf(out, )"%%%%%%%%%%%%%%%%%%%%%%%%%\n% Nouvelle zone\n";
-}*/
-

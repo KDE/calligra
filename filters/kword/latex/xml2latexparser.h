@@ -20,27 +20,28 @@
 **
 */
 
-#ifndef xml2latexparser
-#define xml2latexparser
+#ifndef __XML2LATEXPARSER_H__
+#define __XML2LATEXPARSER_H__
 
-#include <qfile.h>
-#include <qtextstream.h>
-#include <qstring.h>
-#include "xmlparser.h"
+#include <qfile.h>		/* for QFile classe */
+#include <qtextstream.h>	/* for QTextStream classe */
+#include <qstring.h>		/* for QString classe */
 #include "header.h"
 #include "document.h"
 
 class Xml2LatexParser : public XmlParser
 {
-	QFile _file;
+	QFile       _file;
 	QTextStream _out;
-	QString _filename;
+	QString     _filename;
 
-	Header _header;
-	Document _document;
+	Header      _header;
+	Document    _document;
 
 	public:
 		Xml2LatexParser(QString, const char *, const char *);
+		virtual ~Xml2LatexParser() {}
+
 		void analyse();
 		void generate();
 
@@ -48,4 +49,4 @@ class Xml2LatexParser : public XmlParser
 
 };
 
-#endif
+#endif /* __XML2LATEXPARSER_H__ */

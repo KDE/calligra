@@ -20,37 +20,43 @@
 **
 */
 
-#ifndef kword_latexpara
-#define kword_latexpara
+#ifndef __KWORD_LISTPARA_H__
+#define __KWORD_LISTPARA_H__
 
+#include <qstring.h>
 #include "xmlparser.h"
 #include "listetextzone.h"
+#include "layout.h"
 
-class Para: public XmlParser
+class Para: public Layout
 {
-	char *_texte;
-	ListeTextZone *_liste;
-	Para *_suivant;
+	QString        _texte;
+	ListeTextZone* _liste;
+	Para*          _next;
+	Para*          _previous;
 
 	public:
 		Para();
+		virtual ~Para();
+
+		Para* getNext     () const { return _next;     }
+		Para* getPrevious () const { return _previous; }
 		
-		void setNext(Para *p) { _suivant = p;    }
-		
-		Para* getNext() const { return _suivant; }
-		
-		void analyse  (const Markup*);
-		void generate (QTextStream&);
+		void setNext    (Para *p) { _next     = p;    }
+		void setPrevious(Para *p) { _previous = p;    }
+
+
+		void analyse         (const Markup*);
+		void generate        (QTextStream&);
+		void generateDebut   (QTextStream&);
+		void generateFin     (QTextStream&);
 
 	private:
-		void analyse_param   (const Markup *);
-		void analyse_formats (const Markup *);
+		void analyseParam    (const Markup *);
+		void analyseFormats  (const Markup *);
+
+		void generateTitle(QTextStream&);
 };
-
-#endif
-
-#ifndef kword_listepara
-#define kword_listepara
 
 class ListPara: public Para
 {
@@ -59,12 +65,17 @@ class ListPara: public Para
 
 	public:
 		ListPara();
+		virtual ~ListPara();
+
 		void initialiser(Para*);
 		void add(Para*);
+		void rem();
 		
 		Para* getFirst() const { return _start; }
 		Para* getLast()  const { return _end;   }
 		int   getSize()  const { return _size;  }
+
+		void vider();
 
 	private:
 };
@@ -76,53 +87,52 @@ class ParaIter {
 	
 	public:
 /**
- * @name Constructeurs
+ * @name Constructors
  */
 //@{
-	/// Constructeur par défaut
+	/// Default Constructor
 	ParaIter()            { _courant = 0;             }
-	/// Constructeur
-	ParaIter(ListPara l)  { _courant = l.getFirst();  }
-	/// Constructeur
-	ParaIter(ListPara *l) { _courant = l->getFirst(); }
+	/// Constructor
+	ParaIter(ListPara &l) { _courant = l.getFirst();  }
+	/// Constructor
+	ParaIter(ListPara *l) { 
+		if(l != 0)
+			_courant = l->getFirst();
+		else
+			_courant = 0;
+	}
 //@}
 
 /**
- * @name Destructeurs
+ * @name Destructors
  */
 //@{
-	  /// Destructeur
+	  /// Destructor
 	virtual ~ParaIter() { }
 //@}
 
 /**
- * @name Accesseurs
+ * @name Accessors
  */
 //@{	
 
-	Para* get_courant()  const { return _courant; }
-	bool  is_terminate() const { return (_courant == 0); }
+	Para* getCourant()  const { return _courant;        }
+	bool  isTerminate() const { return (_courant == 0); }
 //@}
 
 /**
- * @name Modifieurs
+ * @name Modifiors
  */
 //@{
-	void next() { _courant = _courant->getNext(); }
+	void next   ()            { _courant = _courant->getNext(); }
+	void setList(ListPara &l) { _courant = l.getFirst();        }
 //@}
 
 /**
- * @name Operateurs
+ * @name Operators
  */
 //@{
  //@}
-/**
- * @name Fonctions de delegation
- */
-//@{
-
-//@}
-
 };
 
-#endif
+#endif /* __KWORD_LISTPARA_H__ */

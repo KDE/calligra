@@ -35,19 +35,24 @@ typedef enum _SEnv SEnv;
 
 class Texte: public Element
 {
-	SEnv _env;
+	SEnv      _env;
 	ListPara _liste;
-	int _left,_top, _right, _bottom;
-	bool _runaround;
-	//char *_texte;
+	int      _left,
+		 _top,
+		 _right,
+		 _bottom;
+	bool     _runaround;
 
 	public:
 		Texte();
+		virtual ~Texte() {
+			kdDebug() << "Destruction d'un txt" << endl; }
+		
 		void analyse(const Markup*);
 		void generate(QTextStream&);
 
 	private:
-		void analyse_param_frame(const Markup*);
+		void analyseParamFrame(const Markup*);
 
 };
 

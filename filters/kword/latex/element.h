@@ -20,10 +20,9 @@
 **
 */
 
-#ifndef kword_latex_element
-#define kword_latex_element
+#ifndef __KWORD_ELEMENT_H__
+#define __KWORD_ELEMENT_H__
 
-#include <qfile.h>
 #include <qtextstream.h>
 #include "xmlparser.h"
 
@@ -41,38 +40,52 @@ enum _SSect
 {
 	SS_AUCUN,
 	SS_ENTETE,
-	SS_PIDS,
+	SS_PIEDS,
 	SS_CORPS
 };
 
 typedef enum _SSect SSect;
 
+enum _SInfo
+{
+	SI_NONE,
+	SI_FIRST,
+	SI_ODD,
+	SI_EVEN
+};
+
+typedef enum _SInfo SInfo;
+
 class Element: public XmlParser
 {
 	SType _type;
 	SSect _section;
-	char *_name;
-	bool _removable;
-	bool _visible;
+	SInfo _hinfo;
+	char* _name;
+	bool  _removable;
+	bool  _visible;
 
-	Element *_suivant;
+	Element* _suivant;
 
 	public:
 		Element();
 
-		virtual ~Element() {}
-		SSect getSection() const      { return _section; }
-		SType getType()    const      { return _type;    }
-		Element* getNext() const      { return _suivant; }
+		virtual ~Element();
+
+		SSect    getSection() const { return _section; }
+		SType    getType()    const { return _type;    }
+		SInfo    getInfo()    const { return _hinfo;   }
+		Element* getNext()    const { return _suivant; }
 		
-		void setNext(Element *elt) { _suivant = elt;  }
+		void setType(SType t)       { _type    = t;    }
+		void setSection(SSect s)    { _section = s;    }
+		void setNext(Element *elt)  { _suivant = elt;  }
 		
-		void analyse(const Markup*);
-		//virtual void generate(QTextStream&) {}
+		virtual void analyse(const Markup*);
+		virtual void generate(QTextStream&) = 0;
 
 	private:
-		void analyse_param(const Markup *);
-		//void analyse_param_frame(const Markup *);
+		void analyseParam(const Markup *);
 };
 
-#endif
+#endif /* __KWORD_ELEMENT_H__ */

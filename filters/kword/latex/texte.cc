@@ -19,67 +19,66 @@
 **
 */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/stat.h>
-#include <string.h>
-#include <kdebug.h>
-#include <iostream.h>
+#include <stdlib.h>		/* for atoi function */
+#include <kdebug.h>		/* for kdDebug() stream */
 #include "texte.h"
 
 Texte::Texte()
 {
-	_left   = 0;
-	_right  = 0;
-	_top    = 0;
-	_bottom = 0;
+	_left      = 0;
+	_right     = 0;
+	_top       = 0;
+	_bottom    = 0;
+	_env       = SE_AUCUN;
 	_runaround = false;
+
+	setType(ST_TEXTE);
+	setSection(SS_CORPS);
 }
 
 void Texte::analyse(const Markup * balise_initiale)
 {
-	Token *savedToken;
+	Token* savedToken = 0;
+	Markup* balise    = 0;
 
-	// ON A UNE BALISE DE TYPE FRAMESET INFO = TEXTE, ENTETE CONNUE
-	Markup *balise;
+	// MARKUP TYPE : FRAMESET INFO = TEXTE, ENTETE CONNUE
 	
-	// Analyse des paramètres
-	//analyse_param_frame(balise_initiale);
-	_liste.initialiser(0);
+	// Parameters Analyse
 	Element::analyse(balise_initiale);
-	// Analyse des balises filles
-	cout << "ANALYSE D'UNE FRAME" << endl;
+
+	kdDebug() << "ANALYSE D'UNE FRAME (Texte)" << endl;
+
+	// Chlidren markups Analyse
 	savedToken = enterTokenChild(balise_initiale);
 	while((balise = getNextMarkup()) != 0)
 	{
 		if(strcmp(balise->token.zText, "FRAME")== 0)
 		{
-			analyse_param_frame(balise);
+			analyseParamFrame(balise);
 		}
 		else if(strcmp(balise->token.zText, "PARAGRAPH")== 0)
 		{
-			// 1. Creer un paragraphe
-			Para *prg = new Para();
-			// 2. Ajouter les infos
+			// 1. Create a paragraph :
+			Para *prg = new Para;
+			// 2. Add the informations :
 			prg->analyse(balise);
-			// 3. ajouter le parag. dans la liste
+			// 3. add this parag. in the list
 			_liste.add(prg);
-			cout << "PARA AJOUTE" << endl;
+			kdDebug() << "PARA AJOUTE" << endl;
 		}
 		
 	}
-	cout << "FIN D'UNE FRAME" << endl;
-	setTokenCurrent(savedToken);
+	kdDebug() << "FIN D'UNE FRAME" << endl;
 }
 
-void Texte::analyse_param_frame(const Markup *balise)
+void Texte::analyseParamFrame(const Markup *balise)
 {
 	//<FRAME left="28" top="42" right="566" bottom="798" runaround="1" />
-	Arg *arg;
+	Arg *arg = 0;
 
 	for(arg= balise->pArg; arg; arg= arg->pNext)
 	{
-		cout << "PARAM " << arg->zName << endl;
+		kdDebug() << "PARAM " << arg->zName << endl;
 		if(strcmp(arg->zName, "LEFT")== 0)
 		{
 			_left = atoi(arg->zValue);
@@ -101,16 +100,15 @@ void Texte::analyse_param_frame(const Markup *balise)
 
 void Texte::generate(QTextStream &out)
 {
-	ParaIter iter(_liste);
-	cout << "GENERATION TEXTE" << endl;
-	cout << "NB PARA " << _liste.getSize() << endl;
-	while(!iter.is_terminate())
+	ParaIter iter;
+	kdDebug() << "TEXT GENERATION" << endl;
+	kdDebug() << "NB PARA " << _liste.getSize() << endl;
+	iter.setList(_liste);
+	while(!iter.isTerminate())
 	{
-		cout <<".\\";
-		iter.get_courant()->generate(out);
+		iter.getCourant()->generate(out);
 		iter.next();
-		cout << iter.get_courant() << endl;
+		kdDebug() << iter.getCourant() << endl;
 	}
-	out << "%%%%%" << endl;
 }
 

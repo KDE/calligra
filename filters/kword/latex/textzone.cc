@@ -1,3 +1,7 @@
+/* BUGS : If it's a title, I have a format command : test
+ * the parag. style 
+ */
+
 /*
 ** A program to convert the XML rendered by KWord into LATEX.
 **
@@ -19,145 +23,116 @@
 **
 */
 
-#include <iostream.h>
-
-#include <stdlib.h>
-
-#include <kdebug.h>
+#include <kdebug.h>		/* for kdDebug() stream */
 
 #include "textzone.h"
 
-TextZone::TextZone(const char *texte): _texte(texte)
+TextZone::TextZone(): _useformat(true)
 {
-	//_texte = new QString(texte);
+
+}
+
+TextZone::TextZone(QString texte): _texte(texte), _useformat(true)
+{
+}
+
+TextZone::~TextZone()
+{
+	kdDebug() << "Destruction of a area" << endl;
 }
 
 void TextZone::analyse(const Markup * balise_initiale)
 {
-	Token *savedToken;
-	//Token *p;
-
-	// ON A UNE BALISE DE TYPE FORMAT id="1" pos="0" len="17">...</FORMAT>
-	Markup *balise;
+	kdDebug() << "FORMAT" << endl;
+	// Get infos. to format the text
+	analyseFormat(balise_initiale);
 	
-	// Analyse des paramètres
-	analyse_param(balise_initiale);
-	cout << "ANALYSE D'UNE ZONE" << endl;
+	// Format the text
+	_texte = _texte.mid(getPos(), getLength());
 	
-	// Analyse des balises filles
-	savedToken = enterTokenChild(balise_initiale);
-	
-	while((balise = getNextMarkup()) != NULL)
-	{
-		if(strcmp(balise->token.zText, "FONT")== 0)
-		{
-			cout << "FONT : " << endl;
-			analyse_font(balise);
-		}
-		else if(strcmp(balise->token.zText, "ITALIC")== 0)
-		{
-			cout << "ITALIC : " << endl;
-			analyse_italic(balise);
-		}
-		else if(strcmp(balise->token.zText, "WEIGHT")== 0)
-		{
-			cout << "WEIGTH : " << endl;
-			analyse_weigth(balise);
-		}
-	}
-	cout << "FIN D'UNE ZONE" << endl;
-	setTokenCurrent(savedToken);
+	kdDebug() << _texte.length() << endl;
+	kdDebug() << _texte.local8Bit() << endl;
+	kdDebug() << "END FORMAT" << endl;
 }
 
-void TextZone::analyse_param(const Markup *balise)
-{
-	//<FORMAT id="1" pos="0" len="17">
-	Arg *arg;
-
-	for(arg= balise->pArg; arg; arg= arg->pNext)
-	{
-		cout << "PARAM " << arg->zName << endl;
-		if(strcmp(arg->zName, "ID")== 0)
-		{
-			set_id(atoi(arg->zValue));
-		}
-		else if(strcmp(arg->zName, "POS")== 0)
-		{
-			set_pos(atoi(arg->zValue));
-		}
-		else if(strcmp(arg->zName, "LEN")== 0)
-		{
-			set_taille (atoi(arg->zValue));
-		}
-	}
-	cout << get_pos() << " -- " << get_length() << endl;
-	_texte = _texte.mid(get_pos(), get_length());
-	cout << _texte.length() << endl;
-	cout << _texte.local8Bit() << endl;
-}
-
-void TextZone::analyse_font(const Markup *balise)
-{
-	//<FONT name="times">
-	Arg *arg;
-
-	for(arg= balise->pArg; arg; arg= arg->pNext)
-	{
-		cout << "PARAM " << arg->zName << endl;
-		if(strcmp(arg->zName, "NAME")== 0)
-		{
-			set_police(arg->zValue);
-		}
-	}
-}
-
-void TextZone::analyse_italic(const Markup *balise)
-{
-	//<FONT name="times">
-	Arg *arg;
-
-	for(arg= balise->pArg; arg; arg= arg->pNext)
-	{
-		cout << "PARAM " << arg->zName << endl;
-		if(strcmp(arg->zName, "VALUE")== 0)
-		{
-			set_italic(arg->zValue);
-		}
-	}
-}
-
-void TextZone::analyse_weigth(const Markup *balise)
-{
-	//<FONT name="times">
-	Arg *arg;
-
-	for(arg= balise->pArg; arg; arg= arg->pNext)
-	{
-		cout << "PARAM " << arg->zName << endl;
-		if(strcmp(arg->zName, "VALUE")== 0)
-		{
-			set_weight(atoi(arg->zValue));
-		}
-	}
-}
 void TextZone::generate(QTextStream &out)
 {
-	//fprintf(out, "\\begin{document}\n");
-	// Parcourir les elements pour generer le fichier.
-	// Pour chaque entete - footnote
-	// _entete.genere(_outputFile);
-	// Pour chaque corps de texte
-	// _element.genere(_outputFile);
-	cout << "." << endl;
-	if(get_weight() > 0)
-		out << " \\textbf{";
-	if(is_italic())
-		out << " \\textit{";
-	//fprintf(out, "%s\n", _texte);
+	kdDebug() << "." << endl;
+
+	if(_useformat)
+		generate_format_begin(out);
+
+	// Text
 	out << _texte.latin1();
-	if(is_italic())
-		out << "}";
-	if(get_weight() > 0)
-		out << "}";
+	// Text
+	if(_useformat)
+		generate_format_end(out);
 }
 
+void TextZone::generate_format_begin(QTextStream & out)
+{
+	kdDebug() << "GENERATE FORMAT" << endl;
+	// Bold, Italic or underlined
+	if(getWeight() > 0)
+		out << " \\textbf{";
+	if(isItalic())
+		out << " \\textit{";
+	if(isUnderlined())
+		out << " \\uline{";
+
+	// Size
+	if(getSize() != 11)
+	{
+		out << "\\fontsize{" << getLength() << "}{1}%" << endl;
+		out << "\\selectfont" << endl;
+	}
+
+	// Color
+	if(isColor())
+	{
+		out << "\\textcolor{rgb}{";
+		out << getColorRed() << ", " << getColorGreen() << ", ";
+		out << getColorBlue() << "}{";
+	}
+
+	// Alignement
+	switch(getAlign())
+	{
+		case EA_NONE:
+			break;
+		case EA_SUB: // pass in math mode !!
+			out << " $_{";
+			break;
+		case EA_SUPER:
+			out << " \\textsuperscript{";
+			break;
+	}
+}
+
+void TextZone::generate_format_end(QTextStream & out)
+{
+	// Alignement
+	if(getAlign() == EA_SUPER)
+		out << "}";
+	if(getAlign() == EA_SUB)
+		out << "}$";
+
+	// Color
+	if(isColor())
+		out << "}";
+
+	// Size
+	if(getSize() != 11)
+	{
+		out << "\\fontsize{11}{1}%" << endl;
+		out << "\\selectfont" << endl;
+	}
+
+	// Bold, Italic or underlined
+	if(isUnderlined())
+		out << "}";
+	if(isItalic())
+		out << "}";
+	if(getWeight() > 0)
+		out << "}";
+}

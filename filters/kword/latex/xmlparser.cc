@@ -19,26 +19,18 @@
 **
 */
 
-/*#include <stdio.h>
-#include <stdlib.h>
-#include <sys/stat.h>
-#include <string.h>*/
-#include <assert.h>
-#include <iostream.h>
-
 #include <kdebug.h>
 
 #include "xmlparser.h"
-#include "xmlparse.h"
 
 XmlParser::XmlParser(const char *data, const char *charset)
 {
-	_document     = (char*)data;
+	_document     = data;
 	_charset      = charset;	
 	_index        = 0;
 	_childCurrent = 0;
 
-	// Recupere l'arbre
+	// Get the tree
 	_arbreXml     = ParseXml(_document, &_index);
 	_tokenCurrent = _arbreXml;
 	PrintXml(_arbreXml, 3);
@@ -54,7 +46,13 @@ XmlParser::XmlParser()
 	_childCurrent = 0;
 }
 
-char *XmlParser::getDocument() const
+XmlParser::~XmlParser()
+{
+	kdDebug() << "destruction of XmlParser (tree)" << endl;
+	delete _arbreXml;
+}
+
+const char *XmlParser::getDocument() const
 {
 	return _document;
 }
@@ -63,7 +61,7 @@ Markup* XmlParser::getNextMarkup()
 {
 	Markup *m= 0;
 	// Lit la zone de donnee _document et retourne un bloc.
-	cout << "markup suivant" << endl;
+	kdDebug() << "markup suivant" << endl;
 	if(_tokenCurrent == 0)
 		return 0;
 
@@ -77,10 +75,10 @@ Markup* XmlParser::getNextMarkup()
 	{
 		m = (Markup*) _tokenCurrent;
 		_tokenCurrent = _tokenCurrent->pNext;
-		cout << "getMarkup : " << m->token.zText << endl;
+		kdDebug() << "getMarkup : " << m->token.zText << endl;
 
 	}
-	cout << "ok" << endl;
+	kdDebug() << "ok" << endl;
 	return m;
 }
 

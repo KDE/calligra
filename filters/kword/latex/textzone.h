@@ -20,32 +20,34 @@
 **
 */
 
-#ifndef kword_latextextzone
-#define kword_latextextzone
+#ifndef __KWORD_TEXTZONE_H__
+#define __KWORD_TEXTZONE_H__
 
-#include <qfile.h>
 #include <qtextstream.h>
 #include <qstring.h>
-#include "xmlparser.h"
 #include "format.h"
 
-class TextZone: public XmlParser, public  Format
+class TextZone: public  Format
 {
-	/*SType _type;
-	SSect _section;*/
-	QString _texte;	
 
+	QString _texte;
+	bool    _useformat;
+	
 	public:
-		TextZone(const char* c = 0);
-		//SSect getSection() { return _section; }
-		//SType getType() { return _type; }
+		TextZone();
+		TextZone(QString);
+		virtual ~TextZone();
+
+		void useFormat   () { _useformat = true;  }
+		void notUseFormat() { _useformat = false; }
+
 		void analyse(const Markup*);
 		void generate(QTextStream&);
+		void generate_format_begin(QTextStream &);
+		void generate_format_end(QTextStream &);
+
 	private:
-		void analyse_param  (const Markup *);
-		void analyse_font   (const Markup *);
-		void analyse_italic (const Markup *);
-		void analyse_weigth (const Markup *);
+
 };
 
-#endif
+#endif /* __KWORD_TEXTZONE_H__ */

@@ -7,48 +7,60 @@
 /*                                                     */
 /*******************************************************/
 
-/* EN-TETES */
+/* INCLUDES */
+#include <kdebug.h>
 #include "listetextzone.h"
 
-/* METHODES PRIVEES   */
+/* PRIVATE METHODS   */
 
-/* METHODES PROTEGEES */
+/* PROTECTED METHODS */
 
-/* METHODES PUBLIQUES */
+/* PUBLIC METHODS    */
 
-/* Constructeurs           */
+/* Constructors           */
+ListeTextZone::ListeTextZone()
+{
+	_first = 0;
+	_last  = 0;
+	_size  = 0;
+}
 
-/* Destructeurs            */
+/* Destructors            */
+ListeTextZone::~ListeTextZone()
+{
+	kdDebug() << "Destruction of a text zone list" << endl;
+	vider();
+}
 
-/* Accesseurs              */
+/* Accessors              */
 
-/* Modifieurs              */
-void ListeTextZone::add_last(const TextZone* text)
+/* Modifiors              */
+void ListeTextZone::addLast(TextZone* text)
 {
 	ElementT *new_last = new ElementT;
 
-	new_last->set_texte(text);
+	new_last->setText(text);
 
 	if(_size != 0)
 	{
-		_last->set_next(new_last);
+		_last->setNext(new_last);
 		_last = new_last;
 	}
 	else
 	{
 		/* La liste est vide => _last = _first; */
-		_last = new_last;
+		_last  = new_last;
 		_first = _last;
 	}	
 	_size = _size + 1;
 }
 
-void ListeTextZone::add_first(const TextZone* text)
+void ListeTextZone::addFirst(TextZone* text)
 {
 	ElementT *new_first = new ElementT;
 
-	new_first->set_texte(text);
-	new_first->set_next(_first);
+	new_first->setText(text);
+	new_first->setNext(_first);
 
 	_first = new_first;
 	if(_size == 0)
@@ -59,11 +71,11 @@ void ListeTextZone::add_first(const TextZone* text)
 	_size = _size + 1;
 }
 
-void ListeTextZone::rem_last()
+void ListeTextZone::remLast()
 {
 	ElementT *new_last = new ElementT(_first);
 	
-	for(int index = 1; index< _size - 1; new_last = new_last->get_next())
+	for(int index = 1; index< _size - 1; new_last = new_last->getNext())
 	{ }
 	
 	delete _last;
@@ -71,13 +83,15 @@ void ListeTextZone::rem_last()
 	_size = _size - 1;
 }
 
-void ListeTextZone::rem_first()
+void ListeTextZone::remFirst()
 {
-	ElementT *first_saved = new ElementT;
+	ElementT *first_saved;
+
+	first_saved = _first->getNext();
 
 	delete _first;
 	_first = first_saved;
-	_size = _size - 1;
+	_size  = _size - 1;
 }
 
 /* Operateurs              */
@@ -87,6 +101,20 @@ void ListeTextZone::vider()
 {
 	while(_size != 0)
 	{
-		rem_first();
+		remFirst();
 	}
+}
+
+/*********************************************************/
+TextZoneIter::TextZoneIter(ListeTextZone *l)
+{
+	setList(l);
+}
+
+void TextZoneIter::setList(ListeTextZone *l)
+{
+	if(l!= 0)
+		_courant = l->getFirstElt();
+	else
+		_courant = 0;
 }

@@ -20,36 +20,39 @@
 **
 */
 
-#ifndef kword_xmlparser
-#define kword_xmlparser
+#ifndef __KWORD_XMLPARSER_H__
+#define __KWORD_XMLPARSER_H__
+
 #include "xmlparse.h"
 
 class XmlParser
 {
-	char *_document;
-	const char * _charset;
-	int _index;
-	Token *_arbreXml;
-	Token *_tokenCurrent;
-	Token *_childCurrent;
+	const char* _document;
+	const char* _charset;
+	int         _index;
+	Token*      _arbreXml;
+	Token*      _tokenCurrent;
+	Token*      _childCurrent;
 
 	public:
 		XmlParser(const char *, const char *);
 		XmlParser();
-		~XmlParser(){};
+		virtual ~XmlParser();
 
+		const char *getDocument() const;
+		Token* getTokenCurrent()  const { return _tokenCurrent; }
+
+		void   setTokenCurrent (Token * t)     { _tokenCurrent = t; }
+		void   nextToken       ()              { _tokenCurrent = _tokenCurrent->pNext; };
+		Token* enterTokenChild(const Markup*);
+		
 		void analyse(){};
 		void generate(){};
-		char *getDocument() const;
-		void nextToken() { _tokenCurrent = _tokenCurrent->pNext; };
-		Token* enterTokenChild(const Markup*);
 
 	protected:
 		Markup* getNextMarkup();
-		Token * getNextChild();
-		void setTokenCurrent(Token * t) { _tokenCurrent = t; }
-		Token * getTokenCurrent() const { return _tokenCurrent; }
+		Token*  getNextChild ();
 
 };
 
-#endif
+#endif /* __KWORD_XMLPARSER_H__ */
