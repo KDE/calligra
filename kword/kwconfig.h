@@ -86,7 +86,7 @@ private:
     int m_oldNbRedo;
     int m_oldStartingPage;
     QLineEdit* m_variableNumberOffset;
-    QCheckBox* m_displayLink;
+    QCheckBox* m_displayLink, *m_displayComment;
 };
 
 class ConfigureDefaultDocPage : public QObject

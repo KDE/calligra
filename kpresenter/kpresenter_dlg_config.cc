@@ -439,6 +439,11 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
     m_displayLink=new QCheckBox(i18n("Displays link"),tmpQGroupBox);
     grid->addWidget(m_displayLink,3,0);
     m_displayLink->setChecked(doc->getVariableCollection()->variableSetting()->displayLink());
+    m_displayComment=new QCheckBox(i18n("Displays comment"),tmpQGroupBox);
+    m_displayComment->setChecked(doc->getVariableCollection()->variableSetting()->displayComment());
+    grid->addWidget(m_displayComment,4,0);
+
+
 }
 
 void ConfigureMiscPage::apply()
@@ -477,6 +482,14 @@ void ConfigureMiscPage::apply()
     }
     if(macroCmd)
         doc->addCommand(macroCmd);
+
+    b=m_displayComment->isChecked();
+    if(doc->getVariableCollection()->variableSetting()->displayComment()!=b)
+    {
+        doc->getVariableCollection()->variableSetting()->setDisplayComment(b);
+        doc->recalcVariables( VT_NOTE );
+    }
+
 }
 
 void ConfigureMiscPage::slotDefault()
@@ -484,6 +497,7 @@ void ConfigureMiscPage::slotDefault()
    m_undoRedoLimit->setValue(30);
    m_variableNumberOffset->setText(QString::number(1));
    m_displayLink->setChecked(true);
+   m_displayComment->setChecked(true);
 }
 
 

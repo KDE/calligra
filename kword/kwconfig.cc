@@ -443,6 +443,10 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
 
     m_displayLink=new QCheckBox(i18n("Displays link"),gbMiscGroup);
     m_displayLink->setChecked(doc->getVariableCollection()->variableSetting()->displayLink());
+
+    m_displayComment=new QCheckBox(i18n("Displays comment"),gbMiscGroup);
+    m_displayComment->setChecked(doc->getVariableCollection()->variableSetting()->displayComment());
+
 }
 
 void ConfigureMiscPage::apply()
@@ -498,6 +502,13 @@ void ConfigureMiscPage::apply()
     }
     if(macroCmd)
         doc->addCommand(macroCmd);
+
+    b=m_displayComment->isChecked();
+    if(doc->getVariableCollection()->variableSetting()->displayComment()!=b)
+    {
+        doc->getVariableCollection()->variableSetting()->setDisplayComment(b);
+        doc->recalcVariables( VT_NOTE );
+    }
 }
 
 void ConfigureMiscPage::slotDefault()
@@ -505,6 +516,7 @@ void ConfigureMiscPage::slotDefault()
    m_undoRedoLimit->setValue(30);
    m_variableNumberOffset->setText(QString::number(1));
    m_displayLink->setChecked(true);
+   m_displayComment->setChecked(true);
 }
 
 ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, char *name )
