@@ -90,22 +90,23 @@ EpsImport::convert( const QCString& from, const QCString& to )
 	else
 		qDebug ("file could not be opened");
 
-	// Quote spaces in filename:
-	KRun::shellQuote( input );
-
 	// sed filter
 	QString sedFilter = QString ("sed -e \"s/%%BoundingBox: 0 0 612 792/%%BoundingBox: %1 %2 %3 %4/g\"").
             arg(llx).arg(lly).arg(urx).arg(ury);
 
 	// Build ghostscript call to convert ps/eps -> ai:
-	QString command = QString(
-		"gs -q -dBATCH -dNOPAUSE -dSAFER -dNODISPLAY ps2ai.ps %1 |%2 > %3" ).
-			arg( input ).arg(sedFilter).arg( m_chain->outputFile() );
+	QString command(
+		"gs -q -dBATCH -dNOPAUSE -dSAFER -dNODISPLAY ps2ai.ps "); 
+	command += KProcess::quote(input);
+	command += " | ";
+	command += sedFilter;
+	command += " > ";
+	command += KProcess::quote(m_chain->outputFile());
 
-	qDebug ("command to execute is (%s)",command.latin1());
+	qDebug ("command to execute is (%s)", QFile::encodeName(command).data());
 
 	// Execute it:
-	if( !system( command.latin1() ) )
+	if( !system( QFile::encodeName(command)) )
 		return KoFilter::OK;
 	else
 		return KoFilter::StupidError;
