@@ -1,6 +1,5 @@
 #ifndef lint
-/*static char yysccsid[] = "from: @(#)yaccpar	1.9 (Berkeley) 02/21/93";*/
-static char yyrcsid[] = "$Id$";
+static char yysccsid[] = "@(#)yaccpar	1.9 (Berkeley) 02/21/93";
 #endif
 #define YYBYACC 1
 #define YYMAJOR 1
@@ -39,7 +38,7 @@ typedef union
      void* range;
      void* param;
 } YYSTYPE;
-#line 43 "y.tab.c"
+#line 42 "y.tab.c"
 #define NUM 257
 #define RANGE 258
 #define BOOL 259
@@ -294,7 +293,7 @@ YYSTYPE yylval;
 short yyss[YYSTACKSIZE];
 YYSTYPE yyvs[YYSTACKSIZE];
 #define yystacksize YYSTACKSIZE
-#line 129 "yacc.y"
+#line 181 "yacc.y"
 
 void yyerror ( char *s )  /* Called by yyparse on error */
 {
@@ -308,17 +307,13 @@ void mainParse( const char *_code )
   yyparse();
 }
 
-#line 312 "y.tab.c"
+#line 311 "y.tab.c"
 #define YYABORT goto yyabort
 #define YYREJECT goto yyabort
 #define YYACCEPT goto yyaccept
 #define YYERROR goto yyerrlab
 int
-#if defined(__STDC__)
-yyparse(void)
-#else
 yyparse()
-#endif
 {
     register int yym, yyn, yystate;
 #if YYDEBUG
@@ -342,7 +337,7 @@ yyparse()
     *yyssp = yystate = 0;
 
 yyloop:
-    if ((yyn = yydefred[yystate]) != 0) goto yyreduce;
+    if (yyn = yydefred[yystate]) goto yyreduce;
     if (yychar < 0)
     {
         if ((yychar = yylex()) < 0) yychar = 0;
@@ -382,6 +377,10 @@ yyloop:
         goto yyreduce;
     }
     if (yyerrflag) goto yyinrecovery;
+#ifdef lint
+    goto yynewerror;
+#endif
+yynewerror:
     yyerror("syntax error");
 #ifdef lint
     goto yyerrlab;
@@ -459,7 +458,7 @@ case 2:
 break;
 case 3:
 #line 61 "yacc.y"
-{ printf("BOOL_input %i\n",(int)yyvsp[0].b); setResultBool( yyvsp[0].b ); }
+{ setResultBool( yyvsp[0].b ); }
 break;
 case 4:
 #line 64 "yacc.y"
@@ -502,138 +501,177 @@ case 13:
 { yyval.dbl = yyvsp[0].dbl; }
 break;
 case 14:
-#line 81 "yacc.y"
-{ yyval.dbl = yyvsp[-1].dbl; }
+#line 83 "yacc.y"
+{
+       yyval.dbl = yyvsp[-1].dbl;
+     }
 break;
 case 15:
-#line 82 "yacc.y"
-{ if ( yyvsp[-5].b ) yyval.dbl = yyvsp[-3].dbl; else yyval.dbl = yyvsp[-1].dbl; }
+#line 87 "yacc.y"
+{
+       if ( yyvsp[-5].b )
+	 yyval.dbl = yyvsp[-3].dbl;
+       else
+	 yyval.dbl = yyvsp[-1].dbl;
+     }
 break;
 case 16:
-#line 83 "yacc.y"
-{ double res; int e = funcDbl( yyvsp[-3].name, yyvsp[-1].param, &res ); if ( e != 0 ) setError( e, yyvsp[-3].name ); yyval.dbl = res; }
+#line 94 "yacc.y"
+{
+       double res;
+       int e = funcDbl( yyvsp[-3].name, yyvsp[-1].param, &res ); 
+       if ( e != 0 )
+	 setError( e, yyvsp[-3].name );
+       yyval.dbl = res;
+     }
 break;
 case 17:
-#line 84 "yacc.y"
-{ double res; int e = funcDbl( yyvsp[-2].name, newArgList(), &res ); if ( e != 0 ) setError( e, yyvsp[-2].name ); yyval.dbl = res; }
+#line 102 "yacc.y"
+{
+       double res;
+       int e = funcDbl( yyvsp[-2].name, newArgList(), &res );
+       if ( e != 0 )
+	 setError( e, yyvsp[-2].name );
+       yyval.dbl = res;
+     }
 break;
 case 18:
-#line 85 "yacc.y"
-{ yyval.dbl = yyvsp[0].dbl; }
+#line 110 "yacc.y"
+{
+       yyval.dbl = yyvsp[0].dbl;
+     }
 break;
 case 19:
-#line 88 "yacc.y"
-{ addDbl( yyvsp[-2].param, yyvsp[0].dbl ); yyval.param = yyvsp[-2].param; }
+#line 117 "yacc.y"
+{
+	addDbl( yyvsp[-2].param, yyvsp[0].dbl ); yyval.param = yyvsp[-2].param;
+      }
 break;
 case 20:
-#line 89 "yacc.y"
-{ addBool( yyvsp[-2].param, yyvsp[0].b ); yyval.param = yyvsp[-2].param; }
+#line 121 "yacc.y"
+{
+	addBool( yyvsp[-2].param, yyvsp[0].b ); yyval.param = yyvsp[-2].param;
+      }
 break;
 case 21:
-#line 90 "yacc.y"
-{ addRange( yyvsp[-2].param, yyvsp[0].range ); yyval.param = yyvsp[-2].param; }
+#line 125 "yacc.y"
+{
+	addRange( yyvsp[-2].param, yyvsp[0].range );
+	yyval.param = yyvsp[-2].param;
+      }
 break;
 case 22:
-#line 91 "yacc.y"
-{ void* l = newArgList(); addDbl( l, yyvsp[0].dbl ); yyval.param = l; }
+#line 130 "yacc.y"
+{
+	void* l = newArgList();
+	addDbl( l, yyvsp[0].dbl );
+	yyval.param = l;
+      }
 break;
 case 23:
-#line 92 "yacc.y"
-{ void* l = newArgList(); addBool( l, yyvsp[0].b ); yyval.param = l; }
+#line 136 "yacc.y"
+{
+	void* l = newArgList();
+	addBool( l, yyvsp[0].b ); yyval.param = l;
+      }
 break;
 case 24:
-#line 93 "yacc.y"
-{ void* l = newArgList(); addRange( l, yyvsp[0].range ); yyval.param = l; }
+#line 141 "yacc.y"
+{
+	void* l = newArgList();
+	addRange( l, yyvsp[0].range );
+	yyval.param = l;
+      }
 break;
 case 25:
-#line 96 "yacc.y"
+#line 148 "yacc.y"
 { yyval.b = yyvsp[-2].b || yyvsp[0].b; }
 break;
 case 26:
-#line 97 "yacc.y"
-{ printf("BOOL_exp %i\n",(int)yyvsp[0].b); yyval.b = yyvsp[0].b; }
+#line 149 "yacc.y"
+{ yyval.b = yyvsp[0].b; }
 break;
 case 27:
-#line 100 "yacc.y"
+#line 152 "yacc.y"
 { yyval.b = yyvsp[-2].b && yyvsp[0].b; }
 break;
 case 28:
-#line 101 "yacc.y"
+#line 153 "yacc.y"
 { yyval.b = yyvsp[0].b; }
 break;
 case 29:
-#line 104 "yacc.y"
+#line 156 "yacc.y"
 { yyval.b = !yyvsp[0].b; }
 break;
 case 30:
-#line 105 "yacc.y"
+#line 157 "yacc.y"
 { yyval.b = yyvsp[0].b; }
 break;
 case 31:
-#line 108 "yacc.y"
+#line 160 "yacc.y"
 { yyval.b = yyvsp[0].b; }
 break;
 case 32:
-#line 109 "yacc.y"
+#line 161 "yacc.y"
 { yyval.b = ( yyvsp[-2].dbl == yyvsp[0].dbl ); }
 break;
 case 33:
-#line 110 "yacc.y"
+#line 162 "yacc.y"
 { yyval.b = ( yyvsp[-2].dbl != yyvsp[0].dbl ); }
 break;
 case 34:
-#line 111 "yacc.y"
+#line 163 "yacc.y"
 { yyval.b = ( yyvsp[-2].dbl != yyvsp[0].dbl ); }
 break;
 case 35:
-#line 112 "yacc.y"
+#line 164 "yacc.y"
 { yyval.b = ( yyvsp[-2].dbl < yyvsp[0].dbl ); }
 break;
 case 36:
-#line 113 "yacc.y"
+#line 165 "yacc.y"
 { yyval.b = ( yyvsp[-2].dbl > yyvsp[0].dbl ); }
 break;
 case 37:
-#line 114 "yacc.y"
+#line 166 "yacc.y"
 { yyval.b = ( yyvsp[-2].dbl <= yyvsp[0].dbl ); }
 break;
 case 38:
-#line 115 "yacc.y"
+#line 167 "yacc.y"
 { yyval.b = ( yyvsp[-2].dbl >= yyvsp[0].dbl ); }
 break;
 case 39:
-#line 116 "yacc.y"
+#line 168 "yacc.y"
 { yyval.b = ( yyvsp[-2].b == yyvsp[0].b ); }
 break;
 case 40:
-#line 117 "yacc.y"
+#line 169 "yacc.y"
 { yyval.b = ( yyvsp[-2].b != yyvsp[0].b ); }
 break;
 case 41:
-#line 118 "yacc.y"
+#line 170 "yacc.y"
 { yyval.b = ( yyvsp[-2].b != yyvsp[0].b ); }
 break;
 case 42:
-#line 121 "yacc.y"
-{ printf("BOOL %i\n",(int)yyvsp[0].b); yyval.b = yyvsp[0].b; }
+#line 173 "yacc.y"
+{ yyval.b = yyvsp[0].b; }
 break;
 case 43:
-#line 122 "yacc.y"
+#line 174 "yacc.y"
 { yyval.b = yyvsp[-1].b; }
 break;
 case 44:
-#line 123 "yacc.y"
+#line 175 "yacc.y"
 { if ( yyvsp[-5].b ) yyval.b = yyvsp[-3].b; else yyval.b = yyvsp[-1].b; }
 break;
 case 45:
-#line 124 "yacc.y"
+#line 176 "yacc.y"
 { char res; int e = funcBool( yyvsp[-3].name, yyvsp[-1].param, &res ); if ( e != 0 ) setError( e, yyvsp[-3].name ); yyval.b = res; }
 break;
 case 46:
-#line 125 "yacc.y"
+#line 177 "yacc.y"
 { char res; int e = funcBool( yyvsp[-2].name, newArgList(), &res ); if ( e != 0 ) setError( e, yyvsp[-2].name ); yyval.b = res; }
 break;
-#line 637 "y.tab.c"
+#line 675 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;
