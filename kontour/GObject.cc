@@ -4,7 +4,7 @@
 
   This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
-  Copyright (C) 2001-2002 Igor Janssen (rm@linux.ru.net)
+  Copyright (C) 2001-2002 Igor Janssen (rm@kde.org)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -151,6 +151,7 @@ void GObject::matrix(QWMatrix m)
 void GObject::initTmpMatrix()
 {
   tmpMatrix = tMatrix;
+  calcBoundingBox();
 }
 
 void GObject::transform(const QWMatrix &m)
@@ -158,7 +159,6 @@ void GObject::transform(const QWMatrix &m)
   tMatrix = tMatrix * m;
   iMatrix = tMatrix.invert();
   initTmpMatrix();
-  calcBoundingBox();
 }
 
 void GObject::ttransform(const QWMatrix &m)

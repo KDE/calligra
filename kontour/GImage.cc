@@ -119,7 +119,7 @@ void GImage::movePoint(int idx, double dx, double dy, bool /*ctrlPressed*/)
 {
 }
 
-void GImage::removePoint(int idx, bool update)
+void GImage::removePoint(int idx)
 {
 }
 
@@ -133,11 +133,6 @@ bool GImage::contains(const KoPoint &p)
       return true;
   }
   return false;
-}
-
-bool GImage::findNearestPoint(const KoPoint &p, double max_dist, double &dist, int &pidx, bool all)
-{
-  return true;
 }
 
 void GImage::calcBoundingBox()

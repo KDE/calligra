@@ -157,20 +157,17 @@ int GPolygon::getNeighbourPoint(const KoPoint &p)
 
 void GPolygon::movePoint(int idx, double dx, double dy, bool /*ctrlPressed*/)
 {
+//  if(idx < mVertex)  
 }
 
-void GPolygon::removePoint(int idx, bool update)
+void GPolygon::removePoint(int idx)
 {
 }
 
 bool GPolygon::contains(const KoPoint &p)
 {
+  // TODO Implement...
   return false;
-}
-
-bool GPolygon::findNearestPoint(const KoPoint &p, double max_dist, double &dist, int &pidx, bool all)
-{
-  return true;
 }
 
 void GPolygon::calcBoundingBox()

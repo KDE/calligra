@@ -4,7 +4,7 @@
 
   This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
-  Copyright (C) 2001-2002 Igor Janssen (rm@linux.ru.net)
+  Copyright (C) 2001-2002 Igor Janssen (rm@kde.org)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -159,9 +159,7 @@ public:
    */
   virtual int getNeighbourPoint(const KoPoint &point) = 0;
   virtual void movePoint(int idx, double dx, double dy, bool ctrlPressed = false) = 0;
-  virtual void removePoint(int idx, bool update = true) = 0;
-
-  virtual bool findNearestPoint(const KoPoint &p, double max_dist, double &dist, int &pidx, bool all) = 0;
+  virtual void removePoint(int idx) = 0;
 
   virtual void calcBoundingBox() = 0;
 

@@ -38,7 +38,7 @@
 GOval::GOval(double rx, double ry):
 GObject()
 {
-  mType = Ellipse;
+  mType = Arc;
   mRX = rx;
   mRY = ry;
   sAngle = 270.0;
@@ -229,7 +229,7 @@ void GOval::movePoint (int idx, double dx, double dy, bool /*ctrlPressed*/)
   updateRegion ();*/
 }
 
-void GOval::removePoint(int idx, bool update)
+void GOval::removePoint(int idx)
 {
 }
 
@@ -247,11 +247,6 @@ bool GOval::contains(const KoPoint &p)
   }
   else
     return false;
-}
-
-bool GOval::findNearestPoint(const KoPoint &p, double max_dist, double &dist, int &pidx, bool all)
-{
-  return true;
 }
 
 GPath *GOval::convertToPath() const

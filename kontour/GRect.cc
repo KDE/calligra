@@ -137,7 +137,7 @@ void GRect::movePoint(int idx, double dx, double dy, bool /*ctrlPressed*/)
 {
 }
 
-void GRect::removePoint(int idx, bool update)
+void GRect::removePoint(int idx)
 {
 }
 
@@ -148,11 +148,6 @@ bool GRect::contains(const KoPoint &p)
     return true;
   else
     return false;
-}
-
-bool GRect::findNearestPoint(const KoPoint &p, double max_dist, double &dist, int &pidx, bool all)
-{
-  return true;
 }
 
 GPath *GRect::convertToPath() const

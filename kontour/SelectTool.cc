@@ -4,7 +4,7 @@
 
   This file is part of Kontour.
   Copyright (C) 1998 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)
-  Copyright (C) 2001-2002 Igor Janssen (rm@linux.ru.net)
+  Copyright (C) 2001-2002 Igor Janssen (rm@kde.org)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
@@ -687,47 +687,24 @@ void SelectTool::translate(GPage *page, double dx, double dy, bool snap, bool pe
 
 void SelectTool::scale(GPage *page, double dx, double dy, bool type, bool permanent)
 {
-  page->updateSelection();
-  KoRect origbox = page->boundingBoxForSelection();
-  origbox = origbox.normalize();
-  KoRect newbox(origbox);
   double sx;
   double sy;
-
+  for(QPtrListIterator<GObject> it(page->getSelection()); it.current(); ++it)
+    (*it)->initTmpMatrix();
+  page->calcBoxes();
+  KoRect origbox = page->shapeBoxForSelection();
+  KoRect newbox = origbox;
   if(mask & Kontour::HPosRight)
-  {
     newbox.setRight(newbox.right() + dx);
-    kdDebug() << "1" << endl;
-  }
   if(mask & Kontour::HPosBottom)
-  {
     newbox.setBottom(newbox.bottom() + dy);
-    kdDebug() << "2" << endl;
-  }
   if(mask & Kontour::HPosLeft)
-  {
-    newbox.setLeft(newbox.left() - dx);
-    kdDebug() << "3" << endl;
-  }
+    newbox.setLeft(newbox.left() + dx);
   if(mask & Kontour::HPosTop)
-  {
-    newbox.setTop(newbox.top() - dy);
-    kdDebug() << "4" << endl;
-  }
+    newbox.setTop(newbox.top() + dy);
 
-  kdDebug() << "**********" << endl;
-  if(!type)
- {
-  kdDebug() << "DX = " << dx << endl;
-  kdDebug() << "DY = " << dy << endl;
-  kdDebug() << "old width = " << origbox.width() << endl;
-  kdDebug() << "old height = " << origbox.height() << endl;
-  kdDebug() << "new width = " << newbox.width() << endl;
-  kdDebug() << "new height = " << newbox.height() << endl;
-}
-/*  KoRect sbox = canvas->snapScaledBoxToGrid (newbox, mask);*/
-//  sx = sbox.width() / origbox.width();
-//  sy = sbox.height() / origbox.height();
+//  canvas->snapScaledBoxToGrid(newbox, mask);
+
   sx = newbox.width() / origbox.width();
   sy = newbox.height() / origbox.height();
 
@@ -767,10 +744,7 @@ void SelectTool::scale(GPage *page, double dx, double dy, bool type, bool perman
     for(QPtrListIterator<GObject> it(page->getSelection()); it.current(); ++it)
     {
       (*it)->setWorkInProgress(true);
-      (*it)->initTmpMatrix();
-      (*it)->ttransform(m1);
-      (*it)->ttransform(m2);
-      (*it)->ttransform(m3);
+      (*it)->ttransform(m1 * m2 * m3);
     }
     page->updateSelection();
   }
@@ -782,12 +756,15 @@ void SelectTool::scale(GPage *page, double dx, double dy, bool type, bool perman
   msgbuf += QString::number(sy * 100.0, 'f', 3);
   msgbuf += QString(" %]");
   toolController()->view()->setStatus(msgbuf);
-  kdDebug() << "**********" << endl;
 }
 
 void SelectTool::shear(GPage *page, double dx, double dy, bool permanent)
 {
-  KoRect origbox = page->boundingBoxForSelection();
+  for(QPtrListIterator<GObject> it(page->getSelection()); it.current(); ++it)
+    (*it)->initTmpMatrix();
+  page->calcBoxes();
+  KoRect origbox = page->shapeBoxForSelection();
+  KoRect newbox = origbox;
   double sx = 0.0;
   double sy = 0.0;
   if(mask == Kontour::HPosTopR)
@@ -817,10 +794,7 @@ void SelectTool::shear(GPage *page, double dx, double dy, bool permanent)
     for(QPtrListIterator<GObject> it(page->getSelection()); it.current(); ++it)
     {
       (*it)->setWorkInProgress(true);
-      (*it)->initTmpMatrix();
-      (*it)->ttransform(m1);
-      (*it)->ttransform(m2);
-      (*it)->ttransform(m3);
+      (*it)->ttransform(m1 * m2 * m3);
     }
     page->updateSelection();
   }
@@ -867,9 +841,7 @@ void SelectTool::rotate(GPage *page, double xf, double yf, double xp, double yp,
     {
       (*it)->setWorkInProgress(true);
       (*it)->initTmpMatrix();
-      (*it)->ttransform(m1);
-      (*it)->ttransform(m2);
-      (*it)->ttransform(m3);
+      (*it)->ttransform(m1 * m2 * m3);
     }
     page->updateSelection();
   }

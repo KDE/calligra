@@ -116,7 +116,7 @@ void GGroup::movePoint(int idx, double dx, double dy, bool /*ctrlPressed*/)
 {
 }
 
-void GGroup::removePoint(int idx, bool update)
+void GGroup::removePoint(int idx)
 {
 }
 
@@ -129,11 +129,6 @@ bool GGroup::contains(const KoPoint &p)
                 return true;
     }*/
   return false;
-}
-
-bool GGroup::findNearestPoint(const KoPoint &p, double max_dist, double &dist, int &pidx, bool all)
-{
-  return true;
 }
 
 void GGroup::calcBoundingBox()

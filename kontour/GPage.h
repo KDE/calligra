@@ -54,7 +54,7 @@ public:
 
   void bgColor(QColor aBGColor);
   QColor bgColor() const { return mBGColor; }
-  
+
   int paperWidth() const {return mPaperWidth; }
   int paperHeight() const {return mPaperHeight; }
   void setPaperSize(int width, int height);
@@ -71,12 +71,12 @@ public:
    * Layers management.
    *
    */
-  
+
   QPtrList<GLayer> &getLayers() {return layers; }
-  
+
   // retrieve the active layer
   GLayer *activeLayer();
-  
+
   // set the active layer where further actions take place
   void activeLayer(GLayer *aLayer);
 
@@ -96,7 +96,7 @@ public:
    *  Objects management,
    *
    */
-  
+
   unsigned int objectCount() const;
 
   void insertObject(GObject *obj);

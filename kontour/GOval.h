@@ -32,7 +32,7 @@ class GOval : public GObject
 {
   Q_OBJECT
 public:
-  enum Type{ Ellipse, Pie, Segment };
+  enum Type{ Arc, Sector, Segment };
 
   GOval(double rx, double ry);
   GOval(const QDomElement &element);
@@ -53,9 +53,8 @@ public:
 
   int getNeighbourPoint(const KoPoint &point);
   void movePoint(int idx, double dx, double dy, bool ctrlPressed = false);
-  void removePoint(int idx, bool update = true);
+  void removePoint(int idx);
   bool contains(const KoPoint &p);
-  bool findNearestPoint(const KoPoint &p, double max_dist, double &dist, int &pidx, bool all);
 
   void calcBoundingBox();
   GPath *convertToPath() const;

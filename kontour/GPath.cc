@@ -415,7 +415,7 @@ void GPath::movePoint(int idx, double dx, double dy, bool ctrlPressed)
 {
 }
 
-void GPath::removePoint(int idx, bool update)
+void GPath::removePoint(int idx)
 {
 }
 
@@ -444,11 +444,6 @@ bool GPath::contains(const KoPoint &p)
       y = s->point(0).y();
     }
   }
-  return false;
-}
-
-bool GPath::findNearestPoint(const KoPoint &p, double max_dist, double &dist, int &pidx, bool all)
-{
   return false;
 }
 
