@@ -131,8 +131,8 @@ void KSpreadConsolidate::slotOk()
   KSpreadMap *map = m_pView->doc()->map();
 
   KSpreadTable* table = m_pView->activeTable();
-  int dx = m_pView->canvasWidget()->markerColumn();
-  int dy = m_pView->canvasWidget()->markerRow();
+  int dx = m_pView->selectionInfo()->selection().left();
+  int dy = m_pView->selectionInfo()->selection().top();
 
   QString function;
 

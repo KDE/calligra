@@ -22,6 +22,7 @@ Bugfixes:
 - Fix #46530: crash on selecting validity
 - Fix #45395: Save as HTML is called "mime type"
 - Fix #34088: Precision of currency is too low or overflow is handled in a strange way
+- Fix #45324: consolidate function result reference area selecting unintuitive
 
 Until RC1:
 ----------
