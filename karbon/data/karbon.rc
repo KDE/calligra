@@ -64,6 +64,7 @@
 		</Menu>
 		<Action name="selection_group"/>
 		<Action name="selection_ungroup"/>
+		<Action name="close_path"/>
 	</Menu>
 	<Menu name="plugins">
 		<text>&amp;Plugins</text>

@@ -11,6 +11,7 @@ noinst_HEADERS = \
 	vbooleancmd.h \
 	vcleanupcmd.h \
 	vclipartcmd.h \
+	vclosepathcmd.h \
 	vcommand.h \
 	vdeletecmd.h \
 	vfillcmd.h \
@@ -30,6 +31,7 @@ libkarboncommands_la_SOURCES = \
 	vbooleancmd.cc \
 	vcleanupcmd.cc \
 	vclipartcmd.cc \
+	vclosepathcmd.cc \
 	vcommand.cc \
 	vdeletecmd.cc \
 	vfillcmd.cc \

@@ -46,6 +46,7 @@
 #include "valigncmd.h"
 #include "vcleanupcmd.h"
 #include "vclipartcmd.h"
+#include "vclosepathcmd.h"
 #include "vdeletecmd.h"
 #include "vfillcmd.h"
 #include "vgroupcmd.h"
@@ -75,6 +76,7 @@
 #include "vselection.h"
 #include "vtool.h"
 #include "vtoolcontroller.h"
+#include "vcomposite.h"
 #include "vgroup.h"
 #include "vpainterfactory.h"
 #include "vqpainter.h"
@@ -567,6 +569,12 @@ KarbonView::ungroupSelection()
 	part()->addCommand( new VUnGroupCmd( &part()->document() ), true );
 }
 
+void
+KarbonView::closePath()
+{
+	part()->addCommand( new VClosePathCmd( &part()->document() ), true );
+}
+
 // TODO: remove this one someday:
 void
 KarbonView::dummyForTesting()
@@ -884,6 +892,9 @@ KarbonView::initActions()
 	m_ungroupObjects = new KAction(
 		i18n( "&Ungroup Objects" ), "ungroup", QKeySequence( "Ctrl+U" ), this,
 		SLOT( ungroupSelection() ), actionCollection(), "selection_ungroup" );
+	m_closePath = new KAction(
+		i18n( "&Close path" ), "closepath", 0 /*QKeySequence( "Ctrl+U" )*/, this,
+		SLOT( closePath() ), actionCollection(), "close_path" );
 	// object <-----
 
 	new KAction(
@@ -1021,6 +1032,8 @@ KarbonView::showSelectionPopupMenu( const QPoint &pos )
 		actionList.append( m_groupObjects );
 	else if( m_ungroupObjects->isEnabled() )
 		actionList.append( m_ungroupObjects );
+	if( m_closePath->isEnabled() )
+		actionList.append( m_closePath );
 	plugActionList( "selection_type_action", actionList );
 	((QPopupMenu *)factory()->container( "selection_popup", this ) )->exec( pos );
 	unplugActionList( "selection_type_action" );
@@ -1073,18 +1086,22 @@ void
 KarbonView::selectionChanged()
 {
 	int count = part()->document().selection()->objects().count();
+	m_groupObjects->setEnabled( false );
+	m_closePath->setEnabled( false );
+	m_ungroupObjects->setEnabled( false );
 
 	if( count > 0 )
 	{
-		VGroup *group = dynamic_cast<VGroup *>( part()->document().selection()->objects().getFirst() );
-		m_groupObjects->setEnabled( count > 1 );
-		m_ungroupObjects->setEnabled( group && ( count == 1 ) );
 		VObject *obj = part()->document().selection()->objects().getFirst();
 
 		if( count == 1 )
 		{
 			m_strokeFillPreview->update( *obj->stroke(), *obj->fill() );
 			m_strokeDocker->setStroke( *( obj->stroke() ) );
+			VGroup *group = dynamic_cast<VGroup *>( part()->document().selection()->objects().getFirst() );
+			m_ungroupObjects->setEnabled( group );
+			VPath *path = dynamic_cast<VPath *>( part()->document().selection()->objects().getFirst() );
+			m_closePath->setEnabled( path && !path->isClosed() );
 		}
 		else
 		{
@@ -1092,6 +1109,7 @@ KarbonView::selectionChanged()
 			stroke.setType( VStroke::none );
 			VFill fill;
 			m_strokeFillPreview->update( stroke, fill );
+			m_groupObjects->setEnabled( true );
 		}
 
 		part()->document().selection()->setStroke( *obj->stroke() );
@@ -1107,8 +1125,6 @@ KarbonView::selectionChanged()
 		m_strokeFillPreview->update( *( part()->document().selection()->stroke() ),
 									 *( part()->document().selection()->fill() ) );
 		m_setLineWidth->setEnabled( false );
-		m_groupObjects->setEnabled( false );
-		m_ungroupObjects->setEnabled( false );
 	}
 
 	emit selectionChange();

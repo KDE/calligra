@@ -127,6 +127,7 @@ public:
 	 */
 	void close();
 
+	bool isClosed() const;
 	/**
 	 * Combines two composite paths. For example, the letter "O" is a combination
 	 * of a larger and a smaller ellipitical path.

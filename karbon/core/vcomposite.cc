@@ -226,6 +226,12 @@ VPath::close()
 	m_paths.append( path );
 }
 
+bool
+VPath::isClosed() const
+{
+	return m_paths.getLast()->isEmpty() || m_paths.getLast()->isClosed();
+}
+
 void
 VPath::combine( const VPath& composite )
 {

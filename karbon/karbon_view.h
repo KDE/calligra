@@ -133,6 +133,8 @@ public slots:
 	void groupSelection();
 	void ungroupSelection();
 
+	void closePath();
+
 	// TODO: remove this someday:
 	void dummyForTesting();
 
@@ -197,6 +199,8 @@ private:
 
 	KAction			*m_groupObjects;
 	KAction			*m_ungroupObjects;
+
+	KAction			*m_closePath;
 
 	// actions:
 	KSelectAction		*m_zoomAction;
