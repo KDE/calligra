@@ -27,7 +27,7 @@ libkarbonpart_la_SOURCES = \
 	karbon_view_iface.cc \
 	karbon_view_iface.skel
 
-libkarbonpart_la_LDFLAGS = $(KDE_PLUGIN)
+libkarbonpart_la_LDFLAGS = $(KDE_PLUGIN) -no-undefined
 libkarbonpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOTEXT)  $(LIB_KOPAINTER) \
 	tools/libkarbontools.la \
 	dockers/libkarbondockers.la \
