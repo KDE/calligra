@@ -33,7 +33,8 @@
 #include "KSpreadDocIface.h"
 
 #include <unistd.h>
-#include <qmessagebox.h>
+#include <kmessagebox.h>
+#include <kdebug.h>
 #include <kurl.h>
 #include <kapp.h>
 #include <cassert>
@@ -655,11 +656,15 @@ void KSpreadDoc::initInterpreter()
   QMap<QString,QString>::Iterator mip = m.begin();
   for( ; mip != m.end(); ++mip )
   {
-    qDebug("SCRIPT=%s, %s", mip.key().latin1(), mip.data().latin1() );
+    kdDebug() << "SCRIPT="<<  mip.key() << ", " << mip.data() << endl;
     KSContext context;
     QStringList args;
     if ( !m_pInterpreter->runModule( context, mip.key(), mip.data(), args ) )
-      QMessageBox::critical( 0L, i18n("KScript error"), context.exception()->toString( context ), i18n("OK") );
+    {
+        if ( context.exception() )
+            KMessageBox::error( 0L, context.exception()->toString( context ) );
+        // else ... well, nothing to show...
+    }
   }
 }
 
