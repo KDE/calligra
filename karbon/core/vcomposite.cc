@@ -347,7 +347,8 @@ VComposite::saveSvgPath( QString &d ) const
 	VPathListIterator itr( m_paths );
 	for( itr.toFirst(); itr.current(); ++itr )
 	{
-		itr.current()->saveSvgPath( d );
+		if( !itr.current()->isEmpty() )
+			itr.current()->saveSvgPath( d );
 	}
 }
 
