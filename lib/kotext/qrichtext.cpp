@@ -3883,7 +3883,7 @@ void KoTextParag::format( int start, bool doMove )
     if ( invalid == -1 )
 	return;
 
-    kdDebug() << "KoTextParag::format " << this << " id:" << paragId() << endl;
+    //kdDebug() << "KoTextParag::format " << this << " id:" << paragId() << endl;
 
     r.moveTopLeft( QPoint( documentX(), p ? p->r.y() + p->r.height() : documentY() ) );
     if ( p )
