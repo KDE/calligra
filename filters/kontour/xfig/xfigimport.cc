@@ -161,7 +161,7 @@ bool XFIGImport::filterImport( const QString &file, KoDocument *doc,
                               const QString &from, const QString &to,
                               const QString & ) {
 
-    if( to != "application/x-killustrator" || from != "image/x-xfig" )
+    if( to != "application/x-kontour" || from != "image/x-xfig" )
         return false;
 
   char buf[255];

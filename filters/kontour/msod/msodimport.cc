@@ -49,7 +49,7 @@ bool MSODImport::filter(
     const QString &to,
     const QString &config)
 {
-    if (to != "application/x-killustrator" || from != "image/x-msod")
+    if (to != "application/x-kontour" || from != "image/x-msod")
         return false;
 
     // Get configuration data: the shape id, and any delay stream that we were given.
