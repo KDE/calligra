@@ -18,7 +18,7 @@
 */
 
 //#include "kotextparag.h"
-//#include "kotextdocument.h"
+#include "kotextdocument.h"
 #include "koparagcounter.h"
 #include "kozoomhandler.h"
 #include "kostyle.h"
@@ -1260,8 +1260,9 @@ void KoTextParag::setCustomItem( int index, KoTextCustomItem * custom, KoTextFor
     at( index )->setCustomItem( custom );
     addCustomItem();
     document()->registerCustomItem( custom, this );
-    custom->resize();
+    custom->recalc(); // calc value (e.g. for variables) and set initial size
     invalidate( 0 );
+    setChanged( true );
 }
 
 void KoTextParag::removeCustomItem( int index )
@@ -1635,4 +1636,24 @@ QString KoTextParag::toString( int from, int length ) const
             str += ch->c;
     }
     return str;
+}
+
+int KoTextParag::documentWidth() const
+{
+    return doc ? doc->width() : 0; //docRect.width();
+}
+
+int KoTextParag::documentVisibleWidth() const
+{
+    return doc ? doc->visibleWidth() : 0; //docRect.width();
+}
+
+int KoTextParag::documentX() const
+{
+    return doc ? doc->x() : 0; //docRect.x();
+}
+
+int KoTextParag::documentY() const
+{
+    return doc ? doc->y() : 0; //docRect.y();
 }

@@ -11,6 +11,7 @@
 #include <klocale.h>
 #include <qlineedit.h>
 #include <knuminput.h>
+#include <koVariable.h>
 
 /*
  *  Constructs a TimeFormatWidget which is a child of 'parent', with the
@@ -21,14 +22,8 @@ TimeFormatWidget::TimeFormatWidget( QWidget* parent,  const char* name, WFlags f
 {
     setCaption( i18n( "TimeFormat", "This dialog allows you to set the format of the time variable" ) );
 
-    QStringList listTimeFormat;
-    listTimeFormat<<i18n("Locale");
-    //don't i18n(...) this string otherwise insertion doesn't work
-    listTimeFormat<<"hh:mm";
-    listTimeFormat<<"hh:mm:ss";
-    listTimeFormat<<"hh:mm AP";
-    listTimeFormat<<"hh:mm:ss AP";
-    listTimeFormat<<"mm:ss.zzz";
+    QStringList listTimeFormat = KoVariableTimeFormat::staticTranslatedFormatPropsList();
+    combo1->insertStringList(listTimeFormat);
 
     combo2->insertItem( i18n( "Hour" ) );
     combo2->insertItem( i18n( "Hour (2 digits)" ) );
@@ -41,7 +36,6 @@ TimeFormatWidget::TimeFormatWidget( QWidget* parent,  const char* name, WFlags f
     combo2->insertItem( i18n( "AM/PM" ) );
     combo2->setCurrentItem( 0 );
 
-    combo1->insertStringList(listTimeFormat);
     label_correction->setText(i18n("Correct in Minutes"));
     connect( CheckBox1, SIGNAL(toggled ( bool )),this,SLOT(slotPersonalizeChanged(bool)));
     connect( combo1, SIGNAL(activated ( const QString & )), this, SLOT(slotDefaultValueChanged(const QString &)));

@@ -59,30 +59,29 @@ class KoVariableSettings
     int startingPageNumber()const { return startingPage(); }
     void setStartingPageNumber(int num) { setStartingPage(num); }
 
-    bool displayLink()const{ return m_displayLink; }
-    void setDisplayLink( bool b){ m_displayLink=b; }
+    bool displayLink() const{ return m_displayLink; }
+    void setDisplayLink( bool b) { m_displayLink=b; }
 
-    bool underlineLink()const { return m_underlineLink; }
-    void setUnderlineLink( bool b){ m_underlineLink=b; }
+    bool underlineLink() const { return m_underlineLink; }
+    void setUnderlineLink( bool b) { m_underlineLink=b; }
 
-    bool displayComment()const { return m_displayComment; }
-    void setDisplayComment( bool b){ m_displayComment=b; }
+    bool displayComment() const { return m_displayComment; }
+    void setDisplayComment( bool b) { m_displayComment=b; }
 
-    bool displayFieldCode()const { return m_displayFieldCode; }
-    void setDisplayFieldCode( bool b){ m_displayFieldCode=b; }
-
+    bool displayFieldCode() const { return m_displayFieldCode; }
+    void setDisplayFieldCode( bool b) { m_displayFieldCode=b; }
 
     virtual void save( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
 
-    QDate lastPrinting() const;
-    void setLastPrint( const QDate & _date);
+    QDateTime lastPrintingDate() const;
+    void setLastPrintingDate( const QDateTime & _date);
 
-    QDate createFile() const;
-    void setCreateFile( const QDate & _date);
+    QDateTime creationDate() const;
+    void setCreationDate( const QDateTime & _date);
 
-    QDate modifyFile() const;
-    void setModifyFile( const QDate & _date);
+    QDateTime modificationDate() const;
+    void setModificationDate( const QDateTime & _date);
 
 
  private:
@@ -100,62 +99,127 @@ class KoVariableSettings
  * Base class for a variable format - held by KWDocument.
  * Example of formats are time, date, string, number, floating-point number...
  * The reason for formats to be separated is that it allows to
- * customize the formats, to implement subformats (various date formats, etc.). Still TBD.
+ * customize the formats, to implement subformats (various date formats, etc.).
  */
 class KoVariableFormat
 {
 public:
     KoVariableFormat() {}
     virtual ~KoVariableFormat() {}
-    /** Return a key describing this format.
+    /**
+     * Return a key describing this format.
      * Used for the flyweight pattern in KoVariableFormatCollection
      */
     virtual QCString key() const = 0;
-    /** Create a format from this key.
+    /**
+     * @return the key for a given set of properties.
+     * Use this key to lookup the format in the "variable format" collection.
+     * @param props properties of this format, e.g. DD/MM/YYYY for a date format.
+     */
+    virtual QCString getKey( const QString& props ) const = 0;
+    /**
+     * Create a format from this key.
      */
     virtual void load( const QCString &key ) = 0;
-    virtual QString convert(const QVariant& data )const = 0;
+    /**
+     * Use this format to convert a piece of data into a string.
+     */
+    virtual QString convert(const QVariant& data ) const = 0;
+    /**
+     * Set the properties of this format, e.g. DD/MM/YYYY for a date format.
+     * WARNING: if you call this, you might be modifying a format that
+     * other variables use as well. Don't do it, use getKey.
+     */
+    virtual void setFormatProperties( const QString& ) {}
+    /**
+     * @return the properties of this format, e.g. DD/MM/YYYY for a date format.
+     */
+    virtual QString formatProperties() const { return QString::null; }
+    /**
+     * @return the list of available properties strings (e.g. hh:mm:ss)
+     */
+    virtual QStringList formatPropsList() const { return QStringList(); }
+    /**
+     * @return the translated version of the list of format properties
+     */
+    virtual QStringList translatedFormatPropsList() const { return QStringList(); }
 };
 
+/**
+ * Implementation of the "date" formats
+ * TODO: merge with KoVariableTimeFormat, for a single QDateTime-based class.
+ */
 class KoVariableDateFormat : public KoVariableFormat
 {
 public:
     KoVariableDateFormat();
-    QString convert(const QVariant& data )const;
-
+    virtual QString convert(const QVariant& data ) const;
     virtual QCString key() const;
+    virtual QCString getKey( const QString& props ) const;
     virtual void load( const QCString &key );
 
-    void setDateFormat( const QString& format ) {
-        m_strFormat = format;
+    /// Set the format string (e.g. DDMMYYYY)
+    virtual void setFormatProperties( const QString& props ) {
+        m_strFormat = props;
     }
-    QString m_strFormat; // HACK, MOVE ME
+    /// @return the format string (e.g. DDMMYYYY)
+    virtual QString formatProperties() const { return m_strFormat; }
+
+    /// @return the list of available format strings
+    virtual QStringList formatPropsList() const { return staticFormatPropsList(); }
+
+    /// @return the translated version of the list of formats
+    virtual QStringList translatedFormatPropsList() const { return staticTranslatedFormatPropsList(); }
+
+    static QStringList staticFormatPropsList();
+    static QStringList staticTranslatedFormatPropsList();
+
 private:
-    bool m_bShort;
+    QString m_strFormat;
 };
 
+/**
+ * Implementation of the "time" formats
+ */
 class KoVariableTimeFormat : public KoVariableFormat
 {
 public:
     KoVariableTimeFormat();
-    QString convert(const QVariant& data )const;
+    virtual QString convert(const QVariant& data ) const;
     virtual QCString key() const;
+    virtual QCString getKey( const QString& props ) const;
     virtual void load( const QCString & /*key*/ );
 
-    void setTimeFormat( const QString& format ) {
-        m_strFormat = format;
+    /// Set the format string (e.g. hh:mm:ss)
+    virtual void setFormatProperties( const QString& props ) {
+        m_strFormat = props;
     }
-    QString m_strFormat; // HACK, MOVE ME
+    /// @return the format string (e.g. hh:mm:ss)
+    virtual QString formatProperties() const { return m_strFormat; }
+
+    /// @return the list of available properties strings (e.g. hh:mm:ss)
+    virtual QStringList formatPropsList() const { return staticFormatPropsList(); }
+
+    /// @return the translated version of the list of format properties
+    virtual QStringList translatedFormatPropsList() const { return staticTranslatedFormatPropsList(); }
+
+    static QStringList staticFormatPropsList();
+    static QStringList staticTranslatedFormatPropsList();
+
 private:
+    QString m_strFormat;
 };
 
+/**
+ * Implementation of the string format
+ */
 class KoVariableStringFormat : public KoVariableFormat
 {
 public:
     KoVariableStringFormat() : KoVariableFormat() {}
-    QString convert(const QVariant& data )const;
-
+    virtual QString convert(const QVariant& data ) const;
     virtual QCString key() const;
+    virtual QCString getKey( const QString& props ) const;
     virtual void load( const QCString & /*key*/ ) {}
 };
 
@@ -163,8 +227,9 @@ class KoVariableNumberFormat : public KoVariableFormat
 {
 public:
     KoVariableNumberFormat() : KoVariableFormat() {}
-    QString convert(const QVariant& data )const;
+    virtual QString convert(const QVariant& data ) const;
     virtual QCString key() const;
+    virtual QCString getKey( const QString& props ) const;
     virtual void load( const QCString & /*key*/ ) {}
 };
 
@@ -198,26 +263,6 @@ private:
     QAsciiDict<KoVariableFormat> m_dict;
 };
 
-/* TODO find a way to integrate with all other formats !
-   and add a UI for it
-   class ... : public KoVariableFormat
-{
-public:
-    ...() { pre = "-"; post = "-"; }
-
-    virtual QString convert( KWVariable *_var ) const;
-
-    // Needs a UI !
-    void setPre( const QString &_pre ) { pre = _pre; }
-    void setPost( const QString &_post ) { pre = _post; }
-
-    QString getPre() const { return pre; }
-    QString getPost() const { return post; }
-
-protected:
-    QString pre, post;
-};*/
-
 class KoVariable;
 class KoVariableFormat;
 class KoDocument;
@@ -228,7 +273,9 @@ class KoVariableCollection : public QObject
 {
     Q_OBJECT
 public:
-    KoVariableCollection(KoVariableSettings *_setting);
+    // Note that the KoVariableSettings becomes owned by the collection;
+    // we take it as argument so that it can be subclassed though.
+    KoVariableCollection(KoVariableSettings *settings, KoVariableFormatCollection *formatCollection);
     ~KoVariableCollection();
     void registerVariable( KoVariable *var );
     void unregisterVariable( KoVariable *var );
@@ -245,35 +292,35 @@ public:
 
     bool customVariableExist(const QString &varname)const ;
 
-    virtual KoVariable *createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc, int _correct , bool _forceDefaultFormat=false );
+    virtual KoVariable *createVariable( int type, short int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc, int _correct , bool _forceDefaultFormat=false );
 
-    KoVariableSettings *variableSetting()const {return m_variableSettings;}
+    KoVariableSettings *variableSetting() const { return m_variableSettings; }
+    KoVariableFormatCollection *formatCollection() const { return m_formatCollection; }
 
+    /// Variable that's under the popupmenu
     void setVariableSelected(KoVariable * var);
     KoVariable *selectedVariable()const {return m_varSelected;}
+
+    /// List of KActions to put into the popupmenu on a variable
+    QPtrList<KAction> popupActionList();
 
  signals:
     void repaintVariable();
 
- public slots:
-    void changeTypeOfVariable();
-    void changeFormatOfVariable();
+ protected slots:
+    // This is here because variables and formats are not QObjects
+    void slotChangeSubType();
+    void slotChangeFormat();
 
  private:
-    typedef QMap<KAction *, int> VariableSubTextMap;
-    VariableSubTextMap m_variableSubTextMap;
-
-    struct VariableSubFormatDef {
-        QString translatedString;
-        QString format;
-    };
-    typedef QMap<KAction *, VariableSubFormatDef> VariableSubFormatMap;
-    VariableSubFormatMap m_variableSubFormatMap;
+    //typedef QMap<KAction *, int> VariableSubTextMap;
+    //VariableSubTextMap m_variableSubTextMap;
 
     QPtrList<KoVariable> variables;
-    QMap< QString, QString > varValues;
+    QMap< QString, QString > varValues; // for custom variables
     KoVariableSettings *m_variableSettings;
     KoVariable *m_varSelected;
+    KoVariableFormatCollection *m_formatCollection;
 };
 
 
@@ -295,6 +342,7 @@ public:
     virtual ~KoVariable();
 
     virtual VariableType type() const = 0;
+    virtual short int subType() const { return 0; }
 
     // KoTextCustomItem stuff
     virtual Placement placement() const { return PlaceInline; }
@@ -317,7 +365,8 @@ public:
     KoVariableCollection *variableColl() const
         { return m_varColl; }
 
-    /** Returns the text to be displayed for this variable
+    /**
+     * Returns the text to be displayed for this variable
      * It doesn't need to be cached, convert() is fast, and it's the actual
      * value (date, time etc.) that is cached in the variable already.
      */
@@ -325,13 +374,16 @@ public:
 
     virtual QString fieldCode();
 
-    /** Return the variable value, as a QVariant, before format conversion */
+    /// Return the variable value, as a QVariant, before format conversion
     QVariant varValue() const { return m_varValue; }
 
-    /** Variables reimplement this method to recalculate their value
-     * They must call resize() after having done that.
+    /**
+     * Ask this variable to recalculate and to repaint itself
+     * Only use this if you're working on a single variable (e.g. popupmenu).
+     * Otherwise, better do the repainting all at once.
+     * @see KoVariableCollection::recalcVariables()
      */
-    virtual void recalc() {}
+    void recalcAndRepaint();
 
     /** Save the variable. Public API, does the common job and then calls saveVariable. */
     void save( QDomElement &parentElem );
@@ -342,42 +394,29 @@ public:
       */
     virtual int typeId() const { return 4; }
 
+    /// List of available subtypes (translated). Use variableSubType() to map index to ID
     virtual QStringList subTypeText();
-    virtual QStringList subTypeFormat();
-    virtual void setVariableSubType( short int /*subtype*/) {}
+
+    /// Set this variable's subtype.
+    virtual void setVariableSubType( short int /*subtype*/ ) {}
 
     /**
      * Converts the @p menuNumber to variable subtype number (VST_x)
      */
     virtual short int variableSubType(short int menuNumber){ return menuNumber; }
 
-    /**
-     * Build list of menu actions
-     * Reimplement for all variables that has an action list
-     */
-    virtual QPtrList<KAction> actionList() {return QPtrList<KAction>();}
-
 protected:
     /** Variable should reimplement this to implement saving. */
     virtual void saveVariable( QDomElement &parentElem ) = 0;
     virtual int correctValue() const { return 0;}
+
     KoVariableFormat *m_varFormat;
     KoVariableCollection *m_varColl;
     QVariant m_varValue;
     int m_ascent;
 
-    // Hmm, this stuff should be static, or in a type class, not duplicated in every variable (DF)
-
-    typedef QMap<KAction *, int> SubTextMap;
-    SubTextMap m_subTextMap;
-
-    struct subFormatDef {
-        QString translatedString;
-        QString format;
-    };
-    typedef QMap<KAction *, subFormatDef> SubFormatMap;
-    SubFormatMap m_subFormatMap;
-
+    //typedef QMap<KAction *, int> SubTextMap;
+    //SubTextMap m_subTextMap;
     class Private;
     Private *d;
 };
@@ -388,7 +427,7 @@ protected:
 class KoDateVariable : public KoVariable
 {
 public:
-    KoDateVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *_varFormat,KoVariableCollection *_varColl , int _correctDate = 0);
+    KoDateVariable( KoTextDocument *textdoc, short int subtype, KoVariableFormat *_varFormat,KoVariableCollection *_varColl , int _correctDate = 0);
 
     virtual VariableType type() const
     { return VT_DATE; }
@@ -405,12 +444,14 @@ public:
     virtual int correctValue() const { return m_correctDate;}
     virtual void load( QDomElement &elem );
     virtual QStringList subTypeText();
-    virtual QStringList subTypeFormat();
-    virtual void setVariableSubType( short int type){m_subtype=type;}
+    /// Set this variable's subtype.
+    virtual void setVariableSubType( short int subtype )
+        { m_subtype = subtype; }
+    virtual short int subType() const { return m_subtype; }
     /**
-     * Returns the date format string with prefix "DATE"
+     * Ask the user and return the date format string with prefix "DATE"
      */
-    static QCString formatStr( int & correct);
+    static QCString formatStr( int & correct );
     /**
      * Return the default date format for old file.
      */
@@ -427,7 +468,7 @@ protected:
 class KoTimeVariable : public KoVariable
 {
 public:
-    KoTimeVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat, KoVariableCollection *_varColl,  int _correct);
+    KoTimeVariable( KoTextDocument *textdoc, short int subtype, KoVariableFormat *varFormat, KoVariableCollection *_varColl,  int _correct);
 
     virtual VariableType type() const
     { return VT_TIME; }
@@ -446,8 +487,9 @@ public:
     virtual void load( QDomElement &elem );
 
     virtual QStringList subTypeText();
-    virtual QStringList subTypeFormat();
-    virtual void setVariableSubType( short int type){m_subtype=type;}
+    virtual void setVariableSubType( short int subtype )
+        { m_subtype = subtype; }
+    virtual short int subType() const { return m_subtype; }
     /**
      * Returns the time format string with prefix "TIME"
      */
@@ -500,7 +542,7 @@ protected:
 class KoFieldVariable : public KoVariable
 {
 public:
-    KoFieldVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl, KoDocument *_doc );
+    KoFieldVariable( KoTextDocument *textdoc, short int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl, KoDocument *_doc );
 
     // Do not change existing values, they are saved in document files
     enum FieldSubType { VST_NONE = -1,
@@ -535,8 +577,9 @@ public:
     static FieldSubType fieldSubType( short int menuNumber);
 
     virtual QStringList subTypeText();
-    virtual void setVariableSubType( short int type){m_subtype=type;}
-    virtual short int variableSubType(){return m_subtype;}
+    virtual void setVariableSubType( short int subtype )
+        { m_subtype = subtype; }
+    virtual short int subType() const { return m_subtype; }
 
 protected:
     short int m_subtype;
@@ -572,7 +615,7 @@ protected:
 class KoPgNumVariable : public KoVariable
 {
 public:
-    KoPgNumVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat ,KoVariableCollection *_varColl);
+    KoPgNumVariable( KoTextDocument *textdoc, short int subtype, KoVariableFormat *varFormat ,KoVariableCollection *_varColl);
 
     virtual VariableType type() const
     { return VT_PGNUM; }
@@ -583,7 +626,7 @@ public:
 
     virtual QStringList subTypeText();
 
-    virtual void setVariableSubType( short int type);
+    virtual void setVariableSubType( short int subtype );
 
     // For the 'current page' variable. This is called by the app e.g. when painting
     // a given page (see KWTextFrameSet::drawFrame and KPTextObject::recalcPageNum)
@@ -591,7 +634,7 @@ public:
     // For the 'current section title' variable. Same thing.
     void setSectionTitle( const QString& title ) { m_varValue = QVariant( title); }
 
-    short int subtype() const { return m_subtype; }
+    virtual short int subType() const { return m_subtype; }
 
     virtual void recalc() = 0;
 

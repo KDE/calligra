@@ -134,17 +134,6 @@ public:
     void addRef();
     void removeRef();
 
-    //QString makeFormatChangeTags( KoTextFormat *f, const QString& oldAnchorHref, const QString& anchorHref ) const;
-    //QString makeFormatEndTags( const QString& anchorHref ) const;
-
-    //void setPainter( QPainter *p );
-    //void updateStyle();
-    //void updateStyleFlags();
-    //void setStyle( const QString &s );
-    //QString styleName() const { return style; }
-
-    //int changed() const { return different; }
-
 protected:
     void generateKey();
 
@@ -329,5 +318,45 @@ private:
     int ref;
     QString k;
 };
+
+inline QColor KoTextFormat::color() const
+{
+    return col;
+}
+
+inline QFont KoTextFormat::font() const
+{
+    return fn;
+}
+
+inline bool KoTextFormat::isMisspelled() const
+{
+    return missp;
+}
+
+inline KoTextFormat::VerticalAlignment KoTextFormat::vAlign() const
+{
+    return ha;
+}
+
+inline bool KoTextFormat::operator==( const KoTextFormat &f ) const
+{
+    return k == f.k;
+}
+
+inline KoTextFormatCollection *KoTextFormat::parent() const
+{
+    return collection;
+}
+
+inline QString KoTextFormat::key() const
+{
+    return k;
+}
+
+inline bool KoTextFormat::useLinkColor() const
+{
+    return linkColor;
+}
 
 #endif

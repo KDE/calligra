@@ -87,6 +87,10 @@ void KoTextObject::init()
              this, SIGNAL( paragraphDeleted( KoTextParag* ) ) );
     connect( textdoc, SIGNAL( paragraphDeleted( KoTextParag* ) ),
              this, SLOT( slotParagraphDeleted( KoTextParag* ) ) );
+    connect( textdoc, SIGNAL( newCommand( KCommand* ) ),
+             this, SIGNAL( newCommand( KCommand* ) ) );
+    connect( textdoc, SIGNAL( repaintChanged() ),
+             this, SLOT( emitRepaintChanged() ) );
 
     connect( this, SIGNAL(paragraphModified( KoTextParag*, int, int , int ) ),
              this, SLOT(slotParagraphModified(KoTextParag *, int, int , int)));

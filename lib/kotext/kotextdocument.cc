@@ -17,26 +17,33 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include "kotextdocument.h"
 #include "kozoomhandler.h"
 #include "kotextformatter.h"
 #include <kdebug.h>
+#include <kdeversion.h>
+#if ! KDE_IS_VERSION(3,1,90)
 #include <kdebugclasses.h>
+#endif
 #include "kocommand.h"
 
 //#define DEBUG_PAINTING
+
+//// Note that many methods are implemented in qrichtext.cpp
+//// Those are the ones that come from Qt, and that mostly work :)
 
 KoTextDocument::KoTextDocument( KoZoomHandler *zoomHandler, KoTextFormatCollection *fc,
                                 KoTextFormatter *formatter, bool createInitialParag )
     : m_zoomHandler( zoomHandler ),
       m_bDestroying( false ),
-      par( 0L /*we don't use parent documents */ ), parParag( 0 ),
 #ifdef QTEXTTABLE_AVAILABLE
+      par( 0L /*we don't use parent documents */ ),
       tc( 0 ),
 #endif
       tArray( 0 ), tStopWidth( 0 )
 {
     fCollection = fc;
-    init();
+    init(); // see qrichtext.cpp
 
     m_drawingFlags = 0;
     setAddMargins( true );                 // top margin and bottom are added, not max'ed
@@ -61,6 +68,34 @@ bool KoTextDocument::visitSelection( int selectionId, KoParagVisitor* visitor, b
     if ( c1 == c2 )
         return true;
     return visitFromTo( c1.parag(), c1.index(), c2.parag(), c2.index(), visitor, forward );
+}
+
+bool KoTextDocument::hasSelection( int id, bool visible ) const
+{
+    return ( selections.find( id ) != selections.end() &&
+             ( !visible ||
+               ( (KoTextDocument*)this )->selectionStartCursor( id ) !=
+               ( (KoTextDocument*)this )->selectionEndCursor( id ) ) );
+}
+
+void KoTextDocument::setSelectionStart( int id, KoTextCursor *cursor )
+{
+    KoTextDocumentSelection sel;
+    sel.startCursor = *cursor;
+    sel.endCursor = *cursor;
+    sel.swapped = FALSE;
+    selections[ id ] = sel;
+}
+
+KoTextParag *KoTextDocument::paragAt( int i ) const
+{
+    KoTextParag *s = fParag;
+    while ( s ) {
+	if ( s->paragId() == i )
+	    return s;
+	s = s->next();
+    }
+    return 0;
 }
 
 bool KoTextDocument::visitDocument( KoParagVisitor *visitor, bool forward )
@@ -437,3 +472,5 @@ KoTextDocCommand *KoTextDocument::deleteTextCommand( KoTextDocument *textdoc, in
 }
 
 // SYNC end - end of modified copies of KoTextDocument methods
+
+#include "kotextdocument.moc"

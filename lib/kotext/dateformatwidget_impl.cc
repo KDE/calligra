@@ -12,6 +12,8 @@
 #include <qlineedit.h>
 #include <kdebug.h>
 #include <knuminput.h>
+#include <koVariable.h>
+
 /*
  *  Constructs a DateFormatWidget which is a child of 'parent', with the
  *  name 'name' and widget flags set to 'fl'
@@ -20,22 +22,8 @@ DateFormatWidget::DateFormatWidget( QWidget* parent,  const char* name, WFlags f
     : TimeDateFormatWidgetPrototype( parent, name, fl )
 {
     setCaption( i18n( "DateFormat", "This dialog allows you to set the format of the date variable" ) );
-
-    QStringList listDateFormat;
-    listDateFormat<<i18n("Locale");
-    //don't i18n(...) this string otherwise insertion doesn't work
-    listDateFormat<<"dd/MM/yy";
-    listDateFormat<<"dd/MM/yyyy";
-    listDateFormat<<"MMM dd,yy";
-    listDateFormat<<"MMM dd,yyyy";
-    listDateFormat<<"dd.MMM.yyyy";
-    listDateFormat<<"MMMM dd, yyyy";
-    listDateFormat<<"ddd, MMM dd,yy";
-    listDateFormat<<"dddd, MMM dd,yy";
-    listDateFormat<<"MM-dd";
-    listDateFormat<<"yyyy-MM-dd";
-    listDateFormat<<"dd/yy";
-    listDateFormat<<"MMMM";
+    QStringList listDateFormat = KoVariableDateFormat::staticTranslatedFormatPropsList();
+    combo1->insertStringList(listDateFormat);
 
     combo2->insertItem( i18n( "Day"));
     combo2->insertItem( i18n( "Day (2 digits)"));
@@ -51,7 +39,6 @@ DateFormatWidget::DateFormatWidget( QWidget* parent,  const char* name, WFlags f
     combo2->insertItem( i18n( "Year (4 digits)" ) );
     combo2->setCurrentItem( 0 );
 
-    combo1->insertStringList(listDateFormat);
     label_correction->setText(i18n("Correct in Days"));
 
     connect( CheckBox1, SIGNAL(toggled ( bool )),this,SLOT(slotPersonalizeChanged(bool)));

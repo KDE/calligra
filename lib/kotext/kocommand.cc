@@ -19,7 +19,9 @@
 
 #include "kocommand.h"
 #include "kotextobject.h"
+#include "koVariable.h"
 #include <kdebug.h>
+#include <klocale.h>
 
 // This is automatically called by KCommandHistory's redo action when redo is activated
 void KoTextCommand::execute()
@@ -346,4 +348,70 @@ KoTextCursor *KoTextFormatCommand::unexecute( KoTextCursor *c )
     kdDebug(32500) << "KoTextFormatCommand::unexecute after KoTextFormatCommand c:" << c << " index:" << c->index() << endl;
     resizeCustomItems();
     return c;
+}
+
+////
+
+KoChangeVariableSubType::KoChangeVariableSubType(
+                        short int _oldValue, short int _newValue,
+                        KoVariable *var):
+    KCommand(),
+    m_newValue(_newValue),
+    m_oldValue(_oldValue),
+    m_var(var)
+{
+}
+
+void KoChangeVariableSubType::execute()
+{
+    Q_ASSERT(m_var);
+    m_var->setVariableSubType(m_newValue);
+    m_var->recalcAndRepaint();
+}
+
+void KoChangeVariableSubType::unexecute()
+{
+    Q_ASSERT(m_var);
+    m_var->setVariableSubType(m_oldValue);
+    m_var->recalcAndRepaint();
+}
+
+QString KoChangeVariableSubType::name() const
+{
+    return i18n( "Change Variable SubType" );
+}
+
+////
+
+KoChangeVariableFormatProperties::KoChangeVariableFormatProperties(
+    const QString &_oldValue, const QString &_newValue,
+    KoVariable *var)
+    : KCommand(),
+      m_newValue(_newValue),
+      m_oldValue(_oldValue),
+      m_var(var)
+{
+}
+
+void KoChangeVariableFormatProperties::execute()
+{
+    Q_ASSERT(m_var);
+    // Wrong! m_var->variableFormat()->setFormatProperties( m_newValue );
+    KoVariableFormatCollection* coll = m_var->variableColl()->formatCollection();
+    m_var->setVariableFormat( coll->format( m_var->variableFormat()->getKey( m_newValue ) ) );
+    m_var->recalcAndRepaint();
+}
+
+void KoChangeVariableFormatProperties::unexecute()
+{
+    Q_ASSERT(m_var);
+    // Wrong! m_var->variableFormat()->setFormatProperties( m_oldValue );
+    KoVariableFormatCollection* coll = m_var->variableColl()->formatCollection();
+    m_var->setVariableFormat( coll->format( m_var->variableFormat()->getKey( m_oldValue ) ) );
+    m_var->recalcAndRepaint();
+}
+
+QString KoChangeVariableFormatProperties::name() const
+{
+    return i18n( "Change Variable Format" );
 }

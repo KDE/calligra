@@ -18,6 +18,7 @@
 */
 
 #include "kotextformatter.h"
+#include "kotextdocument.h"
 #include "kozoomhandler.h"
 #include "kohyphen/kohyphen.h"
 

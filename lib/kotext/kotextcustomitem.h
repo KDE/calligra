@@ -36,6 +36,12 @@ public:
      * It is important to start with "if ( m_deleted ) return;" */
     virtual void resize() {}
 
+    /** Reimplemented by KoVariable to recalculate the value.
+     * It exists at the KoTextCustomItem level so that KoTextParag::setCustomItem
+     * can call it to set the initial value.
+     * This should call always resize(). */
+    virtual void recalc() { resize(); }
+
     /** The index in paragraph(), where this anchor is
      * Slightly slow (does a linear search in the paragraph) */
     int index() const;

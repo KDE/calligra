@@ -21,8 +21,9 @@
 #define kotextobject_h
 
 #include <qrichtext_p.h>
-#include <koChangeCaseDia.h>
-#include <kostyle.h>
+#include "koChangeCaseDia.h"
+#include "kostyle.h"
+#include "kotextdocument.h"
 class KCommand;
 class KoTextFormat;
 //#define TIMING_FORMAT
@@ -391,6 +392,8 @@ public:
     void printRTDebug(int);
 #endif
 
+    enum ParagModifyType { AddChar = 0, RemoveChar = 1, ChangeFormat = 2 };
+
 signals:
     /** Emitted by availableHeight() when the available height hasn't been
      * calculated yet or is invalid. Connect to a slot that calls setAvailableHeight() */
@@ -437,7 +440,6 @@ signals:
     void showFormatObject(const KoTextFormat &);
 
     // Keeping track of text modifications - not emitted during loading/closing.
-    enum ParagModifyType{ AddChar = 0, RemoveChar = 1, ChangeFormat = 2 };
     void paragraphCreated( KoTextParag* parag );
     void paragraphModified( KoTextParag* parag, int /*ParagModifyType*/, int pos, int length );
     void paragraphDeleted( KoTextParag* parag );
@@ -445,6 +447,8 @@ signals:
 public slots:
     // The default arguments are those used by the formatTimer.
     void formatMore( int count = 10, bool emitAfterFormatting = true );
+
+    void emitRepaintChanged() { emit repaintChanged( this ); }
 
 public: // made public for KWTextFrameSet...
 

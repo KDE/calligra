@@ -19,8 +19,39 @@
 
 #include "qrichtext_p.h"
 #include "kozoomhandler.h"
+#include "kotextdocument.h"
 #include <kdebug.h>
 #include <kcommand.h>
+
+
+//void KoTextCustomItem::setPainter( QPainter*, bool adjust ){ if ( adjust ) width = 0; }
+void KoTextCustomItem::setPainter( QPainter*, bool ){ resize(); } // changed for kotext
+
+bool KoTextCustomItem::enter( KoTextCursor *, KoTextDocument *&doc, KoTextParag *&parag, int &idx, int &ox, int &oy, bool atEnd )
+{
+    doc = doc; parag = parag; idx = idx; ox = ox; oy = oy; Q_UNUSED( atEnd ) return TRUE;
+
+}
+bool KoTextCustomItem::enterAt( KoTextCursor *, KoTextDocument *&doc, KoTextParag *&parag, int &idx, int &ox, int &oy, const QPoint & )
+{
+    doc = doc; parag = parag; idx = idx; ox = ox; oy = oy; return TRUE;
+}
+bool KoTextCustomItem::next( KoTextCursor *, KoTextDocument *&doc, KoTextParag *&parag, int &idx, int &ox, int &oy )
+{
+    doc = doc; parag = parag; idx = idx; ox = ox; oy = oy; return TRUE;
+}
+bool KoTextCustomItem::prev( KoTextCursor *, KoTextDocument *&doc, KoTextParag *&parag, int &idx, int &ox, int &oy )
+{
+    doc = doc; parag = parag; idx = idx; ox = ox; oy = oy; return TRUE;
+}
+bool KoTextCustomItem::down( KoTextCursor *, KoTextDocument *&doc, KoTextParag *&parag, int &idx, int &ox, int &oy )
+{
+    doc = doc; parag = parag; idx = idx; ox = ox; oy = oy; return TRUE;
+}
+bool KoTextCustomItem::up( KoTextCursor *, KoTextDocument *&doc, KoTextParag *&parag, int &idx, int &ox, int &oy )
+{
+    doc = doc; parag = parag; idx = idx; ox = ox; oy = oy; return TRUE;
+}
 
 int KoTextCustomItem::index() const
 {

@@ -40,7 +40,8 @@
 #include "qdrawutil.h"
 
 #include <stdlib.h>
-#include "koparagcounter.h" //// kotext
+#include "koparagcounter.h"
+#include "kotextdocument.h"
 #include <kdebug.h>
 #include <kdeversion.h>
 #if ! KDE_IS_VERSION(3,1,90)
@@ -635,8 +636,8 @@ void KoTextCursor::pop()
     string = parags.pop();
     ox = xOffsets.pop();
     oy = yOffsets.pop();
-    if ( doc->parent() )
-	doc = doc->parent();
+    //if ( doc->parent() )
+    //doc = doc->parent();
     nested = nestedStack.pop();
 }
 
@@ -1186,8 +1187,8 @@ bool KoTextCursor::remove()
 	string->format( -1, TRUE );
 	if ( h != string->rect().height() )
 	    invalidateNested();
-	else if ( doc && doc->parent() )
-	    doc->nextDoubleBuffered = TRUE;
+	//else if ( doc && doc->parent() )
+	//    doc->nextDoubleBuffered = TRUE;
 	return FALSE;
     } else if ( string->next() ) {
 	if ( string->length() == 1 ) {
@@ -1205,7 +1206,7 @@ bool KoTextCursor::remove()
 	    while ( s ) {
 		s->id = s->p ? s->p->id + 1 : 0;
 		s->state = -1;
-		s->needPreProcess = TRUE;
+		//s->needPreProcess = TRUE;
 		s->changed = TRUE;
 		s = s->n;
 	    }
@@ -1228,8 +1229,8 @@ void KoTextCursor::killLine()
     string->format( -1, TRUE );
     if ( h != string->rect().height() )
 	invalidateNested();
-    else if ( doc && doc->parent() )
-	doc->nextDoubleBuffered = TRUE;
+    //else if ( doc && doc->parent() )
+    //doc->nextDoubleBuffered = TRUE;
 }
 
 void KoTextCursor::indent()
@@ -1255,8 +1256,26 @@ void KoTextCursor::setDocument( KoTextDocument *d )
     tmpIndex = -1;
 }
 
+
+int KoTextCursor::x() const
+{
+    KoTextStringChar *c = string->at( idx );
+    int curx = c->x;
+    if ( c->rightToLeft )
+        curx += c->width; //string->string()->width( idx );
+    return curx;
+}
+
+int KoTextCursor::y() const
+{
+    int dummy, line;
+    string->lineStartOfChar( idx, &dummy, &line );
+    return string->lineY( line );
+}
+
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+#if 0
 KoTextDocument::KoTextDocument( KoTextDocument *p )
     : par( p ), parParag( 0 ),
 #ifdef QTEXTTABLE_AVAILABLE
@@ -1278,31 +1297,32 @@ KoTextDocument::KoTextDocument( KoTextDocument *p, KoTextFormatCollection *f )
     fCollection = f;
     init();
 }
+#endif
 
 void KoTextDocument::init()
 {
 #if defined(PARSER_DEBUG)
     qDebug( debug_indent + "new KoTextDocument (%p)", this );
 #endif
-    oTextValid = TRUE;
-    if ( par )
-	par->insertChild( this );
-    pProcessor = 0;
+    //oTextValid = TRUE;
+    //if ( par )
+//	par->insertChild( this );
+    //pProcessor = 0;
     useFC = TRUE;
     pFormatter = 0;
     indenter = 0;
     fParag = 0;
-    txtFormat = Qt::AutoText;
-    preferRichText = FALSE;
-    pages = FALSE;
-    focusIndicator.parag = 0;
+    m_pageBreakEnabled = false;
     minw = 0;
-    minwParag = 0;
     align = Qt::AlignAuto;
     nSelections = 1;
     addMargs = FALSE;
 
 #if 0
+    preferRichText = FALSE;
+    txtFormat = Qt::AutoText;
+    focusIndicator.parag = 0;
+    minwParag = 0;
     sheet_ = QStyleSheet::defaultSheet();
     factory_ = QMimeSourceFactory::defaultFactory();
     contxt = QString::null;
@@ -1312,19 +1332,19 @@ void KoTextDocument::init()
     underlLinks = TRUE;
     backBrush = 0;
     buf_pixmap = 0;
-    nextDoubleBuffered = FALSE;
+    //nextDoubleBuffered = FALSE;
 
-    if ( par )
-	withoutDoubleBuffer = par->withoutDoubleBuffer;
-    else
+    //if ( par )
+//	withoutDoubleBuffer = par->withoutDoubleBuffer;
+//    else
 	withoutDoubleBuffer = FALSE;
 
     lParag = fParag = createParag( this, 0, 0 );
     tmpCursor = 0;
 
-    cx = 0;
-    cy = 2;
-    if ( par )
+    //cx = 0;
+    //cy = 2;
+    //if ( par )
 	cx = cy = 0;
     cw = 600;
     vw = 0;
@@ -1342,18 +1362,18 @@ void KoTextDocument::init()
 
 KoTextDocument::~KoTextDocument()
 {
-    if ( par )
-	par->removeChild( this );
+    //if ( par )
+//	par->removeChild( this );
     //// kotext
     m_bDestroying = true;
     clear( false );
     ////
     delete commandHistory;
     delete flow_;
-    if ( !par )
+    //if ( !par )
 	delete pFormatter;
     delete fCollection;
-    delete pProcessor;
+    //delete pProcessor;
     delete buf_pixmap;
     delete indenter;
     delete backBrush;
@@ -1415,6 +1435,7 @@ bool KoTextDocument::setMinimumWidth( int w, KoTextParag *p )
 	minw = 0;
 	p = 0;
     }
+#if 0
     if ( p == minwParag ) {
 	minw = w;
 	emit minimumWidthChanged( minw );
@@ -1423,6 +1444,7 @@ bool KoTextDocument::setMinimumWidth( int w, KoTextParag *p )
 	minwParag = p;
 	emit minimumWidthChanged( minw );
     }
+#endif
     cw = QMAX( minw, cw );
     return TRUE;
 }
@@ -1430,9 +1452,9 @@ bool KoTextDocument::setMinimumWidth( int w, KoTextParag *p )
 void KoTextDocument::setPlainText( const QString &text )
 {
     clear();
-    preferRichText = FALSE;
-    oTextValid = TRUE;
-    oText = text;
+    //preferRichText = FALSE;
+    //oTextValid = TRUE;
+    //oText = text;
 
     int lastNl = 0;
     int nl = text.find( '\n' );
@@ -1564,8 +1586,8 @@ static QStyleSheetItem::ListStyle chooseListStyle( const QStyleSheetItem *nstyle
 
 void KoTextDocument::setRichTextInternal( const QString &text )
 {
-    oTextValid = TRUE;
-    oText = text;
+    //oTextValid = TRUE;
+    //oText = text;
     KoTextParag* curpar = lParag;
     int pos = 0;
     QValueStack<KoTextDocumentTag> tags;
@@ -1683,8 +1705,8 @@ void KoTextDocument::setRichTextInternal( const QString &text )
 				formatCollection()->defaultFormat()->setColor( c );
 				curtag.format.setColor( c );
 			    }
-			} else if ( it.key() == "link" ) {
-			    linkColor = QColor( *it );
+                    //  } else if ( it.key() == "link" ) {
+		    //      linkColor = QColor( *it );
 			} else if ( it.key() == "title" ) {
 			    attribs.replace( it.key(), *it );
 			}
@@ -1876,7 +1898,7 @@ void KoTextDocument::setRichTextInternal( const QString &text )
 
 void KoTextDocument::setText( const QString &text, const QString & /*context*/ )
 {
-    focusIndicator.parag = 0;
+    //focusIndicator.parag = 0;
     selections.clear();
 #if 0
     if ( txtFormat == Qt::AutoText && QStyleSheet::mightBeRichText( text ) ||
@@ -1918,8 +1940,8 @@ QString KoTextDocument::text() const
 {
     if ( plainText().simplifyWhiteSpace().isEmpty() )
 	return QString("");
-    if ( txtFormat == Qt::AutoText && preferRichText || txtFormat == Qt::RichText )
-	return richText();
+    //if ( txtFormat == Qt::AutoText && preferRichText || txtFormat == Qt::RichText )
+    //    return richText();
     return plainText( 0 );
 }
 
@@ -1929,9 +1951,9 @@ QString KoTextDocument::text( int parag ) const
     if ( !p )
 	return QString::null;
 
-    if ( txtFormat == Qt::AutoText && preferRichText || txtFormat == Qt::RichText )
-	return richText( p );
-    else
+    //if ( txtFormat == Qt::AutoText && preferRichText || txtFormat == Qt::RichText )
+    //    return richText( p );
+    //else
 	return plainText( p );
 }
 
@@ -2578,6 +2600,7 @@ bool KoTextDocument::find( const QString &expr, bool cs, bool wo, bool forward,
     return FALSE;
 }
 
+#if 0
 void KoTextDocument::setTextFormat( Qt::TextFormat f )
 {
     txtFormat = f;
@@ -2587,6 +2610,7 @@ Qt::TextFormat KoTextDocument::textFormat() const
 {
     return txtFormat;
 }
+#endif
 
 bool KoTextDocument::inSelection( int selId, const QPoint &pos ) const
 {
@@ -2744,9 +2768,10 @@ void KoTextDocument::drawParag( QPainter *p, KoTextParag *parag, int cx, int cy,
     if ( resetChanged )
 	parag->setChanged( FALSE );
     QRect ir( parag->rect() );
-    bool useDoubleBuffer = !parag->document()->parent();
-    if ( !useDoubleBuffer && parag->document()->nextDoubleBuffered )
-	useDoubleBuffer = TRUE;
+    bool useDoubleBuffer = true;
+    //bool useDoubleBuffer = !parag->document()->parent();
+    //if ( !useDoubleBuffer && parag->document()->nextDoubleBuffered )
+    //useDoubleBuffer = TRUE;
     if ( p->device()->devType() == QInternal::Printer )
 	useDoubleBuffer = FALSE;
 
@@ -2822,7 +2847,7 @@ void KoTextDocument::drawParag( QPainter *p, KoTextParag *parag, int cx, int cy,
                          rect.height(), cg.brush( QColorGroup::Base ) );
     }
 
-    parag->document()->nextDoubleBuffered = FALSE;
+    //parag->document()->nextDoubleBuffered = FALSE;
 }
 
 KoTextParag *KoTextDocument::draw( QPainter *p, int cx, int cy, int cw, int ch, const QColorGroup &cg,
@@ -2956,6 +2981,8 @@ void KoTextDocument::unregisterCustomItem( KoTextCustomItem *i, KoTextParag *p )
     customItems.removeRef( i );
 }
 
+// unused in kotext, and needs KoTextStringChar::isAnchor
+#if 0
 bool KoTextDocument::hasFocusParagraph() const
 {
     return !!focusIndicator.parag;
@@ -2966,8 +2993,6 @@ QString KoTextDocument::focusHref() const
     return focusIndicator.href;
 }
 
-// unused in kotext, and needs KoTextStringChar::isAnchor
-#if 0
 bool KoTextDocument::focusNextPrevChild( bool next )
 {
     if ( !focusIndicator.parag ) {
@@ -3334,40 +3359,75 @@ void KoTextString::checkBidi() const
     ((KoTextString *)this)->bidiDirty = FALSE;
 }
 
-#if 0
-void KoTextDocument::setStyleSheet( QStyleSheet *s )
+QMemArray<KoTextStringChar> KoTextString::subString( int start, int len ) const
 {
-    if ( !s )
-	return;
-    sheet_ = s;
-    fCollection->setStyleSheet( s );
-    updateStyles();
+    if ( len == 0xFFFFFF )
+	len = data.size();
+    QMemArray<KoTextStringChar> a;
+    a.resize( len );
+    for ( int i = 0; i < len; ++i ) {
+	KoTextStringChar *c = &data[ i + start ];
+	a[ i ].c = c->c;
+	a[ i ].x = 0;
+	a[ i ].pixelxadj = 0;
+	a[ i ].pixelwidth = 0;
+	a[ i ].width = 0;
+	a[ i ].lineStart = 0;
+	a[ i ].rightToLeft = 0;
+	a[ i ].d.format = 0;
+	a[ i ].type = KoTextStringChar::Regular;
+	a[ i ].setFormat( c->format() );
+	if ( c->format() )
+	    c->format()->addRef();
+    }
+    return a;
 }
 
-void KoTextDocument::updateStyles()
+QString KoTextString::mid( int start, int len ) const
 {
-    invalidate();
-    fCollection->updateStyles();
-    for ( KoTextDocument *d = childList.first(); d; d = childList.next() )
-	d->updateStyles();
+    if ( len == 0xFFFFFF )
+	len = data.size();
+    QString res;
+    res.setLength( len );
+    for ( int i = 0; i < len; ++i ) {
+	KoTextStringChar *c = &data[ i + start ];
+	res[ i ] = c->c;
+    }
+    return res;
 }
 
-void KoTextDocument::updateFontSizes( int base )
+QString KoTextString::toString( const QMemArray<KoTextStringChar> &data )
 {
-    for ( KoTextDocument *d = childList.first(); d; d = childList.next() )
-	d->updateFontSizes( base );
-    invalidate();
-    fCollection->updateFontSizes( base );
+    QString s;
+    int l = data.size();
+    s.setUnicode( 0, l );
+    KoTextStringChar *c = data.data();
+    QChar *uc = (QChar *)s.unicode();
+    while ( l-- ) {
+	*uc = c->c;
+	uc++;
+	c++;
+    }
+
+    return s;
 }
 
-void KoTextDocument::updateFontAttributes( const QFont &f, const QFont &old )
+QString KoTextString::toReverseString() const
 {
-    for ( KoTextDocument *d = childList.first(); d; d = childList.next() )
-	d->updateFontAttributes( f, old );
-    invalidate();
-    fCollection->updateFontAttributes( f, old );
+    QString s;
+    int l = length();
+    s.setUnicode(0, l);
+    KoTextStringChar *c = data.data() + (l-1);
+    QChar *uc = (QChar *)s.unicode();
+    while ( l-- ) {
+	*uc = c->c;
+	uc++;
+	c--;
+    }
+
+    return s;
 }
-#endif
+
 
 void KoTextStringChar::setFormat( KoTextFormat *f )
 {
@@ -3408,74 +3468,16 @@ void KoTextStringChar::loseCustomItem() // setRegular() might be a better name
     }
 }
 
-#if 0
-int KoTextString::width( int idx ) const
+KoTextStringChar::~KoTextStringChar()
 {
-     int w = 0;
-     KoTextStringChar *c = &at( idx );
-     if ( c->c.unicode() == 0xad )
-	 return 0;
-     if( c->isCustom() ) {
-	 if( c->customItem()->placement() == KoTextCustomItem::PlaceInline )
-	     w = c->customItem()->width;
-     } else {
-	 int r = c->c.row();
-	 if( r < 0x06 || r > 0x1f )
-	     w = c->format()->width( c->c );
-	 else {
-	     // complex text. We need some hacks to get the right metric here
-	     QString str;
-	     int pos = 0;
-	     if( idx > 4 )
-		 pos = idx - 4;
-	     int off = idx - pos;
-	     int end = QMIN( length(), idx + 4 );
-	     while ( pos < end ) {
-		 str += at(pos).c;
-		 pos++;
-	     }
-	     w = c->format()->width( str, off );
-	 }
-     }
-     return w;
-}
-#endif
-
-QMemArray<KoTextStringChar> KoTextString::subString( int start, int len ) const
-{
-    if ( len == 0xFFFFFF )
-	len = data.size();
-    QMemArray<KoTextStringChar> a;
-    a.resize( len );
-    for ( int i = 0; i < len; ++i ) {
-	KoTextStringChar *c = &data[ i + start ];
-	a[ i ].c = c->c;
-	a[ i ].x = 0;
-	a[ i ].pixelxadj = 0;
-	a[ i ].pixelwidth = 0;
-	a[ i ].width = 0;
-	a[ i ].lineStart = 0;
-	a[ i ].rightToLeft = 0;
-	a[ i ].d.format = 0;
-	a[ i ].type = KoTextStringChar::Regular;
-	a[ i ].setFormat( c->format() );
-	if ( c->format() )
-	    c->format()->addRef();
+    if ( format() )
+	format()->removeRef();
+    switch ( type ) {
+	case Custom:
+	    delete d.custom; break;
+	default:
+	    break;
     }
-    return a;
-}
-
-QString KoTextString::mid( int start, int len ) const
-{
-    if ( len == 0xFFFFFF )
-	len = data.size();
-    QString res;
-    res.setLength( len );
-    for ( int i = 0; i < len; ++i ) {
-	KoTextStringChar *c = &data[ i + start ];
-	res[ i ] = c->c;
-    }
-    return res;
 }
 
 KoTextStringChar *KoTextStringChar::clone() const
@@ -3556,7 +3558,7 @@ KoTextParag::KoTextParag( KoTextDocument *d, KoTextParag *pr, KoTextParag *nx, b
     m_lineChanged = -1;
     //firstFormat = TRUE; //// unused
     state = -1;
-    needPreProcess = FALSE;
+    //needPreProcess = FALSE;
 
     if ( p )
 	id = p->id + 1;
@@ -3570,7 +3572,7 @@ KoTextParag::KoTextParag( KoTextDocument *d, KoTextParag *pr, KoTextParag *nx, b
 	    s = s->n;
 	}
     }
-    firstPProcess = TRUE;
+    //firstPProcess = TRUE;
 
     str = new KoTextString();
     str->insert( 0, " ", formatCollection()->defaultFormat() );
@@ -3583,10 +3585,10 @@ KoTextParag::~KoTextParag()
 {
     //qDebug("KoTextParag::~KoTextParag %p id=%d",this,paragId());
     delete str;
-    if ( doc && p == doc->minwParag ) {
-	doc->minwParag = 0;
-	doc->minw = 0;
-    }
+//    if ( doc && p == doc->minwParag ) {
+//	doc->minwParag = 0;
+//	doc->minw = 0;
+//    }
     if ( !doc ) {
 	delete pFormatter;
 	delete commandHistory;
@@ -3642,14 +3644,14 @@ void KoTextParag::invalidate( int chr )
     lm = rm = bm = tm = flm = -1;
 }
 
-void KoTextParag::setChanged( bool b, bool recursive )
+void KoTextParag::setChanged( bool b, bool /*recursive*/ )
 {
     changed = b;
     m_lineChanged = -1; // all
-    if ( recursive ) {
-	if ( doc && doc->parentParag() )
-	    doc->parentParag()->setChanged( b, recursive );
-    }
+    //if ( recursive ) {
+//	if ( doc && doc->parentParag() )
+//	    doc->parentParag()->setChanged( b, recursive );
+//    }
 }
 
 void KoTextParag::setLineChanged( short int line )
@@ -3666,20 +3668,22 @@ void KoTextParag::setLineChanged( short int line )
 
 void KoTextParag::insert( int index, const QString &s )
 {
+#if 0
     if ( doc && !doc->useFormatCollection() && doc->preProcessor() )
 	str->insert( index, s,
 		     doc->preProcessor()->format( KoTextPreProcessor::Standard ) );
     else
+#endif
 	str->insert( index, s, formatCollection()->defaultFormat() );
     invalidate( index );
-    needPreProcess = TRUE;
+    //needPreProcess = TRUE;
 }
 
 void KoTextParag::truncate( int index )
 {
     str->truncate( index );
     insert( length(), " " );
-    needPreProcess = TRUE;
+    //needPreProcess = TRUE;
 }
 
 void KoTextParag::remove( int index, int len )
@@ -3695,7 +3699,7 @@ void KoTextParag::remove( int index, int len )
     }
     str->remove( index, len );
     invalidate( 0 );
-    needPreProcess = TRUE;
+    //needPreProcess = TRUE;
 }
 
 void KoTextParag::join( KoTextParag *s )
@@ -3742,13 +3746,13 @@ void KoTextParag::join( KoTextParag *s )
     invalidateCounters();
     ////
     r.setHeight( oh );
-    needPreProcess = TRUE;
+    //needPreProcess = TRUE;
     if ( n ) {
 	KoTextParag *s = n;
 	while ( s ) {
 	    s->id = s->p->id + 1;
 	    s->state = -1;
-	    s->needPreProcess = TRUE;
+	    //s->needPreProcess = TRUE;
 	    s->changed = TRUE;
 	    s = s->n;
 	}
@@ -3790,11 +3794,13 @@ void KoTextParag::format( int start, bool doMove )
     if ( !str || str->length() == 0 || !formatter() )
 	return;
 
+#if 0
     if ( doc &&
 	 doc->preProcessor() &&
 	 ( needPreProcess || state == -1 ) )
 	doc->preProcessor()->process( doc, this, invalid <= 0 ? 0 : invalid );
     needPreProcess = FALSE;
+#endif
 
     if ( invalid == -1 )
 	return;
@@ -4578,12 +4584,211 @@ QChar::Direction KoTextParag::direction() const
     return (str ? str->direction() : QChar::DirON );
 }
 
-
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-
-KoTextPreProcessor::KoTextPreProcessor()
+void KoTextParag::setSelection( int id, int start, int end )
 {
+    QMap<int, KoTextParagSelection>::ConstIterator it = selections().find( id );
+    if ( it != mSelections->end() ) {
+	if ( start == ( *it ).start && end == ( *it ).end )
+	    return;
+    }
+
+    KoTextParagSelection sel;
+    sel.start = start;
+    sel.end = end;
+    (*mSelections)[ id ] = sel;
+    setChanged( TRUE, TRUE );
+}
+
+void KoTextParag::removeSelection( int id )
+{
+    if ( !hasSelection( id ) )
+	return;
+    if ( mSelections )
+	mSelections->remove( id );
+    setChanged( TRUE, TRUE );
+}
+
+int KoTextParag::selectionStart( int id ) const
+{
+    if ( !mSelections )
+	return -1;
+    QMap<int, KoTextParagSelection>::ConstIterator it = mSelections->find( id );
+    if ( it == mSelections->end() )
+	return -1;
+    return ( *it ).start;
+}
+
+int KoTextParag::selectionEnd( int id ) const
+{
+    if ( !mSelections )
+	return -1;
+    QMap<int, KoTextParagSelection>::ConstIterator it = mSelections->find( id );
+    if ( it == mSelections->end() )
+	return -1;
+    return ( *it ).end;
+}
+
+bool KoTextParag::hasSelection( int id ) const
+{
+    if ( !mSelections )
+	return FALSE;
+    QMap<int, KoTextParagSelection>::ConstIterator it = mSelections->find( id );
+    if ( it == mSelections->end() )
+	return FALSE;
+    return ( *it ).start != ( *it ).end || length() == 1;
+}
+
+bool KoTextParag::fullSelected( int id ) const
+{
+    if ( !mSelections )
+	return FALSE;
+    QMap<int, KoTextParagSelection>::ConstIterator it = mSelections->find( id );
+    if ( it == mSelections->end() )
+	return FALSE;
+    return ( *it ).start == 0 && ( *it ).end == str->length() - 1;
+}
+
+int KoTextParag::lineY( int l ) const
+{
+    if ( l > (int)lineStarts.count() - 1 ) {
+	qWarning( "KoTextParag::lineY: line %d out of range!", l );
+	return 0;
+    }
+
+    if ( !isValid() )
+	( (KoTextParag*)this )->format();
+
+    QMap<int, KoTextParagLineStart*>::ConstIterator it = lineStarts.begin();
+    while ( l-- > 0 )
+	++it;
+    return ( *it )->y;
+}
+
+int KoTextParag::lineBaseLine( int l ) const
+{
+    if ( l > (int)lineStarts.count() - 1 ) {
+	qWarning( "KoTextParag::lineBaseLine: line %d out of range!", l );
+	return 10;
+    }
+
+    if ( !isValid() )
+	( (KoTextParag*)this )->format();
+
+    QMap<int, KoTextParagLineStart*>::ConstIterator it = lineStarts.begin();
+    while ( l-- > 0 )
+	++it;
+    return ( *it )->baseLine;
+}
+
+int KoTextParag::lineHeight( int l ) const
+{
+    if ( l > (int)lineStarts.count() - 1 ) {
+	qWarning( "KoTextParag::lineHeight: line %d out of range!", l );
+	return 15;
+    }
+
+    if ( !isValid() )
+	( (KoTextParag*)this )->format();
+
+    QMap<int, KoTextParagLineStart*>::ConstIterator it = lineStarts.begin();
+    while ( l-- > 0 )
+	++it;
+    return ( *it )->h;
+}
+
+void KoTextParag::lineInfo( int l, int &y, int &h, int &bl ) const
+{
+    if ( l > (int)lineStarts.count() - 1 ) {
+	qWarning( "KoTextParag::lineInfo: line %d out of range!", l );
+	qDebug( "%d %d", (int)lineStarts.count() - 1, l );
+	y = 0;
+	h = 15;
+	bl = 10;
+	return;
+    }
+
+    if ( !isValid() )
+	( (KoTextParag*)this )->format();
+
+    QMap<int, KoTextParagLineStart*>::ConstIterator it = lineStarts.begin();
+    while ( l-- > 0 )
+	++it;
+    y = ( *it )->y;
+    h = ( *it )->h;
+    bl = ( *it )->baseLine;
+}
+
+uint KoTextParag::alignment() const
+{
+    return align;
+}
+
+void KoTextParag::setFormat( KoTextFormat *fm )
+{
+#if 0
+    bool doUpdate = FALSE;
+    if (defFormat && (defFormat != formatCollection()->defaultFormat()))
+       doUpdate = TRUE;
+#endif
+    defFormat = formatCollection()->format( fm );
+#if 0
+    if ( !doUpdate )
+	return;
+    for ( int i = 0; i < length(); ++i ) {
+	if ( at( i )->format()->styleName() == defFormat->styleName() )
+	    at( i )->format()->updateStyle();
+    }
+#endif
+}
+
+KoTextFormatterBase *KoTextParag::formatter() const
+{
+    if ( doc )
+	return doc->formatter();
+    if ( pFormatter )
+	return pFormatter;
+    //return ( ( (KoTextParag*)this )->pFormatter = new KoTextFormatterBaseBreakWords );
+    return 0L;
+}
+
+void KoTextParag::setFormatter( KoTextFormatterBase *f )
+{
+    if ( doc ) return;
+    if ( pFormatter ) delete pFormatter;
+    pFormatter = f;
+}
+
+int KoTextParag::minimumWidth() const
+{
+    return doc ? doc->minimumWidth() : 0;
+}
+
+void KoTextParag::setTabArray( int *a )
+{
+    delete [] tArray;
+    tArray = a;
+}
+
+void KoTextParag::setTabStops( int tw )
+{
+    if ( doc )
+	doc->setTabStops( tw );
+    else
+	tabStopWidth = tw;
+}
+
+QMap<int, KoTextParagSelection> &KoTextParag::selections() const
+{
+    if ( !mSelections )
+	((KoTextParag *)this)->mSelections = new QMap<int, KoTextParagSelection>;
+    return *mSelections;
+}
+
+QPtrList<KoTextCustomItem> &KoTextParag::floatingItems() const
+{
+    if ( !mFloatingItems )
+	((KoTextParag *)this)->mFloatingItems = new QPtrList<KoTextCustomItem>;
+    return *mFloatingItems;
 }
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -6792,16 +6997,19 @@ void KoTextFlow::drawFloatingItems( QPainter* p, int cx, int cy, int cw, int ch,
     }
 }
 
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-void KoTextCustomItem::pageBreak( int /*y*/ , KoTextFlow* /*flow*/ )
-{
-}
+void KoTextFlow::setPageSize( int ps ) { pagesize = ps; }
+bool KoTextFlow::isEmpty() { return leftItems.isEmpty() && rightItems.isEmpty(); }
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 #if 0 // port this to WYSIWYG if you want to use it.....
+#ifdef QTEXTTABLE_AVAILABLE
+void KoTextTableCell::invalidate() { cached_width = -1; cached_sizehint = -1; }
+
+void KoTextTable::invalidate() { cachewidth = -1; }
+#endif
+
 KoTextTable::KoTextTable( KoTextDocument *p, const QMap<QString, QString> & attr  )
     : KoTextCustomItem( p ), painter( 0 )
 {

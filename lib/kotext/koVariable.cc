@@ -36,14 +36,16 @@
 #include <qradiobutton.h>
 #include "timeformatwidget_impl.h"
 #include "dateformatwidget_impl.h"
+#include "kocommand.h"
+#include "kotextobject.h"
 
 class KoVariableSettings::KoVariableSettingPrivate
 {
 public:
     KoVariableSettingPrivate() {}
-    QDate m_lastPrinting;
-    QDate m_createFile;
-    QDate m_modifyFile;
+    QDateTime m_lastPrintingDate;
+    QDateTime m_creationDate;
+    QDateTime m_modificationDate;
 };
 
 
@@ -63,36 +65,35 @@ KoVariableSettings::~KoVariableSettings()
     d = 0;
 }
 
-QDate KoVariableSettings::lastPrinting() const
+QDateTime KoVariableSettings::lastPrintingDate() const
 {
-    return d->m_lastPrinting;
+    return d->m_lastPrintingDate;
 }
 
-void KoVariableSettings::setLastPrint( const QDate & _date)
+void KoVariableSettings::setLastPrintingDate( const QDateTime & _date)
 {
-    d->m_lastPrinting = _date;
+    d->m_lastPrintingDate = _date;
 }
 
-QDate KoVariableSettings::createFile() const
+QDateTime KoVariableSettings::creationDate() const
 {
-    return d->m_createFile;
+    return d->m_creationDate;
 }
 
-void KoVariableSettings::setCreateFile( const QDate & _date)
+void KoVariableSettings::setCreationDate( const QDateTime & _date)
 {
-    if ( !d->m_createFile.isValid() )
-        d->m_createFile = _date;
+    if ( !d->m_creationDate.isValid() )
+        d->m_creationDate = _date;
 }
 
-QDate KoVariableSettings::modifyFile() const
+QDateTime KoVariableSettings::modificationDate() const
 {
-    return d->m_modifyFile;
+    return d->m_modificationDate;
 }
 
-void KoVariableSettings::setModifyFile( const QDate & _date)
+void KoVariableSettings::setModificationDate( const QDateTime & _date)
 {
-    if ( !d->m_modifyFile.isValid() )
-        d->m_modifyFile = _date;
+    d->m_modificationDate = _date;
 }
 
 
@@ -109,27 +110,14 @@ void KoVariableSettings::save( QDomElement &parentElem )
     elem.setAttribute("displaycomment",(int)m_displayComment);
     elem.setAttribute("displayfieldcode", (int)m_displayFieldCode);
 
-    if ( d->m_lastPrinting.isValid())
-    {
-        elem.setAttribute("lastPrintYear", d->m_lastPrinting.year());
-        elem.setAttribute("lastPrintMonth", d->m_lastPrinting.month());
-        elem.setAttribute("lastPrintDay", d->m_lastPrinting.day());
-    }
+    if ( d->m_lastPrintingDate.isValid())
+        elem.setAttribute("lastPrintingDate", d->m_lastPrintingDate.toString(Qt::ISODate));
 
-    if ( d->m_createFile.isValid())
-    {
-        elem.setAttribute("createFileYear", d->m_createFile.year());
-        elem.setAttribute("createFileMonth", d->m_createFile.month());
-        elem.setAttribute("createFileDay", d->m_createFile.day());
-    }
+    if ( d->m_creationDate.isValid())
+        elem.setAttribute("creationDate", d->m_creationDate.toString(Qt::ISODate));
 
-    if ( d->m_modifyFile.isValid())
-    {
-        elem.setAttribute("modifyFileYear", d->m_modifyFile.year());
-        elem.setAttribute("modifyFileMonth", d->m_modifyFile.month());
-        elem.setAttribute("modifyFileDay", d->m_modifyFile.day());
-    }
-
+    if ( d->m_modificationDate.isValid())
+        elem.setAttribute("modificationDate", d->m_modificationDate.toString(Qt::ISODate));
 }
 
 void KoVariableSettings::load( QDomElement &elem )
@@ -147,47 +135,20 @@ void KoVariableSettings::load( QDomElement &elem )
             m_displayComment=(bool)e.attribute("displaycomment").toInt();
         if (e.hasAttribute("displayfieldcode"))
             m_displayFieldCode=(bool)e.attribute("displayfieldcode").toInt();
-        int year = 0;
-        int month = 0;
-        int days = 0;
-        if (e.hasAttribute("lastPrintYear"))
-            year = e.attribute("lastPrintYear").toInt();
-        if (e.hasAttribute("lastPrintMonth"))
-            month = e.attribute("lastPrintMonth").toInt();
-        if (e.hasAttribute("lastPrintDay"))
-            days = e.attribute("lastPrintDay").toInt();
-        if ( year!=0 && month !=0 && days!=0 )
-            d->m_lastPrinting=QDate( year, month, days);
 
-        year = 0;
-        month = 0;
-        days = 0;
-        if (e.hasAttribute("createFileYear"))
-            year = e.attribute("createFileYear").toInt();
-        if (e.hasAttribute("createFileMonth"))
-            month = e.attribute("createFileMonth").toInt();
-        if (e.hasAttribute("createFileDay"))
-            days = e.attribute("createFileDay").toInt();
-        if ( year!=0 && month !=0 && days!=0 )
-            d->m_createFile=QDate( year, month, days);
+        if (e.hasAttribute("lastPrintingDate"))
+            d->m_lastPrintingDate = QDateTime::fromString( e.attribute( "lastPrintingDate" ), Qt::ISODate );
 
-        year = 0;
-        month = 0;
-        days = 0;
-        if (e.hasAttribute("modifyFileYear"))
-            year = e.attribute("modifyFileYear").toInt();
-        if (e.hasAttribute("modifyFileMonth"))
-            month = e.attribute("modifyFileMonth").toInt();
-        if (e.hasAttribute("modifyFileDay"))
-            days = e.attribute("modifyFileDay").toInt();
-        if ( year!=0 && month !=0 && days!=0 )
-            d->m_modifyFile=QDate( year, month, days);
+        if (e.hasAttribute("creationDate"))
+            d->m_creationDate = QDateTime::fromString( e.attribute( "creationDate" ), Qt::ISODate );
+
+        if (e.hasAttribute("modificationDate"))
+            d->m_modificationDate = QDateTime::fromString( e.attribute( "modificationDate" ), Qt::ISODate );
     }
 }
 
 KoVariableDateFormat::KoVariableDateFormat() : KoVariableFormat()
 {
-    m_bShort = false;
 }
 
 QString KoVariableDateFormat::convert( const QVariant& data ) const
@@ -202,7 +163,9 @@ QString KoVariableDateFormat::convert( const QVariant& data ) const
         return QString("");
 
     if (m_strFormat.lower()=="locale" || m_strFormat.isEmpty())
-	return KGlobal::locale()->formatDate( data.toDate(), m_bShort );
+	return KGlobal::locale()->formatDate( data.toDate(), false );
+    else if ( m_strFormat.lower() == "localeshort" )
+	return KGlobal::locale()->formatDate( data.toDate(), true );
 
     QString tmp=data.toDate().toString(m_strFormat);
     tmp.replace("PPPP", KGlobal::locale()->monthNamePossessive(data.toDate().month(), false)); //long possessive month name
@@ -212,7 +175,12 @@ QString KoVariableDateFormat::convert( const QVariant& data ) const
 
 QCString KoVariableDateFormat::key() const
 {
-    return QCString("DATE") + (m_bShort ? '1' : '0') + m_strFormat.utf8();
+    return getKey( m_strFormat );
+}
+
+QCString KoVariableDateFormat::getKey( const QString& props ) const
+{
+    return QCString("DATE") + props.utf8();
 }
 
 void KoVariableDateFormat::load( const QCString &key )
@@ -220,10 +188,57 @@ void KoVariableDateFormat::load( const QCString &key )
     QCString params( key.mid( 4 ) );
     if ( !params.isEmpty() )
     {
-        m_bShort = (params[0] == '1');
-        m_strFormat = QString::fromUtf8( key.mid( 5 ) ); // skip "DATE" and the 0/1
+        if (params[0] == '1' || params[0] == '0') // old m_bShort crap
+            params = params.mid(1); // skip it
+        m_strFormat = QString::fromUtf8( params ); // skip "DATE"
     }
 }
+
+// Used by KoVariableFormatCollection::popupActionList(), to apply all formats
+// to the current data, in the popup menu.
+QStringList KoVariableDateFormat::staticFormatPropsList()
+{
+    QStringList listDateFormat;
+    listDateFormat<<"locale";
+    listDateFormat<<"localeshort";
+    listDateFormat<<"dd/MM/yy";
+    listDateFormat<<"dd/MM/yyyy";
+    listDateFormat<<"MMM dd,yy";
+    listDateFormat<<"MMM dd,yyyy";
+    listDateFormat<<"dd.MMM.yyyy";
+    listDateFormat<<"MMMM dd, yyyy";
+    listDateFormat<<"ddd, MMM dd,yy";
+    listDateFormat<<"dddd, MMM dd,yy";
+    listDateFormat<<"MM-dd";
+    listDateFormat<<"yyyy-MM-dd";
+    listDateFormat<<"dd/yy";
+    listDateFormat<<"MMMM";
+    return listDateFormat;
+}
+
+// Used by dateformatwidget_impl
+// TODO: shouldn't it apply the formats to the value, like the popupmenu does?
+QStringList KoVariableDateFormat::staticTranslatedFormatPropsList()
+{
+    QStringList listDateFormat;
+    listDateFormat<<i18n("Locale format");
+    listDateFormat<<i18n("Short locale format");
+    listDateFormat<<"dd/MM/yy";
+    listDateFormat<<"dd/MM/yyyy";
+    listDateFormat<<"MMM dd,yy";
+    listDateFormat<<"MMM dd,yyyy";
+    listDateFormat<<"dd.MMM.yyyy";
+    listDateFormat<<"MMMM dd, yyyy";
+    listDateFormat<<"ddd, MMM dd,yy";
+    listDateFormat<<"dddd, MMM dd,yy";
+    listDateFormat<<"MM-dd";
+    listDateFormat<<"yyyy-MM-dd";
+    listDateFormat<<"dd/yy";
+    listDateFormat<<"MMMM";
+    return listDateFormat;
+}
+
+////
 
 KoVariableTimeFormat::KoVariableTimeFormat() : KoVariableFormat()
 {
@@ -245,15 +260,49 @@ QString KoVariableTimeFormat::convert( const QVariant & time ) const
         return QString::null;
     }
 
-    if(m_strFormat.lower()==QString("locale")||m_strFormat.isEmpty())   // FIXME: "Locale" is I18N !
+    if( m_strFormat.lower() == "locale" || m_strFormat.isEmpty() )
 	return KGlobal::locale()->formatTime( time.toTime() );
     return time.toTime().toString(m_strFormat);
 }
 
 QCString KoVariableTimeFormat::key() const
 {
-    return QCString("TIME")+m_strFormat.utf8();
+    return getKey( m_strFormat );
 }
+
+QCString KoVariableTimeFormat::getKey( const QString& props ) const
+{
+    return QCString("TIME") + props.utf8();
+}
+
+// Used by KoVariableFormatCollection::popupActionList(), to apply all formats
+// to the current data, in the popup menu.
+QStringList KoVariableTimeFormat::staticFormatPropsList()
+{
+    QStringList listTimeFormat;
+    listTimeFormat<<"locale";
+    listTimeFormat<<"hh:mm";
+    listTimeFormat<<"hh:mm:ss";
+    listTimeFormat<<"hh:mm AP";
+    listTimeFormat<<"hh:mm:ss AP";
+    listTimeFormat<<"mm:ss.zzz";
+    return listTimeFormat;
+}
+
+// Used by timeformatwidget_impl
+QStringList KoVariableTimeFormat::staticTranslatedFormatPropsList()
+{
+    QStringList listTimeFormat;
+    listTimeFormat<<i18n("locale");
+    listTimeFormat<<"hh:mm";
+    listTimeFormat<<"hh:mm:ss";
+    listTimeFormat<<"hh:mm AP";
+    listTimeFormat<<"hh:mm:ss AP";
+    listTimeFormat<<"mm:ss.zzz";
+    return listTimeFormat;
+}
+
+////
 
 QString KoVariableStringFormat::convert( const QVariant & string ) const
 {
@@ -268,9 +317,16 @@ QString KoVariableStringFormat::convert( const QVariant & string ) const
 
 QCString KoVariableStringFormat::key() const
 {
-    return "STRING";
+    return getKey( QString::null );
     // TODO prefix & suffix
 }
+
+QCString KoVariableStringFormat::getKey( const QString& props ) const
+{
+    return QCString("STRING") + props.utf8();
+}
+
+////
 
 QString KoVariableNumberFormat::convert( const QVariant &value ) const
 {
@@ -285,16 +341,15 @@ QString KoVariableNumberFormat::convert( const QVariant &value ) const
 
 QCString KoVariableNumberFormat::key() const
 {
-    return "NUMBER";
+    return getKey(QString::null);
 }
 
-/* for the prefix+suffix string format
-    QString str;
-    str.prepend( pre );
-    str.append( post );
-    return QString( str );
-*/
+QCString KoVariableNumberFormat::getKey( const QString& props ) const
+{
+    return QCString("NUMB") + props.utf8();
+}
 
+////
 
 KoVariableFormatCollection::KoVariableFormatCollection()
 {
@@ -312,6 +367,7 @@ KoVariableFormat * KoVariableFormatCollection::format( const QCString &key )
 
 KoVariableFormat * KoVariableFormatCollection::createFormat( const QCString &key )
 {
+    kdDebug(32500) << "KoVariableFormatCollection: creating format for key=" << key << endl;
     KoVariableFormat * format = 0L;
     // The first 4 chars identify the class
     QCString type = key.left(4);
@@ -335,10 +391,11 @@ KoVariableFormat * KoVariableFormatCollection::createFormat( const QCString &key
 /******************************************************************/
 /* Class:       KoVariableCollection                              */
 /******************************************************************/
-KoVariableCollection::KoVariableCollection(KoVariableSettings *_setting)
+KoVariableCollection::KoVariableCollection(KoVariableSettings *_settings, KoVariableFormatCollection *formatCollection)
 {
-    m_variableSettings=_setting;
-    m_varSelected=0L;
+    m_variableSettings = _settings;
+    m_varSelected = 0L;
+    m_formatCollection = formatCollection;
 }
 
 KoVariableCollection::~KoVariableCollection()
@@ -379,6 +436,8 @@ void KoVariableCollection::recalcVariables(int type)
             }
         }
     }
+    // TODO pass list of textdocuments as argument
+    // Or even better, call emitRepaintChanged on all modified textobjects
     if(update)
         emit repaintVariable();
 }
@@ -401,22 +460,6 @@ bool KoVariableCollection::customVariableExist(const QString &varname) const
     return varValues.contains( varname );
 }
 
-void KoVariableCollection::changeTypeOfVariable()
-{
-    KAction * act = (KAction *)(sender());
-    VariableSubTextMap::Iterator it = m_variableSubTextMap.find( act );
-    if ( it == m_variableSubTextMap.end() )
-        kdWarning() << "Action not found in m_variableSubTextMap." << endl;
-    else
-    {
-        if( m_varSelected )
-        {
-            m_varSelected->setVariableSubType( m_varSelected->variableSubType(*it) );
-            recalcVariables(m_varSelected);
-        }
-    }
-}
-
 void KoVariableCollection::recalcVariables(KoVariable *var)
 {
     if( var )
@@ -432,34 +475,87 @@ void KoVariableCollection::recalcVariables(KoVariable *var)
     }
 }
 
-void KoVariableCollection::changeFormatOfVariable()
-{
-    KAction * act = (KAction *)(sender());
-    VariableSubFormatMap::Iterator it = m_variableSubFormatMap.find( act );
-    if ( it == m_variableSubFormatMap.end() )
-        kdWarning() << "Action not found in m_variableSubTextMap." << endl;
-    else
-    {
-        if( m_varSelected )
-        {
-            KoDateVariable *date=dynamic_cast<KoDateVariable*>(m_varSelected);
-            if(date)
-            {
-                static_cast<KoVariableDateFormat*>(date->variableFormat())->setDateFormat( (*it).format );
-            }
-            KoTimeVariable *time=dynamic_cast<KoTimeVariable*>(m_varSelected);
-            if(time)
-            {
-                static_cast<KoVariableTimeFormat*>(time->variableFormat())->setTimeFormat( (*it).format );
-            }
-            recalcVariables(m_varSelected);
-        }
-    }
- }
-
 void KoVariableCollection::setVariableSelected(KoVariable * var)
 {
     m_varSelected=var;
+}
+
+QPtrList<KAction> KoVariableCollection::popupActionList()
+{
+    QPtrList<KAction> listAction;
+    // Insert list of actions that change the subtype
+    QStringList list = m_varSelected->subTypeText();
+    QStringList::ConstIterator it = list.begin();
+    for ( int i = 0; it != list.end() ; ++it, ++i )
+    {
+        if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
+        {
+            // We store the subtype number as the action name
+            QCString name; name.setNum(i);
+            KToggleAction * act = new KToggleAction( *it, KShortcut(), 0, name );
+            connect( act, SIGNAL(activated()), this, SLOT(slotChangeSubType()) );
+            if ( i == m_varSelected->subType() )
+                act->setChecked( true );
+            //m_subTextMap.insert( act, i );
+            listAction.append( act );
+        }
+    }
+    // Insert list of actions that change the format properties
+    KoVariableFormat* format = m_varSelected->variableFormat();
+    QString currentFormat = format->formatProperties();
+
+    list = format->formatPropsList();
+    it = list.begin();
+    for ( int i = 0; it != list.end() ; ++it, ++i )
+    {
+        if( i == 0 ) // first item, and list not empty
+            listAction.append( new KActionSeparator() );
+
+        if ( !(*it).isEmpty() ) // in case of removed subtypes or placeholders
+        {
+            format->setFormatProperties( *it ); // temporary change
+            QString text = format->convert( m_varSelected->varValue() );
+            // We store the raw format as the action name
+            KToggleAction * act = new KToggleAction(text, KShortcut(), 0, (*it).utf8());
+            connect( act, SIGNAL(activated()), this, SLOT(slotChangeFormat()) );
+            if ( (*it) == currentFormat )
+                act->setChecked( true );
+            listAction.append( act );
+        }
+    }
+
+    // Restore current format
+    format->setFormatProperties( currentFormat );
+    return listAction;
+}
+
+void KoVariableCollection::slotChangeSubType()
+{
+    KAction * act = (KAction *)(sender());
+    int menuNumber = QCString(act->name()).toInt();
+    int newSubType = m_varSelected->variableSubType(menuNumber);
+    kdDebug(32500) << "slotChangeSubType: menuNumber=" << menuNumber << " newSubType=" << newSubType << endl;
+    if ( m_varSelected->subType() != newSubType )
+    {
+        KoChangeVariableSubType *cmd=new KoChangeVariableSubType(
+            m_varSelected->subType(), newSubType, m_varSelected );
+        cmd->execute();
+        m_varSelected->textDocument()->emitNewCommand(cmd);
+    }
+}
+
+void KoVariableCollection::slotChangeFormat()
+{
+    KAction * act = (KAction *)(sender());
+    QString newFormat = QString::fromUtf8(act->name());
+    QString oldFormat = m_varSelected->variableFormat()->formatProperties();
+    if (oldFormat != newFormat )
+    {
+        KCommand *cmd=new KoChangeVariableFormatProperties(
+            oldFormat, newFormat, m_varSelected );
+        cmd->execute();
+        m_varSelected->textDocument()->emitNewCommand(cmd);
+    }
 }
 
 /******************************************************************/
@@ -487,11 +583,6 @@ QStringList KoVariable::subTypeText()
     return QStringList();
 }
 
-QStringList KoVariable::subTypeFormat()
-{
-    return QStringList();
-}
-
 void KoVariable::resize()
 {
     if ( m_deleted )
@@ -508,6 +599,19 @@ void KoVariable::resize()
     height = fmt->height();
     m_ascent = fmt->ascent();
     //kdDebug(32500) << "KoVariable::resize text=" << txt << " width=" << width << " height=" << height << " ascent=" << m_ascent << endl;
+}
+
+void KoVariable::recalcAndRepaint()
+{
+    recalc();
+    KoTextParag * parag = paragraph();
+    if ( parag )
+    {
+        //kdDebug(32500) << "KoVariable::recalcAndRepaint -> invalidating parag " << parag->paragId() << endl;
+        parag->invalidate( 0 );
+        parag->setChanged( true );
+    }
+    textDocument()->emitRepaintChanged();
 }
 
 QString KoVariable::fieldCode()
@@ -596,6 +700,7 @@ void KoVariable::save( QDomElement &parentElem )
     QDomElement typeElem = parentElem.ownerDocument().createElement( "TYPE" );
     variableElem.appendChild( typeElem );
     typeElem.setAttribute( "type", static_cast<int>( type() ) );
+    //// Of course, saving the key is ugly. We'll drop this when switching to the OO format.
     typeElem.setAttribute( "key", m_varFormat->key() );
     typeElem.setAttribute( "text", text(true) );
     if ( correctValue() != 0)
@@ -607,7 +712,7 @@ void KoVariable::load( QDomElement & )
 {
 }
 
-KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc, int _correct, bool _forceDefaultFormat )
+KoVariable * KoVariableCollection::createVariable( int type, short int subtype, KoVariableFormatCollection * coll, KoVariableFormat *varFormat,KoTextDocument *textdoc, KoDocument * doc, int _correct, bool _forceDefaultFormat )
 {
     QCString string;
     QStringList stringList;
@@ -621,7 +726,13 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
             if ( _forceDefaultFormat || subtype == KoDateVariable::VST_DATE_LAST_PRINTING || subtype ==KoDateVariable::VST_DATE_CREATE_FILE || subtype ==KoDateVariable::VST_DATE_MODIFY_FILE)
                 varFormat = coll->format( KoDateVariable::defaultFormat() );
             else
-                varFormat = coll->format( KoDateVariable::formatStr(_correct) );
+            {
+                QCString result = KoDateVariable::formatStr(_correct);
+                if ( result == 0 )//we cancel insert variable
+                    return 0L;
+                varFormat = coll->format( result );
+            }
+            break;
         }
         case VT_TIME:
         case VT_TIME_VAR_KWORD10:  // compatibility with kword 1.0
@@ -630,6 +741,7 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
                 varFormat = coll->format( KoTimeVariable::defaultFormat() );
             else
                 varFormat = coll->format( KoTimeVariable::formatStr(_correct) );
+            break;
         }
         case VT_PGNUM:
             varFormat = coll->format( "NUMBER" );
@@ -650,11 +762,12 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
     if ( varFormat == 0L ) // still 0 ? Impossible!
         return 0L ;
 
+    kdDebug(32500) << "Creating variable. Format=" << varFormat->key() << " type=" << type << endl;
     KoVariable * var = 0L;
     switch ( type ) {
         case VT_DATE:
         case VT_DATE_VAR_KWORD10:  // compatibility with kword 1.0
-            var = new KoDateVariable( textdoc, subtype, varFormat,this,_correct );
+            var = new KoDateVariable( textdoc, subtype, varFormat, this, _correct );
             break;
         case VT_TIME:
         case VT_TIME_VAR_KWORD10:  // compatibility with kword 1.0
@@ -686,14 +799,15 @@ KoVariable * KoVariableCollection::createVariable( int type, int subtype, KoVari
 
 void KoVariable::setVariableFormat( KoVariableFormat *_varFormat )
 {
-    m_varFormat=_varFormat;
+    // TODO if ( _varFormat ) _varFormat->deref();
+    m_varFormat = _varFormat;
+    // TODO m_varFormat->ref();
 }
-
 
 /******************************************************************/
 /* Class: KoDateVariable                                          */
 /******************************************************************/
-KoDateVariable::KoDateVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *_varFormat, KoVariableCollection *_varColl, int _correctDate)
+KoDateVariable::KoDateVariable( KoTextDocument *textdoc, short int subtype, KoVariableFormat *_varFormat, KoVariableCollection *_varColl, int _correctDate)
     : KoVariable( textdoc, _varFormat,_varColl ), m_subtype( subtype ), m_correctDate( _correctDate)
 {
 }
@@ -735,11 +849,11 @@ void KoDateVariable::recalc()
     if ( m_subtype == VST_DATE_CURRENT )
         m_varValue = QVariant(QDate::currentDate().addDays(m_correctDate));
     else if ( m_subtype == VST_DATE_LAST_PRINTING )
-        m_varValue = QVariant(m_varColl->variableSetting()->lastPrinting());
+        m_varValue = QVariant(m_varColl->variableSetting()->lastPrintingDate());
     else if ( m_subtype == VST_DATE_CREATE_FILE )
-        m_varValue = QVariant( m_varColl->variableSetting()->createFile() );
+        m_varValue = QVariant( m_varColl->variableSetting()->creationDate() );
     else if ( m_subtype == VST_DATE_MODIFY_FILE )
-        m_varValue = QVariant( m_varColl->variableSetting()->modifyFile() );
+        m_varValue = QVariant( m_varColl->variableSetting()->modificationDate() );
     else
     {
         // Only if never set before (i.e. upon insertion)
@@ -758,7 +872,7 @@ void KoDateVariable::saveVariable( QDomElement& varElem )
     elem.setAttribute( "year", date.year() );
     elem.setAttribute( "month", date.month() );
     elem.setAttribute( "day", date.day() );
-    elem.setAttribute( "fix", m_subtype == VST_DATE_FIX ); // to be extended
+    elem.setAttribute( "fix", m_subtype == VST_DATE_FIX ); // for compat
     elem.setAttribute( "correct", m_correctDate);
     elem.setAttribute( "subtype", m_subtype);
 }
@@ -804,25 +918,6 @@ QStringList KoDateVariable::actionTexts()
 QStringList KoDateVariable::subTypeText()
 {
     return KoDateVariable::actionTexts();
-}
-
-QStringList KoDateVariable::subTypeFormat()
-{
-    QStringList listDateFormat;
-    listDateFormat<<i18n("locale");
-    listDateFormat<<"dd/MM/yy";
-    listDateFormat<<"dd/MM/yyyy";
-    listDateFormat<<"MMM dd,yy";
-    listDateFormat<<"MMM dd,yyyy";
-    listDateFormat<<"dd.MMM.yyyy";
-    listDateFormat<<"MMMM dd, yyyy";
-    listDateFormat<<"ddd, MMM dd,yy";
-    listDateFormat<<"dddd, MMM dd,yy";
-    listDateFormat<<"MM-dd";
-    listDateFormat<<"yyyy-MM-dd";
-    listDateFormat<<"dd/yy";
-    listDateFormat<<"MMMM";
-    return listDateFormat;
 }
 
 QCString KoDateVariable::defaultFormat()
@@ -907,7 +1002,7 @@ QCString KoDateVariable::formatStr(int & correct)
 /******************************************************************/
 /* Class: KoTimeVariable                                          */
 /******************************************************************/
-KoTimeVariable::KoTimeVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat, KoVariableCollection *_varColl, int _correct)
+KoTimeVariable::KoTimeVariable( KoTextDocument *textdoc, short int subtype, KoVariableFormat *varFormat, KoVariableCollection *_varColl, int _correct)
     : KoVariable( textdoc, varFormat,_varColl ), m_subtype( subtype ), m_correctTime( _correct)
 {
 }
@@ -1001,18 +1096,6 @@ QStringList KoTimeVariable::actionTexts()
 QStringList KoTimeVariable::subTypeText()
 {
     return KoTimeVariable::actionTexts();
-}
-
-QStringList KoTimeVariable::subTypeFormat()
-{
-    QStringList listTimeFormat;
-    listTimeFormat<<i18n("locale");
-    listTimeFormat<<"hh:mm";
-    listTimeFormat<<"hh:mm:ss";
-    listTimeFormat<<"hh:mm AP";
-    listTimeFormat<<"hh:mm:ss AP";
-    listTimeFormat<<"mm:ss.zzz";
-    return listTimeFormat;
 }
 
 QCString KoTimeVariable::formatStr(int & _correct)
@@ -1205,7 +1288,7 @@ QStringList KoMailMergeVariable::actionTexts()
 /******************************************************************/
 /* Class: KoPgNumVariable                                         */
 /******************************************************************/
-KoPgNumVariable::KoPgNumVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl )
+KoPgNumVariable::KoPgNumVariable( KoTextDocument *textdoc, short int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl )
         : KoVariable( textdoc, varFormat, _varColl ), m_subtype( subtype )
 {
 }
@@ -1269,15 +1352,18 @@ QStringList KoPgNumVariable::subTypeText()
     return KoPgNumVariable::actionTexts();
 }
 
-void KoPgNumVariable::setVariableSubType( short int type)
+void KoPgNumVariable::setVariableSubType( short int type )
 {
-    m_subtype=type;
+    m_subtype = type;
+    Q_ASSERT( m_varColl );
+    KoVariableFormatCollection* fc = m_varColl->formatCollection();
+    setVariableFormat((m_subtype == VST_CURRENT_SECTION) ? fc->format("STRING") : fc->format("NUMBER"));
 }
 
 /******************************************************************/
 /* Class: KoFieldVariable                                         */
 /******************************************************************/
-KoFieldVariable::KoFieldVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat, KoVariableCollection *_varColl ,KoDocument *_doc )
+KoFieldVariable::KoFieldVariable( KoTextDocument *textdoc, short int subtype, KoVariableFormat *varFormat, KoVariableCollection *_varColl ,KoDocument *_doc )
     : KoVariable( textdoc, varFormat,_varColl ), m_subtype( subtype ), m_doc(_doc)
 {
 }
@@ -1703,3 +1789,4 @@ void KoNoteVariable::drawCustomItem( QPainter* p, int x, int y, int wpix, int hp
 
     p->restore();
 }
+

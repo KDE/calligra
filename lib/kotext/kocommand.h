@@ -24,6 +24,7 @@
 #include <qrichtext_p.h>
 class KoTextObject;
 class KoTextDocument;
+class KoVariable;
 #include <koparaglayout.h>
 
 /**
@@ -133,6 +134,40 @@ public:
     KoTextCursor *execute( KoTextCursor *c );
     KoTextCursor *unexecute( KoTextCursor *c );
     void resizeCustomItems();
+};
+
+/**
+ * Command created when changing the subtype of a variable
+ * (turning "fixed date" into "variable date").
+ */
+class KoChangeVariableSubType : public KCommand
+{
+public:
+    KoChangeVariableSubType( short int _oldValue, short int _newValue, KoVariable *var );
+    void execute();
+    void unexecute();
+    virtual QString name() const;
+private:
+    short int m_newValue;
+    short int m_oldValue;
+    KoVariable *m_var;
+};
+
+/**
+ * Command created when changing the properties of a variable's format
+ * (e.g. DD/MM/YYYY)
+ */
+class KoChangeVariableFormatProperties : public KCommand
+{
+ public:
+    KoChangeVariableFormatProperties( const QString &_oldValue, const QString &_newValue, KoVariable *var);
+    virtual QString name() const;
+    void execute();
+    void unexecute();
+private:
+    QString m_newValue;
+    QString m_oldValue;
+    KoVariable *m_var;
 };
 
 #endif
