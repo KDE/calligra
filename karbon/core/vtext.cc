@@ -277,7 +277,7 @@ VGroup* VText::toVGroup() const
 	VGroup* group = new VGroup( parent() );
 	
 	VCompositeListIterator itr( m_glyphs );
-	for( ++itr; itr.current(); ++itr )
+	for( itr.toFirst(); itr.current(); ++itr )
 	{
 		VComposite* c = itr.current()->clone();
 		c->setParent( group );
@@ -316,7 +316,7 @@ VText::save( QDomElement& element ) const
 
 		// save all glyphs / paths
 		VCompositeListIterator itr = m_glyphs;
-		for( ; itr.current() ; ++itr )
+		for( itr.toFirst(); itr.current(); ++itr )
 			itr.current()->save( me );
 	}
 }
