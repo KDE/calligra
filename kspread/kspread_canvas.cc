@@ -541,11 +541,10 @@ void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_s
   //do we need to scroll right
   else if ( xpos > maxX ) {
     int horzScrollBarValue;
-    const int horzScrollBarValueMax = table->columnRangeMax() - width();
-
+    unsigned long horzScrollBarValueMax = table->sizeMaxX() - width();
     horzScrollBarValue = xOffset() + xpos - maxX;
 
-    //We don't want to display any area > KS_colMax value
+    //We don't want to display any area > KS_colMax widths
     if ( horzScrollBarValue > horzScrollBarValueMax )
       horzScrollBarValue = horzScrollBarValueMax;
 
@@ -559,10 +558,10 @@ void KSpreadCanvas::gotoLocation( int x, int y, KSpreadTable* table, bool make_s
   // do we need to scroll down
   else if ( ypos > maxY ) {
     int vertScrollBarValue;
-    const int vertScrollBarValueMax = table->rowRangeMax() - height();
+    unsigned long vertScrollBarValueMax = table->sizeMaxY() - height();
     vertScrollBarValue = yOffset() + ypos - maxY;
 
-    //We don't want to display any area > KS_rowMax value
+    //We don't want to display any area > KS_rowMax heights
     if ( vertScrollBarValue > vertScrollBarValueMax )
       vertScrollBarValue = vertScrollBarValueMax;
 
@@ -649,7 +648,7 @@ void KSpreadCanvas::chooseGotoLocation( int x, int y, KSpreadTable* table, bool 
   //do we need to scroll right
   else if ( xpos > maxX ) {
     int horzScrollBarValue;
-    int horzScrollBarValueMax = table->columnRangeMax() - width();
+    int horzScrollBarValueMax = table->sizeMaxX() - width();
 
     horzScrollBarValue = xOffset() + xpos - maxX;
 
@@ -667,7 +666,7 @@ void KSpreadCanvas::chooseGotoLocation( int x, int y, KSpreadTable* table, bool 
   // do we need to scroll down
   else if ( ypos > maxY ) {
     int vertScrollBarValue;
-    int vertScrollBarValueMax = table->rowRangeMax() - height();
+    unsigned long vertScrollBarValueMax = table->sizeMaxY() - height();
     vertScrollBarValue = yOffset() + ypos - maxY;
 
     //We don't want to display any area > KS_rowMax value
@@ -780,9 +779,9 @@ void KSpreadCanvas::slotMaxColumn( int _max_column )
   int xpos = activeTable()->columnPos( QMIN( KS_colMax, _max_column + 10 ), this );
 
   //Don't go beyond the maximum column range (KS_colMax)
-  const int _columnRangeMax = activeTable()->columnRangeMax();
-  if ( ( xOffset() + xpos ) > ( _columnRangeMax - width() ) )
-    xpos = _columnRangeMax - width() - xOffset();
+  const int _sizeMaxX = activeTable()->sizeMaxX();
+  if ( ( xOffset() + xpos ) > ( _sizeMaxX - width() ) )
+    xpos = _sizeMaxX - width() - xOffset();
 
   horzScrollBar()->setRange( 0, xpos + xOffset() );
 }
@@ -792,9 +791,9 @@ void KSpreadCanvas::slotMaxRow( int _max_row )
   int ypos = activeTable()->rowPos( QMIN( KS_rowMax, _max_row + 10 ), this );
 
   //Don't go beyond the maximum row range (KS_rowMax)
-  const int _rowRangeMax = activeTable()->rowRangeMax();
-  if ( ( yOffset() + ypos ) > ( _rowRangeMax - height() ) )
-    ypos = _rowRangeMax - height() - yOffset();
+  unsigned long _sizeMaxY = activeTable()->sizeMaxY();
+  if ( ( yOffset() + ypos ) > ( _sizeMaxY - height() ) )
+    ypos = _sizeMaxY - height() - yOffset();
 
   vertScrollBar()->setRange( 0, ypos + yOffset() );
 }
@@ -1512,18 +1511,29 @@ void KSpreadCanvas::resizeEvent( QResizeEvent* _ev )
 {
     // If we rise horizontally, then check if we are still within the valid area (KS_colMax)
     if ( _ev->size().width() > _ev->oldSize().width() ){
-	const int _columnRangeMax = activeTable()->columnRangeMax();
-	if ( ( xOffset() + _ev->size().width() ) > _columnRangeMax )
-	    horzScrollBar()->setValue( _columnRangeMax - _ev->size().width() );
+	if ( ( xOffset() + _ev->size().width() ) > activeTable()->sizeMaxX() ) {
+	    horzScrollBar()->setRange( 0, activeTable()->sizeMaxX() - _ev->size().width() );
+	}
+    }
+    // If we lower vertically, then check if the range should represent the maximum range
+    else if ( _ev->size().width() < _ev->oldSize().width() ){
+	if ( horzScrollBar()->maxValue() == ( activeTable()->sizeMaxX() - _ev->oldSize().width() ) ){
+	    horzScrollBar()->setRange( 0, activeTable()->sizeMaxX() - _ev->size().width() );
+	}
     }
 
     // If we rise vertically, then check if we are still within the valid area (KS_rowMax)
     if ( _ev->size().height() > _ev->oldSize().height() ){
-	const int _rowRangeMax = activeTable()->rowRangeMax();
-	if ( ( yOffset() + _ev->size().height() ) > _rowRangeMax )
-	    vertScrollBar()->setValue( _rowRangeMax - _ev->size().height() );
-
-  }
+	if ( ( yOffset() + _ev->size().height() ) > activeTable()->sizeMaxY() ){
+	    vertScrollBar()->setRange( 0, activeTable()->sizeMaxY() - _ev->size().height() );
+	}
+    }
+    // If we lower vertically, then check if the range should represent the maximum range
+    else if ( _ev->size().height() < _ev->oldSize().height() ){
+	if ( vertScrollBar()->maxValue() == ( activeTable()->sizeMaxY() - _ev->oldSize().height() ) ){
+	    vertScrollBar()->setRange( 0, activeTable()->sizeMaxY() - _ev->size().height() );
+	}
+    }
 }
 
 void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
@@ -2043,6 +2053,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 		      }
 		  }
 		  else{
+		      // If this already the last used field then jump to the end
 		      if ( y >= activeTable()->maxRow() ) {
 			  y = KS_rowMax;
 		      }
@@ -3122,7 +3133,7 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
     m_bResize = FALSE;
 }
 
-void KSpreadVBorder::adjustRow(int _row,bool makeUndo)
+void KSpreadVBorder::adjustRow( int _row, bool makeUndo )
 {
   int adjust;
   int select;
@@ -3153,7 +3164,7 @@ void KSpreadVBorder::adjustRow(int _row,bool makeUndo)
   }
 }
 
-void KSpreadVBorder::equalizeRow(int resize )
+void KSpreadVBorder::equalizeRow( int resize )
 {
   KSpreadTable *table = m_pCanvas->activeTable();
   Q_ASSERT( table );
@@ -3171,17 +3182,17 @@ void KSpreadVBorder::equalizeRow(int resize )
      rl->setHeight( resize, m_pCanvas );
   }
 }
-void KSpreadVBorder::resizeRow(int resize,int nb,bool makeUndo  )
+void KSpreadVBorder::resizeRow( int resize, int nb, bool makeUndo )
 {
   KSpreadTable *table = m_pCanvas->activeTable();
   Q_ASSERT( table );
-  if(nb==-1)
+  if( nb == -1 ) // I don't know, where this is the case
   {
-    if(makeUndo && !m_pCanvas->doc()->undoBuffer()->isLocked() )
+    if( makeUndo && !m_pCanvas->doc()->undoBuffer()->isLocked() )
     {
         QRect rect;
         rect.setCoords( 1, m_iSelectionAnchor, KS_colMax, m_iSelectionAnchor );
-        KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(),m_pCanvas->activeTable() , rect );
+        KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(), m_pCanvas->activeTable(), rect );
         m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
     }
     RowLayout *rl = table->nonDefaultRowLayout( m_iSelectionAnchor );
@@ -3191,14 +3202,14 @@ void KSpreadVBorder::resizeRow(int resize,int nb,bool makeUndo  )
   else
   {
     QRect selection( table->selectionRect() );
-    if(selection.bottom()==0 ||selection.top()==0 || selection.left()==0
-       || selection.right()==0)
+    if( selection.bottom()==0 ||selection.top()==0 || selection.left()==0
+        || selection.right()==0 )
     {
-      if(makeUndo && !m_pCanvas->doc()->undoBuffer()->isLocked() )
+      if( makeUndo && !m_pCanvas->doc()->undoBuffer()->isLocked() )
       {
         QRect rect;
         rect.setCoords( 1, m_pCanvas->markerRow(), KS_colMax, m_pCanvas->markerRow() );
-        KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(),m_pCanvas->activeTable() , rect );
+        KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(), m_pCanvas->activeTable(), rect );
         m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
       }
       RowLayout *rl = table->nonDefaultRowLayout( m_pCanvas->markerRow() );
@@ -3209,13 +3220,13 @@ void KSpreadVBorder::resizeRow(int resize,int nb,bool makeUndo  )
     {
       if(makeUndo && !m_pCanvas->doc()->undoBuffer()->isLocked() )
       {
-          KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(),m_pCanvas->activeTable() , selection );
+          KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(), m_pCanvas->activeTable(), selection );
           m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
       }
       RowLayout *rl;
-      for (int i=selection.top();i<=selection.bottom();i++)
+      for ( int i=selection.top(); i<=selection.bottom(); i++ )
       {
-        rl= table->nonDefaultRowLayout( i );
+        rl = table->nonDefaultRowLayout( i );
         resize=QMAX((int)(2.0* m_pCanvas->zoom()), resize);
         rl->setHeight( resize, m_pCanvas );
       }
@@ -3665,7 +3676,7 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
     m_bResize = FALSE;
 }
 
-void KSpreadHBorder::adjustColumn(int _col, bool makeUndo)
+void KSpreadHBorder::adjustColumn( int _col, bool makeUndo )
 {
   int adjust;
   int select;
@@ -3700,7 +3711,7 @@ void KSpreadHBorder::adjustColumn(int _col, bool makeUndo)
   }
 }
 
-void KSpreadHBorder::equalizeColumn( int resize)
+void KSpreadHBorder::equalizeColumn( int resize )
 {
   KSpreadTable *table = m_pCanvas->activeTable();
   Q_ASSERT( table );
@@ -3720,7 +3731,7 @@ void KSpreadHBorder::equalizeColumn( int resize)
 
 }
 
-void KSpreadHBorder::resizeColumn(int resize,int nb,bool makeUndo  )
+void KSpreadHBorder::resizeColumn( int resize, int nb, bool makeUndo )
 {
   KSpreadTable *table = m_pCanvas->activeTable();
   Q_ASSERT( table );
@@ -3731,7 +3742,7 @@ void KSpreadHBorder::resizeColumn(int resize,int nb,bool makeUndo  )
     {
         QRect rect;
         rect.setCoords( m_iSelectionAnchor, 1, m_iSelectionAnchor, KS_rowMax );
-        KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(),m_pCanvas->activeTable() , rect );
+        KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(), m_pCanvas->activeTable(), rect );
         m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
     }
     ColumnLayout *cl = table->nonDefaultColumnLayout( m_iSelectionAnchor );
@@ -3748,7 +3759,7 @@ void KSpreadHBorder::resizeColumn(int resize,int nb,bool makeUndo  )
       {
         QRect rect;
         rect.setCoords( m_iSelectionAnchor, 1, m_iSelectionAnchor, KS_rowMax );
-        KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(),m_pCanvas->activeTable() , rect );
+        KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(), m_pCanvas->activeTable(), rect );
         m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
       }
 
@@ -3761,13 +3772,13 @@ void KSpreadHBorder::resizeColumn(int resize,int nb,bool makeUndo  )
     {
       if( makeUndo && !m_pCanvas->doc()->undoBuffer()->isLocked() )
       {
-        KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(),m_pCanvas->activeTable() , selection );
+        KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->doc(), m_pCanvas->activeTable(), selection );
         m_pCanvas->doc()->undoBuffer()->appendUndo( undo );
       }
       ColumnLayout *cl;
-      for (int i=selection.left();i<=selection.right();i++)
+      for ( int i=selection.left(); i<=selection.right(); i++ )
       {
-        cl= table->nonDefaultColumnLayout( i );
+        cl = table->nonDefaultColumnLayout( i );
 
         resize = QMAX( (int)(2.0* m_pCanvas->zoom()), resize );
         cl->setWidth( resize, m_pCanvas );

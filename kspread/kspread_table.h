@@ -323,11 +323,23 @@ public:
     /**
      * @retrun the maximum size of the column range
      */
-    int columnRangeMax ();
+    unsigned long sizeMaxX() { return m_ulSizeMaxX; }
     /**
      * @retrun the maximum size of the row range
      */
-    int rowRangeMax ();
+    unsigned long sizeMaxY() { return m_ulSizeMaxY; }
+
+    /**
+     * Adjusts the internal reference of the sum of the widths of all columns.
+     * Used in resizing of columns.
+     */
+    void adjustSizeMaxX ( int _x );
+
+    /**
+     * Adjusts the internal reference of the sum of the heights of all rows.
+     * Used in resizing of rows.
+     */
+    void adjustSizeMaxY ( int _y );
 
     /**
      * Sets the @ref KSpreadCell::layoutDirtyFlag in all cells.
@@ -495,49 +507,51 @@ public:
      *         A reason for returning FALSE is that there was a cell
      *         in the right most position.
      */
-    bool shiftRow(const QRect &_rect,bool makeUndo=true );
-    bool shiftColumn( const QRect& rect,bool makeUndo=true );
+    bool shiftRow( const QRect &_rect, bool makeUndo=true );
+    bool shiftColumn( const QRect& rect, bool makeUndo=true );
 
-    void unshiftColumn( const QRect& rect,bool makeUndo=true );
-    void unshiftRow( const QRect& rect,bool makeUndo=true );
+    void unshiftColumn( const QRect& rect, bool makeUndo=true );
+    void unshiftRow( const QRect& rect, bool makeUndo=true );
 
     /**
      * Moves all columns which are >= @p col one position to the right and
      * inserts a new and empty column. After this the table is redrawn.
      * nbCol is the number of column which are installing
      */
-    bool insertColumn( int col,int nbCol=0,bool makeUndo=true );
+    bool insertColumn( int col, int nbCol=0, bool makeUndo=true );
     /**
      * Moves all rows which are >= @p row one position down and
      * inserts a new and empty row. After this the table is redrawn.
      */
-    bool insertRow( int row,int nbRow=0 ,bool makeUndo=true);
+    bool insertRow( int row, int nbRow=0, bool makeUndo=true );
 
     /**
      * Deletes the column @p col and redraws the table.
      */
-    void removeColumn( int col,int nbCol=0,bool makeUndo=true );
+    void removeColumn( int col, int nbCol=0, bool makeUndo=true );
     /**
      * Deletes the row @p row and redraws the table.
      */
-    void removeRow( int row,int nbRow=0,bool makeUndo=true );
+    void removeRow( int row, int nbRow=0, bool makeUndo=true );
+
     /**
     * hide row
     */
-    void hideRow( int row,int nbRow=0,QValueList<int>list=QValueList<int>() );
+    void hideRow( int row, int nbRow=0, QValueList<int>list=QValueList<int>() );
     void emitHideRow();
-    void showRow( int row,int NbRow=0,QValueList<int>list=QValueList<int>() );
+    void showRow( int row, int NbRow=0, QValueList<int>list=QValueList<int>() );
+
     /**
     * hide column
     */
-    void hideColumn( int col,int NbCol=0,QValueList<int>list=QValueList<int>() );
+    void hideColumn( int col, int NbCol=0, QValueList<int>list=QValueList<int>() );
     void emitHideColumn();
-    void showColumn( int col,int NbCol=0,QValueList<int>list=QValueList<int>() );
+    void showColumn( int col, int NbCol=0, QValueList<int>list=QValueList<int>() );
 
     int adjustColumn( const QPoint &_marker, int _col = -1 );
     int adjustRow( const QPoint &_marker, int _row = -1 );
 
-    bool isCellSelected(int column, int row);
+    bool isCellSelected( int column, int row );
     /**
     * Check wether an entire row is selected in the current selection
     */
@@ -669,7 +683,7 @@ public:
     /**
      * Hides or shows this tables
      */
-    void setHidden(bool hidden) { m_bTableHide=hidden; }
+    void setHidden( bool hidden ) { m_bTableHide=hidden; }
 
     /**
      * Unselects all selected columns/rows/cells and redraws these cells.
@@ -842,18 +856,19 @@ public:
     int id() { return m_id; }
 
     /**
-     * Return the currently maximum defined column of the column scrollbar.
+     * Return the currently maximum defined column of the horizontal scrollbar.
      * It's always 10 times higher than the maximum access column.
      * In an empty table it starts with 256.
      */
     int maxColumn() { return m_iMaxColumn; }
 
     /**
-     * Return the currently maximum defined row of the row scrollbar
+     * Return the currently maximum defined row of the vertical scrollbar.
      * It's always 10 times higher than the maximum access row.
      * In an empty table it starts with 256.
      */
     int maxRow() { return m_iMaxRow; }
+
     void enableScrollBarUpdates( bool _enable );
 
     virtual DCOPObject* dcopObject();
@@ -1128,6 +1143,20 @@ protected:
      * The highest column ever accessed by the user.
      */
     int m_iMaxColumn;
+
+    /**
+     * Max range of canvas in x direction.
+     * Depends on KS_colMax and the width of all columns
+     */
+    unsigned long m_ulSizeMaxX;
+
+    /**
+     * Max range of canvas in y direction.
+     * Depends on KS_rowMax and the heigth of all rows
+     */
+    unsigned long m_ulSizeMaxY;
+
+
     bool m_bScrollbarUpdates;
 
     DCOPObject* m_dcop;

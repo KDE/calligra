@@ -194,6 +194,9 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const QString &tableName, const ch
 
   m_iMaxColumn = 256;
   m_iMaxRow = 256;
+  m_ulSizeMaxX = KS_colMax * m_pDefaultColumnLayout->width(); // default is max cols * default width
+  m_ulSizeMaxY = KS_rowMax * m_pDefaultRowLayout->height(); // default is max rows * default height
+
   m_bScrollbarUpdates = true;
 
   setHidden( false );
@@ -401,36 +404,14 @@ int KSpreadTable::rowPos( int _row, KSpreadCanvas *_canvas )
     return y;
 }
 
-int KSpreadTable::columnRangeMax()
+void KSpreadTable::adjustSizeMaxX ( int _x )
 {
-    //Fix me! It's called on every screen/cursor move.
-    //This function can be optimized, if we store this value
-    //and only recalculate it if we resize/delete/insert columns
-
-    // Add width of all used columns
-    // (+1 as we need the width of the last one too)
-    int x = columnPos( maxColumn() + 1 );
-
-    // Then add the default width for the unused
-    x += ( KS_colMax - maxColumn() ) * m_pDefaultColumnLayout->width();
-
-    return x;
+    m_ulSizeMaxX += _x;
 }
 
-int KSpreadTable::rowRangeMax()
+void KSpreadTable::adjustSizeMaxY ( int _y )
 {
-    //Fix me! It's called on every screen/cursor move.
-    //This function can be optimized, if we store this value
-    //and only recalculate it if we resize/delete/insert rows
-
-    // Add the height of all used rows
-    // (+1 as we need the height of the last one too)
-    int y = rowPos( maxRow() + 1 );
-
-    // Then add the default height for the unused
-    y += ( KS_rowMax - maxRow() ) * m_pDefaultRowLayout->height();
-
-    return y;
+    m_ulSizeMaxY += _y;
 }
 
 KSpreadCell* KSpreadTable::visibleCellAt( int _column, int _row, bool _no_scrollbar_update )
@@ -1749,26 +1730,33 @@ void KSpreadTable::unshiftRow( const QRect & rect,bool makeUndo )
     emit sig_updateView( this );
 }
 
-bool KSpreadTable::insertColumn( int col, int nbCol,bool makeUndo )
+bool KSpreadTable::insertColumn( int col, int nbCol, bool makeUndo )
 {
     if ( !m_pDoc->undoBuffer()->isLocked() && makeUndo)
     {
-        KSpreadUndoInsertColumn *undo = new KSpreadUndoInsertColumn( m_pDoc, this, col,nbCol );
-        m_pDoc->undoBuffer()->appendUndo( undo  );
+        KSpreadUndoInsertColumn *undo = new KSpreadUndoInsertColumn( m_pDoc, this, col, nbCol );
+        m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
     bool res=true;
-    for(int i=0;i<=nbCol;i++)
-        {
-        bool result = m_cells.insertColumn( col+i );
-        m_columns.insertColumn( col+i);
+    for( int i=0; i<=nbCol; i++ )
+    {
+	// Recalculate range max (minus size of last column)
+	m_ulSizeMaxX -= columnLayout( KS_colMax )->width();
+
+        bool result = m_cells.insertColumn( col );
+        m_columns.insertColumn( col );
         if(!result)
-                res=false;
-        }
+	    res=false;
+
+	//Recalculate range max (plus size of new column)
+	m_ulSizeMaxX += columnLayout( col+i )->width();
+    }
 
     QPtrListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
-        it.current()->changeNameCellRef( QPoint( col, 1 ), true, KSpreadTable::ColumnInsert, name() ,nbCol+1);
+        it.current()->changeNameCellRef( QPoint( col, 1 ), true, KSpreadTable::ColumnInsert, name(), nbCol+1 );
+
     refreshChart( QPoint( col, 1 ), true, KSpreadTable::ColumnInsert );
     refreshMergedCell();
     recalc();
@@ -1778,26 +1766,33 @@ bool KSpreadTable::insertColumn( int col, int nbCol,bool makeUndo )
     return res;
 }
 
-bool KSpreadTable::insertRow( int row,int nbRow,bool makeUndo )
+bool KSpreadTable::insertRow( int row, int nbRow, bool makeUndo )
 {
     if ( !m_pDoc->undoBuffer()->isLocked() && makeUndo)
     {
-        KSpreadUndoInsertRow *undo = new KSpreadUndoInsertRow( m_pDoc, this, row,nbRow );
-        m_pDoc->undoBuffer()->appendUndo( undo  );
+        KSpreadUndoInsertRow *undo = new KSpreadUndoInsertRow( m_pDoc, this, row, nbRow );
+        m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
     bool res=true;
-    for(int i=0;i<=nbRow;i++)
-        {
-        bool result = m_cells.insertRow( row+i );
-        m_rows.insertRow( row );
-        if(!result)
-                res=false;
-        }
+    for( int i=0; i<=nbRow; i++ )
+    {
+	// Recalculate range max (minus size of last row)
+	m_ulSizeMaxY -= rowLayout( KS_rowMax )->height();
+
+	bool result = m_cells.insertRow( row );
+	m_rows.insertRow( row );
+	if( !result )
+	    res = false;
+
+	//Recalculate range max (plus size of new row)
+	m_ulSizeMaxY += rowLayout( row )->height();
+    }
 
     QPtrListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
-        it.current()->changeNameCellRef( QPoint( 1, row ), true, KSpreadTable::RowInsert, name() ,nbRow+1);
+        it.current()->changeNameCellRef( QPoint( 1, row ), true, KSpreadTable::RowInsert, name(), nbRow+1 );
+
     refreshChart( QPoint( 1, row ), true, KSpreadTable::RowInsert );
     refreshMergedCell();
     recalc();
@@ -1812,18 +1807,24 @@ void KSpreadTable::removeColumn( int col, int nbCol, bool makeUndo )
     if ( !m_pDoc->undoBuffer()->isLocked() && makeUndo)
     {
         KSpreadUndoRemoveColumn *undo = new KSpreadUndoRemoveColumn( m_pDoc, this, col, nbCol );
-        m_pDoc->undoBuffer()->appendUndo( undo  );
+        m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
-    for(int i=0;i<=nbCol;i++)
-        {
-        m_cells.removeColumn( col );
-        m_columns.removeColumn( col );
-        }
+    for( int i=0; i<=nbCol; i++ )
+    {
+	// Recalculate range max (minus size of removed column)
+	m_ulSizeMaxX -= columnLayout( col )->width();
+
+	m_cells.removeColumn( col );
+	m_columns.removeColumn( col );
+
+	//Recalculate range max (plus size of new column)
+	m_ulSizeMaxX += columnLayout( KS_colMax )->width();
+    }
 
     QPtrListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
-        it.current()->changeNameCellRef( QPoint( col, 1 ), true, KSpreadTable::ColumnRemove, name(),nbCol+1 );
+        it.current()->changeNameCellRef( QPoint( col, 1 ), true, KSpreadTable::ColumnRemove, name(), nbCol+1 );
     refreshChart( QPoint( col, 1 ), true, KSpreadTable::ColumnRemove );
     recalc();
     refreshMergedCell();
@@ -1831,58 +1832,66 @@ void KSpreadTable::removeColumn( int col, int nbCol, bool makeUndo )
     emit sig_updateView( this );
 }
 
-void KSpreadTable::removeRow( int row,int nbRow,bool makeUndo )
+void KSpreadTable::removeRow( int row, int nbRow, bool makeUndo )
 {
-    if ( !m_pDoc->undoBuffer()->isLocked() && makeUndo)
+    if ( !m_pDoc->undoBuffer()->isLocked() && makeUndo )
     {
-        KSpreadUndoRemoveRow *undo = new KSpreadUndoRemoveRow( m_pDoc, this, row,nbRow );
-        m_pDoc->undoBuffer()->appendUndo( undo  );
+        KSpreadUndoRemoveRow *undo = new KSpreadUndoRemoveRow( m_pDoc, this, row, nbRow );
+        m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
-    for(int i=0;i<=nbRow;i++)
-        {
-        m_cells.removeRow( row );
-        m_rows.removeRow( row );
-        }
+    for( int i=0; i<=nbRow; i++ )
+    {
+	// Recalculate range max (minus size of removed row)
+	m_ulSizeMaxY -= rowLayout( row )->height();
+
+	m_cells.removeRow( row );
+	m_rows.removeRow( row );
+
+	//Recalculate range max (plus size of new row)
+	m_ulSizeMaxY += rowLayout( KS_rowMax )->height();
+    }
+
     QPtrListIterator<KSpreadTable> it( map()->tableList() );
     for( ; it.current(); ++it )
-        it.current()->changeNameCellRef( QPoint( 1, row ), true, KSpreadTable::RowRemove, name(),nbRow+1 );
-    refreshChart(QPoint( 1, row ), true, KSpreadTable::RowRemove);
+        it.current()->changeNameCellRef( QPoint( 1, row ), true, KSpreadTable::RowRemove, name(), nbRow+1 );
+
+    refreshChart( QPoint( 1, row ), true, KSpreadTable::RowRemove );
     recalc();
     refreshMergedCell();
     emit sig_updateVBorder( this );
     emit sig_updateView( this );
 }
 
-void KSpreadTable::hideRow( int _row,int nbRow, QValueList<int>_list )
+void KSpreadTable::hideRow( int _row, int nbRow, QValueList<int>_list )
 {
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
       KSpreadUndoHideRow *undo ;
-      if(nbRow!=-1)
-	undo= new KSpreadUndoHideRow( m_pDoc, this, _row,nbRow );
+      if( nbRow!=-1 )
+	undo= new KSpreadUndoHideRow( m_pDoc, this, _row, nbRow );
       else
-	undo= new KSpreadUndoHideRow( m_pDoc, this, _row,nbRow,_list );
+	undo= new KSpreadUndoHideRow( m_pDoc, this, _row, nbRow, _list );
       m_pDoc->undoBuffer()->appendUndo( undo  );
     }
 
-    if(nbRow!=-1)
-      {
-	for(int i=0;i<=nbRow;i++)
-	  {
-	    RowLayout *rl=nonDefaultRowLayout(_row+i);
+    if( nbRow!=-1 )
+    {
+	for( int i=0; i<=nbRow; i++ )
+	{
+	    RowLayout *rl=nonDefaultRowLayout( _row+i );
 	    rl->setHide(true);
-	  }
-      }
+	}
+    }
     else
-      {
+    {
 	QValueList<int>::Iterator it;
 	for( it = _list.begin(); it != _list.end(); ++it )
-	  {
-	    RowLayout *rl=nonDefaultRowLayout(*it);
+	{
+	    RowLayout *rl=nonDefaultRowLayout( *it );
 	    rl->setHide(true);
-	  }
-      }
+	}
+    }
     emitHideRow();
 }
 
@@ -1892,7 +1901,7 @@ void KSpreadTable::emitHideRow()
     emit sig_updateView( this );
 }
 
-void KSpreadTable::showRow( int _row,int nbRow,QValueList<int>_list )
+void KSpreadTable::showRow( int _row, int nbRow, QValueList<int>_list )
 {
     if ( !m_pDoc->undoBuffer()->isLocked() )
     {
@@ -1900,15 +1909,15 @@ void KSpreadTable::showRow( int _row,int nbRow,QValueList<int>_list )
       if(nbRow!=-1)
         undo = new KSpreadUndoShowRow( m_pDoc, this, _row,nbRow );
       else
-	undo = new KSpreadUndoShowRow( m_pDoc, this, _row,nbRow,_list );
-      m_pDoc->undoBuffer()->appendUndo( undo  );
+	undo = new KSpreadUndoShowRow( m_pDoc, this, _row,nbRow, _list );
+      m_pDoc->undoBuffer()->appendUndo( undo );
     }
-    if(nbRow!=-1)
+    if( nbRow!=-1 )
       {
-	for(int i=0;i<=nbRow;i++)
+	for( int i=0; i<=nbRow; i++ )
 	  {
-	    RowLayout *rl=nonDefaultRowLayout(_row+i);
-	    rl->setHide(false);
+	    RowLayout *rl=nonDefaultRowLayout( _row + i );
+	    rl->setHide( false );
 	  }
       }
     else
@@ -1916,8 +1925,8 @@ void KSpreadTable::showRow( int _row,int nbRow,QValueList<int>_list )
 	QValueList<int>::Iterator it;
 	for( it = _list.begin(); it != _list.end(); ++it )
 	  {
-	    RowLayout *rl=nonDefaultRowLayout(*it);
-	    rl->setHide(false);
+	    RowLayout *rl=nonDefaultRowLayout( *it );
+	    rl->setHide( false );
 	  }
       }
     emit sig_updateVBorder( this );
@@ -1925,23 +1934,23 @@ void KSpreadTable::showRow( int _row,int nbRow,QValueList<int>_list )
 }
 
 
-void KSpreadTable::hideColumn( int _col,int nbCol,QValueList<int>_list )
+void KSpreadTable::hideColumn( int _col, int nbCol, QValueList<int>_list )
 {
    if ( !m_pDoc->undoBuffer()->isLocked() )
     {
         KSpreadUndoHideColumn *undo;
-	if(nbCol!=-1)
-	  undo= new KSpreadUndoHideColumn( m_pDoc, this, _col,nbCol );
+	if( nbCol!=-1 )
+	  undo= new KSpreadUndoHideColumn( m_pDoc, this, _col, nbCol );
 	else
-	  undo= new KSpreadUndoHideColumn( m_pDoc, this, _col,nbCol,_list );
-        m_pDoc->undoBuffer()->appendUndo( undo  );
+	  undo= new KSpreadUndoHideColumn( m_pDoc, this, _col, nbCol, _list );
+        m_pDoc->undoBuffer()->appendUndo( undo );
     }
-   if(nbCol!=-1)
+   if( nbCol != -1 )
      {
-       for(int i=0;i<=nbCol;i++)
+       for( int i=0; i<=nbCol; i++ )
 	 {
-	   ColumnLayout *cl=nonDefaultColumnLayout(_col+i);
-	   cl->setHide(true);
+	   ColumnLayout *cl=nonDefaultColumnLayout( _col + i );
+	   cl->setHide( true );
 	 }
      }
    else
@@ -1949,8 +1958,8 @@ void KSpreadTable::hideColumn( int _col,int nbCol,QValueList<int>_list )
        QValueList<int>::Iterator it;
        for( it = _list.begin(); it != _list.end(); ++it )
 	 {
-	   ColumnLayout *cl=nonDefaultColumnLayout(*it);
-	   cl->setHide(true);
+	   ColumnLayout *cl=nonDefaultColumnLayout( *it );
+	   cl->setHide( true );
 	 }
       }
    emitHideColumn();
@@ -1963,38 +1972,37 @@ void KSpreadTable::emitHideColumn()
 }
 
 
-void KSpreadTable::showColumn( int _col,int nbCol,QValueList<int>_list )
+void KSpreadTable::showColumn( int _col, int nbCol, QValueList<int>_list )
 {
-   if ( !m_pDoc->undoBuffer()->isLocked() )
-     {
-       KSpreadUndoShowColumn *undo;
-      if(nbCol!=-1)
-        undo = new KSpreadUndoShowColumn( m_pDoc, this, _col,nbCol );
+    if ( !m_pDoc->undoBuffer()->isLocked() )
+    {
+      KSpreadUndoShowColumn *undo;
+      if( nbCol != -1 )
+	undo = new KSpreadUndoShowColumn( m_pDoc, this, _col, nbCol );
       else
-	undo = new KSpreadUndoShowColumn( m_pDoc, this, _col,nbCol,_list );
-      m_pDoc->undoBuffer()->appendUndo( undo  );
+	undo = new KSpreadUndoShowColumn( m_pDoc, this, _col, nbCol, _list );
+      m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
-   if(nbCol!=-1)
-     {
-       for(int i=0;i<=nbCol;i++)
-	 {
-	   ColumnLayout *cl=nonDefaultColumnLayout(_col+i);
-	   cl->setHide(false);
-	 }
-     }
-   else
-     {
+    if( nbCol != -1 )
+    {
+      for( int i=0; i<=nbCol; i++ )
+      {
+	ColumnLayout *cl=nonDefaultColumnLayout( _col + i );
+	cl->setHide( false );
+      }
+    }
+    else
+    {
        QValueList<int>::Iterator it;
        for( it = _list.begin(); it != _list.end(); ++it )
-	 {
-	   ColumnLayout *cl=nonDefaultColumnLayout(*it);
-	   cl->setHide(false);
-	 }
-
-     }
-   emit sig_updateHBorder( this );
-   emit sig_updateView( this );
+       {
+	   ColumnLayout *cl=nonDefaultColumnLayout( *it );
+	   cl->setHide( false );
+       }
+    }
+    emit sig_updateHBorder( this );
+    emit sig_updateView( this );
 }
 
 
@@ -2116,8 +2124,8 @@ void KSpreadTable::changeNameCellRef(const QPoint & pos, bool fullRowOrColumn, C
           QString str;
           bool tableNameFound = false; //Table names need spaces
           for( ; ( i < origText.length() ) &&  // until the end
-                 (  ( origText[i].isLetter() || origText[i].isDigit() || origText[i] == '$' ) ||  // all Text and numbers are welcome
-                     ( tableNameFound && origText[i].isSpace() ) )
+                 (  ( origText[i].isLetter() || origText[i].isDigit() || origText[i] == '$' ) ||  // all text and numbers are welcome
+                    ( tableNameFound && origText[i].isSpace() ) ) //in case of a table name, we include spaces too
                ; ++i )
           {
             str += origText[i];
@@ -3546,23 +3554,23 @@ int KSpreadTable::adjustColumn( const QPoint& _marker, int _col )
 int KSpreadTable::adjustRow(const QPoint &_marker,int _row)
 {
     int long_max=0;
-    if(_row==-1)
+    if( _row == -1 )
     {
         if ( isRowSelected() )
         {
             KSpreadCell* c = m_cells.firstCell();
-            for( ;c; c = c->nextCell() )
+            for( ; c; c = c->nextCell() )
             {
                 int row = c->row();
                 if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
                 {
-                    if(!c->isEmpty() && !c->isObscured())
+                    if( !c->isEmpty() && !c->isObscured() )
                     {
-                        c->conditionAlign(painter(),c->column(),row);
-                        if(c->textHeight()>long_max)
+                        c->conditionAlign( painter(), c->column(), row );
+                        if( c->textHeight() > long_max )
                             long_max = c->textHeight() +
-                                       c->topBorderWidth(c->column(),c->row() ) +
-                                       c->bottomBorderWidth(c->column(),c->row() );
+                                       c->topBorderWidth( c->column(), c->row() ) +
+                                       c->bottomBorderWidth( c->column(), c->row() );
 
                     }
                 }
@@ -3580,18 +3588,18 @@ int KSpreadTable::adjustRow(const QPoint &_marker,int _row)
         if ( isRowSelected() )
         {
             KSpreadCell* c = m_cells.firstCell();
-            for( ;c; c = c->nextCell() )
+            for( ; c; c = c->nextCell() )
             {
                 int row = c->row();
                 if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
                 {
-                    if(!c->isEmpty() && !c->isObscured())
+                    if( !c->isEmpty() && !c->isObscured() )
                     {
-                        c->conditionAlign(painter(),c->column(),row);
-                        if(c->textHeight()>long_max)
+                        c->conditionAlign( painter(), c->column(), row );
+                        if( c->textHeight() > long_max )
                             long_max = c->textHeight() +
-                                       c->topBorderWidth(c->column(),c->row() ) +
-                                       c->bottomBorderWidth(c->column(),c->row() );
+                                       c->topBorderWidth( c->column(), c->row() ) +
+                                       c->bottomBorderWidth( c->column(), c->row() );
 
                     }
                 }
@@ -3599,24 +3607,24 @@ int KSpreadTable::adjustRow(const QPoint &_marker,int _row)
         }
         else
         {
-        int y=_row;
-        for ( int x = r.left(); x <= r.right(); x++ )
+            int y = _row;
+            for ( int x = r.left(); x <= r.right(); x++ )
                 {
                 KSpreadCell *cell = cellAt( x, y );
-                if(cell != m_pDefaultCell && !cell->isEmpty()
+                if( cell != m_pDefaultCell && !cell->isEmpty()
                         && !cell->isObscured())
                         {
-                        cell->conditionAlign(painter(),x,y);
-                        if(cell->textHeight()>long_max )
+                        cell->conditionAlign( painter(), x, y );
+                        if( cell->textHeight() > long_max )
                                 long_max = cell->textHeight() +
-                                        cell->topBorderWidth(cell->column(),cell->row() ) +
-                                        cell->bottomBorderWidth(cell->column(),cell->row() );
+                                        cell->topBorderWidth( cell->column(), cell->row() ) +
+                                        cell->bottomBorderWidth( cell->column(), cell->row() );
                         }
                 }
         }
     }
     //add 4 because long_max is the long of the text
-    //but column has borders
+    //but row has borders
     if( long_max == 0 )
         return -1;
     else

@@ -496,7 +496,7 @@ public:
      */
     int height( KSpreadCanvas *_canvas = 0L );
     /**
-     * @return the width in millimeters.
+     * @return the height in millimeters.
      */
     float mmHeight() { return m_bHide ? 0 : m_fHeight; }
     /**
@@ -556,7 +556,10 @@ public:
      */
     void setTopBorderPen( const QPen& p );
 
-    void setHide(bool _hide) { m_bHide=_hide;}
+    /**
+     * Sets the hide flag
+     */
+    void setHide( bool _hide );
     bool isHide() { return m_bHide;}
 
 protected:
@@ -675,7 +678,7 @@ public:
      */
     void setLeftBorderPen( const QPen& p );
 
-    void setHide(bool _hide) { m_bHide=_hide;}
+    void setHide( bool _hide );
     bool isHide() { return m_bHide;}
 
 

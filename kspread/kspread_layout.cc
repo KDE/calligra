@@ -1735,12 +1735,24 @@ void RowLayout::setMMHeight( float _h )
 }
 void RowLayout::setHeight( int _h, KSpreadCanvas *_canvas )
 {
+  KSpreadTable *_table;
+  if ( _canvas )
+      _table = _canvas->activeTable();
+  else
+      _table = m_pTable;
+
   UPDATE_BEGIN;
+
+  // Lower maximum size by old height
+  _table->adjustSizeMaxY ( - height() );
 
   if ( _canvas )
     m_fHeight = POINT_TO_MM( _h / _canvas->zoom() );
   else
     m_fHeight = POINT_TO_MM( _h  );
+
+  // Rise maximum size by new height
+  _table->adjustSizeMaxY ( height() );
 
   UPDATE_END;
 }
@@ -1856,6 +1868,21 @@ void RowLayout::setBottomBorderPen( const QPen& p )
     KSpreadLayout::setBottomBorderPen( p );
 }
 
+void RowLayout::setHide( bool _hide )
+{
+    if ( _hide != m_bHide ) // only if we change the status
+    {
+	m_bHide=_hide;
+
+	if ( _hide )
+	    // Lower maximum size by height of row
+	    m_pTable->adjustSizeMaxY ( - height() );
+	else
+	    // Rise maximum size by height of row
+	    m_pTable->adjustSizeMaxY ( height() );
+    }
+}
+
 KSpreadLayout* RowLayout::fallbackLayout( int col, int )
 {
     return table()->columnLayout( col );
@@ -1886,7 +1913,7 @@ bool RowLayout::isDefault() const
 ColumnLayout::ColumnLayout( KSpreadTable *_table, int _column ) : KSpreadLayout( _table )
 {
   m_bDisplayDirtyFlag = false;
-  m_fWidth = POINT_TO_MM(colWidth);
+  m_fWidth = POINT_TO_MM( static_cast<int>(colWidth) );
   m_iColumn = _column;
   m_bDefault=false;
   m_bHide=false;
@@ -1922,12 +1949,24 @@ void ColumnLayout::setMMWidth( float _w )
 
 void ColumnLayout::setWidth( int _w, KSpreadCanvas *_canvas )
 {
+  KSpreadTable *_table;
+  if ( _canvas )
+      _table = _canvas->activeTable();
+  else
+      _table = m_pTable;
+
   UPDATE_BEGIN;
+
+  // Lower maximum size by old width
+  _table->adjustSizeMaxX ( - width() );
 
   if ( _canvas )
       m_fWidth = POINT_TO_MM(_w / _canvas->zoom());
   else
       m_fWidth = POINT_TO_MM(_w);
+
+  // Rise maximum size by new width
+  _table->adjustSizeMaxX ( width() );
 
   UPDATE_END;
 }
@@ -2046,6 +2085,21 @@ void ColumnLayout::setRightBorderPen( const QPen& p )
 KSpreadLayout* ColumnLayout::fallbackLayout( int, int )
 {
     return table()->defaultLayout();
+}
+
+void ColumnLayout::setHide( bool _hide )
+{
+    if ( _hide != m_bHide ) // only if we change the status
+    {
+	m_bHide=_hide;
+
+	if ( _hide )
+	    // Lower maximum size by width of column
+	    m_pTable->adjustSizeMaxX ( - width() );
+	else
+	    // Rise maximum size by width of column
+	    m_pTable->adjustSizeMaxX ( width() );
+    }
 }
 
 const KSpreadLayout* ColumnLayout::fallbackLayout( int, int ) const
