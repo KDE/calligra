@@ -728,7 +728,18 @@ static void ProcessLayoutTabulatorTag ( QDomNode myNode, void *tagData, KWEFKWor
         << AttrProcessing ( "type",    tabulator.m_type    )
         << AttrProcessing ( "filling", tabulator.m_filling )
         << AttrProcessing ( "width",   tabulator.m_width   )
+        << AttrProcessing ( "alignchar" )
         ;
+
+    if ( leader->m_oldSyntax )
+    {
+        // Avoid too many warning
+        attrProcessingList
+            << AttrProcessing ( "mmpos" )
+            << AttrProcessing ( "inchpos" ) // Never ever use it, as this value is mostly wrong (e.g. 1.1009e+15)
+        ;
+    }
+    
     ProcessAttributes (myNode, attrProcessingList);
     tabulatorList->append(tabulator);
 
@@ -773,6 +784,7 @@ static void ProcessLineBreakingTag ( QDomNode myNode, void *tagData, KWEFKWordLe
     attrProcessingList << AttrProcessing ( "linesTogether",       layout->keepLinesTogether  );
     attrProcessingList << AttrProcessing ( "hardFrameBreak",      layout->pageBreakBefore );
     attrProcessingList << AttrProcessing ( "hardFrameBreakAfter", layout->pageBreakAfter  );
+    attrProcessingList << AttrProcessing ( "keepWithNext" ); // RTF import filter
     ProcessAttributes (myNode, attrProcessingList);
 
     AllowNoSubtags (myNode, leader);
@@ -850,8 +862,9 @@ static void ProcessLinespacingTag (QDomNode myNode, void *tagData, KWEFKWordLead
             layout->lineSpacingType = LayoutData::LS_DOUBLE;
         else
         {
-            const double size = oldValue.toDouble ();
-            if ( size >= 1.0 )
+            bool ok = false;
+            const double size = oldValue.toDouble( &ok );
+            if ( ok && ( size >= 0.0 ) ) // 0 is allowed but negative values are not
             {
                 // We have a valid size
                 layout->lineSpacingType = LayoutData::LS_CUSTOM; // set to custom
@@ -874,6 +887,8 @@ static void ProcessLinespacingTag (QDomNode myNode, void *tagData, KWEFKWordLead
             layout->lineSpacingType = LayoutData::LS_ATLEAST;
         else if ( spacingType == "multiple" )
             layout->lineSpacingType = LayoutData::LS_MULTIPLE;
+        else if ( spacingType == "fixed" )
+            layout->lineSpacingType = LayoutData::LS_FIXED;
         else
              layout->lineSpacingType = LayoutData::LS_SINGLE; // assume single linespace
         layout->lineSpacing = spacingValue;
