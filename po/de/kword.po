@@ -1,0 +1,254 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: kword alpha\n"
+"POT-Creation-Date: 1998-10-04 16:10+0200\n"
+"PO-Revision-Date: 1998-10-04 15:26+0200\n"
+"Last-Translator: Stephan Kulow <coolo@kde.org>\n"
+
+#: kword_doc.cc:283 kword_shell.cc:94
+msgid "KWord Error"
+msgstr "KWord Fehler"
+
+#: kword_doc.cc:283 kword_shell.cc:94
+msgid "Could not init"
+msgstr "Konnte nicht initialisieren"
+
+#: kword_view.cc:301
+msgid ""
+"*.gif *GIF *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM *.PBM *.PGM *.PPM "
+"*.PBMRAW *.PGMRAW *.PPMRAW *.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw "
+"*.ppmdraw|All pictures\n"
+"*.gif *.GIF|GIF-Pictures\n"
+"*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
+"*.bmp *.BMP|Windows Bitmaps\n"
+"*.xbm *.XBM|XWindow Pitmaps\n"
+"*.xpm *.XPM|Pixmaps\n"
+"*.pnm *.PNM *.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW *.pbm *.pgm *.ppm "
+"*.pbmdraw *.pgmdraw *.ppmdraw|PNM-Pictures"
+msgstr ""
+"*.gif *GIF *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM *.PBM *.PGM *.PPM "
+"*.PBMRAW *.PGMRAW *.PPMRAW *.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw "
+"*.ppmdraw|Alle Bildformate\n"
+"*.gif *.GIF|GIF-Bilder\n"
+"*.jpg *.JPG *.jpeg *.JPEG|JPEG-Bilder\n"
+"*.bmp *.BMP|Windows Bitmaps\n"
+"*.xbm *.XBM|XWindow Bitmaps\n"
+"*.xpm *.XPM|Pixmaps\n"
+"*.pnm *.PNM *.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW *.pbm *.pgm *.ppm "
+"*.pbmdraw *.pgmdraw *.ppmdraw|PNM-Bilder"
+
+#: kword_view.cc:351
+msgid "KWord - Paragraph settings"
+msgstr "KWord - Einstellung f. Absatz"
+
+#: kword_view.cc:577
+msgid "No Undo possible"
+msgstr "Rückgängig nicht möglich"
+
+#: kword_view.cc:583
+msgid "No Redo possible"
+msgstr "Wiederherstellen nicht möglich"
+
+#: kword_view.cc:604
+msgid "&Find..."
+msgstr "&Suchen..."
+
+#: kword_view.cc:606
+msgid "&Replace..."
+msgstr "E&rsetzen..."
+
+#: kword_view.cc:622
+msgid "&Picture..."
+msgstr "&Bild..."
+
+#: kword_view.cc:628
+msgid "&Clipart..."
+msgstr "&Clipart..."
+
+#: kword_view.cc:634
+msgid "&Table..."
+msgstr "&Tabelle"
+
+#: kword_view.cc:640
+msgid "&Objects..."
+msgstr "&Objekte..."
+
+#: kword_view.cc:644
+msgid "&Format"
+msgstr "&Formatierung"
+
+#: kword_view.cc:645
+msgid "&Font..."
+msgstr "&Schrift..."
+
+#: kword_view.cc:647
+msgid "&Color..."
+msgstr "Far&be..."
+
+#: kword_view.cc:649
+msgid "Paragraph..."
+msgstr "Absatz..."
+
+#: kword_view.cc:651
+msgid "Page..."
+msgstr "Seite..."
+
+#: kword_view.cc:654
+msgid "Numbering..."
+msgstr "Nummerierung..."
+
+#: kword_view.cc:656
+msgid "&Style..."
+msgstr "&Stil..."
+
+#: kword_view.cc:660
+msgid "&Extra"
+msgstr "&Extra"
+
+#: kword_view.cc:661
+msgid "&Spelling..."
+msgstr "&Rechtschreibe-Überprüfung"
+
+#: kword_view.cc:663
+msgid "S&tylist..."
+msgstr "&Autoformat"
+
+#: kword_view.cc:666
+msgid "&Options..."
+msgstr "&Optionen..."
+
+#: kword_view.cc:674
+msgid "&About KWord..."
+msgstr "&Über KWord..."
+
+#: kword_view.cc:676
+msgid "About K&Office..."
+msgstr "Über K&Office..."
+
+#: kword_view.cc:678
+msgid "About &KDE..."
+msgstr "Über &KDE..."
+
+#: kword_view.cc:748
+msgid "Insert Picture"
+msgstr "Bild einfügen"
+
+#: kword_view.cc:756
+msgid "Insert Clipart"
+msgstr "Clipart einfügen"
+
+#: kword_view.cc:764
+msgid "Insert Table"
+msgstr "Tabelle einfügen"
+
+#: kword_view.cc:771
+msgid "Insert Object"
+msgstr "Objekt einfügen"
+
+#: kword_view.cc:783
+msgid "Text"
+msgstr "Text"
+
+#: kword_view.cc:787
+msgid "Style"
+msgstr "Stil"
+
+#: kword_view.cc:804
+msgid "Font List"
+msgstr "Schrift-Liste"
+
+#: kword_view.cc:817
+msgid "Bold"
+msgstr "Fett"
+
+#: kword_view.cc:837
+msgid "Underline"
+msgstr "Unterstrichen"
+
+#: kword_view.cc:844
+msgid "Color"
+msgstr "Farbe"
+
+#: kword_view.cc:854
+msgid "Align Left"
+msgstr "Linksbündig"
+
+#: kword_view.cc:864
+msgid "Align Center"
+msgstr "Zentriert"
+
+#: kword_view.cc:873
+msgid "Align Right"
+msgstr "Rechtsbündig"
+
+#: kword_view.cc:882
+msgid "Align Block"
+msgstr "Blocksatz"
+
+#: kword_view.cc:894
+msgid "Enumerated List"
+msgstr "Nummerierte Liste"
+
+#: kword_view.cc:902
+msgid "Unsorted List"
+msgstr "Unsortierte Liste"
+
+#: paragdia.cc:25
+msgid "Preview"
+msgstr "Voransicht"
+
+#: paragdia.cc:152
+msgid "Indent"
+msgstr "Einrücken"
+
+#: paragdia.cc:155
+msgid "Left (mm):"
+msgstr "Links (mm):"
+
+#: paragdia.cc:169
+msgid "Right (mm):"
+msgstr "Rechts (mm):"
+
+#: paragdia.cc:184
+msgid "First Line (mm):"
+msgstr "Erste Zeile (mm):"
+
+#: paragdia.cc:216
+msgid "Line Spacing"
+msgstr "Zeilenabstand"
+
+#: paragdia.cc:220
+msgid "0.5 lines"
+msgstr "1/2-zeilig"
+
+#: paragdia.cc:221
+msgid "1.0 line"
+msgstr "Einzeilig"
+
+#: paragdia.cc:222
+msgid "1.5 lines"
+msgstr "1 1/2-zeilig"
+
+#: paragdia.cc:223
+msgid "2.0 lines"
+msgstr "2-zeilig"
+
+#: paragdia.cc:224
+msgid "Space (pt)"
+msgstr "Abstand (pt)"
+
+#: paragdia.cc:257
+msgid "Paragraph Space"
+msgstr "Abstand der Absätze"
+
+#: paragdia.cc:260
+msgid "Before (mm):"
+msgstr "Vor (mm):"
+
+#: paragdia.cc:274
+msgid "After (mm):"
+msgstr "Hinter (mm):"
+
+#: paragdia.cc:322
+msgid "Indent and Spacing"
+msgstr "Einrückung und Abstand"
