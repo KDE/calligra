@@ -1053,7 +1053,6 @@ void RTFImport::parseFontTable( RTFProperty * )
 	    QFont qFont( font.name );
 	    qFont.setFixedPitch( (font.fixedPitch == 1) );
 	    qFont.setStyleHint( font.styleHint );
-	    QFontInfo* info=new QFontInfo( font.name );
 	    for(;!qFont.exactMatch();)
 	    {
 		int space=font.name.findRev(' ', font.name.length());
@@ -1062,12 +1061,12 @@ void RTFImport::parseFontTable( RTFProperty * )
 		font.name.truncate(space);
 		qFont.setFamily( font.name );
 	    }
-	    delete info;
-	    info=new QFontInfo( font.name );
+	    QFontInfo *info=new QFontInfo( font.name );
 	    fontTable.insert( state.format.font, info->family().utf8() );
 	    font.name.truncate( 0 );
 	    font.styleHint = QFont::AnyStyle;
 	    font.fixedPitch = 0;
+            delete info;
 	}
     }
 }
