@@ -2687,6 +2687,38 @@
       </Help>
     </Function>
 
+    <Function>
+      <Name>WEIBULL</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>number</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>alpha parameter</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>beta parameter</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>0 = density, 1 = distribution</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Help>
+        <Text>
+          Returns the Weibull distribution.
+          The alpha and beta parameters must be positive, the number (first
+          parameter) must be non-negative.
+          Cumulative = 0 calculates the density function; cumulative = 1 calculates the distribution.
+        </Text>
+        <Syntax>WEIBULL(number;alpha;beta;cumulative)</Syntax>
+        <Example>WEIBULL(2;1;1;0) equals 0.135335</Example>
+        <Example>WEIBULL(2;1;1;1) equals 0.864665</Example>
+      </Help>
+    </Function>
+
   </Group>
   <Group>
     <GroupName>Financial</GroupName>

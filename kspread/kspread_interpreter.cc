@@ -2474,6 +2474,40 @@ static bool kspreadfunc_expondist(KSContext& context ) {
   return true;
 }
 
+static bool kspreadfunc_weibull( KSContext& context ) {
+  //returns the Weibull distribution
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+  
+  if ( !KSUtil::checkArgumentsCount( context, 4, "WEIBULL", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[1], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[2], KSValue::DoubleType, true ) )
+    return false;
+  if ( !KSUtil::checkType( context, args[3], KSValue::IntType, true ) )
+    return false;
+
+  double x = args[0]->doubleValue();
+  double alpha = args[1]->doubleValue();
+  double beta = args[2]->doubleValue();
+  double kum = args[3]->intValue();
+  
+  double result;
+
+  if (alpha <= 0.0 || beta <= 0.0 || x < 0.0)
+    return false;
+  else if (kum == 0)  // density
+    result = alpha / pow(beta,alpha) * pow(x,alpha-1.0) * exp(-pow(x/beta,alpha));
+  else	// distribution
+    result = 1.0 - exp(-pow(x/beta,alpha));
+
+  context.setValue( new KSValue(result));
+  return true;
+}
+
 static bool kspreadfunc_fv( KSContext& context )
 {
 /* Returns future value, given current value, interest rate and time */
@@ -4975,6 +5009,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "LOGNORMDIST", new KSValue( new KSBuiltinFunction( module, "LOGNORMDIST", kspreadfunc_lognormdist) ) );
   module->addObject( "NORMSDIST", new KSValue( new KSBuiltinFunction( module, "NORMSDIST", kspreadfunc_stdnormdist) ) );
   module->addObject( "EXPONDIST", new KSValue( new KSBuiltinFunction( module, "EXPONDIST", kspreadfunc_expondist) ) );
+  module->addObject( "WEIBULL", new KSValue( new KSBuiltinFunction( module, "WEIBULL", kspreadfunc_weibull) ) );
 
   return module;
 }
