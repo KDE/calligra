@@ -1,0 +1,36 @@
+<sect1 id="headers-and-footers">
+<title>Headers/Footers</title>
+
+<para>With multi-page documents, you might want to provide certain
+information at the tops or bottoms of each page throughout the document.
+They can provide the reader with important information and they tie your
+documents together. </para>
+
+<para>Fortunately, headers and footers are really just a special type of
+frame.  You can edit the text and data within the headers and
+footers</para>
+
+<para>You can toggle headers and footers independently at any
+time.</para>
+
+<para>If you are using a Word processing template, the footers will be
+added below the margins you set under page setup.  The text within the
+main frames will be moved so the headers and/or footers do not overlap
+any text.</para>
+
+<para>If you are using a <acronym>DTP</acronym> template, the
+headers/footers will be placed at the margin edges, just like in the
+word processing templates, but these frames are treated just like any
+other frame.  If the text frame below the Header/footer frame is set to
+wrap around text in overlapping frames, that will cause the text to
+move.</para>
+
+<para>You can toggle the headers by selecting <menuchoice>
+<guimenu>View</guimenu><guimenuitem>Headers.</guimenuitem></menuchoice>
+from the Menu bar.</para>
+
+<para>You can toggle the footers by selecting <menuchoice>
+<guimenu>View</guimenu><guimenuitem>Footers.</guimenuitem></menuchoice>
+from the Menu bar.</para>
+
+</sect1>

@@ -1,0 +1,312 @@
+<!-- <?xml version="1.0" ?>
+<!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd">
+To work on this document standalone, uncomment this Prologue. 
+Make sure to comment it out again when you are finished -->
+
+<chapter id="options">
+<title>&kword; Options</title>
+
+<sect1 id="options-keybindings">
+<title>Configure Key Bindings</title>
+
+<para>To configure the key bindings select <menuchoice>
+<guimenu>Settings</guimenu><guimenuitem>Configure Key
+Bindings</guimenuitem></menuchoice> from the Menu bar.</para>
+
+<para>This will bring up a dialog box.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="optkb.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>To edit the key bindings, the first thing you need to do is find
+the action you want to edit.  All of the possible actions are listed in
+the combo box labled <guilabel>Action</guilabel>.  By using the
+scrollbar, locate the action you are interested in and click once with
+the left mouse button.</para>
+
+<para>Once you have selected the action, you can turn your attention to
+the bottom half of the dialog box. You use the bottom half of the dialog
+box to change the key bindings.</para>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>No Key</guilabel></term>
+<listitem>
+<para>By selecting this option, the currently selected action will not
+have any key binding.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Default Key</guilabel></term>
+<listitem>
+<para>By selecting this option, the currently selected action will use
+the default key binding.  Once this option is clicked, the key binding
+column above lists the default key.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Custom Key</guilabel></term>
+<listitem>
+<para>By selecting this option, the currently selected action will use
+any key combination you choose.</para>
+
+<para>You determine the key combination by placing the appropriate
+checks in the check boxes labeld &Shift;, &Ctrl;, and &Alt;.  You can
+select any combination of these keys.</para>
+
+<para>You can also click on the large button with a letter in it.  Now
+type the letter or function key you want to use.  The letter will change
+to the typed letter. </para>
+
+<para>When the combination is correct, you can either select another
+action, or press <guibutton>OK</guibutton> to save all changes.  </para>
+
+<para>If you click on the <guibutton>Cancel</guibutton> button, you will
+return to editing your document, <emphasis>without saving the
+changes</emphasis>.</para>
+
+<para>Clicking on the <guibutton>Default</guibutton> button, you will
+change all keybindings back to their default value.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect1>
+
+<sect1 id="options-toolbars">
+<title>Configure Toolbars</title>
+
+<para>To configure options reguarding spelling and the user interface
+select <menuchoice> <guimenu>Settings</guimenu><guimenuitem>Configure
+Toolbars</guimenuitem></menuchoice> from the Menu bar.</para>
+
+<para>This will bring up a dialog box. You can add or remove as many
+toolbar buttons to as many toolbars as you like. You can also move the
+buttons around on the toolbar.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="opttb.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<sect2>
+<title>Adding a button to a toolbar</title>
+
+<para>To add a button from a toolbar, you move it from the
+<guilabel>Available Actions</guilabel> box to the <guilabel>Current
+Actions</guilabel> column.</para>
+
+<para>First select the toolbar you want to add a button to by selecting
+the toolbar from the dropdown box labeled
+<guilabel>Toolbar</guilabel></para>
+
+<para>Now select the action you want to add from the combo box labeled
+<guilabel>Available Actions</guilabel> by clicking once with the left
+mouse button.</para>
+
+<para>Now click the action in the combo box labeled <guilabel>Current
+Actions</guilabel> you want your new button to follow in the
+toolbar.</para>
+
+<para>Click the blue arrow pointing to the
+right. <inlinemediaobject><imageobject><imagedata fileref="rarrow.png"
+format="PNG" /></imageobject></inlinemediaobject></para>
+
+<para>Once the <guibutton>OK</guibutton> has been clicked, the toolbars
+will change.</para>
+
+</sect2>
+
+<sect2>
+<title>Deleting a button from a toolbar</title>
+
+<para>To delete a button from a toolbar, you move it from the
+<guilabel>Current Actions</guilabel> box to the <guilabel>Available
+Actions</guilabel> column.</para>
+
+<para>First select the toolbar button you want to remove the button from
+the combo box labeled <guilabel>Current Actions</guilabel>.</para>
+
+<para>Click the blue arrow pointing to the
+left. <inlinemediaobject><imageobject><imagedata fileref="larrow.png"
+format="PNG"/></imageobject></inlinemediaobject></para>
+
+<para>Once the <guibutton>OK</guibutton> has been clicked, the toolbars
+will change.</para>
+
+</sect2>
+
+<sect2>
+<title>Moving a button on a toolbar</title>
+
+<para>First select the toolbar you want to move a button on by selecting
+the toolbar from the dropdown box labeled
+<guilabel>Toolbar</guilabel></para>
+
+<para>To move a button, simply click on the button you want to move with
+the <mousebutton>left</mousebutton> mouse button.</para>
+
+<para>Click the up or down arrows to move the button up or down the
+toolbar respectively.</para>
+
+<para>Once the <guibutton>OK</guibutton> has been clicked, the toolbars
+will change.</para>
+
+</sect2>
+
+</sect1>
+
+<sect1 id="options-kword">
+<title>&kword; Options</title>
+
+<para>To configure options reguarding spelling and the user interface
+select <menuchoice> <guimenu>Settings</guimenu><guimenuitem>Configure
+&kword;</guimenuitem></menuchoice> from the Menu bar.</para>
+
+<para>This will bring up a dialog box.</para>
+
+<sect2 id="opt-spell">
+<title>Configure Spelling.</title>
+
+<para>To configure the options for the speller, click on the button
+labeled <guibutton>Spelling</guibutton>.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="opt1.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>If you place a check in the box labeled <guilabel>Create
+root/affix combinations not in dictionary</guilabel>, then when &kword;
+encounters a root word in combination with either a prefix or a suffix
+for the combined word, &kword; will add a new entry to your dictionary.
+If this is not checked, then &kword; will continue to report this word
+as a misspelled.</para>
+
+<para>The next check box down will flag words that have been combined.
+Examples of such words are <emphasis>shutout</emphasis>,
+<emphasis>cannot</emphasis>, and <emphasis>blackout</emphasis>.</para>
+
+<tip>
+<para>Leaving this check box unchecked will prevent &kword; from
+flagging website and email addresses for spelling errors.  These
+addresses often contain words run together.</para>
+</tip>
+
+<para>The <guilabel>Dictionary</guilabel> dropdown box is used to select
+the dictionary you want &kword; to use.</para>
+
+<para>The <guilabel>Encoding</guilabel> dropdown box can be used to
+specify which character set you want the speller to use.</para>
+
+<para>The <guilabel>Client</guilabel> dropdown box is used to specify
+the spell checking program that &kword; should use.</para>
+
+<para>When you are happy with the changes, simply click
+<guibutton>OK</guibutton>.</para>
+
+<para>If you click on <guibutton>Cancel</guibutton>, all changes will be
+lost.</para>
+
+<para>Clicking on the <guibutton>Default</guibutton> button restores all
+values to their default values.</para>
+
+</sect2>
+
+<sect2 id="opt-ui">
+<title>Configure &kword; User Interface.</title>
+
+<para>Clicking <guibutton>Interface</guibutton> will allow you to change
+the following.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="opt2.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>By using the checkbox labled <guilabel>Show Rulers</guilabel> to
+toggle the rulers on the &kword; screen.</para>
+
+<para>The remainder of the controls are a can either be operated using
+the combo box arrows, entering the value directly or by sliding the
+slider to the right of the combo box.</para>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>Autosave</guilabel></term>
+<listitem>
+<para>You can use this to adjust how often &kword; saves a temporary
+file.  If you set this value to zero, &kword; will not autosave.  You
+can adjust the autosave from zero to 60 minutes.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Number of recent files</guilabel></term>
+<listitem>
+<para>This determines the maximum number of files that are listed under
+<menuchoice> <guimenu>File</guimenu><guimenuitem>Open
+Recent</guimenuitem></menuchoice> command. You can adjust this value
+from 1-20.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>X Grid Space</guilabel></term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Y Grid Space</guilabel></term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Indent</guilabel></term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Preview Mode - Number of Pages per Row</guilabel></term>
+<listitem>
+<para>
+
+</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para>When you are happy with the changes, simply click
+<guibutton>OK</guibutton>.</para>
+
+<para>If you click on <guibutton>Cancel</guibutton>, all changes will be
+lost.</para>
+
+<para>Clicking on the <guibutton>Default</guibutton> button restores all
+values to their default values.</para>
+
+</sect2>
+</sect1>
+</chapter>

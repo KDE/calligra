@@ -2,30 +2,33 @@
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd" [
   <!ENTITY kappname "&kword;">
   <!ENTITY % addindex "IGNORE">
-  <!ENTITY fundamentals SYSTEM "kwordfundimentals.docbook">
-  <!ENTITY tutorial SYSTEM "kwordtutorial.docbook">
-  <!ENTITY basics SYSTEM "kwordbasics.docbook">
-  <!ENTITY guides1 SYSTEM "kwordguides1.docbook">
-  <!ENTITY guides2 SYSTEM "kwordguides2.docbook">
-  <!ENTITY pageformat SYSTEM "kwordguides3.docbook">
-  <!ENTITY frames SYSTEM "kwordguides3b.docbook">
-  <!ENTITY formatframe SYSTEM "kwordguides3c.docbook">
-  <!ENTITY formatpara SYSTEM "kwordguides3d.docbook">
-  <!ENTITY tabstops SYSTEM "kwordguides3e.docbook">
-  <!ENTITY formatcharacters SYSTEM "kwordguides3f.docbook">
-  <!ENTITY styles SYSTEM "kwordguides3g.docbook">
-  <!ENTITY columns SYSTEM "kwordguides3h.docbook">
-  <!ENTITY tabls SYSTEM "kwordguides3i.docbook">
-  <!ENTITY headersfooters SYSTEM "kwordguides3j.docbook">
-  <!ENTITY templatecreation SYSTEM "kwordguides3k.docbook">
+  <!ENTITY fundamentals SYSTEM "fundimentals.docbook">
+  <!ENTITY tutorial SYSTEM "tutorial.docbook">
+  <!ENTITY basics SYSTEM "basics.docbook">
+  <!ENTITY storeprint SYSTEM "storeprint.docbook">
+  <!ENTITY editing SYSTEM "editing.docbook">
+  <!ENTITY pageformat SYSTEM "pageformat.docbook">
+  <!ENTITY frames SYSTEM "frames.docbook">
+  <!ENTITY formatframe SYSTEM "formatframes.docbook">
+  <!ENTITY formatpara SYSTEM "formatpara.docbook">
+  <!ENTITY tabstops SYSTEM "tabstops.docbook">
+  <!ENTITY formatcharacters SYSTEM "formatchar.docbook">
+  <!ENTITY styles SYSTEM "styles.docbook">
+  <!ENTITY columns SYSTEM "columns.docbook">
+  <!ENTITY tabls SYSTEM "table.docbook">
+  <!ENTITY headersfooters SYSTEM "headerfooter.docbook">
+  <!ENTITY templatecreation SYSTEM "templatecreation.docbook">
   <!ENTITY guides4 SYSTEM "kwordguides4.docbook">
-  <!ENTITY mbtb SYSTEM "kwordmbtb.docbook">
-  <!ENTITY opt SYSTEM "kwordopt.docbook">
-  <!ENTITY filedlg SYSTEM "kwordfiledlg.docbook">
-  <!ENTITY techstuff SYSTEM "kwordtechinfo.docbook">
-
-
-
+  <!ENTITY mbtb SYSTEM "mbtb.docbook">
+  <!ENTITY opt SYSTEM "opt.docbook">
+  <!ENTITY filedlg SYSTEM "filedlg.docbook">
+  <!ENTITY techstuff SYSTEM "techinfo.docbook">
+  <!ENTITY graphics SYSTEM "graphics.docbook">
+  <!ENTITY toc SYSTEM "toc.docbook">
+  <!ENTITY misc SYSTEM "insertmisc.docbook">
+  <!ENTITY parts SYSTEM "kparts.docbook">
+  <!ENTITY formulas SYSTEM "formulas.docbook">
+  
   <!ENTITY deleteme SYSTEM "do_not_translate.docbook">
 
   <!ENTITY % English "INCLUDE" > <!-- change language only here -->
@@ -51,7 +54,7 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2002-28-02</date>
+<date>2002-03-03</date>
 <releaseinfo>1.02.00</releaseinfo>
 
 <abstract>
@@ -298,7 +301,7 @@ start using &kword;, you will find that using &kword; is easy.</para>
 <member><link linkend="fundamentals">Fundamentals</link></member>
 <member><link linkend="tutorial">Step by Step Tutorial</link></member>
 <member><link linkend="kword-screen">The KWord Screen</link></member>
-<member><link linkend="guides">Document Storage and Printing</link></member>
+<member><link linkend="store-print">Document Storage and Printing</link></member>
 <member><link linkend="guides-2">Editing Your Document</link></member>
 <member><link linkend="menu-intro">Introduction to Menu Bars and Tool Bars</link></member>
 </simplelist>
@@ -342,12 +345,12 @@ need to read before you begin using &kword;.</para>
 &fundamentals;
 &tutorial;
 &basics;
-&guides1;
-&guides2;
+&storeprint;
+&editing;
 
 <chapter id="guides-3">
 <title>Detailed Guides: Document Layout</title>
-<para><link linkend="guides">Two sections ago</link>, we talked about
+<para><link linkend="store-print">Two sections ago</link>, we talked about
 <link linkend="new-doc">creating</link>, <link
 linkend="saving">saving</link>, <link linkend="loading">loading</link>
 and <link linkend="printing">printing documents</link>. <link
@@ -379,7 +382,15 @@ document.</para>
 &templatecreation;
 </chapter>
 
-&guides4;
+<chapter id="guides-4"><title>Detailed Guides: More than just text</title>
+<sect1 id="dg4intro"><title>Introduction</title><para></para></sect1>
+&graphics;
+&toc;
+&misc;
+&parts;
+&formulas;
+</chapter>
+<!--&guides4; -->
 
 <!-- **************************************************************************************************** -->
 <chapter id="quickdirty">

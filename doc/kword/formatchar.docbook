@@ -1,0 +1,146 @@
+<sect1 id="format-characters">
+<title>Formatting Characters</title>
+
+<para>This section will cover the changes you can make to individual or
+blocks of characters including:</para>
+
+<itemizedlist>
+<listitem><para><link linkend="change-font">Size</link></para></listitem>
+<listitem><para><link linkend="change-font">Font</link></para></listitem>
+<listitem><para><link linkend="change-font">Font Style</link></para></listitem>
+<listitem><para><link linkend="change-font">Character Set</link></para></listitem>
+<listitem><para><link linkend="change-font-color">Character Color</link></para></listitem>
+</itemizedlist>
+
+<sect2 id="change-font">
+<title>Changing Size, Font, Font Style and Character Set</title>
+
+<sect3 id="change-font-keyboard">
+<title>Using the Keyboard or Tool-bars</title>
+
+<para>There are several keyboard shortcuts which you can use to make
+common changes to character formatting. After selecting the text, you
+can use these key combinations to toggle each attribute.</para>
+
+<para>The Basic Formatting Tool bar also has buttons which you can use to
+toggle these same attributes.  </para>
+
+<para>The following table details each attribute, the tool bar buttons
+and the keyboard shortcuts.</para>
+
+<informaltable frame="all"><tgroup cols="3" align="left">
+<thead>
+<row><entry align="right">Attribute</entry><entry align="center">Tool bar
+Button</entry><entry align="center">Key Combo</entry></row>
+</thead><tbody>
+<row><entry align="right">Font Size</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="chsizebut.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center">-</entry></row>
+<row><entry align="right">Font</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="chfontbut.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center">-</entry></row>
+<row><entry align="right">Bold Face</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="bold.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center"><keycombo><keycap>Ctrl</keycap><keycap>B</keycap></keycombo></entry></row>
+<row><entry align="right">Italics</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="ital.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center"><keycombo><keycap>Ctrl</keycap><keycap>I</keycap></keycombo></entry></row>
+<row><entry align="right">Underline</entry><entry align="center"><inlinemediaobject><imageobject><imagedata fileref="undl.png" format="PNG" align="center"/></imageobject></inlinemediaobject></entry><entry align="center"><keycombo><keycap>Ctrl</keycap><keycap>U</keycap></keycombo></entry></row>
+</tbody></tgroup></informaltable>
+
+<note>
+<para>You cannot change the Character Set using the keyboard or the
+tool-bar, you must <link linkend="change-font-dialog">use the dialog
+box</link>.</para>
+</note>
+
+</sect3>
+
+<sect3 id="change-font-dialog">
+<title>Using the Dialog Box</title>
+
+<para>If you have many changes to make, you can also use a dialog box to
+set these same attributes.</para>
+
+<para>You can open the Character Formatting Dialog box in one of two
+ways:</para>
+
+<itemizedlist>
+<listitem>
+<para>Select <menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Font</guimenuitem></menuchoice>
+from the Menu bar</para>
+</listitem>
+
+<listitem>
+<para>You can use the keyboard shortcut:
+<keycombo><keycap>Alt</keycap><keycap>F</keycap></keycombo></para>
+</listitem>
+</itemizedlist>
+
+<para>Either method will open a dialog box</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="fchardlg.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Using this dialog box, you can select the font, size, character
+set, italics and boldface options.</para>
+
+<para>The preview box along the bottom, will show you how your current
+settings will appear.</para>
+
+<para>Clicking <guibutton>OK</guibutton> will commit your changes to the
+document.</para>
+
+<para>Clicking <guibutton>Cancel</guibutton> will abort all changes
+made.</para>
+
+<note>
+<para>The default sentence for the preview box is <quote>The Quick Brown
+Fox Jumps Over The Lazy Dog</quote>.</para>
+
+<para>You can change this sentence by clicking once within the sentence.
+You can then change the sample sentence to anything you want.</para>
+
+<para>This can be especially useful if you need to view numbers, special
+characters, or non-arabic characters</para>
+
+<para>The sample sentence will revert to the default the next time you
+open this dialog.</para>
+</note>
+
+</sect3>
+</sect2>
+
+<sect2 id="change-font-color">
+<title>Changing Font Color</title>
+
+<para>The <quote>Change Font Color</quote> command can be invoked 3
+ways:</para>
+
+<itemizedlist>
+<listitem>
+<para>By selecting <menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Font
+Color</guimenuitem></menuchoice> from the Menu bar</para>
+</listitem>
+<listitem>
+<para>You can use the keyboard shortcut:
+<keycombo>&Ctrl;&Alt;<keycap>C</keycap></keycombo></para>
+</listitem>
+<listitem>
+<para>or by clicking <inlinemediaobject><imageobject><imagedata
+fileref="chcolorbut.png" format="PNG"/></imageobject></inlinemediaobject> on
+the 
+tool-bar.</para>
+</listitem>
+</itemizedlist>
+
+<para>You can now choose a color for the selected text using the <link
+linkend="select-colors">Color Selection Dialog Box</link>.</para>
+
+</sect2>
+<sect2 id="change-font-case">
+<title>Changing Font Case</title>
+
+<para></para>
+</sect2>
+
+
+</sect1>
