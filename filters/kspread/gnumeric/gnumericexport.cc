@@ -290,7 +290,7 @@ bool GNUMERICExport::filterExport(const QString &file,
         kdWarning(30501) << "document isn't a KSpreadDoc but a " << document->className() << endl;
         return false;
     }
-    if(to!="text/x-gnumeric" || from!="application/x-kspread")
+    if(to!="application/x-gnumeric" || from!="application/x-kspread")
     {
         kdWarning(30501) << "Invalid mimetypes " << to << " " << from << endl;
         return false;

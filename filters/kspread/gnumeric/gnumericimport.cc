@@ -526,7 +526,7 @@ bool GNUMERICFilter::filterImport(const QString &file,
         kdWarning(30501) << "document isn't a KSpreadDoc but a " << document->className() << endl;
         return false;
     }
-    if(from!="text/x-gnumeric" || to!="application/x-kspread")
+    if(from!="application/x-gnumeric" || to!="application/x-kspread")
     {
         kdWarning(30501) << "Invalid mimetypes " << from << " " << to << endl;
         return false;
