@@ -2644,7 +2644,9 @@ void KWView::openPopupMenuEditText( const QPoint & _point )
 {
   if(!koDocument()->isReadWrite() )
     return;
-  ((QPopupMenu*)factory()->container("text_popup",this))->popup(_point);
+   KWTextFrameSetEdit *edit = dynamic_cast<KWTextFrameSetEdit *>( gui->canvasWidget()->currentFrameSetEdit() );
+    if (edit)
+        ((QPopupMenu*)factory()->container("text_popup",this))->popup(_point);
 }
 
 /*================================================================*/
