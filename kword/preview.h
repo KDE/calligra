@@ -26,11 +26,13 @@
 #include <qurl.h>
 #include <qvbox.h>
 
+#ifndef USE_QFD
 // WMF preview
 bool wmfPreviewHandler ( const KFileInfo*, const QString fileName, QString&, QPixmap& pixmap );
 
 // Pixmap preview
 bool pixmapPreviewHandler( const KFileInfo*, const QString fileName, QString&, QPixmap& pixmap );
+#endif
 
 class PixmapView;
 
