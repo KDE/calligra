@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexiformviewer" version="0.2">
+<kpartgui name="kexiformviewer" version="2">
 <ToolBar name="mainToolBar"><text>Main Toolbar</text>
 	<Action name="form_edit"/>
 </ToolBar>

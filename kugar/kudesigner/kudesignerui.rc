@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kudesigner" version="0.1">
+<kpartgui name="kudesigner" version="1">
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
    <Action name="edit_undo"/>

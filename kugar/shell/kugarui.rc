@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="Kugar" version="1.2">
+<kpartgui name="Kugar" version="12">
 <MenuBar>
   <Menu name="go"><text>&amp;Go</text>
     <Action name="goFirstPage"/>

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexiformeditor" version="0.4">
+<kpartgui name="kexiformeditor" version="4">
 
 <MenuBar>
 	<Menu name="widgets">

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kexiquerydesigner" version="0.2">
+<kpartgui name="kexiquerydesigner" version="2">
 <MenuBar>
 	<Menu name="query">
 		<text>&amp;Query</text>
