@@ -223,6 +223,9 @@ public:
   void setSearchEntry(KWSearchDia::KWSearchEntry *e) { searchEntry = e; }
   void setReplaceEntry(KWSearchDia::KWSearchEntry *e) { replaceEntry = e; }
 
+  void changeUndo(QString,bool);
+  void changeRedo(QString,bool);
+
 public slots:
   void slotInsertObject(KWordChild *_child,KWPartFrameSet *_kwpf);
   void slotUpdateChildGeometry(KWordChild *_child);

@@ -391,6 +391,9 @@ signals:
   void sig_updateChildGeometry(KWordChild *_child);
   void sig_removeObject(KWordChild *_child);
 
+protected slots:
+  void slotUndoRedoChanged(QString,QString);
+
 protected:
   virtual void insertChild(KWordChild*);
   virtual void makeChildListIntern(KOffice::Document_ptr _doc,const char *_path);

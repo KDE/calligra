@@ -834,3 +834,7 @@ Reggie, 16.2.1999:
 ------------------
 - Undo/Redo starts working
 - Some fixes with formatting 
+
+Reggie, 17.2.1999:
+------------------
+- More undo/redo

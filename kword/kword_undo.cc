@@ -25,6 +25,9 @@
 /*================================================================*/
 void KWTextChangeCommand::execute()
 {
+  if (parags.isEmpty())
+    return;
+
   QList<KWParag> old;
   old.setAutoDelete(false);
 
@@ -53,7 +56,7 @@ void KWTextChangeCommand::execute()
       parag = dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(frameset))->getFirstParag();
       while (parag != parag2)
 	{
-	  old.append(parag);
+	  old.append(new KWParag(*parag));
 	  parag = parag->getNext();
 	}
       dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(frameset))->setFirstParag(parags.first());
@@ -65,7 +68,7 @@ void KWTextChangeCommand::execute()
       parag = parag1->getNext();
       while (parag)
 	{
-	  old.append(parag);
+	  old.append(new KWParag(*parag));
 	  parag = parag->getNext();
 	}
       parag1->setNext(parags.first());
@@ -76,7 +79,7 @@ void KWTextChangeCommand::execute()
       parag = parag1->getNext();
       while (parag != parag2)
 	{
-	  old.append(parag);
+	  old.append(new KWParag(*parag));
 	  parag = parag->getNext();
 	}
       parag1->setNext(parags.first());
@@ -93,6 +96,9 @@ void KWTextChangeCommand::execute()
 /*================================================================*/
 void KWTextChangeCommand::unexecute()
 {
+  if (parags.isEmpty())
+    return;
+
   QList<KWParag> old;
   old.setAutoDelete(false);
   
@@ -116,7 +122,7 @@ void KWTextChangeCommand::unexecute()
   if (!parag1 && !parag2)
     {
       dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(frameset))->setFirstParag(parags.first());
-      old.append(dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(frameset))->getFirstParag());
+      old.append(new KWParag(*dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(frameset))->getFirstParag()));
     }
 
   else if (!parag1 && parag2)
@@ -124,7 +130,7 @@ void KWTextChangeCommand::unexecute()
       parag = dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(frameset))->getFirstParag();
       while (parag != parag2)
 	{
-	  old.append(parag);
+	  old.append(new KWParag(*parag));
 	  parag = parag->getNext();
 	}
       dynamic_cast<KWTextFrameSet*>(doc->getFrameSet(frameset))->setFirstParag(parags.first());
@@ -136,7 +142,7 @@ void KWTextChangeCommand::unexecute()
       parag = parag1->getNext();
       while (parag)
 	{
-	  old.append(parag);
+	  old.append(new KWParag(*parag));
 	  parag = parag->getNext();
 	}
       parag1->setNext(parags.first());
@@ -147,7 +153,7 @@ void KWTextChangeCommand::unexecute()
       parag = parag1->getNext();
       while (parag != parag2)
 	{
-	  old.append(parag);
+	  old.append(new KWParag(*parag));
 	  parag = parag->getNext();
 	}
       parag1->setNext(parags.first());

@@ -99,6 +99,9 @@ KWordDocument::KWordDocument()
   displayFontList.setAutoDelete(false);
   frames.setAutoDelete(true);
   grpMgrs.setAutoDelete(true);
+
+  QObject::connect(&history,SIGNAL(undoRedoChanged(QString,QString)),this,
+		   SLOT(slotUndoRedoChanged(QString,QString)));
 }
 
 /*================================================================*/
@@ -3271,3 +3274,17 @@ void KWordDocument::redo()
   history.redo();
 }
 
+/*================================================================*/
+void KWordDocument::slotUndoRedoChanged(QString undo,QString redo)
+{
+  KWordView *viewPtr = 0L;
+
+  if (!m_lstViews.isEmpty())
+    {
+      for (viewPtr = m_lstViews.first();viewPtr != 0;viewPtr = m_lstViews.next())
+	{
+	  viewPtr->changeUndo(undo,!undo.isEmpty());
+	  viewPtr->changeRedo(redo,!redo.isEmpty());
+	}
+    }
+}
