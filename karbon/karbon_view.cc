@@ -243,7 +243,10 @@ void
 KarbonView::removeContainer( QWidget *container, QWidget *parent,
 							 QDomElement &element, int id )
 {
-	if( shell() && m_toolbox )
+	if( container )
+		kdDebug() << container << endl;
+
+	if( shell() && container && container == m_toolbox )
 	{
 		delete m_toolbox;
 		delete m_toolOptionsDocker;
@@ -252,10 +255,9 @@ KarbonView::removeContainer( QWidget *container, QWidget *parent,
 		delete m_toolFactory;
 		m_toolFactory = 0L;
 		m_currentTool = 0L;
-		return ;
 	}
-
-	KXMLGUIBuilder::removeContainer( container, parent, element, id );
+	else
+		KXMLGUIBuilder::removeContainer( container, parent, element, id );
 }
 
 
