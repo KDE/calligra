@@ -186,7 +186,7 @@ void QuerySchema::debug()
 	for ( table = m_tables.first(); table; table = m_tables.next() ) {
 		if (!table_names.isEmpty())
 			table_names += ", ";
-		table_names += table->name();
+		table_names += (QString("'") + table->name() + "'");
 	}
 	if (m_tables.isEmpty())
 		table_names = "<NONE>";
@@ -228,6 +228,7 @@ void QuerySchema::removeTable(TableSchema *table)
 	if (m_parent_table == table)
 		m_parent_table = 0;
 	m_tables.remove(table);
+	//todo: remove fields!
 }
 
 void QuerySchema::setAlias(Field *field, const QString& alias)

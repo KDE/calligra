@@ -10,8 +10,7 @@ METASOURCES = AUTO
 
 
 parser:
-	lex sqlscanner.l
-	mv lex.yy.c sqlscanner.cpp
+	lex -osqlscanner.cpp sqlscanner.l
 	yacc -d sqlparser.y
 	echo '#include <field.h>' > sqlparser.h
 	echo '#include "parser.h"' >> sqlparser.h

@@ -230,7 +230,7 @@ whitespace [ \t\n]
 	return CHARACTER_STRING_LITERAL;
 }
 
-[a-zA-Z]* {
+[a-zA-Z][a-zA-Z0-9]* {
 	kdDebug() << "yytext: '" << yytext << "' (" << yyleng << ")" << endl;
 	strncpy(yylval.stringValue, yytext, yyleng + 1);
 	ECOUNT;

@@ -464,6 +464,8 @@
 					yyerror("fieldlisterror");
 				}
 			}
+			//take the dummy table out of the query
+			parser->select()->removeTable(dummy);
 		}
 
 		tableList.clear();
@@ -511,6 +513,11 @@
 }
 
 %%
+
+TopLevelStatement :
+	Statement SEMICOLON { }
+	| Statement   { }
+	;
 
 Statement :
 	Statement CreateTableStatement 		{ YYACCEPT; }
