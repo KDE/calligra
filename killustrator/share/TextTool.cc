@@ -40,136 +40,132 @@ TextTool::TextTool (CommandHistory *history) : Tool (history) {
 }
 
 void TextTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
-  if (e->type () == QEvent::MouseButtonPress) {
-    QMouseEvent *me = (QMouseEvent *) e;
-    Coord pos (me->x (), me->y ());
+    if (e->type () == QEvent::MouseButtonPress) {
+        QMouseEvent *me = (QMouseEvent *) e;
+        Coord pos (me->x (), me->y ());
 
-    if (text != 0L) {
-      if (text->isEmpty ()) {
-        // an empty text was entered -> remove the object
-        doc->deleteObject (text);
-      }
-      else
-        text->showCursor (false);
-    }
-
-    text = 0L;
-
-    QList<GObject> olist;
-    if (doc->findContainingObjects (me->x (), me->y (), olist)) {
-      QListIterator<GObject> it (olist);
-      while (it.current ()) {
-        if (it.current ()->isA ("GText")) {
-          text = (GText *) it.current ();
-
-          if (origState)
-            origState->unref ();
-          origState = text->saveState ();
-
-          text->updateCursor (pos);
-          text->showCursor (true);
-          break;
+        if (text != 0L) {
+            if (text->isEmpty ()) {
+                // an empty text was entered -> remove the object
+                doc->deleteObject (text);
+            }
+            else
+                text->showCursor (false);
         }
-        ++it;
-      }
-    }
-    if (text == 0) {
-      text = new GText ();
-      float xpos = me->x (), ypos = me->y ();
-      canvas->snapPositionToGrid (xpos, ypos);
 
-      if (origState) {
-        origState->unref ();
-        origState = 0L;
-      }
+        text = 0L;
 
-      text->setOrigin (Coord (xpos, ypos));
-      text->showCursor (true);
-      doc->insertObject (text);
-    }
-  }
-  else if (e->type () == QEvent::KeyPress) {
-    QKeyEvent *ke = (QKeyEvent *) e;
-    if (ke->key () == Qt::Key_Escape) {
-      // Cancel editing
-      if (text != 0L) {
-        if (origState == 0L) {
-          // new text -> remove it
-          doc->deleteObject (text);
+        QList<GObject> olist;
+        if (doc->findContainingObjects (me->x (), me->y (), olist)) {
+            QListIterator<GObject> it (olist);
+            while (it.current ()) {
+                if (it.current ()->isA ("GText")) {
+                    text = (GText *) it.current ();
+
+                    if (origState)
+                        origState->unref ();
+                    origState = text->saveState ();
+
+                    text->updateCursor (pos);
+                    text->showCursor (true);
+                    break;
+                }
+                ++it;
+            }
         }
-        else {
-          // undo modifications
-          text->restoreState (origState);
+        if (text == 0) {
+            text = new GText ();
+            float xpos = me->x (), ypos = me->y ();
+            canvas->snapPositionToGrid (xpos, ypos);
+
+            if (origState) {
+                origState->unref ();
+                origState = 0L;
+            }
+
+            text->setOrigin (Coord (xpos, ypos));
+            text->showCursor (true);
+            doc->insertObject (text);
         }
-      }
-      emit operationDone ();
     }
-    if (text == 0L)
-      return;
-    int x = text->cursorX (), y = text->cursorY ();
-    bool changed = false;
-    if (ke->key () == Key_Left) {
-      if (x > 0) {
-        x--;
-        changed = true;
-      }
-      else if (y > 0) {
-        y--;
-        x = text->line (y).length ();
-        changed = true;
-      }
+    else if (e->type () == QEvent::KeyPress) {
+        QKeyEvent *ke = (QKeyEvent *) e;
+        if (ke->key () == Qt::Key_Escape) {
+            // Cancel editing
+            if (text != 0L) {
+                if (origState == 0L) {
+                    // new text -> remove it
+                    doc->deleteObject (text);
+                }
+                else {
+                    // undo modifications
+                    text->restoreState (origState);
+                }
+            }
+            emit operationDone ();
+        }
+        if (text == 0L)
+            return;
+        int x = text->cursorX (), y = text->cursorY ();
+        bool changed = false;
+        if (ke->key () == Qt::Key_Left) {
+            if (x > 0) {
+                x--;
+                changed = true;
+            }
+            else if (y > 0) {
+                y--;
+                x = text->line (y).length ();
+                changed = true;
+            }
+        }
+        else if (ke->key () == Qt::Key_Right) {
+            if (x < (int) text->line (y).length ()) {
+                x++;
+                changed = true;
+            }
+            else if (y < text->lines () - 1) {
+                y++; x = 0;
+                changed = true;
+            }
+        }
+        else if (ke->key () == Qt::Key_Up) {
+            if (y > 0) {
+                y--;
+                if (x >= (int) text->line (y).length ())
+                    x = text->line (y).length ();
+                changed = true;
+            }
+        }
+        else if (ke->key () == Qt::Key_Down) {
+            if (y < text->lines () - 1) {
+                y++;
+                if (x >= (int) text->line (y).length ())
+                    x = text->line (y).length ();
+                changed = true;
+            }
+        }
+        else if (ke->key () == Qt::Key_Home) {
+            x = 0;
+            changed = true;
+        }
+        else if (ke->key () == Qt::Key_End) {
+            x = text->line (y).length ();
+            changed = true;
+        }
+        else if (ke->key()==Qt::Key_Return)
+            text->insertChar("\n");
+        else if (ke->key()==Qt::Key_Backspace)
+            text->deleteBackward ();
+        else if(ke->key() == Qt::Key_Delete)
+            text->deleteChar ();
+        else if(!ke->text().isEmpty())
+            text->insertChar(ke->text());
+        if(changed) {
+            text->setCursor (x, y);
+        }
     }
-    else if (ke->key () == Key_Right) {
-      if (x < (int) text->line (y).length ()) {
-        x++;
-        changed = true;
-      }
-      else if (y < text->lines () - 1) {
-        y++; x = 0;
-        changed = true;
-      }
-    }
-    else if (ke->key () == Key_Up) {
-      if (y > 0) {
-        y--;
-        changed = true;
-      }
-    }
-    else if (ke->key () == Key_Down) {
-      if (y < text->lines () - 1) {
-        y++;
-        if (x >= (int) text->line (y).length ())
-          x = text->line (y).length ();
-        changed = true;
-      }
-    }
-    else if (ke->key () == Key_Home) {
-      x = 0;
-      changed = true;
-    }
-    else if (ke->key () == Key_End) {
-      x = text->line (y).length ();
-      changed = true;
-    }
-    else if (ke->ascii ()) {
-      if (ke->ascii () == 13)
-        text->insertChar ('\n');
-      else if (ke->ascii () == 8) {
-        // backspace
-        text->deleteBackward ();
-      }
-      else if (ke->ascii () == 127) {
-        // delete
-        text->deleteChar ();
-      }
-      else
-        text->insertChar (ke->ascii ());
-    }
-    if (changed) {
-      text->setCursor (x, y);
-    }
-  }
-  return;
+    return;
 }
 
 void TextTool::activate (GDocument* /*doc*/, Canvas* /*canvas*/) {

@@ -27,7 +27,6 @@
 #include <qvector.h>
 #include <kapp.h>
 #include <kconfig.h>
-#include <kdebug.h>
 
 #include <GObject.h>
 #include <GText.h>
@@ -83,7 +82,6 @@ void PStateManager::readDefaultSettings () {
     oInfo.style = (PenStyle) config->readNumEntry ("OutlineStyle", SolidLine);
     QString test=config->readEntry("OutlineWidth", "hiho");
     oInfo.width = config->readDoubleNumEntry ("OutlineWidth", 1.0);
-    kdDebug() << "++++++++++++++++++oInfo.width: " << oInfo.width << endl;
     oInfo.startArrowId=config->readNumEntry("StartArrowID", 0);
     oInfo.endArrowId=config->readNumEntry("EndArrowID", 0);
     oInfo.mask = GObject::OutlineInfo::Color | GObject::OutlineInfo::Style |

@@ -24,6 +24,7 @@
 
 #include <FloatSpinBox.h>
 #include <qvalidator.h>
+#include <kdebug.h>
 
 FloatSpinBox::FloatSpinBox (QWidget* parent, const char* name, int) :
     QSpinBox (parent, name) {
@@ -55,7 +56,7 @@ void FloatSpinBox::setFormatString (const char* fmt) {
 void FloatSpinBox::setValue (float value) {
     if (minval <= value && value <= maxval) {
         value_ = value;
-        QSpinBox::setValue((int)(value*100.0));
+        QSpinBox::setValue(qRound(value*100.0));
     }
 }
 

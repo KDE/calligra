@@ -54,8 +54,10 @@ void GObject::setDefaultOutlineInfo (const OutlineInfo& oi) {
     defaultOutlineInfo.color = oi.color;
   if (oi.mask & OutlineInfo::Style)
     defaultOutlineInfo.style = oi.style;
-  if (oi.mask & OutlineInfo::Width)
-    defaultOutlineInfo.width = oi.width;
+  if (oi.mask & OutlineInfo::Width) {
+      kdDebug() << "width changed++++++++++++++++++++++++++++++" << endl;
+      defaultOutlineInfo.width = oi.width;
+  }
   defaultOutlineInfo.startArrowId=oi.startArrowId;
   defaultOutlineInfo.endArrowId=oi.endArrowId;
 }

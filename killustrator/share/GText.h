@@ -63,7 +63,7 @@ public:
   void setTextInfo (const TextInfo& tinfo);
   TextInfo getTextInfo () const;
 
-  void insertChar(const QChar &c);
+  void insertChar(const QString &string);
   void deleteChar ();
   void deleteBackward ();
   void showCursor (bool flag);

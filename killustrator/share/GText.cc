@@ -304,9 +304,9 @@ void GText::deleteBackward () {
   updateRegion ();
 }
 
-void GText::insertChar(const QChar &c) {
+void GText::insertChar(const QString &string) {
   QString& s = text[cursy];
-  if (c == '\n') {
+  if (string[0] == '\n') {
     // newline
     QString rest (s.right (s.length () - cursx));
     s.truncate (cursx);
@@ -314,8 +314,8 @@ void GText::insertChar(const QChar &c) {
     cursx = 0;
   }
   else {
-    s.insert (cursx, c);
-    cursx++;
+    s.insert(cursx, string);
+    cursx+=string.length();
   }
   updateMatricesForPath ();
   updateRegion ();
