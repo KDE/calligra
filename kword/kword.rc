@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="11">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="12">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -145,18 +145,8 @@
   <Action name="tools_formula"/>
   <Action name="tools_part"/>
 </ToolBar>
-<ToolBar fullWidth="false" name="format_toolbar" position="top"><Text>Format</Text>
+<ToolBar fullWidth="false" name="paragraph_toolbar" position="top"><Text>Paragraph</Text>
   <Action name="format_style"/>
-  <Action name="format_fontfamily"/>
-  <Action name="format_fontsize"/>
-  <Separator/>
-  <Action name="format_bold"/>
-  <Action name="format_italic"/>
-  <Action name="format_underline"/>
-  <Action name="format_strike"/>
-  <Separator/>
-  <Action name="format_super"/>
-  <Action name="format_sub"/>
   <Separator/>
   <Action name="format_alignleft"/>
   <Action name="format_aligncenter"/>
@@ -167,6 +157,18 @@
   <Separator/>
   <Action name="format_decreaseindent"/>
   <Action name="format_increaseindent"/>
+</ToolBar>
+<ToolBar fullWidth="false" name="format_toolbar" position="top"><Text>Format</Text>
+  <Action name="format_fontfamily"/>
+  <Action name="format_fontsize"/>
+  <Separator/>
+  <Action name="format_bold"/>
+  <Action name="format_italic"/>
+  <Action name="format_underline"/>
+  <Action name="format_strike"/>
+  <Separator/>
+  <Action name="format_super"/>
+  <Action name="format_sub"/>
   <Separator/>
   <Action name="format_color"/>
 </ToolBar>
