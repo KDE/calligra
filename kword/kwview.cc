@@ -234,6 +234,7 @@ void KWView::initGui()
     actionFormatColor->setColor( Qt::black );
 
     //refresh zoom combobox
+    changeZoomMenu( doc->zoom() );
     showZoom( doc->zoom() );
 
     MouseMode mouseMode=gui->canvasWidget()->getMouseMode();
