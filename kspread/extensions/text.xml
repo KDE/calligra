@@ -336,6 +336,36 @@
       </Help>
     </Function>
 
+    <Function>
+      <Name>CHAR</Name>
+      <Type>String</Type>
+      <Parameter>
+	<Comment>Character Code</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The CHAR() function returns the character specified by a number.</Text>
+	<Syntax>CHAR(code)</Syntax>
+	<Example>CHAR(65) returns "A"</Example>
+        <Related>CODE</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>CODE</Name>
+      <Type>Int</Type>
+      <Parameter>
+	<Comment>Text</Comment>
+	<Type>String</Type>
+      </Parameter>
+      <Help>
+	<Text>The CODE() function returns a numeric code for the first character in a text string.</Text>
+	<Syntax>CODE(text)</Syntax>
+	<Example>CODE("KDE") returns 75</Example>
+        <Related>CHAR</Related>
+      </Help>
+    </Function>
+
   </Group>
 
 </KSpreadFunctions>

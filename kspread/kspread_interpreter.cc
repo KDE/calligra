@@ -145,12 +145,14 @@ bool kspreadfunc_isodd( KSContext& context );
 bool kspreadfunc_iseven( KSContext& context );
 
 // defined in kspread_functions_text.cc
+bool kspreadfunc_char( KSContext& context );
+bool kspreadfunc_clean( KSContext& context );
+bool kspreadfunc_code( KSContext& context );
 bool kspreadfunc_join( KSContext& context );
 bool kspreadfunc_left( KSContext& context );
 bool kspreadfunc_right( KSContext& context );
 bool kspreadfunc_upper( KSContext& context );
 bool kspreadfunc_toggle( KSContext& context );
-bool kspreadfunc_clean( KSContext& context );
 bool kspreadfunc_sleek( KSContext& context );
 bool kspreadfunc_proper(KSContext & context);
 bool kspreadfunc_lower( KSContext& context );
@@ -621,6 +623,9 @@ static const functionEntry funcTab[] = {
   { "EURO", kspreadfunc_euro },
 
   // text
+  { "CHAR", kspreadfunc_char },
+  { "CLEAN", kspreadfunc_clean },
+  { "CODE", kspreadfunc_code },
   { "LEFT", kspreadfunc_left },
   { "RIGHT", kspreadfunc_right },
   { "MID", kspreadfunc_mid },
@@ -634,7 +639,6 @@ static const functionEntry funcTab[] = {
   { "UPPER", kspreadfunc_upper },
   { "TOGGLE", kspreadfunc_toggle },
   { "FIND", kspreadfunc_find },
-  { "CLEAN", kspreadfunc_clean },
   { "JOIN", kspreadfunc_join },
   { "SLEEK", kspreadfunc_sleek },
 

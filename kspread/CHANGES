@@ -30,7 +30,7 @@ Until beta2:
   Min, Max, Product, Standard Deviation, Variance.
 
 new functions added:
- ISEMPTY
+ ISEMPTY, CHAR, CODE
 
 Until beta1:
 ------------

@@ -478,3 +478,42 @@ bool kspreadfunc_REPT( KSContext& context )
   context.setValue( new KSValue(tmp1));
   return true;
 }
+
+// Function: CHAR
+bool kspreadfunc_char( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "CHAR", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::IntType, true ) && 
+       !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+        return false;
+
+  args[0]->cast( KSValue::IntType );
+  int val = args[0]->intValue();
+  QString str = QChar( val );
+
+  context.setValue( new KSValue( str ) );
+  return true;
+}
+
+// Function: CODE
+bool kspreadfunc_code( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 1, "CODE", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) ) 
+    return false;
+
+  QString str = args[0]->stringValue();
+  if( str.length() <= 0 )
+     return false;
+
+  context.setValue( new KSValue( str[0].unicode() ) );
+  return true;
+}
