@@ -29,9 +29,11 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kcommand.h>
+#include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <koTemplateChooseDia.h>
 
+#define CURRENT_SYNTAX_VERSION "0.1"
 
 KPTPart::KPTPart(QWidget *parentWidget, const char *widgetName,
 		 QObject *parent, const char *name, bool singleViewMode)
@@ -115,43 +117,75 @@ void KPTPart::editProject() {
 
 
 bool KPTPart::loadXML(QIODevice *, const QDomDocument &document) {
-    kdDebug() << "Loading document\n";
+    QTime dt;
+    dt.start();
+    emit sigProgress( 0 );
 
-    QDomElement doc = document.documentElement();
+    QString value;
+    QDomElement plan = document.documentElement();
 
     // Check if this is the right app
-    if (doc.attribute("mime") != "application/x-vnd.kde.kplato")
-	return false;
+    value = plan.attribute("mime", QString::null);
+    if (value.isEmpty()) {
+        kdError() << "No mime type specified!" << endl;
+        setErrorMessage(i18n("Invalid document. No mimetype specified."));
+        return false;
+    }
+    else if (value != "application/x-vnd.kde.kplato") {
+        kdError() << "Unknown mime type " << value << endl;
+        setErrorMessage(i18n("Invalid document. Expected mimetype application/x-vnd.kde.kplato, got %1").arg(value));
+        return false;
+    }
+    QString m_syntaxVersion = plan.attribute("version", CURRENT_SYNTAX_VERSION);
+    if (m_syntaxVersion > CURRENT_SYNTAX_VERSION) {
+        int ret = KMessageBox::warningContinueCancel(
+            0, i18n("This document was created with a newer version of KPlato (syntax version: %1)\n"
+                    "Opening it in this version of KPlato will lose some information.").arg(m_syntaxVersion),
+            i18n("File Format Mismatch"), i18n("Continue") );
+        if (ret == KMessageBox::Cancel)
+        {
+            setErrorMessage("USER_CANCELED");
+            return false;
+        }
+    }
+    emit sigProgress(5);
 
-    QDomNodeList list = doc.childNodes();
+    QDomNodeList list = plan.childNodes();
     if (list.count() > 1) {
-	// TODO: Make a proper bitching about this
-	kdDebug() << "*** Error ***\n";
-	kdDebug() << "  Children count should be 1 but is " << list.count()
-		  << "\n";
-	return false;
+        // TODO: Make a proper bitching about this
+        kdDebug() << "*** Error ***\n";
+        kdDebug() << "  Children count should be 1 but is " << list.count()
+                << "\n";
+        return false;
     }
 
-    for (unsigned int i=0; i<list.count(); ++i) {
-	if (list.item(i).isElement()) {
-	    QDomElement e = list.item(i).toElement();
-
-	    if(e.tagName() == "project") {
-		KPTProject *newProject = new KPTProject();
-		if (newProject->load(e)) {
-		    // The load went fine. Throw out the old project
-		    delete m_project;
-		    delete m_projectDialog;
-		    m_project = newProject;
-		    m_projectDialog = 0;
-		}
-	    }
-	}
+    for (unsigned int i = 0; i < list.count(); ++i) {
+        if (list.item(i).isElement()) {
+            QDomElement e = list.item(i).toElement();
+    
+            if (e.tagName() == "project") {
+                KPTProject *newProject = new KPTProject();
+                if (newProject->load(e)) {
+                    // The load went fine. Throw out the old project
+                    delete m_project;
+                    delete m_projectDialog;
+                    m_project = newProject;
+                    m_projectDialog = 0;
+                }
+            }
+        }
     }
+    
+    emit sigProgress(100); // the rest is only processing, not loading
 
+    kdDebug() << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
+
+    // do some sanity checking on document.
+    emit sigProgress(-1);
+
+    setModified( false );
     return true;
 }
-
 
 QDomDocument KPTPart::saveXML() {
     QDomDocument document("kplato");
@@ -163,7 +197,7 @@ QDomDocument KPTPart::saveXML() {
     QDomElement doc = document.createElement("kplato");
     doc.setAttribute("editor", "KPlato");
     doc.setAttribute("mime", "application/x-vnd.kde.kplato");
-    doc.setAttribute("version", "0.1");
+    doc.setAttribute("version", CURRENT_SYNTAX_VERSION);
     document.appendChild(doc);
 
     // Save the project
