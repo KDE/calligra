@@ -44,6 +44,8 @@ QTextCursor * KWInsertTOCCommand::execute( QTextCursor *c )
     KWTextDocument * textdoc = static_cast<KWTextDocument *>(doc);
     KWTextFrameSet * fs = textdoc->textFrameSet();
 
+    fs->kWordDocument()->renameButtonTOC(i18n("Update Table of &Contents"));
+
     KWTextParag *body = static_cast<KWTextParag *>( textdoc->firstParag() );
     // Create new very first paragraph
     KWTextParag *parag = static_cast<KWTextParag *>( textdoc->createParag( textdoc, 0, textdoc->firstParag(), true ) );
@@ -117,6 +119,7 @@ QTextCursor *KWInsertTOCCommand::unexecute( QTextCursor *c )
     KWTextDocument * textdoc = static_cast<KWTextDocument *>(doc);
     KWTextFrameSet * fs = textdoc->textFrameSet();
     removeTOC( fs, c, 0L );
+    fs->kWordDocument()->renameButtonTOC(i18n("Table of &Contents"));
     if ( m_bPageBreakInserted )
     {
         KWTextParag *body = static_cast<KWTextParag *>( textdoc->firstParag() );

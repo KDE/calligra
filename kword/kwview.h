@@ -247,6 +247,8 @@ public slots:
 
     void insertExpression();
 
+    void renameButtonTOC(const QString & _name);
+
 protected:
     void addVariableActions( int type, const QStringList & texts,
                              KActionMenu * parentMenu, const QString & menuText );

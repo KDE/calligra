@@ -2617,4 +2617,11 @@ QColor KWDocument::defaultBgColor( QPainter * painter )
 }
 
 
+void KWDocument::renameButtonTOC(const QString & _name)
+{
+    QListIterator<KWView> it( m_lstViews );
+    for ( ; it.current() ; ++it )
+        it.current()->renameButtonTOC(_name);
+}
+
 #include "kwdoc.moc"

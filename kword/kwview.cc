@@ -1565,11 +1565,20 @@ void KWView::insertFootNoteEndNote()
 #endif
 }
 
+void KWView::renameButtonTOC(const QString & _name)
+{
+   KActionCollection * coll = actionCollection();
+   coll->action("insert_contents")->setText(_name);
+}
+
 void KWView::insertContents()
 {
     KWTextFrameSetEdit *edit = currentTextEdit();
     if (edit)
     {
+        KAction * act = (KAction *)(sender());
+        if(act->text()==i18n( "Table of &Contents" ))
+            doc->renameButtonTOC(i18n("Update Table of &Contents"));
         edit->insertTOC();
     }
 }
