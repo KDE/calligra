@@ -125,7 +125,7 @@ KexiBrowser::slotItemListChanged(KexiProjectHandler *parent)
 	//KexiProjectHandlerItem *item = plist->first(); item; item = plist->next())
 	{
 		kdDebug() << "KexiBrowser::slotItemListChanged() adding " << it.current()->mime() << endl;
-		kdDebug() << "KexiBrowser::slotItemListChanged()  named " << it.current()->identifier() << endl;
+		kdDebug() << "KexiBrowser::slotItemListChanged()  named " << it.current()->fullIdentifier() << endl;
 		addItem(it.current());
 	}
 }
@@ -149,7 +149,7 @@ KexiBrowser::slotContextMenu(KListView *, QListViewItem *item, const QPoint &pos
 		{
 			kdDebug() << "KexiBrowser::slotContextMenu() item @ " << it->item() << endl;
 			//a littlebit hacky
-			pg = it->item()->projectPart()->proxy(
+			pg = it->item()->handler()->proxy(
 			static_cast<KexiDialogBase*>(parent()->parent())->kexiView()
 			)->itemContext(it->identifier());
 		}
@@ -177,7 +177,7 @@ KexiBrowser::slotExecuteItem(QListViewItem *item)
 			}
 			else
 			{
-				it->item()->projectPart()->proxy(
+				it->item()->handler()->proxy(
 	                        static_cast<KexiDialogBase*>(parent()->parent())->kexiView()
         	                )->executeItem(it->identifier());
 			}

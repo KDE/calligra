@@ -65,7 +65,7 @@ void KexiDataSourceComboBox::fillList(KexiProject *proj,
 		for(KexiProjectHandler::ItemIterator it(*h->items()); it.current(); ++it)
 		{
 			list.append(Item(sname.arg((*it)->name()),
-			(*it)->identifier(),mime,(*it)->shortIdentifier(),pixmap));
+			(*it)->fullIdentifier(),mime,(*it)->identifier(),pixmap));
 		}
 	}
 

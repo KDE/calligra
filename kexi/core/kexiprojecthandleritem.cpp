@@ -19,26 +19,27 @@
 
 #include "kexiprojecthandleritem.h"
 
-KexiProjectHandlerItem::KexiProjectHandlerItem(KexiProjectHandler *parent, const QString& name, const QString& mime, 
-	const QString& shortIdentifier)
- : QObject(parent, shortIdentifier.latin1())
+KexiProjectHandlerItem::KexiProjectHandlerItem(KexiProjectHandler *item_handler, 
+ const QString& item_ident, const QString& item_mime, const QString& item_title)
+ : QObject(item_handler, item_ident.latin1())
+	, m_handler(item_handler)
+	, m_ident(item_ident)
+	, m_mime(item_mime)
+	, m_title(item_title)
 {
-	m_parent = parent;
-	m_name = name;
-	m_mime = mime;
-	m_shortIdentifier = shortIdentifier;
+
 }
 
 KexiProjectHandler *
-KexiProjectHandlerItem::projectPart()
+KexiProjectHandlerItem::handler()
 {
-	return m_parent;
+	return m_handler;
 }
 
 QString
-KexiProjectHandlerItem::name()
+KexiProjectHandlerItem::identifier()
 {
-	return m_name;
+	return m_ident;
 }
 
 QString
@@ -48,17 +49,10 @@ KexiProjectHandlerItem::mime()
 }
 
 QString
-KexiProjectHandlerItem::identifier()
+KexiProjectHandlerItem::fullIdentifier()
 {
-	return m_mime+"/"+m_shortIdentifier;
+	return m_mime+"/"+m_ident;
 }
-
-QString
-KexiProjectHandlerItem::shortIdentifier()
-{
-	return m_shortIdentifier;
-}
-
 
 KexiProjectHandlerItem::~KexiProjectHandlerItem()
 {

@@ -25,26 +25,32 @@
 
 #include "kexiprojecthandler.h"
 
+/*! Project Handler Item stores 
+	- KexiProjectHandler
+	- identifier ident (low-level name, for example: table name)
+	- mime type name
+	- title (visible hight leve name, eg. table or query title)
+*/
 class KEXICORE_EXPORT KexiProjectHandlerItem : public QObject
 {
 	Q_OBJECT
 
 	public:
-		KexiProjectHandlerItem(KexiProjectHandler *parent, const QString& name, const QString& mime, 
-				const QString& shortIdentifier);
+		KexiProjectHandlerItem(KexiProjectHandler *item_handler, const QString& item_ident, 
+		 const QString& item_mime, const QString& item_title);
 		~KexiProjectHandlerItem();
 
-		KexiProjectHandler	*projectPart();
-		QString		name();
-		QString		mime();
+		KexiProjectHandler	*handler();
 		QString		identifier();
-		QString		shortIdentifier();
+		QString		fullIdentifier();
+		QString		mime();
+		QString		title();
 
 	private:
-		QGuardedPtr<KexiProjectHandler>	m_parent;
-		QString 	m_name;
+		QGuardedPtr<KexiProjectHandler> m_handler;
+		QString 	m_ident;
 		QString 	m_mime;
-		QString 	m_shortIdentifier;
+		QString 	m_title;
 };
 
 #endif
