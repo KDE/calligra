@@ -109,15 +109,6 @@ void Properties::apply(const MsWord::U8 *grpprl, unsigned count)
         if (m_document.m_fib.nFib > MsWord::s_maxWord6Version)
         {
             bytes += MsWordGenerated::read(in + bytes, &opcodeValue);
-
-            // Convert the opcode into its bitfield equivalent in an endian-safe
-            // manner.
-
-            opcodeBits.ispmd = opcodeValue >> 0;
-            opcodeBits.fSpec = opcodeValue >> 9;
-            opcodeBits.sgc = opcodeValue >> 10;
-            opcodeBits.spra = opcodeValue >> 13;
-            operandSize = operandSizes[opcodeBits.spra];
         }
         else
         {
@@ -126,22 +117,7 @@ void Properties::apply(const MsWord::U8 *grpprl, unsigned count)
             // Convert sprm to new format.
 
             bytes += MsWordGenerated::read(in + bytes, &sprm);
-            opcodeValue = sprm;
-            if (sprm >= 128)
-            {
-                kdError(MsWord::s_area) << "Properties::apply: prms in CLX are not supported: " << sprm << endl;
-                bytes += MsWordGenerated::read(in + bytes, &sprm);
-            }
-
-            // Convert the opcode into its bitfield equivalent in an endian-safe
-            // manner.
-
-            opcodeBits.ispmd = opcodeValue >> 0;
-            opcodeBits.fSpec = 0;
-            opcodeBits.sgc = opcodeValue >> 10;
-            opcodeBits.spra = opcodeValue >> 13;
-            operandSize = operandSizes[opcodeBits.spra];
-            switch (opcodeValue)
+            switch (sprm)
             {
             case 0:
                 opcodeValue = sprmNoop;
@@ -310,8 +286,6 @@ void Properties::apply(const MsWord::U8 *grpprl, unsigned count)
                 break;
             case 68:
                 opcodeValue = sprmCPicLocation;
-                bytes++;
-                operandSize = 4;
                 break;
             case 69:
                 opcodeValue = sprmCIbstRMark;
@@ -627,9 +601,15 @@ void Properties::apply(const MsWord::U8 *grpprl, unsigned count)
                 break;
             }
         }
-        if (opcodeBits.fSpec)
-            kdError(MsWord::s_area) << "Properties::apply: prms in CLX are not supported: 0x" <<
-                QString::number(opcodeValue, 16) << endl;
+
+        // Convert the opcode into its bitfield equivalent in an endian-safe
+        // manner.
+
+        opcodeBits.ispmd = opcodeValue >> 0;
+        opcodeBits.fSpec = opcodeValue >> 9;
+        opcodeBits.sgc = opcodeValue >> 10;
+        opcodeBits.spra = opcodeValue >> 13;
+        operandSize = operandSizes[opcodeBits.spra];
         if (!operandSize)
         {
             MsWord::U8 t8;
