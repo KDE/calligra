@@ -510,3 +510,9 @@ Reggie, 6.11.1999:
 - Fixed some crashing code
 - Improved presentation structure viewer a bit
 - More fixes (mainly for scripting)
+
+Reggie, 9.11.1999
+-------------------
+- Fixes and cleanups
+- Loading/Saving embedded parts works finally
+

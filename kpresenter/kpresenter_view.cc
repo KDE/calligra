@@ -164,10 +164,6 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     m_bKPresenterModified = true;
 
     QObject::connect( m_pKPresenterDoc, SIGNAL( sig_KPresenterModified() ), this, SLOT( slotKPresenterModified() ) );
-    QObject::connect( m_pKPresenterDoc, SIGNAL( sig_insertObject( KPresenterChild*, KPPartObject* ) ),
-		      this, SLOT( slotInsertObject( KPresenterChild*, KPPartObject* ) ) );
-    QObject::connect( m_pKPresenterDoc, SIGNAL( sig_updateChildGeometry( KPresenterChild* ) ),
-		      this, SLOT( slotUpdateChildGeometry( KPresenterChild* ) ) );
 
     createGUI();
 
@@ -1563,7 +1559,7 @@ void KPresenterView::setupActions()
 				    this, SLOT( editDelete() ),
 				    actionCollection(), "edit_delete" );
     actionEditSelectAll = new KAction( i18n( "&Select All" ), CTRL + Key_A,
-				       this, SLOT( editDelete() ),
+				       this, SLOT( editSelectAll() ),
 				       actionCollection(), "edit_selectall" );
     actionEditCopyPage = new KAction( i18n( "Copy &Page to Clipboard" ), KPBarIcon( "newslide" ), 0,
 				      this, SLOT( editCopyPage() ),
@@ -1917,14 +1913,6 @@ void KPresenterView::construct()
 
     m_bUnderConstruction = false;
 
-    KPObject *kpobject;
-    for ( unsigned int i = 0; i < m_pKPresenterDoc->objectList()->count(); i++ ) {
-	kpobject = m_pKPresenterDoc->objectList()->at( i );
-	if ( kpobject->getType() == OT_PART )
-	    slotInsertObject( dynamic_cast<KPPartObject*>( kpobject )->getChild(),
-			      dynamic_cast<KPPartObject*>( kpobject ) );
-    }
-
     // We are now in sync with the document
     m_bKPresenterModified = false;
 
@@ -1936,42 +1924,6 @@ void KPresenterView::slotKPresenterModified()
 {
     m_bKPresenterModified = true;
     update();
-}
-
-/*======================= insert object ========================*/
-void KPresenterView::slotInsertObject( KPresenterChild * /*_child*/, KPPartObject * /*_kppo*/ )
-{
-    // ############## TORBEN Todo
-    /* OpenParts::View_var v;
-
-    try
-    {
-	v = _child->createView( m_vKoMainWindow );
-    }
-    catch ( OpenParts::Document::MultipleViewsNotSupported &_ex )
-    {
-	// HACK
-	printf( "void KPresenterView::slotInsertObject( const QRect& _rect, OPParts::Document_ptr _doc )\n" );
-	printf( "Could not create view\n" );
-	exit( 1 );
-    }
-
-    if ( CORBA::is_nil( v ) )
-    {
-	printf( "void KPresenterView::slotInsertObject( const QRect& _rect, OPParts::Document_ptr _doc )\n" );
-	printf( "return value is 0L\n" );
-	exit( 1 );
-    }
-
-    KOffice::View_var kv = KOffice::View::_narrow( v );
-    kv->setMode( KOffice::View::ChildMode );
-    assert( !CORBA::is_nil( kv ) );
-    _kppo->setView( kv ); */
-}
-
-/*========================== update child geometry =============*/
-void KPresenterView::slotUpdateChildGeometry( KPresenterChild * /*_child*/ )
-{
 }
 
 /*=========== take changes for backgr dialog =====================*/

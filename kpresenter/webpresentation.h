@@ -40,7 +40,7 @@ class QComboBox;
 class QListView;
 class QListViewItem;
 class QCloseEvent;
-class QProgressBar;
+class KProgress;
 class QLabel;
 
 /******************************************************************/
@@ -118,10 +118,10 @@ public:
     int slides2Steps() { return slideTitles.count(); }
     int mainSteps() { return 1; }
 
-    void initCreation( QProgressBar *progressBar );
-    void createSlidesPictures( QProgressBar *progressBar );
-    void createSlidesHTML( QProgressBar *progressBar );
-    void createMainPage( QProgressBar *progressBar );
+    void initCreation( KProgress *progressBar );
+    void createSlidesPictures( KProgress *progressBar );
+    void createSlidesHTML( KProgress *progressBar );
+    void createMainPage( KProgress *progressBar );
 
 protected:
     void init();
@@ -214,7 +214,7 @@ protected:
     KPresenterDoc *doc;
     KPWebPresentation webPres;
 
-    QProgressBar *progressBar;
+    KProgress *progressBar;
     QLabel *step1, *step2, *step3, *step4;
     QPushButton *bDone, *bSave;
     QVBox *back;

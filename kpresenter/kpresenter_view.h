@@ -117,7 +117,7 @@ public:
     int getNumPresPages();
     bool gotoPresPage( int pg );
     float getCurrentFaktor();
-    
+
 public slots:
     virtual bool printDlg();
     // edit menu
@@ -315,14 +315,10 @@ public:
     static void getFonts( QStringList &lst );
 
 public slots:
-
     // Document signals
     void slotKPresenterModified();
-    void slotInsertObject( KPresenterChild *_child, KPPartObject *_kppo );
-    void slotUpdateChildGeometry( KPresenterChild *_child );
 
 protected slots:
-
     // dialog slots
     void backOk( bool );
     void afChooseOk( const QString & );

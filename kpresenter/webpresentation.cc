@@ -44,7 +44,7 @@
 #include <qfileinfo.h>
 #include <qevent.h>
 #include <qframe.h>
-#include <qprogressbar.h>
+#include <kprogress.h>
 #include <qfont.h>
 #include <qpixmap.h>
 #include <qsize.h>
@@ -147,21 +147,21 @@ void KPWebPresentation::saveConfig()
 }
 
 /*================================================================*/
-void KPWebPresentation::initCreation( QProgressBar *progressBar )
+void KPWebPresentation::initCreation( KProgress *progressBar )
 {
     QString cmd;
     int p;
 
     QDir( path ).mkdir( path + "/html" );
 
-    p = progressBar->progress();
-    progressBar->setProgress( ++p );
+    p = progressBar->value();
+    progressBar->setValue( ++p );
     kapp->processEvents();
 
     QDir( path ).mkdir( path + "/pics" );
 
-    p = progressBar->progress();
-    progressBar->setProgress( ++p );
+    p = progressBar->value();
+    progressBar->setValue( ++p );
     kapp->processEvents();
 
     QString format = "." + imageFormat( imgFormat );
@@ -176,15 +176,15 @@ void KPWebPresentation::initCreation( QProgressBar *progressBar )
 	system( QString( "cp %1 %2/pics/%3" ).
 		arg( locate( "appdata", "slideshow/" + filename ) ).
 		arg( path ).arg( filename ) );
-	p = progressBar->progress();
-	progressBar->setProgress( ++p );
+	p = progressBar->value();
+	progressBar->setValue( ++p );
 	kapp->processEvents();
 	index++;
     }
 }
 
 /*================================================================*/
-void KPWebPresentation::createSlidesPictures( QProgressBar *progressBar )
+void KPWebPresentation::createSlidesPictures( KProgress *progressBar )
 {
     QPixmap pix( QSize( doc->getPageSize( 0, 0, 0 ).width(), doc->getPageSize( 0, 0, 0 ).height() ) );
     QString filename;
@@ -203,14 +203,14 @@ void KPWebPresentation::createSlidesPictures( QProgressBar *progressBar )
 	}
 	pix.save( filename, format.upper() );
 
-	p = progressBar->progress();
-	progressBar->setProgress( ++p );
+	p = progressBar->value();
+	progressBar->setValue( ++p );
 	kapp->processEvents();
     }
 }
 
 /*================================================================*/
-void KPWebPresentation::createSlidesHTML( QProgressBar *progressBar )
+void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
 {
     unsigned int pgNum;
     int p;
@@ -297,14 +297,14 @@ void KPWebPresentation::createSlidesHTML( QProgressBar *progressBar )
 	t << html;
 	file.close();
 
-	p = progressBar->progress();
-	progressBar->setProgress( ++p );
+	p = progressBar->value();
+	progressBar->setValue( ++p );
 	kapp->processEvents();
     }
 }
 
 /*================================================================*/
-void KPWebPresentation::createMainPage( QProgressBar *progressBar )
+void KPWebPresentation::createMainPage( KProgress *progressBar )
 {
     QString html;
 
@@ -346,7 +346,7 @@ void KPWebPresentation::createMainPage( QProgressBar *progressBar )
     t << html;
     file.close();
 
-    progressBar->setProgress( progressBar->totalSteps() );
+    progressBar->setValue( progressBar->maxValue() );
     kapp->processEvents();
 }
 
@@ -755,13 +755,13 @@ void KPWebPresentationCreateDialog::initCreation()
     f.setBold( TRUE );
     step1->setFont( f );
 
-    progressBar->reset();
-    progressBar->setTotalSteps( webPres.initSteps() );
+    progressBar->setValue( 0 );
+    progressBar->setRange( 0, webPres.initSteps() );
 
     webPres.initCreation( progressBar );
 
     step1->setFont( f2 );
-    progressBar->setProgress( progressBar->totalSteps() );
+    progressBar->setValue( progressBar->maxValue() );
 }
 
 /*================================================================*/
@@ -771,13 +771,13 @@ void KPWebPresentationCreateDialog::createSlidesPictures()
     f.setBold( TRUE );
     step2->setFont( f );
 
-    progressBar->reset();
-    progressBar->setTotalSteps( webPres.slides1Steps() );
+    progressBar->setValue( 0 );
+    progressBar->setRange( 0, webPres.slides1Steps() );
 
     webPres.createSlidesPictures( progressBar );
 
     step2->setFont( f2 );
-    progressBar->setProgress( progressBar->totalSteps() );
+    progressBar->setValue( progressBar->maxValue() );
 }
 
 /*================================================================*/
@@ -787,13 +787,13 @@ void KPWebPresentationCreateDialog::createSlidesHTML()
     f.setBold( TRUE );
     step3->setFont( f );
 
-    progressBar->reset();
-    progressBar->setTotalSteps( webPres.slides2Steps() );
+    progressBar->setValue( 0 );
+    progressBar->setRange( 0, webPres.slides1Steps() );
 
     webPres.createSlidesHTML( progressBar );
 
     step3->setFont( f2 );
-    progressBar->setProgress( progressBar->totalSteps() );
+    progressBar->setValue( progressBar->maxValue() );
 }
 
 /*================================================================*/
@@ -803,13 +803,13 @@ void KPWebPresentationCreateDialog::createMainPage()
     f.setBold( TRUE );
     step4->setFont( f );
 
-    progressBar->reset();
-    progressBar->setTotalSteps( webPres.mainSteps() );
+    progressBar->setValue( 0 );
+    progressBar->setRange( 0, webPres.slides1Steps() );
 
     webPres.createMainPage( progressBar );
 
     step4->setFont( f2 );
-    progressBar->setProgress( progressBar->totalSteps() );
+    progressBar->setValue( progressBar->maxValue() );
 }
 
 /*================================================================*/
@@ -833,7 +833,7 @@ void KPWebPresentationCreateDialog::setupGUI()
     line->setFrameStyle( QFrame::HLine | QFrame::Sunken );
     line->setMaximumHeight( 20 );
 
-    progressBar = new QProgressBar( back );
+    progressBar = new KProgress( back );
 
     line = new QFrame( back );
     line->setFrameStyle( QFrame::HLine | QFrame::Sunken );

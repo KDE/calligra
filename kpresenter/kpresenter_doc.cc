@@ -544,12 +544,13 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 	    }
 	    KPresenterChild *ch = new KPresenterChild( this );
 	    KPPartObject *kppartobject = 0L;
-
+	    QRect r;
+	    
 	    while ( parser.open( 0L, tag ) ) {
 		KOMLParser::parseTag( tag.c_str(), name, lst );
 		if ( name == "OBJECT" ) {
 		    ch->load( parser, lst );
-		    QRect r = ch->geometry();
+		    r = ch->geometry();
 		    insertChild( ch );
 		    kppartobject = new KPPartObject( ch );
 		    kppartobject->setOrig( r.x(), r.y() );
@@ -569,6 +570,12 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KoStore* _store )
 		    cerr << "ERR: Closing Child" << endl;
 		    return false;
 		}
+	    }
+	    if ( kppartobject ) {
+		qDebug( "HHHHHHHHHHHHHHERE: %d %d %d %d",
+			r.x(), r.y(), r.width(), r.height() );
+		kppartobject->setOrig( r.x(), r.y() );
+		kppartobject->setSize( r.width(), r.height() );
 	    }
 	} else if ( name == "PAPER" ) {
 	    KOMLParser::parseTag( tag.c_str(), name, lst );
@@ -3834,11 +3841,11 @@ void KPresenterDoc::groupObjects()
 	if ( kpobject->isSelected() )
 	    objs.append( kpobject );
     }
-    
+
     if ( objs.count() < 2 )
-	QMessageBox::information( 0, i18n( "KPresenter - Group Objects" ), 
+	QMessageBox::information( 0, i18n( "KPresenter - Group Objects" ),
 				  i18n( "You have to select at least 2 objects\n"
-				      "which should be grouped together!"), 
+				      "which should be grouped together!"),
 				  i18n( "OK" ) );
     else {
 	GroupObjCmd *groupObjCmd = new GroupObjCmd( i18n( "Group Objects" ), objs, this );
@@ -3852,7 +3859,7 @@ void KPresenterDoc::ungroupObjects()
 {
     KPObject *kpobject = getSelectedObj();
     if ( kpobject && kpobject->getType() == OT_GROUP ) {
-	UnGroupObjCmd *unGroupObjCmd = new UnGroupObjCmd( i18n( "Ungroup Object" ), 
+	UnGroupObjCmd *unGroupObjCmd = new UnGroupObjCmd( i18n( "Ungroup Object" ),
 							  (KPGroupObject*)kpobject, this );
 	_commands.addCommand( unGroupObjCmd );
 	unGroupObjCmd->execute();
