@@ -54,9 +54,6 @@ class DCOPObject;
 #include <ktempfile.h>
 
 #include <qtextstream.h>
-#include <fstream.h>
-#include <torben.h>
-#include <strstream.h>
 
 #define MIME_TYPE "application/x-kpresenter"
 #define EDITOR "IDL:KPresenter/KPresenterDocument:1.0"
@@ -107,7 +104,7 @@ public:
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = false );
 
     // save
-    virtual bool save( QTextStream&, const char *_format );
+    virtual bool saveToStream( QIODevice * dev );
     virtual bool completeSaving( KoStore* _store );
 
     // load

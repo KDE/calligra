@@ -320,8 +320,9 @@ bool KPresenterDoc::saveChildren( KoStore* _store, const char *_path )
 }
 
 /*========================== save ===============================*/
-bool KPresenterDoc::save(QTextStream& out,const char * /* format */)
+bool KPresenterDoc::saveToStream(QIODevice * dev)
 {
+    QTextStream out( dev );
     KPObject *kpobject = 0L;
 
     out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
