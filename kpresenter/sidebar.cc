@@ -71,8 +71,8 @@ private:
 class OutlineSlideItem: public KListViewItem
 {
 public:
-    OutlineSlideItem( KListView * parent, KPrPage* page );
-    OutlineSlideItem( KListView * parent, OutlineSlideItem *after, KPrPage* page );
+    OutlineSlideItem( KListView * parent, KPrPage* page, bool _masterPage );
+    OutlineSlideItem( KListView * parent, OutlineSlideItem *after, KPrPage* page, bool _masterPage );
 
     KPrPage* page() const { return m_page; }
 
@@ -83,6 +83,7 @@ public:
 
 private:
     KPrPage* m_page;
+    bool m_masterPage;
 };
 
 class OutlineObjectItem: public KListViewItem
@@ -552,16 +553,16 @@ void ThumbBar::slotRefreshItems()
     refreshItems();
 }
 
-OutlineSlideItem::OutlineSlideItem( KListView* parent, KPrPage* _page )
-    : KListViewItem( parent ), m_page( _page )
+OutlineSlideItem::OutlineSlideItem( KListView* parent, KPrPage* _page, bool _masterPage )
+    : KListViewItem( parent ), m_page( _page ), m_masterPage( _masterPage )
 {
     setDragEnabled(true);
     setPage( _page );
     setPixmap( 0, KPBarIcon( "newslide" ) );
 }
 
-OutlineSlideItem::OutlineSlideItem( KListView* parent, OutlineSlideItem * after, KPrPage* _page )
-    : KListViewItem( parent, after ), m_page( _page )
+OutlineSlideItem::OutlineSlideItem( KListView* parent, OutlineSlideItem * after, KPrPage* _page, bool _masterPage )
+    : KListViewItem( parent, after ), m_page( _page ), m_masterPage( _masterPage )
 {
     setDragEnabled(true);
     setPage( _page );
@@ -591,14 +592,16 @@ void OutlineSlideItem::update()
 
     QPtrListIterator<KPObject> it( m_page->objectList() );
 
-    for ( ; it.current(); ++it ) {
-        OutlineObjectItem *item = new OutlineObjectItem( this, it.current(),
-                                                         it.current()->isSticky() );
-        item->setDragEnabled( false );
-        if ( it.current()->isSelected() )
-            ooi = item;
+    if ( !m_masterPage )
+    {
+        for ( ; it.current(); ++it ) {
+            OutlineObjectItem *item = new OutlineObjectItem( this, it.current(),
+                                                             it.current()->isSticky() );
+            item->setDragEnabled( false );
+            if ( it.current()->isSelected() )
+                ooi = item;
+        }
     }
-
     KPObject* header = 0;
     KPObject* footer = 0;
 
@@ -761,14 +764,14 @@ void Outline::rebuildItems()
     if ( m_viewMasterPage )
     {
         KPrPage *page=m_doc->masterPage();
-        new OutlineSlideItem( this, page );
+        new OutlineSlideItem( this, page, true );
     }
     else
     {
         // Rebuild all the items
         for ( int i = m_doc->getPageNums() - 1; i >= 0; --i ) {
             KPrPage *page=m_doc->pageList().at( i );
-            new OutlineSlideItem( this, page );
+            new OutlineSlideItem( this, page, false );
         }
     }
 }
@@ -812,11 +815,11 @@ void Outline::addItem( int pos )
     KPrPage *page=m_doc->pageList().at( pos );
     OutlineSlideItem *item;
     if ( pos == 0 ) {
-        item = new OutlineSlideItem( this, page );
+        item = new OutlineSlideItem( this, page,m_viewMasterPage );
     }
     else {
         OutlineSlideItem *after = slideItem( pos - 1 );
-        item = new OutlineSlideItem( this, after, page );
+        item = new OutlineSlideItem( this, after, page,m_viewMasterPage );
     }
 
     item = dynamic_cast<OutlineSlideItem*>( item->nextSibling() );
