@@ -109,7 +109,7 @@ void KWMailMergeKSpread::initSpreadSheets()
   _columnMap.clear();
   sampleRecord.clear();
 
-  QPtrListIterator<KSpreadSheet> it( _document->map()->tableList() );
+  QPtrListIterator<KSpreadSheet> it( _document->map()->sheetList() );
   int counter = 0;
   for ( it.toFirst(); it.current(), counter < _spreadSheetNumber; ++it ) {
     _sheet = it.current();

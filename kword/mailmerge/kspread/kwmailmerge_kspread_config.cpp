@@ -84,7 +84,7 @@ void KWMailMergeKSpreadConfig::documentLoaded()
 {
   _pageNumber->clear();
 
-  QPtrListIterator<KSpreadSheet> it( _document->map()->tableList() );
+  QPtrListIterator<KSpreadSheet> it( _document->map()->sheetList() );
   int counter = 1;
   for ( it.toFirst(); it.current(); ++it ) {
     _pageNumber->insertItem( QString::number( counter ) );
