@@ -792,7 +792,7 @@ KarbonView::initActions()
 					   SLOT( viewModeChanged() ), actionCollection(), "view_mode" );
 
 	m_zoomAction = new KSelectAction(
-					   i18n( "&Zoom" ), 0, this,
+					   i18n( "&Zoom" ), "viewmag", 0, this,
 					   SLOT( zoomChanged() ), actionCollection(), "view_zoom" );
 
 	QStringList mstl;
