@@ -170,7 +170,7 @@ public:
      * @see #copyAll
      */
     void copyLayout( KSpreadCell *_cell );
-
+    void copyContent( KSpreadCell *_cell );
     /**
      * Copies the layout and the content. It does not copy the @ref #m_row and @ref #m_column attributes.
      * Besides that all persistent attributes are copied. @ref #setCellText is called to set the real

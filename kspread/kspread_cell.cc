@@ -195,6 +195,13 @@ void KSpreadCell::copyAll( KSpreadCell *cell )
 {
     ASSERT( !isDefault() ); // trouble ahead...
     copyLayout( cell );
+    copyContent( cell );
+}
+
+void KSpreadCell::copyContent( KSpreadCell* cell )
+{
+    ASSERT( !isDefault() ); // trouble ahead...
+	
     setCellText( cell->text() );
     setAction(cell->action() );
 
@@ -204,7 +211,6 @@ void KSpreadCell::copyAll( KSpreadCell *cell )
     if ( cell->m_pPrivate )
 	m_pPrivate = cell->m_pPrivate->copy( this );
 }
-
 
 void KSpreadCell::defaultStyle()
 {

@@ -2468,11 +2468,15 @@ void KSpreadTable::swapCells( int x1, int y1, int x2, int y2 )
       // TODO : make ref1 default instead of copying a default cell into it
     }
 
-  // Dummy cell used for swapping cells
+  // Dummy cell used for swapping cells.
+  // In fact we copy only content and no layout
+  // information. Imagine sortting in a table. Swapping
+  // the layout while sorting is not what you would expect
+  // as a user.
   KSpreadCell *tmp = new KSpreadCell( this, -1, -1 );
-  tmp->copyAll(ref1);
-  ref1->copyAll(ref2);
-  ref2->copyAll(tmp);
+  tmp->copyContent( ref1 );
+  ref1->copyContent( ref2 );
+  ref2->copyContent( tmp );
   delete tmp;
 }
 
