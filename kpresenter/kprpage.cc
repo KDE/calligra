@@ -1175,17 +1175,6 @@ void KPrPage::insertClosedLine( const KoPointArray &points, const KoRect &r, con
     KPClosedLineObject *kpClosedLineObject = new KPClosedLineObject( points, size, pen, brush, ft,
                                                                      g1, g2, gt, unbalanced, xfactor, yfactor, _type );
     insertObject( _name, kpClosedLineObject, r );
-    /*
-    kpClosedLineObject->setOrig( r.x(), r.y() );
-    kpClosedLineObject->setSize( size );
-    kpClosedLineObject->setSelected( true );
-
-
-
-    InsertCmd *insertCmd = new InsertCmd( _name, kpClosedLineObject, m_doc, this );
-    insertCmd->execute();
-    m_doc->addCommand( insertCmd );
-    */
 }
 
 KPPartObject* KPrPage::insertObject( const KoRect& _rect, KoDocumentEntry& _e )
