@@ -117,7 +117,7 @@ bool KoApplication::start()
                 } else {
                     // .... if failed
                     delete shell;
-                    delete doc;
+                    // delete doc; done by openDocument
                 }
             }
         }
