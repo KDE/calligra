@@ -640,7 +640,6 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
         if ( frameset->isFloating() ) continue;
 
         frameMoved = true;
-
         QListIterator<KWFrame> frameIt( frameset->frameIterator() );
         for ( ; frameIt.current(); ++frameIt )
         {
@@ -653,6 +652,16 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
                     QRect oldRect( frame->outerRect() );
                     // Move the frame
                     frame->moveTopLeft( frame->topLeft() + _move );
+                    if(frame->bottom()>(visibleHeight ()+ contentsY()))
+                        scrollToOffset( static_cast<int>(frame->x()), static_cast<int>(contentsY ()+(frame->bottom()-(visibleHeight ()+ contentsY()))) );
+                    else if(frame->top()< contentsY())
+                        scrollToOffset( static_cast<int>(frame->x()), static_cast<int>(frame->top()) );
+
+                    if(frame->left()<(contentsX()))
+                        scrollToOffset( static_cast<int>(frame->left()),static_cast<int>(frame->y()) );
+                    else if(frame->right()> (contentsX()+visibleWidth()))
+                        scrollToOffset( static_cast<int>(contentsX ()+(frame->right()-(visibleWidth ()+ contentsX()))), static_cast<int>(frame->y()) );
+
                     // Calculate new rectangle for this frame
                     QRect newRect( frame->outerRect() );
                     // Repaing only the changed rects (oldRect U newRect)
