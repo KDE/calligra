@@ -26,6 +26,8 @@
 #include <kspread_undo.h>
 #include <kspread_util.h>
 
+#include "kspread_sheetprint.h"
+
 // ----- UndoWrapperCommand -----
 
 UndoWrapperCommand::UndoWrapperCommand( KSpreadUndoAction* ua )
@@ -283,3 +285,38 @@ QString InsertColumnCommand::name() const
 {
     return i18n("Insert Columns");
 }
+
+
+// ----- DefinePrintRangeCommand -----
+
+
+DefinePrintRangeCommand::DefinePrintRangeCommand( KSpreadSheet *s )
+{
+  doc = s->doc();
+  sheetName = s->tableName();
+  printRange = s->print()->printRange();
+}
+
+void DefinePrintRangeCommand::execute()
+{
+    KSpreadSheet* sheet = doc->map()->findTable( sheetName );
+    if( !sheet ) return;
+    sheet->print()->setPrintRange( printRangeRedo );
+
+}
+
+void DefinePrintRangeCommand::unexecute()
+{
+    KSpreadSheet* sheet = doc->map()->findTable( sheetName );
+    if( !sheet ) return;
+    printRangeRedo = sheet->print()->printRange();
+    sheet->print()->setPrintRange( printRange );
+}
+
+QString DefinePrintRangeCommand::name() const
+{
+    return i18n("Set Page Layout");
+}
+
+
+

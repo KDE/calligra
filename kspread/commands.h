@@ -228,4 +228,21 @@ protected:
 
 };
 
+
+class DefinePrintRangeCommand : public KCommand
+{
+public:
+  DefinePrintRangeCommand( KSpreadSheet* sheet );
+
+  virtual void execute();
+  virtual void unexecute();
+  virtual QString name() const;
+
+protected:
+    KSpreadDoc* doc;
+    QString sheetName;
+    QRect printRangeRedo, printRange;
+};
+
+
 #endif /* KSPREAD_COMMANDS */
