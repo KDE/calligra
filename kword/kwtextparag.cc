@@ -250,7 +250,23 @@ void KoTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
         // Just draw the text! Note: one space is always appended.
         QString counterText = m_layout.counter->text( this );
         if ( !counterText.isEmpty() )
+        {
+            //code from qt3stuff
+            if (format->vAlign() == QTextFormat::AlignSuperScript )
+            {
+                QFont tmpFont( p->font() );
+                tmpFont.setPointSize( ( tmpFont.pointSize() * 2 ) / 3 );
+                p->setFont( tmpFont );
+                base=base*2/3;
+            }
+            else if ( format->vAlign() == QTextFormat::AlignSubScript )
+            {
+                QFont tmpFont( p->font() );
+                tmpFont.setPointSize( ( tmpFont.pointSize() * 2 ) / 3 );
+                p->setFont( tmpFont );
+            }
             p->drawText( x - size, y - h + base, counterText + ' ' );
+        }
     }
     p->restore();
 }
