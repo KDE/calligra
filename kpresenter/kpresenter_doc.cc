@@ -3611,7 +3611,7 @@ void KPresenterDoc::loadPastedObjs( const QString &in, int )
 
     loadObjects( parser, lst, true );
 
-    repaint( FALSE );
+    repaint( false );
     setModified(FALSE );
 }
 
