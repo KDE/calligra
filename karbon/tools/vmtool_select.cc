@@ -40,12 +40,16 @@ VMToolSelect::drawTemporaryObject(
 	KarbonView* view, const QPoint& p, double d1, double d2 )
 {
 	QPainter painter( view->canvasWidget()->viewport() );
+	// use p2 for content coord instead of viewport coord
+	QPoint p2 = view->canvasWidget()->contentsToViewport( p );
 	// already selected, so must be a handle operation (move, scale etc.)
-	if( !part()->handle()->objects().isEmpty() && part()->handle()->boundingBox().contains( p ) )
+	if( !part()->handle()->objects().isEmpty() &&
+		part()->handle()->boundingBox().contains( p / view->zoomFactor() ) )
 	{
 		if( m_TransformState != Moving )
 			m_TransformState = Moving;
 		QRect rect = part()->handle()->boundingBox();
+		//rect.moveTopLeft( view->canvasWidget()->contentsToViewport( rect.topLeft() ) );
 		kdDebug() << "p.x() : " << p.x() << endl;
 		kdDebug() << "p.y() : " << p.y() << endl;
 		kdDebug() << "d1 : " << d1 << endl;
@@ -55,6 +59,8 @@ VMToolSelect::drawTemporaryObject(
 		kdDebug() << "rect.width() : " << rect.width() << endl;
 		kdDebug() << "rect.height() : " << rect.height() << endl;
 		painter.setRasterOp( Qt::NotROP );
+		painter.translate( -view->canvasWidget()->contentsX(),
+							-view->canvasWidget()->contentsY() );
 		painter.translate( d1, d2 );
 		//painter.scale( d1 / double( rect.width() / 2 ), d2 / double( rect.height() / 2 ) );
 		kdDebug() << "Middle x : " << ( p.x() + d1 ) - ( rect.x() + rect.width() / 2 ) << endl;
@@ -71,11 +77,11 @@ VMToolSelect::drawTemporaryObject(
 		painter.setPen( Qt::DotLine );
 		painter.setRasterOp( Qt::NotROP );
 
-		painter.moveTo( p.x(), p.y() );
-		painter.lineTo( p.x() + d1, p.y() );
-		painter.lineTo( p.x() + d1, p.y() + d2 );
-		painter.lineTo( p.x(), p.y() + d2 );
-		painter.lineTo( p.x(), p.y() );
+		painter.moveTo( p2.x(), p2.y() );
+		painter.lineTo( p2.x() + d1, p2.y() );
+		painter.lineTo( p2.x() + d1, p2.y() + d2 );
+		painter.lineTo( p2.x(), p2.y() + d2 );
+		painter.lineTo( p2.x(), p2.y() );
 
 		painter.restore();
 	}

@@ -22,8 +22,7 @@ VMTool::eventFilter( KarbonView* view, QEvent* event )
 		drawTemporaryObject( view, m_p, m_d1, m_d2 );
 
 		QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
-		m_lp.setX( mouse_event->pos().x() );
-		m_lp.setY( mouse_event->pos().y() );
+		m_lp = view->canvasWidget()->viewportToContents( mouse_event->pos() );
 
 		recalcCoords();
 
@@ -36,14 +35,16 @@ VMTool::eventFilter( KarbonView* view, QEvent* event )
 	if ( event->type() == QEvent::MouseButtonRelease && m_isDragging )
 	{
 		QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
-		m_lp.setX( mouse_event->pos().x() );
-		m_lp.setY( mouse_event->pos().y() );
+		m_lp = view->canvasWidget()->viewportToContents( mouse_event->pos() );
 
 		recalcCoords();
-
-		VCommand* cmd = createCmd(
-			m_p.x() / view->zoomFactor(),
-			m_p.y() / view->zoomFactor(), m_d1, m_d2 );
+        VCommand* cmd = 0L;
+		{
+			// adjust to real viewport contents instead of raw mouse coords
+			QPoint p = view->canvasWidget()->viewportToContents( m_p );
+			double zoom = view->zoomFactor();
+			cmd = createCmd( m_p.x() / zoom, m_p.y() / zoom, m_d1 / zoom, m_d2 / zoom );
+		}
 
 		if( cmd )
 			m_part->addCommand( cmd );
@@ -156,10 +157,8 @@ VMTool::eventFilter( KarbonView* view, QEvent* event )
 	if ( event->type() == QEvent::MouseButtonPress )
 	{
 		QMouseEvent* mouse_event = static_cast<QMouseEvent*>( event );
-		m_fp.setX( mouse_event->pos().x() );
-		m_fp.setY( mouse_event->pos().y() );
-		m_lp.setX( mouse_event->pos().x() );
-		m_lp.setY( mouse_event->pos().y() );
+		m_fp = view->canvasWidget()->viewportToContents( mouse_event->pos() );
+		m_lp = view->canvasWidget()->viewportToContents( mouse_event->pos() );
 
 		// draw initial object:
 		recalcCoords();
