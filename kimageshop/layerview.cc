@@ -256,26 +256,46 @@ void LayerView::slotRemoveLayer()
 
 void LayerView::slotUpperLayer()
 {
+  int newpos = m_selected > 0 ? m_selected - 1 : 0;
+
   m_doc->upperLayer( m_selected );
   repaint();
 
-  m_doc->compositeImage( m_doc->layerList().at( m_selected )->imageExtents() );
-  m_doc->compositeImage( m_doc->layerList().at( m_selected - 1 )->imageExtents() );
-
-  m_doc->slotUpdateViews( m_doc->layerList().at( m_selected )->imageExtents() );
-  m_doc->slotUpdateViews( m_doc->layerList().at( m_selected - 1 )->imageExtents() );
+  if( m_selected != newpos )
+  {
+    QRect l1 = m_doc->layerList().at( m_selected )->imageExtents();
+    QRect l2 = m_doc->layerList().at( newpos )->imageExtents();
+ 
+    if( l1.intersects( l2 ) )
+    {
+      QRect rect = l1.intersect( l2 );
+ 
+      m_doc->compositeImage( rect );
+      m_doc->slotUpdateViews( rect );
+    }
+  }
 }
 
 void LayerView::slotLowerLayer()
 {
+  int newpos = ( m_selected + 1 ) < m_doc->layerList().count() ? m_selected + 1 : m_selected;
+
   m_doc->lowerLayer( m_selected );
   repaint();
 
-  m_doc->compositeImage( m_doc->layerList().at( m_selected )->imageExtents() );
-  m_doc->compositeImage( m_doc->layerList().at( m_selected + 1 )->imageExtents() );
+  if( m_selected != newpos )
+  {
+    QRect l1 = m_doc->layerList().at( m_selected )->imageExtents();
+    QRect l2 = m_doc->layerList().at( newpos )->imageExtents();
 
-  m_doc->slotUpdateViews( m_doc->layerList().at( m_selected )->imageExtents() );
-  m_doc->slotUpdateViews( m_doc->layerList().at( m_selected + 1 )->imageExtents() );
+    if( l1.intersects( l2 ) )
+    {
+      QRect rect = l1.intersect( l2 );
+
+      m_doc->compositeImage( rect );
+      m_doc->slotUpdateViews( rect );
+    }
+  }
 }
 
 #include "layerview.moc"

@@ -614,7 +614,6 @@ void Canvas::upperLayer( int _layer )
  
     Layer *pLayer = layers.take( _layer );
     layers.insert( _layer - 1, pLayer );
-    compositeImage( QRect() );
   }
 }
 
@@ -628,7 +627,6 @@ void Canvas::lowerLayer( int _layer )
 
     Layer *pLayer = layers.take( _layer );
     layers.insert( _layer + 1, pLayer );
-    compositeImage( QRect() );
   }
 }
 
@@ -640,7 +638,6 @@ void Canvas::frontLayer( int _layer )
   {
     Layer *pLayer = layers.take( _layer );
     layers.insert( 0, pLayer );
-    compositeImage( QRect() );
   }
 }
 
@@ -652,7 +649,6 @@ void Canvas::backgroundLayer( int _layer )
   {
     Layer *pLayer = layers.take( _layer );
     layers.append( pLayer );
-    compositeImage( QRect() );
   }
 }
 
