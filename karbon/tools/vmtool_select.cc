@@ -14,9 +14,8 @@
 VMToolSelect* VMToolSelect::s_instance = 0L;
 
 VMToolSelect::VMToolSelect( KarbonPart* part )
-	: VTool( part )
+	: VTool( part ), m_state( normal ), m_isDragging( false )
 {
-	m_TransformState = NoTransform;
 }
 
 VMToolSelect::~VMToolSelect()
@@ -35,26 +34,23 @@ VMToolSelect::instance( KarbonPart* part )
 }
 
 void
-VMToolSelect::drawTemporaryObject(
-	KarbonView* view, const QPoint& p, double d1, double d2 )
+VMToolSelect::drawTemporaryObject( KarbonView* view )
 {
-	m_view = view;
-
 	QPainter painter( view->canvasWidget()->viewport() );
 	painter.setRasterOp( Qt::NotROP );
-   // already selected, so must be a handle operation (move, scale etc.)
+
+	// already selected, so must be a handle operation (move, scale etc.)
 	if( !part()->selection().isEmpty()
-		&& ( m_TransformState != NoTransform ||
-			part()->selection().getFirst()->boundingBox( view->zoomFactor() ).contains( p ) ) )
+		&& ( m_state != normal ||
+			part()->selection().getFirst()->boundingBox( view->zoomFactor() ).contains( m_fp ) ) )
 //		part()->selection()->boundingBox().contains( p /* view->zoomFactor() */ ) ) )
 	{
-		if( m_TransformState != Moving )
-			m_TransformState = Moving;
+		if( m_state != moving )
+			m_state = moving;
 
 		// move operation
 		QWMatrix mat;
-		mat.translate( d1 / view->zoomFactor(),
-						d2 / view->zoomFactor() );
+		mat.translate( m_lp.x() - m_fp.x(), m_lp.y() - m_fp.y() );
 
 		// TODO :  makes a copy of the selection, do assignment operator instead
 		VObjectListIterator itr = part()->selection();
@@ -79,40 +75,108 @@ VMToolSelect::drawTemporaryObject(
 	{
 		painter.setPen( Qt::DotLine );
 
-		painter.moveTo( p.x(), p.y() );
-		painter.lineTo( p.x() + d1, p.y() );
-		painter.lineTo( p.x() + d1, p.y() + d2 );
-		painter.lineTo( p.x(), p.y() + d2 );
-		painter.lineTo( p.x(), p.y() );
+		painter.moveTo( m_fp.x(), m_fp.y() );
+		painter.lineTo( m_lp.x(), m_fp.y() );
+		painter.lineTo( m_lp.x(), m_lp.y() );
+		painter.lineTo( m_fp.x(), m_lp.y() );
+		painter.lineTo( m_fp.x(), m_fp.y() );
 
-		m_TransformState = NoTransform;
+		m_state = normal;
 	}
 }
 
-VCommand*
-VMToolSelect::createCmd( double x, double y, double d1, double d2 )
+bool
+VMToolSelect::eventFilter( KarbonView* view, QEvent* event )
 {
-// TODO: swap coords to optimize normalize() away
-	if( m_TransformState == Moving )
+	if ( event->type() == QEvent::MouseMove && m_isDragging )
 	{
-		m_TransformState = NoTransform;
-		//QWMatrix mat;
-		//mat.translate( d1, d2 );
-		return
-			new VMCmdTranslate( part(), part()->selection(), d1, d2 );
+		// erase old object:
+		drawTemporaryObject( view );
 
-	}
-	else
-	{
-		part()->selectObjectsWithinRect(
-			QRect(
-				qRound( m_view->zoomFactor() * x ),
-				qRound( m_view->zoomFactor() * y ),
-				qRound( m_view->zoomFactor() * ( d1) ),
-				qRound( m_view->zoomFactor() * ( d2 ) ) ).normalize(),
-			m_view->zoomFactor(),
-			true );
+		QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
+		m_lp.setX( mouse_event->pos().x() );
+		m_lp.setY( mouse_event->pos().y() );
+
+		// paint new object:
+		drawTemporaryObject( view );
+
+		return true;
 	}
 
-	return 0L;
+	if ( event->type() == QEvent::MouseButtonRelease && m_isDragging )
+	{
+		QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
+		m_lp.setX( mouse_event->pos().x() );
+		m_lp.setY( mouse_event->pos().y() );
+
+		// adjust to real viewport contents instead of raw mouse coords:
+		QPoint fp = view->canvasWidget()->viewportToContents( m_fp );
+		QPoint lp = view->canvasWidget()->viewportToContents( m_lp );
+
+		if( m_state == moving )
+		{
+			m_state = normal;
+			return
+				new VMCmdTranslate(
+					part(),
+					part()->selection(),
+					qRound( view->zoomFactor() * lp.x() - fp.x() ),
+					qRound( view->zoomFactor() * lp.y() - fp.y() ) );
+
+			part()->repaintAllViews();
+		}
+		else
+		{
+			// erase old object:
+			drawTemporaryObject( view );
+
+			part()->selectObjectsWithinRect(
+				QRect(
+					qRound( view->zoomFactor() * fp.x() ),
+					qRound( view->zoomFactor() * fp.y() ),
+					qRound( view->zoomFactor() * lp.x() ),
+					qRound( view->zoomFactor() * lp.y() ) ).normalize(),
+				view->zoomFactor(),
+				true );
+		}
+
+		m_isDragging = false;
+
+		return true;
+	}
+
+	// handle pressing of keys:
+	if ( event->type() == QEvent::KeyPress )
+	{
+		QKeyEvent* key_event = static_cast<QKeyEvent*>( event );
+
+		// cancel dragging with ESC-key:
+		if ( key_event->key() == Qt::Key_Escape && m_isDragging )
+		{
+			m_isDragging = false;
+
+			// erase old object:
+			drawTemporaryObject( view );
+
+			return true;
+		}
+	}
+
+	// the whole story starts with this event:
+	if ( event->type() == QEvent::MouseButtonPress )
+	{
+		QMouseEvent* mouse_event = static_cast<QMouseEvent*>( event );
+		m_fp.setX( mouse_event->pos().x() );
+		m_fp.setY( mouse_event->pos().y() );
+		m_lp.setX( mouse_event->pos().x() );
+		m_lp.setY( mouse_event->pos().y() );
+
+		// draw initial object:
+		drawTemporaryObject( view );
+		m_isDragging = true;
+
+		return true;
+	}
+
+	return false;
 }

@@ -226,9 +226,7 @@ void
 KarbonPart::addCommand( VCommand* cmd )
 {
 	m_commandHistory->addCommand( cmd );
-
 	setModified( true );
-
 	repaintAllViews();
 }
 

@@ -10,7 +10,9 @@
 #include "vshapetool.h"
 
 VShapeTool::VShapeTool( KarbonPart* part, bool polar )
-	: VTool( part, polar )
+	: VTool( part ),
+		m_isDragging( false ), m_isSquare( false ),
+		m_isCentered( false ), m_calcPolar( polar )
 {
 }
 
@@ -39,18 +41,16 @@ VShapeTool::eventFilter( KarbonView* view, QEvent* event )
 		QMouseEvent* mouse_event = static_cast<QMouseEvent*> ( event );
 		m_lp.setX( mouse_event->pos().x() );
 		m_lp.setY( mouse_event->pos().y() );
-		//m_lp = view->canvasWidget()->viewportToContents( mouse_event->pos() );
 
 		recalcCoords();
 
 		VCommand* cmd = 0L;
-		{
-			// adjust to real viewport contents instead of raw mouse coords
-			QPoint p = view->canvasWidget()->viewportToContents( m_p );
-			cmd = createCmd(
-				p.x() / view->zoomFactor(), p.y() / view->zoomFactor(),
-				m_d1 / view->zoomFactor(), m_calcPolar ? m_d2 : m_d2 / view->zoomFactor() );
-		}
+
+		// adjust to real viewport contents instead of raw mouse coords
+		QPoint p = view->canvasWidget()->viewportToContents( m_p );
+		cmd = createCmd(
+			p.x() / view->zoomFactor(), p.y() / view->zoomFactor(),
+			m_d1 / view->zoomFactor(), m_calcPolar ? m_d2 : m_d2 / view->zoomFactor() );
 
 		if( cmd )
 			part()->addCommand( cmd );
@@ -179,4 +179,3 @@ VShapeTool::eventFilter( KarbonView* view, QEvent* event )
 
 	return false;
 }
-

@@ -38,13 +38,13 @@ VMCmdTransform::unexecute()
 }
 
 VMCmdTranslate::VMCmdTranslate( KarbonPart* part, QPtrList<VObject> objects, double d1, double d2 )
-	: VMCmdTransform( part, objects, i18n("Translate Object") )
+	: VMCmdTransform( part, objects, i18n( "Translate Objects" ) )
 {
 	m_mat.translate( d1, d2 );
 }
 
 VMCmdScale::VMCmdScale( KarbonPart* part, QPtrList<VObject> objects, const QPoint &p, double s1, double s2 )
-	: VMCmdTransform( part, objects, i18n("Scale Object") )
+	: VMCmdTransform( part, objects, i18n( "Scale Objects" ) )
 {
 	m_mat.translate( p.x(), p.y() );
 	m_mat.scale( s1, s2 );
