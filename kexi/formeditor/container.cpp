@@ -323,8 +323,9 @@ Container::eventFilter(QObject *s, QEvent *e)
 					enable = false;
 				m_form->manager()->createContextMenu((QWidget*)s, this, enable);
 			}
-			else if(mev->state() == (Qt::LeftButton|Qt::ControlButton)) // copying a widget by Ctrl+dragging
+			else if(mev->state() == (Qt::LeftButton|Qt::ControlButton) && (m_insertRect.isValid()))
 			{
+				// copying a widget by Ctrl+dragging
 				if(m_form->formWidget())
 					m_form->formWidget()->clearRect();
 				if(s == m_container) // should have no effect on form
