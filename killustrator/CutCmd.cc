@@ -22,15 +22,18 @@
 
 */
 
-#include <CutCmd.h>
+#include "CutCmd.h"
 
 #include <qclipboard.h>
+#include <qbuffer.h>
+#include <qtextstream.h>
+#include <qdragobject.h>
 #include <qdom.h>
 #include <kapp.h>
 #include <klocale.h>
 
-#include <GDocument.h>
-#include <GObject.h>
+#include "GDocument.h"
+#include "GObject.h"
 #include "GPage.h"
 
 CutCmd::CutCmd (GDocument* doc)
@@ -38,7 +41,8 @@ CutCmd::CutCmd (GDocument* doc)
 {
   document = doc;
   objects.setAutoDelete(true);
-  for(QListIterator<GObject> it(doc->activePage()->getSelection()); it.current(); ++it) {
+  for(QListIterator<GObject> it(doc->activePage()->getSelection()); it.current(); ++it)
+  {
     MyPair *p=new MyPair;
     p->o = *it;
     p->o->ref ();
@@ -48,35 +52,48 @@ CutCmd::CutCmd (GDocument* doc)
   }
 }
 
-CutCmd::~CutCmd () {
-    for (MyPair *p=objects.first(); p!=0L;
-         p=objects.next())
-        p->o->unref ();
+CutCmd::~CutCmd ()
+{
+  for (MyPair *p=objects.first(); p!=0L; p=objects.next())
+    p->o->unref ();
 }
 
-void CutCmd::execute () {
+void CutCmd::execute()
+{
+  QDomDocument docu("killustrator");
+  docu.appendChild( docu.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
+  QDomElement doc=docu.createElement("killustrator");
+  doc.setAttribute ("mime", KILLUSTRATOR_MIMETYPE);
+  docu.appendChild(doc);
+  QDomElement layer=docu.createElement("layer");
+  doc.appendChild(layer);
 
-    QDomDocument docu("killustrator");
-    docu.appendChild( docu.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
-    QDomElement doc=docu.createElement("killustrator");
-    doc.setAttribute ("mime", KILLUSTRATOR_MIMETYPE);
-    docu.appendChild(doc);
-    QDomElement layer=docu.createElement("layer");
-    doc.appendChild(layer);
+  for (MyPair *p=objects.first(); p!=0L; p=objects.next())
+  {
+    layer.appendChild(p->o->writeToXml(docu));
+    document->activePage()->deleteObject (p->o);
+  }
+    
+  QBuffer buffer;
+  buffer.open( IO_WriteOnly );
+  QTextStream stream( &buffer );
+  stream.setEncoding( QTextStream::UnicodeUTF8 );
+  stream << docu;
+  buffer.close();
 
-    for (MyPair *p=objects.first(); p!=0L;
-         p=objects.next()) {
-        layer.appendChild(p->o->writeToXml(docu));
-        document->activePage()->deleteObject (p->o);
-    }
-    QApplication::clipboard()->setText(docu.toCString());
+  QStoredDrag *drag = new QStoredDrag( "application/x-killustrator-snippet" );
+  drag->setEncodedData( buffer.buffer() );
+
+  QApplication::clipboard()->setData(drag);
 }
 
-void CutCmd::unexecute () {
+void CutCmd::unexecute ()
+{
   QApplication::clipboard ()->clear ();
   document->activePage()->unselectAllObjects ();
 
-  for (MyPair *p=objects.first(); p!=0; p=objects.next()) {
+  for (MyPair *p=objects.first(); p!=0; p=objects.next())
+  {
     // insert the object at the old position
     p->o->ref ();
     document->activePage()->insertObjectAtIndex (p->o, p->pos);
