@@ -137,6 +137,11 @@ KWPage::KWPage( QWidget *parent, KWordDocument *_doc, KWordGUI *_gui )
 
     viewport()->setBackgroundColor( white );
     viewport()->setBackgroundMode( NoBackground );
+    
+    QPainter p;
+    p.begin( viewport() );
+    p.fillRect( 0, 0, width(), height(), QBrush( Qt::white ) );
+    p.end();
     repaintScreen( true );
 }
 
