@@ -661,20 +661,36 @@ void AbiWordWorker::processParagraphData ( const QString &paraText,
                 else if (4==(*paraFormatDataIt).variable.m_type)
                 {
                     // As AbiWord's field is inflexible, we cannot make the time custom
-                    // TODO: page_count (but we need help from the libexport: <PGNUM>)
-                    *m_streamOut << "<field type=\""<< "page_number" <<"\"";
-                    writeAbiProps(formatLayout,(*paraFormatDataIt).text);
-                    *m_streamOut << "/>";
+                    QString strFieldType;
+                    if ((*paraFormatDataIt).variable.isPageNumber())
+                    {
+                        strFieldType="page_number";
+                    }
+                    else if ((*paraFormatDataIt).variable.isPageCount())
+                    {
+                        strFieldType="page_count";
+                    }
+                    if (strFieldType.isEmpty())
+                    {
+                        // Unknown subtype, therefore write out the result
+                        *m_streamOut << (*paraFormatDataIt).variable.m_text;
+                    }
+                    else
+                    {
+                        *m_streamOut << "<field type=\"" << strFieldType <<"\"";
+                        writeAbiProps(formatLayout,(*paraFormatDataIt).text);
+                        *m_streamOut << "/>";
+                    }
                 }
                 else if (9==(*paraFormatDataIt).variable.m_type)
                 {
                     // A link
                     *m_streamOut << "<a xlink:href=\""
-                        << escapeAbiWordText((*paraFormatDataIt).variable.m_linkName)
+                        << escapeAbiWordText((*paraFormatDataIt).variable.getHrefName())
                         << "\"><c";  // In AbiWord, an anchor <a> has always a <c> child
                     writeAbiProps(formatLayout,(*paraFormatDataIt).text);
                     *m_streamOut << ">"
-                        << escapeAbiWordText((*paraFormatDataIt).variable.m_hrefName)
+                        << escapeAbiWordText((*paraFormatDataIt).variable.getLinkName())
                         << "</c></a>";
                 }
                 else
