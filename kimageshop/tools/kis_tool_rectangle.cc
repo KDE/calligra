@@ -85,7 +85,7 @@ void RectangleTool::mouseRelease( QMouseEvent* event )
     }
     
     KisPainter *p = m_pView->kisPainter();
-    QRect rect(m_dragStart, m_dragEnd) ;
+    QRect rect(zoomed(m_dragStart), zoomed(m_dragEnd)) ;
     p->drawRectangle( rect );
 }
 

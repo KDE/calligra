@@ -32,7 +32,6 @@
 #include <qclipboard.h>
 
 // kde includes
-
 #include <kmessagebox.h>
 #include <kruler.h>
 #include <kaction.h>
@@ -124,7 +123,10 @@ KisView::KisView( KisDoc* doc, QWidget* parent, const char* name )
 
     m_fg = KisColor::black();
     m_bg = KisColor::white();
-    
+ 
+    m_xPaintOffset = 0;
+    m_yPaintOffset = 0; 
+ 
     buttonIsDown = false;
 
     m_pTool     = 0L;
@@ -151,6 +153,10 @@ KisView::~KisView()
     if(m_pPixmap) delete m_pPixmap;
 }
 
+/*
+    Set up painter object for use of QPainter methods to draw
+    into KisLayer memory
+*/
 void KisView::setupPainter()
 {
     m_pPainter = new KisPainter(m_pDoc, this);
@@ -158,9 +164,13 @@ void KisView::setupPainter()
 
 
 /*
-    Canvas for document (image) area
+    Canvas for document (image) area - it's just a plain QWidget used to
+    pass signals (messages) on to the tools and to create an area on
+    which to show the content of the document (the image).  Note that
+    while the depth of the image is not limited, the depth of the 
+    pixmap displayed on the widget is limited to the hardware depth, 
+    which is often 16 bit even though the KisImage is 32 bit.
 */
-
 void KisView::setupCanvas()
 {
     m_pCanvas = new KisCanvas(this, "kis_canvas");
@@ -180,9 +190,10 @@ void KisView::setupCanvas()
 
 
 /*
-    Canvas pixmap for offscreen paint device
+    Canvas pixmap for offscreen paint device - experimental way
+    tried to speed up rendering of zoomed views.  Not used and
+    not needed anymore because a better method was discovered!
 */
-
 void KisView::setupPixmap()
 {
     m_pPixmap = new QPixmap();
@@ -191,8 +202,9 @@ void KisView::setupPixmap()
 
 /*
     SideBar - has tabs for brushes, layers, channels, etc.
+    Nonstandard, but you can't unrelieved uniformity is the
+    mark of small minds.
 */
-
 void KisView::setupSideBar()
 {
     m_pSideBar = new KisSideBar(this, "kis_sidebar");
@@ -297,7 +309,10 @@ void KisView::setupScrollBars()
         SIGNAL(valueChanged(int)), this, SLOT(scrollH(int)));
 }
 
-
+/*
+    Where's the numbers on the ruler?  What about a grid aligned
+    to the rulers.  Coming....
+*/
 void KisView::setupRulers()
 {
     m_pHRuler = new KRuler(Qt::Horizontal, this);
@@ -316,7 +331,9 @@ void KisView::setupRulers()
 }
 
 /*
-    TabBar for the image(s)
+    TabBar for the image(s) - Nonstandard sidebar with custom tabbed
+    widgets violates korifice style guidelines, but hey, my users want
+    a guit that works!
 */
 
 void KisView::setupTabBar()
@@ -352,6 +369,8 @@ void KisView::setupTabBar()
 /*
     set up and create tools - possibly no need to create all these objects
     until we first click on them - only create default tool to  start.
+    however, these don't take long to set up, the entire kis_view takes less
+    than 3 seconds start to finish, so why not.
 */
 void KisView::setupTools()
 {
@@ -412,7 +431,13 @@ void KisView::setupDialogs()
 }
 
 /*
-    Actions - these are really meny actions in kde
+    Actions - these seem to be menu actions, toolbar actions
+    and keyboard actions.  Any action can have any of these forms,
+    at least.  However, using Kde's brain-dead xmlGui because it
+    is the "right(tm)" thing to do, slots cannot take any paramaters
+    and each handler must have its own method, greatly increasing
+    code size and precluding consolidation or related actions. For
+    every action there is an equal and opposite reaction.  
 */
 
 void KisView::setupActions()
@@ -629,7 +654,7 @@ void KisView::setupActions()
         0, this, SLOT( remove_layer() ),
         actionCollection(), "remove_layer" );
 
-    (void) new KAction( i18n("&Link/Unlink layer..."),
+    (void) new KAction( i18n("&Link/Unilnk layer..."),
         0, this, SLOT( link_layer() ),
         actionCollection(), "link_layer" );
 
@@ -722,6 +747,10 @@ void KisView::setupActions()
         actionCollection(), "show_statusbar" );
     */
 
+   m_toggle_paint_offset = new KToggleAction( i18n("Toggle Paint Offset"),
+        "border_outline", 0, this, SLOT( slotSetPaintOffset() ),
+        actionCollection(), "toggle_paint_offset" );
+ 
     m_side_bar = new KToggleAction( i18n("Show/Hide Sidebar"),
         "ok", 0, this, SLOT( showSidebar() ),
         actionCollection(), "show_sidebar" );
@@ -731,7 +760,7 @@ void KisView::setupActions()
         actionCollection(), "float_sidebar" );
 
     m_lsidebar = new KToggleAction( i18n("Left/Right Sidebar"),
-         "view_left_right", 0, this, SLOT( leftSidebar() ),
+         "view_right", 0, this, SLOT( leftSidebar() ),
         actionCollection(), "left_sidebar" );
 
     (void) KStdAction::saveOptions( this, SLOT( saveOptions() ),
@@ -800,14 +829,28 @@ void KisView::setupActions()
     m_tool_select_contiguous->setEnabled( false );
 }
 
-
+/*
+    slotHalt - try to restore reasonabe defaults for a user
+    who may have pushed this app beyond its limits or the
+    limits of his hardware and system memory - didn't
+    know krayon had any limits, though!  This usually happens
+    when someone sets a ridiculously high zoom factor which
+    requires a supercomputer for all the floating point 
+    calculatons.
+*/
 void KisView::slotHalt()
 {
     KMessageBox::error(NULL, 
         "STOP! In the name of Love ...", "System Error", FALSE); 
+        
+    zoom(0, 0, 1.0);
+    slotUpdateImage();            
 }
 
-
+/*
+    slotGimp - a copout for the weak of mind and faint
+    of heart.  Wiblur sucks, remember that!
+*/
 void KisView::slotGimp()
 {
     KMessageBox::error(NULL, 
@@ -815,17 +858,29 @@ void KisView::slotGimp()
     // save current image, export to xcf, open in gimp - coming!
 }
 
+/*
 
+*/
 void KisView::slotTabSelected(const QString& name)
 {
     m_pDoc->setCurrentImage(name);
     resizeEvent(0L);
 }
 
-
+/*
+    showScrollBars - force showing of scrollbars for
+    the view with a fake resize event
+*/
 void KisView::showScrollBars()
 {
-    resizeEvent(0L);
+    if(isVisible())
+    {
+        int w = width();
+        int h = height();
+
+        resize(w-1, h-1);
+        resize(w, h);
+    }    
 }
 
 
@@ -910,7 +965,7 @@ void KisView::resizeEvent(QResizeEvent*)
         tbarBtnW, tbarBtnH);
     m_pTabLast->show();
 
-    // KisView heigth/width - ruler heigth/width
+    // KisView height/width - ruler height/width
     int drawH = height() - ruler - tbarBtnH;
     int drawW = width() - ruler - lsideW - rsideW;
 
@@ -1036,9 +1091,6 @@ void KisView::updateReadWrite( bool /*readwrite*/ )
 /* 
     scrollH - This sends a paint event to canvas,
     and it is handled in canvasGotPaintEvent().
-    How to repaint canvas while scrolling with a
-    high zoom factor ? Here we need some indicator
-    that the screen is being updated. 
 */
 void KisView::scrollH(int)
 {
@@ -1049,9 +1101,6 @@ void KisView::scrollH(int)
 /* 
     scrollV - This sends a paint event to canvas,
     and it is handled in canvasGotPaintEvent()
-    How to repaint canvas while scrolling with a
-    high zoom factor ? Here we need some indicator
-    that the screen is being updated. 
 */
 void KisView::scrollV(int)
 {
@@ -1072,7 +1121,7 @@ void KisView::slotUpdateImage()
   {
      QRect updateRect(0, 0, img->width(), img->height());
      img->markDirty(updateRect);
-     resizeEvent(0L);
+     showScrollBars();
   }   
 }
 
@@ -1129,7 +1178,6 @@ void KisView::slotDocUpdated(const QRect& rect)
     that do not generate paint events to view screen 
     or viewport.
 */
-
 void KisView::updateCanvas( QRect & ur )
 {
     //kdDebug() << "updateCanvas(QRect & ur)" << endl;
@@ -1660,6 +1708,7 @@ void KisView::zoom( int _x, int _y, float zf )
 
     scrollTo( QPoint( x, y ) );
     m_pCanvas->update();
+    slotUpdateImage();
 }
 
 
@@ -1811,7 +1860,6 @@ void KisView::remove_layer()
     hide/show the current layer - to hide other layers, a user must
     access the layers tableview in a dialog or sidebar widget
 */
-
 void KisView::hide_layer()
 {
     KisImage * img = m_pDoc->current();
@@ -1873,6 +1921,7 @@ void KisView::next_layer()
     }    
 }
 
+
 /*
     make the previous layer in the layers list the active one and
     bring it to the front of the view
@@ -1933,7 +1982,6 @@ void KisView::save_layer_as_image()
     specific layer (the current active layer).  This them becomes part
     of the image, including other layers visible and invisible
 */
-
 void KisView::insert_layer_image(bool newImage)
 {
     KURL url = KFileDialog::getOpenURL( QString::null,
@@ -2024,9 +2072,10 @@ void KisView::save_layer_image(bool mergeLayers)
     {
         if(mergeLayers)
         {
-            // should merge them to a scratch layer -
-            // or at least put up a Yes/No dialog to confirm
-            // otherwise layer info will be lost
+            /* merge should not always remove layers -
+            merged into another but should have an option
+            for keeping old layers and merging into a new
+            one - Yes/No dialog to confirm.*/
             merge_all_layers();
         }
 
@@ -2131,7 +2180,8 @@ void KisView::add_new_image_tab()
     m_pPainter->resize(m_pDoc->current()->width(), 
         m_pDoc->current()->height());
         
-    m_pPainter->clearAll();    
+    m_pPainter->clearAll();
+    slotUpdateImage();    
 }
 
 
@@ -2139,6 +2189,7 @@ void KisView::remove_current_image_tab()
 {
     if (m_pDoc->current())
 	    m_pDoc->removeImage(m_pDoc->current());
+    slotUpdateImage();            
 }
 
 
@@ -2146,6 +2197,7 @@ void KisView::merge_all_layers()
 {
     if (m_pDoc->current())
 	    m_pDoc->current()->mergeAllLayers();
+    slotUpdateImage();            
 }
 
 
@@ -2153,6 +2205,7 @@ void KisView::merge_visible_layers()
 {
     if (m_pDoc->current())
         m_pDoc->current()->mergeVisibleLayers();
+    slotUpdateImage();            
 }
 
 
@@ -2160,6 +2213,7 @@ void KisView::merge_linked_layers()
 {
     if (m_pDoc->current())
 	    m_pDoc->current()->mergeLinkedLayers();
+    slotUpdateImage();            
 }
 
 
@@ -2259,31 +2313,31 @@ int KisView::docHeight()
 
 void KisView::slotSetPaintOffset()
 {
-    // dialog to set x and y paint offsets
+    // dialog to set x and y paint offsets needed
+    if(xPaintOffset() == 0)
+    {
+        m_xPaintOffset = 20;
+        m_yPaintOffset = 20; 
+    }
+    else
+    {
+        m_xPaintOffset = 0;
+        m_yPaintOffset = 0; 
+    }
+    
+    showScrollBars();
 }
 
 
 int KisView::xPaintOffset()
 {
-    // FIXME : make this configurable
-    return 0;
-
-    int v = static_cast<int>((m_pCanvas->width() - docWidth())/2);
-    if (v < 0) v = 0;
-    
-    return v;
+    return m_xPaintOffset;
 }
 
 
 int KisView::yPaintOffset()
 {
-    // FIXME : make this configurable
-    return 0;
-
-    int v = static_cast<int>((m_pCanvas->height() - docHeight())/2);
-    if (v < 0) v = 0;
-    
-    return v;
+    return m_yPaintOffset;
 }
 
 

@@ -32,6 +32,8 @@
 #include "kis_util.h"
 #include "kis_tool_paste.h"
 
+
+
 PasteTool::PasteTool(KisDoc *doc, KisView *view, KisCanvas *canvas)
     : KisTool(doc, view)
 {
@@ -162,11 +164,12 @@ bool PasteTool::pasteColor(QPoint pos)
     int   v = 255;
     int   bv = 0;
     
-    //int red     = m_pView->fgColor().R();
-    //int green   = m_pView->fgColor().G();
-    //int blue    = m_pView->fgColor().B();
+    int red     = m_pView->fgColor().R();
+    int green   = m_pView->fgColor().G();
+    int blue    = m_pView->fgColor().B();
 
     bool grayscale = false;
+    bool colorBlending = false;
     bool alpha = (img->colorMode() == cm_RGBA);
   
     for (int y = sy; y <= ey; y++)
@@ -181,10 +184,23 @@ bool PasteTool::pasteColor(QPoint pos)
             // pixel value in scanline at x offset to right
             uint *p = (uint *)qimg->scanLine(y) + x;
             
-            // set layer pixel to be same as image
-	        lay->setPixel(0, startx + x, starty + y, qRed(*p));
-	        lay->setPixel(1, startx + x, starty + y, qGreen(*p));
-	        lay->setPixel(2, startx + x, starty + y, qBlue(*p));
+            if(colorBlending)
+            {
+                // make mud!
+	            lay->setPixel(0, startx + x, starty + y, 
+                    (qRed(*p) + r + red)/3);
+	            lay->setPixel(1, startx + x, starty + y, 
+                    (qGreen(*p) + g + green)/3);
+	            lay->setPixel(2, startx + x, starty + y, 
+                    (qBlue(*p) + b + blue/3));
+            }
+            else
+            {
+                // set layer pixel to be same as image
+	            lay->setPixel(0, startx + x, starty + y, qRed(*p));
+	            lay->setPixel(1, startx + x, starty + y, qGreen(*p));
+	            lay->setPixel(2, startx + x, starty + y, qBlue(*p));
+            }
                        	  
             if (alpha)
 	        {
@@ -254,8 +270,8 @@ bool PasteTool::pasteToCanvas(QPoint pos)
     }
     ur = ur.intersect(lay->layerExtents());
 
-    int xt = m_pView->xPaintOffset()- m_pView->xScrollOffset();
-    int yt = m_pView->yPaintOffset()- m_pView->yScrollOffset();
+    int xt = m_pView->xPaintOffset() - m_pView->xScrollOffset();
+    int yt = m_pView->yPaintOffset() - m_pView->yScrollOffset();
 
     p.translate(xt, yt);
 
@@ -279,8 +295,16 @@ void PasteTool::mouseMove(QMouseEvent *e)
     {
         if( !img->getCurrentLayer()->visible() )
 	        return;
+
+        QPoint pos = e->pos();      
+        int mouseX = e->x();
+        int mouseY = e->y();
+
+        pos = zoomed(pos);
+        mouseX = zoomedX(mouseX);
+        mouseY = zoomedY(mouseY);        
 	  
-        KisVector end(e->x(), e->y());
+        KisVector end(mouseX, mouseY);
         KisVector start(m_dragStart.x(), m_dragStart.y());
             
         KisVector dragVec = end - start;
@@ -291,7 +315,7 @@ void PasteTool::mouseMove(QMouseEvent *e)
         if ((int)dist < spacing)
 	    {
 	        m_dragdist += new_dist; 
-	        m_dragStart = e->pos();
+	        m_dragStart = pos;
 	        return;
 	    }
         else
@@ -357,7 +381,7 @@ void PasteTool::mouseMove(QMouseEvent *e)
 	    }
 	  
         if (dist > 0) m_dragdist = dist; 
-        m_dragStart = e->pos();
+        m_dragStart = pos;
     }
 }
 

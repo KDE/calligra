@@ -132,6 +132,8 @@
   <Action name="float_sidebar"/>
   <Action name="left_sidebar"/>
   <Separator/>    
+  <Action name="toggle_paint_offset"/>
+  <Separator/>    
   <Action name="configure"/>
 </Menu>
 
@@ -176,7 +178,8 @@
 <ToolBar name="settings" position="top"><Text>Settings</Text>
   <Action name="show_sidebar"/>
   <Action name="float_sidebar"/>      
-  <Action name="left_sidebar"/>      
+  <Action name="left_sidebar"/>
+  <Action name="toggle_paint_offset"/>        
   <Action name="preferences"/>
   <Action name="current_tool_properties"/>
   <Action name="blending_properties"/>       

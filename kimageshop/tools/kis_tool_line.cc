@@ -86,8 +86,8 @@ void LineTool::mouseRelease( QMouseEvent* event )
     }
     
     KisPainter *p = m_pView->kisPainter();
-    p->drawLine(m_dragStart.x(), m_dragStart.y(),
-                m_dragEnd.x(),   m_dragEnd.y());
+    p->drawLine(zoomed(m_dragStart.x()), zoomed(m_dragStart.y()),
+                zoomed(m_dragEnd.x()),   zoomed(m_dragEnd.y()));
 }
 
 

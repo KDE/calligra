@@ -56,7 +56,8 @@ void BrushTool::setBrush(const KisBrush *_brush)
     hotSpotY = m_pBrush->hotSpot().y();
     brushSize = QSize(brushWidth, brushHeight);
         
-    // make custom cursor
+    // make custom cursor from brush pixmap 
+    // if brush pixmap is of reasonable size
     if((brushWidth < 33 && brushHeight < 33) 
     && (brushWidth > 9 && brushHeight > 9))
     {
@@ -66,7 +67,8 @@ void BrushTool::setBrush(const KisBrush *_brush)
         pix.setMask(mask);
         m_pView->kisCanvas()->setCursor(QCursor(pix));
         m_Cursor = QCursor(pix);   
-    }    
+    } 
+    // use default brush cursor   
     else 
     {
         m_pView->kisCanvas()->setCursor(KisCursor::brushCursor()); 
@@ -206,12 +208,8 @@ void BrushTool::mouseMove(QMouseEvent *e)
     KisImage * img = m_pDoc->current();
     if (!img) return;
 
-    //int spacing = m_pBrush->spacing();
-    //if (spacing <= 0) spacing = 3;
-
     if(m_dragging)
     {
-
         QPoint pos = e->pos();      
         int mouseX = e->x();
         int mouseY = e->y();
@@ -259,7 +257,7 @@ void BrushTool::mouseMove(QMouseEvent *e)
 	    }
 
         if (dist > 0) m_dragdist = dist; 
-            m_dragStart = pos;
+        m_dragStart = pos;
     }
 }
 

@@ -100,6 +100,15 @@ class KisView : public KoView
     void showScrollBars( );
     void layerScale(bool smooth);
         
+ signals:
+ 
+    void canvasMousePressEvent( QMouseEvent * );
+    void canvasMouseMoveEvent( QMouseEvent * );
+    void canvasMouseReleaseEvent( QMouseEvent * );
+
+    void bgColorChanged(const KisColor & );
+    void fgColorChanged(const KisColor & );     
+
  public slots:
  
     void slotUpdateImage();
@@ -115,24 +124,13 @@ class KisView : public KoView
 
     void slotTabSelected(const QString& name);
 
-    void slotHalt();
-    void slotGimp();
+    void slotHalt(); // for the faint of heart
+    void slotGimp(); // for the weak of mind
     
- signals:
- 
-    void canvasMousePressEvent( QMouseEvent * );
-    void canvasMouseMoveEvent( QMouseEvent * );
-    void canvasMouseReleaseEvent( QMouseEvent * );
-
-    void bgColorChanged(const KisColor & );
-    void fgColorChanged(const KisColor & );     
-
- public slots:
-
     void zoom_in();
     void zoom_out();
-
- protected slots:
+    
+  protected slots:
  
     // edit action slots
     void undo();
@@ -260,7 +258,7 @@ class KisView : public KoView
 
     int 	xPaintOffset();
     int 	yPaintOffset();
-    
+     
     int     xScrollOffset() { return m_pHorz->value(); }
     int     yScrollOffset() { return m_pVert->value(); }
     void    scrollTo( QPoint p );
@@ -273,6 +271,7 @@ class KisView : public KoView
     void	zoom_out( int x, int y );
     float   zoomFactor();
     void    setZoomFactor( float zf );
+    
     QPixmap *pixmap() { return m_pPixmap; };
              
  private:
@@ -295,6 +294,9 @@ class KisView : public KoView
     // krayon box (sidebar)
     KToggleAction *m_side_bar, *m_float_side_bar, *m_lsidebar;
 
+    // settings actions
+    KToggleAction *m_toggle_paint_offset;
+    
     // tool actions (main toolbar & menu)
     KToggleAction *m_tool_select_rectangular, *m_tool_select_polygonal,
     *m_tool_select_elliptical, *m_tool_select_contiguous,
@@ -305,8 +307,8 @@ class KisView : public KoView
     *m_tool_airbrush, *m_tool_eraser,
     *m_tool_line, *m_tool_polyline, *m_tool_rectangle, *m_tool_ellipse;
 
-    KisDoc                *m_pDoc;  // inherited a lot by tools
-    KisTool               *m_pTool; // currently active tool
+    KisDoc                *m_pDoc;  // always needed
+    KisTool               *m_pTool; // current active tool
 
     // tools    
     RectangularSelectTool  *m_pRectangularSelectTool;
@@ -350,21 +352,26 @@ class KisView : public KoView
     GradientDialog       *m_pGradientDialog;
     GradientEditorDialog *m_pGradientEditorDialog;
 
-    KisCanvas            *m_pCanvas;
-    QPixmap              *m_pPixmap;
-    KisPainter           *m_pPainter;
-    KisSideBar           *m_pSideBar;
-    QScrollBar           *m_pHorz, *m_pVert;
-    KRuler               *m_pHRuler, *m_pVRuler;
-    KisColor             m_fg, m_bg;
+    // krayon and kde objects
+    KisCanvas           *m_pCanvas;
+    QPixmap             *m_pPixmap;
+    KisPainter          *m_pPainter;
+    KisSideBar          *m_pSideBar;
+    QScrollBar          *m_pHorz, *m_pVert;
+    KRuler              *m_pHRuler, *m_pVRuler;
+    KisColor            m_fg, m_bg;
+    KisTabBar           *m_pTabBar;
+    QButton             *m_pTabFirst, *m_pTabLeft, 
+                        *m_pTabRight, *m_pTabLast;
 
-    KisTabBar            *m_pTabBar;
-    QButton              *m_pTabFirst, *m_pTabLeft, *m_pTabRight, *m_pTabLast;
-
+    // what's this doing here?
     KHelpMenu            *m_helpMenu;
 
-    float		         m_zoomFactor;
-    bool                 buttonIsDown;
+    // normal variables
+    float	    m_zoomFactor;
+    int         m_xPaintOffset;
+    int         m_yPaintOffset;    
+    bool        buttonIsDown;
 };
 
 #endif

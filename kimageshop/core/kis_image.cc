@@ -58,7 +58,7 @@ KisImage::KisImage( const QString& n, int w, int h, cMode cm, uchar bd )
     m_email = "unknown";
 
     // jwc - need to update tile extents when a new layer is
-    // added larger than the first (or largest) layer
+    // added larger than the first (or largest) layer - done!
     QRect tileExtents = KisUtil::findTileExtents( QRect(0, 0, m_width, m_height) );
   
     m_xTiles = tileExtents.width() / TILE_SIZE;	
@@ -116,9 +116,12 @@ KisImage::KisImage( const QString& n, int w, int h, cMode cm, uchar bd )
 
     compositeImage(QRect()); 
 
-    /* note - 32 bit pixmaps may not show up on 16 bit display and will
-     crash it !!!  Without depth paramater will use native format
-    imagePixmap = new QPixmap(w, h, 32); does not work! */
+    /* note - 32 bit pixmaps may not show up on a 16 bit display 
+    and will even crash it !!!  Without depth paramater Qt will 
+    use native format. imagePixmap = new QPixmap(w, h, 32); does 
+    not work!, so alway default to native display depth when 
+    creating a QPixmap.  With a QImage you can create a 32 bit
+    depth with a 16 bit display with no problems, however. */
 
     // start update timer
     m_pUpdateTimer = new QTimer(this);
@@ -126,6 +129,12 @@ KisImage::KisImage( const QString& n, int w, int h, cMode cm, uchar bd )
     m_pUpdateTimer->start(1);
 }
 
+
+/*
+    KisImage destructor - note that various arrays must be 
+    deleted as these are not children of the QObject for
+    KisImage, but are regular arrays and pointers to them.
+*/
 KisImage::~KisImage()
 {
     qDebug("~KisImage()");
@@ -140,7 +149,13 @@ KisImage::~KisImage()
         free(m_pImgData);
 }
 
-
+/*
+    markDirty - this is a public method for drawing and painting
+    tools, etc., to use to indicate rectantular areas that have
+    been written to, usually using layer->setPixel(), so that they
+    can then be rendered to the display when the update timer sends
+    a timeout signal. See below..
+*/
 void KisImage::markDirty( QRect r )
 {
     for(int y = 0; y < m_yTiles; y++)
@@ -151,7 +166,11 @@ void KisImage::markDirty( QRect r )
 
 
 /*
-    
+    slotUpdateTimeOut - invoked by timeout signal from the 
+    timer for this image.  Those tiles which are "dirty"
+    are then rendered into a QImage and converted to a QPixmpa,
+    one at a time, for display to screen paint device, which
+    is normall the kisCanvas() for the view.
 */
 
 #define TEST_PIXMAP_IMAGE
@@ -170,6 +189,13 @@ void KisImage::slotUpdateTimeOut()
 	    if (m_dirty[y * m_xTiles + x])
 	    {
 	        m_dirty[y * m_xTiles + x] = false;
+            
+   /* redundant - will be removed after further testing. "updated" signal 
+   has already been emitted for each dirty tile in compositImage() for each
+   tile which is dirty.  No need to do it again when tiles are marked clean.
+   Eliminating this redundancy results in a 2x performance improvement
+   for the krayon rendering engine!!! */
+            
 #ifndef TEST_PIXMAP_IMAGE            
 		    emit updated(QRect(x*TILE_SIZE, y*TILE_SIZE,TILE_SIZE,TILE_SIZE));
 #endif            
@@ -359,9 +385,6 @@ void KisImage::paintPixmap(QPainter *p, QRect area)
 void KisImage::addLayer(const QRect& rect, const KisColor& c, 
     bool tr, const QString& name)
 {
-
-    // kdDebug(0) << "KisImage::addLayer(): entering" << endl; 
-
     KisLayer *lay = new KisLayer(name, m_cMode, m_bitDepth);
     // kdDebug(0) << "KisImage::addLayer(): new allocated" << endl; 
     
@@ -377,8 +400,8 @@ void KisImage::addLayer(const QRect& rect, const KisColor& c,
     m_pCurrentLay=lay;
 
     /*##########################################################
-        We need to get updated info about tiles adding new layer 
-        that is larger than existing imageExtents() - jwc
+        We need to get updated info about tiles when adding a 
+        new layer that is larger than existing imageExtents()
     ############################################################*/
     
     int tmpXTiles = lay->xTiles();
@@ -436,8 +459,6 @@ void KisImage::addLayer(const QRect& rect, const KisColor& c,
         // restart update timer
         m_pUpdateTimer->start(1);
     }
-    
-    // kdDebug(0) << "KisImage::addLayer(): leaving" << endl;  
 }
 
 
@@ -691,6 +712,7 @@ void KisImage::renderLayerIntoTile(QRect tileBoundary, const KisLayer *srcLay,
 
 
 
+
 void KisImage::renderTileQuadrant(const KisLayer *srcLay, int srcTile,
 	KisLayer *dstLay, int dstTile,
 	int srcX, int srcY, int dstX, int dstY, int w, int h)
@@ -773,7 +795,11 @@ void KisImage::renderTileQuadrant(const KisLayer *srcLay, int srcTile,
     }
 }
 
-
+/*
+    layerPtr - internal method for assuring a valid layer
+    by defaulting to the current layer if the given layer
+    is null.
+*/
 KisLayer* KisImage::layerPtr( KisLayer *_layer )
 {
     if( _layer == 0 )
@@ -782,13 +808,26 @@ KisLayer* KisImage::layerPtr( KisLayer *_layer )
 }
 
 
+/*
+    setCurrentLayer - sets the current layer to the given
+    index.  There also needs to be a method accepting a 
+    layer ptr instead of an index for setting current layer.
+*/
 void KisImage::setCurrentLayer( int _layer )
 {
     m_pCurrentLay = m_layers.at( _layer );
 }
 
-
-
+/*
+    convertImageToPixmap - an attempt to optimize and improve
+    Qt's pix->convertFromImage() using hardware-specific hacks.
+    This seemed to cause problems for big endian machines so
+    if big endian architecture is detetected it now uses "unknown"
+    visual - the standard Qt method.  This change should eliminate 
+    big endian display problems. (Note:  In any case, the "optimized"
+    methods do not seem any faster, or slower, than the standard
+    ones used by Qt).
+*/
 void KisImage::convertImageToPixmap(QImage *image, QPixmap *pix)
 {
     if (visual==unknown) 
@@ -844,27 +883,33 @@ void KisImage::convertImageToPixmap(QImage *image, QPixmap *pix)
 
 void KisImage::convertTileToPixmap(KisLayer *lay, int tileNo, QPixmap *pix)
 {
-    /*
-    Copy the composite image into a QImage so it can be converted to a
-    QPixmap.  Note: surprisingly it is not quicker to render directly 
-    into a QImage probably due to the CPU cache, it's also useless wrt 
-    (writing?) to other colour spaces
-    */
+    /* Copy the composite image into a QImage so it can be 
+    converted to a QPixmap.  Note: surprisingly it is not quicker 
+    to render directly into a QImage probably due to the CPU cache, 
+    it's also useless wrt (writing?) to other colour spaces  */
     
-    // FIXME: Make it work for non-RGB images
-
-    uchar *ptr0 = lay->channelMem(2, tileNo, 0, 0);
-    uchar *ptr1 = lay->channelMem(1, tileNo, 0, 0);
-    uchar *ptr2 = lay->channelMem(0, tileNo, 0, 0);
+    /*  This is the ***ONLY*** place where there could be problems 
+    with big endian machines in rendering the image to the view. 
+    There is an easy way to vary it for big endian architectures, 
+    if necessary, as Qt does for32 bit images (note that m_img, 
+    a QImage, is always 32 bit in krayon).  convertImageToPixmap() 
+    now uses the standard Qt method if big endian architecture
+    is detected, so there can be no problem with that conversion
+    any longer. It did use an optimized visual method that was 
+    suspicious especially if the user has a 16 bit display. */ 
+    
+    uchar *ptr0 = lay->channelMem(2, tileNo, 0, 0); // blue
+    uchar *ptr1 = lay->channelMem(1, tileNo, 0, 0); // green
+    uchar *ptr2 = lay->channelMem(0, tileNo, 0, 0); // red
 
     for(int y = 0; y < TILE_SIZE; y++)
     {
         uchar *ptr = m_img.scanLine(y);
 	    for(int x = TILE_SIZE; x; x--)
 	    {
-	        *ptr++ = *ptr0++;
-	        *ptr++ = *ptr1++;
-	        *ptr++ = *ptr2++;
+	        *ptr++ = *ptr0++; // red
+	        *ptr++ = *ptr1++; // green
+	        *ptr++ = *ptr2++; // blue
 	        ptr++;
 	    }
     }
@@ -873,7 +918,11 @@ void KisImage::convertTileToPixmap(KisLayer *lay, int tileNo, QPixmap *pix)
     convertImageToPixmap(&m_img, pix);
 }
 
-
+/*
+    mergeAllLayers - merge all layers into the background or first
+    layer and delete them after they are merged, leaving only the
+    first layer.
+*/
 void KisImage::mergeAllLayers()
 {
     QList<KisLayer> l;
@@ -888,7 +937,10 @@ void KisImage::mergeAllLayers()
     mergeLayers(l);
 }
 
-
+/*
+    mergeVisibleLayers - merge only those layers which are visible.  
+    Merge everything into the first visible layer encountered.
+*/
 void KisImage::mergeVisibleLayers()
 {
     QList<KisLayer> l;
@@ -905,7 +957,10 @@ void KisImage::mergeVisibleLayers()
     mergeLayers(l);
 }
 
-
+/*
+    mergeLinkeLayers - merge only those layers linked.  
+    Merge everything into the first linked layer encountered.
+*/
 void KisImage::mergeLinkedLayers()
 {
     QList<KisLayer> l;
@@ -922,8 +977,13 @@ void KisImage::mergeLinkedLayers()
     mergeLayers(l);
 }
 
-
-
+/*
+    mergeLayers - merge all layers in the given list into the
+    first layer in the list, and delete the others.  Normally  
+    this renders everything into the background layer.  There
+    needs to be a paramater and option for not deleting layers
+    merged into others but keeping them instead.
+*/
 void KisImage::mergeLayers(QList<KisLayer> list)
 {
     list.setAutoDelete(false);

@@ -83,7 +83,7 @@ void EllipseTool::mouseRelease( QMouseEvent* event )
         m_dragging = false;
         drawEllipse( m_dragStart, m_dragEnd );
     
-        QRect rect(m_dragStart, m_dragEnd);
+        QRect rect(zoomed(m_dragStart), zoomed(m_dragEnd));
         KisPainter *p = m_pView->kisPainter();
         p->drawEllipse( rect );
     }    
