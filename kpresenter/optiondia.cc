@@ -26,8 +26,8 @@ OptionDia::OptionDia(QWidget *parent=0,const char *name=0)
   :QTabDialog(parent,name,true)
 {
   int col1 = 20,dummy,w,h;
-  
-  /* Tab: General */ 
+
+  /* Tab: General */
   general = new QWidget(this,i18n("General"));
 
   lRastX = new QLabel(general,"lRastX");
@@ -71,7 +71,7 @@ OptionDia::OptionDia(QWidget *parent=0,const char *name=0)
   lBackCol->setText(i18n("Backgroud color:"));
   lBackCol->move(10,20);
   lBackCol->resize(lBackCol->sizeHint());
-  
+
   bBackCol = new KColorButton(white,txtObj,"bBackCol");
   bBackCol->setGeometry(lBackCol->x() + lBackCol->width() + 10,lBackCol->y(),100,25);
 
@@ -85,11 +85,14 @@ OptionDia::OptionDia(QWidget *parent=0,const char *name=0)
   general->resize(w,h);
   general->setMinimumSize(general->width(),general->height());
   general->setMaximumSize(general->width(),general->height());
-
+  
   objects->resize(w,h);
   objects->setMinimumSize(objects->width(),objects->height());
   objects->setMaximumSize(objects->width(),objects->height());
-
+ 
+  resize(max(general->width() + 10,objects->width() + 10),
+	 max(general->height() + bBackCol->height() + 40,objects->height() + bBackCol->height() + 40));
+  
   /* build dialog */
   addTab(general,i18n("General"));
   addTab(objects,i18n("Objects"));

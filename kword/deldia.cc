@@ -1,4 +1,4 @@
-/******************************************************************/ 
+/******************************************************************/
 /* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
 /* Version: 0.0.1                                                 */
 /* Author: Reginald Stadlbauer, Torben Weis                       */
@@ -34,9 +34,11 @@ KWDeleteDia::KWDeleteDia(QWidget *parent,const char *name,KWGroupManager *_grpMg
   page = _page;
 
   setupTab1();
-    
+
   setCancelButton(i18n("Cancel"));
   setOkButton(i18n("OK"));
+
+  resize(300,150);
 }
 
 /*================================================================*/

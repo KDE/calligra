@@ -126,6 +126,8 @@ KoPageLayoutDia::KoPageLayoutDia(QWidget* parent,const char* name,KoPageLayout _
   setCaption( i18n( "Page Layout") );
   setFocusPolicy(QWidget::StrongFocus);
   setFocus();
+
+  resize(600,500);
 }
 
 /*==================== constructor ===============================*/
@@ -158,6 +160,8 @@ KoPageLayoutDia::KoPageLayoutDia(QWidget* parent,const char* name,KoPageLayout _
   setCaption(i18n("Page Layout"));
   setFocusPolicy(QWidget::StrongFocus);
   setFocus();
+  
+  resize(600,500);
 }
 
 /*===================== destructor ===============================*/

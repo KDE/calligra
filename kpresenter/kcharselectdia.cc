@@ -31,7 +31,7 @@ KCharSelectDia::KCharSelectDia(QWidget* parent,const char* name,QList<QFont> *__
 
   setCaption("Select a character");
 
-  grid = new QGridLayout(this,6,2,15,7);
+  grid = new QGridLayout(this,5,1,15,7);
 
   fontList = _fontList;
 
@@ -129,29 +129,29 @@ KCharSelectDia::KCharSelectDia(QWidget* parent,const char* name,QList<QFont> *__
   colorChanged(*_color->at(0));
   grid2->addMultiCellWidget(lPreview,0,1,6,6);
 
-  grid2->addColSpacing(0,lSize->width());
-  grid2->addColSpacing(0,sizeCombo->width());
-  grid2->addColSpacing(1,lColor->width());
-  grid2->addColSpacing(1,colorButton->width());
-  grid2->addColSpacing(2,bold->width());
-  grid2->addColSpacing(3,italic->width());
-  grid2->addColSpacing(4,underl->width());
-  grid2->addColSpacing(5,lDepth->width());
-  grid2->addColSpacing(5,depthCombo->width());
-  grid2->addColSpacing(6,lPreview->width());
+//   grid2->addColSpacing(0,lSize->width());
+//   grid2->addColSpacing(0,sizeCombo->width());
+//   grid2->addColSpacing(1,lColor->width());
+//   grid2->addColSpacing(1,colorButton->width());
+//   grid2->addColSpacing(2,bold->width());
+//   grid2->addColSpacing(3,italic->width());
+//   grid2->addColSpacing(4,underl->width());
+//   grid2->addColSpacing(5,lDepth->width());
+//   grid2->addColSpacing(5,depthCombo->width());
+//   grid2->addColSpacing(6,lPreview->width());
 
-  grid2->addRowSpacing(0,lSize->height());
-  grid2->addRowSpacing(0,lColor->height());
-  grid2->addRowSpacing(0,lAttrib->height());
-  grid2->addRowSpacing(0,lSize->height());
-  grid2->addRowSpacing(1,sizeCombo->height());
-  grid2->addRowSpacing(1,colorButton->height());
-  grid2->addRowSpacing(1,bold->height());
-  grid2->addRowSpacing(1,italic->height());
-  grid2->addRowSpacing(1,underl->height());
-  grid2->addRowSpacing(1,depthCombo->height());
+//   grid2->addRowSpacing(0,lSize->height());
+//   grid2->addRowSpacing(0,lColor->height());
+//   grid2->addRowSpacing(0,lAttrib->height());
+//   grid2->addRowSpacing(0,lSize->height());
+//   grid2->addRowSpacing(1,sizeCombo->height());
+//   grid2->addRowSpacing(1,colorButton->height());
+//   grid2->addRowSpacing(1,bold->height());
+//   grid2->addRowSpacing(1,italic->height());
+//   grid2->addRowSpacing(1,underl->height());
+//   grid2->addRowSpacing(1,depthCombo->height());
 
-  grid2->activate();
+//   grid2->activate();
   grid->addWidget(wid,3,0);
 
   bbox = new KButtonBox(this,KButtonBox::HORIZONTAL,7);
@@ -167,22 +167,22 @@ KCharSelectDia::KCharSelectDia(QWidget* parent,const char* name,QList<QFont> *__
   bbox->layout();
   grid->addWidget(bbox,4,0);
 
-  grid->addColSpacing(0,lFont->width());
-  grid->addColSpacing(0,fontCombo->width());
-  grid->addColSpacing(0,charSelect->width());
-  grid->addColSpacing(0,wid->width());
-  grid->addColSpacing(1,0);
-  grid->setColStretch(1,1);
+//   grid->addColSpacing(0,lFont->width());
+//   grid->addColSpacing(0,fontCombo->width());
+//   grid->addColSpacing(0,charSelect->width());
+//   grid->addColSpacing(0,wid->width());
+//   grid->addColSpacing(1,0);
+//   grid->setColStretch(1,1);
 
-  grid->addRowSpacing(0,lFont->height());
-  grid->addRowSpacing(1,fontCombo->height());
-  grid->addRowSpacing(2,charSelect->height());
-  grid->addRowSpacing(3,wid->height());
-  grid->addRowSpacing(4,bOk->height());
-  grid->addRowSpacing(4,bCancel->height());
-  grid->addRowSpacing(5,0);
-  grid->setRowStretch(5,1);
-  grid->activate();
+//   grid->addRowSpacing(0,lFont->height());
+//   grid->addRowSpacing(1,fontCombo->height());
+//   grid->addRowSpacing(2,charSelect->height());
+//   grid->addRowSpacing(3,wid->height());
+//   grid->addRowSpacing(4,bOk->height());
+//   grid->addRowSpacing(4,bCancel->height());
+//   grid->addRowSpacing(5,0);
+   grid->setRowStretch(2,1);
+//   grid->activate();
 }
 
 /*===================== destructor ===============================*/

@@ -273,6 +273,8 @@ KWParagDia::KWParagDia(QWidget* parent,const char* name,QStrList _fontList,
 
   setCancelButton(i18n("Cancel"));
   setOkButton(i18n("OK"));
+
+  resize(600,500);
 }
 
 /*================================================================*/

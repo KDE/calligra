@@ -53,7 +53,7 @@ KWSearchDia::KWSearchDia(QWidget* parent,const char* name,KWordDocument *_doc,KW
   setupTab1();
   setupTab2();
 
-  resize(minimumSize());
+  resize(600,400);
 
   setCancelButton(i18n("Close"));
   setOkButton(QString::null);

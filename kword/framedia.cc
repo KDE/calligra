@@ -1,4 +1,4 @@
-/******************************************************************/ 
+/******************************************************************/
 /* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
 /* Version: 0.0.1                                                 */
 /* Author: Reginald Stadlbauer, Torben Weis                       */
@@ -37,16 +37,16 @@ KWFrameDia::KWFrameDia(QWidget* parent,const char* name,KWFrame *_frame,KWordDoc
   flags = _flags;
   doc = _doc;
   page = _page;
-  
+
   if ((flags & FD_FRAME_CONNECT) && doc)
     setupTab3ConnectTextFrames();
 
   if ((flags & FD_FRAME_SET) && doc)
     setupTab1TextFrameSet();
-  
+
   if ((flags & FD_FRAME) && doc)
     setupTab2TextFrame();
-    
+
   if ((flags & FD_GEOMETRY) && doc)
     setupTab4Geometry();
 
@@ -55,7 +55,7 @@ KWFrameDia::KWFrameDia(QWidget* parent,const char* name,KWFrame *_frame,KWordDoc
 
   connect(this,SIGNAL(applyButtonPressed()),this,SLOT(applyChanges()));
 
-  resize(minimumSize());
+  resize(550,400);
 }
 
 /*================================================================*/
@@ -68,11 +68,11 @@ void KWFrameDia::setupTab1TextFrameSet()
   lNewFrame = new QLabel(i18n("If the text of the frameset doesn't fit into the the frames of the frameset anymore:"),tab1);
   lNewFrame->resize(lNewFrame->sizeHint());
   grid1->addWidget(lNewFrame,0,0);
-  
+
   rAppendFrame = new QRadioButton(i18n("Create automatically a new frame"),tab1);
   rAppendFrame->resize(rAppendFrame->sizeHint());
   grid1->addWidget(rAppendFrame,1,0);
-  
+
   rResizeFrame = new QRadioButton(i18n("Resize automatically last frame"),tab1);
   rResizeFrame->resize(rResizeFrame->sizeHint());
   grid1->addWidget(rResizeFrame,2,0);
@@ -242,7 +242,7 @@ void KWFrameDia::setupTab3ConnectTextFrames()
 
   if (flags & FD_PLUS_NEW_FRAME)
     lFrameSList->insertItem(i18n("Create a new Frameset with this frame"),-1);
-      
+
   connect(lFrameSList,SIGNAL(highlighted(int)),this,SLOT(connectListSelected(int)));
   grid3->addWidget(lFrameSList,1,0);
 
@@ -267,7 +267,7 @@ void KWFrameDia::setupTab4Geometry()
   grid4 = new QGridLayout(tab4,3,1,15,7);
 
   grp1 = new QGroupBox(i18n(QString("Position in " + doc->getUnit())),tab4);
-  pGrid = new QGridLayout(grp1,5,2,7,7); 
+  pGrid = new QGridLayout(grp1,5,2,7,7);
 
   lx = new QLabel(i18n("Left:"),grp1);
   lx->resize(lx->sizeHint());
@@ -317,7 +317,7 @@ void KWFrameDia::setupTab4Geometry()
   sh->resize(sh->sizeHint());
   pGrid->addWidget(sh,4,1);
 
-  
+
   pGrid->addRowSpacing(0,7);
   pGrid->addRowSpacing(1,lx->height());
   pGrid->addRowSpacing(1,ly->height());
@@ -348,7 +348,7 @@ void KWFrameDia::setupTab4Geometry()
   grid4->addWidget(grp1,0,0);
 
   grp2 = new QGroupBox(i18n(QString("Margins in " + doc->getUnit())),tab4);
-  mGrid = new QGridLayout(grp2,5,2,7,7); 
+  mGrid = new QGridLayout(grp2,5,2,7,7);
 
   lml = new QLabel(i18n("Left:"),grp2);
   lml->resize(lml->sizeHint());
@@ -397,7 +397,7 @@ void KWFrameDia::setupTab4Geometry()
   smb->setFrame(true);
   smb->resize(smb->sizeHint());
   mGrid->addWidget(smb,4,1);
-  
+
   mGrid->addRowSpacing(0,7);
   mGrid->addRowSpacing(1,lml->height());
   mGrid->addRowSpacing(1,lmr->height());
@@ -445,7 +445,7 @@ void KWFrameDia::setupTab4Geometry()
   doc->getFrameMargins(l,r,t,b);
   switch (KWUnit::unitType(doc->getUnit()))
     {
-    case U_MM: 
+    case U_MM:
       {
 	sml->setText(QString().setNum(l.mm()));
 	smr->setText(QString().setNum(r.mm()));
@@ -468,19 +468,19 @@ void KWFrameDia::setupTab4Geometry()
       } break;
     }
 
-  if (doc->isOnlyOneFrameSelected() && (doc->getProcessingType() == KWordDocument::DTP || 
-					(doc->getProcessingType() == KWordDocument::WP && 
+  if (doc->isOnlyOneFrameSelected() && (doc->getProcessingType() == KWordDocument::DTP ||
+					(doc->getProcessingType() == KWordDocument::WP &&
 					 doc->getFrameSetNum(doc->getFirstSelectedFrameSet()) > 0)))
     {
       unsigned int x,y,w,h,_num;
-      
+
       KWFrameSet *frms = doc->getFrameCoords(x,y,w,h,_num);
       QString _x,_y,_w,_h;
       y -= frms->getPageOfFrame(_num) * doc->getPTPaperHeight();
 
       switch (KWUnit::unitType(doc->getUnit()))
 	{
-	case U_MM: 
+	case U_MM:
 	  {
 	    _x.sprintf("%g",POINT_TO_MM(x));
 	    _y.sprintf("%g",POINT_TO_MM(y));
@@ -624,8 +624,8 @@ void KWFrameDia::applyChanges()
 
   if (flags & FD_GEOMETRY && doc)
     {
-      if (doc->isOnlyOneFrameSelected() && (doc->getProcessingType() == KWordDocument::DTP || 
-					    (doc->getProcessingType() == KWordDocument::WP && 
+      if (doc->isOnlyOneFrameSelected() && (doc->getProcessingType() == KWordDocument::DTP ||
+					    (doc->getProcessingType() == KWordDocument::WP &&
 					     doc->getFrameSetNum(doc->getFirstSelectedFrameSet()) > 0)))
 	{
 	  if (oldX != atof(sx->text()) || oldY != atof(sy->text()) || oldW != atof(sw->text()) || oldH != atof(sh->text()))
@@ -633,14 +633,14 @@ void KWFrameDia::applyChanges()
 	      unsigned int px,py,pw,ph;
 	      switch (KWUnit::unitType(doc->getUnit()))
 		{
-		case U_MM: 
+		case U_MM:
 		  {
 		    px = MM_TO_POINT(atof(sx->text()));
 		    py = MM_TO_POINT(atof(sy->text()));
 		    pw = MM_TO_POINT(atof(sw->text()));
 		    ph = MM_TO_POINT(atof(sh->text()));
 		  } break;
-		case U_INCH: 
+		case U_INCH:
 		  {
 		    px = INCH_TO_POINT(atof(sx->text()));
 		    py = INCH_TO_POINT(atof(sy->text()));
@@ -662,14 +662,14 @@ void KWFrameDia::applyChanges()
       KWUnit u1,u2,u3,u4;
       switch (KWUnit::unitType(doc->getUnit()))
 	{
-	case U_MM: 
+	case U_MM:
 	  {
 	    u1.setMM(atof(sml->text()));
 	    u2.setMM(atof(smr->text()));
 	    u3.setMM(atof(smt->text()));
 	    u4.setMM(atof(smb->text()));
 	  } break;
-	case U_INCH: 
+	case U_INCH:
 	  {
 	    u1.setINCH(atof(sml->text()));
 	    u2.setINCH(atof(smr->text()));

@@ -69,15 +69,15 @@ void KWTableConf::setupPage()
   lStyles = new QLabel(i18n("Styles"),this);
   lStyles->resize(lStyles->sizeHint());
   grid1->addWidget(lStyles,0,0);
-  
+
   lbStyles = new QListBox(this);
   lbStyles->resize(lbStyles->sizeHint());
   grid1->addWidget(lbStyles,1,0);
-  
+
   preview = new QWidget(this);
   preview->setBackgroundColor(white);
   grid1->addMultiCellWidget(preview,1,1,1,2);
-  
+
   bgHeader = new QButtonGroup(i18n("Apply for Header"),this);
   grid1->addWidget(bgHeader,2,0);
 
@@ -90,7 +90,7 @@ void KWTableConf::setupPage()
   cbHeaderOnAllPages = new QCheckBox(i18n("When a table flows over multiple pages, copy header to each page begin"),this);
   cbHeaderOnAllPages->resize(cbHeaderOnAllPages->sizeHint());
   grid1->addMultiCellWidget(cbHeaderOnAllPages,3,3,0,2);
-  
+
   grid1->addRowSpacing(0,lStyles->height());
   grid1->addRowSpacing(1,lbStyles->height());
   grid1->addRowSpacing(1,200);
@@ -102,7 +102,7 @@ void KWTableConf::setupPage()
   grid1->setRowStretch(1,1);
   grid1->setRowStretch(2,0);
   grid1->setRowStretch(3,0);
-  
+
   grid1->addColSpacing(0,lStyles->width());
   grid1->addColSpacing(0,lbStyles->width());
   grid1->addColSpacing(0,bgHeader->width());
@@ -113,7 +113,7 @@ void KWTableConf::setupPage()
   grid1->setColStretch(0,1);
   grid1->setColStretch(1,1);
   grid1->setColStretch(2,1);
-  
+
   grid1->activate();
 }
 
@@ -127,12 +127,14 @@ KWTableDia::KWTableDia(QWidget* parent,const char* name,KWPage *_page,KWordDocum
 {
   page = _page;
   doc = _doc;
-  
+
   setupTab1(rows,cols);
   setupTab2();
-  
+
   setCancelButton(i18n("Cancel"));
   setOkButton(i18n("OK"));
+
+  resize(500,400);
 }
 
 /*================================================================*/

@@ -39,6 +39,8 @@ KWStyleManager::KWStyleManager(QWidget *_parent,KWordDocument *_doc,QStrList _fo
   setOkButton(i18n("Close"));
 
   connect(this,SIGNAL(applyButtonPressed()),this,SLOT(apply()));
+
+  resize(500,400);
 }
 
 /*================================================================*/
@@ -328,6 +330,8 @@ KWStyleEditor::KWStyleEditor(QWidget *_parent,KWParagLayout *_style,KWordDocumen
   setOkButton(i18n("OK"));
 
   connect(this,SIGNAL(applyButtonPressed()),this,SLOT(apply()));
+
+  resize(550,400);
 }
 
 /*================================================================*/

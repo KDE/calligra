@@ -35,7 +35,7 @@ PBPreview::PBPreview(QWidget* parent=0,const char* name=0,int _paintType=0)
 void PBPreview::paintEvent(QPaintEvent*)
 {
   QPainter painter;
-    
+
   painter.begin(this);
   if (paintType == 0)
     {
@@ -101,7 +101,7 @@ StyleDia::StyleDia(QWidget* parent = 0,const char* name = 0,int flags = SD_PEN |
   choosePStyle->insertItem(i18n("dash dot dot line (-**-)"));
   choosePStyle->insertItem(i18n("no pen"));
   choosePStyle->resize(choosePStyle->sizeHint());
-  choosePCol->resize(choosePStyle->width(),choosePCol->height());  
+  choosePCol->resize(choosePStyle->width(),choosePCol->height());
   connect(choosePStyle,SIGNAL(activated(int)),this,SLOT(changePStyle(int)));
 
   penWidth = new QLabel(penFrame);
@@ -115,7 +115,7 @@ StyleDia::StyleDia(QWidget* parent = 0,const char* name = 0,int flags = SD_PEN |
   connect(choosePWidth,SIGNAL(valueChanged(int)),this,SLOT(changePWidth(int)));
 
   pen = QPen(black,1,SolidLine);
-  
+
   llineBegin = new QLabel(penFrame);
   llineBegin->setText(i18n("Choose line begin:"));
   llineBegin->move(choosePCol->x() + choosePCol->width() + 10,penStyle->y());
@@ -222,7 +222,7 @@ StyleDia::StyleDia(QWidget* parent = 0,const char* name = 0,int flags = SD_PEN |
 
   gradient1->move(gColors->x(),gColors->y() + gColors->height() + 10);
   connect(gradient1,SIGNAL(changed(const QColor &)),this,SLOT(gColor1(const QColor &)));
-  
+
   gradient2 = new KColorButton(green,brushFrame);
   gradient2->resize(chooseBCol->size());
   gradient2->move(gradient1->x(),gradient1->y() + gradient1->height() + 10);
@@ -262,13 +262,15 @@ StyleDia::StyleDia(QWidget* parent = 0,const char* name = 0,int flags = SD_PEN |
     brushFrame->hide();
 
   penFrame->setMinimumSize(penPrev->x() + penPrev->width() + 20,penPrev->y() + penPrev->height() + 20);
-  penFrame->setMaximumSize(penPrev->minimumSize());
-
+  penFrame->setMaximumSize(penPrev->x() + penPrev->width() + 20,penPrev->y() + penPrev->height() + 20);
+  penFrame->resize(penPrev->x() + penPrev->width() + 20,penPrev->y() + penPrev->height() + 20);
+  
   brushFrame->setMinimumSize(gPrev->x() + gPrev->width() + 20,gPrev->y() + gPrev->height() + 20);
-  brushFrame->setMaximumSize(gPrev->minimumSize());
+  brushFrame->setMaximumSize(gPrev->x() + gPrev->width() + 20,gPrev->y() + gPrev->height() + 20);
+  brushFrame->resize(gPrev->x() + gPrev->width() + 20,gPrev->y() + gPrev->height() + 20);
 
-  resize(max(penPrev->minimumSize().width(),brushPrev->minimumSize().width()),
-	 max(penPrev->minimumSize().height(),brushPrev->minimumSize().height()));
+  resize(max(penFrame->size().width() + 5,brushFrame->size().width() + 5),
+	 max(penFrame->size().height() + 40 + chooseBCol->height(),brushFrame->size().height() + 40 + chooseBCol->height()));
 
   setCancelButton(i18n("Cancel"));
   setOKButton(i18n("OK"));
@@ -291,12 +293,12 @@ void StyleDia::setPen(QPen _pen)
   penPrev->setPen(pen);
   switch (pen.style())
     {
-    case NoPen: choosePStyle->setCurrentItem(5); break; 
-    case SolidLine: choosePStyle->setCurrentItem(0); break; 
-    case DashLine: choosePStyle->setCurrentItem(1); break; 
-    case DotLine: choosePStyle->setCurrentItem(2); break;  
-    case DashDotLine: choosePStyle->setCurrentItem(3); break;  
-    case DashDotDotLine: choosePStyle->setCurrentItem(4); break;  
+    case NoPen: choosePStyle->setCurrentItem(5); break;
+    case SolidLine: choosePStyle->setCurrentItem(0); break;
+    case DashLine: choosePStyle->setCurrentItem(1); break;
+    case DotLine: choosePStyle->setCurrentItem(2); break;
+    case DashDotLine: choosePStyle->setCurrentItem(3); break;
+    case DashDotDotLine: choosePStyle->setCurrentItem(4); break;
     }
   choosePWidth->setValue(pen.width());
 }
@@ -318,8 +320,8 @@ void StyleDia::setBrush(QBrush _brush)
     case Dense7Pattern: chooseBStyle->setCurrentItem(7); break;
     case HorPattern: chooseBStyle->setCurrentItem(8); break;
     case VerPattern: chooseBStyle->setCurrentItem(9); break;
-    case CrossPattern: chooseBStyle->setCurrentItem(10); break; 
-    case BDiagPattern: chooseBStyle->setCurrentItem(11); break; 
+    case CrossPattern: chooseBStyle->setCurrentItem(10); break;
+    case BDiagPattern: chooseBStyle->setCurrentItem(11); break;
     case FDiagPattern: chooseBStyle->setCurrentItem(12); break;
     case DiagCrossPattern: chooseBStyle->setCurrentItem(13); break;
     case NoBrush: chooseBStyle->setCurrentItem(14); break;
@@ -377,7 +379,7 @@ void StyleDia::setGradient(QColor _c1,QColor _c2,BCType _t)
 void StyleDia::changePCol()
 {
   QColor currColor;
-  
+
   currColor = pen.color();
   if (KColorDialog::getColor(currColor))
     {
@@ -390,7 +392,7 @@ void StyleDia::changePCol()
 void StyleDia::changeBCol()
 {
   QColor currColor;
-  
+
   currColor = brush.color();
   if (KColorDialog::getColor(currColor))
     {
@@ -404,12 +406,12 @@ void StyleDia::changePStyle(int item)
 {
   switch (item)
     {
-    case 5: pen.setStyle(NoPen); break; 
-    case 0: pen.setStyle(SolidLine); break; 
-    case 1: pen.setStyle(DashLine); break; 
-    case 2: pen.setStyle(DotLine); break;  
-    case 3: pen.setStyle(DashDotLine); break;  
-    case 4: pen.setStyle(DashDotDotLine); break;  
+    case 5: pen.setStyle(NoPen); break;
+    case 0: pen.setStyle(SolidLine); break;
+    case 1: pen.setStyle(DashLine); break;
+    case 2: pen.setStyle(DotLine); break;
+    case 3: pen.setStyle(DashDotLine); break;
+    case 4: pen.setStyle(DashDotDotLine); break;
     }
   penPrev->setPen(pen);
 }
@@ -429,8 +431,8 @@ void StyleDia::changeBStyle(int item)
     case 7: brush.setStyle(Dense7Pattern); break;
     case 8: brush.setStyle(HorPattern); break;
     case 9: brush.setStyle(VerPattern); break;
-    case 10: brush.setStyle(CrossPattern); break; 
-    case 11: brush.setStyle(BDiagPattern); break; 
+    case 10: brush.setStyle(CrossPattern); break;
+    case 11: brush.setStyle(BDiagPattern); break;
     case 12: brush.setStyle(FDiagPattern); break;
     case 13: brush.setStyle(DiagCrossPattern); break;
     case 14: brush.setStyle(NoBrush); break;
@@ -486,7 +488,7 @@ void StyleDia::rBrush()
   gradients->setEnabled(false);
   gradient1->setEnabled(false);
   gradient2->setEnabled(false);
-  
+
   chooseBCol->setEnabled(true);
   chooseBStyle->setEnabled(true);
 }
@@ -497,7 +499,7 @@ void StyleDia::rGradient()
   gradients->setEnabled(true);
   gradient1->setEnabled(true);
   gradient2->setEnabled(true);
-  
+
   chooseBCol->setEnabled(false);
   chooseBStyle->setEnabled(false);
 }

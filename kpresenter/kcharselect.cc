@@ -34,6 +34,9 @@ KCharSelect::KCharSelect(QWidget *parent,const char *name,QFont __font,QColor __
 
   setNumCols(28);
   setNumRows(8);
+
+  setMinimumSize(QSize(20 * 28,25 * 8));
+  setMaximumSize(QSize(20 * 28,25 * 8));
 }
 
 /*================================================================*/

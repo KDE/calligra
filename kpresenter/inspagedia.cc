@@ -34,7 +34,7 @@ InsPageDia::InsPageDia(QWidget* parent,const char* name,KPresenterDoc *_doc,int 
   before->resize(before->sizeHint());
   connect(before,SIGNAL(clicked()),this,SLOT(beforeClicked()));
   grid->addWidget(before,0,0);
-  
+
   after = new QRadioButton(i18n("&After page:"),this);
   after->resize(after->sizeHint());
   connect(after,SIGNAL(clicked()),this,SLOT(afterClicked()));
@@ -73,30 +73,30 @@ InsPageDia::InsPageDia(QWidget* parent,const char* name,KPresenterDoc *_doc,int 
   connect(ok,SIGNAL(clicked()),this,SLOT(okClicked()));
   grid->addWidget(ok,5,3);
 
-  resize(cancel->x() + cancel->width() + 20,cancel->y() + cancel->height() + 20);
+  //resize(cancel->x() + cancel->width() + 20,cancel->y() + cancel->height() + 20);
   uncheckAllPos();
   uncheckAllMode();
   after->setChecked(true);
   _move->setChecked(true);
 
-  grid->addRowSpacing(0,before->height() / 2);
-  grid->addRowSpacing(1,after->height() / 2);
-  grid->addRowSpacing(2,leave->height());
-  grid->addRowSpacing(3,_move->height());
-  grid->addRowSpacing(4,0);
-  grid->addRowSpacing(5,ok->height());
-  grid->setRowStretch(4,1);
+//   grid->addRowSpacing(0,before->height() / 2);
+//   grid->addRowSpacing(1,after->height() / 2);
+//   grid->addRowSpacing(2,leave->height());
+//   grid->addRowSpacing(3,_move->height());
+//   grid->addRowSpacing(4,0);
+//   grid->addRowSpacing(5,ok->height());
+//   grid->setRowStretch(4,1);
 
-  grid->addColSpacing(0,max(before->width(),after->width()));
-  grid->addColSpacing(1,spinBox->width());
-  grid->addColSpacing(2,max(leave->width(),_move->width()) - 
-		      (max(before->width(),after->width()) + spinBox->width() + 
-		       ok->width() + cancel->width() + 30));
-  grid->addColSpacing(3,ok->width());
-  grid->addColSpacing(4,cancel->width());
-  grid->setColStretch(2,1);
+//   grid->addColSpacing(0,max(before->width(),after->width()));
+//   grid->addColSpacing(1,spinBox->width());
+//   grid->addColSpacing(2,max(leave->width(),_move->width()) -
+// 		      (max(before->width(),after->width()) + spinBox->width() +
+// 		       ok->width() + cancel->width() + 30));
+//   grid->addColSpacing(3,ok->width());
+//   grid->addColSpacing(4,cancel->width());
+//   grid->setColStretch(2,1);
 
-  grid->activate();
+//   grid->activate();
 }
 
 /*================================================================*/
