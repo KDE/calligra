@@ -18,7 +18,7 @@
 */
 
 #include <winworddoc.h>
-#include <qregexp.h>
+#include <qarray.h>
 #define DISABLE_FLOATING true
 
 WinWordDoc::WinWordDoc(
@@ -38,6 +38,7 @@ WinWordDoc::WinWordDoc(
     m_success = TRUE;
     m_body = QString("");
     m_tableManager = 0;
+    m_cellEdges.setAutoDelete(true);
 }
 
 WinWordDoc::~WinWordDoc()
@@ -180,7 +181,7 @@ void WinWordDoc::gotHeadingParagraph(const QString &text, PAP &style)
         m_body.append("</TEXT>\n"
             " <LAYOUT>\n"
             "  <NAME value=\"Head ");
-        m_body.append(QString::number(style.istd));
+        m_body.append(QString::number((int)style.istd));
         m_body.append("\"/>\n  <COUNTER type=\"");
         m_body.append(numberingType(style.anld.nfc));
         m_body.append("\" depth=\"");
@@ -221,9 +222,9 @@ void WinWordDoc::gotListParagraph(const QString &text, PAP &style)
             "  <COUNTER type=\"");
         m_body.append(numberingType(style.anld.nfc));
         m_body.append("\" depth=\"");
-        m_body.append(QString::number(style.ilvl));
+        m_body.append(QString::number((int)style.ilvl));
         m_body.append("\" bullet=\"183\" start=\"");
-        m_body.append(QString::number(style.anld.iStartAt));
+        m_body.append(QString::number((int)style.anld.iStartAt));
         m_body.append("\" numberingtype=\"0\" lefttext=\"\" righttext=\"\" bulletfont=\"symbol\"/>\n"
             " </LAYOUT>\n"
             "</PARAGRAPH>\n");
@@ -236,12 +237,10 @@ void WinWordDoc::gotTableBegin()
 
     m_tableManager++;
     m_tableRow = 0;
-    if (m_phase == INIT)
-    {
-        m_tableRows = 0;
-    }
     if (m_phase == TEXT_PASS)
     {
+        m_cellEdges.resize(m_tableManager);
+        m_cellEdges.insert(m_tableManager - 1, new QArray<unsigned>);
         m_body.append("<PARAGRAPH>\n<TEXT>");
 if (DISABLE_FLOATING)
 {
@@ -269,56 +268,142 @@ void WinWordDoc::gotTableEnd()
 {
 }
 
+//
+// Add to/lookup a cell edge in the cache of cell edges for a given table.
+//
+
+int WinWordDoc::cacheCellEdge(
+    unsigned tableManager,
+    unsigned cellEdge)
+{
+    QArray<unsigned> *edges = m_cellEdges[tableManager - 1];
+    unsigned i;
+    unsigned *data;
+    unsigned index;
+    
+    /*
+     * Do we already know about this edge?
+     */
+
+    data = edges->data();
+    index = edges->size();
+    for (i = 0; i < index; i++)
+    {
+        if (data[i] == cellEdge)
+            return i;
+    }
+
+    /*
+     * Add the edge to the (sorted) array.
+     */
+
+    edges->resize(index + 1);
+    data = edges->data();
+    data[index] = cellEdge;
+    for (i = index; i > 0; i--)
+    {
+        unsigned tmp;
+
+        if (data[i - 1] > data[i])
+        {
+            tmp = data[i - 1];
+            data[i - 1] = data[i];
+            data[i] = tmp;
+        }
+        else
+        {
+            break;
+        }
+    }
+    return i;
+}
+
+//
+// Compute the Word notion of cell edge ordinate into a Kword one.
+//
+
+unsigned WinWordDoc::computeCellEdge(
+    TAP &row,
+    unsigned edge)
+{
+    unsigned rowWidth = row.rgdxaCenter[row.itcMac] - row.rgdxaCenter[0];
+    unsigned cellEdge;
+
+    // We want to preserve the proportion of row widths in the original document.
+    // For now, we do so on the assumption that the table occupies the full width of
+    // the page.
+
+    cellEdge = row.rgdxaCenter[edge] - row.rgdxaCenter[0];
+    cellEdge = (unsigned)((double)cellEdge * (s_width - s_hMargin - s_hMargin) / rowWidth);
+    return cellEdge + s_hMargin;
+}
+
 void WinWordDoc::gotTableRow(const QString texts[], const PAP /*styles*/[], TAP &row)
 {
-    if (m_phase == INIT)
+    if (m_phase == TEXT_PASS)
     {
-        m_tableRows++;
-    }
-    if (m_phase == TABLE_PASS)
-    {
-        // We want to preserve the proportion of row widths in the original document.
-        // For now, we do so on the assumption that the table occupies the full width of
-        // the page.
-
-        unsigned rowWidth = row.rgdxaCenter[row.itcMac] - row.rgdxaCenter[0];
-        unsigned cellEdge;
-        QString xml_friendly;
+        // Add the left and right edge of each cell to our array.
 
         for (unsigned i = 0; i < row.itcMac; i++)
         {
-            m_body.append("<FRAMESET frameType=\"1\" frameInfo=\"0\" grpMgr=\"grpmgr_");
-            m_body.append(QString::number(m_tableManager));
-            m_body.append("\" row=\"");
-            m_body.append(QString::number(m_tableRow));
-            m_body.append("\" col=\"");
-            m_body.append(QString::number(i));
-            m_body.append("\" rows=\"");
-            m_body.append(QString::number(1));
-            m_body.append("\" cols=\"");
-            m_body.append(QString::number(1));
-            m_body.append("\" removeable=\"0\" visible=\"1\">\n"
+            cacheCellEdge(m_tableManager, computeCellEdge(row, i));
+            cacheCellEdge(m_tableManager, computeCellEdge(row, i + 1));
+        }
+    }
+    if (m_phase == TABLE_PASS)
+    {
+        QString xml_friendly;
+
+        // Create the XML for each cell in the row.
+
+        for (unsigned i = 0; i < row.itcMac; i++)
+        {
+            QString cell;
+            unsigned left;
+            unsigned right;
+            unsigned cellEdge;
+
+            cell.append("<FRAMESET frameType=\"1\" frameInfo=\"0\" grpMgr=\"grpmgr_");
+            cell.append(QString::number(m_tableManager));
+            cell.append("\" row=\"");
+            cell.append(QString::number(m_tableRow));
+            cell.append("\" col=\"");
+            left = cacheCellEdge(m_tableManager, computeCellEdge(row, i));
+            cell.append(QString::number(left));
+            cell.append("\" rows=\"");
+            cell.append(QString::number(1));
+            cell.append("\" cols=\"");
+
+            // In cases where not all columns are present, ensure that the last
+            // column spans the remainder of the table.
+
+            if ((int)i < row.itcMac - 1)
+            {
+                right = cacheCellEdge(m_tableManager, computeCellEdge(row, i + 1));
+            }
+            else
+            {
+                right = m_cellEdges[m_tableManager - 1]->size() - 1;
+            }
+            cell.append(QString::number(right - left));
+            cell.append("\" removeable=\"0\" visible=\"1\">\n"
                 " <FRAME left=\"");
-            cellEdge = row.rgdxaCenter[i] - row.rgdxaCenter[0];
-            cellEdge = (unsigned)((double)cellEdge * (s_width - s_hMargin - s_hMargin) / rowWidth);
-            cellEdge = cellEdge + s_hMargin;
-            m_body.append(QString::number(cellEdge));
-            m_body.append("\" right=\"");
-            cellEdge = row.rgdxaCenter[i + 1] - row.rgdxaCenter[0];
-            cellEdge = (unsigned)((double)cellEdge * (s_width - s_hMargin - s_hMargin) / rowWidth);
-            cellEdge = cellEdge + s_hMargin;
-            m_body.append(QString::number(cellEdge));
-            m_body.append("\" top=\"");
+            cellEdge = m_cellEdges[m_tableManager - 1]->at(left);
+            cell.append(QString::number(cellEdge));
+            cell.append("\" right=\"");
+            cellEdge = m_cellEdges[m_tableManager - 1]->at(right);
+            cell.append(QString::number(cellEdge));
+            cell.append("\" top=\"");
 if (DISABLE_FLOATING)
-            m_body.append(QString::number(400 + m_tableRow * 30));
+            cell.append(QString::number(400 + m_tableManager * 10 + m_tableRow * 30));
 else
-            m_body.append(QString::number(30 + m_tableRow * 30));
-            m_body.append("\" bottom=\"");
+            cell.append(QString::number(30 + m_tableRow * 30));
+            cell.append("\" bottom=\"");
 if (DISABLE_FLOATING)
-            m_body.append(QString::number(430 + m_tableRow * 30));
+            cell.append(QString::number(430 + m_tableManager * 10 + m_tableRow * 30));
 else
-            m_body.append(QString::number(60 + m_tableRow * 30));
-            m_body.append(
+            cell.append(QString::number(60 + m_tableRow * 30));
+            cell.append(
                 "\" runaround=\"1\" runaGapPT=\"2\" runaGapMM=\"1\" runaGapINCH=\"0.0393701\" "
                 "lWidth=\"1\" lStyle=\"0\" " +
                 colourType(row.rgtc[i].brcLeft.ico, "lRed", "lGreen", "lBlue") +
@@ -330,13 +415,15 @@ else
                 colourType(row.rgtc[i].brcBottom.ico, "bRed", "bGreen", "bBlue") +
                 colourType(row.rgshd[i].icoBack, "bkRed", "bkGreen", "bkBlue", 8) +
                 "bleftpt=\"0\" bleftmm=\"0\" bleftinch=\"0\" brightpt=\"0\" brightmm=\"0\" brightinch=\"0\" btoppt=\"0\" btopmm=\"0\" btopinch=\"0\" bbottompt=\"0\" bbottommm=\"0\" bbottominch=\"0");
-            m_body.append("\" autoCreateNewFrame=\"0\" newFrameBehaviour=\"1\"/>\n");
-            m_body.append("<PARAGRAPH>\n<TEXT>");
+
+            cell.append("\" autoCreateNewFrame=\"0\" newFrameBehaviour=\"1\"/>\n");
+            cell.append("<PARAGRAPH>\n<TEXT>");
             xml_friendly = texts[i];
             encode(xml_friendly);
-            m_body.append(xml_friendly);
-            m_body.append("</TEXT>\n </PARAGRAPH>\n");
-            m_body.append("</FRAMESET>\n");
+            cell.append(xml_friendly);
+            cell.append("</TEXT>\n </PARAGRAPH>\n");
+            cell.append("</FRAMESET>\n");
+            m_body.append(cell);
         }
     }
     m_tableRow++;

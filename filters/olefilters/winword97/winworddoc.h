@@ -20,8 +20,10 @@
 #ifndef WINWORDDOC_H
 #define WINWORDDOC_H
 
+#include <qarray.h>
 #include <qstring.h>
 #include <qdom.h>
+#include <qvector.h>
 
 #include <properties.h>
 #include <myfile.h>
@@ -83,7 +85,20 @@ private:
     QDomDocument m_part;
     unsigned m_tableManager;
     unsigned m_tableRow;
-    unsigned m_tableRows;
+
+    // Word has a very flexible concept of columns: each row can vary the
+    // edges of each column. We must map this onto a set of fixed-width columns
+    // by defining columns on each edge, and then using joined cells to model
+    // the original Word cells. We accumulate all the known edges for a given
+    // table in an array, and store the per-table arrays in a vector.
+
+    QVector< QArray<unsigned> > m_cellEdges;                                    
+    int cacheCellEdge(
+        unsigned tableManager,
+        unsigned cellEdge);
+    unsigned computeCellEdge(
+        MsWord::TAP &row,
+        unsigned edge);
 
     // Since there is no way to fill m_part incrementally with XML content,
     // we will fill m_body instead.

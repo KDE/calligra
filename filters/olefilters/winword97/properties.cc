@@ -762,6 +762,14 @@ void Paragraph::apply(const MsWord::U8 *grpprl, unsigned count)
             MsWordGenerated::read(in + bytes, &tmp);
             m_chp.iss = tmp >> 0;
             break;
+        case sprmTFCantSplit: // 0x3403
+            MsWordGenerated::read(in + bytes, &tmp);
+            m_tap.fCantSplit = tmp == 1;
+            break;
+        case sprmTTableHeader: // 0x3404
+            MsWordGenerated::read(in + bytes, &tmp);
+            m_tap.fTableHeader = tmp == 1;
+            break;
         case sprmCHps: // 0x4A43
             MsWordGenerated::read(in + bytes, &m_chp.hps);
             break;
