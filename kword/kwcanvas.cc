@@ -1866,6 +1866,10 @@ bool KWCanvas::checkCurrentEdit( KWFrameSet * fs )
     if ( fs && m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet() != fs )
     {
         // Don't use terminateCurrentEdit here, we want to emit changed only once
+        KWTextFrameSet * tmp = dynamic_cast<KWTextFrameSet *>(fs );
+        if ( tmp && tmp->protectContent() && !m_doc->cursorInProtectedArea() )
+            return false;
+
         m_currentFrameSetEdit->terminate();
         delete m_currentFrameSetEdit;
         m_currentFrameSetEdit = 0L;
