@@ -23,15 +23,13 @@
 #include <qdom.h>
 
 #include "vgroup.h"
-#include "vobject.h"
 #include "vvisitor.h"
-#include "vpath.h"
 
 class VPainter;
 
 /**
  * Base class for clipping conglomerates
- * the first child elemt is used for clipping
+ * the first child element is used for clipping
  */
 
 class VClipGroup : public VGroup
@@ -54,15 +52,15 @@ public:
 class PathRenderer : public VVisitor
 {
 public:
-	PathRenderer( VPainter *p_painter);
+	PathRenderer( VPainter *p_painter );
 
 	virtual ~PathRenderer();
-private:
-        VPainter *m_painter;
 
 protected:
 	virtual void visitVPath( VPath& path );
 
+private:
+	VPainter *m_painter;
 };
 
 #endif

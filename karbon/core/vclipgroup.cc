@@ -32,8 +32,8 @@
 #include "vsegment.h"
 #include <vpainter.h>
 #include <vtext.h>
-VClipGroup::VClipGroup( VObject* parent, VState state) : VGroup(parent, state) {}
-VClipGroup::VClipGroup( const VClipGroup& group ) : VGroup (group) {}
+VClipGroup::VClipGroup( VObject* parent, VState state ) : VGroup( parent, state ) {}
+VClipGroup::VClipGroup( const VClipGroup& group ) : VGroup( group ) {}
 
 VClipGroup::~VClipGroup() { }
 
@@ -51,15 +51,15 @@ void VClipGroup::draw( VPainter* painter, const KoRect* rect ) const
 
 	painter->save();
 
-	PathRenderer renderer (painter);
+	PathRenderer renderer( painter );
 	kdDebug() << "calling painter setClipPath" << endl;
 	painter->setClipPath();
 
 	VObject *obj = itr.current();
-	obj->accept (renderer);
+	obj->accept( renderer );
 	++itr;
 
-	for ( ; itr.current(); ++itr )
+	for( ; itr.current(); ++itr )
 		itr.current()->draw( painter, rect );
 
 	painter->restore();
@@ -79,7 +79,7 @@ void VClipGroup::save( QDomElement& element ) const
 	// save objects:
 	VObjectListIterator itr = m_objects;
 
-	for ( ; itr.current(); ++itr )
+	for( ; itr.current(); ++itr )
 		itr.current()->save( me );
 }
 
@@ -126,20 +126,20 @@ void VClipGroup::load( const QDomElement& element )
 	}
 }
 
-PathRenderer::PathRenderer( VPainter *p_painter) : VVisitor()
+PathRenderer::PathRenderer( VPainter *p_painter ) : VVisitor()
 {
-  m_painter = p_painter;
+	m_painter = p_painter;
 }
 
 PathRenderer::~PathRenderer() {}
 
 void PathRenderer::visitVPath( VPath& path )
 {
-	if (!m_painter) return;
+	if(!m_painter) return;
 
-	if (path.isEmpty()) return;
+	if(path.isEmpty()) return;
 
-	for (path.first(); VSegment *segment = path.current(); path.next() )
+	for(path.first(); VSegment *segment = path.current(); path.next() )
 	{
 		KoPoint p1;
 		KoPoint p2;
@@ -147,29 +147,29 @@ void PathRenderer::visitVPath( VPath& path )
 
 		QString buffer;
 
-		if (segment->state() != VSegment::deleted)
+		if(segment->state() != VSegment::deleted)
 		{
-			switch (segment->type())
+			switch(segment->type())
 			{
 				case VSegment::begin :
-					p1 = segment->point(0);
+					p1 = segment->point( 0 );
 
 					kdDebug() << "calling painter.moveTo with " << p1;
-					m_painter->moveTo (p1);
+					m_painter->moveTo( p1 );
 					break;
 				case VSegment::curve :
-					p1 = segment->point(0);
-					p2 = segment->point(1);
-					p3 = segment->point(2);
+					p1 = segment->point( 0 );
+					p2 = segment->point( 1 );
+					p3 = segment->point( 2 );
 
 					kdDebug() << "calling painter.curveTo with " << p1 << " " << p2 << " " << p3;
-					m_painter->curveTo (p1,p2,p3);
+					m_painter->curveTo( p1, p2, p3 );
 
 					break;
 		     		case VSegment::line	 :
-					p1 = segment->point(0);
+					p1 = segment->point( 0 );
 					kdDebug() << "calling painter.lineTo with " << p1;
-					m_painter->lineTo (p1);
+					m_painter->lineTo( p1 );
 					break;
 			}
 		}
@@ -177,6 +177,6 @@ void PathRenderer::visitVPath( VPath& path )
 
 	VVisitor::visitVPath(path);
 
-//	if (path.isClosed()) m_painter->closePath();
+//	if( path.isClosed() ) m_painter->closePath();
 }
 
