@@ -43,6 +43,6 @@ private:
     QFont yaxis;
     QFont xaxis;
     KChartColorArray extColor;
-    int indice;
+    int index;
 };
 #endif

@@ -13,7 +13,6 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <math.h>
-#include <stdio.h> //PENDING(kalle) Remove?
 #include <kdebug.h>
 
 
@@ -45,12 +44,11 @@ int KChartEngine::init() {
   num_sets = data->rows();
 
   // No data sets left -> bail out
-  if( num_sets < 1 )
-        {
+  if( num_sets < 1 ) {
 	kdDebug(35001) << "No data" << endl;
-        return -1;
-        }
-
+	return -1;
+  }
+  
   //num_hlc_sets = params->has_hlc_sets() ? num_sets : 0;
   //you are 2 curves
   num_hlc_sets = params->has_hlc_sets() ? 1 : 0;

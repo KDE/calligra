@@ -71,7 +71,7 @@ private:
   int num_hlc_sets;
   int num_points;
   int graphwidth;
-  int grapheight;
+  int graphheight;
   float	xorig, yorig, vyorig;
   float	yscl;
   float	vyscl;

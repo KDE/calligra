@@ -77,7 +77,7 @@ int KChartEngine::out_graph() {
     /* ----- highest & lowest values ----- */
     computeMinMaxValues();
     /* ----- graph height and width within the gif height width ----- */
-    /* grapheight/height is the actual size of the scalable graph */
+    /* graphheight/height is the actual size of the scalable graph */
     // scaled, sized, ready
     computeSize();
     kdDebug(35001) << "scaled, sized, ready" << endl;
@@ -138,7 +138,6 @@ int KChartEngine::out_graph() {
     {
 
       kdDebug(35001) << "drawing  x ticks and xlabels" << endl;
-      //Commented out because it is prone to math error
       drawXTicks();
     }
     /* ----- solid poly region (volume) ----- */
