@@ -3830,7 +3830,7 @@ void KSpreadCell::checkValue()
         // The tricky part is that we need to remove any separator around the year
         // For instance %Y-%m-%d becomes %m-%d and %d/%m/%Y becomes %d/%m
         // If the year is in the middle, say %m-%Y/%d, we'll remove the sep. before it (%m/%d).
-        QString fmt = locale()->shortDateFormat();
+        QString fmt = locale()->dateFormatShort();
         int yearPos = fmt.find( "%Y", 0, false );
         if ( yearPos > -1 )
         {
@@ -3845,7 +3845,7 @@ void KSpreadCell::checkValue()
                 for ( ; yearPos > 0 && fmt[yearPos-1] != '%'; --yearPos )
                     fmt.remove( yearPos, 1 );
             }
-            //kdDebug() << "KSpreadCell::checkValue short format w/o date: " << fmt << endl;
+            kdDebug() << "KSpreadCell::checkValue short format w/o date: " << fmt << endl;
             tmpDate = locale()->readDate( m_strText, fmt );
         }
     }
