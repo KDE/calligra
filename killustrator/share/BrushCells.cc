@@ -37,9 +37,9 @@ BrushCells::BrushCells (QWidget *parent, const QColor &color, const char *name)
   : QTableView (parent, name) {
 
   setFrameStyle (QFrame::Panel | QFrame::Sunken);
-  setNumRows (3);
-  setNumCols (5);
-  setMinimumSize (5 * CELL_WIDTH, 3 * CELL_HEIGHT);
+  setNumRows(4);
+  setNumCols(4);
+  //setMinimumSize (4 * CELL_WIDTH, 4 * CELL_HEIGHT);
   for (int i = 0; i < 14; i++) {
     QPixmap pix (CELL_WIDTH, CELL_HEIGHT);
     pix.fill (white);
@@ -84,7 +84,7 @@ int BrushCells::cellHeight (int) {
 }
 
 void BrushCells::paintCell (QPainter *p, int row, int col) {
-  int pos = row * 5 + col;
+  int pos = row * 4 + col;
   if (pos < 14) {
     p->drawPixmap (0, 0, brushPixmaps[pos]);
     if (currentBrush == pos) {
@@ -101,7 +101,7 @@ void BrushCells::mousePressEvent (QMouseEvent *event) {
   col = findCol (event->x ());
 
   if (row != -1 && col != -1) {
-    int pos = row * 5 + col;
+    int pos = row * 4 + col;
     if (pos < 14) {
       currentBrush = pos;
       repaint ();

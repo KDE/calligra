@@ -25,16 +25,7 @@
 #ifndef PropertyEditor_h_
 #define PropertyEditor_h_
 
-#include <qdialog.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qwidgetstack.h>
-#include <qslider.h>
-
-#include <ktabctl.h>
-#include <kcolordlg.h>
-#include <kcolorbtn.h>
-#include <qspinbox.h>
+#include <kdialogbase.h>
 
 class QComboBox;
 class GDocument;
@@ -43,68 +34,86 @@ class UnitBox;
 class Gradient;
 class BrushCells;
 
+class QColor;
+class QLabel;
+class QComboBox;
+class QPushButton;
+class QSlider;
 class QRadioButton;
+class QWidgetStack;
+class QSpinBox;
+class KColorButton;
 class KFontChooser;
 
-class PropertyEditor : public QDialog {
-  Q_OBJECT
-public:
-  PropertyEditor (CommandHistory* history, GDocument* doc,
-                  QWidget* parent = 0L, const char* name = 0L);
+// This *huge* class is needed to present the preview pixmap.
+// It is simply a plain Widget which tries to get all the free
+// space it can get (in x and y direction).
+class PWidget : public QWidget {
 
-  static int edit (CommandHistory* history, GDocument* doc);
+public:
+    PWidget(QWidget *w) : QWidget(w) {}
+    virtual QSize minimumSizeHint() const { return QSize(10, 50); }
+    virtual QSizePolicy sizePolicy() const { return QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding); }
+};
+
+class PropertyEditor : public KDialogBase {
+
+    Q_OBJECT
+
+public:
+    PropertyEditor (CommandHistory* history, GDocument* doc,
+                    QWidget* parent = 0L, const char* name = 0L);
+
+    static int edit (CommandHistory* history, GDocument* doc);
 
 protected:
-  QWidget* createInfoWidget (QWidget* parent);
-  QWidget* createOutlineWidget (QWidget* parent);
-  QWidget* createFillWidget (QWidget* parent);
-  QWidget* createFontWidget (QWidget* parent);
+    void createInfoWidget (QWidget* parent);
+    void createOutlineWidget (QWidget* parent);
+    void createFillWidget (QWidget* parent);
+    void createFontWidget (QWidget* parent);
 
 private slots:
-  void applyPressed ();
-  void helpPressed ();
-  void fillStyleChanged ();
-  void fillColor1Changed (const QColor&);
-  void gradientColorChanged (const QColor&);
-  void gradientStyleChanged (int);
-  void gradientAngleChanged (int);
+    void applyPressed ();
+    void fillStyleChanged ();
+    void fillPatternColorChanged (const QColor&);
+    void gradientColorChanged (const QColor&);
+    void gradientStyleChanged (int);
+    void gradientAngleChanged (int);
 
 private:
-  void readProperties ();
-  void updateGradient ();
+    void readProperties ();
+    void updateGradient ();
 
-  GDocument* document;
-  //  GObject* object;
-  CommandHistory* cmdHistory;
-  bool haveObjects, haveTextObjects, haveLineObjects,
-    haveEllipseObjects, haveRectangleObjects;
-  QString text;
+    GDocument* document;
+    CommandHistory* cmdHistory;
+    bool haveObjects, haveTextObjects, haveLineObjects,
+        haveEllipseObjects, haveRectangleObjects;
 
-  KTabCtl* tabctl;
+    // Info Tab
+    QLabel* infoLabel[5];
 
-  // Info Tab
-  QLabel* infoLabel[5];
+    // OutlinePen Tab
+    UnitBox *widthField;
+    KColorButton* penColorBttn;
+    QComboBox* penStyleField;
+    QComboBox *leftArrows, *rightArrows;
+    QPushButton *ellipseKind[3];
+    QPushButton *textAlign[3];
+    QSlider* roundnessSlider;
 
-  // OutlinePen Tab
-  UnitBox *widthField;
-  KColorButton* penColorBttn;
-  QComboBox* penStyleField;
-  QComboBox *leftArrows, *rightArrows;
-  QPushButton *ellipseKind[3];
-  QPushButton *textAlign[3];
-  QSlider* roundnessSlider;
-
-  // Fill Tab
-  QRadioButton *fillStyleBttn[5];
-  QComboBox *gradStyleCombo;
-  KColorButton *fillColorBtn1, *fillColorBtn2;
-  QLabel *gradPreview;
-  QWidgetStack *wstack;
-  Gradient *gradient;
-  BrushCells *brushCells;
-  QSpinBox *gradientAngle;
+    // Fill Tab
+    QRadioButton *fillStyleBttn[5];
+    KColorButton *fillSolidColor;
+    KColorButton *fillPatternColor;
+    QComboBox *gradStyleCombo;
+    KColorButton *fillColorBtn1, *fillColorBtn2;
+    PWidget *gradPreview;
+    QWidgetStack *wstack;
+    Gradient *gradient;
+    BrushCells *brushCells;
+    QSpinBox *gradientAngle;
 
     KFontChooser *fontChooser;
- };
+};
 
 #endif

@@ -41,6 +41,10 @@ public:
                 const char *name = 0);
     ~BrushCells ();
 
+    virtual QSize sizeHint() const { return QSize(200, 120); }
+    virtual QSize minimumSizeHint() const { return QSize(200, 120); }
+    virtual QSizePolicy sizePolicy() const { return QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding); }
+
     Qt::BrushStyle brushStyle ();
     void selectBrush (Qt::BrushStyle style);
     void setColor(const QColor &);
