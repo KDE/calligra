@@ -74,7 +74,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		/*! \return true, both if connection is properly estableshed
 		 and any database within this connection is properly used
 		 with useDatabase(). */
-		bool isDatabaseUsed() { return m_is_connected && m_usedDatabase.isEmpty(); }
+		bool isDatabaseUsed() { return !m_usedDatabase.isEmpty() && m_is_connected; }
 		
 		/*! Disconnects to driver with given parameters. 
 		 Database (if used) is closed, and any active transactions 
@@ -517,6 +517,10 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		/*! Helper: checks if connection is established; 
 			if not: error message is set up and false returned */
 		bool checkConnected();
+
+		/*! Helper: checks both if connection is established and database any is used; 
+			if not: error message is set up and false returned */
+		bool checkIsDatabaseUsed();
 
 		/*! Setups schema data for object that owns sdata (e.g. table, query)
 			using \a cursor opened on 'kexi__objects' table, pointing to a record

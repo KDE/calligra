@@ -153,6 +153,16 @@ bool Connection::checkConnected()
 	return false;
 }
 
+bool Connection::checkIsDatabaseUsed()
+{
+	if (isDatabaseUsed()) {
+		clearError();
+		return true;
+	}
+	setError(ERR_NO_DB_USED, i18n("Currently no database is used.") );
+	return false;
+}
+
 QStringList Connection::databaseNames()
 {
 	if (!checkConnected())
@@ -349,7 +359,6 @@ bool Connection::closeDatabase()
 {
 	if (m_usedDatabase.isEmpty())
 		return true; //no db used
-
 	if (!checkConnected())
 		return true;
 
@@ -417,9 +426,8 @@ QStringList Connection::tableNames(bool also_system_tables)
 {
 	QStringList list;
 	
-//lucijan: doesn't work
-//if (!isDatabaseUsed())
-//		return list;
+	if (!isDatabaseUsed())
+		return list;
 
 	Cursor *c = executeQuery(QString(
 	 "select o_name from kexi__objects where o_type=%1").arg(KexiDB::TableObjectType));
@@ -640,7 +648,7 @@ Field* Connection::findSystemFieldName(KexiDB::FieldList* fieldlist)
 
 bool Connection::createTable( KexiDB::TableSchema* tableSchema )
 {
-	if (!tableSchema || !checkConnected())
+	if (!tableSchema || !checkIsDatabaseUsed())
 		return false;
 
 	//check if there are any fields
@@ -771,7 +779,7 @@ bool Connection::rollbackAutoCommitTransaction(const Transaction& trans)
 
 Transaction Connection::beginTransaction()
 {
-	if (!checkConnected())
+	if (!isDatabaseUsed())
 		return Transaction::null;
 	Transaction trans;
 	if (m_driver->m_features & Driver::SingleTransactions) {
@@ -802,7 +810,7 @@ Transaction Connection::beginTransaction()
 
 bool Connection::commitTransaction(const Transaction trans, bool ignore_inactive)
 {
-	if (!checkConnected())
+	if (!isDatabaseUsed())
 		return false;
 	if (!m_driver->transactionsSupported()) {
 		SET_ERR_TRANS_NOT_SUPP;
@@ -831,7 +839,7 @@ bool Connection::commitTransaction(const Transaction trans, bool ignore_inactive
 
 bool Connection::rollbackTransaction(const Transaction trans, bool ignore_inactive)
 {
-	if (!checkConnected())
+	if (!isDatabaseUsed())
 		return false;
 	if (!m_driver->transactionsSupported()) {
 		SET_ERR_TRANS_NOT_SUPP;
@@ -873,7 +881,7 @@ Transaction& Connection::defaultTransaction() const
 
 void Connection::setDefaultTransaction(const Transaction& trans)
 {
-	if (!checkConnected())
+	if (!checkIsDatabaseUsed())
 		return;
 	if (!trans.active() || !m_driver->transactionsSupported())
 		return;

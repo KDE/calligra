@@ -92,6 +92,31 @@ FIX: corrupted database can be created sometimes (eg. for tests/newapi sqlite db
 TODO: improove Expression class, add code for generationg expression 
  strings in Connection::queryStatement()
 
+<SQLITE>
+from: http://web.utk.edu/~jplyon/sqlite/SQLite_optimization_FAQ.html
+
+TODO: 
+"Although SQLite parses named transactions, the names are ignored. 
+SQLite does not support nested transactions. If you split the SQL statements in a transaction 
+over several sqlite_exec() calls, you must be prepared to handle failure in each of these calls. 
+If a failure occurs SQLite will return a non-zero value. After that, SQLite will revert to the 
+default behavior of giving each SQL statement its own transaction until a new transaction is started."
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+---so: check if any sqlite_exec() failed and if so - update connection state as if rollback has been done.
+
+TODO: use callbacks for fetching data (to avoid data copying)
+TODO: "The SQLite library includes functions sqlite_encode_binary() and sqlite_decode_binary() 
+in "encode.c". They can be used to safely encode binary data in a string form suitable for storing 
+in SQLite, and safe for use in SQL queries. These functions are an "addition" to the SQLite library. 
+They are not compiled into the library by default, and are not present in the precompiled binaries 
+distributed on the download page."
+
+TODO: add possibility in cursor: "Operating in-place on data returned by sqlite_get_table()"
+</SQLITE>
+2003-10-12
+- Connection::isDatabaseUsed() fixed
+- Connection: isConnected() is substituted with isDatabaseUsed() in some cases
+	and checkIsDatabaseUsed() is substituted with checkConnected() in many cases.
 
 2003-10-11
 - Transaction::isNull() fixed 
@@ -100,7 +125,12 @@ TODO: improove Expression class, add code for generationg expression
 - kexidb/parser and kexidb/tests/parser ported to win32
 - KexiDB::Expression introduced
 - isSystemObjectName() now checks for "kexi__" prefixes
-- checks on create table: if name is not system, if table is not empty. if fields are not system
+- checks on create table: if name is not system, if table is not empty, if fields are not system
+- KexiDB::Reference introduced
+- KexiDB::IndexSchema now contains informations about multiple related Reference objects
+- kexidb/tests/newapi : now tests are functions, so can be called as subtests if needed;
+   gui tests group added; tableview gui test introduced
+
 
 2003-10-10
 - FIX: creating kexidb system tables schema objects on useDatabase()

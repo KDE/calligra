@@ -22,23 +22,24 @@
 #define _KEXI_ERROR_H_
 
 #define ERR_NONE 0
-#define ERR_DRIVERMANAGER 1
-#define ERR_MISSING_DB_LOCATION 2
-#define ERR_ALREADY_CONNECTED 3
-#define ERR_NO_CONNECTION 4
-#define ERR_OBJECT_EXISTS 5
-#define ERR_OBJECT_NOT_EXISTING 6
-#define ERR_ACCESS_RIGHTS 6
-#define ERR_TRANSACTION_ACTIVE 7
-#define ERR_NO_TRANSACTION_ACTIVE 8
-#define ERR_DB_SPECIFIC 9
-#define ERR_CURSOR_NOT_OPEN 10
-#define ERR_SINGLE_DB_NAME_MISMATCH 11
-#define ERR_CURSOR_RECORD_FETCHING 12 //!< eg. for Cursor::drv_getNextRecord()
-#define ERR_UNSUPPORTED_DRV_FEATURE 13 //!< given driver's feature is unsupported (eg. transactins)
-#define ERR_ROLLBACK_OR_COMMIT_TRANSACTION 14 //!< error during transaction rollback or commit
-#define ERR_SYSTEM_NAME_RESERVED 15 //!< system name is reserved and cannot be used (e.g. for table of field name)
-#define ERR_CANNOT_CREATE_EMPTY_OBJECT 16 //!< empty object cannot be created (e.g. table without fields)
+#define ERR_DRIVERMANAGER 10
+#define ERR_MISSING_DB_LOCATION 20
+#define ERR_ALREADY_CONNECTED 30
+#define ERR_NO_CONNECTION 40 //!< when opened connection was expected using KexiDB::Connection
+#define ERR_NO_DB_USED 41 //!< when used database was expected using KexiDB::Connection
+#define ERR_OBJECT_EXISTS 50
+#define ERR_OBJECT_NOT_EXISTING 60
+#define ERR_ACCESS_RIGHTS 70
+#define ERR_TRANSACTION_ACTIVE 80
+#define ERR_NO_TRANSACTION_ACTIVE 90
+#define ERR_DB_SPECIFIC 100
+#define ERR_CURSOR_NOT_OPEN 110
+#define ERR_SINGLE_DB_NAME_MISMATCH 120
+#define ERR_CURSOR_RECORD_FETCHING 130 //!< eg. for Cursor::drv_getNextRecord()
+#define ERR_UNSUPPORTED_DRV_FEATURE 140 //!< given driver's feature is unsupported (eg. transactins)
+#define ERR_ROLLBACK_OR_COMMIT_TRANSACTION 150 //!< error during transaction rollback or commit
+#define ERR_SYSTEM_NAME_RESERVED 160 //!< system name is reserved and cannot be used (e.g. for table of field name)
+#define ERR_CANNOT_CREATE_EMPTY_OBJECT 170 //!< empty object cannot be created (e.g. table without fields)
 
 #define ERR_OTHER 0xffff //!< use this if you have not (yet?) the name for given error 
 #endif
