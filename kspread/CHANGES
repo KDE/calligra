@@ -586,3 +586,9 @@ lo22-action-deletecell) made by jp.martin <jpmartin@iroise.com> thanks
 -Change some icon name because the people who improved and
 moved icons in kdelibs or toolbar/hicolor etc... changed name
 (for exemple bold -> text_bold)
+
+2000-06-01 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Improved layout managment in kspread_dlg_layout->border
+-Now you can customize penstyle ,you can change size
+and style of penStyle
