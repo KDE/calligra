@@ -26,6 +26,8 @@
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qregexp.h>
+#include <qvaluelist.h>
+
 #include <kurl.h>
 #include <koPicture.h>
 
@@ -454,6 +456,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
                     destination = destinationStack.pop();
                 }
 	    }
+            // ### TODO: why can this not be simplified to use QValueList::isEmpty()
 	    if (stateStack.count() <= 1)
 	    {
 		// End-of-document, keep formatting properties
@@ -639,24 +642,24 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
 	kwFormat.len = 0;
 
 	// Process all styles in the style sheet
-	for (uint i=0; i < styleSheet.count(); i++)
+        const QValueList<RTFStyle>::ConstIterator endStyleSheet=styleSheet.end();
+        for (QValueList<RTFStyle>::ConstIterator it=styleSheet.begin();it!=endStyleSheet;++it)
 	{
-	    RTFStyle &style = styleSheet[i];
 	    mainDoc.addNode( "STYLE" );
-	    kwFormat.fmt = style.format;
+	    kwFormat.fmt = (*it).format;
 
 	    // Search for 'following' style
-	    for (uint k=0; k < styleSheet.count(); k++)
+            for (QValueList<RTFStyle>::ConstIterator it2=styleSheet.begin();it2!=endStyleSheet;++it2)
 	    {
-		if (styleSheet[k].layout.style == style.next)
+		if ((*it2).layout.style == (*it).next)
 		{
-                mainDoc.addNode( "FOLLOWING" );
-                mainDoc.setAttribute( "name", CheckAndEscapeXmlText( styleSheet[k].name ));
-                mainDoc.closeNode( "FOLLOWING");
+                    mainDoc.addNode( "FOLLOWING" );
+                    mainDoc.setAttribute( "name", CheckAndEscapeXmlText( (*it2).name ));
+                    mainDoc.closeNode( "FOLLOWING");
 		    break;
 		}
 	    }
-	    addLayout( mainDoc, style.name, style.layout, false );
+	    addLayout( mainDoc, (*it).name, (*it).layout, false );
 	    addFormat( mainDoc, kwFormat, 0L );
 	    mainDoc.closeNode( "STYLE" );
 	}
@@ -2262,7 +2265,7 @@ void RTFImport::addFormat( DomNode &node, KWFormat &format, RTFFormat *baseForma
  * @param layout the paragraph layout information
  * @param frameBreak paragraph is always the last in a frame if true
  */
-void RTFImport::addLayout( DomNode &node, const QString &name, RTFLayout &layout, bool frameBreak )
+void RTFImport::addLayout( DomNode &node, const QString &name, const RTFLayout &layout, bool frameBreak )
 {
     // Style name and alignment
     node.addNode( "NAME" );
@@ -2373,7 +2376,7 @@ void RTFImport::addLayout( DomNode &node, const QString &name, RTFLayout &layout
     // Paragraph borders
     for (uint i=0; i < 4; i++)
     {
-	RTFBorder &border = layout.borders[i];
+	const RTFBorder &border = layout.borders[i];
 
 	if (border.style != RTFBorder::None || border.width > 0)
 	{
@@ -2400,7 +2403,7 @@ void RTFImport::addLayout( DomNode &node, const QString &name, RTFLayout &layout
     {
 	for (uint i=0; i < layout.tablist.count(); i++)
 	{
-	    RTFTab &tab = layout.tablist[i];
+	    const RTFTab &tab = layout.tablist[i];
 	    int l = (int)tab.leader;
 	    node.addNode( "TABULATOR" );
 	      node.setAttribute( "type", tab.type );
