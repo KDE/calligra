@@ -65,6 +65,9 @@ public:
     virtual void paint( KivioIntraStencilData * , bool outlined);
     virtual void paintConnectorTargets( KivioIntraStencilData * );
     virtual KivioConnectorTarget *connectToTarget( KivioConnectorPoint *p, float threshHold );
+    virtual KivioConnectorTarget *connectToTarget( KivioConnectorPoint *p, int targetID );
+
+    virtual int generateIds( int );
 
     virtual QColor fgColor();
     virtual void setFGColor( QColor );

@@ -233,7 +233,7 @@ void KivioPyStencil::updateGeometry()
         float y = getDoubleFromDict( target,"y");
 
         pTarget  ->setPosition( x, y );
-	pOriginal->setPosition( x, y );
+        pOriginal->setPosition( x, y );
 
         pTarget = m_pConnectorTargets->next();
         pOriginal = pOriginalTargets->next();
@@ -460,9 +460,14 @@ void KivioPyStencil::paint( KivioIntraStencilData *d, bool outlined )
           else
             d->painter->drawEllipse( x, y, w, h );
        }
-
-
    }
+
+    KivioConnectorTarget *pTarget = m_pConnectorTargets->first();
+    while( pTarget )
+    {
+        pTarget ->paintOutline( d );
+        pTarget = m_pConnectorTargets->next();
+    }
 }
 
 
@@ -625,6 +630,55 @@ KivioConnectorTarget *KivioPyStencil::connectToTarget( KivioConnectorPoint *p, f
     }
 
     return NULL;
+}
+
+KivioConnectorTarget *KivioPyStencil::connectToTarget( KivioConnectorPoint *p, int targetID )
+{
+    int id = p->targetId();
+
+    KivioConnectorTarget *pTarget = m_pConnectorTargets->first();
+    while( pTarget )
+    {
+        if( pTarget->id() == id )
+        {
+            p->setTarget(pTarget);
+
+            return pTarget;
+        }
+
+        pTarget = m_pConnectorTargets->next();
+    }
+
+    return NULL;
+}
+
+int KivioPyStencil::generateIds( int nextAvailable )
+{
+    KivioConnectorTarget *pTarget = m_pConnectorTargets->first();
+
+    // Iterate through all the targets
+    while( pTarget )
+    {
+        // If this target has something connected to it
+        if( pTarget->hasConnections() )
+        {
+            // Set it's id to the next available id
+            pTarget->setId( nextAvailable );
+
+            // Increment the next available id
+            nextAvailable++;
+        }
+        else
+        {
+            // Otherwise mark it as unused (-1)
+            pTarget->setId( -1 );
+        }
+
+        pTarget = m_pConnectorTargets->next();
+    }
+
+    // Return the next availabe id
+    return nextAvailable;
 }
 
 void KivioPyStencil::setStyle( KivioIntraStencilData *d, PyObject *s, int &fillStyle )
