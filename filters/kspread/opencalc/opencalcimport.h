@@ -29,7 +29,7 @@
 class KSpreadCell;
 class KSpreadDoc;
 class KSpreadSheet;
-
+class KSpreadValidity;
 
 class OpenCalcImport : public KoFilter
 {
@@ -67,6 +67,7 @@ class OpenCalcImport : public KoFilter
   QDict<QDomElement>   m_styles;
   QDict<KSpreadFormat> m_defaultStyles;
   QDict<QString>       m_formats;
+  QMap<QString,QDomElement> m_validationList;
 
   QStringList          m_namedAreas;
 
@@ -89,6 +90,9 @@ class OpenCalcImport : public KoFilter
                         KSpreadFormat::FormatType & formatType,
                         QString name );
   void checkForNamedAreas( QString & formula ) const;
+  void loadOasisCellValidation( const QDomElement&body );
+  void loadOasisValidation( KSpreadValidity* val, const QString& validationName );
+  void loadOasisValidationCondition( KSpreadValidity* val,QString &valExpression );
 
   QString translatePar( QString & par ) const;
   KoFilter::ConversionStatus openFile();

@@ -546,6 +546,11 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, KSpreadSheet  * table, in
         cell = table->nonDefaultCell( columns, row );
       cell->setCellText( formula );
     }
+    if ( e.hasAttribute( "table:validation-name" ) )
+    {
+        kdDebug()<<" Celle has a validation :"<<e.attribute( "table:validation-name" )<<endl;
+        loadOasisValidation( cell->getValidity(), e.attribute( "table:validation-name" ) );
+    }
     if ( e.hasAttribute( "table:value-type" ) )
     {
       if ( !cell )
@@ -1132,6 +1137,8 @@ bool OpenCalcImport::parseBody( int numOfTables )
     }
   }
 
+  loadOasisCellValidation( body.toElement() );
+
   KSpreadSheet * table;
   QDomNode sheet = body.namedItem( "table:table" );
 
@@ -1320,6 +1327,25 @@ void OpenCalcImport::insertStyles( QDomElement const & element )
     n = n.nextSibling();
   }
 }
+
+void OpenCalcImport::loadOasisCellValidation( const QDomElement&body )
+{
+    QDomNode validation = body.namedItem( "table:content-validations" );
+    if ( !validation.isNull() )
+    {
+        QDomElement element = validation.firstChild().toElement();
+        for ( ; !element.isNull() ; element = element.nextSibling().toElement() ) {
+            if ( element.tagName() ==  "table:content-validation" ) {
+                m_validationList.insert( element.attribute("table:name" ), element);
+                kdDebug()<<" validation found :"<<element.attribute("table:name" )<<endl;
+            }
+            else {
+                kdDebug()<<" Tag not recognize :"<<element.tagName()<<endl;
+            }
+        }
+    }
+}
+
 
 QString * OpenCalcImport::loadFormat( QDomElement * element,
                                       KSpreadFormat::FormatType & formatType,
@@ -2086,6 +2112,302 @@ bool OpenCalcImport::createStyleMap( QDomDocument const & styles )
 
   return true;
 }
+
+void OpenCalcImport::loadOasisValidation( KSpreadValidity* val, const QString& validationName )
+{
+    kdDebug()<<"validationName:"<<validationName<<endl;
+    QDomElement element = m_validationList[validationName];
+    if ( element.hasAttribute( "table:condition" ) )
+    {
+        QString valExpression = element.attribute( "table:condition" );
+        kdDebug()<<" element.attribute( table:condition ) "<<valExpression<<endl;
+        //Condition ::= ExtendedTrueCondition | TrueFunction 'and' TrueCondition
+        //TrueFunction ::= cell-content-is-whole-number() | cell-content-is-decimal-number() | cell-content-is-date() | cell-content-is-time()
+        //ExtendedTrueCondition ::= ExtendedGetFunction | cell-content-text-length() Operator Value
+        //TrueCondition ::= GetFunction | cell-content() Operator Value
+        //GetFunction ::= cell-content-is-between(Value, Value) | cell-content-is-not-between(Value, Value)
+        //ExtendedGetFunction ::= cell-content-text-length-is-between(Value, Value) | cell-content-text-length-is-not-between(Value, Value)
+        //Operator ::= '<' | '>' | '<=' | '>=' | '=' | '!='
+        //Value ::= NumberValue | String | Formula
+        //A Formula is a formula without an equals (=) sign at the beginning. See section 8.1.3 for more information.
+        //A String comprises one or more characters surrounded by quotation marks.
+        //A NumberValue is a whole or decimal number. It must not contain comma separators for numbers of 1000 or greater.
+
+        //ExtendedTrueCondition
+        if ( valExpression.contains( "cell-content-text-length()" ) )
+        {
+            //"cell-content-text-length()>45"
+            valExpression = valExpression.remove("cell-content-text-length()" );
+            kdDebug()<<" valExpression = :"<<valExpression<<endl;
+            val->m_allow = Allow_TextLength;
+
+            loadOasisValidationCondition( val, valExpression );
+        }
+        //cell-content-text-length-is-between(Value, Value) | cell-content-text-length-is-not-between(Value, Value)
+        else if ( valExpression.contains( "cell-content-text-length-is-between" ) )
+        {
+            val->m_allow = Allow_TextLength;
+            val->m_cond = Between;
+            valExpression = valExpression.remove( "cell-content-text-length-is-between(" );
+            kdDebug()<<" valExpression :"<<valExpression<<endl;
+            valExpression = valExpression.remove( ")" );
+            bool ok = false;
+            QStringList listVal = QStringList::split( ",", valExpression );
+            kdDebug()<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
+
+            val->valMin = listVal[0].toDouble(&ok);
+            if ( !ok )
+            {
+                val->valMin = listVal[0].toInt(&ok);
+#if 0
+                if ( !ok )
+                    val->valMin = listVal[0];
+#endif
+            }
+            ok=false;
+            val->valMax = listVal[1].toDouble(&ok);
+            if ( !ok )
+            {
+                val->valMax = listVal[1].toInt(&ok);
+#if 0
+
+                if ( !ok )
+                    val->valMax = listVal[1];
+#endif
+            }
+        }
+        else if ( valExpression.contains( "cell-content-text-length-is-not-between" ) )
+        {
+            val->m_allow = Allow_TextLength;
+            val->m_cond = Different;
+            valExpression = valExpression.remove( "cell-content-text-length-is-not-between(" );
+            kdDebug()<<" valExpression :"<<valExpression<<endl;
+            valExpression = valExpression.remove( ")" );
+            kdDebug()<<" valExpression :"<<valExpression<<endl;
+            QStringList listVal = QStringList::split( ",", valExpression );
+            bool ok = false;
+
+            val->valMin = listVal[0].toDouble(&ok);
+            if ( !ok )
+            {
+                val->valMin = listVal[0].toInt(&ok);
+#if 0
+                if ( !ok )
+                   bool ok = false;
+             val->valMin = listVal[0];
+#endif
+            }
+            ok=false;
+            val->valMax = listVal[1].toDouble(&ok);
+            if ( !ok )
+            {
+                val->valMax = listVal[1].toInt(&ok);
+#if 0
+
+                if ( !ok )
+                    val->valMax = listVal[1];
+#endif
+            }
+
+
+
+        }
+        //TrueFunction ::= cell-content-is-whole-number() | cell-content-is-decimal-number() | cell-content-is-date() | cell-content-is-time()
+        else
+        {
+            if (valExpression.contains( "cell-content-is-whole-number()" ) )
+            {
+                val->m_allow =  Allow_Number;
+                valExpression = valExpression.remove( "cell-content-is-whole-number() and " );
+            }
+            else if (valExpression.contains( "cell-content-is-decimal-number()" ) )
+            {
+                val->m_allow = Allow_Integer;
+                valExpression = valExpression.remove( "cell-content-is-decimal-number() and " );
+            }
+            else if (valExpression.contains( "cell-content-is-date()" ) )
+            {
+                val->m_allow = Allow_Date;
+                valExpression = valExpression.remove( "cell-content-is-date() and " );
+            }
+            else if (valExpression.contains( "cell-content-is-time()" ) )
+            {
+                val->m_allow = Allow_Time;
+                valExpression = valExpression.remove( "cell-content-is-time() and " );
+            }
+            kdDebug()<<"valExpression :"<<valExpression<<endl;
+
+            if ( valExpression.contains( "cell-content()" ) )
+            {
+                valExpression = valExpression.remove( "cell-content()" );
+                loadOasisValidationCondition( val, valExpression );
+            }
+            //GetFunction ::= cell-content-is-between(Value, Value) | cell-content-is-not-between(Value, Value)
+            //for the moment we support just int/double value, not text/date/time :(
+            if ( valExpression.contains( "cell-content-is-between(" ) )
+            {
+                valExpression = valExpression.remove( "cell-content-is-between(" );
+                valExpression = valExpression.remove( ")" );
+                QStringList listVal = QStringList::split( "," , valExpression );
+                bool ok = false;
+                kdDebug()<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
+
+                val->valMin = listVal[0].toDouble(&ok);
+                if ( !ok )
+                {
+                    val->valMin = listVal[0].toInt(&ok);
+#if 0
+                    if ( !ok )
+                        val->valMin = listVal[0];
+#endif
+                }
+                ok=false;
+                val->valMax = listVal[1].toDouble(&ok);
+                if ( !ok )
+                {
+                    val->valMax = listVal[1].toInt(&ok);
+#if 0
+
+                    if ( !ok )
+                        val->valMax = listVal[1];
+#endif
+                }
+                val->m_cond = Between;
+            }
+            if ( valExpression.contains( "cell-content-is-not-between(" ) )
+            {
+                valExpression = valExpression.remove( "cell-content-is-not-between(" );
+                valExpression = valExpression.remove( ")" );
+                QStringList listVal = QStringList::split( ",", valExpression );
+                bool ok = false;
+                kdDebug()<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
+                val->valMin = listVal[0].toDouble(&ok);
+                if ( !ok )
+                {
+                    val->valMin = listVal[0].toInt(&ok);
+#if 0
+                    if ( !ok )
+                        val->valMin = listVal[0];
+#endif
+                }
+                ok=false;
+                val->valMax = listVal[1].toDouble(&ok);
+                if ( !ok )
+                {
+                    val->valMax = listVal[1].toInt(&ok);
+#if 0
+                    if ( !ok )
+                        val->valMax = listVal[1];
+#endif
+                }
+                val->m_cond = Different;
+            }
+        }
+    }
+    if ( element.hasAttribute( "table:allow-empty-cell" ) )
+    {
+        //todo implement it into kspread
+        //todo add attribute and config into kspread_cell
+    }
+    if ( element.hasAttribute( "table:base-cell-address" ) )
+    {
+        //todo what is it ?
+    }
+
+    //help is not implemented into kspread
+    QDomElement help = element.namedItem( "table:help-message" ).toElement();
+    if ( !help.isNull() )
+    {
+        if ( help.hasAttribute( "table:title" ) )
+            kdDebug()<<"help.attribute( table:title ) :"<<help.attribute( "table:title" )<<endl;
+        if ( help.hasAttribute( "table:display" ) )
+            kdDebug()<<"help.attribute( table:display ) :"<<help.attribute( "table:display" )<<endl;
+        QDomElement attrText = help.namedItem( "text:p" ).toElement();
+        if ( !attrText.isNull() )
+            kdDebug()<<"help text :"<<attrText.text()<<endl;
+    }
+
+    QDomElement error = element.namedItem( "table:error-message" ).toElement();
+    if ( !error.isNull() )
+    {
+        if ( error.hasAttribute( "table:title" ) )
+            val->title = error.attribute( "table:title" );
+        if ( error.hasAttribute( "table:message-type" ) )
+        {
+            QString str = error.attribute( "table:message-type" );
+            if ( str == "warning" )
+                val->m_action = Warning;
+            else if ( str == "information" )
+                val->m_action = Information;
+            else if ( str == "stop" )
+                val->m_action = Stop;
+            else
+                kdDebug()<<"validation : message type unknown  :"<<str<<endl;
+        }
+
+        if ( error.hasAttribute( "table:display" ) )
+        {
+            kdDebug()<<" display message :"<<error.attribute( "table:display" )<<endl;
+            val->displayMessage = (error.attribute( "table:display" )=="true");
+        }
+        QDomElement attrText = error.namedItem( "text:p" ).toElement();
+        if ( !attrText.isNull() )
+            val->message = attrText.text();
+    }
+}
+
+
+void OpenCalcImport::loadOasisValidationCondition( KSpreadValidity* val,QString &valExpression )
+{
+    QString value;
+
+    if ( valExpression.contains( "<" ) )
+    {
+        value = valExpression.remove( "<" );
+        val->m_cond = Inferior;
+    }
+    else if(valExpression.contains( ">" ) )
+    {
+        value = valExpression.remove( ">" );
+        val->m_cond = Superior;
+    }
+    else if (valExpression.contains( "<=" ) )
+    {
+        value = valExpression.remove( "<=" );
+        val->m_cond = InferiorEqual;
+    }
+    else if (valExpression.contains( ">=" ) )
+    {
+        value = valExpression.remove( ">=" );
+        val->m_cond = SuperiorEqual;
+    }
+    else if (valExpression.contains( "=" ) )
+    {
+        value = valExpression.remove( "=" );
+        val->m_cond = Equal;
+    }
+    else if (valExpression.contains( "!=" ) )
+    {
+        //add Differentto attribute
+        value = valExpression.remove( "!=" );
+        val->m_cond = DifferentTo;
+    }
+    else
+        kdDebug()<<" I don't know how to parse it :"<<valExpression<<endl;
+    kdDebug()<<" value :"<<value<<endl;
+    bool ok = false;
+    val->valMin = value.toDouble(&ok);
+    if ( !ok )
+    {
+        val->valMin = value.toInt(&ok);
+#if 0
+        if ( !ok )
+            val->valMin = value;
+#endif
+    }
+
+}
+
 
 int OpenCalcImport::readMetaData()
 {
