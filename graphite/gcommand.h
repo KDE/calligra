@@ -31,10 +31,10 @@ class GCommand {
 
 public:
     virtual ~GCommand();
-    
+
     virtual void execute() = 0;
     virtual void unexecute() = 0;
-    
+
 protected:
     GCommand();
 };
@@ -49,26 +49,25 @@ protected:
 // undo/redo actions in the menu.
 
 class GCommandHistory {
-    
+
 public:
     GCommandHistory(KAction *undo, KAction *redo);
     ~GCommandHistory();
-    
+
     void addCommand(GCommand *command);
     void undo();
     void redo();
-    
+
     const int undoLimit() { return m_undoLimit; }
     void setUndoLimit(const int &limit);
     const int redoLimit() { return m_redoLimit; }
     void setRedoLimit(const int &limit);
-    
+
 private:
     void clipCommands();  // ensures that the limits are kept
-    
+
     QList<GCommand> commands;
-    QListIterator<GCommand> present;  // where are we, currently?
-    int m_undoLimit, m_redoLimit;
     KAction *m_undo, *m_redo;
+    int m_undoLimit, m_redoLimit;
 };
 #endif // gcommand_h

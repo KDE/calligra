@@ -27,7 +27,7 @@ GCommandHistory::GCommandHistory(KAction *undo, KAction *redo) :
 GCommandHistory::~GCommandHistory() {
 }
 
-void GCommandHistory::addCommand(GCommand *command) {
+void GCommandHistory::addCommand(GCommand */*command*/) {
     // TODO
 }
 
@@ -40,7 +40,7 @@ void GCommandHistory::redo() {
 }
 
 void GCommandHistory::setUndoLimit(const int &limit) {
-    
+
     if(limit>0 && limit!=m_undoLimit) {
 	m_undoLimit=limit;
 	clipCommands();
@@ -48,7 +48,7 @@ void GCommandHistory::setUndoLimit(const int &limit) {
 }
 
 void GCommandHistory::setRedoLimit(const int &limit) {
-    
+
     if(limit>0 && limit!=m_redoLimit) {
 	m_redoLimit=limit;
 	clipCommands();
