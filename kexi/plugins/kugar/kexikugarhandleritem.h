@@ -30,8 +30,8 @@ class KexiKugarHandlerItem : public KexiProjectHandlerItem
 {
 	Q_OBJECT
 public:
-	KexiKugarHandlerItem(KexiKugarHandler *parent, const QString& name, const QString& mime,
-                                const QString& identifier);
+	KexiKugarHandlerItem(KexiProjectHandler *handler, const QString& ident, 
+		const QString& mime, const QString& title);
 	~KexiKugarHandlerItem();
 	const QString &reportTemplate() const;
 	void setReportTemplate (const QString &reportTemplate);
@@ -46,6 +46,8 @@ public slots:
 	void pluginStorageFile(QString &path);
 	void view(KexiView*);
 private:
+	QString generateDataFile();
+
 	QStringList m_storedDataSetNames;
 	QDict<QString> m_storedDataSets;
 	QString m_reportTemplate;
@@ -53,7 +55,6 @@ private:
 	QString m_tempPath;
 	KoDocument *m_designer;
 	KoDocument *m_viewer;
-	QString generateDataFile();
 };
 
 #endif

@@ -39,7 +39,7 @@ KexiRelationHandlerProxy::KexiRelationHandlerProxy(KexiRelationHandler *part,Kex
 {
 	kdDebug() << "KexiRelationHandlerProxy::KexiRelationHandlerProxy()" << endl;
 
-    KAction *createAction = new KAction(i18n("Relations"), "relation",
+    KAction *createAction = new KAction(i18n("Relations"), "relation", "",
                                         this,SLOT(slotShowRelationEditor()), actionCollection(), "relations");
 
     setXMLFile("kexirelationhandlerui.rc");

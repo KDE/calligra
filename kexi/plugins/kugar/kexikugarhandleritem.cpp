@@ -32,16 +32,17 @@
 #include <qfile.h>
 #include <kexikugarwrapper.h>
 
-KexiKugarHandlerItem::KexiKugarHandlerItem(KexiKugarHandler *parent, const QString& name, const QString& mime,
-                                           const QString& identifier)
-    : KexiProjectHandlerItem(parent,name,mime,identifier),
-      m_designer(0),m_viewer(0)
+KexiKugarHandlerItem::KexiKugarHandlerItem(KexiProjectHandler *handler, const QString& ident, 
+	const QString& mime, const QString& title)
+ : KexiProjectHandlerItem(handler, ident, mime, title)
+	, m_designer(0)
+	, m_viewer(0)
 {
 	m_storedDataSets.resize(51);
 	m_storedDataSets.setAutoDelete(true);
 	QString tmpPath=parent->tempPath();
 	if (!tmpPath.isEmpty()) {
-		m_tempPath=tmpPath+identifier;
+		m_tempPath=tmpPath+fullIdentifier();
 		kdDebug()<<"KexiKugarHandlerItem::creating directory: "<<m_tempPath<<endl;
 		if (mkdir(QFile::encodeName(m_tempPath),0700)!=0) {
 			kdDebug()<<"FAILED"<<endl;
@@ -57,10 +58,10 @@ KexiKugarHandlerItem::KexiKugarHandlerItem(KexiKugarHandler *parent, const QStri
 				kdDebug()<<"FAILED"<<endl;
 			}
 
-		        parent->kexiProject()->addFileReference(FileReference("reports",
-				"/"+identifier+"/template.kut", "/reports/"+identifier+"/template.kut"));
-		        parent->kexiProject()->addFileReference(FileReference("reports",
-				"/"+identifier+"/template.kukexi", "/reports/"+identifier+"/template.kukexi"));
+			parent->kexiProject()->addFileReference(FileReference("reports",
+				"/"+fullIdentifier()+"/template.kut", "/reports/"+fullIdentifier()+"/template.kut"));
+			parent->kexiProject()->addFileReference(FileReference("reports",
+				"/"+fullIdentifier()+"/template.kukexi", "/reports/"+FullIdentifier()+"/template.kukexi"));
 		}
 	}
 }
@@ -69,9 +70,9 @@ KexiKugarHandlerItem::~KexiKugarHandlerItem() {
 	if (!projectPart()) return;
 	if (!(projectPart()->kexiProject())) return;
 	projectPart()->kexiProject()->removeFileReference(FileReference("reports",
-		"/"+shortIdentifier()+"/template.kut", "/reports/"+shortIdentifier()+"/template.kut"));
+		"/"+identifier()+"/template.kut", "/reports/"+identifier()+"/template.kut"));
 	projectPart()->kexiProject()->removeFileReference(FileReference("reports",
-		"/"+shortIdentifier()+"/template.kukexi", "/reports/"+shortIdentifier()+"/template.kukexi"));
+		"/"+identifier()+"/template.kukexi", "/reports/"+identifier()+"/template.kukexi"));
 }
 
 const QString &KexiKugarHandlerItem::reportTemplate() const {
@@ -103,10 +104,10 @@ KoDocument *KexiKugarHandlerItem::designer(bool newReport) {
 void KexiKugarHandlerItem::store (KoStore *ks) {
 	if (m_tempPath.isEmpty()) return;
 	if (m_designer!=0) m_designer->saveAs(m_tempPath+"template.kut");
-	if (!ks->addLocalFile(m_tempPath+"template.kut","/reports/"+shortIdentifier()+"/template.kut") )
-		kdDebug()<<"Error storing "<<"/reports/"+shortIdentifier()+"/template.kut"<<endl;
-	if (!ks->addLocalFile(m_tempPath+"template.kukexi","/reports/"+shortIdentifier()+"/template.kukexi") )
-		kdDebug()<<"Error storing "<<"/reports/"+shortIdentifier()+"/template.kukexi"<<endl;
+	if (!ks->addLocalFile(m_tempPath+"template.kut","/reports/"+identifier()+"/template.kut") )
+		kdDebug()<<"Error storing "<<"/reports/"+identifier()+"/template.kut"<<endl;
+	if (!ks->addLocalFile(m_tempPath+"template.kukexi","/reports/"+identifier()+"/template.kukexi") )
+		kdDebug()<<"Error storing "<<"/reports/"+identifier()+"/template.kukexi"<<endl;
 }
 
 void KexiKugarHandlerItem::pluginStorageFile(QString &path) {

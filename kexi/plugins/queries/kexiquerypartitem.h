@@ -36,8 +36,8 @@ class KEXI_HAND_QUERY_EXPORT KexiQueryPartItem: public KexiProjectHandlerItem
 
 public:
 
-	KexiQueryPartItem(KexiProjectHandler *parent, const QString& name, const QString& mime,
-			const QString& identifier);
+	KexiQueryPartItem(KexiProjectHandler *handler, const QString& ident, 
+	 const QString& mime, const QString& title);
 	virtual ~KexiQueryPartItem();
 
 	void setParameters(const KexiDataProvider::ParameterList& params);
@@ -60,10 +60,10 @@ protected:
 
 private:
 	friend class KexiQueryPart;
+	KexiQueryDesigner		*m_client;
 	KexiTableList			*m_designData;
 	QString				m_sql;
 	KexiDataProvider::ParameterList	m_params;
-	KexiQueryDesigner		*m_client;
 	QStringList			m_fields;
 };
 

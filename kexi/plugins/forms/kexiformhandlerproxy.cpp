@@ -34,7 +34,7 @@
 KexiFormHandlerProxy::KexiFormHandlerProxy(KexiFormHandler *handler, KexiView *view)
  : KexiProjectHandlerProxy(handler, view), KXMLGUIClient()
 {
-    (void) new KAction(i18n("Create &Form..."), 0,
+    (void) new KAction(i18n("Create &Form..."), "form", "",
                        this,SLOT(slotCreate()), actionCollection(), "formpart_create");
 
     setXMLFile("kexiformpartui.rc");

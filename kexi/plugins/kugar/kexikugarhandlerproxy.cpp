@@ -39,7 +39,7 @@ KexiKugarHandlerProxy::KexiKugarHandlerProxy(KexiKugarHandler *part,KexiView *vi
 	m_kugarManager=part;
 	kdDebug() << "KexiKugarHandlerProxy::KexiKugarHandlerProxy()" << endl;
 
-    (void*) new KAction(i18n("Create &Report..."), 0,
+    (void*) new KAction(i18n("Create &Report..."), "report", "",
                         this,SLOT(slotCreateReport()), actionCollection(), "kugarhandler_create");
 
     setXMLFile("kexikugarhandlerui.rc");

@@ -34,14 +34,12 @@
 #include <kmessagebox.h>
 #include <kexidbrecordset.h>
 
-KexiQueryPartItem::KexiQueryPartItem(KexiProjectHandler *parent,
-		const QString& name, const QString& mime,
-		const QString& identifier)
- :KexiProjectHandlerItem(parent,name,mime,identifier)
+KexiQueryPartItem::KexiQueryPartItem(KexiProjectHandler *handler, const QString& ident, 
+	const QString& mime, const QString& title)
+ : KexiProjectHandlerItem(handler,ident,mime,title)
+	, m_client(0)
+	, m_designData( new KexiTableList() )
 {
-	m_client = 0;
-
-	m_designData = new KexiTableList();
 	KexiTableItem *item = new KexiTableItem(5);
 
 	item->setValue(0, 0);
@@ -81,7 +79,7 @@ void KexiQueryPartItem::store(KoStore* store)
 	QDomElement docElement = domDoc.createElement("query");
 	domDoc.appendChild(docElement);
 	QDomElement nameElement = domDoc.createElement("name");
-	QDomText attrName = domDoc.createTextNode(identifier());
+	QDomText attrName = domDoc.createTextNode(fullIdentifier());
 	nameElement.appendChild(attrName);
 	docElement.appendChild(nameElement);
 
@@ -118,7 +116,7 @@ void KexiQueryPartItem::store(KoStore* store)
 		QDomElement param = domDoc.createElement("parameter");
 		param.setAttribute("name",(*it).name);
 		param.setAttribute("type",(*it).type);
-        	paramsElement.appendChild(param);
+		paramsElement.appendChild(param);
 	}
 
 	QDomElement fieldCacheParent = domDoc.createElement("fieldcache");
@@ -134,7 +132,7 @@ void KexiQueryPartItem::store(KoStore* store)
 
 	if(store)
 	{
-		store->open("/query/" + name() + ".query");
+		store->open("/query/" + identifier() + ".query");
 		store->write(data);
 		store->close();
 	}
@@ -152,7 +150,7 @@ KexiQueryPartItem::load(KoStore* store)
 	{
 		kdDebug() << "KexiQueryPartItem::load(): store!=0" << endl;
 
-		store->open("/query/" + name() + ".query");
+		store->open("/query/" + identifier() + ".query");
 		QDomDocument doc;
 		doc.setContent(store->device());
 		store->close();
@@ -226,7 +224,7 @@ KexiDBRecordSet *KexiQueryPartItem::records(QWidget* dpar,KexiDataProvider::Para
 				if (d.exec()==QDialog::Accepted) {
 
 					KexiDataProvider::Parameters::Iterator it;
-        				for ( it = params.begin(); it != params.end();++it ) {
+						for ( it = params.begin(); it != params.end();++it ) {
 						kdDebug()<<"["<<it.key()<<"]="
 						<<it.data()<<endl;
 					}
@@ -256,16 +254,16 @@ KexiDBRecordSet *KexiQueryPartItem::records(QWidget* dpar,KexiDataProvider::Para
 	kdDebug()<<"resulting query string: "<<query<<endl;
 	KexiDBRecordSet *rec;
 
-        rec = projectPart()->kexiProject()->db()->queryRecord(query, true);
+        rec = handler()->kexiProject()->db()->queryRecord(query, true);
         if (!rec)
         {
                 kdDebug() << "KexiQueryPartItem(): db-error" << endl;
-                projectPart()->kexiProject()->db()->latestError()->toUser(0);
+                handler()->kexiProject()->db()->latestError()->toUser(0);
                 return 0;
         }
 
 	m_fields.clear();
-	for (int i=0;i<rec->fieldCount();i++)
+	for (int i=0;i<(int)rec->fieldCount();i++)
 	{
 		kdDebug()<<"KexiQueryPartItem::records():adding "<<rec->fieldName(i)<<" to cache"<<endl;
 		m_fields<<rec->fieldName(i);
