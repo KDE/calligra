@@ -19,8 +19,8 @@
 </author>
 </authorgroup> 
 
-<date>09/09/2000</date>
-<releaseinfo>0.01.06</releaseinfo>
+<date>24/09/2000</date>
+<releaseinfo>0.01.00</releaseinfo>
 
 <revhistory>
 <revision>
@@ -55,7 +55,7 @@
 </warning>
 <Sect1 id="todo1"><title>Whats done and what needs to be done</title>
 <sect2 id="done"><title>What is done</title>
-<para>Sections 1-7 have been reviewed, snapshots updated, icons correct, etc.  These sections are up to date. Any comments anyone has on these sections of the manual, would be greatly appreciated.</para>
+<para>Sections 1-8.2.6 have been reviewed, snapshots updated, icons correct, etc.  These sections are up to date. Any comments anyone has on these sections of the manual, would be greatly appreciated.</para>
 </sect2>
 <sect2 id="notdone"><title>What is not done</title>
 <para>This is a list (a rather long list) of things which still need work in this manual:</para>
@@ -70,7 +70,7 @@
 <listitem><para>Organize "Keyboard shortcuts" into subjects, then organize table by subject</para></listitem>
 <listitem><para>Finish Find and Replace Section.</para></listitem>
 <listitem><para>Finish up "Add to dictionary section"</para></listitem>
-<listitem><para>Finishe Autocorrection (when implementation is complete)</para></listitem>
+<listitem><para>Finish Autocorrection (when implementation is complete).</para></listitem>
 </itemizedlist>
 </sect2>
 <sect2><title>Just before release of KOffice.......</title>
@@ -764,17 +764,18 @@ This is an excellent choice for every day correspondance, or general word proces
 <para>To switch to the Advanced Autocorrection, click on the tab labled "Advanced Autocorrection".</para>
 <screenshot><graphic fileref="auto2" format="png" align="center"></graphic></screenshot>
 <para>Not completely implemented yet!</para>
+<para>Currently, however, KWord will automatically make the 4 replacements listed in the dialog box above.   At this point, you cannot add, delete or edit these entries. </para>
 </sect2></sect1></chapter> 
 <!-- **************************************************************************************************** -->   
 <chapter id="Guides3"><title>Detailed Guides: Document Layout</title>
-<para><link linkend="Guides">Two sections ago</link>, we talked about <link linkend="NewDoc">creating</link>, <link linkend="Saving">saving</link>, <link linkend="Loading">loading</link> and <link linkend="Printing">printing documents</link>. <link linkend="Guides2">The section after that</link> (the previous section), discussed <link linkend="Select">entering the textual information</link>, <link linkend="Clipboard">moving it around</link>, <link linkend="SpellCheck">spell checing</link>, and <link linkend="AutoCorrect">autocorrecting</link> your text.</para>
-<para>This section of the guide is designed to help you layout your documents.  We will begin with changing the size and shape of the page and the margins, and work progressively trhough smaller and smaller blocks of text (frames, ethen paragraphs, then characters).</para>
+<para><link linkend="Guides">Two sections ago</link>, we talked about <link linkend="NewDoc">creating</link>, <link linkend="Saving">saving</link>, <link linkend="Loading">loading</link> and <link linkend="Printing">printing documents</link>. <link linkend="Guides2">In the section after that</link> (the previous section), we discussed <link linkend="Select">entering the textual information</link>, <link linkend="Clipboard">moving it around</link>, <link linkend="SpellCheck">spell checing</link>, and <link linkend="AutoCorrect">autocorrecting</link> your text.</para>
+<para>This section of the guide is designed to help you layout your documents.  We will begin with changing the size and shape of the page and the margins, and work progressively through smaller and smaller blocks of text (frames, then paragraphs, then characters).</para>
 <para>After we have discussed formatting individual characters, we will deal with some miscellaneous topics related to layout of your document.</para>
 <sect1 id="PageFormat"><title>Formatting the Page</title>
-<para>If you will remember back to when we talked about <link linkend="WPVSDTP">Wordprocessing Templates and DTP Templates</link>, we mentioned that there were differences in your formatting options.</para>
-<para>Well these differences are most important when we talk about Formatting the Page.  What follows are two sections, one for formatting the page with a <link linkend="WPPageFormat">Wordprocessing Template</link>, and another section for formatting the page with a <link linkend="DTPPageFormat">DTP Template</link>. Each section is independent of each other, so you should refer to the section that applies to your document.</para>
-<sect2 id="WPPageFormat"><title> Formatting the Page (Wordprocessing)</title>
-<para>When you are working with a Wordprocessing Template, you control the size and shape of the main frame by setting the margins. </para>
+<para>If you will remember back to when we talked about <link linkend="WPVSDTP">Normal Templates and Publishing Templates</link>, we mentioned that there were differences in your formatting options.</para>
+<para>Well these differences are most important when we talk about Formatting the Page.  What follows are two sections, one for formatting the page with a <link linkend="WPPageFormat">Normal Template</link>, and another section for formatting the page with a <link linkend="DTPPageFormat">Publishing Template</link>. Each section is independent of each other, so you should refer to the section that applies to your document.</para>
+<sect2 id="WPPageFormat"><title> Formatting the Page (Normal Template)</title>
+<para>When you are working with a Normal Template, you control the size and shape of the main frame by setting the margins. </para>
 <para>Formating the page is usually done by selecting: </para>
 <para><menuchoice> <guimenu>Format</guimenu><guimenuitem>Page...</guimenuitem></menuchoice></para>
 <para>From the menubar.</para>
@@ -799,7 +800,7 @@ This is an excellent choice for every day correspondance, or general word proces
 <para>All of these options (with the exception of Screen and Custom), refers to standard paper sizes.</para>
 <para>Screen is used to generate a document where each "page" has an <link linkend="defaspectratio">aspect ratio</link> (shape) which matches the aspect ratios of computer monitors.</para>
 <para>If you select the "Custom" paper size, two text entry boxes (labled "Width" and "Height") become active.  Using these two boxes you can now enter any size paper you need.</para>
-<para>Next to the paper format, you can select either <link linkend="defportrait">Portrait</link> or <link linkend="deflandscape">Landscape</link> layout for your document. (!!!!!!!!Does Landscape/Portrait mean anything with "Screen" or "custom"!!!!!!!!)</para>
+<para>Next to the paper format, you can select either <link linkend="defportrait">Portrait</link> or <link linkend="deflandscape">Landscape</link> layout for your document. </para>
 <para>Below the page format options, is the Page Borders Options, which consists of 4 entry boxes labled ("Right", "Left", "Top" and "Bottom").</para>
 <para>The Page Borders (aka Margins), define the whitespace surrounding the text in your main frame.  You can enter any number from 0 to the maximum size of the page in these boxes.  The units are the same for all four boxes, and is the same as the measurement listed at the top of the dialog..</para>
 <para>Clicking on the "Columns" tab allows you to change the number of columns on each page.  Details can be found <link linkend="Columns">here</link>.</para>
@@ -854,7 +855,7 @@ This is an excellent choice for every day correspondance, or general word proces
 <para>All of these options (with the exception of Screen and Custom), refers to standard paper sizes.</para>
 <para>Screen is used to generate a document where each "page" has an <link linkend="defaspectratio">aspect ratio</link> (shape) which matches the aspect ratios of computer monitors.</para>
 <para>If you select the "Custom" paper size, two text entry boxes (labled "Width" and "Height") become active.  Using these two boxes you can now enter any size paper you need.</para>
-<para>Next to the paper format, you can select either <link linkend="defportrait">Portrait</link> or <link linkend="deflandscape">Landscape</link> layout for your document. (!!!!!!!!Does Landscape/Portrait mean anything with "Screen" or "custom"!!!!!!!!)</para>
+<para>Next to the paper format, you can select either <link linkend="defportrait">Portrait</link> or <link linkend="deflandscape">Landscape</link> layout for your document.</para>
 <para>Below the page format options, is the Page Borders Options, which consists of 4 entry boxes labled ("Right", "Left", "Top" and "Bottom"). These boxes are inactive and cannot be changed.</para>
 <para>Clicking on the "Header and Footer" tab changes the dialog options.</para>
 <screenshot><graphic fileref="dtpfmtpg2" format="png" align="center"></graphic></screenshot>
@@ -897,14 +898,14 @@ This is an excellent choice for every day correspondance, or general word proces
 </listitem></varlistentry></variablelist>
 <para>As you can see, text must (and does) move freely between frames within a framset.</para>
 </sect2>
-<sect2 id="lAddFrame"><title>Adding a Frame to a Document</title>
-<para>Adding a frame can be done one of three ways:</para>
+<sect2 id="lAddFrame"><title>Adding a Text Frame to a Document</title>
+<para>Adding a text frame can be done one of three ways:</para>
 <itemizedlist>
 <listitem><para>By selecting <menuchoice> <guimenu>Tools</guimenu><guimenuitem>Create Text Frame</guimenuitem></menuchoice> from the Menu bar</para></listitem>
 <listitem><para>You can use the keyboard shortcut: <keycombo><keycap>F6</keycap></keycombo></para></listitem>
 <listitem><para>or by clicking <inlinegraphic fileref="tfcreatebut" format="png" align="center"></inlinegraphic> on the toolbar.</para></listitem>
 </itemizedlist>
-<para>Whatever method you choose, KWord responds by changing the cursor from to a set of crosshairs.</para>
+<para>Whatever method you choose, KWord responds by changing the cursor to a set of crosshairs.</para>
 <para>Using the mouse, place the cursor at one of the corners of your new text frame. (Any corner will work)</para>
 <para>Now click and hold with the left mouse button.</para>
 <para>Drag the mouse towards the opposite corner of the rectangle.  As you drag the mouse, you will see a box drawn.  This box represents the boundries of your new text frame.</para>
@@ -916,7 +917,7 @@ This is an excellent choice for every day correspondance, or general word proces
 <listitem><para>Determine which frameset this new frame will belong to</para></listitem>
 <listitem><para>Set up text flow options.</para></listitem>
 </orderedlist>
-<para>The first tab ("Connect Text Frames") in this dialog box is used to determine which frameset this new text box belongs.</para>
+<para>The tab labeled Connect Text Frames in this dialog box is used to determine which frameset this new text box belongs.</para>
 <para>Using the example given, you have just created a new frame in a document which currently has two framesets (called Frameset 1, and Frameset 2).</para>
 <para>You now have the option of either:</para>
 <orderedlist numeration="arabic">
@@ -927,7 +928,7 @@ This is an excellent choice for every day correspondance, or general word proces
 <listitem><para>You can create a new frameset.  This newly added frame will be the first (and currently only) frame in the frameset.</para>
 <para>If you want this to be a new frameset, you can enter a descriptive name for your new frameset.  (A name which will tell you what you might find in that frameset).  This name should be entered in the text box labled "Name of new Frameset".</para></listitem>
 </orderedlist>
-<para>The other tab ("Text Frame"), can be used to set some options for this frame.  For more information on these options, see the section entitled <link linkend="FormatFrame">Formatting Frames</link>.</para>
+<para>The other tabs in this dialog box, can be used to set some options for this frame.  For more information on these options, see the section entitled <link linkend="FormatFrame">Formatting Frames</link>.</para>
 <para>If you click "OK", the new frame will be created.</para>
 <para>If you click "Cancel", the new frame will not be created, and you will be returned to editing your document.</para>
 <note><para>KWord assumes you want to continue to add new text frames until you say otherwise.  </para>
@@ -936,7 +937,7 @@ This is an excellent choice for every day correspondance, or general word proces
 </sect2>
 <sect2 id="ldeleteframe"><title>Deleteing a Frame From a Document</title>
 <para>You may decide you no longer need a frame in your document.  You could leave it blank (so it would not be visible in the final output), but you should probably delete it to keep your document as simple as possible.</para>
-<para>By deleting a frame, you will also be deleteing from you document any data inside that frame.</para>
+<para>By deleting a frame, you will also be deleting from you document any data inside that frame.</para>
 <para>In order to delete a frame, you must be in "Frame Edit Mode".  To change to Frame Edit Mode, you can:</para>
 <itemizedlist>
 <listitem><para>Select <menuchoice> <guimenu>Tools</guimenu><guimenuitem>Edit Frames</guimenuitem></menuchoice> from the Menu bar</para></listitem>
@@ -987,9 +988,21 @@ This is an excellent choice for every day correspondance, or general word proces
 <para>If you need to resize the frame of a neighboring frame, you should click once inside that frame (to make it the current frame), and you can move its borders in the same fashion.</para>
 <note><para>If you are using a Wordprocessing Template, you cannot change the size of the primary frame by draging the edges of the frame.  If you want to resize this frame, you must do so by <link linkend="PageFormat">Changing the margins</link> </para></note>
 </sect2>
-<sect2 id="lconnectframe"><title>"Connecting"/"Unconnecting" Frames in a Frameset.</title>
+<sect2 id="lconnectframe"><title>Reconnecing Frames in a Frameset/Changing text flow..</title>
 <para>This section of the Users Guide is devoted to controlling where (which text frame) text flows when the current frame is full.</para>
-<para>!!!!!!!!!!!This part of KWord is not currently stable enough to write about!!!!!!!!!!!!!!!!!</para>
+<para>Normally, you will create each new text frame with a specific purpose.  Sometimes, however, as the document is changed, you will want the text to flow to a new text frame.  To acomplish this, you will need to know how to move a frame from one frameset to another.</para>
+<para>First, you must be in frame edit mode. To change to Frame Edit Mode, you can:</para>
+<itemizedlist>
+<listitem><para>Select <menuchoice> <guimenu>Tools</guimenu><guimenuitem>Edit Frames</guimenuitem></menuchoice> from the Menu bar</para></listitem>
+<listitem><para>You can use the keyboard shortcut: <keycombo><keycap>F5</keycap></keycombo></para></listitem>
+<listitem><para>or by clicking <inlinegraphic fileref="framemode" format="png" align="center"></inlinegraphic> on the toolbar.</para></listitem>
+</itemizedlist>
+<para>Once you are in frame edit mode, the cursor will change to an arrow.</para>
+<para>Place the arrow inside the frame you want to change, and click once with the left mouse button.  This will select the frame.</para>
+<para>You can change the frameset of the currently selected frame by selecting <menuchoice> <guimenu>Edit</guimenu><guimenuitem>Reconnect  Frame</guimenuitem></menuchoice> from the Menu bar</para>
+<para>This will bring up a dialog box with 4 tabs.  Select the tab labeled "Connect Text Frames".</para>
+<para>You will be presented with a list of framesets.  Simply select the frameset you want, and the currently selected frame will be added <emphasis>to the end</emphasis> of that frameset.</para>
+<para>When you click OK, you will notice that &kword; automatically updates the text flow immediatly.</para>
 </sect2>
 <sect2 id="lhardbreak"><title>Hard Frame Breaks</title>
 <para>A hard frame break is a special formatting character.  It is invisible on the final printed output.</para>
@@ -1009,7 +1022,6 @@ This is an excellent choice for every day correspondance, or general word proces
 <para>Find the <emphasis>last</emphasis> carrage return <emphasis>before</emphasis> the break in your text.  Place the cursor in front of this carrage return.</para>
 <para>Now press the delete key.</para>
 </sect2>
-<sect2 id="ltextwrap"><title>Frames and Text Wrapping</title><para></para></sect2>
 </sect1>
 <sect1 id="FormatFrame"><title>Setting the Properties for a Frame/Formatting Frames</title>
 <para>For each frame in your document, you can determine how:</para>
@@ -1033,7 +1045,7 @@ This is an excellent choice for every day correspondance, or general word proces
 <listitem><para>Select <menuchoice> <guimenu>Format</guimenu><guimenuitem>Frame/Frameset</guimenuitem></menuchoice> from the Menu bar</para></listitem>
 <listitem><para>Place the cursor inside the "current frame", and click once with the right mouse button.  A small menu will appear.  Select "Properties".</para></listitem>
 </itemizedlist>
-<para>The Properties dialog consists of one dialog box, with three index tabs labled "Frameset", "Text Frame", and "Geometry".</para>
+<para>The Properties dialog consists of one dialog box, with four index tabs labled Options, Text Run Around, Connect Text Frames and Geometry.</para>
 <screenshot><graphic fileref="formframe1" format="png" align="center"></graphic></screenshot>
 <para>It is a common situation.  You define a frame, and begin to type.  There is too much text to fit within the current bounds of the frame.</para>
 <para>KWord has two solutions to this problem.  Using this dialog, you can determine which method it uses.</para>
@@ -2632,6 +2644,8 @@ Will <link linkend="SpellCheck">spell check</link> the document.</action></para>
      <sect1 id="Updates"><title>Where can I get updates       </title><para></para></sect1>          
      <sect1 id="Themes"><title>How do themes affect Kword</title><para></para></sect1>
      <sect1 id="DragDrop"><title>Drag and Drop with KWord</title><para></para></sect1>
+     <sect1 id="ShuffleFrames"><title>How do I insert a new frame into a frameset between two frames that already exist.</title><para></para></sect1>
+     
 </chapter>
 <!-- **************************************************************************************************** -->   
 <chapter id="Appendix"><title>Appendix</title>
