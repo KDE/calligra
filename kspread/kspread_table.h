@@ -369,7 +369,18 @@ public:
     void setSelectionPrecision( const QPoint &_marker, int _delta );
     void setSelectionPercent( const QPoint &_marker, bool b );
     void setSelectionMultiRow( const QPoint &_marker, bool enable );
+    
+    /** 
+    * setSelectionSize increase or decrease font size
+    */
+    void setSelectionSize( const QPoint &_marker,int _size );
 
+    /**
+    *change string to upper case if _type equals 1
+    * or change string to lower if _type equals -1
+    */
+    void setSelectionUpperLower( const QPoint &_marker,int _type );
+    
     void setSelectionTextColor( const QPoint &_marker, QColor tbColor );
     void setSelectionbgColor( const QPoint &_marker, QColor bg_Color );
     void setSelectionBorderColor( const QPoint &_marker, QColor bd_Color );

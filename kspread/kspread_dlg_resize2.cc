@@ -40,14 +40,14 @@ KSpreadresize2::KSpreadresize2( KSpreadView* parent, const char* name,type_resiz
   type=re;
   QString tmp;
   QString tmpCheck;
-  int pos;
+  //int pos;
   QString label;
   QVBoxLayout *lay1 = new QVBoxLayout( this );
   lay1->setMargin( 5 );
   lay1->setSpacing( 10 );
   tmpCheck=i18n("Default");
-  RowLayout *rl;
-  ColumnLayout *cl;
+//  RowLayout *rl;
+//  ColumnLayout *cl;
   switch(type)
 	{
 	case resize_row:

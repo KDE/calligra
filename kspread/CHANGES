@@ -471,3 +471,13 @@ lo22-action-middle.png,lo22-action-top.png,lo22-action-bottom.png
 created by jp.martin <jpmartin@iroise.com> thanks
 -Improved kspread_dlg_resize
 -start to replace QMessageBox by KMessageBox
+
+2000-05-07 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Add two functions upper,lower and increase size font,decrease size font
+but it's optional icon.
+You can add them with kedittoolbar
+lo22-action-upper.png lo22-action-fontsizedown.png lo22-action-fontsizeup.png
+lo22-action-lower.png lo22-action-resizecol.png lo22-action-resizerow.png
+icons created by jp.martin <jpmartin@iroise.com> thanks
+bug fix

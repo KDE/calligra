@@ -248,6 +248,11 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_showArea = new KAction( i18n("Show area..."), 0, this, SLOT( showAreaName() ), actionCollection(), "showArea" );
     m_resizeRow = new KAction( i18n("Resize row..."),"adjustrow", 0, this, SLOT( resizeRow() ), actionCollection(), "resizeRow" );
     m_resizeColumn = new KAction( i18n("Resize column..."),"adjustcol", 0, this, SLOT( resizeColumn() ), actionCollection(), "resizeCol" );
+    m_fontSizeUp = new KAction( i18n("Increase font size"),"fontsizeup", 0, this, SLOT( increaseFontSize() ), actionCollection(), "increaseFontSize" );
+    m_fontSizeDown = new KAction( i18n("Decrease font size"),"fontsizedown", 0, this, SLOT( decreaseFontSize() ), actionCollection(), "decreaseFontSize" );
+    m_upper = new KAction( i18n("Upper case"),"upper", 0, this, SLOT( upper() ), actionCollection(), "upper" );
+    m_lower = new KAction( i18n("Lower case"),"lower", 0, this, SLOT( lower() ), actionCollection(), "lower" );
+
     m_undo = KStdAction::undo( this, SLOT( undo() ), actionCollection(), "undo" );
     m_undo->setEnabled( FALSE );
     m_redo = KStdAction::redo( this, SLOT( redo() ), actionCollection(), "redo" );
@@ -1095,6 +1100,40 @@ void KSpreadView::fontSelected( const QString &_font )
 	m_pCanvas->setFocus();
 }
 
+void KSpreadView::decreaseFontSize()
+{
+    if( !m_pTable  )
+	return;
+    m_pTable->setSelectionSize( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), -1 );
+    updateEditWidget();
+}
+
+void KSpreadView::increaseFontSize()
+{
+    if( !m_pTable  )
+	return;
+    m_pTable->setSelectionSize( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), 1 );
+    updateEditWidget();
+}
+
+void KSpreadView::lower()
+{
+    if( !m_pTable  )
+	return;
+    m_pTable->setSelectionUpperLower( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), -1 );
+    updateEditWidget();
+}
+
+void KSpreadView::upper()
+{
+    if( !m_pTable  )
+	return;
+    m_pTable->setSelectionUpperLower( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), 1 );
+    updateEditWidget();
+}
+
+
+
 void KSpreadView::insertFormula()
 {
   KSpreadDlgFormula* dlg = new KSpreadDlgFormula( this, "Formula Editor" );
@@ -1866,9 +1905,9 @@ void KSpreadView::popupColumnMenu(const QPoint & _point)
 
     m_pPopupColumn= new QPopupMenu();
 
-    m_pPopupColumn->insertItem( i18n("Insert Column"), this, SLOT( slotInsertColumn() ) );
-    m_pPopupColumn->insertItem( i18n("Remove Column"), this, SLOT( slotRemoveColumn() ) );
-    m_pPopupColumn->insertItem( i18n("Resize..."), this, SLOT( slotResizeColumn() ) );
+    m_pPopupColumn->insertItem( KSBarIcon("colin"),i18n("Insert Column"), this, SLOT( slotInsertColumn() ) );
+    m_pPopupColumn->insertItem( KSBarIcon("colout"),i18n("Remove Column"), this, SLOT( slotRemoveColumn() ) );
+    m_pPopupColumn->insertItem( KSBarIcon("resizecol"),i18n("Resize..."), this, SLOT( slotResizeColumn() ) );
     m_pPopupColumn->insertItem( i18n("Adjust Column"), this, SLOT(slotAdjustColumn() ) );
     QObject::connect( m_pPopupColumn, SIGNAL(activated( int ) ), this, SLOT(slotActivateTool( int ) ) );
 
@@ -1928,10 +1967,11 @@ void KSpreadView::popupRowMenu(const QPoint & _point )
 
     m_pPopupRow= new QPopupMenu();
 
-    m_pPopupRow->insertItem( i18n("Insert Row"), this, SLOT( slotInsertRow() ) );
-    m_pPopupRow->insertItem( i18n("Remove Row"), this, SLOT( slotRemoveRow() ) );
-    m_pPopupRow->insertItem( i18n("Resize..."), this, SLOT( slotResizeRow() ) );
+    m_pPopupRow->insertItem( KSBarIcon("rowin"),i18n("Insert Row"), this, SLOT( slotInsertRow() ) );
+    m_pPopupRow->insertItem( KSBarIcon("rowout"),i18n("Remove Row"), this, SLOT( slotRemoveRow() ) );
+    m_pPopupRow->insertItem( KSBarIcon("resizerow"),i18n("Resize..."), this, SLOT( slotResizeRow() ) );
     m_pPopupRow->insertItem( i18n("Adjust Row"), this, SLOT( slotAdjustRow() ) );
+
     QObject::connect( m_pPopupRow, SIGNAL( activated( int ) ), this, SLOT( slotActivateTool( int ) ) );
     m_pPopupRow->popup( _point );
 }
