@@ -31,6 +31,7 @@
 #include <klocale.h>
 
 #include <qpainter.h>
+#include <koTemplateChooseDia.h>
 
 KexiProject::KexiProject( QWidget *parentWidget, const char *widgetName, QObject* parent,
          const char* name, bool singleViewMode )
@@ -47,13 +48,23 @@ KexiProject::KexiProject( QWidget *parentWidget, const char *widgetName, QObject
 
 bool KexiProject::initDoc()
 {
-    // If nothing is loaded, do initialize here
-        clear();
-        KexiCreateProject *newDlg = new KexiCreateProject(this,0);
-        newDlg->show();
-//	delete newDlg;
-
-    return TRUE;
+	QString filename;
+	KexiCreateProject *newDlg;
+	KoTemplateChooseDia::ReturnType ret=KoTemplateChooseDia::choose(KexiFactory::global(),filename,"application/x-kexi","*.kex",
+		i18n("Kexi"),KoTemplateChooseDia::Everything,"kexi_template");
+	bool ok=false;
+	if (ret==KoTemplateChooseDia::Empty) {
+		clear();
+		newDlg = new KexiCreateProject(this,0);
+		newDlg->exec();
+		delete newDlg;
+		ok=true;
+	} else if (ret==KoTemplateChooseDia::File) {
+		KURL url(filename);
+		kdDebug()<<"kexi: opening file: "<<url.prettyURL()<<endl;
+		ok=openURL(url);
+	}
+	return ok;
 }
 
 KoView* KexiProject::createViewInstance( QWidget* parent, const char* name )

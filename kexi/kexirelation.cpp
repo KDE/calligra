@@ -102,7 +102,7 @@ KexiRelation::slotAddTable()
 static RelationList*
 KexiRelation::projectRelations()
 {
-#endif
+#if 0
 	KoStore* store = KoStore::createStore(project()->url(), KoStore::Read, "application/x-kexi");
 	
 	if(!store)
