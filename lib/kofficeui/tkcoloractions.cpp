@@ -26,6 +26,23 @@ TKSelectColorAction::TKSelectColorAction( const QString& text, Type type, QObjec
 : TKAction(parent,name)
 {
   setText(text);
+  m_type = type;
+  init();
+}
+
+TKSelectColorAction::TKSelectColorAction( const QString& text, Type type,
+                                          QObject* receiver, const char* slot,
+                                          QObject* parent, const char* name )
+: TKAction(parent,name)
+{
+  setText(text);
+  m_type = type;
+  connect( this, SIGNAL( activated() ), receiver, slot );
+  init();
+}
+
+void TKSelectColorAction::init()
+{
   iconColorRect = QRect(0,12,16,4);
 
   m_pStandardColor = new TKColorPanel();
@@ -44,9 +61,7 @@ TKSelectColorAction::TKSelectColorAction( const QString& text, Type type, QObjec
   m_pMenu->insertItem(m_pRecentColor);
   m_pMenu->insertSeparator();
 
-  m_type = type;
-
-  switch (type) {
+  switch (m_type) {
     case TextColor:
       m_pMenu->insertItem(i18n("More Text Colors..."),this,SLOT(selectColorDialog()));
       setCurrentColor(black);

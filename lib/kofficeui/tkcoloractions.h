@@ -34,6 +34,9 @@ public:
   };
 
   TKSelectColorAction( const QString& text, Type type, QObject* parent, const char* name );
+  TKSelectColorAction( const QString& text, Type type,
+                       QObject* receiver, const char* slot,
+                       QObject* parent, const char* name );
 
   virtual ~TKSelectColorAction();
 
@@ -57,6 +60,7 @@ protected slots:
   virtual void slotActivated();
 
 protected:
+  void init();
   virtual void initToolBarButton(TKToolBarButton*);
   void updatePixmap();
   void updatePixmap(TKToolBarButton*);
