@@ -112,6 +112,30 @@
     </Function>
 
     <Function>
+      <Name>CONVERT</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Number</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>From Unit</Comment>
+        <Type>String</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>To Unit</Comment>
+        <Type>String</Type>
+      </Parameter>
+      <Help>
+        <Text>The CONVERT() function returns a conversion from one measurement system to another.</Text>
+        <Text>Supported distance units: m (meter), in (inch), ft (feet).</Text>
+        <Text>Supported temperature units: C (Celcius), F (Fahrenheit), K (Kelvin).</Text>
+        <Syntax>CONVERT(Number; From Unit; To Unit)</Syntax>
+        <Example>CONVERT(32;"C";"F") equals 89.6</Example>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>ERF</Name>
       <Type>Float</Type>
       <Parameter>
