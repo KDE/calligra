@@ -76,8 +76,6 @@ private:
 
   KImageShopDoc* m_doc;
   int m_items, m_selected;
-  static QPixmap *m_eyeIcon, *m_linkIcon;
-  static QRect m_eyeRect, m_linkRect;
   QPopupMenu* m_contextmenu;
 };
 

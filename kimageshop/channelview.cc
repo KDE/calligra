@@ -25,23 +25,14 @@
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qpushbutton.h>
-#include <qmessagebox.h>
 #include <qpopupmenu.h>
 
-#include <kstddirs.h>
-#include <kglobal.h>
 #include <klocale.h>
 
 #include "misc.h"
 #include "kimageshop_doc.h"
 #include "channelview.h"
-
-#define WIDTH   200
-#define HEIGHT  40
-#define MAXROWS 8
-
-QPixmap *ChannelView::m_eyeIcon;
-QRect ChannelView::m_eyeRect;
+#include "layerdlg.h"
 
 ChannelView::ChannelView( QWidget* _parent, const char* _name )
   : QTableView( _parent, _name )
@@ -64,17 +55,9 @@ void ChannelView::init( KImageShopDoc* doc )
   setBackgroundColor( white );
   updateTable();
 
-  setCellWidth( WIDTH );
-  setCellHeight( HEIGHT );
+  setCellWidth( CELLWIDTH );
+  setCellHeight( CELLHEIGHT );
   m_selected = m_doc->layerList().count() - 1;
-  if( !m_eyeIcon )
-  {
-    QString _icon = locate( "appdata", "pics/eye.png" );
-    m_eyeIcon = new QPixmap;
-    if( !m_eyeIcon->load( _icon ) )
-      QMessageBox::critical( this, "Canvas", "Can't find eye.png" );
-    m_eyeRect = QRect( QPoint( 5,( cellHeight() - m_eyeIcon->height() ) / 2 ), m_eyeIcon->size() );
-  }
 
   QPopupMenu *submenu = new QPopupMenu();
  
@@ -106,7 +89,7 @@ void ChannelView::paintCell( QPainter* _painter, int _row, int )
 
   if( m_doc->layerList().at( _row )->isVisible() )
   {
-    _painter->drawPixmap( m_eyeRect.topLeft(), *m_eyeIcon );
+    _painter->drawPixmap( LayerDialog::m_eyeRect.topLeft(), *LayerDialog::m_eyeIcon );
   }
 
   _painter->drawRect( 0, 0, cellWidth( 0 ) - 1, cellHeight() - 1);
@@ -185,7 +168,7 @@ void ChannelView::slotMenuAction( int _id )
 
 QSize ChannelView::sizeHint() const
 {
-  return QSize( WIDTH, HEIGHT * 5 );
+  return QSize( CELLWIDTH, CELLHEIGHT * 5 );
 }
 
 void ChannelView::mousePressEvent( QMouseEvent *_event )
@@ -195,7 +178,7 @@ void ChannelView::mousePressEvent( QMouseEvent *_event )
 
   if( _event->button() & LeftButton )
   {
-    if( m_eyeRect.contains( localPoint ) )
+    if( LayerDialog::m_eyeRect.contains( localPoint ) )
     {
       slotInverseVisibility( row );
     }

@@ -25,27 +25,18 @@
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qpushbutton.h>
-#include <qmessagebox.h>
 #include <qpopupmenu.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlineedit.h>
 
-#include <kstddirs.h>
-#include <kglobal.h>
 #include <klocale.h>
 #include <knuminput.h>
 
 #include "misc.h"
 #include "kimageshop_doc.h"
 #include "layerview.h"
-
-#define WIDTH   200
-#define HEIGHT  40
-#define MAXROWS 8
-
-QPixmap *LayerView::m_eyeIcon, *LayerView::m_linkIcon;
-QRect LayerView::m_eyeRect, LayerView::m_linkRect;
+#include "layerdlg.h"
 
 LayerView::LayerView( QWidget* _parent, const char* _name )
   : QTableView( _parent, _name )
@@ -68,25 +59,9 @@ void LayerView::init( KImageShopDoc* doc )
   setBackgroundColor( white );
   updateTable();
 
-  setCellWidth( WIDTH );
-  setCellHeight( HEIGHT );
+  setCellWidth( CELLWIDTH );
+  setCellHeight( CELLHEIGHT );
   m_selected = m_doc->layerList().count() - 1;
-  if( !m_eyeIcon )
-  {
-    QString _icon = locate( "appdata", "pics/eye.png" );
-    m_eyeIcon = new QPixmap;
-    if( !m_eyeIcon->load( _icon ) )
-      QMessageBox::critical( this, "Canvas", "Can't find eye.png" );
-    m_eyeRect = QRect( QPoint( 2,( cellHeight() - m_eyeIcon->height() ) / 2 ), m_eyeIcon->size() );
-  }
-  if( !m_linkIcon )
-  {
-    QString _icon = locate( "appdata", "pics/link.png" );
-    m_linkIcon = new QPixmap;
-    if( !m_linkIcon->load( _icon ) )
-      QMessageBox::critical( this, "Canvas", "Can't find link.png" );
-    m_linkRect = QRect( QPoint( 25,( cellHeight() - m_linkIcon->height() ) / 2 ), m_linkIcon->size() );
-  }
 
   QPopupMenu *submenu = new QPopupMenu();
  
@@ -125,12 +100,12 @@ void LayerView::paintCell( QPainter* _painter, int _row, int )
 
   if( m_doc->layerList().at( _row )->isVisible() )
   {
-    _painter->drawPixmap( m_eyeRect.topLeft(), *m_eyeIcon );
+    _painter->drawPixmap( LayerDialog::m_eyeRect.topLeft(), *LayerDialog::m_eyeIcon );
   }
 
   if( m_doc->layerList().at( _row )->isLinked() )
   {
-    _painter->drawPixmap( m_linkRect.topLeft(), *m_linkIcon );
+    _painter->drawPixmap( LayerDialog::m_linkRect.topLeft(), *LayerDialog::m_linkIcon );
   }
 
   _painter->drawRect( 0, 0, cellWidth( 0 ) - 1, cellHeight() - 1);
@@ -223,7 +198,7 @@ void LayerView::slotMenuAction( int _id )
 
 QSize LayerView::sizeHint() const
 {
-  return QSize( WIDTH, HEIGHT * 5 );
+  return QSize( CELLWIDTH, CELLHEIGHT * 5 );
 }
 
 void LayerView::mousePressEvent( QMouseEvent *_event )
@@ -233,11 +208,11 @@ void LayerView::mousePressEvent( QMouseEvent *_event )
 
   if( _event->button() & LeftButton )
   {
-    if( m_eyeRect.contains( localPoint ) )
+    if( LayerDialog::m_eyeRect.contains( localPoint ) )
     {
       slotInverseVisibility( row );
     }
-    else if( m_linkRect.contains( localPoint ) )
+    else if( LayerDialog::m_linkRect.contains( localPoint ) )
     {
       slotInverseLinking( row );
     }

@@ -24,7 +24,12 @@
 #include <kfloatingtabdialog.h>
 
 class KImageShopDoc;
+class LayerDialog;
 
+#define CELLWIDTH   200
+#define CELLHEIGHT  40
+#define MAXROWS	    8
+ 
 class LayerTab : public QWidget
 {
   Q_OBJECT
@@ -48,9 +53,14 @@ class LayerDialog : public KFloatingTabDialog
   Q_OBJECT
 
 public:
+
   LayerDialog( KImageShopDoc* doc, QWidget* _parent = 0, const char* _name = 0, WFlags _flags = 0 );
 
+  static QPixmap *m_eyeIcon, *m_linkIcon;
+  static QRect m_eyeRect, m_linkRect;
+
 private:
+
   QWidget *m_pLayerTab, *m_pChannelTab;
 };
 
