@@ -53,6 +53,7 @@ TODO:
 -	make VSelection a state pattern
 -	try to abstract rendering even more, preferably using kpainter abstraction.
 -	make layers tree robust, efficient and scalable.
+-	support 2 roundness params (rx and ry) for round rectangles.
 
 WISHLIST:
 -	krita export filter (with layers)
