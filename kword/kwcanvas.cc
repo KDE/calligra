@@ -44,6 +44,7 @@
 #include <kmessagebox.h>
 #include <assert.h>
 #include "kwtextdocument.h"
+#include <kmultipledrag.h>
 
 KWCanvas::KWCanvas(KWViewMode* viewMode, QWidget *parent, KWDocument *d, KWGUI *lGui)
     : QScrollView( parent, "canvas", /*WNorthWestGravity*/ WStaticContents| WResizeNoErase | WRepaintNoErase ), m_doc( d )
@@ -1805,6 +1806,7 @@ void KWCanvas::copySelectedFrames()
     QPtrList<KoDocumentChild> embeddedObjects;
 
     KoStoreDrag *kd = new KoStoreDrag( "application/x-kword", 0L );
+    QDragObject* dragObject = kd;
     QByteArray arr;
     QBuffer buffer(arr);
     KoStore* store = KoStore::createStore( &buffer, KoStore::Write, "application/x-kword" );
@@ -1893,6 +1895,20 @@ void KWCanvas::copySelectedFrames()
         topElem.appendChild( m_doc->pictureCollection()->saveXML( KoPictureCollection::CollectionPicture, domDoc, savePictures ) );
         // Save the actual picture data into the store
         m_doc->pictureCollection()->saveToStore( KoPictureCollection::CollectionPicture, store, savePictures );
+        // Single image -> put it in dragobject too
+        if ( savePictures.count() == 1 )
+        {
+            KoPicture pic = m_doc->pictureCollection()->findPicture( savePictures.first() );
+            QDragObject* picDrag = pic.dragObject( 0L );
+            kdDebug() << k_funcinfo << "picDrag=" << picDrag << endl;
+            if ( picDrag ) {
+                KMultipleDrag* multipleDrag = new KMultipleDrag( 0L );
+                multipleDrag->addDragObject( kd );
+                multipleDrag->addDragObject( picDrag );
+                dragObject = multipleDrag;
+                kdDebug() << k_funcinfo << "multiple" << endl;
+            }
+        }
     }
 
     if ( store->open( "root" ) )
@@ -1907,7 +1923,7 @@ void KWCanvas::copySelectedFrames()
 
     delete store;
     kd->setEncodedData( arr );
-    QApplication::clipboard()->setData( kd );
+    QApplication::clipboard()->setData( dragObject );
 }
 
 void KWCanvas::pasteFrames()

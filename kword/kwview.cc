@@ -1594,7 +1594,7 @@ void KWView::checkClipboard( QMimeSource *data, bool &providesImage, bool &provi
     // providesKWordText is true for kword text and for plain text, we send both to KWTextFrameSetEdit::paste
     providesKWordText = formats.findIndex( KWTextDrag::selectionMimeType() ) != -1 || formats.findIndex( "text/plain" ) != -1;
     providesKWord = formats.findIndex( KoStoreDrag::mimeType("application/x-kword") ) != -1;
-    //kdDebug() << "KWView::checkClipboard providesFormula=" << providesFormula << " providesKWordText=" << providesKWordText << " providesKWord=" << providesKWord << endl;
+    //kdDebug() << "KWView::checkClipboard providesFormula=" << providesFormula << " providesKWordText=" << providesKWordText << " providesImage=" << providesImage << " providesKWord=" << providesKWord << endl;
 }
 
 /*=========================== file print =======================*/
@@ -2266,17 +2266,17 @@ void KWView::editPaste()
             insertFormula( data );
         }
     }
-    else if ( providesImage )
-    {
-
-        KoPoint docPoint( m_doc->ptLeftBorder(), m_doc->ptPageTop( m_currentPage ) + m_doc->ptTopBorder() );
-        m_gui->canvasWidget()->pasteImage( data, docPoint );
-    }
     else if ( providesKWordText )
     {
         KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
         if ( edit )
             edit->paste();
+    }
+    else if ( providesImage ) // must be after kwordtext
+    {
+
+        KoPoint docPoint( m_doc->ptLeftBorder(), m_doc->ptPageTop( m_currentPage ) + m_doc->ptTopBorder() );
+        m_gui->canvasWidget()->pasteImage( data, docPoint );
     } else { // providesKWord (e.g. frames)
         m_gui->canvasWidget()->pasteFrames();
     }
