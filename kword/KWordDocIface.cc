@@ -49,72 +49,72 @@ DCOPRef KWordDocIface::frameSet( int num )
 }
 
 
-int KWordDocIface::numPages()
+int KWordDocIface::numPages()const
 {
     return doc->getPages();
 }
 
-int KWordDocIface::numFrameSets()
+int KWordDocIface::numFrameSets()const
 {
     return doc->getNumFrameSets();
 }
 
-unsigned int KWordDocIface::nbColumns()
+unsigned int KWordDocIface::nbColumns()const
 {
     return doc->getColumns();
 }
 
-double KWordDocIface::ptTopBorder()
+double KWordDocIface::ptTopBorder()const
 {
     return doc->ptTopBorder();
 }
 
-double KWordDocIface::ptBottomBorder()
+double KWordDocIface::ptBottomBorder()const
 {
     return doc->ptBottomBorder();
 }
 
-double KWordDocIface::ptLeftBorder()
+double KWordDocIface::ptLeftBorder()const
 {
     return doc->ptLeftBorder();
 }
 
-double KWordDocIface::ptRightBorder()
+double KWordDocIface::ptRightBorder()const
 {
     return doc->ptRightBorder();
 }
 
-double KWordDocIface::ptPaperHeight()
+double KWordDocIface::ptPaperHeight()const
 {
     return doc->ptPaperHeight();
 }
 
-double KWordDocIface::ptPaperWidth()
+double KWordDocIface::ptPaperWidth()const
 {
     return doc->ptPaperWidth();
 }
 
-double KWordDocIface::ptColumnWidth()
+double KWordDocIface::ptColumnWidth()const
 {
     return doc->ptColumnWidth();
 }
 
-double KWordDocIface::ptColumnSpacing()
+double KWordDocIface::ptColumnSpacing()const
 {
     return doc->ptColumnSpacing();
 }
 
-double KWordDocIface::ptPageTop( int pgNum )
+double KWordDocIface::ptPageTop( int pgNum )const
 {
     return doc->ptPageTop(pgNum);
 }
 
-double KWordDocIface::gridX()
+double KWordDocIface::gridX()const
 {
     return doc->gridX();
 }
 
-double KWordDocIface::gridY()
+double KWordDocIface::gridY()const
 {
     return doc->gridY();
 }
@@ -129,12 +129,12 @@ void KWordDocIface::setGridY(double _gridy)
     doc->setGridY(_gridy);
 }
 
-QString KWordDocIface::unitName()
+QString KWordDocIface::unitName()const
 {
     return doc->getUnitName();
 }
 
-double KWordDocIface::indentValue()
+double KWordDocIface::indentValue()const
 {
     return doc->indentValue();
 }
@@ -144,7 +144,7 @@ void KWordDocIface::setIndentValue(double _ind)
     doc->setIndentValue(_ind);
 }
 
-int KWordDocIface::nbPagePerRow()
+int KWordDocIface::nbPagePerRow()const
 {
     return doc->nbPagePerRow();
 }
@@ -154,7 +154,7 @@ void KWordDocIface::setNbPagePerRow(int _nb)
     doc->setNbPagePerRow(_nb);
 }
 
-double KWordDocIface::defaultColumnSpacing()
+double KWordDocIface::defaultColumnSpacing()const
 {
     return doc->defaultColumnSpacing();
 }
@@ -164,7 +164,7 @@ void KWordDocIface::setDefaultColumnSpacing(int _val)
     doc->setDefaultColumnSpacing(_val);
 }
 
-int KWordDocIface::maxRecentFiles()
+int KWordDocIface::maxRecentFiles()const
 {
     return doc->maxRecentFiles();
 }
@@ -214,7 +214,7 @@ bool KWordDocIface::showRuler() const
     return doc->showRuler();
 }
 
-bool KWordDocIface::dontCheckUpperWord()
+bool KWordDocIface::dontCheckUpperWord()const
 {
     return doc->dontCheckUpperWord();
 }
@@ -289,7 +289,7 @@ void KWordDocIface::setShowStatusBar( bool _status )
     doc->reorganizeGUI();
 }
 
-int KWordDocIface::startingPage()
+int KWordDocIface::startingPage()const
 {
     return doc->getVariableCollection()->variableSetting()->startingPage();
 }
@@ -300,7 +300,7 @@ void KWordDocIface::setStartingPage(int nb)
     doc->recalcVariables(VT_PGNUM);
 }
 
-bool KWordDocIface::displayLink()
+bool KWordDocIface::displayLink()const
 {
     return doc->getVariableCollection()->variableSetting()->displayLink();
 }

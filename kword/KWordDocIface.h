@@ -37,40 +37,40 @@ k_dcop:
     virtual DCOPRef textFrameSet( int num );
     virtual DCOPRef frameSet( int num );
 
-    virtual int numPages();
-    virtual int numFrameSets();
-    virtual unsigned int nbColumns();
+    virtual int numPages()const;
+    virtual int numFrameSets()const;
+    virtual unsigned int nbColumns()const;
 
     //paper
-    virtual double ptTopBorder();
-    virtual double ptBottomBorder();
-    virtual double ptLeftBorder();
-    virtual double ptRightBorder();
-    virtual double ptPaperHeight();
-    virtual double ptPaperWidth();
-    virtual double ptColumnWidth();
-    virtual double ptColumnSpacing();
-    virtual double ptPageTop( int pgNum );
+    virtual double ptTopBorder()const;
+    virtual double ptBottomBorder()const;
+    virtual double ptLeftBorder()const;
+    virtual double ptRightBorder()const;
+    virtual double ptPaperHeight()const;
+    virtual double ptPaperWidth()const;
+    virtual double ptColumnWidth()const;
+    virtual double ptColumnSpacing()const;
+    virtual double ptPageTop( int pgNum )const;
 
     //configure
-    virtual double gridX();
-    virtual double gridY();
+    virtual double gridX()const;
+    virtual double gridY()const;
     virtual void setGridX(double _gridx);
     virtual void setGridY(double _gridy);
-    virtual QString unitName();
-    virtual double indentValue();
+    virtual QString unitName()const;
+    virtual double indentValue()const;
     virtual void setIndentValue(double _ind);
 
-    virtual int nbPagePerRow();
+    virtual int nbPagePerRow()const;
     virtual void setNbPagePerRow(int _nb);
-    virtual double defaultColumnSpacing();
+    virtual double defaultColumnSpacing()const;
     virtual void setDefaultColumnSpacing(int _val);
-    virtual int maxRecentFiles();
+    virtual int maxRecentFiles()const;
 
     virtual void setUndoRedoLimit(int _val);
 
     virtual bool showRuler() const;
-    virtual bool dontCheckUpperWord();
+    virtual bool dontCheckUpperWord()const;
     virtual bool dontCheckTitleCase() const;
     virtual bool showdocStruct() const;
     virtual bool viewFrameBorders() const;
@@ -95,10 +95,10 @@ k_dcop:
     virtual QString customVariableValue(const QString & varname)const;
 
     virtual void setStartingPage(int nb);
-    virtual int startingPage();
+    virtual int startingPage()const;
 
     virtual void setDisplayLink(bool b);
-    virtual bool displayLink();
+    virtual bool displayLink()const;
 
     virtual bool backgroundSpellCheckEnabled() const;
     virtual void enableBackgroundSpellCheck( bool b );
