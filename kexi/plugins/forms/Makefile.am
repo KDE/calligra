@@ -2,7 +2,8 @@ include $(top_srcdir)/kexi/Makefile.global
 
 kde_module_LTLIBRARIES = kexihandler_form.la kexidbwidgets.la
 
-kexihandler_form_la_SOURCES = kexidataprovider.cpp kexiformpart.cpp \
+kexihandler_form_la_SOURCES = kexigradientwidget.cpp \
+	kexidataprovider.cpp kexiformpart.cpp \
 	kexiformscrollview.cpp kexidbform.cpp kexiformview.cpp
 
 kexihandler_form_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module -no-undefined

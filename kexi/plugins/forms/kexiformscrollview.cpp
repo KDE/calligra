@@ -243,4 +243,9 @@ void KexiFormScrollView::slotRowInserted(KexiTableItem *item, uint row, bool rep
 	//! @todo
 }
 
+void KexiFormScrollView::slotRowsDeleted( const QValueList<int> & )
+{
+	//! @todo
+}
+
 #include "kexiformscrollview.moc"

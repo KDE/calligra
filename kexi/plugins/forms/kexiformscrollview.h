@@ -107,6 +107,10 @@ class KexiFormScrollView :
 		//! Like above, not db-aware version
 		virtual void slotRowInserted(KexiTableItem *item, uint row, bool repaint);
 
+		virtual void slotRowsDeleted( const QValueList<int> & );
+
+		virtual void slotDataDestroying() { KexiDataAwareObjectInterface::slotDataDestroying(); }
+
 	protected:
 		//! Implementation for KexiDataAwareObjectInterface
 		virtual void clearColumnsInternal(bool repaint);

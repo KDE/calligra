@@ -28,9 +28,11 @@
 
 
 KexiDBForm::KexiDBForm(QWidget *parent, const char *name/*, KexiDB::Connection *conn*/)
- : QWidget(parent, name)
+ : KexiGradientWidget(parent, name)
  , KexiDataItemInterface()
 {
+	setDisplayMode( KexiGradientWidget::SimpleGradient );
+
 	//m_conn = conn;
 	kexipluginsdbg << "KexiDBForm::KexiDBForm(): " << endl;
 	setCursor(QCursor(Qt::ArrowCursor)); //to avoid keeping Size cursor when moving from form's boundaries
