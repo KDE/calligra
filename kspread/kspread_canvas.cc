@@ -516,10 +516,11 @@ void KSpreadCanvas::gotoLocation( QPoint location, KSpreadTable* table,
 
   // Perhaps the user is entering a value in the cell.
   // In this case we may not touch the EditWidget
-  if ( !m_pEditor || m_bChoose )
-    m_pView->updateEditWidget();
+  if ( !m_pEditor && !m_bChoose )
+    m_pView->updateEditWidgetOnPress();
 
-   updatePosWidget();
+  updatePosWidget();
+
 }
 
 
