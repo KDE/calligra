@@ -49,6 +49,8 @@ void KWFrameLayout::layout( KWDocument* doc, KWFrameSet* mainTextFrameSet, int n
         double right = doc->ptPaperWidth() - doc->ptRightBorder();
         Q_ASSERT( left < right );
 
+        KWTextFrameSet* lastFrameSet = 0L;
+
         // For each frameset.... we have to assume they have been correctly sorted
         QPtrListIterator<HeaderFooterFrameset> it( info );
         for ( ; it.current() ; ++it )
@@ -65,7 +67,17 @@ void KWFrameLayout::layout( KWDocument* doc, KWFrameSet* mainTextFrameSet, int n
                 {
                     rect.setRect( left, top, right - left, it.current()->m_height );
                     top += it.current()->m_height + it.current()->m_spacing;
-                } else { // footnote or footer, add at bottom
+                } else // footnote or footer, add at bottom
+                {
+                    // When two footnotes are in the same page there should be 0 spacing between them
+                    // Yeah, write a generic frame layouter and then realize it's not flexible enough :(
+                    if ( fs->isFootEndNote() && lastFrameSet && lastFrameSet->isFootEndNote() )
+                    {
+                        // Undo "bottom -= spacing". This assumes equal spacing for all footnotes
+                        bottom += it.current()->m_spacing;
+                        bottom -= 1; // keep them one pixel apart though
+                    }
+
                     rect.setRect( left, bottom - it.current()->m_height, right - left, it.current()->m_height );
                     bottom -= it.current()->m_height + it.current()->m_spacing;
                 }
@@ -75,6 +87,7 @@ void KWFrameLayout::layout( KWDocument* doc, KWFrameSet* mainTextFrameSet, int n
                 kdDebug(32002) << "     rect:" << rect << "   - new top:bottom: " << top << ":" << bottom << endl;
 #endif
                 resizeOrCreateHeaderFooter( fs, frameNum, rect );
+                lastFrameSet = fs;
             }
         }
 
