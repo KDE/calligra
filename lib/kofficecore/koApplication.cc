@@ -33,6 +33,8 @@
 #include <kdebug.h>
 #include <stdlib.h>
 
+void qt_generate_epsf( bool b );
+
 KoApplication::KoApplication()
         : KApplication()
 {
@@ -44,13 +46,16 @@ KoApplication::KoApplication()
     // Tell the iconloader about share/apps/koffice/icons
     KGlobal::iconLoader()->addAppDir("koffice");
 
-    // Quit when last window closed
-    // This shouldn't be needed anymore, KTMW does it (David)
-    //connect( this, SIGNAL( lastWindowClosed() ), this, SLOT( quit() ) );
-
     // Prepare a DCOP interface
     m_appIface=new KoApplicationIface();  // avoid the leak
     dcopClient()->setDefaultObject( m_appIface->objId() );
+
+    // Qt's default behaviour, to generate EPS in some cases and not in others, sucks.
+    // This is fixed in Qt 3.0, but for Qt 2.x we need to disable it explicitely.
+    // If this is a problem for anyone, we can add a public method to set this flag.
+    // (David Faure, doing as advised by Lars Knoll)
+    qt_generate_epsf( false );
+    // (we can remove this once we rely on kdeprint)
 }
 
 bool KoApplication::start()
