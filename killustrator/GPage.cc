@@ -550,9 +550,10 @@ QDomElement GPage::saveToXml (QDomDocument &document)
 
   kdDebug(0) << "Page saving...\n";
 
-  QDomElement page = document.createElement("page");;
+  QDomElement page = document.createElement("page");
 
   page.setAttribute ("id", name ());
+  page.setAttribute ("bgcolor", mBGColor.name());
 
   QDomElement layout = document.createElement("layout");
   layout.setAttribute ("format", formats[pLayout.format]);
@@ -677,6 +678,7 @@ bool GPage::readFromXml (const QDomElement &page)
   setAutoUpdate (false);
 
   setName(page.attribute("id"));
+  mBGColor.setNamedColor(page.attribute("bgcolor"));
   QDomElement layout=page.namedItem("layout").toElement();
   QString tmp=layout.attribute("format");
   if (tmp == "a3")
