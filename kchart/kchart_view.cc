@@ -1,5 +1,4 @@
 /**
- * $Id$
  *
  * Kalle Dalheimer <kalle@kde.org>
  */
@@ -342,11 +341,12 @@ void KChartView::ringChart()
 
 }
 
-void KChartView::mousePressEvent ( QMouseEvent * )
+void KChartView::mousePressEvent ( QMouseEvent *e )
 {
     if(!koDocument()->isReadWrite() )
         return;
-    ((QPopupMenu*)factory()->container("action_popup",this))->popup(QCursor::pos());
+    if( e->button() == RightButton )
+        ((QPopupMenu*)factory()->container("action_popup",this))->popup(QCursor::pos());
 }
 
 #include "kchart_view.moc"
