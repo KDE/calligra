@@ -148,6 +148,7 @@ void KoShellWindow::setRootDocument( KoDocument * doc )
     KoView *v = doc->createView( m_pFrame );
     v->show();
     v->setGeometry( 0, 0, m_pFrame->width(), m_pFrame->height() );
+    v->setPartManager( partManager() );
 
     // Create a new page for this doc
     Page page;
