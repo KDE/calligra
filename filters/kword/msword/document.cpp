@@ -602,7 +602,7 @@ void Document::writeLayout( QDomElement& parentElement, const wvWare::ParagraphP
             // stuff, into what KWord can do right now.
             wvWare::UString text = listInfo->text().text;
 #ifndef NDEBUG
-            kdDebug() << "  depth=" << depth << endl;
+            kdDebug() << "  ilvl=" << pap.ilvl << " depth=" << depth << endl;
             listInfo->dump();
 #endif
             QString prefix, suffix;
@@ -648,10 +648,21 @@ void Document::writeLayout( QDomElement& parentElement, const wvWare::ParagraphP
                     unsigned int code = text[0].unicode();
                     if ( (code & 0xFF00) == 0xF000 ) // see wv2
                         code &= 0x00FF;
-                    counterElement.setAttribute( "type", 6 ); // custom
-                    counterElement.setAttribute( "bullet", code );
-                    QString paragFont = getFont( m_paragStyle->chp().ftcAscii );
-                    counterElement.setAttribute( "bulletfont", paragFont );
+                    // Some well-known bullet codes. Better turn them into real
+                    // KWord bullets, it looks much nicer (than crappy fonts).
+                    if ( code == 0xB7 ) // Round black bullet
+                    {
+                        counterElement.setAttribute( "type", 10 ); // disc bullet
+                    } else if ( code == 0xD8 ) // Triangle
+                    {
+                        counterElement.setAttribute( "type", 11 ); // Box. We have no triangle.
+                    } else {
+                        kdDebug() << "custom bullet, code=" << QString::number(code,16) << endl;
+                        counterElement.setAttribute( "type", 6 ); // custom
+                        counterElement.setAttribute( "bullet", code );
+                        QString paragFont = getFont( m_paragStyle->chp().ftcAscii );
+                        counterElement.setAttribute( "bulletfont", paragFont );
+                    }
                 }
                 else
                     kdWarning() << "Not supported: counter text without the depth in it, and longer than 1 char" << endl;
