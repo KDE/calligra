@@ -141,6 +141,7 @@ QByteArray KivioDragObject::kivioEncoded() const
 
   QDomDocument doc("KivioSelection");
   QDomElement elem = doc.createElement( "KivioSelection" );
+  doc.appendChild(elem);
   KivioStencil *stencil = 0;
   QPtrListIterator<KivioStencil> it(m_stencilList);
 
@@ -149,11 +150,7 @@ QByteArray KivioDragObject::kivioEncoded() const
     elem.appendChild(stencil->saveXML(doc));
   }
 
-  QCString result;
-  QTextStream ts(result, IO_WriteOnly);
-  ts << elem;
-
-  return result;
+  return doc.toCString();
 }
 
 QByteArray KivioDragObject::imageEncoded(const char* mimetype) const
