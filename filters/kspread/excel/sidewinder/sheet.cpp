@@ -173,3 +173,66 @@ void Sheet::setBottomMargin( double m )
   d->bottomMargin = m;
 }
 
+class Column::Private
+{
+public:
+  Sheet* sheet;
+  unsigned index;
+  double width;
+  Format format;
+  bool visible;
+};
+
+Column::Column( Sheet* sheet, unsigned index )
+{
+  d = new Column::Private;
+  d->sheet   = sheet;
+  d->index   = index;
+  d->width   = 10;
+  d->visible = true;
+}
+
+Column::~Column()
+{
+  delete d;
+}
+
+Sheet* Column::sheet() const
+{
+  return d->sheet;
+}
+
+unsigned Column::index() const
+{
+  return d->index;
+}
+
+double Column::width() const
+{
+  return d->width;
+}
+
+void Column::setWidth( double w )
+{
+  d->width = w;
+}
+
+const Format& Column::format() const
+{
+  return d->format;
+}
+
+void Column::setFormat( const Format& f )
+{
+  d->format = f;
+}
+
+bool Column::visible() const
+{
+  return d->visible;
+}
+
+void Column::setVisible( bool b )
+{
+  d->visible = b;
+}

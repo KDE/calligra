@@ -21,6 +21,7 @@
 #define SIDEWINDER_SHEET_H
 
 #include "ustring.h"
+#include "format.h"
 
 namespace Sidewinder
 {
@@ -73,6 +74,41 @@ private:
   // no copy or assign
   Sheet( const Sheet& );
   Sheet& operator=( const Sheet& );
+  
+  class Private;
+  Private *d;  
+};
+
+class Column
+{
+public:
+
+  Column( Sheet* sheet, unsigned index );
+  
+  virtual ~Column();
+  
+  Sheet* sheet() const;
+  
+  unsigned index() const;
+  
+  // width of column, in mm
+  double width() const;
+  
+  // set the width of column, in mm
+  void setWidth( double w );
+  
+  const Format& format() const;
+  
+  void setFormat( const Format& f );
+  
+  bool visible() const;
+  
+  void setVisible( bool v );
+
+private:
+  // no copy or assign
+  Column( const Column& );
+  Column& operator=( const Column& );
   
   class Private;
   Private *d;  
