@@ -47,7 +47,6 @@ KoInsertLinkDia::KoInsertLinkDia( QWidget *parent, const char *name )
   page=addVBoxPage(i18n("File"), QString::null,BarIcon("filenew",KIcon::SizeMedium));
   fileLink = new  fileLinkPage(page );
   connect(fileLink,SIGNAL(textChanged()),this,SLOT(slotTextChanged ()));
-  setFocus();
   slotTextChanged ( );
   resize(400,300);
 }
@@ -144,6 +143,8 @@ internetLinkPage::internetLinkPage( QWidget *parent , char *name  )
   m_hrefName = new QLineEdit( this );
 
   lay2->addWidget(m_hrefName);
+
+  m_linkName->setFocus();
 
   connect(m_linkName,SIGNAL(textChanged ( const QString & )),this,SLOT(textChanged ( const QString & )));
   connect(m_hrefName,SIGNAL(textChanged ( const QString & )),this,SLOT(textChanged ( const QString & )));
