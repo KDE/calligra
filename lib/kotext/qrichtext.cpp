@@ -1188,11 +1188,12 @@ void KoTextCursor::splitAndInsertEmptyParag( bool ind, bool updateIds )
 	s->remove( 0, 1 );
 	s->append( str, TRUE );
 	for ( uint i = 0; i < str.length(); ++i ) {
-	    s->setFormat( i, 1, string->at( idx + i )->format(), TRUE );
-	    if ( string->at( idx + i )->isCustom() ) {
-		KoTextCustomItem * item = string->at( idx + i )->customItem();
+            KoTextStringChar* tsc = string->at( idx + i );
+	    s->setFormat( i, 1, tsc->format(), TRUE );
+	    if ( tsc->isCustom() ) {
+		KoTextCustomItem * item = tsc->customItem();
 		s->at( i )->setCustomItem( item );
-		string->at( idx + i )->loseCustomItem();
+		tsc->loseCustomItem();
 #if 0
 		s->addCustomItem();
 		string->removeCustomItem();
@@ -4279,7 +4280,10 @@ void KoTextParag::paintDefault( QPainter &painter, const QColorGroup &cg, KoText
 	// draw bullet list items
 	if ( !didListLabel && line == 0 && qstyle() && qstyle()->displayMode() == QStyleSheetItem::DisplayListItem ) {
 	    didListLabel = TRUE;
-	    drawLabel( &painter, chr->x, cy, 0, 0, baseLine, cg );
+            int xLabel = chr->x;
+            if ( str->isRightToLeft() )
+                xLabel += chr->width;
+	    drawLabel( &painter, xLabel, cy, 0, 0, baseLine, cg );
 	}
 
 	// check for cursor mark
@@ -4416,179 +4420,6 @@ void KoTextParag::drawCursorDefault( QPainter &painter, KoTextCursor *cursor, in
     }
     painter.restore();
 }
-
-#if 0 // kotextparag.cc
-void KoTextParag::drawParagString( QPainter &painter, const QString &s, int start, int len, int startX,
-				      int lastY, int baseLine, int bw, int h, bool drawSelections,
-				      KoTextFormat *lastFormat, int i, const QMemArray<int> &selectionStarts,
-				      const QMemArray<int> &selectionEnds, const QColorGroup &cg, bool rightToLeft )
-{
-    bool plainText = doc ? doc->textFormat() == Qt::PlainText : FALSE;
-    QString str( s );
-    if ( str[ (int)str.length() - 1 ].unicode() == 0xad )
-	str.remove( str.length() - 1, 1 );
-    if ( !plainText || doc && lastFormat->color() != doc->formatCollection()->defaultFormat()->color() )
-	painter.setPen( QPen( lastFormat->color() ) );
-    else
-	painter.setPen( cg.text() );
-    painter.setFont( lastFormat->font() );
-
-#if 0
-    if ( doc && lastFormat->isAnchor() && !lastFormat->anchorHref().isEmpty() && lastFormat->useLinkColor() ) {
-	if ( doc->linkColor.isValid() )
-	    painter.setPen( doc->linkColor );
-	else
-	    painter.setPen( QPen( cg.link() ) );
-	if ( doc->underlineLinks() ) {
-	    QFont fn = lastFormat->font();
-	    fn.setUnderline( TRUE );
-	    painter.setFont( fn );
-	}
-    }
-#endif
-
-    if ( drawSelections ) {
-	const int nSels = doc ? doc->numSelections() : 1;
-	const int startSel = painter.device()->devType() != QInternal::Printer ? 0 : 1;
-	for ( int j = startSel; j < nSels; ++j ) {
-	    if ( i > selectionStarts[ j ] && i <= selectionEnds[ j ] ) {
-		if ( !doc || doc->invertSelectionText( j ) )
-		    painter.setPen( QPen( cg.color( QColorGroup::HighlightedText ) ) );
-		if ( j == KoTextDocument::Standard )
-		    painter.fillRect( startX, lastY, bw, h, cg.color( QColorGroup::Highlight ) );
-		else
-		    painter.fillRect( startX, lastY, bw, h, doc ? doc->selectionColor( j ) : cg.color( QColorGroup::Highlight ) );
-	    }
-	}
-    }
-
-    QPainter::TextDirection dir = rightToLeft ? QPainter::RTL : QPainter::LTR;
-
-    if ( dir != QPainter::RTL && start + len == length() ) // don't draw the last character (trailing space)
-	len--;
-
-    if ( str[ start ] != '\t' && str[ start ].unicode() != 0xad ) {
-	if ( lastFormat->vAlign() == KoTextFormat::AlignNormal ) {
-	    painter.drawText( startX, lastY + baseLine, str, start, len, dir );
-#ifdef BIDI_DEBUG
-	    painter.save();
-	    painter.setPen ( Qt::red );
-	    painter.drawLine( startX, lastY, startX, lastY + baseLine );
-	    painter.drawLine( startX, lastY + baseLine/2, startX + 10, lastY + baseLine/2 );
-	    int w = 0;
-	    int i = 0;
-	    while( i < len )
-		w += painter.fontMetrics().charWidth( str, start + i++ );
-	    painter.setPen ( Qt::blue );
-	    painter.drawLine( startX + w - 1, lastY, startX + w - 1, lastY + baseLine );
-	    painter.drawLine( startX + w - 1, lastY + baseLine/2, startX + w - 1 - 10, lastY + baseLine/2 );
-	    painter.restore();
-#endif
-	} else if ( lastFormat->vAlign() == KoTextFormat::AlignSuperScript ) {
-	    QFont f( painter.font() );
-	    f.setPointSize( ( f.pointSize() * 2 ) / 3 );
-	    painter.setFont( f );
-	    painter.drawText( startX, lastY + baseLine - ( painter.fontMetrics().height() / 2 ),
-			      str, start, len, dir );
-	} else if ( lastFormat->vAlign() == KoTextFormat::AlignSubScript ) {
-	    QFont f( painter.font() );
-	    f.setPointSize( ( f.pointSize() * 2 ) / 3 );
-	    painter.setFont( f );
-	    painter.drawText( startX, lastY + baseLine + painter.fontMetrics().height() / 6, str, start, len, dir );
-	}
-    }
-    if ( i + 1 < length() && at( i + 1 )->lineStart && at( i )->c.unicode() == 0xad ) {
-	painter.drawText( startX + bw, lastY + baseLine, "\xad" );
-    }
-    if ( lastFormat->isMisspelled() ) {
-	painter.save();
-	painter.setPen( QPen( Qt::red, 1, Qt::DotLine ) );
-	painter.drawLine( startX, lastY + baseLine + 1, startX + bw, lastY + baseLine + 1 );
-	painter.restore();
-    }
-
-#if 0
-    i -= len;
-
-    if ( doc && lastFormat->isAnchor() && !lastFormat->anchorHref().isEmpty() &&
-	 doc->focusIndicator.parag == this &&
-	 doc->focusIndicator.start >= i &&
-	 doc->focusIndicator.start + doc->focusIndicator.len <= i + len ) {
-	painter.drawWinFocusRect( QRect( startX, lastY, bw, h ) );
-    }
-#endif
-}
-
-void KoTextParag::drawLabel( QPainter* p, int x, int y, int w, int h, int base, const QColorGroup& cg )
-{
-    if ( !qstyle() )
-	return;
-    QRect r ( x, y, w, h );
-    QStyleSheetItem::ListStyle s = listStyle();
-
-    p->save();
-    p->setPen( defFormat->color() );
-
-    QFont font2( defFormat->font() );
-    if ( length() > 0 && at( 0 )->format() )
-	font2.setPointSize( at( 0 )->format()->font().pointSize() );
-    p->setFont( font2 );
-    QFontMetrics fm( p->fontMetrics() );
-    int size = fm.lineSpacing() / 3;
-
-    switch ( s ) {
-    case QStyleSheetItem::ListDecimal:
-    case QStyleSheetItem::ListLowerAlpha:
-    case QStyleSheetItem::ListUpperAlpha:
-	{
-	    int n = numberOfSubParagraph();
-	    QString l;
-	    switch ( s ) {
-	    case QStyleSheetItem::ListLowerAlpha:
-		if ( n < 27 ) {
-		    l = QChar( ('a' + (char) (n-1)));
-		    break;
-		}
-	    case QStyleSheetItem::ListUpperAlpha:
-		if ( n < 27 ) {
-		    l = QChar( ('A' + (char) (n-1)));
-		    break;
-		}
-		break;
-	    default:  //QStyleSheetItem::ListDecimal:
-		l.setNum( n );
-		break;
-	    }
-	    l += QString::fromLatin1(". ");
-	    p->drawText( r.right() - fm.width( l ), r.top() + base, l );
-	}
-	break;
-    case QStyleSheetItem::ListSquare:
-	{
-	    QRect er( r.right() - size * 2, r.top() + fm.height() / 2 - size / 2, size, size );
-	    p->fillRect( er , cg.brush( QColorGroup::Foreground ) );
-	}
-	break;
-    case QStyleSheetItem::ListCircle:
-	{
-	    QRect er( r.right()-size*2, r.top() + fm.height() / 2 - size / 2, size, size);
-	    p->drawEllipse( er );
-	}
-	break;
-    case QStyleSheetItem::ListDisc:
-    default:
-	{
-	    p->setBrush( cg.brush( QColorGroup::Foreground ));
-	    QRect er( r.right()-size*2, r.top() + fm.height() / 2 - size / 2, size, size);
-	    p->drawEllipse( er );
-	    p->setBrush( Qt::NoBrush );
-	}
-	break;
-    }
-
-    p->restore();
-}
-#endif // kotextparag.cc
 
 void KoTextParag::setStyleSheetItems( const QPtrVector<QStyleSheetItem> &vec )
 {

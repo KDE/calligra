@@ -83,8 +83,6 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
     int pixelww = 0; // width in pixels
     int pixelx = zh->layoutUnitToPixelX( x );
 
-    //int customItemOffY = 0;
-
     parag->tabCache().clear();
 
     QChar lastChr;
@@ -299,8 +297,6 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 		int belowBaseLine = QMAX( tmph - tmpBaseLine, c->height() - c->ascent() );
 		tmpBaseLine = QMAX( tmpBaseLine, c->ascent() );
 		tmph = tmpBaseLine + belowBaseLine;
-		//if ( c->isCustom() )
-		//    customItemOffY = tmpBaseLine - c->ascent();
 		//qDebug(  " -> tmpBaseLine/tmph : %d/%d", tmpBaseLine, tmph );
 	    }
 	    minw = QMAX( minw, tminw );
@@ -367,8 +363,6 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 	    int belowBaseLine = QMAX( tmph - tmpBaseLine, c->height() - c->ascent() );
 	    tmpBaseLine = QMAX( tmpBaseLine, c->ascent() );
 	    tmph = tmpBaseLine + belowBaseLine;
-	    //if ( c->isCustom() )
-            //customItemOffY = tmpBaseLine - c->ascent();
 	    //qDebug(  " -> tmpBaseLine/tmph : %d/%d", tmpBaseLine, tmph );
 	}
 
@@ -395,9 +389,6 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
         qDebug("LU: x=%d [equiv. to pix=%d] ; PIX: x=%d  --> adj=%d",
                x, zh->layoutUnitToPixelX( x ), pixelx, c->pixelxadj );
 #endif
-	//if ( c->isCustom() )
-	//    c->customItem()->move( x, y + customItemOffY );
-	//customItemOffY = 0;
 	x += ww;
         pixelx += pixelww;
         wused = QMAX( wused, x );
@@ -535,7 +526,7 @@ KoTextParagLineStart *KoTextFormatter::koBidiReorderLine(
     int start = (startChar - &text->at(0));
     int last = (lastChar - &text->at(0) );
 #ifdef DEBUG_FORMATTER
-    qDebug("doing BiDi reordering from %d to %d!", start, last);
+    kdDebug() << "*KoTextFormatter::koBidiReorderLine from " << start << " to " << last << " space=" << space << " startChar->x=" << startChar->x << endl;
 #endif
     KoBidiControl *control = new KoBidiControl( line->context(), line->status );
     QString str;
@@ -564,11 +555,17 @@ KoTextParagLineStart *KoTextFormatter::koBidiReorderLine(
 	    align = Qt::AlignRight;
     }
 
-    if ( align & Qt::AlignHCenter )
-	x += space/2;
-    else if ( align & Qt::AlignRight )
-	x += space;
-    else if ( align & Qt::AlignJustify ) {
+    if ( align & Qt::AlignHCenter ) {
+        if ( text->isRightToLeft() )
+            x = space/2 - x;
+        else
+            x += space/2;
+    } else if ( align & Qt::AlignRight ) {
+        if ( text->isRightToLeft() )
+            x = space - x;
+        else
+            x += space;
+    } else if ( align & Qt::AlignJustify ) {
 	for ( int j = last - 1; j >= start; --j ) {
             //// Start at last tab, if any. BR #40472 specifies that justifying should start after the last tab.
             if ( text->at( j ).c == '\t' ) {
@@ -615,16 +612,11 @@ KoTextParagLineStart *KoTextFormatter::koBidiReorderLine(
 		chr.x = x + toAdd;
                 chr.pixelxadj = pixelx + toAddPix - zh->layoutUnitToPixelX( chr.x );
 #ifdef DEBUG_FORMATTER
-//                qDebug("koBidiReorderLine: pos=%d x(LU)=%d toAdd(LU)=%d -> chr.x=%d pixelx=%d+%d, pixelxadj=%d", pos, x, toAdd, chr.x, pixelx, zh->layoutUnitToPixelX( toAdd ), pixelx+zh->layoutUnitToPixelX( toAdd )-zh->layoutUnitToPixelX( chr.x ));
+                qDebug("koBidiReorderLine: pos=%d x(LU)=%d toAdd(LU)=%d -> chr.x=%d pixelx=%d+%d, pixelxadj=%d", pos, x, toAdd, chr.x, pixelx, zh->layoutUnitToPixelX( toAdd ), pixelx+zh->layoutUnitToPixelX( toAdd )-zh->layoutUnitToPixelX( chr.x ));
 #endif
 		chr.rightToLeft = TRUE;
 		chr.startOfRun = FALSE;
 		int ww = chr.width;
-		/*if ( chr.c.unicode() >= 32 || chr.c == '\t' || chr.c == '\n' || chr.isCustom() ) {
-		    ww = text->width( pos );
-		} else {
-		    ww = chr.format()->width( ' ' );
-                }*/
 		if ( xmax < x + toAdd + ww ) xmax = x + toAdd + ww;
 		x += ww;
                 pixelx += chr.pixelwidth;
@@ -657,12 +649,7 @@ KoTextParagLineStart *KoTextFormatter::koBidiReorderLine(
 		chr.rightToLeft = FALSE;
 		chr.startOfRun = FALSE;
 		int ww = chr.width;
-		/*if ( chr.c.unicode() >= 32 || chr.c == '\t' || chr.isCustom() ) {
-		    ww = text->width( pos );
-		} else {
-		    ww = chr.format()->width( ' ' );
-                }*/
-		//qDebug("setting char %d at pos %d", pos, x);
+		//qDebug("setting char %d at pos %d", pos, chr.x);
 		if ( xmax < x + toAdd + ww ) xmax = x + toAdd + ww;
 		x += ww;
                 pixelx += chr.pixelwidth;

@@ -138,7 +138,7 @@ int KoTextParag::counterWidth() const
 
 // Draw the complete label (i.e. heading/list numbers/bullets) for this paragraph.
 // This is called by KoTextParag::paintDefault.
-void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int hLU, int baseLU, const QColorGroup& /*cg*/ )
+void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*hLU*/, int baseLU, const QColorGroup& /*cg*/ )
 {
     if ( !m_layout.counter ) // shouldn't happen
         return;
@@ -166,9 +166,9 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int hLU
     assert( zh );
     //bool forPrint = ( p->device()->devType() == QInternal::Printer );
 
-    int xLeft = zh->layoutUnitToPixelX( xLU - counterWidthLU );
+    int xLeft = zh->layoutUnitToPixelX( xLU - (str->isRightToLeft() ? 0 : counterWidthLU) );
     int y = zh->layoutUnitToPixelY( yLU );
-    int h = zh->layoutUnitToPixelY( yLU, hLU );
+    //int h = zh->layoutUnitToPixelY( yLU, hLU );
     int base = zh->layoutUnitToPixelY( yLU, baseLU );
     int counterWidth = zh->layoutUnitToPixelX( counterWidthLU );
     int height = zh->layoutUnitToPixelY( yLU, format->height() );
@@ -188,19 +188,24 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int hLU
     {
 	int xBullet = xLeft + zh->layoutUnitToPixelX( m_layout.counter->bulletX() );
 
+        //kdDebug() << "KoTextParag::drawLabel xLU=" << xLU << " counterWidthLU=" << counterWidthLU << endl;
 	// The width and height of the bullet is the width of one space
         int width = zh->layoutUnitToPixelX( format->width( ' ' ) );
+
+        //kdDebug() << "Pix: xLeft=" << xLeft << " counterWidth=" << counterWidth
+        //          << " xBullet=" << xBullet << " width=" << width << endl;
 
         QString prefix = m_layout.counter->prefix();
         if ( !prefix.isEmpty() )
         {
-            ///prefix += ' '/*the trailing space, part of the prefix*/;
-            KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ), textColor, xLeft, base, width, y - h, height );
+            if ( str->isRightToLeft() )
+                prefix.prepend( ' ' /*the space before the bullet in RTL mode*/ );
+            KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ), textColor, xLeft, base, width, y, height );
 
-            p->drawText( xLeft, y - h + base, prefix );
+            p->drawText( xLeft, y + base, prefix );
         }
 
-        QRect er( xBullet, y - h + height / 2 - width / 2, width, width );
+        QRect er( xBullet + (str->isRightToLeft() ? width : 0), y + height / 2 - width / 2, width, width );
         // Draw the bullet.
         switch ( m_layout.counter->style() )
         {
@@ -227,32 +232,34 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int hLU
                     bulletFont.setFamily( m_layout.counter->customBulletFont() );
                     p->setFont( bulletFont );
                 }
-                KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ), textColor, xBullet, base, width, y - h, height );
+                KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ), textColor, xBullet, base, width, y, height );
 
-                p->drawText( xBullet, y - h + base, m_layout.counter->customBulletCharacter() );
+                p->drawText( xBullet, y + base, m_layout.counter->customBulletCharacter() );
                 break;
             default:
                 break;
         }
 
-        QString suffix = m_layout.counter->suffix() + ' ' /*the trailing space*/;
+        QString suffix = m_layout.counter->suffix();
+        if ( !str->isRightToLeft() )
+            suffix += ' ' /*the space after the bullet*/;
         if ( !suffix.isEmpty() )
         {
-            KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ), textColor, xBullet + width, base, counterWidth, y - h,height );
+            KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ), textColor, xBullet + width, base, counterWidth, y,height );
 
-            p->drawText( xBullet + width, y - h + base, suffix );
+            p->drawText( xBullet + width, y + base, suffix );
         }
     }
     else
     {
         // There are no bullets...any parent bullets have already been suppressed.
         // Just draw the text! Note: one space is always appended.
-        KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ), textColor, xLeft, base, counterWidth, y - h, height);
+        KoTextParag::drawFontEffects( p, format, zh, format->screenFont( zh ), textColor, xLeft, base, counterWidth, y, height);
 
 
         QString counterText = m_layout.counter->text( this );
         if ( !counterText.isEmpty() )
-            p->drawText( xLeft, y - h + base, counterText + ' ' );
+            p->drawText( xLeft, y + base, counterText + ' ' );
     }
     p->restore();
 }
@@ -373,7 +380,10 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, KoTextCursor 
     {
         int cy, h, baseLine;
         lineInfo( 0, cy, h, baseLine );
-        drawLabel( &painter, at(0)->x, cy, 0, 0, baseLine, cg );
+        int xLabel = at(0)->x;
+        if ( str->isRightToLeft() )
+            xLabel += at(0)->width;
+        drawLabel( &painter, xLabel, cy, 0, 0, baseLine, cg );
     }
 
     // We force the alignment to justify during drawing, so that drawParagString is called
@@ -978,6 +988,7 @@ void KoTextParag::printRTDebug( int info )
         static const char * const s_align[] = { "Auto", "Left", "Right", "ERROR", "HCenter", "ERR", "ERR", "ERR", "Justify", };
         static const char * const s_dir[] = { "DirL", "DirR", "DirEN", "DirES", "DirET", "DirAN", "DirCS", "DirB", "DirS", "DirWS", "DirON", "DirLRE", "DirLRO", "DirAL", "DirRLE", "DirRLO", "DirPDF", "DirNSM", "DirBN" };
         kdDebug() << "  align: " << s_align[alignment()] << "  resolveAlignment: " << s_align[resolveAlignment()]
+                  << "  isRTL:" << string()->isRightToLeft()
                   << "  dir: " << s_dir[direction()] << endl;
         QRect pixr = pixelRect( textDocument()->paintingZoomHandler() );
         kdDebug() << "  rect() : " << DEBUGRECT( rect() )
