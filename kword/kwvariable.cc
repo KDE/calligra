@@ -107,7 +107,10 @@ KoVariable* KWVariableCollection::loadOasisField( KoTextDocument* textdoc, const
                   localName == "image-count"  ||
                   localName == "paragraph-count"  ||
                   localName == "word-count"  ||
-                  localName == "character-count")
+                  localName == "character-count" ||
+                  localName == "sentence-count" ||
+                  localName == "line-count" ||
+                  localName == "frame-count" )
         {
             QString key = "NUMBER";
             int type = VT_STATISTIC;
@@ -647,6 +650,26 @@ void KWStatisticVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*
         m_subtype = VST_STATISTIC_NB_CHARACTERE;
         m_varValue = QVariant( elem.text().toInt() );
     }
+    else if ( localName == "frame-count" )
+    {
+        m_subtype = VST_STATISTIC_NB_FRAME;
+        m_varValue = QVariant( elem.text().toInt() );
+    }
+    else if ( localName == "line-count" )
+    {
+        m_subtype = VST_STATISTIC_NB_LINES;
+        m_varValue = QVariant( elem.text().toInt() );
+    }
+    else if ( localName == "character-count" )
+    {
+        m_subtype = VST_STATISTIC_NB_CHARACTERE;
+        m_varValue = QVariant( elem.text().toInt() );
+    }
+    else if ( localName == "sentence-count" )
+    {
+        m_subtype = VST_STATISTIC_NB_SENTENCE;
+        m_varValue = QVariant( elem.text().toInt() );
+    }
     //TODO other copy
 }
 
@@ -670,7 +693,10 @@ void KWStatisticVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*con
         writer.endElement();
         break;
     case VST_STATISTIC_NB_FRAME:
-        //TODO
+        //TODO verify that it's implemented into oasis file format
+        writer.startElement( "text:frame-count" );
+        writer.addTextNode( QString( "%1" ).arg( m_varValue.toInt() ) );
+        writer.endElement();
         break;
     case VST_STATISTIC_NB_WORD:
         writer.startElement( "text:word-count" );
@@ -678,7 +704,10 @@ void KWStatisticVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*con
         writer.endElement();
         break;
     case VST_STATISTIC_NB_SENTENCE:
-        //TODO
+        //TODO verify that it's implemented into oasis file format
+        writer.startElement( "text:sentence-count" );
+        writer.addTextNode( QString( "%1" ).arg( m_varValue.toInt() ) );
+        writer.endElement();
         break;
     case VST_STATISTIC_NB_CHARACTERE:
         writer.startElement( "text:character-count" );
@@ -686,7 +715,10 @@ void KWStatisticVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*con
         writer.endElement();
         break;
     case VST_STATISTIC_NB_LINES:
-        //TODO
+        //TODO verify that it's implemented into oasis file format
+        writer.startElement( "text:line-count" );
+        writer.addTextNode( QString( "%1" ).arg( m_varValue.toInt() ) );
+        writer.endElement();
         break;
     }
 }
