@@ -49,6 +49,7 @@
 #endif
 #include <kglobal.h>
 #include <klocale.h>
+#include <private/qtextengine_p.h>
 
 //#define PARSER_DEBUG
 //#define DEBUG_COLLECTION
@@ -557,6 +558,7 @@ void KoTextCursor::insert( const QString &str, bool checkNewLine, QMemArray<KoTe
     else if ( doc && doc->parent() )
 	doc->nextDoubleBuffered = TRUE;
 #endif
+	fixCursorPosition();
 }
 
 void KoTextCursor::gotoLeft()
@@ -572,12 +574,13 @@ void KoTextCursor::gotoPreviousLetter()
     tmpIndex = -1;
 
     if ( idx > 0 ) {
-	idx--;
+	idx = string->string()->previousCursorPosition( idx );
     } else if ( string->prev() ) {
 	string = string->prev();
 	while ( !string->isVisible() )
 	    string = string->prev();
 	idx = string->length() - 1;
+#if 0
     } else {
 	if ( nested ) {
 	    pop();
@@ -592,6 +595,7 @@ void KoTextCursor::gotoPreviousLetter()
 		}
 	    }
 	}
+#endif
     }
 
     const KoTextStringChar *tsc = string->at( idx );
@@ -698,7 +702,7 @@ bool KoTextCursor::place( const QPoint &p, KoTextParag *s, bool link, int *custo
             cpos += cw;
         int d = cpos - pos.x();
         bool dm = d < 0 ? !chr->rightToLeft : chr->rightToLeft;
-        if ( QABS( d ) < dist || (dist == d && dm == TRUE ) ) {
+        if ( (QABS( d ) < dist || (dist == d && dm == TRUE )) && string->string()->validCursorPosition( i ) ) {
             dist = QABS( d );
             if ( !link || pos.x() >= x + chr->x ) {
                 curpos = i;
@@ -708,6 +712,7 @@ bool KoTextCursor::place( const QPoint &p, KoTextParag *s, bool link, int *custo
     }
     setIndex( curpos, FALSE );
 
+#if 0
     if ( inCustom && doc && parag()->at( curpos )->isCustom() && parag()->at( curpos )->customItem()->isNested() ) {
 	KoTextDocument *oldDoc = doc;
 	pos.setX( pos.x() - parag()->at( curpos )->x );
@@ -718,6 +723,7 @@ bool KoTextCursor::place( const QPoint &p, KoTextParag *s, bool link, int *custo
 	if ( !place( p, document()->firstParag() ) )
 	    pop();
     }
+#endif
     return TRUE;
 }
 
@@ -769,19 +775,21 @@ void KoTextCursor::gotoNextLetter()
 {
     tmpIndex = -1;
 
+    int len = string->length() - 1;
     const KoTextStringChar *tsc = string->at( idx );
     if ( tsc && tsc->isCustom() && tsc->customItem()->isNested() ) {
 	processNesting( EnterBegin );
 	return;
     }
 
-    if ( idx < string->length() - 1 ) {
-	idx++;
+    if ( idx < len ) {
+        idx = string->string()->nextCursorPosition( idx );
     } else if ( string->next() ) {
 	string = string->next();
 	while ( !string->isVisible() )
 	    string = string->next();
 	idx = 0;
+#if 0
     } else {
 	if ( nested ) {
 	    pop();
@@ -796,6 +804,7 @@ void KoTextCursor::gotoNextLetter()
 		}
 	    }
 	}
+#endif
     }
 }
 
@@ -844,6 +853,7 @@ void KoTextCursor::gotoUp()
 	else
 	    idx = oldIndexOfLineStart - 1;
     }
+    fixCursorPosition();
 }
 
 void KoTextCursor::gotoDown()
@@ -899,6 +909,7 @@ void KoTextCursor::gotoDown()
 	else
 	    idx = end - 1;
     }
+    fixCursorPosition();
 }
 
 void KoTextCursor::gotoLineEnd()
@@ -1158,11 +1169,37 @@ void KoTextCursor::splitAndInsertEmptyParag( bool ind, bool updateIds )
     invalidateNested();
 }
 
+bool KoTextCursor::removePreviousChar()
+{
+    tmpIndex = -1;
+    if ( !atParagStart() ) {
+	string->remove( idx-1, 1 );
+	int h = string->rect().height();
+	idx--;
+	// shouldn't be needed, just to make sure.
+	fixCursorPosition();
+	string->format( -1, TRUE );
+	if ( h != string->rect().height() )
+	    invalidateNested();
+	//else if ( string->document() && string->document()->parent() )
+	//    string->document()->nextDoubleBuffered = TRUE;
+	return FALSE;
+    } else if ( string->prev() ) {
+	string = string->prev();
+	string->join( string->next() );
+	string->invalidateCounters();
+	invalidateNested();
+	return TRUE;
+    }
+    return FALSE;
+}
+
 bool KoTextCursor::remove()
 {
     tmpIndex = -1;
     if ( !atParagEnd() ) {
-	string->remove( idx, 1 );
+	int next = string->string()->nextCursorPosition( idx );
+	string->remove( idx, next-idx );
 	int h = string->rect().height();
 	string->format( -1, TRUE );
 	if ( h != string->rect().height() )
@@ -2720,6 +2757,37 @@ int KoTextDocument::length() const
     return l;
 }
 
+
+void KoTextCursor::fixCursorPosition()
+{
+    // searches for the closest valid cursor position
+    if ( string->string()->validCursorPosition( idx ) )
+ 	return;
+
+    int lineIdx;
+    KoTextStringChar *start = string->lineStartOfChar( idx, &lineIdx, 0 );
+    int x = string->string()->at( idx ).x;
+    int diff = QABS(start->x - x);
+    int best = lineIdx;
+
+    KoTextStringChar *c = start;
+    ++c;
+
+    KoTextStringChar *end = &string->string()->at( string->length()-1 );
+    while ( c <= end && !c->lineStart ) {
+ 	int xp = c->x;
+ 	if ( c->rightToLeft )
+ 	    xp += c->pixelwidth; //string->string()->width( lineIdx + (c-start) );
+ 	int ndiff = QABS(xp - x);
+ 	if ( ndiff < diff && string->string()->validCursorPosition(lineIdx + (c-start)) ) {
+ 	    diff = ndiff;
+ 	    best = lineIdx + (c-start);
+ 	}
+ 	++c;
+    }
+    idx = best;
+}
+
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 KoTextString::KoTextString()
@@ -2879,53 +2947,55 @@ void KoTextString::setFormat( int index, KoTextFormat *f, bool useCollection )
 
 void KoTextString::checkBidi() const
 {
-    bool rtlKnown = FALSE;
-    if ( dir == QChar::DirR ) {
-	((KoTextString *)this)->bidi = TRUE;
-	((KoTextString *)this)->rightToLeft = TRUE;
-	((KoTextString *)this)->bidiDirty = FALSE;
-	return;
-    } else if ( dir == QChar::DirL ) {
-	((KoTextString *)this)->rightToLeft = FALSE;
-	rtlKnown = TRUE;
-    } else {
-	((KoTextString *)this)->rightToLeft = FALSE;
+    KoTextString *that = (KoTextString *)this;
+    that->bidiDirty = FALSE;
+    int length = data.size();
+    if ( !length ) {
+        that->bidi = FALSE;
+        that->rightToLeft = dir == QChar::DirR;
+        return;
+    }
+    const KoTextStringChar *start = data.data();
+    const KoTextStringChar *end = start + length;
+
+    // determines the properties we need for layouting
+    QTextEngine textEngine( toString(), 0 );
+    textEngine.itemize(QTextEngine::SingleLine);
+    const QCharAttributes *ca = textEngine.attributes() + length-1;
+    KoTextStringChar *ch = (KoTextStringChar *)end - 1;
+    QScriptItem *item = &textEngine.items[textEngine.items.size()-1];
+    unsigned char bidiLevel = item->analysis.bidiLevel;
+    if ( bidiLevel )
+        that->bidi = TRUE;
+    int pos = length-1;
+    while ( ch >= start ) {
+        if ( item->position > pos ) {
+            --item;
+            Q_ASSERT( item >= &textEngine.items[0] );
+            Q_ASSERT( item < &textEngine.items[textEngine.items.size()] );
+            bidiLevel = item->analysis.bidiLevel;
+            if ( bidiLevel )
+                that->bidi = TRUE;
+        }
+        ch->softBreak = ca->softBreak;
+        ch->whiteSpace = ca->whiteSpace;
+        ch->charStop = ca->charStop;
+        ch->wordStop = ca->wordStop;
+        //ch->bidiLevel = bidiLevel;
+        ch->rightToLeft = (bidiLevel%2);
+        --ch;
+        --ca;
+        --pos;
     }
 
-    int len = data.size();
-    const KoTextStringChar *c = data.data();
-    ((KoTextString *)this)->bidi = FALSE;
-    while( len ) {
-	if ( !rtlKnown ) {
-	    switch( c->c.direction() )
-	    {
-		case QChar::DirL:
-		case QChar::DirLRO:
-		case QChar::DirLRE:
-		    ((KoTextString *)this)->rightToLeft = FALSE;
-		    rtlKnown = TRUE;
-		    break;
-		case QChar::DirR:
-		case QChar::DirAL:
-		case QChar::DirRLO:
-		case QChar::DirRLE:
-		    ((KoTextString *)this)->rightToLeft = TRUE;
-		    rtlKnown = TRUE;
-		    break;
-		default:
-		    break;
-	    }
-	}
-	uchar row = c->c.row();
-	if( (row > 0x04 && row < 0x09) || ( row > 0xfa && row < 0xff ) ) {
-	    ((KoTextString *)this)->bidi = TRUE;
-            if ( rtlKnown )
-                break;
-	}
-	len--;
-	++c;
+    if ( dir == QChar::DirR ) {
+        that->bidi = TRUE;
+        that->rightToLeft = TRUE;
+    } else if ( dir == QChar::DirL ) {
+        that->rightToLeft = FALSE;
+    } else {
+        that->rightToLeft = (textEngine.items[0].analysis.bidiLevel % 2);
     }
-    ((KoTextString *)this)->bidiDirty = FALSE;
 }
 
 QMemArray<KoTextStringChar> KoTextString::subString( int start, int len ) const
@@ -2997,6 +3067,46 @@ QString KoTextString::toReverseString() const
     return s;
 }
 
+int KoTextString::nextCursorPosition( int next )
+{
+    if ( bidiDirty )
+        checkBidi();
+
+    const KoTextStringChar *c = data.data();
+    int len = length();
+
+    if ( next < len - 1 ) {
+        next++;
+        while ( next < len - 1 && !c[next].charStop )
+            next++;
+    }
+    return next;
+}
+
+int KoTextString::previousCursorPosition( int prev )
+{
+    if ( bidiDirty )
+        checkBidi();
+
+    const KoTextStringChar *c = data.data();
+
+    if ( prev ) {
+        prev--;
+        while ( prev && !c[prev].charStop )
+            prev--;
+    }
+    return prev;
+}
+
+bool KoTextString::validCursorPosition( int idx )
+{
+    if ( bidiDirty )
+        checkBidi();
+
+    return (at( idx ).charStop);
+}
+
+////
 
 void KoTextStringChar::setFormat( KoTextFormat *f )
 {
@@ -3047,24 +3157,6 @@ KoTextStringChar::~KoTextStringChar()
 	default:
 	    break;
     }
-}
-
-KoTextStringChar *KoTextStringChar::clone() const
-{
-    KoTextStringChar *chr = new KoTextStringChar;
-    chr->c = c;
-    chr->x = 0;
-    chr->pixelxadj = 0;
-    chr->pixelwidth = 0;
-    chr->width = 0;
-    chr->lineStart = 0;
-    chr->rightToLeft = 0;
-    chr->d.format = 0;
-    chr->type = KoTextStringChar::Regular;
-    chr->setFormat( format() );
-    if ( chr->format() )
-	chr->format()->addRef();
-    return chr;
 }
 
 int KoTextStringChar::height() const
@@ -4299,14 +4391,20 @@ bool KoTextFormatterBase::isStretchable( KoTextString *string, int pos ) const
 {
     if ( string->at( pos ).c == QChar(160) ) //non-breaking space
 	return true;
-    return isBreakable( string, pos );
+    KoTextStringChar& chr = string->at( pos );
+    return chr.whiteSpace;
+    //return isBreakable( string, pos );
 }
 
 bool KoTextFormatterBase::isBreakable( KoTextString *string, int pos ) const
 {
-    const QChar &c = string->at( pos ).c;
-    char ch = c.latin1();
-    if ( c.isSpace() && ch != '\n' && c.unicode() != 0x00a0U )
+    //if (string->at(pos).nobreak)
+    //    return FALSE;
+    return (pos < string->length()-1 && string->at(pos+1).softBreak);
+
+#if 0
+    const QChar &c = string->at(pos).c;
+    if ( c.isSpace() && c.unicode() != '\n' && c.unicode() != 0x00a0U )
 	return TRUE;
     if ( c == '-' || c.unicode() == 0xad ) // hyphen or soft hyphen
 	return TRUE;
@@ -4351,6 +4449,7 @@ bool KoTextFormatterBase::isBreakable( KoTextString *string, int pos ) const
 	    return TRUE;
     }
     return FALSE;
+#endif
 }
 
 void KoTextParag::insertLineStart( int index, KoTextParagLineStart *ls )

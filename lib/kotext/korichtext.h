@@ -120,13 +120,19 @@ public:
     ~KoTextStringChar();
 
     QChar c;
+
+    // this is the same struct as in qtextengine_p.h. Don't change!
+    uchar softBreak      :1;     // Potential linebreak point
+    uchar whiteSpace     :1;     // A unicode whitespace character, except NBSP, ZWNBSP
+    uchar charStop       :1;     // Valid cursor position (for left/right arrow)
+    uchar wordStop       :1;     // Valid cursor position (for ctrl + left/right arrow) (TODO: use)
+    //uchar nobreak        :1;
+
     enum Type { Regular, Custom };
     uint lineStart : 1;
-    uint rightToLeft : 1;
-    //uint hasCursor : 1;
-    //uint canBreak : 1;
-    Type type : 2;
+    Type type : 1;
     uint startOfRun : 1;
+    uint rightToLeft : 1;
 
     // --- added for WYSIWYG ---
     Q_INT8 pixelxadj; // adjustment to apply to lu2pixel(x)
@@ -143,7 +149,6 @@ public:
     void setFormat( KoTextFormat *f );
     void setCustomItem( KoTextCustomItem *i );
     void loseCustomItem();
-    KoTextStringChar *clone() const;
     struct CustomData
     {
 	KoTextFormat *format;
@@ -186,7 +191,7 @@ public:
     KoTextStringChar &at( int i ) const;
     int length() const;
 
-    //int width( int idx ) const;
+    //int width( int idx ) const; // moved to KoTextFormat
 
     void insert( int index, const QString &s, KoTextFormat *f );
     void insert( int index, KoTextStringChar *c );
@@ -213,6 +218,11 @@ public:
     void operator=( const QString &s ) { clear(); insert( 0, s, 0 ); }
     void operator+=( const QString &s );
     void prepend( const QString &s ) { insert( 0, s, 0 ); }
+
+    // return next and previous valid cursor positions.
+    bool validCursorPosition( int idx );
+    int nextCursorPosition( int idx );
+    int previousCursorPosition( int idx );
 
 private:
     void checkBidi() const;
@@ -293,6 +303,7 @@ public:
     void insert( const QString &s, bool checkNewLine, QMemArray<KoTextStringChar> *formatting = 0 );
     void splitAndInsertEmptyParag( bool ind = TRUE, bool updateIds = TRUE );
     bool remove();
+    bool removePreviousChar();
     void killLine();
     void indent();
 
@@ -315,7 +326,7 @@ public:
 
     int x() const;
     int y() const;
-
+    void fixCursorPosition();
     int nestedDepth() const { return (int)indices.count(); } //### size_t/int cast
 
 private:
