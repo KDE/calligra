@@ -315,24 +315,36 @@ void KPresenterView::editRedo()
 /*===============================================================*/
 void KPresenterView::editCut()
 {
-    page->setToolEditMode( TEM_MOUSE );
-    m_pKPresenterDoc->copyObjs( xOffset, yOffset );
-    m_pKPresenterDoc->deleteObjs();
+    if ( !page->kTxtObj() ) {
+	page->setToolEditMode( TEM_MOUSE );
+	m_pKPresenterDoc->copyObjs( xOffset, yOffset );
+	m_pKPresenterDoc->deleteObjs();
+    } else {
+	page->kTxtObj()->cutRegion();
+    }
 }
 
 /*===============================================================*/
 void KPresenterView::editCopy()
 {
-    page->setToolEditMode( TEM_MOUSE );
-    m_pKPresenterDoc->copyObjs( xOffset, yOffset );
+    if ( !page->kTxtObj() ) {
+	page->setToolEditMode( TEM_MOUSE );
+	m_pKPresenterDoc->copyObjs( xOffset, yOffset );
+    } else {
+	page->kTxtObj()->copyRegion();
+    }
 }
 
 /*===============================================================*/
 void KPresenterView::editPaste()
 {
-    page->setToolEditMode( TEM_MOUSE );
-    page->deSelectAllObj();
-    m_pKPresenterDoc->pasteObjs( xOffset, yOffset );
+    if ( !page->kTxtObj() ) {
+	page->setToolEditMode( TEM_MOUSE );
+	page->deSelectAllObj();
+	m_pKPresenterDoc->pasteObjs( xOffset, yOffset );
+    } else {
+	page->kTxtObj()->paste();
+    }
 }
 
 /*===============================================================*/

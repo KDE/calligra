@@ -346,7 +346,7 @@ Reggie, 31.7.1999:
 - Using the new and cool gradients in the demo
 - KPresenter supports now unbalanced gradients too (thanx to KPixmapEffects!!!!)
 
-Reggie, 2.7.1999:
+Reggie, 2.8.1999:
 -------------
 - Swapped horizontal - vertical gradients back
 - Using sliders in property dialog for configuration of unbalanced gradients too
@@ -355,7 +355,7 @@ Reggie, 2.7.1999:
 - Some fixes
 - Fixed gradients in headers/footers
 
-Reggie, 14.7.1999:
+Reggie, 14.8.1999:
 ------------------
 - Fixed a segfault in the textobject
 - Fixed random adding of spaces in the textobject
@@ -365,12 +365,16 @@ Reggie, 14.7.1999:
 - Improved extending contents of a textobj to the object height
 - Dont't forget current URL (filename) when inserting a new page
 
-Reggie, 15.7.1999:
+Reggie, 15.8.1999:
 ------------------
 - When inserting a new page (template), don't change the page layout
 - Fixes in textobject
 - Fixes in headers/footers
 
-Reggie, 16.7.1999:
+Reggie, 16.8.1999:
 ------------------
 - Started working on the new presentation structure viewer/editor
+
+Reggie, 17.8.1999:
+------------------
+- Fixed cut/copy/paste for textobjs
