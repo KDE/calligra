@@ -31,7 +31,7 @@ vmirror.png \
 tleftalign.png \
 tcenteralign.png \
 trightalign.png \
-killustrator.png \
+lo-killustrator.png \
 logo.png \
 deletelayer.png \
 lowerlayer.png \
