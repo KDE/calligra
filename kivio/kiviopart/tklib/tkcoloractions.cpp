@@ -6,6 +6,7 @@
 #include <qcolor.h>
 #include <qiconset.h>
 #include <qtooltip.h>
+#include <klocale.h>
 
 TKColorPopupMenu::TKColorPopupMenu( QWidget* parent, const char* name )
 : KPopupMenu(parent,name)
