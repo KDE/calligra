@@ -1,12 +1,12 @@
 #ifndef __KSCRIPT_METHOD_H__
 #define __KSCRIPT_METHOD_H__
 
-#include <qshared.h>
 #include <qmap.h>
 #include <qlist.h>
 #include <qstring.h>
 
-#include "koscript_ptr.h"
+#include <ksharedptr.h>
+
 #include "koscript_context.h"
 #include "koscript_func.h"
 #include "koscript_struct.h"
@@ -18,17 +18,17 @@
  * may be of the type @ref KSFunction, KSBuiltinFunction or KSStructBuiltinFunction.
  * The instance may be a @ref KSObject or @ref KSStruct or derived types.
  */
-class KSMethod : public QShared
+class KSMethod : public KShared
 {
 public:
-  KSMethod( KSModule* m, const KSValue::Ptr& obj, const KSValue::Ptr& func ) : QShared(), m_object( obj ), m_func( func ), m_module( m ) { }
+  KSMethod( KSModule* m, const KSValue::Ptr& obj, const KSValue::Ptr& func ) : KShared(), m_object( obj ), m_func( func ), m_module( m ) { }
   /**
    * Use this method if the function is KSBuiltinFunction or KSStructBuiltinFunction.
    * In this case we pass the name of the method. No copy of this name is made and the
    * destructor does not free the string. So you should only pass constants here.
    */
   KSMethod( KSModule* m, const KSValue::Ptr& obj, const KSValue::Ptr& func, const QString& name )
-      : QShared(), m_object( obj ), m_func( func ), m_module( m ), m_methodName( name ) { }
+      : KShared(), m_object( obj ), m_func( func ), m_module( m ), m_methodName( name ) { }
   virtual ~KSMethod() { }
 
   bool call( KSContext& context );

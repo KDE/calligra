@@ -4,10 +4,10 @@
 #include <qstring.h>
 #include <qvaluelist.h>
 #include <qmap.h>
-#include <qshared.h>
 #include <qdatetime.h>
 
-#include "koscript_ptr.h"
+#include <ksharedptr.h>
+
 #include "koscript_types.h"
 
 class KSFunction;
@@ -25,10 +25,10 @@ typedef bool (KSStruct::*KSStructBuiltinMethod)( KSContext&, const QString& );
  * time and it can hold the most common types.
  * For CORBA people: It is a poor mans CORBA::Any.
  */
-class KSValue : public QShared
+class KSValue : public KShared
 {
 public:
-    typedef KSSharedPtr<KSValue> Ptr;
+    typedef KSharedPtr<KSValue> Ptr;
 
     enum Type {
       Empty,
@@ -63,24 +63,24 @@ public:
     KSValue( const KSValue& );
     virtual ~KSValue();
 
-    KSValue( const QString& _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
-    KSValue( const QValueList<Ptr>& _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
-    KSValue( const QMap<QString,Ptr>& _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
-    KSValue( KScript::Long _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
-    KSValue( int _v ) { m_mode = Temp; typ = Empty; setValue( (KScript::Long)_v ); }
-    KSValue( KScript::Boolean _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
-    KSValue( KScript::Double _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
-    KSValue( const KScript::Char& _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
-    KSValue( const KScript::CharRef& _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
-    KSValue( KSFunction* _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
-    KSValue( KSMethod* _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
-    KSValue( KSProperty* _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
-    KSValue( KSModule* _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
-    KSValue( KSStruct* _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
-    KSValue( KSStructClass* _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
-    KSValue( KSStructBuiltinMethod _v ) { m_mode = Temp; typ = Empty; setValue( _v ); }
-    KSValue( const QTime& t ) { m_mode = Temp; typ = Empty; setValue( t ); }
-    KSValue( const QDate& d ) { m_mode = Temp; typ = Empty; setValue( d ); }
+    KSValue( const QString& _v ) : KShared() { m_mode = Temp; typ = Empty; setValue( _v ); }
+    KSValue( const QValueList<Ptr>& _v ) : KShared() { m_mode = Temp; typ = Empty; setValue( _v ); }
+    KSValue( const QMap<QString,Ptr>& _v ) : KShared() { m_mode = Temp; typ = Empty; setValue( _v ); }
+    KSValue( KScript::Long _v ) : KShared() { m_mode = Temp; typ = Empty; setValue( _v ); }
+    KSValue( int _v ) : KShared() { m_mode = Temp; typ = Empty; setValue( (KScript::Long)_v ); }
+    KSValue( KScript::Boolean _v ) : KShared() { m_mode = Temp; typ = Empty; setValue( _v ); }
+    KSValue( KScript::Double _v ) : KShared() { m_mode = Temp; typ = Empty; setValue( _v ); }
+    KSValue( const KScript::Char& _v ) : KShared() { m_mode = Temp; typ = Empty; setValue( _v ); }
+    KSValue( const KScript::CharRef& _v ) : KShared() { m_mode = Temp; typ = Empty; setValue( _v ); }
+    KSValue( KSFunction* _v ) : KShared() { m_mode = Temp; typ = Empty; setValue( _v ); }
+    KSValue( KSMethod* _v ) : KShared() { m_mode = Temp; typ = Empty; setValue( _v ); }
+    KSValue( KSProperty* _v ) : KShared() { m_mode = Temp; typ = Empty; setValue( _v ); }
+    KSValue( KSModule* _v ) : KShared() { m_mode = Temp; typ = Empty; setValue( _v ); }
+    KSValue( KSStruct* _v ) : KShared() { m_mode = Temp; typ = Empty; setValue( _v ); }
+    KSValue( KSStructClass* _v ) : KShared() { m_mode = Temp; typ = Empty; setValue( _v ); }
+    KSValue( KSStructBuiltinMethod _v ) : KShared() { m_mode = Temp; typ = Empty; setValue( _v ); }
+    KSValue( const QTime& t ) : KShared() { m_mode = Temp; typ = Empty; setValue( t ); }
+    KSValue( const QDate& d ) : KShared() { m_mode = Temp; typ = Empty; setValue( d ); }
 
     KSValue& operator= ( const KSValue& );
 
@@ -180,7 +180,7 @@ public:
      * @return an empty value. Its reference count is increased so that you can assign
      *         it directly to some @ref KSContext.
      */
-    static KSValue* null() { if ( !s_null ) s_null = new KSValue; s_null->ref(); return s_null; }
+    static KSValue* null() { if ( !s_null ) s_null = new KSValue; s_null->_KShared_ref(); return s_null; }
 
 protected:
 

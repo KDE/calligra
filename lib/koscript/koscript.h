@@ -3,14 +3,13 @@
 
 #include <qstring.h>
 #include <qmap.h>
-#include <qshared.h>
 #include <qstringlist.h>
 
 #include <kregexp.h>
+#include <ksharedptr.h>
 
 #include "koscript_context.h"
 #include "koscript_parsenode.h"
-#include "koscript_ptr.h"
 #include "koscript_value.h"
 
 class QTextStream;
@@ -23,10 +22,10 @@ class QIODevice;
  *
  * @author Torben Weis <weis@kde.org>
  */
-class KSInterpreter : public QShared
+class KSInterpreter : public KShared
 {
 public:
-  typedef KSSharedPtr<KSInterpreter> Ptr;
+  typedef KSharedPtr<KSInterpreter> Ptr;
 
   /**
    * Creates a new interpreter. It is ok to have many of them

@@ -36,7 +36,7 @@ KSContext::~KSContext()
  *
  *************************************************/
 
-KSException::KSException( const QString& _type, const KSValue::Ptr& _ptr, int _line )
+KSException::KSException( const QString& _type, const KSValue::Ptr& _ptr, int _line ) : KShared()
 {
   m_type = new KSValue( _type );
   m_value = _ptr;
@@ -44,7 +44,7 @@ KSException::KSException( const QString& _type, const KSValue::Ptr& _ptr, int _l
     m_lines.append( _line );
 }
 
-KSException::KSException( const QString& _type, const QString& _val, int _line )
+KSException::KSException( const QString& _type, const QString& _val, int _line ) : KShared()
 {
   m_type = new KSValue( _type );
   m_value = new KSValue( _val );
@@ -52,7 +52,7 @@ KSException::KSException( const QString& _type, const QString& _val, int _line )
     m_lines.append( _line );
 }
 
-KSException::KSException( const KSValue::Ptr& _type, const KSValue::Ptr& _ptr, int _line )
+KSException::KSException( const KSValue::Ptr& _type, const KSValue::Ptr& _ptr, int _line ) : KShared()
 {
   m_type = _type;
   m_value = _ptr;
@@ -91,7 +91,7 @@ QString KSException::toString( KSContext& context )
  *
  *************************************************/
 
-KSScope::KSScope( const KSNamespace* globalSpace, KSModule* module )
+KSScope::KSScope( const KSNamespace* globalSpace, KSModule* module ) : KShared()
 {
   ASSERT( globalSpace );
 
@@ -104,7 +104,7 @@ KSScope::KSScope( const KSNamespace* globalSpace, KSModule* module )
   m_localScope = 0;
 }
 
-KSScope::KSScope( const KSScope& s ) : QShared()
+KSScope::KSScope( const KSScope& s ) : KShared()
 {
   m_module = s.m_module;
   m_globalSpace = s.m_globalSpace;
@@ -140,7 +140,7 @@ KSValue* KSScope::object( const QString& name, bool _insert )
     KSNamespace::ConstIterator it = m_globalSpace->find( name );
     if ( it != m_globalSpace->end() )
     {
-      KSSharedPtr<KSValue> ptr( it.data() );
+      KSharedPtr<KSValue> ptr( it.data() );
       return ptr;
     }
 
@@ -177,7 +177,7 @@ void KSScope::addObject( const QString& name, const KSValue::Ptr& value )
  *************************************************/
 
 KSModule::KSModule( KSInterpreter* i, const QString& name, KSParseNode* code )
-  : QShared(), m_name( name ), m_code( code ), m_interpreter( i )
+  : KShared(), m_name( name ), m_code( code ), m_interpreter( i )
 {
 }
 
@@ -199,7 +199,7 @@ KSValue::Ptr KSModule::member( KSContext& context, const QString& name )
   {
     if ( context.leftExpr() )
     {
-        this->ref();
+        this->_KShared_ref();
         KSValue::Ptr ptr( new KSValue( new KSProperty( this, name ) ) );
         ptr->setMode( KSValue::LeftExpr );
         return ptr;

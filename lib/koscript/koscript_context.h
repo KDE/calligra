@@ -2,11 +2,11 @@
 #define __KSCRIPT_CONTEXT_H__
 
 #include "koscript_value.h"
-#include "koscript_ptr.h"
 
-#include <qshared.h>
 #include <qstring.h>
 #include <qlist.h>
+
+#include <ksharedptr.h>
 
 class KSContext;
 class KSParseNode;
@@ -19,10 +19,10 @@ typedef QMap<QString,KSValue::Ptr> KSNamespace;
  * namespace with all symbols of the module and owns the parse tree.
  * A module itself may be inserted in other namespaces.
  */
-class KSModule : public QShared
+class KSModule : public KShared
 {
 public:
-    typedef KSSharedPtr<KSModule> Ptr;
+    typedef KSharedPtr<KSModule> Ptr;
 
     KSModule( KSInterpreter*, const QString& name, KSParseNode* = 0 );
     virtual ~KSModule();
@@ -50,7 +50,7 @@ public:
      * Reimplemented by KSPebblesModule.
      */
     virtual bool isPebbles() const { return FALSE; }
-    
+
     /**
      * @return the modules name.
      */
@@ -122,10 +122,10 @@ private:
 };
 
 
-class KSScope : public QShared
+class KSScope : public KShared
 {
 public:
-  typedef KSSharedPtr<KSScope> Ptr;
+  typedef KSharedPtr<KSScope> Ptr;
 
   /**
    * The scope does NOT take over ownership of the namespaces.
@@ -168,10 +168,10 @@ private:
   KSSubScope* m_localScope;
 };
 
-class KSException : public QShared
+class KSException : public KShared
 {
 public:
-  typedef KSSharedPtr<KSException> Ptr;
+  typedef KSharedPtr<KSException> Ptr;
 
   KSException( const QString& _type, const KSValue::Ptr& _ptr, int _line = -1 );
   KSException( const QString& _type, const QString& _val, int _line = -1 );
@@ -218,15 +218,15 @@ public:
    *         can assign it directly to another context. Mention however, that @ref KSValue is a shared
    *         object, so if you need a real copy, then dont use this function.
    */
-  KSValue* shareValue() { if ( !m_value ) return 0; m_value->ref(); return m_value; }
+  KSValue* shareValue() { if ( !m_value ) return 0; m_value->_KShared_ref(); return m_value; }
 
-  void setException( KSContext& c ) { m_exception = c.exception(); if ( c.exception() ) c.exception()->ref(); }
+  void setException( KSContext& c ) { m_exception = c.exception(); if ( c.exception() ) c.exception()->_KShared_ref(); }
   void setException( KSException::Ptr& p ) { m_exception = p; }
   void setException( KSException* p ) { m_exception = p; }
   KSException* exception() { return m_exception; }
-  KSException* shareException() { if ( !m_exception ) return 0; m_exception->ref(); return m_exception; }
+  KSException* shareException() { if ( !m_exception ) return 0; m_exception->_KShared_ref(); return m_exception; }
 
-  void setScope( KSContext& c ) { m_scope = c.scope(); if ( c.scope() ) c.scope()->ref(); }
+  void setScope( KSContext& c ) { m_scope = c.scope(); if ( c.scope() ) c.scope()->_KShared_ref(); }
   void setScope( KSScope::Ptr& p ) { m_scope = p; }
   void setScope( KSScope* p ) { m_scope = p; }
   KSScope* scope() { return m_scope; }

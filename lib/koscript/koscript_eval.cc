@@ -651,7 +651,7 @@ bool KSEval_scoped_name( KSParseNode* node, KSContext& context )
     return false;
   }
 
-  v->ref();
+  v->_KShared_ref();
   context.setValue( v );
 
   return true;
@@ -1125,7 +1125,7 @@ bool KSEval_func_param_in( KSParseNode* node, KSContext& context )
     KSValue* arg = *(context.value()->listValue().begin());
     if ( arg->mode() == KSValue::Temp )
     {
-      arg->ref();
+      arg->_KShared_ref();
       v = arg;
     }
     else
@@ -1166,7 +1166,7 @@ bool KSEval_func_param_out( KSParseNode* node, KSContext& context )
   context.value()->clear();
 
   // Put the arguments as parameter in our namespace
-  arg->ref();
+  arg->_KShared_ref();
   context.scope()->addObject( node->getIdent(), arg );
 
   // Remove the argument from the list
@@ -1196,7 +1196,7 @@ bool KSEval_func_param_inout( KSParseNode* node, KSContext& context )
   }
 
   // Put the arguments as parameter in our namespace
-  arg->ref();
+  arg->_KShared_ref();
   context.scope()->addObject( node->getIdent(), arg );
 
   // Remove the argument from the list
@@ -1395,7 +1395,7 @@ bool KSEval_member_expr( KSParseNode* node, KSContext& context )
       KSUtil::castingError( context, v, KSValue::FunctionType );
       return false;
     }
-    v->ref();
+    v->_KShared_ref();
     context.setValue( new KSValue( new KSMethod( context.scope()->module(), l.shareValue(), v ) ) );
     return true;
   }
@@ -1452,7 +1452,7 @@ bool KSEval_t_array_element( KSParseNode* node, KSContext& context )
 
   if ( l.value()->mode() == KSValue::Temp )
   {
-    l.value()->ref();
+    l.value()->_KShared_ref();
     context.value()->listValue().append( KSValue::Ptr( l.value() ) );
   }
   else
@@ -1499,7 +1499,7 @@ bool KSEval_t_dict_element( KSParseNode* node, KSContext& context )
 
   if ( r.value()->mode() == KSValue::Temp )
   {
-    r.value()->ref();
+    r.value()->_KShared_ref();
     context.value()->mapValue().insert( l.value()->stringValue(), KSValue::Ptr( r.value() ) );
   }
   else
@@ -1840,7 +1840,7 @@ bool KSEval_t_foreach( KSParseNode* node, KSContext& context )
     for( ; it != end; ++it )
     {
       // Get the element of the map in the local scope
-      it.data()->ref();
+      it.data()->_KShared_ref();
       KSValue* v = it.data();
       // Same mode as the array
       v->setMode( mode );
@@ -1879,7 +1879,7 @@ bool KSEval_t_foreach( KSParseNode* node, KSContext& context )
     for( ; it != end; ++it )
     {
       // Get the element of the array in our local variable
-      (*it)->ref();
+      (*it)->_KShared_ref();
       KSValue* v = (*it);
       // Same mode as the array
       v->setMode( mode );
@@ -2224,7 +2224,7 @@ extern bool KSEval_t_catch( KSParseNode* node, KSContext& context )
   {
      // Get infos about the exception
     KSValue* value = context.exception()->value();
-    value->ref();
+    value->_KShared_ref();
 
     // Add variables to the namespace
     KSNamespace nspace;
@@ -2267,9 +2267,9 @@ extern bool KSEval_t_catch_default( KSParseNode* node, KSContext& context )
 
   // Clear the exception
   KSValue* type = context.exception()->type();
-  type->ref();
+  type->_KShared_ref();
   KSValue* value = context.exception()->value();
-  value->ref();
+  value->_KShared_ref();
   context.setException( 0 );
 
   // Add variables to the namespace
@@ -2356,7 +2356,7 @@ extern bool KSEval_from( KSParseNode* node, KSContext& context )
             }
 
             // Add the symbol to the current namespace
-            v->ref();
+            v->_KShared_ref();
             context.scope()->module()->addObject( *sit, v );
         }
     }

@@ -13,7 +13,7 @@
  ***************************************************/
 
 KSStructClass::KSStructClass( KSModule* m, const QString& name )
-  : m_name( name ), m_module( m )
+  : KShared(), m_name( name ), m_module( m )
 {
   m_space.insert( "isA", new KSValue( &KSStruct::isA ) );
 }
@@ -68,7 +68,7 @@ KSValue::Ptr KSStruct::member( KSContext& context, const QString& name )
 {
   if ( context.leftExpr() )
   {
-    this->ref();
+    this->_KShared_ref();
     KSValue::Ptr ptr( new KSValue( new KSProperty( this, name ) ) );
     ptr->setMode( KSValue::LeftExpr );
     return ptr;
@@ -158,7 +158,7 @@ KSValue::Ptr KSBuiltinStruct::member( KSContext& context, const QString& name )
 {
     if ( context.leftExpr() )
     {
-	this->ref();
+	this->_KShared_ref();
 	KSValue::Ptr ptr( new KSValue( new KSProperty( this, name ) ) );
 	ptr->setMode( KSValue::LeftExpr );
 	return ptr;
@@ -203,7 +203,7 @@ bool KSBuiltinStruct::setMember( KSContext& context, const QString& name, const 
 	context.setException( new KSException( "ReadOnly", tmp.arg( name ).arg( getClass()->name() ) ) );
 	return FALSE;
     }
-	
+
     return TRUE;
 }
 

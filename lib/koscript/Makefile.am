@@ -23,7 +23,7 @@ koscript_SOURCES = main.cc
 noinst_HEADERS = koscript_locale.h \
 		 koscript_eval.h koscript_func.h koscript_context.h koscript_value.h \
 		 koscript_parser.h koscript_parsenode.h koscript.h koscript_util.h koscript_struct.h \
-		 koscript_ptr.h koscript_synext.h koscript_types.h koscript_method.h
+		 koscript_synext.h koscript_types.h koscript_method.h
 
 koscript_LDADD = ./libkoscript.la
 koscript_LDFLAGS = $(KDE_RPATH)

@@ -12,13 +12,13 @@ extern KLocale* s_koscript_locale;
 
 KSValue* KSValue::s_null = 0;
 
-KSValue::KSValue()
+KSValue::KSValue() : KShared()
 {
   typ = Empty;
   m_mode = Temp;
 }
 
-KSValue::KSValue( Type _type )
+KSValue::KSValue( Type _type ) : KShared()
 {
   typ = _type;
   m_mode = Temp;
@@ -68,7 +68,7 @@ KSValue::KSValue( Type _type )
     }
 }
 
-KSValue::KSValue( const KSValue& p ) : QShared()
+KSValue::KSValue( const KSValue& p ) : KShared()
 {
   typ = Empty;
   *this = p;
@@ -126,7 +126,7 @@ KSValue& KSValue::operator= ( const KSValue& p )
     case ModuleType:
     case StructClassType:
       val.ptr = p.val.ptr;
-      ((QShared*)val.ptr)->ref();
+      ((KShared*)val.ptr)->_KShared_ref();
       break;
     case StructType:
       val.ptr = ((KSStruct*)p.val.ptr)->clone();
@@ -284,33 +284,27 @@ void KSValue::clear()
       break;
     case FunctionType:
       if ( val.ptr )
-	if ( functionValue()->deref() )
-	  delete ((KSFunction*)val.ptr);
+          functionValue()->_KShared_unref();
       break;
     case PropertyType:
       if ( val.ptr )
-	if ( propertyValue()->deref() )
-	  delete ((KSProperty*)val.ptr);
+          propertyValue()->_KShared_unref();
       break;
     case MethodType:
       if ( val.ptr )
-	if ( methodValue()->deref() )
-	  delete ((KSMethod*)val.ptr);
+          methodValue()->_KShared_unref();
       break;
     case ModuleType:
       if ( val.ptr )
-	if ( moduleValue()->deref() )
-	  delete ((KSModule*)val.ptr);
+          moduleValue()->_KShared_unref();
       break;
     case StructType:
       if ( val.ptr )
-	if ( structValue()->deref() )
-	  delete ((KSStruct*)val.ptr);
+          structValue()->_KShared_unref();
       break;
     case StructClassType:
       if ( val.ptr )
-	if ( structClassValue()->deref() )
-	  delete ((KSStructClass*)val.ptr);
+          structClassValue()->_KShared_unref();
       break;
     case StringType:
       delete (QString*)val.ptr;

@@ -3,22 +3,21 @@
 
 #include "koscript_value.h"
 #include "koscript_context.h"
-#include "koscript_ptr.h"
 #include "koscript_parsenode.h"
 
-#include <qshared.h>
+#include <ksharedptr.h>
 
 class KSParseNode;
 class KSInterpreter;
 
 KSModule::Ptr ksCreateModule_KScript( KSInterpreter* );
 
-class KSFunction : public QShared
+class KSFunction : public KShared
 {
 public:
-  typedef KSSharedPtr<KSFunction> Ptr;
+  typedef KSharedPtr<KSFunction> Ptr;
 
-  KSFunction( KSModule* m ) : QShared(), m_module( m ) { }
+  KSFunction( KSModule* m ) : KShared(), m_module( m ) { }
 
   virtual bool call( KSContext& context ) = 0;
   virtual QString name() const = 0;
