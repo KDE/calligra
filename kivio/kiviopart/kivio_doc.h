@@ -182,6 +182,9 @@ class KivioDoc : public KoDocument
     bool checkGroupForSpawner( KivioStencil *, KivioStencilSpawner *);
     bool setIsAlreadyLoaded( QString dirName, QString name );
 
+    void saveOasisSettings( KoXmlWriter &/*settingsWriter*/ );
+    void loadOasisSettings( const QDomDocument&settingsDoc );
+
     KoView* createViewInstance( QWidget* parent, const char* name );
 
     /**

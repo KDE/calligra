@@ -83,6 +83,7 @@
 #include <kocommandhistory.h>
 #include <koxmlwriter.h>
 #include <koGenStyles.h>
+#include <koOasisSettings.h>
 
 //using namespace std;
 
@@ -268,121 +269,138 @@ QDomDocument KivioDoc::saveXML()
 
 bool KivioDoc::saveOasis(KoStore* store, KoXmlWriter* manifestWriter)
 {
-  KoStoreDevice storeDev(store);
-  KoGenStyles styles;
-  
-  KoGenStyle pageLayout = Kivio::Config::defaultPageLayout().saveOasis();
-  QString layoutName = styles.lookup(pageLayout, "PL");
-  KoGenStyle masterPage(KoGenStyle::STYLE_MASTER);
-  masterPage.addAttribute("style:page-layout-name", layoutName);
-  styles.lookup(masterPage, "Standard", false);
-  
-  if(!store->open("content.xml")) {
-    return false;
-  }
-      
-  KoXmlWriter docWriter(&storeDev, "office:document-content");
-    
-  docWriter.startElement("office:body");
-  docWriter.startElement("office:drawing");
-  
-  m_pMap->saveOasis(store, &docWriter, &styles); // Save contents
-  
-  docWriter.endElement(); // office:drawing
-  docWriter.endElement(); // office:body
-  docWriter.endElement(); // Root element
-  docWriter.endDocument();
-  
-  if(!store->close()) {
-    return false;
-  }
-  
-  manifestWriter->addManifestEntry("content.xml", "text/xml");
-  
-  if(!store->open("styles.xml")) {
-    return false;
-  }
-  
-  KoXmlWriter styleWriter(&storeDev, "office:document-styles");
-  
-  styleWriter.startElement("office:automatic-styles");
+    KoStoreDevice storeDev(store);
+    KoGenStyles styles;
 
-  QValueList<KoGenStyles::NamedStyle> styleList = styles.styles(KoGenStyle::STYLE_PAGELAYOUT);
-  QValueList<KoGenStyles::NamedStyle>::const_iterator it = styleList.begin();
-    
-  for ( ; it != styleList.end(); ++it) {
-    (*it).style->writeStyle(&styleWriter, styles, "style:page-layout", (*it).name, "style:page-layout-properties");
-  }
+    KoGenStyle pageLayout = Kivio::Config::defaultPageLayout().saveOasis();
+    QString layoutName = styles.lookup(pageLayout, "PL");
+    KoGenStyle masterPage(KoGenStyle::STYLE_MASTER);
+    masterPage.addAttribute("style:page-layout-name", layoutName);
+    styles.lookup(masterPage, "Standard", false);
 
-  styleList = styles.styles(Kivio::STYLE_PAGE);
-  it = styleList.begin();
-  
-  for ( ; it != styleList.end(); ++it) {
-    (*it).style->writeStyle(&styleWriter, styles, "style:style", (*it).name, "style:properties");
-  }
-    
-  styleWriter.endElement(); // office:automatic-styles
-  
-  styleList = styles.styles(KoGenStyle::STYLE_MASTER);
-  it = styleList.begin();
-  styleWriter.startElement("office:master-styles");
-  
-  for ( ; it != styleList.end(); ++it) {
-    (*it).style->writeStyle(&styleWriter, styles, "style:master-page", (*it).name, "");
-  }
-  
-  styleWriter.endElement(); // office:master-styles
-  
-  styleWriter.endElement(); // Root element
-  styleWriter.endDocument();
-  
-  if(!store->close()) {
-    return false;
-  }
+    if(!store->open("content.xml")) {
+        return false;
+    }
 
-  manifestWriter->addManifestEntry("styles.xml", "text/xml");
+    KoXmlWriter docWriter(&storeDev, "office:document-content");
 
-  if(!store->open("settings.xml")) {
-    return false;
-  }
-  
-  KoXmlWriter settingsWriter(&storeDev, "office:document-settings");
-  settingsWriter.startElement("office:settings");
-  settingsWriter.startElement("config:config-item-set");
-  settingsWriter.addAttribute("config:name", "kivio:settings");
-  
-  KoUnit::saveOasis(&settingsWriter, units());
-  
-  settingsWriter.endElement(); // config:config-item-set
-  settingsWriter.endElement(); // office:settings
-  settingsWriter.endElement(); // Root element
-  settingsWriter.endDocument();
-  
-  if(!store->close()) {
-    return false;
-  }
+    docWriter.startElement("office:body");
+    docWriter.startElement("office:drawing");
 
-  manifestWriter->addManifestEntry("settings.xml", "text/xml");
-  
-  setModified(false);
-  return true;
+    m_pMap->saveOasis(store, &docWriter, &styles); // Save contents
+
+    docWriter.endElement(); // office:drawing
+    docWriter.endElement(); // office:body
+    docWriter.endElement(); // Root element
+    docWriter.endDocument();
+
+    if(!store->close()) {
+        return false;
+    }
+
+    manifestWriter->addManifestEntry("content.xml", "text/xml");
+
+    if(!store->open("styles.xml")) {
+        return false;
+    }
+
+    KoXmlWriter styleWriter(&storeDev, "office:document-styles");
+
+    styleWriter.startElement("office:automatic-styles");
+
+    QValueList<KoGenStyles::NamedStyle> styleList = styles.styles(KoGenStyle::STYLE_PAGELAYOUT);
+    QValueList<KoGenStyles::NamedStyle>::const_iterator it = styleList.begin();
+
+    for ( ; it != styleList.end(); ++it) {
+        (*it).style->writeStyle(&styleWriter, styles, "style:page-layout", (*it).name, "style:page-layout-properties");
+    }
+
+    styleList = styles.styles(Kivio::STYLE_PAGE);
+    it = styleList.begin();
+
+    for ( ; it != styleList.end(); ++it) {
+        (*it).style->writeStyle(&styleWriter, styles, "style:style", (*it).name, "style:properties");
+    }
+
+    styleWriter.endElement(); // office:automatic-styles
+
+    styleList = styles.styles(KoGenStyle::STYLE_MASTER);
+    it = styleList.begin();
+    styleWriter.startElement("office:master-styles");
+
+    for ( ; it != styleList.end(); ++it) {
+        (*it).style->writeStyle(&styleWriter, styles, "style:master-page", (*it).name, "");
+    }
+
+    styleWriter.endElement(); // office:master-styles
+
+    styleWriter.endElement(); // Root element
+    styleWriter.endDocument();
+
+    if(!store->close()) {
+        return false;
+    }
+
+    manifestWriter->addManifestEntry("styles.xml", "text/xml");
+
+    if(!store->open("settings.xml")) {
+        return false;
+    }
+
+
+    KoXmlWriter settingsWriter(&storeDev, "office:document-settings");
+    settingsWriter.startElement("office:settings");
+    settingsWriter.startElement("config:config-item-set");
+    settingsWriter.addAttribute("config:name", "view-settings");
+
+
+    //<config:config-item-map-indexed config:name="Views">
+    settingsWriter.startElement("config:config-item-map-indexed" );
+    settingsWriter.addAttribute("config:name", "Views" );
+    settingsWriter.startElement("config:config-item-map-entry" );
+    KoUnit::saveOasis(&settingsWriter, units());
+    saveOasisSettings( settingsWriter );
+    settingsWriter.endElement();
+
+
+    settingsWriter.endElement(); //config:config-item-map-indexed
+    settingsWriter.endElement(); // config:config-item-set
+    settingsWriter.endElement(); // office:settings
+    settingsWriter.endElement(); // Root element
+    settingsWriter.endDocument();
+
+
+
+    if(!store->close()) {
+        return false;
+    }
+
+    manifestWriter->addManifestEntry("settings.xml", "text/xml");
+
+    setModified(false);
+    return true;
+}
+
+void KivioDoc::saveOasisSettings( KoXmlWriter &/*settingsWriter*/ )
+{
+    //todo
 }
 
 bool KivioDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const QDomDocument& settings, KoStore* )
 {
   kdDebug(43000) << "Start loading OASIS document..." << endl;
   m_bLoading = true;
-  
+
   QDomElement contents = doc.documentElement();
   QDomElement body(contents.namedItem("office:body").toElement());
-  
+
   if(body.isNull()) {
     kdDebug(43000) << "No office:body found!" << endl;
     setErrorMessage(i18n("Invalid OASIS document. No office:body tag found."));
     m_bLoading = false;
     return false;
   }
-  
+
   body = body.namedItem("office:drawing").toElement();
 
   if(body.isNull()) {
@@ -394,57 +412,43 @@ bool KivioDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, c
 
   QDomNode node = body.firstChild();
   QString nodeName;
-  
+
   while(!node.isNull()) {
     nodeName = node.nodeName();
-    
+
     if(nodeName == "draw:page") {
       KivioPage* p = createPage();
       addPage(p);
-      
+
       if(!p->loadOasis(node.toElement(), oasisStyles)) {
         m_bLoading = false;
         return false;
       }
     }
-    
+
     node = node.nextSibling();
   }
-  
-  // Load application settings
-  if(!settings.isNull()) {
-    contents = settings.documentElement();
-    body = contents.namedItem("office:settings").toElement();
-    
-    if(body.isNull()) {
-      kdDebug(43000) << "No office:settings found!" << endl;
-      setErrorMessage(i18n("Invalid OASIS document. No office:settings tag found."));
-      m_bLoading = false;
-      return false;
-    }
-    
-    node = body.firstChild();
-    
-    while(!node.isNull()) {
-      if(node.nodeName() == "config:config-item-set") {
-        QDomNode tmp = node.firstChild();
-        
-        while(!tmp.isNull()) {
-          if(tmp.nodeName() == "config:config-item") {
-            if(tmp.toElement().attribute("config:name") == "unit") {
-              setUnits(KoUnit::loadOasis(tmp.toElement()));
-            }
-          }
-          
-          tmp = tmp.nextSibling();
-        }
-      }
-      
-      node = node.nextSibling();
-    }
-  }
-  
+
+  loadOasisSettings( settings );
+
   return true;
+}
+
+
+void KivioDoc::loadOasisSettings( const QDomDocument&settingsDoc )
+{
+    if ( settingsDoc.isNull() )
+        return ; //not a error some file doesn't have settings.xml
+    KoOasisSettings settings( settingsDoc );
+    bool tmp = settings.selectItemSet( "view-settings" );
+    //kdDebug()<<" settings : view-settings :"<<tmp<<endl;
+
+    if ( tmp )
+    {
+        tmp = settings.selectItemMap( "Views" );
+        setUnits(KoUnit::unit(settings.parseConfigItemString("unit")));
+        //todo add other config here.
+    }
 }
 
 bool KivioDoc::loadXML( QIODevice *, const QDomDocument& doc )
