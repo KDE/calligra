@@ -34,13 +34,24 @@ VLayer::insertObject( const VObject* object )
 }
 
 void
+VLayer::selectAllObjects()
+{
+	// select all objects within this layer
+    QPtrListIterator<VObject> itr = m_objects;
+    for ( ; itr.current() ; ++itr )
+        if( itr.current()->state() != VObject::deleted )
+            itr.current()->setState( VObject::selected );
+}
+
+void
 VLayer::selectObjects( const QRect &rect )
 {
 	// select all objects within the rect coords
 	QPtrListIterator<VObject> itr = m_objects;
     for ( ; itr.current() ; ++itr )
     {
-		if( rect.contains( itr.current()->boundingBox(), true ) )
+		if( itr.current()->state() != VObject::deleted &&
+			rect.contains( itr.current()->boundingBox(), true ) )
 			itr.current()->setState( VObject::selected );
     }
 }

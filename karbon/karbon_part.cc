@@ -112,6 +112,15 @@ KarbonPart::insertObject( const VObject* object )
 }
 
 void
+KarbonPart::selectAllObjects()
+{
+	// select objects from all layers
+	QPtrListIterator<VLayer> itr( m_layers );
+	for ( ; itr.current() ; ++itr )
+		activeLayer()->selectAllObjects();
+}
+
+void
 KarbonPart::selectObjects( const QRect &rect )
 {
 	// select objects from all layers

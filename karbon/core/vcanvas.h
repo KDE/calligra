@@ -21,6 +21,7 @@ public:
 	void repaintAll( bool erase = false );
 
 	const double& zoomFactor() const { return m_zoomFactor; }
+	void setZoomFactor( double zoom ) { m_zoomFactor = zoom; }
 
 protected:
 	virtual void drawContents( QPainter* painter, int clipx, int clipy,

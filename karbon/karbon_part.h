@@ -32,6 +32,9 @@ public:
 	// insert a new vobject:
 	void insertObject( const VObject* object );
 
+	// select all vobjects period:
+	void selectAllObjects();
+
 	// select vobjects within the rect:
 	void selectObjects( const QRect &rect );
 

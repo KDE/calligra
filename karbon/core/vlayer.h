@@ -22,6 +22,7 @@ public:
 	void insertObject( const VObject* object );
 
 	void selectObjects( const QRect &rect );
+	void selectAllObjects();
 	void unselectObjects();
 	void deleteObjects( QPtrList<VObject> &list );
 

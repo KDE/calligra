@@ -81,6 +81,9 @@ KarbonView::editPaste()
 void
 KarbonView::editSelectAll()
 {
+	// TODO : hmm should this be a proper Command or not ?
+	m_part->selectAllObjects();
+	m_part->repaintAllViews();
 }
 
 void
@@ -146,6 +149,15 @@ KarbonView::starTool()
 }
 
 void
+KarbonView::zoomChanged()
+{
+	bool bOK;
+	double zoomFactor = m_zoomAction->currentText().toDouble( &bOK ) / 100.0;
+	m_canvas->setZoomFactor( zoomFactor );
+	m_canvas->repaintContents( true );
+}
+
+void
 KarbonView::initActions()
 {
 	// edit
@@ -196,7 +208,7 @@ KarbonView::initActions()
 	m_starToolAction->setExclusiveGroup( "Tools" );
 
 	// view
-	m_zoomAction = new KSelectAction( i18n("&Zoom"), 0, actionCollection(),
+	m_zoomAction = new KSelectAction( i18n("&Zoom"), 0, this, SLOT( zoomChanged() ), actionCollection(),
 		"view_zoom" );
 	QStringList stl;
 	stl << i18n("25%") << i18n("50%") << i18n("100%");

@@ -37,6 +37,7 @@ public:
 	const double& zoomFactor() { return m_canvas->zoomFactor(); }
 
 protected slots:
+	// editing:
 	void editCut();
 	void editCopy();
 	void editPaste();
@@ -52,6 +53,9 @@ protected slots:
 	void sinusTool();
 	void spiralTool();
 	void starTool();
+
+	// zooming:
+	void zoomChanged();
 
 protected:
 	virtual void updateReadWrite( bool rw );
