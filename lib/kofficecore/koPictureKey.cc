@@ -150,7 +150,7 @@ QString KoPictureKey::toString() const
 {
     // m_filename must be the last argument as it can contain a sequence starting with %
     // We do not use the default QDateTime::toString has it does not show microseconds
-    return QString::fromLatin1("File: %2 %1")
-        .arg(m_lastModified.toString("Date: yyyy-MM-dd Time: hh:mm:ss,zzz")).arg(m_filename);
+    return QString::fromLatin1("%2 %1")
+        .arg(m_lastModified.toString("yyyy-MM-dd hh:mm:ss.zzz")).arg(m_filename);
 }
 
