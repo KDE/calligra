@@ -7,7 +7,6 @@
 
 #include <kdialog.h>
 
-class QLineEdit;
 class QSpinBox;
 
 class VMDlgInsertKnots : public KDialog
@@ -17,7 +16,7 @@ public:
 	VMDlgInsertKnots();
 
 	uint valueKnots() const;
-	void setValueKnots( const uint value );
+	void setValueKnots( uint value );
 
 private:
 	QSpinBox* m_knots;

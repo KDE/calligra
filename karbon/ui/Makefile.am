@@ -18,6 +18,7 @@ noinst_HEADERS = \
 	vcdlg_star.h \
 	vcolorslider.h \
 	vmdlg_insertknots.h \
+	vmdlg_polygonize.h \
 	vmdlg_solidfill.h \
 	vmdlg_stroke.h \
 	vmpanel_color.h \
@@ -34,6 +35,7 @@ libkarbonui_la_SOURCES = \
 	vcdlg_star.cc \
 	vcolorslider.cc \
 	vmdlg_insertknots.cc \
+	vmdlg_polygonize.cc \
 	vmdlg_solidfill.cc \
 	vmdlg_stroke.cc \
 	vmpanel_color.cc \

@@ -32,8 +32,10 @@
 #include "vmcmd_fill.h"
 #include "vmcmd_group.h"
 #include "vmcmd_insertknots.h"
+#include "vmcmd_polygonize.h"
 #include "vmcmd_stroke.h"
 #include "vmdlg_insertknots.h"
+#include "vmdlg_polygonize.h"
 #include "vmdlg_solidfill.h"
 #include "vmdlg_stroke.h"
 #include "vmpanel_color.h"
@@ -461,15 +463,14 @@ KarbonView::pathInsertKnots()
 void
 KarbonView::pathPolygonize()
 {
-/*
 	VMDlgPolygonize* dialog = new VMDlgPolygonize();
+	dialog->setValueFlatness( 5.0 );
 
 	if( dialog->exec() )
 		m_part->addCommand( new VMCmdPolygonize(
 			m_part, m_part->selection(), dialog->valueFlatness() ), true );
 
 	delete( dialog );
-*/
 }
 
 

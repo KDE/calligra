@@ -21,7 +21,8 @@ noinst_HEADERS = \
 	vmcmd_insertknots.h \
 	vmcmd_stroke.h \
 	vmcmd_transform.h
-	vmcmd_group.h
+	vmcmd_group.h \
+	vmcmd_polygonize.h
 
 libkarboncommands_la_SOURCES = \
 	vccmd_ellipse.cc \
@@ -38,7 +39,8 @@ libkarboncommands_la_SOURCES = \
 	vmcmd_insertknots.cc \
 	vmcmd_stroke.cc \
 	vmcmd_transform.cc \
-	vmcmd_group.cc
+	vmcmd_group.cc \
+	vmcmd_polygonize.cc
 
 libkarboncommands_la_METASOURCES = \
 	AUTO
