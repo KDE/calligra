@@ -1712,7 +1712,7 @@ KSpreadView::~KSpreadView()
 }
 
 
-KSpreadDoc* KSpreadView::doc()
+KSpreadDoc* KSpreadView::doc() const
 {
     return d->doc;
 }

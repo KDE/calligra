@@ -89,7 +89,7 @@ public:
     /**
      * Returns the corresponding document for this view.
      */
-    KSpreadDoc* doc();
+    KSpreadDoc* doc() const;
 
     /**
      * Returns the canvas of the view.
