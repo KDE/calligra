@@ -7768,7 +7768,7 @@ void KWStatisticsDialog::addBox( QFrame *page, QLabel **resultLabel, bool calcWi
     topLayout->addWidget( box );
 }
 
-bool KWStatisticsDialog::docHasSelection()
+bool KWStatisticsDialog::docHasSelection()const
 {
     QPtrListIterator<KWFrameSet> fsIt( m_doc->framesetsIterator() );
 

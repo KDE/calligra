@@ -817,7 +817,7 @@ private:
 
     bool calcStats( QLabel **resultLabel, bool selection, bool useFootEndNote );
     void calcGeneral( QLabel **resultLabel );
-    bool docHasSelection();
+    bool docHasSelection()const;
     double calcFlesch(ulong sentences, ulong words, ulong syllables);
 private slots:
     void slotRefreshValue(bool);
