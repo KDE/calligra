@@ -23,7 +23,10 @@ kexi \- a database management application for the KDE Office Suite
 [ \fB\-\-print\fP ]
 [ \fIfile\fP ... ]
 .SH DESCRIPTION
-\fBKexi\fP is a database management application.
+\fBKexi\fP aims to be an easy to use frontend to various database backends.
+Currently only MySQL and CQL++ backends are supported.  It is planned
+to support other database systems for better corporate usage in future
+versions.  Kexi reports are produced using the Kugar report generator.
 .PP
 This application is part of the KDE Office Suite.
 .SH OPTIONS
@@ -32,8 +35,14 @@ For a full summary of options, run \fIkexi \-\-help\fP.
 .TP
 \fB\-\-print\fP
 Print the given file(s) and exit.
+.SH SEE ALSO
+.BR kugar (1).
 .SH AUTHOR
-Kexi was written by TODO.
+Kexi was written by Lucijan Busch <lucijan@kde.org>,
+Peter Simonsson <psn@linux.se>, Joseph Wenninger <jowenn@kde.org>,
+Seth Kurzenberg <seth@cql.com>, Laurent Montel <montell@club-internet.fr>,
+Till Busch <till@bux.at> and Jaroslaw Staniek / OpenOffice Polska
+<js@iidea.pl>.
 .br
 This manual page was prepared by Ben Burton <bab@debian.org>
 for the Debian GNU/Linux system (but may be used by others).
