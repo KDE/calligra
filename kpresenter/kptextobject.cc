@@ -1898,10 +1898,13 @@ void KPTextView::insertVariable( int type, int subtype )
     KoVariable * var = 0L;
     if ( type == VT_CUSTOM )
     {
-        // Choose an existing variable
-        KoVariableNameDia dia( m_canvas, doc->getVariableCollection()->getVariables() );
+        KoCustomVarDialog dia( m_canvas );
         if ( dia.exec() == QDialog::Accepted )
-            var = new KoCustomVariable( textObject()->textDocument(), dia.getName(), doc->variableFormatCollection()->format( "STRING" ),doc->getVariableCollection() );
+        {
+            KoCustomVariable *v = new KoCustomVariable( textObject()->textDocument(), dia.name(), doc->variableFormatCollection()->format( "STRING" ),doc->getVariableCollection() );
+            v->setValue( dia.value() );
+            var = v;
+        }
     }
     else
         var = doc->getVariableCollection()->createVariable( type, subtype,  doc->variableFormatCollection(), 0L, textObject()->textDocument(),doc);
