@@ -70,7 +70,7 @@ KoMainWindow::KoMainWindow( QWidget* parent, const char* name )
 			  actionCollection(), "fileclose" );
     KAction* quit = new KAction( i18n("Quit"), 0, this, SLOT( slotFileQuit() ),
 			  actionCollection(), "quit" );
-    KAction* helpAbout = new KAction( i18n("About"), 0, this, SLOT( slotHelpAbout() ),
+    KAction* helpAbout = new KAction( i18n("About..."), 0, this, SLOT( slotHelpAbout() ),
 			  actionCollection(), "about" );
 
     KToolBar* fileTools = new KToolBar( this, "file operations" );
