@@ -42,3 +42,4 @@
 * Form previewing stuff (3/01/04)
 * QByteArray methods in FormIO (3/01/04)
 * Undo support(3/05/04)
+* Alignment and layout properties also support old values (3/06/04)

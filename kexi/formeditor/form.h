@@ -113,6 +113,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		/*! Pastes the widget represented by the QDomElement \a widg in the Form. \a widg is created by FormManager::saveWidget().\n
 		    If \a pos is null or not given, then the widget will be pasted in the actual Container, at the same position as
 		    in its former parent widget. Otherwise, it is pasted at \a pos in the active Container (when the user used the context menu).
+		    If \a cont is 0, the Form::activeContainer() is used, otherwise the widgets are pasted in the \a cont Container.
 		 */
 		void			pasteWidget(QDomElement &widg, Container *cont=0, QPoint pos=QPoint());
 

@@ -585,6 +585,7 @@ FormIO::readAttribute(QDomNode node, QObject *obj, const QString &name)
 void
 FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domDoc)
 {
+	bool savedAlignment = false;
 	if(item->className() == "Spacer")
 	{
 		Spacer::saveSpacer(item, parent, domDoc);
@@ -598,14 +599,23 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 
 	for(QMap<QString,QVariant>::Iterator it = item->modifProp()->begin(); it != item->modifProp()->end(); ++it)
 	{
-		if((it.key() != QString("name")) && (it.key() != QString("geometry")))
+		if((it.key() == QString("hAlign")) || (it.key() == QString("vAlign")) || (it.key() == QString("wordbreak")))
+		{
+			if(!savedAlignment)
+			{
+				tclass.appendChild(prop(domDoc, "alignment", item->widget()->property("alignment"), item->widget()));
+				savedAlignment = true;
+			}
+		}
+
+		else if((it.key() != QString("name")) && (it.key() != QString("geometry")) && (it.key() != QString("layout")))
 			tclass.appendChild(prop(domDoc, it.key().latin1(), item->widget()->property(it.key().latin1()), item->widget()));
 	}
 	parent.appendChild(tclass);
 
 	// Saving container 's layout if there is one
 	QDomElement layout;
-	if(item->container())
+	if(item->container() && item->modifProp()->contains("layout"))
 	{
 		QString nodeName;
 		switch(item->container()->layoutType())

@@ -60,6 +60,20 @@ class PropertyCommand : public KCommand
 		QVariant   m_oldvalue;
 		QString    m_property;
 };
+/*
+class GeometryPropertyCommand : public PropertyCommand
+{
+	public:
+		GeometryPropertyCommand(ObjectPropertyBuffer *buf, const QStringList &names, const QVariant &oldValue, const QVariant &value);
+
+		virtual void execute();
+		virtual void unexecute();
+		virtual QString name() const;
+
+	protected:
+		Form *m_form;
+		QMap<QString,QRect>  m_geometries;
+};*/
 
 class LayoutPropertyCommand : public PropertyCommand
 {

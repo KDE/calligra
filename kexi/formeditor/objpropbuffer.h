@@ -69,6 +69,7 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		 properties.
 		*/
 		void	slotChangeProperty(KexiPropertyBuffer &buff, KexiProperty &prop);
+		//! This slot is called when the watched widget is destroyed. Resets the buffer.
 		void    widgetDestroyed();
 
 	signals:

@@ -121,7 +121,6 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		LayoutType	m_layType;
 
 		// selection
-		//QWidget		*m_selected;
 		QPtrList<QWidget> m_selected;
 
 		// moving etc.

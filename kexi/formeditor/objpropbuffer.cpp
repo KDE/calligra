@@ -153,6 +153,7 @@ ObjectPropertyBuffer::setWidget(QWidget *widg)
 				if(QString(meta->name()) == QString("alignment"))
 				{
 					createAlignProperty(meta, obj);
+					break;
 				}
 				else
 				{
@@ -283,14 +284,14 @@ ObjectPropertyBuffer::checkModifiedProp()
 			for(; it.current(); ++it)
 			{
 				name = it.current()->name();
-				if((name == "hAlign") || (name == "vAlign") || (name == "wordbreak") || (name == "layout"))
-						return;
 				if(it.current()->changed())
 					treeIt->addModProperty(name, it.current()->oldValue());
 			}
 		}
 	}
 }
+
+// i18n functions /////////////////////////////////
 
 QString
 ObjectPropertyBuffer::descFromName(const QString &name)
@@ -328,16 +329,18 @@ ObjectPropertyBuffer::descFromValue(const QString &name)
 	return name;
 }
 
+// Alignment-related functions /////////////////////////////
+
 void
 ObjectPropertyBuffer::createAlignProperty(const QMetaProperty *meta, QObject *obj)
 {
-	kdDebug() << "alignment property" << endl;
 	QStringList list;
 	QString value;
 	QStringList keys = QStringList::fromStrList( meta->valueToKeys(obj->property("alignment").toInt()) );
 	kdDebug() << "keys is " << keys.join("|") << endl;
+	ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(obj->name());
 
-
+	// Create the hor alignment property
 	if(!keys.grep("AlignHCenter").empty())
 		value = "AlignHCenter";
 	else if(!keys.grep("AlignRight").empty())
@@ -353,8 +356,17 @@ ObjectPropertyBuffer::createAlignProperty(const QMetaProperty *meta, QObject *ob
 	list << "AlignAuto" << "AlignLeft" << "AlignRight" << "AlignHCenter" << "AlignJustify";
 	add(new KexiProperty("hAlign", value, list, descList(list), i18n("Horizontal alignment")));
 
+	if(tree->modifProp()->contains("hAlign"))
+	{
+		blockSignals(true);
+		QVariant v = (*this)["hAlign"]->value();
+		(*this)["hAlign"]->setValue( tree->modifProp()->find("hAlign").data() , false);
+		(*this)["hAlign"]->setValue(v, true);
+		blockSignals(false);
+	}
 	list.clear();
 
+	// Create the ver alignment property
 	if(!keys.grep("AlignTop").empty())
 		value = "AlignTop";
 	else if(!keys.grep("AlignBottom").empty())
@@ -365,8 +377,25 @@ ObjectPropertyBuffer::createAlignProperty(const QMetaProperty *meta, QObject *ob
 
 	list << "AlignTop" << "AlignVCenter" << "AlignBottom";
 	add(new KexiProperty("vAlign", value, list, descList(list), i18n("Vertical Alignment")));
+	if(tree->modifProp()->contains("vAlign"))
+	{
+		blockSignals(true);
+		QVariant v = (*this)["vAlign"]->value();
+		(*this)["vAlign"]->setValue( tree->modifProp()->find("vAlign").data() , false);
+		(*this)["vAlign"]->setValue(v, true);
+		blockSignals(false);
+	}
 
+	// Create the wordbreak property
 	add(new KexiProperty("wordbreak", QVariant(false, 3), i18n("Word Break")));
+	if(tree->modifProp()->contains("wordbreak"))
+	{
+		blockSignals(true);
+		QVariant v = (*this)["wordbreak"]->value();
+		(*this)["wordbreak"]->setValue( tree->modifProp()->find("wordbreak").data() , false);
+		(*this)["wordbreak"]->setValue(v, true);
+		blockSignals(false);
+	}
 }
 
 void
@@ -390,6 +419,8 @@ ObjectPropertyBuffer::saveAlignProperty()
 		m_manager->activeForm()->commandHistory()->addCommand(m_lastcom, false);
 	}
 }
+
+// Layout-related functions  //////////////////////////
 
 void
 ObjectPropertyBuffer::createLayoutProperty(Container *container)
@@ -422,7 +453,18 @@ ObjectPropertyBuffer::createLayoutProperty(Container *container)
 	}
 
 	list << "NoLayout" << "HBox" << "VBox" << "Grid";
+
 	add(new KexiProperty("layout", value, list, descList(list), i18n("Container's layout")));
+
+	ObjectTreeItem *tree = m_manager->activeForm()->objectTree()->lookup(container->widget()->name());
+	if(tree->modifProp()->contains("layout"))
+	{
+		blockSignals(true);
+		QVariant v = (*this)["layout"]->value();
+		(*this)["layout"]->setValue( tree->modifProp()->find("layout").data() , false);
+		(*this)["layout"]->setValue(v, true);
+		blockSignals(false);
+	}
 }
 
 void
