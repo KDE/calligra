@@ -35,8 +35,6 @@
  */
 class KoStoreDrag : public QStoredDrag
 {
-    //Q_OBJECT
-
 public:
     /**
      * @param nativeMimeType the app's native mimetype.
