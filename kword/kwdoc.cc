@@ -2326,8 +2326,16 @@ bool KWDocument::completeSaving( KoStore *_store )
                 saveCliparts.append( key );
         }
     }
-    m_imageCollection.saveToStore( KoPictureCollection::CollectionImage, _store, saveImages );
-    m_clipartCollection.saveToStore( KoPictureCollection::CollectionClipart, _store, saveCliparts );
+    if (specialOutputFlag()==SaveAsKOffice1dot1)
+    {
+        m_imageCollection.saveToStoreAsKOffice1Dot1( KoPictureCollection::CollectionImage, _store, saveImages );
+        m_clipartCollection.saveToStoreAsKOffice1Dot1( KoPictureCollection::CollectionClipart, _store, saveCliparts );
+    }
+    else
+    {
+        m_imageCollection.saveToStore( KoPictureCollection::CollectionImage, _store, saveImages );
+        m_clipartCollection.saveToStore( KoPictureCollection::CollectionClipart, _store, saveCliparts );
+    }
     return TRUE;
 }
 

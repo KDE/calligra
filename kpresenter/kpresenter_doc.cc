@@ -825,8 +825,17 @@ bool KPresenterDoc::completeSaving( KoStore* _store )
         }
 	return true;
     }
-    _imageCollection.saveToStore( KoPictureCollection::CollectionImage, _store, usedPixmaps );
-    _clipartCollection.saveToStore( KoPictureCollection::CollectionClipart, _store, usedCliparts );
+    if (specialOutputFlag()==SaveAsKOffice1dot1)
+    {
+        _imageCollection.saveToStoreAsKOffice1Dot1( KoPictureCollection::CollectionImage, _store, usedPixmaps );
+        _clipartCollection.saveToStoreAsKOffice1Dot1( KoPictureCollection::CollectionClipart, _store, usedCliparts );
+    }
+    else
+    {
+        _imageCollection.saveToStore( KoPictureCollection::CollectionImage, _store, usedPixmaps );
+        _clipartCollection.saveToStore( KoPictureCollection::CollectionClipart, _store, usedCliparts );
+    }
+
     saveUsedSoundFileToStore( _store, usedSoundFile );
 
     if ( saveOnlyPage == -1 ) {
