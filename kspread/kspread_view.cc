@@ -634,12 +634,12 @@ void KSpreadView::initializeAreaOperationActions()
 void KSpreadView::initializeGlobalOperationActions()
 {
   m_recalc_workbook = new KAction( i18n("Recalculate Workbook"), Key_F9, this,
-                                   SLOT( RecalcWorkBook() ), actionCollection(),
+                                   SLOT( recalcWorkBook() ), actionCollection(),
                                    "RecalcWorkBook" );
   m_recalc_workbook->setToolTip(i18n("Recalculate the value of every cell in all worksheets."));
 
   m_recalc_worksheet = new KAction( i18n("Recalculate Sheet"), SHIFT + Key_F9,
-                                    this, SLOT( RecalcWorkSheet() ),
+                                    this, SLOT( recalcWorkSheet() ),
                                     actionCollection(), "RecalcWorkSheet" );
   m_recalc_worksheet->setToolTip(i18n("Recalculate the value of every cell in the current worksheet."));
 
