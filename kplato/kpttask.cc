@@ -584,7 +584,7 @@ KPTDateTime &KPTTask::scheduleForward(KPTDateTime &earliest, int use) {
             m_endTime = time;
         }
         // Then my parents
-        time = scheduleSuccessors(m_parentProxyRelations, use);
+        time = schedulePredeccessors(m_parentProxyRelations, use);
         if (time.isValid() && time < m_endTime) {
             m_endTime = time;
         }
@@ -612,9 +612,6 @@ KPTDateTime KPTTask::scheduleSuccessors(const QPtrList<KPTRelation> &list, int u
         // get the successors starttime
         KPTDateTime latest = it.current()->child()->getLatestFinish();
         time = it.current()->child()->scheduleBackward(latest, use);
-        if (it.current()->timingRelation() != FINISH_START) {
-            time = it.current()->child()->endTime();
-        }
         switch (it.current()->timingRelation()) {
             case START_START:
                 // I can't start before my successor, so
@@ -622,7 +619,7 @@ KPTDateTime KPTTask::scheduleSuccessors(const QPtrList<KPTRelation> &list, int u
                 time += duration(time - it.current()->lag(), use, false);
                 break;
             case FINISH_FINISH:
-                time = it.current()->parent()->endTime() - it.current()->lag();
+                time = it.current()->child()->endTime() - it.current()->lag();
                 break;
             default:
                 time -= it.current()->lag();
@@ -681,15 +678,15 @@ KPTDateTime &KPTTask::scheduleBackward(KPTDateTime &latest, int use) {
         }
     } else if (type() == KPTNode::Type_Milestone) {
         // milestones generally wants to stick to their dependant parent
-        KPTDateTime time = schedulePredeccessors(dependParentNodes(), use);
+/*        KPTDateTime time = schedulePredeccessors(dependParentNodes(), use);
         if (time.isValid() && time < m_endTime) {
             m_endTime = time;
         }
         // Then my parents
-        time = scheduleSuccessors(m_parentProxyRelations, use);
+        time = schedulePredeccessors(m_parentProxyRelations, use);
         if (time.isValid() && time < m_endTime) {
             m_endTime = time;
-        }
+        }*/
         m_startTime = m_endTime;
         m_duration = KPTDuration::zeroDuration;
     } else if (type() == KPTNode::Type_Summarytask) {
