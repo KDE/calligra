@@ -30,12 +30,12 @@
 #endif
 
 #ifndef KEXI_VERSION_STRING
-# define KEXI_VERSION_STRING "0.1 beta 2"
+# define KEXI_VERSION_STRING "0.1 beta 3 pre1"
 #endif
 
 #define KEXI_VERSION_MAJOR 0
 #define KEXI_VERSION_MINOR 0 /* 0.1 beta */
-#define KEXI_VERSION_RELEASE 191
+#define KEXI_VERSION_RELEASE 192
 
 #define KEXI_MAKE_VERSION( a,b,c ) (((a) << 16) | ((b) << 8) | (c))
 
