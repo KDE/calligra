@@ -36,7 +36,7 @@ private:
 	pqxx::result m_res;
 	pqxx::transaction<pqxx::serializable>* m_tran;
 	pqxx::Cursor* m_cur;
-	unsigned int m_numFields;
+	pqxx::connection* my_conn;
 };
 
 }

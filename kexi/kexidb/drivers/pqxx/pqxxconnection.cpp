@@ -318,3 +318,5 @@ bool pqxxSqlConnection::drv_isDatabaseUsed() const
     }
     return false;
 }
+
+#include "pqxxconnection.moc"
