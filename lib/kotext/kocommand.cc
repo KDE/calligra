@@ -118,6 +118,8 @@ KoTextParagCommand::KoTextParagCommand( KoTextDocument *d, int fParag, int lPara
     : KoTextDocCommand( d ), firstParag( fParag ), lastParag( lParag ), m_oldParagLayouts( oldParagLayouts ),
       m_newParagLayout( newParagLayout ), m_flags( flags ), m_margin( margin )
 {
+    Q_ASSERT( fParag >= 0 );
+    Q_ASSERT( lParag >= 0 );
 }
 
 KoTextCursor * KoTextParagCommand::execute( KoTextCursor *c )
