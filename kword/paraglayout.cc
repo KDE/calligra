@@ -445,7 +445,7 @@ bool KWParagLayout::getNextTab(unsigned int _ptPos,unsigned int _lBorder,unsigne
       ptPos = tabList.at(i)->ptPos + _lBorder;
       if (ptPos > _ptPos && ptPos < _rBorder && (_best == -1 || ptPos < static_cast<unsigned int>(tabList.at(_best)->ptPos)))
 	_best = i;
-      if (ptPos < _ptPos && ptPos > _lBorder && (_mostLeft == -1 || ptPos < static_cast<unsigned int>(tabList.at(_mostLeft)->ptPos)))
+      if (ptPos <= _ptPos && ptPos > _lBorder && (_mostLeft == -1 || ptPos < static_cast<unsigned int>(tabList.at(_mostLeft)->ptPos)))
 	_mostLeft = i;
     }
 

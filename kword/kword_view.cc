@@ -564,7 +564,7 @@ void KWordView::insertPicture()
 {
   QString file = KFileDialog::getOpenFileName(0,
 					      i18n("*.gif *GIF *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM "
-					      "*.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW "
+					      "*.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW *.jpg *.JPG *.jpeg *.JPEG"
 					      "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|All pictures\n"
 					      "*.gif *.GIF|GIF-Pictures\n"
 					      "*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
@@ -1073,32 +1073,22 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   // edit menu
   _menubar->insertMenu( i18n("&Edit"), m_vMenuEdit, -1, -1 );
 
-  QString tmp = kapp->kde_datadir().copy();
-  tmp += "/koffice/toolbar/undo.xpm";
-  OpenPartsUI::Pixmap_var pix = OPUIUtils::loadPixmap( tmp );
+  OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap( ICON("undo.xpm") );
   m_idMenuEdit_Undo = m_vMenuEdit->insertItem6( pix, i18n("No Undo possible"), this, "editUndo", CTRL + Key_Z, -1, -1 );
   m_vMenuEdit->setItemEnabled( m_idMenuEdit_Undo, false );
 
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/koffice/toolbar/redo.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("redo.xpm"));
   m_idMenuEdit_Redo = m_vMenuEdit->insertItem6( pix, i18n("No Redo possible"), this, "editRedo", 0, -1, -1 );
   m_vMenuEdit->setItemEnabled( m_idMenuEdit_Redo, false );
   m_vMenuEdit->insertSeparator( -1 );
 
-  tmp = kapp->kde_toolbardir().copy();
-  tmp += "/editcut.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("editcut.xpm"));
   m_idMenuEdit_Cut = m_vMenuEdit->insertItem6( pix, i18n("&Cut"), this, "editCut", CTRL + Key_X, -1, -1 );
 
-  tmp = kapp->kde_toolbardir().copy();
-  tmp += "/editcopy.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("editcopy.xpm"));
   m_idMenuEdit_Copy = m_vMenuEdit->insertItem6( pix, i18n("&Copy"), this, "editCopy", CTRL + Key_C, -1, -1 );
 
-  tmp = kapp->kde_toolbardir().copy();
-  tmp += "/editpaste.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("editpaste.xpm"));
   m_idMenuEdit_Paste = m_vMenuEdit->insertItem6( pix, i18n("&Paste"), this, "editPaste", CTRL + Key_V, -1, -1 );
 
   m_vMenuEdit->insertSeparator( -1 );
@@ -1113,47 +1103,31 @@ bool KWordView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   // insert menu
   _menubar->insertMenu( i18n( "&Insert" ), m_vMenuInsert, -1, -1 );
 
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/koffice/toolbar/picture.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("picture.xpm"));
   m_idMenuInsert_Picture = m_vMenuInsert->insertItem6( pix, i18n("&Picture..."), this, "insertPicture", Key_F2, -1, -1 );
 
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/koffice/toolbar/clipart.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("clipart.xpm"));
   m_idMenuInsert_Clipart = m_vMenuInsert->insertItem6( pix, i18n("&Clipart..."), this, "insertClipart", Key_F3, -1, -1 );
 
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kword/toolbar/table.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("table.xpm"));
   m_idMenuInsert_Table = m_vMenuInsert->insertItem6( pix, i18n("&Table..."), this, "insertTable", Key_F4, -1, -1 );
 
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/koffice/toolbar/parts.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("parts.xpm"));
   m_idMenuInsert_Table = m_vMenuInsert->insertItem6( pix, i18n("&Objects..."), this, "insertPart", Key_F5, -1, -1 );
 
   // tools menu
   _menubar->insertMenu( i18n( "&Tools" ), m_vMenuTools, -1, -1 );
 
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kword/toolbar/edittool.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("edittool.xpm"));
   m_idMenuTools_Edit = m_vMenuTools->insertItem6(pix, i18n("&Edit Text"), this, "toolsEdit", Key_F6, -1, -1 );
 
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kword/toolbar/editframetool.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("editframetool.xpm"));
   m_idMenuTools_EditFrame = m_vMenuTools->insertItem6(pix, i18n("&Edit Frames"), this, "toolsEditFrame", Key_F7, -1, -1 );
 
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kword/toolbar/textframetool.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("textframetool.xpm"));
   m_idMenuTools_CreateText = m_vMenuTools->insertItem6(pix, i18n("&Create Text Frame"), this, "toolsCreateText", Key_F8, -1, -1 );
 
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kword/toolbar/picframetool.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("picframetool.xpm"));
   m_idMenuTools_CreatePix = m_vMenuTools->insertItem6(pix, i18n("&Create Picture Frame"), this, "toolsCreatePix", Key_F9, -1, -1 );
 
   m_vMenuTools->setCheckable(true);
@@ -1220,37 +1194,27 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   m_vToolBarEdit->setFullWidth( false );
 
   // undo
-  QString tmp = kapp->kde_datadir().copy();
-  tmp += "/koffice/toolbar/undo.xpm";
-  OpenPartsUI::Pixmap_var pix = OPUIUtils::loadPixmap( tmp );
+  OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap(ICON("undo.xpm"));
   m_idButtonEdit_Undo = m_vToolBarEdit->insertButton2( pix, ID_UNDO, SIGNAL( clicked() ), this, "editUndo", true, i18n("Undo"), -1 );
   m_vToolBarEdit->setItemEnabled(ID_UNDO,false);
 
   // redo
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/koffice/toolbar/redo.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("redo.xpm"));
   m_idButtonEdit_Redo = m_vToolBarEdit->insertButton2( pix, ID_REDO, SIGNAL( clicked() ), this, "editRedo", true, i18n("Redo"), -1);
   m_vToolBarEdit->setItemEnabled(ID_REDO,false);
   
   m_vToolBarEdit->insertSeparator( -1 );
 
   // cut
-  tmp = kapp->kde_toolbardir().copy();
-  tmp += "/editcut.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("editcut.xpm"));
   m_idButtonEdit_Cut = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "editCut", true, i18n("Cut"), -1);
 
   // copy
-  tmp = kapp->kde_toolbardir().copy();
-  tmp += "/editcopy.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("editcopy.xpm"));
   m_idButtonEdit_Copy = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "editCopy", true, i18n("Copy"), -1);
 
   // paste
-  tmp = kapp->kde_toolbardir().copy();
-  tmp += "/editpaste.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("editpaste.xpm"));
   m_idButtonEdit_Paste = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "editPaste", true, i18n("Paste"), -1);
 
   m_vToolBarEdit->enable( OpenPartsUI::Show );
@@ -1260,27 +1224,19 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   m_vToolBarInsert->setFullWidth( false );
  
   // picture
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/koffice/toolbar/picture.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("picture.xpm"));
   m_idButtonInsert_Picture = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertPicture", true, i18n("Insert Picture"), -1);
       
   // clipart
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/koffice/toolbar/clipart.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("clipart.xpm"));
   m_idButtonInsert_Clipart = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertClipart", true, i18n("Insert Clipart"), -1);
 
   // line
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kword/toolbar/table.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("table.xpm"));
   m_idButtonInsert_Table = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertTable", true, i18n("Insert Table"), -1);
 
   // parts
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/koffice/toolbar/parts.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("parts.xpm"));
   m_idButtonInsert_Part = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertPart", true, i18n("Insert Object"), -1);
 
   m_vToolBarInsert->enable( OpenPartsUI::Show );
@@ -1290,34 +1246,26 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   m_vToolBarTools->setFullWidth( false );
  
   // edit
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kword/toolbar/edittool.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("edittool.xpm"));
   m_idButtonTools_Edit = m_vToolBarTools->insertButton2( pix, ID_TOOL_EDIT, SIGNAL( clicked() ), this, "toolsEdit", 
 							 true, i18n("Edit Text Tool"), -1);
   m_vToolBarTools->setToggle(ID_TOOL_EDIT,true);
   m_vToolBarTools->setButton(ID_TOOL_EDIT,true);
 
   // edit frame
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kword/toolbar/editframetool.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("editframetool.xpm"));
   m_idButtonTools_EditFrame = m_vToolBarTools->insertButton2( pix, ID_TOOL_EDIT_FRAME, SIGNAL( clicked() ), this, "toolsEditFrame", 
 							      true, i18n("Edit Frames Tool"), -1);
   m_vToolBarTools->setToggle(ID_TOOL_EDIT_FRAME,true);
 
   // create text frame
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kword/toolbar/textframetool.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("textframetool.xpm"));
   m_idButtonTools_CreateText = m_vToolBarTools->insertButton2( pix, ID_TOOL_CREATE_TEXT, SIGNAL( clicked() ), this, "toolsCreateText", 
 							       true, i18n("Create Text Frame"), -1);
   m_vToolBarTools->setToggle(ID_TOOL_CREATE_TEXT,true);
 
   // create pix frame
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kword/toolbar/picframetool.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("picframetool.xpm"));
   m_idButtonTools_CreatePix = m_vToolBarTools->insertButton2( pix, ID_TOOL_CREATE_PIX, SIGNAL( clicked() ), this, "toolsCreatePix", 
 							       true, i18n("Create Picture Frame"), -1);
   m_vToolBarTools->setToggle(ID_TOOL_CREATE_PIX,true);
@@ -1370,27 +1318,21 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   m_vToolBarText->insertSeparator( -1 );
 
   // bold
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/koffice/toolbar/bold.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("bold.xpm"));
   m_idButtonText_Bold = m_vToolBarText->insertButton2( pix, ID_BOLD, SIGNAL( clicked() ), this, "textBold", true, i18n("Bold"), -1);
   m_vToolBarText->setToggle(ID_BOLD,true);
   m_vToolBarText->setButton(ID_BOLD,false);
   tbFont.setBold(false);
 
   // italic
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/koffice/toolbar/italic.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("italic.xpm"));
   m_idButtonText_Italic = m_vToolBarText->insertButton2( pix, ID_ITALIC, SIGNAL( clicked() ), this, "textItalic", true, i18n("Italic"), -1);
   m_vToolBarText->setToggle(ID_ITALIC,true);
   m_vToolBarText->setButton(ID_ITALIC,false);
   tbFont.setItalic(false);
   
   // underline
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/koffice/toolbar/underl.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("underl.xpm"));
   m_idButtonText_Underline = m_vToolBarText->insertButton2( pix, ID_UNDERLINE, SIGNAL( clicked() ), this, "textUnderline", true, i18n("Underline"), -1);
   m_vToolBarText->setToggle(ID_UNDERLINE,true);
   m_vToolBarText->setButton(ID_UNDERLINE,false);
@@ -1406,36 +1348,29 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   m_vToolBarText->insertSeparator( -1 );
 
   // align left
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/koffice/toolbar/alignLeft.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("alignLeft.xpm"));
   m_idButtonText_ALeft = m_vToolBarText->insertButton2( pix, ID_ALEFT, SIGNAL( clicked() ), this, "textAlignLeft", 
 							true, i18n("Align Left"), -1);
   m_vToolBarText->setToggle(ID_ALEFT,true);
   m_vToolBarText->setButton(ID_ALEFT,true);
 
   // align center
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/koffice/toolbar/alignCenter.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("alignCenter.xpm"));
   m_idButtonText_ACenter = m_vToolBarText->insertButton2( pix, ID_ACENTER, SIGNAL( clicked() ), this, "textAlignCenter", 
 							  true, i18n("Align Center"), -1);
   m_vToolBarText->setToggle(ID_ACENTER,true);
   m_vToolBarText->setButton(ID_ACENTER,false);
   
   // align right
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/koffice/toolbar/alignRight.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("alignRight.xpm"));
   m_idButtonText_ARight = m_vToolBarText->insertButton2( pix, ID_ARIGHT, SIGNAL( clicked() ), this, "textAlignRight", 
 							 true, i18n("Align Right"), -1);
   m_vToolBarText->setToggle(ID_ARIGHT,true);
   m_vToolBarText->setButton(ID_ARIGHT,false);
   
+  QString tmp;
   // align block
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/koffice/toolbar/alignBlock.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("alignBlock.xpm"));
   m_idButtonText_ABlock = m_vToolBarText->insertButton2( pix, ID_ABLOCK, SIGNAL( clicked() ), this, "textAlignBlock", 
 							 true, i18n("Align Block"), -1);
   m_vToolBarText->setToggle(ID_ABLOCK,true);
@@ -1444,18 +1379,14 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   m_vToolBarText->insertSeparator( -1 );
 
   // enum list
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kword/toolbar/enumList.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("enumList.xpm"));
   m_idButtonText_EnumList = m_vToolBarText->insertButton2( pix, ID_ENUM_LIST, SIGNAL( clicked() ), this, "textEnumList", 
 							   true, i18n("Enumerated List"), -1);
   m_vToolBarText->setToggle(ID_ENUM_LIST,true);
   m_vToolBarText->setButton(ID_ENUM_LIST,false);
 
   // unsorted list
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kword/toolbar/unsortedList.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("unsortedList.xpm"));
   m_idButtonText_EnumList = m_vToolBarText->insertButton2( pix, ID_USORT_LIST, SIGNAL( clicked() ), this, "textUnsortList", 
 							   true, i18n("Unsorted List"), -1);
   m_vToolBarText->setToggle(ID_USORT_LIST,true);
@@ -1464,18 +1395,14 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   m_vToolBarText->insertSeparator( -1 );
 
   // superscript
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kword/toolbar/super.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("super.xpm"));
   m_idButtonText_SuperScript = m_vToolBarText->insertButton2( pix, ID_SUPERSCRIPT, SIGNAL( clicked() ), this, "textSuperScript", 
 							      true, i18n("Superscript"), -1);
   m_vToolBarText->setToggle(ID_SUPERSCRIPT,true);
   m_vToolBarText->setButton(ID_SUPERSCRIPT,false);
   
   // subscript
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kword/toolbar/sub.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("sub.xpm"));
   m_idButtonText_SubScript = m_vToolBarText->insertButton2( pix, ID_SUBSCRIPT, SIGNAL( clicked() ), this, "textSubScript", 
 							    true, i18n("Subscript"), -1);
   m_vToolBarText->setToggle(ID_SUBSCRIPT,true);
@@ -1484,36 +1411,28 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   m_vToolBarText->insertSeparator( -1 );
 
   // border left
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kword/toolbar/borderleft.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("borderleft.xpm"));
   m_idButtonText_BorderLeft = m_vToolBarText->insertButton2( pix, ID_BRD_LEFT, SIGNAL( clicked() ), this, "textBorderLeft", 
 							     true, i18n("Border Left"), -1);
   m_vToolBarText->setToggle(ID_BRD_LEFT,true);
   m_vToolBarText->setButton(ID_BRD_LEFT,false);
   
   // border right
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kword/toolbar/borderright.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("borderright.xpm"));
   m_idButtonText_BorderRight = m_vToolBarText->insertButton2( pix, ID_BRD_RIGHT, SIGNAL( clicked() ), this, "textBorderRight", 
 							      true, i18n("Border Right"), -1);
   m_vToolBarText->setToggle(ID_BRD_RIGHT,true);
   m_vToolBarText->setButton(ID_BRD_RIGHT,false);
   
   // border top
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kword/toolbar/bordertop.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("bordertop.xpm"));
   m_idButtonText_BorderTop = m_vToolBarText->insertButton2( pix, ID_BRD_TOP, SIGNAL( clicked() ), this, "textBorderTop", 
 							    true, i18n("Border Top"), -1);
   m_vToolBarText->setToggle(ID_BRD_TOP,true);
   m_vToolBarText->setButton(ID_BRD_TOP,false);
   
   // border bottom
-  tmp = kapp->kde_datadir().copy();
-  tmp += "/kword/toolbar/borderbottom.xpm";
-  pix = OPUIUtils::loadPixmap(tmp);
+  pix = OPUIUtils::convertPixmap(ICON("borderbottom.xpm"));
   m_idButtonText_BorderBottom = m_vToolBarText->insertButton2( pix, ID_BRD_BOTTOM, SIGNAL( clicked() ), this, "textBorderBottom", 
 							       true, i18n("Border Bottom"), -1);
   m_vToolBarText->setToggle(ID_BRD_BOTTOM,true);
@@ -1555,6 +1474,7 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
 
   updateStyle("Standard");
   setFormat(format,false);
+  gui->getPaperWidget()->forceFullUpdate();
 
   return true;
 }      
@@ -1872,7 +1792,7 @@ KWordGUI::KWordGUI( QWidget *parent, bool __show, KWordDocument *_doc, KWordView
     paperWidget->setRuler2Frame(0,0);
 
   // HACK
-  if (doc->viewCount() == 1)
+  if (doc->viewCount() == 1 && !doc->loaded())
     {
       QKeyEvent e(Event_KeyPress,Key_Delete,0,0);
       paperWidget->keyPressEvent(&e);
@@ -1883,7 +1803,9 @@ KWordGUI::KWordGUI( QWidget *parent, bool __show, KWordDocument *_doc, KWordView
     }
 
   connect(r_horz,SIGNAL(tabListChanged(QList<KoTabulator>*)),paperWidget,SLOT(tabListChanged(QList<KoTabulator>*)));
-  r_horz->setTabList(paperWidget->getParagLayout()->getTabList());
+  //r_horz->setTabList(paperWidget->getParagLayout()->getTabList());
+
+  paperWidget->forceFullUpdate();
 }
 
 /*================================================================*/

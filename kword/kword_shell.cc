@@ -345,11 +345,19 @@ void KWordShell::slotFileSave()
 
 void KWordShell::slotFileSaveAs()
 {
+  QString _url = "";
+  if (m_pDoc)
+    {
+      _url = m_pDoc->url();
+      m_pDoc->setURL("");
+    }
+
   if ( !saveDocument( "", "" ) )
   {
     QString tmp;
     tmp.sprintf( i18n( "Could not save file" ) );
     QMessageBox::critical( this, i18n( "IO Error" ), tmp, i18n( "OK" ) );
+    if (m_pDoc) m_pDoc->setURL(_url);
   }
 }
 

@@ -81,6 +81,7 @@ KWordDocument::KWordDocument()
   m_bEmpty = true;
   applyStyleTemplate = 0;
   applyStyleTemplate = applyStyleTemplate | U_FONT_FAMILY_ALL_SIZE | U_COLOR | U_BORDER | U_INDENT | U_NUMBERING | U_ALIGN | U_TABS;
+  _loaded = false;
 }
 
 /*================================================================*/
@@ -155,6 +156,7 @@ bool KWordDocument::loadTemplate(const char *_url)
  
   setModified( true );
 
+  _loaded = false;
   return true;
 }
 
@@ -270,6 +272,8 @@ bool KWordDocument::loadChildren( KOStore::Store_ptr _store )
 /*================================================================*/
 bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 {
+  _loaded = true;
+
   pageLayout.format = PG_DIN_A4;
   pageLayout.orientation = PG_PORTRAIT;
   pageLayout.width = PG_A4_WIDTH;

@@ -981,6 +981,7 @@ bool KWFormatContext::makeLineLayout( QPainter &_painter, bool _checkIntersects 
 		    else
 		      {
 			lineEndPos = textPos;
+			textPos--;
 			ptTextLen = tmpPTWidth;
 			spaces = tmpSpaces;
 			tmpSpaces++;

@@ -330,6 +330,8 @@ public:
   void setStyleChanged(QString _name);
   bool isStyleChanged(QString _name);
 
+  bool loaded() { return _loaded; }
+
 signals:
   void sig_imageModified();
   void sig_insertObject(KWordChild *_child);
@@ -410,6 +412,8 @@ protected:
   
   QStrList changedStyles;
 
+  bool _loaded;
+  
 };
 
 #endif

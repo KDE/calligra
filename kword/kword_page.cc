@@ -691,7 +691,7 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
 	  {
 	    QString file = KFileDialog::getOpenFileName(0,
 							i18n("*.gif *GIF *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM "
-							     "*.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW "
+							     "*.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW *.jpg *.JPG *.jpeg *.JPEG"
 							     "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|All pictures\n"
 							     "*.gif *.GIF|GIF-Pictures\n"
 							     "*.jpg *.JPG *.jpeg *.JPEG|JPEG-Pictures\n"
@@ -2413,3 +2413,19 @@ void KWPage::setNormalText()
 				  fc->getParag()->getParagLayout()->getBottomBorder());
 }
 
+/*================================================================*/
+void KWPage::forceFullUpdate()
+{
+  gui->getView()->updateStyle(fc->getParag()->getParagLayout()->getName(),false);
+  gui->getView()->setFormat(*((KWFormat*)fc),true,false);
+  gui->getView()->setFlow(fc->getParag()->getParagLayout()->getFlow());
+  gui->getView()->setParagBorders(fc->getParag()->getParagLayout()->getLeftBorder(),
+				  fc->getParag()->getParagLayout()->getRightBorder(),
+				  fc->getParag()->getParagLayout()->getTopBorder(),
+				  fc->getParag()->getParagLayout()->getBottomBorder());
+  gui->getHorzRuler()->setLeftIndent(fc->getParag()->getParagLayout()->getMMLeftIndent());
+  gui->getHorzRuler()->setFirstIndent(fc->getParag()->getParagLayout()->getMMFirstLineLeftIndent());
+  gui->getHorzRuler()->setFrameStart(doc->getFrameSet(fc->getFrameSet() - 1)->getFrame(fc->getFrame() - 1)->x());
+  gui->getHorzRuler()->setTabList(fc->getParag()->getParagLayout()->getTabList());
+  format = *((KWFormat*)fc);
+}

@@ -169,6 +169,8 @@ public:
   int getPageOfRect(KRect _rect);
   void setHilitFrameSet(int _f)
     { hiliteFrameSet = _f; repaint(false); }
+
+  void forceFullUpdate();
   
 public slots:
   void newLeftIndent(int _left); 

@@ -471,3 +471,11 @@ Reggie, 6.12.1998:
 Reggie, 7.12.1998:
 ------------------
 - More work on left aligned tabs, but there is still a bug 
+
+Reggie, 8.12.1998:
+------------------
+- added 'jpeg' to the 'All pictures' filter in the file dialog
+- Fixed a bug with this "magic first character"
+- Using ICON() for loading icons in whole KWord
+- Save as works again
+- When loading a file the toolbar and rulers are update correctly at the beginning
