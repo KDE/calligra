@@ -960,17 +960,17 @@ void KWView::updateFrameStatusBarItem()
         }
         if ( nbFrame == 1 )
         {
-            KWUnit::Unit unit = m_doc->getUnit();
+            KoUnit::Unit unit = m_doc->getUnit();
             QString unitName = m_doc->getUnitName();
             KWFrame * frame = m_doc->getFirstSelectedFrame();
             m_sbFramesLabel->setText( i18n( "Statusbar info", "%1. Frame: %2, %3  -  %4, %5 (width: %6, height: %7) (%8)" )
                                       .arg( frame->getFrameSet()->getName() )
-                                      .arg( KWUnit::userValue( frame->left(), unit ) )
-                                      .arg( KWUnit::userValue((frame->top() - (frame->pageNum() * m_doc->ptPaperHeight())), unit ) )
-                                      .arg( KWUnit::userValue( frame->right(), unit ) )
-                                      .arg( KWUnit::userValue( frame->bottom(), unit ) )
-                                      .arg( KWUnit::userValue( frame->width(), unit ) )
-                                      .arg( KWUnit::userValue( frame->height(), unit ) )
+                                      .arg( KoUnit::userValue( frame->left(), unit ) )
+                                      .arg( KoUnit::userValue((frame->top() - (frame->pageNum() * m_doc->ptPaperHeight())), unit ) )
+                                      .arg( KoUnit::userValue( frame->right(), unit ) )
+                                      .arg( KoUnit::userValue( frame->bottom(), unit ) )
+                                      .arg( KoUnit::userValue( frame->width(), unit ) )
+                                      .arg( KoUnit::userValue( frame->height(), unit ) )
                                       .arg( unitName ) );
         } else
             m_sbFramesLabel->setText( i18n( "%1 frames selected" ).arg( nbFrame ) );
@@ -1237,9 +1237,9 @@ void KWView::showRulerIndent( double _leftMargin, double _firstLine, double _rig
   KoRuler * hRuler = m_gui ? m_gui->getHorzRuler() : 0;
   if ( hRuler )
   {
-      hRuler->setFirstIndent( KWUnit::userValue( _firstLine + _leftMargin, m_doc->getUnit() ) );
-      hRuler->setLeftIndent( KWUnit::userValue( _leftMargin, m_doc->getUnit() ) );
-      hRuler->setRightIndent( KWUnit::userValue( _rightMargin, m_doc->getUnit() ) );
+      hRuler->setFirstIndent( KoUnit::userValue( _firstLine + _leftMargin, m_doc->getUnit() ) );
+      hRuler->setLeftIndent( KoUnit::userValue( _leftMargin, m_doc->getUnit() ) );
+      hRuler->setRightIndent( KoUnit::userValue( _rightMargin, m_doc->getUnit() ) );
       actionFormatDecreaseIndent->setEnabled( _leftMargin>0);
   }
 }
@@ -2136,7 +2136,7 @@ void KWView::showParagraphDialog( int initialPage, double initialTabPos )
                 macroCommand->addCommand(cmd);
                 changed=true;
             }
-            m_gui->getHorzRuler()->setLeftIndent( KWUnit::userValue( paragDia->leftIndent(), m_doc->getUnit() ) );
+            m_gui->getHorzRuler()->setLeftIndent( KoUnit::userValue( paragDia->leftIndent(), m_doc->getUnit() ) );
 
         }
 
@@ -2148,7 +2148,7 @@ void KWView::showParagraphDialog( int initialPage, double initialTabPos )
                 macroCommand->addCommand(cmd);
                 changed=true;
             }
-            m_gui->getHorzRuler()->setRightIndent( KWUnit::userValue( paragDia->rightIndent(), m_doc->getUnit() ) );
+            m_gui->getHorzRuler()->setRightIndent( KoUnit::userValue( paragDia->rightIndent(), m_doc->getUnit() ) );
         }
         if(paragDia->isSpaceBeforeChanged())
         {
@@ -2177,7 +2177,7 @@ void KWView::showParagraphDialog( int initialPage, double initialTabPos )
                 changed=true;
             }
             m_gui->getHorzRuler()->setFirstIndent(
-                KWUnit::userValue( paragDia->leftIndent() + paragDia->firstLineIndent(), m_doc->getUnit() ) );
+                KoUnit::userValue( paragDia->leftIndent() + paragDia->firstLineIndent(), m_doc->getUnit() ) );
         }
 
         if(paragDia->isAlignChanged())
@@ -3866,7 +3866,7 @@ void KWGUI::reorganize()
 
 void KWGUI::unitChanged( QString u )
 {
-    view->kWordDocument()->setUnit( KWUnit::unit( u ) );
+    view->kWordDocument()->setUnit( KoUnit::unit( u ) );
 }
 
 #include "kwview.moc"

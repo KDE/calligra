@@ -62,7 +62,7 @@ namespace KFormula {
 #include <kozoomhandler.h>
 #include "kwimage.h"
 #include "kwanchorpos.h"
-#include <kwunit.h>
+#include <koUnit.h>
 #include "defs.h"
 
 #include <qmap.h>
@@ -304,9 +304,9 @@ public:
     void setFrameCoords( double x, double y, double w, double h );
 
     // The user-chosen global unit
-    QString getUnitName() { return KWUnit::unitName( m_unit ); }
-    KWUnit::Unit getUnit() { return m_unit; }
-    void setUnit( KWUnit::Unit _unit );
+    QString getUnitName() { return KoUnit::unitName( m_unit ); }
+    KoUnit::Unit getUnit() { return m_unit; }
+    void setUnit( KoUnit::Unit _unit );
 
     void addCommand( KCommand * cmd );
 
@@ -574,7 +574,7 @@ private:
 
     //int styleMask;
 
-    KWUnit::Unit m_unit;
+    KoUnit::Unit m_unit;
 
     KCommandHistory * m_commandHistory;
 //    KWFootNoteManager footNoteManager;

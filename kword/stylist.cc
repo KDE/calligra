@@ -57,7 +57,7 @@ KWStyleManager::KWStyleManager( QWidget *_parent, KWDocument *_doc )
     noSignals=true;
     m_origStyles.setAutoDelete(false);
     m_changedStyles.setAutoDelete(false);
-    KWUnit::Unit unit = m_doc->getUnit();
+    KoUnit::Unit unit = m_doc->getUnit();
 
     setupWidget(); // build the widget with the buttons and the list selector.
 

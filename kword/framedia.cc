@@ -442,7 +442,7 @@ void KWFrameDia::setupTab2() // TAB Text Runaround
     }
 
     QString str;
-    str.setNum( KWUnit::userValue( ragap, doc->getUnit() ) );
+    str.setNum( KoUnit::userValue( ragap, doc->getUnit() ) );
     eRGap->setText( str );
 
     enableRunAround();
@@ -688,10 +688,10 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
 
     double l, r, t, b;
     doc->getFrameMargins( l, r, t, b );
-    sml->setText( QString::number( QMAX(0.00,KWUnit::userValue( l, doc->getUnit() ) ) ));
-    smr->setText( QString::number( QMAX(0.00,KWUnit::userValue( r, doc->getUnit() ) ) ));
-    smt->setText( QString::number( QMAX(0.00,KWUnit::userValue( t, doc->getUnit() ) ) ));
-    smb->setText( QString::number( QMAX(0.00,KWUnit::userValue( b, doc->getUnit() ) ) ));
+    sml->setText( QString::number( QMAX(0.00,KoUnit::userValue( l, doc->getUnit() ) ) ));
+    smr->setText( QString::number( QMAX(0.00,KoUnit::userValue( r, doc->getUnit() ) ) ));
+    smt->setText( QString::number( QMAX(0.00,KoUnit::userValue( t, doc->getUnit() ) ) ));
+    smb->setText( QString::number( QMAX(0.00,KoUnit::userValue( b, doc->getUnit() ) ) ));
 
     sx->setValidator( new KFloatValidator( 0,9999,sx ) );
     sy->setValidator( new KFloatValidator( 0,9999,sy ) );
@@ -708,10 +708,10 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     {
 	// Can't use frame->pageNum() here since frameset might be 0
 	int pageNum = QMIN( static_cast<int>(frame->y() / doc->ptPaperHeight()), doc->getPages()-1 );
-        oldX = KWUnit::userValue( frame->x(), doc->getUnit() );
-        oldY = KWUnit::userValue( (frame->y() - (pageNum * doc->ptPaperHeight())), doc->getUnit() );
-        oldW = KWUnit::userValue( frame->width(), doc->getUnit() );
-        oldH = KWUnit::userValue( frame->height(), doc->getUnit() );
+        oldX = KoUnit::userValue( frame->x(), doc->getUnit() );
+        oldY = KoUnit::userValue( (frame->y() - (pageNum * doc->ptPaperHeight())), doc->getUnit() );
+        oldW = KoUnit::userValue( frame->width(), doc->getUnit() );
+        oldH = KoUnit::userValue( frame->height(), doc->getUnit() );
 
         sx->setText( QString::number( oldX ) );
         sy->setText( QString::number( oldY ) );
@@ -1219,7 +1219,7 @@ bool KWFrameDia::applyChanges()
         else if ( rRunContur->isChecked() )
             frame->setRunAround( KWFrame::RA_SKIP );
 
-        frame->setRunAroundGap( KWUnit::fromUserValue( eRGap->text().toDouble(), doc->getUnit() ) );
+        frame->setRunAroundGap( KoUnit::fromUserValue( eRGap->text().toDouble(), doc->getUnit() ) );
     }
 
     if(tab5)
@@ -1308,10 +1308,10 @@ bool KWFrameDia::applyChanges()
 	        // Can't use frame->pageNum() here since frameset might be 0
 	        int pageNum = QMIN( static_cast<int>(frame->y() / doc->ptPaperHeight()), doc->getPages()-1 );
 
-                double px = KWUnit::fromUserValue( QMAX( sx->text().toDouble(), 0 ), doc->getUnit() );
-                double py = KWUnit::fromUserValue( (QMAX( sy->text().toDouble(),0)) + (pageNum * doc->ptPaperHeight()), doc->getUnit());
-                double pw = KWUnit::fromUserValue( QMAX( sw->text().toDouble(), 0 ), doc->getUnit() );
-                double ph = KWUnit::fromUserValue( QMAX( sh->text().toDouble(), 0 ), doc->getUnit() );
+                double px = KoUnit::fromUserValue( QMAX( sx->text().toDouble(), 0 ), doc->getUnit() );
+                double py = KoUnit::fromUserValue( (QMAX( sy->text().toDouble(),0)) + (pageNum * doc->ptPaperHeight()), doc->getUnit());
+                double pw = KoUnit::fromUserValue( QMAX( sw->text().toDouble(), 0 ), doc->getUnit() );
+                double ph = KoUnit::fromUserValue( QMAX( sh->text().toDouble(), 0 ), doc->getUnit() );
 
                 KoRect rect( px, py, pw, ph );
                 if( !doc->isOutOfPage( rect , frame->pageNum() ) )
@@ -1336,10 +1336,10 @@ bool KWFrameDia::applyChanges()
         }
 
         double u1, u2, u3, u4;
-        u1=KWUnit::fromUserValue( QMAX(sml->text().toDouble(),0), doc->getUnit() );
-        u2=KWUnit::fromUserValue( QMAX(smr->text().toDouble(),0), doc->getUnit() );
-        u3=KWUnit::fromUserValue( QMAX(smt->text().toDouble(),0), doc->getUnit() );
-        u4=KWUnit::fromUserValue( QMAX(smb->text().toDouble(),0), doc->getUnit() );
+        u1=KoUnit::fromUserValue( QMAX(sml->text().toDouble(),0), doc->getUnit() );
+        u2=KoUnit::fromUserValue( QMAX(smr->text().toDouble(),0), doc->getUnit() );
+        u3=KoUnit::fromUserValue( QMAX(smt->text().toDouble(),0), doc->getUnit() );
+        u4=KoUnit::fromUserValue( QMAX(smb->text().toDouble(),0), doc->getUnit() );
         doc->setFrameMargins( u1, u2, u3, u4 );
     }
 

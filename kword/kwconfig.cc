@@ -151,7 +151,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
 {
     m_pView=_view;
     config = KWFactory::global()->config();
-    KWUnit::Unit unit = m_pView->kWordDocument()->getUnit();
+    KoUnit::Unit unit = m_pView->kWordDocument()->getUnit();
     /*QVBoxLayout *box = new QVBoxLayout( this );
     box->setMargin( 5 );
     box->setSpacing( 10 );*/
@@ -202,22 +202,22 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
 
     lay1->addWidget(recentFiles);
 
-    QString suffix = KWUnit::unitName( unit ).prepend(' ');
-    gridX=new KDoubleNumInput( KWUnit::userValue( ptGridX, unit ), tmpQGroupBox );
+    QString suffix = KoUnit::unitName( unit ).prepend(' ');
+    gridX=new KDoubleNumInput( KoUnit::userValue( ptGridX, unit ), tmpQGroupBox );
     gridX->setRange(0.1, 50, 0.1);
     gridX->setFormat( "%.1f" );
     gridX->setSuffix( suffix );
     gridX->setLabel(i18n("X grid space"));
     lay1->addWidget(gridX);
 
-    gridY=new KDoubleNumInput( KWUnit::userValue( ptGridY, unit ), tmpQGroupBox );
+    gridY=new KDoubleNumInput( KoUnit::userValue( ptGridY, unit ), tmpQGroupBox );
     gridY->setRange(0.1, 50, 0.1);
     gridY->setFormat( "%.1f" );
     gridY->setLabel(i18n("Y grid space"));
     gridY->setSuffix( suffix );
     lay1->addWidget(gridY);
 
-    double val = KWUnit::userValue( ptIndent, unit );
+    double val = KoUnit::userValue( ptIndent, unit );
     indent = new KDoubleNumInput( val, tmpQGroupBox );
     indent->setRange(0.1, 50, 0.1);
     indent->setFormat( "%.1f" );
@@ -238,9 +238,9 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
 void ConfigureInterfacePage::apply()
 {
     KWDocument * doc = m_pView->kWordDocument();
-    double valX=KWUnit::fromUserValue( gridX->value(), doc->getUnit() );
+    double valX=KoUnit::fromUserValue( gridX->value(), doc->getUnit() );
     //kdDebug() << "ConfigureInterfacePage::apply gridX->value()=" << gridX->value() << " valX=" << valX << endl;
-    double valY=KWUnit::fromUserValue( gridY->value(), doc->getUnit() );
+    double valY=KoUnit::fromUserValue( gridY->value(), doc->getUnit() );
     int nbRecent=recentFiles->value();
     bool ruler=showRuler->isChecked();
 
@@ -257,7 +257,7 @@ void ConfigureInterfacePage::apply()
         doc->setGridY(valY);
     }
 
-    double newIndent = KWUnit::fromUserValue( indent->value(), doc->getUnit() );
+    double newIndent = KoUnit::fromUserValue( indent->value(), doc->getUnit() );
     if( newIndent != doc->getIndentValue() )
     {
         config->writeEntry( "Indent", newIndent, true, false, 'g', DBL_DIG /* 6 is not enough */ );
@@ -294,10 +294,10 @@ void ConfigureInterfacePage::apply()
 void ConfigureInterfacePage::slotDefault()
 {
     KWDocument * doc = m_pView->kWordDocument();
-    gridX->setValue( KWUnit::userValue( 10, doc->getUnit() ) );
-    gridY->setValue( KWUnit::userValue( 10, doc->getUnit() ) );
+    gridX->setValue( KoUnit::userValue( 10, doc->getUnit() ) );
+    gridY->setValue( KoUnit::userValue( 10, doc->getUnit() ) );
     m_nbPagePerRow->setValue(4);
-    double newIndent = KWUnit::userValue( MM_TO_POINT( 10 ), doc->getUnit() );
+    double newIndent = KoUnit::userValue( MM_TO_POINT( 10 ), doc->getUnit() );
     indent->setValue( newIndent );
     recentFiles->setValue(10);
     showRuler->setChecked(true);
@@ -310,7 +310,7 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
 {
     m_pView=_view;
     config = KWFactory::global()->config();
-    KWUnit::Unit unit = m_pView->kWordDocument()->getUnit();
+    KoUnit::Unit unit = m_pView->kWordDocument()->getUnit();
     QGroupBox* tmpQGroupBox = new QGroupBox( box, "GroupBox" );
     tmpQGroupBox->setTitle(i18n("Misc"));
 
@@ -318,7 +318,7 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
 
     double ptColumnSpacing=3;
 
-    QString unitType=KWUnit::unitName(unit);
+    QString unitType=KoUnit::unitName(unit);
     if( config->hasGroup("Misc") )
     {
         config->setGroup( "Misc" );
@@ -330,21 +330,21 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
     grid->addWidget(unitLabel,0,0);
 
     QStringList listUnit;
-    listUnit << KWUnit::unitDescription( KWUnit::U_MM );
-    listUnit << KWUnit::unitDescription( KWUnit::U_INCH );
-    listUnit << KWUnit::unitDescription( KWUnit::U_PT );
+    listUnit << KoUnit::unitDescription( KoUnit::U_MM );
+    listUnit << KoUnit::unitDescription( KoUnit::U_INCH );
+    listUnit << KoUnit::unitDescription( KoUnit::U_PT );
     m_unit = new QComboBox( tmpQGroupBox );
     m_unit->insertStringList(listUnit);
     m_oldUnit=0;
-    switch (KWUnit::unit( unitType ) )
+    switch (KoUnit::unit( unitType ) )
     {
-        case KWUnit::U_MM:
+        case KoUnit::U_MM:
             m_oldUnit=0;
             break;
-        case KWUnit::U_INCH:
+        case KoUnit::U_INCH:
             m_oldUnit=1;
             break;
-        case KWUnit::U_PT:
+        case KoUnit::U_PT:
         default:
             m_oldUnit=2;
     }
@@ -353,7 +353,7 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
     grid->addWidget(m_unit,1,0);
 
     QString suffix = unitType.prepend(' ');
-    columnSpacing=new KDoubleNumInput( KWUnit::userValue( ptColumnSpacing, unit ), tmpQGroupBox );
+    columnSpacing=new KDoubleNumInput( KoUnit::userValue( ptColumnSpacing, unit ), tmpQGroupBox );
     columnSpacing->setRange(0.1, 50, 0.1);
     columnSpacing->setFormat( "%.1f" );
     columnSpacing->setSuffix( suffix );
@@ -370,20 +370,20 @@ void ConfigureMiscPage::apply()
         switch (m_unit->currentItem())
         {
             case 0:
-                unitName=KWUnit::unitName(KWUnit::U_MM  );
+                unitName=KoUnit::unitName(KoUnit::U_MM  );
                 break;
             case 1:
-                unitName=KWUnit::unitName(KWUnit::U_INCH  );
+                unitName=KoUnit::unitName(KoUnit::U_INCH  );
                 break;
             case 2:
             default:
-                unitName=KWUnit::unitName(KWUnit::U_PT );
+                unitName=KoUnit::unitName(KoUnit::U_PT );
         }
 
         config->writeEntry("Units",unitName);
     }
     KWDocument * doc = m_pView->kWordDocument();
-    int colSpacing=(int)KWUnit::fromUserValue( columnSpacing->value(), doc->getUnit() );
+    int colSpacing=(int)KoUnit::fromUserValue( columnSpacing->value(), doc->getUnit() );
     if(colSpacing!=doc->defaultColumnSpacing())
     {
         config->writeEntry( "ColumnSpacing",colSpacing , true, false, 'g', DBL_DIG /* 6 is not enough */ );
@@ -394,7 +394,7 @@ void ConfigureMiscPage::apply()
 
 void ConfigureMiscPage::slotDefault()
 {
-   columnSpacing->setValue(KWUnit::userValue( 3, m_pView->kWordDocument()->getUnit() ));
+   columnSpacing->setValue(KoUnit::userValue( 3, m_pView->kWordDocument()->getUnit() ));
 }
 
 #include "kwconfig.moc"

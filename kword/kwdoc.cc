@@ -128,7 +128,7 @@ void KWDocument::clearUndoRedoInfos()
 
 KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
-      m_unit( KWUnit::U_MM ), // footNoteManager( this ),
+      m_unit( KoUnit::U_MM ), // footNoteManager( this ),
       urlIntern()
 {
     dcop = 0;
@@ -313,7 +313,7 @@ void KWDocument::newZoomAndResolution( bool updateViews, bool forPrint )
 
 bool KWDocument::initDoc()
 {
-    m_pageLayout.unit = PG_MM;
+    m_pageLayout.unit = KoUnit::U_MM;
     m_pages = 1;
 
     m_pageColumns.columns = 1;
@@ -364,14 +364,14 @@ void KWDocument::initUnit()
     if(config->hasGroup("Misc") )
     {
         config->setGroup( "Misc" );
-        setUnit(KWUnit::unit( config->readEntry("Units",KWUnit::unitName(KWUnit::U_MM  ))));
+        setUnit(KoUnit::unit( config->readEntry("Units",KoUnit::unitName(KoUnit::U_MM  ))));
          setDefaultColumnSpacing((int)config->readDoubleNumEntry("ColumnSpacing",3));
     }
 }
 
 void KWDocument::initEmpty()
 {
-    m_pageLayout.unit = PG_MM;
+    m_pageLayout.unit = KoUnit::U_MM;
     m_pages = 1;
 
     m_pageColumns.columns = 1;
@@ -983,7 +983,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     m_anchorRequests.clear();
     m_clipartRequests.clear();
 
-    m_pageLayout.unit = PG_MM;
+    m_pageLayout.unit = KoUnit::U_MM;
 
     m_pageColumns.columns = 1;
     m_pageColumns.ptColumnSpacing = m_defaultColumnSpacing;
@@ -1002,7 +1002,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     m_pages = 1;
 
     KoPageLayout __pgLayout;
-    __pgLayout.unit = PG_MM;
+    __pgLayout.unit = KoUnit::U_MM;
     KoColumns __columns;
     KoKWHeaderFooter __hf;
     __hf.header = HF_SAME;
@@ -1118,13 +1118,13 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         m_footerVisible = false;
         unitName = "pt";
     }
-    m_unit = KWUnit::unit( unitName );
+    m_unit = KoUnit::unit( unitName );
     switch ( m_unit ) {
-    case KWUnit::U_MM: __pgLayout.unit = PG_MM;
+    case KoUnit::U_MM: __pgLayout.unit = KoUnit::U_MM;
         break;
-    case KWUnit::U_PT: __pgLayout.unit = PG_PT;
+    case KoUnit::U_PT: __pgLayout.unit = KoUnit::U_PT;
         break;
-    case KWUnit::U_INCH: __pgLayout.unit = PG_INCH;
+    case KoUnit::U_INCH: __pgLayout.unit = KoUnit::U_INCH;
         break;
     }
     setPageLayout( __pgLayout, __columns, __hf );
@@ -1839,7 +1839,7 @@ QDomDocument KWDocument::saveXML()
     docattrs.setAttribute( "standardpage", 1 );
     docattrs.setAttribute( "hasHeader", static_cast<int>(isHeaderVisible()) );
     docattrs.setAttribute( "hasFooter", static_cast<int>(isFooterVisible()) );
-    docattrs.setAttribute( "unit", KWUnit::unitName(getUnit()) );
+    docattrs.setAttribute( "unit", KoUnit::unitName(getUnit()) );
     docattrs.setAttribute( "hasTOC", static_cast<int>(m_hasTOC));
 
 //    out << otag << "<FOOTNOTEMGR>" << endl;
@@ -2163,22 +2163,22 @@ void KWDocument::repaintAllViewsExcept( KWView *_view, bool erase )
     }
 }
 
-void KWDocument::setUnit( KWUnit::Unit _unit )
+void KWDocument::setUnit( KoUnit::Unit _unit )
 {
     m_unit = _unit;
     switch ( m_unit ) {
-    case KWUnit::U_MM: m_pageLayout.unit = PG_MM;
+    case KoUnit::U_MM: m_pageLayout.unit = KoUnit::U_MM;
         break;
-    case KWUnit::U_PT: m_pageLayout.unit = PG_PT;
+    case KoUnit::U_PT: m_pageLayout.unit = KoUnit::U_PT;
         break;
-    case KWUnit::U_INCH: m_pageLayout.unit = PG_INCH;
+    case KoUnit::U_INCH: m_pageLayout.unit = KoUnit::U_INCH;
         break;
     }
 
     for ( KWView *viewPtr = m_lstViews.first(); viewPtr != 0; viewPtr = m_lstViews.next() ) {
         if ( viewPtr->getGUI() ) {
-            viewPtr->getGUI()->getHorzRuler()->setUnit( KWUnit::unitName( m_unit ) );
-            viewPtr->getGUI()->getVertRuler()->setUnit( KWUnit::unitName( m_unit ) );
+            viewPtr->getGUI()->getHorzRuler()->setUnit( KoUnit::unitName( m_unit ) );
+            viewPtr->getGUI()->getVertRuler()->setUnit( KoUnit::unitName( m_unit ) );
         }
     }
 }
