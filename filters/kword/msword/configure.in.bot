@@ -1,6 +1,6 @@
 if test -z "$LIBWV2_LIBS"; then
   echo ""
-  echo "You're missing libwv2 0.0.9 or newer. KWord's MS Word filter will not be"
+  echo "You're missing libwv2 0.1.8 or newer. KWord's MS Word filter will not be"
   echo "compiled. You can download wv2 using anonymous CVS from the Sourceforge"
   echo "repository (http://sourceforge.net/cvs/?group_id=10501) or get a"
   echo "tarball at http://sourceforge.net/projects/wvware/"
