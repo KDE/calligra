@@ -596,7 +596,7 @@ void KoAutoFormatDia::initTab3()
     {
         ( void )new QListViewItem( m_pListView, it.currentKey(), it.current()->replace() );
     }
-    if ( !changeLanguage )
+    if ( !changeLanguage || noSignal)
     {
         if ( m_autoFormat.getConfigAutoFormatLanguage( ).isEmpty() )
             autoFormatLanguage->setCurrentItem(0);
@@ -607,13 +607,14 @@ void KoAutoFormatDia::initTab3()
 
 void KoAutoFormatDia::changeAutoformatLanguage(const QString & text)
 {
+    if ( text==i18n("Default"))
+        m_autoFormat.configAutoFormatLanguage( QString::null);
+    else
+        m_autoFormat.configAutoFormatLanguage( text);
+
     if ( !noSignal )
     {
         changeLanguage=true;
-        if ( text==i18n("Default"))
-            m_autoFormat.configAutoFormatLanguage( QString::null);
-        else
-            m_autoFormat.configAutoFormatLanguage( text);
         m_autoFormat.readConfig( true );
         initTab3();
         initTab4();
