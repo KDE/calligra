@@ -344,8 +344,10 @@ void KoDocument::slotChildChanged( KoChild *c )
 
 void KoDocument::slotChildDestroyed()
 {
-  const KoDocumentChild *child = static_cast<const KoDocumentChild *>( sender() );
-  d->m_children.removeRef( child );
+    setModified( true );
+	
+    const KoDocumentChild *child = static_cast<const KoDocumentChild *>( sender() );
+    d->m_children.removeRef( child );
 }
 
 void KoDocument::slotDestruct()

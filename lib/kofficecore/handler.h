@@ -113,6 +113,13 @@ public:
     ContainerHandler( KoView* view, QWidget* widget );
     ~ContainerHandler();
 
+signals:
+    /**
+     * Emitted if the user wants to open the popup menu for some
+     * child object.
+     */
+    void popupMenu( KoChild*, const QPoint& global_pos );
+    
 protected:
     bool eventFilter( QObject*, QEvent* );
 

@@ -293,7 +293,12 @@ bool ContainerHandler::eventFilter( QObject*, QEvent* ev )
         QMouseEvent *e=static_cast<QMouseEvent*>(ev);
         KoChild *ch=child(gadget, pos, e);
 
-        if ( e->button() == LeftButton && gadget == KoChild::Move )
+	if ( e->button() == RightButton && gadget != KoChild::NoGadget )
+        {
+	    emit popupMenu( ch, e->globalPos() );
+            return true;
+        }
+        else if ( e->button() == LeftButton && gadget == KoChild::Move )
         {
             (void)new PartMoveHandler( static_cast<QWidget*>(target()), m_view->matrix(), m_view, ch, pos );
             return true;

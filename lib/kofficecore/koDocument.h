@@ -348,10 +348,13 @@ public:
    *
    * At the same time this method marks this document as modified.
    *
+   * To remove a child, just delete it. KoDocument will detect this
+   * and remove the child from its lists.
+   *
    * @see #isModified
    */
   virtual void insertChild( const KoDocumentChild *child );
-
+    
   /**
    * @return the list of all children. Do not modify the
    *         returned list.
