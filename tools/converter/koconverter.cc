@@ -114,7 +114,7 @@ int main( int argc, char **argv )
             if ( KIO::NetAccess::stat( uOut, entry ) ) // this file exists => backup
 #endif
             {
-                kdDebug() << "Making backup...";
+                kdDebug() << "Making backup..." << endl;;
                 KURL backup( uOut );
                 backup.setPath( uOut.path() + '~' );
 #if KDE_IS_VERSION(3,1,90)
