@@ -215,17 +215,19 @@ void KWTextParag::drawLabel( QPainter* p, int x, int y, int /*w*/, int h, int ba
         int width = format->width( ' ' );
         int height = format->height();
         QRect er( x - width, y - h + height / 2 - width / 2, width, width );
-
+        QColorGroup tmpGroupColor(cg);
         // Draw the bullet.
         switch ( m_layout.counter->style() )
         {
             case Counter::STYLE_DISCBULLET:
-                p->setBrush( cg.brush( QColorGroup::Foreground ) );
+                tmpGroupColor.setBrush(QColorGroup::Foreground,newColor);
+                p->setBrush( tmpGroupColor.brush( QColorGroup::Foreground ) );
                 p->drawEllipse( er );
                 p->setBrush( Qt::NoBrush );
                 break;
             case Counter::STYLE_SQUAREBULLET:
-                p->fillRect( er , cg.brush( QColorGroup::Foreground ) );
+                tmpGroupColor.setBrush(QColorGroup::Foreground,newColor);
+                p->fillRect( er , tmpGroupColor.brush( QColorGroup::Foreground ) );
                 break;
             case Counter::STYLE_CIRCLEBULLET:
                 p->drawEllipse( er );
