@@ -1041,3 +1041,39 @@ int util_penCompare( QPen const & pen1, QPen const & pen2 )
   return 0;
 }
 
+
+QString convertRefToBase( const QString & table, const QRect & rect )
+{
+  QPoint bottomRight( rect.bottomRight() );
+
+  QString s( "$" );
+  s += table;
+  s += ".$";
+  s += KSpreadCell::columnName( bottomRight.x() );
+  s += '$';
+  s += QString::number( bottomRight.y() );
+
+  return s;
+}
+
+QString convertRefToRange( const QString & table, const QRect & rect )
+{
+  QPoint topLeft( rect.topLeft() );
+  QPoint bottomRight( rect.bottomRight() );
+
+  if ( topLeft == bottomRight )
+    return convertRefToBase( table, rect );
+
+  QString s( "$" );
+  s += table;
+  s += ".$";
+  s += /*util_encodeColumnLabelText*/KSpreadCell::columnName( topLeft.x() );
+  s += '$';
+  s += QString::number( topLeft.y() );
+  s += ":.$";
+  s += /*util_encodeColumnLabelText*/KSpreadCell::columnName( bottomRight.x() );
+  s += '$';
+  s += QString::number( bottomRight.y() );
+
+  return s;
+}

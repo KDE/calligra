@@ -442,6 +442,8 @@ public:
   virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, KoStore* );
   virtual bool loadChildren( KoStore* _store );
   QDomElement saveAreaName( QDomDocument& doc ) ;
+    bool saveOasisAreaName( KoXmlWriter & xmlWriter );
+
   void loadAreaName( const QDomElement& element );
   void loadOasisAreaName( const QDomElement& element );
   void loadOasisCellValidation( const QDomElement&body );

@@ -586,6 +586,7 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     //todo fixme just add a element for testing saving content.xml
     xmlWriter.startElement( "office:body" );
     d->workbook->saveOasis( xmlWriter );
+    saveOasisAreaName( xmlWriter );
     xmlWriter.endElement();
     xmlWriter.endElement(); // root element
     xmlWriter.endDocument();
@@ -1860,6 +1861,27 @@ void KSpreadDoc::loadOasisCellValidation( const QDomElement&body )
             }
         }
     }
+}
+
+bool KSpreadDoc::saveOasisAreaName( KoXmlWriter & xmlWriter )
+{
+    if ( listArea().count()>0 )
+    {
+        xmlWriter.startElement( "table:named-expressions" );
+        QValueList<Reference>::Iterator it;
+        for ( it = d->refs.begin(); it != d->refs.end(); ++it )
+        {
+            xmlWriter.startElement( "table:named-range" );
+
+            xmlWriter.addAttribute( "table:name", ( *it ).ref_name );
+            xmlWriter.addAttribute( "table:base-cell-address", convertRefToBase( ( *it ).table_name, ( *it ).rect ) );
+            xmlWriter.addAttribute( "table:cell-range-address", convertRefToRange( ( *it ).table_name, ( *it ).rect ) );
+
+            xmlWriter.endElement();
+        }
+        xmlWriter.endElement();
+    }
+    return true;
 }
 
 void KSpreadDoc::loadOasisAreaName( const QDomElement& body )
