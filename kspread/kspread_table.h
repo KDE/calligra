@@ -513,6 +513,11 @@ public:
 
     void setShowColumnNumber(bool _showColumnNumber) {m_bShowColumnNumber=_showColumnNumber;}
 
+    bool getHideZero() {return m_bHideZero;}
+
+    void setHideZero(bool _hideZero) {m_bHideZero=_hideZero;}
+
+
     void mergeCell( const QPoint &_marker );
     void dissociateCell( const QPoint &_marker, bool makeUndo=true );
     void changeMergedCell( int m_iCol, int m_iRow, int m_iExtraX, int m_iExtraY);
@@ -918,6 +923,7 @@ protected:
     bool m_bAutoCalc;
     bool m_bLcMode;
     bool m_bShowColumnNumber;
+    bool m_bHideZero;
 
     KSpreadLayout* m_defaultLayout;
 

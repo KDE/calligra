@@ -49,6 +49,7 @@ protected:
   QCheckBox *m_pGrid;
   QCheckBox *m_pColumn;
   QCheckBox *m_pLcMode;
+  QCheckBox *m_pHideZero;
   QPushButton* m_pOk;
   QPushButton* m_pClose;
 };

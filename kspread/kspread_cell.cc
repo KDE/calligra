@@ -2697,6 +2697,10 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
         if(m_bCellTooShort)
                 m_strOutText=textDisplaying(_painter);
 
+        //hide zero
+        if(m_pTable->getHideZero() &&  m_bValue &&   m_dValue * faktor(column(),row())==0)
+                m_strOutText="";
+
         conditionAlign( _painter, _col, _row );
 
         int indent=0;
@@ -2789,6 +2793,8 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
         }
 
         if(m_bCellTooShort)
+                m_strOutText=tmpText;
+        if(m_pTable->getHideZero() &&  m_bValue &&   m_dValue * faktor(column(),row())==0)
                 m_strOutText=tmpText;
     }
 

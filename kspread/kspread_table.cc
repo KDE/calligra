@@ -217,6 +217,7 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const QString &tableName, const ch
   m_bShowFormular=false;
   m_bLcMode=false;
   m_bShowColumnNumber=false;
+  m_bHideZero=false;
   // Get a unique name so that we can offer scripting
   if ( !_name )
   {
@@ -5751,6 +5752,7 @@ QDomElement KSpreadTable::save( QDomDocument& doc )
     table.setAttribute( "borders", (int)m_bShowPageBorders);
     table.setAttribute( "lcmode", (int)m_bLcMode);
     table.setAttribute( "columnnumber", (int)m_bShowColumnNumber);
+    table.setAttribute( "hidezero", (int)m_bHideZero);
     // Save all cells.
     KSpreadCell* c = m_cells.firstCell();
     for( ;c; c = c->nextCell() )
@@ -5845,6 +5847,11 @@ bool KSpreadTable::loadXML( const QDomElement& table )
     if( table.hasAttribute( "columnnumber" ) )
     {
         m_bShowColumnNumber = (int)table.attribute("columnnumber").toInt( &ok );
+        // we just ignore 'ok' - if it didn't work, go on
+    }
+    if( table.hasAttribute( "hidezero" ) )
+    {
+        m_bHideZero = (int)table.attribute("hidezero").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
 
