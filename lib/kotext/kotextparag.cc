@@ -162,7 +162,11 @@ void KoTextParag::drawLabel( QPainter* p, int xLU, int yLU, int /*wLU*/, int /*h
     int counterWidthLU = m_layout.counter->width( this );
 
     // We use the formatting of the first char as the formatting of the counter
-    KoTextFormat *format = KoParagCounter::counterFormat( this );
+    // But without bold/italic
+    KoTextFormat counterFormat( *KoParagCounter::counterFormat( this ) );
+    counterFormat.setBold( false );
+    counterFormat.setItalic( false );
+    KoTextFormat* format = &counterFormat;
     p->save();
 
     QColor textColor( format->color() );

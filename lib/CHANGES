@@ -11,6 +11,7 @@ KOfficeUI:
 KoText:
 - Fixed date format not available for some date variables (#82198)
 - Match words to auto-correct in a case-sensitive way to allow entries to have upper case letters. (#80376)
+- Don't use a different size for bullets/numbers in front of parags starting with bold or italic.
 
 Changes between KOffice-1.3.1 and KOffice-1.3.2
 ===============================================
