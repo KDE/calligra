@@ -125,11 +125,12 @@ void KoShellWindow::slotKoolBar( int _grp, int _item )
     {
       if ( (*it).m_id == _item )
       {
-        (*m_activePage).m_pView->reparent( 0L, 0, QPoint( 0, 0 ), FALSE );
+        KoView * v = (*m_activePage).m_pView;
+        v->reparent( 0L, 0, QPoint( 0, 0 ), FALSE );
 	m_activePage = it;
-        (*m_activePage).m_pView->reparent( m_pFrame, 0, QPoint( 0, 0 ), TRUE );
-	m_pFrame->setView( (*m_activePage).m_pView );
-	//setActiveView( (*m_activePage).m_pView );
+        v->reparent( m_pFrame, 0, QPoint( 0, 0 ), TRUE );
+	m_pFrame->setView( v );
+	partManager()->setActivePart( v->koDocument(), v );
 	return;
       }
       ++it;
@@ -182,11 +183,10 @@ bool KoShellWindow::newPage( KoDocumentEntry& _e )
     (*m_activePage).m_pView->reparent( 0L, 0, QPoint( 0, 0 ), FALSE );
 
   v = doc->createView( m_pFrame );
-  //setActiveView( v );
+  v->setGeometry( 0, 0, width(), height() );
+  partManager()->setActivePart( doc, v );
   v->show();
   m_pFrame->setView( v );
-
-  v->setGeometry( 0, 0, width(), height() );
 
   // Create a new page
   Page page;
