@@ -272,7 +272,7 @@ bool Connection::closeDatabase()
 		return true; //no db used
 
 	if (!checkConnected())
-		return false;
+		return true;
 
 	if (!drv_closeDatabase())
 		return false;
