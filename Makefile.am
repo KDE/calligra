@@ -2,9 +2,9 @@
 ## (C) 1997 Stephan Kulow
 
 AUTOMAKE_OPTIONS = foreign 1.4
-SUBDIRS = $(TOPSUBDIRS)
 COMPILE_FIRST = lib
 COMPILE_LAST = filters
+SUBDIRS = $(COMPILE_FIRST) $(TOPSUBDIRS) $(COMPILE_LAST)
 DISTCLEANFILES = inst-apps
 
 install-data-local:
