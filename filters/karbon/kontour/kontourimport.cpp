@@ -139,6 +139,15 @@ KontourImport::parseGObject( VObject *object, const QDomElement &e )
 		stroke.setLineWidth( lineWidth );
 		object->setStroke( stroke );
 	}
+	// handle matrix
+	QDomElement matrix = e.namedItem( "matrix" ).toElement();
+	QWMatrix mat( matrix.attribute( "m11" ).toDouble(),
+				  matrix.attribute( "m12" ).toDouble(),
+				  matrix.attribute( "m21" ).toDouble(),
+				  matrix.attribute( "m22" ).toDouble(),
+				  matrix.attribute( "dx" ).toDouble(),
+				  matrix.attribute( "dy" ).toDouble() );
+	object->transform( mat );
 }
 
 void
