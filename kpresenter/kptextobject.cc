@@ -687,9 +687,7 @@ void KPTextObject::loadKTextObject( const QDomElement &elem )
                         txt.fill(' ', ws);
                     }
                     n=n.nextSibling().toElement();
-                    if ( txt.isEmpty() )
-                        txt = ' ';
-                    if ( !txt[txt.length()-1].isSpace() && n.isNull() )
+                    if ( n.isNull() )
                         txt += ' '; // trailing space at end of paragraph
                     lastParag->append( txt, true );
                     lastParag->setFormat( i, txt.length(), textDocument()->formatCollection()->format( &fm ) );
@@ -2346,9 +2344,11 @@ void KPTextObject::saveParagraph( QDomDocument& doc,KoTextParag * parag,QDomElem
         }
         tmpText+=QString(c.c);
     }
-    if ( lastFormat ) {
+    if ( lastFormat )
         paragraph.appendChild(saveHelper(tmpText, lastFormat, doc));
-    }
+    else
+        paragraph.appendChild(saveHelper(tmpText, parag->string()->at(0).format(), doc));
+    
     parentElem.appendChild(paragraph);
 }
 
