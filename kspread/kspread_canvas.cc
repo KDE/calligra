@@ -934,6 +934,7 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
       // Delete the selection
       selection.setCoords( 0, 0, 0, 0 );
       table->setSelection( selection, this );
+      gotoLocation(KSpreadPoint(util_cellName(m_iMouseStartColumn, m_iMouseStartRow)));
     }
     else
         m_pView->updateEditWidget();
@@ -1057,6 +1058,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 	kdDebug(36001) << "KSpreadCanvas::mousePressEvent: col or row is out of range: col: " << col << " row: " << row << endl;
 	return;
     }
+
     // Unselect a selection ?
     if ( _ev->button() == LeftButton || !selection.contains( QPoint( col, row ) ) )
         table->unselect();
@@ -1107,36 +1109,51 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     KSpreadCell *cell = table->cellAt( col, row );
 
     // Go to the upper left corner of the obscuring object
+    // uncommented by Norbert (nandres@web.de)
+    // why would we want to do this? Excel and StarCalc behave differently
+    // If you do that you cannot access any obscured cells using the mouse.
+    /*
     if ( cell->isObscured() )
     {
-        // activeTable()->setSelection( QPoint( cell->obscuringCellsColumn(), cell->obscuringCellsRow() ) );
+    // activeTable()->setSelection( QPoint( cell->obscuringCellsColumn(),
+    //                                        cell->obscuringCellsRow() ) );
+    col = cell->obscuringCellsColumn();
+    row = cell->obscuringCellsRow();
+    cell = table->cellAt( col, row );
+    }
+    */
+    // use this instead: (go to first cell, if cells are merged)
+    if (cell->isObscuringForced())
+    {
         col = cell->obscuringCellsColumn();
         row = cell->obscuringCellsRow();
-        cell = table->cellAt( col, row );
+        cell = table->cellAt(col, row);
+        //        activeTable()->setSelection( QRect(col, row, col, row) );
     }
-
 
     // Start a marking action ?
     if ( !m_strAnchor.isEmpty() && _ev->button() == LeftButton )
     {
-	    bool isLink = (m_strAnchor.find("http://") == 0 || m_strAnchor.find("mailto:") == 0
-		   || m_strAnchor.find("ftp://") == 0 || m_strAnchor.find("file:") == 0 );
-	    bool isLocalLink = (m_strAnchor.find("file:") == 0);
-		if( isLink ) {
-			QString question = i18n("Do you want to open this link to '%1'?\n").arg(m_strAnchor);
-			if( isLocalLink ) {
-			  question += i18n("Note that opening a link to a local file may "
-					  "compromise your system's security!");
-			}
-			// this will also start local programs, so adding a "don't warn again"
-			// checkbox will probably be too dangerous
-			int choice = KMessageBox::warningYesNo(this, question, i18n("Open Link?"));
-			if( choice == KMessageBox::Yes ) {
-			  (void) new KRun( m_strAnchor );
-			}
-		} else {
-			gotoLocation( KSpreadPoint( m_strAnchor, m_pDoc->map() ) );
-		}
+        bool isLink = (m_strAnchor.find("http://") == 0 || m_strAnchor.find("mailto:") == 0
+                       || m_strAnchor.find("ftp://") == 0 || m_strAnchor.find("file:") == 0 );
+        bool isLocalLink = (m_strAnchor.find("file:") == 0);
+        if( isLink ) 
+        {
+            QString question = i18n("Do you want to open this link to '%1'?\n").arg(m_strAnchor);
+            if( isLocalLink ) {
+                question += i18n("Note that opening a link to a local file may "
+                                 "compromise your system's security!");
+            }
+
+            // this will also start local programs, so adding a "don't warn again"
+            // checkbox will probably be too dangerous
+            int choice = KMessageBox::warningYesNo(this, question, i18n("Open Link?"));
+            if( choice == KMessageBox::Yes ) {
+                (void) new KRun( m_strAnchor );
+            }
+        } else {
+            gotoLocation( KSpreadPoint( m_strAnchor, m_pDoc->map() ) );
+        }
     }
     else if ( _ev->button() == LeftButton )
     {
@@ -1157,10 +1174,10 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 
     // Paste operation with the middle button ?
     if( _ev->button() == MidButton )
-        {
+    {
         table->setMarker( QPoint( col, row ) );
         table->paste( QPoint( markerColumn(), markerRow() ) );
-        }
+    }
 
     // Update the edit box
     m_pView->updateEditWidget();
@@ -1756,6 +1773,48 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 		  else
 		      gotoLocation( 1, markerRow(), 0, make_select,false,true );
 	      }
+	  return;
+
+      case Key_End:
+
+          // move to the last used cell in the row
+	  // We are in edit mode -> go beginning of line
+	  if ( m_pEditor )
+          {
+              // (David) Do this for text editor only, not formula editor...
+              // Don't know how to avoid this hack (member var for editor type ?)
+              if ( m_pEditor->inherits("KSpreadTextEditor") )
+                  QApplication::sendEvent( m_pEditWidget, _ev );
+              // TODO: What to do for a formula editor ?
+          }
+	  else
+          {
+              int maxCol = table->maxColumn();
+              int row    = markerRow();
+              int max    = -1;
+              int i;
+
+              // we have to check every cell, cause there might
+              // be unused cells in the middle
+              for (i = 1; i < maxCol; ++i)
+              {
+                  KSpreadCell * cell = table->cellAt(i, row);
+
+                  if (cell != table->defaultCell())
+                  {
+                      if (!cell->isObscured())
+                          max = i;
+                  }
+              }
+
+              if (max == -1)
+                  return;
+                  
+              if ( m_bChoose )
+                  chooseGotoLocation( max, markerRow(), 0, make_select );
+              else
+                  gotoLocation( max, markerRow(), 0, make_select,false,true );
+          }
 	  return;
 
       case Key_Prior:
