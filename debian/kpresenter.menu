@@ -1,6 +1,7 @@
 ?package(kpresenter):\
 	needs=x11\
 	section=Apps/Tools\
+	hints="KDE"\
 	title="KPresenter"\
 	command=kpresenter
 

@@ -1,3 +1,36 @@
+koffice (2.0-final-4.1) unstable; urgency=low
+ 
+  * More upstream fixes
+  * Adding in menu hints
+
+ -- Ivan E. Moore II <rkrusty@debian.org>  Thu, 09 Nov 2000 22:45:00 -0700
+
+koffice (2.0-final-4) unstable; urgency=low
+ 
+  * More i18n work
+  * More upstream fixes
+ 
+ -- Ivan E. Moore II <rkrusty@debian.org>  Wed, 08 Nov 2000 17:30:00 -0700
+                                                                                
+koffice (2.0-final-3.1) unstable; urgency=low
+ 
+  * Applying i18n patches (Closes: #75834)
+ 
+ -- Ivan E. Moore II <rkrusty@debian.org>  Sun, 05 Nov 2000 23:00:00 -0700
+
+koffice (2.0-final-3) unstable; urgency=low
+ 
+  * more upstream fixes
+  * build against new xlibs
+
+ -- Ivan E. Moore II <rkrusty@debian.org>  Sat, 04 Nov 2000 23:00:00 -0700
+                                                                                
+koffice (2.0-final-2) unstable; urgency=low
+ 
+  * more upstream fixes
+ 
+ -- Ivan E. Moore II <rkrusty@debian.org>  Thu, 02 Nov 2000 18:00:00 -0700
+                                                                                
 koffice (2.0-final-0) unstable; urgency=low
 
   * KDE 2.0

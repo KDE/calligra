@@ -1,6 +1,7 @@
 ?package(kspread):\
 	needs=x11\
 	section=Apps/Editors\
+	hints="KDE"\
 	title="KSpread"\
 	command=kspread
 

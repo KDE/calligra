@@ -1,6 +1,7 @@
 ?package(killustrator):\
 	needs=x11\
 	section=Apps/Graphics\
+	hints="KDE"\
 	title="KIllustrator"\
 	command=killustrator
 

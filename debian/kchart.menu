@@ -1,6 +1,7 @@
 ?package(kchart):\
 	needs=x11\
 	section=Apps/Math\
+	hints="KDE"\
 	title="KChart"\
 	command=kchart
 
