@@ -38,7 +38,10 @@ public:
     KWImage *getImage( KWImage &_image, QString &key );
     KWImage *getImage( KWImage &_image, QString &key, QSize _imgSize );
     void removeImage( KWImage *_image );
-
+    KWImage *insertImage( QString _key, KWImage &_image );
+    
+    KWImage *getImage( const QString filename );
+    
     QString generateKey( KWImage *_image )
     { return generateKey( *_image ); }
 
@@ -46,12 +49,11 @@ public:
 
     QDictIterator<KWImage> iterator()
     { return QDictIterator<KWImage>( images ); }
-    
+
 protected:
     QString generateKey( KWImage &_image );
     QString generateKey( KWImage &_image, QSize _imgSize );
-    KWImage *insertImage( QString _key, KWImage &_format );
-    KWImage *insertImage( QString _key, KWImage &_format, QSize _imgSize );
+    KWImage *insertImage( QString _key, KWImage &_image, QSize _imgSize );
 
     QDict<KWImage> images;
     KWordDocument *doc;

@@ -427,9 +427,10 @@ void KWString::loadFormat( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDoc
                 {
                     _image = new KWImage();
                     _image->load( parser, lst, _doc );
-                    QString key;
-                    image = _doc->getImageCollection()->getImage( *_image, key );
-                    _kwimage = new KWCharImage( image );
+//                     QString key;
+//                     image = _doc->getImageCollection()->getImage( *_image, key );
+                    _kwimage = new KWCharImage( 0L );
+                    doc->addImageRequest( _image->getFilename(), _kwimage );
                     freeChar( _data_[ __pos ], doc );
                     _data_[ __pos ].c = KWSpecialChar;
                     _data_[ __pos ].attrib = _kwimage;

@@ -61,7 +61,7 @@ KWImage *KWImageCollection::getImage( KWImage &_image, QString &key, QSize _imgS
 
     key = generateKey( _image, _imgSize );
     QString key2 = generateKey( _image );
-    
+
     KWImage *image = findImage( key );
     if ( image )
     {
@@ -146,4 +146,20 @@ KWImage *KWImageCollection::insertImage( QString _key, KWImage &_image, QSize _i
     return image;
 }
 
-
+/*================================================================*/
+KWImage *KWImageCollection::getImage( const QString filename )
+{
+    QDictIterator<KWImage> it( images );
+    for ( ; it.current(); ++it )
+    {
+        if ( it.currentKey().contains( filename ) )
+        {
+            QString fn = it.currentKey();
+            int dashdash = fn.findRev( "--" );
+            if ( filename == fn.left( dashdash ) )
+                return it.current();
+        }
+    }
+    
+    return 0L;
+}

@@ -706,7 +706,10 @@ bool KWordDocument::loadChildren( KOStore::Store_ptr _store )
 bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
 {
     _loaded = true;
-
+    pixmapKeys.clear();
+    imageRequests.clear();
+    imageRequests2.clear();
+    
     pageLayout.unit = PG_MM;
 
     pageColumns.columns = 1; //STANDARD_COLUMNS;
@@ -1059,6 +1062,44 @@ bool KWordDocument::loadXML( KOMLParser& parser, KOStore::Store_ptr )
             loadStyleTemplates( parser, lst );
         }
 
+        else if ( name == "PIXMAPS" )
+        {
+            KOMLParser::parseTag( tag.c_str(), name, lst );
+            vector<KOMLAttrib>::const_iterator it = lst.begin();
+            for( ; it != lst.end(); it++ )
+            {
+            }
+
+            while ( parser.open( 0L, tag ) )
+            {
+                QString key;
+                
+                KOMLParser::parseTag( tag.c_str(), name, lst );
+                if ( name == "KEY" )
+                {
+                    KOMLParser::parseTag( tag.c_str(), name, lst );
+                    vector<KOMLAttrib>::const_iterator it = lst.begin();
+                    for( ; it != lst.end(); it++ )
+                    {
+                        if ( ( *it ).m_strName == "key" )
+                            key = ( *it ).m_strValue.c_str();
+                        else
+                            cerr << "Unknown attrib 'KEY: " << ( *it ).m_strName << "'" << endl;
+                    }
+                    pixmapKeys.append( key );
+                }
+                else
+                    cerr << "Unknown tag '" << tag << "' in PIXMAPS" << endl;
+
+                if ( !parser.close( tag ) )
+                {
+                    cerr << "ERR: Closing Child" << endl;
+                    QApplication::restoreOverrideCursor();
+                    return false;
+                }
+            }
+        }
+
         else
             cerr << "Unknown tag '" << tag << "' in the DOCUMENT" << endl;
 
@@ -1365,6 +1406,47 @@ void KWordDocument::loadFrameSets( KOMLParser& parser, vector<KOMLAttrib>& lst )
     }
 }
 
+/*===================================================================*/
+bool KWordDocument::completeLoading( KOStore::Store_ptr _store )
+{
+    if ( _store )
+    {
+        CORBA::String_var str = urlIntern.isEmpty() ? url() : urlIntern.latin1();
+
+        QStringList::Iterator it = pixmapKeys.begin();
+
+        for ( ; it != pixmapKeys.end(); ++it )
+        {
+            QString u = str.in();
+            u += "/";
+            u += *it;
+
+            QImage img;
+
+            _store->open( u, 0L );
+            {
+                istorestream in( _store );
+                in >> img;
+            }
+            _store->close();
+
+            KWImage image( this, img, *it );
+            imageCollection.insertImage( *it, image );
+            
+        }
+    }
+
+    QDictIterator<KWCharImage> it2( imageRequests );
+    for ( ; it2.current(); ++it2 )
+        it2.current()->setImage( imageCollection.getImage( it2.currentKey() ) );
+    
+    QDictIterator<KWPictureFrameSet> it3( imageRequests2 );
+    for ( ; it3.current(); ++it3 )
+        it3.current()->setImage( imageCollection.getImage( it3.currentKey() ) );
+
+    return true;
+}
+
 /*================================================================*/
 bool KWordDocument::save(ostream &out,const char* /* _format */)
 {
@@ -1424,7 +1506,7 @@ bool KWordDocument::save(ostream &out,const char* /* _format */)
 
     QDictIterator<KWImage> it = imageCollection.iterator();
     for ( ; it.current(); ++it )
-        out << indent << "<KEY=\"" << it.currentKey().latin1() << "\"/>" << endl;
+        out << indent << "<KEY key=\"" << it.currentKey().latin1() << "\"/>" << endl;
 
     out << etag << "</PIXMAPS>" << endl;
 
@@ -1453,10 +1535,16 @@ bool KWordDocument::completeSaving( KOStore::Store_ptr _store )
         u2 += "/";
         u2 += it.currentKey();
 
-        QString mime = "image/bmp";
+        QString format = QFileInfo( it.current()->getFilename() ).extension().upper();
+        if ( format == "JPG" )
+            format = "JPEG";
+        if ( QImage::outputFormats().find( format ) == -1 )
+            format = "BMP";
+
+        QString mime = "image/" + format.lower();
         _store->open( u2, mime.lower() );
         ostorestream out( _store );
-        out << *it.current();
+        writeImageToStream( out, *it.current(), format );
         out.flush();
         _store->close();
     }
@@ -3785,4 +3873,16 @@ long int KWordDocument::getPageNum( int bottom )
     }
 
     return num;
+}
+
+/*================================================================*/
+void KWordDocument::addImageRequest( const QString &filename, KWCharImage *img )
+{
+    imageRequests.insert( filename, img );
+}
+
+/*================================================================*/
+void KWordDocument::addImageRequest( const QString &filename, KWPictureFrameSet *fs )
+{
+    imageRequests2.insert( filename, fs );
 }

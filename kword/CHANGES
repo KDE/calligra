@@ -1323,3 +1323,5 @@ Reggie, 18.6.1999:
 Reggie, 19.6.1999:
 ------------------
 - Fixed initial repaint problem
+- Saving/Loading pictures into/from a document finally
+  works now

@@ -1203,10 +1203,19 @@ void KWPictureFrameSet::setFileName( QString _filename )
 
     filename = _filename;
 
-    KWImage _image = KWImage( doc, filename );
-    QString key;
+    bool del = false;
+    KWImage *_image = doc->getImageCollection()->getImage( filename );
+    if ( !_image )
+    {
+        del = true;
+        _image = new KWImage( doc, filename );
+    }
 
-    image = doc->getImageCollection()->getImage( _image, key );
+    QString key;
+    image = doc->getImageCollection()->getImage( *_image, key );
+
+    if ( del )
+        delete _image;
 }
 
 /*================================================================*/
@@ -1220,10 +1229,19 @@ void KWPictureFrameSet::setFileName( QString _filename, QSize _imgSize )
 
     filename = _filename;
 
-    KWImage _image = KWImage( doc, filename );
-    QString key;
+    bool del = false;
+    KWImage *_image = doc->getImageCollection()->getImage( filename );
+    if ( !_image )
+    {
+        del = true;
+        _image = new KWImage( doc, filename );
+    }
 
-    image = doc->getImageCollection()->getImage( _image, key, _imgSize );
+    QString key;
+    image = doc->getImageCollection()->getImage( *_image, key, _imgSize );
+
+    if ( del )
+        delete _image;
 }
 
 /*================================================================*/
@@ -1272,7 +1290,8 @@ void KWPictureFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 
             KWImage *_image = new KWImage();
             _image->load( parser, lst, doc );
-            setFileName( _image->getFilename() );
+            //setFileName( _image->getFilename() );
+            doc->addImageRequest( _image->getFilename(), this );
             delete _image;
         }
 

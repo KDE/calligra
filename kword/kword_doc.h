@@ -19,6 +19,8 @@
 class KWordDocument;
 class KWPage;
 class QPrinter;
+class KWCharImage;
+class KWPictureFrameSet;
 
 #include <koDocument.h>
 #include <koPrintExt.h>
@@ -44,8 +46,9 @@ class QPrinter;
 #include <qstring.h>
 #include <qstrlist.h>
 #include <qintdict.h>
-
+#include <qstringlist.h>
 #include <qrect.h>
+#include <qdict.h>
 
 /******************************************************************/
 /* Class: KWordChild                                              */
@@ -397,6 +400,9 @@ public:
     bool getPageLayoutChanged()
     { return pglChanged; }
 
+    void addImageRequest( const QString &filename, KWCharImage *img );
+    void addImageRequest( const QString &filename, KWPictureFrameSet *fs );
+    
 signals:
     void sig_imageModified();
     void sig_insertObject( KWordChild *_child, KWPartFrameSet* );
@@ -410,6 +416,7 @@ protected slots:
 protected:
     virtual void insertChild( KWordChild* );
     virtual void makeChildListIntern( KOffice::Document_ptr _doc, const char *_path );
+    virtual bool completeLoading( KOStore::Store_ptr /* _store */ );
 
     virtual void draw( QPaintDevice*, CORBA::Long _width, CORBA::Long _height,
                        CORBA::Float _scale );
@@ -504,12 +511,10 @@ protected:
     QString urlIntern;
     bool pglChanged;
 
+    QStringList pixmapKeys;
+    QDict<KWCharImage> imageRequests;
+    QDict<KWPictureFrameSet> imageRequests2;
+    
 };
 
 #endif
-
-
-
-
-
-
