@@ -4,6 +4,7 @@ noinst_LTLIBRARIES = libui.la
 INCLUDES = -I$(top_srcdir)/kivio/kiviopart -I.. \
 	-I$(top_srcdir)/kivio/kiviopart/kiviosdk \
 	-I$(top_srcdir)/kivio/kiviopart/config \
+	-I$(top_builddir)/kivio/kiviopart/config \
 	$(KOFFICE_INCLUDES) \
 	$(KOTEXT_INCLUDES) \
 	$(all_includes)
