@@ -288,18 +288,18 @@ VKoPainter::fillPath()
 	if( m_index == 0 ) return;
 
 	// find begin of last subpath
-    int find = -1;
-    for( int i = m_index - 1; i >= 0; i-- )
-    {
-        if( m_path[i].code == ART_MOVETO_OPEN || m_path[i].code == ART_MOVETO )
-        {
-            find = i;
-            break;
-        }
+	int find = -1;
+	for( int i = m_index - 1; i >= 0; i-- )
+	{
+		if( m_path[i].code == ART_MOVETO_OPEN || m_path[i].code == ART_MOVETO )
+		{
+			find = i;
+			break;
+		}
 	}
 
 	// for now, always close
-    if( find != -1 && ( m_path[ find ].x3 != m_path[ m_index - 1 ].x3 ||
+	if( find != -1 && ( m_path[ find ].x3 != m_path[ m_index - 1 ].x3 ||
 						m_path[ find ].y3 != m_path[ m_index - 1 ].y3 ) )
 	{
 		ensureSpace( m_index + 1 );
@@ -494,10 +494,9 @@ VKoPainter::drawVPath( ArtVpath *vec )
 	int af = 0;
 	int as = 0;
 	art_u32 fillColor = 0;
-    // filling
 
+	// filling
 	QColor color;
-
 	if( m_fill && m_fill->type() != VFill::none )
 	{
 		color = m_fill->color();

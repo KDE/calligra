@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001, 2002, 2003 The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -43,7 +42,6 @@ public:
 	VKoPainter( unsigned char *buffer, unsigned int w = 0, unsigned int h = 0, bool = true );
 	virtual ~VKoPainter();
 
-    //
 	virtual void resize( unsigned int w, unsigned int h );
 	virtual void begin();
 	virtual void end();
@@ -59,13 +57,13 @@ public:
 	virtual double zoomFactor() { return m_zoomFactor; }
 
 	// drawing
-    virtual void moveTo( const KoPoint & );
-    virtual void lineTo( const KoPoint & );
-    virtual void curveTo( const KoPoint &, const KoPoint &, const KoPoint & );
-    virtual void newPath();
-    virtual void fillPath();
+	virtual void moveTo( const KoPoint & );
+	virtual void lineTo( const KoPoint & );
+	virtual void curveTo( const KoPoint &, const KoPoint &, const KoPoint & );
+	virtual void newPath();
+	virtual void fillPath();
 	virtual void setFillRule( VFillRule );
-    virtual void strokePath();
+	virtual void strokePath();
 	virtual void setClipPath();
 	virtual void resetClipPath();
 
