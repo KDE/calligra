@@ -28,6 +28,7 @@
 #include <string>
 
 namespace wvWare {
+    class Style;
     class Parser;
 }
 
@@ -68,6 +69,7 @@ private:
     QDomElement m_formats;
     QDomElement m_oldLayout;
     int m_index;
+    const wvWare::Style* m_paragStyle;
     wvWare::SharedPtr<const wvWare::Word97::PAP> m_pap;
     KWordCharacterHandler* m_charHandler;
     wvWare::SharedPtr<wvWare::Parser> m_parser;

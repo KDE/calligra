@@ -48,7 +48,8 @@ wvWare::U8 KWordCharacterHandler::nonRequiredHyphen()
 
 Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDomElement& mainFramesetElement )
     : m_mainDocument( mainDocument ), m_mainFramesetElement( mainFramesetElement ), m_index( 0 ),
-      m_charHandler( new KWordCharacterHandler ), m_parser( wvWare::ParserFactory::createParser( fileName ) )
+      m_paragStyle( 0L ), m_charHandler( new KWordCharacterHandler ),
+      m_parser( wvWare::ParserFactory::createParser( fileName ) )
 {
     if ( m_parser ) { // 0 in case of major error (e.g. unsupported format)
         m_parser->setSpecialCharacterHandler( m_charHandler );
@@ -115,12 +116,18 @@ void Document::paragraphStart( wvWare::SharedPtr<const wvWare::Word97::PAP> pap 
 {
     m_formats = m_mainDocument.createElement( "FORMATS" );
     m_pap = pap;
+    const wvWare::StyleSheet& styles = m_parser->styleSheet();
+    m_paragStyle = styles.styleByIndex( m_pap->istd );
+    Q_ASSERT( m_paragStyle );
 }
 
 void Document::paragraphEnd()
 {
-    // TODO: get style name (and properties) from pap.istd, in paragraphStart
-    writeOutParagraph( "Standard", m_paragraph );
+    if ( m_paragStyle ) {
+        QConstString styleName = Conversion::string( m_paragStyle->name() );
+        writeOutParagraph( styleName.string(), m_paragraph );
+    } else
+        writeOutParagraph( "Standard", m_paragraph );
 }
 
 void Document::runOfText( const wvWare::UString& text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp )
