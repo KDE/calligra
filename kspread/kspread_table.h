@@ -40,7 +40,7 @@ class DCOPObject;
 class KPrinter;
 
 #include <koDocument.h>
-#include <koDocumentChild.h>
+#include <koDocumentChild.h>  
 
 #include <qpen.h>
 #include <qptrlist.h>
@@ -257,13 +257,25 @@ public:
      * @see KSpreadTabBar::renameTab
      * @see #tableName
      */
-    bool setTableName( const QString& name, bool init = FALSE,bool makeUndo=true );
-
-    virtual QDomElement save( QDomDocument& );
+    bool setTableName( const QString& name, bool init = FALSE, bool makeUndo=true );
+    
+    /**
+     * Saves the table and all it's children in XML format
+     */
+    virtual QDomElement saveXML( QDomDocument& );
+    /**
+     * Loads the table and all it's children in XML format
+     */
     virtual bool loadXML( const QDomElement& );
-    virtual bool loadChildren( KoStore* _store );
-
+    
+    /**
+     * Saves a children
+     */
     virtual bool saveChildren( KoStore* _store, const QString &_path );
+    /**
+     * Loads a children
+     */
+    virtual bool loadChildren( KoStore* _store );
 
     bool isLoading();
 
@@ -1282,8 +1294,219 @@ protected:
 
     QPoint m_oldPos;
     int m_iScrollPosX;
-    int m_iScrollPosY;
+    int m_iScrollPosY;  
+    
+    /**********************/
+    /* Printout functions */
+    /**********************/
 
+public:
+
+    /**
+     * @return the printable width of the paper in millimeters.
+     */
+    float printableWidth() { return m_paperWidth - m_leftBorder - m_rightBorder; }
+
+    /**
+     * @return the printable height of the paper in millimeters.
+     */
+    float printableHeight()const { return m_paperHeight - m_topBorder - m_bottomBorder; }
+
+    float paperHeight()const { return m_paperHeight; }
+    float paperWidth()const { return m_paperWidth; }
+
+    /**
+     * @return the left border in millimeters
+     */
+    float leftBorder()const { return m_leftBorder; }
+    /**
+     * @return the right border in millimeters
+     */
+    float rightBorder()const { return m_rightBorder; }
+    /**
+     * @return the top border in millimeters
+     */
+    float topBorder()const { return m_topBorder; }
+    /**
+     * @return the bottom border in millimeters
+     */
+    float bottomBorder()const { return m_bottomBorder; }
+
+    /**
+     * @return the orientation of the paper.
+     */
+    KoOrientation orientation() { return m_orientation; }
+    /**
+     * @return the ascii name of the paper orientation ( like Portrait, Landscape )
+     */
+    const char* orientationString();
+
+    /**
+     * @return the paper format.
+     */
+    KoFormat paperFormat()const { return m_paperFormat; }
+    /**
+     * @return the ascii name of the paper format ( like A4, Letter etc. )
+     */
+    QString paperFormatString()const;
+
+    /**
+     * @return the unit paper
+     */
+    KoUnit::Unit paperUnit()const { return m_paperUnit; }
+
+    void setPaperFormat(KoFormat _format) {m_paperFormat=_format;}
+
+    void setPaperOrientation(KoOrientation _orient) { m_orientation=_orient;}
+
+    void setPaperUnit(KoUnit::Unit _unit) { m_paperUnit=_unit;}
+
+     /**
+     * Changes the paper layout and repaints the currently displayed KSpreadTable.
+     */
+    void setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBoder,
+                         KoFormat _paper, KoOrientation orientation );
+    /**
+     * A convenience function using a QString as paper format and orientation.
+     */
+    void setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBoder,
+                         const QString& _paper, const QString& _orientation );
+
+    QString headLeft( int _p, const QString &_t  ) { if ( m_headLeft.isNull() ) return "";
+    return completeHeading( m_headLeft, _p, _t ); }
+    QString headMid( int _p, const QString &_t ) { if ( m_headMid.isNull() ) return "";
+    return completeHeading( m_headMid, _p, _t ); }
+    QString headRight( int _p, const QString &_t ) { if ( m_headRight.isNull() ) return "";
+    return completeHeading( m_headRight, _p, _t ); }
+    QString footLeft( int _p, const QString &_t ) { if ( m_footLeft.isNull() ) return "";
+    return completeHeading( m_footLeft, _p, _t ); }
+    QString footMid( int _p, const QString &_t ) { if ( m_footMid.isNull() ) return "";
+    return completeHeading( m_footMid, _p, _t ); }
+    QString footRight( int _p, const QString &_t ) { if ( m_footRight.isNull() ) return "";
+    return completeHeading( m_footRight, _p, _t ); }
+
+    QString headLeft() { if ( m_headLeft.isNull() ) return ""; return m_headLeft; }
+    QString headMid() { if ( m_headMid.isNull() ) return ""; return m_headMid; }
+    QString headRight() { if ( m_headRight.isNull() ) return ""; return m_headRight; }
+    QString footLeft() { if ( m_footLeft.isNull() ) return ""; return m_footLeft; }
+    QString footMid() { if ( m_footMid.isNull() ) return ""; return m_footMid; }
+    QString footRight() { if ( m_footRight.isNull() ) return ""; return m_footRight; }
+
+    /**
+     * Replaces in _text all _search text parts by _replace text parts.
+     * Included is a test to not change if _search == _replace.
+     * The arguments should not include neither the beginning "<" nor the leading ">", this is already
+     * included internally.
+     */
+    void replaceHeadFootLineMacro ( QString &_text, const QString &_search, const QString &_replace );
+    /**
+     * Replaces in _text all page macros by the i18n-version of the macros
+     */
+    QString localizeHeadFootLine ( const QString &_text );
+    /**
+     * Replaces in _text all i18n-versions of the page macros by the internal version of the macros
+     */
+    QString delocalizeHeadFootLine ( const QString &_text );
+
+    void setHeadFootLine( const QString &_headl, const QString &_headm, const QString &_headr,
+                          const QString &_footl, const QString &_footm, const QString &_footr );
+
+
+public slots:
+    /**
+     * Open a dialog for the "Page Layout".
+     *
+     * @see KoPageLayoutDia
+     */
+    void paperLayoutDlg();
+
+protected: 
+
+    /**
+     * Looks at @ref #m_paperFormat and calculates @ref #m_paperWidth and @ref #m_paperHeight.
+     */
+    void calcPaperSize();
+
+    /**
+     * Replaces macros like <name>, <file>, <date> etc. in the string and
+     * returns the modified one.
+     *
+     * @param _page is the page number for which the heading is produced.
+     * @param _KSpreadTable is the name of the KSpreadTable for which we generate the headings.
+     */
+    QString completeHeading( const QString &_data, int _page, const QString &_table );
+
+    /**
+     * The orientation of the paper.
+     */
+    KoOrientation m_orientation;
+    /**
+     * Tells about the currently seleced paper size.
+     */
+    KoFormat m_paperFormat;
+
+    KoUnit::Unit m_paperUnit;
+
+    /**
+     * The paper width in millimeters. Dont change this value, it is calculated by
+     * @ref #calcPaperSize from the value @ref #m_paperFormat.
+     */
+    float m_paperWidth;
+    /**
+     * The paper height in millimeters. Dont change this value, it is calculated by
+     * @ref #calcPaperSize from the value @ref #m_paperFormat.
+     */
+    float m_paperHeight;
+    /**
+     * The left border in millimeters.
+     */
+    float m_leftBorder;
+    /**
+     * The right border in millimeters.
+     */
+    float m_rightBorder;
+    /**
+     * The top border in millimeters.
+     */
+    float m_topBorder;
+    /**
+     * The right border in millimeters.
+     */
+    float m_bottomBorder;
+
+    /**
+     * Header string. The string may contains makros. That means
+     * it has to be processed before printing.
+     */
+    QString m_headLeft;
+    /**
+     * Header string. The string may contains makros. That means
+     * it has to be processed before printing.
+     */
+    QString m_headRight;
+    /**
+     * Header string. The string may contains makros. That means
+     * it has to be processed before printing.
+     */
+    QString m_headMid;
+    /**
+     * Footer string. The string may contains makros. That means
+     * it has to be processed before printing.
+     */
+    QString m_footLeft;
+    /**
+     * Footer string. The string may contains makros. That means
+     * it has to be processed before printing.
+     */
+    QString m_footRight;
+    /**
+     * Footer string. The string may contains makros. That means
+     * it has to be processed before printing.
+     */
+    QString m_footMid;
+
+    
+    
 public:
     // see kspread_table.cc for an explanation of this
     // this is for type B and also for type A (better use CellWorkerTypeA for that)

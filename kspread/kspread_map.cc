@@ -100,7 +100,7 @@ QDomElement KSpreadMap::save( QDomDocument& doc )
   QPtrListIterator<KSpreadTable> it( m_lstTables );
   for( ; it.current(); ++it )
   {
-    QDomElement e = it.current()->save( doc );
+    QDomElement e = it.current()->saveXML( doc );
     if ( e.isNull() )
       return e;
     mymap.appendChild( e );

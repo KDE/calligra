@@ -33,41 +33,6 @@ bool KSpreadDocIface::saveAs( const QString& )
 }
 
 
-float KSpreadDocIface::paperHeight()const
-{
-    return doc->paperHeight();
-}
-
-float KSpreadDocIface::paperWidth()const
-{
-    return doc->paperWidth();
-}
-
-float KSpreadDocIface::leftBorder()const
-{
-    return doc->leftBorder();
-}
-
-float KSpreadDocIface::rightBorder()const
-{
-    return doc->rightBorder();
-}
-
-float KSpreadDocIface::topBorder()const
-{
-    return doc->topBorder();
-}
-
-float KSpreadDocIface::bottomBorder()const
-{
-    return doc->bottomBorder();
-}
-
-QString KSpreadDocIface::paperFormatString() const
-{
-    return doc->paperFormatString();
-}
-
 bool KSpreadDocIface::showColHeader()const
 {
     return doc->getShowColHeader();
@@ -111,36 +76,6 @@ bool KSpreadDocIface::showStatusBar()const
 bool KSpreadDocIface::showTabBar()const
 {
     return doc->getShowTabBar();
-}
-
-QString KSpreadDocIface::headLeft()const
-{
-    return doc->headLeft();
-}
-
-QString KSpreadDocIface::headMid()const
-{
-    return doc->headMid();
-}
-
-QString KSpreadDocIface::headRight()const
-{
-    return doc->headRight();
-}
-
-QString KSpreadDocIface::footLeft()const
-{
-    return doc->footLeft();
-}
-
-QString KSpreadDocIface::footMid()const
-{
-    return doc->footMid();
-}
-
-QString KSpreadDocIface::footRight()const
-{
-    return doc->footRight();
 }
 
 void KSpreadDocIface::setShowVerticalScrollBar(bool _show)
@@ -187,42 +122,5 @@ void KSpreadDocIface::setShowMessageError(bool _show)
 bool KSpreadDocIface::showMessageError()const
 {
     return doc->getShowMessageError();
-}
-
-void KSpreadDocIface::setHeaderLeft(const QString & text)
-{
-    doc->setHeadFootLine( text,headMid(), headRight(),
-                          footLeft(), footMid(),footRight() );
-}
-
-void KSpreadDocIface::setHeaderMiddle(const QString & text)
-{
-    doc->setHeadFootLine( headLeft(),text, headRight(),
-                          footLeft(), footMid(),footRight() );
-
-}
-
-void KSpreadDocIface::setHeaderRight(const QString & text)
-{
-    doc->setHeadFootLine( headLeft(),headMid(), text,
-                          footLeft(), footMid(),footRight() );
-}
-
-void KSpreadDocIface::setFooterLeft(const QString & text)
-{
-    doc->setHeadFootLine( headLeft(),headMid(), headRight(),
-                          text, footMid(),footRight() );
-}
-
-void KSpreadDocIface::setFooterMiddle(const QString & text)
-{
-    doc->setHeadFootLine( headLeft(),headMid(), headRight(),
-                          footLeft(), text,footRight() );
-}
-
-void KSpreadDocIface::setFooterRight(const QString & text)
-{
-    doc->setHeadFootLine( headLeft(),headMid(), headRight(),
-                          footLeft(), footMid(),text );
 }
 

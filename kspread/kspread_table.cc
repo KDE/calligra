@@ -21,14 +21,18 @@
 #include <ctype.h>
 #include <float.h>
 #include <math.h>
+#include <pwd.h>
+#include <unistd.h>
 
 #include <qapplication.h>
 #include <qclipboard.h>
 #include <qpicture.h>
-#include <qdragobject.h>
+#include <qdragobject.h>   
+#include <qregexp.h>
 
 #include <koReplace.h>
-#include <kprinter.h>
+#include <kprinter.h> 
+#include <koDocumentInfo.h>
 
 #include "kspread_global.h"
 #include "kspread_undo.h"
@@ -262,6 +266,19 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const QString &tableName, const ch
   m_oldPos=QPoint(1,1);
   m_iScrollPosX=0;
   m_iScrollPosY=0;
+  
+  //Init the printing options
+  m_leftBorder = 20.0;
+  m_rightBorder = 20.0;
+  m_topBorder = 20.0;
+  m_bottomBorder = 20.0;
+  m_paperFormat = PG_DIN_A4;
+  m_paperUnit = KoUnit::U_MM;
+  m_paperWidth = PG_A4_WIDTH;
+  m_paperHeight = PG_A4_HEIGHT;
+  m_orientation = PG_PORTRAIT;
+  calcPaperSize();
+  
 }
 
 bool KSpreadTable::isEmpty( unsigned long int x, unsigned long int y )
@@ -5198,7 +5215,6 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
                   //kdDebug() << "loadSelection: cell at " << (col+coff) << "," << (row+roff) << " with roff,coff= "
                   //          << roff << "," << coff << ", _xshift: " << _xshift << ", _yshift: " << _yshift << endl;
 
-//                    bool needInsert = FALSE;
                     cell = cellAt( col + coff, row + roff );
 
                     if ( ( cell->isDefault() ) || ( op == OverWrite && sp == Normal ) ) //we will generate a new or replace the existing cell
@@ -5659,8 +5675,8 @@ void KSpreadTable::print( QPainter &painter, KPrinter *_printer )
 
     // How much space is on every page for table content ?
     QRect rect;
-    rect.setCoords( 0, 0, (int)( MM_TO_POINT ( m_pDoc->printableWidth()  )),
-                          (int)( MM_TO_POINT ( m_pDoc->printableHeight() )) );
+    rect.setCoords( 0, 0, (int)( MM_TO_POINT ( printableWidth()  )),
+                          (int)( MM_TO_POINT ( printableHeight() )) );
 
     // Up to this row everything is already handled
     int bottom = 0;
@@ -5761,47 +5777,47 @@ void KSpreadTable::print( QPainter &painter, KPrinter *_printer )
         QFont font( "Times", 10 );
         painter.setFont( font );
         QFontMetrics fm = painter.fontMetrics();
-        w = fm.width( m_pDoc->headLeft( pagenr, m_strName ) );
+        w = fm.width( headLeft( pagenr, m_strName ) );
         if ( w > 0 )
-            painter.drawText( (int)( MM_TO_POINT ( m_pDoc->leftBorder() )),
-                              (int)( MM_TO_POINT ( 10.0 )), m_pDoc->headLeft( pagenr, m_strName ) );
-        w = fm.width( m_pDoc->headMid( pagenr, m_strName.latin1() ) );
+            painter.drawText( (int)( MM_TO_POINT ( leftBorder() )),
+                              (int)( MM_TO_POINT ( 10.0 )), headLeft( pagenr, m_strName ) );
+        w = fm.width( headMid( pagenr, m_strName.latin1() ) );
         if ( w > 0 )
-            painter.drawText( (int)( MM_TO_POINT ( m_pDoc->leftBorder()) +
-                                     ( MM_TO_POINT ( m_pDoc->printableWidth()) - (float)w ) / 2.0 ),
-                              (int)( MM_TO_POINT ( 10.0 )), m_pDoc->headMid( pagenr, m_strName ) );
-        w = fm.width( m_pDoc->headRight( pagenr, m_strName ) );
+            painter.drawText( (int)( MM_TO_POINT ( leftBorder()) +
+                                     ( MM_TO_POINT ( printableWidth()) - (float)w ) / 2.0 ),
+                              (int)( MM_TO_POINT ( 10.0 )), headMid( pagenr, m_strName ) );
+        w = fm.width( headRight( pagenr, m_strName ) );
         if ( w > 0 )
-            painter.drawText( (int)( MM_TO_POINT ( m_pDoc->leftBorder()) +
-                                     MM_TO_POINT ( m_pDoc->printableWidth()) - (float)w ),
-                              (int)( MM_TO_POINT ( 10.0 )), m_pDoc->headRight( pagenr, m_strName) );
+            painter.drawText( (int)( MM_TO_POINT ( leftBorder()) +
+                                     MM_TO_POINT ( printableWidth()) - (float)w ),
+                              (int)( MM_TO_POINT ( 10.0 )), headRight( pagenr, m_strName) );
 
         // print foot line
-        w = fm.width( m_pDoc->footLeft( pagenr, m_strName ) );
+        w = fm.width( footLeft( pagenr, m_strName ) );
         if ( w > 0 )
-            painter.drawText( (int)( MM_TO_POINT ( m_pDoc->leftBorder() )),
-                              (int)( MM_TO_POINT ( m_pDoc->paperHeight() - 10.0 )),
-                              m_pDoc->footLeft( pagenr, m_strName ) );
-        w = fm.width( m_pDoc->footMid( pagenr, m_strName ) );
+            painter.drawText( (int)( MM_TO_POINT ( leftBorder() )),
+                              (int)( MM_TO_POINT ( paperHeight() - 10.0 )),
+                              footLeft( pagenr, m_strName ) );
+        w = fm.width( footMid( pagenr, m_strName ) );
         if ( w > 0 )
-            painter.drawText( (int)( MM_TO_POINT ( m_pDoc->leftBorder() )+
-                                     ( MM_TO_POINT ( m_pDoc->printableWidth()) - (float)w ) / 2.0 ),
-                              (int)( MM_TO_POINT  ( m_pDoc->paperHeight() - 10.0 ) ),
-                              m_pDoc->footMid( pagenr, m_strName ) );
-        w = fm.width( m_pDoc->footRight( pagenr, m_strName ) );
+            painter.drawText( (int)( MM_TO_POINT ( leftBorder() )+
+                                     ( MM_TO_POINT ( printableWidth()) - (float)w ) / 2.0 ),
+                              (int)( MM_TO_POINT  ( paperHeight() - 10.0 ) ),
+                              footMid( pagenr, m_strName ) );
+        w = fm.width( footRight( pagenr, m_strName ) );
         if ( w > 0 )
-            painter.drawText( (int)( MM_TO_POINT ( m_pDoc->leftBorder()) +
-                                     MM_TO_POINT ( m_pDoc->printableWidth()) - (float)w ),
-                              (int)( MM_TO_POINT ( m_pDoc->paperHeight() - 10.0 ) ),
-                              m_pDoc->footRight( pagenr, m_strName ) );
+            painter.drawText( (int)( MM_TO_POINT ( leftBorder()) +
+                                     MM_TO_POINT ( printableWidth()) - (float)w ),
+                              (int)( MM_TO_POINT ( paperHeight() - 10.0 ) ),
+                              footRight( pagenr, m_strName ) );
 
-        painter.translate( MM_TO_POINT ( m_pDoc->leftBorder()),
-                           MM_TO_POINT ( m_pDoc->topBorder() ));
+        painter.translate( MM_TO_POINT ( leftBorder()),
+                           MM_TO_POINT ( topBorder() ));
         // Print the page
         printPage( painter, *it, *fit );
 
-        painter.translate( - MM_TO_POINT ( m_pDoc->leftBorder()),
-                           - MM_TO_POINT ( m_pDoc->topBorder() ));
+        painter.translate( - MM_TO_POINT ( leftBorder()),
+                           - MM_TO_POINT ( topBorder() ));
 
         if ( pagenr < (int)page_list.count() )
             _printer->newPage();
@@ -5997,7 +6013,7 @@ QDomDocument KSpreadTable::saveCellRect( const QRect &_rect )
     return doc;
 }
 
-QDomElement KSpreadTable::save( QDomDocument& doc )
+QDomElement KSpreadTable::saveXML( QDomDocument& doc )
 {
     QDomElement table = doc.createElement( "table" );
     table.setAttribute( "name", m_strName );
@@ -6011,6 +6027,60 @@ QDomElement KSpreadTable::save( QDomDocument& doc )
     table.setAttribute( "hidezero", (int)m_bHideZero);
     table.setAttribute( "firstletterupper", (int)m_bFirstLetterUpper);
     table.setAttribute( "borders1.2", 1);
+
+    // paper parameters
+    QDomElement paper = doc.createElement( "paper" );
+    paper.setAttribute( "format", paperFormatString() );
+    paper.setAttribute( "orientation", orientationString() );
+    table.appendChild( paper );
+    
+    QDomElement borders = doc.createElement( "borders" );
+    borders.setAttribute( "left", leftBorder() );
+    borders.setAttribute( "top", topBorder() );
+    borders.setAttribute( "right", rightBorder() );
+    borders.setAttribute( "bottom", bottomBorder() );
+    paper.appendChild( borders );
+    QDomElement head = doc.createElement( "head" );
+    paper.appendChild( head );
+    if ( !headLeft().isEmpty() )
+    {
+      QDomElement left = doc.createElement( "left" );
+      head.appendChild( left );
+      left.appendChild( doc.createTextNode( headLeft() ) );
+    }
+    if ( !headMid().isEmpty() )
+    {
+      QDomElement center = doc.createElement( "center" );
+      head.appendChild( center );
+      center.appendChild( doc.createTextNode( headMid() ) );
+    }
+    if ( !headRight().isEmpty() )
+    {
+      QDomElement right = doc.createElement( "right" );
+      head.appendChild( right );
+      right.appendChild( doc.createTextNode( headRight() ) );
+    }
+    QDomElement foot = doc.createElement( "foot" );
+    paper.appendChild( foot );
+    if ( !footLeft().isEmpty() )
+    {
+      QDomElement left = doc.createElement( "left" );
+      foot.appendChild( left );
+      left.appendChild( doc.createTextNode( footLeft() ) );
+    }
+    if ( !footMid().isEmpty() )
+    {
+      QDomElement center = doc.createElement( "center" );
+      foot.appendChild( center );
+      center.appendChild( doc.createTextNode( footMid() ) );
+    }
+    if ( !footRight().isEmpty() )
+    {
+      QDomElement right = doc.createElement( "right" );
+      foot.appendChild( right );
+      right.appendChild( doc.createTextNode( footRight() ) );
+    }
+       
     // Save all cells.
     KSpreadCell* c = m_cells.firstCell();
     for( ;c; c = c->nextCell() )
@@ -6132,7 +6202,59 @@ bool KSpreadTable::loadXML( const QDomElement& table )
     {
         m_bFirstLetterUpper = (int)table.attribute("firstletterupper").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
+    }       
+    
+    // Load the paper layout
+    QDomElement paper = table.namedItem( "paper" ).toElement();
+    if ( !paper.isNull() )
+    {
+      QString format = paper.attribute( "format" );
+      QString orientation = paper.attribute( "orientation" );
+
+      // <borders>
+      QDomElement borders = paper.namedItem( "borders" ).toElement();
+      if ( !borders.isNull() )
+      {
+        float left = borders.attribute( "left" ).toFloat();
+        float right = borders.attribute( "right" ).toFloat();
+        float top = borders.attribute( "top" ).toFloat();
+        float bottom = borders.attribute( "bottom" ).toFloat();
+        setPaperLayout( left, top, right, bottom, format, orientation );
+      }
+      QString hleft, hright, hcenter;
+      QString fleft, fright, fcenter;
+      // <head>
+      QDomElement head = paper.namedItem( "head" ).toElement();
+      if ( !head.isNull() )
+      {
+        QDomElement left = head.namedItem( "left" ).toElement();
+        if ( !left.isNull() )
+          hleft = left.text();
+        QDomElement center = head.namedItem( "center" ).toElement();
+        if ( !center.isNull() )
+        hcenter = center.text();
+        QDomElement right = head.namedItem( "right" ).toElement();
+        if ( !right.isNull() )
+          hright = right.text();
+      }
+      // <foot>
+      QDomElement foot = paper.namedItem( "foot" ).toElement();
+      if ( !foot.isNull() )
+      {
+        QDomElement left = foot.namedItem( "left" ).toElement();
+        if ( !left.isNull() )
+          fleft = left.text();
+        QDomElement center = foot.namedItem( "center" ).toElement();
+        if ( !center.isNull() )
+          fcenter = center.text();
+        QDomElement right = foot.namedItem( "right" ).toElement();
+        if ( !right.isNull() )
+          fright = right.text();
+      }
+      setHeadFootLine( hleft, hcenter, hright, fleft, fcenter, fright);
     }
+
+
     // Load the cells
     QDomNode n = table.firstChild();
     while( !n.isNull() )
@@ -6221,7 +6343,7 @@ bool KSpreadTable::isOnNewPageX( int _column )
     float x = columnLayout( col )->mmWidth();
     while ( ( col <= _column ) && ( col < KS_colMax ) )
     {
-        if ( x > m_pDoc->printableWidth() )
+        if ( x > printableWidth() )
         {
             if ( col == _column )
                 return TRUE;
@@ -6242,7 +6364,7 @@ bool KSpreadTable::isOnNewPageY( int _row )
     float y = rowLayout( row )->mmHeight();
     while ( ( row <= _row ) && ( row < KS_rowMax ) )
     {
-        if ( y > m_pDoc->printableHeight() )
+        if ( y > printableHeight() )
         {
             if ( row == _row )
                 return TRUE;
@@ -6723,7 +6845,302 @@ void KSpreadTable::convertObscuringBorders()
       }
     }
   }
+}         
+
+/**********************
+ * Printout Functions *
+ **********************/
+
+void KSpreadTable::paperLayoutDlg()
+{
+    KoPageLayout pl;
+    pl.format = paperFormat();
+    pl.orientation = orientation();
+    pl.ptWidth = MM_TO_POINT( m_paperWidth );
+    pl.ptHeight = MM_TO_POINT( m_paperHeight );
+    pl.ptLeft = MM_TO_POINT( leftBorder() );
+    pl.ptRight = MM_TO_POINT(  rightBorder() );
+    pl.ptTop = MM_TO_POINT(  topBorder() );
+    pl.ptBottom = MM_TO_POINT(  bottomBorder() );
+
+    KoHeadFoot hf;
+    hf.headLeft  = localizeHeadFootLine( headLeft()  );
+    hf.headRight = localizeHeadFootLine( headRight() );
+    hf.headMid   = localizeHeadFootLine( headMid()   );
+    hf.footLeft  = localizeHeadFootLine( footLeft()  );
+    hf.footRight = localizeHeadFootLine( footRight() );
+    hf.footMid   = localizeHeadFootLine( footMid()   );
+
+    KoUnit::Unit unit = paperUnit();
+
+    if ( !KoPageLayoutDia::pageLayout( pl, hf, FORMAT_AND_BORDERS | HEADER_AND_FOOTER, unit ) )
+        return;
+
+    if ( pl.format == PG_CUSTOM )
+    {
+        m_paperWidth = POINT_TO_MM(pl.ptWidth);
+        m_paperHeight = POINT_TO_MM(pl.ptHeight);
+    }
+
+    setPaperLayout( POINT_TO_MM(pl.ptLeft), POINT_TO_MM(pl.ptTop), POINT_TO_MM(pl.ptRight), POINT_TO_MM(pl.ptBottom), pl.format, pl.orientation );
+
+    setHeadFootLine( localizeHeadFootLine( hf.headLeft  ),
+                     localizeHeadFootLine( hf.headMid   ),
+                     localizeHeadFootLine( hf.headRight ),
+                     localizeHeadFootLine( hf.footLeft  ),
+                     localizeHeadFootLine( hf.footMid   ),
+                     localizeHeadFootLine( hf.footRight ) );
+
+    setPaperUnit( unit );
 }
+
+
+void KSpreadTable::replaceHeadFootLineMacro ( QString &_text, const QString &_search, const QString &_replace )
+{
+    if ( _search != _replace )
+        _text.replace ( QRegExp( "<" + _search + ">" ), "<" + _replace + ">" );
+}
+
+QString KSpreadTable::localizeHeadFootLine ( const QString &_text )
+{
+    QString tmp = _text;
+
+    /*
+      i18n:
+      Please use the same words (even upper/lower case) as in
+      KoPageLayoutDia.cc function setupTab2(), without the brakets "<" and ">"
+    */
+    replaceHeadFootLineMacro ( tmp, "page",   i18n("page") );
+    replaceHeadFootLineMacro ( tmp, "file",   i18n("file") );
+    replaceHeadFootLineMacro ( tmp, "name",   i18n("name") );
+    replaceHeadFootLineMacro ( tmp, "time",   i18n("time") );
+    replaceHeadFootLineMacro ( tmp, "date",   i18n("date") );
+    replaceHeadFootLineMacro ( tmp, "author", i18n("author") );
+    replaceHeadFootLineMacro ( tmp, "email",  i18n("email") );
+    replaceHeadFootLineMacro ( tmp, "org",    i18n("org") );
+    replaceHeadFootLineMacro ( tmp, "table",  i18n("table") );
+
+    return tmp;
+}
+
+
+QString KSpreadTable::delocalizeHeadFootLine ( const QString &_text )
+{
+    QString tmp = _text;
+
+    /*
+      i18n:
+      Please use the same words (even upper/lower case) as in
+      KoPageLayoutDia.cc function setupTab2(), without the brakets "<" and ">"
+    */
+    replaceHeadFootLineMacro ( tmp, i18n("page"),   "page" );
+    replaceHeadFootLineMacro ( tmp, i18n("file"),   "file" );
+    replaceHeadFootLineMacro ( tmp, i18n("name"),   "name" );
+    replaceHeadFootLineMacro ( tmp, i18n("time"),   "time" );
+    replaceHeadFootLineMacro ( tmp, i18n("date"),   "date" );
+    replaceHeadFootLineMacro ( tmp, i18n("author"), "author" );
+    replaceHeadFootLineMacro ( tmp, i18n("email"),  "email" );
+    replaceHeadFootLineMacro ( tmp, i18n("org"),    "org" );
+    replaceHeadFootLineMacro ( tmp, i18n("table"),  "table" );
+
+    return tmp;
+}
+
+void KSpreadTable::setHeadFootLine( const QString &_headl, const QString &_headm, const QString &_headr,
+                                  const QString &_footl, const QString &_footm, const QString &_footr )
+{
+  m_headLeft  = _headl;
+  m_headRight = _headr;
+  m_headMid   = _headm;
+  m_footLeft  = _footl;
+  m_footRight = _footr;
+  m_footMid   = _footm;
+
+  m_pDoc->setModified( TRUE );
+}
+
+void KSpreadTable::setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBorder,
+                                   KoFormat _paper, KoOrientation _orientation )
+{
+  m_leftBorder   = _leftBorder;
+  m_rightBorder  = _rightBorder;
+  m_topBorder    = _topBorder;
+  m_bottomBorder = _bottomBorder;
+  m_orientation  = _orientation;
+  m_paperFormat  = _paper;
+
+  calcPaperSize();
+
+//  QPtrListIterator<KoView> it( views() );
+//  for( ;it.current(); ++it )
+//  {
+//        KSpreadView *v = static_cast<KSpreadView *>( it.current() );
+        // We need to trigger the appropriate repaintings in the cells near the
+        // border of the page. The easiest way for this is to turn the borders
+        // off and on (or on and off if they were off).
+//        bool bBorderWasShown = v->activeTable()->isShowPageBorders();
+//        v->activeTable()->setShowPageBorders( !bBorderWasShown );
+//        v->activeTable()->setShowPageBorders( bBorderWasShown );
+//  }
+
+  m_pDoc->setModified( TRUE );
+}
+
+void KSpreadTable::setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBorder,
+                                   const QString& _paper, const QString& _orientation )
+{
+    KoFormat f = paperFormat();
+    KoOrientation o = orientation();
+
+    QString paper( _paper );
+    if ( paper[0].isDigit() ) // Custom format
+    {
+        const int i = paper.find( 'x' );
+        if ( i < 0 )
+        {
+            // We have nothing useful, so assume ISO A4
+            f = PG_DIN_A4;
+        }
+        else
+        {
+            f = PG_CUSTOM;
+            m_paperWidth  = paper.left(i).toFloat();
+            m_paperHeight = paper.mid(i+1).toFloat();
+            if ( m_paperWidth < 10.0 )
+                m_paperWidth = PG_A4_WIDTH;
+            if ( m_paperHeight < 10.0 )
+                m_paperWidth = PG_A4_HEIGHT;
+        }
+    }
+    else
+    {
+        f = KoPageFormat::formatFromString( paper );
+        if ( f == PG_CUSTOM )
+            // We have no idea about height or width, therefore assume ISO A4
+            f = PG_DIN_A4;
+    }
+
+    if ( _orientation == "Portrait" )
+        o = PG_PORTRAIT;
+    else if ( _orientation == "Landscape" )
+        o = PG_LANDSCAPE;
+
+    setPaperLayout( _leftBorder, _topBorder, _rightBorder, _bottomBorder, f, o );
+}
+
+void KSpreadTable::calcPaperSize()
+{
+    if ( m_paperFormat != PG_CUSTOM )
+    {
+        m_paperWidth = KoPageFormat::width( m_paperFormat, m_orientation );
+        m_paperHeight = KoPageFormat::height( m_paperFormat, m_orientation );
+    }
+}
+
+QString KSpreadTable::paperFormatString()const
+{
+    if ( m_paperFormat == PG_CUSTOM )
+    {
+      QString tmp;
+      tmp.sprintf( "%fx%f", m_paperWidth, m_paperHeight );
+      return tmp;
+    }
+
+    return KoPageFormat::formatString( m_paperFormat );
+}
+
+const char* KSpreadTable::orientationString()
+{
+    switch( m_orientation )
+    {
+    case KPrinter::Portrait:
+        return "Portrait";
+    case KPrinter::Landscape:
+        return "Landscape";
+    }
+
+    assert( 0 );
+    return 0;
+}
+
+QString KSpreadTable::completeHeading( const QString &_data, int _page, const QString &_table )
+{
+    QString page(QString::number(_page));
+
+    QString pathFileName(m_pDoc->url().path());
+    if ( pathFileName.isNull() )
+        pathFileName="";
+
+    QString fileName(m_pDoc->url().fileName());
+    if( fileName.isNull())
+        fileName="";
+
+    QString t(QTime::currentTime().toString());
+    QString d(QDate::currentDate().toString());
+    QString ta;
+    if ( !_table.isEmpty() )
+        ta = _table;
+
+    KoDocumentInfo * info = m_pDoc->documentInfo();
+    KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
+    QString full_name;
+    QString email_addr;
+    QString organization;
+    QString tmp;
+    if ( !authorPage )
+        kdWarning() << "Author information not found in document Info !" << endl;
+    else
+    {
+        full_name = authorPage->fullName();
+        email_addr = authorPage->email();
+        organization = authorPage->company();
+    }
+
+    char hostname[80];
+    struct passwd *p;
+
+    p = getpwuid(getuid());
+    gethostname(hostname, sizeof(hostname));
+
+    if(full_name.isEmpty())
+ 	full_name=p->pw_gecos;
+
+    if( email_addr.isEmpty())
+	email_addr = QString("%1@%2").arg(p->pw_name).arg(hostname);
+
+    tmp = _data;
+    int pos = 0;
+    while ( ( pos = tmp.find( "<page>", pos ) ) != -1 )
+        tmp.replace( pos, 6, page );
+    pos = 0;
+    while ( ( pos = tmp.find( "<file>", pos ) ) != -1 )
+        tmp.replace( pos, 6, pathFileName );
+    pos = 0;
+    while ( ( pos = tmp.find( "<name>", pos ) ) != -1 )
+        tmp.replace( pos, 6, fileName );
+    pos = 0;
+    while ( ( pos = tmp.find( "<time>", pos ) ) != -1 )
+        tmp.replace( pos, 6, t );
+    pos = 0;
+    while ( ( pos = tmp.find( "<date>", pos ) ) != -1 )
+        tmp.replace( pos, 6, d );
+    pos = 0;
+    while ( ( pos = tmp.find( "<author>", pos ) ) != -1 )
+        tmp.replace( pos, 8, full_name );
+    pos = 0;
+    while ( ( pos = tmp.find( "<email>", pos ) ) != -1 )
+        tmp.replace( pos, 7, email_addr );
+    pos = 0;
+    while ( ( pos = tmp.find( "<org>", pos ) ) != -1 )
+        tmp.replace( pos, 5, organization );
+    pos = 0;
+    while ( ( pos = tmp.find( "<table>", pos ) ) != -1 )
+        tmp.replace( pos, 7, ta );
+
+    return tmp;
+}
+
+
 #ifndef NDEBUG
 void KSpreadTable::printDebug()
 {

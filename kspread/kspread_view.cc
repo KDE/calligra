@@ -1209,17 +1209,20 @@ void KSpreadView::initConfig()
      m_pDoc->changePageBorderColor(_pbCol);
    }
 
- if( config->hasGroup("KSpread Page Layout" ) )
-  {
-    config->setGroup( "KSpread Page Layout" );
-    if( m_pDoc->isEmpty())
-      {
-	m_pDoc->setPaperFormat((KoFormat)config->readNumEntry("Default size page",1));
+// Do we need a Page Layout in the congiguration file? Isn't this already in the template? Philipp
+/*
+if( config->hasGroup("KSpread Page Layout" ) )
+ {
+   config->setGroup( "KSpread Page Layout" );
+   if( m_pTable->isEmpty())
+     {
+	m_pTable->setPaperFormat((KoFormat)config->readNumEntry("Default size page",1));
 
-	m_pDoc->setPaperOrientation((KoOrientation)config->readNumEntry("Default orientation page",0));
-	m_pDoc->setPaperUnit((KoUnit::Unit)config->readNumEntry("Default unit page",0));
-      }
-  }
+	m_pTable->setPaperOrientation((KoOrientation)config->readNumEntry("Default orientation page",0));
+	m_pTable->setPaperUnit((KoUnit::Unit)config->readNumEntry("Default unit page",0));
+     }
+ }
+*/
 
  initCalcMenu();
  resultOfCalc();
@@ -2957,11 +2960,11 @@ void KSpreadView::setupPrinter( KPrinter &prt )
 {
 
     //apply page layout parameters
-    KoFormat pageFormat = m_pDoc->paperFormat();
+    KoFormat pageFormat = m_pTable->paperFormat();
 
     prt.setPageSize( static_cast<KPrinter::PageSize>( KoPageFormat::printerPageSize( pageFormat ) ) );
 
-    if ( m_pDoc->orientation() == PG_LANDSCAPE || pageFormat == PG_SCREEN )
+    if ( m_pTable->orientation() == PG_LANDSCAPE || pageFormat == PG_SCREEN )
         prt.setOrientation( KPrinter::Landscape );
     else
         prt.setOrientation( KPrinter::Portrait );
@@ -2970,16 +2973,16 @@ void KSpreadView::setupPrinter( KPrinter &prt )
 void KSpreadView::print( KPrinter &prt )
 {
     //store the current setting in a temporary variable
-    KoOrientation _orient =  m_pDoc->orientation();
+    KoOrientation _orient =  m_pTable->orientation();
     
     //use the current orientation from print dialog
     if ( prt.orientation() == KPrinter::Landscape )
     {
-        m_pDoc->setPaperOrientation( PG_LANDSCAPE );
+        m_pTable->setPaperOrientation( PG_LANDSCAPE );
     }
     else
     {   
-        m_pDoc->setPaperOrientation( PG_PORTRAIT );
+        m_pTable->setPaperOrientation( PG_PORTRAIT );
     }
     
     prt.setFullPage( TRUE );
@@ -2993,7 +2996,7 @@ void KSpreadView::print( KPrinter &prt )
     painter.end();
     
     //Restore original orientation
-    m_pDoc->setPaperOrientation( _orient );
+    m_pTable->setPaperOrientation( _orient );
 }
 
 void KSpreadView::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
@@ -3933,7 +3936,7 @@ void KSpreadView::layoutDlg()
 
 void KSpreadView::paperLayoutDlg()
 {
-    m_pDoc->paperLayoutDlg();
+    m_pTable->paperLayoutDlg();
 }
 
 void KSpreadView::multiRow( bool b )

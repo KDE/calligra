@@ -842,19 +842,19 @@ void configureLayoutPage::apply()
    {
      unsigned int sizePage=defaultSizePage->currentItem();
      config->writeEntry( "Default size page", sizePage);
-     m_pView->doc()->setPaperFormat((KoFormat)sizePage);
+     m_pView->activeTable()->setPaperFormat((KoFormat)sizePage);
    }
  if(orientation!=defaultOrientationPage->currentItem())
    {
      unsigned int orientationPage=defaultOrientationPage->currentItem();
      config->writeEntry( "Default orientation page", orientationPage);
-     m_pView->doc()->setPaperOrientation((KoOrientation)orientationPage);
+     m_pView->activeTable()->setPaperOrientation((KoOrientation)orientationPage);
    }
  if(unit!=defaultUnit->currentItem())
    {
      unsigned int unitPage=defaultUnit->currentItem();
      config->writeEntry( "Default unit page", unitPage);
-     m_pView->doc()->setPaperUnit((KoUnit::Unit)unitPage);
+     m_pView->activeTable()->setPaperUnit((KoUnit::Unit)unitPage);
    }
 }
 

@@ -18,13 +18,6 @@ k_dcop:
     virtual DCOPRef map();
     virtual bool save();
     virtual bool saveAs( const QString& url );
-    virtual float paperHeight() const;
-    virtual float paperWidth() const ;
-    virtual float leftBorder() const;
-    virtual float rightBorder() const;
-    virtual float topBorder() const;
-    virtual float bottomBorder() const;
-    QString paperFormatString() const;
 
     bool showColHeader()const;
     bool showRowHeader()const;
@@ -46,21 +39,6 @@ k_dcop:
 
     void setShowMessageError(bool _show);
     bool showMessageError()const;
-
-
-    QString headLeft()const;
-    QString headMid()const;
-    QString headRight()const;
-    QString footLeft()const;
-    QString footMid()const;
-    QString footRight()const;
-
-    void setHeaderLeft(const QString & text);
-    void setHeaderMiddle(const QString & text);
-    void setHeaderRight(const QString & text);
-    void setFooterLeft(const QString & text);
-    void setFooterMiddle(const QString & text);
-    void setFooterRight(const QString & text);
 
 private:
     KSpreadDoc* doc;

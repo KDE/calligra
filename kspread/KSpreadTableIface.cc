@@ -400,3 +400,106 @@ void KSpreadTableIface::setShowPageBorders( bool b )
     m_table->setShowPageBorders( b );
     m_table->doc()->updateBorderButton();
 }
+
+float KSpreadTableIface::paperHeight()const
+{
+    return m_table->paperHeight();
+}
+
+float KSpreadTableIface::paperWidth()const
+{
+    return m_table->paperWidth();
+}
+
+float KSpreadTableIface::leftBorder()const
+{
+    return m_table->leftBorder();
+}
+
+float KSpreadTableIface::rightBorder()const
+{
+    return m_table->rightBorder();
+}
+
+float KSpreadTableIface::topBorder()const
+{
+    return m_table->topBorder();
+}
+
+float KSpreadTableIface::bottomBorder()const
+{
+    return m_table->bottomBorder();
+}
+
+QString KSpreadTableIface::paperFormatString() const
+{
+    return m_table->paperFormatString();
+}
+
+QString KSpreadTableIface::headLeft()const  
+{
+    return m_table->headLeft();
+}
+
+QString KSpreadTableIface::headMid()const   
+{
+    return m_table->headMid();
+}
+
+QString KSpreadTableIface::headRight()const
+{
+    return m_table->headRight();
+}
+
+QString KSpreadTableIface::footLeft()const
+{
+    return m_table->footLeft();
+}
+
+QString KSpreadTableIface::footMid()const
+{
+    return m_table->footMid();
+}
+
+QString KSpreadTableIface::footRight()const
+{
+    return m_table->footRight();
+}
+
+void KSpreadTableIface::setHeaderLeft(const QString & text)
+{
+    m_table->setHeadFootLine( text,headMid(), headRight(),
+                              footLeft(), footMid(),footRight() );
+}
+
+void KSpreadTableIface::setHeaderMiddle(const QString & text)
+{
+    m_table->setHeadFootLine( headLeft(),text, headRight(),
+                              footLeft(), footMid(),footRight() );
+
+}
+
+void KSpreadTableIface::setHeaderRight(const QString & text)
+{
+    m_table->setHeadFootLine( headLeft(),headMid(), text,
+                              footLeft(), footMid(),footRight() );
+}
+
+void KSpreadTableIface::setFooterLeft(const QString & text)
+{
+    m_table->setHeadFootLine( headLeft(),headMid(), headRight(),
+                              text, footMid(),footRight() );
+}
+
+void KSpreadTableIface::setFooterMiddle(const QString & text)
+{
+    m_table->setHeadFootLine( headLeft(),headMid(), headRight(),
+                              footLeft(), text,footRight() );
+}
+
+void KSpreadTableIface::setFooterRight(const QString & text)
+{
+    m_table->setHeadFootLine( headLeft(),headMid(), headRight(),
+                              footLeft(), footMid(),text );
+}
+
