@@ -986,7 +986,7 @@ bool KoDocument::saveNativeFormat( const QString & _file )
         }
 
 
-        if ( store->open( "Thumbnails/Thumbnail.png" ) )
+        if ( store->open( "Thumbnails/thumbnail.png" ) )
         {
             if ( !saveOasisPreview( store ) || !store->close() ) {
                 delete store;
@@ -996,7 +996,7 @@ bool KoDocument::saveNativeFormat( const QString & _file )
         }
         else
         {
-            d->lastErrorMessage = i18n( "Not able to write '%1'. Partition full?" ).arg( "Thumbnails/Thumbnail.png" );
+            d->lastErrorMessage = i18n( "Not able to write '%1'. Partition full?" ).arg( "Thumbnails/thumbnail.png" );
             delete store;
             return false;
         }
