@@ -38,10 +38,11 @@ public:
 protected slots:
     virtual void slotOk();
     void slotLoadFile();
-
 protected:
-    QString generateStyleName( const QString & templateName );
     virtual void loadFile()=0;
+    virtual void generateStyleList()=0;
+
+    QString generateStyleName( const QString & templateName );
 
     void initList();
 

@@ -52,20 +52,6 @@ void KoImportStyleDia::slotLoadFile()
     loadFile();
 }
 
-QString KoImportStyleDia::generateStyleName( const QString & templateName )
-{
-    QString name;
-    int num = 1;
-    bool exists;
-    do {
-        name = templateName.arg( num );
-        exists = (m_list.findIndex( name )!=-1);
-        ++num;
-    } while ( exists );
-    return name;
-}
-
-
 void KoImportStyleDia::loadFile()
 {
     m_styleList.setAutoDelete(true);
@@ -84,38 +70,22 @@ void KoImportStyleDia::initList()
 
 void KoImportStyleDia::slotOk()
 {
-#if 0
-    for (uint i = 0; i< m_listStyleName->count();i++)
-    {
-        if ( !m_listStyleName->isSelected( i ))
-        {
-            if ( m_typeStyle ==frameStyle )
-            {
-                //remove this style from list
-                QPtrListIterator<KWFrameStyle> styleIt( m_frameStyleList );
-                for ( ; styleIt.current(); ++styleIt )
-                {
-                    if ( styleIt.current()->name() == m_listStyleName->text(i ) )
-                    {
-                        m_frameStyleList.remove(styleIt.current());
-                    }
-                }
-            }
-            else
-            {
-                //remove this style from list
-                QPtrListIterator<KWTableStyle> styleIt( m_tableStyleList );
-                for ( ; styleIt.current(); ++styleIt )
-                {
-                    if ( styleIt.current()->name() == m_listStyleName->text(i ) )
-                    {
-                        m_tableStyleList.remove(styleIt.current());
-                    }
-                }
-            }
-        }
-    }
-#endif
+    generateStyleList();
     KDialogBase::slotOk();
 }
+
+QString KoImportStyleDia::generateStyleName( const QString & templateName )
+{
+    QString name;
+    int num = 1;
+    bool exists;
+    do {
+        name = templateName.arg( num );
+        exists = (m_list.findIndex( name )!=-1);
+        ++num;
+    } while ( exists );
+    return name;
+}
+
+
 #include "koimportstyledia.moc"
