@@ -189,6 +189,7 @@ class KoTemplateChooseDia : public KDialogBase
 	void setupDialog();
 	void setupTemplateDialog(QWidget * widgetbase, QGridLayout * layout);
 	void setupFileDialog(QWidget * widgetbase, QGridLayout * layout);
+	void setupRecentDialog(QWidget * widgetbase, QGridLayout * layout);
 	bool collectInfo();
 	bool noStartupDlg();
 
@@ -196,6 +197,7 @@ class KoTemplateChooseDia : public KDialogBase
 
         void chosen(QIconViewItem *);
 	void currentChanged( QIconViewItem * );
+	void recentSelected( QIconViewItem * );
 };
 
 #endif

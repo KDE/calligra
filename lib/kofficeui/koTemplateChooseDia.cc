@@ -44,8 +44,8 @@
 #include <kjanuswidget.h>
 #include <kglobalsettings.h>
 #include <ktextedit.h>
-
-
+#include <kfileiconview.h>
+#include <kfileitem.h>
 
 class MyFileDialog : public KFileDialog
 {
@@ -121,6 +121,7 @@ class KoTemplateChooseDiaPrivate {
 
 	// choose a template
 	KJanusWidget * m_jwidget;
+	KFileIconView *m_recent;
 	QVGroupBox * boxdescription;
 	KTextEdit * textedit;
 
@@ -131,6 +132,7 @@ class KoTemplateChooseDiaPrivate {
 	QTabWidget* tabWidget;
 	QWidget* newTab;
 	QWidget* existingTab;
+	QWidget* recentTab;
 
 };
 
@@ -232,6 +234,40 @@ KoTemplateChooseDia::ReturnType KoTemplateChooseDia::getReturnType() {
 
 KoTemplateChooseDia::DialogType KoTemplateChooseDia::getDialogType() {
     return d->m_dialogType;
+}
+
+/*================================================================*/
+// private
+void KoTemplateChooseDia::setupRecentDialog(QWidget * widgetbase, QGridLayout * layout)
+{
+
+        d->m_recent = new KFileIconView(widgetbase, "recent files");
+        layout->addWidget(d->m_recent,0,0);
+
+        QString oldGroup;
+        oldGroup=d->m_global->config()->group();
+        d->m_global->config()->setGroup( "RecentFiles" );
+
+        int i = 0;
+        QString value;
+        do {
+                QString key=QString( "File%1" ).arg( i );
+                value=d->m_global->config()->readEntry( key, QString::null );
+                if ( !value.isEmpty() ) {
+                        KURL url(value);
+                        KFileItem *item = new KFileItem( KFileItem::Unknown, KFileItem::Unknown, url );
+                        d->m_recent->insertItem(item);
+                        kdDebug()<<value<<endl;
+                }
+                i++;
+        } while ( !value.isEmpty() || i<=10 );
+
+        d->m_global->config()->setGroup( oldGroup );
+        d->m_recent->showPreviews();
+	
+	connect(d->m_recent, SIGNAL( doubleClicked ( QIconViewItem * ) ),
+			this, SLOT( recentSelected( QIconViewItem * ) ) );
+
 }
 
 /*================================================================*/
@@ -414,10 +450,17 @@ void KoTemplateChooseDia::setupDialog()
 	d->existingTab = new QWidget( d->tabWidget, "existingTab" );
 	d->tabWidget->insertTab( d->existingTab, "" );
 	d->tabWidget->changeTab( d->existingTab, i18n( "Open Existing Document" ) );
-	QGridLayout * existingTabLayout = new QGridLayout( d->existingTab, 1, 1, 0, 6);
+	QGridLayout * existingTabLayout = new QGridLayout( d->existingTab, 1, 1, 0, KDialog::spacingHint());
+
+        // recent document
+        d->recentTab = new QWidget( d->tabWidget, "recentTab" );
+        d->tabWidget->insertTab( d->recentTab, "" );
+        d->tabWidget->changeTab( d->recentTab, i18n( "Open Recent Document" ) );
+        QGridLayout * recentTabLayout = new QGridLayout( d->recentTab, 1, 1, KDialogBase::marginHint(), KDialog::spacingHint());
 
 	setupTemplateDialog(d->newTab, newTabLayout);
 	setupFileDialog(d->existingTab, existingTabLayout);
+	setupRecentDialog(d->recentTab, recentTabLayout);
 
 	QString tabhighlighted = grp.readEntry("LastReturnType");
 	if ( tabhighlighted == QString("Template"))
@@ -475,6 +518,16 @@ void KoTemplateChooseDia::chosen(QIconViewItem * item)
 	currentChanged(item);
 	slotOk();
     }
+}
+
+/* */
+// private SLOT
+void KoTemplateChooseDia::recentSelected( QIconViewItem * item)
+{
+	if (item)
+	{
+		slotOk();
+	}
 }
 
 /*================================================================*/
@@ -542,12 +595,24 @@ bool KoTemplateChooseDia::collectInfo()
     {
 	// a file is chosen
 	// KURL url(d->m_filedialog->currentURL());
-
-	KURL url = d->m_filedialog->currentURL();
-	if (url.isEmpty())
-	    return false;
-	d->m_fullTemplateName = url.isLocalFile() ? url.path() : url.url();
-	d->m_returnType = File;
+	
+	if (d->m_dialogType == Everything && d->tabWidget->currentPage() == d->recentTab)
+	{
+		KFileItem * item = d->m_recent->currentFileItem();
+		if (! item)
+			return false;
+		KURL url = item->url();
+		d->m_fullTemplateName = url.isLocalFile() ? url.path() : url.url();
+		d->m_returnType = File;	
+	}
+	else
+	{
+		KURL url = d->m_filedialog->currentURL();
+		if (url.isEmpty())
+	    		return false;
+		d->m_fullTemplateName = url.isLocalFile() ? url.path() : url.url();
+		d->m_returnType = File;
+	}
 	return true;
     }
 
