@@ -21,6 +21,7 @@
 
 #include <kexidb/indexschema.h>
 #include <kexidb/tableschema.h>
+#include <kexidb/queryschema.h>
 #include <kexidb/driver.h>
 
 #include <kdebug.h>
@@ -30,6 +31,8 @@ using namespace KexiDB;
 Relationship::Relationship()
 	: m_masterIndex(0)
 	, m_detailsIndex(0)
+	, m_masterIndexOwned(false)
+	, m_detailsIndexOwned(false)
 {
 	m_pairs.setAutoDelete(true);
 }
@@ -37,13 +40,100 @@ Relationship::Relationship()
 Relationship::Relationship(IndexSchema* masterIndex, IndexSchema* detailsIndex)
 	: m_masterIndex(0)
 	, m_detailsIndex(0)
+	, m_masterIndexOwned(false)
+	, m_detailsIndexOwned(false)
 {
 	m_pairs.setAutoDelete(true);
 	setIndices(masterIndex, detailsIndex);
 }
 
+Relationship::Relationship( QuerySchema *query, Field *field1, Field *field2 )
+	: m_masterIndex(0)
+	, m_detailsIndex(0)
+	, m_masterIndexOwned(false)
+	, m_detailsIndexOwned(false)
+{
+	m_pairs.setAutoDelete(true);
+	createIndices( query, field1, field2 );
+}
+
 Relationship::~Relationship()
 {
+	if (m_masterIndexOwned)
+		delete m_masterIndex;
+	if (m_detailsIndexOwned)
+		delete m_detailsIndex;
+}
+
+void Relationship::createIndices( QuerySchema *query, Field *field1, Field *field2 )
+{
+	if (!field1 || !field2 || !query) {
+		kdWarning() << "Relationship::addRelationship(): !masterField || !detailsField || !query" << endl;
+		return;
+	}
+	if (field1->isQueryAsterisk() || field2->isQueryAsterisk()) {
+		kdWarning() << "Relationship::addRelationship(): relationship's fields cannot be asterisks" << endl;
+		return;
+	}
+	if (!query->hasField(field1) && !query->hasField(field2)) {
+		kdWarning() << "Relationship::addRelationship(): fields do not belong to this query" << endl;
+		return;
+	}
+	if (field1->table() == field2->table()) {
+		kdWarning() << "Relationship::addRelationship(): fields cannot belong to the same table" << endl;
+		return;
+	}
+//@todo: check more things: -types
+//@todo: find existing global db relationships
+
+	Field *masterField = 0, *detailsField = 0;
+	bool p1 = field1->isPrimaryKey(), p2 = field2->isPrimaryKey();
+	if (p1 && p2) {
+		//2 primary keys
+		masterField = field1;
+		m_masterIndex = masterField->table()->primaryKey();
+		detailsField = field2;
+		m_detailsIndex = masterField->table()->primaryKey();
+	}
+	else if (!p1 && p2) {
+		//foreign + primary: swap
+		Field *tmp = field1;
+		field1 = field2;
+		field2 = tmp;
+		p1 = !p1;
+		p2 = !p2;
+	}
+
+	if (p1 && !p2) {
+		//primary + foreign
+		masterField = field1;
+		m_masterIndex = masterField->table()->primaryKey();
+		detailsField = field2;
+		//create foreign key
+//@todo: check if it already exists
+		m_detailsIndex = new IndexSchema(detailsField->table());
+		m_detailsIndexOwned = true;
+		m_detailsIndex->addField(detailsField);
+		m_detailsIndex->setForeignKey(true);
+	}
+	else if (!p1 && !p2) {
+		masterField = field1;
+		m_masterIndex = new IndexSchema(masterField->table());
+		m_masterIndexOwned = true;
+		m_masterIndex->addField(masterField);
+		m_masterIndex->setForeignKey(true);
+		
+		detailsField = field2;
+		m_detailsIndex = new IndexSchema(detailsField->table());
+		m_detailsIndexOwned = true;
+		m_detailsIndex->addField(detailsField);
+		m_detailsIndex->setForeignKey(true);
+	}
+
+	if (!m_masterIndex || !m_detailsIndex)
+		return; //failed
+
+	setIndices(m_masterIndex, m_detailsIndex, false);
 }
 
 TableSchema* Relationship::masterTable() const
@@ -58,15 +148,23 @@ TableSchema* Relationship::detailsTable() const
 
 void Relationship::setIndices(IndexSchema* masterIndex, IndexSchema* detailsIndex)
 {
+	setIndices(masterIndex, detailsIndex, true);
+}
+
+void Relationship::setIndices(IndexSchema* masterIndex, IndexSchema* detailsIndex, bool ownedByMaster)
+{
 	m_masterIndex = 0;
 	m_detailsIndex = 0;
 	m_pairs.clear();
 	if (!masterIndex || !detailsIndex || !masterIndex->table() || !detailsIndex->table() 
 	|| masterIndex->table()==detailsIndex->table() || masterIndex->fieldCount()!=detailsIndex->fieldCount())
 		return;
-	Field *f1 = masterIndex->fields()->first();
-	Field *f2 = detailsIndex->fields()->first();
-	while (f1 && f2) {
+	Field::ListIterator it1(*masterIndex->fields());
+	Field::ListIterator it2(*detailsIndex->fields());
+	for (;it1.current() && it1.current(); ++it1, ++it2) {
+		Field *f1 = it1.current(); //masterIndex->fields()->first();
+		Field *f2 = it2.current(); //detailsIndex->fields()->first();
+	//	while (f1 && f2) {
 		if (f1->type()!=f1->type()) {
 			KexiDBDbg << "Relationship::setIndices(INDEX on '"<<masterIndex->table()->name()
 			<<"',INDEX on "<<detailsIndex->table()->name()<<"): !equal field types: "
@@ -95,7 +193,7 @@ void Relationship::setIndices(IndexSchema* masterIndex, IndexSchema* detailsInde
 	}
 	m_masterIndex = masterIndex;
 	m_detailsIndex = detailsIndex;
-	m_masterIndex->attachRelationship(this);
-	m_detailsIndex->attachRelationship(this);
+	m_masterIndex->attachRelationship(this, ownedByMaster);
+	m_detailsIndex->attachRelationship(this, ownedByMaster);
 }
 

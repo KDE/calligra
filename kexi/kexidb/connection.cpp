@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,6 +25,7 @@
 #include <kexidb/driver_p.h>
 #include <kexidb/schemadata.h>
 #include <kexidb/tableschema.h>
+#include <kexidb/relationship.h>
 #include <kexidb/transaction.h>
 #include <kexidb/cursor.h>
 #include <kexidb/global.h>
@@ -748,7 +749,9 @@ QString Connection::valueToSQL( const Field *field, const QVariant& v ) const
 
 QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema ) const
 {
-	QString sql = "CREATE TABLE " + tableSchema.name() + " (";
+	QString sql;
+	sql.reserve(4096);
+	sql = "CREATE TABLE " + tableSchema.name() + " (";
 	bool first=true;
 	Field::ListIterator it( tableSchema.m_fields );
 	Field *field;
@@ -849,6 +852,7 @@ bool Connection::insertRecord(TableSchema &tableSchema, QValueList<QVariant>& va
 	Field::List *fields = tableSchema.fields();
 	Field *f = fields->first();
 	QString s_val; 
+	s_val.reserve(4096);
 	QValueList<QVariant>::iterator it = values.begin();
 	int i=0;
 	while (f && (it!=values.end())) {
@@ -875,6 +879,7 @@ bool Connection::insertRecord(FieldList& fields, QValueList<QVariant>& values)
 		return false;
 
 	QString s_val; 
+	s_val.reserve(4096);
 	QValueList<QVariant>::iterator it = values.begin();
 	int i=0;
 	while (f && (it!=values.end())) {
@@ -901,9 +906,12 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema ) const
 		return querySchema.statement();
 
 	QString sql;
-	Field::List *fields = querySchema.fields();
+	sql.reserve(4096);
+//	Field::List *fields = querySchema.fields();
 	uint number = 0;
-	for (Field *f = fields->first(); f; f = fields->next(), number++) {
+//	for (Field *f = fields->first(); f; f = fields->next(), number++) {
+	Field *f;
+	for (Field::ListIterator it = querySchema.fieldsIterator(); (f = it.current()); ++it, number++) {
 		if (querySchema.isFieldVisible(number)) {
 			if (sql.isEmpty())
 				sql = "SELECT ";
@@ -929,14 +937,46 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema ) const
 		return QString::null;
 	
 	QString s_from;
-	for (TableSchema *table = tables->first(); table; table = tables->next()) {
-		s_from += table->name();
-		if(table != tables->getLast())
+	TableSchema *table;
+	for (TableSchema::ListIterator it(*tables); (table = it.current()); ++it) {
+		if (!s_from.isEmpty())
 			s_from += ", ";
+		s_from += table->name();
 	}
 	sql += s_from;
 
+	QString s_where;
+	s_where.reserve(4096);
+
+	//JOINS
+//@todo: we're using WHERE for joins now; user INNER/LEFT/RIGHT JOIN later
+	Relationship *rel;
+	bool wasWhere = false; //for later use
+	for (Relationship::ListIterator it(*querySchema.relationships()); (rel = it.current()); ++it) {
+		if (s_where.isEmpty()) {
+			s_where = " WHERE ";
+			wasWhere = true;
+		}
+		else
+			s_where += " AND ";
+		Field::Pair *pair;
+		QString s_where_sub;
+		for (QPtrListIterator<Field::Pair> p_it(*rel->fieldPairs()); (pair = p_it.current()); ++p_it) {
+			if (!s_where_sub.isEmpty())
+				s_where_sub += " AND ";
+			s_where_sub += (pair->first->table()->name() + "." + pair->first->name() + " = " 
+				+ pair->second->table()->name() + "." + pair->second->name());
+		}
+		if (rel->fieldPairs()->count()>1) {
+			s_where_sub.prepend("(");
+			s_where_sub += ")";
+		}
+		s_where += s_where_sub;
+	}
+
+	sql += s_where;
 //! \todo (js) add WHERE and other sql parts
+	//(use wasWhere here)
 
 	return sql;
 }
@@ -1838,8 +1878,11 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 		return false;
 	}
 	//update the record:
+	m_sql.reserve(4096);
 	m_sql = "UPDATE " + query.parentTable()->name() + " SET ";
 	QString sqlset, sqlwhere;
+	sqlset.reserve(1024);
+	sqlwhere.reserve(1024);
 	KexiDB::RowEditBuffer::DBMap b = buf.dbBuffer();
 	for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.begin();it!=b.end();++it) {
 		if (!sqlset.isEmpty())
@@ -1898,8 +1941,11 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 		KexiDBDrvDbg << " -- WARNING: NO PARENT TABLE's PKEY" << endl;
 
 	//insert the record:
+	m_sql.reserve(4096);
 	m_sql = "INSERT INTO " + query.parentTable()->name() + " (";
 	QString sqlcols, sqlvals;
+	sqlcols.reserve(1024);
+	sqlvals.reserve(1024);
 	KexiDB::RowEditBuffer::DBMap b = buf.dbBuffer();
 	for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.begin();it!=b.end();++it) {
 		if (!sqlcols.isEmpty()) {
@@ -1967,8 +2013,10 @@ bool Connection::deleteRow(QuerySchema &query, RowData& data)
 		KexiDBDrvDbg << " -- WARNING: NO PARENT TABLE's PKEY" << endl;
 	
 	//update the record:
+	m_sql.reserve(4096);
 	m_sql = "DELETE FROM " + query.parentTable()->name() + " WHERE ";
 	QString sqlwhere;
+	sqlwhere.reserve(1024);
 	QValueVector<uint> pkeyFieldsOrder = query.pkeyFieldsOrder();
 	if (pkey->fieldCount()>0) {
 		uint i=0;

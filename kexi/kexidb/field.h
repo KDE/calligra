@@ -348,6 +348,8 @@ class KEXI_DB_EXPORT Field
 		 to true (setIndexed(true)), because index is required it control unique constraint. */
 		void setUniqueKey(bool u);
 
+		/*! Sets whether the field has to be declared with single-field foreign key. 
+		 Used in IndexSchema::setForeigKey(). */
 		void setForeignKey(bool f);
 
 		/*! Specifies whether the field has single-field unique constraint or not 

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -92,6 +92,11 @@ KexiDB::Field* FieldList::field(unsigned int id)
 Field* FieldList::field(const QString& name) const
 {
 	return m_fields_by_name[name.lower()];
+}
+
+bool FieldList::hasField(Field* field)
+{
+	return m_fields.findRef(field);
 }
 
 unsigned int FieldList::fieldCount() const

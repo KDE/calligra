@@ -32,7 +32,6 @@ QuerySchema::QuerySchema()
 	, SchemaData(KexiDB::QueryObjectType)
 //	, m_conn(0)
 	, m_parent_table(0)
-	, m_visibility(64)
 {
 	init();
 }
@@ -42,7 +41,6 @@ QuerySchema::QuerySchema(TableSchema* tableSchema)
 	, SchemaData(KexiDB::QueryObjectType)
 //	, m_conn(0)
 	, m_parent_table(tableSchema)
-	, m_visibility(64)
 {
 	init();
 	assert(m_parent_table);
@@ -68,9 +66,11 @@ QuerySchema::~QuerySchema()
 
 void QuerySchema::init()
 {
+	m_visibility = 64;
 	m_type = KexiDB::QueryObjectType;
 	m_tables.setAutoDelete(false);
 	m_asterisks.setAutoDelete(true);
+	m_relations.setAutoDelete(true);
 	m_fieldsExpanded=0;
 	m_fieldsOrder=0;
 	m_pkeyFieldsOrder=0;
@@ -83,6 +83,7 @@ void QuerySchema::clear()
 	SchemaData::clear();
 	m_aliases.clear();
 	m_asterisks.clear();
+	m_relations.clear();
 	m_parent_table = 0;
 	m_tables.clear();
 	if (m_fieldsExpanded) {
@@ -336,6 +337,75 @@ QValueVector<uint> QuerySchema::pkeyFieldsOrder()
 	}
 	return *m_pkeyFieldsOrder;
 }
+
+
+Relationship* QuerySchema::addRelationship( Field *field1, Field *field2 )
+{
+//@todo: find existing global db relationships
+	Relationship *r = new Relationship(this, field1, field2);
+	if (r->isEmpty()) {
+		delete r;
+		return 0;
+	}
+
+	m_relations.append( r );
+	return r;
+}
+
+/*
+	new field1, Field *field2
+	if (!field1 || !field2) {
+		kdWarning() << "QuerySchema::addRelationship(): !masterField || !detailsField" << endl;
+		return;
+	}
+	if (field1->isQueryAsterisk() || field2->isQueryAsterisk()) {
+		kdWarning() << "QuerySchema::addRelationship(): relationship's fields cannot be asterisks" << endl;
+		return;
+	}
+	if (!hasField(field1) && !hasField(field2)) {
+		kdWarning() << "QuerySchema::addRelationship(): fields do not belong to this query" << endl;
+		return;
+	}
+	if (field1->table() == field2->table()) {
+		kdWarning() << "QuerySchema::addRelationship(): fields cannot belong to the same table" << endl;
+		return;
+	}
+//@todo: check more things: -types
+//@todo: find existing global db relationships
+
+	Field *masterField = 0, *detailsField = 0;
+	IndexSchema *masterIndex = 0, *detailsIndex = 0;
+	if (field1->isPrimaryKey() && field2->isPrimaryKey()) {
+		//2 primary keys
+		masterField = field1;
+		masterIndex = masterField->table()->primaryKey();
+		detailsField = field2;
+		detailsIndex = masterField->table()->primaryKey();
+	}
+	else if (field1->isPrimaryKey()) {
+		masterField = field1;
+		masterIndex = masterField->table()->primaryKey();
+		detailsField = field2;
+//@todo: check if it already exists
+		detailsIndex = new IndexSchema(detailsField->table());
+		detailsIndex->addField(detailsField);
+		detailsIndex->setForeigKey(true);
+	//		detailsField->setForeignKey(true);
+	}
+	else if (field2->isPrimaryKey()) {
+		detailsField = field1;
+		masterField = field2;
+		masterIndex = masterField->table()->primaryKey();
+//@todo
+	}
+
+	if (!masterIndex || !detailsIndex)
+		return; //failed
+
+	Relationship *rel = new Relationship(masterIndex, detailsIndex);
+
+	m_relations.append( rel );
+}*/
 
 //---------------------------------------------------
 

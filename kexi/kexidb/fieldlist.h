@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -66,6 +66,9 @@ class KEXI_DB_EXPORT FieldList
 		
 		/*! \return field with name \a name or NULL if there is no such a field. */
 		Field* field(const QString& name) const;
+
+		/*! \return true if this list contains given \a field. */
+		bool hasField(Field* field);
 
 		/*! \return list of field names for this list. */
 		QStringList names() const;

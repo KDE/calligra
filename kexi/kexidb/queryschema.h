@@ -32,6 +32,7 @@
 #include <kexidb/fieldlist.h>
 #include <kexidb/schemadata.h>
 #include <kexidb/tableschema.h>
+#include <kexidb/relationship.h>
 
 namespace KexiDB {
 
@@ -156,7 +157,19 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		/*! Sets \a alias for \a field within the query. 
 		 Passing empty sting to \a alias clears alias for given field. */
 		void setAlias(Field *field, const QString& alias);
-		
+
+		/*! \return a list of relationships defined for this query */
+		Relationship::List* relationships() { return &m_relations; }
+
+		/*! Adds a new relationship defined by \a field1 and \a field2.
+		 Both fields should belong to two different tables of this query.
+		 This is convenience function useful for a typical cases. 
+		 It automatically creates Relationship object for this query. 
+		 If one of the fields are primary keys, it will be detected 
+		 and appropriate master-detail relation will be established.
+		 This functiuon does nothing if the arguments are invalid. */
+		Relationship* addRelationship( Field *field1, Field *field2 );
+
 		/*! \return list of QueryAsterisk objects defined for this query */
 		Field::List* asterisks() { return &m_asterisks; }
 
@@ -246,6 +259,9 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		/*! forced (predefined) statement */
 		QString      m_statement;
 
+		/*! Relationships defined for this query. */
+		Relationship::List m_relations;
+
 	friend class Connection;
 };
 
@@ -311,11 +327,9 @@ class KEXI_DB_EXPORT QueryAsterisk : protected Field
 		/*! \return String for debugging purposes. */
 		virtual QString debugString() const;
 
-	
 	protected:
 		/*! Table schema for this asterisk */
 		TableSchema* m_table;
-
 
 	friend class QuerySchema;
 };

@@ -72,6 +72,7 @@ namespace KexiDB {
 
 class IndexSchema;
 class TableSchema;
+class QuerySchema;
 
 class KEXI_DB_EXPORT Relationship
 {
@@ -104,6 +105,8 @@ class KEXI_DB_EXPORT Relationship
 		 Each pair has a form of <master-side-field, details-side-field>. */
 		Field::PairList* fieldPairs() { return &m_pairs; }
 
+		bool isEmpty() const { return m_pairs.isEmpty(); }
+
 		/*! \return table assigned at "master / one" side of this relationship.
 		 or null if there is no information defined. */
 		TableSchema* masterTable() const;
@@ -126,13 +129,25 @@ class KEXI_DB_EXPORT Relationship
 		void setIndices(IndexSchema* masterIndex, IndexSchema* detailsIndex);
 
 	protected:
-		IndexSchema *m_masterIndex;
+		Relationship( QuerySchema *query, Field *field1, Field *field2 );
+
+		void createIndices( QuerySchema *query, Field *field1, Field *field2 );
+
+		/*! Internal version of setIndices(). \a ownedByMaster parameter is passed 
+		 to IndexSchema::attachRelationship() */
+		void setIndices(IndexSchema* masterIndex, IndexSchema* detailsIndex, bool ownedByMaster);
+
+	IndexSchema *m_masterIndex;
 		IndexSchema *m_detailsIndex;
 
 		Field::PairList m_pairs;
 
+		bool m_masterIndexOwned : 1;
+		bool m_detailsIndexOwned : 1;
+
 	friend class Connection;
 	friend class TableSchema;
+	friend class QuerySchema;
 	friend class IndexSchema;
 };
 

@@ -42,6 +42,7 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 {
 	public:
 		typedef QPtrList<TableSchema> List; //!< Type of tables list
+		typedef QPtrListIterator<TableSchema> ListIterator; //!< Iterator for tables list
 
 		TableSchema(const QString & name);
 		TableSchema(const SchemaData& sdata);
