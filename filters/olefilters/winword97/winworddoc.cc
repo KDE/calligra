@@ -21,8 +21,8 @@
 #include <qregexp.h>
 #include <winworddoc.h>
 #include <typeinfo>
-#define DISABLE_FLOATING true
-#define ROW_SIZE 30
+#define DISABLE_FLOATING false
+#define ROW_SIZE 20
 
 WinWordDoc::WinWordDoc(
     QCString &result,
