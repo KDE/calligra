@@ -105,7 +105,7 @@ GSegment::GSegment(const QDomElement &element) {
     int i=0;
     Coord p;
     QDomElement point = element.firstChild().toElement();
-    for( ; !point.isNull() && i<4; point = element.nextSibling().toElement(), ++i ) {
+    for( ; !point.isNull() && i<(skind==0 ? 2 : 4); point = point.nextSibling().toElement(), ++i ) {
         p.x(point.attribute("x").toFloat());
         p.y(point.attribute("y").toFloat());
         setPoint(i, p);

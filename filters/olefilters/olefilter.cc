@@ -248,11 +248,7 @@ void OLEFilter::convert(const QString &dirname) {
         success=myFilter->filter();
         // ...and fetch the file
         const QDomDocument * const part=myFilter->part();
-        QBuffer file;
-        file.open(IO_WriteOnly);
-        QTextStream str(&file);
-        str << *part;
-        file.close();
+        QCString file=part->toCString();
         // Get the name of the part (dirname==key)
         char *tmp=0L;
         slotPart(QFile::encodeName(dirname), &tmp);
@@ -262,7 +258,7 @@ void OLEFilter::convert(const QString &dirname) {
             return;
         }
         // Write it to the gzipped tar file
-        store->write(file.buffer().data(), file.buffer().size());
+        store->write(file.data(), file.length());
         store->close();
         delete [] tmp;
         delete myFilter;

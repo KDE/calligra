@@ -39,7 +39,7 @@ XMLTree::XMLTree():QObject(),table(0L)
   root = new QDomDocument("spreadsheet");
 
   root->appendChild(root->createProcessingInstruction
-		    ("xml", "version=\"1.0\" encoding =\"UTF-8\""));
+                    ("xml", "version=\"1.0\" encoding =\"UTF-8\""));
 
   doc = root->createElement("spreadsheet");
   doc.setAttribute("author", "OLEFilter");
@@ -86,10 +86,10 @@ void XMLTree::getFont(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
   if ((fonts[fontid]->bls / 8) != 50)
     font.setAttribute("bold", "yes");
 
-  if ((fonts[fontid]->grbit & 0x02) == 2) 
+  if ((fonts[fontid]->grbit & 0x02) == 2)
     font.setAttribute("italic", "yes");
 
-  if (fonts[fontid]->uls != 0) 
+  if (fonts[fontid]->uls != 0)
     font.setAttribute("underline", "yes");
 
   f.appendChild(font);
@@ -104,7 +104,7 @@ void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
   pen.setAttribute("color", palette[(fonts[fontid]->icv) & 0x7f]);
   f.appendChild(pen);
 
-  if (xfs[xf]->borderStyle & 0x0f != 0) { 
+  if (xfs[xf]->borderStyle & 0x0f != 0) {
     QDomElement leftBorder = root->createElement("left-border");
     pen = root->createElement("pen");
     pen.setAttribute("width", 2);
@@ -155,128 +155,128 @@ const QDomElement XMLTree::getFormat(Q_UINT16 xf)
   if (fontid > 3)
     --fontid;
 
-  format.setAttribute("bgcolor", palette[xfs[xf]->cellColor & 0x7f]); 
+  format.setAttribute("bgcolor", palette[xfs[xf]->cellColor & 0x7f]);
 
-  format.setAttribute("align", (xfs[xf]->align & 0x07) == 0 ? 4 : xfs[xf]->align & 0x07); 
-  format.setAttribute("alignY", ((xfs[xf]->align >> 4) & 0x07) == 3 ? 2 : ((xfs[xf]->align >> 4) & 0x07) + 1); 
+  format.setAttribute("align", (xfs[xf]->align & 0x07) == 0 ? 4 : xfs[xf]->align & 0x07);
+  format.setAttribute("alignY", ((xfs[xf]->align >> 4) & 0x07) == 3 ? 2 : ((xfs[xf]->align >> 4) & 0x07) + 1);
 
   int angle = xfs[xf]->align >> 8;
-  format.setAttribute("angle", angle < 91 ? angle * (-1) : angle - 90); 
+  format.setAttribute("angle", angle < 91 ? angle * (-1) : angle - 90);
 
   if ((xfs[xf]->align >> 3) & 0x01 == 1)
-    format.setAttribute("multirow", "yes"); 
+    format.setAttribute("multirow", "yes");
 
   switch (xfs[xf]->ifmt)
     {
-    case 0x00:	// General
+    case 0x00:  // General
       format.setAttribute("precision", "-1");
       break;
-    case 0x01:	// Number 0
+    case 0x01:  // Number 0
       format.setAttribute("precision", "-1");
       break;
-    case 0x02:	// Number	0.00
+    case 0x02:  // Number       0.00
       format.setAttribute("precision", "2");
       break;
-    case 0x03:	// Number w/comma	0,000
+    case 0x03:  // Number w/comma       0,000
       format.setAttribute("precision", "-1");
       break;
-    case 0x04:	// Number w/comma	0,000.00
+    case 0x04:  // Number w/comma       0,000.00
       format.setAttribute("precision", "2");
       break;
-    case 0x05:	// Number currency
-    case 0x06:	
-    case 0x07:	
-    case 0x08:	
-      format.setAttribute("precision", "2");
-      format.setAttribute("format", "10");
-      format.setAttribute("faktor", "1");
-      break;
-    case 0x09:	// Percent 0%
-      format.setAttribute("precision", "-1");
-      format.setAttribute("format", "25");
-      format.setAttribute("faktor", "100");
-      break;
-    case 0x0A:	// Percent 0.00%
-      format.setAttribute("precision", "2");
-      format.setAttribute("format", "25");
-      format.setAttribute("faktor", "100");
-      break;
-    case 0x0B:	// Scientific 0.00+E00
-      format.setAttribute("precision", "2");
-      format.setAttribute("format", "0");
-      break;
-    case 0x0C:	// Fraction 1 number  e.g. 1/2, 1/3
-      format.setAttribute("precision", "-1");
-      format.setAttribute("format", "0");
-      break;
-    case 0x0D:	// Fraction 2 numbers  e.g. 1/50, 25/33
-      format.setAttribute("precision", "-1");
-      format.setAttribute("format", "0");
-      break;
-    case 0x0E:	// Date: m-d-y
-      format.setAttribute("precision", "-1");
-      format.setAttribute("format", "0");
-      break;
-    case 0x0F:	// Date: d-mmm-yy
-      format.setAttribute("precision", "-1");
-      format.setAttribute("format", "0");
-      break;
-    case 0x10:	// Date: d-mmm
-      format.setAttribute("precision", "-1");
-      format.setAttribute("format", "0");
-      break;
-    case 0x11:	// Date: mmm-yy
-      format.setAttribute("precision", "-1");
-      format.setAttribute("format", "0");
-      break;
-    case 0x12:	// Time: h:mm AM/PM
-      format.setAttribute("precision", "-1");
-      format.setAttribute("format", "0");
-      break;
-    case 0x13:	// Time: h:mm:ss AM/PM
-      format.setAttribute("precision", "-1");
-      format.setAttribute("format", "0");
-      break;
-    case 0x14:	// Time: h:mm
-      format.setAttribute("precision", "-1");
-      format.setAttribute("format", "0");
-      break;
-    case 0x15:	// Time: h:mm:ss
-      format.setAttribute("precision", "-1");
-      format.setAttribute("format", "0");
-      break;
-    case 0x2a:	// Number currency
-    case 0x2c:	
+    case 0x05:  // Number currency
+    case 0x06:
+    case 0x07:
+    case 0x08:
       format.setAttribute("precision", "2");
       format.setAttribute("format", "10");
       format.setAttribute("faktor", "1");
       break;
-    case 0x2D:	// Time: mm:ss
+    case 0x09:  // Percent 0%
+      format.setAttribute("precision", "-1");
+      format.setAttribute("format", "25");
+      format.setAttribute("faktor", "100");
+      break;
+    case 0x0A:  // Percent 0.00%
+      format.setAttribute("precision", "2");
+      format.setAttribute("format", "25");
+      format.setAttribute("faktor", "100");
+      break;
+    case 0x0B:  // Scientific 0.00+E00
+      format.setAttribute("precision", "2");
+      format.setAttribute("format", "0");
+      break;
+    case 0x0C:  // Fraction 1 number  e.g. 1/2, 1/3
       format.setAttribute("precision", "-1");
       format.setAttribute("format", "0");
       break;
-    case 0x2E:	// Time: [h]:mm:ss
+    case 0x0D:  // Fraction 2 numbers  e.g. 1/50, 25/33
       format.setAttribute("precision", "-1");
       format.setAttribute("format", "0");
       break;
-    case 0x2F:	// Time: mm:ss.0
+    case 0x0E:  // Date: m-d-y
       format.setAttribute("precision", "-1");
       format.setAttribute("format", "0");
       break;
-    case 0x31:	// Text
+    case 0x0F:  // Date: d-mmm-yy
       format.setAttribute("precision", "-1");
       format.setAttribute("format", "0");
       break;
-    default:	// Unsupported...but, if we are here, its a number
+    case 0x10:  // Date: d-mmm
+      format.setAttribute("precision", "-1");
+      format.setAttribute("format", "0");
+      break;
+    case 0x11:  // Date: mmm-yy
+      format.setAttribute("precision", "-1");
+      format.setAttribute("format", "0");
+      break;
+    case 0x12:  // Time: h:mm AM/PM
+      format.setAttribute("precision", "-1");
+      format.setAttribute("format", "0");
+      break;
+    case 0x13:  // Time: h:mm:ss AM/PM
+      format.setAttribute("precision", "-1");
+      format.setAttribute("format", "0");
+      break;
+    case 0x14:  // Time: h:mm
+      format.setAttribute("precision", "-1");
+      format.setAttribute("format", "0");
+      break;
+    case 0x15:  // Time: h:mm:ss
+      format.setAttribute("precision", "-1");
+      format.setAttribute("format", "0");
+      break;
+    case 0x2a:  // Number currency
+    case 0x2c:
+      format.setAttribute("precision", "2");
+      format.setAttribute("format", "10");
+      format.setAttribute("faktor", "1");
+      break;
+    case 0x2D:  // Time: mm:ss
+      format.setAttribute("precision", "-1");
+      format.setAttribute("format", "0");
+      break;
+    case 0x2E:  // Time: [h]:mm:ss
+      format.setAttribute("precision", "-1");
+      format.setAttribute("format", "0");
+      break;
+    case 0x2F:  // Time: mm:ss.0
+      format.setAttribute("precision", "-1");
+      format.setAttribute("format", "0");
+      break;
+    case 0x31:  // Text
+      format.setAttribute("precision", "-1");
+      format.setAttribute("format", "0");
+      break;
+    default:    // Unsupported...but, if we are here, its a number
       s = QString::fromLatin1(formats[xfs[xf]->ifmt]->rgch,
-			      formats[xfs[xf]->ifmt]->cch);
+                              formats[xfs[xf]->ifmt]->cch);
       format.setAttribute("precision", "-1");
       format.setAttribute("format", "0");
     }
-  
+
   getFont(xf, format, fontid);
   getPen(xf, format, fontid);
-  
+
   return format;
 }
 
@@ -777,7 +777,7 @@ bool XMLTree::_labelsst(Q_UINT16 size, QDataStream& body)
   e.setAttribute("row", (int) ++row);
   e.setAttribute("column", (int) ++column);
   QDomElement text = root->createElement("text");
-  text.appendChild(root->createTextNode(sst[isst]->latin1()));
+  text.appendChild(root->createTextNode(*sst[isst]));
   e.appendChild(text);
   table->appendChild(e);
 

@@ -74,7 +74,6 @@
 #include <kurl.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
-#include <qmessagebox.h>
 #include <unistd.h>
 #include <qfileinfo.h>
 #include <qscrollview.h>
@@ -671,14 +670,13 @@ void KIllustratorView::slotImport()
                 filter->importFromFile (m_pDoc->gdoc());
             }
             else
-                QMessageBox::critical (this, i18n ("KIllustrator Error"),
-                                       i18n ("Cannot import from file"), i18n ("OK"));
+                KMessageBox::error(this, i18n ("Cannot import from file"),
+                                   i18n("KIllustrator Error"));
         }
         else
-            QMessageBox::critical (this, i18n ("KIllustrator Error"),
-                                   i18n ("Unknown import format"), i18n ("OK"));
+            KMessageBox::error(this, i18n ("Unknown import format"),
+                                i18n ("KIllustrator Error"));
     }
-
     resetTools ();
 }
 
@@ -704,12 +702,12 @@ void KIllustratorView::slotExport()
                 lastExport = fname;
             }
             else
-                QMessageBox::critical (this, i18n ("KIllustrator Error"),
-                                       i18n ("Cannot export to file"), i18n ("OK"));
+                KMessageBox::error(this, i18n ("Cannot export to file"),
+                                    i18n ("KIllustrator Error"));
         }
         else
-            QMessageBox::critical (this, i18n ("KIllustrator Error"),
-                                   i18n ("Unknown export format"), i18n ("OK"));
+            KMessageBox::error(this, i18n ("Unknown export format"),
+                               i18n ("KIllustrator Error"));
     }
     resetTools ();
 }
@@ -794,17 +792,17 @@ void KIllustratorView::slotSelectAll()
 
 void KIllustratorView::slotProperties()
 {
-    int result = 0;
+    int result = KMessageBox::Yes;
 
     if (m_pDoc->gdoc()->selectionIsEmpty ())
     {
-        result = QMessageBox::warning (this, i18n("Warning"),
-                                       i18n ("This action will set the default\n"
-                                             "properties for new objects !\n"
-                                             "Would you like to do it ?"),
-                                       i18n ("Yes"), i18n ("No"));
+        result = KMessageBox::warningYesNo(this,
+                                           i18n ("This action will set the default\n"
+                                                 "properties for new objects !\n"
+                                                 "Would you like to do it ?"),
+                                            i18n("Warning"));
     }
-    if (result == 0)
+    if (result == KMessageBox::Yes)
         PropertyEditor::edit( &cmdHistory, m_pDoc->gdoc() );
 }
 
@@ -949,6 +947,10 @@ void KIllustratorView::slotBlend()
         if (steps > 0)
             cmdHistory.addCommand (new BlendCmd (m_pDoc->gdoc(), steps), true);
     }
+    else
+        KMessageBox::information(this,
+                                 i18n("You have to select exactly two objects."),
+                                 i18n("Blending"), "blending");
 }
 
 void KIllustratorView::slotOptions()
@@ -977,12 +979,12 @@ void KIllustratorView::slotBrushChosen( const QColor & c )
     }
     else
     {
-        int result = QMessageBox::warning(this, i18n("Warning"),
-                                          i18n ("This action will set the default\n"
-                                                "properties for new objects !\n"
-                                                "Would you like to do it ?"),
-                                          i18n ("Yes"), i18n ("No"));
-        if (result == 0)
+        int result = KMessageBox::warningYesNo(this,
+                                               i18n ("This action will set the default\n"
+                                                     "properties for new objects !\n"
+                                                     "Would you like to do it ?"),
+                                               i18n("Warning"));
+        if (result == KMessageBox::Yes)
             GObject::setDefaultFillInfo (fInfo);
     }
 }
@@ -1007,12 +1009,12 @@ void KIllustratorView::slotPenChosen( const QColor & c  )
     }
     else
     {
-        int result = QMessageBox::warning (this, i18n("Warning"),
-                                           i18n ("This action will set the default\n"
-                                                 "properties for new objects !\n"
-                                                 "Would you like to do it ?"),
-                                           i18n ("Yes"), i18n ("No"));
-        if (result == 0)
+        int result = KMessageBox::warningYesNo(this,
+                                               i18n ("This action will set the default\n"
+                                                     "properties for new objects !\n"
+                                                     "Would you like to do it ?"),
+                                                i18n("Warning"));
+        if (result == KMessageBox::Yes)
             GObject::setDefaultOutlineInfo (oInfo);
     }
 }

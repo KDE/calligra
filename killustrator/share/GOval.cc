@@ -29,6 +29,7 @@
 
 #include <qdom.h>
 #include <qstring.h>
+#include <kapp.h>
 #include <qpainter.h>
 #include <klocale.h>
 
@@ -496,6 +497,7 @@ GCurve* GOval::convertToCurve () const {
   unsigned int num = parray.size ();
   GCurve* curve = new GCurve ();
 
+  QApplication::setOverrideCursor(Qt::waitCursor);
   Coord p0 (parray[0].x (), parray[0].y ());
   p0 = p0.transform (tmpMatrix);
   Coord p = p0;
@@ -509,6 +511,8 @@ GCurve* GOval::convertToCurve () const {
   curve->setClosed (true);
   curve->setOutlineInfo (outlineInfo);
   curve->setFillInfo (fillInfo);
+  QApplication::restoreOverrideCursor();
+  kapp->processEvents();
   return curve;
 }
 
