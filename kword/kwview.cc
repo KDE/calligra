@@ -4744,9 +4744,6 @@ KWGUI::KWGUI( QWidget *parent, KWView *_view )
     connect( r_vert, SIGNAL( doubleClicked() ), view, SLOT( formatPage() ) );
     connect( r_vert, SIGNAL( unitChanged( QString ) ), this, SLOT( unitChanged( QString ) ) );
 
-    r_horz->setUnit( doc->getUnit() );
-    r_vert->setUnit( doc->getUnit() );
-
     r_horz->hide();
     r_vert->hide();
 

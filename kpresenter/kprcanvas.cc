@@ -67,7 +67,6 @@
 #include <krandomsequence.h>
 
 #include "kprpage.h"
-#include <koRect.h>
 #include <math.h>
 
 /******************************************************************/

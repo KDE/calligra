@@ -3936,9 +3936,6 @@ void KPresenterView::setupRulers()
     connect( h_ruler, SIGNAL( newLeftIndent( double ) ), this, SLOT( newLeftIndent( double ) ) );
     connect( h_ruler, SIGNAL( newFirstIndent( double ) ), this, SLOT( newFirstIndent( double ) ) );
     connect( h_ruler, SIGNAL( newRightIndent( double ) ), this, SLOT( newRightIndent( double ) ) );
-
-    h_ruler->setUnit( m_pKPresenterDoc->getUnit() );
-    v_ruler->setUnit( m_pKPresenterDoc->getUnit() );
 }
 
 /*==============================================================*/
