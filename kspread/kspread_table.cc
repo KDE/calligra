@@ -2670,6 +2670,14 @@ void KSpreadTable::sortByRow( int ref_row, SortingOrder mode )
     for ( int d = r.left();  d <= r.right(); d++ )
     {
         KSpreadCell *cell1 = cellAt( d, ref_row  );
+        if ( cell1->isObscured() && cell1->isObscuringForced() )
+        {
+            int moveX=cell1->obscuringCellsColumn();
+            KSpreadCell* cell = cellAt(moveX,ref_row);
+            cell1 = cellAt( moveX+cell->extraXCells()+1,moveX );
+            d=moveX+cell->extraXCells()+1;
+        }
+
         // Look for which column we want to swap with the one number d
         KSpreadCell * bestCell = cell1;
         int bestX = d;
@@ -2680,6 +2688,8 @@ void KSpreadTable::sortByRow( int ref_row, SortingOrder mode )
 
             if ( cell2->isEmpty() )
             { /* No need to swap */ }
+            else if ( cell2->isObscured() && cell2->isObscuringForced() )
+            { /* No need to swap */}
             else if ( bestCell->isEmpty() )
             {
                 // empty cells are always shifted to the end
@@ -2759,7 +2769,13 @@ void KSpreadTable::sortByColumn(int ref_column,SortingOrder mode)
         // Look for which row we want to swap with the one number d
         KSpreadCell *cell1 = cellAt( ref_column, d );
         //kdDebug() << "New ref row " << d << endl;
-
+        if ( cell1->isObscured() && cell1->isObscuringForced() )
+        {
+            int moveY=cell1->obscuringCellsRow();
+            KSpreadCell* cell = cellAt(ref_column, moveY);
+            cell1 = cellAt( ref_column, moveY+cell->extraYCells()+1 );
+            d=moveY+cell->extraYCells()+1;
+        }
         KSpreadCell * bestCell = cell1;
         int bestY = d;
 
@@ -2769,6 +2785,8 @@ void KSpreadTable::sortByColumn(int ref_column,SortingOrder mode)
 
             if ( cell2->isEmpty() )
             { /* No need to swap */ }
+            else if ( cell2->isObscured() && cell2->isObscuringForced() )
+            { /* No need to swap */}
             else if ( bestCell->isEmpty() )
             {
                 // empty cells are always shifted to the end
