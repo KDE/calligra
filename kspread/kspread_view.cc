@@ -1621,7 +1621,7 @@ void KSpreadView::gotoCell()
 
 void KSpreadView::find()
 {
-    KoFindDialog dlg( this, "Find", m_findOptions, &m_findStrings );
+    KoFindDialog dlg( this, "Find", m_findOptions, m_findStrings );
     if ( KoFindDialog::Accepted != dlg.exec() )
     {
         return;
@@ -1636,7 +1636,7 @@ void KSpreadView::find()
 
 void KSpreadView::replace()
 {
-    KoReplaceDialog dlg( this, "Replace", m_findOptions, &m_findStrings, &m_replaceStrings );
+    KoReplaceDialog dlg( this, "Replace", m_findOptions, m_findStrings, m_replaceStrings );
     if ( KoReplaceDialog::Accepted != dlg.exec() )
     {
         return;
