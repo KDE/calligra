@@ -88,6 +88,8 @@ KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent, const char* name)
 
 	connect(m_gantt, SIGNAL(itemDoubleClicked(KDGanttViewItem*)), this, SLOT (slotItemDoubleClicked(KDGanttViewItem*)));
 
+    connect(m_gantt, SIGNAL(lvItemRenamed(KDGanttViewItem*, int, const QString&)), SLOT(slotItemRenamed(KDGanttViewItem*, int, const QString&)));
+
     m_taskLinks.setAutoDelete(true);
 }
 
@@ -652,6 +654,13 @@ void KPTGanttView::slotItemDoubleClicked(KDGanttViewItem* /*item*/)
 void KPTGanttView::print(KPrinter &printer) {
     kdDebug()<<k_funcinfo<<endl;
 
+}
+
+void KPTGanttView::slotItemRenamed(KDGanttViewItem* item, int col, const QString& str) {
+    //kdDebug()<<k_funcinfo<<(item ? item->listViewText(col) : "null")<<": "<<str<<endl;
+    if (col == 0) {
+        m_mainview->renameNode(getNode(item), QString(str));
+    }
 }
 
 #include "kptganttview.moc"

@@ -71,7 +71,8 @@ public slots:
 private slots:
     void currentItemChanged(KDGanttViewItem *);
     void slotItemDoubleClicked(KDGanttViewItem*);
-
+    void slotItemRenamed(KDGanttViewItem*, int, const QString&);
+    
 private:
     KDGanttViewItem *findItem(KPTNode *node);
     KDGanttViewItem *findItem(KPTNode *node, KDGanttViewItem *item);

@@ -67,6 +67,8 @@ public:
 
     virtual DCOPObject* dcopObject();
     
+    void renameNode(KPTNode *node, QString name);
+    
 public slots:
     void slotUpdate(bool calculate);
     void slotEditResource();

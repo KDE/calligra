@@ -708,6 +708,14 @@ void KPTView::slotAboutToShow(QWidget *widget) {
 
 }
 
+void KPTView::renameNode(KPTNode *node, QString name) {
+    //kdDebug()<<k_funcinfo<<name<<endl;
+    if (node) {
+        KPTNodeModifyNameCmd *cmd = new KPTNodeModifyNameCmd(*node, name, i18n("Modify name"));
+        getPart()->addCommand(cmd);
+    }
+}
+
 #ifndef NDEBUG
 void KPTView::slotPrintDebug() {
     kdDebug()<<"-------- Debug printout: Node list" <<endl;
