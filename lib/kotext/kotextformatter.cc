@@ -114,27 +114,42 @@ QPair<int, int> KoTextFormatterCore::determineCharWidth()
 }
 
 
+int KoTextFormatterCore::leftMargin( bool firstLine ) const
+{
+    int left = /*doc ?*/ parag->leftMargin() + doc->leftMargin() /*: 0*/;
+    if ( firstLine && !parag->string()->isRightToLeft() )
+    {
+        left += parag->firstLineMargin();
+        // Add the width of the paragraph counter - first line of parag only.
+        if( parag->counter() &&
+            ( parag->counter()->alignment() == Qt::AlignLeft ||
+              parag->counter()->alignment() == Qt::AlignAuto ) )
+            left += parag->counterWidth(); // in LU pixels
+    }
+    return left;
+}
+
+int KoTextFormatterCore::rightMargin( bool firstLine ) const
+{
+    int right = parag->rightMargin(); // 'rm' in QRT
+    if ( /*doc &&*/ firstLine && parag->string()->isRightToLeft() )
+        right += parag->firstLineMargin();
+    return right;
+}
+
 bool KoTextFormatterCore::format()
 {
     start = 0; // we don't do partial formatting yet
+    KoTextString *string = parag->string();
     if ( start == 0 )
-        c = &parag->string()->at( start );
+        c = &string->at( start );
     else
         c = 0;
 
     KoTextStringChar *firstChar = 0;
-    KoTextString *string = parag->string();
-    bool rtl = string->isRightToLeft();
     int left = doc ? parag->leftMargin() + doc->leftMargin() : 0;
-    x = left;
-    if ( doc && !rtl )
-        x += parag->firstLineMargin();
-    // Add the width of the paragraph counter - first line of parag only.
-    if( parag->counter() && !rtl &&
-    	(( parag->counter()->alignment() == Qt::AlignLeft ) || ( parag->counter()->alignment() == Qt::AlignAuto )))
-        x += parag->counterWidth(); // in LU pixels
+    int initialLMargin = leftMargin( true );
 
-    int curLeft = left;
     y = doc && doc->addMargins() ? parag->topMargin() : 0;
     // #57555, top margin doesn't apply if parag at top of page
     // (but a portion of the margin can be needed, to complete the prev page)
@@ -160,9 +175,7 @@ bool KoTextFormatterCore::format()
 
     int initialHeight = c->height(); // remember what adjustMargins was called with
 
-    int currentRightMargin = parag->rightMargin(); // 'rm' in QRT
-    if ( doc && rtl )
-        currentRightMargin += parag->firstLineMargin();
+    int currentRightMargin = rightMargin( true );
     int initialRMargin = currentRightMargin;
     // Those two things must be done before calling determineCharWidth
     i = start;
@@ -179,12 +192,12 @@ bool KoTextFormatterCore::format()
     // We are in a variable-width design, so it is returned by each call to adjustMargins.
     int dw = 0;
     //if (doc) // always true in kotext
-    doc->flow()->adjustMargins( y + parag->rect().y(), initialHeight,
-                                ww, x, initialRMargin, dw, parag );
+    doc->flow()->adjustMargins( y + parag->rect().y(), initialHeight, // input params
+                                ww, initialLMargin, initialRMargin, dw,  // output params
+                                parag );
     //else dw = parag->documentVisibleWidth();
 
-    int initialLMargin = x;
-    curLeft = x;
+    int x = initialLMargin; // as modified by adjustMargins
 
     int maxY = doc ? doc->flow()->availableHeight() : -1;
 
@@ -243,7 +256,7 @@ bool KoTextFormatterCore::format()
         if ( c )
             lastChr = c;
         c = &string->at( i );
-        if ( i > 0 && (x > curLeft || ww == 0) || lastWasNonInlineCustom ) {
+        if ( i > 0 && (x > initialLMargin || ww == 0) || lastWasNonInlineCustom ) {
             c->lineStart = 0;
         } else {
             c->lineStart = 1;
@@ -461,7 +474,6 @@ bool KoTextFormatterCore::format()
                     }
                     if ( x != left || availableWidth != dw )
                         fullWidth = FALSE;
-                    curLeft = x;
                     lineStart->y = y;
                     parag->insertLineStart( i, lineStart );
                     tempWordData.clear();
@@ -553,7 +565,6 @@ bool KoTextFormatterCore::format()
                     availableWidth = dw - initialRMargin;
                     if ( x != left || availableWidth != dw )
                         fullWidth = FALSE;
-                    curLeft = x;
                     lineStart->y = y;
                     parag->insertLineStart( i + 1, lineStart );
                     tempWordData.clear();
@@ -608,20 +619,17 @@ bool KoTextFormatterCore::format()
             // format this line again
             if ( doc && lineStart->h > initialHeight )
             {
-                int lm = left + ( ( firstChar == &string->at(0) && doc && !rtl ) ? parag->firstLineMargin() : 0 );
-#ifdef DEBUG_FORMATTER
-                kdDebug(32500) << "left=" << left << ", firstlinepargin=" << (( firstChar == &string->at(0) && doc ) ? parag->firstLineMargin() : 0) << " => lm=" << lm << endl;
-#endif
-                int newLMargin = lm;
-                int newRMargin = currentRightMargin - ( ( firstChar == &string->at(0) && doc && rtl ) ? parag->firstLineMargin() : 0 );
+                bool firstLine = ( firstChar == &string->at( 0 ) );
+                int newLMargin = leftMargin( firstLine );
+                int newRMargin = rightMargin( firstLine );
                 int newPageWidth = dw;
                 initialHeight = lineStart->h;
                 doc->flow()->adjustMargins( y + parag->rect().y(), initialHeight,
-                                            ww,
+                                            firstChar->width,
                                             newLMargin, newRMargin, newPageWidth, parag );
 
 #ifdef DEBUG_FORMATTER
-                kdDebug(32500) << "new height: " << initialHeight << " => left=" << left << " lm=" << lm << " first-char=" << (firstChar==&string->at(0)) << " newLMargin=" << newLMargin << " newRMargin=" << newRMargin << endl;
+                kdDebug(32500) << "new height: " << initialHeight << " => left=" << left << " first-char=" << (firstChar==&string->at(0)) << " newLMargin=" << newLMargin << " newRMargin=" << newRMargin << endl;
 #endif
                 if ( newLMargin != initialLMargin || newRMargin != initialRMargin || newPageWidth != dw )
                 {
@@ -640,7 +648,6 @@ bool KoTextFormatterCore::format()
                     tmpBaseLine = c->ascent();
                     lineStart->h = tmph;
                     lineStart->baseLine = tmpBaseLine;
-                    curLeft = x;
                     lastBreak = -1;
                     col = 0;
                     //minw = x;
