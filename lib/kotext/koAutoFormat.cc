@@ -64,10 +64,6 @@ KoAutoFormat::KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollecti
       m_ignoreUpperCase(false)
 {
     m_listCompletion=new KCompletion();
-    m_listCompletion->addItem( "kword" );
-    m_listCompletion->addItem( "kspread" );
-    m_listCompletion->addItem( "kpresenter" );
-    m_listCompletion->addItem( "koffice" );
 }
 
 void KoAutoFormat::readConfig()
@@ -115,11 +111,13 @@ void KoAutoFormat::readConfig()
                                   && !end.isEmpty();
 
 
-    config.setGroup( "AutoFormatEntries" );
+    config.setGroup( "AutoCompletion" );
     m_autoCompletion = config.readBoolEntry( "AutoCompletion", false );
 
     m_completionAppendSpace = config.readBoolEntry( "CompletionAppendSpace", false );
     m_minCompletionWordLength = config.readNumEntry( "CompletionMinWordLength", 5 );
+    m_nbMaxCompletionWord = config.readNumEntry( "NbMaxCompletionWord", 100 );
+
 
     Q_ASSERT( m_entries.isEmpty() ); // readConfig is only called once...
     config.setGroup( "AutoFormatEntries" );
@@ -211,7 +209,8 @@ void KoAutoFormat::saveConfig()
     config.setGroup( "AutoCompletion" );
     config.writeEntry( "AutoCompletion", m_autoCompletion );
     config.writeEntry( "CompletionAppendSpace", m_completionAppendSpace );
-
+    config.writeEntry( "CompletionMinWordLength", m_minCompletionWordLength);
+    config.writeEntry( "NbMaxCompletionWord", m_nbMaxCompletionWord);
 
     config.setGroup( "AutoFormatEntries" );
     KoAutoFormatEntryMap::Iterator it = m_entries.begin();
@@ -348,7 +347,7 @@ void KoAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KoTextParag *parag
 
         QString word=getWordAfterSpace(parag,index);
 
-        if( word.length()>= m_minCompletionWordLength)
+        if( m_listCompletion->items().count() < m_nbMaxCompletionWord && word.length()>= m_minCompletionWordLength )
             m_listCompletion->addItem( word );
 
         if ( m_autoChangeFormat && index > 3)
@@ -978,6 +977,11 @@ void KoAutoFormat::configAppendSpace( bool b)
 void KoAutoFormat::configMinWordLength( uint val )
 {
    m_minCompletionWordLength = val;
+}
+
+void KoAutoFormat::configNbMaxCompletionWord( uint val )
+{
+    m_nbMaxCompletionWord = val;
 }
 
 

@@ -409,8 +409,18 @@ void KoAutoFormatDia::setupTab5()
     lab->resize( lab->sizeHint() );
 
     m_minWordLength = new QSpinBox( tab5);
-    m_minWordLength->setMinValue (     m_docAutoFormat->getConfigMinWordLength() );
+    m_minWordLength->setValue ( m_docAutoFormat->getConfigMinWordLength() );
+    m_minWordLength->setMinValue ( 5 );
     m_minWordLength->resize( m_minWordLength->sizeHint() );
+
+
+    lab=new QLabel( i18n("Max. number of completion word:"), tab5);
+    lab->resize( lab->sizeHint() );
+
+    m_maxNbWordCompletion = new QSpinBox( tab5);
+    m_maxNbWordCompletion->setValue ( m_docAutoFormat->getConfigNbMaxCompletionWord() );
+    //m_maxNbWordCompletion->setMinValue( 1 );
+    m_maxNbWordCompletion->resize( m_maxNbWordCompletion->sizeHint() );
 
     cbAppendSpace = new QCheckBox( tab5 );
     cbAppendSpace->setText( i18n( "Append Space" ) );
@@ -589,10 +599,10 @@ bool KoAutoFormatDia::applyConfig()
     m_docAutoFormat->configAdvancedAutocorrect( cbAdvancedAutoCorrection->isChecked() );
 
     m_docAutoFormat->configAutoCompletion( cbAllowAutoCompletion->isChecked());
-
     m_docAutoFormat->configAppendSpace( cbAppendSpace->isChecked() );
-
     m_docAutoFormat->configMinWordLength( m_minWordLength->value() );
+    m_docAutoFormat->configNbMaxCompletionWord( m_maxNbWordCompletion->value () );
+
     // Save to config file
     m_docAutoFormat->saveConfig();
 

@@ -127,6 +127,8 @@ protected:
     KoAutoFormatExceptionWidget *twoUpperLetter;
     QListBox *m_listCompletion;
     QSpinBox *m_minWordLength;
+    QSpinBox *m_maxNbWordCompletion;
+
 protected slots:
     virtual void slotOk();
     void slotItemRenamed(QListViewItem * item, const QString & newText, int column);

@@ -128,6 +128,8 @@ public:
 
     void configMinWordLength( uint val );
 
+    void configNbMaxCompletionWord( uint val );
+
     TypographicQuotes getConfigTypographicSimpleQuotes() const
     { return m_typographicSimpleQuotes; }
 
@@ -173,6 +175,8 @@ public:
     uint getConfigMinWordLength() const
     { return m_minCompletionWordLength; }
 
+    uint getConfigNbMaxCompletionWord() const
+    { return m_nbMaxCompletionWord; }
 
     // Add/remove entries, called by the dialog
     void addAutoFormatEntry( const QString &key, const KoAutoFormatEntry &entry ) {
@@ -263,6 +267,8 @@ private:
     uint m_maxFindLength;
 
     uint m_minCompletionWordLength;
+
+    uint m_nbMaxCompletionWord;
 
     bool m_ignoreUpperCase;
 };
