@@ -620,6 +620,8 @@ void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
     ensureFormatted( cursor->parag() ); // call formatMore until necessary
 
     // Speed optimization: if we only type a char, only repaint from current line
+    // (In fact the one before. When typing a space, a word could move up to the
+    // line before, we need to repaint it too...)
     if ( !checkNewLine && tinyRepaint && !wasChanged )
     {
         // insert() called format() which called setChanged().
@@ -630,7 +632,7 @@ void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
 	// the wordwrap could have changed on the line above
 	// This is why we use origLine and not calling lineStartOfChar here.
         parag->setChanged( false );
-        parag->setLineChanged( origLine );
+        parag->setLineChanged( origLine - 1 ); // if origLine=0, it'll pass -1, which is 'all'
     }
 
     if ( repaint ) {
