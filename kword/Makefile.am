@@ -60,6 +60,7 @@ kword_main.cc: kword_main.moc
 kword_shell.cc: kword_shell.moc
 kword_view.cc: kword_view.moc
 kword_main.cc: kword_view.h kword.h
+char.cc: char.h kword.h
 fc.cc: fc.h
 font.cc: font.h
 format.cc: format.h
