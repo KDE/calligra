@@ -131,6 +131,9 @@ class KivioView : public KoView
 
     KoZoomHandler* zoomHandler();
 
+    KoRuler* horzRuler() { return hRuler; }
+    KoRuler* vertRuler() { return vRuler; }
+
   protected:
     virtual void customEvent( QCustomEvent* );
 

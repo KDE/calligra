@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="kivio" version="11">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="kivio" version="12">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="addStencilSet"/>
@@ -65,26 +65,21 @@
    <Action name="options" group="settings_configure"/>
  </Menu>
 </MenuBar>
-<ToolBar name="StencilToolBar" fullWidth="false"><text>Stencils</text>
+<ToolBar name="mainToolBar" fullWidth="false"><text>File</text>
+  <Separator/>
   <Action name="addStencilSet"/>
 </ToolBar>
-<ToolBar name="ViewToolBar" fullWidth="false"><text>View</text>
-  <Action name="viewZoom"/>
-  <Separator lineSeparator="true" />
-  <Action name="showPageBorders"/>
-  <Action name="showPageMargins"/>
-  <Separator lineSeparator="true" />
-  <Action name="showRulers"/>
-  <Action name="showGrid"/>
-</ToolBar>
-<ToolBar name="StencilBar" fullWidth="false"><text>Edit</text>
+<ToolBar name="EditToolBar" fullWidth="false"><text>Edit</text>
   <Action name="edit_undo"/>
   <Action name="edit_redo"/>
   <Separator/>
   <Action name="cutStencil"/>
   <Action name="copyStencil"/>
   <Action name="pasteStencil"/>
-  <Separator lineSeparator="true" />
+  <Separator/>
+  <Action name="viewZoom"/>
+</ToolBar>
+<ToolBar name="FormatToolBar" fullWidth="false"><text>Format</text>
   <Action name="groupStencils"/>
   <Action name="ungroupStencils"/>
   <Separator lineSeparator="true" />
@@ -92,8 +87,7 @@
   <Action name="bringStencilToFront"/>
   <Separator lineSeparator="true" />
   <Action name="arrowHeads"/>
-</ToolBar>
-<ToolBar name="ColorBar" fullWidth="false"><text>Colors</text>
+  <Separator lineSeparator="true" />
   <Action name="setFGColor"/>
   <Action name="setBGColor"/>
   <Separator lineSeparator="true" />

@@ -37,6 +37,7 @@
 #include <kcolorbutton.h>
 #include <koUnitWidgets.h>
 #include <kglobal.h>
+#include <kdebug.h>
 
 #include <qlabel.h>
 #include <qbuttongroup.h>
@@ -373,8 +374,8 @@ void KivioOptionsDialog::applyGuides()
   while (it.current()) {
     KivioGuideLineData* data = static_cast<GuidesListViewItem*>(it.current())->
       guideData();
-    ++it;
     gl->add(data->position(), data->orientation());
+    ++it;
   }
 
   view->canvasWidget()->paintGuides();
@@ -517,7 +518,7 @@ void KivioOptionsDialog::fillGuideList()
   m_guideList->clear();
 
   for(KivioGuideLineData* d = list.first(); d; d = list.next()) {
-    (void) new GuidesListViewItem(m_guideList, d, unit);
+    (void) new GuidesListViewItem(m_guideList, new KivioGuideLineData(*d), unit);
   }
 }
 
@@ -540,7 +541,7 @@ void KivioOptionsDialog::guideSelectionChanged(QListViewItem* li)
 
   double max = KoUnit::ptToUnit(m_layout.ptWidth, unit);
 
-  if(data->orientation() != Qt::Horizontal) {
+  if(data->orientation() == Qt::Horizontal) {
     max = KoUnit::ptToUnit(m_layout.ptHeight, unit);
   }
 
@@ -550,35 +551,49 @@ void KivioOptionsDialog::guideSelectionChanged(QListViewItem* li)
 
 void KivioOptionsDialog::changePos(double p)
 {
-  GuidesListViewItem* li = static_cast<GuidesListViewItem*>(m_guideList->selectedItems().getLast());
-
-  if(!li) {
-    return;
-  }
-
   KoUnit::Unit unit = static_cast<KoUnit::Unit>(m_unitCombo->currentItem());
-  li->setPosition(p, unit);
+  QListViewItemIterator it(m_guideList);
+
+  while (it.current()) {
+    GuidesListViewItem* li = static_cast<GuidesListViewItem*>(it.current());
+
+    if(li->isSelected()) {
+      li->setPosition(p, unit);
+    }
+
+    ++it;
+  }
 }
 
 void KivioOptionsDialog::guideHoriz(bool h)
 {
-  GuidesListViewItem* li = static_cast<GuidesListViewItem*>(m_guideList->selectedItems().getLast());
-
-  if(!li) {
-    return;
-  }
+  Qt::Orientation o;
 
   if(h) {
-    li->setOrientation(Qt::Horizontal);
+    o = Qt::Horizontal;
   } else {
-    li->setOrientation(Qt::Vertical);
+    o = Qt::Vertical;
+  }
+
+  QListViewItemIterator it(m_guideList);
+
+  while (it.current()) {
+    GuidesListViewItem* li = static_cast<GuidesListViewItem*>(it.current());
+
+    if(li->isSelected()) {
+      li->setOrientation(o);
+    }
+
+    ++it;
   }
 }
 
 void KivioOptionsDialog::addGuide()
 {
   KoUnit::Unit unit = static_cast<KoUnit::Unit>(m_unitCombo->currentItem());
-  (void) new GuidesListViewItem(m_guideList, new KivioGuideLineData(Qt::Horizontal), unit);
+  GuidesListViewItem* it = new GuidesListViewItem(m_guideList, new KivioGuideLineData(Qt::Horizontal), unit);
+  m_guideList->clearSelection();
+  m_guideList->setSelected(it, true);
 }
 
 void KivioOptionsDialog::delGuide()

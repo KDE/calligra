@@ -82,9 +82,6 @@
 #include "kivio_config.h"
 
 #include "tkcoloractions.h"
-//#include "tkfloatspinboxaction.h"
-//#include "tk2floatspinboxaction.h"
-//#include "tkcombobox.h"
 #include "tooldockmanager.h"
 #include "tooldockbase.h"
 

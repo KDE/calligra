@@ -28,6 +28,14 @@ KivioGuideLineData::KivioGuideLineData(Qt::Orientation o)
   selected = false;
 }
 
+KivioGuideLineData::KivioGuideLineData(KivioGuideLineData& d)
+{
+  hasBuffer = false;
+  pos = d.position();
+  orient = d.orientation();
+  selected = false;
+}
+
 void KivioGuideLineData::setOrientation(Qt::Orientation o)
 {
   orient = o;
@@ -176,7 +184,7 @@ void KivioGuideLines::paint(QPaintDevice* buffer, KivioCanvas* c)
     if (g->orientation() == Qt::Vertical) {
       p.setCoords(g->position(), 0);
       int x = c->mapToScreen(p).x();
-      
+
       if (x >= 0 && x < c->width() ) {
         bitBlt(&g->buffer,0,0,buffer,x,0,1,g->buffer.height());
         bitBlt(buffer,x,0,g->isSelected() ? vGuideLinesSelected:vGuideLines,0,dy,1,c->height());
