@@ -35,6 +35,17 @@ bool KWEFBaseWorker::doAbortFile(void)
     return doCloseFile();
 }
 
+bool KWEFBaseWorker::doFullDocument (const QValueList<ParaData>& paraList, QString &, QString &)
+{
+    QValueList<ParaData>::ConstIterator it;
+    for (it=paraList.begin();it!=paraList.end();it++)
+    {
+        if (!doFullParagraph((*it).text,(*it).layout,(*it).formattingList))
+            return false;
+    }
+    return true;
+}
+
 //
 // Secondly, define all methods returning false
 //
@@ -50,6 +61,7 @@ DO_FALSE_DEFINITION (doOpenFile (const QString& , const QString& ))
 DO_FALSE_DEFINITION (doCloseFile (void))
 DO_FALSE_DEFINITION (doOpenDocument (void))
 DO_FALSE_DEFINITION (doCloseDocument (void))
+DO_FALSE_DEFINITION (doFullParagraph(const QString&, const LayoutData&, const ValueListFormatData&))
 
 //
 // Thirdly, define all methods returning true
@@ -64,7 +76,6 @@ DO_FALSE_DEFINITION (doCloseDocument (void))
 DO_TRUE_DEFINITION (doOpenTextFrameSet (void))
 DO_TRUE_DEFINITION (doCloseTextFrameSet (void))
 DO_TRUE_DEFINITION (doFullDocumentInfo (const KWEFDocumentInfo& docInfo))
-DO_TRUE_DEFINITION (doFullDocument (const QValueList<ParaData> &, QString &, QString &))
 DO_TRUE_DEFINITION (doFullPaperFormat (const int format, const double width, const double height, const int orientation))
 DO_TRUE_DEFINITION (doOpenHead (void))
 DO_TRUE_DEFINITION (doCloseHead (void))
