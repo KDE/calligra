@@ -114,5 +114,7 @@ QString util_columnLabel( int column );
 
 QString util_dateFormat( KLocale* locale, QDate _date, KSpreadCell::formatNumber _tmpFormat); 
 
+QString util_timeFormat( KLocale* locale, QTime _time, KSpreadCell::formatNumber _tmpFormat); 
+
 #endif
 

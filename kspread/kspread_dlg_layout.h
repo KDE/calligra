@@ -213,6 +213,7 @@ public slots:
     void slotChangeState();
     void makeformat();
     void makeDateFormat();
+    void makeTimeFormat();
     void init();
     void slotChangeValue(int);
     void formatChanged(int);

@@ -35,6 +35,39 @@
 #include <kapp.h>
 
 
+QString util_timeFormat( KLocale* locale, QTime m_Time, KSpreadCell::formatNumber tmpFormat)
+{
+    QString tmp;
+    if( tmpFormat == KSpreadCell::Time )
+        tmp = locale->formatTime(m_Time,false);
+    else if(tmpFormat == KSpreadCell::SecondeTime )
+        tmp = locale->formatTime(m_Time,true);
+    else if(tmpFormat == KSpreadCell::Time_format1)
+        {// 9 : 01 AM
+            QString tmpTime;
+            if( m_Time.hour()>12)
+                tmp=QString().sprintf("%02d", m_Time.hour()-12)+":"+QString().sprintf("%02d",m_Time.minute()) +" "+ i18n("PM");
+            else
+                tmp=QString().sprintf("%02d", m_Time.hour())+":"+QString().sprintf("%02d",m_Time.minute()) +" "+ i18n("AM");
+        }
+    else if(tmpFormat == KSpreadCell::Time_format2)
+        { //9:01:05 AM
+            QString tmpTime;
+            if( m_Time.hour()>12)
+                tmp=QString().sprintf("%02d", m_Time.hour()-12)+":"+QString().sprintf("%02d",m_Time.minute()) +":"+QString().sprintf("%02d",m_Time.second())+" "+ i18n("PM");
+            else
+                tmp=QString().sprintf("%02d", m_Time.hour())+":"+QString().sprintf("%02d",m_Time.minute()) +":"+QString().sprintf("%02d",m_Time.second())+" "+ i18n("AM");
+        }
+    else if(tmpFormat == KSpreadCell::Time_format3)
+        { // 9 h 01 min 28 s
+            QString tmpTime;
+            tmp=QString().sprintf("%02d",m_Time.hour())+" "+i18n("h")+" "+QString().sprintf("%02d",m_Time.minute())+" "+i18n("min")+" "+QString().sprintf("%02d",m_Time.second())  +" "+ i18n("s");
+        }
+    else
+        tmp = locale->formatTime(m_Time,false);
+    return tmp;
+}
+
 QString util_dateFormat( KLocale* locale, QDate m_Date, KSpreadCell::formatNumber tmpFormat)
 {
     QString tmp,tmp2;

@@ -694,8 +694,6 @@ protected:
 
     QString createFormat( double value, int col, int row );
     QString createFractionFormat( double value );
-    QString createDateFormat( );
-    QString createTimeFormat( );
 
     /**
      * When you insert a cell at bottom or right

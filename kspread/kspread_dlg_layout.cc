@@ -1094,111 +1094,112 @@ void CellLayoutPageFloat::formatChanged(int)
 
 void CellLayoutPageFloat::slotChangeValue(int)
 {
-makeformat();
+    makeformat();
 }
 void CellLayoutPageFloat::slotChangeState()
 {
-QStringList list;
-listFormat->clear();
-if(dlg->cellText.isEmpty() || dlg->m_bValue)
+    QStringList list;
+    listFormat->clear();
+    if(dlg->cellText.isEmpty() || dlg->m_bValue)
         {
-        precision->setEnabled(true);
-        prefix->setEnabled(true);
-        postfix->setEnabled(true);
-        format->setEnabled(true);
+            precision->setEnabled(true);
+            prefix->setEnabled(true);
+            postfix->setEnabled(true);
+            format->setEnabled(true);
         }
-else
+    else
         {
-        precision->setEnabled(false);
-        prefix->setEnabled(false);
-        postfix->setEnabled(false);
-        format->setEnabled(false);
+            precision->setEnabled(false);
+            prefix->setEnabled(false);
+            postfix->setEnabled(false);
+            format->setEnabled(false);
         }
-if(number->isChecked())
+    if(number->isChecked())
         listFormat->setEnabled(false);
-else if(percent->isChecked())
+    else if(percent->isChecked())
         listFormat->setEnabled(false);
-else if(money->isChecked())
+    else if(money->isChecked())
         listFormat->setEnabled(false);
-else if(scientific->isChecked())
+    else if(scientific->isChecked())
         listFormat->setEnabled(false);
-else if(date->isChecked())
+    else if(date->isChecked())
         {
-        format->setEnabled(false);
-        precision->setEnabled(false);
-        prefix->setEnabled(false);
-        postfix->setEnabled(false);
-        listFormat->setEnabled(true);
-        init();
+            format->setEnabled(false);
+            precision->setEnabled(false);
+            prefix->setEnabled(false);
+            postfix->setEnabled(false);
+            listFormat->setEnabled(true);
+            init();
         }
-else if(fraction->isChecked())
+    else if(fraction->isChecked())
         {
-        precision->setEnabled(false);
-        listFormat->setEnabled(true);
-        list+=i18n("Demis 1/2");
-        list+=i18n("Quarters 1/4");
-        list+=i18n("Eighths 1/8");
-        list+=i18n("Sixteenths 1/16");
-        list+=i18n("Tenths 1/10");
-        list+=i18n("Hundredth 1/100");
-        list+=i18n("One digit 5/9");
-        list+=i18n("Two digits 15/22");
-        list+=i18n("Three digits 153/652");
-        listFormat->insertStringList(list);
-        if(dlg->formatNumber==KSpreadCell::fraction_half)
+            precision->setEnabled(false);
+            listFormat->setEnabled(true);
+            list+=i18n("Demis 1/2");
+            list+=i18n("Quarters 1/4");
+            list+=i18n("Eighths 1/8");
+            list+=i18n("Sixteenths 1/16");
+            list+=i18n("Tenths 1/10");
+            list+=i18n("Hundredth 1/100");
+            list+=i18n("One digit 5/9");
+            list+=i18n("Two digits 15/22");
+            list+=i18n("Three digits 153/652");
+            listFormat->insertStringList(list);
+            if(dlg->formatNumber==KSpreadCell::fraction_half)
                 listFormat->setCurrentItem(0);
-        else if(dlg->formatNumber==KSpreadCell::fraction_quarter)
+            else if(dlg->formatNumber==KSpreadCell::fraction_quarter)
                 listFormat->setCurrentItem(1);
-        else if(dlg->formatNumber==KSpreadCell::fraction_eighth )
+            else if(dlg->formatNumber==KSpreadCell::fraction_eighth )
                 listFormat->setCurrentItem(2);
-        else if(dlg->formatNumber==KSpreadCell::fraction_sixteenth )
+            else if(dlg->formatNumber==KSpreadCell::fraction_sixteenth )
                 listFormat->setCurrentItem(3);
-        else if(dlg->formatNumber==KSpreadCell::fraction_tenth )
+            else if(dlg->formatNumber==KSpreadCell::fraction_tenth )
                 listFormat->setCurrentItem(4);
-        else if(dlg->formatNumber==KSpreadCell::fraction_hundredth )
+            else if(dlg->formatNumber==KSpreadCell::fraction_hundredth )
                 listFormat->setCurrentItem(5);
-        else if(dlg->formatNumber==KSpreadCell::fraction_one_digit )
+            else if(dlg->formatNumber==KSpreadCell::fraction_one_digit )
                 listFormat->setCurrentItem(6);
-        else if(dlg->formatNumber==KSpreadCell::fraction_two_digits )
+            else if(dlg->formatNumber==KSpreadCell::fraction_two_digits )
                 listFormat->setCurrentItem(7);
-        else if(dlg->formatNumber==KSpreadCell::fraction_three_digits )
+            else if(dlg->formatNumber==KSpreadCell::fraction_three_digits )
                 listFormat->setCurrentItem(8);
-        else
+            else
                 listFormat->setCurrentItem(0);
         }
-else if(time->isChecked())
+    else if(time->isChecked())
         {
-        precision->setEnabled(false);
-        prefix->setEnabled(false);
-        postfix->setEnabled(false);
-        format->setEnabled(false);
-        listFormat->setEnabled(true);
+            precision->setEnabled(false);
+            prefix->setEnabled(false);
+            postfix->setEnabled(false);
+            format->setEnabled(false);
+            listFormat->setEnabled(true);
 
-        list+=i18n("System: ")+dlg->locale()->formatTime(QTime::currentTime(),false);
-        list+=i18n("System: ")+dlg->locale()->formatTime(QTime::currentTime(),true);
-        QString tmp;
-        list+=tmp.setNum(10)+":"+tmp.setNum(35) +" " + i18n("PM");
-        list+=tmp.setNum(10)+":"+tmp.setNum(35)+":"+tmp.setNum(25)+" " + i18n("PM");
-        list+=tmp.setNum(10)+" "+i18n("h")+" "+tmp.setNum(35)+" "+i18n("min")+" "+tmp.setNum(25)  +" "+ i18n("s");
 
-        listFormat->insertStringList(list);
-        if( dlg->formatNumber==KSpreadCell::Time )
+            list+=i18n("System: ")+dlg->locale()->formatTime(QTime::currentTime(),false);
+            list+=i18n("System: ")+dlg->locale()->formatTime(QTime::currentTime(),true);
+            QTime tmpTime(10,35,25);
+            list+= util_timeFormat(dlg->locale(), tmpTime, KSpreadCell::Time_format1);
+            list+= util_timeFormat(dlg->locale(), tmpTime, KSpreadCell::Time_format2);
+            list+= util_timeFormat(dlg->locale(), tmpTime, KSpreadCell::Time_format3);
+            listFormat->insertStringList(list);
+
+            if( dlg->formatNumber==KSpreadCell::Time )
                 listFormat->setCurrentItem(0);
-        else if(dlg->formatNumber==KSpreadCell::SecondeTime)
+            else if(dlg->formatNumber==KSpreadCell::SecondeTime)
                 listFormat->setCurrentItem(1);
-        else if(dlg->formatNumber==KSpreadCell::Time_format1)
+            else if(dlg->formatNumber==KSpreadCell::Time_format1)
                 listFormat->setCurrentItem(2);
-        else if(dlg->formatNumber==KSpreadCell::Time_format2)
+            else if(dlg->formatNumber==KSpreadCell::Time_format2)
                 listFormat->setCurrentItem(3);
-        else if(dlg->formatNumber==KSpreadCell::Time_format3)
+            else if(dlg->formatNumber==KSpreadCell::Time_format3)
                 listFormat->setCurrentItem(4);
-        else
+            else
                 listFormat->setCurrentItem(0);
         }
- m_bFormatNumberChanged=true;
-if( date->isChecked() && dlg->m_bDate)
+    m_bFormatNumberChanged=true;
+    if( date->isChecked() && dlg->m_bDate)
         makeDateFormat();
-else
+    else
         makeformat();
 }
 
@@ -1335,6 +1336,26 @@ void CellLayoutPageFloat::init()
         listFormat->setCurrentItem(0);
 
 }
+
+void CellLayoutPageFloat::makeTimeFormat()
+{
+    QString tmp;
+    QString tmpTime;
+    KSpreadCell::formatNumber tmpFormat=KSpreadCell::Time;
+    if( listFormat->currentItem()==0)
+        tmpFormat=KSpreadCell::Time;
+    else if(listFormat->currentItem()==1)
+        tmpFormat=KSpreadCell::SecondeTime;
+    else if(listFormat->currentItem()==2)
+        tmpFormat=KSpreadCell::Time_format1;
+    else if(listFormat->currentItem()==3)
+        tmpFormat=KSpreadCell::Time_format2;
+    else if(listFormat->currentItem()==4)
+        tmpFormat=KSpreadCell::Time_format3;
+    tmp= util_timeFormat( dlg->locale(), dlg->m_time, tmpFormat);
+    exampleLabel->setText(tmp);
+}
+
 void CellLayoutPageFloat::makeformat()
 {
     m_bFormatNumberChanged=true;
@@ -1362,34 +1383,7 @@ void CellLayoutPageFloat::makeformat()
         {
             if(time->isChecked())
                 {
-                    QString tmp;
-                    QString tmpTime;
-                    if( listFormat->currentItem()==0)
-                        exampleLabel->setText(dlg->locale()->formatTime(dlg->m_time,false));
-                    else if(listFormat->currentItem()==1)
-                        exampleLabel->setText(dlg->locale()->formatTime(dlg->m_time,true));
-                    else if(listFormat->currentItem()==2)
-                        {
-                            if( dlg->m_time.hour()>12)
-                                tmp=QString().sprintf("%02d", dlg->m_time.hour()-12)+":"+QString().sprintf("%02d",dlg->m_time.minute()) +" "+ i18n("PM");
-                            else
-                                tmp=QString().sprintf("%02d", dlg->m_time.hour())+":"+QString().sprintf("%02d",dlg->m_time.minute()) +" "+ i18n("AM");
-                            exampleLabel->setText(tmp);
-                        }
-                    else if(listFormat->currentItem()==3)
-                        {
-
-                            if( dlg->m_time.hour()>12)
-                                tmp=QString().sprintf("%02d", dlg->m_time.hour()-12)+":"+QString().sprintf("%02d",dlg->m_time.minute()) +":"+QString().sprintf("%02d",dlg->m_time.second())+" "+ i18n("PM");
-                            else
-                                tmp=QString().sprintf("%02d", dlg->m_time.hour())+":"+QString().sprintf("%02d",dlg->m_time.minute()) +":"+QString().sprintf("%02d",dlg->m_time.second())+" "+ i18n("AM");
-                            exampleLabel->setText(tmp);
-                        }
-                    else if(listFormat->currentItem()==4)
-                        {
-                            tmp=QString().sprintf("%02d",dlg->m_time.hour())+" "+i18n("h")+" "+QString().sprintf("%02d",dlg->m_time.minute())+" "+i18n("min")+" "+QString().sprintf("%02d",dlg->m_time.second())  +" "+ i18n("s");
-                            exampleLabel->setText(tmp);
-                        }
+                    makeTimeFormat();
                 }
             else
                 exampleLabel->setText(dlg->cellText);
@@ -2348,30 +2342,6 @@ void CellLayoutPageFont::setCombos()
         textColor = colorGroup().text();
  textColorButton->setColor( textColor );
 
- // Needed to initialize this font
- /*if ( dlg->bTextFontFamily )
- {
-     selFont.setFamily( dlg->textFontFamily );
-     kdDebug(36001) << "Family = " << dlg->textFontFamily.data() << endl;
-     number_of_entries =  family_combo->count();
-     string = dlg->textFontFamily;
-     found = false;
-
-     for (int i = 1; i < number_of_entries - 1; i++)
-     {
-         if ( string == (QString) family->text(i))
-         {
-
-             family->setCurrentItem(i);
-             //     kdDebug(36001) << "Found Font " << string.data() << endl;
-             found = true;
-             break;
-         }
-     }
- }
- else
-     family->setCurrentItem(0);
- */
 
  combo = size_combo;
  if ( dlg->bTextFontSize )
