@@ -6056,19 +6056,32 @@ void KWView::insertFile(const QString & path)
                 //kdDebug() << k_funcinfo << "Paragraphs:\n" << domDoc.toCString() << endl;
 
                 // The fixed framesets
-                framesetElem = framesetElem.nextSibling().toElement();
-                QValueList<QDomElement> framesetsList;
-
                 // doctype SELECTION is used for fixed framesets
                 QDomDocument domDocFrames( "SELECTION" ); // see KWCanvas::copySelectedFrames
                 QDomElement topElem = domDocFrames.createElement( "SELECTION" );
                 domDocFrames.appendChild( topElem );
                 QString tableName;
                 QDomElement table;
+                QValueList<QString> fsInHeader;
+                QValueList<QDomElement> framesetsList;
+
+                framesetElem = framesetElem.nextSibling().toElement();
                 for ( ; !framesetElem.isNull() ; framesetElem = framesetElem.nextSibling().toElement() )
                 {
                     if ( framesetElem.tagName() == "FRAMESET" )
                     {
+                        FrameSetType frameSetType = static_cast<FrameSetType>( KWDocument::getAttribute( framesetElem, "frameType", FT_BASE ) );
+                        KWFrameSet::Info info = static_cast<KWFrameSet::Info>( framesetElem.attribute("frameInfo").toInt() );
+                        if ( frameSetType == FT_TEXT &&
+                             (info == KWFrameSet::FI_FIRST_HEADER ||
+                              info == KWFrameSet::FI_ODD_HEADER   ||
+                              info == KWFrameSet::FI_EVEN_HEADER  ||
+                              info == KWFrameSet::FI_FIRST_FOOTER ||
+                              info == KWFrameSet::FI_ODD_FOOTER   ||
+                              info == KWFrameSet::FI_EVEN_FOOTER)
+                            )
+                            fsInHeader += getInlineFramesets( framesetElem );
+
                         QString name = framesetElem.attribute( "name" );
                         QString grpMgr = framesetElem.attribute( "grpMgr" );
                         if ( !inlineFsNames.contains(name) && !inlineFsNames.contains(grpMgr) )
@@ -6107,8 +6120,18 @@ void KWView::insertFile(const QString & path)
                     framesetElem = (*it);
                     FrameSetType frameSetType = static_cast<FrameSetType>( KWDocument::getAttribute( framesetElem, "frameType", FT_BASE ) );
                     KWFrameSet::Info info = static_cast<KWFrameSet::Info>( framesetElem.attribute("frameInfo").toInt() );
-                    // We skip headers and footers
-                    if ( frameSetType != FT_TEXT || info == KWFrameSet::FI_BODY || info == KWFrameSet::FI_FOOTNOTE )
+                    QString name = framesetElem.attribute("name");
+                    QString grpMgr = framesetElem.attribute( "grpMgr" );
+                    // We skip headers, footers and framsets/tables inside theese
+                    if ( !fsInHeader.contains(name) && !fsInHeader.contains(grpMgr) &&
+                         !( frameSetType == FT_TEXT &&
+                            (info == KWFrameSet::FI_FIRST_HEADER ||
+                             info == KWFrameSet::FI_ODD_HEADER   ||
+                             info == KWFrameSet::FI_EVEN_HEADER  ||
+                             info == KWFrameSet::FI_FIRST_FOOTER ||
+                             info == KWFrameSet::FI_ODD_FOOTER   ||
+                             info == KWFrameSet::FI_EVEN_FOOTER) )
+                        )
                     {
                         hasFixedFramesets = true;
                         topElem.appendChild( framesetElem );
@@ -6173,6 +6196,41 @@ void KWView::insertFile(const QString & path)
 
     }
     delete store;
+}
+
+QValueList<QString> KWView::getInlineFramesets( QDomNode framesetElem)
+{
+    //kdDebug()<<k_funcinfo<<" Frameset: "<<framesetElem.toElement().attribute("name")<<endl;
+    QValueList<QString> list;
+    QDomNode n = framesetElem.firstChild().toElement();
+    for( ; !n.isNull(); n = n.nextSibling() )
+    {
+        QDomElement e = n.toElement(); // try to convert the node to an element.
+        if  ( !e.isNull() && e.tagName() == "PARAGRAPH" )
+        {
+            QDomElement formatsElem = e.namedItem( "FORMATS" ).toElement();
+            if ( !formatsElem.isNull() )
+            {
+                // Get references to inline framesets
+                QDomElement formatElem = formatsElem.firstChild().toElement();
+                for ( ; !formatElem.isNull() ; formatElem = formatElem.nextSibling().toElement() )
+                {
+                    QDomElement anchorElem = formatElem.namedItem( "ANCHOR" ).toElement();
+                    if ( !anchorElem.isNull() )
+                    {
+                        QString type = anchorElem.attribute( "type" );
+                        if ( type == "grpMgr" /* old syntax */ || type == "frameset" )
+                        {
+                            QString iName = anchorElem.attribute( "instance" );
+                            list.append( iName );
+                            //kdDebug()<<k_funcinfo<<" added: "<<iName<<endl;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return list;
 }
 
 void KWView::addBookmark()

@@ -417,6 +417,8 @@ protected:
 
     void startKSpell();
 
+    QValueList<QString> getInlineFramesets( QDomNode framesetElem );
+
     // Helper stuff for the frame adjustment;
     enum moveFrameType  { RaiseFrame, LowerFrame, BringToFront, SendToBack };
     void adjustZOrderOfSelectedFrames(moveFrameType moveType);
