@@ -1399,53 +1399,50 @@ bool XMLTree::_dimensions(Q_UINT32, QDataStream &)
 
 bool XMLTree::_eof(Q_UINT32, QDataStream &)
 {
-    bool foundcell = false;
     MergeInfo *merge;
-    for(merge = mergelist.first(); merge != 0; merge = mergelist.next())
-    {
-	foundcell = false;
-	QDomElement map = root->documentElement().namedItem("map").toElement();
-	QDomNode n = map.firstChild();
-	while (!n.isNull() && !foundcell)
-	{
-	    QDomElement e = n.toElement();
-	    if (!e.isNull() && e.tagName() == "table")
-	    {
-		QDomNode n2 = e.firstChild();  
-		while (!n2.isNull() && !foundcell)
-		{
-		    QDomElement e2 = n2.toElement();
-		    if (!e2.isNull() && e2.tagName() == "cell")
-		    {
-			QDomNode n3 = e2.firstChild();
-			while (!n3.isNull() && !foundcell)
-			{
-			    QDomElement e3 = n3.toElement();
-			    if (!e3.isNull() && e3.tagName() == "format")
-			    {
-				int row = e2.attribute("row").toInt();
-				int col = e2.attribute("column").toInt();
-				if (row == merge->row() && col == merge->col())
-				{
-				    e3.setAttribute("rowspan", QString::number(merge->rowspan()));
-		    		    e3.setAttribute("colspan", QString::number(merge->colspan()));
-				    foundcell = true;
-				}
-			    }
-			    n3 = n3.nextSibling();
-			}
-		    }
-		    n2 = n2.nextSibling();
-		}
-	    }
-	    n = n.nextSibling();
-	}
 
-	if(!foundcell)
-	    kdWarning(s_area) << "WARNING: Cell " << merge->row() << " " << merge->col() << " not found!" << endl;
+    QDomElement map = root->documentElement().namedItem("map").toElement();
+    QDomNode n = map.firstChild();
+    while (!n.isNull() && !mergelist.isEmpty())
+    {
+	QDomElement e = n.toElement();
+	if (!e.isNull() && e.tagName() == "table")
+	{
+	    QDomNode n2 = e.firstChild();  
+	    while (!n2.isNull() && !mergelist.isEmpty())
+	    {
+		QDomElement e2 = n2.toElement();
+		if (!e2.isNull() && e2.tagName() == "cell")
+		{
+		    QDomNode n3 = e2.firstChild();
+		    while (!n3.isNull() && !mergelist.isEmpty())
+		    {
+			QDomElement e3 = n3.toElement();
+			if (!e3.isNull() && e3.tagName() == "format")
+			{
+			    int row = e2.attribute("row").toInt();
+			    int col = e2.attribute("column").toInt();
+			    for (merge = mergelist.first(); merge != 0; merge = mergelist.next())
+			    {
+			        if (row == merge->row() && col == merge->col())
+			        {
+			    	    e3.setAttribute("rowspan", QString::number(merge->rowspan()));
+		    		    e3.setAttribute("colspan", QString::number(merge->colspan()));
+				
+				    mergelist.remove(mergelist.current());
+				    break;
+				}
+    			    }
+			}
+			n3 = n3.nextSibling();
+		    }
+		}
+		n2 = n2.nextSibling();
+	    }
+	}
+	n = n.nextSibling();
     }
 
-    mergelist.clear();
     m_streamDepth--;
     return true;
 }
