@@ -30,6 +30,7 @@
 #include <qclipboard.h>
 #include <qmessagebox.h>
 #include <qcombobox.h>
+#include <qlayout.h>
 #include <unistd.h>
 #include "KIllustrator.h"
 #include "KIllustrator.moc"
@@ -97,6 +98,7 @@
 #include <kstddirs.h>
 #include <kio_job.h>
 #include <kglobal.h>
+#include <ktoolbarradiogroup.h>
 #endif
 
 #include "koPageLayoutDia.h"
@@ -403,8 +405,11 @@ void KIllustrator::initToolBars () {
 
   /* the "tool" toolbar */
   toolPalette = new KToolBar (this);
+#if NEWKDE
+  KToolBarRadioGroup* toolGroup = new KToolBarRadioGroup (toolPalette);
+#else
   KRadioGroup* toolGroup = new KRadioGroup (toolPalette);
-
+#endif
   toolPalette->insertButton (loader->loadIcon ("selecttool.xpm"),
 			     ID_TOOL_SELECT, true, i18n ("Selection Mode"));
   toolPalette->setToggle (ID_TOOL_SELECT);
@@ -499,7 +504,11 @@ void KIllustrator::initToolBars () {
 
   /* the "edit point" toolbar */
   editPointToolbar = new KToolBar (this);
+#if NEWKDE
+  KToolBarRadioGroup* toolGroup2 = new KToolBarRadioGroup (editPointToolbar);
+#else
   KRadioGroup* toolGroup2 = new KRadioGroup (editPointToolbar);
+#endif
   editPointToolbar->insertButton (loader->loadIcon ("moveNode.xpm"),
 			     ID_TOOL_EP_MOVE, true, i18n ("Move Point"));
   editPointToolbar->setToggle (ID_TOOL_EP_MOVE);
@@ -1230,7 +1239,7 @@ void KIllustrator::saveFile () {
 void KIllustrator::saveAsFile () {
   QString fname = KFileDialog::getSaveFileName ((const char *)
 						lastSaveDir, "*.kil", this);
-  if (fname.right (4).compare (".kil") != 0)
+  if (fname.right (4) != ".kil")
     fname += ".kil";
   QFileInfo finfo (fname);
     lastSaveDir = finfo.dirPath ();

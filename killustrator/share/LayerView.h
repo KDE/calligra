@@ -26,12 +26,14 @@
 #define LayerView_h_
 
 #include <qtableview.h>
-#include <qlineedit.h>
 #include <qpixmap.h>
 
 #include <vector>
-#include "GLayer.h"
-#include "GDocument.h"
+
+class QLineEdit;
+
+class GDocument;
+class GLayer;
 
 class LayerView : public QTableView {
   Q_OBJECT

@@ -27,7 +27,7 @@
 
 #include <qstring.h>
 
-#include "GDocument.h"
+class GDocument;
 
 class ExportFilter {
 protected:

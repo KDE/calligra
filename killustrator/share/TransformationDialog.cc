@@ -38,12 +38,20 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qgrpbox.h>
+#include <qradiobt.h>
+#include <qchkbox.h>
 
 #include "TranslateCmd.h"
 #include "RotateCmd.h"
 #include "ScaleCmd.h"
 #include "InsertObjCmd.h"
 #include "Handle.h" // for scaling directions
+#include "GDocument.h"
+#include "GObject.h"
+#include "CommandHistory.h"
+#include "FloatSpinBox.h"
+#include "UnitBox.h"
+#include "MyTabCtl.h"
 
 TransformationDialog::TransformationDialog (CommandHistory* cmdHist,
 					    QWidget* parent,

@@ -25,7 +25,9 @@
 #ifndef ImportFilter_h_
 #define ImportFilter_h_
 
-#include "GDocument.h"
+#include <qstring.h>
+
+class GDocument;
 
 class ImportFilter {
 public:

@@ -25,9 +25,10 @@
 #ifndef CreateOvalCmd_h_
 #define CreateOvalCmd_h_
 
-#include "GDocument.h"
-#include "GOval.h"
 #include "Command.h"
+
+class GDocument;
+class GOval;
 
 class CreateOvalCmd : public Command {
 public:

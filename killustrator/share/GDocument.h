@@ -25,9 +25,15 @@
 #ifndef GDocument_h_
 #define GDocument_h_
 
+#include <vector>
+#include <list>
+
 #include <qobject.h>
 #include <qlist.h>
-#include <qfile.h>
+#include <qstring.h>
+
+#include "xmlutils/XmlWriter.h"
+#include "xmlutils/XmlElement.h"
 
 #include "Painter.h"
 #include "Handle.h"
@@ -41,6 +47,8 @@
 #define XML_DOCTYPE "kiml"
 #define XML_DTD     "kiml1.0.dtd"
 #define UNNAMED_FILE "<unnamed>"
+
+class GObject;
 
 class GDocument : public QObject {
   Q_OBJECT

@@ -25,9 +25,10 @@
 #ifndef EditPointCmd_h_
 #define EditPointCmd_h_
 
-#include "GDocument.h"
-#include "GObject.h"
 #include "Command.h"
+
+class GDocument;
+class GObject;
 
 class EditPointCmd : public Command {
 public:

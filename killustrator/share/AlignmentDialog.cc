@@ -32,12 +32,19 @@
 #include <kbuttonbox.h>
 #include <kseparator.h>
 #include <kiconloader.h>
+#include <ktabctl.h>
 
 #include <qpushbt.h>
 #include <qbttngrp.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qgrpbox.h>
+#include <qradiobt.h>
+#include <qchkbox.h>
+
+#include "GDocument.h"
+#include "GObject.h"
+#include "CommandHistory.h"
 
 #define BUTTON_WIDTH  40
 #define BUTTON_HEIGHT 40

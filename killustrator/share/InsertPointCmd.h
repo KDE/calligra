@@ -25,10 +25,11 @@
 #ifndef InsertPointCmd_h_
 #define InsertPointCmd_h_
 
-#include "GDocument.h"
-#include "GPolyline.h"
 #include "GPolygon.h"
 #include "Command.h"
+
+class GDocument;
+class GPolyline;
 
 class InsertPointCmd : public Command {
 public:

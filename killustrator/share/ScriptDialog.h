@@ -26,8 +26,10 @@
 #define ScriptDialog_h_
 
 #include <qdialog.h>
-#include <qlistbox.h>
-#include "GDocument.h"
+
+class QListBox;
+
+class GDocument;
 
 class ScriptDialog : public QDialog {
   Q_OBJECT

@@ -25,9 +25,10 @@
 #ifndef SetTextCmd_h_
 #define SetTextCmd_h_
 
-#include "GDocument.h"
-#include "GText.h"
 #include "Command.h"
+
+class GDocument;
+class GText;
 
 class SetTextCmd : public Command {
 public:

@@ -36,6 +36,9 @@
 #include <qmlined.h>
 #include <qlayout.h>
 
+#include "ScriptEditor.h"
+#include "GDocument.h"
+
 ScriptConsole::ScriptConsole (QWidget* parent, const char* name) : 
     QDialog (parent, name, false) {
   QPushButton* button;

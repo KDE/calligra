@@ -26,9 +26,10 @@
 #define DuplicateCmd_h_
 
 #include <list>
-#include "GDocument.h"
-#include "GObject.h"
 #include "Command.h"
+
+class GDocument;
+class GObject;
 
 class DuplicateCmd : public Command {
 public:

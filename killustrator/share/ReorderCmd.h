@@ -25,10 +25,11 @@
 #ifndef ReorderCmd_h_
 #define ReorderCmd_h_
 
-#include "GDocument.h"
 #include "Command.h"
 #include <qvector.h>
 #include <qarray.h>
+
+class GDocument;
 
 enum ReorderPosition {
   RP_ToFront, RP_ToBack, RP_ForwardOne, RP_BackwardOne

@@ -78,6 +78,7 @@
 #include <kurl.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
+#include <qmessagebox.h>
 #include <qlayout.h>
 #include <unistd.h>
 

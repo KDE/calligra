@@ -27,7 +27,7 @@
 
 #include <qdialog.h>
 
-#include "GDocument.h"
+class GDocument;
 
 class DocumentInfo : public QDialog {
   Q_OBJECT

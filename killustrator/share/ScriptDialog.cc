@@ -27,6 +27,7 @@
 #include <qfileinfo.h>
 #include <qpushbt.h>
 #include <qlayout.h>
+#include <qlistbox.h>
 
 #include <klocale.h>
 #include <kapp.h>
@@ -38,6 +39,8 @@
 #endif
 #include "ScriptDialog.h"
 #include "ScriptDialog.moc"
+
+#include "GDocument.h"
 
 ScriptDialog::ScriptDialog (QWidget* parent, const char* name) : 
     QDialog (parent, name, false) {

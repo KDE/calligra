@@ -25,9 +25,10 @@
 #ifndef CreateRectangleCmd_h_
 #define CreateRectangleCmd_h_
 
-#include "GDocument.h"
-#include "GPolygon.h"
 #include "Command.h"
+
+class GDocument;
+class GPolygon;
 
 class CreateRectangleCmd : public Command {
 public:

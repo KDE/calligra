@@ -25,7 +25,6 @@
 #ifndef AlignCmd_h_
 #define AlignCmd_h_
 
-#include "GDocument.h"
 #include "Command.h"
 
 enum HorizAlignment { 

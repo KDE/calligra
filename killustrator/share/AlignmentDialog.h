@@ -26,14 +26,17 @@
 #define AlignmentDialog_h
 
 #include <qdialog.h>
-#include <qradiobt.h>
-#include <qchkbox.h>
-#include <ktabctl.h>
-#include "GDocument.h"
-#include "GObject.h"
+
 #include "AlignCmd.h"
 #include "DistributeCmd.h"
-#include "CommandHistory.h"
+
+class QRadioButton;
+class QCheckBox;
+
+class KTabCtl;
+
+class GDocument;
+class CommandHistory;
 
 enum AlignmentMode { AMode_Align, AMode_Distribute };
 

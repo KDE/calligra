@@ -31,6 +31,7 @@
 #include <kimgio.h>
 #include "Painter.h"
 #include "ImageExport.h"
+#include "GDocument.h"
 #include "gif.h"
 
 #define RESOLUTION 72.0

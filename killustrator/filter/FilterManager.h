@@ -26,6 +26,7 @@
 #define FilterManager_h_
 
 #include <qdict.h>
+#include <qstrlist.h>
 
 #include "FilterInfo.h"
 #include "ExportFilter.h"

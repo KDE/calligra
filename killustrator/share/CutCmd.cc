@@ -28,6 +28,9 @@
 #include "CutCmd.h"
 #include <klocale.h>
 
+#include "GDocument.h"
+#include "GObject.h"
+
 CutCmd::CutCmd (GDocument* doc) 
   : Command(i18n("Cut"))
 {

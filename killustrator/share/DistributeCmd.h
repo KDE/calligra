@@ -25,8 +25,9 @@
 #ifndef DistributeCmd_h_
 #define DistributeCmd_h_
 
-#include "GDocument.h"
 #include "Command.h"
+
+class GDocument;
 
 enum HorizDistribution { 
   HDistrib_None, HDistrib_Left, HDistrib_Center, 

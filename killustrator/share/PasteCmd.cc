@@ -22,12 +22,16 @@
 
 */
 
+#include "PasteCmd.h"
+
 #include <iostream.h>
 #include <strstream.h>
 #include <qclipboard.h>
-#include "PasteCmd.h"
-#include "GText.h"
 #include <klocale.h>
+
+#include "GDocument.h"
+#include "GObject.h"
+#include "GText.h"
 
 PasteCmd::PasteCmd (GDocument* doc) 
   : Command(i18n("Paste")) 

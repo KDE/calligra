@@ -44,6 +44,8 @@
 #include <kfm.h>
 #endif
 
+class QGridLayout;
+
 class QwViewport;
 class Canvas;
 class GDocument;

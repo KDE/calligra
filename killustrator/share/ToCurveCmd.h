@@ -25,10 +25,11 @@
 #ifndef ToCurveCmd_h_
 #define ToCurveCmd_h_
 
-#include "GDocument.h"
-#include "GObject.h"
-#include "GCurve.h"
 #include "Command.h"
+
+class GDocument;
+class GObject;
+class GCurve;
 
 class ToCurveCmd : public Command {
 public:

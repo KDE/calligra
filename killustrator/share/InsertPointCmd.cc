@@ -25,6 +25,9 @@
 #include "InsertPointCmd.h"
 #include <klocale.h>
 
+#include "GDocument.h"
+#include "GPolyline.h"
+
 InsertPointCmd::InsertPointCmd (GDocument* doc, GPolyline* o,
 				int idx, float x, float y) 
   : Command(i18n("Insert Point"))

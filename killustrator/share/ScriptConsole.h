@@ -27,8 +27,8 @@
 
 #include <qdialog.h>
 
-#include "ScriptEditor.h"
-#include "GDocument.h"
+class GDocument;
+class ScriptEditor;
 
 class ScriptConsole : public QDialog {
   Q_OBJECT

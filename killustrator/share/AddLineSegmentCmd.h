@@ -25,11 +25,12 @@
 #ifndef AddLineSegmentCmd_h_
 #define AddLineSegmentCmd_h_
 
-#include "GDocument.h"
-#include "GPolyline.h"
 #include "Command.h"
 
 #include <qlist.h>
+
+class GDocument;
+class GPolyline;
 
 class AddLineSegmentCmd : public Command {
 public:

@@ -25,10 +25,15 @@
 #include "LayerView.h"
 #include "LayerView.moc"
 
+#include <qlineedit.h>
+
 #include <kapp.h>
 #include <kiconloader.h>
 
 #include <iostream.h>
+
+#include "GLayer.h"
+#include "GDocument.h"
 
 #define CELL_HEIGHT 25
 #define CELL1_WIDTH 25

@@ -26,6 +26,9 @@
 #include <klocale.h>
 #include <map>
 
+#include "GDocument.h"
+#include "GGroup.h"
+
 GroupCmd::GroupCmd (GDocument* doc) : Command(i18n("Group Objects")) {
   document = doc;
   group = 0L;

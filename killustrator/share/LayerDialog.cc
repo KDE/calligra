@@ -39,6 +39,7 @@
 #include <qlayout.h>
 #include <qheader.h>
 
+#include "GDocument.h"
 #include "GLayer.h"
 
 LayerDialog::LayerDialog (QWidget* parent, const char* name) :

@@ -26,6 +26,8 @@
 #include "InsertObjCmd.h"
 #include <klocale.h>
 
+#include "GDocument.h"
+
 InsertObjCmd::InsertObjCmd (GDocument* doc, QList<GObject>& objs) 
   : Command(i18n("Insert Object"))
 {

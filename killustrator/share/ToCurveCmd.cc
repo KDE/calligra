@@ -25,6 +25,10 @@
 #include "ToCurveCmd.h"
 #include <klocale.h>
 
+#include "GDocument.h"
+#include "GObject.h"
+#include "GCurve.h"
+
 ToCurveCmd::ToCurveCmd (GDocument* doc) 
   : Command(i18n("Convert to curve"))
 {

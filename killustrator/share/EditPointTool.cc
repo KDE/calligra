@@ -108,7 +108,7 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc,
       ) {
     QMouseEvent *me = (QMouseEvent *) e;
     float xpos = me->x (), ypos = me->y ();
-    canvas->snapPositionToGrid (xpos, ypos);
+    //    canvas->snapPositionToGrid (xpos, ypos);
 
     obj = 0L;
     pointIdx = -1;

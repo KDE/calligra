@@ -25,6 +25,9 @@
 #include "TextAlongPathCmd.h"
 #include <klocale.h>
 
+#include "GDocument.h"
+#include "GText.h"
+
 TextAlongPathCmd::TextAlongPathCmd (GDocument* doc, GText* obj, GObject* path) 
   : Command(i18n("Text along path"))
 {

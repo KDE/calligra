@@ -25,6 +25,7 @@
 #include <iostream.h>
 #include "ShearCmd.h"
 #include <klocale.h>
+#include <kapp.h>
 
 ShearCmd::ShearCmd (GDocument* doc, const Coord& center, float x, float y) :
   ObjectManipCmd (doc, i18n("Shear")) {

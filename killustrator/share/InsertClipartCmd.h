@@ -25,8 +25,9 @@
 #ifndef InsertClipartCmd_h_
 #define InsertClipartCmd_h_
 
-#include "GDocument.h"
 #include "Command.h"
+
+class GDocument;
 
 class InsertClipartCmd : public Command {
 public:

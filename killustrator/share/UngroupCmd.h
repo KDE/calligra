@@ -28,10 +28,11 @@
 #include <list>
 #include <pair.h>
 
-#include "GDocument.h"
-#include "GGroup.h"
-#include "GObject.h"
 #include "Command.h"
+
+class GDocument;
+class GGroup;
+class GObject;
 
 class UngroupCmd : public Command {
 public:

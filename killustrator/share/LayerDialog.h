@@ -26,8 +26,8 @@
 #define LayerDialog_h_
 
 #include <qdialog.h>
-#include "GDocument.h"
 
+class GDocument;
 class LayerView;
 
 class LayerDialog : public QDialog {

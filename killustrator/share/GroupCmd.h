@@ -25,9 +25,11 @@
 #ifndef GroupCmd_h_
 #define GroupCmd_h_
 
-#include "GDocument.h"
 #include "Command.h"
-#include "GGroup.h"
+
+class GDocument;
+class GObject;
+class GGroup;
 
 class GroupCmd : public Command {
 public:

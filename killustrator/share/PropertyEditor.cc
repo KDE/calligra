@@ -32,12 +32,16 @@
 #include <kbuttonbox.h>
 #include <kseparator.h>
 #include <kiconloader.h>
+#include <ktabctl.h>
+#include <kcolorbtn.h>
 
 #include <qpushbt.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qwidgetstack.h>
 #include <qcombobox.h>
+#include <qpushbt.h>
+#include <qslider.h>
 
 #include "GText.h"
 #include "GPolygon.h"
@@ -47,6 +51,15 @@
 #include "LineStyle.h"
 #include "PStateManager.h"
 #include "units.h"
+#include "GDocument.h"
+#include "GObject.h"
+#include "FloatSpinBox.h"
+#include "FontSelector.h"
+#include "CommandHistory.h"
+#include "Gradient.h"
+#include "BrushCells.h"
+#include "ColorComboBox.h"
+#include "UnitBox.h"
 
 #define SOLID_BOX    0
 #define PATTERN_BOX  1

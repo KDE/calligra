@@ -30,6 +30,7 @@
 #include "filter/FilterManager.h"
 #include "FilterInfo.h"
 #include "filter_utils.h"
+#include "GDocument.h"
 
 void list_export_filters () {
   FilterManager* fmgr = FilterManager::instance ();

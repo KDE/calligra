@@ -22,9 +22,10 @@
 
 */
 
+#include <qfile.h>
+
 #include "GDocument.h"
 #include "GDocument.moc"
-#include "GObject.h"
 #include "GPolygon.h"
 #include "GText.h"
 #include "GPolyline.h"

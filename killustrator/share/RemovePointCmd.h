@@ -25,10 +25,11 @@
 #ifndef RemovePointCmd_h_
 #define RemovePointCmd_h_
 
-#include "GDocument.h"
-#include "GPolyline.h"
 #include "GPolygon.h"
 #include "Command.h"
+
+class GDocument;
+class GPolyline;
 
 class RemovePointCmd : public Command {
 public:

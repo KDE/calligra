@@ -25,9 +25,10 @@
 #ifndef SplitLineCmd_h_
 #define SplitLineCmd_h_
 
-#include "GDocument.h"
-#include "GPolyline.h"
 #include "Command.h"
+
+class GDocument;
+class GPolyline;
 
 class SplitLineCmd : public Command {
 public:

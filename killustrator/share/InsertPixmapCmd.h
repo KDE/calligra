@@ -25,8 +25,9 @@
 #ifndef InsertPixmapCmd_h_
 #define InsertPixmapCmd_h_
 
-#include "GDocument.h"
 #include "Command.h"
+
+class GDocument;
 
 class InsertPixmapCmd : public Command {
 public:

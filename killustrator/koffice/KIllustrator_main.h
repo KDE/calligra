@@ -26,12 +26,17 @@
 #define KIllustrator_main_h_
 
 #include <koApplication.h>
+#include "KIllustrator_shell.h"
+
+class KoMainWindow;
 
 class KIllustratorApp : public KoApplication {
   Q_OBJECT
 public:
   KIllustratorApp (int& argc, char** argv);
   ~KIllustratorApp ();
+
+  KoMainWindow* createNewShell() { return new KIllustratorShell; };
 
 protected:
 };

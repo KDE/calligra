@@ -25,11 +25,12 @@
 #ifndef CreateBezierCmd_h_
 #define CreateBezierCmd_h_
 
-#include "GDocument.h"
-#include "GBezier.h"
 #include "Command.h"
 
 #include <qlist.h>
+
+class GDocument;
+class GBezier;
 
 class CreateBezierCmd : public Command {
 public:

@@ -26,6 +26,10 @@
 #include "UngroupCmd.h"
 #include <klocale.h>
 
+#include "GDocument.h"
+#include "GGroup.h"
+#include "GObject.h"
+
 UngroupCmd::UngroupCmd (GDocument* doc) : Command(i18n("Ungroup")) {
   document = doc;
   for (list<GObject*>::iterator it = doc->getSelection ().begin ();

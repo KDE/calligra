@@ -25,10 +25,11 @@
 #ifndef BlendCmd_h_
 #define BlendCmd_h_
 
-#include "GDocument.h"
-#include "GObject.h"
-#include "GCurve.h"
 #include "Command.h"
+
+class GDocument;
+class GObject;
+class GCurve;
 
 class BlendCmd : public Command {
 public:

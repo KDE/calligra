@@ -26,6 +26,9 @@
 #include "DeleteCmd.h"
 #include <klocale.h>
 
+#include "GDocument.h"
+#include "GObject.h"
+
 DeleteCmd::DeleteCmd (GDocument* doc) : Command(i18n("Delete")) {
   document = doc;
   for (list<GObject*>::iterator it = doc->getSelection ().begin ();

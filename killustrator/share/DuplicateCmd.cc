@@ -22,12 +22,16 @@
 
 */
 
+#include "DuplicateCmd.h"
+
 #include <iostream.h>
 #include <qclipboard.h>
 #include <strstream.h>
-#include "DuplicateCmd.h"
-#include "PStateManager.h"
 #include <klocale.h>
+
+#include "GDocument.h"
+#include "GObject.h"
+#include "PStateManager.h"
 
 DuplicateCmd::DuplicateCmd (GDocument* doc) 
   : Command(i18n("Duplicate"))

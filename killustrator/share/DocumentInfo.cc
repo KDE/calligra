@@ -34,6 +34,8 @@
 #include <qmlined.h>
 #include <qlayout.h>
 
+#include "GDocument.h"
+
 DocumentInfo::DocumentInfo (GDocument* doc, QWidget* parent,
 			    const char* name) :
     QDialog (parent, name, true) {

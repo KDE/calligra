@@ -26,9 +26,10 @@
 #define Command_h_
 
 #include "GObject.h"
-#include "GDocument.h"
 
 #include <qvector.h>
+
+class GDocument;
 
 class Command {
 protected:

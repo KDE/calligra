@@ -26,6 +26,9 @@
 #include "CreateRectangleCmd.h"
 #include <klocale.h>
 
+#include "GDocument.h"
+#include "GPolygon.h"
+
 CreateRectangleCmd::CreateRectangleCmd (GDocument* doc, GPolygon* obj) :
   Command(i18n("Create Rectangle"))
 {

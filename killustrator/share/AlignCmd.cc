@@ -26,6 +26,8 @@
 #include "AlignCmd.h"
 #include <klocale.h>
 
+#include "GDocument.h"
+
 AlignCmd::AlignCmd (GDocument* doc, HorizAlignment halign, 
                     VertAlignment valign, bool centerToPage, 
 		    bool snapToGrid) : ObjectManipCmd (doc, i18n("Align")) {

@@ -25,6 +25,10 @@
 #include "BlendCmd.h"
 #include <klocale.h>
 
+#include "GDocument.h"
+#include "GObject.h"
+#include "GCurve.h"
+
 BlendCmd::BlendCmd (GDocument* doc, int steps) 
   : Command(i18n("Blend objects"))
 {

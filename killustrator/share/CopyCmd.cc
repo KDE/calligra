@@ -28,6 +28,9 @@
 #include "CopyCmd.h"
 #include <klocale.h>
 
+#include "GDocument.h"
+#include "GObject.h"
+
 CopyCmd::CopyCmd (GDocument* doc) 
   : Command(i18n("Copy"))
 {

@@ -26,6 +26,9 @@
 #include "CreateTextCmd.h"
 #include <klocale.h>
 
+#include "GDocument.h"
+#include "GText.h"
+
 CreateTextCmd::CreateTextCmd (GDocument* doc, GText* obj) :
   Command(i18n("Create Text")) 
 {

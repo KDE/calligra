@@ -35,6 +35,7 @@
 #include <qglobal.h>
 #include "version.h"
 #include "Painter.h"
+#include "GDocument.h"
 #include "EPSExport.h"
 
 EPSExport::EPSExport () {

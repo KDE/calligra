@@ -26,6 +26,9 @@
 #include "CreateBezierCmd.h"
 #include <klocale.h>
 
+#include "GDocument.h"
+#include "GBezier.h"
+
 CreateBezierCmd::CreateBezierCmd (GDocument* doc, GBezier* curve) 
   : Command(i18n("Create Bezier"))
 {

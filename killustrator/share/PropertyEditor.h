@@ -35,16 +35,15 @@
 #include <kcolordlg.h>
 #include <kcolorbtn.h>
 
-#include "GDocument.h"
-#include "GObject.h"
-#include "ColorComboBox.h"
-#include "FontSelector.h"
-#include "CommandHistory.h"
-#include "Gradient.h"
-#include "BrushCells.h"
-#include "UnitBox.h"
-
 class QComboBox;
+class GDocument;
+class CommandHistory;
+class UnitBox;
+class Gradient;
+class BrushCells;
+class FontSelector;
+
+class QRadioButton;
 
 class PropertyEditor : public QDialog {
   Q_OBJECT

@@ -25,9 +25,10 @@
 #ifndef CreateTextCmd_h_
 #define CreateTextCmd_h_
 
-#include "GDocument.h"
-#include "GText.h"
 #include "Command.h"
+
+class GDocument;
+class GText;
 
 class CreateTextCmd : public Command {
 public:

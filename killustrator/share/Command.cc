@@ -24,6 +24,8 @@
 
 #include "Command.h"
 
+#include "GDocument.h"
+
 ObjectManipCmd::ObjectManipCmd (GDocument* doc, const QString& name) : 
   Command(name) 
 {

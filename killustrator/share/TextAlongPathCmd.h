@@ -25,9 +25,10 @@
 #ifndef TextAlongPathCmd_h_
 #define TextAlongPathCmd_h_
 
-#include "GDocument.h"
-#include "GText.h"
 #include "Command.h"
+
+class GDocument;
+class GText;
 
 class TextAlongPathCmd : public Command {
 public:

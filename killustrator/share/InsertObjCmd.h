@@ -25,11 +25,12 @@
 #ifndef InsertObjCmd_h_
 #define InsertObjCmd_h_
 
-#include "GDocument.h"
 #include "GObject.h"
 #include "Command.h"
 
 #include <qlist.h>
+
+class GDocument;
 
 class InsertObjCmd : public Command {
 public:

@@ -25,9 +25,10 @@
 #ifndef CreatePolygonCmd_h_
 #define CreatePolygonCmd_h_
 
-#include "GDocument.h"
-#include "GPolygon.h"
 #include "Command.h"
+
+class GDocument;
+class GPolygon;
 
 class CreatePolygonCmd : public Command {
 public:
