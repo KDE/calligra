@@ -216,6 +216,8 @@ protected:
     virtual void doAutoFormat( QTextCursor* cursor, KoTextParag *parag, int index, QChar ch );
     virtual bool doIgnoreDoubleSpace(KoTextParag * parag, int index,QChar ch );
 
+    virtual void doAutoCompletion( QTextCursor* cursor, KoTextParag *parag, int index );
+
     virtual void showFormat( KoTextFormat *format ) ;
 
     virtual void pgUpKeyPressed();
