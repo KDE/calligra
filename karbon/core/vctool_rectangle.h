@@ -5,6 +5,9 @@
 #ifndef __VCTOOLRECTANGLE_H__
 #define __VCTOOLRECTANGLE_H__
 
+#include <qpoint.h>
+#include <qrect.h>
+
 #include "vtool.h"
 
 class KarbonPart;
@@ -17,13 +20,19 @@ public:
 	virtual ~VCToolRectangle() {}
 	static VCToolRectangle* instance( KarbonPart* part );
 
-	virtual bool eventFilter( QEvent* event );
+	virtual bool eventFilter( KarbonView* view, QEvent* event );
 
 protected:
 	VCToolRectangle( KarbonPart* part );
 
 private:
 	KarbonPart* m_part;
+
+	bool m_isDown;
+
+	// temporary QRect:
+	QRect m_QRect;
+
 	static VCToolRectangle* s_instance;
 };
 

@@ -30,15 +30,6 @@ public:
 	const double& y() const { return m_y; }
 	void setY( const double y = 0.0 );
 
-	/**
-	* we scale QPoint with fractScale, i.e. we consider fractBits bits
-	* of the fraction of each double-coordinate.
-	*/
-// TODO: is the follwing obsolete?
-//	static const char s_fractBits = 12;
-//	static const unsigned int s_fractScale = 1 << s_fractBits;
-//	static const double s_fractInvScale; // = 1/s_fractScale
-
 private:
 	double m_x;
 	double m_y;

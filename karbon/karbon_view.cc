@@ -22,7 +22,7 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	: KoView( part, parent, name ), m_part( part )
 {
 	if ( s_currentTool == 0L )
-		s_currentTool = VCToolRectangle::instance( part );
+		s_currentTool = VCToolRectangle::instance( m_part );
 
 	setInstance( KarbonFactory::instance() );
 	setXMLFile( QString::fromLatin1( "karbon.rc" ) );
@@ -30,7 +30,7 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	initActions();
 
 	m_canvas = new VCanvas( this, part );
-	m_canvas->installEventFilter( this );
+	m_canvas->viewport()->installEventFilter( this );
 	m_canvas->setGeometry( 0, 0, width(), height() );
 }
 
@@ -117,8 +117,8 @@ KarbonView::paintEverything( QPainter& /*p*/, const QRect& /*rect*/,
 bool
 KarbonView::eventFilter( QObject* object, QEvent* event )
 {
-	if ( object == m_canvas )
-		return s_currentTool->eventFilter( event );
+	if ( object == m_canvas->viewport() )
+		return s_currentTool->eventFilter( this, event );
 	else
 		return false;
 }
