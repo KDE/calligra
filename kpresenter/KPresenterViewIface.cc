@@ -421,6 +421,7 @@ void KPresenterViewIface::mtextFont()
     view->mtextFont();
 }
 
+/*
 void KPresenterViewIface::textEnumList()
 {
     view->textEnumList();
@@ -430,6 +431,7 @@ void KPresenterViewIface::textUnsortList()
 {
     view->textUnsortList();
 }
+*/
 
 void KPresenterViewIface::textDepthPlus()
 {

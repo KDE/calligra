@@ -132,8 +132,10 @@ k_dcop:
     virtual void textAlignCenter();
     virtual void textAlignRight();
     virtual void mtextFont();
+/*
     virtual void textEnumList();
     virtual void textUnsortList();
+*/
     virtual void textDepthPlus();
     virtual void textDepthMinus();
     virtual void textContentsToHeight();

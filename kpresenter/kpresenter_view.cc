@@ -1680,42 +1680,47 @@ void KPresenterView::mtextFont()
     delete fontDia;
 }
 
-/*===============================================================*/
-void KPresenterView::textEnumList()
+void KPresenterView::slotCounterStyleSelected()
 {
-    KoParagCounter c;
-    if ( actionTextTypeEnumList->isChecked() )
+    QString actionName = QString::fromLatin1(sender()->name());
+    if ( actionName.startsWith( "counterstyle_" ) )
     {
-        if(actionTextTypeUnsortList->isChecked())
-            actionTextTypeUnsortList->setChecked(false);
-        c.setNumbering( KoParagCounter::NUM_LIST );
-        c.setStyle( KoParagCounter::STYLE_NUM );
-    }
-    else
-    {
-        c.setNumbering( KoParagCounter::NUM_NONE );
-    }
-    m_canvas->setTextCounter(c);
-}
+        QString styleStr = actionName.mid(13);
+        //kdDebug() << "KWView::slotCounterStyleSelected styleStr=" << styleStr << endl;
+        KoParagCounter::Style style = (KoParagCounter::Style)(styleStr.toInt());
+        KoParagCounter c;
+        if ( style == KoParagCounter::STYLE_NONE )
+            c.setNumbering( KoParagCounter::NUM_NONE );
+        else {
+            c.setNumbering( KoParagCounter::NUM_LIST );
+            c.setStyle( style );
+            if ( c.isBullet() )
+                c.setSuffix( QString::null );
+            // else the suffix remains the default, '.'
+            // TODO save this setting, to use the last one selected in the dialog?
+            // (same for custom bullet char etc.)
+        }
 
-/*===============================================================*/
-void KPresenterView::textUnsortList()
-{
-    KoParagCounter c;
-    c.setPrefix( QString::null );
-    c.setSuffix( QString::null );
-    if ( actionTextTypeUnsortList->isChecked() )
-    {
-        if(actionTextTypeEnumList->isChecked())
-            actionTextTypeEnumList->setChecked(false);
-        c.setNumbering( KoParagCounter::NUM_LIST );
-        c.setStyle( KoParagCounter::STYLE_DISCBULLET );
+        QPtrList<KoTextFormatInterface> lst = m_canvas->applicableTextInterfaces();
+        QPtrListIterator<KoTextFormatInterface> it( lst );
+        bool createmacro=false;
+        KMacroCommand* macroCmd = new KMacroCommand( i18n("Change list type") );
+        for ( ; it.current() ; ++it )
+        {
+            KCommand *cmd = it.current()->setCounterCommand( c );
+            if ( cmd )
+            {
+                createmacro=true;
+                macroCmd->addCommand( cmd );
+            }
+        }
+        if( createmacro)
+            m_pKPresenterDoc->addCommand( macroCmd );
+        else
+            delete macroCmd;
     }
-    else
-        c.setNumbering( KoParagCounter::NUM_NONE );
-    m_canvas->setTextCounter(c);
-}
 
+}
 /*===============================================================*/
 void KPresenterView::textDepthPlus()
 {
@@ -2591,13 +2596,32 @@ void KPresenterView::setupActions()
     actionTextAlignBlock->setExclusiveGroup( "align" );
 
 
-    actionTextTypeEnumList = new KToggleAction( i18n( "&Enumerated List" ), "enum_list", 0,
-					  this, SLOT( textEnumList() ),
-					  actionCollection(), "text_enumList" );
 
-    actionTextTypeUnsortList = new KToggleAction( i18n( "&Unsorted List" ), "unsorted_list",
-					    0, this, SLOT( textUnsortList() ),
-					    actionCollection(), "text_unsortedList" );
+    actionFormatNumber = new KActionMenu( i18n( "Number" ),
+                                          "enum_list", actionCollection(), "format_number" );
+    actionFormatNumber->setDelayed( false );
+    actionFormatBullet = new KActionMenu( i18n( "Bullet" ),
+                                          "unsorted_list", actionCollection(), "format_bullet" );
+    actionFormatBullet->setDelayed( false );
+    QPtrList<KoParagCounterWidget::StyleRepresenter> stylesList;
+    KoParagCounterWidget::makeCounterRepresenterList( stylesList );
+    QPtrListIterator<KoParagCounterWidget::StyleRepresenter> styleIt( stylesList );
+    for ( ; styleIt.current() ; ++styleIt ) {
+        // Dynamically create toggle-actions for each list style.
+        // This approach allows to edit toolbars and extract separate actions from this menu
+        KToggleAction* act = new KToggleAction( styleIt.current()->name(), /*TODO icon,*/
+                                                0, this, SLOT( slotCounterStyleSelected() ),
+                                                actionCollection(), QString("counterstyle_%1").arg( styleIt.current()->style() ).latin1() );
+        act->setExclusiveGroup( "counterstyle" );
+        // Add to the right menu: both for "none", bullet for bullets, numbers otherwise
+        if ( styleIt.current()->style() == KoParagCounter::STYLE_NONE ) {
+            actionFormatBullet->insert( act );
+            actionFormatNumber->insert( act );
+        } else if ( styleIt.current()->isBullet() )
+            actionFormatBullet->insert( act );
+        else
+            actionFormatNumber->insert( act );
+    }
 
     actionTextDepthPlus = new KAction( i18n( "&Increase Depth" ), "format_increaseindent",
 				       CTRL + Key_Plus, this, SLOT( textDepthPlus() ),
@@ -3073,8 +3097,10 @@ void KPresenterView::objectSelectedChanged()
     actionTextAlignCenter->setEnabled(isText);
     actionTextAlignRight->setEnabled(isText);
     actionTextAlignBlock->setEnabled(isText);
-    actionTextTypeUnsortList->setEnabled(isText);
-    actionTextTypeEnumList->setEnabled(isText);
+
+    actionFormatBullet->setEnabled(rw);
+    actionFormatNumber->setEnabled(rw);
+
     actionTextDepthPlus->setEnabled(isText);
     actionFormatDefault->setEnabled(isText);
     actionTextDepthMinus->setEnabled(isText);
@@ -3096,16 +3122,9 @@ void KPresenterView::objectSelectedChanged()
         format.setPointSize( (int)KoTextZoomHandler::layoutUnitPtToPt( format.font().pointSize() ) );
         showFormat( format );
         const KoParagLayout * paragLayout=m_canvas->applicableTextInterfaces().first()->currentParagLayoutFormat();
+        KoParagCounter counter;
         if(paragLayout->counter)
-        {
-            KoParagCounter counter=*(paragLayout->counter);
-            showCounter( counter );
-        }
-        else
-        {
-            actionTextTypeUnsortList->setChecked( false );
-            actionTextTypeEnumList->setChecked( false );
-        }
+            counter = *(paragLayout->counter);
         alignChanged(  paragLayout->alignment );
     }
 
@@ -4845,8 +4864,13 @@ void KPresenterView::spellCheckerFinished()
 
 void KPresenterView::showCounter( KoParagCounter &c )
 {
-    actionTextTypeUnsortList->setChecked( c.numbering() == KoParagCounter::NUM_LIST && c.style()==KoParagCounter::STYLE_DISCBULLET  );
-    actionTextTypeEnumList->setChecked( c.numbering() == KoParagCounter::NUM_LIST &&c.style()== KoParagCounter::STYLE_NUM );
+    QString styleStr("counterstyle_");
+    styleStr += QString::number( c.style() );
+    //kdDebug() << "KWView::showCounter styleStr=" << styleStr << endl;
+    KToggleAction* act = static_cast<KToggleAction *>( actionCollection()->action( styleStr.latin1() ) );
+    Q_ASSERT( act );
+    if ( act )
+        act->setChecked( true );
 }
 
 void KPresenterView::formatParagraph()

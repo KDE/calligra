@@ -244,8 +244,9 @@ public slots:
     void textAlignRight();
     void textAlignBlock();
     void mtextFont();
-    void textEnumList();
-    void textUnsortList();
+
+    void slotCounterStyleSelected();
+
     void textDepthPlus();
     void textDepthMinus();
     void textContentsToHeight();
@@ -720,8 +721,11 @@ private:
     KToggleAction *actionTextAlignCenter;
     KToggleAction *actionTextAlignRight;
     KToggleAction *actionTextAlignBlock;
-    KToggleAction *actionTextTypeEnumList;
-    KToggleAction *actionTextTypeUnsortList;
+
+    KActionMenu *actionFormatBullet;
+    KActionMenu *actionFormatNumber;
+
+
     KAction *actionTextDepthPlus;
     KAction *actionTextDepthMinus;
     KAction *actionTextExtentCont2Height;
