@@ -9,6 +9,10 @@ data_DATA = barsubtypedepth.png barsubtypelayer.png barsubtypebeside.png \
 			chart_combo_line_area.png chart_combo_line_bar.png \
 			chart_hiloclose.png chart_pie2D.png chart_pie3D.png \
 			chart_ring.png chart_polar.png \
+			chart_legend_nolegend.png \
+			chart_legend_top.png chart_legend_topleft.png chart_legend_topright.png \
+			chart_legend_left.png chart_legend_right.png \
+			chart_legend_bottom.png chart_legend_bottomleft.png chart_legend_bottomright.png \
                         3DCOMBO_HLC_AREA.png 3DCOMBO_HLC_BAR.png \
 			3DCOMBO_LINE_AREA.png 3DCOMBO_LINE_BAR.png\
 			3DAREA.png 3DLINE.png 3DBAR.png

@@ -7,6 +7,7 @@
 
 #include <qwidget.h>
 #include <qbutton.h>
+#include <qlayout.h>
 
 class KChartParams;
 class QRadioButton;
@@ -29,12 +30,18 @@ public slots:
 
 private:
     KChartParams* _params;
-    QRadioButton *noLegend,*lTop,*lBottom,*lLeft,*lRight,*lTopLeft,*lTopRight,*lBottomRight,*lBottomLeft;
+    QPushButton *lTopLeft,    *lTop,     *lTopRight,
+                *lLeft,       *noLegend, *lRight,
+                *lBottomLeft, *lBottom,  *lBottomRight;
     QLineEdit *title;
     KColorButton *legendTitleColor, *legendTextColor;
     QFont titleLegend, textLegend;
     QPushButton *titleLegendFontButton, *textLegendFontButton;
     QButton::ToggleState titleLegendIsRelative, textLegendIsRelative;
+
+    QPushButton* addButton( QGridLayout* layout, QButtonGroup* gb,
+                            const QString &toolTipText, const QString &icon,
+                            int posY, int posX );
 };
 
 #endif
