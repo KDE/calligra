@@ -26,7 +26,6 @@
 #include <qgroupbox.h>
 #include <qlabel.h>
 
-#include <klocale.h>
 #include <knuminput.h>
 #include <core/vgroup.h>
 #include <core/vpath.h>

@@ -19,7 +19,6 @@
 
 
 #include "insertknotsplugin.h"
-#include "klocale.h"
 #include <karbon_view_base.h>
 #include <karbon_part_base.h>
 #include <core/vpath.h>
@@ -66,7 +65,7 @@ VInsertKnotsDlg::VInsertKnotsDlg( QWidget* parent, const char* name )
 	// signals and slots:
 	connect( this, SIGNAL( okClicked() ), this, SLOT( accept() ) );
 	connect( this, SIGNAL( cancelClicked() ), this, SLOT( reject() ) );
-	
+
 	setMainWidget( group );
 	setFixedSize( baseSize() );
 }

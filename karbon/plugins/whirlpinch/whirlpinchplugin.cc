@@ -19,7 +19,6 @@
 
 #include <core/vselection.h>
 #include "whirlpinchplugin.h"
-#include "klocale.h"
 #include <karbon_view_base.h>
 #include <karbon_part_base.h>
 #include <kgenericfactory.h>

@@ -18,7 +18,6 @@
 */
 
 #include "roundcornersplugin.h"
-#include "klocale.h"
 #include <karbon_view_base.h>
 #include <karbon_part_base.h>
 #include <core/vpath.h>
