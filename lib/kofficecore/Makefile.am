@@ -8,8 +8,8 @@ LIBADD  = -lkom -lkfile -lkdeui -lkdecore -lqt -lkdecore \
 ####### Files
 
 lib_LTLIBRARIES = libkofficecore.la
-libkofficecore_la_SOURCES = koIMR.cc koScanParts.cc koStream.cc koDocument.cc koPrintExt.cc
-include_HEADERS = koIMR.h koScanParts.h koStream.h koDocument.h koPrintExt.h
+libkofficecore_la_SOURCES = koIMR.cc koScanParts.cc koStream.cc koDocument.cc koPrintExt.cc koFilterManager.cc
+include_HEADERS = koIMR.h koScanParts.h koStream.h koDocument.h koPrintExt.h koFilterManager.h
 
 SUFFICES = .h .moc
 
