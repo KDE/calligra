@@ -16,16 +16,26 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qtextstream.h>
 #include <xmltree.h>
 
-#include <qfile.h>
+const char *palette[65] = {
+  "#000000", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff",
+  "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ff0000", "#00ff00",
+  "#0000ff", "#ffff00", "#ff00ff", "#00ffff", "#800000", "#008000",
+  "#000080", "#808000", "#800080", "#008080", "#c0c0c0", "#808080",
+  "#9999ff", "#993366", "#ffffcc", "#ccffff", "#660066", "#ff8080",
+  "#0066cc", "#ccccff", "#000080", "#ff00ff", "#ffff00", "#00ffff",
+  "#800080", "#800000", "#008080", "#0000ff", "#00ccff", "#ccffff",
+  "#ccffcc", "#ffff99", "#99ccff", "#ff99cc", "#cc99ff", "#ffcc99",
+  "#3366ff", "#33cccc", "#99cc00", "#ffcc00", "#ff9900", "#ff6600",
+  "#666699", "#969696", "#003366", "#339966", "#003300", "#333300",
+  "#993300", "#993366", "#333399", "#333333", "#ffffff"
+};
 
-XMLTree::XMLTree():QObject()
+XMLTree::XMLTree():QObject(),table(0L)
 {
   QDomElement e;
 
-  table = 0L;
   root = new QDomDocument("spreadsheet");
 
   root->appendChild(root->createProcessingInstruction
@@ -65,24 +75,52 @@ const QDomDocument* const XMLTree::part()
   return root;
 }
 
-const QDomElement XMLTree::getFont(Q_UINT16 xf)
+void XMLTree::getFont(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
 {
-  Q_UINT16 fontid = xfs[xf]->ifnt;
   QDomElement font = root->createElement("font");
 
-  if (fontid > 3)
-    fontid--;
   font.setAttribute("family", fonts[fontid]->rgch);
   font.setAttribute("size", fonts[fontid]->dyHeight / 20);
   font.setAttribute("weight", fonts[fontid]->bls / 8);
   if ((fonts[fontid]->bls / 8) != 50)
     font.setAttribute("bold", "yes");
-  if ((fonts[fontid]->grbit & 0x02) == 2)
+  if ((fonts[fontid]->grbit & 0x02) == 2) 
     font.setAttribute("italic", "yes");
-  if (fonts[fontid]->uls != 0)
-    font.setAttribute("underlined", "yes");
+  f.appendChild(font);
 
-  return font;
+  if (fonts[fontid]->uls != 0) {
+    font = root->createElement("underline");
+    font.setAttribute("val", (int) fonts[fontid]->uls);
+    f.appendChild(font);
+  }
+}
+
+void XMLTree::getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid)
+{
+  QDomElement pen = root->createElement("pen");
+
+  pen.setAttribute("width", 0);
+  pen.setAttribute("style", 1);
+  pen.setAttribute("color", palette[(fonts[fontid]->icv) & 0x7f]);
+  f.appendChild(pen);
+
+  QDomElement leftBorder = root->createElement("left-border");
+
+  pen = root->createElement("pen");
+  pen.setAttribute("width", 2);
+  pen.setAttribute("style", xfs[xf]->borderStyle & 0x0f);
+  pen.setAttribute("color", "#ff0000");//palette[xfs[xf]->sideBColor & 0x7f]);
+  leftBorder.appendChild(pen);
+  f.appendChild(leftBorder);
+  
+  QDomElement topBorder = root->createElement("top-border");
+
+  pen = root->createElement("pen");
+  pen.setAttribute("width", 2);
+  pen.setAttribute("style", (xfs[xf]->borderStyle >> 4) & 0x0f);
+  pen.setAttribute("color", "#ff0000");//palette[xfs[xf]->topBColor & 0x7f]);
+  topBorder.appendChild(pen);
+  f.appendChild(topBorder);
 }
 
 const QDomElement XMLTree::getFormat(Q_UINT16 xf)
@@ -92,39 +130,115 @@ const QDomElement XMLTree::getFormat(Q_UINT16 xf)
   QString s;
   QDomElement format = root->createElement("format");
 
-  align = (xfs[xf]->info2 & 0x07) == 0 ? 4 :  xfs[xf]->info2 & 0x07;
-  format.setAttribute("align", align); // kspread doesn't support align=0
+  Q_UINT16 fontid = xfs[xf]->ifnt;
 
-  if (xfs[xf]->ifmt < 0x31)
-    s = "General";
-  else {
-    s = QString::fromLatin1(formats[xfs[xf]->ifmt]->rgch,
-			    formats[xfs[xf]->ifmt]->cch);
+  if (fontid > 3)
+    --fontid;
 
-    if ((pos = s.find("0.0")) != -1) {
-      pos += 3;
-      precision += 2;
-      while (s.mid(pos++, 1) == "0")
-	precision++;
+  format.setAttribute("bgcolor", palette[xfs[xf]->cellColor & 0x7f]); 
+
+  align = (xfs[xf]->align & 0x07) == 0 ? 4 : xfs[xf]->align & 0x07;
+  format.setAttribute("align", align); 
+
+  switch (xfs[xf]->ifmt)
+    {
+    case 0x00:	// General
+      format.setAttribute("precision", "-1");
+      break;
+    case 0x01:	// Number 0
+      format.setAttribute("precision", "-1");
+      break;
+    case 0x02:	// Number	0.00
+      format.setAttribute("precision", "2");
+      break;
+    case 0x03:	// Number w/comma	0,000
+      format.setAttribute("precision", "-1");
+      break;
+    case 0x04:	// Number w/comma	0,000.00
+      format.setAttribute("precision", "2");
+      break;
+    case 0x09:	// Percent 0%
+      format.setAttribute("precision", "-1");
+      format.setAttribute("postfix", "%");
+      format.setAttribute("faktor", 100);
+      break;
+    case 0x0A:	// Percent 0.00%
+      format.setAttribute("precision", "2");
+      format.setAttribute("postfix", "%");
+      format.setAttribute("faktor", 100);
+      break;
+    case 0x0B:	// Scientific 0.00+E00
+      format.setAttribute("precision", "2");
+      break;
+    case 0x0C:	// Fraction 1 number  e.g. 1/2, 1/3
+      format.setAttribute("precision", "-1");
+      break;
+    case 0x0D:	// Fraction 2 numbers  e.g. 1/50, 25/33
+      format.setAttribute("precision", "-1");
+      break;
+    case 0x0E:	// Date: m-d-y
+      format.setAttribute("precision", "-1");
+      break;
+    case 0x0F:	// Date: d-mmm-yy
+      format.setAttribute("precision", "-1");
+      break;
+    case 0x10:	// Date: d-mmm
+      format.setAttribute("precision", "-1");
+      break;
+    case 0x11:	// Date: mmm-yy
+      format.setAttribute("precision", "-1");
+      break;
+    case 0x12:	// Time: h:mm AM/PM
+      format.setAttribute("precision", "-1");
+      break;
+    case 0x13:	// Time: h:mm:ss AM/PM
+      format.setAttribute("precision", "-1");
+      break;
+    case 0x14:	// Time: h:mm
+      format.setAttribute("precision", "-1");
+      break;
+    case 0x15:	// Time: h:mm:ss
+      format.setAttribute("precision", "-1");
+      break;
+    case 0x2D:	// Time: mm:ss
+      format.setAttribute("precision", "-1");
+      break;
+    case 0x2E:	// Time: [h]:mm:ss
+      format.setAttribute("precision", "-1");
+      break;
+    case 0x2F:	// Time: mm:ss.0
+      format.setAttribute("precision", "-1");
+      break;
+    case 0x31:	// Text - if we are here...its a number
+      format.setAttribute("precision", "-1");
+      break;
+    default:	// Unsupported...but, if we are here, its a number
+      s = QString::fromLatin1(formats[xfs[xf]->ifmt]->rgch,
+			      formats[xfs[xf]->ifmt]->cch);
+    
+      if ((pos = s.find("0.0")) != -1) {
+	pos += 3;
+	precision += 2;
+	while (s.mid(pos++, 1) == "0") 
+	  precision++;
+      }
+
+      format.setAttribute("precision", "-1");
+
+      if (s.find("DM", 0, false) != -1) {
+	debug ("MONEY FOUND!");
+	format.setAttribute("postfix", " $");
+	format.setAttribute("faktor", 1);
+      }
+      if (s.find("%", 0, false) != -1) {
+	format.setAttribute("postfix", "%");
+	format.setAttribute("faktor", 100);
+      }
     }
-  }
-  format.setAttribute("precision", precision);
-
-  if (s.find("DM", 0, false) != -1) {
-    format.setAttribute("postfix", "DM");
-    format.setAttribute("faktor", 1);
-  }
-  if (s.find("%", 0, false) != -1) {
-    format.setAttribute("postfix", "%");
-    format.setAttribute("faktor", 100);
-  }
-  if (s.find("General", 0, false) != -1) {
-    format.setAttribute("faktor", 1);
-  }
-  // need to add float and floatcolor
-
-  format.appendChild(getFont(xf));
-
+  
+  getFont(xf, format, fontid);
+  getPen(xf, format, fontid);
+  
   return format;
 }
 
@@ -431,8 +545,8 @@ bool XMLTree::_fngroupname(Q_UINT16, QDataStream&)
 
 bool XMLTree::_font(Q_UINT16 size, QDataStream& body)
 {
-  int i;
   static int count;
+
   QChar *c;
   Q_UINT8 lsb, msb;
 
@@ -440,7 +554,7 @@ bool XMLTree::_font(Q_UINT16 size, QDataStream& body)
   body >> f->dyHeight >> f->grbit >> f->icv >> f->bls >> f->sss;
   body >> f->uls >> f->bFamily >> f->bCharSet >> f->reserved >> f->cch;
   if (biff == BIFF_5_7) {
-    for (i = 0; i < f->cch; i++) {
+    for (int i = 0; i < f->cch; i++) {
       body >> lsb;
       c = new QChar(lsb, 0);
       f->rgch += *c;
@@ -448,7 +562,7 @@ bool XMLTree::_font(Q_UINT16 size, QDataStream& body)
   }
   else if (biff == BIFF_8) {
     body >> lsb;
-    for (i = 0; i < f->cch; i++) {
+    for (int i = 0; i < f->cch; i++) {
       body >> lsb >> msb;
       c = new QChar(lsb, msb);
       f->rgch += *c;
@@ -674,6 +788,7 @@ bool XMLTree::_mulrk(Q_UINT16 size, QDataStream& body)
 {
   int i;
   double value = 0;
+  QString s;
   Q_UINT16 first, last, row, xf;
   Q_UINT32 number, t[2];
 
@@ -728,12 +843,13 @@ bool XMLTree::_note(Q_UINT16, QDataStream&)
 bool XMLTree::_number(Q_UINT16 size, QDataStream& body)
 {
   double value;
+  QString s;
   Q_UINT16 row, column, xf;
   body >> row >> column >> xf >> value;
 
   QDomElement e = root->createElement("cell");
   e.appendChild(getFormat(xf));
-  QString s=QString::number(value, 'f');
+  s = QString::number(value, 'f');
   e.setAttribute("row", (int) ++row);
   e.setAttribute("column", (int) ++column);
   QDomElement text = root->createElement("text");
@@ -846,6 +962,7 @@ bool XMLTree::_rightmargin(Q_UINT16 size, QDataStream& body)
 bool XMLTree::_rk(Q_UINT16 size, QDataStream& body)
 {
   double value = 0;
+  QString s;
   Q_UINT32 number, t[2];
   Q_UINT16 row, column, xf;
   body >> row >> column >> xf >> number;
@@ -871,7 +988,7 @@ bool XMLTree::_rk(Q_UINT16 size, QDataStream& body)
 
   QDomElement e = root->createElement("cell");
   e.appendChild(getFormat(xf));
-  QString s=QString::number(value, 'f');
+  s = QString::number(value, 'f');
   e.setAttribute("row", (int) ++row);
   e.setAttribute("column", (int) ++column);
   QDomElement text = root->createElement("text");
@@ -1253,8 +1370,8 @@ bool XMLTree::_xf(Q_UINT16 size, QDataStream& body)
   static int count;
 
   xf_rec *x = new xf_rec;
-  body >> x->ifnt >> x->ifmt >> x->info1 >> x->info2 >> x->info3;
-  body >> x->info4 >> x->info5 >> x->info6 >> x->info7;
+  body >> x->ifnt >> x->ifmt >> x->attr >> x->align >> x->indent;
+  body >> x->borderStyle >> x->sideBColor >> x->topBColor >> x->cellColor;
   xfs.insert(count++, x);
 
   return true;

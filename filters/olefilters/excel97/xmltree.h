@@ -35,8 +35,9 @@ public:
   ~XMLTree();
 
   const QDomDocument * const part();
-  const QDomElement getFont(Q_UINT16 xf);
   const QDomElement getFormat(Q_UINT16 xf);
+  void getFont(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid);
+  void getPen(Q_UINT16 xf, QDomElement &f, Q_UINT16 fontid);
 
   bool _1904(Q_UINT16, QDataStream&);
   bool _addin(Q_UINT16, QDataStream&);
@@ -232,13 +233,13 @@ private:
   struct xf_rec {
     Q_UINT16 ifnt,
       ifmt,
-      info1,
-      info2,
-      info3,
-      info4,
-      info5,
-      info6,
-      info7;
+      attr,
+      align,
+      indent,
+      borderStyle,
+      sideBColor;
+    Q_UINT32 topBColor;
+    Q_UINT16 cellColor;
   };
   
   Q_UINT16 biff;

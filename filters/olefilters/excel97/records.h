@@ -24,7 +24,7 @@ struct record {
   bool (XMLTree::*func)(Q_UINT16 size, QDataStream& body);
 };
 
-record biff[] = {
+const record biff[] = {
   { 0x0022, &XMLTree::_1904 },
   { 0x0087, &XMLTree::_addin },
   { 0x00c2, &XMLTree::_addmenu },
