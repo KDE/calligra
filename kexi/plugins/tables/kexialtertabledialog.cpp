@@ -47,6 +47,7 @@ KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent,
 	KexiDB::TableSchema &table, const char *name)
  : KexiViewBase(win, parent, name)
 {
+	m_dirty = false;
 	m_table = &table;
 	m_fields.resize(101);
 	m_row = -99;
@@ -93,6 +94,8 @@ void KexiAlterTableDialog::init()
 
 		QString typeName = "KexiDB::Field::" + field->typeGroupString();
 		KexiPropertyBuffer *buff = new KexiPropertyBuffer(this, typeName);
+		connect(buff,SIGNAL(propertyChanged(KexiPropertyBuffer&,KexiProperty&)),
+			this, SLOT(slotPropertyChanged(KexiPropertyBuffer&,KexiProperty&)));
 
 		KexiProperty *prop = new KexiProperty("type", QVariant(field->type()), i18n("Type"));
 		prop->setVisible(false);
@@ -137,9 +140,18 @@ void KexiAlterTableDialog::init()
 	m_view->adjustColumnWidthToContents(1); //adjust column width
 	m_view->setColumnStretchEnabled( true, 2 ); //last column occupies the rest of the area
 	setFocusProxy(m_view);
-	
 
-	connect(m_view, SIGNAL(cellSelected(int,int)), this, SLOT(slotCellSelected(int,int)));
+	connect(m_view, SIGNAL(cellSelected(int,int)), 
+		this, SLOT(slotCellSelected(int,int)));
+	connect( m_view, SIGNAL(aboutToChangeItem(KexiTableItem*,QVariant,bool&)),
+		this, SLOT(slotBeforeCellChanged(KexiTableItem*,QVariant,bool&)));
+	connect(m_view, SIGNAL(rowUpdated(KexiTableItem*)),
+		this, SLOT(slotRowUpdated(KexiTableItem*)));
+	connect(m_view, SIGNAL(aboutToInsertRow(KexiTableItem*,bool&)),
+		this, SLOT(slotAboutToInsertRow(KexiTableItem*,bool&)));
+	connect(m_view, SIGNAL(aboutToUpdateRow(KexiTableItem*,bool&)),
+		this, SLOT(slotAboutToUpdateRow(KexiTableItem*,bool&)));
+
 /*	//! before closing - we'are accepting editing
 	connect(this,SIGNAL(closing()),m_view,SLOT(acceptRowEdit()));
 
@@ -271,6 +283,43 @@ void KexiAlterTableDialog::slotUpdateRowActions(int row)
 	setAvailable("edit_delete_row", !m_view->isReadOnly() && !(m_view->isInsertingEnabled() && row==m_view->rows()) );
 	setAvailable("data_save_row", m_view->rowEditing());
 }*/
+
+bool KexiAlterTableDialog::dirty()
+{
+	return m_dirty;
+}
+
+void KexiAlterTableDialog::slotPropertyChanged(KexiPropertyBuffer& buf,KexiProperty& prop)
+{
+	m_dirty = true;
+	//TODO
+}
+
+void KexiAlterTableDialog::slotBeforeCellChanged(KexiTableItem *item, QVariant newValue, bool& allow)
+{
+	//TODO
+	//-check if this change is allowed
+}
+
+void KexiAlterTableDialog::slotRowUpdated(KexiTableItem *item)
+{
+	m_dirty = true;
+	//TODO
+	//-check if the row was empty before updating
+	//if yes: we want to add a property buffer for this new row (field)
+}
+
+void KexiAlterTableDialog::slotAboutToInsertRow(KexiTableItem* item,bool& allow)
+{
+	m_dirty = true;
+	//TODO
+}
+
+void KexiAlterTableDialog::slotAboutToUpdateRow(KexiTableItem* item,bool& allow)
+{
+	m_dirty = true;
+	//TODO
+}
 
 
 #include "kexialtertabledialog.moc"

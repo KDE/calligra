@@ -26,7 +26,9 @@
 class KPopupMenu;
 class KexiMainWindow;
 class KexiTableView;
+class KexiTableItem;
 class KexiPropertyEditor;
+class KexiProperty;
 class KexiPropertyBuffer;
 
 namespace KexiDB
@@ -59,11 +61,30 @@ class KexiAlterTableDialog : public KexiViewBase
 
 		virtual bool beforeSwitchTo(int mode);
 
+		/*! \return property buffer associated with currently selected row (i.e. field)
+		 or 0 if current row is empty. */
 		virtual KexiPropertyBuffer *propertyBuffer();
+
+		virtual bool dirty();
 
 	protected slots:
 		void slotCellSelected(int col, int row);
 //		void slotUpdateRowActions(int row);
+
+		//! Called on property changes in property editor.
+		void slotPropertyChanged(KexiPropertyBuffer& buf,KexiProperty& prop);
+
+		//! Called before cell change in tableview.
+		void slotBeforeCellChanged(KexiTableItem *item, QVariant newValue, bool& allow);
+
+		//! Called on row change in tableview.
+		void slotRowUpdated(KexiTableItem *item);
+
+		//! Called before row inserting in tableview.
+		void slotAboutToInsertRow(KexiTableItem* item, bool& allow);
+
+		//! Called before row updating in tableview.
+		void slotAboutToUpdateRow(KexiTableItem* item, bool& allow);
 
 	private:
 		KexiTableView *m_view;
@@ -71,6 +92,7 @@ class KexiAlterTableDialog : public KexiViewBase
 //		KexiPropertyEditor *m_properties;
 		FieldsBuffer m_fields;
 		int m_row;
+		bool m_dirty : 1;
 };
 
 #endif
