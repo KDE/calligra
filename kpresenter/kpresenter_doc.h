@@ -336,9 +336,6 @@ protected:
     virtual bool completeLoading( KoStore* /* _store */ );
     void makeUsedPixmapList();
 
-    void addToRecentlyOpenedList( const QString &file );
-    QStringList getRecentryOpenedList();
-
     // ************ variables ************
 
     struct PixCache

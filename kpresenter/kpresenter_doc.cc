@@ -898,8 +898,6 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
     if ( _rastX == 0 ) _rastX = 10;
     if ( _rastY == 0 ) _rastY = 10;
 
-    addToRecentlyOpenedList( url().url() );
-
     if ( allSlides && _clean ) {
         //kdDebug() << "KPresenterDoc::loadXML allSlides" << endl;
         QValueList<bool>::Iterator sit = m_selectedSlides.begin();
@@ -3563,6 +3561,7 @@ void KPresenterDoc::alignObjsBottom()
 void KPresenterDoc::slotUndoRedoChanged( QString _undo, QString _redo )
 {
     QListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
     {
 	((KPresenterView*)it.current())->changeUndo( _undo, !_undo.isEmpty() );
 	((KPresenterView*)it.current())->changeRedo( _redo, !_redo.isEmpty() );
@@ -3705,30 +3704,6 @@ void KPresenterDoc::paintContent( QPainter& painter, const QRect& rect, bool /*t
         if ( rect.intersects( oIt.current()->getBoundingRect( 0, 0 ) ) )
             oIt.current()->draw( &painter, 0, 0 );
 
-}
-
-/*================================================================*/
-void KPresenterDoc::addToRecentlyOpenedList( const QString &file )
-{
-    if ( file.right( 3 ) == "kpt" )
-	return;
-
-    KConfig *config = KPresenterFactory::global()->config();
-    config->setGroup( "Global" );
-    QStringList lst = config->readListEntry( "recently opened" );
-    if ( !lst.contains( file ) ) {
-	lst << file;
-	config->writeEntry( "recently opened", lst );
-	config->sync();
-    }
-}
-
-/*================================================================*/
-QStringList KPresenterDoc::getRecentryOpenedList()
-{
-    KConfig *config = KPresenterFactory::global()->config();
-    config->setGroup( "Global" );
-    return config->readListEntry( "recently opened" );
 }
 
 /*================================================================*/

@@ -1614,7 +1614,8 @@ void KPresenterView::createGUI()
 {
     splitter = new QSplitter( this );
 
-    if ( !m_pKPresenterDoc->isEmbedded() ) // No sidebar if the document is embedded
+    if ( !m_pKPresenterDoc->isEmbedded()
+         && !m_pKPresenterDoc->isSingleViewMode() ) // No sidebar if the document is embedded
     {
         sidebar = new SideBar( splitter, m_pKPresenterDoc, this );
         connect( sidebar, SIGNAL( movePage( int, int ) ),
