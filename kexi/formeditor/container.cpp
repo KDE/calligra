@@ -331,8 +331,9 @@ Container::slotSelectionChanged(QWidget *w)
 	{
 		m_resizeHandles = new ResizeHandleSet(w);
 		m_selected = w;
-		form()->setSelectedWidget(w);
 	}
+	if(w)
+		form()->setSelectedWidget(w);
 	else
 		form()->setSelectedWidget(0);
 }

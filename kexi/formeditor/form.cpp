@@ -25,6 +25,7 @@
 #include "form.h"
 #include "container.h"
 #include "objpropbuffer.h"
+#include "formIO.h"
 
 namespace KFormDesigner {
 
@@ -38,8 +39,9 @@ Form::Form(QObject *parent, const char *name, WidgetLibrary *lib, ObjectProperty
 
 	m_toplevel = 0;
 	m_selWidget = 0;
-	m_topTree = new ObjectTree("QWidget", "main", 0);
+	m_topTree = 0;
 	m_buffer = buffer;
+	m_formio = new FormIO(this, buffer, 0);
 	
 	connect(buffer, SIGNAL(nameChanged(const char*, const QString&)), this, SLOT(changeName(const char*, const QString&)));
 }
@@ -50,6 +52,7 @@ Form::createToplevel(QWidget *container)
 	kdDebug() << "Form::createToplevel()" << endl;
 
 	m_toplevel = new Container(0, container, this, "form1");
+	m_topTree = new ObjectTree(container->className(), container->name(), container);
 	m_toplevel->setObjectTree(m_topTree);
 	m_toplevel->setForm(this);
 	
@@ -61,8 +64,6 @@ Form::createToplevel(QWidget *container)
 //	 SLOT(slotInsertWidget(WidgetLibrary *, const QString &)));
 
 	kdDebug() << "Form::createToplevel(): m_toplevel=" << m_toplevel << endl;
-
-//	insertWidget("QButtonGroup");
 }
 
 void
@@ -108,6 +109,8 @@ Form::setSelectedWidget(QWidget *w)
 	m_selWidget = w;
 	if(w)
 		m_buffer->setObject(w);
+	else
+		m_buffer->setObject(m_topTree->widget());
 }
 
 void
@@ -115,6 +118,13 @@ Form::changeName(const char *oldname, const QString &newname)
 {
 	m_topTree->rename(oldname, newname);
 }
+
+void
+Form::saveForm()
+{
+	m_formio->saveForm(this);
+}
+
 
 Form::~Form()
 {

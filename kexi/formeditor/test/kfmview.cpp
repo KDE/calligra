@@ -13,6 +13,7 @@
 #include <kaction.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kstdaction.h>
 
 #include "objecttree.h"
 #include "widgetlibrary.h"
@@ -51,10 +52,13 @@ KFMView::KFMView()
 	formV->resize(350, 300);
 	
 	buff->setObject(formV);
+	buff->setForm(m_form);
 	editor->setBuffer(buff);
 	editor->show();
 
 	new KAction(i18n("Print object tree"), "view_tree", KShortcut(0), this, SLOT(debugTree()), actionCollection(), "dtree");
+	KStdAction::save(m_form, SLOT(saveForm()), actionCollection());
+
 
 	m_form->createActions(actionCollection());
 	createGUI("kfmui.rc", true);

@@ -17,48 +17,49 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef OBJPROPBUFFER_H
-#define OBJPROPBUFFER_H
+#ifndef FORMIO_H
+#define FORMIO_H
 
-#include "kexipropertybuffer.h"
+#include <qobject.h>
+#include <qstring.h>
 
-class KexiPropertyEditor;
+class QString;
+class QDomElement;
+class QDomDocument;
+class QVariant;
 
 namespace KFormDesigner {
 
+class ObjectPropertyBuffer;
 class Form;
+class ObjectTreeItem;
 
-class KEXIPROPERTYEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
+class KEXIPROPERTYEDITOR_EXPORT FormIO : public QObject
 {
 	Q_OBJECT
-
+	
 	public:
-		ObjectPropertyBuffer(QObject *parent, const char *name=0);
-		~ObjectPropertyBuffer();
-
-		void	changeProperty(const char *property, const QVariant &value);
-		void	setObject(QObject *obj);
-		void	setList(KexiPropertyEditor *list);
-		void    setForm(Form *form);
-		bool    eventFilter(QObject *o, QEvent *ev);
-		void    checkModifiedProp();
+		FormIO(QObject *parent, ObjectPropertyBuffer *buffer, const char *name);
+		~FormIO(){;}
 		
-	signals:
-		void	nameChanged(const char *oldname, const QString &newname);
-		void	propertyChanged(QObject *, const char *property, const QVariant &v);
+		int saveForm(Form *form, const QString &filename=QString::null);
+		int loadForm(Form *form, const QString &filename);
+		
+		void setPropertyBuffer(ObjectPropertyBuffer *buff) { m_buffer = buff;}
 
 	protected:
-		bool    isTopWidget(QWidget *w);
-		bool    showProperty(QObject *obj, const char *property);
-	
+		QDomElement  prop(QDomDocument &parent, const char *name, const QVariant &value);
+		QDomElement  enumProp(QDomDocument &parent, const char *name, const QVariant &value);
+		void         saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domDoc);
+		QString      saveImage(QDomDocument &domDoc, const QPixmap &pixmap);
+
 	private:
-		QObject		*m_object;
-		KexiPropertyEditor	*m_list;
-		Form		*m_form;
-		
+		ObjectPropertyBuffer	*m_buffer;
+		int			m_count;
 };
 
 }
 
 #endif
+
 

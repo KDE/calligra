@@ -19,6 +19,7 @@
 #include <iostream>
 #include <kdebug.h>
 #include <qwidget.h>
+#include <qstringlist.h>
 
 #include "objecttree.h"
 
@@ -41,7 +42,7 @@ ObjectTreeItem::ObjectTreeItem(const QString &classn, const QString &name, QWidg
 bool
 ObjectTreeItem::rename(const QString &name)
 {
-	m_widget->setName(name.latin1());
+	//m_widget->setName(name.latin1());
 	m_name = name;
 
 	return true;
@@ -78,13 +79,15 @@ ObjectTreeItem::debug(int ident)
 	}
 }
 
-ObjectTreeItem*
-ObjectTree::lookup(const QString &name)
+void
+ObjectTreeItem::addModProperty(const QString &property)
 {
-	return m_treeDict[name];
+	if(m_props.grep(property).isEmpty())
+	{
+		m_props.append(property);
+		kdDebug() << "added " << property << "   property is now: " << m_props.join("|") << endl;
+	}
 }
-
-
 
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -107,7 +110,11 @@ ObjectTree::rename(const QString &oldname, const QString &newname)
 	return true;
 }
 
-
+ObjectTreeItem*
+ObjectTree::lookup(const QString &name)
+{
+	return m_treeDict[name];
+}
 
 void
 ObjectTree::addChild(ObjectTreeItem *parent, ObjectTreeItem *c)
@@ -132,7 +139,7 @@ ObjectTree::addChild(ObjectTreeItem *c)
 {
 	m_treeDict.insert(c->name(), c);
 	ObjectTreeItem::addChild(c);
-	kdDebug() << "ObjectTree::addChild(): count is now: " << children().count() << endl;
+	kdDebug() << "ObjectTree::addChild(): count is now: " << children()->count() << endl;
 }
 
 void

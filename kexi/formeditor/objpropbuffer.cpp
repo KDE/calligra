@@ -24,6 +24,7 @@
 #include <qvariant.h>
 
 #include "objpropbuffer.h"
+#include "form.h"
 #include "kexipropertyeditor.h"
 #include "kexipropertyeditoritem.h"
 
@@ -34,6 +35,7 @@ ObjectPropertyBuffer::ObjectPropertyBuffer(QObject *parent, const char *name)
 {
 	m_list = 0;
 	m_object = 0;
+	m_form = 0;
 }
 
 void
@@ -67,6 +69,8 @@ ObjectPropertyBuffer::setObject(QObject *obj)
 {
 	if(obj==m_object)
 		return;
+	checkModifiedProp();
+	
 	if(m_object)
 		m_object->removeEventFilter(this);
 
@@ -114,6 +118,12 @@ ObjectPropertyBuffer::setList(KexiPropertyEditor *list)
 	m_list = list;
 }
 
+void
+ObjectPropertyBuffer::setForm(Form *form)
+{
+	m_form = form;
+}
+
 bool
 ObjectPropertyBuffer::showProperty(QObject *obj, const char *property)
 {
@@ -131,7 +141,10 @@ ObjectPropertyBuffer::showProperty(QObject *obj, const char *property)
 bool
 ObjectPropertyBuffer::isTopWidget(QWidget *w)
 {
-	return((w->inherits("QDialog"))||(w->inherits("QMainWindow"))); 
+	if(m_form)
+	return(w == m_form->objectTree()->widget()); 
+	else
+	return false;
 }
 
 bool
@@ -155,6 +168,26 @@ ObjectPropertyBuffer::eventFilter(QObject *o, QEvent *ev)
 	}
 	}
 	return false;
+}
+
+void
+ObjectPropertyBuffer::checkModifiedProp()
+{
+	if(m_object)
+	{
+		ObjectTreeItem *treeIt = m_form->objectTree()->lookup(m_object->name());
+		if(m_list && treeIt)
+		{
+		QListViewItem *it = m_list->firstChild()->firstChild();
+		while(it)
+		{
+			KexiPropertyEditorItem *item = static_cast<KexiPropertyEditorItem*>(it);
+			if(item->modified())
+				treeIt->addModProperty(item->text(0));
+			it = it->nextSibling();
+		}
+		}
+	}
 }
 
 ObjectPropertyBuffer::~ObjectPropertyBuffer()

@@ -31,6 +31,7 @@ namespace KFormDesigner {
 
 class Container;
 class ObjectPropertyBuffer;
+class FormIO;
 
 /**
  * This class provides the base for accessing KFormDesigner over an "forign" api
@@ -103,6 +104,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 	public slots:
 		void			insertWidget(const QString &c);
 		void			changeName(const char *oldname, const QString &newname);
+		void			saveForm();
 
 	private:
 		Container		*m_toplevel;
@@ -110,6 +112,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		ObjectTree		*m_topTree;
 		QWidget			*m_selWidget;
 		ObjectPropertyBuffer	*m_buffer;
+		FormIO			*m_formio;
 		
 		QWidget 		*m_copiedw;
 		bool			m_cut;

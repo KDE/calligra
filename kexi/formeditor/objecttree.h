@@ -51,8 +51,9 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 		QString		className() const { return m_className; }
 		QWidget*	widget() const { return m_widget; }
 		ObjectTreeItem* parent() const { return m_parent; }
-		ObjectTreeC	children() { return m_children; }
-		PropertyMap	properties() { return m_properties; }
+		ObjectTreeC*	children() { return &m_children; }
+		//PropertyMap	properties() { return m_properties; }
+		QStringList*	modifProp() { return &m_props;}
 		
 		void		setWidget(QWidget *w) { m_widget = w; }
 		void 		setParent(ObjectTreeItem *parent)  { m_parent = parent;}
@@ -62,12 +63,15 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 
 		virtual void	addChild(ObjectTreeItem *it);
 		void 		remChild(ObjectTreeItem *it);
+		
+		void		addModProperty(const QString &property);
 
 	private:
 		QString		m_className;
 		QString		m_name;
 		ObjectTreeC	m_children;
-		PropertyMap	m_properties;
+		//PropertyMap	m_properties;
+		QStringList	m_props;
 		ObjectTreeItem* m_parent;
 		QWidget*	m_widget;
 };
