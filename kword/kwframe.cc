@@ -607,7 +607,8 @@ void KWFrameSet::deleteAnchor( KWAnchor * anchor )
     c.setParag( anchor->paragraph() );
     c.setIndex( anchor->index() );
     anchor->setDeleted( true ); // this sets m_anchorTextFs to 0L
-    c.parag()->at( c.index() )->loseCustomItem();
+
+    static_cast<KWTextParag*>(c.parag())->removeCustomItem(c.index());
     c.remove(); // This deletes the character where the anchor was
     // We don't delete the anchor since it might be in a customitemmap in a text-insert command
     // TODO: refcount the anchors

@@ -73,7 +73,7 @@ QTextCursor * KWTextDeleteCommand::execute( QTextCursor *c )
         if ( ch->isCustom() )
         {
             static_cast<KWTextCustomItem *>( ch->customItem() )->setDeleted( true );
-            ch->loseCustomItem();
+            static_cast<KWTextParag*>(cursor.parag())->removeCustomItem(cursor.index());
         }
         cursor.gotoRight();
     }

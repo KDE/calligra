@@ -507,6 +507,7 @@ void KWTextParag::removeCustomItem( int index )
     document()->unregisterCustomItem( item, this );
 }
 
+
 int KWTextParag::findCustomItem( const QTextCustomItem * custom ) const
 {
     int len = string()->length();

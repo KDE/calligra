@@ -1489,7 +1489,7 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KWTextFormat * & /*
         KWParagLayout paragLayout;
         if ( parag->next() )
             paragLayout = static_cast<KWTextParag *>( parag->next() )->paragLayout();
-        copyCharFormatting( ch, undoRedoInfo.text.length()-1, true );
+        copyCharFormatting( ch,undoRedoInfo.text.length()-1, true,parag,cursor->index() );
 
 
         QTextParag *old = cursor->parag();
@@ -1521,7 +1521,7 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KWTextFormat * & /*
             cursor->gotoLeft();
             QTextStringChar * ch = cursor->parag()->at( cursor->index() );
             undoRedoInfo.text.prepend( QString( ch->c ) );
-            copyCharFormatting( ch, 0, true );
+            copyCharFormatting( ch, 0, true,cursor->parag(),cursor->index() );
             undoRedoInfo.index = cursor->index();
             KWParagLayout paragLayout = static_cast<KWTextParag *>( cursor->parag() )->paragLayout();
             if ( cursor->remove() ) {
@@ -1583,7 +1583,7 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KWTextFormat * & /*
             KWParagLayout paragLayout;
             if ( parag->next() )
                 paragLayout = static_cast<KWTextParag *>( parag->next() )->paragLayout();
-            copyCharFormatting( ch, undoRedoInfo.text.length()-1, true );
+            copyCharFormatting( ch, undoRedoInfo.text.length()-1, true,parag,cursor->index() );
             if ( cursor->remove() )
             {
                 undoRedoInfo.text += "\n";
@@ -1593,7 +1593,7 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KWTextFormat * & /*
             int oldLen = undoRedoInfo.text.length();
             undoRedoInfo.text += cursor->parag()->string()->toString().mid( cursor->index() );
             for ( int i = cursor->index(); i < cursor->parag()->length(); ++i )
-                copyCharFormatting( cursor->parag()->at( i ), oldLen + i - cursor->index(), true );
+                copyCharFormatting( cursor->parag()->at( i ), oldLen + i - cursor->index(), true,cursor->parag(),i );
             cursor->killLine();
         }
         break;
@@ -2110,7 +2110,7 @@ bool KWTextFrameSet::UndoRedoInfo::valid() const
 }
 
 // Copies a formatted char, <ch>, into undoRedoInfo.text, at position <index>.
-void KWTextFrameSet::copyCharFormatting( QTextStringChar * ch, int index /*in text*/, bool moveCustomItems )
+void KWTextFrameSet::copyCharFormatting( QTextStringChar * ch, int index /*in text*/, bool moveCustomItems, QTextParag *parag, int position )
 {
     if ( ch->format() ) {
         ch->format()->addRef();
@@ -2123,7 +2123,8 @@ void KWTextFrameSet::copyCharFormatting( QTextStringChar * ch, int index /*in te
         // We copy the custom item to customItemsMap in all cases (see setFormat)
         // We only remove from 'ch' if moveCustomItems was specified
         if ( moveCustomItems )
-            ch->loseCustomItem();
+            static_cast<KWTextParag*>(parag)->removeCustomItem(position);
+        //ch->loseCustomItem();
     }
 }
 
@@ -2135,26 +2136,26 @@ void KWTextFrameSet::readFormats( QTextCursor &c1, QTextCursor &c2, int oldLen, 
     c1.restoreState();
     if ( c1.parag() == c2.parag() ) {
         for ( int i = c1.index(); i < c2.index(); ++i )
-            copyCharFormatting( c1.parag()->at( i ), oldLen + i - c1.index(), moveCustomItems );
+            copyCharFormatting( c1.parag()->at( i ), oldLen + i - c1.index(), moveCustomItems,c1.parag(),i );
     } else {
         int lastIndex = oldLen;
         int i;
         //kdDebug() << "KWTextFrameSet::readFormats copying from " << c1.index() << " to " << c1.parag()->length()-1 << " into lastIndex=" << lastIndex << endl;
         for ( i = c1.index(); i < c1.parag()->length(); ++i, ++lastIndex )
-            copyCharFormatting( c1.parag()->at( i ), lastIndex, moveCustomItems );
+            copyCharFormatting( c1.parag()->at( i ), lastIndex, moveCustomItems,c1.parag(),i );
         ++lastIndex; // skip the '\n'.
         QTextParag *p = c1.parag()->next();
         while ( p && p != c2.parag() ) {
             //kdDebug() << "KWTextFrameSet::readFormats (mid) copying from 0 to "  << p->length()-1 << " into i+" << lastIndex << endl;
             for ( i = 0; i < p->length(); ++i )
-                copyCharFormatting( p->at( i ), i + lastIndex, moveCustomItems );
+                copyCharFormatting( p->at( i ), i + lastIndex, moveCustomItems ,p,i);
             lastIndex += p->length() + 1; // skip the '\n'
             //kdDebug() << "KWTextFrameSet::readFormats lastIndex now " << lastIndex << endl;
             p = p->next();
         }
         //kdDebug() << "KWTextFrameSet::readFormats copying [last] from 0 to " << c2.index() << " into i+" << lastIndex << endl;
         for ( i = 0; i < c2.index(); ++i )
-            copyCharFormatting( c2.parag()->at( i ), i + lastIndex, moveCustomItems );
+            copyCharFormatting( c2.parag()->at( i ), i + lastIndex, moveCustomItems,c2.parag(),i );
     }
 
     if ( copyParagLayouts ) {
@@ -2728,7 +2729,7 @@ void KWTextFrameSet::insert( QTextCursor * cursor, KWTextFormat * currentFormat,
     undoRedoInfo.text += txt;
     for ( int i = 0; i < (int)txt.length(); ++i ) {
         if ( txt[ oldLen + i ] != '\n' )
-            copyCharFormatting( c2.parag()->at( c2.index() ), oldLen + i, false );
+            copyCharFormatting( c2.parag()->at( c2.index() ), oldLen + i, false ,c2.parag(),c2.index());
         c2.gotoRight();
     }
 

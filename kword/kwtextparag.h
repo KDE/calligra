@@ -198,6 +198,7 @@ public:
     void setCustomItem( int index, KWTextCustomItem * custom, QTextFormat * currentFormat );
     // Remove the custom item from position @p index, but doesn't delete it
     void removeCustomItem( int index );
+
     // Find a custom item that we know is somewhere in this paragraph
     // Returns the index in the paragraph
     int findCustomItem( const QTextCustomItem * custom ) const;
