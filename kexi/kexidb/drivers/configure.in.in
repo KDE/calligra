@@ -123,14 +123,15 @@ dnl ========================================
 dnl First check for libpq headers
 dnl ========================================
 if test "$compile_pgsql_plugin" = "yes"; then
-  AC_MSG_CHECKING([for PostgreSQL...Pass 1 of 4])
+  AC_MSG_CHECKING([for PostgreSQL... Step 1 of 4])
   pgsql_incdirs="$ac_pgsql_incdir /usr/include /usr/include/pgsql /usr/include/postgresql /usr/local/include /usr/local/pgsql/include /opt/postgres/include"
   AC_FIND_FILE(libpq-fe.h, $pgsql_incdirs, pgsql_incdir)
   if test ! -r $pgsql_incdir/libpq-fe.h; then
     compile_pgsql_plugin="no"
-    AC_MSG_CHECKING("Could not find the libpq HEADER files. This is nothing critical, but Kexi will be compiled without PostgresSQL support.  You must install the libpq HEADER files (and run this configure script again) to be able to use the libpqxx c++ library. ")
+    AC_MSG_RESULT([not found])
   else
     PG_INCDIR=$pgsql_incdir
+    AC_MSG_RESULT([$PG_INCDIR])
     AC_SUBST(PG_INCDIR)
   fi
 fi
@@ -139,14 +140,15 @@ dnl ========================================
 dnl Next check for libpq libraries
 dnl ========================================
 if test "$compile_pgsql_plugin" = "yes"; then
-  AC_MSG_CHECKING([for PostgreSQL...Pass 2 of 4])
+  AC_MSG_CHECKING([for PostgreSQL... Step 2 of 4])
   pgsql_libdirs="$ac_pgsql_libdir /usr/lib /usr/local/lib /usr/local/pgsql/lib /opt/postgres/lib"
   AC_FIND_FILE(libpq.so, $pgsql_libdirs, pgsql_libdir)
   if test ! -r $pgsql_libdir/libpq.so; then
     compile_pgsql_plugin="no"
-    AC_MSG_CHECKING("Could not find the libpq LIBRARY files. This is nothing critical, but Kexi will be compiled without PostgresSQL support.  You must install the libpq LIBRARY files (and run this configure script again) to be able to use the libpqxx c++ library. ")
+    AC_MSG_RESULT([not found])
   else
     PG_LIBDIR=$pgsql_libdir
+    AC_MSG_RESULT([$PG_LIBDIR])
     AC_SUBST(PG_LIBDIR)
   fi
 fi
@@ -156,14 +158,15 @@ dnl ========================================
 dnl Next check for libpqxx headers
 dnl ========================================
 if test "$compile_pgsql_plugin" = "yes"; then
-  AC_MSG_CHECKING([for PostgreSQL...Pass 3 of 4])
+  AC_MSG_CHECKING([for PostgreSQL... Step 3 of 4])
   pqxx_incdirs="$ac_pqxx_incdir /usr/include /usr/local/pqxx/include /usr/local/include"
   AC_FIND_FILE(pqxx/pqxx, $pqxx_incdirs, pqxx_incdir)
   if test ! -r $pqxx_incdir/pqxx/pqxx; then
     compile_pgsql_plugin="no"
-    AC_MSG_CHECKING("Could not find the libpqxx HEADER files. This is nothing critical, but Kexi will be compiled without PostgresSQL support.  You must install the libpqxx HEADER files (and run this configure script again) to be able to use Kexi PostgreSQL driver. ")
+    AC_MSG_RESULT([not found])
   else
     PQXX_INCDIR=$pqxx_incdir
+    AC_MSG_RESULT([$PQXX_INCDIR])
     AC_SUBST(PQXX_INCDIR)
   fi
 fi
@@ -172,23 +175,17 @@ dnl ========================================
 dnl Finally check for libpqxx libraries
 dnl ========================================
 if test "$compile_pgsql_plugin" = "yes"; then
-  AC_MSG_CHECKING([for PostgreSQL...Pass 4 of 4])
+  AC_MSG_CHECKING([for PostgreSQL... Step 4 of 4])
   pqxx_libdirs="$ac_pqxx_libdir /usr/lib /usr/local/lib /usr/local/pqxx/lib"
   AC_FIND_FILE(libpqxx.so, $pqxx_libdirs, pqxx_libdir)
   if test ! -r $pqxx_libdir/libpqxx.so; then
     compile_pgsql_plugin="no"
-     AC_MSG_CHECKING("Could not find the shared libpqxx.so LIBRARY files. This is nothing critical, but Kexi will be compiled without PostgresSQL support. You must install shared libpqxx.so LIBRARY files (and run this configure script again) to be able to use Kexi PostgreSQL driver. If you build pqxx library on your own, don't forget to add --enable-shared option to your libpqxx configure script's options to get SHARED library, not STATIC libpqxx.a. ")
+    AC_MSG_RESULT([not found])
   else
     PQXX_LIBDIR=$pqxx_libdir
+    AC_MSG_RESULT([$PQXX_LIBDIR])
     AC_SUBST(PQXX_LIBDIR)
   fi
-fi
-
-if test "$compile_pgsql_plugin" = "yes"; then
-  AC_MSG_RESULT([libpq libraries $pgsql_libdir, headers $pgsql_incdir])
-  AC_MSG_RESULT([libpqxx libraries $pqxx_libdir, headers $pqxx_incdir])
-else
-  AC_MSG_RESULT(not found)
 fi
 
 AM_CONDITIONAL(compile_pgsql_plugin, test "$compile_pgsql_plugin" = "yes")
