@@ -267,6 +267,13 @@ bool KivioLayer::loadXML( const QDomElement &layerE )
     return true;
 }
 
+void KivioLayer::loadOasis(const QDomElement& layer)
+{
+  m_name = layer.attribute("draw:name");
+  // TODO OASIS Load flags
+}
+
+
 QDomElement KivioLayer::saveXML( QDomDocument &doc )
 {
     QDomElement e = doc.createElement("KivioLayer");

@@ -79,6 +79,7 @@ public:
     bool removeStencil( KivioStencil * );
 
     bool loadXML( const QDomElement & );
+    void loadOasis(const QDomElement& layer);
     QDomElement saveXML( QDomDocument & );
     void saveOasis(KoXmlWriter* layerWriter);
 

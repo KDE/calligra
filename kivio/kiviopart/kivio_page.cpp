@@ -338,6 +338,27 @@ bool KivioPage::loadOasis(const QDomElement& page, KoOasisStyles& oasisStyles)
     return false;
   }
   
+  QDomElement* style = oasisStyles.styles()[page.attribute("draw:style-name")]; // Find the page style
+  
+  if(!style) {
+    return false;
+  }
+  
+  QDomNode styleNode = style->namedItem("style:properties");
+  styleNode = styleNode.namedItem("draw:layer-set");
+  QDomNode currentNode = styleNode.firstChild();
+  
+  // Load the layers
+  while(!currentNode.isNull()) {
+    if(currentNode.nodeName() == "draw:layer") {
+      KivioLayer* layer = new KivioLayer(this);
+      layer->loadOasis(currentNode.toElement());
+      m_lstLayers.append(layer);
+    }
+    
+    currentNode = currentNode.nextSibling();
+  }
+  
   return true;
 }
 
