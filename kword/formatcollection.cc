@@ -26,7 +26,7 @@
 
 /*================================================================*/
 KWFormatCollection::KWFormatCollection( KWordDocument *_doc )
-    : formats( 1999, true, true )
+    : formats( 1999, true )
 {
     formats.setAutoDelete( true );
     doc = _doc;
