@@ -53,6 +53,7 @@
 
 #include "movecmd.h"
 #include "resizecmd.h"
+#include "gotopage.h"
 
 class KPresenterView;
 class KPresenterDoc;
@@ -157,7 +158,7 @@ protected:
   void dragLeaveEvent(QDragLeaveEvent *e);
   void dragMoveEvent(QDragMoveEvent *e);
   void dropEvent(QDropEvent *e);
-  
+
   // setup popupmenus
   void setupMenus();
 
@@ -276,7 +277,10 @@ private slots:
     {view->screenConfigPages();}
   void presStructView()
     {view->screenPresStructView();}
-
+  void slotGotoPage();
+  void slotExitPres()
+    {view->screenStop();}
+  
 signals:
 
   // signals to notify of changes

@@ -25,7 +25,7 @@ kpresenter_bin_SOURCES = kpresenter_main.cc kpresenter_doc.cc \
 	setoptionscmd.cc chgclipcmd.cc chgpixcmd.cc setbackcmd.cc \
 	effectcmd.cc pgconfcmd.cc pglayoutcmd.cc shadowcmd.cc \
 	rotatecmd.cc lowraicmd.cc pievaluecmd.cc rectvaluecmd.cc penbrushcmd.cc \
-	commandhistory.cc preview.cc
+	commandhistory.cc preview.cc gotopage.cc
 
 noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
 		kpresenter_shell.h kpresenter.h \
@@ -44,7 +44,7 @@ noinst_HEADERS = kpresenter_main.h kpresenter_doc.h kpresenter_view.h \
 		setoptionscmd.h chgclipcmd.h chgpixcmd.h setbackcmd.h \
 		effectcmd.h pgconfcmd.h pglayoutcmd.h shadowcmd.h \
 		rotatecmd.h lowraicmd.h pievaluecmd.h rectvaluecmd.h penbrushcmd.cc \
-		commandhistory.h preview.h
+		commandhistory.h preview.h gotopage.h
 
 METASOURCES =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
 		kpresenter_shell.moc \
@@ -63,7 +63,7 @@ METASOURCES =	kpresenter_main.moc kpresenter_doc.moc kpresenter_view.moc \
 		setoptionscmd.moc chgclipcmd.moc chgpixcmd.moc setbackcmd.moc \
 		effectcmd.moc pgconfcmd.moc pglayoutcmd.moc shadowcmd.moc \
 		rotatecmd.moc lowraicmd.moc pievaluecmd.moc rectvaluecmd.moc penbrushcmd.moc \
-		commandhistory.moc
+		commandhistory.moc gotopage.moc
 
 idl_DATA =	kpresenter.idl
 idl_HEADERS =	kpresenter.h

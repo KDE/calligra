@@ -88,3 +88,12 @@ Reggie, 9.4.1999:
 Reggie, 10.4.1999:
 ------------------
 - Cleanups
+
+Reggie, 12.4.1999:
+------------------
+- It's now possible to jump to a specific page during a screen presentation (e.g. if you
+  want to skip some pages). Just enter [G] or select "Goto Page..." in the rmb menu
+  during a screen presentation. Then it's possible to choose the page to which you want
+  to jump.
+- Added a menu entry to the screen presentation menu to be able to exit a screen presentation
+  using this menu too

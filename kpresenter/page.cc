@@ -1007,6 +1007,8 @@ void Page::keyPressEvent(QKeyEvent *e)
 	  view->screenPrev(); break;
 	case Key_Escape: case Key_Q: case Key_X:
 	  view->screenStop(); break;
+	case Key_G:
+	  slotGotoPage(); break;
 	default: break;
 	}
     }
@@ -1410,6 +1412,10 @@ void Page::setupMenus()
   presMenu->setCheckable(true);
   PM_SM = presMenu->insertItem(i18n("&Switching mode"),this,SLOT(switchingMode()));
   PM_DM = presMenu->insertItem(i18n("&Drawing mode"),this,SLOT(drawingMode()));
+  presMenu->insertSeparator();
+  presMenu->insertItem(i18n("&Goto Page..."),this,SLOT(slotGotoPage()));
+  presMenu->insertSeparator();
+  presMenu->insertItem(i18n("&Exit Presentation"),this,SLOT(slotExitPres()));
   presMenu->setItemChecked(PM_SM,true);
   presMenu->setItemChecked(PM_DM,false);
   presMenu->setMouseTracking(true);
@@ -2260,17 +2266,17 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
 		    QPixmap pix4(_pix2);
 		    float dw = static_cast<float>(_step * ((pix3.width() - (pix3.width() / 10)) / (2 * _psteps)));
 		    float dh = static_cast<float>(_step * ((pix3.height() - (pix3.height() / 10)) / (2 * _psteps)));
-	      
+	
 		    dw *= 2;
 		    dh *= 2;
-	      
+	
 		    QWMatrix m;
 		    m.scale(static_cast<float>(pix3.width() - dw) / static_cast<float>(pix3.width()),
 			    static_cast<float>(pix3.height() - dh) / static_cast<float>(pix3.height()));
 		    pix3 = pix3.xForm(m);
 		    //pix3.resize(pix3.width() - dw,pix3.height() - dh);
 		    ps = pix3.size();
-		    
+		
 		    bitBlt(&pix4,(pix4.width() - pix3.width()) / 2,(pix4.height() - pix3.height()) / 2,
 			   &pix3,0,0,pix3.width(),pix3.height());
 		    KRect newRect((pix4.width() - pix3.width()) / 2,(pix4.height() - pix3.height()) / 2,
@@ -3200,3 +3206,32 @@ void Page::dropEvent(QDropEvent *e)
 	}
     }
 }
+
+/*================================================================*/
+void Page::slotGotoPage()
+{
+  setCursor(blankCursor);
+  int pg = currPresPage;
+  pg = KPGotoPage::gotoPage(1,pageNums(),pg,this);
+
+  if (pg != static_cast<int>(currPresPage))
+    {
+      currPresPage = pg;
+      editMode = false;
+      drawMode = false;
+      presStepList = view->kPresenterDoc()->reorderPage(currPresPage,diffx(),diffy(),_presFakt);
+      currPresStep = (int)(presStepList.first());
+      subPresStep = 0;
+      
+      int yo = view->kPresenterDoc()->getPageSize(0,0,0,presFakt(),false).height() * (pg - 1);
+      view->setDiffY(yo);
+      resize(QApplication::desktop()->width(),QApplication::desktop()->height());
+      repaint(false);
+      setFocus();
+
+      QPainter p(this);
+      view->presentParts(presFakt(),&p,KRect(0,0,0,0),diffx(),diffy());
+      p.end();
+    }
+}
+
