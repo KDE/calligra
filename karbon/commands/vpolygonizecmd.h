@@ -11,8 +11,7 @@
 class VPolygonizeCmd : public VCommand
 {
 public:
-	VPolygonizeCmd( VDocument *doc, const VObjectList& objects,
-		double flatness );
+	VPolygonizeCmd( VDocument *doc, double flatness );
 	virtual ~VPolygonizeCmd() {}
 
 	virtual void execute();

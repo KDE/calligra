@@ -189,9 +189,7 @@ VMToolScale::eventFilter( KarbonView* view, QEvent* event )
 		m_lp.setY( mouse_event->pos().y() );
 
 		part()->addCommand(
-			new VScaleCmd(
-				&part()->document(), part()->document().selection(),
-				m_sp * ( 1.0 / view->zoom() ), m_s1, m_s2 ),
+			new VScaleCmd( &part()->document(), m_sp * ( 1.0 / view->zoom() ), m_s1, m_s2 ),
 			true );
 
 		m_isDragging = false;

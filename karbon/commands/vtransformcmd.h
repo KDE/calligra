@@ -16,16 +16,14 @@ class VPath;
 class VTransformCmd : public VCommand
 {
 public:
-	VTransformCmd( VDocument *doc, const VObjectList& objects,
-		const QWMatrix& mat );
+	VTransformCmd( VDocument *doc, const QWMatrix& mat );
 	virtual ~VTransformCmd() {}
 
 	virtual void execute();
 	virtual void unexecute();
 
 protected:
-	VTransformCmd( VDocument *doc, const VObjectList& objects,
-		const QString& name );
+	VTransformCmd( VDocument *doc, const QString& name );
 
 	VObjectList m_objects;
 	QWMatrix m_mat;
@@ -34,29 +32,25 @@ protected:
 class VTranslateCmd : public VTransformCmd
 {
 public:
-	VTranslateCmd( VDocument *doc, const VObjectList& objects,
-		double d1, double d2 );
+	VTranslateCmd( VDocument *doc, double d1, double d2 );
 };
 
 class VScaleCmd : public VTransformCmd
 {
 public:
-	VScaleCmd( VDocument *doc, const VObjectList& objects,
-		const KoPoint& p, double s1, double s2 );
+	VScaleCmd( VDocument *doc, const KoPoint& p, double s1, double s2 );
 };
 
 class VShearCmd : public VTransformCmd
 {
 public:
-	VShearCmd( VDocument *doc, const VObjectList& objects,
-		const KoPoint& p, double s1, double s2 );
+	VShearCmd( VDocument *doc, const KoPoint& p, double s1, double s2 );
 };
 
 class VRotateCmd : public VTransformCmd
 {
 public:
-	VRotateCmd( VDocument *doc, const VObjectList& objects,
-		const KoPoint& p, double angle );
+	VRotateCmd( VDocument *doc, const KoPoint& p, double angle );
 };
 
 #endif

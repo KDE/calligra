@@ -8,11 +8,11 @@
 #include "vpolygonizecmd.h"
 
 
-VPolygonizeCmd::VPolygonizeCmd( VDocument *doc, const VObjectList& objects,
-	double flatness )
-		: VCommand( doc, i18n( "Polygonize" ) ), m_objects( objects )
+VPolygonizeCmd::VPolygonizeCmd( VDocument *doc, double flatness )
+		: VCommand( doc, i18n( "Polygonize" ) )
 {
 	m_flatness = flatness > 0.0 ? flatness : 1.0;
+	m_objects = doc->selection();
 }
 
 void

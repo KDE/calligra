@@ -168,9 +168,7 @@ VMToolRotate::eventFilter( KarbonView* view, QEvent* event )
 		m_lp.setY( mouse_event->pos().y() );
 
 		part()->addCommand(
-			new VRotateCmd(
-				&part()->document(), part()->document().selection(),
-				m_sp * (1.0 / view->zoom() ), m_angle / VGlobal::pi_180 ),
+			new VRotateCmd( &part()->document(), m_sp * (1.0 / view->zoom() ), m_angle / VGlobal::pi_180 ),
 			true );
 
 		m_isDragging = false;

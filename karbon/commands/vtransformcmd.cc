@@ -8,19 +8,18 @@
 #include "vtransformcmd.h"
 
 
-VTransformCmd::VTransformCmd( VDocument *doc, const VObjectList& objects,
-	const QWMatrix& mat )
-		: VCommand( doc, i18n( "Transform Objects" ) ), m_objects( objects ),
-			m_mat( mat )
+VTransformCmd::VTransformCmd( VDocument *doc, const QWMatrix& mat )
+		: VCommand( doc, i18n( "Transform Objects" ) ), m_mat( mat )
 {
 	if( m_objects.count() == 1 )
 		setName( i18n( "Transform Object" ) );
+	m_objects = doc->selection();
 }
 
-VTransformCmd::VTransformCmd( VDocument *doc, const VObjectList& objects,
-	const QString& name )
-		: VCommand( doc, name ), m_objects( objects )
+VTransformCmd::VTransformCmd( VDocument *doc, const QString& name )
+		: VCommand( doc, name )
 {
+	m_objects = doc->selection();
 }
 
 void
@@ -47,9 +46,8 @@ VTransformCmd::unexecute()
 }
 
 
-VTranslateCmd::VTranslateCmd( VDocument *doc, const VObjectList& objects,
-	double d1, double d2 )
-		: VTransformCmd( doc, objects, i18n( "Translate Objects" ) )
+VTranslateCmd::VTranslateCmd( VDocument *doc, double d1, double d2 )
+		: VTransformCmd( doc, i18n( "Translate Objects" ) )
 {
 	if( m_objects.count() == 1 )
 		setName( i18n( "Translate Object" ) );
@@ -58,9 +56,8 @@ VTranslateCmd::VTranslateCmd( VDocument *doc, const VObjectList& objects,
 }
 
 
-VScaleCmd::VScaleCmd( VDocument *doc, const VObjectList& objects,
-	const KoPoint& p, double s1, double s2 )
-		: VTransformCmd( doc, objects, i18n( "Scale Objects" ) )
+VScaleCmd::VScaleCmd( VDocument *doc, const KoPoint& p, double s1, double s2 )
+		: VTransformCmd( doc, i18n( "Scale Objects" ) )
 {
 	if( m_objects.count() == 1 )
 		setName( i18n( "Scale Object" ) );
@@ -71,9 +68,8 @@ VScaleCmd::VScaleCmd( VDocument *doc, const VObjectList& objects,
 }
 
 
-VShearCmd::VShearCmd( VDocument *doc, const VObjectList& objects,
-	const KoPoint& p, double s1, double s2 )
-		: VTransformCmd( doc, objects, i18n( "Shear Objects" ) )
+VShearCmd::VShearCmd( VDocument *doc, const KoPoint& p, double s1, double s2 )
+		: VTransformCmd( doc, i18n( "Shear Objects" ) )
 {
 	if( m_objects.count() == 1 )
 		setName( i18n( "Shear Object" ) );
@@ -83,9 +79,8 @@ VShearCmd::VShearCmd( VDocument *doc, const VObjectList& objects,
 	m_mat.translate( -p.x(), -p.y() );
 }
 
-VRotateCmd::VRotateCmd( VDocument *doc, const VObjectList& objects,
-	const KoPoint& p, double angle )
-		: VTransformCmd( doc, objects, i18n( "Rotate Objects" ) )
+VRotateCmd::VRotateCmd( VDocument *doc, const KoPoint& p, double angle )
+		: VTransformCmd( doc, i18n( "Rotate Objects" ) )
 {
 	if( m_objects.count() == 1 )
 		setName( i18n( "Rotate Object" ) );

@@ -477,8 +477,7 @@ KarbonView::pathInsertKnots()
 	VInsertKnotsDlg* dialog = new VInsertKnotsDlg();
 
 	if( dialog->exec() )
-		m_part->addCommand( new VInsertKnotsCmd(
-			&m_part->document(), m_part->document().selection(), dialog->knots() ), true );
+		m_part->addCommand( new VInsertKnotsCmd( &m_part->document(), dialog->knots() ), true );
 
 	delete( dialog );
 }
@@ -490,8 +489,7 @@ KarbonView::pathPolygonize()
 	dialog->setFlatness( 5.0 );
 
 	if( dialog->exec() )
-		m_part->addCommand( new VPolygonizeCmd(
-			&m_part->document(), m_part->document().selection(), dialog->flatness() ), true );
+		m_part->addCommand( new VPolygonizeCmd( &m_part->document(), dialog->flatness() ), true );
 
 	delete( dialog );
 }

@@ -169,9 +169,7 @@ VMToolShear::eventFilter( KarbonView* view, QEvent* event )
 		KoPoint fp = view->canvasWidget()->viewportToContents( QPoint( m_fp.x(), m_fp.y() ) );
 
 		part()->addCommand(
-			new VShearCmd(
-				&part()->document(), part()->document().selection(),
-				fp * (1.0 / view->zoom() ), m_s1, m_s2 ),
+			new VShearCmd( &part()->document(), fp * (1.0 / view->zoom() ), m_s1, m_s2 ),
 			true );
 
 		m_isDragging = false;

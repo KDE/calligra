@@ -11,8 +11,7 @@
 class VInsertKnotsCmd : public VCommand
 {
 public:
-	VInsertKnotsCmd( VDocument *doc, const VObjectList& objects,
-		uint knots );
+	VInsertKnotsCmd( VDocument *doc, uint knots );
 	virtual ~VInsertKnotsCmd() {}
 
 	virtual void execute();

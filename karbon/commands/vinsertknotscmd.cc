@@ -8,11 +8,11 @@
 #include "vinsertknotscmd.h"
 
 
-VInsertKnotsCmd::VInsertKnotsCmd( VDocument *doc, const VObjectList& objects,
-	uint knots )
-		: VCommand( doc, i18n( "Insert Knots" ) ), m_objects( objects )
+VInsertKnotsCmd::VInsertKnotsCmd( VDocument *doc, uint knots )
+		: VCommand( doc, i18n( "Insert Knots" ) )
 {
 	m_knots = knots > 0 ? knots : 1;
+	m_objects = doc->selection();
 }
 
 void
