@@ -44,6 +44,7 @@
 #include <ksconfig.h>
 
 #include "koDocumentInfo.h"
+#include <kocommandhistory.h>
 #include <koTemplateChooseDia.h>
 
 #include "kspread_canvas.h"
@@ -76,6 +77,8 @@ public:
   static int s_docId;
 
   DCOPObject* dcop;
+  
+  KoCommandHistory* commandHistory;
 
   // used to give every KSpreadSheet a unique default name.
   int tableId;
@@ -190,6 +193,8 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   initInterpreter();
 
   d->undoBuffer = new KSpreadUndo( this );
+  
+  d->commandHistory = new KoCommandHistory( actionCollection() );
 
   // Make us scriptable if the document has a name
   if ( name )
@@ -229,6 +234,8 @@ KSpreadDoc::~KSpreadDoc()
   d->s_docs.remove( this );
   
   kdDebug(36001) << "alive 1" << endl;
+  
+  delete d->commandHistory;
   
   delete d->workbook;
   delete d->styleManager;
@@ -1131,6 +1138,11 @@ void KSpreadDoc::destroyInterpreter()
     d->module = 0;
 
     d->interpreter = 0;
+}
+
+void KSpreadDoc::addCommand( KCommand* command )
+{
+    d->commandHistory->addCommand( command, true );
 }
 
 void KSpreadDoc::undo()

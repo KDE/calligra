@@ -37,6 +37,7 @@ class KSpreadSheet;
 class KSpreadStyleManager;
 
 class KoStore;
+class KCommand;
 
 class View;
 
@@ -135,15 +136,20 @@ public:
   /**
    * Returns the MIME type of KSpread document.
    */
-  virtual QCString mimeType() const { return MIME_TYPE; }  
+  virtual QCString mimeType() const { return MIME_TYPE; }
+  
+  /**
+   * Adds a command to the command history.
+   */
+  void addCommand( KCommand* command );  
 
   /**
-   * Undo the last operation.
+   * Undoes the last operation.
    */
   void undo();
 
   /**
-   * Redo the last undo.
+   * Redoes the last undo.
    */
   void redo();
 

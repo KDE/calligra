@@ -10,6 +10,7 @@ kde_module_LTLIBRARIES = libkspreadpart.la
 ## The part
 libkspreadpart_la_SOURCES =  \
         digest.cc \
+        commands.cc \
         kspread_autofill.cc \
         kspread_canvas.cc \
         kspread_cell.cc \
