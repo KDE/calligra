@@ -116,6 +116,7 @@ protected:
     KPPixmapObject() {}
 
     QPixmap changePictureSettings( QPixmap _tmpPixmap );
+    virtual void saveOasisPictureElement( KoGenStyle &styleobjectauto );
 
     /**
      * @internal

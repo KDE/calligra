@@ -96,6 +96,12 @@ DCOPObject* KPPixmapObject::dcopObject()
     return dcop;
 }
 
+void KPPixmapObject::saveOasisPictureElement( KoGenStyle &styleobjectauto )
+{
+    //todo
+}
+
+
 bool KPPixmapObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj )
 {
     xmlWriter.startElement( "draw:image" );

@@ -64,12 +64,13 @@ Done:
 Todo:
 -> save/load part element (necessary to modify koDocumentChild)
 -> save/load cubic/quadric/freehand object (define as svg object)
+-> save/load picture effect
 
 Bugs:
 -> load text layout format (bug into kpresenter)
 -> fix default value
 -> fix some arrow style  
-->specific object : header/footer is not sticky object into oo
+-> specific object : header/footer is not sticky object into oo
 
 In Progress:
 

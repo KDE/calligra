@@ -299,6 +299,7 @@ protected:
 
     void saveOasisObjectStyle( KoGenStyle &styleobjectauto );
     void saveOasisShadowElement( KoGenStyle &styleobjectauto );
+    virtual void saveOasisPictureElement( KoGenStyle &styleobjectauto ) {};
 
     float angle;
     KoPoint orig;
