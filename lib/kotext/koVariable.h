@@ -386,7 +386,7 @@ public:
 
     virtual void recalc();
     virtual QString fieldCode();
-
+    virtual void resize();
     void setDate( const QDate & _date ) { m_varValue = QVariant(_date); }
 
     virtual void saveVariable( QDomElement &parentElem );
@@ -424,6 +424,7 @@ public:
     static QStringList actionTexts();
 
     virtual void recalc();
+    virtual void resize();
     virtual QString fieldCode();
 
     void setTime( const QTime & _time ) { m_varValue = QVariant(_time); }

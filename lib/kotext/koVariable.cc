@@ -782,6 +782,22 @@ QString KoDateVariable::fieldCode()
         return i18n("Date");
 }
 
+void KoDateVariable::resize()
+{
+    KoTextFormat * fmt = format();
+    QString oldLanguage;
+    if ( !fmt->language().isEmpty())
+    {
+         oldLanguage=KGlobal::locale()->language();
+         bool changeLanguage = KGlobal::locale()->setLanguage( fmt->language() );
+         KoVariable::resize();
+         if ( changeLanguage )
+             KGlobal::locale()->setLanguage( oldLanguage );
+    }
+    else
+        KoVariable::resize();
+}
+
 void KoDateVariable::recalc()
 {
     if ( m_subtype == VST_DATE_CURRENT )
@@ -969,6 +985,24 @@ QString KoTimeVariable::fieldCode()
     return (m_subtype == VST_TIME_FIX)?i18n("Time (Fixed)"):i18n("Time");
 }
 
+
+void KoTimeVariable::resize()
+{
+    KoTextFormat * fmt = format();
+    QString oldLanguage;
+    kdDebug()<<" fmt->language().isEmpty() :"<<fmt->language()<<endl;
+    if ( !fmt->language().isEmpty())
+    {
+         oldLanguage=KGlobal::locale()->language();
+         bool changeLanguage = KGlobal::locale()->setLanguage( fmt->language() );
+         kdDebug()<<"changeLanguage :"<<changeLanguage<<endl;
+         KoVariable::resize();
+         if ( changeLanguage )
+             KGlobal::locale()->setLanguage( oldLanguage );
+    }
+    else
+        KoVariable::resize();
+}
 
 void KoTimeVariable::recalc()
 {
