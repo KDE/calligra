@@ -59,8 +59,6 @@ public:
   virtual void draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height, CORBA::Float _scale );
 
   char* mimeType();
-  bool openDocument( const char* _filename, const char* _format = 0L );
-  bool saveDocument( const char* _filename, const char* _format = 0L );
   virtual bool hasToWriteMultipart() { return false; };
 
   uint getFormWidth() { return m_FormWidth; };

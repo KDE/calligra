@@ -30,6 +30,7 @@ METASOURCES = \
  kformviewer_view.moc
 
 idl_DATA = kformviewer.idl
+kformviewer.h: $(top_builddir)/lib/kofficecore/koffice.idl
 
 kdelnk_DATA = kformviewer.desktop
 kdelnkdir = $(kde_appsdir)/KOffice

@@ -69,7 +69,6 @@ void KformViewerDoc::cleanUp()
 
   ASSERT( m_lstViews.count() == 0 );
 
-  m_lstAllChildren.clear();
   m_lstFormObjects.clear();
 
   KoDocument::cleanUp();
@@ -390,15 +389,6 @@ void KformViewerDoc::draw( QPaintDevice* , CORBA::Long _width, CORBA::Long _heig
 		      CORBA::Float  )
 {
   kdebug( KDEBUG_INFO, 0, "DRAWING w=%li h=%li", _width, _height );
-}
-
-bool KformViewerDoc::openDocument( const char *, const char * )
-{
-  emit sigUpdateView();
-
-  m_bEmpty = false;
-
-  return true;
 }
 
 char* KformViewerDoc::mimeType()

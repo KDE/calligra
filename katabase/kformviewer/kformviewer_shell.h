@@ -36,7 +36,7 @@ public:
   virtual void cleanUp();
   void setDocument( KformViewerDoc* _doc );
   virtual bool newDocument();
-  virtual bool openDocument( const char* _filename, const char* _format );
+  virtual bool openDocument( const char *  _filename );
   virtual bool saveDocument();
   virtual bool closeDocument();
   virtual bool closeAllDocuments();

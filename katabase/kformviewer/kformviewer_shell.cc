@@ -158,24 +158,21 @@ bool KformViewerShell::newDocument()
   return true;
 }
 
-bool KformViewerShell::openDocument( const char *_url, const char *_format )
+bool KformViewerShell::openDocument( const char *_url )
 {
-  if ( _format == 0L || *_format == 0 )
-    _format = "application/x-kformviewer";
-
   if ( m_pDoc && m_pDoc->isEmpty() )
     releaseDocument();
   else if ( m_pDoc && !m_pDoc->isEmpty() )
   {
     KformViewerShell *s = new KformViewerShell();
     s->show();
-    return s->openDocument( _url, _format );
+    return s->openDocument( _url );
   }
 
   kdebug( KDEBUG_INFO, 0, "Creating new document" );
 
   m_pDoc = new KformViewerDoc;
-  if ( !m_pDoc->loadFromURL( _url, _format ) )
+  if ( !m_pDoc->loadFromURL( _url ) )
   {
     return false;
   }
@@ -301,7 +298,7 @@ void KformViewerShell::slotFileOpen()
   if ( file.isNull() )
     return;
 
-  if ( !openDocument( file, "" ) )
+  if ( openDocument( file  ) )
   {
     QString tmp;
     tmp.sprintf( i18n( "Could not open\n%s" ), file.data() );
