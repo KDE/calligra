@@ -170,9 +170,9 @@ void KPClipartObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
 	    _painter->translate( _zoomHandler->zoomItX(ox) /*+1*/,
 				 _zoomHandler->zoomItY(oy) /*+1*/ );
 	    if ( br.width() && br.height() )
-		_painter->scale( (double)()
+		_painter->scale( (double)(_zoomHandler->zoomItX( ext.width()))
 				 / (double) br.width(),
-				 (double))
+				 (double)(_zoomHandler->zoomItY( ext.height())
 				 / (double) br.height() );
 	    _painter->drawPicture( *m_clipart.picture() );
 	    _painter->restore();
@@ -227,7 +227,7 @@ void KPClipartObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
 #if 1
             // TODO: verify!
             m_clipart.draw(*_painter,
-                0, 0,
+                _zoomHandler->zoomItX(ox) /*+1*/, _zoomHandler->zoomItY(oy) /*+1*/,
                 _zoomHandler->zoomItX( ext.width()), _zoomHandler->zoomItY( ext.height()),
                 0, 0, 0, 0);
 #else
