@@ -224,16 +224,16 @@ void KWDocStructRootItem::setOpen( bool o )
 void KWDocStructRootItem::setupArrangement()
 {
     if ( childCount() > 0 )
-        {
-            QListViewItem *child = firstChild(), *delChild;
+    {
+        QListViewItem *child = firstChild(), *delChild;
 
-            while( child )
-                {
-                    delChild = child;
-                    child = child->nextSibling();
-                    delete delChild;
-                }
+        while( child )
+        {
+            delChild = child;
+            child = child->nextSibling();
+            delete delChild;
         }
+    }
 
     QIntDict<KWDocStructParagItem> parags;
     parags.setAutoDelete( false );
@@ -246,40 +246,42 @@ void KWDocStructRootItem::setupArrangement()
     QString _name;
 
     for ( int i = doc->getNumFrameSets() - 1; i >= 0; i-- )
+    {
+        frameset = doc->getFrameSet( i );
+        if ( frameset->getFrameType() == FT_TEXT && frameset->getFrameInfo() == FI_BODY && !frameset->getGroupManager() )
         {
-            frameset = doc->getFrameSet( i );
-            if ( frameset->getFrameType() == FT_TEXT && frameset->getFrameInfo() == FI_BODY && !frameset->getGroupManager() )
+            item = new QListViewItem( this, frameset->getName() );
+            KWTextFrameSet *tmpParag = dynamic_cast<KWTextFrameSet*> (frameset) ;
+            textdoc= tmpParag->textDocument();
+            parag = static_cast<KWTextParag *>(textdoc->firstParag());
+            while ( parag )
+            {
+                Counter *tmpCounter=parag->counter();
+                if ( (tmpCounter->style() != Counter:: STYLE_NONE) &&  (tmpCounter->numbering() == Counter::NUM_CHAPTER) )
                 {
-                    item = new QListViewItem( this, frameset->getName() );
-                    KWTextFrameSet *tmpParag = dynamic_cast<KWTextFrameSet*> (frameset) ;
-                    textdoc= tmpParag->textDocument();
-                    parag = static_cast<KWTextParag *>(textdoc->firstParag());
-                    while ( parag )
-                        {
-                            Counter *tmpCounter=parag->counter();
-                            if ( (tmpCounter->style() != Counter:: STYLE_NONE) &&  (tmpCounter->numbering() == Counter::NUM_CHAPTER) )
-                                {
-                                    int _depth = tmpCounter->depth();
-                                    if ( _depth == 0 )
-                                        {
-                                            if ( item->childCount() == 0 )
-                                                parags.replace( _depth, new KWDocStructParagItem( item,QString( tmpCounter->text(parag) + "  " +parag->string()->toString().mid( 0, parag->string()->length() ) ),parag, gui ) );
-                                            else
-                                                parags.replace( _depth, new KWDocStructParagItem( item, parags[ _depth ],QString( tmpCounter->text(parag) + "  " +parag->string()->toString().mid( 0, parag->string()->length() ) ),parag, gui ) );
-                                        }
-                                    else
-                                        {
-                                            if ( parags[ _depth - 1 ]->childCount() == 0 )
-                                                parags.replace( _depth, new KWDocStructParagItem( parags[ _depth - 1 ],QString( tmpCounter->text(parag) + "  " +parag->string()->toString().mid( 0, parag->string()->length() ) ),parag, gui ) );
-                                            else
-                                                parags.replace( _depth, new KWDocStructParagItem( parags[ _depth - 1 ], parags[ _depth ],QString( tmpCounter->text(parag) + "  " +parag->string()->toString().mid( 0, parag->string()->length() ) ),parag, gui ) );
-                                        }
-                                    QObject::connect( listView(), SIGNAL( doubleClicked( QListViewItem* ) ), parags[ _depth ], SLOT( slotDoubleClicked( QListViewItem* ) ) );
-                                }
-                            parag = static_cast<KWTextParag *>(parag->next());
-                        }
+                    int _depth = tmpCounter->depth();
+                    if ( _depth == 0 )
+                    {
+                        if ( item->childCount() == 0 )
+                            parags.replace( _depth, new KWDocStructParagItem( item,QString( tmpCounter->text(parag) + "  " +parag->string()->toString().mid( 0, parag->string()->length() ) ),parag, gui ) );
+                        else
+                            parags.replace( _depth, new KWDocStructParagItem( item, parags[ _depth ],QString( tmpCounter->text(parag) + "  " +parag->string()->toString().mid( 0, parag->string()->length() ) ),parag, gui ) );
+                    }
+                    else
+                    {
+                        if (parags[ _depth - 1 ]==0)
+                            parags.replace( _depth, new KWDocStructParagItem( item,QString( tmpCounter->text(parag) + "  " +parag->string()->toString().mid( 0, parag->string()->length() ) ),parag, gui ) );
+                        else if ( parags[ _depth - 1 ]->childCount() == 0 )
+                            parags.replace( _depth, new KWDocStructParagItem( parags[ _depth - 1 ],QString( tmpCounter->text(parag) + "  " +parag->string()->toString().mid( 0, parag->string()->length() ) ),parag, gui ) );
+                        else
+                            parags.replace( _depth, new KWDocStructParagItem( parags[ _depth - 1 ], parags[ _depth ],QString( tmpCounter->text(parag) + "  " +parag->string()->toString().mid( 0, parag->string()->length() ) ),parag, gui ) );
+                    }
+                    QObject::connect( listView(), SIGNAL( doubleClicked( QListViewItem* ) ), parags[ _depth ], SLOT( slotDoubleClicked( QListViewItem* ) ) );
                 }
+                parag = static_cast<KWTextParag *>(parag->next());
+            }
         }
+    }
 
     if ( childCount() == 0 )
         ( void )new QListViewItem( this, i18n( "Empty" ) );
