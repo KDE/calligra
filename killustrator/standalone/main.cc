@@ -64,8 +64,8 @@ int main (int argc, char** argv) {
 	QString arg = argv[i];
 	if (arg.find (":/") == -1) {
 	  if (arg.left (1) != "/") {
-	    char buf[MAXPATHLEN];
-	    getcwd (buf, MAXPATHLEN);
+	    char buf[KDEMAXPATHLEN];
+	    getcwd (buf, KDEMAXPATHLEN);
 	    arg.sprintf ("file:%s/%s", buf, argv[i]);
 	  }
 	  else
