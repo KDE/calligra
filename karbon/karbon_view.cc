@@ -808,16 +808,12 @@ KarbonView::initActions()
 					  SLOT( editCopy() ), actionCollection(), "edit_copy" );
 	KStdAction::paste( this,
 					   SLOT( editPaste() ), actionCollection(), "edit_paste" );
-	KStdAction::selectAll( this,
-						   SLOT( editSelectAll() ), actionCollection(), "edit_select_all" );
+	KStdAction::selectAll( this, SLOT( editSelectAll() ), actionCollection(), "edit_select_all" );
+	KStdAction::deselect( this, SLOT( editDeselectAll() ), actionCollection(), "edit_deselect_all" );
 
 	new KAction(
 		i18n( "&Import Graphic..." ), 0, 0, this,
 		SLOT( fileImportGraphic() ), actionCollection(), "file_import" );
-
-	new KAction(
-		i18n( "&Deselect All" ), QKeySequence( "Ctrl+D" ), this,
-		SLOT( editDeselectAll() ), actionCollection(), "edit_deselect_all" );
 	m_deleteSelectionAction = new KAction(
 		i18n( "D&elete" ), "editdelete", QKeySequence( "Del" ), this,
 		SLOT( editDeleteSelection() ), actionCollection(), "edit_delete" );
