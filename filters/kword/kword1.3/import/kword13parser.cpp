@@ -28,11 +28,11 @@
 #include "kword13document.h"
 #include "kword13parser.h"
 
-StackItem::StackItem() : elementType( KWord13TypeUnknown ), m_currentFrameset( 0 )
+KWord13StackItem::KWord13StackItem() : elementType( KWord13TypeUnknown ), m_currentFrameset( 0 )
 {
 }
 
-StackItem::~StackItem()
+KWord13StackItem::~KWord13StackItem()
 {
 }
 
@@ -41,7 +41,7 @@ KWord13Parser::KWord13Parser( KWord13Document* kwordDocument )
     m_currentLayout( 0 ), m_currentFormat( 0 )
 {
     parserStack.setAutoDelete( true );
-    StackItem* bottom = new StackItem;
+    KWord13StackItem* bottom = new KWord13StackItem;
     bottom->elementType = KWord13TypeBottom;
     parserStack.push( bottom ); //Security item (not to empty the stack)
 }
@@ -54,7 +54,7 @@ KWord13Parser::~KWord13Parser( void )
     delete m_currentFormat;
 }
 
-bool KWord13Parser::startElementFormatOneProperty( const QString& name, const QXmlAttributes& attributes, StackItem *stackItem)
+bool KWord13Parser::startElementFormatOneProperty( const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem)
 {
     // ### TODO: check status
     if ( stackItem->elementType == KWord13TypeLayoutFormatOne )
@@ -112,7 +112,7 @@ bool KWord13Parser::startElementFormatOneProperty( const QString& name, const QX
     }
 }
 
-bool KWord13Parser::startElementLayoutProperty( const QString& name, const QXmlAttributes& attributes, StackItem *stackItem)
+bool KWord13Parser::startElementLayoutProperty( const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem)
 {
     // ### TODO: check status
     if ( stackItem->elementType == KWord13TypeIgnore )
@@ -139,7 +139,7 @@ bool KWord13Parser::startElementLayoutProperty( const QString& name, const QXmlA
     }
 }
 
-bool KWord13Parser::startElementName( const QString&, const QXmlAttributes& attributes, StackItem *stackItem )
+bool KWord13Parser::startElementName( const QString&, const QXmlAttributes& attributes, KWord13StackItem *stackItem )
 {
     if ( stackItem->elementType != KWord13TypeLayout )
     {
@@ -157,7 +157,7 @@ bool KWord13Parser::startElementName( const QString&, const QXmlAttributes& attr
     return  true;
 }
 
-bool KWord13Parser::startElementFormat( const QString&, const QXmlAttributes& attributes, StackItem *stackItem )
+bool KWord13Parser::startElementFormat( const QString&, const QXmlAttributes& attributes, KWord13StackItem *stackItem )
 {
     // ### TODO: check parent?
     if ( stackItem->elementType == KWord13TypeIgnore )
@@ -224,7 +224,7 @@ bool KWord13Parser::startElementFormat( const QString&, const QXmlAttributes& at
     return true;    
 }
 
-bool KWord13Parser::startElementLayout( const QString&, const QXmlAttributes& attributes, StackItem *stackItem )
+bool KWord13Parser::startElementLayout( const QString&, const QXmlAttributes& attributes, KWord13StackItem *stackItem )
 {
     // ### TODO: check parent?
     if ( stackItem->elementType == KWord13TypeIgnore )
@@ -253,7 +253,7 @@ bool KWord13Parser::startElementLayout( const QString&, const QXmlAttributes& at
     return true;    
 }
 
-bool KWord13Parser::startElementParagraph( const QString&, const QXmlAttributes&, StackItem *stackItem )
+bool KWord13Parser::startElementParagraph( const QString&, const QXmlAttributes&, KWord13StackItem *stackItem )
 {
     if ( stackItem->elementType == KWord13TypeUnknownFrameset )
     {
@@ -275,7 +275,7 @@ bool KWord13Parser::startElementParagraph( const QString&, const QXmlAttributes&
     return true;
 }
 
-bool KWord13Parser::startElementFrame( const QString& name, const QXmlAttributes& attributes, StackItem *stackItem )
+bool KWord13Parser::startElementFrame( const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem )
 {
     if ( stackItem->elementType == KWord13TypeFrameset )
     {
@@ -309,7 +309,7 @@ bool KWord13Parser::startElementFrame( const QString& name, const QXmlAttributes
     return true;
 }
 
-bool KWord13Parser::startElementFrameset( const QString& name, const QXmlAttributes& attributes, StackItem *stackItem )
+bool KWord13Parser::startElementFrameset( const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem )
 {
     const QString frameTypeStr( attributes.value( "frameType" ) );
     const QString frameInfoStr( attributes.value( "frameInfo" ) );
@@ -375,8 +375,8 @@ bool KWord13Parser::startElementFrameset( const QString& name, const QXmlAttribu
 }
 
 
-bool KWord13Parser::startElementDocumentAttributes( const QString& name, const QXmlAttributes& attributes, StackItem *stackItem,
-     const StackItemKWord13Type& allowedParentType, const StackItemKWord13Type& newType )
+bool KWord13Parser::startElementDocumentAttributes( const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem,
+     const KWord13StackItemKWord13Type& allowedParentType, const KWord13StackItemKWord13Type& newType )
 {
     if ( parserStack.current()->elementType == allowedParentType )
     {
@@ -409,7 +409,7 @@ bool KWord13Parser::startElement( const QString&, const QString&, const QString&
     }
     
     // Create a new stack element copying the top of the stack.
-    StackItem *stackItem=new StackItem(*parserStack.current());
+    KWord13StackItem *stackItem=new KWord13StackItem(*parserStack.current());
 
     if (!stackItem)
     {
@@ -567,7 +567,7 @@ bool KWord13Parser :: endElement( const QString&, const QString& , const QString
 
     bool success=false;
     
-    StackItem *stackItem=parserStack.pop();
+    KWord13StackItem *stackItem=parserStack.pop();
         
     if ( name == "PARAGRAPH" )
     {
@@ -685,7 +685,7 @@ bool KWord13Parser :: characters ( const QString & ch )
 
     bool success=false;
 
-    StackItem *stackItem = parserStack.current();
+    KWord13StackItem *stackItem = parserStack.current();
 
     if ( stackItem->elementType == KWord13TypeText )
     { 

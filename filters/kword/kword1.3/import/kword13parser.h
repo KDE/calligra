@@ -38,7 +38,7 @@ class KWord13Format;
  *
  * Note: we do not care of the tags: \<FRAMESETS\>, \<STYLES\>
  */
-enum StackItemKWord13Type
+enum KWord13StackItemKWord13Type
 {
     KWord13TypeUnknown  = 0,
     KWord13TypeBottom,      ///< Bottom of the stack
@@ -58,22 +58,22 @@ enum StackItemKWord13Type
     KWord13TypePicturesPlural   ///< \<PICTURES\>, \<PIXMAPS\> or \<CLIPARTS\>
 };
 
-class StackItem
+class KWord13StackItem
 {
 public:
-    StackItem();
-    ~StackItem();
+    KWord13StackItem();
+    ~KWord13StackItem();
 public:
     QString itemName;   ///< Name of the tag (only for error purposes)
-    StackItemKWord13Type elementType;
+    KWord13StackItemKWord13Type elementType;
     KWord13Frameset* m_currentFrameset;
 };
 
-class StackItemStack : public QPtrStack<StackItem>
+class KWord13StackItemStack : public QPtrStack<KWord13StackItem>
 {
 public:
-        StackItemStack(void) { }
-        ~StackItemStack(void) { }
+        KWord13StackItemStack(void) { }
+        ~KWord13StackItemStack(void) { }
 };
 
 class KWord13Parser : public QXmlDefaultHandler
@@ -93,24 +93,24 @@ protected: //QXml
     virtual bool fatalError(const QXmlParseException& exception);
 protected:
     /// Process children of \<FORMAT id="1"\>
-    bool startElementFormatOneProperty( const QString& name, const QXmlAttributes& attributes, StackItem *stackItem);
+    bool startElementFormatOneProperty( const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem);
     /// Process children of \<LAYOUT\> (with exceptions)
-    bool startElementLayoutProperty( const QString& name, const QXmlAttributes& attributes, StackItem *stackItem);
+    bool startElementLayoutProperty( const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem);
     /// Process \<NAME\>
-    bool startElementName( const QString&, const QXmlAttributes& attributes, StackItem *stackItem );
+    bool startElementName( const QString&, const QXmlAttributes& attributes, KWord13StackItem *stackItem );
     /// Process \<FORMAT\>
-    bool startElementFormat( const QString&, const QXmlAttributes& attributes, StackItem *stackItem );
+    bool startElementFormat( const QString&, const QXmlAttributes& attributes, KWord13StackItem *stackItem );
     /// Process \<LAYOUT\> and \<STYLE\>
-    bool startElementLayout( const QString&, const QXmlAttributes&, StackItem *stackItem );
+    bool startElementLayout( const QString&, const QXmlAttributes&, KWord13StackItem *stackItem );
     /// Process \<PARAGRAPH\>
-    bool startElementParagraph( const QString& name, const QXmlAttributes& attributes, StackItem *stackItem );
+    bool startElementParagraph( const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem );
     /// Process \<FRAME\>
-    bool startElementFrame( const QString& name, const QXmlAttributes& attributes, StackItem *stackItem );
+    bool startElementFrame( const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem );
     /// Process \<FRAMESET\>
-    bool startElementFrameset( const QString& name, const QXmlAttributes& attributes, StackItem *stackItem );
+    bool startElementFrameset( const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem );
     /// Process opening tag of some elements that are children of \<DOC\> and which only define document properties
     bool startElementDocumentAttributes( const QString& name, const QXmlAttributes& attributes,
-        StackItem *stackItem, const StackItemKWord13Type& allowedParentType, const StackItemKWord13Type& newType );
+        KWord13StackItem *stackItem, const KWord13StackItemKWord13Type& allowedParentType, const KWord13StackItemKWord13Type& newType );
     /**
      * Get a picture key out of the individual \<KEY\> attributes
      *
@@ -122,7 +122,7 @@ protected:
      const QString& microsecond ) const;
 protected:
     QString indent; //DEBUG
-    StackItemStack parserStack;
+    KWord13StackItemStack parserStack;
     KWord13Document* m_kwordDocument;
     KWord13Paragraph* m_currentParagraph; ///< Current paragraph
     KWord13Layout* m_currentLayout; ///< Current layout (or style)
