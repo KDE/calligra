@@ -69,7 +69,7 @@ QString KoFilterManager::fileSelectorList( Direction direction, const char *_for
   if (!registry)
   {
       registry = new KRegistry;
-      registry->addFactory( new KMimeTypeFactory );
+      registry->addFactory( new KServiceTypeFactory );
       registry->load();
   }
 
