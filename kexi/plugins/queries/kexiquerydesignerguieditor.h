@@ -26,6 +26,7 @@
 
 #include <kexiviewbase.h>
 #include <kexipropertybuffer.h>
+#include <kexiquerypart.h>
 
 class KexiMainWindow;
 class KexiTableViewData;
@@ -58,7 +59,7 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 		KexiQueryDesignerGuiEditor(KexiMainWindow *mainWin, QWidget *parent, KexiQueryDocument *doc, const char *name = 0);
 		~KexiQueryDesignerGuiEditor();
 
-		KexiDB::QuerySchema	*schema();
+//		KexiDB::QuerySchema	*schema();
 
 		KexiRelationWidget *relationView() const;
 
@@ -84,6 +85,12 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 
 		KexiPropertyBuffer* createPropertyBuffer( int row, 
 			const QString& tableName, const QString& fieldName, bool newOne = false );
+
+		/*! Builds query schema out of information provided by gui. 
+		 The schema is stored in temp->query member. */
+		void buildSchema();
+
+		KexiQueryPart::TempData * tempData();
 
 	protected slots:
 		void slotDragOverTableRow(KexiTableItem *item, int row, QDragMoveEvent* e);

@@ -229,6 +229,8 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		 \sa storeDataBlock(). */
 		bool loadDataBlock( QString &dataString, const QString& dataID = QString::null);
 
+		bool storeDataBlock_internal( const QString &dataString, int o_id, const QString& dataID );
+
 	private:
 		KexiMainWindow *m_parentWindow;
 		bool m_isRegistered;

@@ -60,8 +60,9 @@ class KexiQueryPart : public KexiPart::Part
 		class TempData : public KexiDialogTempData
 		{
 			public:
-			TempData(QObject* parent);
-			KexiDB::QuerySchema *query;
+				TempData(QObject* parent);
+				KexiDB::QuerySchema *query;
+				bool needsToLoadLayout : 1;
 		};
 
 	protected:

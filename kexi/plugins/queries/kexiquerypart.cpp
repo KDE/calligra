@@ -40,6 +40,7 @@ KexiQueryPart::KexiQueryPart(QObject *parent, const char *name, const QStringLis
 {
 	m_names["instance"] = i18n("Query");
 	m_supportedViewModes = Kexi::DataViewMode | Kexi::DesignViewMode | Kexi::TextViewMode;
+//	m_supportedViewModes = Kexi::TextViewMode;
 }
 
 KexiQueryPart::~KexiQueryPart()
@@ -133,6 +134,7 @@ void KexiQueryPart::initInstanceActions( int mode, KActionCollection *col )
 KexiQueryPart::TempData::TempData(QObject* parent)
  : KexiDialogTempData(parent)
  , query(0)
+ , needsToLoadLayout(false)
 {
 }
 

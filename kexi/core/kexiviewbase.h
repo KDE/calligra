@@ -132,12 +132,14 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		 Requirements: 
 		 - deep copy of \a sdata should be made
 		 - schema data should be created at the backend
-		   using Connection::storeObjectSchemaData() or more specialized 
+		   (by calling KexiViewBase::storeNewData(const KexiDB::SchemaData& sdata)),
+		   or using Connection::storeObjectSchemaData() or more specialized 
 		   method. For example, KexiAlterTableDialog 
 		   uses Connection::createTable(TableSchema) for this 
 		   (tableschema is SchemaData subclass) to store more information than 
-		   just a schem adata. You should use such subclasses if needed too.
-		 Should return newly created schema data obejct on success. */
+		   just a schem adata. You should use such subclasses if needed.
+		 Should return newly created schema data object on success. 
+		 In this case, do not store schema object yourself (make deep copy if needed). */
 		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata);
 
 		/*! Tells this view to store data changes on the backend. 
@@ -154,15 +156,20 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		/*! Stores large string data \a dataString, block (e.g. xml form's representation) 
 		 at the backend. Block will be stored in "kexi__objectdata" table pointed by
 		 this object's id and an optional \a subID identifier. 
+		 If dialog's id is not available (KexiDialogBase::id()), 
+		 then ID that was just created in storeNewData() is used
+		 (see description of m_newlyAssignedID member).
 		 If there is already such record in the table, it's simply overwritten.
 		 \return true on success
 		*/
-		bool storeDataBlock( const QString &dataString, const QString &id, const QString& subID = QString::null );
+		bool storeDataBlock( const QString &dataString, const QString &dataID = QString::null );
+//		bool storeDataBlock( const QString &dataString, const QString &id, const QString& subID = QString::null );
 
 		/*! Loads large string data \a dataString, block (e.g. xml form's representation).
 		 \return true on success
 		 \sa storeDataBlock(). */
-		bool loadDataBlock( QString &dataString, const QString &id, const QString& dataID = QString::null);
+		bool loadDataBlock( QString &dataString, const QString& dataID = QString::null);
+//		bool loadDataBlock( QString &dataString, const QString &id, const QString& dataID = QString::null);
 
 
 		void setViewWidget(QWidget* w);
@@ -180,6 +187,14 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		QGuardedPtr<QWidget> m_lastFocusedChildBeforeFocusOut;
 
 	private:
+		/*! Member set to newly assigned object's ID in storeNewData()
+		 and used in storeDataBlock(). This is needed because usually,
+		 storeDataBlock() can be called from storeNewData() and in this case
+		 dialog has not yet assigned valid identifier (it has just negative temp. number).
+		 \sa KexiDialogBase::id()
+		 */
+		int m_newlyAssignedID;
+
 		bool m_dirty : 1;
 
 	friend class KexiDialogBase;

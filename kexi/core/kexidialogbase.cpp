@@ -398,27 +398,32 @@ bool KexiDialogBase::storeData()
 	return true;
 }
 
-bool KexiDialogBase::storeDataBlock( const QString &dataString, const QString& dataID )
+bool KexiDialogBase::storeDataBlock_internal( const QString &dataString, int o_id, const QString& dataID )
 {
 	KexiDB::Connection *conn = m_parentWindow->project()->dbConnection();
 	KexiDB::Driver *drv = conn->driver();
 	
-	QString sql = "select kexi__objectdata.o_id where o_id=" + QString::number(id());
+	QString sql = "select kexi__objectdata.o_id from kexi__objectdata where o_id=" + QString::number(o_id);
 	QString sql_sub = KexiDB::sqlWhere(drv, KexiDB::Field::Text, "o_sub_id", dataID);
 
 	bool ok, exists;
-	exists = conn->resultExists(sql + sql_sub, ok);
+	exists = conn->resultExists(sql + " and " + sql_sub, ok);
 	if (!ok)
 		return false;
 	if (exists) {
 		return conn->drv_executeSQL( "update kexi__objectdata set o_data="
 			+ drv->valueToSQL( KexiDB::Field::BLOB, dataString )
-			+ " where o_id=" + QString::number(id()) + sql_sub );
+			+ " where o_id=" + QString::number(o_id) + " and " + sql_sub );
 	}
 	return conn->drv_executeSQL( 
 		"insert into kexi__objectdata (o_id, o_data, o_sub_id) values ("
-		+ QString::number(id()) +"," + drv->valueToSQL( KexiDB::Field::BLOB, dataString )
-		+ "," + drv->valueToSQL( KexiDB::Field::Text, dataID ) );
+		+ QString::number(o_id) +"," + drv->valueToSQL( KexiDB::Field::BLOB, dataString )
+		+ "," + drv->valueToSQL( KexiDB::Field::Text, dataID ) + ")" );
+}
+
+bool KexiDialogBase::storeDataBlock( const QString &dataString, const QString& dataID )
+{
+	return storeDataBlock_internal(dataString, id(), dataID);
 }
 
 bool KexiDialogBase::loadDataBlock( QString &dataString, const QString& dataID )

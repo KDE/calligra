@@ -75,7 +75,7 @@ KexiDBForm::loadForm()
 {
 	kdDebug() << "KexiDBForm::loadForm() Loading the form with id : " << m_id << endl;
 	QString data;
-	loadDataBlock(data, QString::number(m_id));
+	loadDataBlock(data);//, QString::number(m_id));
 	QByteArray raw;
 	raw = data.utf8();
 	raw.truncate(raw.size() - 1);
@@ -145,7 +145,7 @@ KexiDBForm::storeData()
 	kdDebug(44000) << "KexiDBForm::storeData(): " << parentDialog()->partItem()->name() << " [" << m_id << "]" << endl;
 	QByteArray data;
 	KFormDesigner::FormIO::saveForm(m_item.form(), data);
-	storeDataBlock(data, QString::number(m_id));
+	storeDataBlock(data);//, QString::number(m_id));
 
 	return true;
 }

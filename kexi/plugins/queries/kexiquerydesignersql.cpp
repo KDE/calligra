@@ -58,7 +58,7 @@ bool
 KexiQueryDesignerSQL::beforeSwitchTo(int mode, bool &cancelled, bool &dontStore)
 {
 	//TODO
-	return false;
+	return true;
 	
 	if (m_doc) {
 		KexiDB::Parser *parser = new KexiDB::Parser(mainWin()->project()->dbConnection());

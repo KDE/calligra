@@ -36,6 +36,7 @@ KexiViewBase::KexiViewBase(KexiMainWindow *mainWin, QWidget *parent, const char 
  , m_dirty(false)
  , m_viewWidget(0)
  , m_parentView(0)
+ , m_newlyAssignedID(-1)
 {
 	QWidget *wi=this;
 	while ((wi = wi->parentWidget()) && !wi->inherits("KexiDialogBase"))
@@ -130,12 +131,13 @@ KexiDB::SchemaData* KexiViewBase::storeNewData(const KexiDB::SchemaData& sdata)
 	else {
 		setDirty(false);
 	}
+	m_newlyAssignedID = new_schema->id();
 	return new_schema;
 }
 
 bool KexiViewBase::storeData()
 {
-	if (!m_dialog->schemaData())
+	if (!m_dialog || !m_dialog->schemaData())
 		return false;
 	if (!m_mainWin->project()->dbConnection()
 			->storeObjectSchemaData( *m_dialog->schemaData(), false /*existing object*/ ))
@@ -146,37 +148,28 @@ bool KexiViewBase::storeData()
 	return true;
 }
 
-bool KexiViewBase::storeDataBlock( const QString &dataString, const QString &id, const QString& dataID )
+//bool KexiViewBase::storeDataBlock( const QString &dataString, const QString &id, const QString& dataID )
+bool KexiViewBase::storeDataBlock( const QString &dataString, const QString &dataID )
 {
-	KexiDB::Connection *conn = m_mainWin->project()->dbConnection();
-	KexiDB::Driver *drv = conn->driver();
-	
-	QString sql = "select kexi__objectdata.o_id from kexi__objectdata where o_id=" + id;
-	QString sql_sub = KexiDB::sqlWhere(drv, KexiDB::Field::Text, "o_sub_id", dataID);
-
-	bool ok, exists;
-	exists = conn->resultExists(sql + " and " + sql_sub, ok);
-	if (!ok)
+	if (!m_dialog)
 		return false;
-	if (exists) {
-		return conn->drv_executeSQL( "update kexi__objectdata set o_data="
-			+ drv->valueToSQL( KexiDB::Field::BLOB, dataString )
-			+ " where o_id=" + id + " and " + sql_sub );
+	int effectiveID;
+	if (m_newlyAssignedID>0) {//ID not yet stored within dialog, but we've got ID here
+		effectiveID = m_newlyAssignedID;
+		m_newlyAssignedID = -1;
 	}
-	return conn->drv_executeSQL( 
-		"insert into kexi__objectdata (o_id, o_data, o_sub_id) values ("
-		+ id +"," + drv->valueToSQL( KexiDB::Field::BLOB, dataString )
-		+ "," + drv->valueToSQL( KexiDB::Field::Text, dataID ) + ")" );
+	else
+		effectiveID = m_dialog->id();
+
+	return effectiveID>0 && m_dialog->storeDataBlock_internal( dataString, effectiveID, dataID );
 }
 
-bool KexiViewBase::loadDataBlock( QString &dataString, const QString &id, const QString& dataID )
+//bool KexiViewBase::loadDataBlock( QString &dataString, const QString &id, const QString& dataID )
+bool KexiViewBase::loadDataBlock( QString &dataString, const QString& dataID )
 {
-	KexiDB::Connection *conn = m_mainWin->project()->dbConnection();
-	KexiDB::Driver *drv = conn->driver();
-
-	return conn->querySingleString(
-		QString("select o_data from kexi__objectdata where o_id=") + id
-		+ " and " + KexiDB::sqlWhere(drv, KexiDB::Field::Text, "o_sub_id", dataID), dataString );
+	if (!m_dialog)
+		return false;
+	return m_dialog->loadDataBlock(dataString, dataID);
 }
 
 

@@ -299,7 +299,7 @@ TODO: add SharedAction::setVisible() and use QMenuData::setItemVisible() where n
 
 
 === BETA 4 HOT TODO ===
-- make SQL GUI designer working reasonable
+- make query GUI designer working reasonable
 - make SQL text designer working again
 - implement query storage
 
@@ -309,7 +309,17 @@ HOT TODO:
 
 CC_MAIL: dkite@shaw.ca
 
+
+
+
+2004-06-17
+KexiTableView
+- Combobox's button is now in "toggle" mode; popping up is now better hidden/shown
+KexiViewBase
+- storeNewData(), storeDataBlock() simplified; parts code updated for this change
+
 2004-06-15
+2004-06-16
 TableView, Alter Table
 - Table Cell Editor's Focus is cleared on slotRefreshRequested()
 - fixed columns recreating on data resetting for a table
