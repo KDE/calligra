@@ -98,10 +98,10 @@ void KPLineObject::loadOasis(const QDomElement &element, const KoStyleStack & st
          lineType=LT_LU_RD;
     else
         lineType=LT_LD_RU;
-
-    if ( styleStack.hasAttribute( "draw:marker-start" ) )
+    QString attr = (x1 < x2) ?  "draw:marker-start" : "draw:marker-end";
+    if ( styleStack.hasAttribute( attr ) )
     {
-        QString type = styleStack.attribute( "draw:marker-start" );
+        QString type = styleStack.attribute( attr );
         kdDebug()<<"type arrow start :"<<type<<endl;
         if ( type == "Arrow" || type == "Small Arrow" || type == "Rounded short Arrow" ||
              type == "Symmetric Arrow" || type == "Rounded large Arrow" || type == "Arrow concave" )
@@ -117,9 +117,10 @@ void KPLineObject::loadOasis(const QDomElement &element, const KoStyleStack & st
         else if ( type == "Double Arrow" )
             lineBegin = L_DOUBLE_LINE_ARROW;
     }
-    if ( styleStack.hasAttribute( "draw:marker-end" ) )
+    attr = (x1 < x2) ?  "draw:marker-end" : "draw:marker-start";
+    if ( styleStack.hasAttribute( attr ) )
     {
-        QString type = styleStack.attribute( "draw:marker-end" );
+        QString type = styleStack.attribute( attr );
         kdDebug()<<"type arrow end :"<<type<<endl;
         if ( type == "Arrow" || type == "Small Arrow" || type == "Rounded short Arrow" ||
              type == "Symmetric Arrow" || type == "Rounded large Arrow" || type == "Arrow concave" )
