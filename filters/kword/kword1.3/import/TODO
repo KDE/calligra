@@ -1,0 +1,19 @@
+Remove KWEFBaseWorker
+KWord 0.8 support (text images...)
+
+
+=== Old OOWriter To-Do List ===
+Paragraph direction
+Paragraph bullets/counters
+Footnotes/Endnotes
+Text boxes (framesets)
+Annotations (aka "note")
+Anchors
+Mail merge
+"Sections" (e.g. table of contents)
+Table styles, frame styles
+Bookmarks
+Embedded objects
+Spellcheck settings?
+Cursor position, etc.
+(probably more...)
