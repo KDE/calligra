@@ -3098,12 +3098,9 @@ public:
         U32 dxaCol;
 
         // when fDiffLines is 0, is height of every line in paragraph in 
-        // pixels
-        U32 dymLine;
-
-        // when fDiffLines is 1, is the total height in pixels of the 
-        // paragraph
-        U32 dymHeight;
+        // pixels (dymLine) 
+        //     when fDiffLines is 1, is the total height in pixels of the paragraph (dymHeight)
+        U32 dym;
     } __attribute__ ((packed)) PHE;
     static unsigned read(const U8 *in, PHE *out, unsigned count=1);
 
@@ -3172,6 +3169,8 @@ public:
         //     3 shadow
         U8 brcl;
 
+        // reserved
+        U8 unused9;
 
         // when non-zero, list level for this paragraph
         U8 ilvl;
@@ -3187,10 +3186,14 @@ public:
         // no longer used
         U8 nLvlAnm;
 
+        // reserved
+        U8 unused15;
 
         // when 1, paragraph is a side by side paragraph
         U8 fSideBySide;
 
+        // reserved
+        U8 unused17;
 
         // when 0, text in paragraph may be auto hyphenated.
         U8 fNoAutoHyph;
@@ -3229,6 +3232,8 @@ public:
         // 
         U8 fAdjustRight;
 
+        // reserved
+        U8 unused59;
 
         // when 1, apply kinsoku rules when performing line wrapping
         U8 fKinsoku;
@@ -3266,7 +3271,11 @@ public:
         // 
         U16 fRotateFont:1;
 
+        // reserved
+        U16 unused68_3:13;
 
+        // reserved
+        U16 unused70;
 
         // when 1, paragraph is contained in a table row
         U8 fInTable;
@@ -3380,7 +3389,7 @@ public:
         U16 rgdxaTab[64];
 
         // array of itbdMac tab descriptors
-        U8 rgtbd[64];
+        U16 rgtbd[64];
     } __attribute__ ((packed)) PAP;
     static unsigned read(const U8 *in, PAP *out, unsigned count=1);
 

@@ -126,12 +126,6 @@ protected:
     void getParagraphs();
     virtual void gotParagraph(const QString &text);
 
-    // Iterator for the styles in the style sheet. The callback gotStyle()
-    // returns the style fetched. TBD: This is a crappy iterator design.
-
-    void getStyles();
-    virtual void gotStyle(const QString &name);
-
     // Some fundamental data structures. We keep pointers to our streams,
     // and a copy of the FIB.
 
@@ -139,6 +133,11 @@ protected:
     const U8 *m_tableStream;
     const U8 *m_dataStream;
     FIB m_fib;
+
+    // Cache for styles in stylesheet. TBD: Eventually, this should be an array of
+    // fully "decoded" PAPs - that will help performance with lots of paragraphs.
+
+    STD **m_styles;
 
     // For the grpprl array, we store the offset to the
     // byte count preceeding the first entry, and the number of entries.
@@ -224,9 +223,12 @@ protected:
 
 private:
 
-    static const int area = 30003;
-    Plex<PCD> *m_pcd;
+    // Error handling and reporting support.
+
     QString m_error;
+    static const int area = 31000;
+
+    Plex<PCD> *m_pcd;
     void error(unsigned line, const char *reason);
     void getPAPXFKP(const U8 *textStartFc, U32 textLength, bool unicode);
     void getPAPX(
@@ -234,7 +236,21 @@ private:
         const U8 *textStartFc,
         U32 textLength,
         bool unicode);
+
+    // Convert a char into a unicode character.
+
+    static short char2unicode(unsigned char c);
+
+    // Initialise the PAP for a paragrpah.
+
+    void fill(
+        PAP *pap,
+        const PAPXFKP *papx,
+        const PHE *phe);
+
+    // Fetch the styles in the style sheet.
+
+    void getStyles();
 };
 #endif
-
 

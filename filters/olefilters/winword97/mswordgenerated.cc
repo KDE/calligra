@@ -602,7 +602,7 @@ unsigned MsWordGenerated::read(const U8 *in, PHE *out, unsigned count)
     for (unsigned i = 0; i < count; i++)
     {
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 2);
-        bytes += read(in + bytes, (U32 *)(ptr + bytes), 3);
+        bytes += read(in + bytes, (U32 *)(ptr + bytes), 2);
     }
     return bytes;
 } // PHE
@@ -615,15 +615,15 @@ unsigned MsWordGenerated::read(const U8 *in, PAP *out, unsigned count)
     for (unsigned i = 0; i < count; i++)
     {
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 1);
-        bytes += read(in + bytes, (U8 *)(ptr + bytes), 9);
+        bytes += read(in + bytes, (U8 *)(ptr + bytes), 10);
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 1);
-        bytes += read(in + bytes, (U8 *)(ptr + bytes), 4);
+        bytes += read(in + bytes, (U8 *)(ptr + bytes), 6);
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 3);
         bytes += read(in + bytes, (LSPD *)(ptr + bytes), 1);
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 2);
         bytes += read(in + bytes, (PHE *)(ptr + bytes), 1);
-        bytes += read(in + bytes, (U8 *)(ptr + bytes), 9);
-        bytes += read(in + bytes, (U16 *)(ptr + bytes), 2);
+        bytes += read(in + bytes, (U8 *)(ptr + bytes), 10);
+        bytes += read(in + bytes, (U16 *)(ptr + bytes), 3);
         bytes += read(in + bytes, (U8 *)(ptr + bytes), 4);
         bytes += read(in + bytes, (U32 *)(ptr + bytes), 4);
         bytes += read(in + bytes, (BRC *)(ptr + bytes), 6);
@@ -636,8 +636,7 @@ unsigned MsWordGenerated::read(const U8 *in, PAP *out, unsigned count)
         bytes += read(in + bytes, (U16 *)(ptr + bytes), 2);
         bytes += read(in + bytes, (DTTM *)(ptr + bytes), 1);
         bytes += read(in + bytes, (NUMRM *)(ptr + bytes), 1);
-        bytes += read(in + bytes, (U16 *)(ptr + bytes), 65);
-        bytes += read(in + bytes, (U8 *)(ptr + bytes), 64);
+        bytes += read(in + bytes, (U16 *)(ptr + bytes), 129);
     }
     return bytes;
 } // PAP

@@ -1,12 +1,12 @@
 /*
     Copyright (C) 2000, S.R.Haque <shaheedhaque@hotmail.com>.
     This file is part of the KDE project
-
+ 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
     License as published by the Free Software Foundation; either
     version 2 of the License, or (at your option) any later version.
-
+ 
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
@@ -20,22 +20,7 @@
 
 #include <kdebug.h>
 #include <msword.h>
-#include <unistd.h>
-
-static const short CP2UNI[] = { 0x20ac, 0x0000, 0x201a, 0x0192,
-                                0x201e, 0x2026, 0x2020, 0x2021,
-                                0x02c6, 0x2030, 0x0160, 0x2039,
-                                0x0152, 0x0000, 0x017d, 0x0000,
-                                0x0000, 0x2018, 0x2019, 0x201c,
-                                0x201d, 0x2022, 0x2013, 0x2014,
-                                0x02dc, 0x2122, 0x0161, 0x203a,
-                                0x0153, 0x0000, 0x017e, 0x0178 };
-const short char2unicode(const unsigned char &c) {
-    if(c<=0x7f || c>=0xa0)
-        return static_cast<short>(c);
-    else
-        return CP2UNI[c-0x80];
-}
+#include <string.h>
 
 MsWord::MsWord(
         const U8 *mainStream,
@@ -125,6 +110,10 @@ MsWord::MsWord(
 	return;
     };
     m_pcd = new Plex<PCD>(this, m_textPlex.ptr, m_textPlex.byteCount);
+
+    // Fill the style cache.
+
+    getStyles();
 }
 
 MsWord::~MsWord()
@@ -151,8 +140,7 @@ void MsWord::getParagraphs()
     //
     // There is also the implication that without the complex structures, the
     // text cannot be in unicode form.
-//kDebugError(area, "pause for debug");
-//sleep(5);
+
     if (m_fib.lcbClx)
     {
         U32 startFc;
@@ -208,6 +196,7 @@ void MsWord::getStyles()
         return;
     };
     ptr += MsWordGenerated::read(ptr, &m_stshi);
+    m_styles = new STD *[m_stshi.cstd];
     for (unsigned i = 0; i < m_stshi.cstd; i++)
     {
         U16 cbStd;
@@ -217,23 +206,23 @@ void MsWord::getStyles()
         if (cbStd)
         {
             read(ptr, &std);
-            gotStyle(std.xstzName);
+            kDebugInfo(area, QString("MsWord::getStyles: got ") + std.xstzName);
+            m_styles[i] = new STD;
+            *m_styles[i] = std;
         }
         else
         {
-            kDebugInfo(
-                area,
-                "MsWord::Std: style %u: is unused",
-                i);
+            kDebugInfo(area, "MsWord::getStyles: style %u: is unused", i);
+
+            // Set the style to be the same as stiNormal. This is a purely
+            // defensive thing...and relies on a viable 0th entry.
+
+            m_styles[i] = new STD;
+            *m_styles[i] = *m_styles[0];
         }
         ptr += cbStd;
     }
 }
-
-void MsWord::gotStyle(const QString &name)
-{
-    kDebugInfo(area, QString("MsWord::gotStyle: ") + name);
-};
 
 void MsWord::getPAPXFKP(const U8 *textStartFc, U32 textLength, bool unicode)
 {
@@ -241,7 +230,7 @@ void MsWord::getPAPXFKP(const U8 *textStartFc, U32 textLength, bool unicode)
 
     Plex<BTE> btes = Plex<BTE>(
                        this,
-                       m_tableStream + m_fib.fcPlcfbtePapx,
+                       m_tableStream + m_fib.fcPlcfbtePapx,                    
                        m_fib.lcbPlcfbtePapx);
     U32 startFc;
     U32 endFc;
@@ -284,6 +273,48 @@ void MsWord::getPAPX(
     }
 }
 
+short MsWord::char2unicode(unsigned char c)
+{
+    static const short CP2UNI[] =
+    {
+        0x20ac, 0x0000, 0x201a, 0x0192,
+        0x201e, 0x2026, 0x2020, 0x2021,
+        0x02c6, 0x2030, 0x0160, 0x2039,
+        0x0152, 0x0000, 0x017d, 0x0000,
+        0x0000, 0x2018, 0x2019, 0x201c,
+        0x201d, 0x2022, 0x2013, 0x2014,
+        0x02dc, 0x2122, 0x0161, 0x203a,
+        0x0153, 0x0000, 0x017e, 0x0178
+    };
+
+    if (c <= 0x7f || c >= 0xa0)
+        return static_cast<short>(c);
+    else
+        return CP2UNI[c-0x80];
+}
+
+void MsWord::fill(PAP *pap, const PAPXFKP *papx, const PHE *phe)
+{
+    // Set PAP to its initial value.
+
+    memset(pap, 0, sizeof(*pap));
+    pap->fWidowControl = 1;
+    pap->lspd.fMultLinespace = 1;
+    pap->lspd.dyaLine = 240;
+    pap->lvl = 9;
+
+    // Copy the paragraph properties of the style to the PAP.
+
+//    m_styles[papx->istd]
+
+    // Apply the grpprl from the PAPX.
+
+    // Record the style index, and copy the PHE.
+
+    pap->istd = papx->istd;
+    pap->phe = *phe;
+}
+
 template <class T1, class T2>
 MsWord::Fkp<T1, T2>::Fkp(MsWord *client, const U8 *fkp) :
     m_client(client),
@@ -305,6 +336,9 @@ void MsWord::Fkp<T1, T2>::startIteration()
     m_i = 0;
 }
 
+//
+// Get the next entry in an FKP.
+//
 template <class T1, class T2>
 bool MsWord::Fkp<T1, T2>::getNext(
     U32 *startFc,
@@ -315,37 +349,40 @@ bool MsWord::Fkp<T1, T2>::getNext(
 {
     // Sanity check accesses beyond end of Fkp.
 
-    kDebugError(
-        m_i >= m_crun,
-        area,
-        "MsWord::getNext: attempt to read past end of FKP: i: %u, crun: %u",
-        (unsigned)m_i,
-        (unsigned)m_crun);
-    m_i++;
+    if (m_i >= m_crun)
+    {
+        return false;
+    }
 
     // Get fc range.
 
     m_fcNext += MsWordGenerated::read(m_fcNext, startFc);
     MsWordGenerated::read(m_fcNext, endFc);
 
-    // Get word count, and return if the data is not explictly stored.
+    // Get word offset to the second piece of data, and the first piece of data.
 
     m_dataNext += MsWordGenerated::read(m_dataNext, rgb);
+    m_dataNext += MsWordGenerated::read(m_dataNext, data1);
+
+    // If the word offset is zero, then the second piece of data is not explicitly
+    // stored.
+
     if (!(*rgb))
     {
         kDebugInfo(
             area,
-            "MsWord::getNext: %u:%u: default PAPX/CHPX",
+            "MsWord::Fkp::getNext: %u:%u: default PAPX/CHPX, rgb: %u",
             *startFc,
-            *endFc);
-        return (m_i <= m_crun);
+            *endFc,
+            *rgb);
     }
+    else
+    {
+        // Get the second piece of data.
 
-    // Get the requested data.
-
-    m_dataNext += MsWordGenerated::read(m_dataNext, data1);
-    MsWord::read(m_fkp + (2 * (*rgb)), data2);
-    return (m_i <= m_crun);
+        MsWord::read(m_fkp + (2 * (*rgb)), data2);
+    }
+    return (m_i++ < m_crun);
 }
 
 template <class T>
@@ -375,8 +412,12 @@ void MsWord::Plex<T>::startIteration()
 template <class T>
 bool MsWord::Plex<T>::getNext(U32 *startFc, U32 *endFc, T *data)
 {
-    if (m_i == m_crun)
+    // Sanity check accesses beyond end of Plex.
+
+    if (m_i >= m_crun)
+    {
         return false;
+    }
     m_fcNext += MsWordGenerated::read(m_fcNext, startFc);
     MsWordGenerated::read(m_fcNext, endFc);
     m_dataNext += MsWordGenerated::read(m_dataNext, data);
@@ -389,7 +430,7 @@ unsigned MsWord::read(const U8 *in, QString *out, unsigned count, bool unicode)
     U16 char16;
     U8 char8;
     unsigned bytes = 0;
-
+ 
     *out = QString("");
     if (unicode)
     {
@@ -411,6 +452,9 @@ unsigned MsWord::read(const U8 *in, QString *out, unsigned count, bool unicode)
     return bytes;
 }
 
+//
+// Read a PAPX as stored in an FKP.
+//
 unsigned MsWord::read(const U8 *in, PAPXFKP *out, unsigned count)
 {
     unsigned bytes = 0;
@@ -478,19 +522,15 @@ unsigned MsWord::read(const U8 *in, FIB *out, unsigned count)
         bytes += MsWordGenerated::read(in + bytes, (U32 *)(ptr + bytes), 2);
         if (out->nFib > 105)
         {
-            bytes += MsWordGenerated::read(in + bytes, (U16 *)(ptr + bytes),
-16);
-            bytes += MsWordGenerated::read(in + bytes, (U32 *)(ptr + bytes),
-22);
-            bytes += MsWordGenerated::read(in + bytes, (U16 *)(ptr + bytes),
-1);
-            bytes += MsWordGenerated::read(in + bytes, (U32 *)(ptr + bytes),
-186);
+            bytes += MsWordGenerated::read(in + bytes, (U16 *)(ptr + bytes), 16);
+            bytes += MsWordGenerated::read(in + bytes, (U32 *)(ptr + bytes), 22);
+            bytes += MsWordGenerated::read(in + bytes, (U16 *)(ptr + bytes), 1);
+            bytes += MsWordGenerated::read(in + bytes, (U32 *)(ptr + bytes), 186);
         }
         else
         if (out->nFib > 100)
         {
-            // We will convert the FIB into the same form as for Winword
+            // We will convert the FIB into the same form as for Winword 
 
             out->csw = 14;
             out->wMagicCreated = 0;
@@ -560,5 +600,6 @@ unsigned MsWord::read(const U8 *in, FIB *out, unsigned count)
     }
     return bytes;
 } // FIB
+
 
 

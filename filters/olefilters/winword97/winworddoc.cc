@@ -99,7 +99,6 @@ const bool WinWordDoc::convert() {
     // FFN, FRD - TODO(?)
 
     getParagraphs();
-    getStyles();
 
     m_success=true;
 
