@@ -1083,32 +1083,18 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     Q_ASSERT( masterPageStyle );
     if ( masterPageStyle )
     {
-        QDomElement properties( masterPageStyle->namedItem( "style:page-layout-properties" ).toElement() );
-        m_pageLayout.orientation = ( (properties.attribute("style:print-orientation") != "portrait") ? PG_LANDSCAPE : PG_PORTRAIT );
-        double width = KoUnit::parseValue(properties.attribute("fo:page-width"));
-        double height = KoUnit::parseValue(properties.attribute("fo:page-height"));
-        if ( width <= 1e-13 || height <= 1e-13 )
+        m_pageLayout.loadOasis( *masterPageStyle );
+        if ( m_pageLayout.ptWidth <= 1e-13 || m_pageLayout.ptHeight <= 1e-13 )
         {
-            setErrorMessage( i18n( "Invalid document. Paper size: %1x%2" ).arg( width ).arg( height ) );
+            setErrorMessage( i18n( "Invalid document. Paper size: %1x%2" ).arg( m_pageLayout.ptWidth ).arg( m_pageLayout.ptHeight ) );
             return false;
         }
-        // guessFormat takes millimeters
-        if ( m_pageLayout.orientation == PG_LANDSCAPE )
-            m_pageLayout.format = KoPageFormat::guessFormat( POINT_TO_MM(height), POINT_TO_MM(width) );
-        else
-            m_pageLayout.format = KoPageFormat::guessFormat( POINT_TO_MM(width), POINT_TO_MM(height) );
-        m_pageLayout.ptWidth = width;
-        m_pageLayout.ptHeight = height;
-
-        m_pageLayout.ptLeft = KoUnit::parseValue(properties.attribute("fo:margin-left"));
-        m_pageLayout.ptTop = KoUnit::parseValue(properties.attribute("fo:margin-top"));
-        m_pageLayout.ptRight = KoUnit::parseValue(properties.attribute("fo:margin-right"));
-        m_pageLayout.ptBottom = KoUnit::parseValue(properties.attribute("fo:margin-bottom"));
 
         //__hf.ptHeaderBodySpacing = getAttribute( paper, "spHeadBody", 0.0 );
         //__hf.ptFooterBodySpacing  = getAttribute( paper, "spFootBody", 0.0 );
         //__hf.ptFootNoteBodySpacing  = getAttribute( paper, "spFootNoteBody", 10.0 );
 
+        QDomElement properties( masterPageStyle->namedItem( "style:page-layout-properties" ).toElement() );
         QDomElement footnoteSep = properties.namedItem( "style:footnote-sep" ).toElement();
         if ( !footnoteSep.isNull() ) {
             // style:width="0.018cm" style:distance-before-sep="0.101cm"
