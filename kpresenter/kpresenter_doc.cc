@@ -57,6 +57,7 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
+#include <kprocess.h>
 
 #include <koTemplateChooseDia.h>
 #include <koRuler.h>
@@ -2174,7 +2175,7 @@ QString KPresenterDoc::templateFileName(bool chooseTemplate, const QString &theF
 	    return QString("");
 	QFileInfo fileInfo( _template );
 	fileName = fileInfo.dirPath( true ) + "/" + fileInfo.baseName() + ".kpt";
-	QString cmd = "cp " + fileName + " " + locateLocal( "appdata", "default.kpr" );
+	QString cmd = "cp " + KShellProcess::quote(fileName) + " " + KShellProcess::quote( locateLocal( "appdata", "default.kpr" ) );
 	system( QFile::encodeName(cmd) );
     }
     return fileName;
