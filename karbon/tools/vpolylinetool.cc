@@ -252,7 +252,7 @@ void VPolylineTool::mouseButtonRelease()
 		}
 		if( bezierPoints.count() > 2 && p->isNear( *bezierPoints.first(), 3 ) )
 		{
-			bezierPoints.removeLast();
+			bezierPoints.append( new KoPoint( last() ) );
 			m_close = true;
 			accept();
 			return;
