@@ -20,8 +20,6 @@
 #include "koQueryTrader.h"
 #include "koIMR.h"
 #include <opIMR.h>
-#include <trader.h>
-#include <typerepo.h>
 #include <torben.h>
 
 #include <qstring.h>
