@@ -555,7 +555,7 @@ public:
     virtual VariableType type() const
     { return VT_PGNUM; }
 
-    enum { VST_PGNUM_CURRENT = 0, VST_PGNUM_TOTAL = 1, VST_CURRENT_SECTION = 2 };
+    enum { VST_PGNUM_CURRENT = 0, VST_PGNUM_TOTAL = 1, VST_CURRENT_SECTION = 2 , VST_PGNUM_PREVIOUS = 3, VST_PGNUM_NEXT = 4 };
     static QStringList actionTexts();
     virtual QString fieldCode();
 

@@ -1109,6 +1109,11 @@ QString KoPgNumVariable::fieldCode()
         return i18n("Total Page Num");
     else if ( m_subtype == VST_CURRENT_SECTION )
         return i18n("Current Section");
+    else if ( m_subtype == VST_PGNUM_PREVIOUS )
+        return i18n("Previous Page Number");
+    else if ( m_subtype == VST_PGNUM_NEXT )
+        return i18n("Next Page Number");
+
     else
         return i18n("Current Section");
 }
@@ -1145,6 +1150,8 @@ QStringList KoPgNumVariable::actionTexts()
     lst << i18n( "Page Number" );
     lst << i18n( "Number of Pages" );
     lst << i18n( "Section Title" );
+    lst << i18n( "Previous Page" );
+    lst << i18n( "Next Page" );
     return lst;
 }
 

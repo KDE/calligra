@@ -1134,6 +1134,14 @@ void KPTextObject::recalcPageNum( KPrPage *page )
            {
                var->setSectionTitle( page->pageTitle("") );
            }
+           else if ( var->subtype() == KPrPgNumVariable::VST_PGNUM_PREVIOUS )
+           {
+               var->setPgNum( pgnum -1 + kPresenterDocument()->getVariableCollection()->variableSetting()->startingPage());
+           }
+           else if ( var->subtype() == KPrPgNumVariable::VST_PGNUM_NEXT )
+           {
+               var->setPgNum( pgnum +1 + kPresenterDocument()->getVariableCollection()->variableSetting()->startingPage());
+           }
            var->resize();
            var->paragraph()->invalidate( 0 ); // size may have changed -> need reformatting !
            var->paragraph()->setChanged( true );

@@ -551,10 +551,20 @@ void KWTextFrameSet::drawFrameContents( KWFrame *theFrame, QPainter *painter, co
                     //kdDebug() << "KWTextFrameSet::drawFrame updating pgnum variable to " << theFrame->pageNum()+1
                     //          << " and invalidating parag " << var->paragraph() << endl;
                     var->setPgNum( theFrame->pageNum()  + kWordDocument()->getVariableCollection()->variableSetting()->startingPage());
-                } else if ( var->subtype() == KWPgNumVariable::VST_CURRENT_SECTION )
+                }
+                else if ( var->subtype() == KWPgNumVariable::VST_CURRENT_SECTION )
                 {
                     var->setSectionTitle( kWordDocument()->sectionTitle( theFrame->pageNum() ) );
                 }
+                else if ( var->subtype() == KWPgNumVariable::VST_PGNUM_PREVIOUS )
+                {
+                    var->setPgNum( QMAX(theFrame->pageNum()-1,0)   + kWordDocument()->getVariableCollection()->variableSetting()->startingPage());
+                }
+                else if ( var->subtype() == KWPgNumVariable::VST_PGNUM_NEXT )
+                {
+                    var->setPgNum( QMIN(theFrame->pageNum()+1, theFrame->pageNum()+1)  + kWordDocument()->getVariableCollection()->variableSetting()->startingPage());
+                }
+
                 var->resize();
                 var->paragraph()->invalidate( 0 ); // size may have changed -> need reformatting !
                 var->paragraph()->setChanged( true );
