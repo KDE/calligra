@@ -140,8 +140,8 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
         m_drawPolyline = false;
         m_drawCubicBezierCurve = false;
         m_drawLineWithCubicBezierCurve = true;
-        m_oldCubicBezierPointArray.putPoints( 0, 4, (double)0,(double)0, (double)0,(double)0,
-                                              (double)0,(double)0, (double)0,(double)0 );
+        m_oldCubicBezierPointArray.putPoints( 0, 4, 0.0, 0.0, 0.0, 0.0,
+                                              0.0, 0.0, 0.0, 0.0 );
     } else {
         m_view = 0;
         hide();
@@ -4875,7 +4875,7 @@ void KPrCanvas::dropEvent( QDropEvent *e )
 
             QString filename;
             if ( !url.isLocalFile() ) {
-                if ( !KIO::NetAccess::download( url, filename ) )
+                if ( !KIO::NetAccess::download( url, filename, this ) )
                     continue;
             } else {
                 filename = url.path();
