@@ -11,7 +11,7 @@ extern int yylex();
 extern QString idl_lexFile;
 extern int idl_line_no;
 
-void yyerror( char *s )
+void yyerror( const char *s )
 {
   theParser->parse_error( idl_lexFile, s, idl_line_no );
 }

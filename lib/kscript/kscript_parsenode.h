@@ -1,9 +1,9 @@
+#ifndef __KSCRIPT_PARSENODE_H__
+#define __KSCRIPT_PARSENODE_H__
+
 #include <qstring.h>
 
 #include "kscript_types.h"
-
-#ifndef __PARSENODE_H__
-#define __PARSENODE_H__
 
 #define MAX_NODE_SIZE 255
 

@@ -1,5 +1,5 @@
-#ifndef KSCRIPT_VALUE_H
-#define KSCRIPT_VALUE_H
+#ifndef __KSCRIPT_VALUE_H
+#define __KSCRIPT_VALUE_H
 
 #include <qstring.h>
 #include <qvaluelist.h>

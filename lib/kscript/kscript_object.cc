@@ -2,6 +2,7 @@
 #include "kscript_struct.h"
 #include "kscript_util.h"
 #include "kscript.h"
+#include <stdio.h>
 
 KSObject::KSObject( KSClass* c ) : QShared(), m_class( c )
 {

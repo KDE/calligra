@@ -1,6 +1,6 @@
 
 /*  A Bison parser, made from yacc.yy
- by  GNU Bison version 1.25.90
+ by  GNU Bison version 1.27
   */
 
 #define YYBISON 1  /* Identify Bison output.  */
@@ -96,7 +96,7 @@ extern int yylex();
 extern QString idl_lexFile;
 extern int idl_line_no;
 
-void yyerror( char *s )
+void yyerror( const char *s )
 {
   theParser->parse_error( idl_lexFile, s, idl_line_no );
 }
@@ -579,8 +579,8 @@ static const short yycheck[] = {    50,
     -1,    -1,    -1,    -1,    -1,    61,    62
 };
 /* -*-C-*-  Note some compilers choke on comments on `#line' lines.  */
-#line 3 "/usr/share/misc/bison.simple"
-/* This file comes from bison-1.25.90.  */
+#line 3 "/opt/local/share/bison.simple"
+/* This file comes from bison-1.27.  */
 
 /* Skeleton output parser for bison,
    Copyright (C) 1984, 1989, 1990 Free Software Foundation, Inc.
@@ -597,7 +597,8 @@ static const short yycheck[] = {    50,
 
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
-   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
+   Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.  */
 
 /* As a special exception, when this file is copied by Bison into a
    Bison output file, you may use that output file without restriction.
@@ -792,7 +793,7 @@ __yy_memcpy (char *to, char *from, unsigned int count)
 #endif
 #endif
 
-#line 216 "/usr/share/misc/bison.simple"
+#line 216 "/opt/local/share/bison.simple"
 
 /* The user can define YYPARSE_PARAM as the name of an argument to be passed
    into yyparse.  The argument should have type void *.
@@ -2212,7 +2213,7 @@ case 171:
     break;}
 }
    /* the action file gets copied in in place of this dollarsign */
-#line 542 "/usr/share/misc/bison.simple"
+#line 542 "/opt/local/share/bison.simple"
 
   yyvsp -= yylen;
   yyssp -= yylen;

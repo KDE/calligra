@@ -1,5 +1,5 @@
-#ifndef __PARSER_H__
-#define __PARSER_H__
+#ifndef __KSCRIPT_PARSER_H__
+#define __KSCRIPT_PARSER_H__
 
 #include <stdio.h>
 #include <qstring.h>

@@ -1,11 +1,15 @@
 %{
 
+#define YY_NO_UNPUT
 #include <stdlib.h>
 #include <ctype.h>
 
 #include "kscript_parsenode.h"
 #include "kscript_types.h"
+
+#ifndef KDE_USE_FINAL
 #include "yacc.cc.h"
+#endif
 
 extern int idl_line_no;
 
@@ -30,7 +34,7 @@ static KScript::Double ascii_to_longdouble (const char *s)
 {
   KScript::Double d;
 #ifdef HAVE_SCANF_LF
-  sscanf ((char *)s, "%Lf", &d);
+  sscanf (s, "%Lf", &d);
 #else
   /*
    * this is only an approximation and will probably break fixed<>
@@ -39,7 +43,7 @@ static KScript::Double ascii_to_longdouble (const char *s)
    * systems where scanf("%Lf") is known to be broken (Linux/Alpha
    * and HPUX) have sizeof(double) == sizeof(long double).
    */
-  d = strtod ((char *)s, NULL);
+  d = strtod (s, NULL);
 #endif
   return d;
 }
