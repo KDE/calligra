@@ -71,7 +71,11 @@ void StyleClusterTester::run()
 
   StyleCluster stylecluster(m_sheet);
   CHECK_STYLE(stylecluster.lookup(0,0), static_cast< const KSpreadStyle& > (*(m_sheet->doc()->styleManager()->defaultStyle())));
-
+  CHECK_STYLE(stylecluster.lookup(1000,2000), static_cast< const KSpreadStyle& > (*(m_sheet->doc()->styleManager()->defaultStyle())));
+  KSpreadStyle *style1 = new KSpreadStyle();
+  stylecluster.insert(1000,2000, style1);
+  CHECK_STYLE(stylecluster.lookup(1000,2000), *style1);
+  
 }
 
 
