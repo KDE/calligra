@@ -861,8 +861,6 @@ void KoMainWindow::slotActivePartChanged( KParts::Part *newPart )
         factory->plugActionList(d->m_activeView, "view_split", d->m_splitViewActionList );
 
     // Position and show toolbars according to user's preference
-    kdDebug(30003) << "KoMainWindow::slotActivePartChanged applyMainWindowSettings " << newPart->instance()->instanceName() << endl;
-    applyMainWindowSettings( KGlobal::config(), newPart->instance()->instanceName() );
     setAutoSaveSettings( newPart->instance()->instanceName(), false );
 
     // Create and plug toolbar list for Settings menu
