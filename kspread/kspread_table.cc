@@ -1381,7 +1381,6 @@ void KSpreadTable::setSelectionTextColor( const QPoint &_marker, const QColor &t
             m_pDoc->undoBuffer()->appendUndo( undo );
     }
 
-    // Complete rows selected ?
     if ( selected && m_rctSelection.right() == 0x7FFF )
     {
       KSpreadCell* c = m_cells.firstCell();
@@ -1391,13 +1390,18 @@ void KSpreadTable::setSelectionTextColor( const QPoint &_marker, const QColor &t
         if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row
         &&!c->isObscuringForced())
         {
-          c->setDisplayDirtyFlag();
-          c->setTextColor(tb_Color);
-          c->clearDisplayDirtyFlag();
+          c->clearProperty( KSpreadCell::PTextPen );
+          c->clearNoFallBackProperties( KSpreadCell::PTextPen );
         }
       }
 
-      emit sig_updateView( this, m_rctSelection );
+      for(int i=m_rctSelection.top();i<=m_rctSelection.bottom();i++)
+        {
+        RowLayout *rw=nonDefaultRowLayout(i);
+        rw->setTextColor(tb_Color);
+        }
+
+      emit sig_updateView( this );
       return;
     }
     // Complete columns selected ?
@@ -1410,14 +1414,18 @@ void KSpreadTable::setSelectionTextColor( const QPoint &_marker, const QColor &t
         if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
         &&!c->isObscuringForced())
         {
-          c->setDisplayDirtyFlag();
-          c->setTextColor(tb_Color);
-
-          c->clearDisplayDirtyFlag();
+          c->clearProperty( KSpreadCell::PTextPen );
+          c->clearNoFallBackProperties( KSpreadCell::PTextPen );
         }
       }
 
-      emit sig_updateView( this, m_rctSelection );
+      for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
+        {
+        ColumnLayout *cl=nonDefaultColumnLayout(i);
+        cl->setTextColor(tb_Color);
+        }
+
+      emit sig_updateView( this );
       return;
     }
     else
@@ -2499,26 +2507,7 @@ void KSpreadTable::borderBottom( const QPoint &_marker,const QColor &_color )
     // Complete columns selected ?
     else if ( selected && m_rctSelection.bottom() == 0x7FFF )
     {
-      KSpreadCell* c = m_cells.firstCell();
-      for( ;c; c = c->nextCell() )
-      {
-        int col = c->column();
-        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
-        &&!c->isObscuringForced())
-        {
-          c->clearProperty( KSpreadCell::PBottomBorder );
-          c->clearNoFallBackProperties( KSpreadCell::PBottomBorder );
-        }
-      }
-
-      for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
-        {
-        ColumnLayout *cl=nonDefaultColumnLayout(i);
-        QPen pen( _color,2,SolidLine);
-        cl->setBottomBorderPen(pen);
-        }
-
-      emit sig_updateView( this );
+      //nothing
       return;
     }
     else
@@ -2735,27 +2724,20 @@ void KSpreadTable::borderTop( const QPoint &_marker,const QColor &_color )
     // Complete columns selected ?
     else if ( selected && m_rctSelection.bottom() == 0x7FFF )
     {
-      KSpreadCell* c = m_cells.firstCell();
-      for( ;c; c = c->nextCell() )
-      {
-        int col = c->column();
-        if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col
-        &&!c->isObscuringForced())
-        {
-          c->clearProperty( KSpreadCell::PTopBorder );
-          c->clearNoFallBackProperties( KSpreadCell::PTopBorder );
-        }
-      }
-
-      for(int i=m_rctSelection.left();i<=m_rctSelection.right();i++)
-        {
-        ColumnLayout *cl=nonDefaultColumnLayout(i);
-        QPen pen( _color,2,SolidLine);
-        cl->setTopBorderPen(pen);
-        }
-
-      emit sig_updateView( this );
-      return;
+      for ( int x = r.left(); x <= r.right(); x++ )
+                {
+                int y = r.top();
+                KSpreadCell *cell = nonDefaultCell( x, y );
+                if(!cell->isObscuringForced())
+                        {
+                        QPen pen( _color,2,SolidLine);
+                        cell->setTopBorderPen(pen);
+                        }
+                }
+    QRect rect;
+    rect.setCoords(r.left(),r.top(),r.right(),1);
+    emit sig_updateView( this,rect );
+    return;
     }
     else
     {

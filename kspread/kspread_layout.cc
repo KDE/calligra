@@ -911,15 +911,25 @@ void KSpreadLayout::setTextFontStrike( bool _i )
 
 void KSpreadLayout::setTextPen( const QPen& _p )
 {
-    setProperty( PTextPen );
+   if(!_p.color().isValid())
+        {
+        clearProperty( PTextPen );
+        setNoFallBackProperties( PTextPen );
+        }
+    else
+        {
+        setProperty( PTextPen );
+        clearNoFallBackProperties( PTextPen );
+        }
 
+    setProperty( PTextPen );
     layoutChanged();
     m_textPen = _p;
 }
 
 void KSpreadLayout::setTextColor( const QColor & _c )
 {
-    QPen p = textPen();
+   QPen p = textPen();
     p.setColor( _c );
     setTextPen( p );
 }
