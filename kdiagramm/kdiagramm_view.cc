@@ -178,7 +178,7 @@ bool KDiagrammView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 
   m_vMenuEdit->insertSeparator( -1 );
   
-  m_idMenuEdit_Data = m_vMenuEdit->insertItem( i18n("&Edit Data"), this, "editData", CTRL + Key_E );
+  m_idMenuEdit_Data = m_vMenuEdit->insertItem( i18n("&Edit Data..."), this, "editData", CTRL + Key_E );
 
   return true;
 }      

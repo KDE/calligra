@@ -79,7 +79,7 @@ void SheetTable::setText( int row, int col, QString s, bool paint )
 
 bool SheetTable::hasValue(int row,int col)
 {
-  return table.at(index(row,col));
+  return !QString(table.at(index(row,col))).simplifyWhiteSpace().isEmpty();
 }
 
 void SheetTable::placeInput()
