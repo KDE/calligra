@@ -1194,7 +1194,7 @@
 	<Type>Int</Type>
       </Parameter>
       <Help>
-	<Text>The INVBINO function returns the negative binomial distribution. The first parameter is the number of trial the second parameter is the number of failure, and the third is the probability of failure. The number of trials should be bigger than the number of successes and the probability should be smaller or equal to 1.</Text>
+	<Text>The INVBINO function returns the negative binomial distribution. The first parameter is the number of trial the second parameter is the number of failure, and the third is the probability of failure. The number of trials should be bigger than the number of failures and the probability should be smaller or equal to 1.</Text>
 	<Syntax>INVBINO( trials; failure; prob_of_failure )</Syntax>
 	<Example>INVBINO(12;3;0.2) returns 0.236223201</Example>
       </Help>
@@ -1371,7 +1371,7 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The PV() function returns the value that you need if you want to reach the future value after a certain amount of periods and a certain interest. For example if you need $1166.40 for your new computer and you wont to buy it in two years while getting an interest of 8% then PV( 1166.4; 0.08; 2 ) tells you how much money you need now, in the presence. PV calculates the present value that you need to reach a future value, that is why it is called PV.</Text>
+	<Text>The PV() function returns the value that you need if you want to reach the future value after a certain amount of periods and a certain interest. For example if you need $1166.40 for your new computer and you want to buy it in two years while getting an interest of 8% then PV( 1166.4; 0.08; 2 ) tells you how much money you need now, in the presence. PV calculates the present value that you need to reach a future value, that is why it is called PV.</Text>
 	<Syntax>PV( future_value; interest; periods )</Syntax>
 	<Example>PV( 1166.4; 0.08; 2 ) equals 1000</Example>
       </Help>
@@ -1496,7 +1496,7 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The effective() function calculates the effective interest rate. Assume you get 8% interest per period. If you want to know how much money you have after a certain amount of periods you can call FV( initial; nominal_interest; periods ), or you can calculate initial*effective( nominal_interest; periods ). The result of both is the same. In other words: The effective interest rate is the percentage you get if you earn nominal interest for some periods. That means: If you wonder how much you earn in two years from $1000 with 8% interest; then effective( 0.08; 2 ) equals 0.1664 and that means you eran 16.64%.</Text>
+	<Text>The effective() function calculates the effective interest rate. Assume you get 8% interest per period. If you want to know how much money you have after a certain amount of periods you can call FV( initial; nominal_interest; periods ), or you can calculate initial*effective( nominal_interest; periods ). The result of both is the same. In other words: The effective interest rate is the percentage you get if you earn nominal interest for some periods. That means: If you wonder how much you earn in two years from $1000 with 8% interest; then effective( 0.08; 2 ) equals 0.1664 and that means you earn 16.64%.</Text>
 	<Syntax>effective( nominal; periods )</Syntax>
 	<Example>effective( 0.08; 2 ) equals 0.1664</Example>
       </Help>
