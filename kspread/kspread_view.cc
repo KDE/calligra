@@ -3188,6 +3188,10 @@ void KSpreadView::setupPrinter( KPrinter &prt )
 
 void KSpreadView::print( KPrinter &prt )
 {
+    if ( m_pCanvas->editor() )
+    {
+      m_pCanvas->deleteEditor( true ); // save changes
+    }
 
     //store the current setting in a temporary variable
     KoOrientation _orient =  m_pTable->orientation();
