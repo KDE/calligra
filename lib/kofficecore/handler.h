@@ -8,6 +8,8 @@
 class QWMatrix;
 
 class KoView;
+class PartResizeHandlerPrivate;
+class PartMoveHandlerPrivate;
 
 class EventHandler : public QObject
 {
@@ -34,14 +36,7 @@ protected:
     bool eventFilter( QObject*, QEvent* );
 
 private:
-    KoDocumentChild::Gadget m_gadget;
-    QPoint m_mouseStart;
-    QRect m_geometryStart;
-    KoDocumentChild* m_child;
-    QWMatrix m_invert;
-    QWMatrix m_matrix;
-    QWMatrix m_parentMatrix;
-    QWMatrix m_invertParentMatrix;
+    PartResizeHandlerPrivate *d;
 };
 
 class PartMoveHandler : public EventHandler
@@ -56,12 +51,7 @@ protected:
     bool eventFilter( QObject*, QEvent* );
 
 private:
-    KoDocumentChild* m_dragChild;
-    QPoint m_mouseDragStart;
-    QRect m_geometryDragStart;
-    QPoint m_rotationDragStart;
-    QWMatrix m_invertParentMatrix;
-    QWMatrix m_parentMatrix;
+    PartMoveHandlerPrivate *d;
 };
 
 class ContainerHandler : public EventHandler

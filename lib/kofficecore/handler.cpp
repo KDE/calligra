@@ -21,29 +21,46 @@ QObject* EventHandler::target()
 
 // ------------------------------------------------------
 
+class PartResizeHandlerPrivate {
+public:
+    PartResizeHandlerPrivate( const QWMatrix& matrix, KoDocumentChild* child,
+			      KoDocumentChild::Gadget gadget, const QPoint& point ) :
+	m_gadget(gadget), m_child(child), m_parentMatrix(matrix) {
+	
+	m_geometryStart = child->geometry();
+	m_matrix = child->matrix() * matrix;
+	m_invertParentMatrix = matrix.invert();
+	
+	bool ok = true;
+	m_invert = m_matrix.invert( &ok );
+	ASSERT( ok );
+	m_mouseStart = m_invert.map( m_invertParentMatrix.map( point ) );
+    }
+    ~PartResizeHandlerPrivate() {}
+
+    KoDocumentChild::Gadget m_gadget;
+    QPoint m_mouseStart;
+    QRect m_geometryStart;
+    KoDocumentChild* m_child;
+    QWMatrix m_invert;
+    QWMatrix m_matrix;
+    QWMatrix m_parentMatrix;
+    QWMatrix m_invertParentMatrix;
+};
+
 PartResizeHandler::PartResizeHandler( QWidget* widget, const QWMatrix& matrix, KoDocumentChild* child,
 				      KoDocumentChild::Gadget gadget, const QPoint& point )
     : EventHandler( widget )
 {
     child->lock();
-
-    m_gadget = gadget;
-    m_child = child;
-    m_geometryStart = child->geometry();
-    m_matrix = child->matrix() * matrix;
-    m_parentMatrix = matrix;
-    m_invertParentMatrix = matrix.invert();
-
-    bool ok = TRUE;
-    m_invert = m_matrix.invert( &ok );
-    ASSERT( ok );
-
-    m_mouseStart = m_invert.map( m_invertParentMatrix.map( point ) );
+    d=new PartResizeHandlerPrivate(matrix, child, gadget, point);
 }
 
 PartResizeHandler::~PartResizeHandler()
 {
-    m_child->unlock();
+    d->m_child->unlock();
+    delete d;
+    d=0L;
 }
 
 bool PartResizeHandler::eventFilter( QObject*, QEvent* ev )
@@ -56,100 +73,100 @@ bool PartResizeHandler::eventFilter( QObject*, QEvent* ev )
     else if ( ev->type() == QEvent::MouseMove )
     {
 	QMouseEvent* e = (QMouseEvent*)ev;
-	QPoint p = m_invert.map( m_invertParentMatrix.map( e->pos() ) );
-	QRegion rgn( m_child->frameRegion( m_parentMatrix, TRUE ) );
+	QPoint p = d->m_invert.map( d->m_invertParentMatrix.map( e->pos() ) );
+	QRegion rgn( d->m_child->frameRegion( d->m_parentMatrix, TRUE ) );
 
 	double x1_x, x1_y, x2_x, x2_y;
-	m_matrix.map( double( p.x() ), 0.0, &x1_x, &x1_y );
-	m_matrix.map( double( m_mouseStart.x() ), 0.0, &x2_x, &x2_y );		
+	d->m_matrix.map( double( p.x() ), 0.0, &x1_x, &x1_y );
+	d->m_matrix.map( double( d->m_mouseStart.x() ), 0.0, &x2_x, &x2_y );		
 	double y1_x, y1_y, y2_x, y2_y;
-	m_matrix.map( 0.0, double( p.y() ), &y1_x, &y1_y );
-	m_matrix.map( 0.0, double( m_mouseStart.y() ), &y2_x, &y2_y );		
+	d->m_matrix.map( 0.0, double( p.y() ), &y1_x, &y1_y );
+	d->m_matrix.map( 0.0, double( d->m_mouseStart.y() ), &y2_x, &y2_y );		
 		
 	double dx = x2_x - x1_x;
 	double dy = x2_y - x1_y;
-	int x = int( sqrt( dx * dx + dy * dy ) * ( m_mouseStart.x() < p.x() ? 1.0 : -1.0 ) );
+	int x = int( sqrt( dx * dx + dy * dy ) * ( d->m_mouseStart.x() < p.x() ? 1.0 : -1.0 ) );
 		
 	dx = y2_x - y1_x;
 	dy = y2_y - y1_y;
-	int y = int( sqrt( dx * dx + dy * dy ) * ( m_mouseStart.y() < p.y() ? 1.0 : -1.0 ) );
+	int y = int( sqrt( dx * dx + dy * dy ) * ( d->m_mouseStart.y() < p.y() ? 1.0 : -1.0 ) );
 
-	switch( m_gadget )
+	switch( d->m_gadget )
         {
 	case KoDocumentChild::TopLeft:
 	    {
-		x = QMIN( m_geometryStart.width() - 1, x );
-		y = QMIN( m_geometryStart.height() - 1, y );
+		x = QMIN( d->m_geometryStart.width() - 1, x );
+		y = QMIN( d->m_geometryStart.height() - 1, y );
 
-		m_child->setGeometry( QRect( m_geometryStart.x() + x, m_geometryStart.y() + y,
-					     m_geometryStart.width() - x, m_geometryStart.height() - y ) );
-		((QWidget*)target())->repaint( rgn.unite( m_child->frameRegion( m_parentMatrix, TRUE ) ) );
+		d->m_child->setGeometry( QRect( d->m_geometryStart.x() + x, d->m_geometryStart.y() + y,
+					     d->m_geometryStart.width() - x, d->m_geometryStart.height() - y ) );
+		((QWidget*)target())->repaint( rgn.unite( d->m_child->frameRegion( d->m_parentMatrix, TRUE ) ) );
 	    }
 	    break;
 	case KoDocumentChild::TopMid:
 	    {
-		y = QMIN( m_geometryStart.height() - 1, y );
+		y = QMIN( d->m_geometryStart.height() - 1, y );
 
-		m_child->setGeometry( QRect( m_geometryStart.x(), m_geometryStart.y() + y,
-					     m_geometryStart.width(), m_geometryStart.height() - y ) );
-		((QWidget*)target())->repaint( rgn.unite( m_child->frameRegion( m_parentMatrix, TRUE ) ) );
+		d->m_child->setGeometry( QRect( d->m_geometryStart.x(), d->m_geometryStart.y() + y,
+					     d->m_geometryStart.width(), d->m_geometryStart.height() - y ) );
+		((QWidget*)target())->repaint( rgn.unite( d->m_child->frameRegion( d->m_parentMatrix, TRUE ) ) );
 	    }
 	    break;
 	case KoDocumentChild::TopRight:
 	    {
-		x = QMAX( -m_geometryStart.width() + 1, x );
-		y = QMIN( m_geometryStart.height() - 1, y );
+		x = QMAX( -d->m_geometryStart.width() + 1, x );
+		y = QMIN( d->m_geometryStart.height() - 1, y );
 
-		m_child->setGeometry( QRect( m_geometryStart.x(), m_geometryStart.y() + y,
-					     m_geometryStart.width() + x, m_geometryStart.height() - y ) );
-		((QWidget*)target())->repaint( rgn.unite( m_child->frameRegion( m_parentMatrix, TRUE ) ) );
+		d->m_child->setGeometry( QRect( d->m_geometryStart.x(), d->m_geometryStart.y() + y,
+					     d->m_geometryStart.width() + x, d->m_geometryStart.height() - y ) );
+		((QWidget*)target())->repaint( rgn.unite( d->m_child->frameRegion( d->m_parentMatrix, TRUE ) ) );
 	    }
 	    break;
 	case KoDocumentChild::MidLeft:
 	    {
-		x = QMIN( m_geometryStart.width() - 1, x );
+		x = QMIN( d->m_geometryStart.width() - 1, x );
 		
-		m_child->setGeometry( QRect( m_geometryStart.x() + x, m_geometryStart.y(),
-					     m_geometryStart.width() - x, m_geometryStart.height() ) );
-		((QWidget*)target())->repaint( rgn.unite( m_child->frameRegion( m_parentMatrix, TRUE ) ) );
+		d->m_child->setGeometry( QRect( d->m_geometryStart.x() + x, d->m_geometryStart.y(),
+					     d->m_geometryStart.width() - x, d->m_geometryStart.height() ) );
+		((QWidget*)target())->repaint( rgn.unite( d->m_child->frameRegion( d->m_parentMatrix, TRUE ) ) );
 	    }
 	    break;
 	case KoDocumentChild::MidRight:
 	    {
-		x = QMAX( -m_geometryStart.width() + 1, x );
+		x = QMAX( -d->m_geometryStart.width() + 1, x );
 
-		m_child->setGeometry( QRect( m_geometryStart.x(), m_geometryStart.y(),
-					     m_geometryStart.width() + x, m_geometryStart.height() ) );
-		((QWidget*)target())->repaint( rgn.unite( m_child->frameRegion( m_parentMatrix, TRUE ) ) );
+		d->m_child->setGeometry( QRect( d->m_geometryStart.x(), d->m_geometryStart.y(),
+					     d->m_geometryStart.width() + x, d->m_geometryStart.height() ) );
+		((QWidget*)target())->repaint( rgn.unite( d->m_child->frameRegion( d->m_parentMatrix, TRUE ) ) );
 	    }
 	    break;
 	case KoDocumentChild::BottomLeft:
 	    {
-		x = QMIN( m_geometryStart.width() - 1, x );
-		y = QMAX( -m_geometryStart.height() + 1, y );
+		x = QMIN( d->m_geometryStart.width() - 1, x );
+		y = QMAX( -d->m_geometryStart.height() + 1, y );
 
-		m_child->setGeometry( QRect( m_geometryStart.x() + x, m_geometryStart.y(),
-					     m_geometryStart.width() - x, m_geometryStart.height() + y ) );
-		((QWidget*)target())->repaint( rgn.unite( m_child->frameRegion( m_parentMatrix, TRUE ) ) );
+		d->m_child->setGeometry( QRect( d->m_geometryStart.x() + x, d->m_geometryStart.y(),
+					     d->m_geometryStart.width() - x, d->m_geometryStart.height() + y ) );
+		((QWidget*)target())->repaint( rgn.unite( d->m_child->frameRegion( d->m_parentMatrix, TRUE ) ) );
 	    }
 	    break;
 	case KoDocumentChild::BottomMid:
 	    {
-		y = QMAX( -m_geometryStart.height() + 1, y );
+		y = QMAX( -d->m_geometryStart.height() + 1, y );
 
-		m_child->setGeometry( QRect( m_geometryStart.x(), m_geometryStart.y(),
-					     m_geometryStart.width(), m_geometryStart.height() + y ) );
-		((QWidget*)target())->repaint( rgn.unite( m_child->frameRegion( m_parentMatrix, TRUE ) ) );
+		d->m_child->setGeometry( QRect( d->m_geometryStart.x(), d->m_geometryStart.y(),
+					     d->m_geometryStart.width(), d->m_geometryStart.height() + y ) );
+		((QWidget*)target())->repaint( rgn.unite( d->m_child->frameRegion( d->m_parentMatrix, TRUE ) ) );
 	    }
 	    break;
 	case KoDocumentChild::BottomRight:
 	    {
-		x = QMAX( -m_geometryStart.width() + 1, x );
-		y = QMAX( -m_geometryStart.height() + 1, y );
+		x = QMAX( -d->m_geometryStart.width() + 1, x );
+		y = QMAX( -d->m_geometryStart.height() + 1, y );
 
-		m_child->setGeometry( QRect( m_geometryStart.x(), m_geometryStart.y(),
-					     m_geometryStart.width() + x, m_geometryStart.height() + y ) );
-		((QWidget*)target())->repaint( rgn.unite( m_child->frameRegion( m_parentMatrix, TRUE ) ) );
+		d->m_child->setGeometry( QRect( d->m_geometryStart.x(), d->m_geometryStart.y(),
+					     d->m_geometryStart.width() + x, d->m_geometryStart.height() + y ) );
+		((QWidget*)target())->repaint( rgn.unite( d->m_child->frameRegion( d->m_parentMatrix, TRUE ) ) );
 	    }
 	    break;
 	default:
@@ -163,23 +180,39 @@ bool PartResizeHandler::eventFilter( QObject*, QEvent* ev )
 
 // --------------------------------------------------------------
 
+class PartMoveHandlerPrivate {
+public:
+    PartMoveHandlerPrivate( const QWMatrix& matrix, KoDocumentChild* child,
+			    const QPoint& point) : m_dragChild(child),
+						   m_parentMatrix(matrix) {					
+	m_invertParentMatrix = matrix.invert();
+	m_mouseDragStart = m_invertParentMatrix.map( point );
+	m_geometryDragStart = m_dragChild->geometry();
+	m_rotationDragStart = m_dragChild->rotationPoint();
+    }
+    ~PartMoveHandlerPrivate() {}
+
+    KoDocumentChild* m_dragChild;
+    QPoint m_mouseDragStart;
+    QRect m_geometryDragStart;
+    QPoint m_rotationDragStart;
+    QWMatrix m_invertParentMatrix;
+    QWMatrix m_parentMatrix;
+};
+
 PartMoveHandler::PartMoveHandler( QWidget* widget, const QWMatrix& matrix, KoDocumentChild* child,
 				  const QPoint& point )
     : EventHandler( widget )
 {
     child->lock();
-	
-    m_dragChild = child;
-    m_parentMatrix = matrix;
-    m_invertParentMatrix = matrix.invert();
-    m_mouseDragStart = m_invertParentMatrix.map( point );
-    m_geometryDragStart = m_dragChild->geometry();
-    m_rotationDragStart = m_dragChild->rotationPoint();
+    d=new PartMoveHandlerPrivate(matrix, child, point);
 }
 
 PartMoveHandler::~PartMoveHandler()
 {
-    m_dragChild->unlock();
+    d->m_dragChild->unlock();
+    delete d;
+    d=0L;
 }
 
 bool PartMoveHandler::eventFilter( QObject*, QEvent* ev )
@@ -193,14 +226,14 @@ bool PartMoveHandler::eventFilter( QObject*, QEvent* ev )
     {
 	QMouseEvent* e = (QMouseEvent*)ev;
 	
-	QRegion bound = m_dragChild->frameRegion( m_parentMatrix, TRUE );
-	QPoint pos = m_invertParentMatrix.map( e->pos() );
-	m_dragChild->setGeometry( QRect( m_geometryDragStart.x() + pos.x() - m_mouseDragStart.x(),
-					     m_geometryDragStart.y() + pos.y() - m_mouseDragStart.y(),
-					     m_geometryDragStart.width(), m_geometryDragStart.height() ) );
-	m_dragChild->setRotationPoint( QPoint( m_rotationDragStart.x() + pos.x() - m_mouseDragStart.x(),
-					       m_rotationDragStart.y() + pos.y() - m_mouseDragStart.y() ) );
-	((QWidget*)target())->repaint( bound.unite( m_dragChild->frameRegion( m_parentMatrix, TRUE ) ) );
+	QRegion bound = d->m_dragChild->frameRegion( d->m_parentMatrix, TRUE );
+	QPoint pos = d->m_invertParentMatrix.map( e->pos() );
+	d->m_dragChild->setGeometry( QRect( d->m_geometryDragStart.x() + pos.x() - d->m_mouseDragStart.x(),
+					     d->m_geometryDragStart.y() + pos.y() - d->m_mouseDragStart.y(),
+					     d->m_geometryDragStart.width(), d->m_geometryDragStart.height() ) );
+	d->m_dragChild->setRotationPoint( QPoint( d->m_rotationDragStart.x() + pos.x() - d->m_mouseDragStart.x(),
+					       d->m_rotationDragStart.y() + pos.y() - d->m_mouseDragStart.y() ) );
+	((QWidget*)target())->repaint( bound.unite( d->m_dragChild->frameRegion( d->m_parentMatrix, TRUE ) ) );
 
 	return TRUE;
     }
