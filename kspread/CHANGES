@@ -1007,3 +1007,12 @@ thanks
 
 *Laurent:
 some bugs fixes
+
+Summary 2000-09-19 -> 2000-09-25
+*Torben implemented removechild (Now you can remove a chart in
+kspread for example)
+Torben rewrote kspread_dlg_formula
+thanks a lot
+
+*laurent
+some fixes
