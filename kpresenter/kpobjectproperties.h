@@ -45,6 +45,8 @@ public:
 
     int getPropertyFlags() { return m_flags; }
 
+    /// get pie properties
+    PieValueCmd::PieValues getPieValues() { return m_pieValues; }
     /// get text properties
     MarginsStruct getMarginsStruct() { return m_marginsStruct; }
     PropValue getProtectContent() { return m_protectContent; }
@@ -52,12 +54,15 @@ public:
 protected:
     void getProperties( const QPtrList<KPObject> &objects );
 
+    void getPieProperties( KPObject *object );
     void getTextProperties( KPObject *object );
 
 private:
     QPtrList<KPObject> m_objects;
     int m_flags;
 
+    /// pie properties
+    PieValueCmd::PieValues m_pieValues;
     /// text properties
     MarginsStruct m_marginsStruct;
     PropValue m_protectContent;

@@ -71,9 +71,7 @@ void KPObjectProperties::getProperties( const QPtrList<KPObject> &objects )
                     m_flags |= PtLineEnds;
                 break;
             case OT_PIE:
-                m_flags |= PtPen | PtPie;
-                if ( ( static_cast<KPPieObject*>( it.current() )->getPieType() ) != PT_ARC )
-                    m_flags |= PtBrush;
+                getPieProperties( it.current() );
                 break;
             case OT_RECT:
                 m_flags |= PtPen | PtBrush | PtRectangle;
@@ -110,6 +108,25 @@ void KPObjectProperties::getProperties( const QPtrList<KPObject> &objects )
 }
 
 
+void KPObjectProperties::getPieProperties( KPObject *object )
+{
+    if ( !( m_flags & PtPie ) )
+    {
+        KPPieObject *obj = dynamic_cast<KPPieObject*>( object );
+        if ( obj )
+        {
+            m_pieValues.pieType = obj->getPieType();
+            m_pieValues.pieAngle = obj->getPieAngle();
+            m_pieValues.pieLength = obj->getPieLength();
+
+            m_flags |= PtPen | PtPie;
+            if ( obj->getPieType() != PT_ARC )
+                m_flags |= PtBrush;
+        }
+    }
+}
+
+
 void KPObjectProperties::getTextProperties( KPObject *object )
 {
     KPTextObject *obj = dynamic_cast<KPTextObject*>( object );
@@ -128,6 +145,6 @@ void KPObjectProperties::getTextProperties( KPObject *object )
                 m_protectContent = STATE_UNDEF;
             }
         }
+        m_flags |= PtPen | PtBrush | PtText;
     }
-    m_flags |= PtPen | PtBrush | PtText;
 }
