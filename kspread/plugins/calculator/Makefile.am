@@ -38,6 +38,6 @@ desktopdir = $(kde_servicesdir)
 SUBDIRS = pics
 
 messages:
-	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cpp && mv messages.po ../../../po/kspreadcalc_calc.pot
+	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cpp && mv messages.po $(podir)/kspreadcalc_calc.pot
 
 

@@ -12,5 +12,5 @@ myown_dist =
 EXTRA_DIST = README kil.dtd killustrator.lsm $(myown_dist)
 
 messages:
-	$(XGETTEXT) -C -ktranslate -ki18n -kI18N -kSI18N -x$(includedir)/kde.pot */*.cc && mv messages.po ../po/killustrator.pot
+	$(XGETTEXT) -C -ktranslate -ki18n -kI18N -kSI18N -x$(includedir)/kde.pot */*.cc && mv messages.po $(podir)/killustrator.pot
 

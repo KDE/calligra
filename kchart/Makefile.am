@@ -116,6 +116,6 @@ linktest_LDFLAGS = $(libkchart_LDFLAGS)
 # SUBDIRS =  . plugins pics dtd toolbar
 
 messages:
-	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po ../po/kchart.pot
+	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc && mv messages.po $(podir)/kchart.pot
 
 

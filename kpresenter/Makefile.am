@@ -82,7 +82,7 @@ rc_DATA = kpresenter.rc kpresenter_shell.rc
 SUBDIRS = autoformEdit autoforms . pics templates dtd slideshow toolbar
 
 messages:
-	$(XGETTEXT) -C -ki18n -ktranslate -x $(includedir)/kde.pot */*.cc *.cc *.h && mv messages.po ../po/kpresenter.pot
+	$(XGETTEXT) -C -ki18n -ktranslate -x $(includedir)/kde.pot */*.cc *.cc *.h && mv messages.po $(podir)/kpresenter.pot
 
 IDL_FLAGS = --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir)
 
