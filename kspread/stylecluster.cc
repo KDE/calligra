@@ -92,8 +92,25 @@ class StyleClusterQuad
 
     KSpreadStyle* getStyle() { return m_style; }
     inline void setStyle(KSpreadStyle * style);
+    /**
+     * Create a new StyleClusterQuad for one of it's null children
+     */
+    inline void makeChild(StyleClusterQuad **child);
 };
 
+void StyleClusterQuad::makeChild(StyleClusterQuad **child) {
+  Q_ASSERT(!*child);
+  Q_ASSERT(child == &m_topLeft || child == &m_topRight ||
+      child == &m_bottomLeft || child == &m_bottomRight);
+      
+  *child = new StyleClusterQuad();
+  (*child)->setStyle(getStyle());
+  m_isSimple = false; //Make sure the parent knows it has a non-null child now.
+
+  if(numNullChildren() == 0) {
+    setStyle(0); //nothing is using this anymore
+  }
+}
 void StyleClusterQuad::setStyle(KSpreadStyle * style) {
   if(m_style && m_style->release()) {
     delete m_style;
@@ -168,7 +185,47 @@ StyleCluster::~StyleCluster()
   }
 }
 
-// A Simple will never have the same style as the parent.  Instead it will be null.
+void StyleCluster::setStyle( const KSpreadRange & range, KSpreadStyle * style)
+{
+  QValueStack< KSpreadRange > ranges;
+  ranges.push(range);
+  
+  KSpreadRange current_range;
+  
+  while(!ranges.isEmpty()) {
+    current_range = ranges.pop();
+    
+    
+    StyleClusterQuad** current_node = &m_topQuad;
+    StyleClusterQuad* last_node = NULL;
+    int x_offset = 0;
+    int y_offset = 0;
+    int quad_size = KS_Max_Quad;
+    
+    int range_width = current_range.startCol()- current_range.endCol();
+    int range_height = current_range.startRow()- current_range.endRow();
+    int max_quad_size_wanted = (range_width > range_height)?range_width:range_height;
+    
+    while( x_offset != current_range.startCol() || 
+           y_offset != current_range.startRow() ||
+           quad_size > max_quad_size_wanted ) {
+      //Note this function changes most of its parameters
+      stepDownOne(current_node, current_range.startCol(), x_offset, current_range.startRow(), y_offset, quad_size);
+      if(*current_node == NULL) {
+        last_node->makeChild(current_node);
+      }
+    }
+    (*current_node)->setStyle( style );
+    
+    //FIXME - finish this function
+    if( quad_size < range_width ) {
+      //ranges.push( new );
+    }
+  } 
+}
+
+// A Simple (m_isSimple) will never have the same style as the parent.  Instead, if the styles
+// are the same, the instance wouldn't exist and the parent would point to null.
 // If a Quad has a Simple, then it must also have a null.  If temporarily it doesn't, then the 
 // Simple must be deleted, and made a null and the Quad given that style.
 void StyleCluster::setStyle( int x, int y, KSpreadStyle * style)
@@ -193,33 +250,12 @@ void StyleCluster::setStyle( int x, int y, KSpreadStyle * style)
     Q_ASSERT (current_node);
     Q_ASSERT( *current_node);
     Q_ASSERT( quad_size > 0); // we can't have a quad of width 1!
-
-    // For the next few lines, 'quad_size' is the size of the child node - i.e. the new current_node
-    quad_size /= 2;
-    
-    last_node = *current_node;
     
     path.push(current_node);
+    last_node = *current_node;
     
-    if( x - x_offset < quad_size ) {
-      if( y - y_offset < quad_size ) {
-        current_node = &((*current_node)->m_topLeft);
-      }
-      else {
-        current_node = &((*current_node)->m_bottomLeft);
-        y_offset += quad_size;
-      }
-    } else {
-      if( y - y_offset < quad_size ) {
-        current_node = &((*current_node)->m_topRight);
-        x_offset += quad_size;
-      }
-      else {
-        current_node = &((*current_node)->m_bottomRight);
-        y_offset += quad_size;
-        x_offset += quad_size;
-      }
-    }
+    //Note this function modifies its arguments
+    stepDownOne(current_node, x, x_offset, y, y_offset, quad_size);
     
     //quad_size is now the size (size of width, and size of height) of current_node
     //Now we have gone down one step.  The current node may be null, in which case
@@ -247,20 +283,13 @@ void StyleCluster::setStyle( int x, int y, KSpreadStyle * style)
 	  simplify(path);
           Q_ASSERT( !last_node->m_isSimple);
 	} else {  //someone else in the parent is using the style info in parent, so we have to create our own child
-          (*current_node) = new StyleClusterQuad();
-          (*current_node)->setStyle(style);
-          last_node->m_isSimple = false; //Make sure the parent knows it has a non-null child now.
+          last_node->makeChild(current_node);
 	}
         return;
       }
       
-      *current_node = new StyleClusterQuad();
-      (*current_node)->setStyle(last_node->getStyle());
-      last_node->m_isSimple = false; //Make sure the parent knows it has a non-null child now.
-      
-      if(last_node->numNullChildren() == 0) {
-        last_node->setStyle(0); //nothing is using this anymore
-      }
+      last_node->makeChild(current_node);
+
     }
   }
   
@@ -336,6 +365,30 @@ const KSpreadStyle& StyleCluster::lookup(int x, int y) {
   return *(lookupNode(x,y)->getStyle());
 }
 
+void StyleCluster::stepDownOne(StyleClusterQuad **& current_node, int x, int & x_offset, int y, int & y_offset, int & quad_size) {
+
+  quad_size /= 2;
+  if( x - x_offset < quad_size ) {
+    if( y - y_offset < quad_size ) {
+        current_node = &((*current_node)->m_topLeft);
+    }
+    else {
+        current_node = &((*current_node)->m_bottomLeft);
+        y_offset += quad_size;
+    }
+  } else {
+    if( y - y_offset < quad_size ) {
+        current_node = &((*current_node)->m_topRight);
+        x_offset += quad_size;
+    }
+    else {
+        current_node = &((*current_node)->m_bottomRight);
+        y_offset += quad_size;
+        x_offset += quad_size;
+    }
+  }
+}
+
 StyleClusterQuad* StyleCluster::lookupNode(int x, int y) {
   //walk over quad-tree
   // see gnumeric sheet-style.c  cell_tile_apply_pos(...)
@@ -343,40 +396,22 @@ StyleClusterQuad* StyleCluster::lookupNode(int x, int y) {
   
   Q_ASSERT(m_topQuad);
   
-  StyleClusterQuad* current_node = m_topQuad;
+  StyleClusterQuad** current_node = &m_topQuad;
   StyleClusterQuad* last_node = NULL;
   int x_offset = 0;
   int y_offset = 0;
   int quad_size = KS_Max_Quad;
   
-  while ( current_node && !current_node->m_isSimple )
+  while ( *current_node && !(*current_node)->m_isSimple )
   {
-    last_node = current_node;
-    quad_size /= 2;
-    if( x - x_offset < quad_size ) {
-      if( y - y_offset < quad_size ) {
-        current_node = current_node->m_topLeft;
-      }
-      else {
-        current_node = current_node->m_bottomLeft;
-        y_offset += quad_size;
-      }
-    } else {
-      if( y - y_offset < quad_size ) {
-        current_node = current_node->m_topRight;
-        x_offset += quad_size;
-      }
-      else {
-        current_node = current_node->m_bottomRight;
-        y_offset += quad_size;
-        x_offset += quad_size;
-      }
-    }
+    last_node = *current_node;
+    //Below function modifies most of its parameters!
+    stepDownOne(current_node, x, x_offset, y, y_offset, quad_size);
   }
   
-  if( !current_node ) return last_node;
+  if( !(*current_node) ) return last_node;
   
-  return current_node;
+  return *current_node;
 }
 
 }

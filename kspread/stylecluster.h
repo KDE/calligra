@@ -96,6 +96,15 @@ class KSPREAD_EXPORT StyleCluster : public QObject
      * Return the quad being used at x,y.
      */
     StyleClusterQuad* lookupNode(int x, int y);
+    
+    /**
+     * Steps down one quad.  The returned current_node will be a child of taken current_node.
+     * Modifies current_node, x_offset and y_offset variables.
+     */
+    void stepDownOne(StyleClusterQuad ** &current_node,
+                     int x, int & x_offset, 
+                     int y, int & y_offset, 
+                     int & quad_size);
   public:
     StyleCluster(KSpreadSheet* sheet);
 
@@ -117,11 +126,12 @@ class KSPREAD_EXPORT StyleCluster : public QObject
      */
     void setStyle( int x, int y, KSpreadStyle * style);
 
-//     /**
-//      * Practically same usage as above, but use a range to apply the style.
-//      * TODO - implement
-//      */
-//     void insert( const KSpreadRange & range, const KSpreadStyle * style);
+    /**
+     * Practically same usage as above, but use a range to apply the style.
+     * 
+     * @see setStyle( int x, int y, KSpreadStyle * style)
+     */
+    void setStyle( const KSpreadRange & range, KSpreadStyle * style);
 
     /**
      * If you intend to modify this returned style, create

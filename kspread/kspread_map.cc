@@ -59,7 +59,7 @@ void KSpreadMap::setProtected( QCString const & passwd )
   m_strPassword = passwd;
 }
 
-void KSpreadMap::addTable( KSpreadSheet *_table )
+void KSpreadMap::addSheet( KSpreadSheet *_table )
 {
   m_lstTables.append( _table );
 }
@@ -256,8 +256,8 @@ bool KSpreadMap::loadOasis( const QDomElement& body, KoOasisStyles& oasisStyles 
             {
                 if( !tableElement.attributeNS( KoXmlNS::table, "name", QString::null ).isEmpty() )
                 {
-                    KSpreadSheet* sheet = m_pDoc->createTable();
-                    m_pDoc->addTable( sheet );
+                    KSpreadSheet* sheet = m_pDoc->createSheet();
+                    m_pDoc->addSheet( sheet );
                     sheet->setTableName( tableElement.attributeNS( KoXmlNS::table, "name", QString::null ), true, false );
                 }
             }
@@ -301,7 +301,7 @@ bool KSpreadMap::loadXML( const QDomElement& mymap )
   if ( n.isNull() )
   {
       // We need at least one table !
-      m_pDoc->setErrorMessage( i18n("This document has no table.") );
+      m_pDoc->setErrorMessage( i18n("This document has no sheets (tables).") );
       return false;
   }
   while( !n.isNull() )
@@ -309,8 +309,8 @@ bool KSpreadMap::loadXML( const QDomElement& mymap )
     QDomElement e = n.toElement();
     if ( !e.isNull() && e.tagName() == "table" )
     {
-      KSpreadSheet *t = m_pDoc->createTable();
-      m_pDoc->addTable( t );
+      KSpreadSheet *t = m_pDoc->createSheet();
+      m_pDoc->addSheet( t );
       if ( !t->loadXML( e ) )
         return false;
     }

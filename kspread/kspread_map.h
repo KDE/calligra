@@ -91,7 +91,7 @@ public:
   int initialMarkerColumn()const { return m_initialMarkerColumn; }
   int initialMarkerRow()const { return m_initialMarkerRow; }
 
-  void addTable( KSpreadSheet *_table );
+  void addSheet( KSpreadSheet *_table );
 
   /**
    * Use the @ref #nextTable function to get all the other tables.

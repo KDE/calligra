@@ -470,7 +470,7 @@ public:
    * @return a pointer to a new KSpreadSheet. The KSpreadSheet is not added to the map
    *         nor added to the GUI.
    */
-  KSpreadSheet * createTable();
+  KSpreadSheet * createSheet();
 
   /**
    * Adds a KSpreadSheet to the GUI and makes it active. In addition the KSpreadSheet is
@@ -479,7 +479,7 @@ public:
    * @see KSpreadView
    * @see KSpreadMap
    */
-  void addTable( KSpreadSheet * _table );
+  void addSheet( KSpreadSheet * _table );
 
   /**
    * Change the zoom factor to @p z (e.g. 150 for 150%)
@@ -677,7 +677,7 @@ signals:
   /**
    * Emitted if a new table is added to the document.
    */
-  void sig_addTable( KSpreadSheet *_table );
+  void sig_addSheet( KSpreadSheet *_table );
   /**
    * Emitted if all views have to be updated.
    */

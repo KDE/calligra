@@ -140,7 +140,7 @@ public:
 
     void setZoom( int zoom, bool updateViews ); // change the zoom value
 
-    void addTable( KSpreadSheet *_t );
+    void addSheet( KSpreadSheet *_t );
     //void removeTable( KSpreadSheet *_t );
     void removeAllTables();
     void setActiveTable( KSpreadSheet *_t,bool updateTable=true );

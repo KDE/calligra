@@ -96,7 +96,7 @@ DCOPRef KSpreadMapIface::insertTable( const QString& name )
 
     KSpreadSheet* t = new KSpreadSheet( m_map, name );
     t->setTableName( name );
-    m_map->doc()->addTable( t );
+    m_map->doc()->addSheet( t );
 
     return table( name );
 }

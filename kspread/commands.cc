@@ -216,7 +216,7 @@ AddSheetCommand::AddSheetCommand( KSpreadSheet* s )
 {
     sheet = s;
     doc = sheet->doc();
-    doc->addTable( s );
+    doc->addSheet( s );
 }
 
 void AddSheetCommand::execute()

@@ -292,8 +292,8 @@ bool KSpreadDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 
         for( int i=0; i<_page; i++ )
         {
-                KSpreadSheet *t = createTable();
-                d->workbook->addTable( t );
+                KSpreadSheet *t = createSheet();
+                d->workbook->addSheet( t );
         }
 
         resetURL();
@@ -332,8 +332,8 @@ bool KSpreadDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 
 	for( int i=0; i<_page; i++ )
 	{
-		KSpreadSheet *t = createTable();
-		d->workbook->addTable( t );
+		KSpreadSheet *t = createSheet();
+		d->workbook->addSheet( t );
 	}
 
 	resetURL();
@@ -1411,7 +1411,7 @@ QStringList KSpreadDoc::spellListIgnoreAll() const
   return d->spellListIgnoreAll;
 }
 
-KSpreadSheet* KSpreadDoc::createTable()
+KSpreadSheet* KSpreadDoc::createSheet()
 {
   QString s( i18n("Sheet%1") );
   s = s.arg( d->tableId++ );
@@ -1436,13 +1436,13 @@ void KSpreadDoc::resetInterpreter()
   emit sig_updateView();
 }
 
-void KSpreadDoc::addTable( KSpreadSheet *_table )
+void KSpreadDoc::addSheet( KSpreadSheet *_table )
 {
-  d->workbook->addTable( _table );
+  d->workbook->addSheet( _table );
 
   setModified( TRUE );
 
-  emit sig_addTable( _table );
+  emit sig_addSheet( _table );
 }
 
 void KSpreadDoc::setZoomAndResolution( int zoom, int dpiX, int dpiY )

@@ -1439,7 +1439,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     connect( this, SIGNAL( childActivated( KoDocumentChild* ) ),
              this, SLOT( slotChildUnselected( KoDocumentChild* ) ) );
 
-    QObject::connect( d->doc, SIGNAL( sig_addTable( KSpreadSheet* ) ), SLOT( slotAddTable( KSpreadSheet* ) ) );
+    QObject::connect( d->doc, SIGNAL( sig_addSheet( KSpreadSheet* ) ), SLOT( slotAddTable( KSpreadSheet* ) ) );
 
 
     QObject::connect( d->doc, SIGNAL( sig_refreshView(  ) ), this, SLOT( slotRefreshView() ) );
@@ -2229,7 +2229,7 @@ void KSpreadView::initialPosition()
     // Loading completed, pick initial worksheet
     QPtrListIterator<KSpreadSheet> it( d->doc->map()->tableList() );
     for( ; it.current(); ++it )
-      addTable( it.current() );
+      addSheet( it.current() );
 
     KSpreadSheet * tbl = 0L;
     if ( d->doc->isEmbedded() )
@@ -3260,7 +3260,7 @@ void KSpreadView::borderRemove()
   }
 }
 
-void KSpreadView::addTable( KSpreadSheet * _t )
+void KSpreadView::addSheet( KSpreadSheet * _t )
 {
   d->doc->emitBeginOperation( false );
 
@@ -3528,7 +3528,7 @@ void KSpreadView::insertTable()
 
   d->doc->emitBeginOperation( false );
   d->canvas->closeEditor();
-  KSpreadSheet * t = d->doc->createTable();
+  KSpreadSheet * t = d->doc->createSheet();
   KCommand* command = new AddSheetCommand( t );
   d->doc->addCommand( command );
   updateEditWidget();
@@ -5991,7 +5991,7 @@ void KSpreadView::setText( const QString & _text )
 
 void KSpreadView::slotAddTable( KSpreadSheet *_table )
 {
-  addTable( _table );
+  addSheet( _table );
 }
 
 void KSpreadView::slotRefreshView()
