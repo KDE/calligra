@@ -239,8 +239,9 @@ void WinWordDoc::sttbf(STTBF &sttbf, const unsigned long &fc, const unsigned lon
                               const unsigned char * const stream) {
 
     if(lcb==0) {
-        kdebug(KDEBUG_INFO, 31000, "WinWordDoc::sttbf(): empty STTBF");
+        //kdebug(KDEBUG_INFO, 31000, "WinWordDoc::sttbf(): empty STTBF");
         sttbf.ok=false;
+        return;
     }
 
     QString str;
@@ -265,7 +266,7 @@ void WinWordDoc::sttbf(STTBF &sttbf, const unsigned long &fc, const unsigned lon
             base+=2;
             if(len==0) {
                 sttbf.stringList.append(QString(""));
-                kdebug(KDEBUG_INFO, 31000, "WinWordDoc::sttbf(): empty string");
+                //kdebug(KDEBUG_INFO, 31000, "WinWordDoc::sttbf(): empty string");
             }
             else {
                 str="";
@@ -275,13 +276,13 @@ void WinWordDoc::sttbf(STTBF &sttbf, const unsigned long &fc, const unsigned lon
 
                 sttbf.stringList.append(str);
                 kdebug(KDEBUG_INFO, 31000, str);
-                base+=j;   // j==len*2 :)
+                base+=j;
 
                 if(sttbf.extraDataLen!=0) {
                     kdebug(KDEBUG_INFO, 31000, "WinWordDoc::sttbf(): extra data");
                     unsigned char *tmpArray=new unsigned char[sttbf.extraDataLen];
                     kdebug(KDEBUG_INFO, 31000, "STILL ALIVE 1 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number(sttbf.extraDataLen));
+                    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((long)sttbf.extraDataLen));
                     for(j=0; j<sttbf.extraDataLen; ++base)
                         tmpArray[j]=*(stream+base);
                     kdebug(KDEBUG_INFO, 31000, "STILL ALIVE 3 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
@@ -297,7 +298,7 @@ void WinWordDoc::sttbf(STTBF &sttbf, const unsigned long &fc, const unsigned lon
             ++base;
             if(len==0) {
                 sttbf.stringList.append(QString(""));
-                kdebug(KDEBUG_INFO, 31000, "WinWordDoc::sttbf(): empty string");
+                //kdebug(KDEBUG_INFO, 31000, "WinWordDoc::sttbf(): empty string");
             }
             else {
                 str="";
@@ -307,13 +308,13 @@ void WinWordDoc::sttbf(STTBF &sttbf, const unsigned long &fc, const unsigned lon
 
                 sttbf.stringList.append(str);
                 kdebug(KDEBUG_INFO, 31000, str);
-                base+=j;   // j==len :)
-
+                base+=j;
+                
                 if(sttbf.extraDataLen!=0) {
                     kdebug(KDEBUG_INFO, 31000, "WinWordDoc::sttbf(): extra data");
                     unsigned char *tmpArray=new unsigned char[sttbf.extraDataLen];
                     kdebug(KDEBUG_INFO, 31000, "STILL ALIVE 1 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number(sttbf.extraDataLen));
+                    kdebug(KDEBUG_INFO, 31000, (const char*)QString::number((long)sttbf.extraDataLen));
                     for(j=0; j<sttbf.extraDataLen; ++base)
                         tmpArray[j]=*(stream+base);
                     kdebug(KDEBUG_INFO, 31000, "STILL ALIVE 3 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
