@@ -17,61 +17,6 @@
 
 
 
-int kchartEngine::doLabels() {
-  // Finally, the x labels are taken from the first row
-  QArray<QString> xlbl( data->cols() );
-#ifdef NOXLABELSFORNOW
-  debug( "Creating xlbl with %d entries", data->cols() );
-  for( int labels = 0; labels < data->cols(); labels++ ) {
-    debug( "Retrieving value at position %d", labels );
-    const KChartValue& cellval = data->cell( 0, labels );
-    debug( "type of field %d in row 0 is %s", labels, QVariant::typeToName( cellval.value.type() ).latin1() );
-    if( !cellval.exists ) {
-      debug( "No value for x label in col %d", labels );
-      continue;
-    }
-    if( cellval.value.type() != QVariant::String ) {
-      debug( "Value for x label in col %d is not a string", labels );
-      continue;
-    }
-    
-    debug( "Setting label %d to %s", labels, cellval.value.stringValue().latin1() );
-    //		QString l = cellval.value.stringValue();
-    xlbl.at( labels ) = cellval.value.stringValue();
-    debug( "Done setting label" );
-    hasxlabels = true;
-  }
-#endif  
-  debug( "labels read" );
-};
-
-
-
-
-void kchartEngine::drawBorder() {
-  if( params->border ) {
-    int	x1, y1, x2, y2;
-    
-    x1 = PX(0);
-    y1 = PY(highest);
-    x2 = PX(num_points-1+(params->do_bar()?2:0));
-    y2 = PY(lowest);
-    p->setPen( LineColor );
-    p->drawLine( x1, PY(lowest), x1, y1 );
-    
-    setno = params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets: num_sets: 1;
-    p->setPen( LineColor );
-    p->drawLine( x1, y1, PX(0), PY(highest) );
-    // if( !params->grid || do_vol || params->thumbnail )					// grid leaves right side Y open
-    {
-      p->setPen( LineColor );
-      p->drawLine( x2, y2, PX(num_points-1+(params->do_bar()?2:0)), PY(lowest) );
-      p->drawLine( PX(num_points-1+(params->do_bar()?2:0)), PY(lowest),
-		   PX(num_points-1+(params->do_bar()?2:0)), PY(highest) );
-    }
-    setno = 0;
-  }
-}
 
 
 void kchartEngine::drawAnnotation() {
@@ -227,3 +172,61 @@ void kchartEngine::drawThumbnails() {
 #endif
 }
 
+
+void kchartEngine::drawBackgroundImage() {
+  //		debug( "Sorry, not implemented: background images" );
+#ifdef SUPPORT_BACKGROUND_IMAGES
+		FILE	*in = fopen(GDC_BGImage, "rb");
+		if( !in ) {
+			; // Cant load background image, drop it
+		}
+		else {
+			if( bg_img = gdImageCreateFromGif(in) ) {					// =
+				int	bgxpos = gdImageSX(bg_img)<imagewidth?  imageheight/2 - gdImageSX(bg_img)/2:  0,
+					bgypos = gdImageSY(bg_img)<imageheight? imageheight/2 - gdImageSY(bg_img)/2: 0;
+		
+		
+				if( gdImageSX(bg_img) > imagewidth ||				// resize only if too big
+					gdImageSY(bg_img) > imageheight ) {				//  [and center]
+					gdImageCopyResized( im, bg_img,				// dst, src
+										bgxpos, bgypos,			// dstX, dstY
+										0, 0,					// srcX, srcY
+										imagewidth, imageheight,	// dstW, dstH
+										imagewidth, imageheight );	// srcW, srcH
+				} else											// just center
+					gdImageCopy( im, bg_img,					// dst, src
+								 bgxpos, bgypos,				// dstX, dstY
+								 0, 0,							// srcX, srcY
+								 imagewidth, imageheight );			// W, H
+			}
+			fclose(in);
+		}
+#endif
+}
+
+
+void kchartEngine::prepareColors() {
+    for(int j=0; j<num_sets; ++j )
+      for(int i=0; i<num_points; ++i )
+	if( params->ExtColor.count() ) {			
+	  cerr << "Ext color\n";
+	  // changed by me, BL
+	  //QColor ext_clr = params->ExtColor.color( num_points*j+i );			
+	  QColor ext_clr = params->ExtColor.color( (num_points*j+i) % params->ExtColor.count());
+	  ExtColor[j][i]            = ext_clr;
+	  if( params->threeD() )
+	    ExtColorShd[j][i]     = QColor( ext_clr.red() / 2, ext_clr.green() / 2, ext_clr.blue() / 2 );
+	}
+	else if( params->SetColor.count() ) {
+	  QColor set_clr = params->SetColor.color( j );
+	  ExtColor[j][i]     = QColor( set_clr );
+	  if( params->threeD() )
+	    ExtColorShd[j][i] = QColor( set_clr.red() / 2, set_clr.green() / 2, set_clr.blue() / 2 );
+	}
+	else {
+	  ExtColor[j][i]     = PlotColor;
+	  if( params->threeD() )
+	    ExtColorShd[j][i] = QColor( params->PlotColor.red() / 2, params->PlotColor.green() / 2, params->PlotColor.blue() / 2 );
+	}
+
+}

@@ -23,7 +23,11 @@ public:
   void drawScatter();
   void drawBackgroundImage();
   void prepareColors();
+
   void drawGridAndLabels(bool do_ylbl_fractions);
+  void draw3DGrids();
+  void drawShelfGrids();
+  void drawXTicks();
 
   inline bool CELLEXISTS( int row, int col ) {
     return  data->cell(row,col).exists;
