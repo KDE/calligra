@@ -180,17 +180,39 @@ void ZoomTool::zoomRegion(int x1, int y1, int x2, int y2)
     zoomIn();
     return;
    }
+  
+  if(x1 > x2)
+   {
+    int s = x1;
+    x1 = x2;
+    x2 = s;
+   }
+  
+  if(y1 > y2)
+   {
+    int s = y1;
+    y1 = y2;
+    y2 = s;
+   }
+
+  int x = x2 - x1;
+  int y = y2 - y1;
 
   int cw = canvas->viewport()->width();
   int ch = canvas->viewport()->height();
   float cz = canvas->getZoomFactor();
-  float zw = (float)cw/(float)(x2-x1);
-  float zh = (float)ch/(float)(y2-y1);
+  float zw = (float)cw/(float)x;
+  float zh = (float)ch/(float)y;
   float z = QMIN(zw,zh)*cz;
   
   if(z > 10.0)
    z = 10.0;
   canvas->setZoomFactor(z);
+  x = canvas->x() + x1 + x/2;
+  y = canvas->y() + y1 + y/2;
+  x = x * QMIN(zw,zh);
+  y = y * QMIN(zw,zh);
+  canvas->scrollView()->center(x,y);
  }
 
 int ZoomTool::insertZoomFactor (float z) {
