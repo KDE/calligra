@@ -15,6 +15,7 @@ noinst_HEADERS = \
 	vinsertknots.h \
 	vroundcorners.h \
 	vselectnodes.h \
+	vselectobjects.h \
 	vtransformnodes.h \
 	vvisitor.h \
 	vwhirlpinch.h
@@ -26,6 +27,7 @@ libkarbonvisitors_la_SOURCES = \
 	vinsertknots.cc \
 	vroundcorners.cc \
 	vselectnodes.cc \
+	vselectobjects.cc \
 	vtransformnodes.cc \
 	vvisitor.cc \
 	vwhirlpinch.cc

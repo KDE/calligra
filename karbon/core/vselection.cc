@@ -9,6 +9,8 @@
 #include "vdocument.h"
 #include "vselection.h"
 #include "vselectnodes.h"
+#include "vselectobjects.h"
+
 
 VSelection::VSelection( VObject* parent )
 	: VObject( parent )
@@ -51,24 +53,8 @@ VSelection::append()
 {
 	clear();
 
-	VObjectList objects;
-	VLayerListIterator itr(
-		static_cast<VDocument*>( parent() )->layers() );
-
-	for ( ; itr.current(); ++itr )
-	{
-		objects = itr.current()->objects();
-
-		VObjectListIterator itr2( objects );
-
-		for ( ; itr2.current(); ++itr2 )
-		{
-			if( static_cast<VObject *>( itr2.current() )->state() != deleted )
-			{
-				append( itr2.current() );
-			}
-		}
-	}
+	VSelectObjects op( m_objects );
+	op.visit( *static_cast<VDocument*>( parent() ) );
 
 	invalidateBoundingBox();
 }
@@ -86,34 +72,23 @@ VSelection::append( const KoRect& rect, bool selectObjects )
 {
 	bool success = false;
 
-	VSelectNodes op( rect );
-
-	VObjectList objects;
-	VLayerListIterator itr(
-		static_cast<VDocument*>( parent() )->layers() );
-
-	for ( ; itr.current(); ++itr )
+	if( selectObjects )
 	{
-		VObjectListIterator itr2( itr.current()->objects() );
+		VSelectObjects op( m_objects, rect );
 
-// TODO: use a zoom dependant vflatten visitor to achieve finer resolution:
-		for ( ; itr2.current(); ++itr2 )
+		if( op.visit( *static_cast<VDocument*>( parent() ) ) )
+			success = true;
+	}
+	else
+	{
+		VObjectListIterator itr( m_objects );
+
+		for ( ; itr.current(); ++itr )
 		{
-			if( selectObjects )
-			{
-				if(
-					itr2.current()->state() == normal &&
-					itr2.current()->boundingBox().intersects( rect ) )
-				{
-					append( itr2.current() );
-					success = true;
-				}
-			}
-			else
-			{
-				if( op.visit( *itr.current() ) )
-					success = true;
-			}
+			VSelectNodes op( rect );
+
+			if( op.visit( *itr.current() ) )
+				success = true;
 		}
 	}
 
@@ -132,8 +107,7 @@ VSelection::clear()
 	{
 		op.visit( *itr.current() );
 
-		if( itr.current()->state() != deleted )
-			itr.current()->setState( normal );
+		itr.current()->setState( normal );
 	}
 
 	m_objects.clear();
@@ -249,7 +223,7 @@ VSelection::handleNode( const QPoint& point ) const
 }
 
 bool
-VSelection::checkNode( const KoRect& rect )
+VSelection::pathNode( const KoRect& rect )
 {
 	VSelectNodes op( rect, true );
 

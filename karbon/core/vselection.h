@@ -92,7 +92,7 @@ public:
 	const VObjectList& objects() const { return m_objects; }
 
 
-	bool checkNode( const KoRect& rect );
+	bool pathNode( const KoRect& rect );
 
 	/**
 	 * Deselects all nodes.

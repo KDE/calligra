@@ -7,12 +7,12 @@ REAL BUGS:
 -	if selecting many shapes, the fill/stroke state should be "unknown",
 	preview widgets needs to paint questionmarks or something in this case
 -	revert() in vpath::combine() doesnt work
+-	fix rotatetool (to verify, just click and release without dragging)
 
 TODO:
--	rename VSelectNodes to VSelect and merge selection of VObjects there + use
-	it in vselection
 -	unify vselecttool and vselectnodestool
 
+-	get tools right (unfiy this nasty code duplication)
 -	scratch your head about how to do undo/redo of path operations best like
 	removing nodes, inserting nodes...
 -	port path commands to vgroup::insertNewDeleteOld(), maybe add a vpathcommand

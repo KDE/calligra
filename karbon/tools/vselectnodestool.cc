@@ -48,7 +48,7 @@ VSelectNodesTool::setCursor( const KoPoint &p ) const
 {
 	double tolerance = 1.0 / view()->zoom();
 
-	if( view()->part()->document().selection()->checkNode(
+	if( view()->part()->document().selection()->pathNode(
 		KoRect(
 			p.x() - tolerance,
 			p.y() - tolerance,
@@ -74,12 +74,12 @@ VSelectNodesTool::drawTemporaryObject()
 
 	if( view()->part()->document().selection()->objects().count() > 0 &&
 		m_state != dragging &&
-		( m_state == moving || view()->part()->document().selection()->checkNode(
+		( m_state == moving || view()->part()->document().selection()->pathNode(
 			KoRect(
 				lp.x() - tolerance,
 				lp.y() - tolerance,
-				2 * tolerance + 1,
-				2 * tolerance + 1 ) ) ) )
+				2 * tolerance + 1.0,
+				2 * tolerance + 1.0 ) ) ) )
 	{
 		if( m_state == normal )
 		{
@@ -88,8 +88,8 @@ VSelectNodesTool::drawTemporaryObject()
 				KoRect(
 					fp.x() - tolerance,
 					fp.y() - tolerance,
-					2 * tolerance + 1,
-					2 * tolerance + 1 ).normalize(),
+					2 * tolerance + 1.0,
+					2 * tolerance + 1.0 ).normalize(),
 				false );
 			m_state = moving;
 		}
