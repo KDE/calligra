@@ -23,7 +23,7 @@
 #include <qvaluelist.h>
 
 class KWDocument;
-//class KWParag;
+class KWStyle;
 
 /**
  * This class holds information about the table of contents of a given
@@ -41,30 +41,22 @@ public:
      */
     void createContents();
 
-    void addParagId( int i ) {
-	m_paragIds.append( i );
-    }
-    /*void setEnd( KWParag *e ) {
-	end = e;
-    }*/
-    bool hasContents() {
+    // Well, actually we don't need that. Too dangerous.
+    // Better remove parags that have the style "Contents Head X",
+    // than remove parags based on their id (in case of deleting a parag etc.!)
+    // Load/save support
+    //void restoreParagList( QValueList<int> paragIds );
+    //QValueList<int> saveParagList() const;
+
+    /* bool hasContents() const {
 	return !m_paragIds.isEmpty();
-    }
-    /*bool numParags() {
-	return parags.count();
     }*/
-    QValueList<int>::Iterator begin() {
-	return m_paragIds.begin();
-    }
-    QValueList<int>::Iterator end() {
-	return m_paragIds.end();
-    }
 
 protected:
-    KWDocument *m_doc;
-    //KWParag *m_end;
-    QValueList<int> m_paragIds;
 
+    KWStyle * findOrCreateTOCStyle( int depth );
+
+    KWDocument *m_doc;
 };
 
 #endif

@@ -807,77 +807,6 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     lay->setNumberingType( KWParagLayout::NT_CHAPTER );
     lay->setFormat( f );
 
-    lay = new KWParagLayout( this );
-    lay->setName( "Enumerated List" );
-    lay->setFollowingParagLayout( "Enumerated List" );
-    lay->setCounterType( KWParagLayout::CT_NUM );
-    lay->setCounterDepth( 0 );
-    lay->setStartCounter( 1 );
-    lay->setCounterRightText( "." );
-    lay->setNumberingType( KWParagLayout::NT_LIST );
-
-    lay = new KWParagLayout( this );
-    lay->setName( "Alphabetical List" );
-    lay->setFollowingParagLayout( "Alphabetical List" );
-    lay->setCounterType( KWParagLayout::CT_ALPHAB_L );
-    lay->setCounterDepth( 0 );
-    lay->setStartCounter( 1 );
-    lay->setCounterRightText( " )" );
-    lay->setNumberingType( KWParagLayout::NT_LIST );
-
-    lay = new KWParagLayout( this );
-    lay->setName( "Bullet List" );
-    lay->setFollowingParagLayout( "Bullet List" );
-    lay->setCounterType( KWParagLayout::CT_BULLET );
-    lay->setCounterDepth( 0 );
-    lay->setStartCounter( 1 );
-    lay->setCounterRightText( "" );
-    lay->setNumberingType( KWParagLayout::NT_LIST );
-
-    f.setUserFont( findUserFont( "helvetica" ) );
-    f.setWeight( 75 );
-    f.setPTFontSize( 20 );
-    lay = new KWParagLayout( this );
-    lay->setName( "Contents Title" );
-    lay->setFollowingParagLayout( "Standard" );
-    lay->setCounterType( KWParagLayout::CT_NONE );
-    lay->setCounterDepth( 0 );
-    lay->setTopBorder( Border() );
-    lay->setBottomBorder( Border() );
-    lay->setFlow( KWParagLayout::CENTER );
-    lay->setFormat( f );
-
-    f.setUserFont( findUserFont( "helvetica" ) );
-    f.setWeight( 75 );
-    f.setPTFontSize( 16 );
-    lay = new KWParagLayout( this );
-    lay->setName( "Contents Head 1" );
-    lay->setFollowingParagLayout( "Standard" );
-    lay->setCounterType( KWParagLayout::CT_NONE );
-    lay->setCounterDepth( 0 );
-    lay->setFormat( f );
-
-    f.setUserFont( findUserFont( "helvetica" ) );
-    f.setWeight( 75 );
-    f.setPTFontSize( 12 );
-    lay = new KWParagLayout( this );
-    lay->setName( "Contents Head 2" );
-    lay->setFollowingParagLayout( "Standard" );
-    lay->setCounterType( KWParagLayout::CT_NONE );
-    lay->setCounterDepth( 0 );
-    lay->setFormat( f );
-
-    f.setUserFont( findUserFont( "helvetica" ) );
-    f.setItalic( TRUE );
-    f.setWeight( 50 );
-    f.setPTFontSize( 12 );
-    lay = new KWParagLayout( this );
-    lay->setName( "Contents Head 3" );
-    lay->setFollowingParagLayout( "Standard" );
-    lay->setCounterType( KWParagLayout::CT_NONE );
-    lay->setCounterDepth( 0 );
-    lay->setFormat( f );
-
     if ( TRUE /*no variable formats were loaded*/) {
         varFormats.clear();
         varFormats.insert( VT_DATE_FIX, new KWVariableDateFormat() );
@@ -1086,6 +1015,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
 
     emit sigProgress(95);
 
+#if 0 // Not needed anymore
     // <CPARAGS>  (Ids of the parags that form the Table of Contents)
     QDomNodeList listCparags = word.elementsByTagName( "CPARAGS" );
     for (item = 0; item < listCparags.count(); item++)
@@ -1099,6 +1029,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
                 contents->addParagId( value.toInt() );
         }
     }
+#endif
 
     emit sigProgress(100); // the rest is only processing, not loading
 
@@ -1314,14 +1245,13 @@ void KWDocument::addStyleTemplate( KWStyle * sty )
     m_styleList.append( sty );
 }
 
-void KWDocument::removeStyleTemplate ( const QString & _styleName)
+void KWDocument::removeStyleTemplate ( const QString & _styleName )
 {
   for ( KWStyle* p = m_styleList.first(); p != 0L; p = m_styleList.next() )
     {
         if ( p->name() == _styleName )
         {
-            // Remove existing style
-	  //delete p;
+            // Remove (and delete) style
 	    m_styleList.remove( p );
             return;
         }
@@ -1329,33 +1259,35 @@ void KWDocument::removeStyleTemplate ( const QString & _styleName)
 }
 
 /*================================================================*/
-void KWDocument::moveDownStyleTemplate ( const QString & _styleName)
+void KWDocument::moveDownStyleTemplate ( const QString & _styleName )
 {
-  for ( KWStyle* p = m_styleList.first(); p != 0L; p = m_styleList.next() )
+    unsigned int pos = 0;
+    for ( KWStyle* p = m_styleList.first(); p != 0L; p = m_styleList.next(), ++pos )
     {
         if ( p->name() == _styleName )
         {
-	  unsigned int pos=m_styleList.find(p);
-	  KWStyle tmpStyle=*m_styleList.at(pos);
-	  *p=*(m_styleList.at(pos+1));
-	  *(m_styleList.at(pos+1))= tmpStyle;
-	  return;
+            KWStyle * next = m_styleList.at(pos+1);
+            if (!next) return;
+            // We have "p" "next" and we want "next" "p"
+            m_styleList.insert( pos, next ); // "next", "p", "next"
+            m_styleList.take( pos+2 );       // Remove last "next"
+            return;
         }
     }
 }
 
 /*================================================================*/
-void KWDocument::moveUpStyleTemplate ( const QString & _styleName)
+void KWDocument::moveUpStyleTemplate ( const QString & _styleName )
 {
-  for ( KWStyle* p = m_styleList.first(); p != 0L; p = m_styleList.next() )
+    unsigned int pos = 0;
+    for ( KWStyle* p = m_styleList.first(); p != 0L; p = m_styleList.next(), ++pos )
     {
         if ( p->name() == _styleName )
         {
-	  unsigned int pos=m_styleList.find(p);
-	  KWStyle tmpStyle=*m_styleList.at(pos);
-	  *p=*(m_styleList.at(pos-1));
-	  *(m_styleList.at(pos-1))= tmpStyle;
-	  return;
+            // We have "prev" "p" and we want "p" "prev"
+            m_styleList.insert( pos-1, p ); // "p" "prev" "p"
+            m_styleList.take( pos+1 );      // Remove last "p"
+            return;
         }
     }
 }
@@ -1618,6 +1550,8 @@ QDomDocument KWDocument::saveXML()
     out << etag << "</PIXMAPS>" << endl;
 #endif
 
+    // Not needed anymore
+#if 0
     // Write out the list of parags (id) that form the table of contents, see KWContents::createContents
     if ( contents->hasContents() ) {
         QDomElement cParags = doc.createElement( "CPARAGS" );
@@ -1630,6 +1564,7 @@ QDomDocument KWDocument::saveXML()
             paragElem.setAttribute( "name", QString::number( *it ) ); // write parag id
         }
     }
+#endif
 
 /*
     out << otag << "<SERIALL>" << endl;
@@ -1896,7 +1831,7 @@ void KWDocument::draw( QPaintDevice *, long int, long int, float )
 {
 }
 
-KWStyle* KWDocument::findStyle( const QString & _name )
+KWStyle* KWDocument::findStyle( const QString & _name, bool noFallback )
 {
     // Caching, to speed things up
     if ( m_lastStyle && m_lastStyle->name() == _name )
@@ -1911,8 +1846,10 @@ KWStyle* KWDocument::findStyle( const QString & _name )
         }
     }
 
+    if ( noFallback )
+        return 0L;
     qWarning( "Style '%s` is unknown, using default style", _name.latin1() );
-    return m_styleList.first(); // TODO defaultParagLayout;
+    return m_styleList.first();
 }
 
 /*================================================================*/

@@ -43,11 +43,9 @@ public:
 
     const KWParagLayout & paragLayout() const { return m_paragLayout; }
     KWParagLayout & paragLayout()  { return m_paragLayout; }
-    // TODO a way to change the paraglayout
 
     const QTextFormat & format() const { return m_format; }
     QTextFormat & format() { return m_format; }
-    // TODO a way to change the format
 
     QString followingStyle() const { return m_followingStyle; }
 

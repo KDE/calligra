@@ -435,7 +435,6 @@ protected:
     QFont tbFont;
     QColor tbColor;
     QStringList fontList;
-    QStringList styleList;
 
     KWGUI *gui;
 

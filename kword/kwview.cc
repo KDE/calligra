@@ -133,7 +133,7 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
                       this, SLOT( slotUpdateChildGeometry( KWChild* ) ) );
 
 
-    KFontChooser::getFontList(fontList, false);
+    KFontChooser::getFontList(fontList, false); // Shouldn't this be in the doc, or not at all ?
     setKeyCompression( TRUE );
     setAcceptDrops( TRUE );
     createKWGUI();
@@ -380,12 +380,7 @@ void KWView::setupActions()
                                            actionCollection(), "format_style" );
     connect( actionFormatStyle, SIGNAL( activated( int ) ),
              this, SLOT( textStyleSelected( int ) ) );
-    lst.clear();
-    QListIterator<KWStyle> styleIt( doc->styleList() );
-    for (; styleIt.current(); ++styleIt )
-        lst << i18n("KWord Style", styleIt.current()->name().local8Bit()); // try to translate the name, if standard
-    styleList = lst;
-    actionFormatStyle->setItems( lst );
+    updateStyleList();
 
     actionFormatBold = new KToggleAction( i18n( "&Bold" ), "text_bold", CTRL + Key_B,
                                            this, SLOT( textBold() ),
@@ -973,27 +968,26 @@ void KWView::setTool( MouseMode _mouseMode )
 /*===============================================================*/
 void KWView::showStyle( const QString & styleName )
 {
-    int pos = styleList.findIndex( styleName );
-
-    if ( pos == -1 )
-        return;
-
-    actionFormatStyle->setCurrentItem( pos );
-
-    // Updating the rest of the UI according to this style doesn't need
-    // to be done here anymore. Should get called by KWCanvas.
+    QListIterator<KWStyle> styleIt( doc->styleList() );
+    for ( int pos = 0 ; styleIt.current(); ++styleIt, ++pos )
+    {
+        if ( styleIt.current()->name() == styleName ) {
+            actionFormatStyle->setCurrentItem( pos );
+            return;
+        }
+    }
 }
 
 /*===============================================================*/
 void KWView::updateStyleList()
 {
-    styleList.clear();
-    QList<KWStyle> styles = const_cast<QList<KWStyle> & >(doc->styleList());
-    for ( unsigned int i = 0; i < styles.count(); i++ ) {
-        styleList.append( styles.at( i )->name() );
-    }
-    actionFormatStyle->setItems( styleList );
-    //updateStyle( gui->canvasWidget()->getParagLayout()->getName() );
+    QString currentStyle = actionFormatStyle->currentText();
+    QStringList lst;
+    QListIterator<KWStyle> styleIt( doc->styleList() );
+    for (; styleIt.current(); ++styleIt )
+        lst << i18n("KWord Style", styleIt.current()->name().local8Bit()); // try to translate the name, if standard
+    actionFormatStyle->setItems( lst );
+    showStyle( currentStyle );
 }
 
 /*===============================================================*/
@@ -1886,10 +1880,9 @@ void KWView::tableDelete()
 /*====================== text style selected  ===================*/
 void KWView::textStyleSelected( int index )
 {
-    QList<KWStyle> styles = const_cast<QList<KWStyle> & >(doc->styleList());
     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(gui->canvasWidget()->currentFrameSetEdit());
     if ( edit )
-        edit->applyStyle( styles.at( index ) );
+        edit->applyStyle( doc->styleAt( index ) );
     gui->canvasWidget()->setFocus(); // the style combo keeps focus...
 }
 

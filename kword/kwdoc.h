@@ -173,9 +173,17 @@ public:
     void drawAllBorders( bool back = true);
     void refreshAllFrames();
 
-    //QList<KWStyle> & styleList() { return m_styleList; }
     const QList<KWStyle> & styleList() const { return m_styleList; }
-    KWStyle* findStyle( const QString & _name );
+    /**
+     * Look for a style named @p name. If not found, it will
+     * either return 0L (if noFallback is true) or (by default) it will
+     * return the default style (first one in the list of styles).
+     */
+    KWStyle* findStyle( const QString & name, bool noFallback = false );
+    /**
+     * Return style number @p i.
+     */
+    KWStyle* styleAt( int i ) { return m_styleList.at(i); }
 
     int getPages() const { return pages; }
     //void setPages( int _pages ) { pages = _pages;  }
@@ -206,7 +214,7 @@ public:
     int gridX() { return m_gridX; }
     int gridY() { return m_gridY; }
     void setGridX(int _gridx) {m_gridX=_gridx;}
-    void setGridY(int _gridy) {m_gridY=_gridy;}	
+    void setGridY(int _gridy) {m_gridY=_gridy;}
 
     int getApplyStyleTemplate() { return applyStyleTemplate; }
     void setApplyStyleTemplate( int _f ) { applyStyleTemplate = _f; }

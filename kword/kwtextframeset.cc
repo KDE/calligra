@@ -2094,7 +2094,7 @@ void KWTextFrameSetEdit::updateUI()
     int i = cursor->index();
     if ( i > 0 )
 	--i;
-    kdDebug() << "KWTextFrameSet::updateUI currentFormat=" << currentFormat->key() << " parag format=" << cursor->parag()->at( i )->format()->key() << endl;
+    //kdDebug() << "KWTextFrameSet::updateUI currentFormat=" << currentFormat->key() << " parag format=" << cursor->parag()->at( i )->format()->key() << endl;
     if ( currentFormat->key() != cursor->parag()->at( i )->format()->key() && textDocument()->useFormatCollection() ) {
 	if ( currentFormat )
 	    currentFormat->removeRef();

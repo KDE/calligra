@@ -49,42 +49,27 @@ void KWContents::createContents()
 
     QTextDocument * textdoc = fs->textDocument();
 
-    // Remove existing table of contents, using m_paragIds
-    if ( !m_paragIds.isEmpty() ) {
-        QList<QTextParag> paragList;     // list of paragraphs to delete
-        for ( QTextParag *p = textdoc->firstParag(); p ; p = p->next() )
-        {
-            if ( m_paragIds.contains( p->paragId() ) )
-            {
-                m_paragIds.remove( p->paragId() );
-                kdDebug() << "KWContents::createContents will delete paragraph " << p->paragId() << "   " << p << endl;
-                paragList.append( p );
-                if ( m_paragIds.isEmpty() )   // done
-                    break;
-            }
-            // Note that we skip paragraphs that have been manually added in the middle of the TOC
-        }
-        ASSERT( m_paragIds.isEmpty() );
+    // Remove existing table of contents, based on the style
 
-        kdDebug() << "KWContents::createContents " << paragList.count() << " parags to delete" << endl;
-
-        // Now delete them (we can't do that above, it shiftes the Ids)
-        QTextCursor cursor( textdoc );
-        QListIterator<QTextParag> it( paragList );
-        for ( ; it.current() ; ++it )
+    QTextCursor cursor( textdoc );
+    for ( QTextParag *p = textdoc->firstParag(); p ; p = p->next() )
+    {
+        KWTextParag * parag = static_cast<KWTextParag *>(p);
+        if ( parag->styleName().startsWith( "Contents Head" ) ||
+            parag->styleName() == "Contents Title" )
         {
-            kdDebug() << "KWContents::createContents Deleting paragraph " << it.current() << endl;
+            kdDebug() << "KWContents::createContents Deleting paragraph " << p << endl;
             // This paragraph is part of the TOC -> remove
-            cursor.setParag( it.current() );
+            cursor.setParag( p );
             cursor.setIndex( 0 );
             textdoc->setSelectionStart( QTextDocument::Temp, &cursor );
-            cursor.setIndex( it.current()->string()->length() );
+            ASSERT( p->next() );
+            cursor.setParag( p->next() );
+            cursor.setIndex( 0 );
             textdoc->setSelectionEnd( QTextDocument::Temp, &cursor );
             textdoc->removeSelectedText( QTextDocument::Temp, &cursor );
         }
     }
-
-    m_paragIds.clear();
 
 #if 0
     QList<KoTabulator> tabList;
@@ -100,13 +85,9 @@ void KWContents::createContents()
     KWTextParag *parag = static_cast<KWTextParag *>( textdoc->createParag( textdoc, 0, textdoc->firstParag(), true ) );
     parag->append( i18n( "Table of Contents" ) );
     //parag->setInfo( KWParag::PI_CONTENTS );
-    KWStyle * style = m_doc->findStyle( "Contents Title" );
-    if ( style )
-    {
-        parag->setParagLayout( style->paragLayout() );
-        parag->setFormat( 0, parag->string()->length(), &style->format() );
-    }
-    m_paragIds.append( parag->paragId() );
+    KWStyle * style = findOrCreateTOCStyle( -1 ); // "Contents Title"
+    parag->setParagLayout( style->paragLayout() );
+    parag->setFormat( 0, parag->string()->length(), &style->format() );
 
     // Insert table and THEN set page numbers
     // Otherwise the page numbers are incorrect
@@ -129,7 +110,6 @@ void KWContents::createContents()
             parag->append( txt );
             prevTOCParag = parag;
 
-            m_paragIds.append( parag->paragId() );
             paragMap.insert( parag, p );
         }
         p = static_cast<KWTextParag *>(p->next());
@@ -151,8 +131,7 @@ void KWContents::createContents()
 
         // Apply style
         int depth = p->counter()->m_depth;    // we checked for p->counter() before putting in the map
-        KWStyle * tocStyle
-            = m_doc->findStyle( QString( "Contents Head %1" ).arg( depth ) );
+        KWStyle * tocStyle = findOrCreateTOCStyle( depth );
         parag->setParagLayout( tocStyle->paragLayout() );
         parag->setFormat( 0, parag->string()->length(), &tocStyle->format() );
     }
@@ -160,4 +139,59 @@ void KWContents::createContents()
     // Is that "jump to next page" ? We need that then.
     //if ( parag->getNext() )
     //    parag->getNext()->setHardBreak( TRUE );
+}
+
+#if 0
+void KWContents::restoreParagList( QValueList<int> paragIds )
+{
+    KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet *>(m_doc->getFrameSet( 0 ));
+    ASSERT(fs); if (!fs) return;
+    QTextDocument * textdoc = fs->textDocument();
+
+    for ( QTextParag *p = textdoc->firstParag(); p ; p = p->next() )
+    {
+        if ( paragIds.contains( p->paragId() ) )
+        {
+            paragIds.remove( p->paragId() );
+            m_paragList.append( p );
+            if ( m_paragIds.isEmpty() )   // done
+                break;
+        }
+        // Note that we skip paragraphs that have been manually added in the middle of the TOC
+    }
+    ASSERT( paragIds.isEmpty() );
+}
+
+QValueList<int> saveParagList() const
+{
+    QValueList<int> result;
+    QListIterator<QTextParag> it( m_paragList );
+    for ( ; it.current() ; ++it )
+    {
+        result.append( it.current()->paragId() );
+    }
+    return result;
+}
+#endif
+
+KWStyle * KWContents::findOrCreateTOCStyle( int depth )
+{
+    // Determine style name.
+    // NOTE: don't add i18n here ! This is translated using
+    // the i18n calls in stylenames.cc !
+    QString name;
+    if ( depth >= 0 )
+        name = QString( "Contents Head %1" ).arg( depth );
+    else
+        name = "Contents Title";
+    KWStyle * style = m_doc->findStyle( name, true );
+    if ( !style )
+    {
+        style = new KWStyle( name );
+        style->format().setBold(true);
+        style->format().setPointSize( depth==-1 ? 20 : depth==0 ? 16 : 12 );
+        m_doc->addStyleTemplate( style );             // register the new style
+        m_doc->updateAllStyleLists();                 // show it in the UI
+    }
+    return style;
 }
