@@ -197,11 +197,7 @@ Kross::Api::Object* QtObject::connectSignal(Kross::Api::List* args)
 
     QString functionname = Kross::Api::Variant::toString(args->item(1));
 
-//TODO
-    //bool ok = QObject::connect(m_object, sigc, m_signalhandler, SLOT(callback()));
-    //m_signalhandler->connect(m_object, sigc, SLOT(callback()));
     m_signalhandler->connect(m_object, signalsignaturc, functionname);
-
     return 0;
 }
 
