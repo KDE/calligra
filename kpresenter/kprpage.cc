@@ -2573,7 +2573,7 @@ void KPrPage::changePicture( const QString & filename )
             KPPixmapObject* obj=dynamic_cast<KPPixmapObject*>( it.current() );
             if( obj)
             {
-                ChgPixCmd *chgPixCmd = new ChgPixCmd( i18n( "Change Pixmap" ), dynamic_cast<KPPixmapObject*>( it.current() ),pix, m_doc,this );
+                ChgPixCmd *chgPixCmd = new ChgPixCmd( i18n( "Change Pixmap" ),obj,pix, m_doc,this );
                 chgPixCmd->execute();
                 m_doc->addCommand( chgPixCmd );
             }
@@ -2598,10 +2598,7 @@ void KPrPage::changeClipart( const QString & filename )
             KPClipartObject* obj=dynamic_cast<KPClipartObject*>( it.current() );
             if (obj )
             {
-                ChgClipCmd *chgClipCmd = new ChgClipCmd( i18n( "Change Clipart" ),
-                                                         dynamic_cast<KPClipartObject*>( it.current() ),
-                                                         dynamic_cast<KPClipartObject*>( it.current() )->getKey(),
-                                                         clipart.getKey(), m_doc);
+                ChgClipCmd *chgClipCmd = new ChgClipCmd( i18n( "Change Clipart" ),obj,obj->getKey(),clipart.getKey(), m_doc);
                 chgClipCmd->execute();
                 m_doc->addCommand( chgClipCmd );
             }
