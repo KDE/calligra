@@ -244,17 +244,17 @@ KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view, KSpreadDoc* 
 
 QPoint KSpreadCanvas::marker() const
 {
-    return activeTable()->marker();
+    return activeTable()->marker().topLeft();
 }
 
 int KSpreadCanvas::markerColumn() const
 {
-    return marker().x();
+    return activeTable()->marker().left();
 }
 
 int KSpreadCanvas::markerRow() const
 {
-    return marker().y();
+    return activeTable()->marker().top();
 }
 
 void KSpreadCanvas::startChoose()
@@ -1537,10 +1537,10 @@ void KSpreadCanvas::createEditor( EditorType ed )
 
 void KSpreadCanvas::updateCellRect( const QRect &_rect )
 {
-    updateSelection( _rect, activeTable()->marker() );
+    updateSelection( _rect, activeTable()->markerRect() );
 }
 
-void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QPoint& old_marker )
+void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QRect& old_marker )
 {
     KSpreadTable *table = activeTable();
     if ( !table )
@@ -1548,23 +1548,24 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QPoint& old_ma
 
     // Calculate some value which are needed later
     QRect new_sel = table->selectionRect();
-    QPoint new_marker = table->marker();
+    QRect new_marker = table->marker();
     // QRect new_marker_rect = table->markerRect();
 
     QRect old_sel = _old_sel;
     QRect old_marker_outer;
-    old_marker_outer.setCoords( QMAX( 1, old_marker.x() - 1 ), QMAX( 1, old_marker.y() - 1 ),
-				old_marker.x() + 1, old_marker.y() + 1 );
+    old_marker_outer.setCoords( QMAX( 1, old_marker.left() - 1 ), QMAX( 1, old_marker.top() - 1 ),
+				old_marker.right() + 1, old_marker.bottom() + 1 );
     // QRect old_marker_rect = _old_sel;
     // if ( old_marker_rect.left() == 0 )
     // old_marker_rect =  QRect( m_marker, m_marker );
 
     // Old selection was empty -> Just use the marker
     if ( old_sel.left() == 0 )
-	old_sel = QRect( old_marker, old_marker );
+	old_sel = old_marker;
     // New selection was empty -> Just use the marker
     if ( new_sel.left() == 0 )
-	new_sel = QRect( new_marker, new_marker );
+	new_sel = table->markerRect();
+	// new_sel = QRect( new_marker, new_marker );
 
     // Which cells were not marked, but were located next to some
     // selection? They may need repainting, too.
@@ -1577,7 +1578,7 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QPoint& old_ma
     // outer.setCoords( new_sel.left() - 1, new_sel.top() - 1, new_sel.right() + 1, new_sel.bottom() + 1 );
 
     // Determine which area might be subject of repainting.
-    QRect uni = old_sel.unite( new_sel ).unite( old_outer );
+    QRect uni = old_sel.unite( new_sel ).unite( old_outer ).unite( old_marker ).unite( new_marker );
 
     // Limit the number of cells
     uni.rBottom() = QMIN( 9999, uni.bottom() );

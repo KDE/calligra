@@ -1162,8 +1162,8 @@ void KSpreadView::addTable( KSpreadTable *_t )
 		      SLOT( slotUpdateHBorder( KSpreadTable * ) ) );
     QObject::connect( _t, SIGNAL( sig_updateVBorder( KSpreadTable * ) ),
 		      SLOT( slotUpdateVBorder( KSpreadTable * ) ) );
-    QObject::connect( _t, SIGNAL( sig_changeSelection( KSpreadTable *, const QRect &, const QPoint & ) ),
-		      SLOT( slotChangeSelection( KSpreadTable *, const QRect &, const QPoint & ) ) );
+    QObject::connect( _t, SIGNAL( sig_changeSelection( KSpreadTable *, const QRect &, const QRect & ) ),
+		      SLOT( slotChangeSelection( KSpreadTable *, const QRect &, const QRect & ) ) );
     QObject::connect( _t, SIGNAL( sig_changeChooseSelection( KSpreadTable *, const QRect &, const QRect & ) ),
 		      SLOT( slotChangeChooseSelection( KSpreadTable *, const QRect &, const QRect & ) ) );
     QObject::connect( _t, SIGNAL( sig_nameChanged( KSpreadTable*, const QString& ) ),
@@ -2254,10 +2254,10 @@ void KSpreadView::slotChangeChooseSelection( KSpreadTable *_table, const QRect &
     emit sig_chooseSelectionChanged( _table, _new );
 }
 
-void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old, const QPoint& _old_marker )
+void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old, const QRect& _old_marker )
 {
     QRect n = _table->selectionRect();
-    QPoint m = _table->marker();
+    // QRect m = _table->marker();
 
     // printf ("void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old %i %i|%i %i, const QPoint &m %i %i )\n",_old.left(),_old.top(),_old.right(),_old.bottom(),_old_marker.x(),_old_marker.y() );
     // printf ("      const QRect &_new %i %i|%i %i, const QPoint &m %i %i )\n",n.left(),n.top(),n.right(),n.bottom(),m.x(),m.y() );

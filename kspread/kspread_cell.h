@@ -190,7 +190,7 @@ public:
      */
     void paintCell( const QRect& _rect, QPainter &_painter, int _tx, int _ty,
                     int _col, int _row, ColumnLayout *cl, RowLayout *rl,
-                    QRect *_prect = 0L );
+                    QRect *_prect = 0L, bool override_obscured = false );
 
     /**
      * A convenience function
@@ -202,11 +202,11 @@ public:
     /**
      * @return the column this cell is in. May return 0 if the cell is the default cell.
      */
-    int column() { return m_iColumn; }
+    int column() const { return m_iColumn; }
     /**
      * @return the row this cell is in. May return 0 if the cell is the default cell.
      */
-    int row() { return m_iRow; }
+    int row() const { return m_iRow; }
 
     /**
      * @param _col the column this cell is assumed to be in.
@@ -606,6 +606,12 @@ public:
      */
     bool operator > ( const KSpreadCell & ) const;
     bool operator < ( const KSpreadCell & ) const;
+
+    /**
+     * Reimplemented since obscured cells tell that they have
+     * almost no property, even if they physically have.
+     */
+    virtual bool hasProperty( Properties p ) const;
 
 protected:
     /**

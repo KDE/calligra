@@ -197,7 +197,9 @@ KSpreadTable::KSpreadTable( KSpreadMap *_map, const char *_name )
 
   m_defaultLayout = new KSpreadLayout( this );
 
-  m_marker = QPoint( 1, 1 );
+  m_emptyPen.setStyle( Qt::NoPen );
+  
+  m_marker.setCoords( 1, 1, 1, 1 );
 
   m_pMap = _map;
   m_pDoc = _map->doc();
@@ -426,6 +428,15 @@ KSpreadCell* KSpreadTable::firstCell()
     return m_cells.firstCell();
 }
 
+const KSpreadCell* KSpreadTable::cellAt( int _column, int _row ) const
+{
+    const KSpreadCell *p = m_cells.lookup( _column, _row );
+    if ( p != 0L )
+	return p;
+
+    return m_pDefaultCell;
+}
+
 KSpreadCell* KSpreadTable::cellAt( int _column, int _row, bool _no_scrollbar_update )
 {
   if ( !_no_scrollbar_update && m_bScrollbarUpdates )
@@ -581,13 +592,24 @@ void KSpreadTable::setMarker( const QPoint& _point, KSpreadCanvas *_canvas )
 
 QRect KSpreadTable::markerRect() const
 {
+    QRect r;
     if ( m_rctSelection.left() == 0 )
-	return QRect( m_marker, m_marker );
-    
-    return m_rctSelection;
+	r = m_marker;
+    else
+	r = m_rctSelection;
+
+    if ( r.topLeft() == r.bottomRight() )
+    {
+	const KSpreadCell* cell = cellAt( r.left(), r.top() );
+	if ( cell->extraXCells() || cell->extraYCells() )
+	    r.setCoords( r.left(), r.top(),
+			 r.left() + cell->extraXCells(), r.top() + cell->extraXCells() );
+    }
+
+    return r;
 }
 
-QPoint KSpreadTable::marker() const
+QRect KSpreadTable::marker() const
 {
     return m_marker;
 }
@@ -595,20 +617,20 @@ QPoint KSpreadTable::marker() const
 void KSpreadTable::setSelection( const QRect &_sel, KSpreadCanvas *_canvas )
 {
     if ( _sel.left() == 0 )
-	setSelection( _sel, m_marker, _canvas );
+	setSelection( _sel, m_marker.topLeft(), _canvas );
     else
     {
-	if ( m_marker != _sel.topLeft() && m_marker != _sel.topRight() &&
-	     m_marker != _sel.bottomLeft() && m_marker != _sel.bottomRight() )
+	if ( m_marker.topLeft() != _sel.topLeft() && m_marker.topRight() != _sel.topRight() &&
+	     m_marker.bottomLeft() != _sel.bottomLeft() && m_marker.bottomRight() != _sel.bottomRight() )
 	    setSelection( _sel, _sel.topLeft(), _canvas );
 	else
-	    setSelection( _sel, m_marker, _canvas );
+	    setSelection( _sel, m_marker.topLeft(), _canvas );
     }
 }
 
 void KSpreadTable::setSelection( const QRect &_sel, const QPoint& m, KSpreadCanvas *_canvas )
 {
-  if ( _sel == m_rctSelection && m == m_marker )
+  if ( _sel == m_rctSelection && m == m_marker.topLeft() )
     return;
 
   // We want to see whether a single cell was clicked like a button.
@@ -624,10 +646,15 @@ void KSpreadTable::setSelection( const QRect &_sel, const QPoint& m, KSpreadCanv
       cell->clicked( _canvas );
   }
 
-  QPoint old_marker = m_marker;
+  QRect old_marker = m_marker;
   QRect old( m_rctSelection );
   m_rctSelection = _sel;
-  m_marker = m;
+
+  KSpreadCell* cell = cellAt( m.x(), m.y() );
+  if ( cell->extraXCells() || cell->extraYCells() )
+      m_marker.setCoords( m.x(), m.y(), m.x() + cell->extraXCells(), m.y() + cell->extraYCells() );
+  else
+      m_marker = QRect( m, m );
 
   emit sig_changeSelection( this, old, old_marker );
 }

@@ -60,7 +60,7 @@ public:
 		     PMultiRow = 0x20000,
 		     PVerticalText = 0x40000,
                      PPrecision = 0x80000 };
-    
+
     KSpreadLayout( KSpreadTable *_table );
     virtual ~KSpreadLayout();
 
@@ -68,7 +68,7 @@ public:
 
     void clearProperties();
     void clearProperty( Properties p );
-    
+
     ////////////////////////////////
     //
     // Methods for setting layout stuff.
@@ -96,7 +96,7 @@ public:
     void setRightBorderStyle( Qt::PenStyle _s );
     void setRightBorderColor( const QColor & _c );
     void setRightBorderWidth( int _w );
-    
+
     virtual void setBottomBorderPen( const QPen& p );
     void setBottomBorderStyle( Qt::PenStyle _s );
     void setBottomBorderColor( const QColor & _c );
@@ -230,9 +230,9 @@ public:
 
     KSpreadTable* table() { return m_pTable; }
     const KSpreadTable* table() const { return m_pTable; }
-    
-    bool hasProperty( Properties p ) const;
-    
+
+    virtual bool hasProperty( Properties p ) const;
+
 protected:
     virtual const QPen& rightBorderPen() const;
     virtual const QPen& bottomBorderPen() const;
@@ -241,7 +241,7 @@ protected:
      * Default implementation does nothing.
      */
     virtual void layoutChanged();
-    
+
     /**
      * Default implementation returns 0.
      */
@@ -250,12 +250,12 @@ protected:
      * Default implementation returns 0.
      */
     virtual const KSpreadLayout* fallbackLayout( int col, int row ) const;
-    
+
     /**
      * Default implementation returns TRUE.
      */
     virtual bool isDefault() const;
-    
+
     /**
      * Tells whether text may be broken into multiple lines.
      */
@@ -351,10 +351,10 @@ protected:
     KSpreadTable *m_pTable;
 
     uint m_mask;
-    
+
 private:
     void setProperty( Properties p );
-    
+
     /**
      * Currently just used for better abstraction.
      */
@@ -444,7 +444,7 @@ public:
      * @reimp
      */
     void setTopBorderPen( const QPen& p );
-    
+
 protected:
     /**
      * @reimp
@@ -454,7 +454,7 @@ protected:
      * @reimp
      */
     const KSpreadLayout* fallbackLayout( int col, int row ) const;
-        
+
     /**
      * Width of the cell in unzoomed millimeters.
      */
@@ -559,7 +559,7 @@ public:
      * @reimp
      */
     void setLeftBorderPen( const QPen& p );
-    
+
 protected:
     /**
      * @reimp
