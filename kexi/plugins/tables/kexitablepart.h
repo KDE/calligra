@@ -28,6 +28,11 @@ class QPixmap;
 class KexiTablePartProxy;
 class KexiTableFilterManager;
 
+namespace KexiDB
+{
+	class Curosr;
+}
+
 class KEXI_HAND_TBL_EXPORT KexiTablePart : public KexiProjectHandler, public KexiDataProvider
 {
 	Q_OBJECT
@@ -56,8 +61,7 @@ class KEXI_HAND_TBL_EXPORT KexiTablePart : public KexiProjectHandler, public Kex
 		virtual QStringList datasets(QWidget*);
 		virtual QStringList datasetNames(QWidget*);
 		virtual QStringList fields(QWidget*,const QString& identifier);
-		virtual KexiDBRecordSet *records(QWidget*,const QString&
-																		 identifier,Parameters params);
+		virtual KexiDB::Cursor* records(QWidget*,const QString& identifier,Parameters params);
 		virtual ParameterList parameters(QWidget*,const QString &/*identifier*/)
 					{ return ParameterList(); }
 

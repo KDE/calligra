@@ -22,6 +22,7 @@
 
 #include <kmessagebox.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>
@@ -56,6 +57,21 @@ KexiDataTableView::init()
 
 void KexiDataTableView::setDataSet(KexiDB::Cursor *rec)
 {
+	if(!m_first)
+		clearAll();
+
+	m_record = rec;
+
+	for(uint i = 0; i < m_record->fieldCount(); i++)
+	{
+//		QVariant defaultval = QVariant("");
+//		addColumn(m_record->fieldName(i), m_record->type(i), !m_record->readOnly(),
+//		 defaultval, 100, m_record->fieldInfo(i)->auto_increment());
+		addColumn("named", QVariant::String, true);
+	}
+
+
+#if 0
 	if(!m_first)
 		clearAll();
 
@@ -103,17 +119,20 @@ void KexiDataTableView::setDataSet(KexiDB::Cursor *rec)
 	if(lastRow < m_records)
 	{
 	}
+#endif
 }
 
 bool
 KexiDataTableView::readOnly()
 {
-	return m_record ? m_record->readOnly() : true;
+//	return m_record ? m_record->readOnly() : true;
+	return true;
 }
 
 void
 KexiDataTableView::insertNext()
 {
+#if 0
 	if((m_maxRecord + 1) == m_records && !m_record->readOnly()) {
 		appendInsertItem();
 		return;
@@ -127,6 +146,7 @@ KexiDataTableView::insertNext()
 	}
 	it->setHint(QVariant(m_maxRecord));
 	m_maxRecord++;
+#endif
 }
 
 void
@@ -141,6 +161,7 @@ void
 KexiDataTableView::slotItemChanged(KexiTableItem *i, int col,QVariant oldValue)
 {
 	kdDebug() << "KexiDataTableView::slotItemChanged()" << endl;
+#if 0
 	if(i->isInsertItem())
 	{
 		i->setInsertItem(false);
@@ -183,6 +204,7 @@ KexiDataTableView::slotItemChanged(KexiTableItem *i, int col,QVariant oldValue)
 			m_record->writeOut();
 		}
 	}
+#endif
 }
 
 void
@@ -206,6 +228,7 @@ KexiDataTableView::tableSize() const
 	return QSize(KexiTableView::tableSize().width(), m_records * rowHeight());
 }*/
 
+#if 0
 void
 KexiDataTableView::recordInsertFinished(KexiDBUpdateRecord *ur)
 {
@@ -219,6 +242,7 @@ KexiDataTableView::recordInsertFinished(KexiDBUpdateRecord *ur)
 	}
 	kdDebug() << "KexiDataTableView::recordInsertFinished(): end" << endl;
 }
+#endif
 
 KexiDataTableView::~KexiDataTableView()
 {

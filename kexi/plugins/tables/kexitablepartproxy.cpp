@@ -122,11 +122,11 @@ KexiTablePartProxy::slotCreate()
 			KMessageBox::sorry( 0, i18n( "Table \"%1\" already exists" ).arg(name) );
 			return;
 		}
-		KexiProjectHandlerItem *new_item = new KexiProjectHandlerItem(part(), name, "kexi/table",  name);
-		KexiAlterTable* kat = new KexiAlterTable(kexiView(), new_item, 0, true);
+		KexiProjectHandlerItem *new_item = new KexiProjectHandlerItem(part(), KexiIdentifier("kexi/tables"),  name);
+//		KexiAlterTable* kat = new KexiAlterTable(kexiView(), new_item, 0, true);
 //		KexiAlterTable* kat = new KexiAlterTable(kexiView(), 0, new_item, true);
 //		KexiAlterTable* kat = new KexiAlterTable(kexiView(), 0, name, true, "alterTable");
-		kat->show();
+//		kat->show();
 //		kat->setIcon( new_item->handler()->itemPixmap() );
 		list->insert(new_item->fullIdentifier(), new_item);
 		emit m_tablePart->itemListChanged(part());
@@ -166,9 +166,9 @@ KexiTablePartProxy::slotOpen(const QString& identifier)
 	kdDebug() << "KexiTablePartProxy::slotOpen(): kexiView = " << kexiView() << endl;
 
 	//trying to get data
-	KexiDBRecordSet  *data=m_tablePart->records(kexiView(),
-		identifier,KexiDataProvider::Parameters());
-	if (!data) {
+	KexiDB::Cursor *data = m_tablePart->records(kexiView(), identifier,KexiDataProvider::Parameters());
+	if (!data)
+	{
 		 kdDebug() <<"KexitablePartProxy::slotOpen(): error while retrieving data, aborting"<<endl;
 		 return false;
 	}
@@ -176,15 +176,15 @@ KexiTablePartProxy::slotOpen(const QString& identifier)
 	KexiDataTable *kt = new KexiDataTable(kexiView(), item);
 //	KexiDataTable *kt = new KexiDataTable(kexiView(), 0, item->title(), "table");
 //	kt->setIcon( item->handler()->itemPixmap() );
-	QWidget * wid = m_view->workspaceWidget();
+/*	QWidget * wid = m_view->workspaceWidget();
 	int max_w = m_view->workspaceWidget()->width();
 	int max_h = m_view->workspaceWidget()->height();
-	int h = m_view->statusBar()->height();
+	int h = m_view->statusBar()->height();*/
 //	kt->resize(100,100);
 	kt->updateGeometry();
 	kt->show();
 	kdDebug() << "KexiTablePart::slotOpen(): indentifier = " << identifier << endl;
-	kt->setDataSet(data);
+//	kt->setDataSet(data);
 	return true;
 }
 
@@ -216,11 +216,11 @@ KexiTablePartProxy::slotAlter(const QString& identifier)
 	else
 		return; //unknown window type
 	}
-	KexiAlterTable* kat = new KexiAlterTable(kexiView(), item);
+//	KexiAlterTable* kat = new KexiAlterTable(kexiView(), item);
 //	KexiAlterTable* kat = new KexiAlterTable(kexiView(), 0, item, false);
 //	KexiAlterTable* kat = new KexiAlterTable(kexiView(), 0, part()->items()->find(identifier)->identifier(), false, "alterTable");
 //	kat->setIcon( part()->itemPixmap() );
-	kat->show();
+//	kat->show();
 }
 
 void
@@ -245,11 +245,11 @@ KexiTablePartProxy::slotDrop(const QString& identifier)
 		return; //window do not want to be closed: give up!
 
 	kdDebug() << "DROP TABLE " << item->identifier() << endl;
-	if(kexiView()->project()->db()->query("DROP TABLE " + item->identifier()))
+/*	if(kexiView()->project()->dbConnection()->executeQuery("DROP TABLE " + item->identifier()))
 	{
 		// FIXME: Please implement a less costly solution.
 		m_tablePart->getTables();
-	}
+	}*/
 }
 
 bool

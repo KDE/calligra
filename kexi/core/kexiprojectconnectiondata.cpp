@@ -54,6 +54,13 @@ KexiProjectConnectionData::KexiProjectConnectionData(const QString& driverName, 
 	setFileName(fileName);
 }
 
+KexiProjectConnectionData::KexiProjectConnectionData(const QString &driverName, const QString &fileName)
+ : KexiDB::ConnectionData()
+{
+	m_driverName=driverName;
+	setFileName(fileName);
+}
+
 KexiProjectConnectionData*
 KexiProjectConnectionData::loadInfo(QDomElement &rootElement)
 {
@@ -246,6 +253,12 @@ KexiProjectConnectionData::clean()
 		kdDebug() << "KexiDBConnection::clean(): cleaned" << endl;
 	}
 #endif
+}
+
+const QString &
+KexiProjectConnectionData::generateTmpName()
+{
+
 }
 
 KexiProjectConnectionData::~KexiProjectConnectionData()

@@ -171,6 +171,7 @@ KexiCreateProject::accept()
 		//FIXME: care if user selects an existing location :)
 		KexiProjectConnectionData c;
 		c.setDriverName(m_pageEngine->data("engine").toString());
+		c.setFileName("sqlite");
 
 		if(!project()->initDBConnection(&c))
 			return;

@@ -25,8 +25,12 @@
 #include <klocale.h>
 #include <qstringlist.h>
 
-class KexiDBRecordSet;
 class QWidget;
+
+namespace KexiDB
+{
+	class Cursor;
+}
 
 #define KEXIDATAPROVIDER(obj) ((obj)?static_cast<KexiDataProvider*>((obj)->qt_cast("KexiDataProvider")):0)
 
@@ -54,7 +58,7 @@ public:
 	virtual QStringList datasets(QWidget*) {return QStringList();}
 	virtual QStringList datasetNames(QWidget*) { return QStringList();}
 	virtual QStringList fields(QWidget*,const QString& identifier) {return QStringList();}
-	virtual KexiDBRecordSet *records(QWidget*,const QString& identifier,Parameters params) {return 0;}
+	virtual KexiDB::Cursor *records(QWidget*,const QString& identifier,Parameters params) {return 0;}
 	virtual ParameterList parameters(QWidget*,const QString &identifier) { return ParameterList();}
 };
 

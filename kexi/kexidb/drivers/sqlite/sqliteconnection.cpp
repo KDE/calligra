@@ -214,14 +214,6 @@ bool SQLiteConnection::drv_executeSQL( const QString& statement )
 	return res==SQLITE_OK;
 }
 
-QStringList SQLiteConnection::tableNames()
-{
-	QStringList list;
-//	drv_executeQuery("select * from sqlite_master where type='table' order by name;");
-//TODO
-	return list;
-}
-
 
 /*
 #include <qvariant.h>

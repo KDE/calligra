@@ -29,12 +29,14 @@
 #include <kmessagebox.h>
 #include <kgenericfactory.h>
 
+#include <kexidb/connection.h>
+
 #include "kexitablepart.h"
 #include "kexitablepartproxy.h"
 #include "kexiprojecthandleritem.h"
 #include "kexidatatable.h"
 #include "kexialtertable.h"
-
+#include "kexiidentifier.h"
 
 KexiTablePart::KexiTablePart(QObject *project,const char *,const QStringList &)
  : KexiProjectHandler(KEXIPROJECT(project)),KexiDataProvider()
@@ -96,13 +98,13 @@ KexiTablePart::getTables()
 	ItemList *list=items();
 	list->clear();
 
-	if (kexiProject()->db()) {
-		m_tableNames = kexiProject()->db()->tableNames();
+	if (kexiProject()->dbConnection()) {
+		m_tableNames = kexiProject()->dbConnection()->tableNames();
 
 		for ( QStringList::Iterator it = m_tableNames.begin(); it != m_tableNames.end(); ++it )
 		{
 			kdDebug() << "KexiTablePart::getTables() added " << (*it) << endl;
-			KexiProjectHandlerItem *h_item = new KexiProjectHandlerItem(this, (*it), "kexi/table", /*title*/(*it));
+			KexiProjectHandlerItem *h_item = new KexiProjectHandlerItem(this, KexiIdentifier("kexi/table"), /*title*/(*it));
 			list->insert( h_item->fullIdentifier(), h_item );
 		}
 	}
@@ -115,28 +117,30 @@ KexiTablePart::embeddReadOnly(QWidget * /*w*/, KexiView * /*v*/)
 	return 0;
 }
 
-KexiDBRecordSet *KexiTablePart::records(QWidget*,const QString& identifier,Parameters /*params*/)
+KexiDB::Cursor*
+KexiTablePart::records(QWidget*,const QString& identifier,Parameters /*params*/)
 {
 	kdDebug()<<"KexiDBRecordSet *KexiTablePart::records(const QString& identifier,Parameters params)"<<endl;
 	kdDebug()<<"KexiDBRecordSet *KexiTablePart::records(): id: "<< identifier << endl;
 	kdDebug()<<"KexiDBRecordSet *KexiTablePart::records(): local-id: "<< localIdentifier(identifier) << endl;
 
-	KexiDBRecordSet *m_record=0;
-	m_record = kexiProject()->db()->queryRecord("select * from " + kexiProject()->db()->escapeName(localIdentifier(identifier)), true);
+//	KexiDBRecordSet *m_record=0;
+	KexiDB::Cursor *cursor = kexiProject()->dbConnection()->executeQuery("select * from " + localIdentifier(identifier));
 
-	if(!m_record)
+	if(!cursor)
 	{
-		kdDebug() << "KexiTablePart::executeQuery(): db-error" << endl;
-		kexiProject()->db()->latestError()->toUser(0);
+		kdDebug() << "KexiTablePart::executeQuery(): db-error: " << kexiProject()->dbConnection()->errorMsg() << endl;
 		return 0;
 	}
 
-	return m_record;
+	return cursor;
 }
 
 QStringList KexiTablePart::fields(QWidget*,const QString& identifier)
 {
-	return kexiProject()->db()->columns(localIdentifier(identifier));
+	//TODO: do something useful here :)
+//	return kexiProject()->db()->columns(localIdentifier(identifier));
+	return QStringList();
 }
 
 QStringList KexiTablePart::datasets(QWidget*)

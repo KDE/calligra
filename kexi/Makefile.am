@@ -22,7 +22,7 @@ dummy.cc:
 
 #SUBDIRS = kexidb formeditor core tableview widget . plugins pics data interfaces filters
 
-SUBDIRS= 3rdparty kexidb core tableview . data
+SUBDIRS= 3rdparty kexidb core tableview . data widget plugins
 
 kdelnkdir = $(kde_appsdir)/Office
 kdelnk_DATA = kexi.desktop

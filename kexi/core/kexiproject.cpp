@@ -36,6 +36,9 @@
 #include <koTemplateChooseDia.h>
 
 #include <kexidb/drivermanager.h>
+#include <kexidb/driver.h>
+#include <kexidb/connection.h>
+
 #include "KexiProjectIface.h"
 #include "kexiproject.h"
 #include "kexiproject.moc"
@@ -337,11 +340,59 @@ void KexiProject::paintContent( QPainter& /*painter*/, const QRect& /*rect*/, bo
 bool
 KexiProject::initDBConnection(KexiProjectConnectionData *connection, KoStore *store)
 {
-#ifndef Q_WS_WIN
-#warning FIXME
-#endif
-	return false;
-/*
+	KexiDB::Driver *driver = m_dbDriverManager->driver(connection->driverName().latin1());
+	if(!driver)
+		return false;
+
+	KexiDB::Connection *conn = driver->createConnection(*connection);
+	if(!conn)
+		return false;
+
+	if(driver->error())
+	{
+		KMessageBox::detailedError(0, i18n("Error while connecting to db"), i18n("Database error"), driver->errorMsg());
+		return false;
+	}
+
+	if(!conn->connect())
+	{
+		KMessageBox::detailedError(0, i18n("Error while connecting to db"), i18n("Database error"), conn->errorMsg());
+		return false;
+	}
+
+	QString db;
+	if(connection->databaseName().isEmpty())
+		db = "sqlite";
+	else
+		db = connection->databaseName();
+
+	if(!conn->databaseExists(db))
+	{
+		if(!conn->createDatabase(db))
+		{
+			kdDebug() << "KexiProject::initDBConnection() creating: " << conn->errorMsg() << endl;
+			return 1;
+		}
+		kdDebug() << "KexiProject::initDBConnection(): db created" << endl;
+	}
+	if(!conn->useDatabase(db))
+	{
+		kdDebug() << conn->errorMsg() << endl;
+		return 1;
+	}
+
+	kdDebug() << "KexiProject::initDBConnection(): connection ok." << endl;
+
+	QStringList tables = conn->tableNames();
+	for(QStringList::Iterator it=tables.begin(); it != tables.end(); ++it)
+	{
+		kdDebug() << "KexiProject::initDBConnection() found table: " << *it << endl;
+	}
+
+	m_dbConnection = conn;
+	return true;
+
+	/*
 	if(!connection)
 		return false;
 

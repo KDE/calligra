@@ -2,7 +2,7 @@ lib_LTLIBRARIES = libkexidb.la
 
 INCLUDES = -I$(top_srcdir)/kexi $(all_includes)
 
-SUBDIRS = . drivers
+SUBDIRS = . drivers tests
 
 libkexidb_la_METASOURCES = AUTO
 

@@ -2,4 +2,4 @@ if compile_plugin_KUGAR
 KUGARDIR = kugar
 endif
 
-SUBDIRS = importwizard tables relations queries $(KUGARDIR)
+SUBDIRS = tables #importwizard relations queries $(KUGARDIR)

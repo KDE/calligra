@@ -195,8 +195,6 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		virtual bool drv_rollbackTransaction();
 		virtual bool drv_duringTransaction();
 
-
-
 		/*! Creates cursor data and initializes cursor 
 			using \a statement for later data retrieval. */
 //		virtual CursorData* drv_createCursor( const QString& statement ) = 0;

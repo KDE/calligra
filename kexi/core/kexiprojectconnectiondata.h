@@ -42,8 +42,14 @@ class KEXICORE_EXPORT KexiProjectConnectionData:public KexiDB::ConnectionData
 		KexiProjectConnectionData(const QString& driverName, const QString& databaseName, const QString &hostName, unsigned short int port,
 			 const QString& userName, const QString &password, const QString& fileName);
 
+		/**
+		 * connect to a embedded database
+		 */
+		KexiProjectConnectionData(const QString &driverName, const QString &fileName=QString::null);
+
 		~KexiProjectConnectionData();
 
+		static const QString &generateTmpName();
 
 		static KexiProjectConnectionData* loadInfo(QDomElement &e);
 		void	writeInfo(QDomDocument &doc);

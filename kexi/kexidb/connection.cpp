@@ -311,8 +311,23 @@ bool Connection::dropDatabase( const QString &dbName )
 
 QStringList Connection::tableNames()
 {
-	//TODO
-	return QStringList();
+	QStringList list;
+	if(!isConnected())
+		return list;
+
+	Cursor *c = executeQuery("select * from kexi__tables", KexiDB::Cursor::Buffered);
+
+	if(!c)
+		return list;
+
+	for(c->moveFirst(); !c->eof(); c->moveNext())
+	{
+		list.append(c->value(1).toString());
+	}
+
+	deleteCursor(c);
+
+	return list;
 }
 
 QString Connection::valueToSQL( const Field::Type ftype, QVariant& v )
