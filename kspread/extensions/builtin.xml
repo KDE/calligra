@@ -415,7 +415,7 @@
 	<Type>String</Type>
       </Parameter>
       <Help>
-	<Text>The HEX2BIN() function returns the value formatted as an hexadecimal number.</Text>
+	<Text>The HEX2BIN() function returns the value formatted as a hexadecimal number.</Text>
 	<Syntax>HEX2BIN( value )</Syntax>
 	<Example>HEX2BIN("a") returns "1010"</Example>
 	<Example>HEX2BIN("37") returns "110111"</Example>
@@ -1063,7 +1063,8 @@
 	<Type range="true">Float</Type>
       </Parameter>
       <Help>
-	<Text>The multiply() function multiplies all the values given in the parameters.You can multiply values given by a range multiply(A1:B5) or list of values like multiply(12;5;12.5)</Text>
+	<Text>The multiply() function multiplies all the values given in the
+parameters. You can multiply values given by a range multiply(A1:B5) or list of values like multiply(12;5;12.5)</Text>
 	<Syntax>multiply( values; values; ... )</Syntax>
 	<Example>multiply(12;5;7) equals 420</Example>
 	<Example>multiply(12.5;2) equals 25</Example>
@@ -1123,7 +1124,7 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The exp() function returns the value of e (the  base of natural logarithms) raised to the power of x.</Text>
+	<Text>The exp() function returns the value of e (the base of natural logarithms) raised to the power of x.</Text>
 	<Syntax>exp( x )</Syntax>
 	<Example>exp(9) equals 8 103.08392758</Example>
 	<Example>exp(-9) equals 0.00012341</Example>
@@ -1212,7 +1213,7 @@
 	<Type>Int</Type>
       </Parameter>
       <Help>
-	<Text>The ROUNDUP(value;[digits]) function returns the round up of value. Digits is the number of digits to which you want to round that number.If digits is zero or omitted, value is rounded up to the nearest integer.</Text>
+	<Text>The ROUNDUP(value;[digits]) function returns the round up of value. Digits is the number of digits to which you want to round that number. If digits is zero or omitted, value is rounded up to the nearest integer.</Text>
 	<Syntax>ROUNDUP( value; [digits] )</Syntax>
 	<Example>ROUNDUP(1.252;2) equals 1.26</Example>
 	<Example>ROUNDUP(-1.252;2) equals -1.25</Example>
@@ -1232,11 +1233,11 @@
 	<Type>Int</Type>
       </Parameter>
       <Help>
-	<Text>The ROUNDDOWN(value;[digits]) function returns the round down of value. Digits is the number of digits to which you want to round that number.If digits is zero or omitted, value is rounded down to the nearest integer.</Text>
+	<Text>The ROUNDDOWN(value;[digits]) function returns the round down of value. Digits is the number of digits to which you want to round that number. If digits is zero or omitted, value is rounded down to the nearest integer.</Text>
 	<Syntax>ROUNDDOWN( value; [digits] )</Syntax>
 	<Example>ROUNDDOWN(1.252;2) equals 1.25</Example>
 	<Example>ROUNDDOWN(-1.252;2) equals -1.26</Example>
-                <Example>ROUNDDOWN(-1.252) equals -2</Example>
+	<Example>ROUNDDOWN(-1.252) equals -2</Example>
       </Help>
     </Function>
 
@@ -1267,7 +1268,7 @@
 	<Type>String</Type>
       </Parameter>
       <Help>
-	<Text>The IMAGINARY(string)  returns the imaginary coefficient of a complex.</Text>
+	<Text>The IMAGINARY(string) returns the imaginary coefficient of a complex.</Text>
 	<Syntax>IMAGINARY(string )</Syntax>
 	<Example>IMAGINARY("1.2+3.4i") returns 3.4</Example>
 	<Example>IMAGINARY("1.2") returns 0 </Example>
@@ -1282,10 +1283,10 @@
 	<Type>String</Type>
       </Parameter>
       <Help>
-	<Text>The IMREAL(string)  returns the real coefficient of a complex.</Text>
+	<Text>The IMREAL(string) returns the real coefficient of a complex.</Text>
 	<Syntax>IMREAL(string )</Syntax>
 	<Example>IMREAL("1.2+3.4i") returns 1.2</Example>
-	<Example>IMAGINARY("1.2i") returns 0 </Example>
+	<Example>IMREAL("1.2i") returns 0 </Example>
       </Help>
     </Function>
 
@@ -1313,7 +1314,7 @@
 	<Type range="true">String</Type>
       </Parameter>
       <Help>
-	<Text>The IMSUM() returns the sum of several complex number of form x+yi.</Text>
+	<Text>The IMSUM() returns the sum of several complex numbers of form x+yi.</Text>
 	<Syntax>IMSUM( values; value; ... )</Syntax>
 	<Example>IMSUM(1.2;"3.4+5i") returns "4.6+5i"</Example>
 	<Example>IMSUM(1.2;"1i") returns "1.2+i"</Example>
@@ -1344,7 +1345,7 @@
 	<Type range="true">String</Type>
       </Parameter>
       <Help>
-	<Text>The IMDIV() returns the division of several complex number of form x+yi.</Text>
+	<Text>The IMDIV() returns the division of several complex numbers of form x+yi.</Text>
 	<Syntax>IMDIV( values; value; ... )</Syntax>
 	<Example>IMDIV(1.2;"3.4+5i") returns "0.111597+0.164114i"</Example>
 	<Example>IMDIV("12+i";"12-i") returns "0.986207+0.16551i"</Example>
@@ -1376,7 +1377,7 @@
 	<Type range="true">String</Type>
       </Parameter>
       <Help>
-	<Text>The IMSUB() returns the difference of several complex number of form x+yi.</Text>
+	<Text>The IMSUB() returns the difference of several complex numbers of form x+yi.</Text>
 	<Syntax>IMSUB( values; value; ... )</Syntax>
 	<Example>IMSUB(1.2;"3.4+5i") returns "-2.2-5i"</Example>
 	<Example>IMSUB(1.2;"1i") returns "1.2-i"</Example>
@@ -1407,7 +1408,7 @@
 	<Type range="true">String</Type>
       </Parameter>
       <Help>
-	<Text>The IMPRODUCT() returns the product of several complex number of form x+yi.</Text>
+	<Text>The IMPRODUCT() returns the product of several complex numbers of form x+yi.</Text>
 	<Syntax>IMPRODUCT( values; value; ... )</Syntax>
 	<Example>IMPRODUCT(1.2;"3.4+5i") returns "4.08+6i"</Example>
 	<Example>IMPRODUCT(1.2;"1i") returns "+1.2i"</Example>
@@ -1454,7 +1455,7 @@
 	<Type>String</Type>
       </Parameter>
       <Help>
-	<Text>The IMABS(complex number) returns the norme of a complex number of form x+yi.</Text>
+	<Text>The IMABS(complex number) returns the norm of a complex number of form x+yi.</Text>
 	<Syntax>IMABS( complex number )</Syntax>
 	<Example>IMABS("1.2+5i") returns 5.1419</Example>
 	<Example>IMABS("-i") returns 1</Example>
@@ -1711,7 +1712,7 @@
 	<Type>Double</Type>
       </Parameter>
       <Help>
-	<Text>The SUMPRODUCT() function (SUM(X*Y)) returns the sum of product of these value. The number of value should be equal between two arrays. Otherwise this function returns Err.</Text>
+	<Text>The SUMPRODUCT() function (SUM(X*Y)) returns the sum of product of these values. The number of value should be equal between two arrays. Otherwise this function returns Err.</Text>
 	<Syntax>SUMPRODUCT(array1;array2)</Syntax>
 	<Example>SUMPRODUCT(A1:A2;B1;B2) with A1=2 A2=5 and B1=3 B2=5 returns 31</Example>
       </Help>
@@ -1729,7 +1730,7 @@
 	<Type>Double</Type>
       </Parameter>
       <Help>
-	<Text>The SUMX2PY2() function (SUM(X^2+Y^2)) returns the sum of square of these value. The number of value should be equal between two arrays. Otherwise this function returns Err.</Text>
+	<Text>The SUMX2PY2() function (SUM(X^2+Y^2)) returns the sum of square of these values. The number of value should be equal between two arrays. Otherwise this function returns Err.</Text>
 	<Syntax>SUMX2PY2(array1;array2)</Syntax>
 	<Example>SUMX2PY2(A1:A2;B1;B2) with A1=2 A2=5 and B1=3 B2=5 returns 63</Example>
       </Help>
@@ -1747,7 +1748,7 @@
 	<Type>Double</Type>
       </Parameter>
       <Help>
-	<Text>The SUMX2MY2() function (SUM(X^2-Y^2) returns the difference of square of these value. The number of value should be equal between two arrays. Otherwise this function returns Err.</Text>
+	<Text>The SUMX2MY2() function (SUM(X^2-Y^2) returns the difference of square of these values. The number of value should be equal between two arrays. Otherwise this function returns Err.</Text>
 	<Syntax>SUMX2MY2(array1;array2)</Syntax>
 	<Example>SUMX2MY2(A1:A2;B1;B2) with A1=2 A2=5 and B1=3 B2=5 returns -5</Example>
       </Help>
@@ -1765,7 +1766,7 @@
 	<Type>Double</Type>
       </Parameter>
       <Help>
-	<Text>The SUM2XMY() function (SUM((X-Y)^2)) returns the square of difference of these value. The number of value should be equal between two arrays. Otherwise this function returns Err.</Text>
+	<Text>The SUM2XMY() function (SUM((X-Y)^2)) returns the square of difference of these values. The number of value should be equal between two arrays. Otherwise this function returns Err.</Text>
 	<Syntax>SUM2XMY(array1;array2)</Syntax>
 	<Example>SUM2XMY(A1:A2;B1;B2) with A1=2 A2=5 and B1=3 B2=5 returns 1</Example>
       </Help>
@@ -1788,7 +1789,7 @@
 	<Type>Int</Type>
       </Parameter>
       <Help>
-	<Text>The INVBINO function returns the negative binomial distribution. The first parameter is the number of trial the second parameter is the number of failure, and the third is the probability of failure. The number of trials should be bigger than the number of failures and the probability should be smaller or equal to 1.</Text>
+	<Text>The INVBINO function returns the negative binomial distribution. The first parameter is the number of trials, the second parameter is the number of failures, and the third is the probability of failure. The number of trials should be bigger than the number of failures and the probability should be smaller or equal to 1.</Text>
 	<Syntax>INVBINO( trials; failure; prob_of_failure )</Syntax>
 	<Example>INVBINO(12;3;0.2) returns 0.236223201</Example>
       </Help>
@@ -1806,7 +1807,7 @@
 	<Type>Int</Type>
       </Parameter>
       <Help>
-	<Text>The COMBIN() function calculates the count of possible combinations. The first parameter is the total count of elements. The second parameter is the count of element to choose.Both parameters should be positive and the first parameter should not be less then the second,the function returns an error otherwise.</Text>
+	<Text>The COMBIN() function calculates the count of possible combinations. The first parameter is the total count of elements. The second parameter is the count of elements to choose. Both parameters should be positive and the first parameter should not be less than the second, the function returns an error otherwise.</Text>
 	<Syntax>COMBIN( total; choosen )</Syntax>
 	<Example>COMBIN(12;5) returns 792</Example>
 	<Example>COMBIN(5;5) returns 1</Example>
@@ -1887,7 +1888,7 @@
 	<Type range="true">Float</Type>
       </Parameter>
       <Help>
-	<Text>The variance() function calculates the variance of each parameter which are member of a population.</Text>
+	<Text>The variance() function calculates the variance of each parameter which are members of a population.</Text>
 	<Syntax>variance( values; values; ... )</Syntax>
 	<Example>variance(12;5;7) equals 8.666...</Example>
 	<Example>variance(15;80;3) equals 1144.22...</Example>
@@ -1987,8 +1988,7 @@
 	<Type>Float</Type>
       </Parameter>
      <Help>
-	<Text>The PV_annuity() function returns the present value of an annuity or stream of payments. For example: a "million dollar" lottery ticket that pays $50,000 a year for 20 years, with an interest rate of 5%, is actually worth PV_annuity( 50000; 0.05; 20 ) or $623,111.
-           This function assumes that payments are made at the end of each period.</Text>
+	<Text>The PV_annuity() function returns the present value of an annuity or stream of payments. For example: a "million dollar" lottery ticket that pays $50,000 a year for 20 years, with an interest rate of 5%, is actually worth PV_annuity( 50000; 0.05; 20 ) or $623,111. This function assumes that payments are made at the end of each period.</Text>
 	<Syntax>PV_annuity( amount; interest; periods )</Syntax>
 	<Example>PV_annuity( 1000; 0.05; 5 ) equals 4329.48</Example>
       </Help>
