@@ -21,7 +21,6 @@ public:
     KChartView( KChartPart* part, QWidget* parent = 0, const char* name = 0 );
     
 protected slots:
-      void cut();
       void edit();
       void wizard();
       void saveConfig();

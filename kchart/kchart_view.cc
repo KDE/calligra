@@ -26,13 +26,11 @@ QFont *theKChartGiantFont = NULL;
 KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
     : ContainerView( part, parent, name )
 {
-    m_cut = new KAction( tr("&Cut"), KChartBarIcon("editcut"), 0, this, SLOT( cut() ),
-                         actionCollection(), "cut");
     m_wizard = new KAction( tr("Customize with &wizard"),
 			    KChartBarIcon("wizard"), 0,
 			    this, SLOT( wizard() ),
 			    actionCollection(), "wizard");
-    m_edit = new KAction( tr("&Edit"), KChartBarIcon("editcut"), 0,
+    m_edit = new KAction( tr("&Edit data"), KChartBarIcon("pencil"), 0,
 			 this, SLOT( edit() ),
                          actionCollection(), "edit");
     m_loadconfig = new KAction( tr("Load config"), KChartBarIcon("loadconfig"),
@@ -61,11 +59,6 @@ void KChartView::paintEvent( QPaintEvent* ev )
     painter.end();
 }
 
-void KChartView::cut()
-{
-    qDebug("CUT called");
-}
-
 void KChartView::edit()
 {
     qDebug("EDIT called");
@@ -79,15 +72,6 @@ void KChartView::edit()
     
     // fill cells
     int col,row;
-    /*
-    double maxY = 0;
-    for (row = 0;row < 4;row++)
-      for (col = 0;col < 4;col++) {
-	_widget->fillCell(row,col,row+col);
-      }
-    _dlg->exec();
-    */
-
     KChartData *dat = ((KChartPart*)part())->data();
 
     // initialize some data, if there is none
@@ -115,8 +99,8 @@ void KChartView::edit()
 	// fill it in from the part
 	if (t.exists) {
 	  switch(t.value.type()) {
-	  case QVariant::Int:
-	    _widget->fillCell(row, col, t.value.intValue());
+	  case QVariant::Double:
+	    _widget->fillCell(row, col, t.value.doubleValue());
 	    break;
 	  case QVariant::String:
 	    cerr << "A string in the table I cannot handle this yet\n";
@@ -127,40 +111,38 @@ void KChartView::edit()
 	}
       }
     cerr << "Here comes the dialog!\n";
-    _dlg->exec();
-    cerr << "exec done?\n";
-
-    /*
-    for (col = 0;(unsigned int)col <= m_pDoc->chartData()->maxPos();col++)
-      _widget->fillX(col,m_pDoc->chartData()->xValue(col));
-
     // OK pressed
 
-  if (_dlg->exec() == QDialog::Accepted)
-    {
-      KChartData *m_pData = new KChartData(_widget->rows());
-
-      for (col = 0;col < _widget->cols();col++)
-	m_pData->setXValue( col, (const char*)_widget->getX(col));
-
-      for (row = 0;row < _widget->rows();row++)
-	{
-	  for (col = 0;col < _widget->cols();col++)
-	    {
-	      m_pData->setYValue( row, col, _widget->getCell(row,col) );
-	      maxY = _widget->getCell(row,col) > maxY ? _widget->getCell(row,col) : maxY;
-	    }
-	}
-
+    if (_dlg->exec() != QDialog::Accepted) {
+      return;
+    }
+    //KChartData *m_pData = new KChartData(_widget->rows());
+    /*
+      for (col = 0;col < _widget->cols();col++) {
+      m_pData->setXValue( col, (const char*)_widget->getX(col));
+      }
+    */
+    for (row = 0;row < _widget->rows();row++) {
+      for (col = 0;col < _widget->cols();col++) {
+	// m_pData->setYValue( row, col, _widget->getCell(row,col) );
+	KChartValue t; 
+	double val =  _widget->getCell(row,col);
+	t.exists= true;
+	t.value.setValue(val);
+	cerr << "Set cell for " << row << "," << col << "\n";
+	dat->setCell(row,col,t);
+	//   maxY = _widget->getCell(row,col) > maxY ? _widget->getCell(row,col) : maxY;
+      }
+    }
+    /*
       maxY++;
-       
+      
       m_pDoc->setChartData(m_pData);
       m_pDoc->chart().setYMaxValue(maxY);
       m_pDoc->chart().setYTicksNum(maxY);
       m_pDoc->chart().repaintChart( this );    
-    } 
-    */
-  
+    */ 
+      
   // delete dialog
   delete _widget; _widget = 0;
   delete _dlg; _dlg = 0;

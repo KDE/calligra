@@ -1,7 +1,6 @@
 <!DOCTYPE QConfig ><QConfig>
 <MenuBar>
  <Menu name="Edit"><text>Edit</text>
-  <Action name="cut"/>
   <Action name="wizard"/>
   <Action name="edit"/>
  </Menu>
@@ -12,7 +11,6 @@
 </MenuBar>
 <ToolBars>
  <ToolBar>
-  <Action name="cut"/>
   <Action name="wizard"/>
   <Action name="edit"/>
  </ToolBar>
