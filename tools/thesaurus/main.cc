@@ -1,9 +1,9 @@
 /*
    $Id$
    This file is part of the KDE project
-   Copyright (C) 2001,2002 Daniel Naber <daniel.naber@t-online.de>
-   This is a thesaurus based on a subset of WordNet. It also offers a 
-   mostly-complete WordNet 1.7 frontend (WordNet is a powerful lexical 
+   Copyright (C) 2001,2002,2003 Daniel Naber <daniel.naber@t-online.de>
+   This is a thesaurus based on a subset of WordNet. It also offers an
+   almost complete WordNet 1.7 frontend (WordNet is a powerful lexical 
    database/thesaurus)
 */
 /***************************************************************************
@@ -32,8 +32,6 @@ TODO:
 -Maybe remove more uncommon words. However, the "polysemy/familiarity
  count" is sometimes very low for quite common word, e.g. "sky".
 
--Don't forget to insert comments for the translators if necessary
- (because WordNet is English language only)
 -Fix "no mimesource" warning of QTextBrowser? Seems really harmless.
 
 NOT TODO:
@@ -43,6 +41,7 @@ NOT TODO:
 
 #include "main.h"
 
+#include <qfile.h>
 #include <qtoolbutton.h>
 #include <kiconloader.h>
 #include <kfiledialog.h>
@@ -89,8 +88,12 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     QHBoxLayout *row1 = new QHBoxLayout(m_top_layout);
     m_edit = new KHistoryCombo(m_page);
     m_edit_label = new QLabel(m_edit, i18n("&Search for:"), m_page);
+    m_search = new KPushButton(i18n("S&earch"), m_page);
+    connect(m_search, SIGNAL(clicked()),
+        this, SLOT(slotFindTerm()));
     row1->addWidget(m_edit_label, 0);
     row1->addWidget(m_edit, 1);
+    row1->addWidget(m_search, 0);
     m_back = new QToolButton(m_page);
     m_back->setPixmap(BarIcon(QString::fromLatin1("back")));
     QToolTip::add(m_back, i18n("Back"));
@@ -99,13 +102,9 @@ Thesaurus::Thesaurus(QObject* parent, const char* name, const QStringList &)
     m_forward->setPixmap(BarIcon(QString::fromLatin1("forward")));
     QToolTip::add(m_forward, i18n("Forward"));
     row1->addWidget(m_forward, 0);
-    m_lang = new QPushButton(i18n("Change language"), m_page);
+    m_lang = new KPushButton(i18n("Change Language"), m_page);
     connect(m_lang, SIGNAL(clicked()), this, SLOT(slotChangeLanguage()));
     row1->addWidget(m_lang, 0);
-
-    // fixme: remove this to add the language selection feature
-    // Don't forget to update the documentation!
-    //m_lang->hide();
 
     connect(m_back, SIGNAL(clicked()), this, SLOT(slotBack()));
     connect(m_forward, SIGNAL(clicked()), this, SLOT(slotForward()));
@@ -295,9 +294,10 @@ bool Thesaurus::run(const QString& command, void* data, const QString& datatype,
 
 void Thesaurus::slotChangeLanguage()
 {
-    m_data_file = KFileDialog::getOpenFileName(
+    QString filename = KFileDialog::getOpenFileName(
         KGlobal::dirs()->findResourceDir("data", "thesaurus/")+"thesaurus/");
-    if( m_data_file != QString::null ) {
+    if( filename != QString::null ) {
+        m_data_file = filename;
         setCaption();
     }
 }
@@ -399,6 +399,14 @@ void Thesaurus::findTerm(const QString &term)
 //
 void Thesaurus::findTermThesaurus(const QString &term)
 {
+
+    if( !QFile::exists(m_data_file) ) {
+        KMessageBox::error(0, i18n("The thesaurus file '%1' was not found. "
+            "Please use 'Change Language' to select a thesaurus file.").
+            arg(m_data_file));
+        return;
+    }
+
     QApplication::setOverrideCursor(KCursor::waitCursor());
 
     m_thesproc_stdout = "";
@@ -412,7 +420,7 @@ void Thesaurus::findTermThesaurus(const QString &term)
     *m_thesproc << m_data_file;
 
     if( !m_thesproc->start(KProcess::NotifyOnExit, KProcess::AllOutput) ) {
-        KMessageBox::error(0, i18n("<b>Error:</b> Failed to execute grep."));
+        KMessageBox::error(0, i18n("Failed to execute grep."));
         QApplication::restoreOverrideCursor();
         return;
     }

@@ -29,7 +29,6 @@
 #include <qlayout.h>
 #include <qlistbox.h>
 #include <qobject.h>
-#include <qpushbutton.h>
 #include <qregexp.h>
 #include <qstring.h>
 #include <qstringlist.h>
@@ -53,6 +52,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kprocess.h>
+#include <kpushbutton.h>
 #include <krun.h>
 #include <kstandarddirs.h>
 #include <kurl.h>
@@ -129,8 +129,9 @@ protected:
 
     QToolButton *m_back;
     QToolButton *m_forward;
-    QPushButton *m_lang;
+    KPushButton *m_lang;
 
+    KPushButton *m_search;
     KHistoryCombo *m_edit;
     QLabel *m_edit_label;
 
