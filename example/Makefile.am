@@ -30,7 +30,11 @@ noinst_HEADERS =  example_part.h \
 kdelnk_DATA = example.desktop
 kdelnkdir = $(kde_appsdir)/Office
 
-kdemime_DATA = x-example.desktop
+# Note: for your application, the mime type should be defined in
+#       kdelibs CVS HEAD and a compactibility entry should be added in
+#       the directory koffice/mimetypes/kde?? 
+#       where ?? is the latest version number
+kdemime_DATA = x-vnd.kde.example.desktop
 kdemimedir = $(kde_mimedir)/application
 
 rc_DATA = example.rc example_readonly.rc

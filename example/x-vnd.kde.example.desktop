@@ -1,7 +1,7 @@
 # KDE Config File
 [Desktop Entry]
 Encoding=UTF-8
-MimeType=application/x-example
+MimeType=application/x-vnd.kde.example
 #Comment=...
 Type=MimeType
 Patterns=*.xmpl;
