@@ -3727,6 +3727,7 @@ void Page::gotoPage( int pg )
         resize( QApplication::desktop()->width(), QApplication::desktop()->height() );
         repaint( false );
         setFocus();
+        view->refreshPageButton();
     }
 }
 

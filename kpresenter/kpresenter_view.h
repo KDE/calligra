@@ -303,6 +303,8 @@ public:
      */
     void updateSideBar();
 
+    void refreshPageButton();
+
 protected slots:
     // dialog slots
     void backOk( bool );

@@ -1620,9 +1620,6 @@ void KPresenterView::createGUI()
     if ( m_pKPresenterDoc && page )
 	QObject::connect( page, SIGNAL( stopPres() ), this, SLOT( stopPres() ) );
 
-    pgNext->setEnabled( currPg < (int)m_pKPresenterDoc->getPageNums() - 1 );
-    pgPrev->setEnabled( currPg > 0 );
-
     if ( sidebar )
     {
         sidebar->setCurrentItem( sidebar->firstChild() );
@@ -1647,6 +1644,7 @@ void KPresenterView::initGui()
     actionEditRedo->setEnabled( false );
     actionEditDelPage->setEnabled( m_pKPresenterDoc->getPageNums() > 1 );
     objectSelectedChanged();
+    refreshPageButton();
 }
 
 void KPresenterView::guiActivateEvent( KParts::GUIActivateEvent *ev )
@@ -2767,13 +2765,30 @@ void KPresenterView::skipToPage( int num )
     emit currentPageChanged( currPg );
     if( sidebar )
         sidebar->setCurrentPage( currPg );
-    pgNext->setEnabled( currPg < (int)m_pKPresenterDoc->getPageNums() - 1 );
-    pgPrev->setEnabled( currPg > 0 );
+
+    refreshPageButton();
+
     yOffset = kPresenterDoc()->getPageRect( 0, 0, 0, 1.0, false ).height() * currPg;
     //(Laurent) deselect object when we change page.
     //otherwise you can change object properties on other page
     page->deSelectAllObj();
     page->repaint( FALSE );
+}
+
+
+void KPresenterView::refreshPageButton()
+{
+    bool state = (currPg > 0);
+
+    pgPrev->setEnabled( state );
+    actionScreenFirst->setEnabled(state);
+    actionScreenPrev->setEnabled(state);
+
+    state=(currPg < (int)m_pKPresenterDoc->getPageNums() - 1);
+
+    pgNext->setEnabled( state );
+    actionScreenLast->setEnabled(state);
+    actionScreenNext->setEnabled(state);
 }
 
 /*==============================================================*/
