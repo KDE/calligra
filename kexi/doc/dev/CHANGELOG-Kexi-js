@@ -317,6 +317,15 @@ KexiDB Drivers
 2004-08-21
 Table View
 - Key_Left, Key_Right now by default behaves like Key_BackTab, Key_Tab
+- KexiTableViewData::deleteRows(): refresh is requested only 
+  if at least one row has been removed. This also magically fixed 
+  a bug with missing vheaders in the Query Designer :)
+Main Window
+- opening object: if object is already opened but in other view, 
+  its activated and switchToViewMode() is simply called. 
+  This fixes switching GUIClient for "design" action called from the Navigator.
+- Kexi::ViewMode is repaced with int type in most places 
+  to ease future extensibility.
 
 2004-08-20
 KexiDB, Table View
