@@ -1,3 +1,8 @@
+Thu Aug 19 16:15:08 1999  Matthias Elter  <me@kde.org>
+
+	* tiny fixes
+	* only layer dialog is visible on startup
+
 Wed Aug 18 12:34:28 1999  Matthias Elter  <me@kde.org>
 
 	* tiny fixes all over the place

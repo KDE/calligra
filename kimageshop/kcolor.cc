@@ -296,10 +296,12 @@ void KColor::RGBtoLAB(uchar R, uchar G, uchar B, int *L, int *a, int *b)
 
 void KColor::RGBtoCMYK(uchar R, uchar G, uchar B, uchar *C, uchar *M, uchar *Y, uchar *K)
 {
-  *C = 255-R;
-  *M = 255-G;
-  *Y = 255-B;
-  *K = 0;
+  uchar min = (R < G) ? R : G;
+  *K = (min < B) ? min : B;
+
+  *C = 255-(R - *K);
+  *M = 255-(G - *K);
+  *Y = 255-(B - *K);
 }
 
 void KColor::HSVtoRGB(int H, uchar S, uchar V, uchar *R, uchar *G, uchar *B)

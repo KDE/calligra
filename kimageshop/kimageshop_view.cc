@@ -368,7 +368,7 @@ void KImageShopView::createGUI()
   m_pBrushDialog = new BrushDialog(this);
   m_pBrushDialog->resize(205, 267);
   m_pBrushDialog->move(405, 20);
-  m_pBrushDialog->show();
+  m_pBrushDialog->hide();
   addDialog(m_pBrushDialog);
 
   m_pBrushChooser = m_pBrushDialog->brushChooser();
@@ -392,19 +392,19 @@ void KImageShopView::createGUI()
   m_pGradientDialog = new GradientDialog( m_pDoc, this );
   m_pGradientDialog->resize( 206, 185 );
   m_pGradientDialog->move( 200, 290 );
-  m_pGradientDialog->show();
+  m_pGradientDialog->hide();
 
   // create gradient editor dialog
   m_pGradientEditorDialog = new GradientEditorDialog( m_pDoc, this );
   m_pGradientEditorDialog->resize( 400, 200 );
   m_pGradientEditorDialog->move( 100, 190 );
-  m_pGradientEditorDialog->show();
+  m_pGradientEditorDialog->hide();
 
   // color dialog
-  //m_pColorDialog = new ColorDialog(m_pCanvasView);
-  //m_pColorDialog->move(100, 20);
-  //m_pColorDialog->show();
-  //addDialog(m_pColorDialog);
+  m_pColorDialog = new ColorDialog(m_pCanvasView);
+  m_pColorDialog->move(100, 20);
+  m_pColorDialog->hide();
+  addDialog(m_pColorDialog);
 }
 
 void KImageShopView::setupScrollbars()
