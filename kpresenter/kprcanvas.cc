@@ -704,6 +704,10 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                             resizeObjNum = kpobject;
                         }
                     }
+                    if ( resizeObjNum )
+                    {
+                        keepRatio = keepRatio || resizeObjNum->isKeepRatio();
+                    }
                     if ( deSelAll && !( e->state() & ShiftButton ) && !( e->state() & ControlButton ) )
                         deSelectAllObj();
 
@@ -6219,7 +6223,7 @@ void KPrCanvas::resizeObject( ModifyType _modType, int _dx, int _dy )
     KoRect page=m_activePage->getPageRect();
     KPObject *kpobject=resizeObjNum;
 
-    keepRatio = keepRatio || kpobject->isKeepRatio();
+    //keepRatio = keepRatio || kpobject->isKeepRatio();
 
     KoSize objSize = kpobject->getSize();
     KoRect objRect=kpobject->getBoundingRect(m_view->zoomHandler());
