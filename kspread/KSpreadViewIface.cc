@@ -39,6 +39,14 @@ DCOPRef KSpreadViewIface::table() const
     return DCOPRef( kapp->dcopClient()->appId(), m_view->activeTable()->dcopObject()->objId() );
 }
 
+void KSpreadViewIface::changeNbOfRecentFiles(int _nb)
+{
+    if(_nb<0)
+        return;
+    m_view->changeNbOfRecentFiles(_nb);
+}
+
+
 void KSpreadViewIface::hide()
 {
     m_view->hide();

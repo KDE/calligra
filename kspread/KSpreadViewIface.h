@@ -1,7 +1,7 @@
 #ifndef KSPREAD_VIEW_IFACE_H
 #define KSPREAD_VIEW_IFACE_H
 
-#include <KoViewIface.h>           
+#include <KoViewIface.h>
 
 #include <qstring.h>
 #include <qrect.h>
@@ -20,6 +20,9 @@ k_dcop:
     virtual DCOPRef doc() const;
     virtual DCOPRef map() const;
     virtual DCOPRef table() const;
+
+    virtual void changeNbOfRecentFiles(int _nb);
+
     virtual void hide();
     virtual void show();
 

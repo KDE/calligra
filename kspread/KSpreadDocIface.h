@@ -44,6 +44,10 @@ k_dcop:
     bool showFormulaBar()const;
     bool showStatusBar()const;
 
+    void setShowMessageError(bool _show);
+    bool showMessageError()const;
+
+
     QString headLeft()const;
     QString headMid()const;
     QString headRight()const;

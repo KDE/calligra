@@ -179,3 +179,12 @@ void KSpreadDocIface::setShowCommentIndicator(bool _show)
     doc->refreshInterface();
 }
 
+void KSpreadDocIface::setShowMessageError(bool _show)
+{
+    doc->setShowMessageError(_show);
+}
+
+bool KSpreadDocIface::showMessageError()const
+{
+    return doc->getShowMessageError();
+}
