@@ -90,6 +90,7 @@
 using namespace std;
 
 static const int CURRENT_SYNTAX_VERSION = 2;
+static const char * CURRENT_DTD_VERSION = "1.1";
 
 /******************************************************************/
 /* class KPresenterChild					  */
@@ -445,11 +446,8 @@ QDomDocument KPresenterDoc::saveXML()
         emit sigProgress( 0 );
     }
 
-    QDomDocument doc("DOC");
-    doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
-    QDomElement presenter=doc.createElement("DOC");
-    presenter.setAttribute("author", "Reginald Stadlbauer");
-    presenter.setAttribute("email", "reggie@kde.org");
+    QDomDocument doc = createDomDocument( "DOC", CURRENT_DTD_VERSION );
+    QDomElement presenter=doc.documentElement();
     presenter.setAttribute("editor", "KPresenter");
     presenter.setAttribute("mime", "application/x-kpresenter");
     presenter.setAttribute("syntaxVersion", CURRENT_SYNTAX_VERSION);
