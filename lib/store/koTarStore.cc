@@ -24,6 +24,7 @@
 #include <ktar.h>
 #include <kdebug.h>
 #include <kurl.h>
+#include <kdeversion.h>
 #include <kio/netaccess.h>
 
 KoTarStore::KoTarStore( const QString & _filename, Mode _mode, const QCString & appIdentification )
@@ -49,13 +50,14 @@ KoTarStore::KoTarStore( QIODevice *dev, Mode mode, const QCString & appIdentific
         m_pTar->setOrigFileName( completeMagic( appIdentification ) );
 }
 
-KoTarStore::KoTarStore( const KURL& _url, const QString & _filename, Mode _mode, const QCString & appIdentification )
+KoTarStore::KoTarStore( QWidget* window, const KURL& _url, const QString & _filename, Mode _mode, const QCString & appIdentification )
 {
     kdDebug(s_area) << "KoTarStore Constructor url= " << _url.prettyURL() 
                     << " filename = " << _filename
                     << " mode = " << int(_mode) << endl;
 
     m_url = _url;
+    m_window = window;
 
     if ( _mode == KoStore::Read )
     {
@@ -89,7 +91,11 @@ KoTarStore::~KoTarStore()
     }
     else if ( m_fileMode == KoStoreBase::RemoteWrite )
     {
+#if KDE_IS_VERSION(3,1,90)
+        KIO::NetAccess::upload( m_localFileName, m_url, m_window );
+#else
         KIO::NetAccess::upload( m_localFileName, m_url );
+#endif
         // ### FIXME: delete temp file
     }
 }

@@ -31,7 +31,7 @@ class KoZipStore : public KoStoreBase
 public:
     KoZipStore( const QString & _filename, Mode _mode, const QCString & appIdentification );
     KoZipStore( QIODevice *dev, Mode mode, const QCString & appIdentification );
-    KoZipStore( const KURL& _url, const QString & _filename, Mode _mode, const QCString & appIdentification );
+    KoZipStore( QWidget* window, const KURL& _url, const QString & _filename, Mode _mode, const QCString & appIdentification );
     ~KoZipStore();
 
     virtual Q_LONG write( const char* _data, Q_ULONG _len );

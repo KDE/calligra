@@ -63,8 +63,7 @@ void KWImportStyleDia::loadFile()
     }
     QMap<QString, QString>insertStyle;
 
-    // ### TODO network transparency
-    KoStore* store=KoStore::createStore( url.path(), KoStore::Read );
+    KoStore* store=KoStore::createStore( this, url, KoStore::Read );
     if (store )
     {
         if (store->open("maindoc.xml") )
@@ -201,8 +200,7 @@ void KWImportFrameTableStyleDia::loadFile()
                             i18n("Import Style"));
         return;
     }
-    // ### TODO network transparency
-    KoStore* store=KoStore::createStore( url.path(), KoStore::Read );
+    KoStore* store=KoStore::createStore( this, url, KoStore::Read );
     if (store )
     {
         if (store->open("maindoc.xml") )

@@ -6484,7 +6484,7 @@ void KWView::insertFile(const KURL& _url)
 {
     KMacroCommand* macroCmd = 0L;
     bool hasFixedFramesets = false;
-    KoStore* store=KoStore::createStore( _url, KoStore::Read );
+    KoStore* store=KoStore::createStore( this, _url, KoStore::Read );
     QString maindoc = "maindoc.xml";
     if ( store )
     {

@@ -43,7 +43,7 @@ KoZipStore::KoZipStore( QIODevice *dev, Mode mode, const QCString & appIdentific
     m_bGood = init( mode, appIdentification );
 }
 
-KoZipStore::KoZipStore( const KURL & _url, const QString & _filename, Mode _mode, const QCString & appIdentification )
+KoZipStore::KoZipStore( QWidget* window, const KURL & _url, const QString & _filename, Mode _mode, const QCString & appIdentification )
 {
     kdDebug(s_area) << "KoZipStore Constructor url" << _url.prettyURL()
                     << " filename = " << _filename
@@ -51,6 +51,7 @@ KoZipStore::KoZipStore( const KURL & _url, const QString & _filename, Mode _mode
                     << " mimetype = " << appIdentification << endl;
 
     m_url = _url;
+    m_window = window;
 
     if ( _mode == KoStore::Read )
     {
@@ -81,7 +82,11 @@ KoZipStore::~KoZipStore()
     }
     else if ( m_fileMode == KoStoreBase::RemoteWrite )
     {
+#if KDE_IS_VERSION(3,1,90)
+        KIO::NetAccess::upload( m_localFileName, m_url, m_window );
+#else
         KIO::NetAccess::upload( m_localFileName, m_url );
+#endif
         // ### FIXME: delete temp file
     }
 }

@@ -26,6 +26,8 @@
 #include <qiodevice.h>
 #include <qvaluestack.h>
 
+class QWidget;
+
 class KURL;
 
 /**
@@ -66,6 +68,7 @@ public:
   /**
    * Open a store (i.e. the representation on disk of a KOffice document).
    *
+   * @param window associated window (for the progress bar dialog and authentification)
    * @param fileName the name of the file to open
    * @param mode if KoStore::Read, open an existing store to read it.
    *             if KoStore::Write, create or replace a store.
@@ -79,7 +82,7 @@ public:
    *
    * If the file is remote, the backend Directory cannot be used!
    */
-  static KoStore* createStore( const KURL& url, Mode mode, const QCString & appIdentification = "", Backend backend = Auto );
+  static KoStore* createStore( QWidget* window, const KURL& url, Mode mode, const QCString & appIdentification = "", Backend backend = Auto );
 
   /**
    * Destroys the store (i.e. closes the file on the hard disk)

@@ -41,6 +41,7 @@ protected:
     KURL m_url;
     FileMode m_fileMode;
     QString m_localFileName;
+    QWidget* m_window;
 };
 
 #endif //KOSTORE_BASE_H

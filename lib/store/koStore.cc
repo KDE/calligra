@@ -34,6 +34,9 @@
 
 #include <kurl.h>
 #include <kdebug.h>
+#include <kdeversion.h>
+#include <klocale.h>
+#include <kmessagebox.h>
 #include <kio/netaccess.h>
 
 //#define DefaultFormat KoStore::Tar
@@ -115,7 +118,7 @@ KoStore* KoStore::createStore( QIODevice *device, Mode mode, const QCString & ap
   }
 }
 
-KoStore* KoStore::createStore( const KURL& url, Mode mode, const QCString & appIdentification, Backend backend )
+KoStore* KoStore::createStore( QWidget* window, const KURL& url, Mode mode, const QCString & appIdentification, Backend backend )
 {
   if ( url.isLocalFile() )
     return createStore(url.path(), mode,  appIdentification, backend );
@@ -128,7 +131,12 @@ KoStore* KoStore::createStore( const KURL& url, Mode mode, const QCString & appI
   }
   else
   {
-    const bool downloaded = KIO::NetAccess::download( url, tmpFile );
+    const bool downloaded =
+#if KDE_IS_VERSION(3,1,90)
+        KIO::NetAccess::download( url, tmpFile, window );
+#else
+        KIO::NetAccess::download( url, tmpFile );
+#endif
   
     if (!downloaded)
     {
@@ -148,11 +156,14 @@ KoStore* KoStore::createStore( const KURL& url, Mode mode, const QCString & appI
   switch ( backend )
   {
   case Tar:
-    return new KoTarStore( url, tmpFile, mode, appIdentification );
+    return new KoTarStore( window, url, tmpFile, mode, appIdentification );
   case Zip:
-    return new KoZipStore( url, tmpFile, mode, appIdentification );
+    return new KoZipStore( window, url, tmpFile, mode, appIdentification );
   default:
     kdWarning(s_area) << "Unsupported backend requested for KoStore (KURL) : " << backend << endl;
+    KMessageBox::sorry( window,
+        i18n("The directory mode is not suported for remote locations."),
+        i18n("KOffice Storage"));
     return 0L;
   }
 }

@@ -20,7 +20,7 @@
 
 #include "koStoreBase.h"
 
-KoStoreBase::KoStoreBase(void) : m_fileMode(Local)
+KoStoreBase::KoStoreBase(void) : m_fileMode(Local), m_window(0)
 {
 }
 
