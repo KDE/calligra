@@ -89,7 +89,7 @@ void KWConfigFootNoteDia::setupTab3()
 
     QVButtonGroup *bgSeparatorWidth = new QVButtonGroup( i18n( "Separator Line Width" ), page );
 
-    lab = new QLabel(i18n("Width:"), bgSeparatorWidth);
+    lab = new QLabel(i18n("Width(pt):"), bgSeparatorWidth);
     spWidth = new KDoubleNumInput( 1, bgSeparatorWidth );
     spWidth->setRange( 0, 5, 0.5 ,false );
     spWidth->setValue( m_doc->footNoteSeparatorLineWidth());
