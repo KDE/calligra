@@ -29,43 +29,43 @@
 #include <qvaluestack.h>
 
 /*
-  This formula engine is just an expression evaluator. To offer better 
+  This formula engine is just an expression evaluator. To offer better
   performance, the expression is first compiled into bytecodes which will be
   executed later by a virtual machine.
-  
-  Before compilation, the expression is separated into pieces, called tokens. 
-  This step, which is also known as lexical analysis, takes places at once 
-  and will produce sequence of tokens. They are however not stored and 
+
+  Before compilation, the expression is separated into pieces, called tokens.
+  This step, which is also known as lexical analysis, takes places at once
+  and will produce sequence of tokens. They are however not stored and
   used only for the purpose of the subsequent step.
-  
-  Tokens are supplied to the parser, also known as syntax analyzer. In this 
-  design, the parser is also a code generator. It involve the generation 
+
+  Tokens are supplied to the parser, also known as syntax analyzer. In this
+  design, the parser is also a code generator. It involve the generation
   of bytecodes which represents the expression.
-  
-  Evaluating the formula expression is now basically running the virtual 
-  machine to execute compiled bytecodes. No more scanning or parsing 
+
+  Evaluating the formula expression is now basically running the virtual
+  machine to execute compiled bytecodes. No more scanning or parsing
   are performed during evaluation, this saves time a lot.
-  
-  The virtual machine itself (and of course the bytecodes) are designed to be 
-  as simple as possible. This is supposed to be stack-based, i.e. the virtual 
-  machine has an execution stack of values which would be manipulated 
-  as each bytecode is processed. Beside the stack, there will be a list of 
-  constant (sometimes also called as "constants pool") to hold boolean, 
-  integer, floating-point or string values. When a certain bytecode needs 
-  a constant for the operand, an index is specified which should be used 
+
+  The virtual machine itself (and of course the bytecodes) are designed to be
+  as simple as possible. This is supposed to be stack-based, i.e. the virtual
+  machine has an execution stack of values which would be manipulated
+  as each bytecode is processed. Beside the stack, there will be a list of
+  constant (sometimes also called as "constants pool") to hold boolean,
+  integer, floating-point or string values. When a certain bytecode needs
+  a constant for the operand, an index is specified which should be used
   to look up the constant in the constants pool.
- 
+
   There are only few bytecode, sufficient enough to perform calculation.
   Yes, this is really minimalist but yet does the job fairly well.
   The following provides brief description for each type of bytecode.
- 
+
   - Nop means no operation.
- 
-  - Load means loads a constant and push it to the stack. The constant can be 
-    found at constant pools, at position by 'index', it could be a boolean, 
+
+  - Load means loads a constant and push it to the stack. The constant can be
+    found at constant pools, at position by 'index', it could be a boolean,
     integer, floating-point, or string value.
- 
-  - Ref means gets a value from a reference. Member variable 'index' will refers 
+
+  - Ref means gets a value from a reference. Member variable 'index' will refers
     to a string value in the constant pools, i.e. the name of the reference.
     Typically the reference is either a cell (e.g. A1), range of cells (A1:B10)
     or possibly function name.
@@ -77,7 +77,7 @@
         Ref #0
         Ref #1
         Add
- 
+
   - Function.
     Example: expression "sin(x)" will be compiled as:
        Constants:
@@ -86,44 +86,44 @@
        Codes:
          Ref #0
          Ref #1
-         Function 1     
- 
-  - Neg is an unary operator, a value is popped from stack and negated and then 
-    pushed back into the stack. If it is not number (boolean or string), it 
+         Function 1
+
+  - Neg is an unary operator, a value is popped from stack and negated and then
+    pushed back into the stack. If it is not number (boolean or string), it
     will be converted first.
- 
-  - Add, Sub, Mul, Div and Pow are binary operators, two values are popped from 
-    stack and processed (added, subtracted, multiplied, divided, or power) and 
-    the result is push into the stack. 
- 
-  - Concat is string operation, two values are popped from stack (and converted 
-    to string if they are not string values), concatenated, and the result is 
+
+  - Add, Sub, Mul, Div and Pow are binary operators, two values are popped from
+    stack and processed (added, subtracted, multiplied, divided, or power) and
+    the result is push into the stack.
+
+  - Concat is string operation, two values are popped from stack (and converted
+    to string if they are not string values), concatenated, and the result is
     push to stack.
- 
-  - Not is a logical operation, a value is popped from stack and its boolean 
-    not is pushed into the stack. When it is not boolean value, there will be 
+
+  - Not is a logical operation, a value is popped from stack and its boolean
+    not is pushed into the stack. When it is not boolean value, there will be
     a cast.
- 
-  - Equal, Less, and Greater are comparison operators, two values are popped 
-    from stack and compared appropriately. The result, which is a boolean value, 
-    is pushed into the stack. To simplify, there no "not equal" comparison 
-    because it can be regarded as "equal" followed by "not" bytecodes. Same goes 
+
+  - Equal, Less, and Greater are comparison operators, two values are popped
+    from stack and compared appropriately. The result, which is a boolean value,
+    is pushed into the stack. To simplify, there no "not equal" comparison
+    because it can be regarded as "equal" followed by "not" bytecodes. Same goes
     for "less than or equal to" and "greater than or equal to".
-    
-  The expression scanned is based on finite state acceptor. The state denotes 
+
+  The expression scanned is based on finite state acceptor. The state denotes
   the position of cursor, e.g. inside a cell token, inside an identifier, etc.
   State transition is following by emitting the associated token to the
-  result buffer. Rather than showing the state diagrams here, it is much more 
-  convenience and less complicated to browse the scanner source code and try 
+  result buffer. Rather than showing the state diagrams here, it is much more
+  convenience and less complicated to browse the scanner source code and try
   to follow its algorithm from there.
-  
-  The parser is designed using one of bottom-up parsing technique, namely 
-  based on Polish notation. Instead of ordering the tokens in suffix Polish 
-  form, the parser (which is also the code generator) simply outputs 
-  bytecodes. In its operation, the parser requires the knowledge of operator 
-  precedence to correctly translate unparenthesized infix expression and 
+
+  The parser is designed using one of bottom-up parsing technique, namely
+  based on Polish notation. Instead of ordering the tokens in suffix Polish
+  form, the parser (which is also the code generator) simply outputs
+  bytecodes. In its operation, the parser requires the knowledge of operator
+  precedence to correctly translate unparenthesized infix expression and
   thus requires the use of a syntax stack.
-  
+
   The parser algorithm is given as follows:
     Repeat the following steps:
      Step 1: Get next token
@@ -138,7 +138,7 @@
              - when no more rules applies, push token to the syntax stack
 
   The reduce rules are:
-  
+
     Rule A: function argument:
       if token is semicolon or right parenthes
       if syntax stack looks as:
@@ -147,13 +147,13 @@
         non-operator
         operator (
         identifier
-      then reduce to   
+      then reduce to
         non operator
         operator (
         identifier
-      and increase number of function arguments  
-        
-    Rule B: last function argument    
+      and increase number of function arguments
+
+    Rule B: last function argument
       if syntax stack looks as:
         operator )
         non-operator
@@ -161,7 +161,7 @@
         identifier
       then reduce to:
         non-operator
-      and generated "Function" + number of function arguments  
+      and generated "Function" + number of function arguments
 
     Rule C: function without argument
       if syntax stack looks as:
@@ -170,7 +170,7 @@
         identifier
       then reduce to:
         non-operator (dummy)
-      
+
     Rule D: parenthesis removal
       if syntax stack looks as:
         operator (
@@ -178,7 +178,7 @@
         operator )
       then reduce to:
         non-operator
-        
+
     Rule E: binary operator
       if syntax stack looks as:
         non-operator
@@ -189,8 +189,8 @@
       then reduce to:
         non-operator
       and generated appropriate bytecode for the binary operator
-        
-    Rule F: unary operator 
+
+    Rule F: unary operator
       if syntax stack looks as:
       then reduce to:
         non-operator
@@ -199,22 +199,22 @@
       then reduce to:
         operator
       and generated "Neg" if unary operator is '-'
-      
-      
+
+
   Useful references:
    - "Principles of Compiler Design", A.V.Aho, J.D.Ullman, Addison Wesley, 1978
-   - "Writing Interactive Compilers and Interpreters", P.J. Brown, 
+   - "Writing Interactive Compilers and Interpreters", P.J. Brown,
      John Wiley and Sons, 1979.
    - "The Theory and Practice of Compiler Writing", J.Tremblay, P.G.Sorenson,
      McGraw-Hill, 1985.
    - "The Java(TM) Virtual Machine Specification", T.Lindholm, F.Yellin,
      Addison-Wesley, 1997.
-   - "Java Virtual Machine", J.Meyer, T.Downing, O'Reilly, 1997.   
-   
+   - "Java Virtual Machine", J.Meyer, T.Downing, O'Reilly, 1997.
+
  */
- 
- 
- /* 
+
+
+ /*
 TODO:
  - cell and range reference
  - array/list for function arguments
@@ -231,13 +231,13 @@ namespace KSpread
 class Opcode
 {
 public:
-  
-  enum { Nop = 0, Load, Ref, Function, Add, Sub, Neg, Mul, Div, Pow, Concat, 
+
+  enum { Nop = 0, Load, Ref, Function, Add, Sub, Neg, Mul, Div, Pow, Concat,
     Not, Equal, Less, Greater };
 
   unsigned type;
   unsigned index;
-  
+
   Opcode(): type(Nop), index(0) {};
   Opcode( unsigned t ): type(t), index(0) {};
   Opcode( unsigned t, unsigned i ): type(t), index(i) {};
@@ -249,7 +249,7 @@ public:
   Formula *formula;
   bool dirty;
   bool valid;
-  QString expression; 
+  QString expression;
   QValueVector<Opcode> codes;
   QValueVector<KSpreadValue> constants;
 };
@@ -281,7 +281,7 @@ const Token Token::null;
 static Token::Op matchOperator( const QString& text )
 {
   Token::Op result = Token::InvalidOp;
-  
+
   if( text.length() == 1 )
   {
     QChar p = text[0];
@@ -304,18 +304,18 @@ static Token::Op matchOperator( const QString& text )
         default : result = Token::InvalidOp; break;
     }
   }
-  
+
   if( text.length() == 2 )
   {
     if( text == "<>" ) result = Token::NotEqual;
     if( text == "<=" ) result = Token::LessEqual;
     if( text == ">=" ) result = Token::GreaterEqual;
-    
+
     // This is for old KScript backward compatibility
     // Remove in KOffice 2.0
-    if( text == "==" ) result = Token::Equal; 
+    if( text == "==" ) result = Token::Equal;
   }
-  
+
   return result;
 }
 
@@ -327,15 +327,15 @@ static int opPrecedence( Token::Op op )
   switch( op )
   {
     case Token::Percent      : prec = 8; break;
-    case Token::Caret        : prec = 7; break; 
+    case Token::Caret        : prec = 7; break;
     case Token::Asterisk     : prec = 5; break;
-    case Token::Slash        : prec = 6; break; 
+    case Token::Slash        : prec = 6; break;
     case Token::Plus         : prec = 3; break;
     case Token::Minus        : prec = 3; break;
-    case Token::Ampersand    : prec = 2; break;      
-    case Token::Equal        : prec = 1; break; 
+    case Token::Ampersand    : prec = 2; break;
+    case Token::Equal        : prec = 1; break;
     case Token::NotEqual     : prec = 1; break;
-    case Token::Less         : prec = 1; break; 
+    case Token::Less         : prec = 1; break;
     case Token::Greater      : prec = 1; break;
     case Token::LessEqual    : prec = 1; break;
     case Token::GreaterEqual : prec = 1; break;
@@ -507,7 +507,7 @@ void TokenStack::ensureSpace()
 /**********************
     FormulaPrivate
  **********************/
- 
+
 // helper function: return true for valid identifier character
 static bool isIdentifier( QChar ch )
 {
@@ -522,7 +522,7 @@ static bool isIdentifier( QChar ch )
  **********************/
 
 // Constructor
- 
+
 Formula::Formula()
 {
   d = new Private;
@@ -530,7 +530,7 @@ Formula::Formula()
 }
 
 // Destructor
- 
+
 Formula::~Formula()
 {
   delete d;
@@ -582,8 +582,8 @@ void Formula::clear()
 }
 
 // Returns list of token for the expression.
-// this triggers again the lexical analysis step. it is however preferable 
-// (even when there's small performance penalty) because otherwise we need to 
+// this triggers again the lexical analysis step. it is however preferable
+// (even when there's small performance penalty) because otherwise we need to
 // store parsed tokens all the time which serves no good purpose.
 
 Tokens Formula::tokens() const
@@ -598,12 +598,12 @@ Tokens Formula::scan( const QString& expr )
 
   // parsing state
   enum { Start, Finish, Bad, InNumber, InDecimal, InExpIndicator, InExponent,
-    InString, InIdentifier, InCell, InRange, InSheetName } state;    
+    InString, InIdentifier, InCell, InRange, InSheetName } state;
 
   // TODO use locale settings if specified
   QString thousand = "";
   QString decimal = ".";
-    
+
   // initialize variables
   state = Start;
   unsigned int i = 0;
@@ -623,7 +623,7 @@ Tokens Formula::scan( const QString& expr )
     {
 
     case Start:
-    
+
        tokenStart = i;
 
        // skip any whitespaces
@@ -644,7 +644,7 @@ Tokens Formula::scan( const QString& expr )
 
        // beginning with alphanumeric ?
        // could be identifier, cell, range, or function...
-       else if( isIdentifier( ch ) ) 
+       else if( isIdentifier( ch ) )
        {
          state = InIdentifier;
        }
@@ -673,11 +673,11 @@ Tokens Formula::scan( const QString& expr )
        {
          int op;
          QString s;
-         
+
          // check for two-chars operator, such as '<=', '>=', etc
          s.append( ch ).append( ex[i+1] );
          op = matchOperator( s );
-         
+
          // check for one-char operator, such as '+', ';', etc
          if( op == Token::InvalidOp )
          {
@@ -719,7 +719,7 @@ Tokens Formula::scan( const QString& expr )
            tokenText = "";
            state = Start;
          }
-         
+
          else
          {
            // check for cell reference,  e.g A1, VV123, ...
@@ -734,7 +734,7 @@ Tokens Formula::scan( const QString& expr )
              tokenText = "";
              state = Start;
            }
-          } 
+          }
        }
        break;
 
@@ -751,7 +751,10 @@ Tokens Formula::scan( const QString& expr )
          // check if it's a cell ref like A32, not named area
          QString cell;
          for( int j = tokenText.length()-1; j>=0; j-- )
-           if( tokenText[j] == '!' ) break; else cell.prepend( tokenText[j] );
+           if( tokenText[j] == '!' )
+               break;
+           else
+               cell.prepend( tokenText[j] );
          QRegExp exp("(\\$?)([a-zA-Z]+)(\\$?)([0-9]+)$");
          if( exp.search( cell ) != 0 )
          {
@@ -918,12 +921,12 @@ Tokens Formula::scan( const QString& expr )
     default:
        break;
     };
-  }; 
-  
+  };
+
   return tokens;
 }
 
-// will affect: dirty, valid, codes, constants 
+// will affect: dirty, valid, codes, constants
 void Formula::compile( const Tokens& tokens ) const
 {
   // initialize variables
@@ -931,23 +934,23 @@ void Formula::compile( const Tokens& tokens ) const
   d->valid = false;
   d->codes.clear();
   d->constants.clear();
-  
+
   // sanity check
   if( tokens.count() == 0 ) return;
 
   TokenStack syntaxStack;
   QValueStack<int> argStack;
   unsigned argCount = 1;
-  
+
   for( unsigned i = 0; i <= tokens.count(); i++ )
   {
     // helper token: InvalidOp is end-of-formula
     Token token =  ( i < tokens.count() ) ? tokens[i] : Token( Token::Operator );
     Token::Type tokenType = token.type();
-    
+
     // unknown token is invalid
     if( tokenType == Token::Unknown ) break;
-    
+
     // for constants, push immediately to stack
     // generate code to load from a constant
     if ( ( tokenType == Token::Integer ) || ( tokenType == Token::Float ) ||
@@ -956,8 +959,8 @@ void Formula::compile( const Tokens& tokens ) const
       syntaxStack.push( token );
       d->constants.append( tokenAsValue( token ) );
       d->codes.append( Opcode( Opcode::Load, d->constants.count()-1 ) );
-    }    
-    
+    }
+
     // for cell, range, or identifier, push immediately to stack
     // generate code to load from reference
     if( ( tokenType == Token::Cell ) || ( tokenType == Token::Range ) ||
@@ -967,7 +970,7 @@ void Formula::compile( const Tokens& tokens ) const
       d->constants.append( KSpreadValue( token.text() ) );
       d->codes.append( Opcode( Opcode::Ref, d->constants.count()-1 ) );
     }
-    
+
     // are we entering a function ?
     // if token is operator, and stack already has: id ( arg
     if( tokenType == Token::Operator )
@@ -984,7 +987,7 @@ void Formula::compile( const Tokens& tokens ) const
           argCount = 1;
         }
      }
-     
+
      // special case for percentage
     if( tokenType == Token::Operator )
     if( token.asOperator() == Token::Percent )
@@ -995,16 +998,16 @@ void Formula::compile( const Tokens& tokens ) const
       d->codes.append( Opcode( Opcode::Load, d->constants.count()-1 ) );
       d->codes.append( Opcode( Opcode::Mul ) );
     }
-    
+
     // for any other operator, try to apply all parsing rules
     if( tokenType == Token::Operator )
     if( token.asOperator() != Token::Percent )
     {
       // repeat until no more rule applies
       for( ; ; )
-      { 
+      {
         bool ruleFound = false;
-        
+
         // rule for function arguments, if token is ; or )
         // id ( arg1 ; arg2 -> id ( arg
         if( !ruleFound )
@@ -1029,7 +1032,7 @@ void Formula::compile( const Tokens& tokens ) const
             argCount++;
           }
         }
-        
+
         // rule for function last argument:
         //  id ( arg ) -> arg
         if( !ruleFound )
@@ -1043,7 +1046,7 @@ void Formula::compile( const Tokens& tokens ) const
           if( !arg.isOperator() )
           if( par1.asOperator() == Token::LeftPar )
           if( id.isIdentifier() )
-          {        
+          {
             ruleFound = true;
             syntaxStack.pop();
             syntaxStack.pop();
@@ -1053,8 +1056,8 @@ void Formula::compile( const Tokens& tokens ) const
             d->codes.append( Opcode( Opcode::Function, argCount ) );
             argCount = argStack.empty() ? 0 : argStack.pop();
           }
-        }  
-          
+        }
+
         // rule for function call with parentheses, but without argument
         // e.g. "2*PI()"
         if( !ruleFound )
@@ -1066,7 +1069,7 @@ void Formula::compile( const Tokens& tokens ) const
           if( par2.asOperator() == Token::RightPar )
           if( par1.asOperator() == Token::LeftPar )
           if( id.isIdentifier() )
-          {        
+          {
             ruleFound = true;
             syntaxStack.pop();
             syntaxStack.pop();
@@ -1074,8 +1077,8 @@ void Formula::compile( const Tokens& tokens ) const
             syntaxStack.push( Token( Token::Integer ) );
             d->codes.append( Opcode( Opcode::Function, 0 ) );
           }
-        }  
-        
+        }
+
         // rule for parenthesis:  ( Y ) -> Y
         if( !ruleFound )
         if( syntaxStack.itemCount() >= 3 )
@@ -1096,7 +1099,7 @@ void Formula::compile( const Tokens& tokens ) const
             syntaxStack.push( y );
           }
         }
-        
+
         // rule for binary operator:  A (op) B -> A
         // conditions: precedence of op >= precedence of token
         // action: push (op) to result
@@ -1127,33 +1130,33 @@ void Formula::compile( const Tokens& tokens ) const
               case Token::Slash:        d->codes.append( Opcode::Div ); break;
               case Token::Caret:        d->codes.append( Opcode::Pow ); break;
               case Token::Ampersand:    d->codes.append( Opcode::Concat ); break;
-              
+
               // simple value comparisons
               case Token::Equal:        d->codes.append( Opcode::Equal ); break;
               case Token::Less:         d->codes.append( Opcode::Less ); break;
               case Token::Greater:      d->codes.append( Opcode::Greater ); break;
-              
+
               // NotEqual is Equal, followed by Not
-              case Token::NotEqual:     
-                d->codes.append( Opcode::Equal ); 
-                d->codes.append( Opcode::Not ); 
+              case Token::NotEqual:
+                d->codes.append( Opcode::Equal );
+                d->codes.append( Opcode::Not );
                 break;
-                
+
               // LessOrEqual is Greater, followed by Not
-              case Token::LessEqual:    
+              case Token::LessEqual:
                 d->codes.append( Opcode::Greater );
-                d->codes.append( Opcode::Not ); 
+                d->codes.append( Opcode::Not );
                 break;
-                
+
               // GreaterOrEqual is Less, followed by Not
-              case Token::GreaterEqual: 
-                d->codes.append( Opcode::Less ); 
-                d->codes.append( Opcode::Not ); 
-                break;                                        
+              case Token::GreaterEqual:
+                d->codes.append( Opcode::Less );
+                d->codes.append( Opcode::Not );
+                break;
               default: break;
             };
           }
-         } 
+         }
 
          // rule for unary operator:  (op1) (op2) X -> (op1) X
          // conditions: op2 is unary
@@ -1178,8 +1181,8 @@ void Formula::compile( const Tokens& tokens ) const
               if( op2.asOperator() == Token::Minus )
                 d->codes.append( Opcode( Opcode::Neg ) );
             }
-          }  
-        
+          }
+
          // auxilary rule for unary operator:  (op) X -> X
          // conditions: op is unary, op is first in syntax stack
          // action: push (op) to result
@@ -1200,25 +1203,25 @@ void Formula::compile( const Tokens& tokens ) const
               if( op.asOperator() == Token::Minus )
                 d->codes.append( Opcode( Opcode::Neg ) );
             }
-          }  
-        
+          }
+
         if( !ruleFound ) break;
       }
-    
-      // can't apply rules anymore, push the token   
+
+      // can't apply rules anymore, push the token
       if( token.asOperator() != Token::Percent )
         syntaxStack.push( token );
-    }    
-  } 
-  
-  // syntaxStack must left only one operand and end-of-formula (i.e. InvalidOp) 
+    }
+  }
+
+  // syntaxStack must left only one operand and end-of-formula (i.e. InvalidOp)
   d->valid = false;
   if( syntaxStack.itemCount() == 2 )
   if( syntaxStack.top().isOperator() )
   if( syntaxStack.top().asOperator() == Token::InvalidOp )
   if( !syntaxStack.top(1).isOperator() )
     d->valid = true;
-    
+
   // bad parsing ? clean-up everything
   if( !d->valid )
   {
@@ -1233,18 +1236,18 @@ KSpreadValue Formula::convertToNumber( const KSpreadValue& value ) const
 {
   KSpreadValue result = KSpreadValue::errorVALUE();
   bool ok; long num1; double num2;
-  
+
   switch( value.type() )
   {
     case KSpreadValue::Integer:
     case KSpreadValue::Float:
-      result.setValue( value ); 
+      result.setValue( value );
       break;
-      
+
     case KSpreadValue::Boolean:
-      result.setValue( (long)(value.asBoolean() ? 1 : 0 ) ); 
+      result.setValue( (long)(value.asBoolean() ? 1 : 0 ) );
       break;
-      
+
     case KSpreadValue::String:
       num1 = value.asString().toLong( &ok );
       if( ok ) result.setValue( num1 );
@@ -1254,11 +1257,11 @@ KSpreadValue Formula::convertToNumber( const KSpreadValue& value ) const
         if( ok ) result.setValue( num2 );
       }
       break;
-        
+
     default: break;
   }
-  
-  return result;  
+
+  return result;
 }
 
 
@@ -1268,35 +1271,38 @@ KSpreadValue Formula::convertToString( const KSpreadValue& value ) const
 {
   KSpreadValue result = KSpreadValue::errorVALUE();
   QString str;
-  
+
   switch( value.type() )
   {
     case KSpreadValue::Integer:
       str= QString::number( value.asInteger() );;
       break;
-      
+
     case KSpreadValue::Float:
-      str = QString::number( value.asFloat() ); 
+      str = QString::number( value.asFloat() );
       break;
-      
+
     case KSpreadValue::Boolean:
-      if( value.asBoolean() ) str = "True"; else str = "False";
+      if( value.asBoolean() )
+          str = "True";
+      else
+          str = "False";
       break;
-      
+
     case KSpreadValue::String:
       str = value.asString();
       break;
-      
+
     case KSpreadValue::Error:
       str = "Error!";
       break;
-        
+
     default: break;
   }
-  
+
   result.setValue( str );
-  
-  return result;  
+
+  return result;
 }
 
 // Convert any value to Boolean
@@ -1305,33 +1311,33 @@ KSpreadValue Formula::convertToBool( const KSpreadValue& value ) const
 {
   KSpreadValue result = KSpreadValue::errorVALUE();
   QString str;
-  
+
   switch( value.type() )
   {
     case KSpreadValue::Integer:
       result.setValue( value.asInteger() != 0 );
       break;
-      
+
     case KSpreadValue::Float:
       // FIXME use machine epsilon here
       result.setValue( value.asFloat() != 0.0 );
       break;
-      
+
     case KSpreadValue::Boolean:
-      result.setValue( value.asBoolean()  ); 
+      result.setValue( value.asBoolean()  );
       break;
-      
+
     case KSpreadValue::String:
       // FIXME use i18n version as well
       str = value.asString();
       if( str == "True" ) result.setValue( true );
-      if( str == "False" ) result.setValue( false );
+      else if( str == "False" ) result.setValue( false );
       break;
-        
+
     default: break;
   }
-  
-  return result;  
+
+  return result;
 }
 
 // Evaluates the formula, returns the result.
@@ -1343,7 +1349,7 @@ KSpreadValue Formula::eval() const
   KSpreadValue val1, val2;
   QValueVector<KSpreadValue> args;
   Function* function;
-  
+
   for( unsigned pc = 0; pc < d->codes.count(); pc++ )
   {
     Opcode& opcode = d->codes[pc];
@@ -1353,20 +1359,20 @@ KSpreadValue Formula::eval() const
       // no operation
       case Opcode::Nop:
         break;
-      
+
       // load a constant, push to stack
       case Opcode::Load:
         val1 = d->constants[index];
-        stack.push( val1 );        
+        stack.push( val1 );
         break;
-        
+
       // unary operation
       case Opcode::Neg:
         val1 = convertToNumber( stack.pop() );
         if( val1.isError() ) return KSpreadValue::errorVALUE();
         stack.push( -val1.asFloat() );
         break;
-      
+
       // binary operation: take two values from stack, do the operation,
       // push the result to stack
       case Opcode::Add:
@@ -1376,7 +1382,7 @@ KSpreadValue Formula::eval() const
         if( val2.isError() ) return val2;
         stack.push( val2 );
         break;
-        
+
       case Opcode::Sub:
         val1 = convertToNumber( stack.pop() );
         val2 = convertToNumber( stack.pop() );
@@ -1384,7 +1390,7 @@ KSpreadValue Formula::eval() const
         if( val2.isError() ) return val2;
         stack.push( val2 );
         break;
-        
+
       case Opcode::Mul:
         val1 = convertToNumber( stack.pop() );
         val2 = convertToNumber( stack.pop() );
@@ -1392,7 +1398,7 @@ KSpreadValue Formula::eval() const
         if( val2.isError() ) return val2;
         stack.push( val2 );
         break;
-        
+
       case Opcode::Div:
         val1 = convertToNumber( stack.pop() );
         val2 = convertToNumber( stack.pop() );
@@ -1401,7 +1407,7 @@ KSpreadValue Formula::eval() const
         if( val2.isError() ) return val2;
         stack.push( val2 );
         break;
-        
+
       case Opcode::Pow:
         val1 = convertToNumber( stack.pop() );
         val2 = convertToNumber( stack.pop() );
@@ -1419,7 +1425,7 @@ KSpreadValue Formula::eval() const
         val1.setValue( val2.asString().append( val1.asString() ) );
         stack.push( val1 );
         break;
-        
+
       // logical not
       case Opcode::Not:
         val1 = convertToBool( stack.pop() );
@@ -1441,7 +1447,7 @@ KSpreadValue Formula::eval() const
         else
           stack.push( KSpreadValue( false ) );
         break;
-        
+
       // less than
       case Opcode::Less:
         val1 = stack.pop();
@@ -1450,12 +1456,12 @@ KSpreadValue Formula::eval() const
         if( val2.isError() ) return KSpreadValue::errorVALUE();
         if( !val1.allowComparison( val2 ) )
           return KSpreadValue::errorVALUE();
-        if( val2.compare( val1 ) < 0 ) 
+        if( val2.compare( val1 ) < 0 )
           stack.push( KSpreadValue( true ) );
         else
           stack.push( KSpreadValue( false ) );
         break;
-        
+
       // greater than
       case Opcode::Greater:
         val1 = stack.pop();
@@ -1464,22 +1470,22 @@ KSpreadValue Formula::eval() const
         if( val2.isError() ) return KSpreadValue::errorVALUE();
         if( !val1.allowComparison( val2 ) )
           return KSpreadValue::errorVALUE();
-        if( val2.compare( val1 ) > 0 ) 
+        if( val2.compare( val1 ) > 0 )
           stack.push( KSpreadValue( true ) );
         else
           stack.push( KSpreadValue( false ) );
         break;
-        
-        
+
+
       // reference: cell, range or function
       case Opcode::Ref:
         // FIXME check if there's such cell or range
         // else assume function call
         val1 = d->constants[index];
-        stack.push( val1 );        
+        stack.push( val1 );
         break;
-      
-      // calling function      
+
+      // calling function
       case Opcode::Function:
         if( stack.count() < index )
           return KSpreadValue::errorVALUE(); // not enough arguments
@@ -1487,23 +1493,23 @@ KSpreadValue Formula::eval() const
         for( ; index; index-- )
           args.insert( args.begin(), stack.pop() );
         val1 = convertToString( stack.pop() ); // function name as string value
-        if( val1.isError() ) 
-          return KSpreadValue::errorVALUE(); 
+        if( val1.isError() )
+          return KSpreadValue::errorVALUE();
         function = FunctionRepository::self()->function( val1.asString() );
         if( !function )
           return KSpreadValue::errorVALUE(); // no such function
         stack.push( function->exec( this, args ) );
-        break; 
-        
+        break;
+
       default:
         break;
     }
   }
-  
+
   // more than one value in stack ? unsuccesful execution...
   if( stack.count() != 1 )
     return KSpreadValue::errorVALUE();
-  
+
   return stack.pop();
 
 }
@@ -1513,17 +1519,17 @@ KSpreadValue Formula::eval() const
 QString Formula::dump() const
 {
   QString result;
-  
+
   if( d->dirty )
   {
     Tokens tokens = scan( d->expression );
     compile( tokens );
   }
-  
+
   result = QString("Expression: [%1]\n").arg( d->expression );
   KSpreadValue value = eval();
   result.append( QString("Result: %1\n").arg( convertToString( value ).asString() ) );
-  
+
   result.append("  Constants:\n");
   for( unsigned c = 0; c < d->constants.count(); c++ )
   {
@@ -1562,6 +1568,6 @@ QString Formula::dump() const
     }
     result.append( "   " ).append( ctext ).append("\n");
   }
-    
+
   return result;
 }
