@@ -637,15 +637,14 @@ QDomDocumentFragment OoWriterImport::parseList( QDomDocument& doc, const QDomEle
     for ( QDomNode n = list.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
         e = n.firstChild().toElement();
-        QString name = e.tagName();
 
-        //kdDebug(30518) << k_funcinfo << "Got tag: " << name << endl;
+        //kdDebug(30518) << k_funcinfo << "Got tag: " << e.tagName() << endl;
 
         // parse the list-properties
         fillStyleStack( e );
         QDomElement p = parseParagraph( doc, e );
 
-        QDomElement counter = doc.createElement( "COUNTER" ); // should be under <LAYOUT>
+        QDomElement counter = doc.createElement( "COUNTER" );
         counter.setAttribute( "numberingtype", 0 );
         counter.setAttribute( "depth", 0 );
 
@@ -658,10 +657,11 @@ QDomDocumentFragment OoWriterImport::parseList( QDomDocument& doc, const QDomEle
         else
             counter.setAttribute( "type", 10 ); // a disc bullet
 
-        // Don't 'appendChild()'! Text elements have to be the last children of the
-        // paragraph element otherwise kpresenter will cut off the last character of
-        // every item!
-        p.insertBefore( counter, QDomNode() );
+        QDomElement layout (p.namedItem("LAYOUT").toElement());
+        if (layout.isNull())
+            kdWarning(30518) << "Cannot find <LAYOUT> in KWord paragraph." << endl;
+        else
+            layout.appendChild(counter);
 
         fragment.appendChild(p);
         listCounter++;
@@ -1464,7 +1464,7 @@ void OoWriterImport::parseTable( QDomDocument &doc, const QDomElement& parent, Q
 
     // Left position of the cell/column (similar to RTF's \cellx). The last one defined is the right position of the last cell/column
     QMemArray<double> columnLefts(4);
-    int maxColumns=columnLefts.size();
+    uint maxColumns=columnLefts.size();
 
     uint col=0;
     columnLefts[0]=0.0; // Initialize left of first cell
