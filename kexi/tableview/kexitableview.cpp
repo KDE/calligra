@@ -2365,8 +2365,10 @@ void KexiTableView::removeEditor()
 
 bool KexiTableView::acceptEditor()
 {
-	if (!d->pEditor)
+	if (!d->pEditor || d->inside_acceptEditor)
 		return true;
+
+	d->inside_acceptEditor = true;//avoid recursion
 
 	QVariant newval;
 	KexiValidator::Result res = KexiValidator::Ok;
@@ -2430,6 +2432,9 @@ bool KexiTableView::acceptEditor()
 			|| setNull && d->pCurrentItem->at(d->curCol).isNull()) {
 			kdDebug() << "KexiTableView::acceptEditor(): VALUE NOT CHANGED." << endl;
 			removeEditor();
+			d->inside_acceptEditor = false;
+			if (d->acceptRowEditAfterCellAccepting)
+				acceptRowEdit();
 			return true;
 		}
 		if (!setNull) {//get the new value 
@@ -2487,7 +2492,13 @@ bool KexiTableView::acceptEditor()
 		emit itemChanged(d->pCurrentItem, d->curRow, d->curCol, d->pCurrentItem->at(d->curCol));
 		emit itemChanged(d->pCurrentItem, d->curRow, d->curCol);
 	}
-	return res == KexiValidator::Ok;
+	d->inside_acceptEditor = false;
+	if (res == KexiValidator::Ok) {
+		if (d->acceptRowEditAfterCellAccepting)
+			acceptRowEdit();
+		return true;
+	}
+	return false;
 }
 
 void KexiTableView::cancelEditor()
@@ -2502,6 +2513,11 @@ bool KexiTableView::acceptRowEdit()
 {
 	if (!d->rowEditing)
 		return true;
+	if (d->inside_acceptEditor) {
+		d->acceptRowEditAfterCellAccepting = true;
+		return true;
+	}
+	d->acceptRowEditAfterCellAccepting = false;
 	if (!acceptEditor())
 		return false;
 	kdDebug() << "EDIT ROW ACCEPTING..." << endl;

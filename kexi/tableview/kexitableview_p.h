@@ -141,6 +141,12 @@ class KexiTableViewPrivate
 	 when users navigates rows using keyboard, so vscrollbar tooltips are not visible then. */
 	bool vScrollBarValueChanged_enabled : 1;
 
+	/*! Used in acceptEditor() to avoid infinite recursion, 
+	 eg. when we're calling acceptRowEdit() during cell accepting phase. */
+	bool inside_acceptEditor : 1;
+
+	bool acceptRowEditAfterCellAccepting : 1;
+
 	/*! 1 if table view is readOnly, 0 if not; 
 	 otherwise (-1 means "dont know") the 'readOnly' flag from table views' 
 	 internal data structure (KexiTableViewData *KexiTableView::m_data) is reused. 

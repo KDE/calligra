@@ -54,6 +54,8 @@ KexiTableViewPrivate::KexiTableViewPrivate()
 	scrollBarTipTimerCnt = 0;
 	scrollBarTip = 0;
 	fullRowSelectionEnabled = false;
+	inside_acceptEditor = false;
+	acceptRowEditAfterCellAccepting = false;
 }
 
 KexiTableViewPrivate::~KexiTableViewPrivate()

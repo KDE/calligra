@@ -363,7 +363,7 @@ public slots:
 	void deleteAndStartEditCurrentCell();
 
 	/*! Accepts row editing. All changes made to the editing 
-	 row duing this current session will be accepted. 
+	 row during this current session will be accepted (saved). 
 	 \return true is accepting was successfull, false otherwise 
 	 (e.g. when current row contain data that does not meet given constraints). */
 	bool acceptRowEdit();
