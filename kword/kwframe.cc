@@ -959,21 +959,23 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
                 p->restore();
             }
         }
-        QRect outerRect( viewMode->normalToView( frame->outerRect() ) );
-        r = crect.intersect( outerRect );
-        if ( !r.isEmpty() )
-        {
-            // Now draw the frame border
-            // Clip frames on top if onlyChanged, but don't clip to the frame
-            QRegion reg = frameClipRegion( p, 0L, r, viewMode, onlyChanged );
-            if ( !reg.isEmpty() )
+        if(! getGroupManager()) {
+            QRect outerRect( viewMode->normalToView( frame->outerRect() ) );
+            r = crect.intersect( outerRect );
+            if ( !r.isEmpty() )
             {
-                p->save();
-                p->setClipRegion( reg );
-                KWFrame * settingsFrame = ( frame->isCopy() && lastRealFrame ) ? lastRealFrame : frame;
-                drawFrameBorder( p, frame, settingsFrame, r, viewMode, canvas );
-                p->restore();
-            }// else kdDebug() << "KWFrameSet::drawContents not drawing border for frame " << frame << endl;
+                // Now draw the frame border
+                // Clip frames on top if onlyChanged, but don't clip to the frame
+                QRegion reg = frameClipRegion( p, 0L, r, viewMode, onlyChanged );
+                if ( !reg.isEmpty() )
+                {
+                    p->save();
+                    p->setClipRegion( reg );
+                    KWFrame * settingsFrame = ( frame->isCopy() && lastRealFrame ) ? lastRealFrame : frame;
+                    drawFrameBorder( p, frame, settingsFrame, r, viewMode, canvas );
+                    p->restore();
+                }// else kdDebug() << "KWFrameSet::drawContents not drawing border for frame " << frame << endl;
+            }
         }
 
         if ( !lastRealFrame || !frame->isCopy() )
