@@ -31,6 +31,9 @@ public:
 	const QueryEntryList &getQueryData();
 	void setQueryData(const QueryEntryList&);
 
+	void store(KoStore*);
+	void load(KoStore*);
+
 protected:
 	friend class KexiQueryDesigner;
 	friend class KexiQueryDesigerGuiEditor;

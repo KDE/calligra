@@ -31,8 +31,14 @@ class DCOPObject;
 class KexiRelation;
 class KexiProjectHandler;
 
-struct FileReference
+class FileReference
 {
+public:
+	FileReference():group(),name(),location(){;}
+	FileReference(const FileReference &ref):group(ref.group),name(ref.name),location(ref.location){}
+	FileReference(const QString &group_,const QString &name_,const QString &location_):
+		group(group_),name(name_),location(location_){}
+	~FileReference(){}
 	QString group;
 	QString name;
 	QString location;

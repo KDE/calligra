@@ -41,7 +41,7 @@ KexiQueryPartProxy::KexiQueryPartProxy(KexiQueryPart *part,KexiView *view)
 	m_queryPart=part;
 	kdDebug() << "KexiQueryPartProxy::KexiQueryPartProxy()" << endl;
 
-        (void*) new KAction(i18n("Create &Query..."), 0,
+        (void) new KAction(i18n("Create &Query..."), 0,
                 this,SLOT(slotCreateQuery()), actionCollection(), "querypart_create");
 
         setXMLFile("kexiquerypartui.rc");
@@ -89,8 +89,7 @@ KexiQueryPartProxy::slotCreateQuery()
                 part()->items()->insert(name,it=new KexiQueryPartItem(part(), name, "kexi/query", name));
                 KexiQueryDesigner *kqd = new KexiQueryDesigner(kexiView(), 0, "query",it);
                 emit m_queryPart->itemListChanged(part());
-//                kexiView()->project()->addFileReference("/query/" + name + ".query");
-
+                kexiView()->project()->addFileReference(FileReference("Queries",name,"/query/" + name + ".query"));
                 kqd->show();
                 kexiView()->project()->setModified(true);
         }

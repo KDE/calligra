@@ -69,11 +69,18 @@ KexiQueryPart::itemPixmap()
 }
 
 
-void KexiQueryPart::store (KoStore *)
+void KexiQueryPart::store (KoStore *ks)
 {
+	kdDebug() << "KexiQueryPart::store(KoStore*)" << endl;
+
+        for(KexiProjectHandler::ItemIterator it(*items());it.current();++it)
+        {
+		KexiQueryPartItem *qpi=static_cast<KexiQueryPartItem*>(it.current());
+		qpi->store(ks);
+        }
 }
 
-void KexiQueryPart::load (KoStore *)
+void KexiQueryPart::load (KoStore *ks)
 {
 	References fileRefs = kexiProject()->fileReferences("Queries");
 	ItemList *list=items();
@@ -82,7 +89,9 @@ void KexiQueryPart::load (KoStore *)
 	for(References::Iterator it = fileRefs.begin(); it != fileRefs.end(); it++)
 	{
 		kdDebug() << "KexiQueryPart::getQueries() added " << (*it).name << endl;
-		list->insert((*it).name,new KexiQueryPartItem(this, (*it).name, "kexi/query", (*it).name));
+		KexiQueryPartItem *qpi;
+		list->insert((*it).name,qpi=new KexiQueryPartItem(this, (*it).name, "kexi/query", (*it).name));
+		qpi->load(ks);
 	}
 	
 	emit itemListChanged(this);
