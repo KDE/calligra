@@ -1180,6 +1180,9 @@ void KWView::setupActions()
                                         this, SLOT( slotAddIgnoreAllWord() ),
                                         actionCollection(), "ignore_all" );
 
+    actionInsertHorizontalLine = new KAction( i18n( "Horizontal line..." ), 0,
+                                        this, SLOT( insertHorizontalLine() ),
+                                        actionCollection(), "insert_horizontal_line" );
 }
 
 void KWView::refreshMenuExpression()
@@ -6949,6 +6952,11 @@ void KWView::addPersonalExpression()
     file.writeBlock(s,s.length());
     file.close();
     m_doc->refreshMenuExpression();
+}
+
+void KWView::insertHorizontalLine()
+{
+    //todo
 }
 
 /******************************************************************/

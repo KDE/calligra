@@ -436,6 +436,7 @@ public:
     virtual FrameSetType typeAsKOffice1Dot1(void) { return type(); }
 
     virtual void addTextFrameSets( QPtrList<KWTextFrameSet> & /*lst*/, bool /*forceAllTextFrameSet*/ = false ) {};
+    virtual bool ownLine() const { return FALSE;}
 
     /** The different types of textFramesets (that TEXT is important here!)
      * FI_BODY = normal text frames.<br>
@@ -1082,6 +1083,38 @@ protected slots:
 private:
     FormulaView* formulaView;
     DCOPObject *dcop;
+};
+
+
+/******************************************************************/
+/* Class: KWHorzLineFrameSet                                      */
+/******************************************************************/
+class KWHorzLineFrameSet : public KWFrameSet
+{
+public:
+    KWHorzLineFrameSet( KWDocument *_doc, const QString & name );
+    virtual ~KWHorzLineFrameSet();
+
+    virtual KWordFrameSetIface* dcopObject();
+
+    /**
+     * The type of frameset. Use this to differentiate between different instantiations of
+     *  the framesets. Each implementation will return a different frameType.
+     */
+    virtual FrameSetType type( void );
+    virtual bool ownLine() const;
+    /**
+     * Called when the user resizes a frame.
+     */
+    virtual void resizeFrame( KWFrame* frame, double newWidth, double newHeight, bool finalSize );
+
+    virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true );
+    virtual void load( QDomElement &attributes, bool loadFrames = true );
+
+    virtual void drawFrameContents( KWFrame * frame, QPainter *painter, const QRect & crect,
+                                    const QColorGroup &cg, bool onlyChanged, bool resetChanged,
+                                    KWFrameSetEdit * edit, KWViewMode *viewMode );
+
 };
 
 #endif

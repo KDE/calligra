@@ -119,6 +119,7 @@ k_dcop:
     void convertToTextBox();
     void addIgnoreAllWord();
     void addPersonalExpression();
+    void insertHorizontalLine();
 
 private:
     KWView *view;

@@ -256,3 +256,12 @@ void KWAnchor::save( QDomElement &parentElem )
     anchorElem.setAttribute( "instance", m_frameset->getName() );
 }
 
+bool KWAnchor::ownLine() const
+{
+    if ( m_deleted )
+        return FALSE;
+
+    if ( m_frameset)
+        return m_frameset->ownLine();
+    return FALSE;
+}

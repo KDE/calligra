@@ -43,7 +43,7 @@ public:
      */
     KWAnchor( KoTextDocument *textdoc, KWFrameSet * frameset, int frameNum );
     ~KWAnchor();
-
+    bool ownLine() const;
     virtual void setFormat( KoTextFormat* );
 
     /** The frameset that will provide the content to display in this anchor object */

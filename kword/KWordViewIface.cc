@@ -386,3 +386,8 @@ void KWordViewIface::addPersonalExpression()
 {
     view->addPersonalExpression();
 }
+
+void KWordViewIface::insertHorizontalLine()
+{
+    view->insertHorizontalLine();
+}

@@ -50,6 +50,7 @@
 #include "KWordPictureFrameSetIface.h"
 #include "KWordPartFrameSetIface.h"
 #include "KWordPartFrameSetEditIface.h"
+#include "KWordHorizontalLineFrameSetIface.h"
 
 //#define DEBUG_DRAW
 
@@ -2556,5 +2557,65 @@ void KWFormulaFrameSetEdit::cursorChanged( bool visible, bool /*selecting*/ )
     formulaFrameSet()->setChanged();
     m_canvas->repaintChanged( formulaFrameSet(), true );
 }
+
+/******************************************************************/
+/* Class: KWHorzLineFrameSet                                      */
+/******************************************************************/
+KWHorzLineFrameSet::KWHorzLineFrameSet( KWDocument *_doc, const QString & name )
+    : KWFrameSet( _doc )
+{
+    kdDebug(32001) << "KWHorzLineFrameSet::KWHorzLineFrameSet" << endl;
+    if ( name.isEmpty() )
+        m_name = _doc->generateFramesetName( i18n( "Horizontal line %1" ) );
+    else
+        m_name = name;
+}
+
+KWHorzLineFrameSet::~KWHorzLineFrameSet()
+{
+    //todo
+}
+
+
+FrameSetType KWHorzLineFrameSet::type( void )
+{
+    return FT_HORZLINE;
+}
+
+void KWHorzLineFrameSet::resizeFrame( KWFrame* /*frame*/, double /*newWidth*/, double /*newHeight*/, bool /*finalSize*/ )
+{
+    //todo
+}
+
+QDomElement KWHorzLineFrameSet::save( QDomElement &/*parentElem*/, bool /*saveFrames*/ )
+{
+    //todo
+    return QDomElement();
+}
+
+void KWHorzLineFrameSet::load( QDomElement &/*attributes*/, bool /*loadFrames*/ )
+{
+    //todo
+}
+
+void KWHorzLineFrameSet::drawFrameContents( KWFrame * /*frame*/, QPainter */*painter*/, const QRect & /*crect*/,
+                                            const QColorGroup &/*cg*/, bool /*onlyChanged*/, bool /*resetChanged*/,
+                                            KWFrameSetEdit * /*edit*/, KWViewMode */*viewMode*/ )
+{
+    //todo
+}
+
+bool KWHorzLineFrameSet::ownLine() const
+{
+    return TRUE;
+}
+
+KWordFrameSetIface* KWHorzLineFrameSet::dcopObject()
+{
+    if ( !m_dcop )
+	m_dcop = new KWHorizontalLineFrameSetIface( this );
+    return m_dcop;
+}
+
 
 #include "kwframe.moc"

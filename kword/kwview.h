@@ -392,6 +392,8 @@ public slots:
 
     void slotAddIgnoreAllWord();
 
+    void insertHorizontalLine();
+
 protected slots:
     void slotSetInitialPosition();
 
@@ -648,6 +650,8 @@ private:
     KAction *actionConvertToTextBox;
 
     KAction *actionSpellIgnoreAll;
+
+    KAction *actionInsertHorizontalLine;
 
     KToggleAction *actionInsertDirectCursor;
 
