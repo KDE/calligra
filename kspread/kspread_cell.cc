@@ -3195,7 +3195,7 @@ void KSpreadCell::incPrecision()
 {
   if ( !isNumeric() )
     return;
-  int tmpPreci=precision(column(),row());
+  int tmpPreci = precision( column(), row() );
   kdDebug(36001) << "incPrecision: tmpPreci = " << tmpPreci << endl;
   if ( tmpPreci == -1 )
   {
@@ -3206,13 +3206,13 @@ void KSpreadCell::incPrecision()
       setPrecision(1);
     else
     {
-      int start=0;
-      if(m_strOutText.find('%')!=-1)
-        start=2;
-      else if(m_strOutText.find(locale()->currencySymbol())==((int)(m_strOutText.length()-locale()->currencySymbol().length())))
-        start=locale()->currencySymbol().length()+1;
-      else if((start=m_strOutText.find('E'))!=-1)
-        start=m_strOutText.length()-start;
+      int start = 0;
+      if ( m_strOutText.find('%') != -1 )
+        start = 2;
+      else if ( m_strOutText.find(locale()->currencySymbol()) == ((int)(m_strOutText.length()-locale()->currencySymbol().length())) )
+        start = locale()->currencySymbol().length() + 1;
+      else if ( (start=m_strOutText.find('E')) != -1 )
+        start = m_strOutText.length() - start;
 
       //kdDebug(36001) << "start=" << start << " pos=" << pos << " length=" << m_strOutText.length() << endl;
       setPrecision( QMAX( 0, (int)m_strOutText.length() - start - pos ) );
@@ -3220,7 +3220,7 @@ void KSpreadCell::incPrecision()
   }
   else if ( tmpPreci < 10 )
   {
-    setPrecision(++tmpPreci);
+    setPrecision( ++tmpPreci );
   }
   setFlag(Flag_LayoutDirty);
 }
@@ -3229,31 +3229,33 @@ void KSpreadCell::decPrecision()
 {
   if ( !isNumeric() )
     return;
-  int preciTmp=precision(column(),row());
+  int preciTmp = precision( column(), row() );
+  kdDebug(36001) << "decPrecision: tmpPreci = " << tmpPreci << endl;
   if ( precision(column(),row()) == -1 )
   {
-    int pos = m_strOutText.find(decimal_point);
-    int start=0;
-    if(m_strOutText.find('%')!=-1)
-        start=2;
-    else if(m_strOutText.find(locale()->currencySymbol())==((int)(m_strOutText.length()-locale()->currencySymbol().length())))
-        start=locale()->currencySymbol().length()+1;
-    else if((start=m_strOutText.find('E'))!=-1)
-        start=m_strOutText.length()-start;
+    int pos = m_strOutText.find( decimal_point );
+    int start = 0;
+    if ( m_strOutText.find('%') != -1 )
+        start = 2;
+    else if ( m_strOutText.find(locale()->currencySymbol()) == ((int)(m_strOutText.length()-locale()->currencySymbol().length())) )
+        start = locale()->currencySymbol().length() + 1;
+    else if ( (start = m_strOutText.find('E')) != -1 )
+        start = m_strOutText.length() - start;
     else
-        start=0;
+        start = 0;
+
     if ( pos == -1 )
       return;
-    setPrecision(m_strOutText.length() - pos - 2-start);
-    if ( preciTmp < 0 )
-      setPrecision(preciTmp );
-    setFlag(Flag_LayoutDirty);
+
+    setPrecision(m_strOutText.length() - pos - 2 - start);
+    //   if ( preciTmp < 0 )
+    //      setPrecision( preciTmp );
   }
   else if ( preciTmp > 0 )
   {
-    setPrecision(--preciTmp);
-    setFlag(Flag_LayoutDirty);
+    setPrecision( --preciTmp );
   }
+  setFlag( Flag_LayoutDirty );
 }
 
 

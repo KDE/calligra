@@ -44,6 +44,7 @@ Until beta2:
   parts of the sheet independantly in each open view or embedded object)
 - DCOP interface for a table has changed.  Many of the operations have been
   moved to the 'view' class.  Current DCOP scripts will need to be updated
+- Zoom
 
 new functions added:
  ISBLANK, CHAR, CODE, VALUE, DOLLAR, CONCATENATE, FIXED, T, TEXT, SUBSTITUTE,

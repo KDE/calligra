@@ -43,6 +43,7 @@ Other things: (please add the things you are working on!)
 - much more formulas (financial, database...)
 - Scrollbar that supports jumping one row/column forward or back
 - Named areas with something like "=x+5" ("='x'+5" works already)
+- formula result: fit the precision to the width of the cell
 - other bug fixes                               (everybody, every time)
 
 
