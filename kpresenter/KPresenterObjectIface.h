@@ -38,10 +38,10 @@ k_dcop:
     int getType();
     QRect getBoundingRect();
     bool isSelected();
-    float getAngle();
-    int getShadowDistance();
-    int getShadowDirection();
-    QColor getShadowColor();
+    float angle();
+    int shadowDistance();
+    int shadowDirection();
+    QColor shadowColor();
     QSize getSize();
     QPoint getOrig();
     int getEffect();
@@ -55,9 +55,18 @@ k_dcop:
     void setSelected( bool _selected );
     void rotate( float _angle );
     void setShadowDistance( int _distance );
-    float getAngle() const;
     void setSticky( bool b );
     bool isSticky() const ;
+
+    void shadowColor( const QColor & _color );
+
+    void setAppearTimer( int _appearTimer );
+    void setDisappearTimer( int _disappearTimer );
+
+    void setAppearSoundEffect( bool b );
+    void setDisappearSoundEffect( bool b );
+    void setAppearSoundEffectFileName( const QString & _a_fileName );
+    void setDisappearSoundEffectFileName( const QString &_d_fileName );
 
 private:
     KPObject *obj;

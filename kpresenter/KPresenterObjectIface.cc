@@ -46,22 +46,22 @@ bool KPresenterObjectIface::isSelected()
     return obj->isSelected();
 }
 
-float KPresenterObjectIface::getAngle()
+float KPresenterObjectIface::angle()
 {
     return obj->getAngle();
 }
 
-int KPresenterObjectIface::getShadowDistance()
+int KPresenterObjectIface::shadowDistance()
 {
     return obj->getShadowDistance();
 }
 
-int KPresenterObjectIface::getShadowDirection()
+int KPresenterObjectIface::shadowDirection()
 {
     return (int)obj->getShadowDirection();
 }
 
-QColor KPresenterObjectIface::getShadowColor()
+QColor KPresenterObjectIface::shadowColor()
 {
     return obj->getShadowColor();
 }
@@ -128,11 +128,6 @@ void KPresenterObjectIface::setShadowDistance( int _distance )
     obj->setShadowDistance(_distance);
 }
 
-float KPresenterObjectIface::getAngle() const
-{
-    return obj->getAngle();
-}
-
 void KPresenterObjectIface::setSticky( bool b )
 {
     obj->setSticky(b);
@@ -143,3 +138,35 @@ bool KPresenterObjectIface::isSticky() const
     return obj->isSticky();
 }
 
+void KPresenterObjectIface::shadowColor( const QColor & _color )
+{
+    obj->setShadowColor(_color);
+}
+
+void KPresenterObjectIface::setAppearTimer( int _appearTimer )
+{
+    obj->setAppearTimer(_appearTimer);
+}
+
+void KPresenterObjectIface::setDisappearTimer( int _disappearTimer )
+{
+    obj->setDisappearTimer(_disappearTimer);
+}
+
+void KPresenterObjectIface::setAppearSoundEffect( bool b )
+{
+    obj->setAppearSoundEffect(b);
+}
+
+void KPresenterObjectIface::setDisappearSoundEffect( bool b )
+{
+    obj->setDisappearSoundEffect(b);
+}
+void KPresenterObjectIface::setAppearSoundEffectFileName( const QString & _a_fileName )
+{
+    obj->setAppearSoundEffectFileName(_a_fileName);
+}
+void KPresenterObjectIface::setDisappearSoundEffectFileName( const QString &_d_fileName )
+{
+    obj->setDisappearSoundEffectFileName(_d_fileName);
+}
