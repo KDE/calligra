@@ -6896,6 +6896,9 @@ bool KSpreadSheet::setTableName( const QString& name, bool init, bool makeUndo )
 
     checkContentDirection( name );
 
+    setName(name.utf8());
+    (dynamic_cast<KSpreadSheetIface*>(dcopObject()))->tableNameHasChanged();
+
     return TRUE;
 }
 

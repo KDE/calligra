@@ -704,6 +704,8 @@ KSpreadPoint::KSpreadPoint(const QString & _str)
 
 void KSpreadPoint::init(const QString & _str)
 {
+
+//    kdDebug(36001) <<"KSpreadPoint::init ("<<_str<<")"<<endl;
     pos.setX(-1);
 
     uint len = _str.length();

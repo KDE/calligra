@@ -49,12 +49,28 @@ KSpreadCellProxy::~KSpreadCellProxy()
 bool KSpreadCellProxy::process( const QCString& obj, const QCString& fun, const QByteArray& data,
                                         QCString& replyType, QByteArray &replyData )
 {
+
+	kdDebug()<<"KSpreadCellProxy::process: requested object:"<<obj<<endl;
+	kdDebug()<<"KSpreadCellProxy::process: prefix:"<<m_prefix<<endl;
     if ( strncmp( m_prefix.data(), obj.data(), m_prefix.length() ) != 0 )
         return FALSE;
 
+	if ( fun == "functions()" ) {
+        	replyType = "QCStringList";
+	        QDataStream reply( replyData, IO_WriteOnly );
+		 QCStringList repList=m_cell->functions();
+		reply<<repList;
+	        return TRUE;
+	}
+
+
     KSpreadPoint p( obj.data() + m_prefix.length() );
-    if ( !p.isValid() )
-        return FALSE;
+    if ( !p.isValid() ) {
+	kdDebug(36001)<<"KSpreadCellProyxy::process: resulting KSpreadPoint is not valid"<<endl;
+        return FALSE; 
+    }
+
+    kdDebug(36001)<<"all checks finsihed, trying to access cell"<<endl;
 
     m_cell->setCell( m_table, p.pos );
     return m_cell->process( fun, data, replyType, replyData );
@@ -67,15 +83,38 @@ bool KSpreadCellProxy::process( const QCString& obj, const QCString& fun, const 
  ************************************************/
 
 KSpreadSheetIface::KSpreadSheetIface( KSpreadSheet* t )
-    : DCOPObject( t )
+    : DCOPObject()
 {
+    m_proxy=0;
     m_table = t;
 
-    QCString str = objId();
-    str += "/";
-    m_proxy = new KSpreadCellProxy( t, str );
+    tableNameHasChanged();
 
 }
+
+void KSpreadSheetIface::tableNameHasChanged() {
+  ident.resize(1);
+  QObject *currentObj = m_table;
+    while (currentObj != 0L) {
+        ident.prepend( currentObj->name() );
+        ident.prepend("/");
+        currentObj = currentObj->parent();
+    }
+    if ( ident[0] == '/' )
+        ident = ident.mid(1);
+
+   if (qstrcmp(ident,objId())!=0) {
+	   setObjId(ident);
+
+           delete m_proxy;
+           QCString str = objId();
+           str += "/";
+	   kdDebug(36001)<<"KSpreadSheetIface::tableNameHasChanged(): new DCOP-ID:"<<objId()<<endl;
+           m_proxy = new KSpreadCellProxy( m_table, str );
+   }
+
+}
+
 
 KSpreadSheetIface::~KSpreadSheetIface()
 {

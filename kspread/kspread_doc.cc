@@ -655,7 +655,7 @@ KSpreadSheet* KSpreadDoc::createTable()
   QString s( i18n("Sheet%1") );
   s = s.arg( m_iTableId++ );
   //KSpreadSheet *t = new KSpreadSheet( m_pMap, s.latin1() );
-  KSpreadSheet *t = new KSpreadSheet( m_pMap, s );
+  KSpreadSheet *t = new KSpreadSheet( m_pMap, s,s.utf8() );
   t->setTableName( s, TRUE ); // huh? (Werner)
   return t;
 }

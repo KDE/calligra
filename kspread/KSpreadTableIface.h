@@ -23,6 +23,7 @@ public:
     bool processDynamic( const QCString& fun, const QByteArray& data,
 			 QCString& replyType, QByteArray &replyData );
 
+    void tableNameHasChanged();
 k_dcop:
     virtual DCOPRef cell( int x, int y );
     virtual DCOPRef cell( const QString& name );
@@ -77,6 +78,7 @@ k_dcop:
 private:
     KSpreadSheet* m_table;
     KSpreadCellProxy* m_proxy;
+    QCString ident;
 };
 
 #endif
