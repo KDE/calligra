@@ -39,7 +39,7 @@ public:
   // IDL
   virtual bool open( const QString & name, const QCString &_mime_type );
   virtual void close();
-  virtual KOStore::Data read( CORBA::ULong max );
+  virtual KOStore::Data read( long unsigned int max );
   virtual bool write( const KOStore::Data& _data );
 
   // C++
