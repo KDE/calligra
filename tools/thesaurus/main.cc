@@ -340,24 +340,30 @@ void Thesaurus::thesExited(KProcess *)
     if( syn.size() > 0 ) {
         syn = sortQStringList(syn);
         m_thes_syn->insertStringList(syn);
+        m_thes_syn->setEnabled(true);
     } else {
-        m_thes_syn->insertItem(i18n("No match"));
+        m_thes_syn->insertItem(i18n("(No match)"));
+        m_thes_syn->setEnabled(false);
     }
     
     m_thes_hyper->clear();
     if( hyper.size() > 0 ) {
         hyper = sortQStringList(hyper);
         m_thes_hyper->insertStringList(hyper);
+        m_thes_hyper->setEnabled(true);
     } else {
-        m_thes_hyper->insertItem(i18n("No match"));
+        m_thes_hyper->insertItem(i18n("(No match)"));
+        m_thes_hyper->setEnabled(false);
     }
 
     m_thes_hypo->clear();
     if( hypo.size() > 0 ) {
         hypo = sortQStringList(hypo);
         m_thes_hypo->insertStringList(hypo);
+        m_thes_hypo->setEnabled(true);
     } else {
-        m_thes_hypo->insertItem(i18n("No match"));
+        m_thes_hypo->insertItem(i18n("(No match)"));
+        m_thes_hypo->setEnabled(false);
     }
 
     QApplication::restoreOverrideCursor();
