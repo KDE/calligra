@@ -19,6 +19,8 @@
 
 #include "KWordViewIface.h"
 
+#include <kurl.h>
+
 #include "kwview.h"
 #include "kwcanvas.h"
 #include "kwdoc.h"
@@ -356,9 +358,13 @@ void KWordViewIface::importStyle()
     view->importStyle();
 }
 
+// ### TODO: network transparency
 void KWordViewIface::insertFile(const QString & path)
 {
-    view->insertFile( path );
+
+    KURL url;
+    url.setPath( path );
+    view->insertFile( url );
 }
 
 void KWordViewIface::createFrameStyle()
