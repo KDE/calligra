@@ -76,6 +76,7 @@ public:
 
     virtual void recalc();
     virtual void setVariableSubType( short int type);
+    virtual QString text();
 
     QPtrList<KAction> actionList();
 

@@ -5552,6 +5552,10 @@ void KWView::switchModeView()
         m_doc->setShowDocStruct(actionShowDocStruct->isChecked());
         m_doc->reorganizeGUI();
     }
+    //recalc pgnum variable when we swith viewmode
+    //because in text mode view we display field code and not value
+    //normal because we don't have real page in this mode
+    m_doc->recalcVariables(  VT_PGNUM );
     //switch to main frameset when we switch in text-view mode
     //otherwise we can edit a footnote frame or header/footer
     if ( !state )

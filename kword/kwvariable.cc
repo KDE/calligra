@@ -26,7 +26,7 @@
 #include "mailmerge.h"
 #include "kwdoc.h"
 #include "kwcommand.h"
-
+#include "kwviewmode.h"
 #include <klocale.h>
 #include <kdebug.h>
 #include <qdom.h>
@@ -143,6 +143,17 @@ void KWPgNumVariable::recalc()
     }
     // The other cases are handled by the more dynamic code in KWTextFrameSet::drawFrame()
 }
+
+QString KWPgNumVariable::text()
+{
+    if (m_varColl->variableSetting()->displayFiedCode())
+        return fieldCode();
+    else if ( m_subtype !=  VST_CURRENT_SECTION && m_doc->viewMode()->type() == "ModeText")
+        return fieldCode();
+    else
+        return m_varFormat->convert( m_varValue );
+}
+
 
 void KWPgNumVariable::setVariableSubType( short int type)
 {
