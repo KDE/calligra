@@ -34,7 +34,7 @@ public:
     KWStyle( const QString & name );
 
     // Create a style from a saved document
-    KWStyle( QDomElement & styleElem, const QFont & defaultFont );
+    KWStyle( QDomElement & styleElem, KWDocument * doc, const QFont & defaultFont );
 
     // Copy another style
     KWStyle( const KWStyle & rhs ) { *this = rhs; }

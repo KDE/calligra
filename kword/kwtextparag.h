@@ -50,7 +50,7 @@ public:
     KWParagLayout();
     KWParagLayout( const KWParagLayout &layout ) { operator=( layout ); }
     // Load from XML, optionally using styles from document.
-    KWParagLayout( QDomElement & parentElem, KWDocument *doc = 0L );
+    KWParagLayout( QDomElement & parentElem, KWDocument *doc, bool useRefStyle );
 
     ~KWParagLayout();
 

@@ -734,7 +734,7 @@ void KWTextParag::loadLayout( QDomElement & attributes )
     if ( !layout.isNull() )
     {
         KWDocument * doc = textDocument()->textFrameSet()->kWordDocument();
-        KWParagLayout paragLayout( layout, doc );
+        KWParagLayout paragLayout( layout, doc, true );
         setParagLayout( paragLayout );
 
         // Load default format from style.
@@ -1043,14 +1043,12 @@ int KWParagLayout::compare( const KWParagLayout & layout ) const
 // document named by the layout. This allows for simplified import filters,
 // and also looks to the day that redundant data can be eliminated from the
 // saved XML.
-KWParagLayout::KWParagLayout( QDomElement & parentElem, KWDocument *doc )
+KWParagLayout::KWParagLayout( QDomElement & parentElem, KWDocument *doc, bool useRefStyle )
 {
     initialise();
 
     // Only when loading paragraphs, not when loading styles
-    // This is a hack, a better design would be to pass the reference style as parameter
-    // instead of the doc.
-    if ( doc )
+    if ( useRefStyle )
     {
         // Name of the style. If there is no style, then we do not supply
         // any default!
@@ -1110,21 +1108,24 @@ KWParagLayout::KWParagLayout( QDomElement & parentElem, KWDocument *doc )
         }
     }
 
-    element = parentElem.namedItem( "OHEAD" ).toElement(); // used by KWord-0.8
-    if ( !element.isNull() )
-        margins[QStyleSheetItem::MarginTop] = KWDocument::getAttribute( element, "pt", 0.0 );
+    if ( doc->syntaxVersion() < 2 )
+    {
+        element = parentElem.namedItem( "OHEAD" ).toElement(); // used by KWord-0.8
+        if ( !element.isNull() )
+            margins[QStyleSheetItem::MarginTop] = KWDocument::getAttribute( element, "pt", 0.0 );
 
-    element = parentElem.namedItem( "OFOOT" ).toElement(); // used by KWord-0.8
-    if ( !element.isNull() )
-        margins[QStyleSheetItem::MarginBottom] = KWDocument::getAttribute( element, "pt", 0.0 );
+        element = parentElem.namedItem( "OFOOT" ).toElement(); // used by KWord-0.8
+        if ( !element.isNull() )
+            margins[QStyleSheetItem::MarginBottom] = KWDocument::getAttribute( element, "pt", 0.0 );
 
-    element = parentElem.namedItem( "IFIRST" ).toElement(); // used by KWord-0.8
-    if ( !element.isNull() )
-        margins[QStyleSheetItem::MarginFirstLine] = KWDocument::getAttribute( element, "pt", 0.0 );
+        element = parentElem.namedItem( "IFIRST" ).toElement(); // used by KWord-0.8
+        if ( !element.isNull() )
+            margins[QStyleSheetItem::MarginFirstLine] = KWDocument::getAttribute( element, "pt", 0.0 );
 
-    element = parentElem.namedItem( "ILEFT" ).toElement(); // used by KWord-0.8
-    if ( !element.isNull() )
-        margins[QStyleSheetItem::MarginLeft] = KWDocument::getAttribute( element, "pt", 0.0 );
+        element = parentElem.namedItem( "ILEFT" ).toElement(); // used by KWord-0.8
+        if ( !element.isNull() )
+            margins[QStyleSheetItem::MarginLeft] = KWDocument::getAttribute( element, "pt", 0.0 );
+    }
 
     // KWord-1.0 DTD
     element = parentElem.namedItem( "INDENTS" ).toElement();
@@ -1141,9 +1142,12 @@ KWParagLayout::KWParagLayout( QDomElement & parentElem, KWDocument *doc )
         margins[QStyleSheetItem::MarginBottom] = KWDocument::getAttribute( element, "after", 0.0 );
     }
 
-    element = parentElem.namedItem( "LINESPACE" ).toElement(); // used by KWord-0.8
-    if ( !element.isNull() )
-        lineSpacing = KWDocument::getAttribute( element, "pt", 0.0 );
+    if ( doc->syntaxVersion() < 2 )
+    {
+        element = parentElem.namedItem( "LINESPACE" ).toElement(); // used by KWord-0.8
+        if ( !element.isNull() )
+            lineSpacing = KWDocument::getAttribute( element, "pt", 0.0 );
+    }
 
     element = parentElem.namedItem( "LINESPACING" ).toElement(); // KWord-1.0 DTD
     if ( !element.isNull() )
@@ -1161,10 +1165,12 @@ KWParagLayout::KWParagLayout( QDomElement & parentElem, KWDocument *doc )
         if ( element.attribute( "hardFrameBreakAfter" ) == "true" )
             pageBreaking |= HardFrameBreakAfter;
     }
-    element = parentElem.namedItem( "HARDBRK" ).toElement(); // KWord-0.8
-    if ( !element.isNull() )
-        pageBreaking |= HardFrameBreakBefore;
-
+    if ( doc->syntaxVersion() < 2 )
+    {
+        element = parentElem.namedItem( "HARDBRK" ).toElement(); // KWord-0.8
+        if ( !element.isNull() )
+            pageBreaking |= HardFrameBreakBefore;
+    }
 
     element = parentElem.namedItem( "LEFTBORDER" ).toElement();
     if ( !element.isNull() )

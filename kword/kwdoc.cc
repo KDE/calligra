@@ -202,7 +202,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_zoom = 100;
 
     setZoomAndResolution( 100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false );
-    syntaxVersion = CURRENT_SYNTAX_VERSION;
+    m_syntaxVersion = CURRENT_SYNTAX_VERSION;
 
     m_pKSpellConfig=0;
 
@@ -395,42 +395,42 @@ void KWDocument::recalcFrames()
                     firstHeader = dynamic_cast<KWTextFrameSet*>( fs );
                     firstHeadOffset = static_cast<int>(m_pageHeaderFooter.ptHeaderBodySpacing +
                                                        fs->getFrame( 0 )->height());
-                } else fs->setVisible( false );
+                } else { fs->setVisible( false ); fs->deleteAllFrames(); }
                 break;
             case FI_EVEN_HEADER:
                 if ( isHeaderVisible() ) {
                     evenHeader = dynamic_cast<KWTextFrameSet*>( fs );
                     evenHeadOffset = static_cast<int>(m_pageHeaderFooter.ptHeaderBodySpacing +
                                                       fs->getFrame( 0 )->height());
-                } else fs->setVisible( false );
+                } else { fs->setVisible( false ); fs->deleteAllFrames(); }
                 break;
             case FI_ODD_HEADER:
                 if ( isHeaderVisible() ) {
                     oddHeader = dynamic_cast<KWTextFrameSet*>( fs );
                     oddHeadOffset = static_cast<int>(m_pageHeaderFooter.ptHeaderBodySpacing +
                                                      fs->getFrame( 0 )->height());
-                } else fs->setVisible( false );
+                } else { fs->setVisible( false ); fs->deleteAllFrames(); }
                 break;
             case FI_FIRST_FOOTER:
                 if ( isFooterVisible() ) {
                     firstFooter = dynamic_cast<KWTextFrameSet*>( fs );
                     firstFootOffset = static_cast<int>(m_pageHeaderFooter.ptFooterBodySpacing +
                                                        fs->getFrame( 0 )->height());
-                } else fs->setVisible( false );
+                } else { fs->setVisible( false ); fs->deleteAllFrames(); }
                 break;
             case FI_EVEN_FOOTER:
                 if ( isFooterVisible() ) {
                     evenFooter = dynamic_cast<KWTextFrameSet*>( fs );
                     evenFootOffset = static_cast<int>(m_pageHeaderFooter.ptFooterBodySpacing +
                                                       fs->getFrame( 0 )->height());
-                } else fs->setVisible( false );
+                } else { fs->setVisible( false ); fs->deleteAllFrames(); }
                 break;
             case FI_ODD_FOOTER:
                 if ( isFooterVisible() ) {
                     oddFooter = dynamic_cast<KWTextFrameSet*>( fs );
                     oddFootOffset = static_cast<int>(m_pageHeaderFooter.ptFooterBodySpacing +
                                                      fs->getFrame( 0 )->height());
-                } else fs->setVisible( false );
+                } else { fs->setVisible( false ); fs->deleteAllFrames(); }
             default: break;
         }
     }
@@ -440,7 +440,9 @@ void KWDocument::recalcFrames()
             case HF_SAME:
                 evenHeader->setVisible( true );
                 oddHeader->setVisible( false );
+                oddHeader->deleteAllFrames();
                 firstHeader->setVisible( false );
+                firstHeader->deleteAllFrames();
 
                 oddHeader = evenHeader;
                 firstHeader = evenHeader;
@@ -450,6 +452,7 @@ void KWDocument::recalcFrames()
             case HF_FIRST_DIFF:
                 evenHeader->setVisible( true );
                 oddHeader->setVisible( false );
+                oddHeader->deleteAllFrames();
                 firstHeader->setVisible( true );
 
                 oddHeader = evenHeader;
@@ -459,6 +462,7 @@ void KWDocument::recalcFrames()
                 evenHeader->setVisible( true );
                 oddHeader->setVisible( true );
                 firstHeader->setVisible( false );
+                firstHeader->deleteAllFrames();
 
                 firstHeader = oddHeader;
                 firstHeadOffset = oddHeadOffset;
@@ -470,7 +474,9 @@ void KWDocument::recalcFrames()
             case HF_SAME:
                 evenFooter->setVisible( true );
                 oddFooter->setVisible( false );
+                oddFooter->deleteAllFrames();
                 firstFooter->setVisible( false );
+                firstFooter->deleteAllFrames();
 
                 oddFooter = evenFooter;
                 firstFooter = evenFooter;
@@ -480,6 +486,7 @@ void KWDocument::recalcFrames()
             case HF_FIRST_DIFF:
                 evenFooter->setVisible( true );
                 oddFooter->setVisible( false );
+                oddFooter->deleteAllFrames();
                 firstFooter->setVisible( true );
 
                 oddFooter = evenFooter;
@@ -489,6 +496,7 @@ void KWDocument::recalcFrames()
                 evenFooter->setVisible( true );
                 oddFooter->setVisible( true );
                 firstFooter->setVisible( false );
+                firstFooter->deleteAllFrames();
 
                 firstFooter = oddFooter;
                 firstFootOffset = oddFootOffset;
@@ -930,8 +938,8 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         kdError(32001) << "Unknown mime type " << value << endl;
         return false;
     }
-    syntaxVersion = KWDocument::getAttribute( word, "syntaxVersion", 0 );
-    if ( syntaxVersion < CURRENT_SYNTAX_VERSION )
+    m_syntaxVersion = KWDocument::getAttribute( word, "syntaxVersion", 0 );
+    if ( m_syntaxVersion < CURRENT_SYNTAX_VERSION )
     {
         // We can ignore the version mismatch for now. We will actually have to use it
         // when the syntax is extended in an incompatible manner.
@@ -1309,7 +1317,7 @@ void KWDocument::loadStyleTemplates( QDomElement stylesElem )
     for (unsigned int item = 0; item < listStyles.count(); item++) {
         QDomElement styleElem = listStyles.item( item ).toElement();
 
-        KWStyle *sty = new KWStyle( styleElem, m_defaultFont );
+        KWStyle *sty = new KWStyle( styleElem, this, m_defaultFont );
         //kdDebug() << "KWDocument::loadStyleTemplates " << sty->name() << endl;
         addStyleTemplate( sty );
         if(m_styleList.count() > followingStyles.count() )
@@ -1586,8 +1594,8 @@ QDomDocument KWDocument::saveXML()
     QDomElement kwdoc = doc.createElement( "DOC" );
     kwdoc.setAttribute( "editor", "KWord" );
     kwdoc.setAttribute( "mime", "application/x-kword" );
-    syntaxVersion = CURRENT_SYNTAX_VERSION;
-    kwdoc.setAttribute( "syntaxVersion", syntaxVersion );
+    m_syntaxVersion = CURRENT_SYNTAX_VERSION;
+    kwdoc.setAttribute( "syntaxVersion", m_syntaxVersion );
     doc.appendChild( kwdoc );
 
     QDomElement paper = doc.createElement( "PAPER" );

@@ -30,8 +30,8 @@ KWStyle::KWStyle( const QString & name )
     m_paragLayout.style = this;
 }
 
-KWStyle::KWStyle( QDomElement & styleElem, const QFont & defaultFont )
-    : m_paragLayout( styleElem ) // Load the paraglayout from the <STYLE> element
+KWStyle::KWStyle( QDomElement & styleElem, KWDocument * doc, const QFont & defaultFont )
+    : m_paragLayout( styleElem, doc, false ) // Load the paraglayout from the <STYLE> element
 {
     // This way, KWTextParag::setParagLayout also sets the style pointer, to this style
     m_paragLayout.style = this;

@@ -73,10 +73,9 @@ don't put a </?xml...> at the end of the file!).
             syntaxVersion:  Integer version of the syntax in the remainder of
                             this file:
 
-                                1...as for KWord 0.8 and for KWord 1.0
-                            It's the same version since KWord can read both formats,
-                            so it doesn't need to know before hand.
-
+                                1...as for KWord 0.8 (KOffice-1.0)
+                                2...as for KWord 1.1
+                            KWord can read all previous versions, but always saves in the latest.
 -->
 <!ELEMENT DOC
     (PAPER, ATTRIBUTES, FRAMESETS, STYLES, (EMBEDDED*))>
@@ -101,6 +100,7 @@ don't put a </?xml...> at the end of the file!).
                                 6...CUSTOM (just enter your preferred size)
                                 7...DIN B5
                                 8...US EXECUTIVE
+                                etc. See the enum in koffice/lib/kofficeui/koGlobal.h
 
             width:          width in pt.
 

@@ -33,6 +33,9 @@ class KWViewMode;
 class KAction;
 class KoDataToolInfo;
 
+//#define TIMING_FORMAT
+//#include <qdatetime.h>
+
 /**
  * Class: KWTextFrameSet
  * Contains text (KWTextDocument) and frames to display
@@ -293,6 +296,9 @@ private:
     QPtrDict<int> m_origFontSizes; // Format -> doc font size.    Maybe a key->fontsize dict would be better.
     KWViewMode * m_currentViewMode;            // The one while drawing. For KWAnchor. Don't use.
     //KWFrame * m_currentDrawnFrame;           // The frame currently being drawn.
+#ifdef TIMING_FORMAT
+    QTime m_time;
+#endif
 
     static const char s_customItemChar = '#'; // Has to be transparent to kspell but still be saved (not space)
 };

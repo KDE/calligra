@@ -109,7 +109,7 @@ public:
     static const int U_TABS = 512;
     static const int U_SMART = 1024;
 
-    static const int CURRENT_SYNTAX_VERSION = 1;
+    static const int CURRENT_SYNTAX_VERSION = 2;
 
 public:
     virtual bool initDoc();
@@ -120,7 +120,7 @@ public:
     virtual QDomDocument saveXML();
     void processImageRequests();
 
-    //int getSyntaxVersion( ) const { return syntaxVersion; }
+    int syntaxVersion( ) const { return m_syntaxVersion; }
 
     // Called by KWFrame*'s loading code to emit correct progress info
     void progressItemLoaded();
@@ -586,7 +586,7 @@ private:
 
     // When a document is written out, the syntax version in use will be recorded. When read back
     // in, this variable reflects that value.
-    int syntaxVersion;
+    int m_syntaxVersion;
 
     KSpellConfig *m_pKSpellConfig;
 

@@ -287,6 +287,7 @@ public:
     virtual void addFrame( KWFrame *_frame, bool recalc = true );
     virtual void delFrame( unsigned int _num );
     virtual void delFrame( KWFrame *frm, bool remove = true );
+    void deleteAllFrames();
 
     /** retrieve frame from x and y coords (unzoomed coords) */
     KWFrame *frameAtPos( double _x, double _y );

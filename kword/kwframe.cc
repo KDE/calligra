@@ -268,6 +268,15 @@ void KWFrameSet::delFrame( KWFrame *frm, bool remove )
     updateFrames();
 }
 
+void KWFrameSet::deleteAllFrames()
+{
+    if ( !frames.isEmpty() )
+    {
+        frames.clear();
+        updateFrames();
+    }
+}
+
 void KWFrameSet::createEmptyRegion( QRegion & emptyRegion, KWViewMode *viewMode )
 {
     QListIterator<KWFrame> frameIt = frameIterator();
@@ -936,17 +945,20 @@ void KWFrameSet::load( QDomElement &attributes )
             sheetSide = static_cast<SheetSide>( KWDocument::getAttribute( frameElem, "sheetSide", AnySide ) );
 
             KWFrame * frame = new KWFrame(this, rect.x(), rect.y(), rect.width(), rect.height(), runaround, runAroundGap );
-//            if(c==l.color && l.ptWidth==1 && l.style==0 )
-//                l.ptWidth=0;
+            if ( m_doc->syntaxVersion() < 2 ) // Activate old "white border == no border" conversion
+            {
+                if(c==l.color && l.ptWidth==1 && l.style==0 )
+                    l.ptWidth=0;
+                if(c==r.color  && r.ptWidth==1 && r.style==0)
+                    r.ptWidth=0;
+                if(c==t.color && t.ptWidth==1 && t.style==0 )
+                    t.ptWidth=0;
+                if(c==b.color && b.ptWidth==1 && b.style==0 )
+                    b.ptWidth=0;
+            }
             frame->setLeftBorder( l );
-//            if(c==r.color  && r.ptWidth==1 && r.style==0)
-//                r.ptWidth=0;
             frame->setRightBorder( r );
-//            if(c==t.color && t.ptWidth==1 && t.style==0 )
-//                t.ptWidth=0;
             frame->setTopBorder( t );
-//            if(c==b.color && b.ptWidth==1 && b.style==0 )
-//                b.ptWidth=0;
             frame->setBottomBorder( b );
             frame->setBackgroundColor( QBrush( c ) );
             frame->setBLeft( lpt );

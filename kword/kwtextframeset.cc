@@ -1284,6 +1284,13 @@ void KWTextFrameSet::formatMore()
                    << " to=" << to << " viewsBottom=" << viewsBottom
                    << " availableHeight=" << m_availableHeight << endl;
 #endif
+#ifdef TIMING_FORMAT
+    if ( lastFormatted->prev() == 0 && getFrameInfo() == FI_BODY )
+    {
+        kdDebug(32002) << "KWTextFrameSet::formatMore " << getName() << ". First parag -> starting timer" << endl;
+        m_time.start();
+    }
+#endif
 
     // Stop if we have formatted everything or if we need more space
     // Otherwise, stop formatting after "to" paragraphs,
@@ -1381,7 +1388,7 @@ void KWTextFrameSet::formatMore()
                             m_doc->updateAllFrames();
                             m_doc->invalidate();
                             m_doc->repaintAllViews();
-                           break;
+                            break;
                         }
                     }
                 }
@@ -1446,6 +1453,13 @@ void KWTextFrameSet::formatMore()
         interval = QMAX( 0, interval );
 #ifdef DEBUG_FORMAT_MORE
         kdDebug(32002) << "KWTextFrameSet::formatMore all formatted" << endl;
+#endif
+#ifdef TIMING_FORMAT
+        if ( getFrameInfo() == FI_BODY )
+        {
+            kdDebug(32002) << "KWTextFrameSet::formatMore " << getName() << " all formatted. Took "
+                           << (double)(m_time.elapsed()) / 1000 << " seconds." << endl;
+        }
 #endif
     }
 }
