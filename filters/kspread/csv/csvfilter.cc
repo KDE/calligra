@@ -26,16 +26,15 @@ CSVFilter::CSVFilter(KoFilter *parent, QString name) :
                      KoFilter(parent, name) {
 }
 
-const bool CSVFilter::filter(const QCString &fileIn, const QCString &fileOut,
-                             const QCString &from, const QCString &to,
-                             const QString &config) {
+const QDomDocument *CSVFilter::I_filter(const QCString &file, const QCString &from,
+					const QCString &to, const QString &config) {
 
     bool bSuccess=true;
 
     if(to!="application/x-kspread" || from!="text/x-csv")
         return false;
 
-    QFile in(fileIn);
+    QFile in(file);
     if(!in.open(IO_ReadOnly)) {
         //kDebugError( 31501, "Unable to open input file!");
         KMessageBox::sorry( 0L, i18n("CSV filter can't open input file - please report.") );
@@ -130,20 +129,20 @@ const bool CSVFilter::filter(const QCString &fileIn, const QCString &fileOut,
         }
     }
 
-    QCString tmp=tree.part().utf8();
+    //QCString tmp=tree.part().utf8();
 
-    KoTarStore out=KoTarStore(QString(fileOut), KoStore::Write);
-    if(!out.open("root", "")) {
-        kDebugError( 31501, "Unable to open output file!");
-        in.close();
-        out.close();
-        return false;
-    }
-    out.write((const char*)tmp, tmp.length());
+    //KoTarStore out=KoTarStore(QString(fileOut), KoStore::Write);
+    //if(!out.open("root", "")) {
+    //    kDebugError( 31501, "Unable to open output file!");
+    //    in.close();
+    //    out.close();
+    //    return false;
+    //}
+    //out.write((const char*)tmp, tmp.length());
     //kDebugInfo( 31501, "%s", tmp.data());
-    out.close();
+    //out.close();
 
     in.close();
 
-    return bSuccess;
+    return tree.document();
 }

@@ -33,19 +33,21 @@ public:
   XMLTree(const QString & inputFileName);
   ~XMLTree();
 
-  // Return the whole XML
+  // Return the whole XML as QString
   const QString part();
-
+    
+  // Return the QDomDocument
+  const QDomDocument *document() { return root; }
 
   // Create a new cell
-  bool cell( const QString & contents ); 
+  bool cell( const QString & contents );
 
   // Tell about an empty cell (doesn't create it, just skips)
   void emptycell() { column ++; } // easy heh ? ;)
 
   // Go to new line
   void newline() { row ++; column = 1; }
-  
+
 private:
   int row, column;
   QDomDocument *root;

@@ -54,14 +54,14 @@ const bool CSVExport::E_filter(const QCString &file, const KoDocument * const do
 			       const QString &config) {
 
     kdDebug(30003) << "here we go... " << document->className() << endl;
-    
-    //if(document->className()!="KSpreadDoc")
-    //	return false;
-    
+
+    if(strcmp(document->className(), "KSpreadDoc")!=0)  // it's saver that way :)
+    	return false;
+
     kdDebug(30003) << "...still here..." << endl;
 
     const KSpreadDoc * const ksdoc=(const KSpreadDoc* const)document;
-    
+
     kdDebug(30003) << "Mime Type = " << ksdoc->mimeType() << endl;
     return true;
 }

@@ -337,11 +337,11 @@ const QString KoFilterManager::import( const QString & file, const char *_native
 	    ok=filter->filter( QCString(file), QCString(tempfname), QCString(mimeType), QCString(_native_format) );
 #endif
 	}
-	else if(vec[i].implemented.lower()=="qdom" &&            // As long as some parts use KOML we have to make
-		(document->className()=="KSpreadDoc" ||          // sure that we only allow parts which implement
-		 document->className()=="KChartPart" ||          // the right loadXML :)
-		 document->className()=="KisDoc" ||
-		 document->className()=="KImageDocument")) {
+	else if(vec[i].implemented.lower()=="qdom" &&                // As long as some parts use KOML we have to make
+		(strcmp(document->className(), "KSpreadDoc")==0 ||   // sure that we only allow parts which implement
+		 strcmp(document->className(), "KChartPart")==0 ||   // the right loadXML :)
+		 strcmp(document->className(), "KisDoc")==0 ||
+		 strcmp(document->className(), "KImageDocument")==0)) {
 	    kdDebug(30003) << "XXXXXXXXXXX qdom XXXXXXXXXXXXXX" << endl;
 	    qdoc=filter->I_filter(QCString(file), QCString(mimeType), QCString(_native_format), config);
 	    if(qdoc!=0L && (ok=document->loadXML(*qdoc)))
@@ -403,7 +403,7 @@ const QString KoFilterManager::prepareExport( const QString & file, const char *
     }
 
     m_vec=vec;
-    
+
     unsigned int i=0;
     bool ok=false;
     bool tmpFileNeeded=false;
