@@ -54,30 +54,6 @@ protected:
     KWTextFrameSet * m_textfs;
 };
 
-/**
- * Place holder for a command that will be completed later on
- * This is used for the insert and delete text commands, which are
- * build delayed (see KWTextFrameSet::UndoRedoInfo), in order to
- * have an entry in the undo/redo history asap
- */
-/*class KWPlaceHolderCommand : public KCommand
-{
-public:
-    KWPlaceHolderCommand( KWTextFrameSet * textfs, const QString & name ) :
-        KCommand( name ), m_textfs(textfs), m_command(0L) {}
-    ~KWPlaceHolderCommand() {}
-
-    KCommand *command() const { return m_command; }
-    void setCommand(KCommand *c) { ASSERT(!m_command); m_command = c; }
-
-    virtual void execute();
-    virtual void unexecute();
-
-protected:
-    KCommand *m_command;
-    KWTextFrameSet *m_textfs;
-};*/
-
 ////// Extensions to qrichtext_p.h
 #include <qrichtext_p.h>
 #include <kwtextparag.h>
@@ -93,7 +69,6 @@ public:
     KWTextDeleteCommand( QTextDocument *d, int i, int idx, const QArray<QTextStringChar> &str,
                          const CustomItemsMap & customItemsMap,
                          const QValueList<KWParagLayout> & oldParagLayouts );
-    //KWTextDeleteCommand( QTextParag *p, int idx, const QArray<QTextStringChar> &str );
     QTextCursor *execute( QTextCursor *c );
     QTextCursor *unexecute( QTextCursor *c );
 protected:
@@ -111,8 +86,6 @@ public:
                          const CustomItemsMap & customItemsMap,
                          const QValueList<KWParagLayout> &oldParagLayouts )
         : KWTextDeleteCommand( d, i, idx, str, customItemsMap, oldParagLayouts ) {}
-    //KWTextInsertCommand( QTextParag *p, int idx, const QArray<QTextStringChar> &str )
-    //    : KWTextDeleteCommand( p, idx, str ) {}
     Commands type() const { return Insert; };
     QTextCursor *execute( QTextCursor *c ) { return KWTextDeleteCommand::unexecute( c ); }
     QTextCursor *unexecute( QTextCursor *c ) { return KWTextDeleteCommand::execute( c ); }

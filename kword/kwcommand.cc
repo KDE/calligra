@@ -39,22 +39,6 @@ void KWTextCommand::unexecute()
     m_textfs->undo();
 }
 
-
-/*void KWPlaceHolderCommand::execute()
-{
-    ASSERT( m_command );
-    if ( m_command )
-        m_command->execute();
-}
-
-void KWPlaceHolderCommand::unexecute()
-{
-    ASSERT( m_command );
-    if ( m_command )
-        m_command->unexecute();
-}*/
-
-
 KWTextDeleteCommand::KWTextDeleteCommand(
     QTextDocument *d, int i, int idx, const QArray<QTextStringChar> &str,
     const CustomItemsMap & customItemsMap,
@@ -98,7 +82,9 @@ QTextCursor * KWTextDeleteCommand::execute( QTextCursor *c )
 
 QTextCursor * KWTextDeleteCommand::unexecute( QTextCursor *c )
 {
-    // Keep a ref to the first parag before changing anything
+    // Let QRichText re-create the text and formatting
+    QTextCursor * cr = QTextDeleteCommand::unexecute(c);
+
     QTextParag *s = doc ? doc->paragAt( id ) : parag;
     if ( !s ) {
         qWarning( "can't locate parag at %d, last parag: %d", id, doc->lastParag()->paragId() );
@@ -106,24 +92,25 @@ QTextCursor * KWTextDeleteCommand::unexecute( QTextCursor *c )
     }
     cursor.setParag( s );
     cursor.setIndex( index );
-    // Let QRichText undo what it can
-    QTextCursor * cr = QTextDeleteCommand::unexecute(c);
     // Set any custom item that we had
     m_customItemsMap.insertItems( cursor, text.size() );
 
     // Now restore the parag layouts (i.e. KWord specific stuff)
     QValueList<KWParagLayout>::Iterator lit = m_oldParagLayouts.begin();
-    int i = 0;
+    kdDebug() << "KWTextDeleteCommand::unexecute " << m_oldParagLayouts.count() << " parag layouts. First parag=" << s->paragId() << endl;
+    ASSERT( id == s->paragId() );
     QTextParag *p = s;
     while ( p ) {
         if ( lit != m_oldParagLayouts.end() )
+        {
+            kdDebug() << "KWTextDeleteCommand::unexecute applying paraglayout to parag " << p->paragId() << endl;
             static_cast<KWTextParag*>(p)->setParagLayout( *lit );
+        }
         else
             break;
         //if ( s == cr->parag() )
         //    break;
         p = p->next();
-        ++i;
         ++lit;
     }
     return cr;
