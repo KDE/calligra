@@ -4061,11 +4061,10 @@ void KPresenterView::showParagraphDialog(int initialPage, double initialTabPos)
     KPTextView *edit=page->currentTextObjectView();
     if (edit)
     {
-        //FIXME : KoUnit::U_MM unit
         KoParagDia *paragDia = new KoParagDia( this, "",
                                                KoParagDia::PD_SPACING | KoParagDia::PD_ALIGN |
                                                KoParagDia::PD_BORDERS |
-                                               KoParagDia::PD_NUMBERING | KoParagDia::PD_TABS, m_pKPresenterDoc->getUnit(),-1/*todo*/,false );
+                                               KoParagDia::PD_NUMBERING | KoParagDia::PD_TABS, m_pKPresenterDoc->getUnit(),edit->kpTextObject()->getSize().width(),false );
         paragDia->setCaption( i18n( "Paragraph settings" ) );
 
         // Initialize the dialog from the current paragraph's settings
