@@ -280,8 +280,7 @@ void KPWebPresentation::initCreation( KProgress *progressBar )
         srcurl.setPath( locate( "slideshow", filename, KPresenterFactory::global() ) );
         desturl = path;
         desturl.addPath( "/pics/" + filename );
-	KIO::NetAccess::del( desturl ); // Copy does not remove existing destination file
-        KIO::NetAccess::copy( srcurl, desturl );
+        KIO::NetAccess::file_move( srcurl, desturl, -1, true /*overwrite*/);
         p = progressBar->progress();
         progressBar->setProgress( ++p );
         kapp->processEvents();
@@ -303,9 +302,7 @@ void KPWebPresentation::createSlidesPictures( KProgress *progressBar )
         KTempFile tmp;
         pix.save( tmp.name(), "PNG" );
 
-        KIO::NetAccess::del( filename ); // Copy does not remove existing destination file
-        KIO::NetAccess::copy( tmp.name(), filename );
-
+        KIO::NetAccess::file_move( tmp.name(), filename, -1, true /*overwrite*/);
 
         p = progressBar->progress();
         progressBar->setProgress( ++p );
@@ -489,8 +486,7 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
 
         file.close();
 
-        KIO::NetAccess::del( dest ); // Copy does not remove existing destination file
-        KIO::NetAccess::copy( tmp.name(), dest );
+        KIO::NetAccess::file_move( tmp.name(), dest, -1, true /*overwrite*/);
 
         int p = progressBar->progress();
         progressBar->setProgress( ++p );
@@ -539,8 +535,7 @@ void KPWebPresentation::createMainPage( KProgress *progressBar )
     streamOut << "</body>\n</html>\n";
     file.close();
 
-    KIO::NetAccess::del( dest ); // Copy does not remove existing destination file
-    KIO::NetAccess::copy( tmp.name(), dest );
+    KIO::NetAccess::file_move( tmp.name(), dest, -1, true /*overwrite*/);
 
 
     progressBar->setProgress( progressBar->totalSteps() );
