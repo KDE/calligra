@@ -129,6 +129,23 @@ static void ProcessLayoutOffsetTag( QDomNode myNode, void *tagData, QString &, K
     AllowNoSubtags (myNode);
 }
 
+static void ProcessLayoutLineSpacingTag( QDomNode myNode, void *tagData, QString &, KWEFBaseClass*)
+{
+    LayoutData *layout = (LayoutData *) tagData;
+    QValueList<AttrProcessing> attrProcessingList;
+    QString line;
+    attrProcessingList.append ( AttrProcessing ("value" , "QString", (void *)&line ) );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    if( line=="oneandhalf")
+      layout->lineSpacing=1.5;
+    else if( line=="double")
+      layout->lineSpacing=2.0;
+    else 
+      layout->lineSpacing=line.toDouble();
+    AllowNoSubtags (myNode);
+}
+
 static void ProcessLineBreakingTag ( QDomNode myNode, void *tagData, QString &, KWEFBaseClass*)
 {
     LayoutData *layout = (LayoutData *) tagData;
@@ -425,8 +442,8 @@ static void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputTe
     tagProcessingList.append ( TagProcessing ( "TABULATOR", NULL,                   NULL            ) );
     tagProcessingList.append ( TagProcessing ( "FLOW",      ProcessLayoutFlowTag,   (void *) layout ) );
     tagProcessingList.append ( TagProcessing ( "OFFSETS",      ProcessLayoutOffsetTag,   (void *) layout ) );
+    tagProcessingList.append ( TagProcessing ( "LINESPACING",   ProcessLayoutLineSpacingTag, (void *) layout ) );
     tagProcessingList.append ( TagProcessing ( "INDENTS",   ProcessIndentsTag,      (void *) layout ) );
-    tagProcessingList.append ( TagProcessing ( "OFFSETS",   NULL,                   NULL            ) );
     tagProcessingList.append ( TagProcessing ("PAGEBREAKING",ProcessLineBreakingTag,(void *) layout ) );
     ProcessSubtags (myNode, tagProcessingList, outputText,exportFilter);
 
@@ -633,10 +650,15 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
     {
        props += QString("margin-bottom:%1pt;").arg(paraLayout.marginBottom); 
     }
-    if( paraLayout.marginTop!=0.0)
+    if( paraLayout.marginTop!=0.0  )
     {
        props += QString("margin-top:%1pt;").arg(paraLayout.marginTop); 
     }
+    if( paraLayout.lineSpacing!=0.0  )
+    {
+       props += QString("line-height:%1pt;").arg(paraLayout.lineSpacing); 
+    }
+
 
     // Add all AbiWord properties collected in the <FORMAT> element
     props += paraLayout.abiprops;
@@ -737,7 +759,7 @@ static void ProcessStyleTag (QDomNode myNode, void *, QString   &strStyles, KWEF
     tagProcessingList.append ( TagProcessing ( "OFFSETS",          ProcessLayoutOffsetTag,   (void *) layout ) );
     tagProcessingList.append ( TagProcessing ( "INDENTS",       ProcessIndentsTag,      (void *) layout ) );
     tagProcessingList.append ( TagProcessing ( "COUNTER",       ProcessCounterTag,      (void *) &layout->counter ) );
-    tagProcessingList.append ( TagProcessing ( "LINESPACING",   NULL, NULL ) );
+    tagProcessingList.append ( TagProcessing ( "LINESPACING",   ProcessLayoutLineSpacingTag, (void *) layout ) );
     tagProcessingList.append ( TagProcessing ( "LEFTBORDER",    NULL, NULL ) );
     tagProcessingList.append ( TagProcessing ( "RIGHTBORDER",   NULL, NULL ) );
     tagProcessingList.append ( TagProcessing ( "TOPBORDER",     NULL, NULL ) );
