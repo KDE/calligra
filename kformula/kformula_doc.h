@@ -68,8 +68,6 @@ class KFormulaDoc : public KFormulaContainer,
     // IDL
     virtual CORBA::Boolean initDoc();
 
-    // C++
-    virtual bool loadXML( KOMLParser& parser, KOStore::Store_ptr _store );
     /**
      * We dont load any children.
      */

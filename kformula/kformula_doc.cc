@@ -12,7 +12,6 @@
 #include "PrefixedElement.h"
 
 #include <komlMime.h>
-#include <koStream.h>
 
 #include <kurl.h>
 #include <kiconloader.h>
@@ -80,14 +79,10 @@ void KFormulaDoc::cleanUp()
     KoDocument::cleanUp();
 }
 
-bool KFormulaDoc::loadXML( KOMLParser& , KOStore::Store_ptr )
-{
-    // HACK
-    return false;
-}
-
 bool KFormulaDoc::save( ostream& out, const char* /* format */ )
 {
+#warning TODO if someone implements saving, do it right :)
+#if 0
     out << "<?xml version=\"1.0\"?>" << endl;
     out << otag << "<DOC author=\"" << "Andrea Rizzi" << "\" email=\""
 	<< "rizzi@kde.org" << "\" editor=\"" << "KFormula"
@@ -100,6 +95,7 @@ bool KFormulaDoc::save( ostream& out, const char* /* format */ )
     
     out << "</FORMULA>" << endl;    
     out << etag << "</DOC>" << endl;
+#endif
  
     return true;
 }
