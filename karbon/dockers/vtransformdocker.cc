@@ -71,7 +71,7 @@ VRotateWidget::VRotateWidget( QWidget* parent ) : QWidget ( parent )
 {
 	QVBoxLayout* mainLayout = new QVBoxLayout( this );
 
-	QGroupBox* groupBox = new QGroupBox( 3, Vertical, i18n( "Rotation:" ), this );
+	QGroupBox* groupBox = new QGroupBox( 3, Vertical, i18n( "Rotation" ), this );
 	new QLabel( i18n( "Angle:" ), groupBox );
 	new QLabel( i18n( "H:" ), groupBox );
 	new QLabel( i18n( "V:" ), groupBox );

@@ -22,7 +22,7 @@
       <BODYCELL name="Simple 1"/>
   </TABLETEMPLATE>
   <TABLETEMPLATE>
-      <NAME value="Grey Heading"/>
+      <NAME value="Gray Heading"/>
       <FIRSTROW name="Header 1" topleftcorner="1" toprightcorner="1"/>
       <BODYCELL name="Simple 1"/>
   </TABLETEMPLATE>
@@ -33,7 +33,7 @@
       <BODYCELL name="Simple 1"/>
   </TABLETEMPLATE>
   <TABLETEMPLATE>
-      <NAME value="Grey Traditional"/>
+      <NAME value="Gray Traditional"/>
       <FIRSTROW name="Header 3" topleftcorner="1" toprightcorner="1"/>
       <FIRSTCOL name="Header 1" bottomleftcorner="1"/>
       <BODYCELL name="Simple 1"/>
@@ -45,7 +45,7 @@
       <BODYCELL name="Simple 1"/>
   </TABLETEMPLATE>
   <TABLETEMPLATE>
-      <NAME value="Grey Top and Bottom"/>
+      <NAME value="Gray Top and Bottom"/>
       <FIRSTROW name="Header 3" topleftcorner="1" toprightcorner="1"/>
       <LASTROW name="Header 1" bottomleftcorner="1" bottomrightcorner="1"/>
       <BODYCELL name="Simple 1"/>

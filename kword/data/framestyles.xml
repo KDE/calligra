@@ -43,14 +43,14 @@
       <LEFTBORDER red="0" green="0" blue="0" style="0" width="1"/>
   </FRAMESTYLE>
   <FRAMESTYLE red="211" green="211" blue="211">
-      <NAME value="Light Grey"/>
+      <NAME value="Light Gray"/>
       <TOPBORDER red="0" green="0" blue="0" style="0" width="1"/>
       <BOTTOMBORDER red="0" green="0" blue="0" style="0" width="1"/>
       <RIGHTBORDER red="0" green="0" blue="0" style="0" width="1"/>
       <LEFTBORDER red="0" green="0" blue="0" style="0" width="1"/>
   </FRAMESTYLE>
   <FRAMESTYLE red="169" green="169" blue="169">
-      <NAME value="Dark Grey"/>
+      <NAME value="Dark Gray"/>
       <TOPBORDER red="0" green="0" blue="0" style="0" width="1"/>
       <BOTTOMBORDER red="0" green="0" blue="0" style="0" width="1"/>
       <RIGHTBORDER red="0" green="0" blue="0" style="0" width="1"/>

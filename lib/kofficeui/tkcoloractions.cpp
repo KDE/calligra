@@ -414,15 +414,15 @@ void TKColorPanel::fillPanel()
   insertColor(qRgb(     130     ,       127     ,       0       ),      "Dark Yellow");
 
   insertColor(qRgb(255,255,255), "White");
-  insertColor(qRgb(229,229,229), "Grey 90%");
-  insertColor(qRgb(204,204,204), "Grey 80%");
-  insertColor(qRgb(178,178,178), "Grey 70%");
-  insertColor(qRgb(153,153,153), "Grey 60%");
-  insertColor(qRgb(127,127,127), "Grey 50%");
-  insertColor(qRgb(102,102,102), "Grey 40%");
-  insertColor(qRgb(76,76,76),    "Grey 30%");
-  insertColor(qRgb(51,51,51),    "Grey 20%");
-  insertColor(qRgb(25,25,25),    "Grey 10%");
+  insertColor(qRgb(229,229,229), "Gray 90%");
+  insertColor(qRgb(204,204,204), "Gray 80%");
+  insertColor(qRgb(178,178,178), "Gray 70%");
+  insertColor(qRgb(153,153,153), "Gray 60%");
+  insertColor(qRgb(127,127,127), "Gray 50%");
+  insertColor(qRgb(102,102,102), "Gray 40%");
+  insertColor(qRgb(76,76,76),    "Gray 30%");
+  insertColor(qRgb(51,51,51),    "Gray 20%");
+  insertColor(qRgb(25,25,25),    "Gray 10%");
   insertColor(qRgb(0,0,0),       "Black");
 
   insertColor(qRgb( 255 ,   255 ,   240 ),  "Ivory");
@@ -460,7 +460,7 @@ void TKColorPanel::fillPanel()
   insertColor(qRgb( 175 ,   238 ,   238 ),  "Pale Turquoise");
   insertColor(qRgb( 255 ,   192 ,   203 ),  "Pink");
   insertColor(qRgb( 238 ,   221 ,   130 ),  "Light Goldenrod");
-  insertColor(qRgb( 211 ,   211 ,   211 ),  "Light Grey");
+  insertColor(qRgb( 211 ,   211 ,   211 ),  "Light Gray");
   insertColor(qRgb( 255 ,   182 ,   193 ),  "Light Pink");
   insertColor(qRgb( 176 ,   224 ,   230 ),  "Powder Blue");
   insertColor(qRgb( 127 ,   255 ,   212 ),  "Aquamarine");
@@ -509,7 +509,7 @@ void TKColorPanel::fillPanel()
   insertColor(qRgb( 95  ,   158 ,   160 ),  "Cadet Blue");
   insertColor(qRgb( 0   ,   206 ,   209 ),  "Dark Turquoise");
   insertColor(qRgb( 0   ,   191 ,   255 ),  "Deep Skyblue");
-  insertColor(qRgb( 119 ,   136 ,   153 ),  "Light Slate Grey");
+  insertColor(qRgb( 119 ,   136 ,   153 ),  "Light Slate Gray");
   insertColor(qRgb( 184 ,   134 ,   11  ),  "Dark Goldenrod");
   insertColor(qRgb( 123 ,   104 ,   238 ),  "MediumSlate Blue");
   insertColor(qRgb( 205 ,   92  ,   92  ),  "IndianRed");
