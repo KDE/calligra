@@ -249,6 +249,7 @@ QPtrList<KAction> KPrDateVariable::actionList()
         {
             subFormatDef v;
             QDate ct=QDate::currentDate();
+            ct = ct.addDays(correctValue());
             if((*it)==i18n("Locale").lower())
                 v.translatedString=KGlobal::locale()->formatDate( ct );
             else
@@ -353,6 +354,7 @@ QPtrList<KAction> KPrTimeVariable::actionList()
         {
             subFormatDef v;
             QTime ct=QTime::currentTime();
+            ct = ct.addSecs(correctValue());
             if((*it)==i18n("Locale").lower())
                 v.translatedString=KGlobal::locale()->formatTime( ct );
             else
