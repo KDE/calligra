@@ -52,15 +52,7 @@
 #if defined(Q_WS_WIN) || defined(KEXI_OPTIONS)
 /* defined in a .pro file or 'KEXI_OPTIONS' env. variable */
 #else
-
-/* unfinished features visibility */
-/* -- undefined because people asked why these doesn't work: --
-# define KEXI_SHOW_UNIMPLEMENTED 
-# define KEXI_STARTUP_SHOW_TEMPLATES 
-# define KEXI_STARTUP_SHOW_RECENT*/
 # define KEXI_SERVER_SUPPORT
-# define KEXI_FORMS_SUPPORT
-# define KEXI_REPORTS_SUPPORT
 # define KEXI_NO_MIGRATION
 #endif
 
