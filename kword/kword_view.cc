@@ -225,20 +225,20 @@ void KWordView::clipboardDataChanged()
 /*================================================================*/
 void KWordView::selectionOnOff()
 {
-    if ( m_pKWordDoc->has_selection() )
-    {
-        m_vMenuEdit->setItemEnabled( m_idMenuEdit_Cut, true );
-        m_vMenuEdit->setItemEnabled( m_idMenuEdit_Copy, true );
-        m_vToolBarEdit->setItemEnabled( ID_EDIT_CUT, true );
-        m_vToolBarEdit->setItemEnabled( ID_EDIT_COPY, true );
-    }
-    else
-    {
-        m_vMenuEdit->setItemEnabled( m_idMenuEdit_Cut, false );
-        m_vMenuEdit->setItemEnabled( m_idMenuEdit_Copy, false );
-        m_vToolBarEdit->setItemEnabled( ID_EDIT_CUT, false );
-        m_vToolBarEdit->setItemEnabled( ID_EDIT_COPY, false );
-    }
+//     if ( m_pKWordDoc->has_selection() )
+//     {
+//         m_vMenuEdit->setItemEnabled( m_idMenuEdit_Cut, true );
+//         m_vMenuEdit->setItemEnabled( m_idMenuEdit_Copy, true );
+//         m_vToolBarEdit->setItemEnabled( ID_EDIT_CUT, true );
+//         m_vToolBarEdit->setItemEnabled( ID_EDIT_COPY, true );
+//     }
+//     else
+//     {
+//         m_vMenuEdit->setItemEnabled( m_idMenuEdit_Cut, false );
+//         m_vMenuEdit->setItemEnabled( m_idMenuEdit_Copy, false );
+//         m_vToolBarEdit->setItemEnabled( ID_EDIT_CUT, false );
+//         m_vToolBarEdit->setItemEnabled( ID_EDIT_COPY, false );
+//     }
 }
 
 /*================================================================*/
