@@ -30,10 +30,10 @@
 
 class KoStore;
 
-// TODO: correct documentation
 
 /**
  * A collection of cliparts
+ * ### TODO: correct documentation
  */
 class KoPictureCollection : public QMap<KoPictureKey, KoPicture>
 {
@@ -52,7 +52,13 @@ public:
     /**
      * Inserts a picture into the collection, if not already there
      */
-    KoPicture insertPicture(const KoPictureKey& key, const KoPicture& picture );
+    KoPicture insertPicture( const KoPictureKey& key, const KoPicture& picture );
+
+    /**
+     * Inserts a picture into the collection, if not already there
+     * Same as above, but takes the key from the @p picture
+     */
+    KoPicture insertPicture( const KoPicture& picture );
 
     /**
      * Load a clipart from a file (and insert into the collection).
@@ -72,19 +78,19 @@ public:
     void saveToStore(const Type pictureType, KoStore * store, QValueList<KoPictureKey> keys );
 
     /**
-     * Generate the <CLIPARTS> tag, that saves the key and the related
-     * relative path in the store (e.g. pictures/picture1.wmf) for each clipart.
+     * Generate the <PIXMAPS> or <CLIPARTS> tag, that saves the key and the related
+     * relative path in the store (e.g. pictures/picture1.png) for each picture.
      */
     QDomElement saveXML(const Type pictureType, QDomDocument &doc,
         QValueList<KoPictureKey> keys );
 
     typedef QMap<KoPictureKey, QString> StoreMap;
     /**
-     * Read the <CLIPARTS> tag, and save the result (key<->store-filename associations)
+     * Read the <PIXMAPS> or <CLIPARTS> tag, and save the result (key<->store-filename associations)
      * into the QMap. You may want to 'new' a QMap in loadXML, and to use and then delete
      * it in completeLoading (to save memory).
      */
-    StoreMap readXML( QDomElement &pixmapsElem, const QDateTime & defaultDateTime );
+    StoreMap readXML( QDomElement &pixmapsElem );
     /**
      * Read all pictures from the store, into this collection
      * The map comes from readXML above, and is used to find which pictures

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (c) 2001 Simon Hausmann <hausmann@kde.org>
+   Copyright 2002 Nicolas GOUTTE <nicog@snafu.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -102,14 +103,22 @@ void KoPictureKey::saveAttributes( QDomElement &elem ) const
     elem.setAttribute( "msec", time.msec() );
 }
 
-void KoPictureKey::loadAttributes( const QDomElement &elem, const QDate &dDate, const QTime &dTime )
+void KoPictureKey::loadAttributes( const QDomElement &elem )
 {
-    int year=dDate.year(), month=dDate.month(), day=dDate.day();
-    int hour=dTime.hour(), minute=dTime.minute(), second=dTime.second(), msec=dTime.msec();
+    // Default date/time is the *nix epoch: 1970-01-01 00:00:00,000
+    int year=1970, month=1, day=1;
+    int hour=0, minute=0, second=0, msec=0; // We must initialize to zero, as not all compilers are C99-compliant
+
     if( elem.hasAttribute( "key" ) )
-        m_filename=elem.attribute( "key" ); // Old KWord format (up to 1.1-beta2)
+    {
+         // Note: the old KWord format (up to 1.1-beta2) has no date/time
+        m_filename=elem.attribute( "key" );
+    }
     else
+    {   
+        // ### TODO: document which format is this?
         m_filename=elem.attribute( "filename" );
+    }
 
     if( elem.hasAttribute( "year" ) )
         year=elem.attribute( "year" ).toInt();
@@ -132,7 +141,7 @@ void KoPictureKey::loadAttributes( const QDomElement &elem, const QDate &dDate, 
     if (!m_lastModified.isValid())
     {
         // If the date/time is not valid, make it valid by force!
-        kdWarning(30003) << "Correcting invalid date/time: " << m_lastModified.toString()  << " (in KoPictureKey::loadAttributes)" << endl;
+        kdWarning(30003) << "Correcting invalid date/time: " << toString()  << " (in KoPictureKey::loadAttributes)" << endl;
         resetDateTimeToEpoch(m_lastModified);
     }
 }
@@ -140,6 +149,8 @@ void KoPictureKey::loadAttributes( const QDomElement &elem, const QDate &dDate, 
 QString KoPictureKey::toString() const
 {
     // m_filename must be the last argument as it can contain a sequence starting with %
-    return QString::fromLatin1("%2_%1").arg(m_lastModified.toString()).arg(m_filename);
+    // We do not use the default QDateTime::toString has it does not show microseconds
+    return QString::fromLatin1("File: %2 %1")
+        .arg(m_lastModified.toString("Date: yyyy-MM-dd Time: hh:mm:ss,zzz")).arg(m_filename);
 }
 

@@ -56,6 +56,11 @@ KoPicture KoPictureCollection::insertPicture(const KoPictureKey& key, const KoPi
     return c;
 }
 
+KoPicture KoPictureCollection::insertPicture(const KoPicture& picture)
+{
+    return insertPicture(picture.getKey(), picture);
+}
+
 KoPicture KoPictureCollection::loadPicture(const QString& fileName)
 {
     kdDebug(30003) << "KoPictureCollection::loadPicture " << fileName << endl;
@@ -136,8 +141,7 @@ QDomElement KoPictureCollection::saveXML(const Type pictureType, QDomDocument &d
     return cliparts;
 }
 
-KoPictureCollection::StoreMap
-KoPictureCollection::readXML(QDomElement& pixmapsElem, const QDateTime& defaultDateTime)
+KoPictureCollection::StoreMap KoPictureCollection::readXML( QDomElement& pixmapsElem )
 {
     StoreMap map;
 
@@ -150,7 +154,7 @@ KoPictureCollection::readXML(QDomElement& pixmapsElem, const QDateTime& defaultD
         if (keyElement.tagName()=="KEY")
         {
             KoPictureKey key;
-            key.loadAttributes(keyElement, defaultDateTime.date(), defaultDateTime.time());
+            key.loadAttributes(keyElement);
             map.insert(key, keyElement.attribute("name"));
         }
     }
@@ -208,8 +212,11 @@ void KoPictureCollection::readFromStore( KoStore * store, const StoreMap & store
 
 KoPicture KoPictureCollection::findOrLoad(const QString& fileName, const QDateTime& dateTime)
 {
-    if (dateTime.isValid())
-        return findPicture(KoPictureKey(fileName, dateTime) );
-    else
-        return loadPicture(fileName);
+    // As now all KoPictureKey objects have a valid QDateTime, we must do it without a date/time check.
+    ConstIterator it = find( KoPictureKey ( fileName, dateTime ) );
+    if ( it == end() )
+    {
+        return loadPicture( fileName );
+    }
+    return *it;
 }

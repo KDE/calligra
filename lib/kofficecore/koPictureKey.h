@@ -100,9 +100,8 @@ public:
 
     /**
      * Load this key from XML.
-     * The default date and default time are used if the XML doesn't specify any date & time (compat)
      */
-    void loadAttributes( const QDomElement &elem, const QDate &dDate, const QTime &dTime );
+    void loadAttributes( const QDomElement &elem );
 
     /**
      * First part of the key: the filename
