@@ -35,7 +35,7 @@
 #include <klocale.h>
 #include <koTemplates.h>
 #include <kfiledialog.h>
-#include <klineeditdlg.h>
+#include <kinputdialog.h>
 #include <kmessagebox.h>
 #include <kimageio.h>
 #include <kstandarddirs.h>
@@ -377,7 +377,7 @@ void KoTemplateCreateDia::slotNameChanged(const QString &name) {
 
 void KoTemplateCreateDia::slotAddGroup() {
     bool ok=false;
-    QString name=KLineEditDlg::getText( i18n("Add Group"),i18n("Enter group name:"),QString::null, &ok, this );
+    const QString name ( KInputDialog::getText( i18n("Add Group"), i18n("Enter group name:"), QString::null, &ok, this ) );
     if(!ok)
         return;
     KoTemplateGroup *group=d->m_tree->find(name);
