@@ -95,7 +95,7 @@ void KWAutoFormat::readConfig()
       QDomElement de = doc.documentElement();
       QDomNodeList nl = de.childNodes();
       m_maxFindLength=nl.count();
-      for(int i = 0; i < m_maxFindLength; i++) {
+      for(uint i = 0; i < m_maxFindLength; i++) {
           m_entries.insert( nl.item(i).toElement().attribute("find"), KWAutoFormatEntry(nl.item(i).toElement().attribute("replace")) );
       }
     }

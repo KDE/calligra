@@ -22,7 +22,8 @@
 #include "preview.moc"
 #include <qscrollview.h>
 #include <qfileinfo.h>
-#include <qwmf.h>
+#include <koClipartCollection.h>
+#include <qpainter.h>
 
 class PixmapView : public QScrollView
 {
@@ -37,12 +38,9 @@ public:
     }
 
     void setClipart( const QString &s ) {
- 	QWinMetaFile wmf;
-
- 	if ( wmf.load( s ) ) {
- 	    QPicture pic;
- 	    wmf.paint( &pic );
-
+        QPicture pic;
+        if ( KoClipartCollection::loadFromFile( s, &pic ) )
+        {
  	    pixmap = QPixmap( 200, 200 );
  	    QPainter p;
 
@@ -82,7 +80,7 @@ void Preview::showPreview( const KURL &u )
     if ( u.isLocalFile() ) {
 	QString path = u.path();
 	QFileInfo fi( path );
-	if ( fi.extension().lower() == "wmf" )
+	if ( fi.extension().lower() == "wmf" || fi.extension().lower() == "emf" || fi.extension().lower() == "svg")
 	    pixmap->setClipart( path );
 	else {
 	    QPixmap pix( path );

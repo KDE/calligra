@@ -87,7 +87,21 @@ Fixed Table Of Contents creation and updates.
 Fixed placement and drawing of tables.
 Many other fixes, this list is far from complete.
 
-Changes between KWord-1.1-beta3 and KWord-1.1-rc1 (under development)
-===================================================
+Changes between KWord-1.1-beta3 and KWord-1.1-rc1
+=================================================
 
 Improved auto-scrolling.
+[...]
+
+Changes after KWord-1.1
+=======================
+
+WYSIWYG branch merged in. All text layout is done at 1440 DPI now, and
+doesn't depend on the zoom, nor on the screen or printer resolution anymore.
+
+SVG support (for cliparts).
+
+Support for hyperlinks, for text background color (marker).
+Improved handling of tabulators in ruler.
+
+"Change picture" feature.

@@ -19,7 +19,6 @@
 
 #include "kwinsertpicdia.h"
 #include "preview.h"
-#include <qwmf.h>
 #include <klocale.h>
 #include <kfiledialog.h>
 #include <qframe.h>
@@ -31,6 +30,7 @@
 #include <qcheckbox.h>
 #include <kimageio.h>
 #include <kio/netaccess.h>
+#include <koClipartCollection.h>
 #include <kdebug.h>
 
 class KWInsertPicPreview : public QFrame
@@ -67,9 +67,7 @@ public:
     {
         m_type = IPD_CLIPART;
         m_pixmap = QPixmap();
-        QWinMetaFile wmf;
-        wmf.load( filename );
-        wmf.paint( &m_picture );
+        (void)KoClipartCollection::loadFromFile( filename, &m_picture );
         repaint(false);
     }
 
@@ -160,7 +158,7 @@ void KWInsertPicDia::slotChooseImage()
 
 bool KWInsertPicDia::selectPictureDia( QString &filename, const QString & _path)
 {
-    KFileDialog fd( _path, KImageIO::pattern(KImageIO::Writing), 0, 0, TRUE );
+    KFileDialog fd( _path, KImageIO::pattern(KImageIO::Reading), 0, 0, TRUE );
     fd.setCaption(i18n("Choose Image"));
     QString file = selectPicture( fd );
     if ( !file.isEmpty() )
@@ -188,7 +186,7 @@ void KWInsertPicDia::slotChooseClipart()
 
 bool KWInsertPicDia::selectClipartDia( QString &filename, const QString & _path)
 {
-    KFileDialog fd( _path, i18n( "*.wmf|Windows Metafiles (*.wmf)" ), 0, 0, true );
+    KFileDialog fd( _path, i18n( "*.svg|SVG files (*.svg)\n*.wmf|Windows Metafiles (*.wmf)" ), 0, 0, true );
     fd.setCaption(i18n("Choose Clipart"));
     QString file = selectPicture( fd );
     if ( !file.isEmpty() )
