@@ -371,3 +371,4 @@ void KFormulaWidget::emitCursorChanged()
         emit cursorChanged(cursorVisible, cursor->isSelection());
     }
 }
+#include "kformulawidget.moc"

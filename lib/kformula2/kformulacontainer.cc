@@ -551,3 +551,4 @@ void KFormulaContainer::print(QPrinter& printer)
         rootElement->draw(painter, getDocument()->getContextStyle());
     }
 }
+#include "kformulacontainer.moc"

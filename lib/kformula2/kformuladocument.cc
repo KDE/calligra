@@ -379,3 +379,4 @@ bool KFormulaDocument::hasFormula()
 {
     return (formula != 0) && (formula->getActiveCursor() != 0);
 }
+#include "kformuladocument.moc"
