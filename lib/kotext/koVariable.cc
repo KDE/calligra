@@ -278,11 +278,13 @@ void KoVariable::resize()
 {
     if ( m_deleted )
         return;
-    QTextFormat *fmt = format();
+    KoTextFormat *fmt = static_cast<KoTextFormat *>(format());
     QString txt = text();
     width = 0;
     for ( int i = 0 ; i < (int)txt.length() ; ++i )
-        width += fmt->width( txt, i );
+        width += fmt->screenFontMetrics( 0, false ).charWidth( txt, i ); // size at 100%
+    // zoom to LU
+    width = qRound( KoTextZoomHandler::ptToLayoutUnitPt( width ) );
     height = fmt->height();
     //kdDebug() << "Before KoVariable::resize text=" << txt << " width=" << width << endl;
 }
