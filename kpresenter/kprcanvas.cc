@@ -2065,6 +2065,7 @@ void KPrCanvas::startScreenPresentation( float presFakt, int curPgNum /* 1-based
         kdDebug(33001) << "selectedSlides : " << debugstr << endl;
     }
     Q_ASSERT( slideList.count() );
+
     slideListIterator = slideList.begin();
     setCursor( blankCursor );
 
@@ -4400,44 +4401,10 @@ void KPrCanvas::exitEditMode()
 }
 
 /*================================================================*/
-bool KPrCanvas::getPixmapOrigAndCurrentSize( KPPixmapObject *&obj, QSize *origSize, QSize *currentSize )
+bool KPrCanvas::getPixmapOrigAndCurrentSize( KPPixmapObject *&obj, KoSize *origSize, KoSize *currentSize )
 {
-#if 0
-    *origSize = obj->originalSize();
-    *currentSize = m_view->zoomHandler()->zoomSize( obj->getSize() );
-    return true;
-    // Why was the old code so complex ? ;)
-    // Because obj is null. ;) (Toshitaka)
-#endif
-
-    obj = 0;
-    KPObject *kpobject = 0;
-    for ( int i = 0; i < static_cast<int>( objectList().count() ); i++ ) {
-        kpobject = objectList().at( i );
-        if ( kpobject->isSelected() && kpobject->getType() == OT_PICTURE ) {
-            *currentSize = m_view->zoomHandler()->zoomSize( kpobject->getSize() );
-
-            KPPixmapObject *o = (KPPixmapObject*)kpobject;
-            /*
-            QImage *img = m_view->kPresenterDoc()->getPixmapCollection()->
-                          getPixmapDataCollection().findPixmapData( o->key.dataKey );
-            if ( img ) {
-                obj = o;
-                return img->size();
-            }
-            */
-            KPImage img = m_view->kPresenterDoc()->getImageCollection()->
-                          findImage( o->getKey() );
-            if ( !img.isNull() ) {
-                obj = o;
-                *origSize = img.size();
-                return true;
-            }
-        }
-    }
-    *origSize = QSize( -1, -1 );
-    *currentSize = QSize( -1, -1 );
-    return false;
+    *origSize = KoSize(obj->originalSize().width(),obj->originalSize().height());
+    *currentSize = obj->getSize();
 }
 
 /*================================================================*/
@@ -4474,12 +4441,24 @@ void KPrCanvas::picViewOrigHelper(int x, int y)
 {
   KPPixmapObject *obj = 0;
 
-  QSize origSize;
-  QSize currentSize;
-  if ( !getPixmapOrigAndCurrentSize( obj, &origSize, &currentSize ) || !obj )
+  KoSize origSize;
+  KoSize currentSize;
+
+
+  QPtrListIterator<KPObject> it( getObjectList() );
+  for ( ; it.current() ; ++it )
+  {
+      if ( it.current()->isSelected()&& it.current()->getType()==OT_PICTURE )
+      {
+          obj=(KPPixmapObject*)it.current();
+          break;
+      }
+  }
+
+  if ( obj && !getPixmapOrigAndCurrentSize( obj, &origSize, &currentSize ) )
       return;
 
-  QSize pgSize = m_activePage->getZoomPageRect().size();
+  KoSize pgSize = m_activePage->getPageRect().size();
   QSize presSize( x, y );
 
   scalePixmapToBeOrigIn( origSize, currentSize, pgSize, presSize, obj );
@@ -4491,14 +4470,13 @@ void KPrCanvas::picViewOrigFactor()
 }
 
 /*================================================================*/
-void KPrCanvas::scalePixmapToBeOrigIn( const QSize &/*origSize*/, const QSize &currentSize,
-                                  const QSize &pgSize, const QSize &presSize, KPPixmapObject *obj )
+void KPrCanvas::scalePixmapToBeOrigIn( const KoSize &/*origSize*/, const KoSize &currentSize,
+                                  const KoSize &pgSize, const QSize &presSize, KPPixmapObject *obj )
 {
     double faktX = (double)presSize.width() / (double)QApplication::desktop()->width();
     double faktY = (double)presSize.height() / (double)QApplication::desktop()->height();
-    int w = (int)( (double)pgSize.width() * faktX );
-    int h = (int)( (double)pgSize.height() * faktY );
-//FIXME
+    double w = pgSize.width() * faktX;
+    double h = pgSize.height() * faktY;
     ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Scale Picture to be shown 1:1 in presentation mode" ),
                                           KoPoint( 0, 0 ), KoSize( w - currentSize.width(), h - currentSize.height() ),
                                           obj, m_view->kPresenterDoc() );

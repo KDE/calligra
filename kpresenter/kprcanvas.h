@@ -301,9 +301,9 @@ protected:
     void selectNext();
     void selectPrev();
 
-    void scalePixmapToBeOrigIn( const QSize &origSize, const QSize &currentSize,
-                                const QSize &pgSize, const QSize &presSize, KPPixmapObject *obj );
-    bool getPixmapOrigAndCurrentSize( KPPixmapObject *&obj, QSize *origSize, QSize *currentSize );
+    void scalePixmapToBeOrigIn( const KoSize &origSize, const KoSize &currentSize,
+                                const KoSize &pgSize, const QSize &presSize, KPPixmapObject *obj );
+    bool getPixmapOrigAndCurrentSize( KPPixmapObject *&obj, KoSize *origSize, KoSize *currentSize );
     void setTextBackground( KPTextObject *obj );
     virtual bool eventFilter( QObject *o, QEvent *e );
     virtual bool focusNextPrevChild( bool );
