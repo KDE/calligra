@@ -222,6 +222,11 @@ KoRect KoRect::transform(const QWMatrix &m) const
   return result;    
 }
 
+KoRect KoRect::translate(double dx, double dy) const
+{
+  return KoRect(left() + dx, top() + dy, width(), height());
+}
+
 QRect KoRect::toQRect() const
 {
     return QRect( qRound( left() ), qRound( top() ), qRound( width() ), qRound( height() ) );
