@@ -2411,6 +2411,13 @@ void KWTextFrameSet::renumberFootNotes( bool repaint )
         m_doc->slotRepaintChanged( this );
 }
 
+KoTextDocCommand *KWTextFrameSet::deleteTextCommand( KoTextDocument *textdoc, int id, int index, const QMemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const QValueList<KoParagLayout> & oldParagLayouts )
+{
+    return new KWTextDeleteCommand( textdoc, id, index, str, customItemsMap, oldParagLayouts );
+}
+
+
+
 ///////////////////////////////////////////////////////////////////////////////
 
 KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )

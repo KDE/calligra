@@ -250,6 +250,8 @@ public:
      */
     KoTextParag* paragAtLUPos( int yLU ) const;
 
+    KoTextDocCommand *deleteTextCommand( KoTextDocument *textdoc, int id, int index, const QMemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const QValueList<KoParagLayout> & oldParagLayouts );
+
 signals:
     /** Tell the Edit object that this frame got deleted */
     void frameDeleted( KWFrame* frame );

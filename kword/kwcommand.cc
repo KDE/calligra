@@ -210,6 +210,23 @@ KoTextCursor * KWPasteTextCommand::unexecute( KoTextCursor *c )
 }
 
 
+KWTextDeleteCommand::KWTextDeleteCommand( KoTextDocument *d, int i, int idx, const QMemArray<KoTextStringChar> &str,
+                         const CustomItemsMap & customItemsMap,
+                         const QValueList<KoParagLayout> & oldParagLayouts )
+    :KoTextDeleteCommand(d, i, idx, str, customItemsMap, oldParagLayouts)
+{
+}
+
+KoTextCursor *KWTextDeleteCommand::execute( KoTextCursor *c )
+{
+    return KoTextDeleteCommand::execute( c );
+}
+
+KoTextCursor *KWTextDeleteCommand::unexecute( KoTextCursor *c )
+{
+    return KoTextDeleteCommand::unexecute( c );
+}
+
 ////////////////////////// Frame commands ////////////////////////////////
 
 FrameIndex::FrameIndex( KWFrame *frame )

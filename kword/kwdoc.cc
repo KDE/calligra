@@ -126,6 +126,26 @@ struct KWDocument::InitialEditing {
     int m_initialCursorIndex;
 };
 
+KWBookMark::KWBookMark(const QString &_name)
+    : m_name(_name),
+      m_parag(0L),
+      m_frameSet(0L)
+{
+}
+
+KWBookMark::KWBookMark(const QString &_name, KWTextParag *_parag, KWFrameSet *_frameSet)
+    : m_name(_name),
+      m_parag(_parag),
+      m_frameSet(_frameSet)
+{
+}
+
+KWBookMark::~KWBookMark()
+{
+    m_parag=0L;
+    m_frameSet=0L;
+}
+
 /******************************************************************/
 /* Class: KWDocument                                              */
 /******************************************************************/
@@ -302,6 +322,7 @@ KWDocument::~KWDocument()
         saveConfig();
     // formula frames have to be deleted before m_formulaDocument
     m_lstFrameSet.clear();
+    m_bookmarkList.clear();
     delete m_autoFormat;
     delete m_formulaDocument;
     delete m_commandHistory;
@@ -3889,6 +3910,30 @@ bool KWDocument::cursorInProtectedArea()const
 void KWDocument::setCursorInProtectedArea( bool b )
 {
     m_cursorInProtectectedArea=b;
+}
+
+void KWDocument::insertBookMark(const QString &_name, KWTextParag *_parag, KWFrameSet *_frameSet)
+{
+    KWBookMark *book =new KWBookMark( _name, _parag, _frameSet);
+    m_bookmarkList.append( book );
+}
+
+void KWDocument::deleteBookMark(const QString &/*_name*/)
+{
+    //todo
+}
+
+void KWDocument::renameBookMark(const QString &_oldName, const QString &_newName)
+{
+    QPtrListIterator<KWBookMark> book(m_bookmarkList);
+    for ( ; book.current() ; ++book )
+    {
+        if ( book.current()->bookMarkName()==_oldName)
+        {
+            book.current()->setBookMarkName(_newName );
+            break;
+        }
+    }
 }
 
 #include "kwdoc.moc"

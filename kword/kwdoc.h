@@ -101,6 +101,25 @@ protected:
 
 };
 
+
+class KWBookMark
+{
+public:
+    KWBookMark(const QString &_name);
+    KWBookMark(const QString &_name, KWTextParag *_parag, KWFrameSet *_frameSet);
+    ~KWBookMark();
+    QString bookMarkName()const { return m_name;}
+    void setBookMarkName( const QString & _name ) { m_name = _name;}
+    KWFrameSet * frameSet()const{ return m_frameSet;}
+    void setFrameSet(KWFrameSet * _frame) { m_frameSet = _frame;}
+    KWTextParag *parag() const { return m_parag;}
+    void setParag( KWTextParag *_parag ) { m_parag = _parag;}
+private:
+    QString m_name;
+    KWTextParag *m_parag;
+    KWFrameSet *m_frameSet;
+};
+
 /******************************************************************/
 /* Class: KWDocument                                           */
 /******************************************************************/
@@ -621,6 +640,10 @@ public:
     double footNoteSeparatorLineWidth() const { return m_footNoteSeparatorLineWidth;}
     void setFootNoteSeparatorLineWidth( double _width){  m_footNoteSeparatorLineWidth=_width;}
 
+    void insertBookMark(const QString &_name, KWTextParag *_parag, KWFrameSet *_frameSet);
+    void deleteBookMark(const QString &_name);
+    void renameBookMark(const QString &_oldname, const QString &_newName);
+
 signals:
     void sig_insertObject( KWChild *_child, KWPartFrameSet* );
 
@@ -802,6 +825,9 @@ private:
 
     class InitialEditing;
     InitialEditing *m_initialEditing;
+
+    QPtrList<KWBookMark>m_bookmarkList;
+
 };
 
 

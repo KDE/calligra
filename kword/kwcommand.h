@@ -28,7 +28,7 @@
 #include <koparagcounter.h>
 #include "kwvariable.h"
 #include "kwframestyle.h"
-
+#include <kocommand.h>
 
 class KWFrameSet;
 class KWTableStyle;
@@ -57,6 +57,17 @@ protected:
     int m_lastIndex;
     KoParagLayout m_oldParagLayout;
 };
+
+class KWTextDeleteCommand : public KoTextDeleteCommand
+{
+public:
+    KWTextDeleteCommand( KoTextDocument *d, int i, int idx, const QMemArray<KoTextStringChar> &str,
+                         const CustomItemsMap & customItemsMap,
+                         const QValueList<KoParagLayout> & oldParagLayouts );
+    KoTextCursor *execute( KoTextCursor *c );
+    KoTextCursor *unexecute( KoTextCursor *c );
+};
+
 
 ////////////////////////// Frame commands ////////////////////////////////
 
