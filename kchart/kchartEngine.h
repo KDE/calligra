@@ -24,17 +24,27 @@ public:
   void drawBackgroundImage();
   void prepareColors();
 
+  // grid plotting functions
+  // implementation in kchartEngine_Grid.cc
   void drawGridAndLabels(bool do_ylbl_fractions);
   void draw3DGrids();
   void drawShelfGrids();
   void drawXTicks();
   void drawVolumeGrids();
   void draw3DAnnotation();
-
+  
+  // data plotting functions
+  // implementation in kchartEngine_DataDraw.cc
   void drawData();
   void drawBars();
   void drawLines();
   void draw3DLines();
+  void drawArea();
+  void drawCombo();
+  void draw3DCombo();
+  
+
+  // other stuff
 
   inline bool CELLEXISTS( int row, int col ) {
     return  data->cell(row,col).exists;

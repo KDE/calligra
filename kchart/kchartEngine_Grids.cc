@@ -358,47 +358,49 @@ void kchartEngine::drawXTicks() {
 
 
 void kchartEngine::drawVolumeGrids() {
-  		setno = params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets:
-    num_sets:
-		1; // backmost
-		if( params->type == KCHARTTYPE_COMBO_HLC_BAR    ||
-			params->type == KCHARTTYPE_COMBO_LINE_BAR   ||
-			params->type == KCHARTTYPE_3DCOMBO_LINE_BAR ||
-			params->type == KCHARTTYPE_3DCOMBO_HLC_BAR ) {
-			if( uvol[0] != GDC_NOVALUE )
-				draw_3d_bar( p, PX(0), PX(0)+hlf_barwdth,
-							 PV(0), PV(uvol[0]),
+  int i;
+  int setno;
+  setno = params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets:
+ num_sets:
+  1; // backmost
+  if( params->type == KCHARTTYPE_COMBO_HLC_BAR    ||
+      params->type == KCHARTTYPE_COMBO_LINE_BAR   ||
+      params->type == KCHARTTYPE_3DCOMBO_LINE_BAR ||
+      params->type == KCHARTTYPE_3DCOMBO_HLC_BAR ) {
+    if( uvol[0] != GDC_NOVALUE )
+      draw_3d_bar( p, PX(0), PX(0)+hlf_barwdth,
+		   PV(0), PV(uvol[0]),
 							 0, 0,
-							 ExtVolColor[0],
-							 ExtVolColor[0] );
-			for(i=1; i<num_points-1; ++i ) {
-				if( uvol[i] != GDC_NOVALUE )
-				  draw_3d_bar( p, PX(i)-hlf_barwdth, PX(i)+hlf_barwdth,
-					       PV(0), PV(uvol[i]),
-					       0, 0,
-					       ExtVolColor[i],
-					       ExtVolColor[i] );
-			}
-			if (uvol[i] != GDC_NOVALUE) {
-			  draw_3d_bar( p, PX(i)-hlf_barwdth, PX(i),
-				       PV(0), PV(uvol[i]),
-				       0, 0,
-				       ExtVolColor[i],
-				       ExtVolColor[i] );
-			}
-		} else if( params->type == KCHARTTYPE_COMBO_HLC_AREA   ||
-				   params->type == KCHARTTYPE_COMBO_LINE_AREA  ||
-				   params->type == KCHARTTYPE_3DCOMBO_LINE_AREA||
-				   params->type == KCHARTTYPE_3DCOMBO_HLC_AREA )
-		  for(int i=1; i<num_points; ++i ) {
-		    if( uvol[i-1] != GDC_NOVALUE && uvol[i] != GDC_NOVALUE )
-		      draw_3d_area( p, PX(i-1), PX(i),
-				    PV(0), PV(uvol[i-1]), PV(uvol[i]),
-				    0, 0,
-				    ExtVolColor[i],
-				    ExtVolColor[i] );
-		  }
-		setno = 0;
+		   ExtVolColor[0],
+		   ExtVolColor[0] );
+    for(i=1; i<num_points-1; ++i ) {
+      if( uvol[i] != GDC_NOVALUE )
+	draw_3d_bar( p, PX(i)-hlf_barwdth, PX(i)+hlf_barwdth,
+		     PV(0), PV(uvol[i]),
+		     0, 0,
+		     ExtVolColor[i],
+		     ExtVolColor[i] );
+    }
+    if (uvol[i] != GDC_NOVALUE) {
+      draw_3d_bar( p, PX(i)-hlf_barwdth, PX(i),
+		   PV(0), PV(uvol[i]),
+		   0, 0,
+		   ExtVolColor[i],
+		   ExtVolColor[i] );
+    }
+  } else if( params->type == KCHARTTYPE_COMBO_HLC_AREA   ||
+	     params->type == KCHARTTYPE_COMBO_LINE_AREA  ||
+	     params->type == KCHARTTYPE_3DCOMBO_LINE_AREA||
+	     params->type == KCHARTTYPE_3DCOMBO_HLC_AREA )
+    for(int i=1; i<num_points; ++i ) {
+      if( uvol[i-1] != GDC_NOVALUE && uvol[i] != GDC_NOVALUE )
+	draw_3d_area( p, PX(i-1), PX(i),
+		      PV(0), PV(uvol[i-1]), PV(uvol[i]),
+		      0, 0,
+		      ExtVolColor[i],
+		      ExtVolColor[i] );
+    }
+  setno = 0;
 }
 
 
