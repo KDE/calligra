@@ -5,18 +5,16 @@
 #include <qbuffer.h>
 
 #include <kuserprofile.h>
-#include <kregfactories.h>
-#include <kregistry.h>
 #include <kstddirs.h>
 
-class KoTraderSorter
+class KTraderSorter
 {
 public:
-  KoTraderSorter() { m_pService = 0; };
-  KoTraderSorter( const KoTraderSorter& s ) : m_userPreference( s.m_userPreference ),
+  KTraderSorter() { m_pService = 0; };
+  KTraderSorter( const KTraderSorter& s ) : m_userPreference( s.m_userPreference ),
     m_bAllowAsDefault( s.m_bAllowAsDefault ),
     m_traderPreference( s.m_traderPreference ), m_pService( s.m_pService ) { }
-  KoTraderSorter( const KService* _service, double _pref1, int _pref2, bool _default )
+  KTraderSorter( const KService* _service, double _pref1, int _pref2, bool _default )
   { m_pService = _service;
     m_userPreference = _pref2;
     m_traderPreference = _pref1;
@@ -25,7 +23,7 @@ public:
 
   const KService* service() const { return m_pService; }
 
-  bool operator< ( const KoTraderSorter& ) const;
+  bool operator< ( const KTraderSorter& ) const;
 
 private:
   /**
@@ -47,7 +45,7 @@ private:
   const KService* m_pService;
 };
 
-bool KoTraderSorter::operator< ( const KoTraderSorter& _o ) const
+bool KTraderSorter::operator< ( const KTraderSorter& _o ) const
 {
   if ( _o.m_bAllowAsDefault && !m_bAllowAsDefault )
     return true;
@@ -62,25 +60,25 @@ bool KoTraderSorter::operator< ( const KoTraderSorter& _o ) const
 
 // --------------------------------------------------
 
-KoTrader* KoTrader::s_self = 0;
+KTrader* KTrader::s_self = 0;
 
-KoTrader* KoTrader::self()
+KTrader* KTrader::self()
 {
     if ( !s_self )
-	s_self = new KoTrader;
-    
+	s_self = new KTrader;
+
     return s_self;
 }
 
-KoTrader::KoTrader()
+KTrader::KTrader()
 {
 }
 
-KoTrader::~KoTrader()
+KTrader::~KTrader()
 {
 }
 
-KoTrader::OfferList KoTrader::query( const QString& _servicetype, const QString& _constraint,
+KTrader::OfferList KTrader::query( const QString& _servicetype, const QString& _constraint,
 					const QString& _preferences ) const
 {
   // TODO: catch errors here
@@ -94,7 +92,7 @@ KoTrader::OfferList KoTrader::query( const QString& _servicetype, const QString&
     prefs = parsePreferences( _preferences );
 
   KServiceTypeProfile::OfferList lst;
-  KoTrader::OfferList ret;
+  KTrader::OfferList ret;
 
   // Get all services of this service type.
   lst = KServiceTypeProfile::offers( _servicetype );
@@ -117,17 +115,17 @@ KoTrader::OfferList KoTrader::query( const QString& _servicetype, const QString&
 
   if ( !!prefs )
   {
-    QValueList<KoTraderSorter> sorter;
+    QValueList<KTraderSorter> sorter;
     KServiceTypeProfile::OfferList::Iterator it = lst.begin();
     for( ; it != lst.end(); ++it )
     {
       PreferencesReturn p = matchPreferences( prefs, (*it).service(), lst );
       if ( p.type == PreferencesReturn::PRT_DOUBLE )
-	sorter.append( KoTraderSorter( (*it).service(), p.f, (*it).preference(), (*it).allowAsDefault() ) );
+	sorter.append( KTraderSorter( (*it).service(), p.f, (*it).preference(), (*it).allowAsDefault() ) );
     }
     qBubbleSort( sorter );
 
-    QValueList<KoTraderSorter>::Iterator it2 = sorter.begin();
+    QValueList<KTraderSorter>::Iterator it2 = sorter.begin();
     for( ; it2 != sorter.end(); ++it2 )
     {
       KService *s = (KService*)(*it2).service();
@@ -147,38 +145,35 @@ KoTrader::OfferList KoTrader::query( const QString& _servicetype, const QString&
   return ret;
 }
 
-KoTrader::OfferList KoTrader::listServices()
+KTrader::OfferList KTrader::listServices()
 {
-  KoTrader::OfferList res;
+  KTrader::OfferList res;
 
-  const QList<KService> &serviceList = KService::services();
+  const KService::List serviceList = KService::allServices();
 
-  QListIterator<KService> it( serviceList );
-  for (; it.current(); ++it )
+  KService::List::ConstIterator it = serviceList.begin();
+  for (; it != serviceList.end(); ++it )
   {
-    res.append( it.current() );
+    res.append( *it );
   }
 
   return res;
 }
 
-KService::Ptr KoTrader::serviceByName( const QString &name )
+KService::Ptr KTrader::serviceByName( const QString &name )
 {
   KService *s = KService::service( name );
 
   return KService::Ptr( s );
 }
 
-/* void KoTrader::loadRegistry()
+/* void KTrader::loadRegistry()
 {
   QString regDB = locate("config", "kregistry");
 
   // Load from binary registry + check dirs
-  KRegistry::self()->load( regDB );
 
   // If dirs had anything new : save in binary registry
-  if ( KRegistry::self()->isModified() )
-     KRegistry::self()->save( regDB );
 }
 */
 

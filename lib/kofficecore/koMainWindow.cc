@@ -35,7 +35,7 @@
 #include <kstdaccel.h>
 #include <klocale.h>
 #include <kglobal.h>
-#include <kmimetypes.h>
+#include <kmimetype.h>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 #include <kaction.h>

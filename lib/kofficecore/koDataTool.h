@@ -7,7 +7,7 @@
 #include <qvaluelist.h>
 #include <qpixmap.h>
 
-#include <kservices.h>
+#include <kservice.h>
 
 class KoDataTool;
 
@@ -102,7 +102,7 @@ public:
     bool isValid() const;
    
     /**
-     * Queries the @ref KoTrader about installed @ref KoDataTool implementations.
+     * Queries the @ref KTrader about installed @ref KoDataTool implementations.
      */
     static QValueList<KoDataToolInfo> query( const QString& datatype = QString::null, const QString& mimetype = QString::null );
     

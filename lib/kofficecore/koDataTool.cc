@@ -156,10 +156,10 @@ QValueList<KoDataToolInfo> KoDataToolInfo::query( const QString& datatype, const
     }
 
     // Query the trader
-    KoTrader *trader = KoTrader::self();
-    KoTrader::OfferList offers = trader->query( "KoDataTool", constr );
+    KTrader *trader = KTrader::self();
+    KTrader::OfferList offers = trader->query( "KoDataTool", constr );
 
-    KoTrader::OfferList::ConstIterator it = offers.begin();
+    KTrader::OfferList::ConstIterator it = offers.begin();
     for( ; it != offers.end(); ++it )
 	lst.append( KoDataToolInfo( *it ) );
 	

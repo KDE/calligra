@@ -30,11 +30,11 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kstddirs.h>
-#include <kservices.h>
+#include <kservice.h>
 #include <kdebug.h>
 
 /**
- * Port from KOffice Trader to KoTrader/KActivator (kded) by Simon Hausmann
+ * Port from KOffice Trader to KTrader/KActivator (kded) by Simon Hausmann
  * (c) 1999 Simon Hausmann <hausmann@kde.org>
  */
 
@@ -146,15 +146,15 @@ QValueList<KoDocumentEntry> KoDocumentEntry::query( const char *_constr, int /*_
 {
   QValueList<KoDocumentEntry> lst;
 
-  KoTrader *trader = KoTrader::self();
+  KTrader *trader = KTrader::self();
 
   if ( !_constr )
     _constr = "";
 
   // Query the trader
-  KoTrader::OfferList offers = trader->query( "KOfficePart", _constr );
+  KTrader::OfferList offers = trader->query( "KOfficePart", _constr );
 
-  KoTrader::OfferList::ConstIterator it = offers.begin();
+  KTrader::OfferList::ConstIterator it = offers.begin();
   unsigned int max = offers.count();
   for( unsigned int i = 0; i < max; i++ )
   {
@@ -214,11 +214,11 @@ QValueList<KoFilterEntry> KoFilterEntry::query( const char *_constr, int /*_coun
   kdebug(0, 30003, "KoFilterEntry::query( %s, <ignored> )", _constr );
   QValueList<KoFilterEntry> lst;
 
-  KoTrader *trader = KoTrader::self();
+  KTrader *trader = KTrader::self();
 
-  KoTrader::OfferList offers = trader->query( "KOfficeFilter", _constr );
+  KTrader::OfferList offers = trader->query( "KOfficeFilter", _constr );
 
-  KoTrader::OfferList::ConstIterator it = offers.begin();
+  KTrader::OfferList::ConstIterator it = offers.begin();
   unsigned int max = offers.count();
   kdebug(0, 30003, "Query returned %d offers\n", max);
   for( unsigned int i = 0; i < max; i++ )
@@ -289,11 +289,11 @@ QValueList<KoToolEntry> KoToolEntry::query( const QString &_mime_type )
 {
   QValueList<KoToolEntry> lst;
 
-  KoTrader *trader = KoTrader::self();
+  KTrader *trader = KTrader::self();
 
-  KoTrader::OfferList offers = trader->query( "KOfficeTool" );
+  KTrader::OfferList offers = trader->query( "KOfficeTool" );
 
-  KoTrader::OfferList::ConstIterator it = offers.begin();
+  KTrader::OfferList::ConstIterator it = offers.begin();
   for (; it != offers.end(); ++it )
   {
     KoToolEntry t( koParseToolProperties( *it ) );

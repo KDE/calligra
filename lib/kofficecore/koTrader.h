@@ -4,18 +4,18 @@
 #include <qstring.h>
 
 #include <ksharedptr.h>
-#include <kservices.h>
+#include <kservice.h>
 
 /**
  */
-class KoTrader : public QObject
+class KTrader : public QObject
 {
     Q_OBJECT
 public:
     // A list of services
     typedef QValueList<KService::Ptr> OfferList;
   
-    virtual ~KoTrader();
+    virtual ~KTrader();
 
     virtual OfferList query( const QString& servicetype,
 			     const QString& constraint = QString::null,
@@ -25,13 +25,13 @@ public:
 
     virtual KService::Ptr serviceByName( const QString &name );
 
-    static KoTrader* self();
+    static KTrader* self();
     
 protected:
-    KoTrader();
+    KTrader();
     
 private:
-    static KoTrader* s_self;
+    static KTrader* s_self;
 };
 
 #endif

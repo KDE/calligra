@@ -26,7 +26,7 @@
 #include <qmap.h>
 #include <qshared.h>
 
-#include <kservices.h>
+#include <kservice.h>
 #include <kuserprofile.h>
 
 #include "koTrader.h"

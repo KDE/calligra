@@ -22,8 +22,7 @@
 #include "koFilter.h"
 
 #include <klocale.h>
-#include <kregistry.h>
-#include <kmimetypes.h>
+#include <kmimetype.h>
 #include <kdebug.h>
 
 #include <qmsgbox.h>
@@ -52,7 +51,6 @@ KoFilterManager* KoFilterManager::self()
     return s_pSelf;
 }
 
-KRegistry * registry = 0L;
 
 const QString KoFilterManager::fileSelectorList( const Direction &direction, const char *_format,
                                            const char *_native_pattern,
@@ -66,13 +64,12 @@ const QString KoFilterManager::fileSelectorList( const Direction &direction, con
         service = "Import == '";
     service += _format;
     service += "'";
-    
+
     QValueList<KoFilterEntry> vec = KoFilterEntry::query( service );
 
     // ############ Torben: What the hell is that good for ?
     /*if (!registry)
     {
-        registry = new KRegistry;
         registry->addFactory( new KServiceTypeFactory );
         registry->load();
     }*/
@@ -91,14 +88,14 @@ const QString KoFilterManager::fileSelectorList( const Direction &direction, con
 
     for( unsigned int i = 0; i < vec.count(); ++i )
     {
-        KMimeType *t;
+        KMimeType::Ptr t;
         QString mime;
         if ( direction == Import )
             mime = vec[i].import;
         else
             mime = vec[i].export_;
 
-        t = KMimeType::find( mime );
+        t = KMimeType::mimeType( mime );
         // Did we get exact this mime type ?
         if ( t && mime == t->mimeType() )
         {
