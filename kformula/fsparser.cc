@@ -332,7 +332,7 @@ public:
     RowNode( QPtrList<ParserNode> row ) : m_row( row ) { m_row.setAutoDelete( true ); }
     //virtual void output( ostream& stream );
     virtual void buildXML( QDomDocument doc, QDomElement element );
-    uint colunms() const { return m_row.count(); }
+    uint columns() const { return m_row.count(); }
     void setRequiredColumns( uint requiredColumns ) { m_requiredColumns = requiredColumns; }
 private:
     QPtrList<ParserNode> m_row;
@@ -375,11 +375,11 @@ private:
 
 uint MatrixNode::columns()
 {
-    uint colunms = 0;
+    uint columns = 0;
     for ( uint i = 0; i < m_rows.count(); i++ ) {
-        colunms = QMAX( colunms, m_rows.at( i )->colunms() );
+        columns = QMAX( columns, m_rows.at( i )->columns() );
     }
-    return colunms;
+    return columns;
 }
 
 void MatrixNode::buildXML( QDomDocument doc, QDomElement element )
@@ -419,7 +419,7 @@ void MatrixNode::buildXML( QDomDocument doc, QDomElement element )
 
 
 FormulaStringParser::FormulaStringParser( const KFormula::SymbolTable& symbolTable, QString formula )
-    : m_symbolTable( symbolTable ), m_formula( formula ), pos( 0 )
+    : m_symbolTable( symbolTable ), m_formula( formula ), pos( 0 ), line( 1 ), column( 1 )
 {
 }
 
@@ -437,7 +437,7 @@ QDomDocument FormulaStringParser::parse()
     head = parseAssign();
     //head->output( cout );
     if ( !eol() ) {
-        error( QString( i18n( "abouted parsing at %1" ) ).arg( pos ) );
+        error( QString( i18n( "abouted parsing at %1:%2" ) ).arg( line ).arg( column ) );
     }
 
     QDomDocument doc("KFORMULA");
@@ -544,7 +544,7 @@ ParserNode* FormulaStringParser::parsePrimary()
                     nextToken();
                 }
             }
-            expect( RP, QString( i18n( "')' expected at %1" ) ).arg( pos ) );
+            expect( RP, QString( i18n( "')' expected at %1:%2" ) ).arg( line ).arg( column ) );
             node->setFunctionName( true );
             return new FunctionNode( node, args );
         }
@@ -558,7 +558,7 @@ ParserNode* FormulaStringParser::parsePrimary()
     case LP: {
         nextToken();
         ParserNode* node = parseExpr();
-        expect( RP, QString( i18n( "')' expected at %1" ) ).arg( pos ) );
+        expect( RP, QString( i18n( "')' expected at %1:%2" ) ).arg( line ).arg( column ) );
         return node;
     }
     case LB: {
@@ -575,19 +575,19 @@ ParserNode* FormulaStringParser::parsePrimary()
                     nextToken();
                 }
             }
-            expect( RB, QString( i18n( "']' expected at %1" ) ).arg( pos ) );
+            expect( RB, QString( i18n( "']' expected at %1:%2" ) ).arg( line ).arg( column ) );
             rows.append( new RowNode( row ) );
             if ( currentType == COMMA ) {
                 nextToken();
             }
         }
-        expect( RB, QString( i18n( "']' expected at %1" ) ).arg( pos ) );
+        expect( RB, QString( i18n( "']' expected at %1:%2" ) ).arg( line ).arg( column ) );
         MatrixNode* node = new MatrixNode( rows );
         if ( node->columns() == 0 ) {
-            error( QString( i18n( "null columns in Matrix at %1" ) ).arg( pos ) );
+            error( QString( i18n( "null columns in Matrix at %1:%2" ) ).arg( line ).arg( column ) );
         }
         if ( node->rows() == 0 ) {
-            error( QString( i18n( "null rows in Matrix at %1" ) ).arg( pos ) );
+            error( QString( i18n( "null rows in Matrix at %1:%2" ) ).arg( line ).arg( column ) );
         }
         return node;
     }
@@ -597,8 +597,8 @@ ParserNode* FormulaStringParser::parsePrimary()
         return node;
     }
     default:
-        error( QString( i18n( "Unexpected token at %1" ) ).arg( pos ) );
-        return new PrimaryNode( current );
+        error( QString( i18n( "Unexpected token at %1:%2" ) ).arg( line ).arg( column ) );
+        return new PrimaryNode( "?" );
     }
 }
 
@@ -618,7 +618,11 @@ QString FormulaStringParser::nextToken()
     while ( !eol() && ( m_formula[pos].isSpace() ||
                         ( m_formula[pos] == '"' ) ||
                         ( m_formula[pos] == '\'' ) ) ) {
-        pos++;
+        if ( m_formula[pos] == '\n' ) {
+            line++;
+            column = 0;
+        }
+        pos++; column++;
     }
     if ( eol() ) {
         currentType = EOL;
@@ -632,9 +636,9 @@ QString FormulaStringParser::nextToken()
     }
     else if ( m_formula[pos].isLetter() ) {
         uint begin = pos;
-        pos++;
+        pos++; column++;
         while ( !eol() && m_formula[pos].isLetter() ) {
-            pos++;
+            pos++; column++;
         }
         currentType = NAME;
         return current = m_formula.mid( begin, pos-begin );
@@ -642,56 +646,56 @@ QString FormulaStringParser::nextToken()
     else {
         switch ( m_formula[pos].latin1() ) {
         case '+':
-            pos++;
+            pos++; column++;
             currentType = PLUS;
             return current = "+";
         case '-':
-            pos++;
+            pos++; column++;
             currentType = SUB;
             return current = "-";
         case '*':
-            pos++;
+            pos++; column++;
             if ( !eol() && m_formula[pos] == '*' ) {
-                pos++;
+                pos++; column++;
                 currentType = POW;
                 return current = "**";
             }
             currentType = MUL;
             return current = "*";
         case '/':
-            pos++;
+            pos++; column++;
             currentType = DIV;
             return current = "/";
         case '^':
-            pos++;
+            pos++; column++;
             currentType = POW;
             return current = "**";
         case '(':
-            pos++;
+            pos++; column++;
             currentType = LP;
             return current = "(";
         case ')':
-            pos++;
+            pos++; column++;
             currentType = RP;
             return current = ")";
         case '[':
-            pos++;
+            pos++; column++;
             currentType = LB;
             return current = "[";
         case ']':
-            pos++;
+            pos++; column++;
             currentType = RB;
             return current = "]";
         case ',':
-            pos++;
+            pos++; column++;
             currentType = COMMA;
             return current = ",";
         case '=':
-            pos++;
+            pos++; column++;
             currentType = ASSIGN;
             return current = "=";
         default:
-            pos++;
+            pos++; column++;
             currentType = OTHER;
             return current = m_formula.mid( pos-1, 1 );
         }
@@ -707,12 +711,14 @@ void FormulaStringParser::readNumber()
         // Look for a dot.
         if ( ch == '.' ) {
             pos++;
+            column++;
             ch = m_formula[pos];
             if ( ch.isDigit() ) {
                 readDigits();
             }
             else {
                 pos--;
+                column--;
                 return;
             }
         }
@@ -722,18 +728,21 @@ void FormulaStringParser::readNumber()
             ch = m_formula[pos];
             if ( ( ch == 'E' ) || ( ch == 'e' ) ) {
                 pos++;
+                column++;
                 ch = m_formula[pos];
 
                 // signs are allowed after the exponent
                 if ( ( ( ch == '+' ) || ( ch == '-' ) ) &&
                      ( pos < m_formula.length()-1 ) ) {
                     pos++;
+                    column++;
                     ch = m_formula[pos];
                     if ( ch.isDigit() ) {
                         readDigits();
                     }
                     else {
                         pos -= 2;
+                        column -= 2;
                         return;
                     }
                 }
@@ -742,6 +751,7 @@ void FormulaStringParser::readNumber()
                 }
                 else {
                     pos--;
+                    column--;
                 }
             }
         }
@@ -753,6 +763,7 @@ void FormulaStringParser::readDigits()
 {
     while ( !eol() && m_formula[pos].isDigit() ) {
         pos++;
+        column++;
     }
 }
 

@@ -62,6 +62,8 @@ private:
     const KFormula::SymbolTable& m_symbolTable;
     QString m_formula;
     uint pos;
+    uint line;
+    uint column;
 
     TokenType currentType;
     QString current;

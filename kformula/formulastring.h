@@ -22,11 +22,13 @@
 
 #include <qvariant.h>
 #include <qdialog.h>
-class QVBoxLayout;
-class QHBoxLayout;
+
 class QGridLayout;
+class QHBoxLayout;
+class QLabel;
 class QPushButton;
 class QTextEdit;
+class QVBoxLayout;
 
 class KFormulaPartView;
 
@@ -42,10 +44,13 @@ public:
     QPushButton* buttonHelp;
     QPushButton* buttonOk;
     QPushButton* buttonCancel;
+    QLabel* position;
 
 protected slots:
 
     virtual void accept ();
+
+    void cursorPositionChanged ( int para, int pos );
 
 private:
     KFormulaPartView* view;

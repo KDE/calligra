@@ -17,12 +17,13 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qvariant.h>
+#include <qlabel.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qstringlist.h>
 #include <qtextedit.h>
 #include <qtooltip.h>
+#include <qvariant.h>
 #include <qwhatsthis.h>
 
 #include <kmessagebox.h>
@@ -45,6 +46,15 @@ FormulaString::FormulaString( KFormulaPartView* parent, const char* name, bool m
     textWidget = new QTextEdit( this, "textWidget" );
     FormulaStringLayout->addWidget( textWidget );
 
+    QHBoxLayout* Layout2 = new QHBoxLayout( 0, 0, 6, "Layout2");
+    QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
+    Layout2->addItem( spacer );
+
+    position = new QLabel( this, "position" );
+    position->setText( trUtf8( "1:1" ) );
+    Layout2->addWidget( position );
+    FormulaStringLayout->addLayout( Layout2 );
+
     QHBoxLayout* Layout1 = new QHBoxLayout( 0, 0, 6, "Layout1");
 
     buttonHelp = new QPushButton( this, "buttonHelp" );
@@ -52,7 +62,7 @@ FormulaString::FormulaString( KFormulaPartView* parent, const char* name, bool m
     buttonHelp->setAccel( 4144 );
     buttonHelp->setAutoDefault( TRUE );
     Layout1->addWidget( buttonHelp );
-    QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
+    spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
     Layout1->addItem( spacer );
 
     buttonOk = new QPushButton( this, "buttonOk" );
@@ -72,6 +82,8 @@ FormulaString::FormulaString( KFormulaPartView* parent, const char* name, bool m
     // signals and slots connections
     connect( buttonOk, SIGNAL( clicked() ), this, SLOT( accept() ) );
     connect( buttonCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
+    connect( textWidget, SIGNAL( cursorPositionChanged( int, int ) ),
+             this, SLOT( cursorPositionChanged( int, int ) ) );
 }
 
 /*
@@ -91,6 +103,11 @@ void FormulaString::accept()
     else {
         KMessageBox::sorry( this, errorList.join( "\n" ), i18n( "Parser Error" ) );
     }
+}
+
+void FormulaString::cursorPositionChanged( int para, int pos )
+{
+    position->setText( QString( "%1:%2" ).arg( para+1 ).arg( pos+1 ) );
 }
 
 #include "formulastring.moc"
