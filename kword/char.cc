@@ -745,8 +745,12 @@ QString KWString::decoded()
 {
   QString str = toString(0,size());
   
+  str.append("_");
+  
   str.replace(QRegExp("<"),"&lt;");
   str.replace(QRegExp(">"),"&gt;");
+  
+  str.remove(str.length() - 1,1);
   
   return QString(str);
 }
