@@ -31,7 +31,7 @@
             </property>
             <property name="text">
                 <string>The "Kugar Report Generator" is not part of Kexi, although reports are displayed within Kexi main window. It is loaded as as a plugin, but is a stand alone product licensed as GPL. There are no invocations of Kugar's internal methods.
-Kexi only generates data files, which are not covered by the GPL license (FAQ at: http://www.fsf.org/copyleft/gpl.html)  and only the LGPL kparts interface is used for telling Kugar which datafile to use and to display the navigation actions.
+Kexi only generates data files, which are not covered by the GPL license (FAQ at: http://www.fsf.org/copyleft/gpl.html)  and only the LGPL kparts interface is used for telling Kugar which datafile to use and to display the navigation actions. This has been approved by all (including the original) copyright holders.
 
 The GPL application Kugar is part of the KOffice package (www.koffice.org). The copyright/left holders known at  the time this notice is written are:
 Mutiny Bay Software (info@mutinybaysoftware.com)  (Metaphrast)
