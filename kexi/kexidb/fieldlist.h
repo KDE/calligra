@@ -21,6 +21,7 @@
 #define KEXIDB_FIELDLIST_H
 
 #include <qvaluelist.h>
+#include <qdict.h>
 #include <qstring.h>
 
 #include <kexidb/field.h>
@@ -50,12 +51,22 @@ class KEXI_DB_EXPORT FieldList
 		/*! \return number of fields in the list. */
 		unsigned int fieldCount() const;
 		
-		/*! Adds field at the and of field list. */
+		/*! Adds field at the and of field list. 
+		
+		 Note: You can reimplement this method but you should still call 
+		 this implementation in your subclass. 
+		*/
 		virtual FieldList& addField(Field *field);
 		
 		/*! \return field #id or NULL if there is no such a field. */
-		KexiDB::Field* field(unsigned int id);
+		Field* field(unsigned int id);
+		
+		/*! \return field with name \a name or NULL if there is no such a field. */
+		Field* field(const QString& name) const;
 
+		/*! \return list of field names for this list. */
+		QStringList names() const;
+		
 		Field::ListIterator fieldsIterator() const { return Field::ListIterator(m_fields); }
 
 		Field::List* fields() { return &m_fields; }
@@ -68,11 +79,40 @@ class KEXI_DB_EXPORT FieldList
 
 		/*! Shows debug information about all fields in the list. */
 		virtual void debug() const;
+
+		/*! Creates and returns list that contain fields selected by name.
+		 At least field (exising on this list) should be selected, otherwise NULL is
+		 returned. Returned FieldList object is not owned by any parent (so you need 
+		 to destroy yourself) and Field objects included in it are not owned by it 
+		 (but still as before, by 'this' object).
+		 Returned list can be usable e.g. as argument for Connection::insertRecord().
+		*/
+		FieldList* subList(const QString& n1, const QString& n2 = QString::null, 
+			const QString& n3 = QString::null, const QString& n4 = QString::null,
+			const QString& n5 = QString::null, const QString& n6 = QString::null,
+			const QString& n7 = QString::null, const QString& n8 = QString::null,
+			const QString& n9 = QString::null, const QString& n10 = QString::null,
+			const QString& n11 = QString::null, const QString& n12 = QString::null,
+			const QString& n13 = QString::null, const QString& n14 = QString::null,
+			const QString& n15 = QString::null, const QString& n16 = QString::null,
+			const QString& n17 = QString::null, const QString& n18 = QString::null
+		);
 	
+		/*! \return a string that is a result of all field names concatenated 
+		 and with "," between. This is usable e.g. as argument like "field1,field2" 
+		 for "INSERT INTO (xxx) ..". The result of this method is effectively cached,
+		 and it is invalidated when set of fields changes (e.g. using clear() 
+		 or addField()).
+		*/
+		QString sqlFieldsList();
 	protected:
 
 		Field::List m_fields;
-
+		QDict<Field> m_fields_by_name;
+	
+	private:
+		//! cached
+		QString m_sqlFields;
 };
 
 } //namespace KexiDB

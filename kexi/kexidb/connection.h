@@ -96,21 +96,15 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		/*! Creates new database with name \a dbName, using this connection.
 		 If database with \a dbName already exists, or other error occured,
 		 false is returned. 
-		 If \a dbName is empty, first database name 
-		 found on the databaseNames() list will be used.
-		 If this list is empty, method fails. 
-		 Omitting the parameter is convenient only for file-based drivers,
-		 like SQLite, when we know that dbName is the same as database file name.
+		 For file-based drivers, \a dbName should be equal to filename
+		 (the same as specified for ConnectionData).
 		 \sa useDatabase() */
-		bool createDatabase( const QString &dbName = QString::null );
+		bool createDatabase( const QString &dbName );
 
 		/*! Opens existing database \a dbName using this connection.
-		 If \a dbName is empty, first database name 
-		 found on the databaseNames() list will be used.
-		 If this list is empty, method fails. 
-		 Omitting the parameter is convenient e.g. for file-based drivers,
-		 like SQLite, when we know that dbName is the same as database file name. */
-		bool useDatabase( const QString &dbName = QString::null );
+		 For file-based drivers, \a dbName should be equal to filename
+		 (the same as specified for ConnectionData). */
+		bool useDatabase( const QString &dbName );
 
 		/*! Closes currently used database for this connection.
 		 Any active transactions (if supported) are rolled back,
@@ -337,6 +331,8 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 
 		QString valueToSQL( const Field::Type ftype, const QVariant& v ) const;
 
+		QString valueToSQL( const Field *field, const QVariant& v ) const;
+
 		/*! Executes \a sql query and stores first record's data inside \a data.
 		 This is convenient method when we need only first recors from query result,
 		 or when we know that query result has only one record.
@@ -345,19 +341,29 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 
 		//PROTOTYPE:
 		#define A , const QVariant&
-		#define H_INS_REC(args) \
-			bool insertRecord(KexiDB::TableSchema &tableSchema args)
-		H_INS_REC(A);
-		H_INS_REC(A A);
-		H_INS_REC(A A A);
-		H_INS_REC(A A A A);
-		H_INS_REC(A A A A A);
-		H_INS_REC(A A A A A A);
-		H_INS_REC(A A A A A A A);
-		H_INS_REC(A A A A A A A A);
-		bool insertRecord(KexiDB::TableSchema &tableSchema, QValueList<QVariant>& values);
-		#undef A
+		#define H_INS_REC(args) bool insertRecord(TableSchema &tableSchema args)
+		#define H_INS_REC_ALL \
+		H_INS_REC(A); \
+		H_INS_REC(A A); \
+		H_INS_REC(A A A); \
+		H_INS_REC(A A A A); \
+		H_INS_REC(A A A A A); \
+		H_INS_REC(A A A A A A); \
+		H_INS_REC(A A A A A A A); \
+		H_INS_REC(A A A A A A A A)
+		H_INS_REC_ALL;
+		
 		#undef H_INS_REC
+		#define H_INS_REC(args) bool insertRecord(FieldList& fields args)
+
+		H_INS_REC_ALL;
+		#undef H_INS_REC_ALL
+		#undef H_INS_REC
+		#undef A
+		
+		bool insertRecord(TableSchema &tableSchema, QValueList<QVariant>& values);
+		
+		bool insertRecord(FieldList& fields, QValueList<QVariant>& values);
 		
 		/*! Creates table defined by \a tableSchema.
 		 Schema information is also added into kexi system tables, for later reuse.

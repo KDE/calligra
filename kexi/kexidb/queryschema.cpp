@@ -85,7 +85,7 @@ KexiDB::FieldList& QuerySchema::addField(KexiDB::Field* field)
 {
 	if (!field)
 		return *this;
-		if (!field->isQueryAsterisk() && !field->table()) {
+	if (!field->isQueryAsterisk() && !field->table()) {
 		KexiDBDbg << "QuerySchema::addField(): WARNING: field '"<<field->name()<<"' must contain table information!" <<endl;
 		return *this;
 	}
@@ -107,6 +107,10 @@ KexiDB::FieldList& QuerySchema::addField(KexiDB::Field* field)
 
 FieldList& QuerySchema::addAsterisk(QueryAsterisk *asterisk)
 {
+	if (!asterisk)
+		return *this;
+	//make unique name
+	asterisk->m_name = (asterisk->table() ? asterisk->table()->name() + ".*" : "*") + QString::number(asterisks()->count());
 	return addField(asterisk);
 }
 

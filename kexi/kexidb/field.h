@@ -256,6 +256,7 @@ class KEXI_DB_EXPORT Field
 
 	friend class Connection;
 	friend class TableSchema;
+	friend class QuerySchema;
 };
 
 } //namespace KexiDB

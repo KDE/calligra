@@ -286,13 +286,6 @@ bool Connection::createDatabase( const QString &dbName )
 {
 	if (!checkConnected())
 		return false;
-	
-//	QString my_dbName = dbName;
-	//if (my_dbName.isEmpty()) {
-	//	const QStringList& db_lst = databaseNames();
-//		if (!db_lst.isEmpty())
-//			my_dbName = db_lst.first();
-//	}
 
 	if (databaseExists( dbName )) {
 		setError(ERR_OBJECT_EXISTS, i18n("Database '%1' already exists.").arg(dbName) );
@@ -383,15 +376,14 @@ bool Connection::useDatabase( const QString &dbName )
 	if (!checkConnected())
 		return false;
 	
-	QString my_dbName = dbName;
-	if (my_dbName.isEmpty()) {
-		const QStringList& db_lst = databaseNames();
-		if (!db_lst.isEmpty())
-			my_dbName = db_lst.first();
-	}
-	if (my_dbName.isEmpty())
+	if (dbName.isEmpty())
 		return false;
-
+	QString my_dbName = dbName;
+//	if (my_dbName.isEmpty()) {
+//		const QStringList& db_lst = databaseNames();
+//		if (!db_lst.isEmpty())
+//			my_dbName = db_lst.first();
+//	}
 	if (m_usedDatabase == my_dbName)
 		return true; //already used
 
@@ -598,7 +590,7 @@ QValueList<int> Connection::objectIds(int objType)
 	return list;*/
 }
 
-QString Connection::valueToSQL( const Field::Type ftype, const QVariant& v ) const
+inline QString Connection_valueToSQL( const Field::Type ftype, const QVariant& v )
 {
 	if (v.isNull())
 		return "NULL";
@@ -623,13 +615,29 @@ QString Connection::valueToSQL( const Field::Type ftype, const QVariant& v ) con
 			QString s = v.toString();
 //js: TODO: for sqlite we use single ' chars, what with other engines?
 			return QString("'")+s.replace( '"', "\\\"" ) + "'"; 
-		}case Field::BLOB:
+		}
+		case Field::BLOB:
 //TODO: here special encoding method needed
 			return QString("'")+v.toString()+"'";
+		case Field::InvalidType:
+			return "!INVALIDTYPE!";
 		default:
+			KexiDBDbg << "Connection_valueToSQL(): UNKNOWN!" << endl;
 			return QString::null;
 	}
 	return QString::null;
+}
+
+QString Connection::valueToSQL( const Field::Type ftype, const QVariant& v ) const
+{
+//	kdDebug() << "valueToSQL(" << (m_driver ? m_driver->sqlTypeName(ftype) : "??") << ", " << Connection_valueToSQL( ftype, v ) <<")" << endl;
+	return Connection_valueToSQL( ftype, v );
+}
+
+QString Connection::valueToSQL( const Field *field, const QVariant& v ) const
+{
+//	kdDebug() << "valueToSQL(" << (m_driver ? ( field ? m_driver->sqlTypeName(field->type()): "!field") : "??") << ", " << Connection_valueToSQL( (field ? field->type() : Field::InvalidType), v ) <<")" << endl;
+	return Connection_valueToSQL( (field ? field->type() : Field::InvalidType), v );
 }
 
 QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema ) const
@@ -698,17 +706,44 @@ C_INS_REC( C_A(0) C_A(1) C_A(2) C_A(3) C_A(4) C_A(5), V_A0 V_A(1) V_A(2) V_A(3) 
 C_INS_REC( C_A(0) C_A(1) C_A(2) C_A(3) C_A(4) C_A(5) C_A(6), V_A0 V_A(1) V_A(2) V_A(3) V_A(4) V_A(5) V_A(6) )
 C_INS_REC( C_A(0) C_A(1) C_A(2) C_A(3) C_A(4) C_A(5) C_A(6) C_A(7), V_A0 V_A(1) V_A(2) V_A(3) V_A(4) V_A(5) V_A(6) V_A(7) )
 
-#undef C_A
 #undef V_A0
 #undef V_A
 #undef C_INS_REC
 
-bool Connection::insertRecord(KexiDB::TableSchema &tableSchema, QValueList<QVariant>& values)
+#define V_A( a ) valueToSQL( flist->prev(), c ## a )+","+
+#define V_ALAST( a ) valueToSQL( flist->last(), c ## a )
+
+#define C_INS_REC(args, vals) \
+	bool Connection::insertRecord(FieldList& fields args) \
+	{ \
+		Field::List *flist = fields.fields(); \
+		return drv_executeSQL( \
+			QString("INSERT INTO ") + \
+		((fields.fields()->first() && fields.fields()->first()->table()) ? fields.fields()->first()->table()->name() : "??") \
+		+ "(" + fields.sqlFieldsList() + ") VALUES (" + vals + ")" \
+		); \
+	}
+
+C_INS_REC( C_A(0), V_ALAST(0)  )
+C_INS_REC( C_A(0) C_A(1), V_A(0) V_ALAST(1) )
+C_INS_REC( C_A(0) C_A(1) C_A(2), V_A(0) V_A(1) V_ALAST(2) )
+C_INS_REC( C_A(0) C_A(1) C_A(2) C_A(3), V_A(0) V_A(1) V_A(2) V_ALAST(3) )
+C_INS_REC( C_A(0) C_A(1) C_A(2) C_A(3) C_A(4), V_A(0) V_A(1) V_A(2) V_A(3) V_ALAST(4) )
+C_INS_REC( C_A(0) C_A(1) C_A(2) C_A(3) C_A(4) C_A(5), V_A(0) V_A(1) V_A(2) V_A(3) V_A(4) V_ALAST(5) )
+C_INS_REC( C_A(0) C_A(1) C_A(2) C_A(3) C_A(4) C_A(5) C_A(6), V_A(0) V_A(1) V_A(2) V_A(3) V_A(4) V_A(5) V_ALAST(6) )
+C_INS_REC( C_A(0) C_A(1) C_A(2) C_A(3) C_A(4) C_A(5) C_A(6) C_A(7), V_A(0) V_A(1) V_A(2) V_A(3) V_A(4) V_A(5) V_A(6) V_ALAST(7) )
+
+#undef C_A
+#undef V_A
+#undef V_ALAST
+#undef C_INS_REC
+#undef C_INS_REC_ALL
+
+bool Connection::insertRecord(TableSchema &tableSchema, QValueList<QVariant>& values)
 {
 	Field::List *fields = tableSchema.fields();
 	Field *f = fields->first();
 	QString s_val; 
-//	s_val.reserve(2048);//TODO: move to members
 	QValueList<QVariant>::iterator it = values.begin();
 	int i=0;
 	while (f && (it!=values.end())) {
@@ -724,6 +759,31 @@ bool Connection::insertRecord(KexiDB::TableSchema &tableSchema, QValueList<QVari
 	
 	return drv_executeSQL(
 		QString("INSERT INTO ") + tableSchema.name() + " VALUES (" + s_val + ")"
+	);
+}
+
+bool Connection::insertRecord(FieldList& fields, QValueList<QVariant>& values)
+{
+	Field::List *flist = fields.fields();
+	Field *f = flist->first();
+	if (!f)
+		return false;
+
+	QString s_val; 
+	QValueList<QVariant>::iterator it = values.begin();
+	int i=0;
+	while (f && (it!=values.end())) {
+		if (!s_val.isEmpty())
+			s_val += ",";
+		s_val += valueToSQL( f->type(), *it );
+		KexiDBDbg << "val" << i++ << ": " << valueToSQL( f->type(), *it ) << endl;
+		++it;
+		f=flist->next();
+	}
+	
+	return drv_executeSQL(
+		QString("INSERT INTO ") + flist->first()->table()->name() + "("
+		 + fields.sqlFieldsList() + ") VALUES (" + s_val + ")"
 	);
 }
 
@@ -775,7 +835,8 @@ QString Connection::selectStatement( KexiDB::TableSchema& tableSchema ) const
 }
 
 #define createTable_ERR \
-	{ rollbackAutoCommitTransaction(trans); \
+	{ KexiDBDbg << "Connection::createTable(): ERROR!" <<endl; \
+	  rollbackAutoCommitTransaction(trans); \
 	  return false; }
 
 Field* Connection::findSystemFieldName(KexiDB::FieldList* fieldlist)
@@ -824,15 +885,41 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema )
 	//add schema info to kexi__* tables
 	TableSchema *ts;
 	ts = m_tables_byname["kexi__objects"];
-	if (!insertRecord(*ts, QVariant()/*autoinc*/, QVariant(tableSchema->type()), QVariant(tableSchema->name()),
-		QVariant(tableSchema->caption()), QVariant(tableSchema->helpText())))
+		
+	FieldList *fl = ts->subList("o_type", "o_name", "o_caption", "o_help");
+	if (!fl) return false;
+		
+	QValueList<QVariant> values;
+	if (!insertRecord(*fl, QVariant(tableSchema->type()), QVariant(tableSchema->name()),
+		QVariant(tableSchema->caption()), QVariant(tableSchema->helpText()) ))
 		createTable_ERR;
+	
+	delete fl;
+	
+//	if (!insertRecord(*ts, QVariant()/*autoinc*/, QVariant(tableSchema->type()), QVariant(tableSchema->name()),
+//		QVariant(tableSchema->caption()), QVariant(tableSchema->helpText())))
+//		createTable_ERR;
 	int obj_id = drv_lastInsertRowID();
 	if (obj_id<=0) //sanity check
 		createTable_ERR;
 	KexiDBDbg << "######## obj_id == " << obj_id << endl;
 	
 	ts = m_tables_byname["kexi__fields"];
+	fl = ts->subList(
+		"t_id",
+		"f_type",
+		"f_name",
+		"f_length",
+		"f_precision",
+		"f_constraints",
+		"f_options",
+		"f_default",
+		"f_order",
+		"f_caption",
+		"f_help"
+	);
+	if (!fl) return false;
+	
 	Field::List *fields = tableSchema->fields();
 	Field *f = fields->first();
 	int order = 0;
@@ -851,7 +938,7 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema )
 		<< QVariant(f->caption())
 		<< QVariant(f->helpText());
 		
-		if (!insertRecord(*ts, vals ))
+		if (!insertRecord(*fl, vals ))
 			createTable_ERR;
 			
 		f = fields->next();
