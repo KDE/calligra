@@ -29,6 +29,8 @@
 
 #include "kexigradientwidget.h"
 
+#include <kdebug.h>
+
 KexiGradientWidget::KexiGradientWidget( QWidget *parent, const char *name, WFlags f )
 	: QWidget( parent, name, f ), p_displayMode( NoGradient ),
 	p_gradientType( VerticalGradient ),
@@ -79,6 +81,8 @@ void KexiGradientWidget::buildChildrenList( WidgetList& list, QWidget* p ) {
 }
 
 void KexiGradientWidget::rebuildCache( void ) {
+	kdDebug() << this << " new size: " << size() << endl;
+
 	WidgetList childWidgetList;
 	buildChildrenList( childWidgetList, this );
 
@@ -124,6 +128,11 @@ void KexiGradientWidget::rebuildCache( void ) {
 		QPainter p( &tempPixmap, this );
 
 		if ( p_backgroundPixmap.isNull() ) {
+			/*
+			Need to unset the palette, otherwise the old gradient
+			will be used as a background, not the widget's default bg.
+			*/
+			unsetPalette();
 			p.fillRect( 0, 0, width(), height(), palette().brush(
 				isEnabled() ? QPalette::Active : QPalette::Disabled,
 				QColorGroup::Background ) );
