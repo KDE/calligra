@@ -248,8 +248,11 @@ Changes between KWord-1.2-RC1 and KWord-1.2
 ===========================================
 Bugfixes:
 - Fix update ruler tabs when we switch between text object
-- Fix move up/down style
 - Fix move up/down table/frame style
+
+KoText library fixes:
+- Fix move up/down style
+- Fix crash when we create a new style and delete this style.
 
 Layout:
 - Fixed layout of paragraph numbering in Right-To-Left mode.
