@@ -47,7 +47,7 @@ VTransformNodes::visitVPath( VPath& path )
 				path.current()->point( 0 ).transform( m_matrix ) );
 		}*/
 
-		if( path.current()->knotIsSelected() )
+		if( path.current()->knotIsSelected() || path.current()->type() == VSegment::curve )
 		{
 			path.current()->transform( m_matrix );
 			kdDebug() << "Transforming knot!!" << endl;

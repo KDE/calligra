@@ -45,38 +45,40 @@ VSelectNodes::visitVPath( VPath& path )
 		}
 		else
 		{
-			if(
+			if( path.current()->type() == VSegment::curve )
 //				path.current()->ctrlPointFixing() != VSegment::first &&
-				m_rect.contains( path.current()->point( 0 ) ) )
+//				m_rect.contains( path.current()->point( 0 ) ) )
 			{
 				// select first control point, when previous knot is selected:
 				if(
-					path.current()->prev() /*&&
-					path.current()->prev()->knotSelected() */)
+					path.current()->prev() &&
+					path.current()->prev()->knotIsSelected() )
 				{
-//					path.current()->selectCtrlPoint1( m_select );
+					path.current()->selectPoint( 0, m_select );
 
-					setSuccess();
+					//setSuccess();
 				}
 			}
 
-			if(
+//			if( path.current()->type() == VSegment::curve 
 //				path.current()->ctrlPointFixing() != VSegment::second &&
-				m_rect.contains( path.current()->point( 1 ) ) )
-			{
+//				m_rect.contains( path.current()->point( 1 ) ) )
+//			{
 				// select second control point, when knot is selected:
 /*				if( path.current()->knotSelected() )
 				{
-					path.current()->selectCtrlPoint2( m_select );
+					path.current()->selectPoint( 1, m_select );
 
 					setSuccess();
 				}
 */
-			}
+//			}
 
 			if( m_rect.contains( path.current()->knot() ) )
 			{
 				path.current()->selectKnot( m_select );
+				if( path.current()->type() == VSegment::curve )
+					path.current()->selectPoint( 1, m_select );
 
 				setSuccess();
 			}
