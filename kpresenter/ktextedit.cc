@@ -65,6 +65,7 @@ KTextEdit::KTextEdit( KPresenterDoc *d, KPTextObject *txtobj, QWidget *parent, c
       doc( new KTextEditDocument( d, txtobj ) ), undoRedoInfo( doc )
 {
     init();
+    kp_doc = d;
 }
 
 KTextEdit::~KTextEdit()
@@ -166,7 +167,7 @@ void KTextEdit::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
     QSize s( doc->firstParag()->rect().size() );
 
     p->fillRect( 0, 0, width(), doc->y(),
-		 colorGroup().brush( QColorGroup::Base ) );
+		 QBrush( kp_doc->txtBackCol() ) );
 
     if ( !doubleBuffer ) {
 	doubleBuffer = bufferPixmap( s );
@@ -207,7 +208,7 @@ void KTextEdit::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
 	    painter.begin( doubleBuffer );
 	}
 	painter.fillRect( QRect( 0, 0, s.width(), s.height() ),
-			  colorGroup().brush( QColorGroup::Base ) );
+			  QBrush( kp_doc->txtBackCol() ) );
 
 	parag->paint( painter, colorGroup(), drawCur ? cursor : 0, TRUE );
 
@@ -215,7 +216,7 @@ void KTextEdit::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
 	if ( parag->rect().x() + parag->rect().width() < 0 + width() )
 	    p->fillRect( parag->rect().x() + parag->rect().width(), parag->rect().y(),
 			 ( 0 + width() ) - ( parag->rect().x() + parag->rect().width() ),
-			 parag->rect().height(), colorGroup().brush( QColorGroup::Base ) );
+			 parag->rect().height(), QBrush( kp_doc->txtBackCol() ) );
 	parag = parag->next();
     }
 
@@ -223,7 +224,7 @@ void KTextEdit::drawContents( QPainter *p, int cx, int cy, int cw, int ch )
     if ( parag->rect().y() + parag->rect().height() - 0 < height() )
 	p->fillRect( 0, parag->rect().y() + parag->rect().height(), width(),
 		     height() - ( parag->rect().y() + parag->rect().height() ),
-		     colorGroup().brush( QColorGroup::Base ) );
+		     QBrush( kp_doc->txtBackCol() ) );
 
     cursorVisible = TRUE;
 }
@@ -599,7 +600,7 @@ void KTextEdit::drawCursor( bool visible )
 
     if ( fill )
 	painter.fillRect( chr->x, y, cw, h,
-			  colorGroup().brush( QColorGroup::Base ) );
+			  QBrush( kp_doc->txtBackCol() ) );
 
     if ( chr->c != '\t' )
 	painter.drawText( chr->x, y + bl, chr->c );

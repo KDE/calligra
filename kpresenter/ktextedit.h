@@ -801,6 +801,7 @@ private:
     bool readOnly, modified, mightStartDrag;
     QPoint dragStartPos;
     int mLines;
+    KPresenterDoc *kp_doc;
 
 };
 
