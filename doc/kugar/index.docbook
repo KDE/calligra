@@ -14,6 +14,7 @@
   <!ENTITY progguide SYSTEM "progguide.docbook">
   <!ENTITY starting SYSTEM "starting.docbook">
   <!ENTITY designermanual SYSTEM "designer.docbook">
+  <!ENTITY tutorial SYSTEM "tutorial.docbook">
 ]>
 
 <book lang="&language;">
@@ -99,13 +100,10 @@ on how reports can be created.  </para>
 
 <para> Programmers should also refer to the <link
 linkend="prog-guide">Programmer's guide</link> to find information
-about using &kugar; in their own applications.</para> 
+about using &kugar; in their own applications.</para>
 </chapter>
 
-<chapter id="tutorial">
-<title>Tutorial</title>
-<para>Tutorial is coming soon.</para>
-</chapter>
+&tutorial;
 
 &starting;
 
