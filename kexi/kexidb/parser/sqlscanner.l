@@ -26,9 +26,13 @@
 #include "sqltypes.h"
 #include <iostream>
 #include <kdebug.h>
+#include <klocale.h>
 
 #define YY_NO_UNPUT
 #define ECOUNT current += yyleng; ctoken = yytext
+
+extern void setError(const QString& errDesc);
+
 %}
 
 %option case-insensitive
@@ -37,7 +41,8 @@
 
 whitespace	[ \t\n]
 digit				[0-9]
-identifier	[a-zA-Z_][a-zA-Z_0-9]*
+/*identifier	[a-zA-Z_][a-zA-Z_0-9]* */
+identifier	[a-zA-Z_0-9]+
 integer			{digit}+
 decimal			(({digit}*\.{digit}+)|({digit}+\.{digit}*))
 real				((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][-+]?{digit}+))
@@ -268,16 +273,25 @@ real				((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][-+]?{digit}
 
 {identifier}"\.\*" {
 	kdDebug() << "yytext: '" << yytext << "' (" << yyleng << ")" << endl;
-	strncpy(yylval.stringValue, yytext, yyleng + 1);
 	ECOUNT;
-	return USER_DEFINED_NAME_DOT_ASTERISK;
+	strncpy(yylval.stringValue, yytext, yyleng + 1);
+	if (yytext[0]>='0' && yytext[0]<='9') {
+		setError(i18n("Invalid identifier"));
+		return ERROR_DIGIT_BEFORE_IDENTIFIER;
+	}
+	return IDENTIFIER_DOT_ASTERISK;
 }
 
 {identifier} {
 	kdDebug() << "yytext: '" << yytext << "' (" << yyleng << ")" << endl;
-	strncpy(yylval.stringValue, yytext, yyleng + 1);
 	ECOUNT;
-	return USER_DEFINED_NAME;
+	strncpy(yylval.stringValue, yytext, yyleng + 1);
+	if (yytext[0]>='0' && yytext[0]<='9') {
+//		kdDebug() << "  Invalid identifier! " << yytext << endl;
+		setError(i18n("Invalid identifier."));
+		return ERROR_DIGIT_BEFORE_IDENTIFIER;
+	}
+	return IDENTIFIER;
 }
 
 {whitespace}+ {

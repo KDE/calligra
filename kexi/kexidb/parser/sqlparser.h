@@ -348,29 +348,30 @@ bool parseData(KexiDB::Parser *p, const char *data);
      UPPER = 566,
      USAGE = 567,
      USER = 568,
-     USER_DEFINED_NAME = 569,
-     USER_DEFINED_NAME_DOT_ASTERISK = 570,
-     USING = 571,
-     VALUE = 572,
-     VALUES = 573,
-     VARBINARY = 574,
-     VARCHAR = 575,
-     VARYING = 576,
-     VENDOR = 577,
-     VIEW = 578,
-     WEEK = 579,
-     WHEN = 580,
-     WHENEVER = 581,
-     WHERE = 582,
-     WHERE_CURRENT_OF = 583,
-     WITH = 584,
-     WORD_WRAPPED = 585,
-     WORK = 586,
-     WRAPPED = 587,
-     YEAR = 588,
-     YEARS_BETWEEN = 589,
-     SIMILAR = 590,
-     ILIKE = 591
+     IDENTIFIER = 569,
+     IDENTIFIER_DOT_ASTERISK = 570,
+     ERROR_DIGIT_BEFORE_IDENTIFIER = 571,
+     USING = 572,
+     VALUE = 573,
+     VALUES = 574,
+     VARBINARY = 575,
+     VARCHAR = 576,
+     VARYING = 577,
+     VENDOR = 578,
+     VIEW = 579,
+     WEEK = 580,
+     WHEN = 581,
+     WHENEVER = 582,
+     WHERE = 583,
+     WHERE_CURRENT_OF = 584,
+     WITH = 585,
+     WORD_WRAPPED = 586,
+     WORK = 587,
+     WRAPPED = 588,
+     YEAR = 589,
+     YEARS_BETWEEN = 590,
+     SIMILAR = 591,
+     ILIKE = 592
    };
 #endif
 #define SQL_TYPE 258
@@ -684,35 +685,36 @@ bool parseData(KexiDB::Parser *p, const char *data);
 #define UPPER 566
 #define USAGE 567
 #define USER 568
-#define USER_DEFINED_NAME 569
-#define USER_DEFINED_NAME_DOT_ASTERISK 570
-#define USING 571
-#define VALUE 572
-#define VALUES 573
-#define VARBINARY 574
-#define VARCHAR 575
-#define VARYING 576
-#define VENDOR 577
-#define VIEW 578
-#define WEEK 579
-#define WHEN 580
-#define WHENEVER 581
-#define WHERE 582
-#define WHERE_CURRENT_OF 583
-#define WITH 584
-#define WORD_WRAPPED 585
-#define WORK 586
-#define WRAPPED 587
-#define YEAR 588
-#define YEARS_BETWEEN 589
-#define SIMILAR 590
-#define ILIKE 591
+#define IDENTIFIER 569
+#define IDENTIFIER_DOT_ASTERISK 570
+#define ERROR_DIGIT_BEFORE_IDENTIFIER 571
+#define USING 572
+#define VALUE 573
+#define VALUES 574
+#define VARBINARY 575
+#define VARCHAR 576
+#define VARYING 577
+#define VENDOR 578
+#define VIEW 579
+#define WEEK 580
+#define WHEN 581
+#define WHENEVER 582
+#define WHERE 583
+#define WHERE_CURRENT_OF 584
+#define WITH 585
+#define WORD_WRAPPED 586
+#define WORK 587
+#define WRAPPED 588
+#define YEAR 589
+#define YEARS_BETWEEN 590
+#define SIMILAR 591
+#define ILIKE 592
 
 
 
 
 #ifndef YYSTYPE
-#line 560 "sqlparser.y"
+#line 580 "sqlparser.y"
 typedef union {
 	char stringValue[255];
 	int integerValue;
@@ -723,7 +725,7 @@ typedef union {
 	KexiDB::NArgExpr *exprlist;
 } yystype;
 /* Line 1281 of /usr/share/bison/yacc.c.  */
-#line 722 "sqlparser.tab.h"
+#line 724 "sqlparser.tab.h"
 # define YYSTYPE yystype
 #endif
 

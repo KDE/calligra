@@ -331,8 +331,9 @@
 %token UPPER
 %token USAGE
 %token USER
-%token USER_DEFINED_NAME
-%token USER_DEFINED_NAME_DOT_ASTERISK
+%token IDENTIFIER
+%token IDENTIFIER_DOT_ASTERISK
+%token ERROR_DIGIT_BEFORE_IDENTIFIER
 %token USING
 %token VALUE
 %token VALUES
@@ -368,8 +369,8 @@
 %token '\''
 %token '/'
 
-%type <stringValue> USER_DEFINED_NAME
-%type <stringValue> USER_DEFINED_NAME_DOT_ASTERISK
+%type <stringValue> IDENTIFIER
+%type <stringValue> IDENTIFIER_DOT_ASTERISK
 %type <stringValue> CHARACTER_STRING_LITERAL
 %type <stringValue> DOUBLE_QUOTED_STRING
 
@@ -443,7 +444,8 @@
 		parser->setOperation(KexiDB::Parser::OP_Error);
 
 		if (parser->error().type().isEmpty() 
-			&& (qstricmp(str, "syntax error")==0 || qstricmp(str, "parse error")==0))
+			&& (strlen(str)==0 
+			|| qstricmp(str, "syntax error")==0 || qstricmp(str, "parse error")==0))
 		{
 			kdDebug() << parser->statement() << endl;
 			QString ptrline = "";
@@ -454,7 +456,12 @@
 
 			kdDebug() << ptrline << endl;
 
-			KexiDB::ParserError err(i18n("Syntax Error"), i18n("Syntax Error near '%1'").arg(ctoken), ctoken, current);
+			//lexer may add error messages
+			QString lexerErr = parser->error().error();
+			if (!lexerErr.isEmpty())
+				lexerErr.prepend(": ");
+				
+			KexiDB::ParserError err(i18n("Syntax Error"), i18n("Syntax Error near '%1'").arg(ctoken)+lexerErr, ctoken, current);
 			parser->setError(err);
 		}
 	}
@@ -465,6 +472,11 @@
 		yyerror(errName.latin1());
 	}
 
+	void setError(const QString& errDesc)
+	{
+		setError("", errDesc);
+	}
+
 	void tableNotFoundError(const QString& tableName)
 	{
 		setError( i18n("Table not found"), i18n("Unknown table \"%1\"").arg(tableName) );
@@ -472,8 +484,10 @@
 
 	bool parseData(KexiDB::Parser *p, const char *data)
 	{
+/* todo: remove dummy */
 		if (!dummy)
 			dummy = new KexiDB::TableSchema();
+/* todo: make this REENTRANT */
 		parser = p;
 		parser->clear();
 		field = 0;
@@ -484,10 +498,15 @@
 			KexiDB::ParserError err(i18n("Error"), i18n("No query specified"), ctoken, current);
 			parser->setError(err);
 			yyerror("");
+			parser = 0;
 			return false;
 		}
 	
 		tokenize(data);
+		if (!parser->error().type().isEmpty()) {
+			parser = 0;
+			return false;
+		}
 		yyparse();
 
 		bool ok = true;
@@ -520,6 +539,7 @@
 		}
 
 		tableDict.clear();
+		parser = 0;
 		return ok;
 	}
 
@@ -626,7 +646,7 @@ Statement :
 	;
 
 CreateTableStatement :
-CREATE TABLE USER_DEFINED_NAME
+CREATE TABLE IDENTIFIER
 {
 	parser->setOperation(KexiDB::Parser::OP_CreateTable);
 	parser->createTable($3);
@@ -641,7 +661,7 @@ ColDefs ',' ColDef|ColDef
 ;
 
 ColDef:
-USER_DEFINED_NAME ColType
+IDENTIFIER ColType
 {
 	kdDebug() << "adding field " << $1 << endl;
 	field->setName($1);
@@ -650,7 +670,7 @@ USER_DEFINED_NAME ColType
 //	delete field;
 	field = 0;
 }
-| USER_DEFINED_NAME ColType ColKeys
+| IDENTIFIER ColType ColKeys
 {
 	kdDebug() << "adding field " << $1 << endl;
 	field->setName($1);
@@ -905,12 +925,12 @@ aExpr AND aExpr
 {
 	$$ = new KexiDB::BinaryExpr(KexiDBExpr_Relational, $1, SQL_IN, $3);
 }
-| USER_DEFINED_NAME '(' aExprList ')'
+| IDENTIFIER '(' aExprList ')'
 {
 	kdDebug() << "  + function: " << $1 << "(" << $3->debugString() << ")" << endl;
 	$$ = new KexiDB::FunctionExpr($1, $3);
 }
-| USER_DEFINED_NAME
+| IDENTIFIER
 {
 	$$ = new KexiDB::VariableExpr( $1 );
 	
@@ -924,7 +944,7 @@ aExpr AND aExpr
 	requiresTable = true;
 }
 /*TODO: shall we also support db name? */
-| USER_DEFINED_NAME '.' USER_DEFINED_NAME
+| IDENTIFIER '.' IDENTIFIER
 {
 	$$ = new KexiDB::VariableExpr( QString($1) + "." + QString($3) );
 	kdDebug() << "  + identifier.identifier: " << $3 << "." << $1 << endl;
@@ -986,27 +1006,27 @@ Tables:
 FROM FlatTableList
 {
 }
-| Tables LEFT JOIN USER_DEFINED_NAME SQL_ON ColExpression
+| Tables LEFT JOIN IDENTIFIER SQL_ON ColExpression
 {
 	kdDebug() << "LEFT JOIN: '" << $4 << "' ON " << $6 << endl;
 	addTable($4);
 }
-| Tables LEFT OUTER JOIN USER_DEFINED_NAME SQL_ON ColExpression
+| Tables LEFT OUTER JOIN IDENTIFIER SQL_ON ColExpression
 {
 	kdDebug() << "LEFT OUTER JOIN: '" << $5 << "' ON " << $7 << endl;
 	addTable($5);
 }
-| Tables INNER JOIN USER_DEFINED_NAME SQL_ON ColExpression
+| Tables INNER JOIN IDENTIFIER SQL_ON ColExpression
 {
 	kdDebug() << "INNER JOIN: '" << $4 << "' ON " << $6 << endl;
 	addTable($4);
 }
-| Tables RIGHT JOIN USER_DEFINED_NAME SQL_ON ColExpression
+| Tables RIGHT JOIN IDENTIFIER SQL_ON ColExpression
 {
 	kdDebug() << "RIGHT JOIN: '" << $4 << "' ON " << $6 << endl;
 	addTable($4);
 }
-| Tables RIGHT OUTER JOIN USER_DEFINED_NAME SQL_ON ColExpression
+| Tables RIGHT OUTER JOIN IDENTIFIER SQL_ON ColExpression
 {
 	kdDebug() << "RIGHT OUTER JOIN: '" << $5 << "' ON " << $7 << endl;
 	addTable($5);
@@ -1026,7 +1046,7 @@ aFlatTableList ',' FlatTable|FlatTable
 ;
 
 FlatTable:
-USER_DEFINED_NAME
+IDENTIFIER
 {
 	kdDebug() << "FROM: '" << $1 << "'" << endl;
 
@@ -1092,7 +1112,7 @@ ColExpression
 	$$ = $1;
 	kdDebug() << " added column wildcard: '" << $1->debugString() << "'" << endl;
 }
-| ColExpression AS USER_DEFINED_NAME
+| ColExpression AS IDENTIFIER
 {
 //	$$ = new KexiDB::Field();
 //	$$->setExpression( $1 );
@@ -1101,7 +1121,7 @@ ColExpression
 //TODO	parser->select()->setAlias($$, $3);
 	kdDebug() << " added column expr: '" << $1->debugString() << "' as '" << $3 << "'" << endl;
 }
-| ColExpression USER_DEFINED_NAME
+| ColExpression IDENTIFIER
 {
 //	$$ = new KexiDB::Field();
 //	$$->setExpression( $1 );
@@ -1169,7 +1189,7 @@ ColWildCard:
 //	parser->select()->addAsterisk(ast);
 //	requiresTable = true;
 }
-| USER_DEFINED_NAME_DOT_ASTERISK
+| IDENTIFIER_DOT_ASTERISK
 {
 	$$ = new KexiDB::VariableExpr($1);
 	kdDebug() << "  + all columns from " << $1 << endl;
@@ -1177,6 +1197,12 @@ ColWildCard:
 //	parser->select()->addAsterisk(ast);
 //	requiresTable = true;
 }
+/*| ERROR_DIGIT_BEFORE_IDENTIFIER
+{
+	$$ = new KexiDB::VariableExpr($1);
+	kdDebug() << "  Invalid identifier! " << $1 << endl;
+	setError(i18n("Invalid identifier \"%1\"").arg($1));
+}*/
 ;
 
 %%
