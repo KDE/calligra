@@ -682,7 +682,8 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     freeAllObscuredCells();
 
     ColumnLayout *cl1 = m_pTable->columnLayout( column() );
-    if( cl1->isHide())
+    RowLayout *rl1 = m_pTable->rowLayout( row() );
+    if( cl1->isHide() || (rl1->height()<=2))
         return;
     /**
      * RichText
@@ -2697,7 +2698,8 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
         if(m_pTable->getHideZero() &&  m_bValue &&   m_dValue * faktor(column(),row())==0)
                 m_strOutText="";
         ColumnLayout *cl1 = m_pTable->columnLayout( column() );
-        if( cl1->isHide())
+        RowLayout *rl1 = m_pTable->rowLayout( row() );
+        if( cl1->isHide()|| (rl1->height()<=2))
         {
             //clear extracell if column or row is hidden
             freeAllObscuredCells();
@@ -2800,7 +2802,8 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
         if(m_pTable->getHideZero() &&  m_bValue &&   m_dValue * faktor(column(),row())==0)
                 m_strOutText=tmpText;
         cl1 = m_pTable->columnLayout( column() );
-        if( cl1->isHide())
+        rl1 = m_pTable->rowLayout( row() );
+        if( cl1->isHide()|| (rl1->height()<=2))
                 m_strOutText=tmpText;
 
     }
