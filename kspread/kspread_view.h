@@ -175,6 +175,8 @@ public:
      */
     void resultOfCalc();
 
+    void initCalcMenu();
+
 public slots:
     void initialPosition();
     /**
@@ -306,6 +308,9 @@ public slots:
     void previousTable();
 
     void sortList();
+
+    void statusBarClicked(int _id);
+    void menuCalc(bool);
 
 protected slots:
     /**
@@ -536,6 +541,12 @@ private:
     KAction* m_increaseIndent;
     KAction* m_decreaseIndent;
     KAction* m_sortList;
+    
+    KToggleAction* m_menuCalcMin;
+    KToggleAction* m_menuCalcMax;
+    KToggleAction* m_menuCalcAverage;
+    KToggleAction* m_menuCalcCount;
+    KToggleAction* m_menuCalcSum;
 
     /**
      * Pointer to the last popup menu.
@@ -625,6 +636,13 @@ private:
     long m_findOptions;
     QStringList m_findStrings;
     QStringList m_replaceStrings;
+
+    // Statusbar items
+    enum StatusBarIds {
+        statusCalc = 0
+        // More to be added
+    };
+
 };
 
 #endif

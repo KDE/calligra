@@ -1193,3 +1193,8 @@ a text which is in kwrite and kspread)
 2001-03-14-Montel laurent <lmontel@mandrakesoft.com>
 ----------------------------------------------------
 -Now when you resize a col/row until 0 you hide row/col
+
+2001-03-21-Montel laurent <lmontel@mandrakesoft.com>
+----------------------------------------------------
+Now there is a menu when you click on statusbar to select
+the calc which made when you select an area

@@ -430,7 +430,7 @@ miscParameters::miscParameters( KSpreadView* _view,QWidget *parent , char *name 
   typeCalc->setCurrentItem(0);
   lay1->addWidget(typeCalc);
   commentIndicator=new QCheckBox(i18n("Show comment indicator"),tmpQGroupBox);
-  commentIndicator->setChecked(m_bCommentIndicator); 
+  commentIndicator->setChecked(m_bCommentIndicator);
   lay1->addWidget(commentIndicator);
 
   initComboBox();
@@ -604,6 +604,7 @@ if(tmpMethodCalc!=m_pView->doc()->getTypeOfCalc())
         m_pView->doc()->setTypeOfCalc(tmpMethodCalc);
         config->writeEntry( "Method of Calc", (int)tmpMethodCalc);
 	m_pView->resultOfCalc();
+        m_pView->initCalcMenu();
         }
 
 
@@ -636,7 +637,7 @@ colorParameters::colorParameters( KSpreadView* _view,QWidget *parent , char *nam
   QColor _gridColor(Qt::lightGray);
 
 if(  config->hasGroup("KSpread Color" ) )
-   {  
+   {
      config->setGroup( "KSpread Color" );
      _gridColor= config->readColorEntry("GridColor",&_gridColor);
    }
@@ -695,7 +696,7 @@ configureLayoutPage::configureLayoutPage( KSpreadView* _view,QWidget *parent , c
   label->setText(i18n("Default page size:"));
 
   grid1->addWidget(label,0,0);
-  
+
   defaultSizePage=new QComboBox( tmpQGroupBox);
   QStringList listType;
   listType+=i18n( "DIN A3" );
@@ -710,11 +711,11 @@ configureLayoutPage::configureLayoutPage( KSpreadView* _view,QWidget *parent , c
   defaultSizePage->insertStringList(listType);
   defaultSizePage->setCurrentItem(1);
   grid1->addWidget(defaultSizePage,1,0);
-  
+
   label=new QLabel(tmpQGroupBox);
   label->setText(i18n("Default page orientation:"));
   grid1->addWidget(label,2,0);
-  
+
   defaultOrientationPage=new QComboBox( tmpQGroupBox);
   listType.clear();
   listType+=i18n( "Portrait" );
@@ -801,7 +802,7 @@ configureSpellPage::configureSpellPage( KSpreadView* _view,QWidget *parent , cha
   tmpQGroupBox->setTitle(i18n("Spelling"));
   QGridLayout *grid1 = new QGridLayout(tmpQGroupBox,8,1,15,7);
   _spellConfig  = new KSpellConfig(tmpQGroupBox, 0L ,m_pView->doc()->getKSpellConfig(), false );
-  grid1->addWidget(_spellConfig,0,0); 
+  grid1->addWidget(_spellConfig,0,0);
   box->addWidget( tmpQGroupBox);
 }
 

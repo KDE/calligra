@@ -121,6 +121,13 @@
   <Action name="preference" group="settings_configure"/>
  </Menu>
 </MenuBar>
+<Menu name="calc_popup">
+ <Action name="menu_sum"/>
+ <Action name="menu_min"/>
+ <Action name="menu_max"/>
+ <Action name="menu_average"/>
+ <Action name="menu_count"/>
+</Menu>
 <ToolBar fullWidth="false" name="editAndColumnAndSortAndPartToolBar"><text>Edit</text>
  <Action name="undo"/>
  <Action name="redo"/>
