@@ -216,6 +216,24 @@ KontourImport::convert()
 			parseGObject( path, point );
 			m_document.append( path );	
 		}
+		else if( b.tagName() == "bezier" )
+		{
+			QDomElement point = b.namedItem( "polyline" ).firstChild().toElement();
+			VComposite *path = new VComposite( &m_document );
+			double x, y;
+			x = point.attribute( "x" ).toDouble();
+			y = point.attribute( "y" ).toDouble();
+			path->moveTo( KoPoint( x, y ) );
+			point = point.nextSibling().toElement();
+			for( ; point.tagName() != "gobject"; point = point.nextSibling().toElement() )
+			{
+				x = point.attribute( "x" ).toDouble();
+				y = point.attribute( "y" ).toDouble();
+				path->lineTo( KoPoint( x, y ) );
+			}
+			parseGObject( path, point );
+			m_document.append( path );	
+		}
 	}
 	
 	m_document.saveXML( outdoc );
