@@ -946,7 +946,7 @@ static void ProcessFlowTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *le
             const int align = oldAlign.toInt();
             if ( ( align < 0 ) || ( align > 3) )
             {
-                kdWarning(30520) << "KWord 0.8 flow unknown: " << oldAlign << endl;
+                kdWarning(30508) << "KWord 0.8 flow unknown: " << oldAlign << endl;
                 layout->alignment = "left"; // Unknown, so assume left
             }
             else
@@ -955,7 +955,7 @@ static void ProcessFlowTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *le
                 layout->alignment = flows[ align ];
             }
         }
-        kdDebug(30520) << "KWord 0.8 flow: " << oldAlign << " corrected: " << layout->alignment << endl;
+        kdDebug(30508) << "KWord 0.8 flow: " << oldAlign << " corrected: " << layout->alignment << endl;
     }
     else
     {

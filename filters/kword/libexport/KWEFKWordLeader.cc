@@ -157,13 +157,13 @@ void KWEFKWordLeader::createBookmarkFormatData( ParaData& paraData )
         // As we always insert before, make first endings, then startings (problem is zero-length bookmark)
         if ( (*(it)).m_endparag == paraCount )
         {
-            kdDebug(30520) << "Paragraph: " << paraCount << " end: " << (*(it)).m_name << endl;
+            kdDebug(30508) << "Paragraph: " << paraCount << " end: " << (*(it)).m_name << endl;
             InsertBookmarkFormatData( (*(it)).m_cursorIndexEnd, (*(it)).m_name, false, paraData.formattingList);
 
         }
         if ( (*(it)).m_startparag == paraCount )
         {
-            kdDebug(30520) << "Paragraph: " << paraCount << " begin: " << (*(it)).m_name << endl;
+            kdDebug(30508) << "Paragraph: " << paraCount << " begin: " << (*(it)).m_name << endl;
             InsertBookmarkFormatData( (*(it)).m_cursorIndexStart, (*(it)).m_name, true, paraData.formattingList);
         }
     }
@@ -338,7 +338,7 @@ static void ProcessPictureAnchor( QDomNode myNode, KWEFKWordLeader *leader, Fram
         ;
     ProcessSubtags (myNode, tagProcessingList, leader);
 
-    kdDebug (30520) << "FRAMESET PICTURE KEY " << frameAnchor->picture.key.toString() << endl;
+    kdDebug (30508) << "FRAMESET PICTURE KEY " << frameAnchor->picture.key.toString() << endl;
 
     frameAnchor->key = frameAnchor->picture.key;
 }
@@ -500,7 +500,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                             {
                                 if ( (*it).key == key )
                                 {
-                                    kdDebug(30520) << "Found pseudo-anchor for table: " << (*it).key.toString() << endl;
+                                    kdDebug(30508) << "Found pseudo-anchor for table: " << (*it).key.toString() << endl;
                                     found = true;
                                     break;
                                 }
@@ -512,7 +512,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                             }
                             else
                             {
-                                kdWarning(30520) << "Table anchor not found: " << grpMgr << endl;
+                                kdWarning(30508) << "Table anchor not found: " << grpMgr << endl;
                                 FrameAnchor anchor;
                                 ProcessTableAnchor( myNode, leader, &anchor, col, row, cols, rows );
                                 anchor.key = key; // Needed, so that the pseudo-anchor can be found again
@@ -848,7 +848,7 @@ static void ProcessPixmapsKeyTag ( QDomNode         myNode,
             if ( ( ( (*formattingIt).id == 6 ) || ( (*formattingIt).id == 2 ) )
                  && (*formattingIt).frameAnchor.key == key )
             {
-                kdDebug(30520) << "Found anchor for inlined picture: " << (*formattingIt).frameAnchor.key.toString() << endl;
+                kdDebug(30508) << "Found anchor for inlined picture: " << (*formattingIt).frameAnchor.key.toString() << endl;
                 (*formattingIt).frameAnchor.picture.koStoreName = name;
                 found = true;
             }
@@ -860,7 +860,7 @@ static void ProcessPixmapsKeyTag ( QDomNode         myNode,
     {
         if ( (*it).key == key )
         {
-            kdDebug(30520) << "Found pseudo-anchor for non-inlined picture: " << (*it).key.toString() << endl;
+            kdDebug(30508) << "Found pseudo-anchor for non-inlined picture: " << (*it).key.toString() << endl;
             (*it).picture.koStoreName = name;
             found = true;
         }
@@ -983,7 +983,7 @@ static void ProcessBookmarkItemTag ( QDomNode myNode, void* tag, KWEFKWordLeader
     
     // ### TODO: some verifications
 
-    kdDebug(30520) << "Bookmark: " << bookmark.m_name << " in frameset " << bookmark.m_frameset << endl;
+    kdDebug(30508) << "Bookmark: " << bookmark.m_name << " in frameset " << bookmark.m_frameset << endl;
 
     bookmarkList->append( bookmark );
 }
@@ -1102,13 +1102,13 @@ void ProcessDocTag ( QDomNode         myNode,
 
     leader->doFullDocument (paraList);
 
-    kdDebug(30520) << "Unachored Framesets : START" << endl;
+    kdDebug(30508) << "Unachored Framesets : START" << endl;
     QStringList::ConstIterator it;
     for ( it = leader->m_unanchoredFramesets.begin(); it != leader->m_unanchoredFramesets.end(); ++it )
     {
-        kdDebug(30520) << (*it) << endl;
+        kdDebug(30508) << (*it) << endl;
     }
-    kdDebug(30520) << "Unachored Framesets : END" << endl;
+    kdDebug(30508) << "Unachored Framesets : END" << endl;
     
     FreeCellParaLists (paraList);
 
