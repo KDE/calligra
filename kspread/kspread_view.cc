@@ -1033,7 +1033,7 @@ void KSpreadView::deleteColumn()
 
     QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
     for( ; it.current(); ++it )
-	it.current()->changeNameCellRef(m_pCanvas->markerColumn(),KSpreadTable::ColumnRemove,m_pTable->name());
+	it.current()->changeNameCellRef(m_pCanvas->marker(),true,KSpreadTable::ColumnRemove,m_pTable->name());
 
     updateEditWidget();
 }
@@ -1049,7 +1049,7 @@ void KSpreadView::deleteRow()
 
     QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
     for( ; it.current(); ++it )
-	it.current()->changeNameCellRef(m_pCanvas->markerRow(),KSpreadTable::RowRemove,m_pTable->name());
+	it.current()->changeNameCellRef(m_pCanvas->marker(),true,KSpreadTable::RowRemove,m_pTable->name());
 
     updateEditWidget();
 }
@@ -1064,7 +1064,7 @@ void KSpreadView::insertColumn()
 	tbl->recalc(true);
     QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
     for( ; it.current(); ++it )
-	it.current()->changeNameCellRef(m_pCanvas->markerColumn(),KSpreadTable::ColumnInsert, m_pTable->name());
+	it.current()->changeNameCellRef(m_pCanvas->marker(),true,KSpreadTable::ColumnInsert, m_pTable->name());
 
     updateEditWidget();
 }
@@ -1079,7 +1079,7 @@ void KSpreadView::insertRow()
 	tbl->recalc(true);
     QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
     for( ; it.current(); ++it )
-	it.current()->changeNameCellRef(m_pCanvas->markerRow(),KSpreadTable::RowInsert,m_pTable->name());
+	it.current()->changeNameCellRef(m_pCanvas->marker(),true,KSpreadTable::RowInsert,m_pTable->name());
 
     updateEditWidget();
 }
@@ -1330,114 +1330,114 @@ void KSpreadView::editLocalScripts()
 
 void KSpreadView::borderBottom()
 {
-if ( m_pTable != 0L )
-	{
-	QRect selection( m_pTable->selectionRect() );
-	if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
-		{
-		KMessageBox::error( this, i18n("Area too large!") );
-		}
-	else
-		{
-		m_pTable->borderBottom( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) ,m_borderColor->color());
-		}
-	}
+  if ( m_pTable != 0L )
+  {
+    QRect selection( m_pTable->selectionRect() );
+    if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
+    {
+      KMessageBox::error( this, i18n("Area too large!") );
+    }
+    else
+    {
+      m_pTable->borderBottom( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) ,m_borderColor->color());
+    }
+  }
 }
 void KSpreadView::borderRight()
 {
-if ( m_pTable != 0L )
-	{
-	QRect selection( m_pTable->selectionRect() );
-	if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
-		{
-		KMessageBox::error( this, i18n("Area too large!") );
-		}
-	else
-		{
-		m_pTable->borderRight( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) ,m_borderColor->color());
-		}
-	}
+  if ( m_pTable != 0L )
+  {
+    QRect selection( m_pTable->selectionRect() );
+    if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
+    {
+      KMessageBox::error( this, i18n("Area too large!") );
+    }
+    else
+    {
+      m_pTable->borderRight( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) ,m_borderColor->color());
+    }
+  }
 }
 void KSpreadView::borderLeft()
 {
-if ( m_pTable != 0L )
-	{
-	QRect selection( m_pTable->selectionRect() );
-	if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
-		{
-		KMessageBox::error( this, i18n("Area too large!") );
-		}
-	else
-		{
-		m_pTable->borderLeft( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),m_borderColor->color() );
-		}
-	}
+  if ( m_pTable != 0L )
+  {
+    QRect selection( m_pTable->selectionRect() );
+    if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
+    {
+      KMessageBox::error( this, i18n("Area too large!") );
+    }
+    else
+    {
+      m_pTable->borderLeft( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),m_borderColor->color() );
+    }
+  }
 }
 void KSpreadView::borderTop()
 {
-if ( m_pTable != 0L )
-	{
-	QRect selection( m_pTable->selectionRect() );
-	if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
-		{
-		KMessageBox::error( this, i18n("Area too large!") );
-		}
-	else
-		{
-		m_pTable->borderTop( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),m_borderColor->color() );
-		}
-	}
+  if ( m_pTable != 0L )
+  {
+    QRect selection( m_pTable->selectionRect() );
+    if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
+    {
+      KMessageBox::error( this, i18n("Area too large!") );
+    }
+    else
+    {
+      m_pTable->borderTop( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),m_borderColor->color() );
+    }
+  }
 }
 void KSpreadView::borderOutline()
 {
-if ( m_pTable != 0L )
-	{
-	QRect selection( m_pTable->selectionRect() );
-	if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
-		{
-		KMessageBox::error( this, i18n("Area too large!") );
-		}
-	else
-		{
-		m_pTable->borderOutline( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) ,m_borderColor->color());
-		}
-	}
+  if ( m_pTable != 0L )
+  {
+    QRect selection( m_pTable->selectionRect() );
+    if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
+    {
+      KMessageBox::error( this, i18n("Area too large!") );
+    }
+    else
+    {
+      m_pTable->borderOutline( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) ,m_borderColor->color());
+    }
+  }
 }
 void KSpreadView::borderAll()
 {
-if ( m_pTable != 0L )
-	{
-	QRect selection( m_pTable->selectionRect() );
-	if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
-		{
-		KMessageBox::error( this, i18n("Area too large!") );
-		}
-	else
-		{
-		m_pTable->borderAll( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),m_borderColor->color() );
-		}
-	}
+  if ( m_pTable != 0L )
+  {
+    QRect selection( m_pTable->selectionRect() );
+    if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
+    {
+      KMessageBox::error( this, i18n("Area too large!") );
+    }
+    else
+    {
+      m_pTable->borderAll( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),m_borderColor->color() );
+    }
+  }
 }
 
 void KSpreadView::borderRemove()
 {
-if ( m_pTable != 0L )
-	{
-	QRect selection( m_pTable->selectionRect() );
-	if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
-		{
-		KMessageBox::error( this, i18n("Area too large!") );
-		}
-	else
-		{
-		m_pTable->borderRemove( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
-		}
-	}
+  if ( m_pTable != 0L )
+  {
+    QRect selection( m_pTable->selectionRect() );
+    if(selection.right()==0x7FFF ||selection.bottom()==0x7FFF)
+    {
+      KMessageBox::error( this, i18n("Area too large!") );
+    }
+    else
+    {
+      m_pTable->borderRemove( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
+    }
+  }
 
 }
 void KSpreadView::addTable( KSpreadTable *_t )
 {
-    if( !_t->isHidden() )
+  if( !_t->isHidden() )
     {
   	m_pTabBar->addTab( _t->tableName() );
 	setActiveTable( _t );
@@ -1966,7 +1966,7 @@ void KSpreadView::slotPopupInsertColumn()
 	tbl->recalc(true);
     QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
     for( ; it.current(); ++it )
-	it.current()->changeNameCellRef( m_pHBorderWidget->markerColumn(),KSpreadTable::ColumnInsert, m_pTable->name());
+	it.current()->changeNameCellRef( QPoint(m_pHBorderWidget->markerColumn(),0),true,KSpreadTable::ColumnInsert, m_pTable->name());
 
     updateEditWidget();
 }
@@ -1979,7 +1979,7 @@ void KSpreadView::slotPopupRemoveColumn()
 	tbl->recalc(true);
     QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
     for( ; it.current(); ++it )
-	it.current()->changeNameCellRef( m_pHBorderWidget->markerColumn(),KSpreadTable::ColumnRemove,m_pTable->name());
+	it.current()->changeNameCellRef( QPoint(m_pHBorderWidget->markerColumn(),0),true,KSpreadTable::ColumnRemove,m_pTable->name());
 
     updateEditWidget();
 }
@@ -2022,19 +2022,19 @@ void KSpreadView::slotPopupResizeRow()
 
 void KSpreadView::slotPopupInsertRow()
 {
-    kdDebug(36001) << "KSpreadView::slotPopupInsertRow()" << endl;
+    //kdDebug(36001) << "KSpreadView::slotPopupInsertRow()" << endl;
     m_pTable->insertRow( m_pVBorderWidget->markerRow() );
 
-    kdDebug(36001) << "KSpreadView::slotPopupInsertRow() : recalc all tables" << endl;
+    //kdDebug(36001) << "KSpreadView::slotPopupInsertRow() : recalc all tables" << endl;
     KSpreadTable *tbl;
     for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
 	tbl->recalc(true);
 
-    kdDebug(36001) << "KSpreadView::slotPopupInsertRow() : changeNameCellRef" << endl;
+    //kdDebug(36001) << "KSpreadView::slotPopupInsertRow() : changeNameCellRef" << endl;
     QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
     for( ; it.current(); ++it )
-	it.current()->changeNameCellRef( m_pVBorderWidget->markerRow(),KSpreadTable::RowInsert,m_pTable->name());
-    kdDebug(36001) << "KSpreadView::slotPopupInsertRow() : changeNameCellRef done" << endl;
+	it.current()->changeNameCellRef( QPoint(0, m_pVBorderWidget->markerRow()),true,KSpreadTable::RowInsert,m_pTable->name());
+    //kdDebug(36001) << "KSpreadView::slotPopupInsertRow() : changeNameCellRef done" << endl;
 
     updateEditWidget();
 }
@@ -2048,7 +2048,7 @@ void KSpreadView::slotPopupRemoveRow()
 	tbl->recalc(true);
     QListIterator<KSpreadTable> it( m_pTable->map()->tableList() );
     for( ; it.current(); ++it )
-	it.current()->changeNameCellRef( m_pVBorderWidget->markerRow(),KSpreadTable::RowRemove,m_pTable->name());
+	it.current()->changeNameCellRef( QPoint(0,m_pVBorderWidget->markerRow()),true,KSpreadTable::RowRemove,m_pTable->name());
 
     updateEditWidget();
 }

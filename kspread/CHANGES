@@ -639,3 +639,11 @@ or refresh cell.
 -Insert code of patch created by ...
 Now you can go to a selection with kspread_dlg_goto for
 example A5:B5
+
+2000-06-14 -David Faure <faure@kde.org>
+-----------------------------------------------------
+- Fixed what I broke in changeNameCellRef, by completely rewriting it :
+  Now Unicode safe ; uses KSpreadPoint to do most of the parsing.
+  Also allows spaces in table names - for when KScript supports it too.
+  Merged changeNameCellRef and changeNameCellRef2 (added arg 'fullRowOrColumn')
+  This fixes inserting/removing rows/columns/cells.

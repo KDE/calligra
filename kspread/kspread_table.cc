@@ -1817,179 +1817,117 @@ void KSpreadTable::removeTopCell(const QPoint &_marker)
     emit sig_updateView( this );
 }
 
-void KSpreadTable::changeNameCellRef(int pos,ChangeRef ref,QString tabname)
+void KSpreadTable::changeNameCellRef(const QPoint & pos, bool fullRowOrColumn, ChangeRef ref, QString tabname)
 {
+  bool correctDefaultTableName = (tabname == name()); // for cells without table ref (eg "A1")
   QIntDictIterator<KSpreadCell> it( m_dctCells );
   for ( ; it.current(); ++it )
   {
     if(it.current()->isFormular())
     {
-      QString erg = "";
+      QString origText = it.current()->text();
+      unsigned int i = 0;
+      QString newText;
 
-      // Should this be rewritten to use QString instead of char *
-      // or is local8Bit ok ? (David)
-      const char *p = it.current()->text().local8Bit();
-      char buf[ 2 ];
-      buf[ 1 ] = 0;
-
-      bool fix1 = FALSE;
-      bool fix2 = FALSE;
-      bool correct_tablename;
-      bool old_value=false;
-      while ( *p != 0 )
+      bool correctTableName = correctDefaultTableName;
+      //bool previousCorrectTableName = false;
+      for ( ; i < origText.length(); ++i )
       {
-	if ( *p != '$' && !isalpha( *p ) )
+        QChar origCh = origText[i];
+	if ( origCh != ':' && origCh != '$' && !origCh.isLetter() )
 	{
-          buf[0] = *p++;
-          erg += buf;
-          //// ### David : shouldn't this be before the while ?
-          correct_tablename = (tabname==name());
-
-          if(erg.right(1)=="!")
-          {
-            int pos=erg.findRev(tabname);
-            if(pos!=-1)
-            {
-              int pos2=erg.length()-tabname.length()-1;
-              if( erg.find(tabname,pos2)!=-1)
-                correct_tablename=true;
-              else
-                correct_tablename=false;
-
-            }
-            else
-              correct_tablename=false;
-            //when you write Table1!A1:A2
-            //=>don't forget if it's the good name
-            old_value=correct_tablename;
-          }
-          else if(erg.right(1)==":")
-          {
-            correct_tablename=old_value;
-          }
-          else
-            old_value=correct_tablename;
-          fix1 = fix2 = FALSE;
+          newText += origCh;
+          // Reset the "correct table indicator"
+          correctTableName = correctDefaultTableName;
 	}
-	else
+	else // Letter or dollar : maybe start of cell name/range
+          // (or even ':', like in a range - note that correctTable is kept in this case)
 	{
-          QString tmp = "";
-          if ( *p == '$' )
+          // Collect everything that forms a name (cell name or table name)
+          QString str;
+          for( ; i < origText.length() &&
+                  (origText[i].isLetter() || origText[i].isDigit()
+                   || origText[i].isSpace() || origText[i] == '$')
+                   ; ++i )
+            str += origText[i];
+
+          // Was it a table name ?
+          if ( origText[i] == '!' )
           {
-            tmp = "$";
-            p++;
-            fix1 = TRUE;
+            newText += str + '!'; // Copy it (and the '!')
+            // Look for the table name right before that '!'
+            correctTableName = ( newText.right( tabname.length()+1 ) == tabname+"!" );
           }
-          if ( isalpha( *p ) )
+          else // It must be a cell identifier
           {
-            char buffer[ 1024 ];
-            char *p2 = buffer;
-            while ( *p && isalpha( *p ) )
+            // Parse it
+            KSpreadPoint point( str );
+            if (point.isValid())
             {
-              buf[ 0 ] = *p;
-              tmp += buf;
-              *p2++ = *p++;
-            }
-            *p2 = 0;
-            if ( *p == '$' )
-            {
-              tmp += "$";
-              p++;
-              fix2 = TRUE;
-            }
-            if ( isdigit( *p ) )
-            {
-              const char *p3 = p;
-              int row = atoi( p );
-              while ( *p != 0 && isdigit( *p ) ) p++;
-              // Is it a table
-              if ( *p == '!' )
+              int col = point.pos.x();
+              int row = point.pos.y();
+              // Update column
+              if ( point.columnFixed )
+                newText += '$' + util_columnLabel( col );
+              else
               {
-                erg += tmp;
-                fix1 = fix2 = FALSE;
-                p = p3;
-			
+                if(ref==ColumnInsert
+                   && correctTableName
+                   && col>=pos.x()     // Column after the new one : +1
+                   && ( fullRowOrColumn || row == pos.y() ) ) // All rows or just one
+                {
+                  newText += util_columnLabel(col+1);
+                }
+                else if(ref==ColumnRemove
+                        && correctTableName
+                        && col > pos.x() // Column after the deleted one : -1
+                        && ( fullRowOrColumn || row == pos.y() ) ) // All rows or just one
+                {
+                  newText += util_columnLabel(col-1);
+                }
+                else
+                  newText += util_columnLabel(col);
               }
-              else // It must be a cell identifier
+              // Update row
+              if ( point.rowFixed )
+                newText += '$' + QString::number( row );
+              else
               {
-                int col = 0;
-                if ( strlen( buffer ) >= 2 )
+                if(ref==RowInsert
+                   && correctTableName
+                   && row >= pos.y() // Row after the new one : +1
+                   && ( fullRowOrColumn || col == pos.x() ) ) // All columns or just one
                 {
-                  col += 26 * ( buffer[0] - 'A' + 1 );
-                  col += buffer[1] - 'A' + 1;
+                  newText += QString::number( row+1 );
+                }
+                else if(ref==RowRemove
+                        && correctTableName
+                        && row > pos.y() // Column after the deleted one : -1
+                        && ( fullRowOrColumn || col == pos.x() ) ) // All columns or just one
+                {
+                  newText += QString::number( row-1 );
                 }
                 else
-                  col += buffer[0] - 'A' + 1;
-                if ( fix1 )
-                  erg+="$"+util_columnLabel(col);
-                else
-                {
-				
-                  if(ref==ColumnInsert && correct_tablename==true)
-                  {
-                    if(col >=pos)
-                      erg+=util_columnLabel(col+1);
-                    else
-                      erg+=util_columnLabel(col);
-                  }
-                  else if(ref==ColumnRemove && correct_tablename==true)
-                  {
-                    if(col >pos)
-                      erg+=util_columnLabel(col-1);
-                    else
-                      erg+=util_columnLabel(col);
-                  }
-                  else
-                  {
-                    erg+=util_columnLabel(col);
-                  }
-                }
-                if ( fix2 )
-                {
-                  sprintf( buffer, "$%i", row );
-                }
-                else
-                {
-                  if(ref==RowInsert && correct_tablename==true)
-                  {
-                    if(row >=pos)
-                      sprintf( buffer, "%i", (row+1)  );
-                    else
-                      sprintf( buffer, "%i", row  );
-                  }
-                  else if(ref==RowRemove && correct_tablename==true)
-                  {
-                    if(row >pos)
-                      sprintf( buffer, "%i", (row-1)  );
-                    else
-                        sprintf( buffer, "%i", row  );
-                    }
-                    else
-                    {
-                      sprintf( buffer, "%i", row  );
-                    }
-                  erg += buffer;
-                }
+                  newText += QString::number( row );
               }
             }
-            else
+            else // Not a cell ref
             {
-              erg += tmp;
-              fix1 = fix2 = FALSE;
+              //kdDebug(36001) << "Copying (unchanged) : " << str << endl;
+              newText += str;
             }
+            // Copy the char that got us to stop
+            newText += origText[i];
           }
-          else
-          {
-            erg += tmp;
-            fix1 = FALSE;
-          }	
         }
       }
-      it.current()->setCellText(erg, false /* no recalc deps for each, done independently */ );
+      it.current()->setCellText(newText, false /* no recalc deps for each, done independently */ );
     }
   }
 }
 
+#if 0
+// Merged into the one above. Remove if it works.
 void KSpreadTable::changeNameCellRef2(const QPoint & pos, ChangeRef ref,QString tabname)
 {
   QIntDictIterator<KSpreadCell> it( m_dctCells );
@@ -1997,89 +1935,86 @@ void KSpreadTable::changeNameCellRef2(const QPoint & pos, ChangeRef ref,QString 
   {
     if(it.current()->isFormular())
     {
-      QString erg = "";
+      QString newText = "";
 
       // Should this be rewritten to use QString instead of char *
       // or is local8Bit ok ? (David)
-      const char *p = it.current()->text().local8Bit();
+      const char *origText = it.current()->text().local8Bit();
       char buf[ 2 ];
       buf[ 1 ] = 0;
 
-      bool fix1 = FALSE;
-      bool fix2 = FALSE;
-      bool correct_tablename;
+      bool fixedRef1 = FALSE;
+      bool fixedRef2 = FALSE;
+      bool correctTableName;
       bool old_value=false;
-      while ( *p != 0 )
+      while ( *origText != 0 )
       {
-	if ( *p != '$' && !isalpha( *p ) )
+	if ( *origText != '$' && !isalpha( *origText ) )
 	{
-          buf[0] = *p++;
-          erg += buf;
-          correct_tablename = (tabname==name());
+          buf[0] = *origText++;
+          newText += buf;
+          correctTableName = (tabname==name());
 
-          if(erg.right(1)=="!")
+          if(newText.right(1)=="!")
           {
-            int pos=erg.findRev(tabname);
+            int pos=newText.findRev(tabname);
             if(pos!=-1)
             {
-              int pos2=erg.length()-tabname.length()-1;
-              if( erg.find(tabname,pos2)!=-1)
-                correct_tablename=true;
+              int pos2=newText.length()-tabname.length()-1;
+              if( newText.find(tabname,pos2)!=-1)
+                correctTableName=true;
               else
-                correct_tablename=false;
+                correctTableName=false;
 
             }
             else
-              correct_tablename=false;
+              correctTableName=false;
             //when you write Table1!A1:A2
             //=>don't forget if it's the good name
-            old_value=correct_tablename;
+            old_value=correctTableName;
           }
-          else if(erg.right(1)==":")
+          else if(newText.right(1)==":")
           {
-            correct_tablename=old_value;
+            correctTableName=old_value;
           }
           else
-            old_value=correct_tablename;
-          fix1 = fix2 = FALSE;
+            old_value=correctTableName;
+          fixedRef1 = fixedRef2 = FALSE;
 	}
 	else
 	{
-          QString tmp = "";
-          if ( *p == '$' )
+          QString newRef = "";
+          if ( *origText == '$' )
           {
-            tmp = "$";
-            p++;
-            fix1 = TRUE;
+            newRef = "$";
+            origText++;
+            fixedRef1 = TRUE;
           }
-          if ( isalpha( *p ) )
+          if ( isalpha( *origText ) )
           {
             char buffer[ 1024 ];
-            char *p2 = buffer;
-            while ( *p && isalpha( *p ) )
+            while ( *origText && isalpha( *origText ) )
             {
-              buf[ 0 ] = *p;
-              tmp += buf;
-              *p2++ = *p++;
+              buf[ 0 ] = *origText;
+              newRef += buf;
             }
-            *p2 = 0;
-            if ( *p == '$' )
+            if ( *origText == '$' )
             {
-              tmp += "$";
-              p++;
-              fix2 = TRUE;
+              newRef += "$";
+              origText++;
+              fixedRef2 = TRUE;
             }
-            if ( isdigit( *p ) )
+            if ( isdigit( *origText ) )
             {
-              const char *p3 = p;
-              int row = atoi( p );
-              while ( *p != 0 && isdigit( *p ) ) p++;
+              const char *p3 = origText;
+              int row = atoi( origText );
+              while ( *origText != 0 && isdigit( *origText ) ) origText++;
               // Is it a table
-              if ( *p == '!' )
+              if ( *origText == '!' )
               {
-                erg += tmp;
-                fix1 = fix2 = FALSE;
-                p = p3;
+                newText += newRef;
+                fixedRef1 = fixedRef2 = FALSE;
+                origText = p3;
 
               }
               else // It must be a cell identifier
@@ -2092,44 +2027,44 @@ void KSpreadTable::changeNameCellRef2(const QPoint & pos, ChangeRef ref,QString 
                 }
                 else
                   col += buffer[0] - 'A' + 1;
-                if ( fix1 )
-                  erg+="$"+util_columnLabel(col);
+                if ( fixedRef1 )
+                  newText+="$"+util_columnLabel(col);
                 else
                 {
 
-                  if(ref==ColumnInsert && correct_tablename==true)
+                  if(ref==ColumnInsert && correctTableName==true)
                   {
                     if(col >=pos.x()&&row==pos.y())
-                      erg+=util_columnLabel(col+1);
+                      newText+=util_columnLabel(col+1);
                     else
-                      erg+=util_columnLabel(col);
+                      newText+=util_columnLabel(col);
                   }
-                  else if(ref==ColumnRemove && correct_tablename==true)
+                  else if(ref==ColumnRemove && correctTableName==true)
                   {
                     if(col >pos.x() &&row==pos.y())
-                      erg+=util_columnLabel(col-1);
+                      newText+=util_columnLabel(col-1);
                     else
-                      erg+=util_columnLabel(col);
+                      newText+=util_columnLabel(col);
                   }
                   else
                   {
-                    erg+=util_columnLabel(col);
+                    newText+=util_columnLabel(col);
                   }
                 }
-                if ( fix2 )
+                if ( fixedRef2 )
                 {
                   sprintf( buffer, "$%i", row );
                 }
                 else
                 {
-                  if(ref==RowInsert && correct_tablename==true)
+                  if(ref==RowInsert && correctTableName==true)
                   {
                     if(row >=pos.y()&&col==pos.x())
                       sprintf( buffer, "%i", (row+1)  );
                     else
                       sprintf( buffer, "%i", row  );
                   }
-                  else if(ref==RowRemove && correct_tablename==true)
+                  else if(ref==RowRemove && correctTableName==true)
                   {
                     if(row >pos.y()&&col==pos.x())
                       sprintf( buffer, "%i", (row-1)  );
@@ -2140,28 +2075,29 @@ void KSpreadTable::changeNameCellRef2(const QPoint & pos, ChangeRef ref,QString 
                   {
                     sprintf( buffer, "%i", row  );
                   }
-                  erg += buffer;
+                  newText += buffer;
                 }
               }
             }
             else
             {
-              erg += tmp;
-              fix1 = fix2 = FALSE;
+              newText += newRef;
+              fixedRef1 = fixedRef2 = FALSE;
             }
           }
           else
           {
-            erg += tmp;
-            fix1 = FALSE;
+            newText += newRef;
+            fixedRef1 = FALSE;
           }
         }
       }
-      it.current()->setCellText(erg, false /* no recalc deps for each, done independently */ );
+      it.current()->setCellText(newText, false /* no recalc deps for each, done independently */ );
     }
 
   }
 }
+#endif
 
 
 bool KSpreadTable::replace( const QPoint &_marker,QString _find,QString _replace, bool b_sensitive, bool b_whole )

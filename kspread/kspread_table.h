@@ -450,17 +450,19 @@ public:
     QString Currency(){return currency;}
 
     /**
-     * Change name of reference when you insert or remove column or row
-     * For example =Table1!A1 when you insert Column in A1 so
-     * so reference change =Table1!B1
+     * Change name of reference when the user inserts or removes a column,
+     * a row or a cell (= insertion of a row [or column] on a single column [or row]).
+     * For example the formula =Table1!A1 is changed into =Table1!B1 if a Column
+     * is inserted before A.
+     *
+     * @param pos the point of insertion (only one coordinate may be used, depending
+     * on the other paramaters).
+     * @param fullRowOrColumn if true, a whole row or column has been inserted/removed.
+     *                        if false, we inserted or removed a cell
+     * @param ref see ChangeRef
+     * @param tabname completes the pos specification by giving the table name
      */
-    void changeNameCellRef(int pos,ChangeRef ref,QString tabname);
-    /**
-     * Change name of reference when you insert or remove column or row
-     * For example =Table1!A1 when you insert Cell in A1 so
-     * so reference change =Table1!B1 it's specific for insert and remove cell
-     */
-    void changeNameCellRef2(const QPoint & pos,ChangeRef ref,QString tabname);
+    void changeNameCellRef(const QPoint & pos, bool fullRowOrColumn, ChangeRef ref,QString tabname);
 
     /**
      * @return true if this table is hidden

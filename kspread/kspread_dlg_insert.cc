@@ -157,42 +157,42 @@ void KSpreadinsert::refresh(Type_mode insertOrRemove)
   if(insertOrRemove==insertColumn)
   {
     for( ; it.current(); ++it )
-      it.current()->changeNameCellRef(marker.x(),KSpreadTable::ColumnInsert,m_pTable->name());
+      it.current()->changeNameCellRef(marker,true,KSpreadTable::ColumnInsert,m_pTable->name());
   }
   else if(insertOrRemove==inserRow)
   {
     for( ; it.current(); ++it )
-      it.current()->changeNameCellRef(marker.y(),KSpreadTable::RowInsert,m_pTable->name());
+      it.current()->changeNameCellRef(marker,true,KSpreadTable::RowInsert,m_pTable->name());
   }
   else if(insertOrRemove==removeRow)
   {
     for( ; it.current(); ++it )
-      it.current()->changeNameCellRef(marker.y(),KSpreadTable::RowRemove,m_pTable->name());
+      it.current()->changeNameCellRef(marker,true,KSpreadTable::RowRemove,m_pTable->name());
   }
   else if(insertOrRemove==removeColumn)
   {
     for( ; it.current(); ++it )
-      it.current()->changeNameCellRef(marker.x(),KSpreadTable::ColumnRemove,m_pTable->name());  		
+      it.current()->changeNameCellRef(marker,true,KSpreadTable::ColumnRemove,m_pTable->name());  		
   }
   else if(insertOrRemove==insertCellColumn)
   {
     for( ; it.current(); ++it )
-      it.current()->changeNameCellRef2(marker,KSpreadTable::ColumnInsert,m_pTable->name());          	
+      it.current()->changeNameCellRef(marker,false,KSpreadTable::ColumnInsert,m_pTable->name());          	
   }
   else if(insertOrRemove==insertCellRow)
   {
     for( ; it.current(); ++it )
-      it.current()->changeNameCellRef2(marker,KSpreadTable::RowInsert,m_pTable->name());
+      it.current()->changeNameCellRef(marker,false,KSpreadTable::RowInsert,m_pTable->name());
   }
   else if(insertOrRemove==removeCellColumn)
   {
     for( ; it.current(); ++it )
-      it.current()->changeNameCellRef2(marker,KSpreadTable::ColumnRemove,m_pTable->name());
+      it.current()->changeNameCellRef(marker,false,KSpreadTable::ColumnRemove,m_pTable->name());
   }
   else if(insertOrRemove==removeCellRow)
   {
     for( ; it.current(); ++it )
-      it.current()->changeNameCellRef2(marker,KSpreadTable::RowRemove,m_pTable->name());
+      it.current()->changeNameCellRef(marker,false,KSpreadTable::RowRemove,m_pTable->name());
   }
 
 

@@ -100,7 +100,9 @@ void KSpreadPoint::init( const QString& _str )
   {
     columnFixed = true;
     p++;
-  }
+  } else
+    columnFixed = false;
+
   // Malformed ?
   if ( p == len || _str[p] < 'A' || _str[p] > 'Z' )
     return;
@@ -114,7 +116,7 @@ void KSpreadPoint::init( const QString& _str )
     x = x*26 + (char)_str[p++] - 'A' + 1;
   //limit is 26*26
   if(x>(26*26))
-        return;
+    return;
   // Malformed ?
   if ( p == len  )
     return;
@@ -127,6 +129,8 @@ void KSpreadPoint::init( const QString& _str )
     if ( p == len  )
       return;
   }
+  else
+    rowFixed = false;
 
   uint p2 = p;
   while( p < len )
