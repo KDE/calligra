@@ -9,16 +9,15 @@
 
 #include <qtabdialog.h>
 
-#include "kchartColorConfigPage.h"
-#include "kchartParameterConfigPage.h"
-#include "kchartParameter3dConfigPage.h"
-#include "kchartParameterPieConfigPage.h"
-//#include "kchartGeometryConfigPage.h"
-#include "kchartFontConfigPage.h"
-#include "kchartPieConfigPage.h"
-#include "kchartparams.h"
-#include "kchartBarSubTypeChartPage.h"
-#include "kchartComboConfigPage.h"
+class KChartParameters;
+class KChartColorConfigPage;
+class KChartParameterConfigPage;
+class KChartParameter3dConfigPage;
+class KChartParameterPieConfigPage;
+class KChartFontConfigPage;
+class KChartPieConfigPage;
+class KChartSubTypeChartPage;
+class KChartComboPage;
 
 class KChartConfigDialog : public QTabDialog
 {

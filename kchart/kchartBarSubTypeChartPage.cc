@@ -1,6 +1,7 @@
 /*
  * $Id$
  *
+ * Copyright 1999-2000 by Matthias Kalle Dalheimer, <kalle@dalheimer.de>
  * Copyright 2000 by Laurent Montel, released under Artistic License.
  */
 
@@ -9,111 +10,108 @@
 
 #include <kapp.h>
 #include <klocale.h>
+#include <kdebug.h>
+#include <kiconloader.h>
+#include <qvbuttongroup.h>
+#include <qradiobutton.h>
 #include <qlayout.h>
 #include <qlabel.h>
-#include <qbuttongroup.h>
+#include <qhgroupbox.h>
 
+#include "kchartparams.h"
 
-KChartSubTypeChartPage::KChartSubTypeChartPage(KChartParameters* params,QWidget* parent ) :
-    QWidget( parent ),_params( params )
+KChartBarSubTypeChartPage::KChartBarSubTypeChartPage( KChartParameters* params,
+													  QWidget* parent ) :
+  KChartSubTypeChartPage( params, parent )
 {
-  //QVBoxLayout* toplevel = new QVBoxLayout( this, 10 );
+  QHBoxLayout* toplevel = new QHBoxLayout( this, 10 );
+  QVButtonGroup* subtypeBG = new QVButtonGroup( i18n( "Subtype" ), this );
+  toplevel->addWidget( subtypeBG, AlignCenter | AlignVCenter );
+  depth = new QRadioButton( i18n( "Depth" ), subtypeBG ); ;
+  subtypeBG->insert( depth, KCHARTSTACKTYPE_DEPTH );
+  layer = new QRadioButton( i18n( "Layer" ), subtypeBG );
+  subtypeBG->insert( layer, KCHARTSTACKTYPE_LAYER );
+  beside = new QRadioButton( i18n( "Beside" ), subtypeBG );
+  subtypeBG->insert( beside, KCHARTSTACKTYPE_BESIDE );
+  percent = new QRadioButton( i18n( "Percent" ), subtypeBG );
+  subtypeBG->insert( percent, KCHARTSTACKTYPE_PERCENT );
+  subtypeBG->setFixedSize( subtypeBG->sizeHint() );
+  connect( subtypeBG, SIGNAL( clicked( int ) ),
+		   this, SLOT( slotChangeSubType( int ) ) );
 
-  QGridLayout* layout = new QGridLayout(this, 2, 2,15,7 );
-  //toplevel->addLayout( layout );
-  QButtonGroup* gb = new QButtonGroup( i18n("Sub Type Chart"), this );
-  QGridLayout *grid1 = new QGridLayout(gb,7,1,15,7);
-  layout->addWidget(gb,0,0);
-
-  depth=new QRadioButton( i18n("Depth"), gb ); ;
-  grid1->addWidget(depth,0,0);
-  sum=new QRadioButton( i18n("Sum"), gb );
-  grid1->addWidget(sum,1,0);
-  beside=new QRadioButton( i18n("Beside"), gb );
-  grid1->addWidget(beside,2,0);
-  layer=new QRadioButton( i18n("Layer"), gb );
-  grid1->addWidget(layer,3,0);
-  percent=new QRadioButton( i18n("Percent (only bar2D and bar3D)"), gb );
-  grid1->addWidget(percent,4,0);
-  if(!_params->do_bar())
-        {
-        percent->setEnabled(false);
-        }
-  gb->setAlignment(Qt::AlignLeft);
-  grid1->addColSpacing(0,depth->width());
-  grid1->addColSpacing(0,sum->width());
-  grid1->addColSpacing(0,beside->width());
-  grid1->addColSpacing(0,percent->width());
-  grid1->setColStretch(0,1);
-  grid1->activate();
-  //it's not good but I don't know how
-  //to reduce space
-  layout->addColSpacing(1,300);
+  QHGroupBox* exampleGB = new QHGroupBox( i18n( "Example" ), this );
+  toplevel->addWidget( exampleGB, 2 );
+  exampleLA = new QLabel( exampleGB );
+  exampleLA->setMinimumSize( 142, 142 );
+  // PENDING(kalle) Make image scale with available space once Qt 2.2 is out.
+  exampleGB->setFixedSize( exampleGB->sizeHint() );
 }
 
-void KChartSubTypeChartPage::init()
+void KChartBarSubTypeChartPage::init()
 {
-switch((int)_params->stack_type)
-        {
-        case (int)KCHARTSTACKTYPE_DEPTH:
-                {
-                 depth->setChecked(true);
-                 break;
-                }
-         case (int)KCHARTSTACKTYPE_SUM:
-                {
-                 sum->setChecked(true);
-                 break;
-                }
-         case (int)KCHARTSTACKTYPE_BESIDE:
-                {
-                 beside->setChecked(true);
-                 break;
-                }
-          case (int)KCHARTSTACKTYPE_LAYER:
-                {
-                 layer->setChecked(true);
-                 break;
-                 }
-          case (int)KCHARTSTACKTYPE_PERCENT:
-                {
-                 percent->setChecked(true);
-                 break;
-                }
-          default:
-                {
-                 cout <<"Error in stack_type\n";
-                 break;
-                }
-        }
+  // SUM is for areas only and therefore not configurable here.
+  switch((int)_params->stack_type) {
+	case (int)KCHARTSTACKTYPE_DEPTH:
+	  {
+		depth->setChecked(true);
+		break;
+	  }
+	case (int)KCHARTSTACKTYPE_LAYER:
+	  {
+		layer->setChecked(true);
+		break;
+	  }
+	case (int)KCHARTSTACKTYPE_BESIDE:
+	  {
+		beside->setChecked(true);
+		break;
+	  }
+	case (int)KCHARTSTACKTYPE_PERCENT:
+	  {
+		percent->setChecked(true);
+		break;
+	  }
+	default:
+	  {
+		kdDebug( 35001 ) << "Error in stack_type" << endl;
+		break;
+	  }
+	}
+  
+  slotChangeSubType( _params->stack_type );
 }
 
-void KChartSubTypeChartPage::apply()
-{
-if(depth->isChecked())
-        {
-        _params->stack_type = KCHARTSTACKTYPE_DEPTH;
-        }
-else if(sum->isChecked())
-        {
-        _params->stack_type = KCHARTSTACKTYPE_SUM;
-        }
-else if(beside->isChecked())
-        {
-        _params->stack_type = KCHARTSTACKTYPE_BESIDE;
-        }
-else if(layer->isChecked())
-        {
-        _params->stack_type = KCHARTSTACKTYPE_LAYER;
-        }
-else if(percent->isChecked())
-        {
-        _params->stack_type = KCHARTSTACKTYPE_PERCENT;
-        }
 
-else
-        {
-        cout <<"Error in groupbutton\n";
-        }
+void KChartBarSubTypeChartPage::slotChangeSubType( int type )
+{
+  switch( type ) {
+  case KCHARTSTACKTYPE_DEPTH:
+	exampleLA->setPixmap( UserIcon( "barsubtypedepth" ) );
+	break;
+  case KCHARTSTACKTYPE_LAYER:
+	exampleLA->setPixmap( UserIcon( "barsubtypelayer" ) );
+	break;
+  case KCHARTSTACKTYPE_BESIDE:
+	exampleLA->setPixmap( UserIcon( "barsubtypebeside" ) );
+	break;
+  case KCHARTSTACKTYPE_PERCENT:
+	exampleLA->setPixmap( UserIcon( "barsubtypepercent" ) );
+	break;
+  };
+}
+
+void KChartBarSubTypeChartPage::apply()
+{
+  if( depth->isChecked() ) {
+	_params->stack_type = KCHARTSTACKTYPE_DEPTH;
+  } else if( layer->isChecked() ) {
+	_params->stack_type = KCHARTSTACKTYPE_LAYER;
+  } else if( beside->isChecked() ) {
+	_params->stack_type = KCHARTSTACKTYPE_BESIDE;
+  } else if( percent->isChecked() )	{
+	_params->stack_type = KCHARTSTACKTYPE_PERCENT;
+  } else{
+	kdDebug( 35001 ) << "Error in groupbutton" << endl;
+  }
 }
 

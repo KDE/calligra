@@ -1,15 +1,28 @@
 /*
  * $Id$
  *
- * Copyright 1999 by Kalle Dalheimer, released under Artistic License.
+ * Copyright 1999-2000 by Kalle Dalheimer, released under Artistic License.
  */
 
 
 #include "kchartConfigDialog.h"
 #include "kchartConfigDialog.moc"
 
+#include "kchartAreaSubTypeChartPage.h"
+#include "kchartBarSubTypeChartPage.h"
+#include "kchartColorConfigPage.h"
+#include "kchartParameterPieConfigPage.h"
+#include "kchartFontConfigPage.h"
+#include "kchartComboConfigPage.h"
+#include "kchartParameterConfigPage.h"
+#include "kchartPieConfigPage.h"
+#include "kchartParameter3dConfigPage.h"
+#include "kchartparams.h"
+
 #include <kapp.h>
 #include <klocale.h>
+
+#include <qradiobutton.h>
 
 KChartConfigDialog::KChartConfigDialog( KChartParameters* params,
 					QWidget* parent ) :
@@ -25,21 +38,18 @@ KChartConfigDialog::KChartConfigDialog( KChartParameters* params,
     _colorpage = new KChartColorConfigPage( this );
     addTab( _colorpage, i18n( "&Colors" ) );
 
-    if(!_params->isPie())
-    	{
-    	_parameterpage = new KChartParameterConfigPage(_params,this );
-    	addTab( _parameterpage, i18n( "&Parameter" ) );
-
-        }
-    else
-    	{
-    	_parameterpiepage = new KChartParameterPieConfigPage(_params,this );
-    	addTab( _parameterpiepage, i18n( "&Parameter" ) );
-
-    	_piepage = new KChartPieConfigPage(_params, this );
-    	addTab( _piepage, i18n( "&Pie" ) );
-        }
-
+    if( !_params->isPie() )	{
+	  _parameterpage = new KChartParameterConfigPage(_params,this );
+	  addTab( _parameterpage, i18n( "&Parameter" ) );
+	  
+	} else {
+	  _parameterpiepage = new KChartParameterPieConfigPage(_params,this );
+	  addTab( _parameterpiepage, i18n( "&Parameter" ) );
+	  
+	  _piepage = new KChartPieConfigPage(_params, this );
+	  addTab( _piepage, i18n( "&Pie" ) );
+	}
+	
     _parameterfontpage = new KChartFontConfigPage(_params,this );
     addTab( _parameterfontpage, i18n( "&Font" ) );
 
@@ -48,13 +58,22 @@ KChartConfigDialog::KChartConfigDialog( KChartParameters* params,
         _parameter3dpage = new KChartParameter3dConfigPage(_params,this );
         addTab( _parameter3dpage,i18n("3D Parameters"));
         }
-    //For the moment juste for 3 type of chart
-    if((_params->type==KCHARTTYPE_BAR) || ((_params->type==KCHARTTYPE_3DBAR)
-        ||(_params->type==KCHARTTYPE_3DLINE)))
-                {
-                _subTypePage = new KChartSubTypeChartPage(_params, this );
-    	        addTab( _subTypePage, i18n( "Sub Type Chart" ) );
-                }
+	// Lines and pies might need config pages as well, but not yet
+	switch( _params->type ) {
+	case KCHARTTYPE_BAR:
+	case KCHARTTYPE_3DBAR:
+	  _subTypePage = new KChartBarSubTypeChartPage( _params, this );
+	  addTab( _subTypePage, i18n( "Chart &Subtype" ) );
+	  break;
+	case KCHARTTYPE_AREA:
+	case KCHARTTYPE_3DAREA:
+	  _subTypePage = new KChartAreaSubTypeChartPage( _params, this );
+	  addTab( _subTypePage, i18n( "Chart &Subtype" ) );
+	  break;
+	default:
+	  ; // do nothing
+	};
+
     if(_params->has_hlc_sets())
         {
         _hlcChart=new KChartComboPage(_params,this);

@@ -30,7 +30,7 @@
 
 using namespace std;
 
-kchartEngine keng;
+KChartEngine keng;
 
 
 int out_graph( short imagewidth,         // no check for an output device that's too small to fit
@@ -48,7 +48,7 @@ int out_graph( short imagewidth,         // no check for an output device that's
   return keng.out_graph();
 }
 
-int kchartEngine::compute_yintervals() {
+int KChartEngine::compute_yintervals() {
     // TODO
     return 0;
 }
@@ -58,7 +58,7 @@ int kchartEngine::compute_yintervals() {
 //  Out graph
 //
 /*************************************************************/
-int kchartEngine::out_graph() {
+int KChartEngine::out_graph() {
   if (init()== -1) {
     return -1;
   }

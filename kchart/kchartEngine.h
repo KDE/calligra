@@ -1,7 +1,7 @@
 #ifndef KCHARTENGINE_H
 #define KCHARTENGINE_H
 
-class kchartEngine {
+class KChartEngine {
 public:
   KChartParameters* params;
   KChartData const * data;

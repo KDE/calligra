@@ -17,7 +17,7 @@
 #include <kdebug.h>
 
 
-int kchartEngine::init() {
+int KChartEngine::init() {
   // initializations
   yscl = 0.0;
   vyscl = 0.0;
@@ -77,7 +77,7 @@ int kchartEngine::init() {
 /* also, this affords the opportunity to include scatter points onto any type of chart */
 /* drawing of the scatter point should be an exposed function, so the user can */
 /*  use it to draw a legend, and/or add their own */
-void kchartEngine::drawScatter() {
+void KChartEngine::drawScatter() {
   QColor *scatter_clr = new QColor[params->num_scatter_pts];
   QPointArray ct( 3 );
 

@@ -16,7 +16,7 @@
 #include <stdio.h> //PENDING(kalle) Remove?
 #include <kdebug.h>
 
-void kchartEngine::drawAnnotation() {
+void KChartEngine::drawAnnotation() {
   int x1 = PX(params->annotation->point+(params->do_bar()?1:0));
   int y1 = PY(highest);
   int x2=0;
@@ -45,7 +45,6 @@ void kchartEngine::drawAnnotation() {
                 {/* note to the left */
                 p->setPen( AnnoteColor );
                 p->drawLine( x2,PY(highest)-2,x2-annote_hgt/2, PY(highest)-2-annote_hgt/2 );
-		// PENDING(kalle) Check whether this really does line breaks
                 p->setFont( params->annotationFont() );
                 QRect br = QFontMetrics( params->annotationFont() ).boundingRect( 0, 0, MAXINT,
 								   MAXINT,
@@ -60,7 +59,6 @@ void kchartEngine::drawAnnotation() {
                 { /* note to right */
                 p->setPen( AnnoteColor );
                 p->drawLine( x2, PY(highest)-2,x2+annote_hgt/2, PY(highest)-2-annote_hgt/2 );
-		// PENDING(kalle) Check whether this really does line breaks
                 p->setFont( params->annotationFont() );
                 QRect br = QFontMetrics( params->annotationFont() ).boundingRect( 0, 0,
 									MAXINT,
@@ -76,7 +74,7 @@ void kchartEngine::drawAnnotation() {
   setno = 0;
 }
 
-void kchartEngine::titleText() {
+void KChartEngine::titleText() {
     if( !params->title.isEmpty() )
         {
         int tlen=0;
@@ -84,7 +82,6 @@ void kchartEngine::titleText() {
         cnt_nl( params->title.latin1(), &tlen );
         p->setFont( params->titleFont() );
         p->setPen( titlecolor );
-        // PENDING(kalle) Check whether this really does line breaks
         QRect br = QFontMetrics( params->titleFont() ).boundingRect( 0, 0,
 				MAXINT,
 				MAXINT,
@@ -113,7 +110,7 @@ void kchartEngine::titleText() {
 
 
 
-void kchartEngine::drawThumbnails() {
+void KChartEngine::drawThumbnails() {
 #ifdef THUMB_VALS
     /* put thmbl and thumbval over vol and plot lines */
     int n=0, d=0, w=0;
@@ -181,7 +178,7 @@ void kchartEngine::drawThumbnails() {
 }
 
 
-void kchartEngine::drawBackgroundImage()
+void KChartEngine::drawBackgroundImage()
 {
   //		debug( "Sorry, not implemented: background images" );
 #ifdef SUPPORT_BACKGROUND_IMAGES
@@ -219,7 +216,7 @@ void kchartEngine::drawBackgroundImage()
 }
 
 
-void kchartEngine::prepareColors()
+void KChartEngine::prepareColors()
 {
     //for(int j=0; j<num_sets; ++j )
       for(int i=0; i<num_points; ++i )

@@ -18,7 +18,7 @@
 #include <kdebug.h>
 
 
-void kchartEngine::computeSize() {
+void KChartEngine::computeSize() {
   int	title_hgt  = !params->title.isEmpty()? 2 /* title? horizontal text line(s) */
     + cnt_nl(params->title.latin1(),(int*)NULL)*params->titleFontHeight()
     + 2:
@@ -243,7 +243,7 @@ void kchartEngine::computeSize() {
 
 
 
-void kchartEngine::computeMinMaxValues() {
+void KChartEngine::computeMinMaxValues() {
 
   bool set_neg=false;
   switch(params->stack_type) {
