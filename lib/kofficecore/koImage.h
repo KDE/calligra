@@ -5,8 +5,11 @@
 #include <qshared.h>
 #include <qstring.h>
 #include <qdatetime.h>
+#include <qmap.h>
 
-class KoImagePrivate;
+#include <assert.h>
+
+template <class T> class KoImagePrivate;
 
 /**
  * KoImage is a container class for holding a QImage, a cached QPixmap version
@@ -15,35 +18,10 @@ class KoImagePrivate;
  * that the contained QImage is explicitly shared, as documented in the
  * Qt documentation.
  */
+template <class Key>
 class KoImage
 {
 public:
-    /**
-     * A simple Key structure for holding a 'unique' filename and timestamp
-     * for a image
-     */
-    struct Key
-    {
-        Key() {}
-
-        Key( const QString &_filename, const QDateTime &_timestamp = QDateTime() )
-            : fileName( _filename ), timestamp( _timestamp ) {}
-
-        bool operator==( const Key &other ) const
-            { return fileName == other.fileName && timestamp == other.timestamp; }
-
-        bool operator<( const Key &other ) const
-            {
-                register bool res = fileName < other.fileName;
-                if ( timestamp.isValid() && other.timestamp.isValid() )
-                    res &= timestamp < other.timestamp;
-                return res;
-            }
-
-        QString fileName;
-        QDateTime timestamp;
-    };
-
     /**
      * Default constructor. Creates a null image.
      */
@@ -89,12 +67,6 @@ public:
     Key key() const;
 
     /**
-     * Convenience method for retrieving the image's filename. Alias for
-     * key().fileName
-     */
-    QString fileName() const; //convenience
-
-    /**
      * Returns true if the image is null. A null image is created using the
      * default constructor.
      */
@@ -109,34 +81,75 @@ public:
     KoImage scale( const QSize &size ) const;
 
 private:
-    KoImagePrivate *d;
+    KoImagePrivate<Key> *d;
 };
 
 /**
  * @internal
  */
+template <class Key>
 class KoImagePrivate : public QShared
 {
 public:
     QImage m_image;
-    KoImage m_originalImage;
-    KoImage::Key m_key;
+    KoImage<Key> m_originalImage;
+    Key m_key;
     mutable QPixmap m_cachedPixmap;
 };
 
-inline KoImage::KoImage( const KoImage &other )
+template <class Key>
+KoImage<Key>::KoImage()
+{
+    d = 0;
+}
+
+template <class Key>
+KoImage<Key>::KoImage( const Key &key, const QImage &image )
+{
+    d = new KoImagePrivate<Key>;
+    d->m_image = image.copy();
+    d->m_key = key;
+}
+
+template <class Key>
+KoImage<Key>::KoImage( const KoImage &other )
 {
     d = 0;
     (*this) = other;
 }
 
-inline QImage KoImage::image() const
+template <class Key>
+KoImage<Key>::~KoImage()
+{
+    if ( d && d->deref() )
+        delete d;
+}
+
+template <class Key>
+KoImage<Key> &KoImage<Key>::operator=( const KoImage<Key> &_other )
+{
+    KoImage<Key> &other = const_cast<KoImage<Key> &>( _other );
+
+    if ( other.d )
+        other.d->ref();
+
+    if ( d && d->deref() )
+        delete d;
+
+    d = other.d;
+
+    return *this;
+}
+
+template <class Key>
+QImage KoImage<Key>::image() const
 {
     if ( !d) return QImage();
     return d->m_image;
 }
 
-inline QPixmap KoImage::pixmap() const
+template <class Key>
+QPixmap KoImage<Key>::pixmap() const
 {
     if ( !d ) return QPixmap();
 
@@ -145,21 +158,43 @@ inline QPixmap KoImage::pixmap() const
     return d->m_cachedPixmap;
 }
 
-inline KoImage::Key KoImage::key() const
+template <class Key>
+Key KoImage<Key>::key() const
 {
-    if ( !d ) return KoImage::Key();
+    if ( !d ) return Key();
 
     return d->m_key;
 }
 
-inline QString KoImage::fileName() const
+template <class Key>
+bool KoImage<Key>::isNull() const
 {
-    return key().fileName;
+    return d == 0;
 }
 
-inline bool KoImage::isNull() const
+template <class Key>
+KoImage<Key> KoImage<Key>::scale( const QSize &size ) const
 {
-    return d != 0;
+    if ( !d )
+        return *this;
+
+    KoImage<Key> originalImage;
+
+    if ( !d->m_originalImage.isNull() )
+        originalImage = d->m_originalImage;
+    else
+        originalImage = *this;
+
+    if ( originalImage.image().size() == size )
+        return originalImage;
+
+    QImage scaledImg = originalImage.image().smoothScale( size.width(), size.height() );
+
+    KoImage<Key> result( d->m_key, scaledImg );
+    assert( result.d );
+    result.d->m_originalImage = originalImage;
+
+    return result;
 }
 
 #endif

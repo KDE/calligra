@@ -21,8 +21,7 @@ libkofficecore_la_SOURCES = koDocument.cc \
 	koView.cc koFrame.cc handler.cpp koDocumentChild.cc \
 	koDocumentInfoDlg.cc koFactory.cc koChild.cc \
 	KoApplicationIface.cc KoApplicationIface.skel \
-	KoDocumentIface.cc KoDocumentIface.skel KoViewIface.cc KoViewIface.skel \
-	koImage.cc koImageCollection.cc
+	KoDocumentIface.cc KoDocumentIface.skel KoViewIface.cc KoViewIface.skel
 
 libkofficecore_la_LDFLAGS = $(KDE_LDFLAGS)  -version-info 1:0:0 -no-undefined
 

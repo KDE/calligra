@@ -5,33 +5,42 @@
 
 #include <koImage.h>
 
-class KoImageCollection
+template <class Key>
+class KoImageCollection : public QMap<Key, KoImage<Key> >
 {
 public:
-    typedef QMap<KoImage::Key,KoImage> Map;
+    typedef KoImage<Key> Image;
 
-    KoImageCollection();
-    ~KoImageCollection();
+    Image findImage( const Key &key ) const;
 
-    KoImage insertImage( const KoImage::Key &key, const QImage &image );
-
-    KoImage image( const KoImage::Key &key );
-
-    Map data() const { return m_images; }
-
-private:
-    Map m_images;
-    class KoImageCollectionPrivate;
-    KoImageCollectionPrivate *d;
+    Image insertImage( const Key &key, const QImage &image );
 };
 
-inline KoImage KoImageCollection::image( const KoImage::Key &key )
+template <class Key>
+KoImageCollection<Key>::Image KoImageCollection<Key>::findImage( const Key &key ) const
 {
-    QMap<KoImage::Key,KoImage>::ConstIterator it = m_images.find( key );
-    if ( it == m_images.end() )
-        return KoImage();
+    // this gives a 'parse error before '='' . !@#$$! compiler
+//    ConstIterator it = find( key );
+    QMapConstIterator<Key, KoImage<Key> > it = find( key );
+    if ( it == end() )
+        return Image();
 
     return *it;
+}
+
+template <class Key>
+KoImageCollection<Key>::Image KoImageCollection<Key>::insertImage( const Key &key, const QImage &image )
+{
+    Image res = findImage( key );
+
+    if ( res.isNull() )
+    {
+        res = Image( key, image );
+
+        res = insert( key, res ).data();
+    }
+
+    return res;
 }
 
 #endif
