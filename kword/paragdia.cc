@@ -1296,6 +1296,7 @@ void KWParagCounterWidget::numTypeChanged( int nType ) {
     gStyle->setEnabled( m_counter.numbering() != Counter::NUM_NONE );
 
     fillStyleCombo(m_counter.numbering());
+    bCustom->setEnabled(m_counter.numbering()==Counter::NUM_LIST);
 }
 
 void KWParagCounterWidget::display( const KWParagLayout & lay ) {
