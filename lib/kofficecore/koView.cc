@@ -70,6 +70,12 @@ KoView::KoView( KoDocument *document, QWidget *parent, const char *name )
 
   connect( d->m_doc, SIGNAL( childChanged( KoDocumentChild * ) ),
 	   this, SLOT( slotChildChanged( KoDocumentChild * ) ) );
+  
+  QValueList<KAction*> docActions = document->actionCollection()->actions();
+  QValueList<KAction*>::ConstIterator it = docActions.begin();
+  QValueList<KAction*>::ConstIterator end = docActions.end();
+  for (; it != end; ++it )
+    actionCollection()->insert( *it );
 }
 
 KoView::~KoView()
