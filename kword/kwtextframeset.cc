@@ -498,7 +498,8 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, const QColo
                             p->restore();
                         }
                     }
-                }
+                } else
+                    kdWarning(32001) << "Frameset:" << getName() << " frameNum=" << frameNum << " getNumFrames()=" << getNumFrames() << endl;
             }
         }
     }
@@ -1378,6 +1379,12 @@ struct FrameStruct
     Frame frameOne is greater then frameTwo if the center point lies more down then (the whole of)
     frame frameTwo. When they are equal, the X position is considered. */
     int compare (const KWFrame *frameOne, const KWFrame *frameTwo) const {
+        // The first criteria is the page number though!
+        int pageOne = frameOne->pageNum();
+        int pageTwo = frameTwo->pageNum();
+        if ( pageOne > pageTwo ) return 4; // frameOne > frameTwo
+        if ( pageOne < pageTwo ) return -4; // frameOne < frameTwo
+
         double centerX = frameOne->left() + (frameOne->width() /2);
         // reverse the return values of the next two for RTL
         if ( centerX > frameTwo->right()) return 3; // frameOne > frameTwo
@@ -1544,10 +1551,10 @@ KWFrame * KWTextFrameSet::internalToDocument( const QPoint &iPoint, KoPoint &dPo
 #endif
         if ( mid < 0 )
         {
-//#ifdef DEBUG_ITD
+#ifdef DEBUG_ITD
             kdDebug(32002) << "KWTextFrameSet::internalToDocument " << iPoint.x() << "," << iPoint.y()
                            << " before any frame of " << (void*)this << endl;
-//#endif
+#endif
             dPoint = m_doc->layoutUnitPtToPt( m_doc->pixelToPt( iPoint ) ); // "bah", I said above :)
             return 0L;
         }
