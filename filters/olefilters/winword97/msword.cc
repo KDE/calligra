@@ -24,16 +24,17 @@
 */
 
 #include <errno.h>
-#include <iconv.h>
 #include <kdebug.h>
 #include <msword.h>
 #include <paragraph.h>
+#include <qtextcodec.h>
 
 // We currently only take note of the document's main non-Far Eastern
 // language, and ignore character properties. TBD: remove these restrictions!
-unsigned short MsWord::char2unicode(unsigned lid, unsigned char c)
+
+QString MsWord::char2unicode(unsigned lid, char c)
 {
-    static iconv_t lastIconv = (iconv_t)-1;
+    static QTextCodec *codec = (QTextCodec *)0;
     static unsigned lastLid = (unsigned)-1;
 
     // Is the language changing?
@@ -45,54 +46,34 @@ unsigned short MsWord::char2unicode(unsigned lid, unsigned char c)
         // an error message for each character if things go wrong!
         lastLid = lid;
 
-        // Find the name of the new code page.
+        // Find the name of the new code page and open the codec.
         codepage = lid2codepage(lastLid);
-
-        // Close any existing context before opening the new one.
-        if (lastIconv != (iconv_t)-1)
-        {
-            iconv_close(lastIconv);
-        }
-        lastIconv = iconv_open("UCS-2", codepage);
-        if (lastIconv != (iconv_t)-1)
+        codec = QTextCodec::codecForName(codepage);
+        if (codec)
         {
             kdDebug(s_area) <<
                 "converting " << codepage <<
-                " to UCS-2" << endl;
+                " to Unicode" << endl;
         }
         else
         {
             kdError(s_area) <<
                 "cannot convert " << codepage <<
-                " to UCS-2: " << strerror(errno) << endl;
+                " to Unicode" << endl;
         }
     }
 
     // Do the conversion!
 
-    unsigned short result = '?';
+    QString result;
 
-    if (lastIconv != (iconv_t)-1)
+    if (codec)
     {
-        unsigned char input[1];
-        unsigned char output[2];
-        size_t ibuflen = 1;
-        size_t obuflen = 2;
-        char *ibuf;
-        char *obuf;
-
-        input[0] = c;
-        ibuf = (char *)&input[0];
-        obuf = (char *)&output[0];
-        if ((size_t)-1 != iconv(lastIconv, &ibuf, &ibuflen, &obuf, &obuflen))
-        {
-            result = (output[0] << 8) + output[1];
-        }
-        else
-        {
-            kdError(s_area) << "cannot convert " << c << ": " <<
-                strerror(errno) << endl;
-        }
+        result = codec->toUnicode(&c, 1);
+    }
+    else
+    {
+        result = '?';
     }
     return result;
 }
@@ -986,7 +967,8 @@ unsigned MsWord::read(U16 lid, const U8 *in, QString *out, unsigned count, bool 
         for (unsigned i = 0; i < count; i++)
         {
             bytes += MsWordGenerated::read(in + bytes, &char8);
-            *out += QChar(char2unicode(lid, char8));
+            //*out += QChar(char2unicode(lid, char8));
+            *out += char2unicode(lid, char8);
         }
     }
     return bytes;

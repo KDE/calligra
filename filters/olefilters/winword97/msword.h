@@ -30,9 +30,6 @@ DESCRIPTION
 #ifndef MSWORD_H
 #define MSWORD_H
 
-#ifndef __FreeBSD__
-#include <iconv.h>
-#endif
 #include <kdebug.h>
 #include <mswordgenerated.h>
 
@@ -271,7 +268,7 @@ private:
 
     // Convert a char into a unicode character.
 
-    static unsigned short char2unicode(unsigned lid, unsigned char c);
+    static QString char2unicode(unsigned lid, char c);
     static const char *lid2codepage(U16 lid);
 
     // Decode a paragraph into the various types for which we have callbacks.
