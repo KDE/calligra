@@ -1486,11 +1486,10 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KWTextFormat * & /*
         }
         QTextStringChar * ch = parag->at( cursor->index() );
         undoRedoInfo.text += ch->c;
+        copyCharFormatting( parag, cursor->index(), undoRedoInfo.text.length()-1, true );
         KWParagLayout paragLayout;
         if ( parag->next() )
             paragLayout = static_cast<KWTextParag *>( parag->next() )->paragLayout();
-        copyCharFormatting( ch,undoRedoInfo.text.length()-1, true,parag,cursor->index() );
-
 
         QTextParag *old = cursor->parag();
         if ( cursor->remove() ) {
@@ -1521,7 +1520,7 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KWTextFormat * & /*
             cursor->gotoLeft();
             QTextStringChar * ch = cursor->parag()->at( cursor->index() );
             undoRedoInfo.text.prepend( QString( ch->c ) );
-            copyCharFormatting( ch, 0, true,cursor->parag(),cursor->index() );
+            copyCharFormatting( cursor->parag(), cursor->index(), 0, true );
             undoRedoInfo.index = cursor->index();
             KWParagLayout paragLayout = static_cast<KWTextParag *>( cursor->parag() )->paragLayout();
             if ( cursor->remove() ) {
@@ -1580,10 +1579,10 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KWTextFormat * & /*
         if ( cursor->atParagEnd() ) {
             QTextStringChar * ch = cursor->parag()->at( cursor->index() );
             undoRedoInfo.text += ch->c;
+            copyCharFormatting( parag, cursor->index(), undoRedoInfo.text.length()-1, true );
             KWParagLayout paragLayout;
             if ( parag->next() )
                 paragLayout = static_cast<KWTextParag *>( parag->next() )->paragLayout();
-            copyCharFormatting( ch, undoRedoInfo.text.length()-1, true,parag,cursor->index() );
             if ( cursor->remove() )
             {
                 undoRedoInfo.text += "\n";
@@ -1593,7 +1592,7 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KWTextFormat * & /*
             int oldLen = undoRedoInfo.text.length();
             undoRedoInfo.text += cursor->parag()->string()->toString().mid( cursor->index() );
             for ( int i = cursor->index(); i < cursor->parag()->length(); ++i )
-                copyCharFormatting( cursor->parag()->at( i ), oldLen + i - cursor->index(), true,cursor->parag(),i );
+                copyCharFormatting( cursor->parag(), i, oldLen + i - cursor->index(), true );
             cursor->killLine();
         }
         break;
@@ -2098,9 +2097,10 @@ bool KWTextFrameSet::UndoRedoInfo::valid() const
     return text.length() > 0  && id >= 0 && index >= 0;
 }
 
-// Copies a formatted char, <ch>, into undoRedoInfo.text, at position <index>.
-void KWTextFrameSet::copyCharFormatting( QTextStringChar * ch, int index /*in text*/, bool moveCustomItems, QTextParag *parag, int position )
+// Copies a formatted char, <parag, position>, into undoRedoInfo.text, at position <index>.
+void KWTextFrameSet::copyCharFormatting( QTextParag *parag, int position, int index /*in text*/, bool moveCustomItems )
 {
+    QTextStringChar * ch = parag->at( position );
     if ( ch->format() ) {
         ch->format()->addRef();
         undoRedoInfo.text.at( index ).setFormat( ch->format() );
@@ -2118,33 +2118,38 @@ void KWTextFrameSet::copyCharFormatting( QTextStringChar * ch, int index /*in te
 }
 
 // Based on QTextView::readFormats - with all code duplication moved to copyCharFormatting
-void KWTextFrameSet::readFormats( QTextCursor &c1, QTextCursor &c2, int oldLen, bool copyParagLayouts, bool moveCustomItems )
+void KWTextFrameSet::readFormats( QTextCursor &c1, QTextCursor &c2, bool copyParagLayouts, bool moveCustomItems )
 {
     //kdDebug() << "KWTextFrameSet::readFormats moveCustomItems=" << moveCustomItems << endl;
     c2.restoreState();
     c1.restoreState();
+    int oldLen = undoRedoInfo.text.length();
     if ( c1.parag() == c2.parag() ) {
+        undoRedoInfo.text += c1.parag()->string()->toString().mid( c1.index(), c2.index() - c1.index() );
         for ( int i = c1.index(); i < c2.index(); ++i )
-            copyCharFormatting( c1.parag()->at( i ), oldLen + i - c1.index(), moveCustomItems,c1.parag(),i );
+            copyCharFormatting( c1.parag(), i, oldLen + i - c1.index(), moveCustomItems );
     } else {
         int lastIndex = oldLen;
         int i;
         //kdDebug() << "KWTextFrameSet::readFormats copying from " << c1.index() << " to " << c1.parag()->length()-1 << " into lastIndex=" << lastIndex << endl;
+        undoRedoInfo.text += c1.parag()->string()->toString().mid( c1.index() ) + '\n';
         for ( i = c1.index(); i < c1.parag()->length(); ++i, ++lastIndex )
-            copyCharFormatting( c1.parag()->at( i ), lastIndex, moveCustomItems,c1.parag(),i );
+            copyCharFormatting( c1.parag(), i, lastIndex, moveCustomItems );
         ++lastIndex; // skip the '\n'.
         QTextParag *p = c1.parag()->next();
         while ( p && p != c2.parag() ) {
+	    undoRedoInfo.text += p->string()->toString().left( p->length() ) + '\n';
             //kdDebug() << "KWTextFrameSet::readFormats (mid) copying from 0 to "  << p->length()-1 << " into i+" << lastIndex << endl;
             for ( i = 0; i < p->length(); ++i )
-                copyCharFormatting( p->at( i ), i + lastIndex, moveCustomItems ,p,i);
+                copyCharFormatting( p, i, i + lastIndex, moveCustomItems );
             lastIndex += p->length() + 1; // skip the '\n'
             //kdDebug() << "KWTextFrameSet::readFormats lastIndex now " << lastIndex << endl;
             p = p->next();
         }
         //kdDebug() << "KWTextFrameSet::readFormats copying [last] from 0 to " << c2.index() << " into i+" << lastIndex << endl;
+        undoRedoInfo.text += c2.parag()->string()->toString().left( c2.index() );
         for ( i = 0; i < c2.index(); ++i )
-            copyCharFormatting( c2.parag()->at( i ), i + lastIndex, moveCustomItems,c2.parag(),i );
+            copyCharFormatting( c2.parag(), i, i + lastIndex, moveCustomItems );
     }
 
     if ( copyParagLayouts ) {
@@ -2234,14 +2239,12 @@ void KWTextFrameSet::applyStyle( QTextCursor * cursor, const KWStyle * newStyle,
         if ( createUndoRedo )
         {
             QValueList<QTextFormat *> lstFormats;
-            QString str;
+            //QString str;
             for ( QTextParag * parag = firstParag ; parag && parag != lastParag->next() ; parag = parag->next() )
             {
-                str += parag->string()->toString() + '\n';
+                //str += parag->string()->toString() + '\n';
                 lstFormats.append( parag->paragFormat() );
             }
-            kdDebug() << "KWTextFrameSet::applyStyle str=" << str << endl;
-
             QTextCursor c1( textdoc );
             c1.setParag( firstParag );
             c1.setIndex( 0 );
@@ -2250,8 +2253,7 @@ void KWTextFrameSet::applyStyle( QTextCursor * cursor, const KWStyle * newStyle,
             c2.setIndex( lastParag->string()->length()-1 );
             undoRedoInfo.clear();
             undoRedoInfo.type = UndoRedoInfo::Invalid; // same trick
-            undoRedoInfo.text = str;
-            readFormats( c1, c2, 0 ); // gather char-format info but not paraglayouts nor customitems
+            readFormats( c1, c2 ); // gather char-format info but not paraglayouts nor customitems
 
             QTextCommand * cmd = new QTextFormatCommand( textdoc, firstParag->paragId(), 0,
                                                          lastParag->paragId(), c2.index(),
@@ -2593,11 +2595,10 @@ void KWTextFrameSet::removeSelectedText( QTextCursor * cursor, int selectionId, 
         undoRedoInfo.text = QString::null;
         undoRedoInfo.name = cmdName.isNull() ? i18n("Remove Selected Text") : cmdName;
     }
-    int oldLen = undoRedoInfo.text.length();
-    undoRedoInfo.text = textdoc->selectedText( selectionId );
     QTextCursor c1 = textdoc->selectionStartCursor( selectionId );
     QTextCursor c2 = textdoc->selectionEndCursor( selectionId );
-    readFormats( c1, c2, oldLen, true, true );
+    readFormats( c1, c2, true, true );
+    kdDebug() << "KWTextFrameSet::removeSelectedText text=" << undoRedoInfo.text.toString() << endl;
 
     textdoc->removeSelectedText( selectionId, cursor );
 
@@ -2614,13 +2615,10 @@ KCommand * KWTextFrameSet::removeSelectedTextCommand( QTextCursor * cursor, int 
 {
     undoRedoInfo.clear();
     textdoc->selectionStart( selectionId, undoRedoInfo.id, undoRedoInfo.index );
-    undoRedoInfo.text = QString::null;
 
-    int oldLen = undoRedoInfo.text.length();
-    undoRedoInfo.text = textdoc->selectedText( selectionId );
     QTextCursor c1 = textdoc->selectionStartCursor( selectionId );
     QTextCursor c2 = textdoc->selectionEndCursor( selectionId );
-    readFormats( c1, c2, oldLen, true, true );
+    readFormats( c1, c2, true, true );
 
     textdoc->removeSelectedText( selectionId, cursor );
 
@@ -2726,7 +2724,7 @@ void KWTextFrameSet::insert( QTextCursor * cursor, KWTextFormat * currentFormat,
     undoRedoInfo.text += txt;
     for ( int i = 0; i < (int)txt.length(); ++i ) {
         if ( txt[ oldLen + i ] != '\n' )
-            copyCharFormatting( c2.parag()->at( c2.index() ), oldLen + i, false ,c2.parag(),c2.index());
+            copyCharFormatting( c2.parag(), c2.index(), oldLen + i, false );
         c2.gotoRight();
     }
 
@@ -2936,7 +2934,6 @@ void KWTextFrameSet::setFormat( QTextCursor * cursor, KWTextFormat * & currentFo
 
     if ( textdoc->hasSelection( QTextDocument::Standard ) ) {
         emit hideCursor();
-        QString str = textdoc->selectedText( QTextDocument::Standard );
         QTextCursor c1 = textdoc->selectionStartCursor( QTextDocument::Standard );
         QTextCursor c2 = textdoc->selectionEndCursor( QTextDocument::Standard );
         undoRedoInfo.clear();
@@ -2946,8 +2943,7 @@ void KWTextFrameSet::setFormat( QTextCursor * cursor, KWTextFormat * & currentFo
         undoRedoInfo.index = c1.index();
         undoRedoInfo.eid = c2.parag()->paragId();
         undoRedoInfo.eindex = c2.index();
-        undoRedoInfo.text = str;
-        readFormats( c1, c2, 0 ); // read previous formatting info
+        readFormats( c1, c2 ); // read previous formatting info
         undoRedoInfo.format = format;
         undoRedoInfo.flags = flags;
         //kdDebug(32001) << "KWTextFrameSet::setFormat undoredo info done" << endl;

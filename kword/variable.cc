@@ -78,10 +78,7 @@ void KWVariable::resize()
 {
     if ( m_deleted )
         return;
-    //QTextFormat fmt = *format(); // make an out-of-collection copy
-    //QTextString txt;
-    //txt.insert( 0, text(), &fmt );
-    QTextFormat  * fmt = format();
+    QTextFormat *fmt = format();
     QString txt = text();
     width = 0;
     for ( int i = 0 ; i < txt.length() ; ++i )

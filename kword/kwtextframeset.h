@@ -252,8 +252,8 @@ private slots:
 
 protected:
     void storeParagUndoRedoInfo( QTextCursor * cursor, int selectionId = QTextDocument::Standard );
-    void copyCharFormatting( QTextStringChar * ch, int index /*in text*/, bool moveCustomItems, QTextParag *parag,int position );
-    void readFormats( QTextCursor &c1, QTextCursor &c2, int oldLen, bool copyParagLayouts = false, bool moveCustomItems = false );
+    void copyCharFormatting( QTextParag *parag, int position, int index /*in text*/, bool moveCustomItems );
+    void readFormats( QTextCursor &c1, QTextCursor &c2, bool copyParagLayouts = false, bool moveCustomItems = false );
     void setLastFormattedParag( QTextParag *parag );
     void getMargins( int yp, int h, int* marginLeft, int* marginRight, int* breakEnd );
     bool checkVerticalBreak( int & yp, int h, QTextParag * parag, bool linesTogether, int breakBegin, int breakEnd );
