@@ -1,6 +1,4 @@
 /*
- * $Id$
- *
  * Copyright 2000 by Matthias Kalle Dalheimer, released under Artistic License.
  */
 
