@@ -166,7 +166,7 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
     // ------ Popup
     new KAction(i18n("Node Properties"), "node_properties", 0, this,
 		SLOT(slotOpenNode()), actionCollection(), "node_properties");
-    new KAction(i18n("Delete Task"), "delete_task", 0, this,
+    new KAction(i18n("Delete Task"), "editdelete", 0, this,
 		SLOT(slotDeleteTask()), actionCollection(), "delete_task");
 
     new KAction(i18n("Edit resource"), "edit_resource", 0, this,
