@@ -7,6 +7,7 @@
 KWordDocument::KWordDocument( void )
 {
     m_normalTextFramesetList.setAutoDelete( true );
+    m_tableFramesetList.setAutoDelete( true );
     m_otherFramesetList.setAutoDelete( true );
     m_headerFooterFramesetList.setAutoDelete( true );
     m_footEndNoteFramesetList.setAutoDelete( true );
@@ -39,6 +40,15 @@ void KWordDocument::xmldump( QIODevice* io )
         item->xmldump( iostream );
     }
     iostream << " </normalframesets>\n";
+    
+    iostream << " <tableframesets>\n";
+    for ( KWordTextFrameset* item12 = m_tableFramesetList.first();
+        item12;
+        item12 = m_tableFramesetList.next() )
+    {
+        item12->xmldump( iostream );
+    }
+    iostream << " </tableframesets>\n";
     
     iostream << " <headerfooterframesets>\n";
     for ( KWordTextFrameset* item2 = m_headerFooterFramesetList.first();

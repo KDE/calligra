@@ -155,10 +155,10 @@ bool KWordParser::startElementFrameset( const QString& name, const QXmlAttribute
         }
         else if ( !frameInfo )
         {
-            qDebug("Tables are not supported yet!");
-            // ### PROVISORY
-            m_kwordDocument->m_otherFramesetList.append( frameset );
-            stackItem->m_currentFrameset = m_kwordDocument->m_otherFramesetList.current();
+            // We just store the frameset in the frameset table list
+            // Grouping the framesets by table will be done after the parsing, not now.
+            m_kwordDocument->m_tableFramesetList.append( frameset );
+            stackItem->m_currentFrameset = m_kwordDocument->m_tableFramesetList.current();
         }
         else if ( frameInfo >= 1 && frameInfo <= 6 )
         {
