@@ -40,7 +40,9 @@ protected slots:
     void slotLoadFile();
 protected:
     virtual void loadFile()=0;
-    virtual void generateStyleList()=0;
+
+    void generateStyleList();
+    void updateFollowingStyle(const QString & _name);
 
     QString generateStyleName( const QString & templateName );
 

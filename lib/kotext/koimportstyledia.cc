@@ -45,17 +45,47 @@ KoImportStyleDia::KoImportStyleDia( const QStringList &_list, QWidget *parent, c
 
 KoImportStyleDia::~KoImportStyleDia()
 {
+    m_styleList.setAutoDelete(true);
+    m_styleList.clear();
+
+}
+
+void KoImportStyleDia::generateStyleList()
+{
+    for (uint i = 0; i< m_listStyleName->count();i++)
+    {
+        if ( !m_listStyleName->isSelected( i ))
+        {
+            //remove this style from list
+            QPtrListIterator<KoStyle> styleIt( m_styleList );
+            for ( ; styleIt.current(); ++styleIt )
+            {
+                if ( styleIt.current()->name() == m_listStyleName->text(i ) )
+                {
+                    updateFollowingStyle( styleIt.current()->translatedName() );
+                    m_styleList.remove(styleIt.current());
+                }
+            }
+        }
+    }
+}
+
+void KoImportStyleDia::updateFollowingStyle(const QString & _name)
+{
+    QPtrListIterator<KoStyle> styleIt( m_styleList );
+    for ( ; styleIt.current(); ++styleIt )
+    {
+        if ( styleIt.current()->followingStyle()->translatedName() == _name )
+        {
+            styleIt.current()->setFollowingStyle(styleIt.current());
+        }
+    }
 }
 
 void KoImportStyleDia::slotLoadFile()
 {
     loadFile();
-}
-
-void KoImportStyleDia::loadFile()
-{
-    m_styleList.setAutoDelete(true);
-    m_styleList.clear();
+    enableButtonOK( (m_listStyleName->count()!=0) );
 }
 
 void KoImportStyleDia::initList()
