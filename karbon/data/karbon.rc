@@ -81,4 +81,7 @@
 		<Action name="setFontBold"/>
 		<Action name="setFontItalic"/>
 	</ToolBar>
+	<ToolBar name="PenProp" fullWidth="false"><text>stroke properties</text>
+	<Action name="setLineWidth"/>
+	</ToolBar>
 </kpartgui>

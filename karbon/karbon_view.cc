@@ -59,6 +59,8 @@
 //#include "vtext.h"
 #include "vtoolcontainer.h"
 
+#include <tkfloatspinboxaction.h>
+
 #include <kdebug.h>
 
 // TODO: only for testing:
@@ -605,6 +607,22 @@ KarbonView::slotFillColorChanged( const QColor &c )
 }
 
 void
+KarbonView::setLineWidth()
+{
+	kdDebug() << "KarbonView::setLineWidth" << endl;
+	VSelection *selection = &( m_part->document().selection() );
+	VStroke stroke;
+	//if( selection->stroke() )
+	//{
+	kdDebug() << "KarbonView::setLineWidth2" << endl;
+		stroke.setLineWidth( m_setLineWidth->value() );
+		selection->setStroke( stroke );
+
+		m_part->repaintAllViews();
+	//}
+}
+
+void
 KarbonView::viewColorManager()
 {
 	VColorDlg dialog( this );
@@ -803,6 +821,16 @@ KarbonView::initActions()
 		i18n( "&Refresh" ), 0, QKeySequence("Ctrl+W"), this,
 		SLOT( refreshView() ), actionCollection(), "view_refresh" );
 	// view <-----
+
+	// line width
+
+	m_setLineWidth = new TKUFloatSpinBoxAction( i18n("Set Line Width"), "linewidth", 0, actionCollection(), "setLineWidth" );
+	m_setLineWidth->setIconMode(TK::IconOnly);
+	m_setLineWidth->setDecimals(1);
+	m_setLineWidth->setMinValue(0.0);
+	m_setLineWidth->setLineStep(0.5);
+	connect( m_setLineWidth, SIGNAL(activated()), this, SLOT(setLineWidth()) );
+	//connect( m_pDoc, SIGNAL(unitsChanged(int)), m_setLineWidth, SLOT(setUnit(int)) );
 
 	// toolbox ---->
 	m_toolbox = VToolContainer::instance( m_part, this );

@@ -11,14 +11,20 @@ noinst_HEADERS = \
 	vcolorslider.h \
 	vstrokefillpreview.h \
 	vtoolcontainer.h \
-	vtranslate.h
+	vtranslate.h \
+	tkfloatspinbox.h \
+	tkunits.h \
+	tkfloatspinboxaction.h
 
 libkarbonwidgets_la_SOURCES = \
 	dummy.cc \
 	vcolorslider.cc \
 	vstrokefillpreview.cc \
 	vtoolcontainer.cc \
-	vtranslate.cc
+	vtranslate.cc \
+	tkfloatspinbox.cpp \
+	tkunits.cpp \
+	tkfloatspinboxaction.cpp
 
 libkarbonwidgets_la_METASOURCES = \
 	AUTO

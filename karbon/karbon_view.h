@@ -27,6 +27,7 @@ class VPolygonizeDlg;
 class VTool;
 class VToolContainer;
 class VWhirlPinchDlg;
+class TKUFloatSpinBoxAction;
 
 
 class KarbonView : public KoView
@@ -83,6 +84,8 @@ public slots:
 	void dummyForTesting();
 
 	void configure();
+
+	void setLineWidth();
 
 protected slots:
 	// object related operations:
@@ -164,6 +167,9 @@ private:
 	// view:
 	KSelectAction* m_zoomAction;
 	KSelectAction* m_viewAction;
+
+	// line width
+	TKUFloatSpinBoxAction *m_setLineWidth;
 
 	// settings:
 	KAction* m_configureAction;
