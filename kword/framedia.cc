@@ -685,7 +685,7 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
         KWFrame * theFrame = doc->getFirstSelectedFrame();
 
         oldX = KWUnit::userValue( theFrame->x(), doc->getUnit() );
-        oldY = KWUnit::userValue( theFrame->y(), doc->getUnit() );
+        oldY = KWUnit::userValue( (theFrame->y() - (theFrame->pageNum() * doc->ptPaperHeight())), doc->getUnit() );
         oldW = KWUnit::userValue( theFrame->width(), doc->getUnit() );
         oldH = KWUnit::userValue( theFrame->height(), doc->getUnit() );
 
@@ -1069,17 +1069,20 @@ bool KWFrameDia::applyChanges()
                 //          << " " << sw->text().toDouble() << "x" << sh->text().toDouble() << endl;
 
                 double px = KWUnit::fromUserValue( QMAX( sx->text().toDouble(), 0 ), doc->getUnit() );
-                double py = KWUnit::fromUserValue( QMAX( sy->text().toDouble(), 0 ), doc->getUnit() );
+                double py = KWUnit::fromUserValue( (QMAX( sy->text().toDouble(),0)) + (frame->pageNum() * doc->ptPaperHeight()), doc->getUnit());
                 double pw = KWUnit::fromUserValue( QMAX( sw->text().toDouble(), 0 ), doc->getUnit() );
                 double ph = KWUnit::fromUserValue( QMAX( sh->text().toDouble(), 0 ), doc->getUnit() );
 
                 FrameIndex index( frame );
                 FrameResizeStruct tmpResize;
                 tmpResize.sizeOfBegin = frame->normalize();
-                frame->setRect( px, py, pw, ph );
+                KoRect rect( px, py, pw, ph );
+                 if( !doc->isOutOfPage( rect , 0 ) )
+                        frame->setRect( px, py, pw, ph );
+                        // else TODO message box after 1.1
+
                 // TODO apply page limits?
                 tmpResize.sizeOfEnd = frame->normalize();
-
                 KWFrameResizeCommand *cmd = new KWFrameResizeCommand( i18n("Resize Frame"), index, tmpResize ) ;
                 doc->addCommand(cmd);
                 doc->frameChanged( frame );
