@@ -518,6 +518,8 @@ void KWFrameSet::updateAnchors()
             frameIt.current()->setAnchor( anchor );
         }
     }
+    m_anchorParag->setChanged( true );
+    emit m_anchorTextFs->repaintChanged( this );
 }
 
 void KWFrameSet::deleteAnchors()
@@ -1200,6 +1202,7 @@ void KWFormulaFrameSet::drawContents( QPainter* painter, const QRect& crect,
             //kdDebug(32001) << "KWFormulaFrameSet::drawContents1" << endl;
             QRegion reg = frameClipRegion( painter, frames.first(), crect );
             if ( !reg.isEmpty() ) {
+                kdDebug() << "KWFormulaFrameSet::drawContents" << endl;
                 painter->save();
                 painter->setClipRegion( reg );
                 cg.setBrush(QColorGroup::Base,frames.first()->getBackgroundColor());

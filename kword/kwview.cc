@@ -1818,10 +1818,10 @@ void KWView::toolsFormula()
         KWFormulaFrameSet *frameset = new KWFormulaFrameSet( doc, doc->getFormulaDocument()->createFormula() );
         KWFrame *frame = new KWFrame(frameset, 0, 0, 10, 10 );
         frameset->addFrame( frame, false );
-        doc->addFrameSet( frameset );
         KWCreateFrameCommand *cmd = new KWCreateFrameCommand( i18n("Insert Formula"), doc, frame);
         doc->addCommand(cmd);
         edit->insertFloatingFrameSet( frameset );
+        doc->addFrameSet( frameset ); // last since it triggers a redraw
     }
 }
 

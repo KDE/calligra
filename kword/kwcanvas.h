@@ -191,12 +191,6 @@ private:
      */
     void drawFrameSet( KWFrameSet * frameset, QPainter * painter,
                        const QRect & crect, bool onlyChanged, bool resetChanged );
-    /**
-     * Draw the borders of the frames.
-     * @param painter
-     * @param crect the area to be repainted, in contents coordinates
-     */
-    void drawBorders( QPainter *painter, const QRect &crect );
 
     void drawMovingRect( QPainter & p );
 

@@ -192,6 +192,11 @@ void KWDocument::setZoomAndResolution( int zoom, int dpiX, int dpiY, bool update
                    << " m_resolutionY=" << m_resolutionY
                    << " m_zoomedResolutionY=" << m_zoomedResolutionY << endl;
 
+    newZoomAndResolution( updateViews );
+}
+
+void KWDocument::newZoomAndResolution( bool updateViews )
+{
     getFormulaDocument()->setResolution( m_zoomedResolutionX, m_zoomedResolutionY );
 
     // Update all fonts
@@ -1632,7 +1637,6 @@ bool KWDocument::completeSaving( KoStore *_store )
     return TRUE;
 }
 
-/*================================================================*/
 bool KWDocument::saveChildren( KoStore *_store, const QString &_path )
 {
     int i = 0;
@@ -1646,14 +1650,12 @@ bool KWDocument::saveChildren( KoStore *_store, const QString &_path )
     return true;
 }
 
-/*================================================================*/
 void KWDocument::addView( KoView *_view )
 {
     m_lstViews.append( (KWView*)_view );
     KoDocument::addView( _view );
 }
 
-/*================================================================*/
 void KWDocument::removeView( KoView *_view )
 {
     m_lstViews.setAutoDelete( FALSE );
@@ -1670,28 +1672,121 @@ void KWDocument::addShell( KoMainWindow *shell )
     KoDocument::addShell( shell );
 }
 
-/*================================================================*/
 KoView* KWDocument::createViewInstance( QWidget* parent, const char* name )
 {
     return new KWView( parent, name, this );
 }
 
-/*================================================================*/
-void KWDocument::paintContent( QPainter& /*painter*/, const QRect& /*rect*/, bool /*transparent*/, double /*zoomX*/, double /*zoomY*/ )
+void KWDocument::paintContent( QPainter& painter, const QRect& _rect, bool transparent, double zoomX, double zoomY )
 {
-    // TODO !
+    //kdDebug() << "KWDocument::paintContent zoomX=" << zoomX << " zoomY=" << zoomY << endl;
+    m_zoom = 100;
+    if ( m_zoomedResolutionX != zoomX || m_zoomedResolutionY != zoomY )
+    {
+        m_zoomedResolutionX = zoomX;
+        m_zoomedResolutionY = zoomY;
+        newZoomAndResolution( false );
+    }
+
+    QRect rect( _rect );
+    // Translate the painter to avoid the margin
+    /*painter.translate( -leftBorder(), -topBorder() );
+    rect.moveBy( leftBorder(), topBorder() );*/
+
+    drawBorders( &painter, rect, !transparent );
+
+    QColorGroup gb = QApplication::palette().active();
+
+    QListIterator<KWFrameSet> fit = framesetsIterator();
+    for ( ; fit.current() ; ++fit )
+    {
+        KWFrameSet * frameset = fit.current();
+        if ( frameset->isVisible() && !frameset->isFloating() )
+            frameset->drawContents( &painter, rect, gb, false /*onlyChanged*/, false /*resetChanged*/ );
+    }
 }
 
-/*================================================================*/
+void KWDocument::drawBorders( QPainter *painter, const QRect & crect, bool clearEmptySpace )
+{
+    bool embedded = isEmbedded();
+    QRegion region( crect );
+
+    QListIterator<KWFrameSet> fit = framesetsIterator();
+    for ( ; fit.current() ; ++fit )
+    {
+        KWFrameSet *frameset = fit.current();
+        if ( frameset->isVisible() )
+        {
+            frameset->drawBorders( painter, crect, region );
+        }
+    }
+
+    // Draw page borders (red), except when printing.
+    if ( painter->device()->devType() != QInternal::Printer )
+    {
+        painter->save();
+        painter->setPen( red );
+        painter->setBrush( Qt::NoBrush );
+
+        for ( int k = 0; k < getPages(); k++ )
+        {
+            int pagetop = pageTop( k );
+            // using paperHeight() leads to rounding problems ( one pixel between two pages, belonging to none of them )
+            QRect pageRect( 0, pagetop, paperWidth(), pageTop( k+1 ) - pagetop );
+            if ( crect.intersects( pageRect ) )
+            {
+                //kdDebug() << "KWDocument::drawBorders drawing page rect " << DEBUGRECT( pageRect ) << endl;
+                if ( !embedded )
+                    painter->drawRect( pageRect );
+
+                if ( clearEmptySpace )
+                {
+                    // Clear empty space. This is also disabled when printing because
+                    // it is not needed (the blank space, well, remains blank )
+                    painter->save();
+
+                    if ( !embedded )
+                    {
+                        // Exclude red border line, to get the page contents rect
+                        pageRect.rLeft() += 1;
+                        pageRect.rTop() += 1;
+                        pageRect.rRight() -= 1;
+                        pageRect.rBottom() -= 1;
+                        //kdDebug() << "KWDocument::drawBorders page rect w/o borders : " << DEBUGRECT( pageRect ) << endl;
+                    }
+
+                    // The empty space to clear up inside this page
+                    QRegion emptySpaceRegion = region.intersect( pageRect );
+
+                    // Translate emptySpaceRegion in device coordinates
+                    // ( ARGL why on earth isn't QPainter::setClipRegion in transformed coordinate system ?? )
+                    QRegion devReg;
+                    QArray<QRect>rs = emptySpaceRegion.rects();
+                    rs.detach();
+                    for ( uint i = 0 ; i < rs.size() ; ++i )
+                    {
+                        //kdDebug() << "KWDocument::drawBorders emptySpaceRegion includes: " << DEBUGRECT( rs[i] ) << endl;
+                        rs[i] = painter->xForm( rs[i] );
+                    }
+                    devReg.setRects( rs.data(), rs.size() );
+                    painter->setClipRegion( devReg );
+
+                    //kdDebug() << "KWDocument::drawBorders clearEmptySpace in " << DEBUGRECT( emptySpaceRegion.boundingRect() ) << endl;
+                    painter->fillRect( emptySpaceRegion.boundingRect(), QApplication::palette().active().brush( QColorGroup::Base ) );
+                    painter->restore();
+                }
+            }
+        }
+        painter->restore();
+    }
+}
+
 void KWDocument::insertObject( const QRect& rect, KoDocumentEntry& _e )
 {
 
     KoDocument* doc = _e.createDoc( this );
-    if ( !doc || !doc->initDoc() ) {
-        KMessageBox::error( 0, i18n( "Due to an internal error, KWord could not\n"
-                                     "perform the requested action."));
+    if ( !doc || !doc->initDoc() )
         return;
-    }
 
     KWChild* ch = new KWChild( this, rect, doc );
 
@@ -1709,11 +1804,6 @@ void KWDocument::insertObject( const QRect& rect, KoDocumentEntry& _e )
     emit sig_insertObject( ch, frameset );
 
     frameChanged( frame ); // repaint etc.
-}
-
-/*================================================================*/
-void KWDocument::draw( QPaintDevice *, long int, long int, float )
-{
 }
 
 QStringList KWDocument::fontList()

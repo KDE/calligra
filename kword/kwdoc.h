@@ -118,7 +118,17 @@ public:
     // Called by KWFrame*'s loading code to emit correct progress info
     void progressItemLoaded();
 
+    /**
+     * Draw as embedded.
+     */
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 );
+    /**
+     * Draw the borders of the frames.
+     * @param painter
+     * @param crect the area to be repainted, in contents coordinates
+     * @param clearEmptySpace if true the space not occupied by any frame will be cleared
+     */
+    void drawBorders( QPainter *painter, const QRect & crect, bool clearEmptySpace = true );
 
     virtual void addView( KoView *_view );
     virtual void removeView( KoView *_view );
@@ -461,11 +471,10 @@ protected:
     virtual bool completeLoading( KoStore* _store );
     virtual bool completeSaving( KoStore *_store );
 
-    virtual void draw( QPaintDevice*, long int _width, long int _height,
-                       float _scale ); // ?
-
     void loadFrameSets( QDomElement framesets );
     void loadStyleTemplates( QDomElement styles );
+
+    void newZoomAndResolution( bool updateViews );
 
 private:
     QList<KWView> m_lstViews;

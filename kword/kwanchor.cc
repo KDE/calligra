@@ -43,12 +43,13 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     QPoint cPoint;
     if ( fs->internalToContents( QPoint( x, y+paragy ), cPoint ) )
     {
+        kdDebug() << "KWAnchor::draw moving frame to [zoomed pos] " << cPoint.x() << "," << cPoint.y() << endl;
         // Move the frame to position x,y.
         m_frame->moveTopLeft( QPoint( cPoint.x() / doc->zoomedResolutionX(), cPoint.y() / doc->zoomedResolutionY() ) );
     }
     QColorGroup cg2( cg );
     // Determine crect in contents coords
-    QRect crect( cx, cy+paragy, cw, ch );
+    QRect crect( cx > 0 ? cx : 0, cy+paragy, cw, ch );
     if ( fs->internalToContents( crect.topLeft(), cPoint ) )
         crect.moveTopLeft( cPoint );
     // Draw the frame

@@ -171,16 +171,16 @@ void KWCanvas::drawContents( QPainter *painter, int cx, int cy, int cw, int ch )
 
 void KWCanvas::drawDocument( QPainter *painter, const QRect &crect )
 {
-    //kdDebug(32002) << "KWCanvas::drawDocument << " crect: " << DEBUGRECT( crect ) << endl;
+    //kdDebug(32002) << "KWCanvas::drawDocument crect: " << DEBUGRECT( crect ) << endl;
 
     // Draw all framesets, and borders
-    drawBorders( painter, crect );
+    doc->drawBorders( painter, crect );
 
     QListIterator<KWFrameSet> fit = doc->framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet * frameset = fit.current();
-        if ( frameset->isVisible() )
+        if ( frameset->isVisible() && !frameset->isFloating() )
             drawFrameSet( frameset, painter, crect, false, false );
     }
 }
@@ -198,76 +198,6 @@ void KWCanvas::drawFrameSet( KWFrameSet * frameset, QPainter * painter,
         m_currentFrameSetEdit->drawContents( painter, crect, gb, onlyChanged, resetChanged );
     else
         frameset->drawContents( painter, crect, gb, onlyChanged, resetChanged );
-}
-
-void KWCanvas::drawBorders( QPainter *painter, const QRect & crect )
-{
-    bool clearEmptySpace = true;
-    QRegion region( crect );
-
-    QListIterator<KWFrameSet> fit = doc->framesetsIterator();
-    for ( ; fit.current() ; ++fit )
-    {
-        KWFrameSet *frameset = fit.current();
-        if ( frameset->isVisible() )
-        {
-            frameset->drawBorders( painter, crect, region );
-        }
-    }
-
-    // Draw page borders (red), except when printing.
-    if ( painter->device()->devType() != QInternal::Printer )
-    {
-        painter->save();
-        painter->setPen( red );
-        painter->setBrush( Qt::NoBrush );
-
-        for ( int k = 0; k < doc->getPages(); k++ )
-        {
-            int pageTop = doc->pageTop( k );
-            // using doc->paperHeight() leads to rounding problems ( one pixel between two pages, belonging to none of them )
-            QRect pageRect( 0, pageTop, doc->paperWidth(), doc->pageTop( k+1 ) - pageTop );
-            if ( crect.intersects( pageRect ) )
-            {
-                //kdDebug() << "KWCanvas::drawBorders drawing page rect " << DEBUGRECT( pageRect ) << endl;
-                painter->drawRect( pageRect );
-                if ( clearEmptySpace )
-                {
-                    // Clear empty space. This is also disabled when printing because
-                    // it is not needed (the blank space, well, remains blank )
-                    painter->save();
-
-                    // Exclude red border line, to get the page contents rect
-                    pageRect.rLeft() += 1;
-                    pageRect.rTop() += 1;
-                    pageRect.rRight() -= 1;
-                    pageRect.rBottom() -= 1;
-                    //kdDebug() << "KWCanvas::drawBorders page rect w/o borders : " << DEBUGRECT( pageRect ) << endl;
-
-                    // The empty space to clear up inside this page
-                    QRegion emptySpaceRegion = region.intersect( pageRect );
-
-                    // Translate emptySpaceRegion in device coordinates
-                    // ( ARGL why on earth isn't QPainter::setClipRegion in transformed coordinate system ?? )
-                    QRegion devReg;
-                    QArray<QRect>rs = emptySpaceRegion.rects();
-                    rs.detach();
-                    for ( uint i = 0 ; i < rs.size() ; ++i )
-                    {
-                        //kdDebug() << "KWCanvas::drawBorders emptySpaceRegion includes: " << DEBUGRECT( rs[i] ) << endl;
-                        rs[i] = painter->xForm( rs[i] );
-                    }
-                    devReg.setRects( rs.data(), rs.size() );
-                    painter->setClipRegion( devReg );
-
-                    //kdDebug() << "KWCanvas::drawBorders clearEmptySpace in " << DEBUGRECT( emptySpaceRegion.boundingRect() ) << endl;
-                    painter->fillRect( emptySpaceRegion.boundingRect(), colorGroup().brush( QColorGroup::Base ) );
-                    painter->restore();
-                }
-            }
-        }
-        painter->restore();
-    }
 }
 
 void KWCanvas::keyPressEvent( QKeyEvent *e )
