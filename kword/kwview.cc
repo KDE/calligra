@@ -1834,7 +1834,10 @@ void KWView::updateStyleList()
     {
         KAction* act = actionCollection()->action( QString("style_%1").arg(i).latin1() );
         if ( act )
+        {
             actionFormatStyleMenu->remove( act );
+            delete act;
+        }
         else
             break; // no gaps. As soon as style_N doesn't exist, we're done
     }
@@ -1881,7 +1884,10 @@ void KWView::updateFrameStyleList()
     {
         KAction* act = actionCollection()->action( QString("framestyle_%1").arg(i).latin1() );
         if ( act )
+        {
             actionFrameStyleMenu->remove( act );
+            delete act;
+        }
         else
             break; // no gaps. As soon as style_N doesn't exist, we're done
     }
@@ -1928,7 +1934,10 @@ void KWView::updateTableStyleList()
     {
         KAction* act = actionCollection()->action( QString("tablestyle_%1").arg(i).latin1() );
         if ( act )
+        {
             actionTableStyleMenu->remove( act );
+            delete act;
+        }
         else
             break; // no gaps. As soon as style_N doesn't exist, we're done
     }
