@@ -187,6 +187,7 @@ void KisTabBar::slotRemove( )
 	      QString img = *it;
 	      qDebug("Removing: %s", img.latin1());
 	      m_pDoc->slotRemoveImage(img);
+	      return;
 	    }
 	  i++;
 	}
