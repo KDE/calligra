@@ -173,7 +173,8 @@ bool KoShellWindow::openDocumentInternal( const KURL &url, KoDocument* )
   connect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
   connect(newdoc, SIGNAL(completed()), this, SLOT(slotKSLoadCompleted()));
   connect(newdoc, SIGNAL(canceled( const QString & )), this, SLOT(slotKSLoadCanceled( const QString & )));
-  if ( !newdoc || !newdoc->openURL( tmpUrl ) )
+  bool openRet = (!isImporting ()) ? newdoc->openURL(tmpUrl) : newdoc->import(tmpUrl);
+  if ( !newdoc || !openRet )
   {
       delete newdoc;
       if ( tmpFile ) {
@@ -382,7 +383,10 @@ void KoShellWindow::slotFileNew()
 void KoShellWindow::slotFileOpen()
 {
     KFileDialog *dialog=new KFileDialog(QString::null, QString::null, 0L, "file dialog", true);
-    dialog->setCaption( i18n("Open Document") );
+    if (!isImporting())
+        dialog->setCaption( i18n("Open Document") );
+    else
+        dialog->setCaption( i18n("Import Document") );
     dialog->setMimeFilter( KoFilterManager::mimeFilter() );
 
     KURL url;
