@@ -17,7 +17,7 @@
 #include "vfillcmd.h"
 #include "vstrokecmd.h"
 
-
+#include <kdebug.h>
 VGradientTool::VGradientTool( KarbonView* view )
 	: VTool( view )
 {
@@ -52,6 +52,12 @@ VGradientTool::draw()
 	painter->moveTo( first() );
 	painter->lineTo( last() );
 	painter->strokePath();
+}
+
+void
+VGradientTool::mouseDrag( const KoPoint& current )
+{
+	draw();
 }
 
 void

@@ -27,6 +27,7 @@ protected:
 
 	virtual void mouseButtonRelease( const KoPoint& current );
 	virtual void mouseDragRelease( const KoPoint& current );
+	virtual void mouseDrag( const KoPoint& current );
 
 private:
 	VGradientDlg* m_dialog;
