@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="106">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="107">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -28,8 +28,6 @@
   <Action name="edit_delpage"/>
   <Separator/>
   <Action name="duplicate_obj"/>
-  <Separator/>
-  <Action name="enable_autocorrection"/>
  </Menu>
  <Menu name="View"><text>&amp;View</text>
   <Action name="view_newview"/>
@@ -157,6 +155,7 @@
 	  <Action name="extra_spellcheck"/>
   </Menu>  
   <Separator/>
+  <Action name="enable_autocorrection"/>
   <Action name="apply_autoformat"/>
  </Menu>
  <Menu name="Slide Show"><text>Sli&amp;de Show</text>
