@@ -6348,7 +6348,7 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
             {
                 kdDebug ()<<" table-column found \n";
                 loadColumnFormat( rowElement, oasisStyles, indexCol );
-                kdDebug()<<"loadColumnFormatloadColumnFormatloadColumnFormatloadColumnFormatloadColumnFormatloadColumnFormatloadColumnFormat :"<<indexCol<<endl;
+                kdDebug()<<"loadColumnFormat :"<<indexCol<<endl;
             }
             else if( rowElement.tagName() == "table:table-row" )
             {
@@ -6519,6 +6519,7 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, int &rowIndex,const Ko
             columnIndex++;
             if( cellElement.tagName() == "table:table-cell" )
             {
+                kdDebug()<<" create cell at row index :"<<rowIndex<<endl;
                 KSpreadCell* cell = nonDefaultCell( columnIndex, rowIndex );
                 cell->loadOasis( cellElement, oasisStyles );
 
