@@ -156,7 +156,7 @@ SvgExport::visitVComposite( VComposite& composite )
 }
 
 void
-SvgExport::visitVPath( VPath& path )
+SvgExport::visitVPath( VPath& )
 {
 }
 
