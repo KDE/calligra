@@ -638,23 +638,31 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
 	  {
 	    if (insRect.top() == insRect.bottom())
 	      {
+		bool reverse = insRect.left() > insRect.right();
 		insRect = insRect.normalize();
 		insRect.setRect(insRect.left(),insRect.top() - rastY() / 2,
 				insRect.width(),rastY());
-		insertLineH(insRect);
+		insertLineH(insRect,reverse);
 	      }
 	    else if (insRect.left() == insRect.right())
 	      {
+		bool reverse = insRect.top() > insRect.bottom();
 		insRect = insRect.normalize();
 		insRect.setRect(insRect.left() - rastX() / 2,insRect.top(),
 				rastX(),insRect.height());
-		insertLineV(insRect);
+		insertLineV(insRect,reverse);
 	      }
 	    else if (insRect.left() < insRect.right() && insRect.top() < insRect.bottom() ||
 		     insRect.left() > insRect.right() && insRect.top() > insRect.bottom())
-	      insertLineD1(insRect.normalize());
+	      {
+		bool reverse = insRect.left() > insRect.right() && insRect.top() > insRect.bottom();
+		insertLineD1(insRect.normalize(),reverse);
+	      }
 	    else
-	      insertLineD2(insRect.normalize());
+	      {
+		bool reverse = insRect.right() < insRect.left() && insRect.top() < insRect.bottom();
+		insertLineD2(insRect.normalize(),reverse);
+	      }
 	  }
       } break;
     case INS_RECT:
@@ -688,7 +696,8 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
       } break;
     case INS_AUTOFORM:
       {
-	if (insRect.width() > 0 && insRect.height() > 0) insertAutoform(insRect);
+	bool reverse = insRect.left() > insRect.right() || insRect.top() > insRect.bottom();
+	if (insRect.width() > 0 && insRect.height() > 0) insertAutoform(insRect,reverse);
 	setToolEditMode(TEM_MOUSE);
       } break;
     }
@@ -2897,30 +2906,34 @@ void Page::insertText(KRect _r)
 }
 
 /*================================================================*/
-void Page::insertLineH(KRect _r)
+void Page::insertLineH(KRect _r,bool rev)
 {
-  view->kPresenterDoc()->insertLine(_r,view->getPen(),view->getLineBegin(),view->getLineEnd(),
+  view->kPresenterDoc()->insertLine(_r,view->getPen(),
+				    !rev ? view->getLineBegin() : view->getLineEnd(),!rev ? view->getLineEnd() : view->getLineBegin(),
 				    LT_HORZ,diffx(),diffy());
 }
 
 /*================================================================*/
-void Page::insertLineV(KRect _r)
+void Page::insertLineV(KRect _r,bool rev)
 {
-  view->kPresenterDoc()->insertLine(_r,view->getPen(),view->getLineBegin(),view->getLineEnd(),
+  view->kPresenterDoc()->insertLine(_r,view->getPen(),
+				    !rev ? view->getLineBegin() : view->getLineEnd(),!rev ? view->getLineEnd() : view->getLineBegin(),
 				    LT_VERT,diffx(),diffy());
 }
 
 /*================================================================*/
-void Page::insertLineD1(KRect _r)
+void Page::insertLineD1(KRect _r,bool rev)
 {
-  view->kPresenterDoc()->insertLine(_r,view->getPen(),view->getLineBegin(),view->getLineEnd(),
+  view->kPresenterDoc()->insertLine(_r,view->getPen(),
+				    !rev ? view->getLineBegin() : view->getLineEnd(),!rev ? view->getLineEnd() : view->getLineBegin(),
 				    LT_LU_RD,diffx(),diffy());
 }
 
 /*================================================================*/
-void Page::insertLineD2(KRect _r)
+void Page::insertLineD2(KRect _r,bool rev)
 {
-  view->kPresenterDoc()->insertLine(_r,view->getPen(),view->getLineBegin(),view->getLineEnd(),
+  view->kPresenterDoc()->insertLine(_r,view->getPen(),
+				    !rev ? view->getLineBegin() : view->getLineEnd(),!rev ? view->getLineEnd() : view->getLineBegin(),
 				    LT_LD_RU,diffx(),diffy());
 }
 
@@ -2950,9 +2963,11 @@ void Page::insertPie(KRect _r)
 }
 
 /*================================================================*/
-void Page::insertAutoform(KRect _r)
+void Page::insertAutoform(KRect _r,bool rev)
 {
-  view->kPresenterDoc()->insertAutoform(_r,view->getPen(),view->getBrush(),view->getLineBegin(),view->getLineEnd(),
+  rev = false;
+  view->kPresenterDoc()->insertAutoform(_r,view->getPen(),view->getBrush(),
+					!rev ? view->getLineBegin() : view->getLineEnd(),!rev ? view->getLineEnd() : view->getLineBegin(),
 					view->getFillType(),view->getGColor1(),view->getGColor2(),view->getGType(),
 					autoform,diffx(),diffy());
 }
@@ -3226,7 +3241,7 @@ void Page::slotGotoPage()
       presStepList = view->kPresenterDoc()->reorderPage(currPresPage,diffx(),diffy(),_presFakt);
       currPresStep = (int)(presStepList.first());
       subPresStep = 0;
-      
+
       int yo = view->kPresenterDoc()->getPageSize(0,0,0,presFakt(),false).height() * (pg - 1);
       view->setDiffY(yo);
       resize(QApplication::desktop()->width(),QApplication::desktop()->height());

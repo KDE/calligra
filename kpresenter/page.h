@@ -192,10 +192,10 @@ protected:
   void drawObject(KPObject*,QPixmap*,int,int,int,int,int,int);
 
   void insertText(KRect);
-  void insertLineH(KRect);
-  void insertLineV(KRect);
-  void insertLineD1(KRect);
-  void insertLineD2(KRect);
+  void insertLineH(KRect,bool);
+  void insertLineV(KRect,bool);
+  void insertLineD1(KRect,bool);
+  void insertLineD2(KRect,bool);
   void insertRect(KRect);
   void insertEllipse(KRect);
   void insertPie(KRect);
@@ -203,7 +203,7 @@ protected:
   void insertTable(KRect);
   void insertDiagramm(KRect);
   void insertFormula(KRect);
-  void insertAutoform(KRect);
+  void insertAutoform(KRect,bool);
 
   void selectNext();
   void selectPrev();
@@ -280,7 +280,7 @@ private slots:
   void slotGotoPage();
   void slotExitPres()
     {view->screenStop();}
-  
+
 signals:
 
   // signals to notify of changes
