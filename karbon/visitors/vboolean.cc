@@ -35,9 +35,6 @@ VBoolean::doIt()
 	if( m_lists1 == 0L || m_lists2 == 0L )
 		return;
 
-kdDebug() << "******* doit()" << endl;
-
-
 	QPtrListIterator<VSegmentList> itr1( *m_lists1 );
 	QPtrListIterator<VSegmentList> itr2( *m_lists2 );
 
@@ -58,7 +55,6 @@ kdDebug() << "******* doit()" << endl;
 			// ommit "begin" segment:
 			while( itr1.current()->next() )
 			{
-kdDebug() << "1:" << itr1.current()->current() << endl;
 				params1.clear();
 
 				itr2.current()->first();
@@ -66,7 +62,6 @@ kdDebug() << "1:" << itr1.current()->current() << endl;
 				// ommit "begin" segment:
 				while( itr2.current()->next() )
 				{
-kdDebug() << "2:" << itr2.current()->current() << endl;
 					params2.clear();
 				
 					recursiveSubdivision(
@@ -81,10 +76,9 @@ kdDebug() << "2:" << itr2.current()->current() << endl;
 					// walk down all intersection params and insert knots:
 					for( pItr = params2.begin(); pItr != params2.end(); ++pItr )
 					{
-kdDebug() << "******2 " << *pItr << endl;
 						itr2.current()->insert(
 							itr2.current()->current()->splitAt(
-								( *pItr - prevParam )/( 1 - prevParam ) ) );
+								( *pItr - prevParam )/( 1.0 - prevParam ) ) );
 
 						itr2.current()->next();
 						prevParam = *pItr;
@@ -98,10 +92,9 @@ kdDebug() << "******2 " << *pItr << endl;
 				// walk down all intersection params and insert knots:
 				for( pItr = params1.begin(); pItr != params1.end(); ++pItr )
 				{
-	kdDebug() << "******1 " << *pItr << endl;
 					itr1.current()->insert(
 						itr1.current()->current()->splitAt(
-							( *pItr - prevParam )/( 1 - prevParam ) ) );
+							( *pItr - prevParam )/( 1.0 - prevParam ) ) );
 
 					itr1.current()->next();
 					prevParam = *pItr;
@@ -183,10 +176,10 @@ VBoolean::recursiveSubdivision(
 		{
 			recursiveSubdivision(
 				*list1.current(), t0_1, mid1,
-				segment1,         t0_2, t1_2, params1, params2 );
+				segment2,         t0_2, t1_2, params1, params2 );
 			recursiveSubdivision(
 				*list1.next(),    mid1, t1_1,
-				segment1,         t0_2, t1_2, params1, params2 );
+				segment2,         t0_2, t1_2, params1, params2 );
 		}
 		else
 		{

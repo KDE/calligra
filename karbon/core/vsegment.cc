@@ -121,15 +121,19 @@ VSegmentListTraverser::traverse( const VSegmentList& list )
 
 
 VSegment::VSegment()
-	: m_prev( 0L ), m_next( 0L )
 {
+	m_prev = 0L;
+	m_next = 0L;
+
 	m_type = segment_begin;
 	m_smooth = false;
 }
 
 VSegment::VSegment( const VSegment& segment )
-	: m_prev( 0L ), m_next( 0L )
 {
+	m_prev = 0L;
+	m_next = 0L;
+
 	m_point[0] = segment.m_point[0];
 	m_point[1] = segment.m_point[1];
 	m_point[2] = segment.m_point[2];
