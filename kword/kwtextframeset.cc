@@ -407,12 +407,12 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
                         {
                             if ( line == 0 ) // First line ? It's like a paragraph breaking then
                             {
-                                kdDebug(32002) << "KWTextFrameSet::adjustFlow first line -> parag break" << endl;
+                                kdDebug(32002) << "KWTextFrameSet::adjustFlow parag " << parag->paragId() << " BREAKING first line -> parag break" << endl;
                                 yp = bottom;
                                 break;
                             }
                             dy = bottom - y;
-                            kdDebug(32002) << "KWTextFrameSet::adjustFlow breaking at line " << line << " dy=" << dy << endl;
+                            kdDebug(32002) << "KWTextFrameSet::adjustFlow parag " << parag->paragId() << " BREAKING at line " << line << " dy=" << dy << endl;
                             ls->y = bottom - parag->rect().y();
                         }
                     }
@@ -441,12 +441,15 @@ void KWTextFrameSet::eraseAfter( QTextParag * parag, QPainter * p, const QColorG
     // This is called when adjustFlow above moved a paragraph downwards to move
     // it to the next frame. Then we have to erase the space under the paragraph,
     // up to the bottom of the frame. This is what should be done here.
+
     QPoint cPoint;
-    /*KWFrame * frame = */internalToContents( parag->rect().bottomLeft(), cPoint );
     QRect r = parag->rect();
-    ASSERT( cPoint.y() > r.bottom() );
-    //kdDebug(32002) << "KWTextFrameSet::eraseAfter height of fillRect: " << cPoint.y() - r.bottom() << endl;
-    p->fillRect( r.x(), r.y(), r.width(), cPoint.y() - r.bottom(), cg.brush( QColorGroup::Base ) );
+    kdDebug(32002) << "KWTextFrameSet::eraseAfter parag=" << parag->paragId() << /*" bottom(iPoint)=" << r.bottom()*/ << endl;
+    KWFrame * frame = internalToContents( r.bottomLeft(), cPoint );
+    int frameBottom = kWordDocument()->zoomItY( frame->bottom() );
+    ASSERT( cPoint.y() <= frameBottom );
+    kdDebug(32002) << " parag bottom=" << cPoint.y() << " frameBottom=" << frameBottom << " height of fillRect: " << frameBottom - cPoint.y() << endl;
+    p->fillRect( r.x(), r.bottom(), r.width(), frameBottom - cPoint.y(), cg.brush( QColorGroup::Base ) );
 }
 
 /*================================================================*/
@@ -546,7 +549,7 @@ void KWTextFrameSet::updateFrames()
         for ( ; frameIt.current(); ++frameIt )
         {
             KWFrame * frame = frameIt.current();
-            //kdDebug(32002) << "KWTextFrameSet::updateFrames adding frame " << frame << endl;
+            kdDebug(32002) << "KWTextFrameSet::updateFrames adding frame " << frame << " height:" << frame->height() << " zoomed height:" << kWordDocument()->zoomItY( frame->height() ) << endl;
             ASSERT( !frames.contains(frame) );
             frames.append( frame );
             m_availableHeight += kWordDocument()->zoomItY( frame->height() );
@@ -854,10 +857,11 @@ void KWTextFrameSet::doKeyboardAction( QTextCursor * cursor, KeyboardActionPriva
 	break;
     case ActionBackspace:
         // Remove counter
-	if ( parag->counter() && cursor->index() == 0 ) {
+	if ( parag->counter() && parag->counter()->style() != Counter::STYLE_NONE && cursor->index() == 0 ) {
 	    // parag->decDepth(); // We don't have support for nested lists at the moment
                                   // (only in titles, but you don't want Backspace to move it up)
-            parag->setNoCounter();
+            Counter c;
+            setCounter( cursor, c );
 	    emit repaintChanged( this );
 	    emit showCursor();
 	    return;
@@ -938,8 +942,8 @@ void KWTextFrameSet::formatMore()
         viewsBottom = QMAX( viewsBottom, mapIt.data() );
 
     QTextParag *lastFormatted = m_lastFormatted;
-    kdDebug(32002) << "KWTextFrameSet::formatMore lastFormatted id=" << lastFormatted->paragId()
-              << " to=" << to << " viewsBottom=" << viewsBottom << " availableHeight=" << m_availableHeight << endl;
+    //kdDebug(32002) << "KWTextFrameSet::formatMore lastFormatted id=" << lastFormatted->paragId()
+    //          << " to=" << to << " viewsBottom=" << viewsBottom << " availableHeight=" << m_availableHeight << endl;
 
     // Stop if we have formatted everything or if we need more space
     // Otherwise, stop formatting after "to" paragraphs,
@@ -958,9 +962,10 @@ void KWTextFrameSet::formatMore()
     //kdDebug(32002) << "KWTextFrameSet::formatMore finished formatting. Setting m_lastFormatted to " << lastFormatted << endl;
     m_lastFormatted = lastFormatted;
 
-    if ( lastFormatted && bottom != -1 && bottom + lastFormatted->rect().height() > m_availableHeight )
+    if ( bottom != -1 && ( ( lastFormatted && bottom + lastFormatted->rect().height() > m_availableHeight ) // next parag will be off page
+                           || bottom > m_availableHeight ) ) // or this parag is already off page
     {
-        kdDebug(32002) << "KWTextFrameSet::formatMore We need more space. bottom=" << bottom << " next parag's height=" << lastFormatted->rect().height() << " m_availableHeight=" << m_availableHeight << endl;
+        kdDebug(32002) << "KWTextFrameSet::formatMore We need more space. bottom=" << bottom << " m_availableHeight=" << m_availableHeight << endl;
         // #### KWFormatContext::makeLineLayout had much code about this,
         // especially for tables. TODO.
 

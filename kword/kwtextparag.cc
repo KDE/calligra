@@ -693,10 +693,7 @@ void KWTextParag::setParagLayout( const KWParagLayout & layout )
     setRightBorder( layout.rightBorder );
     setTopBorder( layout.topBorder );
     setBottomBorder( layout.bottomBorder );
-    if ( layout.counter )
-        setCounter( *layout.counter );
-    else
-        setNoCounter();
+    setCounter( layout.counter );
 
     setTabList( layout.tabList() );
     // Don't call setStyle from here, it would overwrite any paragraph-specific settings
