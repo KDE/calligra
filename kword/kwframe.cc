@@ -749,11 +749,12 @@ bool KWFrameSet::contains( double mx, double my )
 bool KWFrameSet::getMouseCursor( const QPoint &nPoint, bool controlPressed, QCursor & cursor )
 {
     KoPoint docPoint = m_doc->unzoomPoint( nPoint );
+    QCursor defaultCursor = isFloating() ? Qt::pointingHandCursor : Qt::sizeAllCursor;
     // See if we're over a frame border
     KWFrame * frame = frameByBorder( nPoint );
     if ( frame )
     {
-        cursor = frame->getMouseCursor( docPoint, grpMgr ? true : false, Qt::sizeAllCursor );
+        cursor = frame->getMouseCursor( docPoint, grpMgr ? true : false, defaultCursor );
         return true;
     }
 
@@ -762,7 +763,7 @@ bool KWFrameSet::getMouseCursor( const QPoint &nPoint, bool controlPressed, QCur
         return false;
 
     if ( controlPressed )
-        cursor = Qt::sizeAllCursor;
+        cursor = defaultCursor;
     else
         cursor = frame->getMouseCursor( docPoint, grpMgr ? true : false, Qt::ibeamCursor );
     return true;

@@ -64,6 +64,7 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
     //m_currentDrawnFrame = 0L;
     m_origFontSizes.setAutoDelete( true );
     m_framesInPage.setAutoDelete( true );
+    m_firstPage = 0;
     textdoc = new KWTextDocument( this, 0, new KWTextFormatCollection( _doc ) );
     QTextFormatter * formatter = new QTextFormatterBreakWords;
     formatter->setAllowBreakInWords( true ); // Necessary for lines without a single space
@@ -163,19 +164,19 @@ KWFrame * KWTextFrameSet::normalToInternal( QPoint nPoint, QPoint &iPoint, bool 
     return 0;
 }
 
-KWFrame * KWTextFrameSet::internalToNormal( QPoint iPoint, QPoint & nPoint, QPoint hintNPoint ) const
+KWFrame * KWTextFrameSet::internalToNormalWithHint( QPoint iPoint, QPoint & nPoint, QPoint hintNPoint ) const
 {
     QListIterator<KWFrame> frameIt( frameIterator() );
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame *frame = frameIt.current();
         QRect frameRect = kWordDocument()->zoomRect( *frame );
-        int offsetX = frameRect.left();
-        int offsetY = frameRect.top() - frame->internalY();
-        QRect r( frameRect );
-        r.moveBy( -offsetX, -offsetY );   // frame in qrt coords
+        QRect r( 0, frame->internalY(), frameRect.width(), frameRect.height() );
+        // r is the frame in qrt coords
         if ( r.contains( iPoint ) ) // both r and p are in "qrt coordinates"
         {
+            int offsetX = frameRect.left();
+            int offsetY = frameRect.top() - frame->internalY();
             nPoint.setX( iPoint.x() + offsetX );
             nPoint.setY( iPoint.y() + offsetY );
             if ( hintNPoint.isNull() || !frame->isCopy() || hintNPoint.y() <= nPoint.y() )
@@ -186,7 +187,7 @@ KWFrame * KWTextFrameSet::internalToNormal( QPoint iPoint, QPoint & nPoint, QPoi
 
     // This happens when the parag is on a not-yet-created page (formatMore will notice afterwards)
     // So it doesn't matter much what happens here, we'll redo it anyway.
-    //kdDebug(32002) << "KWTextFrameSet::internalToNormal " << iPoint.x() << "," << iPoint.y()
+    //kdDebug(32002) << "KWTextFrameSet::internalToNormalWithHint " << iPoint.x() << "," << iPoint.y()
     //               << " not in any frame of " << (void*)this << endl;
     nPoint = iPoint; // bah
     return 0L;
@@ -818,10 +819,83 @@ const QList<KWFrame> & KWTextFrameSet::framesInPage( int pageNum ) const
     {
         kdWarning() << "framesInPage called for pageNum=" << pageNum << ". "
                     << " Min value: " << m_firstPage
-                    << " Max value:" << m_framesInPage.size() + m_firstPage - 1 << endl;
+                    << " Max value: " << m_framesInPage.size() + m_firstPage - 1 << endl;
         return m_emptyList; // QList<KWFrame>() doesn't work, it's a temporary
     }
     return * m_framesInPage[pageNum - m_firstPage];
+}
+
+KWFrame * KWTextFrameSet::internalToNormal( QPoint iPoint, QPoint & nPoint ) const
+{
+    //kdDebug() << getName() << " ITN called for iPoint=" << iPoint.x() << "," << iPoint.y() << endl;
+    // This does a binary search in the m_framesInPage array, with internalY as criteria
+    // We only look at the first frame of each page. Refining is done later on.
+    ASSERT( !m_framesInPage.isEmpty() );
+    int len = m_framesInPage.count();
+    int n1 = 0;
+    int n2 = len - 1;
+    int mid = 0;
+    bool found = FALSE;
+    while ( n1 <= n2 ) {
+        int res;
+        mid = (n1 + n2)/2;
+        //kdDebug() << "ITN: begin. mid=" << mid << endl;
+        ASSERT( m_framesInPage[mid] ); // We have no null items
+        if ( m_framesInPage[mid]->isEmpty() )
+            res = -1;
+        else
+        {
+            KWFrame * frame = m_framesInPage[mid]->first();
+            //kdDebug() << "ITN: iPoint.y=" << iPoint.y() << " internalY=" << frame->internalY() << endl;
+            res = iPoint.y() - frame->internalY();
+            //kdDebug() << "ITN: res=" << res << endl;
+            // Anything between this internalY and the next page's first frame's internalY is fine
+            if ( res >= 0 && ( mid == len - 1 ||
+                              iPoint.y() < m_framesInPage[mid+1]->first()->internalY() ) )
+            {
+                //kdDebug() << "ITN: found a match " << mid << endl;
+                found = true;
+                break;
+            }
+        }
+        ASSERT( res != 0 ); // this should have been already handled !
+        if ( res < 0 )
+            n2 = mid - 1;
+        else // if ( res > 0 )
+            n1 = mid + 1;
+        //kdDebug() << "ITN: End of loop. n1=" << n1 << " n2=" << n2 << endl;
+    }
+    if ( !found )
+    {
+        //kdDebug(32002) << "KWTextFrameSet::internalToNormal " << iPoint.x() << "," << iPoint.y()
+        //               << " not in any frame of " << (void*)this << endl;
+        nPoint = iPoint; // "bah", I said above :)
+        return 0L;
+    }
+    // search to first of equal items
+    // ## don't think this can happen here
+    //while ( (mid - 1 >= 0) && !((QGVector*)this)->compareItems(d, m_framesInPage[mid-1]) )
+    //    mid--;
+
+    // Now iterate over the frames in page 'mid' and find the right one
+    QListIterator<KWFrame> frameIt( *m_framesInPage[mid] );
+    for ( ; frameIt.current(); ++frameIt )
+    {
+        KWFrame *frame = frameIt.current();
+        QRect frameRect = kWordDocument()->zoomRect( *frame );
+        QRect r( 0, frame->internalY(), frameRect.width(), frameRect.height() );
+        // r is the frame in qrt coords
+        if ( r.contains( iPoint ) ) // both r and p are in "qrt coordinates"
+        {
+            nPoint.setX( iPoint.x() + frameRect.left() );
+            nPoint.setY( iPoint.y() + frameRect.top() - frame->internalY() );
+            return frame;
+        }
+    }
+    kdDebug(32002) << "KWTextFrameSet::internalToNormal " << iPoint.x() << "," << iPoint.y()
+                   << " not in any frame of " << (void*)this << " (looked on page " << mid << ")" << endl;
+    nPoint = iPoint; // bah again
+    return 0L;
 }
 
 #ifndef NDEBUG
@@ -3068,7 +3142,7 @@ void KWTextFrameSetEdit::ensureCursorVisible()
     QPoint hintNPoint;
     if ( m_currentFrame )
         hintNPoint = frameSet()->kWordDocument()->zoomPoint( m_currentFrame->topLeft() );
-    KWFrame * frame = textFrameSet()->internalToNormal( QPoint(x, y), p, hintNPoint );
+    KWFrame * frame = textFrameSet()->internalToNormalWithHint( QPoint(x, y), p, hintNPoint );
     if ( frame && m_currentFrame != frame )
     {
         m_currentFrame = frame;

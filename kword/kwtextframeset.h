@@ -67,11 +67,11 @@ public:
     // Convert the @p in the internal qtextdoc coordinates
     // into a point in the normal coordinate system.
     // Also returns the frame in which this point is.
-    //
+    KWFrame * internalToNormal( QPoint iPoint, QPoint & nPoint ) const;
     // @param hintNPoint hint, in case of copied frames. If specified, its y
     // value will be used as a minimum on the returned result, to prefer a frame
     // over any of its copies (e.g. in the header/footer case).
-    KWFrame * internalToNormal( QPoint iPoint, QPoint & nPoint, QPoint hintNPoint = QPoint() ) const;
+    KWFrame * internalToNormalWithHint( QPoint iPoint, QPoint & nPoint, QPoint hintNPoint ) const;
 
     // Return the available height in pixels (sum of all frames' height, with zoom applied)
     // Used to know if we need to create more pages.
