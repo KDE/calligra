@@ -236,46 +236,27 @@ SvgExport::getStroke( const VStroke& stroke )
 	else // TODO : gradient fills
 		getHexColor( stroke.color() );
 	*m_stream << "\"";
+	*m_stream << " stroke-opacity=\"" << stroke.color().opacity() << "\"";
 
 	*m_stream << " stroke-width=\"" << stroke.lineWidth() << "\"";
-/*
-	if( !node.attribute( "lineCap" ).isNull() )
-	{
-		if( node.attribute( "lineCap" ).toInt() == 0 )
-		{
-			*m_stream << " stroke-linecap=\"butt\"";
-		}
-		else if( node.attribute( "lineCap" ).toInt() == 1 )
-		{
-			*m_stream << " stroke-linecap=\"round\"";
-		}
-		else if( node.attribute( "lineCap" ).toInt() == 2 )
-		{
+
+	if( stroke.lineCap() == cap_butt )
+		*m_stream << " stroke-linecap=\"butt\"";
+	else if( stroke.lineCap() == cap_round )
+		*m_stream << " stroke-linecap=\"round\"";
+	else if( stroke.lineCap() == cap_square )
 			*m_stream << " stroke-linecap=\"square\"";
-		}
-	}
 
-	if( !node.attribute( "lineJoin" ).isNull() )
+	if( stroke.lineJoin() == join_miter )
 	{
-		if( node.attribute( "lineJoin" ).toInt() == 0 )
-		{
-			*m_stream << " stroke-linejoin=\"miter\"";
-		}
-		else if( node.attribute( "lineJoin" ).toInt() == 1 )
-		{
-			*m_stream << " stroke-linejoin=\"round\"";
-		}
-		else if( node.attribute( "lineJoin" ).toInt() == 2 )
-		{
+		*m_stream << " stroke-linejoin=\"miter\"";
+		*m_stream << " stroke-miterlimit=\"" << stroke.miterLimit() << "\"";
+	}
+	else if( stroke.lineJoin() == join_round )
+		*m_stream << " stroke-linejoin=\"round\"";
+	else if( stroke.lineJoin() == join_bevel )
 			*m_stream << " stroke-linejoin=\"bevel\"";
-		}
-	}
-
-	if( !node.attribute( "miterLimit" ).isNull() )
-	{
-		*m_stream << " stroke-miterlimit=\"" << node.attribute( "miterLimit" ) << "\"";
-	}
-
+/*
 	QDomNodeList list = node.childNodes();
 	for( uint i = 0; i < list.count(); ++i )
 	{
@@ -283,23 +264,6 @@ SvgExport::getStroke( const VStroke& stroke )
 		{
 			QDomElement e = list.item( i ).toElement();
 
-			if( e.tagName() == "COLOR" )
-			{
-
-				// make sure getHexColor returns something
-				// shouldn't be needed really
-				if( !e.attribute( "colorSpace" ).isNull() )
-				{
-					*m_stream << " stroke=\"";
-					getHexColor( s, e );
-					*m_stream << "\"";
-				}
-
-				if( !e.attribute( "opacity" ).isNull() )
-				{
-					*m_stream << " stroke-opacity=\"" << e.attribute( "opacity" ) << "\"";
-				}
-			}
 			else if( e.tagName() == "DASHPATTERN" )
 			{
 				*m_stream << " stroke-dashoffset=\"" << e.attribute( "offset" ) << "\"";
