@@ -34,7 +34,9 @@ class VToolDocker : public VDocker
 	Q_OBJECT
 
 public:
-	 VToolDocker( KarbonPart* part, KarbonView* parent = 0L, const char* name = 0L );
+	VToolDocker( KarbonPart* part, KarbonView* parent = 0L, const char* name = 0L );
+
+	VStrokeFillPreview *strokeFillPreview();
   
 signals:
 	void selectToolActivated();

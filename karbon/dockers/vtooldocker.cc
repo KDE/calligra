@@ -142,7 +142,6 @@ VToolDocker::VToolDocker( KarbonPart* part, KarbonView* parent, const char* /*na
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( polylineToolActivated() ) );
 	m_btngroup->insert( button );
 
-
 	m_strokeFillPreview = new VStrokeFillPreview( m_part, mainWidget );
 
 	QVBoxLayout *mainWidgetLayout = new QVBoxLayout( mainWidget, 2 );
@@ -153,6 +152,12 @@ VToolDocker::VToolDocker( KarbonPart* part, KarbonView* parent, const char* /*na
 	//mainWidget->setMinimumWidth( 194 );
 
 	setWidget( mainWidget );
+}
+
+VStrokeFillPreview *
+VToolDocker::strokeFillPreview()
+{
+	return m_strokeFillPreview;
 }
 
 #include "vtooldocker.moc"

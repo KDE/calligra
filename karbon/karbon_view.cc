@@ -111,7 +111,6 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	else
 		setXMLFile( QString::fromLatin1( "karbon.rc" ) );
 
-	m_strokeFillPreview = 0L;
 	m_dcop = 0;
 	dcopObject(); // build it
 
@@ -150,17 +149,14 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	m_status->setMinimumWidth( 300 );
 	addStatusBarItem( m_status, 0 );
 
-	//Create Dockers
-	m_ColorManager = new VColorDocker( m_part, this );
-	connect( m_strokeFillPreview, SIGNAL( strokeSelected() ), m_ColorManager, SLOT( setStrokeDocker() ) );
-	connect( m_strokeFillPreview, SIGNAL( fillSelected( ) ), m_ColorManager, SLOT( setFillDocker() ) );
+	initActions();
 
 	VToolDocker *_toolContainer = m_part->toolContainer();
 	if( !_toolContainer )
 	{
 		_toolContainer = new VToolDocker( m_part, this );
 		mainWindow()->addDockWindow( _toolContainer, DockLeft );
-	m_part->setToolContainer( _toolContainer );
+		m_part->setToolContainer( _toolContainer );
 	}
 	connect( _toolContainer, SIGNAL( selectToolActivated() ),		this, SLOT( selectTool() ) );
 	connect( _toolContainer, SIGNAL( selectNodesToolActivated() ),	this, SLOT( selectNodesTool() ) );
@@ -176,8 +172,14 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	connect( _toolContainer, SIGNAL( gradToolActivated() ),			this, SLOT( gradTool() ) );
 	connect( _toolContainer, SIGNAL( polylineToolActivated() ),		this, SLOT( polylineTool() ) );
 	m_part->toolContainer()->show();
+	m_strokeFillPreview = _toolContainer->strokeFillPreview();
+	connect( m_strokeFillPreview, SIGNAL( strokeChanged( const VStroke & ) ), this, SLOT( selectionChanged() ) );
+	connect( m_strokeFillPreview, SIGNAL( fillChanged( const VFill & ) ), this, SLOT( selectionChanged() ) );
 
-	initActions();
+	//Create Dockers
+	m_ColorManager = new VColorDocker( m_part, this );
+	connect( m_strokeFillPreview, SIGNAL( strokeSelected() ), m_ColorManager, SLOT( setStrokeDocker() ) );
+	connect( m_strokeFillPreview, SIGNAL( fillSelected( ) ), m_ColorManager, SLOT( setFillDocker() ) );
 
 	m_objectDlg = new VObjectDlg( m_part, this );
 	m_objectDlg->disable(); //disabled @ startup because none of the objects are selected
@@ -1053,22 +1055,8 @@ KarbonView::initActions()
 #endif
 	connect( m_capStyle, SIGNAL(clicked()), this, SLOT(slotCapStyleClicked()) );
 
-	if( shell() && !m_strokeFillPreview )
-	{
-		m_strokeFillPreview = new VStrokeFillPreview( m_part, mainWindow()->toolBar( "Toolbox" ) );
-		connect( m_strokeFillPreview, SIGNAL( strokeChanged( const VStroke & ) ),
-				this, SLOT( selectionChanged() ) );
-		connect( m_strokeFillPreview, SIGNAL( fillChanged( const VFill & ) ),
-				this, SLOT( selectionChanged() ) );
-#if KDE_VERSION >= 305
-		//new KWidgetAction( m_strokeFillPreview, i18n(""), 0, this, SLOT( ), actionCollection(), "preview" );
-#endif
-		mainWindow()->toolBar( "Toolbox" )->insertWidget( 10, 30, m_strokeFillPreview );
-		//part()->document().selection()->setStroke( VStroke( VColor( Qt::black ) ) );
-		//part()->document().selection()->setFill( VFill( VColor( Qt::black ) ) );
-		m_strokeFillPreview->update( *( part()->document().selection()->stroke() ),
-									 *( part()->document().selection()->fill() ) );
-	}
+	//m_strokeFillPreview->update( *( part()->document().selection()->stroke() ),
+	//							 *( part()->document().selection()->fill() ) );
 
 	m_configureAction = new KAction(
 		i18n( "Configure Karbon..." ), "configure", 0, this,
