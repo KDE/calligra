@@ -29,6 +29,7 @@
 class KexiDialogBase;
 class KexiProject;
 class KudesignerDoc;
+class KoStore;
 
 class KuKexi: public KuDesignerPlugin {
 	Q_OBJECT
