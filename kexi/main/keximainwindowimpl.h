@@ -28,55 +28,9 @@
 
 #include <qintdict.h>
 
-class KexiDialogBase;
-class KexiProject;
-namespace KexiPart {
-	class Item;
-}
-
-/**
- * @short Kexi's main window interface
- * This interface is implemented by KexiMainWindowImpl class.
- * KexiMainWindow offers simple features what lowers cross-dependency (and also avoids
- * circular dependencies between Kexi modules).
- */
-class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActionHost
-{
-	Q_OBJECT
-	public:
-		KexiMainWindow();
-		virtual ~KexiMainWindow();
-
-		//! Project data of currently opened project or NULL if no project here yet.
-		virtual KexiProject *project() = 0;
-		
-		/**
-		 * registers a dialog for watching and adds it to the view
-		 */
-		virtual void registerChild(KexiDialogBase *dlg) = 0;
-
-		virtual QPopupMenu* findPopupMenu(const char *popupName) = 0;
-
-		/*! Generates ID for private "document" like Relations window.
-		 Private IDs are negative numbers (while ID regular part instance's IDs are >0)
-		 Private means that the object is not stored as-is in the project but is somewhat 
-		 generated and in most cases there is at most one unique instance document of such type (part).
-		 To generate this ID, just app-wide internal counter is used. */
-		virtual int generatePrivateDocID() = 0;
-	
-	public slots:
-		//! Opens object pointed by \a item in a view \a viewMode
-		virtual KexiDialogBase * openObject(KexiPart::Item *item, int viewMode = Kexi::DataViewMode) = 0;
-		//! For convenience
-		virtual KexiDialogBase * openObject(const QString& mime, const QString& name, int viewMode = Kexi::DataViewMode) = 0;
-};
-
-#if 0
-// MOC_SKIP_BEGIN 
-
 class KexiProject;
 class KexiProjectData;
-//class KexiBrowser;
+class KexiBrowser;
 class KexiActionProxy;
 class KMdiChildView;
 class KexiDialogBase;
@@ -94,8 +48,9 @@ namespace KexiPart {
 /**
  * @short Kexi's main window
  */
-class KEXICORE_EXPORTKexiMainWindow : public KMdiMainFrm, public KexiSharedActionHost
+class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActionHost
 {
+	Q_OBJECT
 
 	public:
 		/**
@@ -163,16 +118,6 @@ class KEXICORE_EXPORTKexiMainWindow : public KMdiMainFrm, public KexiSharedActio
 		bool removeObject( KexiPart::Item *item );
 
 	protected:
-		/**
-		 * Creates navigator (if it's not yet created),
-		 * lookups items for current project and fills the nav. with not-opened items
-		 */
-		void initNavigator();
-		
-		void initContextHelp();
-		
-		void initPropertyEditor();
-		
 		//! reimplementation of events
 		virtual void	closeEvent(QCloseEvent *);
 
@@ -253,15 +198,21 @@ class KEXICORE_EXPORTKexiMainWindow : public KMdiMainFrm, public KexiSharedActio
 //js		void		parseCmdLineOptions();
 
 		/**
+		 * Creates navigator, lookups items for current project and fills the nav. with not-opened items
+		 */
+		void		initNavigator();
+		void		initContextHelp();
+
+		/**
 		 * this slot is called if a window changes
 		 */
-		void activeWindowChanged(KMdiChildView *dlg);
+		void		activeWindowChanged(KMdiChildView *dlg);
 
 		/**
 		 * this slot is called if a window gets colsed
 		 * and will unregister stuff
 		 */
-		void childClosed(KMdiChildView *dlg);
+		void		childClosed(KMdiChildView *dlg);
 
 		void slotPartLoaded(KexiPart::Part* p);
 
@@ -309,8 +260,6 @@ class KEXICORE_EXPORTKexiMainWindow : public KMdiMainFrm, public KexiSharedActio
 
 	friend class KexiDialogBase;	
 };
-//MOC_SKIP_END
-#endif
 
 #endif
 

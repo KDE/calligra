@@ -19,21 +19,6 @@
 */
 
 #include "keximainwindow.h"
-#include "kexidialogbase.h"
-
-#include <kdebug.h>
-
-KexiMainWindow::KexiMainWindow()
- : KMdiMainFrm(0L, "keximainwindow")
- , KexiSharedActionHost(this)
-{
-}
-
-KexiMainWindow::~KexiMainWindow()
-{
-}
-
-#if 0
 
 #include <qapplication.h>
 #include <qfile.h>
@@ -57,8 +42,7 @@ KexiMainWindow::~KexiMainWindow()
 
 #include <kexidb/connection.h>
 
-//#include "kexibrowser.h"
-//#include "kexipropertyeditorview.h"
+#include "kexibrowser.h"
 #include "kexiactionproxy.h"
 #include "kexidialogbase.h"
 #include "kexipartmanager.h"
@@ -67,9 +51,8 @@ KexiMainWindow::~KexiMainWindow()
 #include "kexipartguiclient.h"
 #include "kexiproject.h"
 #include "kexiprojectdata.h"
-#include "kexiprojectset.h"
 #include "kexi.h"
-//#include "kexistatusbar.h"
+#include "kexistatusbar.h"
 #include "kexiinternalpart.h"
 #include "kexicreateitemdlg.h"
 
@@ -77,10 +60,10 @@ KexiMainWindow::~KexiMainWindow()
 #include "startup/KexiConnSelector.h"
 #include "startup/KexiProjectSelectorBase.h"
 #include "startup/KexiProjectSelector.h"
+#include "startup/KexiProjectSet.h"
 #include "startup/KexiNewProjectWizard.h"
 #include "startup/KexiStartup.h"
 #include "kexicontexthelp.h"
-
 
 #if defined(Q_WS_WIN) || !KDE_IS_VERSION(3,1,9)
 # include <unistd.h>
@@ -98,10 +81,9 @@ class KexiMainWindow::Private
 	public:
 		KexiProject	*prj;
 #ifndef KEXI_NO_CTXT_HELP
-		KexiContextHelp *ctxHelp;
+		KexiContextHelp *ctxH;
 #endif
-//		KexiBrowser *nav;
-		KexiPropertyEditorView *propEditor;
+		KexiBrowser *nav;
 		KexiDialogDict dialogs;
 		KXMLGUIClient *curDialogGUIClient, *closedDialogGUIClient;
 		QGuardedPtr<KexiDialogBase> curDialog;
@@ -135,9 +117,7 @@ class KexiMainWindow::Private
 		//data menu
 		KAction *action_data_save_row;
 
-		//for dock windows
 		KMdiToolViewAccessor* navToolWindow;
-		KMdiToolViewAccessor* propEditorToolWindow;
 
 		QWidget *focus_before_popup;
 //		KexiRelationPart *relationPart;
@@ -188,7 +168,6 @@ KexiMainWindow::KexiMainWindow()
 
 	d->origAppCaption = caption();
 	initContextHelp();
-	initPropertyEditor();
 
 	restoreSettings();
 
@@ -622,13 +601,13 @@ bool KexiMainWindow::closeProject()
 
 void KexiMainWindow::initContextHelp() {
 #ifndef KEXI_NO_CTXT_HELP
-	d->ctxHelp=new KexiContextHelp(this,this);
-	d->ctxHelp->setContextHelp(i18n("Welcome"),i18n("The <B>KEXI team</B> wishes you a lot of productive work, "
+	d->ctxH=new KexiContextHelp(this,this);
+	d->ctxH->setContextHelp(i18n("Welcome"),i18n("The <B>KEXI team</B> wishes you a lot of productive work, "
 		"with this product. <BR><HR><BR>If you have found a <B>bug</B> or have a <B>feature</B> request, please don't "
 		"hesitate to report it at our <A href=\"http://www.kexi-project.org/cgi-bin/bug.pl\"> issue "
 		"tracking system </A>.<BR><HR><BR>If you would like to <B>join</B> our effort, the <B>development</B> documentation "
 		"at <A href=\"http://www.kexi-project.org\">www.kexi-project.org</A> is a good starting point."),0);
-	addToolWindow(d->ctxHelp,KDockWidget::DockBottom | KDockWidget::DockLeft,getMainDockWidget(),20);
+	addToolWindow(d->ctxH,KDockWidget::DockBottom | KDockWidget::DockLeft,getMainDockWidget(),20);
 #endif
 }
 
@@ -639,20 +618,19 @@ KexiMainWindow::initNavigator()
 
 	if(!d->nav)
 	{
+//		d->nav = new KexiBrowser(this, "kexi/db", 0);
 		d->nav = new KexiBrowser(this);
 		d->nav->installEventFilter(this);
 		d->navToolWindow = addToolWindow(d->nav, KDockWidget::DockLeft, getMainDockWidget(), 20/*, lv, 35, "2"*/);
 		connect(d->nav,SIGNAL(openItem(KexiPart::Item*,int)),this,SLOT(openObject(KexiPart::Item*,int)));
-		connect(d->nav,SIGNAL(openOrActivateItem(KexiPart::Item*,int)),
-			this,SLOT(openObjectFromNavigator(KexiPart::Item*,int)));
-		connect(d->nav,SIGNAL(newItem( KexiPart::Info* )),
-			this,SLOT(newObject(KexiPart::Info*)));
-		connect(d->nav,SIGNAL(removeItem(KexiPart::Item*)),
-			this,SLOT(removeObject(KexiPart::Item*)));
-		if (d->prj) {//connect to the project
-			connect(d->prj, SIGNAL(itemRemoved(const KexiPart::Item&)), 
-				d->nav, SLOT(slotRemoveItem(const KexiPart::Item&)));
-		}
+		connect(d->nav,SIGNAL(openOrActivateItem(KexiPart::Item*,int)),this,SLOT(openObjectFromNavigator(KexiPart::Item*,int)));
+		connect(d->nav,SIGNAL(newItem( KexiPart::Info* )),this,SLOT(newObject(KexiPart::Info*)));
+		connect(d->nav,SIGNAL(removeItem(KexiPart::Item*)),this,SLOT(removeObject(KexiPart::Item*)));
+		if (d->prj)//connect to project
+			connect(d->prj, SIGNAL(itemRemoved(const KexiPart::Item&)), d->nav, SLOT(slotRemoveItem(const KexiPart::Item&)));
+
+//		connect(d->nav,SIGNAL(actionAvailable(const char*,bool)),this,SLOT(actionAvailable(const char*,bool)));
+
 	}
 	if(d->prj->isConnected()) {
 		d->nav->clear();
@@ -689,14 +667,6 @@ KexiMainWindow::initNavigator()
 	}
 	d->nav->setFocus();
 	invalidateActions();
-}
-
-void KexiMainWindow::initPropertyEditor()
-{
-	d->propEditor = new KexiPropertyEditorView(this);
-	d->propEditor->installEventFilter(this);
-	d->propEditorToolWindow = addToolWindow(d->propEditor, 
-		KDockWidget::DockLeft, getMainDockWidget(), 20/*, lv, 35, "2"*/);
 }
 
 void KexiMainWindow::slotPartLoaded(KexiPart::Part* p)
@@ -1617,7 +1587,7 @@ int KexiMainWindow::generatePrivateDocID()
 {
 	return --d->privateDocIDCounter;
 }
-#endif
+
 
 #include "keximainwindow.moc"
 
