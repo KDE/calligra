@@ -234,7 +234,7 @@ static bool kspreadfunc_fabs( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
-  if ( !KSUtil::checkArgumentsCount( context, 1, "fabs", true ) )
+  if ( !KSUtil::checkArgumentsCount( context, 1, "fabs", true ) || !KSUtil::checkArgumentsCount( context, 1, "abs", true ))
     return false;
 
   double val=0.0;
@@ -823,7 +823,7 @@ static bool kspreadfunc_average( KSContext& context )
 
 
 static bool kspreadfunc_median_helper
-  (KSContext& context, QValueList<KSValue::Ptr>& args, 
+  (KSContext& context, QValueList<KSValue::Ptr>& args,
    QValueList<KSValue::Ptr>& sortedList)
 {
   QValueList<KSValue::Ptr>::Iterator it = args.begin();
@@ -837,7 +837,7 @@ static bool kspreadfunc_median_helper
     if ( KSUtil::checkType( context, *it, KSValue::ListType, false ) )
     {
       /* try to recurse */
-      returnVal = kspreadfunc_median_helper(context, (*it)->listValue(), 
+      returnVal = kspreadfunc_median_helper(context, (*it)->listValue(),
 					    sortedList);
     }
     else if ( KSUtil::checkType( context, *it, KSValue::DoubleType, true ) )
@@ -845,7 +845,7 @@ static bool kspreadfunc_median_helper
       /* insert it properly into the list */
       QValueList<KSValue::Ptr>::Iterator ptr = sortedList.begin();
       QValueList<KSValue::Ptr>::Iterator endPtr = sortedList.end();
-      
+
       /* find the proper place */
       while (ptr != endPtr && (*it)->doubleValue() > (*ptr)->doubleValue())
       {
@@ -863,7 +863,7 @@ static bool kspreadfunc_median( KSContext& context )
 {
   double result = 0.0;
   bool worked;
-  
+
   /* need a list to hold all the values in sorted order so we can pick out the
      median one */
   QValueList<KSValue::Ptr> sortedValues;
@@ -874,12 +874,12 @@ static bool kspreadfunc_median( KSContext& context )
   if (worked && sortedValues.size() > 0)
   {
     /* get the median value */
-    QValueList<KSValue::Ptr>::Iterator ptr = 
+    QValueList<KSValue::Ptr>::Iterator ptr =
       sortedValues.at((sortedValues.size() - 1) / 2);
 
-    /* now we're halfway through the list, or if there is an even number of 
+    /* now we're halfway through the list, or if there is an even number of
        items, we're on the 'first' of the 2 in the middle */
-    
+
     result = (*ptr)->doubleValue();
     if (sortedValues.size() % 2 == 0)
     {
@@ -4306,6 +4306,7 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "sumsq", new KSValue( new KSBuiltinFunction( module, "sumsq", kspreadfunc_sumsq ) ) );
   module->addObject( "sqrt", new KSValue( new KSBuiltinFunction( module, "sqrt", kspreadfunc_sqrt ) ) );
   module->addObject( "fabs", new KSValue( new KSBuiltinFunction( module, "fabs", kspreadfunc_fabs ) ) );
+  module->addObject( "abs", new KSValue( new KSBuiltinFunction( module, "abs", kspreadfunc_fabs ) ) );
   module->addObject( "floor", new KSValue( new KSBuiltinFunction( module, "floor", kspreadfunc_floor ) ) );
   module->addObject( "ceil", new KSValue( new KSBuiltinFunction( module, "ceil", kspreadfunc_ceil ) ) );
   module->addObject( "tan", new KSValue( new KSBuiltinFunction( module, "tan", kspreadfunc_tan ) ) );

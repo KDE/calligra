@@ -1460,17 +1460,17 @@
     </Function>
 
     <Function>
-      <Name>fabs</Name>
+      <Name>abs</Name>
       <Type>Float</Type>
       <Parameter>
 	<Comment>A floating point value</Comment>
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>The fabs() function returns the absolute value of the floating-point number x.</Text>
-	<Syntax>fabs(x)</Syntax>
-	<Example>fabs(12.5) equals 12.5</Example>
-	<Example>fabs(-12.5) equals 12.5</Example>
+	<Text>The abs() function returns the absolute value of the floating-point number x.</Text>
+	<Syntax>abs(x)</Syntax>
+	<Example>abs(12.5) equals 12.5</Example>
+	<Example>abs(-12.5) equals 12.5</Example>
       </Help>
     </Function>
 
