@@ -17,7 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <qwhatsthis.h> 
+#include <qwhatsthis.h>
 #include "paragdia.h"
 #include "paragdia_p.h"
 #include "kwdoc.h"
@@ -53,7 +53,7 @@
 #include <kglobal.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
-
+#include <knumvalidator.h>
 #include <koRuler.h>
 
 #include <stdlib.h>
@@ -866,6 +866,7 @@ void KWParagDia::setupTab4()
     // of numbering.
     eStart = new QLineEdit( gText );
     txtgrid->addWidget( eStart, 2, 1 );
+    eStart->setValidator(new KIntValidator( eStart ));
     connect( eStart, SIGNAL( textChanged( const QString & ) ), this, SLOT( numStartChanged( const QString & ) ) );
 
     QLabel *lDepth = new QLabel( i18n( "Depth:" ), gText );
@@ -1369,13 +1370,13 @@ void KWParagDia::numRightTextChanged( const QString & _c )
 /*================================================================*/
 void KWParagDia::numStartChanged( const QString & _c )
 {
-    m_counter.setStartNumber( _c.toInt() ); // HACK
+    m_counter.setStartNumber( QMAX(_c.toInt(),0) ); // HACK
 }
 
 /*================================================================*/
 void KWParagDia::numDepthChanged( int _val )
 {
-    m_counter.setDepth( _val );
+    m_counter.setDepth( QMAX(_val,0) );
 }
 
 /*================================================================*/
