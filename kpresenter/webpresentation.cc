@@ -1121,7 +1121,10 @@ void KPWebPresentationCreateDialog::saveConfig()
     filename = url.path();
 
     if ( !filename.isEmpty() ) {
-        webPres.setConfig( filename );
+        if (filename.endsWith(".kpweb"))
+            webPres.setConfig( filename );
+        else
+            webPres.setConfig( filename + ".kpweb" );
         webPres.saveConfig();
     }
 }
