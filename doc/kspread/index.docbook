@@ -345,14 +345,10 @@ a file on your hard drive.</para>
 <chapter id="credits"><title>Credits and License</title>
 <para><application>KSpread</application></para>
 <para>Program copyright 1998-1999 The KOffice Team <email>bongo@kongo.org</email></para>
-<para>Contributors:
-<itemizedlist>
-<listitem><para></para></listitem>
-</itemizedlist></para>
 
 <para>Documentation copyright 2000 Frank-Andreas Schmidt</para>
-<para>Translations done by:</para>
-    
+<!-- TRANS:CREDIT_FOR_TRANSLATORS -->
+
 <para>
 This program is licensed under the terms of the <ulink url="common/gpl-license.html">GNU GPL</ulink>.
 </para>
