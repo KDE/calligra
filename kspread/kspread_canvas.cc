@@ -1424,7 +1424,6 @@ void KSpreadCanvas::drawVisibleCells()
 
     ypos += row_lay->height( this );
   }
-
   painter.end();
 
   showMarker();
@@ -1685,7 +1684,9 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
 	
     RowLayout *rl = table->nonDefaultRowLayout( m_iResizeAnchor );
     int y = table->rowPos( m_iResizeAnchor, m_pCanvas );
-    if ( _ev->pos().y() < 20 )
+
+    //if ( _ev->pos().y() < 20 )
+    if ( ( m_pCanvas->zoom() * (float)( _ev->pos().y() - y ) ) < 20.0 )
       rl->setHeight( 20, m_pCanvas );
     else
       rl->setHeight( _ev->pos().y() - y, m_pCanvas );
@@ -1695,17 +1696,49 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
   m_bResize = FALSE;
 }
 
-void KSpreadVBorder::resizeRow(int resize )
+void KSpreadVBorder::resizeRow(int resize,int nb )
 {
 KSpreadTable *table = m_pCanvas->activeTable();
 assert( table );
-RowLayout *rl = table->nonDefaultRowLayout( m_iSelectionAnchor );
-//number of column
-int x = table->rowPos( m_iSelectionAnchor, m_pCanvas );
-if ( ( m_pCanvas->zoom() * (float)(resize) ) < 20.0 )
-	rl->setHeight( 20, m_pCanvas );	
+if(nb==-1)
+	{
+	RowLayout *rl = table->nonDefaultRowLayout( m_iSelectionAnchor );
+	//number of column
+	int x = table->rowPos( m_iSelectionAnchor, m_pCanvas );
+	if ( ( m_pCanvas->zoom() * (float)(resize) ) < 20.0 )
+		rl->setHeight( 20, m_pCanvas );	
+	else
+		rl->setHeight( resize, m_pCanvas );
+	}
 else
-	rl->setHeight( resize, m_pCanvas );
+	{
+	QRect selection( table->selectionRect() );
+	if(selection.bottom()==0 ||selection.top()==0 || selection.left()==0
+	|| selection.right()==0)
+		{
+		cout <<"Cell selectionne : "<<m_pCanvas->markerRow()<<endl;
+		RowLayout *rl = table->nonDefaultRowLayout( m_pCanvas->markerRow() );
+		int x = table->rowPos( m_pCanvas->markerRow(), m_pCanvas );
+		if ( ( m_pCanvas->zoom() * (float)(resize) ) < 20.0 )
+			rl->setHeight( 20, m_pCanvas );	
+		else
+			rl->setHeight( resize, m_pCanvas );
+		}
+	else
+		{
+		RowLayout *rl;
+		for (int i=selection.top();i<=selection.bottom();i++)
+			{
+			rl= table->nonDefaultRowLayout( i );
+			int x = table->rowPos( i, m_pCanvas );
+			if ( ( m_pCanvas->zoom() * (float)(resize) ) < 20.0 )
+				rl->setHeight( 20, m_pCanvas );	
+			else
+				rl->setHeight( resize, m_pCanvas );
+			}
+		}
+	}
+
 }
 
 void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
@@ -1941,17 +1974,50 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
   m_bResize = FALSE;
 }
 
-void KSpreadHBorder::resizeColumn(int resize )
+void KSpreadHBorder::resizeColumn(int resize,int nb )
 {
 KSpreadTable *table = m_pCanvas->activeTable();
 assert( table );
-ColumnLayout *cl = table->nonDefaultColumnLayout( m_iSelectionAnchor );
-//number of column
-int x = table->columnPos( m_iSelectionAnchor, m_pCanvas );
-if ( ( m_pCanvas->zoom() * (float)(resize) ) < 20.0 )
-	cl->setWidth( 20, m_pCanvas );	
+if(nb==-1)
+	{
+	ColumnLayout *cl = table->nonDefaultColumnLayout( m_iSelectionAnchor );
+	//number of column
+	int x = table->columnPos( m_iSelectionAnchor, m_pCanvas );
+	if ( ( m_pCanvas->zoom() * (float)(resize) ) < 20.0 )
+		cl->setWidth( 20, m_pCanvas );	
+	else
+		cl->setWidth( resize, m_pCanvas );
+	}
 else
-	cl->setWidth( resize, m_pCanvas );
+	{
+	QRect selection( table->selectionRect() );
+	if(selection.bottom()==0 ||selection.top()==0 || selection.left()==0
+	|| selection.right()==0)
+		{
+		ColumnLayout *cl = table->nonDefaultColumnLayout( m_pCanvas->markerColumn() );
+		int x = table->rowPos( m_pCanvas->markerColumn(), m_pCanvas );
+		if ( ( m_pCanvas->zoom() * (float)(resize) ) < 20.0 )
+			cl->setWidth( 20, m_pCanvas );	
+		else
+			cl->setWidth( resize, m_pCanvas );
+		}
+	else
+		{
+		ColumnLayout *cl;
+		for (int i=selection.left();i<=selection.right();i++)
+			{
+			cl= table->nonDefaultColumnLayout( i );
+			int x = table->rowPos( i, m_pCanvas );
+			if ( ( m_pCanvas->zoom() * (float)(resize) ) < 20.0 )
+				cl->setWidth( 20, m_pCanvas );	
+			else
+				cl->setWidth( resize, m_pCanvas );
+			}
+		}
+	}
+	
+
+
 }
 
 void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )

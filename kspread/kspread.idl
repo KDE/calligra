@@ -118,7 +118,9 @@ module KSpread
 		slot void formulaSum();
 		slot void formulaProduct();
 		slot void RemoveTable();
-
+		slot void resizeheight();
+		slot void resizewidth();
+                slot void layoutcell();
 		Book book();
 
 		struct EventSelectionChanged

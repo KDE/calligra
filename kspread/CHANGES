@@ -82,3 +82,14 @@ inside so you can add text in this cell.
 -----------------------------------------------------
 -Now you can create a area when you click and press CTRL
 -Add new dialog box for resize column or row
+
+1999-09-24 -Montel laurent<montell@club-internet.fr>
+-----------------------------------------------------       
+-Improved function resize now you can resize a area
+	format->Row->height
+	format->Column->Width
+-bugfix
+
+
+
+ 

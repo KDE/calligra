@@ -875,6 +875,9 @@ bool KSpreadView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     m_vMenuFormat = 0L;
     m_vMenuScripts = 0L;
     m_vMenuHelp = 0L;
+    m_vMenuEdit_Remove = 0L;
+    m_vMenuFormat_ResizeColumn = 0L;
+    m_vMenuFormat_ResizeRow = 0L;
     return true;
   }
 
@@ -944,6 +947,7 @@ bool KSpreadView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_vMenuData->insertSeparator( -1 );
   m_idMenuData_anchor = m_vMenuData->insertItem( i18n( "Create anchor" ), this, "createanchor", 0 );
 
+
   m_vMenuData->insertSeparator( -1 );
   m_idMenuData_Consolidate = m_vMenuData->insertItem( i18n( "Consolidate" ), this, "consolidate", 0 );
 
@@ -956,6 +960,18 @@ bool KSpreadView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   _menubar->insertMenu( i18n( "Fo&rmat" ), m_vMenuFormat, -1, -1 );
 
   m_idMenuFormat_AutoFill = m_vMenuFormat->insertItem( i18n( "&Auto Fill ..." ), this, "autoFill", 0 );
+
+  m_vMenuFormat->insertSeparator( -1 );
+
+  m_idMenuFormat_Cell = m_vMenuFormat->insertItem( i18n( "Cells" ), this, "layoutcell", 0 );
+  m_vMenuFormat->insertSeparator( -1 );
+
+  m_vMenuFormat->insertItem8( i18n( "Row" ), m_vMenuFormat_ResizeRow, -1, -1 );
+  m_idMenuFormat_Height = m_vMenuFormat_ResizeRow->insertItem( i18n( "Height" ), this, "resizeheight", 0 );
+
+  m_vMenuFormat->insertItem8( i18n( "Column" ),m_vMenuFormat_ResizeColumn , -1, -1 );
+  m_idMenuFormat_Width = m_vMenuFormat_ResizeColumn->insertItem( i18n( "Width" ), this, "resizewidth", 0 );
+
 
   // Scripts
   _menubar->insertMenu( i18n( "&Scripts" ), m_vMenuScripts, -1, -1 );
@@ -1585,6 +1601,40 @@ void KSpreadView::createanchor()
 {
   KSpreadanchor* dlg = new KSpreadanchor( this, "Create Anchor" ,QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
   dlg->show();
+}
+
+void KSpreadView::resizeheight()
+{
+if ( !m_pTable )
+       return;
+QRect selection( m_pTable->selectionRect() );
+if(selection.bottom()==0x7FFF)
+	{
+	 QMessageBox::warning( 0L, i18n("Error"), i18n("Area too large!"),
+			   i18n("Ok") );
+	}
+else
+	{
+	KSpreadresize* dlg = new KSpreadresize( this, "Resize row",KSpreadresize::resize_row,0 );
+	dlg->show();
+	}
+}
+
+void KSpreadView::resizewidth()
+{
+if ( !m_pTable )
+       return;
+QRect selection( m_pTable->selectionRect() );
+if(selection.right()==0x7FFF)
+	{
+	QMessageBox::warning( 0L, i18n("Error"), i18n("Area too large!"),
+			   i18n("Ok") );
+	}
+else
+	{
+	KSpreadresize* dlg = new KSpreadresize( this, "Resize column",KSpreadresize::resize_column,0 );
+	dlg->show();
+	}
 }
 
 
@@ -2223,8 +2273,10 @@ void KSpreadView::slotLayoutDlg()
   m_pCanvas->showMarker();
 }
 
-void KSpreadView::layoutDlg()
+void KSpreadView::layoutcell()
 {
+  if ( !m_pTable )
+       return;
   QRect selection( m_pTable->selectionRect() );
 
   m_pCanvas->hideMarker();

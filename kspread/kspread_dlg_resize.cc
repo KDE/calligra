@@ -29,15 +29,17 @@
 #include <kapp.h>
 #include <klocale.h>
 #include <kbuttonbox.h>
+#include <qvgroupbox.h>
 
-
-KSpreadresize::KSpreadresize( KSpreadView* parent, const char* name,type_resize re)
+KSpreadresize::KSpreadresize( KSpreadView* parent, const char* name,type_resize re,int nb=-1)
 	: QDialog( 0L, name )
 {
 
   m_pView=parent;
   type=re;
+  number=nb;
   QString tmp;
+
   int pos;
 
   QVBoxLayout *lay1 = new QVBoxLayout( this );
@@ -48,20 +50,58 @@ KSpreadresize::KSpreadresize( KSpreadView* parent, const char* name,type_resize 
   lay1->addWidget(m_pSize);
   RowLayout *rl;
   ColumnLayout *cl;
+  QRect selection( m_pView->activeTable()->selectionRect() );
   switch(type)
 	{
 	case resize_row:
-		pos=m_pView->canvasWidget()->vBorderWidget()->markerRow();
-		tmp=i18n("Row ")+tmp.setNum(pos);
-		rl = m_pView->activeTable()->rowLayout(pos);
-		size=rl->height(m_pView->canvasWidget());
-		
+		if(selection.right()==0x7fff&&(selection.top()==selection.bottom()))
+			{
+			pos=m_pView->canvasWidget()->vBorderWidget()->markerRow();
+			tmp=i18n("Row ")+tmp.setNum(pos);
+			rl = m_pView->activeTable()->rowLayout(pos);
+			size=rl->height(m_pView->canvasWidget());
+		        }
+		 else
+		 	{
+		 	if(selection.bottom()==0 ||selection.top()==0 || selection.left()==0
+			|| selection.right()==0||(selection.top()==selection.bottom()))
+				{
+				pos=m_pView->canvasWidget()->markerRow();
+				tmp=i18n("Row ")+tmp.setNum(pos);
+				rl = m_pView->activeTable()->rowLayout(pos);
+				size=rl->height(m_pView->canvasWidget());
+				}
+			else
+				{
+		 		size=0;
+		 		tmp=i18n("Row ");
+		 		}
+		 	}
 		break;
 	case resize_column:
-		pos=m_pView->canvasWidget()->hBorderWidget()->markerColumn();
-		tmp=i18n("Column ")+util_columnLabel(pos);
-		cl = m_pView->activeTable()->columnLayout(pos);
-		size=cl->width(m_pView->canvasWidget());
+		if(selection.bottom()==0x7fff &&(selection.left()==selection.right()))
+			{
+			pos=m_pView->canvasWidget()->hBorderWidget()->markerColumn();
+			tmp=i18n("Column ")+util_columnLabel(pos);
+			cl = m_pView->activeTable()->columnLayout(pos);
+			size=cl->width(m_pView->canvasWidget());
+			}
+		else
+			{
+			if(selection.bottom()==0 ||selection.top()==0 || selection.left()==0
+			|| selection.right()==0 || (selection.left()==selection.right()) )
+				{
+				pos=m_pView->canvasWidget()->markerColumn();
+				tmp=i18n("Column ")+util_columnLabel(pos);
+				cl = m_pView->activeTable()->columnLayout(pos);
+				size=cl->width(m_pView->canvasWidget());
+				}
+			else
+				{
+				size=0;
+				tmp=i18n("Column ");
+				}
+			}
 		break;
 	default :
 		cout <<"Err in type_resize\n";
@@ -70,10 +110,13 @@ KSpreadresize::KSpreadresize( KSpreadView* parent, const char* name,type_resize 
 
   setCaption( tmp );
   m_pSize->setText(tmp.setNum(size));
-  //m_pSize2=new KIntNumInput( 20,400,1,size ,0,tmp );
+  /*QVGroupBox *group = new QVGroupBox(  i18n("Size"), this );
+  lay1->addWidget( group);
+  m_pSize2 = new KIntNumInput(0L, 20, 400, 1,size,
+                                 0L, 10, false, group);
 
-  //m_pSize2->layout();
-  //lay1->addWidget(m_pSize2);
+
+  */
   KButtonBox *bb = new KButtonBox( this );
   bb->addStretch();
   m_pOk = bb->addButton( i18n("OK") );
@@ -85,7 +128,6 @@ KSpreadresize::KSpreadresize( KSpreadView* parent, const char* name,type_resize 
 
   connect( m_pClose, SIGNAL( clicked() ), this, SLOT( slotClose() ) );
   connect( m_pOk, SIGNAL( clicked() ), this, SLOT( slotOk() ) );
-
 }
 
 void KSpreadresize::slotOk()
@@ -103,10 +145,10 @@ else
 switch(type)
 	{
 	case resize_row:
-		m_pView->canvasWidget()->vBorderWidget()->resizeRow(new_size );
+		m_pView->canvasWidget()->vBorderWidget()->resizeRow(new_size,number );
 		break;
 	case resize_column:
-		m_pView->canvasWidget()->hBorderWidget()->resizeColumn(new_size );
+		m_pView->canvasWidget()->hBorderWidget()->resizeColumn(new_size,number );
 		break;
 	default :
 		cout <<"Err in type_resize\n";
@@ -115,10 +157,10 @@ switch(type)
 accept();
 }
 else
-{
- QMessageBox::warning( 0L, i18n("Error"), i18n("It is not a number !"), i18n("Ok"));
- m_pSize->setText(tmp.setNum(size));
-}
+	{
+	QMessageBox::warning( 0L, i18n("Error"), i18n("It is not a number !"), i18n("Ok"));
+ 	m_pSize->setText(tmp.setNum(size));
+	}
 }
 
 void KSpreadresize::slotClose()

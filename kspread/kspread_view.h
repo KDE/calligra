@@ -261,6 +261,7 @@ public:
     /**
      * Menu Data
      */
+
     void consolidate();
 
     /**
@@ -272,7 +273,18 @@ public:
      * Menu Auto Fill
      */
     void autoFill();
-
+     /**
+     * Menu Auto Fill
+     */
+     void resizeheight();
+     /**
+     * Menu Format
+     */
+     void resizewidth();
+     /**
+     * Menu Format
+     */
+    void layoutcell();
     /**
      * Menu for help menu
      */
@@ -376,7 +388,7 @@ public:
     void sortincr();
     void sortdecrease();
 
-    void layoutDlg();
+
     void funct();
     void formulaPower();
     void formulaSubscript();
@@ -597,10 +609,21 @@ protected:
     long int m_idMenuData_sort;
     long int m_idMenuData_goto;
     long int m_idMenuData_anchor;
+
+
+
     OpenPartsUI::Menu_var m_vMenuFolder;
     long int m_idMenuFolder_NewTable;
+
     OpenPartsUI::Menu_var m_vMenuFormat;
     long int m_idMenuFormat_AutoFill;
+    OpenPartsUI::Menu_var m_vMenuFormat_ResizeRow;
+    long int m_idMenuFormat_Height;
+    OpenPartsUI::Menu_var m_vMenuFormat_ResizeColumn;
+    long int m_idMenuFormat_Width;
+
+    long int m_idMenuFormat_Cell;
+
     OpenPartsUI::Menu_var m_vMenuScripts;
     long int m_idMenuScripts_EditGlobal;
     long int m_idMenuScripts_EditLocal;
