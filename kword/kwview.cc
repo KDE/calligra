@@ -169,6 +169,7 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
     ASSERT(sb);
     m_sbPageLabel = sb ? new KStatusBarLabel( QString::null, 0, sb ) : 0;
     addStatusBarItem( m_sbPageLabel, 0 );
+    m_sbFramesLabel = 0L; // Only added when frames are selected
 }
 
 KWView::~KWView()
@@ -736,13 +737,19 @@ void KWView::showFormulaToolbar( bool show )
 
 void KWView::updatePageInfo()
 {
-    KWFrameSetEdit * edit = gui->canvasWidget()->currentFrameSetEdit();
-    if ( edit && m_sbPageLabel )
+    if ( m_sbPageLabel )
     {
-        m_currentPage = edit->currentFrame()->pageNum();
+        KWFrameSetEdit * edit = gui->canvasWidget()->currentFrameSetEdit();
+        if ( edit )
+            m_currentPage = edit->currentFrame()->pageNum();
         /*kdDebug() << this << " KWView::updatePageInfo m_currentPage=" << m_currentPage
                   << " m_sbPageLabel=" << m_sbPageLabel
                   << endl;*/
+
+        // ### TODO what's the current page when we have no edit object (e.g. frames are selected) ?
+        // To avoid bugs, apply max page number in case a page was removed.
+        m_currentPage = QMIN( m_currentPage, doc->getPages()-1 );
+
         m_sbPageLabel->setText( QString(" ")+i18n("Page %1/%2").arg(m_currentPage+1).arg(doc->getPages())+' ' );
         QPoint rulerTopLeft = gui->canvasWidget()->rulerPos();
         gui->getHorzRuler()->setOffset( rulerTopLeft.x(), 0 );
@@ -754,6 +761,42 @@ void KWView::pageNumChanged()
 {
      docStructChanged(TextFrames);
      updatePageInfo();
+}
+
+void KWView::updateFrameStatusBarItem()
+{
+    KStatusBar * sb = statusBar();
+    int nbFrame=doc->getSelectedFrames().count();
+    if ( sb && nbFrame > 0 )
+    {
+        if ( !m_sbFramesLabel )
+        {
+            m_sbFramesLabel = sb ? new KStatusBarLabel( QString::null, 0, sb ) : 0;
+            addStatusBarItem( m_sbFramesLabel );
+        }
+        if ( nbFrame == 1 )
+        {
+            KWUnit::Unit unit = doc->getUnit();
+            QString unitName = doc->getUnitName();
+            KWFrame * frame = doc->getFirstSelectedFrame();
+            m_sbFramesLabel->setText( i18n( "Statusbar info", "%1. Frame: %2, %3  -  %4, %5 (width: %6, height: %7) (%8)" )
+                                      .arg( frame->getFrameSet()->getName() )
+                                      .arg( KWUnit::userValue( frame->left(), unit ) )
+                                      .arg( KWUnit::userValue( frame->top(), unit ) )
+                                      .arg( KWUnit::userValue( frame->right(), unit ) )
+                                      .arg( KWUnit::userValue( frame->bottom(), unit ) )
+                                      .arg( KWUnit::userValue( frame->width(), unit ) )
+                                      .arg( KWUnit::userValue( frame->height(), unit ) )
+                                      .arg( unitName ) );
+        } else
+            m_sbFramesLabel->setText( i18n( "%1 frames selected" ).arg( nbFrame ) );
+    }
+    else if ( sb && m_sbFramesLabel )
+    {
+        removeStatusBarItem( m_sbFramesLabel );
+        delete m_sbFramesLabel;
+        m_sbFramesLabel = 0L;
+    }
 }
 
 void KWView::clipboardDataChanged()
@@ -2734,6 +2777,8 @@ void KWView::frameSelectedChanged()
     actionTableUngroup->setEnabled( state );
 
     doc->refreshFrameBorderButton();
+
+    updateFrameStatusBarItem();
 }
 
 void KWView::docStructChanged(TypeStructDocItem _type)

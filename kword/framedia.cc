@@ -655,7 +655,11 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
         sw->setText( QString::number( oldW ) );
         sh->setText( QString::number( oldH ) );
 
-
+        // QString::number leads to some rounding !
+        oldX = sx->toDouble();
+        oldY = sy->toDouble();
+        oldW = sw->toDouble();
+        oldH = sh->toDouble();
 
         KWFrameSet * fs = theFrame->getFrameSet();
         // parentFs is the table in case of a table, fs otherwise
@@ -920,6 +924,10 @@ bool KWFrameDia::applyChanges()
                                             ( doc->processingType() == KWDocument::WP &&
                                               doc->getFrameSetNum( frame->getFrameSet() ) > 0 ) ) ) {
         if ( oldX != sx->text().toDouble() || oldY != sy->text().toDouble() || oldW != sw->text().toDouble() || oldH != sh->text().toDouble() ) {
+            //kdDebug() << "Old geom: " << oldX << ", " << oldY<< " " << oldW << "x" << oldH << endl;
+            //kdDebug() << "New geom: " << sx->text().toDouble() << ", " << sy->text().toDouble()
+            //          << " " << sw->text().toDouble() << "x" << sh->text().toDouble() << endl;
+
             double px = KWUnit::fromUserValue( QMAX( sx->text().toDouble(), 0 ), doc->getUnit() );
             double py = KWUnit::fromUserValue( QMAX( sy->text().toDouble(), 0 ), doc->getUnit() );
             double pw = KWUnit::fromUserValue( QMAX( sw->text().toDouble(), 0 ), doc->getUnit() );

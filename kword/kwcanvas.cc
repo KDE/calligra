@@ -653,6 +653,8 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right )
     // Repaing only the changed rects (oldRect U newRect)
     repaintContents( QRegion(oldRect).unite(newRect).boundingRect() );
     frameResized = true;
+
+    m_gui->getView()->updateFrameStatusBarItem();
 }
 
 void KWCanvas::mmEditFrameMove( int mx, int my )
@@ -800,6 +802,8 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
     // Frames have moved -> update the "frames on top" lists
     doc->updateAllFrames();
     repaintContents( repaintRegion.boundingRect() );
+
+    m_gui->getView()->updateFrameStatusBarItem();
 
     // Doesn't work ! It makes the cursor jump.
     // I have tried every combination of contentsToViewport and viewport()->mapToGlobal etc., no luck

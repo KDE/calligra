@@ -91,6 +91,7 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
     textdoc->addSelection( HighlightSelection );
     textdoc->setSelectionColor( HighlightSelection,
                                 QApplication::palette().color( QPalette::Active, QColorGroup::Dark ) );
+    textdoc->setInvertSelectionText( HighlightSelection, true );
 
     interval = 0;
     changeIntervalTimer = new QTimer( this );
@@ -1429,6 +1430,8 @@ bool KWTextFrameSet::isFrameEmpty( KWFrame * frame )
         totalHeight += kWordDocument()->zoomItY( frameIt.current()->height() );
     }
     kdWarning() << "KWTextFrameSet::isFrameEmpty called for frame " << frame << " which isn't a child of ours!" << endl;
+    if ( frame->getFrameSet() )
+        kdDebug() << "(this is " << getName() << " and the frame belongs to " << frame->getFrameSet()->name() << endl;
     return false;
 }
 

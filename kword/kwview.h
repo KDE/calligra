@@ -236,6 +236,7 @@ public slots:
     void tabListChanged( const KoTabulatorList & tabList );
 
     void updatePageInfo();
+    void updateFrameStatusBarItem();
 
     void slotSpecialChar(QChar , const QString &);
     void updateButtons();
@@ -393,6 +394,7 @@ private:
 
     // Statusbar items
     QLabel * m_sbPageLabel; // 'Current page number and page count' label
+    QLabel * m_sbFramesLabel; // Info about selected frames
 
     // Zoom values for each viewmode ( todo a viewmode enum and a qmap or so )
     int m_zoomViewModeNormal;
