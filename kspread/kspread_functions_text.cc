@@ -431,56 +431,31 @@ bool kspreadfunc_proper(KSContext & context)
 bool kspreadfunc_replace( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
-  QString s;
-  QString s1;
-  QString s2;
 
   if ( !KSUtil::checkArgumentsCount( context, 4, "REPLACE", true ) )
     return false;
 
   if ( !KSUtil::checkType( context, args[0], KSValue::StringType, true ) )
-  {
-    if (!KSUtil::checkType( context, args[0], KSValue::BoolType, true))
-      return false;
-
-    s = args[0]->boolValue() ? "True" : "False";
-  }
-  else
-    s = args[0]->stringValue();
-
-  if ( !KSUtil::checkType( context, args[1], KSValue::StringType, true ) )
-  {
-    if (!KSUtil::checkType( context, args[1], KSValue::BoolType, true))
-      return false;
-
-    s1 = args[1]->boolValue() ? "True" : "False";
-  }
-  else
-    s1 = args[1]->stringValue();
-
-  if ( !KSUtil::checkType( context, args[2], KSValue::StringType, true ) )
-  {
-    if (!KSUtil::checkType( context, args[2], KSValue::BoolType, true))
-      return false;
-
-    s2 = args[2]->boolValue() ? "True" : "False";
-  }
-  else
-    s2 = args[2]->stringValue();
-
-  if ( !KSUtil::checkType( context, args[3], KSValue::BoolType, true ) )
     return false;
 
-  bool    b = args[3]->boolValue();
+  if ( !KSUtil::checkType( context, args[1], KSValue::IntType, true ) )
+    return false;
 
-  int p = s.find(s1, 0, b);
-  while (p != -1)
-  {
-    s.replace(p, s1.length(), s2);
-    p = s.find(s1, 0, b);
-  }
+  if ( !KSUtil::checkType( context, args[2], KSValue::IntType, true ) )
+    return false;
 
-  context.setValue( new KSValue(s) );
+  if ( !KSUtil::checkType( context, args[3], KSValue::StringType, true ) )
+    return false;
+
+  QString text = args[0]->stringValue();
+  int pos = args[1]->intValue();
+  int len = args[2]->intValue();
+  QString new_text = args[3]->stringValue();
+
+  if( pos < 0 ) pos = 0;
+
+  QString result = text.replace( pos-1, len, new_text );
+  context.setValue( new KSValue( result ) );
 
   return true;
 }

@@ -140,26 +140,28 @@
       <Name>REPLACE</Name>
       <Type>String</Type>
       <Parameter>
-	<Comment>String in which something should be replaced</Comment>
+	<Comment>Text which you want to replace some characters</Comment>
 	<Type range="false">String</Type>
       </Parameter>
       <Parameter>
-	<Comment>String to replace</Comment>
-	<Type range="false">String</Type>
+	<Comment>Position of the characters to replace</Comment>
+	<Type>Int</Type>
       </Parameter>
       <Parameter>
-	<Comment>New string part</Comment>
-	<Type range="false">String</Type>
+	<Comment>Number of characters to replace</Comment>
+	<Type>Int</Type>
       </Parameter>
       <Parameter>
-	<Comment>TRUE if replacement should be case sensitive, FALSE otherwise.</Comment>
-	<Type range="false">Boolean</Type>
+	<Comment>The text that will replace characters in old text</Comment>
+	<Type range="false">String</Type>
       </Parameter>
       <Help>
-	<Text>The REPLACE() function replaces a string s1 in the string s with string s2.</Text>
-	<Syntax>REPLACE(string; string1; string2; boolean)</Syntax>
-	<Example>REPLACE("KOffice"; "Office"; "Spread"; TRUE) returns "KSpread"</Example>
+	<Text>The REPLACE() function replaces part of a text string with a different text string.</Text>
+	<Syntax>REPLACE(text;position;length;new_text)</Syntax>
+	<Example>REPLACE("abcdefghijk";6;5;"-") returns "abcde-k"</Example>
+	<Example>REPLACE("2002";3;2;"03") returns "2003"</Example>
         <Related>FIND</Related>
+        <Related>MID</Related>
       </Help>
     </Function>
 
