@@ -945,6 +945,13 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     KoXmlWriter contentTmpWriter( tmpFile, 1 );
 
 
+    //For sticky objects
+    KTempFile stickyTmpFile;
+    stickyTmpFile.setAutoDelete( true );
+    QFile* tmpStickyFile = stickyTmpFile.file();
+    KoXmlWriter stickyTmpWriter( tmpFile, 1 );
+
+
     contentTmpWriter.startElement( "office:body" );
 
     int indexObj = 1;
@@ -953,6 +960,10 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     {
         m_pageList.at( i )->saveOasisPage( store, contentTmpWriter, ( i+1 ), savingContext, indexObj );
     }
+
+    m_stickyPage->saveOasisStickyPage( store, stickyTmpWriter , savingContext, indexObj );
+
+
     saveOasisPresentationSettings( contentTmpWriter );
     contentTmpWriter.endElement(); //office:body
 
@@ -1001,7 +1012,10 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
     manifestWriter->addManifestEntry( "styles.xml", "text/xml" );
 
-    saveOasisDocumentStyles( store, mainStyles );
+    //todo fixme????
+    tmpStickyFile->close();
+    saveOasisDocumentStyles( store, mainStyles, stickyTmpWriter );
+    //stickyTmpWriter.close();
 
     if ( !store->close() ) // done with styles.xml
         return false;
@@ -1057,7 +1071,7 @@ void KPresenterDoc::saveOasisPresentationSettings( KoXmlWriter &contentTmpWriter
     contentTmpWriter.endElement();
 }
 
-void KPresenterDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) const
+void KPresenterDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, KoXmlWriter &stickyTmpWriter ) const
 {
     QString pageLayoutName;
     KoStoreDevice stylesDev( store );
@@ -1125,7 +1139,8 @@ void KPresenterDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainSt
     stylesWriter.startElement( "style:master-page" );
     stylesWriter.addAttribute( "style:name", "Standard" );
     stylesWriter.addAttribute( "style:page-layout-name", pageLayoutName );
-    //todo add code to save sticky object
+    //save sticky object
+    //m_stickyPage->saveOasisStickyPage( store, stylesWriter , KoSavingContext& context, int & indexObj )
     stylesWriter.endElement();
     stylesWriter.endElement(); // office:master-style
 

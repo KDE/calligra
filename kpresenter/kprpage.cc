@@ -108,6 +108,11 @@ DCOPObject* KPrPage::dcopObject()
 
 bool KPrPage::saveOasisStickyPage( KoStore *store, KoXmlWriter &xmlWriter, KoSavingContext& context, int & indexObj )
 {
+    QPtrListIterator<KPObject> it( m_objectList );
+    for ( ; it.current() ; ++it )
+    {
+        it.current()->saveOasis( xmlWriter, context, indexObj );
+    }
     return true;
 }
 
