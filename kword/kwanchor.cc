@@ -94,8 +94,10 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     kdDebug() << "KWAnchor::draw crect in LU coordinates:                   " << DEBUGRECT( crectLU ) << endl;
 #endif
 
+    crectLU = crectLU.intersect ( QRect(paragx+xpos,paragy+ypos,width, height) );
     QPoint topLeftLU = crectLU.topLeft();
-
+    
+        
     // Convert crect to document coordinates, first topleft then bottomright
     KoPoint topLeftPt;
     KWFrame* frameContainingTopLeft = fs->internalToDocument( topLeftLU, topLeftPt );
@@ -110,7 +112,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
 
     crectLU = crectLU.intersect( QRect( topLeftLU, QPoint( rightFrameLU, bottomFrameLU ) ) );
     //kdDebug() << "KWAnchor::draw crectLU now " << crectLU << endl;
-
+    
     QPoint bottomRightLU = crectLU.bottomRight();
     KoPoint bottomRightPt;
     if ( ! fs->internalToDocument( bottomRightLU, bottomRightPt ) )
@@ -191,12 +193,10 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     {
         // The above rects are about the containing frame.
         // To draw the inline frame as selected, we need to look at the inline frame's own size.
-        QRect frameRect = m_frameset->floatingFrameRect( m_frameNum );
-        frameRect &= crect; // intersect
+        QRect frameRect = crect;
 #ifdef DEBUG_DRAWING
     kdDebug() << "KWAnchor::draw selected frame. (frameRect&crect) = " << frameRect << endl;
 #endif
-        if ( !frameRect.isEmpty() )
             p->fillRect( frameRect, QBrush( cg.highlight(), QBrush::Dense4Pattern) );
     }
     p->restore();
