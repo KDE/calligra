@@ -1,1 +1,5 @@
-# modules
+# There is no -dev package.
+kchart: non-dev-pkg-with-shlib-symlink usr/lib/libkchartpart.so.0.0.0 usr/lib/libkchartpart.so
+kchart: non-dev-pkg-with-shlib-symlink usr/lib/kchart.so.0.0.0 usr/lib/kchart.so
+# This is inserted by debhelper and is legal.
+kchart: postrm-calls-ldconfig

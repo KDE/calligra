@@ -1,1 +1,5 @@
-# modules
+# There is no -dev package.
+kspread: non-dev-pkg-with-shlib-symlink usr/lib/libkspreadpart.so.0.0.0 usr/lib/libkspreadpart.so
+kspread: non-dev-pkg-with-shlib-symlink usr/lib/kspread.so.0.0.0 usr/lib/kspread.so
+# This is inserted by debhelper and is legal.
+kspread: postrm-calls-ldconfig

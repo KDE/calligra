@@ -1,1 +1,4 @@
-# modules
+# There is no -dev package.
+koshell: non-dev-pkg-with-shlib-symlink usr/lib/koshell.so.0.0.0 usr/lib/koshell.so
+# This is inserted by debhelper and is legal.
+koshell: postrm-calls-ldconfig

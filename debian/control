@@ -17,30 +17,6 @@ Description: KDE Office Suite
  .
  This package provides all the components of KOffice.
 
-Package: koffice-libs
-Architecture: any
-Section: libs
-Replaces: koffice (<< 2.1-beta2-1), koffice-common, kspread (<< 2.1-20010101-0), kivio (<< 2.1-20010101-0)
-Depends: ${shlibs:Depends}, kdebase-libs
-Suggests: kdebase
-Conflicts: koffice (<< 2.1-beta2-1), koffice-common
-Description: common libraries and files for the KDE Office Suite
- This package provides the libraries, binaries and other files that are
- shared amongst the various components of KOffice.
- .
- This package is part of the KDE Office Suite.
-
-Package: koffice-dev
-Architecture: any
-Section: devel
-Replaces: kformula
-Depends: koffice-libs (= ${Source-Version}), kdelibs-dev
-Description: common libraries for KOffice (development files)
- This package provides the development files for the libraries that are
- shared amongst the various components of KOffice.
- .
- This package is part of the KDE Office Suite.
-
 Package: kchart
 Architecture: any
 Section: x11
@@ -158,6 +134,30 @@ Description: a word processor for the KDE Office Suite
  KWord is a frame-based wordprocessor comparable to FrameMaker.  It
  can be used for desktop publishing, but also for "normal" wordprocessing
  (like writing letters, reports and so on).
+ .
+ This package is part of the KDE Office Suite.
+
+Package: koffice-libs
+Architecture: any
+Section: libs
+Replaces: koffice (<< 2.1-beta2-1), koffice-common, kspread (<< 2.1-20010101-0), kivio (<< 2.1-20010101-0)
+Depends: ${shlibs:Depends}, kdebase-libs
+Suggests: kdebase
+Conflicts: koffice (<< 2.1-beta2-1), koffice-common
+Description: common libraries and files for the KDE Office Suite
+ This package provides the libraries, binaries and other files that are
+ shared amongst the various components of KOffice.
+ .
+ This package is part of the KDE Office Suite.
+
+Package: koffice-dev
+Architecture: any
+Section: devel
+Replaces: kformula
+Depends: koffice-libs (= ${Source-Version}), kdelibs-dev
+Description: common libraries for KOffice (development files)
+ This package provides the development files for the libraries that are
+ shared amongst the various components of KOffice.
  .
  This package is part of the KDE Office Suite.
 

@@ -1,1 +1,5 @@
-# modules
+# There is no -dev package.
+kword: non-dev-pkg-with-shlib-symlink usr/lib/libkwordpart.so.0.0.0 usr/lib/libkwordpart.so
+kword: non-dev-pkg-with-shlib-symlink usr/lib/kword.so.0.0.0 usr/lib/kword.so
+# This is inserted by debhelper and is legal.
+kword: postrm-calls-ldconfig

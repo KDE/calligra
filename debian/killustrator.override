@@ -1,1 +1,5 @@
-# modules
+# There is no -dev package.
+killustrator: non-dev-pkg-with-shlib-symlink usr/lib/killustrator.so.0.0.0 usr/lib/killustrator.so
+killustrator: non-dev-pkg-with-shlib-symlink usr/lib/libkillustratorpart.so.0.0.0 usr/lib/libkillustratorpart.so
+# This is inserted by debhelper and is legal.
+killustrator: postrm-calls-ldconfig

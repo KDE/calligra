@@ -1,1 +1,5 @@
-# modules
+# There is no -dev package.
+kpresenter: non-dev-pkg-with-shlib-symlink usr/lib/libkpresenterpart.so.0.0.0 usr/lib/libkpresenterpart.so
+kpresenter: non-dev-pkg-with-shlib-symlink usr/lib/kpresenter.so.0.0.0 usr/lib/kpresenter.so
+# This is inserted by debhelper and is legal.
+kpresenter: postrm-calls-ldconfig

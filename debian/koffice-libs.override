@@ -1,1 +1,22 @@
-# modules
+# There is no -dev package; this module is a plug-in.
+koffice-libs: non-dev-pkg-with-shlib-symlink usr/lib/libkwmf.so.0.0.0 usr/lib/libkwmf.so
+# These are all modules in /usr/lib/kde2/.
+koffice-libs: shlib-missing-in-control-file libabiwordexport.so usr/lib/kde2/libabiwordexport.so
+koffice-libs: shlib-missing-in-control-file libabiwordimport.so usr/lib/kde2/libabiwordimport.so
+koffice-libs: shlib-missing-in-control-file libapplixgraphicimport.so usr/lib/kde2/libapplixgraphicimport.so
+koffice-libs: shlib-missing-in-control-file libapplixspreadimport.so usr/lib/kde2/libapplixspreadimport.so
+koffice-libs: shlib-missing-in-control-file libapplixwordimport.so usr/lib/kde2/libapplixwordimport.so
+koffice-libs: shlib-missing-in-control-file libasciiexport.so usr/lib/kde2/libasciiexport.so
+koffice-libs: shlib-missing-in-control-file libasciiimport.so usr/lib/kde2/libasciiimport.so
+koffice-libs: shlib-missing-in-control-file libcsvfilterdia.so usr/lib/kde2/libcsvfilterdia.so
+koffice-libs: shlib-missing-in-control-file libdocbookexport.so usr/lib/kde2/libdocbookexport.so
+koffice-libs: shlib-missing-in-control-file libhtmlexport.so usr/lib/kde2/libhtmlexport.so
+koffice-libs: shlib-missing-in-control-file libhtmlexportdia.so usr/lib/kde2/libhtmlexportdia.so
+koffice-libs: shlib-missing-in-control-file libhtmlimport.so usr/lib/kde2/libhtmlimport.so
+koffice-libs: shlib-missing-in-control-file libkspelltool.so usr/lib/kde2/libkspelltool.so
+koffice-libs: shlib-missing-in-control-file liblatexexport.so usr/lib/kde2/liblatexexport.so
+koffice-libs: shlib-missing-in-control-file libmsodimport.so usr/lib/kde2/libmsodimport.so
+koffice-libs: shlib-missing-in-control-file libolefilter.so usr/lib/kde2/libolefilter.so
+koffice-libs: shlib-missing-in-control-file libwmfimport.so usr/lib/kde2/libwmfimport.so
+# This is inserted by debhelper and is legal.
+koffice-libs: postrm-calls-ldconfig

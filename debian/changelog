@@ -13,6 +13,8 @@ koffice (1:1.1-20010404-1) unstable; urgency=low
     single Recommends: koffice.
   * Upgraded debian/rules to DH_COMPAT=3 and removed postinst scripts;
     completely reworked debian/rules.
+  * Moved libcsv[export/import] and associated files from koffice-libs to
+    kspread since it requires kspread libraries.
   * Moved a few files in /usr/share/services from package koffice-libs to
     individual application packages.
   * Made links so killustrator icons show up beneath /usr/share/icons/.

@@ -1,1 +1,4 @@
-# modules
+# There is no -dev package.
+kugar: non-dev-pkg-with-shlib-symlink usr/lib/libkugarpart.so.0.0.0 usr/lib/libkugarpart.so
+# This is inserted by debhelper and is legal.
+kugar: postrm-calls-ldconfig

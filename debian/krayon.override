@@ -1,1 +1,6 @@
-# modules
+# There is no -dev package.
+krayon: non-dev-pkg-with-shlib-symlink usr/lib/libkrayonpart.so.0.0.0 usr/lib/libkrayonpart.so
+krayon: non-dev-pkg-with-shlib-symlink usr/lib/krayon.so.0.0.0 usr/lib/krayon.so
+krayon: non-dev-pkg-with-shlib-symlink usr/lib/libkisp_example.so.0.0.0 usr/lib/libkisp_example.so
+# This is inserted by debhelper and is legal.
+krayon: postrm-calls-ldconfig

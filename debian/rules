@@ -120,14 +120,35 @@ binary-arch: build install
 	dh_installchangelogs -pkword kword/CHANGES
 	dh_link -a
 	dh_strip -a
-	dh_compress -a
+	dh_compress -a --exclude=index.docbook
 	dh_fixperms -a
 	-chmod 644 debian/kivio/usr/share/apps/kivio/autoloadStencils/*ksp
 	# Leave debian/kpresenter/usr/bin/kprconverter.pl with execute perms.
 	dh_makeshlibs -a -V
 	dh_installdeb -a
 	dh_perl -a
-	dh_shlibdeps -a -l`pwd`/debian/koffice-libs/usr/lib
+	dh_shlibdeps -pkoffice-dev \
+	  -ldebian/koffice-libs/usr/lib
+	dh_shlibdeps -pkoffice-libs \
+	  -ldebian/koffice-libs/usr/lib
+	dh_shlibdeps -pkchart \
+	  -ldebian/koffice-libs/usr/lib:debian/kchart/usr/lib
+	dh_shlibdeps -pkillustrator \
+	  -ldebian/koffice-libs/usr/lib:debian/killustrator/usr/lib
+	dh_shlibdeps -pkivio \
+	  -ldebian/koffice-libs/usr/lib:debian/kivio/usr/lib
+	dh_shlibdeps -pkoshell \
+	  -ldebian/koffice-libs/usr/lib:debian/koshell/usr/lib
+	dh_shlibdeps -pkpresenter \
+	  -ldebian/koffice-libs/usr/lib:debian/kpresenter/usr/lib
+	dh_shlibdeps -pkrayon \
+	  -ldebian/koffice-libs/usr/lib:debian/krayon/usr/lib
+	dh_shlibdeps -pkspread \
+	  -ldebian/koffice-libs/usr/lib:debian/kspread/usr/lib
+	dh_shlibdeps -pkugar \
+	  -ldebian/koffice-libs/usr/lib:debian/kugar/usr/lib
+	dh_shlibdeps -pkword \
+	  -ldebian/koffice-libs/usr/lib:debian/kword/usr/lib
 	dh_gencontrol -a
 	dh_md5sums -a
 	dh_builddeb -a
