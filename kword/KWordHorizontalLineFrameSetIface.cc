@@ -18,6 +18,7 @@
 */
 
 #include "KWordHorizontalLineFrameSetIface.h"
+#include "KWordPictureFrameSetIface.h"
 #include "kwframe.h"
 #include <kapplication.h>
 #include <kdebug.h>
@@ -25,7 +26,7 @@
 
 
 KWHorizontalLineFrameSetIface::KWHorizontalLineFrameSetIface( KWHorzLineFrameSet *_frame )
-    : KWordFrameSetIface(_frame)
+    : KWordPictureFrameSetIface(_frame)
 {
     m_frameset =_frame;
 }

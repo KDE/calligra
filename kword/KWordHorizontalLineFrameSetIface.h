@@ -22,13 +22,13 @@
 
 #include <KoDocumentIface.h>
 #include <dcopref.h>
-#include "KWordFrameSetIface.h"
 #include <qstring.h>
 #include <qcolor.h>
+#include "KWordPictureFrameSetIface.h"
 
 class KWHorzLineFrameSet;
 
-class KWHorizontalLineFrameSetIface : public KWordFrameSetIface
+class KWHorizontalLineFrameSetIface : public KWordPictureFrameSetIface
 {
     K_DCOP
 public:
