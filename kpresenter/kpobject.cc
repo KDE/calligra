@@ -790,7 +790,6 @@ void KP2DObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool draw
     double oy = orig.y();
     double ow = ext.width();
     double oh = ext.height();
-
     _painter->save();
 
     if ( shadowDistance > 0 )
@@ -827,9 +826,9 @@ void KP2DObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool draw
             getShadowCoords( sx, sy );
 
             QWMatrix m;
-            m.translate( pw / 2, ph / 2 );
+            m.translate( _zoomHandler->zoomItX(pw / 2), _zoomHandler->zoomItY(ph / 2) );
             m.rotate( angle );
-            m.translate( rr.left() + xPos + sx, rr.top() + yPos + sy );
+            m.translate( _zoomHandler->zoomItX( rr.left() + xPos + sx),_zoomHandler->zoomItY( rr.top() + yPos + sy) );
 
             _painter->setWorldMatrix( m, true );
             paint( _painter,_zoomHandler );
@@ -859,7 +858,7 @@ void KP2DObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler, bool draw
         rr.moveTopLeft( KoPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
         QWMatrix m;
-        m.translate( pw / 2, ph / 2 );
+        m.translate( _zoomHandler->zoomItX(pw / 2), _zoomHandler->zoomItY(ph / 2) );
         m.rotate( angle );
         m.translate( _zoomHandler->zoomItX(rr.left() + xPos), _zoomHandler->zoomItY(rr.top() + yPos) );
 
