@@ -117,7 +117,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	wCustomWidget->setClassName("CustomWidget");
 	wCustomWidget->setName(i18n("Custom Widget"));
 	wCustomWidget->setNamePrefix(i18n("CustomWidget"));
-	wCustomWidget->setDescription(i18n("A custom or non supported widget"));
+	wCustomWidget->setDescription(i18n("A custom or non-supported widget"));
 	m_classes.append(wCustomWidget);
 
 	KFormDesigner::WidgetInfo *wLabel = new KFormDesigner::WidgetInfo(this);
