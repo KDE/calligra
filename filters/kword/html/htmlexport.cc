@@ -932,6 +932,40 @@ bool ClassExportFilterBase::filter(const QString  &filenameIn, const QString  &f
 
     KoStore koStoreIn (filenameIn, KoStore::Read);
 
+    QByteArray byteArrayIn;
+
+    QString strTitle;
+    if ( koStoreIn.open ( "documentinfo.xml" ) )
+    {
+        byteArrayIn = koStoreIn.read ( koStoreIn.size () );
+        koStoreIn.close ();
+
+        QDomDocument qDomDocumentInfo;
+        qDomDocumentInfo.setContent (byteArrayIn);
+
+        // Search <title> element (be carefull: there are two of them!)
+        QDomNodeList docNodeList = qDomDocumentInfo.elementsByTagName("title");
+
+        // Now find the <title> element that is child of a <about> element
+        for (uint i=0; i<docNodeList.count(); i++)
+        {
+            QDomNode node=docNodeList.item(i);
+            kdDebug(30502) << " Parent name: " << node.parentNode().nodeName() << endl;
+            if (node.parentNode().nodeName()=="about")
+            {
+                // We have the one we want!
+                //  Therefore retrieve text of element (may be empty!)
+                strTitle=node.toElement().text();
+                kdDebug(30502) << "Found new title " << strTitle << endl;
+            }
+        }
+    }
+    else
+    {
+        // Note: we do not worry too much if we cannot open the document info!
+        kdWarning(30502) << "Unable to open documentinfo.xml sub-file!" << endl;
+    }
+
     if ( !koStoreIn.open ( "root" ) )
     {
         koStoreIn.close ();
@@ -940,7 +974,7 @@ bool ClassExportFilterBase::filter(const QString  &filenameIn, const QString  &f
         return false;
     }
 
-    QByteArray byteArrayIn = koStoreIn.read ( koStoreIn.size () );
+    byteArrayIn = koStoreIn.read ( koStoreIn.size () );
     koStoreIn.close ();
 
     // let parse the buffer just read from the file
@@ -990,13 +1024,18 @@ bool ClassExportFilterBase::filter(const QString  &filenameIn, const QString  &f
               << "\""<< (isXML()?" /":"") // X(HT)ML closes empty elements, HTML not!
               << ">" << endl;
 
-    // Put the filename as HTML title // TODO: take the real title from documentinfo.xml (if any!)
-    QString strTitle(filenameOut);
-    const int result=strTitle.findRev("/");
-    if (result>=0)
+    if (strTitle.isEmpty())
     {
-        strTitle=strTitle.mid(result+1);
+        // We have still no title for the document,
+        //  therefore make one from the file name
+        strTitle=filenameOut;
+        const int result=strTitle.findRev("/");
+        if (result>=0)
+        {
+            strTitle=strTitle.mid(result+1);
+        }
     }
+
     streamOut << "<title>"<< escapeText(strTitle) <<"</title>" << endl;  // <TITLE> is mandatory in HTML 4.01 !
 
     //TODO: transform documentinfo.xml into many <META> elements (at least the author!)
