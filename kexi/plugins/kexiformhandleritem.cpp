@@ -24,13 +24,15 @@
 #include "kexiprojecthandler.h"
 #include "kexidbwidgetcontainer.h"
 #include "kexiwidgetprovider.h"
-#include "formeditor/widgetwatcher.h"
 
+#include "formeditor/widgetwatcher.h"
+#include "formeditor/eventbuffer.h"
 
 KexiFormHandlerItem::KexiFormHandlerItem(KexiProjectHandler *parent, const QString &name, const QString &identifier)
  : KexiProjectHandlerItem(parent, name, "kexi/form", identifier)
 {
 	m_propertyBuffer = new PropertyBuffer(this, "pb");
+	m_eventBuffer = new KFormEditor::EventBuffer();
 //	m_widgetList = new WidgetList();
 	m_widgetWatcher = new KFormEditor::WidgetWatcher(this, m_propertyBuffer);
 	m_container = new KexiDBWidgetContainer(0, "form", "bar");
@@ -60,6 +62,12 @@ KexiFormHandlerItem::load(KoStore *store)
 //	m_container = new KexiDBWidgetContainer(0, "foo", "bar");
 	KexiWidgetProvider *provider = new KexiWidgetProvider();
 	m_widgetWatcher->load(m_container, provider, data);
+}
+
+void
+KexiFormHandlerItem::setSource(const QString &src)
+{
+	m_container->setProperty("dataSource", QVariant(src));
 }
 
 KexiFormHandlerItem::~KexiFormHandlerItem()

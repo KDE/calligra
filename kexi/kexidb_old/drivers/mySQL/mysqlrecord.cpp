@@ -281,6 +281,13 @@ MySqlRecord::next()
 	return false;
 }
 
+bool
+MySqlRecord::prev()
+{
+	return MySqlResult::prev();
+}
+
+
 unsigned long
 MySqlRecord::last_id()
 {

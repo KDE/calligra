@@ -115,7 +115,7 @@ KexiDBRecord *KexiTablePart::records(const QString& identifier,Parameters params
 	KexiDBRecord *m_record=0;
     try
     {
-        m_record = kexiProject()->db()->queryRecord("select * from " + localIdentifier(identifier), false);
+        m_record = kexiProject()->db()->queryRecord("select * from " + localIdentifier(identifier), true);
     }
     catch(KexiDBError &err)
     {

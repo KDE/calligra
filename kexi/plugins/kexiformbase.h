@@ -79,6 +79,9 @@ class KexiFormBase : public KexiDialogBase
 		void slotToggleFormMode(bool state);
 
 		void slotWidgetInserted(QObject *);
+
+		void slotDBNext();
+		void slotDBPrev();
 };
 
 #endif

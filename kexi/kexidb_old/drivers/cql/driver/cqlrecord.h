@@ -75,6 +75,7 @@ class CqlRecord : public KexiDBRecord
 		QString		fieldName(unsigned int field);
 
 		bool		next();
+		bool		prev() { return false; }
 
 		unsigned long	last_id();
 

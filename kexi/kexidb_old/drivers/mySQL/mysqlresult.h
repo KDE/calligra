@@ -43,6 +43,7 @@ class MySqlResult : public KexiDBResult
 		QVariant	value(QString field);
 		
 		bool		next();
+		bool		prev();
 
 		unsigned int	numFields();
 		unsigned int	numRows();
@@ -63,7 +64,7 @@ class MySqlResult : public KexiDBResult
 		FieldNames	m_fieldNames;
 		FieldInfo	m_fields;
 
-		unsigned int	m_currentRecord;
+		unsigned long	m_currentRecord;
 };
 
 #endif

@@ -56,7 +56,14 @@ class KexiDBWidgetContainer : public KFormEditor::WidgetContainer
 		void		setRecord(KexiDBRecord *rec);
 		void		setWidgetWatcher(KFormEditor::WidgetWatcher *ww) { m_ww = ww; }
 
+	public slots:
+		void		next();
+		void		prev();
+
 	protected:
+		void		setupWidgets();
+
+	private:
 		QString		m_dataSource;
 		KexiDBRecord	*m_rec;
 		KFormEditor::WidgetWatcher	*m_ww;

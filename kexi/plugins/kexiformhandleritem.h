@@ -31,6 +31,7 @@ namespace KFormEditor
 {
 	class WidgetWatcher;
 	class WidgetContainer;
+	class EventBuffer;
 }
 
 class KexiFormHandlerItem : public KexiProjectHandlerItem
@@ -44,9 +45,11 @@ class KexiFormHandlerItem : public KexiProjectHandlerItem
 		PropertyBuffer	*propertyBuffer() { return m_propertyBuffer; }
 		KFormEditor::WidgetWatcher	*widgetWatcher() { return m_widgetWatcher; }
 		KFormEditor::WidgetContainer	*container() { return m_container; }
+		KFormEditor::EventBuffer	*eventBuffer() { return m_eventBuffer; }
 
 		void	load(KoStore *store);
 		void	store(KoStore *store);
+		void	setSource(const QString &src);
 
 		void	setContainer(KFormEditor::WidgetContainer *c) { m_container = c; }
 
@@ -54,5 +57,6 @@ class KexiFormHandlerItem : public KexiProjectHandlerItem
 		PropertyBuffer			*m_propertyBuffer;
 		KFormEditor::WidgetWatcher	*m_widgetWatcher;
 		KFormEditor::WidgetContainer	*m_container;
+		KFormEditor::EventBuffer	*m_eventBuffer;
 };
 #endif

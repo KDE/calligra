@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Joseph Wenninger <jowenn@kde.org>
+   		 2003 Lucijan Busch    <lucijan@gmx.at>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -34,6 +35,8 @@ KexiQueryPartItem::KexiQueryPartItem(KexiProjectHandler *parent,
 		const QString& identifier)
 	:KexiProjectHandlerItem(parent,name,mime,identifier)
 {
+	m_client = 0;
+
 	m_designData = new KexiTableList();
 	KexiTableItem *item = new KexiTableItem(5);
 
@@ -59,8 +62,14 @@ KexiQueryPartItem::parameters()
 
 void KexiQueryPartItem::store(KoStore* store)
 {
-
         kdDebug() << "KexiQueryPartItem::store(KoStore*)" << endl;
+
+	if(m_client)
+	{
+        	kdDebug() << "KexiQueryPartItem::store(): client is registered..." << endl;
+		kdDebug() << "KexiQueryPartItem::store(): " << m_params.count() << " items" << endl;
+		m_client->saveBack();
+	}
 
 	QDomDocument domDoc("Query");
 	domDoc.appendChild(domDoc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));

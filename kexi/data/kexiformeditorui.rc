@@ -27,4 +27,12 @@
 	<Action name="widget_tabwidget"/>
 </ToolBar>
 
+<ToolBar name="DBNavigation">
+	<Text>Database Navigation</Text>
+	<Action name="first" />
+	<Action name="prev" />
+	<Action name="next" />
+	<Action name="last" />
+</ToolBar>
+
 </kpartgui>

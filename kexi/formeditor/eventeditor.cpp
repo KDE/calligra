@@ -25,8 +25,9 @@
 
 #include "eventeditoritem.h"
 #include "eventeditor.h"
+#include "eventbuffer.h"
 
-EventEditor::EventEditor(QWidget *parent, const char *name)
+EventEditor::EventEditor(QWidget *parent, KFormEditor::EventBuffer *buff, const char *name)
  : PropertyEditor(parent, name)
 {
 	header()->setLabel(0, i18n("Event"));
@@ -51,14 +52,6 @@ EventEditor::setObject(QObject *o)
 		new EventEditorItem(this, o, name, "", "", 0);
 	}
 }
-
-/*
-void
-EventEditor::setReceivers(WidgetList *receivers)
-{
-
-}
-*/
 
 void
 EventEditor::appendFake(const QString &name, FakeHandler *h)

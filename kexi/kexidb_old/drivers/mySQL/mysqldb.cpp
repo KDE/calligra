@@ -47,13 +47,18 @@ MySqlDB::MySqlDB(QObject *parent, const char *name, const QStringList &) : KexiD
 }
 
 KexiDBRecord*
-MySqlDB::queryRecord(QString querystatement, bool /*buffer*/)
+MySqlDB::queryRecord(QString querystatement, bool buffer)
 {
 	kdDebug() << "MySqlDB::queryRecord()" << endl;
 	try
 	{
 		query(querystatement);
-		MYSQL_RES *res = mysql_use_result(m_mysql);
+		MYSQL_RES *res;
+		if(!buffer)
+			res = mysql_use_result(m_mysql);
+		else
+			res = mysql_store_result(m_mysql);
+
 		if(res)
 		{
 			MySqlRecord *rec = new MySqlRecord(res, this, false);

@@ -28,16 +28,16 @@ class KexiDBLineEdit : public QLineEdit
 {
 	Q_OBJECT
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-//	Q_PROPERTY(QVariant content READ content WRITE setContent)
+	Q_PROPERTY(QString dbdata READ content WRITE setDBContent DESIGNABLE true)
 
 	public:
 		KexiDBLineEdit(QWidget *parent=0, const char *name=0);
 		~KexiDBLineEdit();
 
 		QString		dataSource() const;
-		QVariant	content() const;
+		QString		content() const;
 		void		setDataSource(const QString &source);
-		void		setContent(const QVariant &value);
+		void		setDBContent(const QString &value);
 
 	protected:
 		QString		m_source;

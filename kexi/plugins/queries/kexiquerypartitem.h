@@ -28,6 +28,7 @@ class QString;
 class KexiProjectHandler;
 class KexiQueryDesigner;
 class KexiTableList;
+class KexiQueryDesigner;
 
 class KexiQueryPartItem: public KexiProjectHandlerItem
 {
@@ -45,6 +46,7 @@ public:
 	KexiTableList	*designData() { return m_designData; }
 	QString		sql() { return m_sql; }
 	void		setSQL(const QString &sql) { m_sql = sql; }
+	void		setClient(KexiQueryDesigner *c) { m_client = c; }
 
 	void store(KoStore*);
 	void load(KoStore*);
@@ -57,6 +59,7 @@ private:
 	KexiTableList			*m_designData;
 	QString				m_sql;
 	KexiDataProvider::ParameterList	m_params;
+	KexiQueryDesigner		*m_client;
 };
 
 #endif

@@ -8,7 +8,7 @@ LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 libkformeditor_la_METASOURCES = AUTO
 
-libkformeditor_la_SOURCES = propertyeditor.cpp propertyeditoritem.cpp propertyeditoreditor.cpp propertyeditorlist.cpp propertyeditorinput.cpp widgetcontainer.cpp resizehandle.cpp container_frame.cpp container_tabwidget.cpp containerIface.cpp propertybufferitem.cpp propertybuffer.cpp eventeditor.cpp eventeditoritem.cpp eventeditoreditor.cpp widgetwatcher.cpp widgetprovider.cpp eventdetail.ui
+libkformeditor_la_SOURCES = propertyeditor.cpp propertyeditoritem.cpp propertyeditoreditor.cpp propertyeditorlist.cpp propertyeditorinput.cpp widgetcontainer.cpp resizehandle.cpp container_frame.cpp container_tabwidget.cpp containerIface.cpp propertybufferitem.cpp propertybuffer.cpp eventeditor.cpp eventeditoritem.cpp eventeditoreditor.cpp widgetwatcher.cpp widgetprovider.cpp eventdetail.ui eventbuffer.cpp
 
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 

@@ -29,7 +29,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kpushbutton.h>
-#include <klineeditdlg.h>
 
 #include "kexiDB/kexidb.h"
 #include "kexiDB/kexidbrecord.h"
@@ -347,12 +346,6 @@ KexiQueryDesignerGuiEditor::getQuery()
 				query += " WHERE ";
 
 			QString ccondition = (*itC).andCondition;
-			if(ccondition.contains("kexi_"))
-			{
-				QRegExp exp("kexi_[a-zA-Z0-9]*");
-				exp.search(ccondition);
-				ccondition.replace(exp, getParam(exp.cap(), true));
-			}
 
 			query += (*itC).field + " " + ccondition;
 			conditionCount++;
@@ -372,22 +365,6 @@ KexiQueryDesignerGuiEditor::getQuery()
 	return query;
 }
 
-QString
-KexiQueryDesignerGuiEditor::getParam(const QString &name, bool escape)
-{
-	kdDebug() << "KexiQueryDesignerGuiEditor::getParam()" << endl;
-	if(m_paramList->list->findItem(name, 0))
-	{
-		bool ok;
-		QString result = KLineEditDlg::getText(i18n("Query"), name, "", &ok, this);
-		if(escape)
-			return QString("\"" + result + "\"");
-	}
-	else
-	{
-		return name;
-	}
-}
 
 KexiQueryDesignerGuiEditor::~KexiQueryDesignerGuiEditor() {
 //	m_parent->saveBack();

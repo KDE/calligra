@@ -73,14 +73,15 @@ class KexiQueryDesignerGuiEditor : public QWidget
 		~KexiQueryDesignerGuiEditor();
 
 		QString			getQuery();
-		QString			getParam(const QString &name, bool escape);
+		KexiParameterListEditor	*paramList() { return m_paramList; }
+//		QString			getParam(const QString &name, bool escape);
 
 		KexiTableView		*table()const { return m_designTable; };
 
 		QStringList		sourceList() { return m_sourceList; };
 
 		void clear();
-		void appendLine(const QString &source, const QString &field, bool show, const QString &andC, 
+		void appendLine(const QString &source, const QString &field, bool show, const QString &andC,
 				const QString &orC);
 
 

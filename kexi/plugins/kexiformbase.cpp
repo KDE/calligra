@@ -87,6 +87,19 @@ class KexiFormBase::EditGUIClient: public KXMLGUIClient
 
 		        m_tabWidget = new KAction(i18n("Tab Widget"), "tabwidget",
 		                Key_F9, actionCollection(), "widget_tabwidget");
+
+			m_dbFrist = new KAction(i18n("First"), "2leftarrow",
+				Key_F10, actionCollection(), "first");
+
+			m_dbPrev = new KAction(i18n("Previous"), "1leftarrow",
+				Key_F10, actionCollection(), "prev");
+
+			m_dbNext = new KAction(i18n("Next"), "1rightarrow",
+				Key_F10, actionCollection(), "next");
+
+			m_dbLast = new KAction(i18n("Last"), "2rightarrow",
+				Key_F10, actionCollection(), "last");
+
 			setXMLFile("kexiformeditorui.rc");
 		}
 		virtual ~EditGUIClient(){;}
@@ -100,6 +113,9 @@ class KexiFormBase::EditGUIClient: public KXMLGUIClient
 			connect(m_frame,SIGNAL(activated()),o,SLOT(slotWidgetFrame()));
 			connect(m_tabWidget,SIGNAL(activated()),o,SLOT(slotWidgetTabWidget()));
 			connect(m_formMode, SIGNAL(toggled(bool)), o, SLOT(slotToggleFormMode(bool)));
+
+			connect(m_dbNext, SIGNAL(activated()), o, SLOT(slotDBNext()));
+			connect(m_dbPrev, SIGNAL(activated()), o, SLOT(slotDBPrev()));
 		}
 		void deactivate(QObject* o)
 		{
@@ -109,6 +125,7 @@ class KexiFormBase::EditGUIClient: public KXMLGUIClient
 			m_urlreq->disconnect(o);
 			m_frame->disconnect(o);
 			m_tabWidget->disconnect(o);
+			m_dbNext->disconnect(o);
 		}
 		void toggleMode(bool m)
 		{
@@ -123,6 +140,11 @@ class KexiFormBase::EditGUIClient: public KXMLGUIClient
 	KAction *m_urlreq;
 	KAction *m_frame;
 	KAction *m_tabWidget;
+
+	KAction *m_dbFrist;
+	KAction *m_dbPrev;
+	KAction *m_dbNext;
+	KAction *m_dbLast;
 };
 
 class KexiFormBase::ViewGUIClient: public KXMLGUIClient
@@ -209,7 +231,7 @@ KexiFormBase::KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *p
 	connect(topLevelEditor, SIGNAL(activated(QObject *)), peditor, SLOT(setObject(QObject *)));
 	connect(topLevelEditor, SIGNAL(widgetInserted(QObject *)), this, SLOT(slotWidgetInserted(QObject *)));
 
-	EventEditor *eeditor = new EventEditor(formProperties);
+	EventEditor *eeditor = new EventEditor(formProperties, item->eventBuffer());
 	connect(topLevelEditor, SIGNAL(activated(QObject *)), eeditor, SLOT(setObject(QObject *)));
 
 	formProperties->insertTab(peditor, i18n("Properties"));
@@ -327,13 +349,26 @@ void KexiFormBase::slotToggleFormMode(bool state)
 	if(!state)
 	{
 		QString source = topLevelEditor->property("dataSource").toString();
+		kdDebug() << "KexiFormBase::slotToggleFormMode() Psource: " << source << endl;
 		KexiTablePart *p = static_cast<KexiTablePart*>(m_project->handlerForMime("kexi/table"));
 		if(p && !source.isNull())
 		{
 			kdDebug() << "KexiFormBase::slotToggleFormMode() Psource: " << source << endl;
 			KexiDBRecord *rec = p->records(m_source, QMap<QString,QString>());
+			if(rec);
+				topLevelEditor->setRecord(rec);
 		}
 	}
+}
+
+void KexiFormBase::slotDBNext()
+{
+	topLevelEditor->next();
+}
+
+void KexiFormBase::slotDBPrev()
+{
+	topLevelEditor->prev();
 }
 
 void KexiFormBase::slotWidgetInserted(QObject *o)

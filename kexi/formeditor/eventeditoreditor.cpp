@@ -28,6 +28,7 @@
 #include "eventeditoreditor.h"
 #include "eventdetail.h"
 #include "eventeditor.h"
+#include "eventbuffer.h"
 
 EventEditorEditor::EventEditorEditor(QWidget *parent, PropertyEditorItem *i, const char *name)
  : PropertyEditorEditor(parent, QVariant::BitArray, QVariant(i->value()), name)
@@ -68,6 +69,9 @@ EventEditorEditor::slotShowDetails()
 		{
 			FakeHandler *f = m_editor->fakes().find(m_ed->handler->currentText()).data();
 			f->callConnect(m_item->sender(), m_item->event(), m_ed->function->currentText());
+//			EventBufferItem *eb = new EventBufferItem(m_item->sender()->name(),
+//			 m_ed->handler->currentText(), m_item->event(), m_ed->function->currentText());
+//			m_item->parent()->buffer()->insertEvent(eb);
 		}
 	}
 }

@@ -79,6 +79,7 @@ KexiFormHandlerProxy::slotCreate()
 		kdDebug() << "KexiFormHandlerProxy::slotCreate(): source: " << d->source() << endl;
 		QString name = d->name();
 		KexiFormHandlerItem *i = new KexiFormHandlerItem(part(), name, name + ".ui");
+		i->setSource(d->source());
 		part()->items()->insert("kexi/form/" + name + ".ui", i);
         emit m_formHandler->itemListChanged(part());
 		KexiFormBase *nform = new KexiFormBase(kexiView(), i, 0, false, d->source(), "nform", name);

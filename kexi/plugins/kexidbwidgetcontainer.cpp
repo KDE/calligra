@@ -19,12 +19,18 @@
 
 //#include "formeditor/widgetwatcher.h"
 
+#include <qobjectlist.h>
+#include <qvariant.h>
+
+#include <kdebug.h>
+
 #include "kexidbwidgetcontainer.h"
 
 KexiDBWidgetContainer::KexiDBWidgetContainer(QWidget *parent, const char *name, QString identifier)
  : KFormEditor::WidgetContainer(parent, name, identifier)
 {
 	m_ww = 0;
+	m_rec = 0;
 }
 
 QString
@@ -37,6 +43,47 @@ void
 KexiDBWidgetContainer::setDataSource(QString source)
 {
 	m_dataSource = source;
+}
+
+void
+KexiDBWidgetContainer::setRecord(KexiDBRecord *rec)
+{
+	if(!rec)
+		return;
+
+	m_rec = rec;
+	next();
+}
+
+void
+KexiDBWidgetContainer::next()
+{
+	if(!m_rec)
+		return;
+
+	m_rec->next();
+	setupWidgets();
+}
+
+void
+KexiDBWidgetContainer::prev()
+{
+	m_rec->prev();
+	setupWidgets();
+}
+
+void
+KexiDBWidgetContainer::setupWidgets()
+{
+	QObjectListIt it(*children());
+	for(QObject *o; (o=it.current()) != 0; ++it)
+	{
+		QString ds = o->property("dataSource").toString();
+		if(ds != QString::null || ds != "")
+		{
+			o->setProperty("dbdata", m_rec->value(ds).toString());
+		}
+	}
 }
 
 KexiDBWidgetContainer::~KexiDBWidgetContainer()

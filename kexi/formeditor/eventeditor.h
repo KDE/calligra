@@ -25,14 +25,10 @@
 #include "propertybuffer.h"
 #include "propertyeditor.h"
 
-/*
-struct FakeHandler
+namespace KFormEditor
 {
-	QObject		*proxy;
-	char		*member;
-	QStringList	handlers;
-};
-*/
+	class EventBuffer;
+}
 
 class FakeHandler
 {
@@ -52,19 +48,21 @@ class EventEditor : public PropertyEditor
 	Q_OBJECT
 
 	public:
-		EventEditor(QWidget *parent, const char *name=0);
+		EventEditor(QWidget *parent, KFormEditor::EventBuffer *buff, const char *name=0);
 		~EventEditor();
 
 		void	appendFake(const QString &name, FakeHandler *);
-
 		Fakes	fakes() { return m_fakes; }
+
+		KFormEditor::EventBuffer *buffer() { return m_buffer; }
 
 	public slots:
 		void	setObject(QObject *o);
 //		void	setReceivers(WidgetList *receivers);
 
 	private:
-		Fakes	m_fakes;
+		Fakes				m_fakes;
+		KFormEditor::EventBuffer	*m_buffer;
 };
 
 #endif

@@ -78,13 +78,27 @@ MySqlResult::next()
 {
 	m_row = mysql_fetch_row(m_result);
 	m_lengths = mysql_fetch_lengths(m_result);
-	
+
 	if(!m_row)
 	{
 		return false;
 	}
-	
+
 	m_currentRecord++;
+	return true;
+}
+
+bool
+MySqlResult::prev()
+{
+	mysql_data_seek(m_result, m_currentRecord - 1);
+	m_row = mysql_fetch_row(m_result);
+	m_lengths = mysql_fetch_lengths(m_result);
+
+	if(!m_row)
+		return false;
+
+	m_currentRecord--;
 	return true;
 }
 

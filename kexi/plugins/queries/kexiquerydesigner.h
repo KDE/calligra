@@ -40,6 +40,8 @@ class KexiQueryDesigner : public KexiDialogBase
 
 		virtual	KXMLGUIClient *guiClient(){return new KXMLGUIClient();}
 
+		void	saveBack();
+
 	public slots:
 		void	query();
 		void	slotContextHelp(const QString &, const QString &);
@@ -48,10 +50,14 @@ class KexiQueryDesigner : public KexiDialogBase
 		void	queryExecuted(QString statement, bool succeed);
 
 	protected:
+		QString	processQuery();
+		QString	getParam(const QString &name, bool escape=false);
+
 		virtual void print(KPrinter &p);
 
 	protected slots:
 		void	viewChanged(QWidget *);
+		void	slotClosing(KexiDialogBase *);
 
 	private:
 		QTabWidget			*m_tab;

@@ -21,6 +21,7 @@
 #include <qtabwidget.h>
 #include <qlayout.h>
 #include <qstatusbar.h>
+#include <qregexp.h>
 
 #include <klocale.h>
 #include <kaction.h>
@@ -28,6 +29,8 @@
 #include <kdebug.h>
 #include <kprinter.h>
 #include <kxmlguiclient.h>
+#include <klineeditdlg.h>
+#include <klistview.h>
 
 #include <koStore.h>
 
@@ -38,6 +41,8 @@
 #include "kexiquerydesignerguieditor.h"
 #include "kexiquerydesignersql.h"
 #include "kexiquerydesigner.h"
+#include "kexiparameterlisteditor.h"
+#include "kexidataprovider.h"
 
 KexiQueryDesigner::KexiQueryDesigner(KexiView *view,QWidget *parent, const char *name,
  KexiQueryPartItem *item, bool modeview)
@@ -68,6 +73,8 @@ KexiQueryDesigner::KexiQueryDesigner(KexiView *view,QWidget *parent, const char 
 	registerAs(DocumentWindow, item->identifier());
 	setContextHelp(i18n("Queries"), i18n("After having set up relations you can drag fields from different tables into the \"query table\"."));
 
+	item->setClient(this);
+
 	if(modeview)
 	{
 		m_statement = item->sql();
@@ -76,7 +83,7 @@ KexiQueryDesigner::KexiQueryDesigner(KexiView *view,QWidget *parent, const char 
 		bool success = false;
 		try
 		{
-			if(m_view->executeQuery(m_statement))
+			if(m_view->executeQuery(processQuery()))
 				success = true;
 		}
 		catch(KexiDBError &err)
@@ -90,6 +97,7 @@ KexiQueryDesigner::KexiQueryDesigner(KexiView *view,QWidget *parent, const char 
 
 	m_item = item;
 	connect(m_tab, SIGNAL(currentChanged(QWidget *)), this, SLOT(viewChanged(QWidget *)));
+	connect(this, SIGNAL(closing(KexiDialogBase *)), this, SLOT(slotClosing(KexiDialogBase *)));
 }
 
 void
@@ -98,7 +106,7 @@ KexiQueryDesigner::query()
 	bool success = false;
 	try
 	{
-		if(m_view->executeQuery(m_statement))
+		if(m_view->executeQuery(processQuery()))
 			success = true;
 	}
 	catch(KexiDBError &err)
@@ -152,8 +160,58 @@ KexiQueryDesigner::print(KPrinter &p)
 	m_view->print(p);
 }
 
-KexiQueryDesigner::~KexiQueryDesigner()
+QString
+KexiQueryDesigner::processQuery()
 {
+	kdDebug() << "KexiQueryDesigner::processQuery(): on " << m_statement << endl;
+	if(m_statement.contains("kexi_"))
+	{
+		QString statement = m_statement;
+		QRegExp exp("kexi_[a-zA-Z0-9]*");
+		exp.search(statement);
+		statement.replace(exp, getParam(exp.cap(), true));
+		return statement;
+	}
+
+	return m_statement;
+}
+
+QString
+KexiQueryDesigner::getParam(const QString &name, bool escape)
+{
+	kdDebug() << "KexiQueryDesignerGuiEditor::getParam(): e=" << m_editor << endl;
+	if(m_editor->paramList()->list->findItem(name, 0))
+	{
+		bool ok;
+		QString result = KLineEditDlg::getText(i18n("Query"), name, "", &ok, this);
+		if(escape)
+			return QString("\"" + result + "\"");
+		else
+			return result;
+	}
+	else
+	{
+		return name;
+	}
+}
+
+void
+KexiQueryDesigner::saveBack()
+{
+	kdDebug() << "KexiQueryDesigner::saveBack() e=" << m_editor << endl;
+//	KexiDataProvider::ParameterList l;
+// 	QListViewItem *it = m_editor->paramList()->list->firstChild();
+// 	while(it->nextSibling())
+// 	{
+//		QListViewItem *it = tmp->itemAt(i);
+// 		kdDebug() << "KexiQueryDesigner::saveBack(): item: " << it->text(0) << endl;
+// 		KexiDataProvider::Parameter param(it->text(0), 1);
+// 		l.append(param);
+// 	}
+
+// 	m_item->setParameterList(l);
+//	kdDebug() << "KexiQueryDesigner::saveBack(): count = " << tmp->childCount() << endl;
+
 	if(m_currentView == 0)
 	{
 		m_item->setSQL(m_editor->getQuery());
@@ -162,6 +220,18 @@ KexiQueryDesigner::~KexiQueryDesigner()
 	{
 		m_item->setSQL(m_sql->getQuery());
 	}
+}
+
+void
+KexiQueryDesigner::slotClosing(KexiDialogBase *)
+{
+	kdDebug() << "KexiQueryDesigner::slotClosing()" << endl;
+	saveBack();
+	m_item->setClient(0);
+}
+
+KexiQueryDesigner::~KexiQueryDesigner()
+{
 }
 
 #include "kexiquerydesigner.moc"

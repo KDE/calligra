@@ -95,6 +95,7 @@ class MySqlRecord : public KexiDBRecord, public MySqlResult
 		QString fieldName(unsigned int field);
 
 		bool next();
+		bool prev();
 
 		unsigned long last_id();
 
