@@ -31,7 +31,9 @@ KoCreateStyleDia::KoCreateStyleDia( const QStringList & _list, QWidget *parent, 
     setCaption( i18n("Create New Style") );
     QVBox *page = makeVBoxMainWidget();
     m_styleName = new QLineEdit( page );
+    connect( m_styleName, SIGNAL(textChanged ( const QString & )), this, SLOT(nameChanged( const QString &)));
     m_styleName->setFocus();
+    enableButtonOK( false );
 }
 
 void KoCreateStyleDia::slotOk()
@@ -49,5 +51,8 @@ QString KoCreateStyleDia::nameOfNewStyle()const
     return m_styleName->text();
 }
 
-
+void KoCreateStyleDia::nameChanged( const QString &text)
+{
+    enableButtonOK( !text.isEmpty() );
+}
 #include "koCreateStyleDia.moc"

@@ -32,6 +32,7 @@ public:
 
 protected slots:
     virtual void slotOk();
+    void nameChanged( const QString &text);
 
 protected:
     QStringList styleList;
