@@ -35,16 +35,6 @@ Description: KDE Office Suite - KChart
  .
  A Graphical Chart program based on QT and KDE
 
-Package: kformula
-Architecture: any
-Section: x11
-Depends: ${shlibs:Depends}
-Suggests: kdebase
-Description: KDE Office Suite - KFormula
- KDE Office Suite - KFormula
- .
- A Graphical Formula program based on QT and KDE
-
 Package: kivio
 Architecture: any
 Section: graphics

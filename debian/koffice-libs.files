@@ -73,7 +73,6 @@ usr/lib/libqt3stuff.la
 usr/lib/libkformula.so.3.0.0
 usr/lib/libkformula.so.3
 usr/lib/libkformula.la
-usr/lib/kformulamain.la
 usr/lib/libhtmlexportdia.so
 usr/lib/libhtmlexportdia.la
 usr/lib/libkochart.so.1.0.0
