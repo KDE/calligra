@@ -109,7 +109,7 @@ void KontourImport::convert()
 		if ( b.tagName() == "polyline" )
 		{
 			QDomElement point = b.firstChild().toElement();
-			VPath *path = new VPath( 0L );
+			VComposite *path = new VComposite( &m_document );
 			int x, y;
 			x = point.attribute( "x" ).toInt();
 			y = point.attribute( "y" ).toInt();
