@@ -10,9 +10,6 @@ usr/share/applnk/Office/kivio.desktop
 usr/share/apps/kivio/*
 usr/share/mimelnk/application/x-kivio.desktop
 usr/share/services/kivio*
-usr/share/icons/locolor/16x16/apps/kivio.png
-usr/share/icons/locolor/22x22/apps/kivio.png
-usr/share/icons/locolor/32x32/apps/kivio.png
 usr/share/icons/hicolor/16x16/apps/kivio.png
 usr/share/icons/hicolor/22x22/apps/kivio.png
 usr/share/icons/hicolor/32x32/apps/kivio.png

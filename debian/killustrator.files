@@ -4,8 +4,7 @@ usr/lib/kde2/libkillustratorpart.*
 usr/share/applnk/Office/killustrator.desktop
 usr/share/apps/killustrator/*
 usr/share/mimelnk/application/x-killustrator.desktop
-usr/share/icons/locolor/16x16/apps/killustrator.png
-usr/share/icons/locolor/32x32/apps/killustrator.png
+usr/share/icons/hicolor/16x16/apps/killustrator.png
 usr/share/icons/hicolor/32x32/apps/killustrator.png
 usr/share/icons/hicolor/48x48/apps/killustrator.png
 usr/share/pixmaps/killustrator.xpm

@@ -21,5 +21,6 @@ koffice-libs: shlib-missing-in-control-file libolefilter.so usr/lib/kde2/libolef
 koffice-libs: shlib-missing-in-control-file librtfexport.so usr/lib/kde2/librtfexport.so
 koffice-libs: shlib-missing-in-control-file librtfimport.so usr/lib/kde2/librtfimport.so
 koffice-libs: shlib-missing-in-control-file libwmfimport.so usr/lib/kde2/libwmfimport.so
+koffice-libs: shlib-missing-in-control-file libxfigimport.so usr/lib/kde2/libxfigimport.so
 # This is inserted by debhelper and is legal.
 koffice-libs: postrm-calls-ldconfig

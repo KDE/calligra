@@ -4,8 +4,7 @@ usr/lib/kde2/libkchartpart.*
 usr/share/applnk/Office/kchart.desktop
 usr/share/apps/kchart/*
 usr/share/mimelnk/application/x-kchart.desktop
-usr/share/icons/locolor/16x16/apps/kchart.png
-usr/share/icons/locolor/32x32/apps/kchart.png
+usr/share/icons/hicolor/16x16/apps/kchart.png
 usr/share/icons/hicolor/32x32/apps/kchart.png
 usr/share/icons/hicolor/48x48/apps/kchart.png
 usr/share/pixmaps/kchart.xpm

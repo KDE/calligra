@@ -5,8 +5,7 @@ usr/lib/libkisp_example.*
 usr/share/applnk/Office/krayon.desktop
 usr/share/apps/krayon/*
 usr/share/mimelnk/application/x-krayon.desktop
-usr/share/icons/locolor/16x16/apps/krayon.png
-usr/share/icons/locolor/32x32/apps/krayon.png
+usr/share/icons/hicolor/16x16/apps/krayon.png
 usr/share/icons/hicolor/32x32/apps/krayon.png
 usr/share/icons/hicolor/48x48/apps/krayon.png
 usr/share/pixmaps/krayon.xpm
