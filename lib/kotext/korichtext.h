@@ -110,7 +110,6 @@ class KoSavingContext;
 
 #include <qmemarray.h>
 #include "koparaglayout.h"
-#include "korichtext.h"
 ////
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

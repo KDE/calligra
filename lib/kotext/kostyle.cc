@@ -300,16 +300,21 @@ void KoStyleCollection::importStyles( const QPtrList<KoParagStyle>& styleList )
 
 void KoStyleCollection::saveOasisOutlineStyles( KoXmlWriter& writer ) const
 {
-    writer.startElement( "text:outline-style" );
+    bool first = true;
     QValueVector<KoParagStyle *> styles = outlineStyles();
     for ( int i = 0 ; i < 10 ; ++i ) {
         if ( styles[i] ) {
+            if ( first ) {
+                writer.startElement( "text:outline-style" );
+	        first = false;
+	    }
             writer.startElement( "text:outline-level-style" );
             styles[i]->paragLayout().counter->saveOasisListLevel( writer );
             writer.endElement();
         }
     }
-    writer.endElement(); // text:outline-style
+    if ( !first )
+        writer.endElement(); // text:outline-style
 }
 
 QValueVector<KoParagStyle *> KoStyleCollection::outlineStyles() const
