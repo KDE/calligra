@@ -106,6 +106,7 @@ KoAutoFormat::KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollecti
       m_bAutoFormatActive(true),
       m_bAutoSuperScript( false ),
       m_bAutoCorrectionWithFormat( false ),
+      m_bCapitalizeNameOfDays( false ),
       m_bulletStyle(),
       m_typographicSimpleQuotes(),
       m_typographicDoubleQuotes(),
@@ -123,6 +124,9 @@ KoAutoFormat::KoAutoFormat( KoDocument *_doc, KoVariableCollection *_varCollecti
     //load once this list not each time that we "readConfig"
     loadListOfWordCompletion();
     m_listCompletion->setIgnoreCase( true );
+    KLocale klocale(m_doc->instance()->instanceName());
+    for (int i = 0; i <7; i++)
+        m_cacheNameOfDays.append(klocale.weekDayName( i ).lower());
 }
 
 KoAutoFormat::KoAutoFormat( const KoAutoFormat& format )
@@ -150,6 +154,7 @@ KoAutoFormat::KoAutoFormat( const KoAutoFormat& format )
       m_bAutoFormatActive( format.m_bAutoFormatActive ),
       m_bAutoSuperScript( format.m_bAutoSuperScript ),
       m_bAutoCorrectionWithFormat( format.m_bAutoCorrectionWithFormat),
+      m_bCapitalizeNameOfDays( format.m_bCapitalizeNameOfDays),
       m_bulletStyle( format.m_bulletStyle ),
       m_typographicSimpleQuotes( format.m_typographicSimpleQuotes ),
       m_typographicDoubleQuotes( format.m_typographicDoubleQuotes ),
@@ -162,7 +167,8 @@ KoAutoFormat::KoAutoFormat( const KoAutoFormat& format )
       m_twoUpperLetterException( format.m_twoUpperLetterException ),
       m_maxFindLength( format.m_maxFindLength ),
       m_minCompletionWordLength( format.m_minCompletionWordLength ),
-      m_nbMaxCompletionWord( format.m_nbMaxCompletionWord )
+      m_nbMaxCompletionWord( format.m_nbMaxCompletionWord ),
+      m_cacheNameOfDays( format.m_cacheNameOfDays)
 {
     //m_listCompletion=new KCompletion();
     //m_listCompletion->setItems( autoFormat.listCompletion() );
@@ -203,6 +209,8 @@ void KoAutoFormat::readConfig(bool force)
 
     m_advancedAutoCorrect = config.readBoolEntry( "AdvancedAutocorrect", true );
     m_bAutoCorrectionWithFormat = config.readBoolEntry( "AutoCorrectionWithFormat",false );
+    m_bCapitalizeNameOfDays = config.readBoolEntry( "CapitalizeNameOfDays",false );
+
     m_autoDetectUrl = config.readBoolEntry("AutoDetectUrl",false);
     m_ignoreDoubleSpace = config.readBoolEntry("IgnoreDoubleSpace",false);
     m_removeSpaceBeginEndLine = config.readBoolEntry("RemoveSpaceBeginEndLine",false);
@@ -508,7 +516,7 @@ void KoAutoFormat::saveConfig()
 
     config.writeEntry( "AdvancedAutocorrect", m_advancedAutoCorrect );
     config.writeEntry( "AutoCorrectionWithFormat", m_bAutoCorrectionWithFormat );
-
+    config.writeEntry( "CapitalizeNameOfDays", m_bCapitalizeNameOfDays );
 
     config.writeEntry( "AutoDetectUrl",m_autoDetectUrl);
 
@@ -901,6 +909,17 @@ void KoAutoFormat::doAutoFormat( KoTextCursor* textEditCursor, KoTextParag *para
             if (!macro)
                 macro = new KMacroCommand(i18n("Autocorrection"));
             macro->addCommand( cmd );
+        }
+        if ( m_bCapitalizeNameOfDays)
+        {
+            KCommand *cmd = doCapitalizeNameOfDays( textEditCursor, parag, newPos, lastWord, txtObj  );
+
+            if( cmd )
+            {
+                if (!macro)
+                macro = new KMacroCommand(i18n("Autocorrection"));
+                macro->addCommand( cmd );
+            }
         }
 
         if ( !m_ignoreUpperCase && (m_convertUpperUpper || m_convertUpperCase) )
@@ -1554,6 +1573,39 @@ KCommand * KoAutoFormat::doRemoveSpaceBeginEndLine( KoTextCursor *textEditCursor
     return macroCmd;
 }
 
+KCommand *KoAutoFormat::doCapitalizeNameOfDays( KoTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word , KoTextObject *txtObj )
+{
+    //m_cacheNameOfDays
+    //todo
+    int pos = m_cacheNameOfDays.findIndex( word.lower() );
+    if ( pos == -1 )
+        return 0L;
+
+    KoTextDocument * textdoc = parag->textDocument();
+    QString replaceStr= m_cacheNameOfDays[pos];
+    int start = index - replaceStr.length();
+    int length = replaceStr.length();
+    if( word.at(0)==word.at(0).lower() )
+    {
+        KoTextCursor cursor( parag->document() );
+        cursor.setParag( parag );
+        cursor.setIndex( start );
+        textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+        cursor.setIndex( start + length );
+        QString replacement = replaceStr.at(0).upper() + replaceStr.right( length-1 );
+        textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
+        QString cmdName=i18n("Capitalize name of days");
+        KCommand *cmd =txtObj->replaceSelectionCommand( textEditCursor, replacement,
+                                                           KoTextObject::HighlightSelection,
+                                                                cmdName );
+        txtObj->emitHideCursor();
+        textEditCursor->gotoRight();
+        txtObj->emitShowCursor();
+        return cmd;
+    }
+    return 0L;
+}
+
 KCommand *KoAutoFormat::doAutoSuperScript( KoTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word , KoTextObject *txtObj )
 {
     KoAutoFormatEntryMap::Iterator it = m_superScriptEntries.begin();
@@ -1773,6 +1825,11 @@ void KoAutoFormat::configCorrectionWithFormat( bool b)
     m_bAutoCorrectionWithFormat = b;
 }
 
+void KoAutoFormat::configCapitalizeNameOfDays( bool b)
+{
+    m_bCapitalizeNameOfDays = b;
+}
+
 void KoAutoFormat::configAutoFormatLanguage( const QString &_lang)
 {
     m_autoFormatLanguage=_lang;
@@ -1871,6 +1928,18 @@ KCommand *KoAutoFormat::scanParag( KoTextParag * parag, KoTextObject * obj )
                     if ( !macro2 )
                         macro2 =new KMacroCommand(i18n("Autocorrection"));
                     macro2->addCommand( cmd );
+                }
+
+                if ( m_bCapitalizeNameOfDays)
+                {
+                    KCommand *cmd = doCapitalizeNameOfDays( cursor, parag, newPos, lastWord, obj  );
+
+                    if( cmd )
+                    {
+                        if (!macro)
+                            macro2 = new KMacroCommand(i18n("Autocorrection"));
+                        macro2->addCommand( cmd );
+                    }
                 }
 
                 if ( !m_ignoreUpperCase && (m_convertUpperUpper || m_convertUpperCase) )

@@ -878,3 +878,13 @@ void KPresenterDocIface::setInsertDirectCursor(bool _b)
     doc->setInsertDirectCursor( _b );
 }
 
+
+bool KPresenterDocIface::configCapitalizeNameOfDays() const
+{
+    return doc->getAutoFormat()->getConfigCapitalizeNameOfDays();
+}
+
+void KPresenterDocIface::setConfigCapitalizeNameOfDays( bool b)
+{
+    doc->getAutoFormat()->configCapitalizeNameOfDays( b );
+}

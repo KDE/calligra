@@ -253,6 +253,10 @@ k_dcop:
     bool insertDirectCursor() const;
     void setInsertDirectCursor(bool _b);
 
+    bool configCapitalizeNameOfDays() const;
+    void setConfigCapitalizeNameOfDays( bool b);
+
+
 private:
     KPresenterDoc *doc;
 

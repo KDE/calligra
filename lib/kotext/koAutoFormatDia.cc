@@ -314,6 +314,9 @@ void KoAutoFormatDia::setupTab1()
     cbAutoSuperScript->setEnabled( m_docAutoFormat->nbSuperScriptEntry()>0 );
 
     vbox->addWidget(cbAutoSuperScript);
+    cbCapitalizeDaysName = new QCheckBox( tab1 );
+    cbCapitalizeDaysName->setText( i18n("Capitalize name of days"));
+    vbox->addWidget(cbCapitalizeDaysName);
 
     cbUseBulletStyle=new QCheckBox( tab1 );
     cbUseBulletStyle->setText( i18n(
@@ -364,6 +367,7 @@ void KoAutoFormatDia::initTab1()
     cbUseBulletStyle->setChecked( m_autoFormat.getConfigUseBulletSyle());
     cbAutoSuperScript->setChecked( m_docAutoFormat->getConfigAutoSuperScript());
     pbBulletStyle->setText( bulletStyle );
+    cbCapitalizeDaysName->setChecked( m_autoFormat.getConfigCapitalizeNameOfDays());
 
     slotBulletStyleToggled( cbUseBulletStyle->isChecked() );
 }
@@ -972,6 +976,8 @@ bool KoAutoFormatDia::applyConfig()
     m_docAutoFormat->configAutoNumberStyle(cbUseNumberStyle->isChecked());
 
     m_docAutoFormat->configAutoSuperScript ( cbAutoSuperScript->isChecked() );
+    m_docAutoFormat->configCapitalizeNameOfDays( cbCapitalizeDaysName->isChecked());
+
 
     // Second tab
     //m_docAutoFormat->copyAutoFormatEntries( m_autoFormat );

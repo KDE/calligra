@@ -154,6 +154,8 @@ public:
 
     void configCorrectionWithFormat( bool b);
 
+    void configCapitalizeNameOfDays( bool b);
+
     void configAutoFormatLanguage( const QString &_lang);
 
     TypographicQuotes getConfigTypographicSimpleQuotes() const
@@ -225,6 +227,8 @@ public:
     bool getConfigCorrectionWithFormat() const
     { return m_bAutoCorrectionWithFormat; }
 
+    bool getConfigCapitalizeNameOfDays() const
+        { return m_bCapitalizeNameOfDays; }
 
     QString getConfigAutoFormatLanguage( )const
         { return m_autoFormatLanguage;}
@@ -302,6 +306,8 @@ protected:
     KCommand *doAutoSuperScript( KoTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word , KoTextObject *txtObj );
     KCommand *scanParag( KoTextParag * parag, KoTextObject * obj );
 
+    KCommand *doCapitalizeNameOfDays( KoTextCursor* textEditCursor, KoTextParag *parag, int index, const QString & word , KoTextObject *txtObj );
+
     static void changeTextFormat(KoSearchContext *formatOptions, KoTextFormat * format, int & flags );
     void loadEntry( const QDomElement &nl);
     QDomElement saveEntry( QDictIterator<KoAutoFormatEntry> _entry, QDomDocument doc);
@@ -330,6 +336,7 @@ private:
 
     bool m_bAutoSuperScript;
     bool m_bAutoCorrectionWithFormat;
+    bool m_bCapitalizeNameOfDays;
     QChar m_bulletStyle;
 
     TypographicQuotes m_typographicSimpleQuotes;
@@ -352,6 +359,7 @@ private:
     uint m_maxFindLength;
     uint m_minCompletionWordLength;
     uint m_nbMaxCompletionWord;
+    QStringList m_cacheNameOfDays;
 };
 
 #endif
