@@ -638,23 +638,33 @@ static void ProcessPixmapsKeyTag ( QDomNode         myNode,
 
     // Let KoPicture do most of the loading
     key.loadAttributes(myNode.toElement());
-    QString name(myNode.toElement().attribute("name"));
+    const QString name(myNode.toElement().attribute("name"));
 
-    // TODO/FIXME: an image could be re-used a few times!
-    FrameAnchor *frameAnchor = findAnchor (key, *paraList);
+    kdDebug(30508) << "search anchors: " << key.toString() << endl;
+    bool found = false;
+    QValueList<ParaData>::Iterator paraIt;
 
-    if ( frameAnchor )
+    for ( paraIt = paraList->begin(); paraIt != paraList->end(); paraIt++ )
     {
-#if 0
-        kdDebug (30508) << "DEBUG: ProcessPixmapsKeyTag (): koStore for picture "
-                        << fileName << " is " << name << endl;
-#endif
+        ValueListFormatData::Iterator formattingIt;
 
-        frameAnchor->picture.koStoreName = name;
+        for ( formattingIt = (*paraIt).formattingList.begin();
+              formattingIt != (*paraIt).formattingList.end();
+              formattingIt++ )
+        {
+            if ( (*formattingIt).id              == 6    &&
+                 (*formattingIt).frameAnchor.key == key )
+            {
+                kdDebug(30508) << "Found anchor " << (*formattingIt).frameAnchor.key.toString() << endl;
+                (*formattingIt).frameAnchor.picture.koStoreName = name;
+                found = true;
+            }
+        }
     }
-    else
+
+    if ( !found )
     {
-        kdWarning (30508) << "Could find anchor for picture " << key.toString() << endl;
+        kdWarning (30508) << "Could not find any anchor for picture " << key.toString() << endl;
     }
 
 
