@@ -1274,6 +1274,7 @@ void KSpreadCanvas::moveDirection(KSpread::MoveTo direction, bool extendSelectio
   if (m_bChoose)
   {
     selectionInfo()->setChooseCursor(destination);
+    selectionInfo()->setChooseTable(activeTable());
   }
   else
   {
@@ -2441,6 +2442,7 @@ void KSpreadCanvas::updateChooseRect(QPoint newMarker, QPoint newAnchor)
   if ( !newChooseRect.contains(chooseCursor))
   {
     selectionInfo()->setChooseCursor(newMarker);
+    selectionInfo()->setChooseTable(table);
   }
 
   /* make sure the old selection was valid before we try to paint it */
