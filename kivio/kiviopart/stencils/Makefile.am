@@ -1,2 +1,2 @@
-SUBDIRS = Dia Flowcharting UML Geographic Miscellaneous
+SUBDIRS = Dia Flowcharting UML Geographic Miscellaneous Hardware
 
