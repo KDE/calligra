@@ -352,20 +352,31 @@ public:
 
     QValueList<double> &horizHelplines() {return m_horizHelplines; }
     QValueList<double> &vertHelplines() {return m_vertHelplines; }
+    QPtrList<KoPoint> &helpPoints() {return m_helpPoints; }
 
     void horizHelplines(const QValueList<double> &lines);
     void vertHelplines(const QValueList<double> &lines);
 
     int indexOfHorizHelpline(double pos);
     int indexOfVertHelpline(double pos);
+
+    int indexOfHelpPoint( const KoPoint & pos );
+
     void updateHorizHelpline(int idx, double pos);
     void updateVertHelpline(int idx, double pos);
+
+    void updateHelpPoint( int idx, const KoPoint & pos );
+
 
     void addHorizHelpline(double pos);
     void addVertHelpline(double pos);
 
+    void addHelpPoint( const KoPoint & pos );
+
     void removeHorizHelpline(int index);
     void removeVertHelpline( int index );
+
+    void removeHelpPoint( int index );
 
 
     void updateHelpLineButton();
@@ -525,6 +536,8 @@ protected:
 private:
     QValueList<double> m_horizHelplines;
     QValueList<double> m_vertHelplines;
+
+    QPtrList<KoPoint> m_helpPoints;
 
     QPtrList<KPrPage> m_pageList;
 

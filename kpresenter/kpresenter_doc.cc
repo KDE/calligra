@@ -2878,5 +2878,36 @@ void KPresenterDoc::updateGridButton()
 
 }
 
+void KPresenterDoc::removeHelpPoint( int index )
+{
+    if ( index >= (int)m_helpPoints.count())
+        kdDebug()<<" removeHelpPoint( int index ) : index is bad !\n";
+    else
+        m_helpPoints.remove( index );
+}
+
+void KPresenterDoc::addHelpPoint( const KoPoint & pos )
+{
+    //m_helpPoints.append( *pos );
+}
+
+void KPresenterDoc::updateHelpPoint( int idx, const KoPoint & pos )
+{
+    if ( idx >= (int)m_helpPoints.count())
+        kdDebug()<<" updateHelpPoint : index is bad !\n";
+    else
+    {
+        //todo
+        //m_helpPoints.at(idx)= *pos;
+    }
+
+}
+
+int KPresenterDoc::indexOfHelpPoint( const KoPoint & pos )
+{
+    return -1;
+    //return m_helpPoints.find( *pos );
+}
+
 
 #include <kpresenter_doc.moc>

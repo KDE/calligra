@@ -278,6 +278,7 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
         if ( doc->showHelplines() && !doc->helpLineToFront())
         {
             drawHelplines( &bufPainter, crect);
+            drawHelpPoints( &bufPainter, crect);
         }
 
 
@@ -293,6 +294,7 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
         if ( doc->showHelplines() && doc->helpLineToFront())
         {
             drawHelplines( &bufPainter, crect);
+            drawHelpPoints( &bufPainter, crect);
         }
 
 
@@ -457,6 +459,10 @@ void KPrCanvas::drawGrid(QPainter *painter, const QRect &rect2)
     painter->restore();
 }
 
+void KPrCanvas::drawHelpPoints( QPainter *painter, const QRect &rect2)
+{
+    //todo
+}
 
 void KPrCanvas::drawHelplines(QPainter *painter, const QRect &rect2)
 {

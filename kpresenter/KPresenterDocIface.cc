@@ -687,3 +687,20 @@ void KPresenterDocIface::setHelpLineToFront( bool _front )
     if( showGrid() )
         doc->repaint( false );
 }
+
+void KPresenterDocIface::updateHelpPoint( int idx, double posX, double posY )
+{
+    doc->updateHelpPoint( idx, KoPoint( posX, posY ));
+}
+
+void KPresenterDocIface::addHelpPoint( double posX, double posY )
+{
+    doc->addHelpPoint( KoPoint( posX, posY ));
+}
+
+bool KPresenterDocIface::removeHelpPoint( int index )
+{
+    doc->removeHelpPoint( index );
+    return true;
+}
+

@@ -290,7 +290,9 @@ protected:
     // draw all helpline
     void drawHelplines(QPainter *painter, const QRect &rect2);
 
-    // draw all helpline
+    void drawHelpPoints( QPainter *painter, const QRect &rect2);
+
+    // draw grid
     void drawGrid(QPainter *painter, const QRect &rect2);
 
 

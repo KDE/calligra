@@ -197,6 +197,10 @@ k_dcop:
     bool helpLineToFront() const;
     void setHelpLineToFront( bool _front );
 
+    void updateHelpPoint( int idx, double posX, double posY );
+    void addHelpPoint( double posX, double posY );
+    bool removeHelpPoint( int index );
+
 private:
     KPresenterDoc *doc;
 
