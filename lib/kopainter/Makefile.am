@@ -1,6 +1,6 @@
 SUBDIRS = . tests
 
-INCLUDES= $(KOFFICEUI_INCLUDES) $(LIBART_CFLAGS) $(all_includes)
+INCLUDES= $(KOFFICECORE_INCLUDES) $(KOFFICEUI_INCLUDES) $(LIBART_CFLAGS) $(all_includes)
 
 lib_LTLIBRARIES = libkopainter.la
 libkopainter_la_SOURCES = art_rgb.c \
