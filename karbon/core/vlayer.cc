@@ -136,7 +136,7 @@ VLayer::save( QDomElement& element ) const
 	QDomElement me = element.ownerDocument().createElement( "LAYER" );
 	element.appendChild( me );
 
-	if( state() == normal || state() == normal_locked )
+	if( state() == normal || state() == normal_locked || state() == VObject::selected )
 		me.setAttribute( "visible", 1 );
 
 	// save objects:
