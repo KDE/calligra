@@ -303,6 +303,9 @@ public:
     // destructor
     virtual ~KWFrameSet();
 
+    /** The type of frameset. Use this to differentiate between different instantiations of 
+     *  the framesets. Each implementation will return a different frameType.
+     */
     virtual FrameSetType type() { return FT_BASE; }
 
     virtual void addTextFrameSets( QPtrList<KWTextFrameSet> & /*lst*/ ) {};
@@ -320,7 +323,9 @@ public:
     enum Info { FI_BODY = 0, FI_FIRST_HEADER = 1, FI_ODD_HEADER = 2, FI_EVEN_HEADER = 3,
                 FI_FIRST_FOOTER = 4, FI_ODD_FOOTER = 5, FI_EVEN_FOOTER = 6,
                 FI_FOOTNOTE = 7 };
+    /** Returns the type of TextFrameSet this is */
     Info frameSetInfo() { return m_info; }
+    /** Set the type of TextFrameSet this is */
     void setFrameSetInfo( Info fi ) { m_info = fi; }
 
     bool isAHeader() const;
@@ -517,6 +522,7 @@ public:
      * @see KWTableFrameSet
      */
     void setGroupManager( KWTableFrameSet *gm ) { grpMgr = gm; }
+    /** returns the groupManager this frameset belongs to. A Groupmanager is better known as a table */
     KWTableFrameSet *getGroupManager() { return grpMgr; }
 
     /** table headers can created by the groupmanager, we store the fact that
@@ -598,6 +604,9 @@ public:
     KWPictureFrameSet( KWDocument *_doc, const QString & name );
     virtual ~KWPictureFrameSet();
 
+    /** The type of frameset. Use this to differentiate between different instantiations of 
+     *  the framesets. Each implementation will return a different frameType.
+     */
     virtual FrameSetType type() { return FT_PICTURE; }
 
     void setImage( const KWImage &image ) { m_image = image; }
@@ -636,6 +645,9 @@ public:
     KWClipartFrameSet( KWDocument *_doc, const QString & name );
     virtual ~KWClipartFrameSet() {}
 
+    /** The type of frameset. Use this to differentiate between different instantiations of 
+     *  the framesets. Each implementation will return a different frameType.
+     */
     virtual FrameSetType type() { return FT_CLIPART; }
 
     void setClipart( const KoClipart &clipart ) { m_clipart = clipart; }
@@ -672,6 +684,9 @@ public:
     KWPartFrameSet( KWDocument *_doc, KWChild *_child, const QString & name );
     virtual ~KWPartFrameSet();
 
+    /** The type of frameset. Use this to differentiate between different instantiations of 
+     *  the framesets. Each implementation will return a different frameType.
+     */
     virtual FrameSetType type() { return FT_PART; }
 
     virtual KWFrameSetEdit * createFrameSetEdit( KWCanvas * );
@@ -729,6 +744,9 @@ public:
     KWFormulaFrameSet( KWDocument *_doc, const QString & name );
     virtual ~KWFormulaFrameSet();
 
+    /** The type of frameset. Use this to differentiate between different instantiations of 
+     *  the framesets. Each implementation will return a different frameType.
+     */
     virtual FrameSetType type() { return FT_FORMULA; }
 
     virtual KWFrameSetEdit* createFrameSetEdit(KWCanvas*);

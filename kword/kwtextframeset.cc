@@ -1608,10 +1608,17 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, Qt3::QTextParag *lastForma
 
                 if ( resized )
                 {
+                    if(theFrame->frameSet()->getGroupManager()) {
 #ifdef DEBUG_FORMAT_MORE
-                    kdDebug(32002) << "formatMore setting bottom to " << newPosition << endl;
+                        kdDebug(32002) << "is table cell; setting new minFrameHeight" << endl;
 #endif
-                    theFrame->setBottom(newPosition);
+                        theFrame->setMinFrameHeight(theFrame->height());
+                    } else {
+#ifdef DEBUG_FORMAT_MORE
+                        kdDebug(32002) << "formatMore setting bottom to " << newPosition << endl;
+#endif
+                        theFrame->setBottom(newPosition);
+                    }
                 }
 
                 if(newPosition < wantedPosition && (theFrame->newFrameBehavior() == KWFrame::NoFollowup)) {
@@ -1732,11 +1739,24 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, Qt3::QTextParag *lastForma
             double wantedPosition = theFrame->bottom() - m_doc->layoutUnitToPt( difference );
             kdDebug() << "formatMore wantedPosition=" << wantedPosition << " top+minheight=" << theFrame->top() + minFrameHeight << endl;
             wantedPosition = QMAX( wantedPosition, theFrame->top() + minFrameHeight );
-            wantedPosition = QMAX( wantedPosition, theFrame->minFrameHeight()+theFrame->top() );
             if ( wantedPosition != theFrame->bottom()) {
-                kdDebug() << "setBottom " << wantedPosition << endl;
-                theFrame->setBottom( wantedPosition );
-                frameResized( theFrame );
+                if(theFrame->frameSet()->getGroupManager() ) {
+                    // When a frame can be smaller we don't rescale it if it is a table, since
+                    // we don't have the full picture of the change.
+                    // We will set the minFramHeight to the correct value and let the tables code
+                    // do the rescaling based on all the frames in the row. (see KWTableFrameSet::recalcRows())
+                    if(wantedPosition != theFrame->top() + theFrame->minFrameHeight()) {
+#ifdef DEBUG_FORMAT_MORE
+                        kdDebug(32002) << "is table cell; only setting new minFrameHeight, recalcrows will do the rest" << endl;
+#endif
+                        theFrame->setMinFrameHeight(wantedPosition - theFrame->top());
+                        frameResized( theFrame );
+                    }
+                } else {
+                    kdDebug() << "setBottom " << wantedPosition << endl;
+                    theFrame->setBottom( wantedPosition );
+                    frameResized( theFrame );
+                }
             }
         }
     }
