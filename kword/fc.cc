@@ -753,17 +753,19 @@ void KWFormatContext::cursorGotoPixelLine( unsigned int mx, unsigned int my )
 {
     textPos = 0;
 
-    init( dynamic_cast<KWTextFrameSet*>( pFrameSet )->getFirstParag() );
+    KWParag *_p = dynamic_cast<KWTextFrameSet*>( pFrameSet )->getFirstParag();
+    init( _p );
 
-    if ( ptY <= my && ptY + getLineHeight() >= my &&
-	 ptLeft <= mx && ptLeft + ptWidth >= mx ) {
+    if ( (ptY <= my) && (ptY + getLineHeight() >= my) &&
+	 (ptLeft <= mx) && (ptLeft + ptWidth >= mx) ) 
+    {
+        init( _p, FALSE );
 	textPos = lineStartPos;
 	cursorGotoLineStart();
 	return;
     }
 
-    KWParag *_p = dynamic_cast<KWTextFrameSet*>( pFrameSet )->getFirstParag();
-    while ( _p->getPTYEnd() < my && _p->getNext() )
+    while ( (_p->getPTYEnd() < my) && _p->getNext() )
 	_p = _p->getNext();
 
     if ( _p->getPrev() ) _p = _p->getPrev();
@@ -773,20 +775,25 @@ void KWFormatContext::cursorGotoPixelLine( unsigned int mx, unsigned int my )
     bool found = FALSE;
     unsigned int pg = page;
     while ( makeNextLineLayout() ) {
-	if ( ptY <= my && ptY + getLineHeight() >= my &&
-	     ptLeft <= mx && ptLeft + ptWidth >= mx ) {
+	if ( (ptY <= my) && (ptY + getLineHeight() >= my) &&
+	     (ptLeft <= mx) && (ptLeft + ptWidth >= mx) ) 
+	{
 	    found = TRUE;
 	    break;
 	}
-	if ( ptY > my + 20 && pg != page )
+	if ( (ptY > my + 20) && (pg != page) )
 	    break;
     }
 
-    if ( !found ) ptY -= getLineHeight();
+    if ( !found ) 
+    {
+       ptY -= getLineHeight();
+    }
 
     textPos = lineStartPos;
     cursorGotoLineStart();
 }
+
 
 /*================================================================*/
 void KWFormatContext::cursorGotoPixelInLine( unsigned int mx, unsigned int )
