@@ -1346,6 +1346,7 @@ void KexiTableView::drawContents( QPainter *p, int cx, int cy, int cw, int ch)
 
 void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row, const QRect &cr, bool print)
 {
+	p->save();
 //	kdDebug() <<"KexiTableView::paintCell(col=" << col <<"row="<<row<<")"<<endl;
 	Q_UNUSED(print);
 	int w = cr.width();
@@ -1365,8 +1366,10 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 
 	if (d->pEditor && row == d->curRow && col == d->curCol //don't paint contents of edited cell
 		&& d->pEditor->hasFocusableWidget() //..if it's visible
-	   )
+	   ) {
+		p->restore();
 		return;
+	}
 
 	KexiTableEdit *edit = editor( col, /*ignoreMissingEditor=*/true );
 //	if (!edit)
@@ -1537,7 +1540,8 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 	}
 
 	bool autonumber = false;
-	if (item == d->pInsertItem) {
+	if ((!d->newRowEditing &&item == d->pInsertItem) 
+		|| (d->newRowEditing && item == d->pCurrentItem && cell_value.isNull())) {
 		//we're in "insert row"
 		if (m_data->column(col)->field()->isAutoIncrement()) {
 			//"autonumber" column
@@ -1560,6 +1564,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 			p->setPen(colorGroup().text());
 		p->drawText(x, y_offset, w - (x + x)- ((align & AlignLeft)?2:0)/*right space*/, h, align, txt);
 	}
+	p->restore();
 }
 
 QPoint KexiTableView::contentsToViewport2( const QPoint &p )
@@ -2330,8 +2335,9 @@ void KexiTableView::createEditor(int row, int col, const QString& addText, bool 
 			d->pVerticalHeaderAlreadyAdded = true;
 			QSize s(tableSize());
 			resizeContents(s.width(), s.height());
-updateContents(columnPos(0), rowPos(row), viewport()->width(), d->rowHeight);
-			updateContents(columnPos(0), rowPos(row+1), viewport()->width(), d->rowHeight);
+			//refr. current and next row
+			updateContents(columnPos(0), rowPos(row), viewport()->width(), d->rowHeight*2);
+//			updateContents(columnPos(0), rowPos(row+1), viewport()->width(), d->rowHeight);
 			qApp->processEvents(500);
 			ensureVisible(columnPos(d->curCol), rowPos(row+1)+d->rowHeight-1, columnWidth(d->curCol), d->rowHeight);
 		}
@@ -2894,8 +2900,11 @@ bool KexiTableView::acceptEditor()
 //	bool allow = true;
 //	static const QString msg_NOT_NULL = i18n("\"%1\" column requires a value to be entered.");
 
+	//autoincremented field can be omitted (left as null or empty) if we're inserting a new row
+	const bool autoIncColumnCanBeOmitted = d->newRowEditing && d->pEditor->field()->isAutoIncrement();
+
 	if (d->pEditor->valueIsNull()) {//null value entered
-		if (d->pEditor->field()->isNotNull()) {
+		if (d->pEditor->field()->isNotNull() && !autoIncColumnCanBeOmitted) {
 			kdDebug() << "KexiTableView::acceptEditor(): NULL NOT ALLOWED!" << endl;
 			res = KexiValidator::Error;
 			msg = KexiValidator::msgColumnNotEmpty().arg(d->pEditor->field()->captionOrName());
@@ -2912,7 +2921,7 @@ bool KexiTableView::acceptEditor()
 	}
 	else if (d->pEditor->valueIsEmpty()) {//empty value entered
 		if (d->pEditor->field()->hasEmptyProperty()) {
-			if (d->pEditor->field()->isNotEmpty()) {
+			if (d->pEditor->field()->isNotEmpty() && !autoIncColumnCanBeOmitted) {
 				kdDebug() << "KexiTableView::acceptEditor(): EMPTY NOT ALLOWED!" << endl;
 				res = KexiValidator::Error;
 				msg = KexiValidator::msgColumnNotEmpty().arg(d->pEditor->field()->captionOrName());
@@ -2926,7 +2935,7 @@ bool KexiTableView::acceptEditor()
 			}
 		}
 		else {
-			if (d->pEditor->field()->isNotNull()) {
+			if (d->pEditor->field()->isNotNull() && !autoIncColumnCanBeOmitted) {
 				kdDebug() << "KexiTableView::acceptEditor(): NEITHER NULL NOR EMPTY VALUE CAN BE SET!" << endl;
 				res = KexiValidator::Error;
 				msg = KexiValidator::msgColumnNotEmpty().arg(d->pEditor->field()->captionOrName());
