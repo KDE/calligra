@@ -105,7 +105,7 @@ void PgConfDia::setupPageGeneral()
 						"for the presentation will be measured.</p> "
 						"<p>The times will be displayed at the end of the "
 						"presentation.</p> "
-						"<p>This can be used during rehersal to check "
+						"<p>This can be used during rehearsal to check "
 						"coverage for each issue in the presentation, "
 						"and to verify that the presentation duration "
 						"is correct.</p>" ) );
