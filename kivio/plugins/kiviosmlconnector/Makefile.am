@@ -1,3 +1,4 @@
+SUBDIRS=. sml_connector
 lib_LTLIBRARIES =libkiviosmlconnector.la
 
 INCLUDES = -I$(top_srcdir)/kivio/kiviopart\

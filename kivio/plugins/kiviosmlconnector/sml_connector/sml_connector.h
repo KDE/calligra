@@ -41,7 +41,7 @@ class KivioShape;
 class KivioSMLConnector : public Kivio1DStencil
 {
 private:
-	bool loadPath(const QString& file);
+	bool loadPath(const QDomElement &e);
 
 protected:
     QPtrList <KivioConnectorPoint> *m_pConnectorPoints;

@@ -367,9 +367,9 @@ void KivioSMLConnector::drawOpenPath( KivioShape *pShape, KivioIntraStencilData 
   delete pNewPoints;
 }
 
-bool KivioSMLConnector::loadPath(const QString& file)
+bool KivioSMLConnector::loadPath(const QDomElement &e)
 {
-	kdDebug() << "Loading :" << file << endl;
+	kdDebug() << "Loading :" << endl;
 
 }
 
