@@ -43,6 +43,7 @@ class AbiProps
 {
 public:
     AbiProps() {};
+    AbiProps(QString newName, void* newValue) : name(newName), value(newValue) {};
     virtual ~AbiProps() {};
     QString name;
     void* value;
@@ -117,15 +118,27 @@ public:
     StackItem()
     {
         propertyFontName="times"; //Default font
+        italic=false;
+        bold=false;
+        underline=false;
+        red=0;
+        green=0;
+        blue=0;
     }
     ~StackItem()
     {
     }
 public:
-    StackItemElementType    elementType;
-    QDomNode                stackNode,stackNode2;
-    QString                 propertyFontName;
-    int                     pos; //Position
+    StackItemElementType elementType;
+    QDomNode    stackNode,stackNode2;
+    QString     propertyFontName;
+    int         pos; //Position
+    bool        italic;
+    bool        bold;
+    bool        underline;
+    int         red;
+    int         green;
+    int         blue;
 };
 
 
@@ -217,12 +230,26 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
                 ||(structureStack.current()->elementType==ElementTypeContent))
         {
             QValueList<AbiProps> abiPropsList;
+            QString strFontStyle,strWeight,strDecoration,strColour;
+            abiPropsList.append( AbiProps("font-style",&strFontStyle));
+            abiPropsList.append( AbiProps("font-weight",&strWeight));
+            abiPropsList.append( AbiProps("text-decoration",&strDecoration));
+            abiPropsList.append( AbiProps("color",&strColour));
             kdDebug()<< "========== props=\"" << attributes.value("props") << "\"" << endl;
-            TreatAbiProps(attributes.value("props"),abiPropsList); //TODO: PROPS (upper case)
+            TreatAbiProps(attributes.value("props"),abiPropsList);
+            TreatAbiProps(attributes.value("PROPS"),abiPropsList);
             stackItem->elementType=ElementTypeContent;
             stackItem->stackNode=nodeOut;   // <TEXT>
             stackItem->stackNode2=nodeOut2; // <FORMATS>
             stackItem->pos=structureStack.current()->pos; //Propagate the position
+            stackItem->italic=(strFontStyle.contains("italic")>0);
+            stackItem->bold=(strWeight.contains("bold")>0);
+            // underline is the only font-decoration available in KWord
+            stackItem->underline=(strDecoration.contains("underline")>0);
+            long int colour=strColour.toLong(NULL,16);
+            stackItem->red  =(colour&0xFF0000)>>16;
+            stackItem->green=(colour&0x00FF00)>>8;
+            stackItem->blue =(colour&0x0000FF);
         }
         else
         {//we are not nested correctly, so consider it a parse error!
@@ -239,7 +266,7 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
         paragraphElementOut.appendChild(textElementOut);
         QDomElement formatsPluralElementOut=mainFramesetElement.ownerDocument().createElement("FORMATS");
         paragraphElementOut.appendChild(formatsPluralElementOut);
-        
+
 #ifdef WRITE_LAYOUT
         QDomElement layoutElementOut=nodeOut.ownerDocument().createElement("LAYOUT");
         paragraphElementOut.appendChild(layoutElementOut);
@@ -254,7 +281,7 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
     else if ((name=="section")||(name=="SECTION"))
     {//Not really needed, as it is the default behaviour for now!
         //TODO: non main text sections (e.g. footers)
-        stackItem->elementType=ElementTypeSection; 
+        stackItem->elementType=ElementTypeSection;
         stackItem->stackNode=nodeOut;
     }
     else
@@ -304,7 +331,7 @@ bool StructureParser :: endElement( const QString&, const QString& , const QStri
         }
     }
     // Do nothing yet
-    delete stackItem;        
+    delete stackItem;
     return true;
 }
 
@@ -329,7 +356,7 @@ bool StructureParser :: characters ( const QString & ch )
     if ((stackItem->elementType==ElementTypeContent) || (stackItem->elementType==ElementTypeParagraph))
     { // <c> or <p>
         nodeOut.appendChild(nodeOut.ownerDocument().createTextNode(ch));
-        
+
         QDomElement formatElementOut=nodeOut.ownerDocument().createElement("FORMAT");
         formatElementOut.setAttribute("id",1); // Normal text!
         formatElementOut.setAttribute("pos",stackItem->pos); // Start position
@@ -341,8 +368,39 @@ bool StructureParser :: characters ( const QString & ch )
         QDomElement fontElementOut=nodeOut.ownerDocument().createElement("FONT");
         fontElementOut.setAttribute("name",stackItem->propertyFontName); // Font name
         formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
+
+        if (stackItem->italic)
+        {
+            QDomElement fontElementOut=nodeOut.ownerDocument().createElement("ITALIC");
+            fontElementOut.setAttribute("value",1);
+            formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
+        }
+
+        if (stackItem->bold)
+        {
+            QDomElement fontElementOut=nodeOut.ownerDocument().createElement("WEIGHT");
+            fontElementOut.setAttribute("value",75);
+            formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
+        }
+
+        if (stackItem->underline)
+        {
+            QDomElement fontElementOut=nodeOut.ownerDocument().createElement("UNDERLINE");
+            fontElementOut.setAttribute("value",1);
+            formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
+        }
+
+        if (stackItem->red || stackItem->green || stackItem->blue)
+        {
+            QDomElement fontElementOut=nodeOut.ownerDocument().createElement("COLOR");
+            fontElementOut.setAttribute("red",stackItem->red);
+            fontElementOut.setAttribute("green",stackItem->green);
+            fontElementOut.setAttribute("blue",stackItem->blue);
+            formatElementOut.appendChild(fontElementOut); //Append to <FORMAT>
+        }
+
     }
-    
+
     return true;
 }
 
@@ -351,7 +409,7 @@ static QDomElement createMainFramesetElement(QDomDocument& qDomDocumentOut)
 {
     QDomElement framesetsPluralElementOut=qDomDocumentOut.createElement("FRAMESETS");
     qDomDocumentOut.documentElement().appendChild(framesetsPluralElementOut);
-    
+
     //As we have a new AbiWord <section>, we think we have a KWord <FRAMESET>
     QDomElement framesetElementOut=qDomDocumentOut.createElement("FRAMESET");
     framesetElementOut.setAttribute("frameType",1);
@@ -502,7 +560,8 @@ const bool ABIWORDImport::filter(const QString &fileIn, const QString &fileOut,
         in.remove();
     }
 
-    kdDebug()<< qDomDocumentOut.toCString() << endl << "Now importing to KWord!" << endl;
+    //kdDebug()<< qDomDocumentOut.toCString() << endl;
+    kdDebug() << "Now importing to KWord!" << endl;
 
     KoStore out=KoStore(fileOut, KoStore::Write);
     if(!out.open("root"))
