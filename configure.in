@@ -55,5 +55,7 @@ AC_OUTPUT(Makefile \
 	kpresenter/Makefile \
 	kpresenter/autoformEdit/Makefile \
 	kpresenter/autoforms/Makefile \
+	kpresenter/autoforms/Arrows/Makefile \
+	kpresenter/autoforms/Connections/Makefile \
 	kpresenter/pics/Makefile \
 	kpresenter/toolbar/Makefile )
