@@ -71,20 +71,27 @@ KWFootNoteDia::KWFootNoteDia( NoteType _noteType, KWFootNoteVariable::Numbering 
         m_rbFootNote->setChecked( true );
     else
         m_rbEndNote->setChecked( true );
-
+    footNoteTypeChanged();
 }
 
 void KWFootNoteDia::footNoteTypeChanged()
 {
     if ( m_rbManual->isChecked())
+    {
+        enableButtonOK( !m_footLine->text().isEmpty() );
         m_footLine->setFocus();
+    }
     else
+    {
+        enableButtonOK(true);
         setFocus();
+    }
 }
 
-void KWFootNoteDia::footLineChanged( const QString & )
+void KWFootNoteDia::footLineChanged( const QString &text )
 {
     m_rbManual->setChecked( true );
+    enableButtonOK( !text.isEmpty() );
 }
 
 NoteType KWFootNoteDia::noteType() const
