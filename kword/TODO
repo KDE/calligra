@@ -10,10 +10,7 @@ Bugs; in order or importance:
   still needs to be done correctly in kword_doc
 - deleting pictures-frames should also delete the picture (from the tar) (imageCollection)
   (we have a problem with reference counts in the creation of a new image)
-- Setting a paragraph to a new style should override ALL settings, including size of the characters.
 - reconnect dumps sometimes.
-- When deleting text, empty pages are not removed
-- When removing text in a table cell shrink table cells
 - Anchor is not redrawn if page scrolls
 - Type 1 line. Press enter after first character, 
   press backspace, press enter again. Press backspace again. 
@@ -29,24 +26,14 @@ Missing or incomplete stuff:
 - Preview widget for numbering
 - Preview widget for style templates editor
 - Tabulators don't work correctly in "Blocksatz"
-- Sideheads
-- split frame
 - Toolbars in the settings menu are not updated if they are not shown/reshown
 - The borders dialog doesnt work (settings are not used)
 - runAroundGap does nothing
-- add table methods:
-   split cells
-   refit. (calc best width for every col)
-   
-
 
 cleanup:
 --------
 - isAHeader is a global function; move to frameset class.
 - isAFooter is a global function; move to frameset class.
-- what does int frameset in the fc.cc do??
-- char.cc uses C-type strings, passing around *char pointers without destructors etc. Very ugly.
-- char.h does a define "#define kwchar QChar", lets replace all kwchar with QChars in the sources..
 - load and save functions in frame and frameset are mixed up. Should move them to right position
   to save code duplication.
 - All enums should belong to a class, making it safe for namespace clashes. Class::Enum-value 
@@ -55,14 +42,6 @@ cleanup:
   doc->getFrame(int) to retrieve the pointer.
   I would suggest using pointers there, and only storing the frame, since the frameset can be 
   retrieved with frame->getFrameSet();
-
-
-Optimations:
-----------------------------------------
-- Make recalculation of frames (after resizing frames) and calculation of text running around 
-  frames much FASTER. Espacially the recalculation of the whole text in these cases is very 
-  slow in long docs
-
 
 The whole images thing needs to be rethought:
 -----------------------------------------
@@ -151,6 +130,84 @@ or file:// or tar:// for remote, local, internal storage respectively.
  
 Last note: this proposal does not propose any gui/printing issues at all.
 
-Reginald Stadlbauer <reggie@kde.org>
-Thomas Zander <zander@earthling.net>
+
+
+MILESTONES
+
+Since KWord has been unmaintained for quite some time it is best to patch it up before we start
+adding features. In this document I want to set a number of milestones which give the direction
+I want KWord to take in the to to far future.
+I have no problem with people starting to implement features, but I myself will try to keep to 
+this file. 
+The reason that this file is in CVS is therefor 2-fold. First I want everyone to know the 
+current state of kword (since for some time not much will visibly change). Last this document will
+state where I want KWord to go. So people can see the purpose of stuff I created better..
+
+
+KWord from a development POV can be devided in a number of 'layers'. 
+- document and view
+  This layer is implemented in the koffice-libs and I will not be actively developing them
+
+- Frames
+  Most (but not all) of the frames code has been created, and will stay in its current form for 
+  quite some time (most notable exception being floating frames)
+
+- Text and paragraphs. 
+  This is code that is to be completely replaced with QT code. There is work in progress for this
+  on the Troll side and a full version will be release in QT3.0 (february 2001) However I have 
+  discussed this with the Trolls and we will find a solution to get this in well before that time.
+
+- GUI
+  The window and menu's need a big update. There is the inconsistency in the menus and lots of
+  options which are in code but not in the GUI.
+
+----------------- Milestones
+
+Replace all the text/paragraph/strings stuff with the QT QRichTextObject stuff.
+
+Page class needs some work; its main function is 2-fold:
+ - input from user
+ - it is the widget to draw on screen (so we need updating stuff in there)
+
+find out if the redraw stuff works, and document it.
+
+Fix a lot of non-OO stuff.
+
+All classes and methods should have proper documentation, in the proper format.
+
+Complete re-layout of the GUI with all future features as hooks implemented. These features will
+mostly be discussed in this file.
+ - tables menu items should be accessible from the edit and the frameedit cursor modes.
+ - Have an insert and a modify menu where all elements are represented.
+
+Make complete undo-redo stuff work.
+
+Create a much nicer status bar.
+
+Tables should get a title (with positioning posibility) This will basicly be a new frame placed on top
+or at bottom of table.
+
+Make all frametypes have the posibility to float.
+
+Sideheads (for text)
+
+Split frames needs to be implemented.
+
+Styles have to be saved external.
+
+Books (collection of documents) should be implemented
+
+Implement complete DCOP interface
+
+Make everything scriptable
+
+Make variables work
+
+Make TOC and other auto-generates stuff work.
+
+Add "TopOfFrame"-TopOfPage" etc to styles.
+
+
+Thanx to: Reginald Stadlbauer <reggie@kde.org>
+Author: Thomas Zander <zander@earthling.net>
 
