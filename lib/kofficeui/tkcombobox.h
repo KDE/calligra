@@ -31,7 +31,10 @@ public:
 
 protected:
   void paintEvent(QPaintEvent*);
+
+private:
+  class TKComboBoxPrivate;
+  TKComboBoxPrivate *d;
 };
 
 #endif
-

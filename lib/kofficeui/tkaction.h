@@ -52,6 +52,8 @@ public slots:
 
 private:
   TK::IconMode m_imode;
+  class TKActionPrivate;
+  TKActionPrivate *d;
 };
 /******************************************************************************/
 class TKBaseSelectAction : public TKAction
@@ -67,7 +69,7 @@ public:
   bool isEditable();
 
   void activate(int);
-  
+
 protected:
   virtual void initComboBox(TKComboBox*);
 
@@ -84,6 +86,8 @@ signals:
 private:
   int m_current;
   bool m_editable;
+  class TKBaseSelectActionPrivate;
+  TKBaseSelectActionPrivate *d;
 };
 /******************************************************************************/
 class TKSelectAction : public TKBaseSelectAction
@@ -110,6 +114,8 @@ signals:
 
 private:
   QStringList m_list;
+  class TKSelectActionPrivate;
+  TKSelectActionPrivate *d;
 };
 /******************************************************************************/
 #endif

@@ -68,6 +68,10 @@ protected:
 
   QColor m_pCurrentColor;
   QRect iconColorRect;
+
+private:
+  class TKSelectColorActionPrivate;
+  TKSelectColorActionPrivate *d;
 };
 /****************************************************************************************/
 class TKColorPanelButton : public QFrame
@@ -91,6 +95,10 @@ protected:
 
   QColor m_Color;
   bool m_bActive;
+
+private:
+  class TKColorPanelButtonPrivate;
+  TKColorPanelButtonPrivate *d;
 };
 /****************************************************************************************/
 class TKColorPanel : public QWidget
@@ -128,7 +136,10 @@ protected:
 
   QColor m_activeColor;
   QDict<TKColorPanelButton> m_pColorDict;
+
+private:
+  class TKColorPanelPrivate;
+  TKColorPanelPrivate *d;
 };
 
 #endif
-
