@@ -22,6 +22,7 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
+#include <texgraphexportdia.h>
 
 TEXGRAPHExport::TEXGRAPHExport(KoFilter *parent, const char *name) :
                      KoFilter(parent, name) {
@@ -40,16 +41,14 @@ bool TEXGRAPHExport::filter(const QString &fileIn, const QString &fileOut,
         in.close();
         return false;
     }
-    // input file Reading
-    QByteArray array = in.read(in.size());
+    /* input file Reading */
+    //QByteArray array = in.read(in.size());
     in.close();
 
-    kdDebug() << "TEXGRAPH FILTER --> BEGIN" << endl;
-    Document TEXGRAPHParser(array, fileOut);
-    TEXGRAPHParser.analyse();
-    kdDebug() << "---------- generate file -------------" << endl;
-    TEXGRAPHParser.generate();
-    kdDebug() << "TEXGRAPH FILTER --> END" << endl;
+    TEXGRAPHExportDia* dialog = new TEXGRAPHExportDia(in);
+    dialog->setOutputFile(fileOut);
+    dialog->exec();
+    delete dialog;
 
     return true;
 }

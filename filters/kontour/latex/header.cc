@@ -32,12 +32,14 @@ Header::Header()
 	_hasUnderline = false;
 	_hasEnumerate = false;
 	_hasGradient  = false;
+	_useRotate    = false;
 	setDx(20);
 	setDy(20);
 	setGridAlign(0);
 	setHelpAlign(0);
 	//setUnit(TU_PT);
 	setFileHeader(this);		/* for xmlParser class. */
+	_currentOrient = TO_PORTRAIT;
 }
 
 /*******************************************/
@@ -50,11 +52,16 @@ Header::~Header()
 
 /*******************************************/
 /* Convert                                 */
-/* Note : 844 is the picture width in pt.  */
+/* Note : 840 is the picture width in pt.  */
+/* for portrait and 600 for landscape. to  */
+/* invert the origin.                      */
 /*******************************************/
 double Header::convert(double y)
 {
-	return (844 - y);
+	if(_currentOrient == TO_PORTRAIT)
+		return (840 - y);
+	else
+		return (600 - y);
 }
 
 /*******************************************/
@@ -151,6 +158,9 @@ void Header::analyseGridParam(const QDomNode balise)
 {
 	setDx(getAttr(balise, "dx").toInt());
 	setDy(getAttr(balise, "dy").toInt());
+	setGridShow(getAttr(balise, "show").toInt());
+	setGridColor(getAttr(balise, "color"));
+	setGridColorName(addNewColor(getGridColor()));
 	setGridAlign(getAttr(balise, "align").toInt());
 }
 
@@ -266,6 +276,8 @@ void Header::generatePackage(QTextStream &out)
 		out << "\\usepackage{pst-grad}" << endl;
 	if(_colors.count() > 0)
 		out << "\\usepackage{pstcol}" << endl;
+	if(mustRotate())
+		out << "\\usepackage{rotating}" << endl;
 	out << endl;
 			
 }

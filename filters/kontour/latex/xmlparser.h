@@ -26,6 +26,8 @@
 #include <qstring.h>
 #include <qdom.h>
 //#include <qbytearray.h>
+#include <koStore.h>
+//#include "document.h"
 
 class Header;
 
@@ -37,21 +39,35 @@ class XmlParser
 	//int         _index;
 	//QDomNode _eltCurrent;
 
+	/* OPTIONS */
+	static bool _useLatexStyle;
+	static bool _useLatin1;
+	static bool _useUnicode;
+
 	protected:
 		/* All the inherit class must be have a link with 
 		 * the header to specify to use special package
 		 */
 		static Header *_fileHeader;
+		static double _maxX;
+		static double _maxY;
+		static KoStore*    _in;
+		//static Document*   _root;
 
 	public:
 		XmlParser(QString);
-		XmlParser(QByteArray);
+		XmlParser(QByteArray);	/* deprecated */
+		XmlParser(const KoStore&);
 		XmlParser();
 		virtual ~XmlParser();
 
+		bool        isKwordStyleUsed() const { return (_useLatexStyle == false); }
+		bool        mustUseUnicode  () const { return _useUnicode;          }
+		bool        mustUseLatin1   () const { return _useLatin1;           }
 		QString     getFilename     () const { return _filename;      }
 		QString     getDocument     () const { return _document.toString(); };
 		Header*     getFileHeader   () const { return _fileHeader; }
+		//Document*   getRoot         () const { return _root;                }
 		/*QDomNode getChild(QString);
 		QDomNode getChild(QString, int);
 		QString  getChildName(int);*/
@@ -65,9 +81,21 @@ class XmlParser
 		int      getNbChild();
 		QString  getAttr(QString);*/
 		QString  getAttr(QDomNode, QString) const;
+		double   getMaxX() const { return _maxX; }
+		double   getMaxY() const { return _maxY; }
+
+		void setNewMaxX(double);
+		void setNewMaxY(double);
+		//void setRoot      (Document*   r) { _root       = r; }
 
 		void setFileHeader(Header* h) { _fileHeader = h; }
 		QDomNode init() { return _document.documentElement(); }
+
+		void        useUnicodeEnc   ()              { _useUnicode    = true; _useLatin1 = false;  }
+		void        useLatin1Enc    ()              { _useLatin1     = true; _useUnicode = false; }
+		void        useLatexStyle   ()              { _useLatexStyle = true;  }
+		void        useKwordStyle   ()              { _useLatexStyle = false; }
+
 
 		/*void analyse(){};
 		void generate(){};*/

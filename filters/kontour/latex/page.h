@@ -25,6 +25,9 @@
 #include <qtextstream.h>
 #include "xmlparser.h"
 #include "layer.h"
+#ifndef __KILLU_FILEHEADER_H__
+#include "header.h"
+#endif
 
 enum TFormat
 {
@@ -39,13 +42,6 @@ enum TFormat
 	TF_USEXECUTIVE
 };
 
-enum TOrient
-{
-	TO_PORTRAIT,
-	TO_LANDSCAPE
-};
-
-
 /***********************************************************************/
 /* Class: Page                                                         */
 /***********************************************************************/
@@ -59,12 +55,12 @@ class Page: public XmlParser
 	/* LAYOUT */
 	TFormat   _format;
 	double    _width,
-			  _height;
+		  _height;
 	TOrient   _orientation;
 	double    _leftMargin,
-			  _rightMargin,
-			  _bottomMargin,
-			  _topMargin;
+		  _rightMargin,
+		  _bottomMargin,
+		  _topMargin;
 
 	QPtrList<Layer> _layers;
 

@@ -29,6 +29,7 @@
 #include "header.h"		/* class header file.      */
 //#include "layer.h"		/* Layer contains all elements. */
 #include "page.h"
+#include <koStore.h>
 
 enum EGenerate
 {
@@ -64,6 +65,9 @@ class Document: public XmlParser
 	LatexType _latexType;
 	int       _version;
 
+	/* Options */
+	bool _isEmbeded;
+
 	public:
 		/**
 		 * Constructor
@@ -75,9 +79,17 @@ class Document: public XmlParser
 		/**
 		 * Constructor
 		 *
-		 * Creates a new instance of Document.
+		 * Creates a new instance of Document from an input file in a QByteArray.
 		 */
 		Document(QByteArray, QString);
+
+		/**
+		 * Constructor
+		 *
+		 * Creates a new instance of Document from an input file in a koStore.
+		 */
+		Document(KoStore&, QString, QString);
+
 
 		/**
 		 * Destructor
@@ -90,16 +102,17 @@ class Document: public XmlParser
 		 * Accessors
 		 */
 		LatexType getLatexType() const { return _latexType; }
-
+		bool isEmbeded() const { return _isEmbeded; }
 
 		void setLatexType(int lt) { _latexType = (LatexType) lt; }
+		void analyse_config(QString);
 
 		void  analyse();
 		void  analysePreambule(const QDomNode);
 		void  analyseDocument(const QDomNode);
 
 		void  generate(); //QTextStream&);
-
+		void  generateGrid(QTextStream&);
 	private:
 };
 

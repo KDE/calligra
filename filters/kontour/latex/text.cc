@@ -79,7 +79,19 @@ void Text::generatePSTRICKS(QTextStream& out)
 {
 	double x, y;
 	kdDebug() << "Generate a text zone" << endl;
-	out << "\\rput";
+	out << "\\rput[t";
+	switch(_align)
+	{
+		case EA_LEFT:
+				out << "l";
+			break;
+		case EA_CENTER: /* default */
+			break;
+		case EA_RIGHT:
+				out << "r";
+			break;
+	}
+	out << "]";
 	
 	/* Options */
 	//QString param = getBaseContentAttr();

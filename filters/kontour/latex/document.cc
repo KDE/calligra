@@ -45,6 +45,35 @@ Document::Document(QByteArray in, QString fileOut): XmlParser(in), _file(fileOut
 }
 
 /*******************************************/
+/* Constructor                             */
+/*******************************************/
+Document::Document(KoStore& in, QString fileOut, QString config): XmlParser(in), _file(fileOut)
+{
+	_in = new KoStore(in);
+	kdDebug() << fileOut.latin1() << endl;
+	_filename = fileOut;
+	setFileHeader(_fileHeader);
+	//setRoot(this);
+	_isEmbeded = false;
+	analyse_config(config);
+}
+
+void Document::analyse_config(QString config)
+{
+	kdDebug() << config << endl;
+	if(config.contains("EMBEDED") > 0)
+		_isEmbeded = true;
+	if(config.contains("PSTRICK") > 0)
+		setLatexType(LT_PSTRICKS);
+	else if(config.contains("KWORD") > 0)
+		useKwordStyle();
+	if(config.contains("UNICODE") > 0)
+		useUnicodeEnc();
+	else if(config.contains("LATIN1") > 0)
+		useLatin1Enc();
+}
+
+/*******************************************/
 /* Destructor                              */
 /*******************************************/
 Document::~Document()
@@ -61,8 +90,8 @@ void Document::analyse()
 
 	kdDebug() << "BEGIN THE ANALYSE OF A DOCUMENT" << endl;
 	balise = init();
-	balise = getChild(balise, "killustrator");
-	analysePreambule(balise);
+	//balise = getChild(balise, "kontour");
+	//analysePreambule(balise);
 	analyseDocument(balise);
 	kdDebug() << "END OF ANALYSE OF A DOCUMENT" << endl;
 }
@@ -104,40 +133,69 @@ void Document::generate() //QTextStream &out)
 	{
 		kdDebug() << "GENERATION" << endl;
 		_out.setDevice(&_file);
+
 		/* Generation */
-		_header.generate(_out);
-
-		if(_pages.first()->getFormat() == TF_CUSTOM)
+		if(!isEmbeded())
 		{
-			_out << "\\setlength{\\paperwidth}{"  << _pages.first()->getWidth()  << "mm}" << endl;
-			_out << "\\setlength{\\paperheight}{" << _pages.first()->getHeight() << "mm}" << endl;
+			_header.generate(_out);
+
+			if(_pages.first()->getFormat() == TF_CUSTOM)
+			{
+				_out << "\\setlength{\\paperwidth}{"  << _pages.first()->getWidth()  << "mm}" << endl;
+				_out << "\\setlength{\\paperheight}{" << _pages.first()->getHeight() << "mm}" << endl;
+			}
+
+			_out << "\\setlength{\\textwidth}{"  << (_pages.first()->getWidth() - _pages.first()->getLeftMargin() - _pages.first()->getRightMargin())  << "mm}" << endl;
+			_out << "\\setlength{\\textheight}{" << (_pages.first()->getHeight()) << "mm}" << endl;
+
+			/* Margin */
+			_out << "\\setlength{\\topmargin}{" << _pages.first()->getTopMargin() << "mm}" << endl;
+			_out << "\\addtolength{\\leftmargin}{" << _pages.first()->getLeftMargin() << "mm}" << endl;
+			_out << endl;
+			_out << "\\begin{document}" << endl;
 		}
-
-		_out << "\\setlength{\\textwidth}{"  << (_pages.first()->getWidth() - _pages.first()->getLeftMargin() - _pages.first()->getRightMargin())  << "mm}" << endl;
-		_out << "\\setlength{\\textheight}{" << (_pages.first()->getHeight()) << "mm}" << endl;
-
-		/* Margin */
-		_out << "\\setlength{\\topmargin}{" << _pages.first()->getTopMargin() << "mm}" << endl;
-		_out << "\\addtolength{\\leftmargin}{" << _pages.first()->getLeftMargin() << "mm}" << endl;
-		_out << endl;
-		
-		_out << "\\begin{document}" << endl;
 		for(Page* page = _pages.first(); page != 0; page = _pages.next())
 		{
+			if(page->getOrientation())
+				_out << "\\begin{sidewaysfigure}" << endl;
 			if(getLatexType() == LT_PSTRICKS)
 			{
 				_out << "\\begin{pspicture}(";
-				_out << page->getWidth() << "mm,";
-				_out << page->getHeight() << "mm)" << endl;
+				if(_header.isGridShow())
+					generateGrid(_out);
+				if(!isEmbeded())
+				{
+					_out << page->getWidth() << "mm,";
+					_out << page->getHeight() << "mm)" << endl;
+				}
+				else
+				{
+					_out << getMaxX() << "pt,";
+					_out << getMaxY() << "pt)" << endl;
+				}
 				page->generatePSTRICKS(_out);
 				_out << "\\end{pspicture}" << endl;
 			}
+			if(page->getOrientation())
+				_out << "\\end{sidewaysfigure}" << endl;
 		}
-		_out << "\\end{document}" << endl;
+		if(!isEmbeded())
+			_out << "\\end{document}" << endl;
 		_out << getDocument();
 	}
 	else
 		kdDebug() << "Can't use the file ..." << endl;
 	_file.close();
+}
+
+/*******************************************/
+/* GenerateGrid                            */
+/*******************************************/
+void Document::generateGrid(QTextStream &out)
+{
+	out << "\\psgrid[xunit=" << _header.getDx() << "pt,yunit=" << _header.getDy() << "pt,";
+	out << "gridcolor=" << _header.getGridColorName() << ",";
+	out << "gridwidth=1pt,subgriddiv=1]" << endl;
+
 }
 

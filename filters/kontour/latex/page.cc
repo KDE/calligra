@@ -35,6 +35,7 @@
 /*******************************************/
 Page::Page()
 {
+	setOrientation(TO_PORTRAIT);
 }
 
 /*******************************************/
@@ -80,6 +81,8 @@ void Page::analyseLayout(const QDomNode balise)
 	setWidth(getAttr(balise, "width").toInt());
 	setHeight(getAttr(balise, "height").toInt());
 	setOrientation(getAttr(balise, "orientation").toInt());
+	if(_orientation == TO_LANDSCAPE)
+		_fileHeader->useRotate(); /* Think to load rotating package */
 	setLeftMargin(getAttr(balise, "lmargin").toInt());
 	setRightMargin(getAttr(balise, "rmargin").toInt());
 	setBottomMargin(getAttr(balise, "bmargin").toInt());
@@ -95,6 +98,7 @@ void Page::generatePSTRICKS(QTextStream &out)
 {
 	//out << "\\psset{origin={0,-" << getHeight() << "mm}}" << endl;
 	//out << "\\psset{yunit=-1pt}" << endl;
+	_fileHeader->setCurrentOrient(_orientation);
 	for(Layer* index = _layers.first(); index != 0; index = _layers.next())
 	{
 		index->generatePSTRICKS(out);

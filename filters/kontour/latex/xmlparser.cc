@@ -26,6 +26,12 @@
 
 /* Init static data */
 Header* XmlParser::_fileHeader = 0;
+bool XmlParser::_useLatin1 = true;
+bool XmlParser::_useUnicode = false;
+bool XmlParser::_useLatexStyle = true;
+double XmlParser::_maxX = 0;
+double XmlParser::_maxY = 0;
+KoStore* XmlParser::_in = NULL;
 
 XmlParser::XmlParser(QString filename):
 		_filename(filename)
@@ -47,6 +53,20 @@ XmlParser::XmlParser(QByteArray in)
 	_document.setContent(in);
 }
 
+XmlParser::XmlParser(const KoStore& in)
+{
+	_in = new KoStore(in);
+	if(!_in->open("root"))
+	{
+	        kdError(30503) << "Unable to open input file!" << endl;
+        	_in->close();
+	        return;
+	}
+	/* input file Reading */
+	QByteArray array = _in->read(_in->size());
+	_document.setContent(array);
+}
+
 XmlParser::XmlParser()
 {
 	//_index = 0;
@@ -55,6 +75,8 @@ XmlParser::XmlParser()
 XmlParser::~XmlParser()
 {
 	//kdDebug() << "Destruction of XmlParser (tree)" << endl;
+	if(_in != NULL)
+		_in->close();
 }
 
 /*QDomNode XmlParser::getChild(QString name)
@@ -140,3 +162,16 @@ QString  XmlParser::getAttr(QDomNode balise, QString name) const
 		return balise.toElement().attributeNode(name).value();
 	return QString();
 }
+
+void XmlParser::setNewMaxX(double x)
+{
+	if(x > _maxX)
+		_maxX = x;
+}
+
+void XmlParser::setNewMaxY(double y)
+{
+	if(y > _maxY)
+		_maxY = y;
+}
+

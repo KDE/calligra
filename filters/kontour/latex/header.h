@@ -41,12 +41,6 @@
 	TF_USEXECUTIVE
 };
 
-enum TOrient
-{
-	TO_PORTRAIT,
-	TO_LANDSCAPE
-};
-
 enum TUnit
 {
 	TU_MM,
@@ -54,6 +48,12 @@ enum TUnit
 	TU_PT,
 	TU_INCH
 };*/
+
+enum TOrient
+{
+	TO_PORTRAIT,
+	TO_LANDSCAPE
+};
 
 /***********************************************************************/
 /* Class: Header                                                       */
@@ -81,7 +81,10 @@ class Header: public XmlParser
 
 	/* GRID */
 	int       _dx, _dy;
+	QString   _gridColorName;
+	QString   _gridColor;
 	bool      _gridAlign;
+	bool      _gridShow;
 	bool      _helpAlign;
 
 	/* DIVERSE */
@@ -90,6 +93,10 @@ class Header: public XmlParser
 	bool     _hasUnderline;
 	bool     _hasEnumerate;
 	bool     _hasGradient;
+	bool     _useRotate;
+
+	/* USEFULL */
+	TOrient   _currentOrient;
 	
 	public:
 		/**
@@ -115,12 +122,18 @@ class Header: public XmlParser
 		double    getLeftMargin   () const { return _leftMargin;   }
 		double    getTopMargin    () const { return _topMargin;    }
 		double    getBottomMargin () const { return _bottomMargin; }*/
+		QString   getGridColor    () const { return _gridColor;    }
+		QString   getGridColorName() const { return _gridColorName;}
 		bool      isHelpAlign     () const { return _helpAlign;    }
 		bool      isGridAlign     () const { return _gridAlign;    }
+		bool      isGridShow      () const { return _gridShow;     }
 		bool      hasColor        () const { return _hasColor;     }
 		bool      hasUnderline    () const { return _hasUnderline; }
 		bool      hasEnumerate    () const { return _hasEnumerate; }
 		bool      hasGradient     () const { return _hasGradient;  }
+		bool      mustRotate      () const { return _useRotate;    }
+		int       getDx           () const { return _dx;           }
+		int       getDy           () const { return _dy;           }
 		//QString   getColor        (QString);
 
 		/**
@@ -137,14 +150,19 @@ class Header: public XmlParser
 		//void setFormat      (int f)     { _format        = (TFormat) f;    }
 		//void setOrientation(TOrient o)  { _orientation  = o;              }
 		//void setOrientation (int o)      { _orientation  = (TOrient) o;    }
-		void setHelpAlign   (int ha)     { _helpAlign    = ha;       }
-		void setGridAlign   (int ga)     { _gridAlign    = ga;       }
-		void setDx          (int dx)     { _dx           = dx;       }
-		void setDy          (int dy)     { _dy           = dy;       }
-		void useColor       ()           { _hasColor     = true;     }
-		void useUnderline   ()           { _hasUnderline = true;     }
-		void useEnumerate   ()           { _hasEnumerate = true;     }
-		void useGradient    ()           { _hasGradient  = true;     }
+		void setGridColor    (QString c)  { _gridColor     = c;        }
+		void setGridColorName(QString cn) { _gridColorName = cn;       }
+		void setHelpAlign    (int ha)     { _helpAlign     = ha;       }
+		void setGridAlign    (int ga)     { _gridAlign     = ga;       }
+		void setGridShow     (int gs)     { _gridShow      = gs;       }
+		void setDx           (int dx)     { _dx            = dx;       }
+		void setDy           (int dy)     { _dy            = dy;       }
+		void useColor        ()           { _hasColor      = true;     }
+		void useUnderline    ()           { _hasUnderline  = true;     }
+		void useEnumerate    ()           { _hasEnumerate  = true;     }
+		void useGradient     ()           { _hasGradient   = true;     }
+		void useRotate       ()           { _useRotate     = true;     }
+		void setCurrentOrient(TOrient o)  { _currentOrient = o;        }
 		QString addNewColor(QString);
 
 		double convert(double);

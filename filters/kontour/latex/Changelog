@@ -1,3 +1,10 @@
+21 October 2001
+- features
+	o show grid if show grid option is enabled.
+- bug fixes
+	o the x parameter for text was wrong.
+	o landscape / portrait : the element were not in the good place in landscape mode.
+
 20 October 2001
 - features
 	o text style (bold, italic, font size)

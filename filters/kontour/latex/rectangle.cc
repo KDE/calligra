@@ -58,12 +58,24 @@ void Rectangle::analyse(const QDomNode balise)
 /*******************************************/
 void Rectangle::analyseParam(const QDomNode balise)
 {
+	double x1, y1, x2, y2;
+
 	/* Get parameters */
 	setX(getAttr(balise, "x").toInt());
 	setY(getAttr(balise, "y").toInt());
 	setWidth(getAttr(balise, "width").toInt());
 	setHeight(getAttr(balise, "height").toInt());
 	setRound(getAttr(balise, "rounding").toInt());
+
+	getMatrix().map(getX(), getY(), &x1, &y1);
+	getMatrix().map(getX() + getWidth(), getY() + getHeight(), &x2, &y2);
+	y1 = getFileHeader()->convert(y1);
+	y2 = getFileHeader()->convert(y2);
+
+	setNewMaxX(x1);
+	setNewMaxX(x2);
+	setNewMaxY(y1);
+	setNewMaxY(y2);
 }
 
 /*******************************************/
