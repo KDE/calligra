@@ -20,6 +20,8 @@
 
 #include "kdchart/KDChartParams.h"
 
+#include "kchart_factory.h"
+
 KChartAreaSubTypeChartPage::KChartAreaSubTypeChartPage( KDChartParams* params,
                                                         QWidget* parent ) :
     KChartSubTypeChartPage(  params, parent )
@@ -72,13 +74,13 @@ void KChartAreaSubTypeChartPage::slotChangeSubType( int type )
 {
     switch( type ) {
     case KDChartParams::AreaNormal:
-        exampleLA->setPixmap( UserIcon( "areasubtypenormal" ) );
+        exampleLA->setPixmap( UserIcon( "areasubtypenormal", KChartFactory::global()  ) );
         break;
     case KDChartParams::AreaStacked:
-        exampleLA->setPixmap( UserIcon( "areasubtypestacked" ) );
+        exampleLA->setPixmap( UserIcon( "areasubtypestacked", KChartFactory::global()  ) );
         break;
     case KDChartParams::AreaPercent:
-        exampleLA->setPixmap( UserIcon( "areasubtypepercent" ) );
+        exampleLA->setPixmap( UserIcon( "areasubtypepercent", KChartFactory::global()  ) );
         break;
     };
 }
@@ -87,7 +89,7 @@ void KChartAreaSubTypeChartPage::slotChangeSubType( int type )
 
 void KChartAreaSubTypeChartPage::apply()
 {
-    if( normal->isChecked() ) 
+    if( normal->isChecked() )
         _params->setAreaChartSubType( KDChartParams::AreaNormal );
     else if( stacked->isChecked() )
         _params->setAreaChartSubType( KDChartParams::AreaStacked );
