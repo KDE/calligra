@@ -1,0 +1,16 @@
+<!DOCTYPE kpartgui>
+<kpartgui name="kexi" version="0.3">
+<MenuBar>
+  <Menu name="file"><text>&amp;File</text>
+    <Action name="file_new_window"/>
+		<Action name="file_open"/>
+  </Menu>
+</MenuBar>
+
+<ToolBar name="widgets">
+	<Text>Widgets</Text>
+	<Action name="widget_line_edit"/>
+	<Action name="widget_push_button"/>
+</ToolBar>
+
+</kpartgui>
