@@ -242,7 +242,9 @@ void KoAutoFormat::readConfig(bool force)
 
     if ( force )
     {
+        m_entries.setAutoDelete(true);
         m_entries.clear();
+        m_entries.setAutoDelete(false);
         m_upperCaseExceptions.clear();
         m_twoUpperLetterException.clear();
 
