@@ -1,6 +1,6 @@
 Kudesigner:
 - show properties AFTER selection
-- changing of the property value 
+- correct changing of the property value for 
 - automatic resize of property editor
 - saving the position and size of the property editor
 - correct multiple selection and deselection for items
@@ -14,16 +14,24 @@ Kudesigner:
 - Z-Ordering (right-click menu) for report items
     default: all items are created with the same z-position 
 - open x-kugarmixed files ???
+- print and print preview
+- do not allow to move report items out of their section
+
+- optimizations:
+-- create property editors only once
+-- do not repaint selected items during selection
+-- remove unnesesary canvas_item->hide() and show()
+-- same for canvas()->update()
 
 
 Kugar engine:
--  Add FieldList element to the Detail element:
+-  Add FieldList element to the Detail element (for Kexi):
     <!ELEMENT FieldList (Field+)>
     <!ELEMENT Field>
     <!ATTLIST Field
 	Name CDATA #REQUIRED
 	Type CDATA #IMPLIED>
--  Add direct database support into the engine:
+-  Add direct database support into the engine (maybe):
     DTD can be extended to allow:
 	<DataSource Name="" ParentName="" Driver=""
 		 	Database="" HostName="" Port=""
@@ -45,6 +53,6 @@ Kugar engine:
 
 
 Kugar shell(part):
-- ???? review of current development status needed ????
+- ???? review of current development status needed ???? (to Joseph Wenninger)
 - --print --from <number> --to <number> --copies <number> --printer <name>
     AD: have some pathes for kugar/lib and kugar/shell (deprecated shell)
