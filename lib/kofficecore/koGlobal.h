@@ -153,9 +153,6 @@ struct KoPageLayout
     /** Page orientation */
     KoOrientation orientation;
 
-    /** The user's preferred unit. Should probably be removed later. */
-    //KoUnit::Unit unit;
-
     /** Page width in pt */
     double ptWidth;
     /** Page height in pt */
@@ -209,9 +206,18 @@ struct KoKWHeaderFooter
 
 class KoGlobal
 {
- public:
-    KoGlobal(){};
+public:
+    /**
+     * Return the default font for KOffice programs.
+     * This is (currently) the same as the KDE-global default font,
+     * except that it is guaranteed to have a point size set,
+     * never a pixel size (see @ref QFont).
+     */
     static QFont defaultFont();
+protected:
+    KoGlobal(){} // don't use
+private:
+    static int s_pointSize;
 };
 
 #endif // koGlobal

@@ -380,14 +380,21 @@ QStringList KoPageFormat::allFormats()
     return lst;
 }
 
+int KoGlobal::s_pointSize = -1;
 
 QFont KoGlobal::defaultFont()
 {
-    QFont font;
-    font = KGlobalSettings::generalFont();
+    QFont font = KGlobalSettings::generalFont();
     // we have to use QFontInfo, in case the font was specified with a pixel size
-    //kdDebug()<<"QFontInfo(font).pointSize() :"<<QFontInfo(font).pointSize()<<endl;
-    //kdDebug()<<"font.name() :"<<font.family ()<<endl;
-    font.setPointSize( QFontInfo(font).pointSize() );
+    if ( font.pointSize() == -1 )
+    {
+        // cache size into s_pointSize, since QFontInfo loads the font -> slow
+        if ( s_pointSize == -1 )
+            s_pointSize = QFontInfo(font).pointSize();
+        Q_ASSERT( s_pointSize != -1 );
+        font.setPointSize( s_pointSize );
+    }
+    //kdDebug()<<k_funcinfo<<"QFontInfo(font).pointSize() :"<<QFontInfo(font).pointSize()<<endl;
+    //kdDebug()<<k_funcinfo<<"font.name() :"<<font.family ()<<endl;
     return font;
 }
