@@ -575,7 +575,7 @@ void QuerySchema::setTableAlias(uint position, const QCString& alias)
 			<< ") out of range!" << endl;
 		return;
 	}
-	QCString fixedAlias = alias.lower().stripWhiteSpace();
+	QCString fixedAlias = alias.stripWhiteSpace();
 	if (fixedAlias.isEmpty()) {
 		QCString *oldAlias = d->tableAliases.take(position);
 		if (oldAlias) {
