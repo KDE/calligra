@@ -23,6 +23,7 @@
 #include <qlist.h>
 #include <qfile.h>
 #include <qstrlist.h>
+#include <qcstring.h>
 
 /******************************************************************/
 /* class ATFInterpreter                                           */
@@ -57,10 +58,10 @@ public:
   struct AttribStruct
   {
     QString isVariable;
-    QString pwDiv;
+    QCString pwDiv;
   };
 
-  //point structure 
+  //point structure
   struct PointStruct
   {
     CoordStruct x;
@@ -70,12 +71,12 @@ public:
 
   // constructure - destructure
   ATFInterpreter(QObject* parent=0,const char* name=0);
-  ~ATFInterpreter();  
+  ~ATFInterpreter();
 
   // load/new/save autifirm
-  void load(const char*);
+  void load(const QString &);
   void newAutoform();
-  void save(const char*);
+  void save(const QString &);
 
   // get pointarray/attribute list/points
   QPointArray getPointArray(int,int);

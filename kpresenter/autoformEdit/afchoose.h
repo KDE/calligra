@@ -44,8 +44,8 @@ class AFChoose : public QTabDialog
 public:
 
   // constructor - destructor
-  AFChoose(QWidget *parent=0,const char *name=0); 
-  ~AFChoose();                                    
+  AFChoose(QWidget *parent=0,const char *name=0);
+  ~AFChoose();
 
 protected:
 
@@ -76,8 +76,8 @@ protected:
 
 private slots:
 
-  // name changed 
-  void nameChanged(const char*);
+  // name changed
+  void nameChanged(const QString &);
 
   // autoform chosen
   void chosen();
@@ -85,7 +85,7 @@ private slots:
 signals:
 
   //autoform chosen
-  void formChosen(const char*);
+  void formChosen(const QString &);
 
 };
 #endif //AFCHOOSE_H

@@ -1,21 +1,21 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 #include <qprinter.h> // has to be first
 
@@ -66,15 +66,15 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* _doc 
   QWidget( _parent, _name ), KoViewIf( _doc ), OPViewIf( _doc ), KSpread::View_skel()
 {
   ADD_INTERFACE( "IDL:KSpread/View:1.0" );
-  
+
   m_bInitialized = false;
-  
+
   setWidget( this );
   m_pluginManager.setView( this );
-  
-  OPPartIf::setFocusPolicy( OpenParts::Part::ClickFocus ); 
 
-  m_lstFrames.setAutoDelete( true );  
+  OPPartIf::setFocusPolicy( OpenParts::Part::ClickFocus );
+
+  m_lstFrames.setAutoDelete( true );
 #ifdef USE_PICTURE
   m_lstPictures.setAutoDelete( true );
 #endif
@@ -86,7 +86,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* _doc 
 
   m_bUndo = false;
   m_bRedo = false;
-    
+
   m_pTable = 0L;
   m_fZoom = 1.0;
 
@@ -115,32 +115,32 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* _doc 
   // Tab Bar
   m_pTabBarFirst = newIconButton( "tab_first.xpm" );
   QObject::connect( m_pTabBarFirst, SIGNAL( clicked() ), SLOT( slotScrollToFirstTable() ) );
-  m_pTabBarLeft = newIconButton( "tab_left.xpm" );    
+  m_pTabBarLeft = newIconButton( "tab_left.xpm" );
   QObject::connect( m_pTabBarLeft, SIGNAL( clicked() ), SLOT( slotScrollToLeftTable() ) );
-  m_pTabBarRight = newIconButton( "tab_right.xpm" );    
+  m_pTabBarRight = newIconButton( "tab_right.xpm" );
   QObject::  connect( m_pTabBarRight, SIGNAL( clicked() ), SLOT( slotScrollToRightTable() ) );
-  m_pTabBarLast = newIconButton( "tab_last.xpm" );    
+  m_pTabBarLast = newIconButton( "tab_last.xpm" );
   QObject::connect( m_pTabBarLast, SIGNAL( clicked() ), SLOT( slotScrollToLastTable() ) );
 
   m_pTabBar = new KSpreadTabBar( this );
   QObject::connect( m_pTabBar, SIGNAL( tabChanged( const char *) ), this, SLOT( slotChangeTable( const char* ) ) );
-  
+
   // Paper and Border widgets
   m_pFrame = new QWidget( this );
   m_pFrame->raise();
-    
+
   // Edit Bar
   m_pToolWidget = new QFrame( this );
   m_pToolWidget->setFrameStyle( 49 );
-  
+
   m_pPosWidget = new QLabel( m_pToolWidget );
   m_pPosWidget->setAlignment( AlignCenter );
   m_pPosWidget->setFrameStyle( QFrame::WinPanel|QFrame::Sunken );
   m_pPosWidget->setGeometry( 2,2,50,26 );
-  
+
   m_pCancelButton = newIconButton( "abort.xpm", TRUE, m_pToolWidget );
   m_pCancelButton->setGeometry( 60, 2, 26, 26 );
-  m_pOkButton = newIconButton( "done.xpm", TRUE, m_pToolWidget );     
+  m_pOkButton = newIconButton( "done.xpm", TRUE, m_pToolWidget );
   m_pOkButton->setGeometry( 90, 2, 26, 26 );
 
   m_pEditWidget = new KSpreadEditWidget( m_pToolWidget, this );
@@ -154,10 +154,10 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* _doc 
   m_pCanvasWidget = new KSpreadCanvas( m_pFrame, this );
   m_pCanvasWidget->setFocusPolicy( QWidget::StrongFocus );
   setFocusProxy( m_pCanvasWidget );
-  
+
   m_pHBorderWidget = new KSpreadHBorder( m_pFrame, this );
   m_pVBorderWidget = new KSpreadVBorder( m_pFrame, this );
-  
+
   KSpreadTable *tbl;
   for ( tbl = m_pDoc->map()->firstTable(); tbl != 0L; tbl = m_pDoc->map()->nextTable() )
     addTable( tbl );
@@ -172,7 +172,7 @@ void KSpreadView::init()
    ******************************************************/
 
   cerr << "Registering menu as " << id() << endl;
-  
+
   OpenParts::MenuBarManager_var menu_bar_manager = m_vMainWindow->menuBarManager();
   if ( !CORBA::is_nil( menu_bar_manager ) )
     menu_bar_manager->registerClient( id(), this );
@@ -187,7 +187,7 @@ void KSpreadView::init()
   if ( !CORBA::is_nil( tool_bar_manager ) )
     tool_bar_manager->registerClient( id(), this );
   else
-    cerr << "Did not get a tool bar manager" << endl;  
+    cerr << "Did not get a tool bar manager" << endl;
 
   /******************************************************
    * Create views for child documents
@@ -211,20 +211,20 @@ void KSpreadView::cleanUp()
 
   cerr << "1) VIEW void KOMBase::incRef() = " << m_ulRefCount << endl;
   cerr << "1) VIEW void KOMBase::refcnt() = " << _refcnt() << endl;
-  
+
   if ( m_bIsClean )
     return;
-  
+
   cerr << "1a) Deactivate Frames" << endl;
-  
+
   QListIterator<KSpreadChildFrame> it( m_lstFrames );
   for( ; it.current() != 0L; ++it )
   {
     it.current()->detach();
   }
-  
+
   cerr << "1b) Unregistering menu and toolbar" << endl;
-  
+
   OpenParts::MenuBarManager_var menu_bar_manager = m_vMainWindow->menuBarManager();
   if ( !CORBA::is_nil( menu_bar_manager ) )
     menu_bar_manager->unregisterClient( id() );
@@ -232,7 +232,7 @@ void KSpreadView::cleanUp()
   OpenParts::ToolBarManager_var tool_bar_manager = m_vMainWindow->toolBarManager();
   if ( !CORBA::is_nil( tool_bar_manager ) )
     tool_bar_manager->unregisterClient( id() );
-  
+
   m_pDoc->removeView( this );
 
   m_pluginManager.cleanUp();
@@ -250,7 +250,7 @@ KSpread::Book_ptr KSpreadView::book()
 bool KSpreadView::event( const char* _event, const CORBA::Any& _value )
 {
   cerr << "CALLED" << endl;
-  
+
   EVENT_MAPPER( _event, _value );
 
   MAPPING( OpenPartsUI::eventCreateMenuBar, OpenPartsUI::typeCreateMenuBar_var,
@@ -264,7 +264,7 @@ bool KSpreadView::event( const char* _event, const CORBA::Any& _value )
 	   mappingEventChartInserted );
 
   END_EVENT_MAPPER;
-  
+
   return false;
 }
 
@@ -276,19 +276,19 @@ bool KSpreadView::mappingEventChartInserted( KSpread::EventChartInserted& _event
   int xpos, ypos;
   xpos = m_pTable->columnPos( markerColumn(), this );
   ypos = m_pTable->rowPos( markerRow(), this );
-  
+
   vector<KoDocumentEntry> vec = koQueryDocuments( "'IDL:Chart/SimpleChart:1.0' in RepoID", 1 );
   if ( vec.size() == 0 )
-  {    
+  {
     cout << "Got no results" << endl;
     QMessageBox::critical( 0L, i18n("Error"), i18n("Sorry, no charting component registered"), i18n("Ok") );
     return true;
   }
 
   QRect r( xpos + _event.dx, ypos + _event.dy, _event.width, _event.height );
-  
+
   cerr << "USING component " << vec[0].name << endl;
-  
+
   m_pTable->insertChart( r, vec[0], m_pTable->selectionRect() );
 
   return true;
@@ -305,20 +305,20 @@ bool KSpreadView::mappingEventKeyPressed( KSpread::EventKeyPressed& _event )
   KSpreadCell *cell;
   // Flag that indicates wether we make a selection right now
   bool make_select = FALSE;
-  
+
   QRect selection( m_pTable->selectionRect() );
-  
+
   // Are we making a selection right now ? Go thru this only if no selection is made
   // or if we neither selected complete rows nor columns.
   if ( ( _event.state & ShiftButton ) == ShiftButton &&
-       ( selection.left() == 0 || ( selection.right() != 0 && selection.bottom() != 0 ) ) && 
+       ( selection.left() == 0 || ( selection.right() != 0 && selection.bottom() != 0 ) ) &&
        ( _event.key == Key_Down || _event.key == Key_Up || _event.key == Key_Left || _event.key == Key_Right ) )
     make_select = TRUE;
 
   // Do we have an old selection ? If yes, unselect everything
   if ( selection.left() != 0 && !make_select )
     m_pTable->unselect();
-    
+
   switch( _event.key )
     {
     case Key_Return:
@@ -509,7 +509,7 @@ bool KSpreadView::mappingEventKeyPressed( KSpread::EventKeyPressed& _event )
 bool KSpreadView::mappingEventSetText( KSpread::EventSetText& _event )
 {
   cerr << "GOT EventSetText ´" << _event.text.in() << "´" << endl;
-  
+
   m_pTable->setText( m_iMarkerRow, m_iMarkerColumn, _event.text.in() );
 
   return true;
@@ -521,10 +521,10 @@ bool KSpreadView::mappingToolDone( DataTools::Answer& _answer )
   _answer.value >>= CORBA::Any::to_string( str, 0 );
   KSpread::DataToolsId id;
   _answer.id >>= id;
-  
+
   cerr << "CORRECTED ´" << str.in() << "´" << endl;
   cerr << "r=" << id.row << " c=" << id.column << endl;
-  
+
   // TODO: check time
   m_pTable->setText( m_iMarkerRow, m_iMarkerColumn, str.in() );
 
@@ -534,7 +534,7 @@ bool KSpreadView::mappingToolDone( DataTools::Answer& _answer )
 bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
 {
   cerr << "bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )" << endl;
-  
+
   if ( CORBA::is_nil( _factory ) )
   {
     cerr << "Setting to nil" << endl;
@@ -549,7 +549,7 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
 
   m_vToolBarEdit = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
   m_vToolBarEdit->setFullWidth(false);
-  
+
   OpenPartsUI::Pixmap_var pix;
   pix = OPUIUtils::convertPixmap( ICON("editcopy.xpm") );
   m_idButtonEdit_Copy = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "copySelection", true, i18n( "Copy" ), -1 );
@@ -574,9 +574,9 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
   pix = OPUIUtils::convertPixmap( ICON("colin.xpm") );
   m_idButtonEdit_InsCol = m_vToolBarEdit->insertButton2( pix, 7, SIGNAL( clicked() ), this, "insertColumn", true, i18n( "Insert Column"  ), -1 );
 
-  m_vToolBarEdit->setFullWidth(false);  
+  m_vToolBarEdit->setFullWidth(false);
   m_vToolBarEdit->enable( OpenPartsUI::Show );
-  
+
   m_vToolBarLayout = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
   m_vToolBarLayout->setFullWidth(false);
 
@@ -656,7 +656,7 @@ bool KSpreadView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory
   m_vToolBarLayout->setBarPos(OpenPartsUI::Floating);
   m_vToolBarLayout->setBarPos(OpenPartsUI::Top);
   m_vToolBarLayout->enable( OpenPartsUI::Show ); */
-  
+
   return true;
 }
 
@@ -666,7 +666,7 @@ bool KSpreadView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   if ( CORBA::is_nil( _menubar ) )
   {
     cerr << "********************** DELETING Menu bar stuff ****************" << endl;
-    
+
     m_vMenuEdit = 0L;
     m_vMenuEdit_Insert = 0L;
     m_vMenuView = 0L;
@@ -678,7 +678,7 @@ bool KSpreadView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     return true;
   }
 
-  // Edit  
+  // Edit
   _menubar->insertMenu( i18n( "&Edit" ), m_vMenuEdit, -1, -1 );
 
   OpenPartsUI::Pixmap_var pix;
@@ -691,13 +691,13 @@ bool KSpreadView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 
   pix = OPUIUtils::convertPixmap( ICON("editcut.xpm") );
   m_idMenuEdit_Cut = m_vMenuEdit->insertItem6( pix, i18n("C&ut"), this, "cutSelection", stdAccel.cut(), -1, -1 );
-  
+
   pix = OPUIUtils::convertPixmap( ICON("editcopy.xpm") );
   m_idMenuEdit_Copy = m_vMenuEdit->insertItem6( pix, i18n("&Copy"), this, "copySelection", stdAccel.copy(), -1, -1 );
-  
+
   pix = OPUIUtils::convertPixmap( ICON("editpaste.xpm") );
   m_idMenuEdit_Paste = m_vMenuEdit->insertItem6( pix, i18n("&Paste"), this, "paste", stdAccel.paste(), -1, -1 );
-    
+
   m_vMenuEdit->insertSeparator( -1 );
 
   m_vMenuEdit->insertItem8( i18n( "&Insert" ), m_vMenuEdit_Insert, -1, -1 );
@@ -705,7 +705,7 @@ bool KSpreadView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_idMenuEdit_Insert_Image = m_vMenuEdit_Insert->insertItem( i18n( "&Image" ), this, "insertImage", 0 );
   m_idMenuEdit_Insert_Chart = m_vMenuEdit_Insert->insertItem( i18n( "&Chart" ), this, "insertChart", 0 );
   m_idMenuEdit_Insert_Object = m_vMenuEdit_Insert->insertItem( i18n( "&Object ..." ), this, "insertObject", 0 );
-    
+
   m_vMenuEdit->insertSeparator( -1 );
 
   m_idMenuEdit_Cell = m_vMenuEdit->insertItem( i18n( "C&ell" ), this, "editCell", 0 );
@@ -755,7 +755,7 @@ bool KSpreadView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     _menubar->insertSeparator( -1 );
     _menubar->setHelpMenu( _menubar->insertMenu( i18n( "&Help" ), m_vMenuHelp, -1, -1 ) );
   }
-    
+
   // m_idMenuHelp_About = m_vMenuHelp->insertItem( i18n( "&About" ), this, "helpAbout", 0 );
   m_idMenuHelp_Using = m_vMenuHelp->insertItem( i18n( "&Using KSpread" ), this, "helpUsing", 0 );
 	
@@ -763,13 +763,13 @@ bool KSpreadView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   enableRedo( false );
 
   return true;
-}      
+}
 
 /*
 void KSpreadView::setMode( OPParts::Part::Mode _mode )
 {
   Part_impl::setMode( _mode );
-  
+
   if ( mode() == OPParts::Part::ChildMode && !m_bFocus )
     m_bShowGUI = false;
   else
@@ -781,7 +781,7 @@ void KSpreadView::setFocus( CORBA::Boolean _mode )
   Part_impl::setFocus( _mode );
 
   bool old = m_bShowGUI;
-  
+
   if ( mode() == OPParts::Part::ChildMode && !m_bFocus )
     m_bShowGUI = false;
   else
@@ -794,18 +794,18 @@ void KSpreadView::setFocus( CORBA::Boolean _mode )
 
 void KSpreadView::helpUsing()
 {
-  kapp->invokeHTMLHelp( "kspread/kspread.html", 0 );
+  kapp->invokeHTMLHelp( "kspread/kspread.html", QString::null );
 }
 
 QButton * KSpreadView::newIconButton( const char *_file, bool _kbutton, QWidget *_parent )
 {
   if ( _parent == 0L )
     _parent = this;
-    
+
   QPixmap *pixmap = 0L;
-    
+
   pixmap = new QPixmap(ICON(_file) );
-    
+
   QButton *pb;
   if ( !_kbutton )
     pb = new QPushButton( _parent );
@@ -813,7 +813,7 @@ QButton * KSpreadView::newIconButton( const char *_file, bool _kbutton, QWidget 
     pb = new KButton( _parent );
   if ( pixmap )
     pb->setPixmap( *pixmap );
-  
+
   return pb;
 }
 
@@ -821,7 +821,7 @@ void KSpreadView::enableUndo( bool _b )
 {
   if ( CORBA::is_nil( m_vMenuEdit ) )
     return;
-  
+
   m_vMenuEdit->setItemEnabled( m_idMenuEdit_Undo, _b );
   m_bUndo = _b;
 }
@@ -856,7 +856,7 @@ void KSpreadView::deleteRow()
 {
   if ( !m_pTable )
     return;
-  m_pTable->deleteRow( m_iMarkerRow ); 
+  m_pTable->deleteRow( m_iMarkerRow );
 }
 
 void KSpreadView::insertColumn()
@@ -956,13 +956,13 @@ void KSpreadView::addTable( KSpreadTable *_t )
 
 void KSpreadView::removeTable( KSpreadTable *_t )
 {
-  m_pTabBar->removeTab( _t->name() ); 
+  m_pTabBar->removeTab( _t->name() );
 
   if ( m_pDoc->map()->firstTable() )
     setActiveTable( m_pDoc->map()->firstTable() );
   else
     m_pTable = 0L;
-} 
+}
 
 void KSpreadView::removeAllTables()
 {
@@ -975,22 +975,22 @@ void KSpreadView::setActiveTable( KSpreadTable *_t )
 {
   if ( _t == m_pTable )
     return;
-    
+
   m_pTable = _t;
   if ( m_pTable == 0L )
     return;
-   
+
   m_pTabBar->setActiveTab( _t->name() );
 
   // Create views for child documents
   if ( m_bInitialized )
-  {   
+  {
     m_lstFrames.clear();
     QListIterator<KSpreadChild> it = m_pTable->childIterator();
     for( ; it.current(); ++it )
       slotInsertChild( it.current() );
   }
-  
+
   m_pVBorderWidget->repaint();
   m_pHBorderWidget->repaint();
   m_pCanvasWidget->repaint();
@@ -1002,13 +1002,13 @@ void KSpreadView::setActiveTable( KSpreadTable *_t )
 KSpreadTable* KSpreadView::findTable( const char *_name )
 {
   KSpreadTable *t;
-  
+
   for ( t = m_pDoc->map()->firstTable(); t != 0L; t = m_pDoc->map()->nextTable() )
   {
     if ( strcmp( _name, t->name() ) == 0 )
       return t;
   }
-  
+
   return 0L;
 }
 
@@ -1029,7 +1029,7 @@ void KSpreadView::slotMaxRow( int _max_row )
 void KSpreadView::slotChangeTable( const char *_name )
 {
   KSpreadTable *t;
-    
+
   for ( t = m_pDoc->map()->firstTable(); t != 0L; t = m_pDoc->map()->nextTable() )
   {
     if ( strcmp( _name, t->name() ) == 0 )
@@ -1107,17 +1107,17 @@ CORBA::Boolean KSpreadView::printDlg()
   /* QPrinter prt;
   if ( !KoPrintDia::print( prt, m_pDoc, SLOT( paperLayoutDlg() ) ) )
     return true; */
-  
+
   QPrinter prt;
   if ( QPrintDialog::getPrinterSetup( &prt ) )
-  {    
+  {
     QPainter painter;
     painter.begin( &prt );
     // Print the table and tell that m_pDoc is NOT embedded.
     m_pTable->print( painter, &prt );
     painter.end();
   }
-  
+
   return true;
 }
 
@@ -1131,11 +1131,11 @@ void KSpreadView::markChildPicture( KSpreadChildPicture *_pic )
   p->show();
 
   m_lstFrames.append( p );
-  
+
   QObject::connect( p, SIGNAL( sig_geometryEnd( KoFrame* ) ),
 		    this, SLOT( slotChildGeometryEnd( KoFrame* ) ) );
   QObject::connect( p, SIGNAL( sig_moveEnd( KoFrame* ) ),
-		    this, SLOT( slotChildMoveEnd( KoFrame* ) ) );  
+		    this, SLOT( slotChildMoveEnd( KoFrame* ) ) );
 
   m_lstPictures.removeRef( _pic );
 }
@@ -1152,7 +1152,7 @@ void KSpreadView::insertChart( const QRect& _geometry )
   event.dy = _geometry.top() - ypos;
   event.width = _geometry.width();
   event.height = _geometry.height();
-  
+
   EMIT_EVENT( this, KSpread::eventChartInserted, event );
 }
 
@@ -1165,12 +1165,12 @@ void KSpreadView::slotRemoveChild( KSpreadChild *_child )
 {
   if ( _child->table() != m_pTable )
     return;
-  
+
   // TODO
 }
 
 void KSpreadView::slotInsertChild( KSpreadChild *_child )
-{ 
+{
   if ( _child->table() != m_pTable )
     return;
 
@@ -1178,7 +1178,7 @@ void KSpreadView::slotInsertChild( KSpreadChild *_child )
   if ( _child->draw( false ) )
   {
     cout << "!!!!!!!! DOING IT WITH A PICTURE !!!!!!!!!" << endl;
-    
+
     KSpreadChildPicture *p = new KSpreadChildPicture( this, _child );
     m_lstPictures.append( p );
     update();
@@ -1203,11 +1203,11 @@ void KSpreadView::slotInsertChild( KSpreadChild *_child )
     cerr << "------------------ newPart -----------" << endl;
     EMIT_EVENT( this, KOffice::View::eventNewPart, event );
   }
-  
+
   QObject::connect( p, SIGNAL( sig_geometryEnd( KoFrame* ) ),
 		    this, SLOT( slotChildGeometryEnd( KoFrame* ) ) );
   QObject::connect( p, SIGNAL( sig_moveEnd( KoFrame* ) ),
-		    this, SLOT( slotChildMoveEnd( KoFrame* ) ) );  
+		    this, SLOT( slotChildMoveEnd( KoFrame* ) ) );
 
   p->show();
 }
@@ -1239,13 +1239,13 @@ void KSpreadView::slotUpdateChildGeometry( KSpreadChild *_child )
   for ( ; it.current() && !f; ++it )
     if ( it.current()->child() == _child )
       f = it.current();
-  
+
   assert( f != 0L );
-  
+
   // Are we already up to date ?
   if ( _child->geometry() == f->partGeometry() )
     return;
-  
+
   // TODO zooming
   f->setPartGeometry( _child->geometry() );
 }
@@ -1254,7 +1254,7 @@ void KSpreadView::togglePageBorders()
 {
    if ( !m_pTable )
        return;
-   
+
    m_vMenuView->setItemChecked( m_idMenuView_ShowPageBorders, !m_pTable->isShowPageBorders() );
    m_pTable->setShowPageBorders( !m_pTable->isShowPageBorders() );
 }
@@ -1272,9 +1272,9 @@ void KSpreadView::keyPressEvent ( QKeyEvent* _ev )
 void KSpreadView::setFocus( CORBA::Boolean mode )
 {
   CORBA::Boolean old = m_bFocus;
-  
+
   KoViewIf::setFocus( mode );
-  
+
   if ( old == m_bFocus )
     return;
 
@@ -1307,9 +1307,9 @@ void KSpreadView::resizeEvent( QResizeEvent * )
   // HACK
   if ( x() == 5000 && y() == 5000 )
     return;
-  
+
   if ( KoViewIf::hasFocus() || mode() == KOffice::View::RootMode )
-  { 
+  {
     m_pToolWidget->show();
     m_pToolWidget->setGeometry( 0, 0, width(), 30 );
     int top = 30;
@@ -1317,7 +1317,7 @@ void KSpreadView::resizeEvent( QResizeEvent * )
     m_pCancelButton->setGeometry( 60, 2, 26, 26 );
     m_pOkButton->setGeometry( 90, 2, 26, 26 );
     m_pEditWidget->setGeometry( 125, 2, 200, 26 );
-      
+
     m_pTabBarFirst->setGeometry( 0, height() - 20, 20, 20 );
     m_pTabBarFirst->show();
     m_pTabBarLeft->setGeometry( 20, height() - 20, 20, 20 );
@@ -1328,7 +1328,7 @@ void KSpreadView::resizeEvent( QResizeEvent * )
     m_pTabBarLast->show();
     m_pTabBar->setGeometry( 80, height() - 20, width() / 2 - 80, 20 );
     m_pTabBar->show();
-      
+
     m_pHorzScrollBar->setGeometry( width() / 2, height() - 20, width() / 2 - 20, 20 );
     m_pHorzScrollBar->show();
     m_pVertScrollBar->setGeometry( width() - 20, top , 20, height() - 20 - top );
@@ -1336,15 +1336,15 @@ void KSpreadView::resizeEvent( QResizeEvent * )
 
     m_pFrame->setGeometry( 0, top, width() - 20, height() - 20 - top );
     m_pFrame->show();
-      
+
     m_pCanvasWidget->setGeometry( YBORDER_WIDTH, XBORDER_HEIGHT,
 				  m_pFrame->width() - YBORDER_WIDTH, m_pFrame->height() - XBORDER_HEIGHT );
 
     m_pHBorderWidget->setGeometry( YBORDER_WIDTH, 0, m_pFrame->width() - YBORDER_WIDTH, XBORDER_HEIGHT );
     m_pHBorderWidget->show();
-    
+
     m_pVBorderWidget->setGeometry( 0, XBORDER_HEIGHT, YBORDER_WIDTH,
-				   m_pFrame->height() - XBORDER_HEIGHT );   
+				   m_pFrame->height() - XBORDER_HEIGHT );
     m_pVBorderWidget->show();
   }
   else
@@ -1371,14 +1371,14 @@ void KSpreadView::resizeEvent( QResizeEvent * )
 {
       if ( xclPart == 0L )
 	return;
-    
+
     if ( xclPart->getURL() == 0L )
     {
 	slotSaveAs();
 	return;
     }
-    
-    xclPart->save( xclPart->getURL() ); 
+
+    xclPart->save( xclPart->getURL() );
 }
 
 void KSpreadView::slotSaveAs()
@@ -1387,7 +1387,7 @@ void KSpreadView::slotSaveAs()
 	return;
 
     QString h = getenv( "HOME" );
-    
+
     if ( saveDlg == 0L )
     {
 	saveDlg = new KFileSelect( 0L, "save", h.data(), xclPart->getURL(), "Kxcl: Save As" );
@@ -1396,12 +1396,12 @@ void KSpreadView::slotSaveAs()
 	saveDlg->show();
     }
     else
-	saveDlg->show();     
+	saveDlg->show();
 }
 
 void KSpreadView::slotSaveFileSelected( const char *_file )
 {
-   QFileInfo info;    
+   QFileInfo info;
 
     info.setFile( _file );
 
@@ -1411,7 +1411,7 @@ void KSpreadView::slotSaveFileSelected( const char *_file )
 				  "Do you want to overwrite it ?") ) )
 	    return;
     }
-    
+
     if ( xclPart )
 	xclPart->save( _file );
 }
@@ -1422,7 +1422,7 @@ void KSpreadView::slotOpen()
 	return;
 
     QString h = getenv( "HOME" );
-    
+
     if ( openDlg == 0L )
     {
 	openDlg = new KFileSelect( 0L, "open", h.data(), 0L, "Kxcl: Open" );
@@ -1431,7 +1431,7 @@ void KSpreadView::slotOpen()
 	openDlg->show();
     }
     else
-	openDlg->show();     
+	openDlg->show();
 }
 
 void KSpreadView::slotOpenFileSelected( const char *_file )
@@ -1440,14 +1440,14 @@ void KSpreadView::slotOpenFileSelected( const char *_file )
 	if ( !QMessageBox::query( "Kxcl Warning", "The current document has been modified.\n\rDo you really want to close it?\n\rAll Changes will be lost!", "Yes", "No" ) )
 	    return;
 
-    xclPart->load( _file ); 
+    xclPart->load( _file );
 }
 
 void KSpreadView::slotQuit()
 {
    KPartShell* shell = xclPart->shell();
     if ( shell->closeShells() )
-	exit(1); 
+	exit(1);
 }
 
 void KSpreadView::slotClose()
@@ -1456,44 +1456,44 @@ void KSpreadView::slotClose()
     {
 	KPartShell *shell = xclPart->shell();
 	delete shell;
-    } 
-} 
+    }
+}
 
 void KSpreadView::slotNewWindow()
 {
    KPartShell *shell = new KPartShell();
     shell->show();
-    
+
     printf("Creating part xcl\n");
-    
+
     KPart *part = shell->newPart( "xcl" );
-    
+
     printf("Got it\n");
-    
-    shell->setActiveDocument( part ); 
+
+    shell->setActiveDocument( part );
 }
 */
 
 /*
 void KSpreadView::print()
-{    
+{
   // Open some printer dialog
   KSpreadPrintDlg* dlg = new KSpreadPrintDlg( this );
-  
+
   if ( !dlg->exec() )
   {
     delete dlg;
     return;
   }
-  
+
   QPrinter prt;
   dlg->configurePrinter( prt );
-  
+
   QPainter painter;
   painter.begin( &prt );
   // Print the table and tell that m_pDoc is NOT embedded.
   m_pTable->print( painter, FALSE, &prt );
-  painter.end(); 
+  painter.end();
 }
 */
 
@@ -1503,7 +1503,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
 
     if ( m_pPopupMenu != 0L )
 	delete m_pPopupMenu;
-    
+
     m_pPopupMenu = new QPopupMenu();
 
     m_pPopupMenu->insertItem( "Copy", this, SLOT( slotCopy() ) );
@@ -1512,7 +1512,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     m_pPopupMenu->insertItem( "Delete", this, SLOT( slotDelete() ) );
     m_pPopupMenu->insertSeparator();
     m_pPopupMenu->insertItem( "Layout", this, SLOT( slotLayoutDlg() ) );
-    
+
     m_lstTools.clear();
     m_lstTools.setAutoDelete( true );
     KSpreadCell *cell = m_pTable->cellAt( m_iMarkerColumn, m_iMarkerRow );
@@ -1532,7 +1532,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
 	    m_pPopupMenu->insertItem( it.current(), m_popupMenuFirstToolId + i++ );
 	  QStrListIterator it2 = entry->commands();
 	  for( ; it2.current() != 0L; ++it2 )
-	  {    
+	  {
 	    ToolEntry *t = new ToolEntry;
 	    t->command = it2.current();
 	    t->entry = entry;
@@ -1543,7 +1543,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
 	QObject::connect( m_pPopupMenu, SIGNAL( activated( int ) ), this, SLOT( slotActivateTool( int ) ) );
       }
     }
-    
+
     m_pPopupMenu->popup( _point );
 }
 
@@ -1560,15 +1560,15 @@ void KSpreadView::slotActivateTool( int _id )
   if ( CORBA::is_nil( obj ) )
     // TODO: error message
     return;
-  
+
   DataTools::Tool_var tool = DataTools::Tool::_narrow( obj );
   if ( CORBA::is_nil( tool ) )
     // TODO: error message
     return;
-  
+
   KSpreadCell *cell = m_pTable->cellAt( m_iMarkerColumn, m_iMarkerRow );
   if ( !cell->isFormular() && !cell->isValue() )
-  {    
+  {
     QString text = cell->text();
     CORBA::Any value;
     value <<= CORBA::Any::from_string( (char*)text.data(), 0 );
@@ -1586,7 +1586,7 @@ void KSpreadView::slotActivateTool( int _id )
 void KSpreadView::slotCopy()
 {
   assert( m_pTable );
-  
+
   m_pTable->copySelection( QPoint( m_iMarkerColumn, m_iMarkerRow ) );
 }
 
@@ -1618,7 +1618,7 @@ void KSpreadView::slotLayoutDlg()
   hideMarker();
 
   cout << "#######################################" << endl;
-  
+
   if ( selection.contains( QPoint( m_iMarkerColumn, m_iMarkerRow ) ) )
     CellLayoutDlg dlg( this, m_pTable, selection.left(), selection.top(),
 		       selection.right(), selection.bottom() );
@@ -1628,7 +1628,7 @@ void KSpreadView::slotLayoutDlg()
   m_pDoc->setModified( true );
 
   cout << "------------------------------------------" << endl;
-  
+
   showMarker();
 }
 
@@ -1642,7 +1642,7 @@ void KSpreadView::multiRow()
   if ( m_pTable != 0L )
     m_pTable->setSelectionMultiRow( QPoint( m_iMarkerColumn, m_iMarkerRow ) );
 }
-    
+
 void KSpreadView::alignLeft()
 {
   if ( m_pTable != 0L )
@@ -1664,32 +1664,32 @@ void KSpreadView::alignCenter()
 void KSpreadView::moneyFormat()
 {
   if ( m_pTable != 0L )
-    m_pTable->setSelectionMoneyFormat( QPoint( m_iMarkerColumn, m_iMarkerRow ) ); 
+    m_pTable->setSelectionMoneyFormat( QPoint( m_iMarkerColumn, m_iMarkerRow ) );
 }
 
 void KSpreadView::precisionPlus()
 {
   if ( m_pTable != 0L )
-    m_pTable->setSelectionPrecision( QPoint( m_iMarkerColumn, m_iMarkerRow ), 1 ); 
+    m_pTable->setSelectionPrecision( QPoint( m_iMarkerColumn, m_iMarkerRow ), 1 );
 }
 
 void KSpreadView::precisionMinus()
 {
   if ( m_pTable != 0L )
-    m_pTable->setSelectionPrecision( QPoint( m_iMarkerColumn, m_iMarkerRow ), -1 ); 
+    m_pTable->setSelectionPrecision( QPoint( m_iMarkerColumn, m_iMarkerRow ), -1 );
 }
 
 void KSpreadView::percent()
 {
   if ( m_pTable != 0L )
-    m_pTable->setSelectionPercent( QPoint( m_iMarkerColumn, m_iMarkerRow ) ); 
+    m_pTable->setSelectionPercent( QPoint( m_iMarkerColumn, m_iMarkerRow ) );
 }
 
 void KSpreadView::insertTable()
 {
   vector<KoDocumentEntry> vec = koQueryDocuments( "'IDL:KSpread/DocumentFactory:1.0' in RepoID", 1 );
   if ( vec.size() == 0 )
-  {    
+  {
     cout << "Got no results" << endl;
     QMessageBox::critical( 0L, i18n("Error"), i18n("Sorry, no spread sheet  component registered"),
 			   i18n("Ok") );
@@ -1711,7 +1711,7 @@ void KSpreadView::insertObject()
   KoDocumentEntry e = KoPartSelectDia::selectPart();
   if ( e.name.isEmpty() )
     return;
-  
+
   m_pCanvasWidget->setAction( KSpreadCanvas::InsertChild, e );
 }
 
@@ -1739,12 +1739,12 @@ void KSpreadView::zoomMinus()
 {
   if ( m_fZoom <= 0.25 )
     return;
-  
+
   m_fZoom -= 0.25;
-  
+
   if ( m_pTable != 0L )
     m_pTable->setLayoutDirtyFlag();
-    
+
   m_pCanvasWidget->repaint();
   m_pVBorderWidget->repaint();
   m_pHBorderWidget->repaint();
@@ -1754,9 +1754,9 @@ void KSpreadView::zoomPlus()
 {
   if ( m_fZoom >= 3 )
     return;
-  
+
   m_fZoom += 0.25;
-  
+
   if ( m_pTable != 0L )
     m_pTable->setLayoutDirtyFlag();
 
@@ -1772,9 +1772,9 @@ void KSpreadView::slotScrollHorz( int _value )
     return;
 
   m_pTable->enableScrollBarUpdates( false );
-  
+
   hideMarker();
-  
+
   int dx = xOffset() - _value;
   m_iXOffset = _value;
   m_pCanvasWidget->scroll( dx, 0 );
@@ -1793,7 +1793,7 @@ void KSpreadView::slotScrollVert( int _value )
   m_pTable->enableScrollBarUpdates( false );
 
   hideMarker();
-  
+
   int dy = yOffset() - _value;
   m_iYOffset = _value;
   m_pCanvasWidget->scroll( 0, dy );
@@ -1808,11 +1808,11 @@ void KSpreadView::setText( const char *_text )
 {
   if ( m_pTable == 0L )
     return;
-  
+
   KSpread::EventSetText event;
   event.text = CORBA::string_dup( _text );
   EMIT_EVENT( this, KSpread::eventSetText, event );
-  
+
   // m_pTable->setText( m_iMarkerRow, m_iMarkerColumn, _text );
 }
 
@@ -1829,7 +1829,7 @@ void KSpreadView::drawVisibleCells()
   QPainter painter;
   painter.begin( m_pCanvasWidget );
   painter.save();
-    
+
   int xpos;
   int ypos;
   int left_col = m_pTable->leftColumn( 0, xpos, this );
@@ -1840,10 +1840,10 @@ void KSpreadView::drawVisibleCells()
   QPen pen;
   pen.setWidth( 1 );
   painter.setPen( pen );
-    
+
   QRect rect( 0, 0, m_pCanvasWidget->width(), m_pCanvasWidget->height() );
-    
-  int left = xpos;    
+
+  int left = xpos;
   for ( int y = top_row; y <= bottom_row; y++ )
   {
     RowLayout *row_lay = m_pTable->rowLayout( y );
@@ -1868,20 +1868,20 @@ void KSpreadView::drawVisibleCells()
 void KSpreadView::drawMarker( QPainter * _painter )
 {
   bool own_painter = FALSE;
-    
+
   if ( _painter == 0L )
   {
     _painter = new QPainter();
     _painter->begin( m_pCanvasWidget );
     own_painter = TRUE;
   }
-    
+
   int xpos;
-  int ypos;    
+  int ypos;
   int w, h;
   QRect selection( m_pTable->selectionRect() );
     // printf("selection: %i %i %i\n",selection.left(), selection.right(), selection.bottom() );
-    
+
   if ( selection.left() == 0 || selection.right() == 0x7fff || selection.bottom() == 0x7fff )
   {
     xpos = m_pTable->columnPos( m_iMarkerColumn, this );
@@ -1903,9 +1903,9 @@ void KSpreadView::drawMarker( QPainter * _painter )
     int th = cell->height( selection.bottom(), this );
     h = ( y - ypos ) + th;
   }
-    
+
   RasterOp rop = _painter->rasterOp();
-    
+
   _painter->setRasterOp( NotROP );
   QPen pen;
   pen.setWidth( 3 );
@@ -1918,7 +1918,7 @@ void KSpreadView::drawMarker( QPainter * _painter )
   _painter->drawLine( xpos + w, ypos + 1, xpos + w, ypos + h - 2 );
   _painter->fillRect( xpos + w - 2, ypos + h - 1, 5, 5, black );
   _painter->setRasterOp( rop );
-  
+
   if ( own_painter )
   {
     _painter->end();
@@ -1928,7 +1928,7 @@ void KSpreadView::drawMarker( QPainter * _painter )
   char buffer[ 20 ];
   sprintf( buffer, "%s%d", m_pTable->columnLabel( m_iMarkerColumn ), m_iMarkerRow );
 
-  m_pPosWidget->setText(buffer);       
+  m_pPosWidget->setText(buffer);
 }
 
 void KSpreadView::hideMarker( QPainter& _painter )
@@ -1942,7 +1942,7 @@ void KSpreadView::showMarker( QPainter& _painter)
 {
   if ( m_iMarkerVisible == 1 )
     return;
-  m_iMarkerVisible++; 
+  m_iMarkerVisible++;
   if ( m_iMarkerVisible == 1 )
     drawMarker( &_painter );
 }
@@ -1975,26 +1975,26 @@ void KSpreadView::drawCell( QPainter &painter, KSpreadCell *_cell, int _col, int
 
 /*
 void KSpreadTable::drawCellList()
-{    
+{
     QPainter painter;
     painter.begin( pGui->canvasWidget() );
     painter.save();
-    
+
     drawMarker( &painter );
     QRect rect( 0, 0, pGui->canvasWidget()->width(), pGui->canvasWidget()->height() );
 
     QRect r;
     QRect unite;
-    
+
     QListIterator<KSpreadCell> it( objectList );
-    for ( ; it.current(); ++it ) 
+    for ( ; it.current(); ++it )
     {
 	it.current()->paintEvent( rect, painter, it.current()->column(), it.current()->row(), false, &r );
 	unite = unite.unite( r );
     }
-    
+
     painter.restore();
-    drawMarker( &painter );    
+    drawMarker( &painter );
 
     painter.end();
 }
@@ -2003,7 +2003,7 @@ void KSpreadTable::drawCellList()
 QPoint KSpreadView::marker()
 {
   int row, column;
-  
+
   if ( !isMarkerVisible() )
   {
     row = -1;
@@ -2032,7 +2032,7 @@ void KSpreadView::slotAddTable( KSpreadTable *_table )
 void KSpreadView::slotUpdateView( KSpreadTable *_table )
 {
   printf("void KSpreadView::slotUdateView( KSpreadTable *_table )\n");
-  
+
   // Do we display this table ?
   if ( _table != m_pTable )
     return;
@@ -2043,7 +2043,7 @@ void KSpreadView::slotUpdateView( KSpreadTable *_table )
 void KSpreadView::slotUpdateView( KSpreadTable *_table, const QRect& _rect )
 {
   printf("void KSpreadView::slotUpdateView( KSpreadTable *_table, const QRect& %i %i|%i %i )\n",_rect.left(),_rect.top(),_rect.right(),_rect.bottom());
-  
+
   // Do we display this table ?
   if ( _table != m_pTable )
     return;
@@ -2051,7 +2051,7 @@ void KSpreadView::slotUpdateView( KSpreadTable *_table, const QRect& _rect )
   /* QPainter painter;
      painter.begin( m_pCanvasWidget ); */
 
-  m_pCanvasWidget->updateCellRect( _rect );  
+  m_pCanvasWidget->updateCellRect( _rect );
   /* int x,y;
   for( y = _rect.top(); y <= _rect.bottom(); y++ )
     for( x = _rect.left(); x <= _rect.right(); x++ )
@@ -2063,7 +2063,7 @@ void KSpreadView::slotUpdateView( KSpreadTable *_table, const QRect& _rect )
 void KSpreadView::slotUpdateHBorder( KSpreadTable *_table )
 {
   printf("void KSpreadView::slotUpdateHBorder( KSpreadTable *_table )\n");
-  
+
   // Do we display this table ?
   if ( _table != m_pTable )
     return;
@@ -2088,7 +2088,7 @@ void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old, 
 
   // Emit a signal for internal use
   emit sig_selectionChanged( _table, _new );
-  
+
   // Send some event around
   KSpread::View::EventSelectionChanged ev;
   ev.range.top = _new.top();
@@ -2104,9 +2104,9 @@ void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old, 
 
   QRect uni( _old );
   uni = uni.unite( _new );
-  
+
   m_pCanvasWidget->updateCellRect( uni );
-  
+
   if ( _old.right() == 0x7fff || _new.right() == 0x7fff )
     m_pVBorderWidget->update();
   else if ( _old.bottom() == 0x7fff || _new.bottom() == 0x7fff )
@@ -2116,7 +2116,7 @@ void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old, 
 void KSpreadView::slotUpdateCell( KSpreadTable *_table, KSpreadCell *_cell, int _col, int _row )
 {
   printf("void KSpreadView::slotUpdateCell( KSpreadTable *_table, KSpreadCell *_cell, _col=%i, _row=%i )\n",_col,_row);
-  
+
   // Do we display this table ?
   if ( _table != m_pTable )
     return;
@@ -2150,7 +2150,7 @@ void KSpreadView::slotUnselect( KSpreadTable *_table, const QRect& _old )
       KSpreadCell *cell = m_pTable->cellAt( x, y );
       drawCell( cell, x, y );
     }
-    
+
   // Are complete columns selected ?
   if ( _old.bottom() == 0x7FFF )
     m_pHBorderWidget->update();	
@@ -2172,7 +2172,7 @@ KSpreadEditWidget::KSpreadEditWidget( QWidget *_parent, KSpreadView *_view ) : Q
   m_pView = _view;
 }
 
-void KSpreadEditWidget::publicKeyPressEvent ( QKeyEvent* _ev ) 
+void KSpreadEditWidget::publicKeyPressEvent ( QKeyEvent* _ev )
 {
   // QLineEdit::keyPressEvent( _ev );
   keyPressEvent( _ev );
@@ -2188,13 +2188,13 @@ void KSpreadEditWidget::slotDoneEdit()
 {
   if ( !m_pView->activeTable() )
     return;
-  
+
   m_pView->canvasWidget()->setFocus();
   m_pView->setText( text() );
   setText( "" );
-}                    
+}
 
-void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev ) 
+void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
 {
   switch ( _ev->key() )
   {
@@ -2217,7 +2217,7 @@ void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
 	
     default:
 	QLineEdit::keyPressEvent( _ev );
-    } 
+    }
 }
 
 /****************************************************************
@@ -2243,9 +2243,9 @@ KSpreadCanvas::KSpreadCanvas( QWidget *_parent, KSpreadView *_view ) : QWidget( 
 void KSpreadCanvas::setAction( Actions _act )
 {
   QRect selection( m_pView->activeTable()->selectionRect() );
-  
+
   if ( _act == InsertChart )
-  {    
+  {
     // Something must be selected
     if ( selection.right() == 0x7fff || selection.bottom() == 0x7fff || selection.left() == 0 )
     {
@@ -2255,7 +2255,7 @@ void KSpreadCanvas::setAction( Actions _act )
       return;
     }
   }
-  
+
   m_eAction = _act;
 }
 
@@ -2272,21 +2272,21 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     return;
 
   QRect selection( table->selectionRect() );
-  
+
   if ( m_eMouseAction == ChildGeometry )
   {
     QPainter painter;
     painter.begin( this );
     painter.setRasterOp( NotROP );
-      
+
     QPen pen;
     pen.setStyle( DashLine );
     painter.setPen( pen );
-      
+
     if ( m_bGeometryStarted )
     {
       int x = m_ptGeometryStart.x();
-      int y = m_ptGeometryStart.y();    
+      int y = m_ptGeometryStart.y();
       if ( x > m_ptGeometryEnd.x() )
 	x = m_ptGeometryEnd.x();
       if ( y > m_ptGeometryEnd.y() )
@@ -2300,11 +2300,11 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     }
     else
       m_bGeometryStarted = TRUE;
-    
+
     m_ptGeometryEnd = _ev->pos();
-    
+
     int x = m_ptGeometryStart.x();
-    int y = m_ptGeometryStart.y();    
+    int y = m_ptGeometryStart.y();
     if ( x > m_ptGeometryEnd.x() )
       x = m_ptGeometryEnd.x();
     if ( y > m_ptGeometryEnd.y() )
@@ -2313,13 +2313,13 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     if ( w < 0 ) w *= -1;
     int h = m_ptGeometryEnd.y() - m_ptGeometryStart.y();
     if ( h < 0 ) h *= -1;
-    
+
     painter.drawRect( x, y, w, h );
     painter.end();
-    
+
     return;
   }
-    
+
   // if ( m_pView->isMarkerVisible() )
   {
     // Test wether we are in the lower right corner of the marker
@@ -2348,17 +2348,17 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
       int th = cell->height( selection.bottom(), m_pView );
       h = ( y - ypos ) + th;
     }
-    
+
     if ( _ev->pos().x() >= xpos + w - 2 && _ev->pos().x() <= xpos + w + 3 &&
 	 _ev->pos().y() >= ypos + h - 1 && _ev->pos().y() <= ypos + h + 4 )
       setCursor( sizeAllCursor );
     else
       setCursor( arrowCursor );
   }
-  
+
   if ( m_eMouseAction == NoAction )
     return;
-    
+
   int ypos, xpos;
   int row = table->topRow( _ev->pos().y(), ypos, m_pView );
   int col = table->leftColumn( _ev->pos().x(), xpos, m_pView );
@@ -2372,12 +2372,12 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     return;
 
   m_pView->hideMarker();
-    
+
   // Set the new lower right corner of the selection
   selection.setRight( col );
   selection.setBottom( row );
   table->setSelection( selection, m_pView );
-  
+
   // Scroll the table if neccessary
   if ( _ev->pos().x() < 0 )
     m_pView->horzScrollBar()->setValue( m_pView->xOffset() + xpos );
@@ -2396,15 +2396,15 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
     m_pView->vertScrollBar()->setValue( m_pView->yOffset() +
 					( ypos + rl->height( m_pView ) - m_pView->canvasWidget()->height() ) );
   }
-  
+
   m_pView->showMarker();
-  
+
   // All visible cells
   /* int left_col = table->leftColumn( 0, xpos, m_pView );
   int right_col = table->rightColumn( width(), m_pView );
   int top_row = table->topRow( 0, ypos, m_pView );
   int bottom_row = table->bottomRow( height(), m_pView ); */
-  
+
   // Redraw all cells that changed their marking mode.
   /* for ( int x = left_col; x <= right_col; x++ )
     for ( int y = top_row; y <= bottom_row; y++ )
@@ -2413,7 +2413,7 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
       bool b2 = ( x >= selection.left() && x <= selection.right() );
       bool b3 = ( y >= r.top() && y <= r.bottom() );
       bool b4 = ( y >= selection.top() && y <= selection.bottom() );
-      
+
       if ( ( b1 && !b2 ) || ( !b1 && b2 ) || ( b3 && !b4 ) || ( !b3 && b4 ) )
       {
 	KSpreadCell *cell = table->cellAt( x, y );
@@ -2437,11 +2437,11 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent *_ev )
       return;
 
     m_bGeometryStarted = false;
-      
+
     m_ptGeometryEnd = _ev->pos();
-    
+
     int x = m_ptGeometryStart.x();
-    int y = m_ptGeometryStart.y();    
+    int y = m_ptGeometryStart.y();
     if ( x > m_ptGeometryEnd.x() )
       x = m_ptGeometryEnd.x();
     if ( y > m_ptGeometryEnd.y() )
@@ -2450,18 +2450,18 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent *_ev )
     if ( w < 0 ) w *= -1;
     int h = m_ptGeometryEnd.y() - m_ptGeometryStart.y();
     if ( h < 0 ) h *= -1;
-    
+
     QPainter painter;
     painter.begin( this );
-      
+
     QPen pen;
     pen.setStyle( DashLine );
     painter.setPen( pen );
-      
+
     painter.setRasterOp( NotROP );
     painter.drawRect( x, y, w, h );
     painter.end();
-      
+
     // TODO
     /*
     QRect r( x, y, w, h );
@@ -2474,23 +2474,23 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent *_ev )
       m_pView->insertChart( r );
     else if ( m_eAction == InsertChild )
       m_pView->insertChild( r, m_actionArgument );
-	      
+	
     m_eMouseAction = NoAction;
     m_eAction = DefaultAction;
     return;
   }
 
   m_pView->hideMarker();
-  
+
   QRect selection( table->selectionRect() );
-  
+
   // m_pView->canvasWidget()->setMouseTracking( FALSE );
   // The user started the drag in the lower right corner of the marker ?
   if ( m_eMouseAction == ResizeCell )
   {
     KSpreadCell *cell = table->nonDefaultCell( m_iMouseStartColumn, m_iMouseStartRow );
-    cell->forceExtraCells( m_iMouseStartColumn, m_iMouseStartRow, 
-			   selection.right() - selection.left(), 
+    cell->forceExtraCells( m_iMouseStartColumn, m_iMouseStartRow,
+			   selection.right() - selection.left(),
 			   selection.bottom() - selection.top() );
 	
     selection.setCoords( 0, 0, 0, 0 );
@@ -2500,8 +2500,8 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent *_ev )
   else if ( m_eMouseAction == AutoFill )
   {
 	/* Object *obj = getNonDefaultCell( mouseStartColumn, mouseStartRow );
-	obj->forceExtraCells( mouseStartColumn, mouseStartRow, 
-			      selection.right() - selection.left(), 
+	obj->forceExtraCells( mouseStartColumn, mouseStartRow,
+			      selection.right() - selection.left(),
 			      selection.bottom() - selection.top() ); */
     table->autofill( m_rctAutoFillSrc, table->selectionRect() );
 	
@@ -2524,7 +2524,7 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent *_ev )
       table->setSelection( selection, m_pView );
     }
   }
-    
+
   m_eMouseAction = NoAction;
   if ( m_bMouseMadeSelection )
     m_pView->drawVisibleCells();
@@ -2553,7 +2553,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   if ( _ev->button() == LeftButton )
   {
     QPoint p( _ev->pos().x() + m_pView->xOffset(), _ev->pos().y() + m_pView->yOffset() );
-    
+
     QListIterator<KSpreadChildPicture> it = m_pView->pictures();
     for( ; it != 0L; ++it )
     {
@@ -2567,7 +2567,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 #endif
 
   QRect selection( table->selectionRect() );
-  
+
   // Get the position and size of the marker/marked-area
   int xpos;
   int ypos;
@@ -2595,7 +2595,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     int th = cell->height( selection.bottom(), m_pView );
     h = ( y - ypos ) + th;
   }
-    
+
   // Did we click in the lower right corner of the marker/marked-area ?
   if ( _ev->pos().x() >= xpos + w - 2 && _ev->pos().x() <= xpos + w + 3 &&
        _ev->pos().y() >= ypos + h - 1 && _ev->pos().y() <= ypos + h + 4 )
@@ -2608,7 +2608,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
       if ( selection.left() != 0 && selection.right() != 0x7fff && selection.bottom() != 0x7fff )
       { /* Selection is ok */
       	m_rctAutoFillSrc = selection;
-      }	    
+      }	
       else // Select the current cell
       {
 	KSpreadCell *cell = table->cellAt( m_pView->markerColumn(), m_pView->markerRow() );
@@ -2618,7 +2618,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
 	m_rctAutoFillSrc.setCoords( m_pView->markerColumn(), m_pView->markerRow(),
 				    m_pView->markerColumn(), m_pView->markerRow() );
       }
-      
+
       m_iMouseStartColumn = m_pView->markerColumn();
       m_iMouseStartRow = m_pView->markerRow();
     }
@@ -2639,18 +2639,18 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   }
 
   m_pView->hideMarker();
-    
+
   int row = table->topRow( _ev->pos().y(), ypos, m_pView );
-  int col = table->leftColumn( _ev->pos().x(), xpos, m_pView );    
+  int col = table->leftColumn( _ev->pos().x(), xpos, m_pView );
 
   if ( _ev->button() == LeftButton || !selection.contains( QPoint( col, row ) ) )
     table->unselect();
-    
+
   m_pView->setMarkerColumn( col );
   m_pView->setMarkerRow( row );
-  
+
   KSpreadCell *cell = table->cellAt( m_pView->markerColumn(), m_pView->markerRow() );
-  
+
   // Go to the upper left corner of the obscuring object
   if ( cell->isObscured() )
   {
@@ -2671,7 +2671,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     m_iMouseStartColumn = m_pView->markerColumn();
     m_iMouseStartRow = m_pView->markerRow();
   }
-  
+
   // Update the edit box
   if ( cell->text() != 0L )
     m_pView->editWidget()->setText( cell->text() );
@@ -2679,7 +2679,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
     m_pView->editWidget()->setText( "" );
 
   m_pView->showMarker();
-    
+
   if ( _ev->button() == RightButton )
   {
     QPoint p = mapToGlobal( _ev->pos() );
@@ -2695,17 +2695,17 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
   // HACK
   if ( x() == 5000 && y() == 5000 )
     return;
-  
+
   KSpreadTable *table = m_pView->activeTable();
   if ( !table )
     return;
 
   m_pView->hideMarker();
-  
+
   QPainter painter;
   painter.begin( this );
   painter.save();
-    
+
   int xpos;
   int ypos;
   int left_col = table->leftColumn( _ev->rect().x(), xpos, m_pView );
@@ -2716,22 +2716,22 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
   QPen pen;
   pen.setWidth( 1 );
   painter.setPen( pen );
-    
+
   QRect r;
-    
-  int left = xpos;    
+
+  int left = xpos;
   for ( int y = top_row; y <= bottom_row; y++ )
   {
     RowLayout *row_lay = table->rowLayout( y );
     xpos = left;
-    
+
     for ( int x = left_col; x <= right_col; x++ )
     {
       ColumnLayout *col_lay = table->columnLayout( x );
-	    
+	
       KSpreadCell *cell = table->cellAt( x, y );
       cell->paintEvent( m_pView, _ev->rect(), painter, xpos, ypos, x, y, col_lay, row_lay, &r );
-	    
+	
       xpos += col_lay->width( m_pView );
     }
 
@@ -2763,7 +2763,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
   KSpreadTable *table = m_pView->activeTable();
   if ( !table )
     return;
-    
+
   switch( _ev->key() )
     {
       /**
@@ -2830,7 +2830,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	m_bEditDirtyFlag = false;
       }
       return;
-  
+
     default:
       char buffer[2];
       if ( _ev->ascii() == 0 )
@@ -2838,13 +2838,13 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
 	_ev->accept();
 	return;
       }
-      
+
       buffer[0] = _ev->ascii();
       buffer[1] = 0;
-      
+
       if ( !m_bEditDirtyFlag )
 	m_pView->editWidget()->setText( "" );
-      
+
       m_pView->editWidget()->publicKeyPressEvent( _ev );
       m_bEditDirtyFlag = TRUE;
       return;
@@ -2872,7 +2872,7 @@ void KSpreadCanvas::updateCellRect( const QRect &_rect )
   QRect param( _rect );
   if ( param.left() <= 0 && param.top() <= 0 && param.right() <= 0 && param.bottom() <= 0 )
     return;
-  
+
   // We want to repaint the border too => enlarge the rect
   if ( param.left() > 1 )
     param.setLeft( param.left() - 1 );
@@ -2882,7 +2882,7 @@ void KSpreadCanvas::updateCellRect( const QRect &_rect )
     param.setTop( param.top() - 1 );
   if ( param.bottom() < 0x7fff )
     param.setBottom( param.bottom() + 1 );
-  
+
   if ( param.left() <= 0 )
     param.setLeft( 1 );
   if ( param.top() <= 0 )
@@ -2891,35 +2891,35 @@ void KSpreadCanvas::updateCellRect( const QRect &_rect )
     return;
   if ( param.bottom() < param.top() )
     return;
-  
+
   m_pView->hideMarker();
-  
+
   QPainter painter;
   painter.begin( this );
   painter.save();
-    
+
   int xpos = table->columnPos( param.left(), m_pView );
   int ypos = table->rowPos( param.top(), m_pView );
 
   QPen pen;
   pen.setWidth( 1 );
   painter.setPen( pen );
-    
+
   QRect r;
-    
-  int left = xpos;    
+
+  int left = xpos;
   for ( int y = param.top(); y <= param.bottom(); y++ )
   {
     RowLayout *row_lay = table->rowLayout( y );
     xpos = left;
-    
+
     for ( int x = param.left(); x <= param.right(); x++ )
     {
       ColumnLayout *col_lay = table->columnLayout( x );
-	    
+	
       KSpreadCell *cell = table->cellAt( x, y );
       cell->paintEvent( m_pView, rect(), painter, xpos, ypos, x, y, col_lay, row_lay, &r );
-	    
+	
       xpos += col_lay->width( m_pView );
 
       if ( xpos > width() )
@@ -2930,7 +2930,7 @@ void KSpreadCanvas::updateCellRect( const QRect &_rect )
     if ( ypos > height() )
       break;
   }
-  
+
   painter.end();
 
   m_pView->showMarker();
@@ -2945,7 +2945,7 @@ void KSpreadCanvas::updateCellRect( const QRect &_rect )
 KSpreadVBorder::KSpreadVBorder( QWidget *_parent, KSpreadView *_view ) : QWidget( _parent )
 {
   m_pView = _view;
-  
+
   setBackgroundColor( lightGray );
   setMouseTracking( TRUE );
   m_bResize = FALSE;
@@ -2959,11 +2959,11 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
 
   KSpreadTable *table = m_pView->activeTable();
   assert( table );
-    
+
   // Find the first visible row and the y position of this row.
   int y = 0;
   int row = table->topRow( 0, y, m_pView );
-    
+
   // Did the user click between two rows ?
   while ( y < m_pView->vBorderWidget()->height() )
   {
@@ -2973,7 +2973,7 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
       m_bResize = TRUE;
     y += h;
   }
-    
+
   // So he clicked between two rows ?
   if ( m_bResize )
   {
@@ -3024,7 +3024,7 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
 	
     m_pView->doc()->setModified( TRUE );
   }
-  
+
   m_bSelection = FALSE;
   m_bResize = FALSE;
 }
@@ -3057,7 +3057,7 @@ void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
     int y = 0;
     int row = table->topRow( _ev->pos().y(), y, m_pView );
     QRect selection = table->selectionRect();
-    
+
     if ( row < m_iSelectionAnchor )
     {
       selection.setTop( row );
@@ -3069,14 +3069,14 @@ void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
       selection.setTop( m_iSelectionAnchor );
     }
     table->setSelection( selection, m_pView );
-    
+
     if ( _ev->pos().y() < 0 )
       m_pView->vertScrollBar()->setValue( m_pView->yOffset() + y );
     else if ( _ev->pos().y() > m_pView->canvasWidget()->height() )
     {
       RowLayout *rl = table->rowLayout( row + 1 );
       y = table->rowPos( row + 1, m_pView );
-      m_pView->vertScrollBar()->setValue( m_pView->yOffset() + 
+      m_pView->vertScrollBar()->setValue( m_pView->yOffset() +
 					  ( y + rl->height( m_pView ) - m_pView->canvasWidget()->height() ) );
     }	
   }
@@ -3120,13 +3120,13 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
   QFontMetrics fm = painter.fontMetrics();
 
   painter.setClipRect( _ev->rect() );
-    
+
   int ypos;
   int top_row = table->topRow( _ev->rect().y(), ypos, m_pView );
   int bottom_row = table->bottomRow( _ev->rect().bottom(), m_pView );
 
   QRect selection( table->selectionRect() );
-  
+
   for ( int y = top_row; y <= bottom_row; y++ )
   {
     bool selected = ( selection.left() != 0 && selection.right() == 0x7FFF &&
@@ -3154,12 +3154,12 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
       painter.setPen( white );
     else
       painter.setPen( black );
-    
+
     painter.drawText( 3, ypos + ( row_lay->height( m_pView ) + fm.ascent() - fm.descent() ) / 2, buffer );
 
     ypos += row_lay->height( m_pView );
   }
-  
+
   painter.end();
 }
 
@@ -3172,7 +3172,7 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
 KSpreadHBorder::KSpreadHBorder( QWidget *_parent, KSpreadView *_view ) : QWidget( _parent )
 {
   m_pView = _view;
-  
+
   setBackgroundColor( lightGray );
   setMouseTracking( TRUE );
   m_bResize = FALSE;
@@ -3183,13 +3183,13 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
 {
   KSpreadTable *table = m_pView->activeTable();
   assert( table );
-  
+
   m_bResize = FALSE;
   m_bSelection = FALSE;
-    
+
   int x = 0;
   int col = table->leftColumn( 0, x, m_pView );
-    
+
   while ( x < width() && !m_bResize )
   {
     int w = table->columnLayout( col )->width( m_pView );
@@ -3198,7 +3198,7 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
       m_bResize = TRUE;
     x += w;
   }
-    
+
   if ( m_bResize )
   {
     QPainter painter;
@@ -3241,13 +3241,13 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
     ColumnLayout *cl = table->nonDefaultColumnLayout( m_iResizeAnchor );
     int x = table->columnPos( m_iResizeAnchor, m_pView );
     if ( ( m_pView->zoom() * (float)( _ev->pos().x() - x ) ) < 20.0 )
-      cl->setWidth( 20, m_pView );	    
+      cl->setWidth( 20, m_pView );	
     else
       cl->setWidth( _ev->pos().x() - x, m_pView );
 	
     m_pView->doc()->setModified( true );
   }
-    
+
   m_bSelection = FALSE;
   m_bResize = FALSE;
 }
@@ -3297,7 +3297,7 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
     {
       ColumnLayout *cl = table->columnLayout( col + 1 );
       x = table->columnPos( col + 1, m_pView );
-      m_pView->horzScrollBar()->setValue( m_pView->xOffset() + 
+      m_pView->horzScrollBar()->setValue( m_pView->xOffset() +
 					  ( x + cl->width( m_pView ) - m_pView->canvasWidget()->width() ) );
     }
   }
@@ -3306,7 +3306,7 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
   {
     int x = 0;
     int col = table->leftColumn( 0, x, m_pView );
-    
+
     while ( x < m_pView->hBorderWidget()->width() )
     {
       int w = table->columnLayout( col )->width( m_pView );
@@ -3337,13 +3337,13 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
   painter.eraseRect( _ev->rect() );
 
   QFontMetrics fm = painter.fontMetrics();
-    
+
   int xpos;
   int left_col = table->leftColumn( _ev->rect().x(), xpos, m_pView );
   int right_col = table->rightColumn( _ev->rect().right(), m_pView );
 
   QRect selection( table->selectionRect() );
-  
+
   for ( int x = left_col; x <= right_col; x++ )
   {
     bool selected = ( selection.left() != 0 && selection.bottom() == 0x7FFF &&
@@ -3365,7 +3365,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
     }
 
     int len = fm.width( table->columnLabel(x) );
-    
+
     if ( selected )
       painter.setPen( white );
     else

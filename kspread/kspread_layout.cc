@@ -1,21 +1,21 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 #include "kspread_view.h"
 #include "kspread_layout.h"
@@ -38,20 +38,20 @@ KSpreadLayout::KSpreadLayout( KSpreadTable *_table )
     m_eFloatColor = KSpreadLayout::AllBlack;
     m_eFloatFormat = KSpreadLayout::OnlyNegSigned;
     m_iPrecision = -1;
-    m_bgColor = white;
+    m_bgColor = Qt::white;
     m_eAlign = KSpreadLayout::Undefined;
     m_iLeftBorderWidth = 1;
     m_iTopBorderWidth = 1;
-    m_leftBorderPen.setColor( black );
+    m_leftBorderPen.setColor( Qt::black );
     m_leftBorderPen.setWidth( leftBorderWidth() );
-    m_leftBorderPen.setStyle( NoPen );
-    m_topBorderPen.setColor( black );
+    m_leftBorderPen.setStyle( Qt::NoPen );
+    m_topBorderPen.setColor( Qt::black );
     m_topBorderPen.setWidth( topBorderWidth() );
-    m_topBorderPen.setStyle( NoPen );
+    m_topBorderPen.setStyle( Qt::NoPen );
     m_dFaktor = 1.0;
     m_bMultiRow = FALSE;
-    
-    m_textColor = black;
+
+    m_textColor = Qt::black;
     m_textPen.setColor( m_textColor );
 }
 
@@ -92,7 +92,7 @@ const char* KSpreadLayout::prefix()
 	return 0L;
     if ( m_strPrefix.data()[0] == 0 )
 	return 0L;
-    
+
     return m_strPrefix.data();
 }
 
@@ -102,14 +102,14 @@ const char* KSpreadLayout::postfix()
 	return 0L;
     if ( m_strPostfix.data()[0] == 0 )
 	return 0L;
-    
+
     return m_strPostfix.data();
 }
 
 int KSpreadLayout::leftBorderWidth( KSpreadView *_view )
 {
     if ( _view )
-      return (int) ( m_iLeftBorderWidth * _view->zoom() ); 
+      return (int) ( m_iLeftBorderWidth * _view->zoom() );
     else
 	return m_iLeftBorderWidth;
 }
@@ -117,7 +117,7 @@ int KSpreadLayout::leftBorderWidth( KSpreadView *_view )
 int KSpreadLayout::topBorderWidth( KSpreadView *_view )
 {
     if ( _view )
-	return (int) ( m_iTopBorderWidth * _view->zoom() ); 
+	return (int) ( m_iTopBorderWidth * _view->zoom() );
     else
 	return m_iTopBorderWidth;
 }
@@ -142,7 +142,7 @@ RowLayout::RowLayout( KSpreadTable *_table, int _row ) : KSpreadLayout( _table )
 void RowLayout::setMMHeight( float _h )
 {
   UPDATE_BEGIN;
-  
+
   m_fHeight = _h;
 
   UPDATE_END;
@@ -217,7 +217,7 @@ bool RowLayout::load( KorbSession *korb, OBJECT o_rl )
 	printf("ERROR: Could not find Property KDE:kxcl:Height \n");
 	return FALSE;
     }
-    
+
     PROPERTY prop = 0;
     do
     {
@@ -264,7 +264,7 @@ ColumnLayout::ColumnLayout( KSpreadTable *_table, int _column ) : KSpreadLayout(
 void ColumnLayout::setMMWidth( float _w )
 {
   UPDATE_BEGIN;
-  
+
   m_fWidth = _w;
 
   UPDATE_END;
@@ -273,7 +273,7 @@ void ColumnLayout::setMMWidth( float _w )
 void ColumnLayout::setWidth( int _w, KSpreadView *_view )
 {
   UPDATE_BEGIN;
-  
+
   if ( _view )
     m_fWidth = ( float)_w / _view->zoom() * POINT_TO_MM;
   else
@@ -342,7 +342,7 @@ OBJECT ColumnLayout::save( KorbSession *korb )
 	
     korb->writeFloatValue( o_cl, p_width, width );
     korb->writeUIntValue( o_cl, p_column, column );
-    
+
     return o_cl;
 }
 
@@ -361,7 +361,7 @@ bool ColumnLayout::load( KorbSession *korb, OBJECT o_cl )
 	printf("ERROR: Could not find Property KDE:kxcl:Column \n");
 	return FALSE;
     }
-    
+
     PROPERTY prop = 0;
     do
     {

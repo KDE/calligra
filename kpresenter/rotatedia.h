@@ -51,7 +51,7 @@ class RotatePreview : public QFrame
 public:
   // constructor - destructor
   RotatePreview(QWidget* parent,const char*);
-  ~RotatePreview() {}                                            
+  ~RotatePreview() {}
 
   void setAngle(float __angle) {_angle = __angle; repaint(true);}
 
@@ -73,7 +73,7 @@ class RotateDia : public QDialog
 public:
   // constructor - destructor
   RotateDia(QWidget* parent,const char*);
-  ~RotateDia();                                             
+  ~RotateDia();
 
   void setAngle(float __angle);
   float getAngle() {return _angle;}
@@ -93,7 +93,7 @@ protected slots:
   void deg180clicked();
   void deg270clicked();
   void degCustomclicked();
-  void degCustomChanged(const char*);
+  void degCustomChanged(const QString &);
   void Apply() {emit rotateDiaOk();}
 
 signals:

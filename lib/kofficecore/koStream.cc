@@ -1,21 +1,21 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 #include "koStream.h"
 
@@ -29,14 +29,14 @@
 ostream& operator<< ( ostream& outs, const QRect &_rect )
 {
   outs << "<RECT x=" << _rect.left() << " y=" << _rect.top() << " w=" << _rect.width() << " h=" << _rect.height() << " />";
-  
+
   return outs;
 }
 
 QRect tagToRect( vector<KOMLAttrib>& _attribs )
 {
   QRect r;
-  
+
   vector<KOMLAttrib>::const_iterator it = _attribs.begin();
   for( ; it != _attribs.end() ; it++ )
   {
@@ -56,7 +56,7 @@ QRect tagToRect( vector<KOMLAttrib>& _attribs )
 /* ostream& operator<< ( ostream& outs, const QRect &_rect )
 {
   char buffer[ 4 * 8 + 3 + 1 ];
-  
+
   intToHexStr( buffer, _rect.left() );
   buffer[8] = ',';
   intToHexStr( buffer + 9, _rect.top() );
@@ -66,17 +66,17 @@ QRect tagToRect( vector<KOMLAttrib>& _attribs )
   intToHexStr( buffer + 27, _rect.height() );
 
   outs << buffer;
-  
+
   return outs;
 }
 
 QRect strToRect( const char *_buffer )
 {
   QRect r;
-  
+
   r.setRect( hexStrToInt( _buffer ), hexStrToInt( _buffer + 9 ),
 	     hexStrToInt( _buffer + 18 ), hexStrToInt( _buffer + 27 ) );
-  
+
   return r;
 }
 
@@ -84,24 +84,24 @@ istream& operator>> ( istream& ins, QRect &_rect )
 {
   char buffer[ 4 * 8 + 1 ];
   ins.get( buffer, 4*8 );
-  
+
   _rect.setRect( hexStrToInt( buffer ), hexStrToInt( buffer + 9 ),
 		 hexStrToInt( buffer + 18 ), hexStrToInt( buffer + 27 ) );
-  
+
   return ins;
 } */
 
 ostream& operator<< ( ostream& outs, const QColor &_color )
 {
   char buffer[ 3 * 2 + 1 ];
-  
+
   shortToHexStr( buffer, _color.red() );
   shortToHexStr( buffer + 2, _color.green() );
   shortToHexStr( buffer + 4, _color.blue() );
   buffer[ 3*2 ] = 0;
-  
+
   outs << '#' << buffer;
-  
+
   return outs;
 }
 
@@ -117,29 +117,29 @@ istream& operator>> ( istream& ins, QColor &_color )
 {
   char buffer[ 1 + 3 * 2 + 1 ];
   ins.get( buffer, 1 + 3*2 );
-  
+
   _color.setRgb( hexStrToShort( buffer + 1 ), hexStrToShort( buffer + 3 ), hexStrToShort( buffer + 5 ) );
-  
+
   return ins;
 }
 
 ostream& operator<< ( ostream& outs, const QPen &_pen )
 {
   outs << "<PEN style=" << (int)_pen.style() << " width=" << _pen.width() << " color=" << _pen.color() << "/>";
-  
+
   return outs;
 }
 
 QPen tagToPen( vector<KOMLAttrib>& _attribs )
 {
   QPen p;
-  
+
   vector<KOMLAttrib>::const_iterator it = _attribs.begin();
   for( ; it != _attribs.end() ; it++ )
   {
     if ( (*it).m_strName == "style" )
     {
-      PenStyle style = (PenStyle)atoi( (*it).m_strValue.c_str() );
+      Qt::PenStyle style = (Qt::PenStyle)atoi( (*it).m_strValue.c_str() );
       p.setStyle( style );
     }
     else if ( (*it).m_strName == "width" )
@@ -154,20 +154,20 @@ QPen tagToPen( vector<KOMLAttrib>& _attribs )
 /* ostream& operator<< ( ostream& outs, const QPen &_pen )
 {
   char buffer[ 2 * 8 + 2 + 1 ];
-  
+
   intToHexStr( buffer, _pen.width() );
   buffer[8] = ',';
   intToHexStr( buffer + 9, (int)_pen.style() );
 
   outs << buffer << ' ' << _pen.color();
-  
+
   return outs;
 }
 
 QPen strToPen( const char *_buffer )
 {
   PenStyle style = (PenStyle)(hexStrToInt( _buffer + 9 ) );
-  
+
   QPen p;
   p.setWidth( hexStrToInt( _buffer ) );
   p.setStyle( style );
@@ -180,20 +180,20 @@ istream& operator>> ( istream& ins, QPen &_pen )
 {
   char buffer[ 2 * 8 + 1 + 3 * 2 + 1 ];
   ins.get( buffer, 2*8 + 1 + 3*2 );
-  
+
   PenStyle style = (PenStyle)hexStrToInt( buffer + 9 );
-  
+
   _pen.setWidth( hexStrToInt( buffer ) );
   _pen.setStyle( style );
   _pen.setColor( strToColor( buffer + 17 ) );
-  
+
   return ins;
 }
 */
 
 ostream& operator<< ( ostream& outs, const QFont &_font )
 {
-  outs << "<FONT family=\"" << _font.family() << "\" pt=" << _font.pointSize() << " weight="
+  outs << "<FONT family=\"" << _font.family().ascii() << "\" pt=" << _font.pointSize() << " weight="
        << _font.weight();
   if ( _font.italic() )
     outs << " italic/>";
@@ -206,7 +206,7 @@ ostream& operator<< ( ostream& outs, const QFont &_font )
 QFont tagToFont( vector<KOMLAttrib>& _attribs )
 {
   // QFont f;
-  QFont f( "Times", 12 );  
+  QFont f( "Times", 12 );
 
   vector<KOMLAttrib>::const_iterator it = _attribs.begin();
   for( ; it != _attribs.end() ; it++ )
@@ -220,7 +220,7 @@ QFont tagToFont( vector<KOMLAttrib>& _attribs )
     else if ( (*it).m_strName == "italic" )
       f.setItalic( true );
     else if ( (*it).m_strName == "bold" )
-      f.setBold( true );    
+      f.setBold( true );
   }
 
   return f;
@@ -228,7 +228,7 @@ QFont tagToFont( vector<KOMLAttrib>& _attribs )
 
 class QIO2CPP : public QIODevice
 {
-public: 
+public:
   QIO2CPP( ostream &_out) : m_out( _out )
   {
     setType( IO_Sequential );
@@ -241,12 +241,12 @@ public:
   bool open( int ) { return true; }
   void close() { }
   void flush() { m_out.flush(); }
-  
+
   uint size() const { return 0xffffffff; }
   int readBlock( char *, uint ) { return 0; }
   int writeBlock( const char *data, uint len ) { m_out.write( data, len ); return len; }
   int readLine( char *, uint  ) { return 0; };
-  
+
   int getch() { return 0; };
   int putch( int _c ) { m_out.put( _c ); return _c; }
   int ungetch( int ) { return 0; }
@@ -263,11 +263,11 @@ ostream& operator<< ( ostream& outs, const QImage &_img )
   io.write();
 
   return outs;
-}       
+}
 
 class CPP2QIO : public QIODevice
 {
-public: 
+public:
   CPP2QIO( istream &_in) : m_in( _in )
   {
     setType( IO_Direct );
@@ -283,7 +283,7 @@ public:
   bool atEnd() { if ( m_in.eof() ) return true; return false; }
   bool at() { return m_in.tellg(); }
   bool at( int _pos ) { m_in.seekg( _pos ); return true; }
-  
+
   uint size() const { return 0xffffffff; }
   int readBlock( char *data, uint len ) { m_in.read( data, len ); return m_in.gcount(); }
   int writeBlock( const char *, uint ) { return -1; }
@@ -304,7 +304,7 @@ public:
     }
     return len;
   } */
-  
+
   int getch() { int c = m_in.get(); if ( c == EOF ) return -1; return c; }
   int putch( int ) { return -1; }
   int ungetch( int _c ) { m_in.putback( _c ); return _c; }
@@ -320,7 +320,7 @@ istream& operator>> ( istream& ins, QImage &_img )
 
   QBuffer buff;
   buff.open( IO_WriteOnly );
-  
+
   while ( !ins.eof() )
   {
     ins.read( buffer, 4096 );
@@ -328,7 +328,7 @@ istream& operator>> ( istream& ins, QImage &_img )
   }
 
   buff.close();
-  
+
   _img.loadFromData( buff.buffer() );
 
   return ins;

@@ -35,14 +35,14 @@ public:
     virtual ~KoPrintDia();
 
     void configurePrinter( QPrinter &_printer );
-    
+
     static bool print( QPrinter &_printer, QObject *dest = 0L, const char *slot = 0L );
 
 public slots:
     void slotPaperLayout();
-    void slotPrinter( const char *_data );
+    void slotPrinter( const QString &_data );
     void slotBrowse();
-  
+
 signals:
     void sig_pageLayout();
 };

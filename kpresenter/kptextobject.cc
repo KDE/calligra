@@ -68,15 +68,15 @@ void KPTextObject::resizeBy(int _dx,int _dy)
 
 /*================================================================*/
 void KPTextObject::setFillType(FillType _fillType)
-{ 
-  fillType = _fillType; 
+{
+  fillType = _fillType;
 
-  if (fillType == FT_BRUSH && gradient) 
+  if (fillType == FT_BRUSH && gradient)
     {
       delete gradient;
       gradient = 0;
     }
-  if (fillType == FT_GRADIENT && !gradient) 
+  if (fillType == FT_GRADIENT && !gradient)
     {
       gradient = new KPGradient(gColor1,gColor2,gType,getSize());
       redrawPix = true;
@@ -92,13 +92,13 @@ void KPTextObject::save(ostream& out)
   out << indent << "<SHADOW distance=\"" << shadowDistance << "\" direction=\""
       << static_cast<int>(shadowDirection) << "\" red=\"" << shadowColor.red() << "\" green=\"" << shadowColor.green()
       << "\" blue=\"" << shadowColor.blue() << "\"/>" << endl;
-  out << indent << "<EFFECTS effect=\"" << static_cast<int>(effect) << "\" effect2=\"" 
+  out << indent << "<EFFECTS effect=\"" << static_cast<int>(effect) << "\" effect2=\""
       << static_cast<int>(effect2) << "\"/>" << endl;
   out << indent << "<PRESNUM value=\"" << presNum << "\"/>" << endl;
   out << indent << "<ANGLE value=\"" << angle << "\"/>" << endl;
   out << indent << "<FILLTYPE value=\"" << static_cast<int>(fillType) << "\"/>" << endl;
   out << indent << "<GRADIENT red1=\"" << gColor1.red() << "\" green1=\"" << gColor1.green()
-      << "\" blue1=\"" << gColor1.blue() << "\" red2=\"" << gColor2.red() << "\" green2=\"" 
+      << "\" blue1=\"" << gColor1.blue() << "\" red2=\"" << gColor2.red() << "\" green2=\""
       << gColor2.green() << "\" blue2=\"" << gColor2.blue() << "\" type=\""
       << static_cast<int>(gType) << "\"/>" << endl;
   out << indent << "<PEN red=\"" << pen.color().red() << "\" green=\"" << pen.color().green()
@@ -110,7 +110,7 @@ void KPTextObject::save(ostream& out)
 }
 
 /*========================== load ================================*/
-void KPTextObject::load(KOMLParser& parser,vector<KOMLAttrib>& lst) 
+void KPTextObject::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 {
   string tag;
   string name;
@@ -118,7 +118,7 @@ void KPTextObject::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
   while (parser.open(0L,tag))
     {
       KOMLParser::parseTag(tag.c_str(),name,lst);
-	      
+	
       // orig
       if (name == "ORIG")
 	{
@@ -183,7 +183,7 @@ void KPTextObject::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 		  effect2 = (Effect2)atoi((*it).m_strValue.c_str());
 	    }
 	}
-      
+
       // angle
       else if (name == "ANGLE")
 	{
@@ -244,7 +244,7 @@ void KPTextObject::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	    }
 	  setPen(pen);
 	}
-      
+
       // brush
       else if (name == "BRUSH")
 	{
@@ -305,8 +305,8 @@ void KPTextObject::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	}
 
       else
-	cerr << "Unknown tag '" << tag << "' in TEXT_OBJECT" << endl;    
-      
+	cerr << "Unknown tag '" << tag << "' in TEXT_OBJECT" << endl;
+
       if (!parser.close(tag))
 	{
 	  cerr << "ERR: Closing Child" << endl;
@@ -325,7 +325,7 @@ void KPTextObject::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 /*========================= draw =================================*/
 void KPTextObject::draw(QPainter *_painter,int _diffx,int _diffy)
 {
-  if (move) 
+  if (move)
     {
       KPObject::draw(_painter,_diffx,_diffy);
       return;
@@ -339,8 +339,6 @@ void KPTextObject::draw(QPainter *_painter,int _diffx,int _diffy)
 
   KRect cr = getBoundingRect(_diffx,_diffy);
   int _x = cr.x(), _y = cr.y(), _w = cr.width(), _h = cr.height();
-
-  QPicture *pic;
 
   _painter->save();
   r = _painter->viewport();
@@ -367,10 +365,10 @@ void KPTextObject::draw(QPainter *_painter,int _diffx,int _diffy)
 	  p.begin(&pix);
 	  p.drawPixmap(0,0,*gradient->getGradient());
 	  p.end();
-	  
+	
 	  _painter->drawPixmap(pw,pw,pix);
 	}
-      
+
       _painter->setPen(pen);
       _painter->setBrush(NoBrush);
       _painter->drawRect(pw,pw,ow - 2 * pw,oh - 2 * pw);
@@ -382,23 +380,7 @@ void KPTextObject::draw(QPainter *_painter,int _diffx,int _diffy)
     {
       _painter->save();
       ktextobject.enableDrawAllInOneColor(shadowColor);
-		    
-      if (specEffects)
-	{
-	  switch (effect2)
-	    {
-	    case EF2T_PARA:
-	      pic = ktextobject.getPic(_x,_y,_w,_h,zoomed,(onlyCurrStep ? subPresStep : 0),subPresStep,ownClipping);
-	      break;
-	    default:
-	      pic = ktextobject.getPic(_x,_y,_w,_h,zoomed,-1,-1,ownClipping);
-	    }
-	}
-      else
-	pic = ktextobject.getPic(_x,_y,_w,_h,zoomed,-1,-1,ownClipping);
-      
-      ktextobject.disableDrawAllInOneColor();
-      
+		
       if (angle == 0)
 	{
 	  int sx = ox;
@@ -407,12 +389,26 @@ void KPTextObject::draw(QPainter *_painter,int _diffx,int _diffy)
 
 	  _painter->setViewport(sx,sy,r.width(),r.height());
 			
-	  _painter->drawPicture(*pic);
+	  if (specEffects)
+	    {
+	      switch (effect2)
+		{
+		case EF2T_PARA:
+		  ktextobject.draw(*_painter,_x,_y,_w,_h,zoomed,(onlyCurrStep ? subPresStep : 0),subPresStep,ownClipping);
+		  break;
+		default:
+		  ktextobject.draw(*_painter,_x,_y,_w,_h,zoomed,-1,-1,ownClipping);
+		}
+	    }
+	  else
+	    ktextobject.draw(*_painter,_x,_y,_w,_h,zoomed,-1,-1,ownClipping);
+
+	  ktextobject.disableDrawAllInOneColor();
 	}
       else
 	{
 	  _painter->setViewport(ox,oy,r.width(),r.height());
-	  
+	
 	  KRect br = KRect(0,0,ow,oh);
 	  int pw = br.width();
 	  int ph = br.height();
@@ -432,32 +428,46 @@ void KPTextObject::draw(QPainter *_painter,int _diffx,int _diffy)
 	  int sx = 0;
 	  int sy = 0;
 	  getShadowCoords(sx,sy,shadowDirection,shadowDistance);
-	  
+	
 	  _painter->translate(rr.left() + xPos + sx,rr.top() + yPos + sy);
 			
-	  _painter->drawPicture(*pic);
+	  if (specEffects)
+	    {
+	      switch (effect2)
+		{
+		case EF2T_PARA:
+		  ktextobject.draw(*_painter,_x,_y,_w,_h,zoomed,(onlyCurrStep ? subPresStep : 0),subPresStep,ownClipping);
+		  break;
+		default:
+		  ktextobject.draw(*_painter,_x,_y,_w,_h,zoomed,-1,-1,ownClipping);
+		}
+	    }
+	  else
+	    ktextobject.draw(*_painter,_x,_y,_w,_h,zoomed,-1,-1,ownClipping);
+
+	  ktextobject.disableDrawAllInOneColor();
 	}
       _painter->restore();
     }
-  
-  if (specEffects)
-    {
-      switch (effect2)
-	{
-	case EF2T_PARA:
-	  pic = ktextobject.getPic(_x,_y,_w,_h,zoomed,(onlyCurrStep ? subPresStep : 0),subPresStep,ownClipping);
-	  break;
-	default:
-	  pic = ktextobject.getPic(_x,_y,_w,_h,zoomed,-1,-1,ownClipping);
-	}
-    }
-  else
-    pic = ktextobject.getPic(_x,_y,_w,_h,zoomed,-1,-1,ownClipping);
-  
+
   _painter->setViewport(ox,oy,r.width(),r.height());
-  
+
   if (angle == 0)
-    _painter->drawPicture(*pic);
+    {
+      if (specEffects)
+	{
+	  switch (effect2)
+	    {
+	    case EF2T_PARA:
+	      ktextobject.draw(*_painter,_x,_y,_w,_h,zoomed,(onlyCurrStep ? subPresStep : 0),subPresStep,ownClipping);
+	      break;
+	    default:
+	      ktextobject.draw(*_painter,_x,_y,_w,_h,zoomed,-1,-1,ownClipping);
+	    }
+	}
+      else
+	ktextobject.draw(*_painter,_x,_y,_w,_h,zoomed,-1,-1,ownClipping);
+    }
   else
     {
       KRect br = KRect(0,0,ow,oh);
@@ -468,21 +478,33 @@ void KPTextObject::draw(QPainter *_painter,int _diffx,int _diffy)
       int xPos = -rr.x();
       br.moveTopLeft(KPoint(-br.width() / 2,-br.height() / 2));
       rr.moveTopLeft(KPoint(-rr.width() / 2,-rr.height() / 2));
-      
+
       QWMatrix m,mtx;
       mtx.rotate(angle);
       m.translate(pw / 2,ph / 2);
       m = mtx * m;
-      
+
       _painter->setWorldMatrix(m);
       _painter->translate(rr.left() + xPos,rr.top() + yPos);
-      
-      _painter->drawPicture(*pic);
+
+      if (specEffects)
+	{
+	  switch (effect2)
+	    {
+	    case EF2T_PARA:
+	      ktextobject.draw(*_painter,_x,_y,_w,_h,zoomed,(onlyCurrStep ? subPresStep : 0),subPresStep,ownClipping);
+	      break;
+	    default:
+	      ktextobject.draw(*_painter,_x,_y,_w,_h,zoomed,-1,-1,ownClipping);
+	    }
+	}
+      else
+	ktextobject.draw(*_painter,_x,_y,_w,_h,zoomed,-1,-1,ownClipping);
     }
-  
+
   _painter->setViewport(r);
   _painter->restore();
-  
+
   KPObject::draw(_painter,_diffx,_diffy);
 }
 
@@ -532,22 +554,22 @@ void KPTextObject::saveKTextObject(ostream& out)
   out << otag << "<TEXTOBJ objType=\"" << static_cast<int>(ktextobject.objType()) << "\">" << endl;
   out << indent << "<ENUMLISTTYPE type=\"" << ktextobject.enumListType().type << "\" before=\""
       << ktextobject.enumListType().before << "\" after=\"" << ktextobject.enumListType().after
-      << "\" start=\"" << ktextobject.enumListType().start << "\" family=\"" 
+      << "\" start=\"" << ktextobject.enumListType().start << "\" family=\""
       << ktextobject.enumListType().font.family() << "\" pointSize=\"" << ktextobject.enumListType().font.pointSize()
       << "\" bold=\"" << ktextobject.enumListType().font.bold() << "\" italic=\"" << ktextobject.enumListType().font.italic()
-      << "\" underline=\"" << ktextobject.enumListType().font.underline() << "\" red=\"" 
-      << ktextobject.enumListType().color.red() << "\" green=\"" << ktextobject.enumListType().color.green() 
-      << "\" blue=\"" << ktextobject.enumListType().color.blue() << "\"/>" << endl; 
+      << "\" underline=\"" << ktextobject.enumListType().font.underline() << "\" red=\""
+      << ktextobject.enumListType().color.red() << "\" green=\"" << ktextobject.enumListType().color.green()
+      << "\" blue=\"" << ktextobject.enumListType().color.blue() << "\"/>" << endl;
   for (i = 0;i < 16;i++)
     {
-      out << indent << "<UNSORTEDLISTTYPE family=\"" << ktextobject.unsortListType().font->at(i)->family() << "\" pointSize=\"" 
+      out << indent << "<UNSORTEDLISTTYPE family=\"" << ktextobject.unsortListType().font->at(i)->family() << "\" pointSize=\""
 	  << ktextobject.unsortListType().font->at(i)->pointSize()
-	  << "\" bold=\"" << ktextobject.unsortListType().font->at(i)->bold() << "\" italic=\"" 
+	  << "\" bold=\"" << ktextobject.unsortListType().font->at(i)->bold() << "\" italic=\""
 	  << ktextobject.unsortListType().font->at(i)->italic()
-	  << "\" underline=\"" << ktextobject.unsortListType().font->at(i)->underline() << "\" red=\"" 
-	  << ktextobject.unsortListType().color->at(i)->red() << "\" green=\"" << ktextobject.unsortListType().color->at(i)->green() 
+	  << "\" underline=\"" << ktextobject.unsortListType().font->at(i)->underline() << "\" red=\""
+	  << ktextobject.unsortListType().color->at(i)->red() << "\" green=\"" << ktextobject.unsortListType().color->at(i)->green()
 	  << "\" blue=\"" << ktextobject.unsortListType().color->at(i)->blue() << "\" chr=\"" << *ktextobject.unsortListType().chr->at(i)
-	  << "\"/>" << endl; 
+	  << "\"/>" << endl;
     }
 
   for (i = 0;i < ktextobject.paragraphs();i++)
@@ -556,7 +578,7 @@ void KPTextObject::saveKTextObject(ostream& out)
 
       out << otag << "<PARAGRAPH horzAlign=\"" << static_cast<int>(txtParagraph->horzAlign()) << "\" depth=\""
 	  << txtParagraph->getDepth() << "\" lineSpacing=\"" << txtParagraph->getLineSpacing() << "\" distBefore=\""
-	  << txtParagraph->getDistBefore() << "\" distAfter=\"" << txtParagraph->getDistAfter() << "\">" << endl; 
+	  << txtParagraph->getDistBefore() << "\" distAfter=\"" << txtParagraph->getDistAfter() << "\">" << endl;
 
       lastWasSpace = false;
 
@@ -573,7 +595,7 @@ void KPTextObject::saveKTextObject(ostream& out)
 	      if (txtObj->type() == TxtObj::SEPARATOR) lastWasSpace = true;
 	      else lastWasSpace = false;
 	      font = txtObj->font();
-	      
+	
 	      out << otag << "<OBJ>" << endl;
 	      out << indent << "<TYPE value=\"" << static_cast<int>(txtObj->type()) << "\"/>" << endl;
 	      out << indent << "<FONT family=\"" << font.family() << "\" pointSize=\""
@@ -589,7 +611,7 @@ void KPTextObject::saveKTextObject(ostream& out)
 	  out << etag << "</LINE>" << endl;
 
 	}
-      
+
       out << etag << "</PARAGRAPH>" << endl;
 
     }
@@ -616,11 +638,11 @@ void KPTextObject::loadKTextObject(KOMLParser& parser,vector<KOMLAttrib>& lst)
   int r = 0,g = 0,b = 0,c = 0;
   TxtParagraph *txtParagraph;
   TxtObj *objPtr;
-  
+
   while (parser.open(0L,tag))
     {
       KOMLParser::parseTag(tag.c_str(),name,lst);
-      
+
       // enumListType
       if (name == "ENUMLISTTYPE")
 	{
@@ -658,7 +680,7 @@ void KPTextObject::loadKTextObject(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	  elt.color = color;
 	  ktextobject.setEnumListType(elt);
 	}
-      
+
       // unsortListType
       else if (name == "UNSORTEDLISTTYPE")
 	{
@@ -715,14 +737,14 @@ void KPTextObject::loadKTextObject(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	  while (parser.open(0L,tag))
 	    {
 	      KOMLParser::parseTag(tag.c_str(),name,lst);
-	      
+	
 	      // line
 	      if (name == "LINE")
 		{
 		  while (parser.open(0L,tag))
 		    {
 		      KOMLParser::parseTag(tag.c_str(),name,lst);
-		      
+		
 		      // object
 		      if (name == "OBJ")
 			{
@@ -731,7 +753,7 @@ void KPTextObject::loadKTextObject(KOMLParser& parser,vector<KOMLAttrib>& lst)
 			  while (parser.open(0L,tag))
 			    {
 			      KOMLParser::parseTag(tag.c_str(),name,lst);
-			      
+			
 			      // type
 			      if (name == "TYPE")
 				{
@@ -808,8 +830,8 @@ void KPTextObject::loadKTextObject(KOMLParser& parser,vector<KOMLAttrib>& lst)
 				}
 
 			      else
-				cerr << "Unknown tag '" << tag << "' in OBJ" << endl;    
-			      
+				cerr << "Unknown tag '" << tag << "' in OBJ" << endl;
+			
 			      if (!parser.close(tag))
 				{
 				  cerr << "ERR: Closing Child" << endl;
@@ -819,10 +841,10 @@ void KPTextObject::loadKTextObject(KOMLParser& parser,vector<KOMLAttrib>& lst)
 			    }
 			  txtParagraph->append(objPtr);
 			}
-		      
+		
 		      else
-			cerr << "Unknown tag '" << tag << "' in LINE" << endl;    
-		      
+			cerr << "Unknown tag '" << tag << "' in LINE" << endl;
+		
 		      if (!parser.close(tag))
 			{
 			  cerr << "ERR: Closing Child" << endl;
@@ -832,8 +854,8 @@ void KPTextObject::loadKTextObject(KOMLParser& parser,vector<KOMLAttrib>& lst)
 		}
 
 	      else
-		cerr << "Unknown tag '" << tag << "' in PARAGRAPH" << endl;    
-	      
+		cerr << "Unknown tag '" << tag << "' in PARAGRAPH" << endl;
+	
 	      if (!parser.close(tag))
 		{
 		  cerr << "ERR: Closing Child" << endl;
@@ -842,10 +864,10 @@ void KPTextObject::loadKTextObject(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	    }
 	  txtParagraph->setDepth(txtParagraph->getDepth());
 	}
-	  
+	
       else
-	cerr << "Unknown tag '" << tag << "' in TEXTOBJ" << endl;    
-      
+	cerr << "Unknown tag '" << tag << "' in TEXTOBJ" << endl;
+
       if (!parser.close(tag))
 	{
 	  cerr << "ERR: Closing Child" << endl;

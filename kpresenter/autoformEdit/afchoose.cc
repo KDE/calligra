@@ -45,7 +45,7 @@ void AFChoose::getGroups()
   afDir += "/kpresenter/autoforms/";
   QString str;
   char* c = new char[256];
-  
+
   QFile afInf(afDir + ".autoforms");
 
   if (afInf.open(IO_ReadOnly))
@@ -64,7 +64,7 @@ void AFChoose::getGroups()
 	    }
 	  strcpy(c,"");
 	}
-      
+
       afInf.close();
     }
 
@@ -83,8 +83,8 @@ void AFChoose::setupTabs()
   	  grpPtr->loadWid->loadDir(grpPtr->dir.absFilePath(),"*.xpm");
  	  grpPtr->loadWid->move(0,0);
 	  grpPtr->loadWid->setBackgroundColor(kapp->windowColor);
- 	  connect(grpPtr->loadWid,SIGNAL(nameChanged(const char*)),
- 		  this,SLOT(nameChanged(const char*)));
+ 	  connect(grpPtr->loadWid,SIGNAL(nameChanged(const QString &)),
+ 		  this,SLOT(nameChanged(const QString &)));
 	  connect(grpPtr->loadWid,SIGNAL(doubleClicked()),
 		  this,SLOT(chosen()));
 	  connect(grpPtr->loadWid,SIGNAL(doubleClicked()),
@@ -94,7 +94,7 @@ void AFChoose::setupTabs()
  	  addTab(grpPtr->tab,grpPtr->name);
 	}
     }
-}  
+}
 
 /*====================== resize event ============================*/
 void AFChoose::resizeEvent(QResizeEvent *e)
@@ -112,7 +112,7 @@ void AFChoose::resizeEvent(QResizeEvent *e)
 }
 
 /*====================== name changed ===========================*/
-void AFChoose::nameChanged(const char* name)
+void AFChoose::nameChanged(const QString & name)
 {
   QFileInfo fi(name);
 
@@ -130,8 +130,8 @@ void AFChoose::chosen()
     {
       for (grpPtr=groupList.first();grpPtr != 0;grpPtr=groupList.next())
 	{
-	  if (grpPtr->tab->isVisible() && !grpPtr->loadWid->getCurrent().isEmpty()) 
-	    emit formChosen(static_cast<const char*>(QString(grpPtr->name + "/" + grpPtr->loadWid->getCurrent())));
+	  if (grpPtr->tab->isVisible() && !grpPtr->loadWid->getCurrent().isEmpty())
+	    emit formChosen(QString(grpPtr->name + "/" + grpPtr->loadWid->getCurrent()));
 	}
     }
 }

@@ -35,7 +35,7 @@ void RectPreview::drawContents(QPainter* painter)
 {
   int ow = width();
   int oh = height();
-      
+
   painter->setPen(QPen(red));
   painter->setBrush(QBrush(blue));
 
@@ -60,7 +60,7 @@ ConfRectDia::ConfRectDia(QWidget* parent,const char* name)
   eRndX = new KRestrictedLine(gSettings,"","0123456789");
   eRndX->resize(eRndX->sizeHint());
   eRndX->move(lRndX->x(),lRndX->y() + lRndX->height() + 5);
-  connect(eRndX,SIGNAL(textChanged(const char*)),this,SLOT(rndXChanged(const char*)));
+  connect(eRndX,SIGNAL(textChanged(const QString &)),this,SLOT(rndXChanged(const QString &)));
 
   lRndY = new QLabel(i18n("Roundedness Y"),gSettings);
   lRndY->resize(lRndY->sizeHint());
@@ -69,7 +69,7 @@ ConfRectDia::ConfRectDia(QWidget* parent,const char* name)
   eRndY = new KRestrictedLine(gSettings,"","0123456789");
   eRndY->resize(eRndY->sizeHint());
   eRndY->move(lRndY->x(),lRndY->y() + lRndY->height() + 5);
-  connect(eRndY,SIGNAL(textChanged(const char*)),this,SLOT(rndYChanged(const char*)));
+  connect(eRndY,SIGNAL(textChanged(const QString &)),this,SLOT(rndYChanged(const QString &)));
 
   gSettings->resize(max(max(max(lRndX->x() + lRndX->width(),eRndX->x() + eRndX->width()),
 			    lRndY->x() + lRndY->width()),eRndY->x() + eRndY->width()) + 20,
@@ -84,7 +84,7 @@ ConfRectDia::ConfRectDia(QWidget* parent,const char* name)
 
   cancelBut = new QPushButton(this,"BCancel");
   cancelBut->setText(i18n("Cancel"));
- 
+
   applyBut = new QPushButton(this,"BApply");
   applyBut->setText(i18n("Apply"));
 
@@ -121,14 +121,14 @@ ConfRectDia::~ConfRectDia()
 }
 
 /*================================================================*/
-void ConfRectDia::rndXChanged(const char* _rx)
+void ConfRectDia::rndXChanged(const QString & _rx)
 {
   xRnd = atoi(_rx);
   rectPreview->setRnds(xRnd,yRnd);
 }
 
 /*================================================================*/
-void ConfRectDia::rndYChanged(const char* _ry)
+void ConfRectDia::rndYChanged(const QString & _ry)
 {
   yRnd = atoi(_ry);
   rectPreview->setRnds(xRnd,yRnd);

@@ -58,7 +58,7 @@ public:
   unsigned int getPenWidth() {return wid;}
 
   // create pixmap
-  void createPixmap(const char*);
+  void createPixmap(const QString &);
 
 protected:
 
@@ -96,7 +96,7 @@ signals:
 };
 
 #endif //DRAWWIDGET_H
-    
+
 
 
 

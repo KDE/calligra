@@ -163,13 +163,13 @@ public:
   // constructor - destructor
   KoPagePreview(QWidget*,const char*,KoPageLayout);
   ~KoPagePreview();
-  
+
   // set page layout
   void setPageLayout(KoPageLayout);
   void setPageColumns(KoColumns);
 
 protected:
-  
+
   // paint page
   void drawContents(QPainter*);
 
@@ -193,7 +193,7 @@ public:
   KoPageLayoutDia(QWidget*,const char*,KoPageLayout,KoHeadFoot,int);
   KoPageLayoutDia(QWidget* parent,const char* name,KoPageLayout _layout,KoHeadFoot _hf,
 		  KoColumns _kw,KoKWHeaderFooter _kwhf,int tabs);
-  ~KoPageLayoutDia();              
+  ~KoPageLayoutDia();
 
   // show page layout dialog
   static bool pageLayout(KoPageLayout&,KoHeadFoot&,int);
@@ -249,10 +249,10 @@ protected:
   bool enableBorders;
   int flags;
 
-private slots:     
+private slots:
 
   // take changes
-  void Ok() {}                                  
+  void Ok() {}
 
   // combos
   void unitChanged(int);
@@ -270,7 +270,7 @@ private slots:
 
   // spinboxes
   void nColChanged(int);
-  void nSpaceChanged(const char*);
+  void nSpaceChanged(const QString &);
 
 };
 #endif //KOPGLAYOUTDIA_H

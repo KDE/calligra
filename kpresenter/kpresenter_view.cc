@@ -23,7 +23,7 @@
 #define DEBUG
 
 // Qt bug
-char *getenv(const char *name);    
+char *getenv(const char *name);
 
 /*****************************************************************/
 /* class KPresenterFrame                                         */
@@ -49,12 +49,12 @@ KPresenterView::KPresenterView( QWidget *_parent, const char *_name, KPresenterD
   setWidget(this);
 
   OPPartIf::setFocusPolicy(OpenParts::Part::ClickFocus);
- 
+
   m_pKPresenterDoc = 0L;
   m_bKPresenterModified = false;
   m_bUnderConstruction = true;
-  
-  m_lstFrames.setAutoDelete(true);  
+
+  m_lstFrames.setAutoDelete(true);
 
   // init
   backDia = 0;
@@ -119,7 +119,7 @@ void KPresenterView::init()
    ****/
 
   cerr << "Registering menu as " << id() << endl;
-  
+
   OpenParts::MenuBarManager_var menu_bar_manager = m_vMainWindow->menuBarManager();
   if ( !CORBA::is_nil( menu_bar_manager ) )
     menu_bar_manager->registerClient( id(), this );
@@ -134,7 +134,7 @@ void KPresenterView::init()
   if ( !CORBA::is_nil( tool_bar_manager ) )
     tool_bar_manager->registerClient( id(), this );
   else
-    cerr << "Did not get a tool bar manager" << endl;  
+    cerr << "Did not get a tool bar manager" << endl;
 
   KPObject *kpobject;
   for (unsigned int i = 0;i < m_pKPresenterDoc->objectList()->count();i++)
@@ -183,15 +183,15 @@ void KPresenterView::hideAllFrames()
 void KPresenterView::cleanUp()
 {
   if (m_bIsClean) return;
-  
+
   cerr << "1a) Deactivate Frames" << endl;
-  
+
   QListIterator<KPresenterFrame> it(m_lstFrames);
   for(;it.current() != 0L;++it)
     {
       it.current()->detach();
     }
-  
+
   OpenParts::MenuBarManager_var menu_bar_manager = m_vMainWindow->menuBarManager();
   if (!CORBA::is_nil(menu_bar_manager))
     menu_bar_manager->unregisterClient(id());
@@ -256,7 +256,7 @@ CORBA::Boolean KPresenterView::printDlg()
   float left_margin = 0.0;
   float top_margin = 0.0;
 
-  if (makeLandscape) 
+  if (makeLandscape)
     {
       prt.setOrientation(QPrinter::Landscape);
       left_margin = 28.5;
@@ -264,7 +264,7 @@ CORBA::Boolean KPresenterView::printDlg()
     }
 
   if (prt.setup(this))
-    {    
+    {
       page->deSelectAllObj();
       QPainter painter;
       painter.begin(&prt);
@@ -335,7 +335,7 @@ void KPresenterView::editDelPage()
       delete delPageDia;
       delPageDia = 0;
     }
-  
+
   if (m_pKPresenterDoc->getPageNums() < 2)
     {
       QMessageBox::critical((QWidget*)0L,i18n("KPresenter Error"),
@@ -371,7 +371,7 @@ void KPresenterView::editFind()
       searchDia->setMinimumSize(searchDia->width(),searchDia->height());
       QObject::connect(searchDia,SIGNAL(doSearch(QString,bool,bool)),this,SLOT(search(QString,bool,bool)));
       searchDia->show();
-      
+
       searchFirst = true;
     }
 }
@@ -396,7 +396,7 @@ void KPresenterView::editFindReplace()
       QObject::connect(replaceDia,SIGNAL(doSearchReplace(QString,QString,bool,bool)),this,SLOT(replace(QString,QString,bool,bool)));
       QObject::connect(replaceDia,SIGNAL(doSearchReplaceAll(QString,QString,bool)),this,SLOT(replaceAll(QString,QString,bool)));
       replaceDia->show();
-      
+
       searchFirst = true;
     }
 }
@@ -421,7 +421,7 @@ void KPresenterView::insertPage()
       delete insPageDia;
       insPageDia = 0;
     }
-  
+
   insPageDia = new InsPageDia(0,"",m_pKPresenterDoc,getCurrPgNum());
   insPageDia->setCaption(i18n("KPresenter - Insert Page"));
   insPageDia->resize(insPageDia->minimumSize());
@@ -442,7 +442,7 @@ void KPresenterView::insertPicture()
   page->setToolEditMode(TEM_MOUSE);
   page->deSelectAllObj();
 
-  QString file = KFilePreviewDialog::getOpenFileName(0,
+  QString file = KFilePreviewDialog::getOpenFileName(QString::null,
 						     i18n("*.gif *GIF *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM "
 							  "*.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW *.jpg *.JPG *.jpeg *.JPEG "
 							  "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|All pictures\n"
@@ -452,8 +452,9 @@ void KPresenterView::insertPicture()
 							  "*.xbm *.XBM|XWindow Pitmaps\n"
 							  "*.xpm *.XPM|Pixmaps\n"
 							  "*.pnm *.PNM *.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW "
-							  "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|PNM-Pictures"),0);
-  
+							  "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|PNM-Pictures"),
+						     0L);
+
   if (!file.isEmpty()) m_pKPresenterDoc->insertPicture(file.data(),xOffset,yOffset);
 
 //   QEvent ev(Event_Leave);
@@ -468,7 +469,7 @@ void KPresenterView::insertClipart()
 {
   page->setToolEditMode(TEM_MOUSE);
   page->deSelectAllObj();
-  QString file = KFilePreviewDialog::getOpenFileName(0,i18n("*.WMF *.wmf|Windows Metafiles"),0);
+  QString file = KFilePreviewDialog::getOpenFileName(QString::null,i18n("*.WMF *.wmf|Windows Metafiles"),0L);
   if (!file.isEmpty()) m_pKPresenterDoc->insertClipart(file.data(),xOffset,yOffset);
 
 //   QEvent ev(Event_Leave);
@@ -514,7 +515,7 @@ void KPresenterView::toolsDiagramm()
 
   vector<KoDocumentEntry> vec = koQueryDocuments( "'IDL:KDiagramm/DocumentFactory:1.0' in RepoID", 1 );
   if ( vec.size() == 0 )
-  {    
+  {
     cout << "Got no results" << endl;
     QMessageBox::critical( 0L, i18n("Error"), i18n("Sorry, no charting component registered"), i18n("Ok") );
     return;
@@ -532,7 +533,7 @@ void KPresenterView::toolsTable()
 
   vector<KoDocumentEntry> vec = koQueryDocuments( "'IDL:KSpread/DocumentFactory:1.0' in RepoID", 1 );
   if ( vec.size() == 0 )
-  {    
+  {
     cout << "Got no results" << endl;
     QMessageBox::critical( 0L, i18n("Error"), i18n("Sorry, no table component registered"), i18n("Ok") );
     return;
@@ -550,7 +551,7 @@ void KPresenterView::toolsFormula()
 
   vector<KoDocumentEntry> vec = koQueryDocuments( "'IDL:KFormula/DocumentFactory:1.0' in RepoID", 1 );
   if ( vec.size() == 0 )
-  {    
+  {
     cout << "Got no results" << endl;
     QMessageBox::critical( 0L, i18n("Error"), i18n("Sorry, no formula component registered"), i18n("Ok") );
     return;
@@ -574,7 +575,7 @@ void KPresenterView::toolsAutoform()
   page->setToolEditMode(TEM_MOUSE);
   if (afChoose)
     {
-      QObject::disconnect(afChoose,SIGNAL(formChosen(const char*)),this,SLOT(afChooseOk(const char*)));
+      QObject::disconnect(afChoose,SIGNAL(formChosen(const QString &)),this,SLOT(afChooseOk(const QString &)));
       afChoose->close();
       delete afChoose;
       afChoose = 0;
@@ -584,7 +585,7 @@ void KPresenterView::toolsAutoform()
   afChoose->setCaption(i18n("KPresenter - Insert an Autoform"));
   afChoose->setMaximumSize(afChoose->width(),afChoose->height());
   afChoose->setMinimumSize(afChoose->width(),afChoose->height());
-  QObject::connect(afChoose,SIGNAL(formChosen(const char*)),this,SLOT(afChooseOk(const char*)));
+  QObject::connect(afChoose,SIGNAL(formChosen(const QString &)),this,SLOT(afChooseOk(const QString &)));
   afChoose->show();
 }
 
@@ -597,7 +598,7 @@ void KPresenterView::toolsObject()
   KoDocumentEntry pe = KoPartSelectDia::selectPart();
   if ( pe.name.isEmpty() )
     return;
-  
+
   page->setToolEditMode(INS_OBJECT);
   page->setPartEntry(pe);
 }
@@ -784,8 +785,8 @@ void KPresenterView::extraLayout()
   KoPageLayout pgLayout = m_pKPresenterDoc->pageLayout();
   KoPageLayout oldLayout = m_pKPresenterDoc->pageLayout();
   KoHeadFoot hf;
-  
-  if (KoPageLayoutDia::pageLayout(pgLayout,hf,FORMAT_AND_BORDERS | USE_NEW_STUFF)) 
+
+  if (KoPageLayoutDia::pageLayout(pgLayout,hf,FORMAT_AND_BORDERS | USE_NEW_STUFF))
     {
       PgLayoutCmd *pgLayoutCmd = new PgLayoutCmd(i18n("Set Pagelayout"),pgLayout,oldLayout,this);
       pgLayoutCmd->execute();
@@ -874,7 +875,7 @@ void KPresenterView::screenPresStructView()
     {
       page->deSelectAllObj();
       page->setToolEditMode(TEM_MOUSE);
-      
+
       presStructView = new PresStructViewer(0,"",kPresenterDoc(),this);
       presStructView->setCaption(i18n("KPresenter - Presentation structure viewer"));
       QObject::connect(presStructView,SIGNAL(presStructViewClosed()),this,SLOT(psvClosed()));
@@ -918,7 +919,7 @@ void KPresenterView::screenStart()
 {
   bool fullScreen = true; //m_rToolBarScreen->isButtonOn(m_idButtonScreen_Full);
 
-  if (page && !presStarted) 
+  if (page && !presStarted)
     {
       // disable screensaver
       QString pidFile;
@@ -940,11 +941,11 @@ void KPresenterView::screenStart()
 	{
 	  page->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
 
-	  float _presFaktW = static_cast<float>(page->width()) / 
-	    static_cast<float>(kPresenterDoc()->getPageSize(0,0,0,1.0,false).width()) > 1.0 ? 
+	  float _presFaktW = static_cast<float>(page->width()) /
+	    static_cast<float>(kPresenterDoc()->getPageSize(0,0,0,1.0,false).width()) > 1.0 ?
 	    static_cast<float>(page->width()) / static_cast<float>(kPresenterDoc()->getPageSize(0,0,0,1.0,false).width()) : 1.0;
-	  float _presFaktH = static_cast<float>(page->height()) / 
-	    static_cast<float>(kPresenterDoc()->getPageSize(0,0,0,1.0,false).height()) > 
+	  float _presFaktH = static_cast<float>(page->height()) /
+	    static_cast<float>(kPresenterDoc()->getPageSize(0,0,0,1.0,false).height()) >
 	    1.0 ? static_cast<float>(page->height()) / static_cast<float>(kPresenterDoc()->getPageSize(0,0,0,1.0,false).height()) : 1.0;
 	  float _presFakt = min(_presFaktW,_presFaktH);
 	  page->setPresFakt(_presFakt);
@@ -954,7 +955,7 @@ void KPresenterView::screenStart()
 	  float _presFakt = 1.0;
 	  page->setPresFakt(_presFakt);
 	}
-	  
+	
       _xOffset = xOffset;
       _yOffset = yOffset;
       xOffset = 0;
@@ -1054,7 +1055,7 @@ void KPresenterView::screenPause()
 /*========================== screen first =======================*/
 void KPresenterView::screenFirst()
 {
-  vert->setValue(0); 
+  vert->setValue(0);
 }
 
 /*========================== screen pevious =====================*/
@@ -1064,7 +1065,7 @@ void KPresenterView::screenPrev()
     {
       if (page->pPrev(true))
 	{
-	  yOffset -= kPresenterDoc()->getPageSize(0,0,0,page->presFakt(),false).height(); 
+	  yOffset -= kPresenterDoc()->getPageSize(0,0,0,page->presFakt(),false).height();
 	  page->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
 	  page->repaint(false);
 	  page->setFocus();
@@ -1079,7 +1080,7 @@ void KPresenterView::screenPrev()
       p.end();
     }
   else
-    vert->setValue(yOffset - kPresenterDoc()->getPageSize(0,0,0,1.0,false).height()); 
+    vert->setValue(yOffset - kPresenterDoc()->getPageSize(0,0,0,1.0,false).height());
 }
 
 /*========================== screen next ========================*/
@@ -1089,7 +1090,7 @@ void KPresenterView::screenNext()
     {
       if (page->pNext(true))
 	{
-	  yOffset += kPresenterDoc()->getPageSize(0,0,0,page->presFakt(),false).height(); 
+	  yOffset += kPresenterDoc()->getPageSize(0,0,0,page->presFakt(),false).height();
 	  page->resize(QApplication::desktop()->width(),QApplication::desktop()->height());
 	  //page->repaint(false);
 	  page->setFocus();
@@ -1104,7 +1105,7 @@ void KPresenterView::screenNext()
       p.end();
     }
   else
-    vert->setValue(yOffset + kPresenterDoc()->getPageSize(0,0,0,1.0,false).height()); 
+    vert->setValue(yOffset + kPresenterDoc()->getPageSize(0,0,0,1.0,false).height());
 }
 
 /*========================== screen last ========================*/
@@ -1299,7 +1300,7 @@ void KPresenterView::textEnumList()
       QString _before = page->kTxtObj()->enumListType().before;
       QString _after = page->kTxtObj()->enumListType().after;
       int _start = page->kTxtObj()->enumListType().start;
-      
+
       if (KEnumListDia::enumListDia(_type,_font,_color,_before,_after,_start,fontList))
 	{
 	  KTextObject::EnumListType elt;
@@ -1311,7 +1312,7 @@ void KPresenterView::textEnumList()
 	  elt.start = _start;
 	  page->kTxtObj()->setEnumListType(elt);
 	}
-      
+
       page->kTxtObj()->setObjType(KTextObject::ENUM_LIST);
     }
 }
@@ -1324,7 +1325,7 @@ void KPresenterView::textUnsortList()
       QList<QFont> *_font = page->kTxtObj()->unsortListType().font;
       QList<QColor> *_color = page->kTxtObj()->unsortListType().color;
       QList<int> *_c = page->kTxtObj()->unsortListType().chr;
-      
+
       if (KCharSelectDia::selectChar(_font,_color,_c,fontList))
 	{
 	  KTextObject::UnsortListType ult;
@@ -1333,7 +1334,7 @@ void KPresenterView::textUnsortList()
 	  ult.chr = _c;
 	  page->kTxtObj()->setUnsortListType(ult);
 	}
-      
+
       page->kTxtObj()->setObjType(KTextObject::UNSORT_LIST);
     }
 }
@@ -1373,7 +1374,7 @@ void KPresenterView::textSpacing()
 	  delete spacingDia;
 	  spacingDia = 0;
 	}
-      
+
       spacingDia = new SpacingDia(0,obj->getLineSpacing(),obj->getDistBefore(),obj->getDistAfter());
       spacingDia->setMaximumSize(spacingDia->width(),spacingDia->height());
       spacingDia->setMinimumSize(spacingDia->width(),spacingDia->height());
@@ -1539,7 +1540,7 @@ void KPresenterView::createGUI()
   setupScrollbars();
   setRanges();
   setupRulers();
- 
+
   if (m_pKPresenterDoc && page)
     QObject::connect(page,SIGNAL(stopPres()),this,SLOT(stopPres()));
 
@@ -1550,13 +1551,13 @@ void KPresenterView::createGUI()
 void KPresenterView::construct()
 {
   if (m_pKPresenterDoc == 0L && !m_bUnderConstruction) return;
-  
+
   assert(m_pKPresenterDoc != 0L);
-  
+
   m_bUnderConstruction = false;
 
   m_lstFrames.clear();
-  
+
 //   QListIterator<KPresenterChild> it = m_pKPresenterDoc->childIterator();
 //   for(;it.current();++it)
 //     slotInsertObject(it.current());
@@ -1584,11 +1585,11 @@ void KPresenterView::slotKPresenterModified()
 
 /*======================= insert object ========================*/
 void KPresenterView::slotInsertObject(KPresenterChild *_child,KPPartObject *_kppo)
-{ 
+{
   OpenParts::View_var v;
 
   try
-  { 
+  {
     v = _child->createView( m_vKoMainWindow );
   }
   catch (OpenParts::Document::MultipleViewsNotSupported &_ex)
@@ -1598,7 +1599,7 @@ void KPresenterView::slotInsertObject(KPresenterChild *_child,KPPartObject *_kpp
     printf("Could not create view\n");
     exit(1);
   }
-  
+
   if (CORBA::is_nil(v))
   {
     printf("void KPresenterView::slotInsertObject( const KRect& _rect, OPParts::Document_ptr _doc )\n");
@@ -1622,12 +1623,12 @@ void KPresenterView::slotInsertObject(KPresenterChild *_child,KPPartObject *_kpp
 //   page->insertChild(p);
 //   vert->raise();
 //   horz->raise();
-  
+
 //   QObject::connect(p,SIGNAL(sig_geometryEnd(KoFrame*)),
 // 		   this,SLOT(slotGeometryEnd(KoFrame*)));
 //   QObject::connect(p,SIGNAL(sig_moveEnd(KoFrame*)),
-// 		   this,SLOT(slotMoveEnd(KoFrame*)));  
-} 
+// 		   this,SLOT(slotMoveEnd(KoFrame*)));
+}
 
 /*========================== update child geometry =============*/
 void KPresenterView::slotUpdateChildGeometry(KPresenterChild *_child)
@@ -1638,12 +1639,12 @@ void KPresenterView::slotUpdateChildGeometry(KPresenterChild *_child)
 //   for (;it.current() && !f;++it)
 //     if (it.current()->child() == _child)
 //       f = it.current();
-  
+
 //   assert(f != 0L);
-  
+
 //   // Are we already up to date ?
 //   if (_child->geometry() == f->partGeometry()) return;
-  
+
 //   // TODO scaling
 //   f->setPartGeometry(_child->geometry());
 }
@@ -1684,12 +1685,12 @@ void KPresenterView::backOk(bool takeGlobal)
 }
 
 /*================== autoform chosen =============================*/
-void KPresenterView::afChooseOk(const char* c)
+void KPresenterView::afChooseOk(const QString & c)
 {
   QString afDir = kapp->kde_datadir();
   QFileInfo fileInfo(c);
   QString fileName(afDir + "/kpresenter/autoforms/" + fileInfo.dirPath(false) + "/" + fileInfo.baseName() + ".atf");
-  
+
   page->deSelectAllObj();
   //m_pKPresenterDoc->insertAutoform(pen,brush,lineBegin,lineEnd,fillType,gColor1,gColor2,gType,fileName,xOffset,yOffset);
 
@@ -1844,7 +1845,7 @@ void KPresenterView::delPageOk(int _page,DelPageMode _delPageMode)
   setRanges();
 }
 
-   
+
 /*================================================================*/
 void KPresenterView::insPageOk(int _page,InsPageMode _insPageMode,InsertPos _insPos)
 {
@@ -1898,7 +1899,7 @@ void KPresenterView::scrollH(int _value)
   if (!presStarted)
     {
       int xo = xOffset;
-      
+
       xOffset = _value;
       page->scroll(xo - _value,0);
       if (h_ruler)
@@ -1912,7 +1913,7 @@ void KPresenterView::scrollV(int _value)
   if (!presStarted)
     {
       int yo = yOffset;
-      
+
       yOffset = _value;
       page->scroll(0,yo - _value);
 
@@ -1924,7 +1925,7 @@ void KPresenterView::scrollV(int _value)
 /*====================== font changed ===========================*/
 void KPresenterView::fontChanged(QFont* font)
 {
-  if (font->operator!=(tbFont)) 
+  if (font->operator!=(tbFont))
     {
       tbFont.setFamily(font->family());
       tbFont.setBold(font->bold());
@@ -1953,7 +1954,7 @@ void KPresenterView::colorChanged(QColor* color)
 
       tbColor.setRgb(color->rgb());
       m_vToolBarText->setButtonPixmap(ID_TEXT_COLOR, pix );
-    }      
+    }
 }
 
 /*====================== align changed ==========================*/
@@ -1970,19 +1971,19 @@ void KPresenterView::alignChanged(TxtParagraph::HorzAlign align)
       m_vMenuText->setItemChecked(m_idMenuText_TAlign_Right,false);
       switch (tbAlign)
 	{
-	case TxtParagraph::LEFT: 
+	case TxtParagraph::LEFT:
 	  {
-	    m_vToolBarText->setButton(ID_ALEFT,true); 
+	    m_vToolBarText->setButton(ID_ALEFT,true);
 	    m_vMenuText->setItemChecked(m_idMenuText_TAlign_Left,true);
 	  } break;
 	case TxtParagraph::CENTER:
 	  {
-	    m_vToolBarText->setButton(ID_ACENTER,true); 
+	    m_vToolBarText->setButton(ID_ACENTER,true);
 	    m_vMenuText->setItemChecked(m_idMenuText_TAlign_Center,true);
 	  } break;
 	case TxtParagraph::RIGHT:
 	  {
-	    m_vToolBarText->setButton(ID_ARIGHT,true); 
+	    m_vToolBarText->setButton(ID_ARIGHT,true);
 	    m_vMenuText->setItemChecked(m_idMenuText_TAlign_Right,true);
 	  } break;
 	default: break;
@@ -2274,7 +2275,7 @@ void KPresenterView::presPen10()
 void KPresenterView::presPenColor()
 {
   QColor c = kPresenterDoc()->presPen().color();
-  
+
   if (KColorDialog::getColor(c))
     {
       QPen p = kPresenterDoc()->presPen();
@@ -2361,14 +2362,14 @@ void KPresenterView::search(QString text,bool sensitive,bool direction)
       from.setKTextObject(page->kTxtObj());
       to.setKTextObject(page->kTxtObj());
       bool found = false;
-      
+
       if (!direction)
 	{
 	  if (searchFirst)
 	    found = page->kTxtObj()->searchFirst(text,&from,&to,sensitive);
 	  else
 	    found = page->kTxtObj()->searchNext(text,&from,&to,sensitive);
-      
+
 	  if (found)
 	    searchFirst = false;
 	  else
@@ -2385,7 +2386,7 @@ void KPresenterView::search(QString text,bool sensitive,bool direction)
 	    found = page->kTxtObj()->searchFirstRev(text,&from,&to,sensitive);
 	  else
 	    found = page->kTxtObj()->searchNextRev(text,&from,&to,sensitive);
-	  
+	
 	  if (found)
 	    searchFirst = false;
 	  else
@@ -2408,14 +2409,14 @@ void KPresenterView::replace(QString search,QString replace,bool sensitive,bool 
       from.setKTextObject(page->kTxtObj());
       to.setKTextObject(page->kTxtObj());
       bool found = false;
-      
+
       if (!direction)
 	{
 	  if (searchFirst)
 	    found = page->kTxtObj()->replaceFirst(search,replace,&from,&to,sensitive);
 	  else
 	    found = page->kTxtObj()->replaceNext(search,replace,&from,&to,sensitive);
-	  
+	
 	  if (found)
 	    searchFirst = false;
 	  else
@@ -2433,7 +2434,7 @@ void KPresenterView::replace(QString search,QString replace,bool sensitive,bool 
 	    found = page->kTxtObj()->replaceFirstRev(search,replace,&from,&to,sensitive);
 	  else
 	    found = page->kTxtObj()->replaceNextRev(search,replace,&from,&to,sensitive);
-	  
+	
 	  if (found)
 	    searchFirst = false;
 	  else
@@ -2457,9 +2458,9 @@ void KPresenterView::replaceAll(QString search,QString replace,bool sensitive)
       from.setKTextObject(page->kTxtObj());
       to.setKTextObject(page->kTxtObj());
       bool found = true;
-      
+
       page->kTxtObj()->setSearchIndexToBegin();
-      
+
       while (found)
 	found = page->kTxtObj()->replaceNext(search,replace,&from,&to,sensitive);
     }
@@ -2488,11 +2489,11 @@ void KPresenterView::repaint(KRect r,bool erase)
 }
 
 /*====================== change pciture =========================*/
-void KPresenterView::changePicture(unsigned int,const char* filename)
+void KPresenterView::changePicture(unsigned int,const QString & filename)
 {
   QFileInfo fileInfo(filename);
 
-  QString file = KFilePreviewDialog::getOpenFileName(0,
+  QString file = KFilePreviewDialog::getOpenFileName(QString::null,
 						     i18n("*.gif *GIF *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM "
 							  "*.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW *.jpg *.JPG *.jpeg *.JPEG "
 							  "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|All pictures\n"
@@ -2502,7 +2503,8 @@ void KPresenterView::changePicture(unsigned int,const char* filename)
 							  "*.xbm *.XBM|XWindow Pitmaps\n"
 							  "*.xpm *.XPM|Pixmaps\n"
 							  "*.pnm *.PNM *.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW "
-							  "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|PNM-Pictures"),0);
+							  "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|PNM-Pictures"),
+						     0L);
 
   if (!file.isEmpty()) m_pKPresenterDoc->changePicture(file,xOffset,yOffset);
 }
@@ -2511,7 +2513,8 @@ void KPresenterView::changePicture(unsigned int,const char* filename)
 void KPresenterView::changeClipart(unsigned int,QString filename)
 {
   QFileInfo fileInfo(filename);
-  QString file = KFilePreviewDialog::getOpenFileName(fileInfo.dirPath(false),i18n("*.WMF *.wmf|Windows Metafiles"),0);
+  QString file = KFilePreviewDialog::getOpenFileName(fileInfo.dirPath(false),i18n("*.WMF *.wmf|Windows Metafiles"),
+						     0L);
 
   if (!file.isEmpty()) m_pKPresenterDoc->changeClipart(file,xOffset,yOffset);
 }
@@ -2522,7 +2525,7 @@ void KPresenterView::resizeEvent(QResizeEvent *e)
   if (!presStarted) QWidget::resizeEvent(e);
 
   if ( ( KoViewIf::hasFocus() || mode() == KOffice::View::RootMode ) && m_bShowGUI )
-  { 
+  {
     horz->show();
     vert->show();
     h_ruler->show();
@@ -2543,7 +2546,7 @@ void KPresenterView::resizeEvent(QResizeEvent *e)
     v_ruler->hide();
     page->move(0,0);
     page->resize(widget()->width(),widget()->height());
-  }  
+  }
 }
 
 /*======================= key press event =======================*/
@@ -2573,7 +2576,7 @@ void KPresenterView::doAutomaticScreenPres()
 void KPresenterView::hideParts()
 {
   QListIterator<KPresenterFrame> it(m_lstFrames);
-  
+
   for(;it.current();++it)
     it.current()->hide();
 }
@@ -2593,10 +2596,10 @@ void KPresenterView::presentParts(float _presFakt,QPainter* _painter,KRect _rect
 //       child_geometry.setRight(chl.current()->_geometry().right());
 //       child_geometry.setBottom(chl.current()->_geometry().bottom());
 
-//       scale_w = static_cast<float>(chl.current()->_geometry().width()) * _presFakt / 
+//       scale_w = static_cast<float>(chl.current()->_geometry().width()) * _presFakt /
 // 	static_cast<float>(chl.current()->_geometry().width());
 
-//       scale_h = static_cast<float>(chl.current()->_geometry().height()) * _presFakt / 
+//       scale_h = static_cast<float>(chl.current()->_geometry().height()) * _presFakt /
 // 	static_cast<float>(chl.current()->_geometry().height());
 
 //       _painter->translate(static_cast<float>(child_geometry.left()) - static_cast<float>(_diffx),
@@ -2608,7 +2611,7 @@ void KPresenterView::presentParts(float _presFakt,QPainter* _painter,KRect _rect
 
 //       if (pic && !pic->isNull())
 // 	_painter->drawPicture(*pic);
-  
+
 //       _painter->resetXForm();
 //     }
 }
@@ -2634,7 +2637,7 @@ void KPresenterView::changeUndo(QString _text,bool _enable)
       m_vToolBarEdit->setItemEnabled(ID_UNDO,true);
     }
   else
-    {    
+    {
       m_vMenuEdit->changeItemText(i18n("No Undo possible"),m_idMenuEdit_Undo);
       m_vMenuEdit->setItemEnabled(m_idMenuEdit_Undo,false);
       m_vToolBarEdit->setItemEnabled(ID_UNDO,false);
@@ -2679,7 +2682,7 @@ bool KPresenterView::event( const char* _event, const CORBA::Any& _value )
   MAPPING( OpenPartsUI::eventCreateToolBar, OpenPartsUI::typeCreateToolBar_var, mappingCreateToolbar );
 
   END_EVENT_MAPPER;
-  
+
   return false;
 }
 
@@ -2699,7 +2702,7 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     return true;
   }
 
-  // MENU Edit  
+  // MENU Edit
   _menubar->insertMenu( i18n( "&Edit" ), m_vMenuEdit, -1, -1 );
 
   OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap(ICON("undo.xpm"));
@@ -2897,9 +2900,9 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_idMenuExtra_Layout = m_vMenuExtra->insertItem(i18n("Pa&ge Layout..."), this,"extraLayout", 0 );
 
   m_vMenuExtra->insertSeparator( -1 );
-  
+
   m_idMenuExtra_Options = m_vMenuExtra->insertItem(i18n("&Options..."), this,"extraOptions", 0 );
-      
+
   // MENU Screenpresentation
   _menubar->insertMenu( i18n( "&Screen Presentations" ), m_vMenuScreen, -1, -1 );
 
@@ -2914,11 +2917,11 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_idMenuScreen_Start = m_vMenuScreen->insertItem6(pix, i18n("&Start"), this,"screenStart", CTRL + Key_G, -1, -1 );
 
   //       pix = OPUIUtils::convertPixmap(ICON("stop.xpm"));
-  //       m_idMenuScreen_Stop = m_vMenuScreen->insertItem6(pix, 
+  //       m_idMenuScreen_Stop = m_vMenuScreen->insertItem6(pix,
   // 						    i18n("St&op"),m_idMenuScreen,
   // 						    this,"screenStop");
   //       pix = OPUIUtils::convertPixmap(ICON("pause.xpm"));
-  //       m_idMenuScreen_Pause = m_vMenuScreen->insertItem6(pix, 
+  //       m_idMenuScreen_Pause = m_vMenuScreen->insertItem6(pix,
   // 						     i18n("Pa&use"),m_idMenuScreen,
   // 						     this,"screenPause");
   m_vMenuScreen->insertSeparator( -1 );
@@ -2946,11 +2949,11 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
 
   m_vMenuScreen_Pen->insertItem8( i18n("Pen width") ,m_vMenuScreen_PenWidth, -1, -1 );
   m_vMenuScreen_PenWidth->setCheckable( true );
-  
+
   m_idMenuScreen_PenColor = m_vMenuScreen_Pen->insertItem( i18n("Pen color"), this,"presPenColoridl", 0 );
 
   m_idMenuScreen_PenW1 = m_vMenuScreen_PenWidth->insertItem(i18n("1"), this,"presPen1idl", 0 );
-  
+
   m_idMenuScreen_PenW2 = m_vMenuScreen_PenWidth->insertItem(i18n("2"), this,"presPen2idl", 0 );
 
   m_idMenuScreen_PenW3 = m_vMenuScreen_PenWidth->insertItem(i18n("3"), this,"presPen3idl", 0 );
@@ -2976,7 +2979,7 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     _menubar->insertSeparator( -1 );
     _menubar->setHelpMenu( _menubar->insertMenu( i18n( "&Help" ), m_vMenuHelp, -1, -1 ) );
   }
-    
+
   m_idMenuHelp_Contents = m_vMenuHelp->insertItem( i18n( "&Contents" ), this, "helpContents", 0 );
 
   // Torben: Reggie, Check/uncheck all checked menu items to their actual value in this function
@@ -2993,7 +2996,7 @@ void KPresenterView::setupPopupMenus()
 {
   QString pixdir;
   QPixmap pixmap;
-  pixdir = KApplication::kde_datadir() + QString("/kpresenter/toolbar/");  
+  pixdir = KApplication::kde_datadir() + QString("/kpresenter/toolbar/");
 
   // create right button pen menu
   rb_pen_width = new QPopupMenu();
@@ -3093,7 +3096,7 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   }
 
   cerr << "bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )" << endl;
-  
+
   ///////
   // Edit
   ///////
@@ -3104,7 +3107,7 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   OpenPartsUI::Pixmap_var pix = OPUIUtils::convertPixmap(ICON("undo.xpm"));
   m_idButtonEdit_Undo = m_vToolBarEdit->insertButton2( pix, ID_UNDO, SIGNAL( clicked() ), this, "editUndo", true, i18n("Undo"), -1 );
   m_vToolBarEdit->setItemEnabled(ID_UNDO,false);
-  
+
   // redo
   pix = OPUIUtils::convertPixmap(ICON("redo.xpm"));
   m_idButtonEdit_Redo = m_vToolBarEdit->insertButton2( pix, ID_REDO, SIGNAL( clicked() ), this, "editRedo", true, i18n("Redo"), -1 );
@@ -3125,7 +3128,7 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   m_idButtonEdit_Paste = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "editPaste", true, i18n("Paste"), -1 );
 
   m_vToolBarEdit->insertSeparator( -1 );
-  
+
   // delete
   pix = OPUIUtils::convertPixmap(ICON("delete.xpm"));
   m_idButtonEdit_Delete = m_vToolBarEdit->insertButton2( pix, 1, SIGNAL( clicked() ), this, "editDelete", true, i18n("Delete"), -1 );
@@ -3137,7 +3140,7 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   //////
   m_vToolBarInsert = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
   m_vToolBarInsert->setFullWidth(false);
- 
+
   // page
   pix = OPUIUtils::convertPixmap(ICON("newslide.xpm"));
   m_idButtonInsert_Page = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertPage", true, i18n("Insert Page"), -1 );
@@ -3146,11 +3149,11 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   // picture
   pix = OPUIUtils::convertPixmap(ICON("picture.xpm"));
   m_idButtonInsert_Picture = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertPicture", true, i18n("Insert Picture"), -1 );
-      
+
   // clipart
   pix = OPUIUtils::convertPixmap(ICON("clipart.xpm"));
   m_idButtonInsert_Clipart = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertClipart", true, i18n("Insert Clipart"), -1 );
-  
+
   m_vToolBarInsert->enable( OpenPartsUI::Show );
 
   ///////
@@ -3161,7 +3164,7 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
 
   // mouse
   pix = OPUIUtils::convertPixmap(ICON("mouse.xpm"));
-  m_idButtonTools_Mouse = m_vToolBarTools->insertButton2( pix, ID_TOOL_MOUSE, SIGNAL( clicked() ), this, "toolsMouse", 
+  m_idButtonTools_Mouse = m_vToolBarTools->insertButton2( pix, ID_TOOL_MOUSE, SIGNAL( clicked() ), this, "toolsMouse",
 							   true, i18n("Mouse Tool"), -1 );
 
   m_vToolBarTools->setToggle(ID_TOOL_MOUSE,true);
@@ -3169,7 +3172,7 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
 
   // line
   pix = OPUIUtils::convertPixmap(ICON("line.xpm"));
-  m_idButtonTools_Line = m_vToolBarTools->insertButton2( pix, ID_TOOL_LINE, SIGNAL( clicked() ), this, "toolsLine", 
+  m_idButtonTools_Line = m_vToolBarTools->insertButton2( pix, ID_TOOL_LINE, SIGNAL( clicked() ), this, "toolsLine",
 							   true, i18n("Create Line"), -1 );
 
   m_vToolBarTools->setToggle(ID_TOOL_LINE,true);
@@ -3177,63 +3180,63 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
 
   // rectangle
   pix = OPUIUtils::convertPixmap(ICON("rectangle.xpm"));
-  m_idButtonTools_Rectangle = m_vToolBarTools->insertButton2( pix, ID_TOOL_RECT, SIGNAL( clicked() ), this, "toolsRectangle", 
+  m_idButtonTools_Rectangle = m_vToolBarTools->insertButton2( pix, ID_TOOL_RECT, SIGNAL( clicked() ), this, "toolsRectangle",
 								true, i18n("Create Rectangle"), -1 );
   m_vToolBarTools->setToggle(ID_TOOL_RECT,true);
   m_vToolBarTools->setButton(ID_TOOL_RECT,false);
 
   // circle or ellipse
   pix = OPUIUtils::convertPixmap(ICON("circle.xpm"));
-  m_idButtonTools_Circle = m_vToolBarTools->insertButton2( pix, ID_TOOL_ELLIPSE, SIGNAL( clicked() ), this, "toolsCircleOrEllipse", 
+  m_idButtonTools_Circle = m_vToolBarTools->insertButton2( pix, ID_TOOL_ELLIPSE, SIGNAL( clicked() ), this, "toolsCircleOrEllipse",
 							     true, i18n("Create Circle or Ellipse"), -1 );
   m_vToolBarTools->setToggle(ID_TOOL_ELLIPSE,true);
   m_vToolBarTools->setButton(ID_TOOL_ELLIPSE,false);
 
   // circle or ellipse
   pix = OPUIUtils::convertPixmap(ICON("pie.xpm"));
-  m_idButtonTools_Pie = m_vToolBarTools->insertButton2( pix, ID_TOOL_PIE, SIGNAL( clicked() ), this, "toolsPie", 
+  m_idButtonTools_Pie = m_vToolBarTools->insertButton2( pix, ID_TOOL_PIE, SIGNAL( clicked() ), this, "toolsPie",
 							  true, i18n("Create Pie/Arc/Chord"), -1 );
   m_vToolBarTools->setToggle(ID_TOOL_PIE,true);
   m_vToolBarTools->setButton(ID_TOOL_PIE,false);
 
   // text
   pix = OPUIUtils::convertPixmap(ICON("text.xpm"));
-  m_idButtonTools_Text = m_vToolBarTools->insertButton2( pix, ID_TOOL_TEXT, SIGNAL( clicked() ), this, "toolsText", 
+  m_idButtonTools_Text = m_vToolBarTools->insertButton2( pix, ID_TOOL_TEXT, SIGNAL( clicked() ), this, "toolsText",
 							   true, i18n("Create Text"), -1 );
   m_vToolBarTools->setToggle(ID_TOOL_TEXT,true);
   m_vToolBarTools->setButton(ID_TOOL_TEXT,false);
 
   // autoform
   pix = OPUIUtils::convertPixmap(ICON("autoform.xpm"));
-  m_idButtonTools_Autoform = m_vToolBarTools->insertButton2( pix, ID_TOOL_AUTOFORM, SIGNAL( clicked() ), this, "toolsAutoform", 
+  m_idButtonTools_Autoform = m_vToolBarTools->insertButton2( pix, ID_TOOL_AUTOFORM, SIGNAL( clicked() ), this, "toolsAutoform",
 							     true, i18n("Create Autoform"), -1 );
   m_vToolBarTools->setToggle(ID_TOOL_AUTOFORM,true);
   m_vToolBarTools->setButton(ID_TOOL_AUTOFORM,false);
 
   // diagramm
   pix = OPUIUtils::convertPixmap(ICON("chart.xpm"));
-  m_idButtonTools_Diagramm = m_vToolBarTools->insertButton2( pix, ID_TOOL_DIAGRAMM, SIGNAL( clicked() ), this, "toolsDiagramm", 
+  m_idButtonTools_Diagramm = m_vToolBarTools->insertButton2( pix, ID_TOOL_DIAGRAMM, SIGNAL( clicked() ), this, "toolsDiagramm",
 							   true, i18n("Create Diagramm"), -1 );
   m_vToolBarTools->setToggle(ID_TOOL_DIAGRAMM,true);
   m_vToolBarTools->setButton(ID_TOOL_DIAGRAMM,false);
 
   // table
   pix = OPUIUtils::convertPixmap(ICON("table.xpm"));
-  m_idButtonTools_Table = m_vToolBarTools->insertButton2( pix, ID_TOOL_TABLE, SIGNAL( clicked() ), this, "toolsTable", 
+  m_idButtonTools_Table = m_vToolBarTools->insertButton2( pix, ID_TOOL_TABLE, SIGNAL( clicked() ), this, "toolsTable",
 							   true, i18n("Create Table"), -1 );
   m_vToolBarTools->setToggle(ID_TOOL_TABLE,true);
   m_vToolBarTools->setButton(ID_TOOL_TABLE,false);
 
   // formula
   pix = OPUIUtils::convertPixmap(ICON("formula.xpm"));
-  m_idButtonTools_Formula = m_vToolBarTools->insertButton2( pix, ID_TOOL_FORMULA, SIGNAL( clicked() ), this, "toolsFormula", 
+  m_idButtonTools_Formula = m_vToolBarTools->insertButton2( pix, ID_TOOL_FORMULA, SIGNAL( clicked() ), this, "toolsFormula",
 							   true, i18n("Create Formula"), -1 );
   m_vToolBarTools->setToggle(ID_TOOL_FORMULA,true);
   m_vToolBarTools->setButton(ID_TOOL_FORMULA,false);
 
   // parts
   pix = OPUIUtils::convertPixmap(ICON("parts.xpm"));
-  m_idButtonTools_Part = m_vToolBarTools->insertButton2( pix, ID_TOOL_OBJECT, SIGNAL( clicked() ), this, "toolsObject", 
+  m_idButtonTools_Part = m_vToolBarTools->insertButton2( pix, ID_TOOL_OBJECT, SIGNAL( clicked() ), this, "toolsObject",
 							   true, i18n("Create Object"), -1 );
   m_vToolBarTools->setToggle(ID_TOOL_OBJECT,true);
   m_vToolBarTools->setButton(ID_TOOL_OBJECT,false);
@@ -3255,7 +3258,7 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
     sprintf( buffer, "%i", i );
     sizelist[i-4] = CORBA::string_dup( buffer );
   }
-  m_idComboText_FontSize = m_vToolBarText->insertCombo( sizelist, ID_FONT_SIZE, true, SIGNAL( activated( const char* ) ),
+  m_idComboText_FontSize = m_vToolBarText->insertCombo( sizelist, ID_FONT_SIZE, true, SIGNAL( activated( const QString & ) ),
 							this, "sizeSelected", true,
 							i18n( "Font Size"  ), 50, -1, OpenPartsUI::AtBottom );
   m_vToolBarText->setCurrentComboItem(ID_FONT_SIZE,16);
@@ -3267,7 +3270,7 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   fonts.length( fontList.count() );
   for(unsigned int i = 0;i < fontList.count(); i++ )
     fonts[i] = CORBA::string_dup( fontList.at(i) );
-  m_idComboText_FontList = m_vToolBarText->insertCombo( fonts, ID_FONT_LIST, true, SIGNAL( activated( const char* ) ), this,
+  m_idComboText_FontList = m_vToolBarText->insertCombo( fonts, ID_FONT_LIST, true, SIGNAL( activated( const QString & ) ), this,
 							"fontSelected", true, i18n("Font List"),
 							200, -1, OpenPartsUI::AtBottom );
   tbFont.setFamily(fontList.at(0));
@@ -3291,7 +3294,7 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
 
   // underline
   pix = OPUIUtils::convertPixmap(ICON("underl.xpm"));
-  m_idButtonText_Underline = m_vToolBarText->insertButton2( pix, ID_UNDERLINE, SIGNAL( clicked() ), this, "textUnderline", 
+  m_idButtonText_Underline = m_vToolBarText->insertButton2( pix, ID_UNDERLINE, SIGNAL( clicked() ), this, "textUnderline",
 							    true, i18n("Underline"), -1 );
   m_vToolBarText->setToggle(ID_UNDERLINE,true);
   m_vToolBarText->setButton(ID_UNDERLINE,false);
@@ -3305,40 +3308,40 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   tbColor = black;
 
   m_vToolBarText->insertSeparator( -1 );
-  
+
   // align left
   pix = OPUIUtils::convertPixmap(ICON("alignLeft.xpm"));
-  m_idButtonText_ALeft = m_vToolBarText->insertButton2( pix, ID_ALEFT, SIGNAL( clicked() ), this, "textAlignLeft", 
+  m_idButtonText_ALeft = m_vToolBarText->insertButton2( pix, ID_ALEFT, SIGNAL( clicked() ), this, "textAlignLeft",
 							true, i18n("Align Left"), -1 );
   m_vToolBarText->setToggle(ID_ALEFT,true);
   m_vToolBarText->setButton(ID_ALEFT,true);
   tbAlign = TxtParagraph::LEFT;
-  
+
   // align center
   pix = OPUIUtils::convertPixmap(ICON("alignCenter.xpm"));
-  m_idButtonText_ACenter = m_vToolBarText->insertButton2( pix, ID_ACENTER, SIGNAL( clicked() ), this, "textAlignCenter", 
+  m_idButtonText_ACenter = m_vToolBarText->insertButton2( pix, ID_ACENTER, SIGNAL( clicked() ), this, "textAlignCenter",
 							  true, i18n("Align Center"), -1 );
   m_vToolBarText->setToggle(ID_ACENTER,true);
   m_vToolBarText->setButton(ID_ACENTER,false);
-  
+
   // align right
   pix = OPUIUtils::convertPixmap(ICON("alignRight.xpm"));
-  m_idButtonText_ARight = m_vToolBarText->insertButton2( pix, ID_ARIGHT, SIGNAL( clicked() ), this, "textAlignRight", 
+  m_idButtonText_ARight = m_vToolBarText->insertButton2( pix, ID_ARIGHT, SIGNAL( clicked() ), this, "textAlignRight",
 							 true, i18n("Align Right"), -1 );
   m_vToolBarText->setToggle(ID_ARIGHT,true);
   m_vToolBarText->setButton(ID_ARIGHT,false);
 
   m_vToolBarText->insertSeparator( -1 );
-  
+
   // enum list
   pix = OPUIUtils::convertPixmap(ICON("enumList.xpm"));
-  m_idButtonText_EnumList = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textEnumList", 
+  m_idButtonText_EnumList = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textEnumList",
 							   true, i18n("Enumerated List"), -1 );
-  
+
   // unsorted list
   pix = OPUIUtils::convertPixmap(ICON("unsortedList.xpm"));
   m_idButtonText_UnsortList = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textUnsortList", true, i18n("Unsorted List"), -1 );
-  
+
   // normal text
   pix = OPUIUtils::convertPixmap(ICON("normalText.xpm"));
   m_idButtonText_NormalText = m_vToolBarText->insertButton2( pix, 1, SIGNAL( clicked() ), this, "textNormalText", true, i18n("Normal Text"), -1 );
@@ -3376,28 +3379,28 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
 
   // rect
   pix = OPUIUtils::convertPixmap(ICON("rectangle2.xpm"));
-  m_idButtonExtra_Rect = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraConfigRect", true, 
+  m_idButtonExtra_Rect = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraConfigRect", true,
 							 i18n("Configure Rectangle"), -1 );
   m_vToolBarExtra->insertSeparator( -1 );
 
   // raise
   pix = OPUIUtils::convertPixmap(ICON("raise.xpm"));
   m_idButtonExtra_Raise = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraRaise", true, i18n("Raise object"), -1 );
-  
+
   // lower
   pix = OPUIUtils::convertPixmap(ICON("lower.xpm"));
   m_idButtonExtra_Lower = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraLower", true, i18n("Lower object"), -1 );
   m_vToolBarExtra->insertSeparator( -1 );
-  
+
   // rotate
   pix = OPUIUtils::convertPixmap(ICON("rotate.xpm"));
   m_idButtonExtra_Rotate = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraRotate", true, i18n("Rotate object"), -1 );
-  
+
   // shadow
   pix = OPUIUtils::convertPixmap(ICON("shadow.xpm"));
   m_idButtonExtra_Shadow = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraShadow", true, i18n("Shadow object"), -1 );
   m_vToolBarExtra->insertSeparator( -1 );
-  
+
   // align
   pix = OPUIUtils::convertPixmap(ICON("alignobjs.xpm"));
   m_idButtonExtra_Align = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraAlignObj", true, i18n("Align object"), -1 );
@@ -3405,11 +3408,11 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
 
   // line begin
   pix = OPUIUtils::convertPixmap(ICON("line_begin.xpm"));
-  m_idButtonExtra_LineBegin = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraLineBegin", 
+  m_idButtonExtra_LineBegin = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraLineBegin",
 							      true, i18n("Line Begin"), -1 );
   // line end
   pix = OPUIUtils::convertPixmap(ICON("line_end.xpm"));
-  m_idButtonExtra_LineEnd = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraLineEnd", 
+  m_idButtonExtra_LineEnd = m_vToolBarExtra->insertButton2( pix, 1, SIGNAL( clicked() ), this, "extraLineEnd",
 							      true, i18n("Line End"), -1 );
 
   m_vToolBarExtra->enable( OpenPartsUI::Show );
@@ -3424,7 +3427,7 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   pix = OPUIUtils::convertPixmap(ICON("kpstart.xpm"));
   m_idButtonScreen_Start = m_vToolBarScreen->insertButton2( pix, 1, SIGNAL( clicked() ), this, "screenStart", true, i18n("Start"), -1 );
   m_vToolBarScreen->insertSeparator( -1 );
-  
+
   // first
   pix = OPUIUtils::convertPixmap(ICON("first.xpm"));
   m_idButtonScreen_First = m_vToolBarScreen->insertButton2( pix, 1, SIGNAL( clicked() ), this, "screenFirst", true, i18n("First"), -1 );
@@ -3441,7 +3444,7 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   pix = OPUIUtils::convertPixmap(ICON("last.xpm"));
   m_idButtonScreen_Last = m_vToolBarScreen->insertButton2( pix, 1, SIGNAL( clicked() ), this, "screenLast", true, i18n("Last"), -1 );
   m_vToolBarScreen->insertSeparator( -1 );
-  
+
   // effect
   pix = OPUIUtils::convertPixmap(ICON("effect.xpm"));
   m_idButtonScreen_Effect = m_vToolBarScreen->insertButton2( pix, 1, SIGNAL( clicked() ), this, "screenAssignEffect", true, i18n("Assign Effect"), -1 );
@@ -3458,10 +3461,10 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   /*
    * ColorBar
    */
-  
+
   m_vColorBar = _factory->createColorBar(OpenPartsUI::ToolBarFactory::Transient);
   m_vColorBar->setFullWidth(false);
-  
+
   int i = 0;
   const QColor cpalette[] = {white,red,green,blue,cyan,magenta,yellow,
 			     darkRed,darkGreen,darkBlue,darkCyan,
@@ -3474,9 +3477,9 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
 				cpalette[i].blue(),
 				i != 0);
 
-  m_vColorBar->addConnection(SIGNAL(fgColorSelected(int)),this, 
+  m_vColorBar->addConnection(SIGNAL(fgColorSelected(int)),this,
 			     "setPenColor");
-  m_vColorBar->addConnection(SIGNAL(bgColorSelected(int)),this, 
+  m_vColorBar->addConnection(SIGNAL(bgColorSelected(int)),this,
 			     "setFillColor");
 
   m_vColorBar->setBarPos(OpenPartsUI::Right);
@@ -3541,7 +3544,7 @@ void KPresenterView::setupAccelerators()
 //   m_vMenuExtra->setAccel(CTRL + Key_Plus,m_idMenuExtra_Raise);
 //   m_vMenuExtra->setAccel(ALT + Key_R,m_idMenuExtra_Rotate);
 //   m_vMenuExtra->setAccel(ALT + Key_S,m_idMenuExtra_Shadow);
- 
+
 //   // screen menu
 //   m_vMenuScreen->setAccel(ALT + Key_A,m_idMenuScreen_AssignEffect);
 //   m_vMenuScreen->setAccel(CTRL + Key_G,m_idMenuScreen_Start);
@@ -3608,12 +3611,12 @@ void KPresenterView::setRanges()
   if (vert && horz && page && m_pKPresenterDoc)
     {
       int range;
-      
+
       vert->setSteps(10,m_pKPresenterDoc->getPageSize(0,xOffset,yOffset,1.0,false).height() + 20);
-      range = (m_pKPresenterDoc->getPageSize(0,xOffset,yOffset,1.0,false).height()) * 
-	m_pKPresenterDoc->getPageNums() - page->height() + 16 
+      range = (m_pKPresenterDoc->getPageSize(0,xOffset,yOffset,1.0,false).height()) *
+	m_pKPresenterDoc->getPageNums() - page->height() + 16
 	< 0 ? 0 :
-	(m_pKPresenterDoc->getPageSize(0,xOffset,yOffset,1.0,false).height()) * 
+	(m_pKPresenterDoc->getPageSize(0,xOffset,yOffset,1.0,false).height()) *
 	m_pKPresenterDoc->getPageNums() - page->height() + 16;
       vert->setRange(0,range);
       horz->setSteps(10,m_pKPresenterDoc->getPageSize(0,xOffset,yOffset,1.0,false).width() + 16 - page->width());
@@ -3626,14 +3629,14 @@ void KPresenterView::setRanges()
 /*==============================================================*/
 void KPresenterView::skipToPage(int _num)
 {
-  vert->setValue(kPresenterDoc()->getPageSize(_num,0,0,1.0,false).y()); 
+  vert->setValue(kPresenterDoc()->getPageSize(_num,0,0,1.0,false).y());
 }
 
 /*==============================================================*/
 void KPresenterView::makeRectVisible(KRect _rect)
 {
-  horz->setValue(_rect.x()); 
-  vert->setValue(_rect.y()); 
+  horz->setValue(_rect.x());
+  vert->setValue(_rect.y());
 }
 
 /*==============================================================*/
@@ -3644,7 +3647,7 @@ void KPresenterView::restartPresStructView()
   delete presStructView;
   presStructView = 0;
   page->deSelectAllObj();
-      
+
   presStructView = new PresStructViewer(0,"",kPresenterDoc(),this);
   presStructView->setCaption(i18n("KPresenter - Presentation structure viewer"));
   QObject::connect(presStructView,SIGNAL(presStructViewClosed()),this,SLOT(psvClosed()));
@@ -3685,12 +3688,12 @@ void KPresenterView::setTool(ToolEditMode toolEditMode)
 	m_vMenuTools->setItemChecked(m_idMenuTools_Mouse,true);
 	m_vToolBarTools->setButton(ID_TOOL_MOUSE,true);
       } break;
-    case INS_LINE: 
+    case INS_LINE:
       {
 	m_vMenuTools->setItemChecked(m_idMenuTools_Line,true);
 	m_vToolBarTools->setButton(ID_TOOL_LINE,true);
       } break;
-    case INS_RECT: 
+    case INS_RECT:
       {
 	m_vMenuTools->setItemChecked(m_idMenuTools_Rectangle,true);
 	m_vToolBarTools->setButton(ID_TOOL_RECT,true);
@@ -3701,7 +3704,7 @@ void KPresenterView::setTool(ToolEditMode toolEditMode)
 	m_vToolBarTools->setButton(ID_TOOL_ELLIPSE,true);
       } break;
     case INS_PIE:
-      {      
+      {
 	m_vMenuTools->setItemChecked(m_idMenuTools_Pie,true);
 	m_vToolBarTools->setButton(ID_TOOL_PIE,true);
       } break;
@@ -3748,7 +3751,7 @@ QString KPresenterView::colorToPixString(QColor c)
   c.rgb(&r,&g,&b);
 
   pix = "/* XPM */\n";
-  
+
   pix += "static char * text_xpm[] = {\n";
 
   line.sprintf("%c 20 20 1 1 %c,\n",34,34);
@@ -3760,7 +3763,7 @@ QString KPresenterView::colorToPixString(QColor c)
   line.sprintf("%c                    %c,\n",34,34);
   for (unsigned int i = 1;i <= 20;i++)
     pix += line.copy();
-    
+
   line.sprintf("%c                    %c};\n",34,34);
   pix += line.copy();
 
@@ -3775,36 +3778,36 @@ void KPresenterView::getFonts()
   char** fontNames;
   char** fontNames_copy;
   QString qfontname;
-  
+
   kde_display = kapp->getDisplay();
 
   bool have_installed = kapp->getKDEFonts(&fontList);
-  
+
   if (have_installed)
     return;
 
   fontNames = XListFonts(kde_display,"*",32767,&numFonts);
   fontNames_copy = fontNames;
-  
+
   for(int i = 0; i < numFonts; i++){
-    
+
     if (**fontNames != '-')
-      { 
+      {
 	fontNames ++;
       continue;
       };
-    
+
     qfontname = "";
     qfontname = *fontNames;
     int dash = qfontname.find ('-', 1, TRUE);
 
-    if (dash == -1) 
+    if (dash == -1)
       {
 	fontNames ++;
 	continue;
       }
 
-    int dash_two = qfontname.find ('-', dash + 1 , TRUE); 
+    int dash_two = qfontname.find ('-', dash + 1 , TRUE);
 
     if (dash == -1)
       {
@@ -3822,11 +3825,11 @@ void KPresenterView::getFonts()
 	    fontList.inSort(qfontname);
 	}
       }
-    
-    
+
+
     fontNames ++;
 
   }
-  
+
   XFreeFontNames(fontNames_copy);
 }

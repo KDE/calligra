@@ -23,26 +23,26 @@
  * A preview handler for the KFilePreviewDialag that shows
  * a WMF object.
  */
-bool wmfPreviewHandler(const KFileInfo* fInfo,const QString fileName,QString&,QPixmap& pixmap) 
+bool wmfPreviewHandler(const KFileInfo* fInfo,const QString fileName,QString&,QPixmap& pixmap)
 {
   bool res = false;
   QString ext = fileName.right(3).lower();
 
-  if (fInfo->isFile() && (ext == "wmf")) 
+  if (fInfo->isFile() && (ext == "wmf"))
     {
       QWinMetaFile wmf;
-      
-      if (wmf.load(fileName.data())) 
+
+      if (wmf.load(fileName.data()))
 	{
 	  QPicture pic;
-	  wmf.paint(&pic);                                                     
+	  wmf.paint(&pic);
 
 	  pixmap = QPixmap(200,200);
 	  QPainter p;
 
 	  p.begin(&pixmap);
-	  p.setBackgroundColor(white);
-	  pixmap.fill(white);
+	  p.setBackgroundColor(Qt::white);
+	  pixmap.fill(Qt::white);
 
 	  QRect oldWin = p.window();
 	  QRect vPort = p.viewport();
@@ -51,7 +51,7 @@ bool wmfPreviewHandler(const KFileInfo* fInfo,const QString fileName,QString&,QP
 	  p.setWindow(oldWin);
 	  p.setViewport(vPort);
 	  p.end();
-	  
+	
 	  res = true;
 	}
     }
@@ -62,9 +62,9 @@ bool wmfPreviewHandler(const KFileInfo* fInfo,const QString fileName,QString&,QP
  * A preview handler for the KFilePreviewDialag that shows
  * a Pixmap object.
  */
-bool pixmapPreviewHandler(const KFileInfo* fInfo,const QString fileName,QString&,QPixmap& pixmap) 
+bool pixmapPreviewHandler(const KFileInfo* fInfo,const QString fileName,QString&,QPixmap& pixmap)
 {
-  if (fInfo->isFile()) 
+  if (fInfo->isFile())
     {
       pixmap.load(fileName.data());
       return !pixmap.isNull();

@@ -93,16 +93,16 @@ class BackDia : public QDialog
 public:
 
   // constructor - destructor
-  BackDia(QWidget* parent=0,const char* name=0,    
+  BackDia(QWidget* parent=0,const char* name=0,
 	  BackType backType=BT_COLOR,QColor backColor1=white,
 	  QColor backColor2=white,BCType _bcType=BCT_PLAIN,
 	  QString backPic=0,QString backClip=0,
 	  BackView backPicView=BV_TILED);
-  ~BackDia();                                      
-  
+  ~BackDia();
+
   // get values
-  QColor getBackColor1() {return color1Choose->color();}     
-  QColor getBackColor2() {return color2Choose->color();}     
+  QColor getBackColor1() {return color1Choose->color();}
+  QColor getBackColor2() {return color2Choose->color();}
   BCType getBackColorType() {return bcType;}
   BackType getBackType();
   QString getBackPixFilename() {return chosenPic;}
@@ -112,7 +112,7 @@ public:
 private:
 
   // dialog objects
-  QLabel *lPicName,*picPreview,*lClipName,*colorPreview;        
+  QLabel *lPicName,*picPreview,*lClipName,*colorPreview;
   QGroupBox *grp1,*grp2,*grp3;
   QRadioButton *radioColor,*radioPic,*vTiled,*vCenter,*vZoom,*radioClip;
   QComboBox *cType;
@@ -126,19 +126,19 @@ private:
   QString chosenClip;
   ClipPreview *clipPreview;
   BCType bcType;
-  
+
 private slots:
 
   // dialog slots
   void selectCType(int);
-  void selectPic(); 
+  void selectPic();
   void selectClip();
-  void openPic(const char*);
-  void openClip(const char*);
+  void openPic(const QString &);
+  void openClip(const QString &);
   void colChanged(const QColor&) {selectCType(bcType);}
-  void Ok() {emit backOk(false);} 
-  void Apply() {emit backOk(false);} 
-  void ApplyGlobal() {emit backOk(true);} 
+  void Ok() {emit backOk(false);}
+  void Apply() {emit backOk(false);}
+  void ApplyGlobal() {emit backOk(true);}
 
 signals:
 

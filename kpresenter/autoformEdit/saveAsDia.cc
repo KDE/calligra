@@ -27,7 +27,7 @@ SaveAsDia::SaveAsDia(QWidget* parent=0,const char* name=0)
 {
   groupList.setAutoDelete(true);
   getGroups();
-  
+
   grpLabel = new QLabel("Choose autoform group",this);
   grpLabel->resize(grpLabel->sizeHint());
   grpLabel->move(20,10);
@@ -36,7 +36,7 @@ SaveAsDia::SaveAsDia(QWidget* parent=0,const char* name=0)
   groups->insertStrList(&groupList);
   groups->resize(grpLabel->width(),100);
   groups->move(grpLabel->x(),grpLabel->y()+grpLabel->height()+10);
-  
+
   grpEdit = new QLineEdit(this);
   grpEdit->resize(grpLabel->width(),grpEdit->sizeHint().height());
   grpEdit->move(grpLabel->x(),groups->y()+groups->height()+20);
@@ -56,7 +56,7 @@ SaveAsDia::SaveAsDia(QWidget* parent=0,const char* name=0)
   cancelBut = new QPushButton(this);
   cancelBut->setText("Cancel");
   cancelBut->resize(cancelBut->sizeHint());
-    
+
   okBut = new QPushButton(this);
   okBut->setText("OK");
   okBut->setAutoRepeat(false);
@@ -64,7 +64,7 @@ SaveAsDia::SaveAsDia(QWidget* parent=0,const char* name=0)
   okBut->setAutoDefault(true);
   okBut->setDefault(true);
   okBut->resize(cancelBut->width(),okBut->sizeHint().height());
-    
+
   cancelBut->move(nameLabel->x()+nameLabel->width()-cancelBut->width(),addGrp->y()+addGrp->height()+20);
   okBut->move(cancelBut->x()-10-okBut->width(),cancelBut->y());
 
@@ -87,13 +87,13 @@ void SaveAsDia::getGroups()
   // global autoforms
   QString afDir = qstrdup(KApplication::kde_datadir());
   afDir += "/kpresenter/autoforms/";
-  
+
   char* c = new char[256];
   QString str;
-  
+
   QFile afInf(afDir + ".autoforms");
   afInf.open(IO_ReadOnly);
-  
+
   while (!afInf.atEnd())
     {
       afInf.readLine(c,256);
@@ -116,7 +116,7 @@ void SaveAsDia::saveAs()
   QString grpName;
 
   if (groups->currentItem() != -1 && !fileName.isEmpty())
-    { 
+    {
       grpName = groups->text(groups->currentItem());
       emit saveATFAs(grpName.data(),fileName.data());
     }
@@ -125,7 +125,7 @@ void SaveAsDia::saveAs()
 /*======================= add a group =============================*/
 void SaveAsDia::addGroup()
 {
-  const char *s = grpEdit->text();
+  QString s = grpEdit->text();
   QString str(s);
   QString str2;
   QString afDir = qstrdup(KApplication::kde_datadir());

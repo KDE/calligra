@@ -1,21 +1,21 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 #ifndef __kspread_layout_h__
 #define __kspread_layout_h__
@@ -43,15 +43,15 @@ public:
     virtual ~KSpreadLayout();
 
     void KSpreadLayout::copy( KSpreadLayout &_l );
-    
+
     virtual void setAlign( Align _align ) { m_eAlign = _align; }
     virtual void setFaktor( double _d ) { m_dFaktor = _d; }
     virtual void setPrefix( const char * _prefix ) { m_strPrefix = _prefix; }
     virtual void setPostfix( const char * _postfix ) { m_strPostfix = _postfix; }
     virtual void setPrecision( int _p ) { m_iPrecision = _p; }
-    
-    virtual void setLeftBorderStyle( PenStyle s ) { m_leftBorderPen.setStyle( s ); }
-    virtual void setTopBorderStyle( PenStyle s ) { m_topBorderPen.setStyle( s ); }
+
+    virtual void setLeftBorderStyle( Qt::PenStyle s ) { m_leftBorderPen.setStyle( s ); }
+    virtual void setTopBorderStyle( Qt::PenStyle s ) { m_topBorderPen.setStyle( s ); }
 
     virtual void setLeftBorderColor( const QColor & _c ) { m_leftBorderPen.setColor( _c ); }
     virtual void setTopBorderColor( const QColor & _c ) { m_topBorderPen.setColor( _c ); }
@@ -71,7 +71,7 @@ public:
     virtual void setFloatColor( FloatColor _c ) { m_eFloatColor = _c; }
 
     virtual void setMultiRow( bool _b ) { m_bMultiRow = _b; }
-    
+
     /**
      * Since the @ref KSpreadView  supports zooming, you can get the value zoomed
      * or not scaled. The not scaled value may be of interest in a
@@ -85,8 +85,8 @@ public:
     /**
      * @return the style used to draw the left border.
      */
-    virtual PenStyle leftBorderStyle() { return m_leftBorderPen.style(); }
-    virtual PenStyle topBorderStyle() { return m_topBorderPen.style(); }
+    virtual Qt::PenStyle leftBorderStyle() { return m_leftBorderPen.style(); }
+    virtual Qt::PenStyle topBorderStyle() { return m_topBorderPen.style(); }
 
     /**
      * @return the precision of the floating point representation.
@@ -132,12 +132,12 @@ public:
     virtual Align align() { return m_eAlign; }
 
     virtual double faktor() { return m_dFaktor; }
-    
+
     virtual bool multiRow() { return m_bMultiRow; }
 
     virtual const QPen& leftBorderPen() { return m_leftBorderPen; }
     virtual const QPen& topBorderPen() { return m_topBorderPen; }
-  
+
     virtual const QPen& textPen() { return m_textPen; }
 
     virtual void setTextPen( const QPen& _p ) { m_textPen = _p; m_textColor = _p.color(); }
@@ -145,13 +145,13 @@ public:
     virtual void setTopBorderPen( const QPen& _p ) { m_topBorderPen = _p; m_iTopBorderWidth = _p.width(); }
 
     KSpreadTable* table() { return m_pTable; }
-  
+
 protected:
     /**
      * Tells wether text may be broken into multiple lines.
      */
     bool m_bMultiRow;
-    
+
     /**
      * Alignment of the text
      */
@@ -173,7 +173,7 @@ protected:
      * The background color
      */
     QColor m_bgColor;
-        
+
     /**
      * The not zoomed border width of the left border
      */
@@ -182,7 +182,7 @@ protected:
      * The pen used to draw the left border
      */
     QPen m_leftBorderPen;
- 
+
     /**
      * The not zoomed border width of the top border
      */
@@ -191,7 +191,7 @@ protected:
      * The pen used to draw the top border
      */
     QPen m_topBorderPen;
-   
+
     /**
      * The precision of the floatinf point representation
      * If precision is -1, this means that no precision is specified.
@@ -220,7 +220,7 @@ protected:
      * Used to display 0.15 as 15% for example.
      */
     double m_dFaktor;
-    
+
     KSpreadTable *m_pTable;
 };
 
@@ -233,7 +233,7 @@ public:
 
     virtual bool save( ostream& );
     virtual bool load( KOMLParser&, vector<KOMLAttrib>& );
-    
+
     /**
      * @param _view is needed to get information about the zooming factor.
      *
@@ -273,7 +273,7 @@ public:
      * @see #time
      */
     int time() { return m_iTime; }
-    
+
     /**
      * @return the row for this RowLayout. May be 0 if this is the default layout.
      *
@@ -323,7 +323,7 @@ public:
 
     virtual bool save( ostream& );
     virtual bool load( KOMLParser&, vector<KOMLAttrib>& );
-  
+
     /**
      * @param _view is needed to get information about the zooming factor.
      *
@@ -348,7 +348,7 @@ public:
      * @param _w is assumed to be a unzoomed millimeter value.
      */
     void setMMWidth( float _w );
-    
+
     /**
      * Use this function to tell this layout that it is the default layout.
      */
@@ -357,7 +357,7 @@ public:
      * @return TRUE if this is the default layout.
      */
     bool isDefault() { return m_bDefault; }
-    
+
     /**
      * @return the last time this layout has been modified.
      */
@@ -374,7 +374,7 @@ public:
 
     void setDisplayDirtyFlag() { m_bDisplayDirtyFlag = true; }
     void clearDisplayDirtyFlag() { m_bDisplayDirtyFlag = false; }
-    
+
 protected:
     /**
      * Height of the cells in unzoomed millimeters.

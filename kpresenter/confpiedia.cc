@@ -38,7 +38,7 @@ void PiePreview::drawContents(QPainter* painter)
 {
   int ow = width() - 8;
   int oh = height() - 8;
-      
+
   painter->setPen(pen);
   int pw = pen.width();
   painter->setBrush(brush);
@@ -90,7 +90,7 @@ ConfPieDia::ConfPieDia(QWidget* parent,const char* name)
   eAngle = new KRestrictedLine(gSettings,"","0123456789");
   eAngle->resize(eAngle->sizeHint());
   eAngle->move(lAngle->x(),lAngle->y() + lAngle->height() + 5);
-  connect(eAngle,SIGNAL(textChanged(const char*)),this,SLOT(angleChanged(const char*)));
+  connect(eAngle,SIGNAL(textChanged(const QString &)),this,SLOT(angleChanged(const QString &)));
 
   lLen = new QLabel(i18n("Length (0 .. 5760 = (0 * 16) .. (360 * 16)):"),gSettings);
   lLen->resize(lLen->sizeHint());
@@ -99,7 +99,7 @@ ConfPieDia::ConfPieDia(QWidget* parent,const char* name)
   eLen = new KRestrictedLine(gSettings,"","0123456789");
   eLen->resize(eLen->sizeHint());
   eLen->move(lLen->x(),lLen->y() + lLen->height() + 5);
-  connect(eLen,SIGNAL(textChanged(const char*)),this,SLOT(lengthChanged(const char*)));
+  connect(eLen,SIGNAL(textChanged(const QString &)),this,SLOT(lengthChanged(const QString &)));
 
   gSettings->resize(max(max(max(max(cType->x() + cType->width(),lAngle->x() + lAngle->width()),eAngle->x() + eAngle->width()),
 			    lLen->x() + lLen->width()),eLen->x() + eLen->width()) + 20,
@@ -114,7 +114,7 @@ ConfPieDia::ConfPieDia(QWidget* parent,const char* name)
 
   cancelBut = new QPushButton(this,"BCancel");
   cancelBut->setText(i18n("Cancel"));
- 
+
   applyBut = new QPushButton(this,"BApply");
   applyBut->setText(i18n("Apply"));
 
@@ -151,14 +151,14 @@ ConfPieDia::~ConfPieDia()
 }
 
 /*================================================================*/
-void ConfPieDia::lengthChanged(const char* _len)
+void ConfPieDia::lengthChanged(const QString & _len)
 {
   len = atoi(_len);
   piePreview->setLength(len);
 }
 
 /*================================================================*/
-void ConfPieDia::angleChanged(const char* _angle)
+void ConfPieDia::angleChanged(const QString & _angle)
 {
   angle = atoi(_angle);
   piePreview->setAngle(angle);

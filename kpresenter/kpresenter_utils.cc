@@ -17,8 +17,8 @@
 /*========================== draw a figure =======================*/
 void drawFigure(LineEnd figure,QPainter* painter,KPoint coord,QColor color,int _w,float angle)
 {
-  painter->setPen(NoPen);
-  painter->setBrush(NoBrush);
+  painter->setPen(Qt::NoPen);
+  painter->setBrush(Qt::NoBrush);
 
   switch (figure)
     {

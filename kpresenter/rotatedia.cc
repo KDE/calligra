@@ -106,7 +106,7 @@ RotateDia::RotateDia(QWidget* parent,const char* name)
   connect(deg180,SIGNAL(clicked()),this,SLOT(deg180clicked()));
   connect(deg270,SIGNAL(clicked()),this,SLOT(deg270clicked()));
   connect(degCustom,SIGNAL(clicked()),this,SLOT(degCustomclicked()));
-  connect(custom,SIGNAL(textChanged(const char*)),this,SLOT(degCustomChanged(const char*)));
+  connect(custom,SIGNAL(textChanged(const QString &)),this,SLOT(degCustomChanged(const QString &)));
 
   preview = new QGroupBox(i18n("Preview"),this);
   preview->move(angle->x() + angle->width() + 20,20);
@@ -117,7 +117,7 @@ RotateDia::RotateDia(QWidget* parent,const char* name)
 
   cancelBut = new QPushButton(this,"BCancel");
   cancelBut->setText(i18n("Cancel"));
- 
+
   applyBut = new QPushButton(this,"BApply");
   applyBut->setText(i18n("Apply"));
 
@@ -249,7 +249,7 @@ void RotateDia::degCustomclicked()
 }
 
 /*======================= deg custom changed =====================*/
-void RotateDia::degCustomChanged(const char* t)
+void RotateDia::degCustomChanged(const QString & t)
 {
   rPreview->setAngle(atof(t));
   _angle = atof(t);

@@ -162,6 +162,8 @@ void Page::drawObjects(QPainter *painter,KRect rect)
 /*==================== handle mouse pressed ======================*/
 void Page::mousePressEvent(QMouseEvent *e)
 {
+  setFocus();
+  
   KPObject *kpobject = 0;
 
   oldMx = e->x();
@@ -2324,14 +2326,14 @@ void Page::doObjEffects()
 	
 	  QList<KRect> changes;
 	  changes.setAutoDelete(true);
-	  
+	
 	  if (_time.elapsed() >= 1)
 	    {
 	      nothingHappens = true;
 	      _step++;
-	      
+	
 	      changes.clear();
-	      
+	
 	      for (i = 0;i < static_cast<int>(_objList.count());i++)
 		{
 		  kpobject = _objList.at(i);
@@ -2348,10 +2350,10 @@ void Page::doObjEffects()
 		  int by = br.y();
 		  int bw = br.width();
 		  int bh = br.height();
-		  
+		
 		  KRect oldRect;
 		  KRect newRect;
-		  
+		
 		  if (static_cast<int>(xy.count() - 1) < i)
 		    {
 		      xy.append(new KRect(0,0,0,0));
@@ -2359,7 +2361,7 @@ void Page::doObjEffects()
 		    }
 		  else
 		    oldRect.setRect(bx - (diffx() - xy.at(i)->x()),by - (diffy() - xy.at(i)->y()),bw - xy.at(i)->width(),bh - xy.at(i)->height());
-		  
+		
 		  switch (kpobject->getEffect())
 		    {
 		    case EF_NONE:
@@ -2547,7 +2549,7 @@ void Page::doObjEffects()
 		      } break;
 		    default: break;
 		    }
-		  
+		
 		  newRect.setRect(bx - (diffx() - xy.at(i)->x()),by - (diffy() - xy.at(i)->y()),bw - xy.at(i)->width(),bh - xy.at(i)->height());
 		  newRect = newRect.unite(oldRect);
 
@@ -2560,18 +2562,18 @@ void Page::doObjEffects()
 			  int s1 = r.width() * r.height();
 			  int s2 = newRect.width() * newRect.height();
 			  int s3 = changes.at(j)->width() * changes.at(j)->height();
-			  
+			
 			  if (s1 > (s2 / 100) * 50 || s1 > (s3 / 100) * 50)
 			    {
 			      KRect rr = changes.at(j)->unite(newRect);
 			      changes.at(j)->setRect(rr.x(),rr.y(),rr.width(),rr.height());
-			      append = false;			  
+			      append = false;			
 			    }
-			  
+			
 			  break;
 			}
 		    }
-		  
+		
 		  if (append)
 		    changes.append(new KRect(newRect));
 		}
@@ -2582,7 +2584,7 @@ void Page::doObjEffects()
 		  changed = changes.at(i);
 		  bitBlt(this,changed->x(),changed->y(),screen,changed->x(),changed->y(),changed->width(),changed->height());
 		}
-	      
+	
 	      delete screen;
 	      screen = new QPixmap(screen_orig);
 	
@@ -2622,7 +2624,7 @@ void Page::drawObject(KPObject *kpobject,QPixmap *screen,int _x,int _y,int _w,in
   QPainter p;
   p.begin(screen);
   //p.begin(this);
-  
+
   if (_w != 0 || _h != 0)
     {
       p.setClipping(true);

@@ -2,7 +2,7 @@
 
 #include <qmsgbox.h>
 #include <stdlib.h>
-#include <dirent.h>   
+#include <dirent.h>
 #include <unistd.h>
 
 #include <kconfig.h>
@@ -18,10 +18,10 @@ KoPrintDia::KoPrintDia( QWidget* parent, const char* name )
 {
     QString dir = kapp->kde_configdir().copy();
     dir += "/printer";
-    
+
     printer->insertItem( i18n( "File" ) );
     printer->insertItem( i18n( "UNIX Printer" ) );
-    
+
     // Read the directory listing
     DIR *dp;
     struct dirent *ep;
@@ -43,25 +43,25 @@ KoPrintDia::KoPrintDia( QWidget* parent, const char* name )
 	}
 	(void) closedir( dp );
     }
-    
+
     copies->setText( "1" );
 
     connect( ok, SIGNAL( clicked() ), this, SLOT( accept() ) );
     connect( cancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
     connect( pageSetup, SIGNAL( clicked() ), this, SLOT( slotPaperLayout() ) );
-    connect( printer, SIGNAL( activated( const char* ) ), this, SLOT( slotPrinter( const char* ) ) );
+    connect( printer, SIGNAL( activated( const QString & ) ), this, SLOT( slotPrinter( const QString & ) ) );
     connect( browse, SIGNAL( clicked() ), this, SLOT( slotBrowse() ) );
-    
+
     printer->setCurrentItem( 0 );
     slotPrinter( printer->currentText() );
 
     setCaption( i18n( "Print Dialog") );
 }
 
-void KoPrintDia::slotPrinter( const char *_printer )
+void KoPrintDia::slotPrinter( const QString &_printer )
 {
   assert( _printer != 0L );
-  
+
     if ( strcmp( _printer, i18n( "File" ) ) == 0 )
     {
 	fileName->setEnabled( TRUE );
@@ -96,7 +96,7 @@ void KoPrintDia::configurePrinter( QPrinter &_printer )
 {
     _printer.setNumCopies( atoi( copies->text() ) );
     // _printer.setOrientation( m_pView->doc()->orientation() );
-    
+
     /* switch( m_pView->doc()->paperFormat() )
     {
     case KSpreadDoc::A4:
@@ -111,7 +111,7 @@ void KoPrintDia::configurePrinter( QPrinter &_printer )
     default:
 	printf("ERROR: Page format not supported by Qt\n");
     } */
-    
+
     if ( strcmp( printer->currentText(), "File" ) == 0 )
     {
 	_printer.setOutputToFile( TRUE );
@@ -273,7 +273,7 @@ bool KoPrintDia::print( QPrinter &_printer, QObject *dest = 0L, const char *slot
     dlg.configurePrinter( _printer );
     return true;
   }
-  
+
   return false;
 }
 

@@ -45,7 +45,7 @@ KEnumListDia::KEnumListDia(QWidget* parent,const char* name,int __type,QFont __f
   fontList.find(_font.family());
   fontCombo->setCurrentItem(fontList.at());
   grid->addMultiCellWidget(fontCombo,1,1,0,2);
-  connect(fontCombo,SIGNAL(activated(const char*)),this,SLOT(fontSelected(const char*)));
+  connect(fontCombo,SIGNAL(activated(const QString &)),this,SLOT(fontSelected(const QString &)));
 
   lSize = new QLabel("Size:",this);
   lSize->resize(lSize->sizeHint());
@@ -103,8 +103,8 @@ KEnumListDia::KEnumListDia(QWidget* parent,const char* name,int __type,QFont __f
   eBefore->setMaxLength(4);
   eBefore->setText(_before.data());
   grid->addWidget(eBefore,5,0);
-  connect(eBefore,SIGNAL(textChanged(const char*)),this,SLOT(beforeChanged(const char*)));
-  
+  connect(eBefore,SIGNAL(textChanged(const QString &)),this,SLOT(beforeChanged(const QString &)));
+
   lAfter = new QLabel("After:",this);
   lAfter->resize(lAfter->sizeHint());
   grid->addWidget(lAfter,4,1);
@@ -114,7 +114,7 @@ KEnumListDia::KEnumListDia(QWidget* parent,const char* name,int __type,QFont __f
   eAfter->setMaxLength(4);
   eAfter->setText(_after.data());
   grid->addWidget(eAfter,5,1);
-  connect(eAfter,SIGNAL(textChanged(const char*)),this,SLOT(afterChanged(const char*)));
+  connect(eAfter,SIGNAL(textChanged(const QString &)),this,SLOT(afterChanged(const QString &)));
 
   lStart = new QLabel("Start:",this);
   lStart->resize(lStart->sizeHint());
@@ -129,7 +129,7 @@ KEnumListDia::KEnumListDia(QWidget* parent,const char* name,int __type,QFont __f
     sprintf(chr,"%c",_start);
   eStart->setText(chr);
   grid->addWidget(eStart,5,2);
-  connect(eStart,SIGNAL(textChanged(const char*)),this,SLOT(startChanged(const char*)));
+  connect(eStart,SIGNAL(textChanged(const QString &)),this,SLOT(startChanged(const QString &)));
   _start = eStart->text()[0];
 
   number = new QRadioButton("Numeric",this);
@@ -235,7 +235,7 @@ bool KEnumListDia::enumListDia(int& __type,QFont& __font,QColor& __color,
 }
 
 /*=========================== Font selected =====================*/
-void KEnumListDia::fontSelected(const char *_family)
+void KEnumListDia::fontSelected(const QString &_family)
 {
   _font.setFamily(_family);
 }
@@ -271,20 +271,20 @@ void KEnumListDia::underlChanged()
 }
 
 /*======================= before changed ========================*/
-void KEnumListDia::beforeChanged(const char* str)
+void KEnumListDia::beforeChanged(const QString & str)
 {
   _before = str;
 }
 
 /*======================= after changed =========================*/
-void KEnumListDia::afterChanged(const char* str)
+void KEnumListDia::afterChanged(const QString & str)
 {
   _after = str;
 }
 
 
 /*======================= start changed =========================*/
-void KEnumListDia::startChanged(const char* str)
+void KEnumListDia::startChanged(const QString & str)
 {
   _start = str[0];
 }

@@ -65,7 +65,7 @@ void AEditWin::setupMenu()
   /* file menu */
   file = new QPopupMenu();
   CHECK_PTR(file);
-  pixdir = KApplication::kde_toolbardir();  
+  pixdir = KApplication::kde_toolbardir();
   pixmap.load(pixdir+"/filenew.xpm");
   M_FNEW = file->insertItem(pixmap,"&New",this,SLOT(fileNew()),CTRL+Key_N);
   pixmap.load(pixdir+"/fileopen.xpm");
@@ -83,21 +83,21 @@ void AEditWin::setupMenu()
   /* edit menu */
   edit = new QPopupMenu();
   CHECK_PTR(edit);
-  pixdir = KApplication::kde_toolbardir();  
+  pixdir = KApplication::kde_toolbardir();
   pixmap.load(pixdir+"/editcut.xpm");
   M_ECUT = edit->insertItem(pixmap,"&Cut",this,SLOT(editCut()),CTRL+Key_X);
   pixmap.load(pixdir+"/editcopy.xpm");
   M_ECOPY = edit->insertItem(pixmap,"C&opy",this,SLOT(editCopy()),CTRL+Key_C);
   pixmap.load(pixdir+"/editpaste.xpm");
   M_EPASTE = edit->insertItem(pixmap,"&Paste",this,SLOT(editPaste()),CTRL+Key_V);
-  pixdir = KApplication::kde_datadir();  
+  pixdir = KApplication::kde_datadir();
   pixmap.load(pixdir+"/kpresenter/toolbar/delete.xpm");
   M_EDELETE = edit->insertItem(pixmap,"&Delete",this,SLOT(editDelete()),CTRL+Key_Delete);
   edit->setMouseTracking(true);
   /* extra menu */
   extra = new QPopupMenu();
   CHECK_PTR(extra);
-  pixdir = KApplication::kde_datadir();  
+  pixdir = KApplication::kde_datadir();
   pixmap.load(pixdir+"/kpresenter/toolbar/newPoint.xpm");
   M_EINSPNT = extra->insertItem(pixmap,"&Insert Point...",this,SLOT(extraInsertPoint()),ALT+Key_I);
   extra->insertSeparator();
@@ -141,11 +141,11 @@ void AEditWin::setupToolbar1()
   QPixmap pixmap;
   QStrList comboList;
   int i;
-  
+
   /* create toolbar */
   toolbar1 = new KToolBar(this);
   /* insert buttons */
-  pixdir = KApplication::kde_toolbardir();  
+  pixdir = KApplication::kde_toolbardir();
   pixmap.load(pixdir+"/filenew.xpm");
   toolbar1->insertButton(pixmap,0,
 			 SIGNAL(clicked()),this,
@@ -171,7 +171,7 @@ void AEditWin::setupToolbar1()
   toolbar1->insertButton(pixmap,0,
 			 SIGNAL(clicked()),this,
 			 SLOT(editPaste()),true,"Paste from the clipboard");
-  pixdir = KApplication::kde_datadir() + QString("/kpresenter/toolbar/");  
+  pixdir = KApplication::kde_datadir() + QString("/kpresenter/toolbar/");
   pixmap.load(pixdir+"/delete.xpm");
   toolbar1->insertButton(pixmap,0,
 			 SIGNAL(clicked()),this,
@@ -235,7 +235,7 @@ void AEditWin::fileNew()
                                   "not saved. Do you really want to reject the\n"
                                   "changes and open a new autoform?\n\n",
                                   "Yes", "No",
-                                  0,1))
+                                  QString::null,1))
 	{
 	case 0: break;
 	case 1: return; break;
@@ -245,7 +245,7 @@ void AEditWin::fileNew()
   fileName = "";
   if (atfInterpret) atfInterpret->newAutoform();
   sendSource();
-  sendPntArry(drawWid->aW(),drawWid->aH());  
+  sendPntArry(drawWid->aW(),drawWid->aH());
 }
 
 /*======================= file open ==============================*/
@@ -258,7 +258,7 @@ void AEditWin::fileOpen()
                                   "not saved. Do you really want to reject the\n"
                                   "changes and open another autoform?\n\n",
                                   "Yes", "No",
-                                  0,1))
+                                  QString::null,1))
 	{
 	case 0: break;
 	case 1: return; break;
@@ -266,7 +266,7 @@ void AEditWin::fileOpen()
     }
   if (afChoose)
     {
-      disconnect(afChoose,SIGNAL(formChosen(const char*)),this,SLOT(afChooseOk(const char*)));
+      disconnect(afChoose,SIGNAL(formChosen(const QString &)),this,SLOT(afChooseOk(const QString &)));
       afChoose->close();
       delete afChoose;
       afChoose = 0;
@@ -276,7 +276,7 @@ void AEditWin::fileOpen()
   afChoose->setCaption("Open an Autoform");
   afChoose->setMaximumSize(afChoose->width(),afChoose->height());
   afChoose->setMinimumSize(afChoose->width(),afChoose->height());
-  connect(afChoose,SIGNAL(formChosen(const char*)),this,SLOT(afChooseOk(const char*)));
+  connect(afChoose,SIGNAL(formChosen(const QString &)),this,SLOT(afChooseOk(const QString &)));
   afChoose->show();
 }
 
@@ -291,7 +291,7 @@ void AEditWin::fileSave()
       if (atfInterpret) atfInterpret->save(atfName);
       editWid->saved();
       QFileInfo fi(atfName);
-      QString pixName(afDir + groupName + "/" + fi.baseName() + ".xpm"); 
+      QString pixName(afDir + groupName + "/" + fi.baseName() + ".xpm");
       if (drawWid) drawWid->createPixmap(pixName);
     }
   else fileSaveAs();
@@ -302,15 +302,15 @@ void AEditWin::fileSaveAs()
 {
   if (saveAsDia)
     {
-      disconnect(saveAsDia,SIGNAL(saveATFAs(const char*,const char*)),
-		 this,SLOT(saveAsDiaOk(const char*,const char*)));
+      disconnect(saveAsDia,SIGNAL(saveATFAs(const QString &,const QString &)),
+		 this,SLOT(saveAsDiaOk(const QString &,const QString &)));
       saveAsDia->close();
       delete saveAsDia;
       saveAsDia = 0;
     }
   saveAsDia = new SaveAsDia(0,"Save-As");
-  connect(saveAsDia,SIGNAL(saveATFAs(const char*,const char*)),
-	  this,SLOT(saveAsDiaOk(const char*,const char*)));
+  connect(saveAsDia,SIGNAL(saveATFAs(const QString &,const QString &)),
+	  this,SLOT(saveAsDiaOk(const QString &,const QString &)));
   saveAsDia->setCaption("Save autoform as");
   saveAsDia->setMaximumSize(saveAsDia->width(),saveAsDia->height());
   saveAsDia->setMinimumSize(saveAsDia->width(),saveAsDia->height());
@@ -468,13 +468,13 @@ void AEditWin::checkMenu()
       clearInfoText();
       timer->stop();
     }
-} 
+}
 
 /*==================== send source ===============================*/
 void AEditWin::sendSource()
 {
   if (atfInterpret && editWid) editWid->setSource(atfInterpret->getPoints());
-} 
+}
 
 /*================== send point array ============================*/
 void AEditWin::sendPntArry(int w,int h)
@@ -506,7 +506,7 @@ void AEditWin::insPntOk(int index,bool pos)
   if (atfInterpret) atfInterpret->insertPoint(index,pos);
   sendSource();
   sendPntArry(drawWid->aW(),drawWid->aH());
-}		      
+}		
 
 /*====================== delete Point ============================*/
 void AEditWin::delPoint(int pnt)
@@ -514,16 +514,16 @@ void AEditWin::delPoint(int pnt)
   if (atfInterpret) atfInterpret->deletePoint(pnt);
   sendSource();
   sendPntArry(drawWid->aW(),drawWid->aH());
-}		      
+}		
 
 /*================== autoform chosen =============================*/
-void AEditWin::afChooseOk(const char* c)
+void AEditWin::afChooseOk(const QString & c)
 {
   QString afDir = qstrdup(KApplication::kde_datadir());
   afDir += "/kpresenter/autoforms/";
   QFileInfo fileInfo(c);
   QString atfName(afDir + fileInfo.dirPath(false) + "/" + fileInfo.baseName() + ".atf");
-  
+
   fileName = fileInfo.baseName() + ".atf";
   groupName = fileInfo.dirPath(false);
   if (atfInterpret) atfInterpret->load(atfName);
@@ -532,7 +532,7 @@ void AEditWin::afChooseOk(const char* c)
 }
 
 /*======================== save as ==============================*/
-void AEditWin::saveAsDiaOk(const char* grp,const char* nam)
+void AEditWin::saveAsDiaOk(const QString & grp,const QString & nam)
 {
   groupName = qstrdup(grp);
   fileName = qstrdup(nam);

@@ -51,7 +51,7 @@ void ClipPreview::setClipart(QString fn)
 void ClipPreview::paintEvent(QPaintEvent*)
 {
   QPainter p;
- 
+
   p.begin(this);
   pic->play(&p);
   p.end();
@@ -89,7 +89,7 @@ BackDia::BackDia(QWidget* parent=0,const char* name=0,BackType backType=BT_COLOR
 
   grp1 = new QGroupBox(this);
   grp1->move(radioColor->x(),radioColor->y()+radioColor->height()+20);
-  
+
   color1Choose = new KColorButton(backColor1,grp1);
   color1Choose->move(10,10);
   color1Choose->resize(color1Choose->sizeHint());
@@ -99,7 +99,7 @@ BackDia::BackDia(QWidget* parent=0,const char* name=0,BackType backType=BT_COLOR
   color2Choose->move(10,color1Choose->y()+color1Choose->height()+10);
   color2Choose->resize(color2Choose->sizeHint());
   connect(color2Choose,SIGNAL(changed(const QColor&)),this,SLOT(colChanged(const QColor&)));
-  
+
   bcType = _bcType;
   cType = new QComboBox(false,grp1);
   cType->insertItem(i18n("Plain"),-1);
@@ -116,7 +116,7 @@ BackDia::BackDia(QWidget* parent=0,const char* name=0,BackType backType=BT_COLOR
   colorPreview = new QLabel(grp1);
   colorPreview->resize(cType->width(),cType->width());
   colorPreview->move(10,cType->y()+cType->height()+20);
-  
+
   cType->setCurrentItem(bcType);
 
   color1Choose->resize(cType->width(),color1Choose->height());
@@ -150,7 +150,7 @@ BackDia::BackDia(QWidget* parent=0,const char* name=0,BackType backType=BT_COLOR
   vZoom->move(vCenter->x()+vCenter->width()+10,10);
   vZoom->resize(vZoom->sizeHint());
   if (backPicView == BV_ZOOM) vZoom->setChecked(true);
-  buttGrp2->insert(vZoom);  
+  buttGrp2->insert(vZoom);
 
   picChoose = new QPushButton(i18n("Choose Picture..."),grp2,"picChoose");
   picChoose->setGeometry(10,vTiled->y()+vTiled->height()+20,
@@ -164,7 +164,7 @@ BackDia::BackDia(QWidget* parent=0,const char* name=0,BackType backType=BT_COLOR
   if (backPic) openPic(qstrdup(backPic));
   if (backPic) chosenPic = qstrdup(backPic);
   else chosenPic = 0;
- 
+
   lPicName = new QLabel(grp2,"picname");
   if (backPic) lPicName->setText(qstrdup(backPic));
   else lPicName->setText(i18n("no picture"));
@@ -188,19 +188,19 @@ BackDia::BackDia(QWidget* parent=0,const char* name=0,BackType backType=BT_COLOR
   clipChoose->setGeometry(10,10,grp3->width()-20,clipChoose->sizeHint().height());
   connect(clipChoose,SIGNAL(clicked()),this,SLOT(selectClip()));
 
-  clipPreview = new ClipPreview(grp3); 
+  clipPreview = new ClipPreview(grp3);
   clipPreview->move(10,clipChoose->y()+clipChoose->height()+20);
   clipPreview->resize(grp3->width()-20,grp3->width()-20);
   if (backClip) openClip(qstrdup(backClip));
   if (backClip) chosenClip = qstrdup(backClip);
   else chosenClip = 0;
-  
+
   lClipName = new QLabel(grp3,"clipname");
   if (backClip) lClipName->setText(qstrdup(backClip));
   else lClipName->setText(i18n("no clipart"));
   lClipName->setGeometry(10,clipPreview->y()+clipPreview->height()+20,
 			 clipChoose->width(),lClipName->sizeHint().height());
-  
+
   grp3->resize(grp2->width(),lClipName->height()+lClipName->y()+20);
 
   col2 = grp3->x()+grp3->width();
@@ -208,7 +208,7 @@ BackDia::BackDia(QWidget* parent=0,const char* name=0,BackType backType=BT_COLOR
 
   cancelBut = new QPushButton(this,"BCancel");
   cancelBut->setText(i18n("Cancel"));
- 
+
   applyBut = new QPushButton(this,"BApply");
   applyBut->setText(i18n("Apply"));
 
@@ -293,7 +293,7 @@ void BackDia::selectPic()
   radioColor->setChecked(false);
   radioClip->setChecked(false);
 
-  QString file = KFilePreviewDialog::getOpenFileName(0,
+  QString file = KFilePreviewDialog::getOpenFileName(QString::null,
 						     i18n("*.gif *GIF *.bmp *.BMP *.xbm *.XBM *.xpm *.XPM *.pnm *.PNM "
 							  "*.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW *.jpg *.JPG *.jpeg *.JPEG "
 							  "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|All pictures\n"
@@ -304,7 +304,7 @@ void BackDia::selectPic()
 							  "*.xpm *.XPM|Pixmaps\n"
 							  "*.pnm *.PNM *.PBM *.PGM *.PPM *.PBMRAW *.PGMRAW *.PPMRAW "
 							  "*.pbm *.pgm *.ppm *.pbmdraw *.pgmdraw *.ppmdraw|PNM-Pictures"),0);
-  
+
   if (!file.isEmpty()) openPic(file.data());
 }
 
@@ -315,15 +315,15 @@ void BackDia::selectClip()
   radioColor->setChecked(false);
   radioPic->setChecked(false);
 
-  QString file = KFilePreviewDialog::getOpenFileName(0,i18n("*.WMF *.wmf|Windows Metafiles"),0);
+  QString file = KFilePreviewDialog::getOpenFileName(QString::null,i18n("*.WMF *.wmf|Windows Metafiles"),0);
   if (!file.isEmpty()) openClip(file.data());
 }
 
 /*==================== open a picture ============================*/
-void BackDia::openPic(const char *picName)
+void BackDia::openPic(const QString &picName)
 {
   QApplication::setOverrideCursor(waitCursor);
-  
+
   chosenPic = qstrdup(picName);
   QPixmap pix(picName);
   QWMatrix m;
@@ -339,7 +339,7 @@ void BackDia::openPic(const char *picName)
 }
 
 /*==================== open a clipart ============================*/
-void BackDia::openClip(const char *clipName)
+void BackDia::openClip(const QString &clipName)
 {
   QApplication::setOverrideCursor(waitCursor);
   chosenClip = qstrdup(clipName);
@@ -347,4 +347,4 @@ void BackDia::openClip(const char *clipName)
   if (lClipName) lClipName->setText(chosenClip);
   QApplication::restoreOverrideCursor();
 }
-      
+

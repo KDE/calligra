@@ -24,7 +24,7 @@
 KPBackGround::KPBackGround(KPPixmapCollection *_pixmapCollection,KPGradientCollection *_gradientCollection)
   : QObject(), backPixFilename(), backClipFilename(), backClip(), pixSize(orig_size), data()
 {
-  backType = BT_COLOR; 
+  backType = BT_COLOR;
   backView = BV_CENTER;
   backColor1 = white;
   backColor2 = white;
@@ -84,7 +84,7 @@ void KPBackGround::setBackPix(QString _filename,QString _data)
 
 /*========================= set backclip filename ================*/
 void KPBackGround::setBackClipFilename(QString _filename)
-{ 
+{
   if (_filename.isEmpty()) return;
 
   backClipFilename = _filename;
@@ -185,7 +185,7 @@ void KPBackGround::restore()
       pixmapCollection->removeRef(backPixFilename,data,pixSize);
       backPix = 0;
     }
-      
+
   if (backType == BT_COLOR || backType == BT_CLIPART || backType == BT_PICTURE && backView == BV_CENTER)
     {
       if (gradient)
@@ -206,13 +206,13 @@ void KPBackGround::restore()
 /*========================== save ================================*/
 void KPBackGround::save(ostream& out)
 {
-  out << indent << "<BACKTYPE value=\"" << static_cast<int>(backType) << "\"/>" << endl; 
-  out << indent << "<BACKVIEW value=\"" << static_cast<int>(backView) << "\"/>" << endl; 
-  out << indent << "<BACKCOLOR1 red=\"" << backColor1.red() << "\" green=\"" 
-      << backColor1.green() << "\" blue=\"" << backColor1.blue() << "\"/>" << endl; 
-  out << indent << "<BACKCOLOR2 red=\"" << backColor2.red() << "\" green=\"" 
-      << backColor2.green() << "\" blue=\"" << backColor2.blue() << "\"/>" << endl; 
-  out << indent << "<BCTYPE value=\"" << static_cast<int>(bcType) << "\"/>" << endl; 
+  out << indent << "<BACKTYPE value=\"" << static_cast<int>(backType) << "\"/>" << endl;
+  out << indent << "<BACKVIEW value=\"" << static_cast<int>(backView) << "\"/>" << endl;
+  out << indent << "<BACKCOLOR1 red=\"" << backColor1.red() << "\" green=\""
+      << backColor1.green() << "\" blue=\"" << backColor1.blue() << "\"/>" << endl;
+  out << indent << "<BACKCOLOR2 red=\"" << backColor2.red() << "\" green=\""
+      << backColor2.green() << "\" blue=\"" << backColor2.blue() << "\"/>" << endl;
+  out << indent << "<BCTYPE value=\"" << static_cast<int>(bcType) << "\"/>" << endl;
 
   if (!backPixFilename.isEmpty() && backType == BT_PICTURE)
     {
@@ -220,14 +220,14 @@ void KPBackGround::save(ostream& out)
       pixmapCollection->getPixmap(backPixFilename,pixSize,_data);
       pixmapCollection->removeRef(backPixFilename,pixSize);
 
-      out << indent << "<BACKPIX filename=\"" << backPixFilename << "\" data=\"" 
+      out << indent << "<BACKPIX filename=\"" << backPixFilename << "\" data=\""
 	  << _data << "\"/>" << endl;
     }
 
   if (!backClipFilename.isEmpty() && backType == BT_CLIPART)
-    out << indent << "<BACKCLIP filename=\"" << backClipFilename << "\"/>" << endl; 
-  
-  out << indent << "<PGEFFECT value=\"" << static_cast<int>(pageEffect) << "\"/>" << endl; 
+    out << indent << "<BACKCLIP filename=\"" << backClipFilename << "\"/>" << endl;
+
+  out << indent << "<PGEFFECT value=\"" << static_cast<int>(pageEffect) << "\"/>" << endl;
 }
 
 /*========================== load ================================*/
@@ -240,7 +240,7 @@ void KPBackGround::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
   while (parser.open(0L,tag))
     {
       KOMLParser::parseTag(tag.c_str(),name,lst);
-      
+
       // backtype
       if (name == "BACKTYPE")
 	{
@@ -252,7 +252,7 @@ void KPBackGround::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 		setBackType((BackType)atoi((*it).m_strValue.c_str()));
 	    }
 	}
-      
+
       // pageEffect
       else if (name == "PGEFFECT")
 	{
@@ -264,7 +264,7 @@ void KPBackGround::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 		setPageEffect((PageEffect)atoi((*it).m_strValue.c_str()));
 	    }
 	}
-      
+
       // backview
       else if (name == "BACKVIEW")
 	{
@@ -276,7 +276,7 @@ void KPBackGround::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 		setBackView((BackView)atoi((*it).m_strValue.c_str()));
 	    }
 	}
-      
+
       // backcolor 1
       else if (name == "BACKCOLOR1")
 	{
@@ -295,7 +295,7 @@ void KPBackGround::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 				     atoi((*it).m_strValue.c_str())));
 	    }
 	}
-      
+
       // backcolor 2
       else if (name == "BACKCOLOR2")
 	{
@@ -314,7 +314,7 @@ void KPBackGround::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 				     atoi((*it).m_strValue.c_str())));
 	    }
 	}
-      
+
       // backColorType
       else if (name == "BCTYPE")
 	{
@@ -326,16 +326,16 @@ void KPBackGround::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 		setBackColorType((BCType)atoi((*it).m_strValue.c_str()));
 	    }
 	}
-      
+
       // backpic
       else if (name == "BACKPIX")
 	{
 	  KOMLParser::parseTag(tag.c_str(),name,lst);
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
-	  
+	
 	  bool openPic = true;
 	  QString _data,_fileName;
-	  
+	
 	  for(;it != lst.end();it++)
 	    {
 	      if ((*it).m_strName == "data")
@@ -354,19 +354,19 @@ void KPBackGround::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 		      if (int _envVarB = _fileName.find('$') >= 0)
 			{
 			  int _envVarE = _fileName.find('/',_envVarB);
-			  QString path = static_cast<const char*>(getenv(_fileName.mid(_envVarB,_envVarE-_envVarB).data()));
+			  QString path = getenv(_fileName.mid(_envVarB,_envVarE-_envVarB).data());
 			  _fileName.replace(_envVarB-1,_envVarE-_envVarB+1,path);
 			}
 		    }
 		}
 	    }
-	  
+	
 	  if (!openPic)
 	    setBackPix(_fileName,_data);
 	  else
 	    setBackPixFilename(_fileName);
 	}
-      
+
       // backclip
       else if (name == "BACKCLIP")
 	{
@@ -382,7 +382,7 @@ void KPBackGround::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 		      if (int _envVarB = _fileName.find('$') >= 0)
 			{
 			  int _envVarE = _fileName.find('/',_envVarB);
-			  QString path = static_cast<const char*>(getenv(_fileName.mid(_envVarB,_envVarE-_envVarB).data()));
+			  QString path = getenv(_fileName.mid(_envVarB,_envVarE-_envVarB).data());
 			  _fileName.replace(_envVarB-1,_envVarE-_envVarB+1,path);
 			}
 		    }
@@ -390,10 +390,10 @@ void KPBackGround::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 		}
 	    }
 	}
-      
+
       else
-	cerr << "Unknown tag '" << tag << "' in PAGE" << endl;    
-      
+	cerr << "Unknown tag '" << tag << "' in PAGE" << endl;
+
       if (!parser.close(tag))
 	{
 	  cerr << "ERR: Closing Child" << endl;
@@ -413,7 +413,7 @@ void KPBackGround::drawBackColor(QPainter *_painter)
 void KPBackGround::drawBackPix(QPainter *_painter)
 {
   if (backPix)
-    {  
+    {
       switch (backView)
 	{
 	case BV_ZOOM:
@@ -438,7 +438,7 @@ void KPBackGround::drawBackPix(QPainter *_painter)
 		_y = (pix->height() - backPix->height()) / 2;
 	      }
 	    else if (backPix->height() > pix->height())
-	      {	      
+	      {	
 		bitBlt(pix,0,0,backPix,0,backPix->height() - pix->height(),
 		       backPix->width(),pix->height());
 		_x = (pix->width() - backPix->width()) / 2;
@@ -471,7 +471,7 @@ void KPBackGround::drawBorders(QPainter *_painter)
 {
   QPen pen(red,1);
   QBrush brush(NoBrush);
-  
+
   _painter->setPen(pen);
   _painter->setBrush(brush);
   _painter->drawRect(0,0,ext.width() + 1,ext.height() + 1);

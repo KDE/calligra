@@ -41,8 +41,8 @@ class SaveAsDia : public QDialog
 public:
 
   // constructor - destructor
-  SaveAsDia(QWidget* parent=0,const char* name=0);  
-  ~SaveAsDia();                                     
+  SaveAsDia(QWidget* parent=0,const char* name=0);
+  ~SaveAsDia();
 
 protected:
 
@@ -65,11 +65,11 @@ private slots:
 
   // add a group
   void addGroup();
-  
+
 signals:
 
   // dave autoform as
-  void saveATFAs(const char*,const char*);
+  void saveATFAs(const QString &,const QString &);
 
 };
 #endif //SAVEASDIA_H

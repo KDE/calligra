@@ -52,11 +52,11 @@ PVTimeTable::PVTimeTable(QWidget *parent,KPresenterDoc *_doc)
 
 /*================================================================*/
 void PVTimeTable::setPageNum(int _num)
-{ 
+{
   objList.setAutoDelete(false);
   objList.clear();
   objList.setAutoDelete(false);
-  page = _num; 
+  page = _num;
 
   QList<int> intList;
   intList.setAutoDelete(false);
@@ -114,16 +114,16 @@ void PVTimeTable::paintCell(QPainter *painter,int row,int col)
 	  unsigned int wid = fm.width(str);
 	  unsigned int hei = fm.height();
 
-	  painter->drawText((cellWidth() - wid) / 2,(cellHeight() - hei) / 2 + fm.ascent(),str);	  
+	  painter->drawText((cellWidth() - wid) / 2,(cellHeight() - hei) / 2 + fm.ascent(),str);	
 	}
       else if (col == 0 && row > 0)
 	{
-	  obj_name.sprintf("%s (%d)",i18n(ObjName[static_cast<int>(objList.at(row - 1)->getType())]),
+	  obj_name.sprintf("%s (%d)",i18n(ObjName[static_cast<int>(objList.at(row - 1)->getType())]).ascii(),
 			   doc->objectList()->find(objList.at(row - 1)) + 1);
 	  unsigned int wid = fm.width(obj_name);
 	  unsigned int hei = fm.height();
 
-	  painter->drawText((cellWidth() - wid) / 2,(cellHeight() - hei) / 2 + fm.ascent(),obj_name);	  
+	  painter->drawText((cellWidth() - wid) / 2,(cellHeight() - hei) / 2 + fm.ascent(),obj_name);	
 	}
       else if (col > 0 && row > 0)
 	{
@@ -185,7 +185,7 @@ PresStructViewer::PresStructViewer(QWidget *parent,const char *name,KPresenterDo
   h_panner->activate(panner,timeTable);
 
   resize(600,400);
-  
+
   toolbar->move(0,0);
   toolbar->resize(600,toolbar->height());
 
@@ -261,7 +261,7 @@ void PresStructViewer::setupTreeView()
   for (unsigned int i = 0;i < doc->objectList()->count();i++)
     {
       kpobject = doc->objectList()->at(i);
-      obj_name.sprintf("%s (%d)",i18n(ObjName[static_cast<int>(kpobject->getType())]),i + 1);
+      obj_name.sprintf("%s (%d)",i18n(ObjName[static_cast<int>(kpobject->getType())]).ascii(),i + 1);
 
       QString str;
       switch (kpobject->getType())
@@ -308,7 +308,7 @@ void PresStructViewer::setupToolBar()
   toolbar = new KToolBar(this);
 
   //QString pixdir = KApplication::kde_datadir() + "/kpresenter/toolbar/";
-  
+
   toolbar->insertButton(ICON("style.xpm"),B_STYLE,SIGNAL(clicked()),this,SLOT(slotStyle()),false,i18n("Pen & Brush"));
   toolbar->insertButton(ICON("rotate.xpm"),B_ROTATE,SIGNAL(clicked()),this,SLOT(slotRotate()),false,i18n("Rotate"));
   toolbar->insertButton(ICON("shadow.xpm"),B_SHADOW,SIGNAL(clicked()),this,SLOT(slotShadow()),false,i18n("Shadow"));
@@ -316,7 +316,7 @@ void PresStructViewer::setupToolBar()
   toolbar->insertButton(ICON("effect.xpm"),B_EFFECT,SIGNAL(clicked()),this,SLOT(slotEffect()),false,i18n("Assign effect"));
 
   toolbar->insertSeparator();
-  
+
   toolbar->insertButton(ICON("raise.xpm"),B_LOWER,SIGNAL(clicked()),this,SLOT(slotRaise()),false,i18n("Raise"));
   toolbar->insertButton(ICON("lower.xpm"),B_RAISE,SIGNAL(clicked()),this,SLOT(slotLower()),false,i18n("Lower"));
 
@@ -352,48 +352,48 @@ void PresStructViewer::fillWithPageInfo(KPBackGround *_page,int _num)
 
   list->setNumRows(0);
   str.sprintf("%d",_num + 1);
-  list->appendItem(i18n("Number")); 
+  list->appendItem(i18n("Number"));
   list->changeItemPart(str,list->count() - 1,1);
 
-  list->appendItem(i18n("Back Type")); 
+  list->appendItem(i18n("Back Type"));
   list->changeItemPart(i18n(BackTypeName[static_cast<int>(_page->getBackType())]),
 		       list->count() - 1,1);
 
-  list->appendItem(i18n("Back View")); 
+  list->appendItem(i18n("Back View"));
   list->changeItemPart(i18n(BackViewName[static_cast<int>(_page->getBackView())]),
 		       list->count() - 1,1);
 
   c = _page->getBackColor1();
   c.rgb(&r,&g,&b);
   str.sprintf("#%02X%02X%02X",r,g,b);
-  list->appendItem(i18n("Color1")); 
+  list->appendItem(i18n("Color1"));
   list->changeItemPart(str,list->count() - 1,1);
 
   c = _page->getBackColor2();
   c.rgb(&r,&g,&b);
   str.sprintf("#%02X%02X%02X",r,g,b);
-  list->appendItem(i18n("Color2")); 
+  list->appendItem(i18n("Color2"));
   list->changeItemPart(str,list->count() - 1,1);
 
-  list->appendItem(i18n("Picture Filename")); 
+  list->appendItem(i18n("Picture Filename"));
   list->changeItemPart(_page->getBackPixFilename(),list->count() - 1,1);
 
-  list->appendItem(i18n("Clipart Filename")); 
+  list->appendItem(i18n("Clipart Filename"));
   list->changeItemPart(_page->getBackClipFilename(),list->count() - 1,1);
 
-  list->appendItem(i18n("Effect for changing to next page")); 
+  list->appendItem(i18n("Effect for changing to next page"));
   list->changeItemPart(i18n(PageEffectName[static_cast<int>(_page->getPageEffect())]),
 		       list->count() - 1,1);
 
-  list->appendItem(i18n("Speed for screenpresentations")); 
+  list->appendItem(i18n("Speed for screenpresentations"));
   list->changeItemPart(i18n(PresSpeedName[static_cast<int>(doc->getPresSpeed())]),
 		       list->count() - 1,1);
 
-  list->appendItem(i18n("Manual switching to next page")); 
+  list->appendItem(i18n("Manual switching to next page"));
   list->changeItemPart(i18n(YesNo[static_cast<int>(!doc->spManualSwitch())]),
 		       list->count() - 1,1);
 
-  list->appendItem(i18n("Infinit loop")); 
+  list->appendItem(i18n("Infinit loop"));
   list->changeItemPart(i18n(YesNo[static_cast<int>(!doc->spInfinitLoop())]),
 		       list->count() - 1,1);
 
@@ -413,7 +413,7 @@ void PresStructViewer::fillWithObjInfo(KPObject *_obj,int _num)
 
   list->setNumRows(0);
   str.sprintf("%d",_num + 1);
-  list->appendItem(i18n("Number")); 
+  list->appendItem(i18n("Number"));
   list->changeItemPart(str,list->count() - 1,1);
 
   list->appendItem(i18n("Type"));
@@ -485,7 +485,7 @@ void PresStructViewer::fillWithObjInfo(KPObject *_obj,int _num)
 	      list->changeItemPart("no brush",list->count() - 1,1);
 	    else
 	      list->changeItemPart(getColor(dynamic_cast<KPRectObject*>(_obj)->getBrush().color()),list->count() - 1,1);
-	    
+	
 	    list->appendItem(i18n("Brush Style"));
 	    list->changeItemPart(i18n(BrushStyleName[static_cast<int>(dynamic_cast<KPRectObject*>(_obj)->getBrush().style())]),
 				 list->count() - 1,1);
@@ -505,11 +505,11 @@ void PresStructViewer::fillWithObjInfo(KPObject *_obj,int _num)
 
 	int rndx,rndy;
 	dynamic_cast<KPRectObject*>(_obj)->getRnds(rndx,rndy);
-	    
+	
 	list->appendItem(i18n("Roundedness X"));
 	str.sprintf("%d",rndx);
 	list->changeItemPart(str,list->count() - 1,1);
-	    
+	
 	list->appendItem(i18n("Roundedness Y"));
 	str.sprintf("%d",rndy);
 	list->changeItemPart(str,list->count() - 1,1);
@@ -537,7 +537,7 @@ void PresStructViewer::fillWithObjInfo(KPObject *_obj,int _num)
 	      list->changeItemPart("no brush",list->count() - 1,1);
 	    else
 	      list->changeItemPart(getColor(dynamic_cast<KPEllipseObject*>(_obj)->getBrush().color()),list->count() - 1,1);
-	    
+	
 	    list->appendItem(i18n("Brush Style"));
 	    list->changeItemPart(i18n(BrushStyleName[static_cast<int>(dynamic_cast<KPEllipseObject*>(_obj)->getBrush().style())]),
 				 list->count() - 1,1);
@@ -581,7 +581,7 @@ void PresStructViewer::fillWithObjInfo(KPObject *_obj,int _num)
 	      list->changeItemPart("no brush",list->count() - 1,1);
 	    else
 	      list->changeItemPart(getColor(dynamic_cast<KPPieObject*>(_obj)->getBrush().color()),list->count() - 1,1);
-	    
+	
 	    list->appendItem(i18n("Brush Style"));
 	    list->changeItemPart(i18n(BrushStyleName[static_cast<int>(dynamic_cast<KPPieObject*>(_obj)->getBrush().style())]),
 				 list->count() - 1,1);
@@ -681,7 +681,7 @@ void PresStructViewer::fillWithObjInfo(KPObject *_obj,int _num)
 	      list->changeItemPart("no brush",list->count() - 1,1);
 	    else
 	      list->changeItemPart(getColor(dynamic_cast<KPAutoformObject*>(_obj)->getBrush().color()),list->count() - 1,1);
-	    
+	
 	    list->appendItem(i18n("Brush Style"));
 	    list->changeItemPart(i18n(BrushStyleName[static_cast<int>(dynamic_cast<KPAutoformObject*>(_obj)->getBrush().style())]),
 				 list->count() - 1,1);
@@ -711,13 +711,13 @@ void PresStructViewer::fillWithObjInfo(KPObject *_obj,int _num)
       } break;
     default: break;
     }
-  
+
   if (lastSelected)
     {
       lastSelected->setSelected(false);
       doc->repaint(lastSelected);
     }
-  
+
   view->makeRectVisible(_obj->getBoundingRect(0,0));
   _obj->setSelected(true);
   doc->repaint(_obj);
@@ -750,7 +750,7 @@ QString PresStructViewer::getColor(QColor _color)
 {
   QFile rgbFile("/usr/X11R6/lib/X11/rgb.txt");
   QString str;
-  
+
   if (rgbFile.exists())
     {
       int r,g,b;
@@ -774,12 +774,12 @@ QString PresStructViewer::getColor(QColor _color)
 		  break;
 		}
 	    }
-	  rgbFile.close();   
+	  rgbFile.close();
 	}
     }
   else
     str.sprintf("(%d,%d,%d)",_color.red(),_color.green(),_color.blue());
-    
+
   return str;
 }
 

@@ -1,21 +1,21 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
- 
+
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
-*/     
+*/
 
 #ifndef __kspread_cell_h__
 #define __kspread_cell_h__
@@ -68,13 +68,13 @@ class SelectPrivate : public KSpreadCellPrivate
 {
   Q_OBJECT
 public:
-  SelectPrivate( KSpreadCell* _cell ) : KSpreadCellPrivate( _cell ) { m_iIndex = -1; }  
+  SelectPrivate( KSpreadCell* _cell ) : KSpreadCellPrivate( _cell ) { m_iIndex = -1; }
   virtual ~SelectPrivate() { }
 
   const char* text();
-  
+
   void parse( const char* _text );
-  
+
   QStrList m_lstItems;
   int m_iIndex;
 
@@ -87,10 +87,10 @@ public slots:
 class KSpreadCell : public KSpreadLayout
 {
   friend SelectPrivate;
-  
-public:    
+
+public:
     enum Style { ST_Normal, ST_Button, ST_Undef, ST_Select };
-  
+
     KSpreadCell( KSpreadTable *_table, int _column, int _row, const char* _text = 0L );
     ~KSpreadCell();
 
@@ -106,13 +106,13 @@ public:
      * A convenience function.
      */
     void copyLayout( KSpreadCell *_cell ) { copyLayout( _cell->column(), _cell->row() ); }
-        
+
     /**
      * Paints the cell.
      */
     virtual void paintEvent( KSpreadView *_view, const QRect& _rect, QPainter &_painter, int _tx, int _ty,
 			     int _col, int _row, ColumnLayout *cl, RowLayout *rl, QRect *_prect = 0L );
-    
+
     /**
      * A convenience function
      */
@@ -126,7 +126,7 @@ public:
     /**
      * @return the row this cell is in. May return 0 if the cell is the default cell.
      */
-    int row() { return m_iRow; }    
+    int row() { return m_iRow; }
 
     /**
      * @param _col the column this cell is assumed to be in.
@@ -141,12 +141,12 @@ public:
      * @return the height of this cell
      */
     int height( int _row, KSpreadView *_view = 0L );
-    
+
     /**
      * @return TRUE if this cell is the default cell.
      */
     virtual bool isDefault() { return ( m_iColumn == 0 ); }
-    
+
     /**
      * Tells wether this cell has any content.
      * An cell has no content if is has no text and no formular.
@@ -159,7 +159,7 @@ public:
 
     void incPrecision();
     void decPrecision();
-  
+
     /**
      * Set the column this cell is now in. This function is usually used after the 'paste'
      * command.
@@ -170,7 +170,7 @@ public:
      * command.
      */
     void setRow( int _r ) { m_iRow = _r; }
-    
+
     /**
      * This function does only store '_text', if we are in the progress of loading.
      * If this is the case, call @ref #initAfterLoading to complete this functions job.
@@ -180,13 +180,13 @@ public:
     void setFaktor( double _d ) { m_dFaktor = _d; m_bLayoutDirtyFlag = TRUE; }
 
     void setPrefix( const char * _prefix );
-    void setPostfix( const char * _postfix );    
+    void setPostfix( const char * _postfix );
     void setPrecision( int _p ) { m_bLayoutDirtyFlag = TRUE; m_iPrecision = _p; }
-    
-    void setLeftBorderStyle( PenStyle _s ) { m_leftBorderPen.setStyle( _s ); m_bLayoutDirtyFlag = TRUE; }
-    void setTopBorderStyle( PenStyle _s ) { m_topBorderPen.setStyle( _s ); m_bLayoutDirtyFlag = TRUE; }
-    void setRightBorderStyle( PenStyle _s );
-    void setBottomBorderStyle( PenStyle _s );
+
+    void setLeftBorderStyle( Qt::PenStyle _s ) { m_leftBorderPen.setStyle( _s ); m_bLayoutDirtyFlag = TRUE; }
+    void setTopBorderStyle( Qt::PenStyle _s ) { m_topBorderPen.setStyle( _s ); m_bLayoutDirtyFlag = TRUE; }
+    void setRightBorderStyle( Qt::PenStyle _s );
+    void setBottomBorderStyle( Qt::PenStyle _s );
 
     void setLeftBorderColor( const QColor & _c ) { m_leftBorderPen.setColor( _c ); m_bLayoutDirtyFlag = TRUE; }
     void setTopBorderColor( const QColor & _c ) { m_topBorderPen.setColor( _c ); m_bLayoutDirtyFlag = TRUE; }
@@ -216,7 +216,7 @@ public:
 
     void setStyle( Style _s );
     void setAction( const char* _action ) { m_strAction = _action; }
-  
+
     /**
      * Since the GUI supports zooming, you can get the value zoomed
      * or not scaled. The not scaled value may be of interest in a
@@ -224,7 +224,7 @@ public:
      *
      * @param _col the column this cell is assumed to be in
      * @param _row the row this cell is assumed to be in
-     *    
+     *
      * @return the border width of the left border
      */
     int leftBorderWidth( int _col, int _row, KSpreadView *_view = 0L );
@@ -238,10 +238,10 @@ public:
      *
      * @return the style used to draw the left border
      */
-    PenStyle leftBorderStyle( int _col, int _row );
-    PenStyle topBorderStyle( int _col, int _row );
-    PenStyle rightBorderStyle( int _col, int _row );
-    PenStyle bottomBorderStyle( int _col, int _row );
+    Qt::PenStyle leftBorderStyle( int _col, int _row );
+    Qt::PenStyle topBorderStyle( int _col, int _row );
+    Qt::PenStyle rightBorderStyle( int _col, int _row );
+    Qt::PenStyle bottomBorderStyle( int _col, int _row );
 
     /**
      * @param _col the column this cell is assumed to be in
@@ -253,7 +253,7 @@ public:
 
     Style style() { return m_style; }
     const char* action() { return m_strAction; }
-  
+
     /**
      * @param _col the column this cell is assumed to be in
      * @param _row the row this cell is assumed to be in
@@ -271,13 +271,13 @@ public:
     void setValue( double _d );
 
     void update();
-  
+
     /**
      * Called if the user clicks on a cell. If the cell is for example a button, then
      * @ref #m_strAction is executed.
      */
     void clicked( KSpreadView *_view );
-  
+
     /**
      * Starts calculating.
      * If a table is ok and you change this cell only, then you dont need to
@@ -292,13 +292,13 @@ public:
      * @return TRUE on success and FALSE on error.
      */
     bool calc( bool _makedepend = FALSE );
-    
+
     /**
      * Set the calcDirtyFlag
      */
     void setCalcDirtyFlag() { if ( m_bFormular ) m_bCalcDirtyFlag = TRUE; }
     bool calcDirtyFlag() { if ( !m_bFormular ) return false; return m_bCalcDirtyFlag; }
-  
+
     /**
      * Sets the calcDirtyFlag if this cell depends on a given cell.
      * If cell (_column|_row) in table '_table' changed and we depend on this cells value, the
@@ -318,7 +318,7 @@ public:
      * some cell specific layout valued like font or text change.
      */
     virtual void setLayoutDirtyFlag();
-    
+
     void clearDisplayDirtyFlag() { m_bDisplayDirtyFlag = false; }
     void setDisplayDirtyFlag() { m_bDisplayDirtyFlag = true ; }
 
@@ -363,7 +363,7 @@ public:
      * @return TRUE if the obscuring cell is forced to obscure this one.
      */
     bool isObscuringForced();
-    
+
     /**
      * @return the column of the obscuring cell.
      */
@@ -372,7 +372,7 @@ public:
      * @return the row of the obscuring cell.
      */
     int obscuringCellsRow() { return m_iObscuringCellsRow; }
-    
+
     /**
      * Force the cell to occupy other cells space.
      * If '_x' and '_y' are 0 then the forcing is disabled.
@@ -402,13 +402,13 @@ public:
 
     QString encodeFormular( int _col = -1, int _row = -1 );
     QString decodeFormular( const char *_text, int _col = -1, int _row = -1 );
-    
+
 protected:
-  
+
     virtual void makeLayout( QPainter &_painter, int _col, int _row );
     /**
      * Parses the formular.
-     * Fills @ref #dependList and @ref #formular. 
+     * Fills @ref #dependList and @ref #formular.
      * @return FALSE on error.
      */
     bool makeFormular();
@@ -441,7 +441,7 @@ protected:
      * If @ref #m_bValue is set, a new value for @ref m_dValue is calculated.
       */
     void checkValue();
-    
+
     /**
      * This cells row.
      * If it is 0, this is the default cell and its row/column can
@@ -467,10 +467,10 @@ protected:
     int m_iOutTextWidth;
     int m_iOutTextHeight;
     int m_iTextX, m_iTextY;
-    
+
     double m_dValue;
     bool m_bValue;
-    
+
     /**
      * Flag showing wether the current layout is OK.
      * If you change for example the fonts point size, set this flag. When the cell
@@ -500,7 +500,7 @@ protected:
      * instead of @ref m_strText since m_strText stores the formular the user entered.
      */
     QString m_strFormularOut;
-    
+
     /**
      * Tells wether this cell it currently under calculation.
      * If a cell thats 'progressFlag' is set is told to calculate we
@@ -518,7 +518,7 @@ protected:
      * The flag is cleared by the function m_pTable->emit_updateCell.
      */
     bool m_bDisplayDirtyFlag;
-  
+
     /**
      * The amount of additional cells horizontal
      */
@@ -546,7 +546,7 @@ protected:
      * no extra size will disable this flag!
      */
     bool m_bForceExtraCells;
-    
+
     /**
      * The @ref KSpreadCell that obscures this one.
      * If this pointer is not NULL, then this cell is obscured by another

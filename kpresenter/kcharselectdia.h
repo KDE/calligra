@@ -48,8 +48,8 @@ class KCharSelectDia : public QDialog
 public:
 
   // constructor - destructor
-  KCharSelectDia(QWidget*,const char*,QList<QFont>* __font,QList<QColor>* __color,QList<int>* __c,QStrList); 
-  ~KCharSelectDia();                                    
+  KCharSelectDia(QWidget*,const char*,QList<QFont>* __font,QList<QColor>* __color,QList<int>* __c,QStrList);
+  ~KCharSelectDia();
 
   // select char dialog
   static bool selectChar(QList<QFont> *__font,QList<QColor> *__color,QList<int> *__chr,QStrList);
@@ -60,12 +60,12 @@ public:
   QList<int> *c() {return _c;}
 
 protected:
-  
+
   // dialog objects
   QGridLayout *grid,*grid2;
   QComboBox *fontCombo,*sizeCombo,*depthCombo;
   KButtonBox *bbox;
-  QPushButton *bOk,*bCancel; 
+  QPushButton *bOk,*bCancel;
   KCharSelect *charSelect;
   QWidget *wid;
   QLabel *lFont,*lSize,*lColor,*lPreview,*lAttrib,*lDepth;
@@ -81,7 +81,7 @@ protected:
   QStrList fontList;
 
 protected slots:
-  void fontSelected(const char*);
+  void fontSelected(const QString &);
   void sizeSelected(int);
   void depthSelected(int);
   void colorChanged(const QColor&);

@@ -41,7 +41,7 @@ class KoTemplateChooseDia : public QTabDialog
   Q_OBJECT
 
 public:
-  KoTemplateChooseDia(QWidget *parent,const char *name,QString _globalTemplatePath,QString _personalTemplatePath,bool _hasCancel); 
+  KoTemplateChooseDia(QWidget *parent,const char *name,QString _globalTemplatePath,QString _personalTemplatePath,bool _hasCancel);
   ~KoTemplateChooseDia() {;}
 
   static bool chooseTemplate(QString _globalTemplatePath,QString _personalTemplatePath,QString &_template,bool _hasCancel);
@@ -69,11 +69,11 @@ protected:
   QString templateName,fullTemplateName;
 
 private slots:
-  void nameChanged(const char*);
+  void nameChanged(const QString &);
   void chosen();
 
 signals:
-  void templateChosen(const char*);
+  void templateChosen(const QString &);
 
 };
 

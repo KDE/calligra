@@ -47,7 +47,7 @@ class PiePreview : public QFrame
 
 public:
   PiePreview(QWidget* parent,const char*);
-  ~PiePreview() {}                                            
+  ~PiePreview() {}
 
   void setAngle(int _angle)
     { angle = _angle; repaint(true); }
@@ -78,7 +78,7 @@ class ConfPieDia : public QDialog
 
 public:
   ConfPieDia(QWidget* parent,const char*);
-  ~ConfPieDia();                                             
+  ~ConfPieDia();
 
   void setAngle(int _angle)
     { angle = _angle; QString str; str.sprintf("%d",_angle); eAngle->setText(str); piePreview->setAngle(angle); }
@@ -89,13 +89,13 @@ public:
   void setPenBrush(QPen _pen,QBrush _brush)
     { pen = _pen; brush = _brush; piePreview->setPenBrush(pen,brush);  }
 
-  int getAngle() 
+  int getAngle()
     { return angle; }
   int getLength()
     { return len; }
   PieType getType()
     { return type; }
-  
+
 protected:
   QLabel *lType,*lAngle,*lLen;
   KRestrictedLine *eAngle,*eLen;
@@ -110,8 +110,8 @@ protected:
   QBrush brush;
 
 protected slots:
-  void lengthChanged(const char*);
-  void angleChanged(const char*);
+  void lengthChanged(const QString &);
+  void angleChanged(const QString &);
   void typeChanged(int);
   void Apply() { emit confPieDiaOk(); }
 

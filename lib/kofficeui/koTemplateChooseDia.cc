@@ -61,7 +61,7 @@ void KoTemplateChooseDia::getGroups()
   QString str;
   char* c = new char[256];
   QString templateDir = qstrdup(globalTemplatePath);
-  
+
   QFile templateInf(globalTemplatePath + ".templates");
 
   if (templateInf.open(IO_ReadOnly))
@@ -80,12 +80,12 @@ void KoTemplateChooseDia::getGroups()
 	    }
 	  strcpy(c,"");
 	}
-      
+
       templateInf.close();
     }
 
   templateDir = qstrdup(personalTemplatePath);
-  
+
   QFile templateInf2(personalTemplatePath + ".templates");
 
   if (templateInf2.open(IO_ReadOnly))
@@ -104,7 +104,7 @@ void KoTemplateChooseDia::getGroups()
 	    }
 	  strcpy(c,"");
 	}
-      
+
       templateInf2.close();
     }
 
@@ -123,8 +123,8 @@ void KoTemplateChooseDia::setupTabs()
   	  grpPtr->loadWid->loadDir(grpPtr->dir.absFilePath(),"*.xpm");
  	  grpPtr->loadWid->move(0,0);
 	  grpPtr->loadWid->setBackgroundColor(kapp->windowColor);
- 	  connect(grpPtr->loadWid,SIGNAL(nameChanged(const char*)),
- 		  this,SLOT(nameChanged(const char*)));
+ 	  connect(grpPtr->loadWid,SIGNAL(nameChanged(const QString &)),
+ 		  this,SLOT(nameChanged(const QString &)));
 	  connect(grpPtr->loadWid,SIGNAL(doubleClicked()),
 		  this,SLOT(chosen()));
 	  connect(grpPtr->loadWid,SIGNAL(doubleClicked()),
@@ -134,7 +134,7 @@ void KoTemplateChooseDia::setupTabs()
  	  addTab(grpPtr->tab,grpPtr->name);
 	}
     }
-}  
+}
 
 /*====================== resize event ============================*/
 void KoTemplateChooseDia::resizeEvent(QResizeEvent *e)
@@ -152,7 +152,7 @@ void KoTemplateChooseDia::resizeEvent(QResizeEvent *e)
 }
 
 /*====================== name changed ===========================*/
-void KoTemplateChooseDia::nameChanged(const char* name)
+void KoTemplateChooseDia::nameChanged(const QString &name)
 {
   QFileInfo fi(name);
 
@@ -170,9 +170,9 @@ void KoTemplateChooseDia::chosen()
     {
       for (grpPtr = groupList.first();grpPtr != 0;grpPtr = groupList.next())
 	{
-	  if (grpPtr->tab->isVisible() && !grpPtr->loadWid->getCurrent().isEmpty()) 
+	  if (grpPtr->tab->isVisible() && !grpPtr->loadWid->getCurrent().isEmpty())
 	    {
-	      emit templateChosen(static_cast<const char*>(QString(grpPtr->name + "/" + grpPtr->loadWid->getCurrent())));
+	      emit templateChosen(QString(grpPtr->name + "/" + grpPtr->loadWid->getCurrent()));
 	      templateName = QString(grpPtr->name + "/" + grpPtr->loadWid->getCurrent());
 	      fullTemplateName = QString(grpPtr->dir.dirPath(true) + "/" + grpPtr->name + "/" + grpPtr->loadWid->getCurrent());
 	    }

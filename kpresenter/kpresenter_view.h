@@ -99,13 +99,13 @@ public:
 
   // constructor
   KPresenterFrame(KPresenterView*,KPresenterChild*);
-  
+
   // get child
   KPresenterChild* child() {return m_pKPresenterChild;}
 
   // get view
   KPresenterView* presenterView() {return m_pKPresenterView;}
-  
+
   void setKPPartObject(KPPartObject *o) { obj = o; }
   KPPartObject *getKPPartObject() { return obj; }
 
@@ -138,10 +138,10 @@ public:
   ~KPresenterView();
 
   void init();
-  
+
   // clean
   virtual void cleanUp();
-  
+
   // ------ IDL ------
   virtual CORBA::Boolean printDlg();
   // edit menu
@@ -155,7 +155,7 @@ public:
   virtual void editDelPage();
   virtual void editFind();
   virtual void editFindReplace();
-  
+
   // view menu
   virtual void newView();
 
@@ -229,8 +229,8 @@ public:
   virtual void helpContents();
 
   // text toolbar
-  virtual void sizeSelected(const char*);
-  virtual void fontSelected(const char*);
+  virtual void sizeSelected(const char *);
+  virtual void fontSelected(const char *);
   virtual void textBold();
   virtual void textItalic();
   virtual void textUnderline();
@@ -248,7 +248,7 @@ public:
   virtual void textDepthPlus();
   virtual void textDepthMinus();
   virtual void textSpacing();
-  
+
   // color bar
   virtual void setPenColor(CORBA::Long id);
   virtual void setFillColor(CORBA::Long id);
@@ -277,7 +277,7 @@ public:
   void repaint(KRect,bool);
 
   // properties
-  void changePicture(unsigned int,const char*);
+  void changePicture(unsigned int,const QString &);
   void changeClipart(unsigned int,QString);
 
   void presentParts(float,QPainter*,KRect,int,int);
@@ -292,9 +292,9 @@ public:
   void presColorChanged();
 
   void setRulerMouseShow(bool _show)
-    { v_ruler->showMousePos(_show); h_ruler->showMousePos(_show); } 
+    { v_ruler->showMousePos(_show); h_ruler->showMousePos(_show); }
   void setRulerMousePos(int mx,int my)
-    { v_ruler->setMousePos(mx,my); h_ruler->setMousePos(mx,my); } 
+    { v_ruler->setMousePos(mx,my); h_ruler->setMousePos(mx,my); }
 
   // set scrollbar ranges
   void setRanges();
@@ -312,10 +312,10 @@ public:
   PieType getPieType() { return pieType; }
   int getPieAngle() { return pieAngle; }
   int getPieLength() { return pieLength; }
-  QPen getPen() {return pen;} 
-  QBrush getBrush() {return brush;} 
-  LineEnd getLineBegin() {return lineBegin;} 
-  LineEnd getLineEnd() {return lineEnd;} 
+  QPen getPen() {return pen;}
+  QBrush getBrush() {return brush;}
+  LineEnd getLineBegin() {return lineBegin;}
+  LineEnd getLineEnd() {return lineEnd;}
   QColor getGColor1() {return gColor1;}
   QColor getGColor2() {return gColor2;}
   BCType getGType() {return gType;}
@@ -335,7 +335,7 @@ public slots:
   void slotKPresenterModified();
   void slotInsertObject(KPresenterChild *_child,KPPartObject *_kppo);
   void slotUpdateChildGeometry(KPresenterChild *_child);
-  
+
   // KPresenterFrame signals
   void slotGeometryEnd( KoFrame* );
   void slotMoveEnd( KoFrame* );
@@ -344,7 +344,7 @@ protected slots:
 
   // dialog slots
   void backOk(bool);
-  void afChooseOk(const char*);
+  void afChooseOk(const QString &);
   void styleOk();
   void optionOk();
   void pgConfOk();
@@ -437,14 +437,14 @@ protected:
 
   // create a pixmapstring from a color
   QString colorToPixString(QColor);
-  
+
   // get fonts
   void getFonts();
 
   void keyPressEvent(QKeyEvent*);
 
   void doAutomaticScreenPres();
-  
+
   // ********** variables **********
 
   // document
@@ -454,7 +454,7 @@ protected:
   bool m_bKPresenterModified;
   bool m_bUnderConstruction;
   bool searchFirst,continuePres,exitPres;
-  
+
   // edit menu
   OpenPartsUI::Menu_var m_vMenuEdit;
   CORBA::Long m_idMenuEdit_Undo;
@@ -471,7 +471,7 @@ protected:
   // view menu
   OpenPartsUI::Menu_var m_vMenuView;
   CORBA::Long m_idMenuView_NewView;
- 
+
   // insert menu
   OpenPartsUI::Menu_var m_vMenuInsert;
   CORBA::Long m_idMenuInsert_Page;
@@ -491,7 +491,7 @@ protected:
   CORBA::Long m_idMenuTools_Table;
   CORBA::Long m_idMenuTools_Formula;
   CORBA::Long m_idMenuTools_Part;
- 
+
   // text menu
   OpenPartsUI::Menu_var m_vMenuText;
   CORBA::Long m_idMenuText_TFont;
@@ -527,7 +527,7 @@ protected:
   CORBA::Long m_idMenuExtra_Background;
   CORBA::Long m_idMenuExtra_Layout;
   CORBA::Long m_idMenuExtra_Options;
-  
+
   // screenpresentation menu
   OpenPartsUI::Menu_var m_vMenuScreen;
   CORBA::Long m_idMenuScreen_ConfigPage;

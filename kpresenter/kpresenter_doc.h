@@ -111,7 +111,7 @@ public:
 
   // get parent
   KPresenterDoc* parent() {return m_pKPresenterDoc;}
-  
+
 protected:
 
   // parent, document and geometry
@@ -131,30 +131,30 @@ class KPresenterDoc : public QObject,
 
 public:
 
-  // ------ C++ ------ 
+  // ------ C++ ------
   // constructor - destructor
   KPresenterDoc();
   ~KPresenterDoc();
-  
+
   // clean
   virtual void cleanUp();
-  
+
   // save
   virtual bool save( ostream&, const char *_format );
   virtual bool exportHTML(QString _filename);
 
   // load
-  virtual bool load_template(const char *_url);
+  virtual bool load_template(const QString &_url);
   virtual bool loadXML( KOMLParser&, KOStore::Store_ptr );
   virtual bool loadChildren( KOStore::Store_ptr _store );
 
   virtual KPresenterView* createPresenterView();
-  
+
   // ------ IDL ------
   virtual CORBA::Boolean init() {return insertNewTemplate(0,0);}
 
   KOffice::MainWindow_ptr createMainWindow();
-  
+
   // create a view
   virtual OpenParts::View_ptr createView();
 
@@ -163,7 +163,7 @@ public:
 
   // get mime type
   virtual char* mimeType() {return CORBA::string_dup(MIME_TYPE);}
-  
+
   // ask, if document is modified
   virtual CORBA::Boolean isModified() {return m_bModified;}
   virtual void setModified(bool _c) {m_bModified = _c; if ( _c ) m_bEmpty = false; }
@@ -180,23 +180,23 @@ public:
   // add - remove a view
   virtual void addView(KPresenterView *_view);
   virtual void removeView(KPresenterView *_view);
-  
+
   // insert an object
   virtual void insertObject(const KRect&,KoDocumentEntry&,int,int);
   virtual void insertChild( KPresenterChild *_child );
-  
+
   // change geomentry of a child
   virtual void changeChildGeometry(KPresenterChild*,const KRect&,int,int);
-  
+
   // get iterator if a child
   virtual QListIterator<KPresenterChild> childIterator();
-  
+
   // page layout
   void setPageLayout(KoPageLayout,int,int);
   KoPageLayout pageLayout() {return _pageLayout;}
 
   // insert a page
-  unsigned int insertNewPage(int,int,bool _restore=true); 
+  unsigned int insertNewPage(int,int,bool _restore=true);
   bool insertNewTemplate(int,int,bool clean=false);
 
   // get number of pages nad objects
@@ -255,7 +255,7 @@ public:
 		 BCType gt,PieType pt,int _angle,int _len,LineEnd lb,LineEnd le,int diffx,int diffy);
   void insertText(KRect,int,int);
   void insertAutoform(KRect,QPen,QBrush,LineEnd,LineEnd,FillType,QColor,QColor,BCType,QString,int,int);
-  
+
   // get list of pages and objects
   QList<KPBackGround> *backgroundList() {return &_backgroundList;}
   QList<KPObject> *objectList() {return _objectList;}
@@ -335,7 +335,7 @@ public:
   int getLeftBorder();
   int getTopBorder();
   int getBottomBorder();
-  
+
   void deletePage(int _page,DelPageMode _delPageMode);
   void insertPage(int _page,InsPageMode _insPageMode,InsertPos _insPos);
 
@@ -373,7 +373,7 @@ protected:
    * saving. We must know about every direct and indirect child so that we
    * can save them all.
    */
-  virtual void makeChildListIntern( KOffice::Document_ptr _root, const char *_path );  
+  virtual void makeChildListIntern( KOffice::Document_ptr _root, const char *_path );
   /*
    * Overloaded function from @ref KoDocument.
    *
@@ -407,7 +407,7 @@ protected:
   // modified?
   bool m_bModified;
   bool m_bEmpty;
-  
+
   // page layout and background
   KoPageLayout _pageLayout;
   QList<KPBackGround> _backgroundList;
@@ -419,7 +419,7 @@ protected:
   bool _spInfinitLoop,_spManualSwitch;
 
   // options
-  int _rastX,_rastY;   
+  int _rastX,_rastY;
   int _xRnd,_yRnd;
 
   // options for editmode

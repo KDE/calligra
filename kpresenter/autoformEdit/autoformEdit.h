@@ -47,15 +47,15 @@
 class AEditWin : public KTopLevelWidget
 {
   Q_OBJECT
-    
+
 public:
 
   // constructor - destructor
   AEditWin(const char *name=0);
   ~AEditWin();
-  
+
 protected:
-  
+
   // setup GUI
   void setupMenu();
   void setupToolbar1();
@@ -133,8 +133,8 @@ private slots:
   void delPoint(int);
 
   // slots for dialogs
-  void afChooseOk(const char*);
-  void saveAsDiaOk(const char*,const char*);
+  void afChooseOk(const QString &);
+  void saveAsDiaOk(const QString &,const QString &);
 
 };
 

@@ -121,17 +121,17 @@ void KPresenterDoc::draw(QPaintDevice* _dev,CORBA::Long _width,CORBA::Long _heig
   warning("***********************************************");
 
   return;
-  
+
   if (m_lstViews.count() > 0)
     {
       QPainter painter;
       painter.begin(_dev);
-     
+
       if ( _scale != 1.0 )
 	painter.scale( _scale, _scale );
-      
+
       m_lstViews.at(0)->getPage()->draw(KRect(0,0,_width,_height),&painter);
-      
+
       painter.end();
     }
 }
@@ -142,7 +142,7 @@ void KPresenterDoc::cleanUp()
   if (m_bIsClean) return;
 
   assert(m_lstViews.count() == 0);
-  
+
   m_lstChildren.clear();
 
   KoDocument::cleanUp();
@@ -150,12 +150,12 @@ void KPresenterDoc::cleanUp()
 
 /*========================== save ===============================*/
 bool KPresenterDoc::hasToWriteMultipart()
-{  
+{
   QListIterator<KPresenterChild> it(m_lstChildren);
   for(;it.current();++it)
     {
       if (!it.current()->isStoredExtern())
-	return true;    
+	return true;
     }
   return false;
 }
@@ -164,7 +164,7 @@ bool KPresenterDoc::hasToWriteMultipart()
 void KPresenterDoc::makeChildListIntern(KOffice::Document_ptr _doc,const char *_path)
 {
   int i = 0;
-  
+
   QListIterator<KPresenterChild> it(m_lstChildren);
   for(;it.current();++it)
     {
@@ -172,31 +172,31 @@ void KPresenterDoc::makeChildListIntern(KOffice::Document_ptr _doc,const char *_
       tmp.sprintf("/%i",i++);
       QString path(_path);
       path += tmp.data();
-      
-      KOffice::Document_var doc = it.current()->document();    
+
+      KOffice::Document_var doc = it.current()->document();
       doc->makeChildList(_doc,path);
     }
 }
 
 /*========================== save ===============================*/
-bool KPresenterDoc::save( ostream& out, const char* /* format */ )
+bool KPresenterDoc::save( ostream& out, const char * /* format */ )
 {
   KPObject *kpobject = 0L;
 
   out << "<?xml version=\"1.0\"?>" << endl;
   out << otag << "<DOC author=\"" << "Reginald Stadlbauer" << "\" email=\"" << "reggie@kde.org" << "\" editor=\"" << "KPresenter"
       << "\" mime=\"" << "application/x-kpresenter" << "\">" << endl;
-  
+
   out << otag << "<PAPER format=\"" << static_cast<int>(_pageLayout.format) << "\" ptWidth=\"" << _pageLayout.ptWidth
-      << "\" ptHeight=\"" << _pageLayout.ptHeight 
+      << "\" ptHeight=\"" << _pageLayout.ptHeight
       << "\" mmWidth =\"" << _pageLayout.mmWidth << "\" mmHeight=\"" << _pageLayout.mmHeight
       << "\" inchWidth =\"" << _pageLayout.inchWidth << "\" inchHeight=\"" << _pageLayout.inchHeight
       << "\" orientation=\"" << static_cast<int>(_pageLayout.orientation) << "\" unit=\"" << static_cast<int>(_pageLayout.unit) << "\">" << endl;
-  out << indent << "<PAPERBORDERS mmLeft=\"" << _pageLayout.mmLeft << "\" mmTop=\"" << _pageLayout.mmTop << "\" mmRight=\"" 
-      << _pageLayout.mmRight << "\" mmBottom=\"" << _pageLayout.mmBottom 
-      << "\" ptLeft=\"" << _pageLayout.ptLeft << "\" ptTop=\"" << _pageLayout.ptTop << "\" ptRight=\"" 
+  out << indent << "<PAPERBORDERS mmLeft=\"" << _pageLayout.mmLeft << "\" mmTop=\"" << _pageLayout.mmTop << "\" mmRight=\""
+      << _pageLayout.mmRight << "\" mmBottom=\"" << _pageLayout.mmBottom
+      << "\" ptLeft=\"" << _pageLayout.ptLeft << "\" ptTop=\"" << _pageLayout.ptTop << "\" ptRight=\""
       << _pageLayout.ptRight << "\" ptBottom=\"" << _pageLayout.ptBottom
-      << "\" inchLeft=\"" << _pageLayout.inchLeft << "\" inchTop=\"" << _pageLayout.inchTop << "\" inchRight=\"" 
+      << "\" inchLeft=\"" << _pageLayout.inchLeft << "\" inchTop=\"" << _pageLayout.inchTop << "\" inchRight=\""
       << _pageLayout.inchRight << "\" inchBottom=\"" << _pageLayout.inchBottom << "\"/>" << endl;
   out << etag << "</PAPER>" << endl;
 
@@ -209,16 +209,16 @@ bool KPresenterDoc::save( ostream& out, const char* /* format */ )
   saveObjects(out);
   out << etag << "</OBJECTS>" << endl;
 
-  out << indent << "<INFINITLOOP value=\"" << _spInfinitLoop << "\"/>" << endl; 
-  out << indent << "<MANUALSWITCH value=\"" << _spManualSwitch << "\"/>" << endl; 
-  out << indent << "<PRESSPEED value=\"" << static_cast<int>(presSpeed) << "\"/>" << endl; 
+  out << indent << "<INFINITLOOP value=\"" << _spInfinitLoop << "\"/>" << endl;
+  out << indent << "<MANUALSWITCH value=\"" << _spManualSwitch << "\"/>" << endl;
+  out << indent << "<PRESSPEED value=\"" << static_cast<int>(presSpeed) << "\"/>" << endl;
 
   // Write "OBJECT" tag for every child
   QListIterator<KPresenterChild> chl(m_lstChildren);
   for(;chl.current();++chl)
     {
       out << otag << "<EMBEDDED>" << endl;
-      
+
       chl.current()->save(out);
 
       out << otag << "<SETTINGS>" << endl;
@@ -229,11 +229,11 @@ bool KPresenterDoc::save( ostream& out, const char* /* format */ )
 	    kpobject->save(out);
 	}
       out << etag << "</SETTINGS> "<< endl;
-      
+
       out << etag << "</EMBEDDED>" << endl;
     }
   out << etag << "</DOC>" << endl;
-    
+
   setModified(false);
 
   return true;
@@ -263,7 +263,7 @@ bool KPresenterDoc::exportHTML(QString _filename)
 void KPresenterDoc::saveBackground(ostream& out)
 {
   KPBackGround *kpbackground = 0;
-  
+
   for (int i = 0;i < static_cast<int>(_backgroundList.count());i++)
     {
       kpbackground = _backgroundList.at(i);
@@ -277,7 +277,7 @@ void KPresenterDoc::saveBackground(ostream& out)
 void KPresenterDoc::saveObjects(ostream& out)
 {
   KPObject *kpobject = 0;
-  
+
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
@@ -297,17 +297,17 @@ bool KPresenterDoc::loadChildren( KOStore::Store_ptr _store )
       if (!it.current()->loadDocument( _store, it.current()->mimeType() ) )
 	return false;
     }
-  
+
   return true;
 }
 
 /*========================= load a template =====================*/
-bool KPresenterDoc::load_template(const char *_url)
+bool KPresenterDoc::load_template(const QString &_url)
 {
   KURL u(_url);
   if (u.isMalformed())
     return false;
-  
+
   if (!u.isLocalFile())
     {
       cerr << "Can not open remote URL" << endl;
@@ -323,10 +323,10 @@ bool KPresenterDoc::load_template(const char *_url)
 
   KOMLStreamFeed feed(in);
   KOMLParser parser(&feed);
-  
+
   if ( !loadXML( parser, 0L ) )
     return false;
- 
+
   m_bModified = true;
   in.close();
   return true;
@@ -341,7 +341,7 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 
   KoPageLayout __pgLayout;
   __pgLayout.unit = PG_MM;
-  
+
   // clean
   if (_clean)
     {
@@ -365,7 +365,7 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
       cerr << "Missing DOC" << endl;
       return false;
     }
-  
+
   KOMLParser::parseTag( tag.c_str(), name, lst );
   vector<KOMLAttrib>::const_iterator it = lst.begin();
   for(;it != lst.end();it++)
@@ -384,7 +384,7 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
   while (parser.open(0L,tag))
     {
       KOMLParser::parseTag(tag.c_str(),name,lst);
-      
+
       if (name == "EMBEDDED")
 	{
 	  KOMLParser::parseTag(tag.c_str(),name,lst);
@@ -419,8 +419,8 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 		  kppartobject->load(parser,lst);
 		}
 	      else
-		cerr << "Unknown tag '" << tag << "' in EMBEDDED" << endl;    
-	      
+		cerr << "Unknown tag '" << tag << "' in EMBEDDED" << endl;
+	
 	      if (!parser.close(tag))
 		{
 		  cerr << "ERR: Closing Child" << endl;
@@ -428,7 +428,7 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 		}
 	    }
 	}
-	  
+	
       else if (name == "PAPER")
 	{
 	  KOMLParser::parseTag(tag.c_str(),name,lst);
@@ -444,13 +444,13 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 		  __pgLayout.width = __pgLayout.mmWidth = static_cast<double>(atof((*it).m_strValue.c_str()));
 		  __pgLayout.ptWidth = MM_TO_POINT(static_cast<double>(atof((*it).m_strValue.c_str())));
 		  __pgLayout.inchWidth = MM_TO_INCH(static_cast<double>(atof((*it).m_strValue.c_str())));
-		}	      
+		}	
 	      else if ((*it).m_strName == "height")
 		{
 		  __pgLayout.height = __pgLayout.mmHeight = static_cast<double>(atof((*it).m_strValue.c_str()));
 		  __pgLayout.ptHeight = MM_TO_POINT(static_cast<double>(atof((*it).m_strValue.c_str())));
 		  __pgLayout.inchHeight = MM_TO_INCH(static_cast<double>(atof((*it).m_strValue.c_str())));
-		}	      
+		}	
 	      else if ((*it).m_strName == "ptWidth")
 		__pgLayout.ptWidth = atoi((*it).m_strValue.c_str());
 	      else if ((*it).m_strName == "inchWidth")
@@ -474,7 +474,7 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 	    {
 	      KOMLParser::parseTag(tag.c_str(),name,lst);
 	      if (name == "PAPERBORDERS")
-		{    
+		{
 		  KOMLParser::parseTag(tag.c_str(),name,lst);
 		  vector<KOMLAttrib>::const_iterator it = lst.begin();
 		  for(;it != lst.end();it++)
@@ -490,19 +490,19 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 			  __pgLayout.top = __pgLayout.mmTop = (double)atof((*it).m_strValue.c_str());
 			  __pgLayout.ptTop = MM_TO_POINT((double)atof((*it).m_strValue.c_str()));
 			  __pgLayout.inchTop = MM_TO_INCH((double)atof((*it).m_strValue.c_str()));
-			}		      
+			}		
 		      else if ((*it).m_strName == "right")
 			{
 			  __pgLayout.right = __pgLayout.mmRight = (double)atof((*it).m_strValue.c_str());
 			  __pgLayout.ptRight = MM_TO_POINT((double)atof((*it).m_strValue.c_str()));
 			  __pgLayout.inchRight = MM_TO_INCH((double)atof((*it).m_strValue.c_str()));
-			}		      
+			}		
 		      else if ((*it).m_strName == "bottom")
 			{
 			  __pgLayout.bottom = __pgLayout.mmBottom = (double)atof((*it).m_strValue.c_str());
 			  __pgLayout.ptBottom = MM_TO_POINT((double)atof((*it).m_strValue.c_str()));
 			  __pgLayout.inchBottom = MM_TO_INCH((double)atof((*it).m_strValue.c_str()));
-			}		      
+			}		
 		      else if ((*it).m_strName == "ptLeft")
 			__pgLayout.ptLeft = atoi((*it).m_strValue.c_str());
 		      else if ((*it).m_strName == "inchLeft")
@@ -529,11 +529,11 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 			__pgLayout.mmBottom = __pgLayout.bottom = atof((*it).m_strValue.c_str());
 		      else
 			cerr << "Unknown attrib 'PAPERBORDERS:" << (*it).m_strName << "'" << endl;
-		    } 
+		    }
 		}
 	      else
-		cerr << "Unknown tag '" << tag << "' in PAPER" << endl;    
-	      
+		cerr << "Unknown tag '" << tag << "' in PAPER" << endl;
+	
 	      if (!parser.close(tag))
 		{
 		  cerr << "ERR: Closing Child" << endl;
@@ -542,7 +542,7 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 	    }
 
 	}
-      
+
       else if (name == "BACKGROUND")
 	{
 	  KOMLParser::parseTag(tag.c_str(),name,lst);
@@ -616,7 +616,7 @@ bool KPresenterDoc::loadXML( KOMLParser& parser, KOStore::Store_ptr _store )
 	}
 
       else
-	cerr << "Unknown tag '" << tag << "' in PRESENTATION" << endl;    
+	cerr << "Unknown tag '" << tag << "' in PRESENTATION" << endl;
 	
       if (!parser.close(tag))
 	{
@@ -642,17 +642,17 @@ void KPresenterDoc::loadBackground(KOMLParser& parser,vector<KOMLAttrib>& lst)
   while (parser.open(0L,tag))
     {
       KOMLParser::parseTag(tag.c_str(),name,lst);
-      
+
       // page
       if (name == "PAGE")
-	{    
+	{
 	  insertNewPage(0,0,false);
 	  KPBackGround *kpbackground = _backgroundList.last();
 	  kpbackground->load(parser,lst);
 	}
       else
-	cerr << "Unknown tag '" << tag << "' in BACKGROUND" << endl;    
-      
+	cerr << "Unknown tag '" << tag << "' in BACKGROUND" << endl;
+
       if (!parser.close(tag))
 	{
 	  cerr << "ERR: Closing Child" << endl;
@@ -671,10 +671,10 @@ void KPresenterDoc::loadObjects(KOMLParser& parser,vector<KOMLAttrib>& lst,bool 
   while (parser.open(0L,tag))
     {
       KOMLParser::parseTag(tag.c_str(),name,lst);
-      
+
       // object
       if (name == "OBJECT")
-	{    
+	{
 	  KOMLParser::parseTag(tag.c_str(),name,lst);
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
 	  for(;it != lst.end();it++)
@@ -696,7 +696,7 @@ void KPresenterDoc::loadObjects(KOMLParser& parser,vector<KOMLAttrib>& lst,bool 
 		    insertCmd->execute();
 		    _commands.addCommand(insertCmd);
 		  }
-		else		   
+		else		
 		  _objectList->append(kplineobject);
 	      } break;
 	    case OT_RECT:
@@ -711,7 +711,7 @@ void KPresenterDoc::loadObjects(KOMLParser& parser,vector<KOMLAttrib>& lst,bool 
 		    insertCmd->execute();
 		    _commands.addCommand(insertCmd);
 		  }
-		else		   
+		else		
 		  _objectList->append(kprectobject);
 	      } break;
 	    case OT_ELLIPSE:
@@ -725,7 +725,7 @@ void KPresenterDoc::loadObjects(KOMLParser& parser,vector<KOMLAttrib>& lst,bool 
 		    insertCmd->execute();
 		    _commands.addCommand(insertCmd);
 		  }
-		else		   
+		else		
 		  _objectList->append(kpellipseobject);
 	      } break;
 	    case OT_PIE:
@@ -739,7 +739,7 @@ void KPresenterDoc::loadObjects(KOMLParser& parser,vector<KOMLAttrib>& lst,bool 
 		    insertCmd->execute();
 		    _commands.addCommand(insertCmd);
 		  }
-		else		   
+		else		
 		  _objectList->append(kppieobject);
 	      } break;
 	    case OT_AUTOFORM:
@@ -753,7 +753,7 @@ void KPresenterDoc::loadObjects(KOMLParser& parser,vector<KOMLAttrib>& lst,bool 
 		    insertCmd->execute();
 		    _commands.addCommand(insertCmd);
 		  }
-		else		   
+		else		
 		  _objectList->append(kpautoformobject);
 	      } break;
 	    case OT_CLIPART:
@@ -767,7 +767,7 @@ void KPresenterDoc::loadObjects(KOMLParser& parser,vector<KOMLAttrib>& lst,bool 
 		    insertCmd->execute();
 		    _commands.addCommand(insertCmd);
 		  }
-		else		   
+		else		
 		  _objectList->append(kpclipartobject);
 	      } break;
 	    case OT_TEXT:
@@ -781,7 +781,7 @@ void KPresenterDoc::loadObjects(KOMLParser& parser,vector<KOMLAttrib>& lst,bool 
 		    insertCmd->execute();
 		    _commands.addCommand(insertCmd);
 		  }
-		else		   
+		else		
 		  _objectList->append(kptextobject);
 	      } break;
 	    case OT_PICTURE:
@@ -795,22 +795,22 @@ void KPresenterDoc::loadObjects(KOMLParser& parser,vector<KOMLAttrib>& lst,bool 
 		    insertCmd->execute();
 		    _commands.addCommand(insertCmd);
 		  }
-		else		   
+		else		
 		  _objectList->append(kppixmapobject);
 	      } break;
 	    default: break;
 	    }
-	  
+	
 	  if (objStartY > 0) _objectList->last()->moveBy(0,objStartY);
-	  if (pasting) 
+	  if (pasting)
 	    {
 	      _objectList->last()->moveBy(pasteXOffset,pasteYOffset);
 	      _objectList->last()->setSelected(true);
 	    }
 	}
       else
-	cerr << "Unknown tag '" << tag << "' in OBJECTS" << endl;    
-      
+	cerr << "Unknown tag '" << tag << "' in OBJECTS" << endl;
+
       if (!parser.close(tag))
 	{
 	  cerr << "ERR: Closing Child" << endl;
@@ -835,7 +835,7 @@ KPresenterView* KPresenterDoc::createPresenterView()
   KPresenterView *p = new KPresenterView( 0L, 0L, this );
   p->QWidget::show();
   m_lstViews.append( p );
-  
+
   return p;
 }
 
@@ -888,7 +888,7 @@ void KPresenterDoc::insertObject(const KRect& _rect, KoDocumentEntry& _e,int _di
   KOffice::Document_var doc = imr_createDoc( _e );
   if (CORBA::is_nil(doc))
     return;
-  
+
   if (!doc->init())
     {
       QMessageBox::critical((QWidget*)0L,i18n("KPresenter Error"),i18n("Could not init"),i18n("OK"));
@@ -1070,7 +1070,7 @@ bool KPresenterDoc::setPenBrush(QPen pen,QBrush brush,LineEnd lb,LineEnd le,Fill
 {
   KPObject *kpobject = 0;
   bool ret = false;
-  
+
   QList<KPObject> _objects;
   QList<PenBrushCmd::Pen> _oldPen;
   QList<PenBrushCmd::Brush> _oldBrush;
@@ -1086,11 +1086,11 @@ bool KPresenterDoc::setPenBrush(QPen pen,QBrush brush,LineEnd lb,LineEnd le,Fill
   _newBrush.gColor1 = g1;
   _newBrush.gColor2 = g2;
   _newBrush.gType = gt;
-  
+
   _objects.setAutoDelete(false);
   _oldPen.setAutoDelete(false);
   _oldBrush.setAutoDelete(false);
-  
+
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
@@ -1222,7 +1222,7 @@ bool KPresenterDoc::setLineBegin(LineEnd lb)
 {
   KPObject *kpobject = 0;
   bool ret = false;
-  
+
   QList<KPObject> _objects;
   QList<PenBrushCmd::Pen> _oldPen;
   QList<PenBrushCmd::Brush> _oldBrush;
@@ -1295,7 +1295,7 @@ bool KPresenterDoc::setLineEnd(LineEnd le)
 {
   KPObject *kpobject = 0;
   bool ret = false;
-  
+
   QList<KPObject> _objects;
   QList<PenBrushCmd::Pen> _oldPen;
   QList<PenBrushCmd::Brush> _oldBrush;
@@ -1307,7 +1307,7 @@ bool KPresenterDoc::setLineEnd(LineEnd le)
   _objects.setAutoDelete(false);
   _oldPen.setAutoDelete(false);
   _oldBrush.setAutoDelete(false);
-  
+
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
@@ -1372,14 +1372,14 @@ bool KPresenterDoc::setPieSettings(PieType pieType,int angle,int len)
   QList<KPObject> _objects;
   QList<PieValueCmd::PieValues> _oldValues;
   PieValueCmd::PieValues _newValues,*tmp;
-  
+
   _objects.setAutoDelete(false);
   _oldValues.setAutoDelete(false);
-  
+
   _newValues.pieType = pieType;
   _newValues.pieAngle = angle;
   _newValues.pieLength = len;
-  
+
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
@@ -1397,7 +1397,7 @@ bool KPresenterDoc::setPieSettings(PieType pieType,int angle,int len)
 	    }
 	}
     }
-  
+
   if (!_objects.isEmpty())
     {
       PieValueCmd *pieValueCmd = new PieValueCmd(i18n("Change Pie/Arc/Chord Values"),_oldValues,_newValues,_objects,this);
@@ -1423,13 +1423,13 @@ bool KPresenterDoc::setRectSettings(int _rx,int _ry)
   QList<KPObject> _objects;
   QList<RectValueCmd::RectValues> _oldValues;
   RectValueCmd::RectValues _newValues,*tmp;
-  
+
   _objects.setAutoDelete(false);
   _oldValues.setAutoDelete(false);
-  
+
   _newValues.xRnd = _rx;
   _newValues.yRnd = _ry;
-  
+
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
@@ -1445,7 +1445,7 @@ bool KPresenterDoc::setRectSettings(int _rx,int _ry)
 	    }
 	}
     }
-  
+
   if (!_objects.isEmpty())
     {
       RectValueCmd *rectValueCmd = new RectValueCmd(i18n("Change Rectangle values"),_oldValues,_newValues,_objects,this);
@@ -1467,7 +1467,7 @@ bool KPresenterDoc::setPenColor(QColor c,bool fill)
 {
   KPObject *kpobject = 0;
   bool ret = false;
-  
+
   QList<KPObject> _objects;
   QList<PenBrushCmd::Pen> _oldPen;
   QList<PenBrushCmd::Brush> _oldBrush;
@@ -1478,7 +1478,7 @@ bool KPresenterDoc::setPenColor(QColor c,bool fill)
     _newPen.pen = NoPen;
   else
     _newPen.pen = QPen(c);
-  
+
   _objects.setAutoDelete(false);
   _oldPen.setAutoDelete(false);
   _oldBrush.setAutoDelete(false);
@@ -1615,7 +1615,7 @@ bool KPresenterDoc::setBrushColor(QColor c,bool fill)
 {
   KPObject *kpobject = 0;
   bool ret = false;
-  
+
   QList<KPObject> _objects;
   QList<PenBrushCmd::Pen> _oldPen;
   QList<PenBrushCmd::Brush> _oldBrush;
@@ -1627,7 +1627,7 @@ bool KPresenterDoc::setBrushColor(QColor c,bool fill)
     _newBrush.brush = NoBrush;
   else
     _newBrush.brush = QBrush(c);
-  
+
   _objects.setAutoDelete(false);
   _oldPen.setAutoDelete(false);
   _oldBrush.setAutoDelete(false);
@@ -1758,7 +1758,7 @@ BackType KPresenterDoc::getBackType(unsigned int pageNum)
 {
   if (pageNum < _backgroundList.count())
     return backgroundList()->at(pageNum)->getBackType();
- 
+
   return BT_COLOR;
 }
 
@@ -1777,7 +1777,7 @@ QString KPresenterDoc::getBackPixFilename(unsigned int pageNum)
   if (pageNum < _backgroundList.count())
     return backgroundList()->at(pageNum)->getBackPixFilename();
 
-  return 0;
+  return QString::null;
 }
 
 /*=================== get background clipart =====================*/
@@ -1786,7 +1786,7 @@ QString KPresenterDoc::getBackClipFilename(unsigned int pageNum)
   if (pageNum < _backgroundList.count())
     return backgroundList()->at(pageNum)->getBackClipFilename();
 
-  return 0;
+  return QString::null;
 }
 
 /*=================== get background color 1 ======================*/
@@ -1829,7 +1829,7 @@ PageEffect KPresenterDoc::getPageEffect(unsigned int pageNum)
 QPen KPresenterDoc::getPen(QPen pen)
 {
   KPObject *kpobject = 0;
-  
+
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
@@ -1866,7 +1866,7 @@ QPen KPresenterDoc::getPen(QPen pen)
 	      break;
 	    default: break;
 	    }
-	}      
+	}
     }
 
   return pen;
@@ -1876,7 +1876,7 @@ QPen KPresenterDoc::getPen(QPen pen)
 LineEnd KPresenterDoc::getLineBegin(LineEnd lb)
 {
   KPObject *kpobject = 0;
-  
+
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
@@ -1895,7 +1895,7 @@ LineEnd KPresenterDoc::getLineBegin(LineEnd lb)
 	      break;
 	    default: break;
 	    }
-	}      
+	}
     }
 
   return lb;
@@ -1905,7 +1905,7 @@ LineEnd KPresenterDoc::getLineBegin(LineEnd lb)
 LineEnd KPresenterDoc::getLineEnd(LineEnd le)
 {
   KPObject *kpobject = 0;
-  
+
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
@@ -1924,7 +1924,7 @@ LineEnd KPresenterDoc::getLineEnd(LineEnd le)
 	      break;
 	    default: break;
 	    }
-	}      
+	}
     }
 
   return le;
@@ -1934,7 +1934,7 @@ LineEnd KPresenterDoc::getLineEnd(LineEnd le)
 QBrush KPresenterDoc::getBrush(QBrush brush)
 {
   KPObject *kpobject = 0;
-  
+
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
@@ -1968,7 +1968,7 @@ QBrush KPresenterDoc::getBrush(QBrush brush)
 	      break;
 	    default: break;
 	    }
-	}      
+	}
     }
 
   return brush;
@@ -1978,7 +1978,7 @@ QBrush KPresenterDoc::getBrush(QBrush brush)
 FillType KPresenterDoc::getFillType(FillType ft)
 {
   KPObject *kpobject = 0;
-  
+
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
@@ -2012,7 +2012,7 @@ FillType KPresenterDoc::getFillType(FillType ft)
 	      break;
 	    default: break;
 	    }
-	}      
+	}
     }
 
   return ft;
@@ -2022,7 +2022,7 @@ FillType KPresenterDoc::getFillType(FillType ft)
 QColor KPresenterDoc::getGColor1(QColor g1)
 {
   KPObject *kpobject = 0;
-  
+
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
@@ -2056,7 +2056,7 @@ QColor KPresenterDoc::getGColor1(QColor g1)
 	      break;
 	    default: break;
 	    }
-	}      
+	}
     }
 
   return g1;
@@ -2066,7 +2066,7 @@ QColor KPresenterDoc::getGColor1(QColor g1)
 QColor KPresenterDoc::getGColor2(QColor g2)
 {
   KPObject *kpobject = 0;
-  
+
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
@@ -2100,7 +2100,7 @@ QColor KPresenterDoc::getGColor2(QColor g2)
 	      break;
 	    default: break;
 	    }
-	}      
+	}
     }
 
   return g2;
@@ -2110,7 +2110,7 @@ QColor KPresenterDoc::getGColor2(QColor g2)
 BCType KPresenterDoc::getGType(BCType gt)
 {
   KPObject *kpobject = 0;
-  
+
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
@@ -2144,7 +2144,7 @@ BCType KPresenterDoc::getGType(BCType gt)
 	      break;
 	    default: break;
 	    }
-	}      
+	}
     }
 
   return gt;
@@ -2154,7 +2154,7 @@ BCType KPresenterDoc::getGType(BCType gt)
 PieType KPresenterDoc::getPieType(PieType pieType)
 {
   KPObject *kpobject = 0;
-  
+
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
@@ -2169,7 +2169,7 @@ PieType KPresenterDoc::getPieType(PieType pieType)
 int KPresenterDoc::getPieLength(int pieLength)
 {
   KPObject *kpobject = 0;
-  
+
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
@@ -2184,7 +2184,7 @@ int KPresenterDoc::getPieLength(int pieLength)
 int KPresenterDoc::getPieAngle(int pieAngle)
 {
   KPObject *kpobject = 0;
-  
+
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
@@ -2199,7 +2199,7 @@ int KPresenterDoc::getPieAngle(int pieAngle)
 int KPresenterDoc::getRndX(int _rx)
 {
   KPObject *kpobject = 0;
-  
+
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
@@ -2218,7 +2218,7 @@ int KPresenterDoc::getRndX(int _rx)
 int KPresenterDoc::getRndY(int _ry)
 {
   KPObject *kpobject = 0;
-  
+
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
@@ -2237,7 +2237,7 @@ int KPresenterDoc::getRndY(int _ry)
 void KPresenterDoc::lowerObjs(int diffx,int diffy)
 {
   KPObject *kpobject = 0;
-  
+
   QList<KPObject> *_new = new QList<KPObject>;
 
   for (unsigned int j = 0; j < _objectList->count();j++)
@@ -2253,7 +2253,7 @@ void KPresenterDoc::lowerObjs(int diffx,int diffy)
 	  _new->take(i);
 	  _new->insert(0,kpobject);
 	}
-    }      
+    }
 
   LowerRaiseCmd *lrCmd = new LowerRaiseCmd(i18n("Lower Object(s)"),_objectList,_new,this);
   lrCmd->execute();
@@ -2266,7 +2266,7 @@ void KPresenterDoc::lowerObjs(int diffx,int diffy)
 void KPresenterDoc::raiseObjs(int diffx,int diffy)
 {
   KPObject *kpobject = 0;
-  
+
   QList<KPObject> *_new = new QList<KPObject>;
 
   for (unsigned int j = 0; j < _objectList->count();j++)
@@ -2282,7 +2282,7 @@ void KPresenterDoc::raiseObjs(int diffx,int diffy)
 	  _new->take(i);
 	  _new->append(kpobject);
 	}
-    }      
+    }
 
   LowerRaiseCmd *lrCmd = new LowerRaiseCmd(i18n("Lower Object(s)"),_objectList,_new,this);
   lrCmd->execute();
@@ -2324,7 +2324,7 @@ void KPresenterDoc::insertClipart(QString filename,int diffx,int diffy)
 void KPresenterDoc::changePicture(QString filename,int diffx,int diffy)
 {
   KPObject *kpobject = 0;
-  
+
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
@@ -2347,7 +2347,7 @@ void KPresenterDoc::changePicture(QString filename,int diffx,int diffy)
 void KPresenterDoc::changeClipart(QString filename,int diffx,int diffy)
 {
   KPObject *kpobject = 0;
-  
+
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
@@ -2463,8 +2463,8 @@ void KPresenterDoc::setRasters(unsigned int rx,unsigned int ry,bool _replace = t
 {
   _orastX = _rastX;
   _orastY = _rastY;
-  _rastX = rx; 
-  _rastY = ry; 
+  _rastX = rx;
+  _rastY = ry;
   if (_replace) replaceObjs();
 }
 
@@ -2542,11 +2542,11 @@ QList<int> KPresenterDoc::reorderPage(unsigned int num,int diffx,int diffy,float
 {
   QList<int> orderList;
   bool inserted;
-  
+
   orderList.append((int*)(0));
 
   KPObject *kpobject = 0;
-  
+
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
@@ -2576,7 +2576,7 @@ QList<int> KPresenterDoc::reorderPage(unsigned int num,int diffx,int diffy,float
 	    }
 	}
     }
-  
+
   m_bModified = true;
   return orderList;
 }
@@ -2587,7 +2587,7 @@ int KPresenterDoc::getPageOfObj(int objNum,int diffx,int diffy,float fakt = 1.0)
   KRect rect;
 
   KPObject *kpobject = 0;
-  
+
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
@@ -2618,7 +2618,7 @@ KRect KPresenterDoc::getPageSize(unsigned int num,int diffx,int diffy,float fakt
   int bb = _pageLayout.ptBottom;
   int wid = _pageLayout.ptWidth;
   int hei = _pageLayout.ptHeight;
-  
+
   if (!decBorders)
     {
       br = 0;
@@ -2728,7 +2728,7 @@ void KPresenterDoc::insertPage(int _page,InsPageMode _insPageMode,InsertPos _ins
       _backgroundList.take(_backgroundList.count() - 1);
       _backgroundList.insert(_page,kpbackground);
     }
-  
+
   repaint(false);
 }
 
@@ -2738,7 +2738,7 @@ int KPresenterDoc::numSelected()
   int num = 0;
 
   KPObject *kpobject = 0;
-  
+
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
@@ -2752,7 +2752,7 @@ int KPresenterDoc::numSelected()
 KPObject* KPresenterDoc::getSelectedObj()
 {
   KPObject *kpobject = 0;
-  
+
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
@@ -2768,17 +2768,17 @@ void KPresenterDoc::deleteObjs(bool _add = true)
   KPObject *kpobject = 0;
   QList<KPObject> _objects;
   _objects.setAutoDelete(false);
-  
+
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
       if (kpobject->isSelected())
 	_objects.append(kpobject);
     }
- 
+
   DeleteCmd *deleteCmd = new DeleteCmd(i18n("Delete object(s)"),_objects,this);
   deleteCmd->execute();
-  
+
   if (_add) _commands.addCommand(deleteCmd);
 
   m_bModified = true;
@@ -2791,7 +2791,7 @@ void KPresenterDoc::copyObjs(int diffx,int diffy)
   string clip_str;
   tostrstream out(clip_str);
   KPObject *kpobject = 0;
-  
+
   out << otag << "<DOC author=\"" << "Reginald Stadlbauer" << "\" email=\"" << "reggie@kde.org" << "\" editor=\"" << "KPresenter"
       << "\" mime=\"" << "application/x-kpresenter-selection" << "\">" << endl;
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
@@ -2819,10 +2819,10 @@ void KPresenterDoc::pasteObjs(int diffx,int diffy)
   pasting = true;
   pasteXOffset = diffx + 20;
   pasteYOffset = diffy + 20;
-  string clip_str = QApplication::clipboard()->text();
+  string clip_str = QApplication::clipboard()->text().ascii();
 
   if (clip_str.empty()) return;
-  
+
   istrstream in(clip_str.c_str());
   loadStream(in);
 
@@ -2839,7 +2839,7 @@ void KPresenterDoc::replaceObjs()
   QList<KPoint> _diffs;
   _objects.setAutoDelete(false);
   _diffs.setAutoDelete(false);
-  
+
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
@@ -2873,18 +2873,18 @@ void KPresenterDoc::loadStream(istream &in)
 {
   KOMLStreamFeed feed(in);
   KOMLParser parser(&feed);
-  
+
   string tag;
   vector<KOMLAttrib> lst;
   string name;
- 
+
   // DOC
   if (!parser.open("DOC",tag))
     {
       cerr << "Missing DOC" << endl;
       return;
     }
-  
+
   KOMLParser::parseTag(tag.c_str(),name,lst);
   vector<KOMLAttrib>::const_iterator it = lst.begin();
   for(;it != lst.end();it++)
@@ -2898,7 +2898,7 @@ void KPresenterDoc::loadStream(istream &in)
 	    }
 	}
     }
-    
+
   loadObjects(parser,lst,true);
 
   repaint(false);
@@ -3039,7 +3039,7 @@ void KPresenterDoc::alignObjsCenterV()
 	  pgnum = getPageOfObj(i,0,0);
 	  if (pgnum != -1)
 	    {
-	      _y = getPageSize(pgnum - 1,0,0).y(); 
+	      _y = getPageSize(pgnum - 1,0,0).y();
 	      _h = getPageSize(pgnum - 1,0,0).height();
 	      _objects.append(kpobject);
 	      _diffs.append(new KPoint(0,(_h - kpobject->getSize().height()) / 2 - kpobject->getOrig().y() + _y));
@@ -3106,15 +3106,15 @@ int KPresenterDoc::getPenBrushFlags()
 {
   int flags = 0;
   KPObject *kpobject = 0;
-  
+
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
-      if (kpobject->isSelected()) 
+      if (kpobject->isSelected())
 	{
 	  switch (kpobject->getType())
 	    {
-	    case OT_LINE: 
+	    case OT_LINE:
 	      flags = flags | SD_PEN;
 	      break;
 	    case OT_AUTOFORM: case OT_RECT: case OT_ELLIPSE: case OT_PIE: case OT_PART: case OT_TEXT: case OT_PICTURE: case OT_CLIPART:

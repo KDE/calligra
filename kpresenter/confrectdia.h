@@ -46,7 +46,7 @@ class RectPreview : public QFrame
 
 public:
   RectPreview(QWidget* parent,const char*);
-  ~RectPreview() {}                                            
+  ~RectPreview() {}
 
   void setRnds(int _rx,int _ry)
     { xRnd = _rx; yRnd = _ry; repaint(true); }
@@ -68,15 +68,15 @@ class ConfRectDia : public QDialog
 
 public:
   ConfRectDia(QWidget* parent,const char*);
-  ~ConfRectDia();                                             
+  ~ConfRectDia();
 
   void setRnds(int _rx,int _rx);
 
-  int getRndX() 
+  int getRndX()
     { return xRnd; }
   int getRndY()
     { return yRnd; }
-  
+
 protected:
   QLabel *lRndX,*lRndY;
   KRestrictedLine *eRndX,*eRndY;
@@ -87,8 +87,8 @@ protected:
   int xRnd,yRnd;
 
 protected slots:
-  void rndXChanged(const char*);
-  void rndYChanged(const char*);
+  void rndXChanged(const QString &);
+  void rndYChanged(const QString &);
   void Apply() { emit confRectDiaOk(); }
 
 signals:

@@ -48,8 +48,8 @@ public:
   static const int ALPHABETH = 2;
 
   // constructor - destructor
-  KEnumListDia(QWidget*,const char*,int,QFont,QColor,QString,QString,int,QStrList); 
-  ~KEnumListDia();                                    
+  KEnumListDia(QWidget*,const char*,int,QFont,QColor,QString,QString,int,QStrList);
+  ~KEnumListDia();
 
   // show enum list dialog
   static bool enumListDia(int&,QFont&,QColor&,QString&,QString&,int&,QStrList);
@@ -74,7 +74,7 @@ protected:
   QRadioButton *number,*alphabeth;
   KButtonBox *bbox;
   QPushButton *bOk,*bCancel;
-  
+
   // values
   int _type;
   QFont _font;
@@ -82,19 +82,19 @@ protected:
   QString _before;
   QString _after;
   int _start;
-  
+
   QStrList fontList;
 
 protected slots:
-  void fontSelected(const char*);
+  void fontSelected(const QString &);
   void sizeSelected(int);
   void colorChanged(const QColor&);
   void boldChanged();
   void italicChanged();
   void underlChanged();
-  void beforeChanged(const char*);
-  void afterChanged(const char*);
-  void startChanged(const char*);
+  void beforeChanged(const QString &);
+  void afterChanged(const QString &);
+  void startChanged(const QString &);
   void numChanged();
   void alphaChanged();
 

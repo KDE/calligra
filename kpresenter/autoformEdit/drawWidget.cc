@@ -61,7 +61,7 @@ void DrawWidget::setRelation(bool r)
 }
 
 /*======================= create pixmap ==========================*/
-void DrawWidget::createPixmap(const char *fileName)
+void DrawWidget::createPixmap(const QString &fileName)
 {
   QPixmap *pm = new QPixmap(32,32);
   QPainter *painter = new QPainter();
@@ -71,8 +71,8 @@ void DrawWidget::createPixmap(const char *fileName)
 
   aWidth = 32;
   aHeight = 32;
-  emit getPntArry(aWidth,aHeight);  
-  pm->fill(white);         
+  emit getPntArry(aWidth,aHeight);
+  pm->fill(white);
   painter->begin(pm);
   painter->setPen(QPen(black,1,SolidLine));
   for (i=0;i < pntArry.size();i++)
@@ -101,7 +101,7 @@ void DrawWidget::createPixmap(const char *fileName)
   painter->end();
   aWidth = aw;
   aHeight = ah;
-  emit getPntArry(aWidth,aHeight);  
+  emit getPntArry(aWidth,aHeight);
   pm->save(fileName,"XPM");
 }
 
@@ -158,5 +158,5 @@ void DrawWidget::paintEvent(QPaintEvent*)
 
   painter->resetXForm();
   painter->end();
-} 
+}
 

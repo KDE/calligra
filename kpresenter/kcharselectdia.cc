@@ -45,7 +45,7 @@ KCharSelectDia::KCharSelectDia(QWidget* parent,const char* name,QList<QFont> *__
   fontList.find(_font->at(0)->family());
   fontCombo->setCurrentItem(fontList.at());
   grid->addWidget(fontCombo,1,0);
-  connect(fontCombo,SIGNAL(activated(const char*)),this,SLOT(fontSelected(const char*)));
+  connect(fontCombo,SIGNAL(activated(const QString &)),this,SLOT(fontSelected(const QString &)));
 
   charSelect = new KCharSelect(this,"",*_font->at(0),*_color->at(0),*_c->at(0));
   charSelect->resize(charSelect->sizeHint());
@@ -53,7 +53,7 @@ KCharSelectDia::KCharSelectDia(QWidget* parent,const char* name,QList<QFont> *__
   connect(charSelect,SIGNAL(activated(int)),this,SLOT(charChanged(int)));
 
   wid = new QWidget(this);
-  
+
   grid2 = new QGridLayout(wid,2,7,0,7);
 
   lSize = new QLabel("Size:",wid);
@@ -75,12 +75,12 @@ KCharSelectDia::KCharSelectDia(QWidget* parent,const char* name,QList<QFont> *__
   grid2->addWidget(sizeCombo,1,0);
   sizeCombo->setCurrentItem(_font->at(0)->pointSize() - 4);
   connect(sizeCombo,SIGNAL(activated(int)),this,SLOT(sizeSelected(int)));
-  
+
   colorButton = new KColorButton(*_color->at(0),wid);
   colorButton->resize(colorButton->sizeHint());
   grid2->addWidget(colorButton,1,1);
   connect(colorButton,SIGNAL(changed(const QColor&)),this,SLOT(colorChanged(const QColor&)));
-  
+
   lAttrib = new QLabel("Attributes:",wid);
   lAttrib->resize(lAttrib->sizeHint());
   grid2->addMultiCellWidget(lAttrib,0,0,2,4);
@@ -210,10 +210,10 @@ bool KCharSelectDia::selectChar(QList<QFont> *__font,QList<QColor> *__color,QLis
 }
 
 /*=========================== Font selected =====================*/
-void KCharSelectDia::fontSelected(const char *_family)
+void KCharSelectDia::fontSelected(const QString &_family)
 {
   _font->at(_depth)->setFamily(_family);
-  charSelect->setFont(_family);
+  charSelect->setFont(QFont(_family));
   lPreview->setFont(*_font->at(_depth));
 }
 
@@ -239,11 +239,11 @@ void KCharSelectDia::depthSelected(int d)
 
   colorButton->setColor(*_color->at(d));
   colorChanged(*_color->at(d));
- 
+
   bold->setChecked(_font->at(d)->bold());
   italic->setChecked(_font->at(d)->italic());
   underl->setChecked(_font->at(d)->underline());
-  
+
   sizeCombo->setCurrentItem(_font->at(d)->pointSize() - 4);
 }
 
@@ -255,7 +255,7 @@ void KCharSelectDia::colorChanged(const QColor& __color)
 		  lPreview->colorGroup().light(),lPreview->colorGroup().dark(),
 		  lPreview->colorGroup().mid(),__color,lPreview->colorGroup().base());
  QPalette p(cgrp,cgrp,cgrp);
- 
+
  lPreview->setPalette(p);
 }
 

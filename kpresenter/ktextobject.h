@@ -61,7 +61,7 @@ class KTextObject;
  * The TxtCusor class manages everything which has to do with the
  * position of the textcursor of the KTextObject.<br>
  * <b>You should <i>never</i> need to do anything with this class. It's the
- * best, if you only access methodes of the KTextObject.</b> 
+ * best, if you only access methodes of the KTextObject.</b>
  * @short Class for managing a textcursor.
  * @author Reginald Stadlbauer <reggie@kde.org>
  * @version 0.0.4
@@ -167,7 +167,7 @@ public:
    * Returns the cursorposition relative to the whole text.
    */
   unsigned int positionAbs() {return absPos;}
-  
+
   /**
    * Returns the paragraph, in which the cursor is.
    */
@@ -186,7 +186,7 @@ public:
   /**
    * Returns the cursorposition relative to the line in the paragraph
    */
-  unsigned int positionInLine() {return inLine;} 
+  unsigned int positionInLine() {return inLine;}
 
   /**
    * Set the maximal position of the cursor.
@@ -197,19 +197,19 @@ public:
    * Returns the maximal position of the cursor.
    */
   unsigned int maxPosition() {return objMaxPos;}
-  
+
   /**
    * (Re)Calculate the cursor position. This is called, if something in the text changes.
    */
   void calcPos();
 
   /**
-   * Returns the cursor, whos position is smaller 
+   * Returns the cursor, whos position is smaller
    */
   TxtCursor* minCursor(TxtCursor*);
 
   /**
-   * Returns the cursor, whos position is bigger 
+   * Returns the cursor, whos position is bigger
    */
   TxtCursor* maxCursor(TxtCursor*);
 
@@ -217,7 +217,7 @@ public:
    * Set the x-position of the cursor in pixels
    */
   void setXPos(int xpos) {_xpos = xpos;}
-  
+
   /**
    * Returns the x-position of the cursor in pixels
    */
@@ -227,7 +227,7 @@ public:
    * Set the y-position of the cursor in pixels
    */
   void setYPos(int ypos) {_ypos = ypos;}
-  
+
   /**
    * Returns the y-position of the cursor in pixels
    */
@@ -237,7 +237,7 @@ public:
    * Set the height of the cursor in pixels
    */
   void setHeight(unsigned int _height) {__height = _height;}
-  
+
   /**
    * Returns the height of the cursor in pixels
    */
@@ -249,7 +249,7 @@ public:
   void setKTextObject(KTextObject* _txtObj) {txtObj = _txtObj;}
 
   /**
-   * copy a TxtCursor and return a reference to it. 
+   * copy a TxtCursor and return a reference to it.
    */
   TxtCursor& copy(TxtCursor&);
 
@@ -258,7 +258,7 @@ protected:
   //*********** variables ***********
 
   unsigned int absPos;
-  
+
   unsigned int paragraph;
   unsigned int inParagraph;
 
@@ -282,7 +282,7 @@ protected:
 /**
  * The class TxtObj is a class for a single object in the KTextObject.<br>
  * <b>You should <i>never</i> need to do anything with this class. It's the
- * best, if you only access methodes of the KTextObject.</b> 
+ * best, if you only access methodes of the KTextObject.</b>
  * @short Class for a single object in the KTextObject.
  * @author Reginald Stadlbauer <reggie@kde.org>
  * @version 0.0.4
@@ -296,7 +296,7 @@ public:
    * type of the textobject
    */
   enum ObjType {TEXT,SEPARATOR};
-  
+
   /**
    * vertical alignment
    */
@@ -310,7 +310,7 @@ public:
   /**
    * Overloaded constructor. With this constructor you can init a textobject.
    */
-  TxtObj(const char* t,QFont f,QColor,VertAlign,ObjType ot=TEXT);
+  TxtObj(const QString & t,QFont f,QColor,VertAlign,ObjType ot=TEXT);
   ~TxtObj() {};
 
   /**
@@ -366,7 +366,7 @@ public:
   /**
    * Inserts the string <i>text</i> at the position <i>index</i>.
    */
-  void insert(unsigned int index,const char* text) {objText.insert(index,text);}
+  void insert(unsigned int index,const QString & text) {objText.insert(index,text);}
 
   /**
    * Inserts the char <i>c</i> at the position <i>index</i>.
@@ -376,7 +376,7 @@ public:
   /**
    * Appends the string <i>text</i>.
    */
-  void append(const char* text) {objText.append(text);}
+  void append(const QString & text) {objText.append(text);}
 
   /**
    * Appends the char <i>c</i>.
@@ -402,7 +402,7 @@ public:
    * Returns the width of the text.
    */
   unsigned int width();
-  
+
   /**
    * Returns the height of the text.
    */
@@ -421,7 +421,7 @@ public:
   /**
    * Returns the position (in chars) at which pos (in pixels) is.
    */
-  int getPos(int pos); 
+  int getPos(int pos);
 
 protected:
 
@@ -445,7 +445,7 @@ protected:
  * The class Txt Line offers everything for a text line. It consists of a list
  * of text objects.<br>
  * <b>You should <i>never</i> need to do anything with this class. It's the
- * best, if you only access methodes of the KTextObject.</b> 
+ * best, if you only access methodes of the KTextObject.</b>
  * @short Class for a text line in the KTextObject.
  * @author Reginald Stadlbauer <reggie@kde.org>
  * @version 0.0.4
@@ -464,7 +464,7 @@ public:
   /**
    * Insert a text (with attributes) at <i>pos</i>.
    */
-  void insert(unsigned int pos,const char*,QFont,QColor,TxtObj::VertAlign);
+  void insert(unsigned int pos,const QString &,QFont,QColor,TxtObj::VertAlign);
 
   /**
    * Insert a character (with attributes) at <i>pos</i>.
@@ -480,7 +480,7 @@ public:
   /**
    * Append a text (with attributes).
    */
-  void append(const char* t,QFont f,QColor c,TxtObj::VertAlign va)
+  void append(const QString &t,QFont f,QColor c,TxtObj::VertAlign va)
     {objList.append(new TxtObj(t,f,c,va));}
 
   /**
@@ -492,7 +492,7 @@ public:
   /**
    * Append a text (with attributes).
    */
-  void append(const char* t,QFont f,QColor c,TxtObj::VertAlign va,TxtObj::ObjType ot)
+  void append(const QString & t,QFont f,QColor c,TxtObj::VertAlign va,TxtObj::ObjType ot)
     {objList.append(new TxtObj(t,f,c,va,ot));}
 
   /**
@@ -584,7 +584,7 @@ public:
 
   /**
    * Split a text object in the line at <i>pos</i> in two objects.
-   */ 
+   */
   void splitObj(unsigned int pos);
 
   /**
@@ -643,13 +643,13 @@ protected:
  * The class TxtParagraph offers everything for a paragraph in the KTextObject. It consists
  * of a list of text lines.<br>
  * <b>You should <i>never</i> need to do anything with this class. It's the
- * best, if you only access methodes of the KTextObject.</b> 
+ * best, if you only access methodes of the KTextObject.</b>
  * @short Class for a text paragraph in the KTextObject.
  * @author Reginald Stadlbauer <reggie@kde.org>
  * @version 0.0.4
  */
 
-class TxtParagraph 
+class TxtParagraph
 {
 public:
 
@@ -667,7 +667,7 @@ public:
    * Horizontal alignment of the paragraph.
    */
   enum HorzAlign {LEFT,CENTER,RIGHT,BLOCK};
-  
+
   /**
    * Constructor. If init is <i>true</i> an empty text line is inserted.
    */
@@ -677,18 +677,18 @@ public:
   /**
    * Insert a string with attributes at a cursor position.
    */
-  void insert(TxtCursor,const char*,QFont,QColor,TxtObj::VertAlign);
+  void insert(TxtCursor,const QString &,QFont,QColor,TxtObj::VertAlign);
 
   /**
    * Insert a character with attributes at a cursor position.
    */
   void insert(TxtCursor,char,QFont,QColor,TxtObj::VertAlign);
-  
+
   /**
    * Append a string with attributes.
    */
-  void append(const char*,QFont,QColor,TxtObj::VertAlign);
-  
+  void append(const QString &,QFont,QColor,TxtObj::VertAlign);
+
   /**
    * Append a character with attributes.
    */
@@ -874,7 +874,7 @@ protected:
 
   unsigned int widthToNextSep(unsigned int);
   unsigned int charsToNextSep(unsigned int);
-  
+
   //*********** variables ***********
 
   QList<TxtLine> lineList;
@@ -888,7 +888,7 @@ protected:
   QList<RegExpMode> *regExpList;
   int _depth,_leftIndent;
   int lineSpacing,distBefore,distAfter;
-  
+
 };
 
 /******************************************************************/
@@ -923,8 +923,8 @@ class KTextObject : public QTableView
 
 public:
 
-  /** 
-   * structur for type of unsorted lists 
+  /**
+   * structur for type of unsorted lists
    */
   struct UnsortListType
   {
@@ -972,7 +972,7 @@ public:
    * Type of the KTextObject. Default is PLAIN.
    */
   enum ObjType {PLAIN,ENUM_LIST,UNSORT_LIST,TABLE};
- 
+
   /**
    * Constructor of the KTextObject.<br>
    * <i>QWidget *parent:</i> Parent widget<br>
@@ -987,12 +987,12 @@ public:
 
   /**
    * Set the object type of the KTextObject.
-   */ 
+   */
   void setObjType(ObjType);
 
   /**
    * Returns the object type of the KTextObject.
-   */ 
+   */
   ObjType objType() {return obType;}
 
   /**
@@ -1000,14 +1000,14 @@ public:
    * The structure for the enumerated list types looks like that:
    * <pre>const int NUMBER = 1;
    * const int ALPHABETH = 2;
-   * 
+   *
    * struct EnumListType
    * {
    *  &nbsp;&nbsp;int type; // NUMBER or ALPHABETH
    *  &nbsp;&nbsp;QString before; // string before the counter
    *  &nbsp;&nbsp;QString after; // string after the counter
    *  &nbsp;&nbsp;int start; // start of the counter
-   *  &nbsp;&nbsp;QFont font; 
+   *  &nbsp;&nbsp;QFont font;
    *  &nbsp;&nbsp;QColor color;
    *  &nbsp;&nbsp;QFont ofont;
    * };
@@ -1020,14 +1020,14 @@ public:
    * The structure for the enumerated list types looks like that:
    * <pre>const int NUMBER = 1;
    * const int ALPHABETH = 2;
-   * 
+   *
    * struct EnumListType
    * {
    *  &nbsp;&nbsp;int type; // NUMBER or ALPHABETH
    *  &nbsp;&nbsp;QString before; // string before the counter
    *  &nbsp;&nbsp;QString after; // string after the counter
    *  &nbsp;&nbsp;int start; // start of the counter
-   *  &nbsp;&nbsp;QFont font; 
+   *  &nbsp;&nbsp;QFont font;
    *  &nbsp;&nbsp;QColor color;
    *  &nbsp;&nbsp;QFont ofont;
    * };
@@ -1148,17 +1148,18 @@ public:
    * Returns a QPicture of the text to draw it transparent.<br>
    * The four integers give the size of the QPicture<br>
    * If presMode is <i>true</i>, you can say that only the paragraphs between from and to are drawn.
-   * If <i>_clip</i> is true, the clipping rect is set to <i>_x, _y, _w, _h</i>, else no clipping rect is set. 
+   * If <i>_clip</i> is true, the clipping rect is set to <i>_x, _y, _w, _h</i>, else no clipping rect is set.
    */
   QPicture* getPic(int _x,int _y,int _w,int _h,bool presMode=false,int from=-1,int to=-1,bool _clip=true);
+  void draw(QPainter &p,int _x,int _y,int _w,int _h,bool presMode=false,int from=-1,int to=-1,bool _clip=true);
 
-  /** 
+  /**
    * Resize the KTextObject.
    */
   void resize(int w,int h)
     {QTableView::resize(w,h); recalc();}
 
-  /** 
+  /**
    * Resize the KTextObject.
    */
   void resize(KSize s)
@@ -1168,7 +1169,7 @@ public:
    * Zoom the text by the faktor which is given as the float argument.
    */
   void zoom(float _fakt);
-  
+
   /**
    * Zoom the text back to it's original size.
    */
@@ -1182,7 +1183,7 @@ public:
   /**
    * Clear the KTextObject. If <i>init</i> is <i>true</i> a paragraph with one line is appended,
    * else nothing is appended.
-   */ 
+   */
   void clear(bool init=true);
 
   /**
@@ -1202,8 +1203,8 @@ public:
    * If <i>clean</i> in <i>true</i> the fontsizes are calculated correctly as HTML, else
    * the real fontsize is used. If you only want to save and load the text in the KTextObject,
    * <i>clean</i> should be <i>false</i>, if you want to use the output for a HTML-Page, <i>clean</i> should
-   * be <i>true</i>. If <i>onlyBody</i> is <i>true</i>, only the stuff which is between the body-begin 
-   * and body-end flag is returned, else a whole, valide HTML-document is returned. 
+   * be <i>true</i>. If <i>onlyBody</i> is <i>true</i>, only the stuff which is between the body-begin
+   * and body-end flag is returned, else a whole, valide HTML-document is returned.
    */
   QString toHTML(bool clean=false,bool onlyBody=false);
 
@@ -1211,9 +1212,9 @@ public:
    * Saves the text of the KTextObject as ASCII-Text to the file
    * <i>filename</i>.<br>
    * If linebreak is <i>true</i> for each linebreak a \n is used.
-   */ 
-  void saveASCII(QString filename,bool linebreak=true); 
-  
+   */
+  void saveASCII(QString filename,bool linebreak=true);
+
   /**
    * Saves the text of the KTextObject in HTML-Text to the file
    * <i>filename</i>.<br>
@@ -1221,8 +1222,8 @@ public:
    * the real fontsize is used. If you only want to save and load the text in the KTextObject,
    * clean should be <i>false</i>, if you want to use the output for a HTML-Page, clean should
    * be <i>true</i>.
-   */ 
-  void saveHTML(QString filename,bool clean=false); 
+   */
+  void saveHTML(QString filename,bool clean=false);
 
   /**
    * Adds the <i>text</i> in the given <i>color</i> and <i>font</i> to the KTextObject.
@@ -1260,7 +1261,7 @@ public:
   /**
    * With this function you can switch on a composer mode. If the composer-mode is
    * on, all lines, which begin with a char out of '>:|' will be displayed in <i>quoted_color</i>
-   * and <i>quoted_font</i>. The rest is displayed in <i>normal_color</i> and <i>normal_font</i>. 
+   * and <i>quoted_font</i>. The rest is displayed in <i>normal_color</i> and <i>normal_font</i>.
    */
   void enableComposerMode(QColor quoted_color,QFont quoted_font,QColor normal_color,QFont normal_font);
 
@@ -1511,25 +1512,25 @@ public:
   void deleteRegion(TxtCursor *_startCursor,TxtCursor *_stopCursor);
 
   /**
-   * Insert the text <i>text</i> at the position <i>pos</i> (given in words). 
+   * Insert the text <i>text</i> at the position <i>pos</i> (given in words).
    * The text is written in the font <i>font</i> and the color <i>color</i>.
    */
   void insertText(QString text,int pos,QFont font,QColor color);
 
   /**
-   * Insert the text <i>text</i> in the line <i>line</i> at the position <i>pos</i> (given in words). 
+   * Insert the text <i>text</i> in the line <i>line</i> at the position <i>pos</i> (given in words).
    * The text is written in the font <i>font</i> and the color <i>color</i>.
    */
   void insertTextInLine(QString text,int pos,int line,QFont font,QColor color);
 
   /**
-   * Insert the text <i>text</i> in the paragraph <i>para</i> at the position <i>pos</i> (given in words). 
+   * Insert the text <i>text</i> in the paragraph <i>para</i> at the position <i>pos</i> (given in words).
    * The text is written in the font <i>font</i> and the color <i>color</i>.
    */
   void insertTextInPara(QString text,int pos,int para,QFont font,QColor color);
 
   /**
-   * Insert the text <i>text</i> in the line <i>line</i> in the paragraph <i>para</i> at the position <i>pos</i> (given in words). 
+   * Insert the text <i>text</i> in the line <i>line</i> in the paragraph <i>para</i> at the position <i>pos</i> (given in words).
    * The text is written in the font <i>font</i> and the color <i>color</i>.
    */
   void insertText(QString text,int pos,int line,int para,QFont font,QColor color);
@@ -1683,7 +1684,7 @@ public:
    * Toggles modified status.
    */
   void toggleModified(bool m) {_modified = m;}
-  
+
   /**
    * Returns modified status.
    */
@@ -1712,7 +1713,7 @@ public:
   /**
    * Start finding a string at the cursor position and goes forwards. If the string was found, this string gets selected.<br>
    * Returns <i>true</i> if the string was found, else it returns <i>false</i>. If <i>true</i> is
-   * returned, <i>from</i> to <i>to</i> points to the position, where the string was found. Else <i>from</i> and <i>to</i> are 
+   * returned, <i>from</i> to <i>to</i> points to the position, where the string was found. Else <i>from</i> and <i>to</i> are
    * undefined.<br>
    * <i>caseSensitive</i> sets, if the search is case sensitive or not.
    */
@@ -1744,7 +1745,7 @@ public:
    * <i>caseSensitive</i> sets, if the search is case sensitive or not.
    */
   bool searchNextRev(QString,TxtCursor *from,TxtCursor *to,bool caseSensitive);
-  
+
   /**
    * Set search index to te beginning.
    */
@@ -1758,40 +1759,40 @@ public:
     { searchIndexFrom.setPositionAbs(textLength()); searchIndexTo.setPositionAbs(textLength()); }
 
   /**
-   * Start finding a string <i>search</i> and replacing it with <i>replace</i> at the current cursor position and goes forwards. 
+   * Start finding a string <i>search</i> and replacing it with <i>replace</i> at the current cursor position and goes forwards.
    * If the string was replaced, the replaced string is selected.<br>
    * Returns <i>true</i> if the string was found and replaced, else it returns <i>false</i>. If <i>true</i> is
-   * returned, <i>from</i> to <i>to</i> points to the position, where the string was replaced. Else <i>from</i> and <i>to</i> are 
+   * returned, <i>from</i> to <i>to</i> points to the position, where the string was replaced. Else <i>from</i> and <i>to</i> are
    * undefined.<br>
    * <i>caseSensitive</i> sets, if the search/replace is case sensitive or not.
    */
   bool replaceFirst(QString search,QString replace,TxtCursor *from,TxtCursor *to,bool caseSensitive);
 
   /**
-   * Continue finding a string <i>search</i> and replacing it with <i>replace</i> at the current cursor position and going forwards. 
+   * Continue finding a string <i>search</i> and replacing it with <i>replace</i> at the current cursor position and going forwards.
    * If the string was replaced, the replaced string is selected.<br>
    * Returns <i>true</i> if the string was found and replaced, else it returns <i>false</i>. If <i>true</i> is
-   * returned, <i>from</i> to <i>to</i> points to the position, where the string was replaced. Else <i>from</i> and <i>to</i> are 
+   * returned, <i>from</i> to <i>to</i> points to the position, where the string was replaced. Else <i>from</i> and <i>to</i> are
    * undefined.<br>
    * <i>caseSensitive</i> sets, if the search/replace is case sensitive or not.
    */
   bool replaceNext(QString search,QString replace,TxtCursor *from,TxtCursor *to,bool caseSensitive);
 
   /**
-   * Start finding a string <i>search</i> and replacing it with <i>replace</i> at the current cursor position and goes backwards. 
+   * Start finding a string <i>search</i> and replacing it with <i>replace</i> at the current cursor position and goes backwards.
    * If the string was replaced, the replaced string is selected.<br>
    * Returns <i>true</i> if the string was found and replaced, else it returns <i>false</i>. If <i>true</i> is
-   * returned, <i>from</i> to <i>to</i> points to the position, where the string was replaced. Else <i>from</i> and <i>to</i> are 
+   * returned, <i>from</i> to <i>to</i> points to the position, where the string was replaced. Else <i>from</i> and <i>to</i> are
    * undefined.<br>
    * <i>caseSensitive</i> sets, if the search/replace is case sensitive or not.
    */
   bool replaceFirstRev(QString search,QString replace,TxtCursor *from,TxtCursor *to,bool caseSensitive);
 
   /**
-   * Continue finding a string <i>search</i> and replacing it with <i>replace</i> at the current cursor position and going backwards. 
+   * Continue finding a string <i>search</i> and replacing it with <i>replace</i> at the current cursor position and going backwards.
    * If the string was replaced, the replaced string is selected.<br>
    * Returns <i>true</i> if the string was found and replaced, else it returns <i>false</i>. If <i>true</i> is
-   * returned, <i>from</i> to <i>to</i> points to the position, where the string was replaced. Else <i>from</i> and <i>to</i> are 
+   * returned, <i>from</i> to <i>to</i> points to the position, where the string was replaced. Else <i>from</i> and <i>to</i> are
    * undefined.<br>
    * <i>caseSensitive</i> sets, if the search/replace is case sensitive or not.
    */
@@ -1806,7 +1807,7 @@ public:
   /**
    * Disable drawing the whole text in one color. Now the objectspecific colors are used again.
    */
-  void disableDrawAllInOneColor(bool _repaint=false) 
+  void disableDrawAllInOneColor(bool _repaint=false)
     { allInOneColor = false; if (_repaint) repaint(false); }
 
   /**
@@ -1840,9 +1841,9 @@ public:
   /**
    * Increase the depth for the current paragraph.
    */
-  void incDepth() { 
-    paragraphList.at(txtCursor->positionParagraph())->setDepth(paragraphList.at(txtCursor->positionParagraph())->getDepth() + 1 < 16 ? 
-							       paragraphList.at(txtCursor->positionParagraph())->getDepth() + 1 : 15); 
+  void incDepth() {
+    paragraphList.at(txtCursor->positionParagraph())->setDepth(paragraphList.at(txtCursor->positionParagraph())->getDepth() + 1 < 16 ?
+							       paragraphList.at(txtCursor->positionParagraph())->getDepth() + 1 : 15);
     recalc(); repaint(true);
   }
 
@@ -1850,7 +1851,7 @@ public:
    * Decrease the depth for the current paragraph.
    */
   void decDepth() {
-    paragraphList.at(txtCursor->positionParagraph())->setDepth(paragraphList.at(txtCursor->positionParagraph())->getDepth() - 1 >= 0 ? 
+    paragraphList.at(txtCursor->positionParagraph())->setDepth(paragraphList.at(txtCursor->positionParagraph())->getDepth() - 1 >= 0 ?
 							       paragraphList.at(txtCursor->positionParagraph())->getDepth() - 1 : 0);
     recalc(); repaint(true);
   }
@@ -1933,7 +1934,7 @@ protected:
     Operators op;
     QString value;
   };
-  
+
   typedef QList<Attrib> AttribList;
 
   struct ParsedTag
@@ -1945,7 +1946,7 @@ protected:
   };
 
   enum CursorDirection {C_LEFT,C_RIGHT,C_UP,C_DOWN};
-  
+
   //***************** methodes ****************
 
   void paintCell(class QPainter*,int,int);
@@ -1954,13 +1955,13 @@ protected:
   void focusOutEvent(QFocusEvent*);
   void leaveEvent(QEvent*);
   void enterEvent(QEvent*);
-  
+
   int cellWidth(int);
   int cellHeight(int);
 
   int totalWidth();
   int totalHeight();
-  
+
   void resizeEvent(QResizeEvent*);
 
   void keyPressEvent(QKeyEvent*);
@@ -1976,14 +1977,14 @@ protected:
 
   bool kbackspace();
   bool kdelete(bool _recalc=true);
-  
+
   bool insertChar(char);
 
   bool sameEffects(TxtObj *to)
     {return (currFont == to->font() && currColor == to->color());}
 
   bool makeCursorVisible();
-  
+
   TxtCursor getCursorPos(int,int,bool&,bool set=false,bool redraw=false);
 
   QString toHexString(QColor);
@@ -1995,7 +1996,7 @@ protected:
   bool isValid(QString);
 
   QString simplify(QString);
-  
+
   bool selectionInObj(int,int,int);
   bool selectFull(int,int,int,int&,int&);
   void redrawSelection(TxtCursor,TxtCursor);
@@ -2044,7 +2045,7 @@ protected:
 
   unsigned int xstart;
   unsigned int ystart;
-  
+
   int drawLine;
   int drawParagraph;
   bool drawBelow;

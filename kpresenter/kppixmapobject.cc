@@ -120,15 +120,15 @@ void KPPixmapObject::resizeBy(int _dx,int _dy)
 
 /*================================================================*/
 void KPPixmapObject::setFillType(FillType _fillType)
-{ 
-  fillType = _fillType; 
+{
+  fillType = _fillType;
 
-  if (fillType == FT_BRUSH && gradient) 
+  if (fillType == FT_BRUSH && gradient)
     {
       delete gradient;
       gradient = 0;
     }
-  if (fillType == FT_GRADIENT && !gradient) 
+  if (fillType == FT_GRADIENT && !gradient)
     {
       gradient = new KPGradient(gColor1,gColor2,gType,getSize());
       redrawPix = true;
@@ -170,7 +170,7 @@ void KPPixmapObject::setPixmap(QString _filename,QString _data)
   data = _data;
 
   pixSize = ext;
-  
+
   pixmap = pixmapCollection->getPixmap(filename,data,pixSize);
 
   if (fillType == FT_GRADIENT && gradient)
@@ -189,7 +189,7 @@ void KPPixmapObject::save(ostream& out)
   out << indent << "<SHADOW distance=\"" << shadowDistance << "\" direction=\""
       << static_cast<int>(shadowDirection) << "\" red=\"" << shadowColor.red() << "\" green=\"" << shadowColor.green()
       << "\" blue=\"" << shadowColor.blue() << "\"/>" << endl;
-  out << indent << "<EFFECTS effect=\"" << static_cast<int>(effect) << "\" effect2=\"" 
+  out << indent << "<EFFECTS effect=\"" << static_cast<int>(effect) << "\" effect2=\""
       << static_cast<int>(effect2) << "\"/>" << endl;
   out << indent << "<PRESNUM value=\"" << presNum << "\"/>" << endl;
   out << indent << "<ANGLE value=\"" << angle << "\"/>" << endl;
@@ -198,12 +198,12 @@ void KPPixmapObject::save(ostream& out)
   pixmapCollection->getPixmap(filename,pixSize,_data);
   pixmapCollection->removeRef(filename,pixSize);
 
-  out << indent << "<PIXMAP filename=\"" << filename << "\" data=\"" 
+  out << indent << "<PIXMAP filename=\"" << filename << "\" data=\""
       << _data << "\"/>" << endl;
 
   out << indent << "<FILLTYPE value=\"" << static_cast<int>(fillType) << "\"/>" << endl;
   out << indent << "<GRADIENT red1=\"" << gColor1.red() << "\" green1=\"" << gColor1.green()
-      << "\" blue1=\"" << gColor1.blue() << "\" red2=\"" << gColor2.red() << "\" green2=\"" 
+      << "\" blue1=\"" << gColor1.blue() << "\" red2=\"" << gColor2.red() << "\" green2=\""
       << gColor2.green() << "\" blue2=\"" << gColor2.blue() << "\" type=\""
       << static_cast<int>(gType) << "\"/>" << endl;
   out << indent << "<PEN red=\"" << pen.color().red() << "\" green=\"" << pen.color().green()
@@ -214,7 +214,7 @@ void KPPixmapObject::save(ostream& out)
 }
 
 /*========================== load ================================*/
-void KPPixmapObject::load(KOMLParser& parser,vector<KOMLAttrib>& lst) 
+void KPPixmapObject::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 {
   string tag;
   string name;
@@ -222,7 +222,7 @@ void KPPixmapObject::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
   while (parser.open(0L,tag))
     {
       KOMLParser::parseTag(tag.c_str(),name,lst);
-	      
+	
       // orig
       if (name == "ORIG")
 	{
@@ -312,16 +312,16 @@ void KPPixmapObject::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	    }
 	}
 
-      
+
       // pixmap
       else if (name == "PIXMAP")
 	{
 	  KOMLParser::parseTag(tag.c_str(),name,lst);
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
-	  
+	
 	  bool openPic = true;
 	  QString _data,_fileName;
-	  
+	
 	  for(;it != lst.end();it++)
 	    {
 	      if ((*it).m_strName == "data")
@@ -340,13 +340,13 @@ void KPPixmapObject::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 		      if (int _envVarB = _fileName.find('$') >= 0)
 			{
 			  int _envVarE = _fileName.find('/',_envVarB);
-			  QString path = static_cast<const char*>(getenv(_fileName.mid(_envVarB,_envVarE-_envVarB).data()));
+			  QString path = getenv(_fileName.mid(_envVarB,_envVarE-_envVarB).data());
 			  _fileName.replace(_envVarB-1,_envVarE-_envVarB+1,path);
 			}
 		    }
 		}
 	    }
-	  
+	
 	  if (!openPic)
 	    setPixmap(_fileName,_data);
 	  else
@@ -373,7 +373,7 @@ void KPPixmapObject::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	    }
 	  setPen(pen);
 	}
-      
+
       // brush
       else if (name == "BRUSH")
 	{
@@ -434,8 +434,8 @@ void KPPixmapObject::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	}
 
       else
-	cerr << "Unknown tag '" << tag << "' in PIXMAP_OBJECT" << endl;    
-      
+	cerr << "Unknown tag '" << tag << "' in PIXMAP_OBJECT" << endl;
+
       if (!parser.close(tag))
 	{
 	  cerr << "ERR: Closing Child" << endl;
@@ -447,7 +447,7 @@ void KPPixmapObject::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 /*========================= draw =================================*/
 void KPPixmapObject::draw(QPainter *_painter,int _diffx,int _diffy)
 {
-  if (move) 
+  if (move)
     {
       KPObject::draw(_painter,_diffx,_diffy);
       return;
@@ -484,10 +484,10 @@ void KPPixmapObject::draw(QPainter *_painter,int _diffx,int _diffy)
 	  p.begin(&pix);
 	  p.drawPixmap(0,0,*gradient->getGradient());
 	  p.end();
-	  
+	
 	  _painter->drawPixmap(pw,pw,pix);
 	}
-      
+
       _painter->setPen(pen);
       _painter->setBrush(NoBrush);
       _painter->drawRect(pw,pw,ow - 2 * pw,oh - 2 * pw);
@@ -507,7 +507,7 @@ void KPPixmapObject::draw(QPainter *_painter,int _diffx,int _diffy)
 	  _painter->setBrush(shadowColor);
 
 	  KSize bs = pixmap->size();
-	  
+	
 	  _painter->drawRect(sx,sy,bs.width(),bs.height());
 	}
       else
@@ -552,7 +552,7 @@ void KPPixmapObject::draw(QPainter *_painter,int _diffx,int _diffy)
     {
       r = _painter->viewport();
       _painter->setViewport(ox,oy,r.width(),r.height());
-      
+
       KRect br = pixmap->rect();
       int pw = br.width();
       int ph = br.height();
@@ -561,16 +561,16 @@ void KPPixmapObject::draw(QPainter *_painter,int _diffx,int _diffy)
       int pixXPos = -rr.x();
       br.moveTopLeft(KPoint(-br.width() / 2,-br.height() / 2));
       rr.moveTopLeft(KPoint(-rr.width() / 2,-rr.height() / 2));
-      
+
       QWMatrix m,mtx;
       mtx.rotate(angle);
       m.translate(pw / 2,ph / 2);
       m = mtx * m;
-      
+
       _painter->setWorldMatrix(m);
-		    
+		
       _painter->drawPixmap(rr.left() + pixXPos,rr.top() + pixYPos,*pixmap);
-      
+
       _painter->setViewport(r);
     }
   _painter->restore();

@@ -14,7 +14,7 @@ KSpreadScripts::KSpreadScripts( QWidget* parent, const char* name )
 	: QDialog( parent, name ), KSpreadScriptsData( this )
 {
     editor = 0L;
-    
+
     setCaption( i18n( "KSpread Scripts" ) );
     connect( list, SIGNAL( highlighted( int ) ), this, SLOT( slotHighlighted( int ) ) );
     connect( list, SIGNAL( selected( int ) ), this, SLOT( slotSelected( int ) ) );
@@ -30,7 +30,7 @@ void KSpreadScripts::updateList()
 {
     list->clear();
     nameList.clear();
-    
+
     QString path( kapp->kde_datadir().copy() );
     path += "/kspread/scripts/";
 
@@ -40,7 +40,7 @@ void KSpreadScripts::updateList()
     const QFileInfoList *flist = d.entryInfoList();
     QFileInfoListIterator it( *flist );
     QFileInfo *fi;
-    
+
     while ( ( fi = it.current() ) )
     {
 	QString t = fi->fileName();
@@ -72,7 +72,7 @@ void KSpreadScripts::slotAdd()
 	QMessageBox::message( i18n("KSpread Error"), i18n("You must enter a name") );
 	return;
     }
-    
+
     QString t2 ( t.data() );
     t2 += ".py";
     if ( nameList.find( t2 ) != -1 )
@@ -91,25 +91,25 @@ void KSpreadScripts::slotAdd()
 	return;
     }
     fclose( f );
-    
+
     /* nameList.append( t2 );
     list->inSort( t.data() );	 */
     updateList();
-    
+
     add2->setText( "" );
 }
- 
+
 void KSpreadScripts::slotDelete()
 {
     if ( list->currentItem() == -1 )
 	return;
 
     QString t;
-    t.sprintf( i18n("Do you really want to delete the script\n%s"), list->text( list->currentItem() ) );
-    
+    t.sprintf( i18n("Do you really want to delete the script\n%s"), list->text( list->currentItem() ).ascii() );
+
     if ( !QMessageBox::query( "KSpread Question", t.data() ) )
 	return;
-    
+
     QString t2( list->text( list->currentItem() ) );
     t2 += ".py";
 
@@ -121,7 +121,7 @@ void KSpreadScripts::slotDelete()
     dir += t2.data();
     // HACK
     unlink( t2.data() );
-    
+
     /* QString t3;
     t3.sprintf("kfmclient move '%s' trash:/", dir.data() );
     system( t3.data() ); */
@@ -133,7 +133,7 @@ void KSpreadScripts::slotRename()
 {
     if ( list->currentItem() == -1 )
 	return;
-    
+
     QString t = rename2->text();
     if ( t.length() == 0 )
     {
@@ -148,7 +148,7 @@ void KSpreadScripts::slotRename()
 	QMessageBox::message( i18n("KSpread Error"), i18n("The file already exists") );
 	return;
     }
- 
+
     QString t3( list->text( list->currentItem() ) );
     t3 += ".py";
     /* nameList.remove( t3.data() );
@@ -159,12 +159,12 @@ void KSpreadScripts::slotRename()
 
     QString dir( kapp->kde_datadir().copy() );
     dir += "/kspread/scripts/";
-    
+
     QString t4( dir.data() );
     t4 += t3.data();
     QString t5( dir.data() );
     t5 += t2.data();
-    
+
     ::rename( t4.data(), t5.data() );
 
     updateList();
@@ -184,7 +184,7 @@ void KSpreadScripts::slotEdit()
     QString dir( kapp->kde_datadir().copy() );
     dir += "/kspread/scripts/";
     dir += t2.data();
-    
+
     editor->show();
     printf("EDITOR Opening '%s'\n",dir.data());
     editor->openFile( dir );

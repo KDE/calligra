@@ -35,19 +35,19 @@ ATFInterpreter::~ATFInterpreter()
   coordList.setAutoDelete(true);
   lines.setAutoDelete(true);
   pointList.setAutoDelete(true);
-  
+
   pointList.clear();
   coordList.clear();
   lines.clear();
 }
 
 /*====================== load autoform ===========================*/
-void ATFInterpreter::load(const char* fileName)
+void ATFInterpreter::load(const QString & fileName)
 {
   QString line;
   char* cLine = new char[256];
   QFile ptA(fileName);
-  
+
   coordList.clear();
   lines.clear();
   pointList.clear();
@@ -73,14 +73,14 @@ void ATFInterpreter::newAutoform()
   lines.clear();
   pointList.clear();
   interpret();
-}  
+}
 
 /*===================== save autoform ============================*/
-void ATFInterpreter::save(const char* fileName)
+void ATFInterpreter::save(const QString & fileName)
 {
   if (!lines.isEmpty())
     {
-      QFile f(fileName); 
+      QFile f(fileName);
       QString line;
       unsigned int i = 0;
 
@@ -105,7 +105,7 @@ QPointArray ATFInterpreter::getPointArray(int wid,int heig)
   char op = OP_EQUAL,var = VAR_1;
   QList<Sign> slp;
   QPointArray pntArray(QPointArray(coordList.count()));
- 
+
   if (!coordList.isEmpty())
     {
       for (coordPtr=coordList.first();coordPtr != 0;coordPtr=coordList.next())
@@ -114,21 +114,21 @@ QPointArray ATFInterpreter::getPointArray(int wid,int heig)
 	    {
 	      switch (i)
 		{
-		case 1: slp = coordPtr->pntX.var1; break; 
-		case 2: slp = coordPtr->pntX.var2; break; 
-		case 3: slp = coordPtr->pntX.var3; break; 
-		case 4: slp = coordPtr->pntX.var4; break; 
-		case 5: slp = coordPtr->pntX.var5; break; 
-		case 6: slp = coordPtr->pntX.var6; break; 
+		case 1: slp = coordPtr->pntX.var1; break;
+		case 2: slp = coordPtr->pntX.var2; break;
+		case 3: slp = coordPtr->pntX.var3; break;
+		case 4: slp = coordPtr->pntX.var4; break;
+		case 5: slp = coordPtr->pntX.var5; break;
+		case 6: slp = coordPtr->pntX.var6; break;
 		case 7: slp = coordPtr->pntX.result; break;
-		case 8: slp = coordPtr->pntY.var1; break; 
-		case 9: slp = coordPtr->pntY.var2; break; 
-		case 10: slp = coordPtr->pntY.var3; break; 
-		case 11: slp = coordPtr->pntY.var4; break; 
-		case 12: slp = coordPtr->pntY.var5; break; 
-		case 13: slp = coordPtr->pntY.var6; break; 
+		case 8: slp = coordPtr->pntY.var1; break;
+		case 9: slp = coordPtr->pntY.var2; break;
+		case 10: slp = coordPtr->pntY.var3; break;
+		case 11: slp = coordPtr->pntY.var4; break;
+		case 12: slp = coordPtr->pntY.var5; break;
+		case 13: slp = coordPtr->pntY.var6; break;
 		case 14: slp = coordPtr->pntY.result; break;
-		} 
+		}
 	      if (!slp.isEmpty())
 		{
 		  tmp = 0;
@@ -181,7 +181,7 @@ QPointArray ATFInterpreter::getPointArray(int wid,int heig)
 		  if (i == 5 || i == 12) e = tmp;
 		  if (i == 6 || i == 13) f = tmp;
 		  if (i == 7) px = tmp;
-		  if (i == 14) py = tmp; 
+		  if (i == 14) py = tmp;
 		}
 	    }
 	  pntArray.setPoint(coordList.at(),px,py);
@@ -193,9 +193,9 @@ QPointArray ATFInterpreter::getPointArray(int wid,int heig)
 /*===================== get attrib list =========================*/
 QList<ATFInterpreter::AttribList> ATFInterpreter::getAttribList()
 {
-  QList<AttribList> attrLs; 
+  QList<AttribList> attrLs;
   AttribList *attribPtr;
-  
+
   if (!coordList.isEmpty())
     {
       for (coordPtr=coordList.first();coordPtr != 0;coordPtr=coordList.next())
@@ -255,13 +255,13 @@ void ATFInterpreter::insertPoint(int index,bool pos)
 {
   // pos == true  => insert after index
   // pos == false => insert before index
-  
+
   CoordStruct *coord1 = new CoordStruct;
   CoordStruct *coord2 = new CoordStruct;
   AttribStruct *attrib = new AttribStruct;
 
   pntPtr = new PointStruct;
-  
+
   coord1->a = qstrdup("a=0");
   coord1->b = qstrdup("b=0");
   coord1->c = qstrdup("c=0");
@@ -336,7 +336,7 @@ void ATFInterpreter::interpret()
   lPtr = new ls;
   lPtr->l = LEVEL_NULL;
   level.push(lPtr);
-  
+
   unsigned int i = 0;
   for (line = simplify(lines.first());i < lines.count();line = simplify(lines.next()),i++)
     {
@@ -382,53 +382,53 @@ void ATFInterpreter::interpret()
 	    {
 	      switch (line.at(0))
 		{
-		case VAR_1: 
+		case VAR_1:
 		  {
 		    coord.a = qstrdup(line);
-		    value.var1 = getVar(line.remove(0,1)); 
+		    value.var1 = getVar(line.remove(0,1));
 		  } break;
 		case VAR_2:
 		  {
-		    coord.b = qstrdup(line);		    
-		    value.var2 = getVar(line.remove(0,1)); 
+		    coord.b = qstrdup(line);		
+		    value.var2 = getVar(line.remove(0,1));
 		  } break;
-		case VAR_3: 
+		case VAR_3:
 		  {
-		    coord.c = qstrdup(line);		    
+		    coord.c = qstrdup(line);		
 		    value.var3 = getVar(line.remove(0,1));
 		  } break;
-		case VAR_4: 
+		case VAR_4:
 		  {
-		    coord.d = qstrdup(line);		    
+		    coord.d = qstrdup(line);		
 		    value.var4 = getVar(line.remove(0,1));
 		  } break;
-		case VAR_5: 
+		case VAR_5:
 		  {
-		    coord.e = qstrdup(line);		    
+		    coord.e = qstrdup(line);		
 		    value.var5 = getVar(line.remove(0,1));
 		  } break;
-		case VAR_6: 
+		case VAR_6:
 		  {
-		    coord.f = qstrdup(line);		    
+		    coord.f = qstrdup(line);		
 		    value.var6 = getVar(line.remove(0,1));
 		  } break;
-		case VAR_X: case VAR_Y: 
+		case VAR_X: case VAR_Y:
 		  {
-		    coord.result = qstrdup(line);		    
+		    coord.result = qstrdup(line);		
 		    value.result = getVar(line.remove(0,1));
 		  } break;
-		case VAR_VARIA: 
+		case VAR_VARIA:
 		  {
-		    if (line.at(2) == '0') v = false; 
-		    else v = true; 
+		    if (line.at(2) == '0') v = false;
+		    else v = true;
 		    attrib.isVariable = qstrdup(line);
 		  } break;
-		case VAR_PW: 
-		  { 
-		    pw = 1; pw = line.at(2) - 48; 
+		case VAR_PW:
+		  {
+		    pw = 1; pw = line.at(2) - 48;
 		    attrib.pwDiv = qstrdup(line);
 		  } break;
-		case '}': 
+		case '}':
 		  {
 		    switch (level.top()->l)
 		      {
@@ -444,7 +444,7 @@ void ATFInterpreter::interpret()
 			  coord.f = 0;
 			  coord.result = 0;
 			} break;
-		      case LEVEL_Y: 
+		      case LEVEL_Y:
 			{
 			  coordPtr->pntY = value;
 			  pntPtr->y = coord;
@@ -457,9 +457,9 @@ void ATFInterpreter::interpret()
 			  coord.f = 0;
 			  coord.result = 0;
 			} break;
-		      case LEVEL_ATTR: 
+		      case LEVEL_ATTR:
 			{
-			  coordPtr->isVariable = v; 
+			  coordPtr->isVariable = v;
 			  coordPtr->pwDiv = pw;
 			  pw = 1;
 			  v = false;
@@ -489,8 +489,10 @@ QString ATFInterpreter::simplify(QString s)
 }
 
 /*====================== get variable ===========================*/
-QList<ATFInterpreter::Sign> ATFInterpreter::getVar(QString s)
+QList<ATFInterpreter::Sign> ATFInterpreter::getVar(QString _s)
 {
+  QCString s(_s.ascii());
+  
   QList<Sign> list;
   for (unsigned int i=0;i < s.length();i++)
     {
@@ -499,57 +501,57 @@ QList<ATFInterpreter::Sign> ATFInterpreter::getVar(QString s)
 	{
 	case VAR_W: signPtr->type = ST_WIDTH; break;
 	case VAR_H: signPtr->type = ST_HEIGHT; break;
-	case VAR_1: 
+	case VAR_1:
 	  {
 	    signPtr->type = ST_VARIABLE;
 	    signPtr->var = VAR_1;
 	  } break;
-	case VAR_2: 
+	case VAR_2:
 	  {
 	    signPtr->type = ST_VARIABLE;
 	    signPtr->var = VAR_2;
 	  } break;
-	case VAR_3: 
+	case VAR_3:
 	  {
 	    signPtr->type = ST_VARIABLE;
 	    signPtr->var = VAR_3;
 	  } break;
-	case VAR_4: 
+	case VAR_4:
 	  {
 	    signPtr->type = ST_VARIABLE;
 	    signPtr->var = VAR_4;
 	  } break;
-	case VAR_5: 
+	case VAR_5:
 	  {
 	    signPtr->type = ST_VARIABLE;
 	    signPtr->var = VAR_5;
 	  } break;
-	case VAR_6: 
+	case VAR_6:
 	  {
 	    signPtr->type = ST_VARIABLE;
 	    signPtr->var = VAR_6;
 	  } break;
-	case OP_EQUAL: 
+	case OP_EQUAL:
 	  {
 	    signPtr->type = ST_OPERATOR;
 	    signPtr->op = OP_EQUAL;
 	  } break;
-	case OP_PLUS: 
+	case OP_PLUS:
 	  {
 	    signPtr->type = ST_OPERATOR;
 	    signPtr->op = OP_PLUS;
 	  } break;
-	case OP_MINUS: 
+	case OP_MINUS:
 	  {
 	    signPtr->type = ST_OPERATOR;
 	    signPtr->op = OP_MINUS;
 	  } break;
-	case OP_DIV: 
+	case OP_DIV:
 	  {
 	    signPtr->type = ST_OPERATOR;
 	    signPtr->op = OP_DIV;
 	  } break;
-	case OP_MULT: 
+	case OP_MULT:
 	  {
 	    signPtr->type = ST_OPERATOR;
 	    signPtr->op = OP_MULT;
@@ -567,9 +569,9 @@ QList<ATFInterpreter::Sign> ATFInterpreter::getVar(QString s)
 		    {
 		      signPtr->num = (s.at(i) - 48) * 10 + s.at(i+1) - 48;
 		      i++;
-		    } break; 
+		    } break;
 		  default:
-		    signPtr->num = s.at(i) - 48; break; 
+		    signPtr->num = s.at(i) - 48; break;
 		  }
 	      }
 	    else
@@ -611,7 +613,7 @@ void ATFInterpreter::makeLines()
 	  lines.append("");
 	  lines.append("POINT {");
 	  lines.append("");
-	  lines.append("  X {"); 
+	  lines.append("  X {");
 
 	  if (!pntPtr->x.a.isEmpty())
 	    lines.append(qstrdup(stretch(pntPtr->x.a)));
@@ -643,7 +645,7 @@ void ATFInterpreter::makeLines()
 	    lines.append("    x = a");
 	  lines.append("  }");
 	  lines.append("");
-	  lines.append("  Y {"); 
+	  lines.append("  Y {");
 	  if (!pntPtr->y.a.isEmpty())
 	    lines.append(qstrdup(stretch(pntPtr->y.a)));
 	  else
@@ -674,7 +676,7 @@ void ATFInterpreter::makeLines()
 	    lines.append("    y = a");
 	  lines.append("  }");
 	  lines.append("");
-	  lines.append("  ATTRIB {"); 
+	  lines.append("  ATTRIB {");
 	  if (!pntPtr->attrib.isVariable.isEmpty())
 	    lines.append(qstrdup(stretch(pntPtr->attrib.isVariable)));
 	  else
