@@ -164,7 +164,7 @@ bool KOMLParser::readText( string &_str )
 
   int end = m_iPos;
   
-  KOMLData *d = m_lstData.front();
+  // KOMLData *d = m_lstData.front();
   
   int size = m_lstData.size();
   if ( size == 1 )
@@ -218,7 +218,7 @@ bool KOMLParser::readTag( string &_str )
   
   int end = m_iPos;
 
-  KOMLData *d = m_lstData.front();
+  // KOMLData *d = m_lstData.front();
   
   int size = m_lstData.size();
   if ( size == 1 )
