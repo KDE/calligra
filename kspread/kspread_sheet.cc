@@ -7000,7 +7000,7 @@ void KSpreadSheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mai
     int i = 1;
     while ( i <= maxCols )
     {
-        const ColumnFormat * column = columnFormat( i );
+        ColumnFormat * column = columnFormat( i );
         KoGenStyle styleCurrent( KSpreadDoc::STYLE_COLUMN/*name ????*/ );
         styleCurrent.addPropertyPt( "style:column-width", column->dblWidth() );/*FIXME pt and not mm */
         styleCurrent.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
@@ -7023,7 +7023,10 @@ void KSpreadSheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mai
         }
         xmlWriter.startElement( "table:table-column" );
         xmlWriter.addAttribute( "table:style-name", mainStyles.lookup( styleCurrent, "co" ) );
-        xmlWriter.addAttribute( "table:default-cell-style-name", "Default" );//todo fixme create style from cell
+        KoGenStyle styleColCurrent( KSpreadDoc::STYLE_CELL/*name ????*/ );
+        column->saveOasisCellStyle(styleColCurrent );
+        //FIXME doesn't create format if it's default format
+        xmlWriter.addAttribute( "table:default-cell-style-name", mainStyles.lookup( styleColCurrent, "ce" ) );//todo fixme create style from cell
         if ( hide )
             xmlWriter.addAttribute( "table:visibility", "collapse" );
 

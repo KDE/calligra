@@ -215,8 +215,111 @@ void KSpreadFormat::setNoFallBackProperties( Properties p )
 //
 /////////////
 
+void KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle )
+{
+
+    //FIXME fallback ????
+    KSpreadFormat::Align a = KSpreadFormat::Undefined;
+    if ( hasProperty( KSpreadFormat::PAlign ) || !hasNoFallBackProperties( KSpreadFormat::PAlign ) )
+    {
+        a = m_pStyle->alignX(  );
+        QString value ="start";
+        if ( a == KSpreadFormat::Center )
+            value = "center";
+        else if ( a == KSpreadFormat::Right )
+            value = "end";
+        else if ( a == KSpreadFormat::Left )
+            value = "start";
+        currentCellStyle.addProperty( "fo:text-align", value );
+    }
+
+    if ( hasProperty( KSpreadFormat::PAlignY ) || !hasNoFallBackProperties( KSpreadFormat::PAlignY ) )
+    {
+        KSpreadFormat::AlignY align = m_pStyle->alignY(  );
+        if ( align != KSpreadFormat::Bottom ) // default in OpenCalc
+            currentCellStyle.addProperty( "fo:vertical-align", ( align == KSpreadFormat::Middle ? "middle" : "top" ) );
+    }
+
+    if ( hasProperty( KSpreadFormat::PIndent ) || !hasNoFallBackProperties( KSpreadFormat::PIndent ) )
+    {
+        double indent = m_pStyle->indent(  );
+        if ( indent > 0.0 )
+        {
+            currentCellStyle.addPropertyPt("fo:margin-left", indent );
+            if ( a == KSpreadFormat::Undefined )
+                currentCellStyle.addProperty("fo:text-align", "start" );
+        }
+    }
+
+    if ( hasProperty( KSpreadFormat::PAngle ) || !hasNoFallBackProperties( KSpreadFormat::PAngle ) )
+    {
+        currentCellStyle.addProperty( "style:rotation-angle", QString::number( -1.0 * m_pStyle->rotateAngle() ) );
+    }
+
+    if ( ( hasProperty( KSpreadFormat::PMultiRow ) || !hasNoFallBackProperties( KSpreadFormat::PMultiRow ) )
+         && m_pStyle->hasProperty( KSpreadStyle::PMultiRow ) )
+    {
+        currentCellStyle.addProperty( "fo:wrap-option", "wrap" );
+    }
+    if ((  hasProperty( KSpreadFormat::PVerticalText ) || !hasNoFallBackProperties( KSpreadFormat::PVerticalText ) )&& m_pStyle->hasProperty( KSpreadStyle::PVerticalText ) )
+    {
+        currentCellStyle.addProperty( "fo:direction", "ttb" );
+        currentCellStyle.addProperty( "style:rotation-angle", "0" );
+    }
+    if ( ( hasProperty( KSpreadFormat::PDontPrintText ) || !hasNoFallBackProperties( KSpreadFormat::PDontPrintText ) ) && m_pStyle->hasProperty( KSpreadStyle::PDontPrintText ) )
+    {
+        currentCellStyle.addProperty( "style:print-content", "false");
+    }
+    bool hideAll = false;
+    bool hideFormula = false;
+    bool isNotProtected = false;
+    if ( ( hasProperty( KSpreadFormat::PHideAll ) || !hasNoFallBackProperties( KSpreadFormat::PHideAll ) )
+         && m_pStyle->hasProperty( KSpreadStyle::PHideAll ) )
+         hideAll = true;
+
+    if ( ( hasProperty( KSpreadFormat::PHideFormula ) || !hasNoFallBackProperties( KSpreadFormat::PHideFormula ) )
+         && m_pStyle->hasProperty( KSpreadStyle::PHideFormula ) )
+        hideFormula = true;
+    if ( ( hasProperty( KSpreadFormat::PNotProtected ) || !hasNoFallBackProperties( KSpreadFormat::PNotProtected ) )
+         && m_pStyle->hasProperty( KSpreadStyle::PHideFormula ) )
+        isNotProtected = true;
+
+    if ( hideAll )
+        currentCellStyle.addProperty( "style:cell-protect", "hidden-and-protected" );
+    else
+    {
+        if ( isNotProtected && !hideFormula )
+            currentCellStyle.addProperty( "style:cell-protect", "none" );
+        else
+        {
+            if ( isNotProtected && hideFormula )
+                currentCellStyle.addProperty( "style:cell-protect", "formula-hidden" );
+            else if ( hideFormula )
+                currentCellStyle.addProperty( "style:cell-protect", "protected formula-hidden" );
+            else if ( !isNotProtected )
+                currentCellStyle.addProperty( "style:cell-protect", "protected" );
+        }
+    }
+#if 0
+    if ( hasProperty( KSpreadFormat::PLeftBorder ) || !hasNoFallBackProperties( KSpreadFormat::PLeftBorder ) )
+        cs.left  = leftBorderPen( col, row );
+
+    if ( hasProperty( KSpreadFormat::PRightBorder ) || !hasNoFallBackProperties( KSpreadFormat::PRightBorder ) )
+        cs.right = rightBorderPen( col, row );
+
+    if ( hasProperty( KSpreadFormat::PTopBorder ) || !hasNoFallBackProperties( KSpreadFormat::PTopBorder ) )
+        cs.top  = topBorderPen( col, row );
+
+    if ( hasProperty( KSpreadFormat::PBottomBorder ) || !hasNoFallBackProperties( KSpreadFormat::PBottomBorder ) )
+        cs.bottom  = bottomBorderPen( col, row );
+#endif
+}
+
+
 void KSpreadFormat::saveOasisCellStyle( KoGenStyle &currentCellStyle, int _col, int _row )
 {
+
+    //FIXME fallback ????
     KSpreadFormat::Align alignX = KSpreadFormat::Undefined;
     if ( hasProperty( KSpreadFormat::PAlign ) || !hasNoFallBackProperties( KSpreadFormat::PAlign ) )
     {
