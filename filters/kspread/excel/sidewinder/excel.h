@@ -843,10 +843,73 @@ class DimensionRecord : public Record
 {
 public:
 
+  static const unsigned int id;
+
   /**
    * Creates a new Dimension record.
    */
   DimensionRecord();
+  
+  /**
+   * Destroys the record.
+   */
+  ~DimensionRecord();
+  
+  /**
+   * Returns index to the first used row.
+   *
+   * \sa setFirstRow, lastRow
+   */
+  unsigned firstRow() const;
+  
+  /**
+   * Sets index to the first used row.
+   *
+   * \sa firstRow, setLastRow
+   */
+  void setFirstRow( unsigned r );
+  
+  /**
+   * Returns index to the last used row.
+   *
+   * \sa setLastRow, firstRow
+   */
+  unsigned lastRow() const;
+  
+  /**
+   * Sets index to the last used row.
+   *
+   * \sa lastRow, setFirstRow
+   */
+  void setLastRow( unsigned r );
+  
+  /**
+   * Returns index to the first used column.
+   *
+   * \sa setFirstColumn, lastColumn
+   */
+  unsigned firstColumn() const;
+  
+  /**
+   * Sets index to the first used column.
+   *
+   * \sa firstColumn, setLastColumn
+   */
+  void setFirstColumn( unsigned r );
+  
+  /**
+   * Returns index to the last used column.
+   *
+   * \sa setLastColumn, firstColumn
+   */
+  unsigned lastColumn() const;
+  
+  /**
+   * Sets index to the last used column.
+   *
+   * \sa lastColumn, setFirstColumn
+   */
+  void setLastColumn( unsigned r );
   
   /**
    \reimpl
@@ -857,6 +920,19 @@ public:
    \reimpl
    */
   virtual void setData( unsigned size, const unsigned char* data );
+  
+  /**
+   \reimpl
+   */
+  virtual void dump( std::ostream& out ) const;
+
+private:
+   // no copy or assign
+   DimensionRecord( const DimensionRecord& );
+   DimensionRecord& operator=( const DimensionRecord& );
+   
+   class Private;
+   Private *d;
 };
 
 /**
@@ -2251,6 +2327,7 @@ private:
   void handleBlank( BlankRecord* record );
   void handleColInfo( ColInfoRecord* record );
   void handleDate1904( Date1904Record* record );
+  void handleDimension( DimensionRecord* record );
   void handleFormat( FormatRecord* record );
   void handleFont( FontRecord* record );
   void handleLabel( LabelRecord* record );

@@ -350,6 +350,9 @@ Record* RecordFactory::create( unsigned type )
   if( type == Date1904Record::id )
     record = new Date1904Record();
     
+  if( type == DimensionRecord::id )
+    record = new DimensionRecord();
+    
   else if( type == FormatRecord::id )
     record = new FormatRecord();
     
@@ -1121,13 +1124,89 @@ void Date1904Record::dump( std::ostream& out ) const
 
 // ========== DIMENSION ========== 
 
+const unsigned int DimensionRecord::id = 0x0200;
+
+class DimensionRecord::Private
+{
+public:
+  unsigned firstRow;
+  unsigned lastRow;
+  unsigned firstColumn;
+  unsigned lastColumn;
+};
+
 DimensionRecord::DimensionRecord():
   Record()
 {
+  d = new DimensionRecord::Private;
+  d->firstRow    = 0;
+  d->lastRow     = 0;
+  d->firstColumn = 0;
+  d->lastColumn  = 0;
+}
+
+DimensionRecord::~DimensionRecord()
+{
+  delete d;
+}
+
+unsigned DimensionRecord::firstRow() const
+{
+  return d->firstRow;
+}
+
+void DimensionRecord::setFirstRow( unsigned r )
+{
+  d->firstRow = r;
+}
+
+unsigned DimensionRecord::lastRow() const
+{
+  return d->lastRow;
+}
+
+void DimensionRecord::setLastRow( unsigned r )
+{
+  d->lastRow = r;
+}
+
+unsigned DimensionRecord::firstColumn() const
+{
+  return d->firstColumn;
+}
+
+void DimensionRecord::setFirstColumn( unsigned r )
+{
+  d->firstColumn = r;
+}
+
+unsigned DimensionRecord::lastColumn() const
+{
+  return d->lastColumn;
+}
+
+void DimensionRecord::setLastColumn( unsigned r )
+{
+  d->lastColumn = r;
 }
 
 void DimensionRecord::setData( unsigned size, const unsigned char* data )
 {
+  if( size < 14 ) return;
+  
+  setFirstRow( readU32( data ) );
+  setLastRow( readU32( data+4 ) - 1 );
+  setFirstColumn( readU16( data + 8 ) );
+  setLastColumn( readU16( data + 10 ) - 1 );
+}
+
+void DimensionRecord::dump( std::ostream& out ) const
+{
+  out << "DIMENSION" << std::endl;
+  out << "    First Row : " << firstRow() << std::endl;
+  out << "     Last Row : " << lastRow() << std::endl;
+  out << " First Column : " << firstColumn() << std::endl;
+  out << "  Last Column : " << lastColumn() << std::endl;
 }
 
 // ========== EOF ========== 
@@ -2610,6 +2689,14 @@ void ExcelReader::handleDate1904( Date1904Record* record )
   
   // FIXME FIXME what to do ??
   std::cerr << "WARNING: Workbook uses unsupported 1904 Date System " << std::endl;
+}
+
+void ExcelReader::handleDimension( DimensionRecord* record )
+{
+  if( !record ) return;
+  
+  // in the mean time we don't need to handle this because we don't care
+  // about the used range of the sheet  
 }
 
 void ExcelReader::handleLabel( LabelRecord* record )
