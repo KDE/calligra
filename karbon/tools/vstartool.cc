@@ -44,6 +44,9 @@ VStarOptionsWidget::VStarOptionsWidget( KarbonPart*part, QWidget* parent, const 
 	new QLabel( i18n( "Edges:" ), this );
 	m_edges = new KIntSpinBox( this );
 	m_edges->setMinValue( 3 );
+	
+	setInsideMargin( 4 );
+	setInsideSpacing( 2 );
 }
 
 double

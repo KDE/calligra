@@ -37,6 +37,9 @@ VRectangleOptionsWidget::VRectangleOptionsWidget( KarbonPart*part, QWidget* pare
 	m_width = new KDoubleNumInput( 0, this );
 	m_heightLabel =new QLabel( i18n( "Height(%1):" ).arg(m_part->getUnitName()), this );
 	m_height = new KDoubleNumInput( 0, this );
+	
+	setInsideMargin( 4 );
+	setInsideSpacing( 2 );
 }
 
 double

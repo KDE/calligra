@@ -46,6 +46,9 @@ VSpiralOptionsWidget::VSpiralOptionsWidget( QWidget* parent, const char* name )
 	m_clockwise = new KComboBox( false, this );
 	m_clockwise->insertItem( i18n( "Clockwise" ), 0 );
 	m_clockwise->insertItem( i18n( "Counter Clockwise" ), 1 );
+	
+	setInsideMargin( 4 );
+	setInsideSpacing( 2 );
 }
 
 double
