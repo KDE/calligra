@@ -19,7 +19,7 @@
 */
 
 #include "koColor.h"
-
+#include "kdebug.h"
 #include <cmath>
 
 KoColor::KoColor()
@@ -448,13 +448,24 @@ void KoColor::RGBtoLAB(int R, int G, int B, int *L, int *a, int *b)
 
 void KoColor::RGBtoCMYK(int R, int G, int B, int *C, int *M, int *Y, int *K)
 {
-  int min = (R < G) ? R : G;
-  *K = (min < B) ? min : B;
+    // XXX: these algorithms aren't the best. See www.littlecms.com
+    // for a suitable library, or the posting by Leo Rosenthol for
+    // a better, but slower algorithm at
+    // http://lists.kde.org/?l=koffice-devel&m=106698241227054&w=2
 
-  *C = 255 - (R - *K);
-  *M = 255 - (G - *K);
-  *Y = 255 - (B - *K);
+    *C = 255 - R;
+    *M = 255 - G;
+    *Y = 255 - B;
+
+    int min = (*C < *M) ? *C : *M;
+    *K = (min < *Y) ? min : *Y;
+
+    *C -= *K;
+    *M -= *K;
+    *Y -= *K;
+
 }
+
 
 void KoColor::HSVtoRGB(int H, int S, int V, int *R, int *G, int *B)
 {
