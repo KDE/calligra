@@ -135,7 +135,6 @@ protected:
   bool m_bIsOpen;
   bool m_bGood;
 
-  int m_readBytes;
   class KoStorePrivate;
   KoStorePrivate * d;
 };

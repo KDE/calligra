@@ -131,7 +131,6 @@ bool KoStore::open( const QString & _name )
     // warning, m_byteArray can be bigger than f->data().size() (if a previous file was bigger)
     // this is why we never use m_byteArray.size()
     m_iSize = f->data().size();
-    m_readBytes = 0;
   }
   else
     assert( 0 );
@@ -190,8 +189,8 @@ QByteArray KoStore::read( unsigned long int max )
     return data;
   }
 
-  if ( max > m_iSize - m_readBytes )
-    max = m_iSize - m_readBytes;
+  if ( max > m_iSize - m_stream->at() )
+    max = m_iSize - m_stream->at();
   if ( max == 0 )
   {
     data.resize( 0 );
@@ -201,15 +200,7 @@ QByteArray KoStore::read( unsigned long int max )
   char *p = new char[ max ];
   m_stream->readBlock( p, max );
 
-  m_readBytes += max;
   data.setRawData( p, max );
-  /*
-  data->length( max );
-  for( unsigned int i = 0; i < max; i++ )
-    (*data)[i] = p[i];
-  */
-  //  delete [] p;  setRawData is a shallow copy
-
   return data;
 }
 
@@ -229,14 +220,12 @@ long KoStore::read( char *_buffer, unsigned long _len )
   if ( m_stream->atEnd() )
     return 0;
 
-  if ( _len > m_iSize - m_readBytes )
-    _len = m_iSize - m_readBytes;
+  if ( _len > m_iSize - m_stream->at() )
+    _len = m_iSize - m_stream->at();
   if ( _len == 0 )
     return 0;
 
   m_stream->readBlock( _buffer, _len );
-
-  m_readBytes += _len;
 
   return _len;
 }
