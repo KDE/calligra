@@ -2152,7 +2152,6 @@ KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )
     connect( textView(), SIGNAL( paste() ), SLOT( paste() ) );
     updateUI( true, true );
 
-    m_actionList.setAutoDelete( true );
     if( canvas->gui() && canvas->gui()->getHorzRuler())
         canvas->gui()->getHorzRuler()->changeFlags(KoRuler::F_INDENTS | KoRuler::F_TABS);
 }
@@ -2797,13 +2796,14 @@ void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPo
     // Removed previous stuff
     view->unplugActionList( "datatools" );
     view->unplugActionList( "datatools_link" );
-    m_actionList.clear();
+    QPtrList<KAction> &actionList = view->dataToolActionList();
+    actionList.clear();
     KWDocument * doc = frameSet()->kWordDocument();
-    m_actionList = dataToolActionList(doc->instance());
-    kdDebug() << "KWView::openPopupMenuInsideFrame plugging actionlist with " << m_actionList.count() << " actions" << endl;
+    actionList = dataToolActionList(doc->instance());
+    kdDebug() << "KWView::openPopupMenuInsideFrame plugging actionlist with " << actionList.count() << " actions" << endl;
     if(refLink().isNull())
     {
-        view->plugActionList( "datatools", m_actionList );
+        view->plugActionList( "datatools", actionList );
         QPopupMenu * popup = view->popupMenu("text_popup");
         Q_ASSERT(popup);
         if (popup)
@@ -2811,7 +2811,7 @@ void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPo
     }
     else
     {
-        view->plugActionList( "datatools_link", m_actionList );
+        view->plugActionList( "datatools_link", actionList );
         QPopupMenu * popup = view->popupMenu("text_popup_link");
         Q_ASSERT(popup);
         if (popup)

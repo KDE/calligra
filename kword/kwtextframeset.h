@@ -53,7 +53,7 @@ public:
     /** destructor */
     ~KWTextFrameSet();
 
-    /** The type of frameset. Use this to differentiate between different instantiations of 
+    /** The type of frameset. Use this to differentiate between different instantiations of
      *  the framesets. Each implementation will return a different frameType.
      */
     virtual FrameSetType type() { return FT_TEXT; }
@@ -320,8 +320,6 @@ private slots:
     void slotFrameDeleted(KWFrame *);
 
 private:
-    QPtrList<KAction> m_actionList; // for the kodatatools
-
     KoParagLayout m_paragLayout;
     QString m_wordUnderCursor;
     bool m_singleWord;

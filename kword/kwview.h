@@ -154,6 +154,8 @@ public:
 
     QPopupMenu * popupMenu( const QString& name );
 
+    QPtrList<KAction> &dataToolActionList() { return m_actionList; }
+
     static void checkClipboard( QMimeSource *data, bool &providesImage, bool &providesKWord );
 
 public slots:
@@ -458,6 +460,8 @@ private:
 
     KWSearchContext *m_searchEntry, *m_replaceEntry;
     KWFindReplace *m_findReplace;
+
+    QPtrList<KAction> m_actionList; // for the kodatatools
 
     int m_currentPage; // 0-based current page number
 
