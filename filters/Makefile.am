@@ -1,1 +1,1 @@
-SUBDIRS = kspread kword olefilters
+SUBDIRS = killustrator kspread kword olefilters
