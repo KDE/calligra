@@ -1,7 +1,0 @@
-if test -z "$LIBASPELL"; then
-   echo ""
-   echo "Your libaspell is too old or not installed, I couldn't find aspell.h."
-   echo "You must download aspell >= 0.50.2"
-   echo "See http://aspell.net/. Spell-checking disabled."
-   echo ""
-fi
