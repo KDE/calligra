@@ -30,6 +30,10 @@
 #include <qdragobject.h>
 #include <qregexp.h>
 
+#include <qlayout.h>
+#include <qvbox.h>
+#include <qcheckbox.h>
+
 #include <koReplace.h>
 #include <kprinter.h>
 #include <koDocumentInfo.h>
@@ -7180,8 +7184,34 @@ void KSpreadTable::paperLayoutDlg()
 
     KoUnit::Unit unit = m_pDoc->getUnit();
 
-    if ( !KoPageLayoutDia::pageLayout( pl, hf, FORMAT_AND_BORDERS | HEADER_AND_FOOTER, unit ) )
+    KoPageLayoutDia dlg( 0, "PageLayout", pl, hf, FORMAT_AND_BORDERS | HEADER_AND_FOOTER, unit );
+    
+    // ------------- options ---------------
+    QWidget *tab = dlg.addPage(i18n( "Options" ));
+    QGridLayout *grid = new QGridLayout( tab, 7, 3, KDialog::marginHint(), KDialog::spacingHint() );
+
+//    QLabel *lHead = new QLabel( i18n( "Print grid" ), tab );
+//    grid->addWidget( lHead, 0, 0 );
+
+    QCheckBox *pPrintGrid = new QCheckBox ( i18n("&Print grid"), tab );
+    pPrintGrid->setChecked( getPrintGrid() );
+    grid->addWidget( pPrintGrid, 0, 0 );
+
+    
+    int result = dlg.exec();
+    if ( result == QDialog::Accepted )
+    {
+        pl = dlg.getLayout();
+        hf = dlg.getHeadFoot();
+        unit = dlg.unit();
+        setPrintGrid( pPrintGrid->isChecked() );
+    }
+    else
+    {
         return;
+    }
+//    if ( !KoPageLayoutDia::pageLayout( pl, hf, FORMAT_AND_BORDERS | HEADER_AND_FOOTER, unit ) )
+//        return;
 
     if ( pl.format == PG_CUSTOM )
     {
