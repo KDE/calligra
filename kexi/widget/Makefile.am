@@ -1,7 +1,8 @@
 include $(top_srcdir)/kexi/Makefile.global
 
 lib_LTLIBRARIES = libkexiextendedwidgets.la
-libkexiextendedwidgets_la_SOURCES = kexidatatable.cpp kexidatatableview.cpp \
+libkexiextendedwidgets_la_SOURCES = kexidataawareview.cpp \
+	kexidatatable.cpp kexidatatableview.cpp \
 	kexiquerydesignersqleditor.cpp kexidatasourcecombo.cpp \
 	kexidatasourcewizard.cpp kexidswelcome.cpp kexidssource.cpp \
 	kexidatasourcefields.cpp kexisectionheader.cpp pixmapcollection.cpp \

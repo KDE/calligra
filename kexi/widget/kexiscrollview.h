@@ -83,7 +83,7 @@ class KEXIEXTWIDGETS_EXPORT KexiScrollView : public QScrollView
 		bool m_preview : 1;
 		bool m_smodeSet : 1;
 		bool m_outerAreaVisible : 1;
-		KexiRecordNavigator* m_navPanel;
+		KexiRecordNavigator* m_scrollViewNavPanel;
 };
 
 #endif

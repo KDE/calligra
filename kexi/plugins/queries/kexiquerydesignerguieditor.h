@@ -34,7 +34,7 @@ class KexiDataTable;
 class KexiTableItem;
 class KexiRelationWidget;
 class KexiSectionHeader;
-class KexiTableViewPropertyBuffer;
+class KexiDataAwarePropertyBuffer;
 class KexiRelationViewTableContainer;
 class KexiRelationViewConnection;
 

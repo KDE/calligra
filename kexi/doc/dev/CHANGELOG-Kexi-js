@@ -393,6 +393,11 @@ TODO: add a small btn at the left of record navigator
       to indicate 'editing' status for forms without record markers
 TODO: fix lineedit's borders
 
+TODO: back to ISO 8601 datetime format: http://www.w3.org/TR/NOTE-datetime
+ (ie. 1994-11-05T13:15:30 not 1994-11-05 13:15:30)
+TODO: add time zones support: 1994-11-05T08:15:30-05:00
+TODO: update to sqlite3.1 and use it's features http://www.sqlite.org/releasenotes310.html
+
 2005-01-26
 Widgets
 - fixed focusing-out record navigator's line edit

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,38 +18,41 @@
 */
 
 #include "kexitableviewpropertybuffer.h"
-
-#include "kexiviewbase.h"
-#include "kexitableview.h"
 #include "kexitableviewdata.h"
+#include "kexidataawareobjectiface.h"
+
+#include <kexiviewbase.h>
 
 #define MAX_FIELDS 101 //nice prime number (default buffer vector size)
 
-KexiTableViewPropertyBuffer::KexiTableViewPropertyBuffer(KexiViewBase *view, KexiTableView* tableView)
- : QObject( view, QCString(view->name())+"KexiTableViewPropertyBuffer" )
+KexiDataAwarePropertyBuffer::KexiDataAwarePropertyBuffer(KexiViewBase *view, 
+	KexiDataAwareObjectInterface* dataObject)
+ : QObject( view, QCString(view->name())+"KexiDataAwarePropertyBuffer" )
  , m_view(view)
- , m_tableView(tableView)
+ , m_dataObject(dataObject)
  , m_row(-99)
 {
 	m_buffers.setAutoDelete(true);
 
-	connect(m_tableView, SIGNAL(dataSet(KexiTableViewData*)),
-		this, SLOT(slotDataSet(KexiTableViewData*)));
-	connect(m_tableView, SIGNAL(cellSelected(int,int)), 
-		this, SLOT(slotCellSelected(int,int)));
-
-	slotDataSet( m_tableView->data() );
+//	connect(m_dataObject, SIGNAL(dataSet(KexiTableViewData*)),
+//		this, SLOT(slotDataSet(KexiTableViewData*)));
+	m_dataObject->connectDataSetSignal(this, SLOT(slotDataSet(KexiTableViewData*)));
+//	connect(m_dataObject, SIGNAL(cellSelected(int,int)), 
+//		this, SLOT(slotCellSelected(int,int)));
+	m_dataObject->connectCellSelectedSignal(this, SLOT(slotCellSelected(int,int)));
+//
+	slotDataSet( m_dataObject->data() );
 	const bool wasDirty = view->dirty();
 	clear();
 	if (!wasDirty)
 		view->setDirty(false);
 }
 
-KexiTableViewPropertyBuffer::~KexiTableViewPropertyBuffer()
+KexiDataAwarePropertyBuffer::~KexiDataAwarePropertyBuffer()
 {
 }
 
-void KexiTableViewPropertyBuffer::slotDataSet( KexiTableViewData *data )
+void KexiDataAwarePropertyBuffer::slotDataSet( KexiTableViewData *data )
 {
 	if (!m_currentTVData.isNull()) {
 		m_currentTVData->disconnect( this );
@@ -61,17 +64,17 @@ void KexiTableViewPropertyBuffer::slotDataSet( KexiTableViewData *data )
 			this, SLOT(slotRowsDeleted( const QValueList<int> & )));
 		connect(m_currentTVData, SIGNAL(rowInserted(KexiTableItem*,uint,bool)), 
 			this, SLOT(slotRowInserted(KexiTableItem*,uint,bool)));
-		connect(m_currentTVData, SIGNAL(refreshRequested()), 
-			this, SLOT(slotRefreshRequested()));
+		connect(m_currentTVData, SIGNAL(reloadRequested()), 
+			this, SLOT(slotReloadRequested()));
 	}
 }
 
-void KexiTableViewPropertyBuffer::removeCurrentPropertyBuffer()
+void KexiDataAwarePropertyBuffer::removeCurrentPropertyBuffer()
 {
-	remove( m_tableView->currentRow() );
+	remove( m_dataObject->currentRow() );
 }
 
-void KexiTableViewPropertyBuffer::remove(uint row)
+void KexiDataAwarePropertyBuffer::remove(uint row)
 {
 	KexiPropertyBuffer *buf = m_buffers.at(row);
 	if (!buf)
@@ -82,12 +85,12 @@ void KexiTableViewPropertyBuffer::remove(uint row)
 	m_view->propertyBufferSwitched();
 }
 
-uint KexiTableViewPropertyBuffer::size() const
+uint KexiDataAwarePropertyBuffer::size() const
 {
 	return m_buffers.size();
 }
 
-void KexiTableViewPropertyBuffer::clear(uint minimumSize)
+void KexiDataAwarePropertyBuffer::clear(uint minimumSize)
 {
 	m_buffers.clear();
 	m_buffers.resize(QMAX(minimumSize, MAX_FIELDS));
@@ -95,19 +98,19 @@ void KexiTableViewPropertyBuffer::clear(uint minimumSize)
 	m_view->propertyBufferSwitched();
 }
 
-void KexiTableViewPropertyBuffer::slotRefreshRequested()
+void KexiDataAwarePropertyBuffer::slotReloadRequested()
 {
 	clear();
 }
 
-void KexiTableViewPropertyBuffer::insert(uint row, KexiPropertyBuffer* buf, bool newOne)
+void KexiDataAwarePropertyBuffer::insert(uint row, KexiPropertyBuffer* buf, bool newOne)
 {
 	if (!buf || row >= m_buffers.size()) {
-		kexiwarn << "KexiTableViewPropertyBuffer::insert() invalid args: rew="<< row<< " buf="<< buf<< endl;
+		kexiwarn << "KexiDataAwarePropertyBuffer::insert() invalid args: rew="<< row<< " buf="<< buf<< endl;
 		return;
 	}
 	if (buf->parent() && buf->parent()!=this) {
-		kexiwarn << "KexiTableViewPropertyBuffer::insert() buffer's parent must be NULL or this KexiTableViewPropertyBuffer" << endl;
+		kexiwarn << "KexiDataAwarePropertyBuffer::insert() buffer's parent must be NULL or this KexiDataAwarePropertyBuffer" << endl;
 		return;
 	}
 
@@ -136,19 +139,19 @@ void KexiTableViewPropertyBuffer::insert(uint row, KexiPropertyBuffer* buf, bool
 	}
 }
 
-KexiPropertyBuffer* KexiTableViewPropertyBuffer::currentPropertyBuffer() const
+KexiPropertyBuffer* KexiDataAwarePropertyBuffer::currentPropertyBuffer() const
 {
-	return (m_tableView->currentRow() >= 0) ? m_buffers.at( m_tableView->currentRow() ) : 0;
+	return (m_dataObject->currentRow() >= 0) ? m_buffers.at( m_dataObject->currentRow() ) : 0;
 }
 
-void KexiTableViewPropertyBuffer::slotRowDeleted()
+void KexiDataAwarePropertyBuffer::slotRowDeleted()
 {
 	m_view->setDirty();
 	removeCurrentPropertyBuffer();
 
 	//let's move up all buffers that are below that deleted
 	m_buffers.setAutoDelete(false);//to avoid auto deleting in insert()
-	const int r = m_tableView->currentRow();
+	const int r = m_dataObject->currentRow();
 	for (int i=r;i<int(m_buffers.size()-1);i++) {
 		KexiPropertyBuffer *b = m_buffers[i+1];
 		m_buffers.insert( i , b );
@@ -160,7 +163,7 @@ void KexiTableViewPropertyBuffer::slotRowDeleted()
 	emit rowDeleted();
 }
 
-void KexiTableViewPropertyBuffer::slotRowsDeleted( const QValueList<int> &rows )
+void KexiDataAwarePropertyBuffer::slotRowsDeleted( const QValueList<int> &rows )
 {
 	//let's move most buffers up & delete unwanted
 	m_buffers.setAutoDelete(false);//to avoid auto deleting in insert()
@@ -206,14 +209,14 @@ void KexiTableViewPropertyBuffer::slotRowsDeleted( const QValueList<int> &rows )
 	m_view->propertyBufferSwitched();
 }
 
-//void KexiTableViewPropertyBuffer::slotEmptyRowInserted(KexiTableItem*, uint /*index*/)
-void KexiTableViewPropertyBuffer::slotRowInserted(KexiTableItem*, uint row, bool /*repaint*/)
+//void KexiDataAwarePropertyBuffer::slotEmptyRowInserted(KexiTableItem*, uint /*index*/)
+void KexiDataAwarePropertyBuffer::slotRowInserted(KexiTableItem*, uint row, bool /*repaint*/)
 {
 	m_view->setDirty();
 
 	//let's move down all buffers that are below
 	m_buffers.setAutoDelete(false);//to avoid auto deleting in insert()
-//	const int r = m_tableView->currentRow();
+//	const int r = m_dataObject->currentRow();
 	m_buffers.resize(m_buffers.size()+1);
 	for (int i=int(m_buffers.size()); i>(int)row; i--) {
 		KexiPropertyBuffer *b = m_buffers[i-1];
@@ -227,7 +230,7 @@ void KexiTableViewPropertyBuffer::slotRowInserted(KexiTableItem*, uint row, bool
 	emit rowInserted();
 }
 
-void KexiTableViewPropertyBuffer::slotCellSelected(int, int row)
+void KexiDataAwarePropertyBuffer::slotCellSelected(int, int row)
 {
 	if(row == m_row)
 		return;
@@ -235,7 +238,7 @@ void KexiTableViewPropertyBuffer::slotCellSelected(int, int row)
 	m_view->propertyBufferSwitched();
 }
 
-KexiPropertyBuffer* KexiTableViewPropertyBuffer::bufferForItem(KexiTableItem& item)
+KexiPropertyBuffer* KexiDataAwarePropertyBuffer::bufferForItem(KexiTableItem& item)
 {
 	if (m_currentTVData.isNull())
 		return 0;

@@ -38,7 +38,8 @@ tristate KexiAlterTable_DataView::beforeSwitchTo(int mode, bool &dontStore)
 {
 	if (mode != Kexi::DataViewMode) {
 		//accept editing before switching
-		if (!m_view->acceptRowEdit()) {
+//		if (!m_view->acceptRowEdit()) {
+		if (!acceptRowEdit()) {
 			return cancelled;
 		}
 	}

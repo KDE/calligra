@@ -82,7 +82,7 @@ public:
 	*/
 	QDict<char> fieldColumnIdentifiers;
 
-	KexiTableViewPropertyBuffer* buffers;
+	KexiDataAwarePropertyBuffer* buffers;
 	KexiTableItem *droppedNewItem;
 
 	QString droppedNewTable, droppedNewField;
@@ -111,22 +111,24 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
 
 	d->head = new KexiSectionHeader(i18n("Query columns"), Vertical, d->spl);
 	d->dataTable = new KexiDataTable(mainWin, d->head, "guieditor_dataTable", false);
-	d->dataTable->tableView()->setSpreadSheetMode();
+	d->dataTable->dataAwareObject()->setSpreadSheetMode();
 
 	d->data = new KexiTableViewData(); //just empty data
-	d->buffers = new KexiTableViewPropertyBuffer( this, d->dataTable->tableView() );
+	d->buffers = new KexiDataAwarePropertyBuffer( this, d->dataTable->dataAwareObject() );
 	initTableColumns();
 	initTableRows();
 
 	QValueList<int> c;
 	c << 0 << 1 << 4;
-	d->dataTable->tableView()->maximizeColumnsWidth( c ); 
-	d->dataTable->tableView()->adjustColumnWidthToContents(2);//'visible'
-	d->dataTable->tableView()->setDropsAtRowEnabled(true);
-	connect(d->dataTable->tableView(), SIGNAL(dragOverRow(KexiTableItem*,int,QDragMoveEvent*)),
-		this, SLOT(slotDragOverTableRow(KexiTableItem*,int,QDragMoveEvent*)));
-	connect(d->dataTable->tableView(), SIGNAL(droppedAtRow(KexiTableItem*,int,QDropEvent*,KexiTableItem*&)),
-		this, SLOT(slotDroppedAtRow(KexiTableItem*,int,QDropEvent*,KexiTableItem*&)));
+	if (d->dataTable->tableView()/*sanity*/) {
+		d->dataTable->tableView()->maximizeColumnsWidth( c );
+		d->dataTable->tableView()->adjustColumnWidthToContents(2);//'visible'
+		d->dataTable->tableView()->setDropsAtRowEnabled(true);
+		connect(d->dataTable->tableView(), SIGNAL(dragOverRow(KexiTableItem*,int,QDragMoveEvent*)),
+			this, SLOT(slotDragOverTableRow(KexiTableItem*,int,QDragMoveEvent*)));
+		connect(d->dataTable->tableView(), SIGNAL(droppedAtRow(KexiTableItem*,int,QDropEvent*,KexiTableItem*&)),
+			this, SLOT(slotDroppedAtRow(KexiTableItem*,int,QDropEvent*,KexiTableItem*&)));
+	}
 	connect(d->data, SIGNAL(aboutToChangeCell(KexiTableItem*,int,QVariant&,KexiDB::ResultInfo*)),
 		this, SLOT(slotBeforeCellChanged(KexiTableItem*,int,QVariant&,KexiDB::ResultInfo*)));
 	connect(d->data, SIGNAL(rowInserted(KexiTableItem*,uint,bool)), 
@@ -207,14 +209,14 @@ void KexiQueryDesignerGuiEditor::initTableRows()
 		KexiTableItem *item = new KexiTableItem(columns);
 		d->data->append(item);
 	}
-	d->dataTable->tableView()->setData(d->data);
+	d->dataTable->dataAwareObject()->setData(d->data);
 
 	updateColumnsData();
 }
 
 void KexiQueryDesignerGuiEditor::updateColumnsData()
 {
-	d->dataTable->tableView()->acceptRowEdit();
+	d->dataTable->dataAwareObject()->acceptRowEdit();
 
 	QStringList sortedTableNames;
 	for (TablesDictIterator it(*d->relations->tables());it.current();++it)
@@ -337,7 +339,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 		if (!it.current()->at(1).isNull() && it.current()->at(0).isNull()) {
 			//show message about missing field name, and set focus to that cell
 			kexipluginsdbg << "no field provided!" << endl;
-			d->dataTable->tableView()->setCursor(i,0);
+			d->dataTable->dataAwareObject()->setCursorPosition(i,0);
 			if (errMsg)
 				*errMsg = i18n("Select column for table \"%1\"").arg(it.current()->at(1).toString());
 			return false;
@@ -457,7 +459,7 @@ KexiQueryDesignerGuiEditor::beforeSwitchTo(int mode, bool &dontStore)
 {
 	kexipluginsdbg << "KexiQueryDesignerGuiEditor::beforeSwitch()" << mode << endl;
 
-	if (!d->dataTable->tableView()->acceptRowEdit())
+	if (!d->dataTable->dataAwareObject()->acceptRowEdit())
 		return cancelled;
 
 	if (mode==Kexi::DesignViewMode) {
@@ -465,7 +467,7 @@ KexiQueryDesignerGuiEditor::beforeSwitchTo(int mode, bool &dontStore)
 		return true;
 	}
 	else if (mode==Kexi::DataViewMode) {
-//		if (!d->dataTable->tableView()->acceptRowEdit())
+//		if (!d->dataTable->dataAwareObject()->acceptRowEdit())
 	//		return cancelled;
 
 		if (!dirty() && parentDialog()->neverSaved()) {
@@ -535,11 +537,11 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(int mode)
 	else if (mode==Kexi::DataViewMode) {
 		//this is just a SWITCH from data view
 		//set cursor if needed:
-		if (d->dataTable->tableView()->currentRow()<0 
-			|| d->dataTable->tableView()->currentColumn()<0)
+		if (d->dataTable->dataAwareObject()->currentRow()<0 
+			|| d->dataTable->dataAwareObject()->currentColumn()<0)
 		{
-			d->dataTable->tableView()->ensureCellVisible(0,0);
-			d->dataTable->tableView()->setCursor(0,0);
+			d->dataTable->dataAwareObject()->ensureCellVisible(0,0);
+			d->dataTable->dataAwareObject()->setCursorPosition(0,0);
 		}
 	}
 	tempData()->queryChangedInPreviousView = false;
@@ -683,7 +685,7 @@ void KexiQueryDesignerGuiEditor::showFieldsForQuery(KexiDB::QuerySchema *query)
 				criteriaString = criteriaExpr->tokenToString() + " " + criteriaExpr->right()->toString();
 			(*newItem)[4] = criteriaString;
 		}
-		d->dataTable->tableView()->insertItem(newItem, row_num);
+		d->dataTable->dataAwareObject()->insertItem(newItem, row_num);
 		//create buffer
 		KexiPropertyBuffer &buf = *createPropertyBuffer( row_num, tableName, fieldName, true/*new one*/ );
 		if (!columnAlias.isEmpty())
@@ -701,7 +703,7 @@ void KexiQueryDesignerGuiEditor::showFieldsForQuery(KexiDB::QuerySchema *query)
 
 	if (!was_dirty)
 		setDirty(false);
-	d->dataTable->tableView()->ensureCellVisible(0,0);
+	d->dataTable->dataAwareObject()->ensureCellVisible(0,0);
 //	tempData()->registerTableSchemaChanges(query);
 }
 
@@ -1143,7 +1145,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 		bool saveOldValue = true;
 		if (!propertyBuffer()) {
 			saveOldValue = false;
-			createPropertyBuffer( d->dataTable->tableView()->currentRow(), 
+			createPropertyBuffer( d->dataTable->dataAwareObject()->currentRow(), 
 				item->at(1).toString(), item->at(0).toString(), true );
 			d->data->updateRowEditBuffer(item, 3, QVariant(0));//totals
 			propertyBufferSwitched();
@@ -1178,7 +1180,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 					.arg(table=="*" ? table : field);
 			else
 				result->msg = i18n("Could not set criteria for empty row");
-			d->dataTable->tableView()->cancelEditor(); //prevents further editing of this cell
+			d->dataTable->dataAwareObject()->cancelEditor(); //prevents further editing of this cell
 		}
 		else if (str.isEmpty() || (e = parseExpressionString(str, token, true/*allowRelationalOperator*/)))
 		{
@@ -1226,8 +1228,8 @@ void KexiQueryDesignerGuiEditor::slotTableFieldDoubleClicked( KexiDB::TableSchem
 	row_num++; //after
 	//add row
 	KexiTableItem *newItem = createNewRow(table->name(), fieldName);
-	d->dataTable->tableView()->insertItem(newItem, row_num);
-	d->dataTable->tableView()->setCursor(row_num, 0);
+	d->dataTable->dataAwareObject()->insertItem(newItem, row_num);
+	d->dataTable->dataAwareObject()->setCursorPosition(row_num, 0);
 	//create buffer
 	createPropertyBuffer( row_num, table->name(), fieldName, true/*new one*/ );
 	propertyBufferSwitched();
@@ -1329,12 +1331,12 @@ void KexiQueryDesignerGuiEditor::slotPropertyChanged(KexiPropertyBuffer &buf, Ke
 		if (pname=="alias") {
 			if (buf["isExpression"].value().toBool()==true) {
 				//update value in column #1
-				d->dataTable->tableView()->acceptEditor();
-//				d->dataTable->tableView()->setCursor(d->dataTable->tableView()->currentRow(),0);
-				//d->dataTable->tableView()->startEditCurrentCell();
-				d->data->updateRowEditBuffer(d->dataTable->tableView()->selectedItem(), 0, QVariant(buf["alias"].value().toString() + ": " + buf["field"].value().toString()));
-				d->data->saveRowChanges(*d->dataTable->tableView()->selectedItem(), true);
-//				d->dataTable->tableView()->acceptRowEdit();
+				d->dataTable->dataAwareObject()->acceptEditor();
+//				d->dataTable->dataAwareObject()->setCursorPosition(d->dataTable->dataAwareObject()->currentRow(),0);
+				//d->dataTable->dataAwareObject()->startEditCurrentCell();
+				d->data->updateRowEditBuffer(d->dataTable->dataAwareObject()->selectedItem(), 0, QVariant(buf["alias"].value().toString() + ": " + buf["field"].value().toString()));
+				d->data->saveRowChanges(*d->dataTable->dataAwareObject()->selectedItem(), true);
+//				d->dataTable->dataAwareObject()->acceptRowEdit();
 			}
 		}
 	}

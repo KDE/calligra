@@ -71,7 +71,7 @@ class KexiAlterTableDialogPrivate
 
 		KexiTableViewData *data;
 
-		KexiTableViewPropertyBuffer *buffers;
+		KexiDataAwarePropertyBuffer *buffers;
 
 		int row; //!< used to know if a new row is selected in slotCellSelected()
 
@@ -128,6 +128,8 @@ KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent,
 	d->data->addColumn( new KexiTableViewColumn(*f) );
 	d->data->addColumn( new KexiTableViewColumn(i18n("Comments"), KexiDB::Field::Text) );
 
+	m_view = dynamic_cast<KexiTableView*>(mainWidget());
+
 	m_view->setSpreadSheetMode();
 //	setFocusProxy(m_view);
 
@@ -141,13 +143,13 @@ KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent,
 	setMinimumSize(m_view->minimumSizeHint().width(),m_view->minimumSizeHint().height());
 	m_view->setFocus();
 
-	d->buffers = new KexiTableViewPropertyBuffer( this, m_view );
+	d->buffers = new KexiDataAwarePropertyBuffer( this, m_view );
 	connect(d->buffers, SIGNAL(rowDeleted()), this, SLOT(updateActions()));
 	connect(d->buffers, SIGNAL(rowInserted()), this, SLOT(updateActions()));
 	
 	plugSharedAction("tablepart_toggle_pkey", this, SLOT(slotTogglePrimaryKey()));
 	d->action_toggle_pkey = static_cast<KToggleAction*>( sharedAction("tablepart_toggle_pkey") );
-	d->action_toggle_pkey->plug(m_view->popup(), 0); //add at the beg.
+	d->action_toggle_pkey->plug(m_view->contextMenu(), 0); //add at the beg.
 }
 
 KexiAlterTableDialog::~KexiAlterTableDialog()
@@ -201,7 +203,7 @@ void KexiAlterTableDialog::initData()
 	m_view->setColumnStretchEnabled( true, COLUMN_ID_DESC ); //last column occupies the rest of the area
 
 	setDirty(false);
-	m_view->setCursor(0, COLUMN_ID_NAME); //set @ name column
+	m_view->setCursorPosition(0, COLUMN_ID_NAME); //set @ name column
 }
 
 static bool updatePropertiesVisibility(KexiDB::Field::Type fieldType, KexiPropertyBuffer& buf)
@@ -736,7 +738,7 @@ tristate KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema)
 		}
 		else if (questionRes==KMessageBox::Yes) {
 			m_view->insertEmptyRow(0);
-			m_view->setCursor(0, COLUMN_ID_NAME);
+			m_view->setCursorPosition(0, COLUMN_ID_NAME);
 			//name and type
 			m_view->data()->updateRowEditBuffer(m_view->selectedItem(), COLUMN_ID_NAME, 
 				QVariant("id"));
@@ -761,7 +763,7 @@ tristate KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema)
 			no_fields = false;
 			const QString name = (*b)["name"].value().toString();
 			if (name.isEmpty()) {
-				m_view->setCursor(i, COLUMN_ID_NAME);
+				m_view->setCursorPosition(i, COLUMN_ID_NAME);
 				m_view->startEditCurrentCell();
 				KMessageBox::information(this, i18n("You should enter field name.") );
 				res = cancelled;
@@ -779,7 +781,7 @@ tristate KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema)
 		res = cancelled;
 	}
 	if (res && b && i<(int)d->buffers->size()) {//found a duplicate
-		m_view->setCursor(i, COLUMN_ID_NAME);
+		m_view->setCursorPosition(i, COLUMN_ID_NAME);
 		m_view->startEditCurrentCell();
 		KMessageBox::sorry(this, 
 			i18n("You have added \"%1\" field name twice.\nField names cannot be repeated. "

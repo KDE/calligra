@@ -3,7 +3,7 @@
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003 Daniel Molkentin <molkentin@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and,or
    modify it under the terms of the GNU Library General Public
@@ -43,6 +43,8 @@
 #include "kexitableedit.h"
 #include "tristate.h"
 #include <widget/utils/kexirecordnavigator.h>
+#include <widget/utils/kexisharedactionclient.h>
+#include <kexidataawareobjectiface.h>
 
 class KPopupMenu;
 class KPrinter;
@@ -59,15 +61,17 @@ namespace KexiDB {
 	class RowEditBuffer;
 }
 
-//! default column width in pixels
-#define KEXITV_DEFAULT_COLUMN_WIDTH 120
-
 //! minimum column width in pixels
 #define KEXITV_MINIMUM_COLUMN_WIDTH 10
 
-/*! @short KexiTableView class provides a table view widget.
+//! @short KexiTableView class provides a widget for displaying data in a tabular view.
+/*! @see KexiFormScrollView
 */
-class KEXIDATATABLE_EXPORT KexiTableView : public QScrollView, public KexiRecordNavigatorHandler
+class KEXIDATATABLE_EXPORT KexiTableView :
+	public QScrollView,
+	public KexiRecordNavigatorHandler,
+	public KexiSharedActionClient,
+	public KexiDataAwareObjectInterface
 {
 Q_OBJECT
 public:
@@ -132,7 +136,7 @@ public:
 
 //	virtual void initActions(KActionCollection *col);
 
-	KexiTableViewData *data() const { return m_data; }
+//moved	KexiTableViewData *data() const { return m_data; }
 
 	/*! \return string displayed for column's header \a colNum */
 	QString columnCaption(int colNum) const;
@@ -141,26 +145,30 @@ public:
 	 \return field object that define column \a colNum or NULL if there is no such column */
 	KexiDB::Field* field(int colNum) const;
 
-	bool isSortingEnabled() const;
+//	/*! \return true if sorting is enabled. */
+//moved	virtual bool isSortingEnabled() const;
 
-	/*! \return sorted column number or -1 if no column is sorted */
-	int sortedColumn();
+//moved	/*! \return sorted column number or -1 if no column is sorted */
+//moved	virtual int sortedColumn();
 
-	/*! \return true if ascending order for sorting. This not implies that 
-	 any sorting has been performed. */
-	bool sortingAscending() const;
+//moved	/*! \return true if ascending order for sorting. This not implies that 
+//moved	 any sorting has been performed. */
+//moved	bool sortingAscending() const;
 
-	//! one of KexiDB::Field::Type
-	int columnType(int col) const;
+//moved	//! \return a type of column \a col - one of KexiDB::Field::Type
+//moved	int columnType(int col) const;
 
-	QVariant columnDefaultValue(int col) const;
+//moved	//! \return default value for column \a col
+//moved	QVariant columnDefaultValue(int col) const;
 
-	bool columnEditable(int col) const;
+//moved	//! \return true is column \a col is editable
+//moved	bool columnEditable(int col) const;
 
-	inline KexiTableItem *itemAt(int row) const;
+//moved	inline KexiTableItem *itemAt(int row) const;
 
-	const QVariant* bufferedValueAt(int col);
-	
+//moved	const QVariant* bufferedValueAt(int col);
+
+#if 0 //moved
 	/*! \return true if data represented by this table view 
 	 is not editable using it (it can be editable with other ways although). */
 	virtual bool isReadOnly() const;
@@ -181,7 +189,7 @@ public:
 	void setReadOnly(bool set);
 
 	/*! \return true if data inserting is enabled (the default). */
-	bool isInsertingEnabled() const;
+	virtual bool isInsertingEnabled() const;
 
 	/*! Sets insertingEnabled flag. If true, empty row is available 
 	 at the end of this widget for new entering new data. 
@@ -201,65 +209,62 @@ public:
 	 Mostly usable for not db-aware table views (e.g. used in Kexi Alter Table). 
 	 Note, that if inserting is disabled, or the table is read-only, 
 	 this flag is ignored. */
-	bool isEmptyRowInsertingEnabled() const;
+	virtual bool isEmptyRowInsertingEnabled() const;
 
 	/*! Sets emptyRowInserting flag. 
 	 Note, that if inserting is disabled, this flag is ignored. */
 	void setEmptyRowInsertingEnabled(bool set);
 
-	/*! \return true if row deleting is enabled. 
-	 Equal to deletionPolicy() != NoDelete && !isReadOnly()).
-	*/
-	bool isDeleteEnabled() const;
+
+//moved	/*! \return true if row deleting is enabled. 
+//	 Equal to deletionPolicy() != NoDelete && !isReadOnly()). */
+//	bool isDeleteEnabled() const;
 
 	/*! \return true if the context menu is enabled (visible) for the view.
 	  True by default. */
-	bool contextMenuEnabled() const;
+	bool contextMenuEnabled() const { return d->contextMenuEnabled; }
 
 	/*! Enables or disables the context menu for the view. */
-	void setContextMenuEnabled(bool set);
+	void setContextMenuEnabled(bool set) { d->contextMenuEnabled = set; }
+#endif //moved
 	
-	/*! Enables or disables filtering. Filtering is enabled by default. */
-	void setFilteringEnabled(bool set);
+//moved	/*! Enables or disables filtering. Filtering is enabled by default. */
+//moved	void setFilteringEnabled(bool set);
 
-	/*! \return true if filtering is enabled. */
-	bool filteringEnabled() const;
-		
-	/*! Added for convenience: configure this table view 
-	 to behave more like spreadsheet (it's used for things like alter-table view).
-	 - hides navigator
-	 - disables sorting, inserting and filtering
-	 - enables accepting row after cell accepting; see setAcceptsRowEditAfterCellAccepting()
-	 - enables inserting empty row; see setEmptyRowInsertingEnabled() */
-	void setSpreadSheetMode();
+//moved	/*! \return true if filtering is enabled. */
+//moved	bool isFilteringEnabled() const;
 
+	/*! Reimplementation for KexiDataAwareObjectInterface */
+	virtual void setSpreadSheetMode();
+
+#if 0 //moved
 	/*! \return true id "spreadSheetMode" is enabled. It's false by default. */
 	bool spreadSheetMode() const;
-
+#endif
 	/*! \return true if vertical scrollbar's tooltips are enabled (true by default). */
 	bool scrollbarToolTipsEnabled() const;
 
 	/*! Enables or disables vertical scrollbar's. */
 	void setScrollbarToolTipsEnabled(bool set);
 
-	/*! \return currently selected column number or -1. */
-	int currentColumn() const;
+//moved	/*! \return currently selected column number or -1. */
+//moved	virtual int currentColumn() const;
 
-	/*! \return currently selected row number or -1. */
-	int currentRow() const;
+//moved	/*! \return currently selected row number or -1. */
+//moved	virtual int currentRow() const;
 
-	/*! \return currently selected item (row data) or null. */
-	KexiTableItem *selectedItem() const;
+//moved /*! \return currently selected item (row data) or null. */
+//moved	KexiTableItem *selectedItem() const;
 
-	/*! \return number of rows in this view. */
-	int rows() const;
+//moved	/*! \return number of rows in this view. */
+//moved	virtual int rows() const;
 
-	/*! \return number of visible columns in this view. */
-	int columns() const;
+//moved	/*! \return number of visible columns in this view. */
+//moved	virtual int columns() const;
 
 	/*! \return maximum number of rows that can be displayed per one "page" 
 	 for current table view's size. */
-	int rowsPerPage() const;
+	virtual int rowsPerPage() const;
 
 	QRect cellGeometry(int row, int col) const;
 	int columnWidth(int col) const;
@@ -269,13 +274,14 @@ public:
 	int columnAt(int pos) const;
 	int rowAt(int pos, bool ignoreEnd=false) const;
 
-	/*! \return true if currently selected row is edited. */
-	bool rowEditing() const;
+//moved	/*! \return true if currently selected row is edited. */
+//moved	virtual bool rowEditing() const;
 
 	/*! Redraws specified cell. */
-	void updateCell(int row, int col);
+	virtual void updateCell(int row, int col);
+
 	/*! Redraws all cells of specified row. */
-	void updateRow(int row);
+	virtual void updateRow(int row);
 
 	bool editableOnDoubleClick() const;
 	void setEditableOnDoubleClick(bool set);
@@ -307,12 +313,13 @@ public:
 
 	virtual QSize tableSize() const;
 
-	void		emitSelected();
+	void emitSelected();
 
-	KexiTableRM *verticalHeader() const;
+//moved	KexiTableRM *verticalHeader() const;
 
-	KPopupMenu* popup() const;
+//moved	KPopupMenu* popup() const { return m_popup; }
 
+/*moved
 	enum DeletionPolicy
 	{
 		NoDelete = 0,
@@ -320,15 +327,16 @@ public:
 		ImmediateDelete = 2,
 		SignalDelete = 3
 	};
-
+*/
 //	virtual void	setInsertionPolicy(InsertionPolicy policy);
 //	/*! \return deletion policy for the table view. The default (after allocating) is AutoInsert. */
 //	InsertionPolicy	insertionPolicy() const;
 
-	virtual void setDeletionPolicy(DeletionPolicy policy);
+//moved	virtual void setDeletionPolicy(DeletionPolicy policy);
 
-	/*! \return deletion policy for the table view. The default (after allocating) is AskDelete. */
-	DeletionPolicy deletionPolicy() const;
+//moved	/*! \return deletion policy for the table view. 
+//moved	 The default (after allocating) is AskDelete. */
+//moved	DeletionPolicy deletionPolicy() const;
 
 	//! single shot after 1ms for contents updatinh
 	void triggerUpdate();
@@ -343,16 +351,21 @@ public:
 
 	virtual bool eventFilter( QObject *o, QEvent *e );
 
+#if 0
+//moved to KexiSharedActionClient
+
 	/*! Plugs action \a a for this table view. The action will be later looked up (by name) 
 	 on key press event, to get proper shortcut. If found, we know that the action is already 
 	 performed at main window's level, so we should give up. Otherwise - default shortcut 
 	 will be used (example: Shift+Enter key for "data_save_row" action). \sa shortCutPressed()
 	*/
-	void plugSharedAction(KAction* a);
+	virtual void plugSharedAction(KAction* a);
+#endif
 
 	//! Initializes standard editor cell editor factories. This is called internally, once.
 	static void initCellEditorFactories();
 
+#if 0 //moved
 	/*! Deletes \a item. Used by deleteCurrentRow(). Calls beforeDeleteItem() before deleting, 
 	 to double-check if deleting is allowed. \return true on success. */
 	bool deleteItem(KexiTableItem *item);//, bool moveCursor=true);
@@ -388,7 +401,7 @@ public:
 	/*! \return true, if this table accepts dropping data on the rows. 
 	*/
 	bool dropsAtRowEnabled() const;
-
+#endif
 	/*! \return highlighted row number or -1 if no row is highlighted. 
 	 Makes sense if row highlighting is enabled.
 	 @see Appearance::rowHighlightingEnabled setHighlightedRow() */
@@ -396,44 +409,59 @@ public:
 
 	KexiTableItem *highlightedItem() const;
 
+	virtual void connectCellSelectedSignal(const QObject* receiver, 
+		const char* intIntMember);
+
+	virtual void connectRowEditStartedSignal(const QObject* receiver, 
+		const char* intMember);
+
+	virtual void connectRowEditTerminatedSignal(const QObject* receiver, 
+		const char* voidMember);
+
+	virtual void connectReloadActionsSignal(const QObject* receiver, 
+		const char* voidMember);
+
+	virtual void connectDataSetSignal(const QObject* receiver, 
+			const char* kexiTableViewDataMember);
+
+	virtual void connectToReloadDataSlot(const QObject* sender, 
+			const char* voidSignal);
+
 public slots:
-	/*! Sets data for this table view. if \a owner is true, the table view will own 
-	 \a data and therefore will destoy when required, else: \a data is (possibly) shared and
-	 not owned by the widget. 
-	 If widget already has _different_ data object assigned (and owns this data),
-	 old data is destroyed before new assignment.
-	 */
-	void setData( KexiTableViewData *data, bool owner = true );
+	virtual void setData( KexiTableViewData *data, bool owner = true )
+		{ KexiDataAwareObjectInterface::setData( data, owner ); }
 
-	/*! Clears columns information and thus all internal table data and its visible representation.
-	 Repaints widget if \a repaint is true.
-	 */
-	void clearColumns(bool repaint = true);
+//moved	/*! Clears columns information and thus all internal table data and its visible representation.
+//moved	 Repaints widget if \a repaint is true.
+//moved	 */
+//moved	void clearColumns(bool repaint = true);
 
-	//! Sets sorting on column \a col, or (when \a col == -1) sets rows unsorted
-	//! this will dont work if sorting is disabled with setSortingEnabled()
-	void setSorting(int col, bool ascending=true);
+	virtual void clearColumnsInternal(bool repaint);
 
-	/*! Enables or disables sorting for this table view
-		This method is different that setSorting() because it prevents both user
-		and programmer from sorting by clicking a column's header or calling setSorting().
-		By default sorting is enabled for table view.
-	*/
-	void setSortingEnabled(bool set);
+//moved	//! Sets sorting on column \a col, or (when \a col == -1) sets rows unsorted
+//moved	//! this will dont work if sorting is disabled with setSortingEnabled()
+//moved	void setSorting(int col, bool ascending=true);
 
-	/*! Sorts all rows by column selected with setSorting().
-	 If there is currently row edited, it is accepted. 
-	 If acception failed, sort() will return false.
-	 \return true on success. */
-	bool sort();
+//moved	/*! Enables or disables sorting for this table view
+//moved		This method is different that setSorting() because it prevents both user
+//moved		and programmer from sorting by clicking a column's header or calling setSorting().
+//moved		By default sorting is enabled for table view.
+//moved	*/
+//moved	void setSortingEnabled(bool set);
 
-	/*! Sorts currently selected column in ascending order. 
-	 This slot is used typically for "data_sort_az" action. */
-	void sortAscending();
+//moved	/*! Sorts all rows by column selected with setSorting().
+//moved	 If there is currently row edited, it is accepted. 
+//moved	 If acception failed, sort() will return false.
+//moved	 \return true on success. */
+//moved	bool sort();
 
-	/*! Sorts currently selected column in descending order.
-	 This slot is used typically for "data_sort_za" action. */
-	void sortDescending();
+//moved	/*! Sorts currently selected column in ascending order. 
+//moved	 This slot is used typically for "data_sort_az" action. */
+//moved	void sortAscending();
+
+//moved	/*! Sorts currently selected column in descending order.
+//moved	 This slot is used typically for "data_sort_za" action. */
+//moved	void sortDescending();
 
 	/*! Adjusts \a colNum column's width to its (current) contents. 
 	 If \a colNum == -1, all columns' width is adjusted. */
@@ -459,10 +487,12 @@ public slots:
 	 \sa setColumnStretchEnabled() QHeader::adjustHeaderSize() */
 	void adjustHorizontalHeaderSize();
 
+#if 0 //moved
+//MOC_SKIP_BEGIN 
 	/*! Moves cursor to \a row and \a col. If \a col is -1, current column number is used.
 	 If forceSet is true, cursor position is updated even if \a row and \a col doesn't 
 	 differ from actual position. */
-	void setCursor(int row, int col = -1, bool forceSet = false);
+	virtual void setCursor(int row, int col = -1, bool forceSet = false);
 
 	/*! Clears current selection. Current row and column will be now unspecified:
 	 currentRow(), currentColumn() will return -1, and selectedItem() will return null. */
@@ -475,6 +505,8 @@ public slots:
 	void selectPrevPage(); //!< page up action
 	void selectFirstRow();
 	void selectLastRow();
+//MOC_SKIP_END
+#endif //moved
 
 	/*! Sets highlighted row number or -1 if no row has to be highlighted. 
 	 Makes sense if row highlighting is enabled.
@@ -487,11 +519,12 @@ public slots:
 	/*! Ensures that cell at \a row and \a col is visible. 
 	 If \a col is -1, current column number is used. \a row and \a col (if not -1) must 
 	 be between 0 and rows() (or cols() accordingly). */
-	void ensureCellVisible(int row, int col/*=-1*/);
+	virtual void ensureCellVisible(int row, int col/*=-1*/);
 
 //	void			gotoNext();
 //js	int			findString(const QString &string);
 	
+#if 0 //moved
 	/*! Deletes currently selected record; does nothing if no record 
 	 is currently selected. If record is in edit mode, editing 
 	 is cancelled before deleting.  */
@@ -517,16 +550,15 @@ public slots:
 	/*! Deletes currently selected cell's contents, if allowed. 
 	 In most cases delete is not accepted immediately but "row editing" mode is just started. */
 	void deleteAndStartEditCurrentCell();
+//moved	/*! Cancels row editing All changes made to the editing 
+//moved	 row during this current session will be undone. */
+//moved	void cancelRowEdit();
 
-	/*! Cancels row editing All changes made to the editing 
-	 row during this current session will be undone. */
-	void cancelRowEdit();
-
-	/*! Accepts row editing. All changes made to the editing 
-	 row during this current session will be accepted (saved). 
-	 \return true if accepting was successfull, false otherwise 
-	 (e.g. when current row contain data that does not meet given constraints). */
-	bool acceptRowEdit();
+//moved	/*! Accepts row editing. All changes made to the editing 
+//moved	 row during this current session will be accepted (saved). 
+//moved	 \return true if accepting was successfull, false otherwise 
+//moved	 (e.g. when current row contain data that does not meet given constraints). */
+//moved	bool acceptRowEdit();
 
 	/*! Specifies, if this table view automatically accepts 
 	 row editing (using acceptRowEdit()) on accepting any cell's edit 
@@ -541,14 +573,15 @@ public slots:
 	 By default this flag is set to false. */
 	void setDropsAtRowEnabled(bool set);
 
-	void cancelEditor();
-	virtual bool acceptEditor();
+//moved	void cancelEditor();
+//moved	virtual bool acceptEditor();
+#endif //moved
 
 signals:
-	void dataSet( KexiTableViewData *data );
+	virtual void dataSet( KexiTableViewData *data );
 
-	void itemSelected(KexiTableItem *);
-	void cellSelected(int col, int row);
+	virtual void itemSelected(KexiTableItem *);
+	virtual void cellSelected(int col, int row);
 
 	void itemReturnPressed(KexiTableItem *, int row, int col);
 	void itemDblClicked(KexiTableItem *, int row, int col);
@@ -558,7 +591,7 @@ signals:
 	void droppedAtRow(KexiTableItem *item, int row, QDropEvent *e, KexiTableItem*& newItem);
 
 	/*! Data has been refreshed on-screen - emitted from initDataContents(). */
-	void dataRefreshed();
+	virtual void dataRefreshed();
 
 #if 0 
 //MOC_SKIP_BEGIN 
@@ -584,10 +617,10 @@ signals:
 	void rowInserted(KexiTableItem*);
 //MOC_SKIP_END
 #endif
-	void itemChanged(KexiTableItem *, int row, int col);
-	void itemChanged(KexiTableItem *, int row, int col, QVariant oldValue);
-	void itemDeleteRequest(KexiTableItem *, int row, int col);
-	void currentItemDeleteRequest();
+	virtual void itemChanged(KexiTableItem *, int row, int col);
+	virtual void itemChanged(KexiTableItem *, int row, int col, QVariant oldValue);
+	virtual void itemDeleteRequest(KexiTableItem *, int row, int col);
+	virtual void currentItemDeleteRequest();
 	void addRecordRequest();
 //	void contextMenuRequested(KexiTableItem *,  int row, int col, const QPoint &);
 	void sortedColumnChanged(int col);
@@ -608,13 +641,16 @@ protected slots:
 	void slotRowsDeleted( const QValueList<int> & ); //!< updates display after many rows deletion
 	void slotColumnWidthChanged( int col, int os, int ns );
 	void slotSectionHandleDoubleClicked( int section );
-	/*! Typically handles pressing Enter or F2 key: 
-	 if current cell has boolean type, toggles it's value, 
-	 otherwise starts editing (startEditCurrentCell()). */
-	void startEditOrToggleValue();
-	virtual void boolToggled();
+
+//moved	/*! Typically handles pressing Enter or F2 key: 
+//moved	 if current cell has boolean type, toggles it's value, 
+//moved	 otherwise starts editing (startEditCurrentCell()). */
+//moved	void startEditOrToggleValue();
+
+//moved	virtual void boolToggled();
+
 	void slotUpdate();
-	void sortColumnInternal(int col, int order = 0);
+//moved	void sortColumnInternal(int col, int order = 0);
 
 	void slotAutoScroll();
 
@@ -628,8 +664,9 @@ protected slots:
 	//! receives a signal from cell editors
 	void slotEditRequested();
 
-	//! Handles KexiTableViewData::refreshRequested() signal
-	void slotRefreshRequested();
+	/*! Reloads data for this widget.
+	 Handles KexiTableViewData::reloadRequested() signal. */
+	virtual void reloadData() { KexiDataAwareObjectInterface::reloadData(); }
 
 	//! Handles KexiTableViewData::rowRepaintRequested() signal
 	void slotRowRepaintRequested(KexiTableItem& item);
@@ -647,17 +684,51 @@ protected slots:
 	void slotRowInserted(KexiTableItem *item, uint row, bool repaint);
 
 protected:
-	/*! Initializes data contents (resizes it, sets cursor at 1st row).
+	/*! Reimplementation for KexiDataAwareObjectInterface 
+	 Initializes data contents (resizes it, sets cursor at 1st row).
 	 Called on setData(). Also called once on show event after
 	 refreshRequested() signal was received from KexiTableViewData obejct. */
-	void initDataContents();
+	virtual void initDataContents();
 
-	// painting and layout
-	void	drawContents(QPainter *p, int cx, int cy, int cw, int ch);
-	void	createBuffer(int width, int height);
-	void	paintCell(QPainter* p, KexiTableItem *item, int col, int row, const QRect &cr, bool print=false);
-	void	paintEmptyArea(QPainter *p, int cx, int cy, int cw, int ch);
-	void	updateGeometries();
+	/*! Implementation for KexiDataAwareObjectInterface.
+	 Updates widget's contents size using QScrollView::resizeContents() 
+	 depending on tableSize(). */
+	virtual void updateWidgetContentsSize();
+
+	/*! Reimplementation for KexiDataAwareObjectInterface */
+	virtual void clearVariables();
+
+	/*! Implementation for KexiDataAwareObjectInterface */
+	virtual int currentLocalSortingOrder() const;
+
+	/*! Implementation for KexiDataAwareObjectInterface */
+	virtual int currentLocalSortColumn() const;
+
+	/*! Implementation for KexiDataAwareObjectInterface */
+	virtual void setLocalSortingOrder(int col, int order);
+
+	/*! Implementation for KexiDataAwareObjectInterface */
+	virtual void updateGUIAfterSorting();
+
+	/*! Implementation for KexiDataAwareObjectInterface */
+	virtual void updateWidgetScrollBars() { updateScrollBars(); }
+
+//	/*! Implementation for KexiDataAwareObjectInterface */
+//	virtual void emitSortedColumnChanged(int col) { emit sortedColumnChanged(col); }
+
+//	/*! Implementation for KexiDataAwareObjectInterface */
+//	virtual void emitRowEditTerminated(int row) { emit rowEditTerminated(row); }
+
+	/*! Implementation for KexiDataAwareObjectInterface.
+	 Adds another sections within horizontal header. */
+	virtual void addHeaderColumn(const QString& caption, const QString& description, int size);
+
+	//! painting and layout
+	void drawContents(QPainter *p, int cx, int cy, int cw, int ch);
+	void createBuffer(int width, int height);
+	void paintCell(QPainter* p, KexiTableItem *item, int col, int row, const QRect &cr, bool print=false);
+	void paintEmptyArea(QPainter *p, int cx, int cy, int cw, int ch);
+	void updateGeometries();
 
 	QPoint contentsToViewport2( const QPoint &p );
 	void contentsToViewport2( int x, int y, int& vx, int& vy );
@@ -680,19 +751,15 @@ protected:
 	virtual void viewportDragLeaveEvent( QDragLeaveEvent * );
 	virtual void paletteChange( const QPalette & );
 	
-	/*! Internal: creates editor structure without filling it with data.
-	 Used in createEditor() and few places to be able to display cell contents 
-	 dependending on its type. If \a ignoreMissingEditor is false (the default),
-	 and editor cannot be instantiated, current row editing (if present) is cancelled.
-	 */
-	KexiTableEdit *editor( int col, bool ignoreMissingEditor = false );
+	/*! Implementation for KexiDataAwareObjectInterface */
+	virtual KexiTableEdit *editor( int col, bool ignoreMissingEditor = false );
 
-	/*! Updates editor's position, size and shows its focus (not the editor!) 
-	 for \a row and \a col, using editor(). Does nothing if editor not found. */
-	void editorShowFocus( int row, int col );
+	/*! Implementation for KexiDataAwareObjectInterface */
+	virtual void editorShowFocus( int row, int col );
 
 	//! Creates editors and shows it, what usually means the beginning of a cell editing
-	void createEditor(int row, int col, const QString& addText = QString::null, bool removeOld = false);
+	virtual void createEditor(int row, int col, const QString& addText = QString::null, 
+		bool removeOld = false);
 
 	bool focusNextPrevChild(bool next);
 
@@ -723,9 +790,9 @@ protected:
 		QPainter *pb, int r, int rowp, int cx, int cy, 
 		int colfirst, int collast, int maxwc);
 
-	/*! For reimplementation: called by deleteItem(). If returns false, deleting is aborted.
-	 Default implementation just returns true. */
-	virtual bool beforeDeleteItem(KexiTableItem *item);
+//moved	/*! For reimplementation: called by deleteItem(). If returns false, deleting is aborted.
+//moved	 Default implementation just returns true. */
+//moved	virtual bool beforeDeleteItem(KexiTableItem *item);
 
 	virtual void setHBarGeometry( QScrollBar & hbar, int x, int y, int w, int h );
 
@@ -741,7 +808,9 @@ protected:
 	//! internal, to determine valid row number when navigator text changed
 	int validRowNumber(const QString& text);
 
-	void removeEditor();
+	/*! Reimplementation for KexiDataAwareObjectInterface 
+	 (viewport()->setFocus() is just added) */
+	virtual void removeEditor();
 
 	//! Internal: updated sched fonts for painting.
 	void updateFonts(bool repaint = false);
@@ -750,13 +819,9 @@ protected:
 	 At this time, it's used by KexiComboBoxPopup to decrease margin for popup's table. */
 	void setBottomMarginInternal(int pixels);
 
+	virtual void updateWidgetContents() { update(); }
+
 	//! for navigator
-//	void slotNavRecordNumberEntered(uint r);
-//	void navBtnLastClicked();
-//	void navBtnPrevClicked();
-//	void navBtnNextClicked();
-//	void navBtnFirstClicked();
-//	void navBtnNewClicked();
 	virtual void moveToRecordRequested(uint r);
 	virtual void moveToLastRecordRequested();
 	virtual void moveToPreviousRecordRequested();
@@ -769,14 +834,15 @@ protected:
 
 	//--------------------------
 		
-	KexiTableViewData *m_data;
-	bool m_owner : 1;
+//moved	KexiTableViewData *m_data;
+//moved	bool m_owner : 1;
 
 	KexiTableViewPrivate *d;
 
 	friend class KexiTableItem;
 };
 
+#if 0 //moved
 inline KexiTableItem *KexiTableView::itemAt(int row) const
 {
 	KexiTableItem *item = m_data->at(row);
@@ -790,6 +856,7 @@ inline KexiTableItem *KexiTableView::itemAt(int row) const
 	}
 	return item;
 }
+#endif
 
 /*! A header with additional actions.
  Displays field description (Field::description()) text as tool tip, if available.

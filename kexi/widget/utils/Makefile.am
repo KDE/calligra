@@ -1,7 +1,7 @@
 include $(top_srcdir)/kexi/Makefile.global
 
 lib_LTLIBRARIES = libkexiguiutils.la
-libkexiguiutils_la_SOURCES = kexirecordnavigator.cpp
+libkexiguiutils_la_SOURCES = kexisharedactionclient.cpp kexirecordnavigator.cpp
 
 libkexiguiutils_la_LDFLAGS = $(all_libraries) -Wnounresolved
 libkexiguiutils_la_LIBADD = $(LIB_KDEUI)

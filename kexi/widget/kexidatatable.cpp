@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,6 +19,7 @@
    Boston, MA 02111-1307, USA.
 */
 
+
 #include <qlayout.h>
 #include <qlabel.h>
 
@@ -33,30 +34,42 @@
 #include "kexidatatable.h"
 #include "kexidialogbase.h"
 
-//KexiDataTable::KexiDataTable(KexiMainWindow *win, const QString &caption)
 KexiDataTable::KexiDataTable(KexiMainWindow *mainWin, QWidget *parent, 
 	const char *name, bool dbAware)
- : KexiViewBase(mainWin, parent, name)
- , m_view(0)
+// : KexiViewBase(mainWin, parent, name)
+ : KexiDataAwareView( mainWin, parent, name )
 {
+	KexiTableView *view;
 	if (dbAware)
-		m_view = new KexiDataTableView(this, QString("%1_datatableview").arg(name ? name : "KexiDataTableView").latin1());
+		view = new KexiDataTableView(this, 
+			QString("%1_datatableview").arg(name ? name : "KexiDataTableView").latin1());
 	else
-		m_view = new KexiTableView(0, this, QString("%1_tableview").arg(name ? name : "KexiTableView").latin1());
-	setViewWidget(m_view);
-	init();
+		view = new KexiTableView(0, this, 
+			QString("%1_tableview").arg(name ? name : "KexiTableView").latin1());
+
+	KexiDataAwareView::init( view, view, view );
+//	init();
 }
 
 //KexiDataTable::KexiDataTable(KexiMainWindow *win, KexiDB::Cursor *cursor, 
 //	const QString &caption)
 KexiDataTable::KexiDataTable(KexiMainWindow *mainWin, QWidget *parent, 
 	KexiDB::Cursor *cursor, const char *name)
- : KexiViewBase(mainWin, parent, name)
- , m_view(0)
+ : KexiDataAwareView( mainWin, parent, name )
+// : KexiViewBase(mainWin, parent, name)
+// , m_view(0)
 {
-	m_view = new KexiDataTableView(this, "view", cursor);
-	init();
+//	m_view = new KexiDataTableView(this, "view", cursor);
+	KexiTableView *view = new KexiDataTableView(this, "view", cursor);
+	KexiDataAwareView::init( view, view, view );
+//	init();
 }
+
+KexiDataTable::~KexiDataTable()
+{
+}
+
+#if 0 //moved
 
 void KexiDataTable::init()
 {
@@ -93,10 +106,6 @@ void KexiDataTable::init()
 	initActions();
 //js already done in keximainwindow:	registerDialog();
 	reloadActions();
-}
-
-KexiDataTable::~KexiDataTable()
-{
 }
 
 void
@@ -167,32 +176,30 @@ void KexiDataTable::reloadActions()
 
 	slotCellSelected( m_view->currentColumn(), m_view->currentRow() );
 }
+#endif
 
+/*moved
 void
 KexiDataTable::updateActions(bool activated)
 {
 	setAvailable("data_sort_az", m_view->isSortingEnabled());
 	setAvailable("data_sort_za", m_view->isSortingEnabled());
 	KexiViewBase::updateActions(activated);
-}
+}*/
 
 void
 KexiDataTable::setData(KexiDB::Cursor *c)
 {
-	if (!m_view->isA("KexiDataTableView"))
+	if (!dynamic_cast<KexiDataTableView*>(mainWidget()))
 		return;
-	static_cast<KexiDataTableView*>(m_view)->setData(c);
+	dynamic_cast<KexiDataTableView*>(mainWidget())->setData(c);
 }
 
 void KexiDataTable::filter()
 {
 }
 
-QWidget* KexiDataTable::mainWidget() 
-{
-	return m_view;
-}
-
+/*moved
 QSize KexiDataTable::minimumSizeHint() const
 {
 //	QWidget*const w= (QWidget*const)mainWidget();
@@ -204,9 +211,10 @@ QSize KexiDataTable::sizeHint() const
 {
 	return m_view ? m_view->sizeHint() : KexiViewBase::sizeHint();
 }
+*/
 
 // update actions --------------
-
+#if 0
 void KexiDataTable::slotCellSelected(int /*col*/, int row)
 {
 	slotUpdateRowActions(row);
@@ -217,6 +225,9 @@ void KexiDataTable::deleteAllRows()
 	m_view->deleteAllRows(true/*ask*/, true/*repaint*/);
 }
 
+#endif
+
+/*moved
 void KexiDataTable::slotUpdateRowActions(int row)
 {
 	setAvailable("edit_delete", !m_view->isReadOnly() && !(m_view->isInsertingEnabled() && row==m_view->rows()));
@@ -227,7 +238,12 @@ void KexiDataTable::slotUpdateRowActions(int row)
 	setAvailable("data_cancel_row_changes", m_view->rowEditing());
 	setAvailable("data_sort_az", m_view->isSortingEnabled());
 	setAvailable("data_sort_za", m_view->isSortingEnabled());
+}*.
+*/
+
+KexiTableView* KexiDataTable::tableView() const
+{
+	return dynamic_cast<KexiTableView*>(m_internalView);
 }
 
 #include "kexidatatable.moc"
-

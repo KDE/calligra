@@ -58,12 +58,16 @@ KexiSubForm::setFormName(const QString &name)
 	QWidget *w = parentWidget();
 	while(w && !w->isA("KexiFormView"))
 		w = w->parentWidget();
-	KexiFormView *view = (KexiFormView*)w;
-	if(!view)
+	KexiFormView *view = static_cast<KexiFormView*>(w);
+
+	if (!view || !view->parentDialog() || !view->parentDialog()->mainWin() 
+		|| !view->parentDialog()->mainWin()->project()->dbConnection())
 		return;
 
+	KexiDB::Connection *conn = view->parentDialog()->mainWin()->project()->dbConnection();
+
 	// we check if there is a form with this name
-	int id = KexiDB::idForObjectName(*(view->connection()), name, KexiPart::FormObjectType);
+	int id = KexiDB::idForObjectName(*conn, name, KexiPart::FormObjectType);
 	if((id == 0) || (id == view->parentDialog()->id())) // == our form
 		return; // because of recursion when loading
 
@@ -77,7 +81,7 @@ KexiSubForm::setFormName(const QString &name)
 
 	// and load the sub form
 	QString data;
-	bool ok = view->connection()->loadDataBlock(id, data , QString::null);
+	bool ok = conn->loadDataBlock(id, data , QString::null);
 	if(!ok)
 		return;
 

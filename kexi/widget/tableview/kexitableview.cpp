@@ -3,7 +3,7 @@
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003 Daniel Molkentin <molkentin@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -177,11 +177,13 @@ void TableViewHeader::slotSizeChange(int /*section*/, int /*oldSize*/, int /*new
 
 //-----------------------------------------
 
+/*moved
 //sanity check
 #define CHECK_DATA(r) \
 	if (!m_data) { kdWarning() << "KexiTableView: No data assigned!" << endl; return r; }
 #define CHECK_DATA_ \
 	if (!m_data) { kdWarning() << "KexiTableView: No data assigned!" << endl; return; }
+*/
 
 bool KexiTableView_cellEditorFactoriesInitialized = false;
 
@@ -224,6 +226,8 @@ void KexiTableView::initCellEditorFactories()
 KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const char* name)
 : QScrollView(parent, name, /*Qt::WRepaintNoErase | */Qt::WStaticContents /*| Qt::WResizeNoErase*/)
 , KexiRecordNavigatorHandler()
+, KexiSharedActionClient()
+, KexiDataAwareObjectInterface()
 {
 	KexiTableView::initCellEditorFactories();
 
@@ -270,10 +274,10 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 	connect(&d->scrollBarTipTimer,SIGNAL(timeout()),this,SLOT(scrollBarTipTimeout()));
 	
 	//context menu
-	d->pContextMenu = new KPopupMenu(this, "contextMenu");
+	m_popup = new KPopupMenu(this, "contextMenu");
 #if 0 //moved to mainwindow's actions
-	d->menu_id_addRecord = d->pContextMenu->insertItem(i18n("Add Record"), this, SLOT(addRecord()), CTRL+Key_Insert);
-	d->menu_id_removeRecord = d->pContextMenu->insertItem(
+	d->menu_id_addRecord = m_popup->insertItem(i18n("Add Record"), this, SLOT(addRecord()), CTRL+Key_Insert);
+	d->menu_id_removeRecord = m_popup->insertItem(
 		kapp->iconLoader()->loadIcon("button_cancel", KIcon::Small),
 		i18n("Remove Record"), this, SLOT(removeRecord()), CTRL+Key_Delete);
 #endif
@@ -298,10 +302,10 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 	d->pTopHeader->setMovingEnabled(false);
 	connect(d->pTopHeader, SIGNAL(sizeChange(int,int,int)), this, SLOT(slotTopHeaderSizeChange(int,int,int)));
 
-	d->pVerticalHeader = new KexiTableRM(this);
-	d->pVerticalHeader->setCellHeight(d->rowHeight);
-//	d->pVerticalHeader->setFixedWidth(d->rowHeight);
-	d->pVerticalHeader->setCurrentRow(-1);
+	m_verticalHeader = new KexiTableRM(this);
+	m_verticalHeader->setCellHeight(d->rowHeight);
+//	m_verticalHeader->setFixedWidth(d->rowHeight);
+	m_verticalHeader->setCurrentRow(-1);
 
 	setMargins(
 		QMIN(d->pTopHeader->sizeHint().height(), d->rowHeight),
@@ -330,7 +334,7 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 
 	// Connect header, table and scrollbars
 	connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), d->pTopHeader, SLOT(setOffset(int)));
-	connect(verticalScrollBar(), SIGNAL(valueChanged(int)), d->pVerticalHeader, SLOT(setOffset(int)));
+	connect(verticalScrollBar(), SIGNAL(valueChanged(int)), m_verticalHeader, SLOT(setOffset(int)));
 	connect(d->pTopHeader, SIGNAL(sizeChange(int, int, int)), this, SLOT(slotColumnWidthChanged(int, int, int)));
 	connect(d->pTopHeader, SIGNAL(sectionHandleDoubleClicked(int)), this, SLOT(slotSectionHandleDoubleClicked(int)));
 	connect(d->pTopHeader, SIGNAL(clicked(int)), this, SLOT(sortColumnInternal(int)));
@@ -361,6 +365,12 @@ KexiTableView::~KexiTableView()
 	delete d;
 }
 
+void KexiTableView::clearVariables()
+{
+	KexiDataAwareObjectInterface::clearVariables();
+	d->clearVariables();
+}
+
 /*void KexiTableView::initActions(KActionCollection *ac)
 {
 	emit reloadActions(ac);
@@ -370,38 +380,38 @@ void KexiTableView::setupNavigator()
 {
 	updateScrollBars();
 	
-	d->navPanel = new KexiRecordNavigator(this, leftMargin(), "navPanel");
-	d->navPanel->setRecordHandler(this);
-	d->navPanel->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Preferred);
+	m_navPanel = new KexiRecordNavigator(this, leftMargin(), "navPanel");
+	m_navPanel->setRecordHandler(this);
+	m_navPanel->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Preferred);
 /*
-	QHBoxLayout *navPanelLyr = new QHBoxLayout(d->navPanel,0,0,"nav_lyr");
+	QHBoxLayout *navPanelLyr = new QHBoxLayout(m_navPanel,0,0,"nav_lyr");
 //	navPanelLyr->setAutoAdd(true);
 
-	navPanelLyr->addWidget( new QLabel(QString(" ")+i18n("Row:")+" ",d->navPanel) );
+	navPanelLyr->addWidget( new QLabel(QString(" ")+i18n("Row:")+" ",m_navPanel) );
 		
 	int bw = 6+SmallIcon("navigator_first").width(); //QMIN( horizontalScrollBar()->height(), 20);
-	QFont f = d->navPanel->font();
+	QFont f = m_navPanel->font();
 	f.setPixelSize((bw > 12) ? 12 : bw);
 	QFontMetrics fm(f);
 	d->nav1DigitWidth = fm.width("8");
 
-	navPanelLyr->addWidget( d->navBtnFirst = new QToolButton(d->navPanel) );
+	navPanelLyr->addWidget( d->navBtnFirst = new QToolButton(m_navPanel) );
 	d->navBtnFirst->setFixedWidth(bw);
 	d->navBtnFirst->setFocusPolicy(NoFocus);
 	d->navBtnFirst->setIconSet( SmallIconSet("navigator_first") );
 	QToolTip::add(d->navBtnFirst, i18n("First row"));
 	
-	navPanelLyr->addWidget( d->navBtnPrev = new QToolButton(d->navPanel) );
+	navPanelLyr->addWidget( d->navBtnPrev = new QToolButton(m_navPanel) );
 	d->navBtnPrev->setFixedWidth(bw);
 	d->navBtnPrev->setFocusPolicy(NoFocus);
 	d->navBtnPrev->setIconSet( SmallIconSet("navigator_prev") );
 	QToolTip::add(d->navBtnPrev, i18n("Previous row"));
 	
-//	QWidget *spc = new QFrame(d->navPanel);
+//	QWidget *spc = new QFrame(m_navPanel);
 //	spc->setFixedWidth(6);
 	navPanelLyr->addSpacing( 6 );
 	
-	navPanelLyr->addWidget( d->navRowNumber = new KLineEdit(d->navPanel) );
+	navPanelLyr->addWidget( d->navRowNumber = new KLineEdit(m_navPanel) );
 	d->navRowNumber->setAlignment(AlignRight | AlignVCenter);
 	d->navRowNumber->setFocusPolicy(ClickFocus);
 //	d->navRowNumber->setFixedWidth(fw);
@@ -410,7 +420,7 @@ void KexiTableView::setupNavigator()
 	d->navRowNumber->installEventFilter(this);
 	QToolTip::add(d->navRowNumber, i18n("Current row number"));
 	
-	KLineEdit *lbl_of = new KLineEdit(i18n("of"), d->navPanel);
+	KLineEdit *lbl_of = new KLineEdit(i18n("of"), m_navPanel);
 	lbl_of->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred);
 	lbl_of->setMaximumWidth(fm.width(lbl_of->text())+8);
 	lbl_of->setReadOnly(true);
@@ -419,7 +429,7 @@ void KexiTableView::setupNavigator()
 	lbl_of->setAlignment(AlignCenter);
 	navPanelLyr->addWidget( lbl_of );
 	
-	navPanelLyr->addWidget( d->navRowCount = new KLineEdit(d->navPanel) );
+	navPanelLyr->addWidget( d->navRowCount = new KLineEdit(m_navPanel) );
 //	d->navRowCount->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred);
 	d->navRowCount->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred);
 //	d->navRowCount->setMaximumWidth(fw);
@@ -431,22 +441,22 @@ void KexiTableView::setupNavigator()
 	lbl_of->setFont(f);
 	d->navRowNumber->setFont(f);
 	d->navRowCount->setFont(f);
-	d->navPanel->setFont(f);
+	m_navPanel->setFont(f);
 
-	navPanelLyr->addWidget( d->navBtnNext = new QToolButton(d->navPanel) );
+	navPanelLyr->addWidget( d->navBtnNext = new QToolButton(m_navPanel) );
 	d->navBtnNext->setFixedWidth(bw);
 	d->navBtnNext->setFocusPolicy(NoFocus);
 	d->navBtnNext->setIconSet( SmallIconSet("navigator_next") );
 	QToolTip::add(d->navBtnNext, i18n("Next row"));
 	
-	navPanelLyr->addWidget( d->navBtnLast = new QToolButton(d->navPanel) );
+	navPanelLyr->addWidget( d->navBtnLast = new QToolButton(m_navPanel) );
 	d->navBtnLast->setFixedWidth(bw);
 	d->navBtnLast->setFocusPolicy(NoFocus);
 	d->navBtnLast->setIconSet( SmallIconSet("navigator_last") );
 	QToolTip::add(d->navBtnLast, i18n("Last row"));
 	
 	navPanelLyr->addSpacing( 6 );
-	navPanelLyr->addWidget( d->navBtnNew = new QToolButton(d->navPanel) );
+	navPanelLyr->addWidget( d->navBtnNew = new QToolButton(m_navPanel) );
 	d->navBtnNew->setFixedWidth(bw);
 	d->navBtnNew->setFocusPolicy(NoFocus);
 	d->navBtnNew->setIconSet( SmallIconSet("navigator_new") );
@@ -459,18 +469,18 @@ void KexiTableView::setupNavigator()
 
 /* moved to rec nav. handler
 
-	connect(d->navPanel, SIGNAL(recordNumberEntered(uint)), 
+	connect(m_navPanel, SIGNAL(recordNumberEntered(uint)), 
 		this, SLOT(slotNavRecordNumberEntered(uint)));
 
-	connect(d->navPanel,SIGNAL(prevButtonClicked()),this,SLOT(navBtnPrevClicked()));
-	connect(d->navPanel,SIGNAL(nextButtonClicked()),this,SLOT(navBtnNextClicked()));
-	connect(d->navPanel,SIGNAL(lastButtonClicked()),this,SLOT(navBtnLastClicked()));
-	connect(d->navPanel,SIGNAL(firstButtonClicked()),this,SLOT(navBtnFirstClicked()));
-	connect(d->navPanel,SIGNAL(newButtonClicked()),this,SLOT(navBtnNewClicked()));
+	connect(m_navPanel,SIGNAL(prevButtonClicked()),this,SLOT(navBtnPrevClicked()));
+	connect(m_navPanel,SIGNAL(nextButtonClicked()),this,SLOT(navBtnNextClicked()));
+	connect(m_navPanel,SIGNAL(lastButtonClicked()),this,SLOT(navBtnLastClicked()));
+	connect(m_navPanel,SIGNAL(firstButtonClicked()),this,SLOT(navBtnFirstClicked()));
+	connect(m_navPanel,SIGNAL(newButtonClicked()),this,SLOT(navBtnNewClicked()));
 	connect(verticalScrollBar(),SIGNAL(valueChanged(int)),
 		this,SLOT(vScrollBarValueChanged(int)));
 */
-//	d->navPanel->updateGeometry(leftMargin());
+//	m_navPanel->updateGeometry(leftMargin());
 }
 
 #if 0
@@ -502,10 +512,10 @@ void KexiTableView::setNavRowCount(int newrows)
 		
 		if (horizontalScrollBar()->isVisible()) {
 			//+width of the delta
-			d->navPanel->resize(
-				d->navPanel->width()+(n.length()-d->navRowCount->text().length())*d->nav1DigitWidth,
-				d->navPanel->height());
-//			horizontalScrollBar()->move(d->navPanel->x()+d->navPanel->width()+20,horizontalScrollBar()->y());
+			m_navPanel->resize(
+				m_navPanel->width()+(n.length()-d->navRowCount->text().length())*d->nav1DigitWidth,
+				m_navPanel->height());
+//			horizontalScrollBar()->move(m_navPanel->x()+m_navPanel->width()+20,horizontalScrollBar()->y());
 		}
 	}
 	//update row number widget's width
@@ -523,6 +533,7 @@ void KexiTableView::setNavRowCount(int newrows)
 }
 #endif
 
+#if 0 //moved
 void KexiTableView::setData( KexiTableViewData *data, bool owner )
 {
 	const bool theSameData = m_data && m_data==data;
@@ -568,15 +579,15 @@ void KexiTableView::setData( KexiTableViewData *data, bool owner )
 //		d->pTopHeader->setUpdatesEnabled(true);
 		//add rows
 //		triggerUpdate();
-		d->pVerticalHeader->clear();
-		d->pVerticalHeader->addLabels(m_data->count());
+		m_verticalHeader->clear();
+		m_verticalHeader->addLabels(m_data->count());
 		if (m_data->count()==0)
-			d->navPanel->setCurrentRecordNumber(1);
+			m_navPanel->setCurrentRecordNumber(1);
 //			setNavRowNumber(0);
 	}
 	
 	if (!theSameData) {
-//todo: store sorting?
+//! @todo: store sorting?
 		setSorting(-1);
 		connect(m_data, SIGNAL(refreshRequested()), this, SLOT(slotRefreshRequested()));
 		connect(m_data, SIGNAL(destroying()), this, SLOT(slotDataDestroying()));
@@ -599,17 +610,17 @@ void KexiTableView::setData( KexiTableViewData *data, bool owner )
 		m_data->clearInternal();
 	}
 
-	if (!d->pInsertItem) {//first setData() call - add 'insert' item
-		d->pInsertItem = new KexiTableItem(m_data->columns.count());
+	if (!m_insertItem) {//first setData() call - add 'insert' item
+		m_insertItem = new KexiTableItem(m_data->columns.count());
 	}
 	else {//just reinit
-		d->pInsertItem->init(m_data->columns.count());
+		m_insertItem->init(m_data->columns.count());
 	}
 
 	//update gui mode
 //	d->navBtnNew->setEnabled(isInsertingEnabled());
-	d->navPanel->setInsertingEnabled(isInsertingEnabled());
-	d->pVerticalHeader->showInsertRow(isInsertingEnabled());
+	m_navPanel->setInsertingEnabled(isInsertingEnabled());
+	m_verticalHeader->showInsertRow(isInsertingEnabled());
 
 	initDataContents();
 
@@ -618,43 +629,58 @@ void KexiTableView::setData( KexiTableViewData *data, bool owner )
 //	QSize s(tableSize());
 //	resizeContents(s.width(),s.height());
 }
+#endif
 
 void KexiTableView::initDataContents()
 {
-	QSize s(tableSize());
-	resizeContents(s.width(),s.height());
+	updateWidgetContentsSize();
 
-	d->navPanel->setRecordCount(rows());
+	KexiDataAwareObjectInterface::initDataContents();
 
+/*moved
 	if (!d->cursorPositionSetExplicityBeforeShow) {
 		//set current row:
-		d->pCurrentItem = 0;
+		m_currentItem = 0;
 		int curRow = -1, curCol = -1;
 		if (m_data->columnsCount()>0) {
 			if (rows()>0) {
-				d->pCurrentItem = m_data->first();
+				m_currentItem = m_data->first();
 				curRow = 0;
 				curCol = 0;
 			}
 			else {//no data
 				if (isInsertingEnabled()) {
-					d->pCurrentItem = d->pInsertItem;
+					m_currentItem = m_insertItem;
 					curRow = 0;
 					curCol = 0;
 				}
 			}
 		}
 
-		setCursor(curRow, curCol);
+		setCursorPosition(curRow, curCol);
 	}
-	ensureVisible(d->curRow,d->curCol);
+	ensureVisible(m_curRow,m_curCol);
 //	updateRowCountInfo();
 //	setNavRowCount(rows());
 	updateContents();
 
 	d->cursorPositionSetExplicityBeforeShow = false;
 
-	emit dataRefreshed();
+	emit dataRefreshed();*/
+}
+
+void KexiTableView::addHeaderColumn(const QString& caption, const QString& description, int width)
+{
+	const int nr = d->pTopHeader->count();
+	d->pTopHeader->addLabel(caption, width);
+	if (!description.isEmpty())
+		d->pTopHeader->setToolTip(nr, description);
+}
+
+void KexiTableView::updateWidgetContentsSize()
+{
+	QSize s(tableSize());
+	resizeContents(s.width(), s.height());
 }
 
 void KexiTableView::slotDataDestroying()
@@ -665,9 +691,8 @@ void KexiTableView::slotDataDestroying()
 void KexiTableView::slotRowsDeleted( const QValueList<int> &rows )
 {
 	viewport()->repaint();
-	QSize s(tableSize());
-	resizeContents(s.width(),s.height());
-	setCursor(QMAX(0, (int)d->curRow - (int)rows.count()), -1, true);
+	updateWidgetContentsSize();
+	setCursorPosition(QMAX(0, (int)m_curRow - (int)rows.count()), -1, true);
 }
 
 
@@ -701,7 +726,7 @@ void KexiTableView::updateFonts(bool repaint)
 		QMIN(d->pTopHeader->sizeHint().height(), d->rowHeight),
 		d->pTopHeader->sizeHint().height(), 0, 0);
 //	setMargins(14, d->rowHeight, 0, 0);
-	d->pVerticalHeader->setCellHeight(d->rowHeight);
+	m_verticalHeader->setCellHeight(d->rowHeight);
 
 	QFont f = font();
 	f.setItalic(true);
@@ -714,6 +739,7 @@ void KexiTableView::updateFonts(bool repaint)
 		updateContents();
 }
 
+#if 0 //moved
 bool KexiTableView::beforeDeleteItem(KexiTableItem *)
 {
 	//always return
@@ -726,7 +752,7 @@ bool KexiTableView::deleteItem(KexiTableItem *item)/*, bool moveCursor)*/
 		return false;
 
 	QString msg, desc;
-//	bool current = (item == d->pCurrentItem);
+//	bool current = (item == m_currentItem);
 	if (!m_data->deleteRow(*item, true /*repaint*/)) {
 		//error
 		if (m_data->result()->desc.isEmpty())
@@ -736,14 +762,14 @@ bool KexiTableView::deleteItem(KexiTableItem *item)/*, bool moveCursor)*/
 		return false;
 	}
 	else {
-//setCursor() wil lset this!		if (current)
-			//d->pCurrentItem = m_data->current();
+//setCursorPosition() wil lset this!		if (current)
+			//m_currentItem = m_data->current();
 	}
 
 //	repaintAfterDelete();
 	if (d->spreadSheetMode) { //append empty row for spreadsheet mode
 			m_data->append(new KexiTableItem(m_data->columns.count()));
-			d->pVerticalHeader->addLabels(1);
+			m_verticalHeader->addLabels(1);
 	}
 
 	return true;
@@ -751,16 +777,16 @@ bool KexiTableView::deleteItem(KexiTableItem *item)/*, bool moveCursor)*/
 /*
 void KexiTableView::repaintAfterDelete()
 {
-	int row = d->curRow;
+	int row = m_curRow;
 	if (!isInsertingEnabled() && row>=rows())
 		row--; //move up
 
 	QSize s(tableSize());
 	resizeContents(s.width(),s.height());
 
-	setCursor(row, d->curCol, true);
+	setCursorPosition(row, m_curCol, true);
 
-	d->pVerticalHeader->removeLabel();
+	m_verticalHeader->removeLabel();
 //		if(moveCursor)
 //		selectPrev();
 //		d->pUpdateTimer->start(1,true);
@@ -770,7 +796,7 @@ void KexiTableView::repaintAfterDelete()
 		r = rows()+1+(isInsertingEnabled()?1:0);
 	}
 	//update all visible rows below 
-	updateContents( contentsX(), rowPos(d->curRow), clipper()->width(), d->rowHeight*(r-d->curRow));
+	updateContents( contentsX(), rowPos(m_curRow), clipper()->width(), d->rowHeight*(r-m_curRow));
 
 	//update navigator's data
 	setNavRowCount(rows());
@@ -778,7 +804,7 @@ void KexiTableView::repaintAfterDelete()
 
 void KexiTableView::deleteCurrentRow()
 {
-	if (d->newRowEditing) {//we're editing fresh new row: just cancel this!
+	if (m_newRowEditing) {//we're editing fresh new row: just cancel this!
 		cancelRowEdit();
 		return;
 	}
@@ -786,7 +812,7 @@ void KexiTableView::deleteCurrentRow()
 	if (!acceptRowEdit())
 		return;
 
-	if (!isDeleteEnabled() || !d->pCurrentItem || d->pCurrentItem == d->pInsertItem)
+	if (!isDeleteEnabled() || !m_currentItem || m_currentItem == m_insertItem)
 		return;
 	switch (d->deletionPolicy) {
 	case NoDelete:
@@ -799,16 +825,17 @@ void KexiTableView::deleteCurrentRow()
 			return;
 		break;
 	case SignalDelete:
-		emit itemDeleteRequest(d->pCurrentItem, d->curRow, d->curCol);
+		emit itemDeleteRequest(m_currentItem, m_curRow, m_curCol);
 		emit currentItemDeleteRequest();
 		return;
 	default:
 		return;
 	}
 
-	if (!deleteItem(d->pCurrentItem)) {//nothing
+	if (!deleteItem(m_currentItem)) {//nothing
 	}
 }
+#endif //moved
 
 void KexiTableView::slotAboutToDeleteRow(KexiTableItem& item, KexiDB::ResultInfo* /*result*/, bool repaint)
 {
@@ -823,28 +850,27 @@ void KexiTableView::slotRowDeleted()
 //		if (!isInsertingEnabled() && d->rowWillBeDeleted>=rows())
 		if (d->rowWillBeDeleted > 0 && d->rowWillBeDeleted >= rows())//+(isInsertingEnabled()?1:0) ))
 			d->rowWillBeDeleted--; //move up
-		QSize s(tableSize());
-		resizeContents(s.width(),s.height());
+		updateWidgetContentsSize();
 
-		setCursor(d->rowWillBeDeleted, d->curCol, true/*forceSet*/);
+		setCursorPosition(d->rowWillBeDeleted, m_curCol, true/*forceSet*/);
 
-		d->pVerticalHeader->removeLabel();
+		m_verticalHeader->removeLabel();
 		//get last visible row
 		int r = rowAt(clipper()->height()+contentsY());
 		if (r==-1) {
 			r = rows()+1+(isInsertingEnabled()?1:0);
 		}
 		//update all visible rows below 
-//		updateContents( contentsX(), rowPos(d->curRow)-contentsY(), 
-	//		clipper()->width(), d->rowHeight*(r - d->curRow));
+//		updateContents( contentsX(), rowPos(m_curRow)-contentsY(), 
+	//		clipper()->width(), d->rowHeight*(r - m_curRow));
 
 		int leftcol = d->pTopHeader->sectionAt( d->pTopHeader->offset() );
-		int row = d->curRow;
+		int row = m_curRow;
 		updateContents( columnPos( leftcol ), rowPos(row), 
 			clipper()->width(), clipper()->height() - (rowPos(row) - contentsY()) );
 
 		//update navigator's data
-		d->navPanel->setRecordCount(rows());
+		m_navPanel->setRecordCount(rows());
 
 		d->rowWillBeDeleted = -1;
 	}
@@ -859,31 +885,31 @@ void KexiTableView::slotRowInserted(KexiTableItem *item, bool repaint)
 void KexiTableView::slotRowInserted(KexiTableItem * /*item*/, uint row, bool repaint)
 {
 	if (repaint && (int)row<rows()) {
-		QSize s(tableSize());
-		resizeContents(s.width(),s.height());
+		updateWidgetContentsSize();
 
 		//redraw only this row and below:
 		int leftcol = d->pTopHeader->sectionAt( d->pTopHeader->offset() );
-	//	updateContents( columnPos( leftcol ), rowPos(d->curRow), 
-	//		clipper()->width(), clipper()->height() - (rowPos(d->curRow) - contentsY()) );
+	//	updateContents( columnPos( leftcol ), rowPos(m_curRow), 
+	//		clipper()->width(), clipper()->height() - (rowPos(m_curRow) - contentsY()) );
 		updateContents( columnPos( leftcol ), rowPos(row), 
 			clipper()->width(), clipper()->height() - (rowPos(row) - contentsY()) );
 
-		if (!d->pVerticalHeaderAlreadyAdded)
-			d->pVerticalHeader->addLabel();
+		if (!d->verticalHeaderAlreadyAdded)
+			m_verticalHeader->addLabel();
 		else //it was added because this inserting was interactive
-			d->pVerticalHeaderAlreadyAdded = false;
+			d->verticalHeaderAlreadyAdded = false;
 
 		//update navigator's data
-		d->navPanel->setRecordCount(rows());
+		m_navPanel->setRecordCount(rows());
 
-		if (d->curRow >= (int)row) {
+		if (m_curRow >= (int)row) {
 			//update
-			editorShowFocus( d->curRow, d->curCol );
+			editorShowFocus( m_curRow, m_curCol );
 		}
 	}
 }
 
+#if 0 //moved
 KexiTableItem *KexiTableView::insertEmptyRow(int row)
 {
 	if ( !acceptRowEdit() || !isEmptyRowInsertingEnabled() 
@@ -897,14 +923,14 @@ KexiTableItem *KexiTableView::insertEmptyRow(int row)
 
 void KexiTableView::insertItem(KexiTableItem *newItem, int row)
 {
-	bool changeCurrent = (row==-1 || row==d->curRow);
+	bool changeCurrent = (row==-1 || row==m_curRow);
 	if (changeCurrent) {
-		row = (d->curRow >= 0 ? d->curRow : 0);
-		d->pCurrentItem = newItem;
-		d->curRow = row;
+		row = (m_curRow >= 0 ? m_curRow : 0);
+		m_currentItem = newItem;
+		m_curRow = row;
 	}
-	else if (d->curRow >= row) {
-		d->curRow++;
+	else if (m_curRow >= row) {
+		m_curRow++;
 	}
 	m_data->insertRow(*newItem, row, true /*repaint*/);
 
@@ -914,26 +940,27 @@ void KexiTableView::insertItem(KexiTableItem *newItem, int row)
 
 	//redraw only this row and below:
 	int leftcol = d->pTopHeader->sectionAt( d->pTopHeader->offset() );
-//	updateContents( columnPos( leftcol ), rowPos(d->curRow), 
-//		clipper()->width(), clipper()->height() - (rowPos(d->curRow) - contentsY()) );
+//	updateContents( columnPos( leftcol ), rowPos(m_curRow), 
+//		clipper()->width(), clipper()->height() - (rowPos(m_curRow) - contentsY()) );
 	updateContents( columnPos( leftcol ), rowPos(row), 
 		clipper()->width(), clipper()->height() - (rowPos(row) - contentsY()) );
 
-	d->pVerticalHeader->addLabel();
+	m_verticalHeader->addLabel();
 
 	//update navigator's data
 	setNavRowCount(rows());
 
-	if (d->curRow >= row) {
+	if (m_curRow >= row) {
 		//update
-		editorShowFocus( d->curRow, d->curCol );
+		editorShowFocus( m_curRow, m_curCol );
 	}
 	*/
 }
 
 tristate KexiTableView::deleteAllRows(bool ask, bool repaint)
 {
-	CHECK_DATA(true);
+	if (!hasData())
+		return true;
 	if (m_data->count()<1)
 		return true;
 
@@ -951,7 +978,7 @@ tristate KexiTableView::deleteAllRows(bool ask, bool repaint)
 
 	cancelRowEdit();
 //	acceptRowEdit();
-//	d->pVerticalHeader->clear();
+//	m_verticalHeader->clear();
 	const bool repaintLater = repaint && d->spreadSheetMode;
 	const int oldRows = rows();
 
@@ -966,10 +993,10 @@ tristate KexiTableView::deleteAllRows(bool ask, bool repaint)
 		}
 	}
 	if (repaintLater)
-		m_data->refresh();
+		m_data->reload();
 
 //	d->clearVariables();
-//	d->pVerticalHeader->setCurrentRow(-1);
+//	m_verticalHeader->setCurrentRow(-1);
 
 //	d->pUpdateTimer->start(1,true);
 //	if (repaint)
@@ -990,7 +1017,7 @@ void KexiTableView::clearColumns(bool repaint)
 
 /*	for(int i=0; i < rows(); i++)
 	{
-		d->pVerticalHeader->removeLabel();
+		m_verticalHeader->removeLabel();
 	}
 
 	editorCancel();
@@ -1002,7 +1029,7 @@ void KexiTableView::clearColumns(bool repaint)
 	while(d->pTopHeader->count()>0)
 		d->pTopHeader->removeLabel(0);
 
-	d->pVerticalHeader->setCurrentRow(-1);
+	m_verticalHeader->setCurrentRow(-1);
 
 	viewport()->repaint();
 
@@ -1015,25 +1042,32 @@ void KexiTableView::slotRefreshRequested()
 {
 //	cancelRowEdit();
 	acceptRowEdit();
-	d->pVerticalHeader->clear();
+	m_verticalHeader->clear();
 
-	if (d->curCol>=0 && d->curCol<columns()) {
+	if (m_curCol>=0 && m_curCol<columns()) {
 		//find the editor for this column
-		KexiTableEdit *edit = editor( d->curCol );
+		KexiTableEdit *edit = editor( m_curCol );
 		if (edit) {
 			edit->hideFocus();
 		}
 	}
-//	setCursor(-1, -1, true);
-	d->clearVariables();
-	d->pVerticalHeader->setCurrentRow(-1);
+//	setCursorPosition(-1, -1, true);
+	clearVariables();
+	m_verticalHeader->setCurrentRow(-1);
 	if (isVisible())
 		initDataContents();
 	else
-		d->initDataContentsOnShow = true;
-	d->pVerticalHeader->addLabels(m_data->count());
+		m_initDataContentsOnShow = true;
+	m_verticalHeader->addLabels(m_data->count());
 
 	updateScrollBars();
+}
+#endif //moved
+
+void KexiTableView::clearColumnsInternal(bool /*repaint*/)
+{
+	while(d->pTopHeader->count()>0)
+		d->pTopHeader->removeLabel(0);
 }
 
 #if 0 //todo
@@ -1045,7 +1079,7 @@ int KexiTableView::findString(const QString &string)
 		return -1;
 	if(string.isEmpty())
 	{
-		setCursor(0, col);
+		setCursorPosition(0, col);
 		return 0;
 	}
 
@@ -1063,7 +1097,7 @@ int KexiTableView::findString(const QString &string)
 					if(it.current()->at(col).toString().left(string.length()).lower().compare(str2)==0)
 					{
 						center(columnPos(col), rowPos(row));
-						setCursor(row, col);
+						setCursorPosition(row, col);
 						return row;
 					}
 					row++;
@@ -1077,7 +1111,7 @@ int KexiTableView::findString(const QString &string)
 					if(QString::number(it.current()->at(col).toInt()).left(string.length()).compare(string)==0)
 					{
 						center(columnPos(col), rowPos(row));
-						setCursor(row, col);
+						setCursorPosition(row, col);
 						return row;
 					}
 					row++;
@@ -1099,7 +1133,7 @@ int KexiTableView::findString(const QString &string)
 					if(it.current()->at(col).toString().find(str2,0,false) >= 0)
 					{
 						center(columnPos(col), rowPos(row));
-						setCursor(row, col);
+						setCursorPosition(row, col);
 						return row;
 					}
 					row++;
@@ -1112,7 +1146,7 @@ int KexiTableView::findString(const QString &string)
 					if(QString::number(it.current()->at(col).toInt()).find(str2,0,true) >= 0)
 					{
 						center(columnPos(col), rowPos(row));
-						setCursor(row, col);
+						setCursorPosition(row, col);
 						return row;
 					}
 					row++;
@@ -1137,12 +1171,11 @@ void KexiTableView::slotUpdate()
 
 	updateContents();
 	updateScrollBars();
-	if (d->navPanel)
-		d->navPanel->updateGeometry(leftMargin());
+	if (m_navPanel)
+		m_navPanel->updateGeometry(leftMargin());
 //	updateNavPanelGeometry();
 
-	QSize s(tableSize());
-	resizeContents(s.width(),s.height());
+	updateWidgetContentsSize();
 //	updateContents(0, contentsY()+clipper()->height()-2*d->rowHeight, clipper()->width(), d->rowHeight*3);
 	
 	//updateGeometries();
@@ -1150,6 +1183,8 @@ void KexiTableView::slotUpdate()
 //	updateGeometries();
 }
 
+/*
+moved
 bool KexiTableView::isSortingEnabled() const
 {
 	return d->isSortingEnabled;
@@ -1175,7 +1210,7 @@ bool KexiTableView::sortingAscending() const
 	return m_data && m_data->sortingAscending();
 }
 
-void KexiTableView::setSorting(int col, bool ascending/*=true*/)
+void KexiTableView::setSorting(int col, bool ascending)
 {
 	if (!m_data || !d->isSortingEnabled)
 		return;
@@ -1198,26 +1233,26 @@ bool KexiTableView::sort()
 		m_data->sort();
 
 	//locate current record
-	if (!d->pCurrentItem) {
-		d->pCurrentItem = m_data->first();
-		d->curRow = 0;
-		if (!d->pCurrentItem)
+	if (!m_currentItem) {
+		m_currentItem = m_data->first();
+		m_curRow = 0;
+		if (!m_currentItem)
 			return true;
 	}
-	if (d->pCurrentItem != d->pInsertItem) {
-		d->curRow = m_data->findRef(d->pCurrentItem);
+	if (m_currentItem != m_insertItem) {
+		m_curRow = m_data->findRef(m_currentItem);
 	}
 
-//	d->pCurrentItem = m_data->at(d->curRow);
+//	m_currentItem = m_data->at(m_curRow);
 
-	int cw = columnWidth(d->curCol);
+	int cw = columnWidth(m_curCol);
 	int rh = rowHeight();
 
-//	d->pVerticalHeader->setCurrentRow(d->curRow);
-	center(columnPos(d->curCol) + cw / 2, rowPos(d->curRow) + rh / 2);
-//	updateCell(oldRow, d->curCol);
-//	updateCell(d->curRow, d->curCol);
-	d->pVerticalHeader->setCurrentRow(d->curRow);
+//	m_verticalHeader->setCurrentRow(m_curRow);
+	center(columnPos(m_curCol) + cw / 2, rowPos(m_curRow) + rh / 2);
+//	updateCell(oldRow, m_curCol);
+//	updateCell(m_curRow, m_curCol);
+	m_verticalHeader->setCurrentRow(m_curRow);
 //	slotUpdate();
 
 	updateContents();
@@ -1262,6 +1297,42 @@ void KexiTableView::sortColumnInternal(int col, int order)
 	if (col != prevSortColumn)
 		emit sortedColumnChanged(col);
 }
+*/
+
+int KexiTableView::currentLocalSortingOrder() const
+{
+	if (d->pTopHeader->sortIndicatorSection()==-1)
+		return 0;
+	return (d->pTopHeader->sortIndicatorOrder() == Qt::Ascending) ? 1 : -1;
+}
+
+void KexiTableView::setLocalSortingOrder(int col, int order)
+{
+	if (order == 0)
+		col = -1;
+	if (col>=0)
+		d->pTopHeader->setSortIndicator(col, (order==1) ? Qt::Ascending : Qt::Descending);
+}
+
+int KexiTableView::currentLocalSortColumn() const
+{
+	return d->pTopHeader->sortIndicatorSection();
+}
+
+void KexiTableView::updateGUIAfterSorting()
+{
+	int cw = columnWidth(m_curCol);
+	int rh = rowHeight();
+
+//	m_verticalHeader->setCurrentRow(m_curRow);
+	center(columnPos(m_curCol) + cw / 2, rowPos(m_curRow) + rh / 2);
+//	updateCell(oldRow, m_curCol);
+//	updateCell(m_curRow, m_curCol);
+//	slotUpdate();
+
+	updateContents();
+//	d->pUpdateTimer->start(1,true);
+}
 
 QSizePolicy KexiTableView::sizePolicy() const
 {
@@ -1273,7 +1344,7 @@ QSize KexiTableView::sizeHint() const
 {
 	const QSize &ts = tableSize();
 	int w = QMAX( ts.width() + leftMargin()+ verticalScrollBar()->sizeHint().width() + 2*2, 
-		(d->navPanel->isVisible() ? d->navPanel->width() : 0) );
+		(m_navPanel->isVisible() ? m_navPanel->width() : 0) );
 	int h = QMAX( ts.height()+topMargin()+horizontalScrollBar()->sizeHint().height(), 
 		minimumSizeHint().height() );
 	w = QMIN( w, qApp->desktop()->width()*3/4 ); //stretch
@@ -1283,8 +1354,8 @@ QSize KexiTableView::sizeHint() const
 
 	return QSize(w, h);
 		/*QSize(
-		QMAX( ts.width() + leftMargin() + 2*2, (d->navPanel ? d->navPanel->width() : 0) ),
-		//+ QMIN(d->pVerticalHeader->width(),d->rowHeight) + margin()*2,
+		QMAX( ts.width() + leftMargin() + 2*2, (m_navPanel ? m_navPanel->width() : 0) ),
+		//+ QMIN(m_verticalHeader->width(),d->rowHeight) + margin()*2,
 		QMAX( ts.height()+topMargin()+horizontalScrollBar()->sizeHint().height(), 
 			minimumSizeHint().height() )
 	);*/
@@ -1294,8 +1365,8 @@ QSize KexiTableView::sizeHint() const
 QSize KexiTableView::minimumSizeHint() const
 {
 	return QSize(
-		leftMargin() + ((columns()>0)?columnWidth(0):KEXITV_DEFAULT_COLUMN_WIDTH) + 2*2, 
-		d->rowHeight*5/2 + topMargin() + (d->navPanel && d->navPanel->isVisible() ? d->navPanel->height() : 0)
+		leftMargin() + ((columns()>0)?columnWidth(0):KEXI_DEFAULT_DATA_COLUMN_WIDTH) + 2*2, 
+		d->rowHeight*5/2 + topMargin() + (m_navPanel && m_navPanel->isVisible() ? m_navPanel->height() : 0)
 	);
 }
 
@@ -1349,12 +1420,12 @@ inline void KexiTableView::paintRow(KexiTableItem *item,
 		pb->restoreWorldMatrix();
 	}
 
-	if (d->dragIndicatorLine>=0) {
+	if (m_dragIndicatorLine>=0) {
 		int y_line = -1;
-		if (r==(rows()-1) && d->dragIndicatorLine==rows()) {
+		if (r==(rows()-1) && m_dragIndicatorLine==rows()) {
 			y_line = transly+d->rowHeight-3; //draw at last line
 		}
-		if (d->dragIndicatorLine==r) {
+		if (m_dragIndicatorLine==r) {
 			y_line = transly+1;
 		}
 		if (y_line>=0) {
@@ -1448,7 +1519,7 @@ void KexiTableView::drawContents( QPainter *p, int cx, int cy, int cw, int ch)
 	}
 
 	if (plus1row) { //additional - 'insert' row
-		paintRow(d->pInsertItem, pb, r, rowp, cx, cy, colfirst, collast, maxwc);
+		paintRow(m_insertItem, pb, r, rowp, cx, cy, colfirst, collast, maxwc);
 	}
 
 	delete pb;
@@ -1479,8 +1550,8 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 	}
 	p->setPen(pen);
 
-	if (d->pEditor && row == d->curRow && col == d->curCol //don't paint contents of edited cell
-		&& d->pEditor->hasFocusableWidget() //..if it's visible
+	if (m_editor && row == m_curRow && col == m_curCol //don't paint contents of edited cell
+		&& m_editor->hasFocusableWidget() //..if it's visible
 	   ) {
 		p->restore();
 		return;
@@ -1509,14 +1580,14 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 
 	QVariant cell_value;
 	if ((uint)col < item->count()) {
-		if (d->pCurrentItem == item) {
-			if (d->pEditor && row == d->curRow && col == d->curCol 
-				&& !d->pEditor->hasFocusableWidget())
+		if (m_currentItem == item) {
+			if (m_editor && row == m_curRow && col == m_curCol 
+				&& !m_editor->hasFocusableWidget())
 			{
 				//we're over editing cell and the editor has no widget
 				// - we're displaying internal values, not buffered
 				bool ok;
-				cell_value = d->pEditor->value(ok);
+				cell_value = m_editor->value(ok);
 			}
 			else {
 				//we're displaying values from edit buffer, if available
@@ -1529,7 +1600,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 	}
 
 	if (edit)
-		edit->setupContents( p, d->pCurrentItem == item && col == d->curCol, 
+		edit->setupContents( p, m_currentItem == item && col == m_curCol, 
 			cell_value, txt, align, x, y_offset, w, h );
 
 	if (d->appearance.fullRowSelection)
@@ -1606,11 +1677,11 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 	}*/
 	
 	// draw selection background
-//	const bool has_focus = hasFocus() || viewport()->hasFocus() || d->pContextMenu->hasFocus();
+//	const bool has_focus = hasFocus() || viewport()->hasFocus() || m_popup->hasFocus();
 
 	const bool columnReadOnly = m_data->column(col)->readOnly();
 
-	if (d->pCurrentItem == item && col == d->curCol) {
+	if (m_currentItem == item && col == m_curCol) {
 /*		edit->paintSelectionBackground( p, isEnabled(), txt, align, x, y_offset, w, h,
 			has_focus ? colorGroup().highlight() : gray,
 			columnReadOnly, d->fullRowSelectionEnabled );*/
@@ -1621,8 +1692,8 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 	}
 
 /*
-	if (!txt.isEmpty() && d->pCurrentItem == item 
-		&& col == d->curCol && !columnReadOnly) //js: && !d->recordIndicator)
+	if (!txt.isEmpty() && m_currentItem == item 
+		&& col == m_curCol && !columnReadOnly) //js: && !d->recordIndicator)
 	{
 		QRect bound=fontMetrics().boundingRect(x, y_offset, w - (x+x), h, align, txt);
 		bound.setX(bound.x()-1);
@@ -1640,10 +1711,10 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 	}
 
 //	If we are in the focus cell, draw indication
-	if(d->pCurrentItem == item && col == d->curCol //js: && !d->recordIndicator)
+	if(m_currentItem == item && col == m_curCol //js: && !d->recordIndicator)
 		&& !d->appearance.fullRowSelection) 
 	{
-//		kdDebug() << ">>> CURRENT CELL ("<<d->curCol<<"," << d->curRow<<") focus="<<has_focus<<endl;
+//		kdDebug() << ">>> CURRENT CELL ("<<m_curCol<<"," << m_curRow<<") focus="<<has_focus<<endl;
 //		if (has_focus) {
 		if (isEnabled()) {
 			p->setPen(d->appearance.textColor);
@@ -1660,8 +1731,8 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 	}
 
 	bool autonumber = false;
-	if ((!d->newRowEditing &&item == d->pInsertItem) 
-		|| (d->newRowEditing && item == d->pCurrentItem && cell_value.isNull())) {
+	if ((!m_newRowEditing &&item == m_insertItem) 
+		|| (m_newRowEditing && item == m_currentItem && cell_value.isNull())) {
 		//we're in "insert row"
 		if (m_data->column(col)->field()->isAutoIncrement()) {
 			//"autonumber" column
@@ -1678,7 +1749,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 			p->drawPixmap( w - x - x - 9 - d->autonumberTextWidth - d->autonumberIcon.width(),
 				(h-d->autonumberIcon.height())/2, d->autonumberIcon );
 		}
-		else if (d->pCurrentItem == item && col == d->curCol && !columnReadOnly)
+		else if (m_currentItem == item && col == m_curCol && !columnReadOnly)
 			p->setPen(colorGroup().highlightedText());
 		else if (d->appearance.rowHighlightingEnabled && row == d->highlightedRow)
 			p->setPen(d->appearance.rowHighlightingTextColor);
@@ -1715,7 +1786,7 @@ void KexiTableView::paintEmptyArea( QPainter *p, int cx, int cy, int cw, int ch 
 	// table size to the visible size
 	QSize ts( tableSize() );
 //	ts.setWidth( QMIN( ts.width(), visibleWidth() ) );
-//	ts.setHeight( QMIN( ts.height() - (d->navPanel ? d->navPanel->height() : 0), visibleHeight()) );
+//	ts.setHeight( QMIN( ts.height() - (m_navPanel ? m_navPanel->height() : 0), visibleHeight()) );
 /*	kdDebug(44021) << QString(" (cx:%1 cy:%2 cw:%3 ch:%4)")
 			.arg(cx).arg(cy).arg(cw).arg(ch) << endl;
 	kdDebug(44021) << QString(" (w:%3 h:%4)")
@@ -1729,9 +1800,9 @@ void KexiTableView::paintEmptyArea( QPainter *p, int cx, int cy, int cw, int ch 
 //kdDebug() << "---cy-- " << contentsY() << endl;
 
 	// Subtract the table from it
-//	reg = reg.subtract( QRect( QPoint( 0, 0 ), ts-QSize(0,d->navPanel->isVisible() ? d->navPanel->height() : 0) ) );
+//	reg = reg.subtract( QRect( QPoint( 0, 0 ), ts-QSize(0,m_navPanel->isVisible() ? m_navPanel->height() : 0) ) );
 	reg = reg.subtract( QRect( QPoint( 0, 0 ), ts
-		-QSize(0,QMAX((d->navPanel ? d->navPanel->height() : 0), horizontalScrollBar()->sizeHint().height())
+		-QSize(0,QMAX((m_navPanel ? m_navPanel->height() : 0), horizontalScrollBar()->sizeHint().height())
 			- (horizontalScrollBar()->isVisible() ? horizontalScrollBar()->sizeHint().height()/2 : 0)
 			+ (horizontalScrollBar()->isVisible() ? 0 : 
 				d->internal_bottomMargin
@@ -1760,20 +1831,20 @@ void KexiTableView::paintEmptyArea( QPainter *p, int cx, int cy, int cw, int ch 
 void KexiTableView::contentsMouseDoubleClickEvent(QMouseEvent *e)
 {
 //	kdDebug(44021) << "KexiTableView::contentsMouseDoubleClickEvent()" << endl;
-	d->contentsMousePressEvent_dblClick = true;
+	m_contentsMousePressEvent_dblClick = true;
 	contentsMousePressEvent(e);
-	d->contentsMousePressEvent_dblClick = false;
+	m_contentsMousePressEvent_dblClick = false;
 
-	if(d->pCurrentItem)
+	if(m_currentItem)
 	{
-		if(d->editOnDoubleClick && columnEditable(d->curCol) 
-			&& columnType(d->curCol) != KexiDB::Field::Boolean)
+		if(d->editOnDoubleClick && columnEditable(m_curCol) 
+			&& columnType(m_curCol) != KexiDB::Field::Boolean)
 		{
 			startEditCurrentCell();
-//			createEditor(d->curRow, d->curCol, QString::null);
+//			createEditor(m_curRow, m_curCol, QString::null);
 		}
 
-		emit itemDblClicked(d->pCurrentItem, d->curRow, d->curCol);
+		emit itemDblClicked(m_currentItem, m_curRow, m_curCol);
 	}
 }
 
@@ -1811,14 +1882,14 @@ void KexiTableView::contentsMousePressEvent( QMouseEvent* e )
 	}
 	else if(e->button() == LeftButton)
 	{
-		if(columnType(d->curCol) == KexiDB::Field::Boolean && columnEditable(d->curCol))
+		if(columnType(m_curCol) == KexiDB::Field::Boolean && columnEditable(m_curCol))
 		{
 			boolToggled();
 		}
 #if 0 //js: TODO
-		else if(columnType(d->curCol) == QVariant::StringList && columnEditable(d->curCol))
+		else if(columnType(m_curCol) == QVariant::StringList && columnEditable(m_curCol))
 		{
-			createEditor(d->curRow, d->curCol);
+			createEditor(m_curRow, m_curCol);
 		}
 #endif
 	}
@@ -1837,20 +1908,20 @@ void KexiTableView::contentsMouseReleaseEvent( QMouseEvent* e )
 	int col = columnAt(e->pos().x());
 	int row = rowAt(e->pos().y());
 
-	if (!d->pCurrentItem || col==-1 || row==-1 || col!=d->curCol || row!=d->curRow)//outside a current cell
+	if (!m_currentItem || col==-1 || row==-1 || col!=m_curCol || row!=m_curRow)//outside a current cell
 		return;
 
 	QScrollView::contentsMouseReleaseEvent( e );
 
-	emit itemMouseReleased(d->pCurrentItem, d->curRow, d->curCol);
+	emit itemMouseReleased(m_currentItem, m_curRow, m_curCol);
 }
 
 //! @internal called by contentsMouseOrEvent() contentsMouseReleaseEvent() to move cursor
 bool KexiTableView::handleContentsMousePressOrRelease(QMouseEvent* e, bool release)
 {
 	// remember old focus cell
-	int oldRow = d->curRow;
-	int oldCol = d->curCol;
+	int oldRow = m_curRow;
+	int oldCol = m_curCol;
 	kdDebug(44021) << "oldRow=" << oldRow <<" oldCol=" << oldCol <<endl;
 	bool onInsertItem = false;
 
@@ -1889,31 +1960,32 @@ bool KexiTableView::handleContentsMousePressOrRelease(QMouseEvent* e, bool relea
 	newcol = columnAt(e->pos().x());
 
 	if(e->button() != NoButton) {
-		setCursor(newrow,newcol);
+		setCursorPosition(newrow,newcol);
 	}
 	return true;
 }
 
+/*moved
 KPopupMenu* KexiTableView::popup() const
 {
-	return d->pContextMenu;
-}
+	return m_popup;
+}*/
 
 void KexiTableView::showContextMenu(QPoint pos)
 {
-	if (!d->contextMenuEnabled || d->pContextMenu->count()<1)
+	if (!d->contextMenuEnabled || m_popup->count()<1)
 		return;
 	if (pos==QPoint(-1,-1)) {
-		pos = viewport()->mapToGlobal( QPoint( columnPos(d->curCol), rowPos(d->curRow) + d->rowHeight ) );
+		pos = viewport()->mapToGlobal( QPoint( columnPos(m_curCol), rowPos(m_curRow) + d->rowHeight ) );
 	}
 	//show own context menu if configured
 //	if (updateContextMenu()) {
-		selectRow(d->curRow);
-		d->pContextMenu->exec(pos);
+		selectRow(m_curRow);
+		m_popup->exec(pos);
 /*	}
 	else {
 		//request other context menu
-		emit contextMenuRequested(d->pCurrentItem, d->curCol, pos);
+		emit contextMenuRequested(m_currentItem, m_curCol, pos);
 	}*/
 }
 
@@ -1977,40 +2049,42 @@ void KexiTableView::contentsMouseMoveEvent( QMouseEvent *e )
 	QScrollView::contentsMouseMoveEvent(e);
 }
 
+#if 0 //moved
 void KexiTableView::startEditCurrentCell(const QString &setText)
 {
-//	if (columnType(d->curCol) == KexiDB::Field::Boolean)
+//	if (columnType(m_curCol) == KexiDB::Field::Boolean)
 //		return;
-	if (isReadOnly() || !columnEditable(d->curCol))
+	if (isReadOnly() || !columnEditable(m_curCol))
 		return;
-	if (d->pEditor) {
-		if (d->pEditor->hasFocusableWidget()) {
-			d->pEditor->show();
-			d->pEditor->setFocus();
+	if (m_editor) {
+		if (m_editor->hasFocusableWidget()) {
+			m_editor->show();
+			m_editor->setFocus();
 		}
 	}
-	ensureVisible(columnPos(d->curCol), rowPos(d->curRow)+rowHeight(), columnWidth(d->curCol), rowHeight());
-	createEditor(d->curRow, d->curCol, setText, !setText.isEmpty());
+	ensureVisible(columnPos(m_curCol), rowPos(m_curRow)+rowHeight(), columnWidth(m_curCol), rowHeight());
+	createEditor(m_curRow, m_curCol, setText, !setText.isEmpty());
 }
 
 void KexiTableView::deleteAndStartEditCurrentCell()
 {
-	if (isReadOnly() || !columnEditable(d->curCol))
+	if (isReadOnly() || !columnEditable(m_curCol))
 		return;
-	if (d->pEditor) {//if we've editor - just clear it
-		d->pEditor->clear();
+	if (m_editor) {//if we've editor - just clear it
+		m_editor->clear();
 		return;
 	}
-	if (columnType(d->curCol) == KexiDB::Field::Boolean)
+	if (columnType(m_curCol) == KexiDB::Field::Boolean)
 		return;
-	ensureVisible(columnPos(d->curCol), rowPos(d->curRow)+rowHeight(), columnWidth(d->curCol), rowHeight());
-	createEditor(d->curRow, d->curCol, QString::null, false/*removeOld*/);
-	if (!d->pEditor)
+	ensureVisible(columnPos(m_curCol), rowPos(m_curRow)+rowHeight(), columnWidth(m_curCol), rowHeight());
+	createEditor(m_curRow, m_curCol, QString::null, false/*removeOld*/);
+	if (!m_editor)
 		return;
-	d->pEditor->clear();
-	if (d->pEditor->acceptEditorAfterDeleteContents())
+	m_editor->clear();
+	if (m_editor->acceptEditorAfterDeleteContents())
 		acceptEditor();
 }
+#endif //moved
 
 #if 0//(js) doesn't work!
 void KexiTableView::contentsMouseReleaseEvent(QMouseEvent *)
@@ -2022,12 +2096,15 @@ void KexiTableView::contentsMouseReleaseEvent(QMouseEvent *)
 }
 #endif
 
+/*
+moved to KexiSharedActionClient
 void KexiTableView::plugSharedAction(KAction* a)
 {
 	if (!a)
 		return;
 	d->sharedActions.insert(a->name(), a);
 }
+*/
 
 bool KexiTableView::shortCutPressed( QKeyEvent *e, const QCString &action_name )
 {
@@ -2056,14 +2133,15 @@ bool KexiTableView::shortCutPressed( QKeyEvent *e, const QCString &action_name )
 
 void KexiTableView::keyPressEvent(QKeyEvent* e)
 {
-	CHECK_DATA_;
+	if (!hasData())
+		return;
 //	kdDebug() << "KexiTableView::keyPressEvent: key=" <<e->key() << " txt=" <<e->text()<<endl;
 
 	const bool ro = isReadOnly();
 	QWidget *w = focusWidget();
-//	if (!w || w!=viewport() && w!=this && (!d->pEditor || w!=d->pEditor->view() && w!=d->pEditor)) {
-//	if (!w || w!=viewport() && w!=this && (!d->pEditor || w!=d->pEditor->view())) {
-	if (!w || w!=viewport() && w!=this && (!d->pEditor || !Kexi::hasParent(d->pEditor, w))) {
+//	if (!w || w!=viewport() && w!=this && (!m_editor || w!=m_editor->view() && w!=m_editor)) {
+//	if (!w || w!=viewport() && w!=this && (!m_editor || w!=m_editor->view())) {
+	if (!w || w!=viewport() && w!=this && (!m_editor || !Kexi::hasParent(m_editor, w))) {
 		//don't process stranger's events
 		e->ignore();
 		return;
@@ -2074,9 +2152,9 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 		return;
 	}
 	
-	if(d->pCurrentItem == 0 && (m_data->count() > 0 || isInsertingEnabled()))
+	if(m_currentItem == 0 && (m_data->count() > 0 || isInsertingEnabled()))
 	{
-		setCursor(0,0);
+		setCursorPosition(0,0);
 	}
 	else if(m_data->count() == 0 && !isInsertingEnabled())
 	{
@@ -2084,13 +2162,13 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 		return;
 	}
 
-	if(d->pEditor) {// if a cell is edited, do some special stuff
+	if(m_editor) {// if a cell is edited, do some special stuff
 		if (e->key() == Key_Escape) {
 			cancelEditor();
 			e->accept();
 			return;
 		} else if (e->key() == Key_Return || e->key() == Key_Enter) {
-			if (columnType(d->curCol) == KexiDB::Field::Boolean) {
+			if (columnType(m_curCol) == KexiDB::Field::Boolean) {
 				boolToggled();
 			}
 			else {
@@ -2100,7 +2178,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 			return;
 		}
 	}
-	else if (d->rowEditing) {// if a row is in edit mode, do some special stuff
+	else if (m_rowEditing) {// if a row is in edit mode, do some special stuff
 		if (shortCutPressed( e, "data_save_row")) {
 			kdDebug() << "shortCutPressed!!!" <<endl;
 			acceptRowEdit();
@@ -2110,11 +2188,11 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 
 	if(e->key() == Key_Return || e->key() == Key_Enter)
 	{
-		emit itemReturnPressed(d->pCurrentItem, d->curRow, d->curCol);
+		emit itemReturnPressed(m_currentItem, m_curRow, m_curCol);
 	}
 
-	int curRow = d->curRow;
-	int curCol = d->curCol;
+	int curRow = m_curRow;
+	int curCol = m_curCol;
 
 	const bool nobtn = e->state()==NoButton;
 	bool printable = false;
@@ -2237,7 +2315,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 				printable = true; //just space key
 		}
 	case Key_Escape:
-		if (nobtn && d->rowEditing) {
+		if (nobtn && m_rowEditing) {
 			cancelRowEdit();
 			return;
 		}
@@ -2282,8 +2360,8 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 			showContextMenu();
 		}
 		else {
-			KexiTableEdit *edit = editor( d->curCol );
-			if (edit && edit->handleKeyPress(e, d->pEditor==edit)) {
+			KexiTableEdit *edit = editor( m_curCol );
+			if (edit && edit->handleKeyPress(e, m_editor==edit)) {
 				//try to handle the event @ editor's level
 				e->accept();
 				return;
@@ -2317,7 +2395,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 	d->vScrollBarValueChanged_enabled=false;
 
 	// if focus cell changes, repaint
-	setCursor(curRow, curCol);
+	setCursorPosition(curRow, curCol);
 
 	d->vScrollBarValueChanged_enabled=true;
 
@@ -2326,14 +2404,15 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 
 void KexiTableView::emitSelected()
 {
-	if(d->pCurrentItem)
-		emit itemSelected(d->pCurrentItem);
+	if(m_currentItem)
+		emit itemSelected(m_currentItem);
 }
 
+/*moved
 void KexiTableView::startEditOrToggleValue()
 {
-	if ( !isReadOnly() && columnEditable(d->curCol) ) {
-		if (columnType(d->curCol) == KexiDB::Field::Boolean) {
+	if ( !isReadOnly() && columnEditable(m_curCol) ) {
+		if (columnType(m_curCol) == KexiDB::Field::Boolean) {
 			boolToggled();
 		}
 		else {
@@ -2346,47 +2425,51 @@ void KexiTableView::startEditOrToggleValue()
 void KexiTableView::boolToggled()
 {
 	startEditCurrentCell();
-	if (d->pEditor) {
-		d->pEditor->clickedOnContents();
+	if (m_editor) {
+		m_editor->clickedOnContents();
 	}
 	acceptEditor();
-	updateCell(d->curRow, d->curCol);
+	updateCell(m_curRow, m_curCol);
 
-/*	int s = d->pCurrentItem->at(d->curCol).toInt();
-	QVariant oldValue=d->pCurrentItem->at(d->curCol);
-	(*d->pCurrentItem)[d->curCol] = QVariant(s ? 0 : 1);
-	updateCell(d->curRow, d->curCol);
-//	emit itemChanged(d->pCurrentItem, d->curRow, d->curCol, oldValue);
-//	emit itemChanged(d->pCurrentItem, d->curRow, d->curCol);*/
+#if 0
+	int s = m_currentItem->at(m_curCol).toInt();
+	QVariant oldValue=m_currentItem->at(m_curCol);
+	(*m_currentItem)[m_curCol] = QVariant(s ? 0 : 1);
+	updateCell(m_curRow, m_curCol);
+//	emit itemChanged(m_currentItem, m_curRow, m_curCol, oldValue);
+//	emit itemChanged(m_currentItem, m_curRow, m_curCol);
+#endif
 }
 
 void KexiTableView::clearSelection()
 {
 //	selectRow( -1 );
-	int oldRow = d->curRow;
-//	int oldCol = d->curCol;
-	d->curRow = -1;
-	d->curCol = -1;
-	d->pCurrentItem = 0;
+	int oldRow = m_curRow;
+//	int oldCol = m_curCol;
+	m_curRow = -1;
+	m_curCol = -1;
+	m_currentItem = 0;
 	updateRow( oldRow );
-	d->navPanel->setCurrentRecordNumber(0);
+	m_navPanel->setCurrentRecordNumber(0);
 //	setNavRowNumber(-1);
 }
 
 void KexiTableView::selectNextRow()
 {
-	selectRow( QMIN( rows() - 1 +(isInsertingEnabled()?1:0), d->curRow + 1 ) );
+	selectRow( QMIN( rows() - 1 +(isInsertingEnabled()?1:0), m_curRow + 1 ) );
 }
+*/
 
 int KexiTableView::rowsPerPage() const
 {
 	return visibleHeight() / d->rowHeight;
 }
 
+/*moved
 void KexiTableView::selectPrevPage()
 {
 	selectRow( 
-		QMAX( 0, d->curRow - rowsPerPage() )
+		QMAX( 0, m_curRow - rowsPerPage() )
 	);
 }
 
@@ -2395,7 +2478,7 @@ void KexiTableView::selectNextPage()
 	selectRow( 
 		QMIN( 
 			rows() - 1 + (isInsertingEnabled()?1:0),
-			d->curRow + rowsPerPage()
+			m_curRow + rowsPerPage()
 		)
 	);
 }
@@ -2412,13 +2495,14 @@ void KexiTableView::selectLastRow()
 
 void KexiTableView::selectRow(int row)
 {
-	setCursor(row, -1);
+	setCursorPosition(row, -1);
 }
 
 void KexiTableView::selectPrevRow()
 {
-	selectRow( QMAX( 0, d->curRow - 1 ) );
+	selectRow( QMAX( 0, m_curRow - 1 ) );
 }
+*/
 
 KexiTableEdit *KexiTableView::editor( int col, bool ignoreMissingEditor )
 {
@@ -2466,7 +2550,7 @@ void KexiTableView::editorShowFocus( int /*row*/, int col )
 	}*/
 	if (edit) {
 		kdDebug()<< "KexiTableView::editorShowFocus() : IN" << endl;
-		QRect rect = cellGeometry( d->curRow, d->curCol );
+		QRect rect = cellGeometry( m_curRow, m_curCol );
 //		rect.moveBy( -contentsX(), -contentsY() );
 		edit->showFocus( rect );
 	}
@@ -2474,10 +2558,10 @@ void KexiTableView::editorShowFocus( int /*row*/, int col )
 
 void KexiTableView::slotEditRequested()
 {
-//	KexiTableEdit *edit = editor( d->curCol );
+//	KexiTableEdit *edit = editor( m_curCol );
 //	if (edit) {
 
-	createEditor(d->curRow, d->curCol);
+	createEditor(m_curRow, m_curCol);
 }
 
 void KexiTableView::createEditor(int row, int col, const QString& addText, bool removeOld)
@@ -2496,55 +2580,54 @@ void KexiTableView::createEditor(int row, int col, const QString& addText, bool 
 /*	QVariant val;
 	if (!removeOld) {
 		val = *bufferedValueAt(col);
-//		val = d->pCurrentItem->at(col);
-//		val = d->pCurrentItem->at(d->curCol);
+//		val = m_currentItem->at(col);
+//		val = m_currentItem->at(m_curCol);
 	}*/
 /*	switch(columnType(col))
 	{
 		case QVariant::Date:
 			#ifdef USE_KDE
-//			val = KGlobal::locale()->formatDate(d->pCurrentItem->getDate(col), true);
+//			val = KGlobal::locale()->formatDate(m_currentItem->getDate(col), true);
 
 			#else
-//			val = d->pCurrentItem->getDate(col).toString(Qt::LocalDate);
+//			val = m_currentItem->getDate(col).toString(Qt::LocalDate);
 			#endif
 			break;
 
 		default:
-//			val = d->pCurrentItem->getText(d->curCol);
-			val = d->pCurrentItem->getValue(d->curCol);
+//			val = m_currentItem->getText(m_curCol);
+			val = m_currentItem->getValue(m_curCol);
 
 			break;
 	}*/
 
-	const bool startRowEdit = !d->rowEditing; //remember if we're starting row edit
+	const bool startRowEdit = !m_rowEditing; //remember if we're starting row edit
 
-	if (!d->rowEditing) {
+	if (!m_rowEditing) {
 		//we're starting row editing session
 		m_data->clearRowEditBuffer();
 		
-		d->rowEditing = true;
+		m_rowEditing = true;
 		//indicate on the vheader that we are editing:
-		d->pVerticalHeader->setEditRow(d->curRow);
-		if (isInsertingEnabled() && d->pCurrentItem==d->pInsertItem) {
+		m_verticalHeader->setEditRow(m_curRow);
+		if (isInsertingEnabled() && m_currentItem==m_insertItem) {
 			//we should know that we are in state "new row editing"
-			d->newRowEditing = true;
+			m_newRowEditing = true;
 			//'insert' row editing: show another row after that:
-			m_data->append( d->pInsertItem );
+			m_data->append( m_insertItem );
 			//new empty insert item
-			d->pInsertItem = new KexiTableItem(columns());
+			m_insertItem = new KexiTableItem(columns());
 //			updateContents();
-			d->pVerticalHeader->addLabel();
-			d->pVerticalHeaderAlreadyAdded = true;
-			QSize s(tableSize());
-			resizeContents(s.width(), s.height());
+			m_verticalHeader->addLabel();
+			d->verticalHeaderAlreadyAdded = true;
+			updateWidgetContentsSize();
 			//refr. current and next row
 			updateContents(columnPos(0), rowPos(row), viewport()->width(), d->rowHeight*2);
 //			updateContents(columnPos(0), rowPos(row+1), viewport()->width(), d->rowHeight);
 //js: warning this breaks behaviour (cursor is skipping, etc.): qApp->processEvents(500);
-			ensureVisible(columnPos(d->curCol), rowPos(row+1)+d->rowHeight-1, columnWidth(d->curCol), d->rowHeight);
+			ensureVisible(columnPos(m_curCol), rowPos(row+1)+d->rowHeight-1, columnWidth(m_curCol), d->rowHeight);
 
-			d->pVerticalHeader->setOffset(contentsY());
+			m_verticalHeader->setOffset(contentsY());
 		}
 	}	
 //	else {//just reinit
@@ -2552,27 +2635,27 @@ void KexiTableView::createEditor(int row, int col, const QString& addText, bool 
 //			d->paintAfterInsertRow = true;
 //	}
 
-	d->pEditor = editor( col );
-	if (!d->pEditor)
+	m_editor = editor( col );
+	if (!m_editor)
 		return;
 
-	d->pEditor->init(*bufferedValueAt(col), addText, removeOld);
-	if (d->pEditor->hasFocusableWidget()) {
-		moveChild(d->pEditor, columnPos(d->curCol), rowPos(d->curRow));
+	m_editor->init(*bufferedValueAt(col), addText, removeOld);
+	if (m_editor->hasFocusableWidget()) {
+		moveChild(m_editor, columnPos(m_curCol), rowPos(m_curRow));
 
-		d->pEditor->resize(columnWidth(d->curCol)-1, rowHeight()-1);
-		d->pEditor->show();
+		m_editor->resize(columnWidth(m_curCol)-1, rowHeight()-1);
+		m_editor->show();
 
-		d->pEditor->setFocus();
+		m_editor->setFocus();
 	}
 
 	if (startRowEdit)
-		emit rowEditStarted(d->curRow);
+		emit rowEditStarted(m_curRow);
 }
 
 void KexiTableView::focusInEvent(QFocusEvent*)
 {
-	updateCell(d->curRow, d->curCol);
+	updateCell(m_curRow, m_curCol);
 }
 
 
@@ -2581,13 +2664,13 @@ void KexiTableView::focusOutEvent(QFocusEvent*)
 	d->scrollBarTipTimer.stop();
 	d->scrollBarTip->hide();
 	
-	updateCell(d->curRow, d->curCol);
+	updateCell(m_curRow, m_curCol);
 }
 
 bool KexiTableView::focusNextPrevChild(bool /*next*/)
 {
 	return false; //special Tab/BackTab meaning
-/*	if (d->pEditor)
+/*	if (m_editor)
 		return true;
 	return QScrollView::focusNextPrevChild(next);*/
 }
@@ -2597,8 +2680,8 @@ void KexiTableView::resizeEvent(QResizeEvent *e)
 	QScrollView::resizeEvent(e);
 	//updateGeometries();
 	
-	if (d->navPanel)
-		d->navPanel->updateGeometry(leftMargin());
+	if (m_navPanel)
+		m_navPanel->updateGeometry(leftMargin());
 //	updateNavPanelGeometry();
 
 	if ((contentsHeight() - e->size().height()) <= d->rowHeight) {
@@ -2608,17 +2691,17 @@ void KexiTableView::resizeEvent(QResizeEvent *e)
 //	d->pTopHeader->repaint();
 
 
-/*		d->navPanel->setGeometry(
+/*		m_navPanel->setGeometry(
 			frameWidth(),
 			viewport()->height() +d->pTopHeader->height() 
 			-(horizontalScrollBar()->isVisible() ? 0 : horizontalScrollBar()->sizeHint().height())
 			+frameWidth(),
-			d->navPanel->sizeHint().width(), // - verticalScrollBar()->sizeHint().width() - horizontalScrollBar()->sizeHint().width(),
+			m_navPanel->sizeHint().width(), // - verticalScrollBar()->sizeHint().width() - horizontalScrollBar()->sizeHint().width(),
 			horizontalScrollBar()->sizeHint().height()
 		);*/
 //		updateContents();
-//		d->navPanel->setGeometry(1,horizontalScrollBar()->pos().y(),
-	//		d->navPanel->width(), horizontalScrollBar()->height());
+//		m_navPanel->setGeometry(1,horizontalScrollBar()->pos().y(),
+	//		m_navPanel->width(), horizontalScrollBar()->height());
 //	updateContents(0,0,2000,2000);//js
 //	erase(); repaint();
 }
@@ -2626,39 +2709,39 @@ void KexiTableView::resizeEvent(QResizeEvent *e)
 #if 0//moved
 void KexiTableView::updateNavPanelGeometry()
 {
-	if (!d->navPanel)
+	if (!m_navPanel)
 		return;
-	d->navPanel->updateGeometry();
-//	QRect g = d->navPanel->geometry();
+	m_navPanel->updateGeometry();
+//	QRect g = m_navPanel->geometry();
 //		kdDebug(44021) << "**********"<< g.top() << " " << g.left() <<endl;
 	int navWidth;
 	if (horizontalScrollBar()->isVisible()) {
-		navWidth = d->navPanel->sizeHint().width();
+		navWidth = m_navPanel->sizeHint().width();
 	}
 	else {
 		navWidth = leftMargin() + clipper()->width();
 	}
 	
-	d->navPanel->setGeometry(
+	m_navPanel->setGeometry(
 		frameWidth(),
 		height() - horizontalScrollBar()->sizeHint().height()-frameWidth(),
 		navWidth,
 		horizontalScrollBar()->sizeHint().height()
 	);
 
-//	horizontalScrollBar()->move(d->navPanel->x()+d->navPanel->width()+20,horizontalScrollBar()->y());
+//	horizontalScrollBar()->move(m_navPanel->x()+m_navPanel->width()+20,horizontalScrollBar()->y());
 
 //	horizontalScrollBar()->hide();
 //	updateGeometry();
 	updateScrollBars();
-//	horizontalScrollBar()->move(d->navPanel->x()+d->navPanel->width()+20,horizontalScrollBar()->y());
+//	horizontalScrollBar()->move(m_navPanel->x()+m_navPanel->width()+20,horizontalScrollBar()->y());
 #if 0 //prev impl.
-	QRect g = d->navPanel->geometry();
+	QRect g = m_navPanel->geometry();
 //		kdDebug(44021) << "**********"<< g.top() << " " << g.left() <<endl;
-	d->navPanel->setGeometry(
+	m_navPanel->setGeometry(
 		frameWidth(),
 		height() - horizontalScrollBar()->sizeHint().height()-frameWidth(),
-		d->navPanel->sizeHint().width(), // - verticalScrollBar()->sizeHint().width() - horizontalScrollBar()->sizeHint().width(),
+		m_navPanel->sizeHint().width(), // - verticalScrollBar()->sizeHint().width() - horizontalScrollBar()->sizeHint().width(),
 		horizontalScrollBar()->sizeHint().height()
 	);
 #endif
@@ -2680,9 +2763,9 @@ void KexiTableView::showEvent(QShowEvent *e)
 		d->maximizeColumnsWidthOnShow.clear();
 	}
 
-	if (d->initDataContentsOnShow) {
+	if (m_initDataContentsOnShow) {
 		//full init
-		d->initDataContentsOnShow = false;
+		m_initDataContentsOnShow = false;
 		initDataContents();
 	}
 	else {
@@ -2699,34 +2782,37 @@ void KexiTableView::showEvent(QShowEvent *e)
 		ensureCellVisible( d->ensureCellVisibleOnShow.x(), d->ensureCellVisibleOnShow.y() );
 		d->ensureCellVisibleOnShow = QPoint(-1,-1); //reset the flag
 	}
-	if (d->navPanel)
-		d->navPanel->updateGeometry(leftMargin());
+	if (m_navPanel)
+		m_navPanel->updateGeometry(leftMargin());
 //	updateNavPanelGeometry();
 }
 
+/*moved
 bool KexiTableView::dropsAtRowEnabled() const
 {
-	return d->dropsAtRowEnabled;
+	return m_dropsAtRowEnabled;
 }
 
 void KexiTableView::setDropsAtRowEnabled(bool set)
 {
-//	const bool old = d->dropsAtRowEnabled;
+//	const bool old = m_dropsAtRowEnabled;
 	if (!set)
 		d->dragIndicatorLine = -1;
-	if (d->dropsAtRowEnabled && !set) {
-		d->dropsAtRowEnabled = false;
+	if (m_dropsAtRowEnabled && !set) {
+		m_dropsAtRowEnabled = false;
 		update();
 	}
 	else {
-		d->dropsAtRowEnabled = set;
+		m_dropsAtRowEnabled = set;
 	}
 }
+*/
 
 void KexiTableView::contentsDragMoveEvent(QDragMoveEvent *e)
 {
-	CHECK_DATA_;
-	if (d->dropsAtRowEnabled) {
+	if (!hasData())
+		return;
+	if (m_dropsAtRowEnabled) {
 		QPoint p = e->pos();
 		int row = rowAt(p.y());
 		KexiTableItem *item = 0;
@@ -2737,21 +2823,21 @@ void KexiTableView::contentsDragMoveEvent(QDragMoveEvent *e)
 		item = m_data->at(row);
 		emit dragOverRow(item, row, e);
 		if (e->isAccepted()) {
-			if (d->dragIndicatorLine>=0 && d->dragIndicatorLine != row) {
+			if (m_dragIndicatorLine>=0 && m_dragIndicatorLine != row) {
 				//erase old indicator
-				updateRow(d->dragIndicatorLine);
+				updateRow(m_dragIndicatorLine);
 			}
-			if (d->dragIndicatorLine != row) {
-				d->dragIndicatorLine = row;
-				updateRow(d->dragIndicatorLine);
+			if (m_dragIndicatorLine != row) {
+				m_dragIndicatorLine = row;
+				updateRow(m_dragIndicatorLine);
 			}
 		}
 		else {
-			if (d->dragIndicatorLine>=0) {
+			if (m_dragIndicatorLine>=0) {
 				//erase old indicator
-				updateRow(d->dragIndicatorLine);
+				updateRow(m_dragIndicatorLine);
 			}
-			d->dragIndicatorLine = -1;
+			m_dragIndicatorLine = -1;
 		}
 	}
 	else
@@ -2769,12 +2855,13 @@ void KexiTableView::contentsDragMoveEvent(QDragMoveEvent *e)
 
 void KexiTableView::contentsDropEvent(QDropEvent *ev)
 {
-	CHECK_DATA_;
-	if (d->dropsAtRowEnabled) {
+	if (!hasData())
+		return;
+	if (m_dropsAtRowEnabled) {
 		//we're no longer dragging over the table
-		if (d->dragIndicatorLine>=0) {
-			int row2update = d->dragIndicatorLine;
-			d->dragIndicatorLine = -1;
+		if (m_dragIndicatorLine>=0) {
+			int row2update = m_dragIndicatorLine;
+			m_dragIndicatorLine = -1;
 			updateRow(row2update);
 		}
 		QPoint p = ev->pos();
@@ -2786,22 +2873,23 @@ void KexiTableView::contentsDropEvent(QDropEvent *ev)
 		KexiTableItem *newItem = 0;
 		emit droppedAtRow(item, row, ev, newItem);
 		if (newItem) {
-			const int realRow = (row==d->curRow ? -1 : row);
+			const int realRow = (row==m_curRow ? -1 : row);
 			insertItem(newItem, realRow);
-			setCursor(row, 0);
-//			d->pCurrentItem = newItem;
+			setCursorPosition(row, 0);
+//			m_currentItem = newItem;
 		}
 	}
 }
 
 void KexiTableView::viewportDragLeaveEvent( QDragLeaveEvent * )
 {
-	CHECK_DATA_;
-	if (d->dropsAtRowEnabled) {
+	if (!hasData())
+		return;
+	if (m_dropsAtRowEnabled) {
 		//we're no longer dragging over the table
-		if (d->dragIndicatorLine>=0) {
-			int row2update = d->dragIndicatorLine;
-			d->dragIndicatorLine = -1;
+		if (m_dragIndicatorLine>=0) {
+			int row2update = m_dragIndicatorLine;
+			m_dragIndicatorLine = -1;
 			updateRow(row2update);
 		}
 	}
@@ -2843,15 +2931,15 @@ void KexiTableView::slotColumnWidthChanged( int, int, int )
 	//	viewport()->repaint();
 
 //	updateContents(0, 0, d->pBufferPm->width(), d->pBufferPm->height());
-	if (d->pEditor)
+	if (m_editor)
 	{
-		d->pEditor->resize(columnWidth(d->curCol)-1, rowHeight()-1);
-		moveChild(d->pEditor, columnPos(d->curCol), rowPos(d->curRow));
+		m_editor->resize(columnWidth(m_curCol)-1, rowHeight()-1);
+		moveChild(m_editor, columnPos(m_curCol), rowPos(m_curRow));
 	}
 	updateGeometries();
 	updateScrollBars();
-	if (d->navPanel)
-		d->navPanel->updateGeometry(leftMargin());
+	if (m_navPanel)
+		m_navPanel->updateGeometry(leftMargin());
 //	updateNavPanelGeometry();
 }
 
@@ -2868,14 +2956,15 @@ void KexiTableView::updateGeometries()
 	if (d->pTopHeader->offset() && ts.width() < (d->pTopHeader->offset() + d->pTopHeader->width()))
 		horizontalScrollBar()->setValue(ts.width() - d->pTopHeader->width());
 
-//	d->pVerticalHeader->setGeometry(1, topMargin() + 1, leftMargin(), visibleHeight());
+//	m_verticalHeader->setGeometry(1, topMargin() + 1, leftMargin(), visibleHeight());
 	d->pTopHeader->setGeometry(leftMargin() + 1, 1, visibleWidth(), topMargin());
-	d->pVerticalHeader->setGeometry(1, topMargin() + 1, leftMargin(), visibleHeight());
+	m_verticalHeader->setGeometry(1, topMargin() + 1, leftMargin(), visibleHeight());
 }
 
 int KexiTableView::columnWidth(int col) const
 {
-	CHECK_DATA(0);
+	if (!hasData())
+		return 0;
 	int vcID = m_data->visibleColumnID( col );
 	return vcID==-1 ? 0 : d->pTopHeader->sectionSize( vcID );
 }
@@ -2887,7 +2976,8 @@ int KexiTableView::rowHeight() const
 
 int KexiTableView::columnPos(int col) const
 {
-	CHECK_DATA(0);
+	if (!hasData())
+		return 0;
 	//if this column is hidden, find first column before that is visible
 	int c = QMIN(col, (int)m_data->columnsCount()-1), vcID = 0;
 	while (c>=0 && (vcID=m_data->visibleColumnID( c ))==-1)
@@ -2906,7 +2996,8 @@ int KexiTableView::rowPos(int row) const
 
 int KexiTableView::columnAt(int pos) const
 {
-	CHECK_DATA(-1);
+	if (!hasData())
+		return -1;
 	int r = d->pTopHeader->sectionAt(pos);
 	if (r<0)
 		return r;
@@ -2919,7 +3010,8 @@ int KexiTableView::columnAt(int pos) const
 
 int KexiTableView::rowAt(int pos, bool ignoreEnd) const
 {
-	CHECK_DATA(-1);
+	if (!hasData())
+		return -1;
 	pos /=d->rowHeight;
 	if (pos < 0)
 		return 0;
@@ -2939,11 +3031,11 @@ QSize KexiTableView::tableSize() const
 	if ((rows()+ (isInsertingEnabled()?1:0) ) > 0 && columns() > 0) {
 /*		kdDebug() << "tableSize()= " << columnPos( columns() - 1 ) + columnWidth( columns() - 1 ) 
 			<< ", " << rowPos( rows()-1+(isInsertingEnabled()?1:0)) + d->rowHeight
-//			+ QMAX(d->navPanel ? d->navPanel->height() : 0, horizontalScrollBar()->sizeHint().height())
-			+ (d->navPanel->isVisible() ? QMAX( d->navPanel->height(), horizontalScrollBar()->sizeHint().height() ) :0 )
+//			+ QMAX(m_navPanel ? m_navPanel->height() : 0, horizontalScrollBar()->sizeHint().height())
+			+ (m_navPanel->isVisible() ? QMAX( m_navPanel->height(), horizontalScrollBar()->sizeHint().height() ) :0 )
 			+ margin() << endl;
 */
-//		kdDebug()<< d->navPanel->isVisible() <<" "<<d->navPanel->height()<<" "
+//		kdDebug()<< m_navPanel->isVisible() <<" "<<m_navPanel->height()<<" "
 //		<<horizontalScrollBar()->sizeHint().height()<<" "<<rowPos( rows()-1+(isInsertingEnabled()?1:0))<<endl;
 
 		int xx = horizontalScrollBar()->sizeHint().height()/2;
@@ -2957,39 +3049,43 @@ QSize KexiTableView::tableSize() const
 //				horizontalScrollBar()->sizeHint().height()/2
 //			- /*d->bottomMargin */ horizontalScrollBar()->sizeHint().height()*3/2
 
-//			+ ( (d->navPanel && d->navPanel->isVisible() && verticalScrollBar()->isVisible()
+//			+ ( (m_navPanel && m_navPanel->isVisible() && verticalScrollBar()->isVisible()
 	//			&& !horizontalScrollBar()->isVisible()) 
 		//		? horizontalScrollBar()->sizeHint().height() : 0)
 
-//			+ QMAX( (d->navPanel && d->navPanel->isVisible()) ? d->navPanel->height() : 0, 
+//			+ QMAX( (m_navPanel && m_navPanel->isVisible()) ? m_navPanel->height() : 0, 
 //				horizontalScrollBar()->isVisible() ? horizontalScrollBar()->sizeHint().height() : 0)
 
-//			+ (d->navPanel->isVisible() 
-//				? QMAX( d->navPanel->height(), horizontalScrollBar()->sizeHint().height() ) :0 )
+//			+ (m_navPanel->isVisible() 
+//				? QMAX( m_navPanel->height(), horizontalScrollBar()->sizeHint().height() ) :0 )
 
 //			- (horizontalScrollBar()->isVisible() ? horizontalScrollBar()->sizeHint().height() :0 )
 			+ margin() 
 //-2*d->rowHeight
 		);
 
-//		kdDebug() << rows()-1 <<" "<< (isInsertingEnabled()?1:0) <<" "<< (d->rowEditing?1:0) << " " <<  s << endl;
+//		kdDebug() << rows()-1 <<" "<< (isInsertingEnabled()?1:0) <<" "<< (m_rowEditing?1:0) << " " <<  s << endl;
 		return s;
 //			+horizontalScrollBar()->sizeHint().height() + margin() );
 	}
 	return QSize(0,0);
 }
 
+/*moved
 int KexiTableView::rows() const
 {
-	CHECK_DATA(0);
+	if (!hasData())
+		return 0;
 	return m_data->count();
 }
 
 int KexiTableView::columns() const
 {
-	CHECK_DATA(0);
+	if (!hasData())
+		return 0;
 	return m_data->columns.count();
 }
+*/
 
 void KexiTableView::ensureCellVisible(int row, int col/*=-1*/)
 {
@@ -3000,20 +3096,20 @@ void KexiTableView::ensureCellVisible(int row, int col/*=-1*/)
 	}
 
 	//quite clever: ensure the cell is visible:
-	QRect r( columnPos(col==-1 ? d->curCol : col), rowPos(row) +(d->appearance.fullRowSelection?1:0), 
-		columnWidth(col==-1 ? d->curCol : col), rowHeight());
+	QRect r( columnPos(col==-1 ? m_curCol : col), rowPos(row) +(d->appearance.fullRowSelection?1:0), 
+		columnWidth(col==-1 ? m_curCol : col), rowHeight());
 
-/*	if (d->navPanel && horizontalScrollBar()->isHidden() && row == rows()-1) {
+/*	if (m_navPanel && horizontalScrollBar()->isHidden() && row == rows()-1) {
 		//when cursor is moved down and navigator covers the cursor's area,
 		//area is scrolled up
-		if ((viewport()->height() - d->navPanel->height()) < r.bottom()) {
-			scrollBy(0,r.bottom() - (viewport()->height() - d->navPanel->height()));
+		if ((viewport()->height() - m_navPanel->height()) < r.bottom()) {
+			scrollBy(0,r.bottom() - (viewport()->height() - m_navPanel->height()));
 		}
 	}*/
 
-	if (d->navPanel && d->navPanel->isVisible() && horizontalScrollBar()->isHidden()) {
+	if (m_navPanel && m_navPanel->isVisible() && horizontalScrollBar()->isHidden()) {
 		//a hack: for visible navigator: increase height of the visible rect 'r'
-		r.setBottom(r.bottom()+d->navPanel->height());
+		r.setBottom(r.bottom()+m_navPanel->height());
 	}
 
 	QPoint pcenter = r.center();
@@ -3023,15 +3119,16 @@ void KexiTableView::ensureCellVisible(int row, int col/*=-1*/)
 //	slotUpdate();
 }
 
-void KexiTableView::setCursor(int row, int col/*=-1*/, bool forceSet)
+#if 0 //moved
+void KexiTableView::setCursorPosition(int row, int col/*=-1*/, bool forceSet)
 {
 	int newrow = row;
 	int newcol = col;
 
 	if(rows() <= 0) {
-		d->pVerticalHeader->setCurrentRow(-1);
+		m_verticalHeader->setCurrentRow(-1);
 		if (isInsertingEnabled()) {
-			d->pCurrentItem=d->pInsertItem;
+			m_currentItem=m_insertItem;
 			newrow=0;
 			if (col>=0)
 				newcol=col;
@@ -3039,9 +3136,9 @@ void KexiTableView::setCursor(int row, int col/*=-1*/, bool forceSet)
 				newcol=0;
 		}
 		else {
-			d->pCurrentItem=0;
-			d->curRow=-1;
-			d->curCol=-1;
+			m_currentItem=0;
+			m_curRow=-1;
+			m_curCol=-1;
 			return;
 		}
 	}
@@ -3052,22 +3149,22 @@ void KexiTableView::setCursor(int row, int col/*=-1*/, bool forceSet)
 		newcol = QMIN(columns() - 1, newcol);
 	}
 	else {
-		newcol = d->curCol; //no changes
+		newcol = m_curCol; //no changes
 		newcol = QMAX(0, newcol); //may not be < 0 !
 	}
 	newrow = QMAX( 0, row);
 	newrow = QMIN( rows() - 1 + (isInsertingEnabled()?1:0), newrow);
 
-//	d->pCurrentItem = itemAt(d->curRow);
-//	kdDebug(44021) << "setCursor(): d->curRow=" << d->curRow << " oldRow=" << oldRow << " d->curCol=" << d->curCol << " oldCol=" << oldCol << endl;
+//	m_currentItem = itemAt(m_curRow);
+//	kdDebug(44021) << "setCursorPosition(): m_curRow=" << m_curRow << " oldRow=" << oldRow << " m_curCol=" << m_curCol << " oldCol=" << oldCol << endl;
 
-	if ( forceSet || d->curRow != newrow || d->curCol != newcol )
+	if ( forceSet || m_curRow != newrow || m_curCol != newcol )
 	{
-		kdDebug(44021) << "setCursor(): " <<QString("old:%1,%2 new:%3,%4").arg(d->curCol).arg(d->curRow).arg(newcol).arg(newrow) << endl;
+		kdDebug(44021) << "setCursorPosition(): " <<QString("old:%1,%2 new:%3,%4").arg(m_curCol).arg(m_curRow).arg(newcol).arg(newrow) << endl;
 		
 		// cursor moved: get rid of editor
-		if (d->pEditor) {
-			if (!d->contentsMousePressEvent_dblClick) {
+		if (m_editor) {
+			if (!m_contentsMousePressEvent_dblClick) {
 				if (!acceptEditor()) {
 					return;
 				}
@@ -3076,8 +3173,8 @@ void KexiTableView::setCursor(int row, int col/*=-1*/, bool forceSet)
 			}
 		}
 
-		if (d->curRow != newrow) {//update current row info
-			d->navPanel->setCurrentRecordNumber(newrow+1);
+		if (m_curRow != newrow) {//update current row info
+			m_navPanel->setCurrentRecordNumber(newrow+1);
 //			setNavRowNumber(newrow);
 //			d->navBtnPrev->setEnabled(newrow>0);
 //			d->navBtnFirst->setEnabled(newrow>0);
@@ -3086,7 +3183,7 @@ void KexiTableView::setCursor(int row, int col/*=-1*/, bool forceSet)
 		}
 
 		// cursor moved to other row: end of row editing
-		if (d->rowEditing && d->curRow != newrow) {
+		if (m_rowEditing && m_curRow != newrow) {
 			if (!acceptRowEdit()) {
 				//accepting failed: cancel setting the cursor
 				return;
@@ -3096,25 +3193,25 @@ void KexiTableView::setCursor(int row, int col/*=-1*/, bool forceSet)
 		}
 
 		//change position
-		int oldRow = d->curRow;
-		int oldCol = d->curCol;
-		d->curRow = newrow;
-		d->curCol = newcol;
+		int oldRow = m_curRow;
+		int oldCol = m_curCol;
+		m_curRow = newrow;
+		m_curCol = newcol;
 
-//		int cw = columnWidth( d->curCol );
+//		int cw = columnWidth( m_curCol );
 //		int rh = rowHeight();
-//		ensureVisible( columnPos( d->curCol ) + cw / 2, rowPos( d->curRow ) + rh / 2, cw / 2, rh / 2 );
-//		center(columnPos(d->curCol) + cw / 2, rowPos(d->curRow) + rh / 2, cw / 2, rh / 2);
+//		ensureVisible( columnPos( m_curCol ) + cw / 2, rowPos( m_curRow ) + rh / 2, cw / 2, rh / 2 );
+//		center(columnPos(m_curCol) + cw / 2, rowPos(m_curRow) + rh / 2, cw / 2, rh / 2);
 //	kdDebug(44021) << " contentsY() = "<< contentsY() << endl;
 
-//js		if (oldRow > d->curRow)
-//js			ensureVisible(columnPos(d->curCol), rowPos(d->curRow) + rh, columnWidth(d->curCol), rh);
-//js		else// if (oldRow <= d->curRow)
-//js		ensureVisible(columnPos(d->curCol), rowPos(d->curRow), columnWidth(d->curCol), rh);
+//js		if (oldRow > m_curRow)
+//js			ensureVisible(columnPos(m_curCol), rowPos(m_curRow) + rh, columnWidth(m_curCol), rh);
+//js		else// if (oldRow <= m_curRow)
+//js		ensureVisible(columnPos(m_curCol), rowPos(m_curRow), columnWidth(m_curCol), rh);
 
 
 		//show editor-dependent focus, if we're changing the current column
-		if (oldCol>=0 && oldCol<columns() && d->curCol!=oldCol) {
+		if (oldCol>=0 && oldCol<columns() && m_curCol!=oldCol) {
 			//find the editor for this column
 			KexiTableEdit *edit = editor( oldCol );
 			if (edit) {
@@ -3124,56 +3221,45 @@ void KexiTableView::setCursor(int row, int col/*=-1*/, bool forceSet)
 
 		//show editor-dependent focus, if needed
 		//find the editor for this column
-		editorShowFocus( d->curRow, d->curCol );
+		editorShowFocus( m_curRow, m_curCol );
 
 		updateCell( oldRow, oldCol );
 
 		//quite clever: ensure the cell is visible:
-		ensureCellVisible(d->curRow, d->curCol);
+		ensureCellVisible(m_curRow, m_curCol);
 
-//		QPoint pcenter = QRect( columnPos(d->curCol), rowPos(d->curRow), columnWidth(d->curCol), rh).center();
-//		ensureVisible(pcenter.x(), pcenter.y(), columnWidth(d->curCol)/2, rh/2);
+//		QPoint pcenter = QRect( columnPos(m_curCol), rowPos(m_curRow), columnWidth(m_curCol), rh).center();
+//		ensureVisible(pcenter.x(), pcenter.y(), columnWidth(m_curCol)/2, rh/2);
 
-//		ensureVisible(columnPos(d->curCol), rowPos(d->curRow) - contentsY(), columnWidth(d->curCol), rh);
-		d->pVerticalHeader->setCurrentRow(d->curRow);
-		updateCell( d->curRow, d->curCol );
-		if (d->curCol != oldCol || d->curRow != oldRow ) //ensure this is also refreshed
-			updateCell( oldRow, d->curCol );
-		if (isInsertingEnabled() && d->curRow == rows()) {
+//		ensureVisible(columnPos(m_curCol), rowPos(m_curRow) - contentsY(), columnWidth(m_curCol), rh);
+		m_verticalHeader->setCurrentRow(m_curRow);
+		updateCell( m_curRow, m_curCol );
+		if (m_curCol != oldCol || m_curRow != oldRow ) //ensure this is also refreshed
+			updateCell( oldRow, m_curCol );
+		if (isInsertingEnabled() && m_curRow == rows()) {
 			kdDebug(44021) << "NOW insert item is current" << endl;
-			d->pCurrentItem = d->pInsertItem;
+			m_currentItem = m_insertItem;
 		}
 		else {
-			kdDebug(44021) << QString("NOW item at %1 (%2) is current").arg(d->curRow).arg((ulong)itemAt(d->curRow)) << endl;
+			kdDebug(44021) << QString("NOW item at %1 (%2) is current").arg(m_curRow).arg((ulong)itemAt(m_curRow)) << endl;
 //NOT EFFECTIVE!!!!!!!!!!!
-			d->pCurrentItem = itemAt(d->curRow);
+			m_currentItem = itemAt(m_curRow);
 		}
 
-		emit itemSelected(d->pCurrentItem);
-		emit cellSelected(d->curCol, d->curRow);
+		emit itemSelected(m_currentItem);
+		emit cellSelected(m_curCol, m_curRow);
 	}
 
-	if(d->initDataContentsOnShow) {
+	if(m_initDataContentsOnShow) {
 		d->cursorPositionSetExplicityBeforeShow = true;
 	}
 }
 
-void KexiTableView::removeEditor()
-{
-	if (!d->pEditor)
-		return;
-
-//	d->pEditor->blockSignals(true);
-	d->pEditor->hide();
-//	delete d->pEditor;
-	d->pEditor = 0;
-	viewport()->setFocus();
-}
-
 bool KexiTableView::acceptEditor()
 {
-	CHECK_DATA(true);
-	if (!d->pEditor || d->inside_acceptEditor)
+	if (!hasData())
+		return true;
+	if (!m_editor || d->inside_acceptEditor)
 		return true;
 
 	d->inside_acceptEditor = true;//avoid recursion
@@ -3186,17 +3272,17 @@ bool KexiTableView::acceptEditor()
 //	static const QString msg_NOT_NULL = i18n("\"%1\" column requires a value to be entered.");
 
 	//autoincremented field can be omitted (left as null or empty) if we're inserting a new row
-	const bool autoIncColumnCanBeOmitted = d->newRowEditing && d->pEditor->field()->isAutoIncrement();
+	const bool autoIncColumnCanBeOmitted = m_newRowEditing && m_editor->field()->isAutoIncrement();
 
-	bool valueChanged = d->pEditor->valueChanged();
+	bool valueChanged = m_editor->valueChanged();
 	bool editCurrentCellAgain = false;
 
 	if (valueChanged) {
-		if (d->pEditor->valueIsNull()) {//null value entered
-			if (d->pEditor->field()->isNotNull() && !autoIncColumnCanBeOmitted) {
+		if (m_editor->valueIsNull()) {//null value entered
+			if (m_editor->field()->isNotNull() && !autoIncColumnCanBeOmitted) {
 				kdDebug() << "KexiTableView::acceptEditor(): NULL NOT ALLOWED!" << endl;
 				res = KexiValidator::Error;
-				msg = KexiValidator::msgColumnNotEmpty().arg(d->pEditor->field()->captionOrName())
+				msg = KexiValidator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
 					+ "\n\n" + KexiValidator::msgYouCanImproveData();
 				desc = i18n("The column's constraint is declared as NOT NULL.");
 				editCurrentCellAgain = true;
@@ -3210,12 +3296,12 @@ bool KexiTableView::acceptEditor()
 				setNull = true;
 			}
 		}
-		else if (d->pEditor->valueIsEmpty()) {//empty value entered
-			if (d->pEditor->field()->hasEmptyProperty()) {
-				if (d->pEditor->field()->isNotEmpty() && !autoIncColumnCanBeOmitted) {
+		else if (m_editor->valueIsEmpty()) {//empty value entered
+			if (m_editor->field()->hasEmptyProperty()) {
+				if (m_editor->field()->isNotEmpty() && !autoIncColumnCanBeOmitted) {
 					kdDebug() << "KexiTableView::acceptEditor(): EMPTY NOT ALLOWED!" << endl;
 					res = KexiValidator::Error;
-					msg = KexiValidator::msgColumnNotEmpty().arg(d->pEditor->field()->captionOrName())
+					msg = KexiValidator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
 						+ "\n\n" + KexiValidator::msgYouCanImproveData();
 					desc = i18n("The column's constraint is declared as NOT EMPTY.");
 					editCurrentCellAgain = true;
@@ -3228,10 +3314,10 @@ bool KexiTableView::acceptEditor()
 				}
 			}
 			else {
-				if (d->pEditor->field()->isNotNull() && !autoIncColumnCanBeOmitted) {
+				if (m_editor->field()->isNotNull() && !autoIncColumnCanBeOmitted) {
 					kdDebug() << "KexiTableView::acceptEditor(): NEITHER NULL NOR EMPTY VALUE CAN BE SET!" << endl;
 					res = KexiValidator::Error;
-					msg = KexiValidator::msgColumnNotEmpty().arg(d->pEditor->field()->captionOrName())
+					msg = KexiValidator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
 						+ "\n\n" + KexiValidator::msgYouCanImproveData();
 					desc = i18n("The column's constraint is declared as NOT EMPTY and NOT NULL.");
 					editCurrentCellAgain = true;
@@ -3251,7 +3337,7 @@ bool KexiTableView::acceptEditor()
 	//try to get the value entered:
 	if (res == KexiValidator::Ok) {
 		if (!setNull && !valueChanged
-			|| setNull && d->pCurrentItem->at(d->curCol).isNull()) {
+			|| setNull && m_currentItem->at(m_curCol).isNull()) {
 			kdDebug() << "KexiTableView::acceptEditor(): VALUE NOT CHANGED." << endl;
 			removeEditor();
 			d->inside_acceptEditor = false;
@@ -3261,11 +3347,11 @@ bool KexiTableView::acceptEditor()
 		}
 		if (!setNull) {//get the new value 
 			bool ok;
-			newval = d->pEditor->value(ok);
+			newval = m_editor->value(ok);
 			if (!ok) {
 				kdDebug() << "KexiTableView::acceptEditor(): INVALID VALUE - NOT CHANGED." << endl;
 				res = KexiValidator::Error;
-//js: TODO get detailed info on why d->pEditor->value() failed
+//js: TODO get detailed info on why m_editor->value() failed
 				msg = i18n("Entered value is invalid.")
 					+ "\n\n" + KexiValidator::msgYouCanImproveData();
 				editCurrentCellAgain = true;
@@ -3276,9 +3362,9 @@ bool KexiTableView::acceptEditor()
 
 		//Check other validation rules:
 		//1. check using validator
-		KexiValidator *validator = m_data->column(d->curCol)->validator();
+		KexiValidator *validator = m_data->column(m_curCol)->validator();
 		if (validator) {
-			res = validator->check(m_data->column(d->curCol)->field()->captionOrName(), 
+			res = validator->check(m_data->column(m_curCol)->field()->captionOrName(), 
 				newval, msg, desc);
 		}
 	}
@@ -3301,10 +3387,10 @@ bool KexiTableView::acceptEditor()
 	if (res == KexiValidator::Ok) {
 		//2. check using signal
 		//bool allow = true;
-//		emit aboutToChangeCell(d->pCurrentItem, newval, allow);
+//		emit aboutToChangeCell(m_currentItem, newval, allow);
 //		if (allow) {
 		//send changes to the backend
-		if (m_data->updateRowEditBufferRef(d->pCurrentItem,d->curCol,newval)) {
+		if (m_data->updateRowEditBufferRef(m_currentItem,m_curCol,newval)) {
 			kdDebug() << "KexiTableView::acceptEditor(): ------ EDIT BUFFER CHANGED TO:" << endl;
 			m_data->rowEditBuffer()->debug();
 		} else {
@@ -3312,11 +3398,11 @@ bool KexiTableView::acceptEditor()
 			res = KexiValidator::Error;
 
 			//now: there might be called cancelEditor() in updateRowEditBuffer() handler,
-			//if this is true, d->pEditor is NULL.
+			//if this is true, m_editor is NULL.
 
-			if (d->pEditor && m_data->result()->column>=0 && m_data->result()->column<columns()) {
-				//move to faulty column (if d->pEditor is not cleared)
-				setCursor(d->curRow, m_data->result()->column);
+			if (m_editor && m_data->result()->column>=0 && m_data->result()->column<columns()) {
+				//move to faulty column (if m_editor is not cleared)
+				setCursorPosition(m_curRow, m_data->result()->column);
 			}
 			if (!m_data->result()->msg.isEmpty()) {
 				if (m_data->result()->desc.isEmpty())
@@ -3329,8 +3415,8 @@ bool KexiTableView::acceptEditor()
 
 	if (res == KexiValidator::Ok) {
 		removeEditor();
-		emit itemChanged(d->pCurrentItem, d->curRow, d->curCol, d->pCurrentItem->at(d->curCol));
-		emit itemChanged(d->pCurrentItem, d->curRow, d->curCol);
+		emit itemChanged(m_currentItem, m_curRow, m_curCol, m_currentItem->at(m_curCol));
+		emit itemChanged(m_currentItem, m_curRow, m_curCol);
 	}
 	d->inside_acceptEditor = false;
 	if (res == KexiValidator::Ok) {
@@ -3338,17 +3424,17 @@ bool KexiTableView::acceptEditor()
 			acceptRowEdit();
 		return true;
 	}
-	if (d->pEditor) {
-		//allow to edit the cell again, (if d->pEditor is not cleared)
+	if (m_editor) {
+		//allow to edit the cell again, (if m_editor is not cleared)
 		startEditCurrentCell(newval.type()==QVariant::String ? newval.toString() : QString::null);
-		d->pEditor->setFocus();
+		m_editor->setFocus();
 	}
 	return false;
 }
 
 void KexiTableView::cancelEditor()
 {
-	if (!d->pEditor)
+	if (!m_editor)
 		return;
 
 	removeEditor();
@@ -3356,7 +3442,7 @@ void KexiTableView::cancelEditor()
 
 bool KexiTableView::acceptRowEdit()
 {
-	if (!d->rowEditing)
+	if (!m_rowEditing)
 		return true;
 	if (d->inside_acceptEditor) {
 		d->internal_acceptsRowEditAfterCellAccepting = true;
@@ -3370,12 +3456,12 @@ bool KexiTableView::acceptRowEdit()
 	bool success = true;
 //	bool allow = true;
 //	int faultyColumn = -1; // will be !=-1 if cursor has to be moved to that column
-	const bool inserting = d->newRowEditing;
+	const bool inserting = m_newRowEditing;
 //	QString msg, desc;
-//	bool inserting = d->pInsertItem && d->pInsertItem==d->pCurrentItem;
+//	bool inserting = m_insertItem && m_insertItem==m_currentItem;
 
-	if (m_data->rowEditBuffer()->isEmpty() && !d->newRowEditing) {
-/*		if (d->newRowEditing) {
+	if (m_data->rowEditBuffer()->isEmpty() && !m_newRowEditing) {
+/*		if (m_newRowEditing) {
 			cancelRowEdit();
 			kdDebug() << "-- NOTHING TO INSERT!!!" << endl;
 			return true;
@@ -3385,23 +3471,23 @@ bool KexiTableView::acceptRowEdit()
 //		}
 	}
 	else {//not empty edit buffer or new row to insert:
-		if (d->newRowEditing) {
-//			emit aboutToInsertRow(d->pCurrentItem, m_data->rowEditBuffer(), success, &faultyColumn);
+		if (m_newRowEditing) {
+//			emit aboutToInsertRow(m_currentItem, m_data->rowEditBuffer(), success, &faultyColumn);
 //			if (success) {
 			kdDebug() << "-- INSERTING: " << endl;
 			m_data->rowEditBuffer()->debug();
-			success = m_data->saveNewRow(*d->pCurrentItem);
+			success = m_data->saveNewRow(*m_currentItem);
 //				if (!success) {
 //				}
 //			}
 		}
 		else {
-//			emit aboutToUpdateRow(d->pCurrentItem, m_data->rowEditBuffer(), success, &faultyColumn);
+//			emit aboutToUpdateRow(m_currentItem, m_data->rowEditBuffer(), success, &faultyColumn);
 			if (success) {
 				//accept changes for this row:
 				kdDebug() << "-- UPDATING: " << endl;
 				m_data->rowEditBuffer()->debug();
-				success = m_data->saveRowChanges(*d->pCurrentItem);//, &msg, &desc, &faultyColumn);
+				success = m_data->saveRowChanges(*m_currentItem);//, &msg, &desc, &faultyColumn);
 //				if (!success) {
 //				}
 			}
@@ -3410,26 +3496,26 @@ bool KexiTableView::acceptRowEdit()
 
 	if (success) {
 		//editing is finished:
-		d->rowEditing = false;
-		d->newRowEditing = false;
+		m_rowEditing = false;
+		m_newRowEditing = false;
 		//indicate on the vheader that we are not editing
-		d->pVerticalHeader->setEditRow(-1);
+		m_verticalHeader->setEditRow(-1);
 		//redraw
-		updateRow(d->curRow);
+		updateRow(m_curRow);
 
 		kdDebug() << "EDIT ROW ACCEPTED:" << endl;
-		/*debug*/itemAt(d->curRow);
+		/*debug*/itemAt(m_curRow);
 
 		if (inserting) {
-//			emit rowInserted(d->pCurrentItem);
+//			emit rowInserted(m_currentItem);
 			//update navigator's data
-			d->navPanel->setRecordCount(rows());
+			m_navPanel->setRecordCount(rows());
 		}
 		else {
-//			emit rowUpdated(d->pCurrentItem);
+//			emit rowUpdated(m_currentItem);
 		}
 
-		emit rowEditTerminated(d->curRow);
+		emit rowEditTerminated(m_curRow);
 	}
 	else {
 //		if (!allow) {
@@ -3440,7 +3526,7 @@ bool KexiTableView::acceptRowEdit()
 //		}
 		if (m_data->result()->column>=0 && m_data->result()->column<columns()) {
 			//move to faulty column
-			setCursor(d->curRow, m_data->result()->column);
+			setCursorPosition(m_curRow, m_data->result()->column);
 		}
 		if (m_data->result()->desc.isEmpty())
 			KMessageBox::sorry(this, m_data->result()->msg);
@@ -3453,47 +3539,62 @@ bool KexiTableView::acceptRowEdit()
 
 	return success;
 }
+#endif //moved
+
+//reimpl.
+void KexiTableView::removeEditor()
+{
+	if (!m_editor)
+		return;
+	KexiDataAwareObjectInterface::removeEditor();
+
+//moved	m_editor->hide();
+//moved	m_editor = 0;
+	viewport()->setFocus();
+}
 
 void KexiTableView::slotRowRepaintRequested(KexiTableItem& item)
 {
 	updateRow( m_data->findRef(&item) );
 }
 
+/*moved
 void KexiTableView::cancelRowEdit()
 {
-	CHECK_DATA_;
-	if (!d->rowEditing)
+	if (!hasData())
+		return;
+	if (!m_rowEditing)
 		return;
 	cancelEditor();
-	d->rowEditing = false;
+	m_rowEditing = false;
 	//indicate on the vheader that we are not editing
-	d->pVerticalHeader->setEditRow(-1);
-	if (d->newRowEditing) {
-		d->newRowEditing = false;
+	m_verticalHeader->setEditRow(-1);
+	if (m_newRowEditing) {
+		m_newRowEditing = false;
 		//remove current edited row (it is @ the end of list)
 		m_data->removeLast();
 		//current item is now empty, last row
-		d->pCurrentItem = d->pInsertItem;
+		m_currentItem = m_insertItem;
 		//update visibility
-		d->pVerticalHeader->removeLabel(false); //-1 label
+		m_verticalHeader->removeLabel(false); //-1 label
 //		updateContents(columnPos(0), rowPos(rows()), 
-//			viewport()->width(), d->rowHeight*3 + (d->navPanel ? d->navPanel->height() : 0)*3 );
+//			viewport()->width(), d->rowHeight*3 + (m_navPanel ? m_navPanel->height() : 0)*3 );
 		updateContents(); //js: above didnt work well so we do that dirty
 //TODO: still doesn't repaint properly!!
 		QSize s(tableSize());
 		resizeContents(s.width(), s.height());
-		d->pVerticalHeader->update();
+		m_verticalHeader->update();
 		//--no cancel action is needed for datasource, 
 		//  because the row was not yet stored.
 	}
 
 	m_data->clearRowEditBuffer();
-	updateRow(d->curRow);
+	updateRow(m_curRow);
 	
 //! \todo (js): cancel changes for this row!
 	kdDebug(44021) << "EDIT ROW CANCELLED." << endl;
 
-	emit rowEditTerminated(d->curRow);
+	emit rowEditTerminated(m_curRow);
 }
 
 bool KexiTableView::acceptsRowEditAfterCellAccepting() const
@@ -3506,17 +3607,6 @@ void KexiTableView::setAcceptsRowEditAfterCellAccepting(bool set)
 	d->acceptsRowEditAfterCellAccepting = set;
 }
 
-/*void KexiTableView::setInsertionPolicy(InsertionPolicy policy)
-{
-	d->insertionPolicy = policy;
-//	updateContextMenu();
-}
-
-KexiTableView::InsertionPolicy KexiTableView::insertionPolicy() const
-{
-	return d->insertionPolicy;
-}*/
-
 void KexiTableView::setDeletionPolicy(DeletionPolicy policy)
 {
 	d->deletionPolicy = policy;
@@ -3526,30 +3616,30 @@ void KexiTableView::setDeletionPolicy(DeletionPolicy policy)
 KexiTableView::DeletionPolicy KexiTableView::deletionPolicy() const
 {
 	return d->deletionPolicy;
-}
+}*/
 
 #if 0
 bool KexiTableView::updateContextMenu()
 {
-  // delete d->pContextMenu;
-  //  d->pContextMenu = 0L;
-//  d->pContextMenu->clear();
-//	if(d->pCurrentItem && d->pCurrentItem->isInsertItem())
+  // delete m_popup;
+  //  m_popup = 0L;
+//  m_popup->clear();
+//	if(m_currentItem && m_currentItem->isInsertItem())
 //	return;
 
 //	if(d->additionPolicy != NoAdd || d->deletionPolicy != NoDelete)
 //	{
-//		d->pContextMenu = new QPopupMenu(this);
-  d->pContextMenu->setItemVisible(d->menu_id_addRecord, d->additionPolicy != NoAdd);
+//		m_popup = new QPopupMenu(this);
+  m_popup->setItemVisible(d->menu_id_addRecord, d->additionPolicy != NoAdd);
 #if 0 //todo(js)
-  d->pContextMenu->setItemVisible(d->menu_id_removeRecord, d->deletionPolicy != NoDelete
-	&& d->pCurrentItem && !d->pCurrentItem->isInsertItem());
+  m_popup->setItemVisible(d->menu_id_removeRecord, d->deletionPolicy != NoDelete
+	&& m_currentItem && !m_currentItem->isInsertItem());
 #else
-  d->pContextMenu->setItemVisible(d->menu_id_removeRecord, d->deletionPolicy != NoDelete
-	&& d->pCurrentItem);
+  m_popup->setItemVisible(d->menu_id_removeRecord, d->deletionPolicy != NoDelete
+	&& m_currentItem);
 #endif
-  for (int i=0; i<(int)d->pContextMenu->count(); i++) {
-	if (d->pContextMenu->isItemVisible( d->pContextMenu->idAt(i) ))
+  for (int i=0; i<(int)m_popup->count(); i++) {
+	if (m_popup->isItemVisible( m_popup->idAt(i) ))
 	  return true;
   }
   return false;
@@ -3566,18 +3656,18 @@ void KexiTableView::slotAutoScroll()
 	switch(d->scrollDirection)
 	{
 		case ScrollDown:
-			setCursor(d->curRow + 1, d->curCol);
+			setCursorPosition(m_curRow + 1, m_curCol);
 			break;
 
 		case ScrollUp:
-			setCursor(d->curRow - 1, d->curCol);
+			setCursorPosition(m_curRow - 1, m_curCol);
 			break;
 		case ScrollLeft:
-			setCursor(d->curRow, d->curCol - 1);
+			setCursorPosition(m_curRow, m_curCol - 1);
 			break;
 
 		case ScrollRight:
-			setCursor(d->curRow, d->curCol + 1);
+			setCursorPosition(m_curRow, m_curCol + 1);
 			break;
 	}
 }
@@ -3648,11 +3738,12 @@ KexiTableView::print(KPrinter &/*printer*/)
 }
 #endif
 
+/*moved
 KexiTableRM* KexiTableView::verticalHeader() const
 {
-	return d->pVerticalHeader; 
+	return m_verticalHeader; 
 }
-
+*/
 QString KexiTableView::columnCaption(int colNum) const
 {
 	return d->pTopHeader->label(colNum);
@@ -3667,7 +3758,8 @@ KexiDB::Field* KexiTableView::field(int colNum) const
 
 void KexiTableView::adjustColumnWidthToContents(int colNum)
 {
-	CHECK_DATA_;
+	if (!hasData())
+		return;
 	if (columns()<=colNum || colNum < -1)
 		return;
 
@@ -3744,7 +3836,7 @@ void KexiTableView::maximizeColumnsWidth( const QValueList<int> &columnList )
 		}
 	}
 	updateContents();
-	editorShowFocus( d->curRow, d->curCol );
+	editorShowFocus( m_curRow, m_curCol );
 }
 
 void KexiTableView::adjustHorizontalHeaderSize()
@@ -3757,20 +3849,21 @@ void KexiTableView::setColumnStretchEnabled( bool set, int colNum )
 	d->pTopHeader->setStretchEnabled( set, colNum );
 }
 
+/*moved
 int KexiTableView::currentColumn() const
-{ 
-	return d->curCol;
+{
+	return m_curCol;
 }
 
 int KexiTableView::currentRow() const
 {
-	return d->curRow;
+	return m_curRow;
 }
 
 KexiTableItem *KexiTableView::selectedItem() const
 {
-	return d->pCurrentItem;
-}
+	return m_currentItem;
+}*/
 
 //void KexiTableView::setBackgroundAltering(bool altering) { d->bgAltering = altering; }
 //bool KexiTableView::backgroundAltering()  const { return d->bgAltering; }
@@ -3804,8 +3897,8 @@ void KexiTableView::setFullRowSelectionEnabled(bool set)
 		d->rowHeight += 1;
 	}
 	d->fullRowSelectionEnabled = set;
-	if (d->pVerticalHeader)
-		d->pVerticalHeader->setCellHeight(d->rowHeight);
+	if (m_verticalHeader)
+		m_verticalHeader->setCellHeight(d->rowHeight);
 	if (d->pTopHeader) {
 		setMargins(
 			QMIN(d->pTopHeader->sizeHint().height(), d->rowHeight),
@@ -3816,18 +3909,18 @@ void KexiTableView::setFullRowSelectionEnabled(bool set)
 */
 bool KexiTableView::verticalHeaderVisible() const
 {
-	return d->pVerticalHeader->isVisible();
+	return m_verticalHeader->isVisible();
 }
 
 void KexiTableView::setVerticalHeaderVisible(bool set)
 {
 	int left_width;
 	if (set) {
-		d->pVerticalHeader->show();
+		m_verticalHeader->show();
 		left_width = QMIN(d->pTopHeader->sizeHint().height(), d->rowHeight);
 	}
 	else {
-		d->pVerticalHeader->hide();
+		m_verticalHeader->hide();
 		left_width = 0;
 	}
 	setMargins( left_width, horizontalHeaderVisible() ? d->pTopHeader->sizeHint().height() : 0, 0, 0);
@@ -3849,7 +3942,7 @@ void KexiTableView::setHorizontalHeaderVisible(bool set)
 		d->pTopHeader->hide();
 		top_height = 0;
 	}
-	setMargins( verticalHeaderVisible() ? d->pVerticalHeader->width() : 0, top_height, 0, 0);
+	setMargins( verticalHeaderVisible() ? m_verticalHeader->width() : 0, top_height, 0, 0);
 }
 
 void KexiTableView::triggerUpdate()
@@ -3860,6 +3953,7 @@ void KexiTableView::triggerUpdate()
 //		d->pUpdateTimer->start(200, true);
 }
 
+/*moved
 int KexiTableView::columnType(int col) const
 {
 	return (m_data && col>=0 && col<columns()) ? m_data->column(col)->field()->type() : KexiDB::Field::InvalidType;
@@ -3870,7 +3964,7 @@ bool KexiTableView::columnEditable(int col) const
 	return (m_data && col>=0 && col<columns()) ? !m_data->column(col)->readOnly() : false;
 }
 
-QVariant KexiTableView::columnDefaultValue(int /*col*/) const
+QVariant KexiTableView::columnDefaultValue(int col) const
 {
 	return QVariant(0);
 //TODO(js)	
@@ -3892,7 +3986,8 @@ bool KexiTableView::isReadOnly() const
 {
 	if (d->readOnly == 1 || d->readOnly == 0)
 		return (bool)d->readOnly;
-	CHECK_DATA(true);
+	if (!hasData())
+		return true;
 	return m_data->isReadOnly();
 }
 
@@ -3901,8 +3996,8 @@ void KexiTableView::setInsertingEnabled(bool set)
 	if (isInsertingEnabled() == set || (m_data && !m_data->isInsertingEnabled() && set))
 		return; //not allowed!
 	d->insertingEnabled = (set ? 1 : 0);
-	d->navPanel->setInsertingEnabled(set);
-	d->pVerticalHeader->showInsertRow(set);
+	m_navPanel->setInsertingEnabled(set);
+	m_verticalHeader->showInsertRow(set);
 	if (set)
 		setReadOnly(false);
 	update();
@@ -3935,9 +4030,8 @@ bool KexiTableView::isDeleteEnabled() const
 
 bool KexiTableView::rowEditing() const
 {
-	return d->rowEditing;
+	return m_rowEditing;
 }
-
 bool KexiTableView::contextMenuEnabled() const
 {
 	return d->contextMenuEnabled;
@@ -3947,27 +4041,29 @@ void KexiTableView::setContextMenuEnabled(bool set)
 {
 	d->contextMenuEnabled = set;
 }
+*/
 
 void KexiTableView::setHBarGeometry( QScrollBar & hbar, int x, int y, int w, int h )
 {
 /*todo*/
 	kdDebug(44021)<<"KexiTableView::setHBarGeometry"<<endl;
 	if (d->appearance.navigatorEnabled) {
-		d->navPanel->setHBarGeometry( hbar, x, y, w, h );
+		m_navPanel->setHBarGeometry( hbar, x, y, w, h );
 	}
 	else {
 		hbar.setGeometry( x , y, w, h );
 	}
 }
 
+/*moved
 void KexiTableView::setFilteringEnabled(bool set)
 {
-	d->filteringEnabled = set;
+	d->isFilteringEnabled = set;
 }
 
 bool KexiTableView::filteringEnabled() const
 {
-	return d->filteringEnabled;
+	return d->isFilteringEnabled;
 }
 
 void KexiTableView::setSpreadSheetMode()
@@ -3986,6 +4082,16 @@ void KexiTableView::setSpreadSheetMode()
 bool KexiTableView::spreadSheetMode() const
 {
 	return d->spreadSheetMode;
+}
+*/
+
+void KexiTableView::setSpreadSheetMode()
+{
+	KexiDataAwareObjectInterface::setSpreadSheetMode();
+	//copy m_navPanelEnabled flag
+	Appearance a = d->appearance;
+	a.navigatorEnabled = m_navPanelEnabled;
+	setAppearance( a );
 }
 
 bool KexiTableView::scrollbarToolTipsEnabled() const
@@ -4046,13 +4152,13 @@ void KexiTableView::addNewRecordRequested()
 {
 	if (!isInsertingEnabled())
 		return;
-	if (d->rowEditing) {
+	if (m_rowEditing) {
 		if (!acceptRowEdit())
 			return;
 	}
-/*	if (d->pEditor) {
+/*	if (m_editor) {
 		//already editing!
-		d->pEditor->setFocus();
+		m_editor->setFocus();
 		return;
 	}*/
 	setFocus();
@@ -4071,16 +4177,16 @@ bool KexiTableView::eventFilter( QObject *o, QEvent *e )
 			int k = ke->key();
 			//cell editor's events:
 			//try to handle the event @ editor's level
-			KexiTableEdit *edit = editor( d->curCol );
-			if (edit && edit->handleKeyPress(ke, d->pEditor==edit)) {
+			KexiTableEdit *edit = editor( m_curCol );
+			if (edit && edit->handleKeyPress(ke, m_editor==edit)) {
 				ke->accept();
 				return true;
 			}
-			else if (d->pEditor && (o==d->pEditor || o==d->pEditor->view())) {
+			else if (m_editor && (o==m_editor || o==m_editor->view())) {
 				if (   (k==Key_Tab && (k==NoButton || k==ShiftButton))
 					|| (k==Key_Enter || k==Key_Return || k==Key_Up || k==Key_Down) 
-					|| (k==Key_Left && d->pEditor->cursorAtStart())
-					|| (k==Key_Right && d->pEditor->cursorAtEnd())
+					|| (k==Key_Left && m_editor->cursorAtStart())
+					|| (k==Key_Right && m_editor->cursorAtEnd())
 					) {
 					keyPressEvent(ke);
 					if (ke->isAccepted())
@@ -4103,8 +4209,7 @@ bool KexiTableView::eventFilter( QObject *o, QEvent *e )
 	else if (o==horizontalScrollBar()) {
 		if ((e->type()==QEvent::Show && !horizontalScrollBar()->isVisible()) 
 			|| (e->type()==QEvent::Hide && horizontalScrollBar()->isVisible())) {
-			QSize s(tableSize());
-			resizeContents(s.width(), s.height());
+			updateWidgetContentsSize();
 		}
 	}
 	else if (e->type()==QEvent::Leave) {
@@ -4137,7 +4242,7 @@ void KexiTableView::vScrollBarValueChanged(int v)
 	kdDebug(44021) << "VCHANGED: " << v << " / " << horizontalScrollBar()->maxValue() <<  endl;
 	
 //	updateContents();
-	d->pVerticalHeader->update(); //<-- dirty but needed
+	m_verticalHeader->update(); //<-- dirty but needed
 
 	if (d->scrollbarToolTipsEnabled) {
 		QRect r = verticalScrollBar()->sliderRect();
@@ -4168,7 +4273,7 @@ void KexiTableView::vScrollBarValueChanged(int v)
 		}
 	}
 	//update bottom view region
-	if (d->navPanel && (contentsHeight() - contentsY() - clipper()->height()) <= QMAX(d->rowHeight,d->navPanel->height())) {
+	if (m_navPanel && (contentsHeight() - contentsY() - clipper()->height()) <= QMAX(d->rowHeight,m_navPanel->height())) {
 		slotUpdate();
 		triggerUpdate();
 	}
@@ -4197,12 +4302,13 @@ void KexiTableView::scrollBarTipTimeout()
 void KexiTableView::slotTopHeaderSizeChange( 
 	int /*section*/, int /*oldSize*/, int /*newSize*/ )
 {
-	editorShowFocus( d->curRow, d->curCol );
+	editorShowFocus( m_curRow, m_curCol );
 }
 
+/*moved
 const QVariant* KexiTableView::bufferedValueAt(int col)
 {
-	if (d->rowEditing && m_data->rowEditBuffer())
+	if (m_rowEditing && m_data->rowEditBuffer())
 	{
 		KexiTableViewColumn* tvcol = m_data->column(col);
 		if (tvcol->isDBAware) {
@@ -4211,14 +4317,15 @@ const QVariant* KexiTableView::bufferedValueAt(int col)
 			if (cv)
 				return cv;
 
-			return &d->pCurrentItem->at(col);
+			return &m_currentItem->at(col);
 		}
 		const QVariant *cv = m_data->rowEditBuffer()->at( tvcol->field()->name() );
 		if (cv)
 			return cv;
 	}
-	return &d->pCurrentItem->at(col);
+	return &m_currentItem->at(col);
 }
+*/
 
 void KexiTableView::setBottomMarginInternal(int pixels)
 {
@@ -4243,8 +4350,8 @@ void KexiTableView::setAppearance(const Appearance& a)
 	else {
 		d->rowHeight += 1;
 	}
-	if (d->pVerticalHeader)
-		d->pVerticalHeader->setCellHeight(d->rowHeight);
+	if (m_verticalHeader)
+		m_verticalHeader->setCellHeight(d->rowHeight);
 	if (d->pTopHeader) {
 		setMargins(
 			QMIN(d->pTopHeader->sizeHint().height(), d->rowHeight),
@@ -4253,9 +4360,9 @@ void KexiTableView::setAppearance(const Appearance& a)
 //	}
 
 	if(!a.navigatorEnabled)
-		d->navPanel->hide();
+		m_navPanel->hide();
 	else
-		d->navPanel->show();
+		m_navPanel->show();
 //	}
 
 	d->highlightedRow = -1;
@@ -4289,6 +4396,37 @@ void KexiTableView::setHighlightedRow(int row)
 KexiTableItem *KexiTableView::highlightedItem() const
 {
 	return m_data->at(d->highlightedRow);
+}
+
+void KexiTableView::connectCellSelectedSignal(const QObject* receiver, const char* intIntMember)
+{
+	connect(this, SIGNAL(cellSelected(int,int)), receiver, intIntMember);
+}
+
+void KexiTableView::connectRowEditStartedSignal(const QObject* receiver, 
+	const char* intMember)
+{
+	connect(this, SIGNAL(rowEditStarted(int)), receiver, intMember);
+}
+
+void KexiTableView::connectRowEditTerminatedSignal(const QObject* receiver, const char* voidMember)
+{
+	connect(this, SIGNAL(rowEditTerminated()), receiver, voidMember);
+}
+
+void KexiTableView::connectReloadActionsSignal(const QObject* receiver, const char* voidMember)
+{
+	connect(this, SIGNAL(reloadActions()), receiver, voidMember);
+}
+
+void KexiTableView::connectDataSetSignal(const QObject* receiver, const char* kexiTableViewDataMember)
+{
+	connect(this, SIGNAL(dataSet(KexiTableViewData*)), receiver, kexiTableViewDataMember);
+}
+
+void KexiTableView::connectToReloadDataSlot(const QObject* sender, const char* voidSignal)
+{
+	connect(sender, voidSignal, this, SLOT(reloadData()));
 }
 
 #include "kexitableview.moc"

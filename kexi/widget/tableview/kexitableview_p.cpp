@@ -95,39 +95,38 @@ KexiTableViewPrivate::KexiTableViewPrivate(KexiTableView* t)
 {
 	clearVariables();
 	tv = t;
-	pInsertItem = 0;
+//moved	pInsertItem = 0;
 
 	editOnDoubleClick = true;
 	pBufferPm = 0;
-//	deletionPolicy = KexiTableView::NoDelete;
-	deletionPolicy = KexiTableView::AskDelete;
+//moved	deletionPolicy = KexiTableView::AskDelete;
 	disableDrawContents = false;
-	readOnly = -1; //don't know
-	insertingEnabled = -1; //don't know
+//moved	readOnly = -1; //don't know
+//moved	insertingEnabled = -1; //don't know
 	
-	contentsMousePressEvent_dblClick = false;
-	isSortingEnabled = true;
+//moved	contentsMousePressEvent_dblClick = false;
+//moved	isSortingEnabled = true;
 	navigatorEnabled = true;
 	contextMenuEnabled = true;
-	filteringEnabled = true;
-	navPanel = 0;
+//moved	filteringEnabled = true;
+//moved	navPanel = 0;
 	skipKeyPress = false;
 	vScrollBarValueChanged_enabled = true;
 	scrollbarToolTipsEnabled = true;
 	scrollBarTipTimerCnt = 0;
 	scrollBarTip = 0;
-	inside_acceptEditor = false;
-	internal_acceptsRowEditAfterCellAccepting = false;
-	acceptsRowEditAfterCellAccepting = false;
-	emptyRowInsertingEnabled = false;
-	dragIndicatorLine = -1;
+//moved	inside_acceptEditor = false;
+//moved	internal_acceptsRowEditAfterCellAccepting = false;
+//moved	acceptsRowEditAfterCellAccepting = false;
+//moved	emptyRowInsertingEnabled = false;
+//moved	dragIndicatorLine = -1;
 	rowWillBeDeleted = -1;
-	dropsAtRowEnabled = false;
-	initDataContentsOnShow = false;
-	cursorPositionSetExplicityBeforeShow = false;
-	pVerticalHeaderAlreadyAdded = false;
+//	dropsAtRowEnabled = false;
+//moved	initDataContentsOnShow = false;
+//moved	cursorPositionSetExplicityBeforeShow = false;
+	verticalHeaderAlreadyAdded = false;
 	ensureCellVisibleOnShow = QPoint(-1,-1);
-	spreadSheetMode = false;
+//moved	spreadSheetMode = false;
 	internal_bottomMargin = tv->horizontalScrollBar()->sizeHint().height()/2;
 	highlightedRow = -1;
 	moveCursorOnMouseRelease = false;
@@ -136,23 +135,23 @@ KexiTableViewPrivate::KexiTableViewPrivate(KexiTableView* t)
 KexiTableViewPrivate::~KexiTableViewPrivate()
 {
 	delete pBufferPm;
-	delete pInsertItem;
-	delete pRowEditBuffer;
+//moved	delete pInsertItem;
+//moved	delete pRowEditBuffer;
 	delete scrollBarTip;
 }
 
 void KexiTableViewPrivate::clearVariables()
 {
 	// Initialize variables
-	pEditor = 0;
+//moved	pEditor = 0;
 //	numRows = 0;
-	curRow = -1;
-	curCol = -1;
-	pCurrentItem=0;
-	pRowEditBuffer=0;
+//moved	curRow = -1;
+//moved	curCol = -1;
+//moved	pCurrentItem=0;
+//moved	pRowEditBuffer=0;
 //	pInsertItem = 0;
-	rowEditing = false;
-	newRowEditing = false;
+//moved	rowEditing = false;
+//moved	newRowEditing = false;
 //	sortedColumn = -1;
 //	sortOrder = true;
 //	recordIndicator = false;

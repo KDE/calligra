@@ -83,6 +83,9 @@ class KexiAlterTableDialog : public KexiDataTable
 		 Sets primary key icon and value for buffer, and deselects it from previous pkey's row. */
 		void setPrimaryKey(KexiPropertyBuffer &buf, bool set);
 
+		//! helper
+		KexiTableView *m_view;
+
 	protected slots:
 		/*! Equivalent to updateActions(false). Called on row insert/delete 
 		 in a KexiTableViewPropertyBuffer. */

@@ -18,14 +18,16 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include "kexiformview.h"
+
 #include <qobjectlist.h>
 
-#include <form.h>
-#include <formIO.h>
-#include <formmanager.h>
-#include <objecttree.h>
-#include <objpropbuffer.h>
-#include <container.h>
+#include <formeditor/form.h>
+#include <formeditor/formIO.h>
+#include <formeditor/formmanager.h>
+#include <formeditor/objecttree.h>
+#include <formeditor/objpropbuffer.h>
+#include <formeditor/container.h>
 
 #include <kexidialogbase.h>
 #include <kexidatasourcewizard.h>
@@ -36,130 +38,30 @@
 #include <tableview/kexitableviewdata.h>
 
 #include "kexidbform.h"
-#include "kexiformview.h"
+#include "kexiformscrollview.h"
 
 #define NO_DSWIZARD
 
-KexiDataProvider::KexiDataProvider()
- : KexiDataItemChangesListener()
- , m_mainWidget(0)
-{
-}
-
-KexiDataProvider::~KexiDataProvider()
-{
-}
-
-void KexiDataProvider::setMainWidget(QWidget* mainWidget)
-{
-	m_mainWidget = mainWidget;
-	m_dataItems.clear();
-	m_usedDataSources.clear();
-	m_fieldNumbersForDataItems.clear();
-	if (!m_mainWidget)
-		return;
-
-	//find widgets whose will work as data items
-	QObjectList *l = m_mainWidget->queryList( "QWidget" );
-	QObjectListIt it( *l );
-	QObject *obj;
-	QDict<char> tmpSources;
-	for ( ; (obj = it.current()) != 0; ++it ) {
-		if (dynamic_cast<KexiDataItemInterface*>(obj)) {
-			QString dataSource( dynamic_cast<KexiDataItemInterface*>(obj)->dataSource().lower() );
-			if (!dataSource.isEmpty()) {
-				kexipluginsdbg << obj->name() << endl;
-				m_dataItems.append( dynamic_cast<KexiDataItemInterface*>(obj) );
-				dynamic_cast<KexiDataItemInterface*>(obj)->installListener( this );
-				tmpSources.replace( dataSource, (char*)1 );
-			}
-		}
-	}
-	delete l;
-	//we've got now a set (unique list) of field names in tmpSources
-	//remember it in m_usedDataSources
-	for (QDictIterator<char> it(tmpSources); it.current(); ++it) {
-		m_usedDataSources += it.currentKey();
-	}
-	//fill m_fieldNumbersForDataItems mapping from data item to field number
-	//(needed for fillDataItems)
-	for (QPtrListIterator<KexiDataItemInterface> it(m_dataItems); it.current(); ++it) {
-		m_fieldNumbersForDataItems.insert( it.current(), 
-			m_usedDataSources.findIndex(it.current()->dataSource().lower()) );
-	}
-}
-
-void KexiDataProvider::fillDataItems(KexiTableItem& row)//KexiDB::Cursor& cursor)
-{
-	for (QMapConstIterator<KexiDataItemInterface*,uint> it = m_fieldNumbersForDataItems.constBegin(); 
-		it!=m_fieldNumbersForDataItems.constEnd(); ++it)
-	{
-		it.key()->setValue( row.at(it.data()) );
-//		it.key()->setValue( cursor.value(it.data()) );
-	}
-}
-
-void KexiDataProvider::valueChanged(KexiDataItemInterface* item)
-{
-}
-
-//////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
-
-KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
- : KexiScrollView(parent, preview)
-{
-	if(preview)
-		setRecordNavigatorVisible(true);
-	connect(this, SIGNAL(resizingStarted()), this, SLOT(slotResizingStarted()));
-}
-
-KexiFormScrollView::~KexiFormScrollView()
-{
-}
-
-void
-KexiFormScrollView::show()
-{
-	KexiScrollView::show();
-
-	//now get resize mode settings for entire form
-	if (m_preview) {
-		KexiFormView* fv = dynamic_cast<KexiFormView*>(parent());
-		int resizeMode = fv ? fv->resizeMode() : KexiFormView::ResizeAuto;
-		if (resizeMode == KexiFormView::ResizeAuto)
-			setResizePolicy(AutoOneFit);
-	}
-}
-
-void
-KexiFormScrollView::slotResizingStarted()
-{
-	if(m_form && m_form->manager())
-		setSnapToGrid(m_form->manager()->snapWidgetsToGrid(), m_form->gridX(), m_form->gridY());
-	else
-		setSnapToGrid(false);
-}
-
-//////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
-
-KexiFormView::KexiFormView(KexiMainWindow *win, QWidget *parent, const char *name, 
-	KexiDB::Connection *conn)
- : KexiViewBase(win, parent, name), m_buffer(0), m_conn(conn)
+//KexiFormView::KexiFormView(KexiMainWindow *win, QWidget *parent, const char *name, 
+//	KexiDB::Connection *conn)
+// : KexiViewBase(win, parent, name), 
+KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent, const char *name, bool dbAware)
+ : KexiDataAwareView( mainWin, parent, name )
+ , m_buffer(0)
+//moved m_conn(conn)
  , m_resizeMode(KexiFormView::ResizeDefault)
  , m_provider(0)
-// , m_cursor(0)
  , m_query(0)
- , m_data(0)
- , m_currentRow(0)
- , m_currentRowNumber(-1)
+//moved , m_data(0)
+//moved , m_currentRow(0)
+//moved , m_currentRowNumber(-1)
 {
 	QHBoxLayout *l = new QHBoxLayout(this);
 	l->setAutoAdd(true);
 
 	m_scrollView = new KexiFormScrollView(this, viewMode()==Kexi::DataViewMode);
-	setViewWidget(m_scrollView);
+
+//moved	setViewWidget(m_scrollView);
 //	m_scrollView->show();
 
 	m_dbform = new KexiDBForm(m_scrollView->viewport(), name/*, conn*/);
@@ -170,7 +72,7 @@ KexiFormView::KexiFormView(KexiMainWindow *win, QWidget *parent, const char *nam
 //	initForm();
 
 	if (viewMode()==Kexi::DataViewMode) {
-		m_scrollView->recordNavigator()->setRecordHandler( this );
+		m_scrollView->recordNavigator()->setRecordHandler( m_scrollView );
 		m_scrollView->viewport()->setPaletteBackgroundColor(m_dbform->palette().active().background());
 		connect(formPart()->manager(), SIGNAL(noFormSelected()), SLOT(slotNoFormSelected()));
 	}
@@ -227,6 +129,8 @@ KexiFormView::KexiFormView(KexiMainWindow *win, QWidget *parent, const char *nam
 
 	initForm();
 
+	KexiDataAwareView::init( m_scrollView, m_scrollView, m_scrollView );
+
 	/// @todo skip this if ther're no borders
 //	m_dbform->resize( m_dbform->size()+QSize(m_scrollView->verticalScrollBar()->width(), m_scrollView->horizontalScrollBar()->height()) );
 }
@@ -237,7 +141,7 @@ KexiFormView::~KexiFormView()
 //		m_conn->deleteCursor(m_cursor);
 	delete m_provider;
 	delete m_query;
-	delete m_data;
+//	delete m_data;
 }
 
 KFormDesigner::Form*
@@ -371,49 +275,58 @@ KexiFormView::afterSwitchFrom(int mode)
 		m_dbform->move(0,0);
 	}
 
-	if(viewMode()==Kexi::DataViewMode) {
+	if (viewMode() == Kexi::DataViewMode) {
 //TMP!!
-		//init data source
-		QString dataSourceString = m_dbform->dataSource();
-		if (!dataSourceString.isEmpty()) {
+		initDataSource();
+	}
+	return true;
+}
+
+void KexiFormView::initDataSource()
+{
+	QString dataSourceString = m_dbform->dataSource();
+	if (dataSourceString.isEmpty())
+		return;
 /*			if (m_previousDataSourceString.lower()==dataSourceString.lower() && !m_cursor) {
-				//data source changed: delete previous cursor
-				m_conn->deleteCursor(m_cursor);
-				m_cursor = 0;
-			}*/
-			m_previousDataSourceString = dataSourceString;
-			bool ok = true;
-			//collect all data-aware widgets and create query schema
-			if (!m_provider)
-				m_provider = new KexiDataProvider();
-			m_provider->setMainWidget(m_dbform);
+			//data source changed: delete previous cursor
+			m_conn->deleteCursor(m_cursor);
+			m_cursor = 0;
+		}*/
+	m_previousDataSourceString = dataSourceString;
+	bool ok = true;
+	//collect all data-aware widgets and create query schema
+	if (!m_provider)
+		m_provider = new KexiDataProvider();
+	m_provider->setMainWidget(m_dbform);
 //			if (m_cursor)
 //				m_conn->deleteCursor(m_cursor);
-			KexiDB::Cursor *cursor;
-			delete m_query;
-			m_query = new KexiDB::QuerySchema();
-			QStringList sources( m_provider->usedDataSources() );
-			KexiDB::TableSchema *tableSchema = m_conn->tableSchema( dataSourceString );
-			ok = tableSchema != 0;
-			if (ok) {
-				for (QStringList::ConstIterator it = sources.constBegin(); it!=sources.constEnd(); ++it) {
+	KexiDB::Cursor *cursor;
+	delete m_query;
+	m_query = new KexiDB::QuerySchema();
+	QStringList sources( m_provider->usedDataSources() );
+	KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
+	KexiDB::TableSchema *tableSchema = conn->tableSchema( dataSourceString );
+	ok = tableSchema != 0;
+	if (ok) {
+		for (QStringList::ConstIterator it = sources.constBegin(); it!=sources.constEnd(); ++it) {
 /*! @todo add expression support */
-					KexiDB::Field *f = tableSchema->field(*it);
-					if (!f) {
+			KexiDB::Field *f = tableSchema->field(*it);
+			if (!f) {
 /*! @todo show error, remove this widget from the set of data widgets in provider */
-						continue;
-					}
-					m_query->addField( f );
-				}
-				cursor = m_conn->executeQuery( *m_query );//, KexiDB::Cursor::Buffered );
-				ok = cursor!=0;
+				continue;
 			}
-			if (ok) {
-				delete m_data;
+			m_query->addField( f );
+		}
+		cursor = conn->executeQuery( *m_query );//, KexiDB::Cursor::Buffered );
+		ok = cursor!=0;
+	}
+//			delete m_data;
 //! @todo PRIMITIVE!! data setting:
 //! @todo KexiTableViewData is not great name for data class here... rename/move?
-				m_data = new KexiTableViewData(cursor);
-				m_data->preloadAllRows();
+	KexiTableViewData* data = new KexiTableViewData(cursor);
+	data->preloadAllRows();
+	conn->deleteCursor(cursor);
+
 ///*! @todo few backends return result count for free! - no need to reopen() */
 //			int resultCount = -1;
 //			if (ok) {
@@ -422,27 +335,31 @@ KexiFormView::afterSwitchFrom(int mode)
 //			}
 //			if (ok)
 //				ok = ! (!m_cursor->moveFirst() && m_cursor->error());
-				m_scrollView->recordNavigator()->setRecordCount(m_data->count());
-				m_currentRow = m_data->first();
-				if (m_currentRow) {
-					m_currentRowNumber = 0;
-					m_provider->fillDataItems(*m_currentRow);
-					m_scrollView->recordNavigator()->setCurrentRecordNumber(1);
-				}
+
+	m_scrollView->setData( data, true /*owner*/ );
+/*moved
+		if (ok) {
+			m_scrollView->recordNavigator()->setRecordCount(data->count());
+			m_currentRow = m_data->first();
+			if (m_currentRow) {
+				m_currentRowNumber = 0;
+				m_provider->fillDataItems(*m_currentRow);
+				m_scrollView->recordNavigator()->setCurrentRecordNumber(1);
+			}
 //				m_provider->fillDataItems(*m_cursor);
 //				m_cursor->moveNext();
-				m_conn->deleteCursor(cursor);
-				//! @todo err message: error opening cursor
+		}
+//moved up			conn->deleteCursor(cursor);
+		if (!ok) {
+			//! @todo err message: error opening cursor
 //				m_conn->deleteCursor(m_cursor);
 //				m_cursor = 0;
-//				delete m_data;
-	//			m_data = 0;
-				delete m_query;
-				m_query = 0;
-			}
+			delete m_data;
+			m_data = 0;
+			delete m_query;
+			m_query = 0;
 		}
-	}
-	return true;
+		*/
 }
 
 void
@@ -464,7 +381,8 @@ KexiFormView::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
 	}
 	if (!storeData()) {
 		//failure: remove object's schema data to avoid garbage
-		m_conn->removeObject( s->id() );
+		KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
+		conn->removeObject( s->id() );
 		delete s;
 		return 0;
 	}
@@ -638,6 +556,7 @@ KexiFormView::resizeEvent( QResizeEvent *e )
 	m_scrollView->updateNavPanelGeometry();
 }
 
+/* moved
 void KexiFormView::moveToRecordRequested(uint r)
 {
 	if (r < 0 || r >= m_data->count())
@@ -651,43 +570,28 @@ void KexiFormView::moveToRecordRequested(uint r)
 void KexiFormView::moveToLastRecordRequested()
 {
 	moveToRecordRequested( m_data->count()-1 );
-/*	m_cursor->moveLast();
-	if (!m_cursor->eof() && !m_cursor->error()) {
-		m_provider->fillDataItems(*m_cursor);
-	}*/
 }
 
 void KexiFormView::moveToPreviousRecordRequested()
 {
 	moveToRecordRequested( QMAX(0, m_currentRowNumber-1) );
-/*	m_cursor->movePrev();
-	if (!m_cursor->bof() && !m_cursor->error()) {
-		m_provider->fillDataItems(*m_cursor);
-	}*/
 }
 
 void KexiFormView::moveToNextRecordRequested()
 {
 	moveToRecordRequested( QMIN(int(m_data->count())-1, m_currentRowNumber+1) );
-/*	m_cursor->moveNext();
-	if (!m_cursor->eof() && !m_cursor->error()) {
-		m_provider->fillDataItems(*m_cursor);
-	}*/
 }
 
 void KexiFormView::moveToFirstRecordRequested()
 {
 	moveToRecordRequested( 0 );
-/*	m_cursor->moveFirst();
-	if (!m_cursor->eof() && !m_cursor->error()) {
-		m_provider->fillDataItems(*m_cursor);
-	}*/
 }
 
 void KexiFormView::addNewRecordRequested()
 {
 	//! @todo
 }
+*/
 
 #include "kexiformview.moc"
 

@@ -228,13 +228,14 @@ public:
 	void setSorting(int column, bool ascending=true);
 
 	/*! \return the column number by which the data is sorted, 
-	 or -1 if sorting is disabled. */
+	 or -1 if sorting is disabled. In this case sortingOrder() will return 0.
+	 Initial sorted column number for data after instantiating object is -1. */
 	inline int sortedColumn() const { return m_key; }
 
-	/*! \return true if ascending sort order is set, or false if sorting is descending.
-	 This is independant of whether data is sorted now.
-	*/
-	inline bool sortingAscending() const { return m_order == 1; }
+	/*! \return 1 if ascending sort order is set, -1 id descending sort order is set,
+	 or 0 if no sorting is set. This is independant of whether data is sorted now. 
+	 Initial sorting for data after instantiating object is 0. */
+	inline int sortingOrder() const { return m_order; }
 
 	/*! Adds column \a col. 
 	 Warning: \a col will be owned by this object, and deleted on its destruction. */
@@ -323,7 +324,7 @@ public:
 	 For db-aware version, all rows are removed from a database.
 	 Row-edit buffer is cleared.
 
-	 If \a repaint is true, refreshRequested() signal 
+	 If \a repaint is true, reloadRequested() signal 
 	 is emitted after deleting (if at least one row was deleted), 
 	 so presenters can repaint their contents. 
 
@@ -349,8 +350,8 @@ public:
 //! \todo what about changing column order?
 	int autoIncrementedColumn();
 
-	//! Emits refreshRequested() signal to refresh presenters.
-	void refresh() { emit refreshRequested(); }
+	//! Emits reloadRequested() signal to reload presenters.
+	void reload() { emit reloadRequested(); }
 
 	inline KexiTableItem* at( uint index ) { return KexiTableViewDataBase::at(index); }
 	inline virtual uint count() const { return KexiTableViewDataBase::count(); }
@@ -404,8 +405,8 @@ signals:
 	//! Rows have been deleted
 	void rowsDeleted( const QValueList<int> &rowsToDelete );
 
-	//! Displayed data needs to be refreshed in all presenters.
-	void refreshRequested();
+	//! Displayed data needs to be reloaded in all presenters.
+	void reloadRequested();
 
 	void rowRepaintRequested(KexiTableItem&);
 
@@ -422,9 +423,9 @@ protected:
 	//! internal: for saveRowChanges() and saveNewRow()
 	bool saveRow(KexiTableItem& item, bool insert, bool repaint);
 
-	int			m_key;
-	short		m_order;
-	short		m_type;
+	int m_key;
+	short m_order;
+	short m_type;
 	static unsigned short charTable[];
 	KexiDB::RowEditBuffer *m_pRowEditBuffer;
 	KexiDB::Cursor *m_cursor;
@@ -439,6 +440,10 @@ protected:
 
 	bool m_readOnly : 1;
 	bool m_insertingEnabled : 1;
+
+	/*! Used in acceptEditor() to avoid infinite recursion, 
+	 eg. when we're calling acceptRowEdit() during cell accepting phase. */
+	bool m_inside_acceptEditor : 1;
 
 	int m_autoIncrementedColumn;
 

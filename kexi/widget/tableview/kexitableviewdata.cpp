@@ -281,7 +281,8 @@ KexiTableViewData::KexiTableViewData(KexiTableViewColumnList& cols)
 void KexiTableViewData::init()
 {
 	m_key = 0;
-	m_order = 1;
+//	m_order = 1;
+	m_order = 0;
 	m_type = 1;
 	m_pRowEditBuffer = 0;
 	m_cursor = 0;
@@ -337,12 +338,14 @@ QString KexiTableViewData::dbTableName() const
 
 void KexiTableViewData::setSorting(int column, bool ascending)
 {
-	m_order = (ascending ? 1 : -1);
+//	m_order = (ascending ? 1 : -1);
 
 	if (column>=0 && column<(int)columns.count()) {
+		m_order = (ascending ? 1 : -1);
 		m_key = column;
 	} 
 	else {
+		m_order = 0;
 		m_key = -1;
 		return;
 	}
@@ -630,7 +633,7 @@ void KexiTableViewData::deleteRows( const QValueList<int> &rowsToDelete, bool re
 		last_r++;
 	}
 //DON'T CLEAR BECAUSE KexiTableViewPropertyBuffer will clear BUFFERS!
-//-->	emit refreshRequested(); //! \todo more effective?
+//-->	emit reloadRequested(); //! \todo more effective?
 	emit rowsDeleted( rowsToDelete );
 }
 
@@ -661,7 +664,7 @@ bool KexiTableViewData::deleteAllRows(bool repaint)
 	}
 
 	if (repaint)
-		emit refreshRequested();
+		emit reloadRequested();
 	return res;
 }
 

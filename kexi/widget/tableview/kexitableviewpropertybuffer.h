@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,24 +17,26 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXITABLEVIEWPROPERTYBUFFER_H
-#define KEXITABLEVIEWPROPERTYBUFFER_H
+#ifndef KexiDataAwarePropertyBuffer_H
+#define KexiDataAwarePropertyBuffer_H
 
 #include <qguardedptr.h>
 #include "kexipropertybuffer.h"
 
 class KexiViewBase;
 class KexiTableItem;
-class KexiTableView;
 class KexiTableViewData;
+class KexiDataAwareObjectInterface;
 
-/*! This helper class handles data changes of a single KexiTableView object inside 
- of KexiViewBase object.
+/*! This helper class handles data changes of a single 
+ object implementing KexiDataAwareObjectInterface (e.g. KexiTableView) inside 
+ a KexiViewBase container.
 
  It is currently used in KexiAlterTableDialog and KexiQueryDesignerGuiEditor, 
- and may be used for similar purposes, when each KexiTableView's row can be associated 
- with single KexiPropertyBuffer object, and given KexiTableView object has to inform 
- the world about currently selected row/buffer.
+ and may be used for similar purposes, when each KexiDataAwareObjectInterface's 
+ row can be associated with single KexiPropertyBuffer object, and given 
+ KexiDataAwareObjectInterface object has to inform the world about currently 
+ selected row/buffer.
 
  Following functionality is built-in:
  - auto-initializing after resetting of table view's data
@@ -45,19 +47,19 @@ class KexiTableViewData;
  - signalling via KexiVieBase::propertyBufferSwitched() that current property 
    buffer has changed (e.g. on moving to other row)
 */
-class KEXIDATATABLE_EXPORT KexiTableViewPropertyBuffer : public QObject
+class KEXIDATATABLE_EXPORT KexiDataAwarePropertyBuffer : public QObject
 {
 	Q_OBJECT
 
 	public:
-		/*! You can instantiate KexiTableViewPropertyBuffer object 
+		/*! You can instantiate KexiDataAwarePropertyBuffer object 
 		 for existing \a tableView and \a view. \a tableView can have data assigned 
-		 (KexiTableView::setData()) now but it can be done later as well 
+		 (KexiDataAwareObjectInterface::setData()) now but it can be done later as well 
 		 (but assigning data is needed for proper functionality).
 		 Any changed reassignments of table view's data will be handled automatically. */
-		KexiTableViewPropertyBuffer(KexiViewBase *view, KexiTableView* tableView);
+		KexiDataAwarePropertyBuffer(KexiViewBase *view, KexiDataAwareObjectInterface* dataObject);
 
-		virtual ~KexiTableViewPropertyBuffer();
+		virtual ~KexiDataAwarePropertyBuffer();
 
 		uint size() const;
 		KexiPropertyBuffer* currentPropertyBuffer() const;
@@ -70,8 +72,8 @@ class KEXIDATATABLE_EXPORT KexiTableViewPropertyBuffer : public QObject
 
 	signals:
 		/*! Emmited when row is deleted. 
-		 KexiTableViewData::rowDeleted() signal is usuallly used but when you're using
-		 KexiTableViewPropertyBuffer, you never know if currentPropertyBuffer() is updated. 
+		 KexiDataAwareObjectInterface::rowDeleted() signal is usuallly used but when you're using
+		 KexiDataAwarePropertyBuffer, you never know if currentPropertyBuffer() is updated. 
 		 So use this signal instead. */
 		void rowDeleted();
 	
@@ -93,7 +95,7 @@ class KEXIDATATABLE_EXPORT KexiTableViewPropertyBuffer : public QObject
 		 delete this buffer by hand but call removeCurrentPropertyBuffer() 
 		 or remove(uint) instead. 
 		 Note that buffer's parent (QObject::parent()) must be null 
-		 or qual to this KexiTableViewPropertyBuffer object, otherwise this method 
+		 or qual to this KexiDataAwarePropertyBuffer object, otherwise this method 
 		 will fail with a warning.
 		*/
 		void insert(uint row, KexiPropertyBuffer* buf, bool newOne = false);
@@ -118,13 +120,14 @@ class KEXIDATATABLE_EXPORT KexiTableViewPropertyBuffer : public QObject
 		void slotCellSelected(int, int row);
 
 		//! Called on clearing tableview's data: just clears all buffers.
-		void slotRefreshRequested();
+		void slotReloadRequested();
 
 	protected:
 		KexiPropertyBuffer::Vector m_buffers; //!< prop. buffers vector
 
 		QGuardedPtr<KexiViewBase> m_view;
-		QGuardedPtr<KexiTableView> m_tableView;
+		KexiDataAwareObjectInterface* m_dataObject;
+//		QGuardedPtr<KexiTableView> m_tableView;
 		QGuardedPtr<KexiTableViewData> m_currentTVData;
 
 		int m_row; //!< used to know if a new row is selected in slotCellSelected()

@@ -67,7 +67,7 @@ class KexiComboBoxPopup : public QFrame
 
 	protected slots:
 		void slotTVItemAccepted(KexiTableItem *item, int row, int col);
-		void slotDataRefreshRequested();
+		void slotDataReloadRequested();
 
 	protected:
 		void init();

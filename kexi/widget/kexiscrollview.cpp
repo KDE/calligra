@@ -39,7 +39,7 @@ KexiScrollView::KexiScrollView(QWidget *parent, bool preview)
  , m_widget(0)
  , m_helpFont(font())
  , m_preview(preview)
- , m_navPanel(0)
+ , m_scrollViewNavPanel(0)
 {
 	setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
 	viewport()->setPaletteBackgroundColor(colorGroup().mid());
@@ -69,8 +69,8 @@ KexiScrollView::KexiScrollView(QWidget *parent, bool preview)
 		refreshContentsSizeLater(true, true);
 //! @todo allow to hide navigator
 		updateScrollBars();
-		m_navPanel = new KexiRecordNavigator(this, leftMargin(), "nav");
-		m_navPanel->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Preferred);
+		m_scrollViewNavPanel = new KexiRecordNavigator(this, leftMargin(), "nav");
+		m_scrollViewNavPanel->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Preferred);
 	}
 }
 
@@ -88,10 +88,10 @@ KexiScrollView::setWidget(QWidget *w)
 void
 KexiScrollView::setRecordNavigatorVisible(bool visible)
 {
-	if(m_navPanel->isVisible() && !visible)
-		m_navPanel->hide();
+	if(m_scrollViewNavPanel->isVisible() && !visible)
+		m_scrollViewNavPanel->hide();
 	else if(visible)  {
-		m_navPanel->show();
+		m_scrollViewNavPanel->show();
 		updateNavPanelGeometry();
 	}
 }
@@ -146,8 +146,8 @@ KexiScrollView::refreshContentsSize()
 void
 KexiScrollView::updateNavPanelGeometry()
 {
-	if (m_navPanel)
-		m_navPanel->updateGeometry(leftMargin());
+	if (m_scrollViewNavPanel)
+		m_scrollViewNavPanel->updateGeometry(leftMargin());
 }
 
 void
@@ -322,8 +322,8 @@ KexiScrollView::setHBarGeometry( QScrollBar & hbar, int x, int y, int w, int h )
 {
 /*todo*/
 	kdDebug(44021)<<"KexiTableView::setHBarGeometry"<<endl;
-	if (m_navPanel && m_navPanel->isVisible()) {
-		m_navPanel->setHBarGeometry( hbar, x, y, w, h );
+	if (m_scrollViewNavPanel && m_scrollViewNavPanel->isVisible()) {
+		m_scrollViewNavPanel->setHBarGeometry( hbar, x, y, w, h );
 	}
 	else {
 		hbar.setGeometry( x, y, w, h );
@@ -333,7 +333,7 @@ KexiScrollView::setHBarGeometry( QScrollBar & hbar, int x, int y, int w, int h )
 KexiRecordNavigator*
 KexiScrollView::recordNavigator() const
 {
-	return m_navPanel;
+	return m_scrollViewNavPanel;
 }
 
 #include "kexiscrollview.moc"

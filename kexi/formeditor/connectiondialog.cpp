@@ -359,7 +359,7 @@ void
 ConnectionDialog::newItem()
 {
 	m_table->acceptRowEdit();
-	m_table->setCursor(m_table->rows(), 1);
+	m_table->setCursorPosition(m_table->rows(), 1);
 }
 
 void

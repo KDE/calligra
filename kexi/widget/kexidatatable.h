@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,7 +22,7 @@
 #ifndef KEXIDATATABLE_H
 #define KEXIDATATABLE_H
 
-#include <kexiviewbase.h>
+#include "kexidataawareview.h"
 
 class KexiMainWindow;
 class KexiDataTableView;
@@ -35,7 +35,12 @@ namespace KexiDB
 	class Cursor;
 }
 
-class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiViewBase
+//! \brief The KexiDataTable class provides a data-driven (record-based) tabular view .
+/*! The KexiDataTable can display data provided "by hand" 
+ or from KexiDB-compatible database source.
+ @see KexiFormView
+*/
+class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiDataAwareView
 {
 	Q_OBJECT
 
@@ -47,45 +52,48 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiViewBase
 		 Otherwise, table will be not-db-aware, 
 		  and KexiTableView is used internally. In the latter case,
 		  data can be set by calling tableView()->setData(KexiTableViewData* data). */
-		KexiDataTable(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0, bool dbAware = true);
+		KexiDataTable(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0, 
+			bool dbAware = true);
 
 		/*! CTOR2: Creates db-aware, table view initialized with \a cursor. 
 		 KexiDataTableView is used internally. */
 		KexiDataTable(KexiMainWindow *mainWin, QWidget *parent, 
 			KexiDB::Cursor *cursor, const char *name = 0);
 
-		~KexiDataTable();
+		virtual ~KexiDataTable();
 
-		virtual QWidget* mainWidget();
+//moved		virtual QWidget* mainWidget();
 
-		KexiTableView* tableView() const { return m_view; }
+		KexiTableView* tableView() const;
 
-		virtual QSize minimumSizeHint() const;
-		virtual QSize sizeHint() const;
+//moved		virtual QSize minimumSizeHint() const;
+//moved		virtual QSize sizeHint() const;
 
 	public slots:
 		/*! Sets data. Only works for db-aware table. */
 		void setData(KexiDB::Cursor *cursor);
 
-		void deleteAllRows();
+//moved		void deleteAllRows();
 
 	protected slots:
+#if 0 //moved
 		/*! Updates shared actions related to currently selected row. 
 		 Called for KexiTableView::rowEditStarted(), KexiTableView::rowEditTerminated(),
 		 and KexiTableView::slotCellSelected() signals. 
 		 Call this implementation if you are reimplementing this method. */
 		virtual void slotUpdateRowActions(int row);
-
+#endif
+//! @todo
 		void filter();
-		virtual void slotCellSelected(int col, int row);
-		void reloadActions();
+//moved		virtual void slotCellSelected(int col, int row);
+//moved		void reloadActions();
 
 	protected:
-		void initActions();
+//moved		void initActions();
 		void init();
-		virtual void updateActions(bool activated);
+//moved		virtual void updateActions(bool activated);
 
-		KexiTableView *m_view;
+//moved		KexiTableView *m_view;
 };
 
 #endif

@@ -21,14 +21,12 @@
 #ifndef KEXIFORMVIEW_H
 #define KEXIFORMVIEW_H
 
-#include <qscrollview.h>
 #include <qtimer.h>
 
 #include <kexiviewbase.h>
-#include <kexidataiteminterface.h>
-#include <widget/utils/kexirecordnavigator.h>
+#include <widget/kexidataawareview.h>
 
-#include "kexiscrollview.h"
+#include "kexidataprovider.h"
 #include "kexiformpart.h"
 
 class KexiFormPart;
@@ -36,78 +34,20 @@ class KexiMainWindow;
 class KexiDBForm;
 class KexiTableItem;
 class KexiTableViewData;
+class KexiFormScrollView;
 
-//! The KexiDataProvider class is a data provider for Kexi Forms
-/*! This provider collects data-aware widgets using setMainWidget().
- Then, usedDataSources() unique list of required field names is available.
- On every call of fillDataItems() method, thew provider will fill data items 
- with appropriate data from a database cursor.
+//! The KexiFormView lass provides a data-driven (record-based) form view .
+/*! The KexiFormView can display data provided "by hand" 
+ or from KexiDB-compatible database source. 
 
- Field names are collected effectively, so eg. having widgets using data sources:
- ("name", "surname", "surname", "name") - "name" and "surname" repeated - will only 
- return ("name", "surname") list, so the cursor's query can be simplified 
- and thus more effective.
-*/
-class KexiDataProvider : public KexiDataItemChangesListener
-{
-	public:
-		KexiDataProvider();
-		~KexiDataProvider();
-
-		/*! sets \a mainWidget to be a main widget for this data provider.
-		 Also find widgets whose will work as data items 
-		 (all of them must implement KexiDataItemInterface), so these could be 
-		 filled with data on demand. */
-		void setMainWidget(QWidget* mainWidget);
-
-		QStringList usedDataSources() const { return m_usedDataSources; }
-
-		const QPtrList<KexiDataItemInterface>& dataItems() const { return m_dataItems; }
-
-		/*! Fills data items with appropriate data fetched from \a cursor. */
-		void fillDataItems(KexiTableItem& row);// KexiDB::Cursor& cursor);
-
-		//! Reaction for change of \a item.
-		virtual void valueChanged(KexiDataItemInterface* item);
-
-	protected:
-		QWidget *m_mainWidget;
-		QPtrList<KexiDataItemInterface> m_dataItems;
-		QStringList m_usedDataSources;
-		QMap<KexiDataItemInterface*,uint> m_fieldNumbersForDataItems;
-};
-
-class KexiFormScrollView : public KexiScrollView
-{
-	Q_OBJECT
-
-	public:
-		KexiFormScrollView(QWidget *parent, bool preview);
-		virtual ~KexiFormScrollView();
-
-		void setForm(KFormDesigner::Form *form) { m_form = form; }
-
-	public slots:
-		/*! Reimplemented to update resize policy. */
-		virtual void show();
-
-	protected slots:
-		void slotResizingStarted();
-
-	protected:
-
-		KFormDesigner::Form *m_form;
-};
-
-
-//! The FormPart's view
-/*! This class provides a single view used inside KexiDialogBase.
+ This class provides a single view used inside KexiDialogBase.
  It takes care of saving/loading form, of enabling actions when needed. 
- One KexiFormView object is instantiated for data view mode (preview == true in constructor),
- and second KexiFormView object is instantiated for design view mode 
- (preview == false in constructor).
+ One KexiFormView object is instantiated for data view mode
+ and a second KexiFormView object is instantiated for design view mode.
+
+ @see KexiDataTable
 */
-class KexiFormView : public KexiViewBase, public KexiRecordNavigatorHandler
+class KexiFormView : public KexiDataAwareView
 {
 	Q_OBJECT
 
@@ -119,10 +59,12 @@ class KexiFormView : public KexiViewBase, public KexiRecordNavigatorHandler
 			NoResize = 2 /*! @todo */
 		};
 
-		KexiFormView(KexiMainWindow *win, QWidget *parent, const char *name, KexiDB::Connection *conn);
+//		KexiFormView(KexiMainWindow *win, QWidget *parent, const char *name, KexiDB::Connection *conn);
+		KexiFormView(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0, 
+			bool dbAware = true);
 		virtual ~KexiFormView();
 
-		KexiDB::Connection* connection() { return m_conn; }
+//		KexiDB::Connection* connection() { return m_conn; }
 
 		virtual QSize preferredSizeHint(const QSize& otherSize);
 
@@ -162,18 +104,20 @@ class KexiFormView : public KexiViewBase, public KexiRecordNavigatorHandler
 
 		virtual void resizeEvent ( QResizeEvent * );
 
-		// for navigator
+		void initDataSource();
+
+/*		// for navigator
 		virtual void moveToRecordRequested(uint r);
 		virtual void moveToLastRecordRequested();
 		virtual void moveToPreviousRecordRequested();
 		virtual void moveToNextRecordRequested();
 		virtual void moveToFirstRecordRequested();
-		virtual void addNewRecordRequested();
+		virtual void addNewRecordRequested();*/
 
 		KexiDBForm *m_dbform;
 		KexiFormScrollView *m_scrollView;
 		KexiPropertyBuffer *m_buffer;
-		KexiDB::Connection *m_conn;
+//moved		KexiDB::Connection *m_conn;
 
 		/*! Database cursor used for data retrieving. 
 		 It is shared between subsequent Data view sessions (just reopened on switch), 
@@ -186,9 +130,9 @@ class KexiFormView : public KexiViewBase, public KexiRecordNavigatorHandler
 		KexiDataProvider* m_provider;
 //		KexiDB::Cursor *m_cursor;
 		KexiDB::QuerySchema* m_query;
-		KexiTableViewData *m_data;
-		KexiTableItem *m_currentRow;
-		int m_currentRowNumber;
+//moved		KexiTableViewData *m_data;
+//moved		KexiTableItem *m_currentRow;
+//moved		int m_currentRowNumber;
 };
 
 #endif

@@ -161,7 +161,7 @@ void KexiComboBoxPopup::setDataInternal( KexiTableViewData *data, bool owner )
 	if (d->tv->data())
 		d->tv->data()->disconnect( this );
 	d->tv->setData( data, owner );
-	connect( d->tv, SIGNAL(dataRefreshed()), this, SLOT(slotDataRefreshRequested()));
+	connect( d->tv, SIGNAL(dataReloaded()), this, SLOT(slotDataReloadRequested()));
 //	connect( data, SIGNAL(refreshRequested()), this, SLOT(slotDataRefreshRequested()));
 
 	updateSize();
@@ -243,7 +243,7 @@ bool KexiComboBoxPopup::eventFilter( QObject *o, QEvent *e )
 	return QFrame::eventFilter( o, e );
 }
 
-void KexiComboBoxPopup::slotDataRefreshRequested()
+void KexiComboBoxPopup::slotDataReloadRequested()
 {
 	updateSize();
 }
