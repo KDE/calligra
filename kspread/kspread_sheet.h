@@ -1177,6 +1177,9 @@ protected:
     void loadOasisMasterLayoutPage( KoStyleStack &styleStack );
 
     QString saveOasisTableStyleName( KoGenStyles &mainStyles );
+    void saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int maxCols, int maxRows );
+
+    void maxRowCols( int & maxCols, int & maxRows );
 
     QString getPart( const QDomNode & part );
     void replaceMacro( QString & text, const QString & old, const QString & newS );

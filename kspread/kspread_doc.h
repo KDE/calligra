@@ -121,7 +121,7 @@ public:
    */
   ~KSpreadDoc();
 
-    enum { STYLE_PAGE = 20 };
+    enum { STYLE_PAGE = 20, STYLE_COLUMN, STYLE_ROW, STYLE_CELL };
 
 
   /**

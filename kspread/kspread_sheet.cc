@@ -6930,8 +6930,43 @@ QString KSpreadSheet::translateOpenCalcPoint( const QString & str )
     return range;
 }
 
+void KSpreadSheet::maxRowCols( int & maxCols, int & maxRows )
+{
+  const KSpreadCell * cell = firstCell();
+  while ( cell )
+  {
+    if ( cell->column() > maxCols )
+      maxCols = cell->column();
+
+    if ( cell->row() > maxRows )
+      maxRows = cell->row();
+
+    cell = cell->nextCell();
+  }
+
+  const RowFormat * row = firstRow();
+  while ( row )
+  {
+    if ( row->row() > maxRows )
+      maxRows = row->row();
+
+    row = row->next();
+  }
+  const ColumnFormat* col = firstCol();
+  while ( col )
+  {
+    if ( col->column() > maxCols )
+      maxCols = col->column();
+
+    col = col->next();
+  }
+}
+
+
 bool KSpreadSheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles )
 {
+    int maxCols= 1;
+    int maxRows= 1;
     xmlWriter.startElement( "table:table" );
     xmlWriter.addAttribute( "table:name", m_strName );
     xmlWriter.addAttribute( "table:style-name", saveOasisTableStyleName(mainStyles )  );
@@ -6940,8 +6975,9 @@ bool KSpreadSheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles )
         xmlWriter.addAttribute("table:protected", "true" );
         QCString str = KCodecs::base64Encode( m_strPassword );
         xmlWriter.addAttribute("table:protection-key", QString( str.data() ) );/* FIXME !!!!*/
-
     }
+    maxRowCols( maxCols, maxRows );
+    saveOasisColRowCell( xmlWriter, mainStyles, maxCols, maxRows );
     xmlWriter.endElement();
     return true;
 }
@@ -6951,8 +6987,63 @@ QString KSpreadSheet::saveOasisTableStyleName( KoGenStyles &mainStyles )
     KoGenStyle pageStyle( KSpreadDoc::STYLE_PAGE, "table"/*FIXME I don't know if name is table*/ );
     pageStyle.addAttribute( "style:master-page-name",  "Standard" ); //FIXME me style
     pageStyle.addProperty( "table:display", !m_bTableHide );
-    //todo
     return mainStyles.lookup( pageStyle, "ta" );
+}
+
+void KSpreadSheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int maxCols, int maxRows )
+{
+    int i = 1;
+    while ( i <= maxCols )
+    {
+        const ColumnFormat * column = columnFormat( i );
+        KoGenStyle styleCurrent( KSpreadDoc::STYLE_COLUMN/*name ????*/ );
+        styleCurrent.addPropertyPt( "style:column-width", column->mmWidth()/10 );/*FIXME pt and not mm */
+        styleCurrent.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
+
+        bool hide = column->isHide();
+        int j = i + 1;
+        int repeated = 1;
+        while ( j <= maxCols )
+        {
+            const ColumnFormat *nextColumn = columnFormat( j );
+            KoGenStyle nextStyle( KSpreadDoc::STYLE_COLUMN/*name ????*/ );
+            nextStyle.addPropertyPt( "style:column-width", nextColumn->mmWidth()/10 );/*FIXME pt and not mm */
+            nextStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
+
+            if ( ( nextStyle==styleCurrent ) && ( hide == nextColumn->isHide() ) )
+                ++repeated;
+            else
+                break;
+            ++j;
+        }
+        xmlWriter.startElement( "table:table-column" );
+        xmlWriter.addAttribute( "table:style-name", mainStyles.lookup( styleCurrent, "co" ) );
+        xmlWriter.addAttribute( "table:default-cell-style-name", "Default" );//todo fixme create style from cell
+        if ( hide )
+            xmlWriter.addAttribute( "table:visibility", "collapse" );
+
+        if ( repeated > 1 )
+            xmlWriter.addAttribute( "table:number-columns-repeated", repeated  );
+        xmlWriter.endElement();
+        i += repeated;
+    }
+
+    for ( i = 1; i <= maxRows; ++i )
+    {
+        const RowFormat * row = rowFormat( i );
+        KoGenStyle rowStyle( KSpreadDoc::STYLE_ROW/*name ????*/ );
+        rowStyle.addPropertyPt( "style:row-height", row->mmHeight()/10 );/*FIXME pt and not mm */
+        rowStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
+
+        xmlWriter.startElement( "table:table-row" );
+        xmlWriter.addAttribute( "table:style-name", mainStyles.lookup( rowStyle, "ro" ) );
+
+        if ( row->isHide() )
+            xmlWriter.addAttribute( "table:visibility", "collapse" );
+
+        //exportCells( doc, rowElem, sheet, i, maxCols );
+        xmlWriter.endElement();
+    }
 }
 
 
