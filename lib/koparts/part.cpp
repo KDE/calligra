@@ -5,6 +5,8 @@
 #include <qpointarray.h>
 #include <qpainter.h>
 
+template class QList<View>;
+
 Part::Part( QObject* parent, const char* name )
     : QObject( parent, name )
 {
