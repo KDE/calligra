@@ -1377,7 +1377,10 @@ KoTextDocument::~KoTextDocument()
 {
     if ( par )
 	par->removeChild( this );
-    clear();
+    //// kotext
+    m_bDestroying = true;
+    clear( false );
+    ////
     delete commandHistory;
     delete flow_;
     if ( !par )
@@ -1389,10 +1392,6 @@ KoTextDocument::~KoTextDocument()
     delete backBrush;
     if ( tArray )
 	delete [] tArray;
-    //// kotext
-    m_bDestroying = true;
-    clear( false );
-    ////
 }
 
 #define KoTextDocument KoTextDocument
