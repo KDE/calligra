@@ -144,11 +144,19 @@ public:
      */
     KPTDuration *getDelay();
 
-    void setName(QString name) { m_name=name; }
-    QString name() const { return m_name; }
-
     KPTDuration getEarliestStart() const { return earliestStart; }
     KPTDuration getLatestFinish() const { return latestFinish; }
+
+    QString &name() { return m_name; }
+    QString &leader() { return m_leader; }
+    QString &description() { return m_description; }
+    const QString &name() const { return m_name; }
+    const QString &leader() const { return m_leader; }
+    const QString &description() const { return m_description; }
+    void setName(const QString &n) { m_name = n; }
+    void setLeader(const QString &l) { m_leader = l; }
+    void setDescription(const QString &d) { m_description = d; }
+
 
 protected:
     /**
@@ -211,7 +219,10 @@ protected:
     QPtrList<KPTRelation> m_dependChildNodes;
     QPtrList<KPTRelation> m_dependParentNodes;
     KPTNode *m_parent;
-    QString m_name;
+
+    QString m_name;        // Name of this node
+    QString m_leader;      // Person or group responsible for this node
+    QString m_description; // Description of this node
 
     // Both of these are entered during the project, not at the initial
     // calculation.
