@@ -42,8 +42,6 @@
 #include <gobject.h>
 #include <graphitefactory.h>
 
-// test
-#include <kdebug.h>
 
 GObjectM9r::GObjectM9r(GObject *object, const Mode &mode, GraphitePart *part,
 		       const QString &type) : QObject(), m_object(object),
@@ -58,8 +56,6 @@ GObjectM9r::GObjectM9r(GObject *object, const Mode &mode, GraphitePart *part,
 GObjectM9r::~GObjectM9r() {
 
     if(m_dialog!=0L) {
-	delete m_line;
-	m_line=0L;
 	delete m_dialog;
 	m_dialog=0L;
     }
@@ -136,54 +132,54 @@ KDialogBase *GObjectM9r::createPropertyDialog(QWidget *parent) {
     // Add an information frame
     QFrame *information=m_dialog->addPage(i18n("Information"), i18n("Information about the Object"),
 					  BarIcon("exec", 32, KIcon::DefaultState, GraphiteFactory::global()));
-    QGridLayout *grid=new QGridLayout(information, 7, 2, KDialog::marginHint(), KDialog::spacingHint());
+    QGridLayout *grid=new QGridLayout(information, 9, 5, KDialogBase::marginHint(), KDialogBase::spacingHint());
 
-    QLabel *label=new QLabel(i18n("Type:"), information);
+    QLabel *label=new QLabel(i18n("Name:"), information);
     grid->addWidget(label, 0, 0);
-    label=new QLabel(m_type, information);
-    grid->addWidget(label, 0, 1);
-
-    label=new QLabel(i18n("Name:"), information);
-    grid->addWidget(label, 1, 0);
     m_line=new QLineEdit(information);
     m_line->setText(m_object->name());
     connect(m_line, SIGNAL(textChanged(const QString &)),
 	    this, SLOT(slotChanged(const QString &)));
-    grid->addWidget(m_line, 1, 1);
+    grid->addWidget(m_line, 0, 2);
+
+    label=new QLabel(i18n("Type:"), information);
+    grid->addWidget(label, 1, 0);
+    label=new QLabel(m_type, information);
+    grid->addWidget(label, 1, 2);
 
     label=new QLabel(i18n("Origin:"), information);
     grid->addWidget(label, 2, 0);
-    //label=new QLabel(i18n("x= %1, y= %2").arg(m_object->origin().x(),
-    //	     m_object->origin().y()), information);
-    //grid->addWidget(label, 2, 1);
-
-    kdDebug(37001) << "added some stuff" << endl;
+    label=new QLabel(i18n("x=%1, y=%2").arg(m_object->origin().x()).
+		     arg(m_object->origin().y()), information);
+    grid->addWidget(label, 2, 2);
 
     label=new QLabel(i18n("Angle:"), information);
     grid->addWidget(label, 3, 0);
-    label=new QLabel(i18n("ang= %1 rad").arg(m_object->angle()), information);
-    grid->addWidget(label, 3, 1);
+    label=new QLabel(i18n("%1 rad").arg(m_object->angle()), information);
+    grid->addWidget(label, 3, 2);
+    
+    grid->setRowStretch(4, 1);
 
     label=new QLabel(i18n("Bounding Rectangle:"), information);
-    grid->addMultiCellWidget(label, 4, 4, 0, 1);
+    grid->addMultiCellWidget(label, 5, 5, 0, 3);
 
-    label=new QLabel(i18n("Top-Left Corner:"), information);
-    grid->addWidget(label, 5, 0);
-
-    kdDebug(37001) << "more stuff" << endl;
-
-    //label=new QLabel(i18n("x= %1, y= %2").arg(m_object->boundingRect().x(),
-    //		     m_object->boundingRect().y()), information);
-    //grid->addWidget(label, 5, 1);
-
-    label=new QLabel(i18n("Bottom-Right Corner:"), information);
+    label=new QLabel(i18n("Top-Left:"), information);
     grid->addWidget(label, 6, 0);
 
-    //label=new QLabel(i18n("x= %1, y= %2").arg(m_object->boundingRect().bottomRight().x()).
-    //		     arg(m_object->boundingRect().bottomRight().y()), information);
-    //grid->addWidget(label, 6, 1);
+    label=new QLabel(i18n("x=%1, y=%2").arg(m_object->boundingRect().x()).
+		     arg(m_object->boundingRect().y()), information);
+    grid->addWidget(label, 6, 2);
 
-    kdDebug(37001) << "leaving base" << endl;
+    label=new QLabel(i18n("Bottom-Right:"), information);
+    grid->addWidget(label, 7, 0);
+
+    label=new QLabel(i18n("x=%1, y=%2").arg(m_object->boundingRect().bottomRight().x()).
+    		     arg(m_object->boundingRect().bottomRight().y()), information);
+    grid->addWidget(label, 7, 2);
+    grid->setColStretch(1, 1);
+    grid->setColStretch(3, 5);
+    grid->setRowStretch(8, 5);
+
     return m_dialog;
 }
 
@@ -206,21 +202,19 @@ KDialogBase *G1DObjectM9r::createPropertyDialog(QWidget *parent) {
     if(!m_dialog)
 	return 0L;
 
-    kdDebug(37001) << "creating dia (1d)" << endl;
-
     // Add a pen property page
     QFrame *frame=m_dialog->addPage(i18n("Pen"), i18n("Pen Settings"),
 				    BarIcon("exec", 32, KIcon::DefaultState, GraphiteFactory::global()));
 
-    QGridLayout *grid=new QGridLayout(frame, 3, 2, KDialog::marginHint(), KDialog::spacingHint());
-
+    QGridLayout *grid=new QGridLayout(frame, 4, 4, KDialog::marginHint(), KDialog::spacingHint());
+    
     QLabel *label=new QLabel(i18n("Width:"), frame);
     grid->addWidget(label, 0, 0);
 
     m_width=new QSpinBox(1, 100, 1, frame);
     m_width->setValue(m_object->pen().width());
     connect(m_width, SIGNAL(valueChanged(int)), this, SLOT(slotChanged(int)));
-    grid->addWidget(m_width, 0, 1);
+    grid->addWidget(m_width, 0, 2);
 
     label=new QLabel(i18n("Color:"), frame);
     grid->addWidget(label, 1, 0);
@@ -228,7 +222,7 @@ KDialogBase *G1DObjectM9r::createPropertyDialog(QWidget *parent) {
     m_color=new KColorButton(m_object->pen().color(), frame);
     connect(m_color, SIGNAL(changed(const QColor &)), this,
 	    SLOT(setChanged(const QColor &)));
-    grid->addWidget(m_color, 1, 1);
+    grid->addWidget(m_color, 1, 2);
 
     label=new QLabel(i18n("Style:"), frame);
     grid->addWidget(label, 2, 0);
@@ -249,9 +243,11 @@ KDialogBase *G1DObjectM9r::createPropertyDialog(QWidget *parent) {
     }
     connect(m_style, SIGNAL(activated(int)), this, SLOT(slotChanged(int)));
     m_style->setCurrentItem(m_object->pen().style());
-    grid->addWidget(m_style, 2, 1);
+    grid->addWidget(m_style, 2, 2);
+    grid->setColStretch(1, 1);
+    grid->setColStretch(3, 10);
+    grid->setRowStretch(3, 1);
 
-    kdDebug(37001) << "leaving 1d" << endl;
     return m_dialog;
 }
 
@@ -287,14 +283,12 @@ KDialogBase *G2DObjectM9r::createPropertyDialog(QWidget *parent) {
     if(!m_dialog)
 	return 0L;
 
-    kdDebug(37001) << "entering 2d" << endl;
-
     // Wow - the fill style page :)
     QFrame *fill=m_dialog->addPage(i18n("Fill Style"), i18n("Fill Style Settings"),
 				   BarIcon("exec", 32, KIcon::DefaultState, GraphiteFactory::global()));
     QBoxLayout *mainbox=new QHBoxLayout(fill, KDialog::marginHint(), KDialog::spacingHint());
-    QBoxLayout *leftbox=new QVBoxLayout(fill, 0, 0);
-    mainbox->addLayout(leftbox);
+    QBoxLayout *leftbox=new QVBoxLayout(mainbox, 0, 0);
+    mainbox->setStretchFactor(leftbox, 1);
 
     m_style=new QVButtonGroup(i18n("Fill Style:"), fill);
     QRadioButton *r=new QRadioButton(i18n("None"), m_style);
@@ -313,10 +307,12 @@ KDialogBase *G2DObjectM9r::createPropertyDialog(QWidget *parent) {
     m_preview=new QWidget(previewbox);
     m_preview->setBackgroundMode(QWidget::FixedPixmap);
     leftbox->addWidget(previewbox);
+    leftbox->setStretchFactor(previewbox, 1);
 
     m_stack=new QWidgetStack(fill);
     m_stack->setFrameStyle(QFrame::Box | QFrame::Sunken);
     mainbox->addWidget(m_stack);
+    mainbox->setStretchFactor(m_stack, 1);
 
     // none
     QWidget *widget=new QWidget(m_stack);
@@ -363,8 +359,7 @@ KDialogBase *G2DObjectM9r::createPropertyDialog(QWidget *parent) {
     // gradient
     widget=new QWidget(m_stack);
     QBoxLayout *wbox=new QVBoxLayout(m_stack, KDialog::marginHint(), KDialog::spacingHint());
-    grid=new QGridLayout(widget, 3, 2, KDialog::marginHint(), KDialog::spacingHint());
-    wbox->addLayout(grid);
+    grid=new QGridLayout(wbox, 3, 2, KDialog::spacingHint());
 
     label=new QLabel(i18n("Colors:"), widget);
     grid->addWidget(label, 0, 0);
@@ -400,9 +395,7 @@ KDialogBase *G2DObjectM9r::createPropertyDialog(QWidget *parent) {
     connect(m_unbalanced, SIGNAL(toggled()), this,
 	    SLOT(slotBalance()));
 
-    QGridLayout *factorgrid=new QGridLayout(widget, 2, 2, KDialog::marginHint(),
-					    KDialog::spacingHint());
-    wbox->addLayout(factorgrid);
+    QGridLayout *factorgrid=new QGridLayout(wbox, 2, 2, KDialog::spacingHint());
     label=new QLabel(i18n("X-Factor:"), widget);
     factorgrid->addWidget(label, 0, 0);
     m_xfactor=new QSlider(-200, 200, 10, m_object->gradient().xfactor,
@@ -420,15 +413,15 @@ KDialogBase *G2DObjectM9r::createPropertyDialog(QWidget *parent) {
 	    this, SLOT(slotChanged(int)));
     m_yfactor->setEnabled(false);
     factorgrid->addWidget(m_yfactor, 1, 1);
+    m_stack->addWidget(widget, 2);
 
     if(m_object->brush().style()==Qt::NoBrush)
 	m_stack->raiseWidget(2);
     else
-	m_stack->raiseWidget(static_cast<int>(m_object->fillStyle())+1);
+	m_stack->raiseWidget(2); //static_cast<int>(m_object->fillStyle())+1);
 
     updatePreview(); // inititalize the pixmap
 
-    kdDebug(37001) << "leaving 2d" << endl;
     return m_dialog;
 }
 

@@ -223,6 +223,12 @@ const QRect &GGroup::boundingRect() const {
     if(!m_boundingRectDirty)
 	return m_boundingRect;
 
+    if(m_members.isEmpty()) {
+	m_boundingRect=QRect(0, 0, 0, 0);
+	m_boundingRectDirty=true;
+	return m_boundingRect;
+    }
+
     QListIterator<GObject> it(m_members);
     m_boundingRect=it.current()->boundingRect();
     ++it;
@@ -392,6 +398,7 @@ const bool GGroupM9r::mousePressEvent(QMouseEvent */*e*/, GraphiteView *view,
     kdDebug(37001) << "here we go..." << endl;
     createPropertyDialog(view->canvas());
     m_dialog->exec();
+    kdDebug(37001) << "dia exec ret" << endl;
     return false;
 }
 

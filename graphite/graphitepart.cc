@@ -72,6 +72,10 @@ void GraphitePart::mousePressEvent(QMouseEvent *e, GraphiteView *view) {
     kdDebug(37001) << "vor MP --->" << endl;
     m->mousePressEvent(e, view, r);
     kdDebug(37001) << "---> nach MP" << endl;
+    delete m;
+    kdDebug(37001) << "m ----- ok" << endl;
+    delete o;
+    kdDebug(37001) << "o ----- ok" << endl;
 }
 
 void GraphitePart::mouseReleaseEvent(QMouseEvent *e, GraphiteView */*view*/) {
