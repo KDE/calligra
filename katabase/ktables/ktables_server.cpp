@@ -25,57 +25,56 @@
 #include <kdb.h>
 #include <kapp.h>
 #include <klocale.h>
+#include <kdebug.h>
 
-#include "ktablesserver.h"
+#include "ktables_server.h"
 
 KtablesServer::KtablesServer(QWidget *p_parent, const char *p_name)
  : QWidget(p_parent,p_name)
 {
 	QLabel      *lab;
 	QPushButton *but;
-	int w;
+	QGridLayout *grid;;
 	
+	grid = new QGridLayout( this,5,3,5,5 );
 	_base = new QLineEdit( this,"base_id" );
 	_host = new QLineEdit( this,"host_id" );
 	_user = new QLineEdit( this,"user_id" );
 	lab   = new QLabel( this );
 	lab->setBuddy( _base );
-	lab->setText( i18n("Database:") );
+	lab->setText( i18n("&Database:") );
 	lab->setAlignment( AlignRight|AlignVCenter );
-	lab->move( 10,10 );
-	w = lab->width();
+	grid->addWidget( lab,0,0 );
+	grid->addWidget( _base,0,2 );	
 	
 	lab = new QLabel( this );
-	lab->setText( i18n("Server name:") );
+	lab->setText( i18n("&Server name:") );
 	lab->setBuddy( _host );
 	lab->setAlignment( AlignRight|AlignVCenter );
-	lab->move( 10,35 );
-	if ( lab->width() > w )
-		w = lab->width();
-	
+	grid->addWidget( lab,1,0 );
+	grid->addWidget( _host,1,2 );
+		
 	lab = new QLabel( this );
 	lab->setBuddy( _user );
-	lab->setText( i18n("Login ID:") );
+	lab->setText( i18n("&Login ID:") );
 	lab->setAlignment( AlignRight|AlignVCenter );
-	lab->move( 10,60 );
-	if ( lab->width() > w )
-		w = lab->width();
-	
-	_base->setGeometry( 20+w,12,100,23 );
-	_host->setGeometry( 20+w,37,100,23 );
-	_user->setGeometry( 20+w,62,100,23 );
-	resize( lab->width()+_base->width()+20,150 );
+	grid->addWidget( lab,2,0 );
+	grid->addWidget( _user,2,2 );
+		
+	grid->addRowSpacing( 3,10 );
+	grid->addColSpacing( 1,2 );
 	
 	but = new QPushButton( this,"ok_0" );
-	but->setText( i18n("Connect") );
+	but->setText( i18n("C&onnect") );
 	but->setGeometry( 10,125,84,23 );
 	connect( but,SIGNAL(clicked()),SLOT(tryConnect()));
-	
+	grid->addWidget( but,4,0 );
+		
 	but = new QPushButton( this,"cancel_0" );
-	but->setText( i18n("Cancel") );
+	but->setText( i18n("&Cancel") );
 	but->setGeometry( width()-94,125,84,23 );
 	connect( but,SIGNAL(clicked()),SLOT(cancelMe()));
-	
+	grid->addWidget( but,4,2 );
 }
 
 KtablesServer::~KtablesServer()
@@ -90,17 +89,17 @@ KtablesServer::tryConnect()
 	QString user = _user->text();
 	QString base = _base->text();
 	
+	kdebug( KDEBUG_INFO,0,"KtablesServer::tryConnect(%s,%s)", base.data(), host.data() );
 	// We are ignoring the user at the moment, and relying on
 	// Ident identification by postgres.
 	try {
 		Kdb::Open( Kdb::Postgres, base, host );
 	}
-	catch(const QString& s) {
+	catch(Kdb::ExceptionTypes t) {
+		QString s = Kdb::exceptionMsg( t );
 		emit errorMessage( s );
 	}
-	catch(const char *s) {
-		emit errorMessage( s );
-	}
+	kdebug( KDEBUG_INFO,0,"KtablesServer::tryConnect()" );
 	if ( Kdb::isOpen() )
 		emit serverSelected();
 	hide();
@@ -112,5 +111,5 @@ KtablesServer::cancelMe()
 	hide();
 }
 
-#include "ktablesserver.moc"
+#include "ktables_server.moc"
 

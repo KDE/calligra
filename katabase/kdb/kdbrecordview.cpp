@@ -24,7 +24,9 @@
 #include <kdbdatabase.h>
 #include <kdbfieldset.h>
 #include <kdbdataset.h>
+
 #include "kdbrecordview.h"
+#include "kdbrecordview.moc"
 
 kdbRecordView::kdbRecordView(kdbDataSet *p_set, QWidget *p_par, const char *p_nam)
  : QListView(p_par, p_nam)
@@ -47,6 +49,8 @@ kdbRecordView::kdbRecordView(kdbDataSet *p_set, QWidget *p_par, const char *p_na
 	_menu->insertSeparator();
 	_menu->insertItem( "&Properties" );
 	QListView::setAllColumnsShowFocus( true );
+
+	connect( header(),SIGNAL(sizeChange(int,int,int)),SLOT(sizeChanged(int,int,int)) );	
 }
 
 kdbRecordView::~kdbRecordView()
@@ -145,7 +149,7 @@ kdbRecordView::buttonMenu(QListViewItem *p_lvi, const QPoint& p_gco, int p_col)
 void
 kdbRecordView::init()
 {
-	const QObject* obj = QObject::sender();
+	const QObject *obj = QObject::sender();
 	
 	if ( obj && _dataSet == (kdbDataSet *)obj ) {
 		clear();
@@ -168,8 +172,8 @@ kdbRecordView::setEditItem(QListViewItem *p_item)
 	for( i=0;i<_columnPos;i++ )
 		pos_x += columnWidth( i );
 	QRect r = itemRect( p_item );
-	_edit->move( r.x() + pos_x + marg,r.y() + marg );
-	_edit->resize( columnWidth(_columnPos)-2*marg,r.height()-2*marg );
+	_edit->move( header()->cellPos(_columnPos),r.y() + marg );
+	_edit->resize( header()->cellSize(_columnPos),r.height()-2*marg );
 	_edit->setText( p_item->text(_columnPos) );
 	_edit->show();
 }
@@ -221,6 +225,15 @@ kdbRecordView::contentsMousePressEvent(QMouseEvent *p_me)
 }
 
 void
+kdbRecordView::sizeChanged(int p_col, int p_oldSize, int p_newSize)
+{
+	if ( p_col < _columnPos )
+		_edit->move( header()->cellPos( _columnPos ),_edit->y() );
+	else if ( p_col == _columnPos )
+		_edit->resize( p_newSize,_edit->height() );
+}
+
+void
 kdbRecordView::keyPressEvent(QKeyEvent *p_kev)
 {
 	switch( p_kev->key() ) {
@@ -232,6 +245,16 @@ kdbRecordView::keyPressEvent(QKeyEvent *p_kev)
 		case Key_Backtab:
 			if ( _columnPos > 0 )
 				_columnPos--;
+			setEditItem( currentItem() );
+			break;
+		case Key_Left:
+			if ( _columnPos > 0 )
+				_columnPos--;
+			setEditItem( currentItem() );
+			break;
+		case Key_Right:
+			if ( _columnPos < header()->count() )
+				_columnPos++;
 			setEditItem( currentItem() );
 			break;
 		default:
@@ -249,5 +272,45 @@ kdbRecordView::textChanged(const QString& p_str)
 	item->setText( columnPos(),p_str );
 }
 
-#include "kdbrecordview.moc"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

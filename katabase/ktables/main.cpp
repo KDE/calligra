@@ -16,31 +16,53 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "ktables.h"
- 
-int main( int argc, char* argv[] )
-{ 
-  KOMApplication app( argc, argv, "Ktables" );
+#include <opAutoLoader.h>
 
-  // TODO: KoApplication should be used.
-  // TODO: Restoring and loading of files is included in KoApplication
- 
-  if( app.isRestored() )
-  { 
-    RESTORE( KtablesApp );
-  }
-  else 
-  {
-    KtablesApp* ktables = new KtablesApp;
-    ktables->show();
-    if( argc > 1 )
-    {
-      ktables->openDocumentFile( argv[1] );
-    }
-  }
-  
+#include <koFactory.h>
+#include <koDocument.h>
+#include <koQueryTypes.h>
+#include <koApplication.h>
+
+#include "ktables_doc.h"
+#include "ktables_main.h"
+#include "ktables_shell.h"
+#include "ktables.h"
+
+KOFFICE_DOCUMENT_FACTORY( KtablesDoc, KtablesFactory, Ktables::DocumentFactory_skel )
+typedef OPAutoLoader<KtablesFactory> KtablesAutoLoader;
+
+int main(int argc, char* argv[]) {
+  KtablesAutoLoader loader( "IDL:Ktables/DocumentFactory:1.0","Ktables" );
+
+  KtablesMain app(argc,argv);
+
   app.exec();
 
   return 0;
-}
-  
+}  
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -43,7 +43,8 @@ protected:
 	kdbDataSet *         _dataSet;
 	uint                 _columnPos;
 
-	void setEditItem(QListViewItem *);	
+	void setEditItem(QListViewItem *);
+	
 public:
 	kdbRecordView(kdbDataSet *, QWidget *, const char *);
 	~kdbRecordView();
@@ -71,7 +72,8 @@ protected slots:
 	void textChanged(const QString&);
 	void removeData(bool&);
 	void insertData();
-	
+	void sizeChanged(int,int,int);
+		
 public slots:
 	void buttonMenu(QListViewItem *,const QPoint&,int);
 	void init();

@@ -17,6 +17,8 @@
 
 
 #include "kdbdatabase.h"
+#include "kdbdatabase.moc"
+
 
 kdbDataBase::kdbDataBase(const char *p_base)
  : QObject( 0,p_base )
@@ -26,6 +28,3 @@ kdbDataBase::kdbDataBase(const char *p_base)
 kdbDataBase::~kdbDataBase()
 {
 }
-
-#include "kdbdatabase.moc"
-

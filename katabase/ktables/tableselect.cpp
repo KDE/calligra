@@ -15,9 +15,12 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <iostream.h>
+
 #include <qlistbox.h>
 
 #include <klocale.h>
+#include <kdebug.h>
 
 #include <kdb.h>
 #include <kdbdataset.h>
@@ -39,24 +42,14 @@ TableSelect::init()
 	kdbDataSet  *set;
 	kdbCriteria *crit;
 
-	if ( !Kdb::isOpen() )
-		return; // Hey! you're not supposed to be here.
-		
-	set = new kdbDataSet(Kdb::dataBase(), "pg_class");
-	set->setVisualProgress( false );
-	set->fieldSet()->addField("relname");
-  crit = new kdbCriteria( set,"relkind" );
-  (*crit) = Kdb::Equal;
-  (*crit) = "r";
-  crit = new kdbCriteria( set,"relname" );
-  (*crit) = Kdb::Like;
-  (*crit) = Kdb::NAnd;
-  (*crit) = "pg_%";
-  Kdb::dataBase()->query( set );
+	kdebug( KDEBUG_INFO,0,"+TableSelect::init()" );
+	if ( !Kdb::isOpen() || !Kdb::hasDataSet("$tables") )
+		return;
+	set = Kdb::dataSet("$tables");
   for( uint i=0;i<set->records();i++ )
-  	_available->insertItem( (*set)[i]["relname"].text() );
-  delete set;
+  	_available->insertItem( (*set)[i]["$name"].text() );
   signalMsg(i18n("Ready."));
+	kdebug( KDEBUG_INFO,0,"-TableSelect::init()" );
 }
 
 TableSelect::~TableSelect()
@@ -130,5 +123,4 @@ TableSelect::removeItem(int p_idx)
 }
 
 #include "tableselect.moc"
-
 

@@ -1,22 +1,31 @@
 
 INCLUDES = $(KOFFICE_INCLUDES) $(all_includes) $(MICO_INCLUDES) -I../kdb
-#LDFLAGS = -g $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
-LDFLAGS = -g $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH) -lpq++
+LDFLAGS = -g $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
+#LDFLAGS = -g $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH) -lpq++
 LDADD = ../../lib/kofficeui/libkofficeui.la ../kdb/libkdb.la
 
 ####### Files
  
 bin_PROGRAMS = ktables
 
-ktables_SOURCES = tableselectdata.cpp tableselect.cpp ktablesserver.cpp \
-	ktablesview.cpp ktablesdoc.cpp ktables.cpp main.cpp 
+ktables_SOURCES = ktables.idl tableselectdata.cpp tableselect.cpp ktables_server.cpp \
+	ktables_view.cpp ktables_doc.cpp main.cpp \
+	ktables_shell.cpp ktables_main.cpp \
+	propertyeditor.cpp propertyitem.cpp \
+	querydialog.cpp queryselect.cpp
 
-noinst_HEADERS = tableselectdata.h tableselect.h ktablesserver.h \
-	ktablesview.h ktablesdoc.h ktables.h
+noinst_HEADERS = tableselect.h ktables_server.h ktables_view.h \
+	ktables_doc.h ktables_shell.h ktables_main.h \
+	propertyeditor.h propertyitem.h resource.h \
+	querydialog.h queryselect.h
 
-METASOURCES = tableselect.moc ktablesserver.moc \
-	ktablesdoc.moc ktablesview.moc ktables.moc
+METASOURCES = tableselect.moc ktables_server.moc ktables_doc.moc \
+	ktables_view.moc ktables_shell.moc ktables_main.moc \
+	propertyeditor.moc propertyitem.moc \
+	querydialog.moc queryselect.moc
 
 messages:
 	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot $(ktables_SOURCES) -o ../po/ktables.pot
+
+IDL_FLAGS =  --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir)
 

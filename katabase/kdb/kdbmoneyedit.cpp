@@ -26,6 +26,7 @@
 #include <qapplication.h>
 
 #include "kdbmoneyedit.h"
+#include "kdbmoneyedit.moc"
 
 kdbMoneyEdit::kdbMoneyEdit(kdbDataField *p_fld,QWidget *p, const char *n)
  : QFrame(p, n)
@@ -670,5 +671,44 @@ kdbMoneyEdit::symbol()
 	return _symbol;
 }
 
-#include "kdbmoneyedit.moc"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

@@ -19,15 +19,19 @@
 
 #include <qobjectlist.h>
 
+#include <klocale.h>
+
 #include <kdbpgbase.h>
 #include <kdbdataset.h>
 #include <kdbrelation.h>
+#include <kdbdatafield.h>
+#include <kdbfieldset.h>
 
 #include "kdb.h"
 
-QString      Kdb::_dateFormat;
-Kdb::Bases   Kdb::_connectionType;
-kdbDataBase *Kdb::_dataBase;
+QString      Kdb::_dateFormat     = "%m/%d/%/";
+Kdb::Bases   Kdb::_connectionType = None;
+kdbDataBase *Kdb::_dataBase       = 0;
 
 Kdb::Kdb()
 {
@@ -40,6 +44,27 @@ Kdb::~Kdb()
 {
 }
 
+QString
+Kdb::exceptionMsg(ExceptionTypes t)
+{
+	switch( t ) {
+		case NoHost:
+			return i18n("No connection to host");
+		case NoBase:
+			return i18n("No database open");
+		case NoField:
+			return i18n("Field index out of bounds");
+		case UnknownField:
+			return i18n("Unknown field name");
+		case NoRecord:
+			return i18n("Record index out of bounds");
+		case NotImplemented:
+			return i18n("The feature isn't implemented yet");
+		default:
+			return i18n("unknwon exception type");
+	}
+}
+
 bool
 Kdb::isOpen()
 {
@@ -49,13 +74,29 @@ Kdb::isOpen()
 void
 Kdb::Open(Bases p_baseType, const QString& p_base, const QString& p_host)
 {
+	kdbDataSet *dset;
+	kdbCriteria *crit;
+	
 	switch( p_baseType ) {
 		case Postgres:
-			_dataBase = new kdbPgBase( p_base,p_host );
+			_dataBase       = new kdbPgBase( p_base,p_host );
 			_connectionType = p_baseType;
+			dset = new kdbDataSet( _dataBase,"pg_class" );
+			dset->fieldSet()->addField( "relname" );
+			crit = new kdbCriteria( dset,"relkind" );
+			(*crit) = "r";
+			(*crit) = Equal;
+			crit = new kdbCriteria( dset,"relname" );
+			(*crit) = Like;
+			(*crit) = NAnd;
+			(*crit) = "pg_%";
+			dset->setVisualProgress( false );
+			dset->runQuery( false );
+			dset->setName( "$tables" );
+			dset->field( "relname" ).setName( "$name" );
 			break;
 		default:
-			throw "Not implemented yet";
+			throw NotImplemented;
 	}
 }
 
@@ -64,7 +105,7 @@ Kdb::Close()
 {
 	if ( _dataBase )
 		delete _dataBase;
-	_dataBase = 0;
+	_dataBase       = 0;
 	_connectionType = None;
 }
 
@@ -72,7 +113,7 @@ kdbDataBase *
 Kdb::dataBase()
 {
 	if ( _connectionType == None )
-		throw "No such database open";
+		throw NoBase;
 	return _dataBase;
 }
 
@@ -82,12 +123,11 @@ Kdb::hasDataSet(const QString& p_set)
 	QObjectList *list;
 	QObject     *obj;
 		
-	if ( !_dataBase )
-		throw "Open database first";
+	if ( _connectionType == None )
+		throw NoBase;
 	list  = _dataBase->queryList( "kdbDataSet",p_set,true,false );
 	QObjectListIt it( *list );
-	for( ;(obj = it.current());++it )
-		break;
+	obj = it.current();
 	delete list;
 	return (obj != 0);
 }
@@ -98,12 +138,11 @@ Kdb::dataSet(const QString& p_set)
 	QObjectList *list;
 	QObject     *obj;
 	
-	if ( !_dataBase )
-		throw "Open database first";
+	if ( _connectionType == None )
+		throw NoBase;
 	list = _dataBase->queryList( "kdbDataSet",p_set,true,false );
 	QObjectListIt it( *list );
-	for( ;(obj = it.current());++it )
-		break;
+	obj = it.current();
 	delete list;
 	if ( !obj ) {
 		obj = new kdbDataSet( _dataBase,p_set );
@@ -128,6 +167,38 @@ Kdb::relation(kdbDataSet *p_set, const QString& p_rel)
 	delete list;
 	return (kdbRelation *)obj;
 }
+
+Kdb::Operator
+Kdb::str2operator(const QString& p_str)
+{
+	if ( p_str.find("AND",0,false) != -1 )
+		return And;
+	else if ( p_str.find("OR",0,false) != -1 )
+		return Or;
+	else if ( p_str.find("NAND",0,false) != -1 )
+		return NAnd;
+	else
+		return NOr;
+}
+
+Kdb::RelationType
+Kdb::str2condition(const QString& p_str)
+{
+	if ( p_str.find("Equal",0,false) != -1 )
+		return Equal;
+	else if ( p_str.find("Less",0,false) != -1 )
+		return Less;
+	else if ( p_str.find("Greater",0,false) != -1 )
+		return Greater;
+	else
+		return Like;
+}
+
+
+
+
+
+
 
 
 

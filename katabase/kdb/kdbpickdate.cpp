@@ -18,7 +18,9 @@
 #include <iostream.h>
 
 #include <qframe.h>
-#include <kdbpickdate.h>
+
+#include "kdbpickdate.h"
+#include "kdbpickdate.moc"
 
 extern "C" {
 
@@ -385,5 +387,27 @@ kdbPickDate::focusOutEvent(QFocusEvent *p_ev)
 	repaint();
 }
 
-#include "kdbpickdate.moc"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

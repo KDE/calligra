@@ -32,11 +32,13 @@
 #include "kdbcalendar.h"
 #include "kdbmoneyedit.h"
 
+#include "kdbfieldedit.moc"
+
 kdbFieldEdit::kdbFieldEdit(QWidget *p_par, const char *p_nam, kdbDataSet *p_set, const char *p_fld)
  : QWidget(p_par, p_nam)
 {
 	if ( !p_set || !p_set->fieldSet()->has(p_fld) )
-		throw QString("set doesn't have field %1").arg(p_fld);
+		throw Kdb::NoField;
 	_fieldName     = p_fld;
 	_acceptSignals = true;
 	init(p_set, p_fld);
@@ -87,7 +89,7 @@ kdbFieldEdit::init(kdbDataSet *p_set, const QString& p_field)
 	} else if (_field->type() == "date")
 		_w = new kdbCalendar( Kdb::dateFormat(),0,this );
 	else
-		throw QString("Don't know about '%1' field types").arg(_field->type());
+		throw Kdb::UnknownField;
 	if ( _w->isA("QLineEdit") || _w->isA("kdbMoneyEdit") )
 		connect(_w, SIGNAL(textChanged(const QString&)), SLOT(textChanged(const QString&)));
 	else if ( _w->isA("QCheckBox") )
@@ -285,5 +287,68 @@ kdbFieldEdit::postChange(const QString& p_str)
 	_acceptSignals = true;
 }
 
-#include "kdbfieldedit.moc"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

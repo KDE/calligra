@@ -31,6 +31,14 @@ class kdbRelation;
 
 class Kdb {
 public:
+	enum ExceptionTypes {
+		NoHost,
+		NoBase,
+		UnknownField,
+		NoField,
+		NoRecord,
+		NotImplemented
+	};
 	enum RelationType {
 		Equal,
 		Greater,
@@ -72,9 +80,16 @@ public:
 	static kdbDataSet  *dataSet(const QString&);
 	static kdbRelation *relation(kdbDataSet *,const QString&);
 	static kdbDataBase *dataBase();
+	
+	static Operator     str2operator(const QString&);
+	static RelationType str2condition(const QString&);
+	static QString      exceptionMsg(ExceptionTypes);
 };
 
 #endif
+
+
+
 
 
 

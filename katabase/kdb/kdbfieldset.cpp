@@ -17,6 +17,7 @@
 
 #include <iostream.h>
 
+#include <kdb.h>
 #include <kdbdataset.h>
 #include "kdbfieldset.h"
 
@@ -152,7 +153,7 @@ kdbFieldSet::field(const QString& p_name)
 	int i = locate( p_name );
 
 	if (i < 0)
-		throw QString("no such field %1").arg(p_name);
+		throw Kdb::NoField;
 	return *_fields.at(i);
 }
 
@@ -160,9 +161,11 @@ kdbDataField&
 kdbFieldSet::field(uint p_idx)
 {
 	if (p_idx >= _fields.count())
-		throw QString("field index %1 out of bounds").arg(p_idx);
+		throw Kdb::NoField;
 	return *_fields.at(p_idx);
 }
+
+
 
 
 

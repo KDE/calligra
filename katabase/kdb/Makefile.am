@@ -1,8 +1,8 @@
 ####### General stuff
 
 INCLUDES = $(KOFFICE_INCLUDES) $(all_includes) $(MICO_INCLUDES) -I/usr/include/pgsql
-#LDFLAGS = $(all_libraries) $(MICO_LDFLAGS) -lpq++ -version-info 1:0:0
-LDFLAGS = $(all_libraries) $(MICO_LDFLAGS) -version-info 1:0:0
+LDFLAGS = $(all_libraries) $(MICO_LDFLAGS) -lpq++ -version-info 1:0:0
+#LDFLAGS = $(all_libraries) $(MICO_LDFLAGS) -version-info 1:0:0
 libkdb_la_LIBADD = ../../lib/kofficeui/libkofficeui.la
 
 ####### Files

@@ -21,6 +21,7 @@
 #include <qobject.h>
 #include <qobjectlist.h>
 
+#include <kdb.h>
 #include <kdbdataset.h>
 #include <kdbfieldset.h>
 #include <kdbdatafield.h>
@@ -64,10 +65,10 @@ kdbPgBase::kdbPgBase(const QString& p_base, const QString& p_host, const QString
 		else
 			dateStyle = "Postgres";
   }
-  _env  = new PgEnv("",p_host.data(),p_port.data(),"","");
+  _env   = new PgEnv("ident",p_host.data(),p_port.data(),"","");
 	_dbase = new PgDatabase(*_env, p_base);
 	if (_dbase->ConnectionBad())
-		throw "no connection to host";
+		throw Kdb::NoHost;
 	_dbase->Exec( QString("SET DATESTYLE TO '%1'").arg(dateStyle) );
 }
 
@@ -243,13 +244,13 @@ kdbPgBase::query(kdbDataSet *p_set)
 		while ( crit ) {
 			switch((Kdb::RelationType)*crit) {
 				case Kdb::Greater:
-					wclause += QString("(%1 < '%2')").arg(crit->field()).arg(wval);
+					wclause += QString("(%1 > '%2')").arg(crit->field()).arg(wval);
 					break;
 				case Kdb::Equal:
 					wclause += QString("(%1 = '%2')").arg(crit->field()).arg(wval);
 					break;
 				case Kdb::Less:
-					wclause += QString("(%1 > '%2')").arg(crit->field()).arg(wval);
+					wclause += QString("(%1 < '%2')").arg(crit->field()).arg(wval);
 					break;
 				case Kdb::Like:
 					wclause += QString("(%1 LIKE '%2')").arg(crit->field()).arg(wval);
@@ -326,6 +327,8 @@ kdbPgBase::getFields(kdbDataSet *set)
 	}
 	return true;
 }
+
+
 
 
 

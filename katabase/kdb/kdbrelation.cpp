@@ -25,6 +25,7 @@
 #include <kdbfieldset.h>
 #include <kdbcriteria.h>
 #include "kdbrelation.h"
+#include "kdbrelation.moc"
 
 kdbRelation::kdbRelation(kdbDataSet *set,const QString& p_field,const QString& p_refTab,const QString& p_refFld)
  : QObject(&set->field(p_field),p_field)
@@ -127,5 +128,32 @@ kdbRelation::index(const QString& p_str)
 	return -1;
 }
 
-#include "kdbrelation.moc"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

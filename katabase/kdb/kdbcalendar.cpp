@@ -10,7 +10,7 @@
 #include <qframe.h>
 
 #include "kdbcalendar.h"
-
+#include "kdbcalendar.moc"
 
 // Calendar
 
@@ -258,5 +258,43 @@ kdbCalendar::resizeEvent(QResizeEvent*)
   _arrow     = QRect( _contents.right(),_contents.top(),width()-_contents.right()-frameWidth,_contents.height() );
 }
 
-#include "kdbcalendar.moc"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

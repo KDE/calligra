@@ -1,7 +1,7 @@
 /***************************************************************************
-                          kdbCriteria.cpp  -  description
+                          ktablesmain.h  -  description                              
                              -------------------                                         
-    begin                : Sun Jun 6 1999                                           
+    begin                : Fri Jul 16 1999                                           
     copyright            : (C) 1999 by Ørn E. Hansen                         
     email                : hanseno@mail.bip.net                                     
  ***************************************************************************/
@@ -16,34 +16,27 @@
  ***************************************************************************/
 
 
-#include <kdbdataset.h>
+#ifndef KTABLESMAIN_H
+#define KTABLESMAIN_H
 
-#include "kdbcriteria.h"
-#include "kdbcriteria.moc"
+#include <koApplication.h>
 
-kdbCriteria::kdbCriteria(kdbCriteria& p_crit)
- : QObject(p_crit.parent(),p_crit.field())
-{
-	_field     = p_crit.field();
-	_relation  = (Rel)p_crit;
-	_operation = (Oper)p_crit;
-	_value     = p_crit.value();
-}
+class KtablesApp;
 
-kdbCriteria::kdbCriteria(kdbDataSet *p_set, const char *p_field)
- : QObject(p_set,p_field)
-{
-	_field     = p_field;
-	_relation  = Kdb::Greater;
-	_operation = Kdb::And;
-	_value     = "";
-}
+/**
+  *@author Ørn E. Hansen
+  */
 
-kdbCriteria::~kdbCriteria()
-{
-}
+class KtablesMain : public KoApplication  {
+	Q_OBJECT
+	
+public: 
+	KtablesMain(int&, char **);
+	~KtablesMain();
+	
+	virtual KoMainWindow *createNewShell();
+};
 
-
-
+#endif
 
 

@@ -29,6 +29,7 @@
 #include <kdbrelation.h>
 
 #include "kdbdataset.h"
+#include "kdbdataset.moc"
 
 /**
  * Assignment of a new dataset, with a copy
@@ -371,7 +372,7 @@ kdbDataSet::operator[] (unsigned int p_ix)
   bool state;
 
 	if ( !(str = _data.at(p_ix)) )
-		throw QString("field index %1 out of bounds").arg(p_ix);
+		throw Kdb::NoRecord;
 	p = str->find(':',0)+1;
 	_recid = str->left(p-1).toInt();
 	for(i=0;i<len;i++,p+=e+1) {
@@ -388,5 +389,65 @@ kdbDataSet::operator[] (unsigned int p_ix)
 	return *_fields;
 }
 
-#include "kdbdataset.moc"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

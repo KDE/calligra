@@ -20,97 +20,110 @@
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qwidget.h>
-#include <qmessagebox.h>
 
 // include files for KDE
 #include <kapp.h>
 #include <kmsgbox.h>
 #include <opView.h>
 
+#include <opMenu.h>
+#include <opToolBar.h>
+#include <opUIUtils.h>
+#include <opMainWindow.h>
+#include <opMainWindowIf.h>
+
+#include <komApplication.h>
+
+#include <koPartSelectDia.h>
+#include <koAboutDia.h>
+
 // application specific includes
 #include <kdb.h>
 #include <kdbdataset.h>
 
-#include <ktablesdoc.h>
-#include "ktables.h"
-#include "ktablesview.h"
+#include "ktables_doc.h"
+#include "ktables_shell.h"
+#include "ktables_view.h"
 
 KtablesDoc::KtablesDoc(QWidget *parent, const char* name)
- : QObject(parent, name), OPDocumentIf()
+ : QObject(parent, name),
+   KoDocument(),
+   KoPrintExt(),
+   Ktables::Document_skel()
 {
+	kdebug(KDEBUG_INFO,0,"KtablesDoc()");
+	b_modified = false;
 	QObject::connect( this,SIGNAL(signalMsg(const char *)),parent,SLOT(slotStatusMsg(const char *)) );
 }
 
 KtablesDoc::~KtablesDoc()
 {
+	cleanUp();
 }
 
 void
-KtablesDoc::insertRow()
+KtablesDoc::cleanUp()
 {
-	KtablesView *v = currentView();
-	
-	if ( v )
-		v->insertRow();
+  if ( m_bIsClean )
+    return;
+
+  ASSERT( m_lstViews.count() == 0 );
+
+  KoDocument::cleanUp();
 }
 
-void
-KtablesDoc::removeRow()
+CORBA::Boolean
+KtablesDoc::initDoc()
 {
-	KtablesView *v = currentView();
-	
-	if ( v )
-		v->removeRow();
+  return true;
 }
 
-void
-KtablesDoc::commitChanges()
+KtablesView *
+KtablesDoc::createTableView( QWidget *p_parent )
 {
-	KtablesView *v = currentView();
+	KtablesView *p = new KtablesView( 0,this,p_parent );
 	
-	if ( v )
-		v->commit();
-}
-
-void
-KtablesDoc::discardChanges()
-{
-	KtablesView *v = currentView();
-	
-	if ( v )
-		v->reScanTable();
+	addView( p );
+	return p;
 }
 
 OpenParts::View_ptr
 KtablesDoc::createView()
 {
-	KtablesView *p = new KtablesView( 0,this,(QWidget *)parent() );
-	
-	addView( p );
-	return OpenParts::View::_duplicate( p );
+	return OpenParts::View::_duplicate( createTableView() );
 }
 
-KtablesView *
+/*KtablesView *
 KtablesDoc::currentView()
 {
 	if ( m_lstViews.count() == 0 )
 		return 0;
 	return (KtablesView *)m_lstViews.current();
+}*/
+
+KOffice::MainWindow_ptr
+KtablesDoc::createMainWindow()
+{
+  KtablesApp *app = new KtablesApp;
+  app->show();
+  app->setDocument( this );
+
+  kdebug( KDEBUG_INFO, 0, "KtablesDoc::createMainWindow()" );
+  return KOffice::MainWindow::_duplicate( app->koInterface() );
 }
 
 void
 KtablesDoc::addView(KtablesView *p_view)
 {
-	m_lstViews.append( p_view );
+	registerView( p_view );
 	QObject::connect( p_view,SIGNAL(signalMsg(const char *)),this,SIGNAL(signalMsg(const char *)) );
 }
 
 void
 KtablesDoc::removeView(KtablesView *p_view)
 {
-	m_lstViews.setAutoDelete( false );
-	m_lstViews.removeRef( p_view );
-	m_lstViews.setAutoDelete( true );
+	unregisterView( p_view );
+	QObject::disconnect( p_view );
 }
 
 const QString& KtablesDoc::getPathName() const
@@ -118,19 +131,11 @@ const QString& KtablesDoc::getPathName() const
 	return m_path;
 }
 
-void KtablesDoc::slotUpdateAllViews(KtablesView* pSender)
-{
-	OPViewIf* w;
-		
-	for( w = m_lstViews.first(); w; w = m_lstViews.next() )
-		if( ((KtablesView *)w) != pSender)
-			((KtablesView *)w)->repaint();
-}
-
 void KtablesDoc::pathName( const char* path_name)
 {
 	m_path=path_name;
 }
+
 void KtablesDoc::title( const char* title)
 {
 	m_title=title;
@@ -139,64 +144,6 @@ void KtablesDoc::title( const char* title)
 const QString& KtablesDoc::getTitle() const
 {
 	return m_title;
-}
-
-bool KtablesDoc::saveModified()
-{
-  if(b_modified)
-  {
-    KtablesApp* win=(KtablesApp*) parent();
-/*
-    int want_save = KMsgBox::yesNoCancel( win,
-      i18n( "Warning" ), i18n( "The current file has been modified.\nDo you want to save it?" ) );
-*/
-    int want_save = QMessageBox::warning( 0, i18n( "Warning" ),
-                    i18n( "The current file has been modified.\nDo you want to save it?" ),
-                    i18n( "Yes" ), i18n( "No" ), i18n( "Cancel" ), 0, 2 );
-
-    switch(want_save)
-    {
-      case 1:
-        if(m_title == "Untitled")
-    	  win->slotFileSaveAs();
-    	else
-	  saveDocument(getPathName()+getTitle());
-       	
-       	deleteContents();
-        return true;
-        break;
-      case 2:
-    	setModified(false);
-      	deleteContents();
-  	return true;
-  	break;	
-      case 3:
-  	return false;
-  	break;
-      default:
-  	return false;
-  	break;
-    }
-  }
-  else
-    return true;
-}
-
-void KtablesDoc::closeDocument()
-{
-	deleteContents();
-}
-
-bool KtablesDoc::newDocument()
-{
-	
-	/////////////////////////////////////////////////
-	// TODO: Add your document initialization code here
-	/////////////////////////////////////////////////
-	b_modified=false;
-	m_path=QDir::homeDirPath();
-	m_title="Untitled";
-	return true;
 }
 
 bool KtablesDoc::openDocument(const char* filename, const char* format)
@@ -208,7 +155,7 @@ bool KtablesDoc::openDocument(const char* filename, const char* format)
 	// TODO: Add your document opening code here
 	/////////////////////////////////////////////////
 	
-	b_modified=false;
+	b_modified = false;
 	return true;
 }
 
@@ -219,7 +166,7 @@ bool KtablesDoc::saveDocument(const char* filename, const char* format)
 	// TODO: Add your document saving code here
 	/////////////////////////////////////////////////
 
-	b_modified=false;
+	b_modified = false;
 	return true;
 }
 
@@ -231,5 +178,34 @@ void KtablesDoc::deleteContents()
 
 }
 
-#include "ktablesdoc.moc"
+void
+KtablesDoc::slotUpdateAllViews(KtablesView *p_sender)
+{
+}
+
+void
+KtablesDoc::viewList(OpenParts::Document::ViewList*& _list )
+{
+  _list->length( m_lstViews.count() );
+
+  int i = 0;
+  QListIterator<OPViewIf> it( m_lstViews );
+  for( ; it.current(); ++it )
+  {
+    (*_list)[i++] = OpenParts::View::_duplicate( it.current() );
+  }
+}
+
+int KtablesDoc::viewCount()
+{
+  return m_lstViews.count();
+}
+
+bool
+KtablesDoc::isEmpty()
+{
+  return false;
+}
+
+#include "ktables_doc.moc"
 

@@ -17,17 +17,19 @@
 
 #include <iostream.h>
 
-#include <kdb.h>
-#include <kdbpickdate.h>
-#include <kdbdatafield.h>
+#include "kdb.h"
+#include "kdbpickdate.h"
+#include "kdbdatafield.h"
 
-kdbDataField::kdbDataField( kdbDataField& _field )
- : QObject( _field.parent(), _field.name() ), kdbBaseType( _field )
+#include "kdbdatafield.moc"
+
+kdbDataField::kdbDataField(kdbDataField& p_field)
+ : QObject(p_field.parent(),p_field.name()), kdbBaseType(p_field)
 {
 }
 
-kdbDataField::kdbDataField( QObject* _par, const QString& _name, const QString& _typ )
- : QObject( _par, _name ), kdbBaseType( _typ )
+kdbDataField::kdbDataField(QObject *p_par, const QString& p_name, const QString& p_typ)
+ : QObject(p_par,p_name), kdbBaseType(p_typ)
 {
 }
 
@@ -35,38 +37,40 @@ kdbDataField::~kdbDataField()
 {
 }
 
-void kdbDataField::set( int _val )
+void kdbDataField::set(int p_val)
 {
-	set( QString("%1").arg( _val ) );
+	set( QString("%1").arg(p_val) );
 }
 
-void kdbDataField::set( double _val )
+void kdbDataField::set(double p_val)
 {
-	set( QString( "%1" ).arg( _val) );
+	set( QString("%1").arg(p_val) );
 }
 
-void kdbDataField::set( const QString& _val )
+void
+kdbDataField::set(const QString& p_val)
 {
 	bool verified = true;;
-	QString txt = _val;
+	QString txt = p_val;
 	
 	emit preChange( verified );
-	if( !verified )
+	if ( !verified )
 		return;
-	emit validateText( verified, txt );
-	if( verified )
-        {
+	emit validateText( verified,txt );
+	if ( verified ) {
 		kdbBaseType::setText( txt );
 		emit postChange( _value );
 	}
 }
 
-void kdbDataField::set( const kdbDataField& p_field )
+void
+kdbDataField::set(const kdbDataField& p_field)
 {
 	set( p_field.text() );
 }
 
-void kdbDataField::set( const QDate& p_date )
+void
+kdbDataField::set(const QDate& p_date)
 {
 	QString txt;
 	if ( !p_date.isValid() )
@@ -75,7 +79,8 @@ void kdbDataField::set( const QDate& p_date )
 	set( txt );
 }
 
-void kdbDataField::setText( const QString& p_txt )
+void
+kdbDataField::setText(const QString& p_txt)
 {
 	bool ok;
 	QString txt = p_txt;
@@ -92,7 +97,8 @@ void kdbDataField::setText( const QString& p_txt )
 	}
 }
 
-void kdbDataField::setDate( const QDate& p_date )
+void
+kdbDataField::setDate(const QDate& p_date)
 {
 	bool ok = true;
 	QString txt;
@@ -112,5 +118,19 @@ void kdbDataField::setDate( const QDate& p_date )
 	}
 }
 
-#include "kdbdatafield.moc"
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
