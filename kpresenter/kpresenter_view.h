@@ -149,6 +149,8 @@ public slots:
     void extraDefaultTemplate();
     void extraGroup();
     void extraUnGroup();
+    void extraPenStyle();
+    void extraPenWidth();
 
     void extraAlignObjLeft();
     void extraAlignObjCenterH();
@@ -360,6 +362,18 @@ protected slots:
     void extraLineEndRect();
     void extraLineEndCircle();
 
+    void extraPenStyleSolid();
+    void extraPenStyleDash();
+    void extraPenStyleDot();
+    void extraPenStyleDashDot();
+    void extraPenStyleDashDotDot();
+    void extraPenStyleNoPen();
+
+    void extraPenWidth1();
+    void extraPenWidth4();
+    void extraPenWidth7();
+    void extraPenWidth10();
+
     void stopPres() {continuePres = false; }
     void newPageLayout( KoPageLayout _layout );
     void openPageLayoutDia() { extraLayout(); }
@@ -403,7 +417,7 @@ protected:
     bool continuePres, exitPres;
 
     // right button popup menus
-    QPopupMenu *rb_oalign, *rb_lbegin, *rb_lend;
+    QPopupMenu *rb_oalign, *rb_lbegin, *rb_lend, *rb_pstyle, *rb_pwidth;
 
     // scrollbars
     QScrollBar *vert, *horz;
@@ -532,6 +546,8 @@ protected:
     KAction *actionExtraLineEnd;
     KAction *actionExtraGroup;
     KAction *actionExtraUnGroup;
+    KAction *actionExtraPenStyle;
+    KAction *actionExtraPenWidth;
 
     KAction *actionScreenConfigPages;
     KAction *actionScreenPresStructView;

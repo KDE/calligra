@@ -161,6 +161,8 @@
   <Action name="extra_configrect"/>
   <Action name="extra_linebegin"/>
   <Action name="extra_lineend"/>
+  <Action name="extra_penstyle"/>
+  <Action name="extra_penwidth"/>
   <Separator/>
   <Action name="extra_lower"/>
   <Action name="extra_raise"/>

@@ -946,6 +946,23 @@ void KPresenterView::extraUnGroup()
     objectSelectedChanged();
 }
 
+/*===============================================================*/
+void KPresenterView::extraPenStyle()
+{
+    page->setToolEditMode( TEM_MOUSE );
+    QPoint pnt( QCursor::pos() );
+    rb_pstyle->popup( pnt );
+}
+
+/*===============================================================*/
+void KPresenterView::extraPenWidth()
+{
+    page->setToolEditMode( TEM_MOUSE );
+    QPoint pnt( QCursor::pos() );
+    rb_pwidth->popup( pnt );
+}
+
+
 /*========================== screen config pages ================*/
 void KPresenterView::screenConfigPages()
 {
@@ -1604,6 +1621,166 @@ void KPresenterView::extraLineEndCircle()
 }
 
 /*===============================================================*/
+void KPresenterView::extraPenStyleSolid()
+{
+    KPresenterDoc *doc = m_pKPresenterDoc;
+    QPen e_pen = QPen( (doc->getPen( pen )).color(), (doc->getPen( pen )).width(),
+                       Qt::SolidLine );
+    doc->setPenBrush( e_pen,
+                      doc->getBrush( brush ), doc->getLineBegin( lineBegin ),
+                      doc->getLineEnd( lineEnd ), doc->getFillType( fillType ),
+                      doc->getGColor1( gColor1 ),
+                      doc->getGColor2( gColor2 ), doc->getGType( gType ),
+                      doc->getGUnbalanced( gUnbalanced ),
+                      doc->getGXFactor( gXFactor ), doc->getGYFactor( gYFactor ),
+                      doc->getSticky( sticky ) );
+}
+
+/*===============================================================*/
+void KPresenterView::extraPenStyleDash()
+{
+    KPresenterDoc *doc = m_pKPresenterDoc;
+    QPen e_pen = QPen( (doc->getPen( pen )).color(), (doc->getPen( pen )).width(),
+                       Qt::DashLine );
+    doc->setPenBrush( e_pen,
+                      doc->getBrush( brush ), doc->getLineBegin( lineBegin ),
+                      doc->getLineEnd( lineEnd ), doc->getFillType( fillType ),
+                      doc->getGColor1( gColor1 ),
+                      doc->getGColor2( gColor2 ), doc->getGType( gType ),
+                      doc->getGUnbalanced( gUnbalanced ),
+                      doc->getGXFactor( gXFactor ), doc->getGYFactor( gYFactor ),
+                      doc->getSticky( sticky ) );
+}
+
+/*===============================================================*/
+void KPresenterView::extraPenStyleDot()
+{
+    KPresenterDoc *doc = m_pKPresenterDoc;
+    QPen e_pen = QPen( (doc->getPen( pen )).color(), (doc->getPen( pen )).width(),
+                       Qt::DotLine );
+    doc->setPenBrush( e_pen,
+                      doc->getBrush( brush ), doc->getLineBegin( lineBegin ),
+                      doc->getLineEnd( lineEnd ), doc->getFillType( fillType ),
+                      doc->getGColor1( gColor1 ),
+                      doc->getGColor2( gColor2 ), doc->getGType( gType ),
+                      doc->getGUnbalanced( gUnbalanced ),
+                      doc->getGXFactor( gXFactor ), doc->getGYFactor( gYFactor ),
+                      doc->getSticky( sticky ) );
+}
+
+/*===============================================================*/
+void KPresenterView::extraPenStyleDashDot()
+{
+    KPresenterDoc *doc = m_pKPresenterDoc;
+    QPen e_pen = QPen( (doc->getPen( pen )).color(), (doc->getPen( pen )).width(),
+                       Qt::DashDotLine );
+    doc->setPenBrush( e_pen,
+                      doc->getBrush( brush ), doc->getLineBegin( lineBegin ),
+                      doc->getLineEnd( lineEnd ), doc->getFillType( fillType ),
+                      doc->getGColor1( gColor1 ),
+                      doc->getGColor2( gColor2 ), doc->getGType( gType ),
+                      doc->getGUnbalanced( gUnbalanced ),
+                      doc->getGXFactor( gXFactor ), doc->getGYFactor( gYFactor ),
+                      doc->getSticky( sticky ) );
+}
+
+/*===============================================================*/
+void KPresenterView::extraPenStyleDashDotDot()
+{
+    KPresenterDoc *doc = m_pKPresenterDoc;
+    QPen e_pen = QPen( (doc->getPen( pen )).color(), (doc->getPen( pen )).width(),
+                       Qt::DashDotDotLine );
+    doc->setPenBrush( e_pen,
+                      doc->getBrush( brush ), doc->getLineBegin( lineBegin ),
+                      doc->getLineEnd( lineEnd ), doc->getFillType( fillType ),
+                      doc->getGColor1( gColor1 ),
+                      doc->getGColor2( gColor2 ), doc->getGType( gType ),
+                      doc->getGUnbalanced( gUnbalanced ),
+                      doc->getGXFactor( gXFactor ), doc->getGYFactor( gYFactor ),
+                      doc->getSticky( sticky ) );
+}
+
+/*===============================================================*/
+void KPresenterView::extraPenStyleNoPen()
+{
+    KPresenterDoc *doc = m_pKPresenterDoc;
+    QPen e_pen = QPen( (doc->getPen( pen )).color(), (doc->getPen( pen )).width(),
+                       Qt::NoPen );
+    doc->setPenBrush( e_pen,
+                      doc->getBrush( brush ), doc->getLineBegin( lineBegin ),
+                      doc->getLineEnd( lineEnd ), doc->getFillType( fillType ),
+                      doc->getGColor1( gColor1 ),
+                      doc->getGColor2( gColor2 ), doc->getGType( gType ),
+                      doc->getGUnbalanced( gUnbalanced ),
+                      doc->getGXFactor( gXFactor ), doc->getGYFactor( gYFactor ),
+                      doc->getSticky( sticky ) );
+}
+
+/*===============================================================*/
+void KPresenterView::extraPenWidth1()
+{
+    KPresenterDoc *doc = m_pKPresenterDoc;
+    QPen e_pen = QPen( (doc->getPen( pen )).color(), 1,
+                       (doc->getPen( pen )).style() );
+    doc->setPenBrush( e_pen,
+                      doc->getBrush( brush ), doc->getLineBegin( lineBegin ),
+                      doc->getLineEnd( lineEnd ), doc->getFillType( fillType ),
+                      doc->getGColor1( gColor1 ),
+                      doc->getGColor2( gColor2 ), doc->getGType( gType ),
+                      doc->getGUnbalanced( gUnbalanced ),
+                      doc->getGXFactor( gXFactor ), doc->getGYFactor( gYFactor ),
+                      doc->getSticky( sticky ) );
+}
+
+/*===============================================================*/
+void KPresenterView::extraPenWidth4()
+{
+    KPresenterDoc *doc = m_pKPresenterDoc;
+    QPen e_pen = QPen( (doc->getPen( pen )).color(), 4,
+                       (doc->getPen( pen )).style() );
+    doc->setPenBrush( e_pen,
+                      doc->getBrush( brush ), doc->getLineBegin( lineBegin ),
+                      doc->getLineEnd( lineEnd ), doc->getFillType( fillType ),
+                      doc->getGColor1( gColor1 ),
+                      doc->getGColor2( gColor2 ), doc->getGType( gType ),
+                      doc->getGUnbalanced( gUnbalanced ),
+                      doc->getGXFactor( gXFactor ), doc->getGYFactor( gYFactor ),
+                      doc->getSticky( sticky ) );
+}
+
+/*===============================================================*/
+void KPresenterView::extraPenWidth7()
+{
+    KPresenterDoc *doc = m_pKPresenterDoc;
+    QPen e_pen = QPen( (doc->getPen( pen )).color(), 7,
+                       (doc->getPen( pen )).style() );
+    doc->setPenBrush( e_pen,
+                      doc->getBrush( brush ), doc->getLineBegin( lineBegin ),
+                      doc->getLineEnd( lineEnd ), doc->getFillType( fillType ),
+                      doc->getGColor1( gColor1 ),
+                      doc->getGColor2( gColor2 ), doc->getGType( gType ),
+                      doc->getGUnbalanced( gUnbalanced ),
+                      doc->getGXFactor( gXFactor ), doc->getGYFactor( gYFactor ),
+                      doc->getSticky( sticky ) );
+}
+
+/*===============================================================*/
+void KPresenterView::extraPenWidth10()
+{
+    KPresenterDoc *doc = m_pKPresenterDoc;
+    QPen e_pen = QPen( (doc->getPen( pen )).color(), 10,
+                       (doc->getPen( pen )).style() );
+    doc->setPenBrush( e_pen,
+                      doc->getBrush( brush ), doc->getLineBegin( lineBegin ),
+                      doc->getLineEnd( lineEnd ), doc->getFillType( fillType ),
+                      doc->getGColor1( gColor1 ),
+                      doc->getGColor2( gColor2 ), doc->getGType( gType ),
+                      doc->getGUnbalanced( gUnbalanced ),
+                      doc->getGXFactor( gXFactor ), doc->getGYFactor( gYFactor ),
+                      doc->getSticky( sticky ) );
+}
+
+/*===============================================================*/
 void KPresenterView::newPageLayout( KoPageLayout _layout )
 {
     KoPageLayout oldLayout = m_pKPresenterDoc->pageLayout();
@@ -1996,6 +2173,14 @@ void KPresenterView::setupActions()
 				      this, SLOT( extraLineEnd() ),
 				      actionCollection(), "extra_lineend" );
 
+    actionExtraPenStyle = new KAction( i18n("Pen Style"), "pen_style", 0,
+					this, SLOT( extraPenStyle() ),
+					actionCollection(), "extra_penstyle" );
+
+    actionExtraPenWidth = new KAction( i18n("Pen Width"), "pen_width", 0,
+					this, SLOT( extraPenWidth() ),
+					actionCollection(), "extra_penwidth" );
+
     actionExtraGroup = new KAction( i18n( "&Group Objects" ), "group", 0,
 				    this, SLOT( extraGroup() ),
 				    actionCollection(), "extra_group" );
@@ -2146,6 +2331,8 @@ void KPresenterView::objectSelectedChanged()
     actionExtraLower->setEnabled(state && m_pKPresenterDoc->numSelected()==1);
     actionBrushColor->setEnabled(state);
     actionPenColor->setEnabled(state);
+    actionExtraPenStyle->setEnabled(state);
+    actionExtraPenWidth->setEnabled(state);
 
     bool isText=page->isASelectedTextObj();
     actionTextFont->setEnabled(isText);
@@ -2746,6 +2933,36 @@ void KPresenterView::setupPopupMenus()
     rb_lend->insertItem( KPBarIcon("line_circle_end" ), this, SLOT( extraLineEndCircle() ) );
     rb_lend->setMouseTracking( true );
     rb_lend->setCheckable( false );
+
+    // create right button pen style
+    rb_pstyle = new QPopupMenu();
+    CHECK_PTR( rb_pstyle );
+    rb_pstyle->insertItem( KPBarIcon( "pen_style_solid" ), this, SLOT( extraPenStyleSolid() ) );
+    rb_pstyle->insertSeparator( -1 );
+    rb_pstyle->insertItem( KPBarIcon( "pen_style_dash" ), this, SLOT( extraPenStyleDash() ) );
+    rb_pstyle->insertSeparator( -1 );
+    rb_pstyle->insertItem( KPBarIcon( "pen_style_dot" ), this, SLOT( extraPenStyleDot() ) );
+    rb_pstyle->insertSeparator( -1 );
+    rb_pstyle->insertItem( KPBarIcon( "pen_style_dashdot" ), this, SLOT( extraPenStyleDashDot() ) );
+    rb_pstyle->insertSeparator( -1 );
+    rb_pstyle->insertItem( KPBarIcon( "pen_style_dotdot" ), this, SLOT( extraPenStyleDashDotDot() ) );
+    rb_pstyle->insertSeparator( -1 );
+    rb_pstyle->insertItem( KPBarIcon( "pen_style_nopen" ), this, SLOT( extraPenStyleNoPen() ) );
+    rb_pstyle->setMouseTracking( true );
+    rb_pstyle->setCheckable( false );
+
+    // create right button pen width
+    rb_pwidth = new QPopupMenu();
+    CHECK_PTR( rb_pwidth );
+    rb_pwidth->insertItem( KPBarIcon( "pen_width1" ), this, SLOT( extraPenWidth1() ) );
+    rb_pwidth->insertSeparator( -1 );
+    rb_pwidth->insertItem( KPBarIcon( "pen_width4" ), this, SLOT( extraPenWidth4() ) );
+    rb_pwidth->insertSeparator( -1 );
+    rb_pwidth->insertItem( KPBarIcon( "pen_width7" ), this, SLOT( extraPenWidth7() ) );
+    rb_pwidth->insertSeparator( -1 );
+    rb_pwidth->insertItem( KPBarIcon( "pen_width10" ), this, SLOT( extraPenWidth10() ) );
+    rb_pwidth->setMouseTracking( true );
+    rb_pwidth->setCheckable( false );
 }
 
 /*======================= setup scrollbars =====================*/
