@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,100 +15,49 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
 
-#include "BlendDialog.h"
-#include "BlendDialog.moc"
+#include <BlendDialog.h>
 
-#include <stdio.h>
-
-#include <klocale.h>
-#include <kapp.h>
-#include <kbuttonbox.h>
-#include <kseparator.h>
-
-#include <qpushbutton.h>
-#include <qbuttongroup.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qgroupbox.h>
+#include <qspinbox.h>
+#include <qhgroupbox.h>
 
-BlendDialog::BlendDialog (QWidget* parent, const char* name) : 
-    QDialog (parent, name, true) {
-  QPushButton* button;
-  QWidget* widget;
+#include <klocale.h>
 
-  setCaption (i18n ("Blend"));
-
-  QVBoxLayout *vl = new QVBoxLayout (this, 2);
-
-  widget = createWidget (this);
-  vl->addWidget (widget);
-
-  KSeparator* sep = new KSeparator (this);
-  vl->addWidget (sep);
-
-  // the standard buttons
-  KButtonBox *bbox = new KButtonBox (this);
-  button = bbox->addButton (i18n ("OK"));
-  connect (button, SIGNAL (clicked ()), SLOT (accept ()));
-  button = bbox->addButton (i18n ("Cancel"));
-  connect (button, SIGNAL (clicked ()), SLOT (reject ()));
-  bbox->addStretch (1);
-  button = bbox->addButton (i18n ("Help"));
-  connect (button, SIGNAL (clicked ()), SLOT (helpPressed ()));
-  bbox->layout ();
-  bbox->setMinimumSize (bbox->sizeHint ());
-
-  vl->addWidget (bbox);
-
-  vl->activate ();
- 
-  setMinimumSize (280, 220);
-  setMaximumSize (290, 220);
+BlendDialog::BlendDialog (QWidget* parent, const char* name) :
+    KDialogBase(parent, name, true, i18n ("Blend"),
+                KDialogBase::Ok | KDialogBase::Cancel) {
+    createWidget(makeMainWidget());
 }
 
-QWidget* BlendDialog::createWidget (QWidget* parent) {
-  QWidget* w;
-  QGroupBox* box;
+void BlendDialog::createWidget (QWidget* parent) {
 
-  w = new QWidget (parent);
+    QVBoxLayout *layout=new QVBoxLayout(parent, KDialogBase::marginHint());
+    QGroupBox *box = new QHGroupBox(i18n("Blend Objects"), parent);
+    layout->addWidget(box);
 
-  box = new QGroupBox (w);
-  box->setTitle (i18n ("Blend Objects"));
-  box->setGeometry (10, 10, 240, 80);
+    (void) new QLabel (i18n("Steps"), box);
 
-  QLabel* label = new QLabel (box);
-  label->setAlignment (AlignLeft | AlignVCenter);
-  label->setText (i18n ("Steps"));
-  label->move (20, 20);
-
-  spinbox = new QSpinBox (box);
-  spinbox->setValue (10);
-//  spinbox->setStep (1);
-  spinbox->setRange (0, 1000);
-  spinbox->move (100, 20);
- 
-  w->setMinimumSize (230, 140);
-  w->setMaximumSize (330, 140);
-  return w;
-}
-
-void BlendDialog::helpPressed () {
+    spinbox = new QSpinBox(box);
+    spinbox->setValue (10);
+    spinbox->setRange (0, 1000);
 }
 
 int BlendDialog::getNumOfSteps () {
-  BlendDialog dialog (0L, "Blend");
 
-  int result = dialog.exec ();
-  if (result == Accepted) 
-    return dialog.spinbox->value ();
-  else
-    return 0;
+    BlendDialog dialog (0L, "Blend");
+
+    if (dialog.exec () == Accepted)
+        return dialog.spinbox->value ();
+    else
+        return 0;
 }
-  
+
+#include <BlendDialog.moc>

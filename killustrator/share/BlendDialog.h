@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -25,24 +25,23 @@
 #ifndef BlendDialog_h
 #define BlendDialog_h
 
-#include <qdialog.h>
-#include <qspinbox.h>
+#include <kdialogbase.h>
 
-class BlendDialog : public QDialog {
-  Q_OBJECT
+class QSpinBox;
+
+class BlendDialog : public KDialogBase {
+
+    Q_OBJECT
+
 public:
-  BlendDialog (QWidget* parent = 0L, const char* name = 0L);
-  
-  static int getNumOfSteps ();
+    BlendDialog (QWidget* parent = 0L, const char* name = 0L);
+    static int getNumOfSteps ();
 
 protected:
-  QWidget *createWidget (QWidget *parent);
+    void createWidget (QWidget *parent);
 
-private slots:
-  void helpPressed ();
-  
 private:
-  QSpinBox *spinbox;
+    QSpinBox *spinbox;
 };
 
 #endif

@@ -26,17 +26,18 @@
 #define BlendCmd_h_
 
 #include <list>
-#include "Command.h"
+#include <Command.h>
 
 class GDocument;
 class GObject;
 class GCurve;
 
 class BlendCmd : public Command {
-  Q_OBJECT
+
+    Q_OBJECT
+
 public:
   BlendCmd (GDocument* doc, int steps);
-
   ~BlendCmd ();
 
   void execute ();
