@@ -25,6 +25,7 @@
 #include <kimgio.h>
 
 #include <koFilterManager.h>
+#include <koApplication.h>
 
 #include "kimage_shell.h"
 #include "kimage_factory.h"
@@ -66,7 +67,7 @@ void KImageShell::slotFileOpen()
 
   if( !KImageIO::isSupported( KImageIO::mimeType( file ) ) )
   {
-    file = KoFilterManager::self()->import( file, nativeFormatMimeType() );
+    file = KoFilterManager::self()->import( file, KOAPP->nativeFormatMimeType() );
     if( file.isNull() )
       return;
   }
