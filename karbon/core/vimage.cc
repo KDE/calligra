@@ -45,6 +45,13 @@ VImage::~VImage()
 void
 VImage::draw( VPainter *painter, const KoRect * ) const
 {
+	if(
+		state() == deleted ||
+		state() == hidden ||
+		state() == hidden_locked )
+	{
+		return;
+	}
 	kdDebug() << "VImage::draw" << endl;
 	if( state() == edit )
 	{
@@ -67,15 +74,15 @@ VImage::draw( VPainter *painter, const KoRect * ) const
 	//painter->setWorldMatrix( m_matrix );
 
 	//*m_image = m_image->smoothScale( m_image->width() * zoomFactor, m_image->height() * zoomFactor, QImage::ScaleMin );
-	//m_boundingBox = KoRect( 0, 0, m_image->width(), m_image->height() );
-	//m_boundingBox = m_boundingBox.transform( m_matrix );
+	m_boundingBox = KoRect( 0, 0, m_image->width(), m_image->height() );
+	m_boundingBox = m_boundingBox.transform( m_matrix );
 	painter->drawImage( *m_image, m_matrix );
 }
 
 void
 VImage::transform( const QWMatrix& m )
 {
-	QWMatrix m2 = m;
+	//QWMatrix m2 = m;
 	//m_matrix *= m2.scale( 1.0, -1.0 );
 	m_matrix *= m;
 	kdDebug() << "dx : " << m.dx() << ", dy : " << m.dy() << endl;
