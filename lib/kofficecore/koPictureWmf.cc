@@ -25,7 +25,6 @@
 #include <qpixmap.h>
 
 #include <kdebug.h>
-#include <kdebugclasses.h>
 
 #include <qwmf.h>
 #include "koPictureKey.h"

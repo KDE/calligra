@@ -33,7 +33,6 @@
 #include <qdragobject.h>
 
 #include <kdebug.h>
-#include <kdebugclasses.h>
 #include <ktempfile.h>
 #include <kprocess.h>
 
