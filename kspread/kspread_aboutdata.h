@@ -32,9 +32,14 @@ KAboutData * newKSpreadAboutData()
                                              version, description, KAboutData::License_GPL,
                                              I18N_NOOP("(c) 1998-2002, The KSpread Team"), 0,
 					     "http://www.koffice.org/kspread/");
-    aboutData->addAuthor("Torben Weis",0, "weis@kde.org");
-    aboutData->addAuthor("Laurent Montel",0, "lmontel@mandrakesoft.com");
-    aboutData->addAuthor("David Faure",0, "faure@kde.org");
+    aboutData->addAuthor("Torben Weis", 0, "weis@kde.org");
+    aboutData->addAuthor("Laurent Montel", 0, "lmontel@mandrakesoft.com");
+    aboutData->addAuthor("David Faure", 0, "faure@kde.org");
+    aboutData->addAuthor("John Dailey", 0, "dailey@vt.edu>");
+    aboutData->addAuthor("Philipp Mueller", 0, "philipp.mueller@gmx.de");
+    aboutData->addAuthor("Ariya Hidayat", 0, "ariya@tf.itb.ac.id");
+    aboutData->addAuthor("Norbert Andres", 0, "nandres@web.de");
+
     return aboutData;
 }
 

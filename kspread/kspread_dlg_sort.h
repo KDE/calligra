@@ -22,11 +22,9 @@
 #ifndef __kspread_dlg_sort__
 #define __kspread_dlg_sort__
 
-#include <kdialogbase.h>
-#include <qrect.h>
 
-// #include <qvariant.h>
-// #include <qdialog.h>
+#include <qdialog.h>
+#include <qstringlist.h>
 
 class KSpreadView;
 

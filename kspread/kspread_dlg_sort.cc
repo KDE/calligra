@@ -40,6 +40,7 @@
 #include <qlineedit.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
+#include <qrect.h>
 #include <qtabwidget.h>
 #include <qwidget.h>
 
