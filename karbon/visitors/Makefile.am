@@ -1,12 +1,19 @@
-INCLUDES = $(KOFFICE_INCLUDES) -I$(srcdir)/.. -I$(srcdir)/../tools \
-	-I$(srcdir)/../render $(LIBFREETYPE_CFLAGS) $(all_includes)
+INCLUDES = \
+	$(KOFFICE_INCLUDES) \
+	-I$(srcdir)/.. \
+	-I$(srcdir)/../core \
+	-I$(srcdir)/../tools \
+	-I$(srcdir)/../render \
+	$(LIBFREETYPE_CFLAGS) $(all_includes)
 
 noinst_LTLIBRARIES = libkarbonvisitors.la
 
 noinst_HEADERS = \
+	vinsertknots.h \
 	vvisitor.h
 
-libkarbonvisitors_la_SOURCES =
+libkarbonvisitors_la_SOURCES = \
+	vinsertknots.cc
 
 libkarbonvisitors_la_METASOURCES = \
 	AUTO

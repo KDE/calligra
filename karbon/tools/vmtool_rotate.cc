@@ -119,8 +119,8 @@ VMToolRotate::drawTemporaryObject( KarbonView* view )
 			if( VPath* path = dynamic_cast<VPath*>( itr2.current() ) )
 			{
 				//path->insertKnots( 5 );
-				path->convertToCurves();
-				path->whirlPinch( KoPoint( sp.x() / view->zoomFactor(), sp.y() / view->zoomFactor() ), m_angle / VGlobal::pi_180, 1.0 );
+//				path->convertToCurves();
+//				path->whirlPinch( KoPoint( sp.x() / view->zoomFactor(), sp.y() / view->zoomFactor() ), m_angle / VGlobal::pi_180, 1.0 );
 			}
 			//itr2.current()->transform( mat );
 			itr2.current()->setState( state_edit );

@@ -46,9 +46,6 @@ public:
 	/// "Calculate" bounding box.
 	KoRect boundingBox() const;
 
-	/// Insert n > 0 knots into each segment.
-	void insertKnots( uint n );
-
 	/// Converts all segments to curves.
 	void convertToCurves();
 

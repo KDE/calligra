@@ -25,6 +25,7 @@ libkarbonpart_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOTEXT) \
 	tools/libkarbontools.la \
 	commands/libkarboncommands.la \
 	core/libkarboncore.la \
+	visitors/libkarbonvisitors.la \
 	render/libvpainter.la
 
 libkarbonpart_la_METASOURCES = AUTO

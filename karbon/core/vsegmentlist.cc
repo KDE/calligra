@@ -325,34 +325,6 @@ VSegmentList::boundingBox() const
 }
 
 void
-VSegmentList::insertKnots( uint n )
-{
-	if( n == 0 )
-		return;
-
-	// ommit "begin" segment:
-	VSegment* segment = m_first->m_next;
-
-	while( segment )
-	{
-		for( uint i = n; i > 0; --i )
-		{
-			VSegment* s = segment->splitAt( 1.0 / ( i + 1.0 ) );
-
-			VSegment* prev = segment->m_prev;
-			segment->m_prev = s;
-			prev->m_next = s;
-			s->m_prev = prev;
-			s->m_next = segment;
-
-			++m_number;
-		}
-
-		segment = segment->m_next;
-	}
-}
-
-void
 VSegmentList::convertToCurves()
 {
 	// ommit "begin" segment:
@@ -511,36 +483,23 @@ VSegmentList::operator=( const VSegmentList& list )
 }
 
 bool
-VSegmentList::insert( const VSegment* /*segment*/ )
+VSegmentList::insert( const VSegment* segment )
 {
-/*
-	VSegment* s = const_cast<VSegment*>( segment );
-
-	if( index == 0 )
-	{
-		prepend( s );
-		return true;
-	}
-	else if( index == m_number )
-	{
-		append( s );
-		return true;
-	}
-
-	VSegment* next = locate( index );
-	if( !next )
+	if( m_currentIndex == -1 )
 		return false;
 
-	VSegment* prev = next->m_prev;
+	VSegment* s = const_cast<VSegment*>( segment );
 
-	next->m_prev = s;
+	VSegment* prev = m_current->m_prev;
+
+	m_current->m_prev = s;
 	prev->m_next = s;
 	s->m_prev = prev;
-	s->m_next = next;
+	s->m_next = m_current;
 
 	m_current = s;
 	++m_number;
-*/
+
 	return true;
 }
 

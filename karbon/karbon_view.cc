@@ -48,7 +48,7 @@
 #include <kdebug.h>
 
 // TODO: only for testing:
-#include "vpath.h"
+#include "vinsertknots.h"
 
 KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	: KoView( part, parent, name ), m_part( part )
@@ -249,17 +249,14 @@ void
 KarbonView::dummyForTesting()
 {
 kdDebug() << "KarbonView::dummyForTesting()" << endl;
+
+	VInsertKnots ik;
+	ik.setKnots( 3 );
+
 	VObjectListIterator itr( m_part->selection() );
-	KoRect rect = m_part->selection().boundingBox( 1 );
-	for ( ; itr.current() ; ++itr )
+	for ( ; itr.current(); ++itr )
 	{
-		if( VPath* path = dynamic_cast<VPath*>( itr.current() ) )
-		{
-			path->insertKnots( 5 );
-			path->convertToCurves();
-			//path->whirlPinch( KoPoint( rect.x() + rect.width() / 2, rect.y() + rect.height() / 2 ), 30, 1 );
-			path->whirlPinch( KoPoint( 100, 100 ), 90, 1 );
-		}
+		itr.current()->accept( ik );
 	}
 
 	m_part->repaintAllViews();
