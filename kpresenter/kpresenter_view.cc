@@ -1600,7 +1600,7 @@ void KPresenterView_impl::setupMenu()
       m_idMenuScreen_Last = m_rMenuBar->insertItemP(CORBA::string_dup(pix),
 						    CORBA::string_dup(i18n("&Go to end")),m_idMenuScreen,
 						    this,CORBA::string_dup("screenLast"));
-      m_idMenuScreen_Skip = m_rMenuBar->insertItem(CORBA::string_dup(i18n("Skip &to page")),m_idMenuScreen,
+      m_idMenuScreen_Skip = m_rMenuBar->insertItem(CORBA::string_dup(i18n("Goto &page")),m_idMenuScreen,
 						   this,CORBA::string_dup("screenSkip"));
       m_rMenuBar->insertSeparator(m_idMenuScreen);
       tmp = kapp->kde_datadir().copy();
