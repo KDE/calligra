@@ -145,7 +145,7 @@
                         <cstring>radioModeCss</cstring>
                     </property>
                     <property name="text">
-                        <string>CSS: as much a s possible (uses CSS)</string>
+                        <string>CSS: use CSS as much as possible</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
