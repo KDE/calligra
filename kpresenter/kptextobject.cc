@@ -506,6 +506,8 @@ void KPTextObject::saveFormat( QDomElement & element, KoTextFormat*lastFormat )
             element.setAttribute(attrUnderline, "double");
         if(lastFormat->underlineLineType()==KoTextFormat::U_SIMPLE_BOLD)
             element.setAttribute(attrUnderline, "single-bold");
+        else if( lastFormat->underlineLineType()==KoTextFormat::U_WAVE)
+            element.setAttribute(attrUnderline, "wave");
         else if(tmpUnderline)
             element.setAttribute(attrUnderline, tmpUnderline);
         QString strLineType=KoTextFormat::underlineStyleToString( lastFormat->underlineLineStyle() );
@@ -787,6 +789,8 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat,
             format.setUnderlineLineType ( KoTextFormat::U_SIMPLE);
         else if ( value == "single-bold" )
             format.setUnderlineLineType ( KoTextFormat::U_SIMPLE_BOLD);
+        else if( value =="wave" )
+            format.setUnderlineLineType( KoTextFormat::U_WAVE);
         else
             format.setUnderlineLineType ( (bool)value.toInt() ? KoTextFormat::U_SIMPLE :KoTextFormat::U_NONE);
     }
