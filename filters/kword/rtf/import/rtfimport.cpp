@@ -1955,12 +1955,33 @@ void RTFImport::addLayout( DomNode &node, QCString &name, RTFLayout &layout, boo
 
 	node.closeNode( "OFFSETS" );
     }
+
+
+    // Linespacing
     if (layout.spaceBetween > 0)
     {
-	// TODO: fix "too much line spacing" (looks ugly in KWord)
-//	QDomElement elem = addNode( node, "LINESPACING" );
-//	setAttribute( elem, "value", .05*layout.spaceBetween );
+	node.addNode( "LINESPACING" );
+        if( layout.spaceBetween == 360 )
+  	    node.setAttribute( "type", "oneandhalf" );
+        else if( layout.spaceBetween == 480 )
+	    node.setAttribute( "type", "double" );
+        else
+        {
+	    node.setAttribute( "type", "custom" );
+	    node.setAttribute( "spacevalue", 0.05*layout.spaceBetween );
+        }
+	node.closeNode( "LINESPACING" );
     }
+    if (layout.spaceBetween < 0)
+    {
+        // negative linespace means "exact"
+	node.addNode( "LINESPACING" );
+	node.setAttribute( "type", "custom" );
+	node.setAttribute( "spacevalue", -0.05*layout.spaceBetween );
+	node.closeNode( "LINESPACING" );
+    }
+
+
     if (layout.keep || layout.pageBB || frameBreak || layout.keepNext)
     {
 	node.addNode( "PAGEBREAKING" );
