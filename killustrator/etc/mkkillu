@@ -4,13 +4,13 @@ make acinclude.m4
 rm -rf killustrator.dist
 cp -rp killustrator killustrator.dist
 rm -rf killustrator.dist/etc killustrator.dist/koffice
-cp -p admin/install-sh admin/ltmain.sh admin/ltconfig admin/missing admin/mkinstalldirs acinclude.m4 killustrator/etc/configure.in COPYING INSTALL acconfig.h admin/config.guess admin/config.sub admin/automoc killustrator.dist
+cp -p admin/install-sh admin/ltmain.sh admin/ltconfig admin/missing admin/mkinstalldirs acinclude.m4 killustrator/etc/configure.in COPYING INSTALL admin/config.guess admin/config.sub admin/am_edit killustrator.dist
 mkdir killustrator.dist/po
-cp -p po/killustrator.pot killustrator.dist/po
+cp -p ../kde-i18n/templates/koffice/killustrator.pot killustrator.dist/po
 cp -p killustrator/etc/po_Makefile.am killustrator.dist/po/Makefile.am
 list=""
-for file in po/*/killustrator.po; do
-   lang=`echo $file | sed -e "s#.*po/\(.*\)/.*#\1#"`
+for file in ../kde-i18n/messages/*/koffice/killustrator.po; do
+   lang=`echo $file | awk -F '/' '{ print $4 }'`
    cp -p $file killustrator.dist/po/$lang.po
    msgfmt $file -o killustrator.dist/po/$lang.gmo
    list="$list $lang.gmo"
@@ -31,7 +31,6 @@ make -k maintainer-clean || rm config.cache
 aclocal
 autoheader
 automake
-perl automoc
 autoconf
 
 # if the following fails, try it by hand.
