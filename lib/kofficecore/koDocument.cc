@@ -103,7 +103,8 @@ public:
         m_backupPath( QString::null ),
         m_doNotSaveExtDoc( false ),
         m_current( false ),
-        m_storeInternal( false )
+        m_storeInternal( false ),
+        m_bLoading( false )
     {
         m_confirmNonNativeSave[0] = true;
         m_confirmNonNativeSave[1] = true;
@@ -142,6 +143,7 @@ public:
     bool m_doNotSaveExtDoc; // makes it possible to save only internally stored child documents
     bool m_current;
     bool m_storeInternal; // Store this doc internally even if url is external
+    bool m_bLoading; // True while loading (openURL is async)
 };
 
 // Used in singleViewMode
@@ -822,7 +824,7 @@ void KoDocument::paintChild( KoDocumentChild *child, QPainter &painter, KoView *
     }
 }
 
-bool KoDocument::isModified()
+bool KoDocument::isModified() const
 {
     if ( KParts::ReadWritePart::isModified() )
     {
@@ -1341,8 +1343,10 @@ bool KoDocument::openURL( const KURL & _url )
     }
     if ( !closeURL() )
         return false;
+
     KURL url( _url );
     bool autosaveOpened = false;
+    d->m_bLoading = true;
     if ( url.isLocalFile() && d->m_shouldCheckAutoSaveFile )
     {
         QString file = url.path();
@@ -1362,10 +1366,15 @@ bool KoDocument::openURL( const KURL & _url )
                     QFile::remove( asf );
                     break;
                 default: // Cancel
+                    d->m_bLoading = false;
                     return false;
             }
         }
     }
+
+    connect(this, SIGNAL(sigProgress(int)), this, SLOT(slotLoadFinished()));
+    connect(this, SIGNAL(completed()), this, SLOT(slotLoadFinished()));
+
     bool ret = KParts::ReadWritePart::openURL( url );
 
     if ( autosaveOpened )
@@ -1550,6 +1559,13 @@ void KoDocument::setMimeTypeAfterLoading( const QString& mimeType )
     const bool needConfirm = !isNativeFormat( d->mimeType );
     setConfirmNonNativeSave( false, needConfirm  );
     setConfirmNonNativeSave( true, needConfirm );
+}
+
+void KoDocument::slotLoadFinished()
+{
+    d->m_bLoading = false;
+    disconnect(this, SIGNAL(sigProgress(int)), this, SLOT(slotLoadFinished()));
+    disconnect(this, SIGNAL(completed()), this, SLOT(slotLoadFinished()));
 }
 
 // The caller must call store->close() if loadAndParse returns true.
@@ -2235,6 +2251,11 @@ void KoDocument::setErrorMessage( const QString& errMsg )
 bool KoDocument::isAutosaving() const
 {
     return d->m_autosaving;
+}
+
+bool KoDocument::isLoading() const
+{
+    return d->m_bLoading;
 }
 
 void KoDocument::removeAutoSaveFiles()

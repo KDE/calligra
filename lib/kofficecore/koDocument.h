@@ -681,7 +681,12 @@ public:
     /**
      * Returns true if this document or any of its internal child documents are modified.
      */
-    bool isModified();
+    bool isModified() const;
+
+    /**
+     * Returns true during loading (openURL can be asynchronous)
+     */
+    bool isLoading() const;
 
     int queryCloseExternalChildren();
     int queryCloseDia();
@@ -928,6 +933,7 @@ private slots:
     void slotChildDestroyed();
     void slotAutoSave();
     void slotStarted( KIO::Job* );
+    void slotLoadFinished();
 
 private:
     static KService::Ptr readNativeService( KInstance *instance );

@@ -54,6 +54,11 @@ void KoDocumentIface::openURL( QString url )
   m_pDoc->openURL( KURL( url ) );
 }
 
+bool KoDocumentIface::isLoading()
+{
+  return m_pDoc->isLoading();
+}
+
 QString KoDocumentIface::url()
 {
   return m_pDoc->url().url();
@@ -109,6 +114,11 @@ QMap<QCString,DCOPRef> KoDocumentIface::actionMap()
 void KoDocumentIface::saveAs( const QString & url )
 {
     m_pDoc->saveAs( KURL( url ) );
+}
+
+bool KoDocumentIface::waitSaveComplete()
+{
+    return m_pDoc->waitSaveComplete(); // see ReadWritePart
 }
 
 void KoDocumentIface::setOutputMimeType( const QCString & mimetype )

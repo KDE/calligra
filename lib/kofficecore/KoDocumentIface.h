@@ -58,8 +58,15 @@ k_dcop:
 
     /**
      * Opens a document stored in @p url
+     * Warning: this is asynchronous. The document might not be loaded yet when
+     * this call returns. See isLoading.
      */
     void openURL( QString url );
+
+    /**
+     * @return TRUE is the document is still loading
+     */
+    bool isLoading();
 
     /**
      * @return TRUE is the document has been modified
@@ -91,8 +98,17 @@ k_dcop:
 
     /**
      * Saves the document under a new name
+     * Warning: this is asynchronous. The document might not be loaded yet when
+     * this call returns. See waitSaveComplete.
      */
     void saveAs( const QString & url );
+
+    /**
+     * Waits for any pending upload job to finish and returns whether the
+     * last save() action was successful.
+     */
+    bool waitSaveComplete();
+
     void setOutputMimeType( const QCString & mimetype );
 
     QString documentInfoAuthorName() const;
