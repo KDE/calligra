@@ -257,9 +257,10 @@ void KoParagCounter::saveOasis( KoGenStyle& listStyle ) const
     listStyle.addChildElement( tagName, listLevelContents );
 }
 
-void KoParagCounter::saveOasisListLevel( KoXmlWriter& listLevelWriter ) const
+void KoParagCounter::saveOasisListLevel( KoXmlWriter& listLevelWriter, bool includeLevelAndProperties ) const
 {
-    listLevelWriter.addAttribute( "text:level", (int)m_depth + 1 );
+    if ( includeLevelAndProperties ) // false when called for footnotes-configuration
+        listLevelWriter.addAttribute( "text:level", (int)m_depth + 1 );
     // OASIS allows to specify a text:style, the character style to use for the numbering...
     // We currently always format as per the first character of the paragraph, but that's not perfect.
 
@@ -292,11 +293,14 @@ void KoParagCounter::saveOasisListLevel( KoXmlWriter& listLevelWriter ) const
     }
     // m_numbering isn't saved, it's set depending on context (NUM_CHAPTER for headings).
 
-    listLevelWriter.startElement( "style:list-level-properties" );
-    listLevelWriter.addAttribute( "fo:text-align", KoParagLayout::saveOasisAlignment( (Qt::AlignmentFlags)m_align ) );
-    // OASIS has other style properties: text:space-before (indent), text:min-label-width (TODO),
-    // text:min-label-distance, style:font-name (for bullets), image size and vertical alignment.
-    listLevelWriter.endElement(); // style:list-level-properties
+    if ( includeLevelAndProperties ) // false when called for footnotes-configuration
+    {
+        listLevelWriter.startElement( "style:list-level-properties" );
+        listLevelWriter.addAttribute( "fo:text-align", KoParagLayout::saveOasisAlignment( (Qt::AlignmentFlags)m_align ) );
+        // OASIS has other style properties: text:space-before (indent), text:min-label-width (TODO),
+        // text:min-label-distance, style:font-name (for bullets), image size and vertical alignment.
+        listLevelWriter.endElement(); // style:list-level-properties
+    }
 }
 
 int KoParagCounter::number( const KoTextParag *paragraph )

@@ -78,7 +78,7 @@ public:
     /// Save as OASIS XML
     void saveOasis( KoGenStyle& listStyle ) const;
     /// Part of saveOasis that is shared with KoStyleCollection::saveOasisOutlineStyles
-    void saveOasisListLevel( KoXmlWriter& listLevelWriter ) const;
+    void saveOasisListLevel( KoXmlWriter& listLevelWriter, bool includeLevelAndProperties = true ) const;
 
     bool operator==( const KoParagCounter & c2 ) const;
     bool operator!=( const KoParagCounter & c2 ) const { return !(*this == c2); }
