@@ -15,8 +15,8 @@
 #include "vcanvas.h"
 
 VCanvas::VCanvas( KarbonView* view, KarbonPart* part )
-	: QScrollView( view, "canvas", WNorthWestGravity | WResizeNoErase /* |
-	  WRepaintNoErase */ ), m_part( part ), m_view( view ), m_zoomFactor( 1.0 )
+	: QScrollView( view, "canvas", WNorthWestGravity | WResizeNoErase  |
+	  WRepaintNoErase ), m_part( part ), m_view( view ), m_zoomFactor( 1.0 )
 {
 	viewport()->setFocusPolicy( QWidget::StrongFocus );
 
@@ -33,9 +33,18 @@ resizeContents( 800, 600 );
 }
 
 void
+VCanvas::viewportPaintEvent( QPaintEvent * )
+{
+	//kdDebug() << "VCanvas::viewportPaintEvent" << endl;
+	VPainter *p = VPainterFactory::painter();
+	p->end();
+}
+
+void
 VCanvas::drawContents( QPainter* painter, int clipx, int clipy,
 	int clipw, int cliph  )
 {
+	//kdDebug() << "VCanvas::drawContents" << endl;
 	drawDocument( painter, QRect( clipx, clipy, clipw, cliph ) );
 }
 
@@ -58,13 +67,17 @@ VCanvas::drawDocument( QPainter* /*painter*/, const QRect& rect )
 void
 VCanvas::repaintAll( bool erase )
 {
-	viewport()->repaint( erase );
+	drawContents( 0, 0, 0, width(), height() );
+	//viewport()->repaint( erase );
 }
 
 void
 VCanvas::resizeEvent( QResizeEvent* event )
 {
 	QScrollView::resizeEvent( event );
+	drawContents( 0, 0, 0, width(), height() );
+    //VPainter *p = VPainterFactory::painter();
+    //p->end();
 }
 
 #include <vcanvas.moc>
