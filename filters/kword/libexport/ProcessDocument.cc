@@ -413,6 +413,23 @@ static void ProcessFootnoteTag (QDomNode myNode, void *tagData, KWEFKWordLeader 
     }
 }
 
+static void ProcessNoteTag (QDomNode myNode, void *tagData, KWEFKWordLeader *leader)
+{
+    VariableData *variable = (VariableData *) tagData;
+
+    QString note;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList
+        << AttrProcessing ( "note", note )
+        ;
+    ProcessAttributes (myNode, attrProcessingList);
+
+    // set it even if note is empty
+    variable->setGenericData( "note", note );
+}
+
+// ### TODO: some files have not a <VARIABLE> tag but its supposed children are directly children of <FORMAT id="4">
 static void ProcessVariableTag (QDomNode myNode, void* tagData, KWEFKWordLeader* leader)
 {
     VariableData *variable = (VariableData *) tagData;
@@ -428,6 +445,7 @@ static void ProcessVariableTag (QDomNode myNode, void* tagData, KWEFKWordLeader*
         << TagProcessing ( "SERIALLETTER" )
         << TagProcessing ( "FIELD",         ProcessFieldTag,        variable )
         << TagProcessing ( "LINK",          ProcessLinkTag,         variable )
+        << TagProcessing ( "NOTE",          ProcessNoteTag,         variable )
         << TagProcessing ( "FOOTNOTE",      ProcessFootnoteTag,     variable )
         ;
     ProcessSubtags (myNode, tagProcessingList, leader);
