@@ -365,8 +365,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
 			       actionCollection(), "textColor" );
     m_bgColor = new KSelectColorAction( i18n("Background color"), KColorAction::BackgroundColor, 0, this, SLOT( changeBackgroundColor() ),
 			       actionCollection(), "backgroundColor" );
-    // Removed the funct icon because it crashed for me :/ (Werner)
-    m_function = new KAction( i18n("Function"), 0, this, SLOT( funct() ), actionCollection(), "function" );
+    m_function = new KAction( i18n("Function"), "funct", 0, this, SLOT( funct() ), actionCollection(), "function" );
     m_borderLeft = new KAction( i18n("Border left"), "border_left", 0, this, SLOT( borderLeft() ), actionCollection(), "borderLeft" );
     m_borderRight = new KAction( i18n("Border Right"), "border_right", 0, this, SLOT( borderRight() ), actionCollection(), "borderRight" );
     m_borderTop = new KAction( i18n("Border Top"), "border_top", 0, this, SLOT( borderTop() ), actionCollection(), "borderTop" );
