@@ -24,8 +24,6 @@
 
 #include <DuplicateCmd.h>
 
-#include <qclipboard.h>
-#include <kapp.h>
 #include <klocale.h>
 
 #include <GDocument.h>

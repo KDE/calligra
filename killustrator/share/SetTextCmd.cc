@@ -29,8 +29,8 @@
 #include <GObject.h>
 #include <GText.h>
 
-SetTextCmd::SetTextCmd (GDocument* doc, GText* obj, const QString& )
-  : Command(i18n("Change Text"))
+SetTextCmd::SetTextCmd (GDocument* doc, GText* obj, const QString &s )
+  : Command(i18n("Change Text")), text(s)
 {
   document = doc;
   object = obj;

@@ -65,7 +65,7 @@ bool KilluImport::importFromFile (GDocument *doc) {
         for (QListIterator<GLayer> li(tmpDoc->getLayers());
              li.current(); ++li) {
             if ((*li)->isVisible ()) {
-                QList<GObject>& contents = (*li)->objects ();
+                const QList<GObject>& contents = (*li)->objects ();
                 for (QListIterator<GObject> oi(contents); oi.current(); ++oi) {
                     GObject* obj = *oi;
                     obj->ref ();

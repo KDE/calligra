@@ -48,7 +48,7 @@ GClipart::GClipart (const QDomElement &element) : GObject (element.namedItem("go
     calcBoundingBox ();
 }
 
-GClipart::GClipart (QWinMetaFile& wmf, const char* name) : url (name) {
+GClipart::GClipart (QWinMetaFile& wmf, const QString &name) : url (name) {
   QRect r = wmf.bbox ();
 
   width = (r.right () - r.left ()) * 72.0 / wmf.dpi ();

@@ -29,7 +29,7 @@
 #include <GDocument.h>
 #include <GPixmap.h>
 
-InsertPixmapCmd::InsertPixmapCmd (GDocument* doc, const char* fname) :
+InsertPixmapCmd::InsertPixmapCmd (GDocument* doc, const QString &fname) :
  Command(i18n("Insert Pixmap"))
 {
   document = doc;

@@ -64,7 +64,7 @@ void FreeHandTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
       newObj = true;
 
       QList<GObject> olist;
-    // look for existing polylines with a point near the mouse pointer
+      // look for existing polylines with a point near the mouse pointer
       if (doc->findContainingObjects (xpos, ypos, olist)) {
         QListIterator<GObject> it (olist);
         while (it.current ()) {

@@ -47,12 +47,6 @@
 #include <GLayer.h>
 #include <SelectionTool.h>
 
-//#include <qdict.h>
-//#include <qpainter.h>
-
-//#include <qpixmap.h>
-//#include <qfont.h>
-
 Canvas::Canvas (GDocument* doc, float res, QwViewport* vp, QWidget* parent,
                 const char* name) : QWidget (parent, name) {
   zoomFactors.append(0.5);
@@ -444,7 +438,6 @@ void Canvas::redrawView (bool repaintFlag) {
   p.lineTo (2, h - 1);
   p.setPen (black);
 
-
   // draw the grid
   if (gridIsOn)
     drawGrid (p);
@@ -524,9 +517,6 @@ void Canvas::updateRegion (const Rect& reg) {
     clip.setRight (mw);
   if (clip.bottom () >= mh)
     clip.setBottom (mh);
-
-  //  cout << "clip: " << clip.left () << ", " << clip.top ()
-  //       << ", " << clip.width () << ", " << clip.height () << endl;
 
   p.setClipRect (clip);
 

@@ -30,10 +30,10 @@ ExportFilter::ExportFilter () {
 ExportFilter::~ExportFilter () {
 }
 
-void ExportFilter::setOutputFileName (const char* fname) {
+void ExportFilter::setOutputFileName (const QString &fname) {
   filename = fname;
 }
 
-const char* ExportFilter::outputFileName () const {
+QString ExportFilter::outputFileName () const {
   return filename;
 }

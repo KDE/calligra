@@ -30,10 +30,10 @@ ImportFilter::ImportFilter () {
 ImportFilter::~ImportFilter () {
 }
 
-void ImportFilter::setInputFileName (const char* fname) {
+void ImportFilter::setInputFileName (const QString &fname) {
   filename = fname;
 }
 
-const char* ImportFilter::inputFileName () const {
+QString ImportFilter::inputFileName () const {
   return filename;
 }

@@ -30,7 +30,7 @@
 #include <GClipart.h>
 #include <GDocument.h>
 
-InsertClipartCmd::InsertClipartCmd (GDocument* doc, const char* fname) :
+InsertClipartCmd::InsertClipartCmd (GDocument* doc, const QString &fname) :
  Command(i18n("Insert Clipart"))
 {
   document = doc;
@@ -48,7 +48,7 @@ void InsertClipartCmd::execute () {
   if (clipart)
     clipart->unref ();
 
-  if (wmf.load ((const char *) filename)) {
+  if (wmf.load(filename)) {
     clipart = new GClipart (wmf, filename);
     document->insertObject (clipart);
   }

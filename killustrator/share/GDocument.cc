@@ -52,10 +52,6 @@
 #include <qdict.h>
 #include <qdom.h>
 
-// default papersize in mm
-#define PAPER_WIDTH 210.0
-#define PAPER_HEIGHT 298.0
-
 #define LAYER_VISIBLE   1
 #define LAYER_EDITABLE  2
 #define LAYER_PRINTABLE 4

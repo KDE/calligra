@@ -34,8 +34,8 @@ class ExportFilter {
 public:
     virtual ~ExportFilter ();
 
-    void setOutputFileName (const char* fname);
-    const char* outputFileName () const;
+    void setOutputFileName (const QString &fname);
+    QString outputFileName () const;
 
     virtual bool setup (GDocument* doc, const char* format) = 0;
     virtual bool exportToFile (GDocument *doc) = 0;

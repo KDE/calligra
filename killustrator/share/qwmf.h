@@ -41,7 +41,7 @@ public:
   virtual ~QWinMetaFile();
 
   /** Load WMF file. Returns TRUE on success. */
-  virtual bool load(const QString fileName);
+  virtual bool load(const QString &fileName);
 
   /** Paint metafile to given paint-device. Returns TRUE on success. */
   virtual bool paint(const QPaintDevice* target);
@@ -55,7 +55,7 @@ public:
   /** Set single-step mode. */
   virtual void singleStep(bool ss);
 
-  /** Returns bounding rectangle if isPlaceable()==TRUE, 
+  /** Returns bounding rectangle if isPlaceable()==TRUE,
     otherwise unspecified result. */
   QRect bbox(void) const { return mBBox; }
 

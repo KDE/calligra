@@ -44,7 +44,7 @@ public:
   // only undoable commands have to implement this
   virtual void unexecute () {}
 
-  const QString& getName() const { return name; }
+  QString getName() const { return name; }
 
 private:
   QString name;

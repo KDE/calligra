@@ -80,5 +80,4 @@ void Painter::drawBezier (QPainter& p, QList<Coord>& points, int index) {
            t3*(int)points.at (i3)->y());
         p.drawLine(x0, y0, x1, y1);
       }
-
 }

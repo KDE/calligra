@@ -29,7 +29,6 @@
 #include <qvaluelist.h>
 #include <Coord.h>
 
-
 class GDocument;
 class GObject;
 class ToolController;
@@ -163,7 +162,6 @@ private:
   QValueList<float> horizHelplines, vertHelplines;
   bool helplinesAreOn, helplinesSnapIsOn;
   float tmpHorizHelpline, tmpVertHelpline;
-
   QValueList<float> zoomFactors;
 };
 

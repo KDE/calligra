@@ -304,7 +304,7 @@ void GText::deleteBackward () {
   updateRegion ();
 }
 
-void GText::insertChar (char c) {
+void GText::insertChar(const QChar &c) {
   QString& s = text[cursy];
   if (c == '\n') {
     // newline
@@ -464,7 +464,6 @@ QDomElement GText::writeToXml (QDomDocument &document) {
     element.appendChild(font);
 
     int i = 0;
-    // temporary solution to make it work before we get rid of the STL
     QString t;
     for (QStringList::Iterator it = text.begin (); it != text.end ();
          it++, i++)

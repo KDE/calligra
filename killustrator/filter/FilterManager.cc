@@ -51,60 +51,60 @@ void FilterManager::installDefaultFilters () {
   if (filter->installed ()) {
 #ifdef HAVE_QIMGIO
     filters.insert ("JPEG", new FilterInfo (FilterInfo::FKind_Export,
-					    "JPEG Image Format", "jpg",
-					    "Kai-Uwe Sattler",
-					    "1.0", 0L, filter));
+                                            "JPEG Image Format", "jpg",
+                                            "Kai-Uwe Sattler",
+                                            "1.0", 0L, filter));
     filters.insert ("PNG", new FilterInfo (FilterInfo::FKind_Export,
-					   "PNG Image Format", "png",
-					   "Kai-Uwe Sattler",
-					   "1.0", 0L, filter));
+                                           "PNG Image Format", "png",
+                                           "Kai-Uwe Sattler",
+                                           "1.0", 0L, filter));
 #endif
     filters.insert ("PPM", new FilterInfo (FilterInfo::FKind_Export,
-					   "PPM Image Format", "ppm",
-					   "Kai-Uwe Sattler",
-					   "1.0", 0L, filter));
+                                           "PPM Image Format", "ppm",
+                                           "Kai-Uwe Sattler",
+                                           "1.0", 0L, filter));
     filters.insert ("XPM", new FilterInfo (FilterInfo::FKind_Export,
-					   "XPM Image Format", "xpm",
-					   "Kai-Uwe Sattler",
-					   "1.0", 0L, filter));
+                                           "XPM Image Format", "xpm",
+                                           "Kai-Uwe Sattler",
+                                           "1.0", 0L, filter));
     filters.insert ("GIF", new FilterInfo (FilterInfo::FKind_Export,
-					   "GIF Image Format", "gif",
-					   "Kai-Uwe Sattler",
-					   "1.0", 0L, filter));
+                                           "GIF Image Format", "gif",
+                                           "Kai-Uwe Sattler",
+                                           "1.0", 0L, filter));
   }
   KilluImport* killuFilter = new KilluImport ();
   filters.insert ("KIllustrator", new FilterInfo (FilterInfo::FKind_Import,
-						  "KIllustrator Document",
-						  "kil",
-						  "Kai-Uwe Sattler",
-						  "0.1", killuFilter, 0L));
+                                                  "KIllustrator Document",
+                                                  "kil",
+                                                  "Kai-Uwe Sattler",
+                                                  "0.1", killuFilter, 0L));
   XfigImport* xfigFilter = new XfigImport ();
   filters.insert ("Xfig", new FilterInfo (FilterInfo::FKind_Import,
-						  "Xfig Document", "fig",
-						  "Kai-Uwe Sattler",
-						  "0.1", xfigFilter, 0L));
+                                                  "Xfig Document", "fig",
+                                                  "Kai-Uwe Sattler",
+                                                  "0.1", xfigFilter, 0L));
   EPSExport* epsFilter = new EPSExport ();
   filters.insert ("EPS", new FilterInfo (FilterInfo::FKind_Export,
-					  "Encapsulated PostScript", "eps",
-					  "Kai-Uwe Sattler",
-					  "0.1", 0L, epsFilter));
+                                          "Encapsulated PostScript", "eps",
+                                          "Kai-Uwe Sattler",
+                                          "0.1", 0L, epsFilter));
   SVGExport* svgFilter = new SVGExport ();
   filters.insert ("SVG", new FilterInfo (FilterInfo::FKind_Export,
-					  "Scalable Vector Graphics", "svg",
-					  "Kai-Uwe Sattler",
-					  "0.1", 0L, svgFilter));
+                                          "Scalable Vector Graphics", "svg",
+                                          "Kai-Uwe Sattler",
+                                          "0.1", 0L, svgFilter));
 #if defined(not_yet)
   CmxImport* cmxFilter = new CmxImport ();
   filters.insert ("CMX", new FilterInfo (FilterInfo::FKind_Import,
-						  "Corel Exchange", "cmx",
-						  "Kai-Uwe Sattler",
-						  "0.1", cmxFilter, 0L));
+                                                  "Corel Exchange", "cmx",
+                                                  "Kai-Uwe Sattler",
+                                                  "0.1", cmxFilter, 0L));
   PSImport* psFilter = new PSImport ();
   if (psFilter->installed ())
     filters.insert ("PS", new FilterInfo (FilterInfo::FKind_Import,
-					  "Postscript", "ps",
-					  "Kai-Uwe Sattler",
-					  "0.1", psFilter, 0L));
+                                          "Postscript", "ps",
+                                          "Kai-Uwe Sattler",
+                                          "0.1", psFilter, 0L));
 #endif
 }
 
@@ -114,11 +114,15 @@ QString FilterManager::importFilters () {
   for (; iter.current (); ++iter) {
     FilterInfo *fi = iter.current ();
     if (fi->kind () == FilterInfo::FKind_Import) {
-      QString buf;
-      buf.sprintf ("*.%s|%s (*.%s)", fi->extension (), fi->type (),
-		   fi->extension ());
+      QString buf="*.";
+      buf+=fi->extension();
+      buf+="|";
+      buf+=fi->type();
+      buf+=" (*.";
+      buf+=fi->extension ();
+      buf+=")";
       if (s.length () > 0)
-	s += "\n";
+        s += "\n";
       s += buf;
     }
   }
@@ -131,28 +135,36 @@ QString FilterManager::exportFilters (const char* defaultExt) {
   QDictIterator<FilterInfo> iter (filters);
   if (defaultExt != 0L) {
       for (; iter.current (); ++iter) {
-	  FilterInfo *fi = iter.current ();
-	  if (fi->kind () == FilterInfo::FKind_Export &&
-	      ::strcmp (fi->extension (), defaultExt) == 0) {
-	      QString buf;
-	      buf.sprintf ("*.%s|%s (*.%s)", fi->extension (), fi->type (),
-			   fi->extension ());
-	      s += buf;
-	  }
+          FilterInfo *fi = iter.current ();
+          if (fi->kind () == FilterInfo::FKind_Export &&
+              ::strcmp (fi->extension (), defaultExt) == 0) {
+              QString buf="*.";
+              buf+=fi->extension();
+              buf+="|";
+              buf+=fi->type();
+              buf+=" (*.";
+              buf+=fi->extension ();
+              buf+=")";
+              s += buf;
+          }
       }
   }
   for (iter.toFirst (); iter.current (); ++iter) {
     FilterInfo *fi = iter.current ();
     if (fi->kind () == FilterInfo::FKind_Export) {
-	if (defaultExt != 0L &&
-	    ::strcmp (fi->extension (), defaultExt) == 0)
-	    continue;
+        if (defaultExt != 0L &&
+            ::strcmp (fi->extension (), defaultExt) == 0)
+            continue;
 
-      QString buf;
-      buf.sprintf ("*.%s|%s (*.%s)", fi->extension (), fi->type (),
-		   fi->extension ());
+        QString buf="*.";
+        buf+=fi->extension();
+        buf+="|";
+        buf+=fi->type();
+        buf+=" (*.";
+        buf+=fi->extension ();
+        buf+=")";
       if (s.length () > 0)
-	s += "\n";
+        s += "\n";
       s += buf;
     }
   }
@@ -169,7 +181,7 @@ QString FilterManager::extension (const char *fname) {
 }
 
 FilterInfo* FilterManager::findFilter (const char* fname,
-				       FilterInfo::Kind kind) {
+                                       FilterInfo::Kind kind) {
   FilterInfo* info = 0L;
   QString ext = extension (fname);
 

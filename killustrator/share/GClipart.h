@@ -35,7 +35,7 @@ class QPainter;
 class GClipart : public GObject {
   Q_OBJECT
 public:
-  GClipart (QWinMetaFile& wmf, const char* name);
+  GClipart (QWinMetaFile& wmf, const QString &name);
   GClipart (const QDomElement &element);
 
   GClipart ();

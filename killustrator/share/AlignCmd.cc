@@ -51,7 +51,6 @@ void AlignCmd::execute () {
   document->setAutoUpdate (false);
   if (nobjs > 1) {
     // alignment is possible only for two or more objects
-
     QListIterator<GObject> it(document->getSelection());
     alignObject = document->getSelection().last();
     alignBox=alignObject->boundingBox ();

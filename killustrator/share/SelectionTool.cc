@@ -43,12 +43,6 @@
 #include <stdio.h>
 #include <math.h>
 
-struct finalize_obj {
-  void operator () (GObject* obj) {
-    obj->setWorkInProgress (false);
-  }
-};
-
 SelectionTool::SelectionTool (CommandHistory *history) : Tool (history) {
   state = S_Init;
   dragHorizHelpline = dragVertHelpline = -1;

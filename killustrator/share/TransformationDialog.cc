@@ -26,6 +26,7 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kdebug.h>
 
 #include <qpushbutton.h>
 #include <qhbuttongroup.h>
@@ -510,26 +511,26 @@ void TransformationDialog::update () {
 void TransformationDialog::updateProportionalDimension (float /*value*/) {
   if (proportional->isChecked ()) {
     if (sender () == horizDim) {
-    debug("updateProportionalDimension--Horizontal");
-      if (percent->isChecked ()){
-        debug("updateProportionalDimension--Percental");
-        vertDim->setValue (horizDim->getValue ());}
-      else {
-        debug("updateProportionalDimension--Non-Percental");
-        float h = horizDim->getValue ();
-        vertDim->setValue (h / dimRatio);
-      }
+        kdDebug() << "updateProportionalDimension--Horizontal" << endl;
+        if (percent->isChecked ()){
+            kdDebug() << "updateProportionalDimension--Percental" << endl;
+            vertDim->setValue (horizDim->getValue ());}
+        else {
+            kdDebug() << "updateProportionalDimension--Non-Percental" << endl;
+            float h = horizDim->getValue ();
+            vertDim->setValue (h / dimRatio);
+        }
     }
     else if (sender () == vertDim) {
-      debug("updateProportionalDimension--vertical");
-      if (percent->isChecked ()){
-      debug("updateProportionalDimension--percental");
-        horizDim->setValue (vertDim->getValue ());}
-      else {
-        debug("updateProportionalDimension--non-percental");
-        float v = vertDim->getValue ();
-        horizDim->setValue (v * dimRatio);
-      }
+        kdDebug() << "updateProportionalDimension--vertical" << endl;
+        if (percent->isChecked ()){
+            kdDebug() << "updateProportionalDimension--percental" << endl;
+            horizDim->setValue (vertDim->getValue ());}
+        else {
+            kdDebug() << "updateProportionalDimension--non-percental" << endl;
+            float v = vertDim->getValue ();
+            horizDim->setValue (v * dimRatio);
+        }
     }
   }
 }
