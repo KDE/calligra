@@ -29,33 +29,33 @@ class KVector
 {
  public:
   KVector();
-  KVector(float x, float y, float z = 0);
+  KVector(double x, double y, double z = 0);
   KVector(int x, int y, int z = 0);
   KVector(long x, long y, long z = 0);
 
   bool isNull()	const;
 
-  float length();
+  double length();
 
-  float	 x() const;
-  float	 y() const;
-  float	 z() const;
-  void   setX(float x);
-  void   setY(float y);
-  void   setZ(float Z);
+  double	 x() const;
+  double	 y() const;
+  double	 z() const;
+  void   setX(double x);
+  void   setY(double y);
+  void   setZ(double Z);
 
   KVector &normalize();
   KVector &crossProduct(const KVector &v);
-  float  dotProduct(const KVector &v);
+  double  dotProduct(const KVector &v);
 
   KVector &operator+=(const KVector &v);
   KVector &operator-=(const KVector &v);
   KVector &operator*=(int c);
   KVector &operator*=(long c);
-  KVector &operator*=(float c);
+  KVector &operator*=(double c);
   KVector &operator/=(int c);
   KVector &operator/=(long c);
-  KVector &operator/=(float c);
+  KVector &operator/=(double c);
 
   friend inline bool operator==(const KVector &, const KVector &);
   friend inline bool operator!=(const KVector &, const KVector &);
@@ -65,56 +65,56 @@ class KVector
   friend inline KVector operator*(int, const KVector &);
   friend inline KVector operator*(const KVector &, long);
   friend inline KVector operator*(long, const KVector &);
-  friend inline KVector operator*(const KVector &, float);
-  friend inline KVector operator*(float, const KVector &);
+  friend inline KVector operator*(const KVector &, double);
+  friend inline KVector operator*(double, const KVector &);
   friend inline KVector operator-(const KVector &);
   friend inline KVector operator/(const KVector &, int);
   friend inline KVector operator/(const KVector &, long);
-  friend inline KVector operator/(const KVector &, float);
+  friend inline KVector operator/(const KVector &, double);
    
  private:
-  float m_x;
-  float m_y;
-  float m_z;
+  double m_x;
+  double m_y;
+  double m_z;
 };
 
 inline KVector::KVector()
 { m_x=0; m_y=0; m_z=0; }
 
-inline KVector::KVector(float x, float y, float z)
+inline KVector::KVector(double x, double y, double z)
 { m_x=x; m_y=y; m_z=z; }
 
 inline KVector::KVector(int x, int y, int z)
-{ m_x=(float)x; m_y=(float)y; m_z=(float)z; }
+{ m_x=static_cast<double>(x); m_y=static_cast<double>(y); m_z=static_cast<double>(z); }
 
 inline KVector::KVector(long x, long y, long z)
-{ m_x=(long)x; m_y=(long)y; m_z=(long)z; }
+{ m_x=static_cast<long>(x); m_y=static_cast<long>(y); m_z=static_cast<long>(z); }
 
 inline bool KVector::isNull() const
 { return m_x == 0 && m_y == 0 && m_z == 0; }
 
-inline float KVector::length()
+inline double KVector::length()
 {  return (sqrt(m_x*m_x + m_y*m_y + m_z*m_z)); }
 
-inline float KVector::dotProduct(const KVector &v)
+inline double KVector::dotProduct(const KVector &v)
 { return m_x*v.m_x + m_y*v.m_y + m_z*v.m_z; }
 
-inline float KVector::x() const
+inline double KVector::x() const
 { return m_x; }
 
-inline float KVector::y() const
+inline double KVector::y() const
 { return m_y; }
 
-inline float KVector::z() const
+inline double KVector::z() const
 { return m_z; }
 
-inline void KVector::setX(float x)
+inline void KVector::setX(double x)
 { m_x=x; }
 
-inline void KVector::setY(float y)
+inline void KVector::setY(double y)
 { m_y=y; }
 
-inline void KVector::setZ(float z)
+inline void KVector::setZ(double z)
 { m_z=z; }
 
 inline KVector &KVector::operator+=(const KVector &v)
@@ -124,12 +124,12 @@ inline KVector &KVector::operator-=(const KVector &v)
 { m_x-=v.m_x; m_y-=v.m_y; m_z-=v.m_z; return *this; }
 
 inline KVector &KVector::operator*=(int c)
-{ m_x*=(float)c; m_y*=(float)c; m_z*=(float)c; return *this; }
+{ m_x*=static_cast<double>(c); m_y*=static_cast<double>(c); m_z*=static_cast<double>(c); return *this; }
 
 inline KVector &KVector::operator*=(long c)
-{ m_x*=(float)c; m_y*=(float)c; m_z*=(float)c; return *this; }
+{ m_x*=static_cast<double>(c); m_y*=static_cast<double>(c); m_z*=static_cast<double>(c); return *this; }
 
-inline KVector &KVector::operator*=(float c)
+inline KVector &KVector::operator*=(double c)
 { m_x*=c; m_y*=c; m_z*=c; return *this; }
 
 inline bool operator==(const KVector &v1, const KVector &v2)
@@ -145,21 +145,21 @@ inline KVector operator-(const KVector &v1, const KVector &v2)
 { return KVector(v1.m_x-v2.m_x, v1.m_y-v2.m_y, v1.m_z-v2.m_z); }
 
 inline KVector operator*(const KVector &v, int c)
-{ return KVector((float)(v.m_x*c), (float)(v.m_y*c), (float)(v.m_z*c)); }
+{ return KVector(static_cast<double>(v.m_x*c), static_cast<double>(v.m_y*c), static_cast<double>(v.m_z*c)); }
 
 inline KVector operator*(int c, const KVector &v)
-{ return KVector((float)(v.m_x*c), (float)(v.m_y*c), (float)(v.m_z*c)); }
+{ return KVector(static_cast<double>(v.m_x*c), static_cast<double>(v.m_y*c), static_cast<double>(v.m_z*c)); }
 
 inline KVector operator*(const KVector &v, long c)
-{ return KVector((float)(v.m_x*c), (float)(v.m_y*c), (float)(v.m_z*c)); }
+{ return KVector(static_cast<double>(v.m_x*c), static_cast<double>(v.m_y*c), static_cast<double>(v.m_z*c)); }
 
 inline KVector operator*(long c, const KVector &v)
-{ return KVector((float)(v.m_x*c), (float)(v.m_y*c), (float)(v.m_z*c)); }
+{ return KVector(static_cast<double>(v.m_x*c), static_cast<double>(v.m_y*c), static_cast<double>(v.m_z*c)); }
 
-inline KVector operator*(const KVector &v, float c)
+inline KVector operator*(const KVector &v, double c)
 { return KVector(v.m_x*c, v.m_y*c, v.m_z*c); }
 
-inline KVector operator*(float c, const KVector &v)
+inline KVector operator*(double c, const KVector &v)
 { return KVector(v.m_x*c, v.m_y*c, v.m_z*c); }
 
 inline KVector operator-(const KVector &v)
@@ -169,9 +169,9 @@ inline KVector &KVector::operator/=(int c)
 {
   if (!c == 0)
     {
-      m_x/=(float)c;
-      m_y/=(float)c;
-      m_z/=(float)c;
+      m_x/=static_cast<double>(c);
+      m_y/=static_cast<double>(c);
+      m_z/=static_cast<double>(c);
     }
     return *this;
 }
@@ -180,14 +180,14 @@ inline KVector &KVector::operator/=(long c)
 {
   if (!c == 0)
     {
-      m_x/=(float)c;
-      m_y/=(float)c;
-      m_z/=(float)c;
+      m_x/=static_cast<double>(c);
+      m_y/=static_cast<double>(c);
+      m_z/=static_cast<double>(c);
     }
     return *this;
 }
 
-inline KVector &KVector::operator/=(float c)
+inline KVector &KVector::operator/=(double c)
 {
   if (!c == 0)
     {

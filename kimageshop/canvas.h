@@ -49,7 +49,7 @@ public:
    *  Paint a area of image data on widget w.
    *  Handle zoomFactor and offset.
    */
-  void paintPixmap( QWidget *widget, QRect area, QPoint offset = QPoint( 0, 0 ), QPoint paintOffset = QPoint( 0, 0 ), int zoomFactor = 0 );
+  void paintPixmap( QWidget *widget, QRect area, QPoint offset = QPoint( 0, 0 ), QPoint paintOffset = QPoint( 0, 0 ), float zoomFactor = 1 );
  
   /**
    *  Returns current layer.

@@ -43,6 +43,7 @@ class KRuler;
 class Tool;
 class MoveTool;
 class BrushTool;
+class ZoomTool;
 class Brush;
 
 class KImageShopView : public QWidget,
@@ -59,6 +60,8 @@ public:
   virtual void cleanUp();
   virtual void createGUI();
 
+  float zoomFactor() { return m_ZoomFactor; }
+
   KImageShopDoc* doc();
   CORBA::Boolean printDlg();
 
@@ -71,9 +74,11 @@ public slots:
   void slotCVMouseRelease(QMouseEvent *e);
   void scrollH(int);
   void scrollV(int);
+  void slotSetZoomFactor(float);
 
   virtual void slotActivateMoveTool();
   virtual void slotActivateBrushTool();
+  virtual void slotActivateZoomTool();
 
 protected:
   virtual void init();
@@ -110,7 +115,7 @@ protected:
   
 private:
 
-  enum { TBTOOLS_MOVETOOL, TBTOOLS_BRUSHTOOL };
+  enum { TBTOOLS_MOVETOOL, TBTOOLS_BRUSHTOOL, TBTOOLS_ZOOMTOOL };
 
   KImageShopDoc *m_pDoc; 
   LayerDialog   *m_pLayerDialog;
@@ -121,7 +126,9 @@ private:
   Tool          *m_pTool; // currently active tool
   MoveTool      *m_pMoveTool;
   BrushTool     *m_pBrushTool;
+  ZoomTool      *m_pZoomTool;
   Brush         *m_pBrush; // current brush
+  float         m_ZoomFactor;
 };
 
 #endif

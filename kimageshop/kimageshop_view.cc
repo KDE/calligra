@@ -54,6 +54,7 @@
 #include "tool.h"
 #include "movetool.h"
 #include "brushtool.h"
+#include "zoomtool.h"
 
 #define CHECK_DOCUMENT \
 	if( m_pDoc->isEmpty() ) \
@@ -91,6 +92,7 @@ KImageShopView::KImageShopView( QWidget* _parent, const char* _name, KImageShopD
   m_pVert = 0L;
   m_pHRuler = 0L;
   m_pVRuler = 0L;
+  m_ZoomFactor = 1;
 
   QObject::connect( m_pDoc, SIGNAL( sigUpdateView(const QRect&) ), this, SLOT( slotUpdateView(const QRect&) ) );
 }
@@ -192,14 +194,20 @@ bool KImageShopView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   OpenPartsUI::Pixmap_var pix;
   
   // move tool
-  text = Q2C(i18n("Move tool"));
+  text = Q2C(i18n("Move layers and selections."));
   pix = OPUIUtils::convertPixmap(*KPixmapCache::toolbarPixmap("move.xpm"));
   m_vToolBarTools->insertButton2(pix, TBTOOLS_MOVETOOL, SIGNAL(clicked()), this, "slotActivateMoveTool", true, text, -1);
   m_vToolBarTools->setToggle(TBTOOLS_MOVETOOL, true);
   m_vToolBarTools->toggleButton(TBTOOLS_MOVETOOL);
 
+  // zoom tool
+  text = Q2C(i18n("Zoom in/out."));
+  pix = OPUIUtils::convertPixmap(*KPixmapCache::toolbarPixmap("viewmag.xpm"));
+  m_vToolBarTools->insertButton2(pix, TBTOOLS_ZOOMTOOL, SIGNAL(clicked()), this, "slotActivateZoomTool", true, text, -1);
+  m_vToolBarTools->setToggle(TBTOOLS_ZOOMTOOL, true);
+
   // paint brush
-  text = Q2C(i18n("Paint brush"));
+  text = Q2C(i18n("Paint using a brush."));
   pix = OPUIUtils::convertPixmap(*KPixmapCache::toolbarPixmap("paintbrush.xpm"));
   m_vToolBarTools->insertButton2(pix, TBTOOLS_BRUSHTOOL, SIGNAL(clicked()), this, "slotActivateBrushTool", true, text, -1);
   m_vToolBarTools->setToggle(TBTOOLS_BRUSHTOOL, true);
@@ -291,6 +299,9 @@ void KImageShopView::createGUI()
   // create brush tool
   m_pBrushTool = new BrushTool(m_pDoc, m_pBrush);
 
+  // create zoom tool
+  m_pZoomTool = new ZoomTool(this);
+
   // layerlist
   m_pLayerDialog = new LayerDialog(m_pDoc);
   m_pLayerDialog->show();
@@ -335,14 +346,14 @@ void KImageShopView::setupRulers()
 
 void KImageShopView::scrollH(int )
 {
-  slotCVPaint(0L);
   m_pHRuler->setOffset(m_pHorz->value());
+  slotCVPaint(0L);
 }
 
 void KImageShopView::scrollV(int )
 {
-  slotCVPaint(0L);
   m_pVRuler->setOffset(m_pVert->value());
+  slotCVPaint(0L);
 }
 
 void KImageShopView::newView()
@@ -487,6 +498,8 @@ void KImageShopView::slotActivateMoveTool()
   // we have more tools.
   if(m_vToolBarTools->isButtonOn(TBTOOLS_BRUSHTOOL))
     m_vToolBarTools->toggleButton(TBTOOLS_BRUSHTOOL);
+  if(m_vToolBarTools->isButtonOn(TBTOOLS_ZOOMTOOL))
+    m_vToolBarTools->toggleButton(TBTOOLS_ZOOMTOOL);
 }
 
 void KImageShopView::slotActivateBrushTool()
@@ -516,12 +529,37 @@ void KImageShopView::slotActivateBrushTool()
   // we have more tools.
   if(m_vToolBarTools->isButtonOn(TBTOOLS_MOVETOOL))
     m_vToolBarTools->toggleButton(TBTOOLS_MOVETOOL);
+  if(m_vToolBarTools->isButtonOn(TBTOOLS_ZOOMTOOL))
+    m_vToolBarTools->toggleButton(TBTOOLS_ZOOMTOOL);
+}
+
+void KImageShopView::slotActivateZoomTool()
+{
+  if (!m_pZoomTool)
+    m_pZoomTool = new ZoomTool(this);
+
+  m_pTool = m_pZoomTool;
+
+  
+  if(m_vToolBarTools->isButtonOn(TBTOOLS_ZOOMTOOL))
+    {
+      // brush tool is already on but will automatically be toggled by
+      // ktoolbar code -> toggle it by hand to keep it on.
+      m_vToolBarTools->isButtonOn(TBTOOLS_ZOOMTOOL);
+    }
+  
+  // shut off movetool (move this to a function as soon as
+  // we have more tools.
+  if(m_vToolBarTools->isButtonOn(TBTOOLS_MOVETOOL))
+    m_vToolBarTools->toggleButton(TBTOOLS_MOVETOOL);
+  if(m_vToolBarTools->isButtonOn(TBTOOLS_BRUSHTOOL))
+    m_vToolBarTools->toggleButton(TBTOOLS_BRUSHTOOL);
 }
 
 void KImageShopView::slotUpdateView(const QRect &_area) // _area in canvas coordiantes
 {
   // viewrect in canvas coordinates
-  QRect viewRect(m_pHorz->value(), m_pVert->value(), m_pCanvasView->width(), m_pCanvasView->height());
+  QRect viewRect(m_pHorz->value(), m_pVert->value(), m_pCanvasView->width()/m_ZoomFactor, m_pCanvasView->height()/m_ZoomFactor);
 
   // does the area intersect the viewrect?
   if (!_area.intersects(viewRect)) return;
@@ -533,17 +571,19 @@ void KImageShopView::slotUpdateView(const QRect &_area) // _area in canvas coord
   QPoint offset(m_pHorz->value(), m_pVert->value());
 
   // paint offset
-  int x = (m_pCanvasView->width() > m_pDoc->width()) ? ((m_pCanvasView->width() -  m_pDoc->width())/2) : 0;
-  int y = (m_pCanvasView->height() > m_pDoc->height()) ? ((m_pCanvasView->height() - m_pDoc->height())/2) : 0;
+  int x = (m_pCanvasView->width() > m_pDoc->width() *m_ZoomFactor) ?
+    static_cast<int>((m_pCanvasView->width() -  m_pDoc->width())/2) : 0;
+  int y = (m_pCanvasView->height() > m_pDoc->height() *m_ZoomFactor) ?
+    static_cast<int>((m_pCanvasView->height() - m_pDoc->height())/2) : 0;
   
   // repaint
-  m_pDoc->paintPixmap(m_pCanvasView, area, offset, QPoint(x,y));
+  m_pDoc->paintPixmap(m_pCanvasView, area, offset, QPoint(x,y), m_ZoomFactor);
 }
 
 void KImageShopView::slotCVPaint(QPaintEvent *)
 {
   // repaint the whole canvasview
-  slotUpdateView(QRect(m_pHorz->value(), m_pVert->value(), m_pCanvasView->width(), m_pCanvasView->height()));
+  slotUpdateView(QRect(m_pHorz->value(), m_pVert->value(), m_pCanvasView->width()/m_ZoomFactor, m_pCanvasView->height()/m_ZoomFactor));
 }
 
 void KImageShopView::slotCVMousePress(QMouseEvent *e)
@@ -552,13 +592,15 @@ void KImageShopView::slotCVMousePress(QMouseEvent *e)
     return;
 
   // paint offset
-  int x = (m_pCanvasView->width() > m_pDoc->width()) ? ((m_pCanvasView->width() -  m_pDoc->width())/2) : 0;
-  int y = (m_pCanvasView->height() > m_pDoc->height()) ? ((m_pCanvasView->height() - m_pDoc->height())/2) : 0;
- 
+  int x = (m_pCanvasView->width() > m_pDoc->width() *m_ZoomFactor) ?
+    static_cast<int>((m_pCanvasView->width() -  m_pDoc->width())/2) : 0;
+  int y = (m_pCanvasView->height() > m_pDoc->height() *m_ZoomFactor) ?
+    static_cast<int>((m_pCanvasView->height() - m_pDoc->height())/2) : 0;
+
   KImageShop::MouseEvent mouseEvent;
   // postion in canvas coordinates
-  mouseEvent.posX = e->x() + m_pHorz->value() - x;
-  mouseEvent.posY = e->y() + m_pVert->value() - y;
+  mouseEvent.posX = static_cast<long>((e->x() + m_pHorz->value()) / m_ZoomFactor) - x;
+  mouseEvent.posY = static_cast<long>((e->y() + m_pVert->value()) / m_ZoomFactor) - y;
   mouseEvent.globalPosX = e->globalX();
   mouseEvent.globalPosY = e->globalY();
   
@@ -579,13 +621,15 @@ void KImageShopView::slotCVMouseMove(QMouseEvent *e)
     return;
 
   // paint offset
-  int x = (m_pCanvasView->width() > m_pDoc->width()) ? ((m_pCanvasView->width() -  m_pDoc->width())/2) : 0;
-  int y = (m_pCanvasView->height() > m_pDoc->height()) ? ((m_pCanvasView->height() - m_pDoc->height())/2) : 0;
- 
+  int x = (m_pCanvasView->width() > m_pDoc->width() *m_ZoomFactor) ?
+    static_cast<int>((m_pCanvasView->width() -  m_pDoc->width())/2) : 0;
+  int y = (m_pCanvasView->height() > m_pDoc->height() *m_ZoomFactor) ?
+    static_cast<int>((m_pCanvasView->height() - m_pDoc->height())/2) : 0;
+
   KImageShop::MouseEvent mouseEvent;
   // postion in canvas coordinates
-  mouseEvent.posX = e->x() + m_pHorz->value() - x;
-  mouseEvent.posY = e->y() + m_pVert->value() - y;
+  mouseEvent.posX = static_cast<long>((e->x() + m_pHorz->value()) / m_ZoomFactor) - x;
+  mouseEvent.posY = static_cast<long>((e->y() + m_pVert->value()) / m_ZoomFactor) - y;
   mouseEvent.globalPosX = e->globalX();
   mouseEvent.globalPosY = e->globalY();
   
@@ -609,13 +653,15 @@ void KImageShopView::slotCVMouseRelease(QMouseEvent *e)
     return;
 
   // paint offset
-  int x = (m_pCanvasView->width() > m_pDoc->width()) ? ((m_pCanvasView->width() -  m_pDoc->width())/2) : 0;
-  int y = (m_pCanvasView->height() > m_pDoc->height()) ? ((m_pCanvasView->height() - m_pDoc->height())/2) : 0;
- 
+  int x = (m_pCanvasView->width() > m_pDoc->width() *m_ZoomFactor) ?
+    static_cast<int>((m_pCanvasView->width() -  m_pDoc->width())/2) : 0;
+  int y = (m_pCanvasView->height() > m_pDoc->height() *m_ZoomFactor) ?
+    static_cast<int>((m_pCanvasView->height() - m_pDoc->height())/2) : 0;
+
   KImageShop::MouseEvent mouseEvent;
   // postion in canvas coordinates
-  mouseEvent.posX = e->x() + m_pHorz->value() - x;
-  mouseEvent.posY = e->y() + m_pVert->value() - y;
+  mouseEvent.posX = static_cast<long>((e->x() + m_pHorz->value()) / m_ZoomFactor) - x;
+  mouseEvent.posY = static_cast<long>((e->y() + m_pVert->value()) / m_ZoomFactor) - y;
   mouseEvent.globalPosX = e->globalX();
   mouseEvent.globalPosY = e->globalY();
   
@@ -628,6 +674,24 @@ void KImageShopView::slotCVMouseRelease(QMouseEvent *e)
   mouseEvent.altButton = (e->state() & AltButton) ? true : false;
 
   m_pTool->mouseRelease(mouseEvent);
+}
+
+void KImageShopView::slotSetZoomFactor(float zoomFactor)
+{
+  if (zoomFactor == 0) // avoid divide by null
+    m_ZoomFactor = 1;
+
+  if (zoomFactor < 0.03125) // min == 1/32
+    zoomFactor = 0.03125;
+
+  if (zoomFactor > 32) // max == 32/1
+    zoomFactor = 32;
+
+  if (zoomFactor == m_ZoomFactor)
+    return;
+
+  m_ZoomFactor = zoomFactor;
+  m_pCanvasView->repaint();
 }
 
 void KImageShopView::editUndo()

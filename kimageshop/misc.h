@@ -34,7 +34,7 @@
 
 // Time size for graphic blocks - must be a power of 2
 //#define TILE_SIZE 128
-#define TILE_SIZE 128
+#define TILE_SIZE 64
 
 // Anumber which can be added to any image coordinate to make it positive
 // Used to make numbers round towards + or - infinity regardless of sign

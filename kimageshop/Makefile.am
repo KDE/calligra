@@ -10,14 +10,16 @@ SUBDIRS   = pics data
 bin_PROGRAMS = kimageshop
 
 kimageshop_SOURCES = kimageshop.idl kimageshop_main.cc kimageshop_shell.cc \
-	kimageshop_doc.cc kimageshop_view.cc \
+	kimageshop_doc.cc kimageshop_view.cc kvector.cc \
 	canvas.cc canvasview.cc layer.cc layerview.cc layerdlg.cc \
-	brush.cc channel.cc misc.cc tool.cc movetool.cc brushtool.cc kvector.cc
+	brush.cc channel.cc misc.cc tool.cc movetool.cc brushtool.cc \
+	zoomtool.cc
 
 noinst_HEADERS = kimageshop_main.h kimageshop_shell.h \
-	kimageshop_doc.h kimageshop_view.h \
+	kimageshop_doc.h kimageshop_view.h  kvector.h \
 	canvas.h canvasview.h layer.h layerview.h layerdlg.h \
-	brush.h channel.h misc.h tool.h movetool.h brushtool.h kvector.h
+	brush.h channel.h misc.h tool.h movetool.h brushtool.h \
+	zoomtool.h
 
 METASOURCES = kimageshop_main.moc kimageshop_shell.moc \
 	kimageshop_doc.moc kimageshop_view.moc \

@@ -55,6 +55,7 @@ module KImageShop
 	interface View : KOffice::View
 	{
 		slot void slotActivateMoveTool();
+		slot void slotActivateZoomTool();
 		slot void slotActivateBrushTool();
 
                 // edit menu

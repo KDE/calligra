@@ -21,9 +21,10 @@
 #include "tool.h"
 #include "canvas.h"
 
-Tool::Tool(KImageShopDoc *doc)
+Tool::Tool(KImageShopDoc *doc, KImageShopView *view)
 {
   m_pDoc = doc;
+  m_pView = view;
 }
 
 Tool::~Tool() {}

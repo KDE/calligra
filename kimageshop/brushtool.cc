@@ -38,6 +38,9 @@ void BrushTool::setBrush(Brush *_brush)
 
 void BrushTool::mousePress(const KImageShop::MouseEvent& e)
 {
+  if (!e.leftButton)
+    return;
+
   m_dragging = true;
   QPoint pos(e.posX, e.posY);
   m_dragStart = pos;
@@ -105,5 +108,7 @@ void BrushTool::mouseMove(const KImageShop::MouseEvent& e)
 
 void BrushTool::mouseRelease(const KImageShop::MouseEvent& e)
 {
+  if (!e.leftButton)
+    return;
   m_dragging = false;
 }

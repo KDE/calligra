@@ -89,19 +89,22 @@ int Canvas::width()
   return w;
 }
 
-void Canvas::paintPixmap(QWidget *w, QRect area, QPoint offset, QPoint paintOffset, int zoomFactor)
+void Canvas::paintPixmap(QWidget *w, QRect area, QPoint offset, QPoint paintOffset, float zoomFactor)
 {
   if (!w)
     return;
 
  int startX, startY, pixX, pixY = 0;
+ int pixW, pixH = -1;
   
- QPainter p(w);
-  
+ QPainter p;
+ p.begin(w);
+ p.scale(zoomFactor,zoomFactor);
+
   // XXX clip it correctly
   // XXX paint only what is needed
   
-  for(int y=0;y<yTiles;y++)
+ for(int y=0;y<yTiles;y++)
     {
       for(int x=0;x<xTiles;x++)
 	{
@@ -128,13 +131,24 @@ void Canvas::paintPixmap(QWidget *w, QRect area, QPoint offset, QPoint paintOffs
 		    }
 		  else
 		    {
-		      startY = y*TILE_SIZE - offset.y();;
+		      startY = y*TILE_SIZE - offset.y();
 		      pixY = 0;
 		    }
-		  
+
+		  /*if (x*TILE_SIZE > (offset.x() + area.width()))
+		    pixW = x*TILE_SIZE - offset.x() - area.width();
+		  else
+		    pixW = -1;
+
+		  if (y*TILE_SIZE > (offset.y() + area.height()))
+		    pixH = y*TILE_SIZE - offset.y() - area.height();
+		  else
+		    pixH = -1;
+		  */
 		  startX+=paintOffset.x();
 		  startY+=paintOffset.y();
-		  p.drawPixmap(startX, startY, *tiles[y*xTiles+x], pixX, pixY);
+
+		  p.drawPixmap(startX, startY, *tiles[y*xTiles+x], pixX, pixY);//, pixW, pixH);
 		}
 	      else
 		puts("Null: not rendering");
@@ -142,6 +156,7 @@ void Canvas::paintPixmap(QWidget *w, QRect area, QPoint offset, QPoint paintOffs
 	  //p.drawRect(tileRect);
 	}
     }
+  p.end();
 }
 
 void Canvas::setUpVisual()
@@ -169,10 +184,10 @@ void Canvas::setUpVisual()
       printf("red=%8x green=%8x blue=%8x\n",red_mask,green_mask,blue_mask);
     } else {
       puts("Using optimized visual");
-      xi=XCreateImage( dpy, vis, displayDepth, ZPixmap, 0,0, 128,128, 32, 0 );
+      xi=XCreateImage( dpy, vis, displayDepth, ZPixmap, 0,0, TILE_SIZE,TILE_SIZE, 32, 0 );
       printf("ximage: bytes_per_line=%d\n",xi->bytes_per_line);
       if (visual!=rgb888x) {
-	imageData=new char[xi->bytes_per_line*128];
+	imageData=new char[xi->bytes_per_line*TILE_SIZE];
 	xi->data=imageData;
       }
     }
@@ -505,8 +520,8 @@ void Canvas::convertImageToPixmap(QImage *image, QPixmap *pix)
       ushort s;
       ushort *ptr=(ushort *)imageData;
       uchar *qimg=image->bits();
-      for(int y=0;y<128;y++)
-	for(int x=0;x<128;x++) { 
+      for(int y=0;y<TILE_SIZE;y++)
+	for(int x=0;x<TILE_SIZE;x++) { 
 	  s =(*qimg++)>>3;
 	  s|=(*qimg++ & 252)<<3;
 	  s|=(*qimg++ & 248)<<8; 

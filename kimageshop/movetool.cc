@@ -30,6 +30,8 @@ MoveTool::~MoveTool() {}
 
 void MoveTool::mousePress(const KImageShop::MouseEvent& e)
 {
+  if(!e.leftButton)
+    return;
   m_dragging = true;
   m_dragStart.setX(e.posX);
   m_dragStart.setY(e.posY);
@@ -55,5 +57,7 @@ void MoveTool::mouseMove(const KImageShop::MouseEvent& e)
 
 void MoveTool::mouseRelease(const KImageShop::MouseEvent& e)
 {
+  if (!e.leftButton)
+    return;
   m_dragging = false;
 }

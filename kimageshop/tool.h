@@ -25,11 +25,12 @@
 #include "kimageshop.h"
 
 class KImageShopDoc;
+class KImageShopView;
 
 class Tool : public KImageShop::Tool_skel
 {
  public:
-  Tool(KImageShopDoc *doc);
+  Tool(KImageShopDoc *doc, KImageShopView *view = 0L);
   ~Tool();
 
   virtual char* toolName();
@@ -43,6 +44,7 @@ class Tool : public KImageShop::Tool_skel
     
  protected:
   KImageShopDoc  *m_pDoc;
+  KImageShopView *m_pView;
 };
 
 #endif
