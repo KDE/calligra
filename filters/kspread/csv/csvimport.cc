@@ -25,7 +25,6 @@
 #include <kspread_doc.h>
 #include <kspread_table.h>
 #include <kspread_cell.h>
-
 /*
  To generate a test CSV file:
 
@@ -146,7 +145,7 @@ const bool CSVFilter::I_filter(const QString &file, KoDocument *document,
             case S_MAYBE_END_OF_QUOTED_FIELD :
                 if (x == '"')
                 {
-                    field += x;
+		  field += x;
                     state = S_QUOTED_FIELD;
                 } else if (x == csv_delimiter || x == '\n')
                 {

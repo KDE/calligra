@@ -138,6 +138,8 @@ const bool CSVExport::E_filter(const QString &file, const KoDocument * const doc
             if ( !text.isEmpty() )
             {
                 line += separators;
+		if(text.find(csv_delimiter)!=-1)
+		  text="\""+text+"\"";
                 line += text;
                 separators = QString::null;
             }
