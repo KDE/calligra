@@ -52,10 +52,10 @@ public:
     /** reshuffle frames so text is always displayed from top-left down and then right. */
     virtual void updateFrames();
 
-    // Convert the @p in the contents coordinates (those visible to the user)
-    // into a point in the internal qtextdoc coordinates.
+    // Convert the @p cPoint in the contents coordinates (those visible to the user)
+    // into a point (@p iPoint) in the internal qtextdoc coordinates.
     // If @p onlyY is true, the X coordinate isn't taken into account - but should be 0
-    QPoint contentsToInternal( QPoint p, bool onlyY = false ) const;
+    KWFrame * contentsToInternal( QPoint cPoint, QPoint &iPoint, bool onlyY = false ) const;
 
     // Convert the @p in the internal qtextdoc coordinates
     // into a point in the contents coordinates (those visible to the user).

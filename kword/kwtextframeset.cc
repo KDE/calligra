@@ -79,7 +79,7 @@ int KWTextFrameSet::availableHeight() const
     return m_availableHeight;
 }
 
-QPoint KWTextFrameSet::contentsToInternal( QPoint p, bool onlyY ) const
+KWFrame * KWTextFrameSet::contentsToInternal( QPoint cPoint, QPoint &iPoint, bool onlyY ) const
 {
     int totalHeight = 0;
     QListIterator<KWFrame> frameIt( frameIterator() );
@@ -88,31 +88,34 @@ QPoint KWTextFrameSet::contentsToInternal( QPoint p, bool onlyY ) const
         QRect frameRect = kWordDocument()->zoomRect( *frameIt.current() );
         QRect r( frameRect );
         if ( onlyY )
-            r.setLeft(0);      // p.x will be 0 too, so only the Y coords will count
-        if ( r.contains( p ) ) // both r and p are in "contents coordinates"
+            r.setLeft(0);      // cPoint.x will be 0 too, so only the Y coords will count
+        if ( r.contains( cPoint ) ) // both r and p are in "contents coordinates"
         {
             // This translates the coordinates in the document contents
             // into the QTextDocument's coordinate system
             // (which doesn't have frames, borders, etc.)
-            // ##### This will not work with multiple frames in the same page (DTP)
-            p.rx() += -frameRect.left();
-            p.ry() += -frameRect.top() + totalHeight;
-            return p;
-        } else if ( p.y() < frameRect.top() && m_doc->processingType() == KWDocument::WP ) // ## WP-only: we've been too far, the point is between two frames
+            iPoint.setX( cPoint.x() - frameRect.left() );
+            iPoint.setY( cPoint.y() - frameRect.top() + totalHeight );
+            return frameIt.current();
+        }
+#if 0 // this was a hack, we shouldn't need it anymore
+        else if ( p.y() < frameRect.top() && m_doc->processingType() == KWDocument::WP ) // ## WP-only: we've been too far, the point is between two frames
         {
             p.rx() += -frameRect.left();
             p.ry() = totalHeight;
             return p;
         }
+#endif
         totalHeight += frameRect.height();
     }
 
+#if 0
     if ( onlyY ) // we only care about Y -> easy, return "we're below the bottom"
         return QPoint( 0, totalHeight );
-
-    kdDebug(32002) << "KWTextFrameSet::contentsToInternal " << p.x() << "," << p.y()
+    kdDebug(32002) << "KWTextFrameSet::contentsToInternal " << cPoint.x() << "," << cPoint.y()
                    << " not in any frame of " << (void*)this << endl;
-    return p;
+#endif
+    return 0;
 }
 
 KWFrame * KWTextFrameSet::internalToContents( QPoint iPoint, QPoint & cPoint ) const
@@ -477,10 +480,11 @@ void KWTextFrameSet::adjustFlow( int &yp, int w, int h, QTextParag * parag, bool
         {
             int top = kWordDocument()->zoomItY( f->top() );
             int bottom = kWordDocument()->zoomItY( f->bottom() );
-
-            if ( checkVerticalBreak( yp, h, parag, linesTogether,
-                                     contentsToInternal( QPoint( 0, top ), true ).y(),  // we know the frame is on top, so using onlyY is ok
-                                     contentsToInternal( QPoint( 0, bottom ), true ).y() ) )
+            QPoint iTop, iBottom; // top and bottom in internal coordinates
+            if ( contentsToInternal( QPoint( 0, top ), iTop, true ) &&  // we know the frame is on top, so using onlyY is ok
+                 contentsToInternal( QPoint( 0, bottom ), iBottom, true ) &&
+                 checkVerticalBreak( yp, h, parag, linesTogether,
+                                     iTop.y(), iBottom.y() ) )
             {
                 kdDebug(32002) << "KWTextFrameSet::adjustFlow breaking around RA_SKIP frame yp="<<yp<<" h=" << h << endl;
                 // We don't "break;" here because there could be another such frame below the first one
@@ -1139,9 +1143,14 @@ void KWTextFrameSet::updateViewArea( QWidget * w, int maxY )
     if ( maxY >= m_availableHeight ) // Speedup
         maxY = m_availableHeight;
     else
+    {
         // Convert to internal qtextdoc coordinates
-        maxY = contentsToInternal( QPoint(0, maxY), true /* only care for Y */ ).y();
-
+        QPoint iPoint;
+        if ( contentsToInternal( QPoint(0, maxY), iPoint, true /* only care for Y */ ) )
+            maxY = iPoint.y();
+        else // not found, assume worse
+            maxY = m_availableHeight;
+    }
     //kdDebug(32002) << "KWTextFrameSet::updateViewArea maxY now " << maxY << endl;
     // Update map
     m_mapViewAreas.replace( w, maxY );
@@ -1740,6 +1749,8 @@ void KWTextFrameSet::insert( QTextCursor * cursor, KWTextFormat * currentFormat,
 
     m_doc->setModified(true);
     if ( !removeSelected ) {
+        // ## not sure why we do this. I'd prefer leaving the selection unchanged...
+        // but then it'd need adjustements in the offsets etc.
         textdoc->setSelectionStart( QTextDocument::Standard, &oldCursor );
         textdoc->setSelectionEnd( QTextDocument::Standard, cursor );
         emit repaintChanged( this );
@@ -2331,46 +2342,50 @@ void KWTextFrameSetEdit::mousePressEvent( QMouseEvent * e )
 {
     textFrameSet()->clearUndoRedoInfo();
     mightStartDrag = FALSE;
-    emit hideCursor();
 
-    QTextCursor oldCursor = *cursor;
-    mousePos = textFrameSet()->contentsToInternal( e->pos() );
-    placeCursor( mousePos );
-    ensureCursorVisible();
+    QPoint iPoint;
+    if ( textFrameSet()->contentsToInternal( e->pos(), iPoint ) )
+    {
+        mousePos = iPoint;
+        emit hideCursor();
+        QTextCursor oldCursor = *cursor;
+        placeCursor( mousePos );
+        ensureCursorVisible();
 
-    QTextDocument * textdoc = textDocument();
-    if ( textdoc->inSelection( QTextDocument::Standard, mousePos ) ) {
-        mightStartDrag = TRUE;
-        emit showCursor();
-        dragStartTimer->start( QApplication::startDragTime(), TRUE );
-        dragStartPos = e->pos();
-        return;
-    }
-
-    bool redraw = FALSE;
-    if ( textdoc->hasSelection( QTextDocument::Standard ) ) {
-        if ( !( e->state() & ShiftButton ) ) {
-            redraw = textdoc->removeSelection( QTextDocument::Standard );
-            textdoc->setSelectionStart( QTextDocument::Standard, cursor );
-        } else {
-            redraw = textdoc->setSelectionEnd( QTextDocument::Standard, cursor ) || redraw;
+        QTextDocument * textdoc = textDocument();
+        if ( textdoc->inSelection( QTextDocument::Standard, mousePos ) ) {
+            mightStartDrag = TRUE;
+            emit showCursor();
+            dragStartTimer->start( QApplication::startDragTime(), TRUE );
+            dragStartPos = e->pos();
+            return;
         }
-    } else {
-        if ( !( e->state() & ShiftButton ) ) {
-            textdoc->setSelectionStart( QTextDocument::Standard, cursor );
+
+        bool redraw = FALSE;
+        if ( textdoc->hasSelection( QTextDocument::Standard ) ) {
+            if ( !( e->state() & ShiftButton ) ) {
+                redraw = textdoc->removeSelection( QTextDocument::Standard );
+                textdoc->setSelectionStart( QTextDocument::Standard, cursor );
+            } else {
+                redraw = textdoc->setSelectionEnd( QTextDocument::Standard, cursor ) || redraw;
+            }
         } else {
-            textdoc->setSelectionStart( QTextDocument::Standard, &oldCursor );
-            redraw = textdoc->setSelectionEnd( QTextDocument::Standard, cursor ) || redraw;
+            if ( !( e->state() & ShiftButton ) ) {
+                textdoc->setSelectionStart( QTextDocument::Standard, cursor );
+            } else {
+                textdoc->setSelectionStart( QTextDocument::Standard, &oldCursor );
+                redraw = textdoc->setSelectionEnd( QTextDocument::Standard, cursor ) || redraw;
+            }
         }
-    }
 
-    for ( int i = 1; i < textdoc->numSelections(); ++i ) // start with 1 as we don't want to remove the Standard-Selection
-        redraw = textdoc->removeSelection( i ) || redraw;
+        for ( int i = 1; i < textdoc->numSelections(); ++i ) // start with 1 as we don't want to remove the Standard-Selection
+            redraw = textdoc->removeSelection( i ) || redraw;
 
-    if ( !redraw ) {
-        emit showCursor();
-    } else {
-        textFrameSet()->selectionChanged();
+        if ( !redraw ) {
+            emit showCursor();
+        } else {
+            textFrameSet()->selectionChanged();
+        }
     }
 }
 
@@ -2382,7 +2397,9 @@ void KWTextFrameSetEdit::mouseMoveEvent( QMouseEvent * e )
             startDrag();
         return;
     }
-    mousePos = textFrameSet()->contentsToInternal( e->pos() );
+    QPoint iPoint;
+    if ( textFrameSet()->contentsToInternal( e->pos(), iPoint ) )
+        mousePos = iPoint;
 }
 
 void KWTextFrameSetEdit::mouseReleaseEvent( QMouseEvent * )
@@ -2428,10 +2445,14 @@ void KWTextFrameSetEdit::dragEnterEvent( QDragEnterEvent * e )
 
 void KWTextFrameSetEdit::dragMoveEvent( QDragMoveEvent * e )
 {
-    emit hideCursor();
-    placeCursor( textFrameSet()->contentsToInternal( e->pos() ) );
-    emit showCursor();
-    e->acceptAction();
+    QPoint iPoint;
+    if ( textFrameSet()->contentsToInternal( e->pos(), iPoint ) )
+    {
+        emit hideCursor();
+        placeCursor( iPoint );
+        emit showCursor();
+        e->acceptAction(); // here or out of the if ?
+    }
 }
 
 void KWTextFrameSetEdit::dragLeaveEvent( QDragLeaveEvent * )
@@ -2445,7 +2466,10 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e )
         e->acceptAction();
 
         QTextCursor dropCursor( textDocument() );
-        QPoint dropPoint = textFrameSet()->contentsToInternal( e->pos() );
+        QPoint dropPoint;
+        if ( !textFrameSet()->contentsToInternal( e->pos(), dropPoint ) )
+            return; // Don't know where to paste
+
         dropCursor.place( dropPoint, textDocument()->firstParag() );
         kdDebug(32001) << "KWTextFrameSetEdit::dropEvent dropCursor at parag=" << dropCursor.parag()->paragId() << " index=" << dropCursor.index() << endl;
 
@@ -2531,11 +2555,12 @@ void KWTextFrameSetEdit::doAutoScroll( QPoint pos )
 {
     if ( mightStartDrag )
         return;
-    pos = textFrameSet()->contentsToInternal( pos );
-
+    QPoint iPoint;
+    if ( !textFrameSet()->contentsToInternal( pos, iPoint ) )
+        return;
     hideCursor();
     QTextCursor oldCursor = *cursor;
-    placeCursor( pos );
+    placeCursor( iPoint );
     if ( inDoubleClick ) {
 	QTextCursor cl = *cursor;
 	cl.gotoWordLeft();
