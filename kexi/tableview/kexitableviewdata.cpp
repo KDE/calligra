@@ -337,11 +337,6 @@ bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert)
 		return false;
 	if (isDBAware()) {
 		if (insert) {
-/*			KexiDB::RowEditBuffer::DBMap b = m_pRowEditBuffer->simpleBuffer();
-			for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.begin();it!=b.end();++it) {
-				sqlset += (it.key()->name() + "=" + valueToSQL(it.key(),it.data()));
-			}
-*/
 			if (!m_cursor->insertRow( static_cast<KexiDB::RowData&>(item), *rowEditBuffer() ))
 				return false;
 		}
