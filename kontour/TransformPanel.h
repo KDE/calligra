@@ -51,12 +51,15 @@ signals:
   void changeTransform(KCommand *);
 
 private:
-  QTabWidget   *m_tab;
+  QTabWidget   *mTab;
   KIntNumInput *mHoriz;
   KIntNumInput *mVert;
   QGroupBox    *mTranslate;
   QGroupBox    *mRotate;
+  QGroupBox    *mShear;
   KIntNumInput *mAngle;
+  KIntNumInput *mShearAngleX;
+  KIntNumInput *mShearAngleY;
   GPage        *mPage;
   Handle       *mHandle; // not strictly necessary, so convenience
   bool         mTRelative : 1;

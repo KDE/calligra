@@ -21,6 +21,11 @@
 */
 
 #include "TransformPanel.h"
+#include "GPage.h"
+#include "TranslateCmd.h"
+#include "RotateCmd.h"
+#include "ShearCmd.h"
+#include "DuplicateCmd.h"
 
 #include <qtabwidget.h>
 #include <qgroupbox.h>
@@ -33,19 +38,16 @@
 #include <kcommand.h>
 #include <kdebug.h>
 
-#include "GPage.h"
-#include "TranslateCmd.h"
-#include "RotateCmd.h"
-#include "DuplicateCmd.h"
+const double deg2rad = 0.017453292519943295769; // pi/180
 
-TransformPanel::TransformPanel(QWidget *parent, const char *name):
-QDockWindow(QDockWindow::InDock, parent, name)
+TransformPanel::TransformPanel(QWidget *parent, const char *name)
+: QDockWindow(QDockWindow::InDock, parent, name)
 {
-  m_tab = new QTabWidget(this);
-  m_tab->setTabShape(QTabWidget::Triangular);
+  mTab = new QTabWidget(this);
+  mTab->setTabShape(QTabWidget::Triangular);
 
   /* Translate */
-  mTranslate = new QGroupBox(5, Qt::Vertical, m_tab);
+  mTranslate = new QGroupBox(5, Qt::Vertical, mTab);
   mHoriz = new KIntNumInput(0, mTranslate);
   //connect(mHoriz, SIGNAL(valueChanged(int)), this, SLOT(slotTranslateChanged(int)));
   mHoriz->setRange(-1000, 1000, 1, false);
@@ -60,10 +62,10 @@ QDockWindow(QDockWindow::InDock, parent, name)
   connect(but, SIGNAL(clicked()), this, SLOT(slotDupPressed()));
   but = new QPushButton(i18n("Apply"), mTranslate);
   connect(but, SIGNAL(clicked()), this, SLOT(slotApplyPressed()));
-  m_tab->insertTab(mTranslate, i18n("T"));
+  mTab->insertTab(mTranslate, i18n("T"));
 
   /* Rotate */
-  mRotate = new QGroupBox(4, Qt::Vertical, m_tab);
+  mRotate = new QGroupBox(4, Qt::Vertical, mTab);
   mAngle = new KIntNumInput(0, mRotate);
   //connect(mHoriz, SIGNAL(valueChanged(int)), this, SLOT(slotHorizTranslateChanged(int)));
   mAngle->setRange(-360, 360, 1, false);
@@ -74,9 +76,25 @@ QDockWindow(QDockWindow::InDock, parent, name)
   connect(but, SIGNAL(clicked()), this, SLOT(slotDupPressed()));
   but = new QPushButton(i18n("Apply"), mRotate);
   connect(but, SIGNAL(clicked()), this, SLOT(slotApplyPressed()));
-  m_tab->insertTab(mRotate, i18n("R"));
+  mTab->insertTab(mRotate, i18n("R"));
 
-  setWidget(m_tab);
+  /* Shear */
+  mShear = new QGroupBox(5, Qt::Vertical, mTab);
+  mShearAngleX = new KIntNumInput(0, mShear);
+  mShearAngleX->setRange(-360, 360, 1, false);
+  mShearAngleX->setLabel(i18n("Shear horizontal"));
+  mShearAngleY = new KIntNumInput(0, mShear);
+  mShearAngleY->setRange(-360, 360, 1, false);
+  mShearAngleY->setLabel(i18n("Shear vertical"));
+  QCheckBox *mSRelative = new QCheckBox(i18n("Relative"), mShear, "R");
+  connect(mSRelative, SIGNAL(toggled(bool)), this, SLOT(slotRelativeToggled(bool)));
+  but = new QPushButton(i18n("Duplicate"), mShear);
+  connect(but, SIGNAL(clicked()), this, SLOT(slotDupPressed()));
+  but = new QPushButton(i18n("Apply"), mShear);
+  connect(but, SIGNAL(clicked()), this, SLOT(slotApplyPressed()));
+  mTab->insertTab(mShear, i18n("S"));
+
+  setWidget(mTab);
   setCaption(i18n("Transform"));
 
   mTRelative = false;
@@ -96,7 +114,7 @@ void TransformPanel::setContext(const QWMatrix &m, GPage *p)
 
 void TransformPanel::slotRelativeToggled(bool toggled)
 {
-  if(m_tab->currentPage() == mTranslate)
+  if(mTab->currentPage() == mTranslate)
   {
 	mTRelative = toggled;
     if(toggled)
@@ -110,7 +128,7 @@ void TransformPanel::slotRelativeToggled(bool toggled)
 	  mVert->setValue(int(mHandle->rotCenter().y()));
 	}
   }
-  else if(m_tab->currentPage() == mRotate)
+  else if(mTab->currentPage() == mRotate)
   {
 	mRRelative = toggled;
   }
@@ -120,7 +138,7 @@ void TransformPanel::slotDupPressed()
 {
   KMacroCommand *c = new KMacroCommand(i18n("Transform Duplicate"));
   c->addCommand(new DuplicateCmd(mPage->document()));
-  if(m_tab->currentPage() == mTranslate)
+  if(mTab->currentPage() == mTranslate)
     // Handle only translates that really change the object
     if(mTRelative)
 	{
@@ -132,15 +150,18 @@ void TransformPanel::slotDupPressed()
 	  if(mHoriz->value() != mHandle->rotCenter().x() || mVert->value() != mHandle->rotCenter().y())
         c->addCommand(new TranslateCmd(mPage->document(), double(mHoriz->value() - mHandle->rotCenter().x()), double(mVert->value()  - mHandle->rotCenter().y())));
     }
-  else if(m_tab->currentPage() == mRotate)
+  else if(mTab->currentPage() == mRotate)
     c->addCommand(new RotateCmd(mPage->document(), mHandle->rotCenter(), mAngle->value()));
+  else if(mTab->currentPage() == mShear)
+    c->addCommand(new ShearCmd(mPage->document(), mHandle->rotCenter(), mShearAngleX->value() * deg2rad,
+	                 mShearAngleY->value() * deg2rad));
   emit changeTransform(c);
 }
 
 void TransformPanel::slotApplyPressed()
 {
   TransformationCmd *c = 0;
-  if(m_tab->currentPage() == mTranslate)
+  if(mTab->currentPage() == mTranslate)
     // Handle only translates that really change the object
     if(mTRelative)
 	{
@@ -153,8 +174,11 @@ void TransformPanel::slotApplyPressed()
         c = new TranslateCmd(mPage->document(), double(mHoriz->value() - mHandle->rotCenter().x()),
 	                                            double(mVert->value()  - mHandle->rotCenter().y()));
     }
-  else if(m_tab->currentPage() == mRotate)
+  else if(mTab->currentPage() == mRotate)
     c = new RotateCmd(mPage->document(), mHandle->rotCenter(), mAngle->value());
+  else if(mTab->currentPage() == mShear)
+    c = new ShearCmd(mPage->document(), mHandle->rotCenter(), mShearAngleX->value() * deg2rad,
+	                 mShearAngleY->value() * deg2rad);
 
   if(c)
     emit changeTransform(c);
