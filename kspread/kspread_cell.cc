@@ -1920,7 +1920,7 @@ void KSpreadCell::paintCell( const QRect& rect, QPainter &painter,
 
 void KSpreadCell::paintObscuredCells(const QRect& rect, QPainter& painter,
                                      KSpreadView* view,
-                                     QPoint corner, QPoint cellRef)
+                                     const QPoint &corner, const QPoint &cellRef)
 {
   // This cell is obscuring other ones? Then we redraw their
   // background and borders before we paint our content there.
@@ -1954,7 +1954,7 @@ void KSpreadCell::paintObscuredCells(const QRect& rect, QPainter& painter,
 
 
 void KSpreadCell::paintBackground(QPainter& painter, KSpreadView* view,
-                                  QPoint corner, QPoint cellRef,
+                                  const QPoint &corner, const QPoint &cellRef,
                                   int width, int height,
                                   bool selected)
 {
@@ -2016,7 +2016,7 @@ void KSpreadCell::paintBackground(QPainter& painter, KSpreadView* view,
 }
 
 void KSpreadCell::paintDefaultBorders( QPainter& painter, KSpreadView* view,
-                                       QPoint corner, QPoint cellRef,
+                                       const QPoint &corner, const QPoint &cellRef,
                                        int width, int height )
 {
   QPen left_pen = leftBorderPen( cellRef.x(), cellRef.y() );
@@ -2185,7 +2185,7 @@ void KSpreadCell::paintDefaultBorders( QPainter& painter, KSpreadView* view,
 
 
 void KSpreadCell::paintCommentIndicator( QPainter& painter, KSpreadView* /*view*/,
-                                         QPoint corner, QPoint cellRef,
+                                         const QPoint &corner, const QPoint &cellRef,
                                          int width, int height )
 {
   // Point the little corner if there is a comment attached
@@ -2209,7 +2209,7 @@ void KSpreadCell::paintCommentIndicator( QPainter& painter, KSpreadView* /*view*
 
 // small blue rectangle if this cell holds a formula
 void KSpreadCell::paintFormulaIndicator( QPainter& painter, KSpreadView* /*view*/,
-                                         QPoint corner, QPoint /*cellRef*/,
+                                         const QPoint &corner, const QPoint &/*cellRef*/,
                                          int height )
 {
   if( isFormula() && m_pTable->getShowFormulaIndicator() )
@@ -2226,7 +2226,7 @@ void KSpreadCell::paintFormulaIndicator( QPainter& painter, KSpreadView* /*view*
 
 
 void KSpreadCell::paintMoreTextIndicator( QPainter& painter, KSpreadView* /*view*/,
-                                          QPoint corner, QPoint /*cellRef*/,
+                                          const QPoint &corner, const QPoint &/*cellRef*/,
                                           int width, int height )
 {
   //show  a red triangle when it's not possible to write all text in cell
@@ -2246,7 +2246,7 @@ void KSpreadCell::paintMoreTextIndicator( QPainter& painter, KSpreadView* /*view
 }
 
 void KSpreadCell::paintText( QPainter& painter, KSpreadView* /*view*/,
-                             QPoint corner, QPoint cellRef,
+                             const QPoint &corner, const QPoint &cellRef,
                              int width, int height )
 {
   ColumnLayout* colLayout = m_pTable->columnLayout( cellRef.x() );
@@ -2469,7 +2469,7 @@ void KSpreadCell::paintText( QPainter& painter, KSpreadView* /*view*/,
 }
 
 void KSpreadCell::paintPageBorders( QPainter& painter, KSpreadView* /*view*/,
-                                    QPoint corner, QPoint cellRef,
+                                    const QPoint &corner, const QPoint &cellRef,
                                     int width, int height )
 {
   if ( painter.device()->isExtDev() )
@@ -2500,7 +2500,7 @@ void KSpreadCell::paintPageBorders( QPainter& painter, KSpreadView* /*view*/,
 
 
 void KSpreadCell::paintCellBorders( QPainter& painter, KSpreadView* view,
-                                    QPoint corner, QPoint cellRef,
+                                    const QPoint &corner, const QPoint &cellRef,
                                     int width, int height )
 {
   /* we might not paint some borders if this cell is merged with another in
