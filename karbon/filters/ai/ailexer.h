@@ -40,6 +40,7 @@ typedef enum {
   State_ByteArray,
   State_StringEncodedChar,
   State_CommentEncodedChar,
+  State_ByteArray2
 } State;
 
 typedef enum {

@@ -22,17 +22,26 @@
 #define CATEGORY_ALPHA -2
 #define CATEGORY_DIGIT -3
 #define CATEGORY_SPECIAL -4
+#define CATEGORY_LETTERHEX -5
+#define CATEGORY_INTTOOLONG -6
 
 #define CATEGORY_ANY -127
+
+#define MAX_INTLEN 9
+#define MIN_HEXCHARS 6
 
 #define STOP 0
 
 int iswhitespace(char c){
-  return (c==' ')||(c=='\n')||(c=='\t');
+  return (c==' ')||(c=='\n')||(c=='\t')||(c=='\r');
 }
 
 int isspecial(char c){
   return (c=='*')||(c=='_')||(c=='?')||(c=='~')||(c=='-')||(c=='^')||(c=='`')||(c=='!')||(c=='.')||(c=='@')||(c=='&')||(c=='$')||(c=='=');
+}
+
+int isletterhex(char c){
+  return (c=='A')||(c=='B')||(c=='C')||(c=='D')||(c=='E')||(c=='F');
 }
 
 const char*statetoa (State state){
@@ -53,6 +62,7 @@ const char*statetoa (State state){
     case State_ByteArray : return "byte array";
     case State_StringEncodedChar : return "encoded char (string)";
     case State_CommentEncodedChar : return "encoded char (comment)";
+    case State_ByteArray2 : return "byte array (mode 2)";
     default : return "unknown";
   }
 }
@@ -71,6 +81,7 @@ static Transition transitions[] = {
   { State_Start, '+', State_Integer, Action_Copy},
   { State_Start, '.', State_Float, Action_Copy},
   { State_Start, '/', State_Reference, Action_Ignore },
+  { State_Start, CATEGORY_LETTERHEX, State_ByteArray2, Action_Copy},
   { State_Start, CATEGORY_ALPHA, State_Token, Action_Copy},
   { State_Start, CATEGORY_SPECIAL, State_Token, Action_Copy},
   { State_Start, '(', State_String, Action_Ignore},
@@ -85,6 +96,7 @@ static Transition transitions[] = {
 //  { State_Array, CATEGORY_DIGIT, State_Array, Action_Copy},
 //  { State_Array, ' ', State_Array, Action_Copy},
   { State_Comment, '\n', State_Start, Action_Output},
+  { State_Comment, '\r', State_Start, Action_Output},
   { State_Comment, '\\', State_CommentEncodedChar, Action_InitTemp},
   { State_Comment, CATEGORY_ANY, State_Comment, Action_Copy},
   { State_Integer, CATEGORY_DIGIT, State_Integer, Action_Copy},
@@ -94,6 +106,10 @@ static Transition transitions[] = {
   { State_Integer, '}', State_Start, Action_OutputUnget},
   { State_Integer, '#', State_Byte, Action_Copy },
   { State_Integer, '/', State_Start, Action_OutputUnget },
+  { State_Integer, '{', State_Start, Action_OutputUnget },
+  { State_Integer, CATEGORY_LETTERHEX, State_ByteArray2, Action_Copy },
+  { State_Integer, CATEGORY_INTTOOLONG, State_ByteArray2, Action_Copy },
+  { State_Integer, '%', State_Start, Action_OutputUnget },
   { State_Integer, CATEGORY_ANY, State_Start, Action_Abort},
   { State_Float, CATEGORY_DIGIT, State_Float, Action_Copy},
   { State_Float, CATEGORY_WHITESPACE, State_Start, Action_Output},
@@ -111,6 +127,7 @@ static Transition transitions[] = {
   { State_Token, CATEGORY_WHITESPACE, State_Start, Action_Output},
   { State_Token, '{', State_BlockStart, Action_Output},
   { State_Token, '}', State_BlockEnd, Action_Output},
+  { State_Token, '/', State_Start, Action_OutputUnget},
   { State_Token, CATEGORY_ANY, State_Start, Action_Abort},
   { State_BlockStart, CATEGORY_ANY, State_Start, Action_OutputUnget },
   { State_BlockEnd, CATEGORY_ANY, State_Start, Action_OutputUnget },
@@ -136,6 +153,13 @@ static Transition transitions[] = {
   { State_CommentEncodedChar, CATEGORY_DIGIT, State_CommentEncodedChar, Action_CopyTemp},
   { State_CommentEncodedChar, '\\', State_String, Action_Copy},
   { State_CommentEncodedChar, CATEGORY_ANY, State_Comment, Action_DecodeUnget},
+  { State_ByteArray2, '\n', State_Start, Action_Output},
+  { State_ByteArray2, '\r', State_Start, Action_Output},
+  { State_ByteArray2, CATEGORY_WHITESPACE, State_Start, Action_Output},
+  { State_ByteArray2, CATEGORY_DIGIT, State_ByteArray2, Action_Copy},
+  { State_ByteArray2, CATEGORY_LETTERHEX, State_ByteArray2, Action_Copy},
+  { State_ByteArray2, CATEGORY_ALPHA, State_Token, Action_Copy},
+  { State_ByteArray2, CATEGORY_ANY, State_Start, Action_Abort},
   { State_Start, STOP, State_Start, Action_Abort}
 };
 
@@ -155,6 +179,8 @@ bool AILexer::parse (QIODevice& fin){
   while (!fin.atEnd())
   {
     c = fin.getch ();
+
+//    qDebug ("got %c", c);
 
     State newState;
     Action action;
@@ -208,6 +234,7 @@ bool AILexer::parse (QIODevice& fin){
 
 void AILexer::doOutput ()
 {
+  if (m_buffer.length() == 0) return;
   switch (m_curState)
   {
     case State_Comment :
@@ -246,6 +273,7 @@ void AILexer::doOutput ()
       gotByte (getByte());
       break;
     case State_ByteArray :
+    case State_ByteArray2 :
       doHandleByteArray ();
       break;
     default:
@@ -344,6 +372,8 @@ void AILexer::nextStep (char c, State *newState, Action *newAction) {
         case CATEGORY_ALPHA : found = ch.isLetter(); break;
         case CATEGORY_DIGIT : found = ch.isNumber(); break;
         case CATEGORY_SPECIAL : found = isspecial(c); break;
+        case CATEGORY_LETTERHEX : found = isletterhex(c); break;
+        case CATEGORY_INTTOOLONG : found = m_buffer.length() > MAX_INTLEN; break;
         case CATEGORY_ANY : found = true; break;
         default : found = (trans.c == c);
       }
@@ -363,7 +393,13 @@ void AILexer::nextStep (char c, State *newState, Action *newAction) {
 
 void AILexer::doHandleByteArray ()
 {
-//  qDebug ("convert string to byte array (%s)", m_buffer.latin1());
+  // Special case - too short
+  if (m_buffer.length () < MIN_HEXCHARS)
+  {
+    gotToken (m_buffer.latin1());
+    return;
+  }
+
 
   uint strIdx = 0;
   uint arrayIdx = 0;

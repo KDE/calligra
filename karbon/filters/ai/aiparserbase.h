@@ -43,6 +43,7 @@ typedef enum { FM_NonZero } FillMode;
 typedef enum { FS_Roman, FS_Kanji } FontScript;
 
 typedef enum { DS_Array, DS_Other } DataSink;
+typedef enum { ST_Setup, ST_Prolog, ST_ProcSet, ST_Encoding, ST_Pattern, ST_Document, ST_BrushPattern, ST_Gradient, ST_Palette, ST_Resource } SectionType;
 
 typedef enum {
   /* AI 88 */
@@ -279,8 +280,11 @@ protected:
   virtual void gotCreator (const char *data);
   virtual void gotPatternDefinition (const char *name, const QValueVector<AIElement>& layerData, double llx, double lly, double urx, double ury);
 
+  virtual void gotBeginSection (SectionType st, const char *data);
+  virtual void gotEndSection (SectionType st, const char *data);
 private:
   void handleElement (AIElement &element);
+  void cleanupArrays();
 public:
 	AIParserBase();
 	~AIParserBase();
@@ -289,6 +293,7 @@ public:
 };
 
 const void aiotoa (AIOperation &data);
+const void sttoa (SectionType &data, bool begin);
 
 #endif
 

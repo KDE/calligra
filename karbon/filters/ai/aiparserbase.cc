@@ -174,39 +174,112 @@ void AIParserBase::gotComment (const char *value) {
 
   CommentOperation cop = getCommentOperation (value);
   switch (cop) {
-    case CO_BeginSetup :
-    case CO_EndSetup :
     case CO_BeginDocument :
+       gotBeginSection (ST_Document, value);
+       break;
     case CO_EndDocument :
-      break;
+       gotBeginSection (ST_Document, value);
+       break;
     case CO_BeginPattern :
-//      m_debug = true;
-      break;
+       gotBeginSection (ST_Pattern, value);
+       break;
     case CO_EndPattern :
-//      m_debug = false;
-      break;
+       gotBeginSection (ST_Pattern, value);
+       break;
     case CO_BeginProlog :
+       gotBeginSection (ST_Prolog, value);
+/*       if (m_debug) qDebug ("start ignoring");
+       m_ignoring = true; */
+       break;
     case CO_BeginProcSet :
+       gotBeginSection (ST_ProcSet, value);
+       if (m_debug) qDebug ("start ignoring");
+       m_ignoring = true;
+       break;
     case CO_BeginResource :
+       gotBeginSection (ST_Resource, value);
+       if (m_debug) qDebug ("start ignoring");
+       m_ignoring = true;
+       break;
     case CO_BeginEncoding :
+       gotBeginSection (ST_Encoding, value);
+       m_ignoring = false;
+/*       if (m_debug) qDebug ("start ignoring");
+       m_ignoring = true; */
+       break;
     case CO_IncludeFont :
+       if (m_debug) qDebug ("start ignoring");
+       m_ignoring = true;
+       break;
     case CO_BeginBrushPattern :
+       gotBeginSection (ST_BrushPattern, value);
+/*       if (m_debug) qDebug ("start ignoring");
+       m_ignoring = true; */
+       break;
     case CO_BeginGradient :
+       gotBeginSection (ST_Gradient, value);
+/*       if (m_debug) qDebug ("start ignoring");
+       m_ignoring = true; */
+       break;
     case CO_Trailer :
+       if (m_debug) qDebug ("start ignoring");
+       m_ignoring = true;
+       break;
     case CO_BeginPalette :
-      if (m_debug) qDebug ("start ignoring");
-      m_ignoring = true;
-      break;
+       gotBeginSection (ST_Palette, value);
+/*       if (m_debug) qDebug ("start ignoring");
+       m_ignoring = true; */
+       break;
+    case CO_BeginSetup :
+       gotBeginSection (ST_Setup, value);
+/*       if (m_debug) qDebug ("start ignoring");
+       m_ignoring = true; */
+       break;
+    case CO_EndSetup :
+       cleanupArrays();
+       gotEndSection (ST_Setup, value);
+/*       if (m_debug) qDebug ("stop ignoring");
+       m_ignoring = false; */
+       break;
     case CO_EndProlog :
+       gotEndSection (ST_Prolog, value);
+/*       if (m_debug) qDebug ("stop ignoring");
+       m_ignoring = false; */
+       break;
     case CO_EndProcSet :
+       gotEndSection (ST_ProcSet, value);
+       if (m_debug) qDebug ("stop ignoring");
+       m_ignoring = false;
+       break;
     case CO_EndResource :
+       gotEndSection (ST_Resource, value);
+       if (m_debug) qDebug ("stop ignoring");
+       m_ignoring = false;
+       break;
     case CO_EndEncoding :
+       cleanupArrays();
+       gotEndSection (ST_Encoding, value);
+/*       if (m_debug) qDebug ("stop ignoring");
+       m_ignoring = false; */
+       break;
     case CO_EndBrushPattern :
+       cleanupArrays();
+       gotEndSection (ST_BrushPattern, value);
+/*       if (m_debug) qDebug ("stop ignoring");
+       m_ignoring = false; */
+       break;
     case CO_EndGradient :
+       cleanupArrays();
+       gotEndSection (ST_Gradient, value);
+/*       if (m_debug) qDebug ("stop ignoring");
+       m_ignoring = false; */
+       break;
     case CO_EndPalette :
-      if (m_debug) qDebug ("stop ignoring");
-      m_ignoring = false;
-      break;
+       cleanupArrays();
+       gotEndSection (ST_Palette, value);
+/*       if (m_debug) qDebug ("stop ignoring");
+       m_ignoring = false; */
+       break;
     case CO_Ignore :
       break;
     case CO_BoundingBox :
@@ -1085,6 +1158,21 @@ void AIParserBase::gotTemplate (const char *data){
 //  qDebug ("got template %s", data);
 }
 
+void AIParserBase::cleanupArrays()
+{
+  if (m_sink == DS_Array) qDebug ("unclosed array(s).");
+  while (m_sink == DS_Array) gotArrayEnd ();
+  stacktoa (m_stack);
+}
+
+void AIParserBase::gotBeginSection (SectionType st, const char *data) {
+  sttoa (st, true);
+}
+
+void AIParserBase::gotEndSection (SectionType st, const char *data) {
+  sttoa (st, false);
+}
+
 const void elementtoa (const AIElement &data)
 {
   AIElement::Type type = data.type();
@@ -1214,5 +1302,25 @@ const void aiotoa (AIOperation &data)
     case AIO_LockElement : qDebug ("AIO_LockElement"); break;
     case AIO_SetWindingOrder : qDebug ("AIO_SetWindingOrder"); break;
     default : qDebug ("unknown");
+  }
+}
+
+const void sttoa (SectionType &data, bool begin)
+{
+  switch (data)
+  {
+    case ST_Setup : begin ? qDebug ("start setup") : qDebug ("end setup"); break;
+    case ST_Prolog : begin ? qDebug ("start prolog") : qDebug ("end prolog"); break;
+    case ST_ProcSet : begin ? qDebug ("start procset") : qDebug ("end procset"); break;
+    case ST_Encoding : begin ? qDebug ("start encoding") : qDebug ("end encoding"); break;
+    case ST_Pattern : begin ? qDebug ("start pattern") : qDebug ("end pattern"); break;
+    case ST_Document : begin ? qDebug ("start document") : qDebug ("end document"); break;
+    case ST_BrushPattern : begin ? qDebug ("start brush pattern") : qDebug ("end brush pattern"); break;
+    case ST_Gradient : begin ? qDebug ("start gradient") : qDebug ("end gradient"); break;
+    case ST_Palette : begin ? qDebug ("start palette") : qDebug ("end palette"); break;
+    case ST_Resource : begin ? qDebug ("start resource") : qDebug ("end resouce"); break;
+
+    default : begin ? qDebug ("unknown") : qDebug ("end unknown");
+
   }
 }
