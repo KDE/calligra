@@ -34,7 +34,7 @@
 
 Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDomElement& framesetsElement )
     : m_mainDocument( mainDocument ), m_framesetsElement( framesetsElement ),
-      m_replacementHandler( new KWordReplacementHandler ),
+      m_replacementHandler( new KWordReplacementHandler ), m_textHandler( 0 ),
       m_parser( wvWare::ParserFactory::createParser( fileName ) ),
       m_headerFooters( 0 ), m_bodyFound( false )
 {
