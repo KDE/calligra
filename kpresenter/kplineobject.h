@@ -25,6 +25,7 @@
 #define RAD_FACTOR 180.0 / M_PI
 
 class QPainter;
+class DCOPObject;
 
 /******************************************************************/
 /* Class: KPLineObject                                            */
@@ -37,6 +38,8 @@ public:
     KPLineObject( const QPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd, LineType _lineType );
     virtual ~KPLineObject()
     {}
+
+    virtual DCOPObject* dcopObject();
 
     KPLineObject &operator=( const KPLineObject & );
 

@@ -17,7 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <kpcubicbeziercurveobject.h>
+#include "kpcubicbeziercurveobject.h"
+#include "KPCubicbeziercurveObjectIface.h"
 #include <kpresenter_utils.h>
 #include <kozoomhandler.h>
 #include <qpainter.h>
@@ -41,6 +42,7 @@ KPCubicBezierCurveObject::KPCubicBezierCurveObject()
     lineEnd = L_NORMAL;
 }
 
+
 /*================== overloaded constructor ======================*/
 KPCubicBezierCurveObject::KPCubicBezierCurveObject( const KoPointArray &_controlPoints, const KoPointArray &_allPoints,
                                                     const KoSize &_size, const QPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd )
@@ -61,6 +63,14 @@ KPCubicBezierCurveObject &KPCubicBezierCurveObject::operator=( const KPCubicBezi
 {
     return *this;
 }
+
+DCOPObject* KPCubicBezierCurveObject::dcopObject()
+{
+    if ( !dcop )
+	dcop = new KPCubicBezierCurveObjectIface( this );
+    return dcop;
+}
+
 
 /*========================= save =================================*/
 QDomDocumentFragment KPCubicBezierCurveObject::save( QDomDocument& doc, double offset )

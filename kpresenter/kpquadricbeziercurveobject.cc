@@ -18,6 +18,7 @@
 */
 
 #include <kpquadricbeziercurveobject.h>
+#include "KPQuadricbezierCurveObjectIface.h"
 #include <kpresenter_utils.h>
 
 #include <qpainter.h>
@@ -56,6 +57,15 @@ KPQuadricBezierCurveObject::KPQuadricBezierCurveObject( const KoPointArray &_con
     lineBegin = _lineBegin;
     lineEnd = _lineEnd;
 }
+
+DCOPObject* KPQuadricBezierCurveObject::dcopObject()
+{
+    if ( !dcop )
+	dcop = new KPQuadricBezierCurveObjectIface( this );
+    return dcop;
+}
+
+
 
 KPQuadricBezierCurveObject &KPQuadricBezierCurveObject::operator=( const KPQuadricBezierCurveObject & )
 {

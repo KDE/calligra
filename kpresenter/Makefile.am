@@ -36,7 +36,10 @@ libkpresenterpart_la_SOURCES = koPointArray.cc kprcanvas.cc kprpage.cc searchdia
 	KPRectObjectIface.skel KPRectObjectIface.cc \
 	KPPixmapObjectIface.skel KPPixmapObjectIface.cc \
 	KPAutoFormObjectIface.skel KPAutoFormObjectIface.cc \
-	KPresenterObject2DIface.skel KPresenterObject2DIface.cc
+	KPresenterObject2DIface.skel KPresenterObject2DIface.cc \
+	KPLineObjectIface.skel KPLineObjectIface.cc \
+	KPQuadricbezierCurveObjectIface.skel KPQuadricbezierCurveObjectIface.cc \
+	KPCubicbeziercurveObjectIface.skel KPCubicbeziercurveObjectIface.cc
 
 libkpresenterpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkpresenterpart_la_LIBADD = autoformEdit/libaf.la $(LIB_KOFFICEUI) $(LIB_KOTEXT) -lkspell  -lqtmcop -lkmedia2_idl -lsoundserver_idl -lartskde
@@ -76,7 +79,9 @@ noinst_HEADERS = koPointArray.h kprcanvas.h kprpage.h kpresenter_doc.h kpresente
 		kppolylineobject.h kpquadricbeziercurveobject.h kpcubicbeziercurveobject.h \
 		confpolygondia.h kppolygonobject.h KPTextViewIface.h KPTextObjectIface.h \
 		presdurationdia.h KPPieObjectIface.h KPPolygonObjectIface.h KPRectObjectIface.h KPPixmapObjectIface.h \
-		KPAutoFormObjectIface.h KPresenterObject2DIface.h
+		KPAutoFormObjectIface.h KPresenterObject2DIface.h \
+		KPLineObjectIface.h KPQuadricbezierCurveObjectIface.h \
+		KPCubicbeziercurveObjectIface.h
 
 kdelnk_DATA = kpresenter.desktop
 kdelnkdir = $(kde_appsdir)/Office

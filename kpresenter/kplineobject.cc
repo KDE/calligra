@@ -19,6 +19,7 @@
 
 #include <kplineobject.h>
 #include <kpresenter_utils.h>
+#include "KPLineObjectIface.h"
 
 #include <qpainter.h>
 #include <qwmatrix.h>
@@ -54,6 +55,14 @@ KPLineObject &KPLineObject::operator=( const KPLineObject & )
 {
     return *this;
 }
+
+DCOPObject* KPLineObject::dcopObject()
+{
+    if ( !dcop )
+	dcop = new KPLineObjectIface( this );
+    return dcop;
+}
+
 
 /*========================= save =================================*/
 QDomDocumentFragment KPLineObject::save( QDomDocument& doc, double offset )

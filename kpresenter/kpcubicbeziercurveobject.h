@@ -27,6 +27,7 @@
 #define RAD_FACTOR 180.0 / M_PI
 
 class QPainter;
+class DCOPObject;
 
 /******************************************************************/
 /* Class: KPCubicBezierCurveObject                                */
@@ -39,6 +40,8 @@ public:
     KPCubicBezierCurveObject( const KoPointArray &_controlPoints, const KoPointArray &_allPoints, const KoSize & _size,
                               const QPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
     virtual ~KPCubicBezierCurveObject() {}
+
+    virtual DCOPObject* dcopObject();
 
     KPCubicBezierCurveObject &operator=( const KPCubicBezierCurveObject & );
 

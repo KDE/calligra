@@ -28,6 +28,8 @@
 
 class QPainter;
 class KoZoomHandler;
+class DCOPObject;
+
 /******************************************************************/
 /* Class: KPQuadricBezierCurveObject                              */
 /******************************************************************/
@@ -41,6 +43,7 @@ public:
     virtual ~KPQuadricBezierCurveObject() {}
 
     KPQuadricBezierCurveObject &operator=( const KPQuadricBezierCurveObject & );
+    virtual DCOPObject* dcopObject();
 
     virtual void setPen( const QPen &_pen ) { pen = _pen; }
     virtual void setLineBegin( LineEnd _lineBegin ) { lineBegin = _lineBegin; }
