@@ -392,7 +392,7 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, QTextCursor *
         r.setLeft( KoBorder::zoomWidthX( m_layout.leftBorder.ptWidth, zh, 0 ) );
         // ## documentWidth breaks with variable width. Maybe use currentDrawnFrame() ?
         r.setRight( zh->layoutUnitToPixelX(documentWidth()) - 2 - KoBorder::zoomWidthX( m_layout.rightBorder.ptWidth, zh, 0 ) );
-        r.setTop( lineY( 0 ) );
+        r.setTop( zh->layoutUnitToPixelY(lineY( 0 )) );
         int lastLine = lines() - 1;
         r.setBottom( static_cast<int>( zh->layoutUnitToPixelY(lineY( lastLine ) + lineHeight( lastLine ) ) ));
         // If we don't have a bottom border, we need go as low as possible ( to touch the next parag's border ).
