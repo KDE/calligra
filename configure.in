@@ -10,7 +10,7 @@ dnl This is so we can use kde-common
 AC_CONFIG_AUX_DIR(admin)
 
 dnl without this order in this file, automake will be confused!
-dnl the argument 
+dnl the argument
 AM_CONFIG_HEADER(config.h)
 AC_CHECK_COMPILERS
 
@@ -26,7 +26,7 @@ AC_PREFIX_DEFAULT(${KDEDIR:-/usr/local/kde})
 AM_ENABLE_SHARED(yes)
 AM_ENABLE_STATIC(no)
 KDE_PROG_LIBTOOL
-AC_PATH_KDE 
+AC_PATH_KDE
 AM_KDE_WITH_NLS
 
 dnl Check for MICO. The argument is the minimal version required.
@@ -120,6 +120,7 @@ AC_OUTPUT( \
 	kword/dtd/Makefile \
 	kword/filters/Makefile \
 	kword/filters/ascii/Makefile \
+	kword/filters/winword97/Makefile \
 	kdiagramm/Makefile \
 	kdiagramm/pics/Makefile \
 	kimage/Makefile \
