@@ -1156,7 +1156,7 @@ void KWFrameDia::updateFrames()
 
     if(frames.count()==1)
     {
-	ASSERT( frames.first() == frame );
+        Q_ASSERT( frames.first() == frame );
         if(frame->isSelected())
             frame->updateResizeHandles();
     }
