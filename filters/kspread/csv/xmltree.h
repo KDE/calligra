@@ -34,7 +34,7 @@ public:
   ~XMLTree();
 
   // Return the whole XML as QString
-  const QString part();
+  //const QString part();
 
   // Create a new cell
   bool cell( const QString & contents );
@@ -50,5 +50,4 @@ private:
   QDomDocument &root;
   QDomElement doc, map, table;
 };
-
 #endif // XMLTREE_H

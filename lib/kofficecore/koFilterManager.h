@@ -197,6 +197,8 @@ public slots:
     void filterChanged(const QString &filter);
 
 private:
+    void change(const QString &ext);
+    
     const KoFilterManager * const mgr;
     bool hidden;
 };

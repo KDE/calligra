@@ -25,7 +25,7 @@
 
 XMLTree::XMLTree(QDomDocument &qdoc) : root(qdoc)
 {
-  root.setName("spreadsheet");
+  root=QDomDocument("spreadsheet");
   root.appendChild( root.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
   doc = root.createElement( "spreadsheet" );
 
@@ -62,16 +62,17 @@ XMLTree::~XMLTree()
     //delete root;
 }
 
-const QString XMLTree::part()
-{
-  QString s;
-  QTextStream t(s, IO_WriteOnly);
+// Not needed anymore (Werner)
+//const QString XMLTree::part()
+//{
+//  QString s;
+//  QTextStream t(s, IO_WriteOnly);
 
-  QTime tmr;
-  tmr.start();
-  kdDebug(31501) << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
+//  QTime tmr;
+//  tmr.start();
+//  kdDebug(31501) << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
 
-  root.save(t);  // Why does this take sooooo long (approx. 8s on my Athlon 500 with a
+//  root.save(t);  // Why does this take sooooo long (approx. 8s on my Athlon 500 with a
                  // quite small file :( )
 
 // David: gdb says that QString::replace calls itself recursively an enormous amount of time
@@ -80,13 +81,13 @@ const QString XMLTree::part()
 //
 // And this looks related to the UTF 8 encoding ...
 
-  kdDebug(31501) << (const char*)QString::number((int)tmr.elapsed()) << endl;
-  kdDebug(31501) << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
+//  kdDebug(31501) << (const char*)QString::number((int)tmr.elapsed()) << endl;
+//  kdDebug(31501) << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
 
-  t << '\0';
+//  t << '\0';
 
-  return s;
-}
+//  return s;
+//}
 
 bool XMLTree::cell( const QString & contents )
 {
@@ -96,7 +97,7 @@ bool XMLTree::cell( const QString & contents )
 
   e.setAttribute("row", row);
   e.setAttribute("column", column++);
-
+  
   QDomElement format=root.createElement("format");
   format.setAttribute("float", "3");
   format.setAttribute("alignY", "2");

@@ -493,38 +493,16 @@ void PreviewStack::showPreview(const KURL &url) {
     while(tmp[foo-k]!=QChar('.') && k<=foo) {
         ++k;
     }
-
-    // did we find the extension?
-    if(tmp[foo-k]!=QChar('.')) {
-        if(!hidden) {
-            hide();
-            hidden=true;
-        }
-        return;
-    }
-    // do we have a dialog for that extension? (0==we don't have one)
-    id=mgr->findWidget(tmp.right(k));
-    if(id==0) {
-        if(!hidden) {
-            hide();
-            hidden=true;
-        }
-        return;
-    }
-    else {
-        raiseWidget(id);
-        if(hidden) {
-            show();
-            hidden=false;
-        }
-    }
+    change(tmp.right(k));
 }
 
 void PreviewStack::filterChanged(const QString &filter) {
+    change(filter.mid(1));    
+}
 
-    QString ext=filter.mid(1);
-
-    if(ext.isNull()) {
+void PreviewStack::change(const QString &ext) {
+    
+    if(ext.isNull() || ext[0]!='.') {
 	if(!hidden) {
             hide();
             hidden=true;
