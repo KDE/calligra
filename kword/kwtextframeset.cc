@@ -1964,7 +1964,7 @@ void KWTextFrameSet::formatMore()
 
 double KWTextFrameSet::footerHearderSizeMax(  KWFrame *theFrame )
 {
-    double tmp =(int)(m_doc->ptPaperHeight()-m_doc->ptBottomBorder()-m_doc->ptTopBorder())-40;//default min 40 for page size
+    double tmp =m_doc->ptPaperHeight()-m_doc->ptBottomBorder()-m_doc->ptTopBorder()-40;//default min 40 for page size
     switch ( theFrame->getFrameSet()->frameSetInfo() ) {
         case KWFrameSet::FI_FIRST_HEADER:
             if ( m_doc->isHeaderVisible() ) {
