@@ -427,7 +427,9 @@ void KWFindReplace::replace( const QString &, int matchingIndex,
     cursor.setParag( m_currentParag );
     cursor.setIndex( index );
     // Remove the match
-    textdoc->removeSelectedText( KWTextFrameSet::HighlightSelection, &cursor );
+    m_currentFrameSet->removeSelectedText( &cursor, KWTextFrameSet::HighlightSelection, i18n("Remove Replacement") );
+
+    //textdoc->removeSelectedText( KWTextFrameSet::HighlightSelection, &cursor );
     // Insert the replacement
     QTextFormat * format = m_currentParag->at( index )->format();
     // ## TODO back references (qt3)
