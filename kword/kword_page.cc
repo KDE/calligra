@@ -4456,7 +4456,7 @@ void KWPage::blinkCursor()
   doc->drawMarker(*fc,&p,xOffset,yOffset);
   p.end();
 
-  blinkTimer.changeInterval(kapp->cursorFlashTime());
+  blinkTimer.changeInterval(kapp->cursorFlashTime() / 2);
 }
 
 /*================================================================*/
