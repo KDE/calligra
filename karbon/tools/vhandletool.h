@@ -13,9 +13,22 @@
 class KarbonPart;
 class QPainter;
 
+
 // A singleton state to represent a handle.
 
-enum { NODE_LT, NODE_MT, NODE_RT, NODE_LM, NODE_MM, NODE_RM, NODE_LB, NODE_MB, NODE_RB };
+enum VHandleNode
+{
+	node_lt,
+	node_mt,
+	node_rt,
+	node_lm,
+	node_mm,
+	node_rm,
+	node_lb,
+	node_mb,
+	node_rb
+};
+
 
 class VHandleTool : public VTool
 {
@@ -27,9 +40,7 @@ public:
 
 	virtual bool eventFilter( KarbonView* view, QEvent* event );
 
-	short activeNode() const;
-
-	void drawBox( QPainter& painter, short index );
+	VHandleNode activeNode() const { return m_activeNode; }
 
 protected:
 	VHandleTool( KarbonPart* part );
@@ -39,7 +50,7 @@ private:
 
 	KoRect m_boundingBox;
 	KoRect m_nodes[9];
-	short m_activeNode;
+	VHandleNode m_activeNode;
 };
 
 #endif

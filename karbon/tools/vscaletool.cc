@@ -47,19 +47,29 @@ VScaleTool::setCursor( KarbonView* view ) const
 {
 	switch( VHandleTool::instance( m_part )->activeNode() )
 	{
-	case NODE_LT:
-	case NODE_RB:	view->canvasWidget()->viewport()->setCursor( QCursor( Qt::SizeFDiagCursor ) );
-					break;
-	case NODE_RT:
-	case NODE_LB:	view->canvasWidget()->viewport()->setCursor( QCursor( Qt::SizeBDiagCursor ) );
-					break;
-	case NODE_LM:
-	case NODE_RM:	view->canvasWidget()->viewport()->setCursor( QCursor( Qt::SizeHorCursor ) );
-					break;
-	case NODE_MT:
-	case NODE_MB:	view->canvasWidget()->viewport()->setCursor( QCursor( Qt::SizeVerCursor ) );
-					break;
-	default:		view->canvasWidget()->viewport()->setCursor( QCursor( Qt::arrowCursor ) );
+		case node_lt:
+		case node_rb:
+			view->canvasWidget()->viewport()->
+				setCursor( QCursor( Qt::SizeFDiagCursor ) );
+			break;
+		case node_rt:
+		case node_lb:
+			view->canvasWidget()->viewport()->
+				setCursor( QCursor( Qt::SizeBDiagCursor ) );
+			break;
+		case node_lm:
+		case node_rm:
+			view->canvasWidget()->viewport()->
+				setCursor( QCursor( Qt::SizeHorCursor ) );
+			break;
+		case node_mt:
+		case node_mb:
+			view->canvasWidget()->viewport()->
+				setCursor( QCursor( Qt::SizeVerCursor ) );
+			break;
+		default:
+			view->canvasWidget()->viewport()->
+				setCursor( QCursor( Qt::arrowCursor ) );
 	}
 }
 
@@ -74,54 +84,54 @@ VScaleTool::drawTemporaryObject( KarbonView* view )
 	KoRect rect = part()->document().selection().boundingBox();
 
 	// already selected, so must be a handle operation (move, scale etc.)
-	if( !part()->document().selection().isEmpty() && VHandleTool::instance( m_part )->activeNode() != NODE_MM )
+	if( !part()->document().selection().isEmpty() && VHandleTool::instance( m_part )->activeNode() != node_mm )
 	{
 		setCursor( view );
 		// scale operation
 		QWMatrix mat;
-		if( VHandleTool::instance( m_part )->activeNode() == NODE_LT )
+		if( VHandleTool::instance( m_part )->activeNode() == node_lt )
 		{
 			m_sp = KoPoint( rect.right(), rect.bottom() );
 			m_s1 = ( rect.right() - lp.x() ) / double( rect.width() );
 			m_s2 = ( rect.bottom() - lp.y() ) / double( rect.height() );
 		}
-		else if( VHandleTool::instance( m_part )->activeNode() == NODE_MT )
+		else if( VHandleTool::instance( m_part )->activeNode() == node_mt )
 		{
 			m_sp = KoPoint( ( ( rect.right() + rect.left() ) / 2 ), rect.bottom() );
 			m_s1 = ( rect.right() - lp.x() ) / double( rect.width() / 2 );
 			m_s2 = ( rect.bottom() - lp.y() ) / double( rect.height() );
 		}
-		else if( VHandleTool::instance( m_part )->activeNode() == NODE_RT )
+		else if( VHandleTool::instance( m_part )->activeNode() == node_rt )
 		{
 			m_sp = KoPoint( rect.x(), rect.bottom() );
 			m_s1 = ( lp.x() - rect.x() ) / double( rect.width() );
 			m_s2 = ( rect.bottom() - lp.y() ) / double( rect.height() );
 		}
-		else if( VHandleTool::instance( m_part )->activeNode() == NODE_RM)
+		else if( VHandleTool::instance( m_part )->activeNode() == node_rm)
 		{
 			m_sp = KoPoint( rect.x(), ( rect.bottom() + rect.top() )  / 2 );
 			m_s1 = ( lp.x() - rect.x() ) / double( rect.width() );
 			m_s2 = ( rect.bottom() - lp.y() ) / double( rect.height() / 2 );
 		}
-		else if( VHandleTool::instance( m_part )->activeNode() == NODE_RB )
+		else if( VHandleTool::instance( m_part )->activeNode() == node_rb )
 		{
 			m_sp = KoPoint( rect.x(), rect.y() );
 			m_s1 = ( lp.x() - rect.x() ) / double( rect.width() );
 			m_s2 = ( lp.y() - rect.y() ) / double( rect.height() );
 		}
-		else if( VHandleTool::instance( m_part )->activeNode() == NODE_MB )
+		else if( VHandleTool::instance( m_part )->activeNode() == node_mb )
 		{
 			m_sp = KoPoint( ( ( rect.right() + rect.left() ) / 2 ), rect.y() );
 			m_s1 = ( rect.right() - lp.x() ) / double( rect.width() / 2 );
 			m_s2 = ( lp.y() - rect.y() ) / double( rect.height() );
 		}
-		else if( VHandleTool::instance( m_part )->activeNode() == NODE_LB )
+		else if( VHandleTool::instance( m_part )->activeNode() == node_lb )
 		{
 			m_sp = KoPoint( rect.right(), rect.y() );
 			m_s1 = ( rect.right() - lp.x() ) / double( rect.width() );
 			m_s2 = ( lp.y() - rect.y() ) / double( rect.height() );
 		}
-		else if( VHandleTool::instance( m_part )->activeNode() == NODE_LM )
+		else if( VHandleTool::instance( m_part )->activeNode() == node_lm )
 		{
 			m_sp = KoPoint( rect.right(), ( rect.bottom() + rect.top() )  / 2 );
 			m_s1 = ( rect.right() - lp.x() ) / double( rect.width() );

@@ -50,24 +50,29 @@ VRotateTool::setCursor( KarbonView* view ) const
 {
 	switch( VHandleTool::instance( m_part )->activeNode() )
 	{
-		case NODE_LT:
-		case NODE_RB:	view->canvasWidget()->viewport()->
-							setCursor( QCursor( Qt::SizeFDiagCursor ) );
-						break;
-		case NODE_RT:
-		case NODE_LB:	view->canvasWidget()->viewport()->
-							setCursor( QCursor( Qt::SizeBDiagCursor ) );
-						break;
-		case NODE_LM:
-		case NODE_RM:	view->canvasWidget()->viewport()->
-							setCursor( QCursor( Qt::SizeHorCursor ) );
-						break;
-		case NODE_MT:
-		case NODE_MB:	view->canvasWidget()->viewport()->
-							setCursor( QCursor( Qt::SizeVerCursor ) );
-						break;
-		default:		view->canvasWidget()->viewport()->
-							setCursor( QCursor( Qt::arrowCursor ) );
+		case node_lt:
+		case node_rb:
+			view->canvasWidget()->viewport()->
+				setCursor( QCursor( Qt::SizeFDiagCursor ) );
+			break;
+		case node_rt:
+		case node_lb:
+			view->canvasWidget()->viewport()->
+				setCursor( QCursor( Qt::SizeBDiagCursor ) );
+			break;
+		case node_lm:
+		case node_rm:
+			view->canvasWidget()->viewport()->
+				setCursor( QCursor( Qt::SizeHorCursor ) );
+			break;
+		case node_mt:
+		case node_mb:
+			view->canvasWidget()->viewport()->
+				setCursor( QCursor( Qt::SizeVerCursor ) );
+			break;
+		default:
+			view->canvasWidget()->viewport()->
+				setCursor( QCursor( Qt::arrowCursor ) );
 	}
 }
 
@@ -80,7 +85,7 @@ VRotateTool::drawTemporaryObject( KarbonView* view )
 	// already selected, so must be a handle operation (move, scale etc.)
 	if(
 		!part()->document().selection().isEmpty() &&
-		VHandleTool::instance( m_part )->activeNode() != NODE_MM )
+		VHandleTool::instance( m_part )->activeNode() != node_mm )
 	{
 		setCursor( view );
 		KoPoint lp = view->canvasWidget()->viewportToContents( QPoint( m_lp.x(), m_lp.y() ) );
@@ -92,22 +97,22 @@ VRotateTool::drawTemporaryObject( KarbonView* view )
 			m_sp.y() - view->canvasWidget()->contentsY() );
 
 		m_angle = atan2( lp.y() - m_sp.y(), lp.x() - m_sp.x() );
-		if( VHandleTool::instance( m_part )->activeNode() == NODE_LT )
+		if( VHandleTool::instance( m_part )->activeNode() == node_lt )
 			m_angle -= atan2( rect.top() - m_sp.y(), rect.left() - m_sp.x() );
-		else if( VHandleTool::instance( m_part )->activeNode() == NODE_MT )
+		else if( VHandleTool::instance( m_part )->activeNode() == node_mt )
 			m_angle += M_PI / 2;
-		else if( VHandleTool::instance( m_part )->activeNode() == NODE_RT )
+		else if( VHandleTool::instance( m_part )->activeNode() == node_rt )
 			m_angle -= atan2( rect.top() - m_sp.y(), rect.right() - m_sp.x() );
-		else if( VHandleTool::instance( m_part )->activeNode() == NODE_RM)
+		else if( VHandleTool::instance( m_part )->activeNode() == node_rm)
 		{
 		}
-		else if( VHandleTool::instance( m_part )->activeNode() == NODE_RB )
+		else if( VHandleTool::instance( m_part )->activeNode() == node_rb )
 			m_angle -= atan2( rect.bottom() - m_sp.y(), rect.right() - m_sp.x() );
-		else if( VHandleTool::instance( m_part )->activeNode() == NODE_MB )
+		else if( VHandleTool::instance( m_part )->activeNode() == node_mb )
 			m_angle -= M_PI / 2;
-		else if( VHandleTool::instance( m_part )->activeNode() == NODE_LB )
+		else if( VHandleTool::instance( m_part )->activeNode() == node_lb )
 			m_angle -= atan2( rect.bottom() - m_sp.y(), rect.left() - m_sp.x() );
-		else if( VHandleTool::instance( m_part )->activeNode() == NODE_LM )
+		else if( VHandleTool::instance( m_part )->activeNode() == node_lm )
 		{
 		}
 		// rotate operation
