@@ -825,6 +825,16 @@ void KoMainWindow::slotFilePrint()
     KPrinter printer( true /*, QPrinter::HighResolution*/ );
     QString title = rootView()->koDocument()->documentInfo()->title();
     QString fileName = rootView()->koDocument()->url().fileName();
+
+    // strip off the native extension (I don't want foobar.kwd.ps when printing into a file)
+    KMimeType::Ptr mime = KMimeType::mimeType( rootView()->koDocument()->outputMimeType() );
+    if ( mime ) {
+        QString extension = mime->property( "X-KDE-NativeExtension" ).toString();
+
+        if ( fileName.endsWith( extension ) )
+            fileName.truncate( fileName.length() - extension.length() );
+    }
+
     if ( title.isNull() )
         title = fileName;
     printer.setDocName( title );
