@@ -58,7 +58,7 @@ KSpreadTextEditor::KSpreadTextEditor( KSpreadCell* _cell, KSpreadCanvas* _parent
   if (m_fontLength == 0)
   {
     QFontMetrics fm( m_pEdit->font() );
-    m_fontLength = fm.width('m');
+    m_fontLength = fm.width('x');
   }
 }
 
@@ -95,9 +95,10 @@ void KSpreadTextEditor::setEditorFont(QFont const & font, bool updateSize)
   if (updateSize)
   {
     QFontMetrics fm( m_pEdit->font() );
-    m_fontLength = fm.width('m');
+    m_fontLength = fm.width('x');
 
     int mw = fm.width( m_pEdit->text() ) + m_fontLength;
+    // don't make it smaller: then we would have to repaint the obscured cells
     if (mw < width())
       mw = width();
 
@@ -121,11 +122,10 @@ void KSpreadTextEditor::slotTextChanged( const QString& t )
   // m_pEdit->setCursorPosition( canvas->chooseCursorPosition() );
   checkChoose();
 
-  kdDebug() << t.length() << " m_L: " << m_length << " m_fontL: " << m_fontLength << endl;
   if (t.length() > m_length)
   {
+    // allocate more space than needed. Otherwise it might be too slow
     m_length = t.length() + 10;
-    kdDebug() << "m_length " << m_length << endl;
    
     // Too slow for long texts
     // QFontMetrics fm( m_pEdit->font() );
