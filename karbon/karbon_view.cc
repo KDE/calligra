@@ -271,6 +271,7 @@ KarbonView::resizeEvent( QResizeEvent* /*event*/ )
 	m_horizRuler->setFrameStartEnd( 0, int( part()->document().width() * zoom() ) );
 	m_vertRuler->setOffset( 0, -m_canvas->pageOffsetY() + m_canvas->contentsY() );
 	m_vertRuler->setFrameStartEnd( 0, int( part()->document().height() * zoom() ) );
+	zoomChanged();
 	reorganizeGUI();
 }
 
@@ -807,7 +808,7 @@ KarbonView::initActions()
 
 	m_zoomAction->setItems( stl );
 	m_zoomAction->setEditable( true );
-	m_zoomAction->setCurrentItem( 2 );
+	m_zoomAction->setCurrentItem( 7 );
 
 	// No need for the other actions in read-only (embedded) mode
 	if( !shell() )
