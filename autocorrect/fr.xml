@@ -27,7 +27,6 @@
   <item find="Etant" replace="Étant" />
   <item find="Février" replace="février" />
   <item find="Haiti" replace="Haïti" />
-  <item find="Hors" replace="Or" />
   <item find="Hors," replace="Or," />
   <item find="Http://" replace="http://" />
   <item find="Ile de France" replace="Île-de-France" />
@@ -40,6 +39,7 @@
   <item find="Mai" replace="mai" />
   <item find="Marseilles" replace="Marseille" />
   <item find="Met avis" replace="M'est avis" />
+  <item find="Mr" replace="M." />
   <item find="Méditerrannée" replace="Méditerranée" />
   <item find="Noel" replace="Noël" />
   <item find="Nouvelle Calédonie" replace="Nouvelle-Calédonie" />
@@ -66,6 +66,7 @@
   <item find="a définit" replace="a défini" />
   <item find="a investit" replace="a investi" />
   <item find="a la fois" replace="à la fois" />
+  <item find="a permit" replace="a permis" />
   <item find="a peu près" replace="à peu près" />
   <item find="a propos" replace="à propos" />
   <item find="a reçut" replace="a reçu" />
@@ -216,7 +217,6 @@
   <item find="ban de poissons" replace="banc de poissons" />
   <item find="ban de sable" replace="banc de sable" />
   <item find="ban des accusés" replace="banc des accusés" />
-  <item find="banc d'essai" replace="ban d'essai" />
   <item find="baptème" replace="baptême" />
   <item find="baptèmes" replace="baptêmes" />
   <item find="bas flanc" replace="bat-flanc" />
@@ -455,6 +455,7 @@
   <item find="est fournit" replace="est fourni" />
   <item find="est suffisent" replace="est suffisant" />
   <item find="est-ce-que" replace="est-ce que" />
+  <item find="etc..." replace="etc." />
   <item find="etre" replace="être" />
   <item find="eux mêmes" replace="eux-mêmes" />
   <item find="exellent" replace="excellent" />
@@ -588,6 +589,7 @@
   <item find="il conseil" replace="il conseille" />
   <item find="il fourni" replace="il fournit" />
   <item find="il investi" replace="il investit" />
+  <item find="il peux" replace="il peut" />
   <item find="il sans va" replace="il s'en va" />
   <item find="il suis" replace="il suit" />
   <item find="il survie" replace="il survit" />
@@ -630,9 +632,11 @@
   <item find="jamias" replace="jamais" />
   <item find="japon" replace="Japon" />
   <item find="je ne sais quoi" replace="je-ne-sais-quoi" />
+  <item find="je peut" replace="je peux" />
   <item find="je suie" replace="je suis" />
   <item find="je suit" replace="je suis" />
   <item find="je travail" replace="je travaille" />
+  <item find="je veut" replace="je veux" />
   <item find="jetéé" replace="jetée" />
   <item find="joailler" replace="joaillier" />
   <item find="joaillers" replace="joailliers" />
@@ -666,9 +670,11 @@
   <item find="le foi" replace="le foie" />
   <item find="le fois" replace="le foie" />
   <item find="le notre" replace="le nôtre" />
+  <item find="le permit de conduire" replace="le permis de conduire" />
   <item find="le publique" replace="le public" />
   <item find="le résidant" replace="le résident" />
   <item find="le souffre" replace="le soufre" />
+  <item find="le sucés" replace="le succès" />
   <item find="le votre" replace="le vôtre" />
   <item find="leru" replace="leur" />
   <item find="lerus" replace="leurs" />
@@ -740,6 +746,7 @@
   <item find="modme" replace="modem" />
   <item find="moi même" replace="moi-même" />
   <item find="moi qui suit" replace="moi qui suis" />
+  <item find="mon du" replace="mon dû" />
   <item find="monaco" replace="Monaco" />
   <item find="monoindustrie" replace="mono-industrie" />
   <item find="monoiodé" replace="mono-iodé" />
@@ -786,6 +793,7 @@
   <item find="olécrânes" replace="olécranes" />
   <item find="on a pas" replace="on n'a pas" />
   <item find="on calcul" replace="on calcule" />
+  <item find="on en a pas" replace="on n'en a pas" />
   <item find="on est pas" replace="on n'est pas" />
   <item find="on y survie" replace="on y survit" />
   <item find="ont aperçut" replace="ont aperçu" />
@@ -1014,6 +1022,7 @@
   <item find="soit disant" replace="soi-disant" />
   <item find="soit même" replace="soi-même" />
   <item find="soleil" replace="Soleil" />
+  <item find="son permit de conduire" replace="son permis de conduire" />
   <item find="sori" replace="soir" />
   <item find="sorite" replace="sortie" />
   <item find="sorte à ce que" replace="sorte que" />
@@ -1090,6 +1099,7 @@
   <item find="trone" replace="trône" />
   <item find="trop plein" replace="trop-plein" />
   <item find="trouble fête" replace="trouble-fête" />
+  <item find="tu peut" replace="tu peux" />
   <item find="tunisie" replace="Tunisie" />
   <item find="tête bêche" replace="tête-bêche" />
   <item find="ua" replace="au" />
@@ -1249,5 +1259,11 @@
   <word exception="KPat" />
   <word exception="MHz" />
   <word exception="MWh" />
+  <word exception="GHz" />
+  <word exception="MW" />
+  <word exception="GW" />
+  <word exception="GWh" />
+  <word exception="MJ" />
+  <word exception="MT" />
  </TwoUpperLetterExceptions>
 </Word>
