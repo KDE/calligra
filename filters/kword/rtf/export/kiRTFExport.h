@@ -37,7 +37,7 @@ class kiDraw
    Size        sizeObject( QValueList<Point> &ptList );
 
    public :
-   kwDraw()  {}
+   kiDraw()  {}
    ~kiDraw() {}
 
 
@@ -53,3 +53,4 @@ class kiDraw
    };  // end class kiDraw
 
 #endif
+

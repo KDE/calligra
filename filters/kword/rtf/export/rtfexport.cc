@@ -45,12 +45,12 @@ FilterType filterType;
 #define CODE_PAGE_SIZE 6
 // global declaration
 const CodeTable codeTable[CODE_PAGE_SIZE] =
-                                     {"ISO-8859-1", "1252",   // Latin1
-                                      "ISO-8859-5", "1251",   // Cryllic
-                                      "ISO-8859-6", "1256",   // Arabic
-                                      "ISO-8859-7", "1253",   // Greek
-                                      "ISO-8859-8", "1255",   // Hebrew
-                                      "ISO-10646",  "1200"};   // Unicode
+                                     { {"ISO-8859-1", "1252"},   // Latin1
+                                       {"ISO-8859-5", "1251"},   // Cryllic
+                                       {"ISO-8859-6", "1256"},   // Arabic
+                                       {"ISO-8859-7", "1253"},   // Greek
+                                       {"ISO-8859-8", "1255"},   // Hebrew
+                                       {"ISO-10646",  "1200"} };   // Unicode
 
 /***************************************************************************/
 

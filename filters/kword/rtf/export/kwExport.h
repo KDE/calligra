@@ -213,7 +213,7 @@ class ColorLayout
    {
    public:
 
-   ColorLayoout() { red = -1; green = -1; blue = -1; }
+   ColorLayout() { red = -1; green = -1; blue = -1; }
    int red;
    int green;
    int blue;

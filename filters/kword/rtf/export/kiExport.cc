@@ -146,7 +146,7 @@ void   kiProcessPageTag ( QDomNode    myNode,
 
 void kiProcessLayoutTag ( QDomNode    myNode,
                           void       *tagData,
-                          QString    &outputText )
+                          QString    &/*outputText*/ )
 // Gets the attributes in the layout tag - information on page layout
 // called by ProcessPageTag()
 
@@ -204,7 +204,7 @@ void ProcessHeadTag ( QDomNode    myNode,
 {
     QString *currentpagenum = (QString *) tagData;
     Grid      grid;
-    Helplines helplines;
+    //Helplines helplines;
     Info      info;
 
     QValueList<AttrProcessing> attrProcessingList;
@@ -696,3 +696,4 @@ int toTwips( QString numString )
    return twips;
 
    }  // end toTwips()
+
