@@ -99,11 +99,8 @@ fileref="clearright.png" format="PNG"/></imageobject></inlinemediaobject> button
 <para>Now type the keyboard shortcut into the keyboard.  &kword; will use this keyboard combination as the new
 keyboard shortcut.  The window will close automatically.</para>
 
-<tip><para>To prevent the window from closing automatically, simply remove the mark in the check box labeled
-<guilabel>Auto-close</guilabel>.</para>
-
 <para>Once you have completed your entries, simply click on <guibutton>OK</guibutton>
-to accept the changes or <guibutton>Cancel</guibutton> to cancel your changes.</para></tip>
+to accept the changes or <guibutton>Cancel</guibutton> to cancel your changes.</para>
 </sect3>
 
 <sect3 id="custom-keybinding-multi"><title>Defining multi-key keyboard shortcuts</title>
@@ -154,14 +151,14 @@ buttons around on the toolbar using this dialog.</para>
 
 <para>To add a button to a toolbar, you move it from the
 <guilabel>Available Actions</guilabel> box to the <guilabel>Current
-Actions</guilabel> column.</para>
+actions:</guilabel> column.</para>
 
 <para>First select the toolbar you want to add a button to by selecting
 the toolbar from the combo box labeled
-<guilabel>Toolbar</guilabel></para>
+<guilabel>Toolbar:</guilabel></para>
 
 <para>Now select the action you want to add from the combo box labeled
-<guilabel>Available Actions</guilabel> by clicking once with the left
+<guilabel>Available actions:</guilabel> by clicking once with the left
 mouse button.</para>
 
 <para>Click the blue arrow pointing to the
@@ -177,15 +174,15 @@ will change.</para>
 <title>Deleting a button from a toolbar</title>
 
 <para>To delete a button from a toolbar, you move it from the
-<guilabel>Current Actions</guilabel> box to the <guilabel>Available
-Actions</guilabel> column.</para>
+<guilabel>Current actions:</guilabel> box to the <guilabel>Available
+actions:</guilabel> column.</para>
 
 <para>First select the toolbar you want to delete a button from by selecting
 the toolbar from the combo box labeled
 <guilabel>Toolbar</guilabel></para>
 
 <para>Select the toolbar button you want to remove the button from
-the combo box labeled <guilabel>Current Actions</guilabel>.</para>
+the combo box labeled <guilabel>Current actions:</guilabel>.</para>
 
 <para>Click the blue arrow pointing to the
 left. <inlinemediaobject><imageobject><imagedata fileref="larrow.png"
@@ -239,6 +236,12 @@ the following.</para>
 </screenshot>
 
 <variablelist>
+<varlistentry>
+<term><guilabel>Units</guilabel></term>
+<listitem><para>Select your preferred unit of measurement.  &kword; will use these units for all measurements.  See
+<link linkend="rulers">Using Rulers</link> for more information.</para>
+</listitem>
+</varlistentry>
 
 <varlistentry>
 <term><guilabel>Show status bar</guilabel></term>
@@ -248,7 +251,7 @@ the following.</para>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Show Scrollbar</guilabel></term>
+<term><guilabel>Show scrollbar</guilabel></term>
 <listitem><para>Placing a mark in this check box makes the scrollbar visible in &kword;.  See
 <link linkend="kword-screen">The &kword; Screen</link> for more information.</para>
 </listitem>
@@ -280,7 +283,7 @@ aligned.  You can reduce the grid size if you need finer control of your layout.
 
 <varlistentry>
 <term><guilabel>Vertical grid size:</guilabel></term>
-<listitem><para>Determines the vertical size of the grid.  When frames and tab stops are placed on the page, they
+<listitem><para>Determines the vertical size of the grid.  When frames are placed on the page, they
 are placed on a point in the grid.  This gives your document a more professional look because elements are effectively
 aligned.  You can reduce the grid size if you need finer control of your layout.</para></listitem>
 </varlistentry>
@@ -340,6 +343,23 @@ revert any text to this default by selecting
 the menubar.</para>
 </listitem>
 </varlistentry>
+
+<varlistentry>
+<term><guilabel>Global language:</guilabel></term>
+<listitem>
+<para>Use this drop down box to determine the default language for the document.  This setting is used by the 
+hyphenation and spelling tools.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Automatic hyphenation</guilabel></term>
+<listitem>
+<para>Place a mark in this checkbox if you want &kword; to automatically hyphenate long words when it determines the word wrap 
+in text frames.</para>
+</listitem>
+</varlistentry>
+
 </variablelist>
 </sect3>
 
@@ -351,6 +371,13 @@ the menubar.</para>
 <para>You can use this to adjust how often &kword; saves a temporary
 file.  If you set this value to zero, &kword; will not autosave.  You
 can adjust the autosave from zero to 60 minutes.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Create backup file</guilabel></term>
+<listitem>
+<para>If there is a mark in this checkbox, &kword; will automatically create a backup file everytime you save your document.</para>
 </listitem>
 </varlistentry>
 
@@ -377,10 +404,25 @@ left margin, etc....</para>
 </variablelist>
 </sect3>
 <sect3 id="opt-document-cursor"><title>Cursor settings</title>
-
-<para>This section of the dialog box has one check box labeled <guilabel>Cursor in protected area</guilabel>.  
+<variablelist>
+<varlistentry>
+<term><guilabel>Cursor in protected area</guilabel></term>
+<listitem><para>  
 When there is a mark in this check box, and you click in a protected frame of your document, a cursor appears.  When the 
-mark is removed from this check box, and you click in a protected frame, there is no cursor visible.</para>
+mark is removed from this check box, and you click in a protected frame, there is no cursor visible.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Direct insert cursor</guilabel></term>
+<listitem><para>  
+When there is a mark in this check box, and you can select a section of text using your mouse.  Move the mouse to a new place 
+in your document and click once with the middle mouse button and a copy of the selected text is copied and pasted to the new location 
+in the document.</para>
+<para>When there is no mark in this checkbox, in order to copy text from one section to another, you must select the text, 
+<link linkend="local-copy">manually copy the text in to the clipboard</link>, then manually paste the text in the new location.  </para></listitem>
+</varlistentry>
+</variablelist>
+
 
 <para>When you are happy with the changes, simply click
 <guibutton>OK</guibutton>.</para>
@@ -411,19 +453,29 @@ labeled <guibutton>Spelling</guibutton>.</para>
 
 <variablelist>
 <varlistentry>
-<term><guilabel>Create
-root/affix combinations not in dictionary</guilabel></term>
-<listitem><para>If checked, when &kword;
-encounters a root word in combination with either a prefix or a suffix
-as a combined word, &kword; will add this combined word as a new entry to your dictionary.
-If this is not checked, then &kword; will continue to report this word
-as a misspelled.</para></listitem>
+<term><guilabel>Default language:</guilabel></term>
+<listitem><para>Used by the spelling application to choose the correct dictionary.</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><guilabel>Enable background spellchecking</guilabel></term>
+<listitem><para>If a mark is placed in this checkbox, &kword; will check the spelling of words in your document as you type them.  Words that 
+&kword; believes are misspelled will have a red line drawn under them.</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><guilabel>Skip all UPPERCASE words</guilabel></term>
+<listitem><para>If a mark is placed in this checkbox, &kword; will not check the spelling of any word which consists of all capital letters.</para>
+<tip><para>This is useful if the document you are working on uses a large number of acronyms.  If this box is left unchecked, most of those acronyms 
+will be incorrectly marked.  By placing a mark in this checkbox, &kword; will not mark the acronyms as misspelled.</para></tip></listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Consider run-together words as spelling errors</guilabel></term>
-<listitem><para>If this box is checked, and kword finds a two words in its dictionary that are placed next to each other, it will be
-marked as misspelled.  If this box is not checked, the combined word will be ignored.</para>
+<term><guilabel>Skip run-together words</guilabel></term>
+<listitem><para>If this box is not checked, and kword finds a two words in its dictionary that are placed next to each other, it will be
+marked as misspelled.  If this box is checked, the combined word will be ignored.</para>
 <para>Examples of such words are <emphasis>shutout</emphasis>,
 <emphasis>cannot</emphasis>, and <emphasis>blackout</emphasis>.</para>
 <tip>
@@ -432,52 +484,25 @@ flagging website and email addresses for spelling errors.  These
 addresses often contain words run together.</para>
 </tip></listitem>
 </varlistentry>
-
-<varlistentry>
-<term><guilabel>Dictionary:</guilabel> </term>
-<listitem><para>This combo box is used to select
-the dictionary you want &kword; to use from all available dictionaries. </para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Encoding:</guilabel></term>
-<listitem><para>This combo box can be used to
-specify which character set you want the speller to use.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Client:</guilabel></term>
-<listitem><para>The combo box is used to specify
-the spellchecking program that &kword; should use from a list of available programs.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Ignore uppercase words.</guilabel></term>
-<listitem><para>If checked, &kword; will not mark <emphasis>PGE</emphasis> as misspelled,
-but it will mark <emphasis>Pge</emphasis> and <emphasis>pge</emphasis> as misspelled. This is useful if your 
-document contains a large number of acronyms.</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Ignore title case words.</guilabel></term>
-<listitem><para>If checked, &kword; will not mark <emphasis>Pge</emphasis> as misspelled,
-but it will mark <emphasis>PGE</emphasis> and <emphasis>pge</emphasis> as misspelled.</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Show misspelled words in document.</guilabel></term>
-<listitem><para>If checked, &kword; will underline all misspelled words in red while you are typing.  To eliminate this behavior,
-remove the mark in this check box..</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Clear Ignore All Word History...</guilabel></term>
-<listitem><para>If selected, &kword; will delete all words that have previously 
-been flagged with the <guibutton>Ignore All</guibutton> button.</para></listitem>
-</varlistentry>
 </variablelist>
+<sect3><title>Ignoring words</title>
+<para>The bottom half of the dialog box allows you to designate specific words (they may be specialized terminology, proper names, etc) which
+should be ignored by the spelling program.</para>
+
+<sect4><title>Adding a word to the ignore list</title>
+<para>To add a word, type the word in the text box directly below the words <guilabel>Ignore 
+Following Words</guilabel> and click the <guibutton>Add</guibutton> button.</para>
+</sect4>
+
+<sect4><title>Deleteing a word from the ignore list</title>
+<para>To remove a word, select the word in the listbox containing all the currently ignored words by clicking on it with 
+the &LMB;.  Now click the <guibutton>Remove</guibutton> button.</para>
+</sect4>
+
+<sect4><title>Changing the order a word appears in the list</title>
+<para>To move a word in the list, select the word in the listbox containing all the currently ignored words by clicking on it with 
+the &LMB;.  Now click the <guibutton>Move Up</guibutton> button or the <guibutton>Move Up</guibutton> button to move the word
+within the list.</para>
 
 <para>When you are happy with the changes, simply click
 <guibutton>OK</guibutton>.</para>
@@ -487,7 +512,8 @@ lost.</para>
 
 <para>Clicking on the <guibutton>Defaults</guibutton> button restores all
 values to their default values.</para>
-
+</sect4>
+</sect3>
 </sect2>
 
 
@@ -520,12 +546,6 @@ values to their default values.</para>
 
 <sect3 id="opt-misc-misc"><title>Misc</title>
 <variablelist>
-<varlistentry>
-<term><guilabel>Units</guilabel></term>
-<listitem><para>Select your preferred unit of measurement.  &kword; will use these units for all measurements.  See
-<link linkend="rulers">Using Rulers</link> for more information.</para>
-</listitem>
-</varlistentry>
 
 <varlistentry>
 <term><guilabel>Undo/Redo limit</guilabel></term>

@@ -61,7 +61,7 @@
 <legalnotice>&FDLNotice;</legalnotice>
 
 <date>2005-1-15</date>
-<releaseinfo>1.5</releaseinfo>
+<releaseinfo>1.3</releaseinfo>
 
 <abstract>
 <para>
@@ -84,8 +84,6 @@ This manual describes &kword; 1.4.
 
 <!--
 TODO:
-- Continue updates to documentation - starting at "Options"
-- Update screenshots
 - Write Migrating section
 - Write Watermark procedure
 - Write Chapter Numbering
@@ -645,9 +643,7 @@ What is a <literal role="extension">kwt</literal> file?</para>
 <para>For updates to &kword; you should always check the following sites:</para>
 <para>The &koffice; website (<ulink url="http://koffice.kde.org">http://koffice.kde.org</ulink>) is the first place to look for updates.
 Any software updates, bug fixes or announcements of new releases of &koffice; will be found here. </para>
-<para>KDE Apps (<ulink url="http://kde-apps.org">http://kde-apps.org</ulink>) is a good place to find software for &kde; in general.
-To locate updates and additions to &kword; choose the category <emphasis>Office: Suites: KOffice</emphasis>.  Here you can find
-additional templates, and other updates that are developed outside of the &kword; development team.</para>
+<para>Addons for &koffice; can be found at <ulink url="http://koffice.kde.org/addons/">http://koffice.kde.org/addons/</ulink>.</para>
 </answer>
 </qandaentry>
 
@@ -705,25 +701,6 @@ can read and write effectively.  <link linkend="filters-rtf">Rich Text Font</lin
 </answer>
 </qandaentry>
 
-<qandaentry>
-<question id="multiedit">
-<para>How can I edit multiple files at once?</para>
-</question>
-<answer>
-<para>To be written</para>
-</answer>
-</qandaentry>
-
-<qandaentry>
-<question id="symbolfonts">
-<para>Symbol fonts are not working well, what can I do?</para>
-</question>
-<answer>
-<para>ftp://ftp.elsevier.nl/pub/styles/esstix/esstix.zip and http://www.stixfonts.org/</para>
-</answer>
-</qandaentry>
-
-
 </qandaset>
 </chapter>
 <!-- **************************************************************************************************** -->
@@ -733,7 +710,7 @@ can read and write effectively.  <link linkend="filters-rtf">Rich Text Font</lin
 <indexterm><primary>credits</primary><secondary>options</secondary></indexterm>
 <indexterm><primary>licenses</primary><secondary>options</secondary></indexterm>
 
-<para>&kword; Copyright 1999-2002 by The &kword; Developers</para>
+<para>&kword; Copyright 1999-2005 by The &kword; Team</para>
 
 <itemizedlist>
 <title>&kword; Developers (Alphabetically)</title>
@@ -827,11 +804,11 @@ Qt 3.3.3 to take advantage of all the bug fixes that have occurred.</para></tip>
 </listitem>
 
 <listitem>
-<para>&kde; 3.4.0 libraries (kdelibs) and the &kde; 3.0.0 base package
+<para>&kde; 3.2.0 libraries (kdelibs) and the &kde; 3.0.0 base package
 (kdebase).  These can be obtained from the <ulink
 url="http://www.kde.org">&kde; web page.</ulink></para>
-<tip><para>While &koffice; will compile and run with any version of &kde; 3.4.0 or later, it is recommended that you compile and install
-&kde; 3.4.0 to take advantage of all the bug fixes that have occurred.</para>
+<tip><para>While &koffice; will compile and run with any version of &kde; 3.2.0 or later, it is recommended that you compile and install
+&kde; 3.3 to take advantage of all the bug fixes that have occurred.</para>
 <para>It is also recommended that you install the arts package 1.3.0 from the
 <ulink url="ftp://ftp.kde.org/pub/kde/">&kde; &FTP; site</ulink>.</para></tip>
 </listitem>
@@ -1497,8 +1474,7 @@ action="simul">&Ctrl;<keycap>Return</keycap></keycombo></entry>
 <title>Kword mimetype</title>
 <indexterm><primary>&kword;</primary><secondary>mimetypes</secondary></indexterm>
 
-<para>&kword; is in the process of applying for a registered mime type with the <ulink url="www.iana.org">IANA</ulink>.</para>
-<para>The proposed &kword; mime type is :  application/x-kword</para>
+<para>The &kword; mime type is :  application/x-kword</para>
 </sect1>
 </appendix>
 
