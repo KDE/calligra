@@ -49,6 +49,10 @@
 #define PAPER_WIDTH 210.0
 #define PAPER_HEIGHT 298.0
 
+#define LAYER_VISIBLE   1
+#define LAYER_EDITABLE  2
+#define LAYER_PRINTABLE 4
+
 template<class T>
 struct del_obj {
   void operator () (T* obj) {
@@ -380,7 +384,6 @@ void GDocument::deleteSelectedObjects () {
 	obj = objects.next ();
     }
 #else
-    // TODO
     for (list<GObject*>::iterator i = selection.begin ();
 	 i != selection.end (); i++) {
       GObject* obj = *i;
@@ -610,13 +613,25 @@ bool GDocument::saveToXml (const char* fname) {
   for (; it.current (); ++it) 
     it.current ()->writeToXml (xml);
 #else
-  // TODO: save layer information
+
+  bool save_layer_info = (layers.size () > 1);
   for (vector<GLayer*>::iterator li = layers.begin (); 
        li != layers.end (); li++) {
+    if (save_layer_info) {
+      int flags = ((*li)->isVisible () ? LAYER_VISIBLE : 0) +
+	  ((*li)->isPrintable () ? LAYER_PRINTABLE : 0) +
+	  ((*li)->isEditable () ? LAYER_EDITABLE : 0);
+      xml.startTag ("layer", false);
+      xml.addAttribute ("id", (*li)->name ());
+      xml.addAttribute ("flags", flags);
+      xml.closeTag ();
+    }
     list<GObject*>& contents = (*li)->objects ();
     for (list<GObject*>::iterator oi = contents.begin ();
 	 oi != contents.end (); oi++)
       (*oi)->writeToXml (xml);
+    if (save_layer_info)
+      xml.endTag (); // </layer>
   }
 #endif
 
@@ -721,7 +736,28 @@ bool GDocument::readFromXml (const char* fname) {
     else {
       finished = elem.isClosed () && elem.tag () != "point";
 
-      if (elem.tag () == "polyline")
+      if (elem.tag () == "layer") {
+	  if (layers.size () == 1 && active_layer->objectCount () == 0) 
+	      // add objects to the current layer
+	      ;
+	  else 
+	      active_layer = addLayer ();
+	  list<XmlAttribute>::const_iterator first = 
+	      elem.attributes ().begin ();
+	  while (first != elem.attributes ().end ()) {
+	      const string& attr = (*first).name ();
+	      if (attr == "id")
+		  active_layer->setName ((*first).stringValue ().c_str ());
+	      else if (attr == "flags") {
+		  int flags = (*first).intValue ();
+		  active_layer->setVisible (flags & LAYER_VISIBLE);
+		  active_layer->setPrintable (flags & LAYER_EDITABLE);
+		  active_layer->setEditable (flags & LAYER_PRINTABLE);
+	      }
+	      first++;
+	  }
+      }
+      else if (elem.tag () == "polyline")
 	obj = new GPolyline (elem.attributes ());
       else if (elem.tag () == "ellipse")
 	obj = new GOval (elem.attributes ());
@@ -811,15 +847,16 @@ bool GDocument::readFromXml (const char* fname) {
       else
 	cout << "invalid object type: " << elem.tag () << endl;
     }
-    if (obj && finished) {
-      if (!groups.empty ()) {
-	obj->setLayer (active_layer);
-	//	obj->ref ();
-	groups.top ()->addObject (obj);
+    if (finished) {
+      if (obj) {
+        if (!groups.empty ()) {
+	  obj->setLayer (active_layer);
+ 	  groups.top ()->addObject (obj);
+        }
+        else 
+	  insertObject (obj);
+        obj = 0L;
       }
-      else 
-	insertObject (obj);
-      obj = 0L;
       finished = false;
     }
   } while (! endOfBody);
