@@ -39,7 +39,7 @@ public slots:
   void slotOk();
   void slotClose();
   void slotselected(const QString &);
-  void slotselected_formula(const QString &);
+
 protected:
   KSpreadView* m_pView;
   

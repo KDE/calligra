@@ -118,6 +118,12 @@ void KSpreadCell::copyLayout( int _column, int _row )
   setRightBorderWidth( o->rightBorderWidth( _column, _row ) );
   setRightBorderStyle( o->rightBorderStyle( _column, _row ) );
   setRightBorderColor( o->rightBorderColor( _column, _row ) );
+  setFallDiagonalWidth( o->fallDiagonalWidth( _column, _row ) );
+  setFallDiagonalStyle( o->fallDiagonalStyle( _column, _row ) );
+  setFallDiagonalColor( o->fallDiagonalColor( _column, _row ) );
+  setGoUpDiagonalWidth( o->goUpDiagonalWidth( _column, _row ) );
+  setGoUpDiagonalStyle( o->goUpDiagonalStyle( _column, _row ) );
+  setGoUpDiagonalColor( o->goUpDiagonalColor( _column, _row ) );
   setPrecision( o->precision() );
   setPrefix( o->prefix() );
   setPostfix( o->postfix() );
@@ -509,7 +515,8 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 {
   m_leftBorderPen.setWidth( leftBorderWidth( _col, _row ) );
   m_topBorderPen.setWidth( topBorderWidth( _col, _row ) );
-
+  m_fallDiagonalPen.setWidth( fallDiagonalWidth( _col, _row) );
+  m_goUpDiagonalPen.setWidth( goUpDiagonalWidth( _col, _row) );
   /**
    * RichText
    */
@@ -1498,6 +1505,17 @@ void KSpreadCell::paintEvent( KSpreadCanvas *_canvas, const QRect& _rect, QPaint
     _painter.setPen( m_topBorderPen );
   _painter.drawLine( _tx, _ty + dy, _tx + w, _ty + dy );
 
+  if ( m_fallDiagonalPen.style() != Qt::NoPen )
+    {
+      _painter.setPen( m_fallDiagonalPen );
+      _painter.drawLine( _tx, _ty + dy, _tx + dx + w, _ty + dy + h );
+    }
+ if ( m_goUpDiagonalPen.style() != Qt::NoPen )
+    {
+      _painter.setPen( m_goUpDiagonalPen );
+      _painter.drawLine( _tx, _ty +h , _tx + w, _ty + dy  );
+    }
+
   static QColorGroup g( Qt::black, Qt::white, Qt::white, Qt::darkGray, Qt::lightGray, Qt::black, Qt::black );
   static QBrush fill( Qt::lightGray );
   /**
@@ -1682,7 +1700,21 @@ void KSpreadCell::print( QPainter &_painter, int _tx, int _ty, int _col, int _ro
     int dy = 0;//(int)ceil( (double)( m_topBorderPen.width() - 1) / 2.0 );
     _painter.drawLine( _tx, _ty + dy, _tx + cl->width() , _ty + dy );
   }
-
+  if ( !_only_top && !_only_left )
+    {
+      int dy=0;
+      int dx=0;
+      if ( m_fallDiagonalPen.style() != Qt::NoPen )
+	{
+	  _painter.setPen( m_fallDiagonalPen );
+	  _painter.drawLine( _tx + dx, _ty + dy, _tx + cl->width() , _ty + rl->height() );
+	}
+      if ( m_goUpDiagonalPen.style() != Qt::NoPen )
+	{
+	  _painter.setPen( m_goUpDiagonalPen );
+	  _painter.drawLine( _tx , _ty +rl->height() , _tx + cl->width(), _ty  );
+	}
+    }
   if ( !_only_top && !_only_left )
     if ( !m_strOutText.isEmpty() )
     {
@@ -1858,6 +1890,44 @@ int KSpreadCell::bottomBorderWidth( int _col, int _row, KSpreadCanvas *_canvas )
     return cell->topBorderWidth( column() + 1, row(), _canvas );
 }
 
+int KSpreadCell::fallDiagonalWidth( int _col, int _row, KSpreadCanvas *_canvas )
+{
+    if ( isDefault() )
+    {
+	RowLayout *rl = m_pTable->rowLayout( _row );
+	ColumnLayout *cl = m_pTable->columnLayout( _col );
+	
+	if ( rl->time() > cl->time() )
+	    return rl->fallDiagonalWidth( _canvas );
+	else
+	    return cl->fallDiagonalWidth( _canvas );
+    }
+
+    if ( _canvas )
+	return (int) ( m_iFallDiagonalWidth );
+    else
+	return m_iFallDiagonalWidth;
+}
+
+int KSpreadCell::goUpDiagonalWidth( int _col, int _row, KSpreadCanvas *_canvas )
+{
+    if ( isDefault() )
+    {
+	RowLayout *rl = m_pTable->rowLayout( _row );
+	ColumnLayout *cl = m_pTable->columnLayout( _col );
+	
+	if ( rl->time() > cl->time() )
+	    return rl->goUpDiagonalWidth( _canvas );
+	else
+	    return cl->goUpDiagonalWidth( _canvas );
+    }
+
+    if ( _canvas )
+	return (int) ( m_iGoUpDiagonalWidth );
+    else
+	return m_iGoUpDiagonalWidth;
+}
+
 Qt::PenStyle KSpreadCell::leftBorderStyle( int _col, int _row )
 {
     if ( isDefault() )
@@ -1889,6 +1959,7 @@ Qt::PenStyle KSpreadCell::topBorderStyle( int _col, int _row )
 
     return m_topBorderPen.style();
 }
+
 
 Qt::PenStyle KSpreadCell::rightBorderStyle( int _col, int _row )
 {
@@ -1922,6 +1993,38 @@ Qt::PenStyle KSpreadCell::bottomBorderStyle( int _col, int _row )
 
     KSpreadCell * cell = m_pTable->cellAt( column(), row() + 1 );
     return cell->topBorderStyle( column(), row() + 1 );
+}
+
+Qt::PenStyle KSpreadCell::fallDiagonalStyle( int _col, int _row )
+{
+    if ( isDefault() )
+    {
+	RowLayout *rl = m_pTable->rowLayout( _row );
+	ColumnLayout *cl = m_pTable->columnLayout( _col );
+	
+	if ( rl->time() > cl->time() )
+	    return rl->fallDiagonalStyle();
+	else
+	    return cl->fallDiagonalStyle();
+    }
+
+    return m_fallDiagonalPen.style();
+}
+
+Qt::PenStyle KSpreadCell::goUpDiagonalStyle( int _col, int _row )
+{
+    if ( isDefault() )
+    {
+	RowLayout *rl = m_pTable->rowLayout( _row );
+	ColumnLayout *cl = m_pTable->columnLayout( _col );
+	
+	if ( rl->time() > cl->time() )
+	    return rl->goUpDiagonalStyle();
+	else
+	    return cl->goUpDiagonalStyle();
+    }
+
+    return m_goUpDiagonalPen.style();
 }
 
 const QColor& KSpreadCell::leftBorderColor( int _col, int _row )
@@ -1989,6 +2092,39 @@ const QColor& KSpreadCell::bottomBorderColor( int _col, int _row )
     KSpreadCell * cell = m_pTable->cellAt( column(), row() + 1 );
     return cell->topBorderColor( column(), row() + 1 );
 }
+
+const QColor& KSpreadCell::fallDiagonalColor( int _col, int _row )
+{
+    if ( isDefault() )
+    {
+	RowLayout *rl = m_pTable->rowLayout( _row );
+	ColumnLayout *cl = m_pTable->columnLayout( _col );
+	
+	if ( rl->time() > cl->time() )
+	    return rl->fallDiagonalColor();
+	else
+	    return cl->fallDiagonalColor();
+    }
+
+    return m_fallDiagonalPen.color();
+}
+
+const QColor& KSpreadCell::goUpDiagonalColor( int _col, int _row )
+{
+    if ( isDefault() )
+    {
+	RowLayout *rl = m_pTable->rowLayout( _row );
+	ColumnLayout *cl = m_pTable->columnLayout( _col );
+	
+	if ( rl->time() > cl->time() )
+	    return rl->goUpDiagonalColor();
+	else
+	    return cl->goUpDiagonalColor();
+    }
+
+    return m_goUpDiagonalPen.color();
+}
+
 
 void KSpreadCell::incPrecision()
 {
@@ -2468,6 +2604,14 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
   top.appendChild( doc.createElement( "pen", m_topBorderPen ) );
   format.appendChild( top );
 
+  QDomElement fallDiagonal  = doc.createElement( "fall-diagonal" );
+  fallDiagonal.appendChild( doc.createElement( "pen", m_fallDiagonalPen ) );
+  format.appendChild( fallDiagonal );
+
+  QDomElement goUpDiagonal = doc.createElement( "up-diagonal" );
+  goUpDiagonal.appendChild( doc.createElement( "pen", m_goUpDiagonalPen ) );
+  format.appendChild( goUpDiagonal );
+
   if ( !m_strText.isEmpty() )
   {
     if ( isFormular() )
@@ -2641,6 +2785,22 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    QDomElement pen = top.namedItem( "pen" ).toElement();
 	    if ( !pen.isNull() )
 		setTopBorderPen( pen.toPen() );
+	}
+
+	QDomElement fallDiagonal = f.namedItem( "fall-diagonal" ).toElement();
+	if ( !fallDiagonal.isNull() && pm != NoBorder )
+        {
+	    QDomElement pen = fallDiagonal.namedItem( "pen" ).toElement();
+	    if ( !pen.isNull() )
+		setFallDiagonalPen( pen.toPen() );
+	}
+
+	QDomElement goUpDiagonal = f.namedItem( "up-diagonal" ).toElement();
+	if ( !goUpDiagonal.isNull() && pm != NoBorder )
+        {
+	    QDomElement pen = goUpDiagonal.namedItem( "pen" ).toElement();
+	    if ( !pen.isNull() )
+		setGoUpDiagonalPen( pen.toPen() );
 	}
 
 	m_strPrefix = f.attribute( "prefix" );

@@ -239,3 +239,7 @@ because when you insert a style (a theme) in kde you can't change color
 in a QPushButton (use color of theme).
 
 -Add new style of line   DashDotLine and  DashDotDotLine
+
+1999-12-23 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Now you can make diagonal in a cell.

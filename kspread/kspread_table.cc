@@ -1812,7 +1812,13 @@ for ( int x = r.left(); x <= r.right(); x++ )
 	  	cell->setTopBorderStyle( NoPen );
    		cell->setTopBorderColor( black );
     		cell->setTopBorderWidth( 1 );
-     		}
+     		cell->setFallDiagonalStyle( NoPen );
+		cell->setFallDiagonalColor( black );
+		cell->setFallDiagonalWidth( 1 );
+		cell->setGoUpDiagonalStyle( NoPen );
+		cell->setGoUpDiagonalColor( black );
+		cell->setGoUpDiagonalWidth( 1 );
+		}
      		
      	}
 emit sig_updateView( this, r );

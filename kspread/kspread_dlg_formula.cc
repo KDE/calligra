@@ -102,32 +102,8 @@ void KSpreaddlgformula::slotClose()
     reject();
 }
 
-void KSpreaddlgformula::slotselected_formula(const QString & string)
-{
-/*if(string=="IF")
-	{
-	exp->clear();
-	exp->setText("IF(exp logic,if true so,if false so..)");
-	}
-else if(string=="true")
-	{
-	exp->clear();
-	exp->setText("TRUE return value TRUE");
-	}
-else if(string=="false")
-	{
-	exp->clear();
-	exp->setText("FALSE return value FALSE");
-	}
-else if(string=="NO")
-	{
-	exp->clear();
-	exp->setText("NO(exp logic) :\nif exp==TRUE return FALSE,\nif exp==FALSE return TRUE");
-	}
-else
-	exp->clear();
-*/
-}
+
+
 void KSpreaddlgformula::slotselected(const QString & string)
 {
 QStringList list_stat;

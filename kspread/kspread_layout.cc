@@ -43,12 +43,20 @@ KSpreadLayout::KSpreadLayout( KSpreadTable *_table )
     m_eAlignY = KSpreadLayout::Middle;
     m_iLeftBorderWidth = 1;
     m_iTopBorderWidth = 1;
+    m_iFallDiagonalWidth = 1;
+    m_iGoUpDiagonalWidth = 1;
     m_leftBorderPen.setColor( Qt::black );
     m_leftBorderPen.setWidth( leftBorderWidth() );
     m_leftBorderPen.setStyle( Qt::NoPen );
     m_topBorderPen.setColor( Qt::black );
     m_topBorderPen.setWidth( topBorderWidth() );
     m_topBorderPen.setStyle( Qt::NoPen );
+    m_fallDiagonalPen.setColor( Qt::black );
+    m_fallDiagonalPen.setWidth( fallDiagonalWidth() );
+    m_fallDiagonalPen.setStyle( Qt::NoPen );
+    m_goUpDiagonalPen.setColor( Qt::black );
+    m_goUpDiagonalPen.setWidth( goUpDiagonalWidth() );
+    m_goUpDiagonalPen.setStyle( Qt::NoPen );
     m_dFaktor = 1.0;
     m_bMultiRow = FALSE;
 
@@ -70,12 +78,21 @@ void KSpreadLayout::copy( KSpreadLayout &_l )
   m_eAlignY = _l.alignY();
   m_iLeftBorderWidth = _l.leftBorderWidth();
   m_iTopBorderWidth = _l.topBorderWidth();
+  m_iFallDiagonalWidth = _l.fallDiagonalWidth();
+  m_iGoUpDiagonalWidth = _l.goUpDiagonalWidth();
   m_leftBorderPen.setColor( _l.leftBorderColor() );
   m_leftBorderPen.setStyle( _l.leftBorderStyle() );
   m_leftBorderPen.setWidth( _l.leftBorderWidth() );
   m_topBorderPen.setColor( _l.topBorderColor() );
   m_topBorderPen.setStyle( _l.topBorderStyle() );
   m_topBorderPen.setWidth( _l.topBorderWidth() );
+  m_fallDiagonalPen.setColor( _l.fallDiagonalColor() );
+  m_fallDiagonalPen.setStyle( _l.fallDiagonalStyle() );
+  m_fallDiagonalPen.setWidth( _l.fallDiagonalWidth() );
+  m_goUpDiagonalPen.setColor( _l.goUpDiagonalColor() );
+  m_goUpDiagonalPen.setStyle( _l.goUpDiagonalStyle() );
+  m_goUpDiagonalPen.setWidth( _l.goUpDiagonalWidth() );
+
   m_dFaktor = _l.faktor();
   m_bMultiRow = _l.multiRow();
   m_textColor = _l.textColor();
@@ -114,6 +131,21 @@ int KSpreadLayout::topBorderWidth( KSpreadCanvas *_canvas )
 	return m_iTopBorderWidth;
 }
 
+int KSpreadLayout::fallDiagonalWidth( KSpreadCanvas *_canvas )
+{
+    if ( _canvas )
+      return (int) ( m_iFallDiagonalWidth * _canvas->zoom() );
+    else
+	return m_iFallDiagonalWidth;
+}
+
+int KSpreadLayout::goUpDiagonalWidth( KSpreadCanvas *_canvas )
+{
+    if ( _canvas )
+      return (int) ( m_iGoUpDiagonalWidth * _canvas->zoom() );
+    else
+	return m_iGoUpDiagonalWidth;
+}
 
 /*****************************************************************************
  *

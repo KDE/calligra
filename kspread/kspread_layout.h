@@ -54,12 +54,20 @@ public:
 
     virtual void setLeftBorderStyle( Qt::PenStyle s ) { m_leftBorderPen.setStyle( s ); }
     virtual void setTopBorderStyle( Qt::PenStyle s ) { m_topBorderPen.setStyle( s ); }
+    virtual void setFallDiagonalStyle( Qt::PenStyle s ) { m_fallDiagonalPen.setStyle( s ); }
+    virtual void setGoUpDiagonalStyle( Qt::PenStyle s ) { m_goUpDiagonalPen.setStyle( s ); }
 
     virtual void setLeftBorderColor( const QColor & _c ) { m_leftBorderPen.setColor( _c ); }
     virtual void setTopBorderColor( const QColor & _c ) { m_topBorderPen.setColor( _c ); }
+    virtual void setFallDiagonalColor( const QColor & _c ) { m_fallDiagonalPen.setColor( _c ); }
+    virtual void setGoUpDiagonalColor( const QColor & _c ) { m_goUpDiagonalPen.setColor( _c ); }
+
 
     virtual void setLeftBorderWidth( int _w ) { m_iLeftBorderWidth = _w; }
     virtual void setTopBorderWidth( int _w ) { m_iTopBorderWidth = _w; }
+    virtual void setFallDiagonalWidth( int _w ) { m_iFallDiagonalWidth = _w; }
+    virtual void setGoUpDiagonalWidth( int _w ) { m_iGoUpDiagonalWidth = _w; }
+
 
     virtual void setTextFontSize( int _s ) { m_textFont.setPointSize( _s ); }
     virtual void setTextFontFamily( const char *_f ) { m_textFont.setFamily( _f ); }
@@ -83,12 +91,16 @@ public:
      */
     virtual int leftBorderWidth( KSpreadCanvas *_canvas = 0L );
     virtual int topBorderWidth( KSpreadCanvas *canvas = 0L );
+    virtual int fallDiagonalWidth( KSpreadCanvas *canvas = 0L );
+    virtual int goUpDiagonalWidth( KSpreadCanvas *canvas = 0L );
 
     /**
      * @return the style used to draw the left border.
      */
     virtual Qt::PenStyle leftBorderStyle() { return m_leftBorderPen.style(); }
     virtual Qt::PenStyle topBorderStyle() { return m_topBorderPen.style(); }
+    virtual Qt::PenStyle fallDiagonalStyle() { return m_fallDiagonalPen.style(); }
+    virtual Qt::PenStyle goUpDiagonalStyle() { return m_goUpDiagonalPen.style(); }
 
     /**
      * @return the precision of the floating point representation.
@@ -124,6 +136,8 @@ public:
      */
     virtual const QColor& leftBorderColor() { return m_leftBorderPen.color(); }
     virtual const QColor& topBorderColor() { return m_topBorderPen.color(); }
+    virtual const QColor& fallDiagonalColor() { return m_fallDiagonalPen.color(); }
+    virtual const QColor& goUpDiagonalColor() { return m_goUpDiagonalPen.color(); }
 
     virtual const QFont& textFont() { return m_textFont; }
     virtual int textFontSize() { return m_textFont.pointSize(); }
@@ -141,11 +155,15 @@ public:
 
     virtual const QPen& leftBorderPen() { return m_leftBorderPen; }
     virtual const QPen& topBorderPen() { return m_topBorderPen; }
-
+    virtual const QPen& fallDiagonalPen() { return m_fallDiagonalPen; }
+    virtual const QPen& goUpDiagonalPen() { return m_goUpDiagonalPen; }
+   
     virtual const QPen& textPen() { return m_textPen; }
 
     virtual void setTextPen( const QPen& _p ) { m_textPen = _p; m_textColor = _p.color(); }
     virtual void setLeftBorderPen( const QPen& _p ) { m_leftBorderPen = _p; m_iLeftBorderWidth = _p.width(); }
+    virtual void setFallDiagonalPen( const QPen& _p ) { m_fallDiagonalPen = _p; m_iFallDiagonalWidth = _p.width(); }
+    virtual void setGoUpDiagonalPen( const QPen& _p ) { m_goUpDiagonalPen = _p; m_iGoUpDiagonalWidth = _p.width(); }
     virtual void setTopBorderPen( const QPen& _p ) { m_topBorderPen = _p; m_iTopBorderWidth = _p.width(); }
 
     KSpreadTable* table() { return m_pTable; }
@@ -199,7 +217,22 @@ protected:
      * The pen used to draw the top border
      */
     QPen m_topBorderPen;
-
+    /**
+     * The not zoomed border width of the diagonal which fall
+     */
+    int m_iFallDiagonalWidth;
+    /**
+     * The pen used to draw the diagonal
+     */
+    QPen m_fallDiagonalPen;
+    /**
+     * The not zoomed border width of the digonal which go up
+     */
+    int m_iGoUpDiagonalWidth;
+    /**
+     * The pen used to draw the the diagonal which go up
+     */
+    QPen m_goUpDiagonalPen;
     /**
      * The precision of the floatinf point representation
      * If precision is -1, this means that no precision is specified.

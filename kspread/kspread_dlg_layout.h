@@ -237,6 +237,8 @@ protected:
     KSpreadPatternSelect *top;
     KSpreadPatternSelect *bottom;
     KSpreadPatternSelect *outline;
+    KSpreadPatternSelect *fallDiagonal;
+    KSpreadPatternSelect *goUpDiagonal; 
     KSpreadPatternSelect* pattern1;
     KSpreadPatternSelect* pattern2;
     KSpreadPatternSelect* pattern3;
@@ -320,6 +322,18 @@ public:
     bool bOutlineBorderStyle;
     QColor outlineBorderColor;
     bool bOutlineBorderColor;
+
+    PenStyle fallDiagonalStyle;
+    int fallDiagonalWidth;
+    bool bFallDiagonalStyle;
+    QColor fallDiagonalColor;
+    bool bfallDiagonalColor;
+    PenStyle goUpDiagonalStyle;
+    int goUpDiagonalWidth;
+    bool bGoUpDiagonalStyle;
+    QColor goUpDiagonalColor;
+    bool bGoUpDiagonalColor;
+
     QString prefix;
     QString postfix;
     int precision;
