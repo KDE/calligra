@@ -97,7 +97,7 @@ public:
 
   \value WhiteSpaceNoWrap  multiple spaces are collapsed as with
   WhiteSpaceNormal, but no automatic linebreaks occur. To break lines manually,
-  use the  \c &lt;br&gt; tag.
+  use the  <tt>&lt;br&gt;</tt> tag.
 
 */
 
@@ -537,7 +537,7 @@ QStyleSheetItem::WhiteSpaceMode QStyleSheetItem::whiteSpaceMode() const
    <li> \c WhiteSpaceNoWrap
 	  - multiple spaces are collapsed as with WhiteSpaceNormal, but no
 	  automatic linebreaks occur. To break lines manually use the
-	  \c &lt;br&gt; tag.
+	  <tt>&lt;br&gt;</tt> tag.
   </ul>
  */
 void QStyleSheetItem::setWhiteSpaceMode(WhiteSpaceMode m)
@@ -734,7 +734,7 @@ int QStyleSheetItem::lineSpacing() const
 
   The structuring tags are
   <ul>
-    <li>\c &lt;qt&gt;...&lt;/qt&gt;
+    <li><tt>&lt;qt&gt;</tt>...<tt>&lt;/qt&gt;</tt>
 	- A Qt rich text document. It understands the following attributes:
 	<ul>
 	<li> \c title
@@ -746,7 +746,7 @@ int QStyleSheetItem::lineSpacing() const
 	which can be used to explain certain expressions in more detail in a few
 	sentences. The QTextBrowser will then keep the current page and display the
 	new document in a small popup similar to QWhatsThis. Note that links
-	will not work in documents with \c &lt;qt \c type="detail" \c &gt;...&lt;/qt&gt.
+	will not work in documents with <tt>&lt;qt type="detail"&gt;</tt>...&lt;/qt&gt.
 	<li> \c bgcolor
 	- The background color, for example \c bgcolor="yellow" or \c bgcolor="#0000FF".
 	<li> \c background
@@ -757,69 +757,69 @@ int QStyleSheetItem::lineSpacing() const
 	<li> \c link
 	- The link color, for example \c link="green".
 	</ul>
-    <li>\c &lt;h1&gt;...&lt;/h1&gt;
+    <li><tt>&lt;h1&gt;</tt>...<tt>&lt;/h1&gt;</tt>
 	- A top-level heading.
-    <li>\c &lt;h2&gt;...&lt;/h2&gt;
+    <li><tt>&lt;h2&gt;</tt>...<tt>&lt;/h2&gt;</tt>
 	- A sublevel heading.
-    <li>\c &lt;h3&gt;...&lt;/h3&gt;
+    <li><tt>&lt;h3&gt;</tt>...<tt>&lt;/h3&gt;</tt>
 	- A sub-sublevel heading.
-    <li>\c &lt;p&gt;...&lt;/p&gt;
+    <li><tt>&lt;p&gt;</tt>...<tt>&lt;/p&gt;</tt>
 	- A left-aligned paragraph. Adjust the alignment with
 	the  \c align attribute. Possible values are
 	\c left, \c right and \c center.
-    <li>\c &lt;center&gt;...&lt;/center&gt;
+    <li><tt>&lt;center&gt;</tt>...<tt>&lt;/center&gt;</tt>
 	- A centered paragraph.
-    <li>\c &lt;blockquote&gt;...&lt;/blockquote&gt;
+    <li><tt>&lt;blockquote&gt;</tt>...<tt>&lt;/blockquote&gt;</tt>
 	- An indented paragraph that is useful for quotes.
-    <li>\c &lt;ul&gt;...&lt;/ul&gt;
+    <li><tt>&lt;ul&gt;</tt>...<tt>&lt;/ul&gt;</tt>
 	- An unordered list. You can also pass a type argument to
 	define the bullet style. The default is \c type=disc; other
 	types are \c circle and \c square.
-    <li>\c &lt;ol&gt;...&lt;/ol&gt;
+    <li><tt>&lt;ol&gt;</tt>...<tt>&lt;/ol&gt;</tt>
 	- An ordered list. You can also pass a type argument to define
 	the enumeration label style. The default is \c type="1"; other
 	types are \c "a" and \c "A".
-    <li>\c &lt;li&gt;...&lt;/li&gt;
+    <li><tt>&lt;li&gt;</tt>...<tt>&lt;/li&gt;</tt>
 	- A list item. This tag can be used only within the context of
 	\c ol or \c ul.
-    <li>\c &lt;pre&gt;...&lt;/pre&gt;
+    <li><tt>&lt;pre&gt;</tt>...<tt>&lt;/pre&gt;</tt>
 	- For larger junks of code. Whitespaces in the contents are preserved.
 	For small bits of code use the inline-style \c code.
    </ul>
 
    Anchors and links are done with a single tag:
    <ul>
-    <li>\c &lt;a&gt;...&lt;/a&gt;
+    <li><tt>&lt;a&gt;</tt>...<tt>&lt;/a&gt;</tt>
 	- An anchor or link. The reference target is defined in the
-	\c href attribute of the tag as in \c &lt;a \c href="target.qml"&gt;...&lt;/a&gt;.
+	\c href attribute of the tag as in <tt>&lt;a href="target.qml"&gt;</tt>...<tt>&lt;/a&gt;</tt>.
 	You can also specify an additional anchor within the specified target document, for
-	example \c &lt;a \c href="target.qml#123"&gt;...&lt;/a&gt;.  If
+	example <tt>&lt;a href="target.qml#123"&gt;</tt>...<tt>&lt;/a&gt;</tt>.  If
 	\c a is meant to be an anchor, the reference source is given in
 	the \c name attribute.
   </ul>
 
    The default character style bindings are
    <ul>
-    <li>\c &lt;em&gt;...&lt;/em&gt;
-	- Emphasized. By default this is the same as \c &lt;i&gt;...&lt;/i&gt; (italic).
-    <li>\c &lt;strong&gt;...&lt;/strong&gt;
-	- Strong. By default this is the same as \c &lt;bold&gt;...&lt;/bold&gt; (bold).
-    <li>\c &lt;i&gt;...&lt;/i&gt;
+    <li><tt>&lt;em&gt;</tt>...<tt>&lt;/em&gt;</tt>
+	- Emphasized. By default this is the same as <tt>&lt;i&gt;</tt>...<tt>&lt;/i&gt;</tt> (italic).
+    <li><tt>&lt;strong&gt;</tt>...<tt>&lt;/strong&gt;</tt>
+	- Strong. By default this is the same as <tt>&lt;bold&gt;</tt>...<tt>&lt;/bold&gt;</tt> (bold).
+    <li><tt>&lt;i&gt;</tt>...<tt>&lt;/i&gt;</tt>
 	- Italic font style.
-    <li>\c &lt;b&gt;...&lt;/b&gt;
+    <li><tt>&lt;b&gt;</tt>...<tt>&lt;/b&gt;</tt>
 	- Bold font style.
-    <li>\c &lt;u&gt;...&lt;/u&gt;
+    <li><tt>&lt;u&gt;</tt>...<tt>&lt;/u&gt;</tt>
 	- Underlined font style.
-    <li>\c &lt;big&gt;...&lt;/big&gt;
+    <li><tt>&lt;big&gt;</tt>...<tt>&lt;/big&gt;</tt>
 	- A larger font size.
-    <li>\c &lt;small&gt;...&lt;/small&gt;
+    <li><tt>&lt;small&gt;</tt>...<tt>&lt;/small&gt;</tt>
 	- A smaller font size.
-    <li>\c &lt;code&gt;...&lt;/code&gt;
-	- Indicates code. By default this is the same as \c &lt;tt&gt;...&lt;/tt&gt; (typewriter). For
+    <li><tt>&lt;code&gt;</tt>...<tt>&lt;/code&gt;</tt>
+	- Indicates code. By default this is the same as <tt>&lt;tt&gt;</tt>...<tt>&lt;/tt&gt;</tt> (typewriter). For
 	larger junks of code use the block-tag \c pre.
-    <li>\c &lt;tt&gt;...&lt;/tt&gt;
+    <li><tt>&lt;tt&gt;</tt>...<tt>&lt;/tt&gt;</tt>
 	- Typewriter font style.
-    <li>\c &lt;font&gt;...&lt;/font&gt;
+    <li><tt>&lt;font&gt;</tt>...<tt>&lt;/font&gt;</tt>
 	- Customizes the font size, family  and text color. The tag understands
 	the following  attributes:
 	<ul>
@@ -837,10 +837,10 @@ int QStyleSheetItem::lineSpacing() const
 
    Special elements are:
    <ul>
-    <li>\c &lt;img/&gt;
+    <li><tt>&lt;img/&gt;</tt>
 	- An image. The image name for the mime source
 	factory is given in the source attribute, for example
-	\c &lt;img \c src="qt.xpm"/&gt;. The image tag also
+	<tt>&lt;img src="qt.xpm"/&gt;</tt>. The image tag also
 	understands the attributes \c width and \c height that determine
 	the size of the image. If the pixmap does not fit the specified
 	size it will be scaled automatically (by using QImage::smoothScale()).
@@ -849,15 +849,15 @@ int QStyleSheetItem::lineSpacing() const
 	placed. By default, an image is placed inline just like a
 	normal character. Specify \c left or \c right to place the
 	image at the respective side.
-    <li>\c &lt;hr/&gt;
+    <li><tt>&lt;hr/&gt;</tt>
 	- A horizonal line.
-    <li>\c &lt;br/&gt;
+    <li><tt>&lt;br/&gt;</tt>
 	- A line break.
   </ul>
 
   Another tag not in any of the above cathegories is
   <ul>
-  <li>\c &lt;nobr&gt;...&lt;/nobr&gt;
+  <li><tt>&lt;nobr&gt;</tt>...<tt>&lt;/nobr&gt;</tt>
 	- No break. Prevents word wrap.
   </ul>
 
@@ -868,7 +868,7 @@ int QStyleSheetItem::lineSpacing() const
   may, however, also span several rows, columns or both.
 
  <ul>
-   <li>\c &lt;table&gt;...&lt;/table&gt;
+   <li><tt>&lt;table&gt;</tt>...<tt>&lt;/table&gt;</tt>
    - A table definition.
      The default table is frameless. Specify the boolean attribute
      \c border in order to get a frame. Other attributes are
@@ -885,13 +885,13 @@ int QStyleSheetItem::lineSpacing() const
 	<li> \c cellpadding
 	- Additional space around the contents of table cells. The default is 1.
 	</ul>
-   <li>\c &lt;tr&gt;...&lt;/tr&gt;
+   <li><tt>&lt;tr&gt;</tt>...<tt>&lt;/tr&gt;</tt>
    - A table row. Can be used only within \c table. Understands the attributes.
 	<ul>
 	<li>\c bgcolor
 	- The background color.
 	</ul>
-   <li>\c &lt;td&gt;...&lt;/td&gt;
+   <li><tt>&lt;td&gt;</tt>...<tt>&lt;/td&gt;</tt>
    - A table data cell. Can be used only within \c tr. Understands the attributes.
 	<ul>
 	<li>\c bgcolor
@@ -907,7 +907,7 @@ int QStyleSheetItem::lineSpacing() const
 	- Alignment; possible values are \c left, \c right, and \c center. The
 	default is left-aligned.
 	</ul>
-   <li>\c &lt;th&gt;...&lt;/th&gt;
+   <li><tt>&lt;th&gt;</tt>...<tt>&lt;/th&gt;</tt>
    - A table header cell. Similar to \c td, but defaults to center alignment
      and a bold font.
    </ul>

@@ -5,6 +5,8 @@
 #include "qrect.h"
 #include <stdlib.h>
 
+using namespace Qt3;
+
 // -----------------------------------------------------
 
 /* a small helper class used internally to resolve Bidi embedding levels.
@@ -111,6 +113,8 @@ static inline bool nextVisualCharJoins( const QString &str, int pos)
     return ( join == QChar::Dual || join == QChar::Center );
 }
 
+// QT2HACK
+#if 0
 
 QComplexText::Shape QComplexText::glyphVariant( const QString &str, int pos)
 {
@@ -485,8 +489,6 @@ static const ushort arabicUnicodeLamAlefMapping[6][4] = {
     { 0xfffd, 0xfffd, 0xfefb, 0xfefc } // 0x627         R       Alef
 };
 
-//QT2HACK
-#if 0
 QString QComplexText::shapedString(const QString& uc, int from, int len, QPainter::TextDirection dir )
 {
     if( len < 0 )
@@ -616,7 +618,6 @@ QString QComplexText::shapedString(const QString& uc, int from, int len, QPainte
 
     return QConstString( shapeBuffer, lenOut ).string();
 }
-#endif
 
 QChar QComplexText::shapedCharacter( const QString &str, int pos )
 {
@@ -778,7 +779,6 @@ QList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const QSt
 	else
 	    context = new QBidiContext( 0, QChar::DirL );
     }
-    context->ref();
 
     QBidiStatus status = control->status;
     QChar::Direction dir = QChar::DirON;
@@ -816,7 +816,6 @@ QList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const QSt
 		    runs->append( new QTextRun(sor, eor, context, dir) );
 		    ++eor; sor = eor; dir = QChar::DirON; status.eor = QChar::DirON;
 		    context = new QBidiContext(level, QChar::DirR, context);
-		    context->ref();
 		    status.last = QChar::DirR;
 		    status.lastStrong = QChar::DirR;
 		}
@@ -833,7 +832,6 @@ QList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const QSt
 		    runs->append( new QTextRun(sor, eor, context, dir) );
 		    ++eor; sor = eor; dir = QChar::DirON; status.eor = QChar::DirON;
 		    context = new QBidiContext(level, QChar::DirL, context);
-		    context->ref();
 		    status.last = QChar::DirL;
 		    status.lastStrong = QChar::DirL;
 		}
@@ -850,7 +848,6 @@ QList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const QSt
 		    runs->append( new QTextRun(sor, eor, context, dir) );
 		    ++eor; sor = eor; dir = QChar::DirON; status.eor = QChar::DirON;
 		    context = new QBidiContext(level, QChar::DirR, context, TRUE);
-		    context->ref();
 		    dir = QChar::DirR;
 		    status.last = QChar::DirR;
 		    status.lastStrong = QChar::DirR;
@@ -868,7 +865,6 @@ QList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const QSt
 		    runs->append( new QTextRun(sor, eor, context, dir) );
 		    ++eor; sor = eor; dir = QChar::DirON; status.eor = QChar::DirON;
 		    context = new QBidiContext(level, QChar::DirL, context, TRUE);
-		    context->ref();
 		    dir = QChar::DirL;
 		    status.last = QChar::DirL;
 		    status.lastStrong = QChar::DirL;
@@ -1258,7 +1254,6 @@ QList<QTextRun> *QComplexText::bidiReorderLine( QBidiControl *control, const QSt
 #endif
 
     control->setContext( context );
-    context->deref();
     control->status = status;
 
     return runs;
@@ -1315,3 +1310,4 @@ QString QComplexText::bidiReorderString( const QString &str, QChar::Direction /*
     }
     return visual;
 }
+#endif

@@ -10,9 +10,9 @@
 #include <qshared.h>
 #endif // QT_H
 
-namespace Qt3 {
-
 class QFontPrivate;
+
+namespace Qt3 {
 
 // bidi helper classes. Internal to Qt
 struct Q_EXPORT QBidiStatus {
@@ -27,6 +27,7 @@ struct Q_EXPORT QBidiStatus {
 };
 
 struct Q_EXPORT QBidiContext : public QShared {
+    // ### ref and deref parent?
     QBidiContext( uchar level, QChar::Direction embedding, QBidiContext *parent = 0, bool override = FALSE );
     ~QBidiContext();
 
@@ -35,17 +36,14 @@ struct Q_EXPORT QBidiContext : public QShared {
     QChar::Direction dir : 5;
 
     QBidiContext *parent;
-
-    // refcounting....
-    int count;
 };
 
 struct Q_EXPORT QBidiControl {
     QBidiControl() { context = 0; }
     QBidiControl( QBidiContext *c, QBidiStatus s)
     { context = c; if( context ) context->ref(); status = s; }
-    ~QBidiControl() { if ( context ) context->deref(); }
-    void setContext( QBidiContext *c ) { if ( context == c ) return; if ( context ) context->deref(); context = c; context->ref(); }
+    ~QBidiControl() { if ( context && context->deref() ) delete context; }
+    void setContext( QBidiContext *c ) { if ( context == c ) return; if ( context && context->deref() ) delete context; context = c; context->ref(); }
     QBidiContext *context;
     QBidiStatus status;
 };

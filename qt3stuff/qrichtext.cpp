@@ -73,14 +73,17 @@ static QString debug_indent;
 
 static double scale_factor( double v )
 {
-    return v/96;
+    return v;
 }
 
-static bool is_printer( QPainter *p )
+static bool is_printer( QPainter * )
 {
+    return FALSE;
+#if 0
     if ( !p || !p->device() )
 	return FALSE;
     return p->device()->devType() == QInternal::Printer;
+#endif
 }
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1355,7 +1358,7 @@ void QTextDocument::setPlainText( const QString &text )
 	lParag = fParag = createParag( this, 0, 0 );
 }
 
-struct Tag {
+struct Q_EXPORT Tag {
     Tag(){}
     Tag( const QString&n, const QStyleSheetItem* s ):name(n),style(s) {
 	wsm = QStyleSheetItem::WhiteSpaceNormal;
@@ -1370,14 +1373,14 @@ struct Tag {
 #endif
 };
 
-#define NEWPAR       do{ if ( !hasNewPar ) curpar = createParag( this, curpar ); \
+#define NEWPAR       if ( !curpar || ( curtag.name != "table" && curtag.name != "li" ) || curpar->length() > 1 ) { if ( !hasNewPar ) curpar = createParag( this, curpar ); \
 		    hasNewPar = TRUE;  \
 		    QVector<QStyleSheetItem> vec( tags.count() ); \
 		    int i = 0; \
 		    for ( QValueStack<Tag>::Iterator it = tags.begin(); it != tags.end(); ++it ) \
 			vec.insert( i++, (*it).style ); 	\
 		    curpar->setStyleSheetItems( vec ); }while(FALSE)
-#define NEWPAROPEN(nstyle)       do{ if ( !hasNewPar ) curpar = createParag( this, curpar ); \
+#define NEWPAROPEN(nstyle)       if ( !curpar || ( curtag.name != "table" && curtag.name != "li" ) || curpar->length() > 1 )  { if ( !hasNewPar ) curpar = createParag( this, curpar ); \
 		    hasNewPar = TRUE;  \
 		    QVector<QStyleSheetItem> vec( tags.count()+1 ); \
 		    int i = 0; \
@@ -1494,7 +1497,15 @@ void QTextDocument::setRichTextInternal( const QString &text )
 		    curtag.name = tagname;
 		    if ( curtag.name == "a" && attr.find( "name" ) != attr.end() && doc[ pos] == '<' ) 	// hack to be sure
 			doc.insert( pos, " " );						// <a name=".."></a> formats or inserted
-
+		    if ( attr.find( "align" ) != attr.end() &&
+			 ( curtag.name == "p" || curtag.name == "li" || curtag.name[ 0 ] == 'h' ) ) {
+			if ( *attr.find( "align" ) == "center" )
+			    curpar->setAlignment( Qt::AlignCenter );
+			else if ( *attr.find( "align" ) == "right" )
+			    curpar->setAlignment( Qt::AlignRight );
+			else if ( *attr.find( "align" ) == "justify" )
+			    curpar->setAlignment( Qt3::AlignJustify );
+		    }
 		    depth++;
 		}
 	    } else {
@@ -1604,6 +1615,19 @@ QString QTextDocument::plainText( QTextParag *p ) const
     }
 }
 
+static QString align_to_string( const QString &tag, int a )
+{
+    if ( tag == "p" || tag == "li" || tag[ 0 ] == 'h' ) {
+	if ( a & Qt::AlignRight )
+	    return " align=right ";
+	if ( a & Qt::AlignCenter )
+	    return " align=center ";
+	if ( a & Qt3::AlignJustify )
+	    return " align=justify ";
+    }
+    return "";
+}
+
 QString QTextDocument::richText( QTextParag *p ) const
 {
     QString s;
@@ -1619,7 +1643,7 @@ QString QTextDocument::richText( QTextParag *p ) const
 		    for ( int i = lastItems.size(); i < (int)items.size(); ++i ) {
 			if ( items[ i ]->name().isEmpty() )
 			    continue;
-			s += "<" + items[ i ]->name() + ">";
+			s += "<" + items[ i ]->name() + align_to_string( items[ i ]->name(), p->alignment() ) + ">";
 		    }
 		} else {
 		    QString end;
@@ -1631,7 +1655,8 @@ QString QTextDocument::richText( QTextParag *p ) const
 		    s += end;
 		}
 		lastItems = items;
-		s += "<" + item->name() + ">" + p->richText() + "</" + item->name() + ">\n";
+		s += "<" + item->name() + align_to_string( item->name(), p->alignment() ) + ">" +
+		     p->richText() + "</" + item->name() + ">\n";
 	    } else {
 		QString end;
 		for ( int i = 0; i < (int)lastItems.size(); ++i ) {
@@ -1640,7 +1665,7 @@ QString QTextDocument::richText( QTextParag *p ) const
 		    end.prepend( "</" + lastItems[ i ]->name() + ">" );
 		}
 		s += end;
-		s += "<p>" + p->richText() + "</p>\n";
+		s += "<p" + align_to_string( "p", p->alignment() ) + ">" + p->richText() + "</p>\n";
 		lastItems = items;
 	    }
 	    p = p->next();
@@ -4233,6 +4258,7 @@ QTextParagLineStart *QTextFormatter::bidiReorderLine( QTextParag *parag, QTextSt
 			x -= text->width( pos );
 		}
 		c->x = x + toAdd;
+		c->rightToLeft = FALSE;
 		int ww = 0;
 		if ( c->c.unicode() >= 32 || c->c == '\t' || c->isCustom() ) {
 		    ww = text->width( pos );
@@ -4905,7 +4931,7 @@ void QTextFormat::setMisspelled( bool b )
     update();
 }
 
-void QTextFormat::setHAlign( HorizontalAlignemnt a )
+void QTextFormat::setHAlign( VerticalAlignment a )
 {
     if ( a == ha )
 	return;
@@ -5336,7 +5362,7 @@ QString QTextHorizontalLine::richText() const
 void QTextHorizontalLine::draw( QPainter* p, int x, int y, int , int , int , int , const QColorGroup& cg )
 {
     QRect r( x, y, width, height);
-    if ( is_printer( p ) ) {
+    if ( is_printer( p ) || ( p && p->device() && p->device()->devType() == QInternal::Printer ) ) {
 	QPen oldPen = p->pen();
 	p->setPen( QPen( cg.text(), height/8 ) );
 	p->drawLine( r.left()-1, y + height / 2, r.right() + 1, y + height / 2 );
@@ -5980,7 +6006,7 @@ void QTextTable::draw(QPainter* p, int x, int y, int cx, int cy, int cw, int ch,
 			 cell->geometry().width() + 2 * us_ib,
 			 cell->geometry().height() + 2 * us_ib );
 		int s = cellspacing;
-		if ( is_printer( p ) ) {
+		if ( is_printer( p ) || ( p && p->device() && p->device()->devType() == QInternal::Printer ) ) {
 		    qDrawPlainRect( p, r, cg.text(), us_ib );
 		} else {
 		    p->fillRect( r.left()-s, r.top(), s, r.height(), cg.button() );
@@ -5994,7 +6020,7 @@ void QTextTable::draw(QPainter* p, int x, int y, int cx, int cy, int cw, int ch,
     }
     if ( border ) {
 	QRect r ( x, y, width, height );
-	if ( is_printer( p ) ) {
+	if ( is_printer( p ) || ( p && p->device() && p->device()->devType() == QInternal::Printer ) ) {
 	    qDrawPlainRect( p, QRect(QMAX( 0, r.x()+1 ), QMAX( 0, r.y()+1 ), QMAX( r.width()-2, 0 ), QMAX( 0, r.height()-2 ) ), cg.text(), us_b );
 	} else {
 	    int s = border;
@@ -6117,6 +6143,8 @@ void QTextTable::enterAt( QTextCursor *c, QTextDocument *&doc, QTextParag *&para
     }
 
     QTextTableCell *cell = cells.at( *currCell.find( c ) );
+    if ( !cell )
+	return;
     doc = cell->richText();
     parag = doc->firstParag();
     idx = 0;
