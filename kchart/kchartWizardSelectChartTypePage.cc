@@ -92,4 +92,5 @@ void KChartWizardSelectChartTypePage::apply()
     _chart->params()->setChartType( _type );
 }
 
+
 #include "kchartWizardSelectChartTypePage.moc"

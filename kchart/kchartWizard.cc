@@ -87,6 +87,7 @@ void KChartWizard::subType(int _type)
     } else {
         _selectchartsubtypepage->chartSubType=false;
     }
+    _selectchartsubtypepage->changeSubTypeName( type );
     if( ( type == KDChartParams::Bar &&
           _chart->params()->threeDBars() ) ||
         ( type == KDChartParams::Pie &&

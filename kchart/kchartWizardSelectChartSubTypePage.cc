@@ -66,8 +66,6 @@ KChartWizardSelectChartSubTypePage::KChartWizardSelectChartSubTypePage( QWidget*
 
     if( _chart->params()->chartType() == KDChartParams::HiLo)
     {
-        stacked->setText(i18n("HiLoClose"));
-        percent->setText(i18n("HiLoOpenClose"));
         if( _chart->params()->hiLoChartSubType()==KDChartParams::HiLoNormal)
             normal->setChecked( true );
         else if(_chart->params()->hiLoChartSubType()==KDChartParams::HiLoClose)
@@ -76,6 +74,7 @@ KChartWizardSelectChartSubTypePage::KChartWizardSelectChartSubTypePage( QWidget*
             percent->setChecked(true);
     }
 
+    changeSubTypeName( _chart->params()->chartType());
     if(!chartSubType)
         grp->setEnabled(false);
 
@@ -140,6 +139,20 @@ void KChartWizardSelectChartSubTypePage::apply()
             }
         else
             kdDebug(35001)<<"Error in groupbutton\n";
+    }
+}
+
+void KChartWizardSelectChartSubTypePage::changeSubTypeName( KDChartParams::ChartType _type)
+{
+    if(_type==KDChartParams::HiLo)
+    {
+        stacked->setText(i18n("HiLoClose"));
+        percent->setText(i18n("HiLoOpenClose"));
+    }
+    else
+    {
+        stacked->setText( i18n( "Stacked" ));
+        percent->setText( i18n( "Percent" ));
     }
 }
 
