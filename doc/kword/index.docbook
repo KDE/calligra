@@ -76,15 +76,15 @@ Environment.  Other applications in &koffice; include:
 </para>
 
 <itemizedlist>
-<listitem>&kspread; (A fully functional spreadsheet.)</listitem>
-<listitem>&kpresenter; (A presentation creator.)</listitem>
-<listitem>&killustrator; (A vector drawing program.)</listitem>
-<listitem>&krayon; (A bitmap image editor)</listitem>
-<listitem>&kivio; (A flowchart creator)</listitem>
-<listitem>&kugar; (A report generation tool.)  </listitem>
-<listitem>&kchart; (A chart and graph creator.)  </listitem>
-<listitem>and a simple integrated office desktop, to help organize your
-work.</listitem>
+<listitem><para>&kspread; (A fully functional spreadsheet.)</para></listitem>
+<listitem><para>&kpresenter; (A presentation creator.)</para></listitem>
+<listitem><para>&kontour; (A vector drawing program.)</para></listitem>
+<!-- <listitem>&krayon; (A bitmap image editor)</listitem> -->
+<listitem><para>&kivio; (A flowchart creator)</para></listitem>
+<listitem><para>&kugar; (A report generation tool.)  </para></listitem>
+<listitem><para>&kchart; (A chart and graph creator.)</para></listitem>
+<listitem><para>and a simple integrated office desktop, to help organize your
+work.</para></listitem>
 </itemizedlist>
 
 <para>
