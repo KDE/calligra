@@ -2366,7 +2366,7 @@ yyreduce:
 			KexiDB::Field *f = item->table()->field(item->name());
 			if(!f)
 			{
-				KexiDB::ParserError err(i18n("FIeld List Error Error"), i18n("Unknown column '%1' in table '%2'").arg(item->name()).arg(schema->name()), ctoken, current);
+				KexiDB::ParserError err(i18n("Field List Error"), i18n("Unknown column '%1' in table '%2'").arg(item->name()).arg(schema->name()), ctoken, current);
 				parser->setError(err);
 				yyerror("field list error");
 			}	

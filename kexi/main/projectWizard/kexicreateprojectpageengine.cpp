@@ -138,9 +138,9 @@ KexiCreateProjectPageEngine::fillSummary()
 	QVariant location;
 #ifdef KEXI_ADD_EXAMPLE_ENGINES
 	if (m_engine->currentItem()>=m_first_example_engine_nr) {
-		engineSummary = i18n("Sorry, this driver is not availabe with current version of %1.").arg(KEXI_APP_NAME);
+		engineSummary = i18n("Sorry, this driver is not available with current version of %1.").arg(KEXI_APP_NAME);
 		if (m_engine->currentText()=="ODBC") {
-			engineSummary += i18n("<p>ODBC is an open specification for easier accessing Data Sources. Data Sources include both SQL databases availabe with Kexi drivers and other, like Microsoft SQL Server and Microsoft Access.");
+			engineSummary += i18n("<p>ODBC is an open specification for accessing data sources more easily; data sources include both SQL databases available with Kexi drivers and others, like Microsoft SQL Server and Microsoft Access.");
 		}
 	} 
 	else
