@@ -106,29 +106,6 @@ public:
   {
   }
 
-  typedef QValueList<QDomElement> ToolbarList;
-  /**
-   * Return a list of toolbar elements given a toplevel element
-   * Shamelessly stolen from KEditToolbar
-   */
-  ToolbarList findToolbars(QDomElement elem)
-  {
-    static const QString &tagToolbar = KGlobal::staticQString( "ToolBar" );
-    //static const QString &attrNoEdit = KGlobal::staticQString( "noEdit" );
-    ToolbarList list;
-
-    for( ; !elem.isNull(); elem = elem.nextSibling().toElement() )
-    {
-      if (elem.tagName() == tagToolbar /*&& elem.attribute( attrNoEdit ) != "true"*/ )
-        list.append(elem);
-
-      QDomElement child = elem.firstChild().toElement();
-      list += findToolbars(child);
-    }
-
-    return list;
-  }
-
   KoDocument *m_rootDoc;
   QList<KoView> m_rootViews;
   KParts::PartManager *m_manager;
