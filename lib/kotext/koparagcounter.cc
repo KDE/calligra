@@ -635,7 +635,7 @@ QString KoParagCounter::makeAlphaLowerNumber( int n )
     return tmp;
 }
 
-int KoParagCounter::fromRomanNumber( const QString &string )
+int KoParagCounter::fromRomanNumber( const QString string )
 {
     int ret = 0;
     int stringStart = 0;
@@ -682,7 +682,7 @@ int KoParagCounter::fromRomanNumber( const QString &string )
     return (ret == 0 || stringStart != stringLen) ? -1 /*invalid value*/ : ret;
 }
 
-int KoParagCounter::fromAlphaUpperNumber( const QString &string )
+int KoParagCounter::fromAlphaUpperNumber( const QString string )
 {
     int ret = 0;
 
@@ -700,10 +700,10 @@ int KoParagCounter::fromAlphaUpperNumber( const QString &string )
         }
     }
 
-    return ret;
+    return (ret == 0) ? -1 /*invalid value*/ : ret;
 }
 
-int KoParagCounter::fromAlphaLowerNumber( const QString &string )
+int KoParagCounter::fromAlphaLowerNumber( const QString string )
 {
     int ret = 0;
 
@@ -721,5 +721,5 @@ int KoParagCounter::fromAlphaLowerNumber( const QString &string )
         }
     }
 
-    return ret;
+    return (ret == 0) ? -1 /*invalid value*/ : ret;
 }
