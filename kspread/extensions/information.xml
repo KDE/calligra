@@ -190,8 +190,7 @@
 	<Type>Any</Type>
       </Parameter>
       <Help>
-	<Text>The TYPE() function returns 1 if the value is a number, 2 if it is text, 4 if the value is a logical value, 16 if it is an error value or 64 if the value is an array.
- If the cell the value represents contains a formula you get its return type.</Text>
+	<Text>The TYPE() function returns 1 if the value is a number, 2 if it is text, 4 if the value is a logical value, 16 if it is an error value or 64 if the value is an array. If the cell the value represents contains a formula you get its return type.</Text>
 	<Syntax>TYPE(x)</Syntax>
 	<Example>TYPE(A1) returns 2, if A1 contains "Text"</Example>
 	<Example>TYPE(-7) returns 1</Example>

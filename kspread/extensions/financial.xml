@@ -30,8 +30,7 @@
       <Help>
 	<Text>The RECEIVED function returns the amount received at the maturity date for a invested security. Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/365. The settlement date must be before maturity date.</Text>
 	<Syntax>RECEIVED(settlement; maturity; investment; discount; basis)</Syntax>
-	<Example>RECEIVED("2/28/2001"; "8/31/2001"; 1000; 0.05; 0)
-returns 1,025.787</Example>
+	<Example>RECEIVED("2/28/2001"; "8/31/2001"; 1000; 0.05; 0) returns 1,025.787</Example>
       </Help>
     </Function>
 
@@ -141,8 +140,7 @@ returns 1,025.787</Example>
       <Help>
 	<Text>The ACCRINT function returns accrued interest for a security which pays periodic interest. Allowed frequencies are 1 - annual, 2 - semi-annual or 4 - quarterly. Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/365.</Text>
 	<Syntax>ACCRINT(issue; first interest; settlement; rate; par; frequency; basis)</Syntax>
-	<Example>ACCRINT("2/28/2001"; "8/31/2001"; "5/1/2001"; 0.1;
-1000; 2; 0) returns 16,944</Example>
+	<Example>ACCRINT("2/28/2001"; "8/31/2001"; "5/1/2001"; 0.1; 1000; 2; 0) returns 16,944</Example>
         <Related>ACCRINTM</Related>
       </Help>
     </Function>
@@ -204,8 +202,7 @@ returns 1,025.787</Example>
       <Help>
 	<Text>The INTRATE function returns the interest rate for a fully invested security. Basis is the type of day counting you want to use: 0: US 30/360 (default), 1: real days, 2: real days/360, 3: real days/365 or 4: European 30/365.</Text>
 	<Syntax>INTRATE(settlement; maturity; investment; redemption; basis)</Syntax>
-	<Example>INTRATE("2/28/2001"; "8/31/2001"; 1000000; 2000000;
-1) returns 1.98</Example>
+	<Example>INTRATE("2/28/2001"; "8/31/2001"; 1000000; 2000000; 1) returns 1.98</Example>
       </Help>
     </Function>
 
@@ -850,8 +847,7 @@ returns 1,025.787</Example>
 	<Type>String</Type>
       </Parameter>
       <Help>
-	<Text>The EURO() function converts one Euro to a given national currency in the European monetary union. Currency is one of the following:
-ATS (Austria), BEF (Belgium), DEM (Germany), ESP (Spain), FIM (Finland), FRF (France), GRD (Greece), IEP (Ireland), ITL (Italy), LUF (Luxembourg), NLG (Netherlands), or PTE (Portugal).  </Text>
+	<Text>The EURO() function converts one Euro to a given national currency in the European monetary union. Currency is one of the following: ATS (Austria), BEF (Belgium), DEM (Germany), ESP (Spain), FIM (Finland), FRF (France), GRD (Greece), IEP (Ireland), ITL (Italy), LUF (Luxembourg), NLG (Netherlands), or PTE (Portugal).</Text>
 	<Syntax>EURO(currency)</Syntax>
 	<Example>EURO("DEM") equals 1.95583</Example>
       </Help>

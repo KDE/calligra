@@ -110,9 +110,7 @@
 	<Type range="true">String</Type>
       </Parameter>
       <Help>
-	<Text>Returns a single value from a column of a database
-specified by a set of conditions. This function returns an error if no
-value or more than one value exist.</Text>
+	<Text>Returns a single value from a column of a database specified by a set of conditions. This function returns an error if no value or more than one value exist.</Text>
 	<Syntax>DGET(Database; "Header"; Conditions)</Syntax>
 	<Example>DGET(A1:C5; "Salary"; A9:A11)</Example>
       </Help>
