@@ -113,6 +113,11 @@ void KSpreadreference::slotRemove()
 	      tbl->refreshRemoveAreaName(textRemove);
 	    }
 	}
+  if(!list->count())
+    {
+      m_pOk->setEnabled(false);
+      m_pRemove->setEnabled(false);
+    }
 }
 
 void KSpreadreference::slotOk()

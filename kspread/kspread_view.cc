@@ -2122,7 +2122,12 @@ void KSpreadView::popupColumnMenu(const QPoint & _point)
     m_insertCellCopy->plug( m_pPopupColumn );
     m_pPopupColumn->insertSeparator();
     m_default->plug( m_pPopupColumn );
-    m_areaName->plug( m_pPopupColumn );
+    // If there is no selection
+    QRect selection( m_pTable->selectionRect() );
+    if(selection.right()!=0x7FFF && selection.bottom()!=0x7FFF )
+    {
+      m_areaName->plug( m_pPopupColumn );
+    }
     m_resizeColumn->plug( m_pPopupColumn );
     m_pPopupColumn->insertItem( i18n("Adjust Column"), this, SLOT(slotPopupAdjustColumn() ) );
     m_pPopupColumn->insertSeparator();
@@ -2162,7 +2167,12 @@ void KSpreadView::popupRowMenu(const QPoint & _point )
     m_insertCellCopy->plug( m_pPopupRow );
     m_pPopupRow->insertSeparator();
     m_default->plug( m_pPopupRow );
-    m_areaName->plug( m_pPopupRow );
+    // If there is no selection
+    QRect selection( m_pTable->selectionRect() );
+    if(selection.right()!=0x7FFF && selection.bottom()!=0x7FFF )
+      {
+	m_areaName->plug( m_pPopupRow );
+      }
 
     m_resizeRow->plug( m_pPopupRow );
     m_pPopupRow->insertItem( i18n("Adjust Row"), this, SLOT( slotPopupAdjustRow() ) );
@@ -2286,15 +2296,15 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     m_delete->plug( m_pPopupMenu );
     m_adjust->plug( m_pPopupMenu );
     m_default->plug( m_pPopupMenu );
-    m_areaName->plug( m_pPopupMenu );
 
     // If there is no selection
     QRect selection( m_pTable->selectionRect() );
     if(selection.right()!=0x7FFF && selection.bottom()!=0x7FFF )
     {
-        m_pPopupMenu->insertSeparator();
-        m_insertCell->plug( m_pPopupMenu );
-        m_removeCell->plug( m_pPopupMenu );
+      m_areaName->plug( m_pPopupMenu );
+      m_pPopupMenu->insertSeparator();
+      m_insertCell->plug( m_pPopupMenu );
+      m_removeCell->plug( m_pPopupMenu );
     }
     
 
