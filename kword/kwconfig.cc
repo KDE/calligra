@@ -35,6 +35,8 @@
 #include "kwview.h"
 #include "kwunit.h"
 #include "kwdoc.h"
+#include "kwcanvas.h"
+#include "kwviewmode.h"
 
 KWConfig::KWConfig( KWView* parent )
   : KDialogBase(KDialogBase::IconList,i18n("Configure KWord") ,
@@ -250,9 +252,10 @@ void configureInterfacePage::apply()
     int nbPageByRow=m_nbPagePerRow->value();
     if(nbPageByRow!=doc->getNbPagePerRow())
     {
-
         config->writeEntry("nbPagePerRow",nbPageByRow);
+        m_pView->getGUI()->canvasWidget()->viewMode()->setPagesPerRow(nbPageByRow);
         doc->setNbPagePerRow(nbPageByRow);
+        m_pView->getGUI()->canvasWidget()->refreshViewMode();
     }
 }
 

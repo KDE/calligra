@@ -154,6 +154,8 @@ public:
     //for KWTextFrameSetEdit
     void dragStarted() { m_mousePressed = false; }
 
+    void refreshViewMode();
+
 protected:
     /** Set format changes on selection on current cursor */
     void setFormat( QTextFormat *, int flags);

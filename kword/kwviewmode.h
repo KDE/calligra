@@ -61,6 +61,9 @@ public:
 
     virtual void drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion ) = 0;
 
+    virtual void setPagesPerRow(int _nb) {}
+    virtual int pagesPerRow() {return 0;}
+
 protected:
     KWCanvas * m_canvas;
 };
@@ -96,8 +99,8 @@ public:
     virtual QSize contentsSize();
     virtual void drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion );
 
-    void setPagesPerRow(int _nb) {m_pagesPerRow=_nb;}
-    int pagesPerRow() {return m_pagesPerRow;}
+    virtual void setPagesPerRow(int _nb) {m_pagesPerRow=_nb;}
+    virtual int pagesPerRow() {return m_pagesPerRow;}
 
 private:
     int m_pagesPerRow;

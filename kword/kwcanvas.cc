@@ -265,6 +265,11 @@ void KWCanvas::switchViewMode( KWViewMode * newViewMode )
 {
     delete m_viewMode;
     m_viewMode = newViewMode;
+    refreshViewMode();
+}
+
+void KWCanvas::refreshViewMode()
+{
     slotNewContentsSize();
     repaintAll( true );
 }
