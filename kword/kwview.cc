@@ -5649,8 +5649,17 @@ void KWView::insertFile()
     KoStore* store=KoStore::createStore( url.path(), KoStore::Read );
     QMap<KoPictureKey, QString> *pixmapMap =0L;
     QMap<KoPictureKey, QString> *clipartMap = 0L;
-    if ( store && store->open("maindoc.xml") )
+    if ( store )
     {
+        bool b = store->open("maindoc.xml");
+        if ( !b )
+        {
+            KMessageBox::sorry( this,
+                                i18n("File name is not a kword file!."),
+                                i18n("Insert File"));
+            delete store;
+            return;
+        }
         QDomDocument doc;
         doc.setContent( store->device() );
         QDomElement word = doc.documentElement();
@@ -5763,6 +5772,7 @@ void KWView::insertFile()
         }
         store->close();
     }
+
     if (store && (pixmapMap||clipartMap) )
     {
         m_doc->setPixmapMap( pixmapMap );
