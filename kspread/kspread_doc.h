@@ -73,7 +73,7 @@ struct Reference
     QRect rect;
 };
 
-class KSpreadPlugin 
+class KSpreadPlugin
 {
  public:
   KSpreadPlugin() {}
@@ -95,7 +95,7 @@ class KSpreadDoc : public KoDocument, public KoZoomHandler
   Q_PROPERTY( bool getShowMessageError READ getShowMessageError WRITE setShowMessageError)
   Q_PROPERTY( bool dontCheckUpperWord READ dontCheckUpperWord WRITE setDontCheckUpperWord)
   Q_PROPERTY( bool dontCheckTitleCase READ dontCheckTitleCase WRITE setDontCheckTitleCase)
-  
+
   Q_PROPERTY( int syntaxVersion READ syntaxVersion )
   Q_PROPERTY( bool showVerticalScrollBar READ showVerticalScrollBar WRITE setShowVerticalScrollBar )
   Q_PROPERTY( bool showHorizontalScrollBar READ showHorizontalScrollBar WRITE setShowHorizontalScrollBar )
@@ -104,7 +104,7 @@ class KSpreadDoc : public KoDocument, public KoZoomHandler
   Q_PROPERTY( bool showStatusBar READ showStatusBar WRITE setShowStatusBar )
   Q_PROPERTY( bool showFormulaBar READ showFormulaBar WRITE setShowFormulaBar )
   Q_PROPERTY( bool showTabBar READ showTabBar WRITE setShowTabBar )
-  
+
 public:
 
   /**
@@ -112,7 +112,7 @@ public:
    */
   KSpreadDoc( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0,
   const char* name = 0, bool singleViewMode = false );
-  
+
   /**
    * Destroys the document.
    */
@@ -126,26 +126,26 @@ public:
   /**
    * Returns the workbook which holds all the sheets.
    */
-  KSpreadMap* workbook() const; 
-   
+  KSpreadMap* workbook() const;
+
   /**
    * \deprecated Use workbook().
    */
   KSpreadMap* map() const { return workbook(); }
-  
+
   /**
    * Returns the MIME type of KSpread document.
    */
   virtual QCString mimeType() const { return MIME_TYPE; }
-  
+
   /**
    * Adds a command to the command history. The command itself
    * would not be executed.
    */
   void addCommand( KCommand* command );
-  
+
   /*
-   * Adds an undo object. This is the same as addCommand, except 
+   * Adds an undo object. This is the same as addCommand, except
    * that it accepts KSpreadUndo instance. Once every undo object
    * is converted to KCommand, this function will be obsoleted.
    */
@@ -160,17 +160,17 @@ public:
    * Redoes the last undo.
    */
   void redo();
-  
+
   /**
    * Locks the undo buffer.
    */
   void undoLock();
-  
+
   /**
    * Releases lock of undo buffer.
    */
   void undoUnlock();
-  
+
   /**
    * Returns true if undo buffer is locked.
    */
@@ -182,39 +182,39 @@ public:
    * signal KoCommandHistory::commandExecuted)
    */
   KoCommandHistory* commandHistory();
-  
+
   /**
    * Returns the style manager for this document.
-   */  
+   */
   KSpreadStyleManager* styleManager();
 
   /**
    * Returns the unit used to display margins.
-   */  
+   */
   KoUnit::Unit unit() const;
-  
+
   /**
    * \deprecated Use unit().
-   */  
+   */
   KoUnit::Unit getUnit() const { return unit(); }
-  
+
   /**
    * Sets the unit used to display margins.
-   */  
+   */
   void setUnit( KoUnit::Unit u );
-  
+
   /**
    * Returns the name of the unit used to display margins.
-   * For example, if unit() returns KoUnit::U_MM, then 
+   * For example, if unit() returns KoUnit::U_MM, then
    * this functions return "mm".
-   */  
+   */
   QString unitName() const;
-  
+
   /**
    * \deprecated Use unitName().
-   */  
+   */
   QString getUnitName() const { return unitName(); }
-  
+
   /**
    * Returns the locale which was used for creating this document.
    */
@@ -224,13 +224,13 @@ public:
    * Returns the syntax version of the currently opened file
    */
   int syntaxVersion( ) const;
-  
+
   /**
    * If b is true, vertical scrollbar is visible, otherwise
    * it will be hidden.
    */
   void setShowVerticalScrollBar( bool b );
-  
+
   /**
    * Returns true if vertical scroll bar is visible.
    */
@@ -238,23 +238,23 @@ public:
 
   /**
    * \deprecated Use showVerticalScrollBar().
-   */  
+   */
   bool getShowVerticalScrollBar() const { return showVerticalScrollBar(); }
-  
+
   /**
    * If b is true, horizontal scrollbar is visible, otherwise
    * it will be hidden.
    */
   void setShowHorizontalScrollBar( bool b );
-  
+
   /**
    * Returns true if horizontal scroll bar is visible.
    */
   bool showHorizontalScrollBar() const;
-  
+
   /**
    * \deprecated Use showHorizontalScrollBar().
-   */  
+   */
   bool getShowHorizontalScrollBar() const { return showHorizontalScrollBar(); }
 
   /**
@@ -262,26 +262,26 @@ public:
    * it will be hidden.
    */
   void setShowColumnHeader( bool b );
-  
+
   /**
    * Returns true if column header is visible.
    */
   bool showColumnHeader() const;
-  
+
   /**
    * \deprecated Use setShowColumnHeader().
-   */  
+   */
   void setShowColHeader( bool b ){ setShowColumnHeader( b ) ; }
-  
+
   /**
    * \deprecated Use showColumnHeader().
-   */  
-  bool getShowColHeader() const { return showColumnHeader(); } 
-  
+   */
+  bool getShowColHeader() const { return showColumnHeader(); }
+
   /**
    * If b is true, row header is visible, otherwise
    * it will be hidden.
-   */  
+   */
   void setShowRowHeader( bool b );
 
   /**
@@ -291,32 +291,32 @@ public:
 
   /**
    * \deprecated Use showRowHeader().
-   */  
-  bool getShowRowHeader() const { return showRowHeader(); } 
-  
+   */
+  bool getShowRowHeader() const { return showRowHeader(); }
+
   /**
    * Sets the color of the grid.
    */
   void setGridColor( const QColor& color );
-  
+
   /**
    * Returns the color of the grid.
    */
   QColor gridColor() const;
-  
+
   /**
    * Sets the indentation value.
-   */  
+   */
   void setIndentValue( double val );
-  
+
   /**
    * Returns the indentation value.
-   */  
+   */
   double indentValue() const;
 
   /**
    * \deprecated Use indentValue().
-   */  
+   */
   double getIndentValue() const { return indentValue(); }
 
   /**
@@ -324,7 +324,7 @@ public:
    * it will be hidden.
    */
   void setShowStatusBar( bool b );
-  
+
   /**
    * Returns true if status bar is visible.
    */
@@ -332,62 +332,62 @@ public:
 
   /**
    * \deprecated Use showStatusBar().
-   */  
+   */
   bool getShowStatusBar() const { return showStatusBar(); }
-  
+
   /**
    * If b is true, tab bar is visible, otherwise
    * it will be hidden.
-   */  
+   */
   void setShowTabBar( bool b );
-  
+
   /**
    * Returns true if tab bar is visible.
    */
   bool showTabBar() const;
-  
+
   /**
    * \deprecated Use showTabBar().
-   */  
+   */
   bool getShowTabBar() const { return showTabBar(); }
 
   /**
    * If b is true, formula bar is visible, otherwise
    * it will be hidden.
-   */  
+   */
   void setShowFormulaBar( bool b );
-  
+
   /**
    * Returns true if formula bar is visible.
    */
   bool showFormulaBar() const;
-  
+
   /**
    * \deprecated Use showFormulaBar().
-   */  
+   */
   bool getShowFormulaBar() const { return showFormulaBar(); }
 
   /**
    * If b is true, comment indicator is visible, otherwise
    * it will be hidden.
-   */  
+   */
   void setShowCommentIndicator( bool b );
-  
+
   /**
    * Returns true if comment indicator is visible.
    */
-  bool showCommentIndicator() const;  
-  
+  bool showCommentIndicator() const;
+
   /**
    * \deprecated Use showCommentIndicator().
-   */  
-  bool getShowCommentIndicator() const { return showCommentIndicator(); }  
+   */
+  bool getShowCommentIndicator() const { return showCommentIndicator(); }
 
   /**
    * If b is true, an error message will pop up whenever error occurs.
-   */  
+   */
   void setShowMessageError( bool b );
-  
+
   /**
    * Returns true if error message should pop up whenever error occurs.
    */
@@ -395,9 +395,9 @@ public:
 
   /**
    * \deprecated Use showMessageError().
-   */     
+   */
   bool getShowMessageError() const{ return showMessageError(); }
-  
+
   /**
   * completion mode
   */
@@ -429,12 +429,12 @@ public:
 
   QColor pageBorderColor() const;
   void changePageBorderColor( const QColor  & _color);
-  
-    
+
+
   virtual QDomDocument saveXML();
 
   virtual bool loadXML( QIODevice *, const QDomDocument& doc );
-  
+    virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles );
   virtual bool loadChildren( KoStore* _store );
   QDomElement saveAreaName( QDomDocument& doc ) ;
   void loadAreaName( const QDomElement& element );
@@ -500,11 +500,11 @@ public:
    */
   bool isLoading() const;
 
-  virtual void paintContent( QPainter & painter, const QRect & rect, bool transparent = false, 
+  virtual void paintContent( QPainter & painter, const QRect & rect, bool transparent = false,
                              double zoomX = 1.0, double zoomY = 1.0 );
-  void paintContent( QPainter & painter, const QRect & rect, bool transparent, 
+  void paintContent( QPainter & painter, const QRect & rect, bool transparent,
                      KSpreadSheet * table, bool drawCursor = true );
-  
+
   bool docData( QString const & xmlTag, QDomElement & data );
   void deregisterPlugin( KSpreadPlugin * plugin );
   void registerPlugin( KSpreadPlugin * plugin );
@@ -588,7 +588,7 @@ public:
 
   /**
    * s.a. difference does only specified tasks and thats why it improves performance
-   * significantly. rect normally are the visible cells/the cells that need to be updated. 
+   * significantly. rect normally are the visible cells/the cells that need to be updated.
    */
   void emitEndOperation( QRect const & rect );
 
@@ -599,7 +599,7 @@ public:
 
   void insertTable( KSpreadSheet * table );
   void takeTable( KSpreadSheet * table );
-  
+
   // The user-chosen global unit
 
   static QString getAttribute(const QDomElement &element, const char *attributeName, const QString &defaultValue)
@@ -693,7 +693,7 @@ private:
   // don't allow copy or assignment
   KSpreadDoc( const KSpreadDoc& );
   KSpreadDoc& operator=( const KSpreadDoc& );
-  
+
   /* helper functions for painting */
 
   /**

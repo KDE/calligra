@@ -73,12 +73,12 @@ public:
   KSpreadMap* workbook;
   KSpreadStyleManager* styleManager;
   KSpreadSheet *activeSheet;
-  
+
   static QValueList<KSpreadDoc*> s_docs;
   static int s_docId;
 
   DCOPObject* dcop;
-  
+
 
   // used to give every KSpreadSheet a unique default name.
   int tableId;
@@ -99,8 +99,8 @@ public:
    * is in this list and the other one is dropped.
    */
   QStringList kscriptModules;
-  
-  // for undo/redo 
+
+  // for undo/redo
   bool undoLocked;
   KoCommandHistory* commandHistory;
 
@@ -116,7 +116,7 @@ public:
   KCompletion listCompletion;
 
   int numOperations;
-  
+
   // document properties
   KSpreadLocale locale;
   KoUnit::Unit unit;
@@ -155,13 +155,13 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
   d = new DocPrivate;
-  
+
   d->workbook = new KSpreadMap( this, "Map" );
   d->styleManager = new KSpreadStyleManager();
   d->activeSheet= 0;
-  
+
   d->pageBorderColor = Qt::red;
-  
+
   QFont f( KoGlobal::defaultFont() );
   KSpreadFormat::setGlobalRowHeight( f.pointSizeFloat() + 3 );
   KSpreadFormat::setGlobalColWidth( ( f.pointSizeFloat() + 3 ) * 5 );
@@ -211,7 +211,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   d->showCommentIndicator = true;
   d->showError = false;
   d->calcMethod = SumOfNumber;
-  d->moveTo = KSpread::Bottom;  
+  d->moveTo = KSpread::Bottom;
   d->completionMode = KGlobalSettings::CompletionAuto;
   d->spellConfig = 0;
   d->dontCheckUpperWord = false;
@@ -227,15 +227,15 @@ KSpreadDoc::~KSpreadDoc()
 
   delete d->dcop;
   d->s_docs.remove( this );
-  
+
   kdDebug(36001) << "alive 1" << endl;
-  
+
   delete d->commandHistory;
-  
+
   delete d->workbook;
   delete d->styleManager;
   delete d->spellConfig;
-  
+
   delete d;
 }
 
@@ -377,14 +377,14 @@ bool KSpreadDoc::isLoading() const
   return d->isLoading;
 }
 
-QColor KSpreadDoc::pageBorderColor() const 
-{ 
-  return d->pageBorderColor; 
+QColor KSpreadDoc::pageBorderColor() const
+{
+  return d->pageBorderColor;
 }
 
-void KSpreadDoc::changePageBorderColor( const QColor  & _color) 
-{ 
-  d->pageBorderColor = _color; 
+void KSpreadDoc::changePageBorderColor( const QColor  & _color)
+{
+  d->pageBorderColor = _color;
 }
 
 KLocale *KSpreadDoc::locale()
@@ -393,9 +393,9 @@ KLocale *KSpreadDoc::locale()
 }
 
 KSContext& KSpreadDoc::context()
-{ 
-  d->context.setException( 0 ); 
-  return d->context; 
+{
+  d->context.setException( 0 );
+  return d->context;
 }
 
 const QValueList<Reference>  &KSpreadDoc::listArea()
@@ -558,6 +558,12 @@ QDomDocument KSpreadDoc::saveXML()
 bool KSpreadDoc::loadChildren( KoStore* _store )
 {
     return d->workbook->loadChildren( _store );
+}
+
+bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles )
+{
+    //todo
+    return true;
 }
 
 bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
@@ -815,44 +821,44 @@ void KSpreadDoc::setShowVerticalScrollBar(bool _show)
   d->verticalScrollBar=_show;
 }
 
-bool KSpreadDoc::showVerticalScrollBar()const 
-{ 
+bool KSpreadDoc::showVerticalScrollBar()const
+{
   return  d->verticalScrollBar;
 }
 
-void KSpreadDoc::setShowHorizontalScrollBar(bool _show) 
-{   
+void KSpreadDoc::setShowHorizontalScrollBar(bool _show)
+{
   d->horizontalScrollBar=_show;
 }
 
-bool KSpreadDoc::showHorizontalScrollBar()const 
-{  
+bool KSpreadDoc::showHorizontalScrollBar()const
+{
   return  d->horizontalScrollBar;
 }
 
 KGlobalSettings::Completion KSpreadDoc::completionMode( ) const
-{ 
+{
   return d->completionMode;
 }
 
 void KSpreadDoc::setShowColumnHeader(bool _show)
-{ 
-  d->columnHeader=_show; 
+{
+  d->columnHeader=_show;
 }
 
 bool KSpreadDoc::showColumnHeader() const
-{ 
+{
   return  d->columnHeader;
 }
 
 void KSpreadDoc::setShowRowHeader(bool _show)
-{ 
+{
   d->rowHeader=_show;
 }
 
 bool KSpreadDoc::showRowHeader() const
-{ 
-  return  d->rowHeader; 
+{
+  return  d->rowHeader;
 }
 
 void KSpreadDoc::setGridColor( const QColor& color )
@@ -866,67 +872,67 @@ QColor KSpreadDoc::gridColor() const
 }
 
 void KSpreadDoc::setCompletionMode( KGlobalSettings::Completion complMode)
-{  
+{
   d->completionMode= complMode;
 }
 
-double KSpreadDoc::indentValue() const 
-{ 
-  return d->indentValue; 
+double KSpreadDoc::indentValue() const
+{
+  return d->indentValue;
 }
 
 void KSpreadDoc::setIndentValue( double val )
-{ 
-  d->indentValue = val; 
+{
+  d->indentValue = val;
 }
 
 void KSpreadDoc::setShowStatusBar(bool _statusBar)
-{ 
+{
   d->showStatusBar=_statusBar;
 }
 
 bool KSpreadDoc::showStatusBar() const
-{ 
+{
   return  d->showStatusBar;
 }
 
 void KSpreadDoc::setShowTabBar(bool _tabbar)
-{  
+{
   d->showTabBar=_tabbar;
 }
 
 bool KSpreadDoc::showTabBar()const
-{ 
+{
   return  d->showTabBar;
 }
 
-void KSpreadDoc::setShowCommentIndicator(bool _indic) 
-{  
+void KSpreadDoc::setShowCommentIndicator(bool _indic)
+{
   d->showCommentIndicator=_indic;
 }
 
 bool KSpreadDoc::showCommentIndicator() const
-{ 
+{
   return  d->showCommentIndicator;
 }
 
 void KSpreadDoc::setShowFormulaBar(bool _formulaBar)
-{  
+{
   d->showFormulaBar=_formulaBar;
 }
 
 bool KSpreadDoc::showFormulaBar() const
-{ 
+{
   return  d->showFormulaBar;
 }
 
 void KSpreadDoc::setShowMessageError(bool _show)
-{   
+{
   d->showError=_show;
 }
 
-bool KSpreadDoc::showMessageError() const 
-{ 
+bool KSpreadDoc::showMessageError() const
+{
   return  d->showError;
 }
 
@@ -941,12 +947,12 @@ void KSpreadDoc::setMoveToValue(KSpread::MoveTo _moveTo)
 }
 
 void KSpreadDoc::setTypeOfCalc( MethodOfCalc _calc)
-{ 
+{
   d->calcMethod=_calc;
 }
 
 MethodOfCalc KSpreadDoc::getTypeOfCalc() const
-{ 
+{
   return d->calcMethod;
 }
 
@@ -969,27 +975,27 @@ KSpellConfig * KSpreadDoc::getKSpellConfig()const
 }
 
 bool KSpreadDoc::dontCheckUpperWord() const
-{ 
+{
   return d->dontCheckUpperWord;
 }
 
 void KSpreadDoc::setDontCheckUpperWord( bool b )
-{ 
+{
   d->dontCheckUpperWord = b;
 }
 
-bool KSpreadDoc::dontCheckTitleCase() const 
-{ 
-  return  d->dontCheckTitleCase; 
+bool KSpreadDoc::dontCheckTitleCase() const
+{
+  return  d->dontCheckTitleCase;
 }
 
 void KSpreadDoc::setDontCheckTitleCase( bool b )
-{ 
-  d->dontCheckTitleCase = b; 
+{
+  d->dontCheckTitleCase = b;
 }
 
 KoUnit::Unit KSpreadDoc::unit() const
-{ 
+{
   return d->unit;
 }
 
@@ -999,18 +1005,18 @@ void KSpreadDoc::setUnit( KoUnit::Unit _unit )
 }
 
 QString KSpreadDoc::unitName() const
-{ 
-  return KoUnit::unitName( d->unit ); 
+{
+  return KoUnit::unitName( d->unit );
 }
 
 void KSpreadDoc::increaseNumOperation()
-{ 
-  ++d->numOperations; 
+{
+  ++d->numOperations;
 }
 
 void KSpreadDoc::decreaseNumOperation()
-{ 
-  --d->numOperations; 
+{
+  --d->numOperations;
 }
 
 void KSpreadDoc::addIgnoreWordAllList( const QStringList & _lst)
@@ -1018,8 +1024,8 @@ void KSpreadDoc::addIgnoreWordAllList( const QStringList & _lst)
   d->spellListIgnoreAll = _lst;
 }
 
-QStringList KSpreadDoc::spellListIgnoreAll() const 
-{ 
+QStringList KSpreadDoc::spellListIgnoreAll() const
+{
   return d->spellListIgnoreAll;
 }
 
