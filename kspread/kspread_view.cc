@@ -815,13 +815,13 @@ void KSpreadView::initializeCellPropertyActions()
   m_clearConditional->setToolTip(i18n("Remove the conditional cell formatting."));
 
   m_increaseIndent = new KAction( i18n("Increase Indent"),
-                                  "format_increaseindent",0, this,
+                                  QApplication::reverseLayout() ? "format_decreaseindent":"format_increaseindent",0, this,
                                   SLOT( increaseIndent() ), actionCollection(),
                                   "increaseindent" );
   m_increaseIndent->setToolTip(i18n("Increase the indentation."));
 
   m_decreaseIndent = new KAction( i18n("Decrease Indent"),
-                                  "format_decreaseindent" ,0, this,
+                                  QApplication::reverseLayout() ? "format_increaseindent" : "format_decreaseindent" ,0, this,
                                   SLOT( decreaseIndent() ), actionCollection(),
                                   "decreaseindent");
   m_decreaseIndent->setToolTip(i18n("Decrease the indentation."));
