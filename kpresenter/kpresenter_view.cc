@@ -3122,7 +3122,12 @@ void KPresenterView::setupActions()
 
 void KPresenterView::customSlideShow()
 {
-    //todo
+    CustomSlideShowDia *dlg = new CustomSlideShowDia( this, "custom slide show" );
+    if ( dlg->exec() )
+    {
+        //todo
+    }
+    delete dlg;
 }
 
 void KPresenterView::textSubScript()

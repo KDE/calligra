@@ -41,20 +41,40 @@ public slots:
   void slotTextClicked(QListBoxItem*);
   void slotRemove();
   void slotAdd();
-  void slotNew();
   void slotModify();
   void slotCopy();
 
 protected:
   QListBox * list;
-  QPushButton* m_pOk;
-  QPushButton* m_pCancel;
   QPushButton* m_pRemove;
-  QPushButton* m_pNew;
   QPushButton* m_pAdd;
   QPushButton* m_pModify;
   QPushButton* m_pCopy;
   bool m_bChanged;
+};
+
+class DefineCustomSlideShow : public KDialogBase
+{
+    Q_OBJECT
+public:
+    DefineCustomSlideShow( QWidget* parent, const char *name );
+
+protected slots:
+void slotMoveUpSlide();
+    void slotMoveDownSlide();
+    void slotMoveRemoveSlide();
+    void slotMoveInsertSlide();
+
+
+protected:
+    QListBox *listSlide;
+    QListBox *listSlideShow;
+    QPushButton *m_insertSlide;
+    QPushButton *m_removeSlide;
+    QPushButton *m_moveUpSlide;
+    QPushButton *m_moveDownSlide;
+    QLineEdit *m_name;
+
 };
 
 #endif

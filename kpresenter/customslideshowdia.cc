@@ -44,34 +44,29 @@ CustomSlideShowDia::CustomSlideShowDia( QWidget* parent, const char* name )
   list=new QListBox(page);
   grid1->addMultiCellWidget(list,0,8,0,0);
 
+  m_pAdd=new QPushButton(i18n("&Add"),page);
+  grid1->addWidget(m_pAdd,1,2);
+
+  m_pModify=new QPushButton(i18n("&Modify"),page);
+  grid1->addWidget(m_pModify,2,2);
 
   m_pRemove=new QPushButton(i18n("&Remove"),page);
   grid1->addWidget(m_pRemove,3,2);
 
-  m_pAdd=new QPushButton(i18n("&Add"),page);
-  grid1->addWidget(m_pAdd,1,2);
-
-  m_pNew=new QPushButton(i18n("&New"),page);
-  grid1->addWidget(m_pNew,2,2);
-
-  m_pModify=new QPushButton(i18n("&Modify"),page);
-  grid1->addWidget(m_pModify,4,2);
-
   m_pCopy=new QPushButton(i18n("Co&py"),page);
-  grid1->addWidget(m_pCopy,5,2);
+  grid1->addWidget(m_pCopy,4,2);
 
   m_pAdd->setEnabled(false);
 
   connect( m_pRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
   connect( m_pAdd, SIGNAL( clicked() ), this, SLOT( slotAdd() ) );
-  connect( m_pNew, SIGNAL( clicked() ), this, SLOT( slotNew() ) );
   connect( m_pModify, SIGNAL( clicked() ), this, SLOT( slotModify() ) );
   connect( m_pCopy, SIGNAL( clicked() ), this, SLOT( slotCopy() ) );
   connect( list, SIGNAL(doubleClicked(QListBoxItem *)),this,SLOT(slotDoubleClicked(QListBoxItem *)));
   connect( list, SIGNAL(clicked ( QListBoxItem * )),this,SLOT(slotTextClicked(QListBoxItem * )));
 
   m_pModify->setEnabled(false);
-  if(list->count()<=2)
+  if(list->count()<=0)
     m_pRemove->setEnabled(false);
   resize( 600, 250 );
   m_bChanged=false;
@@ -80,7 +75,7 @@ CustomSlideShowDia::CustomSlideShowDia( QWidget* parent, const char* name )
 
 void CustomSlideShowDia::slotTextClicked(QListBoxItem*)
 {
-    //todo
+    slotModify();
 }
 
 void CustomSlideShowDia::slotDoubleClicked(QListBoxItem *)
@@ -88,10 +83,6 @@ void CustomSlideShowDia::slotDoubleClicked(QListBoxItem *)
 }
 
 void CustomSlideShowDia::slotAdd()
-{
-}
-
-void CustomSlideShowDia::slotNew()
 {
 }
 
@@ -115,5 +106,50 @@ void CustomSlideShowDia::slotCopy()
     //todo
 }
 
+
+DefineCustomSlideShow::DefineCustomSlideShow( QWidget* parent, const char* name )
+    : KDialogBase( parent, name, true, i18n("Define Slide Show Custom"), Ok|Cancel )
+{
+  QWidget* page = new QWidget( this );
+  setMainWidget( page );
+
+  QGridLayout *grid1 = new QGridLayout( page,10,4,KDialog::marginHint(), KDialog::spacingHint());
+
+  QLabel *lab = new QLabel( i18n( "Name" ), page );
+  grid1->addWidget( lab, 0, 0 );
+
+  m_name = new QLineEdit( page );
+  grid1->addMultiCellWidget( m_name, 0, 0, 1,2 );
+
+  lab = new QLabel( i18n( "Existing slides" ), page );
+  grid1->addWidget( lab, 1, 0 );
+
+
+  listSlide=new QListBox(page);
+  grid1->addMultiCellWidget(listSlide,2,8,0,0);
+
+  lab = new QLabel( i18n( "Selected slides" ), page );
+  grid1->addWidget( lab, 1, 2 );
+
+  listSlideShow=new QListBox(page);
+  grid1->addMultiCellWidget(listSlideShow,2,8,2,2);
+
+}
+
+void DefineCustomSlideShow::slotMoveUpSlide()
+{
+}
+
+void DefineCustomSlideShow::slotMoveDownSlide()
+{
+}
+
+void DefineCustomSlideShow::slotMoveRemoveSlide()
+{
+}
+
+void DefineCustomSlideShow::slotMoveInsertSlide()
+{
+}
 
 #include "customslideshowdia.moc"
