@@ -23,6 +23,7 @@ Bugfixes:
 - Fix precision when displaying numbers in scientific format
 - Fix moving widgets in validity dialog
 - Fix in formula dialog when inserting strings as arguments
+- Fix compilation, when QT is compiled without SQL framework
 
 
 
