@@ -28,6 +28,7 @@ class KSpreadCanvas;
 class QDomElement;
 class QDomDocument;
 class DCOPObject;
+class KoOasisStyles;
 
 #include <qbrush.h>
 #include <qpen.h>
@@ -122,8 +123,9 @@ public:
     QDomElement save( QDomDocument& doc,int _col, int _row,bool force = false, bool copy = false ) const;
     QDomElement saveFormat( QDomDocument& doc, bool force = false, bool copy = false ) const;
     QDomElement saveFormat( QDomDocument& doc, int _col, int _row, bool force = false, bool copy = false ) const;
-
-
+    virtual bool loadOasisStyleProperties( const QDomElement & property, const KoOasisStyles& oasisStyles );
+    bool loadFontOasisStyle( const QDomElement * font );
+    void loadOasisBorder( const QString & borderDef/*, bPos pos*/ );
     ////////////////////////////////
     //
     // Properties

@@ -1167,7 +1167,7 @@ protected:
     void changeCellTabName( QString const & old_name,QString const & new_name );
 
     bool loadCellsOasis( const QDomElement &element, const KoOasisStyles& oasisStyles );
-    bool loadRowFormat( const QDomElement& row, QDomElement * rowStyle, int &rowIndex );
+    bool loadRowFormat( const QDomElement& row, QDomElement * rowStyle, int &rowIndex, const KoOasisStyles& oasisStyles );
 
     void insertChild( KSpreadChild *_child );
 

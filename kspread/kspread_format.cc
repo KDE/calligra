@@ -704,6 +704,267 @@ bool KSpreadFormat::load( const QDomElement & f, PasteMode pm, bool paste )
 }
 
 
+bool KSpreadFormat::loadFontOasisStyle( const QDomElement * font )
+{
+  if ( !font )
+    return false;
+
+  kdDebug(30518) << "Copy font style from the layout " << font->tagName() << ", " << font->nodeName() << endl;
+
+  if ( font->hasAttribute( "fo:font-family" ) )
+    setTextFontFamily( font->attribute( "fo:font-family" ) );
+  if ( font->hasAttribute( "fo:color" ) )
+    setTextColor( QColor( font->attribute( "fo:color" ) ) );
+#if 0 //fixme
+  if ( font->hasAttribute( "fo:size" ) )
+    setTextFontSize( getFontSize( font->attribute( "fo:size" ) ) );
+  else
+    setTextFontSize( 10 );
+#endif
+  if ( font->hasAttribute( "fo:font-style" ) )
+  {
+    kdDebug(30518) << "italic" << endl;
+    setTextFontItalic( true ); // only thing we support
+  }
+  if ( font->hasAttribute( "fo:font-weight" ) )
+    setTextFontBold( true ); // only thing we support
+  if ( font->hasAttribute( "fo:font-weight" ) )
+    setTextFontBold( true ); // only thing we support
+  if ( font->hasAttribute( "fo:text-underline" ) || font->hasAttribute( "style:text-underline" ) )
+    setTextFontUnderline( true ); // only thing we support
+  if ( font->hasAttribute( "style:text-crossing-out" ) )
+    setTextFontStrike( true ); // only thing we support
+  if ( font->hasAttribute( "style:font-pitch" ) )
+  {
+    // TODO: possible values: fixed, variable
+  }
+  // TODO:
+  // text-underline-color
+  return true;
+}
+
+
+bool KSpreadFormat::loadOasisStyleProperties( const QDomElement & property, const KoOasisStyles& oasisStyles )
+{
+    kdDebug(30518) << "*** Loading style properties *****" << endl;
+
+    if ( property.hasAttribute( "style:decimal-places" ) )
+    {
+        bool ok = false;
+        int p = property.attribute( "style:decimal-places" ).toInt( &ok );
+        if (ok )
+            setPrecision( p );
+    }
+
+    if ( property.hasAttribute( "style:font-name" ) )
+    {
+        QDomElement * font = oasisStyles.styles()[ property.attribute( "style:font-name" ) ];
+        loadFontOasisStyle( font ); // generell font style
+    }
+
+    loadFontOasisStyle( &property ); // specific font style
+
+    // TODO:
+    //   diagonal: fall + goup
+    //   fo:direction="ltr"
+    //   style:text-align-source  ("fix")
+    //   style:shadow
+    //   style:text-outline
+    //   indents from right, top, bottom
+    //   style:condition="cell-content()=15"
+    //     => style:apply-style-name="Result" style:base-cell-address="Sheet6.A5"/>
+
+    if ( property.hasAttribute( "style:rotation-angle" ) )
+    {
+        bool ok = false;
+        int a = property.attribute( "style:rotation-angle" ).toInt( &ok );
+        if ( ok )
+            setAngle( -a + 1 );
+    }
+
+    if ( property.hasAttribute( "fo:text-align" ) )
+    {
+        QString s = property.attribute( "fo:text-align" );
+        if ( s == "center" )
+            setAlign( KSpreadFormat::Center );
+        else if ( s == "end" )
+            setAlign( KSpreadFormat::Right );
+        else if ( s == "start" )
+            setAlign( KSpreadFormat::Left );
+        else if ( s == "justify" ) // TODO in KSpread!
+            setAlign( KSpreadFormat::Center );
+    }
+
+    if ( property.hasAttribute( "fo:background-color" ) )
+        setBgColor( QColor( property.attribute( "fo:background-color" ) ) );
+
+    if ( property.hasAttribute( "style:print-content" ) )
+    {
+        if ( property.attribute( "style:print-content" ) == "false" )
+            setDontPrintText( false );
+    }
+    if ( property.hasAttribute( "style:cell-protect" ) )
+    {
+        QString prot( property.attribute( "style:cell-protect" ) );
+        if ( prot == "none" )
+        {
+            setNotProtected( true );
+            setHideFormula( false );
+            setHideAll( false );
+        }
+        else if ( prot == "formula-hidden" )
+        {
+            setNotProtected( true );
+            setHideFormula( true );
+            setHideAll( false );
+        }
+        else if ( prot == "protected formula-hidden" )
+        {
+            setNotProtected( false );
+            setHideFormula( true );
+            setHideAll( false );
+        }
+        else if ( prot == "hidden-and-protected" )
+        {
+            setNotProtected( false );
+            setHideFormula( false );
+            setHideAll( true );
+        }
+        else if ( prot == "protected" )
+        {
+            setNotProtected( false );
+            setHideFormula( false );
+            setHideAll( false );
+        }
+        else if ( prot == "formula-hidden" )
+        {
+            setHideAll( false );
+            setHideFormula( true );
+            setNotProtected( true );
+        }
+        kdDebug(30518) << "Cell " << prot << endl;
+    }
+
+    if ( property.hasAttribute( "fo:padding-left" ) )
+        setIndent(  KoUnit::parseValue(property.attribute( "fo:padding-left" ) ) );
+
+    if ( property.hasAttribute( "fo:vertical-align" ) )
+    {
+        QString s = property.attribute( "fo:vertical-align" );
+        if ( s == "middle" )
+            setAlignY( KSpreadFormat::Middle );
+        else if ( s == "bottom" )
+            setAlignY( KSpreadFormat::Bottom );
+        else
+            setAlignY( KSpreadFormat::Top );
+    }
+
+    if ( property.hasAttribute( "fo:wrap-option" ) )
+    {
+        setMultiRow( true );
+
+        /* we do not support anything else yet
+           QString s = property.attribute( "fo:wrap-option" );
+           if ( s == "wrap" )
+           layout->setMultiRow( true );
+        */
+    }
+#if 0
+    if ( property.hasAttribute( "fo:border-bottom" ) )
+    {
+        loadBorder( property.attribute( "fo:border-bottom" ), Bottom );
+        // TODO: style:border-line-width-bottom if double!
+    }
+
+    if ( property.hasAttribute( "fo:border-right" ) )
+    {
+        loadBorder(  property.attribute( "fo:border-right" ), Right );
+        // TODO: style:border-line-width-right
+    }
+
+    if ( property.hasAttribute( "fo:border-top" ) )
+    {
+        loadBorder(  property.attribute( "fo:border-top" ), Top );
+        // TODO: style:border-line-width-top
+    }
+
+    if ( property.hasAttribute( "fo:border-left" ) )
+    {
+        loadBorder( property.attribute( "fo:border-left" ), Left );
+        // TODO: style:border-line-width-left
+    }
+
+    if ( property.hasAttribute( "fo:border" ) )
+    {
+        loadBorder( property.attribute( "fo:border" ), Border );
+        // TODO: style:border-line-width-left
+    }
+#endif
+    return true;
+}
+
+void KSpreadFormat::loadOasisBorder( const QString & borderDef/*, bPos pos*/ )
+{
+#if 0
+    if ( borderDef == "none" )
+    return;
+
+  int p = borderDef.find( ' ' );
+  if ( p < 0 )
+    return;
+
+  QPen pen;
+  QString w = borderDef.left( p );
+  pen.setWidth( (int) KoUnit::parseValue( w ) );
+
+
+  ++p;
+  int p2 = borderDef.find( ' ', p );
+  QString s = borderDef.mid( p, p2 - p );
+
+  kdDebug(30518) << "Borderstyle: " << s << endl;
+
+  if ( s == "solid" || s == "double" )
+    pen.setStyle( Qt::SolidLine );
+  else
+  {
+#if 0
+    // TODO: not supported by oocalc
+    pen.setStyle( Qt::DashLine );
+    pen.setStyle( Qt::DotLine );
+    pen.setStyle( Qt::DashDotLine );
+    pen.setStyle( Qt::DashDotDotLine );
+#endif
+    pen.setStyle( Qt::SolidLine ); //default.
+  }
+
+  ++p2;
+  p = borderDef.find( ' ', p2 );
+  if ( p == -1 )
+    p = borderDef.length();
+
+  pen.setColor( QColor( borderDef.right( p - p2 ) ) );
+
+  if ( pos == Left )
+    layout->setLeftBorderPen( pen );
+  else if ( pos == Top )
+    layout->setTopBorderPen( pen );
+  else if ( pos == Right )
+    layout->setRightBorderPen( pen );
+  else if ( pos == Bottom )
+    layout->setBottomBorderPen( pen );
+  else if ( pos == Border )
+  {
+    layout->setLeftBorderPen( pen );
+    layout->setTopBorderPen( pen );
+    layout->setRightBorderPen( pen );
+    layout->setBottomBorderPen( pen );
+  }
+  // TODO Diagonals not supported by oocalc
+#endif
+}
+
+
 /////////////
 //
 // Set methods

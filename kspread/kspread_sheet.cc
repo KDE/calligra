@@ -6347,7 +6347,7 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
                 kdDebug()<<"style row !!!!!!!!!!!!!!!!!!!!!!!!!!!!! :"<<str<<endl;
                 QDomElement *style = oasisStyles.styles()[str];
                 kdDebug()<<" style :"<<style<<endl;
-                loadRowFormat( rowElement, style, rowIndex );
+                loadRowFormat( rowElement, style, rowIndex, oasisStyles );
             }
             if( rowElement.tagName() == "table:table-row" )
             {
@@ -6424,10 +6424,12 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
     return true;
 }
 
-bool KSpreadSheet::loadRowFormat( const QDomElement& row, QDomElement * rowStyle, int &rowIndex )
+bool KSpreadSheet::loadRowFormat( const QDomElement& row, QDomElement * rowStyle, int &rowIndex,const KoOasisStyles& oasisStyles )
 {
     QDomNode rowNode = rowStyle->firstChild();
     double height = -1.0;
+    KSpreadFormat layout( this , doc()->styleManager()->defaultStyle() );
+
     while ( !rowNode.isNull() )
     {
         QDomElement property = rowNode.toElement();
@@ -6436,11 +6438,13 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, QDomElement * rowStyle
             if ( property.hasAttribute( "style:row-height" ) )
             {
                 kdDebug()<<" properties style:row-height!!!!!!!!!!!!!!!!!!\n";
-                QString sHeight = property.attribute( "style:row-height" );
                 height = KoUnit::parseValue( property.attribute( "style:row-height" ) , -1 );
-                kdDebug()<<"sHeight :"<<sHeight<<" height :"<<height<<endl;
+                kdDebug()<<" height :"<<height<<endl;
             }
+
         }
+        layout.loadOasisStyleProperties( property, oasisStyles );
+
         rowNode = rowNode.nextSibling();
     }
     int number = 1;
@@ -6469,7 +6473,7 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, QDomElement * rowStyle
     {
         kdDebug()<<" create non defaultrow format :"<<rowIndex<<endl;
         RowFormat * rowL = nonDefaultRowFormat( rowIndex );
-        rowL->copy( *m_defaultFormat );
+        rowL->copy( layout );
         kdDebug()<<"height :"<<height<<endl;
         if ( height != -1 )
         {
