@@ -17,6 +17,7 @@
 #include <qfile.h>
 
 #include "report.h"
+#include <kstatusbar.h>
 
 
 // The ctor.
