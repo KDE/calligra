@@ -85,9 +85,7 @@ void KChartParameterPieConfigPage::init()
     bool state=_params->threeDPies();
     depth->setEnabled(state);
     active3DPie(state);
-    if( state )	{
-        depth->setValue( _params->threeDPieHeight() );
-    }
+    depth->setValue( _params->threeDPieHeight() );
     drawShadowColor->setChecked(_params->threeDShadowColors());
     angle->setValue( _params->pieStart() );
 

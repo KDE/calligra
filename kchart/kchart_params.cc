@@ -31,6 +31,7 @@ KChartParams::KChartParams()
 {
     m_dcop = 0;
     //dcopObject(); // build it
+    setDrawSolidExcessArrows(true);
 }
 
 

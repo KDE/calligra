@@ -25,10 +25,13 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 #include <kprinter.h>
+#include <kstandarddirs.h>
+#include <ktempfile.h>
 #include <dcopobject.h>
 #include <kxmlguifactory.h>
 #include <qpaintdevicemetrics.h>
 
+#include <koTemplateCreateDia.h>
 
 using namespace std;
 
@@ -49,7 +52,9 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
         setXMLFile( "kchart_readonly.rc" );
     m_dcop = 0;
     dcopObject(); // build it
-
+    KAction * actionExtraCreateTemplate = new KAction( i18n( "&Create Template From Document..." ), 0,
+                                             this, SLOT( extraCreateTemplate() ),
+                                             actionCollection(), "extra_template" );
     m_wizard = new KAction( i18n("Customize with &Wizard..."),
                             "wizard", 0,
                             this, SLOT( wizard() ),
@@ -213,6 +218,8 @@ void KChartView::edit()
     if ( ed.exec() != QDialog::Accepted ) {
         return;
     }
+    if (!ed.modified())
+    return;
 
     // Get the data and legend back.
     ed.getData(dat);
@@ -360,7 +367,7 @@ void KChartView::pieChart()
 	KChartParams  *params = ((KChartPart*)koDocument())->params();
 
 	params->setChartType( KDChartParams::Pie );
-	params->setThreeDPies( true );
+    params->setThreeDPies(params->threeDBars());
 	params->setExplodeFactor( 0 );
 	params->setExplode( true );
 
@@ -397,7 +404,7 @@ void KChartView::barsChart()
 	params->setBarChartSubType( KDChartParams::BarNormal );
 
 	updateButton();
-	params->setThreeDBars( true );
+    params->setThreeDBars( params->threeDPies() );
 	repaint();
     }
     else
@@ -558,7 +565,8 @@ void KChartView::slotConfigPageLayout()
 
 void KChartView::setupPrinter( KPrinter &printer )
 {
-  printer.addDialogPage( new KChartPrinterDlg( 0, "KChart page" ) );
+  if ( !printer.previewOnly() )
+    printer.addDialogPage( new KChartPrinterDlg( 0, "KChart page" ) );
 }
 
 void KChartView::print(KPrinter &printer)
@@ -585,6 +593,26 @@ void KChartView::print(KPrinter &printer)
   KDChart::print(&painter,((KChartPart*)koDocument())->params(),((KChartPart*)koDocument())->data(),0, new QRect(0,0, width, height));
   painter.end();
 }
+
+void KChartView::extraCreateTemplate()
+{
+    int width = 60;
+    int height = 60;
+    QPixmap pix = koDocument()->generatePreview(QSize(width, height));
+
+    KTempFile tempFile( QString::null, ".chrt" );
+    tempFile.setAutoDelete(true);
+
+    koDocument()->saveNativeFormat( tempFile.name() );
+
+    KoTemplateCreateDia::createTemplate( "kchart_template", KChartFactory::global(),
+                                         tempFile.name(), pix, this );
+
+    KChartFactory::global()->dirs()->addResourceType("kchart_template",
+                                                    KStandardDirs::kde_default( "data" ) +
+                                                    "kchart/templates/");
+}
+
 
 }  //KChart namespace
 

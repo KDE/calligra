@@ -1,3 +1,12 @@
+2005-04-04  Fredrik Edemar  <f_edemar@linux.se>
+    * Add the "Create Template From Document" feature to the File menu.
+    * The activate-3D property is now the same for bar charts and pie charts so that it is possible to switch between those modes without loosing the setting (this is what the user expects IMHO).
+    * The height of the 3D effect for pie charts was not always set in the config dialog and this is fixed now.
+    * Bar chart mode: Do not show the flat arrows at the bottom of the lowest chart when dealing with negative numbers.
+    * KChartPart::initNullChart() will now generate an empty chart instead of a chart containing 1 cell with the value 0.
+    * KChartView::setupPrinter will not add the printing config page if it's only a preview.
+    * Not modifying anything in the data editor and pressing OK should not do anything.
+
 2005-04-03  Fredrik Edemar  <f_edemar@linux.se>
 	Changes in the data editor:
     * If the data table only has 1 cell which is empty, the whole chart will be parsed as empty. This makes it possible for the user to clear all data.

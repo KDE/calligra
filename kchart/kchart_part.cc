@@ -161,13 +161,7 @@ void KChartPart::initNullChart()
     // Fill cells with data if there is none.
     kdDebug(35001) << "Initialize null chart." << endl;
 
-    m_currentData.expand(1, 1);
-    m_currentData.setUsedRows( 1 );
-    m_currentData.setUsedCols( 1 );
-
-    KoChart::Value t( (double) 0 );
-    m_currentData.setCell(0, 0, t);
-
+    m_currentData.expand(0,0);
     // Fill column and row labels.
     m_colLabels << QString("");
     m_rowLabels << QString("");

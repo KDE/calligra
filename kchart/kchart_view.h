@@ -64,6 +64,7 @@ public slots:
     void  slotConfigSubTypeChart();
 
     void  slotConfigPageLayout();
+    void  extraCreateTemplate();
 
 protected:
     void          paintEvent( QPaintEvent* );
