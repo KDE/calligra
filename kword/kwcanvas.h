@@ -96,7 +96,7 @@ public:
     // Mouse move
     void mmEdit( int /*mx*/, int /*my*/ );  // mouse move in edit mode (with button pressed)
     void mmEditFrameResize( bool top, bool bottom, bool left, bool right );
-    void mmEditFrameMove( int & mx, int & my );
+    void mmEditFrameMove( int mx, int my );
     void mmCreate( int mx, int my );
     // Mouse release
     void mrEditFrame();
@@ -206,10 +206,11 @@ private:
 
     // Frame stuff
     MouseMode m_mouseMode;
-    QRect m_resizedFrameInitialSize;
-    QRect m_insRect;
-    int oldMx, oldMy;
-    bool deleteMovingRect, frameMoved,  frameResized;
+    QRect m_resizedFrameInitialSize; // when resizing a frame
+    QRect m_insRect;  // when creating a new frame
+    QRect m_boundingRect; // when moving frame(s)
+    QPoint m_hotSpot; // when moving frame(s)
+    bool deleteMovingRect, frameMoved, frameResized;
     QString m_PixmapName; // when inserting a pixmap
     KoDocumentEntry m_partEntry; // when inserting a part
 

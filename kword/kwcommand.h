@@ -242,8 +242,7 @@ public:
 
     void execute();
     void unexecute();
-    QList<FrameResizeStruct> getListFrameMoved() {return m_frameMove;}
-    void setListFrameMoved(QList<FrameResizeStruct>_listMove) {m_frameMove=_listMove;}
+    QList<FrameResizeStruct> & listFrameMoved() { return m_frameMove; }
 protected:
     QList<FrameIndex> m_IndexFrame;
     QList<FrameResizeStruct> m_frameMove;

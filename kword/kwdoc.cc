@@ -2338,9 +2338,9 @@ int KWDocument::getPageOfRect( QRect & _rect ) const
 bool KWDocument::isOutOfPage( QRect & r, int page ) const
 {
     return r.x() < 0 ||
-        r.right() > static_cast<int>( ptPaperWidth() ) ||
-        r.y() < page * static_cast<int>( ptPaperHeight() ) ||
-        r.bottom() > ( page + 1 ) * static_cast<int>( ptPaperHeight() );
+        r.right() > ptPaperWidth() ||
+        r.y() < page * ptPaperHeight() ||
+        r.bottom() > ( page + 1 ) * ptPaperHeight();
 }
 
 bool KWDocument::selection() {
