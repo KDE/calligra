@@ -10,6 +10,7 @@
 
 #include <qlabel.h>
 #include <qlineedit.h>
+#include <qpopupmenu.h>
 
 #include <kiconloader.h>
 #include <kgenericfactory.h>
@@ -52,7 +53,7 @@ StdWidgetFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 
 	if(c == "QLabel")
 	{
-		QWidget *w = new QLabel("Label", p, "textlabel");
+		QWidget *w = new QLabel("Label", p, n);
 		w->installEventFilter(container);
 
 		return w;
@@ -60,12 +61,29 @@ StdWidgetFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 	else if(c == "QLineEdit")
 	{
 		QWidget *w = new QLineEdit(p, n);
+		((QLineEdit *)w)->setReadOnly(true);
 		w->installEventFilter(container);
-
 		return w;
 	}
 
 	return 0;
+}
+
+
+void
+StdWidgetFactory::createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container)
+{
+	if(classname == "QLabel")
+	{
+	menu->insertItem(i18n("Change text"), this, SLOT(chText()) );
+	return;
+	}
+	else if(classname == "QLineEdit")
+	{
+	menu->insertItem(i18n("Change text"), this, SLOT(chText()) );
+	return;
+	}
+	return;
 }
 
 StdWidgetFactory::~StdWidgetFactory()

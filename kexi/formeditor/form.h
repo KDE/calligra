@@ -90,6 +90,13 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		 * @returns a list of actions assisiated with this form
 		 */
 		Actions			createActions(KActionCollection *parent);
+		
+		QWidget*		selectedWidget()  {return m_selWidget;}
+		void			setSelectedWidget(QWidget *w)  { m_selWidget = w;}
+		
+		void			preparePaste(QWidget*w, bool cut)  {m_copiedw = w; m_cut=cut; }
+		QWidget*		copiedWidget()  {return m_copiedw;}
+		bool			isCutting() { return m_cut;}
 
 
 	public slots:
@@ -99,6 +106,10 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		Container		*m_toplevel;
 		WidgetLibrary		*m_widgetLib;
 		ObjectTree		*m_topTree;
+		QWidget			*m_selWidget;
+		
+		QWidget 		*m_copiedw;
+		bool			m_cut;
 };
 
 }

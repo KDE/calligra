@@ -18,6 +18,7 @@
 */
 #include <iostream>
 #include <kdebug.h>
+#include <qwidget.h>
 
 #include "objecttree.h"
 
@@ -25,29 +26,43 @@
 namespace KFormDesigner
 {
 
-ObjectTreeItem::ObjectTreeItem(const QString &classn, const QString &name)
+/////////////////////////////////////////////////////////////////////////////////////////
+/////////////////        ObjectTreeItem                                    /////////////
+////////////////////////////////////////////////////////////////////////////////////////
+
+
+ObjectTreeItem::ObjectTreeItem(const QString &classn, const QString &name, QWidget *widget)
 {
 	m_className = classn;
 	m_name = name;
+	m_widget = widget;
 }
 
 bool
-ObjectTreeItem::rename(const QString &/*name*/)
+ObjectTreeItem::rename(const QString &name)
 {
-	//do something useful (e.g. update the list etc)
+	m_widget->setName(name.latin1());
+	m_name = name;
+
 	return true;
 }
 
 ObjectTreeItem::~ObjectTreeItem()
 {
-	// delete all children...
-	// take me out of the dict... :)
+	kdDebug() << "ObjectTreeItem deleted: " << this->name() << endl;
+	m_parent->remChild(this);
 }
 
 void
 ObjectTreeItem::addChild(ObjectTreeItem *c)
 {
 	m_children.append(c);
+}
+
+void
+ObjectTreeItem::remChild(ObjectTreeItem *c)
+{
+	m_children.remove(c);
 }
 
 void
@@ -58,23 +73,9 @@ ObjectTreeItem::debug(int ident)
 		for(int i=0; i < ident; i++)
 			std::cerr << " ";
 
-		qDebug("%s (%s)", it->className().latin1(), it->name().latin1());
+		qDebug("%s (%s): %s", it->className().latin1(), it->name().latin1(), it->parent()->name().latin1() );
 		it->debug(ident + 4);
 	}
-}
-
-/* object tree */
-
-ObjectTree::ObjectTree(const QString &classn, const QString &name)
- : ObjectTreeItem(classn, name)
-{
-}
-
-bool
-ObjectTree::rename(const QString &name)
-{
-	//do something useful (e.g. update the list etc)
-	return true;
 }
 
 ObjectTreeItem*
@@ -82,6 +83,31 @@ ObjectTree::lookup(const QString &name)
 {
 	return m_treeDict[name];
 }
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////
+///                      ObjectTree                                             /////////
+////////////////////////////////////////////////////////////////////////////////////////
+
+ObjectTree::ObjectTree(const QString &classn, const QString &name, QWidget *widget)
+ : ObjectTreeItem(classn, name, widget)
+{
+}
+
+bool
+ObjectTree::rename(const QString &oldname, const QString &newname)
+{
+	ObjectTreeItem *it = lookup(oldname);
+	if(!it->rename(newname))  { return false;}
+	m_treeDict.remove(oldname);
+	m_treeDict.insert(newname, it);
+
+	return true;
+}
+
+
 
 void
 ObjectTree::addChild(ObjectTreeItem *parent, ObjectTreeItem *c)
@@ -96,6 +122,7 @@ ObjectTree::addChild(ObjectTreeItem *parent, ObjectTreeItem *c)
 	else
 	{
 		parent->addChild(c);
+		c->setParent(parent);
 	}
 	kdDebug() << "ObjectTree::addChild(): adding " << c->name() << " to " << parent->name() << endl;
 }

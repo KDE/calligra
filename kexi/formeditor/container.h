@@ -86,7 +86,9 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		 */
 		ObjectTreeItem	*tree();
 
-		void		emitPrepareInsert(WidgetLibrary *, const QString &);
+		void		emitPrepareInsert( const QString &);
+//		void		emitPreparePaste();
+//		void		emitPreparePaste(QWidget *w, bool cut);
 
 		/**
 		 * registers a sub-container and adds it to the widget tree
@@ -119,7 +121,9 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		 * prepares it self to for insertation (listen to click and mousemove eventFilter
 		 * and resend a signal if we are toplevel.
 		 */
-		void		slotPrepareInsert(WidgetLibrary *, const QString &);
+		void		slotPrepareInsert( const QString &);
+		
+//		void		slotPreparePaste(QWidget *w, bool cut);
 
 		/**
 		 * resets the ui canges, e.g. showing a position-pointer made for widgetinserting
@@ -132,15 +136,17 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		 */
 		QWidget		*widget() { return m_container; }
 
-		void		setForm(Form *form) { m_form = form; }
+		void		setForm(Form *form);
 
 		/**
 		 * @returns the form this container belongs to
 		 */
 		Form		*form();
 
-	public slots:
 		void		deleteItem();
+		void		copyWidget();
+		void		cutWidget();
+		void		pasteWidget();
 
 	protected slots:
 		/**
@@ -151,7 +157,8 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		void		widgetDeleted();
 
 	signals:
-		void		prepareInsert(WidgetLibrary *, const QString &);
+		void		prepareInsert( const QString &);
+//		void		preparePaste(QWidget *,bool);
 		void		insertStop();
 
 	protected:
@@ -187,7 +194,11 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		WidgetLibrary	*m_lib;
 		QString		m_insertClass;
 		ObjectTreeItem	*m_tree;
-
+		
+		//Copy/Paste
+	//	QWidget		*m_copiedw;
+	//	bool		m_cut;
+		
 		Form		*m_form;
 };
 

@@ -19,7 +19,7 @@
 #include <klocale.h>
 
 static const char *description =
-    I18N_NOOP("A KDE Application");
+    I18N_NOOP("KFormDesigner");
 
 static const char *version = "0.1";
 
@@ -34,6 +34,7 @@ int main(int argc, char **argv)
     KAboutData about("kformdesigner", I18N_NOOP("KFormDesigner"), version, description,
                      KAboutData::License_LGPL, "(C) 2003 Lucijan Busch", 0, 0, "lucijan@kde.org");
     about.addAuthor( "Lucijan Busch", 0, "lucijan@kde.org" );
+    about.addAuthor( "Cedric Pasteur", 0, "cedric.pasteur@free.fr");
     KCmdLineArgs::init(argc, argv, &about);
     KCmdLineArgs::addCmdLineOptions(options);
     KApplication app;

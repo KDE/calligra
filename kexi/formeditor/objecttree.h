@@ -42,37 +42,47 @@ typedef QMap<QString, int> Names;
  **/
 class KFORMEDITOR_EXPORT ObjectTreeItem
 {
+	
 	public:
-		ObjectTreeItem(const QString &className, const QString &name);
+		ObjectTreeItem(const QString &className, const QString &name, QWidget *widget);
 		virtual ~ObjectTreeItem();
-
-		ObjectTreeC	children() { return m_children; }
-		PropertyMap	properties() { return m_properties; }
-		virtual bool	rename(const QString &name);
 
 		QString		name() const { return m_name; }
 		QString		className() const { return m_className; }
+		QWidget*	widget() const { return m_widget; }
+		ObjectTreeItem* parent() const { return m_parent; }
+		ObjectTreeC	children() { return m_children; }
+		PropertyMap	properties() { return m_properties; }
+		
+		void		setWidget(QWidget *w) { m_widget = w; }
+		void 		setParent(ObjectTreeItem *parent)  { m_parent = parent;}
+
 		void		debug(int ident);
+		virtual bool	rename(const QString &name);
 
 		virtual void	addChild(ObjectTreeItem *it);
+		void 		remChild(ObjectTreeItem *it);
 
 	private:
 		QString		m_className;
 		QString		m_name;
 		ObjectTreeC	m_children;
 		PropertyMap	m_properties;
+		ObjectTreeItem* m_parent;
+		QWidget*	m_widget;
 };
 
 class KFORMEDITOR_EXPORT ObjectTree : public ObjectTreeItem
 {
+	
 	public:
-		ObjectTree(const QString &className=QString::null, const QString &name=QString::null);
+		ObjectTree(const QString &className=QString::null, const QString &name=QString::null, QWidget *widget = 0);
 		virtual ~ObjectTree();
 
 		/**
 		 * renames a item and returns false if name is doublicated
 		 */
-		virtual bool	rename(const QString &name);
+		virtual bool	rename(const QString &oldname, const QString &newname );
 
 		ObjectTreeItem	*lookup(const QString &name);
 		TreeDict	*dict() { return &m_treeDict; }

@@ -23,12 +23,14 @@
 #include <qobject.h>
 #include <qdict.h>
 #include <qptrlist.h>
+#include <qpopupmenu.h>
 
 class KActionCollection;
 
 class QRegExp;
 class KAction;
 class QWidget;
+
 
 namespace KFormDesigner {
 /**
@@ -91,6 +93,8 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 		 * @returns the widget or 0 if something falid
 		 */
 		QWidget	*createWidget(const QString &w, QWidget *parent, const char *name, Container *c);
+		
+		void	createMenuActions(const QString &c, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container);
 
 	signals:
 		void	prepareInsert(const QString &c);

@@ -39,13 +39,13 @@ KFMView::KFMView()
 	w->show();
 
 	m_form = new KFormDesigner::Form(this, "", l);
-	QWidget *formV = new QWidget(w, "form1");
+	QWidget *formV = new QWidget(w, "forms1");
 	m_form->createToplevel(formV);
 	formV->setCaption("Form1");
 	formV->show();
 	formV->resize(350, 300);
 
-	QTabWidget *tab = new QTabWidget(formV, "tabwidget1");
+/*	QTabWidget *tab = new QTabWidget(formV, "tabwidget1");
 	KFormDesigner::ObjectTree *ttab = new KFormDesigner::ObjectTree(tab->className(), tab->name());
 	m_form->objectTree()->addChild(ttab);
 
@@ -63,7 +63,7 @@ KFMView::KFMView()
 	pc2->setObjectTree(tt2);
 	m_form->objectTree()->addChild(ttab, tt2);
 	tab->addTab(tabcontainer2, "Page 2");
-
+*/
 	new KAction(i18n("Print object tree"), "view_tree", KShortcut(0), this, SLOT(debugTree()), actionCollection(), "dtree");
 
 	m_form->createActions(actionCollection());

@@ -18,6 +18,7 @@
 */
 
 #include <qwidget.h>
+#include <qtabwidget.h>
 
 #include <kdebug.h>
 
@@ -35,7 +36,8 @@ Form::Form(QObject *parent, const char *name, WidgetLibrary *lib)
 		m_widgetLib = lib;
 
 	m_toplevel = 0;
-	m_topTree = new ObjectTree("QWidget", "main");
+	m_selWidget = 0;
+	m_topTree = new ObjectTree("QWidget", "main", 0);
 }
 
 void
@@ -46,6 +48,8 @@ Form::createToplevel(QWidget *container)
 	m_toplevel = new Container(0, container, this, "form1");
 	m_toplevel->setObjectTree(m_topTree);
 	m_toplevel->setForm(this);
+	
+	m_topTree->setWidget(container);
 
 	connect(m_widgetLib, SIGNAL(prepareInsert(const QString&)), this,
 	 SLOT(insertWidget(const QString&)));
@@ -62,7 +66,7 @@ Form::insertWidget(const QString &c)
 {
 	kdDebug() << "Form::insertWidget()" << endl;
 	if(m_toplevel)
-		m_toplevel->emitPrepareInsert(m_widgetLib, c);
+		m_toplevel->emitPrepareInsert( c);
 }
 
 QWidget*
@@ -83,7 +87,7 @@ Form::createEmptyInstance(const QString &c, QWidget *parent)
 	kdDebug() << "Form::createEmptyInstance() m=" << m << endl;
 	createToplevel(m);
 
-	m_topTree = new ObjectTree(c, m->name());
+	m_topTree = new ObjectTree(c, m->name(), m);
 	m_toplevel->setObjectTree(m_topTree);
 	return m;
 }
@@ -93,7 +97,6 @@ Form::createActions(KActionCollection *parent)
 {
 	return m_widgetLib->createActions(parent, this, SLOT(insertWidget(const QString &)));
 }
-
 
 Form::~Form()
 {

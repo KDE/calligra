@@ -138,6 +138,19 @@ WidgetLibrary::createWidget(const QString &w, QWidget *parent, const char *name,
 	return wfactory->factory()->create(w, parent, name, c);
 }
 
+void
+WidgetLibrary::createMenuActions(const QString &c, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container)
+{
+	Widget *wfactory = m_widgets[c];
+	if(!wfactory)
+		return ;
+
+	wfactory->factory()->createMenuActions(c, w, menu, container);
+	return;
+}
+
+
+
 WidgetLibrary::~WidgetLibrary()
 {
 }

@@ -24,10 +24,12 @@
 #include <qobject.h>
 #include <qptrlist.h>
 #include <qpixmap.h>
+#include <qpopupmenu.h>
 
 // class QPixmap;
 
 class QWidget;
+
 namespace KFormDesigner {
 
 
@@ -41,7 +43,7 @@ class KFORMEDITOR_EXPORT Widget
 {
 	public:
 		Widget(WidgetFactory *f=0) {m_factory = f; }
-		virtual ~Widget() {; }
+		virtual ~Widget() { }
 
 		/**
 		 * returns a pixmap associated with the widget
@@ -112,6 +114,8 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		 */
 		virtual QWidget*	create(const QString &classname, QWidget *parent, const char *name,
 					 KFormDesigner::Container *container)=0;
+					 
+		virtual void		createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container)=0;
 };
 
 }
