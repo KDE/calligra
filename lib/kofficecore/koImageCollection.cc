@@ -90,7 +90,7 @@ KoImage KoImageCollection::loadImage( const QString &fileName )
 void KoImageCollection::saveToStore( KoStore *store, QValueList<KoImageKey> keys, const QString & prefix ) const
 {
     int i = 0;
-    QValueList<KoImageKey>::Iterator it = keys.begin();
+    QValueList<KoImageKey>::ConstIterator it = keys.begin();
     for ( ; it != keys.end(); ++it )
     {
         KoImage image = findImage( *it );
@@ -159,6 +159,10 @@ KoImageCollection::readXML( QDomElement &pixmapsElem, const QDateTime & defaultD
             KoImageKey key;
             key.loadAttributes( keyElement, defaultDateTime.date(), defaultDateTime.time() );
             QString n = keyElement.attribute( "name" );
+#ifndef NDEBUG
+            if ( map.contains( key ) )
+                kdWarning(30003) << "Duplicate pixmap key " << key.toString() << endl;
+#endif
             map.insert( key, n );
         }
         keyElement = keyElement.nextSibling().toElement();
