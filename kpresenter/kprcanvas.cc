@@ -4512,7 +4512,16 @@ KPTextObject* KPrCanvas::kpTxtObj() const
 
 void KPrCanvas::copyOasisObjs()
 {
-    //todo
+    //todo copy object from selected object
+    KoStoreDrag *kd = new KoStoreDrag( "application/vnd.oasis.openoffice.presentation", 0L );
+    QDragObject* dragObject = kd;
+    QByteArray arr;
+    QBuffer buffer(arr);
+    KoStore* store = KoStore::createStore( &buffer, KoStore::Write, "application/vnd.oasis.openoffice.presentation" );
+
+    delete store;
+    kd->setEncodedData( arr );
+    QApplication::clipboard()->setData( dragObject, QClipboard::Clipboard );
 }
 
 void KPrCanvas::copyObjs()

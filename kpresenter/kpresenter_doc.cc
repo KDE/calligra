@@ -956,7 +956,7 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
 
     contentTmpWriter.startElement( "office:body" );
-	contentTmpWriter.startElement( "office:presentation" );
+    contentTmpWriter.startElement( "office:presentation" );
 
     int indexObj = 1;
     int partIndexObj = 0;
@@ -975,11 +975,14 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     }
     if ( !_duplicatePage )
         m_masterPage->saveOasisStickyPage( store, stickyTmpWriter , savingContext, indexObj,partIndexObj, manifestWriter );
-    saveOasisHeaderFooter( stickyTmpWriter , savingContext );
 
+    if ( saveOnlyPage == -1 ) //don't save setting when we save on page
+    {
+        saveOasisHeaderFooter( stickyTmpWriter , savingContext );
+        saveOasisPresentationSettings( contentTmpWriter );
+    }
 
-    saveOasisPresentationSettings( contentTmpWriter );
-	contentTmpWriter.endElement(); //office:presentation
+    contentTmpWriter.endElement(); //office:presentation
     contentTmpWriter.endElement(); //office:body
 
     writeAutomaticStyles( contentWriter, mainStyles );
