@@ -35,10 +35,10 @@ VStarTool::VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* pa
 {
 	// add width/height-input:
 	m_outerRLabel = new QLabel( i18n( "Outer radius:" ), this );
-	m_outerR = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 100.0, KoUnit::U_MM );
+	m_outerR = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 50.0, KoUnit::U_MM );
 
 	m_innerRLabel = new QLabel( i18n( "Inner radius:" ), this );
-	m_innerR = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 50.0, KoUnit::U_MM );
+	m_innerR = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 25.0, KoUnit::U_MM );
 
 	refreshUnit();
 
@@ -120,8 +120,8 @@ VStarTool::shape( bool interactive ) const
 			new VStar(
 				0L,
 				m_p,
-				m_optionsWidget->outerRadius(),
-				m_optionsWidget->innerRadius(),
+				KoUnit::ptFromUnit( m_optionsWidget->outerRadius(), view()->part()->unit() ),
+				KoUnit::ptFromUnit( m_optionsWidget->innerRadius(), view()->part()->unit() ),
 				m_optionsWidget->edges() );
 	}
 	else

@@ -103,8 +103,8 @@ VEllipseTool::shape( bool interactive ) const
 			new VEllipse(
 				0L,
 				m_p,
-				m_optionsWidget->width(),
-				m_optionsWidget->height() );
+				KoUnit::ptFromUnit( m_optionsWidget->width(), view()->part()->unit() ),
+				KoUnit::ptFromUnit( m_optionsWidget->height(), view()->part()->unit() ) );
 	}
 	else
 		return

@@ -35,7 +35,7 @@ VSpiralTool::VSpiralOptionsWidget::VSpiralOptionsWidget( KarbonPart *part, QWidg
 	: QGroupBox( 2, Qt::Horizontal, 0L, parent, name ), m_part( part )
 {
 	new QLabel( i18n( "Radius:" ), this );
-	m_radius = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
+	m_radius = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 50.0, KoUnit::U_MM );
 	refreshUnit();
 	new QLabel( i18n( "Segments:" ), this );
 	m_segments = new KIntSpinBox( this );
@@ -112,7 +112,6 @@ VSpiralTool::VSpiralTool( KarbonView* view )
 {
 	// create config dialog:
 	m_optionsWidget = new VSpiralOptionsWidget( view->part() );
-	m_optionsWidget->setRadius( 100.0 );
 	m_optionsWidget->setSegments( 8 );
 	m_optionsWidget->setFade( 0.8 );
 	m_optionsWidget->setClockwise( true );
@@ -138,7 +137,7 @@ VSpiralTool::shape( bool interactive ) const
 			new VSpiral(
 				0L,
 				m_p,
-				m_optionsWidget->radius(),
+				KoUnit::ptFromUnit( m_optionsWidget->radius(), view()->part()->unit() ),
 				m_optionsWidget->segments(),
 				m_optionsWidget->fade(),
 				m_optionsWidget->clockwise(),

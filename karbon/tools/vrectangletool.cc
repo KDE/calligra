@@ -35,10 +35,10 @@ VRectangleTool::VRectangleOptionsWidget::VRectangleOptionsWidget( KarbonPart*par
 {
 	// add width/height-input:
 	m_widthLabel = new QLabel( i18n( "Width:" ), this );
-	m_width = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
+	m_width = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 100.0, KoUnit::U_MM );
 
 	m_heightLabel = new QLabel( i18n( "Height:" ), this );
-	m_height = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5 );
+	m_height = new KoUnitDoubleSpinBox( this, 0.0, 1000.0, 0.5, 100.0, KoUnit::U_MM );
 
 	refreshUnit();
 
@@ -82,8 +82,6 @@ VRectangleTool::VRectangleTool( KarbonView* view )
 {
 	// Create config dialog:
 	m_optionsWidget = new VRectangleOptionsWidget( view->part() );
-	m_optionsWidget->setWidth( 100.0 );
-	m_optionsWidget->setHeight( 100.0 );
 }
 
 VRectangleTool::~VRectangleTool()
@@ -106,8 +104,8 @@ VRectangleTool::shape( bool interactive ) const
 			new VRectangle(
 				0L,
 				m_p,
-				m_optionsWidget->width(),
-				m_optionsWidget->height() );
+				KoUnit::ptFromUnit( m_optionsWidget->width(), view()->part()->unit() ),
+				KoUnit::ptFromUnit( m_optionsWidget->height(), view()->part()->unit() ) );
 	}
 	else
 		return
