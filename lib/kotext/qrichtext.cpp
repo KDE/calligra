@@ -284,6 +284,8 @@ QTextCursor *QTextFormatCommand::execute( QTextCursor *c )
     doc->setSelectionEnd( QTextDocument::Temp, &end );
     doc->setFormat( QTextDocument::Temp, format, flags );
     doc->removeSelection( QTextDocument::Temp );
+    if ( endIndex == ep->length() )
+        end.gotoLeft();
     *c = end;
     return c;
 }
@@ -332,6 +334,8 @@ QTextCursor *QTextFormatCommand::unexecute( QTextCursor *c )
     QTextCursor end( doc );
     end.setParag( ep );
     end.setIndex( endIndex );
+    if ( endIndex == ep->length() )
+        end.gotoLeft();
     *c = end;
     return c;
 }
