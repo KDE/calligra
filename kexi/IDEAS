@@ -1,9 +1,0 @@
-a int/float table-editor
-	look at:
-	KGlobal->locale() ...
-
-if there will ever be a scripting interface read:
-	perldoc perlembedd
-
-for KexiDoc
-	take a look at kofficecore/KoDocument
