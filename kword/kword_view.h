@@ -38,7 +38,7 @@ class KWPaintWindow;
 #include <qfont.h>
 #include <qmessagebox.h>
 
-#include <kruler.h>
+#include <koRuler.h>
 #include <kcolordlg.h>
 
 #include "kword.h"
@@ -152,6 +152,9 @@ public slots:
   void slotGeometryEnd(PartFrame_impl*);
   void slotMoveEnd(PartFrame_impl*);
   void paragDiaOk();
+  void openPageLayoutDia()
+    { formatPage(); }
+  void newPageLayout(KoPageLayout _layout);
   
 protected:
   virtual void cleanUp();
@@ -321,7 +324,7 @@ protected:
   int xOffset,yOffset;
   bool _show;
   QScrollBar *s_vert,*s_horz;
-  KRuler *r_vert,*r_horz; 
+  KoRuler *r_vert,*r_horz; 
   KWPage *paperWidget;
   KWordDocument_impl *doc;
   KWordView_impl *view;

@@ -537,6 +537,8 @@ void Page::mouseMoveEvent(QMouseEvent *e)
 {
   if (editMode)
     {
+      view->setRulerMousePos(e->x(),e->y());
+
       KPObject *kpobject;
       
       if (!mousePressed || (!drawRubber && modType == MT_NONE))

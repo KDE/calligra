@@ -1064,6 +1064,16 @@ void KWordView_impl::paragDiaOk()
 }
 
 /*================================================================*/
+void KWordView_impl::newPageLayout(KoPageLayout _layout)
+{
+  KoPageLayout pgLayout;
+  KoColumns cl;
+  m_pKWordDoc->getPageLayout(pgLayout,cl);
+
+  m_pKWordDoc->setPageLayout(_layout,cl);
+}
+
+/*================================================================*/
 void KWordView_impl::setMode(OPParts::Part::Mode _mode)
 {
   Part_impl::setMode(_mode);
@@ -1119,15 +1129,14 @@ KWordGUI::KWordGUI(QWidget *parent,bool __show,KWordDocument_impl *_doc,KWordVie
   s_horz->hide();
   s_vert->hide();
 
-  r_horz = new KRuler(KRuler::horizontal,this);
-  r_horz->setRange(0,1000);
-  r_horz->setOffset(0);
-  r_horz->setRulerStyle(KRuler::millimetres);
+  KoPageLayout layout;
+  KoColumns cols;
+  doc->getPageLayout(layout,cols);
 
-  r_vert = new KRuler(KRuler::vertical,this);
-  r_vert->setOffset(0);
-  r_vert->setRange(0,1000);
-  r_vert->setRulerStyle(KRuler::millimetres);
+  r_horz = new KoRuler(this,paperWidget,KoRuler::HORIZONTAL,layout,0);
+  r_vert = new KoRuler(this,paperWidget,KoRuler::VERTICAL,layout,0);
+  connect(r_horz,SIGNAL(newPageLayout(KoPageLayout)),view,SLOT(newPageLayout(KoPageLayout)));
+  connect(r_horz,SIGNAL(openPageLayoutDia()),view,SLOT(openPageLayoutDia()));
 
   r_horz->hide();
   r_vert->hide();

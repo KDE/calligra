@@ -99,3 +99,7 @@ Reggie, 20.9.1998:
 - Fixed some bugs in cursor navigation
 - Fixed a bug in Key_Backspace
 - Automatically recalc/update of the cursor, if a new page/paragraph layout is set 
+
+Reggie, 21.9.1998:
+------------------
+- Using new interactive KoRuler (which I started writing today) instead of KRuler. 

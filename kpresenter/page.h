@@ -137,6 +137,10 @@ protected:
   int getObjectAt(int x,int y); 
   void focusInEvent(QFocusEvent*) {}
   void focusOutEvent(QFocusEvent*) {}
+  void enterEvent(QEvent *e)
+    { view->setRulerMousePos(((QMouseEvent*)e)->x(),((QMouseEvent*)e)->y()); view->setRulerMouseShow(true); }
+  void leaveEvent(QEvent *e)
+    { view->setRulerMouseShow(false); }
 
   // setup popupmenus
   void setupMenus();

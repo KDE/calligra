@@ -57,6 +57,7 @@ class Page;
 #include <koAboutDia.h>
 #include <koPageLayoutDia.h>
 #include <kfontdialog.h>
+#include <koRuler.h>
 
 #include "kpresenter.h"
 #include "kpresenter_doc.h"
@@ -273,6 +274,11 @@ public:
 
   void presColorChanged();
 
+  void setRulerMouseShow(bool _show)
+    { v_ruler->showMousePos(_show); h_ruler->showMousePos(_show); } 
+  void setRulerMousePos(int mx,int my)
+    { v_ruler->setMousePos(mx,my); h_ruler->setMousePos(mx,my); } 
+
 public slots:
 
   // Document signals
@@ -348,6 +354,12 @@ protected slots:
   void extraAlignObjBottom()
     { extraAlignObjBottomidl(); }
 
+  // layout
+  void newPageLayout(KoPageLayout _layout);
+  void openPageLayoutDia()
+    { extraLayout(); }
+
+
 protected:
 
   // ********* functions ***********
@@ -365,6 +377,7 @@ protected:
   void setupScreenToolbar();
   void setupScrollbars();
   void setupAccelerators();
+  void setupRulers();
 
   // set scrollbar ranges
   void setRanges();
@@ -587,6 +600,7 @@ protected:
 
   // the page
   Page *page;
+  KoRuler *h_ruler,*v_ruler;
 
   // text toolbar values
   QFont tbFont;

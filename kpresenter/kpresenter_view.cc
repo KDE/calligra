@@ -527,7 +527,10 @@ void KPresenterView_impl::extraLayout()
   KoHeadFoot hf;
   
   if (KoPageLayoutDia::pageLayout(pgLayout,hf,FORMAT_AND_BORDERS)) 
-    m_pKPresenterDoc->setPageLayout(pgLayout,xOffset,yOffset);
+    {
+      m_pKPresenterDoc->setPageLayout(pgLayout,xOffset,yOffset);
+      h_ruler->setPageLayout(pgLayout);
+    }
 
   setRanges();
 }
@@ -1090,6 +1093,13 @@ void KPresenterView_impl::extraAlignObjBottomidl()
   KPresenterDoc()->alignObjsBottom();
 }
 
+/*===============================================================*/
+void KPresenterView_impl::newPageLayout(KoPageLayout _layout)
+{
+  m_pKPresenterDoc->setPageLayout(_layout,xOffset,yOffset);
+  setRanges();
+}
+
 /*======================= set document ==========================*/
 void KPresenterView_impl::setDocument(KPresenterDocument_impl *_doc)
 {
@@ -1132,6 +1142,7 @@ void KPresenterView_impl::createGUI()
   setupScrollbars();
   setRanges();
   setupAccelerators();
+  setupRulers();
   m_rMenuBar->setItemChecked(m_idMenuExtra_TAlign_Left,true);
   m_rMenuBar->setItemChecked(m_idMenuScreen_PenW3,true);
  
@@ -2102,15 +2113,22 @@ void KPresenterView_impl::resizeEvent(QResizeEvent *e)
     { 
       horz->show();
       vert->show();
-      page->resize(widget()->width()-16,widget()->height()-16);
-      vert->setGeometry(widget()->width()-16,0,16,widget()->height()-16);
-      horz->setGeometry(0,widget()->height()-16,widget()->width()-16,16);
+      h_ruler->show();
+      v_ruler->show();
+      page->resize(widget()->width() - 36,widget()->height() - 36);
+      page->move(20,20);
+      vert->setGeometry(widget()->width() - 16,0,16,widget()->height() - 16);
+      horz->setGeometry(0,widget()->height() - 16,widget()->width() - 16,16);
+      h_ruler->setGeometry(20,0,page->width(),20);
+      v_ruler->setGeometry(0,20,20,page->height());
       setRanges();
     }
   else
     {
       horz->hide();
       vert->hide();
+      h_ruler->hide();
+      v_ruler->hide();
       page->resize(widget()->width(),widget()->height());
     }  
 }
@@ -3213,6 +3231,20 @@ void KPresenterView_impl::setupAccelerators()
 
   // help menu
   m_rMenuBar->setAccel(CTRL + Key_H,m_idMenuHelp_Contents);
+}
+
+/*==============================================================*/
+void KPresenterView_impl::setupRulers()
+{
+  h_ruler = new KoRuler(this,page,KoRuler::HORIZONTAL,KPresenterDoc()->pageLayout(),0);
+  v_ruler = new KoRuler(this,page,KoRuler::VERTICAL,KPresenterDoc()->pageLayout(),0);
+  page->resize(page->width() - 20,page->height() - 20);
+  page->move(20,20);
+  h_ruler->setGeometry(20,0,page->width(),20);
+  v_ruler->setGeometry(0,20,20,page->height());
+
+  QObject::connect(h_ruler,SIGNAL(newPageLayout(KoPageLayout)),this,SLOT(newPageLayout(KoPageLayout)));
+  QObject::connect(h_ruler,SIGNAL(openPageLayoutDia()),this,SLOT(openPageLayoutDia()));
 }
 
 /*===================== set ranges of scrollbars ===============*/
