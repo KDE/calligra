@@ -71,7 +71,7 @@ AC_HELP_STRING([--enable-pgsql],[build PostgreSQL-plugin [default=yes]]),
  pgsql_plugin=$enableval, pgsql_plugin=yes)
 
 dnl ========================================
-dnl Libpq header/library direcrories
+dnl Libpq header/library directories
 dnl ========================================
 
 AC_ARG_WITH(pgsqlincdir,
@@ -89,7 +89,7 @@ AC_HELP_STRING([  --with-pgsqllibdir=DIR],[use PostgreSQL(libpq)-libraries insta
 )
 
 dnl ========================================
-dnl Libpqxx header/library direcrories
+dnl Libpqxx header/library directories
 dnl ========================================
 
 AC_ARG_WITH(pqxxsincdir,
@@ -177,7 +177,7 @@ if test "$compile_pgsql_plugin" = "yes"; then
   AC_FIND_FILE(libpqxx.so, $pqxx_libdirs, pqxx_libdir)
   if test ! -r $pqxx_libdir/libpqxx.so; then
     compile_pgsql_plugin="no"
-     AC_MSG_CHECKING("Could not find the libpqxx LIBRARY files.  You must install the libpqxx LIBRARY files to be able to use the kexi postgresql driver ")
+     AC_MSG_CHECKING("Could not find the libpqxx LIBRARY files.  You must install shared libpqxx LIBRARY files to be able to use the kexi postgresql driver. If you build this library on your own, don't forget to add --enable-shared option to your libpqxx configure script's options to get SHARED library, not STATIC. ")
   else
     PQXX_LIBDIR=$pqxx_libdir
     AC_SUBST(PQXX_LIBDIR)
