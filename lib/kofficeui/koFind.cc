@@ -176,7 +176,6 @@ void KoFindDialog::init(bool forReplace, const QStringList &findStrings, bool ha
         m_replaceGrp->hide();
     }
     setFindHistory(findStrings);
-    m_find->lineEdit()->selectAll();
     m_find->setFocus();
 }
 
@@ -207,7 +206,11 @@ QString KoFindDialog::pattern() const
 void KoFindDialog::setFindHistory(const QStringList &strings)
 {
     if (strings.count() > 0)
+    {
         m_find->setHistoryItems(strings, true);
+        m_find->lineEdit()->setText( strings.first() );
+        m_find->lineEdit()->selectAll();
+    }
     else
         m_find->clearHistory();
 }
