@@ -190,13 +190,13 @@ bool KImageShopDoc::completeSaving( KOStore::Store_ptr _store )
   QString u2 = u.in();
   u2 += "/image";
 
-  _store->open( u2, "image/bmp" );
+  if ( _store->open( u2, "image/bmp" ) )
   {
     ostorestream out( _store );
     out << m_image;
     out.flush();
+    _store->close();
   }
-  _store->close();
   return true;
 }
 */
@@ -372,12 +372,12 @@ bool KImageShopDoc::completeLoading( KOStore::Store_ptr _store )
   CORBA::String_var str = url();
   QString u = str.in();
   u += "/image";
-  _store->open( u, 0L );
+  if ( _store->open( u, 0L ) )
   {
     istorestream in( _store );
     in >> m_image;
+    _store->close();
   }
-  _store->close();
 
   m_bModified = false;
   m_bEmpty = false;
