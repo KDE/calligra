@@ -237,7 +237,7 @@ private:
     KWDocument *m_doc;
     KWFrameSetEdit *m_currentFrameSetEdit;
     KWGUI *m_gui;
-    QTimer *scrollTimer;
+    QTimer *m_scrollTimer;
     bool m_mousePressed;
     bool m_printing;
     KWViewMode *m_viewMode;

@@ -1005,9 +1005,11 @@ const QList<KWFrame> & KWTextFrameSet::framesInPage( int pageNum ) const
 {
     if ( pageNum < m_firstPage || pageNum >= (int)m_framesInPage.size() + m_firstPage )
     {
+#ifdef DEBUG_NTI
         kdWarning() << getName() << " framesInPage called for pageNum=" << pageNum << ". "
                     << " Min value: " << m_firstPage
                     << " Max value: " << m_framesInPage.size() + m_firstPage - 1 << endl;
+#endif
         return m_emptyList; // QList<KWFrame>() doesn't work, it's a temporary
     }
     return * m_framesInPage[pageNum - m_firstPage];
@@ -3531,10 +3533,9 @@ void KWTextFrameSetEdit::mousePressEvent( QMouseEvent *e, const QPoint & nPoint,
 
     if ( m_currentFrame )
     {
-        mousePos = iPoint;
         emit hideCursor();
         QTextCursor oldCursor = *cursor;
-        placeCursor( mousePos );
+        placeCursor( iPoint );
         ensureCursorVisible();
 
         if ( e->button() != LeftButton )
@@ -3544,7 +3545,7 @@ void KWTextFrameSetEdit::mousePressEvent( QMouseEvent *e, const QPoint & nPoint,
         }
 
         QTextDocument * textdoc = textDocument();
-        if ( textdoc->inSelection( QTextDocument::Standard, mousePos ) ) {
+        if ( textdoc->inSelection( QTextDocument::Standard, iPoint ) ) {
             mightStartDrag = TRUE;
             emit showCursor();
             dragStartTimer->start( QApplication::startDragTime(), TRUE );
@@ -3590,9 +3591,49 @@ void KWTextFrameSetEdit::mouseMoveEvent( QMouseEvent * e, const QPoint & nPoint,
         return;
     }
     QPoint iPoint;
-    if ( textFrameSet()->normalToInternal( nPoint, iPoint, true ) )
-        mousePos = iPoint;
-    // The rest is done in doAutoScroll
+    if ( nPoint.y() > 0 && textFrameSet()->normalToInternal( nPoint, iPoint, true ) )
+    {
+        hideCursor();
+        QTextCursor oldCursor = *cursor;
+        placeCursor( iPoint );
+
+        // Double click + mouse still down + moving the mouse selects full words.
+        if ( inDoubleClick ) {
+            QTextCursor cl = *cursor;
+            cl.gotoWordLeft();
+            QTextCursor cr = *cursor;
+            cr.gotoWordRight();
+
+            int diff = QABS( oldCursor.parag()->at( oldCursor.index() )->x - iPoint.x() );
+            int ldiff = QABS( cl.parag()->at( cl.index() )->x - iPoint.x() );
+            int rdiff = QABS( cr.parag()->at( cr.index() )->x - iPoint.x() );
+
+            if ( cursor->parag()->lineStartOfChar( cursor->index() ) !=
+                 oldCursor.parag()->lineStartOfChar( oldCursor.index() ) )
+                diff = 0xFFFFFF;
+
+            if ( rdiff < diff && rdiff < ldiff )
+                *cursor = cr;
+            else if ( ldiff < diff && ldiff < rdiff )
+                *cursor = cl;
+            else
+                *cursor = oldCursor;
+
+        }
+        //the autoscroll already takes care of the scrolling
+        //ensureCursorVisible();
+
+        bool redraw = FALSE;
+        if ( textDocument()->hasSelection( QTextDocument::Standard ) )
+            redraw = textDocument()->setSelectionEnd( QTextDocument::Standard, cursor ) || redraw;
+        else // it may be that the initial click was out of the frame
+            textDocument()->setSelectionStart( QTextDocument::Standard, cursor );
+
+        if ( redraw )
+            textFrameSet()->selectionChangedNotify( false );
+
+        showCursor();
+    }
 }
 
 void KWTextFrameSetEdit::mouseReleaseEvent( QMouseEvent *, const QPoint &, const KoPoint & )
@@ -3766,55 +3807,6 @@ void KWTextFrameSetEdit::focusOutEvent()
 {
     blinkTimer->stop();
     hideCursor();
-}
-
-void KWTextFrameSetEdit::doAutoScroll( QPoint pos )
-{
-    if ( mightStartDrag )
-        return;
-    QPoint iPoint;
-    if ( !textFrameSet()->normalToInternal( pos, iPoint, true ) )
-        return;
-
-    hideCursor();
-    QTextCursor oldCursor = *cursor;
-    placeCursor( iPoint );
-
-    // Double click + mouse still down + moving the mouse selects full words.
-    if ( inDoubleClick ) {
-        QTextCursor cl = *cursor;
-        cl.gotoWordLeft();
-        QTextCursor cr = *cursor;
-        cr.gotoWordRight();
-
-        int diff = QABS( oldCursor.parag()->at( oldCursor.index() )->x - mousePos.x() );
-        int ldiff = QABS( cl.parag()->at( cl.index() )->x - mousePos.x() );
-        int rdiff = QABS( cr.parag()->at( cr.index() )->x - mousePos.x() );
-
-        if ( cursor->parag()->lineStartOfChar( cursor->index() ) !=
-             oldCursor.parag()->lineStartOfChar( oldCursor.index() ) )
-            diff = 0xFFFFFF;
-
-        if ( rdiff < diff && rdiff < ldiff )
-            *cursor = cr;
-        else if ( ldiff < diff && ldiff < rdiff )
-            *cursor = cl;
-        else
-            *cursor = oldCursor;
-
-    }
-    ensureCursorVisible();
-
-    bool redraw = FALSE;
-    if ( textDocument()->hasSelection( QTextDocument::Standard ) )
-        redraw = textDocument()->setSelectionEnd( QTextDocument::Standard, cursor ) || redraw;
-    else // it may be that the initial click was out of the frame
-        textDocument()->setSelectionStart( QTextDocument::Standard, cursor );
-
-    if ( redraw )
-        textFrameSet()->selectionChangedNotify( false );
-
-    showCursor();
 }
 
 void KWTextFrameSetEdit::placeCursor( const QPoint &pos )

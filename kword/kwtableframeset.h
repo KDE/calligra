@@ -304,7 +304,6 @@ public:
 
     virtual void focusInEvent() { if ( m_currentCell ) m_currentCell->focusInEvent(); }
     virtual void focusOutEvent() { if ( m_currentCell ) m_currentCell->focusOutEvent(); }
-    virtual void doAutoScroll( QPoint p ) { if ( m_currentCell ) m_currentCell->doAutoScroll( p ); }
     virtual void copy() { if ( m_currentCell ) m_currentCell->copy(); }
     virtual void cut() { if ( m_currentCell ) m_currentCell->cut(); }
     virtual void paste() { if ( m_currentCell ) m_currentCell->paste(); }

@@ -40,9 +40,11 @@ KWAnchor::~KWAnchor()
 
 void KWAnchor::move( int x, int y )
 {
+    kdDebug() << this << " KWAnchor::move " << x << "," << y
+              << " xpos=" << xpos << ", ypos=" << ypos
+              << endl;
     if ( x != xpos || y != ypos )
     {
-        kdDebug() << this << " KWAnchor::move " << x << "," << y << endl;
         int paragy = paragraph()->rect().y();
         xpos = x;
         ypos = y;
@@ -53,7 +55,7 @@ void KWAnchor::move( int x, int y )
             //kdDebug(32001) << "KWAnchor::move moving frame to [zoomed pos] " << nPoint.x() << "," << nPoint.y() << endl;
             // Move the frame to position nPoint.
             m_frameset->moveFloatingFrame( m_frameNum, nPoint );
-        }
+        } else kdDebug(32001) << "KWAnchor::move internalToNormal returned 0L ! paragy=" << paragy << endl;
     }
 }
 

@@ -69,8 +69,8 @@ KWCanvas::KWCanvas(QWidget *parent, KWDocument *d, KWGUI *lGui)
     setKeyCompression( TRUE );
     viewport()->setMouseTracking( TRUE );
 
-    scrollTimer = new QTimer( this );
-    connect( scrollTimer, SIGNAL( timeout() ),
+    m_scrollTimer = new QTimer( this );
+    connect( m_scrollTimer, SIGNAL( timeout() ),
 	     this, SLOT( doAutoScroll() ) );
 
     viewport()->setFocusProxy( this );
@@ -801,6 +801,7 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
                     QRect newRect( frame->outerRect() );
 
                     QRect frameRect( m_viewMode->normalToView( newRect ) );
+#if 0 // replaced with the new autoscroll
                     // With frames bigger than the viewport, we end scrolling up/down like nonsense.
                     if ( frameRect.height() < visibleHeight() )
 
@@ -808,7 +809,7 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
                                        (frameRect.top()+frameRect.bottom()) / 2,
                                        (frameRect.right()-frameRect.left()) / 2,  // margin = half-width of the rect
                                        (frameRect.bottom()-frameRect.top()) / 2);
-
+#endif
                     // Repaint only the changed rects (oldRect U newRect)
                     repaintRegion += QRegion(oldRect).unite(frameRect).boundingRect();
                     // Move resize handles to new position
@@ -1153,8 +1154,8 @@ void KWCanvas::contentsMouseReleaseEvent( QMouseEvent * e )
 {
     if ( m_printing )
         return;
-    if ( scrollTimer->isActive() )
-	scrollTimer->stop();
+    if ( m_scrollTimer->isActive() )
+	m_scrollTimer->stop();
     if ( m_mousePressed ) {
         if ( m_mouseMode == MM_CREATE_TEXT || m_mouseMode == MM_CREATE_PIX ||
              m_mouseMode == MM_CREATE_FORMULA || m_mouseMode == MM_CREATE_TABLE ||
@@ -1821,18 +1822,27 @@ void KWCanvas::contentsDropEvent( QDropEvent *e )
 
 void KWCanvas::doAutoScroll()
 {
-    if ( !m_mousePressed || !m_currentFrameSetEdit )
+    if ( !m_mousePressed )
+    {
+        m_scrollTimer->stop();
 	return;
+    }
 
+    // This code comes from khtml
     QPoint pos( mapFromGlobal( QCursor::pos() ) );
-    pos = m_viewMode->viewToNormal( viewportToContents( pos ) );
 
-    m_currentFrameSetEdit->doAutoScroll( pos );
-
-    if ( !scrollTimer->isActive() && pos.y() < 0 || pos.y() > height() )
-	scrollTimer->start( 100, FALSE );
-    else if ( scrollTimer->isActive() && pos.y() >= 0 && pos.y() <= height() )
-	scrollTimer->stop();
+    pos = QPoint(pos.x() - viewport()->x(), pos.y() - viewport()->y());
+    if ( (pos.y() < 0) || (pos.y() > visibleHeight()) ||
+         (pos.x() < 0) || (pos.x() > visibleWidth()) )
+    {
+        int xm, ym;
+        viewportToContents(pos.x(), pos.y(), xm, ym);
+        if ( m_currentFrameSetEdit )
+            m_currentFrameSetEdit->focusOutEvent(); // Hide cursor
+        ensureVisible( xm, ym, 0, 5 );
+        if ( m_currentFrameSetEdit )
+            m_currentFrameSetEdit->focusInEvent(); // Show cursor
+    }
 }
 
 void KWCanvas::slotContentsMoving( int cx, int cy )
@@ -1918,6 +1928,8 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
             case QEvent::FocusOut:
                 if ( m_currentFrameSetEdit && !m_printing )
                     m_currentFrameSetEdit->focusOutEvent();
+                if ( m_scrollTimer->isActive() )
+                    m_scrollTimer->stop();
                 m_mousePressed = false;
                 return TRUE;
             case QEvent::KeyPress:

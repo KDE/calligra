@@ -141,12 +141,6 @@ KWFrame *KWFrame::getCopy() {
     return frm;
 }
 
-/*void KWFrame::deleteAnchor()
-{
-    delete m_anchor;
-    m_anchor = 0L;
-}*/
-
 // Insert all resize handles
 void KWFrame::createResizeHandles() {
     removeResizeHandles();
@@ -1692,10 +1686,6 @@ void KWFormulaFrameSetEdit::focusOutEvent()
 {
     //kdDebug(32001) << "KWFormulaFrameSetEdit::focusOutEvent" << endl;
     formulaView->focusOutEvent(0);
-}
-
-void KWFormulaFrameSetEdit::doAutoScroll(QPoint)
-{
 }
 
 void KWFormulaFrameSetEdit::copy()

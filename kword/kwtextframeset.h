@@ -359,7 +359,6 @@ public:
     virtual void dropEvent( QDropEvent *, const QPoint &, const KoPoint & );
     virtual void focusInEvent();
     virtual void focusOutEvent();
-    virtual void doAutoScroll( QPoint pos );
     virtual void cut();
     virtual void copy();
     virtual void paste();
@@ -459,7 +458,6 @@ private:
 
 private:
     QPoint dragStartPos;
-    QPoint mousePos;
     KWParagLayout m_paragLayout;
     QTextCursor *cursor;
     KWTextFormat *m_currentFormat;

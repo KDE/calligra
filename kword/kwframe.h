@@ -265,7 +265,6 @@ public:
     virtual void dropEvent( QDropEvent *, const QPoint &, const KoPoint & ) {}
     virtual void focusInEvent() {}
     virtual void focusOutEvent() {}
-    virtual void doAutoScroll( QPoint ) {}
     virtual void copy() {}
     virtual void cut() {}
     virtual void paste() {}
@@ -743,7 +742,6 @@ public:
     //virtual void dropEvent( QDropEvent *, const QPoint &, const KoPoint & ) {}
     virtual void focusInEvent();
     virtual void focusOutEvent();
-    virtual void doAutoScroll(QPoint);
     virtual void copy();
     virtual void cut();
     virtual void paste();

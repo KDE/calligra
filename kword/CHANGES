@@ -50,7 +50,7 @@ Fixed drawing and printing of embedded objects.
 Respect user's color scheme.
 Improved visual appearance (page shape, with shadow).
 
-Changes between KWord-1.1-beta2 and KWord-1.1-beta3 (under development)
+Changes between KWord-1.1-beta2 and KWord-1.1-beta3
 ===================================================
 
 New view mode: preview (multiple pages per row)
@@ -87,3 +87,7 @@ Fixed Table Of Contents creation and updates.
 Fixed placement and drawing of tables.
 Many other fixes, this list is far from complete.
 
+Changes between KWord-1.1-beta3 and KWord-1.1-rc1 (under development)
+===================================================
+
+Improved auto-scrolling.
