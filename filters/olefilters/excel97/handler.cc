@@ -233,7 +233,7 @@ bool Handler::invokeHandler(Q_UINT16 opcode, Q_UINT32 bytes, QDataStream &operan
 		{ "SUB",					0x0091, 0 /* &Worker::op_sub */ },
 		{ "SST",					0x00fc, &Worker::op_sst },
 		{ "STANDARDWIDTH",			0x0099, &Worker::op_standardwidth },
-		{ "STRING",					0x0007, 0 /* &Worker::op_string */ },
+		{ "STRING",					0x0007, &Worker::op_string },
 		{ "STYLE",					0x0093, 0 /* &Worker::op_style */ },
 		{ "SXDB",					0x00c6, 0 /* &Worker::op_sxdb */ },
 		{ "SXDI",					0x00c5, 0 /* &Worker::op_sxdi */ },

@@ -95,6 +95,7 @@ protected:
 	bool op_shrfmla(Q_UINT32 size, QDataStream &body);
 	bool op_sst(Q_UINT32 size, QDataStream &body);
 	bool op_standardwidth(Q_UINT32 size, QDataStream &body);
+	bool op_string(Q_UINT32 size, QDataStream &body);
 	bool op_topmargin(Q_UINT32 size, QDataStream &body);
 	bool op_vcenter(Q_UINT32 size, QDataStream &body);
 	bool op_window2(Q_UINT32 size, QDataStream &body);

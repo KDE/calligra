@@ -518,6 +518,9 @@ const QDomElement Helper::getFormat(Q_UINT16 xf)
 		case 0x2F:  // Time: mm:ss.0
 			format.setAttribute("format", "51");
 			break;
+		case 0x31:  // Date: dd.mm.yy
+			format.setAttribute("format", "204");
+			break;
 		case 0xA4:	// fraction 3 digits
 			format.setAttribute("format", "78");
 			break;
@@ -602,7 +605,7 @@ const QDomElement Helper::getFormat(Q_UINT16 xf)
 		default:
 			if(!m_formatrec[xwork->ifmt])
 			{
-				kdError() << "Formatting IFMT 0x" << QString::number(xwork->ifmt, 16) << " NOT implemented!" << endl;
+				kdWarning() << "Formatting IFMT 0x" << QString::number(xwork->ifmt, 16) << " NOT implemented!" << endl;
 				break;
 			}
 			
@@ -656,16 +659,317 @@ void getReference(Q_UINT16 row, Q_UINT16 column, Q_INT16 &refRow, Q_INT16 &refCo
 	}
 }
 
+
+
+struct sExcelFunction
+{
+	const char	*name;
+	Q_UINT16	index;
+	Q_UINT16	params;
+};
+
+static const sExcelFunction ExcelFunctions[] = {
+	{ "COUNT",            0,    0 },
+	{ "IF",               1,    0 },
+	{ "ISNV",             2,    1 },
+	{ "ISERROR",          3,    1 },
+	{ "SUM",              4,    0 },
+	{ "AVERAGE",          5,    0 },
+	{ "MIN",              6,    0 },
+	{ "MAX",              7,    0 },
+	{ "ROW",              8,    0 },
+	{ "COLUMN",           9,    0 },
+	{ "NOVALUE",          10,   0 },
+	{ "NBW",              11,   0 },
+	{ "STDEV",            12,   0 },
+	{ "CURRENCY",         13,   0 },
+	{ "FIXED",            14,   0 },
+	{ "SIN",              15,   1 },
+	{ "COS",              16,   1 },
+	{ "TAN",              17,   1 },
+	{ "ATAN",             18,   1 },  /* EXCEL: ARCTAN */
+	{ "PI",               19,   0 },
+	{ "SQRT",             20,   1 },
+	{ "EXP",              21,   1 },
+	{ "LN",               22,   1 },
+	{ "LOG10",            23,   1 },
+	{ "FABS",             24,   1 },  /* EXCEL: ABS */
+	{ "INT",              25,   1 },
+	{ "SIGN",             26,   1 },  /* EXCEL: PLUSMINUS */
+	{ "ROUND",            27,   2 },
+	{ "LOOKUP",           28,   0 },
+	{ "INDEX",            29,   0 },
+	{ "REPT",             30,   2 },
+	{ "MID",              31,   3 },
+	{ "LEN",              32,   1 },
+	{ "VALUE",            33,   1 },
+	{ "TRUE",             34,   0 },
+	{ "FALSE",            35,   0 },
+	{ "AND",              36,   0 },
+	{ "OR",               37,   0 },
+	{ "NOT",              38,   1 },
+	{ "MOD",              39,   2 },
+	{ "DBCOUNT",          40,   3 },
+	{ "DBSUM",            41,   3 },
+	{ "DBAVERAGE",        42,   3 },
+	{ "DBMIN",            43,   3 },
+	{ "DBMAX",            44,   3 },
+	{ "DBSTDDEV",         45,   3 },
+	{ "VAR",              46,   0 },
+	{ "DBVAR",            47,   3 },
+	{ "TEXT",             48,   2 },
+	{ "RGP",              49,   0 },
+	{ "TREND",            50,   0 },
+	{ "RKP",              51,   0 },
+	{ "GROWTH",           52,   0 },
+	{ "BW",               56,   0 },
+	{ "ZW",               57,   0 },
+	{ "ZZR",              58,   0 },
+	{ "RMZ",              59,   0 },
+	{ "ZINS",             60,   0 },
+	{ "MIRR",             61,   3 },
+	{ "IRR",              62,   0 },
+	{ "RANDOM",           63,   0 },
+	{ "MATCH",            64,   0 },
+	{ "DATE",             65,   3 },
+	{ "TIME",             66,   3 },
+	{ "DAY",              67,   1 },
+	{ "MONTH",            68,   1 },
+	{ "YEAR",             69,   1 },
+	{ "DAYOFWEEK",        70,   0 },
+	{ "HOUR",             71,   1 },
+	{ "MIN",              72,   1 },
+	{ "SEC",              73,   1 },
+	{ "NOW",              74,   0 },
+	{ "AREAS",            75,   1 },
+	{ "ROWS",             76,   1 },
+	{ "COLUMNS",          77,   1 },
+	{ "OFFSET",           78,   0 },
+	{ "SEARCH",           82,   0 },
+	{ "TRANSPOSE",        83,   1 },
+	{ "TYPE",             86,   1 },
+	{ "ATAN2",            97,   2 },  /* EXCEL: ARCTAN2 */
+	{ "ASIN",             98,   1 },  /* EXCEL: ARCSIN */
+	{ "ACOS",             99,   1 },  /* EXCEL: ARCCOS */
+	{ "CHOSE",            100,  0 },
+	{ "HLOOKUP",          101,  0 },
+	{ "VLOOKUP",          102,  0 },
+	{ "ISREF",            105,  1 },
+	{ "LOG",              109,  0 },
+	{ "CHAR",             111,  1 },
+	{ "LOWER",            112,  1 },
+	{ "UPPER",            113,  1 },
+	{ "PROPPER",          114,  1 },
+	{ "LEFT",             115,  0 },
+	{ "RIGHT",            116,  0 },
+	{ "EXACT",            117,  2 },
+	{ "TRIM",             118,  1 },
+	{ "REPLACE",          119,  4 },
+	{ "SUBSTITUTE",       120,  0 },
+	{ "CODE",             121,  1 },
+	{ "FIND",             124,  0 },
+	{ "CELL",             125,  0 },
+	{ "ISERR",            126,  1 },
+	{ "ISSTRING",         127,  1 },
+	{ "ISVALUE",          128,  1 },
+	{ "ISEMPTY",          129,  1 },
+	{ "T",                130,  1 },
+	{ "N",                131,  1 },
+	{ "DATEVALUE",        140,  1 },
+	{ "TIMEVALUE",        141,  1 },
+	{ "SLN",              142,  3 },  /* EXCEL: LIA */
+	{ "SYD",              143,  4 },  /* EXCEL: DIA */
+	{ "GDA",              144,  0 },
+	{ "INDIRECT",         148,  0 },
+	{ "CLEAN",            162,  1 },
+	{ "MATDET",           163,  1 },
+	{ "MATINV",           164,  1 },
+	{ "MATMULT",          165,  2 },
+	{ "ZINSZ",            167,  0 },
+	{ "KAPZ",             168,  0 },
+	{ "COUNT2",           169,  0 },
+	{ "MULTIPLY",         183,  0 },  /* EXCEL: PRODUCT */
+	{ "FACT",             184,  1 },
+	{ "DBPRODUCT",        189,  3 },
+	{ "ISNONSTRING",      190,  1 },
+	{ "STDEVP",           193,  0 },
+	{ "VARP",             194,  0 },
+	{ "DBSTDDEVP",        195,  3 },
+	{ "DBVARP",           196,  3 },
+	{ "ENT",              197,  0 },  /* EXCEL: TRUNC */
+	{ "ISLOGICAL",        198,  1 },
+	{ "DBCOUNT2",         199,  3 },
+	{ "CEIL",             212,  2 },  /* EXCEL: ROUNDUP */
+	{ "ROUNDDOWN",        213,  2 },
+	{ "RANK",             216,  0 },
+	{ "ADDRESS",          219,  0 },
+	{ "GETDIFFDATE360",   220,  0 },
+	{ "CURRENTDATE",      221,  0 },  /* EXCEL: TODAY */
+	{ "VBD",              222,  0 },
+	{ "MEDIAN",           227,  0 },
+	{ "SUMPRODUCT",       228,  0 },
+	{ "SINH",             229,  1 },  /* EXCEL: SINHYP */
+	{ "COSH",             230,  1 },  /* EXCEL: COSHYP */
+	{ "TANH",             231,  1 },  /* EXCEL: TANHYP */
+	{ "ASINH",            232,  1 },  /* EXCEL: ARCSINHYP */
+	{ "ACOSH",            233,  1 },  /* EXCEL: ARCCOSHYP */
+	{ "ATANH",            234,  1 },  /* EXCEL: ARCTANHYP */
+	{ "DBGET",            235,  3 },
+	{ "DB",               247,  0 },  /* EXCEL: GDA2 */
+	{ "FREQUENCY",        252,  2 },
+	{ "ERRORTYPE",        261,  1 },
+	{ "AVEDEV",           269,  0 },
+	{ "BETADIST",         270,  0 },
+	{ "GAMMALN",          271,  1 },
+	{ "BETAINV",          272,  0 },
+	{ "BINOMDIST",        273,  4 },
+	{ "CHIDIST",          274,  2 },
+	{ "CHIINV",           275,  2 },
+	{ "KOMBIN",           276,  2 },
+	{ "CONFIDENCE",       277,  3 },
+	{ "KRITBINOM",        278,  3 },
+	{ "EVEN",             279,  1 },
+	{ "EXPDIST",          280,  3 },
+	{ "FDIST",            281,  3 },
+	{ "FINV",             282,  3 },
+	{ "FISHER",           283,  1 },
+	{ "FISHERINV",        284,  1 },
+	{ "FLOOR",            285,  2 },
+	{ "GAMMADIST",        286,  4 },
+	{ "GAMMAINV",         287,  3 },
+	{ "CEIL",             288,  2 },
+	{ "HYPGEOMDIST",      289,  4 },
+	{ "LOGNORMDIST",      290,  3 },
+	{ "LOGINV",           291,  3 },
+	{ "NEGBINOMVERT",     292,  3 },
+	{ "NORMDIST",         293,  4 },
+	{ "STDNORMDIST",      294,  1 },
+	{ "NORMINV",          295,  3 },
+	{ "SNORMINV",         296,  1 },
+	{ "STANDARD",         297,  3 },
+	{ "ODD",              298,  1 },
+	{ "VARIATIONEN",      299,  2 },
+	{ "POISSONDIST",      300,  3 },
+	{ "TDIST",            301,  3 },
+	{ "WEIBULL",          302,  4 },
+	{ "SUMXMY2",          303,  2 },
+	{ "SUMX2MY2",         304,  2 },
+	{ "SUMX2DY2",         305,  2 },
+	{ "CHITEST",          306,  2 },
+	{ "CORREL",           307,  2 },
+	{ "COVAR",            308,  2 },
+	{ "FORECAST",         309,  3 },
+	{ "FTEST",            310,  2 },
+	{ "INTERCEPT",        311,  2 },
+	{ "PEARSON",          312,  2 },
+	{ "RSQ",              313,  2 },
+	{ "STEYX",            314,  2 },
+	{ "SLOPE",            315,  2 },
+	{ "TTEST",            316,  4 },
+	{ "PROB",             317,  0 },
+	{ "DEVSQ",            318,  0 },
+	{ "GEOMEAN",          319,  0 },
+	{ "HARMEAN",          320,  0 },
+	{ "SUMSQ",            321,  0 },
+	{ "KURT",             322,  0 },
+	{ "SCHIEFE",          323,  0 },
+	{ "ZTEST",            324,  0 },
+	{ "LARGE",            325,  2 },
+	{ "SMALL",            326,  2 },
+	{ "QUARTILE",         327,  2 },
+	{ "PERCENTILE",       328,  2 },
+	{ "PERCENTRANK",      329,  0 },
+	{ "MODALVALUE",       330,  0 },
+	{ "TRIMMEAN",         331,  2 },
+	{ "TINV",             332,  2 },
+	{ "CONCAT",           336,  0 },
+	{ "POW",              337,  2 },  /* EXCEL: POWER */
+	{ "RADIAN",           342,  1 },  /* EXCEL: RAD */
+	{ "DEGREE",           343,  1 },  /* EXCEL: DEG */
+	{ "SUBTOTAL",         344,  0 },
+	{ "SUMIF",            345,  0 },
+	{ "COUNTIF",          346,  2 },
+	{ "COUNTEMPTYCELLS",  347,  1 },
+	{ "ROMAN",            354,  0 },
+	{ "EXTERNAL",         255,  0 },
+	{ "ISPMT",            350,  4 },
+	{ "AVERAGEA",         361,  0 },
+	{ "MAXA",             362,  0 },
+	{ "MINA",             363,  0 },
+	{ "STDEVPA",          364,  0 },
+	{ "VARPA",            365,  0 },
+	{ "STDEVA",           366,  0 },
+	{ "VARA",             367,  0 }
+};
+
+#define MAX_EXCELFUNCTIONS (sizeof(ExcelFunctions)/sizeof(ExcelFunctions[0]))
+
+static const sExcelFunction *ExcelFunction( Q_UINT16 nIndex )
+{
+    int first = 0;
+    int last  = MAX_EXCELFUNCTIONS-1;
+    while (first <= last)
+    {
+	int curr = first + (last - first) / 2;
+        const sExcelFunction *pCurr = ExcelFunctions + curr;
+        if (pCurr->index > nIndex)
+            last = curr - 1;
+        else if (pCurr->index < nIndex)
+            first = curr + 1;
+        else
+            return pCurr;
+    }
+    return NULL;
+}
+
+
+static QString Excel_ErrorString( Q_UINT8 no )
+{
+	switch( no ) {
+		case 0x00:  return "#NULL!";
+		case 0x07:  return "#DIV/0!";
+		case 0x0F:  return "#VALUE!";
+		case 0x17:  return "#REF!";
+		case 0x1D:  return "#NAME?";
+		case 0x24:  return "#NUM!";
+		case 0x2A:  return "#N/A!";
+	}
+	return "#UNKNOWN!";
+}
+
+const QString& concatValues( QStringList *parsedFormula, int count, QString joinVal, 
+			QString prefix=QString::null, QString postfix=QString::null )
+{
+	QString sum;
+	while (count) {
+		count--;
+		sum.prepend(parsedFormula->last());
+		if (count) sum.prepend(joinVal);
+		parsedFormula->pop_back();
+	}
+	
+	if (!prefix.isNull())	sum.prepend(prefix);
+	if (!postfix.isNull())	sum.append(postfix);
+
+	parsedFormula->append(sum);
+
+//	kdWarning(30511) << "  New Formula: " << parsedFormula->join(" X ") << endl;
+
+	return parsedFormula->last();
+}
+
+#define NA(x) QString("NA_%1  Formula: %2").arg(x).arg(parsedFormula.join("  "))
+
 const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgce, Q_UINT16 biff, bool shared)
 {
 	double number;
-	Q_UINT8 byte, ptg;
+	Q_UINT8 byte, ptg, count;
 	Q_UINT16 integer;
 	Q_INT16 refRow, refColumn, refRowLast, refColumnLast;
-	QString str;
+	QString str, newop;
 	QStringList parsedFormula;
-	QStringList::Iterator stringPtr;
 	bool found;
+	const sExcelFunction *excelFunc;
 
 	parsedFormula.append("=");
 
@@ -703,375 +1007,154 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				if(!found)
 					m_todoFormula.append(new FormulaTodo(tlcol, tlrow, biff));
 
-				parsedFormula.append("");
 				break;
 			case 0x03:  // ptgAdd
-				stringPtr = parsedFormula.fromLast();
-				do {
-					--stringPtr;
-					--stringPtr;
-				} while (!(*stringPtr).isEmpty());
-				*stringPtr = "+";
+				concatValues( &parsedFormula, 2, "+" );
 				break;
 			case 0x04:  // ptgSub
-				stringPtr = parsedFormula.fromLast();
-				do {
-					--stringPtr;
-					--stringPtr;
-				} while (!(*stringPtr).isEmpty());
-				*stringPtr = "-";
+				concatValues( &parsedFormula, 2, "-" );
 				break;
 			case 0x05:  // ptgMul
-				stringPtr = parsedFormula.fromLast();
-				do {
-					--stringPtr;
-					--stringPtr;
-				} while (!(*stringPtr).isEmpty());
-				*stringPtr = "*";
+				concatValues( &parsedFormula, 2, "*" );
 				break;
 			case 0x06:  // ptgDiv
-				stringPtr = parsedFormula.fromLast();
-				do {
-					--stringPtr;
-					--stringPtr;
-				} while (!(*stringPtr).isEmpty());
-				*stringPtr = "/";
+				concatValues( &parsedFormula, 2, "/" );
 				break;
 			case 0x07:  // ptgPower
-				stringPtr = parsedFormula.fromLast();
-				do {
-					--stringPtr;
-					--stringPtr;
-				} while (!(*stringPtr).isEmpty());
-				*stringPtr = "^"; // Hmmm, not supported by kspread.
+				concatValues( &parsedFormula, 2, "^" ); // Hmmm, not supported by kspread.
 				break;
 			case 0x08:  // ptgConcat
-				stringPtr = parsedFormula.fromLast();
-				do {
-					--stringPtr;
-					--stringPtr;
-				} while (!(*stringPtr).isEmpty());
-				*stringPtr = "&";
+				concatValues( &parsedFormula, 2, "&" );
 				break;
 			case 0x09:  // ptgLT
-				stringPtr = parsedFormula.fromLast();
-				do {
-					--stringPtr;
-					--stringPtr;
-				} while (!(*stringPtr).isEmpty());
-				*stringPtr = "<";
+				concatValues( &parsedFormula, 2, "<" );
 				break;
 			case 0x0a:  // ptgLE
-				stringPtr = parsedFormula.fromLast();
-				do {
-					--stringPtr;
-					--stringPtr;
-				} while (!(*stringPtr).isEmpty());
-				*stringPtr = "<=";
+				concatValues( &parsedFormula, 2, "<=" );
 				break;
 			case 0x0b:  // ptgEQ
-				stringPtr = parsedFormula.fromLast();
-				do {
-					--stringPtr;
-					--stringPtr;
-				} while (!(*stringPtr).isEmpty());
-				*stringPtr = "==";
+				concatValues( &parsedFormula, 2, "==" );
 				break;
 			case 0x0c:  // ptgGE
-				stringPtr = parsedFormula.fromLast();
-				do {
-					--stringPtr;
-					--stringPtr;
-				} while (!(*stringPtr).isEmpty());
-				*stringPtr = ">=";
+				concatValues( &parsedFormula, 2, ">=" );
 				break;
 			case 0x0d:  // ptgGT
-				stringPtr = parsedFormula.fromLast();
-				do {
-					--stringPtr;
-					--stringPtr;
-				} while (!(*stringPtr).isEmpty());
-				*stringPtr = ">";
+				concatValues( &parsedFormula, 2, ">" );
 				break;
 			case 0x0e:  // ptgNE
-				stringPtr = parsedFormula.fromLast();
-				do {
-					--stringPtr;
-					--stringPtr;
-				} while (!(*stringPtr).isEmpty());
-				*stringPtr = "!=";
+				concatValues( &parsedFormula, 2, "!=" );
+				break;
+			case 0x10:  // ptgUnion
+				concatValues( &parsedFormula, 2, ";" );
+				break;
+			case 0x11:  // ptgRange
+				concatValues( &parsedFormula, 2, ":" );
 				break;
 			case 0x12:  // ptgUPlus
-				stringPtr = parsedFormula.fromLast();
-				--stringPtr;
-				--stringPtr;
-				(*stringPtr).append("+");
+				parsedFormula.last().prepend("+");
 				break;
 			case 0x13:  // ptgUMinus
-				stringPtr = parsedFormula.fromLast();
-				--stringPtr;
-				--stringPtr;
-				(*stringPtr).append("-");
+				parsedFormula.last().prepend("-");
 				break;
 			case 0x14:  // ptgPercent
-				kdDebug(30511) << "WARNING: ptgPercent formula not supported, yet" << endl;
-				return "N/A"; // Return _error_ formula-string
+				parsedFormula.last().append("%");
 				break;
 			case 0x15:  // ptgParen
-				stringPtr = parsedFormula.fromLast();
-				--stringPtr;
-				*stringPtr += ")";
-				++stringPtr;
-				do {
-					--stringPtr;
-					--stringPtr;
-				} while (!(*stringPtr).isEmpty() && (*stringPtr) != "=");
-				++stringPtr;
-				(*stringPtr).prepend("(");
+				parsedFormula.last() = QString("(%1)").arg(parsedFormula.last());
 				break;
 			case 0x16:  // ptgMissArg
-				kdDebug(30511) << "WARNING: ptgMissArg formula not supported, yet" << endl;
-				return "N/A"; // Return _error_ formula-string
+				// parsedFormula.last().prepend("");
 				break;
 			case 0x17:  // ptgStr
 				char *buffer8bit;
-				QString *s;
-				
-				Q_UINT16 cch;				
+				Q_UINT16 cch;
 				rgce >> cch;
 				
 				buffer8bit = new char[cch + 1];
+				
 				rgce.readRawBytes(buffer8bit, cch);
-
 				buffer8bit[cch] = '\0';
-				s = new QString(buffer8bit);
+				
+				parsedFormula.append(QString("\"%1\"").arg(buffer8bit));
 
 				delete []buffer8bit;
 
-				parsedFormula.append("\"" + *s + "\"");
-				parsedFormula.append("");
 				break;
 			case 0x18:  // ptgExtended
-				kdDebug(30511) << "WARNING: ptgExtended formula not supported, yet" << endl;
-				return "N/A"; // Return _error_ formula-string
+				rgce >> byte;
+				parsedFormula.append(QString("Func_18(%1)").arg(byte));
 				break;
 			case 0x19:  // ptgAttr
 				rgce >> byte >> integer;
-				if (byte & 0x10)
-				{
-					stringPtr = parsedFormula.fromLast();
-					--stringPtr;
-					*stringPtr += ")";
-					(*stringPtr).prepend("sum(");
-				}
+				if (byte & 0x04) {
+					integer++;
+					integer *= 2;
+					while (integer--) { rgce >> byte; };
+				} else	
+				if (byte & 0x10) {
+					concatValues( &parsedFormula, 1, "", "sum(" ,")" );
+				};
 				break;
 			case 0x1c:  // ptgErr
-				kdDebug(30511) << "WARNING: ptgErr formula not supported, yet" << endl;
-				return "N/A"; // Return _error_ formula-string
+				rgce >> byte;
+				parsedFormula.append( Excel_ErrorString(byte) );
 				break;
 			case 0x1d:  // ptgBool
 				rgce >> byte;
-				if (byte == 1)
-					parsedFormula.append("True");
-				else
-					parsedFormula.append("False");
-				parsedFormula.append("");
+				parsedFormula.append(byte ? "True":"False");
 				break;
 			case 0x1e:  // ptgInt
 				rgce >> integer;
-				parsedFormula.append(m_locale.formatNumber((double) integer));
-				parsedFormula.append("");
+				parsedFormula.append(m_locale.formatNumber(integer));
 				break;
 			case 0x1f:  // ptgNum
 				rgce >> number;
-				parsedFormula.append(m_locale.formatNumber(number));
-				parsedFormula.append("");
+				if (((int)number) == number)
+					parsedFormula.append(QString().setNum((int)number));
+				else
+					parsedFormula.append(m_locale.formatNumber(number));
 				break;
-			case 0x21:  // ptgFunc
-			case 0x41:
-				rgce >> integer;
-				stringPtr = parsedFormula.fromLast();
-				--stringPtr;
-				*stringPtr += ")";
-
-				switch (integer) {
-					case 15:  // sin
-						(*stringPtr).prepend("sin(");
-						break;
-					case 16:  // cos
-						(*stringPtr).prepend("cos(");
-						break;
-					case 17:  // tan
-						(*stringPtr).prepend("tan(");
-						break;
-					case 18:  // atan
-						(*stringPtr).prepend("atan(");
-						break;
-					case 19:  // pi
-						parsedFormula.append("PI()");
-						parsedFormula.append("");
-						break;
-					case 20:  // sqrt
-						(*stringPtr).prepend("sqrt(");
-						break;
-					case 21:  // exp
-						(*stringPtr).prepend("exp(");
-						break;
-					case 22:  // ln
-						(*stringPtr).prepend("ln(");
-						break;
-					case 23:  // log
-						(*stringPtr).prepend("log(");
-						break;
-					case 24:  // fabs
-						(*stringPtr).prepend("fabs(");
-						break;
-					case 25:  // floor
-						(*stringPtr).prepend("floor(");
-						break;
-					case 26:  // sign
-						(*stringPtr).prepend("sign(");
-						break;
-					case 39:  // mod
-						--stringPtr;
-						*stringPtr = ";";
-						--stringPtr;
-						(*stringPtr).prepend("MOD(");
-						break;
-					case 97:  // atan2
-						--stringPtr;
-						*stringPtr = ";";
-						--stringPtr;
-						(*stringPtr).prepend("atan2(");
-						break;
-					case 98:  // asin
-						(*stringPtr).prepend("asin(");
-						break;
-					case 99:  // acos
-						(*stringPtr).prepend("acos(");
-						break;
-					case 142:  // SLN
-						--stringPtr;
-						*stringPtr = ";";
-						--stringPtr;
-						--stringPtr;
-						*stringPtr = ";";
-						--stringPtr;
-						(*stringPtr).prepend("SLN(");
-						break;
-					case 143:  // SYD
-						--stringPtr;
-						*stringPtr = ";";
-						--stringPtr;
-						--stringPtr;
-						*stringPtr = ";";
-						--stringPtr;
-						--stringPtr;
-						*stringPtr = ";";
-						--stringPtr;
-						(*stringPtr).prepend("SYD(");
-						break;
-					case 184:  // fact
-						(*stringPtr).prepend("fact(");
-						break;
-					case 212:  // ceil
-						*stringPtr = ""; // no exact match, so we have to workaround
-						--stringPtr;
-						*stringPtr = "";
-						--stringPtr;
-						*stringPtr += ")";
-						(*stringPtr).prepend("ceil(");
-						break;
-					case 221:  // today
-						parsedFormula.append("currentDate()");
-						parsedFormula.append("");
-						break;
-					case 229:  // sinh
-						(*stringPtr).prepend("sinh(");
-						break;
-					case 230:  // cosh
-						(*stringPtr).prepend("cosh(");
-						break;
-					case 231:  // tanh
-						(*stringPtr).prepend("tanh(");
-						break;
-					case 232:  // asinh
-						(*stringPtr).prepend("asinh(");
-						break;
-					case 233:  // acosh
-						(*stringPtr).prepend("acosh(");
-						break;
-					case 337:  // pow
-						--stringPtr;
-						*stringPtr = ";";
-						--stringPtr;
-						(*stringPtr).prepend("pow(");
-						break;
-					case 342:  // radian
-						(*stringPtr).prepend("radian(");
-						break;
-					case 343:  // degree
-						(*stringPtr).prepend("degree(");
-						break;
-					default:
-						(*stringPtr).prepend("not_handled_yet(");
-						kdDebug(30511) << "Formula contains unhandled function " << integer << endl;
-						break;
-				}
+			case 0x20:  // ptgArray
+				parsedFormula.append( "ConstArray" );
 				break;
+				
 			case 0x22:  // ptgFuncVar
-			case 0x42:
-				rgce >> byte >> integer;
-				stringPtr = parsedFormula.fromLast();
-				--stringPtr;
-				*stringPtr += ")";
-				++stringPtr;
-				for (; byte > 1; --byte) {
-					--stringPtr;
-					--stringPtr;
-					*stringPtr = ";";
-				}
-				--stringPtr;
+				rgce >> byte;
+				// fall through....
 
-				switch (integer) {
-					case 1: // if
-						--stringPtr;
-						--stringPtr;
-						(*stringPtr).prepend("IF(");
-						break;
-					case 4:  // sum
-						(*stringPtr).prepend("sum(");
-						break;
-					case 5:  // average
-						(*stringPtr).prepend("average(");
-						break;
-					case 6:  // min
-						(*stringPtr).prepend("min(");
-						break;
-					case 7:  // max
-						(*stringPtr).prepend("max(");
-						break;
-					case 183:  // multiply
-						(*stringPtr).prepend("multiply(");
-						break;
-					case 197:  // ent
-						(*stringPtr).prepend("ENT(");
-						*stringPtr += ")"; // no exact match, so we have to workaround
-						++stringPtr;
-						*stringPtr = "";
-						++stringPtr;
-						*stringPtr = "";
-						break;
-					case 247:  // DB
-						(*stringPtr).prepend("DB(");
-						break;
-					default:
-						(*stringPtr).prepend("not_handled_yet(");
-						kdDebug(30511) << "Formula contains unhandled function " << integer << endl;
-						break;
+			case 0x21:  // ptgFunc
+				Q_UINT16 index;
+				rgce >> index;
+				index &= 0x7FFF;
+
+				excelFunc = ExcelFunction(index);
+
+				if (excelFunc) {
+				   newop = QString(excelFunc->name) + "(";
+				   count = excelFunc->params;
+				} else {
+				   newop = QString("ExcelFunc_%1(").arg(index);
+				   kdWarning(30511) << "Formula contains unhandled function " 
+					   		<< index << endl;
+				   count = 1;
 				}
+				
+				if (ptg == 0x22) // variable count of arguments
+					count = byte & 0x7F;
+				
+//				kdWarning(30511) << "concat " << count << " " << newop << endl;
+
+				concatValues( &parsedFormula, count, ";", newop, ")" );
+				break;
+
+			case 0x23:  // ptg????
+				rgce >> integer;
+				str = QString("NAME(%1)").arg(integer);
+				rgce >> integer; // ignore
+				parsedFormula.append(str);
 				break;
 			case 0x24:  // ptgRef
+			case 0x2a:  // ptgRef (deleted)
 			case 0x2c:
 				rgce >> refRow;
 				
@@ -1085,16 +1168,11 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				
 				getReference(row, column, refRow, refColumn, biff, shared);
 
-				str = "#";
-				str += QString::number((int) refColumn);
-				str += "#";
-				str += QString::number((int) refRow);
-				str += "#";
+				str = QString("#%1#%2#").arg(refColumn).arg(refRow);
 				parsedFormula.append(str);
-				parsedFormula.append("");
 				break;
 			case 0x25:  // ptgArea
-			case 0x2d:
+			case 0x2b:
 				rgce >> refRow >> refRowLast;
 				
 				if(biff == BIFF_8)
@@ -1110,19 +1188,32 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 				getReference(row, column, refRow, refColumn, biff, shared);
 				getReference(row, column, refRowLast, refColumnLast, biff, shared);
 
-				str = "#";
-				str += QString::number((int) refColumn);
-				str += "#";
-				str += QString::number((int) refRow);
-				str += "#:#";
-				str += QString::number((int) refColumnLast);
-				str += "#";
-				str += QString::number((int) refRowLast);
-				str += "#";
+				str = QString("#%1#%2#:#%3#%4#").arg(refColumn).arg(refRow)
+						.arg(refColumnLast).arg(refRowLast);
 				parsedFormula.append(str);
-				parsedFormula.append("");
 				break;
-			case 0x3a: // ptgRef3d
+			case 0x26:  // ptgMemArea
+				rgce >> integer >> integer >> integer;
+				parsedFormula.append( "MemArea" );
+				break;
+			case 0x27:  // ptgMemErr
+			case 0x28:  // ptgMemNoMem
+				rgce >> integer >> integer >> integer;
+				break;
+			case 0x29:  // ptgNoMem
+			case 0x2e:  // ptgAreaN
+			case 0x2f:  // ptgNoMemN
+				rgce >> integer;
+				break;
+			case 0x39:  // ptgExtName
+				Q_UINT16 extno, intno;
+				rgce >> extno >> intno;
+				rgce >> integer;
+				str = QString("extname(EXT(%1),%2)").arg(extno).arg(intno);
+				parsedFormula.append( str );
+				break;
+			case 0x3a:  // ptgRef3d
+			case 0x3c:  // ptgRef3dErr
 				if(biff == BIFF_8)
 				{
 					Q_UINT16 sheetNumber;
@@ -1132,29 +1223,60 @@ const QString Helper::getFormula(Q_UINT16 row, Q_UINT16 column, QDataStream &rgc
 					
 					QDomElement *sheet = m_tables->at(sheetNumber);
 
-					if(!sheet)
-						return "N/A";
+					if (sheet)
+						str = sheet->attribute("name");
+					else
+						str = "Unknown_Sheet";
 
-					str = sheet->attribute("name") + "!#";
-					str += QString::number((int) refColumn);
-					str += "#";
-					str += QString::number((int) refRow);
-					str += "#";
+					str = QString("%1!#%2#%3#").arg(str)
+					       	.arg(refColumn).arg(refRow);
 					parsedFormula.append(str);
-					parsedFormula.append("");
 				}
 				else
 				{
 					kdDebug() << "WARNING: External sheet references not done for Excel 95!" << endl;
-					return "N/A";
+					return NA("Excel95_sheet");
+				}				
+				break;			
+			case 0x3b:  // AreaRef3d
+			case 0x3d:  // AreaRef3dErr
+				if(biff == BIFF_8)
+				{
+					Q_UINT16 sheetNumber;
+					rgce >> sheetNumber;
+				        rgce >> refRow >> refRowLast;
+					rgce >> refColumn >> refRowLast;
+	
+					getReference(row, column, refRow, refColumn, biff, shared);
+					
+					QDomElement *sheet = m_tables->at(sheetNumber);
+					if (sheet)
+						str = sheet->attribute("name");
+					else
+						str = "Unknown_Sheet";
+
+					getReference(row, column, refRow, refColumn, biff, shared);
+					getReference(row, column, refRowLast, refColumnLast, biff, shared);
+
+					str = QString("%1!#%2#%3#:#%4#%5#")
+							.arg(str)
+							.arg(refColumn).arg(refRow)
+							.arg(refColumnLast).arg(refRowLast);
+					parsedFormula.append(str);
+					
+				}
+				else
+				{
+					kdDebug() << "WARNING: External sheet references not done for Excel 95!" << endl;
+					return NA("Excel95_sheet");
 				}				
 				break;			
 			default:
-				kdDebug(30511) << "Formula contains unhandled ptg " << ptg << endl;
-				return "N/A"; // Return _error_ formula-string
+				kdWarning(30511) << "Formula contains unhandled ptg 0x" << QString::number(ptg, 16) << endl;
+				return NA(QString("unhandled_ptg_0x%1)").arg(QString::number(ptg,16)));
 				break;
 		}
 	}
-	kdDebug(30511) << "Helper::getFormula: " << parsedFormula.join("") << endl;
+//	kdWarning(30511) << "Helper::getFormula: " << parsedFormula.join("  ") << endl;
 	return parsedFormula.join("");
 }

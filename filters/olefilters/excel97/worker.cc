@@ -1465,7 +1465,7 @@ bool Worker::op_row(Q_UINT32, QDataStream &body)
 {
 	Q_UINT16 rowNr, skip, height, flags, flags2, xf;
 
-	body >> rowNr >> skip >> skip >> height >> flags >> flags >> flags>> flags2;
+	body >> rowNr >> skip >> skip >> height >> flags >> flags >> flags >> flags2;
 
 	xf = flags2 & 0xffff;
 
@@ -1641,6 +1641,16 @@ bool Worker::op_standardwidth(Q_UINT32, QDataStream &body)
 	body >> width;
 	
 	kdDebug(30511) << "Standard width :" << width <<endl;
+
+	return true;
+}
+
+bool Worker::op_string(Q_UINT32 bytes, QDataStream &body)
+{
+	char *store = new char[bytes+1];
+	body.readRawBytes(store, bytes);
+	
+	kdDebug(30511) << " op_string:" << store <<endl;
 
 	return true;
 }
