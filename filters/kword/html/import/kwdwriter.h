@@ -79,8 +79,8 @@ public:
 
 	/**
 	 * inlines something in a paragraph
-	 * @parm paragraph: the paragraph the anchor should be placed in
-	 * @parm toInLline: the element that should be inlined
+	 * @param paragraph: the paragraph the anchor should be placed in
+	 * @param toInLline: the element that should be inlined
 	 **/
 	void createInline(QDomElement paragraph, QDomElement toInline);
 
