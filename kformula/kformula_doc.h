@@ -147,7 +147,7 @@ class KFormulaDocument : public QObject,
     /**
      * This is just a hack til view and doc are really split
      */
-    void mousePressEvent(QMouseEvent *a); 
+    void mousePressEvent(QMouseEvent *a,  QWidget *wid); 
     void paintEvent( QPaintEvent *_ev, QWidget *paintGround );
     void keyPressEvent( QKeyEvent *k );
  protected:

@@ -75,7 +75,7 @@ void KFormulaView::paintEvent( QPaintEvent *_ev )
 }
 void KFormulaView::mousePressEvent( QMouseEvent *_ev )
 {
-    m_pDoc->mousePressEvent(_ev);
+    m_pDoc->mousePressEvent(_ev,this);
 }
 
 void KFormulaView::resizeEvent( QResizeEvent *_ev )

@@ -12,6 +12,7 @@
 #include <qwmatrix.h>
 #include <qcolor.h>
 #include <qbitmap.h>
+#include <qwidget.h>
 
 #include <unistd.h>
 
@@ -446,15 +447,15 @@ void KFormulaDocument::deleteIt(FormulaBlock *bl)
 	QMessageBox::critical( 0L, i18n("Error"), i18n("Can not delete First Block !!"), i18n( "Ok" ) );
 }
 
-void KFormulaDocument::mousePressEvent( QMouseEvent *a)
+void KFormulaDocument::mousePressEvent( QMouseEvent *a,QWidget *wid)
 {
    setCurrent(Blocks[0]->getClick(a->pos()));
    emit sig_modified();
-/*if(a->button()==RightButton){
+if(a->button()==RightButton){
    QPopupMenu *mousepopup = new QPopupMenu;
    QPopupMenu *convert = new QPopupMenu;
    QPopupMenu *fontpopup = new QPopupMenu;    
-       fontpopup->insertItem(klocale("Font +"), this, SLOT(enlarge()), ALT+Key_K);
+       fontpopup->insertItem(i18n("Font +"), this, SLOT(enlarge()), ALT+Key_K);
     fontpopup->insertItem(i18n("Font -"), this, SLOT(reduce()), ALT+Key_K);
     fontpopup->insertItem(i18n("Font + (also Children)"), this, SLOT(enlargeRecur()), ALT+Key_K);
     fontpopup->insertItem(i18n("Font - (also Children)"), this, SLOT(reduceRecur()), ALT+Key_K);
@@ -469,8 +470,8 @@ void KFormulaDocument::mousePressEvent( QMouseEvent *a)
     mousepopup->insertItem(i18n("Convert to.."),convert);
 //    mousepopup->insertSeparator();
 //    mousepopup->insertItem(i18n("Quit"), _part, SLOT(slotQuit()), ALT+Key_Q);
-    mousepopup->popup(mapToGlobal(a->pos()));*/
- //}
+    mousepopup->popup(wid->mapToGlobal(a->pos()));
+}
 }
 
 void KFormulaDocument::keyPressEvent( QKeyEvent *k )
