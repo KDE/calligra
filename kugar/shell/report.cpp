@@ -183,3 +183,4 @@ void Report::slotPreferedTemplate(const QString &tplname)
 {
 	setReportTemplate(tplname);
 }
+#include "report.moc"

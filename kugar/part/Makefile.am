@@ -1,11 +1,9 @@
-INCLUDES = -I../lib $(all_includes)
+INCLUDES = -I$(srcdir)/../lib $(all_includes)
 
 lib_LTLIBRARIES = libkugarpart.la
 libkugarpart_la_SOURCES = kugar_part.cpp
 libkugarpart_la_LDFLAGS = $(all_libraries) -module -avoid-version
-libkugarpart_la_LIBADD = \
-	../lib/libkugar.la -lkparts $(LIB_KIO) $(LIB_KDEUI) $(LIB_KDECORE) \
-	$(LIB_QT)
+libkugarpart_la_LIBADD = ../lib/libkugar.la $(LIB_KPARTS)
 
 libkugarpart_la_METASOURCES = AUTO
 

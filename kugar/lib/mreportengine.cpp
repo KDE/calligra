@@ -660,3 +660,4 @@ void MReportEngine::copy(const MReportEngine* mReportEngine){
 	// Copy grand totals list
 	grandTotal = mReportEngine->grandTotal;
 }
+#include "mreportengine.moc"

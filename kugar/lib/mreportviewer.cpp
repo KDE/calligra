@@ -7,6 +7,8 @@
  ***************************************************************************/
 
 #include <qapplication.h>
+#include <kmessagebox.h>
+#include <klocale.h>
 
 #include "mreportviewer.h"
 
@@ -141,7 +143,7 @@ void MReportViewer::printReport(){
 
 	// Check if there is a report or any pages to print
 	if(cnt == 0) {
-    qWarning(QObject::tr("There are no pages in the\nreport to print."));
+    KMessageBox::error(this, i18n("There are no pages in the\nreport to print."));
     return;
   }
 
@@ -321,3 +323,4 @@ QSize MReportViewer::sizeHint() const
 {
 	return scroller -> sizeHint();
 }
+#include "mreportviewer.moc"

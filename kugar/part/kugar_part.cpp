@@ -234,3 +234,4 @@ void KugarBrowserExtension::print()
 {
 	((KugarPart *)parent()) -> print();
 }
+#include "kugar_part.moc"
