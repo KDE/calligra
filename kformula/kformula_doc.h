@@ -96,7 +96,7 @@ class KFormulaDoc : public QObject,
     virtual bool isEmpty() { return m_bEmpty; };
   
     // IDL
-    void addTextElement();
+    void addTextElement(QString cont="");
     void addRootElement();
     BasicElement * addIndex(int index);
     BasicElement * addChild(int child);

@@ -63,11 +63,22 @@ Lower Bits:
 /*
  * Formula Commands
  */
-
+#define FCOM_DONOTHING  1
 #define FCOM_DELETEME  -1
 #define FCOM_TEXTCLONE -2
 #define FCOM_ROOTCLONE -3
-
+#define FCOM_ADDFRACTION  -4
+#define FCOM_ADDTEXT -5
+#define FCOM_ADDROOT -6
+#define FCOM_ADDINTEGRAL -7
+#define FCOM_ADDSUM -8
+#define FCOM_ADDVSPACE -9
+#define FCOM_ADDBRACKET -10
+#define FCOM_ADDINDEXTL -20
+#define FCOM_ADDINDEXBL -21
+#define FCOM_ADDINDEXTR -22
+#define FCOM_ADDINDEXBR -23
+#define FCOM_ADDCHILD  -100
 /*
  * Index Position
  */
@@ -81,4 +92,12 @@ Lower Bits:
  * keyboard action: special keys like delete,insert,backspace,arrows...
  */
  //May be I don't need them
+
+/*
+ * predefined content value
+ */
+#define DEFAULT_FRACTION  "FMC10"
+#define DEFAULT_VSPACE    "VMC10"
+#define DEFAULT_DELIMITER "()"
+
 #endif

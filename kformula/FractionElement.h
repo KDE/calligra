@@ -62,7 +62,7 @@ class FractionElement : public BasicElement
     /*
      * do nothing
      */
-    virtual int takeAsciiFromKeyb(int action);
+//    virtual int takeAsciiFromKeyb(int action);
    
     /*
      * In  the future....

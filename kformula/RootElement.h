@@ -65,7 +65,7 @@ class RootElement : public BasicElement
     /*
      * do nothing
      */
-    virtual int takeAsciiFromKeyb(int action);
+//    virtual int takeAsciiFromKeyb(int action);
    
     /*
      * Index[0] isn't external:

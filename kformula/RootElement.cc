@@ -137,11 +137,12 @@ void RootElement::checkSize()
     globalSize=globalSize.unite(nextDimension);
     //warning("end");
 }
-
+/*
 int RootElement::takeAsciiFromKeyb(int)
 {
     return 2;
 }
+*/
 int RootElement::takeActionFromKeyb(int)
 {
     return -1;

@@ -345,7 +345,7 @@ bool KFormulaView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factor
   m_idButtonFormula_7 = addToolButton(m_vToolBarFormula, "index.xpm",
 				      i18n( "Add an index at position..." ), "indexList", 8 );
 
-
+  m_vToolBarFormula->enable( OpenPartsUI::Show );
   // Font
   m_vToolBarFont = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
 
@@ -443,7 +443,8 @@ bool KFormulaView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factor
   m_vToolBarFont->setButton( m_idButtonFont_3, true );
   m_vToolBarFont->setButton( m_idButtonFont_4, true );
   m_vToolBarFont->setButton( m_idButtonFont_5, false );
-	
+
+  m_vToolBarFont->enable( OpenPartsUI::Show );	
 warning("Fine ");
   // Type
   m_vToolBarType = _factory->create( OpenPartsUI::ToolBarFactory::Transient );
@@ -546,6 +547,7 @@ warning("Fine ");
 				     i18n( "Remove a column" ), "matrixRemCol", 19 );
 
 //m_vToolBarType->insertSeparator( 26 );
+  m_vToolBarType->enable( OpenPartsUI::Show );
 
   // *********************** General *************************
        m_idButtonType_Pix = addToolButton(m_vToolBarType, "remcol.xpm",
@@ -561,9 +563,9 @@ warning("vai");
 	
   slotTypeChanged(0);
 
-  m_vToolBarFormula->enable( OpenPartsUI::Show );
-  m_vToolBarFont->enable( OpenPartsUI::Show );
-  m_vToolBarType->enable( OpenPartsUI::Show );
+
+
+
 
   cerr << "-------------------------------- TOOL --------------" << endl;
 
@@ -682,19 +684,19 @@ void KFormulaView::addRoot()
 void KFormulaView::addFraction()
 {
     debug("adding Fraction");
-    m_pDoc->addFractionElement("FMC10");
+    m_pDoc->addFractionElement(DEFAULT_FRACTION);
 }
 
 void KFormulaView::addVertSpace()
 {
     debug("adding VerticalSpace");
-    m_pDoc->addFractionElement("VUC10");
+    m_pDoc->addFractionElement(DEFAULT_VSPACE);
 }
 
 void KFormulaView::addBracket()
 {
-    debug("adding parenthesis");
-    m_pDoc->addBracketElement("()");
+    debug("adding parentheses");
+    m_pDoc->addBracketElement(DEFAULT_DELIMITER);
     //    m_vToolBarType->hide();
 }
 

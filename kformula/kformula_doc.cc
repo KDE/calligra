@@ -30,8 +30,8 @@
 
 KFormulaDoc::KFormulaDoc()
 {
+//    setFocusPolicy( ClickFocus );
     thePainter = new QPainter();
-
     warning("General Settings");
     theFont.setFamily( "utopia" );
     theFont.setPointSize(24);
@@ -348,7 +348,7 @@ BasicElement * KFormulaDoc::addChild(int child)
     emitModified();
     return(newElement);
 }
-void KFormulaDoc::addTextElement()
+void KFormulaDoc::addTextElement(QString cont="")
 {
     BasicElement *nextElement;
     BasicElement *newElement;
@@ -368,6 +368,7 @@ void KFormulaDoc::addTextElement()
 	    }else
 		activeElement()->setNext(newElement=new TextElement(this,theActiveElement));
 	}
+    newElement->setContent(cont);	
     setActiveElement(newElement);
     emitModified();
 }
@@ -442,29 +443,55 @@ cerr << " key received , " << k->ascii() << endl;
     */
     warning("Key pressed %i, ascii:%i",k->key(),k->ascii());
     int elReturn=0;
+
     if((k->ascii()>=32)&&(k->ascii()<127))
 	{
+	 switch(k->ascii())
+	    {
+	      case '[':
+		addBracketElement("[]");
+              break;
+	      case '(':
+		addBracketElement(DEFAULT_DELIMITER);
+              break;
+	      case '|':
+		addBracketElement("||");
+              break;
+	      case '/':
+		addFractionElement(DEFAULT_FRACTION);
+              break;
+	      case '@':
+		addRootElement();
+              break;
+	      case '^':
+		addIndex(IN_TOPRIGHT);
+              break;
+	      case '_':
+		addIndex(IN_BOTTOMRIGHT);
+              break;
+	      
+	     default:
+	     {
 	    if (theActiveElement!=0L)
 		elReturn=theActiveElement->takeAsciiFromKeyb(k->ascii());
+              }
+	      
+	    }
 	}
     else   //Not ascii
 	{
 	    if (theActiveElement!=0L)
 		elReturn=theActiveElement->takeActionFromKeyb(k->key());
 	}	
+        
+	if (elReturn==FCOM_ADDTEXT) 
+ 	    { 
+	     addTextElement();
+	     if((k->ascii()>32)&&(k->ascii()<127))
+ 		theActiveElement->takeAsciiFromKeyb(k->ascii());
+	    }
 
-    if (elReturn==FCOM_TEXTCLONE)
-	{
-	    BasicElement *newElement;
-	    theActiveElement->substituteElement(newElement = new TextElement(this));
-	    BasicElement *b;
-	    b=theActiveElement;
-	    setActiveElement(newElement);
-	    if((k->ascii()>32)&&(k->ascii()<127))
-		theActiveElement->takeAsciiFromKeyb(k->ascii());
-	    warning("delete %p",b);
-	    delete b;
-	}
+
 
     //ChText(Blocks[getCurrent()]->getcont());
     //ChType(Blocks[getCurrent()]->gettype());
@@ -475,7 +502,7 @@ cerr << " key received , " << k->ascii() << endl;
 
 void KFormulaDoc::paintEvent( QPaintEvent *, QWidget *paintGround )
 {
-
+//    QPixmap pm(paintGround->size());  //double buffer
     thePainter->begin(paintGround);
     thePainter->setPen( black );
     theFirstElement->checkSize();
@@ -483,6 +510,7 @@ void KFormulaDoc::paintEvent( QPaintEvent *, QWidget *paintGround )
     if(theActiveElement && typeid(*theActiveElement) == typeid(TextElement))
 	thePainter->drawWinFocusRect(theCursor);
     thePainter->end();
+//    bitBlt(paintGround,0,0,&pm,0,0,-1,-1);
 }
 
 void KFormulaDoc::setActiveElement(BasicElement* c)

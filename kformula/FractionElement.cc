@@ -139,10 +139,12 @@ void FractionElement::checkSize()
     globalSize=globalSize.unite(nextDimension);
 }
 
-int FractionElement::takeAsciiFromKeyb(int)
+/*int FractionElement::takeAsciiFromKeyb(int)
 {
     return 2;
 }
+*/
+
 int FractionElement::takeActionFromKeyb(int)
 {
     return -1;
