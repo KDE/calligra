@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
-   Copyright (c) 2001 David Faure <faure@kde.org>
-   Copyright (C) 2002 Nicolas GOUTTE <goutte@kde.org>
+   Copyright (c) 2001, 2004 David Faure <faure@kde.org>
+   Copyright (C) 2002, 2004 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -169,11 +169,15 @@ bool KoPictureCollection::saveToStoreInternal(const Type pictureType, KoStore *s
             {
                 KoStoreDevice dev(store);
                 if (koffice11)
+                {
                     if ( !c.saveAsKOffice1Dot1(&dev) )
                         return false;
+                }
                 else
+                {
                     if ( ! c.save(&dev) )
                         return false; // e.g. bad image?
+                }
                 if ( !store->close() )
                     return false; // e.g. disk full
             }
