@@ -108,7 +108,7 @@ KWordDocument::KWordDocument(QObject* parent, const char* name, bool singleViewM
     rastX = rastY = 10;
 
     setEmpty();
-    setModified(false);
+    setModified(FALSE);
 
     applyStyleTemplate = 0;
     applyStyleTemplate = applyStyleTemplate | U_FONT_FAMILY_ALL_SIZE | U_COLOR | U_BORDER | U_INDENT |
@@ -167,9 +167,9 @@ bool KWordDocument::initDoc()
     QString filter = KoFilterManager::self()->fileSelectorList( KoFilterManager::Import,
                                                                 "application/x-kword",
 								"*.kwd", "KWord",
-								false );
+								FALSE );
 
-    bool ok = false;
+    bool ok = FALSE;
     KoTemplateChooseDia::ReturnType ret = KoTemplateChooseDia::chooseTemplate(
 	"kword_template", KWordFactory::global(), _template, TRUE, FALSE, filter, "application/x-kword" );
     if ( ret == KoTemplateChooseDia::Template ) {
@@ -193,7 +193,7 @@ bool KWordDocument::initDoc()
 	ok = loadNativeFormat( fileName );
     }
 
-    setModified( false );
+    setModified( FALSE );
     setEmpty();
     return ok;
 }
@@ -220,7 +220,7 @@ void KWordDocument::initEmpty()
     QString fileName( locate( "kword_template", "Wordprocessing/PlainText.kwt" , KWordFactory::global() ) );
     /*bool ok = */loadNativeFormat( fileName );
     resetURL();
-    setModified( false );
+    setModified( FALSE );
     setEmpty();
 }
 
@@ -670,7 +670,7 @@ bool KWordDocument::loadChildren( KoStore *_store )
     QListIterator<KoDocumentChild> it( children() );
     for( ; it.current(); ++it ) {
 	if ( !((KoDocumentChild*)it.current())->loadDocument( _store ) )
-	    return false;
+	    return FALSE;
     }
 
     return TRUE;
@@ -894,7 +894,7 @@ bool KWordDocument::loadXML( KOMLParser& parser, KoStore *)
 
 		if ( !parser.close( tag ) ) {
 		    cerr << "ERR: Closing Child" << endl;
-		    return false;
+		    return FALSE;
 		}
 	    }
 	} else if ( name == "PAPER" ) {
@@ -1683,7 +1683,7 @@ bool KWordDocument::saveChildren( KoStore *_store, const char *_path )
     for( ; it.current(); ++it ) {
 	QString internURL = QString( "%1/%2" ).arg( _path ).arg( i++ );
 	if ( !((KoDocumentChild*)(it.current()))->document()->saveToStore( _store, "", internURL ) )
-          return false;
+          return FALSE;
     }
     return true;
 }

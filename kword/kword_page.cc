@@ -978,7 +978,7 @@ void KWPage::viewportMousePressEvent( QMouseEvent *e )
 	    break;
 	default: break;
 	}
-        doc->setModified( true ); // to be refined perhaps
+        doc->setModified( TRUE ); // to be refined perhaps
     } break;
     case MidButton:
 	vmpMidButton();
@@ -2563,7 +2563,7 @@ bool KWPage::kReturn( QKeyEvent *e, int oldPage, int oldFrame, KWParag *oldParag
 	redrawOnlyCurrFrameset = FALSE;
 
     recalcCursor( FALSE, 0 );
-    doc->setModified( true );
+    doc->setModified( TRUE );
 
     int yp = contentsY();
     redrawAllWhileScrolling = TRUE;
@@ -2668,7 +2668,7 @@ bool KWPage::kDelete( QKeyEvent *, int, int, KWParag *, KWTextFrameSet *frameSet
     else
 	fc->cursorGotoPos( tmpTextPos );
 
-    doc->setModified( true );
+    doc->setModified( TRUE );
     return TRUE;
 }
 
@@ -2764,7 +2764,7 @@ bool KWPage::kBackspace( QKeyEvent *, int oldPage, int oldFrame, KWParag *oldPar
 	}
     }
 
-    doc->setModified( true );
+    doc->setModified( TRUE );
     return TRUE;
 }
 
@@ -2790,7 +2790,7 @@ bool KWPage::kTab( QKeyEvent *, int, int, KWParag *, KWTextFrameSet *frameSet )
     }
 
     doc->updateAllViews( gui->getView() );
-    doc->setModified( true );
+    doc->setModified( TRUE );
 
     return TRUE;
 }
@@ -2829,7 +2829,8 @@ bool KWPage::kDefault( QKeyEvent *e, int, int, KWParag *, KWTextFrameSet *frameS
 
     doc->updateAllViews( doc->needRedraw() ? 0L : gui->getView() );
     doc->setNeedRedraw( FALSE );
-    doc->setModified( true );
+    if ( !doc->isModified() )
+	doc->setModified( TRUE );
 
     return TRUE;
 }
@@ -4469,7 +4470,7 @@ void KWPage::insertVariable( VariableType type )
 
     recalcPage( 0L );
     recalcCursor( TRUE );
-    doc->setModified( true );
+    doc->setModified( TRUE );
 }
 
 /*================================================================*/
@@ -4487,7 +4488,7 @@ void KWPage::insertFootNote( KWFootNote *fn )
 
     recalcPage( 0L );
     recalcCursor( TRUE );
-    doc->setModified( true );
+    doc->setModified( TRUE );
 }
 
 /*================================================================*/
@@ -5088,7 +5089,7 @@ void KWPage::insertFormulaChar( int c )
 {
     if ( editNum != -1 && doc->getFrameSet( editNum )->getFrameType() == FT_FORMULA )
 	( ( KWFormulaFrameSet* )doc->getFrameSet( editNum ) )->insertChar( c );
-    doc->setModified( true );
+    doc->setModified( TRUE );
 }
 
 /*================================================================*/
@@ -5327,7 +5328,7 @@ void KWResizeHandle::mouseMoveEvent( QMouseEvent *e )
     page->oldMx = mx;
     page->deleteMovingRect = TRUE;
     page->doRaster = TRUE;
-    page->doc->setModified( true );
+    page->doc->setModified( TRUE );
 }
 
 /*================================================================*/
@@ -5354,7 +5355,7 @@ void KWResizeHandle::mousePressEvent( QMouseEvent *e )
     page->mousePressed = TRUE;
     page->vmpEditFrame( 0, x() + e->x() + page->contentsX(),
 			y() + e->y() + page->contentsY() );
-    page->doc->setModified( true );
+    page->doc->setModified( TRUE );
 }
 
 /*================================================================*/
