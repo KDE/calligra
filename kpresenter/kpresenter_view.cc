@@ -1093,7 +1093,7 @@ void KPresenterView::extraLayout()
 
     if ( KoPageLayoutDia::pageLayout( pgLayout, hf, FORMAT_AND_BORDERS, unit ) ) {
 	PgLayoutCmd *pgLayoutCmd = new PgLayoutCmd( i18n( "Set Page Layout" ),
-						    pgLayout, oldLayout, unit, oldUnit, this );
+						    pgLayout, oldLayout, unit, oldUnit,kPresenterDoc() );
 	pgLayoutCmd->execute();
 	kPresenterDoc()->addCommand( pgLayoutCmd );
         updateRuler();
@@ -2221,7 +2221,7 @@ void KPresenterView::newPageLayout( KoPageLayout _layout )
     KoPageLayout oldLayout = m_pKPresenterDoc->pageLayout();
     KoUnit::Unit unit = m_pKPresenterDoc->getUnit(); // unchanged
 
-    PgLayoutCmd *pgLayoutCmd = new PgLayoutCmd( i18n( "Set Page Layout" ), _layout, oldLayout, unit, unit, this );
+    PgLayoutCmd *pgLayoutCmd = new PgLayoutCmd( i18n( "Set Page Layout" ), _layout, oldLayout, unit, unit,kPresenterDoc() );
     pgLayoutCmd->execute();
     kPresenterDoc()->addCommand( pgLayoutCmd );
     updateRuler();

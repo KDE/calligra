@@ -298,6 +298,7 @@ public:
 
 
     void updateRuler();
+    void updateRulerPageLayout();
 
     unsigned int getPageNums() const { return m_pageList.count(); }
 

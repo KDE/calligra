@@ -2428,4 +2428,16 @@ bool KPresenterDoc::isHeaderFooter(const KPObject *obj) const
     return (obj==_header || obj==_footer);
 }
 
+void KPresenterDoc::updateRulerPageLayout()
+{
+    QPtrListIterator<KoView> it( views() );
+    for (; it.current(); ++it )
+    {
+        ((KPresenterView*)it.current())->getHRuler()->setPageLayout(_pageLayout );
+        ((KPresenterView*)it.current())->getVRuler()->setPageLayout( _pageLayout );
+
+    }
+
+}
+
 #include <kpresenter_doc.moc>

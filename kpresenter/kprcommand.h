@@ -538,18 +538,15 @@ class PgLayoutCmd : public KNamedCommand
 {
 public:
     PgLayoutCmd( const QString &_name, KoPageLayout _layout, KoPageLayout _oldLayout,
-                 KoUnit::Unit _oldUnit, KoUnit::Unit _unit,
-                 KPresenterView *_view );
+                 KoUnit::Unit _oldUnit, KoUnit::Unit _unit,KPresenterDoc *_doc );
 
     virtual void execute();
     virtual void unexecute();
 
 protected:
-
+    KPresenterDoc *m_doc;
     KoPageLayout layout, oldLayout;
     KoUnit::Unit unit, oldUnit;
-    KPresenterView *view;
-
 };
 
 /******************************************************************/

@@ -1484,13 +1484,12 @@ void PgConfCmd::unexecute()
 
 /*======================== constructor ===========================*/
 PgLayoutCmd::PgLayoutCmd( const QString &_name, KoPageLayout _layout, KoPageLayout _oldLayout,
-                          KoUnit::Unit _oldUnit, KoUnit::Unit _unit,
-                          KPresenterView *_view )
+                          KoUnit::Unit _oldUnit, KoUnit::Unit _unit,KPresenterDoc *_doc )
     : KNamedCommand( _name )
 {
+    m_doc=_doc;
     layout = _layout;
     oldLayout = _oldLayout;
-    view = _view;
     oldUnit = _oldUnit;
     unit = _unit;
 }
@@ -1498,31 +1497,21 @@ PgLayoutCmd::PgLayoutCmd( const QString &_name, KoPageLayout _layout, KoPageLayo
 /*====================== execute =================================*/
 void PgLayoutCmd::execute()
 {
-    KPresenterDoc *doc = view->kPresenterDoc();
-    doc->setUnit( unit );
-    doc->setPageLayout( layout );
-    doc->updateHeaderFooterPosition();
-    view->getHRuler()->setPageLayout( layout );
-    view->getHRuler()->setUnit( doc->getUnitName() );
-    view->getVRuler()->setPageLayout( layout );
-    view->getVRuler()->setUnit( doc->getUnitName() );
-    view->setRanges();
+    m_doc->setUnit( unit );
+    m_doc->setPageLayout( layout );
+    m_doc->updateHeaderFooterPosition();
+    m_doc->updateRuler();
+    m_doc->updateRulerPageLayout();
 }
 
 /*====================== unexecute ===============================*/
 void PgLayoutCmd::unexecute()
 {
-    KPresenterDoc *doc = view->kPresenterDoc();
-    doc->setUnit( unit );
-    doc->setPageLayout( layout );
-    doc->setUnit( oldUnit );
-    doc->setPageLayout( oldLayout );
-    doc->updateHeaderFooterPosition();
-    view->getHRuler()->setPageLayout( oldLayout );
-    view->getHRuler()->setUnit( doc->getUnitName() );
-    view->getVRuler()->setPageLayout( oldLayout );
-    view->getVRuler()->setUnit( doc->getUnitName() );
-    view->setRanges();
+    m_doc->setUnit( oldUnit );
+    m_doc->setPageLayout( oldLayout );
+    m_doc->updateHeaderFooterPosition();
+    m_doc->updateRuler();
+    m_doc->updateRulerPageLayout();
 }
 
 
