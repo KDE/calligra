@@ -1,10 +1,10 @@
 #include "vpoint.h"
 
-static const double
+const double
 VPoint::s_fractInvScale = 1.0/s_fractScale;
 
 VPoint::VPoint()
-    : m_x(0.0), m_y(0.0), m_isDirty(true)
+    : m_x(0.0), m_y(0.0), m_QPoint(0,0), m_isDirty(true)
 {
 }
 
@@ -19,7 +19,7 @@ VPoint::VPoint( const double& x, const double& y )
 }
 
 const QPoint&
-VPoint::getQPoint()
+VPoint::getQPoint() const
 {
     // recalculate QPoint-value:
     if ( m_isDirty )
@@ -31,3 +31,30 @@ VPoint::getQPoint()
     return m_QPoint;
 }
 
+void
+VPoint::moveTo( double& x, double& y )
+{
+    m_x = x; m_y = y;
+    m_isDirty=true;
+}
+
+void
+VPoint::rmoveTo( double& x, double& y )
+{
+    m_x += x; m_y += y;
+    m_isDirty=true;
+}
+
+void
+VPoint::setX( double& x )
+{
+    m_x = x;
+    m_isDirty=true;
+}
+
+void
+VPoint::setY( double& y )
+{
+    m_y = y;
+    m_isDirty=true;
+}

@@ -19,8 +19,8 @@ protected:
 private:
     KarbonPart* m_part;
     KarbonView* m_view;
-    KoRuler* m_vertical;
-    KoRuler* m_horizontal;
+    KoRuler* m_vRuler;
+    KoRuler* m_hRuler;
 };
 
 #endif

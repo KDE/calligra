@@ -15,7 +15,9 @@ public:
 	: m_firstPoint(fp), m_lastPoint(lp) {}
     
     const VPoint* firstPoint() const { return m_firstPoint; }
+    void setFirstPoint( VPoint* fp ) { m_firstPoint=fp; }
     const VPoint* lastPoint() const { return m_lastPoint; }
+    void setLastPoint( VPoint* lp ) { m_lastPoint=lp; }
 
     virtual void getQPoints( QPointArray& qpa ) = 0;
 
@@ -38,6 +40,11 @@ class VBezier : public VPrimitive {
 public:
     VBezier( VPoint* fp=0L, VPoint* fcp=0L, VPoint* lcp=0L, VPoint* lp=0L )
 	: VPrimitive(fp,lp), m_firstCtrlPoint(fcp), m_lastCtrlPoint(lcp) {}    
+
+    const VPoint* firstCtrlPoint() const { return m_firstCtrlPoint; }
+    void setFirstCtrlPoint( VPoint* fcp ) { m_firstCtrlPoint=fcp; }
+    const VPoint* lastCtrlPoint() const { return m_lastCtrlPoint; }
+    void setLastCtrlPoint( VPoint* lcp ) { m_lastCtrlPoint=lcp; }
 
     virtual void getQPoints( QPointArray& qpa );
 	    

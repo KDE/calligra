@@ -9,8 +9,6 @@
  * Before 
  */
 
-// TODO: we really have to check if this inline-function excess for a point-class is a good idea
-
 class VPoint {
 public:
     VPoint();
@@ -18,14 +16,15 @@ public:
     VPoint( const double& x, const double& y );
 
     // convert to QPoint and recalculate if necessary:
-    const QPoint& getQPoint();
+    const QPoint& getQPoint() const;
 
-    void moveTo( double& x, double& y ) { m_x = x; m_y = y; m_isDirty=true; }
+    void moveTo( double& x, double& y );
+    void rmoveTo( double& x, double& y );
 
     const double& x() const { return m_x; }
-    void setX( double& x ) { m_x = x; m_isDirty=true; }
+    void setX( double& x );
     const double& y() const { return m_y; }
-    void setY( double& y ) { m_y = y; m_isDirty=true; }
+    void setY( double& y );
 
 //    VPoint& operator= (const VPoint& p) { return *this; }
     void operator +=( const VPoint& p ) { m_x+=p.m_x; m_y+=p.m_y; m_isDirty=true; }
@@ -42,9 +41,9 @@ public:
 private:
     double m_x;
     double m_y;
-    QPoint m_QPoint;	// for painting
+    mutable QPoint m_QPoint;	// for painting
 
-    bool m_isDirty;	// need to recalculate QPoint ?
+    mutable bool m_isDirty;	// need to recalculate QPoint ?
 };
 
 #endif

@@ -6,6 +6,8 @@
 #include "vobject.h"
 #include "vprimitive.h"
 
+// TODO: moveTo inline ?
+
 class VPoint;
 
 /**
@@ -22,14 +24,16 @@ public:
     
     // postscript-like commands:
     void moveTo( double& x, double& y );
+    void rmoveTo( double& x, double& y );    
     void lineTo( double& x, double& y );
-    void curveTo();
+    void rlineTo( double& x, double& y );
+    void curveTo( double& x1, double& y1, double& x2, double& y2, double& x3, double& y3 );
+    void rcurveTo();    
     void close();
 
 private:
-    VPoint* m_currentPoint;
-    QList<VPoint> m_points;
-    QList<VPrimitive> m_primitives;
+    QList<VPoint> m_points;		// list of used points
+    QList<VPrimitive> m_primitives;	// list of used primitives
 };
 
 #endif

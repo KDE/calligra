@@ -11,32 +11,51 @@ VPath::VPath()
     m_primitives.setAutoDelete(true);
     m_points.setAutoDelete(true);
 
-    m_currentPoint = new VPoint();	// we always need a current point (0.0,0.0)
+    m_points.append( new VPoint() );	// we always need a current point (0.0,0.0)
 }
 
 VPath::~VPath()
 {
-    // we use autodelete to destroy our points and primitives
-    
-// TODO: refcounting, what about copy-ctor ?
-    if ( m_currentPoint )
-	delete m_currentPoint;
+    for ( VPrimitive* primitive=m_primitives.first(); primitive!=0L; primitive=m_primitives.next() ) 
+    {
+	delete( primitive );
+    }    
+    for ( VPoint* point=m_points.first(); point!=0L; point=m_points.next() ) 
+    {
+	delete( point );
+    }
 }
 
 void
 VPath::moveTo( double& x, double& y )
 {
-    m_currentPoint->moveTo( x, y );
+    m_points.getLast()->moveTo( x, y );
+}
+
+void
+VPath::rmoveTo( double& x, double& y )
+{
+    m_points.getLast()->rmoveTo( x, y );
 }
 
 void
 VPath::lineTo( double& x, double& y )
 {
-// TODO: convention: does moveTo change last primitve ?
     VPoint* newpoint = new VPoint( x, y );
-    m_points.append( m_currentPoint );
-    m_primitives.append( new VLine( m_currentPoint, newpoint ) );
-    m_currentPoint = newpoint;
+    m_primitives.append( new VLine( m_points.getLast(), newpoint ) );
+    m_points.append( newpoint );
+}
+
+void
+VPath::curveTo( double& x1, double& y1, double& x2, double& y2, double& x3, double& y3 )
+{
+    VPoint* newpoint1 = new VPoint( x1, y1 );
+    VPoint* newpoint2 = new VPoint( x2, y2 );
+    VPoint* newpoint3 = new VPoint( x3, y3 );
+    m_primitives.append( new VBezier( m_points.getLast(), newpoint1, newpoint2, newpoint3 ) );
+    m_points.append( newpoint1 );
+    m_points.append( newpoint2 );
+    m_points.append( newpoint3 );
 }
 
 void
@@ -50,6 +69,7 @@ VPath::draw( QPainter& painter )
     }
     
     painter.save();
-    
+    painter.setPen( Qt::black );
+    painter.drawPolyline( qpa );
     painter.restore();
 }

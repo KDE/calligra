@@ -9,7 +9,7 @@
 VCanvas::VCanvas( KarbonView* view, KarbonPart* part )
     : QScrollView( view, "VCanvas",
 	Qt::WNorthWestGravity | Qt::WResizeNoErase | Qt::WRepaintNoErase),
-	m_part(part), m_view(view), m_vertical(0L), m_horizontal(0L)
+	m_part(part), m_view(view), m_vRuler(0L), m_hRuler(0L)
 {
     viewport()->setFocusPolicy(QWidget::StrongFocus);
     viewport()->setMouseTracking(true);
@@ -21,7 +21,6 @@ VCanvas::VCanvas( KarbonView* view, KarbonPart* part )
 void
 VCanvas::paintEvent( QPaintEvent* event )
 {
-kdDebug(31000) << "****vcanvas.paint" << endl;
     QPainter painter;
     painter.begin( this );
 
@@ -34,8 +33,6 @@ kdDebug(31000) << "****vcanvas.paint" << endl;
 void
 VCanvas::resizeEvent( QResizeEvent* /*event*/ )
 {
-// let document paint
-kdDebug(31000) << "****vcanvas.resizeEvent" << endl;
 }
 
 #include <vcanvas.moc>

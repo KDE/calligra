@@ -19,14 +19,13 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
     initActions();
     
     m_canvas = new VCanvas( this, part );
+    m_canvas->setGeometry( 0, 0, width(), height() );
 }
 
 KarbonView::~KarbonView()
 {
-/*	// doesnt the parent remove this automatically ?
     delete m_canvas;
     m_canvas = 0L;    
-*/
 }
 
 void
@@ -36,8 +35,7 @@ KarbonView::updateReadWrite( bool /*rw*/ )
 
 void
 KarbonView::resizeEvent( QResizeEvent* /*event*/ ) {
-kdDebug(31000) << "****view.resizeevent" << endl;    
-
+    m_canvas->resize( width(), height() );
 }
 
 void

@@ -12,6 +12,7 @@ class KarbonPart : public KoDocument
 public:
     KarbonPart( QWidget* parentWidget = 0, const char* widgetName = 0,
 	QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
+    virtual ~KarbonPart();
 
     virtual void paintContent( QPainter& painter, const QRect& rect,
 	bool transparent = false );
