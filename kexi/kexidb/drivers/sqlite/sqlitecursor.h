@@ -53,6 +53,11 @@ class KEXIDB_SQLITE_DRIVER_EXPORT SQLiteCursor : public Cursor
 //		int at();
 		virtual QVariant value(int i);
 
+		/*! [PROTOTYPE] \return internal buffer data. */
+//TODO		virtual const char *** bufferData()
+		/*! [PROTOTYPE] \return current record data or NULL if there is no current records. */
+		virtual const char ** recordData();
+
 	protected:
 		/*! Cursor will operate on \a conn */
 		SQLiteCursor(Connection* conn, const QString& statement = QString::null, uint options = NoOptions );

@@ -18,3 +18,18 @@ Focus on:
 - avoid memory copying (at low level try to store original char* data instead of QString,
   convert to QString only on data displaying)
 
+Idea 3
+Directories layout:
+dialogs/
++-altertable/
++-datatable/
++-queryeditor/
++-sqleditor
+
+widgets/
++-tableview/
++-datatableview/
+
+Idea 4
+Classes naming guidelines:
+'Dialog' suffix for all classes 

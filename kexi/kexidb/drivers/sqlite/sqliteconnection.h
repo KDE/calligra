@@ -57,7 +57,6 @@ class KEXIDB_SQLITE_DRIVER_EXPORT SQLiteConnection : public Connection
 		/*! Used by driver */
 		SQLiteConnection( Driver *driver, const ConnectionData &conn_data );
 
-//		virtual KexiDB::ConnectionInternal* createConnectionInternalObject( KexiDB::Connection& conn );
 		virtual bool drv_connect();
 		virtual bool drv_disconnect();
 		virtual bool drv_getDatabasesList( QStringList &list );

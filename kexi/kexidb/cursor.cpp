@@ -77,6 +77,7 @@ bool Cursor::open( const QString& statement )
 		return false;
 	if (!m_readAhead) // jowenn: to ensure before first state, without cluttering implementation code
 		m_readAhead = drv_getNextRecord(); //true if any record in this query
+	m_at = 0; //we are still before 1st rec
 //	m_validRecord = false; //no record retrieved
 	return !error();
 }

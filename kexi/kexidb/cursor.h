@@ -104,6 +104,9 @@ class KEXI_DB_EXPORT Cursor: public Object
 		uint fieldCount() { return m_fieldCount; }
 		virtual QVariant value(int i) = 0;
 
+		/*! [PROTOTYPE] \return current record data or NULL if there is no current records. */
+		virtual const char ** recordData() = 0;
+
 	protected:
 		/*! Cursor will operate on \a conn */
 		Cursor(Connection* conn, const QString& statement = QString::null, uint options = NoOptions );
@@ -136,7 +139,7 @@ class KEXI_DB_EXPORT Cursor: public Object
 		bool m_validRecord : 1; //! true if valid record is currently retrieved @ current position
 		bool m_readAhead : 1;
 		Q_LLONG m_at;
-		uint m_fieldCount; //! cached field count information
+		int m_fieldCount; //! cached field count information
 		uint m_options; //! cursor options that describes its behaviour
 	private:
 		class Private;
