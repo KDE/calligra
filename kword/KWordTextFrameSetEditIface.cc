@@ -39,7 +39,7 @@ void KWordTextFrameSetEditIface::insertFrameBreak()
     m_framesetedit->insertFrameBreak();
 }
 
-void KWordTextFrameSetEditIface::insertVariable( int type, int subtype = 0 )
+void KWordTextFrameSetEditIface::insertVariable( int type, int subtype )
 {
     m_framesetedit->insertVariable(type,subtype);
 }
