@@ -269,6 +269,11 @@ void KWDocument::initConfig()
       setKSpellConfig(ksconfig);
       setDontCheckUpperWord(config->readBoolEntry("KSpell_dont_check_upper_word",false));
       setDontCheckTitleCase(config->readBoolEntry("KSpell_dont_check_title_case",false));
+      // Default is false for spellcheck, but the spell-check config dialog
+      // should write out "true" when the user configures spell checking.
+      m_bgSpellCheck->enableBackgroundSpellCheck(config->readBoolEntry( "SpellCheck", false ));
+
+
   }
 
   if(config->hasGroup("Interface" ) )
@@ -291,9 +296,6 @@ void KWDocument::initConfig()
       m_bShowDocStruct = config->readBoolEntry("showDocStruct",true);
       m_lastViewMode= config->readEntry( "viewmode","ModeNormal");
 
-      // Default is false for spellcheck, but the spell-check config dialog
-      // should write out "true" when the user configures spell checking.
-      m_bgSpellCheck->enableBackgroundSpellCheck(config->readBoolEntry( "SpellCheck", false ));
   }
   else
       m_zoom = 100;
