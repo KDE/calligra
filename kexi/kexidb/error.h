@@ -22,11 +22,12 @@
 #define _KEXI_ERROR_H_
 
 #define ERR_NONE 0
+#define ERR_NO_NAME_SPECIFIED 9 //! used when name (e.g. for database) was not specified
 #define ERR_DRIVERMANAGER 10
 #define ERR_MISSING_DB_LOCATION 20
 #define ERR_ALREADY_CONNECTED 30
 #define ERR_NO_CONNECTION 40 //!< when opened connection was expected using KexiDB::Connection
-#define ERR_NO_DB_USED 41 //!< when used database was expected using KexiDB::Connection
+#define ERR_NO_DB_USED 41 //!< when used database was expected in KexiDB::Connection
 #define ERR_OBJECT_EXISTS 50
 #define ERR_OBJECT_NOT_EXISTING 60
 #define ERR_ACCESS_RIGHTS 70

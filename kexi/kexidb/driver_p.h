@@ -40,18 +40,40 @@ class DriverBehaviour
 			
 	//! "UNSIGNED" by default
 	QString UNSIGNED_TYPE_KEYWORD;
+	
 	//! "AUTO_INCREMENT" by default, used as add-in word to field definition
 	//! May be also used as full definition if SPECIAL_AUTO_INCREMENT_DEF is true.
 	QString AUTO_INCREMENT_FIELD_OPTION; 
+	
 	/*! True if autoincrement field need has special definition 
 	 e.g. like "INTEGER PRIMARY KEY" for SQLite.
 	 Special definition string should be stored in AUTO_INCREMENT_FIELD_OPTION.
 	 False by default. */
 	bool SPECIAL_AUTO_INCREMENT_DEF : 1;
+	
 	/*! Name of a field with autoincremented unique value,
 	 typically returned by Connection::drv_lastInsertRowID().
 	*/
 	QString ROW_ID_FIELD_NAME;
+	
+	/*! Name of any (e.g. first found) database for this connection that 
+	 typically always exists. This can be not set if we want to do some magic checking
+	 what database name is availabe by reimplementing
+	 Connection::anyAvailableDatabaseName().
+	 Example: for PostgreSQL this is "template1".
+	 
+	 \sa Connection::SetAvailableDatabaseName()
+	*/
+	QString ALWAYS_AVAILABLE_DATABASE_NAME;
+	
+	/*! True if using database is requied to perform real connection.
+	 This is true for may engines, e.g. for PostgreSQL, where connections 
+	 string should contain a database name.
+	 This flag is unused for file-based db drivers,
+	 by default set to true and used for all other db drivers.
+	*/
+	bool USING_DATABASE_REQUIRED_TO_CONNECT : 1;
+
 };
 
 }

@@ -38,3 +38,4 @@ void ConnectionData::setFileName( const QString& fn )
 		m_dbFileName = file.fileName();
 	}
 }
+

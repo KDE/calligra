@@ -121,7 +121,10 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 			if there is no used database */
 		QString currentDatabase() { return m_usedDatabase; }
 
-		/*! Drop database with name \a dbName, using this connection. */
+		/*! Drops database with name \a dbName, using this connection.
+		 if dbName is not specified, currently used database name is used
+		 (it is closed before dropping).
+		*/
 		bool dropDatabase( const QString &dbName = QString::null );
 
 		/*! \return names of all table schemas stored in currently 
@@ -370,6 +373,56 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 be driver-dependent. */
 		Field* findSystemFieldName(KexiDB::FieldList *fieldlist);
 
+		/*! \return name of any (e.g. first found) database for this connection.
+		 This method does not close or open this connection. The method can be used
+		 (it is also internally used, e.g. for database dropping) when we need 
+		 a database name before we can connect and execute any SQL statement 
+		 (e.g. DROP DATABASE).
+		 
+		 The method can return nul lstring, but in this situation no automatic (implicit)
+		 connections could be made, what is useful by e.g. dropDatabase().
+		 
+		 Note for driver developers: return here a name of database which you are sure 
+		 is existing. 
+		 Default implementation returns:
+		 - value that previously had been set using setAvailableDatabaseName() for 
+		   this connection, if it is not empty
+		 - else (2nd priority): value of DriverBehaviour::ALWAYS_AVAILABLE_DATABASE_NAME 
+		 if it is not empty.
+		 
+		 See decription of DriverBehaviour::ALWAYS_AVAILABLE_DATABASE_NAME member.
+		 You may want to reimplement this method only when you need to depend on
+		 this connection specifics 
+		 (e.g. you need to check something remotely).
+		*/
+		virtual QString anyAvailableDatabaseName();
+		
+		/*! Sets \a dbName as name of a database that can be accessioble. 
+		 This is option that e.g. application that make use of KexiDB library can set
+		 to tune connection's behaviour when it needs to temporary connect to any database
+		 in the server to do some work.
+		 You can pass empty dbName - then anyAvailableDatabaseName() will try return
+		 DriverBehaviour::ALWAYS_AVAILABLE_DATABASE_NAME value instead of the 
+		 one previously set with setAvailableDatabaseName().
+		 
+		 \sa anyAvailableDatabaseName()
+		*/
+		void setAvailableDatabaseName(const QString& dbName);
+
+		/*! Because some engines need to have opened any database before
+		 executing administrative sql statements like "create database" or "drop database",
+		 this method is used to use appropriate, existing database for this connection.
+		 For file-based db drivers this always return true and not sets tmpdbName
+		 to any value. For other db drivers, sets tmpdbName to db name computed 
+		 using anyAvailableDatabaseName(). If the name computed is empty, false is returned;
+		 if it is not, useDatabase() is called for it. False is returned also after 
+		 useDatabase() failure.
+		 You can call this method fro your app if you really want to perform 
+		 tasks that require any used database. In such a case don't forget 
+		 to closeDatabase() if returned tmpdbName is not empty.
+		*/
+		bool useTemporaryDatabaseIfNeeded(QString &tmpdbName);
+		
 	protected:
 		/*! Used by Driver */
 		Connection( Driver *driver, const ConnectionData &conn_data );
@@ -622,7 +675,8 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		bool m_is_connected : 1;
 		bool m_autoCommit : 1;
 		bool m_destructor_started : 1; //!< helper: true if destructor is started
-	
+		
+		QString m_availableDatabaseName; //! used by anyAvailableDatabaseName()
 };
 
 } //namespace KexiDB

@@ -248,12 +248,14 @@ bool Connection::createDatabase( const QString &dbName )
 	if (!checkConnected())
 		return false;
 	
-	QString my_dbName = dbName;
-	const QStringList& db_lst = databaseNames();
-	if (my_dbName.isEmpty() && !db_lst.isEmpty())
-		my_dbName = db_lst.first();
+//	QString my_dbName = dbName;
+	//if (my_dbName.isEmpty()) {
+	//	const QStringList& db_lst = databaseNames();
+//		if (!db_lst.isEmpty())
+//			my_dbName = db_lst.first();
+//	}
 
-	if (databaseExists( my_dbName )) {
+	if (databaseExists( dbName )) {
 		setError(ERR_OBJECT_EXISTS, i18n("Database '%1' already exists.").arg(dbName) );
 		return false;
 	}
@@ -267,10 +269,22 @@ bool Connection::createDatabase( const QString &dbName )
 //		}
 	}
 
+	QString tmpdbName;
+	//some engines need to have opened any database before executing "create database"
+	if (!useTemporaryDatabaseIfNeeded(tmpdbName))
+		return false;
+	
 	//low-level create
 	if (!drv_createDatabase( dbName )) {
 		setError(i18n("Error creating database '%1' on the server.").arg(dbName) );
+		closeDatabase();//sanity
 		return false;
+	}
+	
+	if (!tmpdbName.isEmpty()) {
+		//whatever result is - now we have to close temporary opened database:
+		if (!closeDatabase())
+			return false;
 	}
 
 	if (!m_driver->m_isDBOpenedAfterCreate) {
@@ -282,7 +296,7 @@ bool Connection::createDatabase( const QString &dbName )
 	}
 	else {
 		//just for the rule
-		m_usedDatabase = my_dbName;
+		m_usedDatabase = dbName;
 	}
 		
 	Transaction trans;
@@ -331,9 +345,11 @@ bool Connection::useDatabase( const QString &dbName )
 		return false;
 	
 	QString my_dbName = dbName;
-	const QStringList& db_lst = databaseNames();
-	if (my_dbName.isEmpty() && !db_lst.isEmpty())
-		my_dbName = db_lst.first();
+	if (my_dbName.isEmpty()) {
+		const QStringList& db_lst = databaseNames();
+		if (!db_lst.isEmpty())
+			my_dbName = db_lst.first();
+	}
 	if (my_dbName.isEmpty())
 		return false;
 
@@ -403,28 +419,68 @@ bool Connection::closeDatabase()
 	return ret;
 }
 
+bool Connection::useTemporaryDatabaseIfNeeded(QString &tmpdbName)
+{
+	if (!m_driver->isFileDriver() && m_driver->beh->USING_DATABASE_REQUIRED_TO_CONNECT
+	 && !isDatabaseUsed()) {
+		//we have no db used, but it is required by engine to have used any!
+		tmpdbName = anyAvailableDatabaseName();
+		if (tmpdbName.isEmpty()) {
+			setError(ERR_NO_DB_USED, i18n("Cannot find any database for temporary connection.") );
+			return false;
+		}
+		if (!useDatabase(tmpdbName)) {
+			setError(errorNum(), i18n("Error during starting temporary connection using \"%1\" database name.")
+				.arg(tmpdbName) );
+			return false;
+		}
+	}
+	return true;
+}
+
 bool Connection::dropDatabase( const QString &dbName )
 {
+	if (!checkConnected())
+		return false;
+	
 	QString dbToDrop;
 	if (dbName.isEmpty() && m_usedDatabase.isEmpty()) {
-		if (!m_driver->isFileDriver())
+		if (!m_driver->isFileDriver() 
+		 || (m_driver->isFileDriver() && m_data.m_fileName.isEmpty()) ) {
+			setError(ERR_NO_NAME_SPECIFIED, i18n("Cannot drop database - name not specified.") );
 			return false;
+		}
 		//this is a file driver so reuse previously passed filename
 		dbToDrop = m_data.m_fileName;
 	}
-	else
-		dbToDrop = m_usedDatabase.isEmpty() ? dbName : m_usedDatabase;
+	else {
+		dbToDrop = dbName.isEmpty() ? m_usedDatabase : dbName;
+	}
 
-	if (!checkConnected())
+	if (dbToDrop.isEmpty()) {
 		return false;
+	}
 
-	//close db if opened
-	if (!m_usedDatabase.isEmpty()) {
+	if (isDatabaseUsed() && m_usedDatabase == dbToDrop) {
+		//we need to close database because cannot drop used this database
 		if (!closeDatabase())
 			return false;
 	}
-
-	return drv_dropDatabase( dbToDrop );
+	
+	QString tmpdbName;
+	//some engines need to have opened any database before executing "drop database"
+	if (!useTemporaryDatabaseIfNeeded(tmpdbName))
+		return false;
+	
+	//ok, now we have access to dropping
+	bool ret = drv_dropDatabase( dbToDrop );
+	
+	if (!tmpdbName.isEmpty()) {
+		//whatever result is - now we have to close temporary opened database:
+		if (!closeDatabase())
+			return false;
+	}
+	return ret;
 }
 
 QStringList Connection::tableNames(bool also_system_tables)
@@ -1293,6 +1349,19 @@ void Connection::removeMe(TableSchema *ts)
 		m_tables.take(ts->id());
 		m_tables_byname.take(ts->name());
 	}
+}
+
+QString Connection::anyAvailableDatabaseName()
+{
+	if (!m_availableDatabaseName.isEmpty()) {
+		return m_availableDatabaseName;
+	}
+	return m_driver->beh->ALWAYS_AVAILABLE_DATABASE_NAME;
+}
+
+void Connection::setAvailableDatabaseName(const QString& dbName)
+{
+	m_availableDatabaseName = dbName;
 }
 
 #include "connection.moc"
