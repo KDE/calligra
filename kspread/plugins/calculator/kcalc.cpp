@@ -26,6 +26,7 @@
 #include "fontdlg.h"
 #include "version.h"
 #include <klocale.h>
+#include <knotifyclient.h>
 #include <qgrid.h>
 #include <qlayout.h>
 
@@ -1858,14 +1859,14 @@ void QtCalculator::temp_stack_next(){
   CALCAMNT *number;
 
   if( temp_stack.current() == temp_stack.getLast()){
-        QApplication::beep();
+        KNotifyClient::beep();
         return;
   }
 
   number = temp_stack.next();
 
   if(number == NULL){
-       QApplication::beep();
+       KNotifyClient::beep();
     return;
   }
   else{
@@ -1884,14 +1885,14 @@ void QtCalculator::temp_stack_prev(){
   CALCAMNT *number;
 
   if( temp_stack.current() == temp_stack.getFirst()){
-        QApplication::beep();
+        KNotifyClient::beep();
         return;
   }
 
   number = temp_stack.prev();
 
   if(number == NULL){
-    QApplication::beep();
+    KNotifyClient::beep();
     return;
   }
   else{
