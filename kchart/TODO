@@ -1,12 +1,17 @@
-Before release of KOffice 1.4
------------------------------
-
 Legend
+======
 
-DONE		Task is all done
-done		This part of the task is done
-KDCH		Must be fixed in KDChart (new version is on its way).
-KSPR		Must be fixed in KSpread
+----	Not yet done (for main tasks, parts of it may be done)
+DONE	Task is all done
+KDCH	Must be fixed in KDChart (new version will be out before 1.4).
+KSPR	Must be fixed in KSpread
+done	This part of the task is done
+kdch	This part of the task must be fixed in KDChart
+kspr	This part of the task must be fixed in KSpread
+
+
+Before release of KOffice 1.4
+=============================
 
 
 Item								   Prio Status
@@ -84,6 +89,9 @@ Item								   Prio Status
   + Make Apply button work.						DONE
   + Smaller column widths?						DONE
   + Transfer the Tooltips and WhatsThis from the old editor.	      1	DONE
+  + Better keyboard shortcuts?					      1 ----
+    - Moving within the data table				      1 ----
+    - Remove the spinboxes from the buddy list.			      1 ----
   + Remove the spinboxes from the buddy list.			      1 ----
 
 * Config dialog
@@ -144,6 +152,14 @@ Item								   Prio Status
 
 
 After release of KOffice 1.4
-----------------------------
+============================
 
-* Export of bitmaps.
+* Import of CSV files						     1 ----
+
+* Export of bitmaps.						     1 ----
+
+* Data Editor							     1 ----
+  + Insert / Delete Rows / Columns
+  + Selections: Clear, Cut/Copy&Paste, 
+  + Formulas?
+  + Select specific areas to chart (apart from entire data)
