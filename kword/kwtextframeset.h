@@ -303,7 +303,6 @@ public:
 
     void showPopup( KWFrame *frame, KWView *view, const QPoint &point );
 
-    QPtrList<KAction> dataToolActionList();
     void openLink();
 
 public slots:
@@ -324,14 +323,12 @@ protected:
 
 private slots:
     void slotFrameDeleted(KWFrame *);
-    void slotToolActivated( const KoDataToolInfo & info, const QString & command );
 
 private:
     QPtrList<KAction> m_actionList; // for the kodatatools
 
     KoParagLayout m_paragLayout;
     QString m_wordUnderCursor;
-    QString m_refLink;
     bool m_singleWord;
 };
 
