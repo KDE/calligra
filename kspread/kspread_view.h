@@ -131,7 +131,6 @@ public:
      */
     KSpread::TabBar* tabBar() const;
 
-    void changeZoomMenu( int zoom );
     void setZoom( int zoom, bool updateViews ); // change the zoom value
 
     void addTable( KSpreadSheet *_t );

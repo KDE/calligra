@@ -33,7 +33,6 @@
 #include <qcursor.h>
 #include <qlayout.h>
 #include <qpaintdevicemetrics.h>
-#include <qregexp.h>
 #include <qtimer.h>
 #include <qtoolbutton.h>
 
@@ -66,6 +65,7 @@
 #include <koMainWindow.h>
 #include <koPartSelectAction.h>
 #include <kocommandhistory.h>
+#include <kozoomaction.h>
 #include <koTemplateCreateDia.h>
 
 #include <kparts/partmanager.h>
@@ -538,7 +538,6 @@ public:
     KAction* autoSum;
     KSelectAction* formulaSelection;
     KAction* insertLink;
-    KSelectAction* viewZoom;
     KAction* consolidate;
     KAction* goalSeek;
     KAction* subTotals;
@@ -551,6 +550,7 @@ public:
     KAction* spellChecking;
     
     // settings
+    KoZoomAction* viewZoom;
     KToggleAction* showStatusBar;
     KToggleAction* showTabBar;
     KToggleAction* showFormulaBar;
@@ -1101,11 +1101,9 @@ void ViewPrivate::initActions()
   QObject::connect( actions->formulaSelection, SIGNAL( activated( const QString& ) ),
       view, SLOT( formulaSelection( const QString& ) ) );
 
-  actions->viewZoom = new KSelectAction( i18n( "Zoom" ), "viewmag", 0, ac, "view_zoom" );
-  QObject::connect( actions->viewZoom, SIGNAL( activated( const QString & ) ),
+  actions->viewZoom = new KoZoomAction( i18n( "Zoom" ), "viewmag", 0, ac, "view_zoom" );
+  QObject::connect( actions->viewZoom, SIGNAL( zoomChanged( const QString & ) ),
       view, SLOT( viewZoom( const QString & ) ) );
-  actions->viewZoom->setEditable(true);
-  view->changeZoomMenu( doc->zoom() );
 
   actions->consolidate = new KAction( i18n("&Consolidate..."),
       0, view, SLOT( consolidate() ), ac, "consolidate" );
@@ -1682,10 +1680,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     }
 
     viewZoom( QString::number( d->doc->zoom() ) );
-
-    QStringList list = d->actions->viewZoom->items();
-    QString zoomStr( i18n("%1%").arg( d->doc->zoom()) );
-    d->actions->viewZoom->setCurrentItem( list.findIndex(zoomStr)  );
 
     d->actions->selectStyle->setItems( d->doc->styleManager()->styleNames() );
 
@@ -4533,76 +4527,19 @@ void KSpreadView::togglePageBorders( bool mode )
   d->doc->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
-void KSpreadView::changeZoomMenu( int zoom )
-{
-  if( d->actions->viewZoom->items().isEmpty() )
-  {
-    QStringList lst;
-    lst << i18n("%1%").arg("33");
-    lst << i18n("%1%").arg("50");
-    lst << i18n("%1%").arg("75");
-    lst << i18n("%1%").arg("100");
-    lst << i18n("%1%").arg("125");
-    lst << i18n("%1%").arg("150");
-    lst << i18n("%1%").arg("200");
-    lst << i18n("%1%").arg("250");
-    lst << i18n("%1%").arg("350");
-    lst << i18n("%1%").arg("400");
-    lst << i18n("%1%").arg("450");
-    lst << i18n("%1%").arg("500");
-    d->actions->viewZoom->setItems( lst );
-  }
-
-  if( zoom>0 )
-  {
-    QValueList<int> list;
-    bool ok;
-    const QStringList itemsList( d->actions->viewZoom->items() );
-    QRegExp regexp("(\\d+)"); // "Captured" non-empty sequence of digits
-
-    for (QStringList::ConstIterator it = itemsList.begin() ; it != itemsList.end() ; ++it)
-    {
-      regexp.search(*it);
-      const int val=regexp.cap(1).toInt(&ok);
-      //zoom : limit inferior=10
-      if( ok && val>9 && list.contains(val)==0 )
-        list.append( val );
-
-      //necessary at the beginning when we read config
-      //this value is not in combo list
-      if(list.contains(zoom)==0)
-        list.append( zoom );
-
-      qHeapSort( list );
-
-      QStringList lst;
-      for (QValueList<int>::Iterator it = list.begin() ; it != list.end() ; ++it)
-        lst.append( i18n("%1%").arg(*it) );
-      d->actions->viewZoom->setItems( lst );
-    }
-  }
-}
-
 void KSpreadView::viewZoom( const QString & s )
 {
   int oldZoom = d->doc->zoom();
 
   bool ok = false;
-  QRegExp regexp("(\\d+)"); // "Captured" non-empty sequence of digits
-  regexp.search(s);
-  int newZoom=regexp.cap(1).toInt(&ok);
-
-//   kdDebug(36001) << "---------viewZoom: " << z << " - " << s << ", newZoom: " << newZoom
-//                  << ", oldZoom " << oldZoom << ", " << zoom() << endl;
+  int newZoom = s.toInt(&ok);
 
   if ( !ok || newZoom < 10 ) //zoom should be valid and >10
     newZoom = oldZoom;
 
   if ( newZoom != oldZoom )
   {
-    changeZoomMenu( newZoom );
-    QString zoomStr( i18n("%1%").arg( newZoom ) );
-    d->actions->viewZoom->setCurrentItem( d->actions->viewZoom->items().findIndex( zoomStr ) );
+    d->actions->viewZoom->setZoom( newZoom );
 
     d->doc->emitBeginOperation( false );
 
@@ -4879,8 +4816,7 @@ void KSpreadView::refreshView()
   active = d->doc->showFormulaBar();
   editWidget()->showEditWidget( active );
 
-  QString zoomStr( i18n("%1%").arg( d->doc->zoom() ) );
-  d->actions->viewZoom->setCurrentItem( d->actions->viewZoom->items().findIndex( zoomStr ) );
+  d->actions->viewZoom->setZoom( d->doc->zoom() );
 
   d->adjustActions( !table->isProtected() );
   
