@@ -2603,7 +2603,7 @@ void KSpreadCanvas::updatePosWidget()
                 buffer=util_columnLabel( selection.left() );
                 buffer+=tmp.setNum(selection.top());
                 buffer+=":";
-                buffer+=util_columnLabel( selection.right() );
+                buffer+=util_columnLabel( QMIN(26*26,selection.right()) );
                 buffer+=tmp.setNum(selection.bottom());
                 //buffer=activeTable()->columnLabel( m_iMarkerColumn );
                 //buffer+=tmp.setNum(m_iMarkerRow);
