@@ -251,4 +251,10 @@ void KoBgSpellCheck::slotClearPara()
     parag->setFormat( 0, parag->length()-1, &format, true,
                       KoTextFormat::Misspelled );
 }
+
+KSpell2::Settings * KoBgSpellCheck::settings() const
+{
+    return d->backSpeller->settings();
+}
+
 #endif

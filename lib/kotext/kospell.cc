@@ -229,5 +229,10 @@ KoTextDocument * KoSpell::textDocument() const
     return d->lastTxtDocument;
 }
 
+KSpell2::Settings * KoSpell::settings() const
+{
+    return broker()->settings();
+}
+
 #include "kospell.moc"
 #endif

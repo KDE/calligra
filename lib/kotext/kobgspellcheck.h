@@ -47,6 +47,12 @@ public:
     virtual KoTextIterator *createWholeDocIterator() const=0;
 
     bool enabled() const;
+
+    /**
+     * Returns the Settings object used by the broker.
+     */
+    KSpell2::Settings *settings() const;
+
 public slots:
     void start();
     void stop();

@@ -19,10 +19,9 @@
 #ifndef KOSPELL_H
 #define KOSPELL_H
 
-
-#ifdef HAVE_CONFIG_H
+/// OK including config.h in public headers is bad practice - to be removed once kspell2 is required
 #include <config.h>
-#endif
+
 #ifdef HAVE_LIBKSPELL2
 
 #include <qobject.h>
@@ -35,9 +34,15 @@ class KoTextIterator;
 class KoTextParag;
 class KoTextObject;
 class KoTextDocument;
+namespace KSpell2
+{
+    class Settings;
+}
 
 /**
  * KOffice spell checking object
+ * Used for both spell-checking-with-a-dialog (directly)
+ * and background spell-checking (via KoBgSpellCheck).
  *
  * @author Zack Rusin <zack@kde.org>, David Sweet <dsweet@kde.org>
  * @see KSpell2::Broker
@@ -77,6 +82,11 @@ public:
     int currentStartIndex() const;
 
     KoTextDocument *textDocument() const;
+
+    /**
+     * Returns the Settings object used by the broker.
+     */
+    KSpell2::Settings *settings() const;
 
 public slots:
     void slotCurrentParagraphDeleted();
