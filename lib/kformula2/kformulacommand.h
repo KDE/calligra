@@ -64,19 +64,6 @@ public:
     virtual void unexecute() = 0;
 
     /**
-     * @return a short i18n text that describes the undo/redo
-     * action. This has to be used in menus entries.
-     */
-    QString getShortDescription() { return shortText; } 
-
-    /**
-     * @return a long i18n text that describes the undo/redo
-     * action. This can be used as tooltip.
-     */
-    QString getLongDescription() { return longText; } 
-
-
-    /**
      * A command might have no effect.
      * @returns true if nothing happened.
      */
@@ -91,11 +78,6 @@ protected:
     // I would prefer to have private attributes.
     
     /**
-     * The container we belong to.
-     */
-    KFormulaContainer* doc;
-
-    /**
      * Cursor position before the command execution.
      */
     FormulaCursor::CursorData* cursordata;
@@ -106,16 +88,17 @@ protected:
     FormulaCursor::CursorData* undocursor;
 
     /**
-     * Descriptions.
-     */
-    QString shortText;
-    QString longText;
-
-    /**
      * the list where all elements are stored that are removed
      * from the tree. Nearly each command needs it.
      */
     QList<BasicElement> removedList;
+
+private:
+    
+    /**
+     * The container we belong to.
+     */
+    KFormulaContainer* doc;
 };
 
 
@@ -130,6 +113,11 @@ public:
  
     virtual void execute();
     virtual void unexecute();
+
+    /**
+     * Collects all elements that are to be added.
+     */
+    void addElement(BasicElement* element) { removedList.append(element); }
 };
 
 
@@ -210,39 +198,6 @@ private:
 };
 
 
-class KFCAddText : public KFCAdd
-{
-public:
-    /**
-     * Build a addTextElement command and add
-     * at cursor a textelement with content ch
-     */
-    KFCAddText(KFormulaContainer *document, QChar ch);
-};
-
-
-class KFCAddNumber : public KFCAdd
-{
-public:
-    /**
-     * Build a addNumberElement command and add
-     * at cursor a numberelement with content ch
-     */
-    KFCAddNumber(KFormulaContainer *document, QChar ch);
-};
-
-
-class KFCAddOperator : public KFCAdd
-{
-public:
-    /**
-     * Build a addOperatorElement command and add
-     * at cursor a operatorelement with content ch
-     */
-    KFCAddOperator(KFormulaContainer *document, QChar ch);
-};
-
-
 /**
  * Base for all commands that want to replace the current
  * selection with a new element and set the replaced elements
@@ -257,8 +212,6 @@ public:
     virtual void execute();
     virtual void unexecute();
 
-protected:
-    
     void setElement(BasicElement* e) { element = e; }
     
 private:
@@ -267,34 +220,6 @@ private:
      * The element that is to be inserted.
      */
     BasicElement* element;
-};
-
-
-class KFCAddRoot : public KFCAddReplacing
-{
-public:
-    KFCAddRoot(KFormulaContainer* document);
-};
-
-
-class KFCAddFraction : public KFCAddReplacing
-{
-public:
-    KFCAddFraction(KFormulaContainer* document);
-};
-
-
-class KFCAddBracket : public KFCAddReplacing
-{
-public:
-    KFCAddBracket(KFormulaContainer* document, QChar left, QChar right);
-};
-
-
-class KFCAddSymbol : public KFCAddReplacing
-{
-public:
-    KFCAddSymbol(KFormulaContainer* document, Artwork::SymbolType type);
 };
 
 
@@ -347,14 +272,4 @@ private:
     KFCAddGenericIndex addGenericIndex;
 };
 
-
-/**
- * Command to insert stuff from the clipboard.
- */
-class KFCPaste : public KFCAdd
-{
-public:
-    KFCPaste(KFormulaContainer* document, QList<BasicElement>& list);
-};
-
-#endif // __KFORMULACONTAINER_H
+#endif // __KFORMULACOMMAND_H

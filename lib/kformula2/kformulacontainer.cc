@@ -17,12 +17,15 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
+
 #include <qtextstream.h>
 #include <qfile.h>
 #include <qdom.h>
 #include <qpainter.h>
 #include <qevent.h>
 #include <qstring.h>
+
+#include <klocale.h>
 
 #include "bracketelement.h"
 #include "contextstyle.h"
@@ -46,8 +49,6 @@ KFormulaContainer::KFormulaContainer()
     rootElement = new FormulaElement(this);
     dirty = true;
     testDirty();
-    //undoStack.setAutoDelete(true);
-    //redoStack.setAutoDelete(true);
 }
 
 KFormulaContainer::~KFormulaContainer()
@@ -114,50 +115,46 @@ void KFormulaContainer::execute(KFormulaCommand *command)
 void KFormulaContainer::addText(FormulaCursor* cursor, QChar ch)
 {
     setActiveCursor(cursor);
-    if (cursor->isSelection()) {
- 	KFCRemoveSelection* command = new KFCRemoveSelection(this, BasicElement::beforeCursor);
- 	execute(command);
-    }
-
-    KFCAddText* command = new KFCAddText(this, ch);
+    removeSelection(cursor);
+    
+    KFCAdd* command = new KFCAdd(i18n("_:Undo descr.\nAdd text"), this);
+    command->addElement(new TextElement(ch));
     execute(command);
 }
 
 void KFormulaContainer::addNumber(FormulaCursor* cursor, QChar ch)
 {
     setActiveCursor(cursor);
-    if (cursor->isSelection()) {
- 	KFCRemoveSelection* command = new KFCRemoveSelection(this, BasicElement::beforeCursor);
- 	execute(command);
-    }
+    removeSelection(cursor);
 
-    KFCAddNumber* command = new KFCAddNumber(this, ch);
+    KFCAdd* command = new KFCAdd(i18n("_:Undo descr.\nAdd number"), this);
+    command->addElement(new NumberElement(ch));
     execute(command);
 }
 
 void KFormulaContainer::addOperator(FormulaCursor* cursor, QChar ch)
 {
     setActiveCursor(cursor);
-    if (cursor->isSelection()) {
- 	KFCRemoveSelection* command = new KFCRemoveSelection(this, BasicElement::beforeCursor);
- 	execute(command);
-    }
+    removeSelection(cursor);
 
-    KFCAddOperator* command = new KFCAddOperator(this, ch);
+    KFCAdd* command = new KFCAdd(i18n("_:Undo descr.\nAdd operator"), this);
+    command->addElement(new OperatorElement(ch));
     execute(command);
 }
 
 void KFormulaContainer::addBracket(FormulaCursor* cursor, char left, char right)
 {
     setActiveCursor(cursor);
-    KFCAddBracket* command = new KFCAddBracket(this, left, right);
+    KFCAddReplacing* command = new KFCAddReplacing(i18n("_:Undo descr.\nAdd bracket"), this);
+    command->setElement(new BracketElement(left, right));
     execute(command);
 }
 
 void KFormulaContainer::addFraction(FormulaCursor* cursor)
 {
     setActiveCursor(cursor);
-    KFCAddFraction* command = new KFCAddFraction(this);
+    KFCAddReplacing* command = new KFCAddReplacing(i18n("_:Undo descr.\nAdd fraction"), this);
+    command->setElement(new FractionElement());
     execute(command);
 }
 
@@ -165,7 +162,8 @@ void KFormulaContainer::addFraction(FormulaCursor* cursor)
 void KFormulaContainer::addRoot(FormulaCursor* cursor)
 {
     setActiveCursor(cursor);
-    KFCAddRoot* command = new KFCAddRoot(this);
+    KFCAddReplacing* command = new KFCAddReplacing(i18n("_:Undo descr.\nAdd root"), this);
+    command->setElement(new RootElement());
     execute(command);
 }
 
@@ -174,17 +172,15 @@ void KFormulaContainer::addSymbol(FormulaCursor* cursor,
                                   Artwork::SymbolType type)
 {
     setActiveCursor(cursor);
-    KFCAddSymbol* command = new KFCAddSymbol(this, type);
+    KFCAddReplacing* command = new KFCAddReplacing(i18n("_:Undo descr.\nAdd symbol"), this);
+    command->setElement(new SymbolElement(type));
     execute(command);
 }
 
 void KFormulaContainer::addMatrix(FormulaCursor* cursor, int rows, int columns)
 {
     setActiveCursor(cursor);
-    if (cursor->isSelection()) {
- 	KFCRemoveSelection* command = new KFCRemoveSelection(this, BasicElement::beforeCursor);
- 	execute(command);
-    }
+    removeSelection(cursor);
 
     KFCAddMatrix* command = new KFCAddMatrix(this, rows, columns);
     execute(command);
@@ -299,8 +295,8 @@ void KFormulaContainer::addGenericIndex(FormulaCursor* cursor, ElementIndexPtr i
 }
 
 
-void KFormulaContainer::removeSelection(FormulaCursor* cursor,
-                                        BasicElement::Direction direction)
+void KFormulaContainer::remove(FormulaCursor* cursor,
+                               BasicElement::Direction direction)
 {
     setActiveCursor(cursor);
     KFCRemove* command = new KFCRemove(this, direction);
@@ -331,11 +327,26 @@ void KFormulaContainer::paste(FormulaCursor* cursor, QMimeSource* source)
         QList<BasicElement> list;
         list.setAutoDelete(true);
         if (cursor->buildElementsFromDom(formula, list)) {
-            KFCPaste* command = new KFCPaste(this, list);
+            removeSelection(cursor);
+            KFCAdd* command = new KFCAdd(i18n("_:Undo descr.\nPaste"), this);
+            uint count = list.count();
+            for (uint i = 0; i < count; i++) {
+                command->addElement(list.take(0));
+            }
             execute(command);
         }
     }
 }
+
+
+void KFormulaContainer::removeSelection(FormulaCursor* cursor)
+{
+    if (cursor->isSelection()) {
+ 	KFCRemoveSelection* command = new KFCRemoveSelection(this, BasicElement::beforeCursor);
+ 	execute(command);
+    }
+}
+
 
 void KFormulaContainer::undo()
 {
@@ -360,21 +371,6 @@ void KFormulaContainer::redo(FormulaCursor *cursor)
     redo();
 }
 
-// void KFormulaContainer::pushUndoStack(KFormulaCommand *command) 
-// { 
-//     undoStack.push(command); 
-
-// //emit signals
-
-// }
-
-// void KFormulaContainer::pushRedoStack(KFormulaCommand *command) 
-// { 
-//     redoStack.push(command); 
-
-// //emit signals
-
-// }
 
 QRect KFormulaContainer::boundingRect()
 {
@@ -433,8 +429,6 @@ void KFormulaContainer::load(QString file)
             rootElement = root;
             dirty = true;
             testDirty();
-            //cleanRedoStack();
-            //cleanUndoStack();
             history.clear();
 
             emit formulaLoaded(rootElement);

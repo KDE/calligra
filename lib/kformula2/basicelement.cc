@@ -160,7 +160,7 @@ bool BasicElement::readAttributesFromDom(QDomElement& element)
  * that needs to be read.
  * Returns false if it failed.
  */
-bool BasicElement::readContentFromDom(QDomNode& node)
+bool BasicElement::readContentFromDom(QDomNode&)
 {
     return true;
 }

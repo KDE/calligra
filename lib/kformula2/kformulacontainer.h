@@ -140,7 +140,7 @@ public slots:
     void addGenericLowerIndex(FormulaCursor* cursor);
     void addGenericUpperIndex(FormulaCursor* cursor);
     
-    void removeSelection(FormulaCursor* cursor, BasicElement::Direction);
+    void remove(FormulaCursor* cursor, BasicElement::Direction);
     void replaceElementWithMainChild(FormulaCursor* cursor, BasicElement::Direction);
 
     /**
@@ -183,30 +183,10 @@ public slots:
 private:
 
     void addGenericIndex(FormulaCursor* cursor, ElementIndexPtr index);
+    void removeSelection(FormulaCursor* cursor);
 
     void execute(KFormulaCommand *command);
     
-    /**
-     * Push the command to the undo stack
-     */
-    //void pushUndoStack(KFormulaCommand *command);
-
-    /**
-     * Push the command to the redo stack
-     */
-    //void pushRedoStack(KFormulaCommand *command);
-     
-    /**
-     * Clean redo stack because of a modify.
-     */
-    //void cleanRedoStack() {redoStack.clear();}
-
-    /**
-     * Clean undo stack because of a modify.
-     */
-    //void cleanUndoStack() {undoStack.clear();}
-     
-
     /**
      * The element tree's root.
      */
@@ -237,10 +217,6 @@ private:
     friend class TestFormulaCursor;
     friend class TestIndexElement;
     friend class TestCommands;
-    
-    //Undo and redo stack
-    //QStack<KFormulaCommand> undoStack;
-    //QStack<KFormulaCommand> redoStack;
 };
 
 

@@ -25,29 +25,18 @@
 
 #include "kformulacommand.h"
 #include "formulacursor.h"
-#include "bracketelement.h"
-#include "matrixelement.h"
-#include "basicelement.h"
-#include "textelement.h"
-#include "rootelement.h"
-#include "numberelement.h"
-#include "operatorelement.h"
-#include "fractionelement.h"
 #include "indexelement.h"
+#include "matrixelement.h"
 #include "sequenceelement.h"
-#include "symbolelement.h"
 
 
 KFormulaCommand::KFormulaCommand(const QString &name, KFormulaContainer* document)
-        : KCommand(name), doc(document), cursordata(0), undocursor(0)
+        : KCommand(name), cursordata(0), undocursor(0), doc(document)
 {
     removedList.setAutoDelete(true);
 
     FormulaCursor* cursor = getActiveCursor();
     cursordata = cursor->getCursorData();
-
-    shortText = "";
-    longText = i18n("There is no info for this undo/redo");
 }
 
 KFormulaCommand::~KFormulaCommand()
@@ -62,8 +51,6 @@ KFormulaCommand::~KFormulaCommand()
 KFCAdd::KFCAdd(const QString &name, KFormulaContainer *document)
         : KFormulaCommand(name, document)
 {
-    shortText = i18n("Add");
-    longText = i18n("Add an element");
 }
 
 void KFCAdd::execute()
@@ -95,8 +82,6 @@ KFCRemoveSelection::KFCRemoveSelection(KFormulaContainer *document,
         : KFormulaCommand(i18n("_:Undo descr.\nRemove selected text"), document),
           dir(direction)
 {
-    shortText=i18n("_:Undo descr.\nRemove selected text");
-    longText=i18n("Remove the currently selected text");
 }
 
 void KFCRemoveSelection::execute()
@@ -122,8 +107,6 @@ KFCRemove::KFCRemove(KFormulaContainer *document,
         : KFormulaCommand(i18n("_:Undo descr.\nRemove selected text"), document),
           element(0), simpleRemoveCursor(0), dir(direction)
 {
-    shortText=i18n("_:Undo descr.\nRemove selected text");
-    longText=i18n("Remove the currently selected text");
 }
 
 KFCRemove::~KFCRemove()
@@ -196,34 +179,6 @@ void KFCRemoveEnclosing::unexecute()
 }
 
 
-//  **** Add text, operator, numbers command
-
-KFCAddText::KFCAddText(KFormulaContainer* document, QChar ch) 
-        : KFCAdd(i18n("_:Undo descr.\nAdd text"), document)
-{
-    removedList.append(new TextElement(ch));
-    shortText=i18n("_:Undo descr.\nAdd text");
-    longText=i18n("Insertion of a text element");
-}
-
-
-KFCAddNumber::KFCAddNumber(KFormulaContainer* document, QChar ch)
-        : KFCAdd(i18n("_:Undo descr.\nAdd number"), document)
-{
-    removedList.append(new NumberElement(ch));
-    shortText=i18n("_:Undo descr.\nAdd number");
-    longText=i18n("Insertion of a numberic element");
-}
-
-KFCAddOperator::KFCAddOperator(KFormulaContainer* document, QChar ch)
-        : KFCAdd(i18n("_:Undo descr.\nAdd operator"), document)
-{
-    removedList.append(new OperatorElement(ch));
-    shortText=i18n("_:Undo descr.\nAdd operator");
-    longText=i18n("Insertion of an operator element");
-}
-
-
 // ******  Add root, bracket etc command 
 
 KFCAddReplacing::KFCAddReplacing(const QString &name, KFormulaContainer* document)
@@ -258,43 +213,13 @@ void KFCAddReplacing::unexecute()
 }
 
 
-KFCAddRoot::KFCAddRoot(KFormulaContainer* document)
-        : KFCAddReplacing(i18n("_:Undo descr.\nAdd root"), document)
-{
-    RootElement* root = new RootElement();
-    setElement(root);
-}
-
-
-KFCAddFraction::KFCAddFraction(KFormulaContainer* document)
-        : KFCAddReplacing(i18n("_:Undo descr.\nAdd fraction"), document)
-{
-    FractionElement* frac = new FractionElement();
-    setElement(frac);
-}
-
-
-KFCAddBracket::KFCAddBracket(KFormulaContainer* document, QChar left, QChar right)
-        : KFCAddReplacing(i18n("_:Undo descr.\nAdd bracket"), document)
-{
-    BracketElement* bra = new BracketElement(left,right);
-    setElement(bra);
-}
-
-KFCAddSymbol::KFCAddSymbol(KFormulaContainer* document, Artwork::SymbolType type)
-        : KFCAddReplacing(i18n("_:Undo descr.\nAdd symbol"), document)
-{
-    SymbolElement* sym = new SymbolElement(type);
-    setElement(sym);
-}
-
 // ******  Add matrix command 
 
 KFCAddMatrix::KFCAddMatrix(KFormulaContainer* document, int r, int c)
         : KFCAdd(i18n("_:Undo descr.\nAdd a matrix"), document)
 {
     matrix = new MatrixElement(r, c);
-    removedList.append(matrix);
+    addElement(matrix);
 }
 
 void KFCAddMatrix::execute()
@@ -310,7 +235,7 @@ KFCAddGenericIndex::KFCAddGenericIndex(KFormulaContainer* document,
                                        ElementIndexPtr index)
         : KFCAdd(i18n("_:Undo descr.\nAdd any index"), document)
 {
-    removedList.append(new SequenceElement());
+    addElement(new SequenceElement());
     
     FormulaCursor* cursor = getActiveCursor();
     index->setToIndex(cursor);
@@ -337,19 +262,4 @@ void KFCAddIndex::unexecute()
 {
     addGenericIndex.unexecute();
     KFCAddReplacing::unexecute();
-}
-
-
-/**
- * Command to insert stuff from the clipboard.
- */
-KFCPaste::KFCPaste(KFormulaContainer* document, QList<BasicElement>& list)
-        : KFCAdd(i18n("_:Undo descr.\nPaste"), document)
-{
-    list.setAutoDelete(false);
-    uint count = list.count();
-    for (uint i = 0; i < count; i++) {
-        removedList.append(list.at(i));
-    }
-    list.clear();
 }

@@ -134,10 +134,10 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
             cursor->moveDown(flag);
             break;
         case Qt::Key_BackSpace:
-            document->removeSelection(cursor, BasicElement::beforeCursor);
+            document->remove(cursor, BasicElement::beforeCursor);
             break;
         case Qt::Key_Delete:
-            document->removeSelection(cursor, BasicElement::afterCursor);
+            document->remove(cursor, BasicElement::afterCursor);
             break;
         case Qt::Key_Home:
             cursor->moveHome(flag);
