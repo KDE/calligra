@@ -8,6 +8,7 @@
   <item find="1/2" replace="½" />
   <item find="1/4" replace="¼" />
   <item find="3/4" replace="¾" />
+  <item find="A moins" replace="À moins" />
   <item find="A t'on" replace="A-t-on" />
   <item find="A-t'il" replace="A-t-il" />
   <item find="Allemange" replace="Allemagne" />
@@ -27,6 +28,7 @@
   <item find="Esquimeau" replace="Esquimau" />
   <item find="Et bien" replace="Eh bien" />
   <item find="Et oui" replace="Eh oui" />
+  <item find="Etant" replace="Étant" />
   <item find="Février" replace="février" />
   <item find="Haiti" replace="Haïti" />
   <item find="Hors" replace="Or" />
@@ -40,6 +42,7 @@
   <item find="Magrébin" replace="Maghrébin" />
   <item find="Mai" replace="mai" />
   <item find="Marseilles" replace="Marseille" />
+  <item find="Met avis" replace="M'est avis" />
   <item find="Méditerrannée" replace="Méditerranée" />
   <item find="Noel" replace="Noël" />
   <item find="Nouvelle Calédonie" replace="Nouvelle-Calédonie" />
@@ -60,6 +63,7 @@
   <item find="X Windows" replace="X Window" />
   <item find="a conclut" replace="a conclu" />
   <item find="a conçut" replace="a conçu" />
+  <item find="a investit" replace="a investi" />
   <item find="a reçut" replace="a reçu" />
   <item find="a subit" replace="a subi" />
   <item find="a t'on" replace="a-t-on" />
@@ -352,6 +356,7 @@
   <item find="demi heure" replace="demi-heure" />
   <item find="demie heure" replace="demi-heure" />
   <item find="demie-heure" replace="demi-heure" />
+  <item find="des conseilles" replace="des conseils" />
   <item find="des fabriquants" replace="des fabricants" />
   <item find="des lors" replace="dès lors" />
   <item find="des on dit" replace="des on-dit" />
@@ -385,7 +390,9 @@
   <item find="déviser" replace="dévisser" />
   <item find="dûe" replace="due" />
   <item find="dûs" replace="dus" />
+  <item find="elle conseil" replace="elle conseille" />
   <item find="elle même" replace="elle-même" />
+  <item find="elle survie" replace="elle survit" />
   <item find="elles mêmes" replace="elles-mêmes" />
   <item find="empiètement" replace="empiétement" />
   <item find="en fabricant" replace="en fabriquant" />
@@ -531,7 +538,9 @@
   <item find="identation" replace="indentation" />
   <item find="identer" replace="indenter" />
   <item find="identé" replace="indenté" />
+  <item find="il conseil" replace="il conseille" />
   <item find="il sans va" replace="il s'en va" />
+  <item find="il survie" replace="il survit" />
   <item find="imge" replace="image" />
   <item find="imobile" replace="immobile" />
   <item find="imobiles" replace="immobiles" />
@@ -575,6 +584,7 @@
   <item find="jupiter" replace="Jupiter" />
   <item find="jutse" replace="juste" />
   <item find="kioske" replace="kiosque" />
+  <item find="l'adhérant" replace="l'adhérent" />
   <item find="l'équivalant" replace="l'équivalent" />
   <item find="la notre" replace="la nôtre" />
   <item find="la planisphère" replace="le planisphère" />
@@ -688,6 +698,8 @@
   <item find="olécrânes" replace="olécranes" />
   <item find="on a pas" replace="on n'a pas" />
   <item find="on est pas" replace="on n'est pas" />
+  <item find="on y survie" replace="on y survit" />
+  <item find="ont investit" replace="ont investi" />
   <item find="ontario" replace="Ontario" />
   <item find="optionel" replace="optionnel" />
   <item find="optionelle" replace="opionnelle" />
@@ -968,6 +980,7 @@
   <item find="un adhérant" replace="un adhérent" />
   <item find="un anagramme" replace="une anagramme" />
   <item find="un apostrophe" replace="une apostrophe" />
+  <item find="un conseille" replace="un conseil" />
   <item find="un diagnostique" replace="un diagnostic" />
   <item find="un emise" replace="une mise" />
   <item find="un escarre" replace="une escarre" />
