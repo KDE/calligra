@@ -90,6 +90,8 @@ void
 Form::setCurrentWidget(QWidget *w)
 {
 	m_selWidget = w;
+	if(w)
+		emit selectionChanged(w);
 
 	if(w->parentWidget()->inherits("QWidgetStack"))
 	{
@@ -108,13 +110,24 @@ Form::setCurrentWidget(QWidget *w)
 		delete m_resizeHandles;
 		m_resizeHandles = 0;
 	}
-	if(w)
-		emit selectionChanged(w);
-	
+}
+
+
+void
+Form::setSelWidget(QWidget *w)
+{
+	Container *cont;
+	ObjectTreeItem *item = m_topTree->lookup(w->name());
+	if(item->container())
+		cont = item->container();
+	else
+		cont = item->parent()->container();
+
+	cont->setSelectedWidget(w);
 }
 
 void
-Form::changeName(const char *oldname, const QString &newname)
+Form::changeName(const QString &oldname, const QString &newname)
 {
 	m_topTree->rename(oldname, newname);
 }
@@ -123,6 +136,12 @@ void
 Form::emitChildAdded(ObjectTreeItem *item)
 {
 	emit childAdded(item);
+}
+
+void
+Form::emitChildRemoved(ObjectTreeItem *item)
+{
+	emit childRemoved(item);
 }
 
 Container*
@@ -154,7 +173,9 @@ Form::pasteWidget(QDomElement &widg, QPoint pos)
 	if (!activeContainer())
 		return;
 	fixNames(widg);
-	if(!pos.isNull())
+	if(pos.isNull())
+		widg = fixPos(widg);
+	else
 		widg = fixPos(widg, pos);
 	m_inter = false;
 	FormIO::loadWidget(activeContainer(), m_manager->lib(), widg);
@@ -219,6 +240,45 @@ Form::fixPos(QDomElement widg, QPoint newpos)
 	y.appendChild(valueY);
 
 	return el;
+}
+
+QDomElement
+Form::fixPos(QDomElement el)
+{
+	QDomElement rect;
+	for(QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling())
+	{
+		if((n.toElement().tagName() == "property") && (n.toElement().attribute("name") == "geometry"))
+		{
+			rect = n.firstChild().toElement();
+		}
+	}
+
+	QDomElement x = rect.namedItem("x").toElement();
+	QDomElement y = rect.namedItem("y").toElement();
+	QDomElement w = rect.namedItem("width").toElement();
+	QDomElement h = rect.namedItem("height").toElement();
+
+	int rx = x.text().toInt();
+	int ry = y.text().toInt();
+	int rw = w.text().toInt();
+	int rh = h.text().toInt();
+	QRect r(rx, ry, rw, rh);
+
+	QWidget *widg = m_toplevel->widget()->childAt(r.x()+6, r.y()+6, false);
+	if(!widg)
+		return el;
+
+	while(widg->geometry() == r)
+	{
+		widg = m_toplevel->widget()->childAt(widg->x() + 16, widg->y() + 16, false);
+		r.moveBy(10,10);
+	}
+	if(r == QRect(rx, ry, rw, rh))
+		return el;
+	else
+		return fixPos(el, QPoint(r.x(), r.y()));
+		
 }
 
 Form::~Form()

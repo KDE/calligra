@@ -128,6 +128,8 @@ Container::eventFilter(QObject *s, QEvent *e)
 				if(!w)
 					return true;
 
+				if(!m_insertRect.isValid())
+					m_insertRect = QRect(mev->x(), mev->y(), w->sizeHint().width(), w->sizeHint().height());
 				w->move(m_insertRect.x(), m_insertRect.y());
 				w->resize(m_insertRect.width()-1, m_insertRect.height()-1);
 				w->show();
@@ -187,6 +189,8 @@ Container::eventFilter(QObject *s, QEvent *e)
 			if(mev->state() & Qt::LeftButton)
 			{
 				if(!m_toplevel && m_moving == m_container)
+					break;
+				if(m_moving->parentWidget()->inherits("QWidgetStack"))
 					break;
 				int gridX = Form::gridX();
 				int gridY = Form::gridY();

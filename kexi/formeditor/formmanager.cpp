@@ -67,6 +67,7 @@ FormManager::setEditors(KexiPropertyEditor *editor, ObjectTreeView *treeview)
 	editor->setBuffer(m_buffer);
 
 	connect(treeview, SIGNAL(selectionChanged(QWidget*)), m_buffer, SLOT(setObject(QWidget *)));
+	connect(m_treeview, SIGNAL(selectionChanged(QWidget*)), this, SLOT(setSelWidget(QWidget*)));
 	connect(m_workspace, SIGNAL(windowActivated(QWidget*)), this, SLOT(updateTreeView(QWidget *)));
 }
 
@@ -108,9 +109,21 @@ FormManager::activeForm()
 	for(form = m_forms.first(); form; form = m_forms.next())
 	{
 		if(form->toplevelContainer()->widget() == w)
+		{
+			m_active = form;
 			return form;
+		}
 	}
+	m_active = m_forms.first();
 	return m_forms.first();
+}
+
+
+void
+FormManager::setSelWidget(QWidget *w)
+{
+	if(activeForm())
+		m_active->setSelWidget(w);
 }
 
 void
@@ -161,8 +174,10 @@ FormManager::createBlankForm(const QString &classname, const char *name)
 
 	connect(form, SIGNAL(selectionChanged(QWidget*)), m_buffer, SLOT(setObject(QWidget*)));
 	connect(form, SIGNAL(selectionChanged(QWidget*)), m_treeview, SLOT(setSelWidget(QWidget*)));
-	connect(m_buffer, SIGNAL(nameChanged(const char*, const QString&)), form, SLOT(changeName(const char*, const QString&)));
-	connect(m_treeview, SIGNAL(selectionChanged(QWidget*)), form, SLOT(setSelWidget(QWidget*)));
+	connect(form, SIGNAL(childAdded(ObjectTreeItem* )), m_treeview, SLOT(addItem(ObjectTreeItem*)));
+	connect(form, SIGNAL(childRemoved(ObjectTreeItem* )), m_treeview, SLOT(removeItem(ObjectTreeItem*)));
+	connect(m_buffer, SIGNAL(nameChanged(const QString&, const QString&)), form, SLOT(changeName(const QString&, const QString&)));
+	connect(m_treeview, SIGNAL(selectionChanged(QWidget*)), m_buffer, SLOT(setObject(QWidget*)));
 }
 
 void
@@ -170,7 +185,11 @@ FormManager::loadForm()
 {
 	QString n = "Form" + QString::number(m_forms.count()+1);
 	Form *form = new Form(this, n.latin1());
-	FormIO::loadForm(form, m_workspace);
+	if(!FormIO::loadForm(form, m_workspace))
+	{
+		delete form;
+		return;
+	}
 
 	m_forms.append(form);
 	m_buffer->setObject(form->toplevelContainer()->widget());
@@ -178,9 +197,10 @@ FormManager::loadForm()
 
 	connect(form, SIGNAL(selectionChanged(QWidget*)), m_buffer, SLOT(setObject(QWidget*)));
 	connect(form, SIGNAL(selectionChanged(QWidget*)), m_treeview, SLOT(setSelWidget(QWidget*)));
-	connect(m_buffer, SIGNAL(nameChanged(const char*, const QString&)), form, SLOT(changeName(const char*, const QString&)));
-	connect(m_treeview, SIGNAL(selectionChanged(QWidget*)), form, SLOT(setSelWidget(QWidget*)));
-
+	connect(form, SIGNAL(childAdded(ObjectTreeItem* )), m_treeview, SLOT(addItem(ObjectTreeItem*)));
+	connect(form, SIGNAL(childRemoved(ObjectTreeItem* )), m_treeview, SLOT(removeItem(ObjectTreeItem*)));
+	connect(m_buffer, SIGNAL(nameChanged(const QString&, const QString&)), form, SLOT(changeName(const QString&, const QString&)));
+	connect(m_treeview, SIGNAL(selectionChanged(QWidget*)), m_buffer, SLOT(setObject(QWidget*)));
 }
 
 void

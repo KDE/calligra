@@ -154,6 +154,7 @@ void
 ObjectTree::removeChild(const QString &name)
 {
 	ObjectTreeItem *c = lookup(name);
+	m_container->form()->emitChildRemoved(c);
 	m_treeDict.remove(name);
 	delete c;
 }

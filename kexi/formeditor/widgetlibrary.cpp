@@ -147,7 +147,6 @@ WidgetLibrary::createMenuActions(const QString &c, QWidget *w, QPopupMenu *menu,
 }
 
 
-
 WidgetLibrary::~WidgetLibrary()
 {
 }

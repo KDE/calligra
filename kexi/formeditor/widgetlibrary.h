@@ -99,9 +99,6 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 	private:
 		// dict which associates a class name with a Widget class
 		Widgets	m_widgets;
-
-	protected slots:
-//		void	slotInsertWidget(const QString &);
 };
 
 }

@@ -23,7 +23,7 @@ class ContainerFactory : public KFormDesigner::WidgetFactory
 		virtual QWidget				*create(const QString &, QWidget *, const char *,
 					 		 KFormDesigner::Container *);
 		virtual void				createMenuActions(const QString &classname, QWidget *w, QPopupMenu *menu, KFormDesigner::Container *container);
-		
+
 	public slots:
 		void AddTabPage();
 		void chTitle();

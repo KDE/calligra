@@ -119,13 +119,18 @@ class KFORMEDITOR_EXPORT Form : public QObject
 
 		/*! This function is used by ObjectTree to emit childAdded() signal (as it is not a QObject). */
 		void			emitChildAdded(ObjectTreeItem *item);
+		/*! This function is used by ObjectTree to emit childRemoved() signal (as it is not a QObject). */
+		void			emitChildRemoved(ObjectTreeItem *item);
 
 
 	public slots:
 		/*! This slot is called when the name of a widget was changed in Property Editor. It renames the ObjectTreeItem 
 		  associated to this widget.
 		 */
-		void			changeName(const char *oldname, const QString &newname);
+		void			changeName(const QString &oldname, const QString &newname);
+		/*! Sets \a w to be the selected widget in this Form.
+		 */
+		void			setSelWidget(QWidget *w);
 
 	signals:
 		/*! This signal is emitted when user selects a new widget, to update both Property Editor and ObjectTreeView.
@@ -136,6 +141,10 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		 \a it is the ObjectTreeItem representing this new widget.
 		 */
 		void			childAdded(ObjectTreeItem *it);
+		/*! This signal is emitted when a widget is deleted, to update ObjectTreeView.
+		 \a it is the ObjectTreeItem representing this deleted widget.
+		 */
+		void			childRemoved(ObjectTreeItem *it);
 
 	protected:
 		/*! Internal function used to fix the coordinates of a widget before pasting it (to paste it at the position of the
@@ -143,6 +152,11 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		   \return the modified QDomElement.
 		 */
 		QDomElement  fixPos(QDomElement el, QPoint newpos);
+		/*! Internal function used to fix the coordinates of a widget before pasting it (to avoid to have two widgets at the same position).
+		   It moves the widget by (10, 10) increment (several times if there are already asted widgets at this position).
+		   \return the modified QDomElement.
+		 */
+		QDomElement  fixPos(QDomElement el);
 		/*! Internal function used to fix the names of the widgets before pasting them. It prevents from pasting a widget with
 		  the same name as an actual widget. The child widgets are also fixed recursively.\n
 		  If the name of the widget ends with a number (eg "QLineEdit1"), the new name is just incremented by one (eg becomes "QLineEdit2"). 

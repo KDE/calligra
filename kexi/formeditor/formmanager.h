@@ -137,6 +137,8 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void debugTree();
 		/*! This slot is called when the selected Form changes. It updates the ObjectTreeView to show this Form. */
 		void updateTreeView(QWidget *);
+		/*! Sets \a w as the selected widget in the active Form. (called by ObjectTreeView) */
+		void setSelWidget(QWidget *w);
 
 	private:
 		ObjectPropertyBuffer	*m_buffer;
@@ -144,6 +146,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		KexiPropertyEditor	*m_editor;
 		ObjectTreeView		*m_treeview;
 		QPtrList<Form>		m_forms;
+		Form			*m_active;
 		QWorkspace		*m_workspace;
 
 		QDomDocument		m_domDoc;

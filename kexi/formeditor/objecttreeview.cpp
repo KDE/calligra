@@ -25,6 +25,7 @@
 
 #include "objecttree.h"
 #include "form.h"
+#include "container.h"
 
 #include "objecttreeview.h"
 
@@ -155,6 +156,7 @@ ObjectTreeView::ObjectTreeView(QWidget *parent, const char *name)
 	addColumn(i18n("Class"), 100);
 
 	connect((QObject*)header(), SIGNAL(sectionHandleDoubleClicked(int)), this, SLOT(slotColumnSizeChanged(int)));
+	connect(this, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(emitSelChanged(QListViewItem*))); 
 
 	setFullWidth(true);
 	setShowSortIndicator(true);
@@ -174,37 +176,62 @@ ObjectTreeView::slotColumnSizeChanged(int column)
 	setColumnWidth(1, viewport()->width() - columnWidth(0));
 }
 
-void
-ObjectTreeView::setSelWidget(const QString &name)
+ObjectTreeViewItem*
+ObjectTreeView::findItem(const QString &name)
 {
-	ObjectTreeViewItem *objIt = static_cast<ObjectTreeViewItem*>(selectedItem());
-	if(!objIt) return;
-	if(name == objIt->name())
-		return;
-
-	if(name == QString::null)
-		return;
-
-        QListViewItemIterator it(this);
+	QListViewItemIterator it(this);
         while(it.current())
 	{
 		ObjectTreeViewItem *item = static_cast<ObjectTreeViewItem*>(it.current());
-		
 		if(item->name() == name)
 		{
-		//	it->setActive(true);
-			setSelected(it.current(), true);
-			return;
+			return item;
 		}
 		it++;
 	}
+	return 0;
 }
 
 void
 ObjectTreeView::setSelWidget(QWidget *w)
 {
-	if(w)
-		setSelWidget(w->name());
+	if(!w)
+		return;
+
+	QString name = w->name();
+
+	ObjectTreeViewItem *objIt = static_cast<ObjectTreeViewItem*>(selectedItem());
+	if(!objIt) return;
+	if((name == objIt->name()) || (name == QString::null))
+		return;
+
+	setSelected((QListViewItem*) findItem(name), true);
+}
+
+void
+ObjectTreeView::emitSelChanged(QListViewItem *item)
+{
+	ObjectTreeViewItem *it = static_cast<ObjectTreeViewItem*>(item);
+	emit selectionChanged(it->objectTree()->widget());
+}
+
+void
+ObjectTreeView::addItem(ObjectTreeItem *item)
+{
+	ObjectTreeViewItem *parent=0;
+
+	parent = findItem(item->parent()->name());
+	if(!parent)
+		return;
+
+	ObjectTreeViewItem *listitem = loadTree(item, parent);
+}
+
+void
+ObjectTreeView::removeItem(ObjectTreeItem *item)
+{
+	ObjectTreeViewItem *it = findItem(item->name());
+	delete it;
 }
 
 void
@@ -218,20 +245,26 @@ ObjectTreeView::setForm(Form *form)
 	m_topItem = new ObjectTreeViewItem(this); // Creates the hidden top Item 
 	ObjectTree *tree = m_form->objectTree();
 	loadTree(tree, m_topItem);
-	m_topItem->setOpen(true); 
+	m_topItem->setOpen(true);
+	if(form->selectedWidget())
+		setSelWidget(form->selectedWidget());
+	else
+		setSelWidget(form->toplevelContainer()->widget());
 }
 
-void
+ObjectTreeViewItem*
 ObjectTreeView::loadTree(ObjectTreeItem *item, ObjectTreeViewItem *parent)
 {
 	if(!item)
-		return;
+		return 0;
 	ObjectTreeViewItem *treeItem = new ObjectTreeViewItem(parent, item);
 	treeItem->setOpen(true);
 	ObjectTreeC *list = item->children();
 
 	for(ObjectTreeItem *it = list->first(); it; it = list->next())
 		loadTree(it, treeItem);
+
+	return treeItem;
 }
 
 }

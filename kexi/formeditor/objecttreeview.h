@@ -37,6 +37,8 @@ class KFORMEDITOR_EXPORT ObjectTreeViewItem : public KListViewItem
 
 		//! \return the item name, ie the ObjectTreeItem name
 		const QString	name();
+		//! \return the ObjectTreeItem associated to this item.
+		ObjectTreeItem* objectTree() { return m_item; }
 		
 		//void            setActive(bool active) { m_selected = selection; }
 		//bool            isActive() { return m_selected; }
@@ -56,7 +58,6 @@ class KFORMEDITOR_EXPORT ObjectTreeViewItem : public KListViewItem
 
 	private:
 		ObjectTreeItem     *m_item;
-		//bool               m_selected;
 };
 
 //! A graphical view of the ObjectTree of a Form.
@@ -77,23 +78,32 @@ class KFORMEDITOR_EXPORT ObjectTreeView : public KListView
 		    in the Form, and selection will be synced. Nothing happens if \a form is already the current Form. 
 		 */
 		void setForm(Form *form);
-		
-		void setSelWidget(const QString &name);
 
 	public slots:
 		void slotColumnSizeChanged(int);
+		/*! Sets the widget \a w as selected item, so it will be written bold. */
 		void setSelWidget(QWidget *w);
+		/*! Adds the ObjectTreeItem \a item in the list, with the appropriate parent. */
+		void addItem(ObjectTreeItem *item);
+		/*! Removess the ObjectTreeItem \a item from the list. */
+		void removeItem(ObjectTreeItem *item);
+		/*! The selected list item has changed, so we emit a signal to update the Form. */
+		void emitSelChanged(QListViewItem *item);
 
 	signals:
+		/*! This signal is emitted when the user changes the list item selected, so that the Form and the Property 
+		  Editor gets updated.
+		 */
 		void selectionChanged(QWidget *w);
 	
 	protected:
 		//! Internal function to fill the list.
-		void loadTree(ObjectTreeItem *item, ObjectTreeViewItem *parent);
+		ObjectTreeViewItem* loadTree(ObjectTreeItem *item, ObjectTreeViewItem *parent);
+		//! \return The item whose name is \a name. 
+		ObjectTreeViewItem* findItem(const QString &name);
 
 	private:
 		Form    *m_form;
-		//ObjectTreeViewItem   *m_active;
 		ObjectTreeViewItem   *m_topItem;
 };
 

@@ -91,10 +91,10 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		/*! Deletes the selected child item of this Container, and remove it from ObjectTree. */
 		void		deleteItem();
 
-	protected slots:
 		//! Sets \a selected to be the selected widget of this container (and so of the Form).
 		void		setSelectedWidget(QWidget *selected);
 
+	protected slots:
 		/*! This slot is called when the watched widget is deleted. Deletes the Container too. */
 		void		widgetDeleted();
 
