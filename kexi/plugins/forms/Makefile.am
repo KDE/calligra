@@ -20,6 +20,7 @@ services_DATA = kexidbfactory.desktop
 SUBDIRS = .
 
 INCLUDES= -I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi \
+		-I$(top_srcdir)/kexi/widget/utils \
 		-I$(top_srcdir)/kexi/widget \
 		-I$(top_srcdir)/kexi/formeditor $(all_includes)
 
