@@ -34,6 +34,8 @@
 #include <komlWriter.h>
 #include <komlMime.h>
 
+#include <opUIUtils.h>
+
 #include <koStream.h>
 
 #include "kimageshop_doc.h"
@@ -550,8 +552,6 @@ void KImageShopDoc::slotUndoRedoChanged( QString _undo, QString _redo )
   }
 }
 
-#include <opUIUtils.h>
-
 void KImageShopDoc::slotUndoRedoChanged( QStringList _undo, QStringList _redo )
 {
   if( !m_lstViews.isEmpty() )
@@ -567,20 +567,14 @@ void KImageShopDoc::slotUndoRedoChanged( QStringList _undo, QStringList _redo )
       while( pView->m_vTBRedoMenu->count() > 0 )
         pView->m_vTBRedoMenu->removeItemAt( 0 );
 
-      for( i = 0; i < 10 ; i++ )
-      {
-        pView->m_idTBUndoMenu[ i ] = -1;
-        pView->m_idTBRedoMenu[ i ] = -1;
-      }
-
       for( i = 0; i < _undo.count(); i++ )
       {
-        pView->m_vTBUndoMenu->insertItem7( Q2C( *(_undo.at( i )) ), pView->m_idTBUndoMenu[ i ], 0 );
+        pView->m_vTBUndoMenu->insertItem7( Q2C( *(_undo.at( i )) ), _undo.count() - i, 0 );
       }
 
       for( i = 0; i < _redo.count(); i++ )
       {
-        pView->m_vTBRedoMenu->insertItem7( Q2C( *(_redo.at( i )) ), pView->m_idTBRedoMenu[ i ], 0 );
+        pView->m_vTBRedoMenu->insertItem7( Q2C( *(_redo.at( i )) ), _redo.count() - i, 0 );
       }
     }
   }

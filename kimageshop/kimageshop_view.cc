@@ -893,24 +893,12 @@ void KImageShopView::redo( int _number )
 
 void KImageShopView::activatedUndoMenu( CORBA::Long _id )
 {
-  cout << "Michael : undo-id : " << _id << endl;
-
-  for( int i = 0; i < 10; i++ )
-  {
-    if( m_idTBUndoMenu[ i ] == _id )
-      undo( i + 1 );
-  }
+  undo( _id );
 }
 
 void KImageShopView::activatedRedoMenu( CORBA::Long _id )
 {
-  cout << "Michael : redo-id : " << _id << endl;
-
-  for( int i = 0; i < 10; i++ )
-  {
-    if( m_idTBRedoMenu[ i ] == _id )
-      undo( i + 1 );
-  }
+  redo( _id );
 }
 
 void KImageShopView::slotEditCut()
@@ -1058,4 +1046,5 @@ void  KImageShopView::slotSetBGColor(const KColor& c)
 }
 
 #include "kimageshop_view.moc"
+
 

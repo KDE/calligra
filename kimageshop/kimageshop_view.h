@@ -155,9 +155,6 @@ public:
   OpenPartsUI::Menu_var m_vTBUndoMenu;
   OpenPartsUI::Menu_var m_vTBRedoMenu;
 
-  CORBA::Long m_idTBUndoMenu[ 10 ];
-  CORBA::Long m_idTBRedoMenu[ 10 ];
-
 protected:
   OpenPartsUI::Menu_var m_vMenuEdit;
   CORBA::Long m_idMenuEdit_Undo;
