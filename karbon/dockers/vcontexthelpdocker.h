@@ -21,7 +21,8 @@
 #ifndef _VCONTEXTHELPDOCKER_H_
 #define _VCONTEXTHELPDOCKER_H_
 
-#include <qwidget.h>
+#include <qframe.h>
+#include <qbitmap.h>
 #include <klocale.h>
 
 #include "vdocker.h"
@@ -30,6 +31,52 @@
 class QLabel;
 class VTool;
 class KarbonView;
+
+class VHelpButton : public QWidget
+{
+	Q_OBJECT
+	
+	public:
+		VHelpButton( unsigned char *bits, QWidget* parent );
+
+	signals:
+		void pressed();
+		void released();
+
+	protected:
+		void paintEvent( QPaintEvent* );
+		void enterEvent( QEvent* );
+		void leaveEvent( QEvent* );
+
+	private:
+		QBitmap      m_bitmap;
+		bool         m_pressed;
+}; // VHelpButton
+
+class VHelpWidget : public QFrame
+{
+	Q_OBJECT
+	
+	public:
+		VHelpWidget( QString help, QWidget* parent );
+		
+		void setText( QString text );
+		void timerEvent( QTimerEvent* );
+		void updateButtons();
+
+	public slots:
+		void scrollUp();
+		void scrollDown();
+		void stopScroll();
+
+	private:
+		int           ypos;
+		bool          m_scrollDown;
+		QWidget*      m_helpViewport;
+		QLabel*       m_helpLabel;
+		VHelpButton*  m_upButton;
+		VHelpButton*  m_downButton;
+}; // VHelpWidget
 
 class VContextHelpDocker : public VDocker
 {
@@ -42,7 +89,7 @@ class VContextHelpDocker : public VDocker
 		void manageTool( VTool* tool );
 		
 	private:
-		QLabel* helpLabel;
+		VHelpWidget* m_helpWidget;
 }; // VContextHelpDocker
 
 #endif /* _VCONTEXTHELPDOCKER_H_ */
