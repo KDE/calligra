@@ -430,9 +430,9 @@ void KPBackGround::drawBackColor( QPainter *_painter, const QSize& ext, const QR
 /*================================================================*/
 void KPBackGround::drawBackPix( QPainter *_painter, const QSize& ext, const QRect& crect )
 {
-    /kdDebug() << "KPBackGround::drawBackPix ext=" << ext.width() << "," << ext.height() << endl;
+    /*kdDebug() << "KPBackGround::drawBackPix ext=" << ext.width() << "," << ext.height() << endl;
     kdDebug() << "mode=" << (backView==BV_ZOOM?"ZOOM":backView==BV_TILED?"TILED":backView==BV_CENTER?"CENTER":"OTHER")
-              << " crect=" << DEBUGRECT(crect) << endl;
+              << " crect=" << DEBUGRECT(crect) << endl;*/
     if ( !backImage.isNull() )
     {
         switch ( backView )
