@@ -1,7 +1,7 @@
 
 INCLUDES= $(all_includes) $(KOFFICE_INCLUDES)
 
-SUBDIRS = 
+SUBDIRS = pics
 
 ####### 
 # you can add here more. This one gets installed 
