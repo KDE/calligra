@@ -91,7 +91,7 @@ AC_ARG_WITH(pgsqldir,
 ], ac_pgsql_dir=/usr/local
 )
  
-pgsql_incdirs="$ac_pgsql_dir/pgsql/include /usr/include/pgsql /usr/include /usr/local/include"
+pgsql_incdirs="$ac_pgsql_dir/pgsql/include /usr/include/pgsql /usr/include /usr/local/include /usr/include/postgresql"
 AC_FIND_FILE(libpq++.h, $pgsql_incdirs, pgsql_incdir)
 if test ! -r $pgsql_incdir/libpq++.h; then
   AC_MSG_WARN(libpq++.h not found.)
