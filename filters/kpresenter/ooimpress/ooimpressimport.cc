@@ -1247,6 +1247,13 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
                 text.setAttribute("underlinestyleline","solid");
                 text.setAttribute("underlinecolor", underLineColor);
             }
+            else if( underType =="wave")
+            {
+                //not implemented into kpresenter
+                text.setAttribute("underline","wave");
+                text.setAttribute("underlinestyleline","solid");
+                text.setAttribute("underlinecolor", underLineColor);
+            }
         }
 
         appendShadow( doc, p ); // this is necessary to take care of shadowed paragraphs
