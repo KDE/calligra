@@ -18,6 +18,12 @@ VGradient::VGradient( VGradientType type )
 }
 
 void
+VGradient::clearStops()
+{
+	m_colorStops.clear();
+}
+
+void
 VGradient::addStop( const VColor &color, float rampPoint, float midPoint )
 {
 	VColorStop stop;

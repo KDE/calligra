@@ -52,6 +52,7 @@ public:
 
 	QValueList<VColorStop>& colorStops() { return m_colorStops; }
 	void addStop( const VColor &color, float rampPoint, float midPoint );
+	void clearStops();
 
 	KoPoint origin() const { return m_origin; }
 	void setOrigin( const KoPoint &origin ) { m_origin = origin; }

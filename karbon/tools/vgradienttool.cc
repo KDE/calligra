@@ -85,6 +85,7 @@ VGradientTool::eventFilter( QEvent* event )
 		KoPoint lp = view()->canvasWidget()->viewportToContents( QPoint( m_lp.x(), m_lp.y() ) );
 
 		VGradient gradient;
+		gradient.clearStops();
 		gradient.addStop( VColor( m_dialog->startColor().rgb() ), 0.0, 0.5 );
 		gradient.addStop( VColor( m_dialog->endColor().rgb() ), 1.0, 0.5 );
 		gradient.setOrigin( fp * ( 1.0 / view()->zoom() ) );
