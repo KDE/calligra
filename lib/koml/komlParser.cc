@@ -345,7 +345,7 @@ bool KOMLParser::close( string& _tag, bool _emit )
     return true;
   }
 
-  kdebug( KDEBUG_ERROR, 30001, "... Closing '%c'", m_vecStack.back().c_str() );
+  // kdebug( KDEBUG_ERROR, 30001, "... Closing '%s'", m_vecStack.back().c_str() );
 
   if ( _emit )
   {
@@ -402,7 +402,7 @@ bool KOMLParser::close( string& _tag, bool _emit )
 	  tmp.assign( m_pData, prev );
 	else
 	  tmp.assign( m_pData + m_iEmitStart, prev - m_iEmitStart );
-	kdebug( KDEBUG_ERROR, 30001, "EL: %c", tmp.c_str() );	
+	kdebug( KDEBUG_ERROR, 30001, "EL: %s", tmp.c_str() );	
       }
 
       END_EMIT;
