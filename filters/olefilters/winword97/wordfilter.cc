@@ -17,8 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <winworddoc.h>
 #include <wordfilter.h>
-#include <wordfilter.moc>
 
 WordFilter::WordFilter(const myFile &mainStream, const myFile &table0Stream,
                        const myFile &table1Stream, const myFile &dataStream) :
@@ -68,3 +68,5 @@ bool WordFilter::filter()
     m_ready = true;
     return true;
 }
+
+#include <wordfilter.moc>
