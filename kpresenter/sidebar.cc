@@ -96,9 +96,13 @@ private:
 class OutlineObjectItem: public KListViewItem
 {
 public:
-    OutlineObjectItem( OutlineSlideItem * parent, KPObject* object );
-     
+   
+    OutlineObjectItem( OutlineSlideItem * parent, KPObject* object, 
+       int num, bool sticky );
+       
     KPObject* object(){ return m_object; }
+    
+    void setObject( KPObject* o );
     
 private:
     KPObject* m_object;
@@ -550,11 +554,22 @@ void OutlineSlideItem::update()
 }
 
 
-OutlineObjectItem::OutlineObjectItem( OutlineSlideItem* parent, KPObject* _object )
+OutlineObjectItem::OutlineObjectItem( OutlineSlideItem* parent, KPObject* _object,
+    int num, bool sticky )
     : KListViewItem( parent ), m_object( _object )
 {
+    setObject( m_object );
+    
     QString name = m_object->getTypeString();
+    if( num > 0 ) name += QString(" (%1)").arg( num );
+    if( sticky ) name += i18n(" (Sticky)" );    
     setText( 0, name );
+}
+
+void OutlineObjectItem::setObject( KPObject* object )
+{
+    if( !object ) return;
+    m_object = object;
     
     switch ( m_object->getType() ) {
     case OT_PICTURE:
@@ -600,6 +615,7 @@ OutlineObjectItem::OutlineObjectItem( OutlineSlideItem* parent, KPObject* _objec
       setPixmap( 0, KPBarIcon( "mini_polygon" ) );
       break;
     case OT_CLOSED_LINE: {
+        QString name = m_object->getTypeString();
         if ( name == i18n( "Closed Freehand" ) )
             setPixmap( 0, KPBarIcon( "closed_freehand" ) );
         else if ( name == i18n( "Closed Polyline" ) )
@@ -659,11 +675,11 @@ void Outline::rebuildItems()
         KPrPage *page=doc->pageList().at( i );
         OutlineSlideItem *item = new OutlineSlideItem( this, page );
 
-        // add all objects        
+        // add all objects
         QPtrList<KPObject> list(page->objectList());
         for ( int j = page->objNums() - 1; j >= 0; --j ) {
             KPObject* object = list.at( j );
-            new OutlineObjectItem( item, object );
+            new OutlineObjectItem( item, object, j+1, false );
         }
 
         // add sticky objects
@@ -671,7 +687,7 @@ void Outline::rebuildItems()
         for ( ; it.current() ; ++it )
         {
             KPObject* object = it.current();
-            new OutlineObjectItem( item, object );
+            new OutlineObjectItem( item, object, 0, true );
         }
 
 
