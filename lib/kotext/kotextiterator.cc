@@ -299,7 +299,8 @@ QPair<int, QString> KoTextIterator::currentTextAndIndex() const
     if ( m_currentParag == m_firstParag )
     {
         if ( m_firstParag == m_lastParag ) // special case, needs truncating at both ends
-            return qMakePair( m_firstIndex, str.mid( m_firstIndex, m_lastIndex - m_firstIndex ) );
+            return forw ? qMakePair( m_firstIndex, str.mid( m_firstIndex, m_lastIndex - m_firstIndex ) )
+                : qMakePair( m_lastIndex, str.mid( m_lastIndex, m_firstIndex - m_lastIndex ) );
         else
             return forw ? qMakePair( m_firstIndex, str.mid( m_firstIndex ) )
                         : qMakePair( 0, str.left( m_firstIndex ) );
