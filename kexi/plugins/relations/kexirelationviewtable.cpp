@@ -389,10 +389,11 @@ KexiRelationViewTable::KexiRelationViewTable(QWidget *parent, KexiRelationView *
 	int order=0;
 
 	bool hasPKeys = true; //t->hasPrimaryKeys();
+	KListViewItem *item = 0;
 	for(uint i=0; i < t->fieldCount(); i++)
 	{
 		KexiDB::Field *f = t->field(i);
-		KListViewItem *item = new KexiRelationViewTableItem(this, item, QString::number(order), f->name());
+		item = new KexiRelationViewTableItem(this, item, QString::number(order), f->name());
 //		item = item ? new KexiRelationViewTableItem(this, item, QString::number(order), f.name())
 //			: new KexiRelationViewTableItem(this, QString::number(order), f.name());
 		if(f->isPrimaryKey() || f->isUniqueKey())

@@ -21,6 +21,8 @@
 #include "kexirelationview.h"
 #include "kexirelationpartimpl.h"
 
+#include <kdebug.h>
+
 KexiRelationPartImpl::KexiRelationPartImpl(QObject *parent, const char *name, const QStringList &args)
  : KexiRelationPart(parent, name, args)
 {

@@ -35,6 +35,8 @@ class KexiRelationMainDlg : public KexiDialogBase
 
 		virtual QWidget* mainWidget();
 
+		virtual QString itemIcon();
+
 	private:
 		KexiRelationView	*m_view;
 };

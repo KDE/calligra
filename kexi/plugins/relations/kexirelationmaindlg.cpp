@@ -45,14 +45,19 @@ KexiRelationMainDlg::KexiRelationMainDlg(KexiMainWindow *win)
 	registerDialog();
 }
 
+KexiRelationMainDlg::~KexiRelationMainDlg()
+{
+}
+
 QWidget*
 KexiRelationMainDlg::mainWidget()
 {
 	return m_view;
 }
 
-KexiRelationMainDlg::~KexiRelationMainDlg()
+QString KexiRelationMainDlg::itemIcon()
 {
+	return "relation";
 }
 
 #include "kexirelationmaindlg.moc"
