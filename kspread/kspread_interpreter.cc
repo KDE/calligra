@@ -2538,7 +2538,10 @@ static bool kspreadfunc_roundup( KSContext& context )
         digits=args[1]->intValue();
         }
 
-  result=floor(args[0]->doubleValue()*pow(10,digits)+1)/pow(10,digits);
+  if (floor(args[0]->doubleValue()) == args[0]->doubleValue())
+      result = args[0]->doubleValue();
+  else
+      result=floor(args[0]->doubleValue()*pow(10,digits))/pow(10,digits);
   context.setValue( new KSValue( result) );
 
   return true;
