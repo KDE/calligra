@@ -19,10 +19,10 @@ servicedir = $(kde_servicesdir)
 
 datasdir = $(kde_datadir)/koffice/filter
 
-data_DATA = winword97.kdelnk
+data_DATA = winword97.desktop
 datadir = $(kde_mimedir)/application
 
-bin_SCRIPTS = kword_winword97
+#bin_SCRIPTS = kword_winword97
 
 ####### Build rules
 
