@@ -11,10 +11,10 @@ libhtmlexport_la_LIBADD = $(KOFFICE_LIBS) ../../libexport/libkwordexportfilters.
 kde_module_LTLIBRARIES = libhtmlexport.la
 
 libhtmlexport_la_SOURCES = htmlexport.cc ExportDialog.cc ExportDialogUI.ui \
-ExportFilter.cc ExportCss.cc ExportDocStruct.cc
+ExportFilter.cc ExportCss.cc ExportDocStruct.cc ExportBasic.cc
 
 noinst_HEADERS = htmlexport.h ExportDialog.h ExportDialogUI.h ExportFilter.h \
-ExportCss.h ExportDocStruct.h
+ExportCss.h ExportDocStruct.h ExportBasic.h
 
 METASOURCES = AUTO
 

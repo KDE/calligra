@@ -358,6 +358,20 @@ bool HtmlWorker::doCloseFile(void)
     return (m_ioDevice);
 }
 
+bool HtmlWorker::writeDocType(void)
+{
+    // write <!DOCTYPE
+    *m_streamOut << "<!DOCTYPE ";
+    if (isXML())
+    {
+        *m_streamOut << "html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"DTD/xhtml1-strict.dtd\">\n";
+    }
+    else
+    {
+        *m_streamOut << "HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n";
+    }
+}
+
 bool HtmlWorker::doOpenDocument(void)
 {
     // Make the file header
@@ -369,15 +383,7 @@ bool HtmlWorker::doOpenDocument(void)
     }
 
     // write <!DOCTYPE
-    *m_streamOut << "<!DOCTYPE ";
-    if (isXML())
-    {
-        *m_streamOut << "html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"DTD/xhtml1-strict.dtd\">\n";
-    }
-    else
-    {
-        *m_streamOut << "HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n";
-    }
+    writeDocType();
 
     // No "lang" or "xml:lang" attribute for <html>, as we do not know in which language the document is!
     *m_streamOut << "<html";

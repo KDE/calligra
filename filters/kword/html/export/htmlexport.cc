@@ -43,6 +43,7 @@
 #include "ExportDialog.h"
 #include "ExportFilter.h"
 #include "ExportCss.h"
+#include "ExportBasic.h"
 #include "ExportDocStruct.h"
 
 #include <htmlexport.h>
@@ -85,6 +86,8 @@ KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCSt
     const int workerMode=dialog->getMode();
     if (10==workerMode)
         worker=new HtmlDocStructWorker();
+    else if (1==workerMode)
+        worker=new HtmlBasicWorker();
     else
         worker=new HtmlCssWorker();
 

@@ -110,11 +110,15 @@ void HtmlExportDialog::comboBoxEncodingActivated(int)
 
 int HtmlExportDialog::getMode(void) const
 {
-    if (m_dialog->radioModeCss==m_dialog->buttonGroupMode->selected())
+    if (m_dialog->radioModeEnhanced==m_dialog->buttonGroupMode->selected())
     {
         return 0;
     }
-    else if (m_dialog->radioModeDocStruct==m_dialog->buttonGroupMode->selected())
+    else if (m_dialog->radioModeBasic==m_dialog->buttonGroupMode->selected())
+    {
+        return 1;
+    }
+    else if (m_dialog->radioModeLight==m_dialog->buttonGroupMode->selected())
     {
         return 10;
     }

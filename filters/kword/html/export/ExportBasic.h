@@ -20,17 +20,17 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef EXPORTDOCSTRUCT_H
-#define EXPORTDOCSTRUCT_H
+#ifndef EXPORTBASIC_H
+#define EXPORTBASIC_H
 
 #include <KWEFBaseWorker.h>
 #include "ExportFilter.h"
 
-class HtmlDocStructWorker : public HtmlWorker
+class HtmlBasicWorker : public HtmlWorker
 {
 public:
-    HtmlDocStructWorker(void) { }
-    virtual ~HtmlDocStructWorker(void) { }
+    HtmlBasicWorker(void) { }
+    virtual ~HtmlBasicWorker(void) { }
 public:
 protected:
     virtual QString getStartOfListOpeningTag(const CounterData::Style typeList, bool& ordered);
@@ -38,9 +38,11 @@ protected:
     virtual void closeParagraph(const QString& strTag, const LayoutData& layout);
     virtual void openSpan(const FormatData& format);
     virtual void closeSpan(const FormatData& format);
+    virtual bool writeDocType(void);
 private:
     void openFormatData(const FormatData& format);
     void closeFormatData(const FormatData& format);
+    QString textFormatToCss(const TextFormatting& formatData) const;
 };
 
-#endif /* EXPORTDOCSTRUCT_H */
+#endif /* EXPORTBASIC_H */

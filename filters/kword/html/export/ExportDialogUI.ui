@@ -148,38 +148,44 @@
                 </property>
                 <widget class="QRadioButton">
                     <property name="name">
-                        <cstring>radioModeDocStruct</cstring>
+                        <cstring>radioModeLight</cstring>
                     </property>
                     <property name="enabled">
                         <bool>true</bool>
                     </property>
+                    <property name="focusPolicy">
+                        <enum>TabFocus</enum>
+                    </property>
                     <property name="text">
-                        <string>L&amp;ight: convert the document structure to (X)HTML</string>
+                        <string>L&amp;ight: convert to strict (X)HTML</string>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>Convert only the document structure</string>
+                        <string>Convert mainly the document structure (Recommended for exporting to browsers with limited capabilities)</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton">
                     <property name="name">
-                        <cstring>radioModeStrict</cstring>
+                        <cstring>radioModeBasic</cstring>
                     </property>
                     <property name="enabled">
-                        <bool>false</bool>
+                        <bool>true</bool>
+                    </property>
+                    <property name="focusPolicy">
+                        <enum>TabFocus</enum>
                     </property>
                     <property name="text">
-                        <string>&amp;Normal: convert to (X)HTML</string>
+                        <string>&amp;Basic: convert to transitional (X)HTML</string>
                     </property>
                     <property name="checked">
                         <bool>false</bool>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>Convert the document structure and simple formatting (Recommended to re-import in KWord or to export for older HTML user agents)</string>
+                        <string>Convert most of the document (Recommended for re-importing in KWord or for exporting to older browsers)</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton">
                     <property name="name">
-                        <cstring>radioModeCss</cstring>
+                        <cstring>radioModeEnhanced</cstring>
                     </property>
                     <property name="text">
                         <string>&amp;Enhanced: convert to (X)HTML with CSS</string>
@@ -188,7 +194,7 @@
                         <bool>true</bool>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>Convert as much possible of the KWord document (Recommend for exporting to other modern word processors)</string>
+                        <string>Convert as much possible of the KWord document (Recommend for exporting to other modern word processors or to modern browsers)</string>
                     </property>
                 </widget>
             </vbox>
@@ -262,9 +268,9 @@
     <tabstop>radioEncodingUTF8</tabstop>
     <tabstop>radioEncodingLocal</tabstop>
     <tabstop>comboBoxEncoding</tabstop>
-    <tabstop>radioModeDocStruct</tabstop>
-    <tabstop>radioModeStrict</tabstop>
-    <tabstop>radioModeCss</tabstop>
+    <tabstop>radioModeLight</tabstop>
+    <tabstop>radioModeBasic</tabstop>
+    <tabstop>radioModeEnhanced</tabstop>
     <tabstop>CheckBoxAuthorInfo</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
