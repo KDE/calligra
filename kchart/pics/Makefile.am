@@ -1,20 +1,13 @@
 
 KDE_ICON = kchart
 
-kchartpics_DATA = barsubtypedepth.png barsubtypelayer.png barsubtypebeside.png \
-			barsubtypepercent.png areasubtypedepth.png \
-			areasubtypebeside.png chart_lines.png \
-			chart_3dhiloclose.png chart_area.png chart_bar.png \
-			chart_combo_hlc_area.png chart_combo_hlc_bar.png \
-			chart_combo_line_area.png chart_combo_line_bar.png \
-			chart_hiloclose.png chart_pie2D.png chart_pie3D.png \
-			chart_ring.png chart_polar.png \
-			chart_legend_nolegend.png \
+kchartpics_DATA = chart_bar_beside.png chart_bar_layer.png chart_bar_percent.png \
+			chart_hilo_close.png chart_hilo_normal.png chart_hilo_openclose.png  \
+			chart_area_normal.png chart_area_percent.png chart_area_stacked.png \
+			chart_line_normal.png chart_line_percent.png chart_line_stacked.png \
+			chart_polar_normal.png chart_polar_percent.png chart_polar_stacked.png \
 			chart_legend_top.png chart_legend_topleft.png chart_legend_topright.png \
-			chart_legend_left.png chart_legend_right.png \
+			chart_legend_nolegend.png chart_legend_left.png chart_legend_right.png \
 			chart_legend_bottom.png chart_legend_bottomleft.png chart_legend_bottomright.png \
-                        3DCOMBO_HLC_AREA.png 3DCOMBO_HLC_BAR.png \
-			3DCOMBO_LINE_AREA.png 3DCOMBO_LINE_BAR.png\
-			3DAREA.png 3DLINE.png 3DBAR.png
 			
 kchartpicsdir = $(kde_datadir)/kchart/pics

@@ -89,13 +89,13 @@ void KChartHiloSubTypeChartPage::slotChangeSubType( int type )
 {
     switch( type ) {
     case KDChartParams::HiLoNormal:
-        exampleLA->setPixmap( UserIcon( "hilosubtypenormal", KChartFactory::global()  ) );
+        exampleLA->setPixmap( UserIcon( "chart_hilo_normal", KChartFactory::global()  ) );
         break;
     case KDChartParams::HiLoClose:
-        exampleLA->setPixmap( UserIcon( "hilosubtypestacked", KChartFactory::global()  ) );
+        exampleLA->setPixmap( UserIcon( "chart_hilo_close", KChartFactory::global()  ) );
         break;
     case KDChartParams::HiLoOpenClose:
-        exampleLA->setPixmap( UserIcon( "hilosubtypepercent", KChartFactory::global()  ) );
+        exampleLA->setPixmap( UserIcon( "chart_hilo_openclose", KChartFactory::global()  ) );
         break;
     };
 }
@@ -167,13 +167,13 @@ void KChartAreaSubTypeChartPage::slotChangeSubType( int type )
 {
     switch( type ) {
     case KDChartParams::AreaNormal:
-        exampleLA->setPixmap( UserIcon( "areasubtypenormal", KChartFactory::global()  ) );
+        exampleLA->setPixmap( UserIcon( "chart_area_normal", KChartFactory::global()  ) );
         break;
     case KDChartParams::AreaStacked:
-        exampleLA->setPixmap( UserIcon( "areasubtypestacked", KChartFactory::global()  ) );
+        exampleLA->setPixmap( UserIcon( "chart_area_stacked", KChartFactory::global()  ) );
         break;
     case KDChartParams::AreaPercent:
-        exampleLA->setPixmap( UserIcon( "areasubtypepercent", KChartFactory::global()  ) );
+        exampleLA->setPixmap( UserIcon( "chart_area_percent", KChartFactory::global()  ) );
         break;
     };
 }
@@ -244,13 +244,13 @@ void KChartBarSubTypeChartPage::slotChangeSubType( int type )
 {
     switch( type ) {
     case KDChartParams::BarStacked:
-	exampleLA->setPixmap( UserIcon( "barsubtypelayer", KChartFactory::global() ) );
+	exampleLA->setPixmap( UserIcon( "chart_bar_layer", KChartFactory::global() ) );
 	break;
     case KDChartParams::BarNormal:
-	exampleLA->setPixmap( UserIcon( "barsubtypebeside", KChartFactory::global() ) );
+	exampleLA->setPixmap( UserIcon( "chart_bar_beside", KChartFactory::global() ) );
 	break;
     case KDChartParams::BarPercent:
-	exampleLA->setPixmap( UserIcon( "barsubtypepercent", KChartFactory::global() ) );
+	exampleLA->setPixmap( UserIcon( "chart_bar_percent", KChartFactory::global() ) );
 	break;
     };
 }
@@ -320,13 +320,13 @@ void KChartLineSubTypeChartPage::slotChangeSubType( int type )
 {
     switch( type ) {
     case KDChartParams::AreaNormal:
-        exampleLA->setPixmap( UserIcon( "linesubtypenormal", KChartFactory::global()  ) );
+        exampleLA->setPixmap( UserIcon( "chart_line_normal", KChartFactory::global()  ) );
         break;
     case KDChartParams::AreaStacked:
-        exampleLA->setPixmap( UserIcon( "linesubtypestacked", KChartFactory::global()  ) );
+        exampleLA->setPixmap( UserIcon( "chart_line_stacked", KChartFactory::global()  ) );
         break;
     case KDChartParams::AreaPercent:
-        exampleLA->setPixmap( UserIcon( "linesubtypepercent", KChartFactory::global()  ) );
+        exampleLA->setPixmap( UserIcon( "chart_line_percent", KChartFactory::global()  ) );
         break;
     };
 }
@@ -397,13 +397,13 @@ void KChartPolarSubTypeChartPage::slotChangeSubType( int type )
 {
     switch( type ) {
     case KDChartParams::PolarNormal:
-        exampleLA->setPixmap( UserIcon( "polarsubtypenormal", KChartFactory::global()  ) );
+        exampleLA->setPixmap( UserIcon( "chart_polar_normal", KChartFactory::global()  ) );
         break;
     case KDChartParams::PolarStacked:
-        exampleLA->setPixmap( UserIcon( "polarsubtypestacked", KChartFactory::global()  ) );
+        exampleLA->setPixmap( UserIcon( "chart_polar_stacked", KChartFactory::global()  ) );
         break;
     case KDChartParams::PolarPercent:
-        exampleLA->setPixmap( UserIcon( "polarsubtypepercent", KChartFactory::global()  ) );
+        exampleLA->setPixmap( UserIcon( "chart_polar_percent", KChartFactory::global()  ) );
         break;
     };
 }
