@@ -7400,6 +7400,12 @@ void KSpreadTable::setPaperOrientation( KoOrientation _orient )
 {
   m_orientation = _orient;
   calcPaperSize();
+  updatePrintRepeatColumnsWidth();
+  updatePrintRepeatRowsHeight();
+  updateNewPageListX( m_printRange.left() ); //Reset the list
+  updateNewPageListY( m_printRange.top() ); //Reset the list
+  if ( m_bShowPageBorders )
+    emit sig_updateView( this );
 }
 
 
@@ -7425,10 +7431,9 @@ void KSpreadTable::setPaperLayout( float _leftBorder, float _topBorder, float _r
   m_rightBorder  = _rightBorder;
   m_topBorder    = _topBorder;
   m_bottomBorder = _bottomBorder;
-  m_orientation  = _orientation;
   m_paperFormat  = _paper;
 
-  calcPaperSize();
+  setPaperOrientation( _orientation ); //calcPaperSize() is done here already
 
 //  QPtrListIterator<KoView> it( views() );
 //  for( ;it.current(); ++it )
