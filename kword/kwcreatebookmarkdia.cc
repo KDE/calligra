@@ -60,7 +60,7 @@ void KWCreateBookmarkDia::slotOk()
 {
     if ( listBookMark.findIndex(m_bookmarkName->text() ) != -1 )
     {
-        KMessageBox::error(this, i18n("Name already exists! Please choose another name"));
+        KMessageBox::error(this, i18n("Name already exists! Choose another name."));
     }
     else
         KDialogBase::slotOk();

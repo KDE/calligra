@@ -40,14 +40,14 @@ i18n( "Style name", "Borders 2" );
 i18n( "Style name", "Borders 3" );
 i18n( "Style name", "Row" );
 i18n( "Style name", "Column" );
-i18n( "Style name", "Light grey" );
-i18n( "Style name", "Dark grey" );
+i18n( "Style name", "Light gray" );
+i18n( "Style name", "Dark gray" );
 i18n( "Style name", "Black" );
 i18n( "Style name", "Light blue" );
 i18n( "Style name", "Dark blue" );
 i18n( "Style name", "Red" );
 i18n( "Style name", "Yellow" );
-i18n( "Style name", "Colorfull" );
+i18n( "Style name", "Colorful" );
 i18n( "Style name", "Blueish" );
 
 // Translations for the standard tablestyle names
@@ -63,10 +63,10 @@ i18n( "Style name", "Header 4" );
 i18n( "Style name", "Grid 1" );
 i18n( "Style name", "Grid 2" );
 i18n( "Style name", "Grid 3" );
-i18n( "Style name", "Grey heading" );
+i18n( "Style name", "Gray heading" );
 i18n( "Style name", "Blue heading" );
 i18n( "Style name", "Blue traditional" );
-i18n( "Style name", "Grey traditional" );
+i18n( "Style name", "Gray traditional" );
 i18n( "Style name", "Blue top and bottom" );
-i18n( "Style name", "Grey top and bottom" );
+i18n( "Style name", "Gray top and bottom" );
       

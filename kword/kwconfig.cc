@@ -492,7 +492,7 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
     m_oldFormattingTabs = doc->viewFormattingTabs();
     m_oldFormattingBreak = doc->viewFormattingBreak();
 
-    m_cbViewFormattingEndParag = new QCheckBox( i18n("View formatting end parag"), gbViewFormatting);
+    m_cbViewFormattingEndParag = new QCheckBox( i18n("View formatting end paragraph"), gbViewFormatting);
     m_cbViewFormattingEndParag->setChecked(m_oldFormattingEndParag);
 
     m_cbViewFormattingSpace = new QCheckBox( i18n("View formatting space"), gbViewFormatting);

@@ -433,7 +433,7 @@ void KWView::setupActions()
                                             this, SLOT( viewTextMode() ),
                                             actionCollection(), "view_textmode" );
     actionViewTextMode->setToolTip( i18n( "Only show the text of the document." ) );
-    actionViewTextMode->setWhatsThis( i18n( "Do not show any pictures, formatting or layout.  KWord will display only the text for editing." ) );
+    actionViewTextMode->setWhatsThis( i18n( "Do not show any pictures, formatting or layout. KWord will display only the text for editing." ) );
 
     actionViewTextMode->setExclusiveGroup( "viewmodes" );
     actionViewPageMode = new KToggleAction( i18n( "&Page Mode" ), 0,
@@ -508,13 +508,13 @@ void KWView::setupActions()
                                     this, SLOT( insertComment() ),
                                     actionCollection(), "insert_comment" );
     actionInsertComment->setToolTip( i18n( "Insert a comment about the selected text." ) );
-    actionInsertComment->setWhatsThis( i18n( "Insert a comment about the selected text.  These comments are not desinged to appear on the final page." ) );
+    actionInsertComment->setWhatsThis( i18n( "Insert a comment about the selected text. These comments are not desinged to appear on the final page." ) );
 
     actionEditComment = new KAction( i18n("Edit Comment..."), 0,
                                   this,SLOT(editComment()),
                                   actionCollection(), "edit_comment");
     actionEditComment->setToolTip( i18n( "Change the content of a comment." ) );
-    actionEditComment->setWhatsThis( i18n( "Change the content of a comment" ) );
+    actionEditComment->setWhatsThis( i18n( "Change the content of a comment." ) );
 
     actionRemoveComment = new KAction( i18n("Remove Comment"), 0,
                                      this,SLOT(removeComment()),
@@ -631,14 +631,14 @@ void KWView::setupActions()
     actionFormatPage->setWhatsThis( i18n( "Change properties of the entire page.<p>Currently you can change paper size, paper orientation, header and footer sizes, and column settings." ) );
 
 
-    actionFormatFrameStylist = new KAction( i18n( "&Framestylist..." ), ALT + CTRL + Key_R,
+    actionFormatFrameStylist = new KAction( i18n( "&Frame Style Manager..." ), ALT + CTRL + Key_R,
                                 this, SLOT( extraFrameStylist() ),
                                 actionCollection(), "frame_stylist" );
     actionFormatFrameStylist->setToolTip( i18n( "Change attributes of framestyles." ) );
     actionFormatFrameStylist->setWhatsThis( i18n( "Change background and borders of framestyles.<p>Multiple framestyles can be changed using the dialog box." ) );
 
 
-    actionFormatStylist = new KAction( i18n( "&Stylist..." ), ALT + CTRL + Key_S,
+    actionFormatStylist = new KAction( i18n( "&Style Manager..." ), ALT + CTRL + Key_S,
                         this, SLOT( extraStylist() ),
                         actionCollection(), "format_stylist" );
     actionFormatStylist->setToolTip( i18n( "Change attributes of styles." ) );
@@ -891,7 +891,7 @@ void KWView::setupActions()
     actionTableDelete->setWhatsThis( i18n( "Deletes all cells and the content within the cells of the currently selected table." ) );
 
 
-    actionTableStylist = new KAction( i18n( "T&ablestylist..." ), 0,
+    actionTableStylist = new KAction( i18n( "T&able Style Manager..." ), 0,
                         this, SLOT( tableStylist() ),
                         actionCollection(), "table_stylist" );
     actionTableStylist->setToolTip( i18n( "Change attributes of tablestyles." ) );
@@ -1055,8 +1055,8 @@ void KWView::setupActions()
     actionSavePicture= new KAction( i18n("Save Picture..."), 0,
                                     this, SLOT( savePicture() ),
                                     actionCollection(), "save_picture");
-    actionSavePicture->setToolTip( i18n( "Save the picture in a seperate file." ) );
-    actionSavePicture->setWhatsThis( i18n( "Save the picture in the currently selected frame in a seperate file, outside the KWord document." ) );
+    actionSavePicture->setToolTip( i18n( "Save the picture in a separate file." ) );
+    actionSavePicture->setWhatsThis( i18n( "Save the picture in the currently selected frame in a separate file, outside the KWord document." ) );
 
     actionAllowBgSpellCheck = new KToggleAction( i18n( "Autospellcheck" ), 0,
                                             this, SLOT( autoSpellCheck() ),
@@ -1090,8 +1090,8 @@ void KWView::setupActions()
     actionCreateFrameStyle = new KAction( i18n( "&Create Framestyle from frame" ), 0,
                                         this, SLOT( createFrameStyle()),
                                         actionCollection(), "create_framestyle" );
-    actionCreateFrameStyle->setToolTip( i18n( "Create a new style based on the current selected frame." ) );
-    actionCreateFrameStyle->setWhatsThis( i18n( "Create a new farmestyle based on the current selected frame." ) );
+    actionCreateFrameStyle->setToolTip( i18n( "Create a new style based on the currently selected frame." ) );
+    actionCreateFrameStyle->setWhatsThis( i18n( "Create a new framestyle based on the currently selected frame." ) );
 
 }
 
@@ -5734,7 +5734,7 @@ void KWView::insertFile(const QString & path)
         if ( !b )
         {
             KMessageBox::sorry( this,
-                                i18n("File name is not a kword file!."),
+                                i18n("File name is not a KWord file!."),
                                 i18n("Insert File"));
             delete store;
             return;

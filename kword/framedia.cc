@@ -548,7 +548,7 @@ void KWFrameDia::setupTab2() { // TAB Text Runaround
     rRunRight = new QRadioButton( i18n( "&Right" ), runSideGroup );
     runSideLayout->addWidget( rRunRight, 1, 0 /*1*/ );
 
-    rRunBiggest = new QRadioButton( i18n( "&Biggest side" ), runSideGroup );
+    rRunBiggest = new QRadioButton( i18n( "Lon&gest side" ), runSideGroup );
     runSideLayout->addWidget( rRunBiggest, 2, 0 /*1*/ );
 
 #if 0 // TODO icons!

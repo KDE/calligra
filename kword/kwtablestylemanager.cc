@@ -177,9 +177,11 @@ void KWTableStyleListItem::apply()
 /* Class: KWTableStyleManager                                     */
 /******************************************************************/
 
+// Proof reader comment: stylist sounds like a hair dresser
+
 KWTableStyleManager::KWTableStyleManager( QWidget *_parent, KWDocument *_doc, const QPtrList<KWTableStyle> & style)
     : KDialogBase( _parent, "Tablestylist", true,
-                   i18n("Tablestylist"),
+                   i18n("Table Style Manager"),
                    KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::Apply | KDialogBase::User1 )
 {
     m_doc = _doc;

@@ -121,9 +121,11 @@ void KWFrameStyleListItem::apply()
 /* Class: KWFrameStyleManager                                     */
 /******************************************************************/
 
+// Proof reader comment: stylist sounds like a hair dresser
+
 KWFrameStyleManager::KWFrameStyleManager( QWidget *_parent, KWDocument *_doc, const QPtrList<KWFrameStyle> & style)
     : KDialogBase( _parent, "Framestylist", true,
-                   i18n("Framestylist"),
+                   i18n("Frame Style Manager"),
                    KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::Apply| KDialogBase::User1 )
 {
     m_doc = _doc;
