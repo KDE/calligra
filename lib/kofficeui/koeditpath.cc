@@ -17,6 +17,7 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <kdeversion.h>
 #include <klocale.h>
 #include <qvbox.h>
 #include <qlayout.h>
@@ -37,6 +38,11 @@ KoEditPathDia::KoEditPathDia( const QString & _path, QWidget *parent, const char
     setMainWidget(page);
     QGridLayout * grid = new QGridLayout(page, 5, 2, KDialog::marginHint(), KDialog::spacingHint());
 
+#if KDE_VERSION < 307
+
+    m_listpath =  new KEditListBox( i18n("Expression path:"),
+                    page, "list_editor" , false, KEditListBox::Add|KEditListBox::Remove );
+#else
     urlReq = new KURLRequester();
     urlReq->fileDialog()->setMode(KFile::Directory | KFile::LocalOnly);
 
@@ -44,6 +50,7 @@ KoEditPathDia::KoEditPathDia( const QString & _path, QWidget *parent, const char
 
     m_listpath =  new KEditListBox( i18n("Expression path:"),
                     tmp,page, "list_editor" , false, KEditListBox::Add|KEditListBox::Remove );
+#endif
 
     grid->addMultiCellWidget(m_listpath, 0, 4, 0, 0);
     m_listpath->listBox()->insertStringList(QStringList::split(QString(";"), _path));
