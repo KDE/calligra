@@ -899,7 +899,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 
     m_textPen.setColor( textColor( _col, _row ) );
     m_conditionIsTrue = false;
-
+    QPen tmpPen(m_textPen);
     //
     // Turn the stored value in a string
     //
@@ -1018,7 +1018,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 	// Find the correct color which depends on the conditions
 	// and the sign of the value.
 	if ( floatColor( _col, _row ) == KSpreadCell::NegRed && v < 0.0 )
-	    m_textPen.setColor( Qt::red );
+            tmpPen.setColor( Qt::red );
 	else if( m_conditionIsTrue )
     	{
 	    KSpreadConditional *tmpCondition=0;
@@ -1034,8 +1034,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 		tmpCondition=m_thirdCondition;
 		break;
 	    }
-
-	    m_textPen.setColor(tmpCondition->colorcond);
+            tmpPen.setColor(tmpCondition->colorcond);
  	}
     }
     else if ( isFormular() )
@@ -1055,7 +1054,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 	    return;
     }
 
-    _painter.setPen( m_textPen );
+    _painter.setPen(tmpPen);
 
     // verifyCondition();
 
@@ -2436,6 +2435,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
      */
     else if ( !m_strOutText.isEmpty() )
     {
+        QPen tmpPen(m_textPen);
         if ( selected && ( _col != m.left() || _row != m.top() )  )
         {
 	    QPen p( m_textPen );
@@ -2463,7 +2463,7 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 		break;
 	    }
 	    _painter.setFont( tmpCondition->fontcond );
-	    m_textPen.setColor( tmpCondition->colorcond );
+            tmpPen.setColor( tmpCondition->colorcond );
         }
 	else
         {
@@ -2472,14 +2472,14 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 	    {
 		double v = m_dValue * m_dFaktor;
                 if ( floatColor( _col, _row) == KSpreadCell::NegRed && v < 0.0 && !m_pTable->getShowFormular() )
-		    m_textPen.setColor(Qt::red);
+                    tmpPen.setColor( Qt::red );
                 else
-		    m_textPen.setColor( textColor( _col, _row) );
+                    tmpPen.setColor( textColor( _col, _row) );
 	    }
 	    else
-                m_textPen.setColor( textColor( _col, _row) );
+                tmpPen.setColor( textColor( _col, _row) );
 	}
-
+        _painter.setPen(tmpPen);
 	//_painter.setFont( m_textFont );
 	conditionAlign( _painter, _col, _row );
 

@@ -1946,7 +1946,7 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
     	tmp=tmp.setNum(i);
     	size->insertItem(tmp);
     	}
-
+    size->setCurrentItem(1);
 
     style=new QComboBox(tmpQGroupBox);
     grid3->addWidget(style,1,1);

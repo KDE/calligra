@@ -826,3 +826,13 @@ because in France for example when you write : =F6, kspread
 believes that is 6.00 F
 =>it's not a good idea.
 It's the same think for DM
+
+2000-07-26-Montel laurent <montell@club-internet.fr>
+----------------------------------------------------
+-Bug fix : now adjust area reworks when you change size font
+or set "vertical text" or change angle etc...
+Text size and position are refreshing
+-Bug fix : now text color works when you used "conditional cell
+attributes" and when you make "negative format" (text color
+is red)
+
