@@ -134,7 +134,7 @@ bool KisSelection::erase()
 
             if (alpha)
             {
-                uchar a = lay->pixel(3, x, y);
+                //uchar a = lay->pixel(3, x, y);
                 lay->setPixel(3, x, y, 0);
             }
             else {

@@ -2656,7 +2656,6 @@ void KisView::print( KPrinter &printer )
 
 void KisView::appendToDocImgList(QImage& loadedImg, KURL& u)
 {
-	KisImage *img = m_pDoc -> current();
 	QRect layerRect(0, 0, loadedImg.width(), loadedImg.height());
 	QString layerName(u.fileName());
 	KisImage *newimg = m_pDoc -> newImage(layerName, layerRect.width(), layerRect.height());

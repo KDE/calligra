@@ -772,7 +772,7 @@ bool KisDoc::loadLayers( QDomElement &element, KisImage *img )
 }
 
 // load channels
-void KisDoc::loadChannels( QDomElement &element, KisLayer *lay )
+void KisDoc::loadChannels( QDomElement &element, KisLayer * /*lay*/ )
 {
     // channels element
     QDomElement channels = element.namedItem( "channels" ).toElement();
