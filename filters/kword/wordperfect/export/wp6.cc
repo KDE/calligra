@@ -66,8 +66,6 @@ bool WPSixWorker::doCloseFile(void)
   outfile.at( 20 );
   output << total_filesize;
 
-qDebug(  "Filesize %d\n", total_filesize );
-
   // offset 4, int32, pointer to document area
   outfile.at( 4 );
   output << document_area_ptr;
@@ -156,13 +154,6 @@ static QCString WPSixEscape( const QString& text )
   return result;
 }
 
-// puts Attr On before and Attr Off after
-void WPSetAttr( QCString& buf, int attr )
-{
-   buf.insert( 0, 0xf2 ).insert( 0, attr ).insert( 0, 0xf2 );
-   buf += 0xf3; buf += attr; buf += 0xf3;
-}
-
 bool WPSixWorker::doFullParagraph(const QString& paraText, 
   const LayoutData& layout, const ValueListFormatData& paraFormatDataList)
 {
@@ -182,28 +173,57 @@ bool WPSixWorker::doFullParagraph(const QString& paraText,
     // only if the format is for text (id==1)
     if( formatData.id == 1 )
     {
-       QString partialText = paraText.mid( formatData.pos, formatData.len );
 
-       // "escape" the string first, see WPSixEscape above
-       QCString out = WPSixEscape( partialText );
+       Q_UINT8 attr = 0; //invalid
+       if( formatData.text.weight >= 75 ) attr = 12; // bold
+       if( formatData.text.italic ) attr = 8; 
+       if( formatData.text.underline ) attr = 14; 
+       if( formatData.text.underlineIsDouble ) attr = 11; 
+       if( formatData.text.verticalAlignment == 1 ) attr = 6; //subscript
+       if( formatData.text.verticalAlignment == 2 ) attr = 5; //superscript
+       if( formatData.text.strikeout ) attr = 13; 
 
-       if( formatData.text.weight >= 75 ) WPSetAttr( out, 12 ); // bold
-       if( formatData.text.italic ) WPSetAttr( out, 8 ); 
-       if( formatData.text.underline ) WPSetAttr( out, 14 ); 
-       if( formatData.text.underlineIsDouble ) WPSetAttr( out, 11 ); 
-       if( formatData.text.verticalAlignment == 1 ) WPSetAttr( out, 6 ); //subscript
-       if( formatData.text.verticalAlignment == 2 ) WPSetAttr( out, 5 ); //superscript
-       if( formatData.text.strikeout ) WPSetAttr( out, 13 ); 
+       QColor fgColor = formatData.text.fgColor;
+       QColor bgColor = formatData.text.bgColor;
 
-       // text foreground color
-       Q_UINT8 wp_color[] = { 0xd4, 0x18, 16, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0xd4 }; 
-       wp_color[7] = (Q_UINT8) formatData.text.fgColor.red();
-       wp_color[8] = (Q_UINT8) formatData.text.fgColor.green();
-       wp_color[9] = (Q_UINT8) formatData.text.fgColor.blue();
-       output.writeRawBytes( (const char*)wp_color, 16 );
+       // due to the file format, before writing the text we must
+       // write some refix-code (such as Bold On) and possibly appropriate suffix-code (Bold Off)
+        
+       // attribute on
+       if( attr > 0 ) output << (Q_UINT8)0xf2 << attr << (Q_UINT8)0xf2;
 
-       // write out what we have already
+       // set font color
+       if( fgColor.isValid() )
+       {
+         Q_UINT8 wp_color[] = { 0xd4, 0x18, 16, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0xd4 }; 
+         wp_color[7] = (Q_UINT8) fgColor.red();
+         wp_color[8] = (Q_UINT8) fgColor.green();
+         wp_color[9] = (Q_UINT8) fgColor.blue();
+         output.writeRawBytes( (const char*)wp_color, 16 );
+       }
+
+       // highlight on (background color)
+       if( bgColor.isValid() )
+       {
+         output << (Q_UINT8) 0xfb;
+         output << (Q_UINT8)bgColor.red() << (Q_UINT8)bgColor.green() << (Q_UINT8)bgColor.blue();
+         output << (Q_UINT8) 100 << (Q_UINT8) 0xfb;
+       }
+
+       // the text itself, "escape" it first 
+       QCString out = WPSixEscape( paraText.mid( formatData.pos, formatData.len ) );
        output.writeRawBytes( (const char*)out, out.length() );
+
+       // attribute off
+       if( attr > 0 ) output << (Q_UINT8)0xf3 << attr << (Q_UINT8)0xf3;
+
+       // highlight off
+       if( bgColor.isValid() )
+       {
+         output << (Q_UINT8) 0xfc;
+         output << (Q_UINT8)bgColor.red() << (Q_UINT8)bgColor.green() << (Q_UINT8)bgColor.blue();
+         output << (Q_UINT8) 100 << (Q_UINT8) 0xfc;
+       }
     }
 
   }
