@@ -63,7 +63,7 @@ int KPresenterPageIface::numTextObject() const
 
 DCOPRef KPresenterPageIface::object( int num )
 {
-     if( num >= m_page->objNums())
+     if( num >= (int)m_page->objNums())
          return DCOPRef();
     return DCOPRef( kapp->dcopClient()->appId(),
 		    m_page->getObject(num)->dcopObject()->objId() );
@@ -442,6 +442,7 @@ QString KPresenterPageIface::pageEffectString( )const
         kdDebug()<<"Page effect not define!!!!!!\n";
         break;
     }
+    return QString("");
 }
 
 bool KPresenterPageIface::backUnbalanced()const

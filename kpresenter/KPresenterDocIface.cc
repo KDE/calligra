@@ -41,7 +41,7 @@ int KPresenterDocIface::numPages()
 
 DCOPRef KPresenterDocIface::page( int num )
 {
-    if( num>= doc->getPageNums())
+    if( num>= (int )doc->getPageNums())
       return DCOPRef();
     return DCOPRef( kapp->dcopClient()->appId(),
 		    doc->pageList().at( num )->dcopObject()->objId() );
@@ -174,7 +174,7 @@ QString KPresenterDocIface::customVariableValue(const QString & varname)const
 
 bool KPresenterDocIface::insertNewPage(int pos )
 {
-  if( pos < 0 || pos > doc->getPageNums()-1 )
+  if( pos < 0 || pos > (int)(doc->getPageNums())-1 )
     pos=doc->getPageNums()-1;
   int ret= doc->insertNewPage( i18n("Insert New Page"), pos, IP_AFTER, false, QString::null );
   bool state = (ret !=-1);
@@ -184,7 +184,7 @@ bool KPresenterDocIface::insertNewPage(int pos )
 //return false if page number doesn't exist
 bool KPresenterDocIface::selectPage( int page,bool select)
 {
-    if(page <0 || page> doc->getPageNums()-1 )
+    if(page <0 || page> (int)(doc->getPageNums())-1 )
         return false;
     doc->selectPage( page, select );
     return true;
@@ -193,9 +193,10 @@ bool KPresenterDocIface::selectPage( int page,bool select)
 // return false when we can't remove page
 bool KPresenterDocIface::deletePage( int _page )
 {
-  if( _page < 0 || _page > doc->getPageNums()-1 )
+  if( _page < 0 || _page > (int)(doc->getPageNums())-1 )
       return false;
   doc->deletePage(_page);
+  return true;
 }
 
 void KPresenterDocIface::deSelectAllObj()
@@ -280,7 +281,7 @@ int KPresenterDocIface::bottomBorder() const
 
 bool KPresenterDocIface::isSlideSelected( int pgNum)
 {
-    if( pgNum>= doc->getPageNums())
+    if( pgNum>= (int)doc->getPageNums())
         return false;
     return doc->isSlideSelected(pgNum);
 }
@@ -558,7 +559,7 @@ void KPresenterDocIface::addHoriHelpLine( double val)
 
 double KPresenterDocIface::horizHelpLineValue(int index) const
 {
-    if ( index >= doc->horizHelplines().count())
+    if ( index >= (int)doc->horizHelplines().count())
     {
         return -1.0;
     }
@@ -567,7 +568,7 @@ double KPresenterDocIface::horizHelpLineValue(int index) const
 
 double KPresenterDocIface::vertHelpLineValue(int index) const
 {
-    if ( index >= doc->vertHelplines().count())
+    if ( index >= (int)doc->vertHelplines().count())
     {
         return -1.0;
     }
@@ -576,7 +577,7 @@ double KPresenterDocIface::vertHelpLineValue(int index) const
 
 bool KPresenterDocIface::removeVertHelpLine( int index )
 {
-    if ( index >= doc->vertHelplines().count())
+    if ( index >= (int)doc->vertHelplines().count())
         return false;
     doc->removeVertHelpline( index );
     doc->repaint( false );
@@ -585,7 +586,7 @@ bool KPresenterDocIface::removeVertHelpLine( int index )
 
 bool KPresenterDocIface::removeHorizHelpLine( int index )
 {
-    if ( index >= doc->horizHelplines().count())
+    if ( index >= (int)doc->horizHelplines().count())
         return false;
     doc->removeHorizHelpline( index );
     doc->repaint( false );
@@ -707,7 +708,7 @@ void KPresenterDocIface::addHelpPoint( double posX, double posY )
 
 bool KPresenterDocIface::removeHelpPoint( int index )
 {
-    if( index < 0 || index >= doc->helpPoints().count() )
+    if( index < 0 || index >= (int)doc->helpPoints().count() )
         return false;
 
     doc->removeHelpPoint( index );

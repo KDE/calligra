@@ -410,9 +410,6 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
     m_undoRedoLimit->setRange(10, 60, 1);
     grid->addWidget(m_undoRedoLimit,0,0);
 
-    QLabel *varLabel= new QLabel(i18n("Starting page number:"),tmpQGroupBox);
-    grid->addWidget(varLabel,1,0);
-
     KPresenterDoc* doc = m_pView->kPresenterDoc();
 
     m_displayLink=new QCheckBox(i18n("Displays link"),tmpQGroupBox);
@@ -557,7 +554,6 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage(KPresenterView *_view, QVBox *b
     autoSave->setSuffix( i18n("min") );
 
     QLabel *varLabel= new QLabel(i18n("Starting page number:"), gbDocumentSettings);
-
     KPresenterDoc* doc = m_pView->kPresenterDoc();
     m_oldStartingPage=doc->getVariableCollection()->variableSetting()->startingPage();
     m_variableNumberOffset=new QLineEdit(gbDocumentSettings);

@@ -472,7 +472,6 @@ void KPrCanvas::drawHelpPoints( QPainter *painter, const QRect &rect2)
     painter->save();
     painter->setPen( _pen );
 
-    QRect pageRect=activePage()->getZoomPageRect();
     for(i = doc->helpPoints().begin(); i != doc->helpPoints().end(); ++i)
     {
         KoPoint vi = *i ;
@@ -745,8 +744,8 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     m_hotSpot = docPoint - m_boundingRect.topLeft();
                 } break;
 		case TEM_ROTATE: {
-                    bool deSelAll = true;
-                    bool _resizeObj = false;
+                    //bool deSelAll = true;
+                    //bool _resizeObj = false;
                     KPObject *kpobject = 0;
 
                     firstX = contentsPoint.x();
@@ -2866,7 +2865,7 @@ void KPrCanvas::printPage( QPainter* painter, int pageNum )
 void KPrCanvas::changePages( QPixmap _pix1, QPixmap _pix2, PageEffect _effect )
 {
     QTime _time;
-    int _step = 0, _steps, _h, _w, _x, _y;
+    int _step = 0, _steps = 0, _h = 0, _w = 0, _x = 0, _y = 0;
 
     switch ( _effect )
     {
@@ -6525,7 +6524,6 @@ void KPrCanvas::tmpDrawMoveHelpPoint( const QPoint & newPos )
     p.begin( this );
     p.setRasterOp( NotROP );
     p.setPen( QPen( black, 0, DotLine ) );
-    QRect rect = m_activePage->getZoomPageRect();
     KoPoint vi = tmpHelpPointPos;
 
     QPoint point=m_view->zoomHandler()->zoomPoint( vi );
@@ -6548,8 +6546,6 @@ void KPrCanvas::tmpDrawMoveHelpPoint( const QPoint & newPos )
 
 void KPrCanvas::moveHelpPoint( const QPoint & newPos )
 {
-    QRect rect = m_activePage->getZoomPageRect();
-
     if ( m_tmpHelpPoint != -1)
     {
         KoPoint vi = m_view->kPresenterDoc()->helpPoints()[m_tmpHelpPoint];

@@ -26,5 +26,5 @@ protected:
     double angle;
 };
 
-#endif __textpreview_h__
+#endif
 

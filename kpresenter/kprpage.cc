@@ -649,8 +649,6 @@ QColor KPrPage::getGColor1( const QColor &g1 )const
 /*================================================================*/
 QColor KPrPage::getGColor2( const QColor &g2 )const
 {
-    KPObject *kpobject = 0;
-
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
@@ -719,8 +717,6 @@ int KPrPage::getGXFactor( int xfactor )const
 /*================================================================*/
 int KPrPage::getGYFactor( int yfactor )const
 {
-    KPObject *kpobject = 0;
-
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {

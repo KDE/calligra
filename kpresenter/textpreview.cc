@@ -6,8 +6,10 @@
 #include <qfont.h>
 
 TextPreview::TextPreview( QWidget* parent, const char* name )
-    : QFrame( parent, name ), angle( 0 ),
-      shadowDistance( 0 ), shadowDirection( SD_LEFT_BOTTOM )
+    : QFrame( parent, name ),
+      shadowDirection( SD_LEFT_BOTTOM ),
+      shadowDistance( 0 ),
+      angle( 0 )
 {
     setBackgroundColor( white );
     setFrameStyle( NoFrame );

@@ -225,7 +225,7 @@ double KPTextObject::load(const QDomElement &element)
 
 // Standard paint method for KP2DObjects.
 void KPTextObject::paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
-			  bool drawingShadow, bool drawContour )
+			  bool /*drawingShadow*/, bool drawContour )
 {
     //never draw Shadow.
     //shadow in text obj is a properties from paragraph
@@ -1339,7 +1339,7 @@ void KPTextView::drawCursor( bool b )
     kpTextObject()->drawCursor( &painter, cursor(), b, m_canvas );
 }
 
-void KPTextView::mousePressEvent( QMouseEvent *e, const QPoint &_pos)
+void KPTextView::mousePressEvent( QMouseEvent *e, const QPoint &/*_pos*/)
 {
     QPoint iPoint=e->pos() - kpTextObject()->kPresenterDocument()->zoomHandler()->zoomPoint(kpTextObject()->getOrig());
     iPoint=kpTextObject()->kPresenterDocument()->zoomHandler()->pixelToLayoutUnit( QPoint(iPoint.x()+ m_canvas->diffx(),iPoint.y()+m_canvas->diffy()) );

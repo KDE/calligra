@@ -444,7 +444,6 @@ QDomDocument KPresenterDoc::saveXML()
         emit sigProgress( 0 );
     }
 
-    KPObject *kpobject = 0L;
     QDomDocument doc("DOC");
     doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
     QDomElement presenter=doc.createElement("DOC");
@@ -2515,7 +2514,7 @@ void KPresenterDoc::updateZoomRuler()
     }
 }
 
-void KPresenterDoc::newZoomAndResolution( bool updateViews, bool forPrint )
+void KPresenterDoc::newZoomAndResolution( bool updateViews, bool /*forPrint*/ )
 {
     if ( updateViews )
     {
@@ -2806,7 +2805,7 @@ void KPresenterDoc::addVertHelpline(double pos)
 
 void KPresenterDoc::removeHorizHelpline(int index)
 {
-    if ( index >= m_horizHelplines.count())
+    if ( index >= (int)m_horizHelplines.count())
         kdDebug()<<" index of remove horiz helpline doesn't exit !\n";
     else
         m_horizHelplines.remove(m_horizHelplines[index]);
@@ -2814,7 +2813,7 @@ void KPresenterDoc::removeHorizHelpline(int index)
 
 void KPresenterDoc::removeVertHelpline( int index )
 {
-    if ( index >= m_vertHelplines.count())
+    if ( index >= (int)m_vertHelplines.count())
         kdDebug()<<" index of remove vertical helpline doesn't exit !\n";
     else
         m_vertHelplines.remove(m_vertHelplines[index]);
