@@ -1,4 +1,4 @@
-/* Sidewinder - Portable library for spreadsheet 
+/* Sidewinder - Portable library for spreadsheet
    Copyright (C) 2003 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -36,39 +36,75 @@ class Sheet
 public:
 
   Sheet( Workbook* workbook );
-  
+
   virtual ~Sheet();
-  
+
   // get workbook that owns this sheet
   Workbook* workbook();
-  
+
   void setName( const UString& name );
-  
+
   UString name() const;
-  
-  // return cell at specified column and row 
+
+  // return cell at specified column and row
   // automatically create the cell if previously there is no cell there
   // return NULL if no cell there _and_ autoCreate is false
   Cell* cell( unsigned column, unsigned row, bool autoCreate = true );
-  
+
   Column* column( unsigned index, bool autoCreate = true );
-  
+
   Row* row( unsigned index, bool autoCreate = true );
 
   bool visible() const;
   void setVisible( bool v );
-  
+
   bool protect() const;
   void setProtect( bool p );
-  
+
+  /*
+   *   &P  current page number
+   *   &D  current date
+   *   &T  current time
+   *   &A  sheet name
+   *   &F  file name without path
+   *   &Z  file path without file name
+   *   &G  picture
+   *   &B  bold on/off
+   *   &I  italic on/off
+   *   &U  underlining on/off
+   *   &E  double underlining on/off
+   *   &S  strikeout on/off
+   *   &X  superscript on/off
+   *   &Y  subscript on/off
+   *
+   *   &"<fontname>"  set font name
+   *   &"<fontname>,<fontstyle>" set font name and style
+   *   &<fontheight>  set font height
+
+   */
+
+  UString leftHeader() const;
+  void setLeftHeader( const UString& h );
+  UString centerHeader() const;
+  void setCenterHeader( const UString& h );
+  UString rightHeader() const;
+  void setRightHeader( const UString& h );
+
+  UString leftFooter() const;
+  void setLeftFooter( const UString& f );
+  UString centerFooter() const;
+  void setCenterFooter( const UString& f );
+  UString rightFooter() const;
+  void setRightFooter( const UString& f );
+
   // left margin, in points (pt)
   double leftMargin() const;
   void setLeftMargin( double m );
-  
+
   // right margin, in points (pt)
   double rightMargin() const;
   void setRightMargin( double m );
-  
+
   // top margin, in points (pt)
   double topMargin() const;
   void setTopMargin( double m );

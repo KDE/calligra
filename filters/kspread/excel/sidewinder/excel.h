@@ -2697,6 +2697,8 @@ private:
   void handleDimension( DimensionRecord* record );
   void handleFormat( FormatRecord* record );
   void handleFont( FontRecord* record );
+  void handleFooter( FooterRecord* record );
+  void handleHeader( HeaderRecord* record );
   void handleLabel( LabelRecord* record );
   void handleLabelSST( LabelSSTRecord* record );
   void handleLeftMargin( LeftMarginRecord* record );

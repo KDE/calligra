@@ -48,8 +48,9 @@ static inline double readFloat64( const void*p )
 {
   const unsigned char* ptr = (const unsigned char*) p;
   double num = 0.0;
-  *((unsigned*) &num) = readU32( ptr ); 
-  *((unsigned*) &num + 1) = readU32( ptr+4 );
+  memcpy( (char*)&num, ptr, 8 );
+//  *((unsigned*) &num) = readU32( ptr );
+//  *((unsigned*) &num + 1) = readU32( ptr+4 );
   return num;
 }
 
@@ -851,7 +852,7 @@ void BoolErrRecord::dump( std::ostream& out ) const
   }
 }
 
-// ========== BOTTOMMARGIN ========== 
+// ========== BOTTOMMARGIN ==========
 
 const unsigned int BottomMarginRecord::id = 0x0029;
 
@@ -896,7 +897,7 @@ void BottomMarginRecord::dump( std::ostream& out ) const
 }
 
 
-// ========== BOUNDSHEET ========== 
+// ========== BOUNDSHEET ==========
 
 const unsigned int BoundSheetRecord::id = 0x0085;
 
@@ -1526,7 +1527,7 @@ void FontRecord::dump( std::ostream& out ) const
   out << " Font Name: " << fontName().ascii() << std::endl;
 }
 
-// ========== FOOTER ========== 
+// ========== FOOTER ==========
 
 const unsigned int FooterRecord::id = 0x0015;
 
@@ -1560,7 +1561,7 @@ void FooterRecord::setFooter( const UString& footer )
 void FooterRecord::setData( unsigned size, const unsigned char* data )
 {
   if( size < 2 ) return;
-  
+
   UString footer = ( version() >= Excel97 ) ?
     EString::fromUnicodeString( data, size ).str() :
     EString::fromByteString( data, false, size ).str();
@@ -1573,7 +1574,7 @@ void FooterRecord::dump( std::ostream& out ) const
   out << " footer: " << footer().ascii() << std::endl;
 }
 
-// ========== FORMAT ========== 
+// ========== FORMAT ==========
 
 const unsigned int FormatRecord::id = 0x041e;
 
@@ -1744,7 +1745,7 @@ void LabelRecord::dump( std::ostream& out ) const
   out << "    Label : " << label().ascii() << std::endl;
 }
 
-// ========== HEADER ========== 
+// ========== HEADER ==========
 
 const unsigned int HeaderRecord::id = 0x0014;
 
@@ -1945,7 +1946,7 @@ unsigned MergedCellsRecord::lastColumn( unsigned i ) const
 void MergedCellsRecord::setData( unsigned size, const unsigned char* data )
 {
   if( size < 2 ) return;
-  
+
   unsigned num = readU16( data );
   
   // sanity check
@@ -2140,7 +2141,7 @@ void NumberRecord::setNumber( double f )
 void NumberRecord::setData( unsigned size, const unsigned char* data )
 {
   if( size < 14 ) return;
-  
+
   setRow( readU16( data ) );
   setColumn( readU16( data+2 ) );
   setXfIndex( readU16( data+4 ) );
@@ -2256,7 +2257,7 @@ void RightMarginRecord::dump( std::ostream& out ) const
   out << "   Margin : " << rightMargin() << std::endl;
 }
 
-// ========== RK ========== 
+// ========== RK ==========
 
 const unsigned int RKRecord::id = 0x027e;
 
@@ -2529,7 +2530,7 @@ UString sstrecord_get_plain_string( const unsigned char* data, unsigned length )
   buffer[ length ] = 0;
   UString str = UString( buffer );
   delete[] buffer;
-  return str;  
+  return str;
 }
 
 void SSTRecord::setData( unsigned size, const unsigned char* data )
@@ -2586,7 +2587,7 @@ void SSTRecord::dump( std::ostream& out ) const
   }
 }
 
-// ========== TOPMARGIN ========== 
+// ========== TOPMARGIN ==========
 
 const unsigned int TopMarginRecord::id = 0x0028;
 
@@ -2630,7 +2631,7 @@ void TopMarginRecord::dump( std::ostream& out ) const
   out << "   Margin : " << topMargin() << std::endl;
 }
 
-// ========== XF ========== 
+// ========== XF ==========
 
 const unsigned int XFRecord::id = 0x00e0;
 
@@ -3273,6 +3274,8 @@ void ExcelReader::handleRecord( Record* record )
   handleColInfo( dynamic_cast<ColInfoRecord*>( record ) );
   handleFormat( dynamic_cast<FormatRecord*>( record ) );
   handleFont( dynamic_cast<FontRecord*>( record ) );
+  handleFooter( dynamic_cast<FooterRecord*>( record ) );
+  handleHeader( dynamic_cast<HeaderRecord*>( record ) );
   handleLabel( dynamic_cast<LabelRecord*>( record ) );
   handleLabelSST( dynamic_cast<LabelSSTRecord*>( record ) );
   handleLeftMargin( dynamic_cast<LeftMarginRecord*>( record ) );
@@ -3293,12 +3296,12 @@ void ExcelReader::handleRecord( Record* record )
 void ExcelReader::handleBottomMargin( BottomMarginRecord* record )
 {
   if( !record ) return;
-  
+
   if( !d->activeSheet ) return;
-  
+
   // convert from inches to points
   double margin = record->bottomMargin() * 72.0;
-  d->activeSheet->setBottomMargin( margin );  
+  d->activeSheet->setBottomMargin( margin );
 }
 
 // FIXME does the order of sheet follow BOUNDSHEET of BOF(Worksheet) ?
@@ -3439,9 +3442,9 @@ void ExcelReader::handleDimension( DimensionRecord* record )
 void ExcelReader::handleLabel( LabelRecord* record )
 {
   if( !record ) return;
-  
+
   if( !d->activeSheet ) return;
-  
+
   unsigned column = record->column();
   unsigned row = record->row();  
   unsigned xfIndex = record->xfIndex();
@@ -3458,49 +3461,147 @@ void ExcelReader::handleLabel( LabelRecord* record )
 void ExcelReader::handleLeftMargin( LeftMarginRecord* record )
 {
   if( !record ) return;
-  
+
   if( !d->activeSheet ) return;
-  
+
   // convert from inches to points
   double margin = record->leftMargin() * 72.0;
-  d->activeSheet->setLeftMargin( margin );  
+  d->activeSheet->setLeftMargin( margin );
 }
 
 
 void ExcelReader::handleFormat( FormatRecord* record )
 {
   if( !record ) return;
-  
+
   d->formatTable[ record->index() ] = *record;
 }
 
 void ExcelReader::handleFont( FontRecord* record )
 {
   if( !record ) return;
-  
+
   d->fontTable.push_back( *record );
 
   // font #4 is never used, so add a dummy one
   if( d->fontTable.size() == 4 )
     d->fontTable.push_back( FontRecord() );
-  
+
+}
+
+void ExcelReader::handleFooter( FooterRecord* record )
+{
+  if( !record ) return;
+
+  if( !d->activeSheet ) return;
+
+  UString footer = record->footer();
+  UString left, center, right;
+  int pos = -1, len = 0;
+
+  // left part
+  pos = footer.find( UString("&L") );
+  if( pos >= 0 )
+  {
+    pos += 2;
+    len = footer.find( UString("&C") ) - pos;
+    if( len > 0 )
+    {
+      left = footer.substr( pos, len );
+      footer = footer.substr( pos+len, footer.length() );
+    }
+  }
+
+  // center part
+  pos = footer.find( UString("&C") );
+  if( pos >= 0 )
+  {
+    pos += 2;
+    len = footer.find( UString("&R") ) - pos;
+    if( len > 0 )
+    {
+      center = footer.substr( pos, len );
+      footer = footer.substr( pos+len, footer.length() );
+    }
+  }
+
+  // right part
+  pos = footer.find( UString("&R") );
+  if( pos >= 0 )
+  {
+    pos += 2;
+    right = footer.substr( pos, footer.length() - pos );
+  }
+
+  d->activeSheet->setLeftFooter( left );
+  d->activeSheet->setCenterFooter( center );
+  d->activeSheet->setRightFooter( right );
+}
+
+void ExcelReader::handleHeader( HeaderRecord* record )
+{
+  if( !record ) return;
+
+  if( !d->activeSheet ) return;
+
+  UString header = record->header();
+  UString left, center, right;
+  int pos = -1, len = 0;
+
+  // left part of the header
+  pos = header.find( UString("&L") );
+  if( pos >= 0 )
+  {
+    pos += 2;
+    len = header.find( UString("&C") ) - pos;
+    if( len > 0 )
+    {
+      left = header.substr( pos, len );
+      header = header.substr( pos+len, header.length() );
+    }
+  }
+
+  // center part of the header
+  pos = header.find( UString("&C") );
+  if( pos >= 0 )
+  {
+    pos += 2;
+    len = header.find( UString("&R") ) - pos;
+    if( len > 0 )
+    {
+      center = header.substr( pos, len );
+      header = header.substr( pos+len, header.length() );
+    }
+  }
+
+  // right part of the header
+  pos = header.find( UString("&R") );
+  if( pos >= 0 )
+  {
+    pos += 2;
+    right = header.substr( pos, header.length() - pos );
+  }
+
+  d->activeSheet->setLeftHeader( left );
+  d->activeSheet->setCenterHeader( center );
+  d->activeSheet->setRightHeader( right );
 }
 
 void ExcelReader::handleLabelSST( LabelSSTRecord* record )
 {
   if( !record ) return;
-  
+
   if( !d->activeSheet ) return;
-  
+
   unsigned column = record->column();
-  unsigned row = record->row();  
+  unsigned row = record->row();
   unsigned index = record->sstIndex();
   unsigned xfIndex = record->xfIndex();
-  
+
   UString str;
   if( index < d->stringTable.size() )
     str = d->stringTable[ index ];
-   
+
   Cell* cell = d->activeSheet->cell( column, row, true );
   if( cell )
   {
@@ -3697,12 +3798,13 @@ void ExcelReader::handleSST( SSTRecord* record )
 void ExcelReader::handleTopMargin( TopMarginRecord* record )
 {
   if( !record ) return;
-  
+
   if( !d->activeSheet ) return;
-  
+
+
   // convert from inches to points
   double margin = record->topMargin() * 72.0;
-  d->activeSheet->setTopMargin( margin );  
+  d->activeSheet->setTopMargin( margin );
 }
 
 FormatFont ExcelReader::convertFont( unsigned fontIndex )

@@ -1,4 +1,4 @@
-/* Sidewinder - Portable library for spreadsheet 
+/* Sidewinder - Portable library for spreadsheet
    Copyright (C) 2003 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -43,10 +43,20 @@ public:
   
   bool visible;
   bool protect;
+
+  UString leftHeader;
+  UString centerHeader;
+  UString rightHeader;
+  UString leftFooter;
+  UString centerFooter;
+  UString rightFooter;
+
   double leftMargin;
   double rightMargin;
   double topMargin;
-  double bottomMargin;};
+  double bottomMargin;
+};
+
 };
 
 using namespace Sidewinder;
@@ -165,12 +175,72 @@ void Sheet::setProtect( bool p )
   d->protect = p;
 }
 
+UString Sheet::leftHeader() const
+{
+  return d->leftHeader;
+}
+
+void Sheet::setLeftHeader( const UString& h )
+{
+  d->leftHeader = h;
+}
+
+UString Sheet::centerHeader() const
+{
+  return d->centerHeader;
+}
+
+void Sheet::setCenterHeader( const UString& h )
+{
+  d->centerHeader = h;
+}
+
+UString Sheet::rightHeader() const
+{
+  return d->rightHeader;
+}
+
+void Sheet::setRightHeader( const UString& h )
+{
+  d->rightHeader = h;
+}
+
+UString Sheet::leftFooter() const
+{
+  return d->leftFooter;
+}
+
+void Sheet::setLeftFooter( const UString& h )
+{
+  d->leftFooter = h;
+}
+
+UString Sheet::centerFooter() const
+{
+  return d->centerFooter;
+}
+
+void Sheet::setCenterFooter( const UString& h )
+{
+  d->centerFooter = h;
+}
+
+UString Sheet::rightFooter() const
+{
+  return d->rightFooter;
+}
+
+void Sheet::setRightFooter( const UString& h )
+{
+  d->rightFooter = h;
+}
+
 double Sheet::leftMargin() const
 {
   return d->leftMargin;
 }
 
-void Sheet::setLeftMargin( double m ) 
+void Sheet::setLeftMargin( double m )
 {
   d->leftMargin = m;
 }
