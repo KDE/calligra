@@ -81,6 +81,7 @@ private:
     void parseTable( QDomDocument &doc, const QDomElement& parent, QDomElement& currentFramesetElement );
     void parseInsideOfTable( QDomDocument &doc, const QDomElement& parent, QDomElement& currentFramesetElement,
         const QString& tableName, const QMemArray<double> & columnLefts, uint& row, uint& column );
+    static QString kWordStyleName(  const QString& ooStyleName );
 
     QDomDocument    m_content;
     QDomDocument    m_meta;
