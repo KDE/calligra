@@ -1844,7 +1844,10 @@ void KPresenterDoc::loadOasisObject(int pos, KPrPage * newpage, QDomNode & drawP
                     note += t.text() + "\n";
                     kdDebug()<<" note :"<<note<<endl;
                 }
-                m_pageList.at(pos)->setNoteText(note );
+                if ( pos != -1 )
+                    m_pageList.at(pos)->setNoteText(note );
+                else
+                    m_masterPage->setNoteText( note );
             }
         }
         else if ( ( name == "header" || name == "footer" ) && o.namespaceURI() == KoXmlNS::style )

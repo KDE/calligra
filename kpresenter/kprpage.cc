@@ -128,6 +128,7 @@ bool KPrPage::saveOasisStickyPage( KoStore *store, KoXmlWriter &xmlWriter, KoSav
     saveOasisObject( store, xmlWriter, context, indexObj, partIndexObj, manifestWriter, true );
     //todo for animation style for sticky object it's neccesary to use "presentation:style-name="pr1"
     // => create style presentation.
+    saveOasisNote( xmlWriter );
     return true;
 }
 
@@ -302,7 +303,7 @@ void KPrPage::loadOasis(KoOasisContext & context )
         m_useMasterBackground = str == "true" ? true : false;
     }
 #endif
-    
+
     if ( styleStack.hasAttributeNS( KoXmlNS::presentation, "visibility" ) )
     {
         const QString str = styleStack.attributeNS( KoXmlNS::presentation, "visibility" );
@@ -2678,7 +2679,7 @@ QDomElement KPrPage::saveObjects( QDomDocument &doc, QDomElement &objects, doubl
             continue;
         QDomElement object=doc.createElement("OBJECT");
         object.setAttribute("type", static_cast<int>( oIt.current()->getType() ));
-#if MASTERPAGE        
+#if MASTERPAGE
         bool _sticky = this->m_masterPage == 0;
 #else
         bool _sticky = oIt.current()->isSticky();
