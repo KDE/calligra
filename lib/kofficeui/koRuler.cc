@@ -172,11 +172,11 @@ void KoRuler::drawHorizontal( QPainter *_painter )
     p.setFont( font );
 
     if ( unit == "inch" )
-	dist = _INCH_TO_POINT * m_zoom;
+	dist = INCH_TO_POINT (m_zoom);
     else if ( unit == "pt" )
 	dist = 100.0 * m_zoom;
     else
-	dist = 10.0 * _MM_TO_POINT * m_zoom;
+	dist = MM_TO_POINT ( 10.0 * m_zoom );
 
     for ( double i = 0.0;i <= pw;i += dist ) {
 	str=QString::number(j++);
@@ -308,11 +308,11 @@ void KoRuler::drawVertical( QPainter *_painter )
     p.setFont( font );
 
     if ( unit == "inch" )
-	dist = _INCH_TO_POINT * m_zoom;
+	dist = INCH_TO_POINT ( m_zoom );
     else if ( unit == "pt" )
 	dist = 100.0 * m_zoom;
     else
-	dist = 10.0 * _MM_TO_POINT * m_zoom;
+	dist = MM_TO_POINT ( 10.0 * m_zoom );
 
     for ( double i = 0.0;i <= ph;i += dist ) {
 	str=QString::number(j++);
@@ -452,8 +452,8 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
 	default: break;
 	}
 	_tab->ptPos = static_cast<double>(unZoomIt(e->x() + diffx - (frameStart == -1 ? double2Int(zoomIt(layout.ptLeft)) : zoomIt(frameStart)) ));
-	_tab->mmPos = cPOINT_TO_MM( _tab->ptPos );
-	_tab->inchPos = cPOINT_TO_INCH( _tab->ptPos );
+	_tab->mmPos = POINT_TO_MM( _tab->ptPos );
+	_tab->inchPos = POINT_TO_INCH( _tab->ptPos );
 
 	d->tabList.append( _tab );
 	d->removeTab=true;
@@ -628,8 +628,8 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 			    p.drawLine( d->oldMx, 0, d->oldMx, d->canvas->height() );
 			    p.drawLine( mx, 0, mx, d->canvas->height() );
 			    layout.ptLeft = unZoomIt(static_cast<double>(mx + diffx));
-			    layout.mmLeft = cPOINT_TO_MM(layout.ptLeft);
-			    layout.inchLeft = cPOINT_TO_INCH(layout.ptLeft);
+			    layout.mmLeft = POINT_TO_MM(layout.ptLeft);
+			    layout.inchLeft = POINT_TO_INCH(layout.ptLeft);
 			    if( ip_first > right-left-15 ) {
 				ip_first=right-left-15;
 				ip_first=ip_first<0 ? 0 : ip_first;
@@ -658,8 +658,8 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 			    p.drawLine( mx, 0, mx, d->canvas->height() );
 			    p.end();
 			    layout.ptRight = unZoomIt(static_cast<double>(pw - ( mx + diffx )));
-			    layout.mmRight = cPOINT_TO_MM( layout.ptRight );
-			    layout.inchRight = cPOINT_TO_INCH( layout.ptRight );
+			    layout.mmRight = POINT_TO_MM( layout.ptRight );
+			    layout.inchRight = POINT_TO_INCH( layout.ptRight );
 			    if( ip_first > right-left-15 ) {
 				ip_first=right-left-15;
 				ip_first=ip_first<0 ? 0 : ip_first;
@@ -732,8 +732,8 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 			    int pt_fr=double2Int(pt+fr);
 			    p.drawLine( pt_fr, 0, pt_fr, d->canvas->height() );
 			    d->tabList.at( d->currTab )->ptPos = unZoomIt(static_cast<double>(mx) - fr );
-			    d->tabList.at( d->currTab )->mmPos = cPOINT_TO_MM( d->tabList.at( d->currTab )->ptPos );
-			    d->tabList.at( d->currTab )->inchPos = cPOINT_TO_INCH( d->tabList.at( d->currTab )->ptPos );
+			    d->tabList.at( d->currTab )->mmPos = POINT_TO_MM( d->tabList.at( d->currTab )->ptPos );
+			    d->tabList.at( d->currTab )->inchPos = POINT_TO_INCH( d->tabList.at( d->currTab )->ptPos );
 			    pt=zoomIt(d->tabList.at( d->currTab )->ptPos);
 			    pt_fr=double2Int(pt+fr);
 			    p.drawLine( pt_fr, 0, pt_fr, d->canvas->height() );
@@ -770,8 +770,8 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 			    p.drawLine( 0, my, d->canvas->width(), my );
 			    p.end();
 			    layout.ptTop = unZoomIt(static_cast<double>(my + diffy));
-			    layout.mmTop = cPOINT_TO_MM( layout.ptTop );
-			    layout.inchTop = cPOINT_TO_INCH( layout.ptTop );
+			    layout.mmTop = POINT_TO_MM( layout.ptTop );
+			    layout.inchTop = POINT_TO_INCH( layout.ptTop );
 			    d->oldMx = mx;
 			    d->oldMy = my;
 			    repaint( false );
@@ -787,8 +787,8 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
 			    p.drawLine( 0, my, d->canvas->width(), my );
 			    p.end();
 			    layout.ptBottom = unZoomIt(static_cast<double>(ph - ( my + diffy )));
-			    layout.mmBottom = cPOINT_TO_MM( layout.ptBottom );
-			    layout.inchBottom = cPOINT_TO_INCH( layout.ptBottom );
+			    layout.mmBottom = POINT_TO_MM( layout.ptBottom );
+			    layout.inchBottom = POINT_TO_INCH( layout.ptBottom );
 			    d->oldMx = mx;
 			    d->oldMy = my;
 			    repaint( false );
@@ -845,8 +845,8 @@ void KoRuler::setTabList( const QList<KoTabulator>* _tabList )
 /*================================================================*/
 double KoRuler::makeIntern( double _v )
 {
-    if ( unit == "mm" ) return cMM_TO_POINT( _v );
-    if ( unit == "inch" ) return cINCH_TO_POINT( _v );
+    if ( unit == "mm" ) return MM_TO_POINT( _v );
+    if ( unit == "inch" ) return INCH_TO_POINT( _v );
     return _v;
 }
 

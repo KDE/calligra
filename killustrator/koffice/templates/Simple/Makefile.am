@@ -1,4 +1,4 @@
-template_DATA = Plain.desktop
+template_DATA = .directory Plain.desktop
 templatedir = $(kde_datadir)/killustrator/templates/Simple
 
 templatesrc_DATA = Plain.kil

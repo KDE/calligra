@@ -245,7 +245,7 @@ void KoTemplateCreateDia::slotOk() {
 	return;
     }
 
-    // gereate the command to copy the template
+    // gereate the command to copy the template file
     QString command="cp ";
     command+=m_file;
     command+=" ";
@@ -253,6 +253,23 @@ void KoTemplateCreateDia::slotOk() {
     command+=file;
     system(command.local8Bit());
 
+    // if there's a .directory file, we copy this one, too
+    bool ready=false;
+    QStringList tmp=group->dirs();
+    for(QStringList::ConstIterator it=tmp.begin(); it!=tmp.end() && !ready; ++it) {
+	if((*it).contains(dir)==0) {
+	    QString file=(*it)+".directory ";
+	    QFileInfo info(file);
+	    if(info.exists()) {
+		command="cp ";
+		command+=file;
+		command+=" ";
+		command+=dir;
+		system(command.local8Bit());
+		ready=true;
+	    }
+	}
+    }
     // save the picture
     if(d->m_default->isChecked() && !m_pixmap.isNull())
 	m_pixmap.save(icon, "PNG");
@@ -352,7 +369,7 @@ void KoTemplateCreateDia::slotRemove() {
 		removed = i18n("Remove group");
 	} else {
 		what =  i18n("Do you really want to remove that template");
-        removed = i18n("Remove template");     
+        removed = i18n("Remove template");
 	}
 	
     if(KMessageBox::warningYesNo(this, what,

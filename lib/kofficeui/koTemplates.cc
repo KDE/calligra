@@ -72,8 +72,8 @@ const QPixmap &KoTemplate::loadPicture() {
 
 
 KoTemplateGroup::KoTemplateGroup(const QString &name, const QString &dir,
-				 const bool &touched) : m_name(name),
-							m_touched(touched) {
+				 const bool &touched) :
+    m_name(name), m_touched(touched) {
     m_dirs.append(dir);
     m_templates.setAutoDelete(true);
 }
@@ -140,9 +140,6 @@ void KoTemplateTree::readTemplateTree() {
 
 void KoTemplateTree::writeTemplateTree() {
 
-    QStringList localTemplates;
-    // read from the local .templates file
-    createLocalTemplateList(localTemplates);
     QString localDir=m_instance->dirs()->saveLocation(m_templateType);
 
     for(KoTemplateGroup *group=m_groups.first(); group!=0L; group=m_groups.next()) {
@@ -157,7 +154,7 @@ void KoTemplateTree::writeTemplateTree() {
 	    //kdDebug() << "touched" << endl;
 	    if(!group->isHidden()) {
 		//kdDebug() << "not hidden" << endl;
-		createGroupDir(localDir, group, localTemplates);
+		KStandardDirs::makeDir(localDir+group->name()); // create the local group dir
 	    }
 	    else {
 		//kdDebug() << "hidden" << endl;
@@ -166,12 +163,11 @@ void KoTemplateTree::writeTemplateTree() {
 		    QString command="rm -rf ";
 		    command+=group->dirs().first();
 		    //kdDebug() << "command: " << command << endl;
-		    localTemplates.remove(group->name());
-		    system(command);
+		    system(command.local8Bit());
 		}
 		else {
 		    //kdDebug() << "global" << endl;
-		    createGroupDir(localDir, group, localTemplates);
+		    KStandardDirs::makeDir(localDir+group->name());		
 		}
 	    }
 	}
@@ -187,12 +183,10 @@ void KoTemplateTree::writeTemplateTree() {
 		command+=" ";
 		command+=t->picture();
 		//kdDebug() << "command: " << command << endl;
-		system(command);
+		system(command.local8Bit());
 	    }
 	}
     }
-    // write back the local .templates file
-    writeOutLocalTemplates(localTemplates);
 }
 
 void KoTemplateTree::add(KoTemplateGroup *g) {
@@ -217,20 +211,23 @@ void KoTemplateTree::readGroups() {
     QStringList dirs = m_instance->dirs()->resourceDirs(m_templateType);
     for(QStringList::ConstIterator it=dirs.begin(); it!=dirs.end(); ++it) {
 	//kdDebug() << "dir: " << *it << endl;
-	QFile templateInf(*it + ".templates");
-	if(templateInf.open(IO_ReadOnly)) {
-	    QTextStream stream(&templateInf);
-	    QString tmp;
-	    while(!stream.atEnd()) {
-		stream >> tmp;
-		tmp=KoTemplates::stripWhiteSpace(tmp);
-		//kdDebug() << "string read: " << tmp << endl;
-		if(!tmp.isEmpty()) {
-		    KoTemplateGroup *g=new KoTemplateGroup(tmp, *it+tmp+QChar('/'));
-		    add(g);
-		}
+	QDir dir(*it);
+	dir.setFilter(QDir::Dirs);
+	QStringList templateDirs=dir.entryList();
+	for(QStringList::ConstIterator tdirIt=templateDirs.begin(); tdirIt!=templateDirs.end(); ++tdirIt) {
+	    if(*tdirIt=="." || *tdirIt=="..") // we don't want to check those dirs :)
+		continue;
+	    QDir templateDir(dir.absPath()+*tdirIt);
+	    QString name=*tdirIt;
+	    if(templateDir.exists(".directory")) {
+		kdDebug() << ".directory: " << templateDir.absPath()+".directory" << endl;
+		KSimpleConfig config(templateDir.absPath()+".directory", true);
+		config.setDesktopGroup();
+		name=config.readEntry("Name");
+		kdDebug() << "name: " << name <<endl;
 	    }
-	    templateInf.close();
+	    KoTemplateGroup *g=new KoTemplateGroup(name, *it+*tdirIt+QChar('/'));
+	    add(g);
 	}
     }
 }
@@ -277,7 +274,7 @@ void KoTemplateTree::readTemplates() {
 				templatePath=templatePath.right(templatePath.length()-6);
 			    //else
 			    //	kdDebug() << "dirname=" << *it << endl;
-                            templatePath=*it+templatePath;
+			    templatePath=*it+templatePath;
 			    //kdDebug() << "templatePath: " << templatePath << endl;
 			}
 		    } else
@@ -301,55 +298,6 @@ void KoTemplateTree::readTemplates() {
     		                                         // creation of dirs in .kde/blah/...
 	    }
 	}
-    }
-}
-
-void KoTemplateTree::createLocalTemplateList(QStringList &list) {
-
-    QFile localTemplateFile(m_instance->dirs()->saveLocation(m_templateType)+".templates");
-    if(!localTemplateFile.open(IO_ReadOnly))
-	return;
-
-    QTextStream stream(&localTemplateFile);
-    QString tmp;
-    while(!stream.atEnd()) {
-	stream >> tmp;
-	tmp=KoTemplates::stripWhiteSpace(tmp);
-	if(!tmp.isEmpty())
-	    list.append(tmp);
-    }
-    localTemplateFile.close();
-}
-
-void KoTemplateTree::writeOutLocalTemplates(const QStringList &list) {
-
-    if(list.isEmpty()) {
-	QString command="rm -rf ";
-	command+=m_instance->dirs()->saveLocation(m_templateType)+".templates";
-	system(command);
-	return;
-    }
-
-    QFile localTemplateFile(m_instance->dirs()->saveLocation(m_templateType)+".templates");
-    if(!localTemplateFile.open(IO_WriteOnly))
-	return;
-
-    //kdDebug() << "count: " << list.count() << endl;
-    QTextStream stream(&localTemplateFile);
-    for(QStringList::ConstIterator it=list.begin(); it!=list.end(); ++it) {
-	//kdDebug() << "writing out: " << (*it) << endl;
-	stream << (*it) << endl;
-    }
-    localTemplateFile.close();
-}
-
-void KoTemplateTree::createGroupDir(const QString &localDir, KoTemplateGroup *group,
-				    QStringList &localTemplates) {
-
-    KStandardDirs::makeDir(localDir+group->name()); // create the local group dir
-    if(localTemplates.grep(group->name()).isEmpty()) {
-	//kdDebug() << "adding group ( " << group->name() << " ) locally" << endl;
-	localTemplates.append(group->name());
     }
 }
 

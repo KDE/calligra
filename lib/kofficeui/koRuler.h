@@ -45,17 +45,18 @@
 #include <qpopupmenu.h>
 #include <qpoint.h>
 
+#include <koGlobal.h>
 #include <koTabChooser.h>
 
-#define _MM_TO_POINT 2.83465058
-#define _INCH_TO_POINT 72.0
+//#define _MM_TO_POINT 2.83465058
+//#define _INCH_TO_POINT 72.0
 
-#define cPOINT_TO_MM( px ) ( px*0.352777167 )
-#define cMM_TO_POINT( mm ) ( mm*2.83465058  )
-#define cPOINT_TO_INCH( px ) ( px*0.01388888888889 )
-#define cINCH_TO_POINT( inch ) ( inch*72.0 )
-#define cMM_TO_INCH( mm ) ( mm*0.039370147 )
-#define cINCH_TO_MM( inch ) ( inch*25.399956 )
+//#define cPOINT_TO_MM( px ) ( px*0.352777167 )
+//#define cMM_TO_POINT( mm ) ( mm*2.83465058  )
+//#define cPOINT_TO_INCH( px ) ( px*0.01388888888889 )
+//#define cINCH_TO_POINT( inch ) ( inch*72.0 )
+//#define cMM_TO_INCH( mm ) ( mm*0.039370147 )
+//#define cINCH_TO_MM( inch ) ( inch*25.399956 )
 
 /******************************************************************/
 /* Struct: KoTabulator						  */

@@ -44,6 +44,7 @@ class KoTemplateCreateDia : public KDialogBase
 public:
     KoTemplateCreateDia( const QString &templateType, KInstance *instance,
 			 const QString &file, const QPixmap &pix, QWidget *parent=0L );
+    ~KoTemplateCreateDia() { qDebug("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYY"); }
 
     static void createTemplate( const QString &templateType, KInstance *instance,
 				const QString &file, const QPixmap &pix, QWidget *parent=0L );

@@ -1,4 +1,4 @@
-template_DATA = SimpleLayout.desktop Test.desktop
+template_DATA = .directory SimpleLayout.desktop Test.desktop
 templatedir = $(kde_datadir)/kword/templates/Publishing
 
 templatesrc_DATA = SimpleLayout.kwt Test.kwt

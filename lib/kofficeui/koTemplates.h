@@ -117,10 +117,6 @@ public:
 private:
     void readGroups();
     void readTemplates();
-    void createLocalTemplateList(QStringList &list);
-    void writeOutLocalTemplates(const QStringList &list);
-    void createGroupDir(const QString &localDir, KoTemplateGroup *group,
-			QStringList &localTemplates);
     void writeTemplate(KoTemplate *t, KoTemplateGroup *group,
 		       const QString &localDir);
 

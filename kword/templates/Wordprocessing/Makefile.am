@@ -1,4 +1,4 @@
-templates_DATA = PlainText.desktop TwoColumns.desktop
+templates_DATA = .directory PlainText.desktop TwoColumns.desktop
 templatesdir = $(kde_datadir)/kword/templates/Normal
 
 templatesrc_DATA = PlainText.kwt TwoColumns.kwt
