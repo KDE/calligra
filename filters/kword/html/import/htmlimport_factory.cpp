@@ -17,17 +17,19 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <klocale.h>
+#include <kinstance.h>
+#include <kdebug.h>
+
 #include "htmlimport_factory.h"
 #include "htmlimport_factory.moc"
 #include "htmlimport.h"
-
-#include <kinstance.h>
-#include <kdebug.h>
 
 extern "C"
 {
     void* init_libhtmlimport()
     {
+        KGlobal::locale()->insertCatalogue("kwordhtmlimportfilter");
         return new HTMLImportFactory;
     }
 };
