@@ -78,6 +78,9 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationWidget : public KexiViewBase
 
 		void removeSelectedObject();
 
+		/*! Removes all tables and coonections from the widget. */
+		void clear();
+
 	protected slots:
 		void slotAddTable();
 		void tableViewGotFocus();
@@ -98,8 +101,11 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationWidget : public KexiViewBase
 		 or at center point of the relations view. */
 		void executePopup( QPoint pos = QPoint(-1,-1) );
 
-		//! Invalidates all actions availability
+		//! Invalidates all actions availability.
 		void invalidateActions();
+
+		//! Fills table's combo box with all available table names.
+		void fillTablesCombo();
 
 	private:
 		KexiMainWindow *m_win;

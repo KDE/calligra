@@ -108,6 +108,10 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationView : public QScrollView
 		//! Clears current selection - table/query or connection
 		void clearSelection();
 
+		/*! Removes all tables and coonections from the view. 
+		 Does not emit signals like tableHidden(). */
+		void clear();
+
 		void		slotTableScrolling(QString);
 //		void		removeSelectedConnection();
 //		void		removeSelectedTableQuery();

@@ -537,6 +537,17 @@ QSize KexiRelationView::sizeHint() const
 	return QSize(QScrollView::sizeHint());//.width(), 600);
 }
 
+void KexiRelationView::clear()
+{
+	clearSelection(); //sanity
+	m_connectionViews.setAutoDelete(true);
+	m_connectionViews.clear();
+	m_connectionViews.setAutoDelete(false);
+	m_tables.setAutoDelete(true);
+	m_tables.clear();
+	m_tables.setAutoDelete(false);
+	updateContents();
+}
 
 /*
 

@@ -57,9 +57,7 @@ KexiRelationWidget::KexiRelationWidget(KexiMainWindow *win, QWidget *parent,
 	hlyr->addWidget(lbl);
 	hlyr->addWidget(m_tableCombo);
 	m_tableCombo->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred));
-	QStringList tmp = m_conn->tableNames();
-	tmp.sort();
-	m_tableCombo->insertStringList(tmp);
+	fillTablesCombo();
 
 	m_btnAdd = new KPushButton(i18n("&Add"), this);
 	hlyr->addWidget(m_btnAdd);
@@ -322,6 +320,22 @@ KexiRelationWidget::slotTableFieldDoubleClicked(QListViewItem *i,const QPoint&,i
 	if (!sender()->isA("KexiRelationViewTable"))
 		return;
 	emit tableFieldDoubleClicked( static_cast<const KexiRelationViewTable*>(sender())->table(), i->text(1) );
+}
+
+void 
+KexiRelationWidget::clear()
+{
+	m_relationView->clear();
+	fillTablesCombo();
+}
+
+void 
+KexiRelationWidget::fillTablesCombo()
+{
+	m_tableCombo->clear();
+	QStringList tmp = m_conn->tableNames();
+	tmp.sort();
+	m_tableCombo->insertStringList(tmp);
 }
 
 #include "kexirelationwidget.moc"
