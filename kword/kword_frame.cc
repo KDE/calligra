@@ -427,6 +427,27 @@ FrameType KWFrame::getFrameType()
     return (FrameType)  -1;
 }
 
+/*================================================================*/
+KWFrame *KWFrame::getCopy() {
+    /* returns a deep copy of self */
+    KWFrame *frm = new KWFrame(0L, x(), y(),width(), height(), getRunAround(), getRunAroundGap() );
+    frm->setLeftBorder( getLeftBorder2() );
+    frm->setRightBorder( getRightBorder2() );
+    frm->setTopBorder( getTopBorder2() );
+    frm->setBottomBorder( getBottomBorder2() );
+    frm->setBLeft( getBLeft() );
+    frm->setBRight( getBRight() );
+    frm->setBTop( getBTop() );
+    frm->setBBottom( getBBottom() );
+    frm->setBackgroundColor( QBrush( getBackgroundColor() ) );
+    frm->setFrameBehaviour(getFrameBehaviour());
+    frm->setNewFrameBehaviour(getNewFrameBehaviour());
+    frm->setSheetSide(getSheetSide());
+    frm->setPageNum(getPageNum());
+
+    return frm;
+}
+
 /******************************************************************/
 /* Class: KWFrameSet						  */
 /******************************************************************/
@@ -442,9 +463,12 @@ KWFrameSet::KWFrameSet( KWordDocument *_doc )
     grpMgr = 0L;
 }
 
+
 /*================================================================*/
 void KWFrameSet::addFrame( KWFrame _frame )
 {
+    addFrame(_frame.getCopy());
+/*
     KWFrame *frm = new KWFrame(this, _frame.x(), _frame.y(), _frame.width(), _frame.height(), _frame.getRunAround(), _frame.getRunAroundGap() );
     frm->setLeftBorder( _frame.getLeftBorder2() );
     frm->setRightBorder( _frame.getRightBorder2() );
@@ -456,7 +480,7 @@ void KWFrameSet::addFrame( KWFrame _frame )
     frm->setBBottom( _frame.getBBottom() );
     frm->setBackgroundColor( QBrush( _frame.getBackgroundColor() ) );
 
-    addFrame(frm);
+    addFrame(frm); */
 }
 
 /*================================================================*/
@@ -635,6 +659,7 @@ bool KWFrameSet::hasSelectedFrame()
 
     return false;
 }
+
 
 /******************************************************************/
 /* Class: KWTextFrameSet					  */
@@ -1203,6 +1228,23 @@ KWParag *KWTextFrameSet::getLastParag()
 
     return last;
 }
+
+/*================================================================*/
+KWTextFrameSet *KWTextFrameSet::getCopy() {
+    /* returns a deep copy of self */
+    KWTextFrameSet *newFS = new KWTextFrameSet(doc);
+    newFS->setFrameInfo(getFrameInfo());
+    newFS->setVisible(isVisible());
+    newFS->setName(getName());
+    newFS->setIsRemoveableHeader(isRemoveableHeader());
+    for(unsigned int i=0; i< getNumFrames();i++) {
+        KWFrame *thisFrame=getFrame(i)->getCopy();
+        newFS->addFrame(thisFrame);
+    }
+    newFS->assign(this);
+    return newFS;
+}
+            
 
 /******************************************************************/
 /* Class: KWPictureFrameSet					  */
@@ -2019,6 +2061,15 @@ KWGroupManager::KWGroupManager( const KWGroupManager &original ) :
     rows = original.rows;
     cols = original.cols;
     name = original.name;
+
+    for (unsigned int i=0; i<= cells.count();i++) {
+        if(getCell(i))  {
+            getCell(i)->frameSet= dynamic_cast<KWTextFrameSet*>(getCell(i)->frameSet)->getCopy();
+            if ( anchored ) {
+                getCell(i)->frameSet->getFrame( 0 )->moveBy( origin.x(), origin.y() );
+            }
+        }
+    }
 }
 
 /*================================================================*/

@@ -145,6 +145,8 @@ public:
     KWUnit getBTop() { return btop; }
     KWUnit getBBottom() { return bbottom; }
 
+    KWFrame *getCopy();
+
 protected:
     SheetSide sheetSide;
     RunAround runAround;
@@ -301,6 +303,7 @@ public:
 
     void updateCounters();
     void updateAllStyles();
+    KWTextFrameSet *getCopy();
 
     // this function is optimized for framesets in tables and doesn't work for other purposes
     void assign( KWTextFrameSet *fs );
