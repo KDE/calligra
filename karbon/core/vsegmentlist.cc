@@ -76,6 +76,7 @@ VSegmentList::save( QDomElement& element ) const
 void
 VSegmentList::load( const QDomElement& element )
 {
+	clear();
 	m_isClosed   = element.attribute( "isClosed" ) == 0 ? false : true;
 
 	QDomNodeList list = element.childNodes();
