@@ -850,12 +850,6 @@ KarbonView::viewColorManager()
 }
 
 void
-KarbonView::refreshView()
-{
-	m_canvas->repaintAll();
-}
-
-void
 KarbonView::initActions()
 {
 
@@ -988,9 +982,6 @@ KarbonView::initActions()
 		i18n( "&Color Manager" ), "colorman", 0, this,
 		SLOT( viewColorManager() ), actionCollection(), "view_color_manager" );
 
-	new KAction(
-		i18n( "&Refresh" ), 0, QKeySequence("Ctrl+W"), this,
-		SLOT( refreshView() ), actionCollection(), "view_refresh" );
 	// view <-----
 
 	// line width

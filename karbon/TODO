@@ -8,7 +8,6 @@ GUI:
 	together, share pattern images and put something in kofficeui.
 -	other koffice apps have widgts that may of interest to us, for instance in kpresenter. We should
 	try to reuse them.
--	imho "View->Refresh" is an excuse for not being able to code properly
 
 REAL BUGS:
 -	y-mirroring while being embedded
