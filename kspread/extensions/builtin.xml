@@ -1581,7 +1581,7 @@
       <Help>
 	<Text>The IMDIV() returns the division of several complex numbers of form x+yi.</Text>
 	<Syntax>IMDIV( values; value; ... )</Syntax>
-	<Example>IMDIV(1.2;"3.4+5i") returns "0.111597+0.164114i"</Example>
+	<Example>IMDIV(1.2;"3.4+5i") returns "0.111597-0.164114i"</Example>
 	<Example>IMDIV("12+i";"12-i") returns "0.986207+0.16551i"</Example>
       </Help>
     </Function>
