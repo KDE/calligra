@@ -55,6 +55,7 @@ KWordTextHandler::KWordTextHandler( wvWare::SharedPtr<wvWare::Parser> parser )
     : m_parser( parser ), m_sectionNumber( 0 ), m_footNoteNumber( 0 ), m_endNoteNumber( 0 ),
       m_currentStyle( 0L ), m_shadowTextFound( NoShadow ), m_index( 0 ),
       m_currentTable( 0L ),
+      m_bInParagraph( false ),
       m_insideField( false), m_fieldAfterSeparator( false ), m_fieldType( 0 )
 {
 }
@@ -131,19 +132,6 @@ void KWordTextHandler::footnoteFound( wvWare::FootnoteData::Type type,
     emit subDocFound( new wvWare::FootnoteFunctor( parseFootnote ), type );
 }
 
-void KWordTextHandler::tableRowFound( const wvWare::TableRowFunctor& functor )
-{
-    if ( !m_currentTable )
-    {
-        static int s_tableNumber = 0;
-        m_currentTable = new KWord::Table();
-        m_currentTable->name = i18n("Table %1").arg( ++s_tableNumber );
-        //TODO insertVariable(...)
-    }
-    KWord::Row row( new wvWare::TableRowFunctor( functor ) );
-    m_currentTable->rows.append( row );
-}
-
 QDomElement KWordTextHandler::insertVariable( int type, wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const QString& format )
 {
     m_paragraph += '#';
@@ -162,6 +150,43 @@ QDomElement KWordTextHandler::insertVariable( int type, wvWare::SharedPtr<const 
     return varElem;
 }
 
+void KWordTextHandler::tableRowFound( const wvWare::TableRowFunctor& functor )
+{
+    if ( !m_currentTable )
+    {
+        // We need to be in a paragraph - seems wv2 doesn't always emit paragraphStart!?!?!?!? (table-1.doc)
+        if ( !m_bInParagraph )
+             paragraphStart( 0L );
+        static int s_tableNumber = 0;
+        m_currentTable = new KWord::Table();
+        m_currentTable->name = i18n("Table %1").arg( ++s_tableNumber );
+        insertAnchor( m_currentTable->name );
+    }
+    KWord::Row row( new wvWare::TableRowFunctor( functor ) );
+    m_currentTable->rows.append( row );
+}
+
+QDomElement KWordTextHandler::insertAnchor( const QString& fsname )
+{
+    m_paragraph += '#';
+
+    // Can't call writeFormat, we have no chp.
+    QDomElement format( mainDocument().createElement( "FORMAT" ) );
+    format.setAttribute( "id", 6 );
+    format.setAttribute( "pos", m_index );
+    format.setAttribute( "len", 1 );
+    m_formats.appendChild( format );
+    QDomElement formatElem = format;
+
+    m_index += 1;
+
+    QDomElement anchorElem = m_formats.ownerDocument().createElement( "ANCHOR" );
+    anchorElem.setAttribute( "type", "frameset" );
+    anchorElem.setAttribute( "instance", fsname );
+    formatElem.appendChild( anchorElem );
+    return anchorElem;
+}
+
 void KWordTextHandler::paragLayoutBegin()
 {
     m_shadowTextFound = NoShadow;
@@ -169,16 +194,16 @@ void KWordTextHandler::paragLayoutBegin()
 
 void KWordTextHandler::paragraphStart( wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties )
 {
-    if ( m_currentTable ) // paragraphStart after tablerow functors denotes end of table
-    {
-        emit tableFound( *m_currentTable );
-        m_currentTable = 0L;
-    }
+    if ( m_bInParagraph )
+        paragraphEnd();
+    m_bInParagraph = true;
     //kdDebug() << "paragraphStart. style index:" << paragraphProperties->pap().istd << endl;
     m_formats = mainDocument().createElement( "FORMATS" );
     m_paragraphProperties = paragraphProperties;
     const wvWare::StyleSheet& styles = m_parser->styleSheet();
-    m_currentStyle = styles.styleByIndex( paragraphProperties->pap().istd );
+    m_currentStyle = 0;
+    if ( paragraphProperties )
+        m_currentStyle = styles.styleByIndex( paragraphProperties->pap().istd );
     Q_ASSERT( m_currentStyle );
     paragLayoutBegin();
     // If the style's format includes shadowtext, then we need a <SHADOW> tag
@@ -193,11 +218,18 @@ void KWordTextHandler::paragraphStart( wvWare::SharedPtr<const wvWare::Paragraph
 
 void KWordTextHandler::paragraphEnd()
 {
+    Q_ASSERT( m_bInParagraph );
+    if ( m_currentTable )
+    {
+        emit tableFound( *m_currentTable );
+        m_currentTable = 0L;
+    }
     if ( m_currentStyle ) {
         QConstString styleName = Conversion::string( m_currentStyle->name() );
         writeOutParagraph( styleName.string(), m_paragraph );
     } else
         writeOutParagraph( "Standard", m_paragraph );
+    m_bInParagraph = false;
 }
 
 void KWordTextHandler::fieldStart( const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> /*chp*/ )

@@ -209,7 +209,7 @@ void Document::bodyStart()
     // TODO: "name" attribute (needs I18N)
     m_framesetsElement.appendChild(mainFramesetElement);
 
-    createInitialFrame( mainFramesetElement, 42, 566, false );
+    createInitialFrame( mainFramesetElement, 42, 566, false, Reconnect );
 
     m_textHandler->setFrameSetElement( mainFramesetElement );
     connect( m_textHandler, SIGNAL( firstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> ) ),
@@ -275,7 +275,7 @@ void Document::headerStart( wvWare::HeaderData::Type type )
 
     bool isHeader = Conversion::isHeader( type );
 
-    createInitialFrame( framesetElement, isHeader?0:567, isHeader?41:567+41, true );
+    createInitialFrame( framesetElement, isHeader?0:567, isHeader?41:567+41, true, Copy );
 
     m_textHandler->setFrameSetElement( framesetElement );
 
@@ -310,7 +310,7 @@ void Document::footnoteStart()
         framesetElement.setAttribute("name", i18n("Footnote %1").arg( ++m_footNoteNumber ) );
     m_framesetsElement.appendChild(framesetElement);
 
-    createInitialFrame( framesetElement, 567, 567+41, true );
+    createInitialFrame( framesetElement, 567, 567+41, true, NoFollowup );
 
     m_textHandler->setFrameSetElement( framesetElement );
 }
@@ -330,12 +330,12 @@ void Document::slotTableCellStart( int row, int column, int rowSize, int columnS
     framesetElement.setAttribute( "grpMgr", tableName );
     framesetElement.setAttribute( "name", i18n("Table_Name Cell row,column", "%1 Cell %2,%3").arg(tableName).arg(row).arg(column) );
     framesetElement.setAttribute( "row", row );
-    framesetElement.setAttribute( "column", column );
+    framesetElement.setAttribute( "col", column );
     framesetElement.setAttribute( "rows", rowSize );
-    framesetElement.setAttribute( "columns", columnSize );
+    framesetElement.setAttribute( "cols", columnSize );
     m_framesetsElement.appendChild(framesetElement);
 
-    createInitialFrame( framesetElement, 0 /*?*/, 41 /*?*/, true );
+    createInitialFrame( framesetElement, 0 /*?*/, 41 /*?*/, true, NoFollowup );
 
     m_textHandler->setFrameSetElement( framesetElement );
 }
@@ -345,7 +345,7 @@ void Document::slotTableCellEnd()
     m_textHandler->setFrameSetElement( QDomElement() );
 }
 
-void Document::createInitialFrame( QDomElement& parentFramesetElem, int top, int bottom, bool autoExtend )
+void Document::createInitialFrame( QDomElement& parentFramesetElem, int top, int bottom, bool autoExtend, NewFrameBehavior nfb )
 {
     QDomElement frameElementOut = parentFramesetElem.ownerDocument().createElement("FRAME");
     // Those values are unused. The paper margins make recalcFrames() resize this frame.
@@ -356,6 +356,7 @@ void Document::createInitialFrame( QDomElement& parentFramesetElem, int top, int
     frameElementOut.setAttribute( "runaround", 1 );
     // AutoExtendFrame for header/footer/footnote/endnote, AutoCreateNewFrame for body text
     frameElementOut.setAttribute( "autoCreateNewFrame", autoExtend ? 0 : 1 );
+    frameElementOut.setAttribute( "newFrameBehavior", nfb );
     parentFramesetElem.appendChild( frameElementOut );
 }
 

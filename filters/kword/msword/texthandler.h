@@ -95,6 +95,7 @@ protected:
     void writeOutParagraph( const QString& styleName, const QString& text );
     void writeCounter( QDomElement& parentElement, const wvWare::ParagraphProperties& paragraphProperties, const wvWare::Style* style );
     QDomElement insertVariable( int type, wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const QString& format );
+    QDomElement insertAnchor( const QString& fsname );
     QString getFont(unsigned fc) const;
     QDomDocument mainDocument() const;
 
@@ -115,6 +116,7 @@ private:
     QDomElement m_oldLayout;
 
     KWord::Table* m_currentTable;
+    bool m_bInParagraph;
 
     QString m_fieldValue;
     bool m_insideField;

@@ -92,7 +92,8 @@ protected slots:
 private:
     void processStyles();
     void processAssociatedStrings();
-    void createInitialFrame( QDomElement& parentFramesetElem, int top, int bottom, bool autoExtend );
+    enum NewFrameBehavior { Reconnect=0, NoFollowup=1, Copy=2 };
+    void createInitialFrame( QDomElement& parentFramesetElem, int top, int bottom, bool autoExtend, NewFrameBehavior nfb );
 
     QDomDocument& m_mainDocument;
     QDomDocument& m_documentInfo;

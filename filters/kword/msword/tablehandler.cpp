@@ -51,7 +51,7 @@ void KWordTableHandler::tableEnd()
 void KWordTableHandler::tableRowStart( wvWare::SharedPtr<const wvWare::Word97::TAP> /*tap*/ )
 {
     kdDebug() << k_funcinfo << endl;
-    if ( m_row == -2 || m_column == -2 )
+    if ( m_row == -2 )
     {
         kdWarning() << "tableRowStart: tableStart not called previously!" << endl;
         return;
@@ -68,8 +68,8 @@ void KWordTableHandler::tableRowEnd()
 
 void KWordTableHandler::tableCellStart()
 {
-    kdDebug() << k_funcinfo << endl;
     m_column++;
+    kdDebug() << k_funcinfo << " row=" << m_row << " column=" << m_column << endl;
     emit sigTableCellStart( m_row, m_column, 1 /*TODO*/, 1 /*TODO*/, m_currentTableName );
 }
 
