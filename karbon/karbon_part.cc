@@ -11,7 +11,9 @@
 #include "karbon_part.h"
 #include "karbon_view.h"
 
-#include "vccmd_polygon.h"
+
+#include "vccmd_ellipse.h"
+#include "vccmd_rectangle.h"
 
 KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	QObject* parent, const char* name, bool singleViewMode )
@@ -38,8 +40,21 @@ KarbonPart::~KarbonPart()
 bool
 KarbonPart::initDoc()
 {
-	VCCmdPolygon p( this, 100, 100, 50, 5 );
-	p.execute();
+	VCCmdEllipse e( this, 50, 100, 150, 250 );
+	VPath* elly = e.createPath();
+
+	VCCmdRectangle r( this, 80, 70, 250, 200 );
+	VPath* rect = r.createPath();
+
+	insertObject( elly );
+	insertObject( rect );
+
+	VPath* obj = elly->booleanOp( rect, 0 );
+	
+	if ( obj )
+	{
+		insertObject( obj );
+	}
 
 	// If nothing is loaded, do initialize here
 	return true;
@@ -91,7 +106,8 @@ KarbonPart::repaintAllViews( bool erase )
 // TODO: any better solution for this?
 //		static_cast<KarbonView*> ( itr.current() )->canvasWidget()->repaintAll(
 // erase );
- 		static_cast<KarbonView*> ( itr.current() )->canvasWidget()->repaintAll( true );
+ 		static_cast<KarbonView*> ( itr.current() )->canvasWidget()->repaintAll( true
+ );
 }
 
 

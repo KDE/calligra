@@ -87,8 +87,8 @@ VCCmdSinus::createPath()
 
 	// translate path and scale:
 	QWMatrix m;
-	m.scale( w/m_periods, h*0.5 );
 	m.translate( m_tlX, m_brY + h*0.5 );
+	m.scale( w/m_periods, h*0.5 );
 	path->transform( m );
 
 	return path;

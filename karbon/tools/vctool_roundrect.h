@@ -94,7 +94,7 @@ VCToolRoundRect::recalcCoords()
 inline void
 VCToolRoundRect::drawTemporaryObject( KarbonView* view )
 {
-	QPainter painter( view->canvasWidget()->viewport() );
+/*	QPainter painter( view->canvasWidget()->viewport() );
 	painter.setPen( Qt::black );
 	painter.setRasterOp( Qt::NotROP );
 
@@ -110,7 +110,7 @@ VCToolRoundRect::drawTemporaryObject( KarbonView* view )
 	painter.drawPolygon( path->getQPointArray( view->zoomFactor() ) );
 
 	delete( cmd );
-	delete( path );
+	delete( path );*/
 }
 
 #endif

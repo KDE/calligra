@@ -94,6 +94,7 @@ VCToolEllipse::recalcCoords()
 inline void
 VCToolEllipse::drawTemporaryObject( KarbonView* view )
 {
+/*
 	QPainter painter( view->canvasWidget()->viewport() );
 	painter.setPen( Qt::yellow );
 	painter.setRasterOp( Qt::XorROP );
@@ -166,6 +167,7 @@ VCToolEllipse::drawTemporaryObject( KarbonView* view )
 			m_tl.x() + m_signW * qRound( ( m_width - 1 ) * 0.5 ) - 2,
 			m_tl.y() + m_signH * qRound( ( m_height - 1 ) * 0.5 ) - 2, bm );
  	}
+*/
 }
 
 #endif

@@ -26,10 +26,6 @@ public:
 		const double zoomFactor = 1.0 );
 
 	const KoPoint& currentPoint() const;
-// TODO: away
-// segments() sacrifies safety but provides (at least) transparent access
-	// for tools (==visitor):
-	QPtrList<VSegment> segments() const { return m_segments; };
 
 	// postscript-like commands:
 	VPath& moveTo( const double& x, const double& y );
@@ -84,15 +80,14 @@ public:
 	VPath& close();
 	bool isClosed() const;
 
-	// create a reverted path:
+	// return a reverted path:
 	VPath* revert() const;
 
 	// perform a boolean operation (unite(0), intersect(1), substract(2), xor(3)):
-	VPath* boolean( VPath& path, int type ) const;
+	VPath* booleanOp( const VPath* path, int type = 0 ) const;
 
+	// apply an affine map:
 	virtual VObject& transform( const QWMatrix& m );
-
-	QPointArray getQPointArray( const double zoomFactor = 1.0 ) const;
 
 private:
 	QPtrList<VSegment> m_segments;

@@ -74,8 +74,8 @@ VCCmdEllipse::createPath()
 
 	// translate path and scale:
 	QWMatrix m;
-	m.scale( w, h );
 	m.translate( m_tlX + w*0.5, m_brY + h*0.5 );
+	m.scale( w, h );
 	path->transform( m );
 
 	return path;

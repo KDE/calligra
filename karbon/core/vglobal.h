@@ -5,7 +5,7 @@
 #ifndef __VGLOBAL_H__
 #define __VGLOBAL_H__
 
-// define some often used mathematical constants:
+// define some often used mathematical constants et al:
 
 namespace VGlobal
 {
@@ -14,8 +14,9 @@ namespace VGlobal
 	const double pi_2		= 1.57079632679489661923;
 	const double pi_180		= 0.01745329251994329576;
 	const double sqrt2		= 1.41421356237309504880;
-	
 	const double one_7		= 0.14285714285714285714;
+
+	const double bezierFlatnessTolerance	= 0.5;
 }
 
 #endif
