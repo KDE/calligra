@@ -6054,7 +6054,7 @@ void KSpreadSheet::checkContentDirection( QString const & name )
   bool rtl = m_bRightToLeft;
 
   kdDebug() << "name[0].direction(): " << name[0].direction() << ", RTL: " << rtl << endl;    
-  if ( ( name[0].direction() == QChar::DirR ) || ( name.left(3) == "rtl" ) ) // for testing...
+  if ( /* ( name[0].direction() == QChar::DirR ) || */ ( name.left(3) == "rtl" ) ) // for testing...
   {
     kdDebug() << "Table direction set to right to left" << endl;
     m_bRightToLeft = true;

@@ -3242,12 +3242,13 @@ void KSpreadCanvas::paintUpdates()
   int x;
   int y;
 
+  int right  = range.right();
+  int bottom = range.bottom();
 
-  for ( x = range.left(); x <= range.right(); x++ )
+  for ( x = range.left(); x <= right; x++ )
   {
-    for ( y = range.top(); y <= range.bottom(); y++ )
+    for ( y = range.top(); y <= bottom; y++ )
     {
-
       if ( activeTable()->cellIsPaintDirty( QPoint( x, y ) ) )
       {
         cell = activeTable()->cellAt( x, y );
@@ -3446,12 +3447,26 @@ void KSpreadCanvas::retrieveMarkerInfo( const QRect &marker,
                                         double positions[],
                                         bool paintSides[] )
 {
-  KSpreadSheet* table = activeTable();
+  KSpreadSheet * table = activeTable();
+  if ( !table )
+    return;
 
-  double xpos = table->dblColumnPos( marker.left() ) - xOffset();
+  double dWidth = doc()->unzoomItX( width() );
+
+  double xpos;
+  double x;
+  if ( table->isRightToLeft() )
+  {
+    xpos = dWidth - table->dblColumnPos( marker.left() ) - xOffset();
+    x    = dWidth - table->dblColumnPos( marker.right() ) - xOffset();
+  }
+  else
+  {
+    xpos = table->dblColumnPos( marker.left() ) - xOffset();
+    x    = table->dblColumnPos( marker.right() ) - xOffset();
+  }
   double ypos = table->dblRowPos( marker.top() ) - yOffset();
 
-  double x = table->dblColumnPos( marker.right() ) - xOffset();
   const ColumnFormat *columnFormat = table->columnFormat( marker.right() );
   double tw = columnFormat->dblWidth( );
   double w = ( x - xpos ) + tw;
@@ -3464,7 +3479,10 @@ void KSpreadCanvas::retrieveMarkerInfo( const QRect &marker,
   /* left, top, right, bottom */
   positions[0] = xpos;
   positions[1] = ypos;
-  positions[2] = xpos + w;
+  if ( table->isRightToLeft() )
+    positions[2] = xpos - w + 1;
+  else
+    positions[2] = xpos + w;
   positions[3] = ypos + h;
 
   /* these vars are used for clarity, the array for simpler function arguments  */
@@ -3473,15 +3491,32 @@ void KSpreadCanvas::retrieveMarkerInfo( const QRect &marker,
   double right = positions[2];
   double bottom = positions[3];
 
+  if ( table->isRightToLeft() )
+    kdDebug() << "X: " << x << ", xpos: " << xpos << ", w: " << w 
+              << ", Right: " << right << ", VRight: " << viewRect.right() 
+              << ", Left:  " << left  << ", VLeft:  " << viewRect.left() << endl;
+
   /* left, top, right, bottom */
-  paintSides[0] = (viewRect.left() <= left) && (left <= viewRect.right()) &&
+  if ( table->isRightToLeft() )
+  {
+    paintSides[0] = (viewRect.left() <= left) && (left - 1 <= viewRect.right()) &&
                   (bottom >= viewRect.top()) && (top <= viewRect.bottom());
-  paintSides[1] = (viewRect.top() <= top) && (top <= viewRect.bottom()) &&
-                  (right >= viewRect.left()) && (left <= viewRect.right());
+    paintSides[1] = (viewRect.top() <= top) && (top <= viewRect.bottom()) 
+                 && (right >= viewRect.left()) && (left - 1 <= viewRect.right());
+    paintSides[3] = (viewRect.top() <= bottom) && (bottom <= viewRect.bottom())
+                 && (right >= viewRect.left()) && (left - 1 <= viewRect.right());
+  }
+  else
+  {
+    paintSides[0] = (viewRect.left() <= left) && (left <= viewRect.right()) &&
+                  (bottom >= viewRect.top()) && (top <= viewRect.bottom());
+    paintSides[1] = (viewRect.top() <= top) && (top <= viewRect.bottom())
+                 && (right >= viewRect.left()) && (left <= viewRect.right());
+    paintSides[3] = (viewRect.top() <= bottom) && (bottom <= viewRect.bottom())
+                 && (right >= viewRect.left()) && (left <= viewRect.right());
+  }
   paintSides[2] = (viewRect.left() <= right ) && (right <= viewRect.right()) &&
                   (bottom >= viewRect.top()) && (top <= viewRect.bottom());
-  paintSides[3] = (viewRect.top() <= bottom) && (bottom <= viewRect.bottom()) &&
-                  (right >= viewRect.left()) && (left <= viewRect.right());
 
   positions[0] = QMAX( left,   viewRect.left() );
   positions[1] = QMAX( top,    viewRect.top() );
