@@ -335,6 +335,18 @@ static void ProcessTextTag ( QDomNode myNode, void *tagData, QString &)
     AllowNoSubtags (myNode);
 }
 
+static void ProcessHardBreakTag ( QDomNode myNode, void *tagData, QString &)
+{   // <HRDBREAK> not documented
+    bool *hardBreak = (bool *) tagData;
+
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList.append ( AttrProcessing ("frame", NULL, NULL )); //What means this attribute?
+    ProcessAttributes (myNode, attrProcessingList);
+
+    AllowNoSubtags (myNode);
+
+    *hardBreak=true; //As long as we have no documentation of this tag, we can only do this!
+}
 
 // ProcessParagraphData () mangles the pure text through the
 // formatting information stored in the FormatData list and prints it
@@ -404,10 +416,18 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
     QValueList<FormatData> paraFormatDataList;
     QString paraLayout;
     QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList.append ( TagProcessing ( "TEXT",    ProcessTextTag,    (void *) &paraText           ) );
-    tagProcessingList.append ( TagProcessing ( "FORMATS", ProcessFormatsTag, (void *) &paraFormatDataList ) );
-    tagProcessingList.append ( TagProcessing ( "LAYOUT",  ProcessLayoutTag,  (void *) &paraLayout         ) );
+    bool hardbreak=false;
+    tagProcessingList.append ( TagProcessing ( "TEXT",    ProcessTextTag,       (void *) &paraText           ) );
+    tagProcessingList.append ( TagProcessing ( "FORMATS", ProcessFormatsTag,    (void *) &paraFormatDataList ) );
+    tagProcessingList.append ( TagProcessing ( "LAYOUT",  ProcessLayoutTag,     (void *) &paraLayout         ) );
+    tagProcessingList.append ( TagProcessing ( "HARDBRK", ProcessHardBreakTag,  (void *) &hardbreak          ) ); // Not documented!
     ProcessSubtags (myNode, tagProcessingList, outputText);
+
+    if (hardbreak)
+    {
+        // Add an AbiWord page break
+        outputText+="<pbr/>\n";
+    }
 
     //Note: AbiWord at the state of version 0.7.12 cannot use styles yet but styles are defined in the file format!
 
