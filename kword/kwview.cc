@@ -5889,7 +5889,7 @@ void KWView::importStyle()
         QPtrListIterator<KWStyle> style(  list );
         for ( ; style.current() ; ++style )
         {
-            m_doc->styleCollection()->addStyleTemplate(style.current());
+            m_doc->styleCollection()->addStyleTemplate(new KWStyle(*style.current()));
         }
         m_doc->updateAllStyleLists();
     }

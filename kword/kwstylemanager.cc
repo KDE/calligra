@@ -36,6 +36,7 @@ KWStyleManager::KWStyleManager( QWidget *_parent, KoUnit::Unit unit,KWDocument *
 
 KoStyle* KWStyleManager::addStyleTemplate(KoStyle *style)
 {
+    m_doc->setModified( true);
     return m_doc->styleCollection()->addStyleTemplate(style);
 }
 
@@ -46,6 +47,7 @@ void KWStyleManager::applyStyleChange( KoStyle * changedStyle, int paragLayoutCh
 
 void KWStyleManager::removeStyleTemplate( KoStyle *style )
 {
+    m_doc->setModified( true);
     m_doc->styleCollection()->removeStyleTemplate(style);
 }
 

@@ -168,3 +168,4 @@ Changes between KWord-1.2-beta1 and KWord-1.2-beta2
 - Now we can configure footnote line separator
 - Add support to insert Native file 
 - Import frame/table style from file
+- Import text style from file
