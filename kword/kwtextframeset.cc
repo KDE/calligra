@@ -109,11 +109,13 @@ int KWTextFrameSet::availableHeight() const
 KWFrame * KWTextFrameSet::contentsToInternal( QPoint cPoint, QPoint &iPoint, bool onlyY ) const
 {
     int totalHeight = 0;
-    KWFrame * prevFrame = 0L;
+    KWFrame * copyFrame = 0L;
+    int copyFrameTop = 0;
     QListIterator<KWFrame> frameIt( frameIterator() );
     for ( ; frameIt.current(); ++frameIt )
     {
-        QRect frameRect = kWordDocument()->zoomRect( *frameIt.current() );
+        KWFrame *frame = frameIt.current();
+        QRect frameRect = kWordDocument()->zoomRect( *frame );
         QRect r( frameRect );
         if ( onlyY )
             r.setLeft(0);      // cPoint.x will be 0 too, so only the Y coords will count
@@ -123,19 +125,23 @@ KWFrame * KWTextFrameSet::contentsToInternal( QPoint cPoint, QPoint &iPoint, boo
             // into the QTextDocument's coordinate system
             // (which doesn't have frames, borders, etc.)
             int offsetX = frameRect.left();
-            int offsetY = frameRect.top() - totalHeight;
-            if ( prevFrame && prevFrame->getNewFrameBehaviour() == Copy )
-                offsetY += m_doc->zoomItY( prevFrame->height() );
+            int offsetY = frameRect.top() - ( copyFrame ? copyFrameTop : totalHeight );
 
             iPoint.setX( cPoint.x() - offsetX );
             iPoint.setY( cPoint.y() - offsetY );
             /*kdDebug() << "contentsToInternal: returning " << iPoint.x() << "," << iPoint.y()
                       << " totalHeight=" << totalHeight << " because r: " << DEBUGRECT(r)
                       << " contains cPoint:" << cPoint.x() << "," << cPoint.y() << endl;*/
-            return frameIt.current();
+            return frame;
+        }
+        if ( frame->getNewFrameBehaviour() != Copy )
+            copyFrame = 0L;
+        else if ( !copyFrame )
+        {
+            copyFrame = frame;
+            copyFrameTop = totalHeight;
         }
         totalHeight += frameRect.height();
-        prevFrame = frameIt.current();
     }
 
 #if 0
@@ -151,24 +157,30 @@ KWFrame * KWTextFrameSet::internalToContents( QPoint iPoint, QPoint & cPoint ) c
 {
     int totalHeight = 0;
     QListIterator<KWFrame> frameIt( frameIterator() );
-    KWFrame * prevFrame = 0L;
+    KWFrame * copyFrame = 0L;
+    int copyFrameTop = 0;
     for ( ; frameIt.current(); ++frameIt )
     {
-        QRect frameRect = kWordDocument()->zoomRect( *frameIt.current() );
+        KWFrame *frame = frameIt.current();
+        QRect frameRect = kWordDocument()->zoomRect( *frame );
         int offsetX = frameRect.left();
-        int offsetY = frameRect.top() - totalHeight;
-        if ( prevFrame && prevFrame->getNewFrameBehaviour() == Copy )
-            offsetY += m_doc->zoomItY( prevFrame->height() );
+        int offsetY = frameRect.top() - ( copyFrame ? copyFrameTop : totalHeight );
         QRect r( frameRect );
         r.moveBy( -offsetX, -offsetY );   // frame in qrt coords
         if ( r.contains( iPoint ) ) // both r and p are in "qrt coordinates"
         {
             cPoint.setX( iPoint.x() + offsetX );
             cPoint.setY( iPoint.y() + offsetY );
-            return frameIt.current();
+            return frame;
+        }
+        if ( frame->getNewFrameBehaviour() != Copy )
+            copyFrame = 0L;
+        else if ( !copyFrame )
+        {
+            copyFrame = frame;
+            copyFrameTop = totalHeight;
         }
         totalHeight += frameRect.height();
-        prevFrame = frameIt.current();
     }
 
     kdDebug(32002) << "** KWTextFrameSet::internalToContents " << iPoint.x() << "," << iPoint.y()
@@ -187,7 +199,8 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup
         return;
 
     QListIterator<KWFrame> frameIt( frameIterator() );
-    KWFrame * prevFrame = 0L;
+    KWFrame * copyFrame = 0L;
+    int copyFrameTop = 0;
     int totalHeight = 0;
     for ( ; frameIt.current(); ++frameIt )
     {
@@ -210,9 +223,7 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup
             // into the QTextDocument's coordinate system
             // (which doesn't have frames, borders, etc.)
             int offsetX = frameRect.left();
-            int offsetY = frameRect.top() - totalHeight;
-            if ( prevFrame && prevFrame->getNewFrameBehaviour() == Copy )
-                offsetY += m_doc->zoomItY( prevFrame->height() );
+            int offsetY = frameRect.top() - ( copyFrame ? copyFrameTop : totalHeight );
 
             r.moveBy( -offsetX, -offsetY );   // portion of the frame to be drawn, in qrt coords
 
@@ -269,8 +280,14 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup
                 p->restore();
             }
         }
+        if ( frame->getNewFrameBehaviour() != Copy )
+            copyFrame = 0L;
+        else if ( !copyFrame )
+        {
+            copyFrame = frame;
+            copyFrameTop = totalHeight;
+        }
         totalHeight += frameRect.height();
-        prevFrame = frame;
     }
 }
 
@@ -281,7 +298,8 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
     QListIterator<KWFrame> frameIt( frameIterator() );
     int totalHeight = 0;
     bool drawn = false;
-    KWFrame * prevFrame = 0L;
+    KWFrame * copyFrame = 0L;
+    int copyFrameTop = 0;
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame *frame = frameIt.current();
@@ -292,9 +310,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
         // The parag is in the qtextdoc coordinates -> first translate frame to qtextdoc coords
         QRect rf( frameRect );
         int offsetX = frameRect.left();
-        int offsetY = frameRect.top() - totalHeight;
-        if ( prevFrame && prevFrame->getNewFrameBehaviour() == Copy )
-            offsetY += m_doc->zoomItY( prevFrame->height() );
+        int offsetY = frameRect.top() - ( copyFrame ? copyFrameTop : totalHeight );
 
         rf.moveBy( -offsetX, -offsetY );
 
@@ -334,8 +350,14 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
         else
             if ( drawn ) // Ok, we've drawn it, and now we're after it -> exit
                 break;   // Note that we might go into the above block twice, if parag is over two frames.
+        if ( frame->getNewFrameBehaviour() != Copy )
+            copyFrame = 0L;
+        else if ( !copyFrame )
+        {
+            copyFrame = frame;
+            copyFrameTop = totalHeight;
+        }
         totalHeight += frameRect.height();
-        prevFrame = frame;
     }
     // Well this is a no-op currently (we don't use QTextFlow::draw)
     //if ( textdoc->flow() )
