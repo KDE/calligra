@@ -2409,6 +2409,60 @@ void KPrCanvas::deSelectObj( KPObject *kpobject )
     mouseSelectedObject = false;
     emit objectSelectedChanged();
 }
+bool KPrCanvas::exportPage( int nPage,
+                            int nWidth,
+                            int nHeight,
+                            const KURL& _fileURL,
+                            const char* format,
+                            int quality )
+{
+    bool res = false;
+    const QCursor oldCursor( cursor() );
+    setCursor( waitCursor );
+    QPixmap pix( nWidth, nHeight );
+    drawPageInPix( pix, nPage, 0, true, nWidth, nHeight );
+    if( !pix.isNull() ){
+        // Depending on the desired target size due to rounding
+        // errors during zoom the resulting pixmap *might* be
+        // 1 pixel or 2 pixels wider/higher than desired: we just
+        // remove the additional columns/rows.  This can be done
+        // since KPresenter is leaving a minimal border below/at
+        // the right of the image anyway.
+        const QSize desiredSize(nWidth, nHeight);
+        if( desiredSize != pix.size() )
+            pix.resize( desiredSize );
+        // save the pixmap to the desired file
+        KURL fileURL(_fileURL);
+        if( fileURL.protocol().isEmpty() )
+            fileURL.setProtocol( "file" );
+        const bool bLocalFile = fileURL.isLocalFile();
+        KTempFile* tmpFile = bLocalFile ? NULL : new KTempFile();
+        if( !bLocalFile )
+            tmpFile->setAutoDelete( true );
+        if( bLocalFile || 0 == tmpFile->status() ){
+            QFile file( bLocalFile ? fileURL.path(0) : tmpFile->name() );
+            if ( file.open( IO_ReadWrite ) ) {
+                res = pix.save( &file, format, quality );
+                file.close();
+            }
+            if( !bLocalFile ){
+                if( res ){
+#if KDE_IS_VERSION(3,1,90)
+                    res = KIO::NetAccess::upload( this, tmpFile->name(), fileURL );
+#else
+                    res = KIO::NetAccess::upload( tmpFile->name(), fileURL, this );
+#endif
+                }
+            }
+        }
+        if( !bLocalFile ){
+            delete tmpFile;
+        }
+    }
+    setCursor( oldCursor );
+    return res;
+}
+
 
 void KPrCanvas::selectAllObj()
 {
@@ -3377,14 +3431,46 @@ bool KPrCanvas::isOneObjectSelected() const
 
 // This one is used to generate the pixmaps for the HTML presentation,
 // for the pres-structure-dialog, for the sidebar previews, for template icons.
-void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum, int zoom, bool forceRealVariableValue )
+// Set forceWidth and/or forceHeight to override the zoom factor
+// and obtain a pixmap of the specified width and/or height.
+// By omitting one of them you make sure that the aspect ratio
+// of your page is used for the resulting image.
+void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum, int zoom,
+                               bool forceRealVariableValue,
+                               int forceWidth,
+                               int forceHeight )
 {
     //kdDebug(33001) << "Page::drawPageInPix" << endl;
     currPresPage = pgnum + 1;
 
-    int oldZoom = m_view->kPresenterDoc()->zoomHandler()->zoom();
+    KPresenterDoc *doc = m_view->kPresenterDoc();
+    int oldZoom = doc->zoomHandler()->zoom();
     bool oldDisplayFieldValue = false;
-    m_view->zoomDocument(zoom);
+    
+    if( 0 < forceWidth || 0 < forceHeight )
+    {
+        const QRect rect( doc->getPageRect( true ) );
+        const double dRectHeight = static_cast<double>(rect.height());
+        const double dRectWidth  = static_cast<double>(rect.width());
+        double dForceHeight      = static_cast<double>(forceHeight);
+        double dForceWidth       = static_cast<double>(forceWidth);
+        
+        // adjust width or height, in case one of them is missing
+        if( 0 >= forceWidth )
+            dForceWidth = dForceHeight * dRectWidth / dRectHeight;
+        else if( 0 >= forceHeight )
+            dForceHeight = dForceWidth * dRectHeight / dRectWidth;
+        
+        // set the stretching values
+        doc->zoomHandler()->setResolution( dForceWidth / dRectWidth,
+                                           dForceHeight / dRectHeight );
+        // As of yet (Feb. 2004) the following call results
+        // in a NOP but be prepared for the future...
+        doc->newZoomAndResolution( false, false );
+    }else{
+        m_view->zoomDocument(zoom);
+    }
+    
     if ( forceRealVariableValue )
     {
         oldDisplayFieldValue = m_view->kPresenterDoc()->getVariableCollection()->variableSetting()->displayFieldCode();
@@ -3425,7 +3511,6 @@ void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum, int zoom, bool forceRea
     //draw sticky object
     //the numbers for the sticky page have to be recalculated
     KPrPage* saveActivePage = m_activePage;
-    KPresenterDoc *doc = m_view->kPresenterDoc();
     doc->displayActivePage( doc->pageList().at( currPresPage-1 ) );
     setActivePage(doc->pageList().at( currPresPage - 1 ) );
     //setActivePage(m_view->kPresenterDoc()->pageList().at(currPresPage-1));
