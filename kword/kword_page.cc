@@ -1481,19 +1481,22 @@ void KWPage::editDeleteFrame()
         return;
     }
 
-    if ( fs->getNumFrames() == 1 && fs->getFrameType() == FT_TEXT ) {
+    if ( fs->getNumFrames() == 1 && fs->getFrameType() == FT_TEXT) {
         if ( doc->getProcessingType() == KWordDocument::WP && doc->getFrameSetNum( fs ) == 0 )
             return;
-        int result;
-        result = KMessageBox::warningContinueCancel(this,
-                                                    i18n( "You are about to delete the last Frame of the\n"
-                                                          "Frameset '%1'.\n"
-                                                          "Doing so will delete this Frameset and all the\n"
-                                                          "text contained in it as well!\n\n"
-                                                          "Are you sure you want to do that?").arg(fs->getName()),
-                                                    i18n("Delete Frame"), i18n("&Delete"));
-        if (result != KMessageBox::Continue)
-            return;
+        KWParag *parag= dynamic_cast <KWTextFrameSet *> (fs)->getFirstParag();
+        if(!( parag!=parag->getNext() && parag->getKWString()->size()==0)) {
+            int result;
+            result = KMessageBox::warningContinueCancel(this,
+                                                        i18n( "You are about to delete the last Frame of the\n"
+                                                              "Frameset '%1'.\n"
+                                                              "Doing so will delete this Frameset and all the\n"
+                                                              "text contained in it as well!\n\n"
+                                                              "Are you sure you want to do that?").arg(fs->getName()),
+                                                        i18n("Delete Frame"), i18n("&Delete"));
+            if (result != KMessageBox::Continue)
+                return;
+        }
     }
     bool blinking = blinkTimer.isActive();
     if ( blinking )
@@ -1598,16 +1601,19 @@ void KWPage::editReconnectFrame()
     if ( fs->getNumFrames() == 1 ) {
         if ( doc->getProcessingType() == KWordDocument::WP && doc->getFrameSetNum( fs ) == 0 )
             return;
-        int result;
-        result = KMessageBox::warningContinueCancel(this,
-                                                    i18n( "You are about to reconnect the last Frame of the\n"
-                                                          "Frameset '%1'.\n"
-                                                          "Doing so will delete the Frameset and all the\n"
-                                                          "text contained in it!\n\n"
-                                                          "Are you sure you want to do that?").arg(fs->getName()),
-                                                    i18n("Reconnect Frame"), i18n("&Delete"));
-        if (result != KMessageBox::Continue)
-            return;
+        KWParag *parag= dynamic_cast <KWTextFrameSet *> (fs)->getFirstParag();
+        if(!( parag!=parag->getNext() && parag->getKWString()->size()==0)) {
+            int result;
+            result = KMessageBox::warningContinueCancel(this,
+                                                        i18n( "You are about to reconnect the last Frame of the\n"
+                                                              "Frameset '%1'.\n"
+                                                              "Doing so will delete the Frameset and all the\n"
+                                                              "text contained in it!\n\n"
+                                                              "Are you sure you want to do that?").arg(fs->getName()),
+                                                        i18n("Reconnect Frame"), i18n("&Delete"));
+            if (result != KMessageBox::Continue)
+                return;
+        }
     }
 
     bool blinking = blinkTimer.isActive();
