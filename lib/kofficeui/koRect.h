@@ -95,6 +95,8 @@ public:
     bool intersects(const KoRect &r) const;
 
     QRect toQRect() const;
+    static KoRect fromQRect( const QRect &rect );
+
 private:
     KoPoint m_tl, m_br;
 };

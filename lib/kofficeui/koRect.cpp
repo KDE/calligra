@@ -178,5 +178,11 @@ bool operator!=(const KoRect &lhs, const KoRect &rhs) {
 
 QRect KoRect::toQRect() const
 {
-    return QRect( qRound( left() ), qRound( top() ), qRound( right() ), qRound( bottom() ) );
+    return QRect( qRound( left() ), qRound( top() ), qRound( width() ), qRound( height() ) );
+}
+
+//static
+KoRect KoRect::fromQRect( const QRect &rect )
+{
+    return KoRect( rect.left(), rect.top(), rect.width(), rect.height() );
 }
