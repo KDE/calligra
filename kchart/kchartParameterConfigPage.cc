@@ -60,17 +60,21 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     yaxis = new QCheckBox( i18n( "Y-axis" ), gb1);
     grid1->addWidget(yaxis,2,0);
 
+#if 0
     xlabel = new QCheckBox( i18n( "Has X-label" ), gb1 );
     grid1->addWidget(xlabel,3,0);
 
     yaxis2 = new QCheckBox( i18n( "Y-axis 2" ), gb1 );
     grid1->addWidget(yaxis2,4,0);
+#endif
 
     lineMarker = new QCheckBox( i18n( "Line marker" ), gb1 );
-    grid1->addWidget(lineMarker,5,0);
+    grid1->addWidget(lineMarker, 4, 0);
 
+#if 0
     llabel = new QCheckBox( i18n( "Legend" ), gb1 );
     grid1->addWidget(llabel,6,0);
+#endif
 
     QButtonGroup* gb2 = new QButtonGroup( 0, Qt::Vertical, i18n("Title"), this );
     gb2->layout()->setSpacing(KDialog::spacingHint());
@@ -93,6 +97,7 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     grid2->addWidget(xtitle,5,0);
     xtitle->setEnabled(false);
 
+#if 0
     tmpLabel = new QLabel( i18n( "Y-label format:" ), gb2 );
     grid2->addWidget(tmpLabel,0,1);
 
@@ -114,7 +119,7 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     ylabel2_fmt= new QLineEdit( gb2 );
     ylabel2_fmt->setMaximumWidth(130);
     grid2->addWidget(ylabel2_fmt,5,1);
-
+#endif
     layout->addWidget(gb1,0,0);
     layout->addWidget(gb2,0,1);
     grid1->activate();
@@ -126,13 +131,15 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
       this, SLOT( changeXaxisState( bool ) ) );*/
 }
 
+
 void KChartParameterConfigPage::changeXaxisState(bool state)
 {
+#if 0
     if(state)
         xlabel->setEnabled(true);
     else
         xlabel->setEnabled(false);
-
+#endif
 }
 
 void KChartParameterConfigPage::init()
@@ -141,12 +148,14 @@ void KChartParameterConfigPage::init()
     //     grid->setChecked(_params->grid);
     //     xlabel->setChecked(_params->hasxlabel);
 
+    grid->setChecked(_params->showGrid());
 
     xaxis->setChecked(_params->axisVisible(KDChartAxisParams::AxisPosBottom));
     yaxis->setChecked(_params->axisVisible(KDChartAxisParams::AxisPosLeft));
 
+#if 0
     llabel->setChecked(_params->legendPosition()!=KDChartParams::NoLegend);
-    grid->setChecked(_params->showGrid());
+#endif
 
     if( _params->chartType() == KDChartParams::Line )
     {
@@ -169,12 +178,12 @@ void KChartParameterConfigPage::init()
     //     	ytitle2->setText(_params->ytitle2);
     //     	}
     //     else
+#if 0
     {
     	yaxis2->setEnabled(false);
     	ylabel2_fmt->setEnabled(false);
     	ytitle2->setEnabled(false);
     }
-
 
     // PENDING(kalle) Adapt this
     //     xtitle->setText(_params->xtitle);
@@ -186,19 +195,23 @@ void KChartParameterConfigPage::init()
     //     	xlabel->setEnabled(true);
     //     else
     xlabel->setEnabled(false);
+#endif
 }
 
 
 void KChartParameterConfigPage::apply()
 {
-
+#if 0
     _params->setLegendPosition(llabel->isChecked() ? KDChartParams::LegendRight : KDChartParams::NoLegend);
+#endif
 
     _params->setAxisVisible(KDChartAxisParams::AxisPosBottom,xaxis->isChecked());
     _params->setAxisVisible(KDChartAxisParams::AxisPosLeft,yaxis->isChecked());
 
-    _params->setAxisShowGrid(KDChartAxisParams::AxisPosLeft,grid->isChecked() );
-    _params->setAxisShowGrid(KDChartAxisParams::AxisPosBottom,grid->isChecked() );
+    _params->setAxisShowGrid(KDChartAxisParams::AxisPosLeft,
+			     grid->isChecked() );
+    _params->setAxisShowGrid(KDChartAxisParams::AxisPosBottom,
+			     grid->isChecked() );
 
 // PENDING(kalle) Adapt this
     //     _params->border=border->isChecked();

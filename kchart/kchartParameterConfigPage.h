@@ -44,18 +44,22 @@ public slots:
     void changeXaxisState( bool );
 private:
     KChartParams* _params;
+
+    // Checkboxes on the left side of the tab.
     QCheckBox *grid;
     QCheckBox *xaxis;
     QCheckBox *yaxis;
-    QCheckBox *yaxis2;
-    QCheckBox *xlabel;
+    //QCheckBox *yaxis2;
+    //QCheckBox *xlabel;
     QCheckBox *lineMarker;
-    QCheckBox *llabel;
+    //QCheckBox *llabel;
+
+    // Lineedits on the right side of the tab.
     QLineEdit *xtitle;
     QLineEdit *ytitle;
-    QLineEdit *ylabel_fmt;
-    QLineEdit *ytitle2;
-    QLineEdit *ylabel2_fmt;
+    //QLineEdit *ylabel_fmt;
+    //QLineEdit *ytitle2;
+    //QLineEdit *ylabel2_fmt;
     QLineEdit *annotation;
 };
 
