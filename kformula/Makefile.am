@@ -35,7 +35,7 @@ rc_DATA = kformula.rc kformula_shell.rc
 
 
 kdelnk_DATA = kformula.desktop
-kdelnkdir = $(kde_appsdir)/Applications/KOffice
+kdelnkdir = $(kde_appsdir)/Office
 
 kdemime_DATA = x-kformula.desktop
 kdemimedir = $(kde_mimedir)/application

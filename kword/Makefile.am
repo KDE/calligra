@@ -37,7 +37,7 @@ noinst_HEADERS = char.h kword_doc.h kword_view.h kword_shell.h \
 METASOURCES = AUTO
 
 kdelnk_DATA = kword.desktop
-kdelnkdir = $(kde_appsdir)/Applications/KOffice
+kdelnkdir = $(kde_appsdir)/Office
 
 kdemime_DATA = x-kword.desktop
 kdemimedir = $(kde_mimedir)/application

@@ -30,7 +30,7 @@ noinst_HEADERS =  graphiteglobal.h graphiteshell.h \
 libgraphite_la_METASOURCES = AUTO
 
 kdelnk_DATA = graphite.desktop
-kdelnkdir = $(kde_appsdir)/Applications/KOffice
+kdelnkdir = $(kde_appsdir)/Office
 
 kdemime_DATA = x-graphite.desktop
 kdemimedir = $(kde_mimedir)/application

@@ -18,7 +18,7 @@ METASOURCES = koshell_shell.moc
 # rc_DATA = koshell_shell.rc
 
 applnk_DATA = koshell.desktop
-applnkdir = $(kde_appsdir)/Applications/KOffice
+applnkdir = $(kde_appsdir)/Office
 
 ####### Implicit rules
 

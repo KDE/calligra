@@ -17,7 +17,7 @@ libkimageshop_la_SOURCES = dummy.cc
 kimageshop_SOURCES = main.cc
 
 kdelnk_DATA = kimageshop.desktop
-kdelnkdir = $(kde_appsdir)/Applications/KOffice
+kdelnkdir = $(kde_appsdir)/Office
 
 kdemime_DATA = x-kimageshop.desktop
 kdemimedir = $(kde_mimedir)/application
