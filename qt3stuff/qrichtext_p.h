@@ -1395,12 +1395,11 @@ public:
 protected:
     virtual void generateKey();
     QFont fn;
-    QString k;
-
-private:
     void update();
+    void setKey( const QString &key ) { k = key; }
 
 private:
+    QString k;
     QColor col;
     QFontMetrics fm;
     uint missp : 1;
@@ -1931,6 +1930,7 @@ inline QString QTextFormat::key() const
 
 inline void QTextFormat::generateKey()
 {
+    k = QString::null;
     QTextOStream ts( &k );
     ts << fn.pointSize()
        << fn.weight()
