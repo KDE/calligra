@@ -305,8 +305,9 @@ void KexiBrowser::installEventFilter ( const QObject * filterObj )
 
 bool KexiBrowser::eventFilter ( QObject *o, QEvent * e )
 {
-	if (o==m_list->renameLineEdit() && e->type()==QEvent::Hide) {
-		itemRenameDone();
+	if (o==m_list->renameLineEdit()) {
+		if (e->type()==QEvent::Hide) 
+            itemRenameDone();
 	}
 	else if (e->type()==QEvent::AccelOverride) {
 		QKeyEvent *ke = static_cast<QKeyEvent*>(e);
