@@ -1,0 +1,10 @@
+Compiling
+=========
+
+ - Copy a Python-1.4 source distribution in the directory with
+   the same name ( NOT 'python'! ).
+ - cd python
+ - make
+ - cd ..
+ - make idl
+ - make

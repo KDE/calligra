@@ -1,0 +1,25 @@
+/* XPM */
+static char * precplus_xpm[] = {
+"21 18 4 1",p
+" 	c None",
+".	c #000000008617",
+"X	c #000000000000",
+"o	c #861786178617",
+"                     ",
+"                     ",
+"      .        XX    ",
+"     ..       X  X   ",
+"    .....     X  X   ",
+"     ..       X  X   ",
+"      .    XX X  X   ",
+"           XX  XX    ",
+"          oX         ",
+"          XX   XX    ",
+"         X  X X  X   ",
+"         X  X X  X   ",
+"         X  X X  X   ",
+"      XX X  X X  X   ",
+"      XX  XX   XX    ",
+"     oX              ",
+"                     ",
+"                     "};

@@ -1,0 +1,47 @@
+#ifndef __img_idl__
+#define __img_idl__
+
+#include <parts.idl>
+
+module KSpread
+{
+	interface View : OPParts::View
+	{
+		signal void undo();
+		signal void redo();
+		signal void cutSelection();
+		signal void copySelection();
+		signal void paste();
+		signal void editCell();
+		signal void paperLayoutDlg();
+		signal void togglePageBorders();
+		signal void insertNewTable();
+		signal void autoFill();
+		signal void editGlobalScripts();
+		signal void editLocalScripts();
+		signal void reloadScripts();
+		signal void helpAbout();
+		signal void helpUsing();
+		signal void deleteRow();
+		signal void deleteColumn();
+		signal void insertRow();
+		signal void insertColumn();
+		signal void bold();
+		signal void italic();
+		signal void moneyFormat();
+		signal void percent();
+		signal void alignLeft();
+		signal void alignCenter();
+		signal void alignRight();
+		signal void multiRow();
+		signal void precisionMinus();
+		signal void precisionPlus();
+		signal void insertChart();
+	};
+
+	interface Document : OPParts::Document
+	{
+	};
+};
+
+#endif
