@@ -53,17 +53,6 @@ ObjectPropertyBuffer::changeProperty(const QString &property, const QVariant &va
 	if(property == "name")
 		emit nameChanged(m_object->name(), value.toString());
 
-	/*if(value.type() == QVariant::StringList)
-	{
-		QStrList list;
-		QStringList StrList(value.toStringList());
-		for(QStringList::iterator it = StrList.begin(); it != StrList.end(); ++it)
-			list.append((*it).latin1());
-		int count = m_object->metaObject()->findProperty(property.latin1(), true);
-		const QMetaProperty *meta = m_object->metaObject()->property(count, true);
-		QVariant val = meta->keysToValue(list);
-		m_object->setProperty(property.latin1(), val);
-	}*/
 	if((property == "hAlign") || (property == "vAlign") || (property == "wordbreak"))
 	{
 		saveAlignProperty();
@@ -184,18 +173,15 @@ ObjectPropertyBuffer::checkModifiedProp()
 		ObjectTreeItem *treeIt = m_manager->activeForm()->objectTree()->lookup(m_object->name());
 		if(treeIt)
 		{
-			QListViewItem *it = m_manager->editor()->firstChild()->firstChild();
 			QString name;
-			while(it)
+			QDictIterator<KexiProperty> it(*this);
+			for(; it.current(); ++it)
 			{
-				KexiPropertyEditorItem *item = static_cast<KexiPropertyEditorItem*>(it);
-				name = item->property()->name();
+				name = it.current()->name();
 				if((name == "hAlign") || (name == "vAlign") || (name == "wordbreak") || (name == "layout"))
-					return;
-
-				if(item->property()->changed())
+						return;
+				if(it.current()->changed())
 					treeIt->addModProperty(name);
-				it = it->nextSibling();
 			}
 		}
 	}

@@ -95,8 +95,8 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		*/
 		bool              isTopLevel(QWidget *w);
 
-		//! \return A pointer to the KexiPropertyEditor we use. 
-		KexiPropertyEditor* editor() const { return m_editor; }
+		// \return A pointer to the KexiPropertyEditor we use. 
+		//KexiPropertyEditor* editor() const { return m_editor; }
 
 		/*! Creates a new blank Form, whose toplevel widget inherits \a classname. The Form is automatically shown. */
 		void createBlankForm(const QString &classname, const char *name);
