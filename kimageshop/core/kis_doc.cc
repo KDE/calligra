@@ -181,9 +181,8 @@ bool KisDoc::completeSaving( KoStore* store )
 		{
 		  QString url = QString( "layers/%1/channels/ch%2.bin" ).arg( lay->name() )
 			.arg( static_cast<int>(ch->channelId()) );
-		  QCString mime ( "binary/kis_channel" );
 
-		  if ( store->open( url, mime.lower() ) )
+		  if ( store->open( url ) )
 			{
 			  ostorestream out( store );
 			  ch->writeToStore( &out );
