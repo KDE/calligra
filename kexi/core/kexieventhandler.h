@@ -17,27 +17,32 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXIRECORDNAVIGATOR_H
-#define KEXIRECORDNAVIGATOR_H
+#ifndef KEXIEVENTHANDLER_H
+#define KEXIEVENTHANDLER_H
 
-#include <qwidget.h>
+#include <qobject.h>
 
-class KexiDBRecord;
+class FakeHandler;
 
-class KexiRecordNavigator : public QWidget
+class KexiEventHandler : public QObject
 {
 	Q_OBJECT
 
 	public:
-		KexiRecordNavigator(KexiDBRecord *record, QWidget *parent, const char *name=0);
-		~KexiRecordNavigator();
+		KexiEventHandler(QObject *parent);
+		virtual ~KexiEventHandler();
 
-	signals:
-		void	nextRecord();
-		void	prevRecord();
-		void	firstRecord();
-		void	lastRecord();
-		void	gotoRecord(int rec);
+		virtual QString		name() = 0;
+		virtual QStringList	functions() = 0;
+
+		virtual FakeHandler	*formHandler() = 0;
+
+		virtual void		provideObject(QObject *) = 0;
+
+		/**
+		 * you will need a public slot
+		 * proxy(const QString &function)
+		 */
 };
 
 #endif

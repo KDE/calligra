@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003   Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -17,27 +17,41 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXIRECORDNAVIGATOR_H
-#define KEXIRECORDNAVIGATOR_H
+#ifndef EVENTEDITOREDITOR_H
+#define EVENTEDITOREDITOR_H
 
-#include <qwidget.h>
+#include <qvariant.h>
+#include <qmap.h>
+#include "propertyeditoreditor.h"
 
-class KexiDBRecord;
+class PropertyEditorItem;
+class EventEditorItem;
+class EventEditor;
+class EventDetail;
 
-class KexiRecordNavigator : public QWidget
+class EventEditorEditor : public PropertyEditorEditor
 {
 	Q_OBJECT
 
 	public:
-		KexiRecordNavigator(KexiDBRecord *record, QWidget *parent, const char *name=0);
-		~KexiRecordNavigator();
+		EventEditorEditor(QWidget *parent, PropertyEditorItem *i, const char *name=0);
+		~EventEditorEditor();
 
-	signals:
-		void	nextRecord();
-		void	prevRecord();
-		void	firstRecord();
-		void	lastRecord();
-		void	gotoRecord(int rec);
+		virtual QVariant	getValue();
+
+	public slots:
+		void			slotHandlerChanged(const QString &);
+
+	protected slots:
+		void			slotShowDetails();
+
+	private:
+		EventEditorItem		*m_item;
+		EventEditor		*m_editor;
+		EventDetail		*m_ed;
+		QVariant		m_result;
+
+		bool			m_faked;
 };
 
 #endif

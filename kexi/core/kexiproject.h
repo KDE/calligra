@@ -68,6 +68,7 @@ struct Credentials
 
 typedef QMap<QString, QDomElement> Groups;
 typedef QValueList<FileReference> References;
+typedef QMap<QString, FileReference> ReferencesM;
 typedef QPtrList<KexiProjectHandler> PartList;
 
 class KexiProject : public KoDocument
@@ -128,7 +129,7 @@ private:
 	KexiDB*         m_db;
 //	Credentials     m_cred;
 	bool            m_dbAvaible;
-	References      m_fileReferences;
+	ReferencesM      m_fileReferences;
 	Groups          m_refGroups;
 	KexiRelation	*m_relationManager;
 	PartList	*m_parts;

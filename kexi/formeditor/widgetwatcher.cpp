@@ -17,27 +17,46 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXIRECORDNAVIGATOR_H
-#define KEXIRECORDNAVIGATOR_H
+#include "widgetwatcher.h"
 
-#include <qwidget.h>
+namespace KFormEditor {
 
-class KexiDBRecord;
-
-class KexiRecordNavigator : public QWidget
+WidgetWatcher::WidgetWatcher(QObject *parent, const char *name)
+ : QObject(parent, name),
+   QMap<char *, QWidget *>()
 {
-	Q_OBJECT
+}
 
-	public:
-		KexiRecordNavigator(KexiDBRecord *record, QWidget *parent, const char *name=0);
-		~KexiRecordNavigator();
+QString
+WidgetWatcher::genName(const QString &base)
+{
+//	if(m_nameCounter.contains(base))
+//	{
+		int count = m_nameCounter[base];
+//		int count = m_nameCounter.find(base).data();
+		m_nameCounter.insert(base, count + 1);
+		return QString(base) + QString::number(count + 1);
+/*
+	}
+	else
+	{
+		m_nameCounter.insert(base, 1);
+		return QString(base) + "1";
+	}
+*/
+}
 
-	signals:
-		void	nextRecord();
-		void	prevRecord();
-		void	firstRecord();
-		void	lastRecord();
-		void	gotoRecord(int rec);
-};
+QString
+WidgetWatcher::genName(QObject *o)
+{
+	return genName(o->className());
+}
 
-#endif
+WidgetWatcher::~WidgetWatcher()
+{
+}
+
+}
+
+#include "widgetwatcher.moc"
+

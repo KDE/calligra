@@ -17,27 +17,22 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXIRECORDNAVIGATOR_H
-#define KEXIRECORDNAVIGATOR_H
+#include "eventeditor.h"
+#include "eventeditoritem.h"
 
-#include <qwidget.h>
-
-class KexiDBRecord;
-
-class KexiRecordNavigator : public QWidget
+EventEditorItem::EventEditorItem(EventEditor *parent, QObject *sender, const char *event, QString classR, QString handler,
+ QObject *rec)
+ : PropertyEditorItem(parent, event, QVariant::BitArray, QVariant(classR + "." + handler))
 {
-	Q_OBJECT
+	m_sender = sender;
+	m_event = event;
+	m_classR = classR;
+	m_handler = handler;
+	m_receiver = rec;
 
-	public:
-		KexiRecordNavigator(KexiDBRecord *record, QWidget *parent, const char *name=0);
-		~KexiRecordNavigator();
+	m_parent = parent;
+}
 
-	signals:
-		void	nextRecord();
-		void	prevRecord();
-		void	firstRecord();
-		void	lastRecord();
-		void	gotoRecord(int rec);
-};
-
-#endif
+EventEditorItem::~EventEditorItem()
+{
+}

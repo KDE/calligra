@@ -17,27 +17,32 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXIRECORDNAVIGATOR_H
-#define KEXIRECORDNAVIGATOR_H
+#ifndef WIDGETWATCHER_H
+#define WIDGETWATCHER_H
 
-#include <qwidget.h>
+#include <qmap.h>
+#include <qobject.h>
 
-class KexiDBRecord;
+class QWidget;
 
-class KexiRecordNavigator : public QWidget
+typedef QMap<QString, int> NameCounter;
+
+namespace KFormEditor
 {
-	Q_OBJECT
+	class WidgetWatcher : public QObject, public QMap<char *, QWidget *>
+	{
+		Q_OBJECT
 
-	public:
-		KexiRecordNavigator(KexiDBRecord *record, QWidget *parent, const char *name=0);
-		~KexiRecordNavigator();
+		public:
+			WidgetWatcher(QObject *parent, const char *name=0);
+			~WidgetWatcher();
 
-	signals:
-		void	nextRecord();
-		void	prevRecord();
-		void	firstRecord();
-		void	lastRecord();
-		void	gotoRecord(int rec);
+			QString	genName(const QString &base);
+			QString genName(QObject *);
+
+		private:
+			NameCounter	m_nameCounter;
+	};
 };
 
 #endif

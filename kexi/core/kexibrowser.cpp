@@ -81,23 +81,19 @@ KexiBrowser::addGroup(KexiProjectHandler *part)
 	item->setOpen(true);
 	m_baseItems.insert(part->mime(), item);
 	slotItemListChanged(part);
-	kdDebug() << "KexiBrowser::addGroup(): Added " << part->mime() << " @ " << item << endl;
 }
 
 void
 KexiBrowser::addItem(KexiProjectHandlerItem *item)
 {
-	kdDebug() << "KexiBrowser::addItem() looking for " << item->mime() << endl;
 	if(m_mime == "kexi/db" && m_baseItems.find(item->mime()))
 	{
 		KexiBrowserItem *parent = m_baseItems.find(item->mime());
-		kdDebug() << "KexiBrowser::addItem() found " << item->mime() << " @ " << parent << endl;	
 		KexiBrowserItem *bitem = new KexiBrowserItem(parent, item);
 		bitem->setPixmap(0, parent->proxy()->part()->itemPixmap());
 	}
 	else if(m_mime == item->mime())
 	{
-		kdDebug() << "KexiBrowser::addItem() adding as parent" << endl;
 		KexiBrowserItem *bitem = new KexiBrowserItem(this, item);
 		if(m_part)
 			bitem->setPixmap(0, m_part->itemPixmap());
@@ -109,7 +105,7 @@ KexiBrowser::slotItemListChanged(KexiProjectHandler *parent)
 {
 
 	kdDebug() << "KexiBrowser::slotItemListChanged() " << parent->items()->count() << " items" << endl;
-	
+
 	if(m_mime == "kexi/db")
 	{
 		KexiBrowserItem *group = m_baseItems.find(parent->mime());
@@ -120,7 +116,7 @@ KexiBrowser::slotItemListChanged(KexiProjectHandler *parent)
 		clear();
 	}
 
-	
+
 	for(KexiProjectHandler::ItemIterator it(*(parent->items()));it.current();++it)
 	//KexiProjectHandlerItem *item = plist->first(); item; item = plist->next())
 	{

@@ -1,20 +1,21 @@
-/***************************************************************************
-                          kexiformbase.cpp  -  description
-                             -------------------
-    begin                : Mon Jun 17 2002
-    copyright            : (C) 2002 by lucijan busch
-			   (C) 2002 by Joseph Wenninger <jowenn@kde.org>
-    email                : lucijan@gmx.at
- ***************************************************************************/
+/* This file is part of the KDE libraries
+   Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2002 Joseph Wenninger <jowenn@kde.org>
 
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License version 2 as published by the Free Software Foundation.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
 
 
 #include <kdebug.h>
@@ -37,6 +38,7 @@
 #include <qdockwindow.h>
 #include <qmap.h>
 #include <qstatusbar.h>
+#include <qtabwidget.h>
 
 #include <qobjectlist.h>
 
@@ -49,10 +51,12 @@
 #include "kexitablepart.h"
 #include "kexidataprovider.h"
 #include "kexirecordnavigator.h"
+#include "kexieventhandler.h"
 #include "formeditor/widgetcontainer.h"
 #include "formeditor/container_frame.h"
 #include "formeditor/container_tabwidget.h"
 #include "formeditor/propertyeditor.h"
+#include "formeditor/eventeditor.h"
 
 #include "kexidbwidgetcontainer.h"
 #include "kexidbwidgets.h"
@@ -148,7 +152,7 @@ KexiFormBase::ViewGUIClient *KexiFormBase::m_viewGUIClient=0;
 
 
 KexiFormBase::KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *parent, const QString &s, const char *name, QString identifier)
-	: KexiDialogBase(view,parent,name)
+	: KexiDialogBase(view,parent,identifier.latin1())
 {
 	setMinimumWidth(50);
 	setMinimumHeight(50);
@@ -177,14 +181,37 @@ KexiFormBase::KexiFormBase(KexiView *view, KexiFormHandlerItem *item, QWidget *p
 	editorWindow->setResizeEnabled(true);
 	view->mainWindow()->moveDockWindow(editorWindow, DockRight);
 
-	PropertyEditor *peditor = new PropertyEditor(editorWindow);
-	editorWindow->setWidget(peditor);
-	peditor->show();
-	connect(topLevelEditor, SIGNAL(activated(QObject *)), peditor, SLOT(setObject(QObject *)));
+	QTabWidget *formProperties = new QTabWidget(editorWindow);
+	editorWindow->setWidget(formProperties);
+	formProperties->show();
 
-	QStatusBar *status = new QStatusBar(this);
-	KexiRecordNavigator *nv = new KexiRecordNavigator(0, this);
-	status->addWidget(nv, 2, true);
+	PropertyEditor *peditor = new PropertyEditor(formProperties);
+	connect(topLevelEditor, SIGNAL(activated(QObject *)), peditor, SLOT(setObject(QObject *)));
+	connect(topLevelEditor, SIGNAL(widgetInserted(QObject *)), this, SLOT(slotWidgetInserted(QObject *)));
+
+	EventEditor *eeditor = new EventEditor(formProperties);
+	connect(topLevelEditor, SIGNAL(activated(QObject *)), eeditor, SLOT(setObject(QObject *)));
+
+	formProperties->insertTab(peditor, i18n("Properties"));
+	formProperties->insertTab(eeditor, i18n("Events"));
+
+
+	KexiProjectHandler *sh = m_project->handlerForMime("kexi/script");
+	if(sh)
+	{
+		KexiEventHandler *ev = sh->eventHandler();
+		if(ev)
+		{
+			eeditor->appendFake(ev->name(), ev->formHandler());
+			ev->provideObject(this);
+		}
+	}
+//	peditor->show();
+//	eeditor->show();
+
+//	QStatusBar *status = new QStatusBar(this);
+//	KexiRecordNavigator *nv = new KexiRecordNavigator(0, this);
+//	status->addWidget(nv, 2, true);
 //	status->setFixedWidth(20);
 
 //	mainWindow()->guiFactory()->addClient(guiClient());
@@ -249,8 +276,21 @@ void KexiFormBase::slotToggleFormMode(bool state)
 	if(!state)
 	{
 		kdDebug() << "KexiFormBase::slotToggleFormMode() source: " << m_source << endl;
-		KexiTablePart *p = static_cast<KexiTablePart*>(m_project->handlerForMime("kexi/table"));
-		KexiDBRecord *rec = p->records(m_source, QMap<QString,QString>());
+//		KexiTablePart *p = static_cast<KexiTablePart*>(m_project->handlerForMime("kexi/table"));
+//		KexiDBRecord *rec = p->records(m_source, QMap<QString,QString>());
+	}
+}
+
+void KexiFormBase::slotWidgetInserted(QObject *o)
+{
+	KexiProjectHandler *sh = m_project->handlerForMime("kexi/script");
+	if(sh)
+	{
+		KexiEventHandler *ev = sh->eventHandler();
+		if(ev)
+		{
+			ev->provideObject(o);
+		}
 	}
 }
 

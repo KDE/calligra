@@ -112,6 +112,7 @@ namespace KFormEditor
 			QObject *m_lastActivated;
 		signals:
 			void activated(QObject*);
+			void widgetInserted(QObject *);
 	};
 
 };

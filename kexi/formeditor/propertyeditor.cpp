@@ -30,6 +30,7 @@
 #include "propertyeditoreditor.h"
 #include "propertyeditorlist.h"
 #include "propertyeditorinput.h"
+#include "eventeditoreditor.h"
 
 PropertyEditor::PropertyEditor(QWidget *parent, const char *name)
  : KListView(parent, name)
@@ -108,10 +109,14 @@ PropertyEditor::createEditor(PropertyEditorItem *i, const QRect &geometry)
 		case QVariant::Int:
 			editor = new PropertyEditorSpin(viewport(), i->type(), i->value());
 			break;
-		
+
 		case QVariant::StringList:
 			editor = new PropertyEditorList(viewport(), i->type(), i->value(), i->list());
 			kdDebug() << "PropertyEditor::createEditor: ComboBox created!" << endl;
+			break;
+
+		case QVariant::BitArray:
+			editor = new EventEditorEditor(viewport(), i);
 			break;
 
 		default:
@@ -119,7 +124,7 @@ PropertyEditor::createEditor(PropertyEditorItem *i, const QRect &geometry)
 			kdDebug() << "PropertyEditor::createEditor: No editor created!" << endl;
 			return;
 	}
-	
+
 	connect(editor, SIGNAL(reject(PropertyEditorEditor *)), this,
 	 SLOT(slotEditorReject(PropertyEditorEditor *)));
 	connect(editor, SIGNAL(changed(PropertyEditorEditor *)), this,

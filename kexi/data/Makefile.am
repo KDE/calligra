@@ -1,3 +1,7 @@
+if compile_qsa_plugin
+scripthandler = kexiscripthandler.desktop
+endif
+
 # kde_appsdir         Where your application's menu entry (.desktop) should go to.
 # kde_icondir         Where your icon should go to - better use KDE_ICON.
 # kde_sounddir        Where your sounds should go to.
@@ -26,4 +30,4 @@ servicetypesdir = $(kde_servicetypesdir)
 servicetypes_DATA=kexihandler.desktop
 
 servicesdir=$(kde_servicesdir)/kexi
-services_DATA=kexitablehandler.desktop kexiqueryhandler.desktop kexirelationhandler.desktop kexiformhandler.desktop
+services_DATA=kexitablehandler.desktop kexiqueryhandler.desktop kexirelationhandler.desktop kexiformhandler.desktop $(scripthandler)

@@ -17,27 +17,15 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef KEXIRECORDNAVIGATOR_H
-#define KEXIRECORDNAVIGATOR_H
+#include "kexieventhandler.h"
 
-#include <qwidget.h>
-
-class KexiDBRecord;
-
-class KexiRecordNavigator : public QWidget
+KexiEventHandler::KexiEventHandler(QObject *parent)
+ : QObject(parent)
 {
-	Q_OBJECT
+}
 
-	public:
-		KexiRecordNavigator(KexiDBRecord *record, QWidget *parent, const char *name=0);
-		~KexiRecordNavigator();
+KexiEventHandler::~KexiEventHandler()
+{
+}
 
-	signals:
-		void	nextRecord();
-		void	prevRecord();
-		void	firstRecord();
-		void	lastRecord();
-		void	gotoRecord(int rec);
-};
-
-#endif
+#include "kexieventhandler.moc"

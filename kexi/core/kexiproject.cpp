@@ -181,9 +181,9 @@ void KexiProject::saveReferences(QDomDocument &domDoc)
 	domDoc.documentElement().appendChild(refs);
 
 	kdDebug() << "KexiProject::saveProject(): storing " << m_fileReferences.count() << " references" << endl;
-	for(References::Iterator it = m_fileReferences.begin(); it != m_fileReferences.end(); it++)
+	for(ReferencesM::Iterator it = m_fileReferences.begin(); it != m_fileReferences.end(); it++)
 	{
-		FileReference ref(*it);
+		FileReference ref = it.data();
 
 		QDomElement item = domDoc.createElement("item");
 		item.setAttribute("name", ref.name);
@@ -248,7 +248,7 @@ void KexiProject::loadReferences(QDomElement &fileRefs)
 
 				qDebug("KexiProject::openProject(): #ref %s:%s:%s\n",groupName.latin1(),name.latin1(),location.latin1());
 
-			m_fileReferences.append(ref);
+			m_fileReferences.insert(ref.location, ref);
 		}
 	}
 
@@ -353,9 +353,8 @@ KexiProject::getParts()
 void
 KexiProject::addFileReference(FileReference fileref)
 {
-//	FIXME: port m_fileReferences to QMap...
 //	if(m_fileReferences.findIndex(fileref) != -1)
-		m_fileReferences.append(fileref);
+		m_fileReferences.insert(fileref.location, fileref);
 }
 
 QString
@@ -381,12 +380,12 @@ KexiProject::fileReferences(const QString &group)
 {
 	kdDebug() << "KexiProject::fileReferences(" << group << ")" << endl;
 	References refs;
-	for(References::Iterator it = m_fileReferences.begin(); it != m_fileReferences.end(); it++)
+	for(ReferencesM::Iterator it = m_fileReferences.begin(); it != m_fileReferences.end(); it++)
 	{
-		if((*it).group == group)
+		if(it.data().group == group)
 		{
 			kdDebug() << "KexiProject::fileReferences() found a matching item: " << group << endl;
-			refs.append(*it);
+			refs.append(it.data());
 		}
 	}
 	return refs;

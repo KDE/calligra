@@ -36,6 +36,7 @@
 
 class KexiProjectHandlerItem;
 class KexiProjectHandlerProxy;
+class KexiEventHandler;
 
 
 /*!
@@ -50,7 +51,7 @@ class KexiProjectHandler : public QObject
 	public:
 		typedef QDict<KexiProjectHandlerItem> ItemList;
 		typedef QDictIterator<KexiProjectHandlerItem> ItemIterator;
-		
+
 		KexiProjectHandler(KexiProject *project);
 		virtual ~KexiProjectHandler() {};
 
@@ -61,7 +62,7 @@ class KexiProjectHandler : public QObject
 
 		KexiProjectHandlerProxy		*proxy(KexiView *);
 		virtual void hookIntoView(KexiView*)=0;
-		virtual void unhookFromView(KexiView*);		
+		virtual void unhookFromView(KexiView*);
 
 		virtual QWidget *embeddReadOnly(QWidget *, KexiView *v);
 
@@ -73,12 +74,14 @@ class KexiProjectHandler : public QObject
 		virtual void store (KoStore*);
 		virtual void load (KoStore*);
 		virtual ItemList		*items();
-		
+
+		virtual KexiEventHandler	*eventHandler() { return 0; }
+
 		KexiProject *kexiProject();
 
 	signals:
 		void itemListChanged(KexiProjectHandler*);
-		
+
 	protected:
 		void insertIntoViewProxyMap(KexiView*,KexiProjectHandlerProxy*);
 		void deleteFromViewProxyMap(KexiView*);

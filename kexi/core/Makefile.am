@@ -9,12 +9,13 @@ libkexicore_la_SOURCES = kexi_factory.cpp kexiproject.cpp\
 	KexiProjectIface.cpp kexihandlerpopupmenu.cpp kexiprojecthandler.cpp \
 	kexirelation.cpp kexidragobjects.cpp kexidataprovider.cpp \
 	kexicontexthelp.cpp kexidatasourcedlg.cpp \
-	kexidatasourcecombobox.cpp kexidbconnection.cpp
+	kexidatasourcecombobox.cpp kexidbconnection.cpp kexieventhandler.cpp
 
 
 
 libkexicore_la_LDFLAGS = $(all_libraries) -Wnounresolved
 libkexicore_la_LIBADD = $(LIB_KOFFICEUI) -lktexteditor  ../kexiDB/libkexidb.la
+#../formeditor/libkformeditor.la
 
 SUBDIRS = . projectWizard
 
