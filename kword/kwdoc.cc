@@ -3133,7 +3133,7 @@ void KWDocument::removeView( KoView *_view )
 void KWDocument::addShell( KoMainWindow *shell )
 {
     connect( shell, SIGNAL( documentSaved() ), m_commandHistory, SLOT( documentSaved() ) );
-    connect( shell, SIGNAL( saveDialogShown(bool) ), this, SLOT( saveDialogShown(bool) ) );
+    connect( shell, SIGNAL( saveDialogShown() ), this, SLOT( saveDialogShown() ) );
     KoDocument::addShell( shell );
 }
 
@@ -5404,38 +5404,33 @@ void KWDocument::setInsertDirectCursor(bool _b)
     updateDirectCursorButton();
 }
 
-void KWDocument::saveDialogShown(bool reset)
+void KWDocument::saveDialogShown()
 {
-        if (reset)
-        {
-            resetURL();
-            return;
-        }
-        else if (textFrameSet(0) )
-        {
-                QString first_row = textFrameSet(0)->textDocument()->text(0).left(50);
-                bool truncate = false;
-                QChar ch;
-                for (int i=0;i<(signed int)first_row.length();i++)
-                {
-                        ch =  first_row.at(i);
-                        if (!truncate)
-                                if (ch.isPunct() || ch.isSpace() || ch == '.' )
-                                {
-                                        first_row.remove(i,1);
-                                        --i;
-                                }
-                                else
-                                        truncate = true;
-                        else if ( truncate && (ch.isPunct() || ch == '.' ) )
-                        {
-                                first_row.truncate(i);
-                                break;
-                        }
-                }
-                first_row = first_row.stripWhiteSpace();
-                setURL(first_row);
-        }
+        if ( !textFrameSet(0) )
+		return;
+	QString first_row = textFrameSet(0)->textDocument()->text(0).left(50);
+	bool truncate = false;
+	QChar ch;
+	for (int i=0;i<(signed int)first_row.length();i++)
+	{
+		ch =  first_row.at(i);
+		if (!truncate)
+			if (ch.isPunct() || ch.isSpace() || ch == '.' )
+			{
+				first_row.remove(i,1);
+				--i;
+			}
+			else
+				truncate = true;
+		else if ( truncate && (ch.isPunct() || ch == '.' ) )
+		{
+			first_row.truncate(i);
+			break;
+		}
+	}
+	first_row = first_row.stripWhiteSpace();
+	kdDebug() << "Suggested filename:" << first_row << endl;
+	setURL(first_row);
 }
 
 #if 0 // KWORD_HORIZONTAL_LINE

@@ -827,7 +827,7 @@ protected slots:
     void slotCommandExecuted();
     void slotDocumentInfoModifed();
     void slotChapterParagraphFormatted( KoTextParag* parag );
-    void saveDialogShown(bool reset); ///< called just before the save-dialog is shown
+    void saveDialogShown(); ///< called just before the save-dialog is shown
 
 protected:
     void nextParagraphNeedingCheck();
