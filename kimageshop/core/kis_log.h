@@ -33,7 +33,6 @@ public:
   static void setLogFile(const char *file);
 
   static ostream &output() { return *m_output; };
-  static ostream &log(const char *prefix);
 
 private:
 
@@ -42,9 +41,6 @@ private:
 
 };
 
-inline ostream &dbg()   { return KisLog::log("Debug"); };
-inline ostream &log()   { return KisLog::log("Log"); };
-inline ostream &err()   { return KisLog::log("Error"); };
-inline ostream &fatal() { return KisLog::log("Fatal error"); };
+inline ostream &log()   { return KisLog::output(); };
 
 #endif

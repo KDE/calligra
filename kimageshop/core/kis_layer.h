@@ -58,9 +58,9 @@ class KisLayer : public QObject
 	int     channelLastTileOffsetX() const;
 	int     channelLastTileOffsetY() const;
 	QRect   tileRect(int tileNo);
-	QRect   imageExtents() const;  // Extents of the image in canvas coords
-	QRect   tileExtents() const;   // Extents of the layers tiles in canv coords
-	QPoint  channelOffset() const; // TopLeft of the image in the channel
+	QRect   imageExtents() const;  // extents of the image in canvas coords
+	QRect   tileExtents() const;   // extents of the layers tiles in canv coords
+	QPoint  channelOffset() const; // topLeft of the image in the channel
 	
 	void    loadRGBImage(QImage img, QImage alpha);
 	void    loadGrayImage(QImage img, QImage alpha);

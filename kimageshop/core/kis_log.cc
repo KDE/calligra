@@ -30,12 +30,6 @@
 ostream *KisLog::m_output = &cerr;
 char    *KisLog::m_logfile = 0;
 
-ostream &KisLog::log(const char *prefix)
-{
-  output() << prefix << ": ";
-  return output();
-}
-
 void KisLog::setLogFile(const char *file)
 {
   // remove old logfile

@@ -61,7 +61,8 @@ void BrushTool::mousePress(QMouseEvent *e)
   paint(e->pos());
   
   QRect updateRect(e->pos() - m_pBrush->hotSpot(), m_pBrush->size());
-  m_pDoc->current()->compositeImage(updateRect);
+  // m_pDoc->current()->compositeImage(updateRect);
+  m_pDoc->current()->markDirty(updateRect);
 }
 
 bool BrushTool::paint(QPoint pos)
@@ -157,8 +158,8 @@ void BrushTool::mouseMove(QMouseEvent *e)
   if(m_dragging)
     {
       if( !img->getCurrentLayer()->visible() )
-	return;
-
+		return;
+	  
       KisVector end(e->x(), e->y());
       KisVector start(m_dragStart.x(), m_dragStart.y());
             
@@ -166,42 +167,40 @@ void BrushTool::mouseMove(QMouseEvent *e)
       float saved_dist = m_dragdist;
       float new_dist = dragVec.length();
       float dist = saved_dist + new_dist;
-
+	  
       if ((int)dist < spacing)
-	{
-	  m_dragdist += new_dist; // save for next moveevent
-	  m_dragStart = e->pos();
-	  return;
-	}
+		{
+		  m_dragdist += new_dist; // save for next moveevent
+		  m_dragStart = e->pos();
+		  return;
+		}
       else
-	m_dragdist = 0; // reset
-
+		m_dragdist = 0; // reset
+	  
       dragVec.normalize();
-
+	  
       KisVector step = start;
 
       QRect updateRect;
       while (dist >= spacing)
-	{
-	  if (saved_dist > 0)
-	    {
-	      step += dragVec * (spacing-saved_dist);
-	      saved_dist -= spacing;
-	    }
-	  else
-	      step += dragVec * spacing;
+		{
+		  if (saved_dist > 0)
+			{
+			  step += dragVec * (spacing-saved_dist);
+			  saved_dist -= spacing;
+			}
+		  else
+			step += dragVec * spacing;
+		  
+		  QPoint p(step.x(), step.y());
 
-	  QPoint p(step.x(), step.y());
-	  	  
-	  if (paint(p))
-	    updateRect = updateRect.unite(QRect(p - m_pBrush->hotSpot(), m_pBrush->size()));
-	  dist -= spacing;
-	}
-      if (!updateRect.isEmpty())
-	img->compositeImage(updateRect);
-
+		  if (paint(p))
+			img->markDirty(QRect(p - m_pBrush->hotSpot(), m_pBrush->size()));
+		  dist -= spacing;
+		}
+	  
       if (dist > 0)
-	m_dragdist = dist; //save for next moveevent
+		m_dragdist = dist; //save for next moveevent
       m_dragStart = e->pos();
     }
 }

@@ -180,7 +180,7 @@ bool KisDoc::completeSaving( KoStore* store )
 	{
 	  for ( KisChannel* ch = lay->firstChannel(); ch != 0; ch = lay->nextChannel())
 		{
-		  QString url = QString( "layers/%1/channel_%2.bin" ).arg( lay->name() )
+		  QString url = QString( "layers/%1/channels/ch%2.bin" ).arg( lay->name() )
 			.arg( static_cast<int>(ch->channelId()) );
 		  QCString mime ( "binary/kis_channel" );
 

@@ -29,6 +29,7 @@
 #include <qregexp.h>
 #include <qfileinfo.h>
 
+#include <kapp.h>
 #include <kstddirs.h>
 #include <kglobal.h>
 #include <kmimetype.h>
@@ -59,6 +60,12 @@ KisImage::KisImage( const QString& n, int w, int h, cMode cm, uchar bd )
 
   xTiles = tileExtents.width() / TILE_SIZE;	
   yTiles = tileExtents.height() / TILE_SIZE;
+
+  // setup dirty flag array
+  m_dirty.resize (xTiles*yTiles);
+  for(int y = 0; y < yTiles; y++)
+    for(int x = 0; x < xTiles; x++)
+	  m_dirty[y * xTiles + x] = false;
 
   setUpVisual();
   QPixmap::setDefaultOptimization( QPixmap::NoOptim );
@@ -103,6 +110,11 @@ KisImage::KisImage( const QString& n, int w, int h, cMode cm, uchar bd )
 	  }
 
   compositeImage(QRect());
+
+  // start update timer
+  m_pUpdateTimer = new QTimer(this);
+  connect( m_pUpdateTimer, SIGNAL(timeout()), this, SLOT(slotUpdateTimeOut()) );
+  m_pUpdateTimer->start(20);
 }
 
 KisImage::~KisImage()
@@ -114,6 +126,26 @@ KisImage::~KisImage()
 
   if ((visual!=unknown) && (visual!=rgb888x))
     free(imageData);
+}
+
+void KisImage::markDirty( QRect r )
+{
+  for(int y = 0; y < yTiles; y++)
+    for(int x = 0; x < xTiles; x++)
+      if (r.intersects(QRect(x*TILE_SIZE, y*TILE_SIZE,TILE_SIZE,TILE_SIZE)))
+		m_dirty[y * xTiles + x] = true;
+}
+
+void KisImage::slotUpdateTimeOut()
+{
+  for(int y = 0; y < yTiles; y++)
+	for(int x = 0; x < xTiles; x++)
+	  if (m_dirty[y * xTiles + x])
+		{
+		  compositeImage(QRect(x*TILE_SIZE, y*TILE_SIZE,TILE_SIZE,TILE_SIZE));
+		  m_dirty[y * xTiles + x] = false;
+		  kapp->processEvents();
+		}
 }
 
 void KisImage::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/)

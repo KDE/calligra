@@ -25,6 +25,8 @@
 #include <qpoint.h>
 #include <qstring.h>
 
+#include "kis_global.h"
+
 template<class T> inline T min(T a, T b) { return (a<b)?a:b; }
 template<class T> inline T max(T a, T b) { return (a>b)?a:b; }    
 
@@ -38,6 +40,8 @@ class KisUtil
 
   static void enlargeRectToContainPoint( QRect& r, QPoint p );
   static QRect findTileExtents( QRect r );
+
+  static QString channelIdtoString(cId);
 };
                       
 

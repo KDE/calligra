@@ -19,6 +19,9 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <kglobal.h>
+#include <klocale.h>
+
 #include "kis_global.h"
 #include "kis_util.h"
 
@@ -61,3 +64,48 @@ QRect KisUtil::findTileExtents( QRect r )
   return(r);
 }
 
+QString KisUtil::channelIdtoString(cId cid)
+{
+  switch (cid)
+	{
+	case ci_Indexed:
+	  return i18n("indexed");
+	  break;
+	case ci_Alpha:
+	  return ("alpha");
+	  break;
+	case ci_Red:
+	  return i18n("red");
+	  break;
+	case ci_Green:
+	  return i18n("green");
+	  break;
+	case ci_Blue:
+	  return i18n("blue");
+	  break;
+	case ci_Cyan:
+	  return i18n("cyan");
+	  break;
+	case ci_Magenta:
+	  return i18n("magenta");
+	  break;
+	case ci_Yellow:
+	  return i18n("yellow");
+	  break;
+	case ci_Black:
+	  return i18n("black");
+	  break;
+	case ci_L:
+	  return "L";
+	  break;
+	case ci_a:
+	  return "a";
+	  break;
+	case ci_b:
+	  return "b";
+	  break;
+	default:
+	  return "unknown";
+	  break;
+	}
+}

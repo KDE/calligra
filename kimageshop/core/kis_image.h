@@ -22,9 +22,11 @@
 #ifndef __kis_image_h__
 #define __kis_image_h__
 
+#include <qarray.h>
 #include <qimage.h>
 #include <qlist.h>
 #include <qobject.h>
+#include <qtimer.h>
 
 #include <stdlib.h>
 #include <X11/Xlib.h>
@@ -84,6 +86,7 @@ class KisImage : public QObject
     KisLayer* layerPtr( KisLayer *_layer );
     QList<KisLayer> layerList() { return layers; };
  
+	void markDirty( QRect rect );
     void compositeImage( QRect _rect );
      
     void rotateLayer180(KisLayer *_layer);
@@ -101,6 +104,9 @@ class KisImage : public QObject
     void updated();
     void updated( const QRect& rect );
     void layersUpdated();
+
+ protected slots:
+	void slotUpdateTimeOut();  
     
  protected:
     void compositeTile( int x, int y, KisLayer *dstLay = 0, int dstTile = -1 );
@@ -127,13 +133,15 @@ class KisImage : public QObject
     char        *imageData;
     XImage      *xi;
 
-    QString     m_name;
-	QString     m_author;
-	QString     m_email;
-    int         m_width;
-    int         m_height;
-	cMode       m_cMode;
-	uchar       m_bitDepth;
+    QString      m_name;
+	QString      m_author;
+	QString      m_email;
+    int          m_width;
+    int          m_height;
+	cMode        m_cMode;
+	uchar        m_bitDepth;
+	QArray<bool> m_dirty;
+	QTimer      *m_pUpdateTimer;
 };
 
 #endif

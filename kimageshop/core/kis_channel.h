@@ -46,7 +46,7 @@ class KisChannel
   QRect  imageExtents() const { return m_imgRect; };
   QPoint offset()       const { return m_imgRect.topLeft() - m_tileRect.topLeft(); };
 
-  uchar** tiles()       { return m_tiles; } // FIXME: get rid of this
+  uchar** tiles()       { return m_tiles; }
 
   void allocateRect(QRect newRect);
   
@@ -62,6 +62,7 @@ class KisChannel
   uint lastTileOffsetY();
 
   bool  writeToStore(ostorestream *out);
+  bool  loadFromStore(istorestream *in);
   
  protected:
   
