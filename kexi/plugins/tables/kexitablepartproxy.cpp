@@ -108,15 +108,6 @@ KexiTablePartProxy::slotOpen(const QString& identifier)
 	KexiDataTable *kt = new KexiDataTable(kexiView(), 0, identifier, "table");
 	kdDebug() << "KexiTablePart::slotOpen(): indentifier = " << identifier << endl;
 	kt->setDataSet(data);
-//	kt->setRecord
-//	if(kt->executeQuery("select * from " + identifier))
-//	{
-//		kt->show();
-//	}
-//	else
-//	{
-//		delete kt;
-//	}
 }
 
 void

@@ -159,7 +159,7 @@ HistoryEntry::drawItem(QPainter *p, int width, const QColorGroup &cg)
 
 	content.setX(content.x() + 2);
 	content.setWidth(content.width() - 2);
-	p->drawText(content, Qt::AlignLeft | Qt::AlignVCenter, m_statement);
+	p->drawText(content, Qt::WordBreak | Qt::AlignLeft | Qt::AlignVCenter, m_statement);
 }
 
 QRect
