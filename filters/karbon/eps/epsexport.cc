@@ -12,10 +12,11 @@
 #include <koFilterChain.h>
 #include <koStore.h>
 
-#include <kdebug.h>
-
 #include "epsexport.h"
 #include "vdocument.h"
+#include "vselection.h"
+
+#include <kdebug.h>
 
 
 class EpsExportFactory : KGenericFactory<EpsExport, KoFilter>
@@ -74,7 +75,7 @@ EpsExport::convert( const QCString& from, const QCString& to )
 
 	// find the bounding box of all objects:
 	doc.select();
-	const KoRect& rect = doc.selection().boundingBox();
+	const KoRect& rect = doc.selection()->boundingBox();
 
 	// header:
 	s <<
