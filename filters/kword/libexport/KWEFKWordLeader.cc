@@ -649,7 +649,7 @@ bool KWEFKWordLeader::filter ( const QString &filenameIn,
     else
     {
         // Note: we do not worry too much if we cannot open the document info!
-        kdWarning () << "Unable to open documentinfo.xml sub-file!" << endl;
+        kdWarning (30508) << "Unable to open documentinfo.xml sub-file!" << endl;
     }
 
     doCloseHead ();

@@ -53,7 +53,7 @@ bool KWEFBaseWorker::doFullDocument (const QValueList<ParaData>& paraList, QStri
 #define DO_FALSE_DEFINITION(string) \
     bool KWEFBaseWorker::##string \
     {\
-        kdWarning() << "KWEFBaseWorker::" << #string << " was called (Worker not correctly defined?)" << endl; \
+        kdWarning(30508) << "KWEFBaseWorker::" << #string << " was called (Worker not correctly defined?)" << endl; \
         return false;\
     }
 
