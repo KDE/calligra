@@ -148,7 +148,56 @@ public:
      */
     ~KSpreadCell();
 
+    /**
+     * Returns the worksheet which owns this cell.
+     */
     KSpreadSheet* sheet() const;
+    
+    /**
+     * Returns the cell's column. This could be 0 if the cell is the default cell.
+     */
+    int column() const;
+    
+    /**
+     * Returns the cell's row. This could be 0 if the cell is the default cell.
+     */
+    int row() const;
+
+    /**
+     * Returns the name of the cell. For example, the cell in first column and 
+     * first row is "A1".
+     */
+    QString name() const;
+    
+    /**
+     * Returns the full name of the cell, i.e. including the worksheet name. 
+     * Example: "Sheet1!A1"
+     */
+    QString fullName() const;
+    
+    /**
+     * Returns the column name of the cell.
+     */
+    QString columnName() const;
+    
+    /**
+     * Given the cell position, this static function returns the name of the cell.
+     * Example: name(5,4) will return "E4".
+     */
+    static QString name( int col, int row );
+    
+    /**
+     * Given the sheet and cell position, this static function returns the full name 
+     * of the cell, i.e. with the name of the sheet.
+     */
+    static QString fullName( const KSpreadSheet *s, int col, int row );
+    
+    /**
+     * Given the column number, this static function returns the corresponding
+     * column name, i.e. the first column is "A", the second is "B", and so on.
+     */
+    static QString columnName( int column );
+    
     KSpreadCell* previousCell()const { return m_previousCell; }
     KSpreadCell* nextCell()const { return m_nextCell; }
     void setPreviousCell( KSpreadCell* c ) { m_previousCell = c; }
@@ -239,15 +288,6 @@ public:
                     QPen & leftPen,
                     QPen & topPen,
                     bool drawCursor = true );
-
-  /**
-     * @return the column this cell is in. May return 0 if the cell is the default cell.
-     */
-    int column() const;
-    /**
-     * @return the row this cell is in. May return 0 if the cell is the default cell.
-     */
-    int row() const;
 
     /**
      * @param _col the column this cell is assumed to be in.
@@ -721,28 +761,6 @@ public:
     bool operator < ( const KSpreadCell & ) const;
 
     void freeAllObscuredCells();
-
-    /**
-     * @return the name of this cell. Example: "A1"
-     */
-    QString name() const;
-    /**
-     * @return the name of this cell including the table it belongs, too.
-     * Example: "MyTable!A1"
-     */
-    QString fullName() const;
-    /**
-     * @see #name
-     */
-    static QString name( int col, int row );
-    /**
-     * @see #fullName
-     */
-    static QString fullName( const KSpreadSheet *s, int col, int row );
-    
-    QString columnName() const;
-    
-    static QString columnName( int col );
 
     /* descriptions of the flags are just below */
     enum CellFlags{
