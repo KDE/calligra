@@ -264,7 +264,7 @@ void KWPage::vmmEditFrameSizeAll( unsigned int mx, unsigned int my )
                     else
                     {
                         if ( deleteMovingRect )
-                            p.drawRect( frame->x() - contentsX(), frame->y() - contentsX(), frame->width(), frame->height() );
+                            p.drawRect( frame->x() - contentsX(), frame->y() - contentsY(), frame->width(), frame->height() );
                         frame->moveBy( mx - oldMx, my - oldMy );
                         if ( frame->x() < 0 ||
                              frame->y() < getPageOfRect( QRect( frame->x(), frame->y(), frame->width(), frame->height() ) ) *
