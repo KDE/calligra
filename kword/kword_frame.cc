@@ -2239,6 +2239,7 @@ void KWGroupManager::init()
 /*================================================================*/
 void KWGroupManager::recalcCols()
 {
+    const int minColWidth=18;
     unsigned int row=0,col=0;
     if(! cells.isEmpty() && isOneSelected(row,col)) {
         // check/set sizes of frames
@@ -2257,8 +2258,8 @@ void KWGroupManager::recalcCols()
                 }
             }
         }
-        if(coordinate != activeCell->frameSet->getFrame(0)->left()) {
-                    // TODO watch minimum width
+        int postAdjust=0;
+        if(coordinate != activeCell->frameSet->getFrame(0)->left()) { // left pos changed
             for ( unsigned int i = 0; i < rows; i++) {
                 int difference;
                 if(col==0) {// left most cell
@@ -2272,14 +2273,23 @@ void KWGroupManager::recalcCols()
                     difference=activeCell->frameSet->getFrame(0)->left()- coordinate;
                 }
                 if(cell) {
-                    cell->frameSet->getFrame(0)->setWidth(
-                        cell->frameSet->getFrame(0)->width() + difference);
+                    int newWidth=cell->frameSet->getFrame(0)->width() + difference;
+                    if(newWidth<minColWidth) {
+                        if(minColWidth-newWidth > postAdjust)
+                            postAdjust = minColWidth-newWidth;
+                    }
+                    cell->frameSet->getFrame(0)->setWidth(newWidth);
                 }
             }
             if(col!=0)
                 activeCell->frameSet->getFrame(0)->setWidth(
                   activeCell->frameSet->getFrame(0)->width() +
                   activeCell->frameSet->getFrame(0)->left()- coordinate);
+            for ( unsigned int i = 0; i < rows; i++) {
+                if(col==0) col++;
+                cell = getCell(i,col-1);
+                cell->frameSet->getFrame(0)->setWidth( cell->frameSet->getFrame(0)->width()+postAdjust);
+            }
         } else {
             col+=activeCell->cols-1;
             // find old coord.
@@ -2293,14 +2303,22 @@ void KWGroupManager::recalcCols()
                     }
                 }
             }
-            if(coordinate != activeCell->frameSet->getFrame(0)->right()) {
+            if(coordinate != activeCell->frameSet->getFrame(0)->right()) { // right pos changed.
                 for ( unsigned int i = 0; i < rows; i++) {
                     Cell *cell = getCell(i,col);
                     if(cell != activeCell) {
-                        cell->frameSet->getFrame(0)->setWidth(
-                            cell->frameSet->getFrame(0)->width() +
-                            activeCell->frameSet->getFrame(0)->right() - coordinate );
+                        int newWidth= cell->frameSet->getFrame(0)->width() +
+                            activeCell->frameSet->getFrame(0)->right() - coordinate;
+                        if(newWidth<minColWidth) {
+                            if(minColWidth-newWidth > postAdjust)
+                                postAdjust = minColWidth-newWidth;
+                        }
+                        cell->frameSet->getFrame(0)->setWidth(newWidth);
                     }
+                }
+                for ( unsigned int i = 0; i < rows; i++) {
+                    cell = getCell(i,col);
+                    cell->frameSet->getFrame(0)->setWidth( cell->frameSet->getFrame(0)->width()+postAdjust);
                 }
             }
         }
@@ -2328,6 +2346,7 @@ void KWGroupManager::recalcCols()
 /*================================================================*/
 void KWGroupManager::recalcRows()
 {
+    const int minRowHeight=30;
     // remove automatically added headers
     for ( unsigned int j = 0; j < rows; j++ ) {
         if ( getFrameSet( j, 0 )->isRemoveableHeader() ) {
@@ -2354,8 +2373,8 @@ void KWGroupManager::recalcRows()
                 }
             }
         }
+        int postAdjust=0;
         if(coordinate != activeCell->frameSet->getFrame(0)->top()) { // top pos changed
-            // TODO check minimum height
             for ( unsigned int i = 0; i < cols; i++) {
                 int difference;
                 if(row==0) { // top cell
@@ -2369,14 +2388,26 @@ void KWGroupManager::recalcRows()
                     difference= activeCell->frameSet->getFrame(0)->top()- coordinate;
                 }
                 if(cell) {
-                    cell->frameSet->getFrame(0)->setHeight(
-                        cell->frameSet->getFrame(0)->height() +difference);
+                    int newHeight= cell->frameSet->getFrame(0)->height() + difference;
+                    if(newHeight<minRowHeight) {
+                        if(minRowHeight-newHeight > postAdjust)
+                            postAdjust = minRowHeight-newHeight;
+                    }
+                    cell->frameSet->getFrame(0)->setHeight(newHeight);
                 }
             }
             if(row!=0)
                 activeCell->frameSet->getFrame(0)->setHeight(
                     activeCell->frameSet->getFrame(0)->height() +
                     activeCell->frameSet->getFrame(0)->top()- coordinate);
+            if(postAdjust!=0) {
+                if(row==0) row++;
+                for ( unsigned int i = 0; i < cols; i++) { 
+                    cell = getCell(row-1,i);
+                    cell->frameSet->getFrame(0)->setHeight(
+                        cell->frameSet->getFrame(0)->height() + postAdjust);
+                }
+            }
         } else { // bottom pos has changed
             row+=activeCell->rows-1;
             // find old coord.
@@ -2394,10 +2425,21 @@ void KWGroupManager::recalcRows()
                 for ( unsigned int i = 0; i < cols; i++) {
                     cell = getCell(row,i);
                     if(cell != activeCell) {
-                        cell->frameSet->getFrame(0)->setHeight(
-                            cell->frameSet->getFrame(0)->height() +
-                            activeCell->frameSet->getFrame(0)->bottom() - coordinate );
+                        int newHeight= cell->frameSet->getFrame(0)->height() +
+                            activeCell->frameSet->getFrame(0)->bottom() - coordinate;
+                        if(newHeight<minRowHeight) {
+                            if(minRowHeight-newHeight > postAdjust)
+                                postAdjust = minRowHeight-newHeight;
+                        }
+                        cell->frameSet->getFrame(0)->setHeight(newHeight);
                     }
+                }
+            }
+            if(postAdjust!=0) {
+                for ( unsigned int i = 0; i < cols; i++) { 
+                    cell = getCell(row,i);
+                    cell->frameSet->getFrame(0)->setHeight(
+                        cell->frameSet->getFrame(0)->height() + postAdjust);
                 }
             }
         }

@@ -20,8 +20,6 @@ Bugs; in order or importance:
   but nothing really bad :-))
 - When a frame grows there are sometimes redraw errors
 - When removing text in a table cell shrink table cells
-- Still some bugs in recalc(cels|rows)
-- Fix when a frame gets zero or negitive width in frames.. (crash)
 
 Missing or incomplete stuff:
 ----------------------------------------
