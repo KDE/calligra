@@ -39,6 +39,7 @@
 #include <kaction.h>
 #include <kpopupmenu.h>
 #include <kdebug.h>
+#include "kivio_command.h"
 
 SelectTool::SelectTool( KivioView* view )
 :Tool(view,"Select")
@@ -907,6 +908,8 @@ void SelectTool::endCustomDragging(const QPoint&)
 
 void SelectTool::endResizing(const QPoint&)
 {
+    KivioResizeStencilCommand * cmd = new KivioResizeStencilCommand( i18n("Resize Stencil"), m_pResizingStencil, m_lstOldGeometry.first()->rect, m_pResizingStencil->rect(), m_pView->activePage());
+    m_pCanvas->doc()->addCommand( cmd );
     // Undraw the last outline
     m_pCanvas->drawStencilXOR( m_pResizingStencil );
 

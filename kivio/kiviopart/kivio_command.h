@@ -21,6 +21,7 @@
 #define kiviocommand_h
 
 #include <kcommand.h>
+#include "kivio_rect.h"
 class KivioPage;
 class KivioLayer;
 class KivioPage;
@@ -170,6 +171,23 @@ protected:
     QString newName;
 
 };
+
+class KivioResizeStencilCommand : public KNamedCommand
+{
+public:
+    KivioResizeStencilCommand(const QString &_name, KivioStencil *_stencil, KivioRect _initSize, KivioRect _endSize, KivioPage *_page );
+    ~KivioResizeStencilCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    KivioStencil *m_stencil;
+    KivioRect initSize;
+    KivioRect endSize;
+    KivioPage *m_page;
+};
+
 
 #endif
 
