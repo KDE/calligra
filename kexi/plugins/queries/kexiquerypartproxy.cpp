@@ -97,14 +97,14 @@ KexiQueryPartProxy::slotCreateQuery()
 }
 
 void
-KexiQueryPartProxy::slotOpen(QString identifier)
+KexiQueryPartProxy::slotOpen(const QString& identifier)
 {
         KexiQueryDesigner *kqd = new KexiQueryDesigner(kexiView(), 0, identifier, "oq");
         kqd->show();
 }
 
 void
-KexiQueryPartProxy::slotDelete(QString identifier)
+KexiQueryPartProxy::slotDelete(const QString&  identifier)
 {
 }
 

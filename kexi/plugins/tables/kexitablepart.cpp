@@ -35,8 +35,10 @@
 #include "kexidatatable.h"
 #include "kexialtertable.h"
 
+#include <kexidberror.h>
+
 KexiTablePart::KexiTablePart(QObject *project,const char *,const QStringList &)
- : KexiProjectHandler(KEXIPROJECT(project))
+ : KexiProjectHandler(KEXIPROJECT(project)),KexiDataProvider()
 {
 	kdDebug() << "KexiTablePart::KexiTablePart()" << endl;
 
@@ -93,6 +95,23 @@ KexiTablePart::getTables()
 	}
 
 	emit itemListChanged(this);
+}
+
+KexiDBRecord *KexiTablePart::records(const QString& identifier)
+{
+	KexiDBRecord *m_record=0;
+        try
+        {
+                m_record = kexiProject()->db()->queryRecord("select * from "+identifier, false);
+        }
+        catch(KexiDBError *err)
+        {
+                kdDebug() << "KexiDataTable::executeQuery(): db-error" << endl;
+                err->toUser(0);
+                return 0;
+        }
+	return m_record;
+
 }
 
 

@@ -43,6 +43,7 @@ class KexiProjectHandlerProxy : public QObject
 		KexiView *kexiView();
 		KexiProjectHandler *part();
 
+	public slots:
 		virtual void executeItem(const QString& identifier)=0;
 	protected:
 		QGuardedPtr<KexiView> m_view;

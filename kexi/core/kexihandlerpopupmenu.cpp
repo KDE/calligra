@@ -51,7 +51,7 @@ KexiPartPopupMenu::setIdentifier(QString identifier)
 void
 KexiPartPopupMenu::slotActivated(int id)
 {
-	connect(this, SIGNAL(execute(QString)), m_receiver, m_slots.at(id));
+	connect(this, SIGNAL(execute(const QString&)), m_receiver, m_slots.at(id));
 
 	emit execute(m_identifier);
 

@@ -37,7 +37,7 @@ class KexiPartPopupMenu : public QPopupMenu
 		void	setIdentifier(QString identifier);
 
 	signals:
-		void	execute(QString);
+		void	execute(const QString &);
 
 
 	protected slots:

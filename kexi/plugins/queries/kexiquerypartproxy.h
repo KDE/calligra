@@ -38,12 +38,13 @@ class KexiQueryPartProxy : public KexiProjectHandlerProxy, public KXMLGUIClient
                 virtual KexiPartPopupMenu       *groupContext();
                 virtual KexiPartPopupMenu       *itemContext(const QString& identifier);
 
-		virtual void executeItem(const QString& identifier);
+
 
 	protected slots:
+		virtual void executeItem(const QString& identifier);	
 		void				slotCreateQuery();
-		void				slotOpen(QString identifier);
-		void				slotDelete(QString identifier);
+		void				slotOpen(const QString& identifier);
+		void				slotDelete(const QString& identifier);
 
 	private:
 		KexiQueryPart *m_queryPart;

@@ -2,7 +2,8 @@ kde_module_LTLIBRARIES = kexihandler_table.la kexihandler_query.la kexihandler_r
 
 kexihandler_table_la_SOURCES = kexitablepart.cpp kexitablepartproxy.cpp kexialtertable.cpp
 kexihandler_table_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module
-kexihandler_table_la_LIBADD = ../core/libkexicore.la ../tableview/libkexidatatable.la ../widget/libkexiextendedwidgets.la
+kexihandler_table_la_LIBADD = ../core/libkexicore.la ../tableview/libkexidatatable.la \
+		../widget/libkexiextendedwidgets.la ../kexiDB/libkexidb.la
 
 kexihandler_query_la_SOURCES = kexiquerypart.cpp kexiquerydesigner.cpp kexiquerypartproxy.cpp \
 				kexiquerydesignerguieditor.cpp
@@ -14,7 +15,7 @@ kexihandler_relation_la_SOURCES = kexirelationhandler.cpp kexirelationhandlerpro
 kexihandler_relation_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module
 kexihandler_relation_la_LIBADD = ../core/libkexicore.la
 
-SUBDIRS = . 
+SUBDIRS = . kugar
 #SUBDIRS = . forms
 
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
@@ -41,7 +42,8 @@ KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
 # set the include path for X, qt and KDE - all_includes must remain last!
 INCLUDES= $(KOFFICE_INCLUDES) -I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi \
-		-I$(top_srcdir)/kexi/widget -I$(top_srcdir)/kexi/tableview $(all_includes)
+		-I$(top_srcdir)/kexi/widget -I$(top_srcdir)/kexi/tableview \
+		-I$(top_srcdir)/kexi/kexiDB $(all_includes)
 
 METASOURCES = AUTO
 

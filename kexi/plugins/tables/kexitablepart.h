@@ -21,11 +21,12 @@
 #define KEXITABLEPART_H
 
 #include "kexiprojecthandler.h"
+#include "kexidataprovider.h"
 
 class QPixmap;
 class KexiTablePartProxy;
 
-class KexiTablePart : public KexiProjectHandler
+class KexiTablePart : public KexiProjectHandler, public KexiDataProvider
 {
 	Q_OBJECT
 
@@ -48,6 +49,10 @@ class KexiTablePart : public KexiProjectHandler
 		virtual QPixmap				itemPixmap();
 
 		void				getTables();
+
+        	virtual QStringList datasets(){}
+	        virtual QStringList fields(const QString& identifier){}
+        	virtual KexiDBRecord *records(const QString& identifier);
 
 };
 

@@ -64,9 +64,9 @@ KexiTablePartProxy::itemContext(const QString& identifier)
 {
         kdDebug() << "KexiTablePart::itemContext()" << endl;
         KexiPartPopupMenu *m = new KexiPartPopupMenu(this);
-        m->insertAction(i18n("Open Table"), SLOT(slotOpen(QString)));
-        m->insertAction(i18n("Alter Table"), SLOT(slotAlter(QString)));
-        m->insertAction(i18n("Delete Table"), SLOT(slotDrop(QString)));
+        m->insertAction(i18n("Open Table"), SLOT(slotOpen(const QString&)));
+        m->insertAction(i18n("Alter Table"), SLOT(slotAlter(const QString&)));
+        m->insertAction(i18n("Delete Table"), SLOT(slotDrop(const QString&)));
 
         return m;
 }
@@ -91,7 +91,7 @@ KexiTablePartProxy::slotCreate()
 }
 
 void
-KexiTablePartProxy::slotOpen(QString identifier)
+KexiTablePartProxy::slotOpen(const QString& identifier)
 {
         kdDebug() << "KexiTablePartProxy::slotOpen(): indentifier = " << identifier << endl;
         kdDebug() << "KexiTablePartProxy::slotOpen(): kexiView = " << kexiView() << endl;
@@ -110,14 +110,14 @@ KexiTablePartProxy::slotOpen(QString identifier)
 }
 
 void
-KexiTablePartProxy::slotAlter(QString identifier)
+KexiTablePartProxy::slotAlter(const QString& identifier)
 {
         KexiAlterTable* kat = new KexiAlterTable(kexiView(), 0, identifier, "alterTable");
         kat->show();
 }
 
 void
-KexiTablePartProxy::slotDrop(QString identifier)
+KexiTablePartProxy::slotDrop(const QString& identifier)
 {
         int ans = KMessageBox::questionYesNo(kexiView(),
                 i18n("Do you realy want to delete %1?").arg(identifier), i18n("Delete Table?"));
