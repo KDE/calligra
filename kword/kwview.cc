@@ -5272,13 +5272,7 @@ void KWView::goToFootEndNote()
             int index = var->index();
             KWTextDocument *textDoc = static_cast<KWTextDocument *>(var->textDocument());
             KWTextFrameSet *frameSet =textDoc->textFrameSet();
-            m_gui->canvasWidget()->checkCurrentTextEdit(frameSet);
-            KWTextFrameSetEdit * edit = currentTextEdit();
-            if ( edit )
-            {
-                edit->setCursor( parag, index );
-            }
-
+            m_gui->canvasWidget()->editTextFrameSet( frameSet, parag, index );
         }
     }
 }
