@@ -37,7 +37,7 @@
 
 #ifdef HAVE_KARBONTEXT
 
-#include <freetype2/freetype/freetype.h>
+#include <ft2build.h>
 #include <fontconfig/fontconfig.h>
 
 
