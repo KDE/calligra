@@ -37,23 +37,11 @@
 #include <units.h>
 #include <PStateManager.h>
 #include <klocale.h>
-
-#include <list>
-#include <algorithm>
+#include <kdebug.h>
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-
-/*
-using namespace std;
-
-struct is_a : public binary_function<GObject*, const char*, bool> {
-  bool operator () (GObject* obj, const char* tname) {
-    return obj->isA (tname);
-  }
-};
-*/
 
 struct finalize_obj {
   void operator () (GObject* obj) {
@@ -275,20 +263,36 @@ void SelectionTool::processButtonReleaseEvent (QMouseEvent *me,
     Rect box = doc->boundingBoxForSelection ();
     MeasurementUnit unit =
       PStateManager::instance ()->defaultMeasurementUnit ();
-    const char *u = unitToString (unit);
+    QString u = unitToString (unit);
     float x, y, w, h;
     x = cvtPtToUnit (unit, box.x ());
     y = cvtPtToUnit (unit, box.y ());
     w = cvtPtToUnit (unit, box.width ());
     h = cvtPtToUnit (unit, box.height ());
     if (doc->selectionCount () > 1) {
-      sprintf (msgbuf, "%s [%.3f %s, %.3f %s, %.3f %s, %.3f %s]",
-               (const char*)i18n("Multiple Selection"), x, u, y, u, w, u, h, u);
+        msgbuf=i18n("Multiple Selection");
+        msgbuf+=" [";
+        msgbuf+=QString::number(x, 'f', 3);
+        msgbuf+=QString(" ") + u + QString(", ");
+        msgbuf+=QString::number(y, 'f', 3);
+        msgbuf+=QString(" ") + u + QString(", ");
+        msgbuf+=QString::number(w, 'f', 3);
+        msgbuf+=QString(" ") + u + QString(", ");
+        msgbuf+=QString::number(h, 'f', 3);
+        msgbuf+=QString(" ") + u + QString("]");
     }
     else {
-      GObject *sobj = doc->getSelection ().front ();
-      sprintf (msgbuf, "%s [%.3f %s, %.3f %s, %.3f %s, %.3f %s]",
-               (const char*)i18n(sobj->typeName ()), x, u, y, u, w, u, h, u);
+      GObject *sobj = doc->getSelection ().first();
+      msgbuf=i18n(sobj->typeName ());
+      msgbuf+=" [";
+      msgbuf+=QString::number(x, 'f', 3);
+      msgbuf+=QString(" ") + u + QString(", ");
+      msgbuf+=QString::number(y, 'f', 3);
+      msgbuf+=QString(" ") + u + QString(", ");
+      msgbuf+=QString::number(w, 'f', 3);
+      msgbuf+=QString(" ") + u + QString(", ");
+      msgbuf+=QString::number(h, 'f', 3);
+      msgbuf+=QString(" ") + u + QString("]");
     }
     emit modeSelected (msgbuf);
   }
@@ -495,14 +499,14 @@ void SelectionTool::processButtonPressEvent (QMouseEvent *me, GDocument *doc,
           // a ugly workaround, because cliparts cannot be rotated (WHY NOT ?)
           //
           if (doc->selectionCount () == 1) {
-            GObject* selObj = doc->getSelection ().front ();
+            GObject* selObj = doc->getSelection ().first();
             if (selObj->isA ("GClipart")) {
               // the selected object is a clipart,
               // so don't show rotation handles
               return;
             }
             else if (selObj->isA ("GPart")) {
-              cout << "activate part !!!" << endl;
+              kdDebug() << "activate part !!!" << endl;
               state = S_Inactive;
               emit partSelected (selObj);
               return;
@@ -593,7 +597,7 @@ void SelectionTool::processKeyPressEvent (QKeyEvent *ke, GDocument *doc,
     dy = (shift ? small_step : big_step);
     break;
   case Key_Tab:
-      //cout << "<tab>" << endl;
+      kdDebug() << "<tab>" << endl;
   default:
     break;
   }
@@ -615,17 +619,17 @@ void SelectionTool::translate (GDocument* doc, Canvas* canvas,
   if (dx == 0 && dy == 0)  return;
 
   if (permanent) {
-    for_each (doc->getSelection ().begin (), doc->getSelection ().end (),
-              finalize_obj ());
+      QListIterator<GObject> it(doc->getSelection());
+      for( ; it.current(); ++it)
+          (*it)->setWorkInProgress (false);
     TranslateCmd *cmd = new TranslateCmd (doc, dx, dy);
     history->addCommand (cmd, true);
   }
   else {
-    list<GObject*>::iterator it;
+    QListIterator<GObject> it(doc->getSelection());
     QWMatrix m;
     m.translate (dx, dy);
-    for (it = doc->getSelection ().begin ();
-         it != doc->getSelection ().end (); it++) {
+    for ( ; it.current(); ++it) {
       (*it)->setWorkInProgress (true);
       (*it)->initTmpMatrix ();
       (*it)->ttransform (m, true);
@@ -634,13 +638,17 @@ void SelectionTool::translate (GDocument* doc, Canvas* canvas,
 
   MeasurementUnit unit =
     PStateManager::instance ()->defaultMeasurementUnit ();
-  const char *u = unitToString (unit);
+  QString u = unitToString (unit);
   float xval, yval;
   xval = cvtPtToUnit (unit, dx);
   yval = cvtPtToUnit (unit, dy);
 
-  sprintf (msgbuf, "%s [%.3f %s, %.3f %s]",
-           (const char*)i18n("Translate"), xval, u, yval, u);
+  msgbuf=i18n("Translate");
+  msgbuf+=" [";
+  msgbuf+=QString::number(xval, 'f', 3);
+  msgbuf+=QString(" ") + u + QString(", ");
+  msgbuf+=QString::number(yval, 'f', 3);
+  msgbuf+=QString(" ") + u + QString("]");
   emit modeSelected (msgbuf);
 }
 
@@ -675,10 +683,11 @@ void SelectionTool::rotate (GDocument* doc, float , float ,
   if (angle>180.0) angle-=360.0;
 
   if (permanent) {
-    for_each (doc->getSelection ().begin (), doc->getSelection ().end (),
-              finalize_obj ());
-    RotateCmd *cmd = new RotateCmd (doc, rotCenter, angle);
-    history->addCommand (cmd, true);
+      QListIterator<GObject> it(doc->getSelection());
+      for( ; it.current(); ++it)
+          (*it)->setWorkInProgress(false);
+      RotateCmd *cmd = new RotateCmd (doc, rotCenter, angle);
+      history->addCommand (cmd, true);
   }
   else {
     QWMatrix m1, m2, m3;
@@ -686,8 +695,7 @@ void SelectionTool::rotate (GDocument* doc, float , float ,
     m2.rotate (angle);
     m3.translate (rotCenter.x (), rotCenter.y ());
 
-    for (list<GObject*>::iterator it = doc->getSelection ().begin ();
-         it != doc->getSelection ().end (); it++) {
+    for (QListIterator<GObject> it(doc->getSelection()); it.current(); ++it) {
       (*it)->setWorkInProgress (true);
       (*it)->initTmpMatrix ();
       (*it)->ttransform (m1);
@@ -697,13 +705,19 @@ void SelectionTool::rotate (GDocument* doc, float , float ,
   }
   MeasurementUnit unit =
     PStateManager::instance ()->defaultMeasurementUnit ();
-  const char *u = unitToString (unit);
+  QString u = unitToString (unit);
   float xval, yval;
   xval = cvtPtToUnit (unit, rotCenter.x ());
   yval = cvtPtToUnit (unit, rotCenter.y ());
 
-  sprintf (msgbuf, "%s [%.3f - %.3f %s, %.3f %s]",
-           (const char*)i18n("Rotate"), angle, xval, u, yval, u);
+  msgbuf=i18n("Rotate");
+  msgbuf+=" [";
+  msgbuf+=QString::number(angle, 'f', 3);
+  msgbuf+=QString(" - ");
+  msgbuf+=QString::number(xval, 'f', 3);
+  msgbuf+=QString(" ") + u + QString(", ");
+  msgbuf+=QString::number(yval, 'f', 3);
+  msgbuf+=QString(" ") + u + QString("]");
   emit modeSelected (msgbuf);
 }
 
@@ -736,10 +750,11 @@ void SelectionTool::scale (GDocument* doc, Canvas* canvas,
     yback = r.top () + r.height () * (1 - sy);
   }
   if (permanent) {
-    for_each (doc->getSelection ().begin (), doc->getSelection ().end (),
-              finalize_obj ());
-    ScaleCmd *cmd = new ScaleCmd (doc, oldmask, sx, sy, r);
-    history->addCommand (cmd, true);
+      QListIterator<GObject> it(doc->getSelection());
+      for( ; it.current(); ++it)
+          (*it)->setWorkInProgress(false);
+      ScaleCmd *cmd = new ScaleCmd (doc, oldmask, sx, sy, r);
+      history->addCommand (cmd, true);
   }
   else {
     QWMatrix m1, m2, m3;
@@ -748,8 +763,7 @@ void SelectionTool::scale (GDocument* doc, Canvas* canvas,
     m2.scale (sx, sy);
     m3.translate (xback, yback);
 
-    for (list<GObject*>::iterator it = doc->getSelection ().begin ();
-         it != doc->getSelection ().end (); it++) {
+    for (QListIterator<GObject> it(doc->getSelection ()); it.current(); ++it) {
       (*it)->setWorkInProgress (true);
       (*it)->initTmpMatrix ();
 
@@ -758,8 +772,12 @@ void SelectionTool::scale (GDocument* doc, Canvas* canvas,
       (*it)->ttransform (m3, true);
     }
   }
-  sprintf (msgbuf, "%s [%.3f %%, %.3f %%]",
-           (const char *)i18n("Scale"), sx * 100.0, sy * 100.0);
+  msgbuf=i18n("Scale");
+  msgbuf+=" [";
+  msgbuf+=QString::number(sx * 100.0, 'f', 3);
+  msgbuf+=QString(" %, ");
+  msgbuf+=QString::number(sy * 100.0, 'f', 3);
+  msgbuf+=QString(" %]");
   emit modeSelected (msgbuf);
 }
 
@@ -777,10 +795,11 @@ void SelectionTool::shear (GDocument* doc, int mask, float dx, float dy,
     sy = dy / r.height ();
 
   if (permanent) {
-    for_each (doc->getSelection ().begin (), doc->getSelection ().end (),
-              finalize_obj ());
-    ShearCmd *cmd = new ShearCmd (doc, rotCenter, sx, sy);
-    history->addCommand (cmd, true);
+      QListIterator<GObject> it(doc->getSelection());
+      for( ; it.current(); ++it)
+          (*it)->setWorkInProgress(false);
+      ShearCmd *cmd = new ShearCmd (doc, rotCenter, sx, sy);
+      history->addCommand (cmd, true);
   }
   else {
     QWMatrix m1, m2, m3;
@@ -789,8 +808,7 @@ void SelectionTool::shear (GDocument* doc, int mask, float dx, float dy,
     m2.shear (sx, sy);
     m3.translate (rotCenter.x (), rotCenter.y ());
 
-    for (list<GObject*>::iterator it = doc->getSelection ().begin ();
-         it != doc->getSelection ().end (); it++) {
+    for (QListIterator<GObject> it(doc->getSelection()); it.current(); ++it) {
       (*it)->setWorkInProgress (true);
       (*it)->initTmpMatrix ();
 
@@ -799,8 +817,12 @@ void SelectionTool::shear (GDocument* doc, int mask, float dx, float dy,
       (*it)->ttransform (m3, true);
     }
   }
-  sprintf (msgbuf, "%s [%.3f %%, %.3f %%]",
-           (const char*)i18n("Shear"), sx * 100.0, sy * 100.0);
+  msgbuf=i18n("Shear");
+  msgbuf+=" [";
+  msgbuf+=QString::number(sx * 100.0, 'f', 3);
+  msgbuf+=QString(" %, ");
+  msgbuf+=QString::number(sy * 100.0, 'f', 3);
+  msgbuf+=QString(" %]");
   emit modeSelected (msgbuf);
 }
 
@@ -841,14 +863,29 @@ void SelectionTool::activate (GDocument* doc, Canvas*) {
     w = cvtPtToUnit (unit, box.width ());
     h = cvtPtToUnit (unit, box.height ());
     if (doc->selectionCount () > 1) {
-      sprintf (msgbuf, "%s [%.3f %s, %.3f %s, %.3f %s, %.3f %s]",
-               (const char *)i18n("Multiple Selection"), x, u, y, u, w, u, h, u);
+        msgbuf=i18n("Multiple Selection");
+        msgbuf+=" [";
+        msgbuf+=QString::number(x, 'f', 3);
+        msgbuf+=QString(" ") + u + QString(", ");
+        msgbuf+=QString::number(y, 'f', 3);
+        msgbuf+=QString(" ") + u + QString(", ");
+        msgbuf+=QString::number(w, 'f', 3);
+        msgbuf+=QString(" ") + u + QString(", ");
+        msgbuf+=QString::number(h, 'f', 3);
+        msgbuf+=QString(" ") + u + QString("]");
     }
     else {
-      GObject *sobj = doc->getSelection ().front ();
-      sprintf (msgbuf, "%s [%.3f %s, %.3f %s, %.3f %s, %.3f %s]",
-               sobj->typeName ().ascii ()
-               , x, u, y, u, w, u, h, u);
+      GObject *sobj = doc->getSelection ().first();
+      msgbuf=i18n(sobj->typeName ());
+      msgbuf+=" [";
+      msgbuf+=QString::number(x, 'f', 3);
+      msgbuf+=QString(" ") + u + QString(", ");
+      msgbuf+=QString::number(y, 'f', 3);
+      msgbuf+=QString(" ") + u + QString(", ");
+      msgbuf+=QString::number(w, 'f', 3);
+      msgbuf+=QString(" ") + u + QString(", ");
+      msgbuf+=QString::number(h, 'f', 3);
+      msgbuf+=QString(" ") + u + QString("]");
     }
     emit modeSelected (msgbuf);
   }

@@ -25,6 +25,7 @@
 #include <klocale.h>
 #include <GLayer.h>
 #include <GDocument.h>
+#include <GObject.h>
 
 int GLayer::lastID = 0;
 

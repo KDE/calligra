@@ -23,8 +23,10 @@
 */
 
 #include <qfile.h>
-#include "KilluImport.h"
-#include "GGroup.h"
+#include <qdom.h>
+#include <KilluImport.h>
+#include <GGroup.h>
+#include <GLayer.h>
 
 KilluImport::KilluImport () {
 }
@@ -60,8 +62,8 @@ bool KilluImport::importFromFile (GDocument *doc) {
             group->addObject (obj);
         }
 #else
-        for (vector<GLayer*>::const_iterator li = tmpDoc->getLayers ().begin ();
-             li != tmpDoc->getLayers ().end (); li++) {
+        for (QListIterator<GLayer> li(tmpDoc->getLayers());
+             li.current(); ++li) {
             if ((*li)->isVisible ()) {
                 QList<GObject>& contents = (*li)->objects ();
                 for (QListIterator<GObject> oi(contents); oi.current(); ++oi) {

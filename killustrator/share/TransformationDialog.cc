@@ -330,8 +330,7 @@ void TransformationDialog::translate (bool onDuplicate) {
     QList<GObject> duplicates;
     duplicates.setAutoDelete (false);
 
-    for (list<GObject*>::iterator it = document->getSelection ().begin ();
-         it != document->getSelection ().end (); it++) {
+    for(QListIterator<GObject> it(document->getSelection()); it.current(); ++it) {
       GObject* obj = (*it)->copy ();
       QWMatrix m;
       m.translate (xval, yval);
@@ -371,8 +370,7 @@ void TransformationDialog::scale (bool onDuplicate) {
     QList<GObject> duplicates;
     duplicates.setAutoDelete (false);
 
-    for (list<GObject*>::iterator it = document->getSelection ().begin ();
-         it != document->getSelection ().end (); it++) {
+    for (QListIterator<GObject> it(document->getSelection()); it.current(); ++it) {
       GObject* obj = (*it)->copy ();
       QWMatrix m1, m2, m3;
 
@@ -412,8 +410,7 @@ void TransformationDialog::rotate (bool onDuplicate) {
     QList<GObject> duplicates;
     duplicates.setAutoDelete (false);
 
-    for (list<GObject*>::iterator it = document->getSelection ().begin ();
-         it != document->getSelection ().end (); it++) {
+    for (QListIterator<GObject> it(document->getSelection()); it.current(); ++it) {
       GObject* obj = (*it)->copy ();
       QWMatrix m1, m2, m3;
       m1.translate (-xcenter, -ycenter);
@@ -448,8 +445,7 @@ void TransformationDialog::mirror (bool onDuplicate) {
     QList<GObject> duplicates;
     duplicates.setAutoDelete (false);
 
-    for (list<GObject*>::iterator it = document->getSelection ().begin ();
-         it != document->getSelection ().end (); it++) {
+    for (QListIterator<GObject> it(document->getSelection()); it.current(); ++it) {
       GObject* obj = (*it)->copy ();
       QWMatrix m1, m2, m3;
 

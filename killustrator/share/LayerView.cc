@@ -57,12 +57,12 @@ LayerView::~LayerView () {
 
 void LayerView::setActiveDocument (GDocument* doc) {
   document = doc;
-  showLayers (document->getLayers ());
+  showLayers(document->getLayers ());
 }
 
-void LayerView::showLayers (const vector<GLayer*>& lvec) {
+void LayerView::showLayers (const QList<GLayer>& lvec) {
   layers = lvec;
-  setNumRows (layers.size ());
+  setNumRows (layers.count());
   updateTableSize ();
   repaint ();
 }
@@ -76,7 +76,7 @@ int LayerView::cellHeight (int) {
 }
 
 void LayerView::paintCell (QPainter *p, int row, int col) {
-  GLayer* layer = layers[numRows () - 1 - row];
+  GLayer* layer = layers.at(numRows () - 1 - row);
   bool rowIsActive = (document->activeLayer () == layer);
 
   p->save ();
@@ -164,7 +164,7 @@ void LayerView::mousePressEvent (QMouseEvent *event) {
       lineEditor->hide ();
     }
     else {
-      GLayer* layer = layers[numRows () - 1 - row];
+      GLayer* layer = layers.at(numRows () - 1 - row);
 
       switch (col) {
       case 0:
@@ -188,7 +188,7 @@ void LayerView::mousePressEvent (QMouseEvent *event) {
 }
 
 void LayerView::lineEditorSlot () {
-  GLayer* layer = layers[numRows () - 1 - editorRow];
+  GLayer* layer = layers.at(numRows () - 1 - editorRow);
   layer->setName (lineEditor->text ());
   lineEditor->setEnabled (false);
   lineEditor->hide ();

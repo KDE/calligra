@@ -35,8 +35,6 @@
  * - line styles
  * - arrows
  */
-#include <fstream.h>
-#include <strstream.h>
 #include <GDocument.h>
 #include <SVGExport.h>
 
@@ -48,9 +46,11 @@
 #include <GGroup.h>
 #include <GText.h>
 #include <GPixmap.h>
+#include <GLayer.h>
 
 //#include <stdio.h>
 #include <qfile.h>
+#include <qdom.h>
 #include <qtextstream.h>
 #include <kdebug.h>
 
@@ -75,9 +75,8 @@ bool SVGExport::exportToFile (GDocument* doc) {
     document.appendChild(svg);
 
     // contents
-    const vector<GLayer*>& layers = doc->getLayers ();
-    for (vector<GLayer*>::const_iterator li = layers.begin ();
-         li != layers.end (); li++) {
+    for(QListIterator<GLayer> li(doc->getLayers());
+         li.current(); ++li) {
         if ((*li)->isInternal ())
             continue;
 

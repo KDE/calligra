@@ -107,8 +107,7 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc,
     pointIdx = -1;
     // for performance reasons check if an object from the selection
     // has to be edited
-    for (list<GObject*>::iterator it = doc->getSelection ().begin ();
-         it != doc->getSelection ().end (); it++) {
+    for (QListIterator<GObject>it(doc->getSelection()); it.current(); ++it) {
       GObject* o = *it;
       int idx = o->getNeighbourPoint (Coord (xpos, ypos));
       if (idx != -1) {
@@ -145,8 +144,7 @@ void EditPointTool::processEvent (QEvent* e, GDocument *doc,
       bool isOver = false;
       int pidx;
 
-      for (list<GObject*>::iterator it = doc->getSelection ().begin ();
-           it != doc->getSelection ().end (); it++) {
+      for (QListIterator<GObject> it(doc->getSelection()); it.current(); ++it) {
         GObject* o = *it;
         if ((pidx = o->getNeighbourPoint (Coord (xpos, ypos))) != -1) {
           if (mode == RemovePoint && o->isA ("GBezier")) {

@@ -50,11 +50,11 @@ void DistributeCmd::execute () {
 
   ObjectManipCmd::execute ();
 
-  const list<GObject*>& objs = document->getSelection ();
+  QList<GObject>& objs = document->getSelection ();
 
-  firstObj = objs.front ();
-  lastObj = objs.back ();
-  list<GObject*>::const_iterator it = objs.begin ();
+  firstObj = objs.first();
+  lastObj = objs.last();
+  QListIterator<GObject> it(objs);
 
   switch (hDistrib) {
   case HDistrib_Left:
@@ -71,7 +71,7 @@ void DistributeCmd::execute () {
   case HDistrib_Distance:
     {
       float w = 0;
-      for (; it != objs.end (); it++)
+      for (; it.current(); ++it)
         w += (*it)->boundingBox ().width ();
       xoff = (box.width () - w) / (document->selectionCount () - 1);
       xpos = box.left ();
@@ -105,7 +105,7 @@ void DistributeCmd::execute () {
   case VDistrib_Distance:
     {
       float h = 0;
-      for (; it != objs.end (); it++)
+      for (; it.current(); ++it)
         h += (*it)->boundingBox ().height ();
       yoff = (box.height () - h) / (document->selectionCount () - 1);
       ypos = box.top ();
@@ -115,7 +115,7 @@ void DistributeCmd::execute () {
     break;
   }
 
-  for (; it != objs.end (); it++) {
+  for (; it.current(); ++it) {
     GObject *obj = *it;
     Rect obox = obj->boundingBox ();
     float dx = 0, dy = 0;

@@ -36,8 +36,7 @@ GroupCmd::GroupCmd (GDocument* doc) : Command(i18n("Group Objects")) {
 
   QMap<int, GObject*> idx_map;
 
-  for (list<GObject*>::iterator it = doc->getSelection ().begin ();
-       it != doc->getSelection ().end (); it++) {
+  for (QListIterator<GObject> it(doc->getSelection()); it.current(); ++it) {
     // remember position of object in order to keep the order of
     // objects in the group
     GObject* o = *it;

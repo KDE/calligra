@@ -25,7 +25,7 @@
 #ifndef HelplineDialog_h_
 #define HelplineDialog_h_
 
-#include <vector>
+#include <qvaluelist.h>
 #include <kdialogbase.h>
 
 class Canvas;
@@ -63,7 +63,7 @@ private:
   Canvas *canvas;
   UnitBox *horizValue, *vertValue;
   QListBox *horizList, *vertList;
-  vector<float> horizLines, vertLines;
+  QValueList<float> horizLines, vertLines;
 };
 
 #endif

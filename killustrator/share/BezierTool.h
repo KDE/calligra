@@ -27,7 +27,6 @@
 
 #include <Tool.h>
 
-class QEvent;
 class GBezier;
 
 class BezierTool : public Tool {

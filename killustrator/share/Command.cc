@@ -31,8 +31,8 @@ ObjectManipCmd::ObjectManipCmd (GDocument* doc, const QString& name) :
   objects.resize (doc->selectionCount ());
   states.resize (doc->selectionCount ());
 
-  list<GObject*>::iterator it = doc->getSelection ().begin ();
-  for (unsigned int i = 0; it != doc->getSelection ().end (); it++, i++) {
+  QListIterator<GObject> it(doc->getSelection());
+  for (unsigned int i = 0; it.current(); ++it, ++i) {
     (*it)->ref ();
     objects.insert (i, (*it));
     states.insert (i, 0L);

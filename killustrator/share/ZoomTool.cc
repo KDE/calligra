@@ -33,13 +33,7 @@ ZoomTool::ZoomTool (CommandHistory* history) : Tool (history) {
 
 void ZoomTool::processEvent (QEvent* e, GDocument */*doc*/,
                              Canvas* canvas) {
-  if (e->type () ==
-#if QT_VERSION >= 199
-      QEvent::MouseButtonRelease
-#else
-      Event_MouseButtonRelease
-#endif
-      ) {
+  if (e->type () == QEvent::MouseButtonRelease) {
     QMouseEvent *me = (QMouseEvent *) e;
     if (me->button () == LeftButton)
       canvas->zoomIn (me->x (), me->y ());

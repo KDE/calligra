@@ -367,47 +367,47 @@ void KIllustratorView::setupCanvas()
     SelectionTool* selTool;
     tcontroller->registerTool (ID_TOOL_SELECT,
                                selTool = new SelectionTool (&cmdHistory));
-    QObject::connect (selTool, SIGNAL(modeSelected(const char*)),
-                      this, SLOT(showCurrentMode(const char*)));
+    QObject::connect (selTool, SIGNAL(modeSelected(const QString&)),
+                      this, SLOT(showCurrentMode(const QString&)));
     //  QObject::connect (selTool, SIGNAL(partSelected(GObject*)),
     //                this, SLOT(activatePart(GObject*)));
     tcontroller->registerTool (ID_TOOL_EDITPOINT,
                                editPointTool = new EditPointTool (&cmdHistory));
-    QObject::connect (editPointTool, SIGNAL(modeSelected(const char*)),
-                      this, SLOT(showCurrentMode(const char*)));
+    QObject::connect (editPointTool, SIGNAL(modeSelected(const QString&)),
+                      this, SLOT(showCurrentMode(const QString&)));
     Tool* tool;
     tcontroller->registerTool (ID_TOOL_FREEHAND,
                                tool = new FreeHandTool (&cmdHistory));
-    QObject::connect (tool, SIGNAL(modeSelected(const char*)),
-                      this, SLOT(showCurrentMode(const char*)));
+    QObject::connect (tool, SIGNAL(modeSelected(const QString&)),
+                      this, SLOT(showCurrentMode(const QString&)));
     tcontroller->registerTool (ID_TOOL_LINE,
                                tool = new PolylineTool (&cmdHistory));
-    QObject::connect (tool, SIGNAL(modeSelected(const char*)),
-                      this, SLOT(showCurrentMode(const char*)));
+    QObject::connect (tool, SIGNAL(modeSelected(const QString&)),
+                      this, SLOT(showCurrentMode(const QString&)));
     tcontroller->registerTool (ID_TOOL_BEZIER,
                                tool = new BezierTool (&cmdHistory));
-    QObject::connect (tool, SIGNAL(modeSelected(const char*)),
-                      this, SLOT(showCurrentMode(const char*)));
+    QObject::connect (tool, SIGNAL(modeSelected(const QString&)),
+                      this, SLOT(showCurrentMode(const QString&)));
     tcontroller->registerTool (ID_TOOL_RECTANGLE,
                                tool = new RectangleTool (&cmdHistory));
-    QObject::connect (tool, SIGNAL(modeSelected(const char*)),
-                      this, SLOT(showCurrentMode(const char*)));
+    QObject::connect (tool, SIGNAL(modeSelected(const QString&)),
+                      this, SLOT(showCurrentMode(const QString&)));
     tcontroller->registerTool (ID_TOOL_POLYGON,
                                tool = new PolygonTool (&cmdHistory));
-    QObject::connect (tool, SIGNAL(modeSelected(const char*)),
-                      this, SLOT(showCurrentMode(const char*)));
+    QObject::connect (tool, SIGNAL(modeSelected(const QString&)),
+                      this, SLOT(showCurrentMode(const QString&)));
     tcontroller->registerTool (ID_TOOL_ELLIPSE,
                                tool = new OvalTool (&cmdHistory));
-    QObject::connect (tool, SIGNAL(modeSelected(const char*)),
-                      this, SLOT(showCurrentMode(const char*)));
+    QObject::connect (tool, SIGNAL(modeSelected(const QString&)),
+                      this, SLOT(showCurrentMode(const QString&)));
     tcontroller->registerTool (ID_TOOL_TEXT,
                                tool = new TextTool (&cmdHistory));
-    QObject::connect (tool, SIGNAL(modeSelected(const char*)),
-                      this, SLOT(showCurrentMode(const char*)));
+    QObject::connect (tool, SIGNAL(modeSelected(const QString&)),
+                      this, SLOT(showCurrentMode(const QString&)));
     tcontroller->registerTool (ID_TOOL_ZOOM,
                                tool = new ZoomTool (&cmdHistory));
-    QObject::connect (tool, SIGNAL(modeSelected(const char*)),
-                      this, SLOT(showCurrentMode(const char*)));
+    QObject::connect (tool, SIGNAL(modeSelected(const QString&)),
+                      this, SLOT(showCurrentMode(const QString&)));
 
     tcontroller->registerTool (ID_TOOL_PATHTEXT,
                                tool = new PathTextTool (&cmdHistory));
@@ -429,7 +429,7 @@ void KIllustratorView::setupCanvas()
     mainWidget = w;
 }
 
-void KIllustratorView::showCurrentMode (const char* ) {
+void KIllustratorView::showCurrentMode (const QString& ) {
     //  statusbar->changeItem (msg, 2);
 }
 /*
@@ -705,8 +705,6 @@ void KIllustratorView::slotImport()
     QString fname = QFileDialog::getOpenFileName (lastImportDir, filter, this);
 #else
     KURL url = KFileDialog::getOpenURL( lastImportDir, filter, this );
-    if ( url.isEmpty() )
-        return;
     if (!url.isLocalFile())
         KMessageBox::sorry( 0, i18n("Remote URLs not supported") );
     QString fname = url.path();

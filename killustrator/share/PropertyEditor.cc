@@ -86,8 +86,7 @@ PropertyEditor::PropertyEditor (CommandHistory* history, GDocument* doc,
     haveRectangleObjects = false;
 
     if (haveObjects) {
-        for (list<GObject*>::iterator it = document->getSelection ().begin ();
-             it != document->getSelection ().end (); it++) {
+        for (QListIterator<GObject> it(document->getSelection()); it.current(); ++it) {
             GObject* o = *it;
             if (o->isA ("GText"))
                 haveTextObjects = true;
@@ -451,7 +450,7 @@ void PropertyEditor::readProperties () {
     ustr+=unitToString (munit);
 
     if (document->selectionCount () == 1) {
-        GObject* object = document->getSelection ().front ();
+        GObject* object = document->getSelection().first();
         // Info tab
         Rect boundingBox = object->boundingBox ();
         infoLabel[0]->setText (QString (object->typeName ()));

@@ -47,7 +47,7 @@ class KFontChooser;
 
 // This *huge* class is needed to present the preview pixmap.
 // It is simply a plain Widget which tries to get all the free
-// space it can get (in x and y direction).
+// space it can get (in x and y direction). (Werner)
 class PWidget : public QWidget {
 
 public:

@@ -22,8 +22,8 @@
 
 */
 
-#include <iostream.h>
-#include <fstream.h>
+#include <Canvas.h>
+
 #include <assert.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -35,30 +35,34 @@
 #include <qcolor.h>
 #include <qdatetime.h>
 #include <qtimer.h>
-#include "Canvas.h"
-#include "Canvas.moc"
-#include "GDocument.h"
-#include "Handle.h"
-#include "ToolController.h"
-#include "QwViewport.h"
+
+#include <GDocument.h>
+#include <Handle.h>
+#include <ToolController.h>
+#include <QwViewport.h>
 #include <kconfig.h>
 #include <kapp.h>
 
-#include "GPolyline.h" // for NEAR_DISTANCE
-#include "SelectionTool.h"
+#include <GPolyline.h> // for NEAR_DISTANCE
+#include <GLayer.h>
+#include <SelectionTool.h>
 
-//QArray<float> Canvas::zoomFactors;
+//#include <qdict.h>
+//#include <qpainter.h>
+
+//#include <qpixmap.h>
+//#include <qfont.h>
 
 Canvas::Canvas (GDocument* doc, float res, QwViewport* vp, QWidget* parent,
                 const char* name) : QWidget (parent, name) {
-  zoomFactors.push_back (0.5);
-  zoomFactors.push_back (1.0);
-  zoomFactors.push_back (1.5);
-  zoomFactors.push_back (2.0);
-  zoomFactors.push_back (4.0);
-  zoomFactors.push_back (6.0);
-  zoomFactors.push_back (8.0);
-  zoomFactors.push_back (10.0);
+  zoomFactors.append(0.5);
+  zoomFactors.append(1.0);
+  zoomFactors.append(1.5);
+  zoomFactors.append(2.0);
+  zoomFactors.append(4.0);
+  zoomFactors.append(6.0);
+  zoomFactors.append(8.0);
+  zoomFactors.append(10.0);
 
   document = doc;
   resolution = res;
@@ -120,12 +124,6 @@ void Canvas::calculateSize () {
   updateView ();
   emit sizeChanged ();
 }
-
-/*
-void Canvas::initZoomFactors (QArray<float>& factors) {
-  zoomFactors.duplicate (factors);
-}
-*/
 
 void Canvas::setZoomFactor (float factor) {
   zoomFactor = factor;
@@ -220,8 +218,8 @@ float Canvas::snapXPositionToGrid (float pos) {
 
   if (helplinesSnapIsOn) {
     // try to snap to help lines
-    vector<float>::iterator i;
-    for (i = vertHelplines.begin (); i != vertHelplines.end (); i++) {
+    QValueList<float>::Iterator i;
+    for (i = vertHelplines.begin (); i != vertHelplines.end (); ++i) {
       if (fabs (*i - pos) <= 10.0) {
         pos = *i;
         snap = true;
@@ -244,8 +242,8 @@ float Canvas::snapYPositionToGrid (float pos) {
 
   if (helplinesSnapIsOn) {
     // try to snap to help lines
-    vector<float>::iterator i;
-    for (i = horizHelplines.begin (); i != horizHelplines.end (); i++) {
+    QValueList<float>::Iterator i;
+    for (i = horizHelplines.begin (); i != horizHelplines.end (); ++i) {
       if (fabs (*i - pos) <= 10.0) {
         pos = *i;
         snap = true;
@@ -268,15 +266,15 @@ void Canvas::snapPositionToGrid (float& x, float& y) {
 
   if (helplinesSnapIsOn) {
     // try to snap to help lines
-    vector<float>::iterator i;
-    for (i = horizHelplines.begin (); i != horizHelplines.end (); i++) {
+    QValueList<float>::Iterator i;
+    for (i = horizHelplines.begin (); i != horizHelplines.end (); ++i) {
       if (fabs (*i - y) <= 10.0) {
         y = *i;
         snap = true;
         break;
       }
     }
-    for (i = vertHelplines.begin (); i != vertHelplines.end (); i++) {
+    for (i = vertHelplines.begin (); i != vertHelplines.end (); ++i) {
       if (fabs (*i - x) <= 10.0) {
         x = *i;
         snap = true;
@@ -314,41 +312,16 @@ void Canvas::propagateMouseEvent (QMouseEvent *e) {
 
   // ensure visibility
   if (ensureVisibilityFlag) {
-    if (e->type () ==
-#if QT_VERSION >= 199
-        QEvent::MouseButtonPress
-#else
-        Event_MouseButtonPress
-#endif
-        && e->button () == LeftButton)
+    if (e->type () == QEvent::MouseButtonPress && e->button () == LeftButton)
       dragging = true;
-    else if (e->type () ==
-#if QT_VERSION >= 199
-             QEvent::MouseButtonRelease
-#else
-             Event_MouseButtonRelease
-#endif
-             &&
-             e->button () == LeftButton)
+    else if (e->type () == QEvent::MouseButtonRelease && e->button () == LeftButton)
       dragging = false;
-    else if (e->type () ==
-#if QT_VERSION >= 199
-             QEvent::MouseMove
-#else
-             Event_MouseMove
-#endif
-             && dragging)
+    else if (e->type () == QEvent::MouseMove && dragging)
       viewport->ensureVisible (e->x (), e->y (), 10, 10);
   }
 
   if (e->button () == RightButton &&
-      e->type () ==
-#if QT_VERSION >= 199
-      QEvent::MouseButtonPress
-#else
-      Event_MouseButtonPress
-#endif
-      && ! toolController->getActiveTool ()->consumesRMBEvents ()) {
+      e->type () == QEvent::MouseButtonPress && ! toolController->getActiveTool ()->consumesRMBEvents ()) {
     if (document->selectionIsEmpty ()) {
       GObject* obj = document->findContainingObject (new_pos.x (),
                                                      new_pos.y ());
@@ -584,18 +557,18 @@ void Canvas::updateRegion (const Rect& reg) {
 void Canvas::drawHelplines (QPainter& p) {
   int pw = document->getPaperWidth ();
   int ph = document->getPaperHeight ();
-  unsigned int i;
 
   QPen pen (blue, 0, DashLine);
 
   p.save ();
   p.setPen (pen);
-  for (i = 0; i < horizHelplines.size (); i++) {
-    int hi = qRound (horizHelplines[i]);
+  QValueList<float>::Iterator i;
+  for (i=horizHelplines.begin(); i!=horizHelplines.end(); ++i) {
+    int hi = qRound (*i);
     p.drawLine (0, hi, pw, hi);
   }
-  for (i = 0; i < vertHelplines.size (); i++) {
-    int vi = qRound (vertHelplines[i]);
+  for (i = vertHelplines.begin(); i!=vertHelplines.end(); ++i) {
+    int vi = qRound (*i);
     p.drawLine (vi, 0, vi, ph);
   }
 
@@ -608,7 +581,6 @@ void Canvas::drawHelplines (QPainter& p) {
     int vi = qRound (tmpVertHelpline);
     p.drawLine (vi, 0, vi, ph);
   }
-
   p.restore ();
 }
 
@@ -664,29 +636,29 @@ void Canvas::printDocument () {
 }
 
 void Canvas::zoomIn (int x, int y) {
-  for (unsigned int i = 0; i < zoomFactors.size (); i++) {
-    if (zoomFactors[i] == getZoomFactor ()) {
-      setZoomFactor (zoomFactors[i + 1]);
+  for (QValueList<float>::Iterator i=zoomFactors.begin(); i!=zoomFactors.end(); ++i) {
+    if (*i == getZoomFactor ()) {
+      setZoomFactor(*(++i));
       viewport->centerOn (x, y);
-      emit zoomFactorChanged (zoomFactors[i + 1]);
+      emit zoomFactorChanged(*(++i));
       break;
     }
   }
 }
 
 void Canvas::zoomOut () {
-  for (unsigned int i = 0; i < zoomFactors.size (); i++) {
-    if (zoomFactors[i] == getZoomFactor ()) {
-      setZoomFactor (zoomFactors[i - 1]);
+  for (QValueList<float>::Iterator i=zoomFactors.begin(); i!=zoomFactors.end(); ++i) {
+    if (*i == getZoomFactor ()) {
+      setZoomFactor(*(--i));
       break;
     }
   }
 }
 
 int Canvas::insertZoomFactor (float z) {
-  vector<float>::iterator i;
+  QValueList<float>::Iterator i;
   int pos = 0;
-  for (i = zoomFactors.begin (); i != zoomFactors.end (); i++, pos++) {
+  for (i = zoomFactors.begin (); i != zoomFactors.end (); ++i, pos++) {
     if (*i == z) {
       setZoomFactor (z);
       return pos;
@@ -698,8 +670,8 @@ int Canvas::insertZoomFactor (float z) {
       return pos;
     }
   }
-  zoomFactors.push_back (z);
-  return zoomFactors.size ();
+  zoomFactors.append(z);
+  return zoomFactors.count();
 }
 
 void Canvas::readGridProperties () {
@@ -774,38 +746,38 @@ void Canvas::addHelpline (int x, int y, bool horizH) {
 }
 
 void Canvas::addHorizHelpline  (float pos) {
-  horizHelplines.push_back (pos);
+  horizHelplines.append(pos);
   if (helplinesAreOn)
     updateView ();
   document->setHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
 }
 
 void Canvas::addVertHelpline  (float pos) {
-  vertHelplines.push_back (pos);
+  vertHelplines.append(pos);
   if (helplinesAreOn)
     updateView ();
   document->setHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
 }
 
-void Canvas::setHorizHelplines (const vector<float>& lines) {
+void Canvas::setHorizHelplines (const QValueList<float>& lines) {
   horizHelplines = lines;
   if (helplinesAreOn)
     updateView ();
   document->setHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
 }
 
-void Canvas::setVertHelplines (const vector<float>& lines) {
+void Canvas::setVertHelplines (const QValueList<float>& lines) {
   vertHelplines = lines;
   if (helplinesAreOn)
     updateView ();
   document->setHelplines (horizHelplines, vertHelplines, helplinesSnapIsOn);
 }
 
-const vector<float>& Canvas::getHorizHelplines () const {
+const QValueList<float>& Canvas::getHorizHelplines () const {
   return horizHelplines;
 }
 
-const vector<float>& Canvas::getVertHelplines () const {
+const QValueList<float>& Canvas::getVertHelplines () const {
   return vertHelplines;
 }
 
@@ -834,21 +806,23 @@ bool Canvas::showHelplines () {
 }
 
 int Canvas::indexOfHorizHelpline (float pos) {
-  for (uint i = 0; i < horizHelplines.size (); i++) {
-    if (pos - NEAR_DISTANCE < horizHelplines[i] &&
-        pos + NEAR_DISTANCE > horizHelplines[i])
-      return i;
-  }
-  return -1;
+    int ret=0;
+    for (QValueList<float>::Iterator i = horizHelplines.begin(); i!=horizHelplines.end(); ++i, ++ret) {
+        if (pos - NEAR_DISTANCE < *i &&
+            pos + NEAR_DISTANCE > *i)
+            return ret;
+    }
+    return -1;
 }
 
 int Canvas::indexOfVertHelpline (float pos) {
-  for (unsigned int i = 0; i < vertHelplines.size (); i++) {
-    if (pos - NEAR_DISTANCE < vertHelplines[i] &&
-        pos + NEAR_DISTANCE > vertHelplines[i])
-      return i;
-  }
-  return -1;
+    int ret=0;
+    for (QValueList<float>::Iterator i = vertHelplines.begin(); i!=vertHelplines.end(); ++i, ++ret) {
+        if (pos - NEAR_DISTANCE < *i &&
+            pos + NEAR_DISTANCE > *i)
+            return ret;
+    }
+    return -1;
 }
 
 void Canvas::updateHorizHelpline (int idx, float pos) {
@@ -891,3 +865,5 @@ bool Canvas::eventFilter (QObject *, QEvent *e) {
   }
   return false;
 }
+
+#include <Canvas.moc>

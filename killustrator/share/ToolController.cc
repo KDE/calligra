@@ -24,6 +24,7 @@
 
 #include <ToolController.h>
 #include <GDocument.h>
+#include <GLayer.h>
 #include <MainView.h>
 
 

@@ -25,7 +25,6 @@
 #ifndef PolylineTool_h_
 #define PolylineTool_h_
 
-#include <qlist.h>
 #include <Tool.h>
 
 class GPolyline;

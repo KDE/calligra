@@ -22,11 +22,9 @@
 
 */
 
-#include "units.h"
-
-// FIXME (Werner)
-const char* unitNames[] = { "pt", "mm", "inch", "pica", "cm",
-                            "didot", "cicero" };
+#include <units.h>
+#include <qstring.h>
+#include <klocale.h>
 
 /*
  * Functions for converting Point <-> Inch <-> Millimeter
@@ -132,6 +130,19 @@ float cvtUnitToPt (MeasurementUnit unit, float value) {
   }
 }
 
-const char* unitToString (MeasurementUnit unit) {
-  return unitNames[unit];
+QString unitToString (MeasurementUnit unit) {
+    if(unit==UnitPoint)
+        return i18n("pt");
+    else if(unit==UnitMillimeter)
+        return i18n("mm");
+    else if(unit==UnitInch)
+        return i18n("inch");
+    else if(unit==UnitPica)
+        return i18n("pica");
+    else if(unit==UnitCentimeter)
+        return i18n("cm");
+    else if(unit==UnitDidot)
+        return i18n("didot");
+    else
+        return i18n("cicero");
 }

@@ -34,8 +34,8 @@ BlendCmd::BlendCmd (GDocument* doc, int steps)
 {
   document = doc;
   num_steps = steps;
-  list<GObject*>::iterator it = doc->getSelection ().begin ();
-  for (int i = 0; it != doc->getSelection ().end (); it++, i++) {
+  QListIterator<GObject> it(doc->getSelection());
+  for (int i = 0; it.current(); ++it, ++i) {
     if (i == 2)
       break;
     (*it)->ref ();

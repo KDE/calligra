@@ -25,8 +25,9 @@
 #ifndef TextTool_h_
 #define TextTool_h_
 
-#include <GText.h>
 #include <Tool.h>
+
+class GText;
 
 class TextTool : public Tool {
   Q_OBJECT

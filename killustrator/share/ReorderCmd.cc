@@ -25,6 +25,7 @@
 #include <ReorderCmd.h>
 #include <klocale.h>
 #include <GDocument.h>
+#include <GLayer.h>
 
 ReorderCmd::ReorderCmd (GDocument* doc, ReorderPosition pos)
   : Command(i18n("Reorder"))
@@ -32,8 +33,8 @@ ReorderCmd::ReorderCmd (GDocument* doc, ReorderPosition pos)
   objects.resize (doc->selectionCount ());
   oldpos.resize (doc->selectionCount ());
 
-  list<GObject*>::iterator it = doc->getSelection ().begin ();
-  for (unsigned int i = 0; it != doc->getSelection ().end (); it++, i++) {
+  QListIterator<GObject> it(doc->getSelection());
+  for (unsigned int i = 0; it.current(); ++it, ++i) {
     GObject *o = *it;
     o->ref ();
     objects.insert (i, o);

@@ -25,11 +25,9 @@
 #ifndef FreeHandTool_h_
 #define FreeHandTool_h_
 
-#include <qlist.h>
 #include <Tool.h>
 
 class GPolyline;
-class QEvent;
 
 class FreeHandTool : public Tool {
   Q_OBJECT

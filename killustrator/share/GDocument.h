@@ -25,29 +25,21 @@
 #ifndef GDocument_h_
 #define GDocument_h_
 
-#include <vector>
-#include <list>
-
 #include <qobject.h>
 #include <qlist.h>
+#include <qvaluelist.h>
 #include <qstring.h>
 
-#include <qdom.h>
-
-#include "Painter.h"
-#include "Handle.h"
-#include "GObject.h"
-#include "GLayer.h"
+#include <Handle.h>
 
 #include <koPageLayoutDia.h>
 
 #define KILLUSTRATOR_MIMETYPE "application/x-killustrator"
 
-#define XML_DOCTYPE "kiml"
-#define XML_DTD     "kiml1.0.dtd"
-#define UNNAMED_FILE "<unnamed>"
-
 class GObject;
+class GLayer;
+class QDomDocument;
+class QDomElement;
 
 class GDocument : public QObject {
   Q_OBJECT
@@ -58,8 +50,8 @@ public:
   void initialize ();
   void setAutoUpdate (bool flag);
 
-  const QString& fileName () const { return filename; }
-  void setFileName (const char* s) { filename = s; }
+  QString fileName () const { return filename; }
+  void setFileName (const QString &s) { filename = s; }
   void setPaperSize (int width, int height);
   int getPaperWidth () const;
   int getPaperHeight () const;
@@ -80,7 +72,7 @@ public:
    */
 
   // get an array with all layers of the document
-  const std::vector<GLayer*>& getLayers ();
+  const QList<GLayer>& getLayers ();
 
   // set the active layer where further actions take place
   void setActiveLayer (GLayer *layer);
@@ -116,9 +108,9 @@ public:
   GObject* lastObject () { return last; }
   void setLastObject (GObject* obj);
 
-  std::list<GObject*>& getSelection () { return selection; }
-  bool selectionIsEmpty () const { return selection.empty (); }
-  unsigned int selectionCount () const { return selection.size (); }
+  QList<GObject>& getSelection () { return selection; }
+  bool selectionIsEmpty () const { return selection.isEmpty (); }
+  unsigned int selectionCount () const { return selection.count(); }
 
   unsigned int objectCount () const;
 
@@ -129,7 +121,7 @@ public:
 
   GObject* findContainingObject (int x, int y);
 
-  bool findNearestObject (const char* otype, int x, int y,
+  bool findNearestObject (const QString &otype, int x, int y,
                           float max_dist, GObject*& obj, int& pidx,
                           bool all = false);
 
@@ -138,7 +130,7 @@ public:
 
   QDomDocument saveToXml();
   bool readFromXml (const QDomDocument &document);
-  bool insertFromXml (const QDomDocument &document, list<GObject*>& newObjs);
+  bool insertFromXml (const QDomDocument &document, QList<GObject>& newObjs);
 
   Handle& handle () { return selHandle; }
 
@@ -152,15 +144,15 @@ public:
   void setGrid (float dx, float dy, bool snap);
   void getGrid (float& dx, float& dy, bool& snap);
 
-  void setHelplines (const std::vector<float>& hlines,
-                     const std::vector<float>& vlines,
+  void setHelplines (const QValueList<float>& hlines,
+                     const QValueList<float>& vlines,
                      bool snap);
-  void getHelplines (std::vector<float>& hlines, std::vector<float>& vlines,
+  void getHelplines (QValueList<float>& hlines, QValueList<float>& vlines,
                      bool& snap);
 
 protected:
   void updateHandle ();
-  bool parseBody (const QDomElement &element, std::list<GObject*>& newObjs, bool markNew);
+  bool parseBody (const QDomElement &element, QList<GObject>& newObjs, bool markNew);
 
 public slots:
   void objectChanged ();
@@ -182,8 +174,8 @@ protected:
   bool modifyFlag;
   QString filename;
   int paperWidth, paperHeight; // pt
-  std::vector<GLayer*> layers; // the array of all layers
-  std::list<GObject*> selection;
+  QList<GLayer> layers; // the array of all layers
+  QList<GObject> selection;
   GLayer* active_layer;     // the current layer
   GObject *last;
   Handle selHandle;
@@ -192,7 +184,7 @@ protected:
   KoPageLayout pLayout;
   bool snapToGrid, snapToHelplines;
   float gridx, gridy;
-  std::vector<float> hHelplines, vHelplines;
+  QValueList<float> hHelplines, vHelplines;
 };
 
 #endif

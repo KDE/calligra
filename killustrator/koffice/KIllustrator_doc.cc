@@ -30,6 +30,7 @@
 #include "GDocument.h"
 #include "GPart.h"
 #include "Coord.h"
+#include <GLayer.h>
 
 #include <kmessagebox.h>
 #include <qstring.h>

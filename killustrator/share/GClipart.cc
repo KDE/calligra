@@ -114,7 +114,7 @@ QDomElement GClipart::writeToXml (QDomDocument &document) {
 
     // FIXME (Werner): Make this store internal/external depening on the user's wish
     QDomElement element=document.createElement("clipart");
-    element.setAttribute ("src", (const char *) url.url ());
+    element.setAttribute ("src", url.url ());
     element.appendChild(GObject::writeToXml(document));
     return element;
 }

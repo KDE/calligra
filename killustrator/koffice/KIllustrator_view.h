@@ -187,7 +187,7 @@ protected slots:
     void resetTools();
     QString getExportFileName (FilterManager *filterMgr);
 
-  void showCurrentMode (const char* msg);
+  void showCurrentMode (const QString &msg);
     /* protected slots:
   void editCutSlot ();
   void editCopySlot ();

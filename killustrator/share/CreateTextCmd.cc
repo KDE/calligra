@@ -38,7 +38,7 @@ CreateTextCmd::CreateTextCmd (GDocument* doc, GText* obj) :
 }
 
 CreateTextCmd::CreateTextCmd (GDocument* doc, const Coord& p,
-                              const char* str) :
+                              const QString &str) :
   Command(i18n("Create Text"))
 {
   document = doc;

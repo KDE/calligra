@@ -36,7 +36,7 @@ class GBezier;
 class GCurve;
 class GGroup;
 class GPixmap;
-class QDomElement;
+class QDomDocumentFragment;
 
 /**
  * An export filter for SVG.
@@ -55,7 +55,7 @@ private:
   QDomDocumentFragment exportEllipse (QDomDocument &document, GOval* obj);
   QDomDocumentFragment exportText (QDomDocument &document, GText* obj);
   QDomDocumentFragment exportTextLine (QDomDocument &document, GText* obj, int line, float xoff,
-		       float yoff);
+                       float yoff);
   QDomDocumentFragment exportCurve (QDomDocument &document, GCurve* obj);
   QDomDocumentFragment exportBezier (QDomDocument &document, GBezier* obj);
   QDomDocumentFragment exportGroup (QDomDocument &document, GGroup* obj);

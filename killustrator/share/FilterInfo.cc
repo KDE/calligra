@@ -26,9 +26,9 @@
 #include <ExportFilter.h>
 #include <ImportFilter.h>
 
-FilterInfo::FilterInfo (Kind kind, const char* type, const char* ext,
-                        const char* vendor,
-                        const char* release, ImportFilter* imp,
+FilterInfo::FilterInfo (Kind kind, const QString &type, const QString &ext,
+                        const QString &vendor,
+                        const QString &release, ImportFilter* imp,
                         ExportFilter* exp) {
   f_kind = kind;
   f_type = type;
@@ -39,20 +39,20 @@ FilterInfo::FilterInfo (Kind kind, const char* type, const char* ext,
   export_ = exp;
 }
 
-const char* FilterInfo::type () const {
-  return (const char *) f_type;
+QString FilterInfo::type () const {
+  return f_type;
 }
 
-const char* FilterInfo::extension () const {
-  return (const char *) f_extension;
+QString FilterInfo::extension () const {
+  return f_extension;
 }
 
-const char* FilterInfo::vendor () const {
-  return (const char *) f_vendor;
+QString FilterInfo::vendor () const {
+  return f_vendor;
 }
 
-const char* FilterInfo::release () const {
-  return (const char *) f_release;
+QString FilterInfo::release () const {
+  return f_release;
 }
 
 FilterInfo::Kind FilterInfo::kind () const {

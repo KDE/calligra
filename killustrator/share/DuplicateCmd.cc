@@ -40,8 +40,7 @@ DuplicateCmd::DuplicateCmd (GDocument* doc)
   : Command(i18n("Duplicate"))
 {
   document = doc;
-  for (list<GObject*>::iterator it = doc->getSelection ().begin ();
-       it != doc->getSelection ().end (); it++) {
+  for (QListIterator<GObject> it(doc->getSelection()); it.current(); ++it) {
     GObject* o = *it;
     o->ref ();
     objects.append(o);

@@ -34,15 +34,15 @@ class FilterInfo {
  public:
   enum Kind { FKind_Import, FKind_Export };
 
-  FilterInfo (Kind kind, const char* type, const char* ext,
-              const char* vendor = 0L,
-              const char* release = 0L, ImportFilter* imp = 0L,
+  FilterInfo (Kind kind, const QString &type, const QString &ext,
+              const QString &vendor = QString::null,
+              const QString &release = QString::null, ImportFilter* imp = 0L,
               ExportFilter* exp = 0L);
 
-  const char* type () const;
-  const char* vendor () const;
-  const char* release () const;
-  const char* extension () const;
+  QString type () const;
+  QString vendor () const;
+  QString release () const;
+  QString extension () const;
   Kind kind () const;
 
   ExportFilter* exportFilter ();

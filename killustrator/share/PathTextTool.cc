@@ -65,7 +65,7 @@ void PathTextTool::activate (GDocument* doc, Canvas* canvas) {
   oldCursor = canvas->cursor ();
 
   if (doc->selectionCount () == 1) {
-    GObject* obj = doc->getSelection ().front ();
+    GObject* obj = doc->getSelection().first();
     if (obj->isA ("GText"))
       textObj = (GText *) obj;
   }

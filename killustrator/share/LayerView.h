@@ -27,7 +27,7 @@
 
 #include <qtableview.h>
 #include <qpixmap.h>
-#include <vector>
+#include <qlist.h>
 
 class QLineEdit;
 class GDocument;
@@ -46,7 +46,7 @@ public:
     void setActiveDocument (GDocument* doc);
 
 protected:
-    void showLayers (const std::vector<GLayer*>& lvec);
+    void showLayers (const QList<GLayer>& lvec);
 
     virtual int cellWidth (int col);
     virtual int cellHeight (int row);
@@ -60,7 +60,7 @@ private slots:
 
 private:
     GDocument* document;
-    std::vector<GLayer*> layers;
+    QList<GLayer> layers;
     QPixmap pixmaps[3];
     QLineEdit* lineEditor;
     int editorRow;

@@ -35,8 +35,6 @@
 #include <units.h>
 #include <PStateManager.h>
 
-using namespace std;
-
 HelplineDialog::HelplineDialog (Canvas* c, QWidget* parent,
                                 const char* name) : KDialogBase(KDialogBase::Tabbed,
                                                                 i18n("Setup Helplines"),
@@ -124,31 +122,35 @@ void HelplineDialog::applyPressed () {
 }
 
 void HelplineDialog::initLists () {
-  vector<float>::iterator i;
+  QValueList<float>::Iterator i;
   QString buf;
   MeasurementUnit unit =
     PStateManager::instance ()->defaultMeasurementUnit ();
 
-  for (i = horizLines.begin (); i != horizLines.end (); i++) {
+  for (i = horizLines.begin (); i != horizLines.end (); ++i) {
     float value = *i;
-    buf.sprintf ("%.3f %s", cvtPtToUnit (unit, value), unitToString (unit));
+    buf=QString::number(cvtPtToUnit (unit, value), 'f', 3);
+    buf+=" ";
+    buf+=unitToString (unit);
     horizList->insertItem (buf);
   }
 
-  for (i = vertLines.begin (); i != vertLines.end (); i++) {
+  for (i = vertLines.begin (); i != vertLines.end (); ++i) {
     float value = *i;
-    buf.sprintf ("%.3f %s", cvtPtToUnit (unit, value), unitToString (unit));
+    buf=QString::number(cvtPtToUnit (unit, value), 'f', 3);
+    buf+=" ";
+    buf+=unitToString (unit);
     vertList->insertItem (buf);
   }
 }
 
 void HelplineDialog::addHorizLine () {
   float value = horizValue->getValue ();
-  horizLines.push_back (value);
-  QString buf;
-  MeasurementUnit unit =
-    PStateManager::instance ()->defaultMeasurementUnit ();
-  buf.sprintf ("%.3f %s", cvtPtToUnit (unit, value), unitToString (unit));
+  horizLines.append(value);
+  MeasurementUnit unit = PStateManager::instance ()->defaultMeasurementUnit ();
+  QString buf=QString::number(cvtPtToUnit (unit, value), 'f', 3);
+  buf+=" ";
+  buf+=unitToString (unit);
   horizList->insertItem (buf);
 }
 
@@ -156,10 +158,11 @@ void HelplineDialog::updateHorizLine () {
   int idx = horizList->currentItem ();
   if (idx != -1) {
     float value = horizValue->getValue ();
-    QString buf;
     MeasurementUnit unit =
       PStateManager::instance ()->defaultMeasurementUnit ();
-    buf.sprintf ("%.3f %s", cvtPtToUnit (unit, value), unitToString (unit));
+    QString buf=QString::number(cvtPtToUnit (unit, value), 'f', 3);
+    buf+=" ";
+    buf+=unitToString (unit);
     horizList->changeItem (buf, idx);
     horizLines[idx] = value;
   }
@@ -169,19 +172,18 @@ void HelplineDialog::deleteHorizLine () {
   int idx = horizList->currentItem ();
   if (idx != -1) {
     horizList->removeItem (idx);
-    vector<float>::iterator it = horizLines.begin ();
-    advance (it, idx);
-    horizLines.erase (it);
+    horizLines.remove(horizLines.at(idx));
   }
 }
 
 void HelplineDialog::addVertLine () {
   float value = vertValue->getValue ();
-  vertLines.push_back (value);
-  QString buf;
+  vertLines.append(value);
   MeasurementUnit unit =
     PStateManager::instance ()->defaultMeasurementUnit ();
-  buf.sprintf ("%.3f %s", cvtPtToUnit (unit, value), unitToString (unit));
+  QString buf=QString::number(cvtPtToUnit (unit, value), 'f', 3);
+  buf+=" ";
+  buf+=unitToString (unit);
   vertList->insertItem (buf);
 }
 
@@ -189,10 +191,11 @@ void HelplineDialog::updateVertLine () {
   int idx = vertList->currentItem ();
   if (idx != -1) {
     float value = vertValue->getValue ();
-    QString buf;
     MeasurementUnit unit =
       PStateManager::instance ()->defaultMeasurementUnit ();
-    buf.sprintf ("%.3f %s", cvtPtToUnit (unit, value), unitToString (unit));
+    QString buf=QString::number(cvtPtToUnit (unit, value), 'f', 3);
+    buf+=" ";
+    buf+=unitToString (unit);
     vertList->changeItem (buf, idx);
     vertLines[idx] = value;
   }
@@ -202,22 +205,16 @@ void HelplineDialog::deleteVertLine () {
   int idx = vertList->currentItem ();
   if (idx != -1) {
     vertList->removeItem (idx);
-    vector<float>::iterator it = vertLines.begin ();
-    advance (it, idx);
-    vertLines.erase (it);
+    vertLines.remove(vertLines.at(idx));
   }
 }
 
 void HelplineDialog::horizLineSelected (int idx) {
-    vector<float>::iterator it = horizLines.begin ();
-    advance (it, idx);
-    horizValue->setValue (*it);
+    horizValue->setValue (*horizLines.at(idx));
 }
 
 void HelplineDialog::vertLineSelected (int idx) {
-    vector<float>::iterator it = vertLines.begin ();
-    advance (it, idx);
-    vertValue->setValue (*it);
+    vertValue->setValue (*vertLines.at(idx));
 }
 
 void HelplineDialog::setup (Canvas *c) {

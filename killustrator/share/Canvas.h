@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -25,40 +25,33 @@
 #ifndef Canvas_h_
 #define Canvas_h_
 
-#include <vector>
-
-#include <iostream.h>
 #include <qwidget.h>
-#include <qpixmap.h>
-#include <qfont.h>
-#include <qarray.h>
-#include <qdict.h>
-#include <qpainter.h>
+#include <qvaluelist.h>
+#include <Coord.h>
 
-#include "Coord.h"
 
 class GDocument;
 class GObject;
 class ToolController;
 class QwViewport;
-
-using std::vector;
-
+class QPixmap;
+class QPainter;
+class Rect;
 
 class Canvas : public QWidget {
   Q_OBJECT
 public:
-  Canvas (GDocument* doc, float res, QwViewport* vp, QWidget* parent = 0, 
-	  const char* name = 0);
+  Canvas (GDocument* doc, float res, QwViewport* vp, QWidget* parent = 0,
+          const char* name = 0);
   ~Canvas ();
 
   void setZoomFactor (float factor);
   float getZoomFactor () const;
 
-  void setHorizHelplines (const vector<float>& lines);
-  void setVertHelplines (const vector<float>& lines);
-  const vector<float>& getHorizHelplines () const;
-  const vector<float>& getVertHelplines () const;
+  void setHorizHelplines(const QValueList<float>& lines);
+  void setVertHelplines(const QValueList<float>& lines);
+  const QValueList<float>& getHorizHelplines () const;
+  const QValueList<float>& getVertHelplines () const;
   void alignToHelplines (bool flag);
   bool alignToHelplines ();
   void showHelplines (bool flag);
@@ -84,10 +77,10 @@ public:
   Rect snapScaledBoxToGrid (const Rect& r, int hmask);
 
   void setToolController (ToolController *tc);
-  
+
   void setDocument (GDocument* doc);
   GDocument* getDocument ();
-  
+
   void printDocument ();
 
   void zoomIn (int x, int y);
@@ -98,8 +91,7 @@ public:
 
   float scaleFactor () const;
 
-  const vector<float>& getZoomFactors () const { return zoomFactors; }
-  //  static void initZoomFactors (QArray<float>& factors);
+  const QValueList<float>& getZoomFactors () const { return zoomFactors; }
   int insertZoomFactor (float z);
 
 protected:
@@ -168,12 +160,11 @@ private:
   bool outlineMode;
   int pendingRedraws;
   Rect regionForUpdate, region;
-  vector<float> horizHelplines, vertHelplines;
+  QValueList<float> horizHelplines, vertHelplines;
   bool helplinesAreOn, helplinesSnapIsOn;
   float tmpHorizHelpline, tmpVertHelpline;
 
-  // static QArray<float> zoomFactors;
-  vector<float> zoomFactors;
+  QValueList<float> zoomFactors;
 };
 
 #endif

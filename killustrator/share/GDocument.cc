@@ -25,22 +25,18 @@
 #include <qfile.h>
 
 #include <GDocument.h>
-#include "GPolygon.h"
-#include "GText.h"
-#include "GPolyline.h"
-#include "GOval.h"
-#include "GBezier.h"
-#include "GClipart.h"
-#include "GGroup.h"
-#include "GPixmap.h"
-#include "GCurve.h"
+#include <GPolygon.h>
+#include <GText.h>
+#include <GPolyline.h>
+#include <GOval.h>
+#include <GBezier.h>
+#include <GClipart.h>
+#include <GGroup.h>
+#include <GPixmap.h>
+#include <GCurve.h>
+#include <GLayer.h>
 
-#include <string>
-#include <map>
-#include <iostream.h>
 #include <cassert>
-#include <fstream.h>
-#include <strstream.h>
 #include <kdebug.h>
 
 #ifdef __FreeBSD__
@@ -51,16 +47,10 @@
 
 #include <float.h>
 
-#include <stack>
-#include <vector>
-#include <algorithm>
-
-#include "units.h"
+#include <units.h>
 #include <klocale.h>
-#include <kapp.h>
 #include <qdict.h>
-
-using namespace std;
+#include <qdom.h>
 
 // default papersize in mm
 #define PAPER_WIDTH 210.0
@@ -70,27 +60,13 @@ using namespace std;
 #define LAYER_EDITABLE  2
 #define LAYER_PRINTABLE 4
 
-template<class T>
-struct del_obj {
-  void operator () (T* obj) {
-    delete obj;
-  }
-};
-
-struct unselect_obj {
-  void operator () (GObject* obj) {
-    obj->select (false);
-  }
-};
-
 GDocument::GDocument () {
   initialize ();
 }
 
 GDocument::~GDocument () {
-  for_each (layers.begin (), layers.end (), del_obj<GLayer> ());
-  layers.clear ();
-  selection.clear ();
+    layers.clear();
+    selection.clear();
 }
 
 void GDocument::setAutoUpdate (bool flag) {
@@ -117,17 +93,13 @@ void GDocument::initialize () {
   // in pt !!
   paperWidth = (int) cvtMmToPt (pLayout.mmWidth);
   paperHeight = (int) cvtMmToPt (pLayout.mmHeight);
-  last = NULL;
+  last = 0L;
   modifyFlag = false;
-  filename = UNNAMED_FILE;
+  filename = i18n("<unnamed>");
 
   selection.clear ();
-  if (! layers.empty ()) {
-    vector<GLayer*>::iterator i = layers.begin ();
-    for (; i != layers.end (); i++)
-      delete *i;
-    layers.clear ();
-  }
+  layers.setAutoDelete(true);
+  layers.clear ();
   // add layer for Helplines
   GLayer *l = addLayer ();
   l->setInternal ();
@@ -165,11 +137,9 @@ int GDocument::getPaperHeight () const {
 
 void GDocument::drawContents (QPainter& p, bool withBasePoints, bool outline) {
 
-    vector<GLayer*>::iterator i = layers.begin ();
-    for (; i != layers.end (); i++) {
-        GLayer* layer = *i;
-        if (! layer->isInternal () && layer->isVisible ()) {
-            const QList<GObject> &contents = layer->objects ();
+    for (QListIterator<GLayer> i(layers); i.current(); ++i) {
+        if (! (*i)->isInternal () && (*i)->isVisible ()) {
+            const QList<GObject> &contents = (*i)->objects ();
             QListIterator<GObject> oi(contents);
             for ( ; oi.current() ; ++oi)
                 (*oi)->draw (p, withBasePoints && (*oi)->isSelected (), outline);
@@ -179,11 +149,9 @@ void GDocument::drawContents (QPainter& p, bool withBasePoints, bool outline) {
 
 void GDocument::drawContentsInRegion (QPainter& p, const Rect& r,
                                       bool withBasePoints, bool outline) {
-  vector<GLayer*>::iterator i = layers.begin ();
-  for (; i != layers.end (); i++) {
-    GLayer* layer = *i;
-    if (! layer->isInternal () && layer->isVisible ()) {
-        const QList<GObject> &contents = layer->objects ();
+  for (QListIterator<GLayer> i(layers); i.current(); ++i) {
+    if (! (*i)->isInternal () && (*i)->isVisible ()) {
+        const QList<GObject> &contents = (*i)->objects ();
         QListIterator<GObject> oi(contents);
         for ( ; oi.current() ; ++oi) {
             // draw the object only if its bounding box
@@ -199,8 +167,7 @@ void GDocument::drawContentsInRegion (QPainter& p, const Rect& r,
 
 unsigned int GDocument::objectCount () const {
   unsigned int num = 0;
-  vector<GLayer*>::const_iterator i = layers.begin ();
-  for (; i != layers.end (); i++)
+  for (QListIterator<GLayer> i(layers); i.current(); ++i)
     num += (*i)->objectCount ();
   return num;
 }
@@ -218,12 +185,10 @@ void GDocument::insertObject (GObject* obj) {
 }
 
 void GDocument::selectObject (GObject* obj) {
-  list<GObject*>::iterator i = find (selection.begin (), selection.end (),
-                                     obj);
-  if (i == selection.end ()) {
+  if (selection.containsRef(obj)==0) {
     // object isn't yet in selection list
     obj->select (true);
-    selection.push_back (obj);
+    selection.append(obj);
     selBoxIsValid = false;
     updateHandle ();
     if (autoUpdate) {
@@ -234,12 +199,11 @@ void GDocument::selectObject (GObject* obj) {
 }
 
 void GDocument::unselectObject (GObject* obj) {
-  list<GObject*>::iterator i = find (selection.begin (), selection.end (),
-                                     obj);
-  if (i != selection.end ()) {
+  int i=selection.findRef(obj);
+  if (i != -1) {
     // remove object from the selection list
     obj->select (false);
-    selection.erase (i);
+    selection.remove(i);
     selBoxIsValid = false;
     updateHandle ();
     if (autoUpdate) {
@@ -250,10 +214,11 @@ void GDocument::unselectObject (GObject* obj) {
 }
 
 void GDocument::unselectAllObjects () {
-  if (selection.empty ())
+  if (selection.isEmpty())
     return;
 
-  for_each (selection.begin (), selection.end (), unselect_obj ());
+  for(GObject *o=selection.first(); o!=0L; o=selection.next())
+      o->select(false);
   selection.clear ();
   selBoxIsValid = false;
   if (autoUpdate) {
@@ -264,16 +229,14 @@ void GDocument::unselectAllObjects () {
 
 void GDocument::selectAllObjects () {
   selection.clear ();
-  vector<GLayer*>::const_iterator i = layers.begin ();
-  for (; i != layers.end (); i++) {
-    GLayer* layer = *i;
-    if (layer->isEditable ()) {
-        const QList<GObject> &contents = layer->objects ();
+  for (QListIterator<GLayer> i(layers); i.current(); ++i) {
+    if ((*i)->isEditable ()) {
+        const QList<GObject> &contents = (*i)->objects ();
         QListIterator<GObject> oi(contents);
         for ( ; oi.current() ; ++oi) {
             GObject* obj = *oi;
             obj->select (true);
-            selection.push_back (obj);
+            selection.append(obj);
       }
     }
   }
@@ -301,9 +264,10 @@ void GDocument::updateHandle () {
 Rect GDocument::boundingBoxForSelection () {
   if (! selBoxIsValid) {
     if (! selectionIsEmpty ()) {
-      list<GObject*>::iterator i = selection.begin ();
-      selBox = (*i++)->boundingBox ();
-      for (; i != selection.end (); i++)
+      QListIterator<GObject> i(selection);
+      selBox = (*i)->boundingBox ();
+      ++i;
+      for (; i.current(); ++i)
         selBox = selBox.unite ((*i)->boundingBox ());
     }
     else {
@@ -319,11 +283,9 @@ Rect GDocument::boundingBoxForAllObjects () {
 
   bool init = false;
 
-  for (vector<GLayer*>::iterator li = layers.begin ();
-       li != layers.end (); li++) {
-    GLayer* layer = *li;
-    if (! layer->isInternal () && layer->isEditable ()) {
-        const QList<GObject> &contents = layer->objects ();
+  for (QListIterator<GLayer> li(layers); li.current(); ++li) {
+    if (! (*li)->isInternal () && (*li)->isEditable ()) {
+        const QList<GObject> &contents = (*li)->objects ();
         QListIterator<GObject> oi(contents);
         if (! init) {
             box = (*oi)->boundingBox ();
@@ -339,8 +301,7 @@ Rect GDocument::boundingBoxForAllObjects () {
 
 void GDocument::deleteSelectedObjects () {
   if (! selectionIsEmpty ()) {
-    for (list<GObject*>::iterator i = selection.begin ();
-         i != selection.end (); i++) {
+    for(QListIterator<GObject> i(selection); i.current(); ++i) {
       GObject* obj = *i;
       disconnect (obj, SIGNAL(changed()), this, SLOT(objectChanged ()));
       disconnect (obj, SIGNAL(changed(const Rect&)),
@@ -391,18 +352,17 @@ void GDocument::deleteObject (GObject* obj) {
  * the object in <tt>obj</tt> and the index of the nearest point in
  * <tt>pidx</tt>.
  */
-bool GDocument::findNearestObject (const char* otype, int x, int y,
+bool GDocument::findNearestObject (const QString &otype, int x, int y,
                                    float max_dist, GObject*& obj,
                                    int& pidx, bool all) {
   float d, distance = FLT_MAX;
   obj = 0L;
   Coord p (x, y);
 
-  for (vector<GLayer*>::reverse_iterator li = layers.rbegin ();
-       li != layers.rend (); li++) {
-    GLayer* layer = *li;
-    if (layer->isEditable ()) {
-      const QList<GObject>& contents = layer->objects ();
+  QListIterator<GLayer> li(layers);
+  for (li.toLast(); li.current(); --li) {
+    if ((*li)->isEditable ()) {
+      const QList<GObject>& contents = (*li)->objects ();
       QListIterator<GObject> oi(contents);
       for ( ; oi.current(); ++oi) {
         if (otype == 0L || (*oi)->isA (otype)) {
@@ -424,11 +384,10 @@ GObject* GDocument::findContainingObject (int x, int y) {
   GObject* result = 0L;
   // We are looking for the most relevant object, that means the object
   // in front of all others. So, we have to start at the upper layer
-  vector<GLayer*>::reverse_iterator i = layers.rbegin ();
-  for (; i != layers.rend (); i++) {
-    GLayer* layer = *i;
-    if (layer->isEditable ()) {
-      result = layer->findContainingObject (x, y);
+  QListIterator<GLayer> i(layers);
+  for (i.toLast(); i.current(); --i) {
+    if ((*i)->isEditable ()) {
+      result = (*i)->findContainingObject (x, y);
       if (result)
         break;
     }
@@ -438,29 +397,27 @@ GObject* GDocument::findContainingObject (int x, int y) {
 
 bool GDocument::findContainingObjects (int x, int y, QList<GObject>& olist) {
   Coord coord (x, y);
-  for (vector<GLayer*>::iterator li = layers.begin ();
-       li != layers.end (); li++) {
-    if ((*li)->isEditable ()) {
-      const QList<GObject>& contents = (*li)->objects ();
-      QListIterator<GObject> oi(contents);
-      for ( ; oi.current(); ++oi)
-        if ((*oi)->contains (coord))
-          olist.append (*oi);
-    }
+  for (QListIterator<GLayer> li(layers); li.current(); ++li) {
+      if ((*li)->isEditable ()) {
+          const QList<GObject>& contents = (*li)->objects ();
+          QListIterator<GObject> oi(contents);
+          for ( ; oi.current(); ++oi)
+              if ((*oi)->contains (coord))
+                  olist.append (*oi);
+      }
   }
   return olist.count () > 0;
 }
 
 bool GDocument::findObjectsContainedIn (const Rect& r, QList<GObject>& olist) {
-  for (vector<GLayer*>::iterator li = layers.begin ();
-       li != layers.end (); li++) {
-    if ((*li)->isEditable ()) {
-      const QList<GObject>& contents = (*li)->objects ();
-      QListIterator<GObject> oi(contents);
-      for ( ; oi.current(); ++oi)
-        if (r.contains ((*oi)->boundingBox ()))
-          olist.append (*oi);
-    }
+  for (QListIterator<GLayer> li(layers); li.current(); ++li) {
+      if ((*li)->isEditable ()) {
+          const QList<GObject>& contents = (*li)->objects ();
+          QListIterator<GObject> oi(contents);
+          for ( ; oi.current(); ++oi)
+              if (r.contains ((*oi)->boundingBox ()))
+                  olist.append (*oi);
+      }
   }
   return olist.count () > 0;
 }
@@ -468,7 +425,6 @@ bool GDocument::findObjectsContainedIn (const Rect& r, QList<GObject>& olist) {
 void GDocument::layerChanged () {
   if (!autoUpdate)
     return;
-
   emit changed ();
 }
 
@@ -546,35 +502,35 @@ QDomDocument GDocument::saveToXml () {
 
     QDomElement helplines=document.createElement("helplines");
     helplines.setAttribute ("align", snapToHelplines ? 1 : 0);
-    vector<float>::iterator hi;
-    for (hi = hHelplines.begin (); hi != hHelplines.end (); hi++) {
+    QValueList<float>::Iterator hi;
+    for(hi = hHelplines.begin(); hi!=hHelplines.end(); ++hi) {
         QDomElement hl=document.createElement("hl");
-        hl.setAttribute ("pos", *hi);
+        hl.setAttribute ("pos", (*hi));
         helplines.appendChild(hl);
     }
-    for (hi = vHelplines.begin (); hi != vHelplines.end (); hi++) {
+    for(hi = vHelplines.begin(); hi!=vHelplines.end(); ++hi) {
         QDomElement vl=document.createElement("vl");
-        vl.setAttribute ("pos", *hi);
+        vl.setAttribute ("pos", (*hi));
         helplines.appendChild(vl);
     }
     grid.appendChild(helplines);
 
-    bool save_layer_info = (layers.size () > 2);
-    for (vector<GLayer*>::iterator li = layers.begin ();
-         li != layers.end (); li++) {
-        if ((*li)->isInternal ())
+    bool save_layer_info = (layers.count() > 2);
+    for (QListIterator<GLayer> li(layers); li.current(); ++li) {
+        GLayer *l=(*li);
+        if (l->isInternal ())
             continue;
 
         QDomElement layer;
         layer=document.createElement("layer");
         if(save_layer_info) {
-            int flags = ((*li)->isVisible () ? LAYER_VISIBLE : 0) +
-                        ((*li)->isPrintable () ? LAYER_PRINTABLE : 0) +
-                        ((*li)->isEditable () ? LAYER_EDITABLE : 0);
-            layer.setAttribute ("id", (*li)->name ());
+            int flags = (l->isVisible () ? LAYER_VISIBLE : 0) +
+                        (l->isPrintable () ? LAYER_PRINTABLE : 0) +
+                        (l->isEditable () ? LAYER_EDITABLE : 0);
+            layer.setAttribute ("id", l->name ());
             layer.setAttribute ("flags", QString::number(flags));
         }
-        const QList<GObject>& contents = (*li)->objects ();
+        const QList<GObject>& contents = l->objects ();
         for (QListIterator<GObject> oi(contents);
              oi.current(); ++oi)
             layer.appendChild((*oi)->writeToXml (document));
@@ -584,7 +540,7 @@ QDomDocument GDocument::saveToXml () {
     return document;
 }
 
-bool GDocument::insertFromXml (const QDomDocument &document, list<GObject*>& newObjs) {
+bool GDocument::insertFromXml (const QDomDocument &document, QList<GObject>& newObjs) {
 
     if ( document.doctype().name() != "killustrator" )
         return false;
@@ -595,7 +551,7 @@ bool GDocument::insertFromXml (const QDomDocument &document, list<GObject*>& new
     return parseBody (doc, newObjs, true);
 }
 
-bool GDocument::parseBody (const QDomElement &element, std::list<GObject*>& /*newObjs*/, bool /*markNew*/) {
+bool GDocument::parseBody (const QDomElement &element, QList<GObject>& /*newObjs*/, bool /*markNew*/) {
 
     GObject* obj = 0L;
     QDict<GObject> refDict;
@@ -638,10 +594,8 @@ bool GDocument::parseBody (const QDomElement &element, std::list<GObject*>& /*ne
     }
 
     // update object connections
-    vector<GLayer*>::iterator i = layers.begin ();
-    for (; i != layers.end (); i++) {
-        GLayer* layer = *i;
-        const QList<GObject>& contents = layer->objects ();
+    for (QListIterator<GLayer> i(layers); i.current(); ++i) {
+        const QList<GObject>& contents = (*i)->objects ();
         for (QListIterator<GObject> oi(contents);
              oi.current(); ++oi) {
             // this should be more general !!
@@ -662,16 +616,12 @@ bool GDocument::readFromXml (const  QDomDocument &document) {
 
     if ( document.doctype().name() != "killustrator" )
         return false;
-
     QDomElement killustrator = document.documentElement();
-
     if ( killustrator.attribute( "mime" ) != KILLUSTRATOR_MIMETYPE )
         return false;
 
     QDomElement head=killustrator.namedItem("head").toElement();
     setAutoUpdate (false);
-
-    kapp->processEvents (500);
 
     QDomElement layout=head.namedItem("layout").toElement();
     QString tmp=layout.attribute("format");
@@ -716,15 +666,15 @@ bool GDocument::readFromXml (const  QDomDocument &document) {
     QDomElement l=helplines.firstChild().toElement();
     for( ; !l.isNull(); l=helplines.nextSibling().toElement()) {
         if(l.tagName()=="hl")
-            hHelplines.push_back(l.attribute("pos").toFloat());
+            hHelplines.append(l.attribute("pos").toFloat());
         else if(l.tagName()=="vl")
-            vHelplines.push_back(l.attribute("pos").toFloat());
+            vHelplines.append(l.attribute("pos").toFloat());
     }
 
     // update page layout
     setPageLayout (pLayout);
 
-    list<GObject*> dummy;
+    QList<GObject> dummy;
     bool result = parseBody (killustrator, dummy, false);
 
     setModified (false);
@@ -793,7 +743,7 @@ void GDocument::setPageLayout (const KoPageLayout& layout) {
 /*
  * Get an array with all layers of the document
  */
-const vector<GLayer*>& GDocument::getLayers () {
+const QList<GLayer>& GDocument::getLayers () {
   return layers;
 }
 
@@ -801,9 +751,9 @@ const vector<GLayer*>& GDocument::getLayers () {
  * Set the active layer where further actions take place
  */
 void GDocument::setActiveLayer (GLayer *layer) {
-  vector<GLayer*>::iterator i = layers.begin ();
-  for (; i != layers.end (); i++) {
-    if (*i == layer) {
+  QListIterator<GLayer> i(layers);
+  for (; i.current(); ++i) {
+    if ((*i) == layer) {
       active_layer = layer;
       break;
     }
@@ -821,20 +771,17 @@ GLayer* GDocument::activeLayer () {
  * Raise the given layer
  */
 void GDocument::raiseLayer (GLayer *layer) {
-  if (layer->isInternal ())
+  if (!layer || layer->isInternal ())
     return;
 
-  if (layer == layers.back ())
+  if (layer == layers.last())
     // layer is already on top
     return;
 
-  vector<GLayer*>::iterator i = layers.begin ();
-  for (; i != layers.end (); i++) {
-    if (*i == layer) {
-      vector<GLayer*>::iterator j = layers.erase (i);
-      layers.insert (++j, layer);
-      break;
-    }
+  int pos=layers.findRef(layer);
+  if(pos!=-1) {
+      GLayer *l=layers.take(pos);
+      layers.insert(pos+1, l);
   }
   emit changed ();
 }
@@ -843,20 +790,17 @@ void GDocument::raiseLayer (GLayer *layer) {
  * Lower the given layer
  */
 void GDocument::lowerLayer (GLayer *layer) {
-  if (layer->isInternal ())
+  if (!layer || layer->isInternal ())
     return;
 
-  if (layer == layers.front ())
+  if (layer == layers.first())
     // layer is already at bottom
     return;
 
-  vector<GLayer*>::iterator i = layers.begin ();
-  for (; i != layers.end (); i++) {
-    if (*i == layer) {
-      vector<GLayer*>::iterator j = layers.erase (i);
-      layers.insert (--j, layer);
-      break;
-    }
+  int pos=layers.findRef(layer);
+  if(pos!=-1) {
+      GLayer *l=layers.take(pos);
+      layers.insert(pos-1, l);
   }
   emit changed ();
 }
@@ -867,7 +811,7 @@ void GDocument::lowerLayer (GLayer *layer) {
 GLayer* GDocument::addLayer () {
   GLayer* layer = new GLayer (this);
   connect (layer, SIGNAL(propertyChanged ()), this, SLOT(layerChanged ()));
-  layers.push_back (layer);
+  layers.append(layer);
   return layer;
 }
 
@@ -878,59 +822,48 @@ void GDocument::deleteLayer (GLayer *layer) {
   if (layer->isInternal ())
     return;
 
-  if (layers.size () == 1)
+  if (layers.count() == 1)
     // we need at least one layer
     return;
 
   bool update = (active_layer == layer);
 
-  vector<GLayer*>::iterator i = layers.begin ();
-  for (; i != layers.end (); i++) {
-    if (*i == layer) {
+  int pos=layers.findRef(layer);
+  if(pos!=-1) {
       // remove the layer from the array
-      vector<GLayer*>::iterator n = layers.erase (i);
+      GLayer *l=layers.take(pos);
       // and delete the layer
-      disconnect (layer, SIGNAL(propertyChanged ()),
+      disconnect (l, SIGNAL(propertyChanged ()),
                   this, SLOT(layerChanged ()));
-      delete layer;
+      delete l;
 
       if (update) {
-        // the removed layer was the active layer !
-
-        if (n == layers.end ()) {
-          // this was the upper layer, so the
-          // the active layer to the last one
-          active_layer = layers.back ();
-        }
-        else
-          active_layer = *n;
+          active_layer = layers.current();
+          if(!active_layer)   // This one is needed for Qt 3.0 :)
+              active_layer=layers.last();
       }
-      break;
-    }
   }
   emit selectionChanged ();
   emit changed ();
 }
 
 GLayer *GDocument::layerForHelplines () {
-  return layers[0];
+  return layers.first();
 }
 
 bool GDocument::helplineLayerIsActive () {
-  return (active_layer->isInternal ());
+    return (active_layer->isInternal ()); // hmmm?? Is that save?
 }
 
 void GDocument::invalidateClipRegions () {
-  for (vector<GLayer*>::iterator li = layers.begin ();
-       li != layers.end (); li++) {
-    GLayer* layer = *li;
-    if (layer->isVisible ()) {
-      const QList<GObject>& contents = layer->objects ();
-      QListIterator<GObject> oi(contents);
-      for (; oi.current(); ++oi)
-        (*oi)->invalidateClipRegion ();
+    for (QListIterator<GLayer> li(layers); li.current(); ++li) {
+        if ((*li)->isVisible ()) {
+            const QList<GObject>& contents = (*li)->objects ();
+            QListIterator<GObject> oi(contents);
+            for (; oi.current(); ++oi)
+                (*oi)->invalidateClipRegion ();
+        }
     }
-  }
 }
 
 void GDocument::setGrid (float dx, float dy, bool snap) {
@@ -945,15 +878,15 @@ void GDocument::getGrid (float& dx, float& dy, bool& snap) {
   snap = snapToGrid;
 }
 
-void GDocument::setHelplines (const vector<float>& hlines,
-                              const vector<float>& vlines,
+void GDocument::setHelplines (const QValueList<float>& hlines,
+                              const QValueList<float>& vlines,
                               bool snap) {
   hHelplines = hlines;
   vHelplines = vlines;
   snapToHelplines = snap;
 }
 
-void GDocument::getHelplines (vector<float>& hlines, vector<float>& vlines,
+void GDocument::getHelplines (QValueList<float>& hlines, QValueList<float>& vlines,
                               bool& snap) {
   hlines = hHelplines;
   vlines = vHelplines;
@@ -970,10 +903,9 @@ void GDocument::selectNextObject () {
 
   if (selectionIsEmpty ()) {
     newSel = const_cast< QList<GObject>& >(active_layer->objects()).first();
-
   }
   else {
-    GObject *oldSel = selection.front();
+    GObject *oldSel = selection.first();
     unsigned int idx = findIndexOfObject (oldSel);
     if (++idx >= active_layer->objects ().count())
       idx = 0;

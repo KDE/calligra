@@ -25,15 +25,12 @@
 #ifndef Tool_h_
 #define Tool_h_
 
-#include <qobject.h>
-#include <qevent.h>
-#include <qkeycode.h>
-
 #include <GObject.h>
 
 class GDocument;
 class Canvas;
 class CommandHistory;
+class QEvent;
 
 class Tool : public QObject {
   Q_OBJECT
@@ -51,12 +48,12 @@ public:
   virtual bool consumesRMBEvents () { return true; }
 
 signals:
-  void modeSelected (const char* msg);
+  void modeSelected (const QString &msg);
   void operationDone ();
 
 protected:
   CommandHistory* history;
-  char msgbuf[200];
+  QString msgbuf;
 };
 
 #endif

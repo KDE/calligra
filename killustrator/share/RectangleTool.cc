@@ -80,10 +80,16 @@ void RectangleTool::processEvent (QEvent* e, GDocument *doc,
     wval = cvtPtToUnit (unit, r.width ());
     hval = cvtPtToUnit (unit, r.height ());
 
-    // FIXME!!! (Werner)
-    sprintf (msgbuf, "%s [%.3f %s, %.3f %s, %.3f %s, %.3f %s]",
-             flag ? (const char*)i18n("Create Square") :
-             (const char*)i18n("Create Rectangle"), xval, u, yval, u, wval, u, hval, u);
+    msgbuf=flag ? i18n("Create Square") : i18n("Create Rectangle");
+    msgbuf+=" [";
+    msgbuf+=QString::number(xval, 'f', 3);
+    msgbuf+=QString(" ") + u + QString(", ");
+    msgbuf+=QString::number(yval, 'f', 3);
+    msgbuf+=QString(" ") + u + QString(", ");
+    msgbuf+=QString::number(wval, 'f', 3);
+    msgbuf+=QString(" ") + u + QString(", ");
+    msgbuf+=QString::number(hval, 'f', 3);
+    msgbuf+=QString(" ") + u + QString("]");
     emit modeSelected (msgbuf);
   }
   else if (e->type () == QEvent::MouseButtonRelease) {

@@ -26,6 +26,7 @@
 
 #include <qstring.h>
 #include <qclipboard.h>
+#include <qdom.h>
 
 #include <klocale.h>
 #include <kapp.h>
@@ -59,8 +60,7 @@ void PasteCmd::execute () {
 
             QDomDocument d;
             d.setContent(buf);
-            // FIXME - STL (Werner)
-            //document->insertFromXml (d, objects);
+            document->insertFromXml (d, objects);
             document->unselectAllObjects ();
             for (GObject *o=objects.first(); o!=0L; o=objects.next()) {
                 o->ref ();

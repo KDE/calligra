@@ -25,10 +25,8 @@
 #ifndef EditPointTool_h_
 #define EditPointTool_h_
 
-//#include <GObject.h>
 #include <Tool.h>
 
-class QEvent;
 class QCursor;
 class GObject;
 

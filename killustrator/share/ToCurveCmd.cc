@@ -33,8 +33,8 @@ ToCurveCmd::ToCurveCmd (GDocument* doc)
   : Command(i18n("Convert to curve"))
 {
   document = doc;
-  list<GObject*>::iterator it = doc->getSelection ().begin ();
-  for (; it != doc->getSelection ().end (); it++) {
+  QListIterator<GObject> it(doc->getSelection());
+  for (; it.current(); ++it) {
     (*it)->ref ();
     objects.append(*it);
   }

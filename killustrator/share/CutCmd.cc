@@ -25,21 +25,19 @@
 #include <CutCmd.h>
 
 #include <qclipboard.h>
+#include <qdom.h>
 #include <kapp.h>
 #include <klocale.h>
 
 #include <GDocument.h>
 #include <GObject.h>
 
-using namespace std;
-
 CutCmd::CutCmd (GDocument* doc)
   : Command(i18n("Cut"))
 {
   document = doc;
   objects.setAutoDelete(true);
-  for (list<GObject*>::iterator it = doc->getSelection ().begin ();
-       it != doc->getSelection ().end (); it++) {
+  for(QListIterator<GObject> it(doc->getSelection()); it.current(); ++it) {
     MyPair *p=new MyPair;
     p->o = *it;
     p->o->ref ();

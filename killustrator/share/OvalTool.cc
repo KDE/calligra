@@ -99,17 +99,23 @@ void OvalTool::processEvent (QEvent* e, GDocument *doc, Canvas* canvas) {
     Rect r = oval->boundingBox ();
     MeasurementUnit unit =
       PStateManager::instance ()->defaultMeasurementUnit ();
-    const char *u = unitToString (unit);
+    QString u = unitToString (unit);
     float xval, yval, wval, hval;
     xval = cvtPtToUnit (unit, r.x ());
     yval = cvtPtToUnit (unit, r.y ());
     wval = cvtPtToUnit (unit, r.width ());
     hval = cvtPtToUnit (unit, r.height ());
 
-    // FIXME (Werner)
-    sprintf (msgbuf, "%s [%.3f %s, %.3f %s, %.3f %s, %.3f %s]",
-             oval->isCircle () ? (const char*)i18n("Create Circle") :
-             (const char*)i18n("Create Ellipse"), xval, u, yval, u, wval, u, hval, u);
+    msgbuf=oval->isCircle () ? i18n("Create Circle") : i18n("Create Ellipse");
+    msgbuf+=" [";
+    msgbuf+=QString::number(xval, 'f', 3);
+    msgbuf+=QString(" ") + u + QString(", ");
+    msgbuf+=QString::number(yval, 'f', 3);
+    msgbuf+=QString(" ") + u + QString(", ");
+    msgbuf+=QString::number(wval, 'f', 3);
+    msgbuf+=QString(" ") + u + QString(", ");
+    msgbuf+=QString::number(hval, 'f', 3);
+    msgbuf+=QString(" ") + u + QString("]");
     emit modeSelected (msgbuf);
   }
   else if (e->type () == QEvent::MouseButtonRelease) {

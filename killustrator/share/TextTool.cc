@@ -26,6 +26,7 @@
 
 #include <qkeycode.h>
 
+#include <GText.h>
 #include <GDocument.h>
 #include <Canvas.h>
 #include <Coord.h>

@@ -25,6 +25,7 @@
 #include <GText.h>
 #include <GDocument.h>
 
+#include <qdom.h>
 #include <klocale.h>
 
 float seg_angle (const Coord& c1, const Coord& c2) {

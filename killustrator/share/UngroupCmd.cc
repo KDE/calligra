@@ -32,8 +32,7 @@ UngroupCmd::UngroupCmd (GDocument* doc) : Command(i18n("Ungroup")) {
 
     groups.setAutoDelete(true);
     document = doc;
-    for (list<GObject*>::iterator it = doc->getSelection ().begin ();
-         it != doc->getSelection ().end (); it++) {
+    for(QListIterator<GObject> it(doc->getSelection()); it.current(); ++it) {
         GObject* o = *it;
         if (o->isA ("GGroup")) {
             GGroup* gobj = (GGroup *) o;
