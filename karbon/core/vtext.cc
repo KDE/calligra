@@ -15,7 +15,7 @@
 #include <X11/Xft/Xft.h>
 #include <X11/Xft/XftFreetype.h>
 
-#include FT_BUILD_H
+#include <ft2build.h>
 #include FT_FREETYPE_H
 #include FT_OUTLINE_H
 #include FT_GLYPH_H
@@ -194,6 +194,8 @@ VText::save( QDomElement& element ) const
 	if( state() != state_deleted )
 	{
 		QDomElement me = element.ownerDocument().createElement( "TEXT" );
+
+		VObject::save( me );
 
 		// save font properties
 		me.setAttribute( "text", m_text );
