@@ -223,3 +223,12 @@ Summary 1999-11-28 ->1999-12-03
 A bug was fixed by Mr Well (I believe)
 =>Now kspread don't crash when you write bad tablename in a cell
 thanks.
+
+1999-12-16 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Now you can put text to bottom ,middle or top in a cell
+
+Summary 1999-12-03 ->1999-12-16
+1999-12-15 KRASH release.
+
+

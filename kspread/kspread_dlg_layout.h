@@ -10,7 +10,7 @@
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
- 
+
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
@@ -52,7 +52,7 @@ class KSpreadView;
 class KSpreadPatternSelect : public QFrame
 {
     Q_OBJECT
-public:    
+public:
     KSpreadPatternSelect( QWidget *parent, const char *_name );
 
     void setPenStyle( PenStyle _pat ) { penStyle = _pat; repaint(); }
@@ -96,14 +96,14 @@ public:
     CellLayoutPageFont( QWidget* parent, CellLayoutDlg *_dlg );
 
     void apply( KSpreadCell *_cell );
-    
+
 signals:
     /**
      * Connect to this to monitor the font as it as selected if you are
      * not running modal.
      */
     void fontSelected( const QFont &font );
-    
+
 private slots:
 
     void      family_chosen_slot(const QString & );
@@ -114,9 +114,9 @@ private slots:
 
 
 private:
-    
+
     void setCombos();
-   
+
     QGroupBox	 *box1;
     QGroupBox	 *box2;
 
@@ -139,7 +139,7 @@ private:
     QComboBox    *size_combo;
     QComboBox    *weight_combo;
     QComboBox    *style_combo;
-    
+
     QLabel       *example_label;
     QFont         selFont;
 
@@ -151,14 +151,14 @@ class CellLayoutPageMisc : public QWidget
     Q_OBJECT
 public:
     CellLayoutPageMisc( QWidget *parent, CellLayoutDlg *_dlg );
-    
+
     void apply( KSpreadCell *_cell );
-    
+
 public slots:
     void slotTextColor();
     void slotBackgroundColor();
     void slotStyle( int );
-   
+
 protected:
     void setColor( QPushButton *_button, const QColor &_color );
 
@@ -166,7 +166,7 @@ protected:
     bool bTextColorUndefined;
     QColor bgColor;
     bool bBgColorUndefined;
-    
+
     QPushButton *textColorButton;
     QPushButton *bgColorButton;
 
@@ -175,12 +175,12 @@ protected:
     int idStyleUndef;
     int idStyleButton;
     int idStyleSelect;
-   
+
     QLineEdit* actionText;
-  
+
     CellLayoutDlg *dlg;
 };
-    
+
 /**
  * KSpreadLayout of numbers.
  * This widget is part of the layout dialog.
@@ -190,9 +190,9 @@ class CellLayoutPageFloat : public QWidget
 {
 public:
     CellLayoutPageFloat( QWidget *parent, CellLayoutDlg *_dlg );
-    
+
     void apply( KSpreadCell *_cell );
-    
+
 protected:
     QLineEdit* postfix;
     QLineEdit* precision;
@@ -209,13 +209,13 @@ class CellLayoutPageBorder : public QWidget
     Q_OBJECT
 public:
     CellLayoutPageBorder( QWidget *parent, CellLayoutDlg *_dlg );
-    
+
     void apply( KSpreadCell *_cell );
     /**
      * Apply the changes in the outline to the objects.
      */
     void applyOutline( int _left, int _top, int _right, int _bottom );
-    
+
 public slots:
     void slotUnselect1( KSpreadPatternSelect *_select );
     void slotUnselect2( KSpreadPatternSelect *_select );
@@ -227,9 +227,9 @@ protected:
 
     KSpreadPatternSelect *selectedPattern;
     KSpreadPatternSelect *selectedBorder;
-    
+
     KSpreadPatternSelect *left;
-    KSpreadPatternSelect *right;    
+    KSpreadPatternSelect *right;
     KSpreadPatternSelect *top;
     KSpreadPatternSelect *bottom;
     KSpreadPatternSelect *outline;
@@ -244,9 +244,27 @@ protected:
     QPushButton* color;
 
     QColor currentColor;
-    
+
     CellLayoutDlg *dlg;
 };
+
+class CellLayoutPagePosition : public QWidget
+{
+public:
+    CellLayoutPagePosition( QWidget *parent, CellLayoutDlg *_dlg );
+
+    void apply( KSpreadCell *_cell );
+
+protected:
+    QRadioButton *bottom;
+    QRadioButton *top;
+    QRadioButton *middle;
+    QRadioButton *left;
+    QRadioButton *right;
+    QRadioButton *center;
+    CellLayoutDlg *dlg;
+};
+
 
 /**
  */
@@ -268,7 +286,7 @@ public:
     KSpreadTable* getTable() {	return table; }
 
     bool isSingleCell() { return ( left == right && top == bottom ); }
-  
+
     // The layout of the selected area
     PenStyle leftBorderStyle;
     int leftBorderWidth;
@@ -317,7 +335,9 @@ public:
     bool bBgColor;
     KSpreadCell::Style eStyle;
     QString actionText;
-  
+    KSpreadCell::Align alignX;
+    KSpreadCell::AlignY alignY;
+
     static QPixmap* formatOnlyNegSignedPixmap;
     static QPixmap* formatRedOnlyNegSignedPixmap;
     static QPixmap* formatRedNeverSignedPixmap;
@@ -325,8 +345,8 @@ public:
     static QPixmap* formatRedAlwaysSignedPixmap;
 
     static QPixmap* undefinedPixmap;
-    
-public slots:    
+
+public slots:
     void slotApply();
     
 protected:
@@ -344,27 +364,28 @@ protected:
      */
     QPixmap* paintFormatPixmap( const char *_string1, const QColor & _color1,
 				const char *_string2, const QColor & _color2 );
-    
-    CellLayoutPageFloat *floatPage;    
+
+    CellLayoutPageFloat *floatPage;
     CellLayoutPageBorder *borderPage;
     CellLayoutPageMisc *miscPage;
     CellLayoutPageFont *fontPage;
-    
+    CellLayoutPagePosition *positionPage;
+
     QTabDialog *tab;
-    
+
     /**
      * The table that opened this dlg.
      */
     KSpreadTable *table;
 
     KSpreadView *m_pView;
-  
+
     // The rectangular area for which this dlg has been opened.
     int left;
     int right;
     int top;
     int bottom;
-    
+
 };
 
 #endif

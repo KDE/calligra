@@ -146,6 +146,10 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
     precision = obj->precision();
     floatFormat = obj->floatFormat();
     floatColor = obj->floatColor();
+
+    alignX = obj->align();
+    alignY = obj->alignY();
+
     textColor = obj->textColor();
     bgColor = obj->bgColor( _left, _top );
     textFontSize = obj->textFontSize();
@@ -243,7 +247,7 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
 	if ( outlineBorderWidth != obj->topBorderWidth( x, _top ) )
 	    bOutlineBorderStyle = FALSE;
 	if ( outlineBorderColor != obj->topBorderColor( x, _top ) )
-	    bOutlineBorderColor = FALSE;	
+	    bOutlineBorderColor = FALSE;
 
 	obj = table->cellAt( x, _bottom );
 
@@ -315,6 +319,9 @@ void CellLayoutDlg::init()
     fontPage = new CellLayoutPageFont( tab, this );
     tab->addTab( fontPage, i18n("Font") );
 
+    positionPage = new CellLayoutPagePosition( tab, this);
+    tab->addTab( positionPage, i18n("Position") );
+
     // tab->setApplyButton();
     tab->setCancelButton();
 
@@ -368,6 +375,7 @@ void CellLayoutDlg::slotApply()
 	    borderPage->apply( obj );
 	    miscPage->apply( obj );
 	    fontPage->apply( obj );
+            positionPage->apply( obj );
 	}
 
     // Outline
@@ -406,7 +414,7 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
     tmpQLabel = new QLabel( this, "Label_2" );
     tmpQLabel->setGeometry( 10, 70, 50, 30 );
     tmpQLabel->setText( i18n("Postfix") );
-	
+
     precision->raise();
     precision->setGeometry( 70, 110, 100, 30 );
     char buffer[ 100 ];
@@ -484,23 +492,23 @@ void CellLayoutPageFloat::apply( KSpreadCell *_obj )
     {
     case 0:
 	_obj->setFloatFormat( KSpreadCell::OnlyNegSigned );
-	_obj->setFloatColor( KSpreadCell::AllBlack );	
+	_obj->setFloatColor( KSpreadCell::AllBlack );
 	break;
     case 1:
 	_obj->setFloatFormat( KSpreadCell::OnlyNegSigned );
-	_obj->setFloatColor( KSpreadCell::NegRed );	
+	_obj->setFloatColor( KSpreadCell::NegRed );
 	break;
     case 2:
 	_obj->setFloatFormat( KSpreadCell::AlwaysUnsigned );
-	_obj->setFloatColor( KSpreadCell::NegRed );	
+	_obj->setFloatColor( KSpreadCell::NegRed );
 	break;
     case 3:
 	_obj->setFloatFormat( KSpreadCell::AlwaysSigned );
-	_obj->setFloatColor( KSpreadCell::AllBlack );	
+	_obj->setFloatColor( KSpreadCell::AllBlack );
 	break;
     case 4:
 	_obj->setFloatFormat( KSpreadCell::AlwaysSigned );
-	_obj->setFloatColor( KSpreadCell::NegRed );	
+	_obj->setFloatColor( KSpreadCell::NegRed );
 	break;
     }
 }
@@ -859,7 +867,7 @@ void CellLayoutPageBorder::slotUnselect1( KSpreadPatternSelect *_p )
 	    selectedPattern = pattern7;
 	    pattern7->slotSelect();
 	}
-	
+
 	slotSetColorButton( _p->getColor() );
 	
 	return;
@@ -873,7 +881,7 @@ void CellLayoutPageBorder::slotUnselect1( KSpreadPatternSelect *_p )
 }
 
 void CellLayoutPageBorder::slotUnselect2( KSpreadPatternSelect *_p )
-{	
+{
     selectedPattern = _p;
 
     if ( pattern1 != _p )
@@ -958,7 +966,7 @@ void CellLayoutPageBorder::applyOutline( int _left, int _top, int _right, int _b
 	obj->setLeftBorderColor( outline->getColor() );
 	obj->setLeftBorderStyle( outline->getPenStyle() );
 	obj->setLeftBorderWidth( outline->getPenWidth() );
-	
+
 	obj = dlg->getTable()->nonDefaultCell( _right, y );
 
 	obj->setRightBorderColor( outline->getColor() );
@@ -1460,5 +1468,65 @@ void CellLayoutPageFont::setCombos()
      style_combo->setCurrentItem(1);
  }
 }
+
+CellLayoutPagePosition::CellLayoutPagePosition( QWidget* parent, CellLayoutDlg *_dlg ) : QWidget( parent )
+{
+    dlg = _dlg;
+    QVBoxLayout *lay1 = new QVBoxLayout( this );
+    lay1->setMargin( 5 );
+    lay1->setSpacing( 10 );
+    QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, "Horizontal",this);
+    grp->setRadioButtonExclusive( TRUE );
+    grp->layout();
+    lay1->addWidget(grp);
+    left = new QRadioButton( i18n("Left"), grp );
+    center = new QRadioButton( i18n("Center"), grp );
+    right = new QRadioButton( i18n("Right"), grp );
+    setCaption( i18n("Horizontal") );
+
+    if(dlg->alignX==KSpreadCell::Left)
+        left->setChecked(true);
+    else if(dlg->alignX==KSpreadCell::Center)
+        center->setChecked(true);
+    else if(dlg->alignX==KSpreadCell::Right)
+        right->setChecked(true);
+
+
+    grp = new QButtonGroup( 1, QGroupBox::Horizontal, "Vertical",this);
+    grp->setRadioButtonExclusive( TRUE );
+    grp->layout();
+    lay1->addWidget(grp);
+    top = new QRadioButton( i18n("Top"), grp );
+    middle = new QRadioButton( i18n("Middle"), grp );
+    bottom = new QRadioButton( i18n("Bottom"), grp );
+
+    setCaption( i18n("Vertical") );
+    if(dlg->alignY==KSpreadCell::Top)
+        top->setChecked(true);
+    else if(dlg->alignY==KSpreadCell::Middle)
+        middle->setChecked(true);
+    else if(dlg->alignY==KSpreadCell::Bottom)
+        bottom->setChecked(true);
+
+    this->resize( 400, 400 );
+}
+
+void CellLayoutPagePosition::apply( KSpreadCell *_obj )
+{
+if(top->isChecked())
+        _obj->setAlignY(KSpreadCell::Top);
+else if(bottom->isChecked())
+        _obj->setAlignY(KSpreadCell::Bottom);
+else if(middle->isChecked())
+        _obj->setAlignY(KSpreadCell::Middle);
+
+if(left->isChecked())
+        _obj->setAlign(KSpreadCell::Left);
+else if(right->isChecked())
+        _obj->setAlign(KSpreadCell::Right);
+else if(center->isChecked())
+        _obj->setAlign(KSpreadCell::Center);
+}
+
 
 #include "kspread_dlg_layout.moc"

@@ -36,6 +36,7 @@ class KSpreadLayout
 {
 public:
     enum Align { Left = 1, Center = 2, Right = 3, Undefined = 4 };
+    enum AlignY { Top = 1, Middle = 2, Bottom =3 };
     enum FloatFormat { AlwaysSigned = 1, AlwaysUnsigned = 2, OnlyNegSigned = 3 };
     enum FloatColor { NegRed = 1, AllBlack = 2 };
 
@@ -45,6 +46,7 @@ public:
     void copy( KSpreadLayout &_l );
 
     virtual void setAlign( Align _align ) { m_eAlign = _align; }
+    virtual void setAlignY( AlignY _alignY) { m_eAlignY = _alignY; }
     virtual void setFaktor( double _d ) { m_dFaktor = _d; }
     virtual void setPrefix( const char * _prefix ) { m_strPrefix = _prefix; }
     virtual void setPostfix( const char * _postfix ) { m_strPostfix = _postfix; }
@@ -131,6 +133,8 @@ public:
 
     virtual Align align() { return m_eAlign; }
 
+    virtual AlignY alignY() { return m_eAlignY; }
+
     virtual double faktor() { return m_dFaktor; }
 
     virtual bool multiRow() { return m_bMultiRow; }
@@ -156,6 +160,10 @@ protected:
      * Alignment of the text
      */
     Align m_eAlign;
+    /**
+     * Aligment of the text at top middle or bottom
+     */
+    AlignY m_eAlignY;
 
     /**
      * The font used to draw the text

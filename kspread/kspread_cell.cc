@@ -817,7 +817,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     {
       RowLayout *rl = m_pTable->rowLayout( y );
       h += rl->height() - 1;
-    }	
+    }
   }
   m_iExtraWidth = w;
   m_iExtraHeight = h;
@@ -898,7 +898,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 	int t = wl;
 	if ( start != o.data() )
 	  wl += spacew;
-	
+
 	// Does the new word fit in this line ?
 	if ( t > 0 && l + wl <= w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row) -
 	     rightBorderWidth( _col, _row ) )
@@ -920,7 +920,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 	    // New line
 	    m_strOutText += "\n";
 	  }
-	
+
 	  // Add the current word
 	  m_strOutText += ws;
 	  // Skip this word and the separator
@@ -967,8 +967,20 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     while ( i != -1 );
   }
 
+  switch( m_eAlignY )
+  {
+  case KSpreadCell::Top:
+    m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE+ fm.ascent();
+    break;
+  case KSpreadCell::Bottom:
+    m_iTextY = h - BORDER_SPACE - bottomBorderWidth( _col, _row );
+    break;
+  case KSpreadCell::Middle:
+    m_iTextY = ( h - m_iOutTextHeight ) / 2 + fm.ascent();
+    break;
+  }
   // Vertical alignment
-  m_iTextY = ( h - m_iOutTextHeight ) / 2 + fm.ascent();
+  //m_iTextY = ( h - m_iOutTextHeight ) / 2 + fm.ascent();
   m_fmAscent=fm.ascent();
 
   // Do we have to occupy additional cells right hand ?
@@ -994,7 +1006,7 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
 	{
 	  w += cl2->width() - 1;
 	  c++;
-	
+
 	  // Enough space ?
 	  if ( m_iOutTextWidth <= w - 2 * BORDER_SPACE - leftBorderWidth( _col, _row) -
 	       rightBorderWidth( _col, _row ) )
@@ -1026,12 +1038,12 @@ void KSpreadCell::makeLayout( QPainter &_painter, int _col, int _row )
     /* for ( int x = 0; x <= m_iExtraXCells; x++ )
 	for ( int y = 0; y <= m_iExtraYCells; y++ )
 	    if ( x != 0 || y != 0 )
-	    {		
+	    {
 		KSpreadCell *cell = m_pTable->nonDefaultCell( column + x, row + y );
 		cell->setKSpreadLayoutDirtyFlag();
 		cell->setDisplayDirtyFlag();
 	    }  */
-	
+
   m_bLayoutDirtyFlag = FALSE;
 }
 void KSpreadCell::offsetAlign(int _col,int _row)
@@ -1042,7 +1054,18 @@ ColumnLayout *cl = m_pTable->columnLayout( _col );
 
 int w = cl->width();
 int h = rl->height();
-m_iTextY = ( h - m_iOutTextHeight ) / 2 +m_fmAscent;
+switch( m_eAlignY )
+  {
+  case KSpreadCell::Top:
+    m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE +m_fmAscent;
+    break;
+  case KSpreadCell::Bottom:
+    m_iTextY = h - BORDER_SPACE - bottomBorderWidth( _col, _row );
+    break;
+  case KSpreadCell::Middle:
+    m_iTextY = ( h - m_iOutTextHeight ) / 2 +m_fmAscent;
+    break;
+  }
 if ( a == KSpreadCell::Undefined )
   {
     if ( m_bValue )
@@ -2407,6 +2430,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
   QDomElement format = doc.createElement( "format" );
   cell.appendChild( format );
   format.setAttribute( "align", (int)m_eAlign );
+  format.setAttribute( "alignY", (int)m_eAlignY );
 
   if ( m_bgColor != Qt::white )
     format.setAttribute( "bgcolor", m_bgColor.name() );
@@ -2457,7 +2481,7 @@ QDomElement KSpreadCell::save( QDomDocument& doc, int _x_offset, int _y_offset )
       QDomElement text = doc.createElement( "text" );
       text.appendChild( doc.createCDATASection( m_strText ) );
       cell.appendChild( text );
-    }	
+    }
     else
     {
       QDomElement text = doc.createElement( "text" );
@@ -2508,6 +2532,20 @@ bool KSpreadCell::load( const QDomElement& cell, int _xshift, int _yshift, Paste
 	    }
 	    // Assignment
 	    setAlign( a );
+	}
+        if ( f.hasAttribute( "alignY" ) )
+        {
+	    AlignY a = (AlignY)f.attribute("alignY").toInt( &ok );
+	    if ( !ok )
+		return false;
+	    // Validation
+	    if ( (unsigned int)a < 1 || (unsigned int)a > 4 )
+	    {
+		cerr << "Value of of range Cell::alignY=" << (unsigned int)a << endl;
+		return false;
+	    }
+	    // Assignment
+	    setAlignY( a );
 	}
 	if ( f.hasAttribute( "bgcolor" ) )
 	    setBgColor( QColor( f.attribute( "bgcolor" ) ) );

@@ -40,6 +40,7 @@ KSpreadLayout::KSpreadLayout( KSpreadTable *_table )
     m_iPrecision = -1;
     m_bgColor = Qt::white;
     m_eAlign = KSpreadLayout::Undefined;
+    m_eAlignY = KSpreadLayout::Middle;
     m_iLeftBorderWidth = 1;
     m_iTopBorderWidth = 1;
     m_leftBorderPen.setColor( Qt::black );
@@ -66,6 +67,7 @@ void KSpreadLayout::copy( KSpreadLayout &_l )
   m_iPrecision = _l.precision();
   m_bgColor = _l.bgColor();
   m_eAlign = _l.align();
+  m_eAlignY = _l.alignY();
   m_iLeftBorderWidth = _l.leftBorderWidth();
   m_iTopBorderWidth = _l.topBorderWidth();
   m_leftBorderPen.setColor( _l.leftBorderColor() );

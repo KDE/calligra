@@ -104,7 +104,7 @@ public:
     virtual QDomElement saveRightMostBorder( QDomDocument& doc, int _x_offset, int _y_offset );
     virtual QDomElement saveBottomMostBorder( QDomDocument& doc, int _x_offset, int _y_offset );
     virtual QDomElement save( QDomDocument& doc, int _x_offset = 0, int _y_offset = 0 );
-    
+
     bool loadRightMostBorder( const QDomElement& cell, int _xshift, int _yshift );
     bool loadBottomMostBorder( const QDomElement& cell, int _xshift, int _yshift );
     bool load( const QDomElement& cell, int _xshift, int _yshift, PasteMode pm = Normal, Operation op = OverWrite );
@@ -213,6 +213,7 @@ public:
      */
     void setText( const QString& _text );
     void setAlign( Align _align ) { m_eAlign = _align; m_bLayoutDirtyFlag = TRUE; }
+    void setAlignY( AlignY _alignY ) { m_eAlignY = _alignY; m_bLayoutDirtyFlag = TRUE; }
     void setFaktor( double _d ) { m_dFaktor = _d; m_bLayoutDirtyFlag = TRUE; }
 
     void setPrefix( const char * _prefix );
