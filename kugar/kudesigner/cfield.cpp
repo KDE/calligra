@@ -23,7 +23,7 @@ CanvasField::CanvasField(int x, int y, int width, int height, QCanvas * canvas):
 {
     std::map<QString, QString> m;
 
-    props["Field"] = *(new PropPtr(new Property(StringValue, "Field", i18n("Field to display"), i18n("Field Name"))));
+    props["Field"] = *(new PropPtr(new Property(FieldName, "Field", i18n("Field to display"), i18n("Field Name"))));
 
     m["String"] = "0";
     m["Integer"] = "1";

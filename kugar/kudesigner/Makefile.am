@@ -19,7 +19,8 @@ libkudesignercore_la_SOURCES = canvbox.cpp \
 	propertywidgets.cpp \
 	kudesigner_view.cpp \
 	kudesigner_factory.cpp \
-	kudesigner_doc.cpp
+	kudesigner_doc.cpp \
+	plugin.cpp
 libkudesignercore_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -module -avoid-version
 libkudesignercore_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KPARTS) $(LIB_KOFFICECORE) $(LIB_KIO) $(LIB_KDEPRINT)
 

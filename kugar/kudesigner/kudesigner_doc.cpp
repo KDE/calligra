@@ -30,7 +30,8 @@
 #include "property.h"
 
 #include <koTemplateChooseDia.h>
-
+#include <kparts/componentfactory.h>
+#include <kdebug.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 
@@ -38,11 +39,10 @@
 #include <qprinter.h>
 #include <qpaintdevicemetrics.h>
 #include <qfileinfo.h>
-
 #include "mycanvas.h"
 
 KudesignerDoc::KudesignerDoc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
-    : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
+    : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),m_plugin(0)
 {
     setInstance( KudesignerFactory::global(), false );
     history = new KCommandHistory(actionCollection());
@@ -385,7 +385,14 @@ void KudesignerDoc::setReportItemAttributes(QDomNode *node, CanvasReportItem *it
 
 void KudesignerDoc::loadPlugin(const QString &name)
 {
-	
+	kdDebug()<<"Trying to load plugin: "<<name<<endl;
+	KuDesignerPlugin *plug=KParts::ComponentFactory::createInstanceFromLibrary<KuDesignerPlugin>(name.utf8(),this);
+	m_plugin=plug;
+}
+
+KuDesignerPlugin *KudesignerDoc::plugin()
+{
+	return m_plugin;
 }
 
 #include "kudesigner_doc.moc"

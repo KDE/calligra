@@ -22,6 +22,7 @@
 
 #include <koDocument.h>
 #include <kcommand.h>
+#include "plugin.h"
 
 class MyCanvas;
 class QCanvas;
@@ -46,7 +47,7 @@ public:
     MyCanvas *canvas();
 
     void loadPlugin(const QString& name);
-
+    KuDesignerPlugin *plugin();
 protected:
     virtual KoView* createViewInstance( QWidget* parent, const char* name );
 
@@ -58,6 +59,8 @@ private:
     KCommandHistory *history;
 
     MyCanvas *docCanvas;
+
+    KuDesignerPlugin *m_plugin;
 
     void setReportItemAttributes(QDomNode *node, CanvasReportItem *item);
     void addReportItems(QDomNode *node, CanvasBand *section);

@@ -61,7 +61,7 @@ signals:
 signals:
 #undef signals
 #define signals protected
-    void createPluggedInEditor(QWidget* retVal, const PropertyEditor *editor,
+    void createPluggedInEditor(QWidget *&retVal, PropertyEditor *editor,
 	int type,QString name,QString value,const CanvasBox *cb);
 
 };

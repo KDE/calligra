@@ -18,6 +18,8 @@
 #ifndef PROPERTY_H
 #define PROPERTY_H
 
+#include <map>
+
 class QWidget;
 class QString;
 class PropertyEditor;
