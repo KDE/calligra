@@ -269,25 +269,28 @@ bool KImageShopView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   m_vToolBarTools->enable( OpenPartsUI::Show );
   m_vToolBarTools->setFullWidth( false );
   m_vToolBarTools->setBarPos( OpenPartsUI::Left );
-
+  
   // move tool
   text = Q2C( i18n( "Move layers and selections." ) );
   pix = OPICON( "move" );
   m_vToolBarTools->insertButton2( pix, TBTOOLS_MOVETOOL, SIGNAL( clicked() ), this, "slotActivateMoveTool", true, text, -1 );
   m_vToolBarTools->setToggle( TBTOOLS_MOVETOOL, true );
   m_vToolBarTools->toggleButton( TBTOOLS_MOVETOOL );
+  m_toolButtons.push_back( TBTOOLS_MOVETOOL );
 
   // zoom tool
   text = Q2C( i18n( "Zoom in/out." ) );
   pix = OPICON( "viewmag" );
   m_vToolBarTools->insertButton2( pix, TBTOOLS_ZOOMTOOL, SIGNAL(clicked()), this, "slotActivateZoomTool", true, text, -1 );
   m_vToolBarTools->setToggle( TBTOOLS_ZOOMTOOL, true );
+  m_toolButtons.push_back( TBTOOLS_ZOOMTOOL );
 
   // paint tool
   text = Q2C( i18n( "Paint using a brush." ) );
   pix = OPICON( "paintbrush" );
   m_vToolBarTools->insertButton2( pix, TBTOOLS_BRUSHTOOL, SIGNAL(clicked()), this, "slotActivateBrushTool", true, text, -1 );
   m_vToolBarTools->setToggle( TBTOOLS_BRUSHTOOL, true );
+  m_toolButtons.push_back( TBTOOLS_BRUSHTOOL );
 
   kdebug( KDEBUG_INFO, 0, "KImageShopView::mappingCreateToolbar : done" );
   return true;
@@ -661,6 +664,15 @@ void KImageShopView::resizeEvent(QResizeEvent*)
     }
 }
 
+void KImageShopView::activateTool( int toolID )
+{
+    // implement RadioButton behaviour for the Tool toolbar
+    vector<int>::iterator it;
+    for( it = m_toolButtons.begin(); it != m_toolButtons.end(); it++ ) 
+        if( m_vToolBarTools->isButtonOn( *it ) != ( *it == toolID ) )
+            m_vToolBarTools->setButton( *it, *it == toolID );
+}
+
 void KImageShopView::slotActivateMoveTool()
 {
   if (!m_pMoveTool)
@@ -668,19 +680,7 @@ void KImageShopView::slotActivateMoveTool()
 
   m_pTool = m_pMoveTool;
 
-  if(m_vToolBarTools->isButtonOn(TBTOOLS_MOVETOOL))
-    {
-      // move tool is already on but will automatically be toggled by
-      // ktoolbar code -> toggle it by hand to keep it on.
-      m_vToolBarTools->isButtonOn(TBTOOLS_MOVETOOL);
-    }
-
-  // shut off brushtool (move this to a function as soon as
-  // we have more tools.
-  if(m_vToolBarTools->isButtonOn(TBTOOLS_BRUSHTOOL))
-    m_vToolBarTools->toggleButton(TBTOOLS_BRUSHTOOL);
-  if(m_vToolBarTools->isButtonOn(TBTOOLS_ZOOMTOOL))
-    m_vToolBarTools->toggleButton(TBTOOLS_ZOOMTOOL);
+  activateTool( TBTOOLS_MOVETOOL );
 }
 
 void KImageShopView::slotActivateBrushTool()
@@ -705,19 +705,7 @@ void KImageShopView::slotActivateBrushTool()
 
   m_pTool = m_pBrushTool;
 
-  if(m_vToolBarTools->isButtonOn(TBTOOLS_BRUSHTOOL))
-    {
-      // brush tool is already on but will automatically be toggled by
-      // ktoolbar code -> toggle it by hand to keep it on.
-      m_vToolBarTools->isButtonOn(TBTOOLS_BRUSHTOOL);
-    }
-
-  // shut off movetool (move this to a function as soon as
-  // we have more tools.
-  if(m_vToolBarTools->isButtonOn(TBTOOLS_MOVETOOL))
-    m_vToolBarTools->toggleButton(TBTOOLS_MOVETOOL);
-  if(m_vToolBarTools->isButtonOn(TBTOOLS_ZOOMTOOL))
-    m_vToolBarTools->toggleButton(TBTOOLS_ZOOMTOOL);
+  activateTool( TBTOOLS_BRUSHTOOL);
 }
 
 void KImageShopView::slotActivateZoomTool()
@@ -727,19 +715,7 @@ void KImageShopView::slotActivateZoomTool()
 
   m_pTool = m_pZoomTool;
 
-  if(m_vToolBarTools->isButtonOn(TBTOOLS_ZOOMTOOL))
-    {
-      // brush tool is already on but will automatically be toggled by
-      // ktoolbar code -> toggle it by hand to keep it on.
-      m_vToolBarTools->isButtonOn(TBTOOLS_ZOOMTOOL);
-    }
-
-  // shut off movetool (move this to a function as soon as
-  // we have more tools.
-  if(m_vToolBarTools->isButtonOn(TBTOOLS_MOVETOOL))
-    m_vToolBarTools->toggleButton(TBTOOLS_MOVETOOL);
-  if(m_vToolBarTools->isButtonOn(TBTOOLS_BRUSHTOOL))
-    m_vToolBarTools->toggleButton(TBTOOLS_BRUSHTOOL);
+  activateTool( TBTOOLS_ZOOMTOOL );
 }
 
 void KImageShopView::slotUpdateView(const QRect &_area) // _area in canvas coordiantes
@@ -917,26 +893,30 @@ void KImageShopView::slotLayerDialog()
 {
   if( m_pLayerDialog )
   {
-    if( m_pLayerDialog->isVisible() )
+      bool vis = m_pLayerDialog->isVisible();
+    if( vis )
       m_pLayerDialog->hide();
     else
        m_pLayerDialog->show();
 
     // TODO: make this working
     m_vMenuView->setItemChecked( m_idMenuView_LayerDialog, true );
+    m_vToolBarDialogs->setButton( TBDIALOGS_LAYER, !vis );
   }
 }
 
 void KImageShopView::slotBrushDialog()
 {
   if ( m_pBrushDialog ) {
-    if ( m_pBrushDialog->isVisible() )
+      bool vis = m_pBrushDialog->isVisible();
+    if ( vis )
       m_pBrushDialog->hide();
     else
       m_pBrushDialog->show();
 
     // TODO: make this working
     m_vMenuView->setItemChecked( m_idMenuView_BrushDialog, true );
+    m_vToolBarDialogs->setButton( TBDIALOGS_BRUSH, !vis );
   }
 }
 
@@ -944,41 +924,48 @@ void KImageShopView::slotGradientDialog()
 {
   if( m_pGradientDialog )
   {
-    if( m_pGradientDialog->isVisible() )
+      bool vis = m_pGradientDialog->isVisible();
+    if( vis )
       m_pGradientDialog->hide();
     else
       m_pGradientDialog->show();
 
     // TODO: make this working
     m_vMenuView->setItemChecked( m_idMenuView_GradientDialog, true );
+    m_vToolBarDialogs->setButton( TBDIALOGS_GRADIENT, !vis );
   }
 }
 
 void KImageShopView::slotGradientEditorDialog()
 {
   if( m_pGradientEditorDialog )
-  {
-    if( m_pGradientEditorDialog->isVisible() )
+      {
+      bool vis = m_pGradientEditorDialog->isVisible();
+    if( vis )
       m_pGradientEditorDialog->hide();
     else
       m_pGradientEditorDialog->show();
 
     // TODO: make this working
     m_vMenuView->setItemChecked( m_idMenuView_GradientEditorDialog, true );
+    m_vToolBarDialogs->setButton( TBDIALOGS_GRADIENTEDITOR, !vis );
   }
 }
 
 void KImageShopView::slotColorDialog()
 {
   if( m_pColorDialog )
-	{
-	  if(m_pColorDialog->isVisible())
+      {
+          bool vis = m_pColorDialog->isVisible();
+	  if( vis )
 		m_pColorDialog->hide();
 	  else
 		m_pColorDialog->show();
-	  
+	
 	  // TODO: make this working
-	  m_vMenuView->setItemChecked( m_idMenuView_ColorDialog, true );
+	  m_vMenuView->setItemChecked( m_idMenuView_ColorDialog, !vis );
+          m_vToolBarDialogs->setButton( TBDIALOGS_COLOR, !vis );
+
   }
 }
 

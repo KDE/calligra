@@ -199,6 +199,9 @@ private:
   ColorDialog          *m_pColorDialog;
   KColor               m_fg, m_bg;
   float                m_ZoomFactor;
+
+  vector<int>          m_toolButtons; // id's from all Tools
+  void activateTool( int toolID );
 };
 
 #endif
