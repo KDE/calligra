@@ -671,7 +671,7 @@ void KPTGanttViewSummaryItem::insertRelations()
     QPtrListIterator<KPTRelation> it(m_node->dependChildNodes());
     for (; it.current(); ++it)
     {
-        KDGanttViewItem *child = find(myGantView->firstChild(), it.current()->child());
+        KDGanttViewItem *child = 0;//find(myGantView->firstChild(), it.current()->child());
         if (child)
         {
             //FIXME: This doesn't work. Maybe bug in KDGantt, maybe wrong use
@@ -737,7 +737,7 @@ void KPTGanttViewTaskItem::insertRelations()
     QPtrListIterator<KPTRelation> it(m_task->dependChildNodes());
     for (; it.current(); ++it)
     {
-        KDGanttViewItem *child = find(myGantView->firstChild(), it.current()->child());
+        KDGanttViewItem *child = 0;//find(myGantView->firstChild(), it.current()->child());
         if (child)
         {
             //FIXME: This doesn't work. Maybe bug in KDGantt, maybe wrong use
@@ -804,7 +804,7 @@ void KPTGanttViewEventItem::insertRelations()
     QPtrListIterator<KPTRelation> it(m_task->dependChildNodes());
     for (; it.current(); ++it)
     {
-        KDGanttViewItem *child = find(myGantView->firstChild(), it.current()->child());
+        KDGanttViewItem *child = 0;//find(myGantView->firstChild(), it.current()->child());
         if (child)
         {
             //FIXME: This doesn't work. Maybe bug in KDGantt, maybe wrong use
