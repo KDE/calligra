@@ -447,10 +447,10 @@ void KWTableFrameSet::recalcRows()
                     //newFrameSet->assign( baseFrameSet );
 
                     newFrameSet->getFrame(0)->setBackgroundColor( baseFrameSet->getFrame( 0 )->getBackgroundColor() );
-                    newFrameSet->getFrame(0)->setLeftBorder( baseFrameSet->getFrame( 0 )->getLeftBorder2() );
-                    newFrameSet->getFrame(0)->setRightBorder( baseFrameSet->getFrame( 0 )->getRightBorder2() );
-                    newFrameSet->getFrame(0)->setTopBorder( baseFrameSet->getFrame( 0 )->getTopBorder2() );
-                    newFrameSet->getFrame(0)->setBottomBorder( baseFrameSet->getFrame( 0 )->getBottomBorder2() );
+                    newFrameSet->getFrame(0)->setLeftBorder( baseFrameSet->getFrame( 0 )->getLeftBorder() );
+                    newFrameSet->getFrame(0)->setRightBorder( baseFrameSet->getFrame( 0 )->getRightBorder() );
+                    newFrameSet->getFrame(0)->setTopBorder( baseFrameSet->getFrame( 0 )->getTopBorder() );
+                    newFrameSet->getFrame(0)->setBottomBorder( baseFrameSet->getFrame( 0 )->getBottomBorder() );
                     newFrameSet->getFrame(0)->setBLeft( baseFrameSet->getFrame( 0 )->getBLeft() );
                     newFrameSet->getFrame(0)->setBRight( baseFrameSet->getFrame( 0 )->getBRight() );
                     newFrameSet->getFrame(0)->setBTop( baseFrameSet->getFrame( 0 )->getBTop() );
@@ -1249,6 +1249,7 @@ void KWTableFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegio
         Cell *cell = cells.current();
         for ( unsigned i =0; i < frames.count() ; i++) {
             KWFrame *frame = frames.at(i);
+            // ## TODO port to outerRect ( see KWFrameSet )
             QRect frameRect( m_doc->zoomRect(  *frame ) );
             frameRect.rLeft() -= 1;
             frameRect.rTop() -= 1;

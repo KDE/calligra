@@ -291,6 +291,18 @@ void KWFrame::setSelected( bool _selected )
         removeResizeHandles();
 }
 
+QRect KWFrame::outerRect() const
+{
+    QRect outerRect( getFrameSet()->kWordDocument()->zoomRect( *this ) );
+    kdDebug() << "KWFrame::outerRect BEFORE " << DEBUGRECT( outerRect ) << endl;
+    outerRect.rLeft() -= QMAX( 1, getLeftBorder().ptWidth );
+    outerRect.rTop() -= QMAX( 1, getTopBorder().ptWidth );
+    outerRect.rRight() += QMAX( 1, getRightBorder().ptWidth );
+    outerRect.rBottom() += QMAX( 1, getBottomBorder().ptWidth );
+    kdDebug() << "KWFrame::outerRect AFTER " << DEBUGRECT( outerRect ) << endl;
+    return outerRect;
+}
+
 /******************************************************************/
 /* Class: KWFrameSet                                              */
 /******************************************************************/
@@ -368,15 +380,22 @@ void KWFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegion &re
     {
         KWFrame *frame = frameIt.current();
         QRect frameRect( m_doc->zoomRect( *frame ) );
-        frameRect.rLeft() -= 1;
-        frameRect.rTop() -= 1;
-        frameRect.rRight() += 1;
-        frameRect.rBottom() += 1;
-        //kdDebug(32002) << "KWCanvas::drawBorders frameRect: " << DEBUGRECT( frameRect ) << endl;
-        if ( !crect.intersects( frameRect ) )
+        kdDebug(32002) << "KWCanvas::drawBorders frameRect: " << DEBUGRECT( frameRect ) << endl;
+
+        // Just an estimate, to see if there is any chance to intersect the rect
+        // Otherwise we have to compute everything first...
+        QRect outerRect( frame->outerRect() );
+        kdDebug(32002) << "KWCanvas::drawBorders outerRect: " << DEBUGRECT( outerRect ) << endl;
+
+        if ( !crect.intersects( outerRect ) )
             continue;
 
-        region = region.subtract( frameRect );
+        // Need to extract one :}
+        /*outerRect.rLeft() -= 1;
+        outerRect.rTop() -= 1;
+        outerRect.rRight() += 1;
+        outerRect.rBottom() += 1;*/
+        region = region.subtract( outerRect );
 
         // Set the background color from the main frameset (why?)
         if ( isAHeader() || isAFooter() )
@@ -392,58 +411,75 @@ void KWFrameSet::drawBorders( QPainter *painter, const QRect &crect, QRegion &re
         }
 
         // Draw borders either as the user defined them, or using the view settings.
-        if ( frame->getRightBorder().ptWidth > 0 )
+
+        // Right
+        int w = frame->getRightBorder().ptWidth;
+        if ( w > 0 )
         {
             painter->setPen( Border::borderPen( frame->getRightBorder() ) );
         }
         else
         {
             painter->setPen( viewSetting );
+            w = 1;
         }
-        int w = frame->getRightBorder().ptWidth;
-        if ( !( w & 1 ) )
-            w--;
-        w /= 2;
-        painter->drawLine( frameRect.right() - w, frameRect.y(),
-                            frameRect.right() - w, frameRect.bottom() + 1 );
 
-        if ( frame->getBottomBorder().ptWidth > 0 )
+        // Borders should be drawn _outside_ of the frame area
+        // otherwise the frames will erase the border when painting themselves.
+
+        w = ( w + 1 ) / 2; // at least 1
+        painter->drawLine( frameRect.right() + w, frameRect.y(),
+                           frameRect.right() + w, frameRect.bottom() + 1 );
+
+        // Bottom
+        w = frame->getBottomBorder().ptWidth;
+        if ( w > 0 )
         {
             painter->setPen( Border::borderPen( frame->getBottomBorder() ) );
         }
         else
         {
             painter->setPen( viewSetting );
+            w = 1;
         }
-        w = frame->getBottomBorder().ptWidth;
-        if ( !( w & 1 ) )
-            w--;
-        painter->drawLine( frameRect.x(), frameRect.bottom() - w,
-                            frameRect.right() + 1,
-                            frameRect.bottom() - w );
+        w = ( w + 1 ) / 2;
+        painter->drawLine( frameRect.x(),         frameRect.bottom() + w,
+                           frameRect.right() + 1, frameRect.bottom() + w );
 
-        if ( frame->getLeftBorder().ptWidth > 0 )
+        // Left
+        w = frame->getLeftBorder().ptWidth;
+        if ( w > 0 )
         {
             painter->setPen( Border::borderPen( frame->getLeftBorder() ) );
         }
         else
         {
             painter->setPen( viewSetting );
+            w = 1;
         }
-        painter->drawLine( frameRect.x() + frame->getLeftBorder().ptWidth / 2, frameRect.y(),
-                            frameRect.x() + frame->getLeftBorder().ptWidth / 2, frameRect.bottom() + 1 );
+        w = ( w + 1 ) / 2;
+        kdDebug() << "KWFrameSet::drawBorders left. w=" << w
+                  << " Drawing line from " << frameRect.x() - w << "," << frameRect.y()
+                  << " to " << frameRect.x() - w << "," << frameRect.bottom() + 1 << endl;
+        painter->drawLine( frameRect.x() - w, frameRect.y(),
+                           frameRect.x() - w, frameRect.bottom() + 1 );
 
-        if ( frame->getTopBorder().ptWidth > 0 )
+
+        // Top
+        w = frame->getTopBorder().ptWidth;
+        if ( w > 0 )
         {
             painter->setPen( Border::borderPen( frame->getTopBorder() ) );
         }
         else
         {
             painter->setPen( viewSetting );
+            w = 1;
         }
-        painter->drawLine( frameRect.x(), frameRect.y() + frame->getTopBorder().ptWidth / 2,
-                            frameRect.right() + 1,
-                            frameRect.y() + frame->getTopBorder().ptWidth / 2 );
+        w = ( w + 1 ) / 2;
+        painter->drawLine( frameRect.x(), frameRect.y() - w,
+                           frameRect.right() + 1, frameRect.y() - w );
+
     }
     painter->restore();
 }

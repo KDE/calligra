@@ -151,21 +151,19 @@ public:
     void setPageNum( int i ) { m_pageNum = i; }
     int pageNum() { return m_pageNum; }
 
-    /* All borders can be custum drawn with their own colors etc. */
-    Border &getLeftBorder() { return brd_left; }
-    Border &getRightBorder() { return brd_right; }
-    Border &getTopBorder() { return brd_top; }
-    Border &getBottomBorder() { return brd_bottom; }
-
-    Border getLeftBorder2() { return brd_left; }
-    Border getRightBorder2() { return brd_right; }
-    Border getTopBorder2() { return brd_top; }
-    Border getBottomBorder2() { return brd_bottom; }
+    /* All borders can be custom drawn with their own colors etc. */
+    const Border &getLeftBorder() const { return brd_left; }
+    const Border &getRightBorder() const { return brd_right; }
+    const Border &getTopBorder() const { return brd_top; }
+    const Border &getBottomBorder() const { return brd_bottom; }
 
     void setLeftBorder( Border _brd ) { brd_left = _brd; }
     void setRightBorder( Border _brd ) { brd_right = _brd; }
     void setTopBorder( Border _brd ) { brd_top = _brd; }
     void setBottomBorder( Border _brd ) { brd_bottom = _brd; }
+
+    /** Return the _zoomed_ rectangle for this frame, including the border */
+    QRect outerRect() const;
 
     /* Resize handles (in kwcanvas.h) are the dots that are drawn on selected
        frames, this creates and deletes then */
@@ -178,28 +176,28 @@ public:
     QBrush getBackgroundColor() { return backgroundColor; }
     void setBackgroundColor( QBrush _color ) { backgroundColor = _color; }
 
-    /** set left border size */
+    /** set left margin size */
     void setBLeft( KWUnit b ) { bleft = b; }
-    /** set right border size */
+    /** set right margin size */
     void setBRight( KWUnit b ) { bright = b; }
-    /** set top border size */
+    /** set top margin size */
     void setBTop( KWUnit b ) { btop = b; }
-    /** set bottom border size */
+    /** set bottom margin size */
     void setBBottom( KWUnit b ) { bbottom = b; }
 
-    /** get left border size */
+    /** get left margin size */
     KWUnit getBLeft() { return bleft; }
-    /** get right border size */
+    /** get right margin size */
     KWUnit getBRight() { return bright; }
-    /** get top border size */
+    /** get top margin size */
     KWUnit getBTop() { return btop; }
-    /** get bottom border size */
+    /** get bottom margin size */
     KWUnit getBBottom() { return bbottom; }
 
     /** returns a copy of self */
     KWFrame *getCopy();
 
-protected:
+private:
     SheetSide sheetSide;
     RunAround runAround;
     FrameBehaviour frameBehaviour;
@@ -216,9 +214,8 @@ protected:
     Border brd_left, brd_right, brd_top, brd_bottom;
     QBrush backgroundColor;
 
-    KWUnit bleft, bright, btop, bbottom;
+    KWUnit bleft, bright, btop, bbottom; // margins
 
-private:
     QList<KWResizeHandle> handles;
     KWFrame &operator=( const KWFrame &_frame );
     KWFrame ( const KWFrame &_frame );

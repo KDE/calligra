@@ -579,8 +579,12 @@ void KWTextFrameSet::eraseAfter( QTextParag * parag, QPainter * p, const QColorG
     kdDebug(32002) << " parag bottom=" << cPoint.y()
                    << " frameBottom=" << frameBottom
                    << " height of fillRect: " << frameBottom - cPoint.y() << endl;
-    p->fillRect( r.x(), r.bottom(), r.width(), frameBottom - cPoint.y(),
-                 cg.brush( QColorGroup::Base ) );
+
+    p->fillRect( r.x(), r.bottom(),
+                 kWordDocument()->zoomItX( frame->width() ) /*r.width()*/, // erase the whole width of the frame
+                 frameBottom - cPoint.y(),
+                 /*Qt::blue*/ cg.brush( QColorGroup::Base ) );
+
 }
 
 /*================================================================*/
