@@ -1,0 +1,8 @@
+beta1 => beta2
+* mailmerge support
+* extended blob support
+  - entering text
+  - showing a thumbnail image
+  - showing a icon
+* support for Latin1, Utf8, ASCII, Local8Bit encoding
+* syntaxhighlighting in query history
