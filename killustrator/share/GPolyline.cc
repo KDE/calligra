@@ -212,7 +212,7 @@ bool GPolyline::contains (const Coord& p) {
           n = y1 - m * x1;
 
 	  if (m > 1) {
-	    xp = ((float) pp.y () + n) / m;
+	    xp = ((float) pp.y () - n) / m;
 	    if (xp - 5 <= pp.x () && pp.x () <= xp + 5)
 	      return true;
 	  }

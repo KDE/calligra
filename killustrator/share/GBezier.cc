@@ -33,10 +33,93 @@
 #include <klocale.h>
 #include <kapp.h>
 
-static bool bezier_segment_contains (const Coord& p0, const Coord& p1, 
-				     const Coord& p2, const Coord& p3, 
-				     const Coord& c) {
-  return true;
+#define DELTA 0.05
+
+
+static bool bezier_segment_part_contains (int x0, int y0, int x1,int y1,
+					  const Coord& pp) {
+  float  m, n, yp, xp;
+  int xh, yh;
+  
+  if(pp.x () <= QMAX(x0,x1) + 5 && pp.x() >= QMIN(x0,x1) - 5 &&
+     pp.y () <= QMAX(y0,y1) + 5 && pp.y() >= QMIN(y0,y1) - 5) {
+    
+    if (x1 <= x0) {
+      // swap the points
+      xh = x1;
+      yh = y1;
+      x1 = x0;
+      y1 = y0;
+      x0 = xh;
+      y0 = yh;
+    }
+    
+    if (x0 - 5 <= pp.x () && pp.x () <= x1 + 5) {
+      if (abs (int (x0 - x1)) < 5) {
+	if ((y0 <= pp.y () && pp.y () <= y1) ||
+	    (y1 <= pp.y () && pp.y () <= y0)) {
+	  return true;
+	}
+      }
+      else {
+	// y = m * x + n;
+	m = (float)(y1 - y0) / (float)(x1 - x0);
+	n = (float)y0 - m * (float)x0;
+	
+	if (m > 1) {
+	  xp = ((float) pp.y () - n) / m;
+	  if (xp - 5 <= pp.x () && pp.x () <= xp + 5) {
+	    return true;
+	    
+	  }
+	}
+	else {
+	  yp = m * (float) pp.x () + n;
+	  if (yp - 5 <= pp.y () && pp.y () <= yp + 5) {
+	    return true;
+	  }
+	}
+      }
+    }
+  }
+  return false;
+}
+
+static bool bezier_segment_contains (const Coord& p0, const Coord& p1,
+         const Coord& p2, const Coord& p3, const Coord& c)
+{
+  /** every bezier_segment contains 1/DELTA lines, we have to compute the
+      lines
+      to check later in bezier_segment_part_contains, if the Coord c on a
+      line
+  **/
+
+  float th,th2,th3;
+  float t,t2,t3;
+  int x0,y0,x1,y1;
+  
+  x1 = (int)p0.x();
+  y1 = (int)p0.y();
+  for(t = 0; t < 1.01; t += DELTA) {
+    x0 = x1;
+    y0 = y1;
+    th = 1 - t;
+    t2= t*t;
+    t3 = t2*t;
+    th2 = th*th;
+    th3 = th2*th;
+    x1 = (int) (th3*  p0.x() +
+		3*t*th2*p1.x() +
+		3*t2*th*p2.x() +
+		t3*p3.x());
+    y1 = (int) (th3* p0.y() +
+		3*t*th2*p1.y() +
+		3*t2*th*p2.y() +
+		t3*p3.y());
+    if (bezier_segment_part_contains(x0, y0, x1, y1, c)) return true;
+  }
+  
+  return false;
 }
 
 GBezier::GBezier () : GPolyline () {
@@ -202,11 +285,9 @@ bool GBezier::contains (const Coord& p) {
 	r.bottom (QMAX(pn.y (), r.bottom ()));
       }
       if (r.contains (pc)) {
-	/*
        	if (bezier_segment_contains (*(points.at (i)), *(points.at (i + 1)),
 				     *(points.at (i + 2)), 
 				     *(points.at (i + 3)), pc))
-				     */
 	return true;
       }
     }
