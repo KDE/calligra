@@ -27,6 +27,9 @@ data/
 dialogs/
 	Dialogs.
 
+dockers/
+	Dockers.
+
 pics/
 	Icons and grafx.
 

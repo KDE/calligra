@@ -3,13 +3,14 @@ INCLUDES = $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) \
 	-I$(srcdir)/commands \
 	-I$(srcdir)/core \
 	-I$(srcdir)/dialogs \
+	-I$(srcdir)/dockers \
 	-I$(srcdir)/render \
 	-I$(srcdir)/tools \
 	-I$(srcdir)/visitors \
 	-I$(srcdir)/widgets \
 	$(all_includes)
 
-SUBDIRS = core shapes widgets dialogs commands tools render visitors . data pics
+SUBDIRS = core shapes widgets dialogs dockers commands tools render visitors . data pics
 
 bin_PROGRAMS = karbon
 
