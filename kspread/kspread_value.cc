@@ -784,6 +784,16 @@ int KSpreadValue::compare( const KSpreadValue& v ) const
   KSpreadValue::Type t1 = d->type;
   KSpreadValue::Type t2 = v.type();
   
+  // errors always less than everything else
+  if( ( t1 == Error ) && ( t2 != Error ) )
+    return -1;
+  if( ( t2 == Error ) && ( t1 != Error ) )
+    return 1;
+    
+  // comparing errors only yields 0 if they are the same  
+  if( ( t1 == Error ) && ( t2 == Error ) )
+    return errorMessage() != v.errorMessage();
+  
   // empty == empty
   if( ( t1 == Empty ) && ( t2 == Empty ) )
     return 0;
