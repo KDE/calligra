@@ -4179,6 +4179,7 @@ void KTextObject::splitParagraph()
   int p1 = para+1,p2 = para+2;
   obj = 0;
   TxtParagraph::HorzAlign ha;
+  bool do_key_delete = false;
  
   changedParagraphs.append((int*)para);
 
@@ -4248,13 +4249,14 @@ void KTextObject::splitParagraph()
       if (line == paragraphAt(para)->lines()-1)
 	{
  	  lin = new TxtLine();
- 	  lin->append("  ",currFont,currColor,TxtObj::NORMAL,TxtObj::SEPARATOR);
+	  lin->append("  ",currFont,currColor,TxtObj::NORMAL,TxtObj::SEPARATOR);
 	  para1->setHorzAlign(paragraphAt(para)->horzAlign());
  	  para1->append(lin);
  	  paragraphList.insert(para+1,para1);
 	  changedParagraphs.append((int*)p1);
 	  delete para2;
 	  delete para3;
+	  do_key_delete = true;
 	}
 
       // if the cursor is in another line
@@ -4359,6 +4361,8 @@ void KTextObject::splitParagraph()
 
   // recalculate everything
   recalc(false);
+
+  if (do_key_delete) kdelete();
 }
 
 /*======================= join paragraph =========================*/
