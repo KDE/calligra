@@ -1679,7 +1679,7 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
       } break;
     case PEF_CLOSE_HORZ:
       {
-	_steps = kapp->desktop()->height() / 16;
+	_steps = (int)(50000.0 / (float)kapp->desktop()->height());
 	_time.start();
 
 	for (;;)
@@ -1701,7 +1701,8 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
       } break;
     case PEF_CLOSE_VERT:
       {
-	_steps = kapp->desktop()->width() / 16;
+	_steps = (int)(50000.0 / (float)kapp->desktop()->width());
+	//_steps = kapp->desktop()->width() / 16;
 	_time.start();
 
 	for (;;)
@@ -1731,7 +1732,7 @@ void Page::doObjEffects()
   QList<PageObjects> _objList;
   unsigned int i;
   QTime _time;
-  int _step = 0,_steps1 = 0,_steps2 = 0,x_pos1 = 0,y_pos1 = 0,x_pos2 = 0,y_pos2 = 0;
+  int _step = 0,_steps1 = 0,_steps2 = 0,x_pos1 = 0,y_pos1 = 0,x_pos2 = 0,y_pos2 = 0,_step_width,_step_height;
   bool effects = false;
 
   bitBlt(&screen_orig,0,0,this,0,0,kapp->desktop()->width(),kapp->desktop()->height());
@@ -1767,9 +1768,11 @@ void Page::doObjEffects()
   
   if (effects)
     {
-      _steps1 = (x_pos1 > y_pos1 ? x_pos1 : y_pos1) / 16;
+      _step_width = (int)(((float)20 * kapp->desktop()->width()) / 1000.0);
+      _step_height = (int)(((float)20 * kapp->desktop()->height()) / 1000.0);
+      _steps1 = (x_pos1 > y_pos1 ? x_pos1 : y_pos1) / _step_width;
       _steps2 = (kapp->desktop()->width() - x_pos2 > kapp->desktop()->height() - y_pos2 ?
-		 kapp->desktop()->width() - x_pos2 : kapp->desktop()->height() - y_pos2) / 16;
+		 kapp->desktop()->width() - x_pos2 : kapp->desktop()->height() - y_pos2) / _step_height;
       _time.start();
       
       bool nothingHappens = false;
@@ -1795,7 +1798,8 @@ void Page::doObjEffects()
 		      {
 			if (subPresStep == 0 || subPresStep != 0 && objPtr->objType == OT_TEXT && objPtr->effect2 == EF2T_PARA)
 			  { 
-			    x_pos1 = 16 * _step < objPtr->ox - diffx() + objPtr->ow ? objPtr->ox - diffx() + objPtr->ow - 16 * _step : 0;
+			    x_pos1 = _step_width * _step < objPtr->ox - diffx() + objPtr->ow ? 
+			      objPtr->ox - diffx() + objPtr->ow - _step_width * _step : 0;
 			    y_pos1 = 0;
 			    drawObject(objPtr,screen,-x_pos1,y_pos1);
 			    if (x_pos1 != 0) nothingHappens = false;
@@ -1805,7 +1809,8 @@ void Page::doObjEffects()
 		      {
 			if (subPresStep == 0 || subPresStep != 0 && objPtr->objType == OT_TEXT && objPtr->effect2 == EF2T_PARA)
 			  { 
-			    y_pos1 = 16 * _step < objPtr->oy - diffy() + objPtr->oh ? objPtr->oy - diffy() + objPtr->oh - 16 * _step : 0;
+			    y_pos1 = _step_height * _step < objPtr->oy - diffy() + objPtr->oh ?
+			      objPtr->oy - diffy() + objPtr->oh - _step_height * _step : 0;
 			    x_pos1 = 0;
 			    drawObject(objPtr,screen,x_pos1,-y_pos1);
 			    if (y_pos1 != 0) nothingHappens = false;
@@ -1815,7 +1820,8 @@ void Page::doObjEffects()
 		      {
 			if (subPresStep == 0 || subPresStep != 0 && objPtr->objType == OT_TEXT && objPtr->effect2 == EF2T_PARA)
 			  { 
-			    x_pos2 = _w - (16 * _step) + (objPtr->ox - diffx()) > objPtr->ox - diffx() ? _w - (16 * _step) : 0;
+			    x_pos2 = _w - (_step_width * _step) + (objPtr->ox - diffx()) > objPtr->ox - diffx() ?
+			      _w - (_step_width * _step) : 0;
 			    y_pos2 = 0;
 			    drawObject(objPtr,screen,x_pos2,y_pos2);
 			    if (x_pos2 != 0) nothingHappens = false;
@@ -1825,7 +1831,8 @@ void Page::doObjEffects()
 		      {
 			if (subPresStep == 0 || subPresStep != 0 && objPtr->objType == OT_TEXT && objPtr->effect2 == EF2T_PARA)
 			  { 
-			    y_pos2 = _h - (16 * _step) + (objPtr->oy - diffy()) > objPtr->oy - diffy() ? _h - (16 * _step) : 0;
+			    y_pos2 = _h - (_step_height * _step) + (objPtr->oy - diffy()) > objPtr->oy - diffy() ?
+			      _h - (_step_height * _step) : 0;
 			    x_pos2 = 0;
 			    drawObject(objPtr,screen,x_pos2,y_pos2);
 			    if (y_pos2 != 0) nothingHappens = false;
