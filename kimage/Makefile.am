@@ -30,8 +30,7 @@ SUFFIXES = .h .moc
 
 ####### Build rules
 
-install-exec-local:
-	$(INSTALL_SCRIPT) kimage $(bindir)/kimage
+bin_SCRIPTS = kimage
 
 img.h: img.idl
 	@echo $(IDL) --query-server-for-narrow -I$(idldir) img.idl ;\
