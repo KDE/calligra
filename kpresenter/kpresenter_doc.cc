@@ -3173,6 +3173,7 @@ void KPresenterDoc::deSelectAllObj()
 /*======================== align objects left ===================*/
 void KPresenterDoc::alignObjsLeft()
 {
+    bool newPosition=false;
     KPObject *kpobject = 0;
     QList<KPObject> _objects;
     QList<QPoint> _diffs;
@@ -3184,18 +3185,29 @@ void KPresenterDoc::alignObjsLeft()
 	kpobject = objectList()->at( i );
 	if ( kpobject->isSelected() ) {
 	    _objects.append( kpobject );
+            if( !newPosition &&_x != kpobject->getOrig().x())
+                newPosition=true;
 	    _diffs.append( new QPoint( _x - kpobject->getOrig().x(), 0 ) );
 	}
     }
 
-    MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) left" ), _diffs, _objects, this );
-    _commands.addCommand( moveByCmd2 );
-    moveByCmd2->execute();
+    if(newPosition)
+    {
+        MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) left" ), _diffs, _objects, this );
+        _commands.addCommand( moveByCmd2 );
+        moveByCmd2->execute();
+    }
+    else
+    {
+	_diffs.setAutoDelete( true );
+	_diffs.clear();
+    }
 }
 
 /*==================== align objects center h ===================*/
 void KPresenterDoc::alignObjsCenterH()
 {
+    bool newPosition=false;
     KPObject *kpobject = 0;
     QList<KPObject> _objects;
     QList<QPoint> _diffs;
@@ -3208,19 +3220,29 @@ void KPresenterDoc::alignObjsCenterH()
 	kpobject = objectList()->at( i );
 	if ( kpobject->isSelected() ) {
 	    _objects.append( kpobject );
+            if(!newPosition && (( _w - kpobject->getSize().width() ) / 2 - kpobject->getOrig().x() + _x)!=0)
+                newPosition=true;
 	    _diffs.append( new QPoint( ( _w - kpobject->getSize().width() ) / 2 - kpobject->getOrig().x() + _x, 0 ) );
 	}
     }
-
-    MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) centered (horizontal)" ),
-					     _diffs, _objects, this );
-    _commands.addCommand( moveByCmd2 );
-    moveByCmd2->execute();
+    if(newPosition)
+    {
+        MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) centered (horizontal)" ),
+                                                 _diffs, _objects, this );
+        _commands.addCommand( moveByCmd2 );
+        moveByCmd2->execute();
+    }
+    else
+    {
+         _diffs.setAutoDelete(true);
+         _diffs.clear();
+    }
 }
 
 /*==================== align objects right ======================*/
 void KPresenterDoc::alignObjsRight()
 {
+    bool newPosition=false;
     KPObject *kpobject = 0;
     QList<KPObject> _objects;
     QList<QPoint> _diffs;
@@ -3232,18 +3254,28 @@ void KPresenterDoc::alignObjsRight()
 	kpobject = objectList()->at( i );
 	if ( kpobject->isSelected() ) {
 	    _objects.append( kpobject );
+            if(!newPosition && (( _w - kpobject->getSize().width() ) != kpobject->getOrig().x()))
+                newPosition=true;
 	    _diffs.append( new QPoint( ( _w - kpobject->getSize().width() ) - kpobject->getOrig().x(), 0 ) );
 	}
     }
-
-    MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) right" ), _diffs, _objects, this );
-    _commands.addCommand( moveByCmd2 );
-    moveByCmd2->execute();
+    if(newPosition)
+    {
+        MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) right" ), _diffs, _objects, this );
+        _commands.addCommand( moveByCmd2 );
+        moveByCmd2->execute();
+    }
+    else
+    {
+	_diffs.setAutoDelete( true );
+	_diffs.clear();
+    }
 }
 
 /*==================== align objects top ========================*/
 void KPresenterDoc::alignObjsTop()
 {
+    bool newPosition=false;
     KPObject *kpobject = 0;
     QList<KPObject> _objects;
     QList<QPoint> _diffs;
@@ -3258,19 +3290,30 @@ void KPresenterDoc::alignObjsTop()
 	    if ( pgnum != -1 ) {
 		_y = getPageRect( pgnum - 1, 0, 0 ).y();
 		_objects.append( kpobject );
+                if(!newPosition && (_y != kpobject->getOrig().y()))
+                    newPosition=true;
+
 		_diffs.append( new QPoint( 0, _y - kpobject->getOrig().y() ) );
 	    }
 	}
     }
-
-    MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) top" ), _diffs, _objects, this );
-    _commands.addCommand( moveByCmd2 );
-    moveByCmd2->execute();
+    if(newPosition)
+    {
+        MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) top" ), _diffs, _objects, this );
+        _commands.addCommand( moveByCmd2 );
+        moveByCmd2->execute();
+    }
+    else
+    {
+	_diffs.setAutoDelete( true );
+	_diffs.clear();
+    }
 }
 
 /*==================== align objects center v ===================*/
 void KPresenterDoc::alignObjsCenterV()
 {
+    bool newPosition=false;
     KPObject *kpobject = 0;
     QList<KPObject> _objects;
     QList<QPoint> _diffs;
@@ -3286,20 +3329,30 @@ void KPresenterDoc::alignObjsCenterV()
 		_y = getPageRect( pgnum - 1, 0, 0 ).y();
 		_h = getPageRect( pgnum - 1, 0, 0 ).height();
 		_objects.append( kpobject );
+                if(!newPosition &&(( _h - kpobject->getSize().height() ) / 2 - kpobject->getOrig().y() + _y )!=0)
+                    newPosition=true;
 		_diffs.append( new QPoint( 0, ( _h - kpobject->getSize().height() ) / 2 -
 					   kpobject->getOrig().y() + _y ) );
 	    }
 	}
     }
-
-    MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) center / vertical" ), _diffs, _objects, this );
-    _commands.addCommand( moveByCmd2 );
-    moveByCmd2->execute();
+    if(newPosition)
+    {
+        MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) center / vertical" ), _diffs, _objects, this );
+        _commands.addCommand( moveByCmd2 );
+        moveByCmd2->execute();
+    }
+    else
+    {
+        _diffs.setAutoDelete(true);
+        _diffs.clear();
+    }
 }
 
 /*==================== align objects top ========================*/
 void KPresenterDoc::alignObjsBottom()
 {
+    bool newPosition=false;
     KPObject *kpobject = 0;
     QList<KPObject> _objects;
     QList<QPoint> _diffs;
@@ -3314,14 +3367,24 @@ void KPresenterDoc::alignObjsBottom()
 	    if ( pgnum != -1 ) {
 		_h = getPageRect( pgnum - 1, 0, 0 ).y() + getPageRect( pgnum - 1, 0, 0 ).height();
 		_objects.append( kpobject );
+                if(!newPosition && _h != (kpobject->getSize().height() + kpobject->getOrig().y()))
+                    newPosition=true;
 		_diffs.append( new QPoint( 0, _h - kpobject->getSize().height() - kpobject->getOrig().y() ) );
 	    }
 	}
     }
 
-    MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) bottom" ), _diffs, _objects, this );
-    _commands.addCommand( moveByCmd2 );
-    moveByCmd2->execute();
+    if(newPosition)
+    {
+        MoveByCmd2 *moveByCmd2 = new MoveByCmd2( i18n( "Align object(s) bottom" ), _diffs, _objects, this );
+        _commands.addCommand( moveByCmd2 );
+        moveByCmd2->execute();
+    }
+    else
+    {
+	_diffs.setAutoDelete( true );
+	_diffs.clear();
+    }
 }
 
 /*================= undo redo changed ===========================*/

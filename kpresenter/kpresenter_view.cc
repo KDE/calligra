@@ -2057,12 +2057,7 @@ void KPresenterView::setupActions()
 
 void KPresenterView::objectSelectedChanged()
 {
-    bool state=!m_pKPresenterDoc->isEmbedded();
-    actionEditDuplicatePage->setEnabled(state);
-    actionEditDelPage->setEnabled(state);
-    actionInsertPage->setEnabled(state);
-
-    state=page->isOneObjectSelected();
+    bool state=page->isOneObjectSelected();
     actionScreenAssignEffect->setEnabled(state);
     actionExtraRotate->setEnabled(state);
     actionExtraShadow->setEnabled(state);
