@@ -29,7 +29,7 @@ SUBDIRS = propertyeditor relations
 # kde_designerdir     Where Qt Designer plugins should go to (new in KDE 3).
 
 # set the include path for X, qt and KDE - all_includes must remain last!
-INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/tableview \
+INCLUDES = -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/tableview \
 	$(LIB_KEXI_KMDI_INCLUDES) \
 	-I$(top_srcdir)/kexi/core $(all_includes)
 

@@ -12,7 +12,7 @@ kexihandler_relation_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -module
 kexihandler_relation_la_LIBADD = ../../core/libkexicore.la \
 	../../widget/relations/libkexirelationsview.la
 
-INCLUDES= $(KOFFICE_INCLUDES) -I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi \
+INCLUDES= -I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi \
 		-I$(top_srcdir)/kexi/widget -I$(top_srcdir)/kexi/widget/relations \
 		-I$(top_srcdir)/kexi/tableview \
 		-I$(top_srcdir)/kexi/kexiDB $(all_includes)
