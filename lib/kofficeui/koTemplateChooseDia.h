@@ -58,29 +58,90 @@ class KInstance;
 class KoTemplateChooseDiaPrivate;
 
 /**
- *  class KoTemplateChooseDia
+ *  class KoTemplateChooseDia - This class is used to show the template dialog
+ *  on startup. Unless you need something special, you should use the static
+ *  method choose().
+ *
+ *  @short The template choose dialog
+ *  @author Reginald Stadlbauer <reggie@kde.org>
+ *  @author Werner Trobin <wtrobin@mandrakesoft.com>
  */
 class KoTemplateChooseDia : public KDialog
 {
     Q_OBJECT
 
 public:
+    /**
+     * The Dialog returns one of these values depending
+     * on the input of the user.
+     * Cancel = The user pressed 'Cancel'
+     * Template = The user selected a template
+     * File = The user has choosen a file
+     * Empty = The user selected "Empty document"
+     */
     enum ReturnType {Cancel, Template, File, Empty};
+    /**
+     * To configure the dialog you have to use this enum.
+     * Everything = Show templates and the rest of the dialog
+     * OnlyTemplates = Show only the templates
+     * NoTemplates = Just guess :)
+     */
     enum DialogType {Everything, OnlyTemplates, NoTemplates};
 
-    KoTemplateChooseDia(QWidget *parent, const char *name, const QString& templateType,
-			KInstance* global, const QString &importFilter, const QString &mimeType,
-			bool hasCancel=true, const DialogType &dialogType=Everything);
+    /**
+     * This is the CTOR to create a dialog
+     * @param parent parent the parent of the dialog
+     * @param name the Qt internal name
+     * @param global the KInstance of your app
+     * @param importFilter the filter string for the KFileDialog which pops up when
+     *        the user selects "Choose File..."
+     * @param dialogType the type of the dialog
+     * @param templateType the template type of your application (see kword or
+     *        kpresenter for details)
+     * @param hasCancel if there should be a "Cancel" button
+     * @return The return type (see above)
+     */
+    KoTemplateChooseDia(QWidget *parent, const char *name, KInstance* global,
+			const QString &importFilter=QString::null,
+			const DialogType &dialogType=Everything,
+			const QString& templateType=QString::null,
+			bool hasCancel=true);
     ~KoTemplateChooseDia();
 
-    static ReturnType choose(const QString& templateType, KInstance* global, QString &file,
-			     const DialogType &dialogType=Everything, bool hasCancel=true,
+    /**
+     * This is the static method you'll normally use to show the
+     * dialog.
+     * @param global the KInstance of your app
+     * @param file this is the filename which is returned to your app
+     * @param importFilter the filter string for the KFileDialog which pops up when
+     *        the user selects "Choose File..."
+     * @param dialogType the type of the dialog
+     * @param templateType the template type of your application (see kword or
+     *        kpresenter for details)
+     * @param hasCancel if there should be a "Cancel" button
+     * @return The return type (see above)
+     */
+    static ReturnType choose(KInstance* global, QString &file,
 			     const QString &importFilter=QString::null,
-			     const QString &mimeType=QString::null);
+			     const DialogType &dialogType=Everything,
+			     const QString& templateType=QString::null,
+			     bool hasCancel=true);
 
+    /**
+     * Method to get the current template
+     */
     QString getTemplate();
+    /**
+     * Method to get the "full" template (path+template)
+     */
     QString getFullTemplate();
+    /**
+     * The ReturnType (call this one after exec())
+     */
     ReturnType getReturnType();
+    /**
+     * The dialogType - normally you won't need this one
+     */
     DialogType getDialogType();
 
 private:

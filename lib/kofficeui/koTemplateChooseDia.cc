@@ -45,10 +45,10 @@
 class KoTemplateChooseDiaPrivate {
 public:
     KoTemplateChooseDiaPrivate(const QString& templateType, KInstance* global,
-			       const QString &importFilter, const QString &mimeType,
+			       const QString &importFilter, 
 			       const KoTemplateChooseDia::DialogType &dialogType) :
 	m_templateType(templateType), m_global(global), m_strImportFilter(importFilter),
-	m_strMimeType(mimeType), m_dialogType(dialogType), m_firstTime(true) {
+	m_dialogType(dialogType), m_firstTime(true) {
     }
     ~KoTemplateChooseDiaPrivate() {}
 
@@ -63,7 +63,6 @@ public:
     QString m_templateType;
     KInstance* m_global;
     QString m_strImportFilter;
-    QString m_strMimeType;
     KoTemplateChooseDia::DialogType m_dialogType;
     bool m_firstTime;
 
@@ -87,14 +86,16 @@ public:
 /******************************************************************/
 
 /*================================================================*/
-KoTemplateChooseDia::KoTemplateChooseDia(QWidget *parent, const char *name, const QString& templateType,
-					 KInstance* global, const QString &importFilter, const QString &mimeType,
-					 bool hasCancel, const DialogType &dialogType) : KDialog(parent, name, true) {
+KoTemplateChooseDia::KoTemplateChooseDia(QWidget *parent, const char *name, KInstance* global,
+					 const QString &importFilter, const DialogType &dialogType,
+					 const QString& templateType, bool hasCancel) :
+    KDialog(parent, name, true) {
 
-    d=new KoTemplateChooseDiaPrivate(templateType, global, importFilter, mimeType, dialogType);
+    d=new KoTemplateChooseDiaPrivate(templateType, global, importFilter, dialogType);
 
     d->m_groupList.setAutoDelete(true);
-    getGroups();
+    if(!templateType.isNull() && !templateType.isEmpty() && dialogType!=NoTemplates)
+	getGroups();
 
     KButtonBox *bb=new KButtonBox(this);
     bb->addStretch();
@@ -121,16 +122,15 @@ KoTemplateChooseDia::~KoTemplateChooseDia() {
 }
 
 /*================================================================*/
-
-KoTemplateChooseDia::ReturnType KoTemplateChooseDia::choose(const QString& templateType, KInstance* global, QString &file,
-				       const KoTemplateChooseDia::DialogType &dialogType,
-				       bool hasCancel, const QString &importFilter,
-				       const QString &mimeType) {
+KoTemplateChooseDia::ReturnType KoTemplateChooseDia::choose(KInstance* global, QString &file,
+							    const QString &importFilter,
+							    const KoTemplateChooseDia::DialogType &dialogType,
+							    const QString& templateType, bool hasCancel) {
     bool res = false;
-    KoTemplateChooseDia *dlg = new KoTemplateChooseDia( 0, "Choose", templateType, global, importFilter,
-							mimeType, hasCancel, dialogType );
+    KoTemplateChooseDia *dlg = new KoTemplateChooseDia( 0, "Choose", global, importFilter, 
+							dialogType, templateType, hasCancel);
     dlg->resize( 500, 400 );
-    dlg->setCaption( i18n( "Choose a Template" ) );
+    dlg->setCaption( i18n( "Choose" ) );
 
     if ( dlg->exec() == QDialog::Accepted ) {
 	res = true;
