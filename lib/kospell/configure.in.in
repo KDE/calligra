@@ -5,10 +5,12 @@
    AC_CHECK_HEADER(aspell.h)
    if test -z "$ac_cv_header_aspell_h"; then
        LIBASPELL=""
+       LIBKOSPELL=""
    else
        if test -n "$LIBASPELL"; then
            dnl the header and the lib exist -> ok
            dnl this is for config.h
+           LIBKOSPELL="-lkospell"
            AC_DEFINE(HAVE_LIBASPELL, 1, [If we are going to use libaspell for spell-checking])
        fi
    fi
@@ -16,4 +18,5 @@
    AM_CONDITIONAL(include_KOSPELL, test -n "$LIBASPELL")
    dnl this is for lib/kospell/Makefile.am, to link to libaspell
    AC_SUBST(LIBASPELL)
+   AC_SUBST(LIBKOSPELL)
    AC_LANG_RESTORE
