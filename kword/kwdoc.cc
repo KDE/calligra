@@ -2332,6 +2332,8 @@ void KWDocument::setHeaderVisible( bool h )
 {
     m_headerVisible = h;
     recalcFrames();
+    updateAllFrames();
+    layout();
     repaintAllViews( true );
 }
 
@@ -2339,6 +2341,8 @@ void KWDocument::setFooterVisible( bool f )
 {
     m_footerVisible = f;
     recalcFrames();
+    updateAllFrames();
+    layout();
     repaintAllViews( true );
 }
 
