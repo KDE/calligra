@@ -90,12 +90,12 @@ protected:
 
     virtual QFont getFont(ContextStyle& context);
     
-private:
-
     /**
      * Our content.
      */
     QChar character;
+
+private:
 
     /**
      * The position of our baseline.

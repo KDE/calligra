@@ -582,6 +582,10 @@ QDomElement SequenceElement::getElementDom(QDomDocument *doc)
 void SequenceElement::buildFromDom(QDomElement *elem)
 {
 //Only set size.
+    if(!elem) return;
+
+    children.clear();
+    
     BasicElement::buildFromDom(elem);
 
 
@@ -614,7 +618,7 @@ void SequenceElement::buildFromDom(QDomElement *elem)
 	     if(child) {
 	         child->buildFromDom(&e);
 		//How to add the child to the sequence ?
-		 
+		 children.append(child);				 
 	     }  
 	 }
         

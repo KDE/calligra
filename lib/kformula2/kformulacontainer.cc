@@ -430,8 +430,11 @@ void KFormulaContainer::load(QString file)
     cerr << "Error" << endl;   
     QDomDocument doc;
     doc.setContent(&f);
-
-
+    QDomElement fe = doc.firstChild().toElement();
+    rootElement.buildFromDom(&fe);
+    dirty = true;
+    testDirty();
+    
     
     f.close();
 }	

@@ -155,6 +155,9 @@ void KFormulaWidget::keyPressEvent(QKeyEvent* event)
         case Qt::Key_F4:
             document->save("test");
             break;
+        case Qt::Key_F5:
+            document->load("test");
+            break;
         case Qt::Key_F7:
             document->undo(cursor);
             break;

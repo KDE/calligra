@@ -35,7 +35,14 @@ QFont NumberElement::getFont(ContextStyle& context)
 
 QDomElement NumberElement::getElementDom(QDomDocument *doc)
 {
-    QDomElement de = doc->createElement("NUMBER");
-    de.appendChild(TextElement::getElementDom(doc));
+
+    QDomElement de=doc->createElement("NUMBER");
+    int sz=getRelativeSize();
+    if(sz!=0) {
+        de.setAttribute("SIZE",sz);
+    }
+    //May be this is wrong
+    de.setAttribute("CHAR",QString(character));
     return de;
+
 }
