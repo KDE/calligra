@@ -1,16 +1,16 @@
 /******************************************************************/
-/* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
-/* Version: 0.0.1                                                 */
-/* Author: Reginald Stadlbauer, Torben Weis                       */
-/* E-Mail: reggie@kde.org, weis@kde.org                           */
-/* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
-/* needs c++ library Qt (http://www.troll.no)                     */
-/* written for KDE (http://www.kde.org)                           */
-/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
-/* needs OpenParts and Kom (weis@kde.org)                         */
-/* License: GNU GPL                                               */
+/* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998	  */
+/* Version: 0.0.1						  */
+/* Author: Reginald Stadlbauer, Torben Weis			  */
+/* E-Mail: reggie@kde.org, weis@kde.org				  */
+/* Homepage: http://boch35.kfunigraz.ac.at/~rs			  */
+/* needs c++ library Qt (http://www.troll.no)			  */
+/* written for KDE (http://www.kde.org)				  */
+/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)	  */
+/* needs OpenParts and Kom (weis@kde.org)			  */
+/* License: GNU GPL						  */
 /******************************************************************/
-/* Module: Variable                                               */
+/* Module: Variable						  */
 /******************************************************************/
 
 #ifndef variable_h
@@ -19,20 +19,18 @@
 #include <qstring.h>
 #include <qdatetime.h>
 
-#include <iostream>
-#include <koStream.h>
-
 #include <string>
 
 class KWordDocument;
 class KWVariable;
 class KWParag;
 
-enum VariableType {VT_DATE_FIX = 0, VT_DATE_VAR = 1, VT_TIME_FIX = 2, VT_TIME_VAR = 3, VT_PGNUM = 4, VT_NUMPAGES = 5, VT_NONE};
+enum VariableType {VT_DATE_FIX = 0, VT_DATE_VAR = 1, VT_TIME_FIX = 2, VT_TIME_VAR = 3, VT_PGNUM = 4, 
+		   VT_NUMPAGES = 5, VT_NONE};
 enum VariableFormatType {VFT_DATE = 0, VFT_TIME = 1, VFT_PGNUM = 2, VFT_NUMPAGES = 3};
 
 /******************************************************************/
-/* Class: KWVariableFormat                                        */
+/* Class: KWVariableFormat					  */
 /******************************************************************/
 
 class KWVariableFormat
@@ -54,7 +52,7 @@ protected:
 };
 
 /******************************************************************/
-/* Class: KWVariableDateFormat                                    */
+/* Class: KWVariableDateFormat					  */
 /******************************************************************/
 
 class KWVariableDateFormat : public KWVariableFormat
@@ -72,7 +70,7 @@ public:
 };
 
 /******************************************************************/
-/* Class: KWVariableTimeFormat                                    */
+/* Class: KWVariableTimeFormat					  */
 /******************************************************************/
 
 class KWVariableTimeFormat : public KWVariableFormat
@@ -90,7 +88,7 @@ public:
 };
 
 /******************************************************************/
-/* Class: KWVariablePgNumFormat                                   */
+/* Class: KWVariablePgNumFormat					  */
 /******************************************************************/
 
 class KWVariablePgNumFormat : public KWVariableFormat
@@ -117,7 +115,7 @@ protected:
 };
 
 /******************************************************************/
-/* Class: KWVariable                                              */
+/* Class: KWVariable						  */
 /******************************************************************/
 
 class KWVariable
@@ -127,10 +125,10 @@ public:
     virtual ~KWVariable() {}
 
     virtual KWVariable *copy() {
-        KWVariable *v = new KWVariable( doc );
-        v->setVariableFormat( varFormat );
-        v->setInfo( frameSetNum, frameNum, pageNum, parag );
-        return v;
+	KWVariable *v = new KWVariable( doc );
+	v->setVariableFormat( varFormat );
+	v->setInfo( frameSetNum, frameNum, pageNum, parag );
+	return v;
     }
 
     virtual VariableType getType()
@@ -147,22 +145,22 @@ public:
     virtual void setInfo( int _frameSetNum, int _frameNum, int _pageNum, KWParag *_parag )
     { frameSetNum = _frameSetNum; frameNum = _frameNum; pageNum = _pageNum; parag = _parag; }
 
-    virtual void recalc() {}
+virtual void recalc() {}
 
-    virtual void save( ostream &out );
-    virtual void load( string name, string tag, vector<KOMLAttrib>& lst );
+virtual QDomElement save( QDomDocument& doc )
+virtual void load( string name, string tag, vector<KOMLAttrib>& lst );
 
 protected:
-    KWordDocument *doc;
-    KWVariableFormat *varFormat;
-    QString text;
-    int frameSetNum, frameNum, pageNum;
-    KWParag *parag;
+KWordDocument *doc;
+KWVariableFormat *varFormat;
+QString text;
+int frameSetNum, frameNum, pageNum;
+KWParag *parag;
 
 };
 
 /******************************************************************/
-/* Class: KWPgNumVariable                                         */
+/* Class: KWPgNumVariable					  */
 /******************************************************************/
 
 class KWPgNumVariable : public KWVariable
@@ -171,10 +169,10 @@ public:
     KWPgNumVariable( KWordDocument *_doc ) : KWVariable( _doc ) { pgNum = 0; }
 
     virtual KWVariable *copy() {
-        KWPgNumVariable *var = new KWPgNumVariable( doc );
-        var->setVariableFormat( varFormat );
-        var->setInfo( frameSetNum, frameNum, pageNum, parag );
-        return var;
+	KWPgNumVariable *var = new KWPgNumVariable( doc );
+	var->setVariableFormat( varFormat );
+	var->setInfo( frameSetNum, frameNum, pageNum, parag );
+	return var;
     }
 
     virtual VariableType getType()
@@ -183,7 +181,7 @@ public:
     virtual void recalc() { pgNum = pageNum; }
     long unsigned int getPgNum() { return pgNum; }
 
-    virtual void save( ostream &out );
+    virtual QDomElement save( QDomDocument& doc )
     virtual void load( string name, string tag, vector<KOMLAttrib>& lst );
 
 protected:
@@ -192,7 +190,7 @@ protected:
 };
 
 /******************************************************************/
-/* Class: KWDateVariable                                          */
+/* Class: KWDateVariable					  */
 /******************************************************************/
 
 class KWDateVariable : public KWVariable
@@ -202,10 +200,10 @@ public:
     KWDateVariable( KWordDocument *_doc ) : KWVariable( _doc ) {}
 
     virtual KWVariable *copy() {
-        KWDateVariable *var = new KWDateVariable( doc, fix, date );
-        var->setVariableFormat( varFormat );
-        var->setInfo( frameSetNum, frameNum, pageNum, parag );
-        return var;
+	KWDateVariable *var = new KWDateVariable( doc, fix, date );
+	var->setVariableFormat( varFormat );
+	var->setInfo( frameSetNum, frameNum, pageNum, parag );
+	return var;
     }
 
     virtual VariableType getType()
@@ -216,7 +214,7 @@ public:
     QDate getDate() { return date; }
     void setDate( QDate _date ) { date = _date; }
 
-    virtual void save( ostream &out );
+    virtual QDomElement save( QDomDocument& doc )
     virtual void load( string name, string tag, vector<KOMLAttrib>& lst );
 
 protected:
@@ -226,7 +224,7 @@ protected:
 };
 
 /******************************************************************/
-/* Class: KWTimeVariable                                          */
+/* Class: KWTimeVariable					  */
 /******************************************************************/
 
 class KWTimeVariable : public KWVariable
@@ -236,10 +234,10 @@ public:
     KWTimeVariable( KWordDocument *_doc ) : KWVariable( _doc ) {}
 
     virtual KWVariable *copy() {
-        KWTimeVariable *var = new KWTimeVariable( doc, fix, time );
-        var->setVariableFormat( varFormat );
-        var->setInfo( frameSetNum, frameNum, pageNum, parag );
-        return var;
+	KWTimeVariable *var = new KWTimeVariable( doc, fix, time );
+	var->setVariableFormat( varFormat );
+	var->setInfo( frameSetNum, frameNum, pageNum, parag );
+	return var;
     }
 
     virtual VariableType getType()
@@ -250,7 +248,7 @@ public:
     QTime getTime() { return time; }
     void setTime( QTime _time ) { time = _time; }
 
-    virtual void save( ostream &out );
+    virtual QDomElement save( QDomDocument& doc )
     virtual void load( string name, string tag, vector<KOMLAttrib>& lst );
 
 protected:

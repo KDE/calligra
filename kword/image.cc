@@ -1,16 +1,16 @@
 /******************************************************************/
-/* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
-/* Version: 0.0.1                                                 */
-/* Author: Reginald Stadlbauer, Torben Weis                       */
-/* E-Mail: reggie@kde.org, weis@kde.org                           */
-/* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
-/* needs c++ library Qt (http://www.troll.no)                     */
-/* written for KDE (http://www.kde.org)                           */
-/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
-/* needs OpenParts and Kom (weis@kde.org)                         */
-/* License: GNU GPL                                               */
+/* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998	  */
+/* Version: 0.0.1						  */
+/* Author: Reginald Stadlbauer, Torben Weis			  */
+/* E-Mail: reggie@kde.org, weis@kde.org				  */
+/* Homepage: http://boch35.kfunigraz.ac.at/~rs			  */
+/* needs c++ library Qt (http://www.troll.no)			  */
+/* written for KDE (http://www.kde.org)				  */
+/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)	  */
+/* needs OpenParts and Kom (weis@kde.org)			  */
+/* License: GNU GPL						  */
 /******************************************************************/
-/* Module: Image                                                  */
+/* Module: Image						  */
 /******************************************************************/
 
 #include "image.h"
@@ -24,7 +24,7 @@
 #include <unistd.h>
 
 /******************************************************************/
-/* Class: KWImage                                                 */
+/* Class: KWImage						  */
 /******************************************************************/
 
 /*================================================================*/
@@ -34,9 +34,9 @@ void KWImage::decRef()
     QString key = doc->getImageCollection()->generateKey( this );
 
     if ( ref <= 0 && doc )
-        doc->getImageCollection()->removeImage( this );
+	doc->getImageCollection()->removeImage( this );
     if ( !doc && ref == 0 ) warning( "RefCount of the image == 0, but I couldn't delete it, "
-                                     " because I have not a pointer to the document!" );
+				     " because I have not a pointer to the document!" );
 }
 
 /*================================================================*/
@@ -47,9 +47,12 @@ void KWImage::incRef()
 }
 
 /*================================================================*/
-void KWImage::save( ostream &out )
+QDomElement KWImage::save( QDomDocument& doc )
 {
-    out << indent << "<FILENAME value=\"" << correctQString( filename ).latin1() << "\"/>" << endl;
+    QDomElement img = doc.createElement( "IMAGE" );
+    img.setAttribute( "filename", filename );
+
+    return img;
 }
 
 /*================================================================*/
@@ -63,30 +66,30 @@ void KWImage::load( KOMLParser& parser, vector<KOMLAttrib>& lst, KWordDocument *
 
     while ( parser.open( 0L, tag ) )
     {
-        KOMLParser::parseTag( tag.c_str(), name, lst );
+	KOMLParser::parseTag( tag.c_str(), name, lst );
 
-        // filename
-        if ( name == "FILENAME" )
-        {
-            KOMLParser::parseTag( tag.c_str(), name, lst );
-            vector<KOMLAttrib>::const_iterator it = lst.begin();
-            for( ; it != lst.end(); it++ )
-            {
-                if ( ( *it ).m_strName == "value" )
-                {
-                    filename = correctQString( ( *it ).m_strValue.c_str() );
-                    QImage::load( filename );
-                }
-            }
-        }
+	// filename
+	if ( name == "FILENAME" )
+	{
+	    KOMLParser::parseTag( tag.c_str(), name, lst );
+	    vector<KOMLAttrib>::const_iterator it = lst.begin();
+	    for( ; it != lst.end(); it++ )
+	    {
+		if ( ( *it ).m_strName == "value" )
+		{
+		    filename = correctQString( ( *it ).m_strValue.c_str() );
+		    QImage::load( filename );
+		}
+	    }
+	}
 
-        else
-            cerr << "Unknown tag '" << tag << "' in IMAGE" << endl;
+	else
+	    cerr << "Unknown tag '" << tag << "' in IMAGE" << endl;
 
-        if ( !parser.close( tag ) )
-        {
-            cerr << "ERR: Closing Child" << endl;
-            return;
-        }
+	if ( !parser.close( tag ) )
+	{
+	    cerr << "ERR: Closing Child" << endl;
+	    return;
+	}
     }
 }

@@ -109,7 +109,7 @@ public:
 
     void destroy();
 
-    void save( ostream &out );
+    QDomElement save( QDomDocument& doc )
     void load( string name, string tag, KOMLParser &parser, vector<KOMLAttrib>& lst );
 
 protected:

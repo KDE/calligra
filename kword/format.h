@@ -3,9 +3,7 @@
 
 #include <qstring.h>
 #include <qcolor.h>
-
-#include <iostream>
-#include <koStream.h>
+#include <qdom.h>
 
 class KWFormat;
 class KWordDocument;
@@ -168,7 +166,7 @@ public:
 
     KWordDocument *getDocument() { return doc; }
 
-    void save( ostream &out );
+    QDomElement save( QDomDocument &doc );
     void load( KOMLParser&, vector<KOMLAttrib>&, KWordDocument* );
 
 protected:
