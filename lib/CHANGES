@@ -29,6 +29,7 @@ KoText:
 - Usability in style dialog: when creating a new style, select it as the
   'next style' for itself (#45868).
 - Allow decimal values in "multiply" (proportional) linespacing.
+- Fixed wrong left margin on multiline paragraphs with a counter.
 
 KoSpell:
 - Improved configure check for libaspell
