@@ -6336,10 +6336,10 @@ bool KSpreadSheet::loadOasis( const QDomElement& tableElement, const KoOasisStyl
 
     int rowIndex = 1;
     int indexCol = 1;
-    QDomElement *style = 0L;
     QDomNode rowNode = tableElement.firstChild();
     while( !rowNode.isNull() )
     {
+        kdDebug()<<" rowIndex :"<<rowIndex<<" indexCol :"<<indexCol<<endl;
         QDomElement rowElement = rowNode.toElement();
         if( !rowElement.isNull() )
         {
@@ -6433,7 +6433,7 @@ bool KSpreadSheet::loadColumnFormat(const QDomElement& column, const KoOasisStyl
             col->setHide( true );
 
         insertColumnFormat( col );
-        ++indexCol;
+        indexCol++;
         kdDebug()<<" après !!!!!!!!!!!!!!!!!! :"<<indexCol<<endl;
     }
     return true;
@@ -6506,7 +6506,7 @@ bool KSpreadSheet::loadRowFormat( const QDomElement& row, int &rowIndex,const Ko
             if ( collapse )
                 rowL->setHide( true );
         }
-        ++rowIndex;
+        rowIndex++;
     }
 
     int columnIndex = 0;
