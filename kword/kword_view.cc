@@ -60,6 +60,7 @@
 #include <koTabChooser.h>
 #include <koPartSelectDia.h>
 #include <kformulaedit.h>
+#include <koTemplateCreateDia.h>
 
 #include <kapp.h>
 #include <kfiledialog.h>
@@ -73,6 +74,7 @@
 #include <kaction.h>
 #include <kimgio.h>
 #include <kcoloractions.h>
+#include <kstddirs.h>
 
 #include <stdlib.h>
 #include <X11/Xlib.h>
@@ -574,6 +576,9 @@ void KWordView::setupActions()
     actionExtraOptions = new KAction( i18n( "&Options..." ), 0,
 					 this, SLOT( extraOptions() ),
 				      actionCollection(), "extra_options" );
+    actionExtraCreateTemplate = new KAction( i18n( "&Create Template from Document..." ), 0,
+					     this, SLOT( extraCreateTemplate() ),
+				      actionCollection(), "extra_template" );
 }
 
 /*====================== construct ==============================*/
@@ -1382,6 +1387,25 @@ void KWordView::extraStylist()
     QObject::connect( styleManager, SIGNAL( applyButtonPressed() ), this, SLOT( styleManagerOk() ) );
     styleManager->setCaption( i18n( "KWord - Stylist" ) );
     styleManager->show();
+}
+
+/*===============================================================*/
+void KWordView::extraCreateTemplate()
+{
+    QPixmap pix( 45, 60 );
+    pix.fill( Qt::white );
+    
+    QString file = "/tmp/kpt";
+    m_pKWordDoc->saveToURL( file, "" );
+
+    KoTemplateCreateDia::createTemplate( this, file, pix,
+					 KWordFactory::global()->
+					 dirs()->resourceDirs( "kword_template" ),
+					 "kwt" );
+    system( QString( "rm %1" ).arg( file ).latin1() );
+    KWordFactory::global()->dirs()->addResourceType("kword_template",
+						    KStandardDirs::kde_default( "data" ) +
+						    "kword/templates/");
 }
 
 /*===============================================================*/
@@ -3364,7 +3388,7 @@ KWLayoutWidget::KWLayoutWidget( QWidget *parent, KWordGUI *g )
 {
     gui = g;
 }
- 
+
 void KWLayoutWidget::resizeEvent( QResizeEvent *e )
 {
     QWidget::resizeEvent( e );

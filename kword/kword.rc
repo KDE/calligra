@@ -89,6 +89,8 @@
   <Action name="extra_autocorrection"/>
   <Action name="extra_stylist"/>
   <Separator/>
+  <Action name="extra_template"/>
+  <Separator/>
   <Action name="extra_options"/>
  </Menu>
 </MenuBar>

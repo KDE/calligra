@@ -181,7 +181,8 @@ public slots:
     virtual void extraAutoFormat();
     virtual void extraStylist();
     virtual void extraOptions();
-
+    virtual void extraCreateTemplate();
+    
     virtual void toolsEdit();
     virtual void toolsEditFrame();
     virtual void toolsCreateText();
@@ -401,7 +402,8 @@ protected:
     QAction *actionExtraAutocorrection;
     QAction *actionExtraStylist;
     QAction *actionExtraOptions;
-
+    QAction *actionExtraCreateTemplate;
+    
     // text toolbar values
     QFont tbFont;
     QColor tbColor;
@@ -440,20 +442,20 @@ class KWordGUI;
 class KWLayoutWidget : public QWidget
 {
     Q_OBJECT
-    
+
 public:
     KWLayoutWidget( QWidget *parent, KWordGUI *g );
-    
+
 protected:
     void resizeEvent( QResizeEvent *e );
     KWordGUI *gui;
-    
+
 };
 
 class KWordGUI : public QWidget
 {
     friend class KWLayoutWidget;
-    
+
     Q_OBJECT
 
 public:

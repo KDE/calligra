@@ -1615,3 +1615,7 @@ Reggie, 8.11.1999:
 Reggie, 10.11.1999
 -----------------
 - Saving and loading embedded parts works now
+
+Reggie, 14.11.1999:
+-----------------
+- Implemented a menu entry to create a template from the document
