@@ -362,6 +362,8 @@ void ThumbBar::refreshItems(bool offset)
 
 void ThumbBar::updateItem( int pagenr /* 0-based */, bool sticky )
 {
+    if ( m_viewMasterPage )
+        return;
     if ( !uptodate )
         return;
     int pagecnt = 0;
