@@ -25,6 +25,7 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 #include <qregexp.h>
+#include <kglobalsettings.h>
 
 #include <koApplication.h>
 
@@ -255,20 +256,23 @@ HistoryEntry::highlight()
 		text += beginTag + curr + endTag;
 	}
 
-	QRegExp keywords("\\b(SELECT|UPDATE|INSERT|DELETE|DROP|FROM|WHERE|AND|OR|NOT|NULL)\\b");
+	QRegExp keywords("\\b(SELECT|UPDATE|INSERT|DELETE|DROP|FROM|WHERE|AND|OR|NOT|NULL|JOIN|LEFT|RIGHT|ON)\\b");
 	keywords.setCaseSensitive(false);
 	text.replace(keywords, "<b>\\1</b>");
 
 	kdDebug() << "HistoryEntry::highlight() text:" << text << endl;
-	m_formated = new QSimpleRichText(text, QFont("courier", 8));
+//	m_formated = new QSimpleRichText(text, QFont("courier", 8));
+	m_formated = new QSimpleRichText(text, KGlobalSettings::fixedFont());
 
 }
 
 QRect
 HistoryEntry::geometry(int y, int width, QFontMetrics f)
 {
-	int h = 21 + f.boundingRect(2, 21, width - 2, 0, Qt::WordBreak | Qt::AlignLeft | Qt::AlignVCenter, m_statement).height();
-	return QRect(0, y, width, h);
+//	int h = 21 + f.boundingRect(2, 21, width - 2, 0, Qt::WordBreak | Qt::AlignLeft | Qt::AlignVCenter, m_statement).height();
+//	return QRect(0, y, width, h);
+	m_formated->setWidth(width - 2);
+	return QRect(0, y, width, m_formated->height() + 21);
 }
 
 void HistoryEntry::updateTime(const QTime &execTime) {
