@@ -308,15 +308,6 @@ void KoCounterStyleWidget::numStyleChanged() {
     bool hasStart = !sr->isBullet() && !sr->style() == KoParagCounter::STYLE_NONE;
     lStart->setEnabled( hasStart );
     spnStart->setEnabled( hasStart );
-    if ( sr->isBullet() ) // we selected a bullet -> erase prefix/suffix.
-                           // due to default value of suffix='.', it's too easy to end up
-                           // with a bullet + a dot.
-    {
-        noSignals = true;
-        sSuffix->setText( QString::null );
-        sPrefix->setText( QString::null );
-        noSignals = false;
-    }
     changeKWSpinboxType(sr->style() );
 }
 
