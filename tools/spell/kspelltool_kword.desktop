@@ -45,11 +45,11 @@ Name[zh_TW.Big5]=拼字檢查工具
 X-KDE-Library=libkspelltool
 Type=Service
 Commands=spellcheck
-Comment=Check spelling
-Comment[de]=Rechtschreibung pr�fen
-Comment[fr]=V�rificateur orthographique
+Comment=Check this word's spelling
 ServiceTypes=KoDataTool
 Icon=spellcheck
+# This tool should only appear for single words, in KWord.
 DataType=QString
-DataMimeTypes=text/plain
-ExcludeFrom=kword
+DataMimeTypes=application/x-singleword
+# Do we need an "only include in" ?
+ExcludeFrom=kspread

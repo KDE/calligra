@@ -22,6 +22,8 @@
 #include <klocale.h>
 #include <kspell.h>
 #include <kdebug.h>
+#include <kinstance.h>
+#include <kconfig.h>
 
 /***************************************************
  *
@@ -59,11 +61,6 @@ QObject* SpellCheckerFactory::create( QObject* parent, const char* name, const c
  *
  ***************************************************/
 
-struct spellStruct {
-  QString _data;
-  KSpellConfig * _ksconf;
-};
-
 SpellChecker::SpellChecker( QObject* parent, const char* name )
     : KoDataTool( parent, name )
 {
@@ -81,29 +78,49 @@ bool SpellChecker::run( const QString& command, void* data, const QString& datat
     // Check wether we can accept the data
     if ( datatype != "QString" )
     {
-	kdDebug(31000) << "SpellChecker does only accept datatype QString" << endl;
+	kdDebug(31000) << "SpellChecker only accepts datatype QString" << endl;
 	return FALSE;
     }
 
-    if ( mimetype != "text/plain" )
+    if ( mimetype != "text/plain" && mimetype != "application/x-singleword" )
     {
-	kdDebug(31000) << "SpellChecker does only accept mimetype text/plain" << endl;
+	kdDebug(31000) << "SpellChecker only accepts mimetype text/plain" << endl;
 	return FALSE;
     }
 
     // Get data
-    spellStruct tmpStruct = *((spellStruct*)data);
-    QString buffer = tmpStruct._data;
+    QString buffer = *((QString *)data);
     buffer = buffer.stripWhiteSpace();
 
-    // #### handle errors
+    // Read config
+    KSpellConfig ksconfig;
+    if ( instance() )
+    {
+        KConfig * config = instance()->config();
+        QCString gn( "KSpell " );
+        gn += instance()->instanceName(); // for compat reasons, and to avoid finding the group in kdeglobals (hmm...)
+        QString groupName = QString::fromLatin1( gn );
+        //kdDebug() << "Group: " << groupName << endl;
+        if ( config->hasGroup( groupName ) )
+        {
+            //kdDebug() << "SpellChecker::run - group found -" << endl;
+            config->setGroup( groupName );
+            ksconfig.setNoRootAffix(config->readNumEntry ("KSpell_NoRootAffix", 0));
+            ksconfig.setRunTogether(config->readNumEntry ("KSpell_RunTogether", 0));
+            ksconfig.setDictionary(config->readEntry ("KSpell_Dictionary", ""));
+            ksconfig.setDictFromList(config->readNumEntry ("KSpell_DictFromList", FALSE));
+            ksconfig.setEncoding(config->readNumEntry ("KSpell_Encoding", KS_E_ASCII));
+            ksconfig.setClient(config->readNumEntry ("KSpell_Client", KS_CLIENT_ISPELL));
+        }
+    }
+
     // Call the spell checker
-    KSpell::spellStatus status=(KSpell::spellStatus)KSpell::modalCheck( buffer, tmpStruct._ksconf );
+    KSpell::spellStatus status=(KSpell::spellStatus)KSpell::modalCheck( buffer, &ksconfig );
 
     if (status == KSpell::Error)
     {
         KMessageBox::sorry(0L, i18n("ISpell could not be started.\n"
-                                      "Please make sure you have ISpell properly configured and in your PATH."));
+                                    "Please make sure you have ISpell properly configured and in your PATH."));
     }
     else if (status == KSpell::Crashed)
     {
@@ -111,9 +128,8 @@ bool SpellChecker::run( const QString& command, void* data, const QString& datat
     }
     else
     {
-    // Set data
-    tmpStruct._data=buffer;
-    *((spellStruct*)data) = tmpStruct;
+        // Set data
+        *((QString*)data) = buffer;
     }
     return TRUE;
 }

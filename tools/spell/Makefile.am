@@ -14,6 +14,6 @@ noinst_HEADERS = main.h
 
 libkspelltool_la_METASOURCES = main.moc
 
-service_DATA = kspelltool.desktop
+service_DATA = kspelltool.desktop kspelltool_kword.desktop
 servicedir = $(kde_servicesdir)
 
