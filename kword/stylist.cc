@@ -22,20 +22,16 @@
 #include "stylist.moc"
 #include <koUnit.h>
 #include <kdebug.h>
+#include <koStylist.h>
+#include <kostyle.h>
 /******************************************************************/
 /* Class: KWStyleManager                                          */
 /******************************************************************/
 
-KWStyleManager::KWStyleManager( QWidget *_parent, KoUnit::Unit unit,KWDocument *_doc )
-    : KoStyleManager(_parent,unit)
+KWStyleManager::KWStyleManager( QWidget *_parent, KoUnit::Unit unit,KWDocument *_doc, const QPtrList<KoStyle> & style)
+    : KoStyleManager(_parent,unit,style)
 {
     m_doc = _doc;
-}
-
-const QPtrList<KoStyle> & KWStyleManager::styleList()
-{
-    kdDebug()<<"*********************************************************************************************************coucou\n";
-    return m_doc->styleList();
 }
 
 KoStyle* KWStyleManager::addStyleTemplate(KoStyle *style)

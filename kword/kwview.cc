@@ -2348,7 +2348,7 @@ void KWView::extraStylist()
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         edit->hideCursor();
-    KWStyleManager * styleManager = new KWStyleManager( this, m_doc->getUnit(),m_doc );
+    KWStyleManager * styleManager = new KWStyleManager( this, m_doc->getUnit(),m_doc, m_doc->styleList());
     styleManager->exec();
     delete styleManager;
     if ( edit )

@@ -50,9 +50,8 @@ class KoStyleManager : public KDialogBase
     Q_OBJECT
 
 public:
-    KoStyleManager( QWidget *_parent,KoUnit::Unit unit );
+    KoStyleManager( QWidget *_parent,KoUnit::Unit unit,const QPtrList<KoStyle> & style );
 
-    virtual const QPtrList<KoStyle> & styleList()=0;
     virtual KoStyle* addStyleTemplate(KoStyle *style)=0;
     virtual void applyStyleChange( KoStyle * changedStyle, int paragLayoutChanged, int formatChanged )=0;
     virtual void removeStyleTemplate( KoStyle *style )=0;
@@ -60,7 +59,7 @@ public:
 
 protected:
 
-    void setupWidget();
+    void setupWidget(const QPtrList<KoStyle> & style);
     void addGeneralTab();
     void apply();
     void updateGUI();

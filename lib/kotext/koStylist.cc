@@ -46,23 +46,18 @@
    OK also frees all the changed ones and updates the doc if styles are deleted.
 */
 
-KoStyleManager::KoStyleManager( QWidget *_parent,KoUnit::Unit unit )
+KoStyleManager::KoStyleManager( QWidget *_parent,KoUnit::Unit unit, const QPtrList<KoStyle> & style)
     : KDialogBase( _parent, "Stylist", true,
                    i18n("Stylist"),
                    KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::Apply )
 {
-    kdDebug()<<"KoStyleManager::KoStyleManager******************\n";
     //setWFlags(getWFlags() || WDestructiveClose);
     m_currentStyle =0L;
     noSignals=true;
     m_origStyles.setAutoDelete(false);
     m_changedStyles.setAutoDelete(false);
-    //KoUnit::Unit unit = getUnit();
-    kdDebug()<<"avant setupWidget****************\n";
-    setupWidget(); // build the widget with the buttons and the list selector.
-    kdDebug()<<"apres setupWidget***************************\n";
+    setupWidget(style); // build the widget with the buttons and the list selector.
     addGeneralTab();
-    kdDebug()<<"apres addGeneralTab*****************\n";
     KoStyleFontTab * fontTab = new KoStyleFontTab( m_tabs );
     addTab( fontTab );
 
@@ -87,9 +82,7 @@ KoStyleManager::KoStyleManager( QWidget *_parent,KoUnit::Unit unit )
     addTab( newTab );
     m_stylesList->setCurrentItem( 0 );
     noSignals=false;
-    kdDebug()<<"avant switchStyle************************\n";
     switchStyle();
-    kdDebug()<<"apres switchStyle**************************\n";
     setInitialSize( QSize( 600, 570 ) );
 }
 
@@ -99,15 +92,13 @@ void KoStyleManager::addTab( KoStyleManagerTab * tab )
     m_tabs->insertTab( tab, tab->tabName() );
 }
 
-void KoStyleManager::setupWidget()
+void KoStyleManager::setupWidget(const QPtrList<KoStyle> & styleList)
 {
     QFrame * frame1 = makeMainWidget();
     QGridLayout *frame1Layout = new QGridLayout( frame1, 0, 0, // auto
                                                  KDialog::marginHint(), KDialog::spacingHint() );
-    kdDebug()<<"avant QPtrListIterator<KoStyle> style( styleList() );*****\n";
-    QPtrListIterator<KoStyle> style( styleList() );
-    kdDebug()<<"apres **********************************************\n";
-    numStyles = styleList().count();
+    QPtrListIterator<KoStyle> style( styleList );
+    numStyles = styleList.count();
     m_stylesList = new QListBox( frame1, "stylesList" );
     for ( ; style.current() ; ++style )
     {
