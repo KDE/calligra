@@ -1,3 +1,12 @@
+koffice (1:1.3.3-1) unstable; urgency=medium
+
+  * New upstream bugfix release.
+  * Gnumeric export is fixed (closes: #200313).
+  * Karbon no longer locks up when importing an EPS graphic containing
+    %ALDBoundingBox (closes: #242454).
+
+ -- Ben Burton <bab@debian.org>  Sun, 17 Oct 2004 19:19:03 +1000
+
 koffice (1:1.3.2-2) unstable; urgency=medium
 
   * Rebuilt against libtiff4.
