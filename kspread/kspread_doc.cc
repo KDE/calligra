@@ -52,6 +52,8 @@
 #include "kspread_view.h"
 #include "kspread_factory.h"
 
+#include "koDocumentInfo.h"
+
 #include "KSpreadDocIface.h"
 
 using namespace std;
@@ -598,39 +600,39 @@ QString KSpreadDoc::completeHeading( const QString &_data, int _page, const QStr
     if ( !_table.isEmpty() )
         ta = _table;
 
-    // Read user specific informations....
-    KConfig config("kofficerc");
-    QString full_name;
-    QString email_addr;
-    QString organization;
-    QString tmp;
-    if( config.hasGroup( "Author" ))
-    {
-        config.setGroup( "Author" );
-        full_name=config.readEntry("full-name","");
-        email_addr=config.readEntry("email", "");
-        organization=config.readEntry("company", "");
-    }
-    else
-    {
-        char hostname[80];
-        struct passwd *p;
+     KoDocumentInfo * info = documentInfo();
+     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
+     QString full_name;
+     QString email_addr;
+     QString organization;
+     QString tmp;
+     if ( !authorPage )
+         kdWarning() << "Author information not found in documentInfo !" << endl;
+     else
+     {
+         full_name = authorPage->fullName();
+         email_addr = authorPage->email();
+         organization = authorPage->company();
+     }
 
-        p = getpwuid(getuid());
-        gethostname(hostname, 80);
+      char hostname[80];
+      struct passwd *p;
 
-        KConfig config2( "emaildefaults", true );
-        config2.setGroup( "Defaults" );
-        QString group = config2.readEntry("Profile","Default");
-        config2.setGroup(QString("PROFILE_%1").arg(group));
-        full_name = config2.readEntry( "FullName", p->pw_gecos );
+      p = getpwuid(getuid());
+      gethostname(hostname, 80);
 
-        tmp = p->pw_name;
-        tmp += "@";
-        tmp += hostname;
+      if(full_name.isEmpty())
+      {
+          full_name=p->pw_gecos;
+      }
+      if( email_addr.isEmpty())
+      {
+           tmp = p->pw_name;
+           tmp += "@";
+           tmp += hostname;
+           email_addr=tmp;
+      }
 
-        email_addr=config2.readEntry("EmailAddress", tmp);
-    }
 
     tmp = _data;
     int pos = 0;
