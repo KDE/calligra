@@ -145,7 +145,7 @@ class KivioDoc : public KoDocument
     void resetLayerPanel();
     void updateProtectPanelCheckBox();
 
-    QFont defaultFont() { return m_font; }
+    QFont defaultFont() const { return m_font; }
 
   public slots:
     void updateView(KivioPage*);

@@ -133,10 +133,10 @@ class KivioView : public KoView
     void resetLayerPanel();
     void updateProtectPanelCheckBox();
 
-    KoZoomHandler* zoomHandler();
+    KoZoomHandler* zoomHandler() const;
 
-    KoRuler* horzRuler() { return hRuler; }
-    KoRuler* vertRuler() { return vRuler; }
+    KoRuler* horzRuler() const { return hRuler; }
+    KoRuler* vertRuler() const { return vRuler; }
 
     Kivio::PluginManager* pluginManager();
 
@@ -268,14 +268,14 @@ class KivioView : public KoView
     void arrowHeadFormat();
 
     void clipboardDataChanged();
-    
+
   protected:
     void setupActions();
     void initActions();
 
     virtual void updateReadWrite( bool readwrite );
     virtual void partActivateEvent(KParts::PartActivateEvent* event);
-  
+
   private:
     KivioCanvas *m_pCanvas;
     KoTabBar *m_pTabBar;

@@ -152,10 +152,10 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   .arg(KGlobal::_locale->formatNumber(xy.y(), 2)).arg(unit).arg(unit);
   m_coordSLbl = new KStatusBarLabel(text, 1000);
   addStatusBarItem(m_coordSLbl, 0, true);
-  
+
   // Handle progress information from the doc
   m_statusBarProgress = 0;
-  
+
   connect(m_pDoc, SIGNAL(initProgress()), this, SLOT(initStatusBarProgress()));
   connect(m_pDoc, SIGNAL(progress(int)), this, SLOT(setStatusBarProgress(int)));
   connect(m_pDoc, SIGNAL(endProgress()), this, SLOT(removeStatusBarProgress()));
@@ -181,10 +181,10 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
            SIGNAL(tabChanged(const QString&)),
            SLOT( changePage(const QString&)));
   connect( m_pTabBar, SIGNAL( doubleClicked() ), SLOT( renamePage() ) );
-  connect( m_pTabBar, SIGNAL( contextMenu( const QPoint& ) ), 
+  connect( m_pTabBar, SIGNAL( contextMenu( const QPoint& ) ),
       SLOT( popupTabBarMenu( const QPoint& ) ) );
   m_pTabBar->setReverseLayout( QApplication::reverseLayout() );
-  
+
   // Scroll Bar
   QScrollBar* vertScrollBar = new QScrollBar(QScrollBar::Vertical,pRightSide);
   QScrollBar* horzScrollBar = new QScrollBar(QScrollBar::Horizontal,tabSplit);
@@ -441,7 +441,7 @@ void KivioView::setupActions()
                                             this, SLOT( textSubScript() ),
                                             actionCollection(), "textVAlignSub" );
   m_textVAlignSub->setExclusiveGroup( "valign" );
-  
+
   m_lineWidthAction = new KoLineWidthAction(i18n("Line Width"), "linewidth", this, SLOT(setLineWidth(double)),
     actionCollection(), "setLineWidth");
   m_lineWidthAction->setUnit(m_pDoc->units());
@@ -449,7 +449,7 @@ void KivioView::setupActions()
 
   m_lineStyleAction = new KoLineStyleAction(i18n("Line Style"), "linestyle", this, SLOT(setLineStyle(int)),
     actionCollection(), "setLineStyle");
-    
+
   m_paperLayout = new KAction( i18n("Page Layout..."), 0, this, SLOT(paperLayoutDlg()), actionCollection(), "paperLayout" );
   m_insertPage = new KAction( i18n("Insert Page"),"item_add", 0, this, SLOT(insertPage()), actionCollection(), "insertPage" );
   m_removePage = new KAction( i18n("Remove Page"), "item_remove",0,this, SLOT(removePage()), actionCollection(), "removePage" );
@@ -555,7 +555,7 @@ void KivioView::renamePage()
 {
     bool ok;
     QString activeName = m_pActivePage->pageName();
-    QString newName = KInputDialog::getText( i18n("Rename Page"), 
+    QString newName = KInputDialog::getText( i18n("Rename Page"),
         i18n("Enter page name:"), activeName, &ok, this );
 
     // Have a different name ?
@@ -595,7 +595,7 @@ void KivioView::setActivePage( KivioPage* page )
     disconnect(m_pActivePage, SIGNAL(sig_pageLayoutChanged(const KoPageLayout&)), this,
       SLOT(setRulerPageLayout(const KoPageLayout&)));
   }
-  
+
   m_pActivePage = page;
 
   m_pTabBar->setActiveTab(page->pageName());
@@ -653,15 +653,15 @@ void KivioView::hidePage()
       KMessageBox::error( this, i18n("You cannot hide the last visible page.") );
       return;
   }
-        
+
   m_pActivePage->setHidden(true);
   QString activeName = m_pActivePage->pageName();
-  
+
   m_pTabBar->removeTab( activeName );
-        
+
   KivioHidePageCommand * cmd = new KivioHidePageCommand(i18n("Hide Page"), m_pActivePage);
   m_pDoc->addCommand( cmd );
-    
+
   changePage( m_pDoc->map()->visiblePages().first() );
   updateMenuPage();
 }
@@ -669,10 +669,14 @@ void KivioView::hidePage()
 void KivioView::showPage()
 {
   KivioPageShow* dlg = new KivioPageShow(this,"Page show");
-  dlg->exec();
-  delete dlg;
+  if ( !dlg->exec() )
+  {
+      delete dlg;
+      return;
+  }
   m_pTabBar->setTabs( m_pDoc->map()->visiblePages() );
   updateMenuPage();
+  delete dlg;
 }
 
 int KivioView::leftBorder() const
@@ -786,7 +790,7 @@ void KivioView::viewZoom(int zoom)
   if(zoom < 10 || zoom > 2000 || zoom == zoomHandler()->zoom()) {
     return;
   }
-  
+
   zoomHandler()->setZoomAndResolution(zoom, KoGlobal::dpiX(),
     KoGlobal::dpiY());
   m_pCanvas->update();
@@ -797,7 +801,7 @@ void KivioView::viewZoom(int zoom)
   vRuler->setFrameStartEnd(zoomHandler()->zoomItY(l.ptTop), zoomHandler()->zoomItY(l.ptHeight - l.ptBottom));
   hRuler->setFrameStartEnd(zoomHandler()->zoomItX(l.ptLeft), zoomHandler()->zoomItX(l.ptWidth - l.ptRight));
   KoView::setZoom(zoomHandler()->zoomedResolutionY());
-  
+
   emit zoomChanged(zoom);
 }
 
@@ -894,7 +898,7 @@ void KivioView::setFGColor()
   while( pStencil )
   {
     QColor col( m_setFGColor->color());
-    
+
     if ( col != pStencil->fgColor() )
     {
       KivioChangeStencilColorCommand * cmd = new KivioChangeStencilColorCommand( i18n("Change Fg Color"), m_pActivePage, pStencil, pStencil->fgColor(), col, KivioChangeStencilColorCommand::CT_FGCOLOR);
@@ -903,15 +907,15 @@ void KivioView::setFGColor()
       macro->addCommand( cmd );
       createMacro = true;
     }
-    
+
     pStencil = m_pActivePage->selectedStencils()->next();
   }
-  
+
   if ( createMacro )
     m_pDoc->addCommand( macro );
   else
     delete macro;
-  
+
   m_pDoc->updateView(m_pActivePage);
 }
 
@@ -926,7 +930,7 @@ void KivioView::setBGColor()
   while( pStencil )
   {
     QColor col( m_setBGColor->color());
-    
+
     if ( col != pStencil->bgColor() )
     {
       KivioChangeStencilColorCommand * cmd = new KivioChangeStencilColorCommand( i18n("Change Bg Color"), m_pActivePage, pStencil, pStencil->bgColor(), col, KivioChangeStencilColorCommand::CT_BGCOLOR);
@@ -935,10 +939,10 @@ void KivioView::setBGColor()
       macro->addCommand( cmd );
       createMacro = true;
     }
-    
+
     pStencil = m_pActivePage->selectedStencils()->next();
   }
-  
+
   if ( createMacro )
     m_pDoc->addCommand( macro );
   else
@@ -950,16 +954,16 @@ void KivioView::setBGColor()
 void KivioView::setTextColor()
 {
   KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
-  
+
   if (!pStencil)
     return;
-  
+
   KMacroCommand * macro = new KMacroCommand( i18n("Change Text Color"));
   bool createMacro = false;
   while( pStencil )
   {
     QColor col(m_setTextColor->color());
-    
+
     if ( col != pStencil->textColor() )
     {
       KivioChangeStencilColorCommand * cmd = new KivioChangeStencilColorCommand( i18n("Change Text Color"), m_pActivePage, pStencil, pStencil->textColor(), col, KivioChangeStencilColorCommand::CT_TEXTCOLOR);
@@ -967,25 +971,25 @@ void KivioView::setTextColor()
       macro->addCommand( cmd );
       createMacro = true;
     }
-    
+
     pStencil = m_pActivePage->selectedStencils()->next();
   }
-  
+
   if ( createMacro )
     m_pDoc->addCommand( macro );
   else
     delete macro;
-  
+
   m_pDoc->updateView(m_pActivePage);
 }
 
 void KivioView::setLineWidth(double width)
 {
   KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
-  
+
   if (!pStencil)
     return;
-    
+
   KMacroCommand * macro = new KMacroCommand( i18n("Change Line Width") );
   bool createMacro = false ;
 
@@ -1015,20 +1019,32 @@ void KivioView::setLineWidth(double width)
 
 void KivioView::setLineStyle(int style)
 {
-  //FIXME: Make this undoable!!!!
   KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
-  
+
   if(!pStencil)
     return;
+
+  KMacroCommand * macro = new KMacroCommand( i18n("Change Line Style") );
+  bool createMacro = false ;
 
   while(pStencil)
   {
     if(style != pStencil->linePattern())
     {
-      pStencil->setLinePattern(style);
+        KivioChangeLineStyleCommand * cmd = new KivioChangeLineStyleCommand( i18n("Change Line Style"),
+        m_pActivePage, pStencil, pStencil->linePattern(), style );
+        pStencil->setLinePattern(style);
+        macro->addCommand( cmd );
+        createMacro = true;
     }
-  
+
     pStencil = m_pActivePage->selectedStencils()->next();
+  }
+
+    if ( createMacro ) {
+    m_pDoc->addCommand( macro );
+  } else {
+    delete macro;
   }
 }
 
@@ -1257,7 +1273,7 @@ void KivioView::updateToolBars()
 
         m_menuTextFormatAction->setEnabled( false );
         m_menuStencilConnectorsAction->setEnabled( false );
-        
+
         m_editCut->setEnabled(false);
         m_editCopy->setEnabled(false);
     }
@@ -1311,7 +1327,7 @@ void KivioView::updateToolBars()
             m_setFGColor->setEnabled (false);
             m_setBGColor->setEnabled (false);
         }
-    
+
         m_editCut->setEnabled(true);
         m_editCopy->setEnabled(true);
     }
@@ -1554,12 +1570,13 @@ void KivioView::slotChangeStencilPosition(double newW, double newH)
 
 void KivioView::slotChangeStencilRotation(int d)
 {
-  //FIXME: Add undo command!!!!!
   KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
 
   if(pStencil && pStencil->rotation() != d) {
-    pStencil->setRotation(d);
-    m_pDoc->updateView(m_pActivePage);
+      pStencil->setRotation(d);
+      KivioChangeRotationCommand * cmd = new KivioChangeRotationCommand( i18n("Change Stencil Rotation"), m_pCanvas->activePage(), pStencil, pStencil->rotation() , d);
+      m_pDoc->updateView(m_pActivePage);
+      m_pDoc->addCommand( cmd );
   }
 }
 
@@ -1782,7 +1799,7 @@ void KivioView::rulerChangedUnit(KoUnit::Unit u)
   m_pDoc->setUnits(u);
 }
 
-KoZoomHandler* KivioView::zoomHandler()
+KoZoomHandler* KivioView::zoomHandler() const
 {
   return m_zoomHandler;
 }
@@ -2020,7 +2037,7 @@ QPtrList<KAction> KivioView::clipboardActionList()
   tmp.append(m_editCut);
   tmp.append(m_editCopy);
   tmp.append(m_editPaste);
-  
+
   return tmp;
 }
 
@@ -2028,7 +2045,7 @@ QPtrList<KAction> KivioView::alignActionList()
 {
   QPtrList<KAction> tmp;
   tmp.append(m_alignAndDistribute);
-  
+
   return tmp;
 }
 
@@ -2037,7 +2054,7 @@ QPtrList<KAction> KivioView::groupActionList()
   QPtrList<KAction> tmp;
   tmp.append(m_groupAction);
   tmp.append(m_ungroupAction);
-  
+
   return tmp;
 }
 
@@ -2046,7 +2063,7 @@ QPtrList<KAction> KivioView::layerActionList()
   QPtrList<KAction> tmp;
   tmp.append(m_stencilToFront);
   tmp.append(m_stencilToBack);
-  
+
   return tmp;
 }
 
@@ -2064,7 +2081,7 @@ void KivioView::partActivateEvent(KParts::PartActivateEvent* event)
     updateToolBars();
     clipboardDataChanged();
   }
-  
+
   KoView::partActivateEvent(event);
 }
 
@@ -2074,7 +2091,7 @@ void KivioView::initStatusBarProgress()
     m_statusBarProgress = new QProgressBar(100, this);
     addStatusBarItem(m_statusBarProgress);
   }
-  
+
   m_statusBarProgress->reset();
 }
 

@@ -474,6 +474,62 @@ void KivioChangeLineWidthCommand::unexecute()
     m_page->doc()->slotSelectionChanged();
 }
 
+KivioChangeRotationCommand::KivioChangeRotationCommand( const QString &_name,
+    KivioPage *_page, KivioStencil * _stencil, int _oldValue, int _newValue)
+    :KNamedCommand( _name),
+    m_page(_page),
+    m_stencil( _stencil ),
+    oldValue( _oldValue),
+    newValue( _newValue)
+{
+}
+
+KivioChangeRotationCommand::~KivioChangeRotationCommand()
+{
+}
+
+void KivioChangeRotationCommand::execute()
+{
+    m_stencil->setRotation( newValue );
+    m_page->doc()->updateView(m_page);
+    m_page->doc()->slotSelectionChanged();
+}
+
+void KivioChangeRotationCommand::unexecute()
+{
+    m_stencil->setRotation( oldValue );
+    m_page->doc()->updateView(m_page);
+    m_page->doc()->slotSelectionChanged();
+}
+
+
+KivioChangeLineStyleCommand::KivioChangeLineStyleCommand( const QString &_name,
+    KivioPage *_page, KivioStencil * _stencil, int _oldValue, int _newValue)
+    :KNamedCommand( _name),
+    m_page(_page),
+    m_stencil( _stencil ),
+    oldValue( _oldValue),
+    newValue( _newValue)
+{
+}
+
+KivioChangeLineStyleCommand::~KivioChangeLineStyleCommand()
+{
+}
+
+void KivioChangeLineStyleCommand::execute()
+{
+    m_stencil->setLinePattern( newValue );
+    m_page->doc()->updateView(m_page);
+    m_page->doc()->slotSelectionChanged();
+}
+
+void KivioChangeLineStyleCommand::unexecute()
+{
+    m_stencil->setLinePattern( oldValue );
+    m_page->doc()->updateView(m_page);
+    m_page->doc()->slotSelectionChanged();
+}
 
 KivioChangeBeginEndArrowCommand::KivioChangeBeginEndArrowCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, int _oldArrow,  int _newArrow, bool _beginArrow)
     :KNamedCommand( _name),

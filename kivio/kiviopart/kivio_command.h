@@ -289,6 +289,39 @@ protected:
     ColorType type;
 };
 
+class KivioChangeRotationCommand : public KNamedCommand
+{
+public:
+    KivioChangeRotationCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, int _oldValue,  int _newValue);
+    ~KivioChangeRotationCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    KivioPage *m_page;
+    KivioStencil *m_stencil;
+    int oldValue;
+    int newValue;
+};
+
+class KivioChangeLineStyleCommand : public KNamedCommand
+{
+public:
+    KivioChangeLineStyleCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, int _oldValue,  int _newValue);
+    ~KivioChangeLineStyleCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    KivioPage *m_page;
+    KivioStencil *m_stencil;
+    int oldValue;
+    int newValue;
+};
+
+
 class KivioChangeLineWidthCommand : public KNamedCommand
 {
 public:
