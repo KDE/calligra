@@ -330,6 +330,7 @@ void KPresenterView::editPaste()
                                          xOffset, yOffset, currPg );
 
             page->setMouseSelectedObject(true);
+            emit objectSelectedChanged();
         }
     } else {
 	page->kTxtObj()->paste();
