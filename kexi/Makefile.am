@@ -1,28 +1,10 @@
-kde_module_LTLIBRARIES = libkexipart.la
-libkexipart_la_SOURCES = kexipart.cpp
-
-libkexipart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -no-undefined
-libkexipart_la_LIBADD = $(LIB_KOFFICEUI) core/libkexicore.la
-
-## The kdeinit loadable module
-lib_LTLIBRARIES = kexi.la
-kexi_la_SOURCES = main.cpp
-kexi_la_LDFLAGS = $(all_libraries) -module -avoid-version
-kexi_la_LIBADD = $(LIB_KOFFICECORE)
-
-## The executable
 bin_PROGRAMS = kexi
-kexi_SOURCES = dummy.cc
-kexi_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-kexi_LDADD = kexi.la
+kexi_SOURCES = main.cpp
+kexi_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -no-undefined
+kexi_LDADD = $(LIB_KDEUI) core/libkexicore.la
 
-dummy.cc:
-	echo > dummy.cc
-
-
-#SUBDIRS = kexidb formeditor core tableview widget . plugins pics data interfaces filters
-
-SUBDIRS= 3rdparty kexidb core tableview . data widget plugins tests
+#SUBDIRS= 3rdparty kexidb core tableview . data widget plugins tests
+SUBDIRS= 3rdparty kexidb core tableview widget plugins .
 
 kdelnkdir = $(kde_appsdir)/Office
 kdelnk_DATA = kexi.desktop

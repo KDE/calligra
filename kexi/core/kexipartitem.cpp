@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,26 +17,19 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef _KEXI_GLOBAL_
-#define _KEXI_GLOBAL_
+#include "kexipartitem.h"
 
-/* 
-    Global app definitions
-*/
+namespace KexiPart
+{
 
-#include <klocale.h>
+Item::Item()
+{
+}
 
-#ifdef OOPL_VERSION
-# include "oopl_global.h"
-#else //default
-# define KEXI_APP_NAME I18N_NOOP("Kexi")
-# define KEXI_VERSION VERSION
-#endif
+Item::~Item()
+{
+}
 
-/*
- * this is the version a part has to be only increase it if the interface isn't binary compatible anymore
- */
-#define KEXI_PART_VERSION 1
+}
 
-#endif
 

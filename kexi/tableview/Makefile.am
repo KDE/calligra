@@ -5,7 +5,7 @@ libkexidatatable_la_SOURCES = kexitableedit.cpp kexitableheader.cpp kexitableite
 
 
 libkexidatatable_la_LDFLAGS = $(all_libraries) -Wnounresolved
-libkexidatatable_la_LIBADD = $(LIB_KOFFICEUI) 
+libkexidatatable_la_LIBADD = $(LIB_KDEUI)
 
 SUBDIRS = .
 

@@ -1,160 +1,42 @@
-/* This file is part of the KDE project
-   Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2002,2003   Joseph Wenninger <jowenn@kde.org>
-
-   This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this program; see the file COPYING.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
-*/
-
-#include <qpixmap.h>
-
-#include <koApplication.h>
-
-#include <kiconloader.h>
 #include <kdebug.h>
-#include <klocale.h>
-#include <klineeditdlg.h>
-#include <kmessagebox.h>
 #include <kgenericfactory.h>
 
 #include <kexidb/connection.h>
+#include <kexidb/cursor.h>
 
+#include "widget/kexidatatable.h"
+#include "keximainwindow.h"
+#include "kexiproject.h"
 #include "kexitablepart.h"
-#include "kexitablepartproxy.h"
-#include "kexiprojecthandleritem.h"
-#include "kexidatatable.h"
-#include "kexialtertable.h"
-#include "kexiidentifier.h"
 
-KexiTablePart::KexiTablePart(QObject *project,const char *,const QStringList &)
- : KexiProjectHandler(KEXIPROJECT(project)),KexiDataProvider()
+KexiTablePart::KexiTablePart(QObject *parent, const char *name, const QStringList &l)
+ : KexiPart::Part(parent, name, l)
 {
 	kdDebug() << "KexiTablePart::KexiTablePart()" << endl;
-
-	getTables();
-}
-
-void KexiTablePart::hookIntoView(KexiView *view)
-{
-	KexiTablePartProxy *prx=new KexiTablePartProxy(this,view);
-	insertIntoViewProxyMap(view,prx);
-
-	getTables();
-}
-
-QString
-KexiTablePart::name()
-{
-	return i18n("Table");
-}
-
-QString
-KexiTablePart::groupName()
-{
-	return i18n("Tables");
-}
-
-QString
-KexiTablePart::mime()
-{
-	return QString("kexi/table");
-}
-
-bool
-KexiTablePart::visible()
-{
-	return true;
-}
-
-QPixmap
-KexiTablePart::groupPixmap()
-{
-	return kapp->iconLoader()->loadIcon("tables", KIcon::Small);
-}
-
-QPixmap
-KexiTablePart::itemPixmap()
-{
-	return kapp->iconLoader()->loadIcon("table", KIcon::Small);
 }
 
 void
-KexiTablePart::getTables()
+KexiTablePart::execute(KexiMainWindow *win, const QString &table)
 {
-	m_tableNames.clear();
-	kdDebug() << "KexiTablePart::getTables(): kexiProject()->db()->tables()" << endl;
-	ItemList *list=items();
-	list->clear();
+	KexiDB::TableSchema *sch = win->project()->dbConnection()->tableSchema(table);
+	kdDebug() << "KexiTablePart::execute(): schema is " << sch << endl;
+	if(!sch)
+		return;
 
-	if (kexiProject()->dbConnection()) {
-		m_tableNames = kexiProject()->dbConnection()->tableNames();
+	KexiDB::Cursor *c = win->project()->dbConnection()->prepareQuery(*sch);
 
-		for ( QStringList::Iterator it = m_tableNames.begin(); it != m_tableNames.end(); ++it )
-		{
-			kdDebug() << "KexiTablePart::getTables() added " << (*it) << endl;
-			KexiProjectHandlerItem *h_item = new KexiProjectHandlerItem(this, KexiIdentifier("kexi/table"), /*title*/(*it));
-			list->insert( h_item->fullIdentifier(), h_item );
-		}
-	}
-	emit itemListChanged(this);
+	kdDebug() << "KexiTablePart::execute(): cursor is " << c << endl;
+	if(!c)
+		return;
+
+	KexiDataTable *t = new KexiDataTable(win, i18n("%1 - Table").arg(table), c);
 }
 
-QWidget *
-KexiTablePart::embeddReadOnly(QWidget * /*w*/, KexiView * /*v*/)
+KexiTablePart::~KexiTablePart()
 {
-	return 0;
 }
-
-KexiDB::Cursor*
-KexiTablePart::records(QWidget*,const QString& identifier,Parameters /*params*/)
-{
-	kdDebug()<<"KexiDBRecordSet *KexiTablePart::records(const QString& identifier,Parameters params)"<<endl;
-	kdDebug()<<"KexiDBRecordSet *KexiTablePart::records(): id: "<< identifier << endl;
-	kdDebug()<<"KexiDBRecordSet *KexiTablePart::records(): local-id: "<< localIdentifier(identifier) << endl;
-
-//	KexiDBRecordSet *m_record=0;
-	KexiDB::Cursor *cursor = kexiProject()->dbConnection()->executeQuery("select * from " + localIdentifier(identifier));
-
-	if(!cursor)
-	{
-		kdDebug() << "KexiTablePart::executeQuery(): db-error: " << kexiProject()->dbConnection()->errorMsg() << endl;
-		return 0;
-	}
-
-	return cursor;
-}
-
-QStringList KexiTablePart::fields(QWidget*,const QString& identifier)
-{
-	//TODO: do something useful here :)
-//	return kexiProject()->db()->columns(localIdentifier(identifier));
-	return QStringList();
-}
-
-QStringList KexiTablePart::datasets(QWidget*)
-{
-	return m_tableNames;
-}
-
-QStringList KexiTablePart::datasetNames(QWidget*)
-{
-	return m_tableNames;
-}
-
 
 K_EXPORT_COMPONENT_FACTORY( kexihandler_table, KGenericFactory<KexiTablePart> )
 
 #include "kexitablepart.moc"
-//
+

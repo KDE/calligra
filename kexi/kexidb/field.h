@@ -178,7 +178,11 @@ class KEXI_DB_EXPORT Field
 		int options() const { return m_options; }
 		void setOptions(int options) { m_options = options; }
 
-		inline QVariant::Type variantType() const;
+		inline QVariant::Type variantType() const
+		{
+			return variantType(m_type);
+		}
+
 		Type type() const;
 		inline QString typeName() const;
 		QVariant defaultValue() const;
@@ -274,6 +278,8 @@ class KEXI_DB_EXPORT Field
 	friend class TableSchema;
 	friend class QuerySchema;
 };
+
+
 
 } //namespace KexiDB
 

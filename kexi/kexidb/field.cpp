@@ -235,12 +235,6 @@ Field::table() const
 	return static_cast<TableSchema*>(m_parent);
 }
 
-QVariant::Type
-Field::variantType() const
-{
-	return variantType(m_type);
-}
-
 QString
 Field::typeName() const
 {

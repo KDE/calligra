@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,26 +17,33 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef _KEXI_GLOBAL_
-#define _KEXI_GLOBAL_
+#ifndef KEXIEVENTHANDLER_H
+#define KEXIEVENTHANDLER_H
 
-/* 
-    Global app definitions
-*/
+#include <qobject.h>
 
-#include <klocale.h>
+class FakeHandler;
 
-#ifdef OOPL_VERSION
-# include "oopl_global.h"
-#else //default
-# define KEXI_APP_NAME I18N_NOOP("Kexi")
-# define KEXI_VERSION VERSION
+class KEXICORE_EXPORT KexiEventHandler : public QObject
+{
+	Q_OBJECT
+
+	public:
+		KexiEventHandler(QObject *parent);
+		virtual ~KexiEventHandler();
+
+		virtual QString		name() = 0;
+		virtual QStringList	functions() = 0;
+
+		virtual FakeHandler	*formHandler() = 0;
+
+		virtual void		provideObject(QObject *) = 0;
+		virtual void		resetObject(QObject *) = 0;
+
+		/**
+		 * you will need a public slot
+		 * proxy(const QString &function)
+		 */
+};
+
 #endif
-
-/*
- * this is the version a part has to be only increase it if the interface isn't binary compatible anymore
- */
-#define KEXI_PART_VERSION 1
-
-#endif
-
