@@ -512,10 +512,10 @@ VKoPainter::drawVPath( ArtVpath *vec )
 		art_svp_free( fillSvp );
 	}
 
-	delete m_stroke;
-	m_stroke = 0L;
-	delete m_fill;
-	m_fill = 0L;
+	//delete m_stroke;
+	//m_stroke = 0L;
+	//delete m_fill;
+	//m_fill = 0L;
 
 	art_free( vec );
 }

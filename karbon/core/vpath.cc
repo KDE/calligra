@@ -273,7 +273,6 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 					painter->strokePath();
 				}
 
-
 				// Draw knot:
 				painter->newPath();
 
@@ -282,10 +281,7 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 				if( jtr.current()->knotSelected() )
 				{
 					painter->fillPath();
-kdDebug() << "*** yes" << endl;
 				}
-				else
-kdDebug() << "*** no" << endl;
 
 				painter->strokePath();
 			}

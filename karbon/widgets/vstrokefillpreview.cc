@@ -143,6 +143,7 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 
 	// show 3D outline of stroke part
 	stroke.setColor( Qt::white.rgb() );
+	m_painter->setBrush( Qt::NoBrush );
 	m_painter->setPen( stroke );
 	m_painter->newPath();
 	m_painter->moveTo( KoPoint( STROKE_BOTTOMX + 1, STROKE_TOPY - 1 ) );
@@ -158,8 +159,8 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 	m_painter->lineTo( KoPoint( STROKE_TOPX - 1, STROKE_BOTTOMY + 1 ) );
 	m_painter->strokePath();
 
-	stroke.setColor( Qt::black.rgb() );
-	m_painter->setPen( stroke );
+	//stroke.setColor( Qt::black.rgb() );
+	//m_painter->setPen( stroke );
 	m_painter->newPath();
 	m_painter->moveTo( KoPoint( STROKE_BOTTOMX_INNER - 1, STROKE_TOPY_INNER + 1 ) );
 	m_painter->lineTo( KoPoint( STROKE_TOPX_INNER + 1, STROKE_TOPY_INNER + 1 ) );
