@@ -14,8 +14,19 @@ the currently selected elements?</p>
 <tip category="KFormula|General">
 <html>
 <p>...to get the most out of KFormula you need to install 
-elsevier's Esstix fonts. You can find them at
-<a href="ftp://ftp.elsevier.nl/pub/styles/esstix/esstix.zip">ftp://ftp.elsevier.nl/pub/styles/esstix/esstix.zip</a>.
+the TrueType version of the famous TeX fonts.
+You can find them in <a href="http://www.ctan.org">ctan</a> at
+<a href="http://www.ctan.org/tex-archive/fonts/cm/ps-type1/bakoma/ttf/?action=/tex-archive/fonts/cm/ps-type1/bakoma/">/tex-archive/fonts/cm/ps-type1/bakoma/</a>.
+However you don't need to install all of those. Right now the fonts
+<tt>cmbx10</tt>,
+<tt>cmex10</tt>,
+<tt>cmmi10</tt>,
+<tt>cmr10</tt>,
+<tt>cmsy10</tt>,
+<tt>msam10</tt>
+and
+<tt>msbm10</tt>
+are required.
 </p>
 </html>
 </tip>

@@ -56,7 +56,7 @@ ContextStyle::ContextStyle()
 
     lineWidth = 1;
     linearMovement = false;
-    centerSymbol = false;
+    centerSymbol = true;
     m_syntaxHighlighting = true;
 
     m_fontStyle = 0;

@@ -169,6 +169,8 @@ public:
 
     virtual bool isNormalChar() const { return getBaseline() != -1; }
 
+    virtual double slant() const { return 0; }
+
 protected:
 
     void calcCharSize( const ContextStyle& style, luPt height, QChar ch );

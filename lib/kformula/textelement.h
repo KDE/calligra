@@ -181,9 +181,9 @@ private:
      *
      * This must be in sync with the definition in kformuladefs.h!
      */
-    CharStyle charStyle() const { return static_cast<CharStyle>( m_format & 0x07 ); }
+    CharStyle charStyle() const { return static_cast<CharStyle>( m_format & 0x0f ); }
     void charStyle( CharStyle cs )
-        { m_format = ( m_format & ( 0xff-0x07 ) ) | static_cast<char>( cs ); }
+        { m_format = ( m_format & 0xf0 ) | static_cast<char>( cs ); }
 
     /**
      * Very rarely used so it's actually a shame to have it here.
@@ -191,9 +191,9 @@ private:
      * This must be in sync with the definition in kformuladefs.h!
      */
     CharFamily charFamily() const
-        { return static_cast<CharFamily>( m_format >> 3 ); }
+        { return static_cast<CharFamily>( m_format >> 4 ); }
     void charFamily( CharFamily cf )
-        { m_format = ( m_format & 0x07 ) | ( static_cast<char>( cf ) << 3 ); }
+        { m_format = ( m_format & 0x0f ) | ( static_cast<char>( cf ) << 4 ); }
 
     /**
      * To save space both CharStyle and CharFamily are packed into one

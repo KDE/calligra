@@ -70,18 +70,19 @@ void SymbolTable::init( ContextStyle* /*context*/ )
     fontTable.clear();
 }
 
+
 void SymbolTable::initFont( const InternFontTable* table,
                             const char* fontname,
-                            const NameTable& tempNames,
-                            CharStyle style )
+                            const NameTable& tempNames )
 {
     uint fontnr = fontTable.size();
     fontTable.push_back( QFont( fontname ) );
     for ( uint i = 0; table[ i ].unicode != 0; ++i ) {
         QChar uc = table[ i ].unicode;
-        unicodeTable( style )[ uc ] = CharTableEntry( table[ i ].cl,
-                                                      static_cast<char>( fontnr ),
-                                                      table[ i ].pos );
+        unicodeTable( table[ i ].style )[ uc ] =
+            CharTableEntry( table[ i ].cl,
+                            static_cast<char>( fontnr ),
+                            table[ i ].pos );
 
         if ( tempNames.contains( uc ) ) {
             entries[ tempNames[uc] ] = uc;
@@ -117,6 +118,21 @@ const CharTableEntry& SymbolTable::entry( QChar symbol, CharStyle style ) const
     if ( ( style != normalChar ) && ( style != anyChar ) ) {
         if ( normalChars.contains( symbol ) ) {
             return normalChars[symbol];
+        }
+    }
+    if ( style != boldChar ) {
+        if ( boldChars.contains( symbol ) ) {
+            return boldChars[symbol];
+        }
+    }
+    if ( style != italicChar ) {
+        if ( italicChars.contains( symbol ) ) {
+            return italicChars[symbol];
+        }
+    }
+    if ( style != boldItalicChar ) {
+        if ( boldItalicChars.contains( symbol ) ) {
+            return boldItalicChars[symbol];
         }
     }
     return dummyEntry;

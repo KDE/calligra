@@ -38,8 +38,11 @@ bool CMStyle::init( ContextStyle* context )
          //fontAvailable( "cmti10" ) &&
          //fontAvailable( "cmtt10" ) &&
          //fontAvailable( "cmsl10" ) &&
+         fontAvailable( "msam10" ) &&
+         fontAvailable( "msbm10" ) &&
          fontAvailable( "cmr10" ) &&
          fontAvailable( "cmmi10" ) &&
+         fontAvailable( "cmbx10" ) &&
          fontAvailable( "cmsy10" ) ) {
 
         SymbolTable* st = symbolTable();
@@ -48,10 +51,13 @@ bool CMStyle::init( ContextStyle* context )
         SymbolTable::NameTable tempNames;
         fillNameTable( tempNames );
 
-        st->initFont( cmex10Map, "cmex10", tempNames, normalChar );
-        st->initFont( cmmi10Map, "cmmi10", tempNames, italicChar );
-        st->initFont( cmr10Map, "cmr10", tempNames, normalChar );
-        st->initFont( cmsy10Map, "cmsy10", tempNames, normalChar );
+        st->initFont( cmbx10Map, "cmbx10", tempNames );
+        st->initFont( cmex10Map, "cmex10", tempNames );
+        st->initFont( cmmi10Map, "cmmi10", tempNames );
+        st->initFont( cmr10Map, "cmr10", tempNames );
+        st->initFont( cmsy10Map, "cmsy10", tempNames );
+        st->initFont( msam10Map, "msam10", tempNames );
+        st->initFont( msbm10Map, "msbm10", tempNames );
 
         return true;
     }
@@ -63,14 +69,14 @@ bool CMStyle::init( ContextStyle* context )
 
 QString CMStyle::name()
 {
-    return i18n( "Computer Modern Style" );
+    return i18n( "Computer Modern Style (plain TeX)" );
 }
 
 
-// const AlphaTable* CMStyle::alphaTable() const
-// {
-//     return &m_alphaTable;
-// }
+const AlphaTable* CMStyle::alphaTable() const
+{
+    return &m_alphaTable;
+}
 
 
 Artwork* CMStyle::createArtwork( SymbolType type ) const
@@ -84,11 +90,56 @@ CMAlphaTable::CMAlphaTable()
 }
 
 
-AlphaTableEntry CMAlphaTable::entry( short /*pos*/,
-                                     CharFamily /*family*/,
+AlphaTableEntry CMAlphaTable::entry( short pos,
+                                     CharFamily family,
                                      CharStyle /*style*/ ) const
 {
+    /*
+    static short uppercase_greek[] = {
+        0x0393, // Gamma
+        0x0394, // Delta
+        0x0398, // Theta
+        0x039B, // Lambda
+        0x039E, // Xi
+        0x03A0, // Pi
+        0x03A3, // Sigma
+        0x03A6, // Phi
+        0x03A8, // Psi
+        0x03A9, // Omega
+        0x03D2, // Upsilon
+        0
+    };
+    */
+
     AlphaTableEntry entry;
+    switch( family ) {
+        //case normal:
+    case scriptFamily:
+        /*
+        for ( int i=0; uppercase_greek[i] != 0; ++i ) {
+            if ( pos == uppercase_greek[i] ) {
+                entry.pos = pos;
+                entry.font = QFont( "cmsl10" );
+                return;
+            }
+        }
+        */
+        if ( ( pos >= 'A' ) && ( pos <= 'Z' ) ) {
+            entry.pos = pos;
+            entry.font = QFont( "cmsy10" );
+        }
+        break;
+    case frakturFamily:
+        break;
+    case doubleStruckFamily:
+        if ( ( pos >= 'A' ) && ( pos <= 'Z' ) ) {
+            entry.pos = pos;
+            entry.font = QFont( "msbm10" );
+        }
+        break;
+    default:
+        break;
+    }
     return entry;
 }
 
@@ -194,18 +245,12 @@ void CMArtwork::calcSizes( const ContextStyle& style,
         calcRoundBracket( style, rightSquareBracket, parentSize, mySize );
         break;
     case LeftLineBracket:
-//         if ( calcCMDelimiterSize( style, cmex_LeftLineBracket,
-//                                       mySize, parentSize ) ) {
-//             return;
-//         }
-//         calcRoundBracket( style, leftLineBracket, parentSize, mySize );
+        calcRoundBracket( style, leftLineBracket, parentSize, mySize );
+        setWidth( getWidth()/2 );
         break;
     case RightLineBracket:
-//         if ( calcCMDelimiterSize( style, cmex_RightLineBracket,
-//                                   mySize, parentSize ) ) {
-//             return;
-//         }
-//         calcRoundBracket( style, rightLineBracket, parentSize, mySize );
+        calcRoundBracket( style, rightLineBracket, parentSize, mySize );
+        setWidth( getWidth()/2 );
         break;
     case SlashBracket:
         if ( calcCMDelimiterSize( style, cmex_SlashBracket,
@@ -284,6 +329,47 @@ void CMArtwork::calcSizes( const ContextStyle& style,
 }
 
 
+void CMArtwork::calcSizes( const ContextStyle& style,
+                           ContextStyle::TextStyle tstyle )
+{
+    luPt mySize = style.getAdjustedSize( tstyle );
+    switch (getType()) {
+    case LeftLineBracket:
+    case RightLineBracket:
+        calcCharSize(style, mySize, 0x2223);
+        break;
+    default:
+        Artwork::calcSizes( style, tstyle );
+        break;
+    }
+}
+
+
+void CMArtwork::draw( QPainter& painter, const LuPixelRect& r,
+                      const ContextStyle& style,
+                      ContextStyle::TextStyle tstyle,
+                      const LuPixelPoint& parentOrigin )
+{
+    luPt mySize = style.getAdjustedSize( tstyle );
+    luPixel myX = parentOrigin.x() + getX();
+    luPixel myY = parentOrigin.y() + getY();
+    if ( !LuPixelRect( myX, myY, getWidth(), getHeight() ).intersects( r ) )
+        return;
+
+    painter.setPen(style.getDefaultColor());
+
+    switch (getType()) {
+    case LeftLineBracket:
+    case RightLineBracket:
+        drawCharacter(painter, style, myX, myY, mySize, 0x2223);
+        break;
+    default:
+        Artwork::draw( painter, r, style, tstyle, parentOrigin );
+        break;
+    }
+}
+
+
 void CMArtwork::draw(QPainter& painter, const LuPixelRect& r,
                      const ContextStyle& style, ContextStyle::TextStyle tstyle,
                      luPt /*parentSize*/, const LuPixelPoint& origin)
@@ -330,21 +416,17 @@ void CMArtwork::draw(QPainter& painter, const LuPixelRect& r,
             drawBigCurlyBracket( painter, style, rightCurlyBracket, myX, myY, mySize );
         }
         break;
-    case LeftLineBracket:
-//         if ( cmChar != -1 ) {
-//             drawCMDelimiter( painter, style, myX, myY, mySize );
-//         }
-//         else {
-//             drawBigRoundBracket( painter, style, leftLineBracket, myX, myY, mySize );
-//         }
+    case LeftLineBracket: {
+        luPixel halfWidth = getWidth()/2;
+        drawBigRoundBracket( painter, style, leftLineBracket,
+                             myX-halfWidth, myY, mySize );
+    }
         break;
-    case RightLineBracket:
-//         if ( cmChar != -1 ) {
-//             drawCMDelimiter( painter, style, myX, myY, mySize );
-//         }
-//         else {
-//             drawBigRoundBracket( painter, style, rightLineBracket, myX, myY, mySize );
-//         }
+    case RightLineBracket: {
+        luPixel halfWidth = getWidth()/2;
+        drawBigRoundBracket( painter, style, rightLineBracket,
+                             myX-halfWidth, myY, mySize );
+    }
         break;
     case SlashBracket:
         if ( cmChar != -1 ) {
@@ -412,6 +494,13 @@ bool CMArtwork::isNormalChar() const
     return Artwork::isNormalChar() && ( cmChar == -1 );
 }
 
+double CMArtwork::slant() const
+{
+    if ( getType() == Integral ) {
+        return 0.25;
+    }
+    return 0;
+}
 
 bool CMArtwork::calcCMDelimiterSize( const ContextStyle& context,
                                      uchar c,

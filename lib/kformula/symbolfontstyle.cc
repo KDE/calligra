@@ -49,7 +49,7 @@ bool SymbolFontStyle::init( ContextStyle* context )
 
     SymbolTable::NameTable names;
     fillNameTable( names );
-    symbolTable()->initFont( symbolMap, "symbol", names, normalChar );
+    symbolTable()->initFont( symbolMap, "symbol", names );
 
     return fontAvailable( "symbol" );
 }

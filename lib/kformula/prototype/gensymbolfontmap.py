@@ -3,7 +3,8 @@
 import time
 from xml.sax import saxutils, handler, make_parser
 
-unicodetable = {}
+unicodetable = { "normal":{}, "bold":{}, "italic":{},
+                 "slant":{}, "boldItalic":{} }
 fonttable = {}
 
 class ContentGenerator(handler.ContentHandler):  
@@ -27,26 +28,28 @@ class ContentGenerator(handler.ContentHandler):
                 elif name == "number": number = value
                 elif name == "name": latexName = value
                 elif name == "class": charClass = value
+                elif name == "style": style = value
 
             if number != '':
-                unicodetable[number] = (latexName, charClass)
-                fonttable[self.font].append((key, number))
+                unicodetable[style][number] = (latexName, charClass)
+                fonttable[self.font].append((key, number, style))
 
-def fontkey(font, number):
+def fontkey(font, style, number):
     for mapping in fonttable[font]:
-        k, n = mapping
-        if n == number:
+        k, n, s = mapping
+        if s == style and n == number:
             return k
 
 
 def writeFontTable(fontname, f):
     f.write('\n\nstatic InternFontTable ' + fontname + 'Map[] = {\n')
-    for key in unicodetable:
-        latexName, charClass = unicodetable[key]
-        pos = fontkey(fontname, key)
-        if pos:
-            f.write('    { ' + key + ', ' + hex(pos) + ', ' + charClass + ' },\n')
-    f.write('    { 0, 0, ORDINARY }\n};\n\n')
+    for style in unicodetable:
+        for key in unicodetable[style]:
+            latexName, charClass = unicodetable[style][key]
+            pos = fontkey(fontname, style, key)
+            if pos:
+                f.write('    { ' + key + ', ' + hex(pos) + ', ' + charClass + ', ' + style + 'Char },\n')
+    f.write('    { 0, 0, ORDINARY, normalChar }\n};\n\n')
 
 
 def write_header(f):
@@ -93,10 +96,12 @@ def main():
                   "cmex10", 
                   "cmmi10", 
                   "cmr10", 
-                  "cmsl10", 
+                  #"cmsl10", 
                   "cmsy10", 
-                  "cmti10", 
-                  "cmtt10"
+                  #"cmti10", 
+                  #"cmtt10", 
+                  "msam10",
+                  "msbm10"
                   ]
     for fn in fontnames:
         writeFontTable(fn, f)
@@ -107,13 +112,17 @@ def main():
     print >>f, 'struct UnicodeNameTable { short unicode; const char* name; };'
     print >>f, 'static UnicodeNameTable nameTable[] = {'
     nameDir = {}
-    for key in unicodetable:
-        latexName, charClass = unicodetable[key]
+    table = {}
+    for style in unicodetable:
+        table.update(unicodetable[style])
+
+    for key in table:
+        latexName, charClass = table[key]
         if len(latexName) > 0:
-            for fn in fontnames:
-                if fontkey(fn, key):
+            #for fn in fontnames:
+            #    if fontkey(fn, style, key):
                     print >>f, '    { ' + key + ', "' + latexName + '" },'
-                    break
+                    #break
     print >>f, '    { 0, 0 }\n};'
     f.close()
     

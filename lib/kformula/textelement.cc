@@ -123,6 +123,13 @@ void TextElement::calcSizes(const ContextStyle& context, ContextStyle::TextStyle
         setWidth( context.ptToLayoutUnitPt( fm.width( ch ) ) );
         setHeight( context.ptToLayoutUnitPt( bound.height() ) );
         setBaseline( context.ptToLayoutUnitPt( -bound.top() ) );
+
+        // There are some glyphs in TeX that have
+        // baseline==0. (\int, \sum, \prod)
+        if ( getBaseline() == 0 ) {
+            //setBaseline( getHeight()/2 + context.axisHeight( tstyle ) );
+            setBaseline( -1 );
+        }
     }
     else {
         setWidth( qRound( context.getEmptyRectWidth() * 2./3. ) );
@@ -178,8 +185,16 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
         //kdDebug() << "draw char" << endl;
         QChar ch = getRealCharacter(context);
         if ( ch != QChar::null ) {
+            luPixel bl = getBaseline();
+            if ( bl == -1 ) {
+                // That's quite hacky and actually not the way it's
+                // meant to be. You shouldn't calculate a lot in
+                // draw. But I don't see how else to deal with
+                // baseline==0 glyphs without yet another flag.
+                bl = -( getHeight()/2 + context.axisHeight( tstyle ) );
+            }
             painter.drawText( context.layoutUnitToPixelX( myPos.x() ),
-                              context.layoutUnitToPixelY( myPos.y()+getBaseline() ),
+                              context.layoutUnitToPixelY( myPos.y()+bl ),
                               ch );
         }
         else {
@@ -194,14 +209,16 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
 
     // Debug
     //painter.setBrush(Qt::NoBrush);
-//     painter.setPen( Qt::red );
-//     painter.drawRect( context.layoutUnitToPixelX( myPos.x() ),
-//                       context.layoutUnitToPixelX( myPos.y() ),
-//                       context.layoutUnitToPixelX( getWidth() ),
-//                       context.layoutUnitToPixelX( getHeight() ) );
-    //painter.setPen(Qt::green);
-    //painter.drawLine(myPos.x(), myPos.y()+getMidline(),
-    //                 myPos.x()+getWidth(), myPos.y()+getMidline());
+//     if ( isSymbol() ) {
+//         painter.setPen( Qt::red );
+//         painter.drawRect( context.layoutUnitToPixelX( myPos.x() ),
+//                           context.layoutUnitToPixelX( myPos.y() ),
+//                           context.layoutUnitToPixelX( getWidth() ),
+//                           context.layoutUnitToPixelX( getHeight() ) );
+//         painter.setPen(Qt::green);
+//         painter.drawLine(myPos.x(), myPos.y()+axis( context, tstyle ),
+//                          myPos.x()+getWidth(), myPos.y()+axis( context, tstyle ));
+//     }
 }
 
 

@@ -169,7 +169,9 @@ bool SequenceElement::isEmpty()
  * Calculates our width and height and
  * our children's parentPosition.
  */
-void SequenceElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle istyle)
+void SequenceElement::calcSizes(const ContextStyle& style,
+                                ContextStyle::TextStyle tstyle,
+                                ContextStyle::IndexStyle istyle)
 {
     if (!isEmpty()) {
         luPixel width = 0;
@@ -183,7 +185,9 @@ void SequenceElement::calcSizes(const ContextStyle& style, ContextStyle::TextSty
 
             luPixel spaceBefore = 0;
             if ( isFirstOfToken( child ) ) {
-                spaceBefore = style.ptToPixelX( child->getElementType()->getSpaceBefore( style, tstyle ) );
+                spaceBefore =
+                    style.ptToPixelX( child->getElementType()->getSpaceBefore( style,
+                                                                               tstyle ) );
             }
 
             if ( !child->isInvisible() ) {
@@ -191,8 +195,17 @@ void SequenceElement::calcSizes(const ContextStyle& style, ContextStyle::TextSty
                 child->setX( width + spaceBefore );
                 width += child->getWidth() + spaceBefore;
 
-                toBaseline = QMAX( toBaseline, child->getBaseline() );
-                fromBaseline = QMAX( fromBaseline, child->getHeight()-child->getBaseline() );
+                luPixel childBaseline = child->getBaseline();
+                if ( childBaseline > -1 ) {
+                    toBaseline = QMAX( toBaseline, childBaseline );
+                    fromBaseline = QMAX( fromBaseline,
+                                         child->getHeight() - childBaseline );
+                }
+                else {
+                    luPixel bl = child->getHeight()/2 + style.axisHeight( tstyle );
+                    toBaseline = QMAX( toBaseline, bl );
+                    fromBaseline = QMAX( fromBaseline, child->getHeight() - bl );
+                }
             }
             else {
                 width += spaceBefore;

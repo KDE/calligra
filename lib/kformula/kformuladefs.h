@@ -130,12 +130,13 @@ enum CharClass {
 typedef CharClass TokenType;
 
 
-// there are three bits needed to store this
+// there are four bits needed to store this
 enum CharStyle {
     normalChar,
     boldChar,
     italicChar,
-    boldItalicChar,
+    boldItalicChar, // is required to be (boldChar | italicChar)!
+    //slantChar,
     anyChar
 };
 
@@ -156,6 +157,7 @@ struct InternFontTable {
     short unicode;
     uchar pos;
     CharClass cl;
+    CharStyle style;
 };
 
 

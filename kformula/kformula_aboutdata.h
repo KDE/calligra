@@ -38,7 +38,7 @@ KAboutData * newKFormulaAboutData()
     aboutData->addAuthor( "Ulrich Kuettler", I18N_NOOP( "current maintainer" ), "ulrich.kuettler@gmx.de" );
     aboutData->addAuthor( "Heinrich Kuettler", I18N_NOOP( "core developer" ), "heinrich.kuettler@gmx.de" );
     aboutData->addCredit( "Claus O. Wilke", I18N_NOOP( "for your advice to look at TeX first" ) );
-    aboutData->addCredit( "Tom Deblauwe", I18N_NOOP( "for the sweet icons" ) );
+    //aboutData->addCredit( "Tom Deblauwe", I18N_NOOP( "for the sweet icons" ) );
     return aboutData;
 }
 

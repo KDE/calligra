@@ -235,7 +235,10 @@ void SymbolElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
     else {
         symbol->setX(xOffset - symbol->getWidth());
     }
-    content->setX(xOffset + distX/2);
+    // ???
+    content->setX(xOffset +
+                  static_cast<luPixel>( symbol->slant()*symbol->getHeight()/2 ) +
+                  distX/2);
 
     setWidth(QMAX(content->getX() + content->getWidth(),
                   QMAX(upperWidth, lowerWidth)));
@@ -255,12 +258,15 @@ void SymbolElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
     content->setY(toMidline - content->axis( style, tstyle ));
 
     if (hasUpper()) {
+        luPixel slant =
+            static_cast<luPixel>( symbol->slant()*( symbol->getHeight()+distY ) );
         if (style.getCenterSymbol()) {
-            upper->setX((xOffset - upperWidth) / 2);
+            upper->setX((xOffset - upperWidth) / 2 + slant );
         }
         else {
             if (upperWidth < symbol->getWidth()) {
-                upper->setX(symbol->getX() + (symbol->getWidth() - upperWidth) / 2);
+                upper->setX(symbol->getX() +
+                            (symbol->getWidth() - upperWidth) / 2 + slant );
             }
             else {
                 upper->setX(xOffset - upperWidth);
@@ -269,12 +275,14 @@ void SymbolElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
         upper->setY(toMidline - upperHeight - symbol->getHeight()/2);
     }
     if (hasLower()) {
+        luPixel slant = static_cast<luPixel>( -symbol->slant()*distY );
         if (style.getCenterSymbol()) {
-            lower->setX((xOffset - lowerWidth) / 2);
+            lower->setX((xOffset - lowerWidth) / 2 + slant);
         }
         else {
             if (lowerWidth < symbol->getWidth()) {
-                lower->setX(symbol->getX() + (symbol->getWidth() - lowerWidth) / 2);
+                lower->setX(symbol->getX() +
+                            (symbol->getWidth() - lowerWidth) / 2 + slant );
             }
             else {
                 lower->setX(xOffset - lowerWidth);
@@ -313,11 +321,21 @@ void SymbolElement::draw( QPainter& painter, const LuPixelRect& r,
     }
 
     // Debug
-    //painter.setBrush(Qt::NoBrush);
-    //painter.setPen(Qt::red);
-    //painter.drawRect(myPos.x(), myPos.y(), getWidth(), getHeight());
-    //painter.drawLine(myPos.x(), myPos.y()+getMidline(),
-    //                 myPos.x()+getWidth(), myPos.y()+getMidline());
+//     painter.setBrush(Qt::NoBrush);
+//     painter.setPen(Qt::red);
+//     painter.drawRect( style.layoutUnitToPixelX( myPos.x() ),
+//                       style.layoutUnitToPixelY( myPos.y() ),
+//                       style.layoutUnitToPixelX( getWidth() ),
+//                       style.layoutUnitToPixelY( getHeight() ) );
+//     painter.drawRect( style.layoutUnitToPixelX( myPos.x()+symbol->getX() ),
+//                       style.layoutUnitToPixelY( myPos.y()+symbol->getY() ),
+//                       style.layoutUnitToPixelX( symbol->getWidth() ),
+//                       style.layoutUnitToPixelY( symbol->getHeight() ) );
+//     painter.setPen(Qt::green);
+//     painter.drawLine( style.layoutUnitToPixelX( myPos.x() ),
+//                       style.layoutUnitToPixelY( myPos.y()+axis(style, tstyle) ),
+//                       style.layoutUnitToPixelX( myPos.x()+getWidth() ),
+//                       style.layoutUnitToPixelY( myPos.y()+axis(style, tstyle) ) );
 }
 
 

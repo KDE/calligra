@@ -46,13 +46,13 @@ class CMStyle : public FontStyle {
     virtual QString name();
 
     /// the table for special alphabets.
-    //virtual const AlphaTable* alphaTable() const;
+    virtual const AlphaTable* alphaTable() const;
 
     virtual Artwork* createArtwork( SymbolType type = EmptyBracket ) const;
 
 private:
 
-//     CMAlphaTable m_alphaTable;
+    CMAlphaTable m_alphaTable;
 };
 
 
@@ -63,13 +63,21 @@ public:
     virtual void calcSizes( const ContextStyle& style,
                             ContextStyle::TextStyle tstyle,
                             luPt parentSize );
+    virtual void calcSizes( const ContextStyle& style,
+                            ContextStyle::TextStyle tstyle );
 
     virtual void draw( QPainter& painter, const LuPixelRect& r,
                        const ContextStyle& style,
                        ContextStyle::TextStyle tstyle,
                        luPt parentSize, const LuPixelPoint& origin );
+    virtual void draw( QPainter& painter, const LuPixelRect& r,
+                       const ContextStyle& style,
+                       ContextStyle::TextStyle tstyle,
+                       const LuPixelPoint& parentOrigin );
 
     virtual bool isNormalChar() const;
+
+    virtual double slant() const;
 
 private:
 

@@ -146,8 +146,7 @@ public:
 
     void initFont( const InternFontTable* table,
                    const char* fontname,
-                   const NameTable& tempNames,
-                   CharStyle style );
+                   const NameTable& tempNames );
 
 private:
 
