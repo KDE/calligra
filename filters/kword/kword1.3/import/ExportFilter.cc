@@ -1855,6 +1855,7 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
             }
         case LayoutData::LS_MULTIPLE:
             {
+                // OOWriter 1.1 only allows up to 200%
                 const QString mult ( QString::number( qRound( layout.lineSpacing * 100 ) ) );
                 props += "fo:line-height=\"";
                 props += mult;
