@@ -8,8 +8,8 @@ karbon_insertknotsplugin_la_LIBADD = $(LIB_KPARTS) \
 
 karbon_insertknotsplugin_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 
-datadir   = $(kde_datadir)/karbon/kpartplugins
-data_DATA = insertknotsplugin.rc
+partpluginsdir   = $(kde_datadir)/karbon/kpartplugins
+partplugins_DATA = insertknotsplugin.rc
 
 METASOURCES = AUTO
 

@@ -8,8 +8,8 @@ karbon_imagetoolplugin_la_LIBADD = $(LIB_KPARTS) $(LIB_KOFFICEUI) \
 
 karbon_imagetoolplugin_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 
-datadir   = $(kde_datadir)/karbon/kpartplugins
-data_DATA = imagetoolplugin.rc
+partpluginsdir   = $(kde_datadir)/karbon/kpartplugins
+partplugins_DATA = imagetoolplugin.rc
 
 METASOURCES = AUTO
 

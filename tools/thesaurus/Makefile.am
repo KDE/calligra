@@ -17,8 +17,8 @@ libthesaurustool_la_METASOURCES = main.moc
 service_DATA = thesaurustool.desktop
 servicedir = $(kde_servicesdir)
 
-datadir = $(kde_datadir)/thesaurus
-data_DATA = thesaurus.txt
+thesaurusdir = $(kde_datadir)/thesaurus
+thesaurus_DATA = thesaurus.txt
 
 messages:
 	$(XGETTEXT) *.cc -o $(podir)/thesaurus_tool.pot

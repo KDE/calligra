@@ -1,7 +1,7 @@
 
-#datadir = $(prefix)/share/apps/kformula/pics
+#imgdir = $(prefix)/share/apps/kformula/pics
 
-#data_DATA = kformula2-1.png mini-symbols.png enlarge.png 
+#img_DATA = kformula2-1.png mini-symbols.png enlarge.png 
 #    kformula2-2.png mini-frac.png mini-vspace.png frac-vline.png 
 #    kformula2-3.png mini-integral.png mini-xy.png kformula1-0.png 
 #    kformula3-2.png mini-root.png reduce.png kformula2-0.png 

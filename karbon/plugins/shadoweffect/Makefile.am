@@ -8,8 +8,8 @@ karbon_shadoweffectplugin_la_LIBADD = $(LIB_KPARTS) $(LIB_KOFFICEUI) \
 
 karbon_shadoweffectplugin_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 
-datadir   = $(kde_datadir)/karbon/kpartplugins
-data_DATA = shadoweffectplugin.rc
+partpluginsdir   = $(kde_datadir)/karbon/kpartplugins
+partplugins_DATA = shadoweffectplugin.rc
 
 METASOURCES = AUTO
 

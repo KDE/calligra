@@ -8,8 +8,8 @@ karbon_flattenpathplugin_la_LIBADD = $(LIB_KPARTS) $(LIB_KOFFICEUI) \
 
 karbon_flattenpathplugin_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 
-datadir   = $(kde_datadir)/karbon/kpartplugins
-data_DATA = flattenpathplugin.rc
+partpluginsdir   = $(kde_datadir)/karbon/kpartplugins
+partplugins_DATA = flattenpathplugin.rc
 
 METASOURCES = AUTO
 

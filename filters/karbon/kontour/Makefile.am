@@ -23,5 +23,5 @@ servicedir = $(kde_servicesdir)
 # create a mimetype and install it using those two lines.
 # In case of doubt please ask koffice@mail.kde.org or
 # koffice-devel@mail.kde.org. Thanks.
-# data_DATA = x-foo.desktop
-# datadir = $(kde_mimedir)/text
+# mydata_DATA = x-foo.desktop
+# mydatadir = $(kde_mimedir)/text

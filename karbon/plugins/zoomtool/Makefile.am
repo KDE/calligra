@@ -8,8 +8,8 @@ karbon_zoomtoolplugin_la_LIBADD = $(LIB_KPARTS) $(LIB_KOFFICEUI) \
 
 karbon_zoomtoolplugin_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 
-datadir   = $(kde_datadir)/karbon/kpartplugins
-data_DATA = zoomtoolplugin.rc
+partpluginsdir   = $(kde_datadir)/karbon/kpartplugins
+partplugins_DATA = zoomtoolplugin.rc
 
 METASOURCES = AUTO
 

@@ -8,8 +8,8 @@ karbon_roundcornersplugin_la_LIBADD = $(LIB_KPARTS) \
 
 karbon_roundcornersplugin_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 
-datadir   = $(kde_datadir)/karbon/kpartplugins
-data_DATA = roundcornersplugin.rc
+partpluginsdir   = $(kde_datadir)/karbon/kpartplugins
+partplugins_DATA = roundcornersplugin.rc
 
 METASOURCES = AUTO
 
