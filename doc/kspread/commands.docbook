@@ -730,7 +730,7 @@ decreasing order.</action>
 <guimenu>Data</guimenu>
 <guimenuitem>Show Area...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Change &kspread;'s focus to show a previously 
+<listitem><para><action>Change &kspread;'s focus to show a previously
 named area.</action> See the section <link linkend="namedareas">Named Cells 
 and Areas</link> for further details.
 </para></listitem>
@@ -837,45 +837,10 @@ by &kspread;.</action>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Settings</guimenu>
-<guimenuitem>Show File Toolbar</guimenuitem>
+<guimenuitem>Toolbars</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Show or hide the File toolbar.</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Settings</guimenu>
-<guimenuitem>Show Edit Toolbar</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Show or hide the Edit toolbar.</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Settings</guimenu>
-<guimenuitem>Show Math Toolbar</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Show or hide the Math toolbar.</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Settings</guimenu>
-<guimenuitem>Show Format Toolbar</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Show or hide the Format toolbar.</action>
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Settings</guimenu>
-<guimenuitem>Show Color/Border Toolbar</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Show or hide the Color/Border toolbar.</action>
+<listitem><para><action>Show or hide the toolbars: File, Edit, Math, Format
+and Color/Border toolbar.</action>
 </para></listitem>
 </varlistentry>
 
