@@ -1,7 +1,7 @@
 // $Header$
 
 /* This file is part of the KDE project
-   Copyright (C) 2001, 2002 Nicolas GOUTTE <goutte@kde.org>
+   Copyright 2001, 2002, 2003 Nicolas GOUTTE <goutte@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -74,7 +74,7 @@ class StructureParser : public QXmlDefaultHandler
 public:
     StructureParser(KoFilterChain* chain)
         :  m_chain(chain), m_pictureNumber(0), m_pictureFrameNumber(0), m_tableGroupNumber(0),
-        m_timepoint(QDateTime::currentDateTime(Qt::UTC))
+        m_timepoint(QDateTime::currentDateTime(Qt::UTC)), m_fatalerror(false)
     {
         createDocument();
         structureStack.setAutoDelete(true);
@@ -94,9 +94,13 @@ public:
     virtual bool startElement( const QString&, const QString&, const QString& name, const QXmlAttributes& attributes);
     virtual bool endElement( const QString&, const QString& , const QString& qName);
     virtual bool characters ( const QString & ch );
+    virtual bool warning(const QXmlParseException& exception);
+    virtual bool error(const QXmlParseException& exception);
+    virtual bool fatalError(const QXmlParseException& exception);
 public:
-    QDomDocument getDocInfo(void) const { return m_info; }
-    QDomDocument getDocument(void) const { return mainDocument; }
+    inline QDomDocument getDocInfo(void) const { return m_info; }
+    inline QDomDocument getDocument(void) const { return mainDocument; }
+    inline bool wasFatalError(void) const { return m_fatalerror; }
 protected:
     bool clearStackUntilParagraph(StackItemStack& auxilaryStack);
     bool complexForcedPageBreak(StackItem* stackItem);
@@ -136,6 +140,7 @@ private:
     uint m_tableGroupNumber;                // unique: increment *before* use
     QMap<QString,QString> m_metadataMap;    // Map for <m> elements
     QDateTime m_timepoint;              // Date/time (for pictures)
+    bool m_fatalerror;                  // Did a XML parsing fatal error happened?
 };
 
 // Element <c>
@@ -1571,6 +1576,32 @@ bool StructureParser::endDocument(void)
     return true;
 }
 
+bool StructureParser::warning(const QXmlParseException& exception)
+{
+    kdWarning(30506) << "XML parsing warning: line " << exception.lineNumber()
+        << " col " << exception.columnNumber() << " message: " << exception.message() << endl;
+    return true;
+}
+
+bool StructureParser::error(const QXmlParseException& exception)
+{
+    // A XML error is recoverable, so it is only a KDE warning
+    kdWarning(30506) << "XML parsing error: line " << exception.lineNumber()
+        << " col " << exception.columnNumber() << " message: " << exception.message() << endl;
+    return true;
+}
+
+bool StructureParser::fatalError (const QXmlParseException& exception)
+{
+    kdError(30506) << "XML parsing fatal error: line " << exception.lineNumber()
+        << " col " << exception.columnNumber() << " message: " << exception.message() << endl;
+    m_fatalerror=true;
+    KMessageBox::error(NULL, i18n("An error has occured while parsing the AbiWord file.\nAt line: %1, column %2\nError message: %3")
+        .arg(exception.lineNumber()).arg(exception.columnNumber()).arg(i18n(exception.message().utf8())),
+        i18n("KWord's AbiWord Import Filter"),0);
+    return false; // Stop parsing now, we do not need further errors.
+}
+
 void StructureParser :: createDocument(void)
 {
     QDomImplementation implementation;
@@ -1696,6 +1727,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QCString& from, const Q
     //We arbitrarily decide that Qt can handle the encoding in which the file was written!!
     QXmlSimpleReader reader;
     reader.setContentHandler( &handler );
+    reader.setErrorHandler( &handler );
 
     //Find the last extension
     QString strExt;
@@ -1742,10 +1774,13 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QCString& from, const Q
     {
         kdError(30506) << "Import: Parsing unsuccessful. Aborting!" << endl;
         delete in;
-        // ### TODO: try to give line and column number like the QDom parser does.
-        KMessageBox::error(NULL, i18n("An error occured during the load of the AbiWord file: %1").arg(from),
-            i18n("KWord's AbiWord Import Filter"),0);
-        return KoFilter::StupidError;
+        if (!handler.wasFatalError())
+        {
+            // As the parsing was stopped for something else than a fatal error, we have not yet get an error message. (Can it really happen?)
+            KMessageBox::error(NULL, i18n("An error occured during the load of the AbiWord file: %1").arg(from),
+                i18n("KWord's AbiWord Import Filter"),0);
+        }
+        return KoFilter::ParsingError;
     }
     delete in;
 
