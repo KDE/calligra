@@ -220,7 +220,7 @@ class KEXI_DB_EXPORT QueryAsterisk : protected Field
 		 if the asterisk has "single-tables" type (2nd type).*/
 		bool isAllTableAsterisk() const { return m_table==NULL; }
 		
-		//! \return string for for debugging purposes.
+		//! \return string for debugging purposes.
 		virtual QString debugString() const;
 	
 	protected:
