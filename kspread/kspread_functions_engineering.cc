@@ -24,6 +24,8 @@
 #include <math.h>
 #include <float.h>
 
+#include <qmap.h>
+
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -48,6 +50,7 @@ bool kspreadfunc_bin2hex( KSContext& context );
 bool kspreadfunc_complex( KSContext& context );
 bool kspreadfunc_complex_imag( KSContext& context );
 bool kspreadfunc_complex_real( KSContext& context );
+bool kspreadfunc_convert( KSContext& context );
 bool kspreadfunc_dec2hex( KSContext& context );
 bool kspreadfunc_dec2oct( KSContext& context );
 bool kspreadfunc_dec2bin( KSContext& context );
@@ -89,6 +92,7 @@ void KSpreadRegisterEngineeringFunctions()
   repo->registerFunction( "BIN2OCT",     kspreadfunc_bin2oct );
   repo->registerFunction( "BIN2HEX",     kspreadfunc_bin2hex );
   repo->registerFunction( "COMPLEX",     kspreadfunc_complex );
+  repo->registerFunction( "CONVERT",     kspreadfunc_convert );
   repo->registerFunction( "DEC2HEX",     kspreadfunc_dec2hex );
   repo->registerFunction( "DEC2BIN",     kspreadfunc_dec2bin );
   repo->registerFunction( "DEC2OCT",     kspreadfunc_dec2oct );
@@ -696,6 +700,88 @@ bool kspreadfunc_hex2oct( KSContext& context )
 
   return true;
 }
+
+
+static bool kspread_convert_distance( const QString& fromUnit,
+  const QString& toUnit, double value, double& result )
+{
+  static QMap<QString, double> distanceMap;
+
+  // first-time initialization
+  if( distanceMap.isEmpty() )
+  {
+    distanceMap[ "m" ] = 1.0;
+    distanceMap[ "in" ] = 1.0 / 0.0254;
+    distanceMap[ "ft" ] = 1.0 / (12.0 * 0.0254);
+    distanceMap[ "yd" ] = 1.0 / (3.0 * 12.0 * 0.0254);
+  }
+
+  if( !distanceMap.contains( fromUnit ) ) return false;
+  if( !distanceMap.contains( toUnit ) ) return false;
+
+  result = value * distanceMap[ toUnit ] / distanceMap[ fromUnit ];
+
+  return true;
+}
+
+static bool kspread_convert_temperature( const QString& fromUnit,
+  const QString& toUnit, double value, double& result )
+{
+  static QMap<QString, double> tempFactorMap;
+  static QMap<QString, double> tempOffsetMap;
+
+  // first-time initialization
+  if( tempFactorMap.isEmpty() || tempOffsetMap.isEmpty() )
+  {
+    tempFactorMap[ "C" ] = 1.0; tempOffsetMap[ "C" ] = 0.0;
+    tempFactorMap[ "F" ] = 5.0/9.0; tempOffsetMap[ "F" ] = -32.0;
+    tempFactorMap[ "K" ] = 1.0; tempOffsetMap[ "K" ] = -273.15;
+  }
+
+  if( !tempFactorMap.contains( fromUnit ) ) return false;
+  if( !tempOffsetMap.contains( fromUnit ) ) return false;
+  if( !tempFactorMap.contains( toUnit ) ) return false;
+  if( !tempOffsetMap.contains( toUnit ) ) return false;
+
+  result = ( value + tempOffsetMap[ fromUnit ] )* tempFactorMap[ fromUnit ];
+  result = ( result / tempFactorMap[ toUnit ] ) - tempOffsetMap[ toUnit ];
+
+  return true;
+}
+
+// Function: CONVERT
+bool kspreadfunc_convert( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 3, "CONVERT", true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[0], KSValue::DoubleType, true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[1], KSValue::StringType, true ) )
+    return false;
+
+  if ( !KSUtil::checkType( context, args[2], KSValue::StringType, true ) )
+    return false;
+
+  double value = args[0]->doubleValue();
+  QString fromUnit = args[1]->stringValue();
+  QString toUnit = args[2]->stringValue();
+
+  double result = value;
+
+  if( !kspread_convert_distance( fromUnit, toUnit, value, result ) )
+    if( !kspread_convert_temperature( fromUnit, toUnit, value, result ) )
+      return false;
+
+  context.setValue( new KSValue( result ) );
+
+  return true;
+}
+
+
 
 static QString kspreadfunc_create_complex( double real,double imag )
 {
