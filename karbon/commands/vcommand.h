@@ -48,6 +48,7 @@ public:
 	virtual void execute() = 0;
 	virtual void unexecute() {}
 
+	virtual bool changesSelection() const { return false; }
 
 	QString name() const
 	{

@@ -48,7 +48,7 @@ class VCommandHistory;
 class KarbonPart : public KoDocument
 {
 	Q_OBJECT
-        Q_PROPERTY( int maxRecentFiles READ maxRecentFiles )
+	Q_PROPERTY( int maxRecentFiles READ maxRecentFiles )
 public:
 	KarbonPart( QWidget* parentWidget = 0L, const char* widgetName = 0L,
 				QObject* parent = 0L, const char* name = 0L, bool singleViewMode = false );
@@ -124,7 +124,7 @@ public slots:
 	void repaintAllViews( bool repaint = true );
 	void repaintAllViews( const KoRect& );
 	void slotDocumentRestored();
-	void slotCommandExecuted();
+	void slotCommandExecuted( VCommand * );
 
 protected:
 	virtual KoView* createViewInstance( QWidget* parent, const char* name );

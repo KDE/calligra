@@ -57,7 +57,7 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 
 	m_commandHistory = new VCommandHistory( this );
 	connect( m_commandHistory, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
-	connect( m_commandHistory, SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
+	connect( m_commandHistory, SIGNAL( commandExecuted( VCommand * ) ), this, SLOT( slotCommandExecuted( VCommand * ) ) );
 
 	initConfig();
 
@@ -180,9 +180,15 @@ KarbonPart::slotDocumentRestored()
 }
 
 void
-KarbonPart::slotCommandExecuted()
+KarbonPart::slotCommandExecuted( VCommand *command )
 {
 	setModified( true );
+	if( command && command->changesSelection() )
+	{
+		QPtrListIterator<KoView> itr( views() );
+			for( ; itr.current() ; ++itr )
+				static_cast<KarbonView*>( itr.current() )->selectionChanged();
+	}
 }
 
 void
