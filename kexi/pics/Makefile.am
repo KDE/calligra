@@ -1,4 +1,4 @@
-data_DATA = kexi_main.png cp_wiz.png 
+data_DATA = kexi-main.png cp-wiz.png 
 datadir = $(kde_datadir)/kexi/pics
 
 KDE_ICON = hi16-action-form.png hi16-action-queries.png \
