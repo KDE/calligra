@@ -4032,6 +4032,7 @@ void KPresenterDoc::selectPage( int pgNum /* 0-based */, bool select )
     ASSERT( pgNum >= 0 );
     m_selectedSlides.replace( pgNum, select );
     kdDebug() << "KPresenterDoc::selectPage pgNum=" << pgNum << " select=" << select << endl;
+    setModified(true);
     // Update the views
     KoView* view = firstView();
     for( ; view; view = nextView() )
