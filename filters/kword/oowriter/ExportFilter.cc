@@ -139,23 +139,22 @@ void OOWriterWorker::writeContentXml(void)
 
     zipPrepareWriting("content.xml");    
         
-    QCString head( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
-    head += "<!DOCTYPE office:document-content>\n";
-    head += "<office:document-content>\n";
-    zipWriteData(head);
+    zipWriteData("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+    zipWriteData("<!DOCTYPE office:document-content>\n");
+    zipWriteData("<office:document-content>\n");
+
     
-    QByteArray fontArray;
-    QTextStream stream(fontArray, IO_WriteOnly);
-    stream.setEncoding( QTextStream::UnicodeUTF8 );    
-    stream << " <office:fonts-decls>\n";
+    zipWriteData( " <office:fonts-decls>\n");
     for (QStringList::ConstIterator it=m_fontNames.begin(); it!=m_fontNames.end(); it++)
     {
-        stream << "  <style:font-decl style:name=\"" << escapeOOText(*it) << "\"";
-        stream << " fo:font-family=\"" << escapeOOText(*it) << "\" />\n";
+        zipWriteData("  <style:font-decl style:name=\"");
+        zipWriteData(escapeOOText(*it));
+        zipWriteData("\" fo:font-family=\"");
+        zipWriteData(escapeOOText(*it));
         // ### TODO: pitch
+        zipWriteData("\" />\n");
     }
-    stream << " </office:fonts-decls>\n";
-    zipWriteData(fontArray);
+    zipWriteData(" </office:fonts-decls>\n");
     
     // TODO: styles
 
@@ -192,7 +191,6 @@ bool OOWriterWorker::doOpenDocument(void)
 bool OOWriterWorker::doCloseDocument(void)
 {
     *m_streamOut << "</office:body>\n";
-    *m_streamOut << "</office:document-content>\n";
     return true;
 }
 
@@ -716,6 +714,7 @@ bool OOWriterWorker::doFullParagraph(const QString& paraText, const LayoutData& 
 bool OOWriterWorker::doOpenStyles(void)
 {
     m_styles += " <office:styles>\n";
+    return true;
 }
 
 bool OOWriterWorker::doFullDefineStyle(LayoutData& layout)
@@ -751,6 +750,7 @@ bool OOWriterWorker::doFullDefineStyle(LayoutData& layout)
 bool OOWriterWorker::doCloseStyles(void)
 {
     m_styles += " </office:styles>\n";
+    return true;
 }
 
 
@@ -797,47 +797,49 @@ bool OOWriterWorker::doFullPaperBorders (const double top, const double left,
 
 bool OOWriterWorker::doFullDocumentInfo(const KWEFDocumentInfo& docInfo)
 {
+    if (!m_zip)
+        return true;
+    
+        
+    zipPrepareWriting("meta.xml");
+    
     m_docInfo=docInfo;
     
-    QByteArray array;
-    
-    QTextStream stream(array, IO_WriteOnly);
-    stream.setEncoding( QTextStream::UnicodeUTF8 );    
-    
-    stream << "<office:document-meta>\n";
-    stream << " <office:meta>\n";
+    zipWriteData("<office:document-meta>\n");
+    zipWriteData(" <office:meta>\n");
     
     // Say who we are (with the CVS revision number) in case we have a bug in our filter output!
-    stream << "  <meta:generator>KWord Export Filter";
+    zipWriteData("  <meta:generator>KWord Export Filter");
 
     QString strVersion("$Revision$");
     // Remove the dollar signs
     //  (We don't want that the version number changes if the AbiWord file is itself put in a CVS storage.)
-    stream << strVersion.mid(10).replace('$',"");
+    zipWriteData(strVersion.mid(10).replace('$',""));
 
-    stream << "</meta:generator>\n";
+    zipWriteData("</meta:generator>\n");
     
     if (!m_docInfo.title.isEmpty())
     {
-        stream << "  <dc:title>" << escapeOOText(m_docInfo.title) << "</dc:title>\n";    
+        zipWriteData("  <dc:title>");
+        zipWriteData(escapeOOText(m_docInfo.title));
+        zipWriteData("</dc:title>\n");
     }
     if (!m_docInfo.abstract.isEmpty())
     {
-        stream << "  <dc:description>" << escapeOOText(m_docInfo.abstract) << "</dc:description>\n";    
+        zipWriteData("  <dc:description>");
+        zipWriteData(escapeOOText(m_docInfo.abstract));
+        zipWriteData("</dc:description>\n");    
     }
     
     QDateTime now (QDateTime::currentDateTime(Qt::UTC)); // current time in UTC
-    stream << "  <dc:date>"
-         << escapeOOText(now.toString(Qt::ISODate))
-         << "</dc:date>\n";
+    zipWriteData("  <dc:date>");
+    zipWriteData(escapeOOText(now.toString(Qt::ISODate)));
+    zipWriteData("</dc:date>\n");
     
-    stream << " </office:meta>\n";
-    stream << "</office:document-meta>\n";
+    zipWriteData(" </office:meta>\n");
+    zipWriteData("</office:document-meta>\n");
      
-    if (m_zip)
-    {
-        m_zip->writeFile("meta.xml",QString::null, QString::null, array.size(), array.data());
-    }
+    zipDoneWriting();
     
     return true;
 }
