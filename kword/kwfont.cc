@@ -43,22 +43,27 @@ KWFontDia::KWFontDia( KWView* parent, const char* name, const QFont &_font, bool
     m_chooseFont=new KFontChooser(this);
     m_chooseFont->setFont(_font);
     lay1->addWidget(m_chooseFont);
-    m_underline=new QCheckBox(i18n("Underline"),this);
+
+    QGroupBox *grp=new QGroupBox(this);
+    lay1->addWidget(grp);
+    QGridLayout *grid=new QGridLayout( grp, 2, 2, 15, 7 );
+
+    m_underline=new QCheckBox(i18n("Underline"),grp);
     m_underline->setChecked(_underline);
-    lay1->addWidget(m_underline);
+    grid->addWidget(m_underline,0,1);
 
 
-    m_superScript=new QCheckBox(i18n("SuperScript"),this);
+    m_superScript=new QCheckBox(i18n("SuperScript"),grp);
     m_superScript->setChecked(_superscript);
-    lay1->addWidget(m_superScript);
+    grid->addWidget(m_superScript,0,0);
 
-    m_subScript=new QCheckBox(i18n("SubScript"),this);
+    m_subScript=new QCheckBox(i18n("SubScript"),grp);
     m_subScript->setChecked( _subscript);
-    lay1->addWidget(m_subScript);
+    grid->addWidget(m_subScript,1,0);
 
-    m_strikeOut=new QCheckBox(i18n("Strike Out"),this);
+    m_strikeOut=new QCheckBox(i18n("Strike Out"),grp);
     m_strikeOut->setChecked( _strikeOut);
-    lay1->addWidget(m_strikeOut);
+    grid->addWidget(m_strikeOut,1,1);
 
     KButtonBox *bb = new KButtonBox( this );
     bb->addStretch();
