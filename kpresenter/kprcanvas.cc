@@ -4777,9 +4777,12 @@ void KPrCanvas::dragEnterEvent( QDragEnterEvent *e )
 {
     if ( m_currentTextObjectView )
         m_currentTextObjectView->dragEnterEvent( e );
-    else if ( /*QTextDrag::canDecode( e ) ||*/
-        QImageDrag::canDecode( e ) )
-        e->acceptAction();
+    else if ( QTextDrag::canDecode( e )
+              || QImageDrag::canDecode( e )
+              || QUriDrag::canDecode(e)) {
+        kdDebug(33001) << "Drag entered" << endl;
+        e->accept();
+    }
     else
         e->ignore();
 }
@@ -4800,15 +4803,19 @@ void KPrCanvas::dragMoveEvent( QDragMoveEvent *e )
                 emit currentObjectEditChanged();
         }
     }
-    else if ( /*QTextDrag::canDecode( e ) ||*/
-        QImageDrag::canDecode( e ) )
-        e->acceptAction();
+    else if ( QTextDrag::canDecode( e )
+              || QImageDrag::canDecode( e )
+              || QUriDrag::canDecode(e)) {
+        kdDebug(33001) << "Drag moved" << endl;
+        e->accept();
+    }
     else
         e->ignore();
 }
 
 void KPrCanvas::dropImage( QMimeSource * data, bool resizeImageToOriginalSize, int posX, int posY )
 {
+    kdDebug(33001) << "Dropping image" << endl;
     setToolEditMode( TEM_MOUSE );
     deSelectAllObj();
 

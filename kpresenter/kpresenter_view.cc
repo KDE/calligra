@@ -576,15 +576,16 @@ void KPresenterView::editPaste()
             skipToPage( currPg );
             updateSideBarMenu();
         }
+        else if (QImageDrag::canDecode (data)) {
+            m_canvas->dropImage( data );
+        }
         else if ( data->provides( KoStoreDrag::mimeType("application/x-kpresenter" ) ))
         {
-            m_canvas->activePage()->pasteObjs( data->encodedData(KoStoreDrag::mimeType("application/x-kpresenter")));
+            m_canvas->activePage()->pasteObjs(
+                data->encodedData(KoStoreDrag::mimeType("application/x-kpresenter")));
 
             m_canvas->setMouseSelectedObject(true);
             emit objectSelectedChanged();
-        }
-        else if (QImageDrag::canDecode (data)) {
-            m_canvas->dropImage( data );
         }
     } else {
         if ( !m_canvas->currentTextObjectView()->kpTextObject()->isProtectContent())

@@ -46,8 +46,6 @@
 
 #include <koStore.h>
 #include <koStoreDevice.h>
-#include <kurldrag.h>
-#include <qclipboard.h>
 #include <kozoomhandler.h>
 #include "koPointArray.h"
 #include "kprtextdocument.h"
