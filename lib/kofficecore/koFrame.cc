@@ -75,19 +75,7 @@ void KoFrame::setView( KoView *view )
 
   d->m_view = view;
   if ( d->m_view )
-  {
     d->m_view->installEventFilter( this );
-
-    // #### Do we need this ?
-    // 1 - it seems border is 0
-    // 2 - setState will be called anyway
-    // (David)
-    setMaximumSize( QMAX32767( d->m_view->maximumWidth() + 2 * border(), d->m_view->maximumWidth() ),
-		    QMAX32767( d->m_view->maximumHeight() + 2 * border(), d->m_view->maximumHeight() ) );
-    setMinimumSize( d->m_view->minimumWidth() + leftBorder() + rightBorder(),
-		    d->m_view->minimumHeight() + topBorder() + bottomBorder() );
-
-  }
 
   resizeEvent( 0L );
 }
@@ -129,7 +117,7 @@ void KoFrame::setState( State s )
     d->m_state = Inactive;
     setGeometry( x() + l, y() + t, width() - l - r, height() - t - b );
   }
-  else if ( ( d->m_state == Active || d->m_state == Selected ) && old == Inactive )	
+  else if ( ( d->m_state == Active || d->m_state == Selected ) && old == Inactive )
     setGeometry( x() - leftBorder(), y() - topBorder(),
 		 width() + leftBorder() + rightBorder(),
 		 height() + topBorder() + bottomBorder()  );
@@ -277,7 +265,7 @@ void KoFrame::mouseMoveEvent( QMouseEvent* ev )
       int w = QMIN( QMAX( d->m_width + d->m_mousePressPos.x() - p.x(), minimumWidth() ), maximumWidth() );
       int h = QMIN( QMAX( d->m_height + d->m_mousePressPos.y() - p.y(), minimumHeight() ), maximumHeight() );
       setGeometry( d->m_framePos.x() - w + d->m_width,
-		   d->m_framePos.y() - h + d->m_height, w, h );	
+		   d->m_framePos.y() - h + d->m_height, w, h );
   }
   else if ( d->m_mode == 2 )
   {
@@ -338,11 +326,11 @@ void KoFrame::mouseMoveEvent( QMouseEvent* ev )
     QRect r6( width() / 2 - 3, height() - 5, 5, 5 );
     QRect r7( 0, height() / 2 - 3, 5, 5 );
     QRect r8( width()- 5, height() / 2 - 3, 5, 5 );
-	
+
     if ( r1.contains( ev->pos() ) || r3.contains( ev->pos() ) )
       setCursor( sizeFDiagCursor );
     else if ( r2.contains( ev->pos() ) || r4.contains( ev->pos() ) )
-      setCursor( sizeBDiagCursor );	
+      setCursor( sizeBDiagCursor );
     else if ( r5.contains( ev->pos() ) || r6.contains( ev->pos() ) )
       setCursor( sizeVerCursor );
     else if ( r7.contains( ev->pos() ) || r8.contains( ev->pos() ) )
