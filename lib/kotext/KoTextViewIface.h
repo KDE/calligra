@@ -109,6 +109,8 @@ k_dcop:
     QColor topBorderColor() const;
     QColor bottomBorderColor() const;
 
+    void changeCaseOfText( const QString & caseType);
+
 
 private:
     KoTextView *m_textView;

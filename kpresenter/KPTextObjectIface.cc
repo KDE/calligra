@@ -26,6 +26,7 @@
 #include <kapplication.h>
 #include <dcopclient.h>
 #include "kprcanvas.h"
+#include <kdebug.h>
 
 KPTextObjectIface::KPTextObjectIface( KPTextObject *_textobject )
     : KPresenterObjectIface(_textobject),KPresenterObject2DIface(_textobject)
@@ -139,3 +140,24 @@ void KPTextObjectIface::setTextFamilyFont(const QString &font)
     m_textobject->textObject()->setFamilyCommand(font);
 }
 
+void KPTextObjectIface::changeCaseOfText( const QString & caseType)
+{
+    if( caseType.lower() == "uppercase" )
+    {
+        m_textobject->textObject()->setChangeCaseOfTextCommand( KoChangeCaseDia::UpperCase );
+    }
+    else if( caseType.lower() =="lowercase" )
+    {
+        m_textobject->textObject()->setChangeCaseOfTextCommand( KoChangeCaseDia::LowerCase );
+    }
+    else if( caseType.lower() =="titlecase" )
+    {
+        m_textobject->textObject()->setChangeCaseOfTextCommand( KoChangeCaseDia::TitleCase );
+    }
+    else if( caseType.lower() =="togglecase" )
+    {
+        m_textobject->textObject()->setChangeCaseOfTextCommand( KoChangeCaseDia::ToggleCase );
+    }
+    else
+        kdDebug()<<"Error in void KWordTextFrameSetIface::changeCaseOfText( const QString & caseType) parameter\n";
+}

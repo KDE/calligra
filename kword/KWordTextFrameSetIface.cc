@@ -28,6 +28,7 @@
 #include <kapplication.h>
 #include <dcopclient.h>
 #include "KWordFrameSetIface.h"
+#include <kdebug.h>
 
 KWordTextFrameSetIface::KWordTextFrameSetIface( KWTextFrameSet *_frame )
     : KWordFrameSetIface( _frame)
@@ -149,3 +150,24 @@ void KWordTextFrameSetIface::setTextFamilyFont(const QString &font)
     m_frametext->textObject()->setFamilyCommand(font);
 }
 
+void KWordTextFrameSetIface::changeCaseOfText( const QString & caseType)
+{
+    if( caseType.lower() == "uppercase" )
+    {
+        m_frametext->textObject()->setChangeCaseOfTextCommand( KoChangeCaseDia::UpperCase );
+    }
+    else if( caseType.lower() =="lowercase" )
+    {
+        m_frametext->textObject()->setChangeCaseOfTextCommand( KoChangeCaseDia::LowerCase );
+    }
+    else if( caseType.lower() =="titlecase" )
+    {
+        m_frametext->textObject()->setChangeCaseOfTextCommand( KoChangeCaseDia::TitleCase );
+    }
+    else if( caseType.lower() =="togglecase" )
+    {
+        m_frametext->textObject()->setChangeCaseOfTextCommand( KoChangeCaseDia::ToggleCase );
+    }
+    else
+        kdDebug()<<"Error in void KWordTextFrameSetIface::changeCaseOfText( const QString & caseType) parameter\n";
+}

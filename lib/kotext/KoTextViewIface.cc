@@ -349,3 +349,24 @@ QColor KoTextViewIface::bottomBorderColor() const
 
 }
 
+void KoTextViewIface::changeCaseOfText( const QString & caseType)
+{
+    if( caseType.lower() == "uppercase" )
+    {
+        m_textView->setChangeCaseOfTextCommand( KoChangeCaseDia::UpperCase );
+    }
+    else if( caseType.lower() =="lowercase" )
+    {
+        m_textView->setChangeCaseOfTextCommand( KoChangeCaseDia::LowerCase );
+    }
+    else if( caseType.lower() =="titlecase" )
+    {
+        m_textView->setChangeCaseOfTextCommand( KoChangeCaseDia::TitleCase );
+    }
+    else if( caseType.lower() =="togglecase" )
+    {
+        m_textView->setChangeCaseOfTextCommand( KoChangeCaseDia::ToggleCase );
+    }
+    else
+        kdDebug()<<"Error in void KoTextViewIface::changeCaseOfText( const QString & caseType) parameter\n";
+}

@@ -53,6 +53,7 @@ k_dcop:
     void setTextDefaultFormat();
     void setTextBackgroundColor(const QColor & col);
     void setTextFamilyFont(const QString &font);
+    void changeCaseOfText( const QString & caseType);
 
     QColor textColor() const;
     QFont textFont() const;
