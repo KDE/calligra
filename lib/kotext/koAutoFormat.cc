@@ -1778,10 +1778,9 @@ KCommand *KoAutoFormat::applyAutoFormat( KoTextObject * obj )
 
 KCommand *KoAutoFormat::scanParag( KoTextParag * parag, KoTextObject * obj )
 {
-    KMacroCommand * macro = new KMacroCommand( i18n("Apply Autoformat"));
+    KMacroCommand * macro = 0L;
     KoTextCursor *cursor = new KoTextCursor( obj->textDocument() );
 
-    bool createMacro = false;
     KoTextString *s = parag->string();
     for ( int i = 0; i < s->length(); i++ )
     {
@@ -1791,8 +1790,9 @@ KCommand *KoAutoFormat::scanParag( KoTextParag * parag, KoTextObject * obj )
             KCommand *cmd =doTypographicQuotes( cursor, parag, i, obj, true /*double quote*/ );
             if ( cmd )
             {
+                if ( !macro )
+                    macro = new KMacroCommand( i18n("Apply Autoformat"));
                 macro->addCommand( cmd );
-                createMacro = true;
             }
         }
         else if ( ch == '\'' && m_typographicDoubleQuotes.replace )
@@ -1800,8 +1800,9 @@ KCommand *KoAutoFormat::scanParag( KoTextParag * parag, KoTextObject * obj )
             KCommand *cmd =doTypographicQuotes(  cursor, parag, i,obj, false /* simple quote*/ );
             if ( cmd )
             {
+                if ( !macro )
+                    macro = new KMacroCommand( i18n("Apply Autoformat"));
                 macro->addCommand( cmd );
-                createMacro = true;
             }
         }
         else if( ch.isSpace())
@@ -1817,8 +1818,9 @@ KCommand *KoAutoFormat::scanParag( KoTextParag * parag, KoTextObject * obj )
                 KCommand *cmd =doAutoChangeFormat( cursor, parag,i, word, obj );
                 if ( cmd )
                 {
+                    if ( !macro )
+                        macro = new KMacroCommand( i18n("Apply Autoformat"));
                     macro->addCommand( cmd );
-                    createMacro = true;
                 }
 
             }
@@ -1831,23 +1833,24 @@ KCommand *KoAutoFormat::scanParag( KoTextParag * parag, KoTextObject * obj )
                 KCommand *cmd = doAutoReplaceNumber( cursor, parag, i, word, obj );
                 if ( cmd )
                 {
+                    if ( !macro )
+                        macro = new KMacroCommand( i18n("Apply Autoformat"));
                     macro->addCommand( cmd );
-                    createMacro = true;
                 }
             }
             if ( ( ch.isSpace() || ch.isPunct() ) && i > 0 )
             {
                 QString lastWord = getLastWord(parag, i);
                 //kdDebug(32500)<<" m_listCompletion->items() :"<<m_listCompletion->items()<<endl;
-                KMacroCommand *macro2 =new KMacroCommand(i18n("Autocorrection"));
-                bool cmdCreate=false;
+                KMacroCommand *macro2 =0L;
                 int newPos = i;
                 KCommand *cmd = doAutoCorrect( cursor, parag, newPos , obj );
 
                 if( cmd )
                 {
+                    if ( !macro2 )
+                        macro2 =new KMacroCommand(i18n("Autocorrection"));
                     macro2->addCommand( cmd );
-                    cmdCreate = true;
                 }
 
                 if ( !m_ignoreUpperCase && (m_convertUpperUpper || m_convertUpperCase) )
@@ -1856,36 +1859,32 @@ KCommand *KoAutoFormat::scanParag( KoTextParag * parag, KoTextObject * obj )
                     cmd = doUpperCase( cursor, parag, newPos, lastWord, obj );
                     if( cmd )
                     {
+                        if ( !macro2 )
+                            macro2 =new KMacroCommand(i18n("Autocorrection"));
                         macro2->addCommand( cmd );
-                        cmdCreate = true;
                     }
                 }
-                if ( cmdCreate )
+                if ( macro2 )
                 {
+                    if ( !macro )
+                        macro = new KMacroCommand( i18n("Apply Autoformat"));
                     macro->addCommand( macro2 );
-                    createMacro = true;
                 }
-                else
-                    delete macro2;
-
                 if( m_bAutoSuperScript && m_superScriptEntries.count()>0)
                 {
                     KCommand * cmd =doAutoSuperScript( cursor, parag, newPos, lastWord, obj  );
                     if ( cmd )
                     {
+                        if ( !macro )
+                            macro = new KMacroCommand( i18n("Apply Autoformat"));
                         macro->addCommand( cmd );
-                        createMacro = true;
                     }
                 }
             }
         }
     }
     delete cursor;
-    if ( createMacro )
-        return macro;
-    else
-        delete macro;
-    return 0L;
+    return macro;
 }
 
 void KoAutoFormat::changeTextFormat(KoSearchContext *formatOptions, KoTextFormat * format, int & flags )
