@@ -645,7 +645,7 @@ Entry* StorageIO::buildTree( Entry* parent, int index, const unsigned char* dire
   // 2 = file (aka stream), 1 = directory (aka storage), 5 = root
   unsigned type  = dirent[ 0x42 + p];
   if( ( type == 2 ) || ( type == 1 ) || ( type == 5 ) ) entry = new Entry();
-  if( entry ) entry->dir = ( ( type = 1 ) || ( type == 5 ) );
+  if( entry ) entry->dir = ( ( type == 1 ) || ( type == 5 ) );
 
   // barf on error
   if( !entry ) return entry;
