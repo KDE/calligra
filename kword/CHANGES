@@ -9,6 +9,7 @@ Changes after KWord-1.3
 - Support for different run-around-gaps on every side of the frame
 - Use kspell2
 - Copy/paste between kword/kpresenter
+- Add statistic variable
 
 Changes between KWord-1.3-rc and KWord-1.3
 ==========================================

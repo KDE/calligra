@@ -92,13 +92,28 @@ KWVariableCollection::KWVariableCollection(KWVariableSettings *_setting, KoVaria
 
 KoVariable* KWVariableCollection::loadOasisField( KoTextDocument* textdoc, const QDomElement& tag, KoOasisContext& context )
 {
-    const QString tagName( tag.tagName() );
-    kdDebug()<<" tagName :"<<tagName<<endl;
-    if ( tagName == "text:note" )
+    const QString localName( tag.localName() );
+    const bool isTextNS = tag.namespaceURI() == KoXmlNS::text;
+    if ( isTextNS )
     {
-        QString key = "STRING";
-        int type = VT_FOOTNOTE;
-        return loadOasisFieldCreateVariable( textdoc, tag, context, key, type );
+        if ( localName.endsWith( "note" ))
+        {
+            QString key = "STRING";
+            int type = VT_FOOTNOTE;
+            return loadOasisFieldCreateVariable( textdoc, tag, context, key, type );
+        }
+        else if ( localName.endsWith("table-count" ) ||
+                  localName.endsWith("text:object-count" ) ||
+                  localName.endsWith("text:image-count" ) ||
+                  localName.endsWith("text:paragraph-count" ) ||
+                  localName.endsWith("text:word-count" ) )
+        {
+            QString key = "NUMBER";
+            int type = VT_STATISTIC;
+            return loadOasisFieldCreateVariable( textdoc, tag, context, key, type );
+        }
+        else
+            return KoVariableCollection::loadOasisField( textdoc, tag, context );
     }
     else
         return KoVariableCollection::loadOasisField( textdoc, tag, context );
@@ -603,9 +618,30 @@ void KWStatisticVariable::load( QDomElement &elem )
     //Now we use oasis format
 }
 
-void KWStatisticVariable::loadOasis( const QDomElement &elem, KoOasisContext& context )
+void KWStatisticVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
 {
-    //TODO
+    const QString localName( elem.localName() );
+    if ( localName == "object-count" )
+    {
+        m_subtype = VST_STATISTIC_NB_EMBEDDED;
+        m_varValue = QVariant( elem.text().toInt() );
+    }
+    else if ( localName == "table-count" )
+    {
+        m_subtype = VST_STATISTIC_NB_TABLE;
+        m_varValue = QVariant( elem.text().toInt() );
+    }
+    else if ( localName == "picture-count" )
+    {
+        m_subtype = VST_STATISTIC_NB_PICTURE;
+        m_varValue = QVariant( elem.text().toInt() );
+    }
+    else if ( localName == "word-count" )
+    {
+        m_subtype = VST_STATISTIC_NB_WORD;
+        m_varValue = QVariant( elem.text().toInt() );
+    }
+    //TODO other copy
 }
 
 void KWStatisticVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*/ ) const
