@@ -1,4 +1,6 @@
-/* This file is part of the KDE project
+/*
+   $Id: $
+   This file is part of the KDE project
    Copyright (C) 2001 Daniel Naber <daniel.naber@t-online.de>
 */
 /***************************************************************************
@@ -21,6 +23,7 @@
 #define __main_h__
 
 #include <qapplication.h>
+#include <qlabel.h>
 #include <qlayout.h>
 #include <qlistbox.h>
 #include <qcombobox.h>
@@ -28,6 +31,7 @@
 #include <qregexp.h>
 #include <qstring.h>
 #include <qstringlist.h>
+#include <qtabdialog.h>
 #include <qtextbrowser.h>
 #include <qwidget.h>
 #include <qvbox.h>
@@ -43,6 +47,7 @@
 #include <kmessagebox.h>
 #include <kprocess.h>
 #include <krun.h>
+#include <kstddirs.h>
 #include <kurl.h>
 
 class Thesaurus : public KDataTool
@@ -52,30 +57,55 @@ class Thesaurus : public KDataTool
 public:
     Thesaurus(QObject* parent, const char* name, const QStringList &);
     ~Thesaurus();
-    virtual bool run( const QString& command, void* data, 
+    virtual bool run(const QString& command, void* data, 
         const QString& datatype, const QString& mimetype);
 
 protected slots:
     void slotFindTerm();
     void slotFindTerm(const QString &term);
-    void thesaurusExited(KProcess *proc);
-    void receivedStdout(KProcess *proc, char *result, int len);
-    void receivedStderr(KProcess *proc, char *result, int len);
+
+    void thesExited(KProcess *proc);
+    void receivedThesStdout(KProcess *proc, char *result, int len);
+    void receivedThesStderr(KProcess *proc, char *result, int len);
+
+    void wnExited(KProcess *proc);
+    void receivedWnStdout(KProcess *proc, char *result, int len);
+    void receivedWnStderr(KProcess *proc, char *result, int len);
 
 protected:
     enum Mode {grep, other};
     void findTerm(const QString &term);
+    void findTermThesaurus(const QString &term);
+    void findTermWordnet(const QString &term);
     QString formatLine(QString l);
 
-    KProcess *m_thesaurusproc;
-    QString m_procresult_stdout;
-    QString m_procresult_stderr;
-    QVBox *m_layout;
+    KProcess *m_thesproc;
+    QString m_thesproc_stdout;
+    QString m_thesproc_stderr;
+
+    KProcess *m_wnproc;
+    QString m_wnproc_stdout;
+    QString m_wnproc_stderr;
+
+    Mode m_mode;
+    
+    QTabDialog *m_tab;
+    QVBox *vbox;
+    QVBox *vbox2;
+    
+    // WordNet:
     KHistoryCombo *m_edit;
     QTextBrowser *m_resultbox;
     QComboBox *m_combobox;
-    KDialogBase *m_dialog;
-    Mode m_mode;
+    
+    // Thesaurus:
+    KHistoryCombo *m_thes_edit;
+    QVBox *vbox_syn;
+    QListBox *m_thes_syn;
+    QVBox *vbox_hyper;
+    QListBox *m_thes_hyper;
+    QVBox *vbox_hypo;
+    QListBox *m_thes_hypo;
 };
 
 #endif

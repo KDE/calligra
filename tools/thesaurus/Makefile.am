@@ -16,3 +16,6 @@ libthesaurustool_la_METASOURCES = main.moc
 
 service_DATA = thesaurustool.desktop thesaurustool_kword.desktop
 servicedir = $(kde_servicesdir)
+
+datadir = $(kde_datadir)/thesaurus
+data_DATA = thesaurus.txt

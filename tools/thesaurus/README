@@ -1,13 +1,23 @@
 README for Thesaurus KDataTool
-Daniel Naber (daniel.naber@t-online.de), 2001-11-17
+Daniel Naber (daniel.naber@t-online.de), 2001-11-18
 
-Currently this is a frontend to WordNet 1.7. WordNet is "an online
-lexical reference system whose design is inspired by current
-psycholinguistic theories of human lexical memory." Only the English
-language is supported.
+This software offers two different functions. Note that it only
+supports English, even if the user interface may appear in a
+different language:
 
-To use this you have to download WordNet (11MB):
+1. A small thesaurus, build from a subset of WordNet. Note that this
+doesn't distinguish between parts of speech, e.g. verbs and nouns are
+mixed up in the lists of words. Also the frontend won't separate the
+different meanings most words can have. If you need this, use the
+WordNet frontend.
+
+2. A frontend to WordNet 1.7. WordNet is "an online lexical reference
+system whose design is inspired by current psycholinguistic theories
+of human lexical memory."  The frontend offers nearly all options
+which are available on the command line. It calls the 'wn' binary. To
+use this you have to download WordNet (11MB):
 http://www.cogsci.princeton.edu/~wn/
+
 
 Technically, this is a KDataTool, which means that it will typically
 add an action to a context menu, in this case: "Show related words".
@@ -17,10 +27,3 @@ a word or over selected text.
 The Thesaurus KDataTool just calls the WordNet binary "wn", which has
 to be in your path. The advantage is that there are no dependencies
 at compile time, as there would be if we used the WordNet library.
-
-TODO:
--Extract synonym information from WordNet so that we can distribute it
- (if it's <= 1MB tarred). Asking for synonyms returns the synset (e.g. car
- -> "car, auto, automobile, machine, motorcar") and the first level
- of hypernyms (e.g. "motor vehicle, automotive vehicle", i.e. more general
- terms). One can also get hyponyms (e.g. "cab, hack, taxi, taxicab")
