@@ -647,21 +647,20 @@ void KSpreadView::initializeGlobalOperationActions()
   m_viewZoom->setEditable(false);
 
   QStringList lst1;
-/*  lst1 << "33%";
+  lst1 << "33%";
   lst1 << "50%";
-*/
   lst1 << "60%";
   lst1 << "75%";
   lst1 << "100%";
   lst1 << "125%";
   lst1 << "150%";
-/*  lst1 << "200%";
+  lst1 << "200%";
   lst1 << "250%";
   lst1 << "350%";
   lst1 << "400%";
   lst1 << "450%";
   lst1 << "500%";
-*/
+
   m_viewZoom->setItems( lst1 );
   m_viewZoom->setCurrentItem( 2 );
 

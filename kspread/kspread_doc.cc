@@ -204,38 +204,6 @@ void KSpreadDoc::initConfig()
       config->setGroup( "KSpread Page Layout" );
       setUnit( (KoUnit::Unit)config->readNumEntry( "Default unit page" ,0));
     }
-
-    m_zoom = 100;
-    setZoomAndResolution( m_zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
-    newZoomAndResolution( false, false );
-
-}
-
-
-void KSpreadDoc::setZoomAndResolution( int zoom, int dpiX, int dpiY )
-{
-    KoZoomHandler::setZoomAndResolution( zoom, dpiX, dpiY );
-//    if ( m_formulaDocument )
-//        m_formulaDocument->setZoomAndResolution( zoom, dpiX, dpiY );
-}
-
-
-void KSpreadDoc::newZoomAndResolution( bool updateViews, bool forPrint )
-{
-/*    if ( m_formulaDocument )
-        m_formulaDocument->newZoomAndResolution( updateViews,forPrint );
-    // Update all fonts
-    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
-    for ( ; fit.current() ; ++fit )
-        fit.current()->zoom( forPrint );
-
-    layout();
-    updateAllFrames();
-    if ( updateViews )
-    {
-        emit newContentsSize();
-        repaintAllViews( true );
-    }*/
 }
 
 
@@ -799,11 +767,9 @@ void KSpreadDoc::PaintRegion(QPainter &painter, QRect viewRegion,
       cell = table->cellAt( x, y );
 
       QPoint cellCoordinate( x, y );
-      QPoint size(int(dblCurrentCellPos.first + col_lay->dblWidth()) - currentCellPos.x(),
-                  int(dblCurrentCellPos.second + row_lay->dblHeight()) - currentCellPos.y());
-kdDebug(36001)<<"  x: "<<currentCellPos.x()<<"  width: " << col_lay->width()<<"  size.x: "<<size.x()<<endl;
-kdDebug(36001)<<"  y: "<<currentCellPos.y()<<"  height: " << row_lay->height()<<"  size.y: "<<size.y()<<endl;
-      cell->paintCell( viewRegion, painter, view, currentCellPos, size, cellCoordinate);
+//      QPoint size(int(dblCurrentCellPos.first + col_lay->dblWidth()) - currentCellPos.x(),
+//                  int(dblCurrentCellPos.second + row_lay->dblHeight()) - currentCellPos.y());
+      cell->paintCell( viewRegion, painter, view, currentCellPos, cellCoordinate);
 
       dblCurrentCellPos.first += col_lay->dblWidth();
       currentCellPos.setX((int)dblCurrentCellPos.first);
