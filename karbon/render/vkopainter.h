@@ -20,11 +20,11 @@ class QPainter;
 class VKoPainter : public VPainter
 {
 public:
-	VKoPainter( QPaintDevice *target, int w = 0, int h = 0 );
+	VKoPainter( QPaintDevice *target, unsigned int w = 0, unsigned int h = 0 );
 	virtual ~VKoPainter();
 
     //
-	virtual void resize( int w, int h );
+	virtual void resize( unsigned int w, unsigned int h );
 	virtual void begin();
 	virtual void end();
 	virtual void blit( const QRect & );

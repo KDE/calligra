@@ -47,10 +47,10 @@ VMToolHandle::drawBox( QPainter& painter, short index )
 }
 
 KoRect
-computeRect( int cx, int cy, const double zoomFactor )
+computeRect( double cx, double cy, const double zoomFactor )
 {
-	return KoRect( QPoint( cx - HANDLE_SIZE /* zoomFactor */, cy - HANDLE_SIZE /* zoomFactor */ ),
-				  QPoint( cx + HANDLE_SIZE /* zoomFactor */, cy + HANDLE_SIZE /* zoomFactor */ ) );
+	return KoRect( QPoint( int( cx ) - HANDLE_SIZE /* zoomFactor */, int( cy ) - HANDLE_SIZE /* zoomFactor */ ),
+				  QPoint( int( cx ) + HANDLE_SIZE /* zoomFactor */, int( cy ) + HANDLE_SIZE /* zoomFactor */ ) );
 }
 
 void
@@ -70,19 +70,19 @@ VMToolHandle::draw( QPainter& painter, const double zoomFactor )
 		// draw boxes
 		m_nodes[ NODE_LT ] = computeRect( m_bbox.left(), m_bbox.top(), zoomFactor );
 		drawBox( painter, NODE_LT);
-		m_nodes[ NODE_MT ] = computeRect( m_bbox.left() + m_bbox.width() / 2, m_bbox.top(), zoomFactor );
+		m_nodes[ NODE_MT ] = computeRect( m_bbox.left() + m_bbox.width() / 2.0, m_bbox.top(), zoomFactor );
 		drawBox( painter, NODE_MT);
 		m_nodes[ NODE_RT ] = computeRect( m_bbox.right(), m_bbox.top(), zoomFactor );
 		drawBox( painter, NODE_RT);
-		m_nodes[ NODE_RM ] = computeRect( m_bbox.right(), m_bbox.top() + m_bbox.height() / 2, zoomFactor );
+		m_nodes[ NODE_RM ] = computeRect( m_bbox.right(), m_bbox.top() + m_bbox.height() / 2.0, zoomFactor );
 		drawBox( painter, NODE_RM);
 		m_nodes[ NODE_RB ] = computeRect( m_bbox.right(), m_bbox.bottom(), zoomFactor );
 		drawBox( painter, NODE_RB);
-		m_nodes[ NODE_MB ] = computeRect( m_bbox.left() + m_bbox.width() / 2, m_bbox.bottom(), zoomFactor );
+		m_nodes[ NODE_MB ] = computeRect( m_bbox.left() + m_bbox.width() / 2.0, m_bbox.bottom(), zoomFactor );
 		drawBox( painter, NODE_MB);
 		m_nodes[ NODE_LB ] = computeRect( m_bbox.left(), m_bbox.bottom(), zoomFactor );
 		drawBox( painter, NODE_LB);
-		m_nodes[ NODE_LM ] = computeRect( m_bbox.left(), m_bbox.top() + m_bbox.height() / 2, zoomFactor );
+		m_nodes[ NODE_LM ] = computeRect( m_bbox.left(), m_bbox.top() + m_bbox.height() / 2.0, zoomFactor );
 		drawBox( painter, NODE_LM);
 	}
 }

@@ -26,11 +26,11 @@ class KoPoint;
 class VPainter
 {
 public:
-	VPainter( QPaintDevice *, int /*w*/ = 0, int /*h*/ = 0 ) {};
+	VPainter( QPaintDevice *, unsigned int /*w*/ = 0, unsigned int /*h*/ = 0 ) {};
 	virtual ~VPainter() {};
 
 	//
-	virtual void resize( int w, int h ) = 0;
+	virtual void resize( unsigned int w, unsigned int h ) = 0;
 	virtual void begin() = 0;
 	virtual void end() = 0;
 	virtual void blit( const QRect & ) = 0;

@@ -276,7 +276,7 @@ VColor::toQColor() const
 {
 	if( m_colorSpace == rgb )
 	{
-		return QColor( 255 * m_value[0], 255 * m_value[1], 255 * m_value[2]);
+		return QColor( int( 255 * m_value[0] ), int( 255 * m_value[1] ), int( 255 * m_value[2] ));
 	}
 	else
 		return QColor();

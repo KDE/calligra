@@ -46,7 +46,7 @@ VMCmdTranslate::VMCmdTranslate( KarbonPart* part, const VObjectList& objects, do
 	m_mat.translate( d1, d2 );
 }
 
-VMCmdScale::VMCmdScale( KarbonPart* part, const VObjectList& objects, const QPoint &p, double s1, double s2 )
+VMCmdScale::VMCmdScale( KarbonPart* part, const VObjectList& objects, const KoPoint &p, double s1, double s2 )
 	: VMCmdTransform( part, objects, i18n( "Scale Objects" ) )
 {
 	if( m_objects.count() == 1 )
@@ -57,7 +57,7 @@ VMCmdScale::VMCmdScale( KarbonPart* part, const VObjectList& objects, const QPoi
 	m_mat.translate( -p.x(), -p.y() );
 }
 
-VMCmdShear::VMCmdShear( KarbonPart* part, const VObjectList& objects, const QPoint &p, double s1, double s2 )
+VMCmdShear::VMCmdShear( KarbonPart* part, const VObjectList& objects, const KoPoint &p, double s1, double s2 )
 	: VMCmdTransform( part, objects, i18n( "Shear Objects" ) )
 {
 	if( m_objects.count() == 1 )
@@ -68,7 +68,7 @@ VMCmdShear::VMCmdShear( KarbonPart* part, const VObjectList& objects, const QPoi
 	m_mat.translate( -p.x(), -p.y() );
 }
 
-VMCmdRotate::VMCmdRotate( KarbonPart* part, const VObjectList& objects, const QPoint &p, double angle )
+VMCmdRotate::VMCmdRotate( KarbonPart* part, const VObjectList& objects, const KoPoint &p, double angle )
 	: VMCmdTransform( part, objects, i18n( "Rotate Objects" ) )
 {
 	if( m_objects.count() == 1 )

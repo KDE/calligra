@@ -37,7 +37,7 @@
 
 #include <koPoint.h>
 
-VKoPainter::VKoPainter( QPaintDevice *target, int w, int h ) : VPainter( target, w, h ), m_target( target )
+VKoPainter::VKoPainter( QPaintDevice *target, unsigned int w, unsigned int h ) : VPainter( target, w, h ), m_target( target )
 {
 	kdDebug() << "w : " << w << endl;
 	kdDebug() << "h : " << h << endl;
@@ -74,7 +74,7 @@ VKoPainter::~VKoPainter()
 }
 
 void
-VKoPainter::resize( int w, int h )
+VKoPainter::resize( unsigned int w, unsigned int h )
 {
 	if( !m_buffer || w != m_width || h != m_height )
 	{
@@ -428,16 +428,16 @@ VKoPainter::drawVPath( ArtVpath *vec )
 		art_drect_svp( &bbox, strokeSvp );
 
 		// clamp to viewport
-		int x0 = bbox.x0;
+		int x0 = int( bbox.x0 );
 		x0 = QMAX( x0, 0 );
 		x0 = QMIN( x0, m_width );
-		int y0 = bbox.y0;
+		int y0 = int( bbox.y0 );
 		y0 = QMAX( y0, 0 );
 		y0 = QMIN( y0, m_height );
-		int x1 = bbox.x1 + 1;
+		int x1 = int( bbox.x1 ) + 1;
 		x1 = QMAX( x1, 0 );
 		x1 = QMIN( x1, m_width );
-		int y1 = bbox.y1 + 1;
+		int y1 = int( bbox.y1 ) + 1;
 		y1 = QMAX( y1, 0 );
 		y1 = QMIN( y1, m_height );
 
@@ -452,16 +452,16 @@ VKoPainter::drawVPath( ArtVpath *vec )
 		art_drect_svp( &bbox, fillSvp );
 
 		// clamp to viewport
-		int x0 = bbox.x0;
+		int x0 = int( bbox.x0 );
 		x0 = QMAX( x0, 0 );
 		x0 = QMIN( x0, m_width );
-		int y0 = bbox.y0;
+		int y0 = int( bbox.y0 );
 		y0 = QMAX( y0, 0 );
 		y0 = QMIN( y0, m_height );
-		int x1 = bbox.x1 + 1;
+		int x1 = int( bbox.x1 ) + 1;
 		x1 = QMAX( x1, 0 );
 		x1 = QMIN( x1, m_width );
-		int y1 = bbox.y1 + 1;
+		int y1 = int( bbox.y1 ) + 1;
 		y1 = QMAX( y1, 0 );
 		y1 = QMIN( y1, m_height );
 

@@ -38,19 +38,19 @@ public:
 class VMCmdScale : public VMCmdTransform
 {
 public:
-	VMCmdScale( KarbonPart* part, const VObjectList& objects, const QPoint &p, double s1, double s2 );
+	VMCmdScale( KarbonPart* part, const VObjectList& objects, const KoPoint &p, double s1, double s2 );
 };
 
 class VMCmdShear : public VMCmdTransform
 {
 public:
-	VMCmdShear( KarbonPart* part, const VObjectList& objects, const QPoint &p, double s1, double s2 );
+	VMCmdShear( KarbonPart* part, const VObjectList& objects, const KoPoint &p, double s1, double s2 );
 };
 
 class VMCmdRotate : public VMCmdTransform
 {
 public:
-	VMCmdRotate( KarbonPart* part, const VObjectList& objects, const QPoint &p, double angle );
+	VMCmdRotate( KarbonPart* part, const VObjectList& objects, const KoPoint &p, double angle );
 };
 
 #endif

@@ -6,6 +6,7 @@
 #include "vpainterfactory.h"
 #include "vpainter.h"
 #include <koRect.h>
+#include <koPoint.h>
 
 #include "karbon_part.h"
 #include "karbon_view.h"
@@ -67,7 +68,7 @@ VMToolScale::drawTemporaryObject( KarbonView* view )
 	VPainter *painter = view->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
 
-	QPoint lp = view->canvasWidget()->viewportToContents( m_lp );
+	KoPoint lp = view->canvasWidget()->viewportToContents( QPoint( m_lp.x(), m_lp.y() ) );
 
 	KoRect rect = part()->selection().boundingBox( 1 / view->zoomFactor() );
 	// already selected, so must be a handle operation (move, scale etc.)
@@ -78,53 +79,53 @@ VMToolScale::drawTemporaryObject( KarbonView* view )
 		QWMatrix mat;
 		if( VMToolHandle::instance( m_part )->activeNode() == NODE_LT )
 		{
-			m_sp = QPoint( rect.right(), rect.bottom() );
+			m_sp = KoPoint( rect.right(), rect.bottom() );
 			m_s1 = ( rect.right() - lp.x() ) / double( rect.width() );
 			m_s2 = ( rect.bottom() - lp.y() ) / double( rect.height() );
 		}
 		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_MT )
 		{
-			m_sp = QPoint( ( ( rect.right() + rect.left() ) / 2 ), rect.bottom() );
+			m_sp = KoPoint( ( ( rect.right() + rect.left() ) / 2 ), rect.bottom() );
 			m_s1 = ( rect.right() - lp.x() ) / double( rect.width() / 2 );
 			m_s2 = ( rect.bottom() - lp.y() ) / double( rect.height() );
 		}
 		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_RT )
 		{
-			m_sp = QPoint( rect.x(), rect.bottom() );
+			m_sp = KoPoint( rect.x(), rect.bottom() );
 			m_s1 = ( lp.x() - rect.x() ) / double( rect.width() );
 			m_s2 = ( rect.bottom() - lp.y() ) / double( rect.height() );
 		}
 		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_RM)
 		{
-			m_sp = QPoint( rect.x(), ( rect.bottom() + rect.top() )  / 2 );
+			m_sp = KoPoint( rect.x(), ( rect.bottom() + rect.top() )  / 2 );
 			m_s1 = ( lp.x() - rect.x() ) / double( rect.width() );
 			m_s2 = ( rect.bottom() - lp.y() ) / double( rect.height() / 2 );
 		}
 		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_RB )
 		{
-			m_sp = QPoint( rect.x(), rect.y() );
+			m_sp = KoPoint( rect.x(), rect.y() );
 			m_s1 = ( lp.x() - rect.x() ) / double( rect.width() );
 			m_s2 = ( lp.y() - rect.y() ) / double( rect.height() );
 		}
 		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_MB )
 		{
-			m_sp = QPoint( ( ( rect.right() + rect.left() ) / 2 ), rect.y() );
+			m_sp = KoPoint( ( ( rect.right() + rect.left() ) / 2 ), rect.y() );
 			m_s1 = ( rect.right() - lp.x() ) / double( rect.width() / 2 );
 			m_s2 = ( lp.y() - rect.y() ) / double( rect.height() );
 		}
 		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_LB )
 		{
-			m_sp = QPoint( rect.right(), rect.y() );
+			m_sp = KoPoint( rect.right(), rect.y() );
 			m_s1 = ( rect.right() - lp.x() ) / double( rect.width() );
 			m_s2 = ( lp.y() - rect.y() ) / double( rect.height() );
 		}
 		else if( VMToolHandle::instance( m_part )->activeNode() == NODE_LM )
 		{
-			m_sp = QPoint( rect.right(), ( rect.bottom() + rect.top() )  / 2 );
+			m_sp = KoPoint( rect.right(), ( rect.bottom() + rect.top() )  / 2 );
 			m_s1 = ( rect.right() - lp.x() ) / double( rect.width() );
 			m_s2 = ( rect.bottom() - lp.y() ) / double( rect.height() / 2 );
 		}
-		QPoint sp = QPoint( m_sp.x() - view->canvasWidget()->contentsX(), m_sp.y() - view->canvasWidget()->contentsY() );
+		KoPoint sp = KoPoint( m_sp.x() - view->canvasWidget()->contentsX(), m_sp.y() - view->canvasWidget()->contentsY() );
 		mat.translate( sp.x() / view->zoomFactor(), sp.y() / view->zoomFactor());
 		mat.scale( m_s1, m_s2 );
 		mat.translate(	- ( sp.x() + view->canvasWidget()->contentsX() ) / view->zoomFactor(),
@@ -190,7 +191,7 @@ VMToolScale::eventFilter( KarbonView* view, QEvent* event )
 		part()->addCommand(
 			new VMCmdScale(
 				part(),
-				part()->selection(), m_sp / view->zoomFactor(), m_s1, m_s2 ),
+				part()->selection(), m_sp * ( 1.0 / view->zoomFactor() ), m_s1, m_s2 ),
 			true );
 
 		m_isDragging = false;

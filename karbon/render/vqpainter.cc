@@ -16,7 +16,7 @@
 #include <koPoint.h>
 #include <kdebug.h>
 
-VQPainter::VQPainter( QPaintDevice *target, int w, int h ) : VPainter( target, w, h ), m_painter( 0L ), m_target( target ), m_width( w ), m_height( h )
+VQPainter::VQPainter( QPaintDevice *target, unsigned int w, unsigned int h ) : VPainter( target, w, h ), m_painter( 0L ), m_target( target ), m_width( w ), m_height( h )
 {
 	m_zoomFactor = 1;
 	m_index = 0;
@@ -29,7 +29,7 @@ VQPainter::~VQPainter()
 }
 
 void
-VQPainter::resize( int w, int h )
+VQPainter::resize( unsigned int w, unsigned int h )
 {
 	m_width = w;
 	m_height = h;
