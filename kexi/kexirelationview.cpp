@@ -49,6 +49,9 @@ KexiRelationView::KexiRelationView(QWidget *parent, const char *name)
 void
 KexiRelationView::addTable(QString table, QStringList columns)
 {
+	if(m_tables.contains(table))
+		return;
+
 	RelationSource s;
 	s.table = table;
 
@@ -122,6 +125,9 @@ KexiRelationView::drawConnection(QPainter *p, SourceConnection *conn, bool paint
 
 	int srcY = mapFromGlobal(QPoint(0, (tSrc->globalY((*conn).srcField)))).y();
 	int rcvY = mapFromGlobal(QPoint(0, (tRcv->globalY((*conn).rcvField)))).y();
+	
+	kdDebug() << "KexiRelationView::drawConnection(): unmaped rcvY = " << tRcv->globalY((*conn).rcvField) << endl;
+
 
 //	p->drawLine(0, srcY, 0, rcvY);
 
@@ -130,6 +136,11 @@ KexiRelationView::drawConnection(QPainter *p, SourceConnection *conn, bool paint
 
 	int rcvX = m_tables[(*conn).rcvTable].geometry.x();
 	int rcvW = m_tables[(*conn).rcvTable].geometry.width();
+
+	kdDebug() << "KexiRelationView::drawConnection(): srcX = " << srcX << endl;
+	kdDebug() << "KexiRelationView::drawConnection(): rcvX = " << rcvX << endl;
+	kdDebug() << "KexiRelationView::drawConnection(): srcY = " << srcY << endl;
+	kdDebug() << "KexiRelationView::drawConnection(): rcvY = " << rcvY << endl;
 
 	if(paint)
 		p->setPen(black);
@@ -183,6 +194,8 @@ KexiRelationView::drawConnection(QPainter *p, SourceConnection *conn, bool paint
 			(*conn).geometry = QRect(rcvX + rcvW, srcY - 4, srcX, rcvY + 4);
 		}
 	}
+	
+	kdDebug() << "KexiRelationView::drawConnection(): geometry: " << (*conn).geometry.x() << ":" << (*conn).geometry.width() << endl;
 	
 }
 
@@ -303,6 +316,7 @@ KexiRelationViewTable::KexiRelationViewTable(KexiRelationView *parent, QString t
 int
 KexiRelationViewTable::globalY(QString item)
 {
+	kdDebug() << "KexiRelationViewTable::globalY() looking up " << item << endl;
 	QListViewItem *i = findItem(item, 0);
 	if(i)
 	{

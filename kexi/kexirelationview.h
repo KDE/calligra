@@ -65,6 +65,8 @@ class KexiRelationView : public QScrollView
 		void		addTable(QString table, QStringList columns);
 		void		addConnection(SourceConnection con);
 
+		ConnectionList	getConnections() { return m_connections; };
+
 	protected:
 		void		drawContents(QPainter *p, int cx, int cy, int cw, int ch);
 		void		drawSource(QPainter *p, RelationSource src);

@@ -29,6 +29,7 @@
 #include "kexiformmanager.h"
 
 class KexiDoc;
+class KoStore;
 
 struct Credentials
 {
@@ -59,8 +60,10 @@ public:
 	KexiFormManager *formManager() {return m_formManager;}
 	QString url() { return m_url; }
 	bool modified() { return m_modified; }
+
 signals:
 	void docModified();
+	void saving(KoStore *);
 
 protected:
 	void setCurrentDB(){} ;

@@ -48,7 +48,7 @@ KexiProject::saveProject()
 	{
 		return false;
 	}
-	
+
 	QDomDocument domDoc("KexiProject");
 	domDoc.appendChild(domDoc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
 	
@@ -93,14 +93,18 @@ KexiProject::saveProject()
 	
 	if(store)
 	{
-		store->open("/project.xml");
-		store->write(data);
-		store->close();
+		if(store->open("/project.xml"))
+		{
+			store->write(data);
+			store->close();
+			emit saving(store);
+		}
+		
 		delete store;
 		m_modified = false;
 		return true;
 	}
-	
+
 	return false;
 }
 

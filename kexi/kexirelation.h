@@ -20,14 +20,17 @@
 #ifndef KEXIRELATION_H
 #define KEXIRELATION_H
 
+#include <qvaluelist.h>
+
 #include "kexidialogbase.h"
+#include "kexirelationview.h"
 
 class QComboBox;
+class KoStore;
 class KexiDB;
 
-class KexiRelationView;
 
-
+typedef QValueList<SourceConnection> RelationList;
 
 class KexiRelation : public KexiDialogBase
 {
@@ -39,8 +42,12 @@ class KexiRelation : public KexiDialogBase
 	
 		virtual KXMLGUIClient *guiClient(){return new KXMLGUIClient();}
 
+		static RelationList *	projectRelations();
+		static bool		storeRelations(RelationList relations, KoStore *store);
+
 	public slots:
 		void			slotAddTable();
+		void			slotSave(KoStore *store);
 	
 	private:
 		KexiDB			*m_db;

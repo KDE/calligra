@@ -671,6 +671,11 @@ void KexiTableView::contentsMousePressEvent( QMouseEvent* e )
 	}
 	if(m_pContextMenu && e->button() == RightButton)
 		m_pContextMenu->exec(QCursor::pos());
+
+	if(columnType(m_curCol) == QVariant::Bool)
+	{
+		itemAt(m_curRow)->setValue(m_curCol, true);
+	}
 }
 
 void KexiTableView::contentsMouseMoveEvent( QMouseEvent *e )

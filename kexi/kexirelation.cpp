@@ -17,16 +17,21 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <klocale.h>
-
 #include <qlayout.h>
 #include <qcombobox.h>
 #include <qpushbutton.h>
+#include <qdom.h>
+
+#include <klocale.h>
+#include <kdebug.h>
+
+#include <koStore.h>
 
 #include "kexiDB/kexidb.h"
 #include "kexiDB/kexidbrecord.h"
 
 #include "kexiapplication.h"
+#include "kexiproject.h"
 #include "kexirelationview.h"
 #include "kexirelation.h"
 
@@ -49,6 +54,22 @@ KexiRelation::KexiRelation(QWidget *parent, const char *name)
 	m_view = new KexiRelationView(this);
 	m_view->show();
 
+	connect(kexi->project(), SIGNAL(saving(KoStore *)), this, SLOT(slotSave(KoStore *)));
+
+	RelationList *rl = projectRelations();
+	if(rl)
+	{
+		for(RelationList::Iterator it = rl->begin(); it != rl->end(); it++)
+		{
+			m_tableCombo->setCurrentText((*it).srcTable);
+			slotAddTable();
+			m_tableCombo->setCurrentText((*it).rcvTable);
+			slotAddTable();
+
+			m_view->addConnection((*it));
+		}
+	}
+
 	QGridLayout *g = new QGridLayout(this);
 	g->addWidget(m_tableCombo,	0,	0);
 	g->addWidget(btnAdd,		0,	1);
@@ -68,6 +89,116 @@ KexiRelation::slotAddTable()
 	
 	delete r;
 	m_tableCombo->removeItem(m_tableCombo->currentItem());
+}
+
+static RelationList*
+KexiRelation::projectRelations()
+{
+	KoStore* store = KoStore::createStore(kexi->project()->url(), KoStore::Read, "application/x-kexi");
+	
+	if(!store)
+	{
+		return 0;
+	}
+	
+	if(!store->open("/relations.xml"))
+		return 0;
+
+	QDomDocument inBuf;
+	
+	//error reporting
+	QString errorMsg;
+	int errorLine;
+	int errorCol;
+	
+	bool parsed = inBuf.setContent(store->device(), false, &errorMsg, &errorLine, &errorCol);
+	store->close();
+	delete store;
+
+	if(!parsed)
+	{
+		kdDebug() << "coudn't parse:" << endl;
+		kdDebug() << "error: " << errorMsg << " line: " << errorLine << " col: " << errorCol << endl; 
+		return 0;
+	}
+
+	RelationList *list = new RelationList();
+
+	QDomElement element = inBuf.namedItem("Relations").toElement();
+	for(QDomNode n = element.firstChild(); !n.isNull(); n = n.nextSibling())
+	{
+		SourceConnection con;
+		QDomElement sourceTable = n.namedItem("sourcetable").toElement();
+		QDomElement sourceField = n.namedItem("sourcefield").toElement();
+		QDomElement targetTable = n.namedItem("targettable").toElement();
+		QDomElement targetField = n.namedItem("targetfield").toElement();
+		
+		con.srcTable = sourceTable.text();
+		con.srcField = sourceField.text();
+		con.rcvTable = targetTable.text();
+		con.rcvField = targetTable.text();
+		list->append(con);
+	}
+	
+	return list;
+}
+
+static bool
+KexiRelation::storeRelations(RelationList relations, KoStore *store)
+{
+	QDomDocument domDoc("Relations");
+	domDoc.appendChild(domDoc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
+
+
+	QDomElement relationsElement = domDoc.createElement("Relations");
+	domDoc.appendChild(relationsElement);
+
+	for(RelationList::Iterator it = relations.begin(); it != relations.end(); it++)
+	{
+		QDomElement relationElement = domDoc.createElement("Relation");
+		relationsElement.appendChild(relationElement);
+
+		QDomElement sourceTable = domDoc.createElement("sourcetable");
+		relationElement.appendChild(sourceTable);
+		QDomText tSourceTable = domDoc.createTextNode((*it).srcTable);
+		sourceTable.appendChild(tSourceTable);
+
+		QDomElement sourceField = domDoc.createElement("sourcefield");
+		relationElement.appendChild(sourceField);
+		QDomText tSourceField = domDoc.createTextNode((*it).srcField);
+		sourceField.appendChild(tSourceField);
+
+		QDomElement targetTable = domDoc.createElement("targettable");
+		relationElement.appendChild(targetTable);
+		QDomText tTargetTable = domDoc.createTextNode((*it).rcvTable);
+		targetTable.appendChild(tTargetTable);
+
+		QDomElement targetField = domDoc.createElement("targetfield");
+		relationElement.appendChild(targetField);
+		QDomText tTargetField = domDoc.createTextNode((*it).rcvField);
+		targetField.appendChild(tTargetField);
+		
+		kdDebug() << "KexiRelationView::storeRelatoins(): " << (*it).rcvField << endl;
+	}
+
+	QByteArray data = domDoc.toCString();
+	data.resize(data.size()-1);
+
+	if(store)
+	{
+		store->open("/relations.xml");
+		store->write(data);
+		store->close();
+	}
+	
+	return false;
+}
+
+void
+KexiRelation::slotSave(KoStore *store)
+{
+	kdDebug() << "KexiRelation::slotSave()" << endl;
+	storeRelations(m_view->getConnections(), store);
 }
 
 KexiRelation::~KexiRelation()
