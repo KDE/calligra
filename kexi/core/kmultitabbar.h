@@ -38,8 +38,12 @@ class QPixmap;
 class QPainter;
 class QFrame;
 
+class KMultiTabBarPrivate;
+class KMultiTabBarTabPrivate;
+class KMultiTabBarButtonPrivate;
+class KMultiTabBarInternal;
 
-class KEXICORE_EXPORT KMultiTabBar: public QWidget
+class KMultiTabBar: public QWidget
 {
 	Q_OBJECT
 public:
@@ -69,9 +73,10 @@ private:
 	QBoxLayout *l;
 	QFrame *btnTabSep;	
 	KMultiTabBarPosition position;
+	KMultiTabBarPrivate *d;
 };
 
-class KEXICORE_EXPORT KMultiTabBarButton: public QPushButton
+class KMultiTabBarButton: public QPushButton
 {
 	Q_OBJECT
 public:
@@ -92,6 +97,7 @@ protected:
 
 private:
 	int m_id;
+	KMultiTabBarButtonPrivate *d;
 signals:
 	void clicked(int);
 protected slots:
@@ -99,7 +105,7 @@ protected slots:
 };
 
 
-class KEXICORE_EXPORT KMultiTabBarTab: public KMultiTabBarButton
+class KMultiTabBarTab: public KMultiTabBarButton
 {
 	Q_OBJECT
 public:
@@ -113,46 +119,17 @@ public:
 private:
 	bool m_showActiveTabText;
 	int m_expandedSize;
+	KMultiTabBarTabPrivate *d;
 protected:
 	void updateState();
 	virtual void drawButton(QPainter *);
+	virtual void drawButtonLabel(QPainter *);
 	void drawButtonStyled(QPainter *);
 	void drawButtonClassic(QPainter *);
 protected slots:
 	virtual void slotClicked();
 public slots:
 	virtual void setIcon(const QString&);
-};
-
-class KEXICORE_EXPORT KMultiTabBarInternal: public QScrollView
-{
-	Q_OBJECT
-public:
-	KMultiTabBarInternal(QWidget *parent,KMultiTabBar::KMultiTabBarBasicMode bm);
-	int appendTab(const QPixmap &,int=-1,const QString& =QString::null);
-	KMultiTabBarTab *getTab(int);
-	void removeTab(int);
-	void setPosition(enum KMultiTabBar::KMultiTabBarPosition pos);
-	void setStyle(enum KMultiTabBar::KMultiTabBarStyle style);
-	void showActiveTabTexts(bool show);
-	QPtrList<KMultiTabBarTab>* tabs(){return &m_tabs;}
-private:
-	friend class KMultiTabBar;
-	QHBox *box;
-	QPtrList<KMultiTabBarTab> m_tabs;
-	enum KMultiTabBar::KMultiTabBarPosition position;
-	bool m_showActiveTabTexts;
-	enum  KMultiTabBar::KMultiTabBarStyle m_style;
-protected:
-	virtual void drawContents ( QPainter *, int, int, int, int);
-	
-	/**
-	 * [contentsM|m]ousePressEvent are reimplemented from QScrollView 
-	 * in order to ignore all mouseEvents on the viewport, so that the
-	 * parent can handle them.
-	 */
-	virtual void contentsMousePressEvent(QMouseEvent *);
-	virtual void mousePressEvent(QMouseEvent *);
 };
 
 #endif
