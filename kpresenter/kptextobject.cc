@@ -499,7 +499,7 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
             if(e.hasAttribute(attrAlign))
             {
                 int tmpAlign=e.attribute( attrAlign ).toInt();
-                if(tmpAlign==1)
+                if(tmpAlign==1 || tmpAlign==0 /* a kpresenter version I think a cvs version saved leftAlign = 0 for header/footer */)
                     lastParag->setAlignment(Qt::AlignLeft);
                 else if(tmpAlign==2)
                     lastParag->setAlignment(Qt::AlignRight);
