@@ -17,6 +17,8 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <kurl.h>
+
 #include <kprpage.h>
 #include <kpresenter_view.h>
 #include "KPresenterPageIface.h"
@@ -2461,11 +2463,11 @@ void KPrPage::recalcPageNum()
     }
 }
 
-void KPrPage::changePicture( const QString & filename )
+void KPrPage::changePicture( const KURL & url )
 {
     // filename has been chosen in KPresenterView with a filedialog,
     // so we know it exists
-    KoPicture image = m_doc->getPictureCollection()->loadPicture( filename );
+    KoPicture image = m_doc->getPictureCollection()->downloadPicture( url );
 
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )

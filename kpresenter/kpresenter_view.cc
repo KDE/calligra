@@ -4026,13 +4026,8 @@ void KPresenterView::changePicture( const QString & filename )
 
     if( url.isEmpty() || !url.isValid())
       return;
-
-    QString file;
-    if (!KIO::NetAccess::download( url, file ))
-        return;
-
-    if ( !file.isEmpty() /*&& (file!=filename)*/)
-      m_canvas->changePicture( file );
+    
+    m_canvas->changePicture( url );
 }
 
 /*====================== resize event ===========================*/

@@ -27,6 +27,7 @@
 #include "kpbackground.h"
 #include <koRect.h>
 #include <kostyle.h>
+class KURL;
 class KPTextView;
 class KPObject;
 class KPresenterDoc;
@@ -181,7 +182,7 @@ public:
 
     void slotRepaintVariable();
     void recalcPageNum();
-    void changePicture( const QString & filename );
+    void changePicture( const KURL & url );
     void insertPicture( const QString &, int _x = 10, int _y = 10 );
     void insertPicture( const QString &_file, const KoRect &_rect );
 

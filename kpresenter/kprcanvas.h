@@ -34,6 +34,7 @@
 #include <koRect.h>
 #include <qrichtext_p.h>
 
+class KURL;
 class KoTextFormatInterface;
 class KPresenterView;
 class KPresenterDoc;
@@ -201,7 +202,7 @@ public:
     void insertPie( const QRect& );
     KPTextObject* insertTextObject( const QRect& );
     void insertPicture( const QRect &_r );
-    void changePicture( const QString & filename );
+    void changePicture( const KURL & url );
 
     int numberOfObjectSelected() const;
     KPObject *getSelectedObj() const;

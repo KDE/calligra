@@ -33,6 +33,7 @@
 #include <qrect.h>
 #include <qsize.h>
 #include <qpoint.h>
+#include <kurl.h>
 #include "styledia.h"
 #include "kprcanvas.h"
 #include "kprcanvas.moc"
@@ -5894,10 +5895,10 @@ void KPrCanvas::scrollCanvas(const KoRect & oldPos)
     }
 }
 
-void KPrCanvas::changePicture( const QString & filename )
+void KPrCanvas::changePicture( const KURL & url )
 {
-    m_activePage->changePicture( filename );
-    m_view->kPresenterDoc()->stickyPage()->changePicture( filename );
+    m_activePage->changePicture( url );
+    m_view->kPresenterDoc()->stickyPage()->changePicture( url );
 }
 
 unsigned int KPrCanvas::objNums() const
