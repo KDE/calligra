@@ -29,15 +29,17 @@
 #include <qregexp.h>
 #include <qptrlist.h>
 #include <applixspreadimport.h>
-#include <applixspreadimport.moc>
 #include <kdebug.h>
 #include <math.h>
+#include <koFilterChain.h>
+#include <kgenericfactory.h>
+
+typedef KGenericFactory<APPLIXSPREADImport, KoFilter> APPLIXSPREADImportFactory;
+K_EXPORT_COMPONENT_FACTORY( libapplixspreadimport, APPLIXSPREADImportFactory( "applixspreadimport" ) );
 
 
-
-
-APPLIXSPREADImport::APPLIXSPREADImport (KoFilter *parent, const char *name) :
-                     KoFilter(parent, name)
+APPLIXSPREADImport::APPLIXSPREADImport ( QObject */*parent*/, const char* /*name*/, const QStringList& )
+    : KoFilter()
 {
 }
 
@@ -54,24 +56,18 @@ QString APPLIXSPREADImport::nextLine( QTextStream & stream )
     return s;
 }
 
-bool
-APPLIXSPREADImport::filter (
-   const QString &fileIn,
-   const QString &fileOut,
-   const QString &from,
-   const QString &to,
-   const QString &)
+KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QCString& from, const QCString& to )
 {
 
     if (to != "application/x-kspread" || from != "application/x-applixspread")
-        return false;
+        return KoFilter::NotImplemented;
 
-    QFile in (fileIn);
+    QFile in (m_chain->inputFile());
     if (!in.open(IO_ReadOnly))
     {
         kdError(30502) << "Unable to open input file!" << endl;
         in.close();
-        return false;
+        return KoFilter::FileNotFound;
     }
 
     QString str;
@@ -110,7 +106,7 @@ APPLIXSPREADImport::filter (
     /**************************************************************************
      * Read header                                                            *
      **************************************************************************/
-    if (! readHeader (stream)) return false;
+    if (! readHeader (stream)) return KoFilter::StupidError;
 
 
     while (!stream.atEnd ())
@@ -648,22 +644,20 @@ APPLIXSPREADImport::filter (
 
     printf ("Text %s\n", (const char *) str.utf8());
 
-    KoStore out=KoStore(QString(fileOut), KoStore::Write);
+    KoStoreDevice* out=m_chain->storageFile( "root", KoStore::Write );
 
-    if (!out.open("root"))
+    if (!out)
     {
-      kdError(38000/*30502*/) << "Unable to open output file!" << endl;
+        kdError(38000/*30502*/) << "Unable to open output file!" << endl;
         in.close  ();
-        out.close ();
-        return false;
+        return KoFilter::StorageCreationError;
     }
 
     QCString cstring = str.utf8();
-    out.write ( cstring, cstring.length() );
+    out->writeBlock ( cstring, cstring.length() );
 
-    out.close ();
     in.close  ();
-    return true;
+    return KoFilter::OK;
 }
 
 
@@ -1338,3 +1332,5 @@ APPLIXSPREADImport::translateColumnNumber (QString colstr)
    printf ("translateColumnNumber : <%s> -> %d\n", colstr.latin1(), icol);
    return icol;
 }
+
+#include <applixspreadimport.moc>
