@@ -308,12 +308,6 @@ QWidget* PropertyEditor::createOutlineWidget (QWidget* parent) {
     QButtonGroup *group = new QButtonGroup (w);
     group->move (80, 140);
 
-#if NEWKDE
-    KIconLoader* loader = KGlobal::iconLoader ();
-#else
-    KIconLoader* loader = kapp->getIconLoader ();
-#endif
-
     ellipseKind[0] = new QPushButton (group);
     ellipseKind[0]->setToggleButton (true);
     ellipseKind[0]->setPixmap (UserIcon ("ellipse1"));
@@ -353,12 +347,6 @@ QWidget* PropertyEditor::createOutlineWidget (QWidget* parent) {
 
     QButtonGroup *group = new QButtonGroup (w);
     group->move (80, 140);
-
-#if NEWKDE
-    KIconLoader* loader = KGlobal::iconLoader ();
-#else
-    KIconLoader* loader = kapp->getIconLoader ();
-#endif
 
     textAlign[0] = new QPushButton (group);
     textAlign[0]->setToggleButton (true);
