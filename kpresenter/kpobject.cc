@@ -101,12 +101,8 @@ QDomDocumentFragment KPObject::save( QDomDocument& doc )
     elem.setAttribute("effect", static_cast<int>( effect ));
     elem.setAttribute("effect2", static_cast<int>( effect2 ));
     fragment.appendChild(elem);
-    elem=doc.createElement("PRESNUM");
-    elem.setAttribute("value", presNum);
-    fragment.appendChild(elem);
-    elem=doc.createElement("ANGLE");
-    elem.setAttribute("value", angle);
-    fragment.appendChild(elem);
+    fragment.appendChild(KPObject::createValueElement("PRESNUM", presNum, doc));
+    fragment.appendChild(KPObject::createValueElement("ANGLE", angle, doc));
     elem=doc.createElement("DISAPPEAR");
     elem.setAttribute("effect", static_cast<int>( effect3 ));
     elem.setAttribute("doit", static_cast<int>( disappear ));

@@ -317,12 +317,23 @@ void KPPartObject::setFillType( FillType _fillType )
 /*================================================================*/
 QDomDocumentFragment KPPartObject::save( QDomDocument& doc )
 {
-    QDomDocumentFragment fragment=KPObject::save(doc);
+    QDomDocumentFragment fragment=doc.createDocumentFragment();
+    QDomElement elem=doc.createElement("EFFECTS");
+    elem.setAttribute("effect", static_cast<int>( effect ));
+    elem.setAttribute("effect2", static_cast<int>( effect2 ));
+    fragment.appendChild(elem);
     fragment.appendChild(KPObject::createPenElement("PEN", pen, doc));
     fragment.appendChild(KPObject::createBrushElement("BRUSH", brush, doc));
+    fragment.appendChild(KPObject::createValueElement("PRESNUM", presNum, doc));
+    fragment.appendChild(KPObject::createValueElement("ANGLE", angle, doc));
     fragment.appendChild(KPObject::createValueElement("FILLTYPE", static_cast<int>(fillType), doc));
     fragment.appendChild(KPObject::createGradientElement("GRADIENT", gColor1, gColor2, static_cast<int>(gType),
                                                          unbalanced, xfactor, yfactor, doc));
+    elem=doc.createElement("DISAPPEAR");
+    elem.setAttribute("effect", static_cast<int>( effect3 ));
+    elem.setAttribute("doit", static_cast<int>( disappear ));
+    elem.setAttribute("num", disappearNum);
+    fragment.appendChild(elem);
     return fragment;
 }
 
