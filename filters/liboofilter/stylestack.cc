@@ -64,6 +64,7 @@ void StyleStack::restore()
 
 void StyleStack::pop()
 {
+    Q_ASSERT( !m_stack.isEmpty() );
     m_stack.pop_back();
 #ifdef DEBUG_STYLESTACK
     kdDebug(30519) << "pop -> count=" << m_stack.count() << endl;
