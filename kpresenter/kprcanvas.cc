@@ -719,14 +719,13 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     if ( deSelAll && !( e->state() & ShiftButton ) && !( e->state() & ControlButton ) )
                         deSelectAllObj();
 
-                    if ( overObject ) {
-                        if ( kpobject && !(e->state() & ShiftButton)) {
+                    if ( overObject && kpobject) {
+                        if ( !(e->state() & ShiftButton)) {
                             selectObj( kpobject );
                             raiseObject( kpobject );
 			}
-                        else if ( kpobject && (e->state() & ShiftButton)) {
+                        else
                             deSelectObj( kpobject );
-			}
                     }
                     else {
                         modType = MT_NONE;
