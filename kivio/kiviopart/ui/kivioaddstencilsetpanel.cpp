@@ -146,7 +146,7 @@ namespace Kivio {
 
   void AddStencilSetPanel::changeStencilSet(QListViewItem* li)
   {
-    if(!li || li->text(1).isEmpty()) {
+    if(!li || !li->parent()) {
       return;
     }
     
