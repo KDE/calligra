@@ -4,6 +4,7 @@
   <!ENTITY package "koffice"> 
   <!ENTITY % addindex "IGNORE">
   <!ENTITY % English "INCLUDE">
+  <!ENTITY dataeditor "Data Editor">
 ]>
 
 <book lang="&language;">
@@ -30,7 +31,7 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2005-03-13</date>
+<date>2005-03-18</date>
 <releaseinfo>1.4</releaseinfo>
 
 <abstract>
@@ -63,7 +64,7 @@ to allow visualization of spreadsheet data. But it is also possible to use
 
 <para>
 &kchart; is a tool for visualizing numerical data. It can be used
-as a standalone application with a simple data editor. But as a
+as a standalone application with a simple &dataeditor;. But as a
 &koffice; component it offers very flexible integration. &kspread;
 uses the &kchart; component for charts and diagrams. &kspread;
 can be seen as a very powerful data provider for &kchart; input.
@@ -113,13 +114,44 @@ toolbar configuration and page layout for printing.
 <para>
 Note that data editing is not available if you use &kchart; from
 within &kspread; because all data is provided by the spreadsheet.
-As a standalone application the data editor is an important part
+As a standalone application the &dataeditor; is an important part
 of the application.
 </para>
 </sect2>
 <sect2 id="dataeditorinterface">
-<title>The Data Editor</title>
+<title>The &dataeditor;</title>
 <para>
+The &dataeditor; can be reached by selecting <menuchoice>
+<guimenu>Edit</guimenu><guimenuitem>Edit Data...</guimenuitem>
+</menuchoice> from the menu.
+</para>
+<screenshot>
+<screeninfo>&dataeditor; in stand alone mode</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-dataeditor.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+The &dataeditor; can be used to set all values. You can also define
+the number of rows and columns.
+</para>
+<para> Depending on the chart type rows and columns have different
+representations. Each row can generally be considered to be one data
+series or data set while each column represents the values of all
+data sets at a certain location.
+</para>
+<para>
+The name of a data set can be changed by clicking on the row header
+(left of the first column with values). The name of a column can
+be changed by clicking on the column header (above the first
+row).
+</para>
+<para>
+The number of rows and columns can be adjusted to fit the needs.
+Since version 1.4 the restriction to 16 rows and 16 columns has been
+eliminated.
 </para>
 </sect2>
 <sect2 id="configurationinterface">
