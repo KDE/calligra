@@ -294,6 +294,15 @@ void KPrPage::loadOasis(KoOasisContext & context )
     KoStyleStack& styleStack = context.styleStack();
     kdDebug()<<"KPrPage::loadOasis()\n";
     styleStack.setTypeProperties( "drawing-page" );
+
+#if MASTERPAGE
+    if ( styleStack.hasAttributeNS( KoXmlNS::presentation, "background-visible" ) )
+    {
+        const QString str = styleStack.attributeNS( KoXmlNS::presentation, "background-visible" );
+        m_useMasterBackground = str == "true" ? true : false;
+    }
+#endif
+    
     if ( styleStack.hasAttributeNS( KoXmlNS::presentation, "visibility" ) )
     {
         const QString str = styleStack.attributeNS( KoXmlNS::presentation, "visibility" );
@@ -504,7 +513,11 @@ bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage
 QString KPrPage::saveOasisPageStyle( KoStore *store, KoGenStyles& mainStyles ) const
 {
     KoGenStyle stylepageauto( KPresenterDoc::STYLE_BACKGROUNDPAGEAUTO, "drawing-page" );
+#if MASTERPAGE
+    stylepageauto.addProperty( "presentation:background-visible", m_useMasterBackground == true ? "true" : "false" );
+#else
     stylepageauto.addProperty( "presentation:background-visible", "true" ); //for the moment it's not implemented into kpresenter
+#endif
     stylepageauto.addProperty( "presentation:background-objects-visible", "true" );
     QString transition = saveOasisPageEffect();
     if ( !transition.isEmpty() )
@@ -2669,7 +2682,11 @@ QDomElement KPrPage::saveObjects( QDomDocument &doc, QDomElement &objects, doubl
             continue;
         QDomElement object=doc.createElement("OBJECT");
         object.setAttribute("type", static_cast<int>( oIt.current()->getType() ));
+#if MASTERPAGE        
+        bool _sticky = this->m_masterPage == 0;
+#else
         bool _sticky = oIt.current()->isSticky();
+#endif
         if (_sticky)
             object.setAttribute("sticky", static_cast<int>(_sticky));
         //QPoint orig =zoomHandler->zoomPoint(oIt.current()->getOrig());

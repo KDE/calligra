@@ -121,8 +121,22 @@ void KPBackGround::reload()
 
 QDomElement KPBackGround::save( QDomDocument &doc, const bool saveAsKOffice1Dot1 )
 {
+#if MASTERPAGE
+    QString tag = m_page->masterPage() == 0 ? "MASTERPAGE" : "PAGE";
+    QDomElement page=doc.createElement( tag );
+    QDomElement element;
+
+    if ( m_page->getUseMasterBackground() )
+    {
+        element=doc.createElement("BACKMASTER");
+        page.appendChild(element);
+    }
+    else
+    {
+#else
     QDomElement page=doc.createElement("PAGE");
     QDomElement element;
+#endif
 
     if (backType!=BT_COLOR) {
         element=doc.createElement("BACKTYPE");
@@ -177,6 +191,10 @@ QDomElement KPBackGround::save( QDomDocument &doc, const bool saveAsKOffice1Dot1
         backPicture.getKey().saveAttributes( element );
         page.appendChild( element );
     }
+#if MASTERPAGE
+    }
+#endif
+
 
     return page;
 }
@@ -428,7 +446,18 @@ void KPBackGround::loadOasis(KoOasisContext & context )
 
 void KPBackGround::load( const QDomElement &element )
 {
+#if MASTERPAGE
+    QDomElement e=element.namedItem("BACKMASTER").toElement();
+    if ( !e.isNull() )
+    {
+        m_page->setUseMasterBackground( true );
+    }
+    else
+    {
+    e=element.namedItem("BACKTYPE").toElement();
+#else    
     QDomElement e=element.namedItem("BACKTYPE").toElement();
+#endif
     if(!e.isNull()) {
         int tmp=0;
         if(e.hasAttribute("value"))
@@ -582,6 +611,9 @@ void KPBackGround::load( const QDomElement &element )
             backPicture = pictureCollection()->loadPicture( _fileName ); // load from disk !
         }
     }
+#if MASTERPAGE
+    }
+#endif
 }
 
 void KPBackGround::drawBackColor( QPainter *_painter, const QSize& ext, const QRect& crect )

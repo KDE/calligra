@@ -74,6 +74,13 @@ public:
              BackView backPicView, bool _unbalanced,
              int _xfactor, int _yfactor, KPrPage *m_page  );
 
+    KPBackGround::Settings getBackGround() const;
+#if MASTERPAGE
+    bool getUseMasterBackground() const;
+#endif
+
+protected:
+    void showEvent( QShowEvent *e );
     QColor getBackColor1() const;
     QColor getBackColor2() const;
     BCType getBackColorType() const;
@@ -83,13 +90,6 @@ public:
     bool getBackUnbalanced() const;
     int getBackXFactor() const;
     int getBackYFactor() const;
-    KPBackGround::Settings getBackGround() const;
-#if MASTERPAGE
-    bool getUseMasterBackground() const;
-#endif
-
-protected:
-    void showEvent( QShowEvent *e );
 private:
     QLabel *picPreview;
 	KSqueezedTextLabel *lPicName;
