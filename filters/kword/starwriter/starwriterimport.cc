@@ -272,10 +272,11 @@ bool StarWriterImport::parseText(QByteArray n)
 {
     QByteArray s;
     Q_UINT16 len;
+    Q_UINT32 p;
     QString text;
-    //Q_UINT16 attributeStart, attributeEnd, formatPos, formatLen;
-    //QString pAttributes, cAttributes, tempCAttributes;
-    //QValueList<Q_UINT16, Q_UINT16, QString> cAttributesList;
+    // Q_UINT16 attributeStart, attributeEnd, formatPos, formatLen;
+    // QString pAttributes, cAttributes, tempCAttributes;
+    // QStringList cAttributesList;
 
     // Retrieve the paragraph (text-only)
     len = readU16(n, 0x09);
@@ -285,8 +286,14 @@ bool StarWriterImport::parseText(QByteArray n)
 
     /*
     // Retrieve paragraph and character attributes
-    // FIXME: parse 'S' sections and write to pAttributes
-    // FIXME: parse 'A' sections and fill cAttributesList
+    P = len;
+    while (n[p] == 'S') {
+        p += 0x04;
+        // FIXME: parse 'A' sub-sections and write to pAttributes
+    }
+    while (n[p] == 'A') {
+        // FIXME: parse 'A' sections and fill cAttributesList
+    }
     // Parse list
     while ((!cAttributesList.isEmpty()) || (formatPos < len)) {
         formatLen = 65535;
