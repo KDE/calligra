@@ -19,6 +19,7 @@
 #include <klocale.h>
 #include <kbuttonbox.h>
 #include <kfiledialog.h>
+#include <kglobal.h>
 
 #include <qhbox.h>
 #include <qvbox.h>
@@ -86,7 +87,7 @@ void KoTemplateChooseDia::getGroups()
 	QStringList dirs = KGlobal::dirs()->getResourceDirs(template_type);
 	for (QStringList::ConstIterator it = dirs.begin(); it != dirs.end(); it++) {
 	    QFile templateInf(*it + ".templates");
-	    
+	
 	    if (templateInf.open(IO_ReadOnly)) {
 		while (!templateInf.atEnd())
 		    {
