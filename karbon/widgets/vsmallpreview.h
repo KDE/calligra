@@ -28,9 +28,7 @@
 
 class QFrame;
 class QLabel;
-class QPixmap;
 class VFill;
-class VKoPainter;
 class VStroke;
 
 class VSmallPreview : public QWidget
@@ -52,8 +50,6 @@ private:
 	QFrame *m_strokeFrame;
 	QLabel *m_fillLabel;
 	QLabel *m_strokeLabel;
-	QPixmap m_pixmap;
-	VKoPainter* m_painter;
 	const VFill *m_fill;
 	const VStroke *m_stroke;
 };

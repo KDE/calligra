@@ -26,10 +26,13 @@
 #include <qpixmap.h>
 
 #include <klocale.h>
+#include <koPoint.h>
 
 #include "vcolor.h"
 #include "vfill.h"
+#include "vgradient.h"
 #include "vkopainter.h"
+#include "vpattern.h"
 #include "vstroke.h"
 
 #include "vsmallpreview.h"
@@ -57,14 +60,10 @@ VSmallPreview::VSmallPreview( QWidget* parent, const char* name )
 
 	m_fill = new VFill();
 	m_stroke = new VStroke();
-
-	m_pixmap.resize( m_fillFrame->width(), m_fillFrame->height() );
-	m_painter = new VKoPainter( &m_pixmap, m_fillFrame->width(), m_fillFrame->height() );
 }
 
 VSmallPreview::~VSmallPreview()
 {
-	delete( m_painter );
 }
 
 void
@@ -88,8 +87,11 @@ void
 VSmallPreview::drawFill( const VFill &f )
 {
 	VFill fill;
-	fill = f;
 	VStroke stroke;
+	
+	QPixmap m_pixmap;
+	m_pixmap.resize( m_fillFrame->width(), m_fillFrame->height() );
+	VKoPainter* m_painter = new VKoPainter( &m_pixmap, m_fillFrame->width(), m_fillFrame->height() );
 
 	m_painter->begin();
 	m_painter->setPen( Qt::NoPen );
@@ -172,6 +174,8 @@ VSmallPreview::drawFill( const VFill &f )
 	m_painter->end();
 
 	bitBlt( m_fillFrame, m_fillFrame->frameWidth(), m_fillFrame->frameWidth(), &m_pixmap, m_fillFrame->frameWidth(), m_fillFrame->frameWidth(), m_fillFrame->width() - m_fillFrame->frameWidth(), m_fillFrame->height() - m_fillFrame->frameWidth(), CopyROP );
+
+	delete ( m_painter );
 }
 
 void
@@ -179,6 +183,10 @@ VSmallPreview::drawStroke( const VStroke &s )
 {
 	VFill fill;
 	VStroke stroke;
+
+	QPixmap m_pixmap;
+	m_pixmap.resize( m_fillFrame->width(), m_fillFrame->height() );
+	VKoPainter* m_painter = new VKoPainter( &m_pixmap, m_fillFrame->width(), m_fillFrame->height() );
 
 	m_painter->begin();
 	m_painter->setPen( Qt::NoPen );
@@ -261,6 +269,8 @@ VSmallPreview::drawStroke( const VStroke &s )
 	m_painter->end();
 
 	bitBlt( m_strokeFrame, m_strokeFrame->frameWidth(), m_strokeFrame->frameWidth(), &m_pixmap, m_strokeFrame->frameWidth(), m_strokeFrame->frameWidth(), m_strokeFrame->width() - m_strokeFrame->frameWidth(), m_strokeFrame->height() - m_strokeFrame->frameWidth(), CopyROP );
+
+	delete ( m_painter );
 }
 
 #include "vsmallpreview.moc"
