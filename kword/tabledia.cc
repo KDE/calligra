@@ -256,8 +256,7 @@ bool KWTableDia::insertTable()
     page->setTableConfig( nRows->value(), nCols->value(),
 			  (KWTblCellSize)cWid->currentItem(),
 			  (KWTblCellSize)cHei->currentItem(),
-//                          false ); // TBD: enable floating tables: 
-cbIsFloating->isChecked() );
+                          cbIsFloating->isChecked() );
     page->mmTable();
     return true;
 }
