@@ -112,12 +112,6 @@ public:
     void loadAttributes( const QDomElement &elem, const QDate &dDate, const QTime &dTime );
 
     /**
-     * Returns the format in which to save this image
-     * (this is determined from the filename).
-     */
-    QString format() const;
-
-    /**
      * First part of the key: the filename
      */
     QString filename() const { return m_filename; }
