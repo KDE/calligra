@@ -3,14 +3,14 @@ Type=ServiceType
 X-KDE-ServiceType=KOfficeFilter
 Comment=KOffice Filter
 Comment[af]=koffice filter
-Comment[ara]=فلتر KOffice
+Comment[ar]=فلتر KOffice
 Comment[az]=KOffice Süzgəci
 Comment[bg]=Филтър на KOffice
 Comment[br]=Sil KOffice
 Comment[bs]=KOffice filter
 Comment[ca]=Filtre KOffice
 Comment[cs]=Filtr KOffice
-Comment[da]=KOffice filter
+Comment[da]=KOffice-filter
 Comment[de]=KOffice-Filter
 Comment[el]=Φίλτρο του KOffice
 Comment[eo]=KOficejo-filtrilo
@@ -24,16 +24,16 @@ Comment[he]=מסנן של KOffice
 Comment[hr]=KOffice filter
 Comment[hu]=KOffice szűrő
 Comment[id]=Filter KOffice
-Comment[ind]=Filter KOffice
 Comment[is]=Sía f. KDE-vöndulinn
 Comment[it]=Filtro per KOffice
+Comment[ja]=KOfficeフィルター
 Comment[ko]=K사무용 거르개
 Comment[lt]=KOffice Filtras
 Comment[lv]=KOffice Filtrs
 Comment[mk]=KOffice филтер
 Comment[mt]=Filtru KOffice
-Comment[no]=KOffice-filter
-Comment[no_NY]=KOffice-filter
+Comment[nb]=KOffice-filter
+Comment[nn]=KOffice-filter
 Comment[oc]=Filtre KOffice
 Comment[pl]=Filtr KOffice
 Comment[pt]=Filtro do KOffice
@@ -46,10 +46,13 @@ Comment[sv]=Koffice-filter
 Comment[ta]=KOffice ÅÊ¸ðÊ
 Comment[th]=ตัวกรองของ KOffice
 Comment[tr]=KOffice Süzgeci
+Comment[uk]=Фільтр KOffice
 Comment[vi]=Trình lọc KOffice 
-Comment[xxx]=xx
-Comment[zh_CN.GB2312]=KOffice 过滤程序
-Comment[zh_TW.Big5]=KOffice 過濾程式
+Comment[xh]=Icebo lokucoca ulwelo le KOffice
+Comment[xx]=xx
+Comment[zh_CN]=KOffice 过滤程序
+Comment[zh_TW]=KOffice 過濾程式
+Comment[zu]=Icebo lokuhlaziya ifayela yenimininigwane i KOffice
 
 [PropertyDef::X-KDE-Import]
 Type=QStringList
@@ -60,5 +63,5 @@ Type=QStringList
 [PropertyDef::X-KDE-Weight]
 Type=QString
 
-[PropertyDef::Implemented]
+[PropertyDef::X-KDE-Available]
 Type=QString
