@@ -1468,6 +1468,18 @@ KWFrameSet *KWGroupManager::getFrameSet(unsigned int row,unsigned int col)
 }
 
 /*================================================================*/
+KWGroupManager::Cell *KWGroupManager::getCell(unsigned int row,unsigned int col)
+{
+  for (unsigned int i = 0;i < cells.count();i++)
+    {
+      if (cells.at(i)->row == row && cells.at(i)->col == col)
+	return cells.at(i);
+    }
+
+  return 0L;
+}
+
+/*================================================================*/
 bool KWGroupManager::getFrameSet(KWFrameSet *fs,unsigned int &row,unsigned int &col)
 {
   for (unsigned int i = 0;i < cells.count();i++)
@@ -1580,6 +1592,35 @@ void KWGroupManager::recalcCols()
 	  getFrameSet(j,i)->update();
 	}
       x = getFrameSet(0,i)->getFrame(0)->right() + 3;
+    }
+  
+  QList<int> ws;
+  ws.setAutoDelete(true);
+
+  for (unsigned int i = 0;i < cols;i++)
+    ws.append(new int(getFrameSet(0,i)->getFrame(0)->width()));
+  
+  for (unsigned int i = 0;i < rows;i++)
+    {
+      {
+	for (unsigned int j = 0;j < cols;j++)
+	  {
+	    Cell *cell = getCell(i,j);
+	    if (cell->cols != 1)
+	      {	
+		if (cell->cols == 0)
+		  cell->frameSet->getFrame(0)->setWidth(30);
+		else 
+		  {
+		    int w = 0;
+		    for (unsigned int k = 0;k < cell->cols;k++)
+		      w += *ws.at(k);
+		    
+		    cell->frameSet->getFrame(0)->setWidth(w);
+		  }
+	      }
+	  }
+      }
     }
 }
 
@@ -1987,6 +2028,126 @@ void KWGroupManager::ungroup()
   cells.clear();
   
   active = false;
+}
+
+/*================================================================*/
+bool KWGroupManager::joinCells()
+{
+  enum Orientation {Vertical,Horizontal};
+
+  unsigned int col,row;
+  if (!isOneSelected(0L,row,col)) return false;
+  
+  bool enough = false;
+  Orientation orient = Horizontal;
+
+  if (col > 0 && getFrameSet(row,col - 1)->getFrame(0)->isSelected())
+    {
+      enough = true;
+      orient = Horizontal;
+    }
+  else if (col < cols - 1 && getFrameSet(row,col + 1)->getFrame(0)->isSelected())
+    {
+      enough = true;
+      orient = Horizontal;
+    }
+  else if (row > 0 && getFrameSet(row - 1,col)->getFrame(0)->isSelected())
+    {
+      enough = true;
+      orient = Vertical;
+    }
+  else if (row < rows - 1 && getFrameSet(row + 1,col)->getFrame(0)->isSelected())
+    {
+      enough = true;
+      orient = Vertical;
+    }
+  
+  QList<Cell> _cells;
+  _cells.setAutoDelete(false);
+  
+  if (enough)
+    {
+      switch (orient)
+	{
+	case Horizontal:
+	  {
+	    Cell *cell = getCell(row,col);
+	    int tmpCol = col;
+	    while (cell && cell->frameSet->getFrame(0)->isSelected())
+	      {
+		_cells.insert(0,cell);
+		if (--tmpCol >= 0)
+		  cell = getCell(row,tmpCol);
+		else
+		  cell = 0L;
+	      }
+	    if (col + 1 >= cols - 1) break;
+	    
+	    cell = getCell(row,col + 1);
+	    tmpCol = col + 1;
+	    while (cell && cell->frameSet->getFrame(0)->isSelected())
+	      {
+		_cells.append(cell);
+		if (++tmpCol < cols - 1)
+		  cell = getCell(row,tmpCol);
+		else
+		  cell = 0L;
+	      }
+	  } break;
+	case Vertical:
+	  {
+	    Cell *cell = getCell(row,col);
+	    int tmpRow = row;
+	    while (cell && cell->frameSet->getFrame(0)->isSelected())
+	      {
+		_cells.insert(0,cell);
+		if (--tmpRow >= 0)
+		  cell = getCell(tmpRow,col);
+		else
+		  cell = 0L;
+	      }
+	    if (row + 1 >= rows - 1) break;
+	    
+	    cell = getCell(row + 1,col);
+	    tmpRow = row + 1;
+	    while (cell && cell->frameSet->getFrame(0)->isSelected())
+	      {
+		_cells.append(cell);
+		if (++tmpRow < rows - 1)
+		  cell = getCell(tmpRow,col);
+		else
+		  cell = 0L;
+	      }
+	  } break;
+	}
+      
+      // this just can't happen :-)
+      if (_cells.count() < 1)
+	return false;
+      
+      switch (orient)
+	{
+	case Horizontal:
+	  {
+	    Cell *cell = _cells.first();
+	    cell->cols = _cells.count();
+	    for (cell = _cells.next();cell != 0;cell = _cells.next())
+	      cell->cols = 0;
+	    recalcCols();
+	  } break;
+	case Vertical:
+	  {
+	    Cell *cell = _cells.first();
+	    cell->rows = _cells.count();
+	    for (cell = _cells.next();cell != 0;cell = _cells.next())
+	      cell->rows = 0;
+	  } break;
+	}
+      
+      return true;
+    }
+
+  return false;
 }
 
 /*================================================================*/

@@ -402,7 +402,8 @@ public:
 
   unsigned int getNumCells() { return cells.count(); }
   Cell *getCell(int i) { return cells.at(i); }
-
+  Cell *getCell(unsigned int row,unsigned int col);
+  
   bool hasSelectedFrame();
 
   void moveBy(unsigned int dx,unsigned int dy);
@@ -434,6 +435,8 @@ public:
   
   bool isActive() { return active; }
   
+  bool joinCells();
+
 protected:
   QList<Cell> cells;
   unsigned int rows,cols;

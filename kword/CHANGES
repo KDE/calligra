@@ -973,4 +973,11 @@ Reggie, 24.3.1999:
   - It's possible to ungroup a table (each cell becomes an own frameset - ok,
     they are always own frame sets, but the table manager stops controlling them
     in this case)
-  - More internal work for joining/splitting frames
+  - More internal work for joining/splitting table cells
+
+Reggie, 25.3.1999:
+------------------
+- More work on joining table cells:
+  - Joining in horizontal direction works sort of - but
+    some strange things are still going on here ;-)
+- Made some menu items functional
