@@ -41,6 +41,10 @@ public:
   Sheet* sheet( unsigned index );
   
   unsigned sheetCount() const;
+  
+  bool autoCalc() const;
+  
+  void setAutoCalc( bool a );
 
 private:
   // no copy or assign

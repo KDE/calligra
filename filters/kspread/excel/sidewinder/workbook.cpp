@@ -29,11 +29,13 @@ class Workbook::Private
 {
 public:
   std::vector<Sheet*> sheets;
+  bool autoCalc;
 };
 
 Workbook::Workbook()
 {
   d = new Workbook::Private();
+  d->autoCalc = true;
 }
 
 Workbook::~Workbook()
@@ -68,4 +70,13 @@ Sheet* Workbook::sheet( unsigned index )
   return d->sheets[index];
 }
 
+bool Workbook::autoCalc() const
+{
+  return d->autoCalc;
+}
+
+void Workbook::setAutoCalc( bool a )
+{
+  d->autoCalc = a;
+}
 
