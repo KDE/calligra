@@ -23,6 +23,8 @@
 #include <qdict.h>
 #include <qvaluevector.h>
 
+#include <kstaticdeleter.h>
+
 #include <math.h>
 
 namespace KSpread
@@ -69,6 +71,7 @@ KSpreadValue Function::exec( const Formula* formula, QValueVector<KSpreadValue> 
   return (*d->ptr)( formula, args );
 }
 
+static KStaticDeleter<FunctionRepository> sd;
 FunctionRepository* FunctionRepository::s_self = 0;
 
 FunctionRepository* FunctionRepository::self()
