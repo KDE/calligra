@@ -30,7 +30,7 @@ public:
     ~KSpreadShell();
 
     QString nativeFormatPattern() const { return "*.ksp"; }
-    QString nativeFormatName() const { return "KSpread"; }
+    QString nativeFormatName() const;
 
 public slots:
     void slotFilePrint();

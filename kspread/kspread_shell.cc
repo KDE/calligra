@@ -22,7 +22,7 @@
 #include "kspread_view.h"
 #include "kspread_factory.h"
 
-#include <kstddirs.h>
+#include <klocale.h>
 
 KSpreadShell::KSpreadShell( const char* name )
     : KoMainWindow( 0L, name )
@@ -33,6 +33,11 @@ KSpreadShell::KSpreadShell( const char* name )
 
 KSpreadShell::~KSpreadShell()
 {
+}
+
+QString KSpreadShell::nativeFormatName() const
+{
+  return i18n("KSpread");
 }
 
 KoDocument* KSpreadShell::createDoc()
