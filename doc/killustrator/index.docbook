@@ -260,7 +260,9 @@ FILENAME</literal>.The package may be deleted later using the command <literal r
 <sect2 id="fh">
 <title>Freehand tool</title>
 
-<para><graphic fileref="freehand.png"></graphic> In order to draw a freehand line, one proceeds as follows: </para>
+<para>
+<mediaobject><imageobject><imagedata fileref="freehand.png" format="png"></imageobject></mediaobject>
+In order to draw a freehand line, one proceeds as follows:</para>
 
 <para><orderedlist><listitem>
 <para>left-click (and hold) on the canvas where the freehand line is to begin</para>
@@ -278,12 +280,12 @@ FILENAME</literal>.The package may be deleted later using the command <literal r
 <sect2 id="polyline-tool">
 <title>Polyline tool</title>
 
-<para><graphic fileref="line.png"></graphic> With this tool lines, polylines, and polygons may be drawn. </para>
+<para><mediaobject><imageobject><imagedata fileref="line.png" format="png"></imageobject></mediaobject> With this tool lines, polylines, and polygons may be drawn. </para>
 
 <sect3 id="li">
 <title>Lines</title>
 
-<para><graphic fileref="line.png"></graphic> To draw a line: 
+<para><mediaobject><imageobject><imagedata fileref="line.png" format="png"></imageobject></mediaobject> To draw a line: 
 <orderedlist><listitem>
 <para>left-click on the canvas at the point where the line is to start </para>
 </listitem>
@@ -300,7 +302,7 @@ FILENAME</literal>.The package may be deleted later using the command <literal r
 <sect3 id="pf">
 <title>Polylines</title>
 
-<para><graphic fileref="line.png"></graphic> A polyline is a series of connected lines. In order to draw a polyline, proceed as follows:
+<para><mediaobject><imageobject><imagedata fileref="line.png" format="png"></imageobject></mediaobject> A polyline is a series of connected lines. In order to draw a polyline, proceed as follows:
 <orderedlist><listitem>
 <para>left-click at the point where the polyline is to start</para>
 </listitem>
@@ -323,14 +325,14 @@ FILENAME</literal>.The package may be deleted later using the command <literal r
 <sect3 id="gp">
 <title>Polygons</title>
 
-<para><graphic fileref="line.png"></graphic> To draw a polygon follow the steps in drawing polylines. To close the polygon hold down the SHIFT key while clicking the right mouse button to automatically close the polygon. A line from the last left-click to the first left click is automatically drawn. </para>
+<para><mediaobject><imageobject><imagedata fileref="line.png" format="png"></imageobject></mediaobject> To draw a polygon follow the steps in drawing polylines. To close the polygon hold down the SHIFT key while clicking the right mouse button to automatically close the polygon. A line from the last left-click to the first left click is automatically drawn. </para>
 </sect3>
 </sect2>
 
 <sect2 id="be">
 <title>Bezier curve tool</title>
 
-<para><graphic fileref="bezier.png"></graphic> Drawing Bezier curves is often a problem, however KIllustrator makes it easy. Proceed as follows: 
+<para><mediaobject><imageobject><imagedata fileref="bezier.png" format="png"></imageobject></mediaobject> Drawing Bezier curves is often a problem, however KIllustrator makes it easy. Proceed as follows: 
 <orderedlist><listitem>
 <para>left-click on the canvas at the point of origin of the Bezier curve  </para>
 </listitem>
@@ -350,7 +352,7 @@ FILENAME</literal>.The package may be deleted later using the command <literal r
 <sect2 id="rectangle-tool">
 <title>Rectangle tool</title>
 
-<para><graphic fileref="rect.png"></graphic> In order to draw a rectangle: 
+<para><mediaobject><imageobject><imagedata fileref="rect.png" format="png"></imageobject></mediaobject> In order to draw a rectangle: 
 <orderedlist><listitem>
 <para>left-click (and hold) on the canvas at the point where a corner point of the rectangle is to be  </para>
 </listitem>
@@ -368,14 +370,14 @@ To draw a square, press and hold down the CTRL key while drawing the rectangle. 
 <sect2 id="regular-polygon-tool">
 <title>Regular polygon tool</title>
 
-<para><graphic fileref="polygon.png"></graphic> This tool allows the simple drawing of equilateral triangles, squares, and higher order regular polygons. It is much simpler to use this tool for drawing regular polygons than the polyline tool. The procedure here is the following: </para>
+<para><mediaobject><imageobject><imagedata fileref="polygon.png" format="png"></imageobject></mediaobject> This tool allows the simple drawing of equilateral triangles, squares, and higher order regular polygons. It is much simpler to use this tool for drawing regular polygons than the polyline tool. The procedure here is the following: </para>
 
 <para><orderedlist><listitem>
 <para>left-double click on the regular polygon tool button </para>
 </listitem>
 <listitem>
 <para>a dialog opens where the polygon parameters are set 
-<inlinegraphic fileref="polygon-setup.png"></inlinegraphic>
+<inlinemediaobject><imageobject><imagedata fileref="polygon-setup.png" format="png"></imageobject></inlinemediaobject>
 </para>
 </listitem>
 <listitem>
@@ -401,7 +403,7 @@ To draw a square, press and hold down the CTRL key while drawing the rectangle. 
 <sect2 id="el">
 <title>Ellipse tool</title>
 
-<para><graphic fileref="ellipse.png"></graphic> In order to draw an ellipse, proceed as follows: 
+<para><mediaobject><imageobject><imagedata fileref="ellipse.png" format="png"></imageobject></mediaobject> In order to draw an ellipse, proceed as follows: 
 <orderedlist><listitem>
 <para>left-click (and hold) on one corner point of the bounding box * of the ellipse</para>
 </listitem>
@@ -421,7 +423,7 @@ If a circle is to be drawn instead of an ellipse, hold the CTRL key down while d
 <sect2 id="text-tool">
 <title>Text tool</title>
 
-<para><graphic fileref="text.png"></graphic> This tool adds text to your KIllustrator drawing. The steps are are follows: 
+<para><mediaobject><imageobject><imagedata fileref="text.png" format="png"></imageobject></mediaobject> This tool adds text to your KIllustrator drawing. The steps are are follows: 
 <orderedlist><listitem>
 <para> left-click on the canvas where the text is to begin </para>
 </listitem>
@@ -442,7 +444,7 @@ The input is continued until a new tool is selected, or a new point on the canva
 <sect2 id="rotation">
 <title>Rotation</title>
 
-<para><graphic fileref="pfeil.png"></graphic> Rotation here describes the rotation of an object about a centre point. Proceed as follows: 
+<para><mediaobject><imageobject><imagedata fileref="pfeil.png" format="png"></imageobject></mediaobject> Rotation here describes the rotation of an object about a centre point. Proceed as follows: 
 <orderedlist><listitem>
 <para>left-click on the object to be rotated. The selection frame appears around the object. Left-click again and the transformation frame appears. </para>
 </listitem>
@@ -459,7 +461,7 @@ The input is continued until a new tool is selected, or a new point on the canva
 <sect2 id="scaling">
 <title>Scaling</title>
 
-<para><graphic fileref="pfeil.png"></graphic> Scaling an object allows the user to increase or reduce the size of an object. To scale an object:
+<para><mediaobject><imageobject><imagedata fileref="pfeil.png" format="png"></imageobject></mediaobject> Scaling an object allows the user to increase or reduce the size of an object. To scale an object:
 <orderedlist><listitem>
 <para>left-click on the object to be scaled---the selection frame appears.  </para>
 </listitem>
@@ -480,7 +482,7 @@ Proportional scaling can be done by holding down the CTRL key in the third step.
 <sect2 id="shifting">
 <title>Shifting</title>
 
-<para><graphic fileref="pfeil.png"></graphic> To shift an object proceed as follows: 
+<para><mediaobject><imageobject><imagedata fileref="pfeil.png" format="png"></imageobject></mediaobject> To shift an object proceed as follows: 
 <orderedlist><listitem>
 <para>left-click on the object to be shifted </para>
 </listitem>
@@ -498,12 +500,12 @@ If you hold down the CTRL key while shifting, the object will be shifted horizon
 <sect2 id="modifying-an-object">
 <title>Modifying an object</title>
 
-<para><graphic fileref="point.png"></graphic> In the previous sections the transformations of whole objects were presented. We now turn our attention to the manipulation of individual sections of objects. NOTE: Before the object can be modified the object must be selected using the selection tool. </para>
+<para><mediaobject><imageobject><imagedata fileref="point.png" format="png"></imageobject></mediaobject> In the previous sections the transformations of whole objects were presented. We now turn our attention to the manipulation of individual sections of objects. NOTE: Before the object can be modified the object must be selected using the selection tool. </para>
 
 <sect3 id="moving-points">
 <title>Moving points</title>
 
-<para><graphic fileref="movepoint.png"></graphic> For shifting individual points in a object: 
+<para><mediaobject><imageobject><imagedata fileref="movepoint.png" format="png"></imageobject></mediaobject> For shifting individual points in a object: 
 <orderedlist><listitem>
 <para>left-click (and hold) on the point to be shifted </para>
 </listitem>
@@ -520,19 +522,19 @@ If you hold down the CTRL key while shifting, the object will be shifted horizon
 <sect3 id="adding-points">
 <title>Adding points</title>
 
-<para><graphic fileref="newpoint.png"></graphic> This tool adds control points to an object. To add a point left-click on the object at the point where the new control point is desired. </para>
+<para><mediaobject><imageobject><imagedata fileref="newpoint.png" format="png"></imageobject></mediaobject> This tool adds control points to an object. To add a point left-click on the object at the point where the new control point is desired. </para>
 </sect3>
 
 <sect3 id="removing-points">
 <title>Removing points</title>
 
-<para><graphic fileref="rmpoint.png"></graphic> With this tool one can delete control points from an object---simply left-click on the point to be deleted. </para>
+<para><mediaobject><imageobject><imagedata fileref="rmpoint.png" format="png"></imageobject></mediaobject> With this tool one can delete control points from an object---simply left-click on the point to be deleted. </para>
 </sect3>
 
 <sect3 id="filling-objects">
 <title>Filling objects</title>
 
-<para><graphic fileref="pfeil.png"></graphic> To fill an object with a colour select the object and left-click on the desired colour in the colour palette. If the required colour is not in the palette or a pattern fill is required, proceed as follows: 
+<para><mediaobject><imageobject><imagedata fileref="pfeil.png" format="png"></imageobject></mediaobject> To fill an object with a colour select the object and left-click on the desired colour in the colour palette. If the required colour is not in the palette or a pattern fill is required, proceed as follows: 
 <orderedlist><listitem>
 <para>select the object to be filled.</para>
 </listitem>
@@ -587,9 +589,9 @@ The first and second functions can be performed during the setup of the grid dis
 <sect2 id="aligning-objects">
 <title>Aligning objects</title>
 
-<para><graphic fileref="pfeil.png"></graphic> This function allows objects to be aligned with respect to each other and/or the page. For example a group of objects can be aligned such that their left edges are all in line or such that they are evenly distributed throughout the page. Select the object(s) to be Aligned and right-click, select "Align" from the menu and the following dialog appears:</para>
+<para><mediaobject><imageobject><imagedata fileref="pfeil.png" format="png"></imageobject></mediaobject> This function allows objects to be aligned with respect to each other and/or the page. For example a group of objects can be aligned such that their left edges are all in line or such that they are evenly distributed throughout the page. Select the object(s) to be Aligned and right-click, select "Align" from the menu and the following dialog appears:</para>
 
-<graphic fileref="align" format="png"></graphic>
+<mediaobject><imageobject><imagedata fileref="align" format="png"></imageobject></mediaobject>
 
 <para>NOTE: At the time of writing not all functionality of "Align" has been implemented. It is hoped that further functionality will be added soon. </para>
 </sect2>
@@ -597,7 +599,7 @@ The first and second functions can be performed during the setup of the grid dis
 <sect2 id="aligning-text-along-a-path">
 <title>Aligning text along a path</title>
 
-<para><graphic fileref="pfeil.png"></graphic> If the path is already drawn, then one proceeds as follows:
+<para><mediaobject><imageobject><imagedata fileref="pfeil.png" format="png"></imageobject></mediaobject> If the path is already drawn, then one proceeds as follows:
 <orderedlist><listitem>
 <para>select the text to be aligned </para>
 </listitem>
@@ -682,7 +684,7 @@ A grouped object can be separated into it's constituent objects by selecting the
 
 <para>There are two main ways to save a file, either via the "File" menu item, or by clicking on the Diskette icon in the list of icons. If you've just created the drawing you're working on, and haven't saved it yet, you will be taken taken to a dialog where you can choose a name. This will happen regardless of which of the two methods you choose.</para>
 
-<graphic fileref="save_dialog.png"></graphic>
+<mediaobject><imageobject><imagedata fileref="save_dialog.png" format="png"></imageobject></mediaobject>
 
 <para>If the file already has a name, it will be used unless you select the menu item "Save As".
 You should ALWAYS use the file extension <literal remap="tt">.kil</literal>. This is the only way to ensure that KIllustrator doesn't run into problems when it tries to find the file again.</para>
@@ -693,7 +695,7 @@ You should ALWAYS use the file extension <literal remap="tt">.kil</literal>. Thi
 
 <para>Just as in saving files, there are two ways to load them. You can click on the corresponding icon from the list, or you can use the "Open" item from the "File" menu. Either way brings you to the "Open" dialog.</para>
 
-<graphic fileref="open_dialog.png"></graphic>
+<mediaobject><imageobject><imagedata fileref="open_dialog.png" format="png"></imageobject></mediaobject>
 
 <para>Since this dialog form conforms to the KDE standard, we won't go into the workings of every button. If you've selected the file you want to open a preview appears on the right side of the dialog box. Now you can load it by double-clicking the file name, or by clicking on the "OK" button.</para>
 </sect2>
@@ -762,7 +764,7 @@ Dialogs are similar to those for opening files.</para>
 
 <para>Via the "File" menu and the item "Export" you reach the following Dialog:</para>
 
-<graphic fileref="export.png"></graphic>
+<mediaobject><imageobject><imagedata fileref="export.png" format="png"></imageobject></mediaobject>
 
 <para>This is very similar to the dialog for saving files. The only difference is the fact that you can choose what format to save the file in.</para>
 </sect3>
@@ -783,7 +785,7 @@ Dialogs are similar to those for opening files.</para>
 <sect1 id="zoom-tool">
 <title>Zoom tool</title>
 
-<para><graphic fileref="zoom.png"></graphic> Zooming can be performed in two ways. The simplest is to use the drop down box in the main bar to select the required magnification level whose default value is 100&percnt;. The second method is to use the magnifying glass in the tool bar. Left-clicking on the canvas with the zoom tool increases the magnification to the next level. The magnification levels are:</para>
+<para><mediaobject><imageobject><imagedata fileref="zoom.png" format="png"></imageobject></mediaobject> Zooming can be performed in two ways. The simplest is to use the drop down box in the main bar to select the required magnification level whose default value is 100&percnt;. The second method is to use the magnifying glass in the tool bar. Left-clicking on the canvas with the zoom tool increases the magnification to the next level. The magnification levels are:</para>
 
 <para><itemizedlist>
 <listitem>
@@ -817,7 +819,7 @@ Dialogs are similar to those for opening files.</para>
 <sect1 id="handling-colours">
 <title>Handling colours</title>
 
-<para><graphic fileref="pfeil.png"></graphic> The colour handling process in KIllustrator is very simple. Generally, a left-click on a colour in the colour palette changes the fill colour of the selected object(s); a right-click changes the outline colour (or the text colour) of the selected object(s). If the desired colour is not in the colour palette, then proceed as follows: </para>
+<para><mediaobject><imageobject><imagedata fileref="pfeil.png" format="png"></imageobject></mediaobject> The colour handling process in KIllustrator is very simple. Generally, a left-click on a colour in the colour palette changes the fill colour of the selected object(s); a right-click changes the outline colour (or the text colour) of the selected object(s). If the desired colour is not in the colour palette, then proceed as follows: </para>
 
 <para><orderedlist><listitem>
 <para>select the object whose colour is to be changed.</para>
@@ -830,7 +832,7 @@ Dialogs are similar to those for opening files.</para>
 </listitem>
 <listitem>
 <para>press the colour button and the following dialog is displayed: 
-<inlinegraphic fileref="colour.png"></inlinegraphic>
+<inlinemediaobject><imageobject><imagedata fileref="colour.png" format="png"></imageobject></inlinemediaobject>
 </para>
 </listitem>
 <listitem>
