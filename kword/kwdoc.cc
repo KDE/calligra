@@ -2289,24 +2289,9 @@ KWFrameSet * KWDocument::getFrameSetByName( const QString & name )
     return 0L;
 }
 
-KWFrame * KWDocument::frameAtPos( double mx, double my )
+KWFrame * KWDocument::frameUnderMouse( const QPoint& nPoint, bool* border = 0L )
 {
-    QListIterator<KWFrameSet> fit = framesetsIterator();
-    for ( fit.toLast(); fit.current() ; --fit ) // z-order
-    {
-        KWFrameSet *frameSet = fit.current();
-        if ( !frameSet->isVisible() || frameSet->isRemoveableHeader() )
-            continue;
-        KWFrame * frame = frameSet->frameAtPos( mx, my );
-        //kdDebug() << "KWDocument::frameAtPos found frameset " << frameSet << " at position " << mx << "," << my << endl;
-        if ( frame )
-            return frame;
-    }
-    return 0L;
-}
-
-KWFrame * KWDocument::frameByBorder( const QPoint & nPoint )
-{
+    KoPoint docPoint( unzoomPoint( nPoint ) );
     QListIterator<KWFrameSet> fit = framesetsIterator();
     for ( fit.toLast(); fit.current() ; --fit ) // z-order
     {
@@ -2315,9 +2300,21 @@ KWFrame * KWDocument::frameByBorder( const QPoint & nPoint )
             continue;
         KWFrame * frame = frameSet->frameByBorder( nPoint );
         if ( frame )
+        {
+            if ( border ) *border = true;
             return frame;
+        }
+        frame = frameSet->frameAtPos( docPoint.x(), docPoint.y() );
+        //kdDebug() << "KWDocument::frameAtPos found frameset " << frameSet
+        // << " at position " << docPoint.x() << "," << docPoint.y() << endl;
+        if ( frame )
+        {
+            if ( border ) *border = false;
+            return frame;
+        }
     }
     return 0L;
+
 }
 
 QString KWDocument::generateFramesetName( const QString & templateName )

@@ -307,20 +307,13 @@ void KWCanvas::mpEditFrame( QMouseEvent *e, const QPoint &nPoint ) // mouse pres
 
     if ( e )
     {
-        KoPoint docPoint( m_doc->unzoomPoint( nPoint ) );
-        double x = docPoint.x();
-        double y = docPoint.y();
-
-        // Find the frame we clicked upon (try by border, fallback on frame's internal rect)
-        KWFrame * frame = m_doc->frameByBorder( nPoint );
-        if ( !frame )
-            frame = m_doc->frameAtPos( x, y );
-
+        KWFrame * frame = m_doc->frameUnderMouse( nPoint );
         KWFrameSet *fs = frame ? frame->getFrameSet() : 0;
         KWTableFrameSet *table= fs ? fs->getGroupManager() : 0;
 
         if ( fs && ( e->state() & ShiftButton ) && table ) { // is table and we hold shift
-            table->selectUntil( x,y );
+            KoPoint docPoint( m_doc->unzoomPoint( nPoint ) );
+            table->selectUntil( docPoint.x(), docPoint.y() );
         }
         else if ( frame && !frame->isSelected() ) // clicked on a frame that wasn't selected
         {
@@ -460,12 +453,14 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
         case MM_EDIT:
         {
             // See if we clicked on a frame's border
-            KWFrame * frame = m_doc->frameByBorder( normalPoint );
+            bool border = false;
+            KWFrame * frame = m_doc->frameUnderMouse( normalPoint, &border );
             bool selectedFrame = m_doc->getFirstSelectedFrame() != 0L;
             // Frame border, or pressing Control or pressing Shift and a frame has already been selected
             // [We must keep shift+click for selecting text, when no frame is selected]
-            if ( frame || e->state() & ControlButton ||
-                 ( ( e->state() & ShiftButton ) && selectedFrame ) )
+            if ( ( frame && border )
+                 || e->state() & ControlButton
+                 || ( ( e->state() & ShiftButton ) && selectedFrame ) )
             {
                 if ( m_currentFrameSetEdit )
                     terminateCurrentEdit();
@@ -476,7 +471,6 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                 if ( selectAllFrames( false ) )
                     emit frameSelectedChanged();
 
-                frame = m_doc->frameAtPos( docPoint.x(), docPoint.y() );
                 KWFrameSet * fs = frame ? frame->getFrameSet() : 0L;
                 bool emitChanged = false;
                 if ( fs )
@@ -519,8 +513,9 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
             case MM_EDIT:
             {
                 // See if we clicked on a frame's border
-                KWFrame * frame = m_doc->frameByBorder( normalPoint );
-                if ( frame || e->state() & ControlButton )
+                bool border = false;
+                KWFrame * frame = m_doc->frameUnderMouse( normalPoint, &border );
+                if ( ( frame && border ) || e->state() & ControlButton )
                 {
                     KWFrame *frame = m_doc->getFirstSelectedFrame();
                     if ( frame->getFrameSet()->isHeaderOrFooter() )
@@ -532,7 +527,6 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                 }
                 else
                 {
-                    KWFrame * frame = m_doc->frameAtPos( docPoint.x(), docPoint.y() );
                     if ( frame )
                         m_gui->getView()->openPopupMenuInsideFrame( frame, QCursor::pos() );
                     else
@@ -1055,11 +1049,7 @@ void KWCanvas::mrEditFrame( QMouseEvent *e, const QPoint &nPoint ) // Can be cal
         // If CTRL+click on selected frame, unselect it
         if ( e->state() & ControlButton )
         {
-            KoPoint docPoint( m_doc->unzoomPoint( nPoint ) );
-            // Find the frame we clicked upon (try by border, fallback on frame's internal rect)
-            KWFrame * frame = m_doc->frameByBorder( nPoint );
-            if ( !frame )
-                frame = m_doc->frameAtPos( docPoint.x(), docPoint.y() );
+            KWFrame * frame = m_doc->frameUnderMouse( nPoint );
             if ( m_ctrlClickOnSelectedFrame && frame->isSelected() )
             {
                 selectFrame( frame, false );

@@ -161,10 +161,9 @@ public:
     // Return the frameset with a given name
     KWFrameSet * getFrameSetByName( const QString & name );
 
-    // Return the frame that intersects position mx, my (in pt)
-    KWFrame * frameAtPos( double mx, double my );
-    // Return a frame if nPoint in on one of its borders */
-    KWFrame *frameByBorder( const QPoint & nPoint );
+    // Returns the frame under the mouse (or 0)
+    // The bool border is true if the mouse is on a border, false if it's inside the frame
+    KWFrame * frameUnderMouse( const QPoint& nPoint, bool* border = 0L );
 
     // Return the total number of framesets
     unsigned int getNumFrameSets()
