@@ -185,10 +185,15 @@ void KChartView::edit()
     KoChart::Data *dat = (( (KChartPart*)koDocument())->data());
     qDebug( "***Before calling editor: cols = %d, rows = %d, usedCols = %d, usedRows = %d", dat->cols(), dat->rows(), dat->usedCols(), dat->usedRows() );
     ed.setData(dat);
+    QStringList lst;
+    for(int i =0;i<dat->rows();i++)
+        lst<<params->legendText( i );
+    ed.setLegend(lst);
     if( ed.exec() != QDialog::Accepted ) {
         return;
     }
     ed.getData(dat);
+    ed.getLegend(params);
     qDebug( "***After calling editor: cols = %d, rows = %d, usedCols = %d, usedRows = %d", dat->cols(), dat->rows(), dat->usedCols(), dat->usedRows() );
     repaint();
 }
