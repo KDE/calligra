@@ -102,9 +102,6 @@ public:
 
 	void transform( const QWMatrix& m );
 
-	QWMatrix gradientTransform() const { return m_gradientTransform; }
-	void gradientTransform( const QWMatrix &m ) { m_gradientTransform = m; }
-
 protected:
 	VColorStopList        m_colorStops;
   
@@ -115,8 +112,6 @@ private:
 	// coordinates:
 	KoPoint m_origin;
 	KoPoint m_vector;
-
-	QWMatrix m_gradientTransform;
 }; // VGradient
 
 #endif /* __VGRADIENT_H__ */

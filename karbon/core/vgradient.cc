@@ -60,7 +60,6 @@ VGradient::VGradient( const VGradient& gradient )
 	m_vector       = gradient.m_vector;
 	m_type         = gradient.m_type;
 	m_repeatMethod = gradient.m_repeatMethod;
-	m_gradientTransform = gradient.m_gradientTransform;
 
 	m_colorStops.clear();
 	QPtrVector<VColorStop> cs = gradient.colorStops();
@@ -80,7 +79,6 @@ VGradient& VGradient::operator=( const VGradient& gradient )
 	m_vector       = gradient.m_vector;
 	m_type         = gradient.m_type;
 	m_repeatMethod = gradient.m_repeatMethod;
-	m_gradientTransform = gradient.m_gradientTransform;
 
 	m_colorStops.clear();
 	QPtrVector<VColorStop> cs = gradient.colorStops();
@@ -141,13 +139,6 @@ VGradient::save( QDomElement& element ) const
 	me.setAttribute( "type", m_type );
 	me.setAttribute( "repeatMethod", m_repeatMethod );
 
-	me.setAttribute( "m11", m_gradientTransform.m11() );
-	me.setAttribute( "m12", m_gradientTransform.m12() );
-	me.setAttribute( "m21", m_gradientTransform.m21() );
-	me.setAttribute( "m22", m_gradientTransform.m22() );
-	me.setAttribute( "dx", m_gradientTransform.dx() );
-	me.setAttribute( "dy", m_gradientTransform.dy() );
-
 	// save stops
 	VColorStop* colorstop;
 	QPtrList<VColorStop>& colorStops = const_cast<VColorStopList&>( m_colorStops );
@@ -172,10 +163,6 @@ VGradient::load( const QDomElement& element )
 	m_vector.setY( element.attribute( "vectorY", "0.0" ).toDouble() );
 	m_type = (VGradientType)element.attribute( "type", 0 ).toInt();
 	m_repeatMethod = (VGradientRepeatMethod)element.attribute( "repeatMethod", 0 ).toInt();
-
-	m_gradientTransform.setMatrix(  element.attribute( "m11" ).toDouble(), element.attribute( "m12" ).toDouble(),
-									element.attribute( "m12" ).toDouble(), element.attribute( "m22" ).toDouble(),
-									element.attribute( "dx" ).toDouble(), element.attribute( "dy" ).toDouble() );
 
 	m_colorStops.clear();
 
