@@ -1981,8 +1981,10 @@ void KWView::formatPage()
 void KWView::formatFrameSet()
 {
     if ( m_doc->getFirstSelectedFrame() )
-      m_gui->canvasWidget()->editFrameProperties();
-    else // TODO enable/disable the action depending on whether a frame is selected, instead
+    {
+        m_gui->canvasWidget()->editFrameProperties();
+    }
+    else // Should never happen, the action is disabled
         KMessageBox::sorry( this,
                             i18n("Sorry, you have to select a frame first."),
                             i18n("Format Frameset"));
@@ -2751,7 +2753,7 @@ void KWView::openPopupMenuInsideFrame( KWFrame* frame, const QPoint & _point )
                     unplugActionList( "datatools" );
                     m_actionList.clear();
                     m_actionList = textedit->dataToolActionList();
-                    kdDebug() << "KWView::openPopupMenuEditText plugging actionlist with " << m_actionList.count() << " actions" << endl;
+                    kdDebug() << "KWView::openPopupMenuInsideFrame plugging actionlist with " << m_actionList.count() << " actions" << endl;
                     plugActionList( "datatools", m_actionList );
                     popup->popup(_point); // using exec() here breaks the spellcheck tool (event loop pb)
                 } else

@@ -515,13 +515,10 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                 if ( frame || e->state() & ControlButton )
                 {
                     KWFrame *frame = m_doc->getFirstSelectedFrame();
-                    // if a header/footer etc. Dont show the popup.
-                    if((frame->getFrameSet() && frame->getFrameSet()->frameSetInfo() != KWFrameSet::FI_BODY))
+                    if ( frame->getFrameSet()->isHeaderOrFooter() )
                     {
-                        // ####### TODO show a popup that has "Configure Headers/Footers" in it,
+                        // ####### TODO add "Configure Headers/Footers" to the popup,
                         // which opens KoPageLayoutDia on the 3rd page ######
-                        m_mousePressed = false;
-                        return;
                     }
                     m_gui->getView()->openPopupMenuEditFrame( QCursor::pos() );
                 }
@@ -577,16 +574,10 @@ void KWCanvas::createTable( unsigned int rows, unsigned int cols,
 
 void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, bool noGrid )
 {
+    // This one is called by KWResizeHandle
+    KWFrame *frame = m_doc->getFirstSelectedFrame();
     //kdDebug() << "KWCanvas::mmEditFrameResize top,bottom,left,right: "
     //          << top << "," << bottom << "," << left << "," << right << endl;
-    // This one is called by KWResizeHandle
-
-    // Can't resize the main frame of a WP document
-    KWFrame *frame = m_doc->getFirstSelectedFrame();
-
-    KWFrameSet *fs = frame->getFrameSet();
-    if ( m_doc->processingType() == KWDocument::WP && fs == m_doc->getFrameSet(0))
-        return;
 
     // Get the mouse position from QCursor. Trying to get it from KWResizeHandle's
     // mouseMoveEvent leads to the frame 'jumping' because the events are received async.
@@ -618,13 +609,13 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
     {
         //kdDebug() << "KWCanvas::mmEditFrameResize old rect " << DEBUGRECT( *frame ) << endl;
 
-        if ( top && newTop != y && !fs->isAHeader()/*!fs->isAFooter()*/ )
+        if ( top && newTop != y )
         {
             if (newBottom - y < minFrameHeight+5)
                 y = newBottom - minFrameHeight - 5;
             y = QMAX( y, m_doc->ptPageTop( oldPage ) );
             newTop = y;
-        } else if ( bottom && newBottom != y && !fs->isAFooter()/*!fs->isAHeader()*/ )
+        } else if ( bottom && newBottom != y )
         {
             if (y - newTop < minFrameHeight+5)
                 y = newTop + minFrameHeight + 5;
@@ -632,13 +623,13 @@ void KWCanvas::mmEditFrameResize( bool top, bool bottom, bool left, bool right, 
             newBottom = y;
         }
 
-        if ( left && newLeft != x && !fs->isAHeader() && !fs->isAFooter() )
+        if ( left && newLeft != x )
         {
             if (newRight - x < minFrameWidth)
                 x = newRight - minFrameWidth - 5;
             x = QMAX( x, 0 );
             newLeft = x;
-        } else if ( right && newRight != x && !fs->isAHeader() && !fs->isAFooter() )
+        } else if ( right && newRight != x )
         {
             if (x - newLeft < minFrameWidth)
                 x = newLeft + minFrameWidth + 5; // why +5 ?
@@ -1594,19 +1585,7 @@ void KWCanvas::editFrameProperties()
     KWFrame *frame = m_doc->getFirstSelectedFrame();
     if (!frame)
         return;
-    KWFrameSet *fs = frame->getFrameSet();
-    if ( fs->isAHeader() )
-    {
-        KMessageBox::sorry( this, i18n( "This is a header frame. It cannot be edited."), i18n( "Frame Properties"  ) );
-        return;
-    }
-    if ( fs->isAFooter() )
-    {
-        KMessageBox::sorry( this, i18n( "This is a footer frame. It cannot be edited."),i18n( "Frame Properties"  ) );
-        return;
-    }
-
-    KWFrameDia * frameDia = new KWFrameDia( this, frame);
+    KWFrameDia *frameDia = new KWFrameDia( this, frame );
     frameDia->setCaption(i18n("Frame Properties"));
     frameDia->show();
     delete frameDia;

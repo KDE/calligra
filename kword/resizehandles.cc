@@ -33,33 +33,36 @@ KWResizeHandle::KWResizeHandle( KWCanvas * p, Direction d, KWFrame *frm )
 {
     mousePressed = FALSE;
     setMouseTracking( TRUE );
-    setBackgroundMode( PaletteHighlight );
+    //setBackgroundMode( PaletteHighlight );
 
-    switch ( direction ) {
-    case LeftUp:
-        setCursor( Qt::sizeFDiagCursor );
-        break;
-    case Up:
-        setCursor( Qt::sizeVerCursor );
-        break;
-    case RightUp:
-        setCursor( Qt::sizeBDiagCursor );
-        break;
-    case Right:
-        setCursor( Qt::sizeHorCursor );
-        break;
-    case RightDown:
-        setCursor( Qt::sizeFDiagCursor );
-        break;
-    case Down:
-        setCursor( Qt::sizeVerCursor );
-        break;
-    case LeftDown:
-        setCursor( Qt::sizeBDiagCursor );
-        break;
-    case Left:
-        setCursor( Qt::sizeHorCursor );
-        break;
+    if ( isResizingEnabled() )
+    {
+        switch ( direction ) {
+        case LeftUp:
+            setCursor( Qt::sizeFDiagCursor );
+            break;
+        case Up:
+            setCursor( Qt::sizeVerCursor );
+            break;
+        case RightUp:
+            setCursor( Qt::sizeBDiagCursor );
+            break;
+        case Right:
+            setCursor( Qt::sizeHorCursor );
+            break;
+        case RightDown:
+            setCursor( Qt::sizeFDiagCursor );
+            break;
+        case Down:
+            setCursor( Qt::sizeVerCursor );
+            break;
+        case LeftDown:
+            setCursor( Qt::sizeBDiagCursor );
+            break;
+        case Left:
+            setCursor( Qt::sizeHorCursor );
+            break;
+        }
     }
 
     updateGeometry();
@@ -69,6 +72,8 @@ KWResizeHandle::KWResizeHandle( KWCanvas * p, Direction d, KWFrame *frm )
 void KWResizeHandle::mouseMoveEvent( QMouseEvent *e )
 {
     if ( !mousePressed || !m_canvas->kWordDocument()->isReadWrite() )
+        return;
+    if ( !isResizingEnabled() )
         return;
 
     bool shiftPressed = e->state() & ShiftButton;
@@ -167,6 +172,42 @@ void KWResizeHandle::updateGeometry()
         break;
     }
     resize( 6, 6 );
+}
+
+bool KWResizeHandle::isResizingEnabled() const
+{
+    KWFrameSet *fs = frame->getFrameSet();
+    if ( fs->isMainFrameset() || fs->isFloating() )
+        return false;
+
+    // Headers and footer are resizable only in some directions
+    // and only if not in auto-resize mode
+    if ( fs->isAHeader() &&
+         ( frame->getFrameBehaviour() == KWFrame::AutoExtendFrame ||
+           ( direction != Down && direction != LeftDown && direction != RightDown ) ) )
+        return false;
+
+    if ( fs->isAFooter() &&
+         ( frame->getFrameBehaviour() == KWFrame::AutoExtendFrame ||
+           ( direction != Up && direction != LeftUp && direction != RightUp ) ) )
+        return false;
+
+    return true;
+}
+
+void KWResizeHandle::paintEvent( QPaintEvent * )
+{
+    QPainter p;
+    p.begin( this );
+    if ( isResizingEnabled() )
+        p.fillRect( 0, 0, 6, 6, colorGroup().brush( QColorGroup::Highlight ) );
+    else
+    {
+        p.setPen( colorGroup().color( QColorGroup::Highlight ) );
+        p.drawRect( 0, 0, 6, 6 );
+        p.fillRect( 1, 1, 4, 4, colorGroup().brush( QColorGroup::Base ) );
+    }
+    p.end();
 }
 
 #include "resizehandles.moc"

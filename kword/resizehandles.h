@@ -49,10 +49,13 @@ public:
     void updateGeometry();
     KWCanvas *getCanvas() const { return m_canvas; }
 
+    bool isResizingEnabled() const;
+
 protected:
-    void mouseMoveEvent( QMouseEvent *e );
-    void mousePressEvent( QMouseEvent *e );
-    void mouseReleaseEvent( QMouseEvent *e );
+    virtual void mouseMoveEvent( QMouseEvent *e );
+    virtual void mousePressEvent( QMouseEvent *e );
+    virtual void mouseReleaseEvent( QMouseEvent *e );
+    virtual void paintEvent( QPaintEvent *e );
 
 private:
     bool mousePressed;

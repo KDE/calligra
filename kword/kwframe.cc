@@ -941,8 +941,9 @@ bool KWFrameSet::contains( double mx, double my )
     return false;
 }
 
-bool KWFrameSet::getMouseCursor( const QPoint &nPoint, bool controlPressed, QCursor & cursor, bool canMove )
+bool KWFrameSet::getMouseCursor( const QPoint &nPoint, bool controlPressed, QCursor & cursor )
 {
+    bool canMove = isMoveable();
     KoPoint docPoint = m_doc->unzoomPoint( nPoint );
     QCursor defaultCursor = ( canMove && !isFloating() ) ? Qt::sizeAllCursor : Qt::pointingHandCursor;
     // See if we're over a frame border
@@ -1107,6 +1108,19 @@ bool KWFrameSet::isAWrongFooter( KoHFType t ) const
     } break;
     default: return false;
     }
+}
+
+bool KWFrameSet::isMainFrameset() const
+{
+    return ( m_doc->processingType() == KWDocument::WP &&
+             m_doc->getFrameSet( 0 ) == this );
+}
+
+bool KWFrameSet::isMoveable() const
+{
+    if ( isHeaderOrFooter() )
+        return false;
+    return !isMainFrameset() && !isFloating();
 }
 
 void KWFrameSet::zoom( bool )

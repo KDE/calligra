@@ -95,6 +95,7 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *_frame, KWDocument *_doc, Fram
     frameType=_ft;
     doc = _doc;
     frame= _frame;
+    frameSetFloating = false;
     init();
 }
 
@@ -104,21 +105,26 @@ void KWFrameDia::init() {
     if (frame) {
         KoRect r = frame->normalize();
         frame->setRect( r.x(), r.y(), r.width(), r.height() );
-        if(!doc && frame->getFrameSet())
+        KWFrameSet *fs = frame->getFrameSet(); // 0 when creating a frame
+        if(!doc && fs)
         {
-            doc=frame->getFrameSet()->kWordDocument();
+            doc = fs->kWordDocument();
         }
         if(!doc)
         {
             kdDebug() << "ERROR: KWFrameDia::init frame has no reference to doc.."<<endl;
             return;
         }
-        if(doc->processingType() == KWDocument::WP &&
-           frame->getFrameSet() == doc->getFrameSet(0))
+        if( fs && fs->isMainFrameset() )
         {
             setupTab2();
             setupTab4();
-            runGroup->setEnabled(false);
+        }
+        else if ( fs && fs->isHeaderOrFooter() )
+        {
+            setupTab1();
+            setupTab2();
+            setupTab4();
         }
         else if(frameType == FT_TEXT)
         {
@@ -260,8 +266,7 @@ void KWFrameDia::setupTab1(){ // TAB Frame Options
         connect( copyRadio, SIGNAL( clicked() ), this, SLOT( setFrameBehaviourInputOff() ) );
     onpGrid->addWidget( copyRadio, 3, 0);
 
-    if( frameType != FT_TEXT )
-        reconnect->setEnabled( false );
+    enableOnNewPageOptions();
 
     QButtonGroup *grp2 = new QButtonGroup( onNewPage );
     grp2->hide();
@@ -423,7 +428,7 @@ void KWFrameDia::setupTab2() // TAB Text Runaround
     str.setNum( KWUnit::userValue( ragap, doc->getUnit() ) );
     eRGap->setText( str );
 
-    runGroup->setEnabled( !frameSetFloating );
+    enableRunAround();
 
     //kdDebug() << "setup tab 2 exit"<<endl;
 }
@@ -456,8 +461,7 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
         KWFrameSet * fs = doc->getFrameSet( i );
         if ( i == 0 && doc->processingType() == KWDocument::WP )
             continue;
-        if ( fs->type() != FT_TEXT ||
-             static_cast<KWTextFrameSet*>( fs )->frameSetInfo() != KWFrameSet::FI_BODY )
+        if ( fs->type() != FT_TEXT || fs->isHeaderOrFooter() )
             continue;
         if ( fs->getGroupManager() )
             continue;
@@ -652,6 +656,8 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
     smr->setEnabled( false );
     smt->setEnabled( false );
     smb->setEnabled( false );
+    // margins are not implemented yet
+    grp2->hide();
 
     mGrid->addRowSpacing( 0, KDialog::spacingHint() + 5 );
 
@@ -694,16 +700,17 @@ void KWFrameDia::setupTab4(){ // TAB Geometry
         oldW = sw->text().toDouble();
         oldH = sh->text().toDouble();
 
-        floating->setChecked( frameSetFloating );
-
         if ( theFrame->getFrameSet()->getGroupManager() )
             floating->setText( i18n( "Table is inline" ) );
 
-        slotFloatingToggled( frameSetFloating );
+        floating->setChecked( frameSetFloating );
 
-        // Can't change geometry of main WP frame
-        if ( doc->processingType() == KWDocument::WP &&
-             doc->getFrameSetNum( theFrame->getFrameSet() ) == 0 )
+        if ( frameSetFloating )
+            slotFloatingToggled( true );
+
+        // Can't change geometry of main WP frame or headers/footers
+        if ( theFrame->getFrameSet()->isHeaderOrFooter() ||
+             theFrame->getFrameSet()->isMainFrameset() )
             disable = true;
     }
     else
@@ -751,10 +758,11 @@ void KWFrameDia::runConturClicked()
     rRunContur->setChecked( true );
 }
 
+// Called when "reconnect" or "no followup" is checked
 void KWFrameDia::setFrameBehaviourInputOn() {
     if ( tab4 && floating->isChecked() )
         return;
-    if(rResizeFrame && !rResizeFrame->isEnabled()) {
+    if( rAppendFrame && !rAppendFrame->isEnabled() ) {
         if(frameBehaviour== KWFrame::AutoExtendFrame) {
             rResizeFrame->setChecked(true);
         } else if (frameBehaviour== KWFrame::AutoCreateNewFrame) {
@@ -768,10 +776,11 @@ void KWFrameDia::setFrameBehaviourInputOn() {
     }
 }
 
+// Called when "place a copy" is checked
 void KWFrameDia::setFrameBehaviourInputOff() {
     if ( tab4 && floating->isChecked() )
         return;
-    if(rResizeFrame && rResizeFrame->isEnabled()) {
+    if( rAppendFrame && rAppendFrame->isEnabled() ) {
         if(rResizeFrame->isChecked()) {
             frameBehaviour=KWFrame::AutoExtendFrame;
         } else if ( rAppendFrame->isChecked()) {
@@ -779,10 +788,12 @@ void KWFrameDia::setFrameBehaviourInputOff() {
         } else {
             frameBehaviour=KWFrame::Ignore;
         }
-        rNoShow->setChecked(true);
-        rResizeFrame->setEnabled(false);
+        // In "Place a copy" mode, we can't have "create new page if text too long"
+        if ( rAppendFrame->isChecked() )
+            rNoShow->setChecked(true);
         rAppendFrame->setEnabled(false);
-        rNoShow->setEnabled(false);
+        rResizeFrame->setEnabled(true);
+        rNoShow->setEnabled(true);
     }
 }
 
@@ -797,21 +808,61 @@ void KWFrameDia::slotFloatingToggled(bool b)
             if ( b && rAppendFrame->isChecked() )
                 rNoShow->setChecked( true );
         }
-        // 'what happens on new page' is irrelevant for floating frames
-        reconnect->setEnabled( !b );
-        noFollowup->setEnabled( !b );
-        copyRadio->setEnabled( !b );
+        enableOnNewPageOptions();
         if ( b ) {
             noFollowup->setChecked( true );
             cbCopy->setChecked( false );
+        } else {
+            // Revert to non-inline frame stuff
+            rResizeFrame->setEnabled(true);
+            rAppendFrame->setEnabled(true);
+            rNoShow->setEnabled(true);
         }
     }
-    // grp2->setEnabled( !b ); do margins make sense for floating frames ?  (I think so; Thomas)
-    // well margins are not implemented yet, anyway
-    grp2->hide();
 
+    enableRunAround();
+}
+
+// Enable or disable the "on new page" options
+void KWFrameDia::enableOnNewPageOptions()
+{
+    if ( tab1 )
+    {
+        bool f = tab4 && floating->isChecked();
+        // 'what happens on new page' is irrelevant for floating frames
+        reconnect->setEnabled( !f );
+        noFollowup->setEnabled( !f );
+        copyRadio->setEnabled( !f );
+
+        if( frameType != FT_TEXT )
+            reconnect->setEnabled( false );
+        else
+        {
+            KWFrameSet *fs = frame->getFrameSet(); // 0 when creating a frame
+            if ( fs && fs->isHeaderOrFooter() )
+            {
+                reconnect->setEnabled( false );
+                noFollowup->setEnabled( false );
+            }
+        }
+    }
+}
+
+void KWFrameDia::enableRunAround()
+{
     if ( tab2 )
-        runGroup->setEnabled( !b ); // Runaround options don't make sense for floating frames
+    {
+        if ( tab4 && floating->isChecked() )
+            runGroup->setEnabled( false ); // Runaround options don't make sense for floating frames
+        else
+        {
+            KWFrameSet *fs = frame->getFrameSet();
+            if ( fs )
+                runGroup->setEnabled( !frameSetFloating && !fs->isMainFrameset() && !fs->isHeaderOrFooter() );
+            else
+                runGroup->setEnabled( true );
+        }
+    }
 }
 
 bool KWFrameDia::applyChanges()

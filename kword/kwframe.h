@@ -319,6 +319,9 @@ public:
     bool isAWrongHeader( KoHFType t ) const;
     bool isAWrongFooter( KoHFType t ) const;
 
+    bool isMainFrameset() const;
+    bool isMoveable() const;
+
     // frame management
     virtual void addFrame( KWFrame *_frame, bool recalc = true );
     virtual void delFrame( unsigned int _num );
@@ -416,7 +419,7 @@ public:
     /** returns true if we have a frame occupying that position */
     virtual bool contains( double mx, double my );
 
-    virtual bool getMouseCursor( const QPoint &nPoint, bool controlPressed, QCursor & cursor, bool canMove );
+    virtual bool getMouseCursor( const QPoint &nPoint, bool controlPressed, QCursor & cursor );
 
     /** which popup (from the XML file) should be shown when right-clicking inside this frame */
     virtual QString getPopupName() = 0;
@@ -459,7 +462,7 @@ public:
     /** Make this frameset fixed, i.e. not anchored */
     void setFixed();
     /** Return true if this frameset is floating, false if it's fixed */
-    bool isFloating() { return m_anchorTextFs; }
+    bool isFloating() const { return m_anchorTextFs; }
     /** Return the frameset in which our anchor is - assuming isFloating() */
     KWTextFrameSet * anchorFrameset() const { return m_anchorTextFs; }
     /** Return the anchor object for this frame number */

@@ -21,6 +21,7 @@
 #define framedia_h
 
 #include <kdialogbase.h>
+#include "kwunit.h"
 
 class KWFrame;
 class KWDocument;
@@ -59,6 +60,9 @@ protected:
     void setupTab4();
     void uncheckAllRuns();
     void updateFrames();
+    void enableRunAround();
+    void enableOnNewPageOptions();
+
     // TAB 1:
     QWidget *tab1;
     QGridLayout *grid1, *eofGrid, *onpGrid, *sideGrid;
