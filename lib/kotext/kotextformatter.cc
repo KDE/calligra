@@ -483,12 +483,11 @@ int KoTextFormatter::format( Qt3::QTextDocument *doc, Qt3::QTextParag *parag,
 
 QTextParagLineStart *KoTextFormatter::formatLineKo(
     KoZoomHandler *zh,
-    Qt3::QTextParag * /*parag*/, KoTextString *string, QTextParagLineStart *line,
+    Qt3::QTextParag *parag, KoTextString *string, QTextParagLineStart *line,
     KoTextStringChar *startChar, KoTextStringChar *lastChar, int align, int space )
 {
-//QT2HACK
-//    if( string->isBidi() )
-//	return bidiReorderLine( parag, string, line, startChar, lastChar, align, space );
+    if( string->isBidi() )
+	return bidiReorderLine( parag, string, line, startChar, lastChar, align, space );
     space = QMAX( space, 0 ); // #### with nested tables this gets negative because of a bug I didn't find yet, so workaround for now. This also means non-left aligned nested tables do not work at the moment
     int start = (startChar - &string->at(0));
     int last = (lastChar - &string->at(0) );
