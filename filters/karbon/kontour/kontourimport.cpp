@@ -26,8 +26,10 @@
 #include <shapes/vellipse.h>
 #include <shapes/vrectangle.h>
 #include <shapes/vpolygon.h>
+#include <commands/vtransformcmd.h>
 #include <core/vpath.h>
 #include <qcolor.h>
+#include <qfile.h>
 
 typedef KGenericFactory<KontourImport, KoFilter> KontourImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkarbonkontourimport, KontourImportFactory( "karbonkontourimport" ) );
@@ -147,7 +149,9 @@ KontourImport::parseGObject( VObject *object, const QDomElement &e )
 				  matrix.attribute( "m22" ).toDouble(),
 				  matrix.attribute( "dx" ).toDouble(),
 				  matrix.attribute( "dy" ).toDouble() );
-	object->transform( mat );
+
+	VTransformCmd trafo( 0L, mat );
+	trafo.visit( *object );
 }
 
 void
