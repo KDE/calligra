@@ -48,6 +48,7 @@ class KPresenterView;
 class KPClipartObject;
 class KoParagLayout;
 class KPrPage;
+class KoCustomVariable;
 
 /******************************************************************/
 /* Class: ShadowCmd                                               */
@@ -742,6 +743,20 @@ protected:
     QString oldPageName;
     QString newPageName;
     KPrPage *m_page;
+};
+
+class KPrChangeCustomVariableValue : public KCommand
+{
+ public:
+    KPrChangeCustomVariableValue( const QString &name, KPresenterDoc *_doc,const QString & _oldValue, const QString & _newValue, KoCustomVariable *var);
+    
+    void execute();
+    void unexecute();
+ protected:
+    KPresenterDoc *m_doc;
+    QString newValue;
+    QString oldValue;
+    KoCustomVariable *m_var;
 };
 
 #endif

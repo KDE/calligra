@@ -43,6 +43,7 @@
 #include <kpresenter_view.h>
 #include <kotextobject.h>
 #include "kprtextdocument.h"
+#include <koVariable.h>
 using namespace Qt3;
 #include <kdebug.h>
 #include "kprvariable.h"
@@ -1840,4 +1841,28 @@ void KPrChangeTitlePageNameCommand::unexecute()
     m_page->insertManualTitle(oldPageName);
     int pos=m_doc->pageList().findRef(m_page);
     m_doc->updateSideBarItem(pos);
+}
+
+KPrChangeCustomVariableValue::KPrChangeCustomVariableValue( const QString &name, KPresenterDoc *_doc,const QString & _oldValue, const QString & _newValue,KoCustomVariable *var):
+    KCommand(name),
+    m_doc(_doc),
+    newValue(_newValue),
+    oldValue(_oldValue),
+    m_var(var)
+{
+    kdDebug()<<"newValue :"<<newValue <<" oldValue :"<<oldValue<<endl;
+}
+
+void KPrChangeCustomVariableValue::execute()
+{
+    Q_ASSERT(m_var);
+    m_var->setValue(newValue);
+    m_doc->recalcVariables( VT_CUSTOM );
+}
+
+void KPrChangeCustomVariableValue::unexecute()
+{
+    Q_ASSERT(m_var);
+    m_var->setValue(oldValue);
+    m_doc->recalcVariables( VT_CUSTOM );
 }
