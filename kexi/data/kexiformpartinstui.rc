@@ -13,6 +13,7 @@
 <ToolBar name="widgets" fullWidth="false">
  <text>Widgets</text>
    <Action name="pointer"/>
+   <Action name="drag_connection"/>
    <Separator/>
    <Action name="library_widget_QButtonGroup"/>
    <Action name="library_widget_QTabWidget"/>
