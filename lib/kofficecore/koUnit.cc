@@ -22,6 +22,7 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <qregexp.h>
+#include <kdebug.h>
 
 QStringList KoUnit::listOfUnitName()
 {
@@ -124,7 +125,7 @@ double KoUnit::parseValue( QString value, double defaultVal )
     if( value.isEmpty() )
         return defaultVal;
 
-    int index = value.find( QRegExp( "[a-z]{1,2}$" ), -2 );
+    int index = value.find( QRegExp( "[a-z]+$" ) );
     double val = value.toDouble();
     if ( index == -1 )
         return val;
@@ -142,6 +143,7 @@ double KoUnit::parseValue( QString value, double defaultVal )
         return ptFromUnit( val * 10.0, U_DM );
     else if( unit == "km" )
         return ptFromUnit( val * 10000.0, U_DM );
+    kdWarning() << "KoUnit::parseValue: Unit " << unit << "is not supported, please report." << endl;
 
     // TODO : add support for mi/ft ?
     return defaultVal;
