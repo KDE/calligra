@@ -1,4 +1,4 @@
-		KIllustrator - Release 0.3
+		KIllustrator - Release 0.5
 		==========================
 
 1. Introduction
@@ -14,11 +14,6 @@ slides with a modern drawing tool. Now, for the Linux operating system
 and of course for other Unixes the Qt toolkit and the KDE project
 provide a perfect foundation for this kind of application.
 
-This snapshot release reflects the current development state - only
-basic functionality is implemented. Therefore this release is mainly
-intended for potential co-developers or end-users interested in
-getting a first impression. 
-
 2. Installation
 ---------------
 
@@ -27,13 +22,13 @@ package for yourself. But the configuration and compilation conforms
 to the usual GNU autoconf procedure.
 
 After downloading the archive, unpack the distribution with
-	gunzip -c killustrator-0.3.tar.gz | tar xvof -
+	gunzip -c killustrator-0.5.tar.gz | tar xvof -
 Next, change into the distribution directory 
-	cd killustrator-0.3
+	cd killustrator-0.5
 and invoke
 	./configure
 
-The installation requires a working K Desktop Environment (Beta 4 or
+The installation requires a working K Desktop Environment (1.0
 better). The current release is tested on Linux and Solaris 2.6 with
 gcc-2.8 and egcs-1.0. For image export (JPEG and PNG) the Qt Image I/O
 Extension (qimgio) is required. Otherwise only XPM, PPM and GIF is
@@ -52,81 +47,78 @@ remove the package with
 3. Features
 -----------
 
-As stated before only limited functionality is currently
-implemented. Here are some highlights:
-- different object types: polylines, circles, ellipses, squares,
-  rectangles and multiline text
+Here is a short description of currently implemented features: 
+- different object types: polylines, freehand lines, circles,
+  ellipses, squares, rectangles, symmetric polygones,
+  bezier curves and muliline text
 - tools for creating these objects
-- tools for moving, scaling, rotating as well as grouping, ungrouping,
-  aligning, distributing and reordering objects
-- a multilevel undo/redo facility
+- tools for moving, scaling, rotating as well as
+  grouping, ungrouping, aligning, distributing and
+  reordering objects
 - a property editor
 - multi-window support with cut/copy/paste between the windows
 - zooming and snapping to grid
-- multilevel undo/redo
+- multi-level undo and redo
 - (network-transparent) drop support with the KDE filemanager
 - printing to PostScript (file or printer)
-- preliminary WMF support (contributed by Stefan Taferner)
-- bezier curves
-- symmetric polygons
-- arrows 
+- Import of WMF-Cliparts (Thanks to Stefan Taferner)
 - editing single points of polylines and curves
-- different line styles
-- export to raster image formats (JPEG, XPM, GIF, PNG)
+- different line styles and arrows
+- export to raster image formats (JPEG, PNG, GIF, XPM)
 - saving/restoring of default object properties
-
-New in release 0.3:
-- export to GIF and Encapsulated PostScript
+- export to Encapsulated PostScript
 - page layout
 - transformation dialog
 - rounded rectangles
 - arcs and pies
 - XML-based file format
+- Support for different measurement units: inches, millimeter, points
+- A rudimentary Xfig import filter:
+  * Support for 3.1 and 3.2 files
+  * Splines and arrows not implemented
+
+New in this release:
+- More fill styles: pattern and gradients.
+- Closed (and fillable) bezier curves.
+- Better EPS export and PS printing: now clipart printing works !
+- Graphical layers.
+- Alignment of text.
+- Improved undo facility.
+- Bugfixes.
 
 The handling follows the Corel Draw(tm) user interface. That means:
-- Holding down the control key during object creation produces squares
-  resp. circles instead of rectangles or ellipses. 
-- Clicking in an existing text object enables the editing of the text
-- You can configure a tool by right clicking the activated tool
-  button. Currently, this works only for the polygon tool.
-- Lines are constructed with left click (this adds a new point) and
+- Holding down the control key during object creation
+  produces squares resp. circles instead of rectangles or
+  ellipses.
+- Clicking in an existing text object enables the editing of the text.
+- You can configure a tool by right clicking the
+  activated tool button. Currently, this works only for
+  the polygon tool.
+- Lines are constructed with left click (this adds a new point) and 
   finished with right click.
-- Bezier curves are constructed with 4 control points. You have to
-  left click 3 times before you can finish the curve segment with the
-  right mouse button. But you can add more segments by left clicking
-  instead of the right button. Sound confusing ? Try it !
+- Bezier curves are constructed with 4 control
+  points. You have to left click 3 times before you can
+  finish the curve segment with the right mouse
+  button. But you can add more segments by left clicking
+  instead of the right button. Sound confusing ? Try it	!
+- In addition, there are some new keyboard shortcuts:
+  * In the canvas, selected objects can be moved by 
+    pressing the cursor keys (big steps) or
+    SHIFT+cursor keys (smaller steps).
+  * There is a magnetic mode for appending 
+    to polylines and bezier curves: Press SHIFT+Left
+    Button near the point of line to snap the new line 
+    segment to this point.
+  * You can cancel selection or line adding with ESC.
 
 4. Contributions
 ----------------
 
 The development of this kind of application is surely much
 effort. Because I won't spend my whole spare time in coding, I invite
-you to participate in the KIllustrator project. First, if you plan to
+you to participate in the KIllustrator project. So, if you plan to
 contribute some code, please contact me in order to avoid duplicate
 work. 
-
-Currently the ToDo list for this project is longer than the feature
-list, so I give only some points for further development. My plans for
-the next release (perhaps this is the first beta release ?):
-- redraw optimization
-- layers
-
-Other topics:
-- object hierarchies
-- a freehand drawing tool
-- import of xfig files
-- support of OpenParts (KOffice) 
-- internationalization (at the moment only english and german support
-  is included)
-- documentation/online help (REALLY IMPORTANT ! I'm looking for
-  assistance !)
-- designing some nice icons/pixmaps
-- ...
-
-Open points:
-- replacing the Qt drawing engine by a Display Postscript-based engine
-- constraints
-- ...
 
 5. Bugs
 -------
@@ -152,6 +144,9 @@ and it's mirrors:
 5. History
 ----------
 
+11/06/98: snapshot 0.5 released
+08/28/98: snapshot 0.4.1 released
+08/10/98: snapshot 0.4 released
 06/02/98: release 0.3
 04/21/98: second snapshot released
 03/25/98: first preview version released

@@ -248,8 +248,23 @@ void GBezier::draw (Painter& p, bool withBasePoints) {
       }
       p.drawPolygon (ppoints);
     }
-    else
-      p.drawPolyline (ppoints);
+    else {
+      //      p.drawPolyline (ppoints);
+      for (unsigned int i = 1; i + 3 < num; i += 3) {
+	if (points.at (i + 1)->x () == MAXFLOAT ||
+	    points.at (i + 2)->x () == MAXFLOAT) {
+	  p.drawLine (points.at (i)->x (), points.at (i)->y (),
+		      points.at (i + 3)->x (), points.at (i + 3)->y ());
+	}
+	else {
+	  QPointArray bpoints (4);
+	  for (unsigned int k = 0; k < 4; k++)
+	    bpoints.setPoint (k, qRound (points.at (i + k)->x ()), 
+			      qRound (points.at (i + k)-> y ()));
+	  p.drawQuadBezier (bpoints);
+	}
+      }
+    }
   }
 #endif
   p.setClipping (false);

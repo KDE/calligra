@@ -1,13 +1,14 @@
 Begin3
 Title: killustrator
-Version: 0.3
-Entered-date: 05JUN98
+Version: 0.5
+Entered-date: 06NOV98
 Description: Vector graphics application for KDE.
 Keywords: Vector-graphics, Drawing,  KDE, Qt, X11
 Author: kus@iti.cs.uni-magdeburg.de (Kai-Uwe Sattler)
 Maintained-by: kus@iti.cs.uni-magdeburg.de (Kai-Uwe Sattler)
-Primary-site: http://wwwiti.cs.uni-magdeburg.de/~sattler/killustrator.html
-              245kB killustrator-0.3.tar.gz
+Primary-site: ftp://ftp.kde.org/pub/kde/unstable/apps/office
+File1: killustrator-0.5.tar.gz
+Original-site: http://wwwiti.cs.uni-magdeburg.de/~sattler/killustrator.html
 Platform: Any Unix which runs KDE, needs Qt by Troll Tech Inc.
 Copying-policy: GPL
 End
