@@ -26,6 +26,8 @@
 #include "basicelement.h"
 #include "textelement.h"
 #include "rootelement.h"
+#include "numberelement.h"
+#include "operatorelement.h"
 
 KFormulaCommand::KFormulaCommand(KFormulaContainer *document,
 				 FormulaCursor *cursor)
@@ -35,6 +37,9 @@ KFormulaCommand::KFormulaCommand(KFormulaContainer *document,
         cursordata=cursor->getCursorData();
     else
         cursordata=0;
+    
+    undocursor=0;
+
 }
 
 KFormulaCommand::~KFormulaCommand()
@@ -50,13 +55,14 @@ KFCAdd::KFCAdd(KFormulaContainer *document,FormulaCursor *cursor) : KFormulaComm
     removedList.setAutoDelete(true); 
     removedList.clear();
     insideElement=0;
+    undocursor=cursor->getCursorData();
 }
 
 bool KFCAdd::undo(FormulaCursor *cursor)
 {
 
-    cursor->setCursorData(cursordata);
-    cursor->remove(removedList,BasicElement::afterCursor);
+    cursor->setCursorData(undocursor);
+    cursor->remove(removedList,BasicElement::beforeCursor);
 
     return true;
 }
@@ -68,7 +74,6 @@ bool KFCAdd::redo(FormulaCursor *cursor)
     cursor->setCursorData(cursordata);
     cursor->insert(removedList);
 
-//Adjust it..some elements needs goinside()
     if(!insideElement)
         cursor->setSelection(false);
     else
@@ -92,7 +97,7 @@ KFCRemoveSelection::KFCRemoveSelection(KFormulaContainer *document,FormulaCursor
         delete element;
     }
     cursor->normalize();
-
+    undocursor=cursor->getCursorData();
 }
 
 bool KFCRemoveSelection::redo(FormulaCursor *cursor)
@@ -112,14 +117,14 @@ bool KFCRemoveSelection::redo(FormulaCursor *cursor)
 bool KFCRemoveSelection::undo(FormulaCursor *cursor)
 {
 
-    cursor->setCursorData(cursordata);
+    cursor->setCursorData(undocursor);
     cursor->insert(removedList);
     return true;
 }
 
 
 
-//  **** Add text command
+//  **** Add text,operator,numbers command
 KFCAddText::KFCAddText(KFormulaContainer *document,FormulaCursor *cursor,QChar ch) 
 : KFCAdd(document,cursor)
 {
@@ -130,30 +135,103 @@ KFCAddText::KFCAddText(KFormulaContainer *document,FormulaCursor *cursor,QChar c
     list.append(new TextElement(ch));
     cursor->insert(list);
     cursor->setSelection(false);
+    undocursor=cursor->getCursorData();
+
+}
+
+
+KFCAddNumber::KFCAddNumber(KFormulaContainer *document,FormulaCursor *cursor,QChar ch) 
+: KFCAdd(document,cursor)
+{
     
+
+    QList<BasicElement> list;
+    list.setAutoDelete(true);
+    list.append(new NumberElement(ch));
+    cursor->insert(list);
+    cursor->setSelection(false);
+    undocursor=cursor->getCursorData();
+
+}
+KFCAddOperator::KFCAddOperator(KFormulaContainer *document,FormulaCursor *cursor,QChar ch) 
+: KFCAdd(document,cursor)
+{
+    
+
+    QList<BasicElement> list;
+    list.setAutoDelete(true);
+    list.append(new OperatorElement(ch));
+    cursor->insert(list);
+    cursor->setSelection(false);
+    undocursor=cursor->getCursorData();
+
 }
 
 
 // ******  Add root command 
 
 KFCAddRoot::KFCAddRoot(KFormulaContainer *document,FormulaCursor *cursor)
-		        : KFCAdd(document,cursor)
+		        : KFormulaCommand(document,cursor)
 {
 
     RootElement* root = new RootElement();
-    cursor->insert(root);
-        //cursor->setSelection(false);
+
+    if(cursor->isSelection())
+    {        
+	cursor->replaceSelectionWith(root);
+    }
+    else
+	cursor->insert(root);
+        
+	//cursor->setSelection(false);
     insideElement=root;
     cursor->goInsideElement(root);
-    
+    undocursor=cursor->getCursorData();
 
+
+}
+
+bool KFCAddRoot::undo(FormulaCursor *cursor)
+{
+
+
+    cursor->setCursorData(undocursor);
+    BasicElement* element = cursor->removeEnclosingElement(BasicElement::beforeCursor);
+    removedList.clear();
+    removedList.append(element);
+    
+//    cursor->remove(removedList,BasicElement::beforeCursor);
+
+    return true;
+}
+
+
+bool KFCAddRoot::redo(FormulaCursor *cursor)
+{
+
+    cursor->setCursorData(cursordata);
+    if(cursor->isSelection())
+    {        
+	cursor->replaceSelectionWith(removedList.first());
+    }
+    else
+	cursor->insert(removedList.first());
+
+//    cursor->insert(removedList);
+
+    if(!insideElement)
+        cursor->setSelection(false);
+    else
+        cursor->goInsideElement(insideElement);
+	
+    return true;
 }
 
 
 // ******  Add matrix command 
 
 KFCAddMatrix::KFCAddMatrix(KFormulaContainer *document,FormulaCursor *cursor,int r,int c)
-		        : KFCAdd(document,cursor)
+		        : KFormulaCommand(document,cursor)
 {
 
     MatrixElement* matrix = new MatrixElement(r,c);
@@ -161,6 +239,27 @@ KFCAddMatrix::KFCAddMatrix(KFormulaContainer *document,FormulaCursor *cursor,int
         //cursor->setSelection(false);
     insideElement=matrix;
     cursor->goInsideElement(matrix);
-    
+
 
 }
+
+bool KFCAddMatrix::undo(FormulaCursor *cursor)
+{
+
+    cursor->setCursorData(cursordata);
+    cursor->remove(removedList,BasicElement::afterCursor);
+
+    return true;
+}
+
+
+bool KFCAddMatrix::redo(FormulaCursor *cursor)
+{
+
+    cursor->setCursorData(cursordata);
+    cursor->insert(removedList);
+    cursor->goInsideElement(insideElement);
+	
+    return true;
+}
+

@@ -57,8 +57,8 @@ public:
 protected:
      
      KFormulaContainer *doc;
-     FormulaCursor::CursorData *cursordata;
-
+     FormulaCursor::CursorData *cursordata;  //Cursor before the command execution
+     FormulaCursor::CursorData *undocursor;  //Cursor after the command execution
 };
 
 class KFCAdd : public KFormulaCommand
@@ -106,7 +106,28 @@ public:
    
 };
 
-class KFCAddRoot : public KFCAdd
+class KFCAddNumber : public KFCAdd
+{
+public:
+   /**
+    * Build a addNumberElement command and add
+    * at cursor a numberelement with content ch
+    */
+    KFCAddNumber(KFormulaContainer *document,FormulaCursor* cursor, QChar ch);
+   
+};
+class KFCAddOperator : public KFCAdd
+{
+public:
+   /**
+    * Build a addOperatorElement command and add
+    * at cursor a operatorelement with content ch
+    */
+    KFCAddOperator(KFormulaContainer *document,FormulaCursor* cursor, QChar ch);
+   
+};
+
+class KFCAddRoot : public KFormulaCommand
 {
 public:
    /**
@@ -114,10 +135,18 @@ public:
     * at cursor a root element
     */
     KFCAddRoot(KFormulaContainer *document,FormulaCursor* cursor);
+ 
+    virtual bool undo(FormulaCursor *cursor);
+    virtual bool redo(FormulaCursor *cursor);
+
+protected:
+
+     QList<BasicElement> removedList;
+     BasicElement *insideElement;   
   
 };
 
-class KFCAddMatrix : public KFCAdd
+class KFCAddMatrix : public KFormulaCommand
 {
 public:
    /**
@@ -125,6 +154,14 @@ public:
     * at cursor a root element
     */
     KFCAddMatrix(KFormulaContainer *document,FormulaCursor* cursor,int r,int c);
+
+    virtual bool undo(FormulaCursor *cursor);
+    virtual bool redo(FormulaCursor *cursor);
+
+protected:
+
+     QList<BasicElement> removedList;
+     BasicElement *insideElement;   
   
 };
 

@@ -117,30 +117,32 @@ void KFormulaContainer::addText(FormulaCursor* cursor, QChar ch)
 
 void KFormulaContainer::addNumber(FormulaCursor* cursor, QChar ch)
 {
+
     if (cursor->isSelection()) {
-        removeSelection(cursor, BasicElement::beforeCursor);
+	KFCRemoveSelection *command=new KFCRemoveSelection(this,cursor,BasicElement::beforeCursor);
+	execute(command);
     }
-    QList<BasicElement> list;
-    list.setAutoDelete(true);
-    list.append(new NumberElement(ch));
-    cursor->insert(list);
-    cursor->setSelection(false);
+
+    KFCAddNumber *command=new KFCAddNumber(this,cursor,ch);
+    execute(command);
+
 }
 
 void KFormulaContainer::addOperator(FormulaCursor* cursor, QChar ch)
 {
     if (cursor->isSelection()) {
-        removeSelection(cursor, BasicElement::beforeCursor);
+	KFCRemoveSelection *command=new KFCRemoveSelection(this,cursor,BasicElement::beforeCursor);
+	execute(command);
     }
-    QList<BasicElement> list;
-    list.setAutoDelete(true);
-    list.append(new OperatorElement(ch));
-    cursor->insert(list);
-    cursor->setSelection(false);
+
+    KFCAddOperator *command=new KFCAddOperator(this,cursor,ch);
+    execute(command);
+
 }
 
 void KFormulaContainer::addBracket(FormulaCursor* cursor, char left, char right)
 {
+
     BracketElement* bracket = new BracketElement(left, right);
     if (cursor->isSelection()) {
         cursor->replaceSelectionWith(bracket);
@@ -150,6 +152,7 @@ void KFormulaContainer::addBracket(FormulaCursor* cursor, char left, char right)
         //cursor->setSelection(false);
     }
     cursor->goInsideElement(bracket);
+
 }
 
 void KFormulaContainer::addFraction(FormulaCursor* cursor)
@@ -167,11 +170,11 @@ void KFormulaContainer::addFraction(FormulaCursor* cursor)
 
 void KFormulaContainer::addRoot(FormulaCursor* cursor)
 {
-    if (cursor->isSelection()) {
+/*    if (cursor->isSelection()) {
 	KFCRemoveSelection *command=new KFCRemoveSelection(this,cursor,BasicElement::beforeCursor);
 	execute(command);
     }
-
+*/
     KFCAddRoot *command=new KFCAddRoot(this,cursor);
     execute(command);
 
@@ -328,6 +331,11 @@ void KFormulaContainer::addIndex(FormulaCursor* cursor, ElementIndexPtr index)
 void KFormulaContainer::removeSelection(FormulaCursor* cursor,
                                         BasicElement::Direction direction)
 {
+
+    KFCRemoveSelection *command=new KFCRemoveSelection(this,cursor,direction);
+    execute(command);
+
+/*
     QList<BasicElement> list;
     list.setAutoDelete(true);
     
@@ -338,7 +346,9 @@ void KFormulaContainer::removeSelection(FormulaCursor* cursor,
     }
     //cursor->normalize(direction);
     cursor->normalize();
+*/
 }
+
 
 void KFormulaContainer::replaceElementWithMainChild(FormulaCursor* cursor,
                                                     BasicElement::Direction direction)
