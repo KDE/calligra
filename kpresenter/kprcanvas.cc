@@ -88,7 +88,6 @@
 #include "pageeffects.h"
 #include <unistd.h>
 
-
 KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
     : QWidget( parent, name, WStaticContents|WResizeNoErase|WRepaintNoErase ), buffer( size() )
 {
@@ -3320,18 +3319,18 @@ bool KPrCanvas::pNext( bool gotoNextPage )
         QValueList<int>::ConstIterator it( m_presentationSlidesIterator );
         --it;
 
-        KPBackGround * backtmp=doc->pageList().at( ( *it ) - 1 )->background();
-        PageEffect _pageEffect = backtmp->getPageEffect();
+        KPrPage * page = doc->pageList().at( ( *it ) - 1 );
+        PageEffect _pageEffect = page->getPageEffect();
 
-        bool _soundEffect = backtmp->getPageSoundEffect();
-        QString _soundFileName = backtmp->getPageSoundFileName();
+        bool _soundEffect = page->getPageSoundEffect();
+        QString _soundFileName = page->getPageSoundFileName();
 
         if ( _soundEffect && !_soundFileName.isEmpty() ) {
             stopSound();
             playSound( _soundFileName );
         }
 
-        m_pageEffect = new KPPageEffects( this, _pix2, _pageEffect, backtmp->getPageEffectSpeed() );
+        m_pageEffect = new KPPageEffects( this, _pix2, _pageEffect, page->getPageEffectSpeed() );
         if ( m_pageEffect->doEffect() )
         {
             delete m_pageEffect;

@@ -733,7 +733,7 @@ void KPresenterDoc::compatibilityFromOldFileFormat()
         for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
         {
             if ( presSpeedChanged )
-                m_pageList.at(i)->background()->setPageEffectSpeed( newValue );
+                m_pageList.at(i)->setPageEffectSpeed( newValue );
             m_pageList.at( i )->setHeader( m_loadingInfo->m_header );
             m_pageList.at( i )->setFooter( m_loadingInfo->m_footer );
         }
@@ -758,8 +758,7 @@ QDomDocumentFragment KPresenterDoc::saveBackground( QDomDocument &doc )
     for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ ) {
         if ( saveOnlyPage != -1 && i != saveOnlyPage )
             continue;
-        kpbackground = m_pageList.at(i)->background();
-        fragment.appendChild(kpbackground->save( doc, (specialOutputFlag()==SaveAsKOffice1dot1) ));
+        fragment.appendChild( m_pageList.at(i)->save( doc, (specialOutputFlag()==SaveAsKOffice1dot1) ));
     }
     return fragment;
 }
@@ -1565,15 +1564,13 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
                  || context.styleStack().hasAttribute( "presentation:transition-style" ) )
             {
                 kdDebug()<<" fill or presentation-style found \n";
-                //m_pageList.at(pos)->background()->loadOasis( context );
-                newpage->background()->loadOasis( context );
+                newpage->loadOasis( context );
             }
             else if ( !context.styleStack().hasAttribute( "draw:fill" ) && backgroundStyle)
             {
                 context.styleStack().save();
                 context.addStyles( backgroundStyle );
-                //m_pageList.at( pos )->background()->loadOasis(context);
-                newpage->background()->loadOasis(context);
+                newpage->loadOasis(context);
                 context.styleStack().restore();
                 kdDebug()<<" load standard background \n";
             }
@@ -2367,14 +2364,14 @@ void KPresenterDoc::loadBackground( const QDomElement &element )
     int i=m_insertFilePage;
     while(!page.isNull()) {
         if(m_pageWhereLoadObject)
-            m_pageWhereLoadObject->background()->load(page);
+            m_pageWhereLoadObject->load(page);
         else
         {
             //test if there is a page at this index
             //=> don't add new page if there is again a page
             if ( i > ( (int)m_pageList.count() - 1 ) )
                 m_pageList.append( new KPrPage( this, m_masterPage ) );
-            m_pageList.at(i)->background()->load(page);
+            m_pageList.at(i)->load(page);
             i++;
         }
         page=page.nextSibling().toElement();

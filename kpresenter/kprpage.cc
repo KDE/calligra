@@ -42,6 +42,7 @@
 #include "kpcubicbeziercurveobject.h"
 #include "kppolygonobject.h"
 #include "kpclosedlineobject.h"
+#include "kpresenter_utils.h"
 #include <kdebug.h>
 #include <koQueryTrader.h>
 #include "kpresenter_doc.h"
@@ -81,7 +82,11 @@ KPrPage::KPrPage(KPresenterDoc *_doc, KPrPage *masterPage )
     , m_selectedSlides( true )
     , m_bHasHeader( false )
     , m_bHasFooter( false )
-
+    , m_pageEffect( PEF_NONE )
+    , m_pageEffectSpeed( ES_MEDIUM )
+    , m_soundEffect( false )
+    , m_soundFileName( QString::null )
+    , m_pageTimer( 1 )
 {
     kdDebug(33001)<<"create page : KPrPage::KPrPage(KPresenterDoc *_doc )"<<this<<endl;
     m_objectList.setAutoDelete( false );
@@ -234,6 +239,234 @@ void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingC
     animationTmpFile.close();
 }
 
+void KPrPage::load( const QDomElement &element )
+{
+    m_kpbackground->load( element );
+    QDomElement e=element.namedItem("PGEFFECT").toElement();
+    if(!e.isNull()) {
+        int tmp=0;
+        if(e.hasAttribute("value"))
+            tmp=e.attribute("value").toInt();
+        setPageEffect(static_cast<PageEffect>(tmp));
+        tmp = (int)ES_MEDIUM;
+        if(e.hasAttribute("speed"))
+            tmp=e.attribute("speed").toInt();
+        setPageEffectSpeed( static_cast<EffectSpeed>(tmp) );
+    }
+    e=element.namedItem("PGTIMER").toElement();
+    if(!e.isNull()) {
+        int timer = 1;
+        if(e.hasAttribute("timer"))
+            timer=e.attribute("timer").toInt();
+        setPageTimer(timer);
+    }
+    else
+        setPageTimer(1);
+    e=element.namedItem("PGSOUNDEFFECT").toElement();
+    if(!e.isNull()) {
+        if(e.hasAttribute("soundEffect"))
+            m_soundEffect=static_cast<bool>(e.attribute("soundEffect").toInt());
+        else
+            m_soundEffect=false;
+
+        if(e.hasAttribute("soundFileNmae")) // old typo
+            m_soundFileName=e.attribute("soundFileNmae");
+        else
+            m_soundFileName=e.attribute("soundFileName");
+    }
+    else {
+        m_soundFileName=QString::null;
+    }
+}
+
+void KPrPage::loadOasis(KoOasisContext & context )
+{
+    m_kpbackground->loadOasis( context );
+
+    KoStyleStack& styleStack = context.styleStack();
+    kdDebug()<<"KPrPage::loadOasis()\n";
+    styleStack.setTypeProperties( "drawing-page" );
+    if ( styleStack.hasAttribute( "presentation:visibility" ) )
+    {
+        QString str =  styleStack.attribute( "presentation:visibility" );
+        if ( str=="hidden" )
+            slideSelected( false );
+        else
+            kdDebug()<<" presentation:visibility parameter not implemented :"<<str<<endl;
+    }
+
+    if ( styleStack.hasAttribute( "presentation:transition-speed" ) )
+    {
+        // this argument is not defined into kpresenter_doc and not into kprpage
+        // TODO add it into each page.
+        QString speed = styleStack.attribute( "presentation:transition-speed" );
+        if ( speed == "slow" )
+        {
+            m_pageEffectSpeed = ES_SLOW;
+        }
+        else if ( speed == "medium" )
+        {
+            m_pageEffectSpeed = ES_MEDIUM;
+        }
+        else if ( speed == "fast" )
+        {
+            m_pageEffectSpeed = ES_FAST;
+        }
+        else
+            kdDebug()<<" transition-speed not defined :"<<speed<<endl;
+    }
+    if ( styleStack.hasAttribute("presentation:duration" ))
+    {
+        m_pageTimer = loadOasisTimer( styleStack.attribute("presentation:duration") );
+    }
+    if ( styleStack.hasAttribute( "presentation:transition-type" ) )
+    {
+        //Not defined into kpresenter
+        //it's global for the moment.
+        kdDebug()<<" presentation:transition-type :"<<styleStack.attribute( "presentation:transition-type" )<<endl;
+    }
+    if ( styleStack.hasAttribute( "presentation:display-header" ) )
+    {
+        QString tmp = styleStack.attribute( "presentation:display-header" );
+        setHeader( tmp =="true" ? true : false );
+    }
+    if ( styleStack.hasAttribute( "presentation:display-footer" ) )
+    {
+        QString tmp = styleStack.attribute( "presentation:display-footer" );
+        setFooter(tmp =="true" ? true : false);
+    }
+    if ( styleStack.hasAttribute("presentation:transition-style"))
+    {
+        //kdDebug()<<" have a presentation:transition-style------------\n";
+        const QString effect = styleStack.attribute("presentation:transition-style");
+        kdDebug() << "Transition name: " << effect << endl;
+        PageEffect pef;
+        if ( effect=="none" )
+            pef=PEF_NONE;
+        else if (effect=="vertical-stripes" || effect=="vertical-lines") // PEF_BLINDS_VER
+            pef=PEF_BLINDS_VER;
+        else if (effect=="horizontal-stripes" || effect=="horizontal-lines") // PEF_BLINDS_HOR
+            pef=PEF_BLINDS_HOR;
+        else if (effect=="spiralin-left" || effect=="spiralin-right"
+                 || effect== "spiralout-left" || effect=="spiralout-right") // PEF_SURROUND1
+            pef=PEF_SURROUND1;
+        else if (effect=="fade-from-upperleft") // PEF_STRIPS_RIGHT_DOWN
+            pef=PEF_STRIPS_RIGHT_DOWN;
+        else if (effect=="fade-from-upperright") // PEF_STRIPS_LEFT_DOWN
+            pef=PEF_STRIPS_LEFT_DOWN;
+        else if (effect=="fade-from-lowerleft") // PEF_STRIPS_RIGHT_UP
+            pef=PEF_STRIPS_RIGHT_UP;
+        else if (effect=="fade-from-lowerright") // PEF_STRIPS_LEFT_UP
+            pef=PEF_STRIPS_LEFT_UP;
+        else if (effect=="fade-from-top") // PEF_COVER_DOWN
+            pef=PEF_COVER_DOWN;
+        else if (effect=="fade-from-bottom") // PEF_COVER_UP
+            pef=PEF_COVER_UP;
+        else if (effect=="fade-from-left") // PEF_COVER_RIGHT
+            pef=PEF_COVER_RIGHT;
+        else if (effect=="fade-from-right") // PEF_COVER_LEFT
+            pef=PEF_COVER_LEFT;
+        else if (effect=="fade-from-lowerleft") // PEF_COVER_RIGHT_UP
+            pef=PEF_COVER_RIGHT_UP;
+        else if (effect=="fade-from-lowerright") // PEF_COVER_LEFT_UP
+            pef=PEF_COVER_LEFT_UP;
+        else if (effect=="fade-from-upperleft") // PEF_COVER_RIGHT_DOWN
+            pef=PEF_COVER_RIGHT_DOWN;
+        else if (effect=="fade-from-upperright") // PEF_COVER_LEFT_DOWN
+            pef=PEF_COVER_LEFT_DOWN;
+        else if (effect=="fade-to-center") // PEF_BOX_IN
+            pef=PEF_BOX_IN;
+        else if (effect=="fade-from-center") // PEF_BOX_OUT
+            pef=PEF_BOX_OUT;
+        else if (effect=="open-vertical") // PEF_OPEN_HORZ; really, no kidding ;)
+            pef=PEF_OPEN_HORZ;
+        else if (effect=="open-horizontal") // PEF_OPEN_VERT
+            pef=PEF_OPEN_VERT;
+        else if (effect=="open") // PEF_OPEN_ALL
+            pef=PEF_OPEN_ALL;
+        else if (effect=="close-vertical") // PEF_CLOSE_HORZ
+            pef=PEF_CLOSE_HORZ;
+        else if (effect=="close-horizontal") // PEF_CLOSE_VERT
+            pef=PEF_CLOSE_VERT;
+        else if (effect=="close") // PEF_CLOSE_ALL
+            pef=PEF_CLOSE_ALL;
+        else if (effect=="dissolve") // PEF_DISSOLVE; perfect hit ;)
+            pef=PEF_DISSOLVE;
+        else if (effect=="horizontal-checkerboard") // PEF_CHECKBOARD_ACROSS
+            pef=PEF_CHECKBOARD_ACROSS;
+        else if (effect=="vertical-checkerboard") // PEF_CHECKBOARD_DOWN
+            pef=PEF_CHECKBOARD_DOWN;
+        else if (effect=="uncover-to-right" || effect=="roll-from-left") // PEF_UNCOVER_RIGHT
+            pef=PEF_UNCOVER_RIGHT;
+        else if (effect=="uncover-to-left" || effect=="roll-from-right") // PEF_UNCOVER_LEFT
+            pef=PEF_UNCOVER_LEFT;
+        else if (effect=="uncover-to-top" || effect=="roll-from-bottom") // PEF_UNCOVER_UP
+            pef=PEF_UNCOVER_UP;
+        else if (effect=="uncover-to-bottom" || effect=="roll-from-top") // PEF_UNCOVER_DOWN
+            pef=PEF_UNCOVER_DOWN;
+        else if (effect=="uncover-to-upperleft") // PEF_UNCOVER_LEFT_UP
+            pef=PEF_UNCOVER_LEFT_UP;
+        else if (effect=="uncover-to-upperright") // PEF_UNCOVER_RIGHT_UP
+            pef=PEF_UNCOVER_RIGHT_UP;
+        else if (effect=="uncover-to-lowerleft") // PEF_UNCOVER_LEFT_DOWN
+            pef=PEF_UNCOVER_LEFT_DOWN;
+        else if (effect=="uncover-to-lowerright") // PEF_UNCOVER_RIGHT_DOWN
+            pef=PEF_UNCOVER_RIGHT_DOWN;
+        else if (effect=="interlocking-horizontal-left")
+            pef=PEF_INTERLOCKING_HORZ_1;
+        else if (effect=="interlocking-horizontal-right")
+            pef=PEF_INTERLOCKING_HORZ_2;
+        else if (effect=="interlocking-vertical-top")
+            pef=PEF_INTERLOCKING_VERT_1;
+        else if (effect=="interlocking-vertical-bottom")
+            pef=PEF_INTERLOCKING_VERT_2;
+        else if ( effect=="melt" )
+            pef=PEF_MELTING;
+        else if ( effect=="fly-away" )
+            pef=PEF_FLY1;
+        else if ( effect=="random" )
+            pef=PEF_RANDOM;
+        else         // we choose a random transition instead of the unsupported ones ;)
+            pef=PEF_RANDOM;
+        setPageEffect( pef );
+    }
+    if ( styleStack.hasChildNode("presentation:sound"))
+    {
+        //kdDebug()<<" presentation:sound !!!!!!!!!!!!!!!!!!!!!\n";
+        QDomElement sound = styleStack.childNode("presentation:sound").toElement();
+        m_soundEffect = true;
+        m_soundFileName = sound.attribute( "xlink:href" );
+    }
+}
+
+QDomElement KPrPage::save( QDomDocument &doc, const bool saveAsKOffice1Dot1 )
+{
+    QDomElement page = m_kpbackground->save( doc, saveAsKOffice1Dot1 );
+    QDomElement element;
+
+    if ( m_pageEffect != PEF_NONE) {
+        element = doc.createElement("PGEFFECT");
+        element.setAttribute("value", static_cast<int>( m_pageEffect ));
+        element.setAttribute("speed", static_cast<int>( m_pageEffectSpeed ));
+        page.appendChild(element);
+    }
+
+    if ( m_pageTimer != 1 ) {
+        element = doc.createElement( "PGTIMER" );
+        element.setAttribute( "timer", m_pageTimer );
+        page.appendChild( element );
+    }
+
+    if ( m_soundEffect || !m_soundFileName.isEmpty() ) {
+        element = doc.createElement( "PGSOUNDEFFECT" );
+        element.setAttribute( "soundEffect", static_cast<int>(m_soundEffect) );
+        element.setAttribute( "soundFileName", m_soundFileName );
+        page.appendChild( element );
+    }
+
+    return page;
+}
+
 bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoSavingContext& context, int & indexObj, int &partIndexObj, KoXmlWriter* manifestWriter) const
 {
     //store use to save picture and co
@@ -242,7 +475,7 @@ bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage
     xmlWriter.addAttribute( "draw:name", namePage ); //we must store a name
     xmlWriter.addAttribute( "draw:id", posPage );
     xmlWriter.addAttribute( "draw:master-page-name", "Standard"); //by default name of page is Standard
-    QString styleName = m_kpbackground->saveOasisBackgroundPageStyle( store, xmlWriter, context.mainStyles() );
+    QString styleName = saveOasisPageStyle( store, context.mainStyles() );
     kdDebug()<<" styleName :"<<styleName<<endl;
     if ( !styleName.isEmpty() )
         xmlWriter.addAttribute( "draw:style-name", styleName );
@@ -252,6 +485,56 @@ bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage
     saveOasisNote( xmlWriter );
     xmlWriter.endElement();
     return true;
+}
+
+QString KPrPage::saveOasisPageStyle( KoStore *store, KoGenStyles& mainStyles ) const
+{
+    KoGenStyle stylepageauto( KPresenterDoc::STYLE_BACKGROUNDPAGEAUTO, "drawing-page" );
+    stylepageauto.addProperty( "presentation:background-visible", "true" ); //for the moment it's not implemented into kpresenter
+    stylepageauto.addProperty( "presentation:background-objects-visible", "true" );
+    QString transition = saveOasisPageEffect();
+    if ( !transition.isEmpty() )
+    {
+        stylepageauto.addProperty( "presentation:transition-style", transition );
+    }
+    stylepageauto.addProperty( "presentation:display-header", hasHeader());
+    stylepageauto.addProperty( "presentation:display-footer", hasFooter());
+
+    if ( m_pageTimer != 1 )
+    {
+        stylepageauto.addProperty("presentation:duration", saveOasisTimer( m_pageTimer ));
+        //not used into kpresenter but necessary into ooimpress
+        //keep compatible
+        stylepageauto.addProperty( "presentation:transition-type", "automatic" );
+    }
+    if ( m_pageEffectSpeed != ES_MEDIUM ) // we don't save the default value
+    {
+        if ( m_pageEffectSpeed == ES_FAST )
+            stylepageauto.addProperty( "presentation:transition-speed", "fast" );
+        else if ( m_pageEffectSpeed == ES_SLOW )
+            stylepageauto.addProperty( "presentation:transition-speed", "slow" );
+    }
+    if ( !isSlideSelected() )
+        stylepageauto.addProperty( "presentation:visibility", "hidden" );
+    if ( !m_soundFileName.isEmpty() && m_soundEffect )
+    {
+        QBuffer buffer;
+        buffer.open( IO_WriteOnly );
+        KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
+        elementWriter.startElement( "presentation:sound" );
+        elementWriter.addAttribute( "xlink:href", m_soundFileName );
+        elementWriter.addAttribute( "xlink:type", "simple" );
+        elementWriter.addAttribute( "xlink:show", "new" );
+        elementWriter.addAttribute( "xlink:actuate", "onRequest");
+
+        elementWriter.endElement();
+        QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+        stylepageauto.addChildElement( "sound effect", elementContents );
+    }
+
+    m_kpbackground->saveOasisBackgroundPageStyle( stylepageauto, mainStyles );
+
+    return mainStyles.lookup( stylepageauto, "dp" );
 }
 
 bool KPrPage::saveOasisNote( KoXmlWriter &xmlWriter ) const
@@ -274,6 +557,145 @@ bool KPrPage::saveOasisNote( KoXmlWriter &xmlWriter ) const
 
     return true;
 }
+
+QString KPrPage::saveOasisPageEffect() const
+{
+    QString transition;
+    switch( m_pageEffect )
+    {
+    case PEF_NONE:
+        transition="none";
+        break;
+    case PEF_CLOSE_HORZ:
+        transition="close-vertical";
+        break;
+    case PEF_CLOSE_VERT:
+        transition="close-horizontal";
+        break;
+    case PEF_CLOSE_ALL:
+        transition="close";
+        break;
+    case PEF_OPEN_HORZ:
+        transition="open-vertical";
+        break;
+    case PEF_OPEN_VERT:
+        transition="open-horizontal";
+        break;
+    case PEF_OPEN_ALL:
+        transition="open";
+        break;
+    case PEF_INTERLOCKING_HORZ_1:
+        transition="interlocking-horizontal-left";
+        break;
+    case PEF_INTERLOCKING_HORZ_2:
+        transition="interlocking-horizontal-right";
+        break;
+    case PEF_INTERLOCKING_VERT_1:
+        transition="interlocking-vertical-top";
+        break;
+    case PEF_INTERLOCKING_VERT_2:
+        transition="interlocking-vertical-bottom";
+        break;
+    case PEF_SURROUND1:
+        transition="spiralin-left";
+        break;
+    case PEF_FLY1:
+        transition="fly-away";
+        break;
+    case PEF_BLINDS_HOR:
+        transition="horizontal-stripes";
+        break;
+    case PEF_BLINDS_VER:
+        transition="vertical-stripes";
+        break;
+    case PEF_BOX_IN:
+        transition="fade-to-center";
+        break;
+    case PEF_BOX_OUT:
+        transition="fade-from-center";
+        break;
+    case PEF_CHECKBOARD_ACROSS:
+        transition="horizontal-checkerboard";
+        break;
+    case PEF_CHECKBOARD_DOWN:
+        transition="vertical-checkerboard";
+        break;
+    case PEF_COVER_DOWN:
+        transition="fade-from-top";
+        break;
+    case PEF_COVER_UP:
+        transition="fade-from-bottom";
+        break;
+    case PEF_COVER_LEFT:
+        transition="fade-from-right";
+        break;
+    case PEF_COVER_RIGHT:
+        transition="fade-from-left";
+        break;
+    case PEF_COVER_LEFT_UP:
+        transition="fade-from-lowerright";
+        break;
+    case PEF_COVER_LEFT_DOWN:
+        transition="fade-from-upperright";
+        break;
+    case PEF_COVER_RIGHT_UP:
+        transition="fade-from-lowerleft";
+        break;
+    case PEF_COVER_RIGHT_DOWN:
+        transition="fade-from-upperleft";
+        break;
+    case PEF_UNCOVER_LEFT:
+        transition="uncover-to-left";
+        break;
+    case PEF_UNCOVER_UP:
+        transition="uncover-to-top";
+        break;
+    case PEF_UNCOVER_RIGHT:
+        transition="uncover-to-right";
+        break;
+    case PEF_UNCOVER_DOWN:
+        transition="uncover-to-bottom";
+        break;
+    case PEF_UNCOVER_LEFT_UP:
+        transition="uncover-to-upperleft";
+        break;
+    case PEF_UNCOVER_LEFT_DOWN:
+        transition="uncover-to-lowerleft";
+        break;
+    case PEF_UNCOVER_RIGHT_UP:
+        transition="uncover-to-upperright";
+        break;
+    case PEF_UNCOVER_RIGHT_DOWN:
+        transition="uncover-to-lowerright";
+        break;
+    case PEF_DISSOLVE:
+        transition="dissolve";
+        break;
+    case PEF_STRIPS_LEFT_UP:
+        transition="fade-from-lowerright";
+        break;
+    case PEF_STRIPS_LEFT_DOWN:
+        transition="fade-from-upperright";
+        break;
+    case PEF_STRIPS_RIGHT_UP:
+        transition="fade-from-lowerleft";
+        break;
+    case PEF_STRIPS_RIGHT_DOWN:
+        transition="fade-from-upperleft";
+        break;
+    case PEF_MELTING:
+        transition="melt";
+        break;
+    case PEF_LAST_MARKER://don't use it !!!
+        break;
+    case PEF_RANDOM:
+        transition="random";
+        break;
+
+    }
+    return transition;
+}
+
 
 KPObject *KPrPage::getObject(int num)
 {
@@ -1894,24 +2316,29 @@ void KPrPage::setBackType( BackType backType )
     m_kpbackground->setBackType( backType );
 }
 
+void KPrPage::setPageEffectSpeed( EffectSpeed pageEffectSpeed ) 
+{ 
+    m_pageEffectSpeed = pageEffectSpeed; 
+}
+
 void KPrPage::setPageEffect( PageEffect pageEffect )
 {
-    m_kpbackground->setPageEffect( pageEffect );
+    m_pageEffect = pageEffect;
 }
 
 void KPrPage::setPageTimer( int pageTimer )
 {
-    m_kpbackground->setPageTimer( pageTimer );
+    m_pageTimer = pageTimer;
 }
 
 void KPrPage::setPageSoundEffect( bool soundEffect )
 {
-    m_kpbackground->setPageSoundEffect( soundEffect );
+    m_soundEffect = soundEffect;
 }
 
 void KPrPage::setPageSoundFileName( const QString &fileName )
 {
-    m_kpbackground->setPageSoundFileName( fileName );
+    m_soundFileName = fileName;
 }
 
 BackType KPrPage::getBackType() const
@@ -1959,24 +2386,29 @@ BCType KPrPage::getBackColorType() const
     return m_kpbackground->getBackColorType();
 }
 
+EffectSpeed KPrPage::getPageEffectSpeed() const 
+{ 
+    return m_pageEffectSpeed; 
+}
+
 PageEffect KPrPage::getPageEffect() const
 {
-    return m_kpbackground->getPageEffect();
+    return m_pageEffect;
 }
 
 int KPrPage::getPageTimer() const
 {
-    return m_kpbackground->getPageTimer();
+    return m_pageTimer;
 }
 
 bool KPrPage::getPageSoundEffect() const
 {
-    return m_kpbackground->getPageSoundEffect();
+    return m_soundEffect;
 }
 
 QString KPrPage::getPageSoundFileName() const
 {
-    return m_kpbackground->getPageSoundFileName();
+    return m_soundFileName;
 }
 
 KoRect KPrPage::getPageRect() const

@@ -1194,7 +1194,7 @@ TransEffectCmd::TransEffectCmd( QValueVector<PageEffectSettings> oldSettings,
 void TransEffectCmd::PageEffectSettings::applyTo( KPrPage *page )
 {
     page->setPageEffect( pageEffect );
-    page->background()->setPageEffectSpeed( effectSpeed );
+    page->setPageEffectSpeed( effectSpeed );
     page->setPageSoundEffect( soundEffect );
     page->setPageSoundFileName( soundFileName );
     // TODO page->setAutoAdvance( autoAdvance );

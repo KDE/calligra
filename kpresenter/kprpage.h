@@ -274,6 +274,7 @@ public:
     void setBackType( BackType backType );
 
     void setPageEffect(  PageEffect pageEffect );
+    void setPageEffectSpeed( EffectSpeed pageEffectSpeed );
     void setPageTimer(  int pageTimer );
     void setPageSoundEffect(  bool soundEffect );
     void setPageSoundFileName(  const QString &fileName );
@@ -287,6 +288,7 @@ public:
     int getBackYFactor( )const;
     BCType getBackColorType( )const;
     PageEffect getPageEffect( )const;
+    EffectSpeed getPageEffectSpeed() const;
     int getPageTimer(  )const;
     bool getPageSoundEffect( )const;
     QString getPageSoundFileName()const;
@@ -357,7 +359,14 @@ public:
     void getAllObjectSelectedList(QPtrList<KPObject> &lst,bool force = false );
     void getAllEmbeddedObjectSelected(QPtrList<KoDocumentChild> &embeddedObjects );
 
+    void load( const QDomElement &element );
+    void loadOasis( KoOasisContext & context );
+
+    QDomElement save( QDomDocument &doc, const bool saveAsKOffice1Dot1 );
+    
     bool saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoSavingContext& context, int & indexObj, int &partIndexObj, KoXmlWriter* manifestWriter ) const;
+    QString saveOasisPageStyle( KoStore *store, KoGenStyles& mainStyles ) const;
+    QString saveOasisPageEffect() const;
     bool saveOasisNote( KoXmlWriter &xmlWriter ) const;
     bool saveOasisStickyPage( KoStore *store, KoXmlWriter &xmlWriter, KoSavingContext& context, int & indexObj, int &partIndexObj, KoXmlWriter* manifestWriter ) const;
 
@@ -385,5 +394,28 @@ private:
 
     QString m_pictureFile;
     bool m_bHasHeader, m_bHasFooter;
+
+    /**
+     * The page effect
+     */
+    PageEffect m_pageEffect;
+    /**
+     * The speed of the page effect.
+     */
+    EffectSpeed m_pageEffectSpeed;
+
+    /**
+     * true when a sound effect will be played when going to this page
+     */
+    // ### This could be simply !soundFileName.isEmpty()...
+    bool m_soundEffect;
+    /**
+     * Sound played when showing this page
+     */
+    QString m_soundFileName;
+    /**
+     * TODO
+     */
+    int m_pageTimer;
 };
 #endif //KPRPAGE_H

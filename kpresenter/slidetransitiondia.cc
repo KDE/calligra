@@ -50,7 +50,7 @@ SlideTransitionDia::SlideTransitionDia( QWidget *parent, const char *name, KPres
     int pgnum = m_view->getCurrPgNum() - 1;
     KPrPage *page = m_view->kPresenterDoc()->pageList().at( pgnum );
     m_effect = page->getPageEffect();
-    m_effectSpeed = page->background()->getPageEffectSpeed();  
+    m_effectSpeed = page->getPageEffectSpeed();  
     m_soundEffect = page->getPageSoundEffect();
     m_soundFileName = page->getPageSoundFileName();
     m_slideTime = page->getPageTimer();
@@ -355,7 +355,7 @@ void SlideTransitionDia::apply( bool global )
             for( QPtrListIterator<KPrPage> it( m_view->kPresenterDoc()->getPageList() ); *it; ++it, ++i )
             {
                 oldSettings[i].pageEffect = it.current()->getPageEffect();
-                oldSettings[i].effectSpeed = it.current()->background()->getPageEffectSpeed();
+                oldSettings[i].effectSpeed = it.current()->getPageEffectSpeed();
                 oldSettings[i].soundEffect = it.current()->getPageSoundEffect();
                 oldSettings[i].soundFileName = it.current()->getPageSoundFileName();
                 oldSettings[i].autoAdvance = /*TODO it.current()->getAutoAdvance() */ false;
@@ -368,7 +368,7 @@ void SlideTransitionDia::apply( bool global )
             page = m_view->kPresenterDoc()->pageList().at( pgnum );
             oldSettings.resize( 1 );
             oldSettings[0].pageEffect = page->getPageEffect();
-            oldSettings[0].effectSpeed = page->background()->getPageEffectSpeed();
+            oldSettings[0].effectSpeed = page->getPageEffectSpeed();
             oldSettings[0].soundEffect = page->getPageSoundEffect();
             oldSettings[0].soundFileName = page->getPageSoundFileName();
             oldSettings[0].autoAdvance = /*TODO page->getAutoAdvance() */ false;

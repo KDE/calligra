@@ -1,6 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2004 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -41,6 +42,7 @@ class KoZoomHandler;
 class KPrPage;
 class KoXmlWriter;
 class KoGenStyles;
+class KoGenStyle;
 
 
 class KPBackGround
@@ -72,6 +74,7 @@ public:
     /// set the back picture to a new KoPicture
     void setBackPicture( const KoPicture& picture );
     void setBackPicture ( const KoPictureKey& key );
+#if 0
     void setPageEffect( PageEffect _pageEffect )
         { pageEffect = _pageEffect; }
     void setPageTimer( int _pageTimer )
@@ -80,7 +83,7 @@ public:
         { soundEffect = _soundEffect; }
     void setPageSoundFileName( const QString &_soundFileName )
         { soundFileName = _soundFileName; }
-
+#endif
     KoPicture picture() const { return backPicture;}
 
     BackType getBackType() const
@@ -98,30 +101,12 @@ public:
     KoPicture getBackPicture() const
         { return backPicture;}
 
-    PageEffect getPageEffect() const
-        { return pageEffect; }
     bool getBackUnbalanced() const
         { return unbalanced; }
     int getBackXFactor() const
         { return xfactor; }
     int getBackYFactor() const
         { return yfactor; }
-    int getPageTimer() const
-        { return pageTimer; }
-    bool getPageSoundEffect() const
-        { return soundEffect; }
-    QString getPageSoundFileName() const
-        { return soundFileName; }
-
-    /**
-     * get the effect speed for the page transition
-     */
-    EffectSpeed getPageEffectSpeed() const { return m_pageEffectSpeed; }
-
-    /**
-     * set the effect speed for the page transition to pageEffectSpeed
-     */
-    void setPageEffectSpeed( EffectSpeed pageEffectSpeed ) { m_pageEffectSpeed = pageEffectSpeed; }
 
     // Draw the background.
     // Uses the @p zoomHandler to determine the size of the background
@@ -136,7 +121,7 @@ public:
     QDomElement save( QDomDocument &doc, const bool saveAsKOffice1Dot1 );
     void load( const QDomElement &element );
     void loadOasis( KoOasisContext & context );
-    QString saveOasisBackgroundPageStyle( KoStore *store, KoXmlWriter &xmlWriter, KoGenStyles& mainStyles );
+    void saveOasisBackgroundPageStyle( KoGenStyle &stylepageauto, KoGenStyles &mainStyles );
 
 protected:
     void drawBackColor( QPainter *_painter, const QSize& ext, const QRect& crect );
@@ -151,7 +136,6 @@ protected:
     KPGradientCollection *gradientCollection() const;
 
     QString saveOasisGradientStyle( KoGenStyles& mainStyles );
-    QString saveOasisPageEffect() const;
     QString saveOasisPictureStyle( KoGenStyles& mainStyles );
 
 private:
@@ -160,13 +144,6 @@ private:
     QColor backColor1;
     QColor backColor2;
     BCType bcType;
-    PageEffect pageEffect;
-    // Sound played when showing this page
-    QString soundFileName;
-    /**
-     * The speed of the page effect.
-     */
-    EffectSpeed m_pageEffectSpeed;
 
     // Background picture
     KoPicture backPicture;
@@ -181,10 +158,7 @@ private:
 
     // Gradient factors
     int xfactor, yfactor;
-    // ### Not related to the background, but to the page: delay for the page
-    int pageTimer;
-    // ### This could be simply !soundFileName.isEmpty()...
-    bool soundEffect;
+
     // Gradient setting
     bool unbalanced;
 };
