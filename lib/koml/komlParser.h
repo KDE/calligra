@@ -1,8 +1,13 @@
 #ifndef __parser_h__
 #define __parser_h__
 
+#include <config.h>
 #include <string.h>
+#ifdef HAVE_MINI_STL
+#include <ministl/vector.h>
+#else
 #include <vector.h>
+#endif
 
 #include "torben.h"
 #include "komlFeed.h"

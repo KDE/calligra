@@ -1,5 +1,5 @@
 
-INCLUDES  = $(all_includes) $(PYTHONINC) -I$(idldir)
+INCLUDES  = $(all_includes) $(PYTHONINC) -I$(idldir) $(MICO_INCLUDES) -I../lib/koml -I../lib/kofficecore -I../lib/kofficeui
 LDFLAGS   = $(all_libraries) $(PYTHONLIB)
 LDADD = -lkofficeui -lkofficecore -lkoml -lkfile -lkfm -lop -lkom -lqt -lkdeui -lkdecore $(LIBMICO) $(LIBPYTHON) -lXext -lX11 
 

@@ -15,11 +15,11 @@
 
 // Generate forward declarations for this scope
 
-#include "/opt/kde/idl/kom.h"
+#include "kom.h"
 
-#include "/opt/kde/idl/controls.h"
+#include "controls.h"
 
-#include "/opt/kde/idl/parts.h"
+#include "parts.h"
 
 // Module KSpread
 #ifndef MICO_NO_TOPLEVEL_MODULES

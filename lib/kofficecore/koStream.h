@@ -1,8 +1,14 @@
 #ifndef __ko_stream_h__
 #define __ko_stream_h__
 
+#include <unistd.h>
+#include <config.h>
 #include <iostream.h>
+#ifdef HAVE_MINI_STL
+#include <ministl/vector.h>
+#else
 #include <vector.h>
+#endif
 
 #include <komlParser.h>
 #include <komlWriter.h>

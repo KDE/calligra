@@ -1,6 +1,7 @@
 #ifndef __torben_h__
 #define __torben_h__
 
+#include <config.h>
 #include <list.h>
 #include <iostream.h>
 #include <string>

@@ -1,12 +1,7 @@
 
 lib_LTLIBRARIES = libkoml.la
-
-####### Library version
-
-SOREV 	=	1.0.0
-SOMAJOR = 	1
-SOMINOR = 	0
-SOPATCH =	0	
+LDFLAGS = -version-info 1:0:0
+INCLUDES = $(MICO_INCLUDES)
 
 ####### Files
 

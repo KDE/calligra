@@ -7,3 +7,5 @@
 
 #undef ksize_t
 
+#undef HAVE_MINI_STL
+

@@ -1,6 +1,6 @@
 ####### General stuff
 
-INCLUDES=	$(all_includes) -I../kofficecore
+INCLUDES=	$(all_includes) $(MICO_INCLUDES) -I../kofficecore
 LDFLAGS	=	$(all_libraries) -version-info 1:0:0
 LIBADD  =       -lkdeui -lkdecore -lqt -lXext -lX11 -ldl
 
