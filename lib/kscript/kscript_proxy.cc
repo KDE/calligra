@@ -25,7 +25,7 @@
 #include "kscript_ext_qt.h"
 
 #include <dcopclient.h>
-#include <kapp.h>
+#include <kapplication.h>
 
 #include <qcstring.h>
 #include <qstring.h>

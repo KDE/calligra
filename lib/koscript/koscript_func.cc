@@ -24,7 +24,7 @@
 #include "koscript_util.h"
 #include "koscript_method.h"
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <dcopclient.h>
 #include <klocale.h>
 

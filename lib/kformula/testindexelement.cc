@@ -3,7 +3,7 @@
 
 #include <qptrlist.h>
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <kcommand.h>
 
 #include "basicelement.h"

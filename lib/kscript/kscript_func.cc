@@ -25,7 +25,7 @@
 #include "kscript_util.h"
 #include "kscript_proxy.h"
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <dcopclient.h>
 #include <klocale.h>
 #include <kglobal.h>

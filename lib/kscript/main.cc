@@ -19,7 +19,7 @@
 
 #include "kscript.h"
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <dcopclient.h>
 #include <qstring.h>
 #include <stdio.h> /* for printf */
