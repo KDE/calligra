@@ -8,15 +8,16 @@
 #include <dcopclient.h>
 #include <qcolor.h>
 
-KSpreadDocIface::KSpreadDocIface( KSpreadDoc* doc )
-    : KoDocumentIface( doc )
+KSpreadDocIface::KSpreadDocIface( KSpreadDoc* _doc )
+    : KoDocumentIface( _doc )
 {
+    doc=_doc;
 }
 
 DCOPRef KSpreadDocIface::map()
 {
     return DCOPRef( kapp->dcopClient()->appId(),
-                    static_cast<KSpreadDoc*>(m_pDoc)->map()->dcopObject()->objId() );
+                    doc->map()->dcopObject()->objId() );
 }
 
 bool KSpreadDocIface::save()
@@ -34,80 +35,147 @@ bool KSpreadDocIface::saveAs( const QString& )
 
 float KSpreadDocIface::paperHeight()const
 {
-    return static_cast<KSpreadDoc*>(m_pDoc)->paperHeight();
+    return doc->paperHeight();
 }
 
 float KSpreadDocIface::paperWidth()const
 {
-    return static_cast<KSpreadDoc*>(m_pDoc)->paperWidth();
+    return doc->paperWidth();
 }
 
 float KSpreadDocIface::leftBorder()const
 {
-    return static_cast<KSpreadDoc*>(m_pDoc)->leftBorder();
+    return doc->leftBorder();
 }
 
 float KSpreadDocIface::rightBorder()const
 {
-    return static_cast<KSpreadDoc*>(m_pDoc)->rightBorder();
+    return doc->rightBorder();
 }
 
 float KSpreadDocIface::topBorder()const
 {
-    return static_cast<KSpreadDoc*>(m_pDoc)->topBorder();
+    return doc->topBorder();
 }
 
 float KSpreadDocIface::bottomBorder()const
 {
-    return static_cast<KSpreadDoc*>(m_pDoc)->bottomBorder();
+    return doc->bottomBorder();
 }
 
 QString KSpreadDocIface::paperFormatString() const
 {
-    return static_cast<KSpreadDoc*>(m_pDoc)->paperFormatString();
+    return doc->paperFormatString();
 }
 
 bool KSpreadDocIface::showColHeader()const
 {
-    return static_cast<KSpreadDoc*>(m_pDoc)->getShowColHeader();
+    return doc->getShowColHeader();
 }
 
 bool KSpreadDocIface::showRowHeader()const
 {
-    return static_cast<KSpreadDoc*>(m_pDoc)->getShowRowHeader();
+    return doc->getShowRowHeader();
 }
 
 int KSpreadDocIface::indentValue()const
 {
-    return static_cast<KSpreadDoc*>(m_pDoc)->getIndentValue();
+    return doc->getIndentValue();
 }
 
 void KSpreadDocIface::setIndentValue(int _val)
 {
-    static_cast<KSpreadDoc*>(m_pDoc)->setIndentValue(_val);
+    doc->setIndentValue(_val);
 }
 
 void KSpreadDocIface::changeDefaultGridPenColor( const QColor &_col)
 {
-    static_cast<KSpreadDoc*>(m_pDoc)->changeDefaultGridPenColor(_col);
+    doc->changeDefaultGridPenColor(_col);
 }
 
 bool KSpreadDocIface::showCommentIndicator()const
 {
-    return static_cast<KSpreadDoc*>(m_pDoc)->getShowCommentIndicator();
+    return doc->getShowCommentIndicator();
 }
 
 bool KSpreadDocIface::showFormulaBar()const
 {
-    return static_cast<KSpreadDoc*>(m_pDoc)->getShowFormulaBar();
+    return doc->getShowFormulaBar();
 }
 
 bool KSpreadDocIface::showStatusBar()const
 {
-    return static_cast<KSpreadDoc*>(m_pDoc)->getShowStatusBar();
+    return doc->getShowStatusBar();
 }
 
 bool KSpreadDocIface::showTabBar()const
 {
-    return static_cast<KSpreadDoc*>(m_pDoc)->getShowTabBar();
+    return doc->getShowTabBar();
 }
+
+QString KSpreadDocIface::headLeft()const
+{
+    return doc->headLeft();
+}
+
+QString KSpreadDocIface::headMid()const
+{
+    return doc->headMid();
+}
+
+QString KSpreadDocIface::headRight()const
+{
+    return doc->headRight();
+}
+
+QString KSpreadDocIface::footLeft()const
+{
+    return doc->footLeft();
+}
+
+QString KSpreadDocIface::footMid()const
+{
+    return doc->footMid();
+}
+
+QString KSpreadDocIface::footRight()const
+{
+    return doc->footRight();
+}
+
+void KSpreadDocIface::setShowVerticalScrollBar(bool _show)
+{
+    doc->setShowVerticalScrollBar(_show);
+    doc->refreshInterface();
+}
+
+void KSpreadDocIface::setShowHorizontalScrollBar(bool _show)
+{
+    doc->setShowHorizontalScrollBar(_show);
+    doc->refreshInterface();
+}
+
+void KSpreadDocIface::setShowColHeader(bool _show)
+{
+    doc->setShowColHeader(_show);
+    doc->refreshInterface();
+}
+
+void KSpreadDocIface::setShowRowHeader(bool _show)
+{
+    doc->setShowRowHeader(_show);
+    doc->refreshInterface();
+}
+
+void KSpreadDocIface::setShowTabBar(bool _show)
+{
+    doc->setShowTabBar(_show);
+    doc->refreshInterface();
+}
+
+void KSpreadDocIface::setShowCommentIndicator(bool _show)
+{
+    doc->setShowCommentIndicator(_show);
+    doc->refreshInterface();
+}
+
