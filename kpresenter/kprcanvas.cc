@@ -324,7 +324,20 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
         }
         else
         {
-            //PresStep step( m_step.m_pageNumber, m_step.m_step, m_step.m_subStep, false, !goingBack );
+            // Center the slide in the screen, if it's smaller...
+#if 0 // this works but isn't enough - e.g. object effects need the same offsets
+      // so we should store them, but they don't work like diffx/diffy...
+      // (e.g. the painter mustn't be translated when painting the background)
+            QRect desk = KGlobalSettings::desktopGeometry(this);
+            QRect pgRect = m_view->kPresenterDoc()->pageList().at(0)->getZoomPageRect();
+            int offx = 0, offy = 0;
+            if ( desk.width() > pgRect.width() )
+                offx = ( desk.width() - pgRect.width() ) / 2;
+            if ( desk.height() > pgRect.height() )
+                offy = ( desk.height() - pgRect.height() ) / 2;
+            bufPainter.translate( offx, offy );
+#endif
+
             PresStep step( m_step.m_pageNumber, m_step.m_step, m_step.m_subStep, m_effectTimer.isActive(), !goingBack );
             drawPresPage( &bufPainter, crect, step );
             if ( m_drawMode && m_drawModeLines.count() )
@@ -3101,8 +3114,17 @@ void KPrCanvas::startScreenPresentation( double zoomX, double zoomY, int curPgNu
     // So we have to choose the smallest zoom (but still paint background everywhere)
     double zoom = kMin( zoomX, zoomY );
 
+    kdDebug() << "zoomX=" << zoomX << " zoomY=" << zoomY << " zoom=" << zoom << endl;
+
     m_zoomBeforePresentation = doc->zoomHandler()->zoom();
-    doc->zoomHandler()->setZoomedResolution( zoom, zoom );
+    kdDebug() << "old zoomed resolutions =" << doc->zoomHandler()->zoomedResolutionX() << "," << doc->zoomHandler()->zoomedResolutionY() << endl;
+    // Seems to fail (Qt uses the wrong font sizes...)
+    //doc->zoomHandler()->setZoomedResolution( zoomX * doc->zoomHandler()->zoomedResolutionX(),
+    //                                         zoomY * doc->zoomHandler()->zoomedResolutionY() );
+    // Apply the new zooming to the existing one
+    doc->zoomHandler()->setZoomAndResolution( qRound( zoom * m_zoomBeforePresentation ),
+                                              KoGlobal::dpiX(), KoGlobal::dpiY() );
+
     doc->newZoomAndResolution( false, false );
 
     // add all selected slides
@@ -3136,7 +3158,10 @@ void KPrCanvas::startScreenPresentation( double zoomX, double zoomY, int curPgNu
     setCursor( blankCursor );
 
     m_step.m_pageNumber = (unsigned int) -1; // force gotoPage to do something
+    // No need to paint yet, we'll get an update soon (probably due to reparent+showFullScreen)
+    setUpdatesEnabled( false );
     gotoPage( slide );
+    setUpdatesEnabled( true );
     //kdDebug(33001) << "Page::startScreenPresentation - done" << endl;
 }
 
@@ -3201,7 +3226,7 @@ bool KPrCanvas::pNext( bool gotoNextPage )
             QValueList<int>::ConstIterator it = m_pageEffectSteps.find( m_step.m_step );
             m_step.m_step = *( ++it );
             m_step.m_subStep = 0;
-            //kdDebug(33001) << "Page::pNext setting currentEffectStep to " << currentEffectStep << endl;
+            //kdDebug(33001) << "Page::pNext setting currentEffectStep to " << m_step.m_step << endl;
 
             // if first step on page, draw background
             if ( m_step.m_step == 0 )
@@ -3552,7 +3577,7 @@ void KPrCanvas::doObjEffects( bool isAllreadyPainted )
 
     KPrPage *page = m_view->kPresenterDoc()->pageList().at( m_step.m_pageNumber );
     // YABADABADOOOOOOO.... That's a hack :-)
-    if ( m_step.m_subStep == 0 && !isAllreadyPainted )
+    if ( m_step.m_subStep == 0 && !isAllreadyPainted && isUpdatesEnabled() )
     {
         //kdDebug(33001) << "Page::doObjEffects - in the strange hack" << endl;
         QPainter p;

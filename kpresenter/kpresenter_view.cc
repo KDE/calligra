@@ -1444,11 +1444,11 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
         m_autoPresRestart = false;
         QRect desk = KGlobalSettings::desktopGeometry(this);
         kdDebug(33001) << "KPresenterView::startScreenPres desk=" << desk << endl;
-        KoRect pgRect = kPresenterDoc()->pageList().at(0)->getPageRect();
+        QRect pgRect = kPresenterDoc()->pageList().at(0)->getZoomPageRect();
         kdDebug(33001) << "KPresenterView::startScreenPres pgRect=" << pgRect << endl;
 
-        double zoomX = static_cast<double>( desk.width() ) / pgRect.width();
-        double zoomY = static_cast<double>( desk.height() ) / pgRect.height();
+        double zoomX = static_cast<double>( desk.width() ) / (double)pgRect.width();
+        double zoomY = static_cast<double>( desk.height() ) / (double)pgRect.height();
         kdDebug(33001) << "KPresenterView::startScreenPres zoomX=" << zoomX << " zoomY=" << zoomY << endl;
 
         xOffsetSaved = canvasXOffset();

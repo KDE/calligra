@@ -539,7 +539,7 @@ QPixmap KPPixmapObject::generatePixmap(KoZoomHandler*_zoomHandler)
     const double penw = _zoomHandler->zoomItX( ( ( pen.style() == Qt::NoPen ) ? 1 : pen.width() ) / 2.0 );
 
     QSize size( _zoomHandler->zoomSize( ext ) );
-    kdDebug(333001) << "KPPixmapObject::generatePixmap size= " << size << endl;
+    //kdDebug(33001) << "KPPixmapObject::generatePixmap size= " << size << endl;
     QPixmap pixmap(size);
     QPainter paint;
 
