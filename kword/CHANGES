@@ -189,3 +189,7 @@ Reggie, 6.10.1998:
 ------------------
 - Implemented tab for setting the flow in the paragraph settings dialog
   (I also wrote a nice preview widget for that :-)
+
+Reggie, 7.10.1998:
+------------------
+- Worked a lot on speed. Now editing documents and pasting is _much_ faster.

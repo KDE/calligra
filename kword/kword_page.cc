@@ -339,7 +339,7 @@ void KWPage::paintEvent(QPaintEvent* e)
 	      height() + (int)paintfc->getLineHeight())
 	    bend = true; 
 	}
-	
+      
       delete paintfc;
       if (doc->has_selection()) doc->drawSelection(painter,xOffset,yOffset);
     }
@@ -991,7 +991,7 @@ void KWPage::scroll(int dx,int dy)
       dy = abs(dy);
       repaint(0,height() - abs(dy),width(),abs(dy),true);
     }
-  else
+  else if (yOffset < oy)
     {
       dy = abs(dy);
       repaint(0,0,width(),abs(dy),true);
@@ -1002,7 +1002,7 @@ void KWPage::scroll(int dx,int dy)
       dx = abs(dx);
       repaint(width() - abs(dx),0,abs(dx),height(),true);
     }
-  else
+  else if (xOffset < ox)
     {
       dx = abs(dx);
       repaint(0,0,abs(dx),height(),true);

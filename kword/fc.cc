@@ -567,17 +567,51 @@ int KWFormatContext::cursorGotoNextChar(QPainter & _painter)
   if ( isCursorAtLineEnd() )
     return -2;
   
-  cursorGotoPos( textPos + 1, _painter ); //!! HACK !! This is DOG SLOW
+  KWChar *text = parag->getText();
+  KWParagLayout *lay = parag->getParagLayout();
+  int pos = textPos;
+  if ( text[ pos ].c == 0 )
+    {
+      // Handle specials here
+      ptPos += ((KWCharImage*)text[pos].attrib)->getImage()->width();
+      specialHeight = ((KWCharImage*)text[pos].attrib)->getImage()->height();
+      pos++;
+    }
+  else
+    {
+      if ( text[ pos ].attrib )
+	{
+	  // Change text format here
+	  assert( text[ pos ].attrib->getClassId() == ID_KWCharFormat );
+	  KWCharFormat *f = (KWCharFormat*)text[ pos ].attrib;
+	  apply( *f->getFormat() );
+	}
+      
+      if ( text[ pos ].c == ' ' && lay->getFlow() == KWParagLayout::BLOCK && 
+	   lineEndPos != parag->getTextLen() )
+	{
+	  float sp = ptSpacing + spacingError;
+	  float dx = floor( sp );
+	  spacingError = sp - dx;
+	  ptPos += (unsigned int)dx + displayFont->getPTWidth( text[pos].c );
+	  pos++;
+	}
+      else
+	{
+	  ptPos += displayFont->getPTWidth( text[ pos ].c );
+	  pos++;   
+	}
+    }
+  textPos = pos;
+
   if ( isCursorAtLineEnd() )
     return -2;
   
   if ( parag->getText()[ textPos ].c != 0 && parag->getText()[ textPos ].attrib == 0 ||
        textPos - 1 >= 0 && parag->getText()[ textPos - 1 ].c != 0 && 
        *((KWCharFormat*)parag->getText()[ textPos - 1 ].attrib) == *((KWCharFormat*)parag->getText()[ textPos ].attrib))
-    {
-      return 1;
-    }
-  
+    return 1;
+      
   if ( parag->getText()[ textPos ].c != 0 )
     return 0;
   
@@ -865,6 +899,8 @@ void KWFormatContext::makeCounterLayout( QPainter &_painter )
 
 void KWFormatContext::apply( KWFormat &_format )
 {
+  if (_format == *((KWFormat*)this)) return;
+
   KWFormat::apply(_format);
   if (displayFont)
     {

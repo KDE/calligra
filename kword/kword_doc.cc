@@ -102,12 +102,26 @@ CORBA::Boolean KWordDocument_impl::init()
   p->insertText(0," ");
 
   //   parags->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung." );
-//    p = new KWParag( this, parags, 0L, defaultParagLayout );
-//    p->insertText( 0, "Das ist ein Test");
-//    KWFormat *format = new KWFormat(this);
-//    format->setDefaults(this);
-//    p->setFormat(0,strlen("Das ist ein Test"),*format);
-//   p = new KWParag( this, p, 0L, defaultParagLayout );
+
+//   for (int i = 0;i < 500;i++)
+//     {
+//       p = new KWParag( this, p, 0L, defaultParagLayout );
+//       p->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen.");
+//       KWFormat *format = new KWFormat(this);
+//       format->setDefaults(this);
+//       p->setFormat(0,strlen("Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen. Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen."),*format);
+//     }
+
+//   for (int i = 0;i < 50;i++)
+//     {
+//       p = new KWParag( this, p, 0L, defaultParagLayout );
+//       p->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung.");
+//       KWFormat *format = new KWFormat(this);
+//       format->setDefaults(this);
+//       p->setFormat(0,strlen("Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung."),*format);
+//     }
+
+      //   p = new KWParag( this, p, 0L, defaultParagLayout );
 //   p->insertText( 0, "Hallo Tester, ich frage mich manchmal, ob das alles so in Ordnung ist, ich meine, dass ich hier so einen Mist erzaehle, in meiner eigenen Textverarbeitung." );
 //   p = new KWParag( this, p, 0L, defaultParagLayout );
 //   p->insertText( 0, "Und noch mehr dummes Gesülze auf diesem Äther. Ich liebe dummes Geschwätz! Jetzt langt es aber für den 2. Paragraphen." );
@@ -477,7 +491,7 @@ void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, in
 	      // Change the painter
 	      _painter.setFont( *_fc.loadFont( this ) );
 	      _painter.setPen( _fc.getColor() );
-	    //cerr << "Switch 2 " << _fc.getColor().red() << " "<< _fc.getColor().green() << " "<< _fc.getColor().blue() << endl;
+	      //cerr << "Switch 2 " << _fc.getColor().red() << " "<< _fc.getColor().green() << " "<< _fc.getColor().blue() << endl;
 	    }
 	  
 	  // Test next character.
@@ -493,7 +507,7 @@ void KWordDocument_impl::printLine( KWFormatContext &_fc, QPainter &_painter, in
 	      i = 0;
 	      // Blanks are not printed at all
 	      if ( text[_fc.getTextPos()].c == ' ' )
-		_fc.cursorGotoNextChar(_painter);
+ 		_fc.cursorGotoNextChar(_painter);
 	    }
 	}
     }
@@ -886,7 +900,7 @@ void KWordDocument_impl::paste(KWFormatContext *_fc,QString _string,KWPage *_pag
 {
   QStrList strList;
   int index;
-  QPainter p;
+  QPainter painter;
 
   if (_string.isEmpty()) return;
 
@@ -905,29 +919,87 @@ void KWordDocument_impl::paste(KWFormatContext *_fc,QString _string,KWPage *_pag
 
   if (!strList.isEmpty())
     {
-      unsigned int len;
-      QString str;
-      KWFormat *format = new KWFormat(this);
-      format->setDefaults(this);
-      
-      for (unsigned int i = 0; i < strList.count();i++)
+      if (strList.count() == 1)
 	{
-	  str = QString(strList.at(i));
+	  QString str;
+	  unsigned int len;
+	  KWFormat *format = new KWFormat(this);
+	  format->setDefaults(this);
+	  str = QString(strList.at(0));
 	  len = str.length();
 	  _fc->getParag()->insertText(_fc->getTextPos(),str);
 	  _fc->getParag()->setFormat(_fc->getTextPos(),len,*format);
-	  
-	  // HACK: SLOW!!
-	  p.begin(_page);
-	  for (unsigned int j = 0;j < len;j++)
-	    _fc->cursorGotoRight(p);
-	  p.end();
 
-	  if (i < strList.count() - 1)
+	  painter.begin(_page);
+	  for (unsigned int j = 0;j < len;j++)
+	    _fc->cursorGotoRight(painter);
+	  painter.end();
+	}
+      else if (strList.count() == 2)
+	{
+	  QString str;
+	  unsigned int len;
+	  KWFormat *format = new KWFormat(this);
+	  format->setDefaults(this);
+	  str = QString(strList.at(0));
+	  len = str.length();
+	  _fc->getParag()->insertText(_fc->getTextPos(),str);
+	  _fc->getParag()->setFormat(_fc->getTextPos(),len,*format);
+
+	  painter.begin(_page);
+	  for (unsigned int j = 0;j <= len;j++)
+	    _fc->cursorGotoRight(painter);
+	  painter.end();
+
+	  QKeyEvent ev(Event_KeyPress,Key_Return,13,0);
+	  _page->keyPressEvent(&ev);
+
+	  str = QString(strList.at(1));
+	  len = str.length();
+	  _fc->getParag()->insertText(_fc->getTextPos(),str);
+	  _fc->getParag()->setFormat(_fc->getTextPos(),len,*format);
+
+	  painter.begin(_page);
+	  for (unsigned int j = 0;j < len;j++)
+	    _fc->cursorGotoRight(painter);
+	  painter.end();
+	}
+      else
+	{
+	  QString str;
+	  unsigned int len;
+	  KWFormat *format = new KWFormat(this);
+	  format->setDefaults(this);
+	  str = QString(strList.at(0));
+	  len = str.length();
+	  _fc->getParag()->insertText(_fc->getTextPos(),str);
+	  _fc->getParag()->setFormat(_fc->getTextPos(),len,*format);
+
+	  painter.begin(_page);
+	  for (unsigned int j = 0;j < len;j++)
+	    _fc->cursorGotoRight(painter);
+	  painter.end();
+
+	  QKeyEvent ev(Event_KeyPress,Key_Return,13,0);
+	  _page->keyPressEvent(&ev);
+	  
+	  KWParag *p = _fc->getParag()->getPrev(),*next = _fc->getParag();//->getNext();
+	  painter.begin(_page);
+	  _fc->cursorGotoLeft(painter);
+	  _fc->cursorGotoLeft(painter);
+	  painter.end();
+
+	  for (unsigned int i = 1;i < strList.count();i++)
 	    {
-	      QKeyEvent ev(Event_KeyPress,Key_Return,13,0);
-	      _page->keyPressEvent(&ev);
+	      str = QString(strList.at(i));
+	      len = str.length();
+	      p = new KWParag(this,p,0L,defaultParagLayout);
+	      p->insertText(0,str);
+	      p->setFormat(0,len,*format);
+	      //debug("%d",i);
 	    }
+	  p->setNext(next);
+	  if (next) next->setPrev(p);
 	}
     }
 }
