@@ -14,8 +14,6 @@ INCLUDES = $(all_includes)\
 		-I$(top_srcdir)/kivio/kiviopart/kiviosdk\
 		-I$(top_srcdir)/kivio/kiviopart/tklib\
 		-I$(top_srcdir)/kivio/kiviopart/tools
-CXXFLAGS = -O2 -Wall 
-DEFS = -I. -I$(srcdir) -I$(top_srcdir)
 libstraight_connector_la_METASOURCES = AUTO
 libstraight_connector_la_SOURCES = \
 		straight_connector.cpp
@@ -26,6 +24,9 @@ EXTRA_DIST = \
 ##############################################################
 ####                  END KDEStudio part                  ####
 #2########################################################!@#$
+
+## This is a very bad hack..... why is this needed ? (David)
+
 install-libLTLIBRARIES: $(lib_LTLIBRARIES)
 	@$(NORMAL_INSTALL)
 	$(mkinstalldirs) $(DESTDIR)$(libdir)
@@ -37,3 +38,4 @@ uninstall-libLTLIBRARIES:
 
 stencil_DATA = straight_connector.xpm
 stencildir = $(kde_datadir)/kivio/autoloadStencils
+
