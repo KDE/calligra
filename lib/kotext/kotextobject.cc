@@ -474,9 +474,6 @@ void KoTextObject::insert( QTextCursor * cursor, KoTextFormat * currentFormat,
     if ( textdoc->hasSelection( QTextDocument::Standard ) && removeSelected ) {
         //removeSelectedText( cursor );
         emitNewCommand(replaceSelectionCommand( cursor, txt,QTextDocument::Standard, commandName));
-        emit repaintChanged( this );
-        emit ensureCursorVisible();
-        emit showCursor();
         return;
     }
     QTextCursor c2 = *cursor;
