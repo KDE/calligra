@@ -79,7 +79,8 @@ public:
   void setTextFont(QFont*);
   void setTextColor(QColor*);
   void setTextAlign(TxtParagraph::HorzAlign);
-  KTextObject* kTxtObj() {return txtPtr;}
+  KTextObject* kTxtObj() 
+    {return ((editNum != 0 && getObject(editNum)->objType == OT_TEXT) ? getObject(editNum)->textObj : 0);}
 
   static void _drawBackColor(QColor c1,QColor c2,BCType bct,QPainter* p,QSize s)
     {Page *pg = new Page(0,"",0); pg->drawBackColor(c1,c2,bct,p,s); delete pg;}
@@ -160,7 +161,6 @@ protected:
   QPopupMenu *graphMenu,*picMenu,*txtMenu,*clipMenu,*presMenu;
   Background *pagePtr;            
   PageObjects *objPtr;            
-  KTextObject *txtPtr;                
   unsigned int oldx,oldy;                             
   bool mousePressed;              
   unsigned int modType;                    

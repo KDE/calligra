@@ -31,7 +31,6 @@ Page::Page(QWidget *parent=0,const char *name=0,KPresenterView_impl *_view=0)
       resizeObjNum = 0;
       editNum = 0;
       drawBack = true;
-      txtPtr = 0;
       graphPtr = 0;
       setupMenus();
       setBackgroundColor(white);
@@ -330,7 +329,7 @@ void Page::mousePressEvent(QMouseEvent *e)
 	{
 	  objPtr = getObject(editNum);
 	  editNum = 0;
-	  if (txtPtr)
+	  if (objPtr->objType == OT_TEXT)
 	    {
 	      objPtr->textObj->recreate(0,0,QPoint(objPtr->ox - diffx(),objPtr->oy - diffy()),false);
 	      objPtr->textObj->clearFocus();
@@ -338,8 +337,7 @@ void Page::mousePressEvent(QMouseEvent *e)
 	      disconnect(objPtr->textObj,SIGNAL(fontChanged(QFont*)),this,SLOT(toFontChanged(QFont*)));
 	      disconnect(objPtr->textObj,SIGNAL(colorChanged(QColor*)),this,SLOT(toColorChanged(QColor*)));
 	      disconnect(objPtr->textObj,SIGNAL(horzAlignChanged(TxtParagraph::HorzAlign)),this,SLOT(toAlignChanged(TxtParagraph::HorzAlign)));
-	      txtPtr->setShowCursor(false);
-	      txtPtr = 0;
+	      objPtr->textObj->setShowCursor(false);
 	      setFocusProxy(0);
 	      setFocusPolicy(QWidget::NoFocus);
 	    }
@@ -662,13 +660,14 @@ void Page::mouseDoubleClickEvent(QMouseEvent *e)
 	      setFocusProxy(objPtr->textObj);
 	      setFocusPolicy(QWidget::StrongFocus);
 	      objPtr->textObj->setFocus();
-	      txtPtr = objPtr->textObj;
-	      txtPtr->setShowCursor(true);
+	      objNum = getObjectAt(e->x()+diffx(),e->y()+diffy());
+	      objPtr = getObject(objNum);
+	      objPtr->textObj->setShowCursor(true);
 	      connect(objPtr->textObj,SIGNAL(fontChanged(QFont*)),this,SLOT(toFontChanged(QFont*)));
 	      connect(objPtr->textObj,SIGNAL(colorChanged(QColor*)),this,SLOT(toColorChanged(QColor*)));
 	      connect(objPtr->textObj,SIGNAL(horzAlignChanged(TxtParagraph::HorzAlign)),this,SLOT(toAlignChanged(TxtParagraph::HorzAlign)));
 	      //objPtr->textObj->initActive();
-	      txtPtr->setCursor(ibeamCursor);
+	      objPtr->textObj->setCursor(ibeamCursor);
 	    }
 	}
       if (objNum > 0 && getObject(objNum)->objType == OT_AUTOFORM)
@@ -1030,21 +1029,21 @@ void Page::setupMenus()
 /*======================== clipboard cut =========================*/
 void Page::clipCut()
 {
-  if (txtPtr) ;//txtPtr->clipCut();
+  if (editNum != 0 && getObject(editNum)->objType == OT_TEXT) ;//txtPtr->clipCut();
   else view->editCut();
 }
 
 /*======================== clipboard copy ========================*/
 void Page::clipCopy()
 {
-  if (txtPtr) ;// txtPtr->clipCopy();
+  if (editNum != 0 && getObject(editNum)->objType == OT_TEXT) ;// txtPtr->clipCopy();
   else view->editCopy();
 }
 
 /*====================== clipboard paste =========================*/
 void Page::clipPaste()
 {
-  if (txtPtr) ;//txtPtr->clipPaste();
+  if (editNum != 0 && getObject(editNum)->objType == OT_TEXT) ;//txtPtr->clipPaste();
   else view->editPaste();
 }
 
@@ -1100,28 +1099,28 @@ void Page::choosePen()
 /*======================= set text font ==========================*/
 void Page::setTextFont(QFont *font)
 {
-  if (txtPtr)
+  if (editNum != 0 && getObject(editNum)->objType == OT_TEXT)
     {
-      txtPtr->setFocus();
-      txtPtr->setFont(*font);
+      getObject(editNum)->textObj->setFocus();
+      getObject(editNum)->textObj->setFont(*font);
     }
 }
 
 /*======================= set text color =========================*/
 void Page::setTextColor(QColor *color)
 {
-  if (txtPtr) 
+  if (editNum != 0 && getObject(editNum)->objType == OT_TEXT) 
     {
-      txtPtr->setFocus();
-      txtPtr->setColor(*color);
+      getObject(editNum)->textObj->setFocus();
+      getObject(editNum)->textObj->setColor(*color);
     }
 }
 
 /*===================== set text alignment =======================*/
 void Page::setTextAlign(TxtParagraph::HorzAlign align)
 {
-  if (txtPtr)
-    txtPtr->setHorzAlign(align);
+  if (editNum != 0 && getObject(editNum)->objType == OT_TEXT)
+    getObject(editNum)->textObj->setHorzAlign(align);
 }
 
 /*====================== start screenpresentation ================*/
@@ -1253,7 +1252,7 @@ void Page::stopScreenPresentation()
 }
 
 /*========================== next ================================*/
-bool Page::pNext(bool manual)
+bool Page::pNext(bool)
 {
   bool addSubPres = false;
   bool clearSubPres = false;
@@ -1264,7 +1263,7 @@ bool Page::pNext(bool manual)
     {
 
       unsigned int i;
-
+      
       for (i = 0;i < objList()->count();i++)
 	{
 	  objPtr = objList()->at(i);
@@ -1286,19 +1285,27 @@ bool Page::pNext(bool manual)
 	}
       else if (clearSubPres)
 	subPresStep = 0;
-
+      
       presStepList.find((int*)currPresStep);
       currPresStep = (int)presStepList.next();
-
-      if (currPresStep > 0)
-	doObjEffects();
-      else
+    
+      if (currPresStep == 0)
 	{
-	  drawBack = false;
-	  repaint(drawBack);
-	  drawBack = true;
-	  return false;
+	  QPainter p;
+	  p.begin(this);
+	  paintBackground(&p,QRect(0,0,kapp->desktop()->width(),kapp->desktop()->height()));
+	  p.end();  
 	}
+
+      //if (currPresStep > 0)
+	doObjEffects();
+//       else
+// 	{
+// 	  drawBack = false;
+// 	  repaint(drawBack);
+// 	  drawBack = true;
+// 	  return false;
+// 	}
     }
   else
     {
@@ -1714,10 +1721,7 @@ void Page::doObjEffects()
       for (;;)
 	{
 	  kapp->processEvents();
-	  if (_step == _steps)
-	    {
-	      break;
-	    }
+	  if (_step == _steps) break;
 	  
 	  if (_time.elapsed() >= 1)
 	    {
