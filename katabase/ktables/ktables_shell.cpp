@@ -106,17 +106,17 @@ void KtablesApp::createFileMenu(OPMenuBar *p_mbar)
   QPixmap pix;
 
   text = i18n("New &Window");
-  pix = BarIcon( "ktablesapp.xpm" );
+  pix = BarIcon( "ktablesapp" );
   m_pFileMenu->insertItem( pix, text, this, SLOT( slotFileNewWindow() ), 0 );
 
   m_pFileMenu->insertSeparator();
 
   text = i18n("&New");
-  pix = BarIcon("filenew.xpm");
+  pix = BarIcon("filenew");
   m_idMenuFile_New = m_pFileMenu->insertItem( pix, text, this, SLOT( slotFileNew() ), stdAccel.openNew() );
 
   text = i18n("&Open...");
-  pix = BarIcon("fileopen.xpm");
+  pix = BarIcon( "fileopen" );
   m_idMenuFile_Open = m_pFileMenu->insertItem( pix, text, this, SLOT( slotFileOpen() ), stdAccel.open() );
 
   text = i18n("&Close");
@@ -125,7 +125,7 @@ void KtablesApp::createFileMenu(OPMenuBar *p_mbar)
   m_pFileMenu->insertSeparator();
 
   text = i18n("&Save");
-  pix = BarIcon("fileclose.xpm");
+  pix = BarIcon( "fileclose" );
   m_idMenuFile_Save =  m_pFileMenu->insertItem( pix, text, this, SLOT( slotFileSave() ), stdAccel.save() );
 
   text = i18n("Save &As...");
@@ -134,7 +134,7 @@ void KtablesApp::createFileMenu(OPMenuBar *p_mbar)
   m_pFileMenu->insertSeparator();
 
   text = i18n("&Print...");
-  pix = BarIcon("fileprint.xpm");
+  pix = BarIcon( "fileprint" );
   m_idMenuFile_Print = m_pFileMenu->insertItem( pix, text, this, SLOT( slotFilePrint() ), stdAccel.print() );
 
   m_pFileMenu->insertSeparator();

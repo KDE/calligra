@@ -325,7 +325,7 @@ bool KtablesView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr p_factor
   m_vToolBarQuery->setFullWidth(false);
 
   OpenPartsUI::Pixmap_var pix;
-  pix = OPICON("network_settings.xpm");
+  pix = OPICON( "network_settings" );
   m_idButtonQuery_server = m_vToolBarQuery->insertButton2( pix,1,SIGNAL(clicked()),this,"selectServer",true,(wstr = Q2C(i18n( "Server"))),-1 );
 
   return true;
@@ -352,15 +352,15 @@ bool KtablesView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr p_mbar )
   p_mbar->insertMenu( text, m_vMenuEdit, -1, -1 );
 
   text = Q2C( i18n( "Cu&t" ) );
-  pix = OPICON( "editcut.xpm" );
+  pix = OPICON( "editcut" );
   m_idMenuEdit_cut = m_vMenuEdit->insertItem6( pix, text, this, "cutSelection", stdAccel.cut(), -1, -1 );
 
   text = Q2C( i18n( "&Copy" ) );
-  pix = OPICON( "editcopy.xpm" );
+  pix = OPICON( "editcopy" );
   m_idMenuEdit_copy = m_vMenuEdit->insertItem6( pix, text,this, "copySelection", stdAccel.copy(), -1, -1 );
 
   text = Q2C( i18n( "&Paste" ) );
-  pix = OPICON( "editpaste.xpm" );
+  pix = OPICON( "editpaste" );
   m_idMenuEdit_paste = m_vMenuEdit->insertItem6( pix, text, this, "paste", stdAccel.paste(), -1, -1 );
 
   m_vMenuEdit->insertSeparator( -1 );

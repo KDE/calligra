@@ -1,0 +1,21 @@
+# KDE Config File  
+[Desktop Entry]
+Type=Application
+Exec=ktables
+CorbaExec=ktables --server
+Icon=lo-ktables.png
+MiniIcon=mini-ktables.png
+DocPath=ktables/index.html
+Comment=
+Type=Application
+Terminal=0
+X-KDE-RepoIds=IDL:KTables/Application:1.0#App
+X-KDE-ActivationMode=shared
+ServiceTypes=
+SwallowExec=
+SwallowTitle=
+BinaryPattern=
+Name=Ktables
+Name[eo]=Tabeloj
+Name[hu]=Ktáblák
+Name[sv]=Tabeller
