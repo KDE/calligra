@@ -398,6 +398,13 @@ PiggZ_	js: and to ensure you always have id 1 and 2, well.....they would be anyw
 
 CCMAIL: dkite@shaw.ca
 
+2004-11-20
+KexiDB
+- TableSchemaChangeListenerInterface added to signal cahnges 
+  in tableschema set
+Query Designer
+- registers usage of table schema
+- fixes in GUI editor
 
 2004-11-19
 Query Designer

@@ -227,8 +227,9 @@ void KexiQueryDesignerGuiEditor::updateColumnsData()
 		KexiPropertyBuffer *buf = d->buffers->at(r);
 		if (buf) {
 			QString tableName = (*buf)["table"].value().toString();
-			if (tableName!="*" && sortedTableNames.end() == qFind( sortedTableNames.begin(), 
-				sortedTableNames.end(), tableName ))
+			if (tableName!="*" 
+				&& !(*buf)["isExpression"].value().toBool()
+				&& sortedTableNames.end() == qFind( sortedTableNames.begin(), sortedTableNames.end(), tableName ))
 			{
 				//table not found: mark this line for later remove
 				rowsToDelete += r;
@@ -314,9 +315,9 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 {
 	//build query schema
 	KexiQueryPart::TempData * temp = tempData();
-	if (temp->query)
-		temp->query->clear();
-	else
+	if (temp->query) {
+		temp->clearQuery();
+	} else
 		temp->query = new KexiDB::QuerySchema();
 
 	//add tables
@@ -442,6 +443,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 	temp->query->setWhereExpression( whereExpr );
 
 	temp->query->debug();
+	temp->registerTableSchemaChanges();
 	//TODO?
 	return true;
 }
@@ -972,8 +974,11 @@ KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, int
 	else if (str[0]>='0' && str[0]<='9' || str[0]=='-' || str[0]=='+') {
 		//number
 		QString decimalSym = KGlobal::locale()->decimalSymbol();
-		const int pos = str.find(decimalSym);
 		bool ok;
+		int pos = str.find('.');
+		if (pos==-1) {//second chance: local decimal symbol
+			pos = str.find(decimalSym);
+		}
 		if (pos>=0) {//real const number
 			const int left = str.left(pos).toInt(&ok);
 			if (!ok)
@@ -1033,7 +1038,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 				//-table remains null
 				//-find "alias" in something like "alias : expr"
 				const int id = fieldId.find(':');
-				if (id>=0) {
+				if (id>0) {
 					alias = fieldId.left(id).stripWhiteSpace().latin1();
 					if (!Kexi::isIdentifier(alias)) {
 						result->success = false;
@@ -1044,8 +1049,23 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 					}
 				}
 				fieldName = fieldId.mid(id+1).stripWhiteSpace();
+				//check expr.
+				KexiDB::BaseExpr *e;
+				int dummyToken;
+        if ((e = parseExpressionString(fieldName, dummyToken, false/*allowRelationalOperator*/)))
+				{
+					fieldName = e->toString(); //print it prettier
+					//this is just checking: destroy expr. object
+					delete e;
+				}
+				else {
+					result->success = false;
+					result->column = 0;
+					result->msg = i18n("Invalid expression \"%1\"").arg(fieldName);
+					return;
+				}
 			}
-			else {
+			else {//not expr.
 				//this value is properly selected from combo box list
 				if (fieldId=="*") {
 					tableName = "*";
@@ -1138,7 +1158,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 		KexiDB::BaseExpr* e = 0;
 		const QString str = newValue.toString().stripWhiteSpace();
 //		KexiPropertyBuffer &buf = *propertyBuffer();
-		int dummyToken;
+		int token;
 		QString field, table;
 		KexiPropertyBuffer *buf = d->buffers->bufferForItem(*item); //*propertyBuffer();
 		if (buf) {
@@ -1156,12 +1176,17 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 				result->msg = i18n("Could not set criteria for empty row");
 			d->dataTable->tableView()->cancelEditor(); //prevents further editing of this cell
 		}
-		else if (str.isEmpty() || (e = parseExpressionString(str, dummyToken, true/*allowRelationalOperator*/)))
+		else if (str.isEmpty() || (e = parseExpressionString(str, token, true/*allowRelationalOperator*/)))
 		{
+			QString tokenStr;
+			if (token!='=') {
+				KexiDB::BinaryExpr be(KexiDBExpr_Relational, 0, token, 0);
+				tokenStr = be.tokenToString() + " ";
+			}
+			(*buf)["criteria"] = tokenStr + e->toString(); //print it prettier
 			//this is just checking: destroy expr. object
 			delete e;
       setDirty(true);
-			(*buf)["criteria"] = str;
 		} 
 		else {
 			result->success = false;

@@ -21,12 +21,15 @@
 #ifndef KEXIQUERYPART_H
 #define KEXIQUERYPART_H
 
+#include <qmap.h>
+
 #include <kexidialogbase.h>
 #include <kexipart.h>
 #include <kexipartitem.h>
 #include <kexipartdatasource.h>
+
 #include <kexidb/queryschema.h>
-#include <qmap.h>
+#include <kexidb/connection.h>
 
 class KexiMainWin;
 namespace KexiDB
@@ -52,11 +55,16 @@ class KexiQueryPart : public KexiPart::Part
 
 		virtual KexiPart::DataSource *dataSource();
 
-		class TempData : public KexiDialogTempData
+		class TempData : public KexiDialogTempData, public KexiDB::Connection::TableSchemaChangeListenerInterface
 		{
 			public:
-				TempData(QObject* parent);
+				TempData(KexiDialogBase* parent, KexiDB::Connection *conn);
+				virtual tristate closeListener();
+				void clearQuery();
+				void registerTableSchemaChanges();
+
 				KexiDB::QuerySchema *query;
+				KexiDB::Connection *conn;
 				/*! true, if \a query member has changed in previous view. Used on view switching.
 				 We're checking this flag to see if we should rebuild internal structure for DesignViewMode
 				 of regenerate sql text in TextViewMode after switch from other view. */

@@ -26,8 +26,8 @@
 #include <keximainwindow.h>
 #include <kexidialogbase.h>
 #include <kexiproject.h>
-#include <kexidb/queryschema.h>
-#include <kexidb/connection.h>
+#include <kexipartinfo.h>
+
 #include <kexidb/cursor.h>
 #include <kexidb/parser/parser.h>
 
@@ -49,7 +49,9 @@ KexiQueryPart::~KexiQueryPart()
 KexiDialogTempData* 
 KexiQueryPart::createTempData(KexiDialogBase* dialog)
 {
-	return new KexiQueryPart::TempData(dialog);
+	KexiQueryPart::TempData *data = new KexiQueryPart::TempData(dialog, dialog->mainWin()->project()->dbConnection());
+	data->listenerInfoString = dialog->part()->instanceName() + " \"" + dialog->partItem()->name() + "\"";
+	return data;
 }
 
 KexiViewBase*
@@ -168,11 +170,42 @@ KexiQueryPart::loadSchemaData(KexiDialogBase *dlg, const KexiDB::SchemaData& sda
 
 //----------------
 
-KexiQueryPart::TempData::TempData(QObject* parent)
+KexiQueryPart::TempData::TempData(KexiDialogBase* parent, KexiDB::Connection *conn)
  : KexiDialogTempData(parent)
  , query(0)
  , queryChangedInPreviousView(false)
 {
+	this->conn = conn;
+}
+
+void KexiQueryPart::TempData::clearQuery()
+{
+	if (!query)
+		return;
+	//unregister all tables
+	for (KexiDB::TableSchema::ListIterator it(*query->tables());
+		it.current(); ++it)
+	{
+		conn->unregisterForTableSchemaChanges(*this, *it.current());
+	}
+	query->clear();
+}
+
+void KexiQueryPart::TempData::registerTableSchemaChanges()
+{
+	if (!query)
+		return;
+	for (KexiDB::TableSchema::ListIterator it(*query->tables());
+		it.current(); ++it)
+	{
+		conn->registerForTableSchemaChanges(*this, *it.current());
+	}
+}
+
+tristate KexiQueryPart::TempData::closeListener()
+{
+	KexiDialogBase* dlg = static_cast<KexiDialogBase*>(parent());
+	return dlg->mainWin()->closeDialog(dlg);
 }
 
 //----------------
