@@ -48,8 +48,8 @@ namespace Kivio {
     
     m_url = new KURLRequester(page);
     
-    setButtonOK(KGuiItem(i18n("&Install")));
-    resize(300, 10);
+    setButtonOK(KGuiItem(i18n("&Install"), "button_ok"));
+    resize(400, 10);
   }
   
   StencilSetInstaller::~StencilSetInstaller()
