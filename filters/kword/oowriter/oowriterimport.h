@@ -26,6 +26,7 @@
 #include <qdict.h>
 #include <qdom.h>
 #include <stylestack.h>
+#include <liststylestack.h>
 
 class KZip;
 
@@ -41,7 +42,8 @@ public:
 private:
     void prepareDocument( QDomDocument& mainDocument, QDomElement& framesetsElem );
     void writePageLayout( QDomDocument& mainDocument, const QString& masterPageName );
-    QDomDocumentFragment parseList( QDomDocument& doc, const QDomElement& list );
+    void parseList( QDomDocument& doc, const QDomElement& list, QDomElement& currentFramesetElement );
+    void applyListStyle( QDomDocument& doc, QDomElement& layoutElement );
     QDomElement parseParagraph( QDomDocument& doc, const QDomElement& paragraph );
     void parseSpanOrSimilar( QDomDocument& doc, const QDomElement& parent, QDomElement& kwordParagraph, QDomElement& kwordFormats, QString& paragraphText, uint& pos);
     // Reads from m_styleStack, writes the text properties to parentElement
@@ -77,7 +79,12 @@ private:
 
     QDict<QDomElement>   m_styles;
     QDict<QDomElement>   m_masterPages;
+    QDict<QDomElement>   m_listStyles;
+
     StyleStack m_styleStack;
+    ListStyleStack m_listStyleStack;
+    bool m_insideOrderedList;
+    bool m_nextItemIsListItem; // only the first elem inside list-item is numbered
     QString m_currentMasterPage;
 
     uint m_pictureNumber; // Number of the picture (increment *before* use)
