@@ -30,7 +30,7 @@ CanvasField::CanvasField(int x, int y, int width, int height, QCanvas * canvas):
     m["Float"] = "2";
     m["Date"] = "3";
     m["Currency"] = "4";
-    props["DataType"] = *(new PropPtr(new DescriptionProperty("DataType", m, i18n("Data type"), "0")));
+    props["DataType"] = *(new PropPtr(new Property("DataType", m, i18n("Data type"), "0")));
     m.clear();
 
     m["m/d/y"] = "0";
@@ -46,7 +46,7 @@ CanvasField::CanvasField(int x, int y, int width, int height, QCanvas * canvas):
     m["dd.mm.yy"] = "10";
     m["dd.mm.yyyy"] = "11";
     //TODO: make date format not hard-coded, use locale settings
-    props["DateFormat"] = *(new PropPtr(new DescriptionProperty("DateFormat", m, i18n("Date format"), "11")));
+    props["DateFormat"] = *(new PropPtr(new Property("DateFormat", m, i18n("Date format"), "11")));
     m.clear();
 
     props["Precision"] = *(new PropPtr(new Property(IntegerValue, "Precision", i18n("Number of digits after comma"), "2")));

@@ -28,7 +28,7 @@ CanvasCalculatedField::CanvasCalculatedField(int x, int y, int width, int height
     m["Average"] = "2";
     m["Variance"] = "3";
     m["StandardDeviation"] = "4";
-    props["CalculationType"] = *(new PropPtr(new DescriptionProperty("CalculationType", m, i18n("Calculation type"), "1")));
+    props["CalculationType"] = *(new PropPtr(new Property("CalculationType", m, i18n("Calculation type"), "1")));
 }
 
 void CanvasCalculatedField::draw(QPainter &painter)

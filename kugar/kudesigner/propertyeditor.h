@@ -22,10 +22,11 @@
 
 #include <map>
 
+#include "property.h"
+
 class QWidget;
 class QTable;
 class QString;
-class PropPtr;
 
 /**
   *@author Alexander Dymo

@@ -24,11 +24,12 @@
 #include <qpainter.h>
 #include <qptrlist.h>
 
+#include "property.h"
+
 class CanvasReportItem;
 class QMouseEvent;
 class QCanvasItemList;
 class CanvasBox;
-class PropPtr;
 
 class SelectionRect: public QCanvasRectangle{
 public:

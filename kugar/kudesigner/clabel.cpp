@@ -53,30 +53,30 @@ CanvasLabel::CanvasLabel(int x, int y, int width, int height, QCanvas * canvas):
     m["DemiBold"] = "63";
     m["Bold"] = "75";
     m["Black"] = "87";
-    props["FontWeight"] = *(new PropPtr(new DescriptionProperty("FontWeight", m, i18n("Font weight"), "50")));
+    props["FontWeight"] = *(new PropPtr(new Property("FontWeight", m, i18n("Font weight"), "50")));
     m.clear();
 
     m["Regular"] = "0";
     m["Italic"] = "1";
-    props["FontItalic"] = *(new PropPtr(new DescriptionProperty("FontItalic", m, i18n("Italic font"), "0")));
+    props["FontItalic"] = *(new PropPtr(new Property("FontItalic", m, i18n("Italic font"), "0")));
     m.clear();
 
     m["Left"] = "0";
     m["Center"] = "1";
     m["Right"] = "2";
-    props["HAlignment"] = *(new PropPtr(new DescriptionProperty("HAlignment", m, i18n("Text horizontal alignment"),
+    props["HAlignment"] = *(new PropPtr(new Property("HAlignment", m, i18n("Text horizontal alignment"),
         QString("").isRightToLeft()?"2":"0")));
     m.clear();
 
     m["Top"] = "0";
     m["Middle"] = "1";
     m["Bottom"] = "2";
-    props["VAlignment"] = *(new PropPtr(new DescriptionProperty("VAlignment", m, i18n("Text vertical alignment"), "1")));
+    props["VAlignment"] = *(new PropPtr(new Property("VAlignment", m, i18n("Text vertical alignment"), "1")));
     m.clear();
 
     m["False"] = "0";
     m["True"] = "1";
-    props["WordWrap"] = *(new PropPtr(new DescriptionProperty("WordWrap", m, i18n("Word wrap"), "0")));
+    props["WordWrap"] = *(new PropPtr(new Property("WordWrap", m, i18n("Word wrap"), "0")));
 }
 
 int CanvasLabel::getTextAlignment()

@@ -25,7 +25,7 @@ CanvasSpecialField::CanvasSpecialField(int x, int y, int width, int height, QCan
 
     m["Date"] = "0";
     m["PageNumber"] = "1";
-    props["Type"] = *(new PropPtr(new DescriptionProperty("Type", m, i18n("Field type to display"), "0")));
+    props["Type"] = *(new PropPtr(new Property("Type", m, i18n("Field type to display"), "0")));
     m.clear();
 
     m["m/d/y"] = "0";
@@ -41,7 +41,7 @@ CanvasSpecialField::CanvasSpecialField(int x, int y, int width, int height, QCan
     m["dd.mm.yy"] = "10";
     m["dd.mm.yyyy"] = "11";
     //TODO: make date format not hard-coded, use locale settings
-    props["DateFormat"] = *(new PropPtr(new DescriptionProperty("DateFormat", m, i18n("Date format"), "11")));
+    props["DateFormat"] = *(new PropPtr(new Property("DateFormat", m, i18n("Date format"), "11")));
 }
 
 void CanvasSpecialField::draw(QPainter &painter)

@@ -26,6 +26,14 @@ Property::Property(int type, QString name, QString description, QString value):
 {
 }
 
+Property::Property(QString name, std::map<QString, QString> v_correspList,
+    QString description, QString value):
+    m_type(ValueFromList), m_name(name), m_description(description), m_value(value),
+    correspList(v_correspList)
+{
+    
+}
+
 Property::~Property()
 {
 }
@@ -86,6 +94,7 @@ QWidget *Property::editorOfType(const PropertyEditor *editor)
     PColorCombo *c;
     PSymbolCombo *y;
     PLineStyle *i;
+    PComboBox *b;
     
     switch (type())
     {
@@ -110,6 +119,9 @@ QWidget *Property::editorOfType(const PropertyEditor *editor)
             return i;
 
         case ValueFromList:
+            b = new PComboBox(editor, name(), value(), &correspList, false, 0, 0);
+            return b;
+
         case StringValue:
         default:
             l = new PLineEdit((PropertyEditor *)editor, name(), value(), (QWidget*)0);
@@ -118,26 +130,8 @@ QWidget *Property::editorOfType(const PropertyEditor *editor)
     return 0;
 }
 
-DescriptionProperty::DescriptionProperty(QString name, std::map<QString, QString> v_correspList,
-    QString description, QString value):
-    Property(ValueFromList, name, description, value), correspList(v_correspList)
-{
-    
-}
-
-
-void DescriptionProperty::setCorrespList(std::map<QString, QString> list)
+void Property::setCorrespList(std::map<QString, QString> list)
 {
     correspList = list;
 }
 
-QWidget *DescriptionProperty::editorOfType(const PropertyEditor *editor)
-{
-    switch (type())
-    {
-        case ValueFromList:
-            PComboBox *b = new PComboBox(editor, name(), value(), &correspList, false, 0, 0);
-            return b;
-    }
-    return Property::editorOfType(editor);
-}

@@ -69,6 +69,8 @@ class Property {
 public:
     Property() {}
     Property(int type, QString name, QString description="", QString value=QString::null);
+    Property(QString name, std::map<QString, QString> v_correspList,
+        QString description="", QString value=QString::null);
     virtual ~Property();
 
     bool operator<(const Property &prop) const;
@@ -82,6 +84,9 @@ public:
     QString description() const;
     void setDescription(QString description);
 
+    void setCorrespList(std::map<QString, QString> list);
+    std::map<QString, QString> correspList;    
+    
     virtual QWidget *editorOfType(const PropertyEditor *editor);
 
 protected:
@@ -91,54 +96,51 @@ protected:
     QString m_value;
 };
 
-/** Property with the values that have descriptions. In the combobox
-    descriptions must be displayed, not the values itself.
- */
-class DescriptionProperty: public Property {
+/** Master (accordind to Jeff Alger) pointer to Property */
+template<class P>
+class MPropPtr{
 public:
-    DescriptionProperty(): Property() {}
-    /** map<description, value> <-> map<QString, QString> */
-    DescriptionProperty(QString name, std::map<QString, QString> v_correspList,
-        QString description="", QString value=QString::null);
-
-    void setCorrespList(std::map<QString, QString> list);
-    std::map<QString, QString> correspList;
-
-    virtual QWidget *editorOfType(const PropertyEditor *editor);
-};
-
-/** Smart pointer to Property */
-class PropPtr{
-public:
-    PropPtr()
+    MPropPtr()
     {
-        m_prop = 0;
+        m_prop = new P();
     }
-    PropPtr(Property *prop): m_prop(prop) {}
 
-    ~PropPtr()
+    MPropPtr(P *prop): m_prop(prop) {}
+
+    MPropPtr(const MPropPtr<P>& pp): m_prop(new P(*(pp.m_prop))) {}
+
+    MPropPtr<P>& operator=(const MPropPtr<P>& pp)
     {
-        if (m_prop != 0)
+        if (this != &pp)
+        {
             delete m_prop;
+            m_prop = new P(*(pp.m_prop));
+        }
+        return *this;
     }
     
-    Property *operator->()
+    ~MPropPtr()
+    {
+        delete m_prop;
+    }
+    
+    P *operator->()
     {
         if (m_prop != 0)
             return m_prop;
         else
-            return new Property();
+            return new P();
     }
 
-    Property *operator->() const
+    P *operator->() const
     {
         if (m_prop != 0)
             return m_prop;
         else
-            return new Property();
+            return new P();
     }
 
-    bool operator<(const PropPtr& p) const
+    bool operator<(const MPropPtr<P>& p) const
     {
         if ((prop()->type() < p.prop()->type()) && (prop()->name() < p.prop()->name()))
             return true;
@@ -146,12 +148,17 @@ public:
             return false;        
     }
 
-    Property *prop() const
+    P *prop() const
     {
-        return m_prop;
+        if (m_prop != 0)
+            return m_prop;
+        else
+            return new P();
     }
 private:
-    Property *m_prop;
+    P *m_prop;
 };
+
+typedef MPropPtr<Property> PropPtr;
 
 #endif

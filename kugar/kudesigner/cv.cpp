@@ -529,59 +529,45 @@ void ReportCanvas::finishSelection()
     if (!selected.isEmpty())
         if (selected.count() > 1)
         {
-            // handling multiple selection !!!! AD: BUGS & CRUSHES HERE
-/*            std::map<QString, PropPtr > *curr = &(selected.first()->props);
+            // handling multiple selection 
+            std::map<QString, PropPtr > curr = selected.first()->props;
 
-    for (CanvasBox *b = selected.first(); b; b = selected.next())
-    {
-        qWarning("item with rtti = %d is selected", b->rtti());
-    }
-
-
-            qWarning("props obtained");
             CanvasBox *b = selected.first();
             b = selected.next();
-//            for (; b; b = selected.next())
             while (b)
             {
-                qWarning("  iteration: b->rtti() = %d", b->rtti());
                 std::map<QString, PropPtr > selProps;
                 std::insert_iterator< std::map<QString, PropPtr > > it(selProps, selProps.begin());
-                qWarning("  insert iterator created");
-                std::set_intersection(curr->begin(), curr->end(), b->props.begin(), b->props.end(), it);
-                qWarning("  intersection done");
+                std::set_intersection(curr.begin(), curr.end(), b->props.begin(), b->props.end(), it);
 
-                *curr = selProps;
-                qWarning("  curr changed");
+                curr = selProps;
 
-            qWarning("Multiple selection property list:");
-            for (std::map<QString, PropPtr>::const_iterator i = curr->begin(); i != curr->end(); ++i )
-            {
-                qWarning("   %s = %s", i->first.latin1(), i->second->value().latin1());
-            }
-                
+/*                qWarning("Multiple selection property list:");
+                for (std::map<QString, PropPtr>::const_iterator i = curr->begin(); i != curr->end(); ++i )
+                {
+                    qWarning("   %s = %s", i->first.latin1(), i->second->value().latin1());
+                }*/
 
                 b = selected.next();
-                qWarning("  next selected");
             }
 
-            qWarning("Multiple selection property list:");
+/*            qWarning("Multiple selection property list:");
             for (std::map<QString, PropPtr>::const_iterator i = curr->begin(); i != curr->end(); ++i )
             {
                 qWarning("   %s = %s", i->first.latin1(), i->second->value().latin1());
-            }
-                        
-            emit selectionMade(curr);
-            qWarning("curr emitted");                                  */
+            }*/
+
+            std::map<QString, PropPtr > *x = new std::map<QString, PropPtr >(curr);
+            emit selectionMade(x);
         }
         else
             emit selectionMade(&(selected.first()->props));
 
-    CanvasBox *b;
+/*  CanvasBox *b;
     for (b = selected.first(); b; b = selected.next())
     {
         qWarning("item with rtti = %d is selected", b->rtti());
-    }
+    }*/
 
 }
 

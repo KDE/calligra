@@ -100,16 +100,16 @@ CanvasKugarTemplate::CanvasKugarTemplate(int x, int y, int width, int height, QC
     m["Ledger"] = "28";
     m["Tabloid"] = "29";
     m["NPageSize"] = "30";
-    props["PageSize"] = *(new PropPtr(new DescriptionProperty("PageSize", m, i18n("Page size"), "0")));
+    props["PageSize"] = *(new PropPtr(new Property("PageSize", m, i18n("Page size"), "0")));
     m.clear();
 
     m["Portrait"] = "0";
     m["Landscape"] = "1";
-    props["PageOrientation"] = *(new PropPtr(new DescriptionProperty("PageOrientation",
+    props["PageOrientation"] = *(new PropPtr(new Property("PageOrientation",
         m, i18n("Page orientation"), "0")));
     m.clear();
 
-    props["TopMargin"] = *(new PropPtr(new Property(IntegerValue, "TopMargin", i18n("Top margin"), "0")));
+    props["TopMargin"] = *(new PropPtr(new Property(IntegerValue, "TopMargin", i18n("Top margin"), "0"))); 
 
     props["BottomMargin"] = *(new PropPtr(new Property(IntegerValue, "BottomMargin", i18n("Bottom margin"), "0")));
 
