@@ -394,6 +394,9 @@ public:
     void borderBottom( const QPoint &_marker,QColor _color );
     void borderRight( const QPoint &_marker,QColor _color );
 
+    void setConditional( const QPoint &_marker,KSpreadConditional tmp[3] );
+
+
     QString Currency(){return currency;}
     /**
     * Change Name table in a formula

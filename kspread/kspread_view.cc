@@ -73,6 +73,8 @@
 #include "kspread_dlg_format.h"
 #include "kspread_dlg_oszi.h"
 #include "kspread_dlg_create.h"
+#include "kspread_dlg_conditional.h"
+
 
 #include <kscript_scriptmenu.h>
 
@@ -240,6 +242,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_showPageBorders = new KToggleAction( i18n("Show page borders"), 0, actionCollection(), "showPageBorders");
     connect( m_showPageBorders, SIGNAL( toggled( bool ) ), this, SLOT( togglePageBorders( bool ) ) );
     m_replace = new KAction( i18n("Replace"), 0, this, SLOT( replace() ), actionCollection(), "replace" );
+     m_conditional = new KAction( i18n("Conditional"), 0, this, SLOT( conditional() ), actionCollection(), "conditional" );
     m_sort = new KAction( i18n("Sort"), 0, this, SLOT( sort() ), actionCollection(), "sort" );
     m_createAnchor = new KAction( i18n("Create Anchor"), 0, this, SLOT( createAnchor() ), actionCollection(), "createAnchor" );
     m_consolidate = new KAction( i18n("Consolidate"), 0, this, SLOT( consolidate() ), actionCollection(), "consolidate" );
@@ -1462,6 +1465,13 @@ void KSpreadView::replace()
   KSpreadreplace* dlg = new KSpreadreplace( this, "Replace" ,QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
   dlg->show();
 }
+
+void KSpreadView::conditional()
+{
+  KSpreadconditional *dlg=new KSpreadconditional( this,"conditional",QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ));
+  dlg->show();
+}
+
 
 void KSpreadView::sort()
 {

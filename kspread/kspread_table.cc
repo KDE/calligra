@@ -629,7 +629,7 @@ void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, i
 	    for ( int y = r.top(); y <= r.bottom(); y++ )
 	    {		
 	      KSpreadCell *cell = cellAt( x, y );
-	
+
 	      if ( cell == m_pDefaultCell )
 	      {
 		cell = new KSpreadCell( this, x, y );
@@ -649,7 +649,7 @@ void KSpreadTable::setSelectionFont( const QPoint &_marker, const char *_font, i
 		  cell->setTextFontBold( (bool)_bold );
 	      cell->clearDisplayDirtyFlag();
 	    }
-	
+
 	emit sig_updateView( this, r );
     }
 }
@@ -714,7 +714,7 @@ void KSpreadTable::setSelectionTextColor( const QPoint &_marker, QColor tb_Color
 	
 	for ( int x = r.left(); x <= r.right(); x++ )
 	    for ( int y = r.top(); y <= r.bottom(); y++ )
-	    {		
+	    {
 		KSpreadCell *cell = cellAt( x, y );
 		
 		if ( cell == m_pDefaultCell )
@@ -1189,7 +1189,7 @@ void KSpreadTable::changeNameCellRef(int pos,ChangeRef ref,QString tabname)
                 correct_tablename=true;
               else
                 correct_tablename=false;
-			
+
             }
             else
               correct_tablename=false;
@@ -1349,7 +1349,7 @@ ChangeRef ref,QString tabname)
           buf[0] = *p++;
           erg += buf;
           correct_tablename = (tabname==name());
-	
+
           if(erg.right(1)=="!")
           {
             int pos=erg.findRev(tabname);
@@ -1429,7 +1429,7 @@ ChangeRef ref,QString tabname)
                   erg+="$"+util_columnLabel(col);
                 else
                 {
-				
+
                   if(ref==ColumnInsert && correct_tablename==true)
                   {
                     if(col >=pos.x()&&row==pos.y())
@@ -2079,12 +2079,12 @@ void KSpreadTable::setSelectionMultiRow( const QPoint &_marker, bool enable )
 	    undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
 	    m_pDoc->undoBuffer()->appendUndo( undo );
 	}
-	
+
 	for ( int x = r.left(); x <= r.right(); x++ )
 	    for ( int y = r.top(); y <= r.bottom(); y++ )
-	    {		
+	    {
 		KSpreadCell *cell = cellAt( x, y );
-		
+
 		if ( cell == m_pDefaultCell )
 		{
 		    cell = new KSpreadCell( this, x, y );
@@ -2289,7 +2289,7 @@ void KSpreadTable::setSelectionMoneyFormat( const QPoint &_marker )
 	if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
 	{
 	  it.current()->setDisplayDirtyFlag();
-	
+
 	  if(it.current()->postfix()==tmp)
 	  	{
 	  	it.current()->setPostfix( "");
@@ -2549,7 +2549,7 @@ void KSpreadTable::clearSelection( const QPoint &_marker )
 	
 	for ( int x = r.left(); x <= r.right(); x++ )
 	    for ( int y = r.top(); y <= r.bottom(); y++ )
-	    {		
+	    {
 		KSpreadCell *cell = cellAt( x, y );
 
 		if ( cell == m_pDefaultCell )
@@ -2809,7 +2809,7 @@ void KSpreadTable::deleteRow( unsigned long int _row )
 	{
 	  int key = list2[ k ]->row();
 	  m_dctRows.remove( key );
-		
+
 	  list2[ k ]->setRow( list2[ k ]->row() - 1 );
 		
 	  key = list2[ k ]->row();
@@ -3006,7 +3006,7 @@ void KSpreadTable::deleteColumn( unsigned long int _column )
 	{
 	  int key = list2[ k ]->column();
 	  m_dctColumns.remove( key );
-		
+
 	  list2[ k ]->setColumn( list2[ k ]->column() - 1 );
 		
 	  key = list2[ k ]->column();
@@ -3022,6 +3022,109 @@ void KSpreadTable::deleteColumn( unsigned long int _column )
     emit sig_updateHBorder( this );
     emit sig_updateVBorder( this );
 }
+
+void KSpreadTable::setConditional( const QPoint &_marker,KSpreadConditional tmp[3] )
+{
+m_pDoc->setModified( true );
+KSpreadConditional *m_stCond;
+    bool selected = ( m_rctSelection.left() != 0 );
+    // Complete rows selected ?
+    if ( selected && m_rctSelection.right() == 0x7FFF )
+    {
+      QIntDictIterator<KSpreadCell> it( m_dctCells );
+      for ( ; it.current(); ++it )
+      {
+	long l = it.currentKey();
+	int row = l & 0xFFFF;
+	if ( m_rctSelection.top() <= row && m_rctSelection.bottom() >= row )
+	{
+
+          it.current()->setDisplayDirtyFlag();
+          m_stCond=it.current()->getConditional();
+          for(int i=0;i<3;i++)
+                {
+                m_stCond[i].val1=tmp[i].val1;
+                m_stCond[i].val2=tmp[i].val2;
+                m_stCond[i].colorcond=tmp[i].colorcond;
+                m_stCond[i].fontcond=tmp[i].fontcond;
+                m_stCond[i].m_cond=tmp[i].m_cond;
+                }
+	  it.current()->clearDisplayDirtyFlag();
+	}
+      }
+
+      emit sig_updateView( this, m_rctSelection );
+      return;
+    }
+    // Complete columns selected ?
+    else if ( selected && m_rctSelection.bottom() == 0x7FFF )
+    {
+      QIntDictIterator<KSpreadCell> it( m_dctCells );
+      for ( ; it.current(); ++it )
+      {
+	long l = it.currentKey();
+	int col = l >> 16;
+	if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
+	{
+	  it.current()->setDisplayDirtyFlag();
+          m_stCond=it.current()->getConditional();
+          for(int i=0;i<3;i++)
+                {
+                m_stCond[i].val1=tmp[i].val1;
+                m_stCond[i].val2=tmp[i].val2;
+                m_stCond[i].colorcond=tmp[i].colorcond;
+                m_stCond[i].fontcond=tmp[i].fontcond;
+                m_stCond[i].m_cond=tmp[i].m_cond;
+                }
+          it.current()->clearDisplayDirtyFlag();
+	}
+      }
+
+      emit sig_updateView( this, m_rctSelection );
+      return;
+    }
+    else
+    {
+	QRect r( m_rctSelection );
+	if ( !selected )
+	    r.setCoords( _marker.x(), _marker.y(), _marker.x(), _marker.y() );
+
+	KSpreadUndoCellLayout *undo;
+	if ( !m_pDoc->undoBuffer()->isLocked() )
+	{
+	    undo = new KSpreadUndoCellLayout( m_pDoc, this, r );
+	    m_pDoc->undoBuffer()->appendUndo( undo );
+	}
+
+	for ( int x = r.left(); x <= r.right(); x++ )
+	    for ( int y = r.top(); y <= r.bottom(); y++ )
+	    {
+		KSpreadCell *cell = cellAt( x, y );
+
+		if ( cell == m_pDefaultCell )
+		{
+		    cell = new KSpreadCell( this, x, y );
+		    int key = y + ( x * 0x10000 );
+		    m_dctCells.insert( key, cell );
+		}
+
+		cell->setDisplayDirtyFlag();
+                m_stCond=cell->getConditional();
+                for(int i=0;i<3;i++)
+                        {
+                        m_stCond[i].val1=tmp[i].val1;
+                        m_stCond[i].val2=tmp[i].val2;
+                        m_stCond[i].colorcond=tmp[i].colorcond;
+                        m_stCond[i].fontcond=tmp[i].fontcond;
+                        m_stCond[i].m_cond=tmp[i].m_cond;
+                        }
+                cell->clearDisplayDirtyFlag();
+	    }
+
+	emit sig_updateView( this, r );
+    }
+}
+
 
 void KSpreadTable::copySelection( const QPoint &_marker )
 {

@@ -22,6 +22,7 @@
   <Action name="sortDec"/>
   <Separator/>
   <Action name="createAnchor"/>
+  <Action name="conditional"/>
   <Action name="editCell"/>
   <Separator/>
   <Action name="insertChart"/>

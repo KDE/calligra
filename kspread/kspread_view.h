@@ -166,6 +166,7 @@ public slots:
     void togglePageBorders( bool );
     void gotoCell();
     void replace();
+    void conditional();
     void sort();
     void createAnchor();
     void consolidate();
@@ -366,6 +367,7 @@ private:
     KAction* m_newView;
     KAction* m_gotoCell;
     KAction* m_replace;
+    KAction* m_conditional;
     KAction* m_sort;
     KAction* m_createAnchor;
     KAction* m_consolidate;

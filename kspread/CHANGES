@@ -270,3 +270,18 @@ installing in new cell when you choose Text or NoBorder parameter)
 -----------------------------------------------------
 -Bug fix : When you copy a value in a cell all is recalcing
 (bug that David Faure found. thanks)
+
+Summary 2000-01-07 ->2000-02-06
+Shaumann Port KSpread and all koffice to new kpart
+
+
+2000-02-06 -Montel laurent <montell@club-internet.fr>
+-----------------------------------------------------
+-Add new Function : conditional
+-When you want to define a value for example you want to see all cells which
+are a value equal to 5 you can attribut a color and a font.
+
+=>there are three conditions.
+There is against a lot of work (save condition, reduce memory to store condition,
+and put the old condition when you active dialog.
+=> I try to do this thinks this week if I have time

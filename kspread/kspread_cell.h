@@ -47,6 +47,16 @@ class KSParseNode;
 
 /**
  */
+
+struct KSpreadConditional
+{
+ double val1;
+ double val2;
+ QColor colorcond;
+ QFont fontcond;
+ Conditional m_cond;
+};
+
 struct KSpreadDepend
 {
   int m_iColumn;
@@ -98,6 +108,7 @@ class KSpreadCell : public KSpreadLayout
 public:
     enum Style { ST_Normal, ST_Button, ST_Undef, ST_Select };
     enum Content { Text, RichText, Formula, VisualFormula };
+    
     KSpreadCell( KSpreadTable *_table, int _column, int _row );
     ~KSpreadCell();
 
@@ -520,6 +531,12 @@ public:
 
 
     void defaultStyle();
+
+    //return the number of condition which is true
+    //and valid or not conditionIsTrue
+    int verifyCondition();
+    KSpreadConditional * getConditional() {return  m_stCond;}
+
 protected:
 
     /**
@@ -701,6 +718,11 @@ protected:
     int m_richWidth;
     int m_richHeight;
 
+
+    bool conditionIsTrue;
+
+    KSpreadConditional m_stCond[3];
+    
 };
 
 #endif

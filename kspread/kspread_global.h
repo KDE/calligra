@@ -10,5 +10,5 @@
 enum PasteMode { Normal, Text, Format, NoBorder, NormalAndTranspose, TextAndTranspoase,
 		 FormatAndTranspose, NoBorderAndTranspose };
 enum Operation { OverWrite, Add, Mul, Sub, Div };
-
+enum Conditional { None, Equal,Superior,Inferior,SuperiorEqual,InferiorEqual,Between,Different};
 #endif
