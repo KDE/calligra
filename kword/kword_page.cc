@@ -904,7 +904,7 @@ void KWPage::vmrEdit()
 }
 
 /*================================================================*/
-void KWPage::vmrEditFrame( int mx, int my )
+void KWPage::vmrEditFrame( int /*mx*/, int /*my*/ )
 {
     int frameset=0; 
     KWFrame *frame= doc->getFirstSelectedFrame(frameset);
@@ -2434,7 +2434,7 @@ bool KWPage::kDown( QKeyEvent *e, int, int, KWParag *parag, KWTextFrameSet *fs )
 
 
 /*=============================
-  kNext - Next key handler - same as PageDown. Move cursor down one 
+  kPrior - Prior key handler - same as PageUp. Move cursor up one 
   visible document area height and adjust page view accordingly
 			  ===================================*/
 
@@ -2853,9 +2853,7 @@ void KWPage::keyPressEvent( QKeyEvent *e )
 
     inputTimer.stop();
     formatTimer.stop();
-
     startProcessKeyEvent();
-
     editModeChanged( e );
 
     // if we are in a table and CTRL-Return was pressed
@@ -2864,7 +2862,79 @@ void KWPage::keyPressEvent( QKeyEvent *e )
         if ( !kInsertTableRow() )
             STOP;
 
-    if ( e->state() & ControlButton ) {
+    /*============================================ 
+     scroll up or down by one paper page height, aligning top of view
+     with top of page. Uses PageUp and PageDown with CTRL. key.
+    
+     Note that pages returned from calcVisiblePages() start with 1, not 0.
+     Note also that firstVisiblePage and lastVisiblePage are always different
+     even when only one page is visible - first takes floor and last takes
+     ceiling so there is always a difference of at least one!
+     I adjust by always subtracting 1 from last visible page.
+     if two or more pages are visible this will scroll up to the top of
+     higher one so such pages are not skipped, then scroll a full page 
+     on page alignments from there on.  Scrolling down does not have this
+     problem as it always goes to the start of the next page after top
+     page in view, even if the lower page is partially visible to start.
+    ===========================================*/
+    
+    if ((e->key() == Key_Prior || e->key() == Key_Next) 
+    && (e->state() & ControlButton))
+    {
+          calcVisiblePages();
+	  int ifvPage = static_cast<int>(firstVisiblePage);
+          int ilvPage = static_cast<int>(lastVisiblePage) - 1;	  
+  
+          // determine whether current view is exactly aligned 
+	  // to page boundaries or is in the middle of a page somewhere
+          unsigned int topY = (unsigned int)contentsY();
+	  unsigned int leftover = topY % ptPaperHeight();
+
+          // kdDebug() << "leftover: " << leftover << endl;
+          
+	  if(e->key() == Key_Prior)
+          {
+              stopProcessKeyEvent();	  
+              int priorPage = 0;
+
+              // kdDebug() << "ifvPage: " << ifvPage << " ilvPage: " << ilvPage << endl;
+	      
+              // scroll to top of next page       
+              if((ifvPage == ilvPage) && (leftover < 2)) 
+              {
+                  priorPage = ifvPage - 1;
+		  if(priorPage > 0)  priorPage -= 1;
+              }
+              else // scroll to top of current page
+              { 
+                  priorPage = ifvPage;
+                  if(priorPage > 0) priorPage -= 1;		  
+              }
+
+              scrollToOffset( 0, (priorPage) * (ptPaperHeight()) + 1);
+          }
+          else if(e->key() == Key_Next)
+          {
+              stopProcessKeyEvent();
+              int nextPage = 1;
+
+              // kdDebug() << "ifvPage: " << ifvPage << " ilvPage: " << ilvPage << endl;	      	      
+
+              if(ifvPage == ilvPage)
+                  nextPage = ifvPage + 1;
+              else
+                  nextPage =  ifvPage + 1;
+  
+              scrollToOffset( 0, (nextPage - 1) * (ptPaperHeight()) + 1);
+          }  
+          // note: vmrEdit will set cursor at offset into document !!!
+	  // risky - will test later. jwc
+	  // vmrEdit(0, (nextPage - 1) * (ptPaperHeight()) + 1);      
+          return;
+    }
+    
+    // other keys modified by ControlButton
+    else if ( e->state() & ControlButton ) {
         if ( e->key() == Key_B ) {
             stopProcessKeyEvent();
             gui->getView()->textBold();
@@ -2891,6 +2961,7 @@ void KWPage::keyPressEvent( QKeyEvent *e )
             STOP;
 
     switch( e->key() ) {
+
     case Key_Prior: // PageUp
 	{
         if ( !kPrior( e, oldPage, oldFrame, oldParag, frameSet ) )
@@ -4347,7 +4418,7 @@ void KWPage::setRulerLeftIndent( KoRuler *ruler, KWUnit _value )
 }
 
 /*================================================================*/
-bool KWPage::editModeChanged( QKeyEvent *e )
+bool KWPage::editModeChanged( QKeyEvent * /*e */ )
 {
     KWFrameSet *fs = doc->getFrameSet( fc->getFrameSet() - 1 );
     KWGroupManager *grpMgr = fs->getGroupManager();
