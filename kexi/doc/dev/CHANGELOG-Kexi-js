@@ -460,9 +460,34 @@ Forms:
 -change form's object caption to "caption" property, when changed and conversely!
 -new forms should have "dirty" set to true, so user can save them quickly
 
+TODO:::::::
+1. test dipesh.kexi - ID column is not used on row updating!!!
+
+2. dipesh	np, I also found a crasher witch is maybe related.
+	dipesh	just change a value, go to design mode and switch back to dataview...
+	dipesh	[KCrash handler]
+	dipesh	#3 0xb59b156f in KexiFormScrollView::createEditor ()
+	dipesh	from /usr/lib/kde3/kexihandler_form.so
+	dipesh	#4 0xb7e5f502 in KexiDataAwareObjectInterface::startEditCurrentCell ()
+	dipesh	from /usr/lib/libkexidatatable.so.0
+	dipesh	#5 0xb59b276a in KexiFormScrollView::valueChanged ()
+	dipesh	from /usr/lib/kde3/kexihandler_form.so
+	dipesh	I look where the crasher is coming from.
+	dipesh	oh, in KexiFormScrollView::createEditor
+	dipesh	column( col ) returns NULL
+	jstaniek	dipesh: it's only within your example project...
+	dipesh	therefore column( col )->readOnly() crashes...
+
 2005-03-30
 Forms
 - setting form's background color property fixed
+KexiDB
+- BIC CHANGE: a few dtors made virtual
+- Connection: data inserting/updating/deleting:
+-- more error messages and codes added
+-- we're checking if master table's primary key is available
+- QuerySchema: pkeyFieldsOrder() improved, pkeyFieldsCount() added.
+- FieldList::indexOf() added
 
 2005-03-29
 Main Window

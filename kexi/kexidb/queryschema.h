@@ -320,18 +320,49 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		*/
 		QMap<QueryColumnInfo*,uint> fieldsOrder();
 
-		/*! \return table describing order of PKEY fields within the query.
-		 It is usable foe e.g. Conenction::updateRow(), when we need 
-		 to locate each PKEY's field in a constant time.
-		 Returned vector is owned by QuerySchema object, when you assign it, 
-		 it is implicity shared.
-		 Its size if equal to number of PKEY fields, i.e. 
-		 == masterTable()->primaryKey()->fieldCount().
-		 Returns empty vector if there is neither master table nor master table's pkey.
-		 This method's result is cached by QuerySchema object.
+		/*! \return table describing order of primary key (PKEY) fields within the query.
+		 Indexing is performed against vector returned by fieldsExpanded().
+		 It is usable for e.g. Conenction::updateRow(), when we need 
+		 to locate each primary key's field in a constant time.
+
+		 Returned vector is owned and cached by QuerySchema object. When you assign it, 
+		 it is implicity shared. Its size is equal to number of primary key
+		 fields defined for master table (masterTable()->primaryKey()->fieldCount()).
+
+		 Each element of the returned vector:
+		 - can belong to [0..fieldsExpanded().count()-1] if there is such 
+		   primary key's field in the fieldsExpanded() list.
+		 - can be equal to -1 if there is no such primary key's field 
+		   in the fieldsExpanded() list.
+
+		 If there are more than one primary key's field included in the query, 
+		 only first-found column (oin the fieldsExpanded() list) for each pkey's field is included.
+
+		 Returns empty vector if there is no master table or no master table's pkey.
+		 @see example for pkeyFieldsCount().
 @todo js: UPDATE CACHE!
 		*/
 		QValueVector<uint> pkeyFieldsOrder();
+
+		/*! \return number of master table's primary key fields included in this query.
+		 This method is useful to quickly check whether the vector returned by pkeyFieldsOrder()
+		 if filled completely.
+
+		 User e.g. in Connection::updateRow() to check if entire primary 
+		 key information is specified.
+
+		 Examples: let table T has (ID1 INTEGER, ID2 INTEGER, A INTEGER) fields, 
+		 and let (ID1, ID2) is T's primary key.
+		 -# The query defined by "SELECT * FROM T" statement contains all T's 
+		    primary key's fields as T is the master table, and thus pkeyFieldsCount() 
+		    will return 2 (both primary key's fields are in the fieldsExpanded() list),
+				and pkeyFieldsOrder() will return vector {0, 1}. 
+		 -# The query defined by "SELECT A, ID2 FROM T" statement, and thus pkeyFieldsCount()
+		    will return 1 (only one primary key's field is in the fieldsExpanded() list),
+				and pkeyFieldsOrder() will return vector {-1, 1}, as second primary key's field 
+				is at position #1 and first field is not specified at all within the query. 
+		*/
+		uint pkeyFieldsCount();
 
 		/*! \return a list of field infos for all auto-incremented fields
 		 from master table of this query. This result is cached for efficiency. 

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -49,6 +49,7 @@ class QuerySchemaPrivate
 		 , autoincFields(0)
 		 , fieldsOrder(0)
 		 , pkeyFieldsOrder(0)
+		 , pkeyFieldsCount(0)
 		 , tablesBoundToColumns(64, -1)
 		 , tablePositionsForAliases(67, false)
 		 , columnPositionsForAliases(67, false)
@@ -212,6 +213,9 @@ class QuerySchemaPrivate
 		/*! order of PKEY fields (e.g. for updateRow() ) */
 		QValueVector<uint> *pkeyFieldsOrder;
 
+		/*! number of PKEY fields within the query */
+		uint pkeyFieldsCount;
+
 		/*! forced (predefined) statement */
 		QString statement;
 
@@ -266,9 +270,10 @@ QuerySchema::QuerySchema(TableSchema* tableSchema)
 	, d( new QuerySchemaPrivate(this) )
 {
 	d->masterTable = tableSchema;
-	assert(d->masterTable);
+//	assert(d->masterTable);
 	init();
 	if (!d->masterTable) {
+		kdWarning() << "QuerySchema(TableSchema*): !d->masterTable" << endl;
 		m_name = QString::null;
 		return;
 	}
@@ -435,7 +440,8 @@ FieldList& QuerySchema::addAsterisk(QueryAsterisk *asterisk, bool visible)
 
 Connection* QuerySchema::connection() const
 {
-	return d->masterTable ? d->masterTable->connection() : 0;
+	TableSchema *mt = masterTable();
+	return mt ? mt->connection() : 0;
 }
 
 QString QuerySchema::debugString()
@@ -443,8 +449,9 @@ QString QuerySchema::debugString()
 	QString dbg;
 	dbg.reserve(1024);
 	//fields
+	TableSchema *mt = masterTable();
 	dbg = QString("QUERY ") + schemaDataDebugString() + "\n"
-		+ "-masterTable=" + (d->masterTable ? d->masterTable->name() :"<NULL>")
+		+ "-masterTable=" + (mt ? mt->name() :"<NULL>")
 		+ "\n-COLUMNS:\n"
 		+ ((fieldCount()>0) ? FieldList::debugString() : "<NONE>") + "\n";
 
@@ -814,24 +821,36 @@ QValueVector<uint> QuerySchema::pkeyFieldsOrder()
 	if (!tbl || !tbl->primaryKey())
 		return QValueVector<uint>();
 
-	//get order of PKEY fields (e.g. for save() )
+	//get order of PKEY fields (e.g. for rows updating or inserting )
 	IndexSchema *pkey = tbl->primaryKey();
-	if (!d->pkeyFieldsOrder) {
-		d->pkeyFieldsOrder = new QValueVector<uint>( pkey->fieldCount() );
-	}
-//			d->pkeyFieldsOrder->reserve(pkey->fieldCount());
+	d->pkeyFieldsOrder = new QValueVector<uint>( pkey->fieldCount(), -1 );
+
 	const uint fCount = fieldsExpanded().count();
-	for (uint i=0, j=0; i<fCount; i++) {
+	d->pkeyFieldsCount = 0;
+	for (uint i = 0; i<fCount; i++) {
 		QueryColumnInfo *fi = d->fieldsExpanded->at(i);
-		if (fi->field->table()==tbl && pkey->field(fi->field->name())!=0) {
-			KexiDBDbg << "Cursor::init(): FIELD " << fi->field->name() << " IS IN PKEY" << endl;
-			(*d->pkeyFieldsOrder)[j]=i;
-			j++;
+		const int fieldIndex = fi->field->table()==tbl ? pkey->indexOf(fi->field) : -1;
+		if (fieldIndex!=-1/* field foung in PK */ 
+			&& d->pkeyFieldsOrder->at(fieldIndex)==-1 /* first time */)
+		{
+			KexiDBDbg << "QuerySchema::pkeyFieldsOrder(): FIELD " << fi->field->name() 
+				<< " IS IN PKEY AT POSITION #" << fieldIndex << endl;
+//			(*d->pkeyFieldsOrder)[j]=i;
+			(*d->pkeyFieldsOrder)[fieldIndex]=i;
+			d->pkeyFieldsCount++;
+//			j++;
 		}
 	}
+	KexiDBDbg << "QuerySchema::pkeyFieldsOrder(): " << d->pkeyFieldsCount
+		<< " OUT OF " << pkey->fieldCount() << " PKEY'S FIELDS FOUND IN QUERY " << name() << endl;
 	return *d->pkeyFieldsOrder;
 }
 
+uint QuerySchema::pkeyFieldsCount()
+{
+	(void)pkeyFieldsOrder(); /* rebuild information */
+	return d->pkeyFieldsCount;
+}
 
 Relationship* QuerySchema::addRelationship( Field *field1, Field *field2 )
 {
@@ -851,7 +870,8 @@ QueryColumnInfo::List* QuerySchema::autoIncrementFields()
 	if (!d->autoincFields) {
 		d->autoincFields = new QueryColumnInfo::List();
 	}
-	if (!d->masterTable) {
+	TableSchema *mt = masterTable();
+	if (!mt) {
 		KexiDBWarn << "QuerySchema::autoIncrementFields(): no master table!" << endl;
 		return d->autoincFields;
 	}
@@ -859,7 +879,7 @@ QueryColumnInfo::List* QuerySchema::autoIncrementFields()
 		QueryColumnInfo::Vector fexp = fieldsExpanded();
 		for (int i=0; i<(int)fexp.count(); i++) {
 			QueryColumnInfo *fi = fexp[i];
-			if (fi->field->table() == d->masterTable && fi->field->isAutoIncrement()) {
+			if (fi->field->table() == mt && fi->field->isAutoIncrement()) {
 				d->autoincFields->append( fi );
 			}
 		}

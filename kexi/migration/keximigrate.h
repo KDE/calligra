@@ -52,12 +52,9 @@ namespace KexiMigration
 		Q_OBJECT
 
 		public:
-			//Destructor
-			~KexiMigrate();
-
-			//Constructor
 			KexiMigrate();
 			KexiMigrate(QObject *parent, const char *name, const QStringList &args = QStringList());
+			virtual ~KexiMigrate();
 
 			//! Data Setup.  Requires two connection objects, a name and a bool
 			void setData(KexiDB::ConnectionData* externalConnectionData,

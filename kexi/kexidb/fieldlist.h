@@ -54,7 +54,7 @@ class KEXI_DB_EXPORT FieldList
 		
 		/*! \return number of fields in the list. */
 		inline unsigned int fieldCount() const { return m_fields.count(); }
-		
+
 		/*! Adds \a field at the and of field list. */
 		FieldList& addField(Field *field);
 
@@ -77,7 +77,11 @@ class KEXI_DB_EXPORT FieldList
 		inline Field* field(const QString& name) const { return m_fields_by_name[name.lower()]; }
 
 		/*! \return true if this list contains given \a field. */
-		inline bool hasField(Field* field) { return m_fields.findRef(field)!=-1; }
+		inline bool hasField(const Field* field) { return m_fields.findRef(field)!=-1; }
+
+		/*! \return first occurence of \a field in the list 
+		 or -1 if this list does not contain this field. */
+		inline int indexOf(const Field* field) { return m_fields.findRef(field); }
 
 		/*! \return list of field names for this list. */
 		QStringList names() const;

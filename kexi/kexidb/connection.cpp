@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -2360,6 +2360,8 @@ void Connection::setAvailableDatabaseName(const QString& dbName)
 bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf)
 {
 // Each SQL identifier needs to be escaped in the generated query.
+	query.debug();
+
 	KexiDBDbg << "Connection::updateRow.." << endl;
 	clearError();
 	//--get PKEY
@@ -2367,18 +2369,23 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 		KexiDBDbg << " -- NO CHANGES DATA!" << endl;
 		return true;
 	}
-	if (!query.masterTable()) {
+	TableSchema *mt = query.masterTable();
+	if (!mt) {
 		KexiDBWarn << " -- NO MASTER TABLE!" << endl;
+		setError(ERR_UPDATE_NO_MASTER_TABLE, 
+			i18n("Could not update row because there is no master table defined."));
 		return false;
 	}
-	IndexSchema *pkey = query.masterTable()->primaryKey();
+	IndexSchema *pkey = mt->primaryKey();
 	if (!pkey || pkey->fields()->isEmpty()) {
-		KexiDBWarn << " -- NO PARENT TABLE's PKEY!" << endl;
-//js TODO: hmm, perhaps we can try to update without using PKEY?
+		KexiDBWarn << " -- NO MASTER TABLE's PKEY!" << endl;
+		setError(ERR_UPDATE_NO_MASTER_TABLES_PKEY, 
+			i18n("Could not update row because master table has no primary key defined."));
+//! @todo perhaps we can try to update without using PKEY?
 		return false;
 	}
 	//update the record:
-	m_sql = "UPDATE " + escapeIdentifier(query.masterTable()->name()) + " SET ";
+	m_sql = "UPDATE " + escapeIdentifier(mt->name()) + " SET ";
 	QString sqlset, sqlwhere;
 	sqlset.reserve(1024);
 	sqlwhere.reserve(1024);
@@ -2390,14 +2397,22 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 			m_driver->valueToSQL(it.key()->field,it.data()));
 	}
 	QValueVector<uint> pkeyFieldsOrder = query.pkeyFieldsOrder();
-	if (pkey->fieldCount()>0) {
+	KexiDBDbg << pkey->fieldCount() << " ? " << query.pkeyFieldsCount() << endl;
+	if (pkey->fieldCount() != query.pkeyFieldsCount()) { //sanity check
+		KexiDBWarn << " -- NO ENTIRE MASTER TABLE's PKEY SPECIFIED!" << endl;
+		setError(ERR_UPDATE_NO_ENTIRE_MASTER_TABLES_PKEY, 
+			i18n("Could not update row because it does not contain entire master table's primary key."));
+		return false;
+	}
+	if (!pkey->fields()->isEmpty()) {
 		uint i=0;
 		for (Field::ListIterator it = pkey->fieldsIterator(); it.current(); i++, ++it) {
 			if (!sqlwhere.isEmpty())
 				sqlwhere+=" AND ";
 			QVariant val = data[ pkeyFieldsOrder[i] ];
 			if (val.isNull() || !val.isValid()) {
-				setError(ERR_UPDATE_NULL_PKEY_FIELD, i18n("Primary key's field \"%1\" cannot be empty.").arg(it.current()->name()));
+				setError(ERR_UPDATE_NULL_PKEY_FIELD, 
+					i18n("Primary key's field \"%1\" cannot be empty.").arg(it.current()->name()));
 //js todo: pass the field's name somewhere!
 				return false;
 			}
@@ -2430,11 +2445,14 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 	if (buf.dbBuffer().isEmpty()) {
 		KexiDBDbg << " -- NO CHANGES DATA!" << endl;
 		return true; }*/
-	if (!query.masterTable()) {
+	TableSchema *mt = query.masterTable();
+	if (!mt) {
 		KexiDBWarn << " -- NO MASTER TABLE!" << endl;
+		setError(ERR_INSERT_NO_MASTER_TABLE, 
+			i18n("Could not insert row because there is no master table defined."));
 		return false;
 	}
-	IndexSchema *pkey = query.masterTable()->primaryKey();
+	IndexSchema *pkey = mt->primaryKey();
 	if (!pkey || pkey->fields()->isEmpty())
 		KexiDBWarn << " -- WARNING: NO MASTER TABLE's PKEY" << endl;
 
@@ -2443,16 +2461,27 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 	sqlvals.reserve(1024);
 
 	//insert the record:
-	m_sql = "INSERT INTO " + escapeIdentifier(query.masterTable()->name()) + " (";
+	m_sql = "INSERT INTO " + escapeIdentifier(mt->name()) + " (";
 	KexiDB::RowEditBuffer::DBMap b = buf.dbBuffer();
 
 	if (buf.dbBuffer().isEmpty()) {
 		if (!pkey || pkey->fields()->isEmpty()) {
-			KexiDBWarn << " -- WARNING: PARENT TABLE REQUIRED FOR INSERTING EMPTY ROWS: INSERT CANCELLED" << endl;
+			KexiDBWarn << " -- WARNING: MASTER TABLE's PKEY REQUIRED FOR INSERTING EMPTY ROWS: INSERT CANCELLED" << endl;
+			setError(ERR_INSERT_NO_MASTER_TABLES_PKEY, 
+				i18n("Could not insert row because master table has no primary key defined."));
+			return false;
+		}
+		QValueVector<uint> pkeyFieldsOrder = query.pkeyFieldsOrder();
+		KexiDBDbg << pkey->fieldCount() << " ? " << query.pkeyFieldsCount() << endl;
+		if (pkey->fieldCount() != query.pkeyFieldsCount()) { //sanity check
+			KexiDBWarn << " -- NO ENTIRE MASTER TABLE's PKEY SPECIFIED!" << endl;
+			setError(ERR_INSERT_NO_ENTIRE_MASTER_TABLES_PKEY, 
+				i18n("Could not insert row because it does not contain entire master table's primary key.")
+				.arg(query.name()));
 			return false;
 		}
 		//at least one value is needed for VALUES section: find it and set to NULL:
-		Field *anyField = query.masterTable()->anyNonPKField();
+		Field *anyField = mt->anyNonPKField();
 		if (!anyField) {
 			//try to set NULL in pkey field (could not work for every SQL engine!)
 			anyField = pkey->fields()->first();
@@ -2478,7 +2507,7 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 
 	if (!res) {
 		setError(ERR_INSERT_SERVER_ERROR, i18n("Row inserting on the server failed."));
-	return false;
+		return false;
 	}
 	//success: now also assign new value in memory:
 	QMap<QueryColumnInfo*,uint> fieldsOrder = query.fieldsOrder();
@@ -2489,12 +2518,11 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 	//fetch autoincremented values
 	QueryColumnInfo::List *aif_list = query.autoIncrementFields();
 	if (pkey && !aif_list->isEmpty()) {
-		//now only if PKEY is present:
-		//js TODO more...
+		//! @todo now only if PKEY is present, this should also work when there's no PKEY 
 		QueryColumnInfo *id_fieldinfo = aif_list->first();
 		int last_id = lastInsertedAutoIncValue(id_fieldinfo->field->name(), id_fieldinfo->field->table()->name());
 		if (last_id==-1) {
-			//err...
+			//! @todo show error
 			return false;
 		}
 		RowData aif_data;
@@ -2504,7 +2532,7 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 			escapeIdentifier(id_fieldinfo->field->name()) + "=" +
 			QString::number(last_id);
 		if (!querySingleRecord(getAutoIncForInsertedValue, aif_data)) {
-			//err...
+			//! @todo show error
 			return false;
 		}
 		QueryColumnInfo::ListIterator fi_it(*aif_list);
@@ -2523,34 +2551,53 @@ bool Connection::deleteRow(QuerySchema &query, RowData& data)
 // Each SQL identifier needs to be escaped in the generated query.
 	KexiDBWarn << "Connection::deleteRow.." << endl;
 	clearError();
-	if (!query.masterTable()) {
+	TableSchema *mt = query.masterTable();
+	if (!mt) {
 		KexiDBWarn << " -- NO MASTER TABLE!" << endl;
+		setError(ERR_DELETE_NO_MASTER_TABLE, 
+			i18n("Could not delete row because there is no master table defined.")
+			.arg(query.name()));
 		return false;
 	}
-	IndexSchema *pkey = query.masterTable()->primaryKey();
-	if (!pkey || pkey->fields()->isEmpty())
+	IndexSchema *pkey = mt->primaryKey();
+
+//! @todo allow to delete from a table without pkey
+	if (!pkey || pkey->fields()->isEmpty()) {
 		KexiDBWarn << " -- WARNING: NO MASTER TABLE's PKEY" << endl;
+		setError(ERR_DELETE_NO_MASTER_TABLES_PKEY, 
+			i18n("Could not delete row because there is no primary key for master table defined."));
+		return false;
+	}
 
 	//update the record:
-	m_sql = "DELETE FROM " + escapeIdentifier(query.masterTable()->name()) + " WHERE ";
+	m_sql = "DELETE FROM " + escapeIdentifier(mt->name()) + " WHERE ";
 	QString sqlwhere;
 	sqlwhere.reserve(1024);
-	QValueVector<uint> pkeyFieldsOrder = query.pkeyFieldsOrder();
-	if (pkey->fieldCount()>0) {
+
+//	if (!pkey->fields()->isEmpty()) {
+		QValueVector<uint> pkeyFieldsOrder = query.pkeyFieldsOrder();
+		KexiDBDbg << pkey->fieldCount() << " ? " << query.pkeyFieldsCount() << endl;
+		if (pkey->fieldCount() != query.pkeyFieldsCount()) { //sanity check
+			KexiDBWarn << " -- NO ENTIRE MASTER TABLE's PKEY SPECIFIED!" << endl;
+			setError(ERR_DELETE_NO_ENTIRE_MASTER_TABLES_PKEY, 
+				i18n("Could not delete row because it does not contain entire master table's primary key."));
+			return false;
+		}
 		uint i=0;
 		for (Field::ListIterator it = pkey->fieldsIterator(); it.current(); i++, ++it) {
 			if (!sqlwhere.isEmpty())
 				sqlwhere+=" AND ";
 			QVariant val = data[ pkeyFieldsOrder[i] ];
 			if (val.isNull() || !val.isValid()) {
-				setError(ERR_DELETE_NULL_PKEY_FIELD, i18n("Primary key's field \"%1\" cannot be empty.").arg(it.current()->name()));
+				setError(ERR_DELETE_NULL_PKEY_FIELD, i18n("Primary key's field \"%1\" cannot be empty.")
+					.arg(it.current()->name()));
 //js todo: pass the field's name somewhere!
 				return false;
 			}
 			sqlwhere += ( escapeIdentifier(it.current()->name()) + "=" +
 				m_driver->valueToSQL( it.current(), val ) );
 		}
-	}
+//	}
 	m_sql += sqlwhere;
 	KexiDBDbg << " -- SQL == " << m_sql << endl;
 
@@ -2564,15 +2611,16 @@ bool Connection::deleteRow(QuerySchema &query, RowData& data)
 bool Connection::deleteAllRows(QuerySchema &query)
 {
 	clearError();
-	if (!query.masterTable()) {
+	TableSchema *mt = query.masterTable();
+	if (!mt) {
 		KexiDBWarn << " -- NO MASTER TABLE!" << endl;
 		return false;
 	}
-	IndexSchema *pkey = query.masterTable()->primaryKey();
+	IndexSchema *pkey = mt->primaryKey();
 	if (!pkey || pkey->fields()->isEmpty())
 		KexiDBWarn << "Connection::deleteAllRows -- WARNING: NO MASTER TABLE's PKEY" << endl;
 
-	m_sql = "DELETE FROM " + escapeIdentifier(query.masterTable()->name());
+	m_sql = "DELETE FROM " + escapeIdentifier(mt->name());
 
 	KexiDBDbg << " -- SQL == " << m_sql << endl;
 

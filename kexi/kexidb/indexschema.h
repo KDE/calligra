@@ -65,7 +65,7 @@ class KEXI_DB_EXPORT IndexSchema : public FieldList, public SchemaData
 		 are destroyed (these are also detached from 
 		 detail-side indices before destruction). 
 		 Relationship objects listed in detailsRelationships() are not touched. */
-		~IndexSchema();
+		virtual ~IndexSchema();
 
 		/*! Adds field at the end of field list. 
 		 Field will not be owned by index. Field must belong to a table
