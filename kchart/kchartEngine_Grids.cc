@@ -34,14 +34,14 @@ int kchartEngine::doLabels() {
       debug( "Value for x label in col %d is not a string", labels );
       continue;
     }
-    
+
     debug( "Setting label %d to %s", labels, cellval.value.stringValue().latin1() );
     //		QString l = cellval.value.stringValue();
     xlbl.at( labels ) = cellval.value.stringValue();
     debug( "Done setting label" );
     hasxlabels = true;
   }
-#endif  
+#endif
   debug( "labels read" );
 };
 
@@ -59,14 +59,14 @@ void kchartEngine::drawBorder() {
     }
   if( params->border ) {
     int	x1, y1, x2, y2;
-    
+
     x1 = PX(0);
     y1 = PY(highest);
     x2 = PX(num_points-1+(params->do_bar()?2:0));
     y2 = PY(lowest);
     p->setPen( LineColor );
     p->drawLine( x1, PY(lowest), x1, y1 );
-    
+
     setno = params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets: num_sets: 1;
     p->setPen( LineColor );
     p->drawLine( x1, y1, PX(0), PY(highest) );
@@ -84,7 +84,7 @@ void kchartEngine::drawBorder() {
 
 void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
   // to get rid of this
-  
+
   /* ----- backmost first - grid & labels ----- */
   if (!( params->grid || params->yaxis )) {
     // there is nothing to draw in this case
@@ -94,29 +94,33 @@ void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
   /* draw grid lines & y label(s) */
   int i,j;
   float	tmp_y = lowest;
-  QColor labelcolor = params->YLabelColor== Qt::black ?
+  //Montel : You can choose YLabelColor and LineColor
+  //=>I use labelColor.
+  /*QColor labelcolor = params->YLabelColor== Qt::black ?
     LineColor: params->YLabelColor;
   QColor label2color = params->YLabel2Color== Qt::black ?
     VolColor: params->YLabel2Color;
-    
+    */
+   QColor labelcolor = params->YLabelColor;
+   QColor label2color = params->YLabel2Color;
     /* step from lowest to highest puting in labels and grid at interval points */
     /* since now "odd" intervals may be requested, try to step starting at 0,   */
     /* if lowest < 0 < highest                                                  */
   for(int i=-1; i<=1; i+=2 ) { // -1, 1
-      if( i == -1 )	
+      if( i == -1 )
 	if( lowest >= 0.0 ) //	all pos plotting
 	  continue;
 	else
 	  tmp_y = MIN( 0, highest ); // step down to lowest
-      
+
       if( i == 1 )	
 	if( highest <= 0.0 ) //	all neg plotting
 	  continue;
 	else
 	  tmp_y = MAX( 0, lowest ); // step up to highest
+
       
-      
-      //			if( !(highest > 0 && lowest < 0) )	
+      //			if( !(highest > 0 && lowest < 0) )
       // doesn't straddle 0
       //				{
       //				if( i == -1 )				
@@ -158,7 +162,7 @@ void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
 	  p->drawLine( x1, y1, x2, y2 );		// depth for 3Ds
 	  p->setPen( GridColor );
 	  p->drawLine( x2, y2, PX(num_points-1+(params->do_bar()?2:0)), y2 );
-	  setno = 0;								
+	  setno = 0;
 	  // set back to foremost
 	}
 	
@@ -180,10 +184,10 @@ void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
 			   PY(tmp_y)-params->yAxisFontHeight()/2,
 			   whole );
 	    }
-	  
-	    
+
+
 	    // qDebug( "drawing 3" );
-	    
+
 	    // PENDING( original uses a 1 step smaller
 	    // font here. Do that, too?
 	    if( n )	{
@@ -218,7 +222,7 @@ void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
 	  sprintf( vylbl,
 		   !params->ylabel2_fmt.isEmpty()? params->ylabel2_fmt: QString( "%.0f" ),
 		   ((float)(PY(tmp_y)+(setno*ydepth_3D)-vyorig))/vyscl );
-	  
+
 	  setno = params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets:
 	num_sets:
 	  1; // backmost
@@ -238,7 +242,7 @@ void kchartEngine::drawGridAndLabels(bool do_ylbl_fractions) {
       while( ((i>0) && ((tmp_y += ylbl_interval) < highest)) ||
 	     ((i<0) && ((tmp_y -= ylbl_interval) > lowest)) );
     }
-    
+
     // qDebug( "drawing 5" );
     
     /* catch last (bottom) grid line - specific to an "off" requested interval */
@@ -330,7 +334,7 @@ void kchartEngine::drawXTicks() {
 	(num_xlbls >= num_points)         ||
 	GDC_xlabel_spacing == MAXSHORT ) {
       int xi = params->do_bar()? i-1: i;
-      
+
       if( params->grid ) {
 	int	x1, x2, y1, y2;
 	// tics

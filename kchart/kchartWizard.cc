@@ -36,8 +36,8 @@ kchartWizard::kchartWizard ( KChartPart* chart, QWidget *parent, const char* nam
   //setFinishEnabled(_selectcharttypepage, true);
 
   // Third page: select the minor chart type
-  //  _selectchartsubtypepage = new kchartWizardSelectChartSubTypePage( this, _chart );
-  // addPage( _selectchartsubtypepage, i18n( "Select chart subtype" ) );
+    _selectchartsubtypepage = new kchartWizardSelectChartSubTypePage( this, _chart );
+   addPage( _selectchartsubtypepage, i18n( "Select chart subtype" ) );
 
   // Fourth page: data setup
   //  _setupdatapage = new kchartWizardSetupDataPage( this, _chart );
@@ -54,6 +54,8 @@ kchartWizard::kchartWizard ( KChartPart* chart, QWidget *parent, const char* nam
   connect( this ,SIGNAL( finished()),_labelslegendpage,SLOT(apply()));
   connect( this ,SIGNAL( finished()),_selectcharttypepage,SLOT(apply()));
   connect( this ,SIGNAL( finished()),_axespage,SLOT(apply()));
+  connect( this ,SIGNAL( finished()),_selectchartsubtypepage,SLOT(apply()));
+  connect( _selectcharttypepage ,SIGNAL( chartChange(int)),this,SLOT(subType(int)));
   //resize( 620, 380 );
   cerr << "kchartwizard created\n";
 }
@@ -63,19 +65,35 @@ kchartWizard::~kchartWizard()
 {
     //delete _selectdatapage;
   delete _selectcharttypepage;
-  // delete _selectchartsubtypepage;
+  delete _selectchartsubtypepage;
   //delete _setupdatapage;
   delete _labelslegendpage;
   delete _axespage;
 }
 
+void kchartWizard::subType(int _type)
+{
+ if( ((KChartType)_type==KCHARTTYPE_BAR) || ((KChartType)_type==KCHARTTYPE_3DBAR)
+        ||((KChartType)_type==KCHARTTYPE_3DLINE))
+        /*||((KChartType)_type==KCHARTTYPE_AREA)
+        ||((KChartType)_type==KCHARTTYPE_3DAREA))*/
+        {
+         _selectchartsubtypepage->chartSubType=true;
+        }
+ else
+        {
+         _selectchartsubtypepage->chartSubType=false;
+        }
+
+}
 bool kchartWizard::appropriate( QWidget * w ) const
 {
   if ( w == _selectchartsubtypepage )
     // Show the sub-type page only if has anything to show
-    return _selectchartsubtypepage->createChildren();
+    return _selectchartsubtypepage->chartSubType;
   else
     return true;
+
 }
 
 void kchartWizard::next()
@@ -83,8 +101,8 @@ void kchartWizard::next()
 
   // Some sort of a hack. We want the chart-subtype-page to get
   // dynamically built when it's going to be shown
-  //  if ( currentPage() == _selectcharttypepage )
-  //  _selectchartsubtypepage->createChildren();
+    //if ( currentPage() == _selectcharttypepage )
+    //_selectchartsubtypepage->createChildren();
 
   QWizard::next();
 }

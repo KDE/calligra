@@ -192,6 +192,7 @@ bool KChartPart::save( ostream& out, const char * /*_format*/ ) {
   QDomElement params = doc.createElement("params");
   chart.appendChild(params);
   params.setAttribute("type",(int)_params->type);
+  params.setAttribute("subtype",(int)_params->stack_type);
 
   if(!_params->title.isEmpty())
         {
@@ -371,6 +372,14 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
 	 if ( !ok )
 	        return false;
          }
+  if ( params.hasAttribute( "subtype" ) )
+        {
+	 _params->stack_type = (KChartStackType)params.attribute("subtype").toInt( &ok );
+	 if ( !ok )
+	        return false;
+         }
+
+  params.setAttribute("subtype",(int)_params->stack_type);
   QDomElement title = params.namedItem( "title" ).toElement();
     if ( !title.isNull())
         {
@@ -625,6 +634,9 @@ bool KChartPart::load( istream& in, KoStore* store ) {
 
 /**
  * $Log$
+ * Revision 1.18  2000/01/07 20:37:42  mlaurent
+ * *** empty log message ***
+ *
  * Revision 1.17  2000/01/06 20:32:46  mlaurent
  * Bug fix
  * Now you can choose font and color in kchartWizard

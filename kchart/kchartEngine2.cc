@@ -114,12 +114,12 @@ void kchartEngine::drawThumbnails() {
     char	thmbl[32];
     char	*price_to_str( float, int*, int*, int* );
     char	nmrtr[3+1], dmntr[3+1], whole[8];
-    
+
     char	*dbg = price_to_str( ABS(thumbval),&n,&d,&w );
     sprintf( nmrtr, "%d", n );
     sprintf( dmntr, "%d", d );
     sprintf( whole, "%d", w );
-    
+
     p->setPen( ThumbLblColor );
     p->setFont( gdFontSmall );
     p->drawText( graphwidth/2-strlen(thumblabel)*SFONTWDTH/2,
@@ -206,27 +206,30 @@ void kchartEngine::drawBackgroundImage() {
 
 
 void kchartEngine::prepareColors() {
-    for(int j=0; j<num_sets; ++j )
+    //for(int j=0; j<num_sets; ++j )
       for(int i=0; i<num_points; ++i )
-	if( params->ExtColor.count() ) {			
+        for(int j=0; j<num_sets; ++j )
+        if( params->ExtColor.count() ) {
 	  //cerr << "Ext color\n";
 	  // changed by me, BL
-	  //QColor ext_clr = params->ExtColor.color( num_points*j+i );			
-	  QColor ext_clr = params->ExtColor.color( (num_points*j+i) % params->ExtColor.count());
-	  ExtColor[j][i]            = ext_clr;
-	  if( params->threeD() )
-	    ExtColorShd[j][i]     = QColor( ext_clr.red() / 2, ext_clr.green() / 2, ext_clr.blue() / 2 );
+	  //QColor ext_clr = params->ExtColor.color( num_points*j+i );
+          //Montel change to allow that all same think has the same color
+          //QColor ext_clr = params->ExtColor.color( (num_points*j+i) % params->ExtColor.count());
+          QColor ext_clr = params->ExtColor.color( (j) % params->ExtColor.count());
+          ExtColor[j][i]            = ext_clr;
+          if( params->threeD() )
+            ExtColorShd[j][i]     = QColor( ext_clr.red() / 2, ext_clr.green() / 2, ext_clr.blue() / 2 );
 	}
 	else if( params->SetColor.count() ) {
 	  QColor set_clr = params->SetColor.color( j );
 	  ExtColor[j][i]     = QColor( set_clr );
-	  if( params->threeD() )
-	    ExtColorShd[j][i] = QColor( set_clr.red() / 2, set_clr.green() / 2, set_clr.blue() / 2 );
+          if( params->threeD() )
+            ExtColorShd[j][i] = QColor( set_clr.red() / 2, set_clr.green() / 2, set_clr.blue() / 2 );
 	}
 	else {
 	  ExtColor[j][i]     = PlotColor;
-	  if( params->threeD() )
-	    ExtColorShd[j][i] = QColor( params->PlotColor.red() / 2, params->PlotColor.green() / 2, params->PlotColor.blue() / 2 );
+          if( params->threeD() )
+            ExtColorShd[j][i] = QColor( params->PlotColor.red() / 2, params->PlotColor.green() / 2, params->PlotColor.blue() / 2 );
 	}
 
 }

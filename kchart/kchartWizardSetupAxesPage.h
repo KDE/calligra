@@ -37,6 +37,8 @@ private:
   QLineEdit *y_min;
   QLineEdit *ylabel_fmt;
   QSpinBox *angle;
+  QSpinBox *depth;
+  QSpinBox *barWidth;
   QPushButton *ylabelFont;
   KColorButton *borderColor;
   KColorButton *gridColor;

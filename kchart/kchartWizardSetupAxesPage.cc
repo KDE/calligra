@@ -102,6 +102,19 @@ kchartWizardSetupAxesPage::kchartWizardSetupAxesPage( QWidget* parent,
   ycolor=_chart->params()->YLabelColor;
   ylabelColor->setColor( ycolor );
 
+  tmpLabel=new QLabel(this);
+  tmpLabel->setText(i18n("Depth 3D: "));
+  tmpLabel->setGeometry(250,20,60,30);
+  depth = new QSpinBox(1, 20, 1, this);
+  depth->setValue(_chart->params()->_3d_depth);
+  depth->setGeometry( 320, 20, 110, 30 );
+
+  tmpLabel=new QLabel(this);
+  tmpLabel->setText(i18n("bar width: "));
+  tmpLabel->setGeometry(250,60,60,30);
+  barWidth = new QSpinBox(1, 200, 1, this);
+  barWidth->setValue(_chart->params()->bar_width);
+  barWidth->setGeometry( 320, 60, 110, 30 );
 
   /*
   QGroupBox* ticksettingsGB = new QGroupBox( i18n( "Tick settings" ), this );
@@ -266,6 +279,8 @@ void kchartWizardSetupAxesPage::apply()
  _chart->params()->YLabelColor=ycolor;
  _chart->params()->GridColor=colorGrid;
  _chart->params()->LineColor=colorBorder;
+ _chart->params()->_3d_depth=depth->value();
+ _chart->params()->bar_width=barWidth->value();
 }
 /*
 void kchartWizardSetupAxesPage::setYTicksNum( const QString & newValue )

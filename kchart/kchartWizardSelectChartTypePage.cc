@@ -15,10 +15,10 @@
 
 void kchartWizardSelectChartTypePage::addButton(QString name,
 					   QString icon_name,
-					   int type) {  
+					   int type) {
 
   QFrame* buttonframe = new QFrame( this );
-  buttonframe->setGeometry( 10+pos1*xstep, 
+  buttonframe->setGeometry( 10+pos1*xstep,
 			    10+pos2*ystep, 
 			    xsize, 
 			    ysize );
@@ -108,16 +108,14 @@ kchartWizardSelectChartTypePage::kchartWizardSelectChartTypePage( QWidget* paren
 
 void kchartWizardSelectChartTypePage::chartTypeSelected( int type )
 {
-  cerr << "Type selected: " << type << "\n";
    _type=(KChartType)type;
+   emit chartChange(type);
    // _chart->params()->type = (KChartType)type;
 
 }
 
 void kchartWizardSelectChartTypePage::apply()
 {
-
- cerr << "Type selected: " <<(int)_type <<endl;
  _chart->params()->type = _type;
 }
 

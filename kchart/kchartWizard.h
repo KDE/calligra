@@ -17,12 +17,12 @@ class kchartWizard : public KWizard
 {
     Q_OBJECT
 public:
-    kchartWizard ( KChartPart* chart, QWidget *parent, const char* name, 
+    kchartWizard ( KChartPart* chart, QWidget *parent, const char* name,
 				   bool modal = true, WFlags f = 0 );
     ~kchartWizard();
 
     KChartPart* chart() const { return _chart; };
-  void setDataArea( QString area ); 
+  void setDataArea( QString area );
   QString dataArea() const;
 
   enum RowCol { Row, Col };
@@ -38,12 +38,12 @@ signals:
 					bool firstColIsLabel );
   void finished();
   void cancelled();
-  
+
 protected slots:
   virtual void next();
   virtual void reject();
   virtual void accept();
-
+  virtual void subType(int);
 private:
   KChartPart* _chart;
   kchartWizardSelectDataPage* _selectdatapage;

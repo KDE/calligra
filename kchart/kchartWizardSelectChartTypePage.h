@@ -20,7 +20,8 @@ public slots:
   void apply();
 private slots:
   void chartTypeSelected( int type );
-
+signals:
+  void chartChange(int);
 private:
   KChartPart* _chart;
   QButtonGroup* _typeBG;

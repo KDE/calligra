@@ -17,8 +17,8 @@
 
 
 void kchartEngine::drawData() {
-   switch( params->type ) { 
-    case KCHARTTYPE_3DBAR: // depth, width, y interval need to allow for whitespace between bars 
+   switch( params->type ) {
+    case KCHARTTYPE_3DBAR: // depth, width, y interval need to allow for whitespace between bars
     case KCHARTTYPE_BAR:
       qDebug("drawing bars");
       drawBars();
@@ -29,30 +29,30 @@ void kchartEngine::drawData() {
       qDebug("drawing lines");
       drawLines();
       break;
-      
+
     case KCHARTTYPE_3DLINE:
     case KCHARTTYPE_3DCOMBO_LINE_BAR:
     case KCHARTTYPE_3DCOMBO_LINE_AREA:
       qDebug("drawing 3D lines");
       draw3DLines();
-      break;	
+      break;
     case KCHARTTYPE_AREA:
     case KCHARTTYPE_3DAREA:
       qDebug("drawing areas");
       drawArea();
-      break;	
+      break;
     case KCHARTTYPE_3DHILOCLOSE:
     case KCHARTTYPE_3DCOMBO_HLC_BAR:
     case KCHARTTYPE_3DCOMBO_HLC_AREA:
       qDebug("drawing 3D combos");
       draw3DCombo();
-      break;	
+      break;
     case KCHARTTYPE_HILOCLOSE:
     case KCHARTTYPE_COMBO_HLC_BAR:
     case KCHARTTYPE_COMBO_HLC_AREA:
       qDebug("drawing combos");
       drawCombo();
-      break;	
+      break;
     }
 }
 
@@ -71,7 +71,7 @@ void kchartEngine::drawBars() {
       }
     setno = 0;
     break;
-    
+
   case KCHARTSTACKTYPE_LAYER:
     {
       float	lasty[num_points];
@@ -90,7 +90,7 @@ void kchartEngine::drawBars() {
 	float		lasty_pos = 0.0;
 	float		lasty_neg = 0.0;
 	int			k;
-	
+
 	for( j=0, k=0; j<num_sets; ++j ) {
 	  if( CELLEXISTS( j, i ) ) {
 	    if( CELLVALUE( j, i ) < 0.0 ) {
@@ -108,7 +108,7 @@ void kchartEngine::drawBars() {
 	  }
 	}
 	qsort( barset, k, sizeof(struct BS), barcmpr );
-	
+
 	for( j=0; j<k; ++j ) {
 	  draw_3d_bar( p,
 		       PX(i+(params->do_bar()?1:0))-hlf_barwdth, PX(i+(params->do_bar()?1:0))+hlf_barwdth,
@@ -120,7 +120,7 @@ void kchartEngine::drawBars() {
       }
     }
     break;
-    
+
   case KCHARTSTACKTYPE_BESIDE:
     {												// h/.5, h/1, h/1.5, h/2, ...
       int	new_barwdth = (int)( (float)hlf_barwdth / ((float)num_sets/2.0) );

@@ -14,3 +14,10 @@
 -Bug fix
 -Now you can choose font and color in KchartWizard
 -Save others parameters
+
+2000-01-08 - Montel laurent <montell@club-internet.fr>
+------------------------------------------------------
+-Now there is one color for same think
+-Now you can choose a "sub type chart"
+-Add new parameters depth3d width3d
+-bugfix

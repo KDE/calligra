@@ -13,6 +13,10 @@
 #include <kiconloader.h>
 #include <kglobal.h>
 #include <klocale.h>
+#include <qlayout.h>
+#include <qhbox.h>
+#include <qvbox.h>
+
 
 kchartWizardSelectChartSubTypePage::kchartWizardSelectChartSubTypePage( QWidget* parent,
 						    KChartPart* chart ) :
@@ -20,6 +24,49 @@ kchartWizardSelectChartSubTypePage::kchartWizardSelectChartSubTypePage( QWidget*
   _chart( chart )
 {
     //  _charttype = _chart->chartType();
+    chartSubType=true;
+    QVBoxLayout *lay1 = new QVBoxLayout( this );
+    lay1->setMargin( 5 );
+    lay1->setSpacing( 10 );
+
+    QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n( "Chart Sub Type" ),this );
+    grp->setRadioButtonExclusive( TRUE );
+    grp->layout();
+    lay1->addWidget(grp);
+    depth=new QRadioButton( i18n("Depth"), grp ); ;
+    sum=new QRadioButton( i18n("Sum"), grp );
+    beside=new QRadioButton( i18n("Beside"), grp );
+    layer=new QRadioButton( i18n("Layer"), grp );
+    switch((int)_chart->params()->stack_type)
+        {
+         case (int)KCHARTSTACKTYPE_DEPTH:
+                {
+                 depth->setChecked(true);
+                 break;
+                }
+         case (int)KCHARTSTACKTYPE_SUM:
+                {
+                 sum->setChecked(true);
+                 break;
+                }
+         case (int)KCHARTSTACKTYPE_BESIDE:
+                {
+                 beside->setChecked(true);
+                 break;
+                }
+          case (int)KCHARTSTACKTYPE_LAYER:
+                {
+                 layer->setChecked(true);
+                 break;
+                 }
+          default:
+                {
+                 cout <<"Error in stack_type\n";
+                 break;
+                }
+        }
+if(!chartSubType)
+        grp->setEnabled(false);
 }
 
 
@@ -78,7 +125,7 @@ bool kchartWizardSelectChartSubTypePage::createChildren( )
 	normalbarsLA->show();
 	normalbarsLA->setGeometry( 10, 104, 94, 20 );
 	normalbarsLA->setAlignment( AlignCenter );
-	
+
 	QFrame* barsontopFR = new QFrame( this );
 	barsontopFR->show();
 	barsontopFR->setGeometry( 104, 10, 94, 94 );
@@ -95,7 +142,7 @@ bool kchartWizardSelectChartSubTypePage::createChildren( )
 	barsontopLA->setGeometry( 104, 104, 94, 20 );
 	barsontopLA->setAlignment( AlignCenter );
 	barsontopLA->show();
-	
+
 	QFrame* barsinfrontFR = new QFrame( this );
 	barsinfrontFR->setGeometry( 198, 10, 94, 94 );
 	barsinfrontFR->setLineWidth( 2 );
@@ -134,6 +181,36 @@ bool kchartWizardSelectChartSubTypePage::createChildren( )
 		   this, SLOT( chartSubTypeSelected( int ) ) );
 }
 
+void kchartWizardSelectChartSubTypePage::apply()
+{
+if(chartSubType)
+{
+ if(depth->isChecked())
+        {
+        _chart->params()->stack_type = KCHARTSTACKTYPE_DEPTH;
+        }
+ else if(sum->isChecked())
+        {
+        _chart->params()->stack_type = KCHARTSTACKTYPE_SUM;
+        }
+ else if(beside->isChecked())
+        {
+        _chart->params()->stack_type = KCHARTSTACKTYPE_BESIDE;
+        }
+ else if(layer->isChecked())
+        {
+        _chart->params()->stack_type = KCHARTSTACKTYPE_LAYER;
+        }
+ else
+        {
+        cout <<"Error in groupbutton\n";
+        }
+ }
+else
+{
+_chart->params()->stack_type = KCHARTSTACKTYPE_DEPTH;
+}
+}
 
 
 #include "kchartWizardSelectChartSubTypePage.moc"
