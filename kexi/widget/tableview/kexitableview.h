@@ -524,11 +524,10 @@ public slots:
 //	void			gotoNext();
 //js	int			findString(const QString &string);
 	
-#if 0 //moved
 	/*! Deletes currently selected record; does nothing if no record 
 	 is currently selected. If record is in edit mode, editing 
 	 is cancelled before deleting.  */
-	void deleteCurrentRow();
+	void deleteCurrentRow() { KexiDataAwareObjectInterface::deleteCurrentRow(); }
 
 	/*! Inserts one empty row above row \a row. If \a row is -1 (the default),
 	 new row is inserted above the current row (or above 1st row if there is no current).
@@ -538,32 +537,37 @@ public slots:
 	 -read-only flag is set (see isReadOnly())
 	 \ return inserted row's data
 	*/
-	KexiTableItem *insertEmptyRow(int row = -1);
+	KexiTableItem *insertEmptyRow(int row = -1) 
+		{ return KexiDataAwareObjectInterface::insertEmptyRow(row); }
 
 	/*! Used when Return key is pressed on cell or "+" nav. button is clicked.
 	 Also used when we want to continue editing a cell after "invalid value" message
 	 was displayed (in this case, \a setText is usually not empty, what means
 	 that text will be set in the cell replacing previous value).
 	*/
-	void startEditCurrentCell(const QString& setText = QString::null);
+	void startEditCurrentCell(const QString& setText = QString::null)
+		{ KexiDataAwareObjectInterface::startEditCurrentCell(setText); }
 
 	/*! Deletes currently selected cell's contents, if allowed. 
 	 In most cases delete is not accepted immediately but "row editing" mode is just started. */
-	void deleteAndStartEditCurrentCell();
-//moved	/*! Cancels row editing All changes made to the editing 
-//moved	 row during this current session will be undone. */
-//moved	void cancelRowEdit();
+	void deleteAndStartEditCurrentCell() 
+		{ KexiDataAwareObjectInterface::deleteAndStartEditCurrentCell(); }
 
-//moved	/*! Accepts row editing. All changes made to the editing 
-//moved	 row during this current session will be accepted (saved). 
-//moved	 \return true if accepting was successfull, false otherwise 
-//moved	 (e.g. when current row contain data that does not meet given constraints). */
-//moved	bool acceptRowEdit();
+	/*! Cancels row editing All changes made to the editing 
+	 row during this current session will be undone. */
+	void cancelRowEdit() { KexiDataAwareObjectInterface::cancelRowEdit(); }
+
+	/*! Accepts row editing. All changes made to the editing 
+	 row during this current session will be accepted (saved). 
+	 \return true if accepting was successfull, false otherwise 
+	 (e.g. when current row contain data that does not meet given constraints). */
+	bool acceptRowEdit() { return KexiDataAwareObjectInterface::acceptRowEdit(); }
 
 	/*! Specifies, if this table view automatically accepts 
 	 row editing (using acceptRowEdit()) on accepting any cell's edit 
 	 (i.e. after acceptEditor()). \sa acceptsRowEditAfterCellAccepting() */
-	void setAcceptsRowEditAfterCellAccepting(bool set);
+	void setAcceptsRowEditAfterCellAccepting(bool set) 
+		{ KexiDataAwareObjectInterface::setAcceptsRowEditAfterCellAccepting(set); }
 
 	/*! Specifies, if this table accepts dropping data on the rows. 
 	 If enabled:
@@ -571,11 +575,10 @@ public slots:
 	 - dragOverRow() signal will be emitted on dragging,
 	  -droppedAtRow() will be emitted on dropping
 	 By default this flag is set to false. */
-	void setDropsAtRowEnabled(bool set);
+	void setDropsAtRowEnabled(bool set) { KexiDataAwareObjectInterface::setDropsAtRowEnabled(set); }
 
-//moved	void cancelEditor();
-//moved	virtual bool acceptEditor();
-#endif //moved
+	void cancelEditor() { KexiDataAwareObjectInterface::cancelEditor(); }
+	virtual bool acceptEditor() { return KexiDataAwareObjectInterface::acceptEditor(); }
 
 signals:
 	virtual void dataSet( KexiTableViewData *data );
@@ -650,7 +653,9 @@ protected slots:
 //moved	virtual void boolToggled();
 
 	void slotUpdate();
-//moved	void sortColumnInternal(int col, int order = 0);
+	//! implemented because we needed this as slot
+	virtual void sortColumnInternal(int col, int order = 0)
+		{ KexiDataAwareObjectInterface::sortColumnInternal(col, order); }
 
 	void slotAutoScroll();
 
@@ -687,7 +692,7 @@ protected:
 	/*! Reimplementation for KexiDataAwareObjectInterface 
 	 Initializes data contents (resizes it, sets cursor at 1st row).
 	 Called on setData(). Also called once on show event after
-	 refreshRequested() signal was received from KexiTableViewData obejct. */
+	 reloadRequested() signal was received from KexiTableViewData object. */
 	virtual void initDataContents();
 
 	/*! Implementation for KexiDataAwareObjectInterface.

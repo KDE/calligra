@@ -398,6 +398,10 @@ TODO: back to ISO 8601 datetime format: http://www.w3.org/TR/NOTE-datetime
 TODO: add time zones support: 1994-11-05T08:15:30-05:00
 TODO: update to sqlite3.1 and use it's features http://www.sqlite.org/releasenotes310.html
 
+2005-01-27
+widgets
+- fixed several blind slot-signal connections
+
 2005-01-26
 Widgets
 - fixed focusing-out record navigator's line edit
@@ -412,6 +416,9 @@ SQL Editor
 - focus is correctly to editor widget
 API, Utils
 - KexiDataAwareView, KexiDataAwareObjectInterface introduced
+- API and GUI Consistency highly improved:
+  KexiTableView and subclasses use the same api 
+  as KexiFormView and all friends
 
 2005-01-14
 General

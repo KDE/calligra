@@ -589,7 +589,8 @@ void KexiTableView::setData( KexiTableViewData *data, bool owner )
 	if (!theSameData) {
 //! @todo: store sorting?
 		setSorting(-1);
-		connect(m_data, SIGNAL(refreshRequested()), this, SLOT(slotRefreshRequested()));
+//		connect(m_data, SIGNAL(refreshRequested()), this, SLOT(slotRefreshRequested()));
+		connect(m_data, SIGNAL(reloadRequested()), this, SLOT(reloadData()));
 		connect(m_data, SIGNAL(destroying()), this, SLOT(slotDataDestroying()));
 		connect(m_data, SIGNAL(rowsDeleted( const QValueList<int> & )), 
 			this, SLOT(slotRowsDeleted( const QValueList<int> & )));
@@ -4411,7 +4412,7 @@ void KexiTableView::connectRowEditStartedSignal(const QObject* receiver,
 
 void KexiTableView::connectRowEditTerminatedSignal(const QObject* receiver, const char* voidMember)
 {
-	connect(this, SIGNAL(rowEditTerminated()), receiver, voidMember);
+	connect(this, SIGNAL(rowEditTerminated(int)), receiver, voidMember);
 }
 
 void KexiTableView::connectReloadActionsSignal(const QObject* receiver, const char* voidMember)

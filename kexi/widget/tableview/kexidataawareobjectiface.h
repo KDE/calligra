@@ -437,7 +437,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 
 		/*! @internal Sets order for \a column: -1: descending, 1: ascending, 
 		 0: invert order */
-		void sortColumnInternal(int col, int order = 0);
+		virtual void sortColumnInternal(int col, int order = 0);
 
 		/*! @internal for implementation
 		 Updates GUI after sorting. 

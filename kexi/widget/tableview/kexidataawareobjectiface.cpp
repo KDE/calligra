@@ -140,7 +140,7 @@ void KexiDataAwareObjectInterface::setData( KexiTableViewData *data, bool owner 
 //! @todo: store sorting?
 		setSorting(-1);
 //		connect(m_data, SIGNAL(refreshRequested()), this, SLOT(slotRefreshRequested()));
-		connectToReloadDataSlot(m_data, SIGNAL(refreshRequested()));
+		connectToReloadDataSlot(m_data, SIGNAL(reloadRequested()));
 		if (dynamic_cast<QObject*>(this)) {
 			QObject::connect(m_data, SIGNAL(destroying()), dynamic_cast<QObject*>(this), SLOT(slotDataDestroying()));
 			QObject::connect(m_data, SIGNAL(rowsDeleted( const QValueList<int> & )), 
