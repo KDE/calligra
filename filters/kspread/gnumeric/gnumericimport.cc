@@ -1379,10 +1379,10 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, KSpreadSheet * table)
               if (font_element.attribute("Bold") == "1")
               { kspread_cell->setTextFontBold(true); }
 
-              if (font_element.attribute("Underline") != "0")
+              if (font_element.hasAttribute("Underline") && ( font_element.attribute("Underline") != "0") )
               { kspread_cell->setTextFontUnderline(true); }
 
-              if (font_element.attribute("StrikeThrough") != "0")
+              if (font_element.hasAttribute("StrikeThrough" ) && ( font_element.attribute("StrikeThrough") != "0") )
               { kspread_cell->setTextFontStrike(true); }
 
               if (font_element.hasAttribute("Unit"))

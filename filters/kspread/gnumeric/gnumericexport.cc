@@ -243,7 +243,7 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, KSpreadCell 
 QDomElement GNUMERICExport::GetFontStyle( QDomDocument gnumeric_doc,KSpreadCell * cell, int currentcolumn, int currentrow)
 {
     QDomElement font_style;
-
+    kdDebug()<<" currentcolumn :"<<currentcolumn<<" currentrow :"<<currentrow<<endl;
     font_style = gnumeric_doc.createElement("gmr:Font");
     font_style.appendChild(gnumeric_doc.createTextNode(cell->textFontFamily(currentcolumn, currentrow)));
 
@@ -257,6 +257,7 @@ QDomElement GNUMERICExport::GetFontStyle( QDomDocument gnumeric_doc,KSpreadCell 
     }
     if (cell->textFontUnderline(currentcolumn,currentrow))
     {
+        kdDebug()<<" cell->textFontUnderline(currentcolumn,currentrow)*********************\n";
         font_style.setAttribute("Underline","1");
     }
     if (cell->textFontStrike(currentcolumn,currentrow))
