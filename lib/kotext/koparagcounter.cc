@@ -176,15 +176,24 @@ static QChar exportCounterType( KoParagCounter::Style style )
     return QChar( s_oasisCounterTypes[ style ] );
 }
 
-void KoParagCounter::loadOasis( KoOasisContext& context, int restartNumbering, bool orderedList, bool heading, int level )
+void KoParagCounter::loadOasis( KoOasisContext& context, int restartNumbering,
+                                bool orderedList, bool heading, int level )
 {
     const QDomElement listStyle = context.listStyleStack().currentListStyle();
     const QDomElement listStyleProperties = context.listStyleStack().currentListStyleProperties();
+    loadOasisListStyle( listStyle, listStyleProperties, restartNumbering, orderedList, heading, level );
+}
+
+void KoParagCounter::loadOasisListStyle( const QDomElement& listStyle,
+                                         const QDomElement& listStyleProperties,
+                                         int restartNumbering,
+                                         bool orderedList, bool heading, int level )
+{
     m_numbering = heading ? 1 : 0;
     m_depth = level - 1; // depth start at 0
     // restartNumbering can either be provided by caller, or taken from the style
     if ( restartNumbering == -1 && listStyle.hasAttributeNS( KoXmlNS::text, "start-value" ) )
-        restartNumbering = context.listStyleStack().currentListStyle().attributeNS( KoXmlNS::text, "start-value", QString::null ).toInt();
+        restartNumbering = listStyle.attributeNS( KoXmlNS::text, "start-value", QString::null ).toInt();
 
     m_restartCounter = restartNumbering != -1;
     m_startNumber = m_restartCounter ? restartNumbering : 1;

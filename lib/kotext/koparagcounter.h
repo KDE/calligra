@@ -75,6 +75,11 @@ public:
      * @param level 1-based
      */
     void loadOasis( KoOasisContext& context, int restartNumbering, bool orderedList, bool heading, int level );
+    /// Part of loadOasis that is shared with KWVariableSettings::loadOasis
+    void loadOasisListStyle( const QDomElement& listStyle,
+                        const QDomElement& listStyleProperties,
+                        int restartNumbering,
+                        bool orderedList, bool heading, int level );
     /// Save as OASIS XML
     void saveOasis( KoGenStyle& listStyle ) const;
     /// Part of saveOasis that is shared with KoStyleCollection::saveOasisOutlineStyles
