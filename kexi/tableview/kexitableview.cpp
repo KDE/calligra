@@ -830,7 +830,7 @@ QSize KexiTableView::minimumSizeHint() const
 {
 	return QSize(
 		leftMargin() + ((columns()>0)?columnWidth(0):KEXITV_DEFAULT_COLUMN_WIDTH) + 2*2, 
-		d->rowHeight*5/2 + topMargin() + (d->navPanel->isVisible() ? d->navPanel->height() : 0)
+		d->rowHeight*5/2 + topMargin() + (d->navPanel && d->navPanel->isVisible() ? d->navPanel->height() : 0)
 	);
 }
 
