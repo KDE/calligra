@@ -1192,6 +1192,26 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
         if ( m_styleStack.hasAttribute( "fo:font-style" ) )
             if ( m_styleStack.attribute( "fo:font-style" ) == "italic" )
                 text.setAttribute( "italic", 1 );
+        if( m_styleStack.hasAttribute("style:text-crossing-out" ))
+        {
+            QString strikeOutType = m_styleStack.attribute( "style:text-crossing-out" );
+            if( strikeOutType =="double-line")
+            {
+                text.setAttribute("strikeOut", "double");
+                text.setAttribute("strikeoutstyleline","solid");
+            }
+            else if( strikeOutType =="single-line")
+            {
+                text.setAttribute("strikeOut", "single");
+                text.setAttribute("strikeoutstyleline","solid");
+            }
+            else if( strikeOutType =="thick-line")
+            {
+                text.setAttribute("strikeOut", "single-bold");
+                text.setAttribute("strikeoutstyleline","solid");
+            }
+
+        }
         if ( m_styleStack.hasAttribute( "style:text-underline" ) )
         {
             QString underType = m_styleStack.attribute( "style:text-underline" );
