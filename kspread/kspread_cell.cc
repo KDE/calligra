@@ -1550,7 +1550,12 @@ void KSpreadCell::offsetAlign( int _col,int _row )
 	else if(m_rotateAngle!=0)
         {
 	    if((h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row ))>0)
-		m_iTextY = h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row );
+                {
+                if( m_rotateAngle < 0 )
+		        m_iTextY = h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row );
+                else
+                        m_iTextY = h - BORDER_SPACE - m_iOutTextHeight- bottomBorderWidth( _col, _row )+(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
+                }
 	    else
                 {
 		if( m_rotateAngle < 0 )
@@ -1581,8 +1586,13 @@ void KSpreadCell::offsetAlign( int _col,int _row )
 	else if( m_rotateAngle != 0 )
         {
 	    if( ( h - m_iOutTextHeight ) > 0 )
-		m_iTextY = ( h - m_iOutTextHeight ) / 2 +(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
-	    else
+            {
+                if( m_rotateAngle < 0 )
+                        m_iTextY = ( h - m_iOutTextHeight ) / 2 ;
+                else
+		        m_iTextY = ( h - m_iOutTextHeight ) / 2 +(int)(m_fmAscent*cos(m_rotateAngle*M_PI/180));
+            }
+            else
                 {
                 if( m_rotateAngle < 0 )
 		    m_iTextY = topBorderWidth( _col, _row) + BORDER_SPACE ;
