@@ -44,15 +44,10 @@ void VTool::activateAll()
 } 
 
 bool
-VTool::eventFilter( QEvent* event )
+VTool::mouseEvent( QMouseEvent* mouseEvent, const KoPoint &canvasCoordinate )
 {
 	if( !view() || !view()->part() || !view()->part()->isReadWrite() )
 		return false;
-
-
-	QMouseEvent* mouseEvent = static_cast<QMouseEvent*>( event );
-
-	KoPoint canvasCoordinate = view()->canvasWidget()->toContents( KoPoint( mouseEvent->pos() ) );
 
 	m_lastPoint.setX( canvasCoordinate.x() );
 	m_lastPoint.setY( canvasCoordinate.y() );
@@ -60,14 +55,14 @@ VTool::eventFilter( QEvent* event )
 	setCursor();
 
 	// Mouse events:
-	if ( event->type() == QEvent::MouseButtonDblClick )
+	if ( mouseEvent->type() == QEvent::MouseButtonDblClick )
 	{
 		mouseButtonDblClick();
 		
 		return true;
 	}
 
-	if( event->type() == QEvent::MouseButtonPress )
+	if( mouseEvent->type() == QEvent::MouseButtonPress )
 	{
 		m_firstPoint.setX( canvasCoordinate.x() );
 		m_firstPoint.setY( canvasCoordinate.y() );
@@ -79,7 +74,7 @@ VTool::eventFilter( QEvent* event )
 		return true;
 	}
 
-	if( event->type() == QEvent::MouseMove )
+	if( mouseEvent->type() == QEvent::MouseMove )
 	{
 		setCursor();
 
@@ -95,7 +90,7 @@ VTool::eventFilter( QEvent* event )
 		return true;
 	}
 
-	if( event->type() == QEvent::MouseButtonRelease )
+	if( mouseEvent->type() == QEvent::MouseButtonRelease )
 	{
 		if( m_isDragging )
 		{
@@ -111,6 +106,12 @@ VTool::eventFilter( QEvent* event )
 		return true;
 	}
 
+	return false;
+}
+
+bool
+VTool::keyEvent( QEvent* event )
+{
 	// Key press events:
 	if( event->type() == QEvent::KeyPress )
 	{
@@ -123,7 +124,7 @@ VTool::eventFilter( QEvent* event )
 
 			return true;
 		}
-		
+
 		// Terminate the current drawing with the Enter-key:
 		if ( keyEvent->key() == Qt::Key_Backspace && !m_isDragging )
 		{

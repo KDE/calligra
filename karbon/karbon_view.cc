@@ -216,7 +216,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 
 	// widgets:
 	m_canvas = new VCanvas( this, p );
-	m_canvas->viewport()->installEventFilter( this );
 	m_canvas->setGeometry( 0, 0, width(), height() );
 
 	// set up factory
@@ -725,7 +724,7 @@ KarbonView::rotateTool()
 
 	m_currentTool = m_rotateTool;
 
-	m_currentTool->activateAll();
+	//m_currentTool->activateAll();
 
 	m_canvas->repaintAll();
 }
@@ -1296,10 +1295,19 @@ KarbonView::paintEverything( QPainter& /*p*/, const QRect& /*rect*/,
 }
 
 bool
-KarbonView::eventFilter( QObject* object, QEvent* event )
+KarbonView::mouseEvent( QMouseEvent* event, const KoPoint &p )
 {
-	if( m_currentTool && object == m_canvas->viewport() )
-		return m_currentTool->eventFilter( event );
+	if( m_currentTool )
+		return m_currentTool->mouseEvent( event, p );
+	else
+		return false;
+}
+
+bool
+KarbonView::keyEvent( QEvent* event )
+{
+	if( m_currentTool )
+		return m_currentTool->keyEvent( event );
 	else
 		return false;
 }

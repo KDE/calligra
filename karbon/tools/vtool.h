@@ -72,7 +72,8 @@ public:
 	 * It then calls suiting functions like mouseMoved() so deriving tools
 	 * don't need to directly deal with events themselves.
 	 */
-	bool eventFilter( QEvent* event );
+	bool mouseEvent( QMouseEvent* event, const KoPoint & );
+	bool keyEvent( QEvent* event );
 
 protected:
 	bool isDragging() { return m_isDragging; }

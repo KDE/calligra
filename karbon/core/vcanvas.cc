@@ -46,6 +46,7 @@ VCanvas::VCanvas( KarbonView* view, KarbonPart* part )
 
 	viewport()->setBackgroundColor( Qt::white );
 	viewport()->setBackgroundMode( QWidget::NoBackground );
+	viewport()->installEventFilter( this );
 
 	resizeContents( 800, 600 );
 	m_pixmap = new QPixmap( 800, 600 );
@@ -55,6 +56,24 @@ VCanvas::VCanvas( KarbonView* view, KarbonPart* part )
 	m_bScrolling = false;
 
 }
+
+bool
+VCanvas::eventFilter( QObject* object, QEvent* event )
+{
+	QScrollView::eventFilter( object, event );
+
+	if( event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease  )
+		return m_view->keyEvent( event );
+
+	QMouseEvent* mouseEvent = static_cast<QMouseEvent*>( event );
+
+	KoPoint canvasCoordinate = toContents( KoPoint( mouseEvent->pos() ) );
+	if( mouseEvent && m_view )
+		return m_view->mouseEvent( mouseEvent, canvasCoordinate );
+	else
+		return false;
+}
+
 
 // This causes a repaint normally, so just overwriting it omits the repainting
 void

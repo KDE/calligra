@@ -104,7 +104,8 @@ public:
 	virtual void paintEverything( QPainter &p, const QRect &rect,
 								  bool transparent = false );
 
-	virtual bool eventFilter( QObject* object, QEvent* event );
+	bool mouseEvent( QMouseEvent* event, const KoPoint & );
+	bool keyEvent( QEvent* event );
 
 	virtual QWidget* canvas()
 	{
