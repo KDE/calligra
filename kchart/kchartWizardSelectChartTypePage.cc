@@ -64,14 +64,14 @@ _chart( chart )
     xstep = xsize + 10;
     ystep = ysize + ylabelsize + 10;
 
-    addButton( i18n( "Lines" ), "chart_lines", KDChartParams::Line );
+    addButton( i18n( "Lines" ), "chart_line", KDChartParams::Line );
     addButton( i18n( "Area" ),  "chart_area", KDChartParams::Area );
     addButton( i18n( "Bar" ), "chart_bar", KDChartParams::Bar );
-    addButton( i18n( "Pie" ), "chart_pie3D", KDChartParams::Pie );
+    addButton( i18n( "Pie" ), "chart_pie", KDChartParams::Pie );
     addButton( i18n( "Ring" ), "chart_ring", KDChartParams::Ring );
-    addButton(i18n("Hi-Lo-Close"), "chart_hiloclose", KDChartParams::HiLo );
+    addButton(i18n("Hi-Lo-Close"), "chart_hilo", KDChartParams::HiLo );
     addButton(i18n("Polar"), "chart_polar", KDChartParams::Polar);
-    addButton(i18n("Box & Whisker "), "chart_bw", KDChartParams::BoxWhisker );
+    addButton(i18n("Box & Whisker "), "chart_boxwhisker", KDChartParams::BoxWhisker );
 
     QPushButton *current = ((QPushButton*)_typeBG->find( _chart->params()->chartType() ));
     if (current != NULL) {
