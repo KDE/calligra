@@ -22,6 +22,7 @@
 #include "kexiactionproxy.h"
 
 #include <kiconloader.h>
+#include <kdebug.h>
 
 //! internal class
 KexiSharedActionHostPrivate::KexiSharedActionHostPrivate(KexiSharedActionHost *h)
@@ -119,6 +120,7 @@ void KexiSharedActionHost::invalidateSharedActions(QObject *o)
 	for (KActionPtrList::Iterator it=d->sharedActions.begin(); it!=d->sharedActions.end(); ++it) {
 //			setActionAvailable((*it)->name(),p && p->isAvailable((*it)->name()));
 		(*it)->setEnabled(p && p->isAvailable((*it)->name()));
+		kdDebug() << "Action " << (*it)->name() << (p->isAvailable((*it)->name()) ? " enabled." : " disabled.") << endl;
 	}
 }
 

@@ -58,6 +58,14 @@ class KEXICORE_EXPORT KexiActionProxy
 		/*! Sets host to \a host; rerely used. */
 		void setSharedActionHost(KexiSharedActionHost& host) { m_host = &host; }
 
+		/*! \return true, if action named \a action_name is enabled within the proxy.
+		 False is returned either if the action is not available or is not supported.
+		 \ sa isSupported() */
+		bool isAvailable(const char* action_name) const;
+
+		/*! \return true, if action named \a action_name is supported by the proxy. */
+		bool isSupported(const char* action_name) const;
+
 	protected:
 		/*! Plugs shared action named \a action_name to slot \a slot in \a receiver.
 		 \a Receiver is usually a child of _this_ widget. */
@@ -89,7 +97,6 @@ class KEXICORE_EXPORT KexiActionProxy
 
 		inline QObject *receiver() const { return m_receiver; }
 
-		bool isAvailable(const char* action_name);
 		void setAvailable(const char* action_name, bool set);
 
 		/*! Adds \a child of this proxy. Children will receive activateSharedAction() event,

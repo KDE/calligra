@@ -1342,6 +1342,7 @@ bool KexiMainWindow::eventFilter( QObject *obj, QEvent * e )
 			else if (static_cast<QFocusEvent*>(e)->reason()==QFocusEvent::Popup) {
 				d->focus_before_popup=w;
 			}
+			invalidateSharedActions();
 		} else if (e->type()==QEvent::Hide) {
 			setFocus();
 			return false;

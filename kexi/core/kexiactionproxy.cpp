@@ -110,10 +110,26 @@ KAction* KexiActionProxy::sharedAction(const char* name)
 	return m_host->mainWindow()->actionCollection()->action(name);
 }
 
-bool KexiActionProxy::isAvailable(const char* action_name)
+bool KexiActionProxy::isSupported(const char* action_name) const
 {
 	QPair<QSignal*,bool> *p = m_signals[action_name];
-	return p && p->second;
+	return p != 0;
+}
+
+bool KexiActionProxy::isAvailable(const char* action_name) const
+{
+	QPair<QSignal*,bool> *p = m_signals[action_name];
+	if (!p) {
+		//not supported explicity - try in children...
+		QPtrListIterator<KexiActionProxy> it( m_sharedActionChildren );
+		for( ; it.current(); ++it ) {
+			if (it.current()->isSupported(action_name))
+				return it.current()->isAvailable(action_name);
+		}
+		return false; //not suported
+	}
+	//supported explicity:
+	return p->second;
 }
 
 void KexiActionProxy::setAvailable(const char* action_name, bool set)
