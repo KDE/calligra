@@ -182,12 +182,12 @@ void KIllustratorView::createMyGUI()
     connect( m_showHelplines, SIGNAL( toggled( bool ) ), this, SLOT( slotShowHelplines( bool ) ) );
 
     // Insert menu
-    new KAction( i18n("Insert &Bitmap..."),"insertpicture", 0, this, SLOT( slotInsertBitmap() ), actionCollection(), "insertBitmap" );
+    new KAction( i18n("Insert &Bitmap..."),"frame_image", 0, this, SLOT( slotInsertBitmap() ), actionCollection(), "insertBitmap" );
     new KAction( i18n("Insert &Clipart..."),"insertclipart", 0, this, SLOT( slotInsertClipart() ), actionCollection(), "insertClipart" );
     kdDebug()<<"inside createMyGUI(): a: "<<time.elapsed()<<" msecs elapsed"<<endl;
 
     // Tools
-    m_selectTool = new KToggleAction( i18n("Select objects"), "selecttool", CTRL+Key_1, actionCollection(), "mouse" );
+    m_selectTool = new KToggleAction( i18n("Select objects"), "frame_edit", CTRL+Key_1, actionCollection(), "mouse" );
     m_selectTool->setExclusiveGroup( "Tools" );
     connect( m_selectTool, SIGNAL( toggled( bool ) ), this, SLOT( slotSelectTool( bool ) ) );
 
@@ -219,15 +219,15 @@ void KIllustratorView::createMyGUI()
     m_ellipseTool->setExclusiveGroup( "Tools" );
     connect( m_ellipseTool, SIGNAL( toggled( bool ) ), this, SLOT( slotEllipseTool( bool ) ) );
 
-    KToggleAction *m_textTool = new KToggleAction( i18n("Text"), "texttool", CTRL+Key_9, actionCollection(), "text" );
+    KToggleAction *m_textTool = new KToggleAction( i18n("Text"), "frame_text", CTRL+Key_9, actionCollection(), "text" );
     m_textTool->setExclusiveGroup( "Tools" );
     connect( m_textTool, SIGNAL( toggled( bool ) ), this, SLOT( slotTextTool( bool ) ) );
 
-    KToggleAction *m_zoomTool = new KToggleAction( i18n("Zoom"), "zoomtool", CTRL+Key_0, actionCollection(), "zoom" );
+    KToggleAction *m_zoomTool = new KToggleAction( i18n("Zoom"), "viewmag", CTRL+Key_0, actionCollection(), "zoom" );
     m_zoomTool->setExclusiveGroup( "Tools" );
     connect( m_zoomTool, SIGNAL( toggled( bool ) ), this, SLOT( slotZoomTool( bool ) ) );
 
-    KToggleAction *m_insertPartTool = new KToggleAction( i18n("Insert Part"), "parts", 0, actionCollection(), "insertpart" );
+    KToggleAction *m_insertPartTool = new KToggleAction( i18n("Insert Part"), "frame_query", 0, actionCollection(), "insertpart" );
     m_insertPartTool->setExclusiveGroup( "Tools" );
     connect( m_insertPartTool, SIGNAL( toggled( bool ) ), this, SLOT( slotInsertPartTool( bool ) ) );
 
