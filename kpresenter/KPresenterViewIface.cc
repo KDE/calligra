@@ -21,6 +21,8 @@
 #include "KPresenterViewIface.h"
 
 #include "kpresenter_view.h"
+#include "kprcanvas.h"
+#include "kprpage.h"
 #include "kpresenter_doc.h"
 
 #include <kapplication.h>
@@ -585,6 +587,52 @@ void KPresenterViewIface::closeObject()
 void KPresenterViewIface::savePicture()
 {
     view->savePicture();
+}
+
+// note: _nPage is the user visible 1-based page number
+// if 0 < _verbose exportPage() returns the title and notes of the page
+// if not verbose it returns an empty string
+QStringList KPresenterViewIface::exportPage( int _nPage,
+                                             int _nWidth,
+                                             int _nHeight,
+                                             const QString & _fileName,
+                                             const QString & _format,
+                                             int _quality,
+                                             int _verbose )const
+{
+    QStringList res;
+    // we translate the user visible 1-based page number
+    // to KPresenter's internal 0-based page number
+    const int nPage = _nPage-1;
+    if( 0 <= nPage &&
+        view &&
+        view->kPresenterDoc() &&
+        nPage < (int)view->kPresenterDoc()->getPageNums() ){
+        KPrCanvas* canvas = view->getCanvas();
+        if( canvas ){
+            if( canvas->exportPage( nPage,
+                                    QMAX(8, _nWidth),
+                                    QMAX(8, _nHeight),
+                                    KURL::fromPathOrURL( _fileName ),
+                                    _format.isEmpty() ? "PNG" : _format.latin1(),
+                                    QMAX(-1, QMIN(100, _quality))) ){
+                if( 0 < _verbose ){
+                    KPrPage* page = view->kPresenterDoc()->pageList().at( nPage );
+                    if( page ){
+                        // Note: Do not i18n the following strings, they are prepared
+                        //       to be written to an IndeView page information file,
+                        //       see http://www.indeview.org for details.
+                        // Note: We use the 1-based page number as fallback page title.
+                        res << QString("Name=%1")
+                                .arg( page->pageTitle( QString("Page%1").arg(_nPage) ) );
+                        res << QString("Notes=%1")
+                                .arg( page->noteText() );
+                    }
+                }
+            }
+        }
+    }
+    return res;
 }
 
 void KPresenterViewIface::insertFile()

@@ -148,12 +148,57 @@ public:
     void setAutoForm( const QString &_autoform )
         { autoform = _autoform; }
 
-    void drawPageInPix( QPixmap&, int pgnum, int zoom, bool forceRealVariableValue = false );
+    /**
+    \brief Draw page into QPixmap.
+    
+    Draws page pgnum of the currently open presentation into a QPixmap
+    using the specified zoom factor (or fixed width/height dimensions, resp.)
+    
+    Set forceWidth and/or forceHeight to override the zoom factor
+    and obtain a pixmap of the specified width and/or height.
+    By omitting one of them you make sure that the aspect ratio
+    of your page is used for the resulting image.
+    
+    \sa exportPage
+    */
+    void drawPageInPix( QPixmap&, int pgnum, int zoom,
+                        bool forceRealVariableValue = false,
+                        int forceWidth  = 0,
+                        int forceHeight = 0 );
 
+    /**
+     \brief Save page to bitmap file.
+     
+     Export a page of the currently open presentation to disk
+     using a bitmap format like e.g. PNG.
+     This method uses a QPixmap::save() call.
+      
+     \param nPage the internally used <b>0-based</b> page number
+     \param nWidth the desired image width in px
+     \param nHeight the desired image height in px
+     \param fileURL the URL of the image file to be created: if this
+       does not point to a local file a KTempFile is created by QPixmap::save()
+       which is then copied over to the desired location.
+     \param format the format of the image file (see QPixmap::save())
+      \param quality the quality of the image (see QPixmap::save())
+     
+     example:
+\verbatim
+exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
+\endverbatim
+     \returns True if the file was written successfully.
+     
+     \sa drawPageInPix, KPresenterViewIface::exportPage
+     */
+    bool exportPage( int nPage, int nWidth, int nHeight,
+                     const KURL& fileURL,
+                     const char* format,
+                     int quality = -1 );
+    
     void gotoPage( int pg );
 
     KPrPage* activePage() const;
-
+    
     bool oneObjectTextExist() const;
     bool oneObjectTextSelected() const;
     bool isOneObjectSelected() const;

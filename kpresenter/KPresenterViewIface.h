@@ -24,6 +24,7 @@
 #include <KoViewIface.h>
 
 #include <qstring.h>
+#include <qstringlist.h>
 
 class KPresenterView;
 
@@ -179,6 +180,35 @@ k_dcop:
     virtual void closeObject();
 
     void savePicture();
+    
+    /**
+     \brief Save page to bitmap file.
+     
+     Export a page of the currently open presentation to disk
+     using a bitmap format like e.g. PNG.
+     This method uses a QPixmap::save() call.
+      
+     \param _nPage the user visible <b>1-based</b> page number
+     \param _nWidth the desired image width in px
+     \param _nHeight the desired image height in px
+     \param _fileName the name of the image file to be created (see QPixmap::save())
+     \param _format the format of the image file (see QPixmap::save())
+     \param _quality the quality of the image (see QPixmap::save())
+     \param _verbose the verbosity of the method's return value:
+       if 0 < _verbose exportPage() returns the title and the notes of the page
+       if not _verbose it returns an empty string
+      
+     \returns Page title and page notes if the file was written successfully.
+     
+     \sa KPrCanvas::exportPage
+     */
+    QStringList exportPage( int _nPage,
+                            int _nWidth,
+                            int _nHeight,
+                            const QString & _fileName,
+                            const QString & _format,
+                            int _quality,
+                            int _verbose )const;
     void insertFile();
     void importStyle();
     void backgroundPicture();
