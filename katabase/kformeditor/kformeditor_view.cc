@@ -103,7 +103,9 @@ void KformEditorView::init()
    * Statusbar
    ******************************************************/
 
+/*
   OpenParts::StatusBarManager_var status_bar_manager = m_vMainWindow->statusBarManager();
+
   if( !CORBA::is_nil( status_bar_manager ) )
     m_vStatusBar = status_bar_manager->registerClient( id() );
   else
@@ -115,6 +117,7 @@ void KformEditorView::init()
 
     m_vStatusBar->enable( ::OpenPartsUI::Show );
   }
+*/
 
   /******************************************************
    * Childs
@@ -142,12 +145,14 @@ void KformEditorView::cleanUp()
   if ( !CORBA::is_nil( tool_bar_manager ) )
     tool_bar_manager->unregisterClient( id() );
 
+/*
   OpenParts::StatusBarManager_var status_bar_manager = m_vMainWindow->statusBarManager();
   if ( !CORBA::is_nil( status_bar_manager ) )
   {
     status_bar_manager->unregisterClient( id() );
     m_vStatusBar = 0L;
   }
+*/
 
   m_pDoc->removeView( this );
 
@@ -444,102 +449,105 @@ void KformEditorView::initChilds()
 
 void KformEditorView::editUndo()
 {
-  m_vStatusBar->changeItem( Q2C( i18n ( "Undo" ) ), 1 );
+//m_vStatusBar->changeItem( Q2C( i18n ( "Undo" ) ), 1 );
 }
 
 void KformEditorView::editRedo()
 {
-  m_vStatusBar->changeItem( Q2C( i18n ( "Redo" ) ), 1 );
+/*
+  if( !CORBA::is_nil( m_vStatusBar ) )
+    m_vStatusBar->changeItem( Q2C( i18n ( "Redo" ) ), 1 );
+*/
 }
 
 void KformEditorView::editCut()
 {
-  m_vStatusBar->changeItem( Q2C( i18n ( "Cut widgets" ) ), 1 );
+//m_vStatusBar->changeItem( Q2C( i18n ( "Cut widgets" ) ), 1 );
 }
 
 void KformEditorView::editCopy()
 {
-  m_vStatusBar->changeItem( Q2C( i18n ( "Copy widgets" ) ), 1 );
+//m_vStatusBar->changeItem( Q2C( i18n ( "Copy widgets" ) ), 1 );
 }
 
 void KformEditorView::editPaste()
 {
-  m_vStatusBar->changeItem( Q2C( i18n ( "Paste widgets" ) ), 1 );
+//m_vStatusBar->changeItem( Q2C( i18n ( "Paste widgets" ) ), 1 );
 }
 
 void KformEditorView::editFormSize()
 {
-  m_vStatusBar->changeItem( Q2C( i18n ( "Change form size" ) ), 1 );
+//m_vStatusBar->changeItem( Q2C( i18n ( "Change form size" ) ), 1 );
 }
 
 void KformEditorView::editBackground()
 {
-  m_vStatusBar->changeItem( Q2C( i18n ( "Change background" ) ), 1 );
+//m_vStatusBar->changeItem( Q2C( i18n ( "Change background" ) ), 1 );
 }
 
 void KformEditorView::insertButton()
 {
-  m_vStatusBar->changeItem( Q2C( i18n ( "Insert Button" ) ), 1 );
+//m_vStatusBar->changeItem( Q2C( i18n ( "Insert Button" ) ), 1 );
 }
 
 void KformEditorView::insertLabel()
 {
-  m_vStatusBar->changeItem( Q2C( i18n ( "Insert Label" ) ), 1 );
+//m_vStatusBar->changeItem( Q2C( i18n ( "Insert Label" ) ), 1 );
 }
 
 void KformEditorView::insertLineEdit()
 {
-  m_vStatusBar->changeItem( Q2C( i18n ( "Insert LineEdit" ) ), 1 );
+//m_vStatusBar->changeItem( Q2C( i18n ( "Insert LineEdit" ) ), 1 );
 }
 
 void KformEditorView::insertListBox()
 {
-  m_vStatusBar->changeItem( Q2C( i18n ( "Insert ListBox" ) ), 1 );
+//m_vStatusBar->changeItem( Q2C( i18n ( "Insert ListBox" ) ), 1 );
 }
 
 void KformEditorView::insertCheckBox()
 {
-  m_vStatusBar->changeItem( Q2C( i18n ( "Insert CheckBox" ) ), 1 );
+//m_vStatusBar->changeItem( Q2C( i18n ( "Insert CheckBox" ) ), 1 );
 }
 
 void KformEditorView::orientationFitViewToForm()
 {
-  m_vStatusBar->changeItem( Q2C( i18n ( "Fit view to form" ) ), 1 );
+//m_vStatusBar->changeItem( Q2C( i18n ( "Fit view to form" ) ), 1 );
 }
 
 void KformEditorView::orientationCenter()
 {
-  m_vStatusBar->changeItem( Q2C( i18n ( "Center the selected widgets" ) ), 1 );
+//m_vStatusBar->changeItem( Q2C( i18n ( "Center the selected widgets" ) ), 1 );
 }
 
 void KformEditorView::orientationLeft()
 {
-  m_vStatusBar->changeItem( Q2C( i18n ( "Position the selected widgets to left" ) ), 1 );
+//m_vStatusBar->changeItem( Q2C( i18n ( "Position the selected widgets to left" ) ), 1 );
 }
 
 void KformEditorView::orientationHorizontalCenter()
 {
-  m_vStatusBar->changeItem( Q2C( i18n ( "Position the selected widgets to horizontal center" ) ), 1 );
+//m_vStatusBar->changeItem( Q2C( i18n ( "Position the selected widgets to horizontal center" ) ), 1 );
 }
 
 void KformEditorView::orientationRight()
 {
-  m_vStatusBar->changeItem( Q2C( i18n ( "Position the selected widgets to right" ) ), 1 );
+//m_vStatusBar->changeItem( Q2C( i18n ( "Position the selected widgets to right" ) ), 1 );
 }
 
 void KformEditorView::orientationTop()
 {
-  m_vStatusBar->changeItem( Q2C( i18n ( "Position the selected widgets to top" ) ), 1 );
+//m_vStatusBar->changeItem( Q2C( i18n ( "Position the selected widgets to top" ) ), 1 );
 }
 
 void KformEditorView::orientationVerticalCenter()
 {
-  m_vStatusBar->changeItem( Q2C( i18n ( "Position the selected widgets to vertical center" ) ), 1 );
+//m_vStatusBar->changeItem( Q2C( i18n ( "Position the selected widgets to vertical center" ) ), 1 );
 }
 
 void KformEditorView::orientationBottom()
 {
-  m_vStatusBar->changeItem( Q2C( i18n ( "Position the selected widgets to bottom" ) ), 1 );
+//m_vStatusBar->changeItem( Q2C( i18n ( "Position the selected widgets to bottom" ) ), 1 );
 }
 
 void KformEditorView::resizeEvent( QResizeEvent* _event )
