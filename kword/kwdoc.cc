@@ -204,13 +204,12 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     m_defaultFont = KGlobalSettings::generalFont();
     KGlobal::charsets()->setQFont(m_defaultFont, KGlobal::locale()->charset());
 
-    getFormulaDocument()->setResolution( m_zoomedResolutionX, m_zoomedResolutionY );
-
     m_syntaxVersion = CURRENT_SYNTAX_VERSION;
     m_pKSpellConfig=0;
     m_hasTOC=false;
 
     initConfig();
+    getFormulaDocument()->setResolution( m_zoomedResolutionX, m_zoomedResolutionY );
 
     // Some simple import filters don't define any style,
     // so let's have a Standard style at least
@@ -259,7 +258,13 @@ void KWDocument::initConfig()
 
       m_viewFormattingChars = config->readBoolEntry( "ViewFormattingChars", false );
       m_viewFrameBorders = config->readBoolEntry( "ViewFrameBorders", true );
+
+      m_zoom = config->readNumEntry( "Zoom", 100 );
   }
+  else
+      m_zoom = 100;
+
+  setZoomAndResolution( m_zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false, false );
 }
 
 void KWDocument::saveConfig()
@@ -270,6 +275,7 @@ void KWDocument::saveConfig()
     config->setGroup( "Interface" );
     config->writeEntry( "ViewFormattingChars", m_viewFormattingChars );
     config->writeEntry( "ViewFrameBorders", m_viewFrameBorders );
+    config->writeEntry( "Zoom", m_zoom );
 }
 
 void KWDocument::setZoomAndResolution( int zoom, int dpiX, int dpiY, bool updateViews, bool forPrint )
@@ -1030,9 +1036,10 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         getPointBasedAttribute( __hf, FooterBodySpacing, paper, "spFootBody", 0.0 );
         __columns.columns = KWDocument::getAttribute( paper, "columns", 1 );
         __columns.ptColumnSpacing = KWDocument::getAttribute( paper, "columnspacing", 0.0 );
-        m_zoom = KWDocument::getAttribute( paper, "zoom", 100 );
-        if(m_zoom!=100)
-            setZoomAndResolution( m_zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false, false );
+        // Now part of the app config
+        //m_zoom = KWDocument::getAttribute( paper, "zoom", 100 );
+        //if(m_zoom!=100)
+        //    setZoomAndResolution( m_zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false, false );
         // Support the undocumented syntax actually used by KDE 2.0 for some of the above (:-().
         if ( __pgLayout.ptWidth == 0.0 )
             getPointBasedAttribute( __pgLayout, Width, paper, "ptWidth", 0.0 );
@@ -1788,7 +1795,8 @@ QDomDocument KWDocument::saveXML()
     paper.setAttribute( "spHeadBody", m_pageHeaderFooter.ptHeaderBodySpacing );
     paper.setAttribute( "spFootBody", m_pageHeaderFooter.ptFooterBodySpacing );
 
-    paper.setAttribute( "zoom",m_zoom );
+    // Now part of the app config
+    //paper.setAttribute( "zoom",m_zoom );
 
     QDomElement borders = doc.createElement( "PAPERBORDERS" );
     paper.appendChild( borders );
