@@ -3077,13 +3077,21 @@ void KSpreadCanvas::doAutoScroll()
 
     if ( pos.x() < 0 )
     {
-        horzScrollBar()->setValue ((int) (horzScrollBar()->value() -
-                                   autoScrollAccelerationX( - pos.x() )));
+        if ( activeTable()->layoutDirection() == KSpreadSheet::RightToLeft )
+            horzScrollBar()->setValue ((int) (horzScrollBar()->value() +
+                                       autoScrollAccelerationX( - pos.x() )));
+        else
+            horzScrollBar()->setValue ((int) (horzScrollBar()->value() -
+                                       autoScrollAccelerationX( - pos.x() )));
         select = true;
     }
     else if ( pos.x() > width() )
     {
-        horzScrollBar()->setValue ((int) (horzScrollBar()->value() +
+        if ( activeTable()->layoutDirection() == KSpreadSheet::RightToLeft )
+          horzScrollBar()->setValue ((int) (horzScrollBar()->value() -
+                                   autoScrollAccelerationX( pos.x() - width())));
+        else
+          horzScrollBar()->setValue ((int) (horzScrollBar()->value() +
                                    autoScrollAccelerationX( pos.x() - width())));
         select = true;
     }
@@ -5216,16 +5224,31 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
     m_pView->selectionInfo()->setSelection( newMarker, newAnchor,
                                             m_pView->activeTable() );
 
-    if ( _ev->pos().x() < 0 ) // TODO rtl
-      m_pCanvas->horzScrollBar()->setValue( m_pCanvas->doc()->zoomItX( ev_PosX ) );
-    else if ( _ev->pos().x() > m_pCanvas->width() )
+    if ( table->layoutDirection()==KSpreadSheet::RightToLeft )
     {
-      if ( col < KS_colMax )
+      if ( _ev->pos().x() < width() - m_pCanvas->width() )
       {
         ColumnFormat *cl = table->columnFormat( col + 1 );
         x = table->dblColumnPos( col + 1 );
         m_pCanvas->horzScrollBar()->setValue ((int)
-            (m_pCanvas->doc()->zoomItX (ev_PosX + cl->dblWidth()) - dWidth));
+            (m_pCanvas->doc()->zoomItX (ev_PosX + cl->dblWidth()) - m_pCanvas->doc()->unzoomItX( m_pCanvas->width() )));
+      }
+      else if ( _ev->pos().x() > width() )
+        m_pCanvas->horzScrollBar()->setValue( m_pCanvas->doc()->zoomItX( ev_PosX - dWidth + m_pCanvas->doc()->unzoomItX( m_pCanvas->width() ) ) );
+    }
+    else
+    {
+      if ( _ev->pos().x() < 0 )
+        m_pCanvas->horzScrollBar()->setValue( m_pCanvas->doc()->zoomItX( ev_PosX ) );
+      else if ( _ev->pos().x() > m_pCanvas->width() )
+      {
+        if ( col < KS_colMax )
+        {
+          ColumnFormat *cl = table->columnFormat( col + 1 );
+          x = table->dblColumnPos( col + 1 );
+          m_pCanvas->horzScrollBar()->setValue ((int)
+              (m_pCanvas->doc()->zoomItX (ev_PosX + cl->dblWidth()) - dWidth));
+        }
       }
     }
 
