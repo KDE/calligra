@@ -76,7 +76,7 @@ DCOPObject* KPPolygonObject::dcopObject()
     return dcop;
 }
 
-bool KPPolygonObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj  )
+bool KPPolygonObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj  ) const
 {
     //FIXME me wait that it will define into oo spec
     xmlWriter.startElement( "draw:regular-polygon" );

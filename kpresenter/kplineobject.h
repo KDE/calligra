@@ -63,7 +63,7 @@ public:
     virtual double load(const QDomElement &element);
     virtual void loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info);
 
-    virtual bool saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj );
+    virtual bool saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj ) const;
 
     virtual void flip(bool horizontal );
 
@@ -71,7 +71,7 @@ public:
     virtual KoPoint getRealOrig() const;
 
 protected:
-    QString saveOasisStrokeElement( KoGenStyles& mainStyles );
+    QString saveOasisStrokeElement( KoGenStyles& mainStyles ) const;
 
     virtual void paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
                         bool drawingShadow, bool drawContour = FALSE );

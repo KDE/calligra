@@ -88,7 +88,7 @@ QDomDocumentFragment KPPointObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-QString KPPointObject::saveOasisStrokeElement( KoGenStyles& mainStyles )
+QString KPPointObject::saveOasisStrokeElement( KoGenStyles& mainStyles ) const
 {
     KoGenStyle styleobjectauto( KPresenterDoc::STYLE_GRAPHICAUTO, "graphic" );
     saveOasisMarkerElement( mainStyles, styleobjectauto );
@@ -98,7 +98,7 @@ QString KPPointObject::saveOasisStrokeElement( KoGenStyles& mainStyles )
 }
 
 
-bool KPPointObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context )
+bool KPPointObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context ) const
 {
     QString listOfPoint;
     int maxX=0;

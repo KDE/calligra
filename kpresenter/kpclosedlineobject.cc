@@ -98,7 +98,7 @@ QDomDocumentFragment KPClosedLineObject::save( QDomDocument& doc, double offset 
     return fragment;
 }
 
-bool KPClosedLineObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj )
+bool KPClosedLineObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj ) const
 {
     xmlWriter.startElement( "draw:polygon" );
     xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, context.mainStyles(), indexObj ) );

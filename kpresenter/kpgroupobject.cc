@@ -132,7 +132,7 @@ QDomDocumentFragment KPGroupObject::save( QDomDocument& doc, double offset )
 }
 
 
-bool KPGroupObject::saveOasis(KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj)
+bool KPGroupObject::saveOasis(KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj) const
 {
     xmlWriter.startElement( "draw:g" );
 

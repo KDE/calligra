@@ -62,7 +62,7 @@ DCOPObject* KPLineObject::dcopObject()
 }
 
 
-QString KPLineObject::saveOasisStrokeElement( KoGenStyles& mainStyles )
+QString KPLineObject::saveOasisStrokeElement( KoGenStyles& mainStyles ) const
 {
     KoGenStyle styleobjectauto( KPresenterDoc::STYLE_GRAPHICAUTO, "graphic" );
     saveOasisMarkerElement( mainStyles, styleobjectauto );
@@ -72,7 +72,7 @@ QString KPLineObject::saveOasisStrokeElement( KoGenStyles& mainStyles )
     return mainStyles.lookup( styleobjectauto, "gr" );
 }
 
-bool KPLineObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj )
+bool KPLineObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj )  const
 {
     xmlWriter.startElement( "draw:line" );
     xmlWriter.addAttribute( "draw:style-name", saveOasisStrokeElement( context.mainStyles() ) );

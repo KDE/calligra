@@ -54,7 +54,7 @@ DCOPObject* KPFreehandObject::dcopObject()
     return dcop;
 }
 
-bool KPFreehandObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj )
+bool KPFreehandObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj ) const
 {
     kdDebug()<<"bool KPFreehandObject::saveOasis( KoXmlWriter &xmlWriter ) not implemented\n";
     xmlWriter.startElement( "draw:path" );

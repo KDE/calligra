@@ -210,7 +210,7 @@ QDomDocumentFragment KPTextObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-bool KPTextObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj  )
+bool KPTextObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj  ) const
 {
     xmlWriter.startElement( "draw:text-box" );
     // #### This should use KoGenStyle to share the style
@@ -222,7 +222,7 @@ bool KPTextObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, 
     return true;
 }
 
-void KPTextObject::saveOasisMarginElement( KoGenStyle &styleobjectauto )
+void KPTextObject::saveOasisMarginElement( KoGenStyle &styleobjectauto ) const
 {
     kdDebug()<<"void KPTextObject::saveOasisMarginElement( KoGenStyle &styleobjectauto )\n";
     if ( btop != 0.0 )

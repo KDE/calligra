@@ -68,7 +68,7 @@ double KPPolylineObject::load(const QDomElement &element)
     return KPPointObject::load( element );
 }
 
-bool KPPolylineObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj )
+bool KPPolylineObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj ) const
 {
     xmlWriter.startElement( "draw:polyline" );
     saveOasisPosObject(xmlWriter, indexObj );

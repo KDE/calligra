@@ -135,9 +135,9 @@ public:
     virtual double load(const QDomElement &element);
     virtual void loadOasis(const QDomElement &element, KoOasisContext & context,  KPRLoadingInfo *info);
 
-    virtual bool saveOasis( KoXmlWriter &xmlWriter, KoSavingContext &context, int indexObj ) =0;
+    virtual bool saveOasis( KoXmlWriter &xmlWriter, KoSavingContext &context, int indexObj ) const =0;
 
-    void saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj );
+    void saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) const;
     //return true if we have a animation into object
     bool saveOasisObjectStyleShowAnimation( KoXmlWriter &animation, int objectId );
     bool saveOasisObjectStyleHideAnimation( KoXmlWriter &animation, int objectId );
@@ -297,9 +297,9 @@ protected:
                          const QString &rattr="red", const QString &gattr="green",
                          const QString &battr="blue") const;
 
-    void saveOasisObjectProtectStyle( KoGenStyle &styleobjectauto );
-    void saveOasisShadowElement( KoGenStyle &styleobjectauto );
-    virtual void saveOasisPictureElement( KoGenStyle &styleobjectauto ) {};
+    void saveOasisObjectProtectStyle( KoGenStyle &styleobjectauto ) const;
+    void saveOasisShadowElement( KoGenStyle &styleobjectauto ) const;
+    virtual void saveOasisPictureElement( KoGenStyle &styleobjectauto ) const {};
 
     float angle;
     KoPoint orig;
@@ -380,8 +380,8 @@ public:
     virtual void loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info);
     virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
                        SelectionMode selectionMode, bool drawContour = FALSE );
-    virtual void saveOasisStrokeElement( KoGenStyles& mainStyles, KoGenStyle &styleobjectauto );
-    QString saveOasisStrokeStyle( KoGenStyles& mainStyles );
+    virtual void saveOasisStrokeElement( KoGenStyles& mainStyles, KoGenStyle &styleobjectauto ) const;
+    QString saveOasisStrokeStyle( KoGenStyles& mainStyles ) const;
 
 protected:
     /**
@@ -453,11 +453,11 @@ public:
     virtual void flip(bool horizontal );
 
 protected:
-    QString saveOasisHatchStyle( KoGenStyles& mainStyles );
-    QString saveOasisGradientStyle( KoGenStyles& mainStyles );
-    QString saveOasisBackgroundStyle( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj );
+    QString saveOasisHatchStyle( KoGenStyles& mainStyles ) const;
+    QString saveOasisGradientStyle( KoGenStyles& mainStyles ) const;
+    QString saveOasisBackgroundStyle( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj ) const;
 
-    virtual void saveOasisMarginElement( KoGenStyle &styleobjectauto ) { /* nothing just used into kptextobject*/};
+    virtual void saveOasisMarginElement( KoGenStyle &styleobjectauto ) const { /* nothing just used into kptextobject*/};
 
     QColor gColor1, gColor2;
     BCType gType;
@@ -475,8 +475,8 @@ public:
     void save( QDomDocumentFragment &fragment, QDomDocument& doc );
     void load( const QDomElement &element );
 
-    void saveOasisMarkerElement( KoGenStyles& mainStyles,  KoGenStyle &styleobjectauto );
-    QString saveOasisMarkerStyle( KoGenStyles &mainStyles, LineEnd &_element );
+    void saveOasisMarkerElement( KoGenStyles& mainStyles,  KoGenStyle &styleobjectauto ) const;
+    QString saveOasisMarkerStyle( KoGenStyles &mainStyles, const LineEnd &_element ) const;
     void loadOasisMarkerElement( KoOasisContext & context, const QString & attr, LineEnd &_element );
 
 protected:

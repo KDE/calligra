@@ -81,8 +81,8 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
     virtual void loadOasis(const QDomElement &element, KoOasisContext& context, KPRLoadingInfo *info);
-    virtual bool saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj  );
-    virtual void saveOasisMarginElement( KoGenStyle &styleobjectauto );
+    virtual bool saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj  ) const;
+    virtual void saveOasisMarginElement( KoGenStyle &styleobjectauto ) const;
 
     virtual void paint( QPainter *_painter, KoZoomHandler*_zoomHandler,
                         bool drawingShadow, bool drawContour );

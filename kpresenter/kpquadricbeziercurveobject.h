@@ -43,7 +43,7 @@ public:
     virtual QString getTypeString() const { return i18n("Quadric Bezier Curve"); }
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
-    virtual bool saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj );
+    virtual bool saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj ) const;
     virtual void loadOasis( const QDomElement &element, KoOasisContext & context,  KPRLoadingInfo *info );
 
     virtual double load( const QDomElement &element );

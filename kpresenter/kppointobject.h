@@ -35,7 +35,7 @@ public:
     virtual KoPoint getRealOrig() const;
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
-    virtual bool saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context );
+    virtual bool saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context ) const;
 
     virtual double load( const QDomElement &element );
     virtual void loadOasis( const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info );
@@ -54,7 +54,7 @@ public:
 
     virtual void closeObject( bool close );
     virtual bool isClosed() const;
-    virtual QString saveOasisStrokeElement( KoGenStyles& mainStyles );
+    virtual QString saveOasisStrokeElement( KoGenStyles& mainStyles ) const;
 
 protected:
     void loadOasisMarker( KoOasisContext & context );

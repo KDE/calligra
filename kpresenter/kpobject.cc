@@ -160,7 +160,7 @@ void KPStartEndLine::loadOasisMarkerElement( KoOasisContext & context, const QSt
     }
 }
 
-void KPStartEndLine::saveOasisMarkerElement( KoGenStyles& mainStyles,  KoGenStyle &styleobjectauto )
+void KPStartEndLine::saveOasisMarkerElement( KoGenStyles& mainStyles,  KoGenStyle &styleobjectauto ) const
 {
     //FIXME
     if ( lineBegin != L_NORMAL )
@@ -175,7 +175,7 @@ void KPStartEndLine::saveOasisMarkerElement( KoGenStyles& mainStyles,  KoGenStyl
     }
 }
 
-QString KPStartEndLine::saveOasisMarkerStyle( KoGenStyles &mainStyles, LineEnd &_element )
+QString KPStartEndLine::saveOasisMarkerStyle( KoGenStyles &mainStyles, const LineEnd &_element ) const
 {
     KoGenStyle marker( KPresenterDoc::STYLE_MARKER /*, "graphic"*/ /*no name*/ );
     // value used from ooimpress filter I don't know if it's good
@@ -332,7 +332,7 @@ QDomDocumentFragment KPObject::save( QDomDocument& doc, double offset )
 }
 
 
-void KPObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj )
+void KPObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) const
 {
     xmlWriter.addAttribute( "draw:id", indexObj );
     //save all into pt
@@ -351,7 +351,7 @@ void KPObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj )
     }
 }
 
-void KPObject::saveOasisObjectProtectStyle( KoGenStyle &styleobjectauto )
+void KPObject::saveOasisObjectProtectStyle( KoGenStyle &styleobjectauto ) const
 {
     if ( protect )
     {
@@ -843,7 +843,7 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, K
     }
 }
 
-void KPObject::saveOasisShadowElement( KoGenStyle &styleobjectauto )
+void KPObject::saveOasisShadowElement( KoGenStyle &styleobjectauto ) const
 {
     //FIXME default value
     if(shadowDistance!=0 || shadowDirection!=SD_RIGHT_BOTTOM || shadowColor!=Qt::gray) {
@@ -1565,7 +1565,7 @@ QDomDocumentFragment KPShadowObject::save( QDomDocument& doc,double offset )
     return fragment;
 }
 
-void KPShadowObject::saveOasisStrokeElement( KoGenStyles& mainStyles, KoGenStyle &styleobjectauto )
+void KPShadowObject::saveOasisStrokeElement( KoGenStyles& mainStyles, KoGenStyle &styleobjectauto ) const
 {
     if ( pen!=defaultPen() )
     {
@@ -1591,7 +1591,7 @@ void KPShadowObject::saveOasisStrokeElement( KoGenStyles& mainStyles, KoGenStyle
     }
 }
 
-QString KPShadowObject::saveOasisStrokeStyle( KoGenStyles& mainStyles )
+QString KPShadowObject::saveOasisStrokeStyle( KoGenStyles& mainStyles ) const
 {
     KoGenStyle stroke( KPresenterDoc::STYLE_STROKE /*, "graphic"*/ /*no name*/ );
     switch( pen.style() )
@@ -1823,7 +1823,7 @@ QDomDocumentFragment KP2DObject::save( QDomDocument& doc,double offset )
     return fragment;
 }
 
-QString KP2DObject::saveOasisBackgroundStyle( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj )
+QString KP2DObject::saveOasisBackgroundStyle( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj ) const
 {
     saveOasisPosObject( xmlWriter,indexObj );
     KoGenStyle styleobjectauto;
@@ -1871,7 +1871,7 @@ QString KP2DObject::saveOasisBackgroundStyle( KoXmlWriter &xmlWriter, KoGenStyle
         return mainStyles.lookup( styleobjectauto, "gr" );
 }
 
-QString KP2DObject::saveOasisHatchStyle( KoGenStyles& mainStyles )
+QString KP2DObject::saveOasisHatchStyle( KoGenStyles& mainStyles ) const
 {
     KoGenStyle hatchStyle( KPresenterDoc::STYLE_HATCH /*no family name*/);
     hatchStyle.addAttribute( "draw:color", brush.color().name() );
@@ -1920,7 +1920,7 @@ QString KP2DObject::saveOasisHatchStyle( KoGenStyles& mainStyles )
 }
 
 
-QString KP2DObject::saveOasisGradientStyle( KoGenStyles& mainStyles )
+QString KP2DObject::saveOasisGradientStyle( KoGenStyles& mainStyles ) const
 {
     KoGenStyle gradientStyle( KPresenterDoc::STYLE_GRADIENT /*no family name*/);
     gradientStyle.addAttribute( "draw:start-color", gColor1.name() );

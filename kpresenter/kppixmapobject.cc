@@ -202,7 +202,7 @@ void KPPixmapObject::saveOasisPictureElement( KoGenStyle &styleobjectauto )
 }
 
 
-bool KPPixmapObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj )
+bool KPPixmapObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, int indexObj ) const
 {
     xmlWriter.startElement( "draw:image" );
     xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, context.mainStyles(),indexObj ) );
