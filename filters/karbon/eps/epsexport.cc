@@ -359,7 +359,81 @@ EpsExport::getFill( const VFill& fill )
 	{
 		if( m_psLevel == 3 )
 		{
-			
+			// "gsave".
+			*m_stream << l1_gsave << " ";
+
+			VGradient grad = fill.gradient();
+			QPtrVector<VColorStop> ramp = grad.colorStops();
+			if( ramp.size() < 2 )
+			{
+				if( ramp.size() == 1 )
+					getColor( ramp[0]->color );
+			}
+			if( ramp.size() > 2 || ramp.size() == 2 && ramp[0]->midPoint != 0.5 )
+			{
+				// Gradient with more than two colors or asymmetrical midpoint.
+				for( int i = 1;i < ramp.size();i++ )
+				{
+					char name[15];
+					sprintf( name, "Function%d", 2 * i - 1 );
+
+					VColorStop stop1 = *ramp[i - 1];
+					VColorStop stop2 = *ramp[i];
+					VColor mid;
+					mid.set( 0.5 * ( stop1.color[0] + stop2.color[0] ), 0.5 * ( stop1.color[1] + stop2.color[1] ), 0.5 * ( stop1.color[2] + stop2.color[2] ) );
+					*m_stream << "/" << name << " 7 dict def " << name << " begin\n" << "\t/FunctionType 2 def\n"
+								<< "\t/Domain [ 0 1 ] def\n" << "\t/C0 [ " << stop1.color[0] << " " << stop1.color[1] << " "
+								<< stop1.color[2] << " ] def\n" << "\t/C1 [ " << mid[0] << " " << mid[1] << " "
+								<< mid[2] << " ] def\n" << "\t/N 1 def\n" << "end\n";
+
+					sprintf( name, "Function%d", 2 * i );
+
+					*m_stream << "/" << name << " 7 dict def " << name << " begin\n" << "\t/FunctionType 2 def\n" << "\t/Domain [ 0 1 ] def\n"
+								<< "\t/C0 [ " << mid[0] << " " << mid[1] << " " << mid[2] << " ] def\n" << "\t/C1 [ " << stop2.color[0] << " "
+								<< stop2.color[1] << " " << stop2.color[2] << " ] def\n" << "\t/N 1 def\n" << "end\n";
+				}
+			}
+			if( grad.type() == VGradient::linear )
+				*m_stream << "clip newpath\n" << "/DeviceRGB setcolorspace\n" << "<<\n" << "\t/ShadingType 2\n" << "\t/ColorSpace /DeviceRGB\n" << "\t/Coords [ "
+							<< grad.origin().x() << " " << grad.origin().y() << " " << grad.vector().x() << " " << grad.vector().y() << " ]\n\t/Extend[ true true ]\n" << "\t/Function <<\n";
+			else if( grad.type() == VGradient::radial )
+			{
+				double r = sqrt( pow( grad.vector().x() - grad.origin().x(), 2 ) + pow( grad.vector().y() - grad.origin().y(), 2 ) );
+				*m_stream << "clip newpath\n" << "/DeviceRGB setcolorspace\n" << "<<\n" << "\t/ShadingType 3\n" << "\t/ColorSpace /DeviceRGB\n" << "\t/Coords [ "
+			                << grad.origin().x() << " " << grad.origin().y() << " 0.0 " << grad.origin().x() << " " << grad.origin().y()
+			                << " " << r << "]\n\t\t/Extend [ false true ]\n" << "\t/Function <<\n";
+			}
+			if( ramp.size() == 2 && ramp[0]->midPoint == 0.5 )
+			{
+				// Gradient with only two colors and symmetrical midpoint.
+				VColorStop stop1 = *ramp[0];
+				VColorStop stop2 = *ramp[1];
+				*m_stream << "\t\t/FunctionType 2\n" << "\t\t/C0 [ " << stop1.color[0] << " " << stop1.color[1] << " " << stop1.color[2]
+						  << " ]\n" << "\t\t/C1 [ " << stop2.color[0] << " " << stop2.color[1] << " " << stop2.color[2] << " ]\n" << "\t\t/N 1\n";
+			}
+			else if( ramp.size() > 2 || ramp.size() == 2 && ramp[0]->midPoint != 0.5 )
+			{
+				// Gradient with more than two colors or asymmetrical midpoint.
+				*m_stream << "\t\t/FunctionType 3\n" << "\t\t/Functions [ ";
+				for( int i = 1; i < ( 2 * ramp.size() - 1 );i++ )
+					*m_stream << "Function" << i << " ";
+				*m_stream << "]\n" << "\t\t/Bounds [";
+				for( int i = 0;i < ramp.size() - 1;i++ )
+				{
+					VColorStop stop = *ramp[i];
+					if( i > 0 )
+						*m_stream << " " << stop.rampPoint;
+					*m_stream << " " << ( stop.rampPoint + ( ramp[i + 1]->rampPoint - stop.rampPoint ) * stop.midPoint );
+				}
+				*m_stream << " ]\n" << "\t\t/Encode [ ";
+				for( int i = 0;i < 2 * ramp.size() - 2;i++ )
+					*m_stream << "0 1 ";
+				*m_stream << "]\n";
+			}
+			*m_stream << "\t\t/Domain [ " << ramp[0]->rampPoint << " "
+					<< ramp[ramp.size() - 1]->rampPoint << " ]\n" << "\t>>\n" << ">>\n";
+			// "shfill", "grestore".
+			*m_stream << " shfill " << l1_grestore << "\n";
 		}
 	}
 }
@@ -375,6 +449,4 @@ EpsExport::getColor( const VColor& color )
 		copy[1] << " " <<
 		copy[2] << " " << l1_setrgbcolor;
 }
-
-#include "epsexport.moc"
 
