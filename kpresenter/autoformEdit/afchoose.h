@@ -33,7 +33,7 @@
 #include <qfile.h>
 #include <qcolor.h>
 
-#include <kiconloaderdialog.h>
+#include <kicondialog.h>
 #include <kapp.h>
 
 /******************************************************************/
@@ -58,7 +58,7 @@ protected:
     QFileInfo dir;
     QString name;
     QWidget *tab;
-    KIconLoaderCanvas *loadWid;
+    KIconCanvas *loadWid;
     QLabel *label;
   };
 
@@ -80,7 +80,7 @@ protected:
 private slots:
 
   // name changed
-  void nameChanged(const QString &);
+  void nameChanged(QString);
 
   // autoform chosen
   void chosen();

@@ -78,9 +78,9 @@ void AFChoose::setupTabs()
 	for (grpPtr=groupList.first();grpPtr != 0;grpPtr=groupList.next())
 	{
 	    grpPtr->tab = new QVBox(this);
-	    grpPtr->loadWid = new KIconLoaderCanvas(grpPtr->tab);
+	    grpPtr->loadWid = new KIconCanvas(grpPtr->tab);
 	    qDebug( "%s", grpPtr->dir.absFilePath().latin1() );
-	    // Changes for the new KIconLoaderCanvas (Werner)
+	    // Changes for the new KIconCanvas (Werner)
 	    QDir d( grpPtr->dir.absFilePath() );
 	    d.setNameFilter( "*.png" );
 	    if( d.exists() ) {
@@ -92,8 +92,8 @@ void AFChoose::setupTabs()
 	    //grpPtr->loadWid->loadDir(grpPtr->dir.absFilePath(),"*.png");
 	    grpPtr->loadWid->setBackgroundColor(colorGroup().base());
 	    grpPtr->loadWid->show();
-	    connect(grpPtr->loadWid,SIGNAL(nameChanged(const QString &)),
-		    this,SLOT(nameChanged(const QString &)));
+	    connect(grpPtr->loadWid,SIGNAL(nameChanged(QString)),
+		    this,SLOT(nameChanged(QString)));
 //	  connect(grpPtr->loadWid,SIGNAL(doubleClicked()),
 //		  this,SLOT(chosen()));
 //	  connect(grpPtr->loadWid,SIGNAL(doubleClicked()),
@@ -123,7 +123,7 @@ void AFChoose::resizeEvent(QResizeEvent *e)
 }
 
 /*====================== name changed ===========================*/
-void AFChoose::nameChanged(const QString & name)
+void AFChoose::nameChanged(QString name)
 {
     QFileInfo fi(name);
 
