@@ -1,7 +1,7 @@
 kde_module_LTLIBRARIES = libkarbonaiimport.la
 
 libkarbonaiimport_la_LIBADD = \
-	../../../../koffice/lib/kofficeui/libkofficeui.la
+	$(top_builddir)/lib/kofficeui/libkofficeui.la
 
 libkarbonaiimport_la_LDFLAGS = \
 	$(all_libraries) \
