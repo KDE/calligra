@@ -20,6 +20,7 @@
 #include <qprinter.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 #include "kspread_dlg_layout.h"
 #include "kspread_undo.h"
@@ -128,6 +129,10 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
     bottom = _bottom;
     m_pView = _view;
 
+    m_bValue=false;
+    m_bDate=false;
+    m_bTime=false;
+
     KSpreadCell *obj = table->cellAt( _left, _top );
 
     // Initialize with the upper left object.
@@ -197,6 +202,24 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
 
     textRotation = obj->getAngle();
     formatNumber = obj->getFormatNumber();
+
+    cellText=obj->text();
+
+    if( obj->isValue())
+        {
+        m_bValue=true;
+        m_value=obj->valueDouble();
+        }
+    else if(obj->isDate())
+        {
+        m_bDate=true;
+        m_date=obj->valueDate();
+        }
+    else if(obj->isTime())
+        {
+        m_bTime=true;
+        m_time=obj->valueTime();
+        }
 
     RowLayout *rl;
     ColumnLayout *cl;
@@ -280,8 +303,8 @@ CellLayoutDlg::CellLayoutDlg( KSpreadView *_view, KSpreadTable *_table, int _lef
 		prefix = QString::null;
 	    if ( postfix != obj->postfix( x, y ) )
 		postfix = QString::null;
-	    if ( precision != obj->precision( x, y ) )
-		precision = -2;
+	    /*if ( precision != obj->precision( x, y ) )
+		precision = -2;*/
 	    if ( floatFormat != obj->floatFormat( x, y ) )
 		bFloatFormat = FALSE;
 	    if ( floatColor != obj->floatColor( x, y ) )
@@ -529,8 +552,12 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
 
     postfix = new QLineEdit( box, "LineEdit_1" );
     grid->addWidget(postfix,0,1);
-    precision = new QLineEdit ( box, "LineEdit_2" );
+    precision = new KIntNumInput( dlg->precision, box, 10 );
+    precision->setSpecialValueText(i18n("variable"));
+    precision->setRange(-1,8,1,false);
+
     grid->addWidget(precision,1,1);
+
     prefix = new QLineEdit( box, "LineEdit_3" );
     grid->addWidget(prefix,2,1);
 
@@ -550,19 +577,6 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
     tmpQLabel = new QLabel( box, "Label_2" );
     grid->addWidget(tmpQLabel,2,0);
     tmpQLabel->setText( i18n("Postfix") );
-
-    char buffer[ 100 ];
-    if ( dlg->precision == -1 )
-    {
-      precision->setText( i18n("variable") );
-    }
-    else if ( dlg->precision != -2 )
-    {
-	sprintf( buffer, "%i", dlg->precision );
-	precision->setText( buffer );
-    }
-    else
-	precision->setText( "########" );
 
     tmpQLabel = new QLabel( box, "Label_3" );
     grid->addWidget(tmpQLabel,1,0);
@@ -601,7 +615,7 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
 	format->setCurrentItem( 4 );
     layout->addWidget(box);
 
-    //box = new QGroupBox( this, "Box");
+
     QButtonGroup *grp = new QButtonGroup( i18n("Format"),this);
     grid = new QGridLayout(grp,7,2,15,7);
     grp->setRadioButtonExclusive( TRUE );
@@ -614,24 +628,33 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
     money=new QRadioButton(i18n("Money"),grp);
     grid->addWidget(money,2,0);
 
-    date=new QRadioButton(i18n("Date Format"),grp);
-    grid->addWidget(date,3,0);
-
     scientific=new QRadioButton(i18n("Scientific"),grp);
-    grid->addWidget(scientific,4,0);
+    grid->addWidget(scientific,3,0);
 
     fraction=new QRadioButton(i18n("Fraction"),grp);
-    grid->addWidget(fraction,5,0);
+    grid->addWidget(fraction,4,0);
+
+    date=new QRadioButton(i18n("Date Format"),grp);
+    grid->addWidget(date,5,0);
 
     time=new QRadioButton(i18n("Time Format"),grp);
     grid->addWidget(time,6,0);
 
+    QGroupBox *box2 = new QGroupBox( grp, "Box");
+    box2->setTitle(i18n("Example"));
+    QGridLayout *grid3 = new QGridLayout(box2,1,3,14,7);
+
+    exampleLabel=new QLabel(box2);
+    grid3->addWidget(exampleLabel,0,1);
+
+    grid->addMultiCellWidget(box2,0,1,1,1);
+
     listFormat=new QListBox(grp);
-    grid->addMultiCellWidget(listFormat,0,6,1,1);
+    grid->addMultiCellWidget(listFormat,2,6,1,1);
     layout->addWidget(grp);
 
     if(!dlg->bFormatNumber)
-          number->setEnabled(true);
+          number->setChecked(true);
     else
         {
         if(dlg->formatNumber==KSpreadCell::Number)
@@ -663,10 +686,17 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
     connect(number,SIGNAL(clicked ()),this,SLOT(slotChangeState()));
     connect(percent,SIGNAL(clicked ()),this,SLOT(slotChangeState()));
     connect(time,SIGNAL(clicked ()),this,SLOT(slotChangeState()));
+    connect(listFormat,SIGNAL(selectionChanged ()),this,SLOT(makeformat()));
+    connect(precision,SIGNAL(valueChanged(int)),this,SLOT(slotChangeValue(int)));
+
     slotChangeState();
     this->resize( 400, 400 );
 }
 
+void CellLayoutPageFloat::slotChangeValue(int)
+{
+makeformat();
+}
 void CellLayoutPageFloat::slotChangeState()
 {
 QStringList list;
@@ -730,7 +760,120 @@ else if(time->isChecked())
         else
                 listFormat->setCurrentItem(0);
         }
+makeformat();
+}
 
+void CellLayoutPageFloat::makeformat()
+{
+QString tmp;
+int p;
+p = (precision->value() == -1) ? 8 : precision->value();
+
+if(!dlg->m_bValue&&!dlg->m_bDate&&!dlg->m_bTime)
+        exampleLabel->setText(dlg->cellText);
+else if(dlg->m_bDate)
+        {
+        if(date->isChecked())
+                {
+                if( listFormat->currentItem()==0)
+                        exampleLabel->setText(KGlobal::locale()->formatDate(dlg->m_date,true));
+                else if(listFormat->currentItem()==1)
+                        exampleLabel->setText(KGlobal::locale()->formatDate(dlg->m_date,false));
+                }
+        else
+                exampleLabel->setText(dlg->cellText);
+        }
+else if(dlg->m_bTime)
+        {
+        if(time->isChecked())
+                {
+                if( listFormat->currentItem()==0)
+                        exampleLabel->setText(KGlobal::locale()->formatTime(dlg->m_time,false));
+                else if(listFormat->currentItem()==1)
+                        exampleLabel->setText(KGlobal::locale()->formatTime(dlg->m_time,true));
+                }
+        else
+                exampleLabel->setText(dlg->cellText);
+        }
+else if(dlg->m_bValue)
+        {
+
+        if(number->isChecked())
+                tmp=KGlobal::locale()->formatNumber(dlg->m_value,p );
+        else if(money->isChecked())
+                tmp=KGlobal::locale()->formatMoney(dlg->m_value,KGlobal::locale()->currencySymbol(),p );
+        else if(percent->isChecked())
+                tmp=KGlobal::locale()->formatNumber(dlg->m_value*100.0, p)+ " %";
+        else if(scientific->isChecked())
+                tmp=QString::number(dlg->m_value, 'E', p);
+        else if(fraction->isChecked())
+                {
+                double result = (dlg->m_value)-floor(dlg->m_value);
+
+                if(result == 0 )
+                {
+                        tmp = tmp.setNum( dlg->m_value );
+                }
+                else
+                {
+                        int index = 0;
+                        switch( listFormat->currentItem())
+                        {
+	                case 0:
+	                        index=2;
+	                        break;
+	                case 1:
+	                        index=4;
+	                        break;
+	                case 2:
+	                        index=8;
+        	                break;
+	                case 3:
+	                        index=16;
+	                        break;
+        	        case 4:
+	                        index=10;
+	                        break;
+	                case 5:
+	                        index=100;
+        	                break;
+                        }
+                        double calc = 0;
+                        int index1 = 1;
+                        double diff = result;
+                        for(int i=1;i<index;i++)
+                        {
+        	        calc = i*1.0 / index;
+	                if( fabs( result - calc ) < diff )
+	                        {
+		                index1=i;
+        		        diff = fabs(result-calc);
+	                        }
+                        }
+                        tmp = tmp.setNum( floor(dlg->m_value) ) + " " + tmp.setNum( index1 ) + "/" + tmp.setNum( index );
+                }
+                }
+        if ( precision->value() == -1 && tmp.find(KGlobal::locale()->decimalSymbol()[0]) >= 0 )
+        {
+	    int i = tmp.length();
+	    bool bFinished = FALSE;
+	    while ( !bFinished && i > 0 )
+	    {
+		QChar ch = tmp[ i - 1 ];
+		if ( ch == '0' )
+		    tmp.truncate( --i );
+		else
+	        {
+		    bFinished = TRUE;
+		    if ( ch == KGlobal::locale()->decimalSymbol()[0] )
+			tmp.truncate( --i );
+		}
+	    }
+	}
+        exampleLabel->setText(tmp);
+        }
+        else
+                exampleLabel->setText("Error");
 }
 void CellLayoutPageFloat::apply( KSpreadCell *_obj )
 {
@@ -740,14 +883,9 @@ void CellLayoutPageFloat::apply( KSpreadCell *_obj )
     if ( strcmp( prefix->text(), dlg->prefix.data() ) != 0 )
 	if ( strcmp( prefix->text(), "########" ) != 0 )
 	    _obj->setPrefix( prefix->text() );
-    if ( precision->text() && precision->text()[0] != '#' )
-    {
-      int prec = -1;
-      if ( precision->text()[0] >= '0' && precision->text()[0] <= '9' )
-	prec = atoi( precision->text() );
-      if ( dlg->precision != prec )
-	_obj->setPrecision( prec );
-    }
+
+    if ( dlg->precision != precision->value() )
+	_obj->setPrecision( precision->value() );
 
     switch( format->currentItem() )
     {
@@ -813,7 +951,7 @@ void CellLayoutPageFloat::apply( KSpreadCell *_obj )
         _obj->setFormatNumber(KSpreadCell::Money);
     else if(scientific->isChecked())
         _obj->setFormatNumber(KSpreadCell::Scientific);
-    _obj->setPrecision( 0 );
+    //_obj->setPrecision( 0 );
 
 }
 

@@ -41,6 +41,7 @@
 #include <qscrollbar.h>
 #include <qtooltip.h>
 #include <qstring.h>
+#include <qdatetime.h>
 #include <kcolordlg.h>
 #include <kcolorbtn.h>
 #include <knuminput.h>
@@ -200,10 +201,11 @@ public:
 
 public slots:
     void slotChangeState();
-
+    void makeformat();
+    void slotChangeValue(int);
 protected:
     QLineEdit* postfix;
-    QLineEdit* precision;
+    KIntNumInput* precision;
     QLineEdit* prefix;
     QComboBox *format;
     QRadioButton *number;
@@ -214,6 +216,7 @@ protected:
     QRadioButton *fraction;
     QRadioButton *time;
     QListBox *listFormat;
+    QLabel *exampleLabel;
     CellLayoutDlg *dlg;
 };
 
@@ -527,6 +530,15 @@ public:
 
     KSpreadCell::formatNumber formatNumber;
     bool bFormatNumber;
+
+    bool m_bValue;
+    bool m_bDate;
+    bool m_bTime;
+
+    QTime m_time;
+    QDate m_date;
+    QString cellText;
+    double m_value;
 public slots:
     void slotApply();
 
