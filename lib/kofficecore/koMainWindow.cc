@@ -818,16 +818,24 @@ void KoMainWindow::slotFilePrintPreview()
 
 void KoMainWindow::slotConfigureKeys()
 {
-  KKeyDialog::configureKeys(actionCollection(), xmlFile());
+    // We need to merge the shell, the doc, and the view's action collections
+    KActionCollection coll( *actionCollection() );
+    KoDocument *doc = rootDocument();
+    if ( doc )
+        coll += *doc->actionCollection();
+    KoView *view = rootView();
+    if ( view )
+        coll += *view->actionCollection();
+    KKeyDialog::configureKeys(&coll, xmlFile());
 }
 
 void KoMainWindow::slotConfigureToolbars()
 {
-  if (rootDocument())
-    saveMainWindowSettings( KGlobal::config(), rootDocument()->instance()->instanceName() );
-  KEditToolbar edit(factory());
-  connect(&edit,SIGNAL(newToolbarConfig()),this,SLOT(slotNewToolbarConfig()));
-  (void) edit.exec();
+    if (rootDocument())
+        saveMainWindowSettings( KGlobal::config(), rootDocument()->instance()->instanceName() );
+    KEditToolbar edit(factory());
+    connect(&edit,SIGNAL(newToolbarConfig()),this,SLOT(slotNewToolbarConfig()));
+    (void) edit.exec();
 }
 
 void KoMainWindow::slotNewToolbarConfig()
