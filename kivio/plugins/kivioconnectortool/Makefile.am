@@ -14,7 +14,6 @@ INCLUDES = $(all_includes)\
 		-I$(top_srcdir)/kivio/kiviopart/tklib\
 		-I$(top_srcdir)/kivio/kiviopart/tools\
 		-I$(top_srcdir)/kivio/plugins/kivioconnectortool/straight_connector
-DEFS = -I. -I$(srcdir) -I$(top_srcdir)
 libkivioconnectortool_la_METASOURCES = AUTO
 libkivioconnectortool_la_SOURCES = \
 		plugin.cpp\
@@ -43,3 +42,4 @@ desktopdir = $(kde_servicesdir)
 
 data_DATA = kivio_connector.xpm kivio_connector_cursor1.xpm kivio_connector_cursor2.xpm
 datadir = $(kde_datadir)/kivio/pics
+
