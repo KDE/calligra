@@ -82,7 +82,8 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
       m_internalY( 0 ),
       m_zOrder( 0 ),
       m_bCopy( false ),
-      selected( false ),
+      m_selected( false ),
+      m_drawFootNoteLine( false ),
       m_backgroundColor( QBrush( QColor() ) ), // valid brush with invalid color ( default )
       brd_left( QColor(), KoBorder::SOLID, 0 ),
       brd_right( QColor(), KoBorder::SOLID, 0 ),
@@ -99,7 +100,7 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
 KWFrame::~KWFrame()
 {
     //kdDebug() << "KWFrame::~KWFrame " << this << endl;
-    if (selected)
+    if (m_selected)
         removeResizeHandles();
 }
 
@@ -119,7 +120,7 @@ int KWFrame::pageNum( KWDocument* doc ) const
 
 QCursor KWFrame::getMouseCursor( const KoPoint & docPoint, bool table, QCursor defaultCursor )
 {
-    if ( !selected && !table )
+    if ( !m_selected && !table )
         return defaultCursor;
 
     double mx = docPoint.x();
@@ -145,7 +146,7 @@ QCursor KWFrame::getMouseCursor( const KoPoint & docPoint, bool table, QCursor d
         if ( mx >= x() + width() - 6 && my >= y() + height() - 6 && mx <= x() + width() && my <= y() + height() )
             return Qt::sizeFDiagCursor;
 
-        //if ( selected )
+        //if ( m_selected )
         //    return Qt::sizeAllCursor;
     } else { // Tables
         // ### TODO move to KWTableFrameSet
@@ -182,7 +183,6 @@ void KWFrame::copySettings(KWFrame *frm)
     setZOrder(frm->zOrder());
     setCopy(frm->isCopy());
     setSelected( false );// don't copy this attribute [shouldn't be an attribute of KWFrame]
-    //selected = false; // don't copy this attribute [shouldn't be an attribute of KWFrame]
     setBackgroundColor( frm->backgroundColor() );
     setLeftBorder(frm->leftBorder());
     setRightBorder(frm->rightBorder());
@@ -247,9 +247,9 @@ void KWFrame::updateRulerHandles(){
 void KWFrame::setSelected( bool _selected )
 {
     //kdDebug() << this << " KWFrame::setSelected " << _selected << endl;
-    bool s = selected;
-    selected = _selected;
-    if ( selected )
+    bool s = m_selected;
+    m_selected = _selected;
+    if ( m_selected )
         createResizeHandles();
     else if ( s )
         removeResizeHandles();
@@ -1066,8 +1066,6 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup &cg
 
             QRect r(crect);
             QRect normalFrameRect( m_doc->zoomRect( frame->innerRect() ) );
-            //normalFrameRect.setTop( normalFrameRect.top()+m_doc->zoomItY(frame->bTop()));
-            //normalFrameRect.setBottom( normalFrameRect.bottom()-m_doc->zoomItY(frame->bBottom()));
 
             QRect frameRect( viewMode->normalToView( normalFrameRect ) );
             r = r.intersect( frameRect );

@@ -338,8 +338,9 @@ public:
 
     void recalcFrames( int fromPage = 0, int toPage = -1 );
 
-    KoHFType getHeaderType()const { return m_pageHeaderFooter.header; }
-    KoHFType getFooterType()const { return m_pageHeaderFooter.footer; }
+    KoHFType getHeaderType() const { return m_pageHeaderFooter.header; }
+    KoHFType getFooterType() const { return m_pageHeaderFooter.footer; }
+    const KoKWHeaderFooter& headerFooterInfo() const { return m_pageHeaderFooter; }
 
     bool isOnlyOneFrameSelected();
     void setFrameMargins( double l, double r, double t, double b );

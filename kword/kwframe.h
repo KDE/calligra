@@ -99,7 +99,7 @@ public:
      * - which is actually pretty bad in terms of doc/view design (DF)
      */
     void setSelected( bool _selected );
-    bool isSelected()const { return selected; }
+    bool isSelected()const { return m_selected; }
 
     QCursor getMouseCursor( const KoPoint& docPoint, bool table, QCursor defaultCursor );
 
@@ -263,6 +263,14 @@ public:
           is on the border.  */
     bool frameAtPos( const QPoint& nPoint, bool borderOfFrameOnly=false );
 
+    /**
+     * Only applicable to frames of the main text frameset.
+     * Set to true by KWFrameLayout if the "footnote line" should be
+     * drawn under this frame.
+     */
+    void setDrawFootNoteLine( bool b ) { m_drawFootNoteLine = b; }
+    bool drawFootNoteLine()const { return m_drawFootNoteLine; }
+
 private:
     SheetSide m_sheetSide;
     RunAround m_runAround;
@@ -275,7 +283,8 @@ private:
     double m_internalY;
     int m_zOrder;
     bool m_bCopy;
-    bool selected;
+    bool m_selected;
+    bool m_drawFootNoteLine;
 
     QBrush m_backgroundColor;
     KoBorder brd_left, brd_right, brd_top, brd_bottom;
@@ -483,7 +492,8 @@ public:
     /**
      * Paint this frameset
      * @param painter The painter in which to draw the contents of the frameset
-     * @param crect The rectangle (in "contents coordinates") to be painted
+     * @param crect The rectangle (in scrollview "contents coordinates", i.e. "view coords")
+     * to be painted
      * @param cg The colorgroup from which to get the colors
      * @param onlyChanged If true, only redraw what has changed (see KWCanvas::repaintChanged)
      * @param resetChanged If true, set the changed flag to false after drawing.

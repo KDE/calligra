@@ -111,6 +111,7 @@ KWCanvas::KWCanvas(KWViewMode* viewMode, QWidget *parent, KWDocument *d, KWGUI *
 
 KWCanvas::~KWCanvas()
 {
+
     // Let the frames destroy their resize handles themselves (atm they are our children at the Qt level!)
     // We can't call selectAllFrames since the doc my already be deleted (no frameset anymore etc.)
     // The real fix would be to create an object for 'selected frame' and store it in the view/canvas.
@@ -513,7 +514,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                 m_frameInline=false;
             }
         }
- 
+
         KWTableFrameSet *table = 0L;
         KWDocument::TableToSelectPosition ePositionTable = m_doc->positionToSelectRowcolTable(e->pos(), &table);
         // are we in the situation to select row/cols of a table?

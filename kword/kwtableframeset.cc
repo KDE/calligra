@@ -1590,7 +1590,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
                         y+=border->width() / 2; // move slightly down.
                     else if (row == getRows())
                         y-=border->width() / 2; // move slightly up.
-                    y = m_doc->zoomItY(y);
+                    int ypix = m_doc->zoomItY(y);
                     double offset=0.0;
                     if(border->width() > 0 && col!=getCols()) { // offset border when not at right most cell.
                         if(cell) offset=cell->leftBorder();
@@ -1598,8 +1598,8 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
                         if(c) offset=QMAX(offset, c->leftBorder());
                     }
                     double x = m_colPositions[col] + offset;
-                    QPoint topLeft = viewMode->normalToView(QPoint(m_doc->zoomItX(startPos), y));
-                    QPoint bottomRight = viewMode->normalToView(QPoint(m_doc->zoomItX(x), y));
+                    QPoint topLeft = viewMode->normalToView(QPoint(m_doc->zoomItX(startPos), ypix));
+                    QPoint bottomRight = viewMode->normalToView(QPoint(m_doc->zoomItX(x), ypix));
                     QRect line = QRect(topLeft, bottomRight);
                     if(crect.intersects( line )) {
                         //if(border->width() <= 0) kdDebug(32004) << "preview line" << endl;
@@ -1665,7 +1665,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
                     } else if(col==getCols()) {
                         x-=border->width() / 2;
                     }
-                    x = m_doc->zoomItX(x);
+                    int xpix = m_doc->zoomItX(x);
                     QValueList<unsigned int>::iterator pageBound = m_pageBoundaries.begin();
                     unsigned int topRow=startRow;
                     do { // draw minimum of one line per page.
@@ -1697,8 +1697,8 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
                         }
                         double bottom=m_rowPositions[toRow] + offset;
 
-                        QPoint topLeft = viewMode->normalToView(QPoint(x, m_doc->zoomItY(top)));
-                        QPoint bottomRight = viewMode->normalToView(QPoint(x, m_doc->zoomItY(bottom)));
+                        QPoint topLeft = viewMode->normalToView(QPoint(xpix, m_doc->zoomItY(top)));
+                        QPoint bottomRight = viewMode->normalToView(QPoint(xpix, m_doc->zoomItY(bottom)));
                         QRect line = QRect(topLeft, bottomRight);
                         if(crect.intersects( line )) {
                             //if(border->width() <= 0) kdDebug(32004) << "preview line" << endl;
@@ -1735,9 +1735,9 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
             Cell *cell = m_cells.at( i );
             double y = cell->frame(0)->top() + cell->frame(0)->minFrameHeight() + 1.5;
             if(y >= cell->frame(0)->bottom()) continue;
-            y=m_doc->zoomItY(y);
-            QPoint topLeft = viewMode->normalToView(QPoint(m_doc->zoomItX(cell->frame(0)->left()), y));
-            QPoint bottomRight = viewMode->normalToView(QPoint(m_doc->zoomItX(cell->frame(0)->right()), y));
+            int ypix=m_doc->zoomItY(y);
+            QPoint topLeft = viewMode->normalToView(QPoint(m_doc->zoomItX(cell->frame(0)->left()), ypix));
+            QPoint bottomRight = viewMode->normalToView(QPoint(m_doc->zoomItX(cell->frame(0)->right()), ypix));
             QRect line = QRect(topLeft, bottomRight);
             if(crect.intersects( line )) {
                 painter.drawLine( line.left(), line.top(), line.right(), line.bottom());

@@ -709,7 +709,7 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
     }
 
 
-    // The frameset order _on screen_ is:ptFootNoteBodySpacing
+    // The frameset order _on screen_ is:
     // Header
     // Main text frame (if WP)
     // Footnote_s_
@@ -727,7 +727,7 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/ )
         int pageNum = -42; //fnfs->footNoteVariable()->pageNum(); // determined by KWFrameLayout
         KWFrameLayout::HeaderFooterFrameset* hff = new KWFrameLayout::HeaderFooterFrameset(
                                      fnfs, pageNum, pageNum,
-                                     m_pageHeaderFooter.ptFootNoteBodySpacing, // do we need another var?
+                                     m_pageHeaderFooter.ptFootNoteBodySpacing,
                                      KWFrameLayout::HeaderFooterFrameset::All );
 
         // With other kind of framesets, the height is simply frame->height.
@@ -913,7 +913,10 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         //m_zoom = KWDocument::getAttribute( paper, "zoom", 100 );
         //if(m_zoom!=100)
         //    setZoomAndResolution( m_zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY(), false, false );
+
+
         // Support the undocumented syntax actually used by KDE 2.0 for some of the above (:-().
+        // Do not add anything to this block!
         if ( __pgLayout.ptWidth == 0.0 )
             __pgLayout.ptWidth = getAttribute( paper, "ptWidth", 0.0 );
         if ( __pgLayout.ptHeight == 0.0 )
@@ -922,9 +925,6 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
             __hf.ptHeaderBodySpacing = getAttribute( paper, "ptHeadBody", 0.0 );
         if ( __hf.ptFooterBodySpacing == 0.0 )
             __hf.ptFooterBodySpacing = getAttribute( paper, "ptFootBody", 0.0 );
-        if ( __hf.ptFootNoteBodySpacing == 10.0 )
-            __hf.ptFootNoteBodySpacing = getAttribute( paper, "ptFootNoteBody", 10.0 );
-
         if ( __columns.ptColumnSpacing == 0.0 )
             __columns.ptColumnSpacing = getAttribute( paper, "ptColumnspc", 0.0 );
 

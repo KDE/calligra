@@ -113,7 +113,7 @@ public:
 protected:
     void resizeOrCreateHeaderFooter( KWTextFrameSet* headerFooter, uint frameNumber, const KoRect& rect );
     KoRect firstColumnRect( KWFrameSet* mainTextFrameSet, int pageNum, int numColumns ) const;
-    bool resizeMainTextFrame( KWFrameSet* mainTextFrameSet, int pageNum, int numColumns, double ptColumnWidth, double ptColumnSpacing, double left, double top, double bottom, bool updateFrames );
+    bool resizeMainTextFrame( KWFrameSet* mainTextFrameSet, int pageNum, int numColumns, double ptColumnWidth, double ptColumnSpacing, double left, double top, double bottom, bool hasFootNotes );
     void checkFootNotes();
 
 private:

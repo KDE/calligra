@@ -392,7 +392,7 @@ QSize KWViewModeText::contentsSize()
     return cSize;
 }
 
-QSize KWViewModeText::availableSizeForText( KWTextFrameSet* textfs )
+QSize KWViewModeText::availableSizeForText( KWTextFrameSet* /*textfs*/ )
 {
     return contentsSize();
 }

@@ -114,7 +114,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
         // All headers/footers for this page have been done,
         // now resize the frame from the main textframeset (if any)
         // the first time _before_ doing the footnotes.
-        resizeMainTextFrame( mainTextFrameSet, pageNum, numColumns, ptColumnWidth, m_doc->ptColumnSpacing(), left, top, bottom, true );
+        resizeMainTextFrame( mainTextFrameSet, pageNum, numColumns, ptColumnWidth, m_doc->ptColumnSpacing(), left, top, bottom, false );
 
         // Recalc footnote pages
         checkFootNotes();
@@ -284,7 +284,7 @@ KoRect KWFrameLayout::firstColumnRect( KWFrameSet* mainTextFrameSet, int pageNum
         return KoRect();
 }
 
-bool KWFrameLayout::resizeMainTextFrame( KWFrameSet* mainTextFrameSet, int pageNum, int numColumns, double ptColumnWidth, double ptColumnSpacing, double left, double top, double bottom, bool updateFrames )
+bool KWFrameLayout::resizeMainTextFrame( KWFrameSet* mainTextFrameSet, int pageNum, int numColumns, double ptColumnWidth, double ptColumnSpacing, double left, double top, double bottom, bool hasFootNotes )
 {
     if ( !mainTextFrameSet )
         return false;
@@ -298,26 +298,26 @@ bool KWFrameLayout::resizeMainTextFrame( KWFrameSet* mainTextFrameSet, int pageN
 #ifdef DEBUG_FRAMELAYOUT
         kdDebug(32002) << " Page " << pageNum << ": resizing main text frame " << frameNum << " to " << rect << endl;
 #endif
+        KWFrame* frame;
         if ( frameNum < mainTextFrameSet->getNumFrames() ) {
             // Resize existing frame
-            KWFrame* frame = mainTextFrameSet->frame( frameNum );
+            frame = mainTextFrameSet->frame( frameNum );
             bool resized = (rect != *frame);
             if ( resized ) {
                 frame->setRect( rect );
                 frame->updateRulerHandles();
                 mainTextFrameResized = true;
-                if ( updateFrames )
-                    mainTextFrameSet->updateFrames();
+                mainTextFrameSet->updateFrames();
             }
         } else {
             // Create new frame
-            KWFrame * frame = new KWFrame( mainTextFrameSet, rect.x(), rect.y(), rect.width(), rect.height() );
+            frame = new KWFrame( mainTextFrameSet, rect.x(), rect.y(), rect.width(), rect.height() );
             mainTextFrameSet->addFrame( frame );
             Q_ASSERT( frameNum == mainTextFrameSet->getNumFrames()-1 );
             mainTextFrameResized = true;
-            if ( updateFrames )
-                mainTextFrameSet->updateFrames();
+            mainTextFrameSet->updateFrames();
         }
+        frame->setDrawFootNoteLine( hasFootNotes );
     }
     return mainTextFrameResized;
 }

@@ -388,6 +388,49 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, QColorGroup
 {
     m_currentViewMode = viewMode;
     KWFrameSet::drawContents( p, crect, cg, onlyChanged, resetChanged, edit, viewMode, canvas );
+
+    // Main textframeset: draw the footnote line if there are footnotes
+    if ( isMainFrameset() && viewMode->hasFrames() )
+    {
+        // We stored the info "there's a footnote in this page" in the frame[s]
+        // of the maintextframeset for that page. Usually one, but could be more
+        // if there are columns. However we want to draw the line only once, so we
+        // do it here and not in drawFrame (we'd have problems with cliprect anyway).
+        int pages = m_doc->getPages();
+        double left = m_doc->ptLeftBorder();
+        double width = ( m_doc->ptPaperWidth() - m_doc->ptRightBorder() - left ) / 5; // ### is 1/5 ok?
+        int numColumns = m_doc->getColumns();
+        for ( int pageNum = 0; pageNum < pages; pageNum++ )
+        {
+            //if ( viewMode->isPageVisible( pageNum ) )
+            {
+                uint frameNum = pageNum * numColumns /*+ col  0 here*/;
+                Q_ASSERT ( frameNum < getNumFrames() );
+                if ( frameNum < getNumFrames() )
+                {
+                    KWFrame* frame = this->frame( frameNum ); // ## or use framesInPage ?
+                    //kdDebug() << " Footnote line: page " << pageNum << " found frame " << frameNum << " drawFootNoteLine=" << frame->drawFootNoteLine() << endl;
+                    if ( frame->drawFootNoteLine() )
+                    {
+                        double y = frame->bottomLeft().y() + m_doc->headerFooterInfo().ptFootNoteBodySpacing / 2;
+                        KoRect rect( left, y, width, 0 ); // this rect is flat
+                        QRect flatRect = viewMode->normalToView( m_doc->zoomRect( rect ) );
+                        //kdDebug() << " KWTextFrameSet::drawFrame rect=" << rect << " zoomed:" << flatRect << endl;
+                        flatRect.setBottom( flatRect.top() + 1 ); // #!@!@!& QRect....
+                        if ( flatRect.intersects( crect ) ) {
+                            p->save();
+                            QPen pen( KoTextFormat::defaultTextColor( p ),   // always in default fg color (and black when printing)
+                                      KoBorder::zoomWidthY( 2, m_doc, 1 ) ); // penwidth = zoomIt( 2 pt )
+                            p->setPen( pen );
+                            p->drawLine( flatRect.left(), flatRect.top(), flatRect.right(), flatRect.top() );
+                            //kdDebug() << "  drawLine( " << flatRect.left() << ", " << flatRect.top() << ", " << flatRect.right() << ", " << flatRect.top() << endl;
+                            p->restore();
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 void KWTextFrameSet::drawFrame( KWFrame *theFrame, QPainter *painter, const QRect &r,
