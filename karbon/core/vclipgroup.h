@@ -20,8 +20,6 @@
 #ifndef __VCLIP_H__
 #define __VCLIP_H__
 
-#include <qdom.h>
-
 #include "vgroup.h"
 #include "vvisitor.h"
 
