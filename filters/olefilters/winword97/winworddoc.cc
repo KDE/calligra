@@ -55,6 +55,47 @@ WinWordDoc::~WinWordDoc()
 {
 }
 
+char WinWordDoc::borderStyle(unsigned btc) const
+{
+    // border type code:
+    //     0 none
+    //     1 single
+    //     2 thick
+    //     3 double
+    //     5 hairline
+    //     6 dot
+    //     7 dash large gap
+    //     8 dot dash
+    //     9 dot dot dash
+    //     10 triple
+    //     11 thin-thick small gap
+    //     12 thick-thin small gap
+    //     13 thin-thick-thin small gap
+    //     14 thin-thick medium gap
+    //     15 thick-thin medium gap
+    //     16 thin-thick-thin medium gap
+    //     17 thin-thick large gap
+    //     18 thick-thin large gap
+    //     19 thin-thick-thin large gap
+    //     20 wave
+    //     21 double wave
+    //     22 dash small gap
+    //     23 dash dot stroked
+    //     24 emboss 3D
+    //     25 engrave 3D
+    //     codes 64 - 230 represent border art types and are used only for page borders.
+
+    if (btc == 7)
+        return '1';
+    if (btc == 6)
+        return '2';
+    if (btc == 8)
+        return '3';
+    if (btc == 9)
+        return '4';
+    return '0';
+}
+
 //
 // Add to/lookup a cell edge in the cache of cell edges for a given table.
 //
@@ -222,6 +263,39 @@ void WinWordDoc::encode(QString &text)
   text.replace(QRegExp("'"), "&apos;");
 }
 
+QString WinWordDoc::generateBorder(
+    const char *borderName,
+    const BRC &brc)
+{
+    QString prefix = QString(" ") +  borderName;
+    QString border;
+
+    border.append(prefix);
+    border.append(QString::fromLatin1("Width=\"%1\"").arg(brc.brcType == 0 ? 0.0 : brc.dptLineWidth * 0.125) );
+    border.append(prefix);
+    border.append(QString::fromLatin1("Style=\"%1\"").arg(borderStyle(brc.brcType)));
+
+    QColor colour = colorForNumber(QString::number(brc.ico), -1);
+    border.append(generateColour(borderName, colour));
+    return border;
+}
+
+QString WinWordDoc::generateColour(
+    const char *colourName,
+    const QColor &qc)
+{
+    QString prefix = QString(" ") +  colourName;
+    QString colour;
+
+    colour.append(prefix);
+    colour.append(QString::fromLatin1("Red=\"%1\"").arg(qc.red()));
+    colour.append(prefix);
+    colour.append(QString::fromLatin1("Green=\"%1\"").arg(qc.green()));
+    colour.append(prefix);
+    colour.append(QString::fromLatin1("Blue=\"%1\"").arg(qc.blue()));
+    return colour;
+}
+
 QString WinWordDoc::generateFormat(
     const CHP *chp)
 {
@@ -279,7 +353,7 @@ QString WinWordDoc::generateFormats(
         if (typeid(Format) == typeid(*run))
         {
             const MsWordGenerated::CHP *chp = static_cast<Format *>(run.data())->values->getChp();
-    
+
 kdDebug() << "WinWordDoc::generateFormats: hps 3: " <<chp->hps<< endl;
             if (run->end > run->start)
             {
@@ -700,25 +774,15 @@ void WinWordDoc::gotTableEnd(
             cell.append(QString::number(ROW_SIZE + y * ROW_SIZE));
             cell.append("\" bottom=\"");
             cell.append(QString::number(2 * ROW_SIZE + y * ROW_SIZE));
+            cell.append("\" runaround=\"1\" runaGap=\"2\"");
+            cell.append(generateBorder("l", row.rgtc[x].brcLeft));
+            cell.append(generateBorder("r", row.rgtc[x].brcRight));
+            cell.append(generateBorder("t", row.rgtc[x].brcTop));
+            cell.append(generateBorder("b", row.rgtc[x].brcBottom));
 
-            QColor brcLeft = colorForNumber(QString::number(row.rgtc[x].brcLeft.ico), -1);
-            QColor brcRight = colorForNumber(QString::number(row.rgtc[x].brcRight.ico), -1);
-            QColor brcTop = colorForNumber(QString::number(row.rgtc[x].brcTop.ico), -1);
-            QColor brcBottom = colorForNumber(QString::number(row.rgtc[x].brcBottom.ico), -1);
             QColor backGround = colorForNumber(QString::number(row.rgshd[x].icoBack), 8, true);
-
-            cell.append(
-                QString::fromLatin1("\" runaround=\"1\" runaGap=\"2\" ") +
-                QString::fromLatin1("lWidth=\"%1\" lStyle=\"0\" ").arg(row.rgtc[x].brcLeft.dptLineWidth * 0.125) +
-                QString::fromLatin1("lRed=\"%1\" lGreen=\"%2\" lBlue=\"%3\" ").arg(brcLeft.red()).arg(brcLeft.green()).arg(brcLeft.blue()) +
-                QString::fromLatin1("rWidth=\"%1\" rStyle=\"0\" ").arg(row.rgtc[x].brcRight.dptLineWidth * 0.125) +
-                QString::fromLatin1("rRed=\"%1\" rGreen=\"%2\" rBlue=\"%3\" ").arg(brcRight.red()).arg(brcRight.green()).arg(brcRight.blue()) +
-                QString::fromLatin1("tWidth=\"%1\" tStyle=\"0\" ").arg(row.rgtc[x].brcTop.dptLineWidth * 0.125) +
-                QString::fromLatin1("tRed=\"%1\" tGreen=\"%2\" tBlue=\"%3\" ").arg(brcTop.red()).arg(brcTop.green()).arg(brcTop.blue()) +
-                QString::fromLatin1("bWidth=\"%1\" bStyle=\"0\" ").arg(row.rgtc[x].brcBottom.dptLineWidth * 0.125) +
-                QString::fromLatin1("bRed=\"%1\" bGreen=\"%2\" bBlue=\"%3\" ").arg(brcBottom.red()).arg(brcBottom.green()).arg(brcBottom.blue()) +
-                QString::fromLatin1("bkRed=\"%1\" bkGreen=\"%2\" bkBlue=\"%3\" ").arg(backGround.red()).arg(backGround.green()).arg(backGround.blue()) +
-                QString::fromLatin1("bleft=\"0\" bright=\"0\" btop=\"0\" bbottom=\"0\""));
+            cell.append(generateColour("bk", backGround));
+            cell.append(" bleft=\"0\" bright=\"0\" btop=\"0\" bbottom=\"0\"");
             cell.append(" autoCreateNewFrame=\"0\" newFrameBehaviour=\"1\"/>\n");
             cell.append("<PARAGRAPH>\n<TEXT>");
             xml_friendly = m_table[y]->m_texts[x];

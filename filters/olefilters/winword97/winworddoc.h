@@ -89,16 +89,18 @@ private:
 
     QColor colorForNumber(QString number, int defaultcolor, bool defaultWhite = false);
 
-    // Number format codes.
-
-    const char *list(unsigned nfc) const;
+    const char *justification(unsigned jc) const;   // Justification codes.
+    const char *list(unsigned nfc) const;           // Number format codes.
     char numbering(unsigned nfc) const;
-
-    // Justification codes.
-
-    const char *justification(unsigned jc) const;
+    char borderStyle(unsigned btc) const;           // Border type codes.
 
     // Convert from Word character format to our own format.
+    QString generateBorder(
+        const char *borderName,
+        const BRC &brc);
+    QString generateColour(
+        const char *colourName,
+        const QColor &colour);
     QString generateFormat(
         const CHP *chp);
     QString generateFormats(
@@ -130,8 +132,6 @@ private:
     void gotTableRow(
         unsigned tableNumber, unsigned rowNumber, const QString texts[], const MsWordGenerated::PAP styles[],
         MsWordGenerated::TAP &row);
-
-    QColor colorForNumber(int number);
 
     // This is where the result will end up!
 
