@@ -41,9 +41,6 @@ class KPTMilestone : public KPTNode {
         void addResource( KPTResource *) {}
         void insertChildNode( unsigned int, KPTNode *) {}
         void insertRisk( unsigned int, KPTRisk *) {}
-        void addDependNode( KPTNode*, TimingType, TimingRelation) {}
-        void insertDependNode( unsigned int, KPTNode *, TimingType, TimingRelation) {}
-
 
         /** The expected Duration is the expected time to complete a Task, Project, etc. For an 
          *  individual Task, this will calculate the expected duration by querying 

@@ -24,9 +24,9 @@
 #include <qlist.h> 
 #include <qstring.h> 
 #include "defs.h"
-#include "kptresource.h"
 #include "kptrelation.h"
 
+class KPTRisk;
 
 /**
  * This class represents any node in the project, a node can be a project to a subproject and any task.
@@ -50,15 +50,18 @@ class KPTNode {
         void delChildNode( int number, bool remove=true);
         KPTNode *getChildNode( int number) { return m_nodes.at(number); }
 
-        // resources management
-        /** The resources are coupled with a user specified risk, we list the
-         *  risks here, the risks contain a link to the resource itself.
-         */
-        const QList<KPTRisk> &riskIterator() const { return m_risk; }
-        virtual void addRisk( KPTRisk *risk );
-        virtual void insertRisk( unsigned int index, KPTRisk *risk );
-        void removeRisk( KPTRisk *risk );
-        void removeRisk( int number );
+        // Dependency management.  All types of tasks nodes can have dependencies
+        // as long as they have no child nodes
+
+        virtual KPTRelation::Result addDependNode( KPTNode*, TimingType, TimingRelation);
+        virtual KPTRelation::Result insertDependNode( unsigned int, KPTNode *, TimingType, TimingRelation);
+
+        virtual void removeDependNode( KPTNode* node);
+        virtual void removeDependNode( unsigned int index);
+
+
+        KPTRisk *risk();
+        void setRisk(KPTRisk *risk);
 
         // Type of this node.
         enum NodeType {
@@ -134,7 +137,6 @@ class KPTNode {
         QList<KPTNode> m_nodes;
         QList<KPTRelation> m_dependChildNodes;
         QList<KPTRelation> m_dependParentNodes;
-        QList<KPTRisk> m_risk;
         KPTNode *m_parent;
         NodeType m_nodeType;
         QString m_name;
@@ -142,5 +144,6 @@ class KPTNode {
         QDateTime *m_startTime, *m_endTime; // both entered during the project, not at the initial calculation.
         // effort variables.
         QDateTime *m_optimisticDuration, *m_pessemisticDuration, *m_expectedDuration;
+        KPTRisk *m_risk;
 };
 #endif

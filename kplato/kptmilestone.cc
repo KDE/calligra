@@ -33,4 +33,3 @@ QDateTime *KPTMilestone::getStartTime() {
 QDateTime *KPTMilestone::getFloat() {
     return 0L;
 }
-

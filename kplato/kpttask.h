@@ -22,6 +22,7 @@
 
 #include <qdatetime.h> 
 #include "kptnode.h"
+#include "kptresource.h"
 #include "defs.h"
 
 class KPTResource;
@@ -54,6 +55,21 @@ class KPTTask : public KPTNode {
         /** Retrieve the calculated float of this node
          */
         QDateTime *getFloat();
+
+       // resources management
+        /** The resources are provided as a list, each having an associated risk.
+            we return the resource here which has a pointer to the risk
+         */
+        const QList<KPTResource> &resourceIterator() const { return m_resource; }
+        virtual void addResource( KPTResource *resource );
+        virtual void insertResource( unsigned int index, KPTResource *resource );
+        void removeResource( KPTResource *resource );
+        void removeResource( int number );
+
+
+
+  private:
+        QList<KPTResource> m_resource;
 
 };
 #endif

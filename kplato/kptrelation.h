@@ -42,6 +42,13 @@ class KPTRelation {
          *  and the start of the child.
          */
         QDateTime *lag() { return m_lag; }
+
+        enum Result {
+          SUCCESS = 0l,
+          HASCHILDREN = 1l,
+          NOTIMPL = 2l,
+        };
+
         
     protected: // variables
         KPTNode *m_parent;

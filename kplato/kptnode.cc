@@ -19,9 +19,8 @@
 #include "kptnode.h"
 #include <qlist.h>
 
-KPTNode::KPTNode() : m_nodes(), m_dependChildNodes(), m_dependParentNodes(), m_risk() {
+KPTNode::KPTNode() : m_nodes(), m_dependChildNodes(), m_dependParentNodes() {
         m_name="";
-        m_risk.setAutoDelete(true);
 /*
 something like
 QDate *nul = neq QDate(0,1,1);
@@ -43,24 +42,45 @@ void KPTNode::delChildNode( KPTNode *node, bool remove) {
 void KPTNode::delChildNode( int number, bool remove) {
 }
 
-void KPTNode::addRisk( KPTRisk *risk ) {
-}
-
-void KPTNode::removeRisk( KPTRisk *risk ){
-   // always auto remove
-}
-
-void KPTNode::removeRisk( int number ){
-   // always auto remove
-}
-
-void KPTNode::insertRisk( unsigned int index, KPTRisk *risk ) {
-}
 
 void KPTNode::insertChildNode( unsigned int index, KPTNode *node) {
 }
 
 void KPTNode::addChildNode( KPTNode *node) {
+}
+
+KPTRelation::Result KPTNode::addDependNode( KPTNode*, TimingType, TimingRelation) {
+  // Only possible if we have a terminal node
+
+  if ( !m_nodes.isEmpty() ) {
+  	return KPTRelation::HASCHILDREN;
+  }
+
+  return KPTRelation::NOTIMPL;
+
+}
+
+
+KPTRelation::Result KPTNode::insertDependNode( unsigned int, KPTNode *, TimingType, TimingRelation) {
+  // Only possible if we have a terminal node
+
+  if ( !m_nodes.isEmpty() ) {
+  	return KPTRelation::HASCHILDREN;
+  }
+
+  return KPTRelation::NOTIMPL;
+}
+
+void KPTNode::removeDependNode( KPTNode* node) {
+}
+
+void KPTNode::removeDependNode( unsigned int index){
+}
+
+KPTRisk *KPTNode::risk() {
+}
+
+void KPTNode::setRisk(KPTRisk *risk) {
 }
 
 QDateTime *KPTNode::getDelay() {

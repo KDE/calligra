@@ -25,21 +25,19 @@
 #include <qlist.h>
 #include "defs.h"
 
+#include "kptnode.h"
+
 class KPTRisk;
 class KPTEffort;
 class KPTAppointment;
-class KPTRisk;
 class KPTTask;
-class KPTNode;
 
-class KPTResource {
+class KPTResource : public KPTNode {
     public:
 
         KPTResource();
         ~KPTResource();
 
-        KPTRisk *risk();
-        void setRisk(KPTRisk *risk);
 
         void setName(QString);
         QString &name();
@@ -56,7 +54,6 @@ class KPTResource {
 
     private:
         QList<KPTAppointment> m_appointments;
-        KPTRisk *m_risk;
         QString m_name;
         QDateTime *m_availableFrom;
         QDateTime *m_availableUntil;

@@ -26,12 +26,6 @@ KPTResource::KPTResource() : m_appointments(), m_workingHours() {
 KPTResource::~KPTResource() {
 }
 
-KPTRisk *KPTResource::risk() {
-}
-
-void KPTResource::setRisk(KPTRisk *risk) {
-}
-
 void KPTResource::setName(QString) {
 }
 

@@ -19,8 +19,8 @@
 
 #include "kpttask.h"
 
-KPTTask::KPTTask() : KPTNode() {
-        m_nodeType=TASK;
+KPTTask::KPTTask() : KPTNode(), m_resource() {
+     m_resource.setAutoDelete(true); m_nodeType=TASK;
 }
 
 KPTTask::~KPTTask() {
@@ -42,3 +42,16 @@ QDateTime *KPTTask::getFloat() {
     return 0L;
 }
 
+void KPTTask::addResource( KPTResource *resource ) {
+}
+
+void KPTTask::removeResource( KPTResource *resource ){
+   // always auto remove
+}
+
+void KPTTask::removeResource( int number ){
+   // always auto remove
+}
+
+void KPTTask::insertResource( unsigned int index, KPTResource *resource ) {
+}
