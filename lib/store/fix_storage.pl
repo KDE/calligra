@@ -116,6 +116,9 @@ sub fixLine {
       $line =~ s%\</PICTURES%\</PIXMAPS% ;
       $line =~ s%\</PICTURE%\</IMAGE% ;
   }
+  elsif($line =~ m%\s*\<BACKPICTUREKEY%) {
+      $line =~ s%\<BACKPICTUREKEY%\<BACKPIXKEY% ;
+  }
   return $line;
 }
 
