@@ -1085,9 +1085,36 @@ void Properties::apply(const MsWord::STD &style)
 
 // Conversion from compact PRM opcode to real opcode.
 
-MsWord::U16 Properties::getRealOpcode(unsigned shortOpcode)
+MsWord::U16 Properties::getRealOpcode(unsigned shortOpcode, const MsWord::FIB &fib)
 {
-    static const MsWord::U16 rgsprmPrm[0x80] =
+    static const MsWord::U16 rgsprmPrmWord6[0x80] =
+    {
+        // 0
+        Properties::sprmNoop, Properties::sprmNoop, Properties::sprmPIstd, Properties::sprmPIstdPermute, Properties::sprmPIncLvl, Properties::sprmPJc, Properties::sprmPFSideBySide, Properties::sprmPFKeep,
+        Properties::sprmPFKeepFollow, Properties::sprmPFPageBreakBefore, Properties::sprmPBrcl, Properties::sprmPBrcp, Properties::sprmPAnld, Properties::sprmPIlvl, Properties::sprmPFNoLineNumb, Properties::sprmPChgTabsPapx,
+        //16
+        Properties::sprmPDxaRight, Properties::sprmPDxaLeft, Properties::sprmPNest, Properties::sprmPDxaLeft1, Properties::sprmPDyaLine, Properties::sprmPDyaBefore, Properties::sprmPDyaAfter, Properties::sprmPChgTabs,
+        Properties::sprmPFInTable, Properties::sprmPFTtp, Properties::sprmPDxaAbs, Properties::sprmPDyaAbs, Properties::sprmPDxaWidth, Properties::sprmPPc, Properties::sprmPBrcTop10, Properties::sprmPBrcLeft10,
+        // 32
+        Properties::sprmPBrcBottom10, Properties::sprmPBrcRight10, Properties::sprmPBrcBetween10, Properties::sprmPBrcBar10, Properties::sprmPDxaFromText10, Properties::sprmPWr, Properties::sprmPBrcTop, Properties::sprmPBrcLeft,
+        Properties::sprmPBrcBottom, Properties::sprmPBrcRight, Properties::sprmPBrcBetween, Properties::sprmPBrcBar, Properties::sprmPFNoAutoHyph, Properties::sprmPWHeightAbs, Properties::sprmPDcs, Properties::sprmPShd,
+        // 48
+        Properties::sprmPDyaFromText, Properties::sprmPDxaFromText, Properties::sprmPFLocked, Properties::sprmPFWidowControl, Properties::sprmPRuler, Properties::sprmNoop, Properties::sprmNoop, Properties::sprmNoop,
+        Properties::sprmNoop, Properties::sprmNoop, Properties::sprmNoop, Properties::sprmNoop, Properties::sprmNoop, Properties::sprmNoop, Properties::sprmNoop, Properties::sprmNoop,
+        // 64
+        Properties::sprmNoop, Properties::sprmCFRMarkDel, Properties::sprmCFRMark, Properties::sprmCFFldVanish, Properties::sprmCPicLocation, Properties::sprmCIbstRMark, Properties::sprmCDttmRMark, Properties::sprmCFData,
+        Properties::sprmCIdslRMark, Properties::sprmCChs, Properties::sprmCSymbol, Properties::sprmCFOle2, Properties::sprmNoop, Properties::sprmNoop, Properties::sprmNoop, Properties::sprmNoop,
+        // 80
+        Properties::sprmCIstd, Properties::sprmCIstdPermute, Properties::sprmCDefault, Properties::sprmCPlain, Properties::sprmNoop, Properties::sprmCFBold, Properties::sprmCFItalic, Properties::sprmCFStrike,
+        Properties::sprmCFOutline, Properties::sprmCFShadow, Properties::sprmCFSmallCaps, Properties::sprmCFCaps, Properties::sprmCFVanish, Properties::sprmCRgFtc0, Properties::sprmCKul, Properties::sprmCSizePos,
+        // 96
+        Properties::sprmCDxaSpace, Properties::sprmCLid, Properties::sprmCIco, Properties::sprmCHps, Properties::sprmCHpsInc, Properties::sprmCHpsPos, Properties::sprmCHpsPosAdj, Properties::sprmCMajority,
+        Properties::sprmCIss, Properties::sprmCHpsNew50, Properties::sprmCHpsInc1, Properties::sprmCHpsKern, Properties::sprmCMajority50, Properties::sprmCHpsMul, Properties::sprmCYsri, Properties::sprmNoop,
+        // 112
+        Properties::sprmNoop, Properties::sprmNoop, Properties::sprmNoop, Properties::sprmNoop, Properties::sprmNoop, Properties::sprmCFSpec, Properties::sprmCFObj, Properties::sprmPicBrcl,
+        Properties::sprmPicScale, Properties::sprmPicBrcTop, Properties::sprmPicBrcLeft, Properties::sprmPicBrcBottom, Properties::sprmPicBrcRight, Properties::sprmNoop, Properties::sprmNoop, Properties::sprmNoop
+    };
+    static const MsWord::U16 rgsprmPrmWord8[0x80] =
     {
         sprmNoop, sprmNoop, sprmNoop, sprmNoop, sprmPIncLvl, sprmPJc,
         sprmPFSideBySide, sprmPFKeep, sprmPFKeepFollow, sprmPFPageBreakBefore,
@@ -1118,5 +1145,13 @@ MsWord::U16 Properties::getRealOpcode(unsigned shortOpcode)
         sprmNoop, sprmNoop
     };
 
-    return rgsprmPrm[shortOpcode];
+    // Now get the opcode.
+    if (fib.nFib > MsWord::s_maxWord6Version)
+    {
+        return rgsprmPrmWord8[shortOpcode];
+    }
+    else
+    {
+        return rgsprmPrmWord6[shortOpcode];
+    }
 }

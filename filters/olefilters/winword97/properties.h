@@ -59,7 +59,7 @@ public:
 
     // Conversion from compact PRM opcode to real opcode.
 
-    static MsWord::U16 getRealOpcode(unsigned shortOpcode);
+    static MsWord::U16 getRealOpcode(unsigned shortOpcode, const MsWord::FIB &fib);
 
     // Get the properties.
 

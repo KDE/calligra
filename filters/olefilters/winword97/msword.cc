@@ -72,30 +72,30 @@ QString MsWord::char2unicode(unsigned lid, char c)
     QString result;
 
     if (codec)
-	result = codec->toUnicode(&c, 1);
+        result = codec->toUnicode(&c, 1);
     else
-	result = '?';
+        result = '?';
 
     // KWord (?) can't handle the " <- if it's like this, up, it just
     // always draws the bottom-" , the real " is interpreted as shit
     // in some documents (mostly german ones)
     // so let's force the bottom-" for the moment (Niko)
-    
+
     // UNICODE WORKAROUNDS
     // If you see a wrong character, get the unicode specs
     // convert the containing hex values to dec values
     // and use CHAR_DEBUG to find out the unicode value of
-    // the wrong char and replace them (Niko) 
-    if(result[0].unicode() == 8222 || result[0].unicode() == 8221)
-	result[0] = QChar(8220);
+    // the wrong char and replace them (Niko)
+    if (result[0].unicode() == 8222 || result[0].unicode() == 8221)
+        result[0] = QChar(8220);
 
-    if(result[0].unicode() == 8217)
-	result[0] = QChar(39);
+    if (result[0].unicode() == 8217)
+        result[0] = QChar(39);
 
 #ifdef CHAR_DEBUG
     kdDebug() << "text: " << result << endl;
     kdDebug() << "unicode value: " << result[0].unicode() << endl;
-#endif    
+#endif
 
     return result;
 }
@@ -138,6 +138,7 @@ const char *MsWord::lid2codepage(U16 lid)
     case 0x0c09:    /*Australian English*/          return cp1252;
     case 0x040a:    /*Castilian Spanish*/           return cp1252;
     case 0x080a:    /*Mexican Spanish*/             return cp1252;
+    case 0x0c0a:    /*Traditional Spanish*/         return cp1252; // TBD: Undocumented!
     case 0x040b:    /*Finnish*/                     return cp1252;
     case 0x040c:    /*French*/                      return cp1252;
     case 0x080c:    /*Belgian French*/              return cp1252;
@@ -1125,7 +1126,7 @@ void MsWord::parse()
             }
             else
             {
-                U16 opcode = Properties::getRealOpcode(data.prm.isprm);
+                U16 opcode = Properties::getRealOpcode(data.prm.isprm, m_fib);
 
                 sprm[0] = opcode;
                 sprm[1] = opcode >> 8;
@@ -1440,31 +1441,27 @@ unsigned MsWord::read(U16 lid, const U8 *in, QString *out, unsigned count, bool 
     unsigned bytes = 0;
 
     *out = QString("");
+
+    // Word6 always uses codepages rather than unicode.
+    //if (nFib <= s_maxWord6Version)
+    //    unicode = false;
     if (unicode)
     {
         for (unsigned i = 0; i < count; i++)
         {
-	    if (nFib > s_maxWord6Version) 
-//	    if (nFib > s_maxWord6Version || nFib == 1) 
-//	    {
-	    	bytes += MsWordGenerated::read(in + bytes, &char16);
-		*out += QChar(char16);
-/*	    else
-	    {
-		// Office 95 always saved non-unicode
-	        bytes += MsWordGenerated::read(in + bytes, &char8);
-        	*out += char2unicode(lid, char8);
-	    }
-*/	}
+            bytes += MsWordGenerated::read(in + bytes, &char16);
+            *out += QChar(char16);
+        }
     }
     else
     {
         for (unsigned i = 0; i < count; i++)
         {
             bytes += MsWordGenerated::read(in + bytes, &char8);
-	    *out += char2unicode(lid, char8);
-	}
+            *out += char2unicode(lid, char8);
+        }
     }
+    kdDebug() << "unicode: " << unicode << " " << *out << endl;
     return bytes;
 }
 
@@ -1474,6 +1471,10 @@ unsigned MsWord::read(U16 lid, const U8 *in, QString *out, bool unicode, U16 nFi
     unsigned bytes = 0;
 
     *out = QString("");
+
+    // Word6 always uses codepages rather than unicode.
+    //if (nFib <= s_maxWord6Version)
+    //    unicode = false;
     if (unicode)
     {
         U16 length;
