@@ -128,32 +128,6 @@ private:
 };
 
 //
-// This class implements the 'find' functionality,
-// the "search next, prompt" loop.
-//
-class KWFind : public KoFind
-{
-    Q_OBJECT
-public:
-    KWFind( KWCanvas * canvas, KWSearchDia * dialog );
-    void proceed();
-
-protected:
-    bool findInFrameSet( KWTextFrameSet * fs, QTextParag * firstParag, int firstIndex,
-                         QTextParag * lastParag, int lastIndex );
-
-protected slots:
-
-    void highlight( const QString &text, int matchingIndex, int matchingLength, const QRect &expose );
-private:
-    KWSearchDia * m_dialog;
-    KWCanvas *m_canvas;
-    KWTextFrameSet *m_currentFrameSet;
-    QTextParag *m_currentParag;
-    int m_offset;
-};
-
-//
 // This class is the KWord replace dialog.
 //
 class KWReplaceDia:
@@ -170,8 +144,47 @@ protected slots:
 
 private:
 
-    KWSearchContextUI *m_find;
-    KWSearchContextUI *m_replace;
+    KWSearchContextUI *m_findUI;
+    KWSearchContextUI *m_replaceUI;
+};
+
+//
+// This class implements the 'find' functionality ( the "search next, prompt" loop )
+// and the 'replace' functionality. Same class, to allow centralizing the code that
+// finds the framesets and paragraphs to look into.
+//
+class KWFindReplace : public QObject
+{
+    Q_OBJECT
+public:
+    KWFindReplace( KWCanvas * canvas, KWSearchDia * dialog );
+    KWFindReplace( KWCanvas * canvas, KWReplaceDia * dialog );
+    ~KWFindReplace();
+    void proceed();
+
+protected:
+    bool findInFrameSet( KWTextFrameSet * fs, QTextParag * firstParag, int firstIndex,
+                         QTextParag * lastParag, int lastIndex );
+    bool process( const QString &_text, const QRect &expose);
+
+protected slots:
+    void highlight( const QString &text, int matchingIndex, int matchingLength, const QRect &expose );
+    void replace( const QString &text, int replacementIndex, int replacedLength, const QRect &expose );
+
+private:
+    // Only one of those two will be set
+    KoFind * m_find;
+    KoReplace * m_replace;
+
+    // Only one of those two will be set
+    KWSearchDia * m_findDlg;
+    KWReplaceDia * m_replaceDlg;
+
+    int m_options;
+    KWCanvas *m_canvas;
+    KWTextFrameSet *m_currentFrameSet;
+    QTextParag *m_currentParag;
+    int m_offset;
 };
 
 #endif

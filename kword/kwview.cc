@@ -1033,7 +1033,7 @@ void KWView::editFind()
     KWSearchDia dialog( gui->canvasWidget(), "find", searchEntry );
     if ( dialog.exec() == QDialog::Accepted )
     {
-        KWFind find( gui->canvasWidget(), &dialog );
+        KWFindReplace find( gui->canvasWidget(), &dialog );
         find.proceed();
     }
 }
@@ -1048,8 +1048,8 @@ void KWView::editReplace()
     KWReplaceDia dialog( gui->canvasWidget(), "replace", searchEntry, replaceEntry );
     if ( dialog.exec() == QDialog::Accepted )
     {
-        // KWReplace replace( gui->canvasWidget(), &dialog )
-        // replace.proceed();
+        KWFindReplace replace( gui->canvasWidget(), &dialog );
+        replace.proceed();
     }
 }
 

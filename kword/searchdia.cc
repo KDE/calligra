@@ -37,6 +37,7 @@
 #include "kwcanvas.h"
 #include "kwdoc.h"
 #include "kwtextframeset.h"
+#include "kwformat.h"
 
 KWSearchContext::KWSearchContext()
 {
@@ -227,17 +228,65 @@ void KWSearchDia::slotOk()
     m_findUI->setCtxHistory( findHistory() );
 }
 
-KWFind::KWFind( KWCanvas * canvas, KWSearchDia * dialog )
-    : KoFind( dialog->pattern(), dialog->options(), canvas ),
+KWReplaceDia::KWReplaceDia( KWCanvas *canvas, const char *name, KWSearchContext *find, KWSearchContext *replace ):
+    KoReplaceDialog( canvas, name, find->m_options, find->m_strings, replace->m_strings )
+{
+    // The dialog extension.
+    m_findUI = new KWSearchContextUI( find, findExtension() );
+    m_replaceUI = new KWSearchContextUI( replace, replaceExtension() );
+    // Look whether we have a selection
+    KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(canvas->currentFrameSetEdit());
+    setHasSelection( edit && static_cast<KWTextFrameSet *>(edit->frameSet())->hasSelection() );
+}
+
+void KWReplaceDia::slotOk()
+{
+    KoReplaceDialog::slotOk();
+
+    // Save the current state back into the context required.
+    m_findUI->setCtxOptions( KoReplaceDialog::options() );
+    m_findUI->setCtxHistory( findHistory() );
+    m_replaceUI->setCtxHistory( replacementHistory() );
+}
+
+
+/*================================================================*/
+
+KWFindReplace::KWFindReplace( KWCanvas * canvas, KWSearchDia * dialog )
+    : m_find( new KoFind( dialog->pattern(), dialog->options(), canvas ) ),
+      m_replace( 0L ),
+      m_findDlg( dialog ), // guaranteed to remain alive while we live
+      m_replaceDlg( 0L ),
+      m_options( dialog->options() ),
       m_canvas( canvas )
 {
-    m_dialog = dialog; // guaranteed to remain alive while we live
-    connect( this, SIGNAL( highlight( const QString &, int, int, const QRect & ) ),
+    connect( m_find, SIGNAL( highlight( const QString &, int, int, const QRect & ) ),
              this, SLOT( highlight( const QString &, int, int, const QRect & ) ) );
     m_currentFrameSet = 0L;
 }
 
-void KWFind::proceed()
+KWFindReplace::KWFindReplace( KWCanvas * canvas, KWReplaceDia * dialog )
+    : m_find( 0L ),
+      m_replace( new KoReplace( dialog->pattern(), dialog->replacement(), dialog->options(), canvas ) ),
+      m_findDlg( 0L ),
+      m_replaceDlg( dialog ), // guaranteed to remain alive while we live
+      m_options( dialog->options() ),
+      m_canvas( canvas )
+{
+    connect( m_replace, SIGNAL( highlight( const QString &, int, int, const QRect & ) ),
+             this, SLOT( highlight( const QString &, int, int, const QRect & ) ) );
+    connect( m_replace, SIGNAL( replace( const QString &, int , int, const QRect & ) ),
+             this, SLOT( replace( const QString &, int , int, const QRect & ) ) );
+    m_currentFrameSet = 0L;
+}
+
+KWFindReplace::~KWFindReplace()
+{
+    delete m_find;
+    delete m_replace;
+}
+
+void KWFindReplace::proceed()
 {
     KWTextFrameSet * firstFrameSet = 0;
     // Start point
@@ -246,7 +295,7 @@ void KWFind::proceed()
 
     // 'From Cursor' option
     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(m_canvas->currentFrameSetEdit());
-    if ( edit && ( m_dialog->options() & KoFindDialog::FromCursor ) )
+    if ( edit && ( m_options & KoFindDialog::FromCursor ) )
     {
         firstParag = edit->getCursor()->parag();
         firstIndex = edit->getCursor()->index();
@@ -254,7 +303,7 @@ void KWFind::proceed()
     } // no else here !
 
     // 'Selected Text' option
-    if ( edit && ( m_dialog->options() & KoFindDialog::SelectedText ) )
+    if ( edit && ( m_options & KoFindDialog::SelectedText ) )
     {
         firstFrameSet = static_cast<KWTextFrameSet *>(edit->frameSet());
         if ( !firstParag ) // no set by 'from cursor'
@@ -296,8 +345,8 @@ void KWFind::proceed()
 
 #define HIGHLIGHTSELECTION 1
 
-bool KWFind::findInFrameSet( KWTextFrameSet * fs, QTextParag * firstParag, int firstIndex,
-                             QTextParag * lastParag, int lastIndex )
+bool KWFindReplace::findInFrameSet( KWTextFrameSet * fs, QTextParag * firstParag, int firstIndex,
+                                    QTextParag * lastParag, int lastIndex )
 {
     // TODO formatting options are not implemented !
     // We need to reimplement what KoFind::find does, and add that.
@@ -310,28 +359,28 @@ bool KWFind::findInFrameSet( KWTextFrameSet * fs, QTextParag * firstParag, int f
     if ( firstParag == lastParag )
     {
         m_offset = firstIndex;
-        bool ret = find( firstParag->string()->toString().mid( firstIndex, lastIndex-firstIndex ),
+        bool ret = process( firstParag->string()->toString().mid( firstIndex, lastIndex-firstIndex ),
                          fs->paragRect( firstParag ) );
         fs->textDocument()->removeSelection( HIGHLIGHTSELECTION );
         return ret;
     }
     else
     {
-        bool forw = ! ( m_dialog->options() & KoFindDialog::FindBackwards );
+        bool forw = ! ( m_options & KoFindDialog::FindBackwards );
         bool ret = true;
         if ( forw )
         {
             m_offset = firstIndex;
             QString str = m_currentParag->string()->toString();
             str.truncate( str.length() - 1 ); // damn trailing space
-            ret = find( str.mid( firstIndex ), fs->paragRect( firstParag ) );
+            ret = process( str.mid( firstIndex ), fs->paragRect( firstParag ) );
             fs->textDocument()->removeSelection( HIGHLIGHTSELECTION );
             if (!ret) return false;
         }
         else
         {
             m_currentParag = lastParag;
-            ret = find( lastParag->string()->toString().left( lastIndex + 1 ), fs->paragRect( lastParag ) );
+            ret = process( lastParag->string()->toString().left( lastIndex + 1 ), fs->paragRect( lastParag ) );
             fs->textDocument()->removeSelection( HIGHLIGHTSELECTION );
             if (!ret) return false;
         }
@@ -342,7 +391,7 @@ bool KWFind::findInFrameSet( KWTextFrameSet * fs, QTextParag * firstParag, int f
         while ( m_currentParag && m_currentParag != endParag )
         {
             QString str = m_currentParag->string()->toString();
-            ret = find( str.left(str.length()-1), fs->paragRect( m_currentParag ) );
+            ret = process( str.left(str.length()-1), fs->paragRect( m_currentParag ) );
             fs->textDocument()->removeSelection( HIGHLIGHTSELECTION );
             if (!ret) return false;
             m_currentParag = forw ? m_currentParag->next() : m_currentParag->prev();
@@ -350,12 +399,12 @@ bool KWFind::findInFrameSet( KWTextFrameSet * fs, QTextParag * firstParag, int f
         ASSERT( endParag == m_currentParag );
         if ( forw )
         {
-            ret = find( lastParag->string()->toString().left( lastIndex + 1 ), fs->paragRect( lastParag ) );
+            ret = process( lastParag->string()->toString().left( lastIndex + 1 ), fs->paragRect( lastParag ) );
         } else {
             m_offset = firstIndex;
             QString str = m_currentParag->string()->toString();
             str.truncate( str.length() - 1 ); // damn trailing space
-            ret = find( str.mid( firstIndex ), fs->paragRect( firstParag ) );
+            ret = process( str.mid( firstIndex ), fs->paragRect( firstParag ) );
         }
         fs->textDocument()->removeSelection( HIGHLIGHTSELECTION );
         return ret;
@@ -366,7 +415,18 @@ bool KWFind::findInFrameSet( KWTextFrameSet * fs, QTextParag * firstParag, int f
     // see the last match after the dialog is closed (maybe?).
 }
 
-void KWFind::highlight( const QString &, int matchingIndex, int matchingLength, const QRect &expose )
+bool KWFindReplace::process( const QString &_text, const QRect &expose)
+{
+    if ( m_find )
+        return m_find->find( _text, expose );
+    else
+    {
+        QString text( _text );
+        return m_replace->replace( text, expose );
+    }
+}
+
+void KWFindReplace::highlight( const QString &, int matchingIndex, int matchingLength, const QRect &expose )
 {
     //kdDebug() << "KWFind::highlight " << matchingIndex << "," << matchingLength << " " << DEBUGRECT(expose) << endl;
 
@@ -387,150 +447,30 @@ void KWFind::highlight( const QString &, int matchingIndex, int matchingLength, 
     m_canvas->repaintChanged( m_currentFrameSet, true );
 }
 
-
-KWReplaceDia::KWReplaceDia( KWCanvas *canvas, const char *name, KWSearchContext *find, KWSearchContext *replace ):
-    KoReplaceDialog( canvas, name, find->m_options, find->m_strings, replace->m_strings )
+void KWFindReplace::replace( const QString &, int matchingIndex, int, const QRect &expose )
 {
-    // The dialog extension.
-    m_find = new KWSearchContextUI( find, findExtension() );
-    m_replace = new KWSearchContextUI( replace, replaceExtension() );
+    int index = m_offset + matchingIndex;
+    QTextDocument * textdoc = m_currentFrameSet->textDocument();
+    QTextCursor cursor( textdoc );
+    cursor.setParag( m_currentParag );
+    cursor.setIndex( index );
+    // Remove the match - this relies on highlight doing the right thing :)
+    textdoc->removeSelectedText( HIGHLIGHTSELECTION, &cursor );
+    // Insert the replacement
+    QTextFormat * format = m_currentParag->at( index )->format();
+    // ## TODO back references (qt3)
+    // TODO a macro command somehow
+    m_currentFrameSet->insert( &cursor, static_cast<KWTextFormat *>(format),
+                               m_replaceDlg->replacement(), true, false,
+                               i18n("Insert Replacement") );
+
+    m_canvas->ensureVisible( (expose.left()+expose.right()) / 2,  // point = center of the rect
+                             (expose.top()+expose.bottom()) / 2,
+                             (expose.right()-expose.left()) / 2,  // margin = half-width of the rect
+                             (expose.bottom()-expose.top()) / 2);
+
+    m_currentParag->setChanged( true );
+    m_canvas->repaintChanged( m_currentFrameSet, true );
 }
-
-void KWReplaceDia::slotOk()
-{
-    KoReplaceDialog::slotOk();
-
-    // Save the current state back into the context required.
-    m_find->setCtxOptions( KoReplaceDialog::options() );
-    m_replace->setCtxOptions( KoReplaceDialog::options() );
-}
-
-
-/*================================================================*/
-
-
-#if 0
-void KWSearchDia::searchFirst()
-{
-    QString expr = eSearch->text();
-    if ( expr.isEmpty() ) return;
-
-    bool addlen = true;
-
-    if ( !cRev->isChecked() )
-        canvas->find( expr, searchEntry, true, cCase->isChecked(), cWholeWords->isChecked(), cRegExp->isChecked(), cWildcard->isChecked(), addlen );
-    else
-        canvas->findRev( expr, searchEntry, true, cCase->isChecked(), cWholeWords->isChecked(), cRegExp->isChecked(), cWildcard->isChecked(), addlen );
-}
-
-/*================================================================*/
-void KWSearchDia::searchNext()
-{
-    QString expr = eSearch->text();
-    if ( expr.isEmpty() ) return;
-
-    bool addlen = true;
-
-    if ( !cRev->isChecked() )
-        canvas->find( expr, searchEntry, false, cCase->isChecked(), cWholeWords->isChecked(), cRegExp->isChecked(), cWildcard->isChecked(), addlen );
-    else
-        canvas->findRev( expr, searchEntry, false, cCase->isChecked(), cWholeWords->isChecked(), cRegExp->isChecked(), cWildcard->isChecked(), addlen );
-}
-
-/*================================================================*/
-void KWSearchDia::replaceFirst()
-{
-    QString expr = eSearch->text();
-    if ( expr.isEmpty() ) return;
-
-    bool addlen = false;
-    bool replace = false;
-
-    if ( !cRev->isChecked() )
-        replace = canvas->find( expr, searchEntry, true, cCase->isChecked(), cWholeWords->isChecked(), cRegExp->isChecked(),
-                              cWildcard->isChecked(), addlen, false );
-    else
-        replace = canvas->findRev( expr, searchEntry, true, cCase->isChecked(), cWholeWords->isChecked(), cRegExp->isChecked(),
-                                 cWildcard->isChecked(), addlen, false );
-
-    if ( replace )
-        canvas->replace( eReplace->text(), replaceEntry, addlen );
-}
-
-/*================================================================*/
-void KWSearchDia::replaceNext()
-{
-    QString expr = eSearch->text();
-    if ( expr.isEmpty() ) return;
-
-    bool addlen = false;
-    bool replace = false;
-
-    if ( !cRev->isChecked() )
-        replace = canvas->find( expr, searchEntry, false, cCase->isChecked(), cWholeWords->isChecked(), cRegExp->isChecked(),
-                              cWildcard->isChecked(), addlen, false );
-    else
-        replace = canvas->findRev( expr, searchEntry, false, cCase->isChecked(), cWholeWords->isChecked(), cRegExp->isChecked(),
-                                 cWildcard->isChecked(), addlen, false );
-
-    if ( replace )
-        canvas->replace( eReplace->text(), replaceEntry, addlen );
-}
-
-/*================================================================*/
-void KWSearchDia::replaceAll()
-{
-    QString expr = eSearch->text();
-    if ( expr.isEmpty() ) return;
-
-    bool first = true;
-    bool addlen = false;
-    bool replace = false;
-    bool select = cAsk->isChecked();
-
-    while ( true )
-    {
-        if ( !cRev->isChecked() )
-            replace = canvas->find( expr, searchEntry, first, cCase->isChecked(), cWholeWords->isChecked(), cRegExp->isChecked(),
-                                  cWildcard->isChecked(), addlen, select );
-        else
-            replace = canvas->findRev( expr, searchEntry, first, cCase->isChecked(), cWholeWords->isChecked(), cRegExp->isChecked(),
-                                     cWildcard->isChecked(), addlen, select );
-        first = false;
-
-        if ( replace && cAsk->isChecked() )
-        {
-            int result = KMessageBox::warningYesNoCancel( this,
-                                i18n( "Replace selected text?" ),
-                                i18n( "Replace" ),
-                                i18n( "&Replace" ), i18n( "&Skip" ) );
-
-            if (result == KMessageBox::Cancel)
-            {
-               // Cancel
-               break;
-            }
-
-            if (result == KMessageBox::No)
-            {
-                // Skip
-                if ( addlen ) canvas->addLen();
-                canvas->repaintScreen( false );
-                continue;
-            };
-
-            // KMessageBox::Yes
-            // Replace continues
-        }
-
-        if ( replace )
-            canvas->replace( eReplace->text(), replaceEntry, addlen );
-        else
-            break;
-    }
-
-    canvas->repaintScreen( false );
-}
-#endif
 
 #include "searchdia.moc"
