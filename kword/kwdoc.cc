@@ -2109,7 +2109,7 @@ QCursor KWDocument::getMouseCursor( const QPoint &nPoint, bool controlPressed )
             return cursor;
     }
 
-    return arrowCursor;
+    return ibeamCursor;
 }
 
 QList<KWFrame> KWDocument::getSelectedFrames() {
