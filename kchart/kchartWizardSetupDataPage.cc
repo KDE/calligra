@@ -10,7 +10,7 @@
 #include <qlabel.h>
 
 KChartWizardSetupDataPage::KChartWizardSetupDataPage( QWidget* parent,
-													  KChartPart* chart) :
+                                                                                                          KChartPart* chart) :
   QWidget( parent ),
   _chart( chart ),
   _parent( (KChartWizard*)parent )
@@ -25,7 +25,7 @@ KChartWizardSetupDataPage::KChartWizardSetupDataPage( QWidget* parent,
   datarow->setGeometry( 270, 40, 100, 20 );
   datarow->setText( i18n("Rows") );
   connect( datarow, SIGNAL( clicked() ),
-		   this, SLOT( dataInRowsClicked() ) );
+                   this, SLOT( dataInRowsClicked() ) );
   tmpQGroupBox->insert( datarow );
 
   datacol = new QRadioButton( this, "RadioButton_2" );
@@ -33,7 +33,7 @@ KChartWizardSetupDataPage::KChartWizardSetupDataPage( QWidget* parent,
   datacol->setText( i18n("Columns") );
   datacol->setChecked( true );
   connect( datarow, SIGNAL( clicked() ),
-		   this, SLOT( dataInColsClicked() ) );
+                   this, SLOT( dataInColsClicked() ) );
   tmpQGroupBox->insert( datacol );
 
   QLabel* tmpQLabel;
@@ -47,7 +47,7 @@ KChartWizardSetupDataPage::KChartWizardSetupDataPage( QWidget* parent,
   coldescript->setGeometry( 260, 110, 20, 30 );
   coldescript->setChecked( true );
   connect( coldescript, SIGNAL( toggled( bool ) ),
-		   this, SLOT( firstColumnIsDescriptionToggled( bool ) ) );
+                   this, SLOT( firstColumnIsDescriptionToggled( bool ) ) );
   coldescript->setText( "" );
   descrBG->insert( coldescript );
 
@@ -59,7 +59,7 @@ KChartWizardSetupDataPage::KChartWizardSetupDataPage( QWidget* parent,
   rowdescript = new QCheckBox( this, "CheckBox_4" );
   rowdescript->setGeometry( 260, 150, 20, 30 );
   connect( rowdescript, SIGNAL( toggled( bool ) ),
-		   this, SLOT( firstRowIsDescriptionToggled( bool ) ) );
+                   this, SLOT( firstRowIsDescriptionToggled( bool ) ) );
   rowdescript->setText( "" );
   descrBG->insert( rowdescript );
 
@@ -79,7 +79,7 @@ KChartWizardSetupDataPage::KChartWizardSetupDataPage( QWidget* parent,
   preview->show();
   _chart->addAutoUpdate( preview );
   preview->resize( tmpQFrame->contentsRect().width(),
-				   tmpQFrame->contentsRect().height() );
+                                   tmpQFrame->contentsRect().height() );
   */
   //parent->resize( 400, 350 );
 }
@@ -95,34 +95,34 @@ KChartWizardSetupDataPage::~KChartWizardSetupDataPage()
 
 void KChartWizardSetupDataPage::dataInRowsClicked()
 {
-  _parent->emitNeedNewData( _parent->dataArea(), KChartWizard::Row,
-								 coldescript->isChecked(),
-								 rowdescript->isChecked() );
+  _parent->emitNeedNewData( _parent->dataArea().latin1(), KChartWizard::Row,
+                                                                 coldescript->isChecked(),
+                                                                 rowdescript->isChecked() );
 }
 
 void KChartWizardSetupDataPage::dataInColsClicked()
 {
-  _parent->emitNeedNewData( _parent->dataArea(), KChartWizard::Col,
-							coldescript->isChecked(),
-							rowdescript->isChecked() );
+  _parent->emitNeedNewData( _parent->dataArea().latin1(), KChartWizard::Col,
+                                                        coldescript->isChecked(),
+                                                        rowdescript->isChecked() );
 }
 
 void KChartWizardSetupDataPage::firstColumnIsDescriptionToggled( bool )
 {
-  _parent->emitNeedNewData( _parent->dataArea(),
-							( datarow->isChecked() ? KChartWizard::Row :
-							  KChartWizard::Col ),
-							coldescript->isChecked(),
-							rowdescript->isChecked() );
+  _parent->emitNeedNewData( _parent->dataArea().latin1(),
+                                                        ( datarow->isChecked() ? KChartWizard::Row :
+                                                          KChartWizard::Col ),
+                                                        coldescript->isChecked(),
+                                                        rowdescript->isChecked() );
 }
 
 void KChartWizardSetupDataPage::firstRowIsDescriptionToggled( bool )
 {
-  _parent->emitNeedNewData( _parent->dataArea(),
-							( datarow->isChecked() ? KChartWizard::Row :
-							  KChartWizard::Col ),
-							coldescript->isChecked(),
-							rowdescript->isChecked() );
+  _parent->emitNeedNewData( _parent->dataArea().latin1(),
+                                                        ( datarow->isChecked() ? KChartWizard::Row :
+                                                          KChartWizard::Col ),
+                                                        coldescript->isChecked(),
+                                                        rowdescript->isChecked() );
 }
 
 

@@ -34,11 +34,11 @@ KChartEngine keng;
 
 
 int out_graph( short imagewidth,         // no check for an output device that's too small to fit
-	   short imageheight,        // needed info (labels, etc), could core dump
-	   QPainter* p,	             // paint into this painter
-	   KChartParameters* params, // the parameters of the chart
-	   const KChartData& data
-	   )
+           short imageheight,        // needed info (labels, etc), could core dump
+           QPainter* p,              // paint into this painter
+           KChartParameters* params, // the parameters of the chart
+           const KChartData& data
+           )
 {  // temporary stuff for initializing the engine
   keng.params = params;
   keng.data = &data;
@@ -66,12 +66,12 @@ int KChartEngine::out_graph() {
   doLabels();
     //  i.e., not up against Y axes
   do_ylbl_fractions =   // %f format not given, or
-		( params->ylabel_fmt.isEmpty() ||					//  format doesn't have a %,g,e,E,f or F
-		  params->ylabel_fmt.length() == strcspn(params->ylabel_fmt,"%geEfF") );
+                ( params->ylabel_fmt.isEmpty() ||                                       //  format doesn't have a %,g,e,E,f or F
+                  params->ylabel_fmt.length() == strcspn(params->ylabel_fmt.latin1(),"%geEfF") );
     if( params->thumbnail ) {
-		params->grid = FALSE;
-		params->xaxis = FALSE;
-		params->yaxis = FALSE;
+                params->grid = FALSE;
+                params->xaxis = FALSE;
+                params->yaxis = FALSE;
     }
     kdDebug(35001) << "done thumbnails" << endl;
     /* ----- highest & lowest values ----- */
@@ -90,19 +90,19 @@ int KChartEngine::out_graph() {
     if( params->do_vol() ) {
       VolColor = params->VolColor;
       for(int i=0; i<num_points; ++i )
-	if( params->ExtVolColor.count() )
-	  ExtVolColor[i] = params->ExtVolColor.color( i );
-	else
-	  ExtVolColor[i] = VolColor;
+        if( params->ExtVolColor.count() )
+          ExtVolColor[i] = params->ExtVolColor.color( i );
+        else
+          ExtVolColor[i] = VolColor;
     }
 
-    //	ArrowDColor    = gdImageColorAllocate( im, 0xFF,    0, 0 );
-    //	ArrowUColor    = gdImageColorAllocate( im,    0, 0xFF, 0 );
+    //  ArrowDColor    = gdImageColorAllocate( im, 0xFF,    0, 0 );
+    //  ArrowUColor    = gdImageColorAllocate( im,    0, 0xFF, 0 );
     if( params->annotation )
-		AnnoteColor = params->annotation->color;
+                AnnoteColor = params->annotation->color;
     /* attempt to import optional background image */
-	kdDebug(35001) << "before bgimage" << endl;
-	drawBackgroundImage();
+        kdDebug(35001) << "before bgimage" << endl;
+        drawBackgroundImage();
     kdDebug(35001) << "Color settings coming!" << endl;
     prepareColors();
     // PENDING(kalle) Do some sophisticated things that involve QPixmap::createHeuristicMask
@@ -111,14 +111,14 @@ int KChartEngine::out_graph() {
     if( params->transparent_bg )
       kdDebug(35001) << "Sorry, transparent backgrounds are not supported yet." << endl;
     //     if( params->transparent_bg )
-    // 	gdImageColorTransparent( im, BGColor );
+    //  gdImageColorTransparent( im, BGColor );
     kdDebug(35001) << "Title text is coming" << endl;
     titleText();
     kdDebug(35001) << "start drawing, first the grids" << endl;
     if(!params->isPie()) {
-	  drawGridAndLabels(do_ylbl_fractions);
-	  kdDebug(35001) << "more advanced grids" << endl;
-	}
+          drawGridAndLabels(do_ylbl_fractions);
+          kdDebug(35001) << "more advanced grids" << endl;
+        }
     /* intervening set grids */
     /*  0 < setno < num_sets   non-inclusive, they've already been covered */
     if( params->grid && params->threeD() && !params->isPie())
@@ -127,13 +127,13 @@ int KChartEngine::out_graph() {
       draw3DGrids();
     }
     if( ( params->grid || params->shelf ) && /* line color grid at 0 */
-		( (lowest < 0.0 && highest > 0.0) ||
-		  (lowest < 0.0 && highest > 0.0) ) && !params->isPie()) {
+                ( (lowest < 0.0 && highest > 0.0) ||
+                  (lowest < 0.0 && highest > 0.0) ) && !params->isPie()) {
       kdDebug(35001) << "drawing shelf grids" << endl;
       drawShelfGrids();
     }
     /* x ticks and xlables */
-    if( (params->grid || params->xaxis) &&!params->isPie() )	
+    if( (params->grid || params->xaxis) &&!params->isPie() )
     {
 
       kdDebug(35001) << "drawing  x ticks and xlabels" << endl;
@@ -144,9 +144,9 @@ int KChartEngine::out_graph() {
     if( params->do_vol() && !params->isPie() ) {
       kdDebug(35001) << "Doing volume grids" << endl;
       drawVolumeGrids();
-    }		// volume polys done
+    }           // volume polys done
     if( params->annotation && params->threeD() &&!params->isPie())
-    {		/* back half of annotation line */
+    {           /* back half of annotation line */
       kdDebug(35001) << "drawing 3d annotation" << endl;
       draw3DAnnotation();
     }
@@ -156,7 +156,7 @@ int KChartEngine::out_graph() {
     setno = 0;
     if( params->scatter && !params->isPie())
     {
-	kdDebug(35001) << "scatter" << endl;
+        kdDebug(35001) << "scatter" << endl;
       drawScatter();
     }
     // overlay with a value and an arrow (e.g., total daily change)
@@ -173,12 +173,12 @@ int KChartEngine::out_graph() {
       drawBorder();
     }
 
-    if( params->shelf && params->threeD() &&	/* front of 0 shelf */
-	( (lowest < 0.0 && highest > 0.0) ||
-	  (lowest < 0.0 && highest > 0.0) ) &&!params->isPie())
-	   {
-      	   draw3DShelf();
-    	   }
+    if( params->shelf && params->threeD() &&    /* front of 0 shelf */
+        ( (lowest < 0.0 && highest > 0.0) ||
+          (lowest < 0.0 && highest > 0.0) ) &&!params->isPie())
+           {
+           draw3DShelf();
+           }
 
     if (params->annotation && !params->isPie())
     {
@@ -188,4 +188,4 @@ int KChartEngine::out_graph() {
   return 0;
 }
 
-/* rem circle:  x = rcos(@), y = rsin(@)	*/
+/* rem circle:  x = rcos(@), y = rsin(@)        */

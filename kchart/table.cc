@@ -21,15 +21,15 @@
 #include <kapp.h>
 
 SheetTable::SheetTable( int cols, int rows, QWidget *parent,
-			  int flags, const char *name, bool _editable)
+                          int flags, const char *name, bool _editable)
     :QTableView(parent,name)
 {
     editable = _editable;
     if ( flags < 0 )
-	setTableFlags( Tbl_clipCellPainting| Tbl_vScrollBar | Tbl_hScrollBar |
-		       Tbl_snapToGrid| Tbl_cutCells );
+        setTableFlags( Tbl_clipCellPainting| Tbl_vScrollBar | Tbl_hScrollBar |
+                       Tbl_snapToGrid| Tbl_cutCells );
     else
-	setTableFlags( flags );
+        setTableFlags( flags );
 
     setNumRows(rows);
     setNumCols(cols);
@@ -47,14 +47,14 @@ SheetTable::SheetTable( int cols, int rows, QWidget *parent,
 
     if (editable)
       {
-	input = new QLineEdit(this);
-	input->setFrame(false);
-	input->resize( cellWidth()-2, cellHeight()-2 );
-	moveInput(0,0);
-	input->setFocus();
-	connect( input, SIGNAL(returnPressed()), this, SLOT(nextInput()) );
+        input = new QLineEdit(this);
+        input->setFrame(false);
+        input->resize( cellWidth()-2, cellHeight()-2 );
+        moveInput(0,0);
+        input->setFocus();
+        connect( input, SIGNAL(returnPressed()), this, SLOT(nextInput()) );
       }
-	
+
     setBackgroundColor(colorGroup().base());
 }
 
@@ -69,10 +69,10 @@ void SheetTable::setText( int row, int col, QString s, bool paint )
 {
   //table[index(row,col)].operator=( s.copy() );
   table.remove(index(row,col));
-  table.insert(index(row,col),s);
+  table.insert(index(row,col),s.latin1());
   int x,y;
     if ( paint && rowYPos( row, &y ) && colXPos( col, &x ))
-	repaint( x,y, cellWidth(col), cellHeight(row));
+        repaint( x,y, cellWidth(col), cellHeight(row));
     if (row == inRow && col == inCol && editable)
       input->setText(s);
 }
@@ -87,12 +87,12 @@ void SheetTable::placeInput()
     // makeVisible( inRow, inCol );
     int x,y;
     if ( colXPos(inCol,&x) && rowYPos(inRow,&y) ) {
-	input->move(x+1,y+1);
-	input->show();
-	if (!input->hasFocus())
-	    input->setFocus();
+        input->move(x+1,y+1);
+        input->show();
+        if (!input->hasFocus())
+            input->setFocus();
     } else
-	input->hide();
+        input->hide();
 }
 
 void SheetTable::paintCell( QPainter *p, int row, int col )
@@ -117,18 +117,18 @@ void SheetTable::paintCell( QPainter *p, int row, int col )
       //str = table[index(row,col)].copy();
       str = table.at(index(row,col));
     //    if ( str.isEmpty() )
-    //	str.sprintf( "%c%d", col+'A', row );
+    //  str.sprintf( "%c%d", col+'A', row );
     p->drawText( 1, 1, cellWidth()-2, cellHeight()-2,
-		 AlignCenter, str );
+                 AlignCenter, str );
 
     if ( row == inRow && col == inCol && editable)
-	placeInput();
+        placeInput();
 
 }
 
 void SheetTable::setInputText( QString s )
 {
-    input->setText( s.data() );
+    input->setText( s );
 }
 
 void SheetTable::nextInput()
@@ -136,21 +136,21 @@ void SheetTable::nextInput()
     int c = inCol;
     int r = ( inRow + 1 ) % numRows();
     if ( !r )
-	c = ( inCol + 1 ) % numCols();
+        c = ( inCol + 1 ) % numCols();
     moveInput( r, c );
 }
 
 void SheetTable::moveInput( int row, int col )
 {
     if ( col < 0 || row < 0 )
-	return;
+        return;
     if ( col == inCol && row == inRow )
-	return;
+        return;
 
    if ( inRow >= 0 && inCol >= 0 ) {
-	QString str = input->text();
-	setText( inRow, inCol, str );
-	emit newText(inRow, inCol, str );
+        QString str = input->text();
+        setText( inRow, inCol, str );
+        emit newText(inRow, inCol, str );
     }
     inCol = col;
     inRow = row;
@@ -162,21 +162,21 @@ void SheetTable::moveInput( int row, int col )
 void SheetTable::makeVisible( int row, int col )
 {
     if ( col < leftCell() ) {
-	setLeftCell(col);
-	emit newCol(col);
+        setLeftCell(col);
+        emit newCol(col);
     } else if ( col > lastColVisible() ) {
-	int c = leftCell() + col - lastColVisible();
-	setLeftCell(c);
-	emit newCol(c);
+        int c = leftCell() + col - lastColVisible();
+        setLeftCell(c);
+        emit newCol(c);
     }
 
     if ( row < topCell() ) {
-	setTopCell(row);
-	emit newRow(row);
+        setTopCell(row);
+        emit newRow(row);
     } else if ( row > lastRowVisible() ) {
-	int r = topCell() + row - lastRowVisible();
-	setTopCell(r);
-	emit newRow(r);
+        int r = topCell() + row - lastRowVisible();
+        setTopCell(r);
+        emit newRow(r);
     }
 }
 
