@@ -76,3 +76,4 @@ QString KarbonPartIface::unitName() const
 {
     return m_part->getUnitName();
 }
+

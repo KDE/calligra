@@ -95,8 +95,8 @@ public slots:
 	void editDeleteSelection();
 	void editPurgeHistory();
 
-	void selectionMoveToTop();
-	void selectionMoveToBottom();
+	void selectionBringToFront();
+	void selectionSendToBack();
 	void selectionMoveUp();
 	void selectionMoveDown();
 

@@ -2,8 +2,8 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#ifndef __VNODESELECTOR_H__
-#define __VNODESELECTOR_H__
+#ifndef __VSELECTNODES_H__
+#define __VSELECTNODES_H__
 
 
 #include <qptrlist.h>
@@ -17,16 +17,16 @@
 class VSegment;
 
 
-class VNodeSelector : public VVisitor
+class VSelectNodes : public VVisitor
 {
 protected:
-	VNodeSelector()
+	VSelectNodes()
 		{ m_deselect = true; }
 
 public:
-	VNodeSelector( const KoPoint& point )
+	VSelectNodes( const KoPoint& point )
 		{ m_deselect = false; m_point = point; }
-	VNodeSelector( const KoRect& rect )
+	VSelectNodes( const KoRect& rect )
 		{ m_deselect = false; m_rect = rect; }
 
 	virtual void visitVSegmentList( VSegmentList& segmentList );
@@ -41,9 +41,9 @@ private:
 };
 
 
-class VNodeDeselector : public VNodeSelector
+class VDeselectNodes : public VSelectNodes
 {
-	VNodeDeselector() : VNodeSelector() {}
+	VDeselectNodes() : VSelectNodes() {}
 };
 
 #endif

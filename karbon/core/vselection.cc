@@ -8,7 +8,7 @@
 
 #include "vdocument.h"
 #include "vselection.h"
-#include "vnodeselector.h"
+#include "vselectnodes.h"
 
 VSelection::VSelection( VObject* parent )
 	: VObject( parent )
@@ -101,7 +101,7 @@ VSelection::append( const KoRect& rect )
 // TODO: use a zoom dependant vflatten visitor to achieve finer resolution:
 				itr2.current()->boundingBox().intersects( rect ) )
 			{
-				VNodeSelector op( rect );
+				VSelectNodes op( rect );
 				op.visit( *itr.current() );
 				append( itr2.current() );
 				QPtrListIterator<VSegment> it2( op.result() );
@@ -253,7 +253,7 @@ VSelection::clearNodes()
 void
 VSelection::appendNodes()
 {
-	VNodeSelector op;
+	VSelectNodes op;
 	m_segments.clear();
 	VObjectListIterator itr = m_objects;
 	for( ; itr.current(); ++itr )
@@ -269,7 +269,7 @@ VSelection::appendNodes()
 bool
 VSelection::checkNode( const KoPoint &p )
 {
-	VNodeSelector op( p );
+	VSelectNodes op( p );
 
 	VObjectListIterator itr = m_objects;
 	for( ; itr.current(); ++itr )
@@ -291,7 +291,7 @@ VSelection::checkNode( const KoPoint &p )
 bool
 VSelection::appendNode( const KoPoint &p )
 {
-	VNodeSelector op( p );
+	VSelectNodes op( p );
 
 	VObjectListIterator itr = m_objects;
 	for( ; itr.current(); ++itr )

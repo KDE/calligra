@@ -37,7 +37,7 @@
 #include "vfillcmd.h"
 #include "vflattencmd.h"
 #include "vgroupcmd.h"
-#include "vorderselectioncmd.h"
+#include "vzordercmd.h"
 #include "vinsertknotscmd.h"
 #include "vroundcornerscmd.h"
 #include "vstrokecmd.h"
@@ -323,27 +323,31 @@ KarbonView::editPurgeHistory()
 }
 
 void
-KarbonView::selectionMoveToTop()
+KarbonView::selectionBringToFront()
 {
-	m_part->addCommand( new VOrderSelectionCmd( &m_part->document(), VOrderSelectionCmd::bringtofront ), true );
+	m_part->addCommand(
+		new VZOrderCmd( &m_part->document(), VZOrderCmd::bringToFront ), true );
 }
 
 void
 KarbonView::selectionMoveUp()
 {
-	m_part->addCommand( new VOrderSelectionCmd( &m_part->document(), VOrderSelectionCmd::up ), true );
+	m_part->addCommand(
+		new VZOrderCmd( &m_part->document(), VZOrderCmd::up ), true );
 }
 
 void
 KarbonView::selectionMoveDown()
 {
-	m_part->addCommand( new VOrderSelectionCmd( &m_part->document(), VOrderSelectionCmd::down ), true );
+	m_part->addCommand(
+		new VZOrderCmd( &m_part->document(), VZOrderCmd::down ), true );
 }
 
 void
-KarbonView::selectionMoveToBottom()
+KarbonView::selectionSendToBack()
 {
-	m_part->addCommand( new VOrderSelectionCmd( &m_part->document(), VOrderSelectionCmd::sendtoback ), true );
+	m_part->addCommand(
+		new VZOrderCmd( &m_part->document(), VZOrderCmd::sendToBack ), true );
 }
 
 void
@@ -788,7 +792,7 @@ KarbonView::initActions()
 	// object ----->
 	new KAction(
 		i18n( "Bring to &Front" ), 0, QKeySequence("Shift+PgUp"), this,
-		SLOT( selectionMoveToTop() ), actionCollection(), "object_move_totop" );
+		SLOT( selectionBringToFront() ), actionCollection(), "object_move_totop" );
 	new KAction(
 		i18n( "&Raise" ), 0, QKeySequence("Ctrl+PgUp"), this,
 		SLOT( selectionMoveUp() ), actionCollection(), "object_move_up" );
@@ -797,7 +801,7 @@ KarbonView::initActions()
 		SLOT( selectionMoveDown() ), actionCollection(), "object_move_down" );
 	new KAction(
 		i18n( "Send to &Back" ), 0, QKeySequence("Shift+PgDown"), this,
-		SLOT( selectionMoveToBottom() ), actionCollection(), "object_move_tobottom" );
+		SLOT( selectionSendToBack() ), actionCollection(), "object_move_tobottom" );
 	new KAction(
 		i18n( "&Group Objects" ), 0, QKeySequence("Ctrl+G"), this,
 		SLOT( groupSelection() ), actionCollection(), "selection_group" );

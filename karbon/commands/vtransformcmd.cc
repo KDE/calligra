@@ -9,8 +9,8 @@
 #include "vtransformcmd.h"
 
 
-VTransformCmd::VTransformCmd( VDocument *doc, const QWMatrix& mat, bool selectedSubObjects )
-		: VCommand( doc, i18n( "Transform Objects" ) ), m_mat( mat ), m_selectedSubObjects( selectedSubObjects )
+VTransformCmd::VTransformCmd( VDocument *doc, const QWMatrix& mat )
+	: VCommand( doc, i18n( "Transform Objects" ) ), m_mat( mat )
 {
 	m_selection = m_doc->selection()->clone();
 
@@ -24,8 +24,6 @@ VTransformCmd::VTransformCmd( VDocument *doc, const QString& name )
 	m_selection = m_doc->selection()
 		? new VSelection( *m_doc->selection() )
 		: new VSelection();
-
-	m_selectedSubObjects = false;
 }
 
 VTransformCmd::~VTransformCmd()

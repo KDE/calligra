@@ -1,28 +1,27 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
    Copyright (C) 2002, The Karbon Developers
 */
 
 #include <klocale.h>
 
-#include "vorderselectioncmd.h"
+#include "vzordercmd.h"
 #include "vselection.h"
 
-VOrderSelectionCmd::VOrderSelectionCmd( VDocument *doc, VOrder state )
+VZOrderCmd::VZOrderCmd( VDocument *doc, VOrder state )
 	: VCommand( doc, i18n( "Order Selection" ) ), m_state( state )
 {
 	m_selection = m_doc->selection()->clone();
 }
 
-VOrderSelectionCmd::~VOrderSelectionCmd()
+VZOrderCmd::~VZOrderCmd()
 {
 	delete( m_selection );
 }
 
 void
-VOrderSelectionCmd::execute()
+VZOrderCmd::execute()
 {
-	if( m_state == sendtoback )
+	if( m_state == sendToBack )
 	{
 		VObjectListIterator itr( m_doc->selection()->objects() );
 		for ( itr.toLast() ; itr.current() ; --itr )
@@ -41,7 +40,7 @@ VOrderSelectionCmd::execute()
 			}
 		}
 	}
-	else if( m_state == bringtofront )
+	else if( m_state == bringToFront )
 	{
 		VObjectListIterator itr( m_doc->selection()->objects() );
 		for ( ; itr.current() ; ++itr )
@@ -104,6 +103,7 @@ VOrderSelectionCmd::execute()
 }
 
 void
-VOrderSelectionCmd::unexecute()
+VZOrderCmd::unexecute()
 {
 }
+

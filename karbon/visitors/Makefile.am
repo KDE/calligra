@@ -13,8 +13,8 @@ noinst_HEADERS = \
 	vcleanup.h \
 	vflatten.h \
 	vinsertknots.h \
-	vnodeselector.h \
 	vroundcorners.h \
+	vselectnodes.h \
 	vtransformnodes.h \
 	vvisitor.h \
 	vwhirlpinch.h
@@ -24,8 +24,8 @@ libkarbonvisitors_la_SOURCES = \
 	vcleanup.cc \
 	vflatten.cc \
 	vinsertknots.cc \
-	vnodeselector.cc \
 	vroundcorners.cc \
+	vselectnodes.cc \
 	vtransformnodes.cc \
 	vvisitor.cc \
 	vwhirlpinch.cc

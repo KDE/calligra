@@ -74,13 +74,13 @@ KarbonViewIface::editPurgeHistory()
 void
 KarbonViewIface::objectMoveToTop()
 {
-	m_view->selectionMoveToTop();
+	m_view->selectionBringToFront();
 }
 
 void
 KarbonViewIface::objectMoveToBottom()
 {
-	m_view->selectionMoveToBottom();
+	m_view->selectionSendToBack();
 }
 
 void

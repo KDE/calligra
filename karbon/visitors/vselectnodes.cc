@@ -2,12 +2,12 @@
    Copyright (C) 2002, The Karbon Developers
 */
 
-#include "vnodeselector.h"
 #include "vsegment.h"
 #include "vsegmentlist.h"
+#include "vselectnodes.h"
 
 void
-VNodeSelector::visitVSegmentList( VSegmentList& segmentList )
+VSelectNodes::visitVSegmentList( VSegmentList& segmentList )
 {
 	segmentList.first();
 

@@ -159,7 +159,6 @@ VEditNodeTool::eventFilter( QEvent* event )
 					&view()->part()->document(),
 					qRound( ( lp.x() - fp.x() ) * ( 1.0 / view()->zoom() ) ),
 					qRound( ( lp.y() - fp.y() ) * ( 1.0 / view()->zoom() ) ) );
-			cmd->setSelectedSubObjects( true );
 			view()->part()->addCommand( cmd, true );
 
 //			view()->part()->repaintAllViews();
