@@ -983,13 +983,14 @@ public:
 
     void setDocumentRect( const QRect &r );
     int documentWidth() const;
-    int documentVisibleWidth() const;
+    //int documentVisibleWidth() const;
     int documentX() const;
     int documentY() const;
     KoTextFormatCollection *formatCollection() const;
     //void setFormatter( KoTextFormatterBase *f );
     KoTextFormatterBase *formatter() const;
-    int minimumWidth() const;
+    //int minimumWidth() const;
+    int widthUsed() const;
 
     int nextTabDefault( int i, int x );
     int nextTab( int i, int x ); // kotextparag.cc
@@ -1020,7 +1021,7 @@ public:
     //QColor *backgroundColor() const { return bgcol; }
     //void clearBackgroundColor();
 
-    bool isLineBreak() const { return isBr; }
+    //bool isLineBreak() const { return isBr; }
 
     void setMovedDown( bool b ) { movedDown = b; }
     bool wasMovedDown() const { return movedDown; }
@@ -1054,19 +1055,17 @@ private:
     //uint lastInFrame : 1;
     uint visible : 1;
     uint breakable : 1;
-    uint isBr : 1;
+    //uint isBr : 1;
     uint movedDown : 1;
     uint align : 4;
     short int m_lineChanged;
     int id;
+    int m_wused;
     KoTextString *str;
     QMap<int, KoTextParagSelection> *mSelections;
     QPtrList<KoTextCustomItem> *mFloatingItems;
     //int tm, bm, lm, rm, flm; // margins
     KoTextFormat *defFormat; // is this really used?
-#ifdef QTEXTTABLE_AVAILABLE
-    KoTextTableCell *tc;
-#endif
     //int numCustomItems;
     int *tArray;
     //KoTextParagData *eData;
@@ -1102,7 +1101,7 @@ public:
     virtual void setAllowBreakInWords( bool b ) { biw = b; }
     bool allowBreakInWords() const { return biw; }
 
-    int minimumWidth() const { return thisminw; }
+    //int minimumWidth() const { return thisminw; }
     int widthUsed() const { return thiswused; }
 
     // This setting is passed to KoTextParag::fixParagWidth by postFormat()

@@ -49,7 +49,7 @@ struct TemporaryWordData
 {
     int baseLine;
     int height;
-    int lineWidth;
+    int lineWidth; // value of wused
 };
 
 // Originally based on QTextFormatterBreakWords::format()
@@ -99,12 +99,13 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
     if ( doc && rtl )
         currentRightMargin += parag->firstLineMargin();
     int initialRMargin = currentRightMargin;
-    int dw = 0;
 
-    if (doc)
-        doc->flow()->adjustMargins( y + parag->rect().y(), initialHeight, x, initialRMargin, dw, parag );
-    else // never the case in kotext
-        dw = parag->documentVisibleWidth();
+    // dw is the document width, i.e. the maximum available width, all included.
+    // We are in a variable-width design, so it is returned by each call to adjustMargins.
+    int dw = 0;
+    //if (doc) // always true in kotext
+    doc->flow()->adjustMargins( y + parag->rect().y(), initialHeight, x, initialRMargin, dw, parag );
+    //else dw = parag->documentVisibleWidth();
 
     int initialLMargin = x;
     curLeft = x;
@@ -116,10 +117,19 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
     kdDebug(32500) << "KoTextFormatter::format left=" << left << " initialHeight=" << initialHeight << " initialLMargin=" << initialLMargin << " initialRMargin=" << initialRMargin << " availableWidth=" << availableWidth << endl;
 #endif
     bool fullWidth = TRUE;
-    int marg = left + initialRMargin;
-    int minw = 0;
+    //int marg = left + initialRMargin;
+
+    // minw is the really minimum width needed for this paragraph, i.e.
+    // the width of the longest set of non-breakable characters together.
+    // Currently unused.
+    //int minw = 0;
+
+    // wused is the width of the wider line (with the
+    // current word-breaking, margins included, but e.g. centering not included).
+    // Unused in KWord currently, this is however used by KPresenter's
+    // "resize object to fit contents" feature.
     int wused = 0;
-    int tminw = marg;
+
     bool wrapEnabled = isWrapEnabled( parag );
     QValueList<TemporaryWordData> tempWordData;
 
@@ -130,9 +140,11 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
     KoTextParagLineStart *lineStart = new KoTextParagLineStart( y, 0, 0 );
     insertLineStart( parag, 0, lineStart );
     int lastBreak = -1;
-    // tmph and tmpBaseLine are used after the last breakable char
+    // tmph, tmpBaseLine and tminw are used after the last breakable char
     // we don't know yet if we'll break there, or later.
     int tmpBaseLine = 0, tmph = 0;
+    //int tminw = marg;
+    int tmpWused = 0;
     bool lastWasNonInlineCustom = FALSE;
 
     int align = parag->alignment();
@@ -295,7 +307,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
                                 const TemporaryWordData& twd = tempWordData[ hypos ];
                                 lineStart->baseLine = twd.baseLine;
                                 lineStart->h = twd.height;
-                                lineStart->w = twd.lineWidth;
+                                tmpWused = twd.lineWidth;
                             }
                             break;
                         }
@@ -354,7 +366,8 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
                 tmpBaseLine = lineStart->baseLine;
                 lastBreak = -1;
                 col = 0;
-                tminw = marg; // not in QRT?
+                //tminw = marg; // not in QRT?
+                tmpWused = 0;
                 // recalc everything for 'i', it might still not be ok where it is...
                 // (e.g. if there's no room at all on this line)
                 // But we don't want to do this forever, so we check against maxY (if known)
@@ -427,7 +440,8 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
                 tmpBaseLine = lineStart->baseLine;
                 lastBreak = -1;
                 col = 0;
-                tminw = marg;
+                //tminw = marg;
+                tmpWused = 0;
                 // If we're after maxY, time to stop. Hopefully KWord will create more pages.
                 if ( maxY > -1 && y >= maxY )
                     break;
@@ -444,8 +458,10 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
                 //kdDebug(32500) << " -> tmpBaseLine/tmph : " << tmpBaseLine << "/" << tmph << endl;
             }
             tempWordData.clear();
-            minw = QMAX( minw, tminw );
-            tminw = marg + ww;
+            //minw = QMAX( minw, tminw );
+            //tminw = marg + ww;
+            wused = QMAX( wused, tmpWused );
+            tmpWused = 0;
             // (combine lineStart and tmpBaseLine/tmph)
             //kdDebug(32500) << "Breakable character: combining " << lineStart->baseLine << "/" << h << " with " << tmpBaseLine << "/" << tmph << endl;
             int belowBaseLine = QMAX( lineHeight - lineStart->baseLine, tmph - tmpBaseLine );
@@ -491,6 +507,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
                     curLeft = x;
                     lastBreak = -1;
                     col = 0;
+                    //minw = x;
 #ifdef DEBUG_FORMATTER
                     kdDebug(32500) << "Restarting with i=" << i << " x=" << x << " y=" << y << " lineHeight=" << lineHeight << " initialHeight=" << initialHeight << " initialLMargin=" << initialLMargin << " initialRMargin=" << initialRMargin << " y=" << y << endl;
 #endif
@@ -500,6 +517,8 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 #ifndef REF_IS_LU
                     pixelww = c->pixelwidth;
 #endif
+                    //tminw = x + ww;
+                    tmpWused = 0;
                 }
             }
 
@@ -509,7 +528,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 
         } else {
             // Non-breakable character
-            tminw += ww;
+            //tminw += ww;
             //kdDebug(32500) << " Non-breakable character: combining " << tmpBaseLine << "/" << tmph << " with " << c->ascent() << "/" << c->height() << endl;
             // (combine tmpBaseLine/tmph and this character)
             int belowBaseLine = QMAX( tmph - tmpBaseLine, c->height() - c->ascent() );
@@ -520,7 +539,7 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
             TemporaryWordData twd;
             twd.baseLine = tmpBaseLine;
             twd.height = tmph;
-            twd.lineWidth = tminw; // ### check this is correct
+            twd.lineWidth = tmpWused;
             tempWordData.append( twd );
         }
 
@@ -533,14 +552,15 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
         kdDebug(32500) << "LU: x=" << x << " [equiv. to pix=" << zh->layoutUnitToPixelX( x ) << "] ; PIX: x=" << pixelx << "  --> adj=" << c->pixelxadj << endl;
 #endif
 
+        x += ww;
+
         if ( i > 0 )
             lastChr->pixelwidth = pixelx - lastPixelx;
         if ( i < len - 1 )
-            wused = QMAX( wused, x );
+            tmpWused = QMAX( tmpWused, x );
         else // trailing space
             c->pixelwidth = zh->layoutUnitToPixelX( ww ); // was: pixelww;
 
-        x += ww;
         lastPixelx = pixelx;
 #ifdef REF_IS_LU
         pixelx = zh->layoutUnitToPixelX( x ); // no accumulating rounding errors anymore
@@ -583,7 +603,8 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
         delete lineStart2;
     }
 
-    minw = QMAX( minw, tminw );
+    //minw = QMAX( minw, tminw );
+    wused = QMAX( wused, tmpWused );
 
     int m = parag->bottomMargin();
     // ##### Does OOo add margins or does it max them?
@@ -597,10 +618,10 @@ int KoTextFormatter::format( KoTextDocument *doc, KoTextParag *parag,
 #endif
     y += lineHeight + m;
 
-    wused += currentRightMargin;
-    if ( !wrapEnabled || wrapAtColumn() != -1  )
-        minw = QMAX(minw, wused);
-    thisminw = minw;
+    tmpWused += currentRightMargin; // ### this can break with a variable right-margin
+    //if ( !wrapEnabled || wrapAtColumn() != -1  )
+    //    minw = QMAX(minw, wused);
+    //thisminw = minw;
     thiswused = wused;
     return y;
 }

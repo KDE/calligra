@@ -895,6 +895,8 @@ QString KoTextFormat::displayedString( const QString& str )const
 
 QChar KoTextFormat::displayedChar( QChar c )const
 {
+    if ( c.unicode() == 0xa0 ) // nbsp
+        return ' ';
     switch ( m_attributeFont ) {
     case ATT_NONE:
         return c;

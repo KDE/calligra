@@ -526,6 +526,7 @@ void KoTextParag::paintLines( QPainter &painter, const QColorGroup &cg, KoTextCu
     int xstart, xend = 0;
 
     QString qstr = str->toString();
+    qstr.replace( QChar(0x00a0U), ' ' ); // Not all fonts have non-breakable-space glyph
 
     const int nSels = doc ? doc->numSelections() : 1;
     QMemArray<int> selectionStarts( nSels );
@@ -834,7 +835,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
     kdDebug(32500) << "Real font: " << fi.family() << ". Font height in pixels: " << fm.height() << endl;
 #endif
 
-    // 3) Go (almost verbatim from the original KoTextFormat::drawParagString)
+    // 3) Paint
     QString str( s );
     if ( str[ (int)str.length() - 1 ].unicode() == 0xad )
         str.remove( str.length() - 1, 1 );
@@ -867,7 +868,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
     KoTextParag::drawFontEffects( &painter, format, zh, font, textColor, startX, baseLine, bw, lastY, h, str[start] );
 
     if ( str[ start ] != '\t' && str[ start ].unicode() != 0xad ) {
-        str = format->displayedString( str );
+        str = format->displayedString( str ); // #### This converts the whole string, instead of from start to start+len!
 	if ( format->vAlign() == KoTextFormat::AlignNormal ) {
             int posY = lastY + baseLine - format->offsetFromBaseLine();
             //we must move to bottom text because we create
@@ -911,7 +912,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
     if ( str[ start ] == '\t' && m_tabCache.contains( start ) ) {
 	painter.save();
 	KoZoomHandler * zh = textDocument()->paintingZoomHandler();
-	KoTabulator tab = m_layout.tabList()[ m_tabCache[ start ] ];
+	const KoTabulator& tab = m_layout.tabList()[ m_tabCache[ start ] ];
 	int lineWidth = zh->zoomItY( tab.ptWidth );
 	switch ( tab.filling ) {
 	    case TF_DOTS:
@@ -955,7 +956,7 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
         }
     }
 
-	// Paint a zigzag line for "wrong" background spellchecking checked words:
+    // Paint a zigzag line for "wrong" background spellchecking checked words:
     if(
 		painter.device()->devType() != QInternal::Printer &&
 		format->isMisspelled() &&
@@ -986,16 +987,6 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 
 		painter.restore();
 	}
-
-#if 0
-    i -= len;
-    if ( doc && format->isAnchor() && !format->anchorHref().isEmpty() &&
-         doc->focusIndicator.parag == this &&
-         doc->focusIndicator.start >= i &&
-         doc->focusIndicator.start + doc->focusIndicator.len <= i + len ) {
-	painter.drawWinFocusRect( QRect( startX, lastY, bw, h ) );
-    }
-#endif
 }
 
 bool KoTextParag::lineHyphenated( int l ) const
@@ -1646,10 +1637,10 @@ int KoTextParag::documentWidth() const
     return doc ? doc->width() : 0; //docRect.width();
 }
 
-int KoTextParag::documentVisibleWidth() const
-{
-    return doc ? doc->visibleWidth() : 0; //docRect.width();
-}
+//int KoTextParag::documentVisibleWidth() const
+//{
+//    return doc ? doc->visibleWidth() : 0; //docRect.width();
+//}
 
 int KoTextParag::documentX() const
 {
@@ -1733,16 +1724,20 @@ void KoTextParag::drawFormattingChars( QPainter &painter, int start, int len,
 #endif
             if ( ch.isCustom() )
                 continue;
-            if ( ch.c == ' ' && (whichFormattingChars & FormattingSpace))
+            if ( (ch.c == ' ' || ch.c.unicode() == 0x00a0U)
+                 && (whichFormattingChars & FormattingSpace))
             {
                 // Don't use ch.pixelwidth here. We want a square with
                 // the same size for all spaces, even the justified ones
-                //int w = zh->layoutUnitToPixelX( string()->width(i) );
                 int w = zh->layoutUnitToPixelX( ch.format()->width( ' ' ) );
                 int height = zh->layoutUnitToPixelY( ch.ascent() );
                 int size = QMAX( 2, QMIN( w/2, height/3 ) ); // Enfore that it's a square, and that it's visible
                 int x = zh->layoutUnitToPixelX( ch.x ); // + ch.pixelxadj;
-                painter.drawRect( x + (ch.pixelwidth - size) / 2, lastY_pix + baseLine_pix - (height - size) / 2, size, size );
+                QRect spcRect( x + (ch.pixelwidth - size) / 2, lastY_pix + baseLine_pix - (height - size) / 2, size, size );
+                if ( ch.c == ' ' )
+                    painter.drawRect( spcRect );
+                else // nbsp
+                    painter.fillRect( spcRect, pen.color() );
             }
             else if ( ch.c == '\t' && (whichFormattingChars & FormattingTabs) )
             {

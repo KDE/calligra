@@ -69,12 +69,12 @@ public:
     int x() const;
     int y() const;
     int width() const;
-    int widthUsed() const;
-    int visibleWidth() const;
+    //int widthUsed() const;
+    //int visibleWidth() const;
     int height() const;
     void setWidth( int w );
-    int minimumWidth() const;
-    virtual bool setMinimumWidth( int w, KoTextParag *parag );
+    //int minimumWidth() const;
+    //virtual bool setMinimumWidth( int w, KoTextParag *parag );
 
     void setY( int y );
     int leftMargin() const;
@@ -217,27 +217,14 @@ public:
     void informParagraphDeleted( KoTextParag* parag );
 
 signals:
-    void minimumWidthChanged( int );
+    //void minimumWidthChanged( int );
+
     /** Emitted when a paragraph is deleted (kotext addition) */
     void paragraphDeleted( KoTextParag* parag );
 
 private:
     void init();
     QPixmap *bufferPixmap( const QSize &s );
-    // HTML parser
-    bool hasPrefix(const QString& doc, int pos, QChar c);
-    bool hasPrefix(const QString& doc, int pos, const QString& s);
-#ifdef QTEXTTABLE_AVAILABLE
-    KoTextCustomItem* parseTable( const QMap<QString, QString> &attr, const KoTextFormat &fmt, const QString &doc, int& pos, KoTextParag *curpar );
-#endif
-    bool eatSpace(const QString& doc, int& pos, bool includeNbsp = FALSE );
-    bool eat(const QString& doc, int& pos, QChar c);
-    QString parseOpenTag(const QString& doc, int& pos, QMap<QString, QString> &attr, bool& emptyTag);
-    QString parseCloseTag( const QString& doc, int& pos );
-    QChar parseHTMLSpecialChar(const QString& doc, int& pos);
-    QString parseWord(const QString& doc, int& pos, bool lower = TRUE);
-    QChar parseChar(const QString& doc, int& pos, QStyleSheetItem::WhiteSpaceMode wsm );
-    //void setRichTextInternal( const QString &text );
 
     //// Beginning of kotext additions
 
@@ -364,7 +351,7 @@ private:
 	QString href;
     };*/
 
-    int cx, cy, cw, vw;
+    int cx, cy; //, cw, vw;
     KoTextParag *fParag, *lParag;
     //KoTextPreProcessor *pProcessor;
     QMap<int, QColor> selectionColors;
@@ -394,7 +381,7 @@ private:
     QBrush *backBrush;
     QPixmap *buf_pixmap;
     //Focus focusIndicator;
-    int minw;
+    //int minw;
     int leftmargin;
     int rightmargin;
     //KoTextParag *minwParag;
@@ -418,13 +405,14 @@ inline int KoTextDocument::y() const
 
 inline int KoTextDocument::width() const
 {
-    return QMAX( cw, flow_->width() );
+    return flow_->width();
+    //return QMAX( cw, flow_->width() );
 }
 
-inline int KoTextDocument::visibleWidth() const
-{
-    return vw;
-}
+//inline int KoTextDocument::visibleWidth() const
+//{
+//    return vw;
+//}
 
 inline KoTextParag *KoTextDocument::firstParag() const
 {
@@ -448,15 +436,15 @@ inline void KoTextDocument::setLastParag( KoTextParag *p )
 
 inline void KoTextDocument::setWidth( int w )
 {
-    cw = QMAX( w, minw );
-    flow_->setWidth( cw );
-    vw = w;
+    //cw = QMAX( w, minw );
+    flow_->setWidth( w );
+    //vw = w;
 }
 
-inline int KoTextDocument::minimumWidth() const
-{
-    return minw;
-}
+//inline int KoTextDocument::minimumWidth() const
+//{
+//    return minw;
+//}
 
 inline void KoTextDocument::setY( int y )
 {
