@@ -1021,7 +1021,7 @@ void KWPage::vmrEditFrame( unsigned int mx, unsigned int my )
         repaintScreen( true );
         recalcAll = false;
     }
-    else 
+    else
         doc->updateAllViews( gui->getView() );
 }
 
@@ -2456,7 +2456,7 @@ void KWPage::keyPressEvent( QKeyEvent *e )
 {
 #define STOP { stopProcessKeyEvent(); return; }
 
-    if ( mouseMode != MM_EDIT )
+    if ( mouseMode != MM_EDIT || e->key() == Key_Control )
         return;
 
     startProcessKeyEvent();
@@ -2842,9 +2842,9 @@ void KWPage::drawFrameSelection( QPainter &_painter, KWFrame *_frame )
     _painter.save();
     _painter.setRasterOp( NotROP );
 
-    QRect frame( _frame->x() - contentsX() - 1, _frame->y() - contentsY() - 1, 
+    QRect frame( _frame->x() - contentsX() - 1, _frame->y() - contentsY() - 1,
                  _frame->width() + 2, _frame->height() + 2 );
-    
+
     _painter.fillRect( frame.x(), frame.y(), 6, 6, colorGroup().highlight() );
     _painter.fillRect( frame.x() + frame.width() / 2 - 3, frame.y(), 6, 6, colorGroup().highlight() );
     _painter.fillRect( frame.x(), frame.y() + frame.height() / 2 - 3, 6, 6, colorGroup().highlight() );
@@ -2917,7 +2917,7 @@ void KWPage::setMouseMode( MouseMode _mm )
 
     if ( mouseMode != _mm )
         selectAllFrames( false );
-        
+
     mouseMode = _mm;
     mmUncheckAll();
     gui->getView()->uncheckAllTools();
@@ -4559,22 +4559,22 @@ void KWPage::selectAllFrames( bool select )
 {
     KWFrameSet *fs = 0L;
     KWFrame *frame = 0L;
-    
-    QRect v_rect( contentsX(), contentsY(), 
+
+    QRect v_rect( contentsX(), contentsY(),
                   viewport()->width(), viewport()->height() );
 
     bool dirty = false;
-    
+
     QPainter p;
     p.begin( viewport() );
-    
+
     for ( unsigned int i = 0; i < doc->getNumFrameSets(); ++i )
     {
         bool careAboutDirty = false;
         fs = doc->getFrameSet( i );
         if ( fs->getGroupManager() )
             careAboutDirty = true;
-        
+
         for ( unsigned int j = 0; j < fs->getNumFrames(); ++j )
         {
             frame = fs->getFrame( j );
@@ -4588,9 +4588,9 @@ void KWPage::selectAllFrames( bool select )
             }
         }
     }
-        
+
     p.end();
-    
+
     if ( dirty )
         repaintScreen( true );
 }
@@ -4599,7 +4599,7 @@ void KWPage::selectAllFrames( bool select )
 void KWPage::selectFrame( int mx, int my, bool select )
 {
     int fs = doc->getFrameSet( mx, my );
-    if ( fs != -1 ) 
+    if ( fs != -1 )
     {
         KWFrameSet *frameset = doc->getFrameSet( fs );
         int frm = frameset->getFrame( mx, my );
