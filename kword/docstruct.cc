@@ -122,7 +122,7 @@ void KWDocStructFrameItem::selectFrameSet()
 
 void KWDocStructFrameItem::editFrameSet()
 {
-    //gui->canvasWidget()->editTextFrameSet( frameset, 0L, 0 );
+    gui->canvasWidget()->editTextFrameSet( frameset, 0L, 0 );
 }
 
 

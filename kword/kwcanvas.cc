@@ -38,6 +38,7 @@
 #include <kapplication.h>
 #include <kmessagebox.h>
 #include <assert.h>
+#include "kwtextdocument.h"
 
 KWCanvas::KWCanvas(KWViewMode* viewMode, QWidget *parent, KWDocument *d, KWGUI *lGui)
     : QScrollView( parent, "canvas", /*WNorthWestGravity*/ WStaticContents| WResizeNoErase | WRepaintNoErase ), m_doc( d )
@@ -1805,6 +1806,11 @@ void KWCanvas::editTextFrameSet( KWFrameSet * fs, KoTextParag* parag, int index 
 
     if ( emitChanged ) { // emitted after mousePressEvent [for tables]
         if ( m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet()->type()==FT_TEXT ) {
+            if ( !parag )
+            {
+                KWTextDocument *tmp = static_cast<KWTextFrameSet*>(m_currentFrameSetEdit->frameSet())->kwTextDocument();
+                parag = tmp->firstParag();
+            }
             static_cast<KWTextFrameSetEdit*>( m_currentFrameSetEdit )->setCursor( parag, index );
 
             // The _new_ cursor position must be visible.
