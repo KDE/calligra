@@ -186,7 +186,7 @@ class KEXICORE_EXPORT KexiProperty
 
 		/*! Internal: Works like setValue(const QVariant &v, bool saveOldValue), 
 		 but \a v is set for the child named \a childName. */
-		void setValue(const QString& childName, const QVariant &v, 
+		void setChildValue(const QString& childName, const QVariant &v, 
 			bool saveOldValue);
 
 		/*! Internal: Updates this property value using \a v value coming from a child

@@ -77,7 +77,9 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditorItem : public KListViewItem
 		//! \return true if the item has been modified.
 //		bool		modified() { return !(m_value==m_oldvalue);}
 
-		virtual void updateValue();
+		/*! Updates text on of this item, for current property value. 
+		 If \a alsoParent is true, parent item (if present) is also updated. */
+		virtual void updateValue(bool alsoParent = true);
 
 /*		typedef enum ItemsOrder {
 			DefaultOrder = 2;

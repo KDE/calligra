@@ -113,7 +113,9 @@ KexiPropertyEditor::createEditor(KexiPropertyEditorItem *i)//, const QRect &geom
 		delete m_currentEditor;
 	}
 	
-	m_defaults->hide();
+//	m_defaults->hide();
+
+	m_editItem = i;
 
 	KexiPropertySubEditor *editor=0;
 	switch(i->type())
@@ -176,29 +178,30 @@ KexiPropertyEditor::createEditor(KexiPropertyEditorItem *i)//, const QRect &geom
 			break;
 
 		default:
-			m_currentEditor = 0;
+//			m_currentEditor = 0;
 			setFocus();
 			kdDebug() << "PropertyEditor::createEditor: No editor created!" << endl;
-			return;
+//			return;
 	}
 
-	connect(editor, SIGNAL(reject(KexiPropertySubEditor *)), this,
-		SLOT(slotEditorReject(KexiPropertySubEditor *)));
+	if (editor) {
+		connect(editor, SIGNAL(reject(KexiPropertySubEditor *)), this,
+			SLOT(slotEditorReject(KexiPropertySubEditor *)));
 
 		connect(editor, SIGNAL(accept(KexiPropertySubEditor *)), this,
 			SLOT(slotEditorAccept(KexiPropertySubEditor *)));
 
-	connect(editor, SIGNAL(changed(KexiPropertySubEditor *)), this,
-		SLOT(slotValueChanged(KexiPropertySubEditor *)));
+		connect(editor, SIGNAL(changed(KexiPropertySubEditor *)), this,
+			SLOT(slotValueChanged(KexiPropertySubEditor *)));
 
-	editor->show();
-	addChild(editor);
-	moveChild(editor, geometry.x(), geometry.y());
+		addChild(editor);
+		moveChild(editor, geometry.x(), geometry.y());
+		editor->show();
 	
-	editor->setFocus();
-
+		editor->setFocus();
+	}
 	m_currentEditor = editor;
-	m_editItem = i;
+//	m_editItem = i;
 	showDefaultsButton( i->property()->changed() );
 }
 
@@ -210,18 +213,22 @@ KexiPropertyEditor::showDefaultsButton( bool show )
 	m_defaults->resize(geometry.height(), geometry.height());
 
 	if (!show) {
-		if (m_currentEditor->leavesTheSpaceForRevertButton()) {
-			geometry.setWidth(geometry.width()-m_defaults->width());
+		if (m_currentEditor) {
+			if (m_currentEditor->leavesTheSpaceForRevertButton()) {
+				geometry.setWidth(geometry.width()-m_defaults->width());
+			}
+			m_currentEditor->resize(geometry.width(), geometry.height());
 		}
-		m_currentEditor->resize(geometry.width(), geometry.height());
 		m_defaults->hide();
 		return;
 	}
 
 	QPoint p = contentsToViewport(QPoint(0, geometry.y()));
 	m_defaults->move(geometry.x() + geometry.width() - m_defaults->width(), p.y());
-	m_currentEditor->move(m_currentEditor->x(), p.y());
-	m_currentEditor->resize(geometry.width()-m_defaults->width(), geometry.height());
+	if (m_currentEditor) {
+		m_currentEditor->move(m_currentEditor->x(), p.y());
+		m_currentEditor->resize(geometry.width()-m_defaults->width(), geometry.height());
+	}
 	m_defaults->show();
 }
 
@@ -422,12 +429,22 @@ KexiPropertyEditor::resetItem()
 {
 	if(m_editItem)
 	{
-		if(m_currentEditor) {
+		if (m_currentEditor) {
 			m_currentEditor->setValue(m_editItem->property()->oldValue());
 		}
 
 //		m_editItem->property()->setValue( m_editItem->property()->oldValue(), false );
 		m_editItem->property()->resetValue();
+		if (!m_currentEditor) {
+			m_editItem->updateValue();
+		}
+		//update children
+		KexiPropertyEditorItem *it = static_cast<KexiPropertyEditorItem*>(m_editItem->firstChild());
+		while (it) {
+			it->updateValue(false);
+			it = static_cast<KexiPropertyEditorItem*>(it->nextSibling());
+		}
+
 		showDefaultsButton( false );
 //js: not needed		else
 //js: not needed			m_editItem->setValue(m_editItem->property()->oldValue());

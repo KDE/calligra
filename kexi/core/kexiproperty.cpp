@@ -313,24 +313,29 @@ QVariant::Type KexiProperty::type() const
 
 void KexiProperty::setValue(const QVariant &v, bool updateChildren, bool saveOldValue)
 {
+	kdDebug() << m_name << ": setValue('" << v.toString() << "' type=" << v.typeName() << ")" << endl;
+	if (m_value.type() != v.type() && !m_value.isNull() && !v.isNull()) {
+		kdDebug() << "INCOMPAT TYPES! " <<m_value.typeName() <<" and " << v.typeName() << endl;
+	}
+		
 	if (saveOldValue) {
-		if (m_value != v) {
-			if (!m_changed) {
-				m_oldValue = m_value; //store old
-			}
+		if (m_value == v)
+			return;
+		if (!m_changed) {
+			m_oldValue = m_value; //store old
+		}
 //			m_changed = true;
-			setChanged(true);
-			m_value = v;
-			if (m_parent) {
-				m_parent->setChanged( true ); //inform the parent
-				m_parent->updateValueForChild(m_name, m_value, saveOldValue);
-			}
+		setChanged(true);
+		m_value = v;
+		if (m_parent) {
+			m_parent->setChanged( true ); //inform the parent
+			m_parent->updateValueForChild(m_name, m_value, saveOldValue);
 		}
 	}
 	else {
+		m_value = v;
 		m_oldValue = QVariant(); //clear old
 		setChanged(false);
-		m_value = v;
 	}
 
 	if (!updateChildren)
@@ -342,33 +347,33 @@ void KexiProperty::setValue(const QVariant &v, bool updateChildren, bool saveOld
 		case QVariant::Size:
 		{
 			QSize s = m_value.toSize();
-			setValue("width",s.width(),saveOldValue);
-			setValue("height",s.height(),saveOldValue);
+			setChildValue("width",s.width(),saveOldValue);
+			setChildValue("height",s.height(),saveOldValue);
 			break;
 		}
 		case QVariant::Point:
 		{
 			QPoint p = m_value.toPoint();
-			setValue("x",p.x(),saveOldValue);
-			setValue("y",p.y(),saveOldValue);
+			setChildValue("x",p.x(),saveOldValue);
+			setChildValue("y",p.y(),saveOldValue);
 			break;
 		}
 		case QVariant::Rect:
 		{
 			QRect r = m_value.toRect();
-			setValue("x",r.x(),saveOldValue);
-			setValue("y",r.y(),saveOldValue);
-			setValue("width",r.width(),saveOldValue);
-			setValue("height",r.height(),saveOldValue);
+			setChildValue("x",r.x(),saveOldValue);
+			setChildValue("y",r.y(),saveOldValue);
+			setChildValue("width",r.width(),saveOldValue);
+			setChildValue("height",r.height(),saveOldValue);
 			break;
 		}
 		case QVariant::SizePolicy:
 		{
 			QSizePolicy p = m_value.toSizePolicy();
-			setValue("horSizeType",QVariant(spHelper.valueToKey(p.horData())),saveOldValue);
-			setValue("verSizeType",QVariant(spHelper.valueToKey(p.verData())),saveOldValue);
-			setValue("hStretch",(int)p.horStretch(),saveOldValue);
-			setValue("vStretch",(int)p.verStretch(),saveOldValue);
+			setChildValue("horSizeType",QVariant(spHelper.valueToKey(p.horData())),saveOldValue);
+			setChildValue("verSizeType",QVariant(spHelper.valueToKey(p.verData())),saveOldValue);
+			setChildValue("hStretch",(int)p.horStretch(),saveOldValue);
+			setChildValue("vStretch",(int)p.verStretch(),saveOldValue);
 			break;
 		}
 		default:
@@ -399,11 +404,11 @@ QString KexiProperty::valueText() const
 	return m_list->names[ idx ];
 }
 
-void KexiProperty::setValue(const QString& childName, const QVariant &v, bool saveOldValue)
+void KexiProperty::setChildValue(const QString& childName, const QVariant &v, bool saveOldValue)
 {
 	KexiProperty * prop = child(childName);
 	if (!prop) {
-		kdDebug()<< "KexiProperty::setValue() NO SUCH CHILD: " << childName << endl;
+		kdDebug()<< "KexiProperty::setChildValue() NO SUCH CHILD: " << childName << endl;
 		return;
 	}
 	prop->setValue(v, saveOldValue);
@@ -459,11 +464,6 @@ void KexiProperty::updateValueForChild(const QString& childName,
 		case QVariant::SizePolicy:
 		{
 			QSizePolicy p = m_value.toSizePolicy();
-			setValue("horSizeType",QVariant(spHelper.valueToKey(p.horData())),saveOldValue);
-			setValue("verSizeType",QVariant(spHelper.valueToKey(p.verData())),saveOldValue);
-			setValue("hStretch",(int)p.horStretch(),saveOldValue);
-			setValue("vStretch",(int)p.verStretch(),saveOldValue);
-
 			if (childName=="horSizeType")
 				p.setHorData( spHelper.keyToValue(v.toString()) );
 			else if (childName=="verSizeType")

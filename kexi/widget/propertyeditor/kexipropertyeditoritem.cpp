@@ -500,10 +500,10 @@ KexiPropertyEditorItem::~KexiPropertyEditorItem()
 	}
 }
 
-void KexiPropertyEditorItem::updateValue()
+void KexiPropertyEditorItem::updateValue(bool alsoParent)
 {
 	setText( 1, m_property->valueText() );
-	if (parent())
+	if (alsoParent && parent())
 		static_cast<KexiPropertyEditorItem*>(parent())->updateValue();
 }
 
