@@ -45,3 +45,8 @@ KoDash &KoDash::operator=(const KoDash &o)
   mDashes = o.mDashes;
   return *this;
 }
+
+void KoDash::draw(QImage *img)
+{
+
+}

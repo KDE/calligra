@@ -37,6 +37,7 @@ QWidget( widget, name )
 {
   setFixedSize(800,600);
   p = new KoPainter(this, 800, 600);
+/*
   QTime t;
   t.start();
   p->fillAreaRGB(QRect(0,0,800,600), KoColor::white());
@@ -102,6 +103,7 @@ QWidget( widget, name )
 //  o->color(KoColor::cyan());
 //  p->drawLine(600,590, 200,200);
 //  p->drawLine(670,120, 400,200);
+*/
 }
 
 KoPainterTest::~KoPainterTest()

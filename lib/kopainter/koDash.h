@@ -22,6 +22,8 @@
 
 #include <qmemarray.h>
 
+class QImage;
+
 class KoDash
 {
 public:
@@ -36,6 +38,8 @@ public:
   void setDash(int n, double l);
 
   KoDash &operator=(const KoDash &d);
+
+  void draw(QImage *img);
 
 private:
   double mOffset;

@@ -19,12 +19,14 @@
 
 #include "koOutline.h"
 
+#include "koDash.h"
+
 KoOutline::KoOutline()
 {
   mColor = KoColor::black();
   mOpacity = 255;
   mWidth = 1.0;
-  mDashOffset = 0.0;
+  mDash = 0L;
   mJoin = JoinMiter;
   mCap = CapButt;
 }
@@ -44,19 +46,9 @@ void KoOutline::width(double w)
   mWidth = w;
 }
 
-void KoOutline::dashOffset(double d)
+void KoOutline::dash(KoDash *d)
 {
-  mDashOffset = d;
-}
-
-void KoOutline::dashResize(int s)
-{
-  mDashes.resize(s);
-}
-
-void KoOutline::setDash(int n, double l)
-{
-  mDashes[n] = l;
+  mDash = d;
 }
 
 void KoOutline::join(Join j)
@@ -74,8 +66,7 @@ KoOutline &KoOutline::operator=(const KoOutline &o)
   mColor = o.mColor;
   mOpacity = o.mOpacity;
   mWidth = o.mWidth;
-  mDashOffset = o.mDashOffset;
-  mDashes = o.mDashes;
+  mDash = o.mDash;
   mJoin = o.mJoin;
   mCap = o.mCap;
   return *this;

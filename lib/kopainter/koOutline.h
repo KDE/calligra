@@ -22,6 +22,8 @@
 
 #include "koColor.h"
 
+class KoDash;
+
 class KoOutline
 {
 public:
@@ -39,12 +41,8 @@ public:
   double width() const {return mWidth; }
   void width(double w);
 
-  double dashOffset() const {return mDashOffset; }
-  void dashOffset(double d);
-
-  const QMemArray<double> &dashes() const {return mDashes; }
-  void dashResize(int s);
-  void setDash(int n, double l);
+  KoDash *dash() const {return mDash; }
+  void dash(KoDash *d);
 
   Join join() const {return mJoin; }
   void join(Join j);
@@ -55,13 +53,12 @@ public:
   KoOutline &operator=(const KoOutline &o);
 
 private:
-  KoColor mColor;
-  int mOpacity;
-  double mWidth;
-  double mDashOffset;
-  QMemArray<double> mDashes;
-  Join mJoin;
-  Cap mCap;
+  KoColor    mColor;
+  int        mOpacity;
+  double     mWidth;
+  KoDash    *mDash;
+  Join       mJoin;
+  Cap        mCap;
 };
 
 #endif

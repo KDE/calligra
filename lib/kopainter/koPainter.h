@@ -50,7 +50,8 @@ public:
   void drawHorizLineRGB(const int x1, const int x2, const int y, const QColor &c);
   void drawVertLineRGB(const int x, const int y1, const int y2, const QColor &c);
 
-  void drawLine(double x1, double y1, double x2, double y2);
+  void drawVectorPathOutline(KoVectorPath *vp);
+  void drawVectorPathFill(KoVectorPath *vp);
   void drawVectorPath(KoVectorPath *vp);
   void drawImage(QImage *img, int alpha, QWMatrix &m);
 
@@ -58,7 +59,6 @@ public:
 
 private:
   void memset(QRgb *p, int n, QRgb c);
-  void drawVPath(ArtVpath *vec);
 
 private:
   QWidget *mWidget;

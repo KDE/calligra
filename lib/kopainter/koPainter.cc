@@ -36,9 +36,10 @@
 
 #include <kdebug.h>
 
-#include <koVectorPath.h>
-#include <koOutline.h>
-#include <koFill.h>
+#include "koVectorPath.h"
+#include "koOutline.h"
+#include "koDash.h"
+#include "koFill.h"
 
 //#include <support/xlibrgb.h>
 //#include <X11/Xlib.h>
@@ -152,27 +153,59 @@ void KoPainter::drawVertLineRGB(const int x, const int y1, const int y2, const Q
   }
 }
 
-void KoPainter::drawLine(double x1, double y1, double x2, double y2)
+void KoPainter::drawVectorPathOutline(KoVectorPath *vp)
 {
-  ArtVpath *vec = art_new(ArtVpath, 3);
+  if(mOutline)
+  {
+    ArtVpath *vec = vp->data();
+    QRgb color = mOutline->color().color().rgb();
 
-  vec[0].code = ART_MOVETO_OPEN;
-  vec[0].x = x1;
-  vec[0].y = y1;
+    if(mOutline->dash())
+      if(mOutline->dash()->dashes().count() > 0)
+      {
+        // dashes
+        ArtVpathDash dash;
+        dash.offset = mOutline->dash()->offset();
+        dash.n_dash = mOutline->dash()->dashes().count();
+        dash.dash = mOutline->dash()->dashes().data();
+        // get the dashed VPath and use that for the stroke render operation
+        vec = art_vpath_dash(vec, &dash);
+      }
 
-  vec[1].code = ART_LINETO;
-  vec[1].x = x2;
-  vec[1].y = y2;
+    ArtSVP *svp = art_svp_vpath_stroke(vec, (ArtPathStrokeJoinType)mOutline->join(), (ArtPathStrokeCapType)mOutline->cap(), mOutline->width(), 4, 0.25);
+    art_rgb_svp_alpha(svp, 0, 0, mWidth, mHeight, (art_u32)color, mOutline->opacity(), mBuffer->bits(), mWidth * 4, 0);
+    art_free(svp);
+    if(vec != vp->data())
+      art_free(vec);
+  }
+}
 
-  vec[2].code = ART_END;
+void KoPainter::drawVectorPathFill(KoVectorPath *vp)
+{
+  if(mFill)
+  {
+    QRgb color = mFill->color().color().rgb();
 
-  drawVPath(vec);
-  delete vec;
+    ArtSVP *temp;
+    ArtSvpWriter *swr;
+    temp = art_svp_from_vpath(vp->data());
+    swr = art_svp_writer_rewind_new(ART_WIND_RULE_ODDEVEN);
+//    if(m_drawShape->getFillRule() == "evenodd")
+//			swr = art_svp_writer_rewind_new(ART_WIND_RULE_ODDEVEN);
+//		else
+//			swr = art_svp_writer_rewind_new(ART_WIND_RULE_NONZERO);
+    art_svp_intersector(temp, swr);
+    ArtSVP *svp = art_svp_writer_rewind_reap(swr);
+    art_rgb_svp_alpha(svp, 0, 0, mWidth, mHeight, (art_u32)color, mFill->opacity(), mBuffer->bits(), mWidth * 4, 0);
+    art_svp_free(temp);
+    art_svp_free(svp);
+  }
 }
 
 void KoPainter::drawVectorPath(KoVectorPath *vp)
 {
-  drawVPath(vp->data());
+  drawVectorPathFill(vp);
+  drawVectorPathOutline(vp);
 }
 
 void KoPainter::blit()
@@ -185,29 +218,8 @@ void KoPainter::memset(QRgb *p, int n, QRgb c)
 {
 }
 
-void KoPainter::drawVPath(ArtVpath *vec)
-{
-  ArtSVP *svp;
-  if(mFill)
-  {
-    QRgb color = mFill->color().color().rgb();
-
-    ArtSVP *temp;
-    ArtSvpWriter *swr;
-    temp = art_svp_from_vpath(vec);
-    swr = art_svp_writer_rewind_new(ART_WIND_RULE_ODDEVEN);
-//    if(m_drawShape->getFillRule() == "evenodd")
-//			swr = art_svp_writer_rewind_new(ART_WIND_RULE_ODDEVEN);
-//		else
-//			swr = art_svp_writer_rewind_new(ART_WIND_RULE_NONZERO);
-    art_svp_intersector(temp, swr);
-    svp = art_svp_writer_rewind_reap(swr);
-    art_rgb_svp_alpha(svp, 0, 0, mWidth, mHeight, (art_u32)color, mFill->opacity(), mBuffer->bits(), mWidth * 4, 0);
-    art_svp_free(temp);
-    art_svp_free(svp);
-  }
-
-/*  double a = 1/32.0;
+/*  Some code for gradients
+  double a = 1/32.0;
   double b = -1/33.00000;
   double c = -1/3.0;
   ArtGradientSpread spread = ART_GRADIENT_REPEAT;
@@ -238,29 +250,6 @@ void KoPainter::drawVPath(ArtVpath *vec)
 //  art_render_gradient_linear (render, &gradient, ART_FILTER_NEAREST);
   //  art_render_image_solid (render, color);
   art_render_invoke (render);*/
-
-  if(mOutline)
-  {
-    QRgb color = mOutline->color().color().rgb();
-
-    if(mOutline->dashes().count() > 0)
-    {
-      // dashes
-      ArtVpathDash dash;
-      dash.offset = mOutline->dashOffset();
-      dash.n_dash = mOutline->dashes().count();
-      dash.dash = mOutline->dashes().data();
-      // get the dashed VPath and use that for the stroke render operation
-      ArtVpath *vec2 = art_vpath_dash(vec, &dash);
-      art_free(vec);
-      vec = vec2;
-    }
-
-    svp = art_svp_vpath_stroke(vec, (ArtPathStrokeJoinType)mOutline->join(), (ArtPathStrokeCapType)mOutline->cap(), mOutline->width(), 4, 0.25);
-    art_rgb_svp_alpha(svp, 0, 0, mWidth, mHeight, (art_u32)color, mOutline->opacity(), mBuffer->bits(), mWidth * 4, 0);
-    art_free(svp);
-  }
-}
 
 void KoPainter::drawImage(QImage *img, int alpha, QWMatrix &m)
 {
