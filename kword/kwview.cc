@@ -4879,6 +4879,7 @@ void KWView::slotFrameSetEditChanged()
     actionFormatFont->setEnabled( rw );
     actionFormatFontSize->setEnabled( rw );
     actionFormatFontFamily->setEnabled( rw );
+    actionAddBookmark->setEnabled(state);
 
     actionFormatStyleMenu->setEnabled( rw );
     actionFormatBold->setEnabled( rw );
