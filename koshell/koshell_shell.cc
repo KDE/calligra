@@ -195,6 +195,12 @@ bool KoShellWindow::openDocumentInternal( const KURL &url, KoDocument* )
 void KoShellWindow::slotKSLoadCompleted()
 {
     KoDocument* newdoc = (KoDocument *)(sender());
+
+    // KoDocument::import() calls resetURL() too late...
+    // ...setRootDocument will show the URL...
+    // So let's stop this from happening and the user will never know :)
+    if (isImporting()) newdoc->resetURL ();
+
     partManager()->addPart( newdoc, false );
     setRootDocument( newdoc );
     disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
