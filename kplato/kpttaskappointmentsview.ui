@@ -82,7 +82,7 @@
                                 </column>
                                 <column>
                                     <property name="text">
-                                        <string>Start date</string>
+                                        <string>Start Date</string>
                                     </property>
                                     <property name="clickable">
                                         <bool>true</bool>
@@ -104,7 +104,7 @@
                                 </column>
                                 <column>
                                     <property name="text">
-                                        <string>Normal rate</string>
+                                        <string>Normal Rate</string>
                                     </property>
                                     <property name="clickable">
                                         <bool>true</bool>
@@ -115,7 +115,7 @@
                                 </column>
                                 <column>
                                     <property name="text">
-                                        <string>Overtime rate</string>
+                                        <string>Overtime Rate</string>
                                     </property>
                                     <property name="clickable">
                                         <bool>true</bool>
@@ -126,7 +126,7 @@
                                 </column>
                                 <column>
                                     <property name="text">
-                                        <string>Fixed cost</string>
+                                        <string>Fixed Cost</string>
                                     </property>
                                     <property name="clickable">
                                         <bool>true</bool>
@@ -157,7 +157,7 @@
                         <cstring>textLabel1</cstring>
                     </property>
                     <property name="text">
-                        <string>Task name</string>
+                        <string>Task name:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>kLineEdit1</cstring>
@@ -168,7 +168,7 @@
                         <cstring>textLabel8</cstring>
                     </property>
                     <property name="text">
-                        <string>Total planned work</string>
+                        <string>Total planned work:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>kLineEdit8</cstring>
@@ -179,7 +179,7 @@
                         <cstring>textLabel9</cstring>
                     </property>
                     <property name="text">
-                        <string>Completion</string>
+                        <string>Completion:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>kIntSpinBox9</cstring>
@@ -188,6 +188,9 @@
                 <widget class="KIntSpinBox" row="3" column="7">
                     <property name="name">
                         <cstring>m_completion</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
                     </property>
                     <property name="suffix">
                         <string>%</string>
@@ -211,7 +214,7 @@
                         <cstring>textLabel4</cstring>
                     </property>
                     <property name="text">
-                        <string>Deviation</string>
+                        <string>Deviation:</string>
                     </property>
                     <property name="indent">
                         <number>-1</number>
@@ -225,7 +228,7 @@
                         <cstring>textLabel5</cstring>
                     </property>
                     <property name="text">
-                        <string>Total planned cost</string>
+                        <string>Total planned cost:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>kLineEdit5</cstring>
@@ -241,7 +244,7 @@
                         <cstring>textLabel2</cstring>
                     </property>
                     <property name="text">
-                        <string>Responsible</string>
+                        <string>Responsible:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>kLineEdit2</cstring>
@@ -252,7 +255,7 @@
                         <cstring>textLabel7</cstring>
                     </property>
                     <property name="text">
-                        <string>Deviation</string>
+                        <string>Deviation:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>kLineEdit7</cstring>
@@ -263,7 +266,7 @@
                         <cstring>textLabel6</cstring>
                     </property>
                     <property name="text">
-                        <string>Work to date</string>
+                        <string>Work to date:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>kLineEdit6</cstring>
@@ -274,7 +277,7 @@
                         <cstring>textLabel3</cstring>
                     </property>
                     <property name="text">
-                        <string>Cost to date</string>
+                        <string>Cost to date:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>kLineEdit3</cstring>
