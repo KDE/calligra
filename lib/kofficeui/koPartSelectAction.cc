@@ -19,6 +19,8 @@
 #include "koPartSelectAction.h"
 #include "koPartSelectDia.h"
 
+#include <kdebug.h>
+
 KoPartSelectAction::KoPartSelectAction( const QString& text, QObject* parent, const char* name )
     : KActionMenu( text, parent, name )
 {
@@ -49,10 +51,12 @@ void KoPartSelectAction::init()
     QValueList<KoDocumentEntry>::Iterator it = m_lstEntries.begin();
     for( ; it != m_lstEntries.end(); ++it ) {
         KService::Ptr serv = (*it).service();
-	KAction *action = new KAction( serv->genericName(), serv->icon(), 0,
+	if (!serv->genericName().isEmpty()) {
+	    KAction *action = new KAction( serv->genericName(), serv->icon(), 0,
                                        this, SLOT( slotActionActivated() ),
                                        parentCollection(), serv->name().latin1() );
-        insert( action );
+    	    insert( action );
+	}
     }
 
 }

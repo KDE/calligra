@@ -48,8 +48,10 @@ KoPartSelectDia::KoPartSelectDia( QWidget* parent, const char* name ) :
     QValueList<KoDocumentEntry>::Iterator it = m_lstEntries.begin();
     for( ; it != m_lstEntries.end(); ++it ) {
         KService::Ptr serv = (*it).service();
-	QListViewItem *item = new QListViewItem( listview, serv->name(), serv->genericName() );
-	item->setPixmap( 0, SmallIcon( serv->icon() ) );
+	if (!serv->genericName().isEmpty()) {
+    	    QListViewItem *item = new QListViewItem( listview, serv->name(), serv->genericName() );
+	    item->setPixmap( 0, SmallIcon( serv->icon() ) );
+	}
     }
 
     selectionChanged( 0 );
