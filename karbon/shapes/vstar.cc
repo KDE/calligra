@@ -164,6 +164,8 @@ VStar::VStar( VObject* parent,
 
 	VTransformCmd cmd( 0L, m );
 	cmd.visit( *this );
+
+	setFillRule( evenOdd );
 }
 
 QString
