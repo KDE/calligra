@@ -193,14 +193,12 @@ private:
      */
     KoTextParag *parent( const KoTextParag *paragraph );
 
-    char m_numbering; // Numbering
-    char m_style;     // Style
+    Numbering m_numbering:3; // Numbering (maximum value: 8)
+    bool m_restartCounter:1;
+    bool unused:4;
+    Style m_style:8;     // Style
     char m_displayLevels; // Number of levels to display (e.g. 3 => 1.2.1)
     char m_depth;
-
-    bool m_restartCounter;
-    char unused; // padding, feel free to use
-    short int padding; // padding, feel free to use
 
     short int m_startNumber;
     QChar m_customBulletChar;

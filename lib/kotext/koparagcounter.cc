@@ -109,7 +109,7 @@ bool KoParagCounter::isBullet( Style style ) // static
 
 bool KoParagCounter::isBullet() const
 {
-    return isBullet( static_cast<Style>(m_style) );
+    return isBullet( m_style );
 }
 
 void KoParagCounter::load( QDomElement & element )
@@ -117,7 +117,7 @@ void KoParagCounter::load( QDomElement & element )
     m_numbering = static_cast<Numbering>( element.attribute("numberingtype", "2").toInt() );
     m_style = static_cast<Style>( element.attribute("type").toInt() );
     // Old docs have this:
-    if ( (Numbering)m_numbering == NUM_LIST && (Style)m_style == STYLE_NONE )
+    if ( m_numbering == NUM_LIST && m_style == STYLE_NONE )
         m_numbering = NUM_NONE;
     m_depth = element.attribute("depth").toInt();
     m_customBulletChar = QChar( element.attribute("bullet").toInt() );
@@ -190,7 +190,7 @@ void KoParagCounter::loadOasisListStyle( const QDomElement& listStyle,
                                          bool orderedList, bool heading, int level,
                                          bool loadingStyle )
 {
-    m_numbering = heading ? 1 : 0;
+    m_numbering = heading ? NUM_CHAPTER : NUM_LIST;
     m_depth = level - 1; // depth start at 0
     // restartNumbering can either be provided by caller, or taken from the style
     if ( restartNumbering == -1 && listStyle.hasAttributeNS( KoXmlNS::text, "start-value" ) )
@@ -202,7 +202,7 @@ void KoParagCounter::loadOasisListStyle( const QDomElement& listStyle,
     //kdDebug() << k_funcinfo << "IN: restartNumbering=" << restartNumbering << " OUT: m_restartCounter=" << m_restartCounter << " m_startNumber=" << m_startNumber << endl;
 
     if ( orderedList || heading ) {
-        m_style = importCounterType( listStyle.attributeNS( KoXmlNS::style, "num-format", QString::null)[0] );
+        m_style = static_cast<Style>( importCounterType( listStyle.attributeNS( KoXmlNS::style, "num-format", QString::null)[0] ) );
         m_prefix = listStyle.attributeNS( KoXmlNS::style, "num-prefix", QString::null );
         m_suffix = listStyle.attributeNS( KoXmlNS::style, "num-suffix", QString::null );
         QString dl = listStyle.attributeNS( KoXmlNS::text, "display-levels", QString::null );
@@ -350,7 +350,7 @@ int KoParagCounter::number( const KoTextParag *paragraph )
         {
             otherCounter = otherParagraph->counter();
             if ( otherCounter &&               // ...look at numbered paragraphs only
-                ( (Numbering)otherCounter->m_numbering == NUM_CHAPTER ) &&     // ...same number type.
+                ( otherCounter->m_numbering == NUM_CHAPTER ) &&     // ...same number type.
                 ( otherCounter->m_depth <= m_depth ) )        // ...same or higher level.
             {
                 if ( ( otherCounter->m_depth == m_depth ) &&
@@ -377,8 +377,8 @@ int KoParagCounter::number( const KoTextParag *paragraph )
             otherCounter = otherParagraph->counter();
             if ( otherCounter )                                         // look at numbered paragraphs only
             {
-                if ( ( (Numbering)otherCounter->m_numbering == NUM_LIST ) &&       // ...same number type.
-                     !isBullet( static_cast<Style>(otherCounter->m_style) ) &&    // ...not a bullet
+                if ( ( otherCounter->m_numbering == NUM_LIST ) &&       // ...same number type.
+                     !isBullet( otherCounter->m_style ) &&    // ...not a bullet
                     ( otherCounter->m_depth <= m_depth ) )    // ...same or higher level.
                 {
                     if ( ( otherCounter->m_depth == m_depth ) &&
@@ -395,7 +395,7 @@ int KoParagCounter::number( const KoTextParag *paragraph )
                     break;
                 }
                 else
-                if ( (Numbering)otherCounter->m_numbering == NUM_CHAPTER )        // ...heading number type.
+                if ( otherCounter->m_numbering == NUM_CHAPTER )        // ...heading number type.
                 {
                     m_cache.number = m_startNumber;
                     break;
@@ -417,7 +417,7 @@ int KoParagCounter::number( const KoTextParag *paragraph )
 
 KoParagCounter::Numbering KoParagCounter::numbering() const
 {
-    return static_cast<Numbering>(m_numbering);
+    return m_numbering;
 }
 
 // Go looking for another paragraph at a higher level.
@@ -431,7 +431,7 @@ KoTextParag *KoParagCounter::parent( const KoTextParag *paragraph )
     KoParagCounter *otherCounter;
 
     // (This code shares logic with number())
-    switch ( (Numbering)m_numbering )
+    switch ( m_numbering )
     {
     case NUM_NONE:
         // This should not occur!
@@ -444,7 +444,7 @@ KoTextParag *KoParagCounter::parent( const KoTextParag *paragraph )
         {
             otherCounter = otherParagraph->counter();
             if ( otherCounter &&                                        // ...numbered paragraphs.
-                ( (Numbering)otherCounter->m_numbering == NUM_CHAPTER ) &&         // ...same number type.
+                ( otherCounter->m_numbering == NUM_CHAPTER ) &&         // ...same number type.
                 ( otherCounter->m_depth < m_depth ) )         // ...higher level.
             {
                 break;
@@ -459,14 +459,14 @@ KoTextParag *KoParagCounter::parent( const KoTextParag *paragraph )
             otherCounter = otherParagraph->counter();
             if ( otherCounter )                                         // ...numbered paragraphs.
             {
-                if ( ( (Numbering)otherCounter->m_numbering == NUM_LIST ) &&       // ...same number type.
-                     !isBullet( static_cast<Style>(otherCounter->m_style) ) &&    // ...not a bullet
+                if ( ( otherCounter->m_numbering == NUM_LIST ) &&       // ...same number type.
+                     !isBullet( otherCounter->m_style ) &&    // ...not a bullet
                     ( otherCounter->m_depth < m_depth ) )     // ...higher level.
                 {
                     break;
                 }
                 else
-                if ( (Numbering)otherCounter->m_numbering == NUM_CHAPTER )         // ...heading number type.
+                if ( otherCounter->m_numbering == NUM_CHAPTER )         // ...heading number type.
                 {
                     otherParagraph = 0L;
                     break;
@@ -504,7 +504,7 @@ void KoParagCounter::save( QDomElement & element )
     //if ( m_displayLevels != m_depth ) // see load()
         element.setAttribute( "display-levels", m_displayLevels );
     // Don't need to save NUM_FOOTNOTE, it's updated right after loading
-    if ( (Numbering)m_numbering != NUM_NONE && (Numbering)m_numbering != NUM_FOOTNOTE )
+    if ( m_numbering != NUM_NONE && m_numbering != NUM_FOOTNOTE )
         element.setAttribute( "numberingtype", static_cast<int>( m_numbering ) );
     if ( !m_custom.isEmpty() )
         element.setAttribute( "customdef", m_custom );
@@ -597,7 +597,7 @@ int KoParagCounter::alignment() const
 
 KoParagCounter::Style KoParagCounter::style() const
 {
-    return static_cast<Style>(m_style);
+    return m_style;
 }
 
 QString KoParagCounter::suffix() const
@@ -619,9 +619,9 @@ void KoParagCounter::setRestartCounter( bool restart )
 // Return the text for that level only
 QString KoParagCounter::levelText( const KoTextParag *paragraph )
 {
-    bool bullet = isBullet( static_cast<Style>(m_style) );
+    bool bullet = isBullet( m_style );
 
-    if ( bullet && (Numbering)m_numbering == NUM_CHAPTER ) {
+    if ( bullet && m_numbering == NUM_CHAPTER ) {
         // Shome mishtake surely! (not sure how it can happen though)
         m_style = STYLE_NUM;
         bullet = false;
@@ -636,7 +636,7 @@ QString KoParagCounter::levelText( const KoTextParag *paragraph )
         switch ( m_style )
         {
         case STYLE_NONE:
-        if ( (Numbering)m_numbering == NUM_LIST )
+        if ( m_numbering == NUM_LIST )
             text = ' ';
         break;
         case STYLE_NUM:
