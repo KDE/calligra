@@ -350,6 +350,24 @@ static void ProcessImageTag ( QDomNode         myNode,
     ProcessSubtags (myNode, tagProcessingList, leader);
 }
 
+static void ProcessPictureAnchor( QDomNode myNode, KWEFKWordLeader *leader, FrameAnchor* frameAnchor, const int frameType )
+{
+    frameAnchor->type = frameType;
+ 
+    QValueList<TagProcessing> tagProcessingList;
+    tagProcessingList
+        << TagProcessing ( "FRAME",   ProcessFrameTag, frameAnchor )
+        << TagProcessing ( "PICTURE", ProcessImageTag, &frameAnchor->picture.key )
+        << TagProcessing ( "IMAGE",   ProcessImageTag, &frameAnchor->picture.key )
+        << TagProcessing ( "CLIPART", ProcessImageTag, &frameAnchor->picture.key )
+        ;
+    ProcessSubtags (myNode, tagProcessingList, leader);
+
+    kdDebug (30520) << "FRAMESET PICTURE KEY " << frameAnchor->picture.key.toString() << endl;
+
+    frameAnchor->key = frameAnchor->picture.key;
+}
+
 static void ProcessTableAnchor( QDomNode myNode, KWEFKWordLeader *leader, FrameAnchor* frameAnchor,
     const int col, const int row, const int cols, const int rows )
 {
@@ -526,29 +544,15 @@ static void ProcessFramesetTag ( QDomNode        myNode,
             kdDebug (30508) << "DEBUG: FRAMESET name of picture is " << name << endl;
 #endif
 
-            FrameAnchor *frameAnchor = findAnchor (leader->m_currentFramesetName, *paraList);
+            FrameAnchor *frameAnchor = findAnchor ( leader->m_currentFramesetName, *paraList );
 
             if ( frameAnchor )
             {
-                frameAnchor->type = frameType;
-
-                QValueList<TagProcessing> tagProcessingList;
-                tagProcessingList
-                    << TagProcessing ( "FRAME",   ProcessFrameTag, frameAnchor )
-                    << TagProcessing ( "PICTURE", ProcessImageTag, &frameAnchor->picture.key )
-                    << TagProcessing ( "IMAGE",   ProcessImageTag, &frameAnchor->picture.key )
-                    << TagProcessing ( "CLIPART", ProcessImageTag, &frameAnchor->picture.key )
-                    ;
-                ProcessSubtags (myNode, tagProcessingList, leader);
-
-#if 0
-                kdDebug (30508) << "DEBUG: FRAMESET PICTURE KEY filename of picture is " << frameAnchor->picture.key << endl;
-#endif
-
-                frameAnchor->key = frameAnchor->picture.key;
+                ProcessPictureAnchor( myNode, leader, frameAnchor, frameType );
             }
             else
             {
+                // ### TODO: non-inlined picture?
                 kdWarning (30508) << "ProcessFramesetTag: Couldn't find anchor " << leader->m_currentFramesetName << endl;
             }
 
@@ -621,12 +625,32 @@ static void ProcessPaperBordersTag (QDomNode myNode, void*, KWEFKWordLeader* lea
     double bottom = 0.0;
 
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList
-        << AttrProcessing ( "left",   left )
-        << AttrProcessing ( "right",  right )
-        << AttrProcessing ( "top",    top )
-        << AttrProcessing ( "bottom", bottom )
-        ;
+    if ( leader->m_oldSyntax )
+    {
+        attrProcessingList
+            << AttrProcessing ( "ptLeft",   left )
+            << AttrProcessing ( "ptRight",  right )
+            << AttrProcessing ( "ptTop",    top )
+            << AttrProcessing ( "ptBottom", bottom )
+            << AttrProcessing ( "mmLeft" )
+            << AttrProcessing ( "mmRight" )
+            << AttrProcessing ( "mmTop" )
+            << AttrProcessing ( "mmBottom" )
+            << AttrProcessing ( "inchLeft" )
+            << AttrProcessing ( "inchRight" )
+            << AttrProcessing ( "inchTop" )
+            << AttrProcessing ( "inchBottom" )
+            ;
+    }
+    else
+    {
+        attrProcessingList
+            << AttrProcessing ( "left",   left )
+            << AttrProcessing ( "right",  right )
+            << AttrProcessing ( "top",    top )
+            << AttrProcessing ( "bottom", bottom )
+            ;
+    }
     ProcessAttributes (myNode, attrProcessingList);
 
     leader->doFullPaperBorders(top, left, bottom, right);
