@@ -140,6 +140,7 @@ GBezier::GBezier (const GBezier& obj) : GPolyline (obj) {
   wSegment = -1;
   closed = obj.closed;
   ppoints = obj.ppoints;
+  calcBoundingBox();
 }
 
 void GBezier::setPoint (int idx, const Coord& p) {
