@@ -101,7 +101,9 @@ public:
   bool open( const QString & name );
 
   /**
-   * Allows to check for an open storage.
+   * Check whether a file inside the store is currently opened with open(),
+   * ready to be read or written.
+   * @return true if a file is currently opened.
    */
   bool isOpen() const;
 
