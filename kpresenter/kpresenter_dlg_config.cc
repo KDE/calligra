@@ -606,6 +606,7 @@ void ConfigureMiscPage::slotDefault()
    m_displayLink->setChecked(true);
    m_displayComment->setChecked(true);
    m_underlineLink->setChecked(true);
+   m_displayFieldCode->setChecked( false );
    KPresenterDoc* doc = m_pView->kPresenterDoc();
 
    resolutionY->setValue( KoUnit::ptToUnit( MM_TO_POINT( 10.0), doc->getUnit() ) );
@@ -746,6 +747,8 @@ void ConfigureDefaultDocPage::slotDefault()
     autoSave->setValue( m_pView->kPresenterDoc()->defaultAutoSave()/60 );
     m_variableNumberOffset->setValue(1);
     m_cursorInProtectedArea->setChecked(true);
+    m_tabStopWidth->setValue(KoUnit::ptToUnit( MM_TO_POINT(15), m_pView->kPresenterDoc()->getUnit()));
+
 }
 
 void ConfigureDefaultDocPage::selectNewDefaultFont() {
