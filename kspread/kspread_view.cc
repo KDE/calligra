@@ -276,7 +276,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     m_formulaAbsValue = new KAction( i18n("Formula Abs Value"), KSBarIcon("abs"), 0, this, SLOT( formulaAbsValue() ),
 				     actionCollection(), "formulaAbsValue" );
     m_formulaBrackets = new KAction( i18n("Formula Brackets"), KSBarIcon("brackets"), 0, this, SLOT( formulaBrackets() ),
-				     actionCollection(), "m_formulaBrackets" );
+				     actionCollection(), "formulaBrackets" );
     m_formulaFraction = new KAction( i18n("Formula Fraction"), KSBarIcon("frac"), 0, this, SLOT( formulaFraction() ),
 				     actionCollection(), "formulaFraction" );
     m_formulaRoot = new KAction( i18n("Formula Root"), KSBarIcon("root"), 0, this, SLOT( formulaRoot() ),
