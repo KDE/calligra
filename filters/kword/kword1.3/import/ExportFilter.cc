@@ -1089,6 +1089,37 @@ bool OOWriterWorker::makeTableRows( const QString& tableName, const Table& table
     return true;
 }
 
+static uint findColumnWidths( const Table& table, QMemArray<double>& widthArray )
+{
+    uint currentColumn = 0;
+    QValueList<TableCell>::ConstIterator itCell;
+
+    for ( itCell = table.cellList.begin();
+        itCell != table.cellList.end(); ++itCell )
+    {
+        kdDebug(30520) << "Column: " << (*itCell).col << " (Row: " << (*itCell).row << ")" << endl;
+        if ( (*itCell).row )
+            break; // We have finished the first row
+
+        int cols = (*itCell).m_cols;
+        if ( cols < 1)
+            cols = 1;
+
+        // ### FIXME: the columns behind a larger cell do not need to be symmetrical
+        const double width = ( (*itCell).frame.right - (*itCell).frame.left ) / cols;
+
+        if ( currentColumn + cols > widthArray.size() )
+            widthArray.resize( currentColumn + 4, QGArray::SpeedOptim);
+
+        for ( int i = 0; i < cols; ++i )
+        {
+            widthArray.at( currentColumn ) = width;
+            ++currentColumn;
+        }
+    }
+    return currentColumn;
+}
+
 bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
 {
 #ifdef ALLOW_TABLE
@@ -1107,48 +1138,21 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
         << escapeOOText( automaticTableStyle )
         << "\" >\n";
 
-    ulong columnNumber = 0L;
+
+    QMemArray<double> widthArray(4);
+
+    const uint numberColumns = findColumnWidths( anchor.table, widthArray );
+    // ### TODO: check if 0 and give error message!
+
     double tableWidth = 0.0; // total width of table
-    QString delayedAutomaticStyles; // Automatic styles for the columns
-
-    QValueList<TableCell>::ConstIterator itCell;
-
-    for ( itCell=anchor.table.cellList.begin();
-        itCell!=anchor.table.cellList.end(); ++itCell )
+    uint i; // We need the loop variable 2 times
+    for ( i=0; i < numberColumns; ++i )
     {
-        kdDebug(30520) << "Column: " << (*itCell).col << endl;
-        if ( (*itCell).row )
-            break; // We have finished the first row
-
-        int cols = (*itCell).m_cols;
-        if ( cols < 1)
-            cols = 1;
-
-        // ### FIXME: the columns behind a larger cell do not need to be symmetrical
-        const double width = ( (*itCell).frame.right - (*itCell).frame.left ) / cols;
-        tableWidth += width; // ###TODO any modifier needed?
-
-        const QString automaticColumnStyle ( makeAutomaticStyleName( tableName + ".Column", columnNumber ) );
-        kdDebug(30520) << "Creating automatic column style: " << automaticColumnStyle /* << " key: " << styleKey */ << endl;
-
-        delayedAutomaticStyles += "  <style:style";
-        delayedAutomaticStyles += " style:name=\"" + escapeOOText( automaticColumnStyle ) + "\"";
-        delayedAutomaticStyles += " style:family=\"table-column\"";
-        delayedAutomaticStyles += ">\n";
-        delayedAutomaticStyles += "   <style:properties ";
-        // Despite that some OO specification examples use fo:width, OO specification section 4.19 tells to use style:column-width
-        //  and/or the relative variant: style:rel-column-width
-        delayedAutomaticStyles += " style:column-width=\"" + QString::number( width ) + "pt\" ";
-        delayedAutomaticStyles += "/>\n";
-        delayedAutomaticStyles += "  </style:style>\n";
-
-        // ### TODO: find a way how to use table:number-columns-repeated for more that one cell's column(s)
-        *m_streamOut << "<table:table-column table:style-name=\""
-            << escapeOOText( automaticColumnStyle )
-            << "\" table:number-columns-repeated=\"" << cols << "\"/>\n";
+        tableWidth += widthArray.at( i );
     }
+    kdDebug(30520) << "Table width: " << tableWidth << endl;
 
-    // Now that we have processed the columns, we can write out the automatic style for the table
+    // Now we have enough information to generate the style for the table
     m_contentAutomaticStyles += "  <style:style";
     m_contentAutomaticStyles += " style:name=\"" + escapeOOText( automaticTableStyle ) + "\"";
     m_contentAutomaticStyles += " style:family=\"table\"";
@@ -1158,9 +1162,31 @@ bool OOWriterWorker::makeTable(const FrameAnchor& anchor )
     m_contentAutomaticStyles += "/>\n";
     m_contentAutomaticStyles += "  </style:style>\n";
 
-    // Now that the automatic style for the table is written, we can write the column's ones
-    m_contentAutomaticStyles += delayedAutomaticStyles;
-    delayedAutomaticStyles = QString::null; // Release memory
+    QValueList<TableCell>::ConstIterator itCell;
+
+    ulong columnNumber = 0L;
+
+    for ( i=0; i < numberColumns; ++i )
+    {
+        const QString automaticColumnStyle ( makeAutomaticStyleName( tableName + ".Column", columnNumber ) );
+        kdDebug(30520) << "Creating automatic column style: " << automaticColumnStyle /* << " key: " << styleKey */ << endl;
+
+        m_contentAutomaticStyles += "  <style:style";
+        m_contentAutomaticStyles += " style:name=\"" + escapeOOText( automaticColumnStyle ) + "\"";
+        m_contentAutomaticStyles += " style:family=\"table-column\"";
+        m_contentAutomaticStyles += ">\n";
+        m_contentAutomaticStyles += "   <style:properties ";
+        // Despite that some OO specification examples use fo:width, OO specification section 4.19 tells to use style:column-width
+        //  and/or the relative variant: style:rel-column-width
+        m_contentAutomaticStyles += " style:column-width=\"" + QString::number( widthArray.at( i ) ) + "pt\" ";
+        m_contentAutomaticStyles += "/>\n";
+        m_contentAutomaticStyles += "  </style:style>\n";
+
+        // ### TODO: find a way how to use table:number-columns-repeated for more that one cell's column(s)
+        *m_streamOut << "<table:table-column table:style-name=\""
+            << escapeOOText( automaticColumnStyle )
+            << "\" table:number-columns-repeated=\"1\"/>\n";
+    }
 
     makeTableRows( tableName, anchor.table );
 
