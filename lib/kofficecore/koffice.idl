@@ -58,7 +58,8 @@ module KOffice
 	 */
 	interface Print
 	{
-		string encodedMetaFile( in long width, in long height, in float scale );
+		typedef sequence<octet> Picture;
+		Picture picture( in long width, in long height, in float scale );
 	};
 
 	interface View : OpenParts::View
