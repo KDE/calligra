@@ -501,6 +501,10 @@ private:
 
     ViewPrivate* d;
 
+    // don't allow copy or assignment
+    KSpreadView( const KSpreadView& );
+    KSpreadView& operator=( const KSpreadView& );
+
     // GUI stuff
     QButton* newIconButton( const char *_file, bool _kbutton = false, QWidget *_parent = 0L );
     void updateButton(KSpreadCell *cell, int column, int row);
