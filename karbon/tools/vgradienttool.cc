@@ -118,7 +118,7 @@ VGradientTool::mouseButtonRelease()
 		fill.gradient() = m_gradient;
 		fill.setType( VFill::grad );
 		view()->part()->addCommand(
-			new VFillCmd( &view()->part()->document(), fill ), true );
+			new VFillCmd( &view()->part()->document(), fill, "14_gradient" ), true );
 	}
 	else
 	{
@@ -126,7 +126,7 @@ VGradientTool::mouseButtonRelease()
 		stroke.gradient() = m_gradient;
 		stroke.setType( VStroke::grad );
 		view()->part()->addCommand(
-			new VStrokeCmd( &view()->part()->document(), &stroke ), true );
+			new VStrokeCmd( &view()->part()->document(), &stroke, "14_gradient" ), true );
 	}
 
 	view()->selectionChanged();
@@ -149,7 +149,7 @@ VGradientTool::mouseDragRelease()
 		fill.gradient() = m_gradient;
 		fill.setType( VFill::grad );
 		view()->part()->addCommand(
-			new VFillCmd( &view()->part()->document(), fill ), true );
+			new VFillCmd( &view()->part()->document(), fill, "14_gradient" ), true );
 	}
 	else
 		view()->part()->addCommand(
