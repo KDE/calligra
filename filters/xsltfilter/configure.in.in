@@ -55,7 +55,8 @@ if test -n "$XSLT_CONFIG"; then
 fi
 
 if test ! "$USE_RPATH" = "yes"; then
-   LIBXLST_RPATH=
+    LIBXLST_RPATH=
+    LIBXML_RPATH=
 fi
 
 AC_SUBST(LIBXSLT_LIBS)
