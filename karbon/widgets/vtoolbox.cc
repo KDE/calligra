@@ -151,6 +151,8 @@ VToolBox::setupTools()
 	}
 	if( !insertLeft ) // uneven count, make dummy button
 		addButton( "karbon", "", id );
+	// select first (select tool)
+	buttonGroup->setButton( 0 );
 }
 
 QToolButton *
