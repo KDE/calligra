@@ -3,14 +3,19 @@
 MimeType=application/x-kpresenter
 Comment=KPresenter
 Comment[da]=KPræsenterer
-Comment[eo]=KPrezentanto-dosiero
+Comment[eo]=Prezentilo
+Comment[es]=Documento de KPresenter
 Comment[et]=KPresener
 Comment[is]=Vörpun (kpresenter-skjal)
+Comment[ko]=K프리젠터
 Comment[mk]=K-презентација
-Comment[pt]=Apresentações
 Comment[pt_BR]=Gerador de Apresentações
+Comment[pt]=Apresentações
 Comment[ru]=Презентации
 Icon=kpresenter
 Type=MimeType
 Patterns=*.kpr;*.kpt;
 X-KDE-AutoEmbed=false
+[Property::X-KDE-NativeExtension]
+Type=QString
+Value=.kpr

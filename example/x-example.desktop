@@ -1,38 +1,10 @@
 # KDE Config File
 [Desktop Entry]
 MimeType=application/x-example
-Comment=Canossa Example
-Comment[ca]=L'exemple Canossa
-Comment[cs]=Příklad Canossy
-Comment[da]=Canossa eksempel
-Comment[de]=Canossa-Beispiel
-Comment[eo]=Ekzemplo pri Canossa
-Comment[es]=Ejemplo Canossa
-Comment[et]=Canossa näide
-Comment[fi]=Canossa esimerkki
-Comment[fr]=Exemple de Canossa
-Comment[gl]=Exemplo de Canossa
-Comment[he]=Canossa תמגוד
-Comment[hu]=Canossa példaprogramja
-Comment[is]=Canossa sýnishorn
-Comment[it]=Esempio di Canossa
-Comment[lt]=Canossa Pavyzdys
-Comment[mk]=Canossa пример
-Comment[nl]=Canossa-voorbeeld
-Comment[no]=Canossa-eksempel
-Comment[no_NY]=Canossa-døme
-Comment[pl]=Przykład Canossy
-Comment[pt]=Exemplo do Canossa
-Comment[pt_BR]=Exemplo Canossa
-Comment[ro]=Exemplu Canossa
-Comment[ru]=Пример Canossa
-Comment[sk]=Príklad Canosa
-Comment[sl]=Primer Canossa
-Comment[sv]=Canossa-exempel
-Comment[ta]=¦¸§É¡º¡ ¯¾¡Ã½õ
-Comment[tr]=Canossa Örneği
-Comment[uk]=Приклад Canossa
-Comment[zh_CN.GB2312]=Canossa 例子
+#Comment=...
 Type=MimeType
 Patterns=*.xmpl;
 X-KDE-AutoEmbed=false
+[Property::X-KDE-NativeExtension]
+Type=QString
+Value=.xmpl

@@ -3,9 +3,13 @@
 MimeType=application/x-kformula
 Comment=KFormula
 Comment[eo]=KFormulo
+Comment[es]=Documento de KFormula
 Comment[is]=Formúla
+Comment[ko]=K공식
 Comment[mk]=К-формула
-Comment[pt]=Formulas
-Comment[ru]=Формулы
+Comment[pt_BR]=Editor de fórmulas
 Type=MimeType
 Patterns=*.kfo;
+[Property::X-KDE-NativeExtension]
+Type=QString
+Value=.kfo

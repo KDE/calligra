@@ -3,7 +3,6 @@
 MimeType=application/x-kspread
 Comment=KSpread
 Comment[ca]=Fulla de càlcul
-Comment[cs]=Tabulkový procesor
 Comment[da]=KRegneark
 Comment[de]=KSpread Tabellenkalkulation
 Comment[eo]=Tabelkalkulilo
@@ -22,3 +21,6 @@ Icon=kspread
 Type=MimeType
 Patterns=*.ksp;
 X-KDE-AutoEmbed=false
+[Property::X-KDE-NativeExtension]
+Type=QString
+Value=.ksp

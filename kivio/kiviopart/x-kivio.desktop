@@ -2,7 +2,13 @@
 [Desktop Entry]
 MimeType=application/x-kivio
 Comment=Kivio
+Comment[es]=Archivo de Kivio
+Comment[is]=kivio: Forrit til að teikna ýmis rit (ekki ósvipað Visio)
+Comment[pt_BR]=Editor de fluxogramas
 Icon=kivio
 Type=MimeType
 Patterns=*.flw;
 X-KDE-AutoEmbed=false
+[Property::X-KDE-NativeExtension]
+Type=QString
+Value=.flw
