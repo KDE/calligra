@@ -632,7 +632,7 @@ bool KoFind::shouldRestart( bool forceAsking ) const
         return false;
     QString message;
     if ( numMatches() )
-        message = i18n("1 match found.\n", "%1 matches found.\n").arg( numMatches() );
+        message = i18n("1 match found.\n", "%n matches found.\n").arg( numMatches() );
     else
         message = i18n("No matches found.\n");
     // Hope this word puzzle is ok, it's a different sentence
