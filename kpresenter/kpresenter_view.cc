@@ -4721,12 +4721,10 @@ void KPresenterView::changeZoomMenu( int zoom )
     QStringList lst;
     if(zoom>0)
     {
-#if 0
 	if( lst.contains( i18n( "Zoom to width" ) ) == 0 )
 	    lst << i18n( "Zoom to width" );
         if( lst.contains( i18n( "Zoom to Whole Page" ) )==0)
             lst << i18n( "Zoom to Whole Page" );
-#endif
         QValueList<int> list;
         QString z;
         int val;
@@ -4753,10 +4751,8 @@ void KPresenterView::changeZoomMenu( int zoom )
     }
     else
     {
-#if 0
           lst << i18n( "Zoom to width" );
           lst << i18n( "Zoom to Whole Page" );
-#endif
           lst << "33%";
           lst << "50%";
           lst << "75%";
@@ -4785,22 +4781,20 @@ void KPresenterView::viewZoom( const QString &s )
     QString z( s );
     bool ok=false;
     int zoom = 0;
-#if 0
     if ( z == i18n("Zoom to width") )
     {
-        zoom = qRound( static_cast<double>(m_canvas->visibleWidth() * 100 ) / (m_doc->resolutionX() * m_pKPresenterDoc->ptPaperWidth() ) );
+        zoom = qRound( static_cast<double>(m_canvas->visibleRect().width() * 100 ) / (zoomHandler()->resolutionX() * m_pKPresenterDoc->pageLayout().ptWidth ) );
         ok = true;
     }
     else if ( z == i18n("Zoom to Whole Page") )
     {
-        double height = m_doc->resolutionY() * m_doc->ptPaperHeight();
-        double width = m_doc->resolutionX() * m_doc->ptPaperWidth();
-        zoom = QMIN( qRound( static_cast<double>(canvas->visibleHeight() * 100 ) / height ),
-                     qRound( static_cast<double>(canvas->visibleWidth() * 100 ) / width ) );
+        double height = zoomHandler()->resolutionY() * m_pKPresenterDoc->pageLayout().ptHeight;
+        double width = zoomHandler()->resolutionX() * m_pKPresenterDoc->pageLayout().ptWidth;
+        zoom = QMIN( qRound( static_cast<double>(m_canvas->visibleRect().height() * 100 ) / height ),
+                     qRound( static_cast<double>(m_canvas->visibleRect().width() * 100 ) / width ) );
         ok = true;
     }
     else
-#endif
     {
     	z = z.replace( QRegExp( "%" ), "" );
     	z = z.simplifyWhiteSpace();
