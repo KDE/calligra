@@ -124,6 +124,8 @@ void KPresenterDocIface::recalcVariables(const QString &varName)
         doc->recalcVariables(7);
     else if(varName=="VT_FIELD")
         doc->recalcVariables(8);
+    else if(varName=="VT_LINK")
+        doc->recalcVariables(9);
     else if(varName=="VT_ALL")
         doc->recalcVariables(256);
 }
@@ -137,4 +139,15 @@ void KPresenterDocIface::setStartingPage(int nb)
 {
     doc->getVariableCollection()->variableSetting()->setStartingPage(nb);
     doc->recalcVariables(VT_PGNUM);
+}
+
+bool KPresenterDocIface::displayLink()
+{
+    return doc->getVariableCollection()->variableSetting()->displayLink();
+}
+
+void KPresenterDocIface::setDisplayLink(bool b)
+{
+    doc->getVariableCollection()->variableSetting()->setDisplayLink(b);
+    doc->recalcVariables(VT_LINK);
 }

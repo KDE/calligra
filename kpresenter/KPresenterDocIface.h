@@ -57,6 +57,9 @@ k_dcop:
     virtual int startingPage();
     virtual void setStartingPage(int nb);
 
+    virtual void setDisplayLink(bool b);
+    virtual bool displayLink();
+
 private:
     KPresenterDoc *doc;
 
