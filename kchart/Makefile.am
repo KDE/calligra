@@ -30,7 +30,7 @@ libkchartpart_la_SOURCES = kchart_part.cc \
 	parser.cc \
 	sheet.cc \
 	sheetdlg.cc \
-	table.cc
+	table.cc qttableview.cpp
 
 libkchartpart_la_LDFLAGS = $(KDE_PLUGIN)
 libkchartpart_la_LIBADD = $(top_builddir)/interfaces/libkochart.la \
