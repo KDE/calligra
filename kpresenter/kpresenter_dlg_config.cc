@@ -45,7 +45,7 @@
 #include <qvgroupbox.h>
 #include <kfontdialog.h>
 #include <klineedit.h>
-
+#include <koRect.h>
 
 KPConfig::KPConfig( KPresenterView* parent )
   : KDialogBase(KDialogBase::IconList,i18n("Configure KPresenter") ,
@@ -449,12 +449,13 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
 
     grid = new QGridLayout( tmpQGroupBox , 8, 1, KDialog::marginHint()+7, KDialog::spacingHint() );
 
+    KoRect rect = doc->stickyPage()->getPageRect();
     QLabel *lab=new QLabel(i18n("Resolution X :(%1)").arg(doc->getUnitName()),  tmpQGroupBox);
     grid->addWidget(lab ,0,0);
 
     resolutionX = new KLineEdit(tmpQGroupBox);
     resolutionX->setText( KoUnit::userValue( doc->getGridX(), doc->getUnit() ) );
-    resolutionX->setValidator( new KFloatValidator( 1, 100 ,true, resolutionX ) );
+    resolutionX->setValidator( new KFloatValidator( KoUnit::ptToUnit(10.0 , doc->getUnit()), KoUnit::ptToUnit(rect.width() , doc->getUnit()) ,true, resolutionX ) );
     grid->addWidget(resolutionX ,1,0);
 
     lab=new QLabel(i18n("Resolution X :(%1)").arg(doc->getUnitName()), tmpQGroupBox);
@@ -462,7 +463,7 @@ ConfigureMiscPage::ConfigureMiscPage( KPresenterView *_view, QVBox *box, char *n
 
     resolutionY = new KLineEdit(tmpQGroupBox);
     resolutionY->setText( KoUnit::userValue( doc->getGridY(), doc->getUnit() ) );
-    resolutionY->setValidator( new KFloatValidator( 1, 100 ,true, resolutionY ) );
+    resolutionY->setValidator( new KFloatValidator( KoUnit::ptToUnit(10.0 , doc->getUnit()), KoUnit::ptToUnit(rect.width() , doc->getUnit()) ,true, resolutionY ) );
     grid->addWidget(resolutionY , 2,0);
 }
 
