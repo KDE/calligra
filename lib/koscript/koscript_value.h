@@ -145,8 +145,8 @@ public:
     const QMap<QString,Ptr>& mapValue() const { Q_ASSERT( typ == MapType ); return *((QMap<QString,Ptr>*)val.ptr); }
     QMap<QString,Ptr>& mapValue() { Q_ASSERT( typ == MapType ); return *((QMap<QString,Ptr>*)val.ptr); }
     KScript::Long intValue() const { Q_ASSERT( typ == IntType || typ == DoubleType ); if ( typ == IntType ) return val.i; return (int)val.d; }
-    KScript::Boolean boolValue() const { Q_ASSERT( typ == BoolType || typ == StringType ); if ( typ == BoolType ) return val.b;
-                                         return !stringValue().isEmpty(); }
+    KScript::Boolean boolValue() const { Q_ASSERT( typ == DoubleType || typ == BoolType || typ == StringType ); 
+										if ( typ == BoolType ) return val.b; if( typ == DoubleType) if( doubleValue() == 0 ) return false; else return true; return !stringValue().isEmpty(); }
     KScript::Double doubleValue() const { Q_ASSERT( typ == DoubleType || typ == IntType ); if ( typ == DoubleType ) return val.d;
                                           return (double)val.i; }
     KScript::Char charValue() const { if ( typ == CharRefType ) return *((KScript::CharRef*)val.ptr);

@@ -709,6 +709,8 @@ bool KSValue::implicitCast( Type _typ ) const
     case DoubleType:
 	if ( _typ == IntType )
 	    return TRUE;
+	if ( _typ == BoolType && ( doubleValue() == 1 || doubleValue() == 0 ) )
+		return TRUE;
       return false;
     case StringType:
 	if ( _typ == BoolType )
