@@ -218,7 +218,7 @@ void configureInterfacePage::apply()
         oldRastY=rastY;
     }
 
-    double newIndent = KoUnit::ptToUnit( indent->value(), doc->getUnit() );
+    double newIndent = KoUnit::ptFromUnit( indent->value(), doc->getUnit() );
     if( newIndent != doc->getIndentValue() )
     {
         config->writeEntry( "Indent", newIndent, true, false, 'g', DBL_DIG /* 6 is not enough */ );
