@@ -92,11 +92,14 @@ public:
     virtual void load( QDomElement &elem );
 
     virtual QString text();
-    // Nothing to do here. Done at a higher level.
+    // Nothing to do here. Numbering done by KWTextFrameSet::renumberFootNotes
     virtual void recalc() { }
 
     void setNum( int num ) { m_num = num; }
     int num() const { return m_num; }
+
+    // Called whenever this item is being moved by the text formatter
+    virtual void move( int x, int y );
 
 private:
     unsigned short int m_num;

@@ -18,6 +18,8 @@
 */
 
 #include "kwvariable.h"
+#include "kwtextframeset.h"
+#include "kwtextdocument.h"
 #include <koVariable.h>
 #include "mailmerge.h"
 #include "kwdoc.h"
@@ -101,6 +103,8 @@ void KWMailMergeVariable::recalc()
     resize();
 }
 
+/////////////
+
 KWFootNoteVariable::KWFootNoteVariable( KoTextDocument *textdoc, NoteType noteType, KoVariableFormat *varFormat, KoVariableCollection *varColl )
     : KoVariable( textdoc, varFormat, varColl ), m_num( 0 ), m_noteType( noteType ), m_frameset( 0L )
 {
@@ -152,4 +156,27 @@ void KWFootNoteVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, 
 
     QColor textColor( fmt->color() );
     drawCustomItemHelper( p, x, y, cg, selected, offset, fmt, font, textColor );
+}
+
+void KWFootNoteVariable::move( int x, int y )
+{
+    KoVariable::move( x, y );
+
+    Q_ASSERT( m_frameset );
+    if (!m_frameset )
+        return;
+
+    // Find out the position of the footnote variable in document coordinates.
+    int paragy = paragraph()->rect().y();
+    KWTextFrameSet * fs = static_cast<KWTextDocument *>(textDocument())->textFrameSet();
+    KoPoint dPoint;
+    if ( fs->internalToDocument( QPoint( x, paragy + y + height ), dPoint ) )
+    {
+        // Ok, the (bottom of the) footnote variable is at dPoint.
+
+    } else
+    {
+        // This can happen if the page hasn't been created yet
+        //kdDebug(32001) << "KWFootNoteVariable::move internalToDocument returned 0L for " << x << ", " << y+paragy << endl;
+    }
 }

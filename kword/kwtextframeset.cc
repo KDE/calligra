@@ -120,7 +120,7 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
 KWordFrameSetIface* KWTextFrameSet::dcopObject()
 {
     if ( !m_dcop )
-	m_dcop = new KWordTextFrameSetIface( this );
+        m_dcop = new KWordTextFrameSetIface( this );
 
     return m_dcop;
 }
@@ -963,13 +963,13 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int & h, KoTextParag * parag,
                     }
                 }
                 else
-		{
+                {
                     ls->y += dy;
 #ifdef DEBUG_FLOW
-		    if ( dy )
+                    if ( dy )
                         kdDebug(32002) << "                   moving down to position ls->y=" << ls->y << endl;
 #endif
-		}
+                }
             }
             parag->setMovedDown( true );
             parag->setHeight( h + dy );
@@ -2236,7 +2236,7 @@ KWTextFrameSetEdit::~KWTextFrameSetEdit()
 KoTextViewIface* KWTextFrameSetEdit::dcopObject()
 {
     if ( !dcop )
-	dcop = new KWordTextFrameSetEditIface( this );
+        dcop = new KWordTextFrameSetEditIface( this );
 
     return dcop;
 }
@@ -2848,13 +2848,7 @@ void KWTextFrameSetEdit::insertFootNote( NoteType noteType )
 {
      kdDebug() << "KWTextFrameSetEdit::insertFootNote " << endl;
      KWDocument * doc = frameSet()->kWordDocument();
-     KoVariable * var = new KWFootNoteVariable( textFrameSet()->textDocument(), noteType, doc->variableFormatCollection()->format( "NUMBER" ), doc->getVariableCollection());
-
-     // Not a good idea, one enters superscript text afterwards when doing that...
-     //KoTextFormat format = *currentFormat();
-     //format.setVAlign(KoTextFormat::AlignSuperScript);
-     //insertVariable( var, &format );
-     insertVariable( var );
+     KWFootNoteVariable * var = new KWFootNoteVariable( textFrameSet()->textDocument(), noteType, doc->variableFormatCollection()->format( "NUMBER" ), doc->getVariableCollection());
 
      // Now create text frameset which will hold the variable's contents
      KWTextFrameSet *fs = new KWTextFrameSet( doc, i18n( "Footnotes" ) );
@@ -2869,6 +2863,11 @@ void KWTextFrameSetEdit::insertFootNote( NoteType noteType )
             fs->addFrame( frame );
 
      doc->addFrameSet( fs );
+
+     // Bind the footnote variable and its text frameset
+     var->setFrameSet( fs );
+
+     insertVariable( var );
 
      // Re-number footnote variables
      textFrameSet()->renumberFootNotes();
@@ -2975,7 +2974,7 @@ void KWTextFrameSetEdit::updateUI( bool updateFormat, bool force )
     if( m_paragLayout.margins[QStyleSheetItem::MarginLeft] != parag->margin(QStyleSheetItem::MarginLeft)
         || m_paragLayout.margins[QStyleSheetItem::MarginFirstLine] != parag->margin(QStyleSheetItem::MarginFirstLine)
         || m_paragLayout.margins[QStyleSheetItem::MarginRight] != parag->margin(QStyleSheetItem::MarginRight)
-	|| force )
+        || force )
     {
         m_paragLayout.margins[QStyleSheetItem::MarginFirstLine] = parag->margin(QStyleSheetItem::MarginFirstLine);
         m_paragLayout.margins[QStyleSheetItem::MarginLeft] = parag->margin(QStyleSheetItem::MarginLeft);

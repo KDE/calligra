@@ -539,10 +539,6 @@ public:
     // Return true if page @p num can be removed, as far as this frameset is concerned
     virtual bool canRemovePage( int num );
 
-    // only used for headers and footers...
-    void setCurrent( int i ) { m_current = i; }
-    int getCurrent()const { return m_current; }
-
     //Note: none of those floating-frameset methods creates undo/redo
     //They are _called_ by the undo/redo commands.
 
@@ -658,7 +654,6 @@ protected:
     QPtrList<KWFrame> m_emptyList; // ## make static pointer to save memory ?
 
     Info m_info;
-    int m_current; // used for headers and footers, not too sure what it means
     KWTableFrameSet *grpMgr;
     bool m_removeableHeader, m_visible;
     QString m_name;
