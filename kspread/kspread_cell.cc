@@ -5340,10 +5340,16 @@ void KSpreadCell::loadOasisConditional( QDomElement * style )
     kdDebug()<<"void KSpreadCell::loadOasisConditional( QDomElement * style )********************\n";
     if ( style )//safe
     {
-        delete d->extra()->conditions;
-        d->extra()->conditions = new KSpreadConditions( this );
-        d->extra()->conditions->loadOasisConditions( *style );
-        d->extra()->conditions->checkMatches();
+        QDomElement elementItem = style->firstChild().toElement();
+        elementItem = elementItem.firstChild().toElement();
+        if ( !elementItem.isNull() )
+        {
+            kdDebug()<<" has a conditional attribute :!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
+            delete d->extra()->conditions;
+            d->extra()->conditions = new KSpreadConditions( this );
+            d->extra()->conditions->loadOasisConditions( elementItem );
+            d->extra()->conditions->checkMatches();
+        }
     }
 }
 

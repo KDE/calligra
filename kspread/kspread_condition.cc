@@ -409,8 +409,7 @@ QDomElement KSpreadConditions::saveConditions( QDomDocument & doc ) const
 void KSpreadConditions::loadOasisConditions( const QDomElement & element )
 {
     kdDebug()<<"void KSpreadConditions::loadOasisConditions( const QDomElement & element )\n";
-    QDomElement elementItem = element.firstChild().toElement();
-    elementItem = elementItem.firstChild().toElement();
+    QDomElement elementItem( element );
     KSpreadStyleManager * manager = m_cell->sheet()->doc()->styleManager();
 
     while ( !elementItem.isNull() )
