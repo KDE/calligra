@@ -74,7 +74,6 @@ public:
 	     BackType backType, const QColor &backColor1,
 	     const QColor &backColor2, BCType _bcType,
 	     const QString &backPic, const QDateTime &picLM,
-	     const QString &backClip, const QDateTime &clipLM,
 	     BackView backPicView, bool _unbalanced,
 	     int _xfactor, int _yfactor, KPrPage *m_page  );
 
@@ -84,8 +83,6 @@ public:
     BackType getBackType() const;
     QString getBackPixFilename() const { return chosenPic; }
     QDateTime getBackPixLastModified() const { return picLastModified; }
-    QString getBackClipFilename() const { return chosenClip; }
-    QDateTime getBackClipLastModified() const { return clipLastModified; }
     BackView getBackView() const;
     bool getBackUnbalanced() const;
     int getBackXFactor() const;
@@ -96,17 +93,16 @@ protected:
     /// Common code for @ref BackDia::selectPic and @ref BackDia::selectClip
     QString selectPicture( const QString& pattern );
 private:
-    QLabel *lPicName, *picPreview, *lClipName;
+    QLabel *lPicName, *picPreview;
     QCheckBox *unbalanced;
     QComboBox *cType, *backCombo, *picView;
-    QPushButton *picChoose, *clipChoose;
+    QPushButton *picChoose;
     KColorButton *color1Choose, *color2Choose;
     QSlider *xfactor, *yfactor;
     QString chosenPic;
-    QString chosenClip;
     BackPreview *preview;
-    bool picChanged, clipChanged, lockUpdate;
-    QDateTime picLastModified, clipLastModified;
+    bool picChanged, lockUpdate;
+    QDateTime picLastModified;
     QLabel *labXFactor, *labYFactor;
     QTabWidget *tabWidget;
 
@@ -115,7 +111,6 @@ private:
     QColor oldBackColor2;
     BCType oldBcType;
     QString oldBackPic;
-    QString oldBackClip;
     BackView oldBackPicView;
     bool oldUnbalanced;
     int oldXFactor;
@@ -123,7 +118,6 @@ private:
 
 private slots:
     void selectPic();
-    void selectClip();
     void updateConfiguration();
 
     void Ok() { emit backOk( false ); }

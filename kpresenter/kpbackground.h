@@ -36,6 +36,7 @@ class QDomElement;
 class KoZoomHandler;
 class KPrPage;
 
+
 /******************************************************************/
 /* Class: KPBackGround                                            */
 /* The background for a given page.                               */
@@ -65,10 +66,11 @@ public:
     { removeGradient(); yfactor = _yfactor; }
     void setBackPixmap( const QString &_filename, const QDateTime &_lastModified );
     /// set the back pixmap to a new KoPicture
-    void setBackPixmap( const KoPicture& pixmap );
-    void setBackClipart(  const QString &_filename, const QDateTime &_lastModified );
-    /// set the back clipart to a new KoPicture
-    void setBackClipart( const KoPicture& clipart );
+    void setBackPicture( const KoPicture& pixmap );
+    inline void setBackPicture ( const KoPictureKey& key )
+    {
+        setBackPixmap(key.filename(), key.lastModified());
+    }
     void setPageEffect( PageEffect _pageEffect )
     { pageEffect = _pageEffect; }
     void setPageTimer( int _pageTimer )
@@ -78,8 +80,7 @@ public:
     void setPageSoundFileName( const QString &_soundFileName )
     { soundFileName = _soundFileName; }
 
-    KoPicture picture()const { return backImage;}
-    KoPicture clipart()const { return backClipart;}
+    KoPicture picture()const { return backPicture;}
 
     BackType getBackType() const
     { return backType; }
@@ -92,9 +93,7 @@ public:
     BCType getBackColorType() const
     { return bcType; }
     KoPictureKey getBackPixKey() const
-    { return backImage.getKey(); }
-    KoPictureKey getBackClipKey() const
-    { return backClipart.getKey(); }
+    { return backPicture.getKey(); }
 
     PageEffect getPageEffect() const
     { return pageEffect; }
@@ -121,7 +120,7 @@ public:
 
     void reload();
 
-    QDomElement save( QDomDocument &doc );
+    QDomElement save( QDomDocument &doc, const bool saveAsKOffice1Dot1 );
     void load( const QDomElement &element );
 
 protected:
@@ -133,9 +132,8 @@ protected:
     // Generate a new gradient pixmap, for the given size
     void generateGradient( const QSize& size );
 
-    KoPictureCollection *imageCollection() const;
+    KoPictureCollection *getPictureCollection() const;
     KPGradientCollection *gradientCollection() const;
-    KoPictureCollection *clipartCollection() const;
 
 private:
     BackType backType;
@@ -147,9 +145,9 @@ private:
     // Sound played when showing this page
     QString soundFileName;
 
-    // Background image or clipart
-    KoPicture backImage;
-    KoPicture backClipart;
+    // Background picture
+    KoPicture backPicture;
+    
     // Pixmap used to cache the drawing of the gradient, at the current size
     const QPixmap *gradientPixmap;
 

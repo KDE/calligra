@@ -716,7 +716,7 @@ QDomDocumentFragment KPresenterDoc::saveBackground( QDomDocument &doc )
 	     i != saveOnlyPage )
 	    continue;
 	kpbackground = m_pageList.at(i)->background();
-	fragment.appendChild(kpbackground->save( doc ));
+        fragment.appendChild(kpbackground->save( doc, (specialOutputFlag()==SaveAsKOffice1dot1) ));
     }
     return fragment;
 }

@@ -164,17 +164,17 @@ void SetOptionsCmd::unexecute()
 /*======================== constructor ===========================*/
 SetBackCmd::SetBackCmd( const QString &_name, const QColor &_backColor1, const QColor &_backColor2, BCType _bcType,
 			bool _backUnbalanced, int _backXFactor, int _backYFactor,
-			const KoPictureKey & _backPix, const KoPictureKey & _backClip,
+			const KoPictureKey & _backPix,
                         BackView _backView, BackType _backType,
 			const QColor &_oldBackColor1, const QColor &_oldBackColor2, BCType _oldBcType,
 			bool _oldBackUnbalanced, int _oldBackXFactor, int _oldBackYFactor,
-			const KoPictureKey & _oldBackPix, const KoPictureKey & _oldBackClip,
+			const KoPictureKey & _oldBackPix,
                         BackView _oldBackView, BackType _oldBackType,
 			bool _takeGlobal, KPresenterDoc *_doc, KPrPage *_page )
     : KNamedCommand( _name ), backColor1( _backColor1 ), backColor2( _backColor2 ), unbalanced( _backUnbalanced ),
-      xfactor( _backXFactor ), yfactor( _backYFactor ), backPix( _backPix ), backClip( _backClip ),
+      xfactor( _backXFactor ), yfactor( _backYFactor ), backPix( _backPix ),
       oldBackColor1( _oldBackColor1 ), oldBackColor2( _oldBackColor2 ), oldUnbalanced( _oldBackUnbalanced ),
-      oldXFactor( _oldBackXFactor ), oldYFactor( _oldBackYFactor ), oldBackPix( _oldBackPix ), oldBackClip( _oldBackClip )
+      oldXFactor( _oldBackXFactor ), oldYFactor( _oldBackYFactor ), oldBackPix( _oldBackPix )
 {
     bcType = _bcType;
     backView = _backView;
@@ -197,7 +197,6 @@ void SetBackCmd::execute()
 	m_page->setBackType(  backType );
 	m_page->setBackView(  backView );
 	m_page->setBackPixmap( backPix );
-	m_page->setBackClipart( backClip );
 	doc->restoreBackground( m_page );
     } else {
         QPtrListIterator<KPrPage> it( doc->getPageList() );
@@ -208,7 +207,6 @@ void SetBackCmd::execute()
 	    it.current()->setBackType( backType );
 	    it.current()->setBackView( backView );
 	    it.current()->setBackPixmap(  backPix );
-	    it.current()->setBackClipart( backClip );
             doc->restoreBackground(it.current());
         }
 
@@ -225,7 +223,6 @@ void SetBackCmd::unexecute()
 	m_page->setBackType( oldBackType );
 	m_page->setBackView(  oldBackView );
 	m_page->setBackPixmap(  oldBackPix );
-	m_page->setBackClipart( oldBackClip );
 	doc->restoreBackground( m_page );
     } else {
         QPtrListIterator<KPrPage> it( doc->getPageList() );
@@ -236,7 +233,6 @@ void SetBackCmd::unexecute()
 	    it.current()->setBackType( oldBackType );
 	    it.current()->setBackView( oldBackView );
 	    it.current()->setBackPixmap(  oldBackPix );
-	    it.current()->setBackClipart( oldBackClip );
             doc->restoreBackground(it.current());
         }
     }

@@ -2707,7 +2707,7 @@ void KPrPage::setBackColor(const  QColor &backColor1, const QColor &backColor2, 
 
 void KPrPage::setBackPixmap( const KoPictureKey & key )
 {
-    kpbackground->setBackPixmap( key.filename(), key.lastModified() );
+    kpbackground->setBackPicture( key );
 }
 
 bool KPrPage::getBackUnbalanced(  )const
@@ -2717,7 +2717,7 @@ bool KPrPage::getBackUnbalanced(  )const
 
 void KPrPage::setBackClipart( const KoPictureKey & key )
 {
-    kpbackground->setBackClipart( key.filename(), key.lastModified() );
+    kpbackground->setBackPicture( key );
 }
 
 void KPrPage::setBackView( BackView backView )
@@ -2768,7 +2768,7 @@ KoPictureKey KPrPage::getBackPixKey( )const
 
 KoPictureKey KPrPage::getBackClipKey(  )const
 {
-    return kpbackground->getBackClipKey();
+    return kpbackground->getBackPixKey();
 }
 
 QColor KPrPage::getBackColor1( )const
@@ -2968,10 +2968,8 @@ void KPrPage::makeUsedPixmapList()
        }
    }
 
-   if( kpbackground->getBackType()==BT_PICTURE)
+   if( kpbackground->getBackType()==BT_PICTURE || kpbackground->getBackType()==BT_CLIPART)
        m_doc->insertPixmapKey(kpbackground->getBackPixKey());
-   else if( kpbackground->getBackType()==BT_CLIPART)
-       m_doc->insertClipartKey(kpbackground->getBackClipKey());
 }
 
 

@@ -117,11 +117,11 @@ class SetBackCmd : public KNamedCommand
 public:
     SetBackCmd( const QString &_name, const QColor &_backColor1, const QColor &_backColor2, BCType _bcType,
 		bool _backUnbalanced, int _backXFactor, int _backYFactor,
-		const KoPictureKey & _backPix, const KoPictureKey & _backClip,
+		const KoPictureKey & _backPix,
                 BackView _backView, BackType _backType,
 		const QColor &_oldBackColor1, const QColor &_oldBackColor2, BCType _oldBcType,
 		bool _oldBackUnbalanced, int _oldBackXFactor, int _oldBackYFactor,
-		const KoPictureKey & _oldBackPix, const KoPictureKey & _oldBackClip,
+		const KoPictureKey & _oldBackPix,
                 BackView _oldBackView, BackType _oldBackType,
 		bool _takeGlobal, KPresenterDoc *_doc, KPrPage *_page );
 
@@ -134,7 +134,6 @@ protected:
     bool unbalanced;
     int xfactor, yfactor;
     KoPictureKey backPix;
-    KoPictureKey backClip;
     BCType bcType;
     BackView backView;
     BackType backType;
@@ -142,7 +141,6 @@ protected:
     bool oldUnbalanced;
     int oldXFactor, oldYFactor;
     KoPictureKey oldBackPix;
-    KoPictureKey oldBackClip;
     BCType oldBcType;
     BackView oldBackView;
     BackType oldBackType;

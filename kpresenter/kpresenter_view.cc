@@ -1308,8 +1308,6 @@ void KPresenterView::extraBackground()
 			   page->getBackColorType(  ),
 			   page->getBackPixKey(  ).filename(),
                            page->getBackPixKey(  ).lastModified(),
-			   page->getBackClipKey().filename(),
-			   page->getBackClipKey().lastModified(),
 			   page->getBackView(),
 			   page->getBackUnbalanced(),
 			   page->getBackXFactor(),
@@ -3486,8 +3484,6 @@ void KPresenterView::backOk( bool takeGlobal )
 					     backDia->getBackXFactor(), backDia->getBackYFactor(),
 					     KoPictureKey( backDia->getBackPixFilename(),
                                                          backDia->getBackPixLastModified() ),
-                                             KoPictureKey( backDia->getBackClipFilename(),
-                                                           backDia->getBackClipLastModified() ),
 					     backDia->getBackView(), backDia->getBackType(),
 					     page->getBackColor1(  ),
 					     page->getBackColor2(  ),
@@ -3496,7 +3492,6 @@ void KPresenterView::backOk( bool takeGlobal )
 					     page->getBackXFactor(  ),
 					     page->getBackYFactor(  ),
 					     page->getBackPixKey(  ),
-					     page->getBackClipKey( ),
 					     page->getBackView(  ),
 					     page->getBackType(  ),
 					     takeGlobal, m_pKPresenterDoc,page);
@@ -7131,85 +7126,16 @@ void KPresenterView::importStyle()
 
 void KPresenterView::backgroundPicture()
 {
-    //todo
-    QStringList mimetypes;
-    QString oldFile;
-    KFileDialog *fd=0L;
-    KURL url;
     switch( m_canvas->activePage()->getBackType())
     {
     case BT_COLOR:
         break;
-    case BT_PICTURE:
-        mimetypes = KImageIO::mimeTypes( KImageIO::Reading );
-        oldFile=m_canvas->activePage()->background()->picture().getKey().filename();
-        url.setPath(oldFile);
-        if (QDir(url.directory()).exists())
-            fd=new KFileDialog( oldFile, QString::null, 0, 0, TRUE );
-        else
-            fd=new KFileDialog( url.fileName(), QString::null, 0, 0, TRUE );
-        fd->setMimeFilter( mimetypes );
-        fd->setCaption(i18n("Save Image"));
-        if ( fd->exec() == QDialog::Accepted )
-        {
-            url = fd->selectedURL();
-            if( url.isEmpty() )
-            {
-                KMessageBox::sorry( this,
-                                    i18n("File name is empty"),
-                                    i18n("Save Picture"));
-                delete fd;
-                return;
-            }
-
-            QFile file( url.path() );
-            if ( file.open( IO_ReadWrite ) ) {
-                m_canvas->activePage()->background()->picture().save( &file );
-                file.close();
-            } else {
-                KMessageBox::error(this,
-                                   i18n("Error during saving"),
-                                   i18n("Save Picture"));
-            }
-        }
-        break;
     case BT_CLIPART:
-        oldFile=m_canvas->activePage()->background()->clipart().getKey().filename();
-
-        mimetypes = KoPictureFilePreview::clipartMimeTypes();
-        url.setPath(oldFile);
-        if (QDir(url.directory()).exists())
-            fd=new KFileDialog( oldFile, QString::null, 0, 0, TRUE );
-        else
-            fd=new KFileDialog( url.fileName(), QString::null, 0, 0, TRUE );
-
-        fd->setMimeFilter( mimetypes );
-        fd->setCaption(i18n("Save Clipart"));
-        if ( fd->exec() == QDialog::Accepted )
-        {
-            url = fd->selectedURL();
-            if( url.isEmpty() )
-            {
-                KMessageBox::sorry( this,
-                                    i18n("File name is empty"),
-                                    i18n("Save Clipart"));
-                delete fd;
-                return;
-            }
-            QFile file( url.path() );
-            if ( file.open( IO_ReadWrite ) ) {
-                m_canvas->activePage()->background()->clipart().save( &file );
-                file.close();
-            } else {
-                KMessageBox::error(this,
-                                   i18n("Error during saving"),
-                                   i18n("Save Clipart"));
-            }
-        }
+    case BT_PICTURE:
+        KoPicture picture=m_canvas->activePage()->background()->picture();
+        savePicture(picture.getKey().filename(), picture);
         break;
     }
-    delete fd;
-
 }
 
 #include <kpresenter_view.moc>
