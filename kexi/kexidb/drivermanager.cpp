@@ -170,11 +170,11 @@ void DriverManagerInternal::incRefCount()
 void DriverManagerInternal::decRefCount()
 {
 	m_refCount--;
-	if (m_refCount<1) {
-		kdDebug()<<"KexiDB::DriverManagerInternal::decRefCount(): reached m_refCount<1 -->deletelater()"<<endl;
+//	if (m_refCount<1) {
+//		kdDebug()<<"KexiDB::DriverManagerInternal::decRefCount(): reached m_refCount<1 -->deletelater()"<<endl;
 //		s_self=0;
 //		deleteLater();
-	}
+//	}
 }
 
 DriverManagerInternal* DriverManagerInternal::s_self = 0L;
