@@ -125,3 +125,4 @@ Changes after KPresenter 1.2
 - Add font properties : change relative font size when we sub/super script font
 - Add support to add offset from baseline
 - Now koinsertlink use 'recent document'
+- Now "create backup file" is configurable

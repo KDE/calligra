@@ -117,6 +117,7 @@ private:
     int oldAutoSaveValue;
     int m_oldStartingPage;
     double m_oldTabStopWidth;
+    bool m_oldBackupFile;
 
     KPresenterView* m_pView;
     KConfig* config;
@@ -126,6 +127,7 @@ private:
     KIntNumInput* m_variableNumberOffset;
     KDoubleNumInput *m_tabStopWidth;
     QCheckBox *m_cursorInProtectedArea;
+    QCheckBox *m_createBackupFile;
 };
 
 class ConfigureToolsPage : public QObject

@@ -685,6 +685,17 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage(KPresenterView *_view, QVBox *b
         oldAutoSaveValue = config->readNumEntry( "AutoSave", oldAutoSaveValue );
     }
 
+    m_oldBackupFile = true;
+    if( config->hasGroup("Interface") )
+    {
+        config->setGroup( "Interface" );
+        m_oldBackupFile=config->readBoolEntry("BackupFile",m_oldBackupFile);
+    }
+
+    m_createBackupFile = new QCheckBox( i18n("Create Backup File"), gbDocumentSettings);
+    m_createBackupFile->setChecked( m_oldBackupFile );
+
+
     autoSave = new KIntNumInput( oldAutoSaveValue, gbDocumentSettings );
     autoSave->setRange( 0, 60, 1 );
     autoSave->setLabel( i18n("Autosave (min):") );
@@ -731,7 +742,16 @@ KCommand *ConfigureDefaultDocPage::apply()
         m_pView->kPresenterDoc()->setAutoSave( autoSaveVal*60 );
         oldAutoSaveValue=autoSaveVal;
     }
-    bool state = m_cursorInProtectedArea->isChecked();
+    bool state =m_createBackupFile->isChecked();
+
+    if(state!=m_oldBackupFile)
+    {
+        config->writeEntry( "BackupFile", state );
+        doc->setBackupFile( state);
+        m_oldBackupFile=state;
+    }
+
+    state = m_cursorInProtectedArea->isChecked();
     if ( state != doc->cursorInProtectedArea() )
     {
         config->writeEntry( "cursorInProtectArea", state );
@@ -767,7 +787,7 @@ void ConfigureDefaultDocPage::slotDefault()
     m_variableNumberOffset->setValue(1);
     m_cursorInProtectedArea->setChecked(true);
     m_tabStopWidth->setValue(KoUnit::ptToUnit( MM_TO_POINT(15), m_pView->kPresenterDoc()->getUnit()));
-
+    m_createBackupFile->setChecked( true );
 }
 
 void ConfigureDefaultDocPage::selectNewDefaultFont() {
