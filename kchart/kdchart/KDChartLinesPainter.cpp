@@ -230,7 +230,7 @@ void KDChartLinesPainter::paintDataInternal( QPainter* painter,
     if ( mode == Percent ) {
         if ( minColumnValue == 0.0 )
             zeroXAxisI = _dataRect.height();
-        else if ( maxColumnValue = 0.0 )
+        else if ( maxColumnValue == 0.0 )
             zeroXAxisI = 0.0;
         else
             zeroXAxisI = _dataRect.height() / 2.0;

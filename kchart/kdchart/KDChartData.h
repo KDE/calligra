@@ -31,6 +31,9 @@
 #include <values.h>
 #else
 #include <float.h>
+#ifdef MINDOUBLE
+#undef MINDOUBLE
+#endif
 #define MINDOUBLE DBL_MIN
 #endif
 
