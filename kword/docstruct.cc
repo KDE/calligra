@@ -625,6 +625,7 @@ KWDocStructTree::KWDocStructTree( QWidget *_parent, KWDocument *_doc, KWGUI*__pa
     //addColumn( i18n( "Additional Info" ) );
     //setColumnWidthMode( 0, Manual );
     //setColumnWidthMode( 1, Manual );
+	setResizeMode(QListView::LastColumn);
 }
 
 void KWDocStructTree::setup()
