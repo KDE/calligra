@@ -12,7 +12,6 @@
 /******************************************************************/
 
 #include "koRuler.h"
-#include "koRuler.moc"
 
 #define POINT_TO_MM(px) (int((float)px/2.83465))
 #define MM_TO_POINT(mm) (int((float)mm*2.83465))

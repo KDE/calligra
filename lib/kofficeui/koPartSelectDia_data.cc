@@ -57,4 +57,3 @@ DlgPartSelectData::~DlgPartSelectData()
 {
 }
 
-#include "koPartSelectDia_data.moc"

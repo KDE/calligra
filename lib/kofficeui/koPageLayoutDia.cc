@@ -12,7 +12,6 @@
 /******************************************************************/
 
 #include "koPageLayoutDia.h"
-#include "koPageLayoutDia.moc"
 
 #include <klocale.h>
 

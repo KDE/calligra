@@ -1,6 +1,7 @@
 ####### General stuff
 
-INCLUDES= -I../koml -I../store -I$(idldir) $(all_includes) $(MICO_INCLUDES)
+INCLUDES= -I$(top_srcdir)/lib/koml -I$(top_srcdir)/lib/store \
+	-I$(idldir) $(all_includes) $(MICO_INCLUDES)
 LDFLAGS	= $(all_libraries)  -version-info 1:0:0
 LIBADD  = -lkom $(LIB_KFILE) $(LIBMICO) 
 
@@ -8,13 +9,13 @@ LIBADD  = -lkom $(LIB_KFILE) $(LIBMICO)
 
 lib_LTLIBRARIES = libkofficecore.la
 
-BUILT_SOURCES =  moc_koFrame.cc moc_koMainWindow.cc moc_koApplication.cc
+libkofficecore_METASOURCES = USE_AUTOMOC cc
 
 libkofficecore_la_SOURCES = koDocument.cc koView.cc koffice.cc \
 	koFrame.cc koIMR.cc koStream.cc koQueryTrader.cc \
 	koMediator.cc koPrintExt.cc koMainWindow.cc koScanTools.cc \
 	koScanPlugins.cc koApplication.cc koPOAMediator.cc trader.cc \
-	koFilterManager.cc $(BUILT_SOURCES)
+	koFilterManager.cc 
 
 include_HEADERS = koffice.h koView.h koFrame.h koIMR.h \
 	koStream.h koDocument.h koPrintExt.h koFactory.h \
@@ -22,31 +23,19 @@ include_HEADERS = koffice.h koView.h koFrame.h koIMR.h \
 	koApplication.h koPOAMediator.h trader.h koQueryTrader.h \
 	koQueryTypes.h koFilterManager.h
 
+IDL_FLAGS = --query-server-for-narrow --relative-paths -I$(top_srcdir)/store -I$(idldir)
+
 idl_DATA = koffice.idl
-idl_HEADERS =  koffice.h
+idl_HEADERS = koffice.h
 
-SUFFICES = .h .moc
-
-.h.moc:
-	$(MOC) $< -o $@      
-
-moc_koFrame.cc: koFrame.h
-	$(MOC) koFrame.h -o moc_koFrame.cc
-
-moc_koMainWindow.cc: koMainWindow.h
-	$(MOC) koMainWindow.h -o moc_koMainWindow.cc
-
-moc_koApplication.cc: koApplication.h
-	$(MOC) koApplication.h -o moc_koApplication.cc
-
-
+koIMR.cc: trader.h
 koDocument.cc: koDocument.h
 moc_koMainWindow.cc: koffice.h
 koDocument.h: koffice.h
 koffice.cc: koffice.h
 koffice.h: koffice.idl
-	$(IDL) --query-server-for-narrow --relative-paths -I../store -I$(idldir) koffice.idl
+	$(IDL) $(IDL_FLAGS) $(srcdir)/koffice.idl
 trader.cc: trader.h
-trader.h: ../interfaces/trader.idl
-	$(IDL) $(IDL_FLAGS) ../interfaces/trader.idl
+trader.h: $(top_srcdir)/lib/interfaces/trader.idl
+	$(IDL) $(IDL_FLAGS) $(top_srcdir)/lib/interfaces/trader.idl
 

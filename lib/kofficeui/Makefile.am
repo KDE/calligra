@@ -1,8 +1,8 @@
 ####### General stuff
 
-INCLUDES=	-I../kofficecore $(all_includes) $(MICO_INCLUDES) -I$(idldir)
+INCLUDES=	-I$(top_srcdir)/lib/kofficecore -I$(top_builddir)/lib/kofficecore $(all_includes) $(MICO_INCLUDES) -I$(idldir)
 LDFLAGS	=	$(all_libraries) -version-info 1:0:0
-LIBADD  =           $(LIB_KDEUI)
+LIBADD  =       $(LIB_KDEUI)
 
 ####### Files
 
@@ -20,22 +20,5 @@ include_HEADERS = koAboutDia.h koPageLayoutDia.h \
 	koRuler.h koTemplateChooseDia.h koTabChooser.h \
 	koKoolBar.h
 
-SRCMETA = koAboutDia.moc koPageLayoutDia.moc koPartSelectDia.moc \
-	koPartSelectDia_data.moc koPrintDia.moc \
-	koRuler.moc koTemplateChooseDia.moc koTabChooser.moc \
-	koKoolBar.moc
+libkofficeui_METASOURCES = USE_AUTOMOC cc
 
-SUFFIXES = .h .moc
-
-.h.moc:
-	$(MOC) $< -o $@      
-
-koAboutDia.cc: koAboutDia.moc
-koPageLayoutDia.cc: koPageLayoutDia.moc
-koPartSelectDia.cc: koPartSelectDia.moc
-koPartSelectDia_data.cc: koPartSelectDia_data.moc
-koPrintDia.cc: koPrintDia.moc
-koRuler.cc: koRuler.moc
-koTemplateChooseDia.cc: koTemplateChooseDia.moc
-koTabChooser.cc: koTabChooser.moc
-koKoolBar.cc: koKoolBar.moc

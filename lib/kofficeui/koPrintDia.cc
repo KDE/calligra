@@ -277,4 +277,3 @@ bool KoPrintDia::print( QPrinter &_printer, QObject *dest = 0L, const char *slot
   return false;
 }
 
-#include "koPrintDia.moc"

@@ -14,7 +14,6 @@
 /******************************************************************/
 
 #include "koTemplateChooseDia.h"
-#include "koTemplateChooseDia.moc"
 
 /******************************************************************/
 /* Class: KoTemplateChooseDia                                     */

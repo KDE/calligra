@@ -22,4 +22,4 @@ idl:
 
 koStore_idl.cc: koStore_idl.h
 koStore_idl.h: koStore.idl
-	$(IDL) -I./ --relative-paths --query-server-for-narrow --name koStore_idl koStore.idl
+	$(IDL) -I./ --relative-paths --query-server-for-narrow --name koStore_idl $(srcdir)/koStore.idl
