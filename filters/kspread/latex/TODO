@@ -4,9 +4,15 @@ EXPORT FILTER :
 VERSION 1
 	- border											DONE
 	- multirow										DONE
-	- cell color									
+	- column color								DONE
+	- row color 									
+	- nb col and row with column and row 
+	- cell color									DONE
 	- text font										
 	- use params from the dialog	
+	- inherit row and column 
+		format for cell format. Make
+		a Format(Format, Format) constructor.
 VERSION 2
 	- formula											
 	- column format								
