@@ -18,10 +18,29 @@
 */
 
 #include <koApplication.h>
+#include <kcmdlineargs.h>
+#include <kaboutdata.h>
+#include <klocale.h>
+
+static const char* description=I18N_NOOP("KOffice Chart Generator");
+static const char* version="0.1";
+
+static const KCmdLineOptions options[]=
+{
+	{"+[file]", I18N_NOOP("File To Open"),0},
+	{0,0,0}
+};
 
 int main( int argc, char **argv )
 {
-    KoApplication app( argc, argv, "kchart" );
+    KAboutData aboutData( "kchart", I18N_NOOP("KChart"),
+        version, description, KAboutData::License_GPL,
+        "(c) 1998-2000, Kalle Dalheimer");
+    aboutData.addAuthor("Kalle Dalheimer",0, "kalle@kde.org");
+    KCmdLineArgs::init( argc, argv, &aboutData );
+    KCmdLineArgs::addCmdLineOptions( options );
+
+    KoApplication app;
 
     app.start();
 
