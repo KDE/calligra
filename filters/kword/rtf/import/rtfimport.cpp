@@ -1,3 +1,4 @@
+// kate: space-indent on; indent-width 4; replace-tabs off;
 /*
    This file is part of the KDE project
    Copyright (C) 2001 Ewald Snel <ewald@rambo.its.tudelft.nl>
@@ -37,9 +38,8 @@ K_EXPORT_COMPONENT_FACTORY( librtfimport, RTFImportFactory( "kofficefilters" ) )
 // defines a property
 #define PROP(a,b,c,d,e)		{ a, b, &RTFImport::c, d, e }
 
-// defines a member variable of RTFImport as a property
+// defines a member variable of RTFImport as a property (DEPRECATED)
 #define MEMBER(a,b,c,d,e)	PROP(a,b,c,offsetof(RTFImport,d),e)
-
 
 static RTFProperty destinationPropertyTable[] =
     {
@@ -96,7 +96,7 @@ static RTFProperty propertyTable[] =
 	MEMBER(	"@colortbl",	"blue",		setNumericProperty,	blue, 0 ),
 	MEMBER(	0L,		"box",		setEnumProperty,	state.layout.border, 0 ),
 	PROP(	0L,		"brdrb",	selectLayoutBorder,	0L, 3 ),
-	PROP(	0L,		"brdrcf",	setBorderProperty,	offsetof(RTFBorder,color), 0 ),
+	PROP(	0L,		"brdrcf",	setBorderColor,           0L, 0 ),
 	PROP(	0L,		"brdrdash",	setBorderStyle,		0L, RTFBorder::Dashes ),
 	PROP(	0L,		"brdrdashd",	setBorderStyle,		0L, RTFBorder::DashDot ),
 	PROP(	0L,		"brdrdashdd",	setBorderStyle,		0L, RTFBorder::DashDotDot ),
@@ -853,10 +853,6 @@ void RTFImport::setBorderStyle( RTFProperty *property )
     }
 }
 
-/**
- * Sets the value of a border property specified by token.
- * @param property the property to set
- */
 void RTFImport::setBorderProperty( RTFProperty *property )
 {
     if (state.layout.border)
@@ -868,6 +864,21 @@ void RTFImport::setBorderProperty( RTFProperty *property )
 	for (uint i=0; i < 4; i++)
 	{
 	    *((int *)(((char *)&state.layout.borders[i]) + property->offset)) = token.value;
+	}
+    }
+}
+
+void RTFImport::setBorderColor( RTFProperty * )
+{
+    if (state.layout.border)
+    {
+        state.layout.border->color = token.value;
+    }
+    else
+    {
+	for (uint i=0; i < 4; i++)
+	{
+	    state.layout.borders[i].color = token.value;
 	}
     }
 }
@@ -1173,8 +1184,18 @@ void RTFImport::insertSymbol( RTFProperty *property )
 void RTFImport::insertHexSymbol( RTFProperty * )
 {
     //kdDebug(30515) << "insertHexSymbol: " << token.value << endl;
+
     // Be careful, the value given in \' could be only one byte of a multi-byte character.
     // So it cannot be assumed that it will result in one character.
+
+    // Some files have \'00 which is pretty bad, as NUL is end of string for us.
+    // (e.g. attachment #7758 of bug #90649)
+    if ( !token.value )
+    {
+        kdWarning(30515) << "Trying to insert NUL character!" << endl;
+        return;
+    }
+
     char tmpch[2] = {token.value, '\0'};
 
     char *tk = token.text;
@@ -1244,6 +1265,8 @@ void RTFImport::parseFontTable( RTFProperty * )
             kdError(30515) << "No text codec for font!" << endl;
             return; // We have no text codec, so we cannot proceed!
         }
+        // ### TODO VERIFY: a RTF group could be in the middle of the font name
+        // ### TODO VERIFY:  I do not now if it is specified in RTF but attachment #7758 of bug #90649 has it.
 	// Semicolons separate fonts
 	if (strchr( token.text, ';' ) == 0L) // ### TODO: is this allowed with multi-byte Asian characters?
 	    font.name += textCodec->toUnicode( token.text );

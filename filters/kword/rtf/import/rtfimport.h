@@ -247,7 +247,15 @@ public:
     void setNumericProperty( RTFProperty *property );
     void setEnumProperty( RTFProperty *property );
     void setUnderlineProperty( RTFProperty *property );
+    /**
+     * Sets the value of a border property specified by token.
+     * @param property the property to set
+     */
     void setBorderProperty( RTFProperty *property );
+    /**
+     * Sets the value of a border color specified by token.
+     */
+    void setBorderColor( RTFProperty * );
     /**
      * Sets the value of a border property specified by token.
      * @param property the property to set
