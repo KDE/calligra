@@ -45,6 +45,8 @@ KWTextParag::KWTextParag( QTextDocument *d, QTextParag *pr, QTextParag *nx, bool
 
 KWTextParag::~KWTextParag()
 {
+    if ( !static_cast<KWTextDocument *>(document())->isDestroying() )
+        invalidateCounters();
     //kdDebug() << "KWTextParag::~KWTextParag " << this << endl;
     delete m_item;
 }
@@ -1006,12 +1008,18 @@ void KWParagLayout::setStyleName( const QString &styleName )
 }
 
 KWTextDocument::KWTextDocument( KWTextFrameSet * textfs, QTextDocument *p, KWTextFormatCollection *fc )
-    : QTextDocument( p, fc ), m_textfs( textfs )
+    : QTextDocument( p, fc ), m_textfs( textfs ), m_bDestroying( false )
 {
     // QTextDocument::QTextDocument creates a parag, but too early for our createParag to get called !
     // So we have to get rid of it.
     clear( true );
     // Using clear( false ) is a bit dangerous, since we don't always check cursor->parag() for != 0
+}
+
+KWTextDocument::~KWTextDocument()
+{
+    m_bDestroying = true;
+    clear( false );
 }
 
 #include "kwtextparag.moc"

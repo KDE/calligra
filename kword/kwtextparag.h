@@ -190,6 +190,7 @@ class KWTextDocument : public QTextDocument
     Q_OBJECT
 public:
     KWTextDocument( KWTextFrameSet * textfs, QTextDocument *p, KWTextFormatCollection *fc );
+    ~KWTextDocument();
 
     virtual QTextParag * createParag( QTextDocument *d, QTextParag *pr = 0, QTextParag *nx = 0, bool updateIds = TRUE )
     {
@@ -198,8 +199,11 @@ public:
 
     KWTextFrameSet * textFrameSet() const { return m_textfs; }
 
+    // Used by ~KWTextParag to know if it should die quickly
+    bool isDestroying() const { return m_bDestroying; }
 private:
     KWTextFrameSet * m_textfs;
+    bool m_bDestroying;
 };
 
 #endif
