@@ -278,17 +278,21 @@ bool KoFilterManager::prepareDialog( KFileDialog *dialog,
 }
 
 void KoFilterManager::cleanUp() {
-
     if(!d->dialogMap.isEmpty() && d->ps!=0L && !d->ps->isHidden()) {
         int id=d->ps->id(d->ps->visibleWidget());
         if(id!=0) {
-            KoFilterDialog *dia=d->originalDialogs.find(id).data();
-            if(dia!=0L) {
-                d->config=dia->state();
-                kdDebug(s_area) << d->config << endl;
-            }
-            else
-                kdWarning(s_area) << "default dia - no config!" << endl;
+            QMap<int, KoFilterDialog*>::Iterator it = d->originalDialogs.find(id);
+            if ( it != d->originalDialogs.end() )
+            {
+                KoFilterDialog *dia=it.data();
+                if(dia!=0L) {
+                    d->config=dia->state();
+                    kdDebug(s_area) << d->config << endl;
+                }
+                else
+                    kdWarning(s_area) << "default dia - no config!" << endl;
+            } else
+                kdWarning(s_area) << "Not found in map. id=" << id << endl;
         }
     }
 }
