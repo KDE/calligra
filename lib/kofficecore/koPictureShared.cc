@@ -297,9 +297,13 @@ void KoPictureShared::clearAndSetMode(const QString& newMode)
     const QString mode=newMode.lower();
 
     // TODO: WMF need to be alone!
-    if ((mode=="svg") || (mode=="qpic") || (mode=="wmf"))
+    if ((mode=="svg") || (mode=="qpic"))
     {
         m_base=new KoPictureClipart();
+    }
+    else if (mode=="wmf")
+    {
+        m_base=new KoPictureWmf();
     }
     else if ( (mode=="eps") || (mode=="epsi") || (mode=="epsf") )
     {
