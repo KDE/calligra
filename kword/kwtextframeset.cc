@@ -330,7 +330,7 @@ void KWTextFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &
     // This paints the 1st two lines, which QRT forgets.
     if (!onlyChanged)
     {
-        QRect rtop( r.intersect( QRect( 0, 0, r.width(), 2 ) ) );
+        QRect rtop( r.intersect( QRect( 0, 0, r.right(), 2 ) ) );
         if ( !rtop.isEmpty() )
             painter->fillRect( rtop, cg.brush( QColorGroup::Base ) );
     }
