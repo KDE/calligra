@@ -1,6 +1,4 @@
 INCLUDES= $(all_includes) -I.. 
-DISTCLEANFILES = $(BUILT_SOURCES)
-CFLAGS = -Wall -O2
 
 noinst_LIBRARIES = libkillu.a
 

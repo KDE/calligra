@@ -1,12 +1,12 @@
-INCLUDES  = $(MICO_INCLUDES) $(all_includes) -I$(idldir) -I.. -I../share
+
+INCLUDES  = $(KOFFICE_INCLUDES) -I.. -I../share $(MICO_INCLUDES) $(all_includes) -I$(idldir)
 LDFLAGS   = $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 FILTER_LIBS = ../filter/libfilter.a
 XML_LIBS = ../xmlutils/libxml.a
 KSHARE_LIBS = ../share/libkillu.a
-LDADD = $(KSHARE_LIBS) $(XML_LIBS) $(FILTER_LIBS) \
-	-lkofficeui -lkofficecore -lkoml \
-	 -lkfile -lkfm -lop -lkom -lqt -lkdeui -lkdecore \
-	$(LIBMICO) -lXext -lX11 $(LIBSOCKET)
+LDADD = $(KSHARE_LIBS) $(XML_LIBS) $(FILTER_LIBS) $(KOFFICE_LIBS) \
+	 -lkfile -lkfm -lop -lkom  -lkdeui -lkdecore \
+	$(LIBMICO) -lqt -lXext -lX11 $(LIBSOCKET)
 
 ####### Files
 

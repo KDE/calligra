@@ -33,33 +33,50 @@ AC_SUBST(idldir)
 
 KDE_CHECK_PYTHON(1.5)
 
+topdir=`pwd`
+KOFFICE_LIBS="$topdir/lib/kofficeui/libkofficeui.la $topdir/lib/kofficecore/libkofficecore.la $topdir/lib/koml/libkoml.la"
+AC_SUBST(KOFFICE_LIBS)
+
+KOFFICE_INCLUDES="-I $topdir/lib/kofficeui -I $topdir/lib/kofficecore -I $topdir/lib/koml"
+AC_SUBST(KOFFICE_INCLUDES)
+
 dnl add here all your Makefiles. These are created by configure
-AC_OUTPUT(Makefile \
+AC_OUTPUT( \
+	Makefile \
+	kchart/Makefile	\
+	kchart/core/Makefile \
+	kchart/pics/Makefile \
+	kchart/ui/Makefile \
+	kformula/Makefile \
+	kformula/pics/Makefile \
+	killustrator/Makefile \
+	killustrator/src/Makefile \
+	killustrator/src/doc/Makefile \
+	killustrator/src/filter/Makefile \
+	killustrator/src/koffice/Makefile \
+	killustrator/src/pics/Makefile \
+	killustrator/src/share/Makefile \
+	killustrator/src/standalone/Makefile \
+	killustrator/src/xmlutils/Makefile \
 	kimage/Makefile \
-	kspread/pics/Makefile \
+	kpresenter/Makefile \
+	kpresenter/autoformEdit/Makefile \
+	kpresenter/autoforms/Arrows/Makefile \
+	kpresenter/autoforms/Connections/Makefile \
+	kpresenter/autoforms/Makefile \
+	kpresenter/pics/Makefile \
+	kpresenter/templates/Makefile \
+	kpresenter/toolbar/Makefile \
 	kspread/Makefile \
+	kspread/pics/Makefile \
 	kspread/scripts/Makefile \
 	lib/Makefile \
 	lib/kofficecore/Makefile \
+	lib/kofficeui/Makefile \
 	lib/kofficeui/pics/Makefile \
 	lib/kofficeui/test/Makefile \
-	lib/kofficeui/Makefile \
 	lib/koml/Makefile \
-	kformula/Makefile \
-	kformula/pics/Makefile \
-	kpresenter/Makefile \
-	kpresenter/autoformEdit/Makefile \
-	kpresenter/autoforms/Makefile \
-	kpresenter/autoforms/Arrows/Makefile \
-	kpresenter/autoforms/Connections/Makefile \
-	kpresenter/pics/Makefile \
-	kpresenter/toolbar/Makefile \
-	kpresenter/templates/Makefile \
-	kchart/Makefile	\
-	kchart/core/Makefile \
-	kchart/ui/Makefile \
-	kchart/pics/Makefile \
 	po/Makefile \
 	po/de/Makefile \
-	po/no/Makefile 
+	po/no/Makefile \
  )

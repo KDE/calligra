@@ -21,10 +21,8 @@
 APPSDIR = $(kde_appsdir)/share/apps
 
 # set the include path for X, qt and KDE
-INCLUDES= @all_includes@ -I../share -I..
+INCLUDES= $(all_includes) -I../share -I..
 # claim, which subdirectories you want to install
-
-CXXFLAGS = -O2 -Wall
 
 EXTRA_DIST = killustrator.xpm killustrator.kdelnk
 
@@ -37,7 +35,7 @@ killustrator_SOURCES	= KIllustrator.cc \
 			  main.cc
 
 # the library search path
-killustrator_LDFLAGS = @all_libraries@
+killustrator_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 # the libraries to link against. Be aware of the order. First the libraries,
 # that depend on the following ones.
@@ -46,8 +44,8 @@ XML_LIBS = ../xmlutils/libxml.a
 KSHARE_LIBS = ../share/libkillu.a
 killustrator_LDADD   =  $(KSHARE_LIBS) $(FILTER_LIBS) $(XML_LIBS) \
 	-lkfm -lkfile -lkdeui -lkdecore \
-	-lqt @LIBQIMGIO@ \
-	-lX11 -lXext @LIBSOCKET@ @LIBDL@
+	-lqt $(LIBQIMGIO) \
+	-lX11 -lXext $(LIBSOCKET) $(LIBDL)
 
 # this option you can leave out. Just, if you use "make dist", you need it
 noinst_HEADERS = KIllustrator.h

@@ -24,15 +24,15 @@
 
 #include <iostream.h>
 #include <assert.h>
+#include <qpainter.h>
+#include <qprinter.h>
+#include <qcolor.h>    
 #include "Canvas.h"
 #include "Canvas.moc"
 #include "GDocument.h"
 #include "Handle.h"
 #include "ToolController.h"
 #include "QwViewport.h"
-#include <qpainter.h>
-#include <qprinter.h>
-#include <qcolor.h>
 
 QArray<float> Canvas::zoomFactors;
 

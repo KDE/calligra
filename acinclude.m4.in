@@ -478,7 +478,6 @@ for dir in $qt_libdirs; do
   if test=`eval $try 2> /dev/null`; then qt_libdir=$dir; break; else echo "tried $dir" >&AC_FD_CC ; fi
 done
 
-dnl AC_FIND_FILE(libqt.so libqt.so.1.30 libqt.so.1.31 libqt.so.1 libqt.a libqt.sl, $qt_libdirs, qt_libdir)
 ac_qt_libraries="$qt_libdir"
 
 ac_cxxflags_safe="$CXXFLAGS"
@@ -2085,25 +2084,28 @@ AC_DEFUN(KDE_CHECK_STL,
 ])
 
 AC_DEFUN(AC_FIND_QIMGIO,
-   [AC_MSG_CHECKING([for qimgio])
-AC_CACHE_VAL(ac_cv_lib_qimgio,
-[ac_save_LIBS="$LIBS"
-LIBS="$all_libraries -lqimgio -lpng -lz -lqt $LIBJPEG -lX11 $LIBSOCKET"
-AC_TRY_LINK(dnl
 [
-void qInitImageIO ();
-],
-            [qInitImageIO();],
-            eval "ac_cv_lib_qimgio=yes",
-            eval "ac_cv_lib_qimgio=no")
-LIBS="$ac_save_LIBS"
+AC_MSG_CHECKING([for qimgio])
+AC_CACHE_VAL(ac_cv_lib_qimgio,
+[
+  ac_save_LIBS="$LIBS"
+  LIBS="$all_libraries -lqimgio -lpng -lz -lqt $LIBJPEG -lX11 $LIBSOCKET"
+  AC_TRY_LINK(dnl
+  [
+    void qInitImageIO ();
+  ],
+  [qInitImageIO();],
+   eval "ac_cv_lib_qimgio=yes",
+   eval "ac_cv_lib_qimgio=no")
+   LIBS="$ac_save_LIBS"
 ])dnl
-if eval "test \"`echo $ac_cv_lib_qimgio`\" = yes"; then
+
+if test "$ac_cv_lib_qimgio" = "yes"; then
   LIBQIMGIO="-lqimgio -lpng -lz $LIBJPEG"
   AC_MSG_RESULT(yes)
   AC_DEFINE_UNQUOTED(HAVE_QIMGIO)
-  AC_SUBST(LIBQIMGIO)
 else
   AC_MSG_RESULT(not found)
 fi
+AC_SUBST(LIBQIMGIO)
 ])
