@@ -414,50 +414,55 @@ int BackDia::getBackYFactor() const
 }
 
 
+
 /*=============================================================*/
-void BackDia::selectPic()
+QString BackDia::selectPicture( const QString& pattern )
 {
     KURL url;
 
-    //url = KFileDialog::getImageOpenURL(); lukas: put this back in KDE 3.0
-
-    KFileDialog fd( QString::null, KImageIO::pattern(KImageIO::Reading), 0, 0, true );
+    KFileDialog fd( QString::null, pattern, 0, 0, true );
     fd.setPreviewWidget( new KoPictureFilePreview( &fd ) );
 
     if ( fd.exec() == QDialog::Accepted )
     {
-        url = fd.selectedURL();
-        chosenPic = QString::null;
-        if (!KIO::NetAccess::download( url, chosenPic ))
-          return;
+        KURL url = fd.selectedURL();
+        QString strTemp = QString::null;
+        // ### FIXME: Problem: for a remote file, we have no typical image/clipart extension for the temp file name.
+        if (!KIO::NetAccess::download( url, strTemp ))
+            return QString::null;
         lPicName->setText( url.prettyURL() );
-        backCombo->setCurrentItem( 1 );
-        picChanged = true;
-        picLastModified = QDateTime();
-        updateConfiguration();
-        // Problem : when to remove the temp file ?
+        return strTemp;
+        // ### TODO/FIXME Problem : when to remove the temp file ?
     }
+    return QString::null;
+}
+
+/*=============================================================*/
+void BackDia::selectPic()
+{
+    QString strResult=selectPicture( KImageIO::pattern(KImageIO::Reading) );
+    if ( strResult.isEmpty() )
+        return;
+
+    backCombo->setCurrentItem( 1 );
+    chosenPic=strResult;
+    picChanged = true;
+    picLastModified = QDateTime();
+    updateConfiguration();
 }
 
 /*=============================================================*/
 void BackDia::selectClip()
 {
-    KURL url;
-    KFileDialog fd( QString::null, KoPictureFilePreview::clipartPattern(), 0, 0, true );
-    fd.setPreviewWidget( new KoPictureFilePreview( &fd ) );
+    QString strResult=selectPicture( KoPictureFilePreview::clipartPattern() );
+    if ( strResult.isEmpty() )
+        return;
 
-    if ( fd.exec() == QDialog::Accepted )
-    {
-        url = fd.selectedURL();
-        chosenClip = QString::null;
-        if (!KIO::NetAccess::download( url, chosenClip ))
-          return;
-        lClipName->setText( url.prettyURL() );
-        backCombo->setCurrentItem( 2 );
-        clipChanged = true;
-        clipLastModified = QDateTime();
-        updateConfiguration();
-    }
+    backCombo->setCurrentItem( 2 );
+    chosenClip=strResult;
+    clipChanged = true;
+    clipLastModified = QDateTime();
+    updateConfiguration();
 }
 
 #include <backdia.moc>
