@@ -149,17 +149,24 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
     double ow = ext.width();
     double oh = ext.height();
 
-    QPen pen2( pen );
-    pen2.setWidth( _zoomHandler->zoomItX( pen.width() ) );
+
+    QPen pen2;
+    if ( drawContour )
+	pen2 = QPen( Qt::black, 1, Qt::DotLine );
+    else {
+	pen2 = pen;
+	pen2.setWidth( _zoomHandler->zoomItX( pen.width() ) );
+   }
 
     _painter->save();
 
     _painter->setPen( pen2 );
-    _painter->setBrush( brush );
+    if ( !drawContour )
+	_painter->setBrush( brush );
 
     double penw = _zoomHandler->zoomItX( pen.width() ) / 2.0;
 
-    if ( shadowDistance > 0 )
+    if ( shadowDistance > 0 && !drawContour )
     {
         if ( angle == 0 )
         {
@@ -207,8 +214,9 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
     if ( angle == 0 ) {
         // Draw background
         _painter->setPen( Qt::NoPen );
-        _painter->setBrush( brush );
-        if ( fillType == FT_BRUSH || !gradient )
+	if ( !drawContour )
+	    _painter->setBrush( brush );
+        if ( fillType == FT_BRUSH || !gradient || drawContour )
             _painter->drawRect( (int)( _zoomHandler->zoomItX( ox ) + penw ),
                                 (int)( _zoomHandler->zoomItY( oy ) + penw ),
                                 (int)( _zoomHandler->zoomItX( ext.width() ) - 2 * penw ),
@@ -222,10 +230,14 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
                                   (int)( _zoomHandler->zoomItY( oh ) - 2 * penw ) );
         }
 
-        // Draw pixmap
-        image.draw( *_painter,
-                    (int)( _zoomHandler->zoomItX( ox ) + penw ), (int)( _zoomHandler->zoomItY( oy ) + penw ),
-                    (int)( _zoomHandler->zoomItX( ow ) - 2 * penw ), (int)( _zoomHandler->zoomItY( oh ) - 2 * penw ) );
+	// Draw pixmap
+        if ( !drawContour ) {
+	    image.draw( *_painter,
+			(int)( _zoomHandler->zoomItX( ox ) + penw ),
+			(int)( _zoomHandler->zoomItY( oy ) + penw ),
+			(int)( _zoomHandler->zoomItX( ow ) - 2 * penw ),
+			(int)( _zoomHandler->zoomItY( oh ) - 2 * penw ) );
+	}
 
         // Draw border - TODO port to KoBorder::drawBorders() (after writing a simplified version of it, that takes the same border on each size)
         _painter->setPen( pen2 );
@@ -253,9 +265,10 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
         _painter->setWorldMatrix( m, true );
 
         _painter->setPen( Qt::NoPen );
-        _painter->setBrush( brush );
+	if ( !drawContour )
+	    _painter->setBrush( brush );
 
-        if ( fillType == FT_BRUSH || !gradient )
+        if ( fillType == FT_BRUSH || !gradient  || drawContour )
             _painter->drawRect( (int)penw, (int)penw,
                                 (int)( _zoomHandler->zoomItX( ext.width() ) - 2 * penw ),
                                 (int)( _zoomHandler->zoomItY( ext.height() ) - 2 * penw ) );
@@ -267,10 +280,12 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
         }
 
         // Draw pixmap
-        image.draw( *_painter,
-                    (int)penw, (int)penw,
-                    (int)( _zoomHandler->zoomItX( ow ) - 2 * penw ),
-                    (int)( _zoomHandler->zoomItY( oh ) - 2 * penw ) );
+        if ( !drawContour ) {
+	    image.draw( *_painter,
+			(int)penw, (int)penw,
+			(int)( _zoomHandler->zoomItX( ow ) - 2 * penw ),
+			(int)( _zoomHandler->zoomItY( oh ) - 2 * penw ) );
+	}
 
         _painter->setPen( pen2 );
         _painter->setBrush( Qt::NoBrush );
@@ -281,5 +296,5 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
 
     _painter->restore();
 
-    KPObject::draw( _painter, _zoomHandler, drawSelection );
+    KPObject::draw( _painter, _zoomHandler, drawSelection, drawContour );
 }
