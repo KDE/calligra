@@ -10,16 +10,18 @@ libkocryptexport_la_LIBADD = $(KOFFICE_LIBS)
 
 kde_module_LTLIBRARIES = libkocryptimport.la libkocryptexport.la
 
-libkocryptimport_la_SOURCES = kocryptimport.cc kocryptimport_factory.cc blowfish.cc cbc.cc blockcipher.cc
-libkocryptexport_la_SOURCES = kocryptexport.cc kocryptexport_factory.cc blowfish.cc cbc.cc blockcipher.cc
+libkocryptimport_la_SOURCES = kocryptimport.cc kocryptimport_factory.cc blowfish.cc cbc.cc blockcipher.cc hashbase.cc
+libkocryptexport_la_SOURCES = kocryptexport.cc kocryptexport_factory.cc blowfish.cc cbc.cc blockcipher.cc hashbase.cc
 
-noinst_HEADERS = kocryptimport.h kocryptimport_factory.h kocryptexport.h \
-	kocryptexport_factory.h cbc.h blowfish.h blockcipher.h blowfishtables.h
+noinst_HEADERS = kocryptimport.h kocryptimport_factory.h kocryptexport.h  \
+	kocryptexport_factory.h cbc.h blowfish.h blockcipher.h            \
+	blowfishtables.h hashbase.h
 
 METASOURCES = AUTO
 
-mimelnk_DATA = x-kword-crypt.desktop
+mimelnk_DATA = x-kword-crypt.desktop x-kspread-crypt.desktop
 mimelnkdir = $(kde_mimedir)/application
 
-service_DATA = kword_crypto_import.desktop kword_crypto_export.desktop
+service_DATA = kword_crypto_import.desktop kword_crypto_export.desktop    \
+	kspread_crypto_import.desktop kspread_crypto_export.desktop
 servicedir = $(kde_servicesdir)

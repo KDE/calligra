@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+Name=KSpread Document Decryption Layer
+Export=application/x-kspread
+Import=application/x-kspread-crypt
+Implemented=file
+X-KDE-Library=libkocryptimport
+ServiceTypes=KOfficeFilter
