@@ -241,8 +241,8 @@ void KFormulaContainer::addMatrix()
 {
     MatrixDialog* dialog = new MatrixDialog(0);
     if (dialog->exec()) {
-        uint rows = dialog->w;
-        uint cols = dialog->h;
+        uint rows = dialog->h;
+        uint cols = dialog->w;
         addMatrix(rows, cols);
     }
     delete dialog;
