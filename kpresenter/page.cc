@@ -52,7 +52,6 @@
 #include "kptextobject.h"
 
 #include <kmimemagic.h>
-#include <kio_job.h>
 #include <kurl.h>
 #include <klocale.h>
 #include <kiconloader.h>
