@@ -35,17 +35,10 @@ KoZoomHandler::KoZoomHandler()
 
 void KoZoomHandler::setZoomAndResolution( int zoom, int dpiX, int dpiY )
 {
-    m_zoom = zoom;
     // m_resolution[XY] is in pixel per pt
     m_resolutionX = POINT_TO_INCH( static_cast<double>(dpiX) );
     m_resolutionY = POINT_TO_INCH( static_cast<double>(dpiY) );
-    if( 100 == m_zoom ){
-        m_zoomedResolutionX = m_resolutionX;
-        m_zoomedResolutionY = m_resolutionY;
-    }else{
-        m_zoomedResolutionX = static_cast<double>(m_zoom) * m_resolutionX / 100.0;
-        m_zoomedResolutionY = static_cast<double>(m_zoom) * m_resolutionY / 100.0;
-    }
+    setZoom( zoom );
     /*kdDebug(32500) << "KoZoomHandler::setZoomAndResolution " << zoom << " " << dpiX << "," << dpiY
               << " m_resolutionX=" << m_resolutionX
               << " m_zoomedResolutionX=" << m_zoomedResolutionX
@@ -60,6 +53,18 @@ void KoZoomHandler::setResolution( double resolutionX, double resolutionY )
     m_resolutionY = resolutionY;
     m_zoomedResolutionX = resolutionX;
     m_zoomedResolutionY = resolutionY;
+}
+
+void KoZoomHandler::setZoom( int zoom )
+{
+    m_zoom = zoom;
+    if( m_zoom == 100 ) {
+        m_zoomedResolutionX = m_resolutionX;
+        m_zoomedResolutionY = m_resolutionY;
+    } else {
+        m_zoomedResolutionX = static_cast<double>(m_zoom) * m_resolutionX / 100.0;
+        m_zoomedResolutionY = static_cast<double>(m_zoom) * m_resolutionY / 100.0;
+    }
 }
 
 #if 0
@@ -92,3 +97,4 @@ int KoZoomHandler::layoutUnitToPixelY( int y, int h ) const
     // Calling layoutUnitToPixelY(h) leads to rounding problems.
     return layoutUnitToPixelY( y + h - 1 ) - layoutUnitToPixelY( y ) + 1;
 }
+

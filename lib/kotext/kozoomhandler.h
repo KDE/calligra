@@ -67,7 +67,7 @@ protected:
 
 /**
  * This class handles the zooming and DPI stuff (conversions between pt values and pixels).
- * An instance of KoZoomHandler operates at a given zoom (see @ref setZoomAndResolution)
+ * An instance of KoZoomHandler operates at a given zoom (see setZoomAndResolution() and setZoom())
  * so there is usually one instance of KoZoomHandler per view.
  */
 class KoZoomHandler : public KoTextZoomHandler
@@ -104,6 +104,10 @@ public:
      */
     virtual void setResolution( double resolutionX, double resolutionY );
 
+    /**
+     * Change the zoom level, keeping the resolution unchanged.
+     */
+    void setZoom( int zoom );
 
     int zoom() const { return m_zoom; }
 
@@ -126,11 +130,11 @@ public:
     }
     /**
      * Returns the size in pixels for a input size in points.
-     * 
+     *
      * This function can return a size with 1 pixel to less, depending
      * on the reference point and the width and/or the zoom level.
      * It's save to use if the starting point is (0/0).
-     * You can use it if you don't know the starting point yet 
+     * You can use it if you don't know the starting point yet
      * (like when inserting a picture), but then please take
      * care of it afterwards, when you know the reference point.
      */
