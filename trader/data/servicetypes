@@ -1,6 +1,6 @@
 'servicetype' 'KOMComponent'
 {
-  'Interface'<string> = 'IDL:KOM/Component:1.0';
+  'Interface'<string> = 'IDL:KOM/ComponentFactory:1.0';
   'properties' 'properties'
   {
     'property' 'Comment' [ de = 'Kommentar' ]
@@ -37,7 +37,7 @@
 'servicetype' 'KOfficeDocument'
 {
   'SuperTypes'<@string> = { 'KOMComponent' };
-  'Interface'<string> = 'IDL:KSpread/DocumentFactory:1.0';
+  'Interface'<string> = 'IDL:KOffice/DocumentFactory:1.0';
   'properties' 'properties'
   {
     'property' 'MimeTypes'
@@ -71,7 +71,7 @@
 'servicetype' 'KOMPlugin'
 {
   'SuperTypes'<@string> = { 'KOMComponent' };
-  'Interface'<string> = 'IDL:KSpread/DocumentFactory:1.0';
+  'Interface'<string> = 'IDL:KOM/PluginFactory:1.0';
   'properties' 'properties'
   {
     'property' 'RequiredInterfaces'
@@ -86,5 +86,22 @@
     {
 	'Type'<string> = '@string' ;
     };    
+  };
+};
+
+'servicetype' 'KOfficeFilter'
+{
+  'SuperTypes'<@string> = { 'KOMComponent' };
+  'Interface'<string> = 'IDL:KOffice/FilterFactory:1.0';
+  'properties' 'properties'
+  {
+    'property' 'Import'
+    {
+	'Type'<string> = '@string' ;
+    };
+    'property' 'Export'
+    {
+	'Type'<string> = '@string' ;
+    };
   };
 };

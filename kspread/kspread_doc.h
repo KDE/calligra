@@ -5,6 +5,7 @@ class KSpreadDoc;
 
 #include <koFrame.h>
 #include <koDocument.h>
+#include <koPrintExt.h>
 
 #include <iostream.h>
 
@@ -13,6 +14,7 @@ class KSpreadDoc;
 #include <qstring.h>
 #include <qpainter.h>
 #include <qprinter.h>
+#include <qpen.h>
 
 #include "kmetaedit.h"
 
@@ -33,6 +35,7 @@ class KSpreadDoc;
  */
 class KSpreadDoc : public QObject,
 		   virtual public KoDocument,
+		   virtual public KoPrintExt,
 		   virtual public KSpread::Document_skel
 {
   Q_OBJECT
@@ -68,6 +71,8 @@ public:
   virtual char* mimeType() { return CORBA::string_dup( MIME_TYPE ); }
   
   virtual CORBA::Boolean isModified() { return m_bModified; }
+
+  virtual KOffice::MainWindow_ptr createMainWindow();
   
   // C++
   virtual int viewCount();
@@ -194,28 +199,36 @@ public:
   bool isLoading() { return m_bLoading; }
 
   int docId() { return m_docId; }
-  
+
+  const QPen& defaultGridPen() { return m_defaultGridPen; }
+    
   static KSpreadDoc* find( int _doc_id ); 
 
 public slots:
-    /**
-     * Open a dialog for the "Page Layout".
-     *
-     * @see KoPageLayoutDia
-     */
-    void paperLayoutDlg();
-
+  /**
+   * Open a dialog for the "Page Layout".
+   *
+   * @see KoPageLayoutDia
+   */
+   void paperLayoutDlg();
+  
 signals:
-    // Document signals
-    void sig_addTable( KSpreadTable *_table );
-    void sig_updateView();
+  // Document signals
+  void sig_addTable( KSpreadTable *_table );
+  void sig_updateView();
   
 protected:
+  /**
+   * Needed for the printing extension KOffice::Print
+   */
+  virtual void draw( QPaintDevice*, CORBA::Long _width, CORBA::Long _height,
+		     CORBA::Float _scale );
+
   virtual bool completeLoading( KOStore::Store_ptr );
 
   virtual void makeChildListIntern( KOffice::Document_ptr _root, const char *_path );
   
-  /*
+  /**
    * @return true if one of the direct children wants to
    *              be saved embedded. If there are no children or if
    *              every direct child saves itself into its own file
@@ -325,6 +338,8 @@ protected:
   bool m_bLoading;
 
   int m_docId;
+
+  QPen m_defaultGridPen;
   
   static int s_docId;
   static QIntDict<KSpreadDoc>* s_mapDocuments;

@@ -85,6 +85,8 @@ class KFormulaDoc : public QObject,
     virtual char* mimeType() { return CORBA::string_dup( MIME_TYPE ); }
   
     virtual CORBA::Boolean isModified() { return m_bModified; }
+
+    virtual KOffice::MainWindow_ptr createMainWindow();
  
     // C++
     virtual void addView( KFormulaView *_view );

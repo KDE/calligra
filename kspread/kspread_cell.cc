@@ -1171,8 +1171,9 @@ void KSpreadCell::paintEvent( KSpreadView *_view, const QRect& _rect, QPainter &
   }
 }
 
-void KSpreadCell::print( QPainter &_painter, int _tx, int _ty,
-			 int _col, int _row, ColumnLayout *cl, RowLayout *rl, bool _only_left, bool _only_top )
+void KSpreadCell::print( QPainter &_painter, int _tx, int _ty, int _col, int _row,
+			 ColumnLayout *cl, RowLayout *rl, bool _only_left,
+			 bool _only_top, const QPen& _grid_pen )
 {    
   if ( m_bCalcDirtyFlag )
     calc();
@@ -1194,7 +1195,10 @@ void KSpreadCell::print( QPainter &_painter, int _tx, int _ty,
     // of the line but a width > 1 wont work for us.
     QPen pen;
     pen.setColor( leftBorderColor( _col, _row) );
-    pen.setStyle( m_leftBorderPen.style() );
+    if ( m_leftBorderPen.style() == NoPen )
+      pen = _grid_pen;
+    else
+      pen.setStyle( m_leftBorderPen.style() );
     _painter.setPen( pen );
     int dx = (int)ceil( (double)( m_leftBorderPen.width() - 1) / 2.0 );
     _painter.drawLine( _tx + dx, _ty, _tx + dx, _ty + rl->height() - 1 );
@@ -1204,7 +1208,10 @@ void KSpreadCell::print( QPainter &_painter, int _tx, int _ty,
     //_painter.setPen( topBorderPen );
     QPen pen;
     pen.setColor( topBorderColor( _col, _row ) );
-    pen.setStyle( m_topBorderPen.style() );
+    if ( m_topBorderPen.style() == NoPen )
+      pen = _grid_pen;
+    else
+      pen.setStyle( m_topBorderPen.style() );
     _painter.setPen( pen );
     int dy = (int)ceil( (double)( m_topBorderPen.width() - 1) / 2.0 );    
     _painter.drawLine( _tx, _ty + dy, _tx + cl->width() - 1, _ty + dy );

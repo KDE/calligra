@@ -1,5 +1,6 @@
 #include <qprinter.h>
 #include "kimage_doc.h"
+#include "kimage_shell.h"
 
 #include <komlParser.h>
 #include <komlStreamFeed.h>
@@ -28,7 +29,7 @@
 
 KImageDoc::KImageDoc()
 {
-  ADD_INTERFACE("IDL:OPParts/Print:1.0");
+  ADD_INTERFACE("IDL:KOffice/Print:1.0");
 
   m_bEmpty = true;
   m_bModified = false;
@@ -68,6 +69,15 @@ void KImageDoc::cleanUp()
   m_lstAllChildren.clear();
 
   KoDocument::cleanUp();
+}
+
+KOffice::MainWindow_ptr KImageDoc::createMainWindow()
+{
+  KImageShell* shell = new KImageShell;
+  shell->show();
+  shell->setDocument( this );
+
+  return KOffice::MainWindow::_duplicate( shell->koInterface() );
 }
 
 void KImageDoc::removeView( KImageView* _view )
@@ -384,13 +394,17 @@ void KImageDoc::print( QPaintDevice* _dev )
   painter.end();
 }
 
-void KImageDoc::draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height )
+void KImageDoc::draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height,
+		      CORBA::Float _scale )
 {
   cerr << "DRAWING w=" << _width << " h=" << _height << endl;
   
   QPainter painter;
   painter.begin( _dev );
 
+  if ( _scale != 1.0 )
+    painter.scale( _scale, _scale );
+  
   // Print centered
   int x = ( _width - m_image.width() ) / 2;
   int y = ( _height - m_image.height() ) / 2;

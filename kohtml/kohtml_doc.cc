@@ -149,6 +149,15 @@ void KoHTMLDoc::cleanUp()
   KoDocument::cleanUp();
 }
 
+KOffice::MainWindow_ptr KoHTMLDoc::createMainWindow()
+{
+  KoHTMLShell* shell = new KoHTMLShell;
+  shell->show();
+  shell->setDocument( this );
+
+  return KOffice::MainWindow::_duplicate( shell->koInterface() );
+}
+
 void KoHTMLDoc::removeView(KoHTMLView *view)
 {
   m_lstViews.removeRef(view);
@@ -233,8 +242,10 @@ void KoHTMLDoc::slotHTMLCodeLoaded(KoHTMLJob *, KHTMLView *, KHTMLView *, const 
   emit contentChanged();    
 }
 
-void KoHTMLDoc::draw(QPaintDevice *dev, CORBA::Long width, CORBA::Long height)
+void KoHTMLDoc::draw(QPaintDevice *dev, CORBA::Long width, CORBA::Long height,
+		     CORBA::Float _scale )
 { 
+  // FIXME!!!! Obeye the _scale
   if (!m_bDocumentDone) return;
 
   cerr << "void KoHTMLDoc::draw(QPaintDevice *dev, CORBA::Long width, CORBA::Long height)" << endl;

@@ -398,6 +398,12 @@ public:
 
     void print( QPainter &painter, QPrinter *_printer );
 
+    /**
+     * Needed for the printing Extension KOffice::Print
+     */
+    void draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height,
+	       CORBA::Float _scale );
+
     void insertChart( const QRect& _geometry, KoDocumentEntry&, const QRect& _data );
     void insertChild( const QRect& _geometry, KoDocumentEntry& );
     void changeChildGeometry( KSpreadChild *_child, const QRect& _geometry );
@@ -439,7 +445,7 @@ protected:
      * @paran _page_rangs QRect defines a rectangle of cells which should be painted
      *                    to the device 'prn'.
      */
-    void printPage( QPainter &_painter, QRect *page_range );
+    void printPage( QPainter &_painter, QRect *page_range, const QPen& _grid_pen );
 
     /**
      * @see #autofill

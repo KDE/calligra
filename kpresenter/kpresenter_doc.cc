@@ -15,6 +15,7 @@
 #include <kfiledialog.h>
 #include "kpresenter_doc.h"
 #include "kpresenter_doc.moc"
+#include "kpresenter_shell.h"
 #include "page.h"
 
 /******************************************************************/
@@ -52,7 +53,7 @@ KPresenterChild::~KPresenterChild()
 KPresenterDoc::KPresenterDoc()
   : _pixmapCollection(), _gradientCollection(), _commands()
 {
-  ADD_INTERFACE("IDL:OPParts/Print:1.0")
+  ADD_INTERFACE("IDL:KOffice/Print:1.0")
   // Use CORBA mechanism for deleting views
   m_lstViews.setAutoDelete(false);
   m_lstChildren.setAutoDelete(true);
@@ -112,7 +113,8 @@ KPresenterDoc::~KPresenterDoc()
 }
 
 /*======================== draw contents as QPicture =============*/
-void KPresenterDoc::draw(QPaintDevice* _dev,CORBA::Long _width,CORBA::Long _height)
+void KPresenterDoc::draw(QPaintDevice* _dev,CORBA::Long _width,CORBA::Long _height,
+			 CORBA::Float _scale)
 {
   warning("***********************************************");
   warning(i18n("KPresenter doesn't support KoDocument::draw(...) now!"));
@@ -125,6 +127,9 @@ void KPresenterDoc::draw(QPaintDevice* _dev,CORBA::Long _width,CORBA::Long _heig
       QPainter painter;
       painter.begin(_dev);
      
+      if ( _scale != 1.0 )
+	painter.scale( _scale, _scale );
+      
       m_lstViews.at(0)->getPage()->draw(KRect(0,0,_width,_height),&painter);
       
       painter.end();
@@ -746,6 +751,16 @@ void KPresenterDoc::loadObjects(KOMLParser& parser,vector<KOMLAttrib>& lst,bool 
 	  return;
 	}
     }
+}
+
+/*========================= create a new shell ========================*/
+KOffice::MainWindow_ptr KPresenterDoc::createMainWindow()
+{
+  KPresenterShell* shell = new KPresenterShell;
+  shell->show();
+  shell->setDocument( this );
+
+  return KOffice::MainWindow::_duplicate( shell->koInterface() );
 }
 
 /*========================= create a view ========================*/

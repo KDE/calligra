@@ -56,6 +56,8 @@ public:
 
   // IDL
   virtual CORBA::Boolean init();
+
+  virtual KOffice::MainWindow_ptr createMainWindow();
   
   /**
    * Wrapper for @ref #createImageView
@@ -77,7 +79,8 @@ public:
 
   // C++
   virtual void print( QPaintDevice* _dev );
-  virtual void draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height );
+  virtual void draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height,
+		     CORBA::Float _scale );
 
   // C++
   void paperLayoutDlg();

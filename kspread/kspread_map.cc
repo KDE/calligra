@@ -357,3 +357,13 @@ bool KSpreadMap::hasToWriteMultipart()
 
   return false;
 }
+
+void KSpreadMap::draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height,
+		       CORBA::Float _scale )
+{
+  // Only the view knows about the active table. So we can just assume that
+  // embedded KSpread documents do only have one table
+  if ( m_lstTables.first() )
+    m_lstTables.first()->draw( _dev, _width, _height, _scale );
+}
+

@@ -47,7 +47,7 @@ module KSpread
 		slot void consolidate();
 	};
 
-	interface Document : KOffice::Document
+	interface Document : KOffice::Document, KOffice::Print
 	{
 	};
 

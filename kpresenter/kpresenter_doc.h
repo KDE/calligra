@@ -152,6 +152,8 @@ public:
   // ------ IDL ------
   virtual CORBA::Boolean init() {return insertNewTemplate(0,0);}
 
+  KOffice::MainWindow_ptr createMainWindow();
+  
   // create a view
   virtual OpenParts::View_ptr createView();
 
@@ -377,7 +379,7 @@ protected:
    */
   virtual bool hasToWriteMultipart();
 
-  virtual void draw(QPaintDevice*,CORBA::Long,CORBA::Long);
+  virtual void draw(QPaintDevice*,CORBA::Long,CORBA::Long,CORBA::Float _scale);
 
   void saveBackground(ostream&);
   void saveObjects(ostream&);

@@ -25,6 +25,7 @@
 #include "KIllustrator_doc.h"
 #include "KIllustrator_doc.moc"
 #include "KIllustrator_view.h"
+#include "KIllustrator_shell.h"
 
 #include "GPart.h"
 
@@ -57,7 +58,7 @@ const char* KIllustratorChild::urlForSave () {
 }
 
 KIllustratorDocument::KIllustratorDocument () {
-  ADD_INTERFACE("IDL:OPParts/Print:1.0")
+  ADD_INTERFACE("IDL:KOffice/Print:1.0")
   cout << "create new KIllustratorDocument ..." << endl;
 
   GObject::registerPrototype ("object", new GPart ());
@@ -176,6 +177,15 @@ CORBA::Boolean KIllustratorDocument::init () {
   return true;
 }
 
+KOffice::MainWindow_ptr KIllustratorDocument::createMainWindow()
+{
+  KIllustratorShell* shell = new KIllustratorShell;
+  shell->show();
+  shell->setDocument( this );
+
+  return KOffice::MainWindow::_duplicate( shell->koInterface() );
+}
+
 KIllustratorView* KIllustratorDocument::createKIllustratorView () {
   KIllustratorView *view = new KIllustratorView (0L, 0L, this);
   view->QWidget::show ();
@@ -216,9 +226,14 @@ void KIllustratorDocument::setModified (bool f) {
 }
 
 void KIllustratorDocument::draw (QPaintDevice* dev, 
-				 CORBA::Long w, CORBA::Long h) {
+				 CORBA::Long w, CORBA::Long h,
+				 CORBA::Float _scale ) {
   Painter painter;
   painter.begin (dev);
+
+  if ( _scale != 1.0 )
+    painter.scale( _scale, _scale );
+  
   GDocument::drawContents (painter);
   painter.end ();
 }

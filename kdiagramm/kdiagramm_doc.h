@@ -72,6 +72,8 @@ public:
   
   virtual bool hasToWriteMultipart() { return false; }
 
+  virtual KOffice::MainWindow_ptr createMainWindow();
+
   // C++
   virtual int viewCount();
   
@@ -91,7 +93,8 @@ public:
 
   // C++
   virtual void print( QPaintDevice* _dev );
-  virtual void draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height );
+  virtual void draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height,
+		     CORBA::Float _scale );
 
   // C++
   void paperLayoutDlg();

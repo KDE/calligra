@@ -1,4 +1,6 @@
 #include "kformula_doc.h"
+#include "kformula_shell.h"
+
 #include "formuladef.h"
 #include "BasicElement.h"
 #include "TextElement.h"
@@ -86,6 +88,15 @@ bool KFormulaDoc::save( ostream& out, const char* /* format */ )
     out << etag << "</DOC>" << endl;
   
     return true;
+}
+
+KOffice::MainWindow_ptr KFormulaDoc::createMainWindow()
+{
+  KFormulaShell* shell = new KFormulaShell;
+  shell->show();
+  shell->setDocument( this );
+
+  return KOffice::MainWindow::_duplicate( shell->koInterface() );
 }
 
 int KFormulaDoc::viewCount()

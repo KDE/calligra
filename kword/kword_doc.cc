@@ -16,6 +16,7 @@
 #include <qprinter.h>
 #include "kword_doc.h"
 #include "kword_page.h"
+#include "kword_shell.h"
 
 #include <koIMR.h>
 #include <komlMime.h>
@@ -1197,6 +1198,15 @@ QStrList KWordDocument::inputFormats()
   return QStrList();
 }
 
+KOffice::MainWindow_ptr KWordDocument::createMainWindow()
+{
+  KWordShell* shell = new KWordShell;
+  shell->show();
+  shell->setDocument( this );
+
+  return KOffice::MainWindow::_duplicate( shell->koInterface() );
+}
+
 /*================================================================*/
 void KWordDocument::viewList(OpenParts::Document::ViewList*& _list)
 {
@@ -1289,7 +1299,8 @@ QListIterator<KWordChild> KWordDocument::childIterator()
 }
 
 /*================================================================*/
-void KWordDocument::draw(QPaintDevice* _dev,CORBA::Long _width,CORBA::Long _height)
+void KWordDocument::draw(QPaintDevice* _dev,CORBA::Long _width,CORBA::Long _height,
+			 CORBA::Float _scale )
 {
 }
 

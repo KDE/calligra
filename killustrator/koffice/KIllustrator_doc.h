@@ -87,6 +87,8 @@ public:
   // --- IDL ---
   virtual CORBA::Boolean init ();
 
+  virtual KOffice::MainWindow_ptr createMainWindow();
+
   // create a view
   virtual OpenParts::View_ptr createView ();
 
@@ -102,7 +104,8 @@ public:
   virtual CORBA::Boolean isModified ();
   virtual void setModified (bool f);
 
-  virtual void draw (QPaintDevice* dev, CORBA::Long w, CORBA::Long h);
+  virtual void draw (QPaintDevice* dev, CORBA::Long w, CORBA::Long h,
+		     CORBA::Float _scale );
 
   virtual int viewCount ();
   virtual KIllustratorView* createKIllustratorView ();

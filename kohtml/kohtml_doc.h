@@ -113,11 +113,14 @@ public:
 
   virtual CORBA::Boolean documentDone() { return (CORBA::Boolean)m_bDocumentDone; }
 
-  virtual void draw(QPaintDevice *dev, CORBA::Long width, CORBA::Long height);
+  virtual void draw( QPaintDevice *dev, CORBA::Long width, CORBA::Long height,
+		     CORBA::Float _scale );
 
   virtual bool loadXML(KOMLParser &parser, KOStore::Store_ptr store);
   virtual bool loadChildren( KOStore::Store_ptr store);
   virtual bool save( ostream &out, const char *format);
+
+  virtual KOffice::MainWindow_ptr createMainWindow();
 
   virtual KoHTMLView *createKoHTMLView();
 

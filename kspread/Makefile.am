@@ -39,7 +39,7 @@ DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(SRCMETA) chart.h chart.cc
 kdelnk_DATA = kspread_part.kdelnk
 kdelnkdir = $(kde_datadir)/koffice/partlnk
 
-SUBDIRS = pics scripts dtd
+SUBDIRS = pics scripts dtd filters
 
 ####### Implicit rules
 

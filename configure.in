@@ -84,6 +84,8 @@ AC_OUTPUT( \
 	kspread/pics/Makefile \
 	kspread/scripts/Makefile \
 	kspread/dtd/Makefile \
+	kspread/filters/Makefile \
+	kspread/filters/komma/Makefile \
 	kword/Makefile \
 	kword/toolbar/Makefile \
 	kword/templates/Makefile \

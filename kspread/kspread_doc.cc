@@ -1,5 +1,6 @@
 #include <qprinter.h>
 #include "kspread_doc.h"
+#include "kspread_shell.h"
 
 #include <komlParser.h>
 #include <komlStreamFeed.h>
@@ -178,6 +179,7 @@ KSpreadDoc* KSpreadDoc::find( int _docId )
 KSpreadDoc::KSpreadDoc()
 {
   ADD_INTERFACE( "IDL:KSpread/Document:1.0" );
+  ADD_INTERFACE( "IDL:KOffice/Print:1.0" );
   
   if ( s_mapDocuments == 0L )
     s_mapDocuments = new QIntDict<KSpreadDoc>;
@@ -201,6 +203,10 @@ KSpreadDoc::KSpreadDoc()
   m_bEmpty = true;
     
   m_iTableId = 1;
+
+  m_defaultGridPen.setColor( lightGray );
+  m_defaultGridPen.setWidth( 1 );
+  m_defaultGridPen.setStyle( SolidLine );
   
   initPython();
   
@@ -843,6 +849,22 @@ void KSpreadDoc::enableRedo( bool _b )
   KSpreadView *v;
   for( v = m_lstViews.first(); v != 0L; v = m_lstViews.next() )
     v->enableRedo( _b );
+}
+
+KOffice::MainWindow_ptr KSpreadDoc::createMainWindow()
+{
+  KSpreadShell* shell = new KSpreadShell;
+  shell->show();
+  shell->setDocument( this );
+
+  return KOffice::MainWindow::_duplicate( shell->koInterface() );
+}
+
+void KSpreadDoc::draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height,
+		       CORBA::Float _scale)
+{
+  if ( m_pMap )
+    m_pMap->draw( _dev, _width, _height, _scale );
 }
 
 void KSpreadDoc::printMap( QPainter &_painter )

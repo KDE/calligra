@@ -1,5 +1,6 @@
 #include <qprinter.h>
 #include "kdiagramm_doc.h"
+#include "kdiagramm_shell.h"
 
 #include <komlParser.h>
 #include <komlStreamFeed.h>
@@ -28,7 +29,7 @@
 KDiagrammDoc::KDiagrammDoc()
 {
   ADD_INTERFACE( "IDL:Chart/SimpleChart:1.0" );
-  ADD_INTERFACE("IDL:OPParts/Print:1.0");
+  ADD_INTERFACE("IDL:KOffice/Print:1.0");
 
   m_bEmpty = true;
   m_bModified = FALSE;
@@ -88,6 +89,15 @@ void KDiagrammDoc::cleanUp()
   m_lstAllChildren.clear();
 
   KoDocument::cleanUp();
+}
+
+KOffice::MainWindow_ptr KDiagrammDoc::createMainWindow()
+{
+  KDiagrammShell* shell = new KDiagrammShell;
+  shell->show();
+  shell->setDocument( this );
+
+  return KOffice::MainWindow::_duplicate( shell->koInterface() );
 }
 
 void KDiagrammDoc::removeView( KDiagrammView* _view )
@@ -345,13 +355,17 @@ void KDiagrammDoc::print( QPaintDevice* _dev )
   painter.end();
 }
 
-void KDiagrammDoc::draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height )
+void KDiagrammDoc::draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height,
+			 CORBA::Float _scale )
 {
   cerr << "DRAWING w=" << _width << " h=" << _height << endl;
   
   QPainter painter;
   painter.begin( _dev );
 
+  if ( _scale != 1.0 )
+    painter.scale( _scale, _scale );
+  
   KoDiagramm diag;
   diag.setData( data(), "", KoDiagramm::DAT_NUMMER, m_type );
   diag.paint( painter, _width, _height );  

@@ -296,7 +296,8 @@ public:
      * @param _only_top_border' set to draw only the top border.
      */
     virtual void print( QPainter &_painter, int _tx, int _ty, int _col, int _row,
-			ColumnLayout *_cl, RowLayout *_rl, bool _only_left, bool _only_top );
+			ColumnLayout *_cl, RowLayout *_rl, bool _only_left,
+			bool _only_top, const QPen& _grid_pen );
 
     /**
      * Tells this cell that the @ref KSpreadCell '_cell' obscures this one.

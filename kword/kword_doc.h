@@ -134,6 +134,8 @@ public:
   virtual CORBA::Boolean isModified() 
     { return m_bModified; }
 
+  virtual KOffice::MainWindow_ptr createMainWindow();
+
   // C++
   virtual void setModified( bool _c ) { m_bModified = _c; if ( _c ) m_bEmpty = false; }
   virtual bool isEmpty() { return m_bEmpty; }
@@ -354,7 +356,9 @@ protected:
   virtual void insertChild(KWordChild*);
   virtual void makeChildListIntern(KOffice::Document_ptr _doc,const char *_path);
   
-  virtual void draw(QPaintDevice*,CORBA::Long _width,CORBA::Long _height);
+  virtual void draw(QPaintDevice*,CORBA::Long _width,CORBA::Long _height,
+		    CORBA::Float _scale );
+
   QPen setBorderPen(KWParagLayout::Border _brd);
 
   void loadFrameSets(KOMLParser&,vector<KOMLAttrib>&);

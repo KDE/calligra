@@ -86,11 +86,16 @@ public:
     void update();
   
     int mapId() { return m_mapId; }
+
+    /**
+     * Needed for the printing Extension KOffice::Print
+     */
+    void draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height,
+	       CORBA::Float _scale );
   
     static KSpreadMap* find( int _map_id );  
 
 protected:
-
     /**
      * List of all tables in this map. The list has autodelete turned on.
      */

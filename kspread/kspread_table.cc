@@ -1323,21 +1323,78 @@ void KSpreadTable::deleteSelection( const QPoint &_marker )
 	if ( !m_pDoc->undoBuffer()->isLocked() )
 	{
 	    QRect r;
-	    r.setCoords( m_rctSelection.left(), m_rctSelection.top(), m_rctSelection.right(), m_rctSelection.bottom() );
+	    r.setCoords( m_rctSelection.left(), m_rctSelection.top(),
+			 m_rctSelection.right(), m_rctSelection.bottom() );
 	    undo = new KSpreadUndoDelete( m_pDoc, this, r );
 	    m_pDoc->undoBuffer()->appendUndo( undo );
 	}
 	
-	deleteCells( m_rctSelection.left(), m_rctSelection.top(), m_rctSelection.right(), m_rctSelection.bottom() );	
+	deleteCells( m_rctSelection.left(), m_rctSelection.top(),
+		     m_rctSelection.right(), m_rctSelection.bottom() );	
     }
     
     emit sig_updateView( this );
-    /* if ( pGui )
-	pGui->canvasWidget()->repaint(); */
 }
     
+void KSpreadTable::draw( QPaintDevice* _dev, CORBA::Long _width, CORBA::Long _height,
+			 CORBA::Float _scale )
+{
+  QRect page_range;
+  page_range.setLeft( 0 );
+  page_range.setTop( 0 );
+
+  QRect rect( 1, 1, _width, _height );
+  
+  int col = 1;
+  int x = columnLayout( col )->width();
+  bool bend = false;
+  while ( !bend )
+  {
+    col++;
+    int w = columnLayout( col )->width();
+    if ( x + w > rect.width() )
+    {
+      bend = true;
+      col--;
+    }
+    else
+      x += w;
+  }
+  page_range.setRight( col - 1 );
+	    
+  int row = 1;
+  int y = rowLayout( row )->height();
+  bend = false;
+  while ( !bend )
+  {
+    row++;
+    int h = rowLayout( row )->height();
+    if ( y + h > rect.height() )
+    {
+      row--;
+      bend = true;
+    }
+    else
+      y += h;
+  }
+  page_range.setBottom( row - 1 );
+
+  QPainter painter;
+  painter.begin( _dev );
+
+  if ( _scale != 1.0 )
+    painter.scale( _scale, _scale );
+  
+  printPage( painter, &page_range, doc()->defaultGridPen() );
+  
+  painter.end();
+}
+
 void KSpreadTable::print( QPainter &painter, QPrinter *_printer )
 {
+  QPen gridPen;
+  gridPen.setStyle( NoPen );
+  
     unsigned int pages = 1;
 
     QRect cell_range;
@@ -1456,7 +1513,7 @@ void KSpreadTable::print( QPainter &painter, QPrinter *_printer )
       painter.translate( MM_TO_POINT * m_pDoc->leftBorder(),
 			 MM_TO_POINT * m_pDoc->rightBorder() );
       // Print the page
-      printPage( painter, p );
+      printPage( painter, p, gridPen );
       painter.translate( - MM_TO_POINT * m_pDoc->leftBorder(),
 			 - MM_TO_POINT * m_pDoc->rightBorder() );
       
@@ -1466,7 +1523,7 @@ void KSpreadTable::print( QPainter &painter, QPrinter *_printer )
     }
 }
 
-void KSpreadTable::printPage( QPainter &_painter, QRect *page_range )
+void KSpreadTable::printPage( QPainter &_painter, QRect *page_range, const QPen& _grid_pen )
 {
   int xpos;
   int ypos = 0;
@@ -1486,11 +1543,12 @@ void KSpreadTable::printPage( QPainter &_painter, QRect *page_range )
       if ( y > page_range->bottom() && x > page_range->right() )
 	{ /* Do nothing */ }
       else if ( y > page_range->bottom() )
-	cell->print( _painter, xpos, ypos, x, y, col_lay, row_lay, FALSE, TRUE );
+	cell->print( _painter, xpos, ypos, x, y, col_lay, row_lay, FALSE, TRUE, _grid_pen );
       else if ( x > page_range->right() )
-	cell->print( _painter, xpos, ypos, x, y, col_lay, row_lay, TRUE, FALSE );
+	cell->print( _painter, xpos, ypos, x, y, col_lay, row_lay, TRUE, FALSE, _grid_pen );
       else
-	cell->print( _painter, xpos, ypos, x, y, col_lay, row_lay, FALSE, FALSE ); 
+	cell->print( _painter, xpos, ypos, x, y, col_lay, row_lay,
+		     FALSE, FALSE, _grid_pen ); 
       
       xpos += col_lay->width();
     }

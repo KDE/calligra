@@ -38,9 +38,10 @@ void KSpreadApp::start()
   {
     imr_init();
     koInitTrader();
+   
     koScanTools();
     koScanPlugins();
-    
+ 
     if ( g_openFiles.size() == 0 )
     {
       m_pShell = new KSpreadShell;
@@ -57,6 +58,11 @@ void KSpreadApp::start()
 	m_pShell->openDocument( it->c_str(), "" );
       }
     }
+  }
+  else
+  {    
+    koScanTools();
+    koScanPlugins();
   }
 }
 
