@@ -395,6 +395,7 @@ public slots:
     void clipPaste();
     void deleteObjs();
     void copyObjs();
+    void copyOasisObjs();
 
     void rotateObjs();
     void shadowObjs();
@@ -469,7 +470,7 @@ protected:
      * Only rect is painted.
      * This method is used for edit mode.
      */
-    void drawObjectsEdit( QPainter *painter, const KoRect &rect, const QPtrList<KPObject> &_objects, 
+    void drawObjectsEdit( QPainter *painter, const KoRect &rect, const QPtrList<KPObject> &_objects,
                           SelectionMode selectionMode, int page ) const;
 
     /**
@@ -522,7 +523,7 @@ protected:
     virtual void wheelEvent( QWheelEvent *e );
     virtual void resizeEvent( QResizeEvent *e );
     /**
-     * Returns the object at position pos 
+     * Returns the object at position pos
      * @param pos the position in the document on which to look
      * @param withoutProtected if set to true only unprotecred objects are returned
      * @return the object at position pos

@@ -581,12 +581,20 @@ void KPresenterView::editDeSelectAll()
 
 void KPresenterView::editCopyPage()
 {
+#if 1
     m_pKPresenterDoc->copyPageToClipboard( currPg );
+#else
+    m_pKPresenterDoc->copyOasisPageToClipboard( currPg );
+#endif
 }
 
 void KPresenterView::editDuplicatePage()
 {
+#if 1
     m_pKPresenterDoc->copyPage( currPg );
+#else
+    m_pKPresenterDoc->copyOasisPage( currPg );
+#endif
     setRanges();
 }
 

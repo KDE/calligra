@@ -3473,6 +3473,11 @@ void KPresenterDoc::movePage( int from, int to )
     addCommand(cmd);
 }
 
+void KPresenterDoc::copyOasisPage( int from )
+{
+    //todo
+}
+
 void KPresenterDoc::copyPage( int from )
 {
     _clean = false;
@@ -3501,6 +3506,11 @@ void KPresenterDoc::copyPage( int from )
     m_pageWhereLoadObject=0L;
 
     selectPage( from + 1, wasSelected );
+}
+
+void KPresenterDoc::copyOasisPageToClipboard( int pgnum )
+{
+    //todo
 }
 
 void KPresenterDoc::copyPageToClipboard( int pgnum )

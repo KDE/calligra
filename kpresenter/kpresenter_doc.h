@@ -222,12 +222,13 @@ class KPresenterDoc : public KoDocument
      */
     void insertPage( KPrPage *page, int currentPageNum, int insertPageNum );
     /**
-     * remove page page and go to page pageNum on all view which 
+     * remove page page and go to page pageNum on all view which
      * had page as active page
      */
     void takePage( KPrPage *page, int pageNum );
     void deletePage( int _page );
     void copyPageToClipboard( int pgnum );
+    void copyOasisPageToClipboard( int pgnum );
 
     // repaint all views
     void repaint( bool );
@@ -496,6 +497,8 @@ class KPresenterDoc : public KoDocument
 public slots:
     void movePage( int from, int to );
     void copyPage( int from );
+    void copyOasisPage( int from );
+
     void selectPage( int pgNum, bool select );
     void clipboardDataChanged();
 
@@ -578,9 +581,9 @@ protected:
     void parseOasisHelpLine( const QString &str );
 
     /**
-     * recalc the variables 
+     * recalc the variables
      * update statusbar and sidebar menu
-     */ 
+     */
     void pageOrderChanged();
     // ************ variables ************
 

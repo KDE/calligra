@@ -4510,6 +4510,11 @@ KPTextObject* KPrCanvas::kpTxtObj() const
     // ### return m_currentTextObjectView->kpTextObject()
 }
 
+void KPrCanvas::copyOasisObjs()
+{
+    //todo
+}
+
 void KPrCanvas::copyObjs()
 {
     QDomDocument doc("DOC");
