@@ -34,7 +34,7 @@
 KWAutoFormat::KWAutoFormat( KWDocument *_doc )
     : m_doc( _doc ), m_configRead( false ), m_typographicQuotes(), /*m_enabled( true ),*/
       m_convertUpperCase( false ), m_convertUpperUpper( false ),
-      m_maxlen( 0 )
+      m_dontUpper(false),m_maxlen( 0 )
 {
 }
 
@@ -78,6 +78,9 @@ void KWAutoFormat::readConfig()
     }
     buildMaxLen();
 
+    if(config->hasKey( "Exception" ) )
+        exception=config->readListEntry( "Exception" );
+
     m_configRead = true;
 }
 
@@ -100,7 +103,24 @@ void KWAutoFormat::saveConfig()
     }
     config->writeEntry( "Find", find );
     config->writeEntry( "Replace", replace );
+
+    config->writeEntry( "Exception",exception );
+
     config->sync();
+}
+
+QString KWAutoFormat::getLastWord(KWTextParag *parag, int index)
+{
+    QString lastWord;
+    QTextString *s = parag->string();
+    for ( int i = index - 1; i >= 0; --i )
+    {
+        QChar ch = s->at( i ).c;
+        if ( ch.isSpace() || ch.isPunct() )
+            break;
+        lastWord.prepend( ch );
+    }
+    return lastWord;
 }
 
 void KWAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KWTextParag *parag, int index, QChar ch )
@@ -110,21 +130,19 @@ void KWAutoFormat::doAutoFormat( QTextCursor* textEditCursor, KWTextParag *parag
 
     //if ( !m_enabled )
     //    return;
-
+    if( ch==".")
+    {
+        QString text=getLastWord(parag,index);
+        text=text+".";
+        m_dontUpper=(exception.findIndex(text)!=-1);
+        kdDebug()<<"m_dontUpper :"<<m_dontUpper<<endl;
+    }
     // Auto-correction happens when pressing space, tab, CR etc.
     if ( ch.isSpace() )
     {
         if ( index > 0 )
         {
-            QString lastWord;
-            QTextString *s = parag->string();
-            for ( int i = index - 1; i >= 0; --i )
-            {
-                QChar ch = s->at( i ).c;
-                if ( ch.isSpace() || ch.isPunct() )
-                    break;
-                lastWord.prepend( ch );
-            }
+            QString lastWord=getLastWord(parag, index);
             kdDebug() << "KWAutoFormat::doAutoFormat lastWord=" << lastWord << endl;
             if ( !doAutoCorrect( textEditCursor, parag, index, lastWord ) )
             {
@@ -208,8 +226,9 @@ void KWAutoFormat::doUpperCase( QTextCursor *textEditCursor, KWTextParag *parag,
     QChar firstChar = backCursor.parag()->at( backCursor.index() )->c;
     bool bNeedMove = false;
 
-    if ( m_convertUpperCase && isLower( firstChar ) )
+    if ( m_convertUpperCase && isLower( firstChar ) && !m_dontUpper)
     {
+
         bool beginningOfSentence = true; // true if beginning of text
         // Go back over any space/tab/CR
         while ( backCursor.index() > 0 || backCursor.parag()->prev() )

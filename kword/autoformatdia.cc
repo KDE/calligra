@@ -52,7 +52,7 @@ KWAutoFormatDia::KWAutoFormatDia( QWidget *parent, const char *name, KWAutoForma
 {
     setupTab1();
     setupTab2();
-
+    setupTab3();
     setInitialSize( QSize(500, 300) );
 }
 
@@ -150,6 +150,57 @@ void KWAutoFormatDia::setupTab2()
     pbEdit->setEnabled(state);
 }
 
+
+void KWAutoFormatDia::setupTab3()
+{
+    tab3 = addPage( i18n( "Exception" ) );
+    QGridLayout *grid = new QGridLayout(tab3, 7, 2,15,7);
+    exceptionLine = new QLineEdit( tab3 );
+    grid->addWidget(exceptionLine,1,0);
+
+    QLabel *lab=new QLabel(i18n("Don't upper lettre after these word.(Word with a point a the end)"),tab3);
+    grid->addMultiCellWidget(lab,0,0,0,1);
+
+    pbAddException=new QPushButton(i18n("Add"),tab3);
+    connect(pbAddException, SIGNAL(clicked()),this,SLOT(slotAddException()));
+    grid->addWidget(pbAddException,2,1);
+
+    pbRemoveException=new QPushButton(i18n("Remove"),tab3);
+    connect(pbRemoveException, SIGNAL(clicked()),this,SLOT(slotRemoveException()));
+    grid->addWidget(pbRemoveException,3,1);
+
+    exceptionList=new QListBox(tab3);
+    m_listException=m_autoFormat.listException();
+    exceptionList->insertStringList(m_listException);
+    grid->addMultiCellWidget(exceptionList,2,6,0,0);
+
+}
+
+void KWAutoFormatDia::slotAddException()
+{
+    QString text=exceptionLine->text().stripWhiteSpace();
+    if(!text.isEmpty())
+    {
+        if(text.at(text.length()-1)!='.')
+            text=text+".";
+        m_listException<<text;
+
+        exceptionList->clear();
+        exceptionList->insertStringList(m_listException);
+        exceptionLine->clear();
+    }
+}
+
+void KWAutoFormatDia::slotRemoveException()
+{
+    if(!exceptionList->currentText().isEmpty())
+    {
+        m_listException.remove(exceptionList->currentText());
+        exceptionList->clear();
+        exceptionList->insertStringList(m_listException);
+    }
+}
+
 void KWAutoFormatDia::slotChangeItem( QListViewItem * )
 {
     bool state=(m_pListView->currentItem()!=0);
@@ -232,7 +283,7 @@ bool KWAutoFormatDia::applyConfig()
 
     // Second tab
     m_docAutoFormat->copyAutoFormatEntries( m_autoFormat );
-
+    m_docAutoFormat->copyListException(m_listException);
     // Save to config file
     m_docAutoFormat->saveConfig();
 

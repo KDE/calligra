@@ -30,6 +30,8 @@ class QHBox;
 class KCharSelect;
 class KListView;
 class QLineEdit;
+class QListBox;
+
 
 /******************************************************************/
 /* Class: KWAutoFormatDia                                         */
@@ -47,19 +49,27 @@ protected:
     bool applyConfig();
     void setupTab1();
     void setupTab2();
+    void setupTab3();
     void refreshEntryList();
 
     QWidget *tab1;
     QWidget *tab2;
+    QWidget *tab3;
     QCheckBox *cbTypographicQuotes, *cbUpperCase, *cbUpperUpper;
     QPushButton *pbQuote1, *pbQuote2, *pbEdit, *pbRemove, *pbAdd;
     KCharSelect *charselect;
     KListView * m_pListView;
 
+    QListBox *exceptionList;
+    QLineEdit *exceptionLine;
+    QPushButton *pbAddException,*pbRemoveException;
+
     QChar oBegin, oEnd;
 
     KWAutoFormat m_autoFormat; // The copy we're working on
     KWAutoFormat * m_docAutoFormat; // Pointer to the real one (in KWDocument)
+
+    QStringList m_listException;
 protected slots:
     virtual void slotOk();
     void slotItemRenamed(QListViewItem * item, const QString & newText, int column);
@@ -69,6 +79,8 @@ protected slots:
     void chooseQuote2();
     void slotAddEntry();
     void slotChangeItem( QListViewItem * );
+    void slotAddException();
+    void slotRemoveException();
 };	
 
 /******************************************************************/

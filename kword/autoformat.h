@@ -24,6 +24,7 @@
 #include <qcolor.h>
 #include <qmap.h>
 #include <qvaluelist.h>
+#include <qstringlist.h>
 
 class KWDocument;
 class KWTextParag;
@@ -70,6 +71,8 @@ public:
      */
     void doAutoFormat( QTextCursor* cursor, KWTextParag *parag, int index, QChar ch );
 
+    static QString getLastWord(KWTextParag *parag, int index);
+
     //void setEnabled( bool e ) { m_enabled = e; }
     //bool isEnabled() { return m_enabled; }
 
@@ -114,6 +117,11 @@ public:
     void copyAutoFormatEntries( const KWAutoFormat & other )
     { m_entries = other.m_entries; }
 
+    void copyListException( const QStringList & _list)
+	{ exception=_list;}
+
+    QStringList listException() {return exception;}
+
     // Read/save config ( into kwordrc )
     void readConfig();
     void saveConfig();
@@ -136,10 +144,12 @@ private:
     //bool m_enabled;
     bool m_configRead;
     bool m_convertUpperCase, m_convertUpperUpper;
+    bool m_dontUpper;
     TypographicQuotes m_typographicQuotes;
 
     typedef QMap< QString, KWAutoFormatEntry > KWAutoFormatEntryMap;
     KWAutoFormatEntryMap m_entries;
+    QStringList exception;
     int m_maxlen;
 };
 
