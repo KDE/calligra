@@ -109,16 +109,16 @@ void KPTTaskDialog::slotSchedulingChanged(int activated) {
             label = label.arg(i18n("Place all events at the last possible moment permitted in the schedule"));
             break;
         case KPTNode::StartNotEarlier: // Start not earlier than
-            label = label.arg(i18n("Start not Earlier than"));
-            label = label.arg(i18n("The task can not be sceduled to start earlier than this date."));
+            label = label.arg(i18n("Start No Earlier Than"));
+            label = label.arg(i18n("The task can not be scheduled to start earlier than this date."));
             break;
         case KPTNode::FinishNotLater: // Finish not later than
-            label = label.arg(i18n("Finish not Later than"));
-            label = label.arg(i18n("The task can not be sceduled to finish later than this date."));
+            label = label.arg(i18n("Finish No Later Than"));
+            label = label.arg(i18n("The task can not be scheduled to finish later than this date."));
             break;
         case KPTNode::MustStartOn: // Must start on
             label = label.arg(i18n("Must Start on"));
-            label = label.arg(i18n("The task must be sceduled to start on this date."));
+            label = label.arg(i18n("The task must be scheduled to start on this date."));
             break;
         default: // error ...
             dia->lSchedulingExplain->setText("");

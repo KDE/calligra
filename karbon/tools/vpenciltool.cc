@@ -156,7 +156,7 @@ QString
 VPencilTool::contextHelp()
 {
 	QString s = i18n( "<qt><b>Pencil tool:</b><br>" );
-	s += i18n( "- <i>Click</i> to begin drawing, release when your finished.");
+	s += i18n( "- <i>Click</i> to begin drawing, release when you have finished.");
 	s += i18n( "- Press <i>Enter</i> or <i>double click</i> to end the polyline.</qt>" );
 
 	return s;
@@ -183,7 +183,7 @@ VPencilTool::deactivate()
 
 	QPtrList<KoPoint> complete;
 	QPtrList<KoPoint> *points = &m_Points;
-	
+
 	if( m_Points.count() > 1 )
 	{
 		if( m_optimize || m_mode == STRAIGHT )
@@ -288,7 +288,7 @@ VPencilTool::draw()
 		line.setState( VObject::edit );
 		line.draw( painter, &line.boundingBox() );
 	}
-	
+
 }
 
 

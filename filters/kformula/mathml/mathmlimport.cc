@@ -54,7 +54,7 @@ KoFilter::ConversionStatus MathMLImport::convert( const QCString& from, const QC
 
     KoStore* out = KoStore::createStore(QString(m_chain->outputFile()), KoStore::Write);
     if(!out || !out->open("root")) {
-        KMessageBox::error( 0, i18n( "Unable to open output file." ), i18n( "Mathml Import Error" ) );
+        KMessageBox::error( 0, i18n( "Unable to open output file." ), i18n( "MathML Import Error" ) );
         delete out;
         return KoFilter::FileNotFound;
     }
@@ -62,7 +62,7 @@ KoFilter::ConversionStatus MathMLImport::convert( const QCString& from, const QC
     QFile f( m_chain->outputFile() );
     if( !f.open( IO_Truncate | IO_ReadWrite ) ) {
         QApplication::restoreOverrideCursor();
-        KMessageBox::error( 0, i18n( "Failed to write file." ), i18n( "Mathml Import Error" ) );
+        KMessageBox::error( 0, i18n( "Failed to write file." ), i18n( "MathML Import Error" ) );
         return KoFilter::FileNotFound;
     }
     f.close();
@@ -75,7 +75,7 @@ KoFilter::ConversionStatus MathMLImport::convert( const QCString& from, const QC
     //formula->loadMathML( m_chain->inputFile() );
     f.setName( m_chain->inputFile() );
     if ( !f.open( IO_ReadOnly ) ) {
-        KMessageBox::error( 0, i18n( "Failed to open file." ), i18n( "Mathml Import Error" ) );
+        KMessageBox::error( 0, i18n( "Failed to open file." ), i18n( "MathML Import Error" ) );
         delete wrapper;
         return KoFilter::FileNotFound;
     }
@@ -83,7 +83,7 @@ KoFilter::ConversionStatus MathMLImport::convert( const QCString& from, const QC
     QDomDocument mathML;
     if ( !mathML.setContent( &f, false ) ) {
         QApplication::restoreOverrideCursor();
-        KMessageBox::error( 0, i18n( "Malformed XML data." ), i18n( "Mathml Import Error" ) );
+        KMessageBox::error( 0, i18n( "Malformed XML data." ), i18n( "MathML Import Error" ) );
         delete wrapper;
         return KoFilter::WrongFormat;
     }
@@ -101,7 +101,7 @@ KoFilter::ConversionStatus MathMLImport::convert( const QCString& from, const QC
     if ( nwritten != (int)s.size()-1 )
         kdWarning() << "wrote " << nwritten << "   - expected " << s.size()-1 << endl;
     if ( nwritten != (int)s.size()-1 ) {
-        KMessageBox::error( 0, i18n( "Failed to write formula." ), i18n( "Mathml Import Error" ) );
+        KMessageBox::error( 0, i18n( "Failed to write formula." ), i18n( "MathML Import Error" ) );
     }
 
     out->close();

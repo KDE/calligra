@@ -54,7 +54,7 @@ KexiProjectData* Kexi::detectProjectData( const QString &fname, QWidget *parent)
 	QString drivername = Kexi::driverManager().lookupByMime(mimename);
 	kdDebug() << "Kexi::detectProjectData(): driver name: " << drivername << endl;
 	if(drivername.isEmpty()) {
-		KMessageBox::detailedSorry(parent, QString( I18N_NOOP( "The file \"%1\" is not recognized as supported by Kexi.") ).arg(fname),
+		KMessageBox::detailedSorry(parent, QString( I18N_NOOP( "The file \"%1\" is not recognized as being supported by Kexi.") ).arg(fname),
 		QString( I18N_NOOP("<qt>Database driver for this file type not found. <p>Detected MIME type: %1") ).arg(mimename));
 		return 0;
 	}

@@ -173,10 +173,10 @@
                             <string>Document to include</string>
                         </property>
                         <property name="toolTip" stdset="0">
-                            <string>Don't generate neither the latex header nor the document environment.</string>
+                            <string>Do not generate neither the latex header or the document environment.</string>
                         </property>
                         <property name="whatsThis" stdset="0">
-                            <string>The document will be generated as a latex document which will have to include in a main latex document. It's allow you to generate several little files for each chapter of your document.</string>
+                            <string>The document will be generated as a latex document which will have to be included in a main latex document. It will allow you to generate several little files for each chapter of your document.</string>
                         </property>
                     </widget>
                 </widget>

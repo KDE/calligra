@@ -54,21 +54,21 @@ KoFilter::ConversionStatus MathMLExport::convert( const QCString& from, const QC
     KoStoreDevice* in = m_chain->storageFile( "root", KoStore::Read );
     if(!in) {
         QApplication::restoreOverrideCursor();
-        KMessageBox::error( 0, i18n( "Failed to read data." ), i18n( "Mathml Export Error" ) );
+        KMessageBox::error( 0, i18n( "Failed to read data." ), i18n( "MathML Export Error" ) );
         return KoFilter::StorageCreationError;
     }
 
     QDomDocument dom;
     if ( !dom.setContent( in, false ) ) {
         QApplication::restoreOverrideCursor();
-        KMessageBox::error( 0, i18n( "Malformed XML data." ), i18n( "Mathml Export Error" ) );
+        KMessageBox::error( 0, i18n( "Malformed XML data." ), i18n( "MathML Export Error" ) );
         return KoFilter::WrongFormat;
     }
 
     QFile f( m_chain->outputFile() );
     if( !f.open( IO_Truncate | IO_ReadWrite ) ) {
         QApplication::restoreOverrideCursor();
-        KMessageBox::error( 0, i18n( "Failed to write file." ), i18n( "Mathml Export Error" ) );
+        KMessageBox::error( 0, i18n( "Failed to write file." ), i18n( "MathML Export Error" ) );
         return KoFilter::FileNotFound;
     }
 

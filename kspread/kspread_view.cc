@@ -976,7 +976,7 @@ void ViewPrivate::initActions()
 
   actions->insertFromClipboard = new KAction( i18n("From &Clipboard..."),
       0, view, SLOT( insertFromClipboard() ), ac, "insertFromClipboard");
-  actions->insertFromClipboard->setToolTip(i18n("Insert csv data from the clipboard to the current cursor position/selection."));
+  actions->insertFromClipboard->setToolTip(i18n("Insert CSV data from the clipboard to the current cursor position/selection."));
 
   actions->transform = new KAction( i18n("Transform Object..."), "rotate",
       0, view, SLOT( transformPart() ), ac, "transform" );

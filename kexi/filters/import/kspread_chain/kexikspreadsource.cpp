@@ -115,7 +115,7 @@ KexiKSpreadSource::~KexiKSpreadSource() {
 }
 
 void KexiKSpreadSource::syncHeaderSection() {
-	headerRowColumnRange->setText(getRange());	
+	headerRowColumnRange->setText(getRange());
 //	showRange(headerRowColumnRange->text());
 }
 
@@ -149,7 +149,7 @@ QRect KexiKSpreadSource::rangeFromString(const QString& range,QString &tableName
 	tableName=tableNameExpr.capturedTexts()[0];
 	tableName.truncate(tableName.length()-1);
 	tableName=tableName.stripWhiteSpace();
-	
+
 	//retrieve the range begining
 	//col
 	QRegExp startColExpr=QRegExp("\\[\\s*[a-zA-Z]+");
@@ -224,7 +224,7 @@ void KexiKSpreadSource::showRange(const QString& tableName, int startCol, int st
                 kdDebug()<<"Error, can't show table"<<endl;
                 return ;
         }
-	
+
 	if (!((bool)res1)) {
                 kdDebug()<<"Error, can't show table, table unknown"<<endl;
 		return;
@@ -237,7 +237,7 @@ void KexiKSpreadSource::showRange(const QString& tableName, int startCol, int st
 		kdDebug()<<"Error while setting kspread selection"<<endl;
                 return ;
         }
-	
+
 
 //        DCOPRef tableRef=res1;
 //        QString tableName=tableRef.call("name");
@@ -247,7 +247,7 @@ void KexiKSpreadSource::showRange(const QString& tableName, int startCol, int st
 
 QString KexiKSpreadSource::getRange() {
 	if (!m_kspread) return "";
-	
+
 	QByteArray param;
 	QByteArray data;
 	QCString retType;
@@ -279,25 +279,25 @@ QString KexiKSpreadSource::getRange() {
 		kdDebug()<<"Error, can't get selection"<<endl;
 		return "";
 	}
-		
+
 	QRect sel=res;
 	return QString ("%1[%2%3 : %4%5]").arg(tableName).arg(util_encodeColumnLabelText(sel.x()))
 		.arg(sel.y()).arg(util_encodeColumnLabelText(sel.x()+sel.width()-1))
 		.arg(sel.y()+sel.height()-1);
-	
+
 
 }
 
 bool KexiKSpreadSource::checkConsistency() {
 	m_dataArea=rangeFromString(dataRange->text(),m_dataTable);
 	if (!m_dataArea.isValid()){
-		KMessageBox::sorry(this,i18n("You haven't specified a valid cell range, which contains the data, you would like to import"));
+		KMessageBox::sorry(this,i18n("You have not specified a valid cell range. This must contain the data you would like to import"));
 		return false;
 	}
 	if (useHeader->isChecked()) {
 		m_headerArea=rangeFromString(headerRowColumnRange->text(),m_headerTable);
 		if (!m_headerArea.isValid()) {
-			KMessageBox::sorry(this,i18n("You have chosen that a separate header range should be used. The specified range is invalid though. You have to fix that problem, before you can proceed"));
+			KMessageBox::sorry(this,i18n("You have chosen that a separate header range should be used. The specified range is invalid though. You have to fix that problem before you can proceed"));
 			return false;
 		}
 	}
@@ -356,12 +356,12 @@ KexiDBTable KexiKSpreadSource::tableStructure() {
 		else
 			area.setRight(area.left());
 #warning fixme
-	}	
-	
+	}
+
 	if (area.width()<area.height()) {
 		start=area.top();
 		end=area.top()+area.height();
-		int col=area.left();		
+		int col=area.left();
 		for (int i=start;i<end;i++)  {
 			QString fieldName=kspreadCellAsString(table,col,i);
 			if (fieldName.isEmpty()) fieldName=QString("Unknown_%1").arg(i);
@@ -394,7 +394,7 @@ KexiDBTable KexiKSpreadSource::tableStructure() {
 }
 
 bool KexiKSpreadSource::firstTableRow() {
-	if (m_recordIsRow)	
+	if (m_recordIsRow)
 		m_dataPos=m_dataArea.top()-1;
 	else
 		m_dataPos=m_dataArea.left()-1;
@@ -422,7 +422,7 @@ bool KexiKSpreadSource::nextTableRow() {
 				return !kspreadNoContent(m_dataTable,rec);
 			}
 		}
-		return true;		
+		return true;
 	}
 
 	if (m_recordIsRow) {
@@ -436,7 +436,7 @@ bool KexiKSpreadSource::nextTableRow() {
 
 QVariant KexiKSpreadSource::tableValue(int field) {
 //	return QVariant(preview->text(m_dataPos,field));
-	if (m_recordIsRow) 
+	if (m_recordIsRow)
 		return kspreadCellAsString(m_dataTable,field+m_dataArea.left(),m_dataPos);
 	else
 		return kspreadCellAsString(m_dataTable,m_dataPos,field+m_dataArea.top());

@@ -62,13 +62,13 @@ class KexiNewProjectWizardPrivate
 	KIconView *lv_types;
 	KIconViewItem *lvi_file, *lvi_server;
 	QString chk_file_txt, chk_server_txt; //!< helper
-	
+
 	QString server_db_name_dblist_lbl_txt; //!< helper
 
 	//for displaying db list of the selected conn.
 	KexiDB::ConnectionData *conndata_to_show;
 	KexiProjectSet *project_set_to_show;
-	
+
 	bool le_dbname_txtchanged_disable : 1;
 	bool le_dbname_autofill : 1;
 };
@@ -81,12 +81,12 @@ KexiNewProjectWizard::KexiNewProjectWizard(const KexiDBConnectionSet& conn_set,
 	setIcon( DesktopIcon("filenew") );
 	setCaption( i18n("Creating a new project") );
 	finishButton()->setText(i18n("Create"));
-	
+
 	//page: type selector
 	m_prjtype_sel = new KexiNewPrjTypeSelector(this, "KexiNewPrjTypeSelector");
 	d->lv_types = new KIconView(m_prjtype_sel, "types");
 	QString none;
-	d->lvi_file = new KIconViewItem( d->lv_types, i18n("New project stored in a file"), 
+	d->lvi_file = new KIconViewItem( d->lv_types, i18n("New project stored in a file"),
 		KGlobal::iconLoader()->loadIcon( KMimeType::mimeType("application/x-kexiproject-sqlite")->icon(none,0), KIcon::Desktop ) );
 	d->lvi_server = new KIconViewItem( d->lv_types, i18n("New project stored on a database server"), DesktopIcon("socket") );
 	d->lv_types->setFocus();
@@ -94,7 +94,7 @@ KexiNewProjectWizard::KexiNewProjectWizard(const KexiDBConnectionSet& conn_set,
 	d->chk_file_txt = m_prjtype_sel->chk_always->text() +"\n"+txt_dns;
 	d->chk_server_txt = i18n("Always &use database server for creating new projects.")
 		+"\n"+txt_dns;
-	
+
 	connect(d->lv_types,SIGNAL(executed(QIconViewItem*)),this,SLOT(slotLvTypesExecuted(QIconViewItem*)));
 	connect(d->lv_types,SIGNAL(returnPressed(QIconViewItem*)),this,SLOT(slotLvTypesExecuted(QIconViewItem*)));
 	connect(d->lv_types,SIGNAL(selectionChanged( QIconViewItem*)),this,SLOT(slotLvTypesSelected(QIconViewItem*)));
@@ -108,17 +108,17 @@ KexiNewProjectWizard::KexiNewProjectWizard(const KexiDBConnectionSet& conn_set,
 	//page: db title
 	m_db_title = new KexiDBTitlePage(this, "KexiDBTitlePage");
 	addPage(m_db_title, i18n("Select project's caption"));
-		
+
 	//page: connection selector
 	m_conn_sel = new KexiConnSelectorWidget(conn_set, this, "KexiConnSelectorWidget");
-	
+
 	//"Select database server connection"
 	m_conn_sel->m_file->btn_advanced->hide();
 	m_conn_sel->m_file->label->hide();
 	m_conn_sel->m_file->lbl->setText( i18n("Enter a new Kexi project's file name:") );
-	
+
 	m_conn_sel->m_remote->label->setText(
-	 i18n("Select database server's connection you wish use to create a new Kexi project. "
+	 i18n("Select database server's connection you wish to use to create a new Kexi project. "
 	 "<p>Here you may also add, edit or remove connections from the list."));
 	m_conn_sel->m_remote->label_back->hide();
 	m_conn_sel->m_remote->btn_back->hide();
@@ -134,7 +134,7 @@ KexiNewProjectWizard::KexiNewProjectWizard(const KexiDBConnectionSet& conn_set,
 	m_conn_sel->showAdvancedConn();
 	connect(m_conn_sel,SIGNAL(connectionItemExecuted(ConnectionDataLVItem*)),
 		this,SLOT(next()));
-	
+
 	addPage(m_conn_sel, i18n("Select project's location"));
 
 	//page: server db name
@@ -150,20 +150,20 @@ KexiNewProjectWizard::KexiNewProjectWizard(const KexiDBConnectionSet& conn_set,
 		this,SLOT(accept()));
 	m_server_db_name->le_caption->setText(i18n("New database"));
 	m_server_db_name->le_dbname->setValidator(new Kexi::IdentifierValidator(this, "id_val"));
-	m_project_selector = new KexiProjectSelectorWidget( 
+	m_project_selector = new KexiProjectSelectorWidget(
 		m_server_db_name->frm_dblist, "KexiProjectSelectorWidget", 0, false, false );
 	GLUE_WIDGET(m_project_selector, m_server_db_name->frm_dblist);
 	m_project_selector->setFocusPolicy(NoFocus);
 	m_project_selector->setSelectable(false);
-	
+
 	addPage(m_server_db_name, i18n("Select project's caption and database name"));
 	setFinishEnabled(m_server_db_name,true);
-		
+
 	//finish:
 	updateGeometry();
 	d->lv_types->setMaximumWidth(width()/2);
 	d->lv_types->setSelected(d->lvi_file, true);
-	
+
 	//get settings
 	KGlobal::config()->setGroup("Startup");
 	//"" means goto 1st page
@@ -183,7 +183,7 @@ KexiNewProjectWizard::~KexiNewProjectWizard()
 {
 	delete d;
 }
-	
+
 void KexiNewProjectWizard::show()
 {
 	KDialog::centerOnScreen(this);
@@ -236,7 +236,7 @@ void KexiNewProjectWizard::showPage(QWidget *page)
 			m_server_db_name->le_caption->selectAll();
 		}
 	} else if (page==m_server_db_name) {
-		if (m_conn_sel->selectedConnectionData() 
+		if (m_conn_sel->selectedConnectionData()
 		 && (d->conndata_to_show != m_conn_sel->selectedConnectionData())) {
 			d->conndata_to_show = m_conn_sel->selectedConnectionData();
 			m_project_selector->setProjectSet(0);
@@ -272,7 +272,7 @@ void KexiNewProjectWizard::next()
 			m_project_selector->label->setText(
 				d->server_db_name_dblist_lbl_txt.arg(m_conn_sel->selectedConnectionData()->serverInfoString(false)) );
 			m_server_db_name->le_caption->setFocus();
-			
+
 		}
 	}
 	KWizard::next();
@@ -281,7 +281,7 @@ void KexiNewProjectWizard::next()
 void KexiNewProjectWizard::accept()
 {
 	if (d->lv_types->currentItem()==d->lvi_file) {//FILE:
-		//check if new db file name is ok 
+		//check if new db file name is ok
 		kdDebug() << "********** sender() " << sender()->className() << endl;
 		if (sender()==finishButton()) { /*(only if signal does not come from filedialog)*/
 			kdDebug() << "********** sender()==finishButton() ********" << endl;
@@ -310,7 +310,7 @@ void KexiNewProjectWizard::accept()
 			->findProject( m_server_db_name->le_dbname->text() )) {
 			if (KMessageBox::warningYesNo( this, "<qt>"
 				+i18n("<b>A project with database name \"%1\" already exists</b>"
-				"<p>Do you want to delete it and create new one?")
+				"<p>Do you want to delete it and create a new one?")
 				.arg( m_server_db_name->le_dbname->text() ) ) != KMessageBox::Yes)
 			{
 				m_server_db_name->le_dbname->setFocus();
@@ -318,7 +318,7 @@ void KexiNewProjectWizard::accept()
 			}
 		}
 	}
-	
+
 	KWizard::accept();
 }
 
@@ -332,9 +332,9 @@ void KexiNewProjectWizard::done(int r)
 		KGlobal::config()->writeEntry("DefaultStorageForNewProjects","File");
 	else
 		KGlobal::config()->writeEntry("DefaultStorageForNewProjects","Server");
-	
+
 	KGlobal::config()->sync();
-	
+
 	KWizard::done(r);
 }
 
@@ -363,7 +363,7 @@ KexiDB::ConnectionData* KexiNewProjectWizard::projectConnectionData() const
 }
 
 void KexiNewProjectWizard::slotServerDBCaptionTxtChanged(const QString &capt)
-{	
+{
 	if (m_server_db_name->le_dbname->text().isEmpty())
 		d->le_dbname_autofill=true;
 	if (d->le_dbname_autofill) {
@@ -372,7 +372,7 @@ void KexiNewProjectWizard::slotServerDBCaptionTxtChanged(const QString &capt)
 		d->le_dbname_txtchanged_disable = false;
 	}
 }
-	
+
 void KexiNewProjectWizard::slotServerDBNameTxtChanged(const QString &)
 {
 	if (d->le_dbname_txtchanged_disable)

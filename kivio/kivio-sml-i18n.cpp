@@ -26,8 +26,8 @@ i18n("Stencils","On-Page Reference") // Title
 i18n("Stencils","On-Page Reference") // Description
 i18n("Stencils","Paper Tape") // Title
 i18n("Stencils","Flowcharting Paper Tape Stencil") // Description
-i18n("Stencils","Preperation") // Title
-i18n("Stencils","Basic flowcharting preperation shape") // Description
+i18n("Stencils","Preparation") // Title
+i18n("Stencils","Basic flowcharting preparation shape") // Description
 i18n("Stencils","Process") // Title
 i18n("Stencils","Basic flowcharting process shape") // Description
 i18n("Stencils","Sequential Data") // Title
@@ -72,8 +72,8 @@ i18n("Stencils","France") // Title
 i18n("Stencils","France") // Description
 i18n("Stencils","Germany") // Title
 i18n("Stencils","Germany") // Description
-i18n("Stencils","Great Britain") // Title
-i18n("Stencils","Great Britain") // Description
+i18n("Stencils","United Kingdom") // Title
+i18n("Stencils","United Kingdom") // Description
 i18n("Stencils","Greece") // Title
 i18n("Stencils","Greece") // Description
 i18n("Stencils","Iceland") // Title
@@ -84,8 +84,8 @@ i18n("Stencils","Italy") // Title
 i18n("Stencils","Italy") // Description
 i18n("Stencils","Japan") // Title
 i18n("Stencils","Japan") // Description
-i18n("Stencils","Luxemburg") // Title
-i18n("Stencils","Luxemburg") // Description
+i18n("Stencils","Luxembourg") // Title
+i18n("Stencils","Luxembourg") // Description
 i18n("Stencils","Netherlands") // Title
 i18n("Stencils","Netherlands") // Description
 i18n("Stencils","Norway") // Title

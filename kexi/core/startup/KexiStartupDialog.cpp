@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -82,8 +82,8 @@ TemplatesPage::TemplatesPage( Orientation o, QWidget * parent, const char * name
 
 TemplatesPage::~TemplatesPage() {}
 
-void TemplatesPage::addItem(const QString& key, const QString& name, 
-	const QString& description, const QPixmap& icon) 
+void TemplatesPage::addItem(const QString& key, const QString& name,
+	const QString& description, const QPixmap& icon)
 {
 	TemplateItem *item = new TemplateItem(templates, name, icon);
 	item->key=key;
@@ -135,19 +135,19 @@ public:
 	int pageTemplatesID, pageOpenExistingID, pageOpenRecentID;
 
 	QCheckBox *chkDoNotShow;
-	
+
 	//widgets for template tab:
 	KJanusWidget* templatesWidget;
 	QObject *templatesWidget_IconListBox;//helper
-	
+
 	QWidgetStack *viewBlankTempl;
 	TemplatesPage *viewPersonalTempl;
 	TemplatesPage *viewBusinessTempl;
-		
+
 	int result;
-	
+
 	QPixmap kexi_sqlite_icon, kexi_shortcut_icon;
-	
+
 	//! Key string of selected database template. \sa selectedTemplateKey()
 	QString selectedTemplateKey;
 
@@ -157,19 +157,19 @@ public:
 	KexiConnSelectorWidget *openExistingConnWidget;
 	QString existingFileToOpen; //! helper for returning a file name to open
 	KexiDB::ConnectionData* selectedExistingConnection; //! helper for returning selected connection
-		
+
 	//! used for "open recent"
 	KexiProjectSet *recentProjects;
 	KexiProjectSelectorWidget* prj_selector;
-	
+
 	//! true if the dialog contain single page, not tabs
 	bool singlePage : 1;
 };
 
 bool dlgSinglePage(int type)
 {
-	return (type==KexiStartupDialog::Templates) 
-	|| (type==KexiStartupDialog::OpenExisting) 
+	return (type==KexiStartupDialog::Templates)
+	|| (type==KexiStartupDialog::OpenExisting)
 	|| (type==KexiStartupDialog::OpenRecent);
 }
 
@@ -181,10 +181,10 @@ QString captionForDialogType(int type)
 		return I18N_NOOP("Open Existing Project");
 	else if (type==KexiStartupDialog::OpenRecent)
 		return I18N_NOOP("Open Recent Project");
-	
+
 	return I18N_NOOP("Choose a project");
 }
-	
+
 /*================================================================*/
 /*KexiStartupDialog::KexiStartupDialog(QWidget *parent, const char *name, KInstance* global,
 	const QCString &format, const QString &nativePattern,
@@ -193,11 +193,11 @@ QString captionForDialogType(int type)
 	KDialogBase(parent, name, true, i18n("Open Document"), KDialogBase::Ok | KDialogBase::Cancel,
 	KDialogBase::Ok) {
 */
-KexiStartupDialog::KexiStartupDialog( 
+KexiStartupDialog::KexiStartupDialog(
 	int dialogType, int dialogOptions,
 	KexiDBConnectionSet& connSet, KexiProjectSet& recentProjects,
 	QWidget *parent, const char *name )
- : KDialogBase( 
+ : KDialogBase(
  	dlgSinglePage(dialogType) ? Plain : Tabbed
 	,captionForDialogType(dialogType)
  	,Help | Ok | Cancel, Ok, parent, name )
@@ -208,7 +208,7 @@ KexiStartupDialog::KexiStartupDialog(
 	d->dialogType = dialogType;
 	d->dialogOptions = dialogOptions;
  	d->singlePage = dlgSinglePage(dialogType);
-	
+
 	if (dialogType==OpenExisting) {//this dialog has "open" tab only!
 		setIcon(DesktopIcon("fileopen"));
 	} else {
@@ -234,7 +234,7 @@ KexiStartupDialog::KexiStartupDialog(
 		if (d->singlePage)
 			d->prj_selector->setFocus();
 	}
-	
+
 	if (!d->singlePage) {
 		connect(this, SIGNAL(aboutToShowPage(QWidget*)), this, SLOT(tabShown(QWidget*)));
 		d->templatesWidget->setFocus();
@@ -260,7 +260,7 @@ void KexiStartupDialog::show()
 	d->selectedTemplateKey=QString::null;
 	d->existingFileToOpen=QString::null;
 	d->result=-1;
-	
+
 	KDialog::centerOnScreen(this);
 	KDialogBase::show();
 }
@@ -277,16 +277,16 @@ void KexiStartupDialog::done(int r)
 
 	kdDebug() << "KexiStartupDialog::done(" << r << ")" << endl;
 	updateSelectedTemplateKeyInfo();
-	
+
 	//save settings
 	KGlobal::config()->setGroup("Startup");
 	if (d->openExistingConnWidget)
 		KGlobal::config()->writeEntry("OpenExistingType", (d->openExistingConnWidget->selectedConnectionType() == KexiConnSelectorWidget::FileBased) ? "File" : "Server");
 	if (d->chkDoNotShow)
 		KGlobal::config()->writeEntry("ShowStartupDialog",!d->chkDoNotShow->isChecked());
-	
+
 	KGlobal::config()->sync();
-	
+
 	if (r==QDialog::Rejected) {
 		d->result = CancelResult;
 	} else {
@@ -324,8 +324,8 @@ void KexiStartupDialog::setupPageTemplates()
 {
 	d->pageTemplates = addPage( i18n("&Create Project") );
 	QVBoxLayout *lyr = new QVBoxLayout( d->pageTemplates, 0, KDialogBase::spacingHint() );
-	
-    d->templatesWidget = new KJanusWidget( 
+
+    d->templatesWidget = new KJanusWidget(
 		d->pageTemplates, "templatesWidget", KJanusWidget::IconList);
 	{//aaa! dirty hack
 		d->templatesWidget_IconListBox = d->templatesWidget->child(0,"KListBox");
@@ -334,7 +334,7 @@ void KexiStartupDialog::setupPageTemplates()
 	}
     lyr->addWidget(d->templatesWidget);
 	connect(d->templatesWidget, SIGNAL(aboutToShowPage(QWidget*)), this, SLOT(templatesPageShown(QWidget*)));
-	
+
 	if (d->dialogOptions & CheckBoxDoNotShowAgain) {
 		d->chkDoNotShow = new QCheckBox(i18n("Don't show me this dialog again"), d->pageTemplates, "chkDoNotShow");
     	lyr->addWidget(d->chkDoNotShow);
@@ -342,18 +342,18 @@ void KexiStartupDialog::setupPageTemplates()
 
 	//template groups:
 	QFrame *templPageFrame;
-	
+
 	//- page "blank db"
 	templPageFrame = d->templatesWidget->addPage (
 		i18n("Blank Databases"), i18n("New Blank Database Project"), DesktopIcon("empty") );
-	
+
 	QVBoxLayout *tmplyr = new QVBoxLayout(templPageFrame, 0, KDialogBase::spacingHint());
-	
+
 	QLabel *lbl_blank = new QLabel( i18n("Kexi will create a new blank database. Click \"OK\" button to proceed."), templPageFrame );
 	lbl_blank->setMargin(0);
 	tmplyr->addWidget( lbl_blank );
 	tmplyr->addStretch(1);
-	
+
 	//- page "personal db"
 	templPageFrame = d->templatesWidget->addPage (
 		i18n("Personal Databases"), i18n("New Personal Database Project Templates"), DesktopIcon("folder_home") );
@@ -363,7 +363,7 @@ void KexiStartupDialog::setupPageTemplates()
 	connect(d->viewPersonalTempl->templates,SIGNAL(doubleClicked(QIconViewItem*)),this,SLOT(templateItemExecuted(QIconViewItem*)));
 	connect(d->viewPersonalTempl->templates,SIGNAL(returnPressed(QIconViewItem*)),this,SLOT(templateItemExecuted(QIconViewItem*)));
 	connect(d->viewPersonalTempl->templates,SIGNAL(currentChanged(QIconViewItem*)),this,SLOT(templateItemSelected(QIconViewItem*)));
-	  
+
 	//- page "business db"
 	templPageFrame = d->templatesWidget->addPage (
 		i18n("Business Databases"), i18n("New Business Database Project Templates"),
@@ -387,13 +387,13 @@ void KexiStartupDialog::templatesPageShown(QWidget *page)
 		templ = d->viewPersonalTempl->templates;
 		if (templ->count()==0) {
 			//add items (on demand):
-			d->viewPersonalTempl->addItem("cd_catalog", i18n("CD Catalog"), 
-				i18n("Easy to use database for storing information about your CDs collection."),
+			d->viewPersonalTempl->addItem("cd_catalog", i18n("CD Catalog"),
+				i18n("Easy to use database for storing information about your CD collection."),
 				DesktopIcon("cdrom_unmount"));
-			d->viewPersonalTempl->addItem("expenses", i18n("Expenses"), 
+			d->viewPersonalTempl->addItem("expenses", i18n("Expenses"),
 				i18n("A database for managing your personal expenses."),
 				DesktopIcon("kcalc"));
-			d->viewPersonalTempl->addItem("image_gallery", i18n("Image Gallery"), 
+			d->viewPersonalTempl->addItem("image_gallery", i18n("Image Gallery"),
 				i18n("A database for archiving your image collection in a form of gallery."),
 				DesktopIcon("icons"));
 		}
@@ -402,7 +402,7 @@ void KexiStartupDialog::templatesPageShown(QWidget *page)
 		templ = d->viewBusinessTempl->templates;
 		if (templ->count()==0) {
 			//add items (on demand):
-			d->viewBusinessTempl->addItem("address_book", i18n("Address Book"), 
+			d->viewBusinessTempl->addItem("address_book", i18n("Address Book"),
 				i18n("A database that offers you a contact information"),
 				DesktopIcon("contents"));
 		}
@@ -456,7 +456,7 @@ void KexiStartupDialog::updateSelectedTemplateKeyInfo()
 void KexiStartupDialog::tabShown(QWidget *w)
 {
 	kdDebug() << "KexiStartupDialog::tabShown " << (long)w << " "<< long(d->pageTemplates)<<endl;
-	
+
 	updateDialogOKButton(w);
 }
 
@@ -470,7 +470,7 @@ void KexiStartupDialog::updateDialogOKButton(QWidget *w)
 			w = d->pageOpenExisting;
 		else if (idx==d->pageOpenRecentID)
 			w = d->pageOpenRecent;
-		
+
 		if (!w)
 			return;
 	}
@@ -554,7 +554,7 @@ void KexiStartupDialog::showAdvancedConnForOpenExisting()
 
 QString KexiStartupDialog::selectedExistingFile() const
 {
-	kdDebug() << activePageIndex() << " " << d->openExistingFileDlg->isVisible() 
+	kdDebug() << activePageIndex() << " " << d->openExistingFileDlg->isVisible()
 		<< ": " << d->existingFileToOpen << endl;
 	return d->existingFileToOpen;
 }

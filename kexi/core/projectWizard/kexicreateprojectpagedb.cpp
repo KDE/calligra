@@ -124,18 +124,18 @@ KexiCreateProjectPageDB::connectHost(const QString &driver, const QString &host,
 	KexiDB::Connection *con=0;
 	if (!db || !(con=db->createConnection(data)))
 	{
-		KMessageBox::detailedError(0, i18n("Error in databaseconnection"),
+		KMessageBox::detailedError(0, i18n("Error in database connection"),
 			db ? db->errorMsg(): "", i18n("Database Connection"));
 		return false;
 	}
 	if (!con->connect()) {
-		KMessageBox::detailedError(0, i18n("Error in databaseconnection"),
+		KMessageBox::detailedError(0, i18n("Error in database connection"),
 			 con->errorMsg() , i18n("Database Connection"));
 		delete con;
 		return false;
 	}
 
-	
+
 	kdDebug()<<"Querying database names"<<endl;
 	QStringList databases = con->databaseNames();
 	QPixmap db_pix = kapp->iconLoader()->loadIcon("db", KIcon::Small);
