@@ -538,11 +538,11 @@ void KoMainWindow::updateCaption()
           if (page)
               caption = static_cast<KoDocumentInfoAbout *>(page)->title();
       }
-      if ( caption.isEmpty() )
-      {
-          //Fall back to document URL, but don't show 'file' protocol
-          caption = rootDocument()->url().prettyURL( 0, KURL::StripFileProtocol );
-      }
+      const QString url = rootDocument()->url().prettyURL( 0, KURL::StripFileProtocol );
+      if ( !caption.isEmpty() && !url.isEmpty() )
+          caption = QString( "%1 - %2" ).arg( caption ).arg( url );
+      else if ( caption.isEmpty() )
+          caption = url;
 
       setCaption( caption, rootDocument()->isModified() );
   }

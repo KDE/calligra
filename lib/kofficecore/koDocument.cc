@@ -413,6 +413,7 @@ bool KoDocument::saveFile()
         suppressErrorDialog = (status == KoFilter::UserCancelled || status == KoFilter::BadConversionGraph );
     } else {
         // Native format => normal save
+        Q_ASSERT( !m_file.isEmpty() );
         ret = saveNativeFormat( m_file );
     }
 
@@ -1970,7 +1971,7 @@ void KoDocument::setTitleModified( const QString caption, bool mod )
     QPtrListIterator<KoMainWindow> it( d->m_shells );
     for (; it.current(); ++it )
     {
-        it.current()->updateCaption( caption, mod );
+        it.current()->updateCaption();
         it.current()->updateReloadFileAction(this);
     }
 }
