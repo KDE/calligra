@@ -1424,6 +1424,8 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 	int curRow = d->curRow;
 	int curCol = d->curCol;
 
+	const bool nobtn = e->state()==NoButton;
+
 	switch (e->key())
 	{
 	case Key_Delete:
@@ -1447,14 +1449,16 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 		break;
 
 	case Key_Left:
-		curCol = QMAX(0, curCol - 1);
+		if (nobtn)
+			curCol = QMAX(0, curCol - 1);
 		break;
 	case Key_Right:
-		curCol = QMIN(cols() - 1, curCol + 1);
+		if (nobtn)
+			curCol = QMIN(cols() - 1, curCol + 1);
 		break;
 	case Key_Tab:
 	case Key_Backtab:
-		if (e->state()==NoButton && e->key()==Key_Tab) {
+		if (nobtn && e->key()==Key_Tab) {
 			acceptEditor();
 			curCol = QMIN(cols() - 1, curCol + 1);
 		}
@@ -1466,21 +1470,27 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 		}
 		break;
 	case Key_Up:
-		curRow = QMAX(0, curRow - 1);
+		if (nobtn)
+			curRow = QMAX(0, curRow - 1);
 		break;
 	case Key_Down:
-		curRow = QMIN(rows() - 1 + (isInsertingEnabled()?1:0), curRow + 1);
+		if (nobtn)
+			curRow = QMIN(rows() - 1 + (isInsertingEnabled()?1:0), curRow + 1);
 		break;
-	case Key_Prior:
-		curRow -= visibleHeight() / d->rowHeight;
-		curRow = QMAX(0, curRow);
+	case Key_PageUp:
+		if (nobtn) {
+			curRow -= visibleHeight() / d->rowHeight;
+			curRow = QMAX(0, curRow);
+		}
 		break;
-	case Key_Next:
-		curRow += visibleHeight() / d->rowHeight;
-		curRow = QMIN(rows() - 1 + (isInsertingEnabled()?1:0), curRow);
+	case Key_PageDown:
+		if (nobtn) {
+			curRow += visibleHeight() / d->rowHeight;
+			curRow = QMIN(rows() - 1 + (isInsertingEnabled()?1:0), curRow);
+		}
 		break;
 	case Key_Home:
-		if (e->state()==NoButton) {
+		if (nobtn) {
 			curCol = 0;//to 1st col
 		}
 		else if (e->state()==ControlButton) {
@@ -1492,7 +1502,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 		}
 		break;
 	case Key_End:
-		if (e->state()==NoButton) {
+		if (nobtn) {
 			curCol = cols()-1;//to last col
 		}
 		else if (e->state()==ControlButton) {
@@ -1507,28 +1517,30 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 	case Key_Enter:
 	case Key_Return:
 	case Key_F2:
-		startEditCurrentCell();
-		return;
-	
+		if (nobtn) {
+			startEditCurrentCell();
+			return;
+		}
+		break;
 	case Key_Backspace:
-		if(columnType(curCol) != KexiDB::Field::Boolean && columnEditable(curCol))
+		if (nobtn && columnType(curCol) != KexiDB::Field::Boolean && columnEditable(curCol))
 			createEditor(curRow, curCol, QString::null, true);
 		break;
 	case Key_Space:
-		if(columnType(curCol) == KexiDB::Field::Boolean && columnEditable(curCol))
+		if (nobtn && columnType(curCol) == KexiDB::Field::Boolean && columnEditable(curCol))
 		{
 			boolToggled();
 			break;
 		}
 	case Key_Escape:
-		if (d->rowEditing) {
+		if (nobtn && d->rowEditing) {
 			cancelRowEdit();
 			return;
 		}
 		break;
 	default:
 		//others:
-		if (e->key()==KGlobalSettings::contextMenuKey()) { //Key_Menu:
+		if (nobtn && e->key()==KGlobalSettings::contextMenuKey()) { //Key_Menu:
 			showContextMenu();
 		}
 		else {
