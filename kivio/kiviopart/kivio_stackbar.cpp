@@ -41,7 +41,7 @@ void KivioStackBar::insertPage( QWidget* w, const QString& title )
 {
   if (w->parent() != this)
     w->reparent(this,QPoint(0,0));
-  
+
   w->hide();
 
   setMinimumWidth( QMAX(minimumSize().width(),w->minimumSize().width() ) );
@@ -145,6 +145,11 @@ void KivioStackBar::deletePageAndButton( DragBarButton *pBtn )
         return;
     }
 
+    if(pPage == m_visiblePage)
+    {
+      m_visiblePage = 0L;
+    }
+
     delete pBtn;
     delete pPage;
 
@@ -154,10 +159,6 @@ void KivioStackBar::deletePageAndButton( DragBarButton *pBtn )
     if ( it.toFirst() )
     {
         showPage( it.current() );
-    }
-    else
-    {
-        m_visiblePage = 0L;
     }
 }
 
