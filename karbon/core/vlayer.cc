@@ -30,11 +30,6 @@ VLayer::VLayer( const VLayer& layer )
 
 VLayer::~VLayer()
 {
-	VObjectListIterator itr = m_objects;
-	for ( ; itr.current(); ++itr )
-	{
-		delete( itr.current() );
-	}
 }
 
 void
