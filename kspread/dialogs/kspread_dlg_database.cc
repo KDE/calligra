@@ -641,11 +641,11 @@ void KSpreadDatabaseDlg::accept()
     }
   }
 
-  if ( !m_pView->doc()->undoBuffer()->isLocked() )
+  if ( !m_pView->doc()->undoLocked() )
   {
     QRect r(left, top, count, height);
     KSpreadUndoInsertData * undo = new KSpreadUndoInsertData( m_pView->doc(), table, r );
-    m_pView->doc()->undoBuffer()->appendUndo( undo );
+    m_pView->doc()->addCommand( undo );
   }
 
   m_pView->doc()->emitBeginOperation();

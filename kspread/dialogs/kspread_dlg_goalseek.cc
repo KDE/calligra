@@ -315,14 +315,14 @@ void KSpreadGoalSeekDlg::buttonOkClicked()
   }
   else
   {
-    if ( !pDoc->undoBuffer()->isLocked() )
+    if ( !pDoc->undoLocked() )
     {
       KSpreadUndoSetText * undo
         = new KSpreadUndoSetText( pDoc, m_pView->activeTable(), QString::number(m_oldSource),
                                   m_sourceCell->column(), m_sourceCell->row(),
                                   m_sourceCell->formatType() );
 
-      pDoc->undoBuffer()->appendUndo( undo );
+      pDoc->addCommand( undo );
     }
 
     m_restored = true;

@@ -84,10 +84,10 @@ void KSpreadResizeRow::slotOk()
     {
         QRect selection( m_pView->selection() );
 
-        if ( !m_pView->doc()->undoBuffer()->isLocked() )
+        if ( !m_pView->doc()->undoLocked() )
         {
             KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pView->doc(), m_pView->activeTable(), selection );
-            m_pView->doc()->undoBuffer()->appendUndo( undo );
+            m_pView->doc()->addCommand( undo );
         }
 
         for( int i=selection.top(); i <= selection.bottom(); i++ )
@@ -153,10 +153,10 @@ void KSpreadResizeColumn::slotOk()
     {
         QRect selection( m_pView->selection() );
 
-        if ( !m_pView->doc()->undoBuffer()->isLocked() )
+        if ( !m_pView->doc()->undoLocked() )
         {
             KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pView->doc(), m_pView->activeTable(), selection );
-            m_pView->doc()->undoBuffer()->appendUndo( undo );
+            m_pView->doc()->addCommand( undo );
         }
 
         for( int i = selection.left(); i <= selection.right(); i++ )

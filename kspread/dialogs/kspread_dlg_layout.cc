@@ -1009,7 +1009,7 @@ void CellFormatDlg::slotApply()
   }
 
   // Prepare the undo buffer
-  if ( !m_doc->undoBuffer()->isLocked() )
+  if ( !m_doc->undoLocked() )
   {
     QRect rect;
 
@@ -1038,14 +1038,14 @@ void CellFormatDlg::slotApply()
     
     QString title = i18n( "Change Format" );
     KSpreadUndoCellFormat * undo = new KSpreadUndoCellFormat( m_doc, m_table, rect, title );
-    // m_doc->undoBuffer()->appendUndo( undo );
+    // m_doc->addCommand( undo );
     macroUndo->addCommand( undo );
 
     /*	if ( miscPage->getStyle()!=eStyle)
         {
         //make undo for style of cell
         KSpreadUndoStyleCell *undo3 = new KSpreadUndoStyleCell( m_doc, m_table, rect );
-        //m_doc->undoBuffer()->appendUndo( undo3 );
+        //m_doc->addCommand( undo3 );
         macroUndo->addCommand( undo3 );
         }*/
   }
@@ -1072,12 +1072,12 @@ void CellFormatDlg::slotApply()
     if ( int( positionPage->getSizeHeight() ) != int( heightSize )
          || int( positionPage->getSizeWidth() ) != int( widthSize ) )
     {
-      if ( !m_doc->undoBuffer()->isLocked() )
+      if ( !m_doc->undoLocked() )
       {
         QRect rect;
         rect.setCoords( left, top, right , bottom  );
         KSpreadUndoResizeColRow *undo2 = new KSpreadUndoResizeColRow( m_doc, m_table , rect );
-        //m_doc->undoBuffer()->appendUndo( undo2 );
+        //m_doc->addCommand( undo2 );
         macroUndo->addCommand( undo2 );
       }
     }
@@ -1108,12 +1108,12 @@ void CellFormatDlg::slotApply()
     //        miscPage->applyRow( );
     if ( int( positionPage->getSizeHeight() ) != int( heightSize ) )
     {
-      if ( !m_doc->undoBuffer()->isLocked())
+      if ( !m_doc->undoLocked())
       {
         QRect rect;
         rect.setCoords( left, top, right, bottom  );
         KSpreadUndoResizeColRow * undo2 = new KSpreadUndoResizeColRow( m_doc, m_table , rect );
-        //m_doc->undoBuffer()->appendUndo( undo2 );
+        //m_doc->addCommand( undo2 );
         macroUndo->addCommand(undo2);
       }
       for ( int x = top; x <= bottom; x++ ) // The loop seems to be doubled, already done in resizeRow: Philipp -> fixme
@@ -1135,12 +1135,12 @@ void CellFormatDlg::slotApply()
 
     if ( int( positionPage->getSizeWidth() ) != int( widthSize ) )
     {
-      if ( !m_doc->undoBuffer()->isLocked())
+      if ( !m_doc->undoLocked())
       {
         QRect rect;
         rect.setCoords( left, top, right , bottom  );
         KSpreadUndoResizeColRow * undo2 = new KSpreadUndoResizeColRow( m_doc, m_table , rect );
-        // m_doc->undoBuffer()->appendUndo( undo2 );
+        // m_doc->addCommand( undo2 );
         macroUndo->addCommand(undo2);
       }
       for ( int x = left; x <= right; x++ ) // The loop seems to be doubled, already done in resizeColumn: Philipp -> fixme
@@ -1148,8 +1148,8 @@ void CellFormatDlg::slotApply()
     }
   }
 
-  if ( !m_doc->undoBuffer()->isLocked())
-    m_doc->undoBuffer()->appendUndo( macroUndo );
+  if ( !m_doc->undoLocked())
+    m_doc->addCommand( macroUndo );
 
   // m_pView->drawVisibleCells();
   QRect r;

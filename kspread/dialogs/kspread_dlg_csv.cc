@@ -625,17 +625,17 @@ void KSpreadCSVDialog::accept()
   {
     KSpreadDoc * doc = m_pView->doc();
     cell = table->nonDefaultCell( m_targetRect.left(), m_targetRect.top() );
-    if ( !doc->undoBuffer()->isLocked() )
+    if ( !doc->undoLocked() )
     {
       KSpreadUndoSetText * undo = new KSpreadUndoSetText( doc, table , cell->text(), m_targetRect.left(),
                                                           m_targetRect.top(), cell->formatType() );
-      doc->undoBuffer()->appendUndo( undo );
+      doc->addCommand( undo );
     }
   }
   else
   {
       KSpreadUndoChangeAreaTextCell * undo = new KSpreadUndoChangeAreaTextCell( m_pView->doc(), table , m_targetRect );
-      m_pView->doc()->undoBuffer()->appendUndo( undo );
+      m_pView->doc()->addCommand( undo );
   }
 
   m_pView->doc()->emitBeginOperation();

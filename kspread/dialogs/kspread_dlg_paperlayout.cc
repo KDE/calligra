@@ -267,10 +267,10 @@ void KSpreadPaperLayout::slotChoosePageLimit( int /*index*/ )
 
 void KSpreadPaperLayout::slotOk()
 {
-    if ( !m_pSheet->doc()->undoBuffer()->isLocked() )
+    if ( !m_pSheet->doc()->undoLocked() )
     {
         KSpreadUndoAction* undo = new KSpreadUndoPaperLayout( m_pSheet->doc(), m_pSheet );
-        m_pSheet->doc()->undoBuffer()->appendUndo( undo );
+        m_pSheet->doc()->addCommand( undo );
     }
 
     // get new values for borders

@@ -93,14 +93,14 @@ void KSpreadshow::slotOk()
     for ( QStringList::Iterator it = listTable.begin(); it != listTable.end(); ++it )
     {
         table=m_pView->doc()->map()->findTable( *it );
-        if ( !m_pView->doc()->undoBuffer()->isLocked() )
+        if ( !m_pView->doc()->undoLocked() )
         {
             KSpreadUndoShowTable* undo = new KSpreadUndoShowTable( m_pView->doc(), table );
             macroUndo->addCommand( undo );
         }
         table->hideTable(false);
     }
-    m_pView->doc()->undoBuffer()->appendUndo( macroUndo );
+    m_pView->doc()->addCommand( macroUndo );
 
     m_pView->slotUpdateView( m_pView->activeTable() );
     accept();

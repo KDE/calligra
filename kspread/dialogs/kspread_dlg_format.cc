@@ -139,11 +139,11 @@ void KSpreadFormatDlg::slotOk()
 
     QRect r = m_view->selection();
 
-    if ( !m_view->doc()->undoBuffer()->isLocked() )
+    if ( !m_view->doc()->undoLocked() )
     {
         QString title=i18n("Change Format");
         KSpreadUndoCellFormat *undo = new KSpreadUndoCellFormat( m_view->doc(), m_view->activeTable(), r ,title);
-        m_view->doc()->undoBuffer()->appendUndo( undo );
+        m_view->doc()->addCommand( undo );
     }
     //
     // Set colors, borders etc.
