@@ -298,6 +298,10 @@ bool KChartPart::save( ostream& out, const char * /*_format*/ ) {
   xaxisfont.appendChild( doc.createElement( "font",_params->xAxisFont() ) );
   params.appendChild(xaxisfont);
 
+  QDomElement annotationFont = doc.createElement("annotationfont");
+  annotationFont.appendChild( doc.createElement( "font",_params->annotationFont() ) );
+  params.appendChild(annotationFont);
+
   QDomElement yaxis = doc.createElement("yaxis");
   yaxis.setAttribute("ymin",_params->requested_ymin);
   yaxis.setAttribute("ymax",_params->requested_ymax);
@@ -342,6 +346,17 @@ bool KChartPart::save( ostream& out, const char * /*_format*/ ) {
   graphcolor.setAttribute( "ylabel2color", _params->YLabel2Color.name() );
   params.appendChild(graphcolor);
 
+  if(_params->annotation)
+        {
+        QDomElement annotation = doc.createElement("annotation");
+        annotation.setAttribute("color", _params->annotation->color.name());
+        annotation.setAttribute("point",(int)_params->annotation->point);
+        params.appendChild(annotation);
+
+        QDomElement note = doc.createElement( "note" );
+        note.appendChild( doc.createTextNode( _params->annotation->note ) );
+        params.appendChild( note );
+        }
 
   QDomElement legend = doc.createElement("legend");
   chart.appendChild(legend);
@@ -561,12 +576,19 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
 		_params->setYAxisFont(font.toFont());
         }
 
- QDomElement xaxisfont = params.namedItem( "xaxisfont" ).toElement();
+  QDomElement xaxisfont = params.namedItem( "xaxisfont" ).toElement();
     if ( !xaxisfont.isNull())
         {
         QDomElement font = xaxisfont.namedItem( "font" ).toElement();
 	    if ( !font.isNull() )
 		_params->setXAxisFont(font.toFont());
+        }
+  QDomElement annotationFont = params.namedItem("annotationfont").toElement();
+    if ( !annotationFont.isNull())
+        {
+        QDomElement font = annotationFont.namedItem( "font" ).toElement();
+	    if ( !font.isNull() )
+		_params->setAnnotationFont(font.toFont());
         }
 
   QDomElement yaxis = params.namedItem( "yaxis" ).toElement();
@@ -676,6 +698,7 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
                 if(!ok) return false;
                 }
         }
+
    QDomElement graphcolor = params.namedItem( "graphcolor" ).toElement();
    if(!graphcolor.isNull())
         {
@@ -729,6 +752,26 @@ bool KChartPart::loadXML( const QDomDocument& doc, KoStore* /*store*/ ) {
                 }
         }
 
+   QDomElement annotation = params.namedItem( "annotation" ).toElement();
+   if(!annotation.isNull())
+        {
+        _params->annotation=new KChartAnnotationType;
+        if(annotation.hasAttribute( "color" ))
+                {
+                _params->annotation->color= QColor( annotation.attribute( "color" ) );
+                }
+        if(annotation.hasAttribute( "point" ))
+                {
+                _params->annotation->point=annotation.attribute("point").toDouble( &ok );
+                if(!ok) return false;
+                }
+        }
+   QDomElement note = params.namedItem( "note" ).toElement();
+   if ( !note.isNull())
+        {
+         QString t = note.text();
+         _params->annotation->note=t;
+        }
 
   QDomElement legend = chart.namedItem("legend").toElement();
   if(!legend.isNull())
@@ -846,6 +889,9 @@ bool KChartPart::load( istream& in, KoStore* store )
 
 /**
  * $Log$
+ * Revision 1.29  2000/02/23 05:50:06  mlaurent
+ * Bug fix
+ *
  * Revision 1.28  2000/02/20 22:39:54  mueller
  * compilation fix with new Qt
  *

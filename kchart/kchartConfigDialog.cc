@@ -29,7 +29,8 @@ KChartConfigDialog::KChartConfigDialog( KChartParameters* params,
     	{
     	_parameterpage = new KChartParameterConfigPage(_params,this );
     	addTab( _parameterpage, i18n( "&Parameter" ) );
-	}
+
+        }
     else
     	{
     	_parameterpiepage = new KChartParameterPieConfigPage(_params,this );
@@ -37,7 +38,7 @@ KChartConfigDialog::KChartConfigDialog( KChartParameters* params,
 
     	_piepage = new KChartPieConfigPage(_params, this );
     	addTab( _piepage, i18n( "&Pie" ) );
-    	}
+        }
 
     _parameterfontpage = new KChartFontConfigPage(_params,this );
     addTab( _parameterfontpage, i18n( "&Font" ) );
@@ -47,7 +48,13 @@ KChartConfigDialog::KChartConfigDialog( KChartParameters* params,
         _parameter3dpage = new KChartParameter3dConfigPage(_params,this );
         addTab( _parameter3dpage,i18n("3D Parameters"));
         }
-
+    //For the moment juste for 3 type of chart
+    if((_params->type==KCHARTTYPE_BAR) || ((_params->type==KCHARTTYPE_3DBAR)
+        ||(_params->type==KCHARTTYPE_3DLINE)))
+                {
+                _subTypePage = new KChartSubTypeChartPage(_params, this );
+    	        addTab( _subTypePage, i18n( "Sub Type Chart" ) );
+                }
     //init
     defaults();
 
@@ -85,6 +92,7 @@ void KChartConfigDialog::apply()
         _parameterpage->apply();
         if(_params->threeD())
                 _parameter3dpage->apply();
+
         }
     else
     	{
@@ -93,7 +101,11 @@ void KChartConfigDialog::apply()
     	}
 
     _parameterfontpage->apply();
-
+    if((_params->type==KCHARTTYPE_BAR) || ((_params->type==KCHARTTYPE_3DBAR)
+        ||(_params->type==KCHARTTYPE_3DLINE)))
+        {
+        _subTypePage->apply();
+        }
 //     for( uint i = 0; i < NUMDATACOLORS; i++ )
 // 	_params->_datacolors.setColor( i, _colorpage->dataColor( i ) );
 }
@@ -123,6 +135,7 @@ void KChartConfigDialog::defaults()
     	_parameterpage->init();
         if(_params->threeD())
                 _parameter3dpage->init();
+
         }
     else
     	{
@@ -131,7 +144,11 @@ void KChartConfigDialog::defaults()
     	}
 
     _parameterfontpage->init();
-
+    if((_params->type==KCHARTTYPE_BAR) || ((_params->type==KCHARTTYPE_3DBAR)
+        ||(_params->type==KCHARTTYPE_3DLINE)))
+        {
+        _subTypePage->init();
+        }
 //     for( uint i = 0; i < NUMDATACOLORS; i++ )
 // 	_colorpage->setDataColor( i, _params->_datacolors.color( i ) );
 }

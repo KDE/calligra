@@ -27,16 +27,6 @@ struct YS {
 };
 
 
-/*#define CX( i, d ) ( cx + ((d)? xdepth_3D: 0) + \
-            (int)( (double)(GDCPIE_explode?GDCPIE_explode[((i))]:0) * \
-                   sin((double)(slice_angle[0][(i)])) ) )
-
-#define CY( i, d ) ( cy - ((d)? ydepth_3D: 0) - \
-            (int)( (double)(GDCPIE_explode?GDCPIE_explode[(i)]:0) * \
-                   cos((double)(slice_angle[0][(i)])) ) )
-*/
-
-
 #define CX( i, d ) ( cx + ((d)? xdepth_3D:0)+ \
 	(int)((double)(!params->explode.isNull()?params->explode[params->offsetCol+i]:0) * \
                    sin((double)(slice_angle[0][(i)])) ) )
@@ -90,11 +80,11 @@ static float				dist_foo1, dist_foo2; // by Werner
 #define RAD_DEPTH	( (double)params->_3d_angle*2*M_PI/360 )
 
 
-struct BS { 
-    float y1; 
-    float y2; 
-    QColor clr; 
-    QColor shclr; 
+struct BS {
+    float y1;
+    float y2;
+    QColor clr;
+    QColor shclr;
 };
 
 #define	NUM_YPOINTS	(sizeof(ypoints) / sizeof(float))

@@ -13,8 +13,7 @@
 /* ------------------------------------------------------------------------- */
 /* vals in pixels */
 /* ref is front plane */
-void
-draw_3d_bar( QPainter* p,
+void draw_3d_bar( QPainter* p,
 			 int x1,
 			 int x2,
 			 int y0,
@@ -131,80 +130,86 @@ void draw_3d_area( QPainter* p,
 			  QColor clr,
 			  QColor clrshd )
 {
-	debug( "draw 3d area with color 0 = %d, %d, %d,\nshadow color 0 = %d, %d, %d", clr.red(), clr.green(), clr.blue(), clrshd.red(), clrshd.green(), clrshd.blue() );
+    debug( "draw 3d area with color 0 = %d, %d, %d,\nshadow color 0 = %d, %d, %d", clr.red(), clr.green(), clr.blue(), clrshd.red(), clrshd.green(), clrshd.blue() );
 
     QPointArray poly( 4 );
     int	y_intercept = 0;
 
-    if( xdepth || ydepth ) {
-		float		line_slope   = x2==x1?    MAXFLOAT: (float)-(y2-y1) / (float)(x2-x1);
-		float		depth_slope  = xdepth==0? MAXFLOAT: (float)ydepth/(float)xdepth;
+    if( xdepth || ydepth )
+        {
+	float line_slope = x2==x1?    MAXFLOAT: (float)-(y2-y1) / (float)(x2-x1);
+	float depth_slope  = xdepth==0? MAXFLOAT: (float)ydepth/(float)xdepth;
+        y_intercept = (y1 > y0 && y2 < y0) ||						// line crosses y0
+                (y1 < y0 && y2 > y0)?
+			(int)((1.0/ABS(line_slope))*(float)(ABS(y1-y0)))+x1:0;										// never
 
-		y_intercept = (y1 > y0 && y2 < y0) ||						// line crosses y0
-			(y1 < y0 && y2 > y0)?
-			(int)((1.0/ABS(line_slope))*(float)(ABS(y1-y0)))+x1:
-			0;										// never
-	
-		// edging along y0 depth
-		p->setPen( clrshd );
-		p->drawLine( x1+xdepth, y0-ydepth, x2+xdepth, y0-ydepth );
-	
-		set3dpoly( poly, x1, x2, y1, y2, xdepth, ydepth );		// top
-		p->setBrush( QBrush(  line_slope > depth_slope ? clrshd : clr ) );
-		p->setPen( line_slope > depth_slope ? clrshd : clr );
-		p->drawPolygon( poly );
-		set3dpoly( poly, x1, x2, y0, y0, xdepth, ydepth+1 );	// along y axis
-		p->setBrush( QBrush( clr ) );
-		p->setPen( clr );
-		p->drawPolygon( poly );
-		set3dpoly( poly, x2, x2, y0, y2, xdepth, ydepth );		// side
-		p->setBrush( QBrush( clrshd ) );
-		p->setPen( clrshd );
-		p->drawPolygon( poly );
-	
-		if( y_intercept ) {
-			p->setPen( clrshd );
-			p->drawLine( y_intercept,        y0,
-						 y_intercept+xdepth, y0-ydepth );	// edging
+	// edging along y0 depth
+	p->setPen( clrshd );
+	p->drawLine( x1+xdepth, y0-ydepth, x2+xdepth, y0-ydepth );
+
+	set3dpoly( poly, x1, x2, y1, y2, xdepth, ydepth );// top
+	p->setBrush( QBrush(  line_slope > depth_slope ? clrshd : clr ) );
+	p->setPen( line_slope > depth_slope ? clrshd : clr );
+	p->drawPolygon( poly );
+	set3dpoly( poly, x1, x2, y0, y0, xdepth, ydepth+1 );	// along y axis
+	p->setBrush( QBrush( clr ) );
+	p->setPen( clr );
+	p->drawPolygon( poly );
+	set3dpoly( poly, x2, x2, y0, y2, xdepth, ydepth );// side
+	p->setBrush( QBrush( clrshd ) );
+	p->setPen( clrshd );
+	p->drawPolygon( poly );
+
+	if( y_intercept )
+                {
+	        p->setPen( clrshd );
+	        p->drawLine( y_intercept,y0,
+                        y_intercept+xdepth, y0-ydepth );	// edging
 		}
-		p->drawLine( x1, y0, x1+xdepth, y0-ydepth );	// edging
-		p->drawLine( x2, y0, x2+xdepth, y0-ydepth );	// edging
+	p->drawLine( x1, y0, x1+xdepth, y0-ydepth );	// edging
+	p->drawLine( x2, y0, x2+xdepth, y0-ydepth );	// edging
 
-		// set3dpoly( poly, x2, x2, y0, y2, xdepth, ydepth );	// side
-		// gdImageFilledPolygon( im, poly, 4, clrshd );
+	// set3dpoly( poly, x2, x2, y0, y2, xdepth, ydepth );	// side
+	// gdImageFilledPolygon( im, poly, 4, clrshd );
 
-		p->drawLine( x1, y1, x1+xdepth, y1-ydepth );	// edging
-		p->drawLine( x2, y2, x2+xdepth, y2-ydepth );	// edging
+	p->drawLine( x1, y1, x1+xdepth, y1-ydepth );// edging
+	p->drawLine( x2, y2, x2+xdepth, y2-ydepth );// edging
     }
 
     if( y1 == y2 )												// bar rect
-		setrect( poly, x1, x2, y0, y1 );							// front
-    else {
-		poly.setPoint( 0, x1, y0 );
-		poly.setPoint( 1, x2, y0 );
-		poly.setPoint( 2, x2, y2 );
-		poly.setPoint( 3, x1, y1 );
-    }
+	setrect( poly, x1, x2, y0, y1 );							// front
+    else
+        {
+	poly.setPoint( 0, x1, y0 );
+	poly.setPoint( 1, x2, y0 );
+	poly.setPoint( 2, x2, y2 );
+	poly.setPoint( 3, x1, y1 );
+        }
     p->setBrush( QBrush( clr ) );
     p->setPen( clr );
     p->drawPolygon( poly );
 
     p->setPen( clrshd );
-    p->drawLine( x1, y0, x2, y0 );			// edging along y0
+    p->drawLine( x1, y0, x2, y0 );// edging along y0
 
-    if( (xdepth || ydepth) &&								// front edging only on 3D
-		(y1<y0 || y2<y0) )									// and only above y0
+    if( (xdepth || ydepth) &&	// front edging only on 3D
+                (y1<y0 || y2<y0) )									// and only above y0
 		{
-			if( y1 > y0 && y2 < y0 ) {						// line crosses from below y0
+		if( y1 > y0 && y2 < y0 )
+                        {// line crosses from below y0
+		        p->setPen( clrshd );
+		        p->drawLine( y_intercept, y0, x2, y2 );
+			}
+                else
+			if( y1 < y0 && y2 > y0 )
+                                { // line crosses from above y0
+			        p->setPen( clrshd );
+			        p->drawLine( x1, y1, y_intercept, y0 );
+				}
+                        else
+                                { // completely above
 				p->setPen( clrshd );
-				p->drawLine( y_intercept, y0, x2, y2 );
-			} else
-				if( y1 < y0 && y2 > y0 ) { // line crosses from above y0
-					p->setPen( clrshd );
-					p->drawLine( x1, y1, y_intercept, y0 );
-				} else { // completely above
-					p->setPen( clrshd );
-					p->drawLine( x1, y1, x2, y2 );
+				p->drawLine( x1, y1, x2, y2 );
 				}
 		}
 }

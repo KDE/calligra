@@ -442,7 +442,7 @@ void kchartEngine::drawXTicks()
 void kchartEngine::drawVolumeGrids()
 {
   int i;
-  int setno;
+  //int setno;
   setno = params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets:
  num_sets:
   1; // backmost
@@ -487,11 +487,10 @@ void kchartEngine::drawVolumeGrids()
 }
 
 
-void kchartEngine::draw3DAnnotation() 
+void kchartEngine::draw3DAnnotation()
 {
-  int setno;
-  int	x1 = PX(params->annotation->point+(params->do_bar()?1:0)),
-    y1 = PY(lowest);
+  int x1 = PX(params->annotation->point+(params->do_bar()?1:0));
+  int y1 = PY(lowest);
   setno = params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets:
  num_sets:1; // backmost
   p->setPen( AnnoteColor );
@@ -501,10 +500,10 @@ void kchartEngine::draw3DAnnotation()
   setno = 0;
 }
 
-void kchartEngine::draw3DShelf() 
+void kchartEngine::draw3DShelf()
 {
       int x2 = PX( num_points-1+(params->do_bar()?2:0) ),y2 = PY( 0 );
-      
+
       p->setPen( LineColor );
       p->drawLine( PX(0), PY(0), x2, y2 );		// front line
       setno = params->stack_type==KCHARTSTACKTYPE_DEPTH? num_hlc_sets? num_hlc_sets: num_sets:1;				// backmost

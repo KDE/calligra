@@ -10,6 +10,9 @@
 #include <qwidget.h>
 #include <qcheckbox.h>
 #include <qlineedit.h>
+//#include <knuminput.h>
+#include <qspinbox.h>
+#include <kcolorbtn.h>
 
 #include "kchartparams.h"
 
@@ -24,6 +27,7 @@ public:
 public slots:
     void changeState( bool );
     void changeXaxisState( bool );
+    void changeFont();
 private:
     KChartParameters* _params;
     QCheckBox *grid;
@@ -37,8 +41,14 @@ private:
     QLineEdit *xtitle;
     QLineEdit *ytitle;
     QLineEdit *ylabel_fmt;
-    QLineEdit *ytitle2;  
+    QLineEdit *ytitle2;
     QLineEdit *ylabel2_fmt;
+    QLineEdit *annotation;
+    //KIntNumInput *element;
+    QSpinBox *element;
+    KColorButton *color;
+    QPushButton *font;
+    QFont annotationFont;
 };
 
 #endif

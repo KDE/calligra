@@ -63,9 +63,9 @@ KChartParameters::KChartParameters() :
 	hlc_style = KCHARTHLCSTYLE_CLOSECONNECTED;
 	hlc_cap_width = 25;
 	annotation = 0;
-	num_scatter_pts = 0;
+        num_scatter_pts = 0;
 	scatter = 0;
-	thumbnail = false;
+        thumbnail = false;
 	thumbval = -MAXFLOAT;
 	border = true;
 	transparent_bg = false;
@@ -358,7 +358,9 @@ void KChartParameters::defaultConfig()
 	bar_width = 75;
 	hlc_style = KCHARTHLCSTYLE_CLOSECONNECTED;
 	hlc_cap_width = 25;
-	annotation = 0;
+        if(annotation)
+                delete annotation;
+        annotation = 0;
 	num_scatter_pts = 0;
 	scatter = 0;
 	thumbnail = false;

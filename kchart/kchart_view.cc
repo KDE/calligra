@@ -264,24 +264,28 @@ void KChartView::defaultConfig() {
 void KChartView::pieChart() {
 KChartParameters* params = ((KChartPart*)koDocument())->params();
 params->type=KCHARTTYPE_2DPIE;
+params->stack_type=KCHARTSTACKTYPE_DEPTH;
 repaint();
 }
 
 void KChartView::lineChart() {
 KChartParameters* params = ((KChartPart*)koDocument())->params();
 params->type=KCHARTTYPE_3DLINE;
+params->stack_type=KCHARTSTACKTYPE_DEPTH;
 repaint();
 }
 
 void KChartView::barsChart() {
 KChartParameters* params = ((KChartPart*)koDocument())->params();
 params->type=KCHARTTYPE_3DBAR;
+params->stack_type=KCHARTSTACKTYPE_DEPTH;
 repaint();
 }
 
 void KChartView::areasChart() {
 KChartParameters* params = ((KChartPart*)koDocument())->params();
 params->type=KCHARTTYPE_3DAREA;
+params->stack_type=KCHARTSTACKTYPE_DEPTH;
 repaint();
 }
 

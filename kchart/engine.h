@@ -15,7 +15,7 @@
 #include <qcolor.h>
 #include <values.h>
 #include <kchart_part.h>
-
+         
 class KChartParameters;
 
 #define GDC_NOVALUE			-MAXFLOAT

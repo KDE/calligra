@@ -15,16 +15,16 @@
 
 #include "engine.h"
 
-enum KChartPercentType { 
-    KCHARTPCTTYPE_NONE, 
+enum KChartPercentType {
+    KCHARTPCTTYPE_NONE,
     KCHARTPCTTYPE_ABOVE,
-    KCHARTPCTTYPE_BELOW, 
+    KCHARTPCTTYPE_BELOW,
     KCHARTPCTTYPE_RIGHT,
-    KCHARTPCTTYPE_LEFT 
+    KCHARTPCTTYPE_LEFT
 };
 
-enum KChartHLCStyle { 
-    KCHARTHLCSTYLE_DIAMOND = 1, 
+enum KChartHLCStyle {
+    KCHARTHLCSTYLE_DIAMOND = 1,
     KCHARTHLCSTYLE_CLOSECONNECTED = 2,
     KCHARTHLCSTYLE_CONNECTING = 4,
     KCHARTHLCSTYLE_ICAP = 8
@@ -35,7 +35,7 @@ enum KChartType {
     KCHARTTYPE_AREA,
     KCHARTTYPE_BAR,
     KCHARTTYPE_HILOCLOSE,
-    KCHARTTYPE_COMBO_LINE_BAR,			/* aka, VOL[ume] */
+    KCHARTTYPE_COMBO_LINE_BAR,/* aka, VOL[ume] */
     KCHARTTYPE_COMBO_HLC_BAR,
     KCHARTTYPE_COMBO_LINE_AREA,
     KCHARTTYPE_COMBO_HLC_AREA,
@@ -53,7 +53,7 @@ enum KChartType {
 
 
 enum KChartStackType {
-    KCHARTSTACKTYPE_DEPTH,				/* "behind" (even non-3D) */
+    KCHARTSTACKTYPE_DEPTH,/* "behind" (even non-3D) */
     KCHARTSTACKTYPE_SUM,
     KCHARTSTACKTYPE_BESIDE,
     KCHARTSTACKTYPE_LAYER,
@@ -83,9 +83,9 @@ struct KChartScatterType {
 };
 
 struct KChartAnnotationType {
-    double point;				/* 0 <= point < num_points */
+    double point;/* 0 <= point < num_points */
     QColor color;
-    QString note;	/* NLs ok here */
+    QString note;/* NLs ok here */
 };
 
 
@@ -226,7 +226,7 @@ struct KChartParameters
     QFont xTitleFont() const { return xtitlefont; }
     int xTitleFontWidth() const { return xtitlefontwidth; }
     int xTitleFontHeight() const { return xtitlefontheight; }
-	
+
     void setYAxisFont( QFont f ) {
 	yaxisfont = f;
 	QFontMetrics fm( f );
@@ -246,7 +246,7 @@ struct KChartParameters
     QFont xAxisFont() const { return xaxisfont; }
     int xAxisFontWidth() const { return xaxisfontwidth; }
     int xAxisFontHeight() const { return xaxisfontheight; }
-	
+
     void setLabelFont( QFont f ) {
 	labelfont = f;
 	QFontMetrics fm( f );
@@ -256,7 +256,7 @@ struct KChartParameters
     QFont labelFont() const { return labelfont; }
     int labelFontWidth() const { return labelfontwidth; }
     int labelFontHeight() const { return labelfontheight; }
-	
+
     void setAnnotationFont( QFont f ) {
 	annotationfont = f;
 	QFontMetrics fm( f );
@@ -266,7 +266,7 @@ struct KChartParameters
     QFont annotationFont() const { return annotationfont; }
     int annotationFontWidth() const { return annotationfontwidth; }
     int annotationFontHeight() const { return annotationfontheight; }
-	
+
 private:
     QFont titlefont;
     int titlefontwidth;

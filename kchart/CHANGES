@@ -81,3 +81,9 @@ But Pb for writing % in label for the moment it's not good
 2000-04-01 - Montel laurent <montell@club-internet.fr>
 ------------------------------------------------------
 -Improved "Config"
+
+2000-04-02 - Montel laurent <montell@club-internet.fr>
+------------------------------------------------------
+-Now you can put an annotation on chart
+-Improved "Config Dialog"
+-Bug fix

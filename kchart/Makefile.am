@@ -25,6 +25,7 @@ libkchart_la_SOURCES = kchart_shell.cc kchart_part.cc \
 	kchartColorConfigPage.cc \
 	kchartParameterConfigPage.cc \
 	kchartParameter3dConfigPage.cc \
+	kchartBarSubTypeChartPage.cc \
 	kchartFontConfigPage.cc \
 	kchartPieConfigPage.cc \
 	kchartParameterPieConfigPage.cc \
@@ -60,7 +61,8 @@ noinst_HEADERS =  kchart_global.h \
 		kchartBarConfigPage.h \
 		kchartColorConfigPage.h \
 		kchartParameterConfigPage.h \
-		kchartParameter3dConfigPage.cc \
+		kchartParameter3dConfigPage.h \
+		kchartBarSubTypeChartPage.h
 		kchartParameterPieConfigPage.h \
 		kchartFontConfigPage.h \
 		kchartPieConfigPage.h \

@@ -17,7 +17,7 @@
 #include "kchartFontConfigPage.h"
 #include "kchartPieConfigPage.h"
 #include "kchartparams.h"
-
+#include "kchartBarSubTypeChartPage.h"
 
 class KChartConfigDialog : public QTabDialog
 {
@@ -36,6 +36,7 @@ protected:
     KChartParameterPieConfigPage*_parameterpiepage;
     KChartFontConfigPage*_parameterfontpage;
     KChartPieConfigPage*_piepage;
+    KChartSubTypeChartPage *_subTypePage;
 protected slots:
     virtual void apply();
     virtual void defaults();
