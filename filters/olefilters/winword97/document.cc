@@ -228,7 +228,6 @@ void Document::createAttributes(
                             image->type = drawingType;
                             image->length = drawingLength;
                             image->data = (const char *)drawingData;
-        // TBD: Kword drawings are broken!
                             run = image;
                         }
                     }

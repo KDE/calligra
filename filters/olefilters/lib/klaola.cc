@@ -363,10 +363,21 @@ void KLaola::readPPSEntry(int pos, const int handle) {
     if (nameSize)
     {
         int i;
-
         Node *node = new Node();
+
+        // The first character of the name often seems to be an unprintable
+        // character. We don't know the significance of this, but for now,
+        // convert any such crap we see.
+
         for (i = 0; i < (nameSize / 2) - 1; ++i)
-            node->m_name += read16(pos + 2 * i);
+        {
+            QChar tmp;
+
+            tmp = read16(pos + 2 * i);
+            if (!tmp.isPrint())
+                tmp = '.';
+            node->m_name += tmp;
+        }
         node->m_handle = handle;
         node->type = static_cast<NodeType>(read8(pos + 0x42));
         node->prevHandle = static_cast<int>(read32(pos + 0x44));

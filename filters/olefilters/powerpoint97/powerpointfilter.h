@@ -21,19 +21,23 @@
 #define POWERPOINTFILTER_H
 
 #include <filterbase.h>
+#include <myfile.h>
 
 class PowerPointFilter : public FilterBase {
 
     Q_OBJECT
 
 public:
-    PowerPointFilter() : FilterBase() {}
-    virtual ~PowerPointFilter() {}
-    virtual const bool filter() { return true; }
+    PowerPointFilter(const myFile &mainStream, const myFile &currentUser);
+    virtual ~PowerPointFilter();
+    virtual const bool filter();
     virtual const QDomDocument * const part();
 
 private:
     PowerPointFilter(const PowerPointFilter &);
     const PowerPointFilter &operator=(const PowerPointFilter &);
+
+    myFile m_mainStream;
+    myFile m_currentUser;
 };
 #endif // POWERPOINTFILTER_H

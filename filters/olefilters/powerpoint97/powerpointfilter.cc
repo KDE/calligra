@@ -17,7 +17,27 @@
    Boston, MA 02111-1307, USA.
 */
 
+#include <powerpoint.h>
 #include <powerpointfilter.h>
+
+PowerPointFilter::PowerPointFilter(
+    const myFile &mainStream,
+    const myFile &currentUser) : FilterBase()
+{
+    m_mainStream = mainStream;
+    m_currentUser = currentUser;
+}
+
+PowerPointFilter::~PowerPointFilter()
+{
+}
+
+const bool PowerPointFilter::filter()
+{
+    Powerpoint *myDoc = new Powerpoint();
+
+    return myDoc->parse(m_mainStream, m_currentUser);
+}
 
 const QDomDocument * const PowerPointFilter::part() {
 

@@ -307,11 +307,6 @@ unsigned OLEFilter::convert(const QString &parentPath, const QString &dirname) {
                 myFile main, table0, table1, data;
                 KLaola::NodeList tmp;
 
-                main.data=0L;
-                table0.data=0L;
-                table1.data=0L;
-                data.data=0L;
-
                 tmp=docfile->find("WordDocument", true);
                 if(tmp.count()==1)
                     main=docfile->stream(tmp.at(0));
@@ -337,20 +332,79 @@ unsigned OLEFilter::convert(const QString &parentPath, const QString &dirname) {
                 // Excel.
 
                 myFile workbook;
-                workbook.data=0L;
 
                 workbook=docfile->stream(node->handle());
                 mimeType = "application/x-kspread";
                 kdDebug(s_area) << "converting \"" << nodeNames.join(",") << "\" into " << mimeType << endl;
                 myFilter=new ExcelFilter(workbook);
             }
+/*
+            else if(node->name()=="Ole10Native") {
+                myFile native, pres, objinfo, compobj;
+                KLaola::NodeList tmp;
+
+                tmp=docfile->find("Ole10Native", true);
+                if(tmp.count()==1)
+                    native=docfile->stream(tmp.at(0));
+
+                tmp=docfile->find("OlePres000", true);
+                if(tmp.count()==1)
+                    pres=docfile->stream(tmp.at(0));
+
+                tmp=docfile->find("ObjInfo", true);
+                if(tmp.count()==1)
+                    objinfo=docfile->stream(tmp.at(0));
+
+                tmp=docfile->find("CompObj", true);
+                if(tmp.count()==1)
+                    compobj=docfile->stream(tmp.at(0));
+kdDebug(s_area) << "converting XXXXXXXXXXXX" << endl;
+QFile file;
+file.setName("Ole10Native");
+file.open(IO_WriteOnly );
+file.writeBlock((char*)native.data, native.length);
+file.close();
+file.setName("OlePres000");
+file.open(IO_WriteOnly );
+file.writeBlock((char*)pres.data, pres.length);
+file.close();
+file.setName("ObjInfo");
+file.open(IO_WriteOnly );
+file.writeBlock((char*)objinfo.data, objinfo.length);
+file.close();
+file.setName("CompObj");
+file.open(IO_WriteOnly );
+file.writeBlock((char*)compobj.data, compobj.length);
+file.close();
+                node=list.next();
+            }
+*/
             else if(node->name()=="PowerPoint Document") {
 
                 // Powerpoint.
 
+                myFile main, currentUser, summary, documentSummary;
+                KLaola::NodeList tmp;
+
+                tmp=docfile->find("PowerPoint Document", true);
+                if(tmp.count()==1)
+                    main=docfile->stream(tmp.at(0));
+
+                tmp=docfile->find("Current User", true);
+                if(tmp.count()==1)
+                    currentUser=docfile->stream(tmp.at(0));
+
+                tmp=docfile->find("SummaryInformation", true);
+                if(tmp.count()==1)
+                    summary=docfile->stream(tmp.at(0));
+
+                tmp=docfile->find("DocumentSummaryInformation", true);
+                if(tmp.count()==1)
+                    documentSummary=docfile->stream(tmp.at(0));
+
                 mimeType = "application/x-kpresenter";
                 kdDebug(s_area) << "converting \"" << nodeNames.join(",") << "\" into " << mimeType << endl;
-                myFilter=new PowerPointFilter();
+                myFilter=new PowerPointFilter(main, currentUser);
             }
             else
                 node=list.next();
