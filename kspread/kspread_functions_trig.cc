@@ -47,8 +47,8 @@ bool kspreadfunc_atan2( KSContext& context );
 bool kspreadfunc_atanh( KSContext& context );
 bool kspreadfunc_cos( KSContext& context );
 bool kspreadfunc_cosh( KSContext& context );
-bool kspreadfunc_degree( KSContext& context );
-bool kspreadfunc_radian( KSContext& context );
+bool kspreadfunc_degrees( KSContext& context );
+bool kspreadfunc_radians( KSContext& context );
 bool kspreadfunc_sin( KSContext& context );
 bool kspreadfunc_sinh( KSContext& context );
 bool kspreadfunc_tan( KSContext& context );
@@ -69,8 +69,10 @@ void KSpreadRegisterTrigFunctions()
   repo->registerFunction( "ATANH",  kspreadfunc_atanh );
   repo->registerFunction( "COS",    kspreadfunc_cos );
   repo->registerFunction( "COSH",   kspreadfunc_cosh );
-  repo->registerFunction( "DEGREE", kspreadfunc_degree );
-  repo->registerFunction( "RADIAN", kspreadfunc_radian );
+  repo->registerFunction( "DEGREE", kspreadfunc_degrees );  // backward-compatible, remove in 1.4
+  repo->registerFunction( "DEGREES",kspreadfunc_degrees );
+  repo->registerFunction( "RADIAN", kspreadfunc_radians ); // backwared-compatible, remove in 1.4
+  repo->registerFunction( "RADIANS",kspreadfunc_radians );
   repo->registerFunction( "SIN",    kspreadfunc_sin );
   repo->registerFunction( "SINH",   kspreadfunc_sinh );
   repo->registerFunction( "TAN",    kspreadfunc_tan );
@@ -341,12 +343,12 @@ bool kspreadfunc_cosh( KSContext& context )
   return true;
 }
 
-// Function: degree
-bool kspreadfunc_degree( KSContext& context )
+// Function: DEGREES
+bool kspreadfunc_degrees( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
-  if ( !KSUtil::checkArgumentsCount( context, 1, "degree", true ) )
+  if ( !KSUtil::checkArgumentsCount( context, 1, "degrees", true ) )
     return false;
 
   double val=0.0;
@@ -363,12 +365,12 @@ bool kspreadfunc_degree( KSContext& context )
   return true;
 }
 
-// Function: radian
-bool kspreadfunc_radian( KSContext& context )
+// Function: RADIANS
+bool kspreadfunc_radians( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
-  if ( !KSUtil::checkArgumentsCount( context, 1, "radian", true ) )
+  if ( !KSUtil::checkArgumentsCount( context, 1, "radians", true ) )
     return false;
 
   double val=0.0;

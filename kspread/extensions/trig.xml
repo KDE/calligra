@@ -219,7 +219,7 @@
     </Function>
 
     <Function>
-      <Name>DEGREE</Name>
+      <Name>DEGREES</Name>
       <Type>Float</Type>
       <Parameter>
 	<Comment>Angle (radians)</Comment>
@@ -227,15 +227,15 @@
       </Parameter>
       <Help>
 	<Text>This function transforms a radian angle to a degree angle.</Text>
-	<Syntax>DEGREE(Float)</Syntax>
-	<Example>DEGREE(0.78) equals 44.69</Example>
-	<Example>DEGREE(1) equals 57.29</Example>
-	<Related>RADIAN</Related>
+	<Syntax>DEGREES(Float)</Syntax>
+	<Example>DEGREES(0.78) equals 44.69</Example>
+	<Example>DEGREES(1) equals 57.29</Example>
+	<Related>RADIANS</Related>
       </Help>
     </Function>
 
     <Function>
-      <Name>RADIAN</Name>
+      <Name>RADIANS</Name>
       <Type>Float</Type>
       <Parameter>
 	<Comment>Angle (degrees)</Comment>
@@ -243,10 +243,10 @@
       </Parameter>
       <Help>
 	<Text>This function transforms a degree angle to a radian angle.</Text>
-	<Syntax>RADIAN(Float)</Syntax>
-	<Example>RADIAN(75) equals 1.308</Example>
-	<Example>RADIAN(90) equals 1.5707</Example>
-	<Related>DEGREE</Related>
+	<Syntax>RADIANS(Float)</Syntax>
+	<Example>RADIANS(75) equals 1.308</Example>
+	<Example>RADIANS(90) equals 1.5707</Example>
+	<Related>DEGREES</Related>
       </Help>
     </Function>
 
