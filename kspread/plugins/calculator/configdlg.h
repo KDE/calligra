@@ -39,6 +39,7 @@
 #include <qlabel.h>
 #include <qframe.h>
 #include <qspinbox.h>
+#include <kcolorbtn.h>
 
 #include "kcalc.h"
 
@@ -63,8 +64,8 @@ private slots:
 
   void okButton();
   void cancelbutton();
-  void set_fore_color();
-  void set_background_color();
+  void set_fore_color(const QColor &);
+  void set_background_color(const QColor &);
   void help();
 
 signals:
@@ -82,30 +83,14 @@ private:
   QPushButton *cancel;
 
   QLabel *label1;
-  QFrame *qframe1;
-  QPushButton *button1;
+  KColorButton *button1;
 
   QLabel *label2;
-  QFrame *qframe2;
-  QPushButton *button2;
+  KColorButton *button2;
 
   QLabel *label3;
-  QFrame *qframe3;
   QPushButton *button3;
-
-  QLabel *label4;
-  QFrame *qframe4;
-  QPushButton *button4;
-
   QLabel *label5;
-
-  QLabel *label6;
-
-
-  QLabel *label7;
-
-  QLabel *label8;
-
 
   QGroupBox *gbox;
   QCheckBox *cb;

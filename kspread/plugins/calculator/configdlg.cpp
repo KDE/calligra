@@ -26,9 +26,10 @@
 
 #include "configdlg.h"
 
-//#include <qcolordialog.h>
 #include <kcolordlg.h>
 #include <klocale.h>
+#include <qgrid.h>
+#include <qlayout.h>
 
 // Undefine HAVE_LONG_DOUBLE for Beta 4 since RedHat 5.0 comes with a borken
 // glibc
@@ -37,57 +38,47 @@
 #undef HAVE_LONG_DOUBLE
 #endif
 
-// ??? (Werner)
-//#define i18n( x ) x
-
 ConfigDlg::ConfigDlg(QWidget *parent, const char *name, DefStruct *defstruct)
   : QDialog(parent, name)
 {
   defst = defstruct;
 
+   QVBoxLayout *lay1 = new QVBoxLayout( this );
+    lay1->setMargin( 5 );
+    lay1->setSpacing( 10 );
 
-
-  box = new QGroupBox(this, "box");
-  box->setGeometry(10,10,320,290);
+    box = new QGroupBox(this, "box");
   box->setTitle(i18n("Defaults"));
 
-
-  label1 = new QLabel(this);
-  label1->setGeometry(30,40,135,25);
+  QGridLayout *grid1 = new QGridLayout(box,8,2,15,7);
+  label1 = new QLabel(box);
   label1->setText(i18n("Foreground Color:"));
+  grid1->addWidget(label1,0,0);
 
+  button1 = new KColorButton( box, "button1" );
+  grid1->addWidget(button1,0,1);
+  button1->setColor( defst->forecolor );
 
-  qframe1 = new QFrame(this);
-  qframe1->setGeometry(155,40,30,25);	
-  qframe1->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
-  qframe1->setBackgroundColor(defst->forecolor);
+  connect(button1 , SIGNAL( changed( const QColor & ) ),
+             this, SLOT( set_fore_color( const QColor & ) ) );
 
-
-  button1 = new QPushButton(this);
-  button1->setGeometry(205,40,100,25);
-  button1->setText(i18n("Change"));
-
-  connect(button1,SIGNAL(clicked()),this,SLOT(set_fore_color()));
-
-  label2 = new QLabel(this);
-  label2->setGeometry(30,75,135,25);
+  label2 = new QLabel(box);
+  grid1->addWidget(label2,1,0);
   label2->setText(i18n("Background Color:"));
 
+  button2 = new KColorButton( box, "button2" );
+  grid1->addWidget(button2,1,1);
+  button2->setColor( defst->backcolor );
 
-  qframe2 = new QFrame(this);
-  qframe2->setGeometry(155,75,30,25);	
-  qframe2->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
-  qframe2->setBackgroundColor(defst->backcolor);
+  connect(button2 , SIGNAL( changed( const QColor & ) ),
+             this, SLOT( set_background_color( const QColor & ) ) );
 
-  button2 = new QPushButton(this);
-  button2->setGeometry(205,75,100,25);
-  button2->setText(i18n("Change"));
 
   connect(button2,SIGNAL(clicked()),this,SLOT(set_background_color()));
 
 
-  label5 = new QLabel(this);
-  label5->setGeometry(30,115,100,25);
+  label5 = new QLabel(box);
+  grid1->addWidget(label5,2,0);
   label5->setText(i18n("Precision:"));
 
   int maxprec;
@@ -97,9 +88,9 @@ ConfigDlg::ConfigDlg(QWidget *parent, const char *name, DefStruct *defstruct)
   maxprec = 12 ;
 #endif
 
-  precspin = new QSpinBox( this );
+  precspin = new QSpinBox( box );
   precspin->setRange( 0, maxprec );
-  precspin->setGeometry( 205, 115, 40, 23);
+  grid1->addWidget(precspin,2,1);
 
   if( defst->precision <= maxprec)
     precspin->setValue(defst->precision);
@@ -107,8 +98,8 @@ ConfigDlg::ConfigDlg(QWidget *parent, const char *name, DefStruct *defstruct)
     precspin->setValue(maxprec);
 
 
-  cb = new QCheckBox(this);
-  cb->setGeometry(30,145,130,25);
+  cb = new QCheckBox(box);
+  grid1->addWidget(cb,3,0);
   cb->setText(i18n("Set Fixed Precision at:"));
   if(defst->fixed)
     cb->setChecked(true);
@@ -120,9 +111,9 @@ ConfigDlg::ConfigDlg(QWidget *parent, const char *name, DefStruct *defstruct)
   fixprec = 10 ;
 #endif
 
-  precspin2 = new QSpinBox( this );
+  precspin2 = new QSpinBox( box );
   precspin2->setRange(0,fixprec);
-  precspin2->setGeometry(205,145,40,23);
+  grid1->addWidget(precspin2,3,1);
 
   if( defst->fixedprecision <= fixprec)
     precspin2->setValue(defst->fixedprecision);
@@ -130,39 +121,43 @@ ConfigDlg::ConfigDlg(QWidget *parent, const char *name, DefStruct *defstruct)
     precspin2->setValue(fixprec);
 
 
-  button3 = new QPushButton(this);
-  button3->setGeometry(205,225,100,25);
-  button3->setText(i18n("Help"));
 
-  connect(button3,SIGNAL(clicked()),this,SLOT(help()));
-
-  cb2 = new QCheckBox(this);
-  cb2->setGeometry(30,170,130,25);
+  cb2 = new QCheckBox(box);
+  grid1->addWidget(cb2,4,0);
   cb2->setText(i18n("Beep on Error"));
   if(defst->beep)
     cb2->setChecked(true);
 
-  stylegroup = new QButtonGroup(this,"stylegroup");
-  stylegroup->setGeometry(20,190,170,90);
+
+  stylegroup = new QButtonGroup(box,"stylegroup");
+  grid1->addMultiCellWidget(stylegroup,5,7,0,1);
   stylegroup->setFrameStyle(QFrame::NoFrame);
 
+  QGridLayout *grid2 = new QGridLayout(stylegroup,2,2,15,7);
+
   trigstyle = new QRadioButton(i18n("Trigonometry Mode"),stylegroup,"trigstyle");
-  trigstyle->move(10,15);
+  grid2->addWidget(trigstyle,0,0);
   trigstyle->adjustSize();
   trigstyle->setChecked(defst->style == 0 );
 
   statstyle = new QRadioButton(i18n("Statistical Mode"),stylegroup,"Stats");
-  statstyle->move(10,40);
+  grid2->addWidget(statstyle,1,0);
   statstyle->adjustSize();
   statstyle->setChecked(defst->style == 1 );
 
   tablestyle = new QRadioButton(i18n("Table Mode"),stylegroup,"Table");
-  tablestyle->move(10,65);
+  grid2->addWidget(tablestyle,2,0);
   tablestyle->adjustSize();
+
   tablestyle->setChecked(defst->style == 2 );
+  button3 = new QPushButton(stylegroup);
+  grid2->addWidget(button3,0,1);
+  button3->setText(i18n("Help"));
 
+  connect(button3,SIGNAL(clicked()),this,SLOT(help()));
+
+  lay1->addWidget(box);
   connect(parent,SIGNAL(applyButtonPressed()),SLOT(okButton()));
-
 }
 
 void ConfigDlg::help()
@@ -190,28 +185,14 @@ void ConfigDlg::cancelbutton()
   reject();
 }
 
-
-
-
-void ConfigDlg::set_fore_color(){
-
-    //QColor c = QColorDialog::getColor( defst->forecolor, this );
-    if(KColorDialog::getColor( defst->forecolor ) )
-        qframe1->setBackgroundColor(defst->forecolor);
-
+void ConfigDlg::set_fore_color(const QColor &_color)
+{
+        defst->forecolor=_color;
 }
 
-void ConfigDlg::set_background_color(){
-
-    //QColor c = QColorDialog::getColor( defst->backcolor, this );
-    if(KColorDialog::getColor( defst->backcolor ))
-        qframe2->setBackgroundColor(defst->backcolor);
-        /*if ( c.isValid() )
-                {
-	        defst->backcolor = c;
-	        qframe2->setBackgroundColor(defst->backcolor);
-                }*/
-
+void ConfigDlg::set_background_color( const QColor &_color )
+{
+        defst->backcolor=_color;
 }
 
 #include "configdlg.moc"

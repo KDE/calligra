@@ -26,6 +26,8 @@
 #include "fontdlg.h"
 #include "version.h"
 #include <klocale.h>
+#include <qgrid.h>
+#include <qlayout.h>
 
 // What's that?!? (Werner)
 //#define i18n( x ) x
@@ -1526,17 +1528,18 @@ void QtCalculator::configclicked(){
   tabdialog->setCancelButton( i18n("Cancel") );
 
   QWidget *about = new QWidget(tabdialog,"about");
+  QVBoxLayout *lay1 = new QVBoxLayout( about );
+  lay1->setMargin( 5 );
+  lay1->setSpacing( 10 );
 
   QGroupBox *box = new QGroupBox(about,"box");
+  QGridLayout *grid1 = new QGridLayout(box,2,2,15,7);
   QLabel  *label = new QLabel(box,"label");
   QLabel  *label2 = new QLabel(box,"label2");
-  box->setGeometry(10,10,320,260);
 
   box->setTitle(i18n("About"));
-
-
-  label->setGeometry(140,30,160,170);
-  label2->setGeometry(20,150,280,100);
+  grid1->addWidget(label,0,1);
+  grid1->addMultiCellWidget(label2,2,2,0,1);
 
   QString labelstring = "KCalc "KCALCVERSION"\n"\
     "Bernd Johannes Wuebben\n"\
@@ -1568,7 +1571,8 @@ void QtCalculator::configclicked(){
   QPixmap pm;
   QLabel *logo = new QLabel(box);
   logo->setPixmap(pm);
-  logo->setGeometry(30, 20, pm.width(), pm.height());
+  grid1->addWidget(logo,0,0);
+  lay1->addWidget(box);
 
 
   DefStruct newdefstruct;

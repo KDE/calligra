@@ -1,4 +1,3 @@
-
 /*
 
  $Id$
@@ -29,55 +28,61 @@
 
 #include <qfontdialog.h>
 #include <klocale.h>
+#include <qgrid.h>
+#include <qlayout.h>
 
-// ??? (Werner)
-//#define i18n( x ) x
 
 FontDlg::FontDlg(QWidget *parent, const char *name, DefStruct *defstruct)
   : QDialog(parent, name)
 {
   defst = defstruct;
+  QVBoxLayout *lay1 = new QVBoxLayout( this );
+  lay1->setMargin( 5 );
+  lay1->setSpacing( 10 );
 
   box = new QGroupBox(this, "box");
-  box->setGeometry(10,10,320,260);
   box->setTitle(i18n("Set Default Font"));
 
-  button = new QPushButton(this);
-  button->setGeometry(205,225,100,25);
+  QGridLayout *grid1 = new QGridLayout(box,8,2,15,7);
+
+  button = new QPushButton(box);
+  grid1->addWidget(button,5,1);
   button->setText(i18n("Change"));
+
   connect(button,SIGNAL(clicked()),this,SLOT(setFont()));
 
-  familylabel = new QLabel(this);
-  familylabel->setGeometry(30,40,135,25);
+  familylabel = new QLabel(box);
   familylabel->setText(i18n("Family:"));
+  grid1->addWidget(familylabel,0,0);
 
-  familylabeldisp = new QLabel(this);
-  familylabeldisp->setGeometry(130,40,150,23);	
+
+  familylabeldisp = new QLabel(box);
+  grid1->addWidget(familylabeldisp,0,1);
   familylabeldisp->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
   familylabeldisp->setText(defst->font.family());
 //  familylabeldisp->setBackgroundColor(white);
 
-  sizelabel = new QLabel(this);
-  sizelabel->setGeometry(30,75,100,25);
+  sizelabel = new QLabel(box);
   sizelabel->setText(i18n("Point Size:"));
+  grid1->addWidget(sizelabel,1,0);
 
-  sizelabeldisp = new QLabel(this);
-  sizelabeldisp->setGeometry(130,75,60,23);	
+  sizelabeldisp = new QLabel(box);
   sizelabeldisp->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
+  grid1->addWidget(sizelabeldisp,1,1);
 //  sizelabeldisp->setBackgroundColor(white);
   QString size;
   size.setNum(defst->font.pointSize());
   sizelabeldisp->setText(size);
 
 
-  stylelabel = new QLabel(this);
-  stylelabel->setGeometry(30,110,80,25);
+  stylelabel = new QLabel(box);
+  grid1->addWidget(stylelabel,3,0);
   stylelabel->setText(i18n("Style:"));
 
 
-  stylelabeldisp = new QLabel(this);
-  stylelabeldisp->setGeometry(130,110,80,23);
+  stylelabeldisp = new QLabel(box);
   stylelabeldisp->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
+  grid1->addWidget(stylelabeldisp,3,1);
 //  stylelabeldisp->setBackgroundColor(white);
 
   if(defst->font.italic())
@@ -85,14 +90,14 @@ FontDlg::FontDlg(QWidget *parent, const char *name, DefStruct *defstruct)
   else
     stylelabeldisp->setText(i18n("Roman"));
 
-  weightlabel = new QLabel(this);
-  weightlabel->setGeometry(30,145,80,25);
+  weightlabel = new QLabel(box);
+  grid1->addWidget(weightlabel,2,0);
   weightlabel->setText(i18n("Weight:"));
 
 
 
-  weightlabeldisp = new QLabel(this);
-  weightlabeldisp->setGeometry(130,145,80,23);
+  weightlabeldisp = new QLabel(box);
+  grid1->addWidget(weightlabeldisp,2,1);
   weightlabeldisp->setFrameStyle(QFrame::WinPanel | QFrame::Sunken);
 //  weightlabeldisp->setBackgroundColor(white);
 
@@ -102,7 +107,7 @@ FontDlg::FontDlg(QWidget *parent, const char *name, DefStruct *defstruct)
     weightlabeldisp->setText(i18n("Normal"));
 
   connect(parent,SIGNAL(applyButtonPressed()),SLOT(okButton()));
-
+  lay1->addWidget(box);
 }
 
 
