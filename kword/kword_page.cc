@@ -739,6 +739,8 @@ void KWPage::vmpCreatePixmap( int mx, int my )
  */
 void KWPage::vmpMidButton()
 {
+    if ( mouseMode != MM_EDIT || !doc->isReadWrite())
+        return;
     QClipboard *cb = QApplication::clipboard();
     bool emptyMessage = FALSE;
 
@@ -829,6 +831,10 @@ void KWPage::vmpRightButton( QMouseEvent *e, int mx, int my )
                 }
             } else
                 frame_edit_menu->setItemEnabled(frEditReconnect, false);
+
+            if(curTable)
+                frame_edit_menu->setItemEnabled(frEditReconnect, false);
+
             frame_edit_menu->popup( pnt );
         } break;
         default: break;
@@ -2924,7 +2930,7 @@ void KWPage::keyPressEvent( QKeyEvent *e )
 {
 #define STOP { stopProcessKeyEvent(); return; }
 
-    if ( mouseMode != MM_EDIT || e->key() == Key_Control )
+    if ( mouseMode != MM_EDIT || e->key() == Key_Control || !doc->isReadWrite())
         return;
 
     inputTimer.stop();
