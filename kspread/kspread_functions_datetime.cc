@@ -32,8 +32,10 @@
 #include <koscript_func.h>
 #include <koscript_synext.h>
 
+#include <kspread_cell.h>
 #include <kspread_functions.h>
 #include <kspread_functions_helper.h>
+#include <kspread_interpreter.h>
 #include <kspread_util.h>
 
 // prototypes, sorted
@@ -66,6 +68,7 @@ bool kspreadfunc_seconds( KSContext& context );
 bool kspreadfunc_shortcurrentDate( KSContext& context );
 bool kspreadfunc_time( KSContext& context );
 bool kspreadfunc_timevalue( KSContext& context );
+bool kspreadfunc_today( KSContext& context );
 bool kspreadfunc_weekday( KSContext& context );
 bool kspreadfunc_weeks( KSContext& context );
 bool kspreadfunc_weeksInYear( KSContext& context );
@@ -109,7 +112,7 @@ void KSpreadRegisterDateTimeFunctions()
   repo->registerFunction( "SHORTCURRENTDATE",  kspreadfunc_shortcurrentDate );
   repo->registerFunction( "TIME",  kspreadfunc_time );
   repo->registerFunction( "TIMEVALUE",  kspreadfunc_timevalue );
-  repo->registerFunction( "TODAY",  kspreadfunc_currentDate );
+  repo->registerFunction( "TODAY",  kspreadfunc_today );
   repo->registerFunction( "WEEKDAY",  kspreadfunc_weekday );
   repo->registerFunction( "WEEKS",  kspreadfunc_weeks );
   repo->registerFunction( "WEEKSINYEAR",  kspreadfunc_weeksInYear );
@@ -1015,6 +1018,20 @@ bool kspreadfunc_shortcurrentDate( KSContext& context )
       return false;
 
     context.setValue( new KSValue(KGlobal::locale()->formatDate(QDate::currentDate(),true)));
+
+    return true;
+}
+
+// Function: today
+bool kspreadfunc_today( KSContext& context )
+{
+    if ( !KSUtil::checkArgumentsCount( context,0, "shortcurrentDate",true ) )
+      return false;
+
+    context.setValue( new KSValue( QDate::currentDate() ) );
+    KSpreadCell *  cell  = ((KSpreadInterpreter *) context.interpreter() )->cell();
+    cell->setFormatType( KSpreadFormat::ShortDate );
+
 
     return true;
 }
