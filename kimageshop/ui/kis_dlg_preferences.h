@@ -59,9 +59,13 @@ public:
 
   DirectoriesTab( QWidget *_parent = 0, const char *_name = 0 );
 
+private slots:
+
+    void slotRequesterClicked( KURLRequester * );
+
 private:
 
-	KURLRequester *m_pLineEdit;
+    KURLRequester *m_pLineEdit, *m_pGimpGradients;
 };
 
 /* jwc - undo-redo not working yet */
