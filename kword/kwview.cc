@@ -1535,6 +1535,9 @@ void KWView::updateReadWrite( bool readwrite )
         actionAllowAutoFormat->setEnabled( true );
         actionShowDocStruct->setEnabled( true );
         actionConfigureCompletion->setEnabled( true );
+        actionFormatBullet->setEnabled(true);
+        actionFormatNumber->setEnabled( true);
+
         KAction* newView = actionCollection()->action("edit_sldatabase");
         if (newView)
             newView->setEnabled( true );
@@ -1543,9 +1546,38 @@ void KWView::updateReadWrite( bool readwrite )
         if (newView)
             newView->setEnabled( true );
         // Well, the view menu doesn't appear in konq, so this is currently useless...
-    } else
+    }
+    else
     {
-        // Don't enable everything if readwrite. E.g. "undo" must be initially disabled.
+        //store last status of undo/redo action
+        bool undoState = false;
+        KAction* newView = actionCollection()->action("edit_undo");
+        if (newView)
+            undoState=newView->isEnabled();
+        bool redoState = false;
+        newView = actionCollection()->action("edit_redo");
+        if (newView)
+            redoState=newView->isEnabled();
+
+        QValueList<KAction*> actions = actionCollection()->actions();
+        QValueList<KAction*>::ConstIterator aIt = actions.begin();
+        QValueList<KAction*>::ConstIterator aEnd = actions.end();
+        for (; aIt != aEnd; ++aIt )
+            (*aIt)->setEnabled( readwrite );
+
+        newView = actionCollection()->action("edit_undo");
+        if (newView)
+            newView->setEnabled( undoState );
+        newView = actionCollection()->action("edit_redo");
+        if (newView)
+            newView->setEnabled( redoState );
+
+        slotFrameSetEditChanged();
+        refreshCustomMenu();
+
+#if 0
+
+// Don't enable everything if readwrite. E.g. "undo" must be initially disabled.
         slotFrameSetEditChanged();
         // Insert
         actionInsertTable->setEnabled( true );
@@ -1571,6 +1603,7 @@ void KWView::updateReadWrite( bool readwrite )
         actionBorderWidth->setEnabled( true );
         actionBorderStyle->setEnabled( true );
         actionBackgroundColor->setEnabled( true );
+#endif
     }
 }
 
