@@ -104,7 +104,7 @@ void KPrImportStyleDia::loadFile()
 
                     QString name =sty->name();
                     if ( m_list.findIndex( name )!=-1 )
-                        sty->setName(generateStyleName( sty->translatedName() + QString( "- %1")));
+                        sty->setName(generateStyleName( sty->translatedName() + QString( "-%1")));
 
 
                     // followingStyle is set by KWDocument::loadStyleTemplates after loading all the styles
