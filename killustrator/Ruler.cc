@@ -105,6 +105,7 @@ void Ruler::initMarker (int w, int h) {
 }
 
 void Ruler::recalculateSize (QResizeEvent *) {
+   kdDebug()<<"recalcSize() 1"<<endl;
   delete buffer;
   buffer = 0L;
 
@@ -117,6 +118,7 @@ void Ruler::recalculateSize (QResizeEvent *) {
 
   int maxsize = (int)(1000.0 * zoom);
 
+  kdDebug()<<"recalcSize() max: "<<maxsize<<endl;
   if (orientation == Horizontal) {
     w = QMAX(width (), maxsize);
     h = RULER_SIZE;
@@ -126,8 +128,11 @@ void Ruler::recalculateSize (QResizeEvent *) {
     h = QMAX(height (), maxsize);
   }
   buffer = new QPixmap (w, h);
+   kdDebug()<<"recalcSize() new buffer created2"<<endl;
   drawRuler ();
+   kdDebug()<<"recalcSize() after drawRuler"<<endl;
   updatePointer (currentPosition, currentPosition);
+   kdDebug()<<"recalcSize() after updatePointer"<<endl;
 }
 
 MeasurementUnit Ruler::measurementUnit () const {
@@ -299,7 +304,7 @@ void Ruler::drawRuler ()
       start = (int)(cvtPtToCicero(zeroPoint) / zoom);
       break;
    }
-   if(fabs(step)<0.1)
+   if(fabs(step)<0.9)
       step = 1;
 
    //workaround, will fix it, aleXXX
