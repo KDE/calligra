@@ -81,36 +81,31 @@ bool KPLineObject::saveOasis( KoXmlWriter &xmlWriter, KoSavingContext& context, 
 
     float x1 = orig.x();
     float y1 = orig.y();
-    float x2 = ext.width();
-    float y2 = ext.height();
-    x2 += x1;
-    y2 += y1;
+    float x2 = x1 + ext.width();
+    float y2 = y1;   
 
-    float xpos1 = orig.x();
-    float xpos2 = x2;
     switch( lineType )
     {
     case LT_LD_RU:
-        xmlWriter.addAttributePt( "svg:y1", y2 );
-        xmlWriter.addAttributePt( "svg:y2", y1 );
+        y1 += ext.height();    
         break;
     case LT_HORZ:
-        xmlWriter.addAttributePt( "svg:y1", y2/2.0 );
-        xmlWriter.addAttributePt( "svg:y2", y2/2.0  );
+        y1 += ext.height() / 2.0;
+        y2 = y1;
         break;
     case LT_VERT:
-        xmlWriter.addAttributePt( "svg:y1",  y1 );
-        xmlWriter.addAttributePt( "svg:y2",  y2 );
-        xpos1 = x1/2.0;
-        xpos2 = xpos1;
-        break;
+        x1 += ext.width() / 2.0;
+        x2 = x1;
+        // no break
     case LT_LU_RD:
-        xmlWriter.addAttributePt( "svg:y1", y1 );
-        xmlWriter.addAttributePt( "svg:y2", y2 );
+        y2 += ext.height();
         break;
     }
-    xmlWriter.addAttributePt( "svg:x1", xpos1 );
-    xmlWriter.addAttributePt( "svg:x2", xpos2 );
+
+    xmlWriter.addAttributePt( "svg:y1", y1 );
+    xmlWriter.addAttributePt( "svg:y2", y2 );
+    xmlWriter.addAttributePt( "svg:x1", x1 );
+    xmlWriter.addAttributePt( "svg:x2", x2 );
 
     if( !objectName.isEmpty())
         xmlWriter.addAttribute( "draw:name", objectName );
@@ -147,25 +142,27 @@ void KPLineObject::loadOasis(const QDomElement &element, KoOasisContext & contex
     ext.setWidth( fabs( x1 - x2 ) );
     ext.setHeight( fabs( y1 - y2 ) );
 
-    kdDebug()<<"KPLineObject::loadOasis(const QDomElement &element) : real position x :"<<x<<" y "<<y<< " width :"<<ext.width()<<" height :"<<ext.height()<<endl;
-
     if ( y1 == y2 )
     {
         lineType=LT_HORZ;
         //define default height
-        ext.setHeight( 2*pen.width()+10 );
+        ext.setHeight( 10 );
+        orig.setY( y - 5.0 );
     }
     else if ( x1 == x2 )
     {
         lineType=LT_VERT;
         //define default width
-        ext.setWidth( 2*pen.width()+10 );
+        ext.setWidth( 10 );
+        orig.setX( x - 5.0 );
     }
     else if ( ( x1 < x2 && y1 < y2 ) || ( x1 > x2 && y1 > y2 ) )
          lineType=LT_LU_RD;
     else
         lineType=LT_LD_RU;
 
+    kdDebug()<<"KPLineObject::loadOasis(const QDomElement &element) : real position x :"<<orig.x()<<" y "<<orig.y()<< " width :"<<ext.width()<<" height :"<<ext.height()<<endl;
+    
     QString attr = (x1 < x2) ?  "draw:marker-start" : "draw:marker-end";
     loadOasisMarkerElement( context, attr, lineBegin );
 
