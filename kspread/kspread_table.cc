@@ -7129,19 +7129,20 @@ bool KSpreadTable::isOnNewPageY( int _row )
 
 void KSpreadTable::updateNewPageListX( int _col )
 {
+    //If the new range is after the first entry, we need to delete the whole list
+    if ( m_lnewPageListX.first() != m_printRange.left() )
+    {
+        m_lnewPageListX.clear();
+        m_lnewPageListX.append( m_printRange.left() );
+        return;
+    }
+
     if ( _col < m_lnewPageListX.last() )
     {
-        //If the new range is after the first entry, we need to delete the whole list
-        if ( m_lnewPageListX.first() < m_printRange.left() )
-        {
-            m_lnewPageListX.clear();
-            m_lnewPageListX.append( m_printRange.left() );
-        }
-
         //Find the page entry for this column
         QValueList<int>::iterator it;
         it = m_lnewPageListX.find( _col );
-        while ( ( it == m_lnewPageListX.end() ) && _col > m_printRange.left() )
+        while ( ( it == m_lnewPageListX.end() ) && _col > 0 )
         {
             _col--;
             it = m_lnewPageListX.find( _col );
@@ -7159,19 +7160,20 @@ void KSpreadTable::updateNewPageListX( int _col )
 
 void KSpreadTable::updateNewPageListY( int _row )
 {
+    //If the new range is after the first entry, we need to delete the whole list
+    if ( m_lnewPageListY.first() != m_printRange.top() )
+    {
+        m_lnewPageListY.clear();
+        m_lnewPageListY.append( m_printRange.top() );
+        return;
+    }
+
     if ( _row < m_lnewPageListY.last() )
     {
-        //If the new range is after the first entry, we need to delete the whole list
-        if ( m_lnewPageListY.first() < m_printRange.top() )
-        {
-            m_lnewPageListY.clear();
-            m_lnewPageListY.append( m_printRange.top() );
-        }
-
         //Find the page entry for this row
         QValueList<int>::iterator it;
         it = m_lnewPageListY.find( _row );
-        while ( ( it == m_lnewPageListY.end() ) && _row > m_printRange.top() )
+        while ( ( it == m_lnewPageListY.end() ) && _row > 0 )
         {
             _row--;
             it = m_lnewPageListY.find( _row );
@@ -8158,7 +8160,6 @@ void KSpreadTable::setPrintRange( QRect _printRange )
   if ( oldTop != _printRange.top() )
     updateNewPageListY( QMIN( oldTop, _printRange.top() ) );
 
-  m_printRange = _printRange;
   m_pDoc->setModified( true );
   
   emit sig_updateView( this );
@@ -8235,11 +8236,11 @@ void KSpreadTable::setPrintRepeatColumns( QPair<int, int> _printRepeatColumns )
     int oldFirst = m_printRepeatColumns.first;
     m_printRepeatColumns = _printRepeatColumns;
 
-    //Refresh calculation of stored page breaks, the lower one of old and new
-    updateNewPageListX( QMIN( oldFirst, _printRepeatColumns.first ) );
-
     //Recalcualte the space needed for the repeated columns
     updatePrintRepeatColumnsWidth();
+
+    //Refresh calculation of stored page breaks, the lower one of old and new
+    updateNewPageListX( QMIN( oldFirst, _printRepeatColumns.first ) );
 
     //Refresh view, if page borders are shown
     if ( m_bShowPageBorders ) emit sig_updateView( this );
