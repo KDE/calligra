@@ -3226,7 +3226,7 @@ void KWView::slotFrameSetEditChanged()
     actionFormatAlignBlock->setEnabled(state);
     actionFormatIncreaseIndent->setEnabled(state);
     actionChangeCase->setEnabled( hasSelection && state);
-
+    actionInsertFrameBreak->setEnabled( state && edit && edit->frameSet() && !edit->frameSet()->isHeaderOrFooter());
 
     bool goodleftMargin=false;
     if(state)
@@ -3243,7 +3243,7 @@ void KWView::slotFrameSetEditChanged()
     actionInsertContents->setEnabled(state);
     actionInsertVariable->setEnabled(state);
     actionInsertExpression->setEnabled(state);
-    actionInsertFrameBreak->setEnabled(state);
+    actionInsertFrameBreak->setEnabled( state && edit && edit->frameSet() && !edit->frameSet()->isHeaderOrFooter());
 
     slotUpdateRuler();
 }
