@@ -63,6 +63,7 @@ KPresenterView_impl::KPresenterView_impl(QWidget *_parent = 0L,const char *_name
   setMouseTracking(true);
   m_bShowGUI = true;
   m_bRectSelection = false;
+  presStarted = false;
 }
 
 /*======================= destructor ============================*/
@@ -331,11 +332,34 @@ void KPresenterView_impl::screenAssignEffect()
 /*========================== screen start =======================*/
 void KPresenterView_impl::screenStart()
 {
+  if (page) 
+    {
+      page->deSelectAllObj();
+      presStarted = true;
+      //printf("%d %d\n",widget()->mapToGlobal(QPoint(x(),y())).x(),
+      //     widget()->mapToGlobal(QPoint(x(),y())).y());
+      _xOffset = xOffset;
+      _yOffset = yOffset;
+      xOffset = 0;
+      yOffset = 0;
+      if (widget()->width() > KPresenterDoc()->getPageSize(0,0,0).width())
+	xOffset -= (widget()->width() - KPresenterDoc()->getPageSize(0,0,0).width()) / 2;
+      if (widget()->height() > KPresenterDoc()->getPageSize(0,0,0).height())
+	yOffset -= (widget()->height() - KPresenterDoc()->getPageSize(0,0,0).height()) / 2;
+      page->startScreenPresentation();
+    }
 }
 
 /*========================== screen stop ========================*/
 void KPresenterView_impl::screenStop()
 {
+  if (presStarted)
+    {
+      xOffset = _xOffset;
+      yOffset = _yOffset;
+      page->stopScreenPresentation();
+      presStarted = false;
+    }
 }
 
 /*========================== screen pause =======================*/
@@ -351,11 +375,27 @@ void KPresenterView_impl::screenFirst()
 /*========================== screen pevious =====================*/
 void KPresenterView_impl::screenPrev()
 {
+  if (presStarted)
+    {
+      if (page->pPrevPage(true))
+	{
+	  yOffset -= KPresenterDoc()->getPageSize(0,0,0).height()+10; 
+	  page->repaint(true);
+	}
+    }
 }
 
 /*========================== screen next ========================*/
 void KPresenterView_impl::screenNext()
 {
+  if (presStarted)
+    {
+      if (page->pNextPage(true))
+	{
+	  yOffset += KPresenterDoc()->getPageSize(0,0,0).height()+10; 
+	  page->repaint(true);
+	}
+    }
 }
 
 /*========================== screen last ========================*/
@@ -811,19 +851,25 @@ void KPresenterView_impl::styleOk()
 /*================== scroll horizontal ===========================*/
 void KPresenterView_impl::scrollH(int _value)
 {
-  int xo = xOffset;
-
-  xOffset = _value;
-  page->scroll(xo - _value,0);
+  if (!presStarted)
+    {
+      int xo = xOffset;
+      
+      xOffset = _value;
+      page->scroll(xo - _value,0);
+    }
 }
 
 /*===================== scroll vertical ==========================*/
 void KPresenterView_impl::scrollV(int _value)
 {
-  int yo = yOffset;
-
-  yOffset = _value;
-  page->scroll(0,yo - _value);
+  if (!presStarted)
+    {
+      int yo = yOffset;
+      
+      yOffset = _value;
+      page->scroll(0,yo - _value);
+    }
 }
 
 /*====================== font changed ===========================*/

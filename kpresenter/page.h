@@ -79,6 +79,13 @@ public:
   static void _drawBackColor(QColor c1,QColor c2,BCType bct,QPainter* p,QSize s)
     {Page *pg = new Page(0,"",0); pg->drawBackColor(c1,c2,bct,p,s); delete pg;}
 
+  void startScreenPresentation();
+  void stopScreenPresentation();
+  bool pNextPage(bool);
+  bool pPrevPage(bool);
+
+  unsigned int presPage() {return currPresPage;}
+
 public slots:
 
   // public slots
@@ -99,6 +106,7 @@ protected:
   void mouseReleaseEvent(QMouseEvent *e);
   void mouseMoveEvent(QMouseEvent *e);
   void mouseDoubleClickEvent(QMouseEvent *e);
+  void keyPressEvent(QKeyEvent *e);
   int getObjectAt(int x,int y); 
   struct PageObjects* getObject(int num);
   void selectObj(int num);      
@@ -126,6 +134,7 @@ protected:
   bool spManualSwitch() {return view->KPresenterDoc()->spManualSwitch();}
   QList<SpPageConfiguration> *spPageConfig() {return view->KPresenterDoc()->spPageConfig();}
   QRect getPageSize(unsigned int p) {return view->KPresenterDoc()->getPageSize(p,diffx(),diffy());}
+  unsigned int pageNums() {return view->KPresenterDoc()->getPageNums();}
 
   void drawBackColor(QColor,QColor,BCType,QPainter*,QSize);
   void _repaint(bool erase=true) {view->KPresenterDoc()->repaint(erase);}
@@ -146,6 +155,8 @@ protected:
   GraphObj *graphPtr;
   SpPageConfiguration *spPCPtr;
   KPresenterView_impl *view;
+  bool editMode;
+  unsigned int currPresPage;
 
 private slots:
 

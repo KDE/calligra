@@ -38,6 +38,8 @@ Page::Page(QWidget *parent=0,const char *name=0,KPresenterView_impl *_view=0)
       view = _view;
       setMouseTracking(true);
       show();
+      editMode = true;
+      currPresPage = 1;
     }
   else 
     {
@@ -82,7 +84,8 @@ void Page::paintBackground(QPainter *painter,QRect rect)
       painter->setViewport(r);
       painter->resetXForm();
       r = painter->viewport();
-      if (rect.intersects(QRect(getPageSize(pagePtr->pageNum))))
+      if ((rect.intersects(QRect(getPageSize(pagePtr->pageNum))) && editMode) ||
+	  (!editMode && currPresPage == pageList()->at()+1))
 	{
 	  switch (pagePtr->backType)
 	    {
@@ -169,9 +172,12 @@ void Page::paintBackground(QPainter *painter,QRect rect)
       painter->setBrush(white);
       painter->drawRect(0,getPageSize(pagePtr->pageNum).y()+getPageSize(pagePtr->pageNum).height(),
 			width(),20);
-      painter->setPen(QPen(red,1,SolidLine));
-      painter->setBrush(NoBrush);
-      painter->drawRect(getPageSize(pagePtr->pageNum));
+      if (editMode)
+	{
+	  painter->setPen(QPen(red,1,SolidLine));
+	  painter->setBrush(NoBrush);
+	  painter->drawRect(getPageSize(pagePtr->pageNum));
+	}
     }
   if (pageList() && !pageList()->isEmpty())
       {
@@ -196,8 +202,11 @@ void Page::paintObjects(QPainter *painter,QRect rect)
       painter->resetXForm();
       r = painter->viewport();
       /* draw the objects */
-      if (rect.intersects(QRect(objPtr->ox - diffx(),objPtr->oy - diffy(),
-				objPtr->ow,objPtr->oh)))
+      if ((rect.intersects(QRect(objPtr->ox - diffx(),objPtr->oy - diffy(),
+				 objPtr->ow,objPtr->oh)) && editMode) ||
+	  (!editMode && QRect(objPtr->ox - diffx(),objPtr->oy - diffy(),
+			      objPtr->ow,objPtr->oh).intersects(QRect(0,0,getPageSize(currPresPage).width(),
+								      getPageSize(currPresPage).height()))))
 	{     
 	  switch (objPtr->objType)
 	    {
@@ -292,99 +301,105 @@ void Page::mousePressEvent(QMouseEvent *e)
   oldMx = e->x()+diffx();
   oldMy = e->y()+diffy();
   
-  if (editNum > 0)
+  if (editMode)
     {
-      objPtr = getObject(editNum);
-      editNum = 0;
-      if (txtPtr)
+      if (editNum > 0)
 	{
-	  objPtr->textObj->recreate(0,0,QPoint(objPtr->ox - diffx(),objPtr->oy - diffy()),false);
-	  objPtr->textObj->clearFocus();
-	  objPtr->textObj->hide();
-	  disconnect(objPtr->textObj,SIGNAL(fontChanged(QFont*)),this,SLOT(toFontChanged(QFont*)));
-	  disconnect(objPtr->textObj,SIGNAL(colorChanged(QColor*)),this,SLOT(toColorChanged(QColor*)));
-	  disconnect(objPtr->textObj,SIGNAL(horzAlignChanged(TxtParagraph::HorzAlign)),this,SLOT(toAlignChanged(TxtParagraph::HorzAlign)));
-	  txtPtr->setShowCursor(false);
-	  txtPtr = 0;
-	  setFocusProxy(0);
-	  setFocusPolicy(QWidget::NoFocus);
-	}
-      if (graphPtr)
-	{
-	  objPtr->graphObj->hide();
-	  graphPtr = 0;
-	}
-    }      
-  if ((e->button() == LeftButton || e->button() == RightButton) && (!mousePressed))
-    {
-      modType = MT_NONE;
-      mousePressed = true;
-      objNum = getObjectAt(e->x()+diffx(),e->y()+diffy());
-      if (objNum > 0)
-	{
-	  objPtr = getObject(objNum);
-	  if (!objPtr->isSelected)
+	  objPtr = getObject(editNum);
+	  editNum = 0;
+	  if (txtPtr)
 	    {
-	      if (((e->state() & ShiftButton) != 0) ||
-		  ((e->state() & ControlButton) != 0))
-		selectObj(objNum);
-	      else
+	      objPtr->textObj->recreate(0,0,QPoint(objPtr->ox - diffx(),objPtr->oy - diffy()),false);
+	      objPtr->textObj->clearFocus();
+	      objPtr->textObj->hide();
+	      disconnect(objPtr->textObj,SIGNAL(fontChanged(QFont*)),this,SLOT(toFontChanged(QFont*)));
+	      disconnect(objPtr->textObj,SIGNAL(colorChanged(QColor*)),this,SLOT(toColorChanged(QColor*)));
+	      disconnect(objPtr->textObj,SIGNAL(horzAlignChanged(TxtParagraph::HorzAlign)),this,SLOT(toAlignChanged(TxtParagraph::HorzAlign)));
+	      txtPtr->setShowCursor(false);
+	      txtPtr = 0;
+	      setFocusProxy(0);
+	      setFocusPolicy(QWidget::NoFocus);
+	    }
+	  if (graphPtr)
+	    {
+	      objPtr->graphObj->hide();
+	      graphPtr = 0;
+	    }
+	}      
+      if ((e->button() == LeftButton || e->button() == RightButton) && (!mousePressed))
+	{
+	  modType = MT_NONE;
+	  mousePressed = true;
+	  objNum = getObjectAt(e->x()+diffx(),e->y()+diffy());
+	  if (objNum > 0)
+	    {
+	      objPtr = getObject(objNum);
+	      if (!objPtr->isSelected)
 		{
-		  deSelectAllObj();
-		  objPtr = getObject(objNum);
-		  selectObj(objNum);
+		  if (((e->state() & ShiftButton) != 0) ||
+		      ((e->state() & ControlButton) != 0))
+		    selectObj(objNum);
+		  else
+		    {
+		      deSelectAllObj();
+		      objPtr = getObject(objNum);
+		      selectObj(objNum);
+		    }
 		}
-	    }
-	}
-      else
-	{
-	  deSelectAllObj();
-	  objPtr = getObject(objNum);
-	}
-    }  
-  if (e->button() == RightButton)
-    {
-      objNum = getObjectAt(e->x()+diffx(),e->y()+diffy());
-      if (objNum > 0)
-	{
-	  objPtr = getObject(objNum);
-	  if (objPtr->objType == OT_PICTURE)
-	    {
-	      mousePressed = false;
-	      deSelectAllObj();
-	      selectObj(objNum);
-	      pnt.operator=(QCursor::pos());
-	      picMenu->popup(pnt);
-	      modType = MT_NONE;
-	      resizeObjNum = 0;
-	    }
-	  else if (objPtr->objType == OT_CLIPART)
-	    {
-	      mousePressed = false;
-	      deSelectAllObj();
-	      selectObj(objNum);
-	      pnt.operator=(QCursor::pos());
-	      clipMenu->popup(pnt);
-	      modType = MT_NONE;
-	      resizeObjNum = 0;
-	    }
-	  else if (objPtr->objType == OT_TEXT)
-	    {
-	      pnt.operator=(QCursor::pos());
-	      txtMenu->popup(pnt);
-	      mousePressed = false;
-	      modType = MT_NONE;
-	      resizeObjNum = 0;
 	    }
 	  else
 	    {
-	      pnt.operator=(QCursor::pos());
-	      graphMenu->popup(pnt);
-	      mousePressed = false;
-	      modType = MT_NONE;
-	      resizeObjNum = 0;
+	      deSelectAllObj();
+	      objPtr = getObject(objNum);
+	    }
+	}  
+      if (e->button() == RightButton)
+	{
+	  objNum = getObjectAt(e->x()+diffx(),e->y()+diffy());
+	  if (objNum > 0)
+	    {
+	      objPtr = getObject(objNum);
+	      if (objPtr->objType == OT_PICTURE)
+		{
+		  mousePressed = false;
+		  deSelectAllObj();
+		  selectObj(objNum);
+		  pnt.operator=(QCursor::pos());
+		  picMenu->popup(pnt);
+		  modType = MT_NONE;
+		  resizeObjNum = 0;
+		}
+	      else if (objPtr->objType == OT_CLIPART)
+		{
+		  mousePressed = false;
+		  deSelectAllObj();
+		  selectObj(objNum);
+		  pnt.operator=(QCursor::pos());
+		  clipMenu->popup(pnt);
+		  modType = MT_NONE;
+		  resizeObjNum = 0;
+		}
+	      else if (objPtr->objType == OT_TEXT)
+		{
+		  pnt.operator=(QCursor::pos());
+		  txtMenu->popup(pnt);
+		  mousePressed = false;
+		  modType = MT_NONE;
+		  resizeObjNum = 0;
+		}
+	      else
+		{
+		  pnt.operator=(QCursor::pos());
+		  graphMenu->popup(pnt);
+		  mousePressed = false;
+		  modType = MT_NONE;
+		  resizeObjNum = 0;
+		}
 	    }
 	}
+    }
+  else
+    {
     }
   mouseMoveEvent(e);
 }
@@ -407,7 +422,7 @@ void Page::mouseMoveEvent(QMouseEvent *e)
   int mx,my,oox,ooy,oow,ooh,ox,oy,ow,oh,objNum;
   unsigned int i;
   
-  if (!objList()->isEmpty())
+  if (!objList()->isEmpty() && editMode)
     {
       mx = e->x()+diffx(); my = e->y()+diffy();
       if ((!mousePressed) || (modType == MT_NONE))
@@ -559,6 +574,9 @@ void Page::mouseMoveEvent(QMouseEvent *e)
       oldMx = e->x()+diffx();
       oldMy = e->y()+diffy();
     }
+  if (!editMode)
+    {
+    }
 }
 
 /*==================== mouse double click ========================*/
@@ -569,44 +587,53 @@ void Page::mouseDoubleClickEvent(QMouseEvent *e)
   modType = MT_NONE;
   mousePressed = false;
   deSelectAllObj();
-  objNum = getObjectAt(e->x()+diffx(),e->y()+diffy());
-  if (objNum > 0 && getObject(objNum)->objType == OT_TEXT)
+  if (editMode)
     {
-      objPtr = getObject(objNum);
-      if (objPtr->textObj->parentWidget() == 0)
+      objNum = getObjectAt(e->x()+diffx(),e->y()+diffy());
+      if (objNum > 0 && getObject(objNum)->objType == OT_TEXT)
+	{
+	  objPtr = getObject(objNum);
+	  if (objPtr->textObj->parentWidget() == 0)
+	    {
+	      editNum = objNum;
+	      objPtr->textObj->recreate(this,0,QPoint(objPtr->ox - diffx(),objPtr->oy - diffy()),false);
+	      //objPtr->textObj->move(objPtr->ox - diffx(),objPtr->oy - diffy());
+	      objPtr->textObj->resize(objPtr->ow,objPtr->oh);
+	      objPtr->textObj->setBackgroundColor(txtBackCol());
+	      //objPtr->textObj->setSelectionColor(txtSelCol());
+	      objPtr->textObj->show();
+	      objPtr->textObj->setFocus();
+	      txtPtr = objPtr->textObj;
+	      txtPtr->setShowCursor(true);
+	      connect(objPtr->textObj,SIGNAL(fontChanged(QFont*)),this,SLOT(toFontChanged(QFont*)));
+	      connect(objPtr->textObj,SIGNAL(colorChanged(QColor*)),this,SLOT(toColorChanged(QColor*)));
+	      connect(objPtr->textObj,SIGNAL(horzAlignChanged(TxtParagraph::HorzAlign)),this,SLOT(toAlignChanged(TxtParagraph::HorzAlign)));
+	      //objPtr->textObj->initActive();
+	      setFocusProxy(objPtr->textObj);
+	      setFocusPolicy(QWidget::StrongFocus);
+	      txtPtr->setCursor(ibeamCursor);
+	    }
+	}
+      if (objNum > 0 && getObject(objNum)->objType == OT_AUTOFORM)
 	{
 	  editNum = objNum;
-	  objPtr->textObj->recreate(this,0,QPoint(objPtr->ox - diffx(),objPtr->oy - diffy()),false);
-	  //objPtr->textObj->move(objPtr->ox - diffx(),objPtr->oy - diffy());
-	  objPtr->textObj->resize(objPtr->ow,objPtr->oh);
-	  objPtr->textObj->setBackgroundColor(txtBackCol());
-	  //objPtr->textObj->setSelectionColor(txtSelCol());
-	  objPtr->textObj->show();
-	  objPtr->textObj->setFocus();
-	  txtPtr = objPtr->textObj;
-	  txtPtr->setShowCursor(true);
-	  connect(objPtr->textObj,SIGNAL(fontChanged(QFont*)),this,SLOT(toFontChanged(QFont*)));
-	  connect(objPtr->textObj,SIGNAL(colorChanged(QColor*)),this,SLOT(toColorChanged(QColor*)));
-	  connect(objPtr->textObj,SIGNAL(horzAlignChanged(TxtParagraph::HorzAlign)),this,SLOT(toAlignChanged(TxtParagraph::HorzAlign)));
-	  //objPtr->textObj->initActive();
-	  setFocusProxy(objPtr->textObj);
-	  setFocusPolicy(QWidget::StrongFocus);
-	  txtPtr->setCursor(ibeamCursor);
+	  objPtr = getObject(objNum);
+	  objPtr->graphObj->move(objPtr->ox - diffx(),objPtr->oy - diffy());
+	  objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
+	  objPtr->graphObj->setBackgroundColor(txtBackCol());
+	  objPtr->graphObj->show();
+	  objPtr->graphObj->setFocus();
+	  graphPtr = objPtr->graphObj;
+	  _repaint(objPtr->ox - diffx(),objPtr->oy - diffy(),
+		   objPtr->ow,objPtr->oh,true);
 	}
     }
-  if (objNum > 0 && getObject(objNum)->objType == OT_AUTOFORM)
-    {
-      editNum = objNum;
-      objPtr = getObject(objNum);
-      objPtr->graphObj->move(objPtr->ox - diffx(),objPtr->oy - diffy());
-      objPtr->graphObj->resize(objPtr->ow,objPtr->oh);
-      objPtr->graphObj->setBackgroundColor(txtBackCol());
-      objPtr->graphObj->show();
-      objPtr->graphObj->setFocus();
-      graphPtr = objPtr->graphObj;
-      _repaint(objPtr->ox - diffx(),objPtr->oy - diffy(),
-	      objPtr->ow,objPtr->oh,true);
-    }
+}
+
+/*====================== key press event =========================*/
+void Page::keyPressEvent(QKeyEvent *e)
+{
+  printf("Hallo\n");
 }
 
 /*========================== get object ==========================*/
@@ -983,6 +1010,44 @@ void Page::setTextAlign(TxtParagraph::HorzAlign align)
 {
   if (txtPtr)
     txtPtr->setHorzAlign(align);
+}
+
+/*====================== start screenpresentation ================*/
+void Page::startScreenPresentation()
+{
+  currPresPage = 1;
+  editMode = false;
+  drawBack = true;
+  repaint(true);
+}
+
+/*====================== stop screenpresentation =================*/
+void Page::stopScreenPresentation()
+{
+  currPresPage = 1;
+  editMode = true;
+  drawBack = true;
+  repaint(true);
+}
+
+/*===================== next page ================================*/
+bool Page::pNextPage(bool manual)
+{
+  if (currPresPage+1 > pageNums())
+    return false;
+
+  currPresPage++;
+  return true;
+}
+
+/*===================== prev page ================================*/
+bool Page::pPrevPage(bool manual)
+{
+  if (currPresPage-1 <= 0)
+    return false;
+
+  currPresPage--;
+  return true;
 }
 
 /*======================== draw back color =======================*/

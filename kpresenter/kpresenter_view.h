@@ -434,6 +434,7 @@ protected:
   // scrollbars
   QScrollBar *vert,*horz;
   int xOffset,yOffset;
+  int _xOffset,_yOffset;
 
   // frames
   QList<KPresenterFrame> m_lstFrames;
@@ -460,7 +461,8 @@ protected:
   QRect m_rctRectSelection;
   QString m_strNewPart;
   bool m_bShowGUI;
-
+  bool presStarted;
+  
 };
 
 #endif
