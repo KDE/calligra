@@ -77,7 +77,11 @@ KexiRelationDialog::KexiRelationDialog(KexiView *view,QWidget *parent, const cha
 	g->addWidget(m_view);
 
 	if(!embedd)
+	{
 		registerAs(DocumentWindow);
+		setContextHelp(i18n("Relations"), i18n("To create a relation simply drag the source field onto the targetfield.\
+		 An arrowhead is used to show which table is the parent (master) and which table is the child (slave) in the relation."));
+	}
 	else
 		m_view->setReadOnly(true);
 }

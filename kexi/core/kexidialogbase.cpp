@@ -142,8 +142,11 @@ void KexiDialogBase::registerAs(KexiDialogBase::WindowType wt)
 
 void KexiDialogBase::focusInEvent ( QFocusEvent *)
 {
-    kdDebug()<<"FocusInEvent"<<endl;
-
+	kdDebug()<<"KexiDialogBase::FocusInEvent()"<<endl;
+	if(!m_contextMessage.isNull())
+	{
+		setContextHelp(m_contextTitle, m_contextMessage);
+	}
 }
 void KexiDialogBase::closeEvent(QCloseEvent *ev)
 {

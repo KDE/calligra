@@ -131,7 +131,6 @@ KexiTableItem::KexiTableItem(KexiTableView *tableView, bool sorted, ...)
 void
 KexiTableItem::setInsertItem(bool insertItem)
 {
-	qDebug("KexiTableItem::setInsertItem()\n");
 	m_insertItem = insertItem;
 //	int m_position = m_pTable->m_contents.find(this);
 	if(insertItem)
@@ -148,7 +147,6 @@ KexiTableItem::setInsertItem(bool insertItem)
 		}
 	}
 
-	qDebug("KexiTableItem::setInsertItem(): done\n");
 }
 
 

@@ -87,6 +87,8 @@ public:
 	int		rows() const;
 	int		cols() const;
 
+	int		currentCol() { return m_curCol; }
+
 	QRect		cellGeometry(int row, int col) const;
 	int		columnWidth(int col) const;
 	int		rowHeight(int row) const;

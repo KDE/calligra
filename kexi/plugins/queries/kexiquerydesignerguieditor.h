@@ -87,6 +87,10 @@ class KexiQueryDesignerGuiEditor : public QWidget
 		void			slotItemChanged(KexiTableItem *item, int col);
 		void			slotAddParameter();
 		void			slotRemoveParameter();
+		void			slotItemSelected(KexiTableItem *);
+
+	signals:
+		void			contextHelp(const QString &, const QString &);
 
 	private:
 		KexiDB			*m_db;

@@ -43,7 +43,7 @@ class KexiTablePart : public KexiProjectHandler, public KexiDataProvider
 		virtual QWidget *embeddReadOnly(QWidget *, KexiView *);
 
 		virtual void store (KoStore *){;}
-		virtual void load  (KoStore *){;}
+		virtual void load  (KoStore *){getTables();}
 
 
 		virtual QPixmap				groupPixmap();

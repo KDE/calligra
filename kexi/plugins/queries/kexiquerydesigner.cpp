@@ -50,6 +50,8 @@ KexiQueryDesigner::KexiQueryDesigner(KexiView *view,QWidget *parent, const char 
 	connect(m_tab, SIGNAL(currentChanged(QWidget *)), this, SLOT(viewChanged(QWidget *)));
 
 	m_editor = new KexiQueryDesignerGuiEditor(view, this, this, "design");
+	connect(m_editor, SIGNAL(contextHelp(const QString &, const QString &)), this,
+	 SLOT(slotContextHelp(const QString &, const QString &)));
 	m_sql = new KexiQueryDesignerSQL(this);
 	m_view = new KexiDataTable(view, this, "sql", 0, true);
 
@@ -63,6 +65,7 @@ KexiQueryDesigner::KexiQueryDesigner(KexiView *view,QWidget *parent, const char 
 	l->addWidget(status);
 
 	registerAs(DocumentWindow);
+	setContextHelp(i18n("Queries"), i18n("After having set up relations you can drag fields from different tables into the \"query table\"."));
 }
 
 void
@@ -110,6 +113,12 @@ KexiQueryDesigner::viewChanged(QWidget *w)
 			query();
 		}
 	}
+}
+
+void
+KexiQueryDesigner::slotContextHelp(const QString &t, const QString &m)
+{
+	setContextHelp(t, m);
 }
 
 KexiQueryDesigner::~KexiQueryDesigner()

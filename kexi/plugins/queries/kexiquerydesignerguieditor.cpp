@@ -60,6 +60,7 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(KexiView *view,QWidget *p
 	m_designTable->m_editOnDubleClick = true;
 	connect(m_designTable, SIGNAL(dropped(QDropEvent *)), this, SLOT(slotDropped(QDropEvent *)));
 	connect(m_designTable, SIGNAL(itemChanged(KexiTableItem *, int)), this, SLOT(slotItemChanged(KexiTableItem *, int)));
+	connect(m_designTable, SIGNAL(itemSelected(KexiTableItem *)), this, SLOT(slotItemSelected(KexiTableItem *)));
 	m_paramList=new KexiParameterListEditor(vSplitter);
 	connect(m_paramList->addParameter,SIGNAL(clicked()),this,SLOT(slotAddParameter()));
 
@@ -391,6 +392,28 @@ KexiQueryDesignerGuiEditor::slotAddParameter()
 	{
 		kdDebug() << "KexiQueryDesignerGuiEditor::slotAddParameter(): name=" << d.parameterName() << endl;
 		new KListViewItem(m_paramList->list, QString("kexi_" + d.parameterName()), "type");
+	}
+}
+
+void
+KexiQueryDesignerGuiEditor::slotItemSelected(KexiTableItem *)
+{
+	int col = m_designTable->currentCol();
+	if(col == 1)
+	{
+		emit contextHelp(i18n("Queries"), i18n("This cell contains either the column name from the source table or if the source table is set to \"[no table]\" you can use it as column for e.g. calculations within the current record set."));
+	}
+	else if(col == 3 || col == 4)
+	{
+		emit contextHelp(i18n("Queries"), i18n("Folowing conditions are possible:<br>\
+		<font size=\"-1\">\
+		<table width=\"95%\"><tr><td><font size=\"-1\">= 'abc'</td><td><font size=\"-1\">matches string <i>abc</i></td></tr>\
+		<tr><td><font size=\"-1\">= 25</td><td><font size=\"-1\">matches figures 25</td></tr>\
+		<tr><td><font size=\"-1\">&gt; 25</td><td><font size=\"-1\">greater than 25</td></tr>\
+		<tr><td><font size=\"-1\">&lt; 25</td><td><font size=\"-1\">lesser than 25</td></tr>\
+		<tr><td><font size=\"-1\">&lt;&gt; 'ab'</td><td><font size=\"-1\">matches any string except <i>ab</i></td></tr>\
+		<tr><td><font size=\"-1\">like \"%pine%\"</td><td><font size=\"-1\">matches '<i>pine</i>', '<i>pineapple</i>', '<i>porcupine</i>'</td></tr>\
+		</table></font>"));
 	}
 }
 

@@ -41,6 +41,7 @@ class KexiQueryDesigner : public KexiDialogBase
 
 	public slots:
 		void	query();
+		void	slotContextHelp(const QString &, const QString &);
 
 	signals:
 		void	queryExecuted(QString statement, bool succeed);
