@@ -154,7 +154,7 @@ void
 VCanvas::viewportPaintEvent( QPaintEvent *e )
 {
 	//kdDebug() << " e->rect() : " << e->rect().x() << ", " << e->rect().y() << ", " << e->rect().width() << ", " << e->rect().height() << endl;
-	QRect rect( e->rect().x(), e->rect().y(), e->rect().width(), e->rect().height() );
+	QRect rect( e->rect().x() - 1, e->rect().y() - 2, e->rect().width() + 2, e->rect().height() + 4 );
 	VPainter *p = m_view->painterFactory()->painter();
 	if( m_bScrolling )
 	{

@@ -40,6 +40,10 @@
 #include "vtoolbox.h"
 #include "vstrokefillpreview.h"
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 VToolBox::VToolBox( KarbonPart* part, KMainWindow *mainWin, const char* name ) : KToolBar( mainWin, name, false, false )
 {
 	setFullSize( false );
@@ -106,8 +110,10 @@ VToolBox::VToolBox( KarbonPart* part, KMainWindow *mainWin, const char* name ) :
 	button = addButton( "14_clipart", i18n( "Insert clipart" ) );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( clipartToolActivated() ) );
 
+#ifdef HAVE_KARBONTEXT
 	button = addButton( "14_text", i18n( "Insert text" ) );
 	connect( button, SIGNAL( clicked() ), this, SIGNAL( textToolActivated() ) );
+#endif
 
 	// dummy
 	button = addButton( "", i18n( "" ) );

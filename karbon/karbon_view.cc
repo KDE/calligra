@@ -37,9 +37,11 @@
 #include "vtoolbox.h"
 
 // Tools.
+#include "vcliparttool.h"
 #include "vellipsetool.h"
 #include "vgradienttool.h"
 #include "vpolygontool.h"
+#include "vpolylinetool.h"
 #include "vrectangletool.h"
 #include "vrotatetool.h"
 #include "vroundrecttool.h"
@@ -50,9 +52,9 @@
 #include "vsinustool.h"
 #include "vspiraltool.h"
 #include "vstartool.h"
-#include "vpolylinetool.h"
-#include "vcliparttool.h"
+#ifdef HAVE_KARBONTEXT
 #include "vtexttool.h"
+#endif
 
 // Commands.
 #include "vcleanupcmd.h"
@@ -159,7 +161,9 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	m_starTool = new VStarTool( this );
 	m_polylineTool = new VPolylineTool( this );
 	m_clipartTool = new VClipartTool( this );
+#ifdef HAVE_KARBONTEXT
 	m_textTool = new VTextTool( this );
+#endif
 
 	// set up status bar message
 	m_status = new KStatusBarLabel( QString::null, 0, statusBar() );
@@ -231,7 +235,9 @@ KarbonView::~KarbonView()
 	delete( m_starTool );
 	delete( m_polylineTool );
 	delete( m_clipartTool );
+#ifdef HAVE_KARBONTEXT
 	delete( m_textTool );
+#endif
 
 	// widgets:
 	delete( m_status );
@@ -260,7 +266,9 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 		connect( m_toolbox, SIGNAL( gradToolActivated() ),			this, SLOT( gradTool() ) );
 		connect( m_toolbox, SIGNAL( polylineToolActivated() ),		this, SLOT( polylineTool() ) );
 		connect( m_toolbox, SIGNAL( clipartToolActivated() ),		this, SLOT( clipartTool() ) );
-		connect( m_toolbox, SIGNAL( textToolActivated() ),		this, SLOT( textTool() ) );
+#ifdef HAVE_KARBONTEXT
+		connect( m_toolbox, SIGNAL( textToolActivated() ),			this, SLOT( textTool() ) );
+#endif
 		if( shell() )
 		{
 			m_strokeFillPreview = m_toolbox->strokeFillPreview();
@@ -669,6 +677,7 @@ KarbonView::rotateTool()
 void
 KarbonView::textTool()
 {
+#ifdef HAVE_KARBONTEXT
 	if( m_currentTool == m_textTool )
 			m_toolOptionsDocker->show();
 	else
@@ -677,6 +686,7 @@ KarbonView::textTool()
 		m_currentTool = m_textTool;
 		m_currentTool->activateAll();
 	}
+#endif
 }
 
 void

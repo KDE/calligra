@@ -21,6 +21,9 @@
 #ifndef __KARBON_VIEW__
 #define __KARBON_VIEW__
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
 #include <koView.h>
 #include <ksharedptr.h>
@@ -75,7 +78,9 @@ class VStateButton;
 class VStroke;
 class VStrokeDocker;
 class VStrokeFillPreview;
+#ifdef HAVE_KARBONTEXT
 class VTextTool;
+#endif
 class VTool;
 class VToolBox;
 class VTransformDlg;
@@ -114,7 +119,7 @@ public:
 		{ return m_contextHelpDocker; }
 	VToolOptionsDocker* toolOptionsDocker() const
 		{ return m_toolOptionsDocker; }
-	
+
 	void reorganizeGUI();
 	void setNumberOfRecentFiles( int number );
 	void setLineWidth( double val);
@@ -196,7 +201,6 @@ protected slots:
 	void slotJoinStyleClicked();
 	void slotCapStyleClicked();
 
-
 protected:
 	virtual void updateReadWrite( bool rw );
 	virtual void resizeEvent( QResizeEvent* event );
@@ -232,7 +236,9 @@ private:
 	VGradientTool* m_gradTool;
 	VPolylineTool* m_polylineTool;
 	VClipartTool* m_clipartTool;
+#ifdef HAVE_KARBONTEXT
 	VTextTool* m_textTool;
+#endif
 
 	// text:
 	KFontAction *m_setFontFamily;
@@ -272,12 +278,12 @@ private:
 	VToolOptionsDocker* m_toolOptionsDocker;
 	VStrokeDocker* m_strokeDocker;
 	VHistoryDocker* m_historyDocker;
-	
+
 	//toolbox
 	DCOPObject* m_dcop;
 
 	VToolBox *m_toolbox;
-	
+
 	//toolbars
 	VSelectToolBar* m_selectToolBar;
 
