@@ -114,6 +114,6 @@ if test -z "$LIBART_LIBS"; then
 	DO_NOT_COMPILE="$DO_NOT_COMPILE karbon"
 fi
 
-if test -n "$LIBFREETYPE_LIBS" -a -n "$FONTCONFIG_LIBS"; then
+if test -n "$LIBFREETYPE_LIBS" -a -n "$LIBFONTCONFIG_LIBS"; then
 	AC_DEFINE_UNQUOTED(HAVE_KARBONTEXT, 1, [Defines if your system has the fontconfig and freetype libraries])
 fi
