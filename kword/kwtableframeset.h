@@ -208,6 +208,7 @@ public:
 
 //    QString anchorType();
 //    QString anchorInstance();
+    virtual void statistics( ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words, ulong & sentences );
 
 protected:
     unsigned int m_rows, m_cols;
@@ -237,9 +238,9 @@ public:
     KWTableFrameSet * tableFrameSet() const {
         return static_cast<KWTableFrameSet *>( m_fs );
     }
-    
+
     virtual KWFrameSetEdit* currentTextEdit();
-    
+
     virtual void drawContents( QPainter * painter, const QRect & crect,
                                QColorGroup & cg, bool onlyChanged, bool resetChanged )
     {

@@ -865,7 +865,7 @@ KWParagLayout::KWParagLayout( QDomElement & parentElem, KWDocument *doc )
             alignment = flow2align[flow.toInt()];
         } else {
             flow = element.attribute( "align" ); // KWord-1.0 DTD
-            alignment = flow=="right" ? Qt::AlignRight : flow=="center" ? Qt::AlignCenter : flow=="justify" ? Qt3::AlignJustify : Qt::AlignLeft;
+            alignment = flow=="right" ? (int)Qt::AlignRight : flow=="center" ? (int)Qt::AlignCenter : flow=="justify" ? (int)Qt3::AlignJustify : (int)Qt::AlignLeft;
         }
     }
 

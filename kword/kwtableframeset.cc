@@ -1361,6 +1361,13 @@ void KWTableFrameSet::save( QDomElement &parentElem ) {
     }
 }
 
+void KWTableFrameSet::statistics( ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words, ulong & sentences )
+{
+    for (unsigned int i =0; i < m_cells.count(); i++) {
+        m_cells.at(i)->statistics( charsWithSpace, charsWithoutSpace, words, sentences );
+    }
+}
+
 KWTableFrameSet::Cell::Cell( KWTableFrameSet *table, unsigned int row, unsigned int col ) :
     KWTextFrameSet( table->m_doc )
 {

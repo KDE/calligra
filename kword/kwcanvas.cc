@@ -29,6 +29,7 @@
 #include "kwanchor.h"
 #include "framedia.h"
 #include "kwcommand.h"
+#include "kformuladocument.h"
 
 #include <qtimer.h>
 #include <qclipboard.h>
@@ -933,7 +934,7 @@ void KWCanvas::mrCreateFormula()
 {
     m_insRect = m_insRect.normalize();
     if ( m_insRect.width() > doc->gridX() && m_insRect.height() > doc->gridY() ) {
-        KWFormulaFrameSet *frameset = new KWFormulaFrameSet( doc, this );
+        KWFormulaFrameSet *frameset = new KWFormulaFrameSet( doc, doc->getFormulaDocument()->createFormula() );
         KWFrame *frame = new KWFrame(frameset, m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height() );
         frameset->addFrame( frame );
         doc->addFrameSet( frameset );

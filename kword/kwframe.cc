@@ -1095,17 +1095,12 @@ void KWPartFrameSetEdit::drawContents( QPainter *p, const QRect &r, QColorGroup 
 /******************************************************************/
 
 
-KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc, QWidget */*parent*/ )
-    : KWFrameSet( _doc ), m_changed( false )
+KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc, KFormulaContainer *_f )
+    : KWFrameSet( _doc ), formula(_f), m_changed( false )
 {
-    formula = m_doc->getFormulaDocument()->createFormula();
-    connect(formula, SIGNAL(formulaChanged(int, int)),
-            this, SLOT(slotFormulaChanged(int, int)));
-}
-
-KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc )
-        : KWFrameSet( _doc ), formula(0), m_changed( false )
-{
+    if ( formula )
+        connect(formula, SIGNAL(formulaChanged(int, int)),
+                this, SLOT(slotFormulaChanged(int, int)));
 }
 
 KWFormulaFrameSet::~KWFormulaFrameSet()
@@ -1167,7 +1162,7 @@ void KWFormulaFrameSet::drawContents( QPainter* painter, const QRect& crect,
 
 
 // ## can this be done in the constructor instead (DF) ?
-void KWFormulaFrameSet::create( QWidget */*parent*/ )
+void KWFormulaFrameSet::create()
 {
     if ( formula != 0 ) {
         updateFrames();

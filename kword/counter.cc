@@ -475,5 +475,6 @@ int Counter::width( const KWTextParag *paragraph )
         text.append( ' ' ); // append a trailing space, see KWTextParag::drawLabel
     for ( unsigned int i = 0; i < text.length(); i++ )
         m_cache.width += format->width( text, i );
+    //kdDebug() << "Counter::width recalculated parag=" << paragraph << " width=" << m_cache.width << endl;
     return m_cache.width;
 }

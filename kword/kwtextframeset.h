@@ -149,6 +149,8 @@ public:
 
     virtual void layout();
 
+    virtual void statistics( ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words, ulong & sentences );
+
     // reimplemented from QTextFlow
     virtual int adjustLMargin( int yp, int h, int margin, int space );
     virtual int adjustRMargin( int yp, int h, int margin, int space );
@@ -242,7 +244,7 @@ class KWTextFrameSetEdit : public QObject, public KWFrameSetEdit
 public:
     KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas );
     virtual ~KWTextFrameSetEdit();
-    
+
     virtual KWFrameSetEdit* currentTextEdit(){return this;}
 
     /**

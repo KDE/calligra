@@ -305,6 +305,36 @@ void KWTextFrameSet::layout()
     textdoc->invalidate(); // lazy layout, real update follows upon next repaint
 }
 
+
+void KWTextFrameSet::statistics( ulong & charsWithSpace, ulong & charsWithoutSpace, ulong & words, ulong & sentences )
+{
+    QTextParag * parag = textdoc->firstParag();
+    for ( ; parag ; parag = parag->next() )
+    {
+        QString s = parag->string()->toString();
+        bool wordStarted = false;
+        for ( uint i = 0 ; i < s.length() - 1 /*trailing-space*/ ; ++i )
+        {
+            QChar ch = s[i];
+            ++charsWithSpace;
+            if ( ch.isSpace() )
+                ++charsWithoutSpace;
+            if ( ch.isSpace() || ch.isPunct() )
+            {
+                if ( wordStarted )
+                    ++words;
+                if ( ch == '.' )
+                    ++sentences;
+                wordStarted = false;
+            }
+            else
+                wordStarted = true;
+        }
+        if ( wordStarted )
+            ++words;
+    }
+}
+
 // Only interested in the body textframeset, not in header/footer
 #define kdDebugBody(area) if ( getFrameInfo() == FI_BODY ) kdDebug(area)
 

@@ -217,6 +217,9 @@ void KWView::initGui()
 /*================================================================*/
 void KWView::setupActions()
 {
+    // -------------- File actions
+    (void) new KAction( i18n( "Statistics" ), 0, this, SLOT( fileStatistics() ), actionCollection(), "file_statistics" );
+
     // -------------- Edit actions
     actionEditCut = KStdAction::cut( this, SLOT( editCut() ), actionCollection(), "edit_cut" );
     actionEditCopy = KStdAction::copy( this, SLOT( editCopy() ), actionCollection(), "edit_copy" );
@@ -572,13 +575,47 @@ void KWView::setupActions()
                                       actionCollection(), "configure" );
 }
 
+void KWView::fileStatistics()
+{
+    ulong charsWithSpace = 0L;
+    ulong charsWithoutSpace = 0L;
+    ulong words = 0L;
+    ulong sentences = 0L;
+    QListIterator<KWFrameSet> framesetIt( doc->framesetsIterator() );
+    for ( ; framesetIt.current(); ++framesetIt )
+    {
+        KWFrameSet *frameSet = framesetIt.current();
+        // Exclude headers and footers
+        if ( frameSet->getFrameInfo() == FI_BODY && frameSet->isVisible() )
+        {
+            frameSet->statistics( charsWithSpace, charsWithoutSpace, words, sentences );
+        }
+    }
+
+    KDialogBase dlg( KDialogBase::Plain, i18n( "Document Statistics" ),
+                     KDialogBase::Ok, KDialogBase::Ok, this, 0, true,
+                     true /* separator */ );
+
+    QVBoxLayout * vlayout = new QVBoxLayout( dlg.plainPage() );
+    vlayout->addWidget( new QLabel(
+        i18n( "<qt><center>Document Statistics</center><hr><p>"
+              "Characters (total count including spaces) : <b>%1</b><br/>"
+              "Characters without spaces: <b>%2</b><br/>"
+              "Words: <b>%3</b><br/>"
+              "Sentences: <b>%4</b></p>" ).
+        arg( charsWithSpace ).arg( charsWithoutSpace ).arg( words ).arg( sentences ),
+                        dlg.plainPage() ) );
+    dlg.setInitialSize( QSize( 400, 200 ) ); // not too good for long translations... -> use a real layout and 5 labels
+    dlg.show();
+}
+
 /*======================== create GUI ==========================*/
 void KWView::createKWGUI()
 {
     // setup GUI
     setupActions();
 
-    gui = new KWGUI( this, true, doc, this );
+    gui = new KWGUI( this, doc, this );
     gui->setGeometry( 0, 0, width(), height() );
     gui->show();
 
@@ -590,7 +627,7 @@ void KWView::createKWGUI()
                               dynamic_cast<KWPartFrameSet*>( frameset ) );
         else */
         if ( frameset->getFrameType() == FT_FORMULA )
-            dynamic_cast<KWFormulaFrameSet*>( frameset )->create( gui->canvasWidget() );
+            dynamic_cast<KWFormulaFrameSet*>( frameset )->create();
     }
 }
 
@@ -2830,7 +2867,7 @@ void KWLayoutWidget::resizeEvent( QResizeEvent *e )
 /******************************************************************/
 /* Class: KWGUI                                                */
 /******************************************************************/
-KWGUI::KWGUI( QWidget *parent, bool, KWDocument *_doc, KWView *_view )
+KWGUI::KWGUI( QWidget *parent, KWDocument *_doc, KWView *_view )
     : QWidget( parent, "" )
 {
     doc = _doc;

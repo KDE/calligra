@@ -135,6 +135,7 @@ public:
 
 
 public slots:
+    void fileStatistics();
     void editCut();
     void editCopy();
     void editPaste();
@@ -439,7 +440,7 @@ class KWGUI : public QWidget
     Q_OBJECT
 
 public:
-    KWGUI( QWidget *parent, bool __show, KWDocument *_doc, KWView *_view );
+    KWGUI( QWidget *parent, KWDocument *_doc, KWView *_view );
 
     KWDocument *getDocument() { return doc; }
 

@@ -379,6 +379,8 @@ public:
      * The default implementation calls updateFrames() and zoom(). Call the parent :) */
     virtual void finalize();
 
+    virtual void statistics( ulong & /*charsWithSpace*/, ulong & /*charsWithoutSpace*/, ulong & /*words*/, ulong & /*sentences*/ ) {}
+
     KWDocument* kWordDocument() const { return m_doc; }
 
     // only used for headers and footers...
@@ -535,11 +537,11 @@ class KWFormulaFrameSet : public KWFrameSet
 {
     Q_OBJECT
 public:
-    KWFormulaFrameSet( KWDocument *_doc );
-    KWFormulaFrameSet( KWDocument *_doc, QWidget *parent );
+    KWFormulaFrameSet( KWDocument *_doc, KFormulaContainer * _f = 0L );
+    //KWFormulaFrameSet( KWDocument *_doc, QWidget *parent );
     virtual ~KWFormulaFrameSet();
 
-    void create( QWidget *parent );
+    void create();
 
     virtual FrameType getFrameType() { return FT_FORMULA; }
 
