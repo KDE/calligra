@@ -111,6 +111,7 @@ KPPixmapObject &KPPixmapObject::operator=( const KPPixmapObject & )
     return *this;
 }
 
+// Deprecated, same as KPPixmapObject::setPicture
 void KPPixmapObject::setPixmap( const KoPictureKey & key )
 {
     setPicture( key );
@@ -123,7 +124,7 @@ void KPPixmapObject::setPicture( const KoPictureKey & key )
 
 void KPPixmapObject::reload( void )
 {
-    // ### FIXME: this seems wrong, KoPictureCollection will never reload it 
+    // ### FIXME: this seems wrong, KoPictureCollection will never reload it (or perhaps it is the function name that is wrong)
     setPicture( image.getKey() ); 
 }
 
@@ -243,7 +244,7 @@ double KPPixmapObject::load(const QDomElement &element)
                 image.setKey(key);
                 QByteArray rawData=_data.utf8(); // XPM is normally ASCII, therefore UTF-8
                 rawData[rawData.size()-1]=char(10); // Replace the NULL character by a LINE FEED
-                QBuffer buffer(rawData);
+                QBuffer buffer(rawData); // ### TODO: open?
                 image.loadXpm(&buffer);
             }
         }
@@ -471,7 +472,7 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
 #endif
             )
         {
-            //kdDebug(33001) << "Drawing cached pixmap " << (void*) this << " " << k_funcinfo << endl;
+            kdDebug(33001) << "Drawing cached pixmap " << (void*) this << " " << k_funcinfo << endl;
         }
         else
         {
@@ -519,6 +520,7 @@ void KPPixmapObject::draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
 QPixmap KPPixmapObject::getOriginalPixmap()
 {
     QSize _pixSize = image.getOriginalSize();
+    kdDebug(33001) << "KPPixmapObject::getOriginalPixmap size= " << _pixSize << endl;
     QPixmap _pixmap = image.generatePixmap( _pixSize, true );
     image.clearCache(); // Release the memoy of the picture cache
 
