@@ -1088,10 +1088,10 @@ void KPrPage::alignObjsLeft()
 {
     bool newPosition=false;
     QPtrList<KPObject> _objects;
-    QPtrList<QPoint> _diffs;
+    QPtrList<KoPoint> _diffs;
     _objects.setAutoDelete( false );
     _diffs.setAutoDelete( false );
-    int _x =  getPageRect().x();
+    double _x =  getPageRect().x();
 
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -1101,7 +1101,7 @@ void KPrPage::alignObjsLeft()
 	    _objects.append( it.current() );
             if( !newPosition &&_x != it.current()->getOrig().x())
                 newPosition=true;
-	    _diffs.append( new QPoint( _x - it.current()->getOrig().x(), 0 ) );
+	    _diffs.append( new KoPoint( _x - it.current()->getOrig().x(), 0 ) );
 	}
     }
 
@@ -1123,11 +1123,11 @@ void KPrPage::alignObjsCenterH()
 {
     bool newPosition=false;
     QPtrList<KPObject> _objects;
-    QPtrList<QPoint> _diffs;
+    QPtrList<KoPoint> _diffs;
     _objects.setAutoDelete( false );
     _diffs.setAutoDelete( false );
-    int _x =  getPageRect().x();
-    int _w = getPageRect( ).width();
+    double _x = getPageRect().x();
+    double _w = getPageRect( ).width();
 
 
     QPtrListIterator<KPObject> it( m_objectList );
@@ -1138,7 +1138,7 @@ void KPrPage::alignObjsCenterH()
 	    _objects.append( it.current() );
             if(!newPosition && (( _w - it.current()->getSize().width() ) / 2 - it.current()->getOrig().x() + _x)!=0)
                 newPosition=true;
-	    _diffs.append( new QPoint( ( _w - it.current()->getSize().width() ) / 2 - it.current()->getOrig().x() + _x, 0 ) );
+	    _diffs.append( new KoPoint( ( _w - it.current()->getSize().width() ) / 2 - it.current()->getOrig().x() + _x, 0 ) );
 	}
     }
     if(newPosition)
@@ -1160,10 +1160,10 @@ void KPrPage::alignObjsRight()
 {
     bool newPosition=false;
     QPtrList<KPObject> _objects;
-    QPtrList<QPoint> _diffs;
+    QPtrList<KoPoint> _diffs;
     _objects.setAutoDelete( false );
     _diffs.setAutoDelete( false );
-    int _w = getPageRect().x() + getPageRect( ).width();
+    double _w = getPageRect().x() + getPageRect( ).width();
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
@@ -1172,7 +1172,7 @@ void KPrPage::alignObjsRight()
 	    _objects.append( it.current() );
             if(!newPosition && (( _w - it.current()->getSize().width() ) != it.current()->getOrig().x()))
                 newPosition=true;
-	    _diffs.append( new QPoint( ( _w - it.current()->getSize().width() ) - it.current()->getOrig().x(), 0 ) );
+	    _diffs.append( new KoPoint( ( _w - it.current()->getSize().width() ) - it.current()->getOrig().x(), 0 ) );
 	}
     }
     if(newPosition)
@@ -1193,10 +1193,10 @@ void KPrPage::alignObjsTop()
 {
     bool newPosition=false;
     QPtrList<KPObject> _objects;
-    QPtrList<QPoint> _diffs;
+    QPtrList<KoPoint> _diffs;
     _objects.setAutoDelete( false );
     _diffs.setAutoDelete( false );
-    int  _y;
+    double  _y;
 
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -1208,7 +1208,7 @@ void KPrPage::alignObjsTop()
             if(!newPosition && (_y != it.current()->getOrig().y()))
                 newPosition=true;
 
-            _diffs.append( new QPoint( 0, _y - it.current()->getOrig().y() ) );
+            _diffs.append( new KoPoint( 0, _y - it.current()->getOrig().y() ) );
 	}
     }
     if(newPosition)
@@ -1229,10 +1229,10 @@ void KPrPage::alignObjsCenterV()
 {
     bool newPosition=false;
     QPtrList<KPObject> _objects;
-    QPtrList<QPoint> _diffs;
+    QPtrList<KoPoint> _diffs;
     _objects.setAutoDelete( false );
     _diffs.setAutoDelete( false );
-    int  _y, _h;
+    double  _y, _h;
 
 
     QPtrListIterator<KPObject> it( m_objectList );
@@ -1245,7 +1245,7 @@ void KPrPage::alignObjsCenterV()
             _objects.append( it.current() );
             if(!newPosition &&(( _h - it.current()->getSize().height() ) / 2 - it.current()->getOrig().y() + _y )!=0)
                 newPosition=true;
-            _diffs.append( new QPoint( 0, ( _h - it.current()->getSize().height() ) / 2 -
+            _diffs.append( new KoPoint( 0, ( _h - it.current()->getSize().height() ) / 2 -
                                        it.current()->getOrig().y() + _y ) );
 	}
     }
@@ -1266,10 +1266,10 @@ void KPrPage::alignObjsBottom()
 {
     bool newPosition=false;
     QPtrList<KPObject> _objects;
-    QPtrList<QPoint> _diffs;
+    QPtrList<KoPoint> _diffs;
     _objects.setAutoDelete( false );
     _diffs.setAutoDelete( false );
-    int  _h;
+    double  _h;
 
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
@@ -1280,7 +1280,7 @@ void KPrPage::alignObjsBottom()
             _objects.append( it.current() );
             if(!newPosition && _h != (it.current()->getSize().height() + it.current()->getOrig().y()))
                 newPosition=true;
-            _diffs.append( new QPoint( 0, _h - it.current()->getSize().height() - it.current()->getOrig().y() ) );
+            _diffs.append( new KoPoint( 0, _h - it.current()->getSize().height() - it.current()->getOrig().y() ) );
 	}
     }
 

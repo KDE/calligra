@@ -875,7 +875,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                     }
                 }
                 MoveByCmd *moveByCmd = new MoveByCmd( i18n( "Move object(s)" ),
-                                                      QPoint( mx - firstX, my - firstY ),
+                                                      KoPoint( m_view->zoomHandler()->unzoomItX (mx - firstX),m_view->zoomHandler()->unzoomItY( my - firstY) ),
                                                       _objects, m_view->kPresenterDoc(),m_activePage );
                 m_view->kPresenterDoc()->addCommand( moveByCmd );
             } else
@@ -4670,7 +4670,8 @@ void KPrCanvas::moveObject( int x, int y, bool key )
     QPtrList<KPObject> _objects;
     QPainter p;
     _objects.setAutoDelete( false );
-
+    x=m_view->zoomHandler()->unzoomItX(x);
+    y=m_view->zoomHandler()->unzoomItY(y);
     if ( (int)objectList().count() - 1 >= 0 ) {
         for ( int i = static_cast<int>( objectList().count() ) - 1; i >= 0; i-- ) {
             kpobject = objectList().at( i );
@@ -4678,12 +4679,13 @@ void KPrCanvas::moveObject( int x, int y, bool key )
                 p.begin( this );
                 kpobject->setMove( true );
                 kpobject->draw( &p,m_view->zoomHandler() );
-                kpobject->moveBy( QPoint( x, y ) );
+                kpobject->moveBy( KoPoint( x, y ) );
                 kpobject->draw( &p,m_view->zoomHandler() );
                 p.end();
 
                 kpobject->setMove( false );
                 _objects.append( kpobject );
+                //FIXME x and y I don't sure that we can unzoom it for repaint
                 _repaint( QRect( kpobject->getBoundingRect(  ).x() + ( -1*x ),
                                  kpobject->getBoundingRect(  ).y() + ( -1*y ),
                                  kpobject->getBoundingRect(  ).width(),
@@ -4695,7 +4697,7 @@ void KPrCanvas::moveObject( int x, int y, bool key )
 
     if ( key ) {
         MoveByCmd *moveByCmd = new MoveByCmd( i18n( "Move object(s)" ),
-                                              QPoint( x, y ),
+                                              KoPoint( x, y ),
                                               _objects, m_view->kPresenterDoc(),m_activePage );
         m_view->kPresenterDoc()->addCommand( moveByCmd );
     }

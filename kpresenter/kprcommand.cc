@@ -707,7 +707,7 @@ void LowerRaiseCmd::unexecute()
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-MoveByCmd::MoveByCmd( const QString &_name, const QPoint &_diff, QPtrList<KPObject> &_objects, KPresenterDoc *_doc,KPrPage *_page )
+MoveByCmd::MoveByCmd( const QString &_name, const KoPoint &_diff, QPtrList<KPObject> &_objects, KPresenterDoc *_doc,KPrPage *_page )
     : KCommand( _name ), diff( _diff ), objects( _objects )
 {
     objects.setAutoDelete( false );
@@ -773,7 +773,7 @@ void MoveByCmd::unexecute()
 /******************************************************************/
 
 /*======================== constructor ===========================*/
-MoveByCmd2::MoveByCmd2( const QString &_name, QPtrList<QPoint> &_diffs,
+MoveByCmd2::MoveByCmd2( const QString &_name, QPtrList<KoPoint> &_diffs,
 			QPtrList<KPObject> &_objects, KPresenterDoc *_doc )
     : KCommand( _name ), diffs( _diffs ), objects( _objects )
 {

@@ -395,7 +395,7 @@ protected:
 class MoveByCmd : public KCommand
 {
 public:
-    MoveByCmd( const QString &_name, const QPoint &_diff, QPtrList<KPObject> &_objects, KPresenterDoc *_doc, KPrPage *_page );
+    MoveByCmd( const QString &_name, const KoPoint &_diff, QPtrList<KPObject> &_objects, KPresenterDoc *_doc, KPrPage *_page );
     ~MoveByCmd();
 
     virtual void execute();
@@ -403,7 +403,7 @@ public:
 
 protected:
 
-    QPoint diff;
+    KoPoint diff;
     QPtrList<KPObject> objects;
     KPresenterDoc *doc;
     KPrPage *m_page;
@@ -417,7 +417,7 @@ protected:
 class MoveByCmd2 : public KCommand
 {
 public:
-    MoveByCmd2( const QString &_name, QPtrList<QPoint> &_diffs, QPtrList<KPObject> &_objects, KPresenterDoc *_doc );
+    MoveByCmd2( const QString &_name, QPtrList<KoPoint> &_diffs, QPtrList<KPObject> &_objects, KPresenterDoc *_doc );
     ~MoveByCmd2();
 
     virtual void execute();
@@ -425,7 +425,7 @@ public:
 
 protected:
 
-    QPtrList<QPoint> diffs;
+    QPtrList<KoPoint> diffs;
     QPtrList<KPObject> objects;
     KPresenterDoc *doc;
 
