@@ -215,6 +215,8 @@ class KIVIO_EXPORT KivioView : public KoView
 
     void setActivePage( KivioPage* );
 
+    void setStatusBarInfo(const QString& text);
+
   protected slots:
     void slotAddPage( KivioPage *_page );
     void slotPageRenamed( KivioPage* page, const QString& old_name );
@@ -352,6 +354,7 @@ class KIVIO_EXPORT KivioView : public KoView
 
     KStatusBarLabel* m_coordSLbl;
     KStatusBarLabel* m_pageCountSLbl;
+    KStatusBarLabel* m_infoSLbl;
 
     Kivio::PluginManager* m_pluginManager;
 

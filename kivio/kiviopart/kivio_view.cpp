@@ -130,6 +130,7 @@
 #define TOGGLE_ACTION(X) ((KToggleAction*)actionCollection()->action(X))
 #define MOUSEPOS_TEXT 1000
 #define PAGECOUNT_TEXT 0
+#define INFO_TEXT 1
 
 using namespace Kivio;
 
@@ -147,6 +148,9 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
 
   m_pageCountSLbl = new KStatusBarLabel(i18n("Page %1/%2").arg(0).arg(0), PAGECOUNT_TEXT);
   addStatusBarItem(m_pageCountSLbl, 0, false);
+
+  m_infoSLbl = new KStatusBarLabel("", INFO_TEXT);
+  addStatusBarItem(m_infoSLbl, 0, false);
 
   // Add coords to the statusbar
   QString unit = KoUnit::unitName(m_pDoc->units());
@@ -2226,6 +2230,11 @@ void KivioView::updatePageStatusLabel()
 {
   QString text = i18n("Page %1/%2").arg(m_pDoc->map()->pageList().find(activePage()) + 1).arg(m_pDoc->map()->count());
   m_pageCountSLbl->setText(text);
+}
+
+void KivioView::setStatusBarInfo(const QString& text)
+{
+  m_infoSLbl->setText(text);
 }
 
 #include "kivio_view.moc"

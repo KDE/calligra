@@ -203,6 +203,7 @@ void ZoomTool::setActivated(bool a)
   
     m_zoomAction->setChecked(false);
     m_panAction->setChecked(false);
+    view()->setStatusBarInfo("");
   
     if (!view()->canvasWidget()->isUpdatesEnabled()) {
       view()->canvasWidget()->setUpdatesEnabled(true);
@@ -218,6 +219,7 @@ void ZoomTool::zoomActivated()
   m_bLockKeyboard = false;
   m_zoomAction->setChecked(true);
   m_panAction->setChecked(false);
+  view()->setStatusBarInfo(i18n("Hold Shift to zoom out."));
 }
 
 void ZoomTool::handActivated()

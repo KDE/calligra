@@ -105,12 +105,12 @@ bool SelectTool::processEvent(QEvent* e)
       if( m->button() == RightButton ) {
         showPopupMenu(m->globalPos());
       } else if( m->button() == LeftButton ) {
-        if(m->state() & ControlButton) {
+        if((m->state() & ControlButton) || (m->state() & ShiftButton)) {
           m_controlKey = true;
         } else {
           m_controlKey = false;
         }
-        
+
         mousePress( m->pos() );
       }
 
@@ -128,7 +128,7 @@ bool SelectTool::processEvent(QEvent* e)
       mouseMove( static_cast<QMouseEvent*>(e));
       return true;
       break;
-    
+
     case QEvent::KeyPress:
       if((static_cast<QKeyEvent*>(e)->key() >= Key_Left) && (static_cast<QKeyEvent*>(e)->key() <= Key_Down)) {
         keyPress(static_cast<QKeyEvent*>(e));
@@ -139,7 +139,7 @@ bool SelectTool::processEvent(QEvent* e)
     default:
       break;
   }
-  
+
   return false;
 }
 
