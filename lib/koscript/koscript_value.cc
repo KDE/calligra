@@ -721,8 +721,9 @@ bool KSValue::implicitCast( Type _typ ) const
 		return TRUE;
       return false;
     case StringType:
-	if ( _typ == BoolType )
-	    return TRUE;
+	// Laurent fix N("foo") return 0 and not "False" bug #86873
+      	//if ( _typ == BoolType )
+        //return TRUE;
 	return false;
     case CharRefType:
 	if ( _typ == CharType )
