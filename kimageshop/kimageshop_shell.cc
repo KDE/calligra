@@ -22,7 +22,14 @@
 #include "kimageshop_factory.h"
 
 #include <kstddirs.h>
+#include <kimgio.h>
 #include <kglobal.h>
+#include <klocale.h>
+#include <kfiledialog.h>
+
+#include <koFilterManager.h>
+
+#include <qmessagebox.h>
 
 KImageShopShell::KImageShopShell( QWidget* parent, const char* name )
     : KoMainWindow( parent, name )
@@ -42,6 +49,30 @@ QString KImageShopShell::configFile() const
 KoDocument* KImageShopShell::createDoc()
 {
     return new KImageShopDoc;
+}
+
+void KImageShopShell::slotFileOpen()
+{
+  QString filter = "*.kis|KImageShop picture\n" + KImageIO::pattern( KImageIO::Reading );
+
+  QString file = KFileDialog::getOpenFileName( getenv( "HOME" ), filter );
+  
+  if ( file.isNull() )
+    return;
+  
+  if( KImageIO::isSupported( KImageIO::mimeType( file ) ) )
+    {
+      file = KoFilterManager::self()->import( file, nativeFormatMimeType() );
+      if( file.isNull() )
+	return;
+    }
+  
+  if( !openDocument( file ) )
+    {
+      QString tmp;
+      tmp.sprintf( i18n( "Could not open\n%s" ), file.data() );
+      QMessageBox::critical( 0L, i18n( "IO Error" ), tmp, i18n( "OK" ) );
+    }
 }
 
 #include "kimageshop_shell.moc"

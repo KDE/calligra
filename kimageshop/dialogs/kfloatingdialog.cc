@@ -403,7 +403,6 @@ void KFloatingDialog::mouseMoveEvent(QMouseEvent *e)
 		  if (newPos.y() < 0)
 			newPos.setY(0);
 		  move(newPos);
-		  qDebug("x = %d; y = %d", newPos.x(), newPos.y());
 		}
       else
 		{

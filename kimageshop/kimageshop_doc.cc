@@ -33,6 +33,7 @@
 
 #include <kstddirs.h>
 #include <kglobal.h>
+#include <kmimetype.h>
 
 #include "kimageshop_doc.h"
 #include "kimageshop_view.h"
@@ -101,6 +102,25 @@ KImageShopDoc::~KImageShopDoc()
 
   if ((visual!=unknown) && (visual!=rgb888x))
     free(imageData);
+}
+
+bool KImageShopDoc::loadFromURL( const QString& _url )
+{
+  cout << "KImageShopDoc::loadFromURL" << endl;
+  
+  QString mimetype = KMimeType::findByURL( _url )->mimeType();
+  
+  if( ( mimetype == "image/png" ) ||
+      ( mimetype == "image/jpeg" ) ||
+      ( mimetype == "image/bmp" ) ||
+      ( mimetype == "image/gif" ) )
+    {
+      // if( !m_image.load( _url ) )
+      //	return false;
+
+      return false;
+    }
+  return KoDocument::loadFromURL( _url );
 }
 
 bool KImageShopDoc::initDoc()

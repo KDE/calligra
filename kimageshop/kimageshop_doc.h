@@ -46,6 +46,8 @@ class KImageShopDoc : public KoDocument
 public:
     KImageShopDoc( int w = 510, int h = 510, KoDocument* parent = 0, const char* name = 0 );
     ~KImageShopDoc();
+
+    virtual bool loadFromURL( const QString& );
     
     // document
     virtual View* createView( QWidget* parent = 0, const char* name = 0 );

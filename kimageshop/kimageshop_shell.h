@@ -36,6 +36,9 @@ public:
     QString nativeFormatPattern() const { return "*.kis"; }
     QString nativeFormatName() const { return "KImageShop"; }
 
+public slots:
+  virtual void slotFileOpen();
+
 protected:
     virtual QString configFile() const;
     virtual KoDocument* createDoc();
