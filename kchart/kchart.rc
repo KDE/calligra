@@ -1,4 +1,4 @@
-<!DOCTYPE QConfig ><QConfig name="KChart">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KChart">
 <MenuBar>
  <Menu name="Edit"><text>&amp;Edit</text>
   <Action name="wizard"/>
@@ -21,4 +21,4 @@
  <Action name="areaschart"/>
  <Action name="barschart"/>
 </ToolBar>
-</QConfig>
+</kpartgui>
