@@ -553,7 +553,7 @@ protected:
     void saveOasisPresentationCustionSlideShow( KoXmlWriter &contentTmpWriter );
 
     void saveOasisSettings( KoXmlWriter &contentTmpWriter );
-    void loadOasisSettings();
+    bool loadOasisSettings( const QDomDocument&settingsDoc );
 
 
     //we move presSpeed to each table => compatibility with old file format

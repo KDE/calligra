@@ -70,6 +70,7 @@
 #include <koStoreDevice.h>
 #include <koQueryTrader.h>
 #include <koxmlwriter.h>
+#include <koOasisSettings.h>
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -1053,9 +1054,16 @@ bool KPresenterDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
     KoUnit::saveOasis(&settingsWriter, m_unit);
 
+    settingsWriter.startElement( "config:config-item-map-indexed" );
+    settingsWriter.addAttribute( "config:name", "Views" );
+
     settingsWriter.startElement("config:config-item-map-entry" );
     saveOasisSettings( settingsWriter );
     settingsWriter.endElement();
+
+
+    settingsWriter.endElement(); //config:config-item-map-indexed
+
 
     settingsWriter.endElement(); // config:config-item-set
     settingsWriter.endElement(); // office:settings
@@ -1127,8 +1135,66 @@ void KPresenterDoc::saveOasisSettings( KoXmlWriter &settingsWriter )
 
 }
 
-void KPresenterDoc::loadOasisSettings()
+bool KPresenterDoc::loadOasisSettings(const QDomDocument&settingsDoc)
 {
+    if ( settingsDoc.isNull() )
+        return true; //not a error some file doesn't have settings.xml
+
+    KoOasisSettings settings( settingsDoc );
+    bool tmp = settings.configItem( "view-settings" );
+    kdDebug()<<" settings : view-settings :"<<tmp<<endl;
+
+    if ( tmp )
+    {
+        tmp = settings.mapItem( "Views" );
+        kdDebug()<<" View :"<<tmp<<endl;
+        if ( tmp )
+        {
+            parseOasisHelpLine(  settings.parseConfigItemString( "SnapLinesDrawing" ) );
+            setShowHelplines( settings.parseConfigItemBool( "SnapLineIsVisible" ) );
+            //todo other argument
+        }
+    }
+
+    return true;
+
+#if 0
+// Load application settings
+
+
+
+    if(!settingsDoc.isNull()) {
+        QDomElement contents = settingsDoc.documentElement();
+        body = contents.namedItem("office:settings").toElement();
+
+        if(body.isNull()) {
+            kdDebug(43000) << "No office:settings found!" << endl;
+            setErrorMessage(i18n("Invalid OASIS document. No office:settings tag found."));
+            return false;
+        }
+
+        node = body.firstChild();
+
+        while(!node.isNull()) {
+            if(node.nodeName() == "config:config-item-set") {
+                QDomNode tmp = node.firstChild();
+
+                while(!tmp.isNull()) {
+                    if(tmp.nodeName() == "config:config-item") {
+
+                        if(tmp.toElement().attribute("config:name") == "unit") {
+                            setUnit(KoUnit::loadOasis(tmp.toElement()));
+                        }
+                    }
+
+                    tmp = tmp.nextSibling();
+                }
+            }
+
+            node = node.nextSibling();
+        }
+    }
+#endif
 }
 
 void KPresenterDoc::parseOasisHelpLine( const QString &text )
@@ -1461,42 +1527,12 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
     m_loadingInfo=0L;
     kdDebug(33001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;
 
+    loadOasisSettings( settingsDoc );
+
     emit sigProgress( 100 );
     recalcVariables( VT_FIELD );
     emit sigProgress( -1 );
 
-    // Load application settings
-    if(!settingsDoc.isNull()) {
-        QDomElement contents = settingsDoc.documentElement();
-        body = contents.namedItem("office:settings").toElement();
-
-        if(body.isNull()) {
-            kdDebug(43000) << "No office:settings found!" << endl;
-            setErrorMessage(i18n("Invalid OASIS document. No office:settings tag found."));
-            return false;
-        }
-
-        node = body.firstChild();
-
-        while(!node.isNull()) {
-            if(node.nodeName() == "config:config-item-set") {
-                QDomNode tmp = node.firstChild();
-
-                while(!tmp.isNull()) {
-                    if(tmp.nodeName() == "config:config-item") {
-
-                        if(tmp.toElement().attribute("config:name") == "unit") {
-                            setUnit(KoUnit::loadOasis(tmp.toElement()));
-                        }
-                    }
-
-                    tmp = tmp.nextSibling();
-                }
-            }
-
-            node = node.nextSibling();
-        }
-    }
     return true;
 }
 
