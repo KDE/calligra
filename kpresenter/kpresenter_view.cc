@@ -1376,7 +1376,6 @@ void KPresenterView::extraPenWidth()
 void KPresenterView::screenConfigPages()
 {
     delete pgConfDia;
-    pgConfDia = 0;
     pgConfDia = new PgConfDia( this, kPresenterDoc() );
     pgConfDia->setCaption( i18n( "Configure Slide Show" ) );
     QObject::connect( pgConfDia, SIGNAL( pgConfDiaOk() ), this, SLOT( pgConfOk() ) );
@@ -1733,11 +1732,8 @@ void KPresenterView::mtextFont()
         col = textIface->textBackgroundColor();
     col = col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base );
 
-    if( m_fontDlg )
-    {
-        delete m_fontDlg;
-        m_fontDlg = 0L;
-    }
+    delete m_fontDlg;
+
     m_fontDlg = new KoFontDia( *textIface->currentFormat(), this, 0L );
 
     connect( m_fontDlg, SIGNAL( applyFont() ),
@@ -1875,7 +1871,7 @@ void KPresenterView::brushChosen()
                 macro = new KMacroCommand( i18n( "Change Fill Color" ) );
             macro->addCommand(cmd);
         }
-#endif 
+#endif
 
         if( macro )
             m_pKPresenterDoc->addCommand( macro );
