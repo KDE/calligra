@@ -323,15 +323,15 @@ KoSize KPObject::getRealSize() const {
       size.setWidth( ext.width() * cos( angInRad ) + ext.height() * sin( angInRad ) );
       size.setHeight( ext.width() * sin( angInRad ) + ext.height() * cos( angInRad ) );
     }
-      
+
     return size;
 }
 
 KoPoint KPObject::getRealOrig() const {
     KoPoint origin = orig;
-    
+
     if ( angle != 0.0 ) {
-        KoSize dist( ( getRealSize() - ext ) / 2 ); 
+        KoSize dist( ( getRealSize() - ext ) / 2 );
         origin.setX( orig.x() - dist.width() );
         origin.setY( orig.y() - dist.height() );
     }
@@ -785,12 +785,12 @@ QPen KPObject::getPen() const
     return QPen();
 }
 
-void KPObject::getRealSizeAndOrigFromPoints( KoPointArray &points, float angle, 
+void KPObject::getRealSizeAndOrigFromPoints( KoPointArray &points, float angle,
                                             KoSize &size, KoPoint &orig )
 {
-    if ( angle == 0 ) 
+    if ( angle == 0 )
         return;
-    
+
     float angInRad = angle * M_PI / 180;
     float sinus = sin( angInRad );
     float cosinus = cos( angInRad );
@@ -814,7 +814,7 @@ void KPObject::getRealSizeAndOrigFromPoints( KoPointArray &points, float angle,
         else if ( tmp_x > max_x ) {
             max_x = tmp_x;
         }
-          
+
         if ( tmp_y < min_y ) {
             min_y = tmp_y;
         }
@@ -854,8 +854,7 @@ QDomDocumentFragment KPShadowObject::save( QDomDocument& doc,double offset )
 {
     QDomDocumentFragment fragment=KPObject::save(doc, offset);
 
-    if(pen.color()!=Qt::black || pen.width()!=1 || pen.style()!=Qt::SolidLine)
-        fragment.appendChild(KPObject::createPenElement(tagPEN, pen, doc));
+    fragment.appendChild(KPObject::createPenElement(tagPEN, pen, doc));
     if(brush.color()!=Qt::black || brush.style()!=Qt::NoBrush)
         fragment.appendChild(KPObject::createBrushElement(tagBRUSH, brush, doc));
     return fragment;
@@ -1042,7 +1041,7 @@ double KP2DObject::load(const QDomElement &element)
 
 void KP2DObject::flip( bool horizontal ) {
     KPObject::flip( horizontal );
-  
+
     // flip the gradient
     if ( fillType == FT_GRADIENT ) {
         if ( gType == BCT_GDIAGONAL1 ) {
