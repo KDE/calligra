@@ -206,7 +206,10 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 	// Draw nodes and control lines:
 	if( state() == selected )
 	{
-		for( itr.toFirst(); itr.current(); ++itr )
+		itr.toFirst();
+		++itr;		// Skip "begin".
+
+		for( ; itr.current(); ++itr )
 		{
 			VSegmentListIterator jtr( *( itr.current() ) );
 			for( ; jtr.current(); ++jtr )
@@ -254,10 +257,18 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 					// Draw control node1:
 					painter->newPath();
 
-					drawNode( painter, jtr.current()->ctrlPoint1(), 2, zoomFactor );
-
-					if( jtr.current()->ctrlPoint1Selected() )
+					if(
+						jtr.current()->prev() &&
+						( jtr.current()->ctrlPoint1Selected() ||
+						  jtr.current()->prev()->knotSelected() ) )
+					{
+						painter->setBrush( Qt::blue.light() );
 						painter->fillPath();
+
+						drawNode( painter, jtr.current()->ctrlPoint1(), 3, zoomFactor );
+					}
+					else
+						painter->setBrush( Qt::NoBrush );
 
 					painter->strokePath();
 
@@ -265,10 +276,17 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 					// Draw control node2:
 					painter->newPath();
 
-					drawNode( painter, jtr.current()->ctrlPoint2(), 2, zoomFactor );
-
-					if( jtr.current()->ctrlPoint2Selected() )
+					if(
+						jtr.current()->ctrlPoint2Selected() ||
+						jtr.current()->knotSelected() )
+					{
+						painter->setBrush( Qt::blue.light() );
 						painter->fillPath();
+
+						drawNode( painter, jtr.current()->ctrlPoint2(), 3, zoomFactor );
+					}
+					else
+						painter->setBrush( Qt::NoBrush );
 
 					painter->strokePath();
 				}
@@ -276,12 +294,15 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 				// Draw knot:
 				painter->newPath();
 
-				drawNode( painter, jtr.current()->knot(), 2, zoomFactor );
+				drawNode( painter, jtr.current()->knot(), 3, zoomFactor );
 
 				if( jtr.current()->knotSelected() )
 				{
+					painter->setBrush( Qt::blue.light() );
 					painter->fillPath();
 				}
+				else
+					painter->setBrush( Qt::NoBrush );
 
 				painter->strokePath();
 			}
@@ -295,7 +316,7 @@ VPath::draw( VPainter *painter, const KoRect& rect ) const
 			painter->setPen( Qt::NoPen );
 			painter->setBrush( Qt::blue.light() );
 
-			drawNode( painter, boundingBox().center(), 2, zoomFactor );
+			drawNode( painter, boundingBox().center(), 3, zoomFactor );
 
 			painter->fillPath();
 		}
