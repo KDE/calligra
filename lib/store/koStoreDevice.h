@@ -22,6 +22,10 @@
 
 #include <koStore.h>
 
+// ### TODO: KOffice 1.4: allow writeBlock(const QByteArray&) and readLine
+// ### TODO:   writeBlock is shadowed by the other writeBlock 
+// ### TODO:   readLine is disabled for no good reason (QIODevice can do it alone.)
+
 /**
  * This class implements a QIODevice around KoStore, so that
  * it can be used to create a QDomDocument from it, or to be read
