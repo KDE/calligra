@@ -9,7 +9,7 @@ Package: koffice
 Architecture: all
 Section: kde
 Depends: karbon, kchart, kformula, kivio, koshell, kpresenter, kspread, kugar, kword
-Suggests: koffice-dev, koffice-doc-html
+Suggests: koffice-i18n, koffice-dev, koffice-doc-html
 Description: KDE Office Suite
  KOffice is an integrated office suite for KDE, the K Desktop
  Environment.  It offers a word processor, spreadsheet, presentation
