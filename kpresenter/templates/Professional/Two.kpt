@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<DOC author="Reginald Stadlbauer" email="reggie@kde.org" editor="KPresenter" mime="application/x-kpresenter">
+ <PAPER format="5" width="240" height="180" orientation="0">
+  <PAPERBORDERS left="0" top="0" right="0" bottom="0"/>
+ </PAPER>
+ <BACKGROUND rastX="10" rastY="10" xRnd="20" yRnd="20" bred="255" bgreen="255" bblue="255" sred="192" sgreen="192" sblue="192">
+  <PAGE>
+   <BACKTYPE value="0"/>
+   <BACKVIEW value="1"/>
+   <BACKCOLOR1 red="255" green="255" blue="255"/>
+   <BACKCOLOR2 red="255" green="255" blue="255"/>
+   <BCTYPE value="0"/>
+   <PGEFFECT value="0"/>
+  </PAGE>
+ </BACKGROUND>
+ <OBJECTS>
+  <OBJECT type="4">
+   <ORIG x="30" y="30"/>
+   <SIZE width="611" height="61"/>
+   <SHADOW distance="0" direction="5" red="160" green="160" blue="164"/>
+   <EFFECTS effect="0" effect2="0"/>
+   <PRESNUM value="0"/>
+   <ANGLE value="0"/>
+   <TEXTOBJ objType="0">
+    <ENUMLISTTYPE type="1" before="" after="." start="1" family="times" pointSize="12" bold="0" italic="0" underline="0" red="0" green="0" blue="0"/>
+    <UNSORTEDLISTTYPE type="1" family="symbol" pointSize="20" bold="0" italic="0" underline=0 red="0" green="0" blue="0" chr="45"/>
+    <PARAGRAPH horzAlign="1">
+     <LINE>
+      <OBJ>
+       <TYPE value="1"/>
+       <FONT family="utopia" pointSize="48" bold="1" italic="0" underline="0"/>
+       <COLOR red="0" green="0" blue="0"/>
+       <VERTALIGN value="1"/>
+       <TEXT value=" "/>
+      </OBJ>
+     </LINE>
+    </PARAGRAPH>
+   </TEXTOBJ>
+  </OBJECT>
+  <OBJECT type="4">
+   <ORIG x="30" y="110"/>
+   <SIZE width="301" height="371"/>
+   <SHADOW distance="0" direction="5" red="160" green="160" blue="164"/>
+   <EFFECTS effect="0" effect2="0"/>
+   <PRESNUM value="0"/>
+   <ANGLE value="0"/>
+   <TEXTOBJ objType="2">
+    <ENUMLISTTYPE type="1" before="" after="." start="1" family="times" pointSize="12" bold="0" italic="0" underline="0" red="0" green="0" blue="0"/>
+    <UNSORTEDLISTTYPE type="1" family="utopia" pointSize="20" bold="1" italic="0" underline=0 red="0" green="0" blue="0" chr="183"/>
+    <PARAGRAPH horzAlign="0">
+     <LINE>
+      <OBJ>
+       <TYPE value="1"/>
+       <FONT family="utopia" pointSize="20" bold="1" italic="0" underline="0"/>
+       <COLOR red="0" green="0" blue="0"/>
+       <VERTALIGN value="1"/>
+       <TEXT value=" "/>
+      </OBJ>
+     </LINE>
+    </PARAGRAPH>
+   </TEXTOBJ>
+  </OBJECT>
+  <OBJECT type="4">
+   <ORIG x="340" y="110"/>
+   <SIZE width="301" height="371"/>
+   <SHADOW distance="0" direction="5" red="160" green="160" blue="164"/>
+   <EFFECTS effect="0" effect2="0"/>
+   <PRESNUM value="0"/>
+   <ANGLE value="0"/>
+   <TEXTOBJ objType="2">
+    <ENUMLISTTYPE type="1" before="" after="." start="1" family="times" pointSize="12" bold="0" italic="0" underline="0" red="0" green="0" blue="0"/>
+    <UNSORTEDLISTTYPE type="1" family="utopia" pointSize="20" bold="1" italic="0" underline=0 red="0" green="0" blue="0" chr="183"/>
+    <PARAGRAPH horzAlign="0">
+     <LINE>
+      <OBJ>
+       <TYPE value="1"/>
+       <FONT family="utopia" pointSize="20" bold="1" italic="0" underline="0"/>
+       <COLOR red="255" green="0" blue="0"/>
+       <VERTALIGN value="1"/>
+       <TEXT value=" "/>
+      </OBJ>
+     </LINE>
+    </PARAGRAPH>
+   </TEXTOBJ>
+  </OBJECT>
+ </OBJECTS>
+ <INFINITLOOP value="0"/>
+ <MANUALSWITCH value="1"/>
+ <PRESSPEED value="1"/>
+</DOC>
