@@ -340,7 +340,9 @@ void KSpreadTabBar::paintTab( QPainter & painter, int x, const QString& text, in
 			painter.setBrush( oldBrush );
 		}
 	}
-    painter.drawText( x + 10, text_y , text );
+    if ( isactive )
+	painter.setPen( colorGroup().highlightedText() );	
+	painter.drawText( x + 10, text_y , text );
 }
 
 
