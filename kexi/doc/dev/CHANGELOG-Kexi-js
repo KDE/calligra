@@ -275,9 +275,6 @@ TODO: fix lucijan's hack, with part loading (29 feb)
 ==== Main window TODO ====
 - show error message if createView() returned 0
 
-=== Startup TODO ===
-- reuse KexiNameWidget in KexiNewProjectWizard!
-
 
 TODO: add SharedAction::setVisible() and use QMenuData::setItemVisible() where needed
 
@@ -308,12 +305,17 @@ TODO: Query designer: for queries like 'select * from a, b, c' allow to enter * 
       (needed for switching back to GUI editor from text mode)
 - add flexible support for date/time constants
 
+=== Startup TODO ===
+- reuse KexiNameWidget in KexiNewProjectWizard!
+- use KPasswordDialog::disableCoreDumps() for security reasons
+
 === CLI TODO ===
 - add kexicmd as a symlink to kexi binary, for totally non-gui usage
 - just drop all tables when database already exist 
 	(so recreating database will be available even 
 	if you have only access to one database).
 - GRANT privileges for non-root (current?) user for newly created db
+- remove --password option, add CLI password entering mode
 
 === 2004 LT TODO ===
 KexiDB Drivers
@@ -325,7 +327,8 @@ TODO: add kexi__toremove table, and use it to remove objects on begin connection
 
 2004-10-04
 - command line options added: --user (-u), --port, 
-   --host (-h), --password
+   --host (-h), --password, --local-socket
+- password can be now entered using dialog, if it's a server-based conn.
 
 2004-10-01..02
 Kexi Startup

@@ -37,6 +37,7 @@
 #include <kmessagebox.h>
 #include <kcmdlineargs.h>
 #include <kdeversion.h>
+#include <kpassdlg.h>
 
 #if defined(Q_WS_WIN) || !KDE_IS_VERSION(3,1,9)
 # include <unistd.h>
@@ -152,9 +153,12 @@ bool KexiStartupHandler::init(int argc, char **argv)
 	if (cdata.driverName.isEmpty())
 		cdata.driverName = "SQLite";
 	cdata.hostName = args->getOption("host");
+	cdata.localSocketFileName = args->getOption("local-socket");
 	cdata.userName = args->getOption("user");
 	cdata.password = args->getOption("password");
-	
+	const bool fileDriverSelected = cdata.driverName.lower()=="sqlite";
+	bool projectFileExists = false;
+
 	//obfuscate the password, if present
 	for (int i=1; i<(argc-1); i++) {
 		if (qstrcmp("--password",argv[i])==0
@@ -182,8 +186,6 @@ bool KexiStartupHandler::init(int argc, char **argv)
 			return false;
 		}
 	}
-	const bool fileDriverSelected = cdata.driverName.lower()=="sqlite";
-	bool projectFileExists = false;
 
 	m_forcedFinalMode = args->isSet("final-mode");
 	m_forcedDesignMode = args->isSet("design-mode");
@@ -204,6 +206,23 @@ bool KexiStartupHandler::init(int argc, char **argv)
 			return false;
 		}
 		m_action = Exit;
+	}
+
+//TODO: add option for non-gui; integrate with KWallet; 
+//      move to static KexiProject method
+	if (!fileDriverSelected && cdata.password.isEmpty()) {
+		QCString pwd;
+		if (QDialog::Accepted == KPasswordDialog::getPassword(pwd,
+			i18n("Please enter the password for user \"%1\" on \"%2\" database server.")
+			.arg(cdata.userName)
+			.arg(cdata.serverInfoString(false))) )
+		{
+			cdata.password = QString(pwd);
+		}
+		else {
+			m_action = Exit;
+			return true;
+		}
 	}
 
 	kdDebug() << "ARGC==" << args->count() << endl;

@@ -625,18 +625,5 @@ tristate KexiProject::dropProject(KexiProjectData* data, KexiMessageHandler* han
 	return prj.dbConnection()->dropDatabase();
 }
 
-#if 0
-KexiProject* createKexiProject(KexiProjectData* data, KexiMessageHandler* handler)
-{
-	KexiProject *prj = new KexiProject( new_data );
-/*TODO	if (handler) {
-		connect(prj, SIGNAL(error(const QString&,KexiDB::Object*)), handler, SLOT(showErrorMessage(const QString&,KexiDB::Object*)));
-		connect(prj, SIGNAL(error(const QString&,const QString&)), handler, SLOT(showErrorMessage(const QString&,const QString&)));
-		connect(prj, SIGNAL(itemRenamed(const KexiPart::Item&)), handler, SLOT(slotObjectRenamed(const KexiPart::Item&)));
-	}*/
-	return prj;
-}
-#endif
-
 #include "kexiproject.moc"
 

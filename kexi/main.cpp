@@ -84,31 +84,36 @@ static KCmdLineOptions options[] =
   { ":", I18N_NOOP("Options related to database servers:"), 0 },
   { "drv", 0, 0 },
   { "dbdriver <name>", I18N_NOOP(
-	"Database driver to be used for\n"
-	"connecting to a database project.\n"
+	"Database driver to be used\n"
+	"for connecting to a database project.\n"
 	"Ignored if a shortcut filename\n"
 	"is provided."), "SQLite" },
   { "u", 0, 0 },
   { "user <name>", I18N_NOOP(
-	"User name to be used for\n"
-	"connecting to a database project.\n"
+	"User name to be used\n"
+	"for connecting to a database project.\n"
 	"Ignored if a shortcut filename\n"
 	"is provided."), 0 },
   { "password <password>", I18N_NOOP(
-	"User password to be used for\n"
-	"connecting to a database project.\n"
+	"User password to be used\n"
+	"for connecting to a database project.\n"
 	"Ignored if a shortcut filename\n"
 	"is provided."), 0 },
   { "h", 0, 0 },
   { "host <name>", I18N_NOOP(
-	"Server (host) name to be used for\n"
-	"connecting to a database project.\n"
+	"Server (host) name to be used\n"
+	"for connecting to a database project.\n"
 	"Ignored if a shortcut filename\n"
 	"is provided."), 0 },
   { "port <number>", I18N_NOOP(
-	"Server's port name to be used for\n"
-	"connecting to a database project.\n"
+	"Server's port name to be used\n"
+	"for connecting to a database project.\n"
 	"Ignored if a shortcut filename\n"
+	"is provided."), 0 },
+  { "local-socket <filename>", I18N_NOOP(
+	"Server's local socket filename\n"
+	"to be used for connecting to a database\n"
+	"project. Ignored if a shortcut filename\n"
 	"is provided."), 0 },
 
   { "+[database-name]", I18N_NOOP(

@@ -237,9 +237,5 @@ class KEXICORE_EXPORT KexiProject : public QObject, protected KexiDB::Object
 };
 
 
-/* Creates a new kexi project object and connects signals from it 
- to \a handler (if \a handler is provided). */
-//KexiProject* createKexiProject(KexiProjectData* data, KexiMessageHandler* handler = 0);
-
 #endif
 
