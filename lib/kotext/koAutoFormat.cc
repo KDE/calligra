@@ -1537,14 +1537,14 @@ KCommand *KoAutoFormat::scanParag( KoTextParag * parag, KoTextObject * obj )
             {
                 QString lastWord = getLastWord(parag, i);
                 //kdDebug()<<" m_listCompletion->items() :"<<m_listCompletion->items()<<endl;
-                KMacroCommand *macro =new KMacroCommand(i18n("Autocorrection"));
+                KMacroCommand *macro2 =new KMacroCommand(i18n("Autocorrection"));
                 bool cmdCreate=false;
                 int newPos = i;
                 KCommand *cmd = doAutoCorrect( cursor, parag, newPos , obj );
 
                 if( cmd )
                 {
-                    macro->addCommand( cmd );
+                    macro2->addCommand( cmd );
                     cmdCreate = true;
                 }
 
@@ -1554,17 +1554,17 @@ KCommand *KoAutoFormat::scanParag( KoTextParag * parag, KoTextObject * obj )
                     cmd = doUpperCase( cursor, parag, newPos, lastWord, obj );
                     if( cmd )
                     {
-                        macro->addCommand( cmd );
+                        macro2->addCommand( cmd );
                         cmdCreate = true;
                     }
                 }
                 if ( cmdCreate )
                 {
-                    macro->addCommand( macro );
+                    macro->addCommand( macro2 );
                     createMacro = true;
                 }
                 else
-                    delete macro;
+                    delete macro2;
 
                 if( m_bAutoSuperScript && m_superScriptEntries.count()>0)
                 {
