@@ -11,6 +11,17 @@
 # Change tag_group to tag-group.
 # Rename tag group kdesdk to default.
 # For empty messages, skip output and write a comment.
+#
+# 2004-05-13: Richard Evans <rich@ridas.com>
+#
+# Relaxed error handling which was breaking stuff in kdeedu.
+# Now warns instead of dies when:
+#
+# 1) Invalid flags are specified.
+# 2) No filenames are specified.
+# 3) Files fail to open.
+#
+# Also removed "\n" from warning/errors.
 
 sub usage
 {
@@ -56,18 +67,21 @@ use constant TAG_GROUPS => join ", ", map "'$_'", sort keys %{&TAG_GROUP};
 ###########################################################################################
 # Add options here as necessary - perldoc Getopt::Long for details on GetOptions
 
-die "extractrc --help for usage\n"
-  unless GetOptions ( "tag=s"       => \my @opt_extra_tags,
-                      "tag-group=s" => \my $opt_tag_group,
-                      "context=s"   => \my $opt_context,       # I18N context
-                      "lines"       => \my $opt_lines,
-                      "help|?"      => \&usage );
+GetOptions ( "tag=s"       => \my @opt_extra_tags,
+             "tag-group=s" => \my $opt_tag_group,
+             "context=s"   => \my $opt_context,       # I18N context
+             "lines"       => \my $opt_lines,
+             "help|?"      => \&usage );
 
-die "No filename specified\n" unless @ARGV;
+unless( @ARGV )
+{
+  warn "No filename specified";
+  exit;
+}
 
 $opt_tag_group ||= "default";
 
-die "Unknown tag group: '$opt_tag_group', should be one of: " . TAG_GROUPS . "\n"
+die "Unknown tag group: '$opt_tag_group', should be one of: " . TAG_GROUPS
     if $opt_tag_group and not my $tags = TAG_GROUP->{$opt_tag_group};
 
 my $extra_tags  = join "", map "|" . quotemeta, @opt_extra_tags;
@@ -79,7 +93,13 @@ my $text_string = qr/($tags$extra_tags)>/;                       # Precompile re
 
 for my $file_name ( @ARGV )
 {
-  open my $fh, "<", $file_name or die "Failed to open: '$file_name': $!";
+  my $fh;
+
+  unless ( open $fh, "<", $file_name )
+  {
+    warn "Failed to open: '$file_name': $!";
+    next;
+  }
 
   my $string          = "";
   my $in_text         = 0;
