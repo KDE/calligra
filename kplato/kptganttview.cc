@@ -66,10 +66,13 @@ KPTGanttView::KPTGanttView( KPTView *view, QWidget *parent, const char* name)
     setOrientation(QSplitter::Vertical);
 
     m_gantt = new KDGanttView(this, "Gantt view");
+    // For test, we need "slack functinallity" in KDGantt...
     m_gantt->addColumn("Earliest start");
     m_gantt->addColumn("Start");
     m_gantt->addColumn("End");
     m_gantt->addColumn("Latest finish");
+    
+    m_gantt->setHeaderVisible(true);
     m_gantt->setScale(KDGanttView::Day);
     m_taskView = new KPTTaskAppointmentsView(this, "Task widget");
 	draw(view->getPart()->getProject());
