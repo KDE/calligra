@@ -126,14 +126,16 @@ KWView::KWView( QWidget *_parent, const char *_name, KWDocument* _doc )
                       this, SLOT( insertPicture( const QString & ) ) );
     QObject::connect( doc, SIGNAL( sig_updateChildGeometry( KWChild* ) ),
                       this, SLOT( slotUpdateChildGeometry( KWChild* ) ) );
-    QObject::connect( doc, SIGNAL( pageNumChanged() ),
-                      this, SLOT( updatePageInfo() ) );
 
     KFontChooser::getFontList(fontList, false); // Shouldn't this be in the doc, or not at all ?
     setKeyCompression( TRUE );
     setAcceptDrops( TRUE );
     createKWGUI();
     initConfig();
+
+    QObject::connect( doc, SIGNAL( pageNumChanged() ),
+                      this, SLOT( updatePageInfo() ) );
+
     gui->canvasWidget()->updateCurrentFormat();
     setFocusProxy( gui->canvasWidget() );
 }
