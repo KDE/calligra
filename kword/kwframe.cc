@@ -1145,7 +1145,7 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, const QColorGro
         }
     } else {
         // Text view mode
-        drawFrame( 0L /*frame*/, p, crect, crect, cg, onlyChanged, resetChanged, edit, viewMode, true );
+        drawFrame( 0L /*frame*/, p, crect, crect, 0L /*settingsFrame*/, cg, onlyChanged, resetChanged, edit, viewMode, true );
     }
 }
 
@@ -1174,11 +1174,6 @@ void KWFrameSet::drawFrameAndBorders( KWFrame *frame,
         // Determine settingsFrame if not passed (for speedup)
         if ( !settingsFrame )
             settingsFrame = this->settingsFrame( frame );
-
-        QColorGroup frameColorGroup( cg );
-        QBrush bgBrush( settingsFrame->backgroundColor() );
-        bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), painter ) );
-        frameColorGroup.setBrush( QColorGroup::Base, bgBrush );
 
         QRect normalInnerFrameRect( m_doc->zoomRect( frame->innerRect() ) );
         QRect innerFrameRect( viewMode->normalToView( normalInnerFrameRect ) );
@@ -1216,7 +1211,8 @@ void KWFrameSet::drawFrameAndBorders( KWFrame *frame,
             painter->setClipRegion( reg );
 
             drawFrame( frame, painter, fcrect, innerCRect,
-                       frameColorGroup, onlyChanged, resetChanged, edit, viewMode, drawUnderlyingFrames );
+                       settingsFrame, cg, onlyChanged, resetChanged,
+                       edit, viewMode, drawUnderlyingFrames );
 
             painter->restore();
         }
@@ -1235,7 +1231,7 @@ void KWFrameSet::drawFrameAndBorders( KWFrame *frame,
             if( !getGroupManager() ) // not for table cells
                 drawFrameBorder( painter, frame, settingsFrame, outerCRect, viewMode );
             if ( frame->bLeft() || frame->bTop() || frame->bRight() || frame->bBottom() )
-                drawMargins( frame, painter, outerCRect, frameColorGroup, viewMode );
+                drawMargins( frame, painter, outerCRect, cg, viewMode );
 
             painter->restore();
         }
@@ -1245,7 +1241,7 @@ void KWFrameSet::drawFrameAndBorders( KWFrame *frame,
 }
 
 void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcrect, const QRect &crect,
-                            const QColorGroup &cg, bool onlyChanged, bool resetChanged,
+                            KWFrame *settingsFrame, const QColorGroup &cg, bool onlyChanged, bool resetChanged,
                             KWFrameSetEdit *edit, KWViewMode* viewMode, bool drawUnderlyingFrames )
 {
     // In this method the painter is NOT translated yet. It's still in view coordinates.
@@ -1255,6 +1251,14 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcre
 #ifdef DEBUG_DRAW
     kdDebug(32001) << "\nKWFrameSet::drawFrame " << getName() << " crect=" << crect << " frame-crect=" << fcrect << " drawUnderlyingFrames=" << drawUnderlyingFrames << endl;
 #endif
+
+    QColorGroup frameColorGroup( cg );
+    if ( settingsFrame ) // 0L in text viewmode
+    {
+        QBrush bgBrush( settingsFrame->backgroundColor() );
+        bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), painter ) );
+        frameColorGroup.setBrush( QColorGroup::Base, bgBrush );
+    }
 
     if ( drawUnderlyingFrames && !frame->framesBelow().isEmpty() )
     {
@@ -1307,7 +1311,7 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcre
 #endif
         doubleBufPainter->translate( crect.x() - fcrect.x(), crect.y() - fcrect.y() ); // This assume that viewToNormal() is only a translation
         // We can't "repaint changed parags only" if we just drew the underlying frames, hence the "false"
-        drawFrameContents( frame, doubleBufPainter, fcrect, cg, false, resetChanged, edit, viewMode );
+        drawFrameContents( frame, doubleBufPainter, fcrect, frameColorGroup, false, resetChanged, edit, viewMode );
         doubleBufPainter->restore();
 
         if ( painter->device()->devType() != QInternal::Printer )
@@ -1323,7 +1327,7 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcre
         painter->translate( crect.x() - fcrect.x(), crect.y() - fcrect.y() ); // This assume that viewToNormal() is only a translation
         //painter->setBrushOrigin( painter->brushOrigin() + crect.topLeft() - fcrect.topLeft() );
 
-        drawFrameContents( frame, painter, fcrect, cg, onlyChanged, resetChanged, edit, viewMode );
+        drawFrameContents( frame, painter, fcrect, frameColorGroup, onlyChanged, resetChanged, edit, viewMode );
         painter->restore();
     }
 }
