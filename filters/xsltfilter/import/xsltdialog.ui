@@ -40,7 +40,7 @@
         </property>
         <property stdset="1">
             <name>title</name>
-            <string>Common xslt files :</string>
+            <string>Common xslt files:</string>
         </property>
         <widget>
             <class>QListBox</class>
@@ -82,7 +82,7 @@
         </property>
         <property stdset="1">
             <name>title</name>
-            <string>Personnal xslt files :</string>
+            <string>Personal xslt files:</string>
         </property>
         <widget>
             <class>QPushButton</class>
@@ -101,7 +101,7 @@
             </property>
             <property stdset="1">
                 <name>text</name>
-                <string>Choose ...</string>
+                <string>Choose...</string>
             </property>
         </widget>
         <widget>

@@ -40,7 +40,7 @@ XSLTImportDia::XSLTImportDia(const KoStore& out, const QCString &format, QWidget
 	_out = new KoStore(out);
 	_format = format;
 	kdDebug() << "creation" << endl;
-	setCaption(i18n("Import XSLT Configration"));
+	setCaption(i18n("Import XSLT Configuration"));
 }
 
 /*  
