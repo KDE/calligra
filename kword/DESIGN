@@ -1,3 +1,22 @@
+Overall design
+==============
+
+* The document (KWDocument) has a list of framesets (KWFrameSet)
+Currently the order of the framesets in the list defines the z-order (which frameset
+is on top of which one), but this ought to be changed after 1.1 (with an int in the 
+frameset for instance)
+
+* Framesets include: text frameset, picture/clipart frameset, table frameset etc.
+
+* A frameset has a list of frames, KWFrame. A KWFrame is basically a rectangle
+(KoRect) with a bunch of attributes. The data is NOT in the frame, but in the frameset.
+The frames are just the way to visualize the contents of the frameset. Imagine a
+10 pages document, with 1 text frameset and 10 frames, one per page: the frames
+hold no data.
+
+* About text framesets: they hold a text document (KWTextDocument, which is
+a QTextDocument from the QRichText classes - more on QRT later).
+
 Coordinate systems
 ==================
  
