@@ -35,9 +35,11 @@ public:
     KoApplication( int &argc, char **argv, const QString& rAppName = 0);
     virtual ~KoApplication();
 
-	virtual KoMainWindow* createNewShell() { return 0; };
-	virtual void start();
+    virtual KoMainWindow* createNewShell() { return 0; };
+    virtual void start();
 	
+    void aboutKDE() { KApplication::aboutKDE(); }
+
 private:
     KdedInstance kded;
     KStartParams m_params;

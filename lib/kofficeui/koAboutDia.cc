@@ -13,6 +13,7 @@
 
 #include "koAboutDia.h"
 #include <klocale.h>
+#include <koApplication.h>
 
 /******************************************************************/
 /* class KoAboutDia                                               */
@@ -89,11 +90,11 @@ KoAboutDia::KoAboutDia(QWidget* parent,
   lInfo = new QLabel(this);
   QString infoText;
 
-  infoText.sprintf(i18n("Version: %s\n\n"
-			"(c) by %s 1997 - 1998\n\n"
-			"E-mail: %s \n\n"
-			"The KOffice is under GNU GPL"),
-		   (const char*)version,(const char*)author,(const char*)email);
+  infoText = i18n("Version: %1\n\n"
+			"(c) by %1 1997 - 1998\n\n"
+			"E-mail: %2 \n\n"
+		  "The KOffice is under GNU GPL").arg(version).
+                  arg(author).arg(email);
   lInfo->setText(infoText);
 
   if (!add.isEmpty())
@@ -138,16 +139,11 @@ void KoAboutDia::about(KoApplication koapp,QString version)
       dlg->exec();
       delete dlg;
     }
-  else
-    {
-	QMessageBox::about(0,i18n("About KDE"),
-			   i18n("\nThe KDE Desktop Environment was written by the KDE Team,\n"
-				"a world-wide network of software engineers committed to\n"
-				"free software development.\n\n"
-				"Visit http://www.kde.org for more information on the KDE\n"
-				"Project. Please consider joining and supporting KDE.\n\n"
-				"Please report bugs at http://buglist.kde.org.\n"));
-    }
+  else {
+    ::KoApplication *app = dynamic_cast< ::KoApplication* >(KApplication::getKApplication());
+    ASSERT(app);
+    app->aboutKDE();
+  }
 }
 
 #include "koAboutDia.moc"
