@@ -881,7 +881,7 @@ static const sExcelFunction ExcelFunctions[] =
 	{ "MODALVALUE",       330,  0 },
 	{ "TRIMMEAN",         331,  2 },
 	{ "TINV",             332,  2 },
-	{ "CONCAT",           336,  0 },
+	{ "CONCATENATE",      336,  0 },  /* EXCEL: CONCAT */
 	{ "POW",              337,  2 },  /* EXCEL: POWER */
 	{ "RADIAN",           342,  1 },  /* EXCEL: RAD */
 	{ "DEGREE",           343,  1 },  /* EXCEL: DEG */
