@@ -1280,6 +1280,7 @@
  <SuperScript>
   <superscript super="ier" find="1ier" />
   <superscript super="ième" find="2ième" />
+  <superscript super="ième" find="othernb" />
  </SuperScript>
  <DoubleQuote>
   <doublequote begin="«" end="»" />
