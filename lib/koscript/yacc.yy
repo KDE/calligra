@@ -101,7 +101,8 @@ void yyerror( const char *s )
 %token T_LESS_OR_EQUAL
 %token T_GREATER_OR_EQUAL
 %token T_ASSIGN
-%token T_NOTEQUAL
+%token T_NOTEQUAL1
+%token T_NOTEQUAL2
 %token T_MEMBER
 %token T_WHILE
 %token T_IF
@@ -349,7 +350,11 @@ equal_expr
           {
             $$ = new KSParseNode( t_equal, $1, $3 );
           }
-        | or_expr T_NOTEQUAL equal_expr
+        | or_expr T_NOTEQUAL1 equal_expr
+          {
+            $$ = new KSParseNode( t_notequal, $1, $3 );
+          }
+        | or_expr T_NOTEQUAL2 equal_expr
           {
             $$ = new KSParseNode( t_notequal, $1, $3 );
           }

@@ -288,70 +288,70 @@ static void yy_fatal_error YY_PROTO(( yyconst char msg[] ));
 	*yy_cp = '\0'; \
 	yy_c_buf_p = yy_cp;
 
-#define YY_NUM_RULES 102
-#define YY_END_OF_BUFFER 103
-static yyconst short int yy_acclist[542] =
+#define YY_NUM_RULES 103
+#define YY_END_OF_BUFFER 104
+static yyconst short int yy_acclist[543] =
     {   0,
-      103,  101,  102,    1,  101,  102,    2,  102,    1,  101,
-      102,   26,  101,  102,  101,  102,    5,  101,  102,   50,
-      101,  102,   35,  101,  102,   40,  101,  102,  101,  102,
-       18,  101,  102,   19,  101,  102,   33,  101,  102,   31,
-      101,  102,   32,  101,  102,   46,  101,  102,   34,  101,
-      102,   97,  101,  102,  101,  102,   20,  101,  102,   44,
-      101,  102,   27,  101,  102,   45,  101,  102,   83,  101,
-      102,   83,  101,  102,   83,  101,  102,   16,  101,  102,
-       17,  101,  102,   39,  101,  102,   83,  101,  102,   83,
-      101,  102,   83,  101,  102,   83,  101,  102,   83,  101,
+      104,  102,  103,    1,  102,  103,    2,  103,    1,  102,
+      103,   27,  102,  103,  102,  103,    5,  102,  103,   51,
+      102,  103,   36,  102,  103,   41,  102,  103,  102,  103,
+       18,  102,  103,   19,  102,  103,   34,  102,  103,   32,
+      102,  103,   33,  102,  103,   47,  102,  103,   35,  102,
+      103,   98,  102,  103,  102,  103,   20,  102,  103,   45,
+      102,  103,   28,  102,  103,   46,  102,  103,   84,  102,
+      103,   84,  102,  103,   84,  102,  103,   16,  102,  103,
+       17,  102,  103,   40,  102,  103,   84,  102,  103,   84,
+      102,  103,   84,  102,  103,   84,  102,  103,   84,  102,
 
-      102,   83,  101,  102,   83,  101,  102,   83,  101,  102,
-       83,  101,  102,   83,  101,  102,   83,  101,  102,   83,
-      101,  102,   83,  101,  102,   14,  101,  102,   38,  101,
-      102,   15,  101,  102,   36,  101,  102,  101,  102,  101,
-      102,   46,  101,  102,   97,  101,  102,   90,  101,  102,
-       23,  101,  102,   21,  101,  102,   46,  101,  102,   97,
-      101,  102,   96,  101,  102,   22,  101,  102,   52,  101,
-      102,    1,   52,  101,  102,    1,   52,  101,  102,   26,
-       52,  101,  102,   52,  101,  102,    5,   52,  101,  102,
-       50,   52,  101,  102,   35,   52,  101,  102,   40,   52,
+      103,   84,  102,  103,   84,  102,  103,   84,  102,  103,
+       84,  102,  103,   84,  102,  103,   84,  102,  103,   84,
+      102,  103,   84,  102,  103,   14,  102,  103,   39,  102,
+      103,   15,  102,  103,   37,  102,  103,  102,  103,  102,
+      103,   47,  102,  103,   98,  102,  103,   91,  102,  103,
+       23,  102,  103,   21,  102,  103,   47,  102,  103,   98,
+      102,  103,   97,  102,  103,   22,  102,  103,   53,  102,
+      103,    1,   53,  102,  103,    1,   53,  102,  103,   27,
+       53,  102,  103,   53,  102,  103,    5,   53,  102,  103,
+       51,   53,  102,  103,   36,   53,  102,  103,   41,   53,
 
-      101,  102,   52,  101,  102,   18,   52,  101,  102,   19,
-       52,  101,  102,   33,   52,  101,  102,   31,   52,  101,
-      102,   32,   52,  101,  102,   46,   52,  101,  102,   34,
-       52,  101,  102,   51,   52,   97,  101,  102,   51,   52,
-      101,  102,   20,   52,  101,  102,   44,   52,  101,  102,
-       27,   52,  101,  102,   45,   52,  101,  102,   52,   83,
-      101,  102,   52,   83,  101,  102,   52,   83,  101,  102,
-       16,   52,  101,  102,   17,   52,  101,  102,   39,   52,
-      101,  102,   52,   83,  101,  102,   52,   83,  101,  102,
-       52,   83,  101,  102,   52,   83,  101,  102,   52,   83,
+      102,  103,   53,  102,  103,   18,   53,  102,  103,   19,
+       53,  102,  103,   34,   53,  102,  103,   32,   53,  102,
+      103,   33,   53,  102,  103,   47,   53,  102,  103,   35,
+       53,  102,  103,   52,   53,   98,  102,  103,   52,   53,
+      102,  103,   20,   53,  102,  103,   45,   53,  102,  103,
+       28,   53,  102,  103,   46,   53,  102,  103,   53,   84,
+      102,  103,   53,   84,  102,  103,   53,   84,  102,  103,
+       16,   53,  102,  103,   17,   53,  102,  103,   40,   53,
+      102,  103,   53,   84,  102,  103,   53,   84,  102,  103,
+       53,   84,  102,  103,   53,   84,  102,  103,   53,   84,
 
-      101,  102,   52,   83,  101,  102,   52,   83,  101,  102,
-       52,   83,  101,  102,   52,   83,  101,  102,   52,   83,
-      101,  102,   52,   83,  101,  102,   52,   83,  101,  102,
-       52,   83,  101,  102,   14,   52,  101,  102,   38,   52,
-      101,  102,   15,   52,  101,  102,   36,   52,  101,  102,
-       52,  101,  102,   25,  100,    5,    4,    5,   49,   41,
-       80,   47,   81,   48,    3,16392,   97,   98,   82,   30,
-       42,   28,   24,   43,   29,    9,   83,   83,   83,   83,
-       83,   83,   83,   83,   66,   83,   83,   83,   83,   83,
-       83,   68,   83,   83,   63,   83,   83,   83,   83,   83,
+      102,  103,   53,   84,  102,  103,   53,   84,  102,  103,
+       53,   84,  102,  103,   53,   84,  102,  103,   53,   84,
+      102,  103,   53,   84,  102,  103,   53,   84,  102,  103,
+       53,   84,  102,  103,   14,   53,  102,  103,   39,   53,
+      102,  103,   15,   53,  102,  103,   37,   53,  102,  103,
+       53,  102,  103,   25,  101,    5,    4,    5,   50,   42,
+       81,   48,   82,   49,    3,16392,   98,   99,   83,   31,
+       43,   26,   29,   24,   44,   30,    9,   84,   84,   84,
+       84,   84,   84,   84,   84,   67,   84,   84,   84,   84,
+       84,   84,   69,   84,   84,   64,   84,   84,   84,   84,
 
-       83,   83,   83,   83,   83,   37,   88,   97,   90,   94,
-       97,   96,    4,    5,    9,   99,16392,    3, 8200, 8200,
-        3,    3,   98,   83,   83,   83,   83,   83,   83,   83,
-       83,   83,   83,   67,   83,   83,   83,   83,   83,   64,
-       83,   83,   83,   83,   83,   83,   76,   83,   74,   83,
-       83,   13,   99,   87,   86,   87,   93,   92,   10,    7,
-       83,   55,   83,   60,   83,   83,   83,   83,   69,   83,
-       62,   83,   83,   83,   79,   83,   83,   83,   70,   83,
-       83,   83,   83,   83,   57,   83,   83,   13,   89,   87,
-       86,   87,   95,   92,   11,   54,   83,   77,   83,   53,
+       84,   84,   84,   84,   84,   84,   38,   89,   98,   91,
+       95,   98,   97,    4,    5,    9,  100,16392,    3, 8200,
+     8200,    3,    3,   99,   84,   84,   84,   84,   84,   84,
+       84,   84,   84,   84,   68,   84,   84,   84,   84,   84,
+       65,   84,   84,   84,   84,   84,   84,   77,   84,   75,
+       84,   84,   13,  100,   88,   87,   88,   94,   93,   10,
+        7,   84,   56,   84,   61,   84,   84,   84,   84,   70,
+       84,   63,   84,   84,   84,   80,   84,   84,   84,   71,
+       84,   84,   84,   84,   84,   58,   84,   84,   13,   90,
+       88,   87,   88,   96,   93,   11,   55,   84,   78,   84,
 
-       83,   83,   56,   83,   83,   83,   75,   83,   78,   83,
-       83,   83,   83,   65,   83,   87,   85,   84,   84,   87,
-       91,    6,   83,   83,   73,   83,   72,   83,   58,   83,
-       59,   83,   87,   12,   61,   83,   71,   83,   85,   86,
-       84
+       54,   84,   84,   57,   84,   84,   84,   76,   84,   79,
+       84,   84,   84,   84,   66,   84,   88,   86,   85,   85,
+       88,   92,    6,   84,   84,   74,   84,   73,   84,   59,
+       84,   60,   84,   88,   12,   62,   84,   72,   84,   86,
+       87,   85
     } ;
 
 static yyconst short int yy_accept[351] =
@@ -371,29 +371,29 @@ static yyconst short int yy_accept[351] =
       339,  343,  347,  351,  354,  354,  354,  355,  355,  356,
       356,  357,  359,  359,  360,  361,  361,  361,  362,  363,
       364,  365,  365,  367,  367,  368,  369,  370,  371,  372,
-      373,  374,  374,  375,  376,  376,  378,  379,  380,  381,
-      382,  383,  384,  385,  387,  388,  389,  390,  391,  392,
-      394,  395,  397,  398,  399,  400,  401,  402,  403,  404,
-      405,  406,  407,  407,  408,  408,  408,  409,  409,  409,
-      409,  409,  410,  411,  411,  412,  412,  412,  413,  413,
-      413,  413,  413,  415,  416,  417,  417,  417,  418,  420,
+      374,  375,  375,  376,  377,  377,  379,  380,  381,  382,
+      383,  384,  385,  386,  388,  389,  390,  391,  392,  393,
+      395,  396,  398,  399,  400,  401,  402,  403,  404,  405,
+      406,  407,  408,  408,  409,  409,  409,  410,  410,  410,
+      410,  410,  411,  412,  412,  413,  413,  413,  414,  414,
+      414,  414,  414,  416,  417,  418,  418,  418,  419,  421,
 
-      421,  422,  423,  424,  424,  424,  424,  424,  425,  426,
-      427,  428,  429,  430,  431,  432,  433,  434,  436,  437,
-      438,  439,  440,  442,  443,  444,  445,  446,  447,  449,
-      451,  452,  454,  454,  454,  454,  455,  455,  456,  456,
-      457,  457,  458,  458,  459,  459,  460,  460,  460,  460,
-      460,  460,  460,  461,  461,  461,  461,  461,  462,  464,
-      466,  467,  468,  469,  471,  473,  474,  475,  477,  478,
-      479,  481,  482,  483,  484,  485,  487,  488,  489,  489,
-      490,  490,  491,  491,  492,  492,  493,  493,  494,  494,
-      495,  495,  495,  495,  495,  495,  495,  495,  495,  496,
+      422,  423,  424,  425,  425,  425,  425,  425,  426,  427,
+      428,  429,  430,  431,  432,  433,  434,  435,  437,  438,
+      439,  440,  441,  443,  444,  445,  446,  447,  448,  450,
+      452,  453,  455,  455,  455,  455,  456,  456,  457,  457,
+      458,  458,  459,  459,  460,  460,  461,  461,  461,  461,
+      461,  461,  461,  462,  462,  462,  462,  462,  463,  465,
+      467,  468,  469,  470,  472,  474,  475,  476,  478,  479,
+      480,  482,  483,  484,  485,  486,  488,  489,  490,  490,
+      491,  491,  492,  492,  493,  493,  494,  494,  495,  495,
+      496,  496,  496,  496,  496,  496,  496,  496,  496,  497,
 
-      498,  500,  502,  503,  505,  506,  507,  509,  511,  512,
-      513,  514,  516,  516,  517,  517,  518,  519,  521,  521,
-      522,  522,  522,  522,  523,  523,  524,  525,  527,  529,
-      531,  533,  533,  534,  534,  534,  534,  535,  537,  539,
-      539,  539,  541,  541,  541,  541,  541,  542,  542,  542
+      499,  501,  503,  504,  506,  507,  508,  510,  512,  513,
+      514,  515,  517,  517,  518,  518,  519,  520,  522,  522,
+      523,  523,  523,  523,  524,  524,  525,  526,  528,  530,
+      532,  534,  534,  535,  535,  535,  535,  536,  538,  540,
+      540,  540,  542,  542,  542,  542,  542,  543,  543,  543
     } ;
 
 static yyconst int yy_ec[256] =
@@ -1500,231 +1500,236 @@ return T_EQUAL;
 case 25:
 YY_RULE_SETUP
 #line 318 "scanner.ll"
-return T_NOTEQUAL;
+return T_NOTEQUAL1;
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
 #line 319 "scanner.ll"
-return T_NOT;
+return T_NOTEQUAL2;
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
 #line 320 "scanner.ll"
-return T_ASSIGN;
+return T_NOT;
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
 #line 321 "scanner.ll"
-return T_INPUT;
+return T_ASSIGN;
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
 #line 322 "scanner.ll"
-return T_SHIFTRIGHT;
+return T_INPUT;
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
 #line 323 "scanner.ll"
-return T_SHIFTLEFT;
+return T_SHIFTRIGHT;
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
 #line 324 "scanner.ll"
-return T_PLUS_SIGN;
+return T_SHIFTLEFT;
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
 #line 325 "scanner.ll"
-return T_MINUS_SIGN;
+return T_PLUS_SIGN;
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
 #line 326 "scanner.ll"
-return T_ASTERISK;
+return T_MINUS_SIGN;
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
 #line 327 "scanner.ll"
-return T_SOLIDUS;
+return T_ASTERISK;
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
 #line 328 "scanner.ll"
-return T_PERCENT_SIGN;
+return T_SOLIDUS;
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
 #line 329 "scanner.ll"
-return T_TILDE;
+return T_PERCENT_SIGN;
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
 #line 330 "scanner.ll"
-return T_OR;
+return T_TILDE;
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
 #line 331 "scanner.ll"
-return T_VERTICAL_LINE;
+return T_OR;
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
 #line 332 "scanner.ll"
-return T_CIRCUMFLEX;
+return T_VERTICAL_LINE;
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
 #line 333 "scanner.ll"
-return T_AMPERSAND;
+return T_CIRCUMFLEX;
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
 #line 334 "scanner.ll"
-return T_AND;
+return T_AMPERSAND;
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
 #line 335 "scanner.ll"
-return T_LESS_OR_EQUAL;
+return T_AND;
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
 #line 336 "scanner.ll"
-return T_GREATER_OR_EQUAL;
+return T_LESS_OR_EQUAL;
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
 #line 337 "scanner.ll"
-return T_LESS_THAN_SIGN;
+return T_GREATER_OR_EQUAL;
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
 #line 338 "scanner.ll"
-return T_GREATER_THAN_SIGN;
+return T_LESS_THAN_SIGN;
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
 #line 339 "scanner.ll"
-return T_MEMBER;
+return T_GREATER_THAN_SIGN;
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
 #line 340 "scanner.ll"
-return T_PLUS_ASSIGN;
+return T_MEMBER;
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
 #line 341 "scanner.ll"
-return T_MINUS_ASSIGN;
+return T_PLUS_ASSIGN;
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
 #line 342 "scanner.ll"
-return T_LINE;
+return T_MINUS_ASSIGN;
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
 #line 343 "scanner.ll"
+return T_LINE;
+	YY_BREAK
+case 51:
+YY_RULE_SETUP
+#line 344 "scanner.ll"
 {
                                 yy_push_state( REGEXP_GROUP );
                                 return T_DOLLAR;
                         }
 	YY_BREAK
-case 51:
+case 52:
 YY_RULE_SETUP
-#line 347 "scanner.ll"
+#line 348 "scanner.ll"
 {
                                 yy_pop_state();
                                 yylval._int = ascii_to_longlong( 10, yytext );
                                 return T_INTEGER_LITERAL;
                         }
 	YY_BREAK
-case 52:
+case 53:
 YY_RULE_SETUP
-#line 352 "scanner.ll"
+#line 353 "scanner.ll"
 {
                                 yy_pop_state();
                                 yyless(0);
                         }
 	YY_BREAK
-case 53:
-YY_RULE_SETUP
-#line 357 "scanner.ll"
-return T_CONST;
-	YY_BREAK
 case 54:
 YY_RULE_SETUP
 #line 358 "scanner.ll"
-return T_FALSE;
+return T_CONST;
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
 #line 359 "scanner.ll"
-return T_TRUE;
+return T_FALSE;
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
 #line 360 "scanner.ll"
-return T_FALSE;
+return T_TRUE;
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
 #line 361 "scanner.ll"
-return T_TRUE;
+return T_FALSE;
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
 #line 362 "scanner.ll"
-return T_STRUCT;
+return T_TRUE;
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
 #line 363 "scanner.ll"
-return T_SWITCH;
+return T_STRUCT;
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
 #line 364 "scanner.ll"
-return T_CASE;
+return T_SWITCH;
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
 #line 365 "scanner.ll"
-return T_DEFAULT;
+return T_CASE;
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
 #line 366 "scanner.ll"
-return T_ENUM;
+return T_DEFAULT;
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
 #line 367 "scanner.ll"
-return T_IN;
+return T_ENUM;
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
 #line 368 "scanner.ll"
-return T_OUT;
+return T_IN;
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
 #line 369 "scanner.ll"
-return T_WHILE;
+return T_OUT;
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
 #line 370 "scanner.ll"
-return T_DO;
+return T_WHILE;
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
 #line 371 "scanner.ll"
-return T_FOR;
+return T_DO;
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
 #line 372 "scanner.ll"
+return T_FOR;
+	YY_BREAK
+case 69:
+YY_RULE_SETUP
+#line 373 "scanner.ll"
 {
                                 if ( !s_kspread )
                                         return T_IF;
@@ -1732,86 +1737,84 @@ YY_RULE_SETUP
                                 return T_IDENTIFIER;
                         }
 	YY_BREAK
-case 69:
-YY_RULE_SETUP
-#line 378 "scanner.ll"
-return T_ELSE;
-	YY_BREAK
 case 70:
 YY_RULE_SETUP
 #line 379 "scanner.ll"
-return T_MAIN;
+return T_ELSE;
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
 #line 380 "scanner.ll"
-return T_FOREACH;
+return T_MAIN;
 	YY_BREAK
 case 72:
 YY_RULE_SETUP
 #line 381 "scanner.ll"
-return T_RETURN;
+return T_FOREACH;
 	YY_BREAK
 case 73:
 YY_RULE_SETUP
 #line 382 "scanner.ll"
-return T_IMPORT;
+return T_RETURN;
 	YY_BREAK
 case 74:
 YY_RULE_SETUP
 #line 383 "scanner.ll"
-return T_VAR;
+return T_IMPORT;
 	YY_BREAK
 case 75:
 YY_RULE_SETUP
 #line 384 "scanner.ll"
-return T_INOUT;
+return T_VAR;
 	YY_BREAK
 case 76:
 YY_RULE_SETUP
 #line 385 "scanner.ll"
-return T_TRY;
+return T_INOUT;
 	YY_BREAK
 case 77:
 YY_RULE_SETUP
 #line 386 "scanner.ll"
-return T_CATCH;
+return T_TRY;
 	YY_BREAK
 case 78:
 YY_RULE_SETUP
 #line 387 "scanner.ll"
-return T_RAISE;
+return T_CATCH;
 	YY_BREAK
 case 79:
 YY_RULE_SETUP
 #line 388 "scanner.ll"
-return T_FROM;
+return T_RAISE;
 	YY_BREAK
 case 80:
 YY_RULE_SETUP
-#line 390 "scanner.ll"
-return T_INCR;
+#line 389 "scanner.ll"
+return T_FROM;
 	YY_BREAK
 case 81:
 YY_RULE_SETUP
 #line 391 "scanner.ll"
-return T_DECR;
+return T_INCR;
 	YY_BREAK
 case 82:
 YY_RULE_SETUP
 #line 392 "scanner.ll"
-return T_SCOPE;
+return T_DECR;
 	YY_BREAK
 case 83:
 YY_RULE_SETUP
-#line 394 "scanner.ll"
+#line 393 "scanner.ll"
+return T_SCOPE;
+	YY_BREAK
+case 84:
+YY_RULE_SETUP
+#line 395 "scanner.ll"
 {
                           yylval.ident = new QString( yytext );
                           return T_IDENTIFIER;
                         }
 	YY_BREAK
-case 84:
-#line 400 "scanner.ll"
 case 85:
 #line 401 "scanner.ll"
 case 86:
@@ -1821,8 +1824,10 @@ case 87:
 case 88:
 #line 404 "scanner.ll"
 case 89:
+#line 405 "scanner.ll"
+case 90:
 YY_RULE_SETUP
-#line 404 "scanner.ll"
+#line 405 "scanner.ll"
 {
                           QString s( yytext );
                           bool ok = TRUE;
@@ -1841,16 +1846,14 @@ YY_RULE_SETUP
                           return T_FLOATING_PT_LITERAL;
                         }
 	YY_BREAK
-case 90:
+case 91:
 YY_RULE_SETUP
-#line 421 "scanner.ll"
+#line 422 "scanner.ll"
 {
                           yylval._int = ascii_to_longlong( 10, yytext );
                           return T_INTEGER_LITERAL;
                         }
 	YY_BREAK
-case 91:
-#line 427 "scanner.ll"
 case 92:
 #line 428 "scanner.ll"
 case 93:
@@ -1858,40 +1861,42 @@ case 93:
 case 94:
 #line 430 "scanner.ll"
 case 95:
+#line 431 "scanner.ll"
+case 96:
 YY_RULE_SETUP
-#line 430 "scanner.ll"
+#line 431 "scanner.ll"
 {
                           yylval._float = ascii_to_longdouble( yytext );
                           return T_FLOATING_PT_LITERAL;
                         }
 	YY_BREAK
-case 96:
+case 97:
 YY_RULE_SETUP
-#line 434 "scanner.ll"
+#line 435 "scanner.ll"
 {
                           yylval._int = ascii_to_longlong( 10, yytext );
                           return T_INTEGER_LITERAL;
                         }
 	YY_BREAK
-case 97:
+case 98:
 YY_RULE_SETUP
-#line 439 "scanner.ll"
+#line 440 "scanner.ll"
 {
                           yylval._int = ascii_to_longlong( 8, yytext );
                           return T_INTEGER_LITERAL;
                         }
 	YY_BREAK
-case 98:
+case 99:
 YY_RULE_SETUP
-#line 443 "scanner.ll"
+#line 444 "scanner.ll"
 {
                           yylval._int = ascii_to_longlong( 16, yytext + 2 );
                           return T_INTEGER_LITERAL;
                         }
 	YY_BREAK
-case 99:
+case 100:
 YY_RULE_SETUP
-#line 447 "scanner.ll"
+#line 448 "scanner.ll"
 {
                           QCString s( yytext );
                           s = s.mid( 1, s.length() - 2 );
@@ -1899,9 +1904,9 @@ YY_RULE_SETUP
                           return T_CHARACTER_LITERAL;
                         }
 	YY_BREAK
-case 100:
+case 101:
 YY_RULE_SETUP
-#line 453 "scanner.ll"
+#line 454 "scanner.ll"
 {
                           QString s=QString::fromUtf8( yytext );
                           yylval._str = new QString( s.mid( 1, s.length() - 2 ) );
@@ -1911,17 +1916,17 @@ YY_RULE_SETUP
                           return T_STRING_LITERAL;
                         }
 	YY_BREAK
-case 101:
-YY_RULE_SETUP
-#line 462 "scanner.ll"
-return T_UNKNOWN;
-	YY_BREAK
 case 102:
 YY_RULE_SETUP
-#line 464 "scanner.ll"
+#line 463 "scanner.ll"
+return T_UNKNOWN;
+	YY_BREAK
+case 103:
+YY_RULE_SETUP
+#line 465 "scanner.ll"
 ECHO;
 	YY_BREAK
-#line 1925 "scanner.cc"
+#line 1930 "scanner.cc"
 			case YY_STATE_EOF(INITIAL):
 			case YY_STATE_EOF(KSPREAD):
 			case YY_STATE_EOF(PLAIN):
@@ -2484,7 +2489,7 @@ YY_BUFFER_STATE b;
 
 #ifndef YY_ALWAYS_INTERACTIVE
 #ifndef YY_NEVER_INTERACTIVE
-#include<unistd.h>
+extern int isatty YY_PROTO(( int ));
 #endif
 #endif
 
@@ -2804,7 +2809,7 @@ int main()
 	return 0;
 	}
 #endif
-#line 464 "scanner.ll"
+#line 465 "scanner.ll"
 
 
 void kscriptInitFlex( const char *_code, int extension, KLocale* locale )

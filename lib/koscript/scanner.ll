@@ -315,7 +315,8 @@ KScript_Identifier      [_a-zA-Z][a-zA-Z0-9_]*
 <PLAIN>";"              return T_SEMICOLON;
 <KSPREAD>";"            return T_COMMA;
 "=="                    return T_EQUAL;
-"!="                    return T_NOTEQUAL;
+"!="                    return T_NOTEQUAL1;
+"<>"                    return T_NOTEQUAL2;
 "!"                     return T_NOT;
 "="                     return T_ASSIGN;
 "<>"                    return T_INPUT;
