@@ -11,6 +11,3 @@ libkisp_example_la_SOURCES = example.cc
 kisplugin_DATA = example.kisplugin
 kisplugindir = $(kde_datadir)/kimageshop/plugins/
 
-messages:
-	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot *.cc */*.cc && mv messages.po $(podir)/kisp_example.pot
-
