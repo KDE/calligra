@@ -595,6 +595,8 @@ bool KoMainWindow::openDocument( KoDocument *newdoc, const KURL & url )
                 QString mime = KMimeType::findByURL(url)->name();
                 if ( mime.isEmpty() || mime == KMimeType::defaultMimeType() )
                     mime = newdoc->nativeFormatMimeType();
+                if ( url.isLocalFile() ) // workaround for kde<=3.3 kparts bug, fixed for 3.4
+                    newdoc->setFile(url.path());
                 newdoc->setMimeTypeAfterLoading( mime );
                 updateCaption();
                 return true;
