@@ -39,10 +39,10 @@ public:
         QColor color;
         BorderStyle style;
         unsigned int ptWidth;
-        bool operator==( const Border _brd ) {
+        bool operator==( const Border _brd ) const {
             return ( style == _brd.style && color == _brd.color && ptWidth == _brd.ptWidth );
         }
-        bool operator!=( const Border _brd ) {
+        bool operator!=( const Border _brd ) const {
             return ( style != _brd.style || color != _brd.color || ptWidth != _brd.ptWidth );
         }
     };
@@ -59,27 +59,30 @@ public:
         QString bulletFont;
     };
 
-    KWParagLayout( KWordDocument *_doc, bool _add = true, QString _name = "Standard" );
+    KWParagLayout( KWordDocument *_doc, bool _add = true,
+		   QString _name = "Standard" );
     ~KWParagLayout();
 
     KWParagLayout& operator=( const KWParagLayout &_layout );
 
-    void setFormat( KWFormat &_format );
+    void setFormat( const KWFormat &_format );
     void setFirstLineLeftIndent( KWUnit _i ) { firstLineLeftIndent = _i; }
     void setLeftIndent( KWUnit _i ) { leftIndent = _i; }
     void setParagFootOffset( KWUnit _i ) { paragFootOffset = _i; }
     void setParagHeadOffset( KWUnit _i ) { paragHeadOffset = _i; }
     void setLineSpacing( KWUnit _i ) { lineSpacing = _i; }
-    void setName( QString _n ) { name = _n; }
+    void setName( const QString& _n ) { name = _n; }
     void setFlow( Flow _f ) { flow = _f; }
     /**
      * Set the text left to the counter.
      */
-    void setCounterLeftText( QString _t ) { counter.counterLeftText = _t; }
+    void setCounterLeftText( const QString& _t )
+	{ counter.counterLeftText = _t; }
     /**
      * Set the text right to the counter.
      */
-    void setCounterRightText( QString _t ) { counter.counterRightText = _t; }
+    void setCounterRightText( const QString& _t )
+	{ counter.counterRightText = _t; }
     /**
      *  Set counter type
      */
@@ -98,54 +101,55 @@ public:
      *
      * @see KWFormat
      */
-    void setFollowingParagLayout( QString _paragname );
+    void setFollowingParagLayout( const QString& _paragname );
 
     void setLeftBorder( Border _brd ) { left = _brd; }
     void setRightBorder( Border _brd ) { right = _brd; }
     void setTopBorder( Border _brd ) { top = _brd; }
     void setBottomBorder( Border _brd ) { bottom = _brd; }
 
-    void setStartCounter( QString _s ) { counter.startCounter = _s; }
-    QString getStartCounter() { return counter.startCounter; }
+    void setStartCounter( const QString& _s ) { counter.startCounter = _s; }
+    QString getStartCounter() const { return counter.startCounter; }
 
     void setNumberingType( NumType _t ) { counter.numberingType = _t; }
-    NumType getNumberingType() { return counter.numberingType; }
+    NumType getNumberingType() const { return counter.numberingType; }
 
-    void setBulletFont( QString _f ) { counter.bulletFont = _f; }
-    QString getBulletFont() { return counter.bulletFont; }
+    void setBulletFont( const QString& _f ) { counter.bulletFont = _f; }
+    QString getBulletFont() const { return counter.bulletFont; }
 
     KWFormat& getFormat() { return format; }
-    QString getName() { return name; }
-    KWUnit getFirstLineLeftIndent() { return firstLineLeftIndent; }
-    KWUnit getLeftIndent() { return leftIndent; }
-    KWUnit getParagFootOffset() { return paragFootOffset; }
-    KWUnit getParagHeadOffset() { return paragHeadOffset; }
-    KWUnit getLineSpacing() { return lineSpacing; }
-    Flow getFlow() { return flow; }
-    Border getLeftBorder() { return left; }
-    Border getRightBorder() { return right; }
-    Border getTopBorder() { return top; }
-    Border getBottomBorder() { return bottom; }
+    QString getName() const { return name; }
+    KWUnit getFirstLineLeftIndent() const { return firstLineLeftIndent; }
+    KWUnit getLeftIndent() const { return leftIndent; }
+    KWUnit getParagFootOffset() const { return paragFootOffset; }
+    KWUnit getParagHeadOffset() const { return paragHeadOffset; }
+    KWUnit getLineSpacing() const { return lineSpacing; }
+    Flow getFlow() const { return flow; }
+    Border getLeftBorder() const { return left; }
+    Border getRightBorder() const { return right; }
+    Border getTopBorder() const { return top; }
+    Border getBottomBorder() const { return bottom; }
     /**
      * @return the type of the Counter.
      */
-    CounterType getCounterType() { return counter.counterType; }
+    CounterType getCounterType() const { return counter.counterType; }
     /**
      * @return the bullet of the Counter.
      */
-    QChar getCounterBullet() { return counter.counterBullet; }
+    QChar getCounterBullet() const { return counter.counterBullet; }
     /**
      * @return depth of Counter.
      */
-    int getCounterDepth() { return counter.counterDepth; }
+    int getCounterDepth() const { return counter.counterDepth; }
     /**
      * @return the text left to the counter
      */
-    QString getCounterLeftText() { return counter.counterLeftText; }
+    QString getCounterLeftText() const { return counter.counterLeftText; }
     /**
      * @return the text right to the counter
      */
-    QString getCounterRightText() { return counter.counterRightText.data(); }
+    QString getCounterRightText() const
+	{ return counter.counterRightText.data(); }
     /**
      * @return the name of the following parag layout.
      */
@@ -154,14 +158,14 @@ public:
     void save( ostream &out );
     void load( KOMLParser&, vector<KOMLAttrib>& );
 
-    Counter getCounter() { return counter; }
+    Counter getCounter() const { return counter; }
     void setCounter( Counter _counter ) { counter = _counter; }
 
-    QList<KoTabulator> *getTabList() { return &tabList; }
-    void setTabList( QList<KoTabulator> *tabList );
+    const QList<KoTabulator> *getTabList() const { return &tabList; }
+    void setTabList( const QList<KoTabulator> *tabList );
 
     bool getNextTab( unsigned int _ptPos, unsigned int _lBorder, unsigned int _rBorder, unsigned int &_tabPos, KoTabulators &_tabType );
-    bool hasSpecialTabs() { return specialTabs; }
+    bool hasSpecialTabs() const { return specialTabs; }
 
 protected:
     /**

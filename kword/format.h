@@ -61,10 +61,10 @@ public:
 
     KWFormat& operator=( const KWFormat& _format );
 
-    bool operator==( const KWFormat & _format );
-    bool operator!=( const KWFormat & _format );
+    bool operator==( const KWFormat & _format ) const;
+    bool operator!=( const KWFormat & _format ) const;
 
-    void apply( KWFormat &_format );
+    void apply( const KWFormat &_format );
 
     /**
      * @return The color to use. The color may be not valid ( test with <TT>QColor::isValid()</TT>.

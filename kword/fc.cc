@@ -1382,7 +1382,7 @@ bool KWFormatContext::makeLineLayout( bool _checkIntersects, bool _checkTabs )
 }
 
 /*================================================================*/
-unsigned int KWFormatContext::getLineHeight()
+unsigned int KWFormatContext::getLineHeight() const
 {
     unsigned int hei = ptMaxAscender + ptMaxDescender;
     unsigned int plus = 0;
@@ -1410,7 +1410,7 @@ void KWFormatContext::makeCounterLayout()
 
 
 /*================================================================*/
-void KWFormatContext::apply( KWFormat &_format )
+void KWFormatContext::apply( const KWFormat &_format )
 {
     if ( compare_formats && _format == *( ( KWFormat* )this ) ) return;
 

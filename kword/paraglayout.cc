@@ -12,6 +12,7 @@
 #include <unistd.h>
 
 #include <qfont.h>
+#include <qlist.h>
 
 /******************************************************************/
 /* Class: KWParagLayout                                           */
@@ -96,20 +97,20 @@ KWParagLayout& KWParagLayout::operator=( const KWParagLayout &_layout )
     tabList.clear();
     tabList.setAutoDelete( false );
     specialTabs = false;
-    QList<KoTabulator> *_tabList = &_layout.tabList;
+    const QList<KoTabulator> *_tabList = &_layout.tabList;
     setTabList( _tabList );
-    
+
     return *this;
 }
 
 /*================================================================*/
-void KWParagLayout::setFollowingParagLayout( QString _name )
+void KWParagLayout::setFollowingParagLayout( const QString& _name )
 {
     followingParagLayout = _name;
 }
 
 /*================================================================*/
-void KWParagLayout::setFormat( KWFormat &_f )
+void KWParagLayout::setFormat( const KWFormat &_f )
 {
     format = _f;
 }
@@ -523,19 +524,21 @@ void KWParagLayout::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
 }
 
 /*================================================================*/
-void KWParagLayout::setTabList( QList<KoTabulator> *_tabList )
+void KWParagLayout::setTabList( const QList<KoTabulator> *_tabList )
 {
     tabList.setAutoDelete( true );
     tabList.clear();
     tabList.setAutoDelete( false );
     specialTabs = false;
-    for ( unsigned int i = 0; i < _tabList->count(); i++ )
+
+    QListIterator<KoTabulator> it(*_tabList);
+    for ( it.toFirst(); it.current(); ++it )
     {
         KoTabulator *t = new KoTabulator;
-        t->type = _tabList->at( i )->type;
-        t->mmPos = _tabList->at( i )->mmPos;
-        t->ptPos = _tabList->at( i )->ptPos;
-        t->inchPos = _tabList->at( i )->inchPos;
+        t->type = it.current()->type;
+        t->mmPos = it.current()->mmPos;
+        t->ptPos = it.current()->ptPos;
+        t->inchPos = it.current()->inchPos;
         tabList.append( t );
         if ( t->type != T_LEFT ) specialTabs = true;
     }

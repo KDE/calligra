@@ -33,7 +33,7 @@ public:
 
     bool operator>( const KWFormatContext &fc );
     bool operator<( const KWFormatContext &fc );
-    
+
     void init( KWParag *_parag, bool _fromStart = true,
                int _frame = -1, int _page = -1 );
     void enterNextParag();
@@ -93,83 +93,83 @@ public:
     bool isCursorAtLastChar();
     bool isCursorInLastLine();
 
-    KWDisplayFont& getDisplayFont() { return *displayFont; }
+    KWDisplayFont& getDisplayFont() const { return *displayFont; }
 
     /**
      * @return the paragraph we are in currently.
      *
      * @see #parag
      */
-    KWParag* getParag() { return parag; }
+    KWParag* getParag() const { return parag; }
     /**
      * @return the page we are currently on.
      *
      * @see #pahe
      */
-    unsigned int getPage() { return page; }
+    unsigned int getPage() const { return page; }
     /**
      * @return the colum we are in currently.
      *
      * @see #column
      */
-    unsigned int getFrameSet() { return frameSet; }
-    unsigned int getFrame() { return frame; }
+    unsigned int getFrameSet() const { return frameSet; }
+    unsigned int getFrame() const { return frame; }
 
     /**
      * @return the text that represents the counter
      */
-    QString getCounterText() { return counterText; }
+    QString getCounterText() const { return counterText; }
     /**
      * @return the width that is needed to display the counter.
      */
-    unsigned int getPTCounterWidth() { return ptCounterWidth; }
+    unsigned int getPTCounterWidth() const { return ptCounterWidth; }
     /**
      * @return the position that is needed to display the counter.
      */
-    unsigned int getPTCounterPos() { return ptCounterPos; }
+    unsigned int getPTCounterPos() const { return ptCounterPos; }
     /**
      * @return the current ascender. This is always <= ptMaxAscender.
      */
-    unsigned int getPTAscender() { return ptAscender; }
+    unsigned int getPTAscender() const { return ptAscender; }
     /**
      * @return the current descender. This is always <= ptMaxDescender.
      */
-    unsigned int getPTDescender() { return ptDescender; }
+    unsigned int getPTDescender() const { return ptDescender; }
     /**
      * @return the maximal ascender in the current line.
      */
-    unsigned int getPTMaxAscender() { return ptMaxAscender; }
+    unsigned int getPTMaxAscender() const { return ptMaxAscender; }
     /**
      * @return the maximal descender in the current line.
      */
-    unsigned int getPTMaxDescender() { return ptMaxDescender; }
+    unsigned int getPTMaxDescender() const { return ptMaxDescender; }
     /**
      * @return the Y position of the cursor relative to the upper left
      *         corner of the first page.
      */
-    unsigned int getPTY() { return ptY; }
+    unsigned int getPTY() const { return ptY; }
     /**
      * @return the X position of the cursor relative to the left edge
      *         of the paper.
      */
-    unsigned int getPTPos() { return ptPos; }
+    unsigned int getPTPos() const { return ptPos; }
 
-    unsigned int getPTTextLen() { return ptTextLen; }
+    unsigned int getPTTextLen() const { return ptTextLen; }
 
-    unsigned int getPTLeft() { return ptLeft; }
+    unsigned int getPTLeft() const { return ptLeft; }
 
-    unsigned int getPTWidth() { return ptWidth; }
+    unsigned int getPTWidth() const { return ptWidth; }
 
-    float getPTSpacing() { return ptSpacing; }
+    float getPTSpacing() const { return ptSpacing; }
 
-    unsigned int getLineStartPos() { return lineStartPos; }
-    unsigned int getLineEndPos() { return lineEndPos; }
-    unsigned int getTextPos() { return textPos; }
+    unsigned int getLineStartPos() const { return lineStartPos; }
+    unsigned int getLineEndPos() const { return lineEndPos; }
+    unsigned int getTextPos() const { return textPos; }
     void setTextPos( unsigned int _pos ) { textPos = _pos; }
 
-    unsigned int getLineHeight();
+    unsigned int getLineHeight() const;
 
-    void apply( KWFormat &_format );
+    void apply( const KWFormat &_format );
 
     bool selectWord( KWFormatContext &_fc1, KWFormatContext &_fc2 );
 

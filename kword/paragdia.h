@@ -170,7 +170,7 @@ public:
 
     void setFlow( KWParagLayout::Flow _flow );
 
-    void setTabList( QList<KoTabulator> *tabList );
+    void setTabList( const QList<KoTabulator> *tabList );
 
     KWUnit getLeftIndent();
     KWUnit getFirstLineIndent();

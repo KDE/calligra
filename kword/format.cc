@@ -82,7 +82,7 @@ KWFormat& KWFormat::operator=( const KWFormat& _format )
 }
 
 /*================================================================*/
-bool KWFormat::operator==( const KWFormat & _format )
+bool KWFormat::operator==( const KWFormat & _format ) const
 {
     return ( *userFont == *_format.getUserFont() &&
              ptFontSize == _format.getPTFontSize() &&
@@ -94,7 +94,7 @@ bool KWFormat::operator==( const KWFormat & _format )
 }
 
 /*================================================================*/
-bool KWFormat::operator!=( const KWFormat & _format )
+bool KWFormat::operator!=( const KWFormat & _format ) const
 {
     return ( *userFont != *_format.getUserFont() ||
              ptFontSize != _format.getPTFontSize() ||
@@ -127,7 +127,7 @@ KWDisplayFont* KWFormat::loadFont( KWordDocument *_doc )
 }
 
 /*================================================================*/
-void KWFormat::apply( KWFormat &_format )
+void KWFormat::apply( const KWFormat &_format )
 {
     if ( _format.getUserFont() )
         userFont = _format.getUserFont();

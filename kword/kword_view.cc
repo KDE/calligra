@@ -368,7 +368,7 @@ CORBA::Boolean KWordView::printDlg()
 }
 
 /*================================================================*/
-void KWordView::setFormat( KWFormat &_format, bool _check, bool _update_page, bool _redraw )
+void KWordView::setFormat( const KWFormat &_format, bool _check, bool _update_page, bool _redraw )
 {
     if ( _check && _format == format || !m_vToolBarText ) return;
 

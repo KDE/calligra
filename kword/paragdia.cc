@@ -1424,14 +1424,15 @@ void KWParagDia::setCounter( KWParagLayout::Counter _counter )
 }
 
 /*================================================================*/
-void KWParagDia::setTabList( QList<KoTabulator> *tabList )
+void KWParagDia::setTabList( const QList<KoTabulator> *tabList )
 {
     lTabs->clear();
     QString str;
 
-    for ( unsigned int i = 0; i < tabList->count(); i++ )
+    QListIterator<KoTabulator> it(*tabList);
+    for ( it.toFirst(); !it.atLast(); ++it )
     {
-        str.sprintf( "%d", tabList->at( i )->ptPos );
+        str.sprintf( "%d", tabList->current()->ptPos );
         lTabs->insertItem( str );
     }
 }

@@ -366,7 +366,7 @@ public:
     void setFrameMargins( KWUnit l, KWUnit r, KWUnit t, KWUnit b );
     void setFrameCoords( unsigned int x, unsigned int y, unsigned int w, unsigned int h );
 
-    const QString getUnit() { return unit; }
+    QString getUnit() { return unit; }
     void setUnit( QString _unit ) { unit = _unit; }
 
     int &getNumParags() { return numParags; }
@@ -396,7 +396,7 @@ public:
     { pglChanged = c; }
     bool getPageLayoutChanged()
     { return pglChanged; }
-    
+
 signals:
     void sig_imageModified();
     void sig_insertObject( KWordChild *_child, KWPartFrameSet* );
@@ -503,7 +503,7 @@ protected:
 
     QString urlIntern;
     bool pglChanged;
-    
+
 };
 
 #endif
