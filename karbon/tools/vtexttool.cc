@@ -200,7 +200,7 @@ void VTextTool::drawPathCreation()
 
 void VTextTool::drawEditedText()
 {
-	if ( !m_editedText )
+	if( !m_editedText )
 		return;
 
 	kdDebug() << "Drawing: " << m_editedText->text() << endl;
@@ -308,7 +308,8 @@ void VTextTool::cancel()
 
 void VTextTool::editBasePath()
 {
-	if ( !m_editedText )
+	if( !m_editedText )
+		return;
 	view()->part()->document().selection()->clear();
 	view()->part()->document().selection()->append( &m_editedText->basePath() );
 } // VTextTool::editBasePath
