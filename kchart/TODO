@@ -39,6 +39,8 @@ Item								   Prio Status
       - Load row and column labels	 				--
   + 101290: KChart changes font for axes when Polar chart is chosen   1	KDCH
        Fixed by new KDChart version
+  + 101490: Error in drawing charts with logarithmic scale.	      1	KDCH
+       Fixed by new KDChart version (hopefully)
 
 * Wishes
   + 14971: Data in rows or columns				      1	DONE
@@ -100,22 +102,23 @@ Item								   Prio Status
   + Type specific settings for each type?			      2 ----
   + Check *all* subpages for uglyness and bugs			     S1 ----
     - BackgroundPixmap						     S1 --
-    - Bar							     S1 --
+    - Bar		REMOVE					     S1 done
     - Color							     S1 --
-    - Combo							     S1 --
-    - Data							     S1 --
+    - Combo		When is this used?			     S1 --
+    - Data		OK					     S1 done
     - Font		Ugly					     S1 --
     - Geometry							     S1 --
-    - HeaderFooter						     S1 --
-    - Legend							     S1 --
-    - Line3d							     S1 --
-    - Parameter3d						     S1 --
+    - HeaderFooter	Somewhat ugly?				     S1 --
+    - Legend		OK					     S1 done
+    - Line3d		UGLY!!  FIX!				     S1 --
+    - Parameter3d						     S1 done
     - Parameter (Axes)	Ugly					     S1 done
     - ParameterPie						     S1 --
     - ParameterPolar						     S1 --
-    - Pie							     S1 --
+    - Pie		Remove?					     S1 --
     - SubtypeChartPage						     S1 --
   + Check handling of defaults.					      1 DONE
+  + Integrate the Colors and Font pages into Axes?		      2 ----
 
 * Wizard
   + New data page?						     S1 ----

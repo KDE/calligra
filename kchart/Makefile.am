@@ -5,7 +5,6 @@ lib_LTLIBRARIES =
 kde_module_LTLIBRARIES = libkchartpart.la
 libkchartpart_la_SOURCES = kchart_part.cc \
 	kchart_view.cc kchart_factory.cc \
-	kchartBarConfigPage.cc \
 	kchartColorConfigPage.cc \
 	kchartParameterConfigPage.cc \
 	kchartParameter3dConfigPage.cc \
@@ -46,7 +45,6 @@ kchart_la_LIBADD = $(LIB_KOFFICECORE)
 
 noinst_HEADERS =  kchart_part.h \
 		kchart_view.h kchart_factory.h \
-		kchartBarConfigPage.h \
 		kchartColorConfigPage.h \
 		kchartParameterConfigPage.h \
 		kchartParameter3dConfigPage.h \
