@@ -236,7 +236,7 @@ VSelection::handleNode( const QPoint& point ) const
 bool
 VSelection::checkNode( const KoPoint &p )
 {
-	VSelectNodes op( p );
+	VSelectNodes op( p, true, 2 );
 
 	VObjectListIterator itr = m_objects;
 	for( ; itr.current(); ++itr )
@@ -265,7 +265,7 @@ VSelection::appendNode( const KoPoint &p )
 {
 	bool success = false;
 
-	VSelectNodes op( p );
+	VSelectNodes op( p, true, 2 );
 
 	VObjectListIterator itr = m_objects;
 	for( ; itr.current(); ++itr )
