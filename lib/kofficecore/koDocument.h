@@ -20,48 +20,97 @@
 #ifndef __ko_document_h__
 #define __ko_document_h__
 
-class KoDocumentChild;
-class KoDocumentChildPicture;
-
-class QDomElement;
-class QDomDocument;
-
 #include <container.h>
 #include <part.h>
 
 #include <komlParser.h>
-#include <koStore.h>
 
-#include <kdebug.h>
+class QDomElement;
+class QDomDocument;
 
-#include <qrect.h>
-#include <qpicture.h>
-#include <qstring.h>
+class KoStore;
 
-#include <iostream.h>
+class KoDocumentChild;
+class KoDocumentChildPicture;
 
+/**
+ *  The KOffice document class
+ *
+ *  This class provides some functionality each KOffice document should have.
+ *
+ *  @short The KOffice document class
+ */
 class KoDocument : public ContainerPart
 {
-    Q_OBJECT
+  Q_OBJECT
+    
 public:
+
+  /**
+   *  Constructor.
+   */
   KoDocument( QObject* parent = 0, const char* name = 0 );
+
+  /**
+   *  Destructor.
+   */
   virtual ~KoDocument() { };
 
+  /**
+   *  Initializes an empty document. You have to overlaod this method
+   *  to initalize all your document variables.
+   */
   virtual bool initDoc() = 0;
 
+  /**
+   *  Retrieves, if the document is modified or not. 
+   */
   virtual bool isModified() const;
+
+  /**
+   *  Sets the modified flag on the document. This means that it has
+   *  to be saved or not before deleting it.
+   */
   virtual void setModified( bool _mod = true );
+
+  /**
+   *  Retrieves, if the document is empty or not.
+   */
   virtual bool isEmpty() const;
 
+  /**
+   *  Sets the URL where the document is located and should be saved.
+   */
   virtual void setURL( const QString& url );
+
+  /**
+   *  Retrieves the URL of the document where the file is located.
+   */
   virtual QString url() const;
 
+  /**
+   *  Loads a document from a given URL.
+   */
   virtual bool loadFromURL( const QString& url );
+
+  /**
+   *  Loads a document from a store.
+   */
   virtual bool loadFromStore( KoStore* store, const QString& url );
 
+  /**
+   *  Saves the document to a given URL.
+   */
   virtual bool saveToURL( const QString& url, const QCString& format );
+
+  /**
+   *  Saves a document to a store.
+   */
   virtual bool saveToStore( KoStore* store, const QCString& format, const QString& path );
 
+  /**
+   *  Retrieves the mimetype of the document.
+   */
   virtual QCString mimeType() const = 0;
 
   /**
@@ -70,6 +119,7 @@ public:
   virtual void insertChild( PartChild* child );
 
 protected:
+
   /**
    *  This function is called from @ref #loadFromURL and @ref #loadFromStore.
    *  It decides wether XML or binary data has to be read and calls
@@ -80,18 +130,32 @@ protected:
    *  @param _store may be 0L.
    */
   virtual bool load( istream& in, KoStore* _store );
+
   /**
+   *  This method loads a binary document. It is called by @ref #load.
+   *
+   *  You have to overload it, if you want to load a binary file.
+   *
    *  @param _stream       The stream, from which the binary should be read.
    *  @param _randomaccess Tells whether input stream is a serial stream
    *                       or a random access stream, usually a @ref ifstream
    *                       or a @ref istringstream.
    *  @param _store        Pointer to a Store object. May be 0L.
+   *  @return              Loading was successful or not.
    */
   virtual bool loadBinary( istream& , bool /*_randomaccess*/, KoStore* /*_store*/ );
+
   /**
-   *  This function loads a XML document. It is called by @ref KoDocument#load.
+   *  This method loads a XML document. It is called by @ref #load.
+   *
+   *  You have to overload it, if you want to load a XML file.
+   *
+   *  @param _parser Parser from which to load the document.
+   *  @param _store  Pointer to a Store object. May be 0L.
+   *  @return              Loading was successful or not.
    */
-  virtual bool loadXML( KOMLParser&, KoStore* );
+  virtual bool loadXML( KOMLParser& _parser, KoStore* _store );
+
   /**
    *  You need to overload this function if your document may contain
    *  embedded documents. This function is called to load embedded documents.
@@ -110,6 +174,7 @@ protected:
    *  </PRE>
    */
   virtual bool loadChildren( KoStore* );
+
   /**
    *  Saves all children. If your document supports embedding, then you have
    *  to overload this function. An implementation may look like this:
@@ -128,12 +193,14 @@ protected:
    *  </PRE>
    */
   virtual bool saveChildren( KoStore* store, const char *path );
+
   /**
    *  Overload this function if you have to load additional files
    *  from a store. This function is called after @ref #loadXML or
    *  @ref #loadBinary and after @ref #loadChildren have been called.
    */
   virtual bool completeLoading( KoStore* store );
+
   /**
    *  If you want to write additional files to a store,
    *  the you must do it here.
@@ -154,7 +221,12 @@ protected:
    *  Overload this function with your personal text.
    */
   virtual QString copyright() const;
+
+  /**
+   *  Retrieves a comment of the document.
+   */
   virtual QString comment() const;
+  
   /**
    *  An example implementation may look like this one:
    *  <PRE>
@@ -181,6 +253,7 @@ protected:
   virtual bool isStoredExtern();
 
 private:
+
     QString m_strURL;
     bool m_bModified;
     bool m_bEmpty;
@@ -191,13 +264,14 @@ private:
  */
 class KoDocumentChild : public PartChild
 {
+
 public:
+
   KoDocumentChild( KoDocument* parent, KoDocument* doc, const QRect& geometry );
   KoDocumentChild( KoDocument* parent );
   virtual ~KoDocumentChild();
 
-  virtual KoDocument* document() { return (KoDocument*)part(); }
-
+  virtual KoDocument* document() { return (KoDocument*) part(); }
   virtual QString url();
 
   /**
@@ -207,6 +281,7 @@ public:
    *  about the position and id of the embedded document.
    */
   virtual bool save( ostream& out );
+  
   /**
    *  Writes the OBJECT tag, but does NOT write the content of the
    *  embedded documents. Saving the embedded documents themselves
@@ -216,12 +291,14 @@ public:
    *  Use this function if your application uses the DOM.
    */
   virtual QDomElement save( QDomDocument& doc );
+  
   /**
    *  Parses the OBJECT tag. This does NOT mean creating the child documents.
    *  AFTER the 'parser' finished parsing, you must use @ref #loadDocument
    *  to actually load the embedded documents.
    */
   virtual bool load( KOMLParser& parser, vector<KOMLAttrib>& _attribs );
+  
   /**
    *  Parses the OBJECT tag. This does NOT mean creating the child documents.
    *  AFTER the 'parser' finished parsing, you must use @ref #loadDocument
@@ -230,6 +307,7 @@ public:
    *  Use this function if your application uses the DOM.
    */
   virtual bool load( const QDomElement& element );
+  
   /**
    *  Actually loads the document from the disk/net or from the store,
    *  depending on @ref #url
@@ -239,6 +317,7 @@ public:
   virtual bool isStoredExtern();
 
 protected:
+
   /**
    * Called if @ref #load finds a tag that it does not understand.
    *
@@ -248,6 +327,7 @@ protected:
   virtual bool loadTag( KOMLParser& parser, const string& tag, vector<KOMLAttrib>& lst2 );
 
 private:
+
   /**
    *  Holds the source of this object, for example "file:/home/weis/image.gif"
    *  or "tar:/table1/2" if it is stored in a koffice store. This variable is
@@ -255,12 +335,14 @@ private:
    *  calling @ref #loadDocument.
    */
   QString m_tmpURL;
+  
   /**
    * This variable is
    *  set after parsing the OBJECT tag in @ref #load and is reset after
    *  calling @ref #loadDocument.
    */
   QRect m_tmpGeometry;
+  
   /**
    * This variable is
    *  set after parsing the OBJECT tag in @ref #load and is reset after

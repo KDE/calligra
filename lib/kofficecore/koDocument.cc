@@ -27,6 +27,8 @@
 #include <koTarStore.h>
 #include <koStoreStream.h>
 
+#include <koStore.h>
+
 #include <komlWriter.h>
 #include <komlMime.h>
 #include <komlStreamFeed.h>
@@ -34,6 +36,7 @@
 #include <kurl.h>
 #include <klocale.h>
 #include <kapp.h>
+#include <kdebug.h>
 
 #include <qmsgbox.h>
 #include <qpainter.h>
