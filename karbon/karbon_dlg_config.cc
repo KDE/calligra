@@ -44,7 +44,7 @@
 #include <klineedit.h>
 
 KarbonConfig::KarbonConfig( KarbonView* parent )
-  : KDialogBase(KDialogBase::IconList,i18n("Configure Karbon") ,
+  : KDialogBase(KDialogBase::IconList,i18n( "Configure" ) ,
 		KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel| KDialogBase::Default,
 		KDialogBase::Ok)
 

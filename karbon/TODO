@@ -1,8 +1,9 @@
-1	painting (NotROP) while shape creation isnt good. creation should instead
+-	Turn QDialogs in ui/ into KDialog*
+-	painting (NotROP) while shape creation isnt good. creation should instead
 	insert a temporary object (state "edit") right from the start.
 	other vobjects shouldnt repaint if they didnt change put just blit their pixmap-cache.
-2	mirror coordinate-system so origin is bottom-left
-3	reintroduce handler
-4	add validators to all tool-dialog input-fields
-5	polygonizing a sinus shapes results in a asymetric polyline
+-	mirror coordinate-system so origin is bottom-left
+-	reintroduce handler
+-	add validators to all tool-dialog input-fields
+-	polygonizing a sinus shapes results in a asymetric polyline
 	(probably error in sinus generation).
