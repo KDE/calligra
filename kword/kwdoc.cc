@@ -1419,9 +1419,8 @@ bool KWDocument::completeLoading( KoStore *_store )
             if ( dashdash != -1 )
                 filename == filename.left( dashdash );
 
-            QImage image( filename );
             if ( !img.isNull() )
-                m_imageCollection.insertImage( *it, image );
+                m_imageCollection.insertImage( *it, img );
         }
     }
 
