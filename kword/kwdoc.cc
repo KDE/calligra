@@ -2848,7 +2848,7 @@ void KWDocument::delFrameSet( KWFrameSet *f, bool deleteit)
 int KWDocument::getPageOfRect( QRect & _rect ) const
 {
     int page = _rect.y() / ptPaperHeight();
-    return QMAX( page, getPages()-1 );
+    return QMIN( page, getPages()-1 );
 }
 
 bool KWDocument::selection() {
