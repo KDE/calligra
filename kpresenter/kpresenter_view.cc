@@ -4560,8 +4560,8 @@ void KPresenterView::slotUpdateRuler()
         if ( txtobj )
         {
             QRect r= txtobj->getBoundingRect(page->diffx(),page->diffy() );
-            getHRuler()->setFrameStartEnd( r.left() /*- pc.x()*/, r.right() /*- pc.x()*/ );
-            getVRuler()->setFrameStartEnd( r.top() /*- pc.y()*/, r.bottom() /*- pc.y()*/ );
+            getHRuler()->setFrameStartEnd( r.left() +xOffset/*- pc.x()*/, r.right()+xOffset /*- pc.x()*/ );
+            getVRuler()->setFrameStartEnd( r.top()+ yOffset/*- pc.y()*/, r.bottom()+ yOffset/*- pc.y()*/ );
             if( getHRuler())
             {
                 getHRuler()->changeFlags(KoRuler::F_INDENTS | KoRuler::F_TABS);
