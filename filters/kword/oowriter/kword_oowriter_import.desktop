@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Name=oowriter Import Filter for KSpread
+X-KDE-Export=application/x-kword
+X-KDE-Import=application/x-oowriter
+X-KDE-Weight=1
+X-KDE-Library=liboowriterimport
+X-KDE-LibraryMajor=1
+X-KDE-LibraryMinor=0
+X-KDE-LibraryDependencies=
+ServiceTypes=KOfficeFilter
