@@ -1363,7 +1363,6 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
 
         if ( kPresenterDoc()->presentationDuration() && pgNum == -1 ) {
             m_presentationDuration.start();
-            m_presentationTotalDuration.start();
 
             for ( unsigned int i = 0; i < kPresenterDoc()->pageList().count(); ++i )
                 m_presentationDurationList.append( 0 ); // initialization
@@ -5193,13 +5192,16 @@ void KPresenterView::restartPresentationDuration()
 
 void KPresenterView::openThePresentationDurationDialog()
 {
-    QString presentationTotalDurationString = presentationDurationDataFormatChange( m_presentationTotalDuration.elapsed() );
-
+    int totalTime = 0;
     QStringList presentationDurationStringList;
     for ( QValueList<int>::Iterator it = m_presentationDurationList.begin(); it != m_presentationDurationList.end(); ++it ) {
-        QString presentationDurationString = presentationDurationDataFormatChange( *it );
+        int _time = *it;
+        QString presentationDurationString = presentationDurationDataFormatChange( _time );
         presentationDurationStringList.append( presentationDurationString );
+        totalTime += _time;
     }
+
+    QString presentationTotalDurationString = presentationDurationDataFormatChange( totalTime );
 
     if ( presDurationDia ) {
         delete presDurationDia;
@@ -5225,31 +5227,24 @@ void KPresenterView::pddClosed()
 // change from milliseconds to hh:mm:ss
 QString KPresenterView::presentationDurationDataFormatChange( int _time )
 {
-    int hours, minutes, seconds;
+    int hours = 0, minutes = 0, seconds = 0;
 
     _time = _time / 1000;
+    seconds = _time;
     if ( _time >= 60 ) {
         seconds = _time % 60;
         _time = _time - seconds;
         _time = _time / 60;
+        minutes = _time;
 
         if ( _time >= 60 ) {
             minutes = _time % 60;
             _time = _time - minutes;
             hours = _time / 60;
         }
-        else {
-            hours = 0;
-            minutes = _time;
-        }
-    }
-    else {
-        hours = 0;
-        minutes = 0;
-        seconds = _time;
     }
 
-    return KGlobal::locale()->formatTime(QTime(hours, minutes, seconds) );
+    return KGlobal::locale()->formatTime( QTime( hours, minutes, seconds ), true );
 }
 
 

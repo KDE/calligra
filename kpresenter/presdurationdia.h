@@ -40,14 +40,13 @@ class KPPresDurationDia : public KDialogBase
 public:
     KPPresDurationDia( QWidget *parent, const char *name,
                        KPresenterDoc *_doc,
-                       QStringList _durationListString, 
+                       QStringList _durationListString,
 		       const QString &_durationString );
 
 protected:
     void setupSlideList( QWidget *_page );
-    void resizeEvent( QResizeEvent *e );
 
- private:
+private:
     KPresenterDoc *doc;
     KListView *slides;
     QLabel *label;

@@ -79,10 +79,4 @@ void KPPresDurationDia::setupSlideList( QWidget *_page )
     }
 }
 
-/*================================================================*/
-void KPPresDurationDia::resizeEvent( QResizeEvent *e )
-{
-    KDialogBase::resizeEvent( e );
-}
-
 #include <presdurationdia.moc>

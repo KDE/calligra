@@ -795,7 +795,7 @@ private:
     bool automaticScreenPresFirstTimer;
     int currentTimer;
 
-    QTime m_presentationDuration, m_presentationTotalDuration;
+    QTime m_presentationDuration;
     QValueList<int> m_presentationDurationList;
 
     KoCharSelectDia *m_specialCharDlg;
