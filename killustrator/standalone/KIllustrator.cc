@@ -137,6 +137,8 @@ KIllustrator::KIllustrator (const char* url) : KTopLevelWidget () {
   if (! previewHandlerRegistered) {
     KFilePreviewDialog::registerPreviewModule ("kil", kilPreviewHandler,
 					       PreviewPixmap);
+    KFilePreviewDialog::registerPreviewModule ("wmf", wmfPreviewHandler,
+					       PreviewPixmap);
     previewHandlerRegistered = true;
   }
 
@@ -693,7 +695,7 @@ void KIllustrator::menuCallback (int item) {
     break;
   case ID_EXTRAS_CLIPART:
     {
-      QString fname = KFileDialog::getOpenFileName (0, "*.wmf *.WMF | Windows Metafiles", this);
+      QString fname = KFilePreviewDialog::getOpenFileName (0, "*.wmf *.WMF | Windows Metafiles", this);
       if (! fname.isEmpty ()) {
 	InsertClipartCmd *cmd = new InsertClipartCmd (document, 
 						      (const char *) fname);
