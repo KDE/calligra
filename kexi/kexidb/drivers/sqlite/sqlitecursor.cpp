@@ -122,10 +122,11 @@ bool SQLiteCursor::drv_getNextRecord()
 			kdDebug()<<"column "<< i<<","<< m_data->curr_colname[i]<<","<< m_data->curr_colname[m_data->curr_cols+i]<<endl;
 		}
 
-		if (res!=SQLITE_ROW) {
+		if (res!=SQLITE_ROW) {//there is no record
 			kdDebug()<<"res!=SQLITE_ROW ********"<<endl;
 			m_validRecord = false;
 			m_afterLast = true;
+			m_at = -1;
 			return false;
 		}
 	}

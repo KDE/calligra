@@ -70,14 +70,12 @@ bool Cursor::open( const QString& statement )
 	}
 	m_opened = drv_open();
 //	m_beforeFirst = true;
-	m_afterLast = false;
-	m_at = 0;
+	m_afterLast = false; //we are not @ the end
+	m_at = 0; //we are before 1st rec
 	if (!m_opened)
 		return false;
-	if (!m_readAhead)
-		m_readAhead = drv_getNextRecord();
-	m_afterLast = !m_readAhead; //we are after last if there is no record
-	m_beforeFirst = !m_readAhead; //we are before first if there is no record
+//js: why if? if (!m_readAhead) 
+	m_readAhead = drv_getNextRecord(); //true if any record in this query
 //	m_validRecord = false; //no record retrieved
 	return true;
 }
@@ -90,6 +88,8 @@ bool Cursor::close()
 	m_opened = false;
 //	m_beforeFirst = false;
 	m_afterLast = false;
+	m_readAhead = false;
+	m_at = -1;
 
 	kdDebug()<<"Cursor::close() == "<<ret<<endl;
 	return ret;
@@ -120,7 +120,6 @@ bool Cursor::moveFirst()
 //		m_beforeFirst = false;
 		m_afterLast = false;
 		m_readAhead = false; //1st record had been read
-		m_beforeFirst = false;
 //	}
 	return m_validRecord;
 }
@@ -140,7 +139,6 @@ bool Cursor::moveLast()
 		m_afterLast = true;
 		m_validRecord = false;
 		m_atLast = false;
-		m_beforeFirst = false;
 		return false; //no records
 	}
 	while (drv_getNextRecord()) //move after last rec.
@@ -228,15 +226,13 @@ bool Cursor::eof()
 
 bool Cursor::bof()
 {
-#ifndef Q_WS_WIN
-#warning todo
-#endif
-	return false;//rm this
+	return m_at==0;
+//	return m_beforeFirst;
 }
 
 int Cursor::at()
 {
 	if (m_readAhead)
 		return 0;
-	return m_at;
+	return m_at - 1;
 }

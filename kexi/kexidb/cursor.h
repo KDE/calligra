@@ -59,7 +59,11 @@ class KEXI_DB_EXPORT Cursor: public Object
 		bool eof();
 		/*! \return true if current position is before first record. */
 		bool bof();
-		/*! \return current internal position of the query. */
+		/*! \return current internal position of the cursor's query. 
+		 We are counting records from 0.
+		 Value -1 means that cursor does not point to any valid record
+		 (this happens eg. after open(), close(), 
+		 and after moving after last record or before first one. */
 		int at();
 		QString statement() { return m_statement; }
 		bool isOpened() { return m_opened; }
