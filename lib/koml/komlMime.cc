@@ -105,7 +105,7 @@ int Base64DecodeBuffer::underflow()
 
     if ( m_in.eof() )
     {
-      kdebug( KDEBUG_ERROR, 30001, "Unexpected end of input" );
+      kDebugError( 30001, "Unexpected end of input" );
       m_bEnd = true;
     }
     
@@ -136,13 +136,13 @@ int Base64DecodeBuffer::underflow()
       buf[ got ] = c;
       if ( c == '=' )
       {
-	kdebug( KDEBUG_INFO, 30001, "END OF BASE64" );
+	kDebugInfo( 30001, "END OF BASE64" );
 	
 	if ( got % 4 == 2 )
 	{
 	  if ( m_in.eof() )
 	  {
-	    kdebug( KDEBUG_ERROR, 30001, "Unexpected EOF" );
+	    kDebugError( 30001, "Unexpected EOF" );
 	    delete [] buf;
 	    return EOF;
 	  }
@@ -150,7 +150,7 @@ int Base64DecodeBuffer::underflow()
 	  c = m_in.get();
 	  if ( c != '=' )
 	  {
-	    kdebug( KDEBUG_ERROR, 30001, "Not correct base64" );
+	    kDebugError( 30001, "Not correct base64" );
 	    delete [] buf;
 	    return EOF;
 	  }
@@ -164,7 +164,7 @@ int Base64DecodeBuffer::underflow()
 	}
 	else 
 	{
-	  kdebug( KDEBUG_ERROR, 30001, "Unexpected =" );
+	  kDebugError( 30001, "Unexpected =" );
 	  delete [] buf;
 	  return EOF;
 	}
@@ -175,7 +175,7 @@ int Base64DecodeBuffer::underflow()
     
     if( got % 4 != 0 )
     {
-      kdebug( KDEBUG_ERROR, 30001, "Unexpected EOF 2" );
+      kDebugError( 30001, "Unexpected EOF 2" );
       delete [] buf;
       return EOF;
     }
