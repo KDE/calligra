@@ -68,20 +68,66 @@ ABIWORDExport::ABIWORDExport(KoFilter *parent, const char *name) :
 //            FLOW align=
 //            FORMAT id=1
 
-
-static void ProcessLayoutNameTag ( QDomNode myNode, void *tagData, QString & )
+// Counter structure, for LayoutData
+class CounterData
 {
-    QString *layout = (QString *) tagData;
+public:
+    CounterData() {}
 
-    *layout = "";
+    enum Numbering
+    {
+        NUM_LIST = 0,       // Numbered as a list item.
+        NUM_CHAPTER = 1,    // Numbered as a heading.
+        NUM_NONE = 2        // No counter.
+    };
+    enum Style
+    {
+        STYLE_NONE = 0,
+        STYLE_NUM = 1, STYLE_ALPHAB_L = 2, STYLE_ALPHAB_U = 3,
+        STYLE_ROM_NUM_L = 4, STYLE_ROM_NUM_U = 5, STYLE_CUSTOMBULLET = 6,
+        STYLE_CUSTOM = 7, STYLE_CIRCLEBULLET = 8, STYLE_SQUAREBULLET = 9,
+        STYLE_DISCBULLET = 10
+    };
+    Numbering numbering;
+    Style style;
+    /*unsigned*/ int depth;
+    int start;
+    QString lefttext;
+    QString righttext;
+
+    int /*QChar*/ customCharacter;
+    QString customFont;
+    //QString custom;
+};
+
+// Paragraph layout
+class LayoutData
+{
+public:
+    LayoutData() { init(); }
+
+    QString styleName;
+    QString alignment;
+    CounterData counter;
+    QString abiprops; // AbiWord properties
+
+    void init()
+    {
+    }
+};
+
+static void ProcessLayoutNameTag ( QDomNode myNode, void *tagData, QString &)
+{
+    LayoutData *layout = (LayoutData *) tagData;
+
+    layout->styleName = QString::null;
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList.append ( AttrProcessing ( "value", "QString", (void *) layout ) );
+    attrProcessingList.append ( AttrProcessing ( "value", "QString", (void *) &layout->styleName ) );
     ProcessAttributes (myNode, attrProcessingList);
 
-    if ( *layout == "" )
+    if ( layout->styleName.isEmpty() )
     {
-        *layout = "Standard";
-
+        layout->styleName = "Standard";
         kdError(30506) << "Bad layout name value!" << endl;
     }
 
@@ -90,26 +136,32 @@ static void ProcessLayoutNameTag ( QDomNode myNode, void *tagData, QString & )
 
 static void ProcessLayoutFlowTag ( QDomNode myNode, void *tagData, QString & )
 {
-    QString *align = (QString *) tagData;
+    LayoutData *layout = (LayoutData *) tagData;
 
-    *align = QString::null;
+    layout->alignment = QString::null;
     QValueList<AttrProcessing> attrProcessingList;
-    attrProcessingList.append ( AttrProcessing ( "align", "QString", (void *) align ) );
+    attrProcessingList.append ( AttrProcessing ( "align", "QString", (void *) &layout->alignment ) );
     ProcessAttributes (myNode, attrProcessingList);
 
     AllowNoSubtags (myNode);
 }
 
-class LayoutData
+static void ProcessCounterTag ( QDomNode myNode, void *tagData, QString &)
 {
-public:
-    LayoutData(void)
-    {
-    }
-    QString name; // Name of the style
-    QString flow; // Flow
-    QString abiprops; // AbiWord properties
-};
+    CounterData *counter = (CounterData *) tagData;
+    QValueList<AttrProcessing> attrProcessingList;
+    attrProcessingList.append ( AttrProcessing ( "numberingtype", "int", (void *) &counter->numbering ) );
+    attrProcessingList.append ( AttrProcessing ( "type", "int", (void *) &counter->style ) );
+    attrProcessingList.append ( AttrProcessing ( "depth", "int", (void *) &counter->depth ) );
+    attrProcessingList.append ( AttrProcessing ( "start", "int", (void *) &counter->start ) );
+    attrProcessingList.append ( AttrProcessing ( "lefttext", "QString", (void *) &counter->lefttext ) );
+    attrProcessingList.append ( AttrProcessing ( "righttext", "QString", (void *) &counter->righttext ) );
+    attrProcessingList.append ( AttrProcessing ( "bullet", "int", (void *) &counter->customCharacter ) );
+    attrProcessingList.append ( AttrProcessing ( "bulletfont", "QString", (void *) &counter->customFont ) );
+    ProcessAttributes (myNode, attrProcessingList);
+
+    AllowNoSubtags (myNode);
+}
 
 // FORMAT's subtags
 
@@ -354,12 +406,12 @@ static void ProcessLayoutTag ( QDomNode myNode, void *tagData, QString &outputTe
     AllowNoAttributes (myNode);
 
     QValueList<TagProcessing> tagProcessingList;
-    tagProcessingList.append ( TagProcessing ( "NAME",      ProcessLayoutNameTag,   (void *) &layout->name ) );
+    tagProcessingList.append ( TagProcessing ( "NAME",      ProcessLayoutNameTag,   (void *) layout ) );
     tagProcessingList.append ( TagProcessing ( "FOLLOWING", NULL,                   NULL            ) );
-    tagProcessingList.append ( TagProcessing ( "COUNTER",   NULL,                   NULL            ) );
+    tagProcessingList.append ( TagProcessing ( "COUNTER",   ProcessCounterTag,      (void *) &layout->counter ) );
     tagProcessingList.append ( TagProcessing ( "FORMAT",    ProcessSingleFormatTag, (void *) &formatData ) );
     tagProcessingList.append ( TagProcessing ( "TABULATOR", NULL,                   NULL            ) );
-    tagProcessingList.append ( TagProcessing ( "FLOW",      ProcessLayoutFlowTag,   (void *) &layout->flow ) );
+    tagProcessingList.append ( TagProcessing ( "FLOW",      ProcessLayoutFlowTag,   (void *) layout ) );
     tagProcessingList.append ( TagProcessing ( "OFFSETS",   NULL,                   NULL            ) );
     ProcessSubtags (myNode, tagProcessingList, outputText);
 
@@ -535,30 +587,30 @@ static void ProcessParagraphTag ( QDomNode myNode, void *, QString   &outputText
     QString style; // Style attribute for <p> element
     QString props; // Props attribute for <p> element
 
-    // TODO: Change style names in a more elegant way!
-    if ( paraLayout.name == "Head 1" )
+    if ( paraLayout.counter.numbering == CounterData::NUM_CHAPTER )
     {
-        style = "Heading 1";  //Warning: No trailing white space or else it's in the text!!!
-    }
-    else if ( paraLayout.name == "Head 2" )
-    {
-        style = "Heading 2";  //Warning: No trailing white space or else it's in the text!!!
-    }
-    else if ( paraLayout.name == "Head 3" )
-    {
-        style = "Heading 3";  //Warning: No trailing white space or else it's in the text!!!
+        const int depth = paraLayout.counter.depth + 1;
+        // Note: .arg(strParaText) must remain last,
+        //  as strParaText may contain an unwanted % + number sequence
+        style = QString("Heading %1").arg(depth);
     }
     else
     {// We don't know the layout, so assume it's "Standard". It's better than to abort with an error!
-        style = "Normal";  //Warning: No trailing white space or else it's in the text!!!
+        // TODO: use AbiWord's full style capacity
+        style = "Normal";
     }
 
-    // Check if the current flow is a valid one for AbiWord.
-    if ( (paraLayout.flow == "left") || (paraLayout.flow == "right") || (paraLayout.flow == "center")  || (paraLayout.flow == "justify"))
+    // Check if the current alignment is a valid one for AbiWord.
+    if ( (paraLayout.alignment == "left") || (paraLayout.alignment == "right")
+        || (paraLayout.alignment == "center")  || (paraLayout.alignment == "justify"))
     {
         props += "text-align:";
-        props += paraLayout.flow;
+        props += paraLayout.alignment;
         props += "; ";
+    }
+    else
+    {
+        kdWarning(30506) << "Unknown alignment: " << paraLayout.alignment << endl;
     }
 
     // Add all AbiWord properties collected in the <FORMAT> element
@@ -736,7 +788,7 @@ static void ProcessPaperTag (QDomNode myNode, void *, QString   &outputText )
              // FIXME/TODO: AbiWord (CVS 2001-04-25) seems not to like custom formats, so avoid them for now!
             if ((width<=1.0) || (height<=1.0) || true)
             {
-                // Height or width is ridiculous,, so assume A4 format
+                // Height or width is ridiculous, so assume A4 format
                 outputText += "pagetype=\"A4\" width=\"21.0\" height=\"29.7\" units=\"cm\" ";
             }
             else
