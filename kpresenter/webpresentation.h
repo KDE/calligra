@@ -78,6 +78,8 @@ public:
     { textColor = _textColor; }
     void setImageFormat( ImageFormat _imgFormat )
     { imgFormat = _imgFormat; }
+    void setXML( bool _xml )
+    { xml = _xml; }
     void setPath( const QString &_path )
     { path = _path; }
     void setZoom( int _zoom )
@@ -91,6 +93,7 @@ public:
     QColor getTitleColor() const { return titleColor; }
     QColor getTextColor() const { return textColor; }
     ImageFormat getImageFormat() const { return imgFormat; }
+    bool isXML() const { return xml; }
     QString getPath() const { return path; }
     int getZoom() const { return zoom; }
     QString getEncoding() const { return m_encoding; }
@@ -137,6 +140,7 @@ protected:
     QColor backColor, titleColor, textColor;
     QString path;
     ImageFormat imgFormat;
+    bool xml;
     int zoom;
     QString m_encoding;
 };
@@ -172,7 +176,7 @@ protected:
     QHBox *page1, *page2, *page3, *page4;
     KLineEdit *author, *title, *email;//, *path;
     KColorButton *textColor, *titleColor, *backColor;
-    KComboBox *format, *encoding;
+    KComboBox *format, *encoding, *doctype;
     KIntNumInput *zoom;
     KURLRequester *path;
     //QPushButton *choosePath;

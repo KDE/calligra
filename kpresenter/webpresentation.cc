@@ -165,7 +165,7 @@ static QString EscapeEncodingOnly(const QTextCodec* codec, const QString& strIn)
 
 /*================================================================*/
 KPWebPresentation::KPWebPresentation( KPresenterDoc *_doc, KPresenterView *_view )
-    : config( QString::null )
+    : config( QString::null ), xml( false )
 {
     doc = _doc;
     view = _view;
@@ -174,7 +174,7 @@ KPWebPresentation::KPWebPresentation( KPresenterDoc *_doc, KPresenterView *_view
 
 /*================================================================*/
 KPWebPresentation::KPWebPresentation( const QString &_config, KPresenterDoc *_doc, KPresenterView *_view )
-    : config( _config )
+    : config( _config ), xml( false )
 {
     doc = _doc;
     view = _view;
@@ -186,8 +186,8 @@ KPWebPresentation::KPWebPresentation( const QString &_config, KPresenterDoc *_do
 KPWebPresentation::KPWebPresentation( const KPWebPresentation &webPres )
     : config( webPres.config ), author( webPres.author ), title( webPres.title ), email( webPres.email ),
       slideInfos( webPres.slideInfos ), backColor( webPres.backColor ), titleColor( webPres.titleColor ),
-      textColor( webPres.textColor ), path( webPres.path ), imgFormat( webPres.imgFormat ), zoom( webPres.zoom ),
-      m_encoding( webPres.m_encoding )
+      textColor( webPres.textColor ), path( webPres.path ), imgFormat( webPres.imgFormat ),
+      xml( webPres.xml), zoom( webPres.zoom ), m_encoding( webPres.m_encoding )
 {
     doc = webPres.doc;
     view = webPres.view;
@@ -226,6 +226,7 @@ void KPWebPresentation::loadConfig()
     textColor = cfg.readColorEntry( "TextColor", &textColor );
     path = cfg.readEntry( "Path", path );
     imgFormat = static_cast<ImageFormat>( cfg.readNumEntry( "ImageFormat", static_cast<int>( imgFormat ) ) );
+    xml = cfg.readBoolEntry( "XML", xml );
     zoom = cfg.readNumEntry( "Zoom", zoom );
     m_encoding = cfg.readEntry( "Encoding", m_encoding );
 }
@@ -249,6 +250,7 @@ void KPWebPresentation::saveConfig()
     cfg.writeEntry( "TextColor", textColor );
     cfg.writeEntry( "Path", path );
     cfg.writeEntry( "ImageFormat", static_cast<int>( imgFormat ) );
+    cfg.writeEntry( "XML", xml );
     cfg.writeEntry( "Zoom", zoom );
     cfg.writeEntry( "Encoding", m_encoding );
 }
@@ -324,14 +326,14 @@ QString KPWebPresentation::escapeHtmlText( QTextCodec *codec, const QString& str
 void KPWebPresentation::writeStartOfHeader(QTextStream& streamOut, QTextCodec *codec, const bool xhtml, const QString& subtitle)
 {
     QString mimeName ( codec->mimeName() );
-    if (xhtml)
+    if ( isXML() )
     {   //Write out the XML declaration
         streamOut << "<?xml version=\"1.0\" encoding=\""
             << mimeName << "\"?>\n";
     }
     // write <!DOCTYPE
     streamOut << "<!DOCTYPE ";
-    if (xhtml)
+    if ( isXML() )
     {
         streamOut << "html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"";
         streamOut << " \"DTD/xhtml1-transitional.dtd\">\n";
@@ -343,7 +345,7 @@ void KPWebPresentation::writeStartOfHeader(QTextStream& streamOut, QTextCodec *c
         streamOut << " \"http://www.w3.org/TR/html4/loose.dtd\">\n";
     }
     streamOut << "<html";
-    if (xhtml)
+    if ( isXML() )
     {
         // XHTML has an extra attribute defining its namespace (in the <html> opening tag)
         streamOut << " xmlns=\"http://www.w3.org/1999/xhtml\"";
@@ -352,7 +354,7 @@ void KPWebPresentation::writeStartOfHeader(QTextStream& streamOut, QTextCodec *c
 
     // Declare what charset we are using
     streamOut << "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=";
-    streamOut << mimeName << '"' << (xhtml?" /":"") << ">\n" ;
+    streamOut << mimeName << '"' << ( isXML() ?" /":"") << ">\n" ;
 
     // Tell who we are (with the CVS revision number) in case we have a bug in our output!
     QString strVersion("$Revision$");
@@ -360,7 +362,7 @@ void KPWebPresentation::writeStartOfHeader(QTextStream& streamOut, QTextCodec *c
     //  (We don't want that the version number changes if the HTML file is itself put in a CVS storage.)
     streamOut << "<meta name=\"Generator\" content=\"KPresenter's Web Presentation "
         << strVersion.mid(10).replace("$","")
-        << "\""<< (xhtml?" /":"") // X(HT)ML closes empty elements, HTML not!
+        << "\""<< ( isXML() ?" /":"") // X(HT)ML closes empty elements, HTML not!
         << ">\n";
 
     streamOut << "<title>"<< escapeHtmlText( codec, title ) << " - " << escapeHtmlText( codec, subtitle ) << "</title>\n";
@@ -374,9 +376,7 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
     QTextCodec *codec = KGlobal::charsets()->codecForName( m_encoding );
     QString format ( imageFormat( imgFormat ) );
     
-    bool xhtml=false; // ### TODO: XHTML 1.0 support in dialog
-    
-    const QString brtag ( "<br" + QString(xhtml?" /":"") + ">" );
+    const QString brtag ( "<br" + QString(isXML()?" /":"") + ">" );
 
     for ( unsigned int i = 0; i < slideInfos.count(); i++ ) {
         
@@ -387,19 +387,19 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
         QTextStream streamOut( &file );
         streamOut.setCodec( codec );
 
-        writeStartOfHeader( streamOut, codec, xhtml, slideInfos[ i ].slideTitle );
+        writeStartOfHeader( streamOut, codec,  isXML() , slideInfos[ i ].slideTitle );
 
         // ### TODO: transform documentinfo.xml into many <META> elements (at least the author!)
 
         if ( i > 0 ) {
-            streamOut <<  "<link rel=\"first\" href=\"slide_1.html\"" << (xhtml?" /":"") << ">\n";
-            streamOut <<  "<link rel=\"prev\" href=\"slide_" << pgNum - 1 << ".html\"" << (xhtml?" /":"") << ">\n";
+            streamOut <<  "<link rel=\"first\" href=\"slide_1.html\"" << ( isXML() ?" /":"") << ">\n";
+            streamOut <<  "<link rel=\"prev\" href=\"slide_" << pgNum - 1 << ".html\"" << ( isXML() ?" /":"") << ">\n";
         }
         if ( i < slideInfos.count() - 1 ) {
-            streamOut <<  "<link rel=\"next\" href=\"slide_" << pgNum + 1 << ".html\"" << (xhtml?" /":"") << ">\n";
-            streamOut <<  "<link rel=\"last\" href=\"slide_" << slideInfos.count() << ".html\"" << (xhtml?" /":"") << ">\n";
+            streamOut <<  "<link rel=\"next\" href=\"slide_" << pgNum + 1 << ".html\"" << ( isXML() ?" /":"") << ">\n";
+            streamOut <<  "<link rel=\"last\" href=\"slide_" << slideInfos.count() << ".html\"" << ( isXML() ?" /":"") << ">\n";
         }
-        streamOut <<  "<link rel=\"contents\" href=\"../index.html\"" << (xhtml?" /":"") << ">\n";
+        streamOut <<  "<link rel=\"contents\" href=\"../index.html\"" << ( isXML() ?" /":"") << ">\n";
 
         streamOut << "</head>\n";
         streamOut << "<body bgcolor=\"" << backColor.name() << "\" text=\"" << textColor.name() << "\">\n";
@@ -408,7 +408,7 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
         
         if ( i > 0 )
             streamOut << "    <a href=\"slide_1.html\">";
-        streamOut << "<img src=\"../pics/first." << format << "\" border=\"0\" alt=\"First\" title=\"First\"" << (xhtml?" /":"") << ">";
+        streamOut << "<img src=\"../pics/first." << format << "\" border=\"0\" alt=\"First\" title=\"First\"" << ( isXML() ?" /":"") << ">";
         if ( i > 0 )
             streamOut << "</a>";
 
@@ -416,7 +416,7 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
             
         if ( i > 0 )
             streamOut << "    <a href=\"slide_" << pgNum - 1 << ".html\">";
-        streamOut << "<img src=\"../pics/prev." << format << "\" border=\"0\" alt=\"Previous\" title=\"Previous\"" << (xhtml?" /":"") << ">";
+        streamOut << "<img src=\"../pics/prev." << format << "\" border=\"0\" alt=\"Previous\" title=\"Previous\"" << ( isXML() ?" /":"") << ">";
         if ( i > 0 )
             streamOut << "</a>";
 
@@ -424,7 +424,7 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
         
         if ( i < slideInfos.count() - 1 )
             streamOut << "    <a href=\"slide_" << pgNum + 1 << ".html\">";
-        streamOut << "<img src=\"../pics/next." << format << "\" border=\"0\" alt=\"Next\" title=\"Next\"" << (xhtml?" /":"") << ">";;
+        streamOut << "<img src=\"../pics/next." << format << "\" border=\"0\" alt=\"Next\" title=\"Next\"" << ( isXML() ?" /":"") << ">";;
         if ( i < slideInfos.count() - 1 )
             streamOut << "</a>";
 
@@ -432,22 +432,22 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
         
         if ( i < slideInfos.count() - 1 )
             streamOut << "    <a href=\"slide_" << slideInfos.count() << ".html\">";
-        streamOut << "<img src=\"../pics/last." << format << "\" border=\"0\" alt=\"Last\" title=\"Last\"" << (xhtml?" /":"") << ">";;
+        streamOut << "<img src=\"../pics/last." << format << "\" border=\"0\" alt=\"Last\" title=\"Last\"" << ( isXML() ?" /":"") << ">";;
         if ( i < slideInfos.count() - 1 )
             streamOut << "</a>";
 
         streamOut << "\n" << "    &nbsp; &nbsp; &nbsp; &nbsp;\n";
 
         streamOut << "    <a href=\"../index.html\">";
-        streamOut << "<img src=\"../pics/home." << format << "\" border=\"0\" alt=\"Home\" title=\"Home\"" << (xhtml?" /":"") << ">";;
+        streamOut << "<img src=\"../pics/home." << format << "\" border=\"0\" alt=\"Home\" title=\"Home\"" << ( isXML() ?" /":"") << ">";;
         streamOut << "</a>\n";
 
-        streamOut << " </center>" << brtag << "<hr noshade=\"noshade\"" << (xhtml?" /":"") << ">\n"; // ### TODO: is noshade W3C?
+        streamOut << " </center>" << brtag << "<hr noshade=\"noshade\"" << ( isXML() ?" /":"") << ">\n"; // ### TODO: is noshade W3C?
 
         streamOut << "  <center>\n    <font color=\"" << escapeHtmlText( codec, titleColor.name() ) << "\">\n";
         streamOut << "    <b>" << escapeHtmlText( codec, title ) << "</b> - <i>" << escapeHtmlText( codec, slideInfos[ i ].slideTitle ) << "</i>\n";
 
-        streamOut << "    </font>\n  </center><hr noshade=\"noshade\"" << (xhtml?" /":"") << ">" << brtag << "\n";
+        streamOut << "    </font>\n  </center><hr noshade=\"noshade\"" << ( isXML() ?" /":"") << ">" << brtag << "\n";
 
         streamOut << "  <center>\n    ";
 
@@ -459,7 +459,7 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
 
         streamOut << "\n";
         
-        streamOut << "    </center>" << brtag << "<hr noshade=\"noshade\"" << (xhtml?" /":"") << ">\n";
+        streamOut << "    </center>" << brtag << "<hr noshade=\"noshade\"" << ( isXML() ?" /":"") << ">\n";
 
         QPtrList<KPrPage> _tmpList( doc->getPageList() );
         QString note ( escapeHtmlText( codec, _tmpList.at(i)->noteText() ) );
@@ -469,7 +469,7 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
             
             streamOut << note.replace( "\n", brtag );
 
-            streamOut << "  </blockquote><hr noshade=\"noshade\"" << (xhtml?" /":"") << ">\n";
+            streamOut << "  </blockquote><hr noshade=\"noshade\"" << ( isXML() ?" /":"") << ">\n";
         }
 
         streamOut << "  <center>\n";
@@ -482,7 +482,7 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
         streamOut << EscapeEncodingOnly ( codec, i18n( "Created on %1 by <i>%2</i> with <a href=\"http://www.koffice.org/kpresenter\">KPresenter</a>" ) 
             .arg( KGlobal::locale()->formatDate ( QDate::currentDate() ) ).arg( htmlAuthor ) );
 
-        streamOut << "    </center><hr noshade=\"noshade\"" << (xhtml?" /":"") << ">\n";
+        streamOut << "    </center><hr noshade=\"noshade\"" << ( isXML() ?" /":"") << ">\n";
         streamOut << "</body>\n</html>\n";
 
         file.close();
@@ -500,16 +500,14 @@ void KPWebPresentation::createMainPage( KProgress *progressBar )
 
     QTextCodec *codec = KGlobal::charsets()->codecForName( m_encoding );
 
-    bool xhtml=false; // ### TODO: XHTML 1.0 support in dialog
-    
-    const QString brtag ( "<br" + QString(xhtml?" /":"") + ">" );
+    const QString brtag ( "<br" + QString( isXML() ?" /":"") + ">" );
 
     QFile file( QString( "%1/index.html" ).arg( path ) );
     file.open( IO_WriteOnly );
     QTextStream streamOut( &file );
     streamOut.setCodec( codec );
         
-    writeStartOfHeader( streamOut, codec, xhtml, i18n("Table of Contents") );
+    writeStartOfHeader( streamOut, codec,  isXML() , i18n("Table of Contents") );
     
     streamOut << "</head>\n";
     streamOut << "<body bgcolor=\"" << backColor.name() << "\" text=\"" << textColor.name() << "\">\n";
@@ -522,7 +520,7 @@ void KPWebPresentation::createMainPage( KProgress *progressBar )
     streamOut << i18n("Click here to start the Slideshow");
     streamOut << "</a></h3></center>" << brtag << "\n";
 
-    streamOut << "<hr noshade=\"noshade\"" << (xhtml?" /":"") << ">" << "\n";
+    streamOut << "<hr noshade=\"noshade\"" << ( isXML() ?" /":"") << ">" << "\n";
 
     streamOut << brtag << brtag << "\n<b>" << i18n("Table of Contents") << "</b>" << brtag << "\n";
     streamOut << "<ol>\n";
@@ -532,7 +530,7 @@ void KPWebPresentation::createMainPage( KProgress *progressBar )
 
     streamOut << "</ol>\n";
 
-    streamOut << "<hr noshade=\"noshade\"" << (xhtml?" /":"") << ">" << "\n";
+    streamOut << "<hr noshade=\"noshade\"" << ( isXML() ?" /":"") << ">" << "\n";
     
     QString htmlAuthor;
     if (email.isEmpty())
@@ -718,7 +716,7 @@ void KPWebPresentationWizard::setupPage2()
     sidebar->setPixmap(locate("data", "kpresenter/pics/webslideshow-sidebar.png"));
 
     QWidget* canvas = new QWidget( page2 );
-    QGridLayout *layout = new QGridLayout( canvas, 6, 2, 
+    QGridLayout *layout = new QGridLayout( canvas, 7, 2, 
         KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel *helptext = new QLabel( canvas );
@@ -763,17 +761,21 @@ void KPWebPresentationWizard::setupPage2()
 
     layout->addMultiCell( new QSpacerItem( 1, 50 ), 1, 1, 0, 1 );
 
-    QLabel *label4 = new QLabel( i18n("Image format:"), canvas );
+    QLabel *label1 = new QLabel( i18n("Image format:"), canvas );
+    label1->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
+    layout->addWidget( label1, 2, 0 );
+
+    QLabel *label2 = new QLabel( i18n("Zoom:"), canvas );
+    label2->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
+    layout->addWidget( label2, 3, 0 );
+
+    QLabel *label3 = new QLabel( i18n( "Default encoding:" ), canvas );
+    label3->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
+    layout->addWidget( label3, 4, 0 );
+
+    QLabel *label4 = new QLabel( i18n( "Document type:" ), canvas );
     label4->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
-    layout->addWidget( label4, 2, 0 );
-
-    QLabel *label5 = new QLabel( i18n("Zoom:"), canvas );
-    label5->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
-    layout->addWidget( label5, 3, 0 );
-
-    QLabel *label6 = new QLabel( i18n( "Default encoding:" ), canvas );
-    label6->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
-    layout->addWidget( label6, 4, 0 );
+    layout->addWidget( label4, 5, 0 );
 
     format = new KComboBox( false, canvas );
     layout->addWidget( format, 2, 1 );
@@ -795,9 +797,14 @@ void KPWebPresentationWizard::setupPage2()
     QString _name = webPres.getEncoding();
     encoding->setCurrentItem( _strList.findIndex( _name.lower() ) );
 
+    doctype = new KComboBox( false, canvas );
+    layout->addWidget( doctype, 5, 1 );
+    doctype->insertItem( "HTML 4.01", -1 );
+    doctype->insertItem( "XHTML 1.0", -1 );
+
     QSpacerItem* spacer = new QSpacerItem( 1, 10, 
         QSizePolicy::Minimum, QSizePolicy::Expanding );
-    layout->addMultiCell( spacer, 5, 5, 0, 1 );
+    layout->addMultiCell( spacer, 6, 6, 0, 1 );
 
     addPage( page2, i18n( "Step 2: Configure HTML" ) );
 
@@ -943,6 +950,7 @@ void KPWebPresentationWizard::finish()
     webPres.setImageFormat( static_cast<KPWebPresentation::ImageFormat>( format->currentItem() ) );
     webPres.setPath( path->lineEdit()->text() );
     webPres.setZoom( zoom->value() );
+    webPres.setXML( doctype->currentItem() != 0 );
     webPres.setEncoding( encoding->currentText() );
 
     close();
