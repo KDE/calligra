@@ -432,17 +432,17 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, KWEFKWordLeader *l
 
     switch ( formatId )
     {
-    case 1:   // regular texts
+    case 1: // regular texts
         {
             SubProcessFormatOneTag(myNode, formatDataList, formatPos, formatLen, leader);
             break;
         }
-    case 4:
+    case 4: // variables
         {
             SubProcessFormatFourTag(myNode, formatDataList, formatPos, formatLen, leader);
             break;
         }
-    case 6:   // anchors
+    case 6: // anchors
         {
             SubProcessFormatSixTag(myNode, formatDataList, formatPos, formatLen, leader);
             break;
@@ -498,39 +498,21 @@ static void ProcessCounterTag ( QDomNode myNode, void *tagData, KWEFKWordLeader 
 
 static void ProcessLayoutTabulatorTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader )
 {
-    // WARNING: This is exactly the format that AbiWord needs for defining its tabulators
-    // TODO: make this function independant of the AbiWord export filter
+    TabulatorList* tabulatorList = (TabulatorList*) tagData;
 
-    QString *tabulator = (QString *) tagData;
-
-    double ptPos;
-    int    type;
+    TabulatorData tabulator;
 
     QValueList<AttrProcessing> attrProcessingList;
 
-    attrProcessingList << AttrProcessing ( "ptpos", "double", (void *) &ptPos );
-    attrProcessingList << AttrProcessing ( "type",  "int",    (void *) &type  );
+    attrProcessingList
+        << AttrProcessing ( "ptpos",   "double", &tabulator.m_ptpos   )
+        << AttrProcessing ( "type",    "int",    &tabulator.m_type    )
+        << AttrProcessing ( "filling", "int",    &tabulator.m_filling )
+        << AttrProcessing ( "width",   "double", &tabulator.m_width   )
+        ;
     ProcessAttributes (myNode, attrProcessingList);
 
-    if ( tabulator->isEmpty () )
-    {
-        *tabulator = QString::number (ptPos);
-    }
-    else
-    {
-        *tabulator += "," + QString::number (ptPos);
-    }
-
-    *tabulator += "pt";
-
-    switch ( type )
-    {
-        case 0:  *tabulator += "/L0"; break;
-        case 1:  *tabulator += "/C0"; break;
-        case 2:  *tabulator += "/R0"; break;
-        case 3:  *tabulator += "/D0"; break;
-        default: *tabulator += "/L0";
-    }
+    tabulatorList->append(tabulator);
 
     AllowNoSubtags (myNode, leader);
 }
@@ -650,7 +632,7 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader 
     tagProcessingList << TagProcessing ( "BOTTOMBORDER", ProcessAnyBorderTag,         &layout->bottomBorder        );
     tagProcessingList << TagProcessing ( "COUNTER",      ProcessCounterTag,           (void *) &layout->counter    );
     tagProcessingList << TagProcessing ( "FORMAT",       ProcessFormatTag,            (void *) &formatDataList     );
-    tagProcessingList << TagProcessing ( "TABULATOR",    ProcessLayoutTabulatorTag,   (void *) &layout->tabulator  );
+    tagProcessingList << TagProcessing ( "TABULATOR",    ProcessLayoutTabulatorTag,   &layout->tabulatorList       );
     tagProcessingList << TagProcessing ( "SHADOW",       ProcessShadowTag,            layout                       );
     ProcessSubtags (myNode, tagProcessingList, leader);
 

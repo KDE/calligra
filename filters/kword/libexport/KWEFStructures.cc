@@ -47,6 +47,15 @@ void Table::addCell ( int                   c,
    cellList << TableCell ( c, r, new QValueList<ParaData> (p) );
 }
 
+bool TabulatorData::operator == (const TabulatorData& other) const
+{
+    return ((m_type==other.m_type)
+        && (m_ptpos==other.m_ptpos)
+        && (m_filling==other.m_filling)
+        && (m_width==other.m_width));
+}
+
+
 void VariableData::setLink(const QString& linkName, const QString& hrefName)
 {
     propertyMap["link:linkName"]=linkName;

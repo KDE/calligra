@@ -268,6 +268,32 @@ public:
     double width;
 };
 
+/**
+  * Tabulator (see also <TABULATOR> element in KWord's DTD)
+  */
+class TabulatorData
+{
+public:
+    TabulatorData() : m_type(0), m_ptpos(0.0), m_filling(0), m_width(0.0) {}
+public:
+    bool operator == (const TabulatorData& other) const;
+public:
+    int m_type;
+    double m_ptpos;
+    int m_filling;
+    double m_width;
+};
+
+/**
+  * List of tabulators
+  */
+class TabulatorList : public QValueList<TabulatorData>
+{
+public:
+    TabulatorList(void) {}
+    virtual ~TabulatorList(void) {}
+};
+
 // Paragraph layout
 class LayoutData
 {
@@ -293,7 +319,6 @@ public:
 
     bool        pageBreakBefore;
     bool        pageBreakAfter;
-    QString     tabulator;      // tabulator in AbiWord format
     double      shadowDistance; // distance of <SHADOW>
     int         shadowDirection;// direction of <SHADOW>
     QColor      shadowColor;    // red, green, blue of <SHADOW>
@@ -301,6 +326,7 @@ public:
     BorderData  rightBorder;
     BorderData  topBorder;
     BorderData  bottomBorder;
+    TabulatorList tabulatorList; // List of tabulators
 };
 
 
