@@ -33,7 +33,7 @@ idl_DATA = kword.idl
 kdelnk_DATA = kword.desktop
 kdelnkdir = $(kde_appsdir)/KOffice
 
-kdemime_DATA = x-kword.kdelnk
+kdemime_DATA = x-kword.desktop
 kdemimedir = $(kde_mimedir)/application
 
 SUBDIRS = . toolbar templates filters dtd
