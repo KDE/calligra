@@ -1,7 +1,7 @@
 template_DATA = .directory Plain.desktop
 templatedir = $(kde_datadir)/kontour/templates/Simple
 
-templatesrc_DATA = Plain.kil
+templatesrc_DATA = Plain.kon
 templatesrcdir = $(kde_datadir)/kontour/templates/Simple/.source
 
 templateicons_DATA = Plain.png
