@@ -324,6 +324,10 @@ TODO: add SharedAction::setVisible() and use QMenuData::setItemVisible() where n
 
 CC_MAIL: dkite@shaw.ca
 
+2004-03-26
+	- pl translate updated
+	- some I18N_NOOP turned to i18n
+
 2004-03-25
 KexiTableView
 	- adjustColumnWidthToContents(-1) now mean that all columns' width is adjusted

@@ -176,13 +176,13 @@ bool dlgSinglePage(int type)
 QString captionForDialogType(int type)
 {
 	if (type==KexiStartupDialog::Templates)
-		return I18N_NOOP("Create Project");
+		return i18n("Create Project");
 	else if (type==KexiStartupDialog::OpenExisting)
-		return I18N_NOOP("Open Existing Project");
+		return i18n("Open Existing Project");
 	else if (type==KexiStartupDialog::OpenRecent)
-		return I18N_NOOP("Open Recent Project");
+		return i18n("Open Recent Project");
 
-	return I18N_NOOP("Choose a project");
+	return i18n("Choose a project");
 }
 
 /*================================================================*/
