@@ -23,6 +23,7 @@
 
 #include <qmap.h>
 #include <qwidgetstack.h>
+#include <qobject.h>
 
 #include <koQueryTrader.h>
 
@@ -32,6 +33,7 @@ class KFileDialog;
 class KoDocument;
 class KoFilterDialog;
 class KURL;
+class KProcess;
 
 class KoFilterManagerPrivate;
 class PreviewStack;
@@ -53,8 +55,9 @@ class PreviewStack;
  *  @author Werner Trobin <trobin@kde.org>
  *  @version $Id$
  */
-class KoFilterManager
+class KoFilterManager : public QObject
 {
+    Q_OBJECT
 public:
     /**
      * Are we importing (loading) or exporting (saving) a file?
@@ -176,6 +179,10 @@ protected:
     KoFilterManager();
     KoFilterManager &operator=(const KoFilterManager &);
     virtual ~KoFilterManager();
+
+private slots:
+    void processExited(KProcess *p);
+    void receivedStdout(KProcess *p, char *buffer, int buflen);
 
 private:
     static const int s_area = 30003;

@@ -24,6 +24,7 @@
 #include <kmimetype.h>
 #include <kurl.h>
 #include <kapp.h>
+#include <kprocess.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
@@ -40,7 +41,7 @@
 class KoFilterManagerPrivate {
 
 public:
-    KoFilterManagerPrivate() { prepare=false; }
+    KoFilterManagerPrivate() { prepare=false; exitCode=0; }
     ~KoFilterManagerPrivate() {}
 
     QString tmpFile;
@@ -53,6 +54,8 @@ public:
     mutable QMap<QString, int> dialogMap;
     QMap<int, KoFilterDialog*> originalDialogs;
     QString config;  // stores the config information
+    int exitCode; // the exit code of the external filter process
+    QString tempfname; // yes, ugly :)
 };
 
 
@@ -380,9 +383,25 @@ QString KoFilterManager::import( const QString &_file, const char *_native_forma
 
     unsigned int i=0;
     bool ok=false;
-    QString tempfname;
     // just in case that there are more than one filters
     while(i<vec.count() && !ok) {
+        // first check the "external" case
+        if(vec[i].implemented.lower()=="bulletproof") {
+            KProcess *process=new KProcess();
+            *process << "filter_wrapper";
+            *process << constr << file << storePrefix << mimeType
+                     << _native_format << d->config << QString::number(i);
+            connect(process, SIGNAL(processExited(KProcess *)), SLOT(processExited(KProcess *)));
+            connect(process, SIGNAL(receivedStdout(KProcess *, char *, int)),
+                                    SLOT(receivedStdout(KProcess *, char *, int)));
+            kdDebug(s_area) << "################### starting wrapper process ###################" << endl;
+            process->start(KProcess::NotifyOnExit, KProcess::Stdout);
+            kapp->enter_loop();  // yay, l33t h4XOr :)
+            ok=d->exitCode==0;
+            ++i;
+            continue;
+        }
+
         KoFilter* filter = vec[i].createFilter();
         if( !filter )
         {
@@ -391,6 +410,7 @@ QString KoFilterManager::import( const QString &_file, const char *_native_forma
             // ### use KLibLoader::lastErrorMessage() here
             KMessageBox::error( 0L, tmp, i18n("Import filter failed") );
             // ## set busy cursor again
+            ++i;
             continue;
         }
 
@@ -406,12 +426,12 @@ QString KoFilterManager::import( const QString &_file, const char *_native_forma
             KTempFile tempFile; // create with default file prefix, extension and mode
             if (tempFile.status() != 0)
                 return QString::null;
-            tempfname=tempFile.name();
+            d->tempfname=tempFile.name();
             if (filter->supportsEmbedding())
-                ok=filter->filter( file, tempfname, storePrefix, mimeType, _native_format, d->config );
+                ok=filter->filter( file, d->tempfname, storePrefix, mimeType, _native_format, d->config );
             else
-                ok=filter->filter( file, tempfname, mimeType, _native_format, d->config );
-            tempfname=tempFile.name(); // hack for -DQT_NO_BLAH stuff
+                ok=filter->filter( file, d->tempfname, mimeType, _native_format, d->config );
+            // tempfname=tempFile.name(); // hack for -DQT_NO_BLAH stuff <-- huh??? (Werner)
         }
         else if(vec[i].implemented.lower()=="qdom") {
             //kdDebug(s_area) << "XXXXXXXXXXX qdom XXXXXXXXXXXXXX" << endl;
@@ -437,8 +457,8 @@ QString KoFilterManager::import( const QString &_file, const char *_native_forma
         delete filter;
         ++i;
     }
-    if(ok && vec[i-1].implemented.lower()=="file")
-        return tempfname;
+    if(ok && (vec[i-1].implemented.lower()=="file" || vec[i-1].implemented.lower()=="bulletproof"))
+        return d->tempfname;
 
     // Return failure.
     kdError(s_area) << "All filters failed." << endl;
@@ -560,6 +580,32 @@ unsigned long KoFilterManager::refCnt()
 {
   return s_refCnt;
 }
+
+void KoFilterManager::processExited(KProcess *p) {
+
+    if(p->normalExit())
+        d->exitCode=p->exitStatus();
+    kdDebug(s_area) << "################### wrapper process exited: "
+                    << d->exitCode << " ###################" << endl;
+    kapp->exit_loop();
+}
+
+void KoFilterManager::receivedStdout(KProcess */*p*/, char *buffer, int buflen) {
+
+    kdDebug() << "KoFilterManager::receivedStdout  -- len: " << buflen << "buffer: " << buffer << endl;
+    if(d->document && buflen>0 && buffer[0]=='P') {
+        QCString tmp(++buffer, buflen-1);
+        bool ok=true;
+        int progress=tmp.toInt(&ok);
+        if(ok)
+            d->document->emitProgress(progress);
+    }
+    else if(buflen>0 && buffer[0]=='F') {
+        QCString tmp(++buffer, buflen-1);
+        d->tempfname=tmp;
+    }
+}
+
 
 //////////////////////////////////////////////////////////////////////////////
 // PreviewStack
