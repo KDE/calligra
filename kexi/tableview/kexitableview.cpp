@@ -2448,7 +2448,7 @@ bool KexiTableView::acceptEditor()
 			kdDebug() << "KexiTableView::acceptEditor(): VALUE NOT CHANGED." << endl;
 			removeEditor();
 			d->inside_acceptEditor = false;
-			if (d->acceptRowEditAfterCellAccepting)
+			if (d->acceptsRowEditAfterCellAccepting || d->internal_acceptsRowEditAfterCellAccepting)
 				acceptRowEdit();
 			return true;
 		}
@@ -2509,7 +2509,7 @@ bool KexiTableView::acceptEditor()
 	}
 	d->inside_acceptEditor = false;
 	if (res == KexiValidator::Ok) {
-		if (d->acceptRowEditAfterCellAccepting)
+		if (d->acceptsRowEditAfterCellAccepting || d->internal_acceptsRowEditAfterCellAccepting)
 			acceptRowEdit();
 		return true;
 	}
@@ -2529,10 +2529,10 @@ bool KexiTableView::acceptRowEdit()
 	if (!d->rowEditing)
 		return true;
 	if (d->inside_acceptEditor) {
-		d->acceptRowEditAfterCellAccepting = true;
+		d->internal_acceptsRowEditAfterCellAccepting = true;
 		return true;
 	}
-	d->acceptRowEditAfterCellAccepting = false;
+	d->internal_acceptsRowEditAfterCellAccepting = false;
 	if (!acceptEditor())
 		return false;
 	kdDebug() << "EDIT ROW ACCEPTING..." << endl;
@@ -2656,6 +2656,16 @@ void KexiTableView::cancelRowEdit()
 	kdDebug(44021) << "EDIT ROW CANCELLED." << endl;
 
 	emit rowEditTerminated(d->curRow);
+}
+
+bool KexiTableView::acceptsRowEditAfterCellAccepting() const
+{
+	return d->acceptsRowEditAfterCellAccepting;
+}
+
+void KexiTableView::setAcceptsRowEditAfterCellAccepting(bool set)
+{
+	d->acceptsRowEditAfterCellAccepting = set;
 }
 
 void KexiTableView::setInsertionPolicy(InsertionPolicy policy)

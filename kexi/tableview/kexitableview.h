@@ -372,6 +372,22 @@ public slots:
 	 row during this current session will be undone. */
 	void cancelRowEdit();
 
+	/*! \return true, if this table view automatically accepts 
+	 row editing (using acceptRowEdit()) on accepting any cell's edit 
+	 (i.e. after acceptEditor()). 
+	 By default this flag is set to false.
+	 Not that if the query for this table has given constraints defined,
+	 like NOT NULL / NOT EMPTY for more than one field - editing a record would 
+	 be impossible for the flag set to true, because of constraints violation.
+	 However, setting this flag to true can be usefull especially for not-db-aware
+	 data set (it's used e.g. in Kexi Alter Table's field editor). */
+	bool acceptsRowEditAfterCellAccepting() const;
+
+	/*! Specifies, if this table view automatically accepts 
+	 row editing (using acceptRowEdit()) on accepting any cell's edit 
+	 (i.e. after acceptEditor()). \sa acceptsRowEditAfterCellAccepting() */
+	void setAcceptsRowEditAfterCellAccepting(bool set);
+
 signals:
 	void itemSelected(KexiTableItem *);
 	void cellSelected(int col, int row);

@@ -145,7 +145,15 @@ class KexiTableViewPrivate
 	 eg. when we're calling acceptRowEdit() during cell accepting phase. */
 	bool inside_acceptEditor : 1;
 
-	bool acceptRowEditAfterCellAccepting : 1;
+	/*! Internal: if true, this table view automatically accepts 
+	 row editing (using acceptRowEdit()) on accepting any cell's edit 
+	 (i.e. after acceptEditor()). */
+	bool internal_acceptsRowEditAfterCellAccepting : 1;
+
+	/*! Public version of 'acceptsRowEditAfterCellAcceptin' flag (available for a user).
+	 It's OR'es together with above flag.
+	*/
+	bool acceptsRowEditAfterCellAccepting : 1;
 
 	/*! 1 if table view is readOnly, 0 if not; 
 	 otherwise (-1 means "dont know") the 'readOnly' flag from table views' 
