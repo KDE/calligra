@@ -48,7 +48,7 @@ public slots:
   void     importTextSide( int row, int col, QString );
   void     setHorzBar(int);
   void     setVertBar(int);
-  void     ok() {tableView->nextInput(); head->nextInput();}
+  void     ok() {tableView->nextInput(); head->nextInput(); side->nextInput();}
 
 protected:
   virtual void  resizeEvent( QResizeEvent *);
