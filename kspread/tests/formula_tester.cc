@@ -213,6 +213,18 @@ void FormulaEvalTester::run()
   CHECK_EVAL( "0+0", KSpreadValue(0) );
   CHECK_EVAL( "1+1", KSpreadValue(2) );
   
+  // unary minus
+  CHECK_EVAL( "-1", KSpreadValue(-1) );
+  CHECK_EVAL( "--1", KSpreadValue(1) );
+  CHECK_EVAL( "---1", KSpreadValue(-1) );
+  CHECK_EVAL( "----1", KSpreadValue(1) );
+  CHECK_EVAL( "-----1", KSpreadValue(-1) );
+  CHECK_EVAL( "5-1", KSpreadValue(4) );
+  CHECK_EVAL( "5--1", KSpreadValue(6) );
+  CHECK_EVAL( "5---1", KSpreadValue(4) );
+  CHECK_EVAL( "5----1", KSpreadValue(6) );
+  CHECK_EVAL( "5-----1", KSpreadValue(4) );
+  
   // no parentheses, checking operator precendences
   CHECK_EVAL( "14+3*77", KSpreadValue(245) );
   CHECK_EVAL( "14-3*77", KSpreadValue(-217) );
