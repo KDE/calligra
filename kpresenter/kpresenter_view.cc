@@ -1492,9 +1492,9 @@ void KPresenterView::startScreenPres( int pgNum /*1-based*/ )
         actionScreenStart->setEnabled( false );
 
         if ( kPresenterDoc()->presentationDuration() ) {
-            m_presentationDuration.start();
+            m_duration.start();
 
-            // ### make m_presentationDuration a QMemArray
+            // ### make m_duration a QMemArray
             for ( unsigned int i = 0; i < kPresenterDoc()->pageList().count(); ++i )
                 m_presentationDurationList.append( 0 ); // initialization
         }
@@ -1537,9 +1537,6 @@ void KPresenterView::screenStop()
             m_pKPresenterDoc->getVariableCollection()->variableSetting()->setDisplayFieldCode(true);
             m_pKPresenterDoc->recalcVariables( VT_ALL );
         }
-
-//         if ( kPresenterDoc()->presentationDuration() && !m_presentationDurationList.isEmpty() )
-//             setPresentationDuration( m_canvas->presPage() - 1 );
 
         m_canvas->stopScreenPresentation();
         presStarted = false;
@@ -5846,24 +5843,14 @@ void KPresenterView::slotViewFormattingChars()
     m_pKPresenterDoc->repaint(false);
 }
 
-int KPresenterView::getPresentationDuration() const
-{
-    return m_presentationDuration.elapsed();
-}
-
-void KPresenterView::setPresentationDuration( int _pgNum )
+void KPresenterView::setPageDuration( int _pgNum )
 {
     if ( kPresenterDoc()->presentationDuration() )
     {
-        // kdDebug(33001) << "KPresenterView::setPresentationDuration( " << _pgNum << " )" << endl;
-        *m_presentationDurationList.at( _pgNum ) = getPresentationDuration();
-        restartPresentationDuration();
+        // kdDebug(33001) << "KPresenterView::setPageDuration( " << _pgNum << " )" << endl;
+        *m_presentationDurationList.at( _pgNum ) += m_duration.elapsed();
+        m_duration.restart();
     }
-}
-
-void KPresenterView::restartPresentationDuration()
-{
-    m_presentationDuration.restart();
 }
 
 void KPresenterView::openThePresentationDurationDialog()

@@ -584,9 +584,12 @@ public:
     bool getPictureGrayscal() const { return grayscal; }
     int getPictureBright() const { return bright; }
 
-    int getPresentationDuration() const;
-    void setPresentationDuration( int _pgNum );
-    void restartPresentationDuration();
+    /**
+     * Set the duration of the given page ( zero based ).
+     * This reads out m_duration and adds it to the given page.
+     * m_duration is restarted.
+     */
+    void setPageDuration( int _pgNum );
 
     KPrPage * stickyPage() const;
 
@@ -1073,7 +1076,9 @@ private:
     bool automaticScreenPresFirstTimer;
     int currentTimer;
 
-    QTime m_presentationDuration;
+    /// timer for duration of a page
+    QTime m_duration;
+    /// list for saving the duration of the pages 
     QValueList<int> m_presentationDurationList;
 
     KoCharSelectDia *m_specialCharDlg;

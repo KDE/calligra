@@ -3199,6 +3199,8 @@ bool KPrCanvas::pNext( bool )
         QPixmap _pix1( desk.width(), desk.height() );
         drawCurrentPageInPix( _pix1 );
 
+        m_view->setPageDuration( m_step.m_pageNumber );
+
         m_step.m_pageNumber = *( ++m_presentationSlidesIterator ) - 1;
         m_step.m_subStep = 0;
         //kdDebug(33001) << "Page::pNext going to page " << m_step.m_pageNumber << endl;
@@ -3247,8 +3249,6 @@ bool KPrCanvas::pNext( bool )
 
         kPchangePages( this, _pix1, _pix2, _pageEffect, pageSpeedFakt() );
 
-        m_view->setPresentationDuration( m_step.m_pageNumber );
-
 
         if ( !spManualSwitch() )
             m_view->autoScreenPresReStartTimer();
@@ -3263,7 +3263,7 @@ bool KPrCanvas::pNext( bool )
     // we display the 'End of presentation' slide.
     if ( ( spManualSwitch() || !spInfiniteLoop() ) && !showingLastSlide )
     {
-        m_view->setPresentationDuration( m_step.m_pageNumber );
+        m_view->setPageDuration( m_step.m_pageNumber );
 
 #if KDE_IS_VERSION(3,1,90)
         QRect desk = KGlobalSettings::desktopGeometry(this);
@@ -3289,7 +3289,7 @@ bool KPrCanvas::pNext( bool )
     }
     else
     {
-        m_view->setPresentationDuration( m_step.m_pageNumber );
+        m_view->setPageDuration( m_step.m_pageNumber );
         emit stopPres(); // tells automatic mode to restart
     }
 
@@ -3317,6 +3317,8 @@ bool KPrCanvas::pPrev( bool /*manual*/ )
             doObjEffects();
             return false;
         }
+        m_view->setPageDuration( m_step.m_pageNumber );
+
         m_step.m_pageNumber = *( --m_presentationSlidesIterator ) - 1;
 
         tmpObjs.clear();
@@ -3330,8 +3332,6 @@ bool KPrCanvas::pPrev( bool /*manual*/ )
             tmpObjs.append(oIt.current());
         m_pageEffectSteps = doc->getPageEffectSteps( m_step.m_pageNumber );
         m_step.m_step = *( --m_pageEffectSteps.end() );
-
-        m_view->setPresentationDuration( m_step.m_pageNumber + 1 );
 
         return true;
     }
@@ -4928,6 +4928,9 @@ void KPrCanvas::slotGotoPage()
 {
     setCursor( blankCursor );
     int pg = m_step.m_pageNumber + 1;
+    
+    m_view->setPageDuration( m_step.m_pageNumber );
+
     pg = KPGotoPage::gotoPage( m_view->kPresenterDoc(), m_presentationSlides, pg, this );
     gotoPage( pg );
 
@@ -4935,8 +4938,6 @@ void KPrCanvas::slotGotoPage()
         m_view->setCurrentTimer( 1 );
         setNextPageTimer( true );
     }
-
-    m_view->setPresentationDuration( pg - 1 );
 
     if ( presMenu->isItemChecked ( PM_DM ) )
         setCursor( KPresenterUtils::penCursor() );
