@@ -63,6 +63,12 @@ class TabBarPrivate;
 class TabBar : public QWidget
 {
     Q_OBJECT
+    
+    Q_PROPERTY( QString activeTab READ activeTab WRITE setActiveTab )
+    Q_PROPERTY( bool readOnly READ readOnly WRITE setReadOnly )
+    Q_PROPERTY( QStringList tabs READ tabs WRITE setTabs )
+    Q_PROPERTY( unsigned count READ count )
+    
 public:
 
     /**
@@ -76,6 +82,54 @@ public:
     virtual ~TabBar();
 
     /**
+     * Returns true if the tab bar is read only.
+     */
+    bool readOnly() const;
+    
+    /**
+     * Returns true if tabs and scroll buttons will be laid out in a mirrored 
+     * (right to left) fashion.
+     */
+    bool reverseLayout() const;
+    
+    /*
+     * Returns all the tab as list of strings.
+     */
+    QStringList tabs() const;
+
+    /*
+     * Returns number of tabs.
+     * This is the same as TabBar::tabs().count()
+     */
+    unsigned count() const;
+
+    /*
+     * Returns the active tab.
+     */
+    QString activeTab() const;
+
+    /**
+     * Returns true if it is possible to scroll one tab back.
+     *
+     * \sa scrollBack
+     */
+    bool canScrollBack() const;
+
+    /**
+     * Returns true if it is possible to scroll one tab forward.
+     *
+     * \sa scrollForward
+     */
+    bool canScrollForward() const;
+
+public slots:
+
+    /**
+     * Replaces all tabs with the list of strings.
+     */
+    void setTabs( const QStringList& list );
+
+    /**
      * Sets the tab bar to be read only.
      *
      * If the tab bar is read only, tab reordering is not allowed.
@@ -85,9 +139,10 @@ public:
     void setReadOnly( bool ro );
 
     /**
-     * Returns true if the tab bar is read only.
+     * If reverse is true, dialogs and scroll buttonswidgets will be laid out in a mirrored
+     * as if the sheet is in right to left languages (such as Arabic and Hebrew)
      */
-    bool readOnly() const;
+    void setReverseLayout( bool reverse );
 
     /**
      * Adds a tab to the tab bar.
@@ -102,34 +157,10 @@ public:
     void removeTab( const QString& text );
 
     /**
-     * Replaces all tabs with the list of strings.
-     */
-    void setTabs( const QStringList& list );
-
-    /*
-     * Returns all the tab as list of strings.
-     */
-    QStringList tabs() const;
-
-    /**
      * Renames a tab.
      */
     void renameTab( const QString& old_name, const QString& new_name );
-
-    /**
-     * Returns true if it is possible to scroll one tab left.
-     *
-     * \sa scrollLeft
-     */
-    bool canScrollLeft() const;
-
-    /**
-     * Returns true if it is possible to scroll one tab right.
-     *
-     * \sa scrollRight
-     */
-    bool canScrollRight() const;
-
+    
     /**
      * Moves a tab to another position and reorder other tabs.
      *
@@ -142,37 +173,35 @@ public:
      */
     void moveTab( unsigned tab, unsigned target );
 
-public slots:
-
     /**
-     * Scrolls one tab left. Does nothing if the leftmost tab is already the
-     * first tab.
+     * Scrolls one tab back. Does nothing if the leftmost tab (rightmost tab
+     * when reverseLayout is true) is already the first tab.
      *
-     * \sa canScrollLeft
+     * \sa canScrollBack
      */
-    void scrollLeft();
+    void scrollBack();
 
     /**
-     * Scrolls one tab right. Does nothing if the rightmost tab is already the
-     * last tab.
+     * Scrolls one tab forward. Does nothing if the rightmost tab (leftmost tab 
+     * when reverseLayout is true) is already the last tab.
      *
-     * \sa canScrollRight
+     * \sa canScrollForward
      */
-    void scrollRight();
+    void scrollForward();
 
     /**
-     * Scrolls to the first tab. Does nothing if the leftmost tab is already the
-     * first tab.
+     * Scrolls to the first tab. Does nothing if the leftmost tab (rightmost tab
+     * when reverseLayout is true) is already the first tab.
      *
-     * \sa canScrollLeft
+     * \sa canScrollBack
      */
     void scrollFirst();
 
     /**
-     * Scrolls to the last tab. Does nothing if the rightmost tab is already the
-     * last tab.
+     * Scrolls to the last tab. Does nothing if the rightmost tab (leftmost tab 
+     * when reverseLayout is true) is already the last tab.
      *
-     * \sa canScrollRight
+     * \sa canScrollForward
      */
     void scrollLast();
 
@@ -218,8 +247,8 @@ signals:
     void doubleClicked();
 
 protected slots:
-    void autoScrollLeft();
-    void autoScrollRight();
+    void autoScrollBack();
+    void autoScrollForward();
 
 protected:
     virtual void paintEvent ( QPaintEvent* ev );

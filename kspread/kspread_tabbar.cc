@@ -39,8 +39,6 @@
 // - keep track of tabs, only (re)layout when necessary
 // - paint all tabs to buffer, show only by shifting
 // - customizable button pixmaps
-// - implement few things as properties (use Q_PROPERTY)
-// - reverse layout (for RTL sheets)
 // - use QStyle to paint the tabs & buttons (is it good/possible?)
 
 
@@ -55,34 +53,36 @@ public:
     // scroll buttons
     QToolButton* scrollFirstButton;
     QToolButton* scrollLastButton;
-    QToolButton* scrollLeftButton;
-    QToolButton* scrollRightButton;
+    QToolButton* scrollBackButton;
+    QToolButton* scrollForwardButton;
 
     // read-only: no mouse drag, double-click, right-click
     bool readOnly;
+    
+    // if true, layout is from right to left
+    bool reverseLayout;
 
-    // list of visible tabs, in order of appearance
+    // list of all tabs, in order of appearance
     QStringList tabs;
 
     // array of QRect for each visible tabs
     QValueVector<QRect> tabRects;
 
-    // the first visible tab on the left of the bar.
-    int leftTab;
-
-    // the last fully visible tab on the right of the bar.
-    int rightTab;
+    // leftmost tab (or rightmost if reverseLayout)
+    int firstTab;
+    
+    // rightmost tab (or leftmost if reverseLayout)
+    int lastTab;
 
     // the active tab in the range form 1..n.
     // if this value is 0, that means that no tab is active.
     int activeTab;
 
-    // unusable space on the left, taken by the buttons
+    // unusable space on the left, taken by the scroll buttons
     int offset;
 
     // when the user drag the tab (in order to move it)
-    // this is the target position
-    // (it's 0 if no tab is dragged)
+    // this is the target position, it's 0 if no tab is dragged
     int targetTab;
 
     // true if autoscroll is active
@@ -90,6 +90,9 @@ public:
 
     // calculate the bounding rectangle for each visible tab
     void layoutTabs();
+    
+    // reposition scroll buttons
+    void layoutButtons();
 
     // find a tab whose bounding rectangle contains the pos
     // return -1 if no such tab is found
@@ -111,7 +114,7 @@ public:
 using namespace KSpread;
 
 // built-in pixmap for scroll-first button
-static const char * scroll_first_xpm[] = {
+static const char * arrow_leftmost_xpm[] = {
 "10 10 2 1",
 " 	c None",
 ".	c #000000",
@@ -127,7 +130,7 @@ static const char * scroll_first_xpm[] = {
 "          "};
 
 // built-in pixmap for scroll-last button
-static const char * scroll_last_xpm[] = {
+static const char * arrow_rightmost_xpm[] = {
 "10 10 2 1",
 " 	c None",
 ".	c #000000",
@@ -143,7 +146,7 @@ static const char * scroll_last_xpm[] = {
 "          "};
 
 // built-in pixmap for scroll-left button
-static const char * scroll_left_xpm[] = {
+static const char * arrow_left_xpm[] = {
 "10 10 2 1",
 " 	c None",
 ".	c #000000",
@@ -159,7 +162,7 @@ static const char * scroll_left_xpm[] = {
 "          "};
 
 // built-in pixmap for scroll-right button
-static const char * scroll_right_xpm[] = {
+static const char * arrow_right_xpm[] = {
 "10 10 2 1",
 " 	c None",
 ".	c #000000",
@@ -185,28 +188,57 @@ void TabBarPrivate::layoutTabs()
     f.setBold( true );
     painter.setFont( f );
     QFontMetrics fm = painter.fontMetrics();
-
-    int x = 0;
-    for( unsigned c = 0; c < tabs.count(); c++ )
+    
+    if( !reverseLayout )
     {
-      QRect rect;
-      if( (int)c >= leftTab-1 )
-      {
-          QString text = tabs[ c ];
-          int tw = fm.width( text ) + 4;
-          rect = QRect( x, 0, tw + 20, tabbar->height() );
-          x = x + tw + 10;
-      }
-      tabRects.append( rect );
-    }
+        // left to right
+        int x = 0;
+        for( unsigned c = 0; c < tabs.count(); c++ )
+        {
+            QRect rect;
+            if( (int)c >= firstTab-1 )
+            {
+                QString text = tabs[ c ];
+                int tw = fm.width( text ) + 4;
+                rect = QRect( x, 0, tw + 20, tabbar->height() );
+                x = x + tw + 10;
+            }
+            tabRects.append( rect );
+        }
 
-    rightTab = tabRects.count();
-    for( unsigned i = 0; i < tabRects.count(); i++ )
-      if( tabRects[i].right()-10+offset > tabbar->width() )
-      {
-        rightTab = i;
-        break;
-      }
+        lastTab = tabRects.count();
+        for( unsigned i = 0; i < tabRects.count(); i++ )
+            if( tabRects[i].right()-10+offset > tabbar->width() )
+            {
+                lastTab = i;
+                break;
+            }
+    }
+    else
+    {
+        // right to left
+        int x = tabbar->width() - offset;
+        for( unsigned c = 0; c < tabs.count(); c++ )
+        {
+            QRect rect;
+            if( (int)c >= firstTab-1 )
+            {
+                QString text = tabs[ c ];
+                int tw = fm.width( text ) + 4;
+                rect = QRect( x - tw - 20, 0, tw + 20, tabbar->height() );
+                x = x - tw - 10;
+            }
+            tabRects.append( rect );
+        }
+
+        lastTab = tabRects.count();
+        for( unsigned i = 0; i < tabRects.count(); i++ )
+            if( tabRects[i].right() < 0 )
+            {
+                lastTab = i;
+                break;
+            }
+    }    
 }
 
 int TabBarPrivate::tabAt( const QPoint& pos )
@@ -263,12 +295,42 @@ void TabBarPrivate::drawMoveMarker( QPainter& painter, int x, int y )
     painter.setBrush( oldBrush );
 }
 
+void TabBarPrivate::layoutButtons()
+{
+    int bw = tabbar->height();
+    int w = tabbar->width();
+    offset = bw * 4;
+    
+    if( !reverseLayout )
+    {
+        scrollFirstButton->setGeometry( 0, 0, bw, bw );
+        scrollFirstButton->setPixmap( arrow_leftmost_xpm );
+        scrollBackButton->setGeometry( bw, 0, bw, bw );
+        scrollBackButton->setPixmap( arrow_left_xpm );
+        scrollForwardButton->setGeometry( bw*2, 0, bw, bw );
+        scrollForwardButton->setPixmap( arrow_right_xpm );
+        scrollLastButton->setGeometry( bw*3, 0, bw, bw );
+        scrollLastButton->setPixmap( arrow_rightmost_xpm );
+    }
+    else
+    {
+        scrollFirstButton->setGeometry( w-bw, 0, bw, bw );
+        scrollFirstButton->setPixmap( arrow_rightmost_xpm );
+        scrollBackButton->setGeometry( w-2*bw, 0, bw, bw );
+        scrollBackButton->setPixmap( arrow_right_xpm );
+        scrollForwardButton->setGeometry( w-3*bw, 0, bw, bw );
+        scrollForwardButton->setPixmap( arrow_left_xpm );
+        scrollLastButton->setGeometry( w-4*bw, 0, bw, bw );
+        scrollLastButton->setPixmap( arrow_leftmost_xpm );
+    }
+ }
+
 void TabBarPrivate::updateButtons()
 {
-    scrollFirstButton->setEnabled( tabbar->canScrollLeft() );
-    scrollLeftButton->setEnabled( tabbar->canScrollLeft() );
-    scrollRightButton->setEnabled( tabbar->canScrollRight() );
-    scrollLastButton->setEnabled( tabbar->canScrollRight() );
+    scrollFirstButton->setEnabled( tabbar->canScrollBack() );
+    scrollBackButton->setEnabled( tabbar->canScrollBack() );
+    scrollForwardButton->setEnabled( tabbar->canScrollForward() );
+    scrollLastButton->setEnabled( tabbar->canScrollForward() );
 }
 
 // creates a new tabbar
@@ -278,8 +340,9 @@ TabBar::TabBar( QWidget* parent, const char* name )
     d = new TabBarPrivate;
     d->tabbar = this;
     d->readOnly = false;
-    d->leftTab = 1;
-    d->rightTab = 0;
+    d->reverseLayout = false;
+    d->firstTab = 1;
+    d->lastTab = 0;
     d->activeTab = 0;
     d->targetTab = 0;
     d->autoScroll = false;
@@ -287,21 +350,18 @@ TabBar::TabBar( QWidget* parent, const char* name )
 
     // initialize the scroll buttons
     d->scrollFirstButton = new QToolButton( this );
-    d->scrollFirstButton->setPixmap( scroll_first_xpm );
     connect( d->scrollFirstButton, SIGNAL( clicked() ),
       this, SLOT( scrollFirst() ) );
     d->scrollLastButton = new QToolButton( this );
-    d->scrollLastButton->setPixmap( scroll_last_xpm );
     connect( d->scrollLastButton, SIGNAL( clicked() ),
       this, SLOT( scrollLast() ) );
-    d->scrollLeftButton = new QToolButton( this );
-    d->scrollLeftButton->setPixmap( scroll_left_xpm );
-    connect( d->scrollLeftButton, SIGNAL( clicked() ),
-      this, SLOT( scrollLeft() ) );
-    d->scrollRightButton = new QToolButton( this );
-    d->scrollRightButton->setPixmap( scroll_right_xpm );
-    connect( d->scrollRightButton, SIGNAL( clicked() ),
-      this, SLOT( scrollRight() ) );
+    d->scrollBackButton = new QToolButton( this );
+    connect( d->scrollBackButton, SIGNAL( clicked() ),
+      this, SLOT( scrollBack() ) );
+    d->scrollForwardButton = new QToolButton( this );
+    connect( d->scrollForwardButton, SIGNAL( clicked() ),
+      this, SLOT( scrollForward() ) );
+    d->layoutButtons();
     d->updateButtons();
 }
 
@@ -338,7 +398,7 @@ void TabBar::clear()
 {
     d->tabs.clear();
     d->activeTab = 0;
-    d->leftTab = 1;
+    d->firstTab = 1;
 
     update();
 }
@@ -353,24 +413,41 @@ void TabBar::setReadOnly( bool ro )
     d->readOnly = ro;
 }
 
+bool TabBar::reverseLayout() const
+{
+    return d->reverseLayout;
+}
+
+void TabBar::setReverseLayout( bool reverse )
+{
+    if( reverse != d->reverseLayout )
+    {
+        d->reverseLayout = reverse;
+        d->layoutTabs();
+        d->layoutButtons();
+        d->updateButtons();
+        update();
+    }
+}
+
 void TabBar::setTabs( const QStringList& list )
 {
     QString left, active;
 
     if( d->activeTab > 0 )
         active = d->tabs[ d->activeTab-1 ];
-    if( d->leftTab > 0 )
-        left = d->tabs[ d->leftTab-1 ];
+    if( d->firstTab > 0 )
+        left = d->tabs[ d->firstTab-1 ];
 
     d->tabs = list;
 
     if( !left.isNull() )
     {
-        d->leftTab = d->tabs.findIndex( left ) + 1;
-        if( d->leftTab > (int)d->tabs.count() )
-            d->leftTab = 1;
-        if( d->leftTab <= 0 )
-            d->leftTab = 1;
+        d->firstTab = d->tabs.findIndex( left ) + 1;
+        if( d->firstTab > (int)d->tabs.count() )
+            d->firstTab = 1;
+        if( d->firstTab <= 0 )
+            d->firstTab = 1;
     }
 
     d->activeTab = 0;
@@ -385,48 +462,49 @@ QStringList TabBar::tabs() const
     return d->tabs;
 }
 
-bool TabBar::canScrollLeft() const
+unsigned TabBar::count() const
+{
+    return d->tabs.count();
+}
+
+bool TabBar::canScrollBack() const
+{
+    if ( d->tabs.count() == 0 )
+        return false;
+	
+    return d->firstTab > 1;
+}
+
+bool TabBar::canScrollForward() const
 {
     if ( d->tabs.count() == 0 )
         return false;
 
-    if ( d->leftTab == 1 )
-        return false;
-
-    return true;
+    return d->lastTab < d->tabs.count();
 }
 
-bool TabBar::canScrollRight() const
+void TabBar::scrollBack()
 {
-    if ( d->tabs.count() == 0 )
-        return false;
-
-    if ( d->rightTab == (int)d->tabs.count() )
-        return false;
-
-    if ( (unsigned int )d->leftTab == d->tabs.count() )
-        return false;
-
-    return true;
-}
-
-void TabBar::scrollLeft()
-{
-    if ( !canScrollLeft() )
+    if ( !canScrollBack() )
         return;
 
-    d->leftTab--;
+    d->firstTab--;
+    if( d->firstTab < 1 ) d->firstTab = 1;
+
     d->layoutTabs();
     d->updateButtons();
     update();
 }
 
-void TabBar::scrollRight()
+void TabBar::scrollForward()
 {
-    if ( !canScrollRight() )
+    if ( !canScrollForward() )
         return;
 
-    d->leftTab++;
+    d->firstTab ++;
+    if( d->firstTab > d->tabs.count() )
+        d->firstTab = d->tabs.count();
+
     d->layoutTabs();
     d->updateButtons();
     update();
@@ -434,10 +512,10 @@ void TabBar::scrollRight()
 
 void TabBar::scrollFirst()
 {
-    if ( !canScrollLeft() )
+    if ( !canScrollBack() )
         return;
 
-    d->leftTab = 1;
+    d->firstTab = 1;
     d->layoutTabs();
     d->updateButtons();
     update();
@@ -445,18 +523,33 @@ void TabBar::scrollFirst()
 
 void TabBar::scrollLast()
 {
-    if ( !canScrollRight() )
+    if ( !canScrollForward() )
         return;
 
     d->layoutTabs();
-    int fullWidth = d->tabRects[ d->tabRects.count()-1 ].right();
-    int delta = fullWidth - width() + d->offset;
-    for( unsigned i = 0; i < d->tabRects.count(); i++ )
-        if( d->tabRects[i].x() > delta )
+
+    if( !d->reverseLayout )
+    {
+        int fullWidth = d->tabRects[ d->tabRects.count()-1 ].right();
+        int delta = fullWidth - width() + d->offset;
+        for( unsigned i = 0; i < d->tabRects.count(); i++ )
+            if( d->tabRects[i].x() > delta )
+            {
+                d->firstTab = i+1;
+                break;
+            }
+    }
+    else
+    {
+        // FIXME optimize this, perhaps without loop
+        for( ; d->firstTab <= d->tabRects.count();)
         {
-          d->leftTab = i+1;
-          break;
+            int x = d->tabRects[ d->tabRects.count()-1 ].x();
+            if( x > 0 ) break;
+            d->firstTab++;
+            d->layoutTabs();
         }
+    }
 
     d->layoutTabs();
     d->updateButtons();
@@ -499,28 +592,28 @@ void TabBar::setActiveTab( const QString& text )
     emit tabChanged( text );
 }
 
-void TabBar::autoScrollLeft()
+void TabBar::autoScrollBack()
 {
     if( !d->autoScroll ) return;
 
-    scrollLeft();
+    scrollBack();
 
-    if( !canScrollLeft() )
+    if( !canScrollBack() )
         d->autoScroll = false;
     else
-        QTimer::singleShot( 400, this, SLOT( autoScrollLeft() ) );
+        QTimer::singleShot( 400, this, SLOT( autoScrollBack() ) );
 }
 
-void TabBar::autoScrollRight()
+void TabBar::autoScrollForward()
 {
     if( !d->autoScroll ) return;
 
-    scrollRight();
+    scrollForward();
 
-    if( !canScrollRight() )
+    if( !canScrollForward() )
         d->autoScroll = false;
     else
-        QTimer::singleShot( 400, this, SLOT( autoScrollRight() ) );
+        QTimer::singleShot( 400, this, SLOT( autoScrollForward() ) );
 }
 
 void TabBar::paintEvent( QPaintEvent* )
@@ -532,7 +625,7 @@ void TabBar::paintEvent( QPaintEvent* )
     }
 
     QPainter painter;
-    QPixmap pm(size());
+    QPixmap pm( size() );
     pm.fill( colorGroup().background() );
     painter.begin( &pm, this );
 
@@ -541,7 +634,7 @@ void TabBar::paintEvent( QPaintEvent* )
                      height(), colorGroup(), FALSE, 1, &fill );
 
     d->layoutTabs();
-
+    
     // draw first all non-active, visible tabs
     for( unsigned c = 0; c < d->tabRects.count(); c++ )
     {
@@ -577,17 +670,17 @@ void TabBar::paintEvent( QPaintEvent* )
     }
 
     painter.end();
-    bitBlt( this, d->offset, 0, &pm );
+    
+    if( !d->reverseLayout )
+         bitBlt( this, d->offset, 0, &pm );
+    else
+         bitBlt( this, 0, 0, &pm );
+
 }
 
 void TabBar::resizeEvent( QResizeEvent* )
 {
-    int bw = height();
-    d->offset = bw * 4;
-    d->scrollFirstButton->setGeometry( 0, 0, bw, bw );
-    d->scrollLeftButton->setGeometry( bw, 0, bw, bw );
-    d->scrollRightButton->setGeometry( bw*2, 0, bw, bw );
-    d->scrollLastButton->setGeometry( bw*3, 0, bw, bw );
+    d->layoutButtons();
     d->updateButtons();
     update();
 }
@@ -600,6 +693,14 @@ void TabBar::renameTab( const QString& old_name, const QString& new_name )
     update();
 }
 
+QString TabBar::activeTab() const
+{
+    if( d->activeTab == 0 )
+        return QString::null;
+    else
+        return d->tabs[ d->activeTab ];
+}
+
 void TabBar::mousePressEvent( QMouseEvent* ev )
 {
     if ( d->tabs.count() == 0 )
@@ -610,7 +711,9 @@ void TabBar::mousePressEvent( QMouseEvent* ev )
 
     d->layoutTabs();
 
-    QPoint pos = ev->pos() - QPoint( d->offset,0 );
+    QPoint pos = ev->pos();
+    if( !d->reverseLayout ) pos = pos - QPoint( d->offset,0 );
+    
     int tab = d->tabAt( pos ) + 1;
     if( ( tab > 0 ) && ( tab != d->activeTab ) )
     {
@@ -621,7 +724,7 @@ void TabBar::mousePressEvent( QMouseEvent* ev )
 
         // scroll if partially visible
         if( d->tabRects[ tab-1 ].right() > width() - d->offset )
-            scrollRight();
+            scrollForward();
     }
 
     if( ev->button() == RightButton )
@@ -646,8 +749,9 @@ void TabBar::mouseMoveEvent( QMouseEvent* ev )
 {
     if ( d->readOnly ) return;
 
-    QPoint pos = ev->pos() - QPoint( d->offset,0 );
-
+    QPoint pos = ev->pos();
+    if( !d->reverseLayout) pos = pos - QPoint( d->offset,0 );
+    
     // check if user drags a tab to move it
     int i = d->tabAt( pos ) + 1;
     if( ( i > 0 ) && ( i != d->targetTab ) )
@@ -680,7 +784,7 @@ void TabBar::mouseMoveEvent( QMouseEvent* ev )
     if ( pos.x() < 0 && !d->autoScroll  )
     {
         d->autoScroll = true;
-        autoScrollLeft();
+        autoScrollBack();
     }
 
     // outside far too right ? activate autoscroll...
@@ -688,13 +792,14 @@ void TabBar::mouseMoveEvent( QMouseEvent* ev )
     if ( pos.x() > w && !d->autoScroll )
     {
         d->autoScroll = true;
-        autoScrollRight();
+        autoScrollForward();
     }
 }
 
 void TabBar::mouseDoubleClickEvent( QMouseEvent* ev )
 {
-    if( ev->pos().x() > d->offset )
+    int offset = d->reverseLayout ? 0 : d->offset;
+    if( ev->pos().x() > offset )
     if( !d->readOnly )
         emit doubleClicked();
 }
