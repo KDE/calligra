@@ -193,7 +193,8 @@ bool KexiRecordNavigator::eventFilter( QObject *o, QEvent *e )
 			case Qt::Key_Enter:
 			case Qt::Key_Return:
 			case Qt::Key_Tab:
-			case Qt::Key_BackTab: {
+			case Qt::Key_BackTab: 
+			{
 				recordEntered=true;
 				ke->accept(); //to avoid pressing Enter later
 				ret = true;
@@ -202,7 +203,10 @@ bool KexiRecordNavigator::eventFilter( QObject *o, QEvent *e )
 			}
 		}
 		else if (e->type()==QEvent::FocusOut) {
-			recordEntered=true;
+			if (static_cast<QFocusEvent*>(e)->reason()!=QFocusEvent::Tab
+				&& static_cast<QFocusEvent*>(e)->reason()!=QFocusEvent::Backtab
+				&& static_cast<QFocusEvent*>(e)->reason()!=QFocusEvent::Other)
+				recordEntered=true;
 			ret = false;
 		}
 
@@ -211,12 +215,12 @@ bool KexiRecordNavigator::eventFilter( QObject *o, QEvent *e )
 			uint r = m_navRecordNumber->text().toUInt(&ok);
 			if (!ok || r<1)
 				r = (recordCount()>0)?1:0;
-			if (m_view)
+			if (m_view && (hasFocus() || e->type()==QEvent::KeyPress))
 				m_view->setFocus();
 			setCurrentRecordNumber(r);
 			emit recordNumberEntered(r);
 			if (d->handler)
-				d->handler->moveToRecordRequested(r);
+				d->handler->moveToRecordRequested(r-1);
 			return ret;
 		}
 	}
