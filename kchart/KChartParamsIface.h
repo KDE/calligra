@@ -88,6 +88,15 @@ k_dcop:
     //hilo chart
     virtual void setHiLoChartSubType(const QString &);
     virtual QString hiLoChartSubType() const;
+    virtual bool hiLoChartPrintHighValues() const;
+    virtual bool hiLoChartLowValuesUseFontRelSize() const;
+    virtual int hiLoChartLowValuesFontRelSize() const;
+    virtual bool hiLoChartPrintLowValues() const;
+    virtual int hiLoChartOpenValuesFontRelSize() const;
+    virtual bool hiLoChartPrintCloseValues() const;
+    virtual bool hiLoChartCloseValuesUseFontRelSize() const;
+    virtual int hiLoChartCloseValuesFontRelSize() const;
+
 
     //polar chart
     virtual void setPolarLineWidth( int width  );

@@ -358,6 +358,46 @@ QString KChartParamsIface::hiLoChartSubType() const
     return params->hiLoChartSubTypeToString(params->hiLoChartSubType());
 }
 
+bool KChartParamsIface::hiLoChartPrintHighValues() const
+{
+    return params->hiLoChartPrintHighValues();
+}
+
+bool KChartParamsIface::hiLoChartLowValuesUseFontRelSize() const
+{
+    return params->hiLoChartLowValuesUseFontRelSize();
+}
+
+int KChartParamsIface::hiLoChartLowValuesFontRelSize() const
+{
+    return params->hiLoChartLowValuesFontRelSize();
+}
+
+bool KChartParamsIface::hiLoChartPrintLowValues() const
+{
+    return params->hiLoChartPrintLowValues();
+}
+
+int KChartParamsIface::hiLoChartOpenValuesFontRelSize() const
+{
+    return params->hiLoChartOpenValuesFontRelSize();
+}
+
+bool KChartParamsIface::hiLoChartPrintCloseValues() const
+{
+    return params->hiLoChartPrintCloseValues();
+}
+
+bool KChartParamsIface::hiLoChartCloseValuesUseFontRelSize() const
+{
+    return params->hiLoChartCloseValuesUseFontRelSize();
+}
+
+int KChartParamsIface::hiLoChartCloseValuesFontRelSize() const
+{
+    return params->hiLoChartCloseValuesFontRelSize();
+}
+
 void KChartParamsIface::setPolarLineWidth( int width  )
 {
     params->setPolarLineWidth( width  );
