@@ -35,3 +35,4 @@ MimeType=application/x-example
 Type=Service
 ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 X-KDE-NativeMimeType=application/x-example
+Icon=example
