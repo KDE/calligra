@@ -3330,29 +3330,38 @@ void KWTextFrameSetEdit::insertFile(const QString & file )
                 }
             }
 
-            QDomDocument domDoc( "PARAGRAPHS" );
-            QDomElement elem = domDoc.createElement( "PARAGRAPHS" );
-            domDoc.appendChild( elem );
 
+            QValueList<QDomElement> paragList;
 
             QValueList<QDomElement>::Iterator it = framesetsList.begin();
             QValueList<QDomElement>::Iterator end = framesetsList.end();
             for ( ; it != end ; ++it )
             {
-                //(void) loadFrameSet( *it );
                 QDomElement frame = (*it).firstChild().toElement();
-                for ( ; !frame.isNull() ; frame = frame.nextSibling().toElement() )
-                {
-                    if ( frame.tagName() == "PARAGRAPH" )
-                    {
-                        elem.appendChild( frame );
+                QDomNode n = (*it).firstChild().toElement();
+                while( !n.isNull() ) {
+                    QDomElement e =n.toElement(); // try to convert the node to an element.
+                    if( !e.isNull() ) {
+                        if (e.tagName() == "PARAGRAPH" )
+                            paragList.append( e );
                     }
+                    n = n.nextSibling();
                 }
             }
-            KCommand *cmd =textFrameSet()->pasteKWord( cursor(), domDoc.toCString(), true );
-        if ( cmd )
-            frameSet()->kWordDocument()->addCommand(cmd);
 
+            QDomDocument domDoc( "PARAGRAPHS" );
+            QDomElement elem = domDoc.createElement( "PARAGRAPHS" );
+            domDoc.appendChild( elem );
+
+            it = paragList.begin();
+            end = paragList.end();
+            for ( ; it!= end ; ++it )
+            {
+                elem.appendChild( *it );
+            }
+            KCommand *cmd =textFrameSet()->pasteKWord( cursor(), domDoc.toCString(), true );
+            if ( cmd )
+                frameSet()->kWordDocument()->addCommand(cmd);
         }
 
     }
