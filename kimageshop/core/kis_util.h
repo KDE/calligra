@@ -25,9 +25,19 @@
 #include <qrect.h>
 #include <qpoint.h>
 #include <qstring.h>
-#include <stdio.h>
 #include <sys/time.h>
-#include <unistd.h>
+
+#include <kiconloader.h>
+#include "kis_factory.h"
+
+#define KISBarIcon( x ) BarIcon( x, KImageShopFactory::global() )
+
+// size for graphic blocks - must be a power of 2
+const int TILE_SIZE = 128;
+
+// Anumber which can be added to any image coordinate to make it positive
+// Used to make numbers round towards + or - infinity regardless of sign
+const long BIGNUM = (TILE_SIZE*10000);
 
 class kisUtil
 {
@@ -36,40 +46,18 @@ class kisUtil
 
   static void printRect( const QRect&, const QString& name = "Rect" );
   static void printPoint( const QPoint&, const QString& name = "Point" );
+
+  static void enlargeRectToContainPoint( QRect& r, QPoint p );
+  static QRect findTileExtents( QRect r );
+  
+  static void startTimer();
+  static void stopTimer( const QString& text );
+ private:
+  static struct timeval tv1, tv2;
+  static struct timezone tz;
 };
 
-#define MAX(a,b)        ((a) > (b) ? (a) : (b))
-#define MIN(a,b)        ((a) < (b) ? (a) : (b))
-
-#define showi(X) printf( #X " = %d\n", int(X));
-#define showf(X) printf( #X " = %f\n", float(X));
-#define showc(X) printf( #X " = %c\n", char(X));
-#define shows(X) printf( #X " = %s\n", (char *)X);                              
-
-// Time size for graphic blocks - must be a power of 2
-#define TILE_SIZE 128
-//#define TILE_SIZE 64
-
-// Anumber which can be added to any image coordinate to make it positive
-// Used to make numbers round towards + or - infinity regardless of sign
-#define BIGNUM (TILE_SIZE*10000)
-
-#define TIME_START \
-{\
-	struct timeval tv1,tv2;\
-	struct timezone tz;\
-	gettimeofday(&tv1,&tz);
-
-#define TIME_END(STR)\
- 	gettimeofday(&tv2,&tz);\
-	float _t=float(tv2.tv_sec-tv1.tv_sec)+(tv2.tv_usec-tv1.tv_usec)/1000000.;\
-	printf(STR " took %5.6f seconds\n",_t);\
-}
-
-void enlargeRectToContainPoint(QRect& r, QPoint p);
-QRect findTileExtents(QRect r);
-
-extern bool dbg;
-
+template<class T> inline T min(T a, T b) { return (a<b)?a:b; }
+template<class T> inline T max(T a, T b) { return (a>b)?a:b; }                          
 
 #endif

@@ -74,7 +74,7 @@ void Layer::setOpacity(uchar o)
 
 void Layer::loadRGBImage(QImage img, QImage alpha)
 {
-  printf("loadRGBImage img=(%d,%d) alpha=(%d,%d)\n",img.width(),img.height(),
+  qDebug("loadRGBImage img=(%d,%d) alpha=(%d,%d)\n",img.width(),img.height(),
 	 alpha.width(),alpha.height());
   if (img.depth()!=32)
     img=img.convertDepth(32);

@@ -49,7 +49,7 @@ KImageShopImage::KImageShopImage( const QString& _name, int width, int height )
 {
   viewportRect = QRect(0,0,w,h);
 
-  QRect tileExtents=::findTileExtents( viewportRect );
+  QRect tileExtents = kisUtil::findTileExtents( viewportRect );
 
   xTiles = tileExtents.width() / TILE_SIZE;	
   yTiles = tileExtents.height() / TILE_SIZE;
@@ -136,7 +136,7 @@ void KImageShopImage::paintPixmap(QPainter *p, QRect area)
 {
   if (!p) return;
 
- TIME_START;
+ kisUtil::startTimer();
  int startX, startY, pixX, pixY, clipX, clipY = 0;
 
  int l = area.left();
@@ -197,7 +197,7 @@ void KImageShopImage::paintPixmap(QPainter *p, QRect area)
 	    }
 	}
     }
- TIME_END("paintImage ");
+ kisUtil::stopTimer("paintImage ");
 }
 
 void KImageShopImage::setUpVisual()
@@ -338,7 +338,7 @@ void KImageShopImage::compositeTile(int x, int y, Layer *dstLay, int dstTile)
 
 void KImageShopImage::compositeImage(QRect r)
 {
-  TIME_START;
+  kisUtil::startTimer();
   for(int y=0;y<yTiles;y++)
     for(int x=0;x<xTiles;x++)
       if (r.isNull() ||
@@ -350,7 +350,7 @@ void KImageShopImage::compositeImage(QRect r)
 	
 	convertTileToPixmap(compose, 0, tiles[y*xTiles+x]);
       }
-  TIME_END("compositeImage");
+  kisUtil::stopTimer("compositeImage");
 
   emit updated(r);
 }
@@ -413,8 +413,6 @@ void KImageShopImage::renderLayerIntoTile(QRect tileBoundary, const Layer *srcLa
   //  | 3 | 4 |
   //  ---------
   //
-
-  dbg=false;
 
   KIS_DEBUG(render, {
     SHOW_POINT(tileBoundary.topLeft());
@@ -490,8 +488,6 @@ void KImageShopImage::renderLayerIntoTile(QRect tileBoundary, const Layer *srcLa
       KIS_DEBUG(render, puts("ignore"); );
   }	else
     KIS_DEBUG(render, puts("ignore"); );
-	
-  dbg=false;
 }
 
 void KImageShopImage::renderTileQuadrant(const Layer *srcLay, int srcTile,
@@ -504,13 +500,13 @@ void KImageShopImage::renderTileQuadrant(const Layer *srcLay, int srcTile,
   uchar opacity=srcLay->opacity();
 	
   // Constrain the width so that the copy is clipped to the overlap
-  w=MIN(MIN(w, TILE_SIZE-srcX), TILE_SIZE-dstX);
-  h=MIN(MIN(h, TILE_SIZE-srcY), TILE_SIZE-dstY);
+  w = min(min(w, TILE_SIZE-srcX), TILE_SIZE-dstX);
+  h = min(min(h, TILE_SIZE-srcY), TILE_SIZE-dstY);
   // now constrain if on the boundry of the layer
   if (srcLay->boundryTileX(srcTile))
-    w=MIN(w, srcLay->channelLastTileOffsetX()-srcX);
+    w = min(w, srcLay->channelLastTileOffsetX()-srcX);
   if (srcLay->boundryTileY(srcTile))
-    h=MIN(h, srcLay->channelLastTileOffsetY()-srcY);
+    h = min(h, srcLay->channelLastTileOffsetY()-srcY);
   // XXX now constrain for the boundry of the Canvas
 
   //printf("renderTileQuadrant: srcTile=%d src=(%d,%d) dstTile=%d dst=(%d,%d) size=(%d,%d)\n", srcTile, srcX, srcY, dstTile, dstX, dstY, w,h);

@@ -31,12 +31,12 @@
 #include <klocale.h>
 
 #include "kis_view.h"
-#include "kis_global.h"
 #include "kis_doc.h"
 #include "kis_canvas.h"
 #include "kis_tabbar.h"
 #include "kis_brush.h"
 #include "kis_tool.h"
+#include "kis_util.h"
 
 #include "kis_dlg_color.h"
 #include "kis_dlg_layer.h"
@@ -149,19 +149,19 @@ void KImageShopView::setupTabBar()
  
   // tabbar control buttons
   m_pTabFirst = new QPushButton( this );
-  m_pTabFirst->setPixmap( QPixmap( KImageShopBarIcon( "tab_first" ) ) );
+  m_pTabFirst->setPixmap( QPixmap( KISBarIcon( "tab_first" ) ) );
   QObject::connect( m_pTabFirst, SIGNAL( clicked() ), this, SLOT( slotScrollToFirstTab() ) );
 
   m_pTabLeft = new QPushButton( this );
-  m_pTabLeft->setPixmap( QPixmap( KImageShopBarIcon( "tab_left" ) ) );
+  m_pTabLeft->setPixmap( QPixmap( KISBarIcon( "tab_left" ) ) );
   QObject::connect( m_pTabLeft, SIGNAL( clicked() ), this, SLOT( slotScrollToLeftTab() ) );
 
   m_pTabRight = new QPushButton( this );
-  m_pTabRight->setPixmap( QPixmap( KImageShopBarIcon( "tab_right" ) ) );
+  m_pTabRight->setPixmap( QPixmap( KISBarIcon( "tab_right" ) ) );
   QObject::connect( m_pTabRight, SIGNAL( clicked() ), this, SLOT( slotScrollToRightTab() ) );
 
   m_pTabLast = new QPushButton( this );
-  m_pTabLast->setPixmap( QPixmap( KImageShopBarIcon( "tab_last" ) ) );
+  m_pTabLast->setPixmap( QPixmap( KISBarIcon( "tab_last" ) ) );
   QObject::connect( m_pTabLast, SIGNAL( clicked() ), this, SLOT( slotScrollToLastTab() ) );
 }
 
@@ -241,49 +241,49 @@ void KImageShopView::setupActions()
 {
   // edit actions
   
-  m_undo = new KAction( i18n("&Undo"), KImageShopBarIcon("undo"), 0, this, SLOT( undo() ),
+  m_undo = new KAction( i18n("&Undo"), KISBarIcon("undo"), 0, this, SLOT( undo() ),
 			actionCollection(), "undo");
-  m_redo = new KAction( i18n("&Redo"), KImageShopBarIcon("redo"), 0, this, SLOT( redo() ),
+  m_redo = new KAction( i18n("&Redo"), KISBarIcon("redo"), 0, this, SLOT( redo() ),
 			actionCollection(), "redo");
-  m_cut = new KAction( i18n("C&ut"), KImageShopBarIcon("editcut"), 0, this, SLOT( cut() ),
+  m_cut = new KAction( i18n("C&ut"), KISBarIcon("editcut"), 0, this, SLOT( cut() ),
 		       actionCollection(), "cut");
-  m_copy = new KAction( i18n("&Copy"), KImageShopBarIcon("editcopy"), 0, this, SLOT( copy() ),
+  m_copy = new KAction( i18n("&Copy"), KISBarIcon("editcopy"), 0, this, SLOT( copy() ),
 			actionCollection(), "copy");
-  m_paste = new KAction( i18n("&Paste"), KImageShopBarIcon("editpaste"), 0, this, SLOT( paste() ),
+  m_paste = new KAction( i18n("&Paste"), KISBarIcon("editpaste"), 0, this, SLOT( paste() ),
 			 actionCollection(), "paste");
 
   // dialog actions
 
-  m_dialog_layer = new KToggleAction( i18n("&Layer Dialog"), KImageShopBarIcon("layer_dialog"), 0, this,
+  m_dialog_layer = new KToggleAction( i18n("&Layer Dialog"), KISBarIcon("layer_dialog"), 0, this,
 				SLOT( dialog_layer() ),actionCollection(), "dialog_layer");
-  m_dialog_color = new KToggleAction( i18n("&Color Dialog"), KImageShopBarIcon("color_dialog"), 0, this,
+  m_dialog_color = new KToggleAction( i18n("&Color Dialog"), KISBarIcon("color_dialog"), 0, this,
 				SLOT( dialog_color() ),actionCollection(), "dialog_color");
-  m_dialog_brush = new KToggleAction( i18n("&Brush Dialog"), KImageShopBarIcon("brush_dialog"), 0, this,
+  m_dialog_brush = new KToggleAction( i18n("&Brush Dialog"), KISBarIcon("brush_dialog"), 0, this,
 				SLOT( dialog_brush() ),actionCollection(), "dialog_brush");
-  m_dialog_gradient = new KToggleAction( i18n("&Gradient Dialog"), KImageShopBarIcon("gradient_dialog"), 0, this,
+  m_dialog_gradient = new KToggleAction( i18n("&Gradient Dialog"), KISBarIcon("gradient_dialog"), 0, this,
 				   SLOT( dialog_gradient() ),actionCollection(), "dialog_gradient");
-  m_dialog_gradienteditor = new KToggleAction( i18n("Gradient &Editor"), KImageShopBarIcon("gradienteditor_dialog"),
+  m_dialog_gradienteditor = new KToggleAction( i18n("Gradient &Editor"), KISBarIcon("gradienteditor_dialog"),
 					 0, this, SLOT( dialog_gradienteditor() ),
 					 actionCollection(), "dialog_gradienteditor");
 
   // tool actions
 
-  m_tool_move = new KToggleAction( i18n("&Move tool"), KImageShopBarIcon("move"), 0, this,
+  m_tool_move = new KToggleAction( i18n("&Move tool"), KISBarIcon("move"), 0, this,
 			     SLOT( tool_move() ),actionCollection(), "tool_move");
   m_tool_move->setExclusiveGroup( "tools" );
-  m_tool_zoom = new KToggleAction( i18n("&Zoom tool"), KImageShopBarIcon("viewmag"), 0, this,
+  m_tool_zoom = new KToggleAction( i18n("&Zoom tool"), KISBarIcon("viewmag"), 0, this,
 			     SLOT( tool_zoom() ),actionCollection(), "tool_zoom");
   m_tool_zoom->setExclusiveGroup( "tools" );
-  m_tool_pen = new KToggleAction( i18n("&Pen tool"), KImageShopBarIcon("pen"), 0, this,
+  m_tool_pen = new KToggleAction( i18n("&Pen tool"), KISBarIcon("pen"), 0, this,
 			      SLOT( tool_pen() ),actionCollection(), "tool_pen");
   m_tool_pen->setExclusiveGroup( "tools" );
-  m_tool_brush = new KToggleAction( i18n("&Brush tool"), KImageShopBarIcon("paintbrush"), 0, this,
+  m_tool_brush = new KToggleAction( i18n("&Brush tool"), KISBarIcon("paintbrush"), 0, this,
 			      SLOT( tool_brush() ),actionCollection(), "tool_brush");
   m_tool_brush->setExclusiveGroup( "tools" );
-  m_tool_colorpicker = new KToggleAction( i18n("&Color picker"), KImageShopBarIcon("colorpicker"), 0, this,
+  m_tool_colorpicker = new KToggleAction( i18n("&Color picker"), KISBarIcon("colorpicker"), 0, this,
 			      SLOT( tool_colorpicker() ),actionCollection(), "tool_colorpicker");
   m_tool_colorpicker->setExclusiveGroup( "tools" );
-  m_tool_gradient = new KToggleAction( i18n("&Gradient tool"), KImageShopBarIcon("gradient"), 0, this,
+  m_tool_gradient = new KToggleAction( i18n("&Gradient tool"), KISBarIcon("gradient"), 0, this,
   				 SLOT( tool_gradient() ),actionCollection(), "tool_gradient");
   m_tool_gradient->setExclusiveGroup( "tools" );
 

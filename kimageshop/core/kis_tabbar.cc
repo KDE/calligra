@@ -429,7 +429,7 @@ void KImageShopTabBar::mousePressEvent( QMouseEvent* _ev )
       }
 }
 
-void KImageShopTabBar::mouseReleaseEvent( QMouseEvent* _ev )
+void KImageShopTabBar::mouseReleaseEvent( QMouseEvent* )
 {
   /*
   if ( _ev->button() == LeftButton && m_moveTab != 0 )

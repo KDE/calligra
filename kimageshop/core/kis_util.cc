@@ -34,31 +34,39 @@ void kisUtil::printPoint( const QPoint& p, const QString& name )
   qDebug("%s:: x:%d y:%d", name.latin1(), p.x(), p.y()); 
 }
 
-bool dbg;
-
-void enlargeRectToContainPoint(QRect& r, QPoint p)
+void kisUtil::startTimer()
 {
-	if (r.contains(p)) {
-		puts("enlargeRectToContainPoint: point already contained\n");	
-		return;
-	}
-	if (p.x()<r.left())   r.setLeft(p.x());
-	if (p.x()>r.right())  r.setRight(p.x());
-	if (p.y()<r.top())    r.setTop(p.y());
-	if (p.y()>r.bottom()) r.setBottom(p.y());
+  gettimeofday( &tv1, &tz );
+}
+
+void kisUtil::stopTimer( const QString& text )
+{
+  gettimeofday( &tv2, &tz );
+  float time = float( tv2.tv_sec - tv1.tv_sec ) + ( tv2.tv_usec - tv1.tv_usec ) / 1000000.;
+  qDebug( "%s took %5.6f seconds\n", text.latin1(), time );
+}
+
+void kisUtil::enlargeRectToContainPoint( QRect& r, QPoint p )
+{
+  if (r.contains(p))
+    {
+      qDebug("kisUtil::enlargeRectToContainPoint: point already contained\n");	
+      return;
+    }
+  if (p.x()<r.left())   r.setLeft(p.x());
+  if (p.x()>r.right())  r.setRight(p.x());
+  if (p.y()<r.top())    r.setTop(p.y());
+  if (p.y()>r.bottom()) r.setBottom(p.y());
 }
 
 // Find a rectangle which encloses r whose coordinates are divisible
 // by TILE_SIZE (ie no remainder)
-QRect findTileExtents(QRect r)
+QRect kisUtil::findTileExtents( QRect r )
 {
-// 	puts("findTileExtents");
-// 	SHOW_RECT_COORDS(r);
-	r.setLeft(((r.left()+BIGNUM)/TILE_SIZE)*TILE_SIZE-BIGNUM);
-	r.setTop(((r.top()+BIGNUM)  /TILE_SIZE)*TILE_SIZE-BIGNUM);
-	r.setBottom(((r.bottom()+TILE_SIZE+BIGNUM)/TILE_SIZE)*TILE_SIZE-BIGNUM-1);
-	r.setRight(((r.right()+TILE_SIZE+BIGNUM)  /TILE_SIZE)*TILE_SIZE-BIGNUM-1);
-// 	SHOW_RECT_COORDS(r);
-	return(r);
+  r.setLeft(((r.left()+BIGNUM)/TILE_SIZE)*TILE_SIZE-BIGNUM);
+  r.setTop(((r.top()+BIGNUM)  /TILE_SIZE)*TILE_SIZE-BIGNUM);
+  r.setBottom(((r.bottom()+TILE_SIZE+BIGNUM)/TILE_SIZE)*TILE_SIZE-BIGNUM-1);
+  r.setRight(((r.right()+TILE_SIZE+BIGNUM)  /TILE_SIZE)*TILE_SIZE-BIGNUM-1);
+  return(r);
 }
 

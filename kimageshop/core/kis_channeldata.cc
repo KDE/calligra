@@ -268,12 +268,12 @@ void ChannelData::dumpTileBlock()
   qDebug("====dumpTileBlock====");
   kisUtil::printRect(imageRect, "imageRect");
   kisUtil::printRect(tilesRect, "tilesRect");
-  showi(xTilesNo);
-  showi(yTilesNo);
+  qDebug("xTilesNo: %d", xTilesNo);
+  qDebug("yTilesNo: %d", yTilesNo);
   for(int y=0;y<yTilesNo;y++)
     {
       for(int x=0;x<xTilesNo;x++)
-	printf("%08x ",(unsigned int)tileInfo[(y*xTilesNo)+x]);
+	qDebug("%08x ",(unsigned int)tileInfo[(y*xTilesNo)+x]);
       puts("");
     }
   puts("");
