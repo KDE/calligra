@@ -161,10 +161,11 @@ public:
     /** The "layout unit pixel" -> "[zoomed] view pixel" conversions. */
     int layoutUnitToPixelX( int lupix ) const
       // No need to apply the resolution here.
-    { return qRound( static_cast<double>( lupix * m_zoom ) / static_cast<double>( m_layoutUnitFactor * 100 ) ); }
+      // qRound replaced with a truncation, too many problems (e.g. bottom of parags)
+    { return int( static_cast<double>( lupix * m_zoom ) / static_cast<double>( m_layoutUnitFactor * 100 ) ); }
     int layoutUnitToPixelY( int lupix ) const
       // Same as layoutUnitToPixelX nowadays
-    { return qRound( static_cast<double>( lupix * m_zoom ) / static_cast<double>( m_layoutUnitFactor * 100 ) ); }
+    { return layoutUnitToPixelX( lupix ); }
 
     /** This variant converts a height, using a reference Y position.
      * This prevents rounding problems. */

@@ -336,16 +336,28 @@ int KoTextParag::lineSpacing( int line ) const
 QRect KoTextParag::pixelRect( KoZoomHandler *zh ) const
 {
     QRect rct( zh->layoutUnitToPixel( rect() ) );
+    // Both of those workarounds don't appear to be necessary anymore
+    // after the qRound->int fix in KoZoomHandler::layoutUnitToPixel.
+    // To be checked.
+#if 0
+    // QRect-semantics and rounding problem... The height is wrong.
+    rct.setHeight( zh->layoutUnitToPixelY( rect().height() ) );
+
+    kdDebug() << "KoTextParag::pixelRect was:" << zh->layoutUnitToPixel( rect() ).height()
+              << " is now:" << rct.height() << endl;
+#endif
+#if 0
     // After division we almost always end up with the top overwriting the bottom of the parag above
     if ( prev() )
     {
         QRect prevRect( zh->layoutUnitToPixel( prev()->rect() ) );
         if ( rct.top() < prevRect.bottom() + 1 )
         {
-            //kdDebug() << "pixelRect: rct.top() adjusted to " << prevRect.bottom() + 1 << " (was " << rct.top() << ")" << endl;
+            kdDebug() << "pixelRect: rct.top() adjusted to " << prevRect.bottom() + 1 << " (was " << rct.top() << ")" << endl;
             rct.setTop( prevRect.bottom() + 1 );
         }
     }
+#endif
     return rct;
 }
 
@@ -414,12 +426,12 @@ void KoTextParag::drawParagString( QPainter &painter, const QString &s, int star
     // Calculate startX in pixels (using the xadj value of the corresponding char)
     int startX_pix = zh->layoutUnitToPixelX( startX ) + at( rightToLeft ? start+len-1 : start )->pixelxadj;
     //kdDebug() << "KoTextParag::drawParagString startX in pixels : " << startX_pix << " bw=" << bw << endl;
-    //kdDebug() << "KoTextParag::drawParagString h(LU)=" << h << " lastY(LU)=" << lastY
-    //          << " h(PIX)=" << zh->layoutUnitToPixelY( lastY, h ) << " lastY(PIX)=" << zh->layoutUnitToPixelY( lastY ) << endl;
 
     int lastY_pix = zh->layoutUnitToPixelY( lastY );
     int baseLine_pix = zh->layoutUnitToPixelY( lastY, baseLine );
     int h_pix = zh->layoutUnitToPixelY( lastY, h );
+    //kdDebug() << "KoTextParag::drawParagString h(LU)=" << h << " lastY(LU)=" << lastY
+    //        << " h(PIX)=" << h_pix << " lastY(PIX)=" << lastY_pix << endl;
 
     if ( lastFormat->textBackgroundColor().isValid() )
         painter.fillRect( startX_pix, lastY_pix, bw, h_pix, lastFormat->textBackgroundColor() );
@@ -477,8 +489,12 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
     // 2) Sort out the font
     //bool forPrint = ( painter.device()->devType() == QInternal::Printer );
     QFont font( lastFormat->screenFont( zh ) );
-    //QFontInfo fi( font );
-    //kdDebug() << "KoTextParag::drawParagString requested font " << font.pointSizeFloat() << " using font " << fi.pointSize() << " (pt for layout-unit size " << lastFormat->font().pointSizeFloat() << ")" << endl;
+#if 0
+    QFontInfo fi( font );
+    kdDebug() << "KoTextParag::drawParagString requested font " << font.pointSizeFloat() << " using font " << fi.pointSize() << " (pt for layout-unit size " << lastFormat->font().pointSizeFloat() << ")" << endl;
+    QFontMetrics fm( font );
+    kdDebug() << "Real font: " << fi.family() << ". Font height in pixels: " << fm.height() << endl;
+#endif
 
     // 3) Go (almost verbatim from the original KoTextFormat::drawParagString)
     QString str( s );
@@ -966,9 +982,9 @@ void KoTextParag::printRTDebug( int info )
                       << " text='" << m_layout.counter->text( this ) << "'"
                       << " width=" << m_layout.counter->width( this ) << endl;
         kdDebug() << "  align: " << alignment() << endl;
+        QRect pixr = pixelRect( textDocument()->paintingZoomHandler() );
         kdDebug() << "  rect() : " << DEBUGRECT( rect() )
-                  << "  pixelRect() : " << DEBUGRECT( pixelRect( textDocument()->paintingZoomHandler() ) ) << endl;
-
+                  << "  pixelRect() : " << DEBUGRECT( pixr ) << endl;
         kdDebug() << "  topMargin()=" << topMargin() << " bottomMargin()=" << bottomMargin()
                   << " leftMargin()=" << leftMargin() << " firstLineMargin()=" << firstLineMargin()
                   << " rightMargin()=" << rightMargin() << endl;

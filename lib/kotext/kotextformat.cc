@@ -228,6 +228,7 @@ int KoTextFormat::height() const
 {
     // Calculate height using 100%-zoom font
     int h = screenFontMetrics( 0L, false ).height();
+    //kdDebug() << "KoTextFormat::height 100%-zoom font says h=" << h << " in LU:" << KoTextZoomHandler::ptToLayoutUnitPt(h) << endl;
     // Then scale to LU
     return qRound( KoTextZoomHandler::ptToLayoutUnitPt( h ) );
 }
