@@ -254,10 +254,16 @@ tristate
 KexiFormView::beforeSwitchTo(int mode, bool &dontStore)
 {
 	if (mode!=viewMode()) {
-		if (viewMode()!=Kexi::DataViewMode) {
-		//remember our pos
-		tempData()->scrollViewContentsPos 
-			= QPoint(m_scrollView->contentsX(), m_scrollView->contentsY());
+		if (viewMode()==Kexi::DataViewMode) {
+			if (!m_scrollView->acceptRowEdit())
+				return cancelled;
+
+			m_scrollView->beforeSwitchView();
+		}
+		else {
+			//remember our pos
+			tempData()->scrollViewContentsPos 
+				= QPoint(m_scrollView->contentsX(), m_scrollView->contentsY());
 		}
 	}
 

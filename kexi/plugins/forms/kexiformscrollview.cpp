@@ -444,4 +444,9 @@ void KexiFormScrollView::updateAfterAcceptRowEdit()
 	dbFormWidget()->editedItem = 0;
 }
 
+void KexiFormScrollView::beforeSwitchView()
+{
+	m_editor = 0;
+}
+
 #include "kexiformscrollview.moc"

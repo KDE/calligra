@@ -85,6 +85,9 @@ class KexiFormScrollView :
 			return it!=m_fieldNumbersForDataItems.constEnd() ? it.data() : -1;
 		}
 
+		/*! @internal Used by KexiFormView in view switching. */
+		void beforeSwitchView();
+
 	public slots:
 		/*! Reimplemented to update resize policy. */
 		virtual void show();

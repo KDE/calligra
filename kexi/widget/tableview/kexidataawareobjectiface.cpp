@@ -192,6 +192,7 @@ void KexiDataAwareObjectInterface::setData( KexiTableViewData *data, bool owner 
 
 void KexiDataAwareObjectInterface::initDataContents()
 {
+	m_editor = 0;
 //	QSize s(tableSize());
 //	resizeContents(s.width(),s.height());
 
@@ -600,6 +601,8 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
 					//moving from 'insert item' to last item
 					m_itemIterator->toLast();
 				}
+				else if (!newRowInserted && !forceSet && m_currentItem != m_insertItem && 0==m_curRow)
+					m_itemIterator->toFirst();
 				else if (!newRowInserted && !forceSet && m_currentItem != m_insertItem && oldRow>=0 && (oldRow+1)==m_curRow) //just move next
 					++(*m_itemIterator);
 				else if (!newRowInserted && !forceSet && m_currentItem != m_insertItem && oldRow>=0 && (oldRow-1)==m_curRow) //just move back
@@ -620,6 +623,9 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
 		/*emit*/ cellSelected(m_curCol, m_curRow);
 		/* only needed for forms */
 		selectCellInternal();
+	}
+	else {
+			kexidbg << "setCursorPosition(): NO CHANGE" << endl;
 	}
 
 	if(m_initDataContentsOnShow) {
