@@ -69,7 +69,8 @@ namespace Kexi
 			;
 		return o;
 	}*/
-}
+
+} //namespace
 
 #endif
 
