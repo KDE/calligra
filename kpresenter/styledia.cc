@@ -140,17 +140,27 @@ StyleDia::StyleDia( QWidget* parent, const char* name, int flags_, bool _stickyO
         setupTab3();
     lockUpdate = false;
 
-    if ( flags & SdPen )
-	updatePenConfiguration();
-    if ( flags & SdBrush )
-	updateBrushConfiguration();
 
     setCancelButton( i18n( "&Close" ) );
     setOkButton( i18n( "&OK" ) );
     setApplyButton( i18n( "&Apply" ) );
-
+    setDefaultButton ( i18n("Reset") );
+    slotReset();
     connect( this, SIGNAL( applyButtonPressed() ), this, SLOT( styleDone() ) );
     connect( this, SIGNAL( cancelButtonPressed() ), this, SLOT( reject() ) );
+    connect( this, SIGNAL( defaultButtonPressed () ), this, SLOT( slotReset() ) );
+
+}
+
+void StyleDia::slotReset()
+{
+    setPen( oldPen );
+    setBrush( oldBrush );
+    setLineBegin( oldLb );
+    setLineEnd( oldLe );
+    setFillType( oldFillType );
+    setGradient( oldC1, oldC1, oldBCType,oldUnbalanced, oldXfactor, oldYfactor );
+    setSticky( oldSticky );
 }
 
 /*==============================================================*/
@@ -445,7 +455,7 @@ void StyleDia::setPen( const QPen &_pen )
 {
     if ( lockUpdate )
 	return;
-
+    oldPen=_pen;
     switch ( _pen.style() ) {
     case NoPen: choosePStyle->setCurrentItem( 5 );
 	break;
@@ -470,7 +480,7 @@ void StyleDia::setBrush( const QBrush &_brush )
 {
     if ( lockUpdate )
 	return;
-
+    oldBrush =_brush;
     switch ( _brush.style() ) {
     case SolidPattern: chooseBStyle->setCurrentItem( 0 );
 	break;
@@ -514,7 +524,7 @@ void StyleDia::setLineBegin( LineEnd lb )
 {
     if ( lockUpdate )
 	return;
-
+    oldLb = lb;
     clineBegin->setCurrentItem( (int)lb );
     updatePenConfiguration();
 }
@@ -524,7 +534,7 @@ void StyleDia::setLineEnd( LineEnd le )
 {
     if ( lockUpdate )
 	return;
-
+    oldLe=le;
     clineEnd->setCurrentItem( (int)le );
     updatePenConfiguration();
 }
@@ -546,7 +556,12 @@ void StyleDia::setGradient( const QColor &_c1, const QColor &_c2, BCType _t,
 {
     if ( lockUpdate )
 	return;
-
+    oldC1=_c1;
+    oldC2=_c2;
+    oldBCType=_t;
+    oldUnbalanced=_unbalanced;
+    oldXfactor=_xfactor;
+    oldYfactor=_yfactor;
     gradient1->setColor( _c1 );
     gradient2->setColor( _c2 );
     gradients->setCurrentItem( (int)_t - 1 );
@@ -681,6 +696,7 @@ int StyleDia::getGYFactor()
 
 void StyleDia::setSticky( bool s )
 {
+    oldSticky=s;
     if( stickyObj)
         sticky->setChecked( s );
 }

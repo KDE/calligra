@@ -136,7 +136,19 @@ private:
     bool lockUpdate, stickyObj;
     int flags;
 
+    QPen oldPen;
+    QBrush oldBrush;
+    LineEnd oldLb;
+    LineEnd oldLe;
+    FillType oldFillType;
+    QColor oldC1, oldC2;
+    BCType oldBCType;
+    bool oldUnbalanced;
+    bool oldSticky;
+    int oldXfactor, oldYfactor;
+
 private slots:
+    void slotReset();
     void styleDone() { emit styleOk(); }
     void updatePenConfiguration();
     void updateBrushConfiguration();
