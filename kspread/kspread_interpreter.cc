@@ -2189,7 +2189,7 @@ KSParseNode* KSpreadInterpreter::parse( KSContext& context, KSpreadTable* table,
 {
   // Create the parse tree.
   KSParser parser;
-  if ( !parser.parse( formula.latin1(), KSCRIPT_EXTENSION_KSPREAD ) )
+  if ( !parser.parse( formula.local8Bit(), KSCRIPT_EXTENSION_KSPREAD ) )
   {
     context.setException( new KSException( "SyntaxError", parser.errorMessage() ) );
     return 0;
