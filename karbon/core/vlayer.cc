@@ -42,17 +42,19 @@ VLayer::draw( VPainter *painter, const KoRect& rect )
 void
 VLayer::appendObject( VShape* object )
 {
+	object->setParent( this );
 	// put new objects "on top" by appending them:
 	m_objects.append( object );
-	object->setParent( this );
+	invalidateBoundingBox();
 }
 
 void
 VLayer::prependObject( VShape* object )
 {
+	object->setParent( this );
 	// prepend object
 	m_objects.prepend( object );
-	object->setParent( this );
+	invalidateBoundingBox();
 }
 
 void
@@ -174,3 +176,4 @@ VLayer::load( const QDomElement& element )
 		}
 	}
 }
+
