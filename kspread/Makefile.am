@@ -4,7 +4,7 @@ INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes) \
 kspread_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 kspread_LDADD = ../kchart/libkchart.la libkspread.la ../lib/kofficeui/libkofficeui.la
 
-libkspread_la_LDFLAGS = -avoid-version -module
+libkspread_la_LDFLAGS = -avoid-version -module -no-undefined
 
 libkspread_la_LIBADD = $(all_libraries) ../lib/kscript/libkscript.la ../lib/kofficeui/libkofficeui.la -lkformula
 

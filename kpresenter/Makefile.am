@@ -10,7 +10,7 @@ lib_LTLIBRARIES = libkpresenter.la
 kpresenter_LDFLAGS = $(KDE_RPATH)
 kpresenter_LDADD = libkpresenter.la
 
-libkpresenter_la_LDFLAGS = -avoid-version -module
+libkpresenter_la_LDFLAGS = -avoid-version -module -no-undefined
 libkpresenter_la_LIBADD = autoformEdit/libaf.la ../lib/kofficeui/libkofficeui.la
 
 libkpresenter_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc \

@@ -10,7 +10,7 @@ lib_LTLIBRARIES = libkword.la
 kword_LDFLAGS = $(KDE_RPATH)
 kword_LDADD = libkword.la
 
-libkword_la_LDFLAGS = $(KDE_LDFLAGS) -avoid-version -module
+libkword_la_LDFLAGS = $(KDE_LDFLAGS) -avoid-version -module -no-undefined
 libkword_la_LIBADD = ../lib/kofficeui/libkofficeui.la -lkspell -lkformula
 
 libkword_la_SOURCES = kword_doc.cc searchdia.cc char.cc kword_view.cc \

@@ -1,7 +1,6 @@
 
 INCLUDES = -I$(srcdir)/../../lib/kofficecore -I$(idldir) $(all_includes)
-# LDFLAGS	= $(all_libraries) $(KDE_RPATH)
-libkspelltool_la_LIBADD = $(all_libraries) ../../lib/kofficecore/libkofficecore.la -lkspell
+libkspelltool_la_LIBADD = ../../lib/kofficecore/libkofficecore.la -lkspell
 
 ####### Files
 
@@ -9,7 +8,7 @@ lib_LTLIBRARIES = libkspelltool.la
 
 libkspelltool_la_SOURCES = main.cc
 
-libkspelltool_la_LDFLAGS = -avoid-version -module
+libkspelltool_la_LDFLAGS = $(all_libraries) -avoid-version -module -no-undefined
 
 noinst_HEADERS = main.h
 
@@ -17,7 +16,4 @@ libkspelltool_la_METASOURCES = main.moc
 
 service_DATA = kspelltool.desktop
 servicedir = $(kde_servicesdir)
-
-messages:
-#	$(XGETTEXT)  *.cc -o $(podir)/kspelltool.pot
 

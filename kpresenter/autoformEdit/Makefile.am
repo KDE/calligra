@@ -9,3 +9,4 @@ noinst_LTLIBRARIES = libaf.la
 libaf_la_SOURCES = atfinterpreter.cc afchoose.cc
 
 METASOURCES = AUTO
+
