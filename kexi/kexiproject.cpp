@@ -39,29 +39,30 @@ KexiProject::KexiProject( QWidget *parentWidget, const char *widgetName, QObject
          const char* name, bool singleViewMode )
     : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
-    dcop = 0;
-    setInstance( KexiFactory::global(), false );
-    kdDebug()<<"creating KexDB instance"<<endl;
-    m_db = new KexiDB(this);
-    m_formManager=new KexiFormManager(this);
-    m_relationManager=new KexiRelation(this);
-    if ( name )
-        dcopObject();
-
+	dcop = 0;
+	setInstance( KexiFactory::global(), false );
+	kdDebug()<<"creating KexDB instance"<<endl;
+	m_db = new KexiDB(this);
+	m_formManager=new KexiFormManager(this);
+	m_relationManager=new KexiRelation(this);
+	
+	if ( name )
+		dcopObject();
 }
 
 KexiProject::~KexiProject()
 {
-    delete dcop;
+	delete dcop;
 }
 
 KexiRelation *KexiProject::relationManager() { return m_relationManager;}
 
 DCOPObject* KexiProject::dcopObject()
 {
-    if ( !dcop )
-        dcop = new KexiProjectIface( this );
-    return dcop;
+	if ( !dcop )
+		dcop = new KexiProjectIface( this );
+	
+	return dcop;
 }
 
 bool KexiProject::completeSaving( KoStore* store )

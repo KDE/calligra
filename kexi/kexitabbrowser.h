@@ -35,6 +35,7 @@
 class QWidgetStack;
 class KMultiTabBar;
 class KexiBrowser;
+class KexiBrowserItem;
 
 class KexiTabBrowser : public KexiDialogBase
 //class KexiTabBrowser : public QDockWindow 
@@ -53,6 +54,7 @@ class KexiTabBrowser : public KexiDialogBase
 		KexiProject*    kexiProject() const {return m_project;};
 
 		void			generateTables();
+		void			generateQueries();
 
 		KMultiTabBar		*m_tabBar;
 		QWidgetStack		*m_stack;
@@ -66,6 +68,10 @@ class KexiTabBrowser : public KexiDialogBase
 		KexiBrowser		*m_queries;
 		KexiBrowser		*m_forms;
 		KexiBrowser		*m_reports;
+		KexiBrowserItem	*m_dbTables;
+		KexiBrowserItem	*m_dbQueries;
+		KexiBrowserItem	*m_dbForms;
+		KexiBrowserItem	*m_dbReports;
 
 		KexiProject     *m_project;
 

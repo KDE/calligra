@@ -31,8 +31,7 @@ class KexiBrowserItem;
 class KexiView;
 
 class KexiBrowser : public KListView {
-   Q_OBJECT
-
+	Q_OBJECT
 public:
 	enum Section
 	{
@@ -46,17 +45,12 @@ public:
 	KexiBrowser(KexiView *project,QWidget *parent=0, Section s=SectionDB, const char *name=0);
 	~KexiBrowser();
 	
-	void			clearView();
-	void			generateView();
-
 	Section			section();
 	
 private:
 	KexiView *m_view;
 protected:
 	void			createForm();
-	void			addTables(KexiBrowserItem *parent);
-	void			addQueries(KexiBrowserItem *parent);
 
 	KexiBrowserItem*	m_tables;
 	KexiBrowserItem*	m_queries;
@@ -65,13 +59,11 @@ protected:
 
 	KIconLoader		*iconLoader;
 	
-	QWidget*		m_parent;
 
 	KexiBrowserItem*	m_database;
 
 	Section			m_section;
 	
-		
 protected slots:
 	void		slotContextMenu(KListView*, QListViewItem *i, const QPoint &point);
 	void		slotCreate(QListViewItem* i);

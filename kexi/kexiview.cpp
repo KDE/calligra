@@ -57,8 +57,8 @@ KexiView::KexiView(KexiWindowMode winmode, KexiProject *part,QWidget *parent, co
 	m_project=part;
 	m_windowMode=winmode;
 	initActions();
-        dcop = 0;
-        dcopObject(); // build it
+	dcop = 0;
+	dcopObject(); // build it
 //	createGUI("kexiui.rc",false);
 	setXMLFile("kexiui.rc");
 
@@ -71,15 +71,16 @@ KexiView::KexiView(KexiWindowMode winmode, KexiProject *part,QWidget *parent, co
 
 DCOPObject* KexiView::dcopObject()
 {
-    if ( !dcop )
-	dcop = new KexiViewIface( this );
-    return dcop;
+	if ( !dcop )
+		dcop = new KexiViewIface( this );
+	
+	return dcop;
 }
 
 
 KexiProject *KexiView::project() const
 {
-    return m_project;
+	return m_project;
 }
 
 void KexiView::solveDeps()
@@ -120,22 +121,14 @@ void KexiView::finalizeInit()
 void KexiView::initMainDock()
 {
 	(new QVBoxLayout (this))->setAutoAdd(true);
-	m_workspace = new KexiWorkspaceMDI(this,"kexiworkspace",this);
+	m_workspace = new KexiWorkspaceMDI(this, "kexiworkspace", this);
 }
 
 void KexiView::initDocBrowser()
 {
-//	KDockWidget* dockBrowser;
-//	dockBrowser = createDockWidget(i18n("Database Browser"), 0, 0L, i18n("db"));
-	m_browser = new KexiTabBrowser(this,m_workspace,"Document Browser");//dockBrowser);
+	m_browser = new KexiTabBrowser(this, m_workspace, "Document Browser");
 	m_browser->show(); //remove later
-//	dockBrowser->setWidget(m_browser);
-//	dockBrowser->manualDock(getMainDockWidget(), KDockWidget::DockLeft);
-//	dockBrowser->toDesktop();
 	kdDebug() << "KexiView::initDocBrowser: done" << endl;
-
-//	KexiTabBrowser *tab = new KexiTabBrowser(0, 0);
-//	tab->show();
 }
 
 void KexiView::initActions()
@@ -220,12 +213,12 @@ KexiView::slotShowProjectProps()
 {
 	KexiProjectProperties *p = new KexiProjectProperties(this);
 	p->exec();
-        delete p;
+	delete p;
 }
 
 KexiView::~KexiView(){
-    delete m_formActionList;
-    delete dcop;
+	delete m_formActionList;
+	delete dcop;
 }
 
 void

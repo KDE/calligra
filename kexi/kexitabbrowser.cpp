@@ -117,11 +117,25 @@ void
 KexiTabBrowser::generateView()
 {
 	kdDebug() << "KexiTabBrowser::generateView()" << endl;
+	
+	KexiBrowserItem* database = new KexiBrowserItem(KexiBrowserItem::Parent, KexiBrowserItem::Table, m_db, i18n("Database"));
+	m_dbTables = new KexiBrowserItem(KexiBrowserItem::Parent, KexiBrowserItem::Table, database, i18n("Tables"));
+	m_dbQueries = new KexiBrowserItem(KexiBrowserItem::Parent, KexiBrowserItem::Query, database, i18n("Queries"));
+	m_dbForms = new KexiBrowserItem(KexiBrowserItem::Parent, KexiBrowserItem::Form, database, i18n("Forms"));
+	m_dbReports = new KexiBrowserItem(KexiBrowserItem::Parent, KexiBrowserItem::Report, database, i18n("Reports"));
+	database->setPixmap(0, kapp->iconLoader()->loadIcon("db", KIcon::Small));
+	m_dbTables->setPixmap(0, kapp->iconLoader()->loadIcon("tables", KIcon::Small));
+	m_dbQueries->setPixmap(0, kapp->iconLoader()->loadIcon("queries", KIcon::Small));
+	m_dbForms->setPixmap(0, kapp->iconLoader()->loadIcon("forms", KIcon::Small));
+	m_dbReports->setPixmap(0, kapp->iconLoader()->loadIcon("reports", KIcon::Small));
+	m_db->setOpen(database, true);
+	
 	if(kexiProject()->dbIsAvaible())
 	{
-		m_db->generateView();
+		//m_db->generateView();
 
 		generateTables();
+		generateQueries();
 	}
 }
 
@@ -133,7 +147,23 @@ KexiTabBrowser::generateTables()
 	for ( QStringList::Iterator it = tables.begin(); it != tables.end(); ++it )
 	{
 		KexiBrowserItem *item = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Table, m_tables, (*it) );
+		KexiBrowserItem *item2 = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Table, m_dbTables, (*it) );
 		item->setPixmap(0, kapp->iconLoader()->loadIcon("table", KIcon::Small));
+		item2->setPixmap(0, kapp->iconLoader()->loadIcon("table", KIcon::Small));
+	}
+}
+
+void
+KexiTabBrowser::generateQueries()
+{
+	References fileRefs = kexiProject()->fileReferences("Queries");
+
+	for(References::Iterator it = fileRefs.begin(); it != fileRefs.end(); it++)
+	{
+		KexiBrowserItem *item = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Query, m_queries, (*it).name);
+		KexiBrowserItem *item2 = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Query, m_dbQueries, (*it).name);
+		item->setPixmap(0, kapp->iconLoader()->loadIcon("queries", KIcon::Small));
+		item2->setPixmap(0, kapp->iconLoader()->loadIcon("queries", KIcon::Small));
 	}
 }
 

@@ -46,7 +46,6 @@
 KexiBrowser::KexiBrowser(KexiView *view,QWidget *parent, Section s, const char *name ) : KListView(parent,name)
 {
 	m_view=view;
-	m_parent = parent;
 	m_section = s;
 
 	iconLoader = KGlobal::iconLoader();
@@ -61,64 +60,6 @@ KexiBrowser::KexiBrowser(KexiView *view,QWidget *parent, Section s, const char *
 		SLOT(slotContextMenu(KListView*, QListViewItem *, const QPoint&)));
 
 	connect(this, SIGNAL(executed(QListViewItem *)), SLOT(slotCreate(QListViewItem *)));
-}
-
-void KexiBrowser::clearView()
-{
-	clear();
-	generateView();
-}
-
-void KexiBrowser::generateView()
-{
-	kdDebug() << "KexiBrowser::generateView()" << endl;
-	clear();
-
-	m_database = new KexiBrowserItem(KexiBrowserItem::Parent, KexiBrowserItem::Table, this, i18n("Database"));
-	m_tables = new KexiBrowserItem(KexiBrowserItem::Parent, KexiBrowserItem::Table, m_database, i18n("Tables"));
-	m_queries = new KexiBrowserItem(KexiBrowserItem::Parent, KexiBrowserItem::Query, m_database, i18n("Queries"));
-	m_forms = new KexiBrowserItem(KexiBrowserItem::Parent, KexiBrowserItem::Form, m_database, i18n("Forms"));
-	m_reports = new KexiBrowserItem(KexiBrowserItem::Parent, KexiBrowserItem::Report, m_database, i18n("Reports"));
-
-	addTables(m_tables);
-	addQueries(m_queries);
-
-	m_database->setPixmap(0, iconLoader->loadIcon("db", KIcon::Small));
-	m_tables->setPixmap(0, iconLoader->loadIcon("tables", KIcon::Small));
-	m_queries->setPixmap(0, iconLoader->loadIcon("queries", KIcon::Small));
-	m_forms->setPixmap(0, iconLoader->loadIcon("forms", KIcon::Small));
-	m_reports->setPixmap(0, iconLoader->loadIcon("reports", KIcon::Small));
-
-	setOpen(m_database, true);
-	setOpen(m_tables, true);
-	setOpen(m_queries, true);
-}
-
-
-void KexiBrowser::addTables(KexiBrowserItem *parent)
-{
-	kdDebug() << "KexiBrowser::addTables()" << endl;
-
-	QStringList tables = m_view->project()->db()->tables();
-
-	for(QStringList::Iterator it = tables.begin(); it != tables.end(); ++it)
-	{
-		KexiBrowserItem *item = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Table, parent, (*it) );
-		item->setPixmap(0, iconLoader->loadIcon("table", KIcon::Small));
-	}
-}
-
-void KexiBrowser::addQueries(KexiBrowserItem *parent)
-{
-	kdDebug() << "KexiBrowser::addTables()" << endl;
-
-	References fileRefs = m_view->project()->fileReferences("Queries");
-
-	for(References::Iterator it = fileRefs.begin(); it != fileRefs.end(); it++)
-	{
-		KexiBrowserItem *item = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Query, parent, (*it).name);
-		item->setPixmap(0, iconLoader->loadIcon("queries", KIcon::Small));
-	}
 }
 
 void KexiBrowser::slotContextMenu(KListView* , QListViewItem *i, const QPoint &p)
@@ -244,9 +185,21 @@ void KexiBrowser::slotCreateTable()
 	{
 		if(m_view->project()->db()->query("CREATE TABLE " + name + " (id INT(10))"))
 		{
+			KexiBrowserItem* r = static_cast<KexiBrowserItem *>(selectedItems().first());
+			KexiBrowserItem* parent;
+
+			if (r->type() == KexiBrowserItem::Child)
+			{
+				parent = static_cast<KexiBrowserItem *>(r->parent());
+			}
+			else
+			{
+				parent = r;
+			}
+			
 			KexiAlterTable* kat = new KexiAlterTable(m_view, 0,name, "alterTable");
 			kat->show();
-			KexiBrowserItem *item = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Table, m_tables, name);
+			KexiBrowserItem *item = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Table, parent, name);
 			item->setPixmap(0, iconLoader->loadIcon("table", KIcon::Small));
 		}
 	}
@@ -256,7 +209,7 @@ void KexiBrowser::slotAlterTable()
 {
 	KexiBrowserItem* r = static_cast<KexiBrowserItem *>(selectedItems().first());
 
-	if ( r->type() == KexiBrowserItem::Child )
+	if (r->type() == KexiBrowserItem::Child)
 	{
 		KexiAlterTable* kat = new KexiAlterTable(m_view,0,r->text(0), "alterTable");
 		kat->show();
@@ -270,13 +223,25 @@ void KexiBrowser::slotCreateQuery()
 
 	if(ok && name.length() > 0)
 	{
+		KexiBrowserItem* r = static_cast<KexiBrowserItem *>(selectedItems().first());
+		KexiBrowserItem* parent;
+
+		if (r->type() == KexiBrowserItem::Child)
+		{
+			parent = static_cast<KexiBrowserItem *>(r->parent());
+		}
+		else
+		{
+			parent = r;
+		}
+		
 		KexiQueryDesigner *kqd = new KexiQueryDesigner(m_view, 0,name, "query");
-		KexiBrowserItem *item = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Query, m_queries, name);
+		KexiBrowserItem *item = new KexiBrowserItem(KexiBrowserItem::Child, KexiBrowserItem::Query, parent, name);
 //		kexi->project()->addFileReference("/query/" + name + ".query");
 
 		m_view->project()->setModified(true);
 
-		m_queries->setOpen(true);
+		item->parent()->setOpen(true);
 		kqd->show();
 
 		m_view->project()->setModified(true);
