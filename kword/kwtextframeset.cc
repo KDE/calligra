@@ -1249,6 +1249,7 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int & hp, KoTextParag * parag
 
 int KWTextFrameSet::formatVertically( KoTextParag * _parag, const QRect& paragRect )
 {
+    // WARNING: in this whole method parag can be 0. See adjustFlow()
     KWTextParag *parag = static_cast<KWTextParag *>( _parag );
     if ( !m_doc->viewMode()->shouldFormatVertically() )
     {
@@ -1366,7 +1367,7 @@ int KWTextFrameSet::formatVertically( KoTextParag * _parag, const QRect& paragRe
     // leave no space by their side for any text (e.g. most tables)
     int breakBegin = 0;
     int breakEnd = 0;
-    int reqMinWidth = parag->string()->at( 0 ).width;
+    int reqMinWidth = parag ? parag->string()->at( 0 ).width : 0;
     getMargins( yp, hp, reqMinWidth, 0L, 0L, 0L, 0L, &breakBegin, &breakEnd, parag );
     if ( breakEnd )
     {
