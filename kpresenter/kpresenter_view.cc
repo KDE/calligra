@@ -2561,13 +2561,13 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   _menubar->insertMenu( i18n( "&Edit" ), m_vMenuEdit, -1, -1 );
 
   QString tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/undo.xpm";
+  tmp += "/koffice/toolbar/undo.xpm";
   OpenPartsUI::Pixmap_var pix = OPUIUtils::loadPixmap( tmp );
   m_idMenuEdit_Undo = m_vMenuEdit->insertItem6( pix, i18n("No Undo possible"), this,"editUndo", CTRL + Key_Z, -1, -1 );
   m_vMenuEdit->setItemEnabled(m_idMenuEdit_Undo,false);
 
   tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/redo.xpm";
+  tmp += "/koffice/toolbar/redo.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuEdit_Redo = m_vMenuEdit->insertItem6( pix, i18n("No Redo possible"), this,"editRedo", 0, -1, -1 );
   m_vMenuEdit->setItemEnabled(m_idMenuEdit_Redo,false);
@@ -2625,12 +2625,12 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_vMenuInsert->insertSeparator( -1 );
 
   tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/picture.xpm";
+  tmp += "/koffice/toolbar/picture.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuInsert_Picture = m_vMenuInsert->insertItem6(pix, i18n("&Picture..."), this,"insertPicture", Key_F2, -1, -1 );
 
   tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/clipart.xpm";
+  tmp += "/koffice/toolbar/clipart.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuInsert_Clipart = m_vMenuInsert->insertItem6(pix, i18n("&Clipart..."), this,"insertClipart", Key_F3, -1, -1 );
 
@@ -2675,7 +2675,7 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_idMenuTools_Text = m_vMenuTools->insertItem6(pix, i18n("&Text"), this,"toolsText", Key_F10, -1, -1 );
 
   tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/parts.xpm";
+  tmp += "/koffice/toolbar/parts.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuTools_Part = m_vMenuTools->insertItem6(pix, i18n("&Object..."), this,"toolsObject", Key_F11, -1, -1 );
 
@@ -2692,19 +2692,19 @@ bool KPresenterView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
   m_vMenuText_TAlign->setCheckable( true );
 
   tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/alignLeft.xpm";
+  tmp += "/koffice/toolbar/alignLeft.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuText_TAlign_Left = m_vMenuText_TAlign->insertItem6(pix, i18n("Align &Left"), this,"mtextAlignLeft", 0, -1, -1 );
   // m_vMenuText_TAlign->setCheckable(m_idMenuText_TAlign_Left,true);
       
   tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/alignCenter.xpm";
+  tmp += "/koffice/toolbar/alignCenter.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuText_TAlign_Center = m_vMenuText_TAlign->insertItem6(pix, i18n("Align &Center"), this,"mtextAlignCenter", 0, -1, -1 );
   // m_vMenuText_TAlign->setCheckable(m_idMenuText_TAlign_Center,true);
 
   tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/alignRight.xpm";
+  tmp += "/koffice/toolbar/alignRight.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
   m_idMenuText_TAlign_Right = m_vMenuText_TAlign->insertItem6(pix, i18n("Align &Right"), this,"mtextAlignRight", 0, -1, -1 );
   // m_vMenuText_TAlign->setCheckable(m_idMenuText_TAlign_Right,true);
@@ -3051,14 +3051,14 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
 
   // undo
   QString tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/undo.xpm";
+  tmp += "/koffice/toolbar/undo.xpm";
   OpenPartsUI::Pixmap_var pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonEdit_Undo = m_vToolBarEdit->insertButton2( pix, ID_UNDO, SIGNAL( clicked() ), this, "editUndo", true, i18n("Undo"), -1 );
   m_vToolBarEdit->setItemEnabled(ID_UNDO,false);
   
   // redo
   tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/redo.xpm";
+  tmp += "/koffice/toolbar/redo.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonEdit_Redo = m_vToolBarEdit->insertButton2( pix, ID_REDO, SIGNAL( clicked() ), this, "editRedo", true, i18n("Redo"), -1 );
   m_vToolBarEdit->setItemEnabled(ID_REDO,false);
@@ -3108,13 +3108,13 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
 
   // picture
   tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/picture.xpm";
+  tmp += "/koffice/toolbar/picture.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonInsert_Picture = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertPicture", true, i18n("Insert Picture"), -1 );
       
   // clipart
   tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/clipart.xpm";
+  tmp += "/koffice/toolbar/clipart.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonInsert_Clipart = m_vToolBarInsert->insertButton2( pix, 1, SIGNAL( clicked() ), this, "insertClipart", true, i18n("Insert Clipart"), -1 );
   
@@ -3190,7 +3190,7 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
 
   // parts
   tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/parts.xpm";
+  tmp += "/koffice/toolbar/parts.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonTools_Part = m_vToolBarTools->insertButton2( pix, ID_TOOL_OBJECT, SIGNAL( clicked() ), this, "toolsObject", 
 							   true, i18n("Create Object"), -1 );
@@ -3236,7 +3236,7 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
 
   // bold
   tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/bold.xpm";
+  tmp += "/koffice/toolbar/bold.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonText_Bold = m_vToolBarText->insertButton2( pix, ID_BOLD, SIGNAL( clicked() ), this, "textBold", true, i18n("Bold"), -1 );
   m_vToolBarText->setToggle(ID_BOLD,true);
@@ -3245,7 +3245,7 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
 
   // italic
   tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/italic.xpm";
+  tmp += "/koffice/toolbar/italic.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonText_Italic = m_vToolBarText->insertButton2( pix, ID_ITALIC, SIGNAL( clicked() ), this, "textItalic", true, i18n("Italic"), -1 );
   m_vToolBarText->setToggle(ID_ITALIC,true);
@@ -3254,7 +3254,7 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
 
   // underline
   tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/underl.xpm";
+  tmp += "/koffice/toolbar/underl.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonText_Underline = m_vToolBarText->insertButton2( pix, ID_UNDERLINE, SIGNAL( clicked() ), this, "textUnderline", 
 							    true, i18n("Underline"), -1 );
@@ -3273,7 +3273,7 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   
   // align left
   tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/alignLeft.xpm";
+  tmp += "/koffice/toolbar/alignLeft.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonText_ALeft = m_vToolBarText->insertButton2( pix, ID_ALEFT, SIGNAL( clicked() ), this, "textAlignLeft", 
 							true, i18n("Align Left"), -1 );
@@ -3283,7 +3283,7 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   
   // align center
   tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/alignCenter.xpm";
+  tmp += "/koffice/toolbar/alignCenter.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonText_ACenter = m_vToolBarText->insertButton2( pix, ID_ACENTER, SIGNAL( clicked() ), this, "textAlignCenter", 
 							  true, i18n("Align Center"), -1 );
@@ -3292,7 +3292,7 @@ bool KPresenterView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _fact
   
   // align right
   tmp = kapp->kde_datadir().copy();
-  tmp += "/kpresenter/toolbar/alignRight.xpm";
+  tmp += "/koffice/toolbar/alignRight.xpm";
   pix = OPUIUtils::loadPixmap(tmp);
   m_idButtonText_ARight = m_vToolBarText->insertButton2( pix, ID_ARIGHT, SIGNAL( clicked() ), this, "textAlignRight", 
 							 true, i18n("Align Right"), -1 );

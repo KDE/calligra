@@ -99,6 +99,8 @@ AC_OUTPUT( \
 	tools/spell/Makefile \
 	plugins/Makefile \
 	plugins/recorder/Makefile \
+	pics/Makefile
+	pics/toolbar/Makefile \
 	po/Makefile \
 	po/de/Makefile \
 	po/pt/Makefile \
