@@ -861,7 +861,14 @@ QCString KoDocument::readNativeFormatMimeType( KInstance *instance )
 {
   QString instname = instance ? instance->instanceName() : kapp->instanceName();
 
-  KService::Ptr service = KService::serviceByDesktopName( instname );
+  // Try by path first, so that we find the global one (which has the native mimetype)
+  // even if the user created a kword.desktop in ~/.kde/share/applnk or any subdir of it.
+  // If he created it under ~/.kde/share/applnk/Office/ then no problem anyway.
+  KService::Ptr service = KService::serviceByDesktopPath( QString::fromLatin1("Office/%1.desktop").arg(instname) );
+  if ( !service )
+  {
+    service = KService::serviceByDesktopName( instname );
+  }
 
   if ( !service )
     return QCString();

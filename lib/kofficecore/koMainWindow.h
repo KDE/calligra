@@ -141,9 +141,14 @@ public slots:
     virtual void slotDocumentInfo();
 
     /**
-     *  Closes the actual shell.
+     *  Closes the document.
      */
     virtual void slotFileClose();
+
+    /**
+     *  Closes the shell.
+     */
+    virtual void slotFileQuit();
 
     /**
      *  Configure key bindings

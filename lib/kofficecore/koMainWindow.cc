@@ -137,6 +137,7 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     KStdAction::saveAs( this, SLOT( slotFileSaveAs() ), actionCollection(), "file_save_as" );
     KStdAction::print( this, SLOT( slotFilePrint() ), actionCollection(), "file_print" );
     KStdAction::close( this, SLOT( slotFileClose() ), actionCollection(), "file_close" );
+    KStdAction::quit( this, SLOT( slotFileQuit() ), actionCollection(), "file_quit" );
 
     (void) new KAction( i18n( "&Document Information..." ), "documentinfo", 0,
                         this, SLOT( slotDocumentInfo() ),
@@ -548,6 +549,17 @@ void KoMainWindow::slotDocumentInfo()
 }
 
 void KoMainWindow::slotFileClose()
+{
+    if (queryClose())
+    {
+        setRootDocument( 0L ); // don't delete this shell when deleting the document
+        delete d->m_rootDoc;
+        d->m_rootDoc = 0L;
+        slotFileNew();
+    }
+}
+
+void KoMainWindow::slotFileQuit()
 {
     if ( queryClose() )
     {
