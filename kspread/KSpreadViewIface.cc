@@ -392,3 +392,29 @@ void KSpreadViewIface::subtotals()
 {
     m_view->subtotals();
 }
+
+void KSpreadViewIface::sortInc()
+{
+    m_view->sortInc();
+}
+
+void KSpreadViewIface::sortDec()
+{
+    m_view->sortDec();
+}
+
+void KSpreadViewIface::layoutDlg()
+{
+    m_view->layoutDlg();
+}
+
+
+void KSpreadViewIface::increaseFontSize()
+{
+    m_view->increaseFontSize();
+}
+
+void KSpreadViewIface::decreaseFontSize()
+{
+    m_view->decreaseFontSize();
+}
