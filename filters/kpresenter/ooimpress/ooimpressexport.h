@@ -63,6 +63,7 @@ private:
     QString rotateValue( double val );
     QString pictureKey( QDomElement &element );
     void createHelpLine( QDomNode &helpline );
+    void createAttribute( QDomNode &attributeValue );
 
     int m_currentPage;
     int m_objectIndex;
@@ -76,6 +77,10 @@ private:
     QMap<QString, QString> m_pictureLst;
 
     QString m_helpLine;
+    int m_activePage;
+    double m_gridX, m_gridY;
+    bool m_snapToGrid;
+
     //load from kpresenter file format
     QMap<QString, QString> m_kpresenterPictureLst;
     int m_pictureIndex;

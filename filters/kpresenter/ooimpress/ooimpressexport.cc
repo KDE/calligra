@@ -40,6 +40,10 @@ OoImpressExport::OoImpressExport( KoFilter *, const char *, const QStringList & 
     , m_currentPage( 0 )
     , m_objectIndex( 0 )
     , m_pageHeight( 0 )
+    , m_activePage( 0 )
+    , m_gridX( -1.0 )
+    , m_gridY( -1.0 )
+    , m_snapToGrid( false )
     , m_pictureIndex( 0 )
     , m_storeinp( 0L )
     , m_storeout( 0L )
@@ -336,6 +340,37 @@ void OoImpressExport::createDocumentSettings( QDomDocument & docsetting )
     mapItem.appendChild( attribute );
     //<config:config-item config:name="SnapLinesDrawing" config:type="string">H5983V700V10777H4518V27601P50000,9000P8021,2890</config:config-item>
 
+    attribute =  docsetting.createElement("config:config-item" );
+    attribute.setAttribute( "config:name", "IsSnapToGrid" );
+    attribute.setAttribute( "config:type", "boolean" );
+    attribute.appendChild( docsetting.createTextNode( m_snapToGrid ? "true" : "false" ) );
+    mapItem.appendChild( attribute );
+
+    if (  m_gridX >=0 )
+    {
+        attribute =  docsetting.createElement("config:config-item" );
+        attribute.setAttribute( "config:name", "GridFineWidth" );
+        attribute.setAttribute( "config:type", "int" );
+        attribute.appendChild( docsetting.createTextNode( QString::number( ( int ) ( KoUnit::toMM( ( m_gridX )  )*100 ) ) ) );
+        mapItem.appendChild( attribute );
+    }
+
+    if ( m_gridY >=0 )
+    {
+        attribute =  docsetting.createElement("config:config-item" );
+        attribute.setAttribute( "config:name", "GridFineHeight" );
+        attribute.setAttribute( "config:type", "int" );
+        attribute.appendChild( docsetting.createTextNode( QString::number( ( int ) ( KoUnit::toMM( ( m_gridY )  )*100 ) ) ) );
+        mapItem.appendChild( attribute );
+    }
+
+    attribute =  docsetting.createElement("config:config-item" );
+    attribute.setAttribute( "config:name", "SelectedPage" );
+    attribute.setAttribute( "config:type", "short" );
+    attribute.appendChild( docsetting.createTextNode( QString::number( m_activePage ) ) );
+    mapItem.appendChild( attribute );
+
+
     mapIndexed.appendChild( mapItem );
 
     begin.appendChild( configItem );
@@ -476,6 +511,19 @@ void OoImpressExport::createPictureList( QDomNode &pictures )
     kdDebug()<<" void OoImpressExport::createPictureList( QDomNode &pictures ) \n";
 }
 
+void OoImpressExport::createAttribute( QDomNode &attributeValue )
+{
+    QDomElement elem = attributeValue.toElement();
+    if(elem.hasAttribute("activePage"))
+        m_activePage=elem.attribute("activePage").toInt();
+    if(elem.hasAttribute("gridx"))
+        m_gridX = elem.attribute("gridx").toDouble();
+    if(elem.hasAttribute("gridy"))
+        m_gridY = elem.attribute("gridy").toDouble();
+    if(elem.hasAttribute("snaptogrid"))
+        m_snapToGrid = (bool)elem.attribute("snaptogrid").toInt();
+}
+
 void OoImpressExport::createHelpLine( QDomNode &helpline )
 {
     helpline = helpline.firstChild();
@@ -489,13 +537,11 @@ void OoImpressExport::createHelpLine( QDomNode &helpline )
             {
                 int tmpX = ( int ) ( KoUnit::toMM( helplines.attribute("value").toDouble() )*100 );
                 m_helpLine+="V"+QString::number( tmpX );
-                kdDebug()<<" verticval !!!!!!!!!!!!!!!!!!!!!\n";
             }
             else if ( helplines.tagName()=="Horizontal" )
             {
                 int tmpY = ( int ) ( KoUnit::toMM( helplines.attribute("value").toDouble() )*100 );
                 m_helpLine+="H"+QString::number( tmpY );
-                kdDebug()<<" horizontal !!!!!!!!!!!!!!!!!\n";
             }
             else if ( helplines.tagName()=="HelpPoint" )
             {
@@ -503,11 +549,10 @@ void OoImpressExport::createHelpLine( QDomNode &helpline )
                 int tmpX = ( int ) ( KoUnit::toMM( helplines.attribute("posX").toDouble()  )*100 );
                 int tmpY = ( int ) ( KoUnit::toMM( helplines.attribute("posY").toDouble() )*100 );
                 m_helpLine+=str.arg( QString::number( tmpX ) ).arg( QString::number( tmpY ) );
-                kdDebug()<<" helppoint !!!!!!!!!!!!!!!!!!!\n";
             }
         }
     }
-    kdDebug()<<"m_helpLine :"<<m_helpLine<<endl;
+    //kdDebug()<<"m_helpLine :"<<m_helpLine<<endl;
 }
 
 
@@ -524,11 +569,15 @@ void OoImpressExport::exportBody( QDomDocument & doccontent, QDomElement & body 
     QDomNode pictures = doc.namedItem( "PICTURES" );
     QDomNode sounds = doc.namedItem( "SOUNDS" );
     QDomNode helpline = doc.namedItem( "HELPLINES" );
+    QDomNode attributeValue = doc.namedItem( "ATTRIBUTES" );
+
     QDomNode bgpage = background.firstChild();
 
     createPictureList( pictures );
 
     createHelpLine( helpline );
+
+    createAttribute( attributeValue );
 
     // store the paper settings
     QDomElement p = paper.toElement();
