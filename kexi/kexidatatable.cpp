@@ -64,24 +64,27 @@ bool
 KexiDataTable::executeQuery(QString queryStatement)
 {
 	kdDebug() << "KexiDataTable::executeQuery(): executing query..." << endl;
-	KexiDBRecord *record = kexi->project()->db()->queryRecord(queryStatement, false);
+	m_record = kexi->project()->db()->queryRecord(queryStatement, false);
 	
-	for(uint i = 0; i < record->fieldCount(); i++)
+	for(uint i = 0; i < m_record->fieldCount(); i++)
 	{
 		kdDebug() << "KexiDataTable::executeQuery(): adding columns" << endl;
-		m_tableView->addColumn(record->fieldName(i), record->type(i), false);
+		m_tableView->addColumn(m_record->fieldName(i), m_record->type(i), false);
 	}
 
-	while(record->next())
+	int record = 0;
+	while(m_record->next())
 	{
 		KexiTableItem *it = new KexiTableItem(m_tableView);
-		for(uint i = 0; i < record->fieldCount(); i++)
+		for(uint i = 0; i < m_record->fieldCount(); i++)
 		{
-			it->setValue(i, record->value(i));
+			it->setValue(i, m_record->value(i));
 		}
+		it->setHint(QVariant(record));
+		record++;
 	}
 
-	kdDebug() << "KexiDataTable::executeQuery(): query " << record->fieldCount() << " columns affected" << endl;
+	kdDebug() << "KexiDataTable::executeQuery(): query " << m_record->fieldCount() << " columns affected" << endl;
 
 /*	QTime t;
 	t.start();
@@ -139,7 +142,13 @@ KexiDataTable::executeQuery(QString queryStatement)
 void
 KexiDataTable::slotItemChanged(KexiTableItem *i, int col)
 {
-	kdDebug() << "CHANGED!!!" << endl;
+	int record = i->getHint().toInt();
+	kdDebug() << "KexiDataTable::slotItemChanged(" << record << ")" << endl;
+	if(m_record->update(record, col, i->getValue(col)))
+	{
+		m_record->commit(i->getHint().toInt(), false);
+	}
+	
 }
 
 QStringList

@@ -67,6 +67,7 @@ MySqlResult::next()
 	m_row = mysql_fetch_row(m_result);
 	if(!m_row)
 		return false;
+	m_currentRecord++;
 	return true;
 }
 
@@ -106,6 +107,12 @@ MySqlResult::fieldInfo(QString field)
 	FieldNames::Iterator it;
 	it = m_fieldNames.find(field);
 	return fieldInfo(it.data());
+}
+
+unsigned int
+MySqlResult::currentRecord()
+{
+	return m_currentRecord;
 }
 
 MySqlResult::~MySqlResult()

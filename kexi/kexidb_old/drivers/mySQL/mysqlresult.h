@@ -49,7 +49,9 @@ class MySqlResult : public KexiDBResult
 
 		unsigned int	numFields();
 		unsigned int	numRows();
-		
+
+		unsigned int	currentRecord();
+
 		KexiDBField	*fieldInfo(unsigned int field);
 		KexiDBField	*fieldInfo(QString field);
 

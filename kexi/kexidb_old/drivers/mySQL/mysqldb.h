@@ -71,7 +71,8 @@ class MySqlDB : public KexiDB
 		 */
 		bool		query(QString statement);
 //		int		realQuery(const char *statement, unsigned int length);
-		
+
+		QString		escape(const QString &str);
 		QString		realEscape(const QString &str);
 		QByteArray	realEscape(const QByteArray &a); 
 

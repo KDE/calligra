@@ -65,7 +65,7 @@ class KexiDBRecord
 		 *  and commit on the base-buffer won't work for the insertBuffer anymore!
 		 *
 		 */
-		virtual bool commit(bool insertBuffer=false) = 0;
+		virtual bool commit(unsigned int record, bool insertBuffer=false) = 0;
 
 
 		/*!
@@ -105,14 +105,14 @@ class KexiDBRecord
 		 *  the changes have to be commited in order to take effect
 		 *  returns true, if update is possible
 		 */
-		virtual bool update(unsigned int field, QVariant value) = 0;
+		virtual bool update(unsigned int record, unsigned int field, QVariant value) = 0;
 
 		/*!
 		 *  sets the field "field" in the buffer to "value"
 		 *  the changes have to be commited in order to take effect
 		 *  returns true, if update is possible
 		 */
-		virtual bool update(QString field, QVariant value) = 0;
+		virtual bool update(unsigned int record, QString field, QVariant value) = 0;
 
 		/*! 
 		 *  deletes the current record

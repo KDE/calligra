@@ -27,6 +27,8 @@
 
 class KexiTableItem;
 class QStatusBar;
+
+class KexiDBRecord;
  
 class KexiDataTable : public KexiDialogBase
 {
@@ -45,6 +47,8 @@ class KexiDataTable : public KexiDialogBase
 
 		KexiTableView	*m_tableView;
 		QStatusBar	*m_statusBar;
+
+		KexiDBRecord	*m_record;
 
 	protected slots:
 		void slotItemChanged(KexiTableItem *i, int col);

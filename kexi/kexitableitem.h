@@ -43,6 +43,16 @@ public:
 	void attach(KexiTableView *tableView, bool sorted=false);
 	void attach(KexiTableView *tableView, int position);
 
+	void setHint(QVariant hint)
+	{
+		m_hint = hint;
+	}
+
+	QVariant getHint()
+	{
+		return m_hint;
+	}
+
 	QVariant getValue(const int col) const
 	{
 		return m_columns[col];
@@ -51,6 +61,11 @@ public:
 	void setValue(const int col, QVariant value)
 	{
 		m_columns[col] = value;
+	}
+
+	int position()
+	{
+		return m_position;
 	}
 
 	QString getText(const int col) const
@@ -105,7 +120,10 @@ public:
 
 protected:
 	QValueVector<QVariant>	 m_columns;
-	KexiTableView				*m_pTable;
+	QVariant		m_hint;
+	KexiTableView		*m_pTable;
+
+	int			m_position;
 };
 
 #endif

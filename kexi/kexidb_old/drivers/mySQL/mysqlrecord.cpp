@@ -26,19 +26,35 @@ Boston, MA 02111-1307, USA.
 #include "mysqlfield.h"
 #include "mysqlrecord.h"
 
-MySqlRecord::MySqlRecord(MYSQL_RES *result, QObject *p, bool buffer, MySqlRecord *parent)
- : KexiDBRecord(), MySqlResult(result, p)
+MySqlRecord::MySqlRecord(MYSQL_RES *result, MySqlDB *db, bool buffer, MySqlRecord *parent)
+ : KexiDBRecord(), MySqlResult(result, db)
 {
+	m_db = db;
+	m_readOnly = findKey();
 }
 
 bool
 MySqlRecord::findKey()
 {
+	for(uint i=0; i < fieldCount(); i++)
+	{
+		if(MySqlResult::fieldInfo(i)->primary_key() || MySqlResult::fieldInfo(i)->unique_key())
+		{
+			m_keyField = MySqlResult::fieldInfo(i)->name();
+			m_table = MySqlResult::fieldInfo(i)->table();
+			return false;
+		}
+	}
+
+	kdDebug() << "MySqlRecrod::findKey(): name is: " << m_keyField << endl;
+
+	return true;
 }
 
 bool
 MySqlRecord::readOnly()
 {
+	return m_readOnly;
 }
 
 void
@@ -51,23 +67,31 @@ MySqlRecord::reset()
 }
 
 bool
-MySqlRecord::commit(bool insertBuffer)
+MySqlRecord::commit(unsigned int record, bool insertBuffer)
 {
-	if(!m_updateBuffer.empty())
+	for(UpdateBuffer::Iterator it = m_updateBuffer.begin(); it != m_updateBuffer.end(); it++)
 	{
-		QString query = QString("update " + m_table);
-		for(UpdateBuffer::Iterator it = m_updateBuffer.begin(); it != m_updateBuffer.end(); it++)
+		if((*it).record == record)
 		{
-			query += QString(QString(" set ") + it.key() + "='" + it.data().toString() + "'");
+			QString value = m_db->escape((*it).value.toString());
+			kdDebug() << "MySqlRecord::commit(): escaping" << endl;
+			QString key = m_db->escape(m_keyBuffer.find(record).data().toString());
+			kdDebug() << "MySqlRecord::commit(): key is now: " << key << endl;
+			kdDebug() << "MySqlRecord::commit(): endEscape" << endl;
+
+			kdDebug() << (*it).field << endl;
+			
+			QString statement("update " + m_table + " set " + (*it).field + "='" + value + "' where " + m_keyField + "='" + key + "'");
+			kdDebug() << "MySqlRecord::commit(): query: " << statement << endl;
+			m_db->query(statement);
+//			m_updateBuffer.erase(it);
 		}
-		query += QString(" where " + m_keyField + "=" + value(m_keyField).toString());
 	}
 }
 
 QVariant
 MySqlRecord::value(unsigned int column)
 {
-//	kdDebug() << "MySqlRecord::value(uint)" << endl;
 	return MySqlResult::value(column);
 }
 
@@ -111,15 +135,29 @@ MySqlRecord::sqlType(QString)
 
 
 bool
-MySqlRecord::update(unsigned int, QVariant)
+MySqlRecord::update(unsigned int record, unsigned int field, QVariant value)
 {
-	return false;
+	kdDebug() << "MySqlRecord::update(uint): holding field '" << fieldInfo(field)->name() << "' for update" << endl;
+	return update(record, MySqlResult::fieldInfo(field)->name(), value);
 }
 
 bool
-MySqlRecord::update(QString, QVariant)
+MySqlRecord::update(unsigned int record, QString field, QVariant value)
 {
-	return false;
+	if(readOnly())
+	{
+		kdDebug() << "MySqlRecord::update(): record is read only, abroating..." << endl;
+		return false;
+	}
+
+	UpdateItem i;
+	i.record = record;
+	i.field = field;
+	i.value = value;
+
+	m_updateBuffer.append(i);
+	kdDebug() << "MySqlRecord::update(): we have now " << m_updateBuffer.count() << " items" << endl;
+	return true;
 }
 
 KexiDBRecord*
@@ -155,7 +193,15 @@ MySqlRecord::fieldName(unsigned int field)
 bool
 MySqlRecord::next()
 {
-	return MySqlResult::next();
+	if(MySqlResult::next())
+	{
+//		m_keyContent = value(m_keyField);
+		kdDebug() << "MySqlRecord::next(): hint: " << MySqlResult::currentRecord() - 1<< ", " << value(m_keyField).toString() << endl;
+		m_keyBuffer.insert(MySqlResult::currentRecord() - 1, value(m_keyField));
+		kdDebug() << "MySqlRecord::next(): but: " << m_keyBuffer[MySqlResult::currentRecord() - 1].toString() << " found" << endl;
+		return true;
+	}
+	return false;
 }
 
 MySqlRecord::~MySqlRecord()

@@ -24,6 +24,7 @@ Boston, MA 02111-1307, USA.
 #include <qptrlist.h>
 #include <qmap.h>
 #include <qvaluevector.h>
+#include <qvaluelist.h>
 #include <qobject.h>
 
 #include <mysql/mysql.h>
@@ -37,15 +38,23 @@ class KexiDB;
 class MySqlRecord;
 class MySqlResult;
 
+typedef struct UpdateItem
+{
+	unsigned int record;
+	QString field;
+	QVariant value;
+};
+
 typedef QPtrList<MySqlRecord> InsertList;
-typedef QMap<unsigned int, QVariant> UpdateBuffer;
+typedef QValueList<UpdateItem> UpdateBuffer;
 typedef QMap<QString , QVariant> ContentBuffer;
 typedef QValueVector<QString> FieldName;
+typedef QMap<uint, QVariant> KeyBuffer;
 
 class MySqlRecord : public KexiDBRecord, public MySqlResult
 {
 	public:
-		MySqlRecord(MYSQL_RES *result, QObject *p, bool buffer, MySqlRecord *parent=0);
+		MySqlRecord(MYSQL_RES *result, MySqlDB *db, bool buffer, MySqlRecord *parent=0);
 		~MySqlRecord();
 
 		//KexiDBRecord members
@@ -54,7 +63,7 @@ class MySqlRecord : public KexiDBRecord, public MySqlResult
 		bool readOnly();
 
 		void reset();
-		bool commit(bool insertBuffer);
+		bool commit(unsigned int record, bool insertBuffer);
 
 		QVariant value(unsigned int field);
 		QVariant value(QString field);
@@ -65,8 +74,8 @@ class MySqlRecord : public KexiDBRecord, public MySqlResult
 		KexiDBField::ColumnType sqlType(unsigned int field);
 		KexiDBField::ColumnType sqlType(QString field);
 
-		bool update(unsigned int field, QVariant value);
-		bool update(QString field, QVariant value);
+		bool update(unsigned int record, unsigned int field, QVariant value);
+		bool update(unsigned int record, QString field, QVariant value);
 
 		bool deleteRecord();
 
@@ -89,12 +98,14 @@ class MySqlRecord : public KexiDBRecord, public MySqlResult
 	protected:
 		bool		findKey(); /* finds the key for updateing */
 
+		MySqlDB		*m_db;
+
 		MySqlRecord	*m_parent; /* parent if current is a insert-buffer */
-		MySqlResult	*m_result; /* reult (will not be accessible always! */
 
 		QString		m_keyField; /* fieldname which contains primary/unique key */
-		QVariant	m_keyContent; /* the key is buffered so requeries are possible */
+//		QVariant	m_keyContent; /* the key is buffered so requeries are possible */
 		QString		m_table;    /* table for update table ... */
+		KeyBuffer	m_keyBuffer; /* each record (key) holds a key-value */
 		bool		m_readOnly; /* is that record read only? */
 
 		FieldName	m_fieldNames; /* field name vector */

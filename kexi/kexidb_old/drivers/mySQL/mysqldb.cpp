@@ -159,7 +159,14 @@ MySqlDB::query(QString statement)
 //		return false;
 	const char *query = statement.latin1();
 	if(mysql_real_query(m_mysql, query, strlen(query)) == 0)
+	{
 		return true;
+	}
+	else
+	{
+		kdDebug() << "MySqlDB::query() error: " << mysql_error(m_mysql) << endl;
+	}
+	return false;
 }
 
 KexiDBResult*
@@ -215,6 +222,14 @@ QString
 MySqlDB::driverName()
 {
 	return QString::fromLatin1("mySQL");
+}
+
+QString
+MySqlDB::escape(const QString &str)
+{
+	const char *escaped;
+	mysql_real_escape_string(m_mysql, escaped, str.latin1(), strlen(str.latin1()));
+	return QString::fromLatin1(escaped);
 }
 
 MySqlDB::~MySqlDB()

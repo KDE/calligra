@@ -49,6 +49,7 @@ void KexiTableItem::attach(KexiTableView *tableView, bool sorted=false)
 
 void KexiTableItem::attach(KexiTableView *tableView, int position)
 {
+	m_position = position;
 	tableView->m_contents.insert(position, this);
 	tableView->m_numRows++;
 	tableView->triggerUpdate();
