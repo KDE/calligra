@@ -45,7 +45,7 @@ void KPresenterShell::setRootDocument( KoDocument *part )
 {
     KoMainWindow::setRootDocument( part );
     if ( part )
-      ( (KPresenterView*)rootView() )->initGui();
+	( (KPresenterView*)rootView() )->initGui();
 }
 
 void KPresenterShell::slotFilePrint()

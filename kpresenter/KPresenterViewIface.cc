@@ -85,11 +85,6 @@ void KPresenterViewIface::editFind()
     view->editFind();
 }
 
-void KPresenterViewIface::editFindReplace()
-{
-    view->editFindReplace();
-}
-
 void KPresenterViewIface::editHeaderFooter()
 {
     view->editHeaderFooter();
@@ -425,9 +420,9 @@ void KPresenterViewIface::textDepthMinus()
     view->textDepthMinus();
 }
 
-void KPresenterViewIface::textSpacing()
+void KPresenterViewIface::textSettings()
 {
-    view->textSpacing();
+    view->textSettings();
 }
 
 void KPresenterViewIface::textContentsToHeight()

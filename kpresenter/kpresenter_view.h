@@ -27,6 +27,7 @@
 #include <qstringlist.h>
 #include <qcolor.h>
 #include <qfont.h>
+#include <qguardedptr.h>
 
 #include <qrect.h>
 #include <qpoint.h>
@@ -36,7 +37,8 @@
 
 #include "kpresenter_doc.h"
 #include "global.h"
-#include "ktextobject.h"
+#include "ktextedit.h"
+#include "searchdia.h"
 
 class DCOPObject;
 class KPresenterView;
@@ -55,15 +57,12 @@ class OptionDia;
 class PgConfDia;
 class EffectDia;
 class RotateDia;
-class KSearchDialog;
-class KSearchReplaceDialog;
 class ShadowDia;
 class KPPresStructView;
 class DelPageDia;
 class InsPageDia;
 class ConfPieDia;
 class ConfRectDia;
-class SpacingDia;
 
 class KAction;
 
@@ -131,7 +130,6 @@ public slots:
     virtual void editCopyPage();
     virtual void editDelPage();
     virtual void editFind();
-    virtual void editFindReplace();
     virtual void editHeaderFooter();
 
     // insert menu
@@ -212,7 +210,7 @@ public slots:
     virtual void textNormalText();
     virtual void textDepthPlus();
     virtual void textDepthMinus();
-    virtual void textSpacing();
+    virtual void textSettings();
     virtual void textContentsToHeight();
     virtual void textObjectToContents();
     virtual void textInsertPageNum();
@@ -310,10 +308,6 @@ public:
      */
     int canvasYOffset() const;
 
-public slots:
-    // Document signals
-      //void slotKPresenterModified();
-
 protected slots:
     // dialog slots
     void backOk( bool );
@@ -329,16 +323,15 @@ protected slots:
     void insPageOk( int, InsPageMode, InsertPos );
     void confPieOk();
     void confRectOk();
-    void spacingOk( int, int, int, int );
 
     // scrolling
     void scrollH( int );
     void scrollV( int );
 
     // textobject
-    void fontChanged( QFont* );
-    void colorChanged( QColor* );
-    void alignChanged( TxtParagraph::HorzAlign );
+    void fontChanged( const QFont & );
+    void colorChanged( const QColor & );
+    void alignChanged( int );
 
     void extraLineBeginNormal();
     void extraLineBeginArrow();
@@ -349,18 +342,13 @@ protected slots:
     void extraLineEndRect();
     void extraLineEndCircle();
 
-    // search/replace
-    void search( QString, bool, bool );
-    void replace( QString, QString, bool, bool );
-    void replaceAll( QString, QString, bool );
-
     void stopPres() {continuePres = false; }
-
-				// layout
     void newPageLayout( KoPageLayout _layout );
     void openPageLayoutDia() { extraLayout(); }
     void unitChanged( QString );
 
+    void search();
+    
 protected:
 
 // ********* functions ***********
@@ -394,7 +382,7 @@ protected:
 // flags
     //bool m_bKPresenterModified;
     bool m_bUnderConstruction;
-    bool searchFirst, continuePres, exitPres;
+    bool continuePres, exitPres;
 
     // right button popup menus
     QPopupMenu *rb_oalign, *rb_lbegin, *rb_lend;
@@ -414,16 +402,14 @@ protected:
     PgConfDia *pgConfDia;
     EffectDia *effectDia;
     RotateDia *rotateDia;
-    KSearchDialog *searchDia;
-    KSearchReplaceDialog *replaceDia;
     ShadowDia *shadowDia;
     KPPresStructView *presStructView;
     DelPageDia *delPageDia;
     InsPageDia *insPageDia;
     ConfPieDia *confPieDia;
     ConfRectDia *confRectDia;
-    SpacingDia *spacingDia;
-
+    QGuardedPtr<SearchDialog> searchDialog;
+    
     // default pen and brush
     QPen pen;
     QBrush brush;
@@ -444,7 +430,7 @@ protected:
 
     // text toolbar values
     QFont tbFont;
-    TxtParagraph::HorzAlign tbAlign;
+    int tbAlign;
     QColor tbColor;
     QStringList fontList;
 
@@ -470,7 +456,6 @@ protected:
     KAction *actionEditCopyPage;
     KAction *actionEditDelPage;
     KAction *actionEditFind;
-    KAction *actionEditFindReplace;
     KAction *actionEditHeaderFooter;
 
     KAction *actionInsertPage;
@@ -501,7 +486,7 @@ protected:
     KAction *actionTextTypeNormalText;
     KAction *actionTextDepthPlus;
     KAction *actionTextDepthMinus;
-    KAction *actionTextSpacing;
+    KAction *actionTextSettings;
     KAction *actionTextExtentCont2Height;
     KAction *actionTextExtendObj2Cont;
     KAction *actionTextBold;

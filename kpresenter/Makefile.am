@@ -10,12 +10,11 @@ lib_LTLIBRARIES = kpresenter.la libkpresenterpart.la
 
 libkpresenterpart_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc \
 	kpresenter_doc.cc \
-	page.cc ktextobject.cc styledia.cc \
-	qwmf.cc kenumlistdia.cc \
-	kcharselectdia.cc optiondia.cc pgconfdia.cc effectdia.cc \
-	kpresenter_utils.cc rotatedia.cc ksearchdialogs.cc \
+	page.cc ktextedit.cc styledia.cc \
+	qwmf.cc optiondia.cc pgconfdia.cc effectdia.cc \
+	kpresenter_utils.cc rotatedia.cc searchdia.cc \
 	shadowdia.cc presstructview.cc delpagedia.cc inspagedia.cc \
-	confpiedia.cc spacingdia.cc confrectdia.cc \
+	confpiedia.cc confrectdia.cc \
 	kpobject.cc kplineobject.cc kprectobject.cc kpellipseobject.cc \
 	kpautoformobject.cc kpclipartobject.cc kptextobject.cc \
 	kppixmapobject.cc kppieobject.cc kppartobject.cc kpgroupobject.cc \
@@ -30,7 +29,9 @@ libkpresenterpart_la_SOURCES = backdia.cc webpresentation.cc kpresenter_view.cc 
 	KPresenterDocIface.skel KPresenterDocIface.cc \
 	KPresenterViewIface.skel KPresenterViewIface.cc \
 	KPresenterObjectIface.skel KPresenterObjectIface.cc \
-	KPresenterBackgroundIface.skel KPresenterBackgroundIface.cc
+	KPresenterBackgroundIface.skel KPresenterBackgroundIface.cc \
+	textdialog.cc
+
 libkpresenterpart_la_LDFLAGS = -avoid-version -module -no-undefined
 libkpresenterpart_la_LIBADD = autoformEdit/libaf.la ../lib/kofficeui/libkofficeui.la
 libkpresenterpart_la_METASOURCES = AUTO
@@ -47,12 +48,11 @@ dummy.cc:
 	echo > dummy.cc
 
 noinst_HEADERS = kpresenter_doc.h kpresenter_view.h \
-		backdia.h page.h ktextobject.h styledia.h \
-		qwmf.h global.h \
-		kenumlistdia.h kcharselectdia.h optiondia.h \
+		backdia.h page.h ktextedit.h styledia.h \
+		qwmf.h global.h optiondia.h \
 		pgconfdia.h effectdia.h kpresenter_utils.h \
-		rotatedia.h ksearchdialogs.h shadowdia.h presstructview.h \
-		delpagedia.h inspagedia.h confpiedia.h spacingdia.h confrectdia.h \
+		rotatedia.h searchdia.h shadowdia.h presstructview.h \
+		delpagedia.h inspagedia.h confpiedia.h confrectdia.h \
 		kpobject.h kplineobject.h kprectobject.h kpellipseobject.h \
 		kpautoformobject.h kpclipartobject.h kptextobject.h \
 		kppixmapobject.h kppieobject.h kppartobject.h kpgroupobject.h \
@@ -65,7 +65,7 @@ noinst_HEADERS = kpresenter_doc.h kpresenter_view.h \
 		grpobjcmd.h commandhistory.h preview.h gotopage.h webpresentation.h \
 		footer_header.h kpresenter_shell.h kpresenter_factory.h \
 		KPresenterDocIface.h KPresenterViewIface.h KPresenterObjectIface.h \
-		KPresenterBackgroundIface.h
+		KPresenterBackgroundIface.h textdialog.h
 
 kdelnk_DATA = kpresenter.desktop
 kdelnkdir = $(kde_appsdir)/Office

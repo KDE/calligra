@@ -46,7 +46,6 @@ k_dcop:
     virtual void editCopyPage();
     virtual void editDelPage();
     virtual void editFind();
-    virtual void editFindReplace();
     virtual void editHeaderFooter();
 
     // view menu
@@ -128,7 +127,7 @@ k_dcop:
     virtual void textNormalText();
     virtual void textDepthPlus();
     virtual void textDepthMinus();
-    virtual void textSpacing();
+    virtual void textSettings();
     virtual void textContentsToHeight();
     virtual void textObjectToContents();
 

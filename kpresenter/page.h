@@ -36,13 +36,13 @@
 #include <koQueryTrader.h>
 
 #include "global.h"
-#include "ktextobject.h"
+#include "ktextedit.h"
 #include "kpbackground.h"
 
 class KPresenterView;
 class KPresenterDoc;
 class QPainter;
-class KTextObject;
+class KTextEdit;
 class KPTextObject;
 class KPObject;
 class QPopupMenu;
@@ -88,10 +88,15 @@ public:
     void selectObj( KPObject* );
     void deSelectObj( int num );
     void deSelectObj( KPObject* );
-    void setTextFont( QFont* );
-    void setTextColor( QColor* );
-    void setTextAlign( TxtParagraph::HorzAlign );
-    KTextObject* kTxtObj();
+    void setTextFont( const QFont & );
+    void setTextColor( const QColor & );
+    void setTextAlign( int );
+    void setTextBold( bool b );
+    void setTextItalic( bool b );
+    void setTextUnderline( bool b );
+    void setTextFamily( const QString &f );
+    void setTextPointSize( int s );
+    KTextEdit* kTxtObj();
     KPTextObject* kpTxtObj();
 
     void startScreenPresentation( bool, int );
@@ -119,7 +124,7 @@ public:
     void setAutoForm( QString _autoform )
     { autoform = _autoform; }
 
-    KTextObject *haveASelectedTextObj();
+    KTextEdit *haveASelectedTextObj();
     KPTextObject *haveASelectedKPTextObj();
 
     void drawPageInPix( QPixmap&, int );
@@ -214,10 +219,10 @@ protected:
     void selectNext();
     void selectPrev();
 
-    void scalePixmapToBeOrigIn( const QSize &origSize, const QSize &pgSize, 
+    void scalePixmapToBeOrigIn( const QSize &origSize, const QSize &pgSize,
 				const QSize &presSize, KPPixmapObject *obj );
     QSize getPixmapOrigSize( KPPixmapObject *&obj );
-    
+
     // variables
     QPopupMenu *graphMenu, *picMenu, *txtMenu, *clipMenu, *presMenu;
     QPopupMenu *alignMenu1, *alignMenu2, *alignMenu3, *alignMenu4, *alignMenu5;
@@ -252,9 +257,9 @@ public slots:
     void chClip();
 
 private slots:
-    void toFontChanged( QFont* font ) { emit fontChanged( font ); }
-    void toColorChanged( QColor* color ) { emit colorChanged( color ); }
-    void toAlignChanged( TxtParagraph::HorzAlign a ) { emit alignChanged( a ); }
+    void toFontChanged( const QFont &font ) { emit fontChanged( font ); }
+    void toColorChanged( const QColor &color ) { emit colorChanged( color ); }
+    void toAlignChanged( int a ) { emit alignChanged( a ); }
     void objProperties();
     void objConfigPie();
     void objConfigRect();
@@ -287,13 +292,13 @@ private slots:
     void picViewOrig1280x1024();
     void picViewOrig1600x1200();
     void picViewOrigFactor();
-    
+
 signals:
 
     // signals to notify of changes
-    void fontChanged( QFont* );
-    void colorChanged( QColor* );
-    void alignChanged( TxtParagraph::HorzAlign );
+    void fontChanged( const QFont & );
+    void colorChanged( const QColor & );
+    void alignChanged( int );
     void stopPres();
 
 };

@@ -28,19 +28,18 @@
 #include <qfileinfo.h>
 #include <qtextstream.h>
 #include <qfiledialog.h>
+#include <qmessagebox.h>
 #include <cassert>
 
 #include "backdia.h"
 #include "autoformEdit/afchoose.h"
 #include "styledia.h"
-#include "ktextobject.h"
-#include "kcharselectdia.h"
-#include "kenumlistdia.h"
+#include "ktextedit.h"
 #include "optiondia.h"
 #include "pgconfdia.h"
 #include "effectdia.h"
 #include "rotatedia.h"
-#include "ksearchdialogs.h"
+#include "searchdia.h"
 #include "shadowdia.h"
 #include "presstructview.h"
 #include "delpagedia.h"
@@ -49,12 +48,12 @@
 #include "pgconfcmd.h"
 #include "confpiedia.h"
 #include "confrectdia.h"
-#include "spacingdia.h"
 #include "pglayoutcmd.h"
 #include "shadowcmd.h"
 #include "rotatecmd.h"
 #include "kppartobject.h"
 #include "preview.h"
+#include "textdialog.h"
 
 #include <kfiledialog.h>
 #include <kmessagebox.h>
@@ -82,6 +81,7 @@
 #include <koTemplateCreateDia.h>
 #include <kcoloractions.h>
 #include <kaction.h>
+#include <qspinbox.h>
 
 #include <stdlib.h>
 #include <signal.h>
@@ -131,15 +131,12 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     pgConfDia = 0;
     effectDia = 0;
     rotateDia = 0;
-    searchDia = 0;
-    replaceDia = 0;
     shadowDia = 0;
     presStructView = 0;
     delPageDia = 0;
     insPageDia = 0;
     confPieDia = 0;
     confRectDia = 0;
-    spacingDia = 0;
     xOffset = 0;
     yOffset = 0;
     v_ruler = 0;
@@ -162,7 +159,6 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     m_bShowGUI = true;
     m_bRectSelection = false;
     presStarted = false;
-    searchFirst = true;
     continuePres = false;
     exitPres = false;
     rndX = 0;
@@ -277,7 +273,7 @@ void KPresenterView::editCut()
 	m_pKPresenterDoc->copyObjs( xOffset, yOffset );
 	m_pKPresenterDoc->deleteObjs();
     } else {
-	page->kTxtObj()->cutRegion();
+	page->kTxtObj()->cut();
     }
 }
 
@@ -288,7 +284,7 @@ void KPresenterView::editCopy()
 	page->setToolEditMode( TEM_MOUSE );
 	m_pKPresenterDoc->copyObjs( xOffset, yOffset );
     } else {
-	page->kTxtObj()->copyRegion();
+	page->kTxtObj()->copy();
     }
 }
 
@@ -319,7 +315,7 @@ void KPresenterView::editSelectAll()
 	page->setToolEditMode( TEM_MOUSE );
 	page->selectAllObj();
     } else {
-	page->kTxtObj()->selectAll();
+	page->kTxtObj()->selectAll( TRUE );
     }
 }
 
@@ -357,51 +353,14 @@ void KPresenterView::editDelPage()
 /*===============================================================*/
 void KPresenterView::editFind()
 {
-    if ( searchDia ) {
-	QObject::disconnect( searchDia, SIGNAL( doSearch( QString, bool, bool ) ),
-			     this, SLOT( search( QString, bool, bool ) ) );
-	searchDia->close();
-	delete searchDia;
-	searchDia = 0;
+    if ( !searchDialog ) {
+	searchDialog = new SearchDialog( this, 0, FALSE );
+	connect( searchDialog->buttonFind, SIGNAL( clicked() ),
+		 this, SLOT( search() ) );
     }
-
-    if ( page->kTxtObj() ) {
-	searchDia = new KSearchDialog( this, "SearchDia" );
-	searchDia->setMaximumSize( searchDia->width(), searchDia->height() );
-	searchDia->setMinimumSize( searchDia->width(), searchDia->height() );
-	QObject::connect( searchDia, SIGNAL( doSearch( QString, bool, bool ) ),
-			  this, SLOT( search( QString, bool, bool ) ) );
-	searchDia->show();
-
-	searchFirst = true;
-    }
-}
-
-/*===============================================================*/
-void KPresenterView::editFindReplace()
-{
-    if ( replaceDia ) {
-	QObject::disconnect( replaceDia, SIGNAL( doSearchReplace( QString, QString, bool, bool ) ),
-			     this, SLOT( replace( QString, QString, bool, bool ) ) );
-	QObject::disconnect( replaceDia, SIGNAL( doSearchReplaceAll( QString, QString, bool ) ),
-			     this, SLOT( replaceAll( QString, QString, bool ) ) );
-	replaceDia->close();
-	delete replaceDia;
-	replaceDia = 0;
-    }
-
-    if ( page->kTxtObj() ) {
-	replaceDia = new KSearchReplaceDialog( this, "ReplaceDia" );
-	replaceDia->setMaximumSize( replaceDia->width(), replaceDia->height() );
-	replaceDia->setMinimumSize( replaceDia->width(), replaceDia->height() );
-	QObject::connect( replaceDia, SIGNAL( doSearchReplace( QString, QString, bool, bool ) ),
-			  this, SLOT( replace( QString, QString, bool, bool ) ) );
-	QObject::connect( replaceDia, SIGNAL( doSearchReplaceAll( QString, QString, bool ) ),
-			  this, SLOT( replaceAll( QString, QString, bool ) ) );
-	replaceDia->show();
-
-	searchFirst = true;
-    }
+    searchDialog->lineEdit->setFocus();
+    searchDialog->show();
+    searchDialog->raise();
 }
 
 /*===============================================================*/
@@ -1140,7 +1099,11 @@ void KPresenterView::screenPause()
 void KPresenterView::screenFirst()
 {
     if ( page->kTxtObj() )
+#if 0
 	page->kTxtObj()->home();
+#else
+    ;
+#endif
     else {
 	if ( !presStarted )
 	    vert->setValue( 0 );
@@ -1194,7 +1157,11 @@ void KPresenterView::screenNext()
 void KPresenterView::screenLast()
 {
     if ( page->kTxtObj() )
+#if 0
 	page->kTxtObj()->end();
+#else
+    ;
+#endif
     else {
 	if ( !presStarted )
 	    vert->setValue(vert->maxValue());
@@ -1218,7 +1185,7 @@ void KPresenterView::screenFullScreen()
 void KPresenterView::sizeSelected()
 {
     tbFont.setPointSize( ( (KFontSizeAction*)actionTextFontSize )->fontSize() );
-    page->setTextFont( &tbFont );
+    page->setTextPointSize( tbFont.pointSize() );
     kdDebug() << "sizeSelected() " << tbFont.pointSize() << endl;
 }
 
@@ -1226,7 +1193,7 @@ void KPresenterView::sizeSelected()
 void KPresenterView::fontSelected()
 {
     tbFont.setFamily( ( (KFontAction*)actionTextFontFamily )->currentText() );
-    page->setTextFont( &tbFont );
+    page->setTextFamily( tbFont.family() );
     kdDebug() << "fontSelected() " << tbFont.family() << endl;
 }
 
@@ -1234,35 +1201,37 @@ void KPresenterView::fontSelected()
 void KPresenterView::textBold()
 {
     tbFont.setBold( !tbFont.bold() );
-    page->setTextFont( &tbFont );
+    page->setTextBold( tbFont.bold() );
 }
 
 /*===============================================================*/
 void KPresenterView::textInsertPageNum()
 {
+#if 0
     if ( page->kTxtObj() )
 	page->kTxtObj()->insertPageNum();
+#endif
 }
 
 /*===============================================================*/
 void KPresenterView::textItalic()
 {
     tbFont.setItalic( !tbFont.italic() );
-    page->setTextFont( &tbFont );
+    page->setTextItalic( tbFont.italic() );
 }
 
 /*===============================================================*/
 void KPresenterView::textUnderline()
 {
     tbFont.setUnderline( !tbFont.underline() );
-    page->setTextFont( &tbFont );
+    page->setTextUnderline( tbFont.underline() );
 }
 
 /*===============================================================*/
 void KPresenterView::textColor()
 {
     if ( KColorDialog::getColor( tbColor ) ) {
-	page->setTextColor( &tbColor );
+	page->setTextColor( tbColor );
 	( (KColorAction*)actionTextColor )->blockSignals( true );
 	( (KColorAction*)actionTextColor )->setColor( tbColor );
 	( (KColorAction*)actionTextColor )->blockSignals( false );
@@ -1274,7 +1243,7 @@ void KPresenterView::textAlignLeft()
 {
     if ( !( (KToggleAction*)actionTextAlignLeft )->isChecked() )
 	return;
-    tbAlign = TxtParagraph::LEFT;
+    tbAlign = Qt::AlignLeft;
     page->setTextAlign( tbAlign );
 }
 
@@ -1283,8 +1252,8 @@ void KPresenterView::textAlignCenter()
 {
     if ( !( (KToggleAction*)actionTextAlignCenter )->isChecked() )
 	return;
-    tbAlign = TxtParagraph::CENTER;
-    page->setTextAlign( TxtParagraph::CENTER );
+    tbAlign = Qt::AlignHCenter;
+    page->setTextAlign( Qt::AlignHCenter );
 }
 
 /*===============================================================*/
@@ -1292,8 +1261,8 @@ void KPresenterView::textAlignRight()
 {
     if ( !( (KToggleAction*)actionTextAlignRight )->isChecked() )
 	return;
-    tbAlign = TxtParagraph::RIGHT;
-    page->setTextAlign( TxtParagraph::RIGHT );
+    tbAlign = Qt::AlignRight;
+    page->setTextAlign( Qt::AlignRight );
 }
 
 /*===============================================================*/
@@ -1302,9 +1271,9 @@ void KPresenterView::mtextFont()
     QFont tmpFont = tbFont;
 
     if ( KFontDialog::getFont( tmpFont ) ) {
-	fontChanged( &tmpFont );
+	fontChanged( tmpFont );
 	tbFont = tmpFont;
-	page->setTextFont( &tbFont );
+	page->setTextFont( tbFont );
  	( (KFontAction*)actionTextFontFamily )->blockSignals( true );
  	( (KFontAction*)actionTextFontFamily )->setFont( tbFont.family() );
  	( (KFontAction*)actionTextFontFamily )->blockSignals( false );
@@ -1317,133 +1286,131 @@ void KPresenterView::mtextFont()
 /*===============================================================*/
 void KPresenterView::textEnumList()
 {
-    KTextObject *txtObj = page->kTxtObj();
+    KTextEdit *txtObj = page->kTxtObj();
     if ( !txtObj )
 	txtObj = page->haveASelectedTextObj();
     if ( txtObj ) {
-	int _type = txtObj->enumListType().type;
-	QFont _font = txtObj->enumListType().font;
-	QColor _color = txtObj->enumListType().color;
-	QString _before = txtObj->enumListType().before;
-	QString _after = txtObj->enumListType().after;
-	int _start = txtObj->enumListType().start;
-
-	if ( KEnumListDia::enumListDia( _type, _font, _color, _before, _after, _start, fontList ) ) {
-	    KTextObject::EnumListType elt;
-	    elt.type = _type;
-	    elt.font = _font;
-	    elt.color = _color;
-	    elt.before = _before;
-	    elt.after = _after;
-	    elt.start = _start;
-	    txtObj->setEnumListType( elt );
+	if ( txtObj->paragType() != KTextEdit::EnumList ) {
+	    txtObj->setParagType( KTextEdit::EnumList );
+	    txtObj->setListDepth( 0 );
 	}
-
-	txtObj->setObjType( KTextObject::ENUM_LIST );
-
 	if ( !page->kTxtObj() )
 	    page->repaint( false );
+	else
+	    txtObj->repaint( FALSE );
     }
 }
 
 /*===============================================================*/
 void KPresenterView::textUnsortList()
 {
-    KTextObject *txtObj = page->kTxtObj();
+    KTextEdit *txtObj = page->kTxtObj();
     if ( !txtObj )
 	txtObj = page->haveASelectedTextObj();
     if ( txtObj ) {
-	QList<QFont> *_font = txtObj->unsortListType().font;
-	QList<QColor> *_color = txtObj->unsortListType().color;
-	QList<QChar> *_c = txtObj->unsortListType().chr;
-
-	if ( KCharSelectDia::selectChar( _font, _color, _c ) ) {
-	    KTextObject::UnsortListType ult;
-	    ult.font = _font;
-	    ult.color = _color;
-	    ult.chr = _c;
-	    txtObj->setUnsortListType( ult );
+	if ( txtObj->paragType() != KTextEdit::BulletList ) {
+	    txtObj->setParagType( KTextEdit::BulletList );
+	    txtObj->setListDepth( 0 );
 	}
-
-	txtObj->setObjType( KTextObject::UNSORT_LIST );
-
 	if ( !page->kTxtObj() )
 	    page->repaint( false );
+	else
+	    txtObj->repaint( FALSE );
     }
 }
 
 /*===============================================================*/
 void KPresenterView::textNormalText()
 {
-    KTextObject *txtObj = page->kTxtObj();
+    KTextEdit *txtObj = page->kTxtObj();
     if ( !txtObj )
 	txtObj = page->haveASelectedTextObj();
     if ( txtObj ) {
-	txtObj->setObjType( KTextObject::PLAIN );
+	txtObj->setParagType( KTextEdit::Normal );
 	if ( !page->kTxtObj() )
 	    page->repaint( false );
+	else
+	    txtObj->repaint( FALSE );
     }
 }
 
 /*===============================================================*/
 void KPresenterView::textDepthPlus()
 {
-    KTextObject *txtObj = page->kTxtObj();
+    KTextEdit *txtObj = page->kTxtObj();
     if ( !txtObj )
 	txtObj = page->haveASelectedTextObj();
     if ( txtObj ) {
-	txtObj->incDepth();
+	txtObj->setListDepth( 1 );
 	if ( !page->kTxtObj() )
 	    page->repaint( false );
+	else
+	    txtObj->repaint( FALSE );
     }
 }
 
 /*===============================================================*/
 void KPresenterView::textDepthMinus()
 {
-    KTextObject *txtObj = page->kTxtObj();
+    KTextEdit *txtObj = page->kTxtObj();
     if ( !txtObj )
 	txtObj = page->haveASelectedTextObj();
     if ( txtObj ) {
-	txtObj->decDepth();
+	txtObj->setListDepth( -1 );
 	if ( !page->kTxtObj() )
 	    page->repaint( false );
-	
+	else
+	    txtObj->repaint( FALSE );
     }
 }
 
 /*===============================================================*/
-void KPresenterView::textSpacing()
+void KPresenterView::textSettings()
 {
-    KTextObject *obj = 0L;
-
-    if ( page->kTxtObj() ) obj = page->kTxtObj();
-    else if ( page->haveASelectedTextObj() ) obj = page->haveASelectedTextObj();
-
-    if ( obj ) {
-	if ( spacingDia ) {
-	    QObject::disconnect( spacingDia, SIGNAL( spacingDiaOk( int, int, int, int ) ),
-                                 this, SLOT( spacingOk( int, int, int, int ) ) );
-	    spacingDia->close();
-	    delete spacingDia;
-	    spacingDia = 0;
+    KTextEdit *txtObj = page->kTxtObj();
+    if ( !txtObj )
+	txtObj = page->haveASelectedTextObj();
+    if ( txtObj ) {
+	TextDialog dlg( this, 0, TRUE );
+	dlg.comboBullet1->setCurrentItem( (int)txtObj->document()->textSettings().bulletType[0] );
+	dlg.comboBullet2->setCurrentItem( (int)txtObj->document()->textSettings().bulletType[1] );
+	dlg.comboBullet3->setCurrentItem( (int)txtObj->document()->textSettings().bulletType[2] );
+	dlg.comboBullet4->setCurrentItem( (int)txtObj->document()->textSettings().bulletType[3] );
+	dlg.colorBullet1->setColor( txtObj->document()->textSettings().bulletColor[0] );
+	dlg.colorBullet2->setColor( txtObj->document()->textSettings().bulletColor[1] );
+	dlg.colorBullet3->setColor( txtObj->document()->textSettings().bulletColor[2] );
+	dlg.colorBullet4->setColor( txtObj->document()->textSettings().bulletColor[3] );
+	dlg.spinLineSpacing->setValue( txtObj->document()->textSettings().lineSpacing );
+	dlg.spinParagSpacing->setValue( txtObj->document()->textSettings().paragSpacing );
+	dlg.spinMargin->setValue( txtObj->document()->textSettings().margin );
+	if ( dlg.exec() == QDialog::Accepted ) {
+	    KTextEditDocument::TextSettings s;
+	    s.bulletType[0] = (KTextEditDocument::Bullet)dlg.comboBullet1->currentItem();
+	    s.bulletType[1] = (KTextEditDocument::Bullet)dlg.comboBullet2->currentItem();
+	    s.bulletType[2] = (KTextEditDocument::Bullet)dlg.comboBullet3->currentItem();
+	    s.bulletType[3] = (KTextEditDocument::Bullet)dlg.comboBullet4->currentItem();
+	    s.bulletColor[0] = dlg.colorBullet1->color();
+	    s.bulletColor[1] = dlg.colorBullet2->color();
+	    s.bulletColor[2] = dlg.colorBullet3->color();
+	    s.bulletColor[3] = dlg.colorBullet4->color();
+	    s.lineSpacing = dlg.spinLineSpacing->value();
+	    s.paragSpacing = dlg.spinParagSpacing->value();
+	    s.margin = dlg.spinMargin->value();
+	    txtObj->document()->setTextSettings( s );
+	    if ( !page->kTxtObj() )
+		page->repaint( false );
+	    else
+		txtObj->repaint( FALSE );
 	}
-
-	spacingDia = new SpacingDia( this, obj->getLineSpacing(), obj->getDistBefore(),
-				     obj->getDistAfter(), obj->getGap() );
-	spacingDia->setMaximumSize( spacingDia->width(), spacingDia->height() );
-	spacingDia->setMinimumSize( spacingDia->width(), spacingDia->height() );
-	spacingDia->setCaption( i18n( "KPresenter - Spacings" ) );
-	QObject::connect( spacingDia, SIGNAL( spacingDiaOk( int, int, int, int ) ),
-			  this, SLOT( spacingOk( int, int, int, int ) ) );
-	spacingDia->show();
     }
 }
+
+
 
 /*===============================================================*/
 void KPresenterView::textContentsToHeight()
 {
-    KTextObject *txtObj = 0L;
+    KTextEdit *txtObj = 0L;
 
     if ( page->kTxtObj() )
 	txtObj = page->kTxtObj();
@@ -1456,7 +1423,7 @@ void KPresenterView::textContentsToHeight()
     if ( page->haveASelectedTextObj() )
 	m_pKPresenterDoc->repaint( false );
     else if ( txtObj )
-	txtObj->repaint( true );
+	txtObj->repaint( FALSE );
 }
 
 /*===============================================================*/
@@ -1475,7 +1442,7 @@ void KPresenterView::textObjectToContents()
     if ( page->haveASelectedKPTextObj() )
 	m_pKPresenterDoc->repaint( false );
     else if ( txtObj )
-	txtObj->getKTextObject()->repaint( true );
+	txtObj->getKTextObject()->repaint( FALSE );
 }
 
 /*===============================================================*/
@@ -1492,7 +1459,7 @@ void KPresenterView::penChosen( const QColor &c )
 	}
     } else {
 	tbColor = c;
-	page->setTextColor( &tbColor );
+	page->setTextColor( tbColor );
 	( (KColorAction*)actionTextColor )->blockSignals( true );
 	( (KColorAction*)actionTextColor )->setColor( tbColor );
 	( (KColorAction*)actionTextColor )->blockSignals( false );
@@ -1513,7 +1480,7 @@ void KPresenterView::brushChosen( const QColor &c )
 	}
     } else {
 	tbColor = c;
-	page->setTextColor( &tbColor );
+	page->setTextColor( tbColor );
 	( (KColorAction*)actionTextColor )->blockSignals( true );
 	( (KColorAction*)actionTextColor )->setColor( tbColor );
 	( (KColorAction*)actionTextColor )->blockSignals( false );
@@ -1627,12 +1594,12 @@ void KPresenterView::createGUI()
 {
     // setup page
     page = new Page( this, "Page", ( KPresenterView* )this );
-    QObject::connect( page, SIGNAL( fontChanged( QFont* ) ),
-		      this, SLOT( fontChanged( QFont* ) ) );
-    QObject::connect( page, SIGNAL( colorChanged( QColor* ) ),
-		      this, SLOT( colorChanged( QColor* ) ) );
-    QObject::connect( page, SIGNAL( alignChanged( TxtParagraph::HorzAlign ) ),
-		      this, SLOT( alignChanged( TxtParagraph::HorzAlign ) ) );
+    QObject::connect( page, SIGNAL( fontChanged( const QFont & ) ),
+		      this, SLOT( fontChanged( const QFont & ) ) );
+    QObject::connect( page, SIGNAL( colorChanged( const QColor & ) ),
+		      this, SLOT( colorChanged( const QColor & ) ) );
+    QObject::connect( page, SIGNAL( alignChanged( int ) ),
+		      this, SLOT( alignChanged( int ) ) );
 
     // setup GUI
     setupActions();
@@ -1683,7 +1650,6 @@ void KPresenterView::setupActions()
 				     this, SLOT( editDelPage() ),
 				     actionCollection(), "edit_delpage" );
     actionEditFind = KStdAction::find( this, SLOT( editFind() ), actionCollection(), "edit_find" );
-    actionEditFindReplace = KStdAction::replace( this, SLOT( editFindReplace() ), actionCollection(), "edit_findreplace" );
     actionEditHeaderFooter = new KAction( i18n( "&Header/Footer..." ), 0,
 					  this, SLOT( editHeaderFooter() ),
 					  actionCollection(), "edit_headerfooter" );
@@ -1824,9 +1790,9 @@ void KPresenterView::setupActions()
 					CTRL + Key_Minus, this, SLOT( textDepthMinus() ),
 					actionCollection(), "text_depthMinus" );
 
-    actionTextSpacing = new KAction( i18n( "&Spacing..." ), "spacing", 0,
-				     this, SLOT( textSpacing() ),
-				     actionCollection(), "text_spacing" );
+    actionTextSettings = new KAction( i18n( "&Settings..." ), "settings", 0,
+				      this, SLOT( textSettings() ),
+				      actionCollection(), "text_settings" );
 
     actionTextExtentCont2Height = new KAction( i18n( "Extend Contents to Object &Height" ), 0,
 					       this, SLOT( textContentsToHeight() ),
@@ -2260,24 +2226,6 @@ void KPresenterView::confRectOk()
 }
 
 /*================================================================*/
-void KPresenterView::spacingOk( int _lineSpacing, int _distBefore, int _distAfter, int _gap )
-{
-    if ( page->kTxtObj() ) {
-	page->kTxtObj()->setLineSpacing( _lineSpacing );
-	page->kTxtObj()->setDistBefore( _distBefore );
-	page->kTxtObj()->setDistAfter( _distAfter );
-	page->kTxtObj()->setGap( _gap );
-    } else if ( page->haveASelectedTextObj() ) {
-	KTextObject *obj = page->haveASelectedTextObj();
-	obj->setAllLineSpacing( _lineSpacing );
-	obj->setAllDistBefore( _distBefore );
-	obj->setAllDistAfter( _distAfter );
-	obj->setGap( _gap );
-	repaint( false );
-    }
-}
-
-/*================================================================*/
 unsigned int KPresenterView::getCurrPgNum()
 {
     if ( vert->value() == vert->minValue() )
@@ -2317,65 +2265,57 @@ void KPresenterView::scrollV( int _value )
 }
 
 /*====================== font changed ===========================*/
-void KPresenterView::fontChanged( QFont* font )
+void KPresenterView::fontChanged( const QFont &font )
 {
-    if ( font->operator!=( tbFont ) ) {
-	tbFont.setFamily( font->family() );
-	tbFont.setBold( font->bold() );
-	tbFont.setItalic( font->italic() );
-	tbFont.setUnderline( font->underline() );
-	tbFont.setPointSize( font->pointSize() );
-	( (KToggleAction*) actionTextFontFamily )->blockSignals( true );
- 	( (KFontAction*) actionTextFontFamily )->setFont( tbFont.family() );
-	( (KToggleAction*) actionTextFontFamily )->blockSignals( false );
-	( (KToggleAction*) actionTextFontSize )->blockSignals( true );
- 	( (KFontSizeAction*) actionTextFontSize )->setFontSize( tbFont.pointSize() );
-	( (KToggleAction*) actionTextFontSize )->blockSignals( false );
-	( (KToggleAction*) actionTextBold )->blockSignals( true );
-	( (KToggleAction*) actionTextBold )->setChecked( tbFont.bold() );
-	( (KToggleAction*) actionTextBold )->blockSignals( false );
-	( (KToggleAction*) actionTextItalic )->blockSignals( true );
-	( (KToggleAction*) actionTextItalic )->setChecked( tbFont.italic() );
-	( (KToggleAction*) actionTextItalic )->blockSignals( false );
-	( (KToggleAction*) actionTextUnderline )->blockSignals( true );
-	( (KToggleAction*) actionTextUnderline )->setChecked( tbFont.underline() );
-	( (KToggleAction*) actionTextUnderline )->blockSignals( false );
-    }
+    tbFont.setFamily( font.family() );
+    tbFont.setBold( font.bold() );
+    tbFont.setItalic( font.italic() );
+    tbFont.setUnderline( font.underline() );
+    tbFont.setPointSize( font.pointSize() );
+    ( (KToggleAction*) actionTextFontFamily )->blockSignals( true );
+    ( (KFontAction*) actionTextFontFamily )->setFont( tbFont.family() );
+    ( (KToggleAction*) actionTextFontFamily )->blockSignals( false );
+    ( (KToggleAction*) actionTextFontSize )->blockSignals( true );
+    ( (KFontSizeAction*) actionTextFontSize )->setFontSize( tbFont.pointSize() );
+    ( (KToggleAction*) actionTextFontSize )->blockSignals( false );
+    ( (KToggleAction*) actionTextBold )->blockSignals( true );
+    ( (KToggleAction*) actionTextBold )->setChecked( tbFont.bold() );
+    ( (KToggleAction*) actionTextBold )->blockSignals( false );
+    ( (KToggleAction*) actionTextItalic )->blockSignals( true );
+    ( (KToggleAction*) actionTextItalic )->setChecked( tbFont.italic() );
+    ( (KToggleAction*) actionTextItalic )->blockSignals( false );
+    ( (KToggleAction*) actionTextUnderline )->blockSignals( true );
+    ( (KToggleAction*) actionTextUnderline )->setChecked( tbFont.underline() );
+    ( (KToggleAction*) actionTextUnderline )->blockSignals( false );
 }
 
 /*====================== color changed ==========================*/
-void KPresenterView::colorChanged( QColor* color )
+void KPresenterView::colorChanged( const QColor &color )
 {
-    if ( color->operator!=( tbColor ) ) {
-	tbColor.setRgb( color->rgb() );
-	( (KColorAction*) actionTextColor )->blockSignals( true );
-	( (KColorAction*) actionTextColor )->setColor( tbColor );
-	( (KColorAction*) actionTextColor )->blockSignals( false );
-    }
+    tbColor.setRgb( color.rgb() );
+    ( (KColorAction*) actionTextColor )->blockSignals( true );
+    ( (KColorAction*) actionTextColor )->setColor( tbColor );
+    ( (KColorAction*) actionTextColor )->blockSignals( false );
 }
 
 /*====================== align changed ==========================*/
-void KPresenterView::alignChanged( TxtParagraph::HorzAlign align )
+void KPresenterView::alignChanged( int align )
 {
     if ( align != tbAlign ) {
 	tbAlign = align;
-	switch ( tbAlign ) {
-	case TxtParagraph::LEFT:
+	if ( ( align & AlignLeft ) == AlignLeft ) {
 	    ( (KToggleAction*) actionTextAlignLeft )->blockSignals( true );
 	    ( (KToggleAction*)actionTextAlignLeft )->setChecked( true );
 	    ( (KToggleAction*) actionTextAlignLeft )->blockSignals( false );
-	    break;
-	case TxtParagraph::CENTER:
+	} else if ( ( align & AlignHCenter ) == AlignHCenter ||
+		    ( align & AlignCenter ) == AlignCenter ) {
 	    ( (KToggleAction*) actionTextAlignCenter )->blockSignals( true );
 	    ( (KToggleAction*)actionTextAlignCenter )->setChecked( true );
 	    ( (KToggleAction*) actionTextAlignCenter )->blockSignals( false );
-	    break;
-	case TxtParagraph::RIGHT:
+	} else if ( ( align & AlignRight ) == AlignRight ) {
 	    ( (KToggleAction*) actionTextAlignRight )->blockSignals( true );
 	    ( (KToggleAction*)actionTextAlignRight )->setChecked( true );
 	    ( (KToggleAction*) actionTextAlignRight )->blockSignals( false );
-	    break;
-	default: break;
 	}
     }
 }
@@ -2400,100 +2340,6 @@ void KPresenterView::screenPenColor()
 	( (KColorAction*)actionScreenPenColor )->blockSignals( true );
 	( (KColorAction*)actionScreenPenColor )->setColor( c );
 	( (KColorAction*)actionScreenPenColor )->blockSignals( false );
-    }
-}
-
-/*=========================== search =============================*/
-void KPresenterView::search( QString text, bool sensitive, bool direction )
-{
-    if ( page->kTxtObj() ) {
-	TxtCursor from, to;
-	from.setKTextObject( page->kTxtObj() );
-	to.setKTextObject( page->kTxtObj() );
-	bool found = false;
-
-	if ( !direction ) {
-	    if ( searchFirst )
-		found = page->kTxtObj()->searchFirst( text, &from, &to, sensitive );
-	    else
-		found = page->kTxtObj()->searchNext( text, &from, &to, sensitive );
-
-	    if ( found )
-		searchFirst = false;
-	    else {
-		searchFirst = false;
-		page->kTxtObj()->setSearchIndexToBegin();
-		KMessageBox::sorry( this, i18n( "The search string '%1' couldn't be found!" ).arg(text));
-	    }
-	} else {
-	    if ( searchFirst )
-		found = page->kTxtObj()->searchFirstRev( text, &from, &to, sensitive );
-	    else
-		found = page->kTxtObj()->searchNextRev( text, &from, &to, sensitive );
-
-	    if ( found )
-		searchFirst = false;
-	    else {
-		searchFirst = false;
-		page->kTxtObj()->setSearchIndexToEnd();
-		KMessageBox::sorry( this, i18n( "The search string '%1' couldn't be found!" ).arg(text));
-	    }
-	}
-    }
-}
-
-/*=========================== search and replace =================*/
-void KPresenterView::replace( QString search, QString replace, bool sensitive, bool direction )
-{
-    if ( page->kTxtObj() ) {
-	TxtCursor from, to;
-	from.setKTextObject( page->kTxtObj() );
-	to.setKTextObject( page->kTxtObj() );
-	bool found = false;
-
-	if ( !direction ) {
-	    if ( searchFirst )
-		found = page->kTxtObj()->replaceFirst( search, replace, &from, &to, sensitive );
-	    else
-		found = page->kTxtObj()->replaceNext( search, replace, &from, &to, sensitive );
-
-	    if ( found )
-		searchFirst = false;
-	    else {
-		searchFirst = false;
-		page->kTxtObj()->setSearchIndexToBegin();
-		KMessageBox::sorry( this, i18n( "The search string '%1' couldn't be found!" ).arg(search));
-	    }
-	} else {
-	    if ( searchFirst )
-		found = page->kTxtObj()->replaceFirstRev( search, replace, &from, &to, sensitive );
-	    else
-		found = page->kTxtObj()->replaceNextRev( search, replace, &from, &to, sensitive );
-
-	    if ( found )
-		searchFirst = false;
-	    else {
-		searchFirst = false;
-		page->kTxtObj()->setSearchIndexToEnd();
-		KMessageBox::sorry( this, i18n( "The search string '%1' couldn't be found!" ).arg(search));
-	    }
-	}
-    }
-}
-
-/*=========================== search and replace all =============*/
-void KPresenterView::replaceAll( QString search, QString replace, bool sensitive )
-{
-    if ( page->kTxtObj() ) {
-	TxtCursor from, to;
-	from.setKTextObject( page->kTxtObj() );
-	to.setKTextObject( page->kTxtObj() );
-	bool found = true;
-
-	page->kTxtObj()->setSearchIndexToBegin();
-
-	while ( found )
-	    found = page->kTxtObj()->replaceNext( search, replace, &from, &to, sensitive );
     }
 }
 
@@ -3024,4 +2870,18 @@ bool KPresenterView::gotoPresPage( int pg )
 
     page->gotoPage( pg );
     return true;
+}
+
+void KPresenterView::search()
+{
+    if ( !searchDialog )
+	return;
+    KTextEdit *txtObj = page->kTxtObj();
+    if ( !txtObj )
+	txtObj = page->haveASelectedTextObj();
+    if ( !txtObj ) 
+	return;
+    QString txt = searchDialog->lineEdit->text();
+    if ( !txtObj->find( txt, searchDialog->cs, searchDialog->wo, !searchDialog->back ) )
+	QMessageBox::information( this, i18n( "Find" ), i18n( "%1 not found!" ).arg( txt ) );
 }

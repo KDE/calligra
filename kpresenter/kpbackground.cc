@@ -176,7 +176,7 @@ void KPBackGround::restore()
 	backPix = 0L;
     }
 
-    if ( backType == BT_COLOR || backType == BT_CLIPART || 
+    if ( backType == BT_COLOR || backType == BT_CLIPART ||
 	 backType == BT_PICTURE && backView == BV_CENTER ) {
 	if ( gradient ) {
 	    gradientCollection->removeRef( backColor1, backColor2, bcType, ext, unbalanced, xfactor, yfactor );
@@ -538,6 +538,7 @@ void KPBackGround::drawBackPix( QPainter *_painter )
 /*================================================================*/
 void KPBackGround::drawHeaderFooter( QPainter *_painter, const QPoint &_offset )
 {
+#if 0
     if ( doc->hasHeader() ) {
 	QSize s( doc->header()->getKTextObject()->size() );
 	QPoint pnt( doc->header()->getKTextObject()->x(), doc->header()->getKTextObject()->y() );
@@ -604,6 +605,7 @@ void KPBackGround::drawHeaderFooter( QPainter *_painter, const QPoint &_offset )
 
 	doc->footer()->getKTextObject()->toggleModified( false );
     }
+#endif
 }
 
 /*================================================================*/

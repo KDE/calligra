@@ -25,7 +25,7 @@
 
 #include <ktoolbar.h>
 
-#include "ktextobject.h"
+#include "ktextedit.h"
 
 class KPresenterDoc;
 
@@ -114,17 +114,17 @@ protected slots:
     void footerAlignCenter();
     void footerAlignRight();
     void footerInsertPageNum();
-    
+
     void headerFontChanged( QFont *f );
     void headerColorChanged( QColor *c );
-    void headerAlignChanged( TxtParagraph::HorzAlign ha );
+    void headerAlignChanged( int ha );
 
     void footerFontChanged( QFont *f );
     void footerColorChanged( QColor *c );
-    void footerAlignChanged( TxtParagraph::HorzAlign ha );
+    void footerAlignChanged( int ha );
 
     void tabSelected( const QString &s );
-    
+
 };
 
 #endif

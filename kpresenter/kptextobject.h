@@ -21,11 +21,12 @@
 #define kptextobject_h
 
 #include "kpobject.h"
-#include "ktextobject.h"
+#include "ktextedit.h"
 #include "kpgradient.h"
 
 class KPresenterView;
 class KPresenterDoc;
+class QDomElement;
 
 /******************************************************************/
 /* Class: KPTextObject						  */
@@ -69,7 +70,7 @@ public:
     { return OT_TEXT; }
     virtual int getSubPresSteps()
     { return ktextobject.paragraphs() - 1; }
-    virtual KTextObject* getKTextObject()
+    virtual KTextEdit* getKTextObject()
     { return &ktextobject; }
     virtual QPen getPen()
     { return pen; }
@@ -108,14 +109,13 @@ public:
     virtual void extendObject2Contents( KPresenterView *view );
 
     void recalcPageNum( KPresenterDoc *doc );
-    
+
 protected:
     virtual void saveKTextObject( QTextStream& out );
-    virtual void loadKTextObject( KOMLParser& parser, vector<KOMLAttrib>& lst );
+    virtual void loadKTextObject( const QDomElement &e, int type );
+    void drawParags( QPainter *p, int from, int to );
 
-    QString decode( const QString &_str );
-
-    KTextObject ktextobject;
+    KTextEdit ktextobject;
 
     QPen pen;
     QBrush brush;

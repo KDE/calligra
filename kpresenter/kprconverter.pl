@@ -11,7 +11,7 @@ while (<INPUT>)
 {
   if (/<DOC/)
     {
-      s/>$/syntaxVersion=\"2\">/;
+      s/>$/ syntaxVersion=\"2\">/;
     }
   elsif (/<TEXTOBJ/)
     {

@@ -22,7 +22,7 @@
 #include "kpresenter_view.h"
 #include "kpresenter_shell.h"
 #include "page.h"
-#include "ktextobject.h"
+#include "ktextedit.h"
 #include "footer_header.h"
 #include "kplineobject.h"
 #include "kprectobject.h"
@@ -96,7 +96,7 @@
 #define QT_NO_CAST_ASCII
 #endif
 
-static const int CURRENT_SYNTAX_VERSION = 1; // Reggie: make this 2 when committing the new text object
+static const int CURRENT_SYNTAX_VERSION = 2; // Reggie: make this 2 when committing the new text object
 
 /******************************************************************/
 /* class KPresenterChild					  */
@@ -575,41 +575,43 @@ bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
     int syntaxVersion = docelem.attribute( "syntaxVersion" ).toInt();
     if ( (syntaxVersion == 0 || syntaxVersion == 1) && CURRENT_SYNTAX_VERSION > 1 )
     {
-        // This is an old style document, before the current TextObject
-        // We have kprconverter.pl for it
-        kdWarning() << "KPresenter document version 1. Launching perl script to convert it." << endl;
+	// This is an old style document, before the current TextObject
+	// We have kprconverter.pl for it
+	kdWarning() << "KPresenter document version 1. Launching perl script to convert it." << endl;
 
-        // Read the full XML and write it to a temp file
-        KTempFile tmpFileIn;
-        {
-            QByteArray array = dev->readAll();
-            *tmpFileIn.dataStream() << array;
-        }
+	// Read the full XML and write it to a temp file
+	KTempFile tmpFileIn;
+	{
+	    dev->reset();
+	    QByteArray array = dev->readAll();
+	    *tmpFileIn.textStream() << (const char*)array.data();
+	}
+	tmpFileIn.close();
+	
+	// Launch the perl script on it
+	KTempFile tmpFileOut;
+	QCString cmd = KGlobal::dirs()->findExe("perl").local8Bit();
+	if (cmd.isEmpty())
+	{
+	    KMessageBox::error(0L,"You don't appear to have perl installed.\nIt is needed to convert this document.\nInstall perl and try again.");
+	    return false;
+	}
+	cmd += " ";
+	cmd += locate( "exe", "kprconverter.pl" ) + " ";
+	cmd += QFile::encodeName( tmpFileIn.name() ) + " ";
+	cmd += QFile::encodeName( tmpFileOut.name() );
+	system( cmd );
 
-        // Launch the perl script on it
-        KTempFile tmpFileOut;
-        QCString cmd = KGlobal::dirs()->findExe("perl").local8Bit();
-        if (cmd.isEmpty())
-        {
-            KMessageBox::error(0L,"You don't appear to have perl installed.\nIt is needed to convert this document.\nInstall perl and try again.");
-            return false;
-        }
-        cmd += " ";
-        cmd += locate( "exe", "kprconverter.pl" ) + " ";
-        cmd += QFile::encodeName( tmpFileIn.name() ) + " ";
-        cmd += QFile::encodeName( tmpFileOut.name() );
-        system( cmd );
-
-        // Build a new QDomDocument from the result
-        QDomDocument newdoc;
-        newdoc.setContent( tmpFileOut.file() );
-        KOMLParser parser( newdoc );
-        return loadXML( parser );
+	// Build a new QDomDocument from the result
+	QDomDocument newdoc;
+	newdoc.setContent( tmpFileOut.file() );
+	KOMLParser parser( newdoc );
+	return loadXML( parser );
     }
     else
     {
-        KOMLParser parser( doc );
-        return loadXML( parser );
+	KOMLParser parser( doc );
+	return loadXML( parser );
     }
 }
 
@@ -3103,7 +3105,9 @@ void KPresenterDoc::insertText( QRect r, int diffx, int diffy, QString text, KPr
     kptextobject->setSelected( true );
     if ( !text.isEmpty() && _view ) {
 	kptextobject->getKTextObject()->clear();
-	kptextobject->getKTextObject()->addText( text, _view->currFont(), _view->currColor() );
+	kptextobject->getKTextObject()->setText( text );
+	kptextobject->getKTextObject()->document()->setFontToAll( _view->currFont() );
+	kptextobject->getKTextObject()->document()->setColorToAll( _view->currColor() );
     }
 
     InsertCmd *insertCmd = new InsertCmd( i18n( "Insert text" ), kptextobject, this );
@@ -3831,17 +3835,13 @@ QString KPresenterDoc::getPageTitle( unsigned int pgNum, const QString &_title )
     if ( !obj )
 	return QString( _title );
 
-    KTextObject *txtObj = dynamic_cast<KPTextObject*>( obj )->getKTextObject();
+    KTextEdit *txtObj = dynamic_cast<KPTextObject*>( obj )->getKTextObject();
 
-    if ( txtObj->lines() == 2 ) {
-	QString l1 = txtObj->lineAt( 0 )->getText();
-	l1 = l1.simplifyWhiteSpace();
-	QString l2 = txtObj->lineAt( 1 )->getText();
-	l2 = l2.simplifyWhiteSpace();
-	return QString( "%1 %2" ).arg( l1 ).arg( l2 );
-    }
-
-    return QString( txtObj->lineAt( 0 )->getText() ).simplifyWhiteSpace();
+    QString txt = txtObj->text();
+    int i = txt.find( '\n' );
+    if ( i == -1 )
+	return txt;
+    return txt.left( i );
 }
 
 /*================================================================*/

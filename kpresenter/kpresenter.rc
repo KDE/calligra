@@ -15,7 +15,6 @@
   <Action name="edit_delpage"/>
   <Separator/>
   <Action name="edit_find"/>
-  <Action name="edit_findreplace"/>
   <Separator/>
   <Action name="edit_headerfooter"/>
  </Menu>
@@ -47,6 +46,7 @@
  <Menu name="Text"><text>&amp;Text</text>
   <Action name="text_font"/>
   <Action name="text_color"/>
+  <Action name="text_settings"/>
   <Separator/>
   <Menu name="Align"><text>&amp;Align</text>
    <Action name="text_alignleft"/>
@@ -62,7 +62,6 @@
   <Separator/>
   <Action name="text_depthPlus"/>
   <Action name="text_depthMinus"/>
-  <Action name="text_spacing"/>
   <Separator/>
   <Action name="text_con2hei"/>
   <Action name="text_obj2cont"/>
@@ -171,7 +170,7 @@
   <Separator/>
   <Action name="text_depthPlus"/>
   <Action name="text_depthMinus"/>
-  <Action name="text_spacing"/>
+  <Action name="text_settings"/>
   <Separator/>
   <Action name="text_inspgnum"/>
 </ToolBar>
