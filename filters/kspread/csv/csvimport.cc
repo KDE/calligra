@@ -160,12 +160,11 @@ const bool CSVFilter::I_filter(const QString &file, KoDocument *document,
                         ++column;
                     state = S_START;
                 } else
-                { // should never happen
-                    kdError(30501) << "Error: unexpected character!" << endl;
-                    field += "*** Error : unexpected character : ";
+                { // This field wasn't quoted. It was "blah"something
+                    state = S_NORMAL_FIELD;
+                    field.prepend('"');
+                    field += '"';
                     field += x;
-                    state = S_START;
-                    bSuccess=false;
                 }
                 break;
             case S_NORMAL_FIELD :
