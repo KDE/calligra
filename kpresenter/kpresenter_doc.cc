@@ -1594,7 +1594,7 @@ bool KPresenterDoc::setPieSettings( PieType pieType, int angle, int len )
 bool KPresenterDoc::setRectSettings( int _rx, int _ry )
 {
     bool ret = false;
-
+    bool changed=false;
     KPObject *kpobject = 0;
     QList<KPObject> _objects;
     QList<RectValueCmd::RectValues> _oldValues;
@@ -1614,12 +1614,15 @@ bool KPresenterDoc::setRectSettings( int _rx, int _ry )
 		dynamic_cast<KPRectObject*>( kpobject )->getRnds( tmp->xRnd, tmp->yRnd );
 		_oldValues.append( tmp );
 		_objects.append( kpobject );
+                if(!changed && (tmp->xRnd!=_newValues.xRnd
+                                ||tmp->yRnd!=_newValues.yRnd) )
+                    changed=true;
 		ret = true;
 	    }
 	}
     }
 
-    if ( !_objects.isEmpty() ) {
+    if ( !_objects.isEmpty() && changed ) {
 	RectValueCmd *rectValueCmd = new RectValueCmd( i18n( "Change Rectangle values" ), _oldValues,
 						       _newValues, _objects, this );
 	commands()->addCommand( rectValueCmd );
