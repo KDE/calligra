@@ -429,7 +429,7 @@ bool KoDocument::saveFile()
                 KMessageBox::error( 0L, i18n( "Could not save\n%1" ).arg( m_file ) );
             else if ( d->lastErrorMessage != "USER_CANCELED" )
             {
-                KMessageBox::error( 0L, i18n( "Could not save %1\nReason: %2" ).arg( m_file, d->lastErrorMessage ) );
+                KMessageBox::error( 0L, i18n( "Could not save %1\nReason: %2" ).arg( m_file).arg( d->lastErrorMessage ) );
             }
         }
 
@@ -1143,7 +1143,7 @@ bool KoDocument::checkAutoSaveFile()
         QString dateStr = date.toString(Qt::LocalDate);
         int res = KMessageBox::warningYesNoCancel(
             0, i18n( "An autosaved file for an unnamed document exists in %1.\nThis file is dated %2\nDo you want to open it?" )
-            .arg(asf, dateStr) );
+            .arg(asf).arg( dateStr) );
         switch(res) {
         case KMessageBox::Yes : {
             KURL url;
@@ -1346,7 +1346,7 @@ bool KoDocument::openFile()
                 if ( d->lastErrorMessage.isEmpty() )
                     KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().prettyURL( 0, KURL::StripFileProtocol ) ) );
                 else if ( d->lastErrorMessage != "USER_CANCELED" )
-                    KMessageBox::error( 0L, i18n( "Could not open %1\nReason: %2" ).arg( url().prettyURL( 0, KURL::StripFileProtocol ), d->lastErrorMessage ) );
+                    KMessageBox::error( 0L, i18n( "Could not open %1\nReason: %2" ).arg( url().prettyURL( 0, KURL::StripFileProtocol )).arg( d->lastErrorMessage ) );
             }
         }
     }
