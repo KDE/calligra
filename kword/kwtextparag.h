@@ -248,6 +248,8 @@ public:
     // Load and apply paragraph layout
     void loadLayout( QDomElement & attributes );
 
+    void insertCustomItem( int index, QTextCustomItem * custom, QTextFormat * currentFormat );
+
     const QList<KoTabulator> *tabList() const { return &m_tabList; }
     void setTabList( const QList<KoTabulator> *tabList );
     //bool hasSpecialTabs() const { return m_specialTabs; }

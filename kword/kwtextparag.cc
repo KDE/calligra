@@ -819,6 +819,16 @@ void KWTextParag::copyParagData( QTextParag *_parag )
     // applying the parag layout will create them
 }
 
+void KWTextParag::insertCustomItem( int index, QTextCustomItem * custom, QTextFormat * currentFormat )
+{
+    insert( index, QChar('@') /*whatever*/ );
+    setFormat( index, 1, currentFormat );
+    at( index )->setCustomItem( custom );
+    addCustomItem();
+    document()->registerCustomItem( custom, this );
+    invalidate( 0 );
+}
+
 //static
 QDomElement KWTextParag::saveFormat( QDomDocument & doc, QTextFormat * curFormat, QTextFormat * refFormat, int pos, int len )
 {
@@ -871,14 +881,6 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, QTextFormat * curFormat
         formatElem.appendChild( elem );
         elem.setAttribute( "value", static_cast<int>(curFormat->vAlign()) );
     }
-#if 0
-    if( !refFormat ||  ... )
-    {
-        elem = doc.createElement( "ANCHOR" );
-        formatElem.appendChild( elem );
-        elem.setAttribute( "value", ... );
-    }
-#endif
     return formatElem;
 }
 
@@ -901,26 +903,59 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */, int t
     QTextFormat *curFormat = paragFormat();
     for ( int i = from; i <= to; ++i, ++index )
     {
-        QTextFormat * newFormat = string()->at(i).format();
-        if ( newFormat != curFormat )
+        QTextStringChar & ch = string()->at(i);
+        if ( ch.isCustom() )
         {
-            // Format changed.
             if ( startPos > -1 && curFormat) { // Save former format
                 QDomElement formatElem = saveFormat( doc, curFormat, paragFormat(), startPos, index-startPos );
                 if ( !formatElem.firstChild().isNull() ) // Don't save an empty format tag
                     formatsElem.appendChild( formatElem );
             }
 
-            // Format different from paragraph's format ?
-            if( newFormat != paragFormat() )
+            QDomElement formatElem = doc.createElement( "FORMAT" );
+            formatsElem.appendChild( formatElem );
+            formatElem.setAttribute( "pos", index );
+            formatElem.setAttribute( "len", 1 );
+            // Is it an image ?
+            KWTextImage * ti = dynamic_cast<KWTextImage *>( ch.customItem() );
+            if ( ti )
             {
-                startPos = index;
-                curFormat = newFormat;
+                formatElem.setAttribute( "id", 2 ); // code for a picture
+                QDomElement imageElem = parentElem.ownerDocument().createElement( "IMAGE" );
+                formatElem.appendChild( imageElem );
+                QDomElement elem = parentElem.ownerDocument().createElement( "FILENAME" );
+                imageElem.appendChild( elem );
+                elem.setAttribute( "value", ti->image().key() );
+                startPos = -1;
             }
             else
             {
-                startPos = -1;
-                curFormat = paragFormat();
+                // ... TODO
+            }
+        }
+        else
+        {
+            QTextFormat * newFormat = ch.format();
+            if ( newFormat != curFormat )
+            {
+                // Format changed.
+                if ( startPos > -1 && curFormat) { // Save former format
+                    QDomElement formatElem = saveFormat( doc, curFormat, paragFormat(), startPos, index-startPos );
+                    if ( !formatElem.firstChild().isNull() ) // Don't save an empty format tag
+                        formatsElem.appendChild( formatElem );
+                }
+
+                // Format different from paragraph's format ?
+                if( newFormat != paragFormat() )
+                {
+                    startPos = index;
+                    curFormat = newFormat;
+                }
+                else
+                {
+                    startPos = -1;
+                    curFormat = paragFormat();
+                }
             }
         }
     }
@@ -1040,17 +1075,47 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
         for (unsigned int item = 0; item < listFormats.count(); item++)
         {
             QDomElement formatElem = listFormats.item( item ).toElement();
-            QTextFormat f = loadFormat( formatElem, paragFormat() );
-
-            int id = formatElem.attribute( "id" ).toInt();
-            if ( id != 1 )
-                kdWarning() << "KWTextParag::loadFormat id=" << id << " should be 1" << endl;
-
             int index = formatElem.attribute( "pos" ).toInt() + offset;
             int len = formatElem.attribute( "len" ).toInt();
 
-            //kdDebug(32002) << "KWTextParag::loadFormatting applying formatting from " << index << " to " << index+len << endl;
-            setFormat( index, len, document()->formatCollection()->format( &f ) );
+            int id = formatElem.attribute( "id" ).toInt();
+            switch( id ) {
+            case 1: // Normal text
+            {
+                QTextFormat f = loadFormat( formatElem, paragFormat() );
+                //kdDebug(32002) << "KWTextParag::loadFormatting applying formatting from " << index << " to " << index+len << endl;
+                setFormat( index, len, document()->formatCollection()->format( &f ) );
+                break;
+            }
+            case 2: // Picture
+            {
+                ASSERT( len == 1 );
+                KWTextDocument * textdoc = static_cast<KWTextDocument *>(document());
+                KWDocument * doc = textdoc->textFrameSet()->kWordDocument();
+                KWTextImage * custom = new KWTextImage( textdoc, QString::null );
+                kdDebug() << "KWTextParag::loadFormatting insertCustomItem" << endl;
+                insertCustomItem( index, custom );
+                // <IMAGE>
+                QDomElement image = formatElem.namedItem( "IMAGE" ).toElement();
+                if ( !image.isNull() ) {
+                    // <FILENAME>
+                    QDomElement filenameElement = image.namedItem( "FILENAME" ).toElement();
+                    if ( !filenameElement.isNull() )
+                    {
+                        QString filename = filenameElement.attribute( "value" );
+                        doc->addImageRequest( filename, custom );
+                    }
+                    else
+                        kdError(32001) << "Missing FILENAME tag in IMAGE" << endl;
+                } else
+                    kdError(32001) << "Missing IMAGE tag in FORMAT wth id=2" << endl;
+
+                break;
+            }
+            default:
+                kdWarning() << "KWTextParag::loadFormat id=" << id << " not supported" << endl;
+                break;
+            }
         }
     }
 }

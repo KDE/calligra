@@ -778,7 +778,7 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     kdDebug() << "KWDocument::loadXML" << endl;
     pixmapKeys.clear();
     pixmapNames.clear();
-//    imageRequests.clear();
+    imageRequests.clear();
     imageRequests2.clear();
 
     m_pageLayout.unit = PG_MM;
@@ -1474,14 +1474,20 @@ bool KWDocument::completeLoading( KoStore *_store )
                 m_imageCollection.insertImage( *it, image );
         }
     }
-/*
-    QDictIterator<KWCharImage> it2( imageRequests );
-    for ( ; it2.current(); ++it2 )
-        it2.current()->setImage( imageCollection.getImage( it2.currentKey() ) ); */
 
-    QDictIterator<KWPictureFrameSet> it3( imageRequests2 );
-    for ( ; it3.current(); ++it3 )
-        it3.current()->setImage( m_imageCollection.findImage( it3.currentKey() ) );
+
+    QMapIterator<QString,KWTextImage *> it2 = imageRequests.begin();
+    for ( ; it2 != imageRequests.end(); ++it2 )
+    {
+        kdDebug() << "KWDocument::completeLoading loading image " << it2.key() << endl;
+        it2.data()->setImage( m_imageCollection.findImage( it2.key() ) );
+    }
+    imageRequests.clear();
+
+    QMapIterator<QString,KWPictureFrameSet *> it3 = imageRequests2.begin();
+    for ( ; it3 != imageRequests2.end(); ++it3 )
+        it3.data()->setImage( m_imageCollection.findImage( it3.key() ) );
+    imageRequests2.clear();
 
     return TRUE;
 }
@@ -2642,12 +2648,11 @@ void KWDocument::updateTableHeaders( QList<KWGroupManager> &grpMgrs )
 }
 
 /*================================================================*/
-#if 0
-void KWDocument::addImageRequest( const QString &filename, KWCharImage *img )
+void KWDocument::addImageRequest( const QString &filename, KWTextImage *img )
 {
     imageRequests.insert( filename, img );
 }
-#endif
+
 /*================================================================*/
 void KWDocument::addImageRequest( const QString &filename, KWPictureFrameSet *fs )
 {
@@ -2718,29 +2723,6 @@ void KWDocument::getPageLayout( KoPageLayout& _layout, KoColumns& _cl, KoKWHeade
     _cl = m_pageColumns;
     _hf = m_pageHeaderFooter;
 }
-
-#if 0
-// somewhat of an ugly hack. KWFrame should have unzoomed and zoomed values instead.
-void KWDocument::updateFrameSizes( double factorX, double factorY )
-{
-    kdDebug() << "KWDocument::updateFrameSizes " << factorX << "," << factorY << endl;
-    KWFrameSet *fs = frames.first();
-    fs = frames.next();
-    KWFrame *frm = 0;
-    for ( ; fs; fs = frames.next() ) {
-        if ( fs->getFrameInfo() != FI_BODY )
-            continue;
-        for ( unsigned int i = 0; i < fs->getNumFrames(); ++i ) {
-            frm = fs->getFrame( i );
-            double x = factorX * (double)frm->x();
-            double y = factorY * (double)frm->y();
-            double w = factorX * (double)frm->width();
-            double h = factorY * (double)frm->height();
-            frm->setRect( x, y, w, h );
-        }
-    }
-}
-#endif
 
 void KWDocument::delGroupManager( KWGroupManager *g, bool deleteit )
 {

@@ -814,13 +814,7 @@ void KWPictureFrameSet::setFileName( const QString &_filename, const QSize &_img
 {
     KWImageCollection *collection = doc->imageCollection();
 
-    m_image = collection->findImage( _filename );
-    if ( !m_image.isNull() )
-    {
-        QImage img( _filename );
-        if ( !img.isNull() )
-            m_image = collection->insertImage( _filename, img );
-    }
+    m_image = collection->image( _filename );
 
     m_image = m_image.scale( _imgSize );
 }
@@ -848,7 +842,7 @@ void KWPictureFrameSet::save( QDomElement & parentElem )
     framesetElem.appendChild( imageElem );
     QDomElement elem = parentElem.ownerDocument().createElement( "FILENAME" );
     imageElem.appendChild( elem );
-    elem.setAttribute( "value", correctQString( m_image.key() ) );
+    elem.setAttribute( "value", m_image.key() );
 }
 
 /*================================================================*/
@@ -863,7 +857,7 @@ void KWPictureFrameSet::load( QDomElement &attributes )
         QDomElement filenameElement = image.namedItem( "FILENAME" ).toElement();
         if ( !filenameElement.isNull() )
         {
-            QString filename = correctQString( filenameElement.attribute( "value" ) );
+            QString filename = filenameElement.attribute( "value" );
             doc->addImageRequest( filename, this );
         }
         else

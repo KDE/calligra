@@ -623,6 +623,16 @@ void KWTextFrameSet::zoom()
         format->setPointSize( static_cast<int>( static_cast<float>( format->font().pointSize() ) * factor ) );
     }
 
+    // Zoom all custom items
+    QListIterator<QTextCustomItem> cit( text->allCustomItems() );
+    for ( ; cit.current() ; ++cit )
+    {
+        // ## This is only valid as long as we only have KWTextImage, which updates
+        // the size in adjustToPainter and doesn't use the painter.
+        // If other classes do it differently, make a KWTextCustomItem base class with zoom().
+        cit.current()->adjustToPainter( 0L );
+    }
+
     // Mark all paragraphs as changed !
     for ( QTextParag * s = text->firstParag() ; s ; s = s->next() )
     {
@@ -651,6 +661,11 @@ void KWTextFrameSet::unzoom()
     }
 
     m_origFontSizes.clear();
+
+    // Unzoom all custom items
+    QListIterator<QTextCustomItem> cit( text->allCustomItems() );
+    for ( ; cit.current() ; ++cit )
+        cit.current()->adjustToPainter( 0L );        // See zoom()
 }
 
 int KWTextFrameSet::docFontSize( QTextFormat * format ) const
@@ -900,8 +915,8 @@ void KWTextFrameSet::formatMore()
         viewsBottom = QMAX( viewsBottom, mapIt.data() );
 
     QTextParag *lastFormatted = m_lastFormatted;
-    //kdDebug(32002) << "KWTextFrameSet::formatMore lastFormatted id=" << lastFormatted->paragId()
-    //          << " to=" << to << " viewsBottom=" << viewsBottom << " availableHeight=" << m_availableHeight << endl;
+    kdDebug(32002) << "KWTextFrameSet::formatMore lastFormatted id=" << lastFormatted->paragId()
+              << " to=" << to << " viewsBottom=" << viewsBottom << " availableHeight=" << m_availableHeight << endl;
 
     // Stop if we have formatted everything or if we need more space
     // Otherwise, stop formatting after "to" paragraphs,
@@ -910,7 +925,7 @@ void KWTextFrameSet::formatMore()
           lastFormatted && bottom + lastFormatted->rect().height() <= m_availableHeight &&
           ( i < to || bottom <= viewsBottom ) ; ++i )
     {
-        //kdDebug(32002) << "KWTextFrameSet::formatMore formatting id=" << lastFormatted->paragId() << endl;
+        kdDebug(32002) << "KWTextFrameSet::formatMore formatting id=" << lastFormatted->paragId() << endl;
 	lastFormatted->format();
 	bottom = lastFormatted->rect().top() + lastFormatted->rect().height();
 	lastFormatted = lastFormatted->next();
@@ -2473,18 +2488,9 @@ void KWTextFrameSetEdit::insertSpecialChar(QChar _c)
 /*===============================================================*/
 void KWTextFrameSetEdit::insertPicture( const QString & file )
 {
-    QMap<QString,QString> attributes;
-    attributes.insert( QString::fromLatin1("src"), file );
-    QTextImage * custom = new QTextImage( textDocument(), attributes, QString::null, *QMimeSourceFactory::defaultFactory() );
-    QTextParag * curpar = cursor->parag();
-    int index = curpar->length() - 1;
-    if ( index < 0 )
-        index = 0;
-    curpar->append( QChar('p') );
-    curpar->setFormat( index, 1, currentFormat );
-    curpar->at( index )->setCustomItem( custom );
-    curpar->addCustomItem();
-    textDocument()->registerCustomItem( custom, curpar );
+    KWTextImage * custom = new KWTextImage( textDocument(), file );
+    static_cast<KWTextParag *>( cursor->parag() )->insertCustomItem( cursor->index(), custom, currentFormat );
+    // TODO undo/redo support
 }
 
 // Update the GUI toolbar button etc. to reflect the current cursor position.

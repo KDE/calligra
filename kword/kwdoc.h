@@ -22,7 +22,7 @@
 
 class KWDocument;
 class KPrinter;
-//class KWCharImage;
+class KWTextImage;
 class KWPictureFrameSet;
 class KWSerialLetterDataBase;
 class KWContents;
@@ -51,13 +51,12 @@ class KSpellConfig;
 #include <kcommand.h>
 
 #include <qlist.h>
+#include <qmap.h>
 #include <qpainter.h>
 #include <qstring.h>
 #include <qstrlist.h>
-#include <qintdict.h>
 #include <qstringlist.h>
 #include <qrect.h>
-#include <qdict.h>
 
 #include <qrichtext_p.h>
 
@@ -285,7 +284,7 @@ public:
 
     //bool getPageLayoutChanged() const { return pglChanged; }
 
-    //void addImageRequest( const QString &filename, KWCharImage *img );
+    void addImageRequest( const QString &filename, KWTextImage *img );
     void addImageRequest( const QString &filename, KWPictureFrameSet *fs );
 
 #if 0
@@ -354,9 +353,6 @@ public:
     QRect zoomRect( const QRect & r ) const {
         return QRect( zoomItX( r.x() ), zoomItY( r.y() ), zoomItX( r.width() ), zoomItY( r.height() ) );
     }
-
-    // somewhat of an ugly hack. KWFrame should have unzoomed and zoomed values instead.
-    //void updateFrameSizes( double factorX, double factorY );
 
     // useless method
     static QString getAttribute(QDomElement &element, const char *attributeName, const QString &defaultValue)
@@ -491,8 +487,8 @@ private:
     //bool pglChanged;
 
     QStringList pixmapKeys, pixmapNames;
-//    QDict<KWCharImage> imageRequests;
-    QDict<KWPictureFrameSet> imageRequests2;
+    QMap<QString, KWTextImage *> imageRequests;
+    QMap<QString, KWPictureFrameSet *> imageRequests2;
  //   QList<KWVariable> variables;
     QMap< QString, QString > varValues;
     KWSerialLetterDataBase *slDataBase;
