@@ -142,6 +142,27 @@ protected:
 };
 
 /******************************************************************/
+/* Class: KWDocStructClipartItem                                  */
+/******************************************************************/
+
+class KWDocStructClipartItem : public QObject,
+                               virtual public QListViewItem
+{
+    Q_OBJECT
+
+public:
+    KWDocStructClipartItem( QListViewItem *_parent, QString _text, KWClipartFrameSet *_pic, KWGUI*__parent );
+
+public slots:
+    void slotDoubleClicked( QListViewItem *_item );
+
+protected:
+    KWClipartFrameSet *clip;
+    KWGUI *gui;
+
+};
+
+/******************************************************************/
 /* Class: KWDocStructPartItem                                     */
 /******************************************************************/
 
@@ -204,7 +225,7 @@ public:
     QSize	minimumSizeHint() const {
 	return QSize( 0, 0 );
     }
-
+    bool testExistTypeOfFrame(TypeStructDocItem _type);
 protected:
     KWDocument *doc;
     KWGUI *gui;

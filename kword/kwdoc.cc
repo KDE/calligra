@@ -205,7 +205,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widgetName, QObject* p
     }
     m_defaultFont= QFont();
     m_defaultFont.fromString(defaultFontname);
-    
+
     // Zoom its size (we have to use QFontInfo, in case the font was specified with a pixel size)
     m_defaultFont.setPointSize( ptToLayoutUnit( QFontInfo(m_defaultFont).pointSize() ) );
 
@@ -3007,6 +3007,9 @@ int KWDocument::typeItemDocStructure(FrameSetType _type)
             break;
         case FT_PICTURE:
             typeItem=(int)Pictures;
+            break;
+        case FT_CLIPART:
+            typeItem=(int)Cliparts;
             break;
         case FT_PART:
             typeItem=(int)Embedded;

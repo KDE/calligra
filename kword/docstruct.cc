@@ -28,7 +28,7 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
-
+#include <kdebug.h>
 
 
 /******************************************************************/
@@ -119,6 +119,27 @@ void KWDocStructPictureItem::slotDoubleClicked( QListViewItem *_item )
         gui->canvasWidget()->scrollToOffset( frame->topLeft() );
     }
 }
+
+/******************************************************************/
+/* Class: KWDocStrucClipartItem                                   */
+/******************************************************************/
+
+KWDocStructClipartItem::KWDocStructClipartItem( QListViewItem *_parent, QString _text, KWClipartFrameSet *_clip, KWGUI*__parent )
+    : QListViewItem( _parent, _text )
+{
+    clip = _clip;
+    gui = __parent;
+}
+
+void KWDocStructClipartItem::slotDoubleClicked( QListViewItem *_item )
+{
+    if ( _item == this )
+    {
+        KWFrame *frame = clip->frame( 0 );
+        gui->canvasWidget()->scrollToOffset( frame->topLeft() );
+    }
+}
+
 
 /******************************************************************/
 /* Class: KWDocStructFormulaItem                                  */
@@ -454,6 +475,36 @@ void KWDocStructRootItem::setupPictures()
 
 void KWDocStructRootItem::setupCliparts()
 {
+    if ( childCount() > 0 )
+    {
+        QListViewItem *child = firstChild(), *delChild;
+
+        while( child )
+        {
+            delChild = child;
+            child = child->nextSibling();
+            delete delChild;
+        }
+    }
+
+    KWFrameSet *frameset = 0L;
+    QString _name;
+    KWDocStructClipartItem *child;
+
+    int j = 0;
+    for ( int i = doc->getNumFrameSets() - 1; i >= 0; i-- )
+    {
+        frameset = doc->frameSet( i );
+        if ( frameset->type() == FT_CLIPART && frameset->getNumFrames()>0)
+        {
+            _name=i18n("Clipart (%1) %2").arg(dynamic_cast<KWClipartFrameSet*>( frameset )->key().filename()).arg(++j);
+            child = new KWDocStructClipartItem( this, _name, dynamic_cast<KWClipartFrameSet*>( frameset ), gui );
+            QObject::connect( listView(), SIGNAL( doubleClicked( QListViewItem* ) ), child, SLOT( slotDoubleClicked( QListViewItem* ) ) );
+        }
+    }
+
+    if ( childCount() == 0 )
+        ( void )new QListViewItem( this, i18n( "Empty" ) );
 }
 
 void KWDocStructRootItem::setupEmbedded()
@@ -500,6 +551,14 @@ KWDocStructTree::KWDocStructTree( QWidget *_parent, KWDocument *_doc, KWGUI*__pa
     doc = _doc;
     gui = __parent;
 
+    arrangement=0L;
+    tables=0L;
+    pictures=0L;
+    cliparts=0L;
+    textfrms=0L;
+    embedded=0L;
+    formulafrms=0L;
+
     addColumn( i18n( "Document Structure" ) );
     //addColumn( i18n( "Additional Info" ) );
     //setColumnWidthMode( 0, Manual );
@@ -510,27 +569,14 @@ void KWDocStructTree::setup()
 {
     setRootIsDecorated( true );
     setSorting( -1 );
-
-    embedded = new KWDocStructRootItem( this, doc, Embedded, gui );
-    QListViewItem *item = new QListViewItem( embedded, i18n ("Empty" ) );
-
-    cliparts = new KWDocStructRootItem( this, doc, Cliparts, gui );
-    item = new QListViewItem( cliparts, i18n( "Empty" ) );
-
-    pictures = new KWDocStructRootItem( this, doc,Pictures, gui );
-    item = new QListViewItem( pictures, i18n ("Empty" ) );
-
-    tables = new KWDocStructRootItem( this, doc, Tables, gui );
-    item = new QListViewItem( tables, i18n ("Empty" ) );
-
-    formulafrms = new KWDocStructRootItem( this, doc, FormulaFrames, gui );
-    item = new QListViewItem( formulafrms, i18n ("Empty" ) );
-
-    textfrms = new KWDocStructRootItem( this, doc, TextFrames, gui );
-    item = new QListViewItem( textfrms, i18n ("Empty" ) );
-
+    //test if theses frames exist.
+    refreshTree((int)TextFrames);
+    refreshTree((int)FormulaFrames);
+    refreshTree((int)Tables);
+    refreshTree((int)Pictures);
+    refreshTree((int)Cliparts);
+    refreshTree((int)Embedded);
     arrangement = new KWDocStructRootItem( this, doc, Arrangement, gui );
-    item = new QListViewItem( arrangement, i18n ( "Empty" ) );
 }
 
 void KWDocStructTree::refreshTree(int _type)
@@ -538,17 +584,153 @@ void KWDocStructTree::refreshTree(int _type)
     if(((int)Arrangement) & _type)
         arrangement->setupArrangement();
     if(((int)TextFrames) & _type)
-        textfrms->setupTextFrames();
+    {
+        if(testExistTypeOfFrame(TextFrames))
+        {
+            if(!textfrms)
+                textfrms = new KWDocStructRootItem( this, doc, TextFrames, gui );
+            textfrms->setupTextFrames();
+        }
+        else
+        {
+            delete textfrms;
+            textfrms=0L;
+        }
+
+    }
     if(((int)FormulaFrames) & _type)
-        formulafrms->setupFormulaFrames();
+    {
+        if(testExistTypeOfFrame(FormulaFrames))
+        {
+            if(!formulafrms)
+                formulafrms = new KWDocStructRootItem( this, doc, FormulaFrames, gui );
+            formulafrms->setupFormulaFrames();
+        }
+        else
+        {
+            delete formulafrms;
+            formulafrms=0L;
+        }
+    }
     if(((int)Tables) & _type)
-        tables->setupTables();
+    {
+        if(testExistTypeOfFrame(Tables))
+        {
+            if(!tables)
+                tables = new KWDocStructRootItem( this, doc, Tables, gui );
+            tables->setupTables();
+        }
+        else
+        {
+            delete tables;
+            tables=0L;
+        }
+    }
     if(((int)Pictures) & _type)
-        pictures->setupPictures();
+    {
+        if(testExistTypeOfFrame(Pictures))
+        {
+            if(!pictures)
+                pictures = new KWDocStructRootItem( this, doc,Pictures, gui );
+            pictures->setupPictures();
+        }
+        else
+        {
+            delete pictures;
+            pictures=0L;
+        }
+    }
     if(((int)Cliparts) & _type)
-        cliparts->setupCliparts();
+    {
+        if(testExistTypeOfFrame(Cliparts))
+        {
+            if(!cliparts)
+                cliparts=new KWDocStructRootItem(this,doc,Cliparts,gui);
+            cliparts->setupCliparts();
+        }
+        else
+        {
+            delete cliparts;
+            cliparts=0L;
+        }
+    }
     if(((int)Embedded) & _type)
-        embedded->setupEmbedded();
+    {
+        if(testExistTypeOfFrame(Embedded))
+        {
+            if(!embedded)
+                embedded = new KWDocStructRootItem( this, doc, Embedded, gui );
+            embedded->setupEmbedded();
+        }
+        else
+        {
+            delete embedded;
+            embedded=0L;
+        }
+    }
+}
+
+bool KWDocStructTree::testExistTypeOfFrame(TypeStructDocItem _type)
+{
+    KWFrameSet *frameset = 0L;
+    KWTableFrameSet *tfs=0L;
+    KWTextFrameSet *tmpParag=0L;
+    KWTextParag *parag = 0L;
+    QTextDocument * textdoc=0L;
+
+    for ( int i = doc->getNumFrameSets() - 1; i >= 0; i-- )
+    {
+        frameset = doc->frameSet( i );
+        switch ( _type )
+        {
+            case Arrangement:
+                if ( frameset->type() == FT_TEXT && frameset->frameSetInfo() == KWFrameSet::FI_BODY && !frameset->getGroupManager() && frameset->getNumFrames()>0)
+                {
+
+                    tmpParag = dynamic_cast<KWTextFrameSet*> (frameset) ;
+                    textdoc= tmpParag->textDocument();
+                    parag = static_cast<KWTextParag *>(textdoc->firstParag());
+                    while ( parag )
+                    {
+                        KoParagCounter *tmpCounter=parag->counter();
+                        if (tmpCounter!=0 && (tmpCounter->style() != KoParagCounter::STYLE_NONE) &&  (tmpCounter->numbering() == KoParagCounter::NUM_CHAPTER) )
+                            return true;
+                        parag = static_cast<KWTextParag *>(parag->next());
+                    }
+                }
+                break;
+            case TextFrames:
+                if ( frameset->type() == FT_TEXT && frameset->frameSetInfo() == KWFrameSet::FI_BODY && !frameset->getGroupManager() && frameset->getNumFrames()>0)
+                    return true;
+                break;
+            case FormulaFrames:
+                if ( frameset->type() == FT_FORMULA &&
+                     frameset->getNumFrames()>0  )
+                    return true;
+                break;
+            case Tables:
+                if ( frameset->type() != FT_TABLE)
+                    continue;
+                tfs = static_cast<KWTableFrameSet *> (frameset);
+                if(!tfs->isActive() )
+                    continue;
+                return true;
+                break;
+            case Pictures:
+                if ( frameset->type() == FT_PICTURE && frameset->getNumFrames()>0)
+                    return true;
+                break;
+            case Cliparts:
+                if ( frameset->type() == FT_CLIPART && frameset->getNumFrames()>0)
+                    return true;
+                break;
+            case Embedded:
+                if ( frameset->type() == FT_PART && frameset->getNumFrames()>0)
+                    return true;
+                break;
+        }
+    }
+    return false;
 }
 
 /******************************************************************/

@@ -430,6 +430,7 @@ void KWCanvas::mpCreatePixmap( const QPoint& normalPoint )
             QRect viewportRect( contentsX(), contentsY(), visibleWidth(), visibleHeight() );
             if ( viewportRect.contains( vPoint ) ) // Don't move the mouse out of the viewport
                 QCursor::setPos( viewport()->mapToGlobal( vPoint ) );
+            emit docStructChanged(Cliparts);
         }
     }
 }
@@ -1168,7 +1169,10 @@ void KWCanvas::mrCreatePixmap()
         m_doc->frameChanged( frame );
     }
     setMouseMode( MM_EDIT );
-    emit docStructChanged(Pictures);
+    if(m_isClipart)
+        emit docStructChanged(Cliparts);
+    else
+        emit docStructChanged(Pictures);
 }
 
 void KWCanvas::mrCreatePart() // mouse release, when creating part
