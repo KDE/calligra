@@ -186,14 +186,14 @@ VEllipseTool::mouseMove()
 	if( m_state == startangle )
 	{
 		m_startAngle = atan2( last().y() - m_center.y(), last().x() - m_center.x() );
-		m_startAngle = ( ( -VGlobal::pi_2 + m_startAngle ) / VGlobal::pi_2 ) * 90.0;
+		m_startAngle = ( m_startAngle / VGlobal::pi_2 ) * 90.0;
 		if( m_startAngle < 0 )
 			m_startAngle += 360.0;
 	}
 	else 
 	{
 		m_endAngle = atan2( last().y() - m_center.y(), last().x() - m_center.x() );
-		m_endAngle = ( ( -VGlobal::pi_2 + m_endAngle ) / VGlobal::pi_2 ) * 90.0;
+		m_endAngle = ( m_endAngle / VGlobal::pi_2 ) * 90.0;
 		if( m_endAngle < 0 )
 			m_endAngle += 360.0;
 	}
