@@ -26,6 +26,7 @@
 #include <kstddirs.h>
 #include <kdebug.h>
 #include <kparts/plugin.h>
+#include <kparts/event.h>
 
 class KoViewPrivate
 {

@@ -52,6 +52,7 @@
 
 #include <kparts/partmanager.h>
 #include <kparts/plugin.h>
+#include <kparts/event.h>
 
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>

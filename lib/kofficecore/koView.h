@@ -27,6 +27,7 @@
 
 class QAction;
 class QActionCollection;
+class QCustomEvent;
 class KoDocument;
 class KoDocumentChild;
 class KoViewPrivate;
@@ -37,6 +38,8 @@ class KInstance;
 namespace KParts
 {
   class PartManager;
+  class PartActivateEvent;
+  class PartSelectEvent;
 };
 
 class KoView : public QWidget, public KParts::XMLGUIServant

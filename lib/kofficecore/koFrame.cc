@@ -3,6 +3,7 @@
 #include "koView.h"
 
 #include <qpainter.h>
+#include <kparts/event.h>
 
 class KoFramePrivate
 {
