@@ -10,7 +10,7 @@ kde_module_LTLIBRARIES = libkspreadlatexexport.la
 
 libkspreadlatexexport_la_SOURCES = cell.cc column.cc config.cc document.cc fileheader.cc \
 				 format.cc kspreadlatexexportdia.ui kspreadlatexexportdiaImpl.cc \
-				 kspreadlatexexportdiaImpl.moc latexexport.cc \
+				 latexexport.cc \
 kspreadlatexexportdia.skel map.cc pen.cc spreadsheet.cc table.cc \
 xmlparser.cc
 
