@@ -1879,14 +1879,15 @@ void KSpreadCell::paintCell( const KoRect& rect, QPainter &painter,
     paintBackground( painter, cellRect, cellRef, selected );
   }
 
+  paintDefaultBorders( painter, rect, cellRect, cellRef );
+
   //If we print pages then we disable clipping otherwise borders are cut in the middle at the page borders
-  if ( !painter.device()->isExtDev() )
+  if ( painter.device()->isExtDev() )
     painter.setClipping( false );
 
-  paintDefaultBorders( painter, rect, cellRect, cellRef );
   paintCellBorders( painter, rect, cellRect, cellRef, paintCellBorder );
 
-  if ( !painter.device()->isExtDev() )
+  if ( painter.device()->isExtDev() )
     painter.setClipping( true );
 
   paintCellDiagonalLines( painter, cellRect, cellRef );
