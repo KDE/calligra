@@ -493,10 +493,12 @@ void KPBackGround::drawBackPix( QPainter *_painter )
 	switch ( backView )
 	{
 	case BV_ZOOM:
-	    _painter->drawPixmap( 0, 0, *backPix );
+	    if ( backPix && !backPix->isNull() )
+		_painter->drawPixmap( 0, 0, *backPix );
 	    break;
 	case BV_TILED:
-	    _painter->drawTiledPixmap( 0, 0, ext.width(), ext.height(), *backPix );
+	    if ( backPix && !backPix->isNull() )
+		_painter->drawTiledPixmap( 0, 0, ext.width(), ext.height(), *backPix );
 	    break;
 	case BV_CENTER:
 	{
