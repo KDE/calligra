@@ -66,8 +66,8 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParame
   QWhatsThis::add( wallWidget, i18n( "This area will always display the "
 									 "currently selected background image. "
 									 "Note that the image will be scaled and "
-									 "might thus have a different ratio than "
-									 "it originally has." ) );
+									 "thus might have a different ratio than "
+									 "it originally had." ) );
   left->addWidget( wallWidget, 2 );
 
   connect( wallCB, SIGNAL( activated( int ) ),
@@ -101,7 +101,7 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParame
 									 "image will be centered over the chart. "
 									 "If the image is larger then the chart, "
 									 "you will only see the middle part of "
-									 "it.<br> This setting is only available, "
+									 "it.<br> This setting is only available "
 									 "if the <i>Scaled</i> checkbox is not "
 									 "checked." ) );
   connect( scaledCB, SIGNAL( toggled( bool ) ),
@@ -194,7 +194,7 @@ void KChartBackgroundPixmapConfigPage::slotBrowse()
     if( url.isEmpty() )
       return;
     if( !url.isLocalFile() ) {
-      KMessageBox::sorry(this, i18n("Currently are only local wallpapers allowed."));
+      KMessageBox::sorry(this, i18n("Currently only local wallpapers are allowed."));
     } else
       showSettings( url.path() );
 }

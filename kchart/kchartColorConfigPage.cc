@@ -48,7 +48,7 @@ KChartColorConfigPage::KChartColorConfigPage( QWidget* parent ) :
     grid->addWidget( _gridCB, 0, 3 );
 	wtstr = i18n( "Here you can configure the color that is used for the "
 				  "grid of the chart. Of course, this setting will only "
-				  "take effect if the grid drawing is turned on." );
+				  "take effect if grid drawing is turned on." );
 	QWhatsThis::add( gridLA, wtstr );
 	QWhatsThis::add( _gridCB, wtstr );
 

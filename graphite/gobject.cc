@@ -105,7 +105,7 @@ void GObjectM9r::slotCancel() {
         return;
     }
     if(KMessageBox::warningContinueCancel(this,
-                                          i18n("You'll loose the last changes you made!"),
+                                          i18n("You'll lose the last changes you made!"),
                                           i18n("Really Cancel?"),
                                           i18n("Continue"),
                                           QString::fromLatin1("propertydia"),
@@ -335,7 +335,7 @@ void G2DObjectM9r::createPropertyDialog() {
     // none
     QWidget *widget=new QWidget(m_stack);
     QGridLayout *grid=new QGridLayout(widget, 1, 1, KDialog::marginHint(), KDialog::spacingHint());
-    QLabel *label=new QLabel(i18n("Not configurable."), widget);
+    QLabel *label=new QLabel(i18n("Not configurable"), widget);
     grid->addWidget(label, 0, 0);
     m_stack->addWidget(widget, 0);
 

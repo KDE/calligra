@@ -805,7 +805,7 @@
                     </property>
                     <property>
                         <name>whatsThis</name>
-                        <string>This button will save the current settings as your preferred default settings. These default settings are loaded everytime you start this application</string>
+                        <string>This button will save the current settings as your preferred default settings. These default settings are loaded every time you start this application.</string>
                     </property>
                 </widget>
                 <spacer>
