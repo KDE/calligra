@@ -208,6 +208,8 @@ public:
     int getPenBrushFlags();
     bool getEditMode() { return editMode; }
 
+    void ungroupObjects();
+
 public slots:
     void exitEditMode();
 

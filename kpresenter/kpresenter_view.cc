@@ -1192,7 +1192,7 @@ void KPresenterView::extraGroup()
 void KPresenterView::extraUnGroup()
 {
     m_canvas->setToolEditMode( TEM_MOUSE );
-    m_canvas->activePage()->ungroupObjects();
+    m_canvas->ungroupObjects();
     objectSelectedChanged();
 }
 

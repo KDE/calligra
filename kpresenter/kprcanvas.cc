@@ -5277,3 +5277,9 @@ int KPrCanvas::getPenBrushFlags()
       flags = StyleDia::SdAll;
     return flags;
 }
+
+void KPrCanvas::ungroupObjects()
+{
+    m_activePage->ungroupObjects();
+    m_view->kPresenterDoc()->stickyPage()->ungroupObjects();
+}
