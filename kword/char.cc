@@ -946,19 +946,20 @@ QDomElement KWCharTab::save( QDomDocument& doc )
 /*================================================================*/
 bool KWCharTab::load( const QDomElement&, KWordDocument* )
 {
+    return TRUE;
 }
 
 /*================================================================*/
 QDomElement KWCharVariable::save( QDomDocument& doc )
 {
-    QDomElement e = var->save( doc );
+    QDomElement e = KWCharFormat::save( doc );
     if ( e.isNull() )
 	return e;
 
-    QDomElement f = KWCharFormat::save( doc );
-    if ( f.isNull() )
-	return f;
-    e.appendChild( f );
+    QDomElement v = var->save( doc );
+    if ( v.isNull() )
+	return v;
+    e.appendChild( v );
 
     return e;
 }
