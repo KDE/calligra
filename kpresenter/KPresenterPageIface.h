@@ -134,6 +134,8 @@ k_dcop:
     void moveAllObjectSelected( int diffx,int diffy);
     void deleteAllObjectSelected();
 
+    void sendBackward();
+    void bringForward();
 
 private:
     KPrPage *m_page;

@@ -581,3 +581,13 @@ void KPresenterViewIface::duplicateObj()
 {
     view->duplicateObj();
 }
+
+void KPresenterViewIface::extraSendBackward()
+{
+    view->extraSendBackward();
+}
+
+void KPresenterViewIface::extraBringForward()
+{
+    view->extraBringForward();
+}

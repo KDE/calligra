@@ -110,6 +110,9 @@ k_dcop:
 
     virtual void extraAutoFormat();
 
+    virtual void extraSendBackward();
+    virtual void extraBringForward();
+
     // screen menu
     virtual void screenConfigPages();
     virtual void screenPresStructView();

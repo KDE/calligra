@@ -203,6 +203,9 @@ public slots:
     void extraRaise();
     void extraLower();
     void extraRotate();
+    void extraSendBackward();
+    void extraBringForward();
+
     void extraShadow();
     //    void extraAlignObj();
     void extraBackground();
@@ -810,6 +813,10 @@ private:
     KAction *actionExtraConfigPicture;
     KAction *actionExtraRaise;
     KAction *actionExtraLower;
+
+    KAction *actionExtraBringForward;
+    KAction *actionExtraSendBackward;
+
     KAction *actionExtraRotate;
     KAction *actionExtraShadow;
     KAction *actionExtraAlignObjs;

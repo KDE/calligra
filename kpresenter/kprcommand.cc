@@ -2166,9 +2166,9 @@ KPrGeometryPropertiesCommand::KPrGeometryPropertiesCommand( const QString &_name
     KNamedCommand( _name ),
     protect( _protect ),
     ratio(_ratio),
+    objects( _objects ),
     newProtect( _newProtect ),
     newRatio( _newRatio ),
-    objects( _objects ),
     doc(_doc)
 {
     QPtrListIterator<KPObject> it( objects );

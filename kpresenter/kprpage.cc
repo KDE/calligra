@@ -947,7 +947,7 @@ bool KPrPage::getPictureSettingsAndPixmap( PictureMirrorType *_mirrorType, int *
 }
 
 /*======================== lower objects =========================*/
-void KPrPage::lowerObjs()
+void KPrPage::lowerObjs(bool backward)
 {
     KPObject *kpobject = 0;
 
@@ -962,7 +962,10 @@ void KPrPage::lowerObjs()
 	kpobject = _new.at( i );
 	if ( kpobject->isSelected() ) {
 	    _new.take( i );
-	    _new.insert( 0, kpobject );
+            if ( backward )
+                _new.insert(QMAX(i-1,0) ,  kpobject);
+            else
+                _new.insert( 0, kpobject );
 	}
     }
     LowerRaiseCmd *lrCmd = new LowerRaiseCmd( i18n( "Lower Object(s)" ), m_objectList, _new, m_doc,this );
@@ -973,7 +976,7 @@ void KPrPage::lowerObjs()
 }
 
 /*========================= raise object =========================*/
-void KPrPage::raiseObjs()
+void KPrPage::raiseObjs(bool forward)
 {
     KPObject *kpobject = 0;
 
@@ -988,7 +991,10 @@ void KPrPage::raiseObjs()
 	kpobject = m_objectList.at( i );
 	if ( kpobject->isSelected() ) {
 	    _new.take( i );
-	    _new.append( kpobject );
+            if ( forward )
+                _new.insert( QMIN( i+1, _new.count()),  kpobject);
+            else
+                _new.append( kpobject );
 	}
     }
     LowerRaiseCmd *lrCmd = new LowerRaiseCmd( i18n( "Raise Object(s)" ), m_objectList, _new, m_doc,this );
@@ -3182,7 +3188,7 @@ QDomElement KPrPage::saveObjects( QDomDocument &doc, QDomElement &objects, doubl
         bool _sticky = oIt.current()->isSticky();
         if (_sticky)
             object.setAttribute("sticky", static_cast<int>(_sticky));
-        QPoint orig =zoomHandler->zoomPoint(oIt.current()->getOrig());
+        //QPoint orig =zoomHandler->zoomPoint(oIt.current()->getOrig());
         if ( saveOnlyPage != -1 )
             yoffset=0;
         //add yoffset to compatibility with koffice 1.1

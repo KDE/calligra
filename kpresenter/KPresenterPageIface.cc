@@ -120,13 +120,24 @@ void KPresenterPageIface::ungroupObjects()
 
 void KPresenterPageIface::raiseObjs()
 {
-    m_page->raiseObjs();
+    m_page->raiseObjs(false);
 }
 
 void KPresenterPageIface::lowerObjs()
 {
-    m_page->lowerObjs();
+    m_page->lowerObjs(false);
 }
+
+void KPresenterPageIface::sendBackward()
+{
+    m_page->lowerObjs(true);
+}
+
+void KPresenterPageIface::bringForward()
+{
+    m_page->raiseObjs(true);
+}
+
 
 void KPresenterPageIface::copyObjs()
 {

@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="66">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd"><kpartgui name="KPresenter" version="67">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -202,6 +202,8 @@
   <Action name="tools_zoom"/>
   <Separator/>
   <Action name="extra_lower"/>
+  <Action name="extra_send_backward"/>
+  <Action name="extra_bring_forward"/>
   <Action name="extra_raise"/>
   <Action name="extra_alignobjs"/>
 </ToolBar>

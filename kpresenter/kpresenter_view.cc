@@ -1113,14 +1113,14 @@ void KPresenterView::extraConfigPicture()
 void KPresenterView::extraRaise()
 {
     m_canvas->setToolEditMode( TEM_MOUSE );
-    m_canvas->activePage()->raiseObjs();
+    m_canvas->activePage()->raiseObjs(false);
 }
 
 /*===============================================================*/
 void KPresenterView::extraLower()
 {
     m_canvas->setToolEditMode( TEM_MOUSE );
-    m_canvas->activePage()->lowerObjs();
+    m_canvas->activePage()->lowerObjs(false);
 }
 
 /*===============================================================*/
@@ -2680,6 +2680,16 @@ void KPresenterView::setupActions()
 				    this, SLOT( extraLower() ),
 				    actionCollection(), "extra_lower" );
 
+    actionExtraBringForward= new KAction( i18n( "Bring Forward" ), "bring_forward",
+                                          0, this, SLOT( extraBringForward() ),
+                                          actionCollection(), "extra_bring_forward" );
+
+    actionExtraSendBackward= new KAction( i18n( "Send Backward" ), "send_backward",
+                                          0, this, SLOT( extraSendBackward() ),
+                                          actionCollection(), "extra_send_backward" );
+
+
+
     actionExtraRotate = new KAction( i18n( "R&otate Object(s)..." ), "rotate", 0,
 				     this, SLOT( extraRotate() ),
 				     actionCollection(), "extra_rotate" );
@@ -3151,9 +3161,15 @@ void KPresenterView::objectSelectedChanged()
     actionExtraAlignObjCenterV->setEnabled(state &&  !headerfooterselected && canMove);
     actionExtraAlignObjBottom->setEnabled(state &&  !headerfooterselected && canMove );
     actionEditDelete->setEnabled(state);
-    actionExtraRaise->setEnabled(state && m_canvas->numberOfObjectSelected()==1);
-    actionExtraLower->setEnabled(state && m_canvas->numberOfObjectSelected()==1);
-    actionDuplicateObj->setEnabled(state && m_canvas->numberOfObjectSelected()==1);
+    state = state && m_canvas->numberOfObjectSelected()==1;
+    actionExtraRaise->setEnabled(state );
+    actionExtraLower->setEnabled(state );
+    actionDuplicateObj->setEnabled(state);
+
+    actionExtraBringForward->setEnabled(state);
+    actionExtraSendBackward->setEnabled(state );
+
+
     //actionExtraConfigPicture->setEnabled( state && m_canvas->haveASelectedPixmapObj() );
     //actionBrushColor->setEnabled(state);
     //actionPenColor->setEnabled(state);
@@ -6371,4 +6387,16 @@ void KPresenterView::duplicateObj()
 
 }
 
+
+void KPresenterView::extraSendBackward()
+{
+    m_canvas->setToolEditMode( TEM_MOUSE );
+    m_canvas->activePage()->raiseObjs(true);
+}
+
+void KPresenterView::extraBringForward()
+{
+    m_canvas->setToolEditMode( TEM_MOUSE );
+    m_canvas->activePage()->lowerObjs(true);
+}
 #include <kpresenter_view.moc>

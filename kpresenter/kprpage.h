@@ -98,8 +98,8 @@ public:
     KPObject* getSelectedObj();
     void groupObjects();
     void ungroupObjects();
-    void raiseObjs();
-    void lowerObjs();
+    void raiseObjs( bool forward );
+    void lowerObjs( bool backward );
     bool getPolygonSettings( bool *_checkConcavePolygon, int *_cornersValue, int *_sharpnessValue );
     bool getPictureSettingsAndPixmap( PictureMirrorType *_mirrorType, int *_depth, bool *_swapRGB, bool *_grayscal,
                                       int *_bright, QPixmap *_origPixmap );
