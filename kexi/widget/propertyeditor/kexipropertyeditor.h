@@ -154,6 +154,9 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 
 		void showDefaultsButton( bool show );
 
+	protected slots:
+		void slotPropertyReset(KexiPropertyBuffer &buf,KexiProperty &prop);
+
 	private:
 		QGuardedPtr<KexiPropertySubEditor> m_currentEditor;
 		KexiPropertyEditorItem *m_editItem;
@@ -162,6 +165,7 @@ class KEXIPROPERTYEDITOR_EXPORT KexiPropertyEditor : public KListView
 		KPushButton *m_defaults; // "Revert to defaults" button
 		KexiPropertyEditorItem::Dict m_items;
 		bool m_sync : 1;
+		bool slotValueChanged_enabled : 1;
 };
 
 #endif

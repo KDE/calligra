@@ -50,6 +50,7 @@ KexiPropertyEditor::KexiPropertyEditor(QWidget *parent, bool autoSync, const cha
 	m_topItem = 0;
 	m_editItem = 0;
 	m_sync = autoSync;
+	slotValueChanged_enabled = true;
 
 	connect(this, SIGNAL(selectionChanged(QListViewItem *)), this, SLOT(slotClicked(QListViewItem *)));
 	connect(this, SIGNAL(expanded(QListViewItem *)), this, SLOT(slotExpanded(QListViewItem *)));
@@ -239,6 +240,8 @@ KexiPropertyEditor::showDefaultsButton( bool show )
 void
 KexiPropertyEditor::slotValueChanged(KexiPropertySubEditor *editor)
 {
+	if (!slotValueChanged_enabled)
+		return;
 	if(m_currentEditor)
 	{
 		QVariant value = m_currentEditor->value();
@@ -408,9 +411,27 @@ KexiPropertyEditor::setBuffer(KexiPropertyBuffer *b)
 		//receive property changes
 		connect(m_buffer,SIGNAL(propertyChanged(KexiPropertyBuffer&,KexiProperty&)),
 			this,SLOT(slotPropertyChanged(KexiPropertyBuffer&,KexiProperty&)));
+		connect(m_buffer,SIGNAL(propertyReset(KexiPropertyBuffer&,KexiProperty&)),
+			this, SLOT(slotPropertyReset(KexiPropertyBuffer&,KexiProperty&)));
 		connect(m_buffer,SIGNAL(destroying()), this, SLOT(slotBufferDestroying()));
 	}
 	fill(); 
+}
+
+void KexiPropertyEditor::slotPropertyReset(KexiPropertyBuffer &buf,KexiProperty &prop)
+{
+	if (m_currentEditor) {
+		slotValueChanged_enabled = false;
+		m_currentEditor->setValue(m_editItem->property()->value());
+		slotValueChanged_enabled = true;
+	}
+	else {
+		m_editItem->updateValue();
+	}
+	//update children
+	m_editItem->updateChildrenValue();
+
+	showDefaultsButton( false );
 }
 
 void KexiPropertyEditor::slotBufferDestroying()
@@ -451,24 +472,21 @@ KexiPropertyEditor::resetItem()
 {
 	if(m_editItem)
 	{
-		if (m_currentEditor) {
-			m_currentEditor->setValue(m_editItem->property()->oldValue());
-		}
+//		if (m_currentEditor) {
+//			m_currentEditor->setValue(m_editItem->property()->oldValue());
+//		}
 
 //		m_editItem->property()->setValue( m_editItem->property()->oldValue(), false );
 		m_editItem->property()->resetValue();
+/*
 		if (!m_currentEditor) {
 			m_editItem->updateValue();
 		}
 		//update children
 		m_editItem->updateChildrenValue();
-/*		KexiPropertyEditorItem *it = static_cast<KexiPropertyEditorItem*>(m_editItem->firstChild());
-		while (it) {
-			it->updateValue(false);
-			it = static_cast<KexiPropertyEditorItem*>(it->nextSibling());
-		}*/
 
 		showDefaultsButton( false );
+*/
 //js: not needed		else
 //js: not needed			m_editItem->setValue(m_editItem->property()->oldValue());
 	}
