@@ -154,7 +154,7 @@ void KIllustratorShell::setDocument (KIllustratorDocument* doc) {
 
   m_pDoc = doc;
   m_pDoc->_ref ();
-  m_pView = doc->createKIllustratorView ( getFrame() );
+  m_pView = doc->createKIllustratorView ( frame() );
   m_pView->incRef ();
   m_pView->setMode (KOffice::View::RootMode);
   m_pView->setMainWindow (interface ());
@@ -189,7 +189,7 @@ bool KIllustratorShell::newDocument () {
   }
 
   cout << "create KIllustratorView ..." << endl;
-  m_pView = m_pDoc->createKIllustratorView ( getFrame() );
+  m_pView = m_pDoc->createKIllustratorView ( frame() );
   m_pView->incRef ();
   m_pView->setMode (KOffice::View::RootMode);
   m_pView->setMainWindow (interface ());
@@ -232,7 +232,7 @@ bool KIllustratorShell::openDocument (const char* url, const char* fmt) {
     return false;
 
   cout << "create new view" << endl;
-  m_pView = m_pDoc->createKIllustratorView ( getFrame() );
+  m_pView = m_pDoc->createKIllustratorView ( frame() );
   m_pView->incRef ();
   m_pView->setMode (KOffice::View::RootMode);
   m_pView->setMainWindow (interface ());
