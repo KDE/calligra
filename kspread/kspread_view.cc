@@ -303,7 +303,6 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
     connect( m_verticalText, SIGNAL( toggled( bool ) ), this, SLOT( verticalText( bool ) ) );
     m_changeAngle = new KAction( i18n("Change Angle ..."), 0, this, SLOT( changeAngle() ), actionCollection(), "changeangle" );
     m_addModifyComment = new KAction( i18n("&Add/modify comment ..."),"comment", 0, this, SLOT( addModifyComment() ), actionCollection(), "addmodifycomment" );
-    //m_showComment = new KAction( i18n("Show comment"), 0, this, SLOT( showComment() ), actionCollection(), "showcomment" );
     m_removeComment = new KAction( i18n("&Remove comment"),"removecomment", 0, this, SLOT( removeComment() ), actionCollection(), "removecomment" );
     m_editGlobalScripts = new KAction( i18n("Edit Global Scripts..."), 0, this, SLOT( editGlobalScripts() ),
                                        actionCollection(), "editGlobalScripts" );
@@ -535,11 +534,6 @@ void KSpreadView::updateEditWidget()
     m_verticalText->setChecked( cell->verticalText( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
 
     m_multiRow->setChecked( cell->multiRow( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ) );
-    /*if( cell->faktor()==100.0 && cell->postfix()=="%")
-        m_percent->setChecked( TRUE );
-    else
-        m_percent->setChecked( FALSE );
-    */
     if( cell->getFormatNumber( m_pCanvas->markerColumn(), m_pCanvas->markerRow()) == KSpreadCell::Percentage )
         m_percent->setChecked( TRUE );
     else
@@ -1973,7 +1967,6 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     m_addModifyComment->plug( m_pPopupMenu );
     if( !cell->comment(m_pCanvas->markerColumn(), m_pCanvas->markerRow()).isEmpty() )
     {
-        //m_showComment->plug( m_pPopupMenu );
         m_removeComment->plug( m_pPopupMenu );
     }
 
@@ -2162,7 +2155,6 @@ void KSpreadView::slotInsertCellCopy()
 void KSpreadView::setAreaName()
 {
     KSpreadarea* dlg = new KSpreadarea( this, "Area Name",QPoint(m_pCanvas->markerColumn(), m_pCanvas->markerRow()) );
-
     dlg->show();
 }
 
@@ -2202,9 +2194,7 @@ void KSpreadView::equalizeRow()
     if(selection.bottom()==0x7FFF)
         KMessageBox::error( this, i18n("Area too large!"));
     else
-        {
         canvasWidget()->equalizeRow();
-        }
 }
 
 void KSpreadView::equalizeColumn()
@@ -2213,9 +2203,7 @@ void KSpreadView::equalizeColumn()
     if(selection.right()==0x7FFF)
         KMessageBox::error( this, i18n("Area too large!"));
     else
-        {
         canvasWidget()->equalizeColumn();
-        }
 }
 
 
@@ -2537,6 +2525,27 @@ void KSpreadView::slotChangeSelection( KSpreadTable *_table, const QRect &_old, 
     else
         m_tableFormat->setEnabled( TRUE );
 
+    if( n.top()!=0 &&n.bottom()==0x7FFF)
+        {
+        m_resizeRow->setEnabled(false);
+        m_equalizeRow->setEnabled(false);
+        }
+    else
+        {
+        m_resizeRow->setEnabled(true);
+        m_equalizeRow->setEnabled(true);
+        }
+
+    if( n.left()!=0 &&n.right()==0x7FFF)
+        {
+        m_resizeColumn->setEnabled(false);
+        m_equalizeColumn->setEnabled(false);
+        }
+    else
+        {
+        m_resizeColumn->setEnabled(true);
+        m_equalizeColumn->setEnabled(true);
+        }
     double result=0;
     QRect tmpRect(n);
     if(n.left()==0)

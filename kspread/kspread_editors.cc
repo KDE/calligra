@@ -66,7 +66,7 @@ void KSpreadTextEditor::slotTextChanged( const QString& t )
     // m_pEdit->setCursorPosition( canvas->chooseCursorPosition() );
     checkChoose();
 
-  if(cell()->getFormatNumber(cell()->column(),cell()->row()==KSpreadCell::Percentage))
+  if((cell()->getFormatNumber(cell()->column(),cell()->row()))==KSpreadCell::Percentage)
         {
         if((t.length()==1) && t[0].isDigit())
                 {
