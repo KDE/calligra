@@ -27,18 +27,22 @@ class QDomElement;
 
 namespace KoPictureType
 {
-    // 3 = Qt 2.1.x and later
-    // 4 = QT 3.x and later
-    // -1 = current QT
+    /**
+     * QPicture version used by KoPictureClipart
+     *
+     * 3 = Qt 2.1.x and later
+     * 4 = QT 3.x
+     * -1 = current QT
+     */
     const int formatVersionQPicture=-1;
 
     enum Type
     {
         TypeUnknown = 0,
-        TypeImage,          /// Image, QImage-based
-        TypeEps,            /// Encapsulated Postscript
-        TypeClipart,        /// Clipart, QPicture-based
-        TypeWmf             /// WMF (Windows Meta File)
+        TypeImage,          ///< Image, QImage-based
+        TypeEps,            ///< Encapsulated Postscript
+        TypeClipart,        ///< Clipart, QPicture-based
+        TypeWmf             ///< WMF (Windows Meta File)
     };
 }
 
