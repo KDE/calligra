@@ -145,11 +145,10 @@ void KPLineObject::draw( QPainter *_painter, int _diffx, int _diffy )
             int sy = 0;
             getShadowCoords( sx, sy, shadowDirection, shadowDistance );
 
-            QWMatrix m, mtx, m2;
-            mtx.rotate( angle );
+            QWMatrix m;
             m.translate( pw / 2, ph / 2 );
-            m2.translate( rr.left() + xPos + sx, rr.top() + yPos + sy );
-            m = m2 * mtx * m;
+            m.rotate( angle );
+            m.translate( rr.left() + xPos + sx, rr.top() + yPos + sy );
 
             _painter->setWorldMatrix( m, true );
             paint( _painter );
@@ -175,11 +174,10 @@ void KPLineObject::draw( QPainter *_painter, int _diffx, int _diffy )
         int xPos = -rr.x();
         rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
-        QWMatrix m, mtx, m2;
-        mtx.rotate( angle );
+        QWMatrix m;
         m.translate( pw / 2, ph / 2 );
-        m2.translate( rr.left() + xPos, rr.top() + yPos );
-        m = m2 * mtx * m;
+        m.rotate( angle );
+        m.translate( rr.left() + xPos, rr.top() + yPos );
 
         _painter->setWorldMatrix( m, true );
         paint( _painter );
