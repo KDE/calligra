@@ -998,27 +998,9 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
                             text = cell->text();
                             break;
                     }
-                }
-         
-                bool hasContent = false;
-                
-                if (!text.isEmpty() )
-                    hasContent = true;
-                else
-                {
-                    if ( cell->backGroundBrushStyle(currentcolumn, currentrow) != Qt::NoBrush )
-                        hasContent = true;
-                    else
-                    {
-                        if ( hasBorder(cell, currentcolumn, currentrow) )
-                            hasContent = true;
-                        else
-                            hasContent = false;
-                    }
-                }
+                }                    
                     
-                    
-                if (hasContent)
+                if (!cell->isDefault())
 		        {
            
                     // Check if the cell is merged
