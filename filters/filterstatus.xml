@@ -326,7 +326,7 @@
             <filter id="karbon_wmf">
                 <title xml:lang="en_us">WMF</title>
                 <note xml:lang="en_us">Windows MetaFile</note>
-                <stat import="onestar" export="none"/>
+                <stat import="onestar" export="onestar"/>
             </filter>
             <filter id="karbon_png">
                 <title xml:lang="en_us">PNG</title>
