@@ -231,7 +231,7 @@ bool KWordShell::openDocument( const char *_url, const char *_format )
 }
 
 /*================================================================*/
-bool KWordShell::saveDocument( const char *_url, const char *_format )
+bool KWordShell::saveDocument()
 {
     return KoMainWindow::saveDocument( "application/x-kword", "*.kwd" );
 }
