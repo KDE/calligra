@@ -76,8 +76,8 @@ void Part::createGUIClients(KexiMainWindow *win)
 		}
 		// also add an instance common for all modes (mode==0)
 		GUIClient *instanceGuiClient = new GUIClient(win, this, true);
-		m_instanceGuiClients.insert(0, instanceGuiClient);
-		initInstanceActions( 0 , instanceGuiClient->actionCollection() );
+		m_instanceGuiClients.insert(Kexi::AllViewModes, instanceGuiClient);
+		initInstanceActions( Kexi::AllViewModes , instanceGuiClient->actionCollection() );
 	}
 }
 

@@ -101,14 +101,19 @@ class KEXICORE_EXPORT Part : public QObject
 		*/
 		virtual void initPartActions( KActionCollection * ) {};
 
-		/*! For reimplementation. Create here all instance actions for \a mode (KAction or similar). 
+		/*! For reimplementation. You should here create all instance actions (KAction or similar)
+		 for \a mode (this method called for every value given by Kexi::ViewMode enum, 
+		 and in special cases, in the future - for user-defined part-specific modes). 
+		 Actions should be bound to action collection \a col. 
 		 "Instance action" is an action that is bound to given dialog instance (created with a part), 
-		 for specific view; eg. "Filter data" action for DataViewMode of Table part. 
+		 for specific view. \a mo; eg. "Filter data" action for DataViewMode of Table part. 
 		 By creating actions here, you can ensure that after switching to other view mode (eg. from
-		 Design view to Data view), appropriate actions will be switched/hidden
+		 Design view to Data view), appropriate actions will be switched/hidden.
+		 \a mode equal Kexi::AllViewModes means that given actions will be available for 
+		 all supported views.
 		 Default implementation does nothing.
 		*/
-		virtual void initInstanceActions( int mode, KActionCollection * ) {};
+		virtual void initInstanceActions( int mode, KActionCollection *col ) {};
 
 		inline void setInfo(Info *info) { m_info = info; }
 

@@ -36,6 +36,7 @@ namespace KexiDB
 	class DriverManager;
 	class Driver;
 	class Connection;
+	class Parser;
 }
 
 namespace KexiPart
@@ -146,6 +147,8 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		bool createObject(KexiDialogBase *dlg);
 //		bool createObject(KexiMainWindow *wnd, KexiPart::Item& item);
 
+		KexiDB::Parser* sqlParser();
+
 	protected:
 //		bool			openConnection(KexiProjectConnectionData *connection);
 
@@ -189,6 +192,8 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		QAsciiDict<KexiPart::Item> m_unstoredItems;
 		int m_tempPartItemID_Counter; //!< helper for getting unique 
 		                              //!< temporary identifiers for unstored items
+
+		KexiDB::Parser* m_sqlParser;
 //		KexiProjectConnectionData	*m_connData;
 //js		KexiPart::Manager		*m_partManager;
 //		QString				m_error;

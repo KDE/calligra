@@ -31,6 +31,7 @@
 #include <kexidb/driver.h>
 #include <kexidb/drivermanager.h>
 #include <kexidb/utils.h>
+#include <kexidb/parser/parser.h>
 
 #include "kexiproject.h"
 #include "kexipartmanager.h"
@@ -50,6 +51,7 @@ KexiProject::KexiProject(KexiProjectData *pdata)
  , m_itemDictsCache(199)
  , m_unstoredItems(199, false)
  , m_tempPartItemID_Counter(-1)
+ , m_sqlParser(0)
 {
 //	m_drvManager = new KexiDB::DriverManager();
 //	m_connData = new KexiProjectConnectionData();
@@ -69,6 +71,7 @@ KexiProject::~KexiProject()
 	closeConnection();
 	delete m_data;
 	m_data=0;
+	delete m_sqlParser;
 }
 
 bool
@@ -446,6 +449,14 @@ bool KexiProject::createObject(KexiDialogBase *dlg)
 	return true;
 }
 
+KexiDB::Parser* KexiProject::sqlParser()
+{
+	if (!m_connection)
+		return 0;
+	if (!m_sqlParser)
+		m_sqlParser = new KexiDB::Parser(m_connection);
+	return m_sqlParser;
+}
 
 #include "kexiproject.moc"
 
