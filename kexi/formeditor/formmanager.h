@@ -117,7 +117,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		/*! Loads a Form from a UI file. A "Open File" dialog is shown to select the file. The loaded Form is shown and becomes
 		   the active Form.
 		  */
-		void loadForm();
+		void loadForm(bool preview=false);
 		/*! Save the active Form into a UI file. A "Save File" dialog is shown to choose a name for the file, but the former name
 		  is used if there is one (using Form::filename()).
 		 */
@@ -126,6 +126,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		    already been saved.
 		 */
 		void saveFormAs();
+		/*! Previews the Form \a form using the widget \a w as toplevel container for this Form. */
 		void previewForm(Form *form, QWidget *w);
 		/*! Deletes the selected widget in active Form and all of its children. */
 		void deleteWidget();

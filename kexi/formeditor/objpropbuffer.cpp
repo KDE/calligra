@@ -42,13 +42,19 @@ ObjectPropertyBuffer::ObjectPropertyBuffer(FormManager *manager, QObject *parent
 {
 	m_object = 0;
 	m_manager = manager;
+
+	connect(this, SIGNAL(propertyChanged(KexiPropertyBuffer*, KexiProperty&)), this, SLOT(slotChangeProperty(KexiPropertyBuffer*, KexiProperty&)));
 }
 
 void
-ObjectPropertyBuffer::changeProperty(const QString &property, const QVariant &value)
+ObjectPropertyBuffer::slotChangeProperty(KexiPropertyBuffer *buff, KexiProperty &prop)
 {
+	if(buff != this)
+		return;
+
+	QString property = prop.name();
+	QVariant value = prop.value();
 	kdDebug() << "ObjPropBuffer::changeProperty(): changing: " << property << endl;
-	KexiPropertyBuffer::changeProperty(property, value);
 
 	if(property == "name")
 		emit nameChanged(m_object->name(), value.toString());

@@ -32,7 +32,7 @@ class Container;
 
 //! A buffer which holds the property of the selected widget
 /*! This class inherits KexiPropertyBuffer and holds the properties of the selected widget, which are shown in
-  KexiPropertyEditor. It takes care of reading and writing the properties of the widget, and you just need to call 
+  KexiPropertyEditor. It takes care of reading and writing the properties of the widget, and you just need to call
    setObject() and properties are created.\n
    It includes property filtering (eg "caption" only for a toplevel widget), and is synced with widget resizig or moving.
  */
@@ -45,12 +45,6 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		ObjectPropertyBuffer(FormManager *manager, QObject *parent, const char *name=0);
 		~ObjectPropertyBuffer();
 
-		/*! Reimplemented from KexiPropertyBuffer to save properties. This function is called by
-		 KexiPropertyEditor every time a property is modifed in the list. It takes care of saving set and enum 
-		 properties.
-		*/
-		void	changeProperty(const QString &property, const QVariant &value);
-
 		/*! This function filters the event of the sselected widget to automatically updates the "geometry" property
 		  when the widget is moved or resized in the Form.
 		 */
@@ -59,16 +53,23 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		  they are saved later (using ObjectTreeItem::addMofProperty() ).
 		 */
 		void    checkModifiedProp();
-	
+
 	public slots:
 		/*! Sets the buffer's object to \a widget. The properties are created automatically, and the list view is updated.
 		  checkModifiedProp() is called before doing this.
 		 */
 		void	setWidget(QWidget *obj);
+		/*! Adds the QWidget \a w to the list of widgets managed by this buffer. The properties shown are filtered
+		  to show only properties common to all the widgets.
+		 */
 		void    addWidget(QWidget *w);
+		/*!  This function is called every time a property is modifed.  It takes care of saving set and enum
+		 properties.
+		*/
+		void	slotChangeProperty(KexiPropertyBuffer *buff, KexiProperty &prop);
 
 	signals:
-		/*! This signal is emitted when the name of the widget is modified. \a oldname is the name of the widget before the 
+		/*! This signal is emitted when the name of the widget is modified. \a oldname is the name of the widget before the
 		  change, \a newname is the name after.
 		 */
 		void	nameChanged(const QString &oldname, const QString &newname);
@@ -104,7 +105,7 @@ class KFORMEDITOR_EXPORT ObjectPropertyBuffer : public KexiPropertyBuffer
 		static QString      descFromValue(const QString &name);
 		/*! \return The i18n'ed list of values, that will be shown by Property Editor (using descFromValue()).*/
 		static QStringList  descList(const QStringList &list);
-	
+
 	private:
 		QObject		*m_object;
 		QPtrList<QWidget> m_widgets;

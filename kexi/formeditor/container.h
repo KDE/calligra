@@ -95,6 +95,7 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		 */
 		void		setSelectedWidget(QWidget *selected, bool add);
 
+		/*! Unselects the widget \a w. Te widget is removed from the Cntainer 's list and its resizeHandles are removed. */
 		void		unSelectWidget(QWidget *w);
 
 	protected slots:

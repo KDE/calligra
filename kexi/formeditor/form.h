@@ -82,7 +82,10 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		   and the PropertyBuffer and ObjectTreeView are updated.
 		 */
 		void			setCurrentWidget(QWidget *w);
+		/*! Adds the widget \a w to the Form 's list of selected widgets. The widget gets ResizeHandles, and the ObjectPropertyBuffer is
+		  modified. */
 		void			addSelectedWidget(QWidget *w);
+		/*! Unselects the widget \a w. Te widget is removed from the Cntainer 's list and its resizeHandle is removed. */
 		void			unSelectWidget(QWidget *w);
 		/*! Sets the Form interactivity mode. If is used when pasting widgets, or loading a Form.
 		 */
@@ -93,7 +96,10 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		 */
 		bool			interactiveMode() const { return m_inter; }
 
+		/*! If \a design is true, the Form is in Design Mode (by default). If \a design is false, then the Form is in Preview Mode, so
+		  the ObjectTree and the Containers are removed. */
 		void			setDesignMode(bool design);
+		//! \return The actual mode of the Form.
 		bool			designMode() { return m_design; }
 
 		//! \return the x distance between two dots in the background.
@@ -137,6 +143,7 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		   \a w is the newly selected widget.
 		  */
 		void			selectionChanged(QWidget *w);
+		/*! This signal is emitted when the widget \a w is added to the list of selected widgets. */
 		void			addedSelectedWidget(QWidget *w);
 		/*! This signal is emitted when a new widget is created, to update ObjectTreeView.
 		 \a it is the ObjectTreeItem representing this new widget.

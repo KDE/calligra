@@ -43,6 +43,7 @@ Form::Form(FormManager *manager, const char *name)
 	m_manager = manager;
 	m_resizeHandles.setAutoDelete(true);
 	m_inter = true;
+	m_design = true;
 }
 
 void

@@ -192,7 +192,7 @@ FormManager::importForm(QWidget *w)
 }
 
 void
-FormManager::loadForm()
+FormManager::loadForm(bool preview)
 {
 //	QString n = "Form" + QString::number(m_count + 1);
 	Form *form = new Form(this);//, n.latin1());
@@ -204,7 +204,14 @@ FormManager::loadForm()
 		return;
 	}
 	w->show();
-	initForm(form);
+
+	if(!preview)
+		initForm(form);
+	else
+	{
+		m_preview.append(form);
+		form->setDesignMode(false);
+	}
 }
 
 void
