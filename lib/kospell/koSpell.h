@@ -451,7 +451,7 @@ protected:
     bool cleanFputsWord (const QString & s, bool appendCR=TRUE);
     bool writePersonalDictionary ();
 
-    void spellWord( const QString &_word );
+    bool spellWord( const QString &_word );
     void nextWord();
     void previousWord();
     void spellCheckReplaceWord( const QString & _word);

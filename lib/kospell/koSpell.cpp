@@ -295,63 +295,57 @@ QStringList KOSpell::resultCheckWord( const QString &_word )
     return result;
 }
 
-void KOSpell::spellWord( const QString &_word )
+bool KOSpell::spellWord( const QString &_word )
 {
     QStringList lst =resultCheckWord( _word );
     if ( lst.isEmpty() && (lastpos >= origbuffer.length()-1) )
     {
         emit death();
-        return;
+        return false;
     }
+    if ( lst.contains( _word ))
+      return false;
+
     dialog( _word, lst);
+    return true;
 }
 
 void KOSpell::nextWord()
 {
-    bool searchAgain =false;
     QString word;
     do
     {
-        searchAgain =false;
         int i =0;
         for ( i = lastpos; i<origbuffer.length();i++)
         {
             QChar ch = origbuffer[i];
             if ( ch.isSpace() || ch.isPunct() )
-            {
                 break;
-            }
             word.append(ch);
         }
         lastpos = i+1;
 
 
         if(d->m_bIgnoreTitleCase && word==word.upper())
-            searchAgain = true;
+            word ="";
 
         if(d->m_bIgnoreUpperWords && word[0]==word[0].upper())
         {
             QString text=word[0]+word.right(word.length()-1).lower();
             if(text==word)
-            {
-                //clear search word
-                searchAgain = true;
                 word ="";
-            }
         }
 
         //We don't take advantage of ispell's ignore function because
         //we can't interrupt ispell's output (when checking a large
         //buffer) to add a word to _it's_ ignore-list.
         if (ignorelist.findIndex(word.lower())!=-1)
-        {
             word ="";
-            searchAgain = true;
-        }
     }
-    while ( (word.isEmpty() || searchAgain) && (lastpos < origbuffer.length()-1));
+    while ( word.isEmpty() && (lastpos < origbuffer.length()-1));
 
-    spellWord( word );
+    if ( !spellWord( word ))
+        nextWord();
 }
 
 void KOSpell::previousWord()
