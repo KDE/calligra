@@ -37,7 +37,6 @@ public:
     void addFrame( int left, int top, int right, int bottom,
 		   int autoCreateNewFrame, int newFrameBehaviour,
 		   int sheetSide );
-    void setAttribute( const char *name, const char *value );
     void setAttribute( const QString& attribute, const QString& value );
     void setAttribute( const char *name, int value );
     void setAttribute( const char *name, double value );
