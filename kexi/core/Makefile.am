@@ -4,7 +4,7 @@ libkexicore_la_SOURCES = kexi.cpp kexi_global.cpp \
 	kexistartupdlgui.ui kexistartupdlg.cpp \
 	kexipartmanager.cpp kexipartinfo.cpp kexipartitem.cpp kexipart.cpp \
 	kexibrowser.cpp kexibrowseritem.cpp \
-	kexiprojectdata.cpp
+	kexiprojectdata.cpp kexistatusbar.cpp
 
 # kexiprojectconnectiondata.cpp
 

@@ -114,6 +114,8 @@ class KexiMainWindow : public KMdiMainFrm
 		*/
 		bool createBlankDatabase();
 
+		void setWindowMenu(QPopupMenu *menu);
+
 	protected slots:
 
 		/**
@@ -125,7 +127,7 @@ class KexiMainWindow : public KMdiMainFrm
 		/**
 		 * creates browser and fills it with empty items
 		 */
-		void		initBrowser();
+		void		initNavigator();
 
 		/**
 		 * this slot is called if a window changes
@@ -158,7 +160,7 @@ class KexiMainWindow : public KMdiMainFrm
 
 	private:
 		KexiProject	*m_project;
-		KexiBrowser	*m_browser;
+		KexiBrowser	*m_nav;
 		WidgetDict	m_docs;
 
 		KXMLGUIClient   *m_currentDocumentGUIClient;

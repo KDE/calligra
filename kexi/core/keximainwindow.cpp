@@ -45,6 +45,8 @@
 #include "kexiproject.h"
 #include "kexiprojectdata.h"
 #include "kexi.h"
+#include "kexistatusbar.h"
+
 #include "startup/KexiStartupDialog.h"
 #include "startup/KexiConnSelector.h"
 #include "startup/KexiProjectSelectorBase.h"
@@ -61,14 +63,14 @@ class KexiMainWindow::Private
 		//! project menu
 		KAction *action_save, *action_save_as, *action_close,
 		 *action_project_properties;
-		KActionMenu *action_open_recent;
+		KActionMenu *action_open_recent, *action_show_other;
 		KAction *action_open_recent_more;
 		int action_open_recent_more_id;
 		// view menu
 #ifndef KEXI_NO_CTXT_HELP
 		KToggleAction *action_show_helper;
 #endif
-		KToggleAction *action_show_browser;
+		KToggleAction *action_show_nav;
 	Private()
 	{
 	}
@@ -81,7 +83,7 @@ KexiMainWindow::KexiMainWindow()
 	,m_currentDocumentGUIClient(0)
  	,d(new KexiMainWindow::Private() )
 {
-	m_browser = 0;
+	m_nav = 0;
 	m_project = 0;	
 	KGlobal::iconLoader()->addAppDir("kexi");
 	setXMLFile("kexiui.rc");
@@ -90,12 +92,23 @@ KexiMainWindow::KexiMainWindow()
 
 	initActions();
 	createShellGUI(true);
+	(void) new KexiStatusBar(this, "status_bar");
 
 //	initBrowser();
 	//TODO:new KexiProject();
 //	connect(m_project, SIGNAL(dbAvailable()), this, SLOT(initBrowser()));
 
 	restoreSettings();
+	
+	if (!isFakingSDIApplication()) {
+		QPopupMenu *menu = (QPopupMenu*) child( "window", "KPopupMenu" );
+		unsigned int count = menuBar()->count();
+		if (menu)
+			setWindowMenu(menu);
+		else
+			menuBar()->insertItem( i18n("&Window"), windowMenu(), -1, count-2); // standard position is left to the last ('Help')
+	}
+	
 //	QTimer::singleShot(0, this, SLOT(parseCmdLineOptions()));
 }
 
@@ -105,12 +118,22 @@ KexiMainWindow::~KexiMainWindow()
 	closeProject();
 }
 
+void KexiMainWindow::setWindowMenu(QPopupMenu *menu)
+{
+    if (m_pWindowMenu)
+        delete m_pWindowMenu;
+    m_pWindowMenu = menu;
+    m_pWindowMenu->setCheckable(TRUE);
+    QObject::connect( m_pWindowMenu, SIGNAL(aboutToShow()), this, SLOT(fillWindowMenu()) );
+}
+
 void
 KexiMainWindow::initActions()
 {
 	// PROJECT MENU
-	new KAction(i18n("&New"), "filenew", KStdAccel::shortcut(KStdAccel::New), 
+	KAction *action = new KAction(i18n("&New..."), "filenew", KStdAccel::shortcut(KStdAccel::New), 
 		this, SLOT(slotProjectNew()), actionCollection(), "project_new");
+  	action->setWhatsThis(i18n("Create a new project"));
 	KStdAction::open( this, SLOT( slotProjectOpen() ), actionCollection(), "project_open" )
 		->setWhatsThis(i18n("Open an existing project"));
 	d->action_open_recent = new KActionMenu(i18n("Open Recent"), 
@@ -137,18 +160,27 @@ KexiMainWindow::initActions()
     KStdAction::keyBindings(this, SLOT( slotConfigureKeys() ), actionCollection() );
     KStdAction::configureToolbars( this, SLOT( slotConfigureToolbars() ), actionCollection() );
 	(void*) KStdAction::preferences(this, SLOT(slotShowSettings()), actionCollection());
+
+	d->action_show_other = new KActionMenu(i18n("Other"), 
+		actionCollection(), "options_show_other");
+	d->action_show_nav = new KToggleAction(i18n("Show Navigator"), "", CTRL + Key_B,
+	 actionCollection(), "options_show_nav");
+#ifndef KEXI_NO_CTXT_HELP
+	d->action_show_helper = new KToggleAction(i18n("Show Context Help"), "", CTRL + Key_H,
+	 actionCollection(), "options_show_contexthelp");
+#endif
 	
 	KAction *actionSettings = new KAction(i18n("Configure Kexi..."), "configure", 0,
 	 actionCollection(), "kexi_settings");
 	connect(actionSettings, SIGNAL(activated()), this, SLOT(slotShowSettings()));
 
 	//VIEW MENU
-	d->action_show_browser = new KToggleAction(i18n("Show Navigator"), "", CTRL + Key_B,
-	 actionCollection(), "show_nav");
+//	d->action_show_browser = new KToggleAction(i18n("Show Navigator"), "", CTRL + Key_B,
+//	 actionCollection(), "options_show_nav");
 
 #ifndef KEXI_NO_CTXT_HELP
-	d->action_show_helper = new KToggleAction(i18n("Show Context Help"), "", CTRL + Key_H,
-	 actionCollection(), "show_contexthelp");
+//	d->action_show_helper = new KToggleAction(i18n("Show Context Help"), "", CTRL + Key_H,
+//	 actionCollection(), "options_show_contexthelp");
 #endif
 
 	invalidateActions();
@@ -158,7 +190,7 @@ void KexiMainWindow::invalidateActions()
 {
 	stateChanged("project_opened",m_project ? StateNoReverse : StateReverse);
 	
-	d->action_show_browser->setEnabled(m_project && m_browser);
+	d->action_show_nav->setEnabled(m_project && m_nav);
 #ifndef KEXI_NO_CTXT_HELP
 	d->action_show_helper->setEnabled(m_project);
 #endif
@@ -251,7 +283,7 @@ bool KexiMainWindow::openProject(KexiProjectData *projectData)
 		m_project = 0;
 		return false;
 	}
-	initBrowser();
+	initNavigator();
 	Kexi::recentProjects.addProjectData( projectData );
 	invalidateActions();
 	
@@ -292,33 +324,33 @@ bool KexiMainWindow::closeProject()
 }
 
 void
-KexiMainWindow::initBrowser()
+KexiMainWindow::initNavigator()
 {
-	kdDebug() << "KexiMainWindow::initBrowser()" << endl;
+	kdDebug() << "KexiMainWindow::initNavigator()" << endl;
 
-	if(!m_browser)
+	if(!m_nav)
 	{
-		m_browser = new KexiBrowser(this, "kexi/db", 0);
-		m_browser->setCaption(i18n("Navigator"));
-		addToolWindow(m_browser, KDockWidget::DockLeft, getMainDockWidget(), 20/*, lv, 35, "2"*/);
+		m_nav = new KexiBrowser(this, "kexi/db", 0);
+		m_nav->setCaption(i18n("Navigator"));
+		addToolWindow(m_nav, KDockWidget::DockLeft, getMainDockWidget(), 20/*, lv, 35, "2"*/);
 	}
 
 	if(m_project->isConnected())
 	{
-		m_browser->clear();
+		m_nav->clear();
 
 		KexiPart::PartList *pl = Kexi::partManager.partList(); //m_project->partManager()->partList();
 		for(KexiPart::Info *it = pl->first(); it; it = pl->next())
 		{
-			kdDebug() << "KexiMainWindow::initBrowser(): adding " << it->groupName() << endl;
-			m_browser->addGroup(it);
+			kdDebug() << "KexiMainWindow::initNavigator(): adding " << it->groupName() << endl;
+			m_nav->addGroup(it);
 			KexiPart::Part *p=Kexi::partManager.part(it);
 			if (p) p->createGUIClient(this);
 		}
 	}
 	
-	d->action_show_browser->setChecked(m_browser->isVisible());
-//TODO	m_browser->plugToggleAction(m_actionBrowser);
+	d->action_show_nav->setChecked(m_nav->isVisible());
+//TODO	m_nav->plugToggleAction(m_actionBrowser);
 
 }
 
@@ -503,7 +535,7 @@ KexiMainWindow::createBlankDatabase()
 		return false;
 	}
 	kdDebug() << "KexiMainWindow::slotProjectNew(): new project created --- " << endl;
-	initBrowser();
+	initNavigator();
 	Kexi::recentProjects.addProjectData( new_data );
 
 	invalidateActions();
