@@ -395,15 +395,6 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, cons
       }
     }
 
-    QRect _printRange = sheet->print()->printRange();
-    if ( _printRange != ( QRect( QPoint( 1, 1 ), QPoint( KS_colMax, KS_rowMax ) ) ) )
-    {
-        QString range= convertRangeToRef( sheet->tableName(), _printRange );
-        //kdDebug()<<" range : "<<range<<endl;
-        tabElem.setAttribute( "table:print-ranges", range );
-    }
-
-
     QString name( sheet->tableName() );
 
     int n = name.find( ' ' );
@@ -414,6 +405,15 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, cons
       kdDebug(30518) << "Sheet name converted: " << name << endl;
     }
     name = name.replace( ' ', "_" );
+
+    QRect _printRange = sheet->print()->printRange();
+    if ( _printRange != ( QRect( QPoint( 1, 1 ), QPoint( KS_colMax, KS_rowMax ) ) ) )
+    {
+        QString range= convertRangeToRef( name, _printRange );
+        //kdDebug()<<" range : "<<range<<endl;
+        tabElem.setAttribute( "table:print-ranges", range );
+    }
+
 
     tabElem.setAttribute( "table:name", name );
 
