@@ -428,7 +428,7 @@ bool KivioSMLConnector::loadPath( const QString &file )
 
 //	m_PointList.append(m_pEnd);
 	m_name = file;
-
+        return true;
 }
 
 #include "sml_connector.moc"
