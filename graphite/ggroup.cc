@@ -395,8 +395,38 @@ const bool GGroupM9r::mousePressEvent(QMouseEvent */*e*/, QRect &/*dirty*/) {
 
     // TODO
     // test
+    kdDebug(37001) << "XXXXXXXXXXXXXXXXX Properties XXXXXXXXXXXXXXXXX" << endl;
+    kdDebug(37001) << "Name: " << m_object->name() << endl;
+    kdDebug(37001) << "Pen: color: " << m_object->pen().color().name() << " width: "
+		   << m_object->pen().width() << " style: "
+		   << (int)m_object->pen().style() << endl;
+    kdDebug(37001) << "Fill Style: " << m_object->fillStyle() << endl;
+    kdDebug(37001) << "Brush: color: " << m_object->brush().color().name()
+		   << " style: " << (int)m_object->brush().style() << endl;
+    kdDebug(37001) << "Gradient: color a: " << m_object->gradient().ca.name()
+		   << " color b: " << m_object->gradient().cb.name()
+		   << " type: " << (int)m_object->gradient().type
+		   << " xfactor: " << m_object->gradient().xfactor
+		   << " yfactor: " << m_object->gradient().yfactor
+		   << endl;
+    kdDebug(37001) << "XXXXXXXXXXXXXXXXX Properties XXXXXXXXXXXXXXXXX" << endl;
     createPropertyDialog();
     exec();
+    kdDebug(37001) << "XXXXXXXXXXXXXXXXX Properties XXXXXXXXXXXXXXXXX" << endl;
+    kdDebug(37001) << "Name: " << m_object->name() << endl;
+    kdDebug(37001) << "Pen: color: " << m_object->pen().color().name() << " width: "
+		   << m_object->pen().width() << " style: "
+		   << (int)m_object->pen().style() << endl;
+    kdDebug(37001) << "Fill Style: " << m_object->fillStyle() << endl;
+    kdDebug(37001) << "Brush: color: " << m_object->brush().color().name()
+		   << " style: " << (int)m_object->brush().style() << endl;
+    kdDebug(37001) << "Gradient: color a: " << m_object->gradient().ca.name()
+		   << " color b: " << m_object->gradient().cb.name()
+		   << " type: " << (int)m_object->gradient().type
+		   << " xfactor: " << m_object->gradient().xfactor
+		   << " yfactor: " << m_object->gradient().yfactor
+		   << endl;
+    kdDebug(37001) << "XXXXXXXXXXXXXXXXX Properties XXXXXXXXXXXXXXXXX" << endl;
     return false;
 }
 

@@ -65,18 +65,13 @@ void GraphitePart::mouseMoveEvent(QMouseEvent */*e*/, GraphiteView */*view*/) {
 void GraphitePart::mousePressEvent(QMouseEvent *e, GraphiteView *view) {
     kdDebug(37001) << "MP x=" << e->x() << " y=" << e->y() << endl;
     // test
-    // TODO: Check the view - if it's the same is "before" - ok :)
+    // TODO: Check the view - if it's the same as "before" -> ok :)
     GObject *o=new GGroup("foo");
-    kdDebug(37001) << "group: isOk=" << o->isOk() << endl;
     GObjectM9r *m=o->createM9r(this, view);
     QRect r;
-    kdDebug(37001) << "vor MP --->" << endl;
     m->mousePressEvent(e, r);
-    kdDebug(37001) << "---> nach MP" << endl;
     delete m;
-    kdDebug(37001) << "m ----- ok" << endl;
     delete o;
-    kdDebug(37001) << "o ----- ok" << endl;
 }
 
 void GraphitePart::mouseReleaseEvent(QMouseEvent *e, GraphiteView */*view*/) {

@@ -40,6 +40,7 @@ class QRect;
 class QPainter;
 class QMouseEvent;
 class QKeyEvent;
+class QResizeEvent;
 class QLineEdit;
 class QSpinBox;
 class QComboBox;
@@ -84,7 +85,7 @@ public:
 
     const Mode &mode() const { return m_mode; }
     void setMode(const Mode &mode) { m_mode=mode; }
-    
+
     const GraphiteView *view() const { return m_view; }
 
     // call drawHandles
@@ -154,7 +155,7 @@ public:
     virtual ~G1DObjectM9r() {}
 
 protected slots:
-    virtual void slotApply() {}
+    virtual void slotApply();
 
 protected:
     G1DObjectM9r(GObject *object, const Mode &mode, GraphitePart *part,
@@ -179,7 +180,8 @@ public:
 protected slots:
     virtual void slotChanged(int x);
     virtual void slotChanged(const QColor &x);
-    virtual void slotApply() {}
+    virtual void slotApply();
+    virtual void resizeEvent(QResizeEvent *e);
 
 protected:
     G2DObjectM9r(GObject *object, const Mode &mode, GraphitePart *part,

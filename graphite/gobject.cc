@@ -91,14 +91,21 @@ void GObjectM9r::slotOk() {
 }
 
 void GObjectM9r::slotApply() {
+
+    m_object->setName(m_line->text());
+    m_changed=false;
+    enableButtonApply(false);
+    KDialogBase::slotApply();
 }
 
 void GObjectM9r::slotCancel() {
 
-    if(!m_changed)
+    if(!m_changed) {
 	KDialogBase::slotCancel();
+	return;
+    }
     if(KMessageBox::warningContinueCancel(this,
-					  i18n("You'll loose the latest changes!"),
+					  i18n("You'll loose the last changes you made!"),
 					  i18n("Really Cancel?"),
 					  i18n("Continue"))==KMessageBox::Continue)
 	KDialogBase::slotCancel();
@@ -167,6 +174,14 @@ void GObjectM9r::createPropertyDialog() {
 }
 
 
+void G1DObjectM9r::slotApply() {
+
+    m_object->setPen(QPen(m_color->color(),
+			  m_width->value(),
+			  static_cast<Qt::PenStyle>(m_style->currentItem())));
+    GObjectM9r::slotApply();
+}
+
 void G1DObjectM9r::createPropertyDialog() {
 
     if(m_created)
@@ -232,6 +247,40 @@ void G2DObjectM9r::slotChanged(const QColor &x) {
 
     updatePage();
     GObjectM9r::slotChanged(x);
+}
+
+void G2DObjectM9r::slotApply() {
+
+    int id=m_style->id(m_style->selected());
+
+    if(id==0) {
+	m_object->setBrush(QBrush());
+	m_object->setFillStyle(GObject::Brush);
+    }
+    else if(id==1) {
+	m_object->setBrush(QBrush(m_brushColor->color(),
+				  static_cast<Qt::BrushStyle>
+				  (m_brushStyle->currentItem()+1)));
+	m_object->setFillStyle(GObject::Brush);
+    }
+    else {
+	Gradient g;
+	g.ca=m_gradientCA->color();
+	g.cb=m_gradientCB->color();
+	g.type=static_cast<KImageEffect::GradientType>
+	       (m_gradientStyle->currentItem());
+	g.xfactor=m_xfactor->value();
+	g.yfactor=m_yfactor->value();
+	m_object->setGradient(g);
+	m_object->setFillStyle(GObject::GradientFilled);
+    }
+    G1DObjectM9r::slotApply();
+}
+
+void G2DObjectM9r::resizeEvent(QResizeEvent *e) {
+
+    updatePage();
+    KDialogBase::resizeEvent(e);
 }
 
 void G2DObjectM9r::createPropertyDialog() {
