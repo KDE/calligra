@@ -24,6 +24,8 @@ KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KCh
     KDChartAxisParams bottomparams( _chart->params()->axisParams( KDChartAxisParams::AxisPosBottom ) );
     x_color=bottomparams.axisLineColor();
     y_color=leftparams.axisLineColor();
+    xlabel=bottomparams.axisLabelsFont();
+    ylabel=leftparams.axisLabelsFont();
 
     QGridLayout *grid1 = new QGridLayout(this,2,2,15,15);
 
@@ -274,6 +276,11 @@ void KChartWizardLabelsLegendPage::apply(  )
         bottomparams.setAxisLineColor( x_color );
     if( y_color.isValid() )
         leftparams.setAxisLineColor( y_color );
+    if(bottomparams.axisLabelsFont()!=xlabel)
+        bottomparams.setAxisLabelsFont(xlabel,false);
+    if(leftparams.axisLabelsFont()!=ylabel)
+        leftparams.setAxisLabelsFont(ylabel,true);
+
     _chart->params()->setAxisParams( KDChartAxisParams::AxisPosBottom, bottomparams );
     _chart->params()->setAxisParams( KDChartAxisParams::AxisPosLeft, leftparams );
 }
