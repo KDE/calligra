@@ -41,8 +41,5 @@ libkarbontools_la_SOURCES = \
 	vtool.cc \
 	vshapetool.cc 
 
-libkarbontools_la_LIBADD = \
-	../dialogs/libkarbondialogs.la
-
 libkarbontools_la_METASOURCES = \
 	AUTO
