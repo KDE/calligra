@@ -945,7 +945,7 @@ bool CharsetParser::doStartElement(const QString& tagName, const HtmlAttributes&
     return true;
 }
 
-bool CharsetParser::treatMetaTag(const QString& tagName, const HtmlAttributes& attributes)
+bool CharsetParser::treatMetaTag(const QString& /*tagName*/, const HtmlAttributes& attributes)
 {
     // The only <meta> element interesting us is the own defining the encoding.
 

@@ -57,10 +57,10 @@ void PictureZone::analyse(const Markup * balise_initiale)
 	/* Get header information (size, position)
 	 * Get infos. to delete the text
 	 */
-	
+
 	if(balise_initiale != 0)
 		analysePictureFormat(balise_initiale);
-	
+
 	/* Convert the picture */
 
 	kdDebug() << "END FORMAT" << endl;
@@ -88,7 +88,7 @@ void PictureZone::generate(QTextStream &out)
 /*******************************************/
 /* Write the begining format markup.       */
 /*******************************************/
-void PictureZone::generate_format_begin(QTextStream & out)
+void PictureZone::generate_format_begin(QTextStream & /*out*/)
 {
 	kdDebug() << "GENERATE PICTURE FORMAT" << endl;
 }
@@ -98,7 +98,7 @@ void PictureZone::generate_format_begin(QTextStream & out)
 /*******************************************/
 /* Write the format end markup.            */
 /*******************************************/
-void PictureZone::generate_format_end(QTextStream & out)
+void PictureZone::generate_format_end(QTextStream & /*out*/)
 {
 
 }

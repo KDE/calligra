@@ -174,7 +174,7 @@ bool XFIGImport::filterImport( const QString &file, KoDocument *doc,
 
     KIllustratorDocument *kidoc = (KIllustratorDocument *) doc;
     GDocument *gdoc             = kidoc->gdoc();
-    GPage *activePage           = gdoc->activePage();
+    //GPage *activePage           = gdoc->activePage();
 
   layout = gdoc->activePage()->pageLayout ();
 

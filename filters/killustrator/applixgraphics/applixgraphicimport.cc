@@ -371,7 +371,7 @@ APPLIXGRAPHICImport::filter (const QString &fileIn,
                 printf ("  NSIDES: ");
                 mystr.remove (0, 8);
                 pos = sscanf ((const char *) mystr.latin1(), "%d", &nsides);
-                printf ("%d(%d)\n", &nsides, pos);
+                printf ("%d(%d)\n", nsides, pos);
 	      }
 	      else if (mystr.startsWith (" PNTS ") )
 	      {
@@ -401,8 +401,8 @@ APPLIXGRAPHICImport::filter (const QString &fileIn,
             b = agLine.ptY[2] / 2;
             for (int i=0; i<nsides; i++)
 	    {
-              x[i] = a * cos (wink*PI/180);
-              y[i] = b * sin (wink*PI/180);
+              x[i] = qRound (a * std::cos (wink*PI/180));
+              y[i] = qRound (b * std::sin (wink*PI/180));
 	      wink += (360/nsides);
 	    }
 

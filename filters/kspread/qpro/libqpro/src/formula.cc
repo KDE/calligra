@@ -388,7 +388,7 @@ QpFormula::binaryOperandReal(const char* pOper)
 }
 
 void
-QpFormula::absKludgeReal(const char* pOper)
+QpFormula::absKludgeReal(const char*/*pOper*/)
 {
    // kspread doesn't (yet) have the abs function so do it ourselves
    // using 'if( (arg) < 0, -(arg), arg )'

@@ -96,7 +96,7 @@ void KWVariable::resize()
     //kdDebug() << "KWVariable::resize width=" << width << endl;
 }
 
-void KWVariable::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg )
+void KWVariable::draw( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& /*cg*/ )
 {
     QTextFormat * f = format();
     p->save();
@@ -188,6 +188,8 @@ QString KWDateVariable::text()
     ASSERT( format );
     if ( format )
         return format->convert( m_date );
+    // make gcc happy
+    return QString();
 }
 
 void KWDateVariable::save( QDomElement& parentElem )
@@ -255,6 +257,8 @@ QString KWTimeVariable::text()
     ASSERT( format );
     if ( format )
         return format->convert( m_time );
+    // make gcc happy
+    return QString();
 }
 
 void KWTimeVariable::save( QDomElement& parentElem )
@@ -350,6 +354,8 @@ QString KWPgNumVariable::text()
     ASSERT( format );
     if ( format )
         return format->convert( m_pgNum );
+    // make gcc happy
+    return QString();
 }
 
 QStringList KWPgNumVariable::actionTexts()

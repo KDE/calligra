@@ -396,7 +396,9 @@ QString WinWordDoc::generateFormats(
         else
         if (typeid(VectorGraphic) == typeid(*run))
         {
+#ifdef __GNUC__
 #warning: disabling killustrator-embedded images
+#endif
 #ifdef KILLUSTRATOR_WORKS_AGAIN
             VectorGraphic *vectorGraphic = static_cast<VectorGraphic *>(run.data());
             QString ourKey;
@@ -743,7 +745,7 @@ void WinWordDoc::gotTableEnd(
         unsigned x;
         MsWordGenerated::TAP row = m_table[y]->m_row;
         QString xml_friendly;
-	
+
         // Create the XML for each cell in the row.
 
         for (x = 0; x < row.itcMac; x++)
@@ -878,8 +880,8 @@ QColor WinWordDoc::colorForNumber(QString number, int defaultcolor, bool default
 	case 14:
 	    return QColor("darkYellow");
 	case 15:
-	    return QColor("darkGray");	
-	case 16:	
+	    return QColor("darkGray");
+	case 16:
 	    return QColor("lightGray");
 
 	default:

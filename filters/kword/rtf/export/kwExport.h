@@ -34,7 +34,8 @@
 #include <qvaluelist.h>
 
 #define KDEBUG_KWFILTER 30505
-
+#define INSERT_TABLE_IN_PARA 1
+#define TABLES_WITH_TITLES   0
 
 // Global variables
 extern int GhType;  // defines header type
@@ -44,7 +45,7 @@ extern int GfType;
 
 // Reportedly, the capability to set tabs will be taken out of kword
 // at some time in the future.
-// Note from David Faure: of course not ! Just needs to be reimplemented, that's all :) 
+// Note from David Faure: of course not ! Just needs to be reimplemented, that's all :)
 
 class TabularData
    {

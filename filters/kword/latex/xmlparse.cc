@@ -474,7 +474,7 @@ int StrICmp(const char *atext, const char *btext){
 /* Compare strings without case.  Strings of digits compare
 ** in numerical order.  No more than "n" characters are compared */
 int StrNICmp(const char *atext, const char *btext, int n){
-  register unsigned char *a, *b, *map, ca, cb;
+  register unsigned char *a, *b, *map, ca=0, cb=0;
   int result;
 
   map = UpperToLowerCase;

@@ -47,7 +47,7 @@ public:
     virtual bool doEndElement(const QString& tagName)=0;
     virtual bool doCharacters(const QString& strChars)=0;
     virtual bool doSgmlProcessingInstruction(const QString& tagName,const QString&  strInstruction)=0;
-    virtual bool doXmlProcessingInstruction(const QString& tagName, const HtmlAttributes& attributes)=0;	
+    virtual bool doXmlProcessingInstruction(const QString& tagName, const HtmlAttributes& attributes)=0;
 protected:
     inline bool IsWhiteSpace(const QChar& ch)
     {
@@ -96,10 +96,10 @@ public:
     QString findCharset(void);
 protected:
     bool treatMetaTag(const QString& tagName, const HtmlAttributes& attributes);
-    virtual void WriteOut(const QChar& ch) { };
-    virtual void WriteOut(const QString& str) { };
-	virtual bool doSgmlProcessingInstruction(const QString& tagName,const QString&  strInstruction) { return true;}
-	virtual bool doXmlProcessingInstruction(const QString& tagName, const HtmlAttributes& attributes);
+    virtual void WriteOut(const QChar& /*ch*/) { };
+    virtual void WriteOut(const QString& /*str*/) { };
+    virtual bool doSgmlProcessingInstruction(const QString& /*tagName*/,const QString& /*strInstruction*/) { return true;}
+    virtual bool doXmlProcessingInstruction(const QString& tagName, const HtmlAttributes& attributes);
 private:
     QString m_strCharset;
 };

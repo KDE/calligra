@@ -469,12 +469,12 @@ static void ProcessHardBreakTag ( QDomNode myNode, void *tagData, QString &)
 static void CreateMissingFormatData(QString &paraText, ValueListFormatData &paraFormatDataList)
 {
     ValueListFormatData::Iterator  paraFormatDataIt;
-    int lastPos=0; // last position
+    unsigned int lastPos=0; // last position
 
     paraFormatDataIt = paraFormatDataList.begin ();
     while (paraFormatDataIt != paraFormatDataList.end ())
     {
-        if ((*paraFormatDataIt).pos>lastPos)
+        if (static_cast<unsigned int>((*paraFormatDataIt).pos)>lastPos)
         {
             //We must add a FormatData
             FormatData formatData(lastPos,(*paraFormatDataIt).pos-lastPos);

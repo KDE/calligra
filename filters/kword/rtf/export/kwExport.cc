@@ -24,9 +24,6 @@
 #include <kwExport.h>
 #include <docinfoExport.h>
 
-#define INSERT_TABLE_IN_PARA 1
-#define TABLES_WITH_TITLES   0
-
 // Global variables
 QValueList<FormatData> paraFormatDataList; // for processing formats tag
 BorderStyle leftBorder;
@@ -1016,10 +1013,10 @@ ProcessParagraph ( paraText, paraFormatDataList, paraFormatDataFormats,
 /***************************************************************************/
 
 void ProcessDocTag ( QDomNode   myNode,
-                     void      *tagData,
+                     void      */*tagData*/,
                      QString   &outputText )
 {
-    FilterData *filterData = (FilterData *) tagData;
+    //FilterData *filterData = (FilterData *) tagData;
 
     QValueList<AttrProcessing> attrProcessingList;
     attrProcessingList << AttrProcessing ( "editor",        "", NULL )

@@ -448,12 +448,12 @@ struct DocData
 static void CreateMissingFormatData(QString &paraText, QValueList<FormatData> &paraFormatDataList)
 {
     QValueList<FormatData>::Iterator  paraFormatDataIt;
-    int lastPos=0; // last position
+    unsigned int lastPos=0; // last position
 
     paraFormatDataIt = paraFormatDataList.begin ();
     while (paraFormatDataIt != paraFormatDataList.end ())
     {
-        if ((*paraFormatDataIt).pos>lastPos)
+        if (static_cast<unsigned int>((*paraFormatDataIt).pos)>lastPos)
         {
             //We must add a FormatData
             FormatData formatData(lastPos,(*paraFormatDataIt).pos-lastPos,QString::null,false);
