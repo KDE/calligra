@@ -35,7 +35,7 @@ class VHistoryItem : public QListBoxItem
 
 		VCommand* command() { return m_command; }
 
-		virtual int height( const QListBox* ) const { return 18; }
+		virtual int height( const QListBox* ) const { return 22; }
 		virtual int width( const QListBox* lb ) const;
 
 	protected:

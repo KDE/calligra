@@ -22,6 +22,7 @@
 
 #include <kiconloader.h>
 #include <kdebug.h>
+#include <klocale.h>
 
 #include "vhistorydocker.h"
 
@@ -46,7 +47,7 @@ void VHistoryItem::paint( QPainter* painter )
 	painter->fillRect( r, ( m_command->isExecuted() ? Qt::white : Qt::lightGray ) );
 	painter->drawPixmap( 1, 1, QPixmap( il.iconPath( m_command->icon(), KIcon::Small ) ) );
 	painter->setPen( ( m_command->isExecuted() ? Qt::black : Qt::gray ) );
-	painter->drawText( 19, 1, width( listBox() ) - 21,  height( listBox() ) - 2, Qt::AlignVCenter, m_command->name() );
+	painter->drawText( 25, 1, width( listBox() ) - 27,  height( listBox() ) - 2, Qt::AlignVCenter, m_command->name() );
 	painter->restore();
 	if ( isSelected() )
 	{
@@ -59,6 +60,7 @@ void VHistoryItem::paint( QPainter* painter )
 VHistoryDocker::VHistoryDocker( KarbonView* view )
 		: m_view( view )
 {
+	setCaption( i18n( "History" ) );
 	setWidget( m_history = new QListBox( this ) );
 	m_history->setFixedSize( 160, 120 );
 	m_history->setVScrollBarMode( QListBox::AlwaysOn );
