@@ -142,6 +142,8 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     _txtBackCol = lightGray;
     _otxtBackCol = lightGray;
     m_pKSpellConfig=0;
+    m_bDontCheckUpperWord=false;
+    m_bDontCheckTitleCase=false;
     //   _pageLayout.format = PG_SCREEN;
     //   _pageLayout.orientation = PG_PORTRAIT;
     //   _pageLayout.width = PG_SCREEN_WIDTH;

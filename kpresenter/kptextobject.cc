@@ -385,7 +385,8 @@ QDomElement KPTextObject::saveKTextObject( QDomDocument& doc )
         default:
             tmpAlign=1;
         }
-        paragraph.setAttribute(attrAlign, tmpAlign);
+        if(tmpAlign!=1)
+            paragraph.setAttribute(attrAlign, tmpAlign);
 #if 0
         paragraph.setAttribute(attrType, (int)parag->type());
         paragraph.setAttribute(attrDepth, parag->listDepth());
@@ -433,14 +434,21 @@ QDomElement KPTextObject::saveHelper(const QString &tmpText, const QString &tmpF
     QDomElement element=doc.createElement(tagTEXT);
     element.setAttribute(attrFamily, tmpFamily);
     element.setAttribute(attrPointSize, tmpPointSize);
-    element.setAttribute(attrBold, tmpBold);
-    element.setAttribute(attrItalic, tmpItalic);
-    element.setAttribute(attrUnderline, tmpUnderline);
-    element.setAttribute(attrStrikeOut, tmpStrikeOut);
+
+    if(tmpBold)
+        element.setAttribute(attrBold, tmpBold);
+    if(tmpItalic)
+        element.setAttribute(attrItalic, tmpItalic);
+    if(tmpUnderline)
+        element.setAttribute(attrUnderline, tmpUnderline);
+    if(tmpStrikeOut)
+        element.setAttribute(attrStrikeOut, tmpStrikeOut);
     element.setAttribute(attrColor, tmpColor);
+
     if(!tmpTextBackColor.isEmpty())
         element.setAttribute(attrColor, tmpTextBackColor);
-    element.setAttribute(attrVertAlign,tmpVerticalAlign);
+    if(tmpVerticalAlign!=Qt::AlignLeft)
+        element.setAttribute(attrVertAlign,tmpVerticalAlign);
     if(tmpText.stripWhiteSpace().isEmpty())
         // working around a bug in QDom
         element.setAttribute(attrWhitespace, tmpText.length());
@@ -467,16 +475,18 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
             else
                 lastParag->setType( (KTextEditParag::Type)e.attribute( attrType ).toInt() );
 #endif
-            int tmpAlign=e.attribute( attrAlign ).toInt();
-            if(tmpAlign==1)
-                lastParag->setAlignment(Qt::AlignLeft);
-            else if(tmpAlign==2)
-                lastParag->setAlignment(Qt::AlignRight);
-            else if(tmpAlign==4)
-                lastParag->setAlignment(Qt::AlignCenter);
-            else
-                kdDebug()<<"Error in e.attribute( attrAlign ).toInt()\n";
-
+            if(e.hasAttribute(attrAlign))
+            {
+                int tmpAlign=e.attribute( attrAlign ).toInt();
+                if(tmpAlign==1)
+                    lastParag->setAlignment(Qt::AlignLeft);
+                else if(tmpAlign==2)
+                    lastParag->setAlignment(Qt::AlignRight);
+                else if(tmpAlign==4)
+                    lastParag->setAlignment(Qt::AlignCenter);
+                else
+                    kdDebug()<<"Error in e.attribute( attrAlign ).toInt()\n";
+            }
             // ## lastParag->setListDepth( e.attribute( attrDepth ).toInt() ); // TODO check/convert values
             lineSpacing = QMAX( e.attribute( attrLineSpacing ).toInt(), lineSpacing );
             paragSpacing = QMAX( QMAX( e.attribute( "distBefore" ).toInt(), e.attribute( "distAfter" ).toInt() ), paragSpacing );
@@ -484,10 +494,19 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
                 if ( n.tagName() == tagTEXT ) {
                     QString family = n.attribute( attrFamily );
                     int size = n.attribute( attrPointSize ).toInt();
-                    bool bold = (bool)n.attribute( attrBold ).toInt();
-                    bool italic = (bool)n.attribute( attrItalic ).toInt();
-                    bool underline = (bool)n.attribute( attrUnderline ).toInt();
-                    bool strikeOut = (bool)n.attribute( attrStrikeOut ).toInt();
+                    bool bold=false;
+                    if(n.hasAttribute(attrBold))
+                        bold = (bool)n.attribute( attrBold ).toInt();
+                    bool italic = false;
+                    if(n.hasAttribute(attrItalic))
+                        bold=(bool)n.attribute( attrItalic ).toInt();
+                    bool underline=false;
+                    if(n.hasAttribute( attrUnderline ))
+                        underline = (bool)n.attribute( attrUnderline ).toInt();
+                    bool strikeOut=false;
+                    if(n.hasAttribute(attrStrikeOut))
+                        strikeOut = (bool)n.attribute( attrStrikeOut ).toInt();
+
                     QString color = n.attribute( attrColor );
                     QFont fn( family );
                     fn.setPointSize( KoTextZoomHandler::ptToLayoutUnit( size ) );
@@ -508,8 +527,8 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
                         fm->setTextBackgroundColor(tmpCol);
                     }
                     //TODO FIXME : value is correct, but format is not good :(
-
-                    fm->setVAlign( static_cast<QTextFormat::VerticalAlignment>(n.attribute(attrVertAlign).toInt() ) );
+                    if(n.hasAttribute(attrVertAlign))
+                        fm->setVAlign( static_cast<QTextFormat::VerticalAlignment>(n.attribute(attrVertAlign).toInt() ) );
 
                     QString txt = n.firstChild().toText().data();
                     if(n.hasAttribute(attrWhitespace)) {
