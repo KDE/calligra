@@ -17,6 +17,14 @@
  *
  */
 
+/**
+ * CHANGES
+ * v1.1 to v1.2
+ * Added support for  KFileMimeTypeInfo::Hints (Name, Author, Description)
+ * Added some Advanced Attributes and Statistics according to DTD of OOo
+ * No more duplicated strings of same contents to facilitate changes
+ */
+
 #include <config.h>
 #include "kfile_ooo.h"
 
@@ -49,32 +57,46 @@ static const char * const Advanced[] =
  {"meta:print-date"     , I18N_NOOP("Print Date"),
   "meta:printed-by"     , I18N_NOOP("Printed By"),
   "meta:initial-creator", I18N_NOOP("Creator"),
+  "meta:date"		, I18N_NOOP("Date"),
+  "meta:creation-date"  , I18N_NOOP("Creation Date"),
+  "meta:generator"	, I18N_NOOP("Generator"),
+  "meta:editing-cycles" , I18N_NOOP("Editing Cycles"),
   0};
 
+static const char * dclanguage = "dc:language";
+
 static const char * const Information[] =
- {"dc:title",       I18N_NOOP("Title")      , 
-  "dc:subject",     I18N_NOOP("Subject")    , 
-  "dc:creator",     I18N_NOOP("Author")     ,
+ {"dc:title"      , I18N_NOOP("Title")      , 
+  "dc:creator"    , I18N_NOOP("Author")     ,
   "dc:description", I18N_NOOP("Description"),
-  "dc:language"   , I18N_NOOP("Language"),
+  "dc:subject"    , I18N_NOOP("Subject")    , 
+  dclanguage      , I18N_NOOP("Language")   ,
   0};
 
 static const char * const Statistics[] =
- {"meta:table-count"    , I18N_NOOP("Tables"),
-  "meta:image-count"    , I18N_NOOP("Images"),
-  "meta:object-count"   , I18N_NOOP("Objects"),
-  "meta:page-count"     , I18N_NOOP("Pages"),
-  "meta:paragraph-count", I18N_NOOP("Paragraphs"),
-  "meta:word-count"     , I18N_NOOP("Words"),
-  "meta:cell-count"     , I18N_NOOP("Cells"),
-  "meta:character-count", I18N_NOOP("Characters"),
+ {"meta:draw-count"	 , I18N_NOOP("Draws"),
+  "meta:table-count"     , I18N_NOOP("Tables"),
+  "meta:image-count"     , I18N_NOOP("Images"),
+  "meta:object-count"    , I18N_NOOP("Objects"),
+  "meta:ole-object-count", I18N_NOOP("OLE Objects"),
+  "meta:page-count"      , I18N_NOOP("Pages"),
+  "meta:paragraph-count" , I18N_NOOP("Paragraphs"),
+  "meta:word-count"      , I18N_NOOP("Words"),
+  "meta:cell-count"      , I18N_NOOP("Cells"),
+  "meta:character-count" , I18N_NOOP("Characters"),
+  "meta:row-count"       , I18N_NOOP("Rows"),
   0};
 
-static const char * metakeywords = "meta:keywords";
-static const char * metakeyword  = "meta:keyword" ;
-static const char * DocumentInfo = "DocumentInfo" ;
-static const char * UserDefined  = "UserDefined"  ;
-
+static const char * metakeywords  = "meta:keywords";
+static const char * metakeyword   = "meta:keyword" ;
+static const char * DocumentInfo  = "DocumentInfo" ;
+static const char * UserDefined   = "UserDefined"  ;
+static const char * DocAdvanced   = "Advanced"     ;
+static const char * DocStatistics = "Statistics"   ;
+static const char * metadocstat   = "meta:document-statistic";
+static const char * metaname      = "meta:name"    ;
+static const char * metauserdef   = "meta:user-defined";
+static const char * metafile      = "meta.xml"     ;
 KOfficePlugin::KOfficePlugin(QObject *parent, const char *name,
                        const QStringList &args)
     
@@ -103,22 +125,32 @@ void KOfficePlugin::makeMimeTypeInfo(const QString& mimeType)
       item = addItemInfo(group, Information[i], i18n(Information[i+1]),
 		         QVariant::String);
       setAttributes(item, KFileMimeTypeInfo::Modifiable);
+      switch (i){
+	      case 0:
+		setHint(item, KFileMimeTypeInfo::Name);
+		break;
+	      case 1:
+		setHint(item, KFileMimeTypeInfo::Author);
+		break;
+	      case 2:
+		setHint(item, KFileMimeTypeInfo::Description);
+	      default:;
+     }		      
     }
       
-    //setHint(item, KFileMimeTypeInfo::Author);
     item = addItemInfo(group, metakeyword, i18n("Keywords"),
 		       QVariant::String);
     setHint(item, KFileMimeTypeInfo::Description);
     setAttributes(item, KFileMimeTypeInfo::Modifiable);
 
-    group = addGroupInfo(info, "Advanced", i18n("Document Advanced"));
+    group = addGroupInfo(info, DocAdvanced, i18n("Document Advanced"));
     for (i = 0; Advanced[i]; i+=2){
       item = addItemInfo(group, Advanced[i], i18n(Advanced[i+1]),
 		         QVariant::String);
       setHint(item, KFileMimeTypeInfo::Description);
     }
     
-    group = addGroupInfo(info, "Statistics", i18n("Document Statistics"));
+    group = addGroupInfo(info, DocStatistics, i18n("Document Statistics"));
     for (i = 0; Statistics[i]; i+=2){
       item = addItemInfo(group, Statistics[i], i18n(Statistics[i+1]),
 		         QVariant::Int);
@@ -142,16 +174,16 @@ bool KOfficePlugin::readInfo( KFileMetaInfo& info, uint /*what*/)
     appendItem(group, metakeyword,
 	       stringFromNode(base.namedItem(metakeywords), metakeyword));
     
-    KFileMetaInfoGroup group1 = appendGroup(info, "Advanced");
+    KFileMetaInfoGroup group1 = appendGroup(info, DocAdvanced);
     for (int i = 0; Advanced[i]; i+=2){
 	    QString txt = stringFromNode(base, Advanced[i]);
 	    if (txt != "")
 		    appendItem(group1, Advanced[i], txt);
     }
 
-    QDomNode dstat = base.namedItem("meta:document-statistic");
+    QDomNode dstat = base.namedItem(metadocstat);
 
-    KFileMetaInfoGroup group2 = appendGroup(info, "Statistics");
+    KFileMetaInfoGroup group2 = appendGroup(info, DocStatistics);
     if (!dstat.isNull() && dstat.isElement()){
 	    QDomElement dinfo = dstat.toElement();
     	    for (int i = 0; Statistics[i]; i+=2)
@@ -159,7 +191,7 @@ bool KOfficePlugin::readInfo( KFileMetaInfo& info, uint /*what*/)
     }
     
 
-    QDomNodeList userList = base.elementsByTagName( "meta:user-defined" );
+    QDomNodeList userList = base.elementsByTagName( metauserdef );
 
     KFileMetaInfoGroup groupuser = appendGroup(info, UserDefined);
 
@@ -167,7 +199,7 @@ bool KOfficePlugin::readInfo( KFileMetaInfo& info, uint /*what*/)
       QDomNode node = userList.item(i);
       if (node.isElement()){
 	appendItem(groupuser,
-		   node.toElement().attribute("meta:name",
+		   node.toElement().attribute(metaname,
 					      QString("User %1").arg(i)),
 		   node.toElement().text());
       }
@@ -248,16 +280,16 @@ bool KOfficePlugin::writeInfo( const KFileMetaInfo& info) const
 		  info[DocumentInfo][metakeyword].value().toString());
 
   // Now, we store the user-defined data
-  QDomNodeList theElements = base.elementsByTagName("meta:user-defined");
+  QDomNodeList theElements = base.elementsByTagName(metauserdef);
   for (uint i = 0; i < theElements.length(); i++)
     {
       QDomElement el = theElements.item(i).toElement();
       if (el.isNull()){
-	kdDebug(7034) << "meta:user-defined is not an Element" << endl;
+	kdDebug(7034) << metauserdef << " is not an Element" << endl;
 	no_errors = false;
       }
 
-      QString s = info[UserDefined][el.attribute("meta:name")].value().toString();
+      QString s = info[UserDefined][el.attribute(metaname)].value().toString();
       if (s != el.text()){
 	QDomText txt = doc.createTextNode(s);
 	if (!el.firstChild().isNull())
@@ -268,8 +300,8 @@ bool KOfficePlugin::writeInfo( const KFileMetaInfo& info) const
     }
 
   if (!no_errors){
-    kdDebug(7034) << "Errors were found while building meta.xml for file "
-		  << info.path() << endl;
+    kdDebug(7034) << "Errors were found while building " << metafile
+	     	  << " for file " << info.path() << endl;
     // It is safer to avoid to manipulate meta.xml if errors, we abort.
     return false;
   }
@@ -286,7 +318,7 @@ bool KOfficePlugin::writeMetaData(const QString & path,
 	    return false;
     QCString text = doc.toCString();
     m_zip.setCompression(KZip::DeflateCompression);
-    m_zip.writeFile("meta.xml", QString::null, QString::null,text.length(),
+    m_zip.writeFile(metafile, QString::null, QString::null,text.length(),
 		    text);
     return true;
 }
@@ -298,7 +330,7 @@ QIODevice* KOfficePlugin::getData(KArchive &m_zip, int fileMode) const
     if ( !m_zip.open(fileMode) || !m_zip.directory())
         return 0;
     
-    const KArchiveEntry* entry = m_zip.directory()->entry( "meta.xml" );
+    const KArchiveEntry* entry = m_zip.directory()->entry( metafile );
     if (!entry || entry->isDirectory())
         return 0;
 
@@ -340,7 +372,7 @@ QValidator * KOfficePlugin::createValidator(const QString &,      /* mimetype */
 					    QObject * parent,
 					    const char * name ) const
 {
-	if (key == "dc:language")
+	if (key == dclanguage)
 		return new QRegExpValidator(QRegExp("[a-zA-Z-]{1,5}"),
 					    parent, name);
 	return 0;
