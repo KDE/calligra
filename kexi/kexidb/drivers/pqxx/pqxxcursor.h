@@ -33,10 +33,10 @@ public:
 	virtual void storeCurrentRecord(RecordData &data) const;
 
 private:
-	pqxx::result m_res;
-	pqxx::transaction<pqxx::serializable>* m_tran;
-	pqxx::Cursor* m_cur;
+	pqxx::result* m_res;
+	pqxx::nontransaction* m_tran;
 	pqxx::connection* my_conn;
+	unsigned int m_pos;
 };
 
 }

@@ -23,7 +23,7 @@ pqxxSqlCursor::pqxxSqlCursor(KexiDB::Connection* conn, const QString& statement,
 	Cursor(conn,statement, options)
 {
 my_conn = static_cast<pqxxSqlConnection*>(conn)->m_pqxxsql;
-m_fieldCount;
+m_fieldCount = 0;
 }
 
 //==================================================================================
@@ -31,10 +31,6 @@ m_fieldCount;
 pqxxSqlCursor::~pqxxSqlCursor()
 {
 	close();
-	delete m_cur;
-	delete m_tran;
-	m_cur = 0;
-	m_tran = 0;
 }
 
 //==================================================================================
@@ -53,24 +49,16 @@ bool pqxxSqlCursor::drv_open(const QString& statement)
 	//Set up a transaction
 	try
 	{
-		m_tran = new pqxx::transaction<pqxx::serializable>(*my_conn);
+		//m_tran = new pqxx::work(*my_conn, "cursor_open");
+		m_tran = new pqxx::nontransaction(*my_conn, "cursor_transaction");
 
-		m_cur = new pqxx::Cursor(*m_tran, statement.utf8(), "cur", 1);
-		//m_tran->commit();
-		kdDebug() << "pqxxSqlCursor::drv_open - Created Cursor:" << statement << endl;
+		m_res = new pqxx::result(m_tran->exec(statement.utf8()));
+		m_tran->commit();
 
-		if (*m_cur)
-		{
-			//We should now be placed before the first row, if any
-			m_opened=true;
-			m_afterLast=false;
-			return true;
-		}
-		else
-		{
-			//There were  results
-			return false;
-		}
+		//We should now be placed before the first row, if any
+		m_opened=true;
+		m_afterLast=false;
+		return true;
 	}
 	catch (const std::exception &e)
     	{
@@ -86,9 +74,11 @@ bool pqxxSqlCursor::drv_close()
 {
 	m_fieldCount=0;
 	m_opened=false;
-	m_tran->commit();
-	//delete m_cur;
-	//delete m_tran;
+
+	delete m_res;
+	delete m_tran;
+	m_res = 0;
+	m_tran = 0;
 	return true;
 }
 
@@ -96,6 +86,8 @@ bool pqxxSqlCursor::drv_close()
 //
 bool pqxxSqlCursor::drv_moveFirst()
 {
+m_pos = 0;
+#if 0
 try
 {
 	m_cur->BACKWARD_ALL();
@@ -107,6 +99,8 @@ catch (const std::exception &e)
 	m_validRecord = false;
 	return false;
 }
+#endif
+return true;
 }
 
 //==================================================================================
@@ -114,7 +108,15 @@ catch (const std::exception &e)
 bool pqxxSqlCursor::drv_getNextRecord()
 {
 kdDebug() << "pqxxSqlCursor::drv_getNextRecord" << endl;
+if (m_pos < m_res->size() - 1)
+{
+	m_pos++;
+	return true;
+}
 
+return false;
+
+#if 0
 	try
 	{
 		if (*m_cur>>m_res)
@@ -143,6 +145,7 @@ kdDebug() << "pqxxSqlCursor::drv_getNextRecord" << endl;
 		m_validRecord = false;
         	return false;
     	}
+#endif
 }
 
 
@@ -151,6 +154,15 @@ kdDebug() << "pqxxSqlCursor::drv_getNextRecord" << endl;
 bool pqxxSqlCursor::drv_getPrevRecord()
 {
 kdDebug() << "pqxxSqlCursor::drv_getPrevRecord" << endl;
+
+if (m_pos > 0)
+{
+	m_pos--;
+	return true;
+}
+return false;
+
+#if 0
 	try
 	{
 		if (m_cur-=1)
@@ -175,13 +187,14 @@ kdDebug() << "pqxxSqlCursor::drv_getPrevRecord" << endl;
 		m_validRecord = false;
         	return false;
     	}
+#endif
 }
 
 //==================================================================================
 //
 QVariant pqxxSqlCursor::value(int pos) const
 {
-	if (!m_res.size() > 0)
+	if (!m_res->size() > 0)
 	{
 		kdDebug() << "pqxxSqlCursor::value - ERROR: result size not greater than 0" << endl;
 		return QVariant();
@@ -192,11 +205,10 @@ QVariant pqxxSqlCursor::value(int pos) const
 		kdDebug() << "pqxxSqlCursor::value - ERROR: requested position is greater than the number of fields" << endl;
 		return QVariant();
 	}
-//	if (m_res[0][pos]==0)
-//		return QVariant();
-	kdDebug() << "pqxxSqlCursor::value at pos:" << pos << "is: " << m_res[0][pos].c_str() << endl;
 
-	return QVariant(QString::fromUtf8(m_res[0][pos].c_str()));
+	kdDebug() << "pqxxSqlCursor::value at pos:" << pos << "is: " << (*m_res)[m_pos][pos].c_str() << endl;
+
+	return QVariant(QString::fromUtf8((*m_res)[m_pos][pos].c_str()));
 }
 
 //==================================================================================
@@ -212,7 +224,7 @@ void pqxxSqlCursor::storeCurrentRecord(RecordData &data) const
 {
 kdDebug() << "pqxxSqlCursor::storeCurrentRecord" << endl;
 
-if (!m_res.size()>0)
+if (!m_res->size()>0)
 	return;
 
 data.reserve(m_fieldCount);
