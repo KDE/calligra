@@ -106,6 +106,7 @@ AC_OUTPUT( \
 	kpresenter/templates/Professional/Makefile \
 	kpresenter/toolbar/Makefile \
 	kpresenter/dtd/Makefile \
+	kpresenter/slideshow/Makefile \
 	kspread/Makefile \
 	kspread/pics/Makefile \
 	kspread/toolbar/Makefile \
