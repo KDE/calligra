@@ -210,7 +210,8 @@ ShadowDia::ShadowDia( QWidget* parent, const char* name )
 
     okBut = new QPushButton( i18n( "OK" ), this, "BOK" );
     okBut->setAutoRepeat( false );
-    okBut->setAutoResize( false );	//lukas: obsolete
+    //Laurent : comment it fix QT_NO_COMPAT
+    //okBut->setAutoResize( false );	//lukas: obsolete
     okBut->setAutoDefault( true );
     okBut->setDefault( true );
 

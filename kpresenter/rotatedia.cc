@@ -134,7 +134,8 @@ RotateDia::RotateDia( QWidget* parent, const char* name )
 
     okBut = bb->addButton( i18n( "OK" ) );
     okBut->setAutoRepeat( false );
-    okBut->setAutoResize( false );
+    //laurent : comment it fix QT_NO_COMPAT
+    //okBut->setAutoResize( false );
     okBut->setAutoDefault( true );
     okBut->setDefault( true );
     applyBut = bb->addButton( i18n( "Apply" ) );

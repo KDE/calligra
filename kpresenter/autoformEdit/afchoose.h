@@ -64,7 +64,7 @@ private:
   // ********** variables **********
 
   // list of groups and a pointer to a group
-  QList<Group> groupList;
+  QPtrList<Group> groupList;
   Group *grpPtr;
 
 private slots:

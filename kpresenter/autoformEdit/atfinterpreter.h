@@ -70,13 +70,13 @@ public:
   // structure of values
   struct Value
   {
-    QList<Sign> var1;
-    QList<Sign> var2;
-    QList<Sign> var3;
-    QList<Sign> var4;
-    QList<Sign> var5;
-    QList<Sign> var6;
-    QList<Sign> result;
+    QPtrList<Sign> var1;
+    QPtrList<Sign> var2;
+    QPtrList<Sign> var3;
+    QPtrList<Sign> var4;
+    QPtrList<Sign> var5;
+    QPtrList<Sign> var6;
+    QPtrList<Sign> result;
   };
 
   // constructure - destructure
@@ -88,7 +88,7 @@ public:
 
   // get pointarray/attribute list/points
   QPointArray getPointArray(int,int);
-  QList<AttribList> getAttribList();
+  QPtrList<AttribList> getAttribList();
 
 protected:
 
@@ -160,13 +160,13 @@ protected:
   void interpret();
 
   // get varaible of a line
-  QList<Sign> getVar(QString);
+  QPtrList<Sign> getVar(QString);
 
   // ********** variables **********
 
   // list of coordinates and pointers to coordinate/sign/value
-  QList<Coord> coordList;
-  QList<AttribList> attrLs;
+  QPtrList<Coord> coordList;
+  QPtrList<AttribList> attrLs;
   Coord *coordPtr;
   Sign *signPtr;
   Value *valuePtr;

@@ -118,7 +118,7 @@ QPointArray ATFInterpreter::getPointArray(int wid,int heig)
     unsigned int tmp = 0,num = 0;
     bool calc = false,res = false;
     char op = OP_EQUAL,var = VAR_1;
-    QList<Sign> slp;
+    QPtrList<Sign> slp;
     QPointArray pntArray(coordList.count());
 
     if (!coordList.isEmpty())
@@ -206,7 +206,7 @@ QPointArray ATFInterpreter::getPointArray(int wid,int heig)
 }
 
 /*===================== get attrib list =========================*/
-QList<ATFInterpreter::AttribList> ATFInterpreter::getAttribList()
+QPtrList<ATFInterpreter::AttribList> ATFInterpreter::getAttribList()
 {
     if(!attrLs.isEmpty())
         return attrLs;
@@ -360,9 +360,9 @@ void ATFInterpreter::interpret()
 }
 
 /*====================== get variable ===========================*/
-QList<ATFInterpreter::Sign> ATFInterpreter::getVar(QString s)
+QPtrList<ATFInterpreter::Sign> ATFInterpreter::getVar(QString s)
 {
-    QList<Sign> list;
+    QPtrList<Sign> list;
 
     for (unsigned int i=1; i<s.length(); ++i)
     {
