@@ -177,7 +177,7 @@ void KisView::setupSideBar()
     QObject::connect(m_pKrayonChooser, SIGNAL(selected(const KisKrayon *)),
 			   this, SLOT(slotSetKrayon(const KisKrayon*)));
 
-    m_pKrayonChooser->setCaption("Krayons");
+    m_pKrayonChooser->setCaption(i18n("Krayons"));
     m_pSideBar->plug(m_pKrayonChooser);
 
     // brush chooser
@@ -186,7 +186,7 @@ void KisView::setupSideBar()
     QObject::connect(m_pBrushChooser, SIGNAL(selected(const KisBrush *)),
 			   this, SLOT(slotSetBrush(const KisBrush*)));
 
-    m_pBrushChooser->setCaption("Brushes");
+    m_pBrushChooser->setCaption(i18n("Brushes"));
     m_pSideBar->plug(m_pBrushChooser);
 
     // pattern chooser
@@ -195,21 +195,21 @@ void KisView::setupSideBar()
     QObject::connect(m_pPatternChooser, SIGNAL(selected(const KisPattern *)),
 			   this, SLOT(slotSetPattern(const KisPattern*)));
 
-    m_pPatternChooser->setCaption("Patterns");
+    m_pPatternChooser->setCaption(i18n("Patterns"));
     m_pSideBar->plug(m_pPatternChooser);
 
     // layer view
     m_pLayerView = new KisLayerView(m_pDoc, this);
-    m_pLayerView->setCaption("Layers");
+    m_pLayerView->setCaption(i18n("Layers"));
     m_pSideBar->plug(m_pLayerView);
 
     // channel view
     m_pChannelView = new KisChannelView(m_pDoc, this);
-    m_pChannelView->setCaption("Channels");
+    m_pChannelView->setCaption(i18n("Channels"));
     m_pSideBar->plug(m_pChannelView);
 
     // activate brushes tab
-    m_pSideBar->slotActivateTab("Brushes");
+    m_pSideBar->slotActivateTab(i18n("Brushes"));
 
     // init sidebar
     m_pSideBar->slotSetBrush(*m_pBrush);
@@ -1229,7 +1229,7 @@ void KisView::tool_paste()
     }    
     else
     {
-        KMessageBox::sorry(NULL, "Nothing to paste!", "", FALSE); 
+        KMessageBox::sorry(NULL, i18n("Nothing to paste!"), "", FALSE); 
     }
 }
 
@@ -1336,7 +1336,7 @@ void KisView::paste()
     }    
     else
     {
-        KMessageBox::sorry(NULL, "Nothing to paste!", "", FALSE); 
+        KMessageBox::sorry(NULL, i18n("Nothing to paste!"), "", FALSE); 
     }
 }
 
@@ -1347,7 +1347,7 @@ void KisView::crop()
 
     if(!m_pDoc->hasSelection())
     {
-        KMessageBox::sorry(NULL, "No selection to crop!", "", FALSE); 
+        KMessageBox::sorry(NULL, i18n("No selection to crop!"), "", FALSE); 
         return;
     }
     // copy contents of the current selection ot a QImage
