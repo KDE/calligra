@@ -194,9 +194,9 @@ KoVariableFormat * KoVariableFormatCollection::createFormat( const QCString &key
 /******************************************************************/
 /* Class:       KoVariableCollection                              */
 /******************************************************************/
-KoVariableCollection::KoVariableCollection()
+KoVariableCollection::KoVariableCollection(KoVariableSettings *_setting)
 {
-    m_variableSettings=new KoVariableSettings();
+    m_variableSettings=_setting;
     m_varSelected=0L;
 }
 

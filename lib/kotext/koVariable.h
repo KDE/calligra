@@ -191,7 +191,7 @@ class KoVariableCollection : public QObject
 {
     Q_OBJECT
 public:
-    KoVariableCollection();
+    KoVariableCollection(KoVariableSettings *_setting);
     ~KoVariableCollection();
     void registerVariable( KoVariable *var );
     void unregisterVariable( KoVariable *var );
