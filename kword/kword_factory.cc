@@ -98,11 +98,11 @@ KInstance* KWordFactory::global()
 {
     if ( !s_global )
     {
-      KAboutData aboutData( "kword", I18N_NOOP("KWord"),
-        version, description, KAboutData::License_GPL,
-        "(c) 1998-2000, Reginald Stadlbauer");
-      aboutData.addAuthor("Reginald Stadlbauer",0, "reggie@kde.org");
-      s_global = new KInstance( "kword" );
+      KAboutData *aboutData=new KAboutData( "kword", I18N_NOOP("KWord"),
+                                version, description, KAboutData::License_GPL,
+                                "(c) 1998-2000, Reginald Stadlbauer");
+      aboutData->addAuthor("Reginald Stadlbauer",0, "reggie@kde.org");
+      s_global = new KInstance( aboutData );
 
       s_global->dirs()->addResourceType( "kword_template",
 				         KStandardDirs::kde_default("data") + "kword/templates/");
