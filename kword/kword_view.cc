@@ -83,14 +83,6 @@
 #include <stdlib.h>
 #define DEBUG
 
-static QFontDatabase *fontDataBase = 0;
-
-static void cleanupFontDatabase()
-{
-    delete fontDataBase;
-    fontDataBase = 0;
-}
-
 #include "preview.h"
 
 /******************************************************************/
@@ -104,6 +96,7 @@ KWordView::KWordView( QWidget *_parent, const char *_name, KWordDocument* _doc )
     m_pKWordDoc = 0L;
     m_bUnderConstruction = TRUE;
     m_bShowGUI = TRUE;
+    m_fontDatabase = 0;
     gui = 0;
     kspell = 0;
     flow = KWParagLayout::LEFT;
@@ -164,6 +157,7 @@ void KWordView::showEvent( QShowEvent *e )
 /*================================================================*/
 KWordView::~KWordView()
 {
+    delete m_fontDatabase;
 }
 
 /*=============================================================*/
@@ -2425,11 +2419,10 @@ void KWordView::dropEvent( QDropEvent *e )
 /*===================== load not KDE installed fonts =============*/
 void KWordView::getFonts()
 {
-    if ( !fontDataBase ) {
-	fontDataBase = new QFontDatabase();
-	qAddPostRoutine( cleanupFontDatabase );
+    if ( !m_fontDatabase ) {
+	m_fontDatabase = new QFontDatabase();
     }
-    fontList = fontDataBase->families();
+    fontList = m_fontDatabase->families();
 }
 
 /*================================================================*/

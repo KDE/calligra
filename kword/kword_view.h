@@ -62,6 +62,7 @@ class KSpell;
 class QScrollView;
 class QSplitter;
 class KAction;
+class QFontDatabase;
 
 // /******************************************************************/
 // /* Class: KWordFrame						  */
@@ -297,6 +298,7 @@ protected:
     virtual void updateReadWrite( bool readwrite );
 
     KWordDocument *m_pKWordDoc;
+    QFontDatabase *m_fontDatabase;
 
     bool m_bUnderConstruction, m_bKWordModified;
 
