@@ -100,6 +100,7 @@ protected slots:
     void colsChanged( int );
     void slotSetReapply( bool );
     virtual void slotOk();
+    void slotInlineTable( bool );
 };
 
 #endif

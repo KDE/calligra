@@ -82,6 +82,10 @@ KWTableDia::KWTableDia( QWidget* parent, const char* name, UseMode _useMode, KWC
     oldRowCount = rows;
     oldColCount = cols;
     oldTemplateName = _templateName;
+    if ( m_useMode==NEW )
+    {
+        slotInlineTable( cbIsFloating->isChecked());
+    }
 }
 
 void KWTableDia::setupTab1( int rows, int cols, CellSize wid, CellSize hei, bool floating )
@@ -137,6 +141,7 @@ void KWTableDia::setupTab1( int rows, int cols, CellSize wid, CellSize hei, bool
         cbIsFloating->setChecked( floating );
 
         grid->addMultiCellWidget( cbIsFloating, 9, 9, 0, 2 );
+        connect( cbIsFloating, SIGNAL( toggled ( bool )  ), this, SLOT( slotInlineTable( bool ) ) );
     }
     else
     if (m_useMode==EDIT)
@@ -316,3 +321,13 @@ void KWTableDia::slotSetReapply( bool _reapply )
     if ( cbReapplyTemplate2->isChecked()!=_reapply ) cbReapplyTemplate2->setChecked( _reapply );
 }
 
+void KWTableDia::slotInlineTable( bool state)
+{
+    if ( m_useMode==NEW )
+    {
+        lWid->setEnabled( !state );
+        lHei->setEnabled( !state );
+        cHei->setEnabled( !state );
+        cWid->setEnabled( !state );
+    }
+}
