@@ -27,7 +27,7 @@
 #include "brushdialog.h"
 
 
-BrushDialog::BrushDialog( QWidget* parent, const char* name,WFlags flags )
+BrushDialog::BrushDialog( QWidget* parent, const char* name,WFlags /*flags*/ )
   : KFloatingTabDialog( parent, name )
 {
   setCaption( i18n( "Brushes" ) );

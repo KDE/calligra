@@ -79,7 +79,8 @@ KImageShopConfig::KImageShopConfig() : QObject( 0L, "kimageshop config" )
 }
 
 
-KImageShopConfig::KImageShopConfig( const KImageShopConfig& config )
+KImageShopConfig::KImageShopConfig( const KImageShopConfig& config ) 
+  : QObject()
 {
   instanceList.append( this );
 

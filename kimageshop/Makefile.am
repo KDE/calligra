@@ -1,4 +1,5 @@
-INCLUDES  = -I$(srcdir)/widgets -I$(srcdir)/dialogs -I$(srcdir)/tools $(MICO_INCLUDES) $(KOFFICE_INCLUDES) $(all_includes) 
+
+INCLUDES  = -I$(srcdir)/widgets -I$(srcdir)/dialogs -Idialogs -I$(srcdir)/tools $(MICO_INCLUDES) $(KOFFICE_INCLUDES) $(all_includes) 
 LDFLAGS   = $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD     = $(LIB_KOFFICEUI) $(LIB_KIMGIO) widgets/libkiswidgets.la dialogs/libkisdialogs.la tools/libkistools.la
 
@@ -11,10 +12,10 @@ bin_PROGRAMS = kimageshop
 #canvastest
 #canvastest_SOURCES = canvastest.cc channeldata.cc layer.cc canvas.cc misc.cc
 
-kimageshop_SOURCES = channeldata.cc layer.cc canvas.cc \
-	brush.cc misc.cc kvector.cc kcolor.cc tool.cc canvasview.cc \
+kimageshop_SOURCES =  kimageshop_view.cc tool.cc channeldata.cc layer.cc canvas.cc \
+	brush.cc misc.cc kvector.cc kcolor.cc canvasview.cc \
 	kfloatingdialog.cc kfloatingtabdialog.cc kfloatingdialogowner.cc \
-	kimageshop_undo.cc kimageshop_config.cc kimageshop_view.cc \
+	kimageshop_undo.cc kimageshop_config.cc \
 	kimageshop_doc.cc kimageshop_shell.cc kimageshop_main.cc
 
 noinst_HEADERS = channeldata.h layer.h canvas.h \

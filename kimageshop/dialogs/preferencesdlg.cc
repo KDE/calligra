@@ -69,7 +69,7 @@ DirectoriesTab::DirectoriesTab( QWidget *_parent, const char *_name )
 	grid->addWidget( label, 2, 0 );
 }
 
-UndoRedoTab::UndoRedoTab( QWidget *_parent = 0, const char *_name = 0 )
+UndoRedoTab::UndoRedoTab( QWidget *_parent, const char *_name  )
   : QWidget( _parent, _name )
 {
 	// Layout
