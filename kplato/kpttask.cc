@@ -152,6 +152,23 @@ void KPTTask::makeAppointments() {
     }
 }
 
+void KPTTask::calcResourceOverbooked() {
+    m_resourceOverbooked = false;
+    if (type() == KPTNode::Type_Task) {
+        QPtrListIterator<KPTAppointment> it = m_appointments;
+        for (; it.current(); ++it) {
+            if (it.current()->resource()->isOverbooked(m_startTime, m_endTime)) {
+                m_resourceOverbooked = true;
+            }
+        }
+    } else if (type() == KPTNode::Type_Summarytask) {
+        QPtrListIterator<KPTNode> nit(m_nodes);
+        for ( ; nit.current(); ++nit ) {
+            nit.current()->calcResourceOverbooked();
+        }
+    }
+}
+
 // A new constraint means start/end times and duration must be recalculated
 void KPTTask::setConstraint(KPTNode::ConstraintType type) {
     if (m_constraint == type)
@@ -190,8 +207,8 @@ bool KPTTask::load(QDomElement &element) {
     m_constraintEndTime = KPTDateTime::fromString(element.attribute("constraint-endtime"));
 
     m_resourceError = element.attribute("resource-error", "0").toInt();
-    m_resourceError = element.attribute("resource-overbooked", "0").toInt();
-    m_resourceError = element.attribute("scheduling-conflict", "0").toInt();
+    m_resourceOverbooked = element.attribute("resource-overbooked", "0").toInt();
+    m_schedulingError = element.attribute("scheduling-conflict", "0").toInt();
     m_notScheduled = element.attribute("not-scheduled", "0").toInt();
     
     // Load the project children
@@ -1277,7 +1294,7 @@ void KPTTask::printDebug(bool children, QCString indent) {
     indent += "!  ";
     kdDebug()<<indent<<"Requested resources (total): "<<units()<<"%"<<endl;
     kdDebug()<<indent<<"Requested resources (work): "<<workUnits()<<"%"<<endl;
-    kdDebug()<<indent<<"Resource overbooked="<<resourceOverbooked()<<endl;
+    kdDebug()<<indent<<"Resource overbooked="<<m_resourceOverbooked<<endl;
     kdDebug()<<indent<<"resourceError="<<resourceError()<<endl;
     kdDebug()<<indent<<"schedulingError="<<schedulingError()<<endl;
     if (m_requests)

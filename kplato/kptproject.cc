@@ -114,6 +114,7 @@ void KPTProject::calculate(KPTEffort::Use use) {
             scheduleBackward(m_endTime, use);
         }
         makeAppointments();
+        calcResourceOverbooked();
     } else if (type() == Type_Subproject) {
         kdWarning()<<k_funcinfo<<"Subprojects not implemented"<<endl;
     } else {

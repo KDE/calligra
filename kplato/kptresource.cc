@@ -163,11 +163,6 @@ void KPTResourceGroup::clearAppointments() {
     QPtrListIterator<KPTResource> it(m_resources);
     for (; it.current(); ++it) {
         it.current()->clearAppointments();
-        it.current()->setOverbooked(false);
-    }
-    QPtrListIterator<KPTNode> nodes(m_nodes);
-    for (; nodes.current(); ++nodes) {
-        nodes.current()->setResourceOverbooked(false);
     }
     clearNodes();
 }
@@ -411,6 +406,7 @@ void KPTResource::takeAppointment(KPTAppointment *appointment) {
 
 
 void KPTResource::clearAppointments() {
+    m_overbooked = false;
     KPTAppointment *a;
     while ((a = m_appointments.getFirst()))
         delete a;
@@ -501,12 +497,50 @@ KPTCalendar *KPTResource::findCalendar(const QString &id) const {
     return (m_project ? m_project->findCalendar(id) : 0); 
 }
 
+bool KPTResource::isOverbooked() const {
+    return isOverbooked(KPTDateTime(), KPTDateTime());
+}
+
+bool KPTResource::isOverbooked(const KPTDateTime &start, const KPTDateTime &end) const {
+    //kdDebug()<<k_funcinfo<<start.toString()<<" - "<<end.toString()<<endl;
+    KPTAppointment a = appointmentIntervals();
+    QPtrListIterator<KPTAppointmentInterval> it = a.intervals();
+    for (; it.current(); ++it) {
+        if ((!end.isValid() || it.current()->startTime() < end) && 
+            (!start.isValid() || it.current()->endTime() > start)) 
+        {
+            if (it.current()->load() > m_units) {
+                //kdDebug()<<k_funcinfo<<m_name<<" overbooked"<<endl;
+                return true;
+            }
+        }
+        if (it.current()->startTime() >= end)
+            break;
+    }
+    //kdDebug()<<k_funcinfo<<m_name<<" not overbooked"<<endl;
+    return false; 
+}
+
+KPTAppointment KPTResource::appointmentIntervals() const {
+    KPTAppointment a;
+    QPtrListIterator<KPTAppointment> it = m_appointments;
+    for (; it.current(); ++it) {
+        a += *(it.current());
+    }
+    return a;
+}
 //////
 
 KPTAppointmentInterval::KPTAppointmentInterval() {
     m_load = 100.0; 
 }
-KPTAppointmentInterval::KPTAppointmentInterval(KPTDateTime &start, KPTDateTime end, double load) {
+KPTAppointmentInterval::KPTAppointmentInterval(const KPTAppointmentInterval &interval) {
+    //kdDebug()<<k_funcinfo<<endl;
+    m_start = interval.startTime(); 
+    m_end = interval.endTime(); 
+    m_load = interval.load(); 
+}
+KPTAppointmentInterval::KPTAppointmentInterval(const KPTDateTime &start, const KPTDateTime end, double load) {
     //kdDebug()<<k_funcinfo<<endl;
     m_start = start; 
     m_end = end; 
@@ -558,6 +592,59 @@ void KPTAppointmentInterval::saveXML(QDomElement &element) const {
     me.setAttribute("end", m_end.toString());
     me.setAttribute("load", m_load);
 }
+
+bool KPTAppointmentInterval::isValid() const {
+    return m_start.isValid() && m_end.isValid();
+}
+
+KPTAppointmentInterval KPTAppointmentInterval::firstInterval(const KPTAppointmentInterval &interval, const KPTDateTime &from) const {
+    KPTDateTime f = from;
+    KPTDateTime s1 = m_start;
+    KPTDateTime e1 = m_end;
+    KPTDateTime s2 = interval.startTime();
+    KPTDateTime e2 = interval.endTime();
+    KPTAppointmentInterval a;
+    if (f.isValid() && f >= e1 && f >= e2) {
+        return a;
+    }
+    if (f.isValid()) {
+        if (s1 < f && f < e1) {
+            s1 = f;
+        }
+        if (s2 < f && f < e2) {
+            s2 = f;
+        }
+    } else {
+        f = s1 < s2 ? s1 : s2;
+    }
+    if (s1 < s2) {
+        a.setStartTime(s1);
+        if (e1 <= s2) {
+            a.setEndTime(e1);
+        } else {
+            a.setEndTime(s2);
+        }
+        a.setLoad(m_load);
+    } else if (s1 > s2) {
+        a.setStartTime(s2);
+        if (e2 <= s1) {
+            a.setEndTime(e2);
+        } else {
+            a.setEndTime(s1);
+        }
+        a.setLoad(interval.load());
+    } else {
+        a.setStartTime(s1);
+        if (e1 <= e2)
+            a.setEndTime(e1);
+        else 
+            a.setEndTime(e2);
+        a.setLoad(m_load + interval.load());
+    }
+    //kdDebug()<<k_funcinfo<<a.startTime().toString()<<" - "<<a.endTime().toString()<<" load="<<a.load()<<endl;
+    return a;
+}
+
 //////
 
 KPTAppointment::KPTAppointment() 
@@ -602,12 +689,12 @@ KPTAppointment::~KPTAppointment() {
 
 void KPTAppointment::addInterval(KPTAppointmentInterval *a) {
     //kdDebug()<<k_funcinfo<<m_resource->name()<<" to "<<m_node->name()<<endl;
-    m_intervals.append(a);
+    m_intervals.inSort(a);
 }
-void KPTAppointment::addInterval(KPTDateTime &start, KPTDateTime &end, double load) {
+void KPTAppointment::addInterval(const KPTDateTime &start, const KPTDateTime &end, double load) {
     addInterval(new KPTAppointmentInterval(start, end, load));
 }
-void KPTAppointment::addInterval(KPTDateTime &start, KPTDuration &duration, double load) {
+void KPTAppointment::addInterval(const KPTDateTime &start, const KPTDuration &duration, double load) {
     KPTDateTime e = start+duration;
     addInterval(start, e, load);
 }
@@ -784,6 +871,58 @@ KPTDuration KPTAppointment::effort(const QDate &date) const {
         d += it.current()->effort(s, e);
     }
     return d;
+}
+
+KPTAppointment &KPTAppointment::operator=(const KPTAppointment &app) {
+    m_resource = app.resource();
+    m_node = app.node();
+    m_repeatInterval = app.repeatInterval();
+    m_repeatCount = app.repeatCount();
+
+    m_intervals.clear();
+    QPtrListIterator<KPTAppointmentInterval> it = app.intervals();
+    for (; it.current(); ++it) {
+        addInterval(new KPTAppointmentInterval(*(it.current())));
+    }
+    return *this;
+}
+
+KPTAppointment &KPTAppointment::operator+=(const KPTAppointment &app) {
+    *this = *this + app;
+    return *this;
+}
+
+KPTAppointment KPTAppointment::operator+(const KPTAppointment &app) {
+    KPTAppointment a;
+    KPTAppointmentIntervalList ai = app.intervals();
+    KPTAppointmentInterval i;
+    KPTAppointmentInterval *i1 = m_intervals.first();
+    KPTAppointmentInterval *i2 = ai.first();
+    while (i1 || i2) {
+        if (!i1) {
+            a.addInterval(i2->startTime(), i2->endTime(), i2->load());
+            i2 = ai.next();
+            continue;
+        }
+        if (!i2) {
+            a.addInterval(i1->startTime(), i1->endTime(), i1->load());
+            i1 = m_intervals.next();
+            continue;
+        }
+        i =  i1->firstInterval(*i2, i.endTime());
+        if (!i.isValid()) {
+            break;
+        }
+        a.addInterval(i);
+        //kdDebug()<<"Interval+ (i): "<<i.startTime().toString()<<" - "<<i.endTime().toString()<<endl;
+        if (i1 && a.endTime() >= i1->endTime()) {
+            i1 = m_intervals.next();
+        }
+        if (i2 && a.endTime() >= i2->endTime()) {
+            i2 = ai.next();
+        }
+    }
+    return a;
 }
 
 /////////   KPTRisk   /////////
@@ -1280,7 +1419,7 @@ void KPTResourceGroup::printDebug(QString indent)
 }
 void KPTResource::printDebug(QString indent)
 {
-    kdDebug()<<indent<<"  + Resource: "<<m_name<<" id="<<m_id<<" Overbooked="<<m_overbooked<<endl;
+    kdDebug()<<indent<<"  + Resource: "<<m_name<<" id="<<m_id<<" Overbooked="<<isOverbooked()<<endl;
     QPtrListIterator<KPTAppointment> it(m_appointments);
     indent += "  !";
     for (; it.current(); ++it)

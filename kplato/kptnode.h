@@ -278,7 +278,9 @@ public:
     bool resourceError() const { return m_resourceError; }
     /// The assigned resource is overbooked
     virtual bool resourceOverbooked() const { return m_resourceOverbooked; }
-    virtual void setResourceOverbooked(bool on) { m_resourceOverbooked = on; }
+    /// Calculates if the assigned resource is overbooked 
+    /// within the duration of this node
+    virtual void calcResourceOverbooked();
     /// The requested resource is not available
     bool resourceNotAvailable() const { return m_resourceNotAvailable; }
     /// The task cannot be scheduled to fullfill all the constraints

@@ -371,6 +371,13 @@ void KPTNode::makeAppointments() {
     }
 }
 
+void KPTNode::calcResourceOverbooked() {
+    QPtrListIterator<KPTNode> nit(m_nodes);
+    for ( ; nit.current(); ++nit ) {
+        nit.current()->calcResourceOverbooked();
+    }
+}
+
 void KPTNode::saveRelations(QDomElement &element) {
     QPtrListIterator<KPTRelation> it(m_dependChildNodes);
     for (; it.current(); ++it) {

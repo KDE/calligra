@@ -241,8 +241,8 @@ public:
     void makeAppointment(KPTDateTime &start, KPTDuration &duration, KPTTask *task);
     void saveAppointments(QDomElement &element) const;
 
-    void setOverbooked(bool on) { m_overbooked = on; }
-    bool isOverbooked() const { return m_overbooked; }
+    bool isOverbooked() const;
+    bool isOverbooked(const KPTDateTime &start, const KPTDateTime &end) const;
 
     double normalRate() const { return cost.normalRate; }
     void setNormalRate(double rate) { cost.normalRate = rate; }
@@ -289,6 +289,8 @@ public:
 
     KPTCalendar *findCalendar(const QString &id) const;
 
+    KPTAppointment KPTResource::appointmentIntervals() const;
+    
 private:
     KPTProject *m_project;
     QPtrList<KPTAppointment> m_appointments;
@@ -324,7 +326,8 @@ public:
 class KPTAppointmentInterval {
 public:
     KPTAppointmentInterval();
-    KPTAppointmentInterval(KPTDateTime &start, KPTDateTime end, double load=100);
+    KPTAppointmentInterval(const KPTAppointmentInterval &KPTAppointmentInterval);
+    KPTAppointmentInterval(const KPTDateTime &start, const KPTDateTime end, double load=100);
     ~KPTAppointmentInterval();
     
     void set(KPTDateTime &start, KPTDateTime &end, double load=100);
@@ -337,14 +340,41 @@ public:
     bool loadXML(QDomElement &element);
     void saveXML(QDomElement &element) const;
     
-    KPTDateTime startTime() const { return m_start; }
-    KPTDateTime endTime() const { return m_end; }
+    const KPTDateTime &startTime() const { return m_start; }
+    void setStartTime(const KPTDateTime &time) { m_start = time; }
+    const KPTDateTime &endTime() const { return m_end; }
+    void setEndTime(const KPTDateTime &time) { m_end = time; }
     double load() const { return m_load; }
+    void setLoad(double load) { m_load = load; }
+    
+    bool isValid() const;
+    KPTAppointmentInterval firstInterval(const KPTAppointmentInterval &interval, const KPTDateTime &from) const;
 
 private:
     KPTDateTime m_start;
     KPTDateTime m_end;
     double m_load; //percent
+};
+
+class KPTAppointmentIntervalList : public QPtrList<KPTAppointmentInterval> {
+protected:
+    int compareItems(QPtrCollection::Item item1, QPtrCollection::Item item2) {
+        KPTAppointmentInterval *i1 = static_cast<KPTAppointmentInterval*>(item1);
+        KPTAppointmentInterval *i2 = static_cast<KPTAppointmentInterval*>(item2);
+        if (i1->startTime() < i2->startTime()) {
+            return -1;
+        }
+        if (i1->startTime() > i2->startTime()) {
+            return 1;
+        }
+        if (i1->endTime() < i2->endTime()) {
+            return -1;
+        }
+        if (i1->endTime() > i2->endTime()) {
+            return 1;
+        }
+        return 0;
+    }
 };
 
 /**
@@ -389,10 +419,12 @@ public:
     void detach();
     
     void addInterval(KPTAppointmentInterval *a);
-    void addInterval(KPTDateTime &start, KPTDateTime &end, double load=100);
-    void addInterval(KPTDateTime &start, KPTDuration &duration, double load=100);
+    void addInterval(KPTAppointmentInterval &a) 
+        { addInterval(new KPTAppointmentInterval(a)); }
+    void addInterval(const KPTDateTime &start, const KPTDateTime &end, double load=100);
+    void addInterval(const KPTDateTime &start, const KPTDuration &duration, double load=100);
     
-     QPtrList<KPTAppointmentInterval> &intervals() { return m_intervals; }
+    const KPTAppointmentIntervalList &intervals() const { return m_intervals; }
 
     /// Returns the total effort for this appointment
     KPTDuration effort() const;
@@ -422,6 +454,10 @@ public:
     int work();
     int work(const KPTDateTime &dt);
 
+    KPTAppointment &operator=(const KPTAppointment &app);
+    KPTAppointment &operator+=(const KPTAppointment &app);
+    KPTAppointment operator+(const KPTAppointment &app);
+    
 private:
     KPTNode *m_node;
     KPTResource *m_resource;
@@ -430,7 +466,7 @@ private:
     QPtrList<KPTDuration> m_extraRepeats;
     QPtrList<KPTDuration> m_skipRepeats;
 
-    QPtrList<KPTAppointmentInterval> m_intervals;
+    KPTAppointmentIntervalList m_intervals;
     
 #ifndef NDEBUG
 public:
