@@ -297,7 +297,7 @@ public:
     void getAllObjectSelectedList(QPtrList<KPObject> &lst,bool force = false );
     void getAllEmbeddedObjectSelected(QPtrList<KoDocumentChild> &embeddedObjects );
 
-    bool saveOasisPage( KoStore *store,KoXmlWriter &xmlWriter, int posPage, KoGenStyles& mainStyles );
+    bool saveOasisPage( KoStore *store,KoXmlWriter &xmlWriter, int posPage, KoGenStyles& mainStyles, int & indexObj );
     bool saveOasisNote( KoXmlWriter &xmlWriter );
 
 

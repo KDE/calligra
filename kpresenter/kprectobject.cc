@@ -72,10 +72,10 @@ QDomDocumentFragment KPRectObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-bool KPRectObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles )
+bool KPRectObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj  )
 {
     xmlWriter.startElement( "draw:rect" );
-    xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, mainStyles ) );
+    xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, mainStyles, indexObj ) );
 
     if( !objectName.isEmpty())
         xmlWriter.addAttribute( "draw:name", objectName );

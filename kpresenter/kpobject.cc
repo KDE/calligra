@@ -188,19 +188,21 @@ QDomDocumentFragment KPObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-bool KPObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles )
+bool KPObject::saveOasis( KoXmlWriter &/*xmlWriter*/, KoGenStyles& /*mainStyles*/, int /*indexObj*/ )
 {
     //we don't have a simple object
     return true;
 }
 
-void KPObject::saveOasisPosObject( KoXmlWriter &xmlWriter )
+void KPObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj )
 {
+    xmlWriter.addAttribute( "draw:id", indexObj );
     //save all into pt
     xmlWriter.addAttributePt( "svg:x", orig.x() );
     xmlWriter.addAttributePt( "svg:y", orig.y() );
     xmlWriter.addAttributePt( "svg:width", ext.width() );
     xmlWriter.addAttributePt( "svg:height", ext.height() );
+
 }
 
 void KPObject::saveOasisObjectStyleAnimation( KoGenStyles& mainStyles, int objectId )
@@ -264,6 +266,7 @@ void KPObject::saveOasisObjectStyleAnimation( KoGenStyles& mainStyles, int objec
         animation.addAttribute( "presentation:direction", "from-bottom" );
         break;
     }
+    //mainStyles.lookup( styleobjectauto, "gr" );
 }
 
 void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, QDomElement *animation)
@@ -1328,9 +1331,9 @@ QDomDocumentFragment KP2DObject::save( QDomDocument& doc,double offset )
     return fragment;
 }
 
-QString KP2DObject::saveOasisBackgroundStyle( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles )
+QString KP2DObject::saveOasisBackgroundStyle( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj )
 {
-    saveOasisPosObject( xmlWriter );
+    saveOasisPosObject( xmlWriter,indexObj );
     KoGenStyle styleobjectauto( KPresenterDoc::STYLE_GRAPHICAUTO, "graphic" );
     switch ( fillType )
     {

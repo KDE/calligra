@@ -131,7 +131,7 @@ QDomDocumentFragment KPGroupObject::save( QDomDocument& doc, double offset )
 }
 
 
-bool KPGroupObject::saveOasis(KoXmlWriter &xmlWriter, KoGenStyles& mainStyles)
+bool KPGroupObject::saveOasis(KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj)
 {
     xmlWriter.startElement( "draw:g" );
 
@@ -142,7 +142,7 @@ bool KPGroupObject::saveOasis(KoXmlWriter &xmlWriter, KoGenStyles& mainStyles)
         if ( it.current()->getType() == OT_PART )
             continue;
 #endif
-        it.current()->saveOasis( xmlWriter, mainStyles );
+        it.current()->saveOasis( xmlWriter, mainStyles, indexObj );
     }
     xmlWriter.endElement();
     return true;

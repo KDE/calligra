@@ -64,7 +64,7 @@ DCOPObject* KPLineObject::dcopObject()
     return dcop;
 }
 
-bool KPLineObject::saveOasis( KoXmlWriter &xmlWriter )
+bool KPLineObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj )
 {
     xmlWriter.startElement( "draw:line" );
     //xmlWriter.addAttribute( "draw:style-name", style ); FIXME todo add style
@@ -373,7 +373,7 @@ KoSize KPLineObject::getRealSize() const {
         double objAngle = atan( ext.width() / ext.height() );
         double x = cos( objAngle ) * pen.width();
         double y = sin( objAngle ) * pen.width();
-        
+
         if ( lineType == LT_LU_RD )
         {
             points.setPoint( 0, x, 0 );
@@ -436,7 +436,7 @@ KoPoint KPLineObject::getRealOrig() const {
         double objAngle = atan( ext.width() / ext.height() );
         double x = cos( objAngle ) * pen.width();
         double y = sin( objAngle ) * pen.width();
-        
+
         if ( lineType == LT_LU_RD )
         {
             points.setPoint( 0, x, 0 );

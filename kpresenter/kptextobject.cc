@@ -210,10 +210,10 @@ QDomDocumentFragment KPTextObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-bool KPTextObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles )
+bool KPTextObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj  )
 {
     xmlWriter.startElement( "draw:text-box" );
-    xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, mainStyles ) );
+    xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, mainStyles, indexObj ) );
     if( !objectName.isEmpty())
         xmlWriter.addAttribute( "draw:name", objectName );
     m_textobj->saveOasisContent( xmlWriter, mainStyles );

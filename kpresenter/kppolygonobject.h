@@ -68,7 +68,7 @@ public:
     int getSharpnessValue() const { return sharpnessValue; }
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
-    virtual bool saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles );
+    virtual bool saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj );
 
     virtual double load( const QDomElement &element );
     virtual void loadOasis( const QDomElement &element, KoOasisContext & context, QDomElement *animation );

@@ -83,10 +83,10 @@ QDomDocumentFragment KPPieObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-bool KPPieObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles )
+bool KPPieObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj )
 {
     xmlWriter.startElement( ( ext.width() == ext.height() ) ? "draw:circle" : "draw:ellipse" );
-    xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, mainStyles ) );
+    xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, mainStyles,indexObj ) );
 
     if( !objectName.isEmpty())
         xmlWriter.addAttribute( "draw:name", objectName );

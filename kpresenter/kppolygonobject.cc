@@ -76,14 +76,14 @@ DCOPObject* KPPolygonObject::dcopObject()
     return dcop;
 }
 
-bool KPPolygonObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles )
+bool KPPolygonObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj  )
 {
     xmlWriter.startElement( "draw:polygon" );
     kdDebug()<<"bool KPPolygonObject::saveOasis( KoXmlWriter &xmlWriter ) not finished to implemented\n";
     //xmlWriter.addAttribute( "draw:style-name", style ); FIXME todo add style
     //save object name and other generic attribute
     //KPObject::saveOasis( xmlWriter );
-    saveOasisPosObject(xmlWriter );
+    saveOasisPosObject(xmlWriter,indexObj );
 
     QString listOfPoint;
     int maxX=0;

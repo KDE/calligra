@@ -140,10 +140,10 @@ KoSize KPEllipseObject::getRealSize() const {
     return size;
 }
 
-bool KPEllipseObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles )
+bool KPEllipseObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj )
 {
     xmlWriter.startElement( ( ext.width() == ext.height() ) ? "draw:circle" : "draw:ellipse" );
-    xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, mainStyles ) );
+    xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, mainStyles, indexObj ) );
 
     if( !objectName.isEmpty())
         xmlWriter.addAttribute( "draw:name", objectName );

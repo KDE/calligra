@@ -60,7 +60,7 @@ DCOPObject* KPCubicBezierCurveObject::dcopObject()
     return dcop;
 }
 
-bool KPCubicBezierCurveObject::saveOasis( KoXmlWriter &xmlWriter )
+bool KPCubicBezierCurveObject::saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj )
 {
     kdDebug()<<"bool KPCubicBezierCurveObject::saveOasis( KoXmlWriter &xmlWriter ) not implemented\n";
     //todo

@@ -129,9 +129,9 @@ public:
     virtual double load(const QDomElement &element);
     virtual void loadOasis(const QDomElement &element, KoOasisContext & context,  QDomElement *animation);
 
-    virtual bool saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles );
+    virtual bool saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj );
 
-    void saveOasisPosObject( KoXmlWriter &xmlWriter );
+    void saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj );
     void saveOasisObjectStyleAnimation( KoGenStyles& mainStyles, int objectId );
 
     virtual void flip(bool horizontal );
@@ -433,7 +433,7 @@ public:
 protected:
     QString saveOasisHatchStyle( KoGenStyles& mainStyles );
     QString saveOasisGradientStyle( KoGenStyles& mainStyles );
-    QString saveOasisBackgroundStyle( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles );
+    QString saveOasisBackgroundStyle( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj );
 
     QColor gColor1, gColor2;
     BCType gType;

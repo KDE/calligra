@@ -96,7 +96,7 @@ DCOPObject* KPrPage::dcopObject()
 }
 
 
-bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoGenStyles& mainStyles )
+bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoGenStyles& mainStyles, int & indexObj )
 {
     kdDebug()<<"saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoGenStyles& mainStyles )*****************\n";
     //store use to save picture and co
@@ -114,7 +114,8 @@ bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage
     QPtrListIterator<KPObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
-        it.current()->saveOasis( xmlWriter,mainStyles );
+        it.current()->saveOasis( xmlWriter,mainStyles, indexObj );
+        ++indexObj;
     }
 
     saveOasisNote( xmlWriter );

@@ -160,10 +160,10 @@ QDomDocumentFragment KPPixmapObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-bool KPPixmapObject::saveOasisImage( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles )
+bool KPPixmapObject::saveOasisImage( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj )
 {
     xmlWriter.startElement( "draw:image" );
-    xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, mainStyles ) );
+    xmlWriter.addAttribute( "draw:style-name", KP2DObject::saveOasisBackgroundStyle( xmlWriter, mainStyles,indexObj ) );
     if( !objectName.isEmpty())
         xmlWriter.addAttribute( "draw:name", objectName );
 

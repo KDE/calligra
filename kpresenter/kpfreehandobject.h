@@ -43,7 +43,7 @@ public:
 
     virtual QDomDocumentFragment save( QDomDocument& doc,double offset );
     virtual double load( const QDomElement &element );
-    virtual bool saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles );
+    virtual bool saveOasis( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int indexObj );
 
 };
 
