@@ -32,7 +32,7 @@ public:
   KoBinaryStore( const QString & _filename, Mode _mode );
   virtual ~KoBinaryStore();
 
-  virtual bool open( const QString & name, const QCString &_mime_type );
+  virtual bool open( const QString & name, const QCString &_mime_type = "" );
   virtual void close();
   virtual QByteArray read( unsigned long int max );
   virtual bool write( const QByteArray& _data );

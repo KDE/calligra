@@ -44,7 +44,7 @@ public:
   KoTarStore( const QString & _filename, Mode _mode );
   virtual ~KoTarStore();
 
-  virtual bool open( const QString & name, const QCString &_mime_type );
+  virtual bool open( const QString & name, const QCString &_mime_type = "" );
   virtual void close();
   virtual QByteArray read( long unsigned int max );
   virtual bool write( const QByteArray& _data );

@@ -36,10 +36,10 @@ protected:
      * See KoTarStore and KoBinaryStore for how to construct a store
      */
     KoStore() {}
-    
+
 public:
     enum Mode { Read, Write };
-    
+
     /**
      * Destroys the store (i.e. closes the file on the hard disk)
      */
@@ -50,7 +50,7 @@ public:
      * @param name the filename, internal representation ("root", "tar:0"... )
      * @mimetype deprecated, don't use
      */
-    virtual bool open( const QString & name, const QCString & mimetype ) = 0;
+    virtual bool open( const QString & name, const QCString & mimetype = "" ) = 0;
     /**
      * Close the file inside the store
      */
