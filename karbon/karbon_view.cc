@@ -134,6 +134,7 @@ KarbonView::KarbonView( KarbonPart* part, QWidget* parent, const char* name )
 	}
 
 	// initial tool is select-tool:
+	m_currentTool = m_selectTool;
 	selectTool();
 	reorganizeGUI();
 }
