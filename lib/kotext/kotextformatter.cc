@@ -473,7 +473,7 @@ bool KoTextFormatterCore::format()
                 // recalc everything for 'i', it might still not be ok where it is...
                 // (e.g. if there's no room at all on this line)
                 // But we don't want to do this forever, so we check against maxY (if known)
-                if ( maxY > -1 )
+                if ( formatLine && maxY > -1 )
                 {
                     if ( parag->rect().y() + y < maxY )
                     {
