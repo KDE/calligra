@@ -52,7 +52,7 @@ class KivioArrowHeadAction : public KActionMenu
     void endChanged(int);
 
   protected:
-    void loadArrowHeads(KPopupMenu* combo);
+    void loadArrowHeads(KPopupMenu* combo, bool endArrow);
 
   protected:
     KPopupMenu* m_popup;

@@ -55,7 +55,7 @@ class KivioArrowHeadFormatDlg : public KDialogBase
 
   protected:
     void init();
-    void loadArrowHeads(KComboBox* combo);
+    void loadArrowHeads(KComboBox* combo, bool endArrow);
 
   protected:
     KoUnitDoubleSpinBox* m_startAHWidthUSBox;

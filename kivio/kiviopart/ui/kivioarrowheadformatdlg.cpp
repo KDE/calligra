@@ -47,10 +47,10 @@ void KivioArrowHeadFormatDlg::init()
   setMainWidget(mainWidget);
   QGridLayout* gl = new QGridLayout(mainWidget, 2, 1, KDialog::marginHint(), KDialog::spacingHint());
 
-  QGroupBox* startGBox = new QGroupBox(2, Qt::Horizontal, i18n("Start Arrowhead"), mainWidget);
+  QGroupBox* startGBox = new QGroupBox(2, Qt::Horizontal, i18n("Arrowhead At Origin"), mainWidget);
   QLabel* startAHTypeLbl = new QLabel(i18n("&Type:"), startGBox);
   m_startAHTypeCBox = new KComboBox(startGBox);
-  loadArrowHeads(m_startAHTypeCBox);
+  loadArrowHeads(m_startAHTypeCBox, false);
   startAHTypeLbl->setBuddy(m_startAHTypeCBox);
   QLabel* startAHWidthLbl = new QLabel(i18n("&Width:"), startGBox);
   m_startAHWidthUSBox = new KoUnitDoubleSpinBox(startGBox, 0.0, 1000.0, 0.1, 1.0, m_unit, 2);
@@ -59,10 +59,10 @@ void KivioArrowHeadFormatDlg::init()
   m_startAHHeightUSBox = new KoUnitDoubleSpinBox(startGBox, 0.0, 1000.0, 0.1, 1.0, m_unit, 2);
   startAHHeightLbl->setBuddy(m_startAHHeightUSBox);
 
-  QGroupBox* endGBox = new QGroupBox(2, Qt::Horizontal, i18n("End Arrowhead"), mainWidget);
+  QGroupBox* endGBox = new QGroupBox(2, Qt::Horizontal, i18n("Arrowhead At End"), mainWidget);
   QLabel* endAHTypeLbl = new QLabel(i18n("T&ype:"), endGBox);
   m_endAHTypeCBox = new KComboBox(endGBox);
-  loadArrowHeads(m_endAHTypeCBox);
+  loadArrowHeads(m_endAHTypeCBox, true);
   endAHTypeLbl->setBuddy(m_endAHTypeCBox);
   QLabel* endAHWidthLbl = new QLabel(i18n("W&idth:"), endGBox);
   m_endAHWidthUSBox = new KoUnitDoubleSpinBox(endGBox, 0.0, 1000.0, 0.1, 1.0, m_unit, 2);
@@ -75,31 +75,31 @@ void KivioArrowHeadFormatDlg::init()
   gl->addWidget(endGBox, 1, 0);
 }
 
-void KivioArrowHeadFormatDlg::loadArrowHeads(KComboBox* combo)
+void KivioArrowHeadFormatDlg::loadArrowHeads(KComboBox* combo, bool endArrow)
 {
   QBitmap mask;
   QPixmap pixAll = Kivio::arrowHeadPixmap();
-  int tw = combo->fontMetrics().width(" 99:");
-
-  QPixmap pix(pixAll.width() + tw + 3, 17);
+  QPixmap pix(pixAll.width(), 17);
   QPainter p(&pix, combo);
   int cindex = 0;
+  QPen markPen;
+  markPen.setWidth(2);
+  
+  if(endArrow) {
+    markPen.setColor(QColor(143, 255, 120));
+  } else {
+    markPen.setColor(QColor(125, 138, 255));
+  }
 
-  // insert item "0: None"
-  pix.fill(white);
-  p.drawText(0,0,tw,pix.height(),AlignRight|AlignVCenter,QString("%1:").arg(cindex));
-  p.drawText(tw+3,0,pix.width()-tw-3,pix.height(),AlignLeft|AlignVCenter,i18n("no line end", "None"));
-  mask = pix;
-  pix.setMask(mask);
-  combo->insertItem(pix,cindex++);
+  p.setPen(markPen);
+
+  // insert item "None"
+  combo->insertItem(i18n("no line end", "None"),cindex++);
 
   for (int y = 0; y < pixAll.height(); y += 17 ) {
-    pix.fill(white);
-    p.drawText(0,0,tw,pix.height(),AlignRight|AlignVCenter,QString("%1:").arg(cindex));
-    p.drawPixmap(tw+3,0,pixAll,0,y,pix.width(),pix.height());
+    p.drawPixmap(0, 0, pixAll, 0, y, pix.width(), pix.height());
+    p.drawRect(1, 1, pix.width() - 2, pix.height() - 2);
 
-    mask = pix;
-    pix.setMask(mask);
     combo->insertItem(pix,cindex++);
   }
 

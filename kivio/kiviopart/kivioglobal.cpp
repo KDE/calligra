@@ -312,8 +312,8 @@ QPixmap Kivio::arrowHeadPixmap()
 {
   const char* lineends[] = {
     "50 272 2 1",
-    "  c Gray0",
-    "X c Gray100",
+    "  c #000000",
+    "X c #ffffff",
     "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
     "X                                                X",
     "X XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX X",

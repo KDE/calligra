@@ -846,7 +846,7 @@ void KivioScreenPainter::drawPixmap( float x, float y, const QPixmap &pix )
 void KivioScreenPainter::drawHandle( float x, float y, int flags )
 {
    PAINTER_CHECK();
-   QColor fillColor;
+   QColor fillColor, penColor;
    QBrush b;
    QPen p;
 
@@ -875,9 +875,17 @@ void KivioScreenPainter::drawHandle( float x, float y, int flags )
       fillColor = QColor(0,200,0);
    }
 
+   if( flags & cpfStart ) {
+     penColor.setRgb(125, 138, 255);
+   } else if( flags & cpfEnd ) {
+     penColor.setRgb(143, 255, 120);
+   } else {
+     penColor.setRgb(0, 0, 0);
+   }
+
    b.setColor(fillColor);
    b.setStyle(Qt::SolidPattern);
-   p.setColor(QColor(0,0,0));
+   p.setColor(penColor);
    m_pPainter->setPen(p);
    m_pPainter->setBrush(b);
 

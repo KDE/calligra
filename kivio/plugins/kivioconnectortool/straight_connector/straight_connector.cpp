@@ -111,19 +111,19 @@ void KivioStraightConnector::setStartPoint( double x, double y )
 {
     m_pStart->setPosition( x, y, false );
     m_pStart->disconnect();
-
-    if( m_needsText )
-    {
-       m_pTextConn->setPosition( (m_pEnd->x()+m_pStart->x())/2.0f,
-        (m_pEnd->y()+m_pStart->y())/2.0f,
-        false );
-    }
 }
 
 void KivioStraightConnector::setEndPoint( double x, double y )
 {
     m_pEnd->setPosition( x, y, false );
     m_pEnd->disconnect();
+
+    if( m_needsText )
+    {
+       m_pTextConn->setPosition( (m_pStart->x()+m_pEnd->x())/2.0f,
+        (m_pStart->y()+m_pEnd->y())/2.0f,
+        false );
+    }
 }
 
 KivioCollisionType KivioStraightConnector::checkForCollision( KoPoint *p, double threshold )

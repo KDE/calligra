@@ -23,6 +23,7 @@
 
 #include <qbitmap.h>
 #include <qpixmap.h>
+#include <qimage.h>
 #include <qpainter.h>
 #include <qmenubar.h>
 #include <qwhatsthis.h>
@@ -47,10 +48,10 @@ KivioArrowHeadAction::KivioArrowHeadAction(const QString &text, const QString &p
   m_endPopup = new KPopupMenu;
   m_startPopup->setCheckable(true);
   m_endPopup->setCheckable(true);
-  m_popup->insertItem(i18n("Start Arrowhead"), m_startPopup);
-  m_popup->insertItem(i18n("End Arrowhead"), m_endPopup);
-  loadArrowHeads(m_startPopup);
-  loadArrowHeads(m_endPopup);
+  m_popup->insertItem(i18n("Arrowhead At Origin"), m_startPopup);
+  m_popup->insertItem(i18n("Arrowhead At End"), m_endPopup);
+  loadArrowHeads(m_startPopup, false);
+  loadArrowHeads(m_endPopup, true);
   m_currentStart = m_currentEnd = 0;
   m_startPopup->setItemChecked(0, true);
   m_endPopup->setItemChecked(0, true);
@@ -158,32 +159,33 @@ int KivioArrowHeadAction::plug( QWidget* widget, int index)
   return -1;
 }
 
-void KivioArrowHeadAction::loadArrowHeads(KPopupMenu* popup)
+void KivioArrowHeadAction::loadArrowHeads(KPopupMenu* popup, bool endArrow)
 {
   QBitmap mask;
-  QPixmap pixAll = Kivio::arrowHeadPixmap();
-  int tw = popup->fontMetrics().width(" 99:");
-
-  QPixmap pix(pixAll.width() + tw + 3, 17);
+  QPixmap pixAll = Kivio::arrowHeadPixmap();  
+  QPixmap pix(pixAll.width(), 17);
   QPainter p(&pix, popup);
   int cindex = 0;
+  QPen markPen;
+  markPen.setWidth(2);
+  
+  if(endArrow) {
+    markPen.setColor(QColor(143, 255, 120));
+  } else {
+    markPen.setColor(QColor(125, 138, 255));
+  }
+  
+  p.setPen(markPen);
 
-  // insert item "0: None"
-  pix.fill(white);
-  p.drawText(0,0,tw,pix.height(),AlignRight|AlignVCenter,QString("%1:").arg(cindex));
-  p.drawText(tw+3,0,pix.width()-tw-3,pix.height(),AlignLeft|AlignVCenter,i18n("no line end", "None"));
-  mask = pix;
-  pix.setMask(mask);
-  popup->insertItem(pix,cindex++);
+  // insert item "None"
+  popup->insertItem(i18n("no line end", "None"),cindex++);
 
   for (int y = 0; y < pixAll.height(); y += 17 ) {
     pix.fill(white);
-    p.drawText(0,0,tw,pix.height(),AlignRight|AlignVCenter,QString("%1:").arg(cindex));
-    p.drawPixmap(tw+3,0,pixAll,0,y,pix.width(),pix.height());
+    p.drawPixmap(0, 0, pixAll, 0, y, pix.width(), pix.height());
+    p.drawRect(1, 1, pix.width() - 2, pix.height() - 2);
 
-    mask = pix;
-    pix.setMask(mask);
-    popup->insertItem(pix,cindex++);
+    popup->insertItem(pix, cindex++);
   }
 
   p.end();

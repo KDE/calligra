@@ -231,8 +231,8 @@ bool ConnectorTool::startRubberBanding( QMouseEvent *e )
     KivioStraightConnector* connector = static_cast<KivioStraightConnector*>(m_pStencil);
     m_pDragData->id = kctCustom + 2;
   
-    connector->setStartPoint(startPoint.x() + 10.0f, startPoint.y() + 10.0f);
-    connector->setEndPoint(startPoint.x(), startPoint.y());
+    connector->setStartPoint(startPoint.x(), startPoint.y());
+    connector->setEndPoint(startPoint.x() + 10.0, startPoint.y() + 10.0);
   } else {
     Kivio::PolyLineConnector* connector = static_cast<Kivio::PolyLineConnector*>(m_pStencil);
     m_pDragData->id = kctCustom + 1;
@@ -276,9 +276,9 @@ void ConnectorTool::continueRubberBanding( QMouseEvent *e )
   
   if(m_type == StraightConnector) {
     KivioStraightConnector* connector = static_cast<KivioStraightConnector*>(m_pStencil);
-    connector->setStartPoint(endPoint.x(), endPoint.y()); // !!
+    connector->setEndPoint(endPoint.x(), endPoint.y());
   
-    m_pDragData->id = kctCustom + 1;
+    m_pDragData->id = kctCustom + 2;
   } else {
     Kivio::PolyLineConnector* connector = static_cast<Kivio::PolyLineConnector*>(m_pStencil);
     m_pDragData->id = kctCustom + connector->pointCount();
