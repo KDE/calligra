@@ -22,7 +22,6 @@
 
 #include "kexicreateprojectpage.h"
 #include "kexicreateprojectpageengine.h"
-//#include "kexicreateprojectpageconnection.h"
 #include "kexicreateprojectpagelocation.h"
 #include "kexicreateprojectpageauth.h"
 #include "kexicreateprojectpagedb.h"
@@ -101,9 +100,11 @@ KexiCreateProject::next()
 		QString socket = m_pageLocation->data("socket").toString();
 		QString user = m_pageAuth->data("user").toString();
 		QString pass = m_pageAuth->data("password").toString();
+		bool savePass = m_pageAuth->data("savePassword").toBool();
 		
 		kdDebug() << "Socket = " << socket << " Port = " << port << endl;
-		static_cast<KexiCreateProjectPageDB*>(m_pageDatabase)->connectHost(engine, host, user, pass, socket, port);
+		static_cast<KexiCreateProjectPageDB*>(m_pageDatabase)->connectHost(engine, host, user, pass, socket,
+			port, savePass);
 	}
 
 	KWizard::next();

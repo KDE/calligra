@@ -39,7 +39,7 @@ class KexiCreateProjectPageDB : public KexiCreateProjectPage
 		~KexiCreateProjectPageDB();
 
 		void		connectHost(QString driver, QString host, QString user, QString password,
-			QString socket, QString port);
+			QString socket, QString port, bool savePass);
 		bool		connectDB();
 
 	protected:

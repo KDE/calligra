@@ -21,6 +21,8 @@
 #include <qcstring.h>
 #include <qdom.h>
 
+#include <kpassdlg.h>
+#include <klocale.h>
 #include <koStore.h>
 
 #include "kexiapplication.h"
@@ -82,9 +84,24 @@ KexiProject::saveProject()
 	QDomElement passElement = domDoc.createElement("password");
 	projectElement.appendChild(passElement);
 	
-	QDomText tPass = domDoc.createTextNode(m_cred.password);
+	QDomText tPass;
+	
+	if(m_cred.savePassword)
+	{
+		tPass = domDoc.createTextNode(m_cred.password);
+	}
+	else
+	{
+		tPass = domDoc.createTextNode("");
+	}
+	
 	passElement.appendChild(tPass);
 
+	QDomElement savePassElement = domDoc.createElement("savePassword");
+	projectElement.appendChild(savePassElement);
+	
+	QDomText tSavePass = domDoc.createTextNode(boolToString(m_cred.savePassword));
+	savePassElement.appendChild(tSavePass);
 
 	QByteArray data = domDoc.toCString();
 	data.resize(data.size()-1);
@@ -153,6 +170,7 @@ KexiProject::loadProject(const QString& url)
 	QDomElement nameElement = projectData.namedItem("name").toElement();
 	QDomElement userElement = projectData.namedItem("user").toElement();
 	QDomElement passElement = projectData.namedItem("password").toElement();
+	QDomElement savePassElement = projectData.namedItem("savePassword").toElement();
 
 	Credentials parsedCred;
 	parsedCred.driver   = engineElement.text();
@@ -160,6 +178,26 @@ KexiProject::loadProject(const QString& url)
 	parsedCred.database = nameElement.text();
 	parsedCred.user     = userElement.text();
 	parsedCred.password = passElement.text();
+	parsedCred.savePassword = stringToBool(savePassElement.text());
+	m_modified = false;
+	
+	if(!parsedCred.savePassword)
+	{
+		QCString password;
+		int keep = 1;
+		int result = KPasswordDialog::getPassword(password, i18n("Database password for %1").arg(parsedCred.user), &keep);
+		
+		if(result == KPasswordDialog::Accepted)
+		{
+			parsedCred.password = password;
+			
+			if(keep)
+			{
+				parsedCred.savePassword = true;
+				m_modified = true;
+			}
+		}
+	}
 	
 	initDbConnection(parsedCred);
 	
@@ -233,6 +271,32 @@ KexiProject::clear()
 {
 	m_url = "";
 	m_modified = false;
+}
+
+QString
+KexiProject::boolToString(bool b)
+{
+	if(b)
+	{
+		return QString("TRUE");
+	}
+	else
+	{
+		return QString("FALSE");
+	}
+}
+
+bool
+KexiProject::stringToBool(const QString s)
+{
+	if(s == "TRUE")
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 #include "kexiproject.moc"

@@ -51,6 +51,7 @@ KexiCreateProjectPageAuth::KexiCreateProjectPageAuth(KexiCreateProject *parent, 
 
 	m_savePassChk = new QCheckBox(i18n("save password"), this);
 	m_savePassChk->setChecked(true);
+	setProperty("savePassword", QVariant(m_savePassChk->isChecked()));
 
 	//layout
 	QGridLayout *g = new QGridLayout(this);
@@ -64,18 +65,25 @@ KexiCreateProjectPageAuth::KexiCreateProjectPageAuth(KexiCreateProject *parent, 
 
 	connect(m_userEdit, SIGNAL(textChanged(const QString &)), this, SLOT(slotUserChanged(const QString &)));
 	connect(m_passwordEdit, SIGNAL(textChanged(const QString &)), this, SLOT(slotPassChanged(const QString &)));
+	connect(m_savePassChk, SIGNAL(toggled(bool)), this, SLOT(slotSavePassChanged(bool)));
 }
 
 void
 KexiCreateProjectPageAuth::slotUserChanged(const QString &user)
 {
-        setProperty("user", QVariant(user));
+	setProperty("user", QVariant(user));
 }
 
 void
 KexiCreateProjectPageAuth::slotPassChanged(const QString &password)
 {
-        setProperty("password", QVariant(password));
+	setProperty("password", QVariant(password));
+}
+
+void
+KexiCreateProjectPageAuth::slotSavePassChanged(bool state)
+{
+	setProperty("savePassword", QVariant(state));
 }
 
 #include "kexicreateprojectpageauth.moc"

@@ -40,6 +40,7 @@ class KexiCreateProjectPageAuth : public KexiCreateProjectPage
 	protected slots:
 		void slotUserChanged(const QString &);
 		void slotPassChanged(const QString &);
+		void slotSavePassChanged(bool);
 };
 
 #endif

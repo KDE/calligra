@@ -40,6 +40,7 @@ struct Credentials
 			user,
 			password,
 			socket;
+	bool savePassword;
 };
 
 class KexiProject : public QObject
@@ -60,6 +61,8 @@ public:
 	KexiFormManager *formManager() {return m_formManager;}
 	QString url() { return m_url; }
 	bool modified() { return m_modified; }
+	QString boolToString(bool b);
+	bool stringToBool(const QString s);
 
 signals:
 	void docModified();
