@@ -511,8 +511,12 @@ public slots:
 	*/
 	KexiTableItem *insertEmptyRow(int row = -1);
 
-	//! used when Return key is pressed on cell or "+" nav. button is clicked
-	void startEditCurrentCell();
+	/*! Used when Return key is pressed on cell or "+" nav. button is clicked.
+	 Also used when we want to continue editing a cell after "invalid value" message
+	 was displayed (in this case, \a setText is usually not empty, what means
+	 that text will be set in the cell replacing previous value).
+	*/
+	void startEditCurrentCell(const QString& setText = QString::null);
 
 	/*! Deletes currently selected cell's contents, if allowed. 
 	 In most cases delete is not accepted immediately but "row editing" mode is just started. */
@@ -540,6 +544,9 @@ public slots:
 	  -droppedAtRow() will be emitted on dropping
 	 By default this flag is set to false. */
 	void setDropsAtRowEnabled(bool set);
+
+	void cancelEditor();
+	virtual bool acceptEditor();
 
 signals:
 	void dataSet( KexiTableViewData *data );
@@ -605,8 +612,6 @@ protected slots:
 	void slotRowsDeleted( const QValueList<int> & ); //!< updates display after many rows deletion
 	void slotColumnWidthChanged( int col, int os, int ns );
 	void slotSectionHandleDoubleClicked( int section );
-	void cancelEditor();
-	virtual bool acceptEditor();
 	/*! Typically handles pressing Enter or F2 key: 
 	 if current cell has boolean type, toggles it's value, 
 	 otherwise starts editing (startEditCurrentCell()). */

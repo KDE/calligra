@@ -94,14 +94,17 @@ public:
 		mouseBtnPressedWhenPopupVisible = false;
 		currentEditorWidth = 0;
 		slotLineEditTextChanged_enabled = true;
+		userEnteredTextChanged = false;
 	}
 	KPushButton *button;
 	KexiComboBoxPopup *popup;
 	int parentRightMargin;
 	int currentEditorWidth;
 	QSize totalSize;
+	QString userEnteredText; //!< text entered by hand (by user)
 	bool mouseBtnPressedWhenPopupVisible : 1;
 	bool slotLineEditTextChanged_enabled : 1;
+	bool userEnteredTextChanged : 1;
 };
 
 //======================================================
@@ -159,7 +162,7 @@ void KexiComboBoxTableEdit::init(const QString& add, bool /*removeOld*/)
 			//use 'related table data' model
 //			KexiTableItem *it = d->popup ? d->popup->tableView()->selectedItem() : 0;
 //			if (it)
-			stringValue = valueForID(m_origValue);
+			stringValue = valueForString(m_origValue.toString(), 0, 1);
 ////			stringValue = m_origValue.toString();
 //				stringValue = it->at(1).toString();
 		}
@@ -168,7 +171,7 @@ void KexiComboBoxTableEdit::init(const QString& add, bool /*removeOld*/)
 			const int row = m_origValue.toInt();
 			stringValue = field()->enumHint(row);
 		}
-		m_lineedit->setText( stringValue );
+		setLineEditText( stringValue );
 		
 		if (d->popup) {
 			if (m_origValue.isNull()) {
@@ -205,12 +208,14 @@ void KexiComboBoxTableEdit::init(const QString& add, bool /*removeOld*/)
 		//todo: autocompl.?
 		if (d->popup)
 			d->popup->tableView()->clearSelection();
-		m_lineedit->setText( add );
+		m_lineedit->setText(add); //not setLineEditText(), because 'add' is entered by user!
+		//setLineEditText( add );
 	}
 	m_lineedit->end(false);
 }
 
-QString KexiComboBoxTableEdit::valueForID(const QVariant& val)
+QString KexiComboBoxTableEdit::valueForString(const QString& str, 
+	uint lookInColumn, uint returnFromColumn, bool allowNulls)
 {
 		KexiTableViewData *relData = column()->relatedData();
 		if (!column()->relatedData())
@@ -218,17 +223,19 @@ QString KexiComboBoxTableEdit::valueForID(const QVariant& val)
 		//use 'related table data' model
 //-not effective for large sets: please cache it!
 //.stripWhiteSpace() is not generic!
-		const QString txt = val.toString().stripWhiteSpace();
+		const QString txt = str.stripWhiteSpace();
 		KexiTableViewData::Iterator it(relData->iterator());
 		for (;it.current();++it) {
-			if (it.current()->at(0).toString()==txt)
+			if (it.current()->at(lookInColumn).toString().stripWhiteSpace()==txt)
 				break;
 		}
 		if (it.current())
-			return it.current()->at(1).toString().stripWhiteSpace();
+			return it.current()->at(returnFromColumn).toString().stripWhiteSpace();
 
-		kexiwarn << "KexiComboBoxTableEdit::valueForID(): no related row found, ID will be painted!" << endl;
-		return val.toString(); //for sanity but it's veird to show id to the user
+		kexiwarn << "KexiComboBoxTableEdit::valueForString(): no related row found, ID will be painted!" << endl;
+		if (allowNulls)
+			return QString::null;
+		return str; //for sanity but it's veird to show id to the user
 }
 
 void KexiComboBoxTableEdit::showFocus( const QRect& r )
@@ -278,23 +285,28 @@ void KexiComboBoxTableEdit::hideFocus()
 QVariant KexiComboBoxTableEdit::value(bool &ok)
 {
 	ok = true;
-	if (d->popup) {
-		KexiTableViewData *relData = column()->relatedData();
-		if (relData) {
+	KexiTableViewData *relData = column()->relatedData();
+	if (relData) {
+		if (d->userEnteredTextChanged) {
+			//we've user-entered text: look for id
+//TODO: make error if matching text not found?
+			return valueForString(d->userEnteredText, 1, 0, true/*allowNulls*/);
+		}
+		else {
 			//use 'related table data' model
 			KexiTableItem *it = d->popup->tableView()->selectedItem();
 			return it ? it->at(0) : m_origValue;//QVariant();
 		}
-		else {
-			//use 'enum hints' model
-			const int row = d->popup->tableView()->currentRow();
-			if (row>=0)
-				return QVariant( row );
+	}
+	else if (d->popup) {
+		//use 'enum hints' model
+		const int row = d->popup->tableView()->currentRow();
+		if (row>=0)
+			return QVariant( row );
 //		else
 //			return m_origValue; //QVariant();
-		}
-
 	}
+
 	if (m_lineedit->text().isEmpty())
 		return QVariant();
 /*js: TODO dont return just 1st row, but use autocompletion feature
@@ -327,6 +339,9 @@ bool KexiComboBoxTableEdit::valueChanged()
 	//avoid comparing values:
 	KexiTableViewData *relData = column()->relatedData();
 	if (relData) {
+		if (d->userEnteredTextChanged)
+			return true;
+
 		//use 'related table data' model
 		KexiTableItem *it = d->popup ? d->popup->tableView()->selectedItem() : 0;
 		if (!it)
@@ -373,7 +388,7 @@ void KexiComboBoxTableEdit::setupContents( QPainter *p, bool focused, QVariant v
 	if (!val.isNull()) {
 		KexiTableViewData *relData = column()->relatedData();
 		if (relData) {
-			txt = valueForID(val);
+			txt = valueForString(val.toString(), 0, 1);
 		}
 		else {
 			//use 'enum hints' model
@@ -566,7 +581,7 @@ void KexiComboBoxTableEdit::slotItemSelected(KexiTableItem*)
 		//use 'enum hints' model
 		stringValue = field()->enumHint( d->popup->tableView()->currentRow() );
 	}
-	m_lineedit->setText( stringValue );
+	setLineEditText( stringValue );
 	m_lineedit->end(false);
 	m_lineedit->selectAll();
 }
@@ -575,6 +590,8 @@ void KexiComboBoxTableEdit::slotLineEditTextChanged(const QString &newtext)
 {
 	if (!d->slotLineEditTextChanged_enabled)
 		return;
+	d->userEnteredText = newtext;
+	d->userEnteredTextChanged = true;
 	if (newtext.isEmpty()) {
 		if (d->popup) {
 			d->popup->tableView()->clearSelection();
@@ -592,7 +609,7 @@ void KexiComboBoxTableEdit::updateTextForHighlightedRow()
 		const KexiTableItem *item = d->popup ? d->popup->tableView()->highlightedItem() : 0;
 		if (item) {
 			d->slotLineEditTextChanged_enabled = false; //temp. disable slot
-			m_lineedit->setText( item->at(1).toString() );
+			setLineEditText( item->at(1).toString() );
 			d->slotLineEditTextChanged_enabled = true;
 			m_lineedit->setCursorPosition(m_lineedit->text().length());
 			m_lineedit->selectAll();
@@ -628,6 +645,14 @@ bool KexiComboBoxTableEdit::eventFilter( QObject *o, QEvent *e )
 QSize KexiComboBoxTableEdit::totalSize() const
 {
 	return d->totalSize;
+}
+
+void KexiComboBoxTableEdit::setLineEditText(const QString& text)
+{
+	m_lineedit->setText( text );
+	//this text is not entered by hand:
+	d->userEnteredText = QString::null;
+	d->userEnteredTextChanged = false;
 }
 
 //======================================================

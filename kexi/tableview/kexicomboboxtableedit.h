@@ -94,8 +94,22 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit
 		virtual bool eventFilter( QObject *o, QEvent *e );
 
 		void updateTextForHighlightedRow();
-		//! \return value (col #1 of related data) - only reasonable for 'related table data' model
-		QString valueForID(const QVariant& val);
+
+//		//! \return value (col #1 of related data) - only reasonable for 'related table data' model
+//		QString valueForID(const QVariant& val);
+
+		/*! \return value from \a returnFromColumn related to \a str value from column \a lookInColumn.
+		 If \a allowNulls is true, NULL is returend if no matched column found, else: 
+		 \a str is returned.
+		 Example: lookInColumn=0, returnFromColumn=1 --returns user-visible string 
+		 for column #1 for id-column #0 */
+		QString valueForString(const QString& str, uint lookInColumn, 
+			uint returnFromColumn, bool allowNulls = false);
+
+
+		//! sets \a text for the line edit without setting a flag (d->userEnteredText) that indicates that 
+		//! the text has been entered by hand (by a user)
+		void setLineEditText(const QString& text);
 
 		class Private;
 		Private *d;

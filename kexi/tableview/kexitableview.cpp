@@ -478,20 +478,21 @@ void KexiTableView::setupNavigator()
 void KexiTableView::setNavRowNumber(int newrow)
 {
 	QString n;
-	if (newrow>=0) {
+	if (newrow>=0)
 		n = QString::number(newrow+1);
-		if (d->navRowNumber->text().length() != n.length()) {//resize
-			d->navRowNumber->setFixedWidth(
-				d->nav1DigitWidth*QMAX( QMAX(n.length(),2)+1,d->navRowCount->text().length()+1)+6 
-			);
-		}
+	else
+		n = " ";
+	if (d->navRowNumber->text().length() != n.length()) {//resize
+		d->navRowNumber->setFixedWidth(
+			d->nav1DigitWidth*QMAX( QMAX(n.length(),2)+1,d->navRowCount->text().length()+1)+6 
+		);
 	}
 	d->navRowNumber->setText(n);
 	d->navRowCount->deselect();
 	d->navBtnPrev->setEnabled(newrow>0);
 	d->navBtnFirst->setEnabled(newrow>0);
 	d->navBtnNext->setEnabled(newrow<(rows()-1+(isInsertingEnabled()?1:0)));
-	d->navBtnLast->setEnabled(newrow!=(rows()-1));
+	d->navBtnLast->setEnabled(newrow!=(rows()-1) && (isInsertingEnabled() || rows()>0));
 }
 
 void KexiTableView::setNavRowCount(int newrows)
@@ -563,7 +564,10 @@ void KexiTableView::setData( KexiTableViewData *data, bool owner )
 //		d->pTopHeader->setUpdatesEnabled(true);
 		//add rows
 //		triggerUpdate();
+		d->pVerticalHeader->clear();
 		d->pVerticalHeader->addLabels(m_data->count());
+		if (m_data->count()==0)
+			setNavRowNumber(0);
 	}
 	
 	if (!theSameData) {
@@ -726,6 +730,11 @@ bool KexiTableView::deleteItem(KexiTableItem *item)/*, bool moveCursor)*/
 	}
 
 //	repaintAfterDelete();
+	if (d->spreadSheetMode) { //append empty row for spreadsheet mode
+			m_data->append(new KexiTableItem(m_data->columns.count()));
+			d->pVerticalHeader->addLabels(1);
+	}
+
 	return true;
 }
 /*
@@ -1929,7 +1938,7 @@ void KexiTableView::contentsMouseMoveEvent( QMouseEvent *e )
 	QScrollView::contentsMouseMoveEvent(e);
 }
 
-void KexiTableView::startEditCurrentCell()
+void KexiTableView::startEditCurrentCell(const QString &setText)
 {
 //	if (columnType(d->curCol) == KexiDB::Field::Boolean)
 //		return;
@@ -1942,7 +1951,7 @@ void KexiTableView::startEditCurrentCell()
 		}
 	}
 	ensureVisible(columnPos(d->curCol), rowPos(d->curRow)+rowHeight(), columnWidth(d->curCol), rowHeight());
-	createEditor(d->curRow, d->curCol, QString::null, false);
+	createEditor(d->curRow, d->curCol, setText, !setText.isEmpty());
 }
 
 void KexiTableView::deleteAndStartEditCurrentCell()
@@ -3250,6 +3259,20 @@ bool KexiTableView::acceptEditor()
 		} else {
 			kdDebug() << "KexiTableView::acceptEditor(): ------ CHANGE FAILED in KexiTableViewData::updateRowEditBuffer()" << endl;
 			res = KexiValidator::Error;
+
+			//now: there might be called cancelEditor() in updateRowEditBuffer() handler,
+			//if this is true, d->pEditor is NULL.
+
+			if (d->pEditor && m_data->result()->column>=0 && m_data->result()->column<columns()) {
+				//move to faulty column (if d->pEditor is not cleared)
+				setCursor(d->curRow, m_data->result()->column);
+			}
+			if (!m_data->result()->msg.isEmpty()) {
+				if (m_data->result()->desc.isEmpty())
+					KMessageBox::sorry(this, m_data->result()->msg);
+				else
+					KMessageBox::detailedSorry(this, m_data->result()->msg, m_data->result()->desc);
+			}
 		}
 	}
 
@@ -3264,8 +3287,11 @@ bool KexiTableView::acceptEditor()
 			acceptRowEdit();
 		return true;
 	}
-	startEditCurrentCell();
-	d->pEditor->setFocus();
+	if (d->pEditor) {
+		//allow to edit the cell again, (if d->pEditor is not cleared)
+		startEditCurrentCell(newval.type()==QVariant::String ? newval.toString() : QString::null);
+		d->pEditor->setFocus();
+	}
 	return false;
 }
 
