@@ -46,7 +46,7 @@ KWSearchContext::KWSearchContext()
     m_size = 12;
     m_vertAlign = QTextFormat::AlignNormal;
     m_optionsMask = 0;
-    m_options = 0;
+    m_options = KoFindDialog::FromCursor | KoReplaceDialog::PromptOnReplace;
 }
 
 KWSearchContextUI::KWSearchContextUI( KWSearchContext *ctx, QWidget *parent )
