@@ -34,6 +34,7 @@
 #include <koStoreDevice.h>
 #include <koxmlwriter.h>
 #include <koGenStyles.h>
+#include <koDocument.h>
 
 #include "kword13formatother.h"
 #include "kword13picture.h"
@@ -56,7 +57,7 @@ void KWord13OasisGenerator::prepareTextFrameset( KWordTextFrameset* frameset )
         kdWarning(30520) << "Tried to prepare a NULL text frameset!" << endl;
         return;
     }
-    
+
     for ( QValueList<KWord13Paragraph>::Iterator it = frameset->m_paragraphGroup.begin();
         it != frameset->m_paragraphGroup.end(); ++it)
     {
@@ -137,23 +138,23 @@ bool KWord13OasisGenerator::prepare( KWord13Document& kwordDocument )
     {
         kdWarning(30520) << "KWord Document is different!" <<endl;
     }
-    
+
     m_kwordDocument = &kwordDocument;
 
     preparePageLayout();
-    
+
     // Declare styles
     for ( QValueList<KWord13Layout>::Iterator it = m_kwordDocument->m_styles.begin();
         it != m_kwordDocument->m_styles.end(); ++it)
     {
-        declareStyle( *it );    
+        declareStyle( *it );
     }
-    
+
     // Prepare first text frameset
     prepareTextFrameset( m_kwordDocument->m_normalTextFramesetList.first() );
-    
+
     // ### TODO
-    
+
     return true;
 }
 
@@ -196,7 +197,7 @@ void KWord13OasisGenerator::declareLayout( KWord13Layout& layout )
     fillGenStyleWithFormatOne( layout.m_format , gs, false );
 
     layout.m_autoStyleName = m_oasisGenStyles.lookup( gs, "P", true );
-    
+
     kdDebug(30520) << "Layout: Parent " << layout.m_name << " => " << layout.m_autoStyleName << endl;
 }
 
@@ -220,7 +221,7 @@ void KWord13OasisGenerator::declareStyle( KWord13Layout& layout )
     fillGenStyleWithFormatOne( layout.m_format , gs, true );
 
     layout.m_autoStyleName = m_oasisGenStyles.lookup( gs, layout.m_name, false );
-    
+
     kdDebug(30520) << "Style: " << layout.m_name << " => " << layout.m_autoStyleName << endl;
 }
 
@@ -229,7 +230,7 @@ void KWord13OasisGenerator::declareStyle( KWord13Layout& layout )
 void KWord13OasisGenerator::fillGenStyleWithFormatOne( const KWord13FormatOneData& one, KoGenStyle& gs, const bool style ) const
 {
     QString str; // helper string
-    
+
     KoGenStyle::PropertyType tt = KoGenStyle::TextType;
 #if 0
     gs.addProperty( "fo:color", col.isValid() ? col.name() : "#000000", tt );
@@ -248,7 +249,7 @@ void KWord13OasisGenerator::fillGenStyleWithFormatOne( const KWord13FormatOneDat
         gs.addPropertyPt( "fo:font-size", d, tt );
     }
     // ### TODO If not, same question as with font name.
-    
+
 #if 0
     int w = fn.weight();
     gs.addProperty( "fo:font-weight", w == 50 ? "normal" : w == 75 ? "bold" : QString::number( w * 10 ), tt );
@@ -304,7 +305,7 @@ void KWord13OasisGenerator::fillGenStyleWithLayout( const KWord13Layout& layout,
     // ### TODO syntaxVersion < 3
 
     QString str; // Help string to store each KWord 1.3 layout property
-   
+
     str = layout.getProperty( "FLOW:align" );
     if ( str.isEmpty() && ! style)
     {
@@ -473,14 +474,14 @@ void KWord13OasisGenerator::generateTextFrameset( KoXmlWriter& writer, KWordText
         kdWarning(30520) << "Tried to generate a NULL text frameset!" << endl;
         return;
     }
-    
+
     for ( QValueList<KWord13Paragraph>::Iterator it = frameset->m_paragraphGroup.begin();
         it != frameset->m_paragraphGroup.end(); ++it)
     {
         // Write rawly the paragrapgh (see KoTextParag::saveOasis)
         writer.startElement( "text:p", false ); // No indent inside!
         writer.addAttribute( "text:style-name", (*it).m_layout.m_autoStyleName );
-#if 1        
+#if 1
         const QString paragraphText( (*it).text() );
         int currentPos = 0; // Current position where the next character has to be written
 
@@ -528,7 +529,7 @@ void KWord13OasisGenerator::generateTextFrameset( KoXmlWriter& writer, KWordText
         const QString tailText( paragraphText.mid( currentPos ) );
         if ( ! tailText.isEmpty() )
             writer.addTextSpan( tailText );
-#else        
+#else
         writer.addTextSpan( (*it).text() );
 #endif
         writer.endElement(); // text:p
@@ -547,18 +548,18 @@ void KWord13OasisGenerator::writeStylesXml( void )
     m_store->open("styles.xml"); // ### TODO: check error!
     KoStoreDevice io ( m_store );
     io.open( IO_WriteOnly );  // ### TODO: check error!
-    
-    KoXmlWriter stylesWriter( &io, "office:document-styles" );
 
-    stylesWriter.startElement( "office:styles" );
+    KoXmlWriter *stylesWriter = KoDocument::createOasisXmlWriter( &io, "office:document-styles" );
+
+    stylesWriter->startElement( "office:styles" );
     QValueList<KoGenStyles::NamedStyle> styles = m_oasisGenStyles.styles( KoGenStyle::STYLE_USER );
     QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &stylesWriter, m_oasisGenStyles, "style:style", (*it).name, "style:paragraph-properties" );
+        (*it).style->writeStyle(  stylesWriter, m_oasisGenStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
-    stylesWriter.endElement(); // office:styles
+    stylesWriter->endElement(); // office:styles
 
-    stylesWriter.startElement( "office:automatic-styles" );
+    stylesWriter->startElement( "office:automatic-styles" );
 #if 0
     styles = m_oasisGenStyles.styles( KWDocument::STYLE_FRAME );
     it = styles.begin();
@@ -572,30 +573,30 @@ void KWord13OasisGenerator::writeStylesXml( void )
     Q_ASSERT( styles.count() == 1 );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &stylesWriter, m_oasisGenStyles, "style:page-layout", (*it).name, "style:page-layout-properties", false /*don't close*/ );
+        (*it).style->writeStyle( stylesWriter, m_oasisGenStyles, "style:page-layout", (*it).name, "style:page-layout-properties", false /*don't close*/ );
         //if ( m_pageLayout.columns > 1 ) TODO add columns element. This is a bit of a hack,
         // which only works as long as we have only one page master
-        stylesWriter.endElement();
+        stylesWriter->endElement();
         Q_ASSERT( pageLayoutName.isEmpty() ); // if there's more than one pagemaster we need to rethink all this
         pageLayoutName = (*it).name;
     }
 
 
 
-    stylesWriter.endElement(); // office:automatic-styles
+    stylesWriter->endElement(); // office:automatic-styles
 
-    stylesWriter.startElement( "office:master-styles" );
-    stylesWriter.startElement( "style:master-page" );
-    stylesWriter.addAttribute( "style:name", "Standard" );
-    stylesWriter.addAttribute( "style:page-layout-name", pageLayoutName );
-    stylesWriter.endElement();
-    stylesWriter.endElement(); // office:master-styles
+    stylesWriter->startElement( "office:master-styles" );
+    stylesWriter->startElement( "style:master-page" );
+    stylesWriter->addAttribute( "style:name", "Standard" );
+    stylesWriter->addAttribute( "style:page-layout-name", pageLayoutName );
+    stylesWriter->endElement();
+    stylesWriter->endElement(); // office:master-styles
 
-    stylesWriter.endElement(); // root element (office:document-styles)
-    stylesWriter.endDocument();
+    stylesWriter->endElement(); // root element (office:document-styles)
+    stylesWriter->endDocument();
     io.close();
     m_store->close();
-    
+
     if ( m_manifestWriter )
     {
         m_manifestWriter->addManifestEntry( "styles.xml", "text/xml" );
@@ -616,36 +617,36 @@ void KWord13OasisGenerator::writeContentXml(void)
     KoStoreDevice io ( m_store );
     io.open( IO_WriteOnly );  // ### TODO: check error!
 
-    KoXmlWriter writer( &io, "office:document-content" );
-    
-    
+    KoXmlWriter *writer = KoDocument::createOasisXmlWriter( &io, "office:document-content" );
+
+
     // Automatic styles
-    writer.startElement( "office:automatic-styles" );
+    writer->startElement( "office:automatic-styles" );
     QValueList<KoGenStyles::NamedStyle> styles = m_oasisGenStyles.styles( KoGenStyle::STYLE_AUTO );
     QValueList<KoGenStyles::NamedStyle>::const_iterator it;
     for ( it = styles.begin(); it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &writer, m_oasisGenStyles, "style:style", (*it).name, "style:paragraph-properties" );
+        (*it).style->writeStyle( writer, m_oasisGenStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
     styles = m_oasisGenStyles.styles( KoGenStyle::STYLE_LIST );
     for ( it = styles.begin(); it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &writer, m_oasisGenStyles, "text:list-style", (*it).name, 0 );
+        (*it).style->writeStyle( writer, m_oasisGenStyles, "text:list-style", (*it).name, 0 );
     }
-    writer.endElement(); // office:automatic-styles
+    writer->endElement(); // office:automatic-styles
 
-    writer.startElement( "office:body" );
-    writer.startElement( "office:text" );
+    writer->startElement( "office:body" );
+    writer->startElement( "office:text" );
 
     // ### TODO: check that there is at least a normal text frameset
-    generateTextFrameset( writer, m_kwordDocument->m_normalTextFramesetList.first(), true );
-    
-    writer.endElement(); // office:text
-    writer.endElement(); // office:body
+    generateTextFrameset( *writer, m_kwordDocument->m_normalTextFramesetList.first(), true );
 
-    
+    writer->endElement(); // office:text
+    writer->endElement(); // office:body
+
+
     // ### TODO
-        
-    writer.endElement();
-    writer.endDocument();
+
+    writer->endElement();
+    writer->endDocument();
     io.close();
     m_store->close();
 
@@ -667,82 +668,82 @@ void KWord13OasisGenerator::writeMetaXml(void)
     KoStoreDevice io ( m_store );
     io.open( IO_WriteOnly );  // ### TODO: check error!
 
-    KoXmlWriter writer( &io, "office:document-meta" );
-    
-    writer.startElement( "office:meta" );
-    
+    KoXmlWriter *writer = KoDocument::createOasisXmlWriter( &io, "office:document-meta" );
+
+    writer->startElement( "office:meta" );
+
     // Tell who we are in case that we have a bug in our filter output!
     // According to OASIS spec section 3.1.1, it has to follow section 14.43 of RFC 2616
-    writer.startElement( "meta:generator" );
+    writer->startElement( "meta:generator" );
     QString strVersion;
     strVersion += "KWord-OneDotThree-Import-Filter/";
     strVersion += QString( "$Revision$" ).mid( 10 ).remove( '$' ).stripWhiteSpace();
     strVersion += " KOffice/";
     strVersion += KOFFICE_VERSION_STRING;
-    writer.addTextSpan( strVersion );
-    writer.endElement();
-       
+    writer->addTextSpan( strVersion );
+    writer->endElement();
+
     QString str; // Helper string
-    
+
     str = m_kwordDocument->getDocumentInfo( "about:title" );
     if ( !str.isEmpty() )
     {
-        writer.startElement( "dc:title" );
-        writer.addTextSpan( str );
-        writer.endElement();
+        writer->startElement( "dc:title" );
+        writer->addTextSpan( str );
+        writer->endElement();
     }
-    
+
     str = m_kwordDocument->getDocumentInfo( "about:abstract" );
     if (!str.isEmpty())
     {
-        writer.startElement( "dc:description");
-        writer.addTextSpan( str );
-        writer.endElement();
+        writer->startElement( "dc:description");
+        writer->addTextSpan( str );
+        writer->endElement();
     }
-    
+
     str = m_kwordDocument->getDocumentInfo( "author:full-name" );
     if ( !str.isEmpty() )
     {
-        writer.startElement( "dc:creator" );
-        writer.addTextSpan( str );
-        writer.endElement();
+        writer->startElement( "dc:creator" );
+        writer->addTextSpan( str );
+        writer->endElement();
     }
 
     // ### TODO: what about the other document info of KWord 1.3?
 
     QDateTime dt;
-    
+
     dt = m_kwordDocument->creationDate();
     if ( dt.isValid() )
     {
-        writer.startElement( "meta:creation-date");
-        writer.addTextNode( dt.toString( Qt::ISODate) );
-        writer.endElement();
+        writer->startElement( "meta:creation-date");
+        writer->addTextNode( dt.toString( Qt::ISODate) );
+        writer->endElement();
     }
 
     dt = m_kwordDocument->modificationDate();
     if ( dt.isValid() )
     {
-        writer.startElement( "dc:date");
-        writer.addTextNode( dt.toString( Qt::ISODate) );
-        writer.endElement();
+        writer->startElement( "dc:date");
+        writer->addTextNode( dt.toString( Qt::ISODate) );
+        writer->endElement();
     }
 
     dt = m_kwordDocument->lastPrintingDate();
     if ( dt.isValid() )
     {
-        writer.startElement( "meta:print-date");
-        writer.addTextNode( dt.toString( Qt::ISODate) );
-        writer.endElement();
+        writer->startElement( "meta:print-date");
+        writer->addTextNode( dt.toString( Qt::ISODate) );
+        writer->endElement();
     }
-    
-    writer.startElement( "meta:document-statistic" );
+
+    writer->startElement( "meta:document-statistic" );
 
     // KWord files coming from import filters mostly do not have any page count
     const int numPages = m_kwordDocument->getProperty( "PAPER:pages" ).toInt();
     if ( numPages > 0 )
     {
-        writer.addAttribute( "meta:page-count", numPages );
+        writer->addAttribute( "meta:page-count", numPages );
     }
 
 #if 0
@@ -762,15 +763,15 @@ void KWord13OasisGenerator::writeMetaXml(void)
 #endif
     zipWriteData( "\"" );
 #endif
-    writer.endElement(); // meta:document-statistic
-    writer.endElement(); // office:meta
-    
-    writer.endElement();
-    writer.endDocument();
-    
+    writer->endElement(); // meta:document-statistic
+    writer->endElement(); // office:meta
+
+    writer->endElement();
+    writer->endDocument();
+
     io.close();
     m_store->close();
-    
+
     if ( m_manifestWriter )
     {
         m_manifestWriter->addManifestEntry( "meta.xml", "text/xml" );
@@ -792,7 +793,7 @@ void KWord13OasisGenerator::writePreviewFile(void)
         kdWarning(30520) << "Could not re-read preview from temp file!" << endl;
         return;
     }
-    
+
     // We have a 256x256x8 preview and we need a 128x128x32 preview with alpha channel
     QImage preview( image.convertDepth( 32 ).smoothScale( 128, 128 ) );
     if ( preview.isNull() )
@@ -847,11 +848,11 @@ void KWord13OasisGenerator::writePictures( void )
             continue;
         }
         file.close();
-        
+
         m_store->open( oasisName );
         m_store->write( array );
         m_store->close();
-        
+
         if ( m_manifestWriter )
         {
             const QString mimeType ( KMimeType::findByContent( array, 0 )->name() );
@@ -862,7 +863,7 @@ void KWord13OasisGenerator::writePictures( void )
             }
             m_manifestWriter->addManifestEntry( oasisName, mimeType );
         }
-        
+
     }
 
 }
@@ -873,9 +874,9 @@ bool KWord13OasisGenerator::generate ( const QString& fileName, KWord13Document&
     {
         kdWarning(30520) << "KWord Document is different!" <<endl;
     }
-    
+
     m_kwordDocument = &kwordDocument;
-    
+
     m_store = KoStore::createStore( fileName, KoStore::Write, "application/vnd.sun.xml.writer", KoStore::Zip );
     if ( ! m_store )
     {
@@ -883,7 +884,7 @@ bool KWord13OasisGenerator::generate ( const QString& fileName, KWord13Document&
         return false;
     }
     m_store->disallowNameExpansion();
-    
+
     // Prepare manifest file - in memory (inspired by KoDocument::saveNativeFormat)
     QByteArray manifestData;
     QBuffer manifestBuffer( manifestData );
@@ -892,14 +893,14 @@ bool KWord13OasisGenerator::generate ( const QString& fileName, KWord13Document&
     m_manifestWriter->startDocument( "manifest:manifest" );
     m_manifestWriter->startElement( "manifest:manifest" );
     m_manifestWriter->addAttribute( "xmlns:manifest", "urn:oasis:names:tc:openoffice:xmlns:manifest:1.0" );
-    
+
     // ### TODO: check if writing the store is successful
-    
+
     writeStylesXml();
     writeContentXml();
     writeMetaXml();
     writePictures();
-    
+
         // Write out manifest file
     m_manifestWriter->endElement();
     m_manifestWriter->endDocument();
@@ -915,8 +916,8 @@ bool KWord13OasisGenerator::generate ( const QString& fileName, KWord13Document&
     {
         writePreviewFile();
     }
-    
-    
+
+
 # ifndef NDEBUG // DEBUG (out of specification)
     m_store->open("debug.xml"); // ### TODO: check error!
     KoStoreDevice io ( m_store );
@@ -925,8 +926,8 @@ bool KWord13OasisGenerator::generate ( const QString& fileName, KWord13Document&
     io.close();
     m_store->close();
 # endif
-    
-    
+
+
     delete m_store;
     m_store = 0;
     return true;
