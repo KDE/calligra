@@ -208,6 +208,7 @@ protected:
     void mouseMoveEvent( QMouseEvent *e );
     void mouseDoubleClickEvent( QMouseEvent* );
     void resizeEvent( QResizeEvent *e );
+    void handleDoubleClick();
 
     double makeIntern( double _v );
     double zoomIt(const double &value) const;

@@ -396,7 +396,6 @@ void KoRuler::drawVertical( QPainter *_painter )
     _painter->drawPixmap( 0, 0, buffer );
 }
 
-/*================================================================*/
 void KoRuler::mousePressEvent( QMouseEvent *e )
 {
     if( !d->m_bReadWrite)
@@ -407,7 +406,8 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
     d->mousePressed = true;
     d->removeTab=d->tabList.end();
 
-    if ( e->button() == RightButton ) {
+    switch ( e->button() ) {
+    case RightButton:
         if(d->currTab==d->tabList.end())
             d->rb_menu->setItemEnabled(d->mRemoveTab, false);
         else
@@ -416,73 +416,76 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
         d->action = A_NONE;
         d->mousePressed = false;
         return;
-    }
+    case MidButton:
+        // MMB shall do like double-click (it opens a dialog).
+        handleDoubleClick();
+        return;
+    case LeftButton:
+        if ( d->action == A_BR_RIGHT || d->action == A_BR_LEFT ) {
+            if ( d->action == A_BR_RIGHT )
+                d->whileMovingBorderRight = true;
+            else
+                d->whileMovingBorderLeft = true;
 
-    if ( d->action == A_BR_RIGHT || d->action == A_BR_LEFT ) {
-        if ( d->action == A_BR_RIGHT )
-            d->whileMovingBorderRight = true;
-        else
-            d->whileMovingBorderLeft = true;
+            if ( d->canvas )
+                drawLine(d->oldMx, -1);
+            repaint( false );
+        } else if ( d->action == A_BR_TOP || d->action == A_BR_BOTTOM ) {
+            if ( d->action == A_BR_TOP )
+                d->whileMovingBorderTop = true;
+            else
+                d->whileMovingBorderBottom = true;
 
-        if ( d->canvas )
-            drawLine(d->oldMx, -1);
-        repaint( false );
-    } else if ( d->action == A_BR_TOP || d->action == A_BR_BOTTOM ) {
-        if ( d->action == A_BR_TOP )
-            d->whileMovingBorderTop = true;
-        else
-            d->whileMovingBorderBottom = true;
+            if ( d->canvas ) {
+                QPainter p( d->canvas );
+                p.setRasterOp( Qt::NotROP );
+                p.drawLine( 0, d->oldMy, d->canvas->width(), d->oldMy );
+                p.end();
+            }
+            repaint( false );
+        } else if ( d->action == A_FIRST_INDENT || d->action == A_LEFT_INDENT || d->action == A_RIGHT_INDENT ) {
+            if ( d->canvas )
+                drawLine(d->oldMx, -1);
+        } else if ( d->action == A_TAB ) {
+            if ( d->canvas && d->currTab!=d->tabList.end()) {
+                drawLine( qRound( zoomIt((*d->currTab).ptPos) ) + frameStart - diffx, -1);
+            }
+        } else if ( d->tabChooser && ( d->flags & F_TABS ) && d->tabChooser->getCurrTabType() != 0 ) {
+            int left = frameStart - diffx;
+            int right = d->frameEnd - diffx;
 
-        if ( d->canvas ) {
-            QPainter p( d->canvas );
-            p.setRasterOp( Qt::NotROP );
-            p.drawLine( 0, d->oldMy, d->canvas->width(), d->oldMy );
-            p.end();
+            if( e->x()-left < 0 || right-e->x() < 0 )
+                return;
+            KoTabulator tab;
+            switch ( d->tabChooser->getCurrTabType() ) {
+            case KoTabChooser::TAB_LEFT:
+                tab.type = T_LEFT;
+                break;
+            case KoTabChooser::TAB_CENTER:
+                tab.type = T_CENTER;
+                break;
+            case KoTabChooser::TAB_RIGHT:
+                tab.type = T_RIGHT;
+                break;
+            case KoTabChooser::TAB_DEC_PNT:
+                tab.type = T_DEC_PNT;
+                break;
+            default: break;
+            }
+            tab.ptPos = unZoomIt( static_cast<double>( e->x() + diffx - frameStart ) );
+
+            KoTabulatorList::Iterator it=d->tabList.begin();
+            for( ; (it!=d->tabList.end() && tab > (*it)); ++it);   // DON'T remove that trailing ';'  :-)
+            // You know, a while() would clearer (DF) :)
+
+            d->removeTab=d->tabList.insert(it, tab);
+
+            emit tabListChanged( d->tabList );
+            repaint( false );
         }
-        repaint( false );
-    } else if ( d->action == A_FIRST_INDENT || d->action == A_LEFT_INDENT || d->action == A_RIGHT_INDENT ) {
-        if ( d->canvas )
-            drawLine(d->oldMx, -1);
-    } else if ( d->action == A_TAB ) {
-        if ( d->canvas && d->currTab!=d->tabList.end()) {
-            drawLine( qRound( zoomIt((*d->currTab).ptPos) ) + frameStart - diffx, -1);
-        }
-    } else if ( d->tabChooser && ( d->flags & F_TABS ) && d->tabChooser->getCurrTabType() != 0 ) {
-        int left = frameStart - diffx;
-        int right = d->frameEnd - diffx;
-
-        if( e->x()-left < 0 || right-e->x() < 0 )
-            return;
-        KoTabulator tab;
-        switch ( d->tabChooser->getCurrTabType() ) {
-        case KoTabChooser::TAB_LEFT:
-            tab.type = T_LEFT;
-            break;
-        case KoTabChooser::TAB_CENTER:
-            tab.type = T_CENTER;
-            break;
-        case KoTabChooser::TAB_RIGHT:
-            tab.type = T_RIGHT;
-            break;
-        case KoTabChooser::TAB_DEC_PNT:
-            tab.type = T_DEC_PNT;
-            break;
-        default: break;
-        }
-        tab.ptPos = unZoomIt( static_cast<double>( e->x() + diffx - frameStart ) );
-
-        KoTabulatorList::Iterator it=d->tabList.begin();
-        for( ; (it!=d->tabList.end() && tab > (*it)); ++it);   // DON'T remove that trailing ';'  :-)
-        // You know, a while() would clearer (DF) :)
-
-        d->removeTab=d->tabList.insert(it, tab);
-
-        emit tabListChanged( d->tabList );
-        repaint( false );
     }
 }
 
-/*================================================================*/
 void KoRuler::mouseReleaseEvent( QMouseEvent *e )
 {
     d->mousePressed = false;
@@ -546,7 +549,6 @@ void KoRuler::mouseReleaseEvent( QMouseEvent *e )
     }
 }
 
-/*================================================================*/
 void KoRuler::mouseMoveEvent( QMouseEvent *e )
 {
     hasToDelete = false;
@@ -798,15 +800,18 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
     d->oldMy = my;
 }
 
-/*================================================================*/
 void KoRuler::resizeEvent( QResizeEvent *e )
 {
     QFrame::resizeEvent( e );
     buffer.resize( size() );
 }
 
-/*================================================================*/
 void KoRuler::mouseDoubleClickEvent( QMouseEvent* )
+{
+    handleDoubleClick();
+}
+
+void KoRuler::handleDoubleClick()
 {
     if(!d->m_bReadWrite)
         return;
@@ -827,7 +832,6 @@ void KoRuler::mouseDoubleClickEvent( QMouseEvent* )
         emit doubleClicked(); // usually page layout dialog
 }
 
-/*================================================================*/
 void KoRuler::setTabList( const KoTabulatorList & _tabList )
 {
     KoTabulator rm, curr;
@@ -851,7 +855,6 @@ void KoRuler::setTabList( const KoTabulatorList & _tabList )
     repaint( false );
 }
 
-/*================================================================*/
 double KoRuler::makeIntern( double _v )
 {
     if ( unit == "mm" ) return MM_TO_POINT( _v );
@@ -859,7 +862,6 @@ double KoRuler::makeIntern( double _v )
     return _v;
 }
 
-/*================================================================*/
 void KoRuler::setupMenu()
 {
     d->rb_menu = new QPopupMenu();
@@ -876,7 +878,6 @@ void KoRuler::setupMenu()
     d->rb_menu->setItemEnabled( d->mRemoveTab, false );
 }
 
-/*================================================================*/
 void KoRuler::uncheckMenu()
 {
     d->rb_menu->setItemChecked( d->mMM, false );
@@ -884,7 +885,6 @@ void KoRuler::uncheckMenu()
     d->rb_menu->setItemChecked( d->mINCH, false );
 }
 
-/*================================================================*/
 void KoRuler::setUnit( const QString& _unit )
 {
     unit = _unit;
