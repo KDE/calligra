@@ -50,7 +50,7 @@ KexiDataTable::executeQuery(QString queryStatement)
 	if(error.type() != QSqlError::None)
 	{
 		QString errorText = error.databaseText();
-		KMessageBox::sorry(this, i18n("<qt>Error in your sql-statement:<br><br><b>" + errorText + "</b>"), i18n("Query satement"));
+		KMessageBox::sorry(this, i18n("<qt>Error in your sql-statement:<br><br><b>" + errorText + "</b>"), i18n("Query Statement"));
 		return false; 
 	}
 
