@@ -723,7 +723,7 @@ bool KWPage::vmpEdit( int mx, int my )
         fc->apply( *f );
         //formatChanged( *f, FALSE );
         gui->getView()->setFormat( *f, TRUE );
-        delete f;
+        //delete f;
 
         return TRUE;
     }
