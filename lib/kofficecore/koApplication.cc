@@ -27,9 +27,9 @@ KoApplication::KoApplication(int &argc, char **argv,
     : OPApplication(argc, argv, rAppName)
 {
     KGlobal::locale()->insertCatalogue("koffice");
-    getIconLoader()->insertDirectory(0, kde_datadir() + 
+    KGlobal::iconLoader()->insertDirectory(0, kde_datadir() + 
 				     "/koffice/toolbar");
-    getIconLoader()->insertDirectory(3, kde_localedir() + 
+    KGlobal::iconLoader()->insertDirectory(3, localkdedir() + 
 				     "/share/apps/koffice/toolbar");
 }
 

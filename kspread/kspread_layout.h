@@ -42,7 +42,7 @@ public:
     KSpreadLayout( KSpreadTable *_table );
     virtual ~KSpreadLayout();
 
-    void KSpreadLayout::copy( KSpreadLayout &_l );
+    void copy( KSpreadLayout &_l );
 
     virtual void setAlign( Align _align ) { m_eAlign = _align; }
     virtual void setFaktor( double _d ) { m_dFaktor = _d; }

@@ -56,6 +56,7 @@
 #include "kspread_util.h"
 #include "kspread_canvas.h"
 #include "kspread_tabbar.h"
+#include <kglobal.h>
 
 /*****************************************************************************
  *

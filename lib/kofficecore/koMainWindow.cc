@@ -35,6 +35,7 @@
 #include <kstdaccel.h>
 #include <kiconloader.h>
 #include <klocale.h>
+#include <kglobal.h>
 
 KoMainWindow::KoMainWindow( const char * )
 {
