@@ -27,13 +27,22 @@
 #include <ktextedit.h>
 #include <klistview.h>
 #include <kprogress.h>
-#include <ktimewidget.h>
-#include <kdatewidget.h>
-#include <kdatetimewidget.h>
 #include <kiconloader.h>
 #include <kgenericfactory.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <kdeversion.h>
+
+#if !KDE_IS_VERSION(3,1,9) //TMP
+# include <qdatetimeedit.h>
+# define KTimeWidget QTimeEdit
+# define KDateWidget QDateEdit
+# define KDateTimeWidget QDateTimeEdit
+#else
+# include <ktimewidget.h>
+# include <kdatewidget.h>
+# include <kdatetimewidget.h>
+#endif
 
 #include "spacer.h"
 #include "formIO.h"

@@ -220,8 +220,13 @@ KexiTableViewData::KexiTableViewData(
 	addColumn(valueColumn);
 
 	uint cnt = QMIN(keys.count(), values.count());
+#if (QT_VERSION >= 0x030200) //TMP 
 	QValueList<QVariant>::ConstIterator it_keys = keys.constBegin();
 	QValueList<QVariant>::ConstIterator it_values = values.constBegin();
+#else
+	QValueListConstIterator<QVariant> it_keys = keys.begin();
+	QValueListConstIterator<QVariant> it_values = values.begin();
+#endif
 	for (;cnt>0;++it_keys, ++it_values, cnt--) {
 		KexiTableItem *item = new KexiTableItem(2);
 		(*item)[0] = (*it_keys);

@@ -18,12 +18,11 @@
 #include <qevent.h>
 #include <qobjectlist.h>
 
-#include <ktabwidget.h>
 #include <kiconloader.h>
 #include <kgenericfactory.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <kinputdialog.h>
+#include <kdeversion.h>
 
 #include "containerfactory.h"
 #include "container.h"
@@ -33,6 +32,18 @@
 #include "commands.h"
 #include "formmanager.h"
 #include "widgetlibrary.h"
+
+#if !KDE_IS_VERSION(3,1,9) //TMP
+# define KTabWidget QTabWidget
+# define KInputDialog QInputDialog
+# include <qtabwidget.h>
+# include <qinputdialog.h>
+# include <qlineedit.h>
+#else
+# include <ktabwidget.h>
+# include <kinputdialog.h>
+#endif
+
 
 class KFORMEDITOR_EXPORT MyTabWidget : public KTabWidget
 {
@@ -231,7 +242,9 @@ ContainerFactory::create(const QString &c, QWidget *p, const char *n, KFormDesig
 	else if(c == "KTabWidget")
 	{
 		MyTabWidget *tab = new MyTabWidget(p, n, container);
+#if KDE_IS_VERSION(3,1,9) 
 		tab->setTabReorderingEnabled(true);
+#endif
 		connect(tab, SIGNAL(movedTab(int,int)), this, SLOT(reorderTabs(int,int)));
 		container->form()->objectTree()->addChild(container->tree(), new KFormDesigner::ObjectTreeItem(
 		        container->form()->manager()->lib()->displayName(c), n, tab));
@@ -438,6 +451,9 @@ void ContainerFactory::renameTabPage()
 	bool ok;
 
 	QString name = KInputDialog::getText(i18n("New Page Title"), i18n("Enter a new title for the current page"),
+#if !KDE_IS_VERSION(3,1,9) //TMP
+	       QLineEdit::Normal,
+#endif
 	       tab->tabLabel(w), &ok, w->topLevelWidget());
 	if(ok)
 		tab->changeTab(w, name);

@@ -3097,7 +3097,12 @@ void KexiTableView::maximizeColumnsWidth( const QValueList<int> &columnList )
 	QValueList<int> cl, sortedList = columnList;
 	qHeapSort(sortedList);
 	int i=-999;
+
+#if (QT_VERSION >= 0x030200) //TMP
 	for (it=sortedList.constBegin(); it!=sortedList.end(); ++it) {
+#else
+	for (it=sortedList.begin(); it!=sortedList.end(); ++it) {
+#endif
 		if (i!=(*it)) {
 			cl += (*it);
 			i = (*it);
@@ -3107,7 +3112,11 @@ void KexiTableView::maximizeColumnsWidth( const QValueList<int> &columnList )
 	int sizeToAdd = (width() - d->pTopHeader->headerWidth()) / cl.count() - verticalHeader()->width();
 	if (sizeToAdd<=0)
 		return;
+#if (QT_VERSION >= 0x030200) //TMP
 	for (it=cl.constBegin(); it!=cl.end(); ++it) {
+#else
+	for (it=cl.begin(); it!=cl.end(); ++it) {
+#endif
 		int w = d->pTopHeader->sectionSize(*it);
 		if (w>0) {
 			d->pTopHeader->resizeSection(*it, w+sizeToAdd);

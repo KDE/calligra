@@ -2234,7 +2234,9 @@ void KexiMainWindowImpl::importantInfo(bool onStartup)
 		QRect desk = QApplication::desktop()->screenGeometry( QApplication::desktop()->screenNumber(this) );
 		tipDialog.resize( QMAX(tipDialog.width(),desk.width()*3/5), QMAX(tipDialog.height(),desk.height()*3/5) );
 		KDialog::centerOnScreen(&tipDialog);
+#if (QT_VERSION >= 0x030200) //TMP 
 		tipDialog.setModal ( true );
+#endif
 		tipDialog.exec();
 		//a hack: get user's settings
 		d->config->setGroup("TipOfDay");
