@@ -103,8 +103,7 @@
  </Menu>
  <Menu name="Data"><text>&amp;Data</text>
   <Action name="sort"/>
-  <Action name="sortInc"/>
-  <Action name="sortDec"/>
+  <Action name="textToColumns"/>
   <Separator/>
   <Action name="insertColumn"/>
   <Action name="insertRow"/>
@@ -119,9 +118,9 @@
   <Separator/>
   <Action name="showArea"/>
   <Separator/>
+  <Action name="subtotals"/>
   <Action name="goalSeek"/>
   <Action name="consolidate"/>
-  <Action name="textToColumns"/>
   <Action name="oszi"/>
  </Menu>
  <Menu name="tools"><text>&amp;Tools</text>

@@ -57,6 +57,8 @@
 #include "kspread_dlg_cons.h"
 #include "kspread_dlg_database.h"
 #include "kspread_dlg_goalseek.h"
+//#include "kspread_dlg_multipleop.h"
+#include "kspread_dlg_subtotal.h"
 #include "kspread_canvas.h"
 #include "kspread_tabbar.h"
 #include "kspread_dlg_formula.h"
@@ -610,6 +612,14 @@ void KSpreadView::initializeAreaOperationActions()
   m_goalSeek = new KAction( i18n("&Goal Seek..."), 0, this,
                             SLOT( goalSeek() ), actionCollection(), "goalSeek" );
   m_goalSeek->setToolTip( i18n("Repeating calculation to find a specific value") );
+
+  m_multipleOperations = new KAction( i18n("&Multiple Operations..."), 0, this,
+                            SLOT( multipleOperations() ), actionCollection(), "multipleOperations" );
+  m_multipleOperations->setToolTip( i18n("Apply the same formula to various cells using different values for the parameter.") );
+
+  m_subTotals = new KAction( i18n("&Subtotals..."), 0, this,
+                             SLOT( subtotals() ), actionCollection(), "subtotals" );
+  m_subTotals->setToolTip( i18n("Create different kind of subtotals to a list or database.") );
 
   m_textToColumns = new KAction( i18n("&Text to Columns..."), 0, this,
                             SLOT( textToColumns() ), actionCollection(), "textToColumns" );
@@ -2969,6 +2979,34 @@ void KSpreadView::goalSeek()
   KSpreadGoalSeekDlg * dlg = new KSpreadGoalSeekDlg( this, QPoint(m_pCanvas->markerColumn(), m_pCanvas->markerRow() ),
                                                      "KSpreadGoalSeekDlg" );
   dlg->show();
+}
+
+void KSpreadView::subtotals()
+{
+  QRect selection( m_selectionInfo->selection() );
+  if ( ( selection.width() < 2 )
+       || ( selection.height() < 2 ) )
+  {
+    KMessageBox::error( this, i18n("You must select multiple cells.") );
+    return;
+  }
+
+  KSpreadSubtotalDlg dlg(this, selection, "KSpreadSubtotalDlg" );
+  if ( dlg.exec() )
+    m_selectionInfo->setSelection( dlg.selection().topLeft(), 
+                                   dlg.selection().bottomRight(),
+                                   dlg.table() );
+
+}
+
+void KSpreadView::multipleOperations()
+{
+  if ( m_pCanvas->editor() )
+  {
+    m_pCanvas->deleteEditor( true ); // save changes
+  }
+  //  KSpreadMultipleOpDlg * dlg = new KSpreadMultipleOpDlg( this, "KSpreadMultipleOpDlg" );
+  //  dlg->show();
 }
 
 void KSpreadView::textToColumns()
