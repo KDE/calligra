@@ -179,17 +179,27 @@ void KPTextObject::load(const QDomElement &element)
         settings.bulletType[2] = (KTextEditDocument::Bullet)e.attribute( attrBulletType3, 0 ).toInt();
         settings.bulletType[3] = (KTextEditDocument::Bullet)e.attribute( attrBulletType4, 0 ).toInt();
         ktextobject.document()->setTextSettings( settings );
-        QString type = e.attribute( attrObjType );
+#endif
+        //  <P ....> .... </P>
+        QString type;
+        if(e.hasAttribute(attrObjType ))
+            type = e.attribute( attrObjType );
         int t = -1;
-        if ( !type.isEmpty() ) {
+        if ( !type.isEmpty() )
+        {
+#if 0
             if ( type == "1" )
                 t = KTextEdit::EnumList;
             if ( type == "2" )
                 t = KTextEdit::BulletList;
+#endif
+            if ( type == "1" )
+                t = 1;
+            if ( type == "2" )
+                t = 2;
         }
         loadKTextObject( e, t );
-#endif
-        loadKTextObject( e, -1 /*TODO*/ );
+        //loadKTextObject( e, -1 /*TODO*/ );
     }
     setSize( ext.width(), ext.height() );
 }
@@ -493,6 +503,7 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
     while ( !e.isNull() ) {
         if ( e.tagName() == tagP ) {
             QDomElement n = e.firstChild().toElement();
+
 #if 0
             if ( type != -1 )
                 lastParag->setType( (KTextEditParag::Type)type );
@@ -500,7 +511,29 @@ void KPTextObject::loadKTextObject( const QDomElement &elem, int type )
                 lastParag->setType( (KTextEditParag::Type)e.attribute( attrType ).toInt() );
 #endif
             KoParagLayout paragLayout = loadParagLayout(e);
+            //compatibility
+            kdDebug()<<"type====================================== :"<<type<<endl;
+            if(type!=-1)
+            {
+                kdDebug()<<"type====================================== :"<<type<<endl;
+                if(!paragLayout.counter)
+                {
+                    paragLayout.counter = new KoParagCounter;
+                }
+                paragLayout.counter->setNumbering(KoParagCounter::NUM_LIST);
+                if ( type == 1 )
+                {
+                    //t = KTextEdit::EnumList;
+                    paragLayout.counter->setStyle(KoParagCounter::STYLE_NUM);
+                }
+                if ( type == 2 )
+                {
+                    //t = KTextEdit::BulletList;
+                    paragLayout.counter->setStyle(KoParagCounter::STYLE_DISCBULLET);
+                }
+            }
             lastParag->setParagLayout( paragLayout );
+
 
             if(e.hasAttribute(attrAlign))
             {
