@@ -21,11 +21,11 @@
 #include <kpresenter_utils.h>
 #include <kpgradient.h>
 
+#include <qbitmap.h>
 #include <qpointarray.h>
 #include <qlist.h>
 #include <qregion.h>
 #include <qdom.h>
-#include <qpicture.h>
 #include <qpainter.h>
 #include <qwmatrix.h>
 #include <kstddirs.h>
@@ -292,26 +292,23 @@ void KPAutoformObject::paint( QPainter* _painter )
 
                     _painter->restore();
                 }
-                else  //lukas: FIXME rotated autoforms && gradient bg
+                else
                 {
                     if ( redrawPix )
                     {
                         redrawPix = false;
                         QRegion clipregion( pntArray2 );
-                        QPicture pic;
-                        QPainter p;
 
-                        p.begin( &pic );
+                        pix.fill( Qt::white );
+
+
+                        QPainter p;
+                        p.begin( &pix );
                         p.setClipRegion( clipregion );
-                        setupClipRegion( &p, clipregion );
                         p.drawPixmap( 0, 0, *gradient->getGradient() );
                         p.end();
 
-                        pix.fill( Qt::white );
-                        QPainter p2;
-                        p2.begin( &pix );
-                        p2.drawPicture( pic );
-                        p2.end();
+                        pix.setMask( pix.createHeuristicMask() );
 
                     }
 
