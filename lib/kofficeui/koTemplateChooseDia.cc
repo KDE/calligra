@@ -232,11 +232,11 @@ void KoTemplateChooseDia::setupDialog()
 
     if ( d->m_dialogType!=OnlyTemplates ) {
         QHBoxLayout *row = new QHBoxLayout( grid );
-        d->m_rbFile = new QRadioButton( i18n( "&Open an existing document" ), d->m_mainwidget );
+        d->m_rbFile = new QRadioButton( i18n( "Open an existing document" ), d->m_mainwidget );
         connect( d->m_rbFile, SIGNAL( clicked() ), this, SLOT( openFile() ) );
         row->addWidget(d->m_rbFile);
         row->addSpacing(30);
-        d->m_bFile = new QPushButton( i18n( "Choose..." ), d->m_mainwidget );
+        d->m_bFile = new QPushButton( i18n( "C&hoose..." ), d->m_mainwidget );
         d->m_bFile->setMaximumSize( d->m_bFile->sizeHint() );
         row->addWidget(d->m_bFile);
         connect( d->m_bFile, SIGNAL( clicked() ), this, SLOT( chooseFile() ) );
@@ -245,7 +245,7 @@ void KoTemplateChooseDia::setupDialog()
         grid->addWidget( line, 5, 0 );
 
         row = new QHBoxLayout( grid );
-        d->m_rbRecent = new QRadioButton( i18n( "&Open a recent document" ), d->m_mainwidget );
+        d->m_rbRecent = new QRadioButton( i18n( "Open a &recent document" ), d->m_mainwidget );
         connect( d->m_rbRecent, SIGNAL( clicked() ), this, SLOT( openRecent() ) );
         row->addWidget(d->m_rbRecent);
         row->addSpacing(30);
