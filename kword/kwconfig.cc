@@ -356,12 +356,12 @@ void ConfigureInterfacePage::apply()
     config->setGroup( "Interface" );
     if(valX!=doc->gridX())
     {
-        config->writeEntry( "GridX", valX, true, false, 'g', DBL_DIG /* 6 is not enough */ );
+        config->writeEntry( "GridX", QMAX( 0.1, valX), true, false, 'g', DBL_DIG /* 6 is not enough */ );
         doc->setGridX(valX);
     }
     if(valY!=doc->gridY())
     {
-        config->writeEntry( "GridY", valY, true, false, 'g', DBL_DIG /* 6 is not enough */ );
+        config->writeEntry( "GridY", QMAX( 0.1, valY), true, false, 'g', DBL_DIG /* 6 is not enough */ );
         doc->setGridY(valY);
     }
     double newIndent = KoUnit::ptFromUnit( indent->value(), doc->getUnit() );
