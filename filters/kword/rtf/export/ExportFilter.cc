@@ -1030,32 +1030,23 @@ QString RTFWorker::layoutToRtf(const LayoutData& layoutOrigin,
        strLayout += "\\sb";
        strLayout += QString::number(int(layout.marginTop)*20, 10);
     }
-#if 0
-    // TODO: Konqueror/KHTML does not support "line-height"
-    if (!force
-        && (layoutOrigin.lineSpacingType==layoutOrigin.lineSpacingType)
-        && (layoutOrigin.lineSpacing==layoutOrigin.lineSpacing))
+
+    if (force
+        || (layoutOrigin.lineSpacingType!=layoutOrigin.lineSpacingType)
+        || (layoutOrigin.lineSpacing!=layoutOrigin.lineSpacing))
     {
-        // Do nothing!
-    }
-    else if ( !layout.lineSpacingType )
-    {
-        // We have a custom line spacing (in points)
-        strLayout += QString("line-height:%1pt; ").arg(layout.lineSpacing);
-    }
-    else if ( 15==layout.lineSpacingType  )
-    {
-        strLayout += "line-height:1.5; "; // One-and-half
-    }
-    else if ( 20==layout.lineSpacingType  )
-    {
-        strLayout += "line-height:2.0; "; // Two
-    }
-    else if ( layout.lineSpacingType!=10  )
-    {
+        if ( layout.lineSpacingType==10  )
+           ;// do nothing, single linespace is default in RTF
+        else if ( layout.lineSpacingType==15  )
+           strLayout += "\\sl360"; // one-and-half linespace
+        else if ( layout.lineSpacingType==20  )
+           strLayout += "\\sl480"; // double linespace
+        else if ( layout.lineSpacingType==0 )
+           // custom line spacing (in points)
+           strLayout += "\\sl-" + QString::number(int(layout.lineSpacing)*20,10);
+        else 
         kdWarning(30503) << "Curious lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
     }
-#endif
 
     if (!layout.tabulatorList.isEmpty()
         && (force || (layoutOrigin.tabulatorList!=layout.tabulatorList) ))
