@@ -1,16 +1,16 @@
 /******************************************************************/
-/* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998   */
-/* Version: 0.0.1                                                 */
-/* Author: Reginald Stadlbauer, Torben Weis                       */
-/* E-Mail: reggie@kde.org, weis@kde.org                           */
-/* Homepage: http://boch35.kfunigraz.ac.at/~rs                    */
-/* needs c++ library Qt (http://www.troll.no)                     */
-/* written for KDE (http://www.kde.org)                           */
-/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)     */
-/* needs OpenParts and Kom (weis@kde.org)                         */
-/* License: GNU GPL                                               */
+/* KWord - (c) by Reginald Stadlbauer and Torben Weis 1997-1998	  */
+/* Version: 0.0.1						  */
+/* Author: Reginald Stadlbauer, Torben Weis			  */
+/* E-Mail: reggie@kde.org, weis@kde.org				  */
+/* Homepage: http://boch35.kfunigraz.ac.at/~rs			  */
+/* needs c++ library Qt (http://www.troll.no)			  */
+/* written for KDE (http://www.kde.org)				  */
+/* needs mico (http://diamant.vsb.cs.uni-frankfurt.de/~mico/)	  */
+/* needs OpenParts and Kom (weis@kde.org)			  */
+/* License: GNU GPL						  */
 /******************************************************************/
-/* Module: Frame Dialog                                           */
+/* Module: Frame Dialog						  */
 /******************************************************************/
 
 #include "kword_doc.h"
@@ -44,19 +44,19 @@
 #include <limits.h>
 
 /******************************************************************/
-/* Class: KWFrameDia                                              */
+/* Class: KWFrameDia						  */
 /******************************************************************/
 
 /*================================================================*/
-KWFrameDia::KWFrameDia( QWidget* parent, const char* name, KWFrame *_frame, KWordDocument *_doc, 
-                        KWPage *_page, int _flags, KWFrameSet *fs )
+KWFrameDia::KWFrameDia( QWidget* parent, const char* name, KWFrame *_frame, KWordDocument *_doc,
+			KWPage *_page, int _flags, KWFrameSet *fs )
     : QTabDialog( parent, name, true )
 {
     frame = _frame;
     frameset = fs;
     if ( frame ) {
-        QRect r = frame->normalize();
-        frame->setRect( r.x(), r.y(), r.width(), r.height() );
+	QRect r = frame->normalize();
+	frame->setRect( r.x(), r.y(), r.width(), r.height() );
     }
 
     flags = _flags;
@@ -64,16 +64,16 @@ KWFrameDia::KWFrameDia( QWidget* parent, const char* name, KWFrame *_frame, KWor
     page = _page;
 
     if ( ( flags & FD_FRAME_CONNECT ) && doc )
-        setupTab3ConnectTextFrames();
+	setupTab3ConnectTextFrames();
 
     if ( ( flags & FD_FRAME_SET ) && doc )
-        setupTab1TextFrameSet();
+	setupTab1TextFrameSet();
 
     if ( ( flags & FD_FRAME ) && doc )
-        setupTab2TextFrame();
+	setupTab2TextFrame();
 
     if ( ( flags & FD_GEOMETRY ) && doc )
-        setupTab4Geometry();
+	setupTab4Geometry();
 
     setCancelButton( i18n( "Cancel" ) );
     setOkButton( i18n( "OK" ) );
@@ -222,21 +222,21 @@ void KWFrameDia::setupTab2TextFrame()
     uncheckAllRuns();
     switch ( frame ? frame->getRunAround() : doc->getRunAround() ) {
     case RA_NO: rRunNo->setChecked( true );
-        break;
+	break;
     case RA_BOUNDINGRECT: rRunBounding->setChecked( true );
-        break;
+	break;
     case RA_CONTUR: rRunContur->setChecked( true );
-        break;
+	break;
     }
 
     QString str;
     switch ( KWUnit::unitType( doc->getUnit() ) ) {
     case U_MM: str.sprintf( "%g", frame ? frame->getRunAroundGap().mm() : doc->getRunAroundGap().mm() );
-        break;
+	break;
     case U_INCH: str.sprintf( "%g", frame ? frame->getRunAroundGap().inch() : doc->getRunAroundGap().inch() );
-        break;
+	break;
     case U_PT: str.sprintf( "%d", frame ? frame->getRunAroundGap().pt() : doc->getRunAroundGap().pt() );
-        break;
+	break;
     }
 
     eRGap->setText( str );
@@ -260,28 +260,30 @@ void KWFrameDia::setupTab3ConnectTextFrames()
     lFrameSList->header()->setMovingEnabled( false );
 
     for ( unsigned int i = 0; i < doc->getNumFrameSets(); i++ ) {
-        if ( i == 0 && doc->getProcessingType() == KWordDocument::WP )
-            continue;
-        if ( doc->getFrameSet( i )->getFrameType() != FT_TEXT ||
-             dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( i ) )->getFrameInfo() != FI_BODY )
-            continue;
-        if ( frameset == doc->getFrameSet( i ) )
-            continue;
-        QListViewItem *item = new QListViewItem( lFrameSList );
-        item->setText( 0, QString( "%1" ).arg( i + 1 ) );
-        item->setText( 1, doc->getFrameSet( i )->getName() );
+	if ( i == 0 && doc->getProcessingType() == KWordDocument::WP )
+	    continue;
+	if ( doc->getFrameSet( i )->getFrameType() != FT_TEXT ||
+	     dynamic_cast<KWTextFrameSet*>( doc->getFrameSet( i ) )->getFrameInfo() != FI_BODY )
+	    continue;
+	if ( frameset == doc->getFrameSet( i ) )
+	    continue;
+	if ( doc->getFrameSet( i )->getGroupManager() )
+	    continue;
+	QListViewItem *item = new QListViewItem( lFrameSList );
+	item->setText( 0, QString( "%1" ).arg( i + 1 ) );
+	item->setText( 1, doc->getFrameSet( i )->getName() );
     }
 
     if ( flags & FD_PLUS_NEW_FRAME ) {
-        QListViewItem *item = new QListViewItem( lFrameSList );
-        item->setText( 0, QString( "*%1" ).arg( doc->getNumFrameSets() + 1 ) );
-        item->setText( 1, i18n( "Create a new Frameset with this frame" ) );
+	QListViewItem *item = new QListViewItem( lFrameSList );
+	item->setText( 0, QString( "*%1" ).arg( doc->getNumFrameSets() + 1 ) );
+	item->setText( 1, i18n( "Create a new Frameset with this frame" ) );
     }
 
     lFrameSList->setSelected( lFrameSList->firstChild(), TRUE );
 
     connect( lFrameSList, SIGNAL( currentChanged( QListViewItem * ) ),
-             this, SLOT( connectListSelected( QListViewItem * ) ) );
+	     this, SLOT( connectListSelected( QListViewItem * ) ) );
     grid3->addWidget( lFrameSList, 1, 0 );
 
     QHBox *row = new QHBox( tab3 );
@@ -492,69 +494,69 @@ void KWFrameDia::setupTab4Geometry()
     doc->getFrameMargins( l, r, t, b );
     switch ( KWUnit::unitType( doc->getUnit() ) ) {
     case U_MM:
-        sml->setText( QString().setNum( l.mm() ) );
-        smr->setText( QString().setNum( r.mm() ) );
-        smt->setText( QString().setNum( t.mm() ) );
-        smb->setText( QString().setNum( b.mm() ) );
-        break;
+	sml->setText( QString().setNum( l.mm() ) );
+	smr->setText( QString().setNum( r.mm() ) );
+	smt->setText( QString().setNum( t.mm() ) );
+	smb->setText( QString().setNum( b.mm() ) );
+	break;
     case U_INCH:
-        sml->setText( QString().setNum( l.inch() ) );
-        smr->setText( QString().setNum( r.inch() ) );
-        smt->setText( QString().setNum( t.inch() ) );
-        smb->setText( QString().setNum( b.inch() ) );
-        break;
+	sml->setText( QString().setNum( l.inch() ) );
+	smr->setText( QString().setNum( r.inch() ) );
+	smt->setText( QString().setNum( t.inch() ) );
+	smb->setText( QString().setNum( b.inch() ) );
+	break;
     case U_PT:
-        sml->setText( QString().setNum( l.pt() ) );
-        smr->setText( QString().setNum( r.pt() ) );
-        smt->setText( QString().setNum( t.pt() ) );
-        smb->setText( QString().setNum( b.pt() ) );
-        break;
+	sml->setText( QString().setNum( l.pt() ) );
+	smr->setText( QString().setNum( r.pt() ) );
+	smt->setText( QString().setNum( t.pt() ) );
+	smb->setText( QString().setNum( b.pt() ) );
+	break;
     }
 
     if ( doc->isOnlyOneFrameSelected() && ( doc->getProcessingType() == KWordDocument::DTP ||
-                                            ( doc->getProcessingType() == KWordDocument::WP &&
-                                              doc->getFrameSetNum( doc->getFirstSelectedFrameSet() ) > 0 ) ) ) {
-        unsigned int x, y, w, h, _num;
+					    ( doc->getProcessingType() == KWordDocument::WP &&
+					      doc->getFrameSetNum( doc->getFirstSelectedFrameSet() ) > 0 ) ) ) {
+	unsigned int x, y, w, h, _num;
 
-        KWFrameSet *frms = doc->getFrameCoords( x, y, w, h, _num );
-        QString _x, _y, _w, _h;
-        y -= frms->getPageOfFrame( _num ) * doc->getPTPaperHeight();
+	KWFrameSet *frms = doc->getFrameCoords( x, y, w, h, _num );
+	QString _x, _y, _w, _h;
+	y -= frms->getPageOfFrame( _num ) * doc->getPTPaperHeight();
 
-        switch ( KWUnit::unitType( doc->getUnit() ) ) {
-        case U_MM:
-            _x.sprintf( "%g", POINT_TO_MM( x ) );
-            _y.sprintf( "%g", POINT_TO_MM( y ) );
-            _w.sprintf( "%g", POINT_TO_MM( w ) );
-            _h.sprintf( "%g", POINT_TO_MM( h ) );
-            break;
-        case U_INCH:
-            _x.sprintf( "%g", POINT_TO_INCH( x ) );
-            _y.sprintf( "%g", POINT_TO_INCH( y ) );
-            _w.sprintf( "%g", POINT_TO_INCH( w ) );
-            _h.sprintf( "%g", POINT_TO_INCH( h ) );
-            break;
-        case U_PT:
-            _x.sprintf( "%d", x );
-            _y.sprintf( "%d", y );
-            _w.sprintf( "%d", w );
-            _h.sprintf( "%d", h );
-            break;
-        }
+	switch ( KWUnit::unitType( doc->getUnit() ) ) {
+	case U_MM:
+	    _x.sprintf( "%g", POINT_TO_MM( x ) );
+	    _y.sprintf( "%g", POINT_TO_MM( y ) );
+	    _w.sprintf( "%g", POINT_TO_MM( w ) );
+	    _h.sprintf( "%g", POINT_TO_MM( h ) );
+	    break;
+	case U_INCH:
+	    _x.sprintf( "%g", POINT_TO_INCH( x ) );
+	    _y.sprintf( "%g", POINT_TO_INCH( y ) );
+	    _w.sprintf( "%g", POINT_TO_INCH( w ) );
+	    _h.sprintf( "%g", POINT_TO_INCH( h ) );
+	    break;
+	case U_PT:
+	    _x.sprintf( "%d", x );
+	    _y.sprintf( "%d", y );
+	    _w.sprintf( "%d", w );
+	    _h.sprintf( "%d", h );
+	    break;
+	}
 
-        oldX = atof( _x );
-        oldY = atof( _y );
-        oldW = atof( _w );
-        oldH = atof( _h );
+	oldX = atof( _x );
+	oldY = atof( _y );
+	oldW = atof( _w );
+	oldH = atof( _h );
 
-        sx->setText( _x );
-        sy->setText( _y );
-        sw->setText( _w );
-        sh->setText( _h );
+	sx->setText( _x );
+	sy->setText( _y );
+	sw->setText( _w );
+	sh->setText( _h );
     } else {
-        sx->setEnabled( false );
-        sy->setEnabled( false );
-        sw->setEnabled( false );
-        sh->setEnabled( false );
+	sx->setEnabled( false );
+	sy->setEnabled( false );
+	sw->setEnabled( false );
+	sh->setEnabled( false );
     }
 }
 
@@ -591,158 +593,158 @@ void KWFrameDia::runConturClicked()
 void KWFrameDia::applyChanges()
 {
     if ( ( flags & FD_FRAME_SET ) && doc )
-        doc->setAutoCreateNewFrame( rAppendFrame->isChecked() );
+	doc->setAutoCreateNewFrame( rAppendFrame->isChecked() );
 
     if ( ( flags & FD_FRAME ) && doc ) {
-        if ( frame ) {
-            if ( rRunNo->isChecked() )
-                frame->setRunAround( RA_NO );
-            else if ( rRunBounding->isChecked() )
-                frame->setRunAround( RA_BOUNDINGRECT );
-            else if ( rRunContur->isChecked() )
-                frame->setRunAround( RA_CONTUR );
+	if ( frame ) {
+	    if ( rRunNo->isChecked() )
+		frame->setRunAround( RA_NO );
+	    else if ( rRunBounding->isChecked() )
+		frame->setRunAround( RA_BOUNDINGRECT );
+	    else if ( rRunContur->isChecked() )
+		frame->setRunAround( RA_CONTUR );
 
-            KWUnit u;
-            switch ( KWUnit::unitType( doc->getUnit() ) ) {
-            case U_MM: u.setMM( atof( eRGap->text() ) );
-                break;
-            case U_INCH: u.setINCH( atof( eRGap->text() ) );
-                break;
-            case U_PT: u.setPT( atoi( eRGap->text() ) );
-                break;
-            }
-            frame->setRunAroundGap( u );
-        } else {
-            if ( rRunNo->isChecked() )
-                doc->setRunAround( RA_NO );
-            else if ( rRunBounding->isChecked() )
-                doc->setRunAround( RA_BOUNDINGRECT );
-            else if ( rRunContur->isChecked() )
-                doc->setRunAround( RA_CONTUR );
+	    KWUnit u;
+	    switch ( KWUnit::unitType( doc->getUnit() ) ) {
+	    case U_MM: u.setMM( atof( eRGap->text() ) );
+		break;
+	    case U_INCH: u.setINCH( atof( eRGap->text() ) );
+		break;
+	    case U_PT: u.setPT( atoi( eRGap->text() ) );
+		break;
+	    }
+	    frame->setRunAroundGap( u );
+	} else {
+	    if ( rRunNo->isChecked() )
+		doc->setRunAround( RA_NO );
+	    else if ( rRunBounding->isChecked() )
+		doc->setRunAround( RA_BOUNDINGRECT );
+	    else if ( rRunContur->isChecked() )
+		doc->setRunAround( RA_CONTUR );
 
-            KWUnit u;
-            switch ( KWUnit::unitType( doc->getUnit() ) ) {
-            case U_MM: u.setMM( atof( eRGap->text() ) );
-                break;
-            case U_INCH: u.setINCH( atof( eRGap->text() ) );
-                break;
-            case U_PT: u.setPT( atoi( eRGap->text() ) );
-                break;
-            }
-            doc->setRunAroundGap( u );
-        }
+	    KWUnit u;
+	    switch ( KWUnit::unitType( doc->getUnit() ) ) {
+	    case U_MM: u.setMM( atof( eRGap->text() ) );
+		break;
+	    case U_INCH: u.setINCH( atof( eRGap->text() ) );
+		break;
+	    case U_PT: u.setPT( atoi( eRGap->text() ) );
+		break;
+	    }
+	    doc->setRunAroundGap( u );
+	}
     }
 
     int currFS = -1;
 
     if ( flags & FD_FRAME_CONNECT && doc ) {
-        QString str = lFrameSList->currentItem()->text( 0 );
-        QString name = QString::null;
-        if ( str[ 0 ] == '*' ) {
-            str.remove( 0, 1 );
-            name = eFrameSetName->text();
-            if ( name.isEmpty() )
-                name = i18n( "Frameset %d" ).arg( doc->getNumFrameSets() + 1 );
-            bool same = FALSE;
-            for ( unsigned int i = 0; i < doc->getNumFrameSets(); ++i ) {
-                if ( doc->getFrameSet( i )->getName() == name ) {
-                    same = TRUE;
-                    break;
-                }
-            }
-            if ( same ) {
-                QMessageBox::critical( this, i18n( "Error connecting frames" ),
-                                       i18n( "A Frameset with the name\n%1\n already exists. Please enter\n"
-                                             "an unique name for the new Frameset" ) );
-                return;
-            }
-        }
-        int _num = str.toInt() - 1;
+	QString str = lFrameSList->currentItem()->text( 0 );
+	QString name = QString::null;
+	if ( str[ 0 ] == '*' ) {
+	    str.remove( 0, 1 );
+	    name = eFrameSetName->text();
+	    if ( name.isEmpty() )
+		name = i18n( "Frameset %d" ).arg( doc->getNumFrameSets() + 1 );
+	    bool same = FALSE;
+	    for ( unsigned int i = 0; i < doc->getNumFrameSets(); ++i ) {
+		if ( doc->getFrameSet( i )->getName() == name ) {
+		    same = TRUE;
+		    break;
+		}
+	    }
+	    if ( same ) {
+		QMessageBox::critical( this, i18n( "Error connecting frames" ),
+				       i18n( "A Frameset with the name\n%1\n already exists. Please enter\n"
+					     "an unique name for the new Frameset" ) );
+		return;
+	    }
+	}
+	int _num = str.toInt() - 1;
 
-        if ( frameset ) {
-            if ( frameset->getNumFrames() > 1 )
-                frameset->delFrame( frame, FALSE );
-            else {
-                frameset->delFrame( frame, FALSE );
-                doc->delFrameSet( frameset );
-            }
-        }
+	if ( frameset ) {
+	    if ( frameset->getNumFrames() > 1 )
+		frameset->delFrame( frame, FALSE );
+	    else {
+		frameset->delFrame( frame, FALSE );
+		doc->delFrameSet( frameset );
+	    }
+	}
 
-        if ( static_cast<unsigned int>( _num ) < doc->getNumFrameSets() ) {
-            doc->getFrameSet( _num )->addFrame( frame );
-            currFS = _num;
-        } else {
-            KWTextFrameSet *_frameSet = new KWTextFrameSet( doc );
-            _frameSet->setName( name );
-            _frameSet->addFrame( frame );
-            _frameSet->setAutoCreateNewFrame( false );
-            doc->addFrameSet( _frameSet );
-            page->repaintScreen( _num, true );
-            _frameSet->setAutoCreateNewFrame( true );
-            emit applyButtonReallyPressed();
-            return;
-        }
-        doc->updateAllFrames();
+	if ( static_cast<unsigned int>( _num ) < doc->getNumFrameSets() ) {
+	    doc->getFrameSet( _num )->addFrame( frame );
+	    currFS = _num;
+	} else {
+	    KWTextFrameSet *_frameSet = new KWTextFrameSet( doc );
+	    _frameSet->setName( name );
+	    _frameSet->addFrame( frame );
+	    _frameSet->setAutoCreateNewFrame( false );
+	    doc->addFrameSet( _frameSet );
+	    page->repaintScreen( _num, true );
+	    _frameSet->setAutoCreateNewFrame( true );
+	    emit applyButtonReallyPressed();
+	    return;
+	}
+	doc->updateAllFrames();
     }
 
     if ( flags & FD_GEOMETRY && doc ) {
-        if ( doc->isOnlyOneFrameSelected() && ( doc->getProcessingType() == KWordDocument::DTP ||
-                                                ( doc->getProcessingType() == KWordDocument::WP &&
-                                                  doc->getFrameSetNum( doc->getFirstSelectedFrameSet() ) > 0 ) ) ) {
-            if ( oldX != atof( sx->text() ) || oldY != atof( sy->text() ) || oldW != atof( sw->text() ) || oldH != atof( sh->text() ) ) {
-                unsigned int px, py, pw, ph;
-                switch ( KWUnit::unitType( doc->getUnit() ) ) {
-                case U_MM:
-                    px = MM_TO_POINT( atof( sx->text() ) );
-                    py = MM_TO_POINT( atof( sy->text() ) );
-                    pw = MM_TO_POINT( atof( sw->text() ) );
-                    ph = MM_TO_POINT( atof( sh->text() ) );
-                    break;
-                case U_INCH:
-                    px = INCH_TO_POINT( atof( sx->text() ) );
-                    py = INCH_TO_POINT( atof( sy->text() ) );
-                    pw = INCH_TO_POINT( atof( sw->text() ) );
-                    ph = INCH_TO_POINT( atof( sh->text() ) );
-                    break;
-                case U_PT:
-                    px = atoi( sx->text() );
-                    py = atoi( sy->text() );
-                    pw = atoi( sw->text() );
-                    ph = atoi( sh->text() );
-                    break;
-                }
-                doc->setFrameCoords( px, py, pw, ph );
-            }
-        }
+	if ( doc->isOnlyOneFrameSelected() && ( doc->getProcessingType() == KWordDocument::DTP ||
+						( doc->getProcessingType() == KWordDocument::WP &&
+						  doc->getFrameSetNum( doc->getFirstSelectedFrameSet() ) > 0 ) ) ) {
+	    if ( oldX != atof( sx->text() ) || oldY != atof( sy->text() ) || oldW != atof( sw->text() ) || oldH != atof( sh->text() ) ) {
+		unsigned int px, py, pw, ph;
+		switch ( KWUnit::unitType( doc->getUnit() ) ) {
+		case U_MM:
+		    px = MM_TO_POINT( atof( sx->text() ) );
+		    py = MM_TO_POINT( atof( sy->text() ) );
+		    pw = MM_TO_POINT( atof( sw->text() ) );
+		    ph = MM_TO_POINT( atof( sh->text() ) );
+		    break;
+		case U_INCH:
+		    px = INCH_TO_POINT( atof( sx->text() ) );
+		    py = INCH_TO_POINT( atof( sy->text() ) );
+		    pw = INCH_TO_POINT( atof( sw->text() ) );
+		    ph = INCH_TO_POINT( atof( sh->text() ) );
+		    break;
+		case U_PT:
+		    px = atoi( sx->text() );
+		    py = atoi( sy->text() );
+		    pw = atoi( sw->text() );
+		    ph = atoi( sh->text() );
+		    break;
+		}
+		doc->setFrameCoords( px, py, pw, ph );
+	    }
+	}
 
-        KWUnit u1, u2, u3, u4;
-        switch ( KWUnit::unitType( doc->getUnit() ) ) {
-        case U_MM:
-            u1.setMM( atof( sml->text() ) );
-            u2.setMM( atof( smr->text() ) );
-            u3.setMM( atof( smt->text() ) );
-            u4.setMM( atof( smb->text() ) );
-            break;
-        case U_INCH:
-            u1.setINCH( atof( sml->text() ) );
-            u2.setINCH( atof( smr->text() ) );
-            u3.setINCH( atof( smt->text() ) );
-            u4.setINCH( atof( smb->text() ) );
-            break;
-        case U_PT:
-            u1.setPT( atoi( sml->text() ) );
-            u2.setPT( atoi( smr->text() ) );
-            u3.setPT( atoi( smt->text() ) );
-            u4.setPT( atoi( smb->text() ) );
-            break;
-        }
-        doc->setFrameMargins( u1, u2, u3, u4 );
+	KWUnit u1, u2, u3, u4;
+	switch ( KWUnit::unitType( doc->getUnit() ) ) {
+	case U_MM:
+	    u1.setMM( atof( sml->text() ) );
+	    u2.setMM( atof( smr->text() ) );
+	    u3.setMM( atof( smt->text() ) );
+	    u4.setMM( atof( smb->text() ) );
+	    break;
+	case U_INCH:
+	    u1.setINCH( atof( sml->text() ) );
+	    u2.setINCH( atof( smr->text() ) );
+	    u3.setINCH( atof( smt->text() ) );
+	    u4.setINCH( atof( smb->text() ) );
+	    break;
+	case U_PT:
+	    u1.setPT( atoi( sml->text() ) );
+	    u2.setPT( atoi( smr->text() ) );
+	    u3.setPT( atoi( smt->text() ) );
+	    u4.setPT( atoi( smb->text() ) );
+	    break;
+	}
+	doc->setFrameMargins( u1, u2, u3, u4 );
     }
 
     if ( currFS != -1 )
-        page->repaintScreen( currFS, true );
+	page->repaintScreen( currFS, true );
     else
-        page->repaintScreen( true );
+	page->repaintScreen( true );
 
     emit applyButtonReallyPressed();
 }
@@ -751,27 +753,27 @@ void KWFrameDia::applyChanges()
 void KWFrameDia::connectListSelected( QListViewItem *item )
 {
     if ( !item )
-        return;
+	return;
 
     QString str = item->text( 0 );
     if ( str[ 0 ] == '*' ) {
-        str.remove( 0, 1 );
-        eFrameSetName->setEnabled( TRUE );
+	str.remove( 0, 1 );
+	eFrameSetName->setEnabled( TRUE );
     } else
-        eFrameSetName->setEnabled( FALSE );
+	eFrameSetName->setEnabled( FALSE );
 
     //int num = str.toInt();
 
 //     if ( static_cast<unsigned int>( _num ) < doc->getNumFrameSets() )
 //     {
-//         if ( doc->getFrameSet( _num )->getFrameType() != FT_TEXT || doc->getFrameSet( _num )->getFrameInfo() != FI_BODY )
-//         {
-//             lFrameSList->setCurrentItem( lFrameSList->count() - 1 );
-//             page->setHilitFrameSet( -1 );
-//         }
-//         else
-//             page->setHilitFrameSet( _num );
+//	   if ( doc->getFrameSet( _num )->getFrameType() != FT_TEXT || doc->getFrameSet( _num )->getFrameInfo() != FI_BODY )
+//	   {
+//	       lFrameSList->setCurrentItem( lFrameSList->count() - 1 );
+//	       page->setHilitFrameSet( -1 );
+//	   }
+//	   else
+//	       page->setHilitFrameSet( _num );
 //     }
 //     else
-//         page->setHilitFrameSet( -1 );
+//	   page->setHilitFrameSet( -1 );
 }

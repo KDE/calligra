@@ -1386,3 +1386,7 @@ Reggie, 13.7.1999:
 Reggie, 14.7.1999:
 -----------------
 - Improved DnD a lot
+
+Reggie, 4.7.1999:
+-------------
+- Don't allow to connect new frames with framesets of a table
