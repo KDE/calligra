@@ -153,7 +153,7 @@
                         <cstring>radioParagraphOldWay</cstring>
                     </property>
                     <property name="text">
-                        <string>Old &amp;Way: if the line is empty or has less than 40 characters</string>
+                        <string>Old &amp;Method: if the line is empty or has less than 40 characters</string>
                     </property>
                 </widget>
             </vbox>

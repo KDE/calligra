@@ -878,7 +878,7 @@ void KivioView::setFGColor()
         QColor col( m_setFGColor->color());
         if ( col != pStencil->fgColor() )
         {
-            KivioChangeStencilColorCommand * cmd = new KivioChangeStencilColorCommand( i18n("Change FG Color"), m_pActivePage, pStencil, pStencil->fgColor(), col, KivioChangeStencilColorCommand::CT_FGCOLOR);
+            KivioChangeStencilColorCommand * cmd = new KivioChangeStencilColorCommand( i18n("Change Fg Color"), m_pActivePage, pStencil, pStencil->fgColor(), col, KivioChangeStencilColorCommand::CT_FGCOLOR);
 
             pStencil->setFGColor( col );
             macro->addCommand( cmd );
@@ -898,7 +898,7 @@ void KivioView::setBGColor()
     KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if (!pStencil)
       return;
-    KMacroCommand * macro = new KMacroCommand( i18n("Change BackGround Color"));
+    KMacroCommand * macro = new KMacroCommand( i18n("Change Background Color"));
     bool createMacro = false;
 
     while( pStencil )

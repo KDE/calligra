@@ -683,7 +683,7 @@
 	<Type>Int</Type>
       </Parameter>
       <Help>
-	<Text>The ROUND(value;[digits]) function returns value rounded. Digits is the number of digits to which you want to round that number. If digits is zero or omitted, value is rounded up to the nearest integer. If digits is smaller than zero, the corresponding interger part of the number is rounded.</Text>
+	<Text>The ROUND(value;[digits]) function returns value rounded. Digits is the number of digits to which you want to round that number. If digits is zero or omitted, value is rounded up to the nearest integer. If digits is smaller than zero, the corresponding integer part of the number is rounded.</Text>
 	<Syntax>ROUND(value;[digits])</Syntax>
 	<Example>ROUND(1.252;2) equals 1.25</Example>
 	<Example>ROUND(-1.252;2) equals -1.25</Example>
