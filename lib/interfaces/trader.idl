@@ -1,0 +1,240 @@
+#ifndef __trading_idl__
+#define __trading_idl__
+
+#pragma prefix "omg.org"
+
+module CosTrading {
+
+	// forward references to our interfaces
+
+	interface Lookup;
+	interface Register;
+	interface Link { };
+	interface Proxy { };
+	interface Admin
+	{
+		typedef sequence<octet> OctetSeq;
+	};
+	interface OfferIterator;
+
+	// type definitions used in more than one interface
+
+	typedef string Istring;
+	typedef Object TypeRepository;
+
+	typedef Istring PropertyName;
+	typedef sequence<PropertyName> PropertyNameSeq;
+	typedef any PropertyValue;
+
+	struct Property {
+		PropertyName name;
+		PropertyValue value;
+		boolean is_file;
+	};
+	typedef sequence<Property> PropertySeq;
+
+	struct Offer {
+		Object reference;
+		PropertySeq properties;
+	};
+	typedef sequence<Offer> OfferSeq;
+
+	typedef string OfferId;
+	typedef sequence<OfferId> OfferIdSeq;
+
+	typedef Istring ServiceTypeName;  // similar structure to IR::Identifier
+
+	typedef Istring Constraint;
+
+	enum FollowOption {
+		local_only, 
+		if_no_local, 
+		always
+	};
+
+	typedef string PolicyName;  // policy names restricted to Latin1
+	typedef sequence<PolicyName> PolicyNameSeq;
+	typedef any PolicyValue;
+	struct Policy {
+		PolicyName name;
+		PolicyValue value;
+	};
+	typedef sequence<Policy> PolicySeq;
+
+	// exceptions used in more than one interface
+
+	exception UnknownMaxLeft {};
+
+	exception NotImplemented {};
+
+	exception IllegalServiceType {
+		ServiceTypeName type;
+	};
+
+	exception UnknownServiceType {
+		ServiceTypeName type;
+	};
+
+	exception IllegalPropertyName {
+		PropertyName name;
+	};
+
+	exception DuplicatePropertyName {
+		PropertyName name;
+	};
+	exception PropertyTypeMismatch {
+		ServiceTypeName type;
+		Property prop;
+	};
+
+	exception MissingMandatoryProperty {
+		ServiceTypeName type;
+		PropertyName name;
+	};
+
+	exception ReadonlyDynamicProperty {
+		ServiceTypeName type;
+		PropertyName name;
+	};
+
+	exception IllegalConstraint {
+		Constraint constr;
+	};
+
+	exception InvalidLookupRef {
+		Lookup target;
+	};
+	  
+	exception IllegalOfferId {
+		OfferId id;
+	};
+
+	exception UnknownOfferId {
+		OfferId id;
+	};
+
+	exception DuplicatePolicyName {
+		PolicyName name;
+	};
+
+	// the interfaces
+
+	interface TraderComponents {
+
+		readonly attribute Lookup lookup_if;
+		readonly attribute Register register_if;
+		readonly attribute Link link_if;
+		readonly attribute Proxy proxy_if;
+		readonly attribute Admin admin_if;
+	};
+
+	interface SupportAttributes {
+
+		readonly attribute boolean supports_modifiable_properties;
+		readonly attribute boolean supports_dynamic_properties;
+		readonly attribute boolean supports_proxy_offers;
+		readonly attribute TypeRepository type_repos;
+	};
+
+	interface ImportAttributes {
+
+		readonly attribute unsigned long def_search_card;
+		readonly attribute unsigned long max_search_card;
+		readonly attribute unsigned long def_match_card;
+		readonly attribute unsigned long max_match_card;
+		readonly attribute unsigned long def_return_card;
+		readonly attribute unsigned long max_return_card;
+		readonly attribute unsigned long max_list;
+		readonly attribute unsigned long def_hop_count;
+		readonly attribute unsigned long max_hop_count;
+		readonly attribute FollowOption def_follow_policy;
+		readonly attribute FollowOption max_follow_policy;
+	};
+
+	interface Lookup:TraderComponents,SupportAttributes,ImportAttributes {
+
+		typedef Istring Preference;
+
+		enum HowManyProps { none, some, all };
+
+		union SpecifiedProps switch ( HowManyProps ) {
+			case some: PropertyNameSeq prop_names;
+		};
+
+		exception IllegalPreference {
+			Preference pref;
+		};
+
+		exception IllegalPolicyName {
+			PolicyName name;
+		};
+
+		exception PolicyTypeMismatch {
+			Policy the_policy;
+		};
+
+		exception InvalidPolicyValue {
+			Policy the_policy;
+		};
+
+		void query ( 
+			in ServiceTypeName type,
+			in Constraint constr,
+			in Preference pref,
+			in PolicySeq policies,
+			in SpecifiedProps desired_props,
+			in unsigned long how_many,
+			out OfferSeq offers,
+			out OfferIterator offer_itr,
+			out PolicyNameSeq limits_applied
+		) raises (
+			IllegalServiceType,
+			UnknownServiceType,
+			IllegalConstraint,
+			IllegalPreference,
+			IllegalPolicyName,
+			PolicyTypeMismatch,
+			InvalidPolicyValue,
+			IllegalPropertyName,
+			DuplicatePropertyName,
+			DuplicatePolicyName
+		);
+	};
+
+	interface Register
+	{
+		exception InterfaceTypeMismatch
+		{
+			ServiceTypeName type;
+			Object reference;
+		};
+		exception InvalidObjectRef
+		{
+			Object ref;
+		};
+
+	};
+
+	interface OfferIterator {
+
+		unsigned long max_left (
+		) raises (
+			UnknownMaxLeft
+		);
+
+		boolean next_n (
+			in unsigned long n,
+			out OfferSeq offers
+		);
+
+		void destroy ();
+	};
+
+	/** Extensions **/
+	typedef sequence<long> LongList;
+	typedef sequence<float> FloatList;
+	typedef sequence<string> StringList;
+
+}; /* end module CosTrading */
+
+#endif
