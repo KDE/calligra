@@ -664,7 +664,8 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
 
     m_redrawFromCol = 0;
     for (TableIter cell(this); cell; ++cell) {
-        if((cell->rowAfter() > fromRow && cell->firstRow() < untilRow) || cell->colAfter() > m_redrawFromCol)
+        if((cell->rowAfter() > fromRow && cell->firstRow() < untilRow)
+           || cell->colAfter() > m_redrawFromCol)
             position(cell);
     }
     m_redrawFromCol = getCols();
@@ -1662,8 +1663,8 @@ void KWTableFrameSet::validate()
 // not sure where this method is used, it will be fixed soon
 bool KWTableFrameSet::contains( double mx, double my ) {
 
-    (void) mx;
-    (void) my;
+    // The default implementation looks into each cell, should be good enough (DF)
+    return KWFrameSet::contains( mx, my );
 /*
     if(m_cells.count()==0)
         return false;
@@ -1689,9 +1690,10 @@ bool KWTableFrameSet::contains( double mx, double my ) {
         if(rect.contains(mx,my)) {
             return true;
         }
-    }*/
+    }
 
     return false;
+*/
 }
 
 MouseMeaning KWTableFrameSet::getMouseMeaning( const QPoint &nPoint, int keyState )

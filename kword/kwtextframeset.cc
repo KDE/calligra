@@ -1991,6 +1991,7 @@ void KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
                     KWTableFrameSet::Cell *cell = (KWTableFrameSet::Cell *)theFrame->frameSet();
                     table->recalcCols(cell->firstCol(), cell->firstRow());
                     table->recalcRows(cell->firstCol(), cell->firstRow());
+                    m_doc->delayedRepaintAllViews();
                 }
                 *abort = false;
                 break;
@@ -2101,6 +2102,7 @@ void KWTextFrameSet::slotAfterFormattingTooMuchSpace( int bottom, bool* abort )
                     KWTableFrameSet::Cell *cell = (KWTableFrameSet::Cell *)theFrame->frameSet();
                     table->recalcCols(cell->firstCol(), cell->firstRow());
                     table->recalcRows(cell->firstCol(), cell->firstRow());
+                    m_doc->delayedRepaintAllViews();
                     *abort = false;
                 }
             }
