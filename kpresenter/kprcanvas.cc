@@ -7114,6 +7114,8 @@ bool KPrCanvas::checkCurrentTextEdit( KPTextObject * textObj )
     bool emitChanged = false;
     if ( textObj && m_currentTextObjectView && m_currentTextObjectView->kpTextObject() != textObj )
     {
+        m_currentTextObjectView->kpTextObject()->setEditingTextObj( false );
+        _repaint( m_currentTextObjectView->kpTextObject() );
         //don't remove selection otherwise break dnd.
         m_currentTextObjectView->terminate(false);
         delete m_currentTextObjectView;

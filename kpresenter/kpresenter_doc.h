@@ -80,7 +80,7 @@ public:
     ~KPresenterChild();
 
     // get parent
-    KPresenterDoc* parent() { return m_parent; }
+    KPresenterDoc* parent()const { return m_parent; }
 
     virtual KoDocument *hitTest( const QPoint &, const QWMatrix & );
 
@@ -398,7 +398,7 @@ public:
     QStringList spellListIgnoreAll() const { return m_spellListIgnoreAll;}
     void addIgnoreWordAll( const QString & );
     void clearIgnoreWordAll( );
-    KCommandHistory * commandHistory() { return m_commandHistory; }
+    KCommandHistory * commandHistory()const { return m_commandHistory; }
     void updateObjectStatusBarItem();
 
 public slots:
