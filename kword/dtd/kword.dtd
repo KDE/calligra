@@ -12,11 +12,17 @@ the original version were made.
 About the version
 =================
 
-This is the DTD version 2, for KWord 1.1 or 1.2
-It has changed a bit since the DTD version 1, for KWord-0.8 (the one included in KDE-2.0)
+This is the DTD version 3, for KWord 1.3
+
+The DTD version 1 was used by KWord-0.8 (KOffice-1.0, the one included in KDE-2.0)
+The DTD version 2 was used by KWord-1.1 and KWord-1.2
+
 KWord will read the previous versions of its own file format but this is considered
 the most complete format, we highly encourage you to use this format.
 
+Version 3 specifics that have another meaning when read by earlier versions of KWord:
+* counter: depth and display-levels have been separated, older versions assume display-levels=depth+1
+* TOC: outline and numberingtype=1 have been separated, older versions assume outline if nt=1
 
 KWord overview
 ==============
@@ -93,6 +99,7 @@ don't put a </?xml...> at the end of the file!).
 
                                 1...as for KWord 0.8 (KOffice-1.0)
                                 2...as for KWord 1.1 or 1.2
+                                3...as for KWord 1.3
                             KWord can read all previous versions, but always saves in the latest.
 -->
 <!ELEMENT DOC
@@ -559,11 +566,17 @@ don't put a </?xml...> at the end of the file!).
         all the paragraph properties, as well as a text format.
         It also contains the name of the following style, i.e. the one used when
         the user presses Enter in a paragraph using this style.
+
+        Attributes:
+          outline   if "true", this style is part of the Table Of Contents.
+                    (by default it is not).
 -->
 <!ELEMENT STYLES
     (STYLE*)>
 <!ELEMENT STYLE
     (%layout;|FOLLOWING)*>
+<!ATTLIST STYLE
+    outline CDATA #IMPLIED>
 
 <!--
         Defines the color of the text, using RGB.
