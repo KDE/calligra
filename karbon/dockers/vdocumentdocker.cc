@@ -112,6 +112,7 @@ VDocumentPreview::eventFilter( QObject* object, QEvent* event )
 			m_view->canvasWidget()->scrollBy( int( dx / scaleFactor ), int( dy / scaleFactor ) );
 			m_firstPoint = m_lastPoint;
 			m_dragging = false;
+			update();
 		}
 	}
 	else if( event->type() == QEvent::MouseMove )
