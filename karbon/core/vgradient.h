@@ -24,7 +24,9 @@ enum VGradientSpreadMethod
 	gradient_spread_repeat = 2
 };
 
+
 class QDomElement;
+
 
 class VGradient
 {

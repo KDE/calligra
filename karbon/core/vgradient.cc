@@ -24,12 +24,13 @@ void
 VGradient::save( QDomElement& element ) const
 {
 	QDomElement me = element.ownerDocument().createElement( "GRADIENT" );
-	me.setAttribute( "originx", m_origin.x() );
-	me.setAttribute( "originy", m_origin.y() );
-	me.setAttribute( "vectorx", m_vector.x() );
-	me.setAttribute( "vectory", m_vector.y() );
+
+	me.setAttribute( "originX", m_origin.x() );
+	me.setAttribute( "originY", m_origin.y() );
+	me.setAttribute( "vectorX", m_vector.x() );
+	me.setAttribute( "vectorY", m_vector.y() );
 	me.setAttribute( "type", m_type );
-	me.setAttribute( "spreadmethod", m_spreadMethod );
+	me.setAttribute( "spreadMethod", m_spreadMethod );
 
 	// save stops
 	QDomElement stops = element.ownerDocument().createElement( "COLORSTOPS" );
@@ -38,7 +39,7 @@ VGradient::save( QDomElement& element ) const
 	{
 		QDomElement stop = element.ownerDocument().createElement( "COLORSTOP" );
 		(*itr).color.save( stop );
-		stop.setAttribute( "ramppoint", (*itr).rampPoint );
+		stop.setAttribute( "rampPoint", (*itr).rampPoint );
 		stops.appendChild( stop );
 	}
 
@@ -50,12 +51,12 @@ VGradient::save( QDomElement& element ) const
 void
 VGradient::load( const QDomElement& element )
 {
-	m_origin.setX( element.attribute( "originx", "0.0" ).toDouble() );
-	m_origin.setY( element.attribute( "originy", "0.0" ).toDouble() );
-	m_vector.setX( element.attribute( "vectorx", "0.0" ).toDouble() );
-	m_vector.setY( element.attribute( "vectory", "0.0" ).toDouble() );
+	m_origin.setX( element.attribute( "originX", "0.0" ).toDouble() );
+	m_origin.setY( element.attribute( "originY", "0.0" ).toDouble() );
+	m_vector.setX( element.attribute( "vectorX", "0.0" ).toDouble() );
+	m_vector.setY( element.attribute( "vectorY", "0.0" ).toDouble() );
 	m_type = element.attribute( "type", 0 ).toInt();
-	m_spreadMethod = element.attribute( "spreadmethod", 0 ).toInt();
+	m_spreadMethod = element.attribute( "spreadMethod", 0 ).toInt();
 
 	m_colorStops.clear();
 
@@ -80,7 +81,7 @@ VGradient::load( const QDomElement& element )
 						{
 							VColorStop stop;
 							stop.color.load( colorstop.firstChild().toElement() );
-							stop.rampPoint = colorstop.attribute( "ramppoint", "0.0" ).toDouble();
+							stop.rampPoint = colorstop.attribute( "rampPoint", "0.0" ).toDouble();
 							m_colorStops.append( stop );
 						}
 					}
