@@ -1,6 +1,6 @@
 
 lib_LTLIBRARIES = libkstore.la
-LDFLAGS = -version-info 1:0:0 $(all_libraries)
+LDFLAGS = -version-info 1:0:0 $(all_libraries) $(MICO_LDFLAGS)
 INCLUDES = $(MICO_INCLUDES) -I$(idldir) $(all_includes)
 
 ####### Files
