@@ -1034,6 +1034,11 @@ QString RTFWorker::layoutToRtf(const LayoutData& layoutOrigin,
        strLayout += QString::number(int(layout.marginTop)*20, 10);
     }
 
+    if (force || (layoutOrigin.pageBreakBefore!=layout.pageBreakBefore))
+    {
+       if(layout.pageBreakBefore) strLayout += "\\pagebb";
+    }
+
     if (force
         || (layoutOrigin.lineSpacingType!=layoutOrigin.lineSpacingType)
         || (layoutOrigin.lineSpacing!=layoutOrigin.lineSpacing))
