@@ -5,6 +5,9 @@
  *                1999 Michael Koch    <koch@kde.org>
  *                1999 Carsten Pfeiffer <pfeiffer@kde.org>
  *
+ *  Copyright (c) 2000 John Califf  <jcaliff@compuzone.net>
+ * 
+ *             
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -45,7 +48,9 @@
 #include "kis_canvas.h"
 #include "kis_sidebar.h"
 #include "kis_tabbar.h"
+#include "kis_krayon.h"
 #include "kis_brush.h"
+#include "kis_pattern.h"
 #include "kis_tool.h"
 #include "kis_factory.h"
 #include "kis_gradient.h"
@@ -53,6 +58,8 @@
 #include "kis_selection.h"
 
 #include "kis_brushchooser.h"
+#include "kis_patternchooser.h"
+#include "kis_krayonchooser.h"
 #include "kis_layerview.h"
 #include "kis_channelview.h"
 #include "kis_dlg_gradient.h"
@@ -79,7 +86,7 @@ KisView::KisView( KisDoc* doc, QWidget* parent, const char* name )
     , m_zoomFactor( 1.0 )
 {
     setInstance( KisFactory::global() );
-    setXMLFile( "kimageshop.rc" );
+    setXMLFile( "krayon.rc" );
 
     QObject::connect( m_pDoc, SIGNAL( docUpdated( ) ),
                     this, SLOT( slotDocUpdated ( ) ) );
@@ -136,6 +143,15 @@ void KisView::setupSideBar()
 {
     m_pSideBar = new KisSideBar(this, "kis_sidebar");
 
+    // krayon chooser
+    m_pKrayonChooser = new KisKrayonChooser(this);
+    m_pKrayon = m_pKrayonChooser->currentKrayon();
+    QObject::connect(m_pKrayonChooser, SIGNAL(selected(const KisKrayon *)),
+			   this, SLOT(slotSetKrayon(const KisKrayon*)));
+
+    m_pKrayonChooser->setCaption("Krayons");
+    m_pSideBar->plug(m_pKrayonChooser);
+
     // brush chooser
     m_pBrushChooser = new KisBrushChooser(this);
     m_pBrush = m_pBrushChooser->currentBrush();
@@ -144,6 +160,15 @@ void KisView::setupSideBar()
 
     m_pBrushChooser->setCaption("Brushes");
     m_pSideBar->plug(m_pBrushChooser);
+
+    // pattern chooser
+    m_pPatternChooser = new KisPatternChooser(this);
+    m_pPattern = m_pPatternChooser->currentPattern();
+    QObject::connect(m_pPatternChooser, SIGNAL(selected(const KisPattern *)),
+			   this, SLOT(slotSetPattern(const KisPattern*)));
+
+    m_pPatternChooser->setCaption("Patterns");
+    m_pSideBar->plug(m_pPatternChooser);
 
     // layer view
     m_pLayerView = new KisLayerView(m_pDoc, this);
@@ -167,13 +192,13 @@ void KisView::setupSideBar()
 		  SLOT(slotSetFGColor(const KisColor&)));
     connect(m_pSideBar, SIGNAL(bgColorChanged(const KisColor&)), this,
 		  SLOT(slotSetBGColor(const KisColor&)));
-                  
+
     connect(this, SIGNAL(fgColorChanged(const KisColor&)), m_pSideBar,
 		  SLOT(slotSetFGColor(const KisColor&)));
     connect(this, SIGNAL(bgColorChanged(const KisColor&)), m_pSideBar,
 		  SLOT(slotSetBGColor(const KisColor&)));
 
-    m_side_bar->setChecked( true );                  
+    m_side_bar->setChecked( true );
 }
 
 
@@ -186,7 +211,7 @@ void KisView::setupScrollBars()
     m_pHorz->setGeometry(20, height()-16, width()-36, 16);
     m_pHorz->setValue(0);
     m_pVert->setValue(0);
-    
+
     //m_pVert->show();
     //m_pHorz->show();
 
@@ -249,10 +274,10 @@ void KisView::setupTabBar()
 
 void KisView::setupTools()
 {
-    // select tool 
+    // select tool
     m_pSelectTool = new SelectTool( m_pDoc, this, m_pCanvas );
 
-    // select tool 
+    // select tool
     m_pPasteTool = new PasteTool( m_pDoc, this, NULL );
 
     // move tool
@@ -314,56 +339,58 @@ void KisView::setupDialogs()
 void KisView::setupActions()
 {
     // edit actions
-  
-    m_undo = KStdAction::undo( this, SLOT( undo() ), 
+
+    m_undo = KStdAction::undo( this, SLOT( undo() ),
         actionCollection(), "undo");
-    m_redo = KStdAction::redo( this, SLOT( redo() ), 
+    m_redo = KStdAction::redo( this, SLOT( redo() ),
         actionCollection(), "redo");
-  
-    m_cut = KStdAction::cut( this, SLOT( cut() ), 
+
+    m_cut = KStdAction::cut( this, SLOT( cut() ),
         actionCollection(), "cut");
-        
-    m_copy = KStdAction::copy( this, SLOT( copy() ), 
+
+    m_copy = KStdAction::copy( this, SLOT( copy() ),
         actionCollection(), "copy");
-        
-    m_paste = KStdAction::paste( this, SLOT( paste() ), 
+
+    m_paste = KStdAction::paste( this, SLOT( paste() ),
         actionCollection(), "paste");
 
     m_crop = new KAction( i18n("Crop"),
-        0,  this, SLOT( crop() ), 
+        0,  this, SLOT( crop() ),
         actionCollection(), "crop");
 
-    m_select_all = KStdAction::selectAll( this, SLOT( selectAll() ), 
+    m_select_all = KStdAction::selectAll( this, SLOT( selectAll() ),
         actionCollection(), "select_all");
 
-    m_unselect_all = new KAction( i18n("Unselect All"), 
-        0, this, SLOT( unSelectAll() ), 
+    m_unselect_all = new KAction( i18n("Unselect All"),
+        0, this, SLOT( unSelectAll() ),
         actionCollection(), "unselect_all");
 
     // import/export actions
 
-    new KAction( i18n("Import Image"), 
-        "wizard", 0, this, SLOT( insert_layer_image() ), 
+    new KAction( i18n("Import Image"),
+        "wizard", 0, this, SLOT( insert_layer_image() ),
         actionCollection(), "import_image" );
 
-    new KAction( i18n("Export Image"), 
-        "wizard", 0, this, SLOT( save_layer_image() ), 
+    new KAction( i18n("Export Image"),
+        "wizard", 0, this, SLOT( save_layer_image() ),
         actionCollection(), "export_image" );
 
     // view actions
 
-    new KAction( i18n("Zoom &in"), 
-        "viewmag+", 0, this, SLOT( zoom_in() ), 
+    new KAction( i18n("Zoom &in"),
+        "viewmag+", 0, this, SLOT( zoom_in() ),
         actionCollection(), "zoom_in" );
 
-    new KAction( i18n("Zoom &out"), 
-        "viewmag-", 0, this, SLOT( zoom_out() ), 
+    new KAction( i18n("Zoom &out"),
+        "viewmag-", 0, this, SLOT( zoom_out() ),
         actionCollection(), "zoom_out" );
+
+    // tool settings actions
 
     m_dialog_gradient = new KToggleAction( i18n("&Gradient Dialog"),
         "gradient_dialog", 0, this, SLOT( dialog_gradient() ),
         actionCollection(), "dialog_gradient");
-          
+
     m_dialog_gradienteditor = new KToggleAction( i18n("Gradient &Editor"),
         "gradienteditor_dialog",  0, this, SLOT( dialog_gradienteditor() ),
         actionCollection(), "dialog_gradienteditor");
@@ -371,154 +398,177 @@ void KisView::setupActions()
     // tool actions - lots of them
 
     m_tool_select_rect = new KToggleAction( i18n( "&Rectangular select" ),
-        "rectangular", 0, this,  SLOT( tool_select_rect() ), 
+        "rectangular", 0, this,  SLOT( tool_select_rect() ),
         actionCollection(), "tool_select_rect" );
-        
+
     m_tool_select_rect->setExclusiveGroup( "tools" );
 
-    m_tool_select_polygon = new KToggleAction( i18n( "&Polygon select" ), 
-        "rectangular" , 0, this, SLOT( tool_select_rect() ), 
+    m_tool_select_polygon = new KToggleAction( i18n( "&Polygon select" ),
+        "rectangular" , 0, this, SLOT( tool_select_rect() ),
         actionCollection(), "tool_select_polygon" );
-        
+
     m_tool_select_polygon->setExclusiveGroup( "tools" );
 
-    m_tool_move = new KToggleAction( i18n("&Move tool"), 
+    m_tool_move = new KToggleAction( i18n("&Move tool"),
         "move", 0, this, SLOT( tool_move() ),
         actionCollection(), "tool_move");
-        
+
     m_tool_move->setExclusiveGroup( "tools" );
 
-    m_tool_zoom = new KToggleAction( i18n("&Zoom tool"), 
+    m_tool_zoom = new KToggleAction( i18n("&Zoom tool"),
         "viewmag", 0, this, SLOT( tool_zoom() ),
         actionCollection(), "tool_zoom");
-        
+
     m_tool_zoom->setExclusiveGroup( "tools" );
 
-    m_tool_draw = new KToggleAction( i18n("&Draw simple figure"), 
+    m_tool_draw = new KToggleAction( i18n("&Draw simple figure"),
         "pencil", 0, this, SLOT( tool_pen() ),
         actionCollection(), "tool_draw_figure");
-        
+
     m_tool_draw->setExclusiveGroup( "tools" );
 
-    m_tool_pen = new KToggleAction( i18n("&Pen tool"), 
+    m_tool_pen = new KToggleAction( i18n("&Pen tool"),
         "pencil", 0, this, SLOT( tool_pen() ),
         actionCollection(), "tool_pen");
-        
+
     m_tool_pen->setExclusiveGroup( "tools" );
 
-    m_tool_brush = new KToggleAction( i18n("&Brush tool"), 
+    m_tool_brush = new KToggleAction( i18n("&Brush tool"),
         "paintbrush", 0, this, SLOT( tool_brush() ),
         actionCollection(), "tool_brush");
-        
+
     m_tool_brush->setExclusiveGroup( "tools" );
 
     m_tool_airbrush = new KToggleAction( i18n("&Airbrush tool"),
         "airbrush", 0, this, SLOT( tool_airbrush() ),
         actionCollection(), "tool_airbrush");
-        
-    m_tool_airbrush->setExclusiveGroup( "tools" );
-	//m_tool_airbrush->setEnabled( false ); 
 
-    m_tool_fill = new KToggleAction( i18n("&Filler tool"), 
+    m_tool_airbrush->setExclusiveGroup( "tools" );
+	//m_tool_airbrush->setEnabled( false );
+
+    m_tool_fill = new KToggleAction( i18n("&Filler tool"),
         "fill", 0, this, SLOT( tool_fill() ),
         actionCollection(), "tool_fill");
-        
+
     m_tool_fill->setExclusiveGroup( "tools" );
 
-    m_tool_eraser = new KToggleAction( i18n("&Eraser tool"), 
-        "eraser", 0, this, SLOT( tool_eraser() ),actionCollection(), 
+    m_tool_eraser = new KToggleAction( i18n("&Eraser tool"),
+        "eraser", 0, this, SLOT( tool_eraser() ),actionCollection(),
         "tool_eraser");
-        
+
     m_tool_eraser->setExclusiveGroup( "tools" );
 
     m_tool_colorpicker = new KToggleAction( i18n("&Color picker"),
         "colorpicker", 0, this, SLOT( tool_colorpicker() ),
         actionCollection(), "tool_colorpicker");
-        
+
     m_tool_colorpicker->setExclusiveGroup( "tools" );
 
-    m_tool_gradient = new KToggleAction( i18n("&Gradient tool"), 
+    m_tool_gradient = new KToggleAction( i18n("&Gradient tool"),
         "gradient", 0, this, SLOT( tool_gradient() ),
         actionCollection(), "tool_gradient");
-        
+
     m_tool_gradient->setExclusiveGroup( "tools" );
 
     // layer actions
 
-    (void) new KAction( i18n("&Insert layer..."), 
-        0, this, SLOT( insert_layer() ), 
+    (void) new KAction( i18n("&Insert layer..."),
+        0, this, SLOT( insert_layer() ),
         actionCollection(), "insert_layer" );
 
-    (void) new KAction( i18n("I&nsert image as layer..."), 
-        0, this, SLOT( insert_layer_image() ), 
+    (void) new KAction( i18n("I&nsert image as layer..."),
+        0, this, SLOT( insert_layer_image() ),
         actionCollection(), "insert_layer_image" );
 
-    (void) new KAction( i18n("Save layer as standard image..."), 
-        0, this, SLOT( save_layer_image() ), 
+    (void) new KAction( i18n("Save layer as standard image..."),
+        0, this, SLOT( save_layer_image() ),
         actionCollection(), "save_layer_image" );
 
-    m_layer_rotate180 = new KAction( i18n("Rotate &180"), 
+    m_layer_rotate180 = new KAction( i18n("Rotate &180"),
         0, this, SLOT( layer_rotate180() ),
         actionCollection(), "layer_rotate180");
 
-    m_layer_rotate270 = new KAction( i18n("Rotate &270"), 
+    m_layer_rotate270 = new KAction( i18n("Rotate &270"),
         0, this, SLOT( layer_rotateleft90() ),
         actionCollection(), "layer_rotateleft90");
 
-    m_layer_rotate90 = new KAction( i18n("Rotate &90"), 
+    m_layer_rotate90 = new KAction( i18n("Rotate &90"),
         0, this, SLOT( layer_rotateright90() ),
         actionCollection(), "layer_rotateright90");
 
-    m_layer_mirrorX = new KAction( i18n("Mirror &X"), 
+    m_layer_mirrorX = new KAction( i18n("Mirror &X"),
         0, this, SLOT( layer_mirrorX() ),
         actionCollection(), "layer_mirrorX");
 
-    m_layer_mirrorY = new KAction( i18n("Mirror &Y"), 
+    m_layer_mirrorY = new KAction( i18n("Mirror &Y"),
         0, this, SLOT( layer_mirrorY() ),
         actionCollection(), "layer_mirrorY");
 
     // image actions
 
-    (void) new KAction( i18n("Add new image tab"), 
+    (void) new KAction( i18n("Add new image tab"),
         0, this, SLOT( add_new_image_tab() ),
         actionCollection(), "add_new_image_tab");
 
-    (void) new KAction( i18n("Remove current image tab"), 
+    (void) new KAction( i18n("Remove current image tab"),
         0, this, SLOT( remove_current_image_tab() ),
         actionCollection(), "remove_current_image_tab");
 
-    (void) new KAction( i18n("Merge &all layers"), 
+    (void) new KAction( i18n("Merge &all layers"),
         0, this, SLOT( merge_all_layers() ),
         actionCollection(), "merge_all_layers");
 
-    (void) new KAction( i18n("Merge &visible layers"), 
+    (void) new KAction( i18n("Merge &visible layers"),
         0, this, SLOT( merge_visible_layers() ),
         actionCollection(), "merge_visible_layers");
 
-    (void) new KAction( i18n("Merge &linked layers"), 
+    (void) new KAction( i18n("Merge &linked layers"),
         0, this, SLOT( merge_linked_layers() ),
         actionCollection(), "merge_linked_layers");
 
     // setting actions
 
-    (void) KStdAction::showMenubar( this, SLOT( showMenubar() ), 
+    (void) KStdAction::showMenubar( this, SLOT( showMenubar() ),
         actionCollection(), "show_menubar" );
 
-    (void) KStdAction::showToolbar( this, SLOT( showToolbar() ), 
+    (void) KStdAction::showToolbar( this, SLOT( showToolbar() ),
         actionCollection(), "show_toolbar" );
 
-    (void) KStdAction::showStatusbar( this, SLOT( showStatusbar() ), 
+    (void) KStdAction::showStatusbar( this, SLOT( showStatusbar() ),
         actionCollection(), "show_statusbar" );
 
-    m_side_bar = new KToggleAction( i18n("Show &Sidebar"), 
-        0, this, SLOT( showSidebar() ), 
+    m_side_bar = new KToggleAction( i18n("Show/Hide Sidebar"),
+        "krayon_box", 0, this, SLOT( showSidebar() ),
         actionCollection(), "show_sidebar" );
-    
-    (void) KStdAction::saveOptions( this, SLOT( saveOptions() ), 
+
+    (void) KStdAction::saveOptions( this, SLOT( saveOptions() ),
         actionCollection(), "save_options" );
 
-    (void) KStdAction::preferences( this, SLOT( preferences() ), 
-        actionCollection(), "configure");
+	// krayon box toolbar actions 
+
+      m_dialog_colors = new KToggleAction( i18n("&Colors"),
+        "color_dialog", 0, this, SLOT( dialog_colors() ),
+        actionCollection(), "colors_dialog");
+
+      m_dialog_krayons = new KToggleAction( i18n("&Krayons"),
+        "krayon_box", 0, this, SLOT( dialog_krayons() ),
+        actionCollection(), "krayons_dialog");
+
+      m_dialog_brushes = new KToggleAction( i18n("Brushes"),
+        "brush_dialog", 0, this, SLOT( dialog_brushes() ),
+        actionCollection(), "brushes_dialog");
+
+      m_dialog_patterns = new KToggleAction( i18n("Patterns"),
+        "pattern_dialog", 0, this, SLOT( dialog_patterns() ),
+        actionCollection(), "patterns_dialog");
+
+      m_dialog_layers = new KToggleAction( i18n("Layers"),
+        "layer_dialog", 0, this, SLOT( dialog_layers() ),
+        actionCollection(), "layers_dialog");
+
+      m_dialog_channels = new KToggleAction( i18n("Channels"),
+        "channel_dialog", 0, this, SLOT( dialog_channels() ),
+        actionCollection(), "channels_dialog");
 
     // help actions - these are standard kde actions
 
@@ -527,7 +577,7 @@ void KisView::setupActions()
     (void) KStdAction::helpContents( m_helpMenu, SLOT( appHelpActivated() ), 
         actionCollection(), "help_contents" );
         
-    (void) KStdAction::whatsThis( m_helpMenu, SLOT( contextHelpActivated() ), 
+    (void) KStdAction::whatsThis( m_helpMenu, SLOT( contextHelpActivated() ),
         actionCollection(), "help_whatsthis" );
         
     (void) KStdAction::reportBug( m_helpMenu, SLOT( reportBug() ), 
@@ -543,10 +593,10 @@ void KisView::setupActions()
     m_redo->setEnabled( false );
 
     m_layer_rotate180->setEnabled( false );
-    m_layer_rotate270->setEnabled( false );  
-    m_layer_rotate90->setEnabled( false );  
-    m_layer_mirrorX->setEnabled( false );  
-    m_layer_mirrorY->setEnabled( false );  
+    m_layer_rotate270->setEnabled( false );
+    m_layer_rotate90->setEnabled( false );
+    m_layer_mirrorX->setEnabled( false );
+    m_layer_mirrorY->setEnabled( false );
 }
 
 
@@ -569,12 +619,12 @@ void KisView::resizeEvent(QResizeEvent*)
     if(!m_pSideBar)
         sideW = 0;
     else
-    {  
+    {
         if(m_side_bar->isChecked())
         {
             sideW = m_pSideBar->width();
-        }    
-        else    
+        }
+        else
             sideW = 0;
     }        
     
@@ -730,6 +780,7 @@ void KisView::slotDocUpdated(const QRect& rect)
     QPainter p;
 
     p.begin( m_pCanvas );
+    p.scale( zoomFactor(), zoomFactor() ); //jwc
     p.translate(xt, yt);
 
     // let the document draw the image
@@ -1075,6 +1126,17 @@ void KisView::zoom( int _x, int _y, float zf )
     if (x < 0) x = 0;
     if (y < 0) y = 0;
 
+    // clear old background
+    if(zf < 1)
+    {
+        QPainter p;
+        p.begin( m_pCanvas );
+
+        // clear everything
+        p.eraseRect( 0, 0, width(), height() );
+        p.end();
+    }
+
     scrollTo( QPoint( x, y ) );
     m_pCanvas->update();
 }
@@ -1126,6 +1188,24 @@ void KisView::dialog_gradienteditor()
         m_pGradientEditorDialog->hide();
 }
 
+void KisView::dialog_colors()
+{
+}
+void KisView::dialog_krayons()
+{
+}
+void KisView::dialog_brushes()
+{
+}
+void KisView::dialog_patterns()
+{
+}
+void KisView::dialog_layers()
+{
+}
+void KisView::dialog_channels()
+{
+}
 
 void KisView::updateToolbarButtons()
 {
@@ -1226,14 +1306,7 @@ void KisView::layer_rotateright90()
 
 void KisView::layer_mirrorX()
 {
-    if(m_pCanvas->backgroundPixmap()->isNull())
-    {
-        kdDebug(0) << "canvasBgPixmap is NULL" << endl;   
-    }        
-    else
-    {
-        m_pCanvas->backgroundPixmap()->save("canvasBgPixmap.png", "PNG");
-    } 
+
 }
 
 
@@ -1245,7 +1318,6 @@ void KisView::layer_mirrorY()
 /*
  * image action slots
  */
-
 
 void KisView::add_new_image_tab()
 {
@@ -1404,6 +1476,45 @@ void KisView::slotSetBrush(const KisBrush* b)
 
     m_pSideBar->slotSetBrush(*b);
 }
+
+
+void KisView::slotSetKrayon(const KisKrayon* k)
+{
+    m_pKrayon = k;
+    
+/*
+    if (m_pPatternPaintTool)
+        m_pPatternPaintTool->setPattern(p);
+    if (m_pPenTool)
+        m_pPenTool->setPattern(p);
+    if (m_pStarDustTool)
+        m_pAirBrushTool->setPattern(p);
+    if (m_pEraserTool)
+        m_pEraserTool->setPattern(p);
+*/
+
+    m_pSideBar->slotSetKrayon(*k);
+}
+
+
+void KisView::slotSetPattern(const KisPattern* p)
+{
+    m_pPattern = p;
+    
+/*
+    if (m_pPatternPaintTool)
+        m_pPatternPaintTool->setPattern(p);
+    if (m_pPenTool)
+        m_pPenTool->setPattern(p);
+    if (m_pStarDustTool)
+        m_pAirBrushTool->setPattern(p);
+    if (m_pEraserTool)
+        m_pEraserTool->setPattern(p);
+*/
+
+    m_pSideBar->slotSetPattern(*p);
+}
+
 
 /*
     The new foreground color should show up in the color selector 

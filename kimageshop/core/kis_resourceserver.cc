@@ -33,7 +33,7 @@
 KisResourceServer::KisResourceServer()
 {
     m_brushes.setAutoDelete(true);
-    m_pattern.setAutoDelete(true);
+    m_patterns.setAutoDelete(true);
 
     // image formats
     QStringList formats;
@@ -81,7 +81,7 @@ KisResourceServer::KisResourceServer()
 KisResourceServer::~KisResourceServer()
 {
     m_brushes.clear();
-    m_pattern.clear();
+    m_patterns.clear();
 }
 
 const KisBrush * KisResourceServer::loadBrush( const QString& filename )
@@ -104,7 +104,7 @@ const KisPattern * KisResourceServer::loadPattern( const QString& filename )
     KisPattern *pattern = new KisPattern( filename );
 
     if ( pattern->isValid() )
-        m_pattern.append(pattern);
+        m_patterns.append(pattern);
     else 
     {
         delete pattern;

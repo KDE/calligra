@@ -134,17 +134,21 @@ bool Fill::flood(int startx, int starty)
     nBlue    = m_pView->fgColor().B();
 
     QRect layerRect = lay->imageExtents();
-    
-    if(layerRect.width() > 320)
+    int maxWidth = zoomed(320);
+    int maxHeight = zoomed(320);    
+    int maxX = zoomed(160);
+    int maxY = zoomed(160);
+        
+    if(layerRect.width() > maxWidth)
     { 
-        layerRect.setLeft(startx - 160 > 0 ? startx - 160 : 0);  
-        layerRect.setRight(startx + 160 < layerRect.right() ? startx + 160 :  layerRect.right());      
+        layerRect.setLeft(startx - maxX > 0 ? startx - maxX : 0);  
+        layerRect.setRight(startx + maxX < layerRect.right() ? startx + maxX :  layerRect.right());      
     }
     
-    if(layerRect.height() > 320)
+    if(layerRect.height() > maxHeight)
     { 
-        layerRect.setTop(starty - 160 > 0 ? starty - 160 : 0);  
-        layerRect.setBottom(starty + 160 < layerRect.bottom() ? starty + 160 : layerRect.bottom());      
+        layerRect.setTop(starty - maxY > 0 ? starty - maxY : 0);  
+        layerRect.setBottom(starty + maxY < layerRect.bottom() ? starty + maxY : layerRect.bottom());      
     }
      
     // bool alpha = (img->colorMode() == cm_RGBA);
@@ -339,16 +343,19 @@ void Fill::mousePress(QMouseEvent *e)
     && e->button() != QMouseEvent::RightButton)
         return;
 
+    QPoint pos = e->pos();
+    pos = zoomed(pos);
+        
     if( !img->getCurrentLayer()->visible() )
         return;
   
-    if( !img->getCurrentLayer()->imageExtents().contains( e->pos() ))
+    if( !img->getCurrentLayer()->imageExtents().contains(pos))
         return;
   
     if (e->button() == QMouseEvent::LeftButton)
-        flood(e->pos().x(), e->pos().y());
+        flood(pos.x(), pos.y());
         
     else if (e->button() == QMouseEvent::RightButton)
-        flood(e->pos().x(), e->pos().y());
+        flood(pos.x(), pos.y());
 }
 

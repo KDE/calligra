@@ -26,6 +26,7 @@
 #include <kdebug.h> 
 
 #include "kis_sidebar.h"
+#include "kis_krayonwidget.h"
 #include "kis_brushwidget.h"
 #include "kis_patternwidget.h"
 #include "kis_colorchooser.h"
@@ -130,9 +131,19 @@ void KisSideBar::slotControlBGColorSelected(const KisColor& c)
   emit bgColorChanged( c );
 }
 
+void KisSideBar::slotSetKrayon( const KisKrayon& k )
+{
+    m_pControlFrame->slotSetKrayon(k);
+}
+
 void KisSideBar::slotSetBrush( const KisBrush& b )
 {
     m_pControlFrame->slotSetBrush(b);
+}
+
+void KisSideBar::slotSetPattern( const KisPattern& b )
+{
+    m_pControlFrame->slotSetPattern(b);
 }
 
 void KisSideBar::slotHideChooserFrame( )
@@ -448,15 +459,15 @@ void ChooserFrame::slotColorSelected(const KisColor& c)
 
 
 /*
-    Control Frame - access to dialogs for kde color chooser, 
-    brushes and patterns - more later
+    Control Frame - status display with access to  
+    color selector, brushes, patterns, and preview 
 */
 
 ControlFrame::ControlFrame( QWidget* parent, const char* name ) : QFrame( parent, name )
 {
     QString defaultPattern = getenv("KDEDIR") + QString("/")
         + KStandardDirs::kde_default("data") 
-        + "kimageshop/patterns/Mystique.xpm";
+        + "krayon/patterns/Concrete.xpm";
 
     setFrameStyle(Panel | Raised);
     setLineWidth(1);
@@ -489,6 +500,11 @@ void ControlFrame::slotActiveColorChanged(KDualColorButton::DualColor s)
 	    emit activeColorChanged(ac_Foreground);
     else
 	    emit activeColorChanged(ac_Background);
+}
+
+void ControlFrame::slotSetKrayon(const KisKrayon& k)
+{
+    m_pKrayonWidget->slotSetKrayon(k);
 }
 
 void ControlFrame::slotSetBrush(const KisBrush& b)

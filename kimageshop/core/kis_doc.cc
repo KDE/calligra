@@ -2,7 +2,7 @@
  *  kis_doc.cc - part of KImageShop
  *
  *  Copyright (c) 1999 Matthias Elter  <me@kde.org>
- *
+ *  Copyright (c) 2000 John Califf  <jcaliff@compuzone.net>
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -83,6 +83,7 @@ kdDebug(0) << "KisDoc::KisDoc() entering" << endl;
     m_pCurrent = 0L;
     m_pNewDialog = 0L;
     m_pClipImage = 0L;
+    m_pSelection = new KisSelection(this);    
     m_Images.setAutoDelete(false);
     
 kdDebug(0) << "QPixmap::defaultDepth(): " << QPixmap::defaultDepth() << endl; 
@@ -101,17 +102,17 @@ bool KisDoc::initDoc()
     QString name;
     name.sprintf("image%d", m_Images.count() + 1);
     
-    // jwc - choose dialog for open mode  
+    // choose dialog for open mode  
 
     QString templ;
     KoTemplateChooseDia::ReturnType ret;
 
     ret = KoTemplateChooseDia::choose (KisFactory::global(),
-                                     templ,
-                                     "application/x-kimageshop", "*.kis",
-                                     i18n("KImageShop"),
-                                     KoTemplateChooseDia::Everything,
-                                     "kimageshop_template");
+              templ,
+              "application/x-krayon", "*.kra",
+              i18n("Krayon"),
+              KoTemplateChooseDia::Everything,
+              "krayon_template");
 
     // create document from template - use default 
     // 512x512 RGBA image
@@ -134,7 +135,7 @@ bool KisDoc::initDoc()
         ok = true;
     } 
     // open an existing document
-    else if (ret == KoTemplateChooseDia::File) 
+    else if ( ret == KoTemplateChooseDia::File ) 
     {
         KURL url;
         url.setPath (templ);
@@ -147,8 +148,6 @@ bool KisDoc::initDoc()
         ok = slotNewImage();        
         if(ok) emit imageListUpdated();
     } 
-
-    m_pSelection = new KisSelection(this);    
 
     return ok;    
 }
@@ -175,8 +174,8 @@ QDomDocument KisDoc::saveXML( )
     image.setAttribute( "name", img->name() );
     image.setAttribute( "author", img->author() );
     image.setAttribute( "email", img->email() );
-    image.setAttribute( "editor", "KImageShop" );
-    image.setAttribute( "mime", "application/x-kimageshop" );
+    image.setAttribute( "editor", "Krayon" );
+    image.setAttribute( "mime", "application/x-krayon" );
     image.setAttribute( "width", img->width() );
     image.setAttribute( "height", img->height() );
     image.setAttribute( "bitDepth", static_cast<int>(img->bitDepth()) );
@@ -185,8 +184,8 @@ QDomDocument KisDoc::saveXML( )
 kdDebug(0) << "name: " <<  img->name() << endl;
 kdDebug(0) << "author: " <<  img->author() << endl;          
 kdDebug(0) << "email: " <<  img->email() << endl;
-kdDebug(0) << "editor: " <<  "KImageShop" << endl;
-kdDebug(0) << "mime: " << "application/x-kimageshop"  << endl;
+kdDebug(0) << "editor: " <<  "Krayon" << endl;
+kdDebug(0) << "mime: " << "application/x-krayon"  << endl;
 kdDebug(0) << "img->width(): " <<  img->width() << endl;  
 kdDebug(0) << "img->height(): " <<  img->height() << endl;    
 kdDebug(0) << "bitDepth " <<  static_cast<int>(img->bitDepth()) << endl;  
@@ -287,19 +286,19 @@ kdDebug(0) << "KisDoc::completeSaving() entering" << endl;
 
     QList<KisLayer> layers = m_pCurrent->layerList();
 
-    for (KisLayer *lay = layers.first(); lay != 0; lay = layers.next())
+    for ( KisLayer *lay = layers.first(); lay != 0; lay = layers.next())
     {
-      for ( KisChannel* ch = lay->firstChannel(); ch != 0; ch = lay->nextChannel())
-	  {
-	    QString url = QString( "layers/%1/channels/ch%2.bin" ).arg( lay->name() )
-			.arg( static_cast<int>(ch->channelId()) );
+        for ( KisChannel* ch = lay->firstChannel(); ch != 0; ch = lay->nextChannel())
+	    {
+	        QString url = QString( "layers/%1/channels/ch%2.bin" ).arg( lay->name() )
+			    .arg( static_cast<int>(ch->channelId()) );
 
-          if ( store->open( url ) )
-	      {
-              ch->writeToStore(store);
-		      store->close();
-	      }
-	  }
+            if ( store->open( url ) )
+	        {
+                ch->writeToStore(store);
+		        store->close();
+	        }
+	    }
     }
 
 kdDebug(0) << "KisDoc::completeSaving() leaving" << endl;    
@@ -324,7 +323,7 @@ kdDebug(0) << "KisDoc::loadXML() entering" << endl;
 
     QDomElement image = doc.documentElement();
 
-    if (image.attribute( "mime" ) != "application/x-kimageshop") 
+    if (image.attribute( "mime" ) != "application/x-krayon") 
     {
       kdDebug(0) << "KisDoc::loadXML() no mime name error" << endl;        
       return false;
@@ -821,7 +820,7 @@ bool KisDoc::QtImageToLayer(QImage *qimage, KisView *pView)
     uchar *sl;
     uchar bv, invbv;
     uchar r, g, b, a;
-    int   v;
+    int   v = 255;
 
     int red     = pView->fgColor().R();
     int green   = pView->fgColor().G();
@@ -1080,7 +1079,6 @@ KisImage* KisDoc::newImage(const QString& n, int width, int height, cMode cm , u
 }
 
 
-
 void KisDoc::removeImage( KisImage *img )
 {
     if(m_Images.count() > 1)
@@ -1088,22 +1086,9 @@ void KisDoc::removeImage( KisImage *img )
         m_Images.remove(img);
         delete img;
         setCurrentImage(m_Images.first());
-
     }
     else // last image
     {
-        // disconnect image - should always be current image
-#if 0
-        if(img == m_pCurrent)
-        {
-            QObject::disconnect( m_pCurrent, SIGNAL( updated() ),
-	            this, SLOT( slotImageUpdated() ) );
-            QObject::disconnect( m_pCurrent, SIGNAL( updated( const QRect& ) ),
-	            this, SLOT( slotImageUpdated( const QRect& ) ) );
-            QObject::disconnect( m_pCurrent, SIGNAL( layersUpdated() ),
-                this, SLOT( slotLayersUpdated() ) );
-        }
-#endif        
         m_Images.remove(img);
         delete img;
         setCurrentImage(0L);
@@ -1208,7 +1193,7 @@ bool KisDoc::slotNewImage()
 
 QCString KisDoc::mimeType() const
 {
-    return "application/x-kimageshop";
+    return "application/x-krayon";
 }
 
 

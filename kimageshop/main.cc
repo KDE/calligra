@@ -35,7 +35,7 @@ static const KCmdLineOptions options[] =
 
 int main( int argc, char **argv )
 {
-    KAboutData aboutData( "kimageshop", I18N_NOOP("KImageShop"),
+    KAboutData aboutData( "krayon", I18N_NOOP("Krayon"),
         "0.0.1", description, KAboutData::License_GPL, "(c) 1999, Michael Koch",
 	0, "http://koffice.kde.org/kimageshop/" );
     aboutData.addAuthor("Matthias Elter", 0, "me@kde.org");
@@ -48,7 +48,7 @@ int main( int argc, char **argv )
     KoApplication app;
 
     app.dcopClient()->attach();
-    app.dcopClient()->registerAs( "kimageshop" );
+    app.dcopClient()->registerAs( "krayon" );
 
     app.start();
     app.exec();

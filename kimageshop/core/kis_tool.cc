@@ -21,6 +21,7 @@
 #include <kmessagebox.h>
 
 #include "kis_tool.h"
+#include "kis_view.h"
 #include "kis_cursor.h"
 
 KisTool::KisTool(KisDoc *doc, KisView *view)
@@ -51,6 +52,27 @@ void KisTool::setCursor( const QCursor& c )
 QCursor KisTool::cursor()
 {
   return m_Cursor;
+}
+
+// translate integer for zoom factor
+int KisTool::zoomed(int n)
+{
+    return ((int)(n / m_pView->zoomFactor()));
+}
+
+// translate point for zoom factor
+QPoint KisTool::zoomed(QPoint & point)
+{
+    // current zoom factor for this view
+    float zF = m_pView->zoomFactor();
+   
+    // translate startpoint for zoom factor
+    // this is almost always a from a mouse event
+     
+    int startx = point.x();
+    int starty = point.y();
+    
+    return QPoint((int)(startx/zF), (int)(starty/zF));
 }
 
 void KisTool::mousePress(QMouseEvent*){}

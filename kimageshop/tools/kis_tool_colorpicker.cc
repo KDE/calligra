@@ -61,14 +61,17 @@ void ColorPicker::mousePress(QMouseEvent *e)
 
     if( !img->getCurrentLayer()->visible() )
         return;
-  
-    if( !img->getCurrentLayer()->imageExtents().contains( e->pos() ))
+
+    QPoint pos = e->pos();
+    pos = zoomed(pos);
+          
+    if( !img->getCurrentLayer()->imageExtents().contains(pos))
         return;
   
     if (e->button() == QMouseEvent::LeftButton)
-        m_pView->slotSetFGColor(pick(e->pos().x(), e->pos().y()));
+        m_pView->slotSetFGColor(pick(pos.x(), pos.y()));
         
     else if (e->button() == QMouseEvent::RightButton)
-        m_pView->slotSetBGColor(pick(e->pos().x(), e->pos().y()));
+        m_pView->slotSetBGColor(pick(pos.x(), pos.y()));
 }
 

@@ -1,11 +1,13 @@
 [Desktop Entry]
-Name=KImageShop
+Name=Krayon
 Name[eo]=Bildfarilo
 Name[is]=Myndvinnsla
+Name[mi]=KToaPikitia
 Name[pt_BR]=Manipulador de Imagens
-Exec=kimageshop
+Name[sv]=Bildmanipulering
+Exec=krayon
 MapNotify=true
-X-KDE-Library=libkimageshop
+X-KDE-Library=libkrayonpart
 X-KDE-LibraryMajor=1
 X-KDE-LibraryMinor=0
 X-KDE-LibraryDependencies=
@@ -14,10 +16,9 @@ Comment[ca]=Aplicació de manipulació d'imatges KOffice.
 Comment[cs]=Program pro manipulaci s obrázky pro KOffice
 Comment[da]=KOffice billedmanipulations program.
 Comment[de]=KOffice-Programm für die Bildbearbeitung
-Comment[el]=Εφαρμογή επεξεργασίας εικόνας του 
-KOffice.
+Comment[el]=Εφαρμογή επεξεργασίας εικόνας του KOffice.
 Comment[eo]=Bildmanipulilo de Oficejo
-Comment[es]=Aplicación de manipulación de imágenes de KOffice.
+Comment[es]=Aplicación de KOffice para manipular imágenes
 Comment[et]=KOffice'i pilditöötlus programm
 Comment[fi]=KOffice kuvianmuokkausohjelma
 Comment[fr]=Programe de Manipulation d'Images de KOffice
@@ -28,27 +29,30 @@ Comment[hu]=A KOffice képmanipuláló programja.
 Comment[is]=kimageshop:  Myndvinnsluforrit K-vöndulsins
 Comment[it]=Applicazione di manipolazione immagini di KOffice
 Comment[lt]=KOffice manipuliavimo paveikslėliais programa
-Comment[mk]=Апликација за манипулација со слики 
-за KOffice
 Comment[nl]=KOffice's beeldbewerkingsprogramma
 Comment[no]=KOffices bildemanipuleringsprogram.
 Comment[no_NY]=Biletebehandling for KDE
 Comment[pl]=Program graficzny do KOffice
-Comment[pt]=Uma aplicação de manipulação de imagens do KOffice
 Comment[pt_BR]=Aplicação de manipulação de imagens do KOffice
+Comment[pt]=Uma aplicação de manipulação de imagens do KOffice
 Comment[ro]=Aplicaţie KOffice de prelucrat imagini
-Comment[ru]=Программа для манипуляции 
-изображениями
+Comment[ru]=Программа для работы с изображениями KOffice
 Comment[sk]=KOffice kresliaci program
 Comment[sl]=Program za obdelavo slik iz KOffice
-Comment[sv]=Bildmanipuleringsprogram för KOffice.
+Comment[sr]=KOffice program za manipulaciju slikama
+Comment[sv]=Bildmanipuleringsprogram för KOffice (kimageshop).
 Comment[ta]=KOffice ¯ÕÅ ¨¸Â¡Ùõ ÀÂýÀ¡Î.
 Comment[tr]=KOffice resim işleme uygulaması
 Comment[uk]=Програма редагування зображень KOffice
 Comment[zh_CN.GB2312]=KOffice 图像处理程序.
-MimeType=application/x-kimageshop
+Comment[zh_TW.Big5]=KOffice 影像處理應用程式
+KOffice.
+за KOffice
+изображениями
+MimeType=application/x-krayon
 Type=Application
-Icon=kimageshop
+Icon=krayon
 ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
-X-KDE-NativeMimeType=application/x-kimageshop
+X-KDE-NativeMimeType=application/x-krayon
+
 

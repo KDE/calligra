@@ -31,8 +31,10 @@
 #include "kis_global.h"
 
 class KDualColorButton;
+class KisKrayonWidget;
 class KisBrushWidget;
 class KisPatternWidget;
+class KisKrayon;
 class KisBrush;
 class KisPattern;
 class KisColorChooser;
@@ -114,6 +116,7 @@ class ControlFrame : public QFrame
   void slotSetFGColor(const KisColor&);
   void slotSetBGColor(const KisColor&);
 
+  void slotSetKrayon(const KisKrayon&);
   void slotSetBrush(const KisBrush&);
   void slotSetPattern(const KisPattern&);
 
@@ -134,6 +137,7 @@ class ControlFrame : public QFrame
 
  private:
   KDualColorButton  *m_pColorButton;
+  KisKrayonWidget   *m_pKrayonWidget;  
   KisBrushWidget    *m_pBrushWidget;
   KisPatternWidget  *m_pPatternWidget;
 };
@@ -174,8 +178,10 @@ class KisSideBar : public QWidget
   void slotSetFGColor(const KisColor&);
   void slotSetBGColor(const KisColor&);
 
+  void slotSetKrayon(const KisKrayon&);
   void slotSetBrush(const KisBrush&);
-
+  void slotSetPattern(const KisPattern&);
+  
   void slotActivateTab(const QString& tab) { m_pDockFrame->slotActivateTab(tab); }
     void slotHideChooserFrame();
     

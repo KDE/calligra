@@ -28,14 +28,14 @@
 #include "kis_pattern.h"
 
 KisPattern::KisPattern(QString file)
-  : IconItem()
+  : /* IconItem() */ KisKrayon()
 {
     m_valid    = false;
     loadViaQImage(file);
 }
 
 KisPattern::KisPattern(int formula)
-  : IconItem()
+  : /* IconItem() */ KisKrayon()
 {
     m_valid    = false;
     loadViaFormula(formula);
@@ -107,6 +107,7 @@ void KisPattern::loadViaFormula(int formula)
     qDebug("Loading pattern: %d", formula);
 }
 
+#if 0
 QPixmap& KisPattern::pixmap() const 
 {
     return *m_pPixmap;
@@ -116,4 +117,5 @@ QImage* KisPattern::image() const
 {
     return m_pImage;
 }
+#endif
 

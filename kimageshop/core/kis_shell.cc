@@ -52,7 +52,7 @@ KisShell::~KisShell()
 
 QString KisShell::nativeFormatName() const 
 {
-    return i18n("KImageShop");
+    return i18n("Krayon");
 }
 
 

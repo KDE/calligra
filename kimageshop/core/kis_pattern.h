@@ -24,12 +24,14 @@
 #include <qsize.h>
 
 #include "iconitem.h"
+#include "kis_krayon.h"
 
 class QPoint;
 class QPixmap;
 class QImage;
 
-class KisPattern : public IconItem
+//class KisPattern : public IconItem
+class KisPattern : public KisKrayon
 {
     public:
         KisPattern(QString file);
@@ -37,20 +39,21 @@ class KisPattern : public IconItem
         virtual ~KisPattern();
 
         bool      isValid()	const { return m_valid; }
-        QPixmap&  pixmap()  const;
-        QImage*   image()   const;
-        QSize     size()    const { return QSize(m_w, m_h); } 
-        int       width()   const { return m_w; }
-        int       height()  const { return m_h; }
+
+        //QPixmap&  pixmap()  const;
+        //QImage*   image()   const;
+        //QSize     size()    const { return QSize(m_w, m_h); } 
+        //int       width()   const { return m_w; }
+        //int       height()  const { return m_h; }
 
     private:
         void      loadViaQImage(QString file);
         void      loadViaFormula(int formula);
         bool      m_valid;
-        int       m_w, m_h;
+        //int       m_w, m_h;
 
-        QImage   *m_pImage;
-        QPixmap  *m_pPixmap;
+        //QImage   *m_pImage;
+        //QPixmap  *m_pPixmap;
 };
 
 #endif

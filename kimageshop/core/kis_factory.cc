@@ -1,5 +1,5 @@
 /*
- *  kis_factory.cc - part of KImageShop
+ *  kis_factory.cc - part of Krayon
  *
  *  Copyright (c) 1999 Matthias Elter <elter@kde.org>
  *
@@ -33,9 +33,9 @@
 
 extern "C"
 {
-    void* init_libkimageshop()
+    void* init_libkrayonpart()
     {
-	return new KisFactory;
+	    return new KisFactory;
     }
 };
 
@@ -47,12 +47,12 @@ KisResourceServer* KisFactory::s_rserver = 0;
 KisFactory::KisFactory( QObject* parent, const char* name )
     : KoFactory( parent, name )
 {
-    s_aboutData = new KAboutData( "kimageshop",
-	I18N_NOOP("KImageShop"),
+    s_aboutData = new KAboutData( "krayon",
+	I18N_NOOP("Krayon"),
 	"0.1.0",
 	I18N_NOOP("KOffice image manipulation application."),
 	KAboutData::License_GPL,
-	"(c) 1999-2000 The KImageShop team.",
+	"(c) 1999-2000 The Krayon team.",
 	"",
 	"http://koffice.kde.org",
 	"submit@bugs.kde.org");
@@ -61,14 +61,11 @@ KisFactory::KisFactory( QObject* parent, const char* name )
     s_pserver = new KisPluginServer;
     s_rserver = new KisResourceServer;
 
-    //KisLog::setLogFile(locateLocal("kis", "kimageshop.log", s_global)); //jwc
-    // jwc - setLogFile() expect char * for not QString
-
-    QString FileName = locateLocal("kis", "kimageshop.log", s_global);  
+    QString FileName = locateLocal("kis", "krayon.log", s_global);  
     char *latinFileName = FileName.latin1();
     KisLog::setLogFile(latinFileName);
   
-    log() << "Starting KImageShop" << endl;
+    log() << "Starting Krayon" << endl;
 }
 
 KisFactory::~KisFactory()
@@ -103,25 +100,25 @@ KInstance* KisFactory::global()
 	s_global = new KInstance(s_aboutData);
 
 	s_global->dirs()->addResourceType("kis",
-	    KStandardDirs::kde_default("data") + "kimageshop/");
+	    KStandardDirs::kde_default("data") + "krayon/");
 
 	s_global->dirs()->addResourceType("kis_images",
-	    KStandardDirs::kde_default("data") + "kimageshop/images/");
+	    KStandardDirs::kde_default("data") + "krayon/images/");
 
 	s_global->dirs()->addResourceType("kis_brushes",
-	    KStandardDirs::kde_default("data") + "kimageshop/brushes/");
+	    KStandardDirs::kde_default("data") + "krayon/brushes/");
 
 	s_global->dirs()->addResourceType("kis_pattern",
-            KStandardDirs::kde_default("data") + "kimageshop/patterns/");
+            KStandardDirs::kde_default("data") + "krayon/patterns/");
 
 	s_global->dirs()->addResourceType("kis_gradients",
-	    KStandardDirs::kde_default("data") + "kimageshop/gradients/");
+	    KStandardDirs::kde_default("data") + "krayon/gradients/");
 
 	s_global->dirs()->addResourceType("kis_pics",
-	    KStandardDirs::kde_default("data") + "kimageshop/pics/");
+	    KStandardDirs::kde_default("data") + "krayon/pics/");
 
 	s_global->dirs()->addResourceType("kis_plugins",
-	    KStandardDirs::kde_default("data") + "kimageshop/plugins/");
+	    KStandardDirs::kde_default("data") + "krayon/plugins/");
 
 	s_global->dirs()->addResourceType("toolbars",
 	    KStandardDirs::kde_default("data") + "koffice/toolbar/");

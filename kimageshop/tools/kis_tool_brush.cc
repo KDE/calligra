@@ -19,6 +19,8 @@
  */
 
 #include <qcolor.h>
+#include <kdebug.h>
+
 #include "kis_tool_brush.h"
 #include "kis_brush.h"
 #include "kis_doc.h"
@@ -48,70 +50,32 @@ void BrushTool::setBrush(const KisBrush *_brush)
 
 void BrushTool::mousePress(QMouseEvent *e)
 {
+    KisImage * img = m_pDoc->current();
+    if (!img) return;
+
     if (e->button() != QMouseEvent::LeftButton)
         return;
 
-    if(!m_pDoc->current())
-        return;
-
-    if(!m_pDoc->current()->getCurrentLayer()->visible() )
+    if( !img->getCurrentLayer()->visible() )
         return;
 
     m_dragging = true;
-    m_dragStart = e->pos();
+
+    QPoint pos = e->pos();
+    pos = zoomed(pos);
+    m_dragStart = pos;
     m_dragdist = 0;
-
-    paintMonochrome(e->pos());
-         m_pDoc->current()->markDirty(QRect(e->pos() - m_pBrush->hotSpot(), m_pBrush->size()));  
-
-#if 0
-    QPixmap *brushPM = m_pBrush->m_pPixmap;
-
-    if(paintColor(e->pos()))
+    
+    if(paintMonochrome(pos))
     {
-        int left    =  m_dragStart.x() - brushPM->width()/2;
-        int top     =  m_dragStart.y() - brushPM->height()/2;
-        int wid     =  brushPM->width();
-        int hgt     =  brushPM->height();
-
-        QRect updateRect(left, top, wid, hgt);
-        m_pView->updateCanvas( updateRect);        
+         m_pDoc->current()->markDirty(QRect(pos 
+            - m_pBrush->hotSpot(), m_pBrush->size()));      
     }
-#endif
-        
-}
-
-
-bool BrushTool::paintColor(QPoint pos)
-{
-#if 0
-    KisImage * img = m_pDoc->current();
-    if (!img)	        return false;    
-
-    KisLayer *lay = img->getCurrentLayer();
-    if (!lay)        return false;
-
-    if (!m_pBrush)      return false;
-
-    if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
-	return false;
-
-    int startx = (pos - m_pBrush->hotSpot()).x();
-    int starty = (pos - m_pBrush->hotSpot()).y();
-    
-    QPixmap *imPM = m_pDoc->current()->imagePixmap;
-    QPixmap *brushPM = m_pBrush->m_pPixmap;
-    
-    bitBlt(imPM, startx, starty, brushPM , 0, 0, 
-            brushPM->width() , brushPM->height() );    
-#endif        
-    return true;
 }
 
 
 bool BrushTool::paintMonochrome(QPoint pos)
 {
-
     KisImage * img = m_pDoc->current();
     KisLayer *lay = img->getCurrentLayer();
 
@@ -121,23 +85,25 @@ bool BrushTool::paintMonochrome(QPoint pos)
 
     // FIXME: Implement this for non-RGB modes.
     if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
-	return false;
-
+	    return false;
+    
     int startx = (pos - m_pBrush->hotSpot()).x();
     int starty = (pos - m_pBrush->hotSpot()).y();
-
+    
+    QRect zoomedExtents = img->getCurrentLayer()->imageExtents();
+    
     QRect clipRect(startx, starty, m_pBrush->width(), m_pBrush->height());
-
-    if (!clipRect.intersects(img->getCurrentLayer()->imageExtents()))
+    
+    if (!clipRect.intersects(zoomedExtents))
         return false;
   
-    clipRect = clipRect.intersect(img->getCurrentLayer()->imageExtents());
-
+    clipRect = clipRect.intersect(zoomedExtents);
+    
     int sx = clipRect.left() - startx;
     int sy = clipRect.top() - starty;
     int ex = clipRect.right() - startx;
     int ey = clipRect.bottom() - starty;
-
+    
     uchar *sl;
     uchar bv, invbv;
     uchar r, g, b, a;
@@ -154,36 +120,36 @@ bool BrushTool::paintMonochrome(QPoint pos)
         sl = m_pBrush->scanline(y);
 
         for (int x = sx; x <= ex; x++)
-	{
-	    r = lay->pixel(0, startx + x, starty + y);
-	    g = lay->pixel(1, startx + x, starty + y);
-	    b = lay->pixel(2, startx + x, starty + y);
+	    {
+	        r = lay->pixel(0, startx + x, starty + y);
+	        g = lay->pixel(1, startx + x, starty + y);
+	        b = lay->pixel(2, startx + x, starty + y);
 		  
-	    bv = *(sl + x);
-	    if (bv == 0) continue;
+	        bv = *(sl + x);
+	        if (bv == 0) continue;
 		  
-	    invbv = 255 - bv;
+	        invbv = 255 - bv;
 		  
             b = ((blue * bv) + (b * invbv))/255;
-	    g = ((green * bv) + (g * invbv))/255;
-	    r = ((red * bv) + (r * invbv))/255;
+	        g = ((green * bv) + (g * invbv))/255;
+	        r = ((red * bv) + (r * invbv))/255;
             		  
-	    lay->setPixel(0, startx + x, starty + y, r);
-	    lay->setPixel(1, startx + x, starty + y, g);
-	    lay->setPixel(2, startx + x, starty + y, b);
+	        lay->setPixel(0, startx + x, starty + y, r);
+	        lay->setPixel(1, startx + x, starty + y, g);
+	        lay->setPixel(2, startx + x, starty + y, b);
                        	  
             if (alpha)
-	    {
-	        a= lay->pixel(3, startx + x, starty + y);
+	        {
+	            a = lay->pixel(3, startx + x, starty + y);
 
-		v = a + bv;
-		if (v < 0 ) v = 0;
-		if (v > 255 ) v = 255;
-		a = (uchar) v;
+		        v = a + bv;
+		        if (v < 0 ) v = 0;
+		        if (v > 255 ) v = 255;
+		        a = (uchar) v;
 			  
-		lay->setPixel(3, startx + x, starty + y, a);
-	    }
-	} 
+		        lay->setPixel(3, startx + x, starty + y, a);
+	        }
+	    } 
     }
 
     return true;
@@ -194,9 +160,7 @@ bool BrushTool::paintMonochrome(QPoint pos)
 void BrushTool::mouseMove(QMouseEvent *e)
 {
     KisImage * img = m_pDoc->current();
-
     if (!img) return;
-    if ( m_pDoc->isEmpty() )  return;
 
     int spacing = m_pBrush->spacing();
     if (spacing <= 0) spacing = 1;
@@ -204,63 +168,57 @@ void BrushTool::mouseMove(QMouseEvent *e)
     if(m_dragging)
     {
         if( !img->getCurrentLayer()->visible() )
-	    return;
-	  
-        KisVector end(e->x(), e->y());
+        	return;
+
+        QPoint pos = e->pos();      
+        int mouseX = e->x();
+        int mouseY = e->y();
+
+        pos = zoomed(pos);
+        mouseX = zoomed(mouseX);
+        mouseY = zoomed(mouseY);        
+
+        KisVector end(mouseX, mouseY);
         KisVector start(m_dragStart.x(), m_dragStart.y());
             
         KisVector dragVec = end - start;
         float saved_dist = m_dragdist;
         float new_dist = dragVec.length();
         float dist = saved_dist + new_dist;
-	  
+
         if ((int)dist < spacing)
-	{
-	    m_dragdist += new_dist; // save for next moveevent
-	    m_dragStart = e->pos();
-	    return;
-	}
-        else
-	    m_dragdist = 0; // reset
-	  
+	    {
+            // save for next movevent        
+	        m_dragdist += new_dist; 
+	        m_dragStart = pos;
+	        return;
+	    }
+        else 
+	        m_dragdist = 0; 
+
         dragVec.normalize();
-	  
         KisVector step = start;
 
         while (dist >= spacing)
-	{
-	    if (saved_dist > 0)
 	    {
-		  step += dragVec * (spacing-saved_dist);
-		  saved_dist -= spacing;
+	        if (saved_dist > 0)
+	        {
+	            step += dragVec * (spacing-saved_dist);
+	            saved_dist -= spacing;
+	        }
+	        else
+	            step += dragVec * spacing;
+
+	        QPoint p(step.x(), step.y());
+	  	  
+	        if (paintMonochrome(p))
+               img->markDirty(QRect(p - m_pBrush->hotSpot(), m_pBrush->size()));
+
+ 	        dist -= spacing;
 	    }
-	    else
-		step += dragVec * spacing;
-		  
-	    QPoint p(step.x(), step.y());
-
-	    if (paintMonochrome(p))
-		img->markDirty(QRect(p - m_pBrush->hotSpot(), m_pBrush->size()));
-
-#if 0
-            if (paintColor(p))
-            {
-                QPixmap *brushPM = m_pBrush->m_pPixmap;            
-                int left    =  p.x() - brushPM->width()/2;
-                int top     =  p.y() - brushPM->height()/2;
-                int wid     =  brushPM->width();
-                int hgt     =  brushPM->height();
-
-                QRect updateRect(left, top, wid, hgt);
-                m_pView->updateCanvas( updateRect);                        
-            }
-#endif
-            
-	    dist -= spacing;
-	}
-	  
-        if (dist > 0) m_dragdist = dist; //save for next moveevent
-        m_dragStart = e->pos();
+        //save for next movevent
+        if (dist > 0) m_dragdist = dist; 
+        m_dragStart = pos;
     }
 }
 
@@ -274,3 +232,7 @@ void BrushTool::mouseRelease(QMouseEvent *e)
 }
 
 
+bool BrushTool::paintColor(QPoint pos)
+{
+    return true;
+}

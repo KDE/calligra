@@ -22,13 +22,14 @@
 #define __kis_brush_h__
 
 #include <qsize.h>
-
+#include "kis_krayon.h"
 #include "iconitem.h"
 
 class QPoint;
 class QPixmap;
 
-class KisBrush : public IconItem
+//class KisBrush : public IconItem
+class KisBrush : public KisKrayon
 {
  public:
     KisBrush(QString file, bool monochrome = false, bool special = false);
@@ -39,10 +40,11 @@ class KisBrush : public IconItem
     bool      isValid()   	      const { return m_valid;    }
     void      setHotSpot(QPoint);
     QPoint    hotSpot()   	      const { return m_hotSpot;  }
-    QPixmap&  pixmap() const;
-    QSize     size()                    const { return QSize(m_w, m_h); } 
-    int       width()                   const { return m_w; }
-    int       height()                  const { return m_h; }
+
+    //QPixmap&  pixmap() const;
+    //QSize     size()                    const { return QSize(m_w, m_h); } 
+    //int       width()                   const { return m_w; }
+    //int       height()                  const { return m_h; }
     uchar     value(int x, int y) const;
     uchar*    scanline(int) const;
     uchar*    bits() const;
@@ -58,10 +60,10 @@ class KisBrush : public IconItem
     int       m_spacing;
     QPoint    m_hotSpot;
 
-    int       m_w, m_h;
+    //int       m_w, m_h;
     uchar*    m_pData;
 
-    QPixmap  *m_pPixmap;
+    //QPixmap  *m_pPixmap;
 };
 
 #endif

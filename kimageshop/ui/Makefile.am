@@ -9,6 +9,7 @@ libkisui_la_SOURCES = colorframe.cc colorslider.cc \
 	kis_dlg_new.cc kis_dlg_preferences.cc kis_dlg_new_layer.cc \
 	kfloatingdialog.cc kfloatingtabdialog.cc \
 	kis_tabbar.cc kis_dlg_rename.cc kis_canvas.cc kis_sidebar.cc kis_brushwidget.cc \
-	kis_colorchooser.cc kis_framebutton.cc kis_patternwidget.cc kis_brushchooser.cc 
+	kis_colorchooser.cc kis_framebutton.cc kis_patternwidget.cc kis_brushchooser.cc \
+    kis_patternchooser.cc kis_krayonwidget.cc kis_krayonchooser.cc
 
 libkisui_la_METASOURCES = AUTO

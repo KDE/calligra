@@ -1,0 +1,12 @@
+# KDE Config File
+[Desktop Entry]
+MimeType=application/x-krayon
+Comment=Krayon
+Comment[eo]=Bildejo
+Comment[es]=Documento de Krayon
+Comment[is]=Krayon-mynd
+Comment[pt_BR]=Manipulador de imagens
+Comment[ro]=Document Krayon
+Type=MimeType
+Patterns=*.kra;
+X-KDE-AutoEmbed=false

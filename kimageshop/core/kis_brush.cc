@@ -30,7 +30,7 @@
 #include "kis_brush.h"
 
 KisBrush::KisBrush(QString file, bool monochrome, bool special)
-  : IconItem()
+  : /* IconItem() */ KisKrayon()
 {
     // set defaults
     m_valid    = false;
@@ -131,12 +131,12 @@ void KisBrush::loadViaQImage(QString file, bool monochrome)
     // qDebug("Loading brush: %s",file.latin1());
 }
 
-
+#if 0
 QPixmap& KisBrush::pixmap() const 
 {
     return *m_pPixmap;
 }
-
+#endif
 
 void KisBrush::setHotSpot(QPoint pt)
 {

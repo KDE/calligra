@@ -54,13 +54,17 @@ void AirBrushTool::mousePress(QMouseEvent *e)
         return;
 
     m_dragging = true;
-    m_dragStart = e->pos();
-    m_dragdist = 0;
 
-    paint(e->pos());
-  
-    QRect updateRect(e->pos() - m_pBrush->hotSpot(), m_pBrush->size());
-    img->markDirty(updateRect);
+    QPoint pos = e->pos();
+    pos = zoomed(pos);
+    m_dragStart = pos;
+    m_dragdist = 0;
+    
+    if(paint(pos))
+    {
+         m_pDoc->current()->markDirty(QRect(pos 
+            - m_pBrush->hotSpot(), m_pBrush->size()));      
+    }
 }
 
 
@@ -149,59 +153,67 @@ bool AirBrushTool::paint(QPoint pos)
 void AirBrushTool::mouseMove(QMouseEvent *e)
 {
     KisImage * img = m_pDoc->current();
-    if (!img)	return;
+    if (!img) return;
 
     int spacing = m_pBrush->spacing();
-
     if (spacing <= 0) spacing = 1;
 
     if(m_dragging)
     {
-      if( !img->getCurrentLayer()->visible() )
-	return;
+        if( !img->getCurrentLayer()->visible() )
+        	return;
 
-      KisVector end(e->x(), e->y());
-      KisVector start(m_dragStart.x(), m_dragStart.y());
+        QPoint pos = e->pos();      
+        int mouseX = e->x();
+        int mouseY = e->y();
+
+        pos = zoomed(pos);
+        mouseX = zoomed(mouseX);
+        mouseY = zoomed(mouseY);        
+
+        KisVector end(mouseX, mouseY);
+        KisVector start(m_dragStart.x(), m_dragStart.y());
             
-      KisVector dragVec = end - start;
-      float saved_dist = m_dragdist;
-      float new_dist = dragVec.length();
-      float dist = saved_dist + new_dist;
+        KisVector dragVec = end - start;
+        float saved_dist = m_dragdist;
+        float new_dist = dragVec.length();
+        float dist = saved_dist + new_dist;
 
-      if ((int)dist < spacing)
-	{
-	  m_dragdist += new_dist; // save for next moveevent
-	  m_dragStart = e->pos();
-	  return;
-	}
-      else
-	m_dragdist = 0; // reset
-
-      dragVec.normalize();
-
-      KisVector step = start;
-
-      while (dist >= spacing)
-	{
-	  if (saved_dist > 0)
+        if ((int)dist < spacing)
 	    {
-	      step += dragVec * (spacing-saved_dist);
-	      saved_dist -= spacing;
+            // save for next movevent        
+	        m_dragdist += new_dist; 
+	        m_dragStart = pos;
+	        return;
 	    }
-	  else
-	      step += dragVec * spacing;
+        else 
+	        m_dragdist = 0; 
 
-	  QPoint p(step.x(), step.y());
+        dragVec.normalize();
+        KisVector step = start;
+
+        while (dist >= spacing)
+	    {
+	        if (saved_dist > 0)
+	        {
+	            step += dragVec * (spacing-saved_dist);
+	            saved_dist -= spacing;
+	        }
+	        else
+	            step += dragVec * spacing;
+
+	        QPoint p(step.x(), step.y());
 	  	  
-	  if (paint(p))
-	    img->markDirty(QRect(p - m_pBrush->hotSpot(), m_pBrush->size()));
-	  dist -= spacing;
-	}
+	        if (paint(p))
+               img->markDirty(QRect(p - m_pBrush->hotSpot(), m_pBrush->size()));
 
-      if (dist > 0)
-	m_dragdist = dist; //save for next moveevent
-      m_dragStart = e->pos();
+ 	        dist -= spacing;
+	    }
+        //save for next movevent
+        if (dist > 0) m_dragdist = dist; 
+        m_dragStart = pos;
     }
+
 }
 
 

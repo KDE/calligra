@@ -1,5 +1,5 @@
 /*
- *  kis_pluginserver.cc - part of KImageShop
+ *  kis_pluginserver.cc - part of Krayon
  *
  *  Copyright (c) 1999 Matthias Elter <elter@kde.org>
  *
@@ -38,7 +38,7 @@ KisPluginServer::KisPluginServer()
   m_plugins.setAutoDelete(true);
 
   /*
-   * Find plugin dirs. For example ~/.kde/share/apps/kimageshop/plugins or
+   * Find plugin dirs. For example ~/.kde/share/apps/krayon/plugins or
    * $KDEDIR/share/apps/kimageshop/plugins
    */
   QStringList pluginDirs = KisFactory::global()->dirs()->resourceDirs("kis_plugins");
@@ -83,7 +83,7 @@ void KisPluginServer::findPlugins( const QString &directory )
       pname = config.readEntry("Name", fi->baseName());
       pcomment = config.readEntry("Comment", i18n("No description available."));
       pdir = directory + config.readEntry("Subdir", fi->baseName());
-      plib = config.readEntry("Library", QString("libkisp_") + fi->baseName());
+      plib = config.readEntry("Library", QString("libkray_") + fi->baseName());
       pcategory = config.readEntry("Category", "General");
       ptype = config.readEntry("Type", "Filter");
       qDebug("%s", pcategory.latin1());
@@ -93,7 +93,7 @@ void KisPluginServer::findPlugins( const QString &directory )
       else if (ptype == "Tool" )
 	type = PLUGIN_TOOL;
       else
-	qDebug("Warning: %s is not a valid KImageShop plugin type.", ptype.latin1()); 
+	qDebug("Warning: %s is not a valid Krayon plugin type.", ptype.latin1()); 
       
       PluginInfo *pi = new PluginInfo(pname, pcomment, pdir, plib, pcategory, type);
       m_plugins.append(pi);

@@ -1,4 +1,4 @@
-dtd_DATA = kimageshop.dtd
+dtd_DATA = krayon.dtd
 
-dtddir = $(kde_datadir)/kimageshop/dtd
+dtddir = $(kde_datadir)/krayon/dtd
 

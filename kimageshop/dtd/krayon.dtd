@@ -29,7 +29,7 @@
                 author   CDATA #IMPLIED
                 email    CDATA #IMPLIED
                 editor   CDATA #IMPLIED
-                mime     CDATA "application/x-kimageshop"
+                mime     CDATA "application/x-krayon"
                 width    CDATA #REQUIRED
                 height   CDATA #REQUIRED
                 bitDepth CDATA #REQUIRED

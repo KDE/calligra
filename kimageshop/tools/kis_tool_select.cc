@@ -107,7 +107,10 @@ void SelectTool::mouseRelease( QMouseEvent* event )
     {
         m_dragging = false;
         m_drawn = true;
-
+        
+        QPoint zStart = zoomed(m_dragStart);
+        QPoint zEnd   = zoomed(m_dragEnd);
+                
         /* jwc - leave selection rectange boundary on screen
         it is only drawn to canvas, not to retained imagePixmap,
         and therefore will disappear when another tool action is used */
@@ -117,26 +120,26 @@ void SelectTool::mouseRelease( QMouseEvent* event )
         there always is one, even if width and height are 0 
         left and right, top and bottom are sometimes reversed! */
         
-        if(m_dragStart.x() <= m_dragEnd.x())
+        if(zStart.x() <= zEnd.x())
         {
-            m_selectRect.setLeft(m_dragStart.x());
-            m_selectRect.setRight(m_dragEnd.x());
+            m_selectRect.setLeft(zStart.x());
+            m_selectRect.setRight(zEnd.x());
         }    
         else 
         {
-            m_selectRect.setLeft(m_dragEnd.x());                   
-            m_selectRect.setRight(m_dragStart.x());
+            m_selectRect.setLeft(zEnd.x());                   
+            m_selectRect.setRight(zStart.x());
         }
         
-        if(m_dragStart.y() <= m_dragEnd.y())
+        if(zStart.y() <= zEnd.y())
         {
-            m_selectRect.setTop(m_dragStart.y());
-            m_selectRect.setBottom(m_dragEnd.y());            
+            m_selectRect.setTop(zStart.y());
+            m_selectRect.setBottom(zEnd.y());            
         }    
         else
         {
-            m_selectRect.setTop(m_dragEnd.y());
-            m_selectRect.setBottom(m_dragStart.y());            
+            m_selectRect.setTop(zEnd.y());
+            m_selectRect.setBottom(zStart.y());            
         }
                     
         m_pDoc->getSelection()->setRect(m_selectRect);

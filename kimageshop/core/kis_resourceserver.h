@@ -36,10 +36,10 @@ public:
   virtual ~KisResourceServer();
 
   int brushCount() { return m_brushes.count(); }
-  int patternCount() { return m_pattern.count(); }
+  int patternCount() { return m_patterns.count(); }
 
   QList<KisBrush> brushes() { return m_brushes; }
-  QList<KisPattern> pattern() { return m_pattern; }
+  QList<KisPattern> patterns() { return m_patterns; }
 
  protected:
   const KisBrush* loadBrush( const QString& filename );
@@ -47,7 +47,7 @@ public:
  
  private:
   QList<KisBrush>  m_brushes;
-  QList<KisPattern>  m_pattern;
+  QList<KisPattern>  m_patterns;
 };
 
 #endif // __kis_resourceserver_h__

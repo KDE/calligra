@@ -64,10 +64,14 @@ void PasteTool::mousePress(QMouseEvent *e)
         return;
 
     m_dragging = true;
-    m_dragStart = e->pos();
+
+    QPoint pos = e->pos();
+    pos = zoomed(pos);
+    
+    m_dragStart = pos;
     m_dragdist = 0;
 
-    pasteColor(e->pos());
+    pasteColor(pos);
     
     m_pDoc->current()->markDirty(QRect(0, 0, 
         m_pDoc->current()->width(), m_pDoc->current()->height()));      
@@ -80,8 +84,8 @@ bool PasteTool::pasteColor(QPoint pos)
 {
     KisImage *img = m_pDoc->current();
     KisLayer *lay = img->getCurrentLayer();
-    if (!img)	        return false;
-    if (!lay)           return false;
+    if (!img)   return false;
+    if (!lay)   return false;
     
     //QImage   *qimg = m_pDoc->getClipImage();
     QImage qImage = kapp->clipboard()->image();
@@ -101,7 +105,7 @@ bool PasteTool::pasteColor(QPoint pos)
     if (!img->colorMode() == cm_RGB && !img->colorMode() == cm_RGBA)
     {
         kdDebug(0) << "colormode is not RGB or RGBA!" << endl;
-	return false;
+	    return false;
     }
     /* if dealing with 1 or 8 bit images, convert to 16 bit */
     if(qimg->depth() < 16)
@@ -127,11 +131,11 @@ bool PasteTool::pasteColor(QPoint pos)
     int ey = clipRect.bottom() - starty;
 
     uchar r, g, b, a;
-    int   v;
+    // int   v;
 
-    int red     = m_pView->fgColor().R();
-    int green   = m_pView->fgColor().G();
-    int blue    = m_pView->fgColor().B();
+    // int red     = m_pView->fgColor().R();
+    // int green   = m_pView->fgColor().G();
+    // int blue    = m_pView->fgColor().B();
 
     bool alpha = (img->colorMode() == cm_RGBA);
   
@@ -147,6 +151,7 @@ bool PasteTool::pasteColor(QPoint pos)
             // pixel value in scanline at x offset to right
             uint *p = (uint *)qimg->scanLine(y) + x;
             
+            // set layer pixel to be same as image
 	        lay->setPixel(0, startx + x, starty + y, qRed(*p));
 	        lay->setPixel(1, startx + x, starty + y, qGreen(*p));
 	        lay->setPixel(2, startx + x, starty + y, qBlue(*p));

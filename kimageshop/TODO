@@ -1,9 +1,9 @@
-KImageShop is the KOffice image manipulation application.
+Krayon is the KOffice image manipulation application.
 It does not aim to be a direct competitor to the GIMP,
 but to integrate well with the other KOffice applications,
 to be easy to use and yet powerfull.
 
-We are curently in a early alpha developement stage but
+We are curently in a beta developement stage but
 work towards a 1.0 release that comes with all basic
 image manipulation features.
 
@@ -35,5 +35,4 @@ we want to have in the 1.0 release:
 - eraser
 - blur/sharpen with brush tool 
 
-- screenshot utility
 - fullscreen editing mode

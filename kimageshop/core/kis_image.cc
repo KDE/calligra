@@ -537,10 +537,10 @@ void KisImage::renderLayerIntoTile(QRect tileBoundary, const KisLayer *srcLay,
             KIS_DEBUG(render, showi(newTile); );
             if (!(renderQ1 && !renderQ2 && !renderQ3)) 
             {
-		if (tileOffsetX>0) tileOffsetX=tileOffsetX-TILE_SIZE;
-		if (tileOffsetY>0) tileOffsetY=tileOffsetY-TILE_SIZE;
-		renderTileQuadrant(srcLay, newTile, dstLay, dstTile,											 0, 0, -tileOffsetX, -tileOffsetY,
-		     TILE_SIZE, TILE_SIZE);
+		        if (tileOffsetX>0) tileOffsetX=tileOffsetX-TILE_SIZE;
+		        if (tileOffsetY>0) tileOffsetY=tileOffsetY-TILE_SIZE;
+		        renderTileQuadrant(srcLay, newTile, dstLay, dstTile,											 0, 0, -tileOffsetX, -tileOffsetY,
+		            TILE_SIZE, TILE_SIZE);
             }
         }	
         else

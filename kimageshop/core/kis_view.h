@@ -36,11 +36,15 @@ class GradientDialog;
 class GradientEditorDialog;
 
 class KisDoc;
+class KisImage;
 class KisCanvas;
 class KisTabBar;
 class KisSideBar;
 
 class KisBrushChooser;
+class KisPatternChooser;
+class KisKrayonChooser;
+
 class KisLayerView;
 class KisChannelView;
 
@@ -49,7 +53,9 @@ class KRuler;
 
 class SelectTool;
 class PasteTool;
+class KisKrayon;
 class KisBrush;
+class KisPattern;
 class KisTool;
 class MoveTool;
 class BrushTool;
@@ -68,7 +74,7 @@ class KisView : public KoView
 {
     Q_OBJECT
 
- public:        // constructors
+ public:  
  
     KisView( KisDoc* doc, QWidget* parent = 0, const char* name = 0 );
     ~KisView();
@@ -77,6 +83,7 @@ class KisView : public KoView
     KisColor& bgColor() { return m_bg; }
 
     KisCanvas* kisCanvas() { return m_pCanvas; }
+
     void updateCanvas(  QRect & ur );
     void showScrollBars( );
         
@@ -84,8 +91,10 @@ class KisView : public KoView
  
     void slotDocUpdated();
     void slotDocUpdated(const QRect&);
+    
+    void slotSetKrayon(const KisKrayon *);
     void slotSetBrush(const KisBrush *);
-
+    void slotSetPattern(const KisPattern *);
     void slotSetFGColor(const KisColor&);
     void slotSetBGColor(const KisColor&);
 
@@ -96,6 +105,7 @@ class KisView : public KoView
     void canvasMousePressEvent( QMouseEvent * );
     void canvasMouseMoveEvent( QMouseEvent * );
     void canvasMouseReleaseEvent( QMouseEvent * );
+
     void bgColorChanged(const KisColor & );
     void fgColorChanged(const KisColor & );     
 
@@ -119,6 +129,14 @@ class KisView : public KoView
     // dialog action slots
     void dialog_gradient();
     void dialog_gradienteditor();
+
+    void dialog_colors();
+    void dialog_krayons();
+    void dialog_brushes();
+    void dialog_patterns();
+    void dialog_layers();
+    void dialog_channels();
+
     void updateToolbarButtons();
 
     // layer action slots
@@ -203,6 +221,8 @@ class KisView : public KoView
     float   zoomFactor();
     void    setZoomFactor( float zf );
     
+    KisImage* currentViewImage() { return m_pImage; } 
+      
  private:
 
     // import/export actions
@@ -213,19 +233,26 @@ class KisView : public KoView
     KAction *m_undo, *m_redo, *m_copy, *m_cut, *m_paste, *m_crop,
         *m_select_all, *m_unselect_all;
 
-    // dialog actions
+    // tool settings dialog actions
     KToggleAction *m_dialog_gradient, *m_dialog_gradienteditor;
 
-    // sidebar
+	// krayon box floating dialog actions
+	KToggleAction *m_dialog_colors, *m_dialog_krayons, *m_dialog_brushes,
+		*m_dialog_patterns, *m_dialog_layers, *m_dialog_channels;
+
+    // krayon box (sidebar)
     KToggleAction *m_side_bar;
 
-    // tool actions
+    // tool actions (main toolbar & menu)
     KToggleAction *m_tool_select_rect, *m_tool_select_polygon, *m_tool_move, 
     *m_tool_zoom, *m_tool_brush, *m_tool_draw, *m_tool_pen, *m_tool_gradient, 
     *m_tool_colorpicker, *m_tool_fill, *m_tool_airbrush, *m_tool_eraser;
 
-    KisDoc                *m_pDoc;
+    KisDoc                *m_pDoc;  // inherited a lot by tools
     KisTool               *m_pTool; // currently active tool
+
+    // tools    
+
     SelectTool            *m_pSelectTool;
     PasteTool             *m_pPasteTool;
     MoveTool              *m_pMoveTool;
@@ -237,11 +264,17 @@ class KisView : public KoView
     KisGradient           *m_pGradient;
     GradientTool          *m_pGradientTool;
     ColorPicker           *m_pColorPicker;
-    Fill                  *m_pFill;    
-    const KisBrush        *m_pBrush; // current brush
+    Fill                  *m_pFill;
+    
+    const KisKrayon       *m_pKrayon;   // current krayon for this view   
+    const KisBrush        *m_pBrush;    // current brush for this view
+    const KisPattern      *m_pPattern;  // current for this view pattern
+    const KisImage        *m_pImage;    // current image for this view
 
     // sidebar dock widgets
+    KisKrayonChooser     *m_pKrayonChooser;    
     KisBrushChooser      *m_pBrushChooser;
+    KisPatternChooser    *m_pPatternChooser;
     KisLayerView         *m_pLayerView;
     KisChannelView       *m_pChannelView;
 
@@ -249,7 +282,6 @@ class KisView : public KoView
     GradientEditorDialog *m_pGradientEditorDialog;
 
     KisCanvas            *m_pCanvas;
-    //KisCanvas            *pDrawCanvas;
     KisSideBar           *m_pSideBar;
     QScrollBar           *m_pHorz, *m_pVert;
     KRuler               *m_pHRuler, *m_pVRuler;

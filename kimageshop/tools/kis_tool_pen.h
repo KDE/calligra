@@ -54,7 +54,6 @@ class PenTool : public KisTool
 
     QPen pen;
     int  penW;
-    QPointArray polyline;
     QPixmap *buffer;
   
 };
