@@ -2885,23 +2885,55 @@ void CellLayoutPageBorder::slotPressEvent(QMouseEvent *_ev)
   QRect rect(OFFSETX,OFFSETY-8,area->width()-OFFSETX,OFFSETY+8);
   if(rect.contains(QPoint(_ev->x(),_ev->y())))
         {
-         invertState(top);
+        if(((top->getPenWidth()!=preview->getPenWidth()) ||(top->getColor()!=currentColor)
+        ||(top->getPenStyle()!=preview->getPenStyle()))&& top->isOn())
+                {
+                top->setPenWidth(preview->getPenWidth());
+                top->setPenStyle(preview->getPenStyle());
+                top->setColor( currentColor );
+                }
+        else
+                invertState(top);
         }
   rect.setCoords(OFFSETX,area->height()-OFFSETY-8,area->width()-OFFSETX,area->height()-OFFSETY+8);
   if(rect.contains(QPoint(_ev->x(),_ev->y())))
         {
-         invertState(bottom);
+         if(((bottom->getPenWidth()!=preview->getPenWidth()) ||(bottom->getColor()!=currentColor)
+        ||(bottom->getPenStyle()!=preview->getPenStyle()))&& bottom->isOn())
+                {
+                bottom->setPenWidth(preview->getPenWidth());
+                bottom->setPenStyle(preview->getPenStyle());
+                bottom->setColor( currentColor );
+                }
+        else
+                invertState(bottom);
         }
 
   rect.setCoords(OFFSETX-8,OFFSETY,OFFSETX+8,area->height()-OFFSETY);
   if(rect.contains(QPoint(_ev->x(),_ev->y())))
         {
-         invertState(left);
+        if(((left->getPenWidth()!=preview->getPenWidth()) ||(left->getColor()!=currentColor)
+        ||(left->getPenStyle()!=preview->getPenStyle()))&& left->isOn())
+                {
+                left->setPenWidth(preview->getPenWidth());
+                left->setPenStyle(preview->getPenStyle());
+                left->setColor( currentColor );
+                }
+        else
+                invertState(left);
         }
   rect.setCoords(area->width()-OFFSETX-8,OFFSETY,area->width()-OFFSETX+8,area->height()-OFFSETY);
  if(rect.contains(QPoint(_ev->x(),_ev->y())))
         {
-         invertState(right);
+        if(((right->getPenWidth()!=preview->getPenWidth()) ||(right->getColor()!=currentColor)
+        ||(right->getPenStyle()!=preview->getPenStyle()))&& right->isOn())
+                {
+                right->setPenWidth(preview->getPenWidth());
+                right->setPenStyle(preview->getPenStyle());
+                right->setColor( currentColor );
+                }
+        else
+                invertState(right);
         }
 
 //don't work because I don't know how create a rectangle
@@ -2923,7 +2955,15 @@ if(rect.contains(QPoint(_ev->x(),_ev->y())))
 
         if(rect.contains(QPoint(_ev->x(),_ev->y())))
                 {
-                invertState(vertical);
+                if(((vertical->getPenWidth()!=preview->getPenWidth()) ||(vertical->getColor()!=currentColor)
+                ||(vertical->getPenStyle()!=preview->getPenStyle()))&& vertical->isOn())
+                        {
+                        vertical->setPenWidth(preview->getPenWidth());
+                        vertical->setPenStyle(preview->getPenStyle());
+                        vertical->setColor( currentColor );
+                        }
+                else
+                        invertState(vertical);
                 }
         }
  if(dlg->oneRow==false)
@@ -2931,7 +2971,15 @@ if(rect.contains(QPoint(_ev->x(),_ev->y())))
         rect.setCoords(OFFSETX,area->height()/2-8,area->width()-OFFSETX,area->height()/2+8);
         if(rect.contains(QPoint(_ev->x(),_ev->y())))
                 {
-                invertState(horizontal);
+                if(((horizontal->getPenWidth()!=preview->getPenWidth()) ||(horizontal->getColor()!=currentColor)
+                ||(horizontal->getPenStyle()!=preview->getPenStyle()))&& horizontal->isOn())
+                        {
+                        horizontal->setPenWidth(preview->getPenWidth());
+                        horizontal->setPenStyle(preview->getPenStyle());
+                        horizontal->setColor( currentColor );
+                        }
+                else
+                        invertState(horizontal);
                 }
         }
 
