@@ -75,6 +75,7 @@ void KPTGanttView::clear()
 void KPTGanttView::draw(KPTNode &node)
 {
     kdDebug()<<k_funcinfo<<endl;
+	setUpdateEnabled(false);
 	clear();
 	KPTDuration *time;
 	KPTDuration *dur;
@@ -114,6 +115,7 @@ void KPTGanttView::draw(KPTNode &node)
 		}
 	}
 	setShowTaskLinks(true);
+	setUpdateEnabled(true);
 }
 
 

@@ -172,8 +172,9 @@ void KPTView::slotEditPaste() {
 
 void KPTView::slotViewGantt() {
     kdDebug()<<k_funcinfo<<endl;
-	m_ganttview->draw(getPart()->getProject());
+	m_ganttview->clear();
     m_tab->raiseWidget(m_ganttview);
+	m_ganttview->draw(getPart()->getProject());
 }
 
 void KPTView::slotViewPert() {
