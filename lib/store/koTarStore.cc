@@ -18,9 +18,13 @@
 */
 
 #include "koTarStore.h"
+
+#include <qbuffer.h>
+
 #include <ktar.h>
 #include <kdebug.h>
-#include <qbuffer.h>
+#include <kurl.h>
+#include <kio/netaccess.h>
 
 KoTarStore::KoTarStore( const QString & _filename, Mode _mode, const QCString & appIdentification )
 {
@@ -45,10 +49,49 @@ KoTarStore::KoTarStore( QIODevice *dev, Mode mode, const QCString & appIdentific
         m_pTar->setOrigFileName( completeMagic( appIdentification ) );
 }
 
+KoTarStore::KoTarStore( const KURL& _url, const QString & _filename, Mode _mode, const QCString & appIdentification )
+{
+    kdDebug(s_area) << "KoTarStore Constructor url= " << _url.prettyURL() 
+                    << " filename = " << _filename
+                    << " mode = " << int(_mode) << endl;
+
+    m_url = _url;
+
+    if ( _mode == KoStore::Read )
+    {
+        m_fileMode = KoStoreBase::RemoteRead;
+        m_localFileName = _filename;
+
+    }
+    else
+    {
+        m_fileMode = KoStoreBase::RemoteWrite;
+        m_localFileName = "/tmp/kozip"; // ### FIXME with KTempFile
+    }
+
+    m_pTar = new KTar( m_localFileName, "application/x-gzip" );
+
+    m_bGood = init( _mode ); // open the targz file and init some vars
+
+    if ( m_bGood && _mode == Write )
+        m_pTar->setOrigFileName( completeMagic( appIdentification ) );
+}
+
 KoTarStore::~KoTarStore()
 {
     m_pTar->close();
     delete m_pTar;
+
+    // Now we have still some job to do for remote files.
+    if ( m_fileMode == KoStoreBase::RemoteRead )
+    {
+        KIO::NetAccess::removeTempFile( m_localFileName );
+    }
+    else if ( m_fileMode == KoStoreBase::RemoteWrite )
+    {
+        KIO::NetAccess::upload( m_localFileName, m_url );
+        // ### FIXME: delete temp file
+    }
 }
 
 QCString KoTarStore::completeMagic( const QCString& appMimetype )

@@ -20,16 +20,18 @@
 #ifndef koZipStore_h
 #define koZipStore_h
 
-#include "koStore.h"
+#include "koStoreBase.h"
 
 class KZip;
 class KArchiveDirectory;
+class KURL;
 
-class KoZipStore : public KoStore
+class KoZipStore : public KoStoreBase
 {
 public:
     KoZipStore( const QString & _filename, Mode _mode, const QCString & appIdentification );
     KoZipStore( QIODevice *dev, Mode mode, const QCString & appIdentification );
+    KoZipStore( const KURL& _url, const QString & _filename, Mode _mode, const QCString & appIdentification );
     ~KoZipStore();
 
     virtual Q_LONG write( const char* _data, Q_ULONG _len );

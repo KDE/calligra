@@ -28,11 +28,13 @@
 #include "koZipStore.h"
 #include "koDirectoryStore.h"
 
-#include <kdebug.h>
-
 #include <qfileinfo.h>
 #include <qfile.h>
 #include <qdir.h>
+
+#include <kurl.h>
+#include <kdebug.h>
+#include <kio/netaccess.h>
 
 //#define DefaultFormat KoStore::Tar
 #define DefaultFormat KoStore::Zip
@@ -109,6 +111,48 @@ KoStore* KoStore::createStore( QIODevice *device, Mode mode, const QCString & ap
     return new KoZipStore( device, mode, appIdentification );
   default:
     kdWarning(s_area) << "Unsupported backend requested for KoStore : " << backend << endl;
+    return 0L;
+  }
+}
+
+KoStore* KoStore::createStore( const KURL& url, Mode mode, const QCString & appIdentification, Backend backend )
+{
+  if ( url.isLocalFile() )
+    return createStore(url.path(), mode,  appIdentification, backend );
+
+  QString tmpFile;
+  if ( mode == KoStore::Write )
+  {
+    if ( backend == Auto )
+      backend = DefaultFormat;
+  }
+  else
+  {
+    const bool downloaded = KIO::NetAccess::download( url, tmpFile );
+  
+    if (!downloaded)
+    {
+      kdError(s_area) << "Could not download file!" << endl;
+      backend = DefaultFormat; // will create a "bad" store (bad()==true)
+    }
+    else if ( backend == Auto ) 
+    {
+      QFile file( tmpFile );
+      if ( file.open( IO_ReadOnly ) )
+      {
+        backend = determineBackend( &file );
+        file.close();
+      }
+    }
+  }
+  switch ( backend )
+  {
+  case Tar:
+    return new KoTarStore( url, tmpFile, mode, appIdentification );
+  case Zip:
+    return new KoZipStore( url, tmpFile, mode, appIdentification );
+  default:
+    kdWarning(s_area) << "Unsupported backend requested for KoStore (KURL) : " << backend << endl;
     return 0L;
   }
 }

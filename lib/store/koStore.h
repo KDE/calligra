@@ -26,6 +26,8 @@
 #include <qiodevice.h>
 #include <qvaluestack.h>
 
+class KURL;
+
 /**
  * Saves and loads KOffice documents using various backends. Currently supported
  * backends are ZIP, tar and directory.
@@ -56,10 +58,28 @@ public:
   static KoStore* createStore( const QString& fileName, Mode mode, const QCString & appIdentification = "", Backend backend = Auto );
 
   /**
-   * Create a store for any kind of iodevice: file, memory buffer...
+   * Create a store for any kind of QIODevice: file, memory buffer...
    * This method doesn't support the Directory store!
    */
   static KoStore* createStore( QIODevice *device, Mode mode, const QCString & appIdentification = "", Backend backend = Auto );
+
+  /**
+   * Open a store (i.e. the representation on disk of a KOffice document).
+   *
+   * @param fileName the name of the file to open
+   * @param mode if KoStore::Read, open an existing store to read it.
+   *             if KoStore::Write, create or replace a store.
+   * @param backend the backend to use for the data storage.
+   * Auto means automatically-determined for reading,
+   * and the current format (now Zip) for writing.
+   *
+   * @param appIdentification the application's mimetype,
+   * to be written in the file for "mime-magic" identification.
+   * Only meaningful if mode is Write, and if backend!=Directory.
+   *
+   * If the file is remote, the backend Directory cannot be used!
+   */
+  static KoStore* createStore( const KURL& url, Mode mode, const QCString & appIdentification = "", Backend backend = Auto );
 
   /**
    * Destroys the store (i.e. closes the file on the hard disk)

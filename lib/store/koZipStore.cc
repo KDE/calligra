@@ -18,10 +18,14 @@
 */
 
 #include "koZipStore.h"
+
+#include <qbuffer.h>
+
 #include <kzip.h>
 #include <kdebug.h>
 #include <kdeversion.h>
-#include <qbuffer.h>
+#include <kurl.h>
+#include <kio/netaccess.h>
 
 KoZipStore::KoZipStore( const QString & _filename, Mode _mode, const QCString & appIdentification )
 {
@@ -39,11 +43,47 @@ KoZipStore::KoZipStore( QIODevice *dev, Mode mode, const QCString & appIdentific
     m_bGood = init( mode, appIdentification );
 }
 
+KoZipStore::KoZipStore( const KURL & _url, const QString & _filename, Mode _mode, const QCString & appIdentification )
+{
+    kdDebug(s_area) << "KoZipStore Constructor url" << _url.prettyURL()
+                    << " filename = " << _filename
+                    << " mode = " << int(_mode)
+                    << " mimetype = " << appIdentification << endl;
+
+    m_url = _url;
+
+    if ( _mode == KoStore::Read )
+    {
+        m_fileMode = KoStoreBase::RemoteRead;
+        m_localFileName = _filename;
+
+    }
+    else
+    {
+        m_fileMode = KoStoreBase::RemoteWrite;
+        m_localFileName = "/tmp/kozip"; // ### FIXME with KTempFile
+    }
+
+    m_pZip = new KZip( m_localFileName );
+    m_bGood = init( _mode, appIdentification ); // open the zip file and init some vars
+}
+
 KoZipStore::~KoZipStore()
 {
     kdDebug(s_area) << "KoZipStore::~KoZipStore" << endl;
     m_pZip->close();
     delete m_pZip;
+
+    // Now we have still some job to do for remote files.
+    if ( m_fileMode == KoStoreBase::RemoteRead )
+    {
+        KIO::NetAccess::removeTempFile( m_localFileName );
+    }
+    else if ( m_fileMode == KoStoreBase::RemoteWrite )
+    {
+        KIO::NetAccess::upload( m_localFileName, m_url );
+        // ### FIXME: delete temp file
+    }
 }
 
 bool KoZipStore::init( Mode _mode, const QCString& appIdentification )
