@@ -32,7 +32,7 @@ class KPresenterView;
 class QDropEvent;
 class QPopupMenu;
 class Outline;
-class OutlineItem;
+class OutlineSlideItem;
 class ThumbBar;
 class ThumbToolTip;
 class OutlineToolTip;
@@ -94,6 +94,7 @@ public:
 
 protected:
     void contentsDropEvent( QDropEvent *e );
+    OutlineSlideItem* slideItem( int pageNumber );
 
 signals: // all page numbers 0-based
     void showPage( int i );

@@ -654,6 +654,7 @@ Outline::Outline( QWidget *parent, KPresenterDoc *d, KPresenterView *v )
 
     setAcceptDrops( true );
     setDropVisualizer( true );
+    setFullWidth( true );
     setDragEnabled( true );
     this->setRootIsDecorated( true );
 
@@ -693,23 +694,31 @@ void Outline::rebuildItems()
     }
 }
 
-// update the Outline item, the title may have changed
-void Outline::updateItem( int pagenr /* 0-based */)
+// given the page number (0-based), find associated slide item
+// returns 0 upon stupid things (e.g. invalid page number)
+OutlineSlideItem* Outline::slideItem( int pageNumber )
 {
-    KPrPage* page = doc->pageList().at(pagenr);
-    if( !page ) return;
+    KPrPage* page = doc->pageList().at( pageNumber );
+    if( !page ) return 0;
     
     QListViewItemIterator it( this );
     for ( ; it.current(); ++it )
     {
-        OutlineSlideItem *slideItem = dynamic_cast<OutlineSlideItem*>( it.current() );
-        if( slideItem )
-            if( slideItem->page() == page )
-            {
-                slideItem->update();
-                return;
-            }
+        OutlineSlideItem *item = dynamic_cast<OutlineSlideItem*>( it.current() );
+        if( item ) if( item->page() == page )
+            return item;
     }
+
+    return 0;
+}
+
+
+// update the Outline item, the title may have changed
+void Outline::updateItem( int pagenr /* 0-based */)
+{
+    OutlineSlideItem *item = slideItem( pagenr );
+    if( item )
+        item->update();
 }
 
 void Outline::addItem( int /*pos*/ )
@@ -746,24 +755,20 @@ void Outline::removeItem( int pos )
 {
     kdDebug(33001)<< "Outline::removeItem" << endl;
     int page = 0;
-    bool updatePageNum = false;
+    bool update = false;
 
     QListViewItemIterator it( this );
     for ( ; it.current(); ++it ) {
         if ( page == pos ) {
             kdDebug(33001) << "Page " << it.current()->text(0) << " removed" << endl;
             if ( it.current()->nextSibling())
-                updatePageNum = true;
+                update = it.current()->nextSibling();
             delete it.current();
         }
-        if ( updatePageNum ) {
-            QString title = doc->pageList().at(page)->pageTitle( i18n( "Slide %1" ).arg( page + 1 ) );
-            if (title.length() > 12) // restrict to a maximum of 12 characters
-                it.current()->setText( 0, title.left(5) + "..." + title.right(4));
-            else
-                it.current()->setText( 0, title );
-
-            it.current()->setText( 1, QString::number( page + 1 ) ); // page number
+        if ( update ) {
+            KPrPage* newPage = doc->pageList().at(page);
+            OutlineSlideItem* slideItem = dynamic_cast<OutlineSlideItem*>(it.current());
+            if( slideItem ) slideItem->setPage( newPage );
         }
         page++;
     }
@@ -814,13 +819,12 @@ void Outline::itemClicked( QListViewItem *item )
 
 void Outline::setCurrentPage( int pg )
 {
-    QListViewItemIterator it( this );
-    for ( ; it.current(); ++it ) {
-        if ( it.current()->text( 1 ).toInt() - 1 == pg ) {
-            setCurrentItem( it.current() );
-            setSelected( it.current(), TRUE );
-            ensureItemVisible(it.current());
-        }
+    OutlineSlideItem *item = slideItem( pg );
+    if( item )
+    {
+        setCurrentItem( item );
+        setSelected( item, true );
+        ensureItemVisible( item );
     }
 }
 
@@ -836,7 +840,6 @@ void Outline::movedItems( QListViewItem *i, QListViewItem *, QListViewItem *newA
     movedItem = i;
     movedAfter = newAfter;
     QTimer::singleShot( 300, this, SLOT( doMoveItems() ) );
-
 }
 
 void Outline::doMoveItems()
