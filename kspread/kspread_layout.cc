@@ -92,7 +92,7 @@ KSpreadLayout::~KSpreadLayout()
 void KSpreadLayout::copy( KSpreadLayout &_l )
 {
     m_mask = _l.m_mask;
-
+    m_bNoFallBack=_l.m_bNoFallBack;
     m_eFloatColor = _l.m_eFloatColor;
     m_eFloatFormat = _l.m_eFloatFormat;
     m_iPrecision = _l.m_iPrecision;
