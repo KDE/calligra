@@ -242,7 +242,6 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, KSpreadCell 
     //<gmr:Validation Style="1" Type="1" Operator="7" AllowBlank="true" UseDropdown="false" Title="ghhg" Message="ghghhhjfhfghjfghj&#10;fg&#10;hjgf&#10;hj">
     //        <gmr:Expression0>45</gmr:Expression0>
     //      </gmr:Validation>
-    //TODO
     KSpreadValidity *kspread_validity = cell->getValidity();
     QDomElement val = gnumeric_doc.createElement( "gmr:Validation" );
     val.setAttribute( "Title", kspread_validity->title );
@@ -271,42 +270,59 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, KSpreadCell 
     switch( kspread_validity->m_cond )
     {
     case None:
+        //Nothing
         break;
     case Equal:
+        val.setAttribute("Operator", "2" );
         break;
     case Superior:
+        val.setAttribute("Operator", "4" );
         break;
     case Inferior:
+        val.setAttribute("Operator", "5" );
         break;
     case SuperiorEqual:
-        break;
+        val.setAttribute("Operator", "6" );
+       break;
     case InferiorEqual:
+        val.setAttribute("Operator", "7" );
         break;
     case Between:
+        val.setAttribute("Operator", "0" );
         break;
     case Different:
+        val.setAttribute("Operator", "3" );
         break;
     case DifferentTo:
-        //TODO
+        val.setAttribute("Operator", "1" );
         break;
     }
     switch( kspread_validity->m_allow )
     {
     case Allow_All:
+        val.setAttribute("Type", "0" );
         break;
     case Allow_Number:
+        val.setAttribute("Type", "2" );
         break;
     case Allow_Text:
+        //Not supported into gnumeric
+        //val.setAttribute("Type", "1" );
         break;
     case Allow_Time:
+        val.setAttribute("Type", "5" );
         break;
     case Allow_Date:
+        val.setAttribute("Type", "4" );
         break;
     case Allow_Integer:
+        val.setAttribute("Type", "1" );
         break;
     case Allow_TextLength:
+        val.setAttribute("Type", "6" );
         break;
     case Allow_List:
+        val.setAttribute("Type", "3" );
         //TODO
         break;
     }

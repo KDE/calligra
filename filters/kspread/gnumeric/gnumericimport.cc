@@ -1424,7 +1424,71 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, KSpreadSheet * table)
                           break;
                       }
                   }
+                  if ( validation_element.hasAttribute( "Operator" ) )
+                  {
+                      int value = validation_element.attribute( "Operator" ).toInt();
+                      switch( value )
+                      {
+                      case 0:
+                          kspread_validity->m_cond=Between;
+                          break;
+                      case 1:
+                          kspread_validity->m_cond=DifferentTo;
+                          break;
+                      case 2:
+                          kspread_validity->m_cond=Equal;
+                          break;
+                      case 3:
+                          kspread_validity->m_cond=Different;
+                          break;
+                      case 4:
+                          kspread_validity->m_cond=Superior;
+                          break;
+                      case 5:
+                          kspread_validity->m_cond=Inferior;
+                          break;
+                      case 6:
+                          kspread_validity->m_cond=SuperiorEqual;
+                          break;
+                      case 7:
+                          kspread_validity->m_cond=InferiorEqual;
+                          break;
+                      default:
+                          kdDebug()<<" Error in validation Operator :"<<value<<endl;
+                          break;
+                      }
+                  }
+                  if ( validation_element.hasAttribute( "Type" ) )
+                  {
+                      int value = validation_element.attribute( "Operator" ).toInt();
+                      switch( value )
+                      {
+                      case 0:
+                          kspread_validity->m_allow=Allow_All;
+                          break;
+                      case 1:
+                          kspread_validity->m_allow=Allow_Integer;
+                          break;
+                      case 2:
+                          kspread_validity->m_allow=Allow_Number;
+                          break;
+                      case 3:
+                          kspread_validity->m_allow=Allow_List;
+                          break;
+                      case 4:
+                          kspread_validity->m_allow=Allow_Date;
+                          break;
+                      case 5:
+                          kspread_validity->m_allow=Allow_Time;
+                          break;
+                      case 6:
+                          kspread_validity->m_allow=Allow_TextLength;
+                          break;
+                      default:
+                          kdDebug()<<" Error in Type element : "<<value<<endl;
+                      }
 
+                  }
                   //<gmr:Validation Style="0" Type="1" Operator="0" AllowBlank="true" UseDropdown="false">
                   //<gmr:Expression0>745</gmr:Expression0>
                   //<gmr:Expression1>4546</gmr:Expression1>
