@@ -429,19 +429,34 @@ void OoImpressImport::appendLineGeometry( QDomDocument& doc, QDomElement& e, con
 
 void OoImpressImport::appendPen( QDomDocument& doc, QDomElement& e )
 {
-    QDomElement pen = doc.createElement( "PEN" );
-    if ( m_styleStack.hasAttribute( "draw:stroke" ) )
+    if ( m_styleStack.hasAttribute( "draw:stroke" ))
     {
-        if ( m_styleStack.attribute( "draw:stroke" ) == "solid" ) // TODO check for other styles
+        QDomElement pen = doc.createElement( "PEN" );
+        if ( m_styleStack.attribute( "draw:stroke" ) == "none" )
+            pen.setAttribute( "style", 0 );
+        else if ( m_styleStack.attribute( "draw:stroke" ) == "solid" )
             pen.setAttribute( "style", 1 );
+        else if ( m_styleStack.attribute( "draw:stroke" ) == "dash" )
+        {
+            QString style = m_styleStack.attribute( "draw:stroke-dash" );
+            if ( style == "Ultrafine Dashed" || style == "Fine Dashed" ||
+                 style == "Fine Dashed (var)" || style == "Dashed (var)" )
+                pen.setAttribute( "style", 2 );
+            else if ( style == "Fine Dotted" || style == "Ultrafine Dotted (var)" ||
+                      style == "Line with Fine Dots" )
+                pen.setAttribute( "style", 3 );
+            else if ( style == "3 Dashes 3 Dots (var)" || style == "Ultrafine 2 Dots 3 Dashes" )
+                pen.setAttribute( "style", 4 );
+            else if ( style == "2 Dots 1 Dash" )
+                pen.setAttribute( "style", 5 );
+        }
+
         if ( m_styleStack.hasAttribute( "svg:stroke-width" ) )
             pen.setAttribute( "width", (int) toPoint( m_styleStack.attribute( "svg:stroke-width" ) ) );
         if ( m_styleStack.hasAttribute( "svg:stroke-color" ) )
             pen.setAttribute( "color", m_styleStack.attribute( "svg:stroke-color" ) );
         e.appendChild( pen );
     }
-    else
-        pen.setAttribute( "style", 0 ); // to avoid a line around textobjects
 }
 
 void OoImpressImport::appendBrush( QDomDocument& doc, QDomElement& e )
@@ -731,7 +746,14 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
         if ( m_styleStack.hasAttribute( "fo:color" ) )
             text.setAttribute( "color", m_styleStack.attribute( "fo:color" ) );
         if ( m_styleStack.hasAttribute( "fo:font-family" ) )
-            text.setAttribute( "family", m_styleStack.attribute( "fo:font-family" ).remove( "'" ) );
+        {
+            // 'Thorndale' is not known outside OpenOffice so we substitute it
+            // with 'Times New Roman' that looks nearly the same.
+            if ( m_styleStack.attribute( "fo:font-family" ) == "Thorndale" )
+                text.setAttribute( "family", "Times New Roman" );
+            else
+                text.setAttribute( "family", m_styleStack.attribute( "fo:font-family" ).remove( "'" ) );
+        }
         if ( m_styleStack.hasAttribute( "fo:font-size" ) )
             text.setAttribute( "pointSize", toPoint( m_styleStack.attribute( "fo:font-size" ) ) );
         if ( m_styleStack.hasAttribute( "fo:font-weight" ) )
