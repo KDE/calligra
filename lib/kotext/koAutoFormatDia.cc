@@ -500,6 +500,8 @@ void KoAutoFormatDia::setupTab3()
 
     QStringList lst;
     lst<<i18n("Default");
+    exceptionLanguageName.insert( i18n("Default"), "");
+
     KStandardDirs *standard = new KStandardDirs();
     QStringList tmp = standard->findDirs("data", "koffice/autocorrect/");
     QString path = *(tmp.end());
@@ -513,7 +515,16 @@ void KoAutoFormatDia::setupTab3()
     for ( QStringList::Iterator it = tmp.begin(); it != tmp.end(); ++it )
     {
         if ( !(*it).contains("autocorrect"))
-            lst<<(*it).left((*it).length()-4);
+        {
+            QString readableName = KGlobal::locale()->twoAlphaToCountryName((*it).left((*it).length()-4));
+            QString tmp;
+            if ( readableName.isEmpty() )
+                tmp =(*it).left((*it).length()-4);
+            else
+                tmp =readableName;
+            exceptionLanguageName.insert( tmp, (*it).left((*it).length()-4));
+            lst<<tmp;
+        }
     }
     autoFormatLanguage->insertStringList(lst);
 
@@ -620,7 +631,18 @@ void KoAutoFormatDia::initTab3()
         if ( initialLanguage.isEmpty() )
             autoFormatLanguage->setCurrentItem(0);
         else
-            autoFormatLanguage->setCurrentText(initialLanguage);
+        {
+            KoExceptionLanguageName::Iterator it = exceptionLanguageName.begin();
+            for ( ; it != exceptionLanguageName.end() ; ++it )
+            {
+                if ( it.data() == initialLanguage)
+                {
+                    autoFormatLanguage->setCurrentText(it.key());
+                    break;
+                }
+
+            }
+        }
     }
     //force to re-readconfig when we reset config and we change a entry
     if ( autocorrectionEntryChanged )
@@ -664,7 +686,9 @@ void KoAutoFormatDia::changeAutoformatLanguage(const QString & text)
     if ( text==i18n("Default"))
         m_docAutoFormat->configAutoFormatLanguage( QString::null);
     else
-        m_docAutoFormat->configAutoFormatLanguage( text);
+    {
+        m_docAutoFormat->configAutoFormatLanguage( exceptionLanguageName.find(text).data());
+    }
 
     if ( !noSignal )
     {
@@ -989,7 +1013,7 @@ bool KoAutoFormatDia::applyConfig()
     m_docAutoFormat->configIncludeTwoUpperUpperLetterException( twoUpperLetter->autoInclude());
     m_docAutoFormat->configIncludeAbbreviation( abbreviation->autoInclude());
 
-    QString lang = autoFormatLanguage->currentText();
+    QString lang = exceptionLanguageName.find(autoFormatLanguage->currentText()).data();
     if ( lang == i18n("Default") )
         m_docAutoFormat->configAutoFormatLanguage(QString::null);
     else

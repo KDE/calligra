@@ -106,6 +106,9 @@ protected:
     void initTab3();
     void initTab4();
 
+    typedef QMap<QString, QString> KoExceptionLanguageName;
+    KoExceptionLanguageName exceptionLanguageName;
+
     QWidget *tab1;
     QWidget *tab2;
     QWidget *tab3;
