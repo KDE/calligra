@@ -70,7 +70,7 @@ const bool OLEFilter::filter1(
     m_prefixOut = prefixOut;
     QFile in(fileIn);
     if(!in.open(IO_ReadOnly)) {
-        kdError(s_area) << "OLEFilter::filter(): Unable to open input file!" << endl;
+        kdError(s_area) << "OLEFilter::filter(): Unable to open input: " << fileIn << endl;
         in.close();
         return false;
     }
@@ -145,6 +145,7 @@ void OLEFilter::slotSavePart(
         // on it.
 
         tempFile.file()->writeBlock(data, length);
+        tempFile.close();
         QString result = mgr->import(tempFile.name(), mimeType, config, m_prefixOut + id.mid(sizeof("tar:") - 1) );
         unlink(tempFile.name().local8Bit());
         partMap.insert(key, id);
