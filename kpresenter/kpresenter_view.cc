@@ -3296,8 +3296,8 @@ void KPresenterView::updateReadWrite( bool readwrite )
         QValueList<KAction *>::ConstIterator aEnd = actions.end();
         for (; aIt != aEnd; ++aIt )
             (*aIt)->setEnabled( readwrite );
+        refreshPageButton();
     }
-    refreshPageButton();
 }
 
 /*======================== setup popup menus ===================*/
