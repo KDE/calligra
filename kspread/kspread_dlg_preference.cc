@@ -82,12 +82,31 @@ void KSpreadpreference::slotApply()
 
 void KSpreadpreference::slotDefault()
 {
-  _preferenceConfig->slotDefault();
-  _configure->slotDefault();
-  _miscParameter->slotDefault();
-  _colorParameter->slotDefault();
-  _layoutPage->slotDefault();
-  _spellPage->slotDefault();
+    switch(activePageIndex())
+    {
+        case 0:
+            _preferenceConfig->slotDefault();
+            break;
+        case 1:
+            break;
+        case 2:
+            _configure->slotDefault();
+            break;
+        case 3:
+            _miscParameter->slotDefault();
+            break;
+        case 4:
+            _colorParameter->slotDefault();
+            break;
+        case 5:
+            _layoutPage->slotDefault();
+            break;
+        case 6:
+            _spellPage->slotDefault();
+            break;
+        default:
+            break;
+    }
 }
 
 preference::preference( KSpreadView* _view,QWidget *parent , char *name )
