@@ -6978,13 +6978,14 @@ void KWView::insertHorizontalLine()
 
 void KWView::changeHorizontalLine()
 {
-    QString file,oldFile;
+
     KWFrame * frame = m_doc->getFirstSelectedFrame();
     KWHorzLineFrameSet *frameset = static_cast<KWHorzLineFrameSet *>(frame->frameSet());
-    oldFile=frameset->picture().getKey().filename();
+    QString oldFile ( frameset->picture().getKey().filename() );
     KWinsertHorizontalLineDia *dia = new KWinsertHorizontalLineDia( m_doc, this);
     if ( dia->exec() )
     {
+        QString file( dia->horizontalLineName() );
         KWFrameChangePictureCommand *cmd= new KWFrameChangePictureCommand( i18n("Change HorizontalLine"), FrameIndex(frame), oldFile, file) ;
 
         frameset->loadPicture( file );
