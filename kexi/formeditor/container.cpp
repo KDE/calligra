@@ -392,7 +392,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 			}
 			else if(s == m_container && !m_toplevel && (mev->state() != ControlButton) && !m_form->manager()->isCreatingConnection()) // draw the selection rect
 			{
-				if((mev->state() == RightButton) || /*m_inlineEditing*/ m_state == InlineEditing)
+				if((mev->state() != LeftButton) || /*m_inlineEditing*/ m_state == InlineEditing)
 					return true;
 				int topx = (m_insertBegin.x() < mev->x()) ? m_insertBegin.x() :  mev->x();
 				int topy = (m_insertBegin.y() < mev->y()) ? m_insertBegin.y() : mev->y();
