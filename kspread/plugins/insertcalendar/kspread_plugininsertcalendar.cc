@@ -273,3 +273,5 @@ void PluginInsertCalendar::slotInsertCalendar(QDate start, QDate end)
 }
 
 }
+
+#include "kspread_plugininsertcalendar.moc"

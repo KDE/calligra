@@ -146,3 +146,5 @@ QDate InsertCalendarDialog::endDate() const
 }
 
 }
+
+#include "kspread_insertcalendardialog.moc"
