@@ -320,34 +320,37 @@ void KoTemplateChooseDia::openEmpty()
 /*================================================================*/
 void KoTemplateChooseDia::chooseFile()
 {
-    openFile();
-
+    // Use dir from currently selected file
     QString dir = QString::null;
     if ( QFile::exists( lFile->text() ) )
 	dir = QFileInfo( lFile->text() ).absFilePath();
 
 #ifdef USE_QFD
-    QString filename;
-    filename = QFileDialog::getOpenFileName( dir, m_strImportFilter );
+    QString filename = QFileDialog::getOpenFileName( dir, m_strImportFilter );
+    QString url = filename;
+    bool local = true;
 #else
-    KURL url;
-    url = KFileDialog::getOpenURL( dir, m_strImportFilter );
+    KURL u = KFileDialog::getOpenURL( dir, m_strImportFilter );
+    QString filename = u.path();
+    QString url = u.url();
+    bool local = u.isLocalFile();
 #endif
 
-#ifdef USE_QFD
-    if ( !filename.isEmpty() && QFileInfo( filename ).isFile() ||
-	( QFileInfo( filename ).isSymLink() && !QFileInfo( filename ).readLink().isEmpty() &&
-	 QFileInfo( QFileInfo( filename ).readLink() ).isFile() ) )
-	lFile->setText( filename );
-#else
-    QString filename = url.url();
-    if ( !filename.isEmpty() && QFileInfo( filename ).isFile() ||
-	( QFileInfo( filename ).isSymLink() && !QFileInfo( filename ).readLink().isEmpty() &&
-	 QFileInfo( QFileInfo( filename ).readLink() ).isFile() ) )
-	lFile->setText( filename );
-#endif
+    bool ok = !url.isEmpty();
+    if (local) // additionnal checks for local files
+      ok = ok && ( QFileInfo( filename ).isFile() ||
+	( QFileInfo( filename ).isSymLink() &&
+            !QFileInfo( filename ).readLink().isEmpty() &&
+	    QFileInfo( QFileInfo( filename ).readLink() ).isFile() ) );
 
-    openFile();
-    if ( !filename.isEmpty() )
+    if ( ok )
+    {
+	if (local)
+            lFile->setText( filename );
+        else
+            lFile->setText( url );
+        openFile();
 	chosen();
+    }
 }
+
