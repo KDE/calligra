@@ -3097,9 +3097,9 @@ void KSpreadView::refreshView()
     else
         m_pHorzScrollBar->hide();
     if(!m_pDoc->getShowTabBar() && !m_pDoc->getShowHorizontalScrollBar())
-      m_pVertScrollBar->setGeometry( width() - 16, top , 16, height() - top );
+      m_pVertScrollBar->setGeometry( width() - 16, top , 15, height() - top );
     else
-      m_pVertScrollBar->setGeometry( width() - 16, top , 16, height() - 16 - top );
+      m_pVertScrollBar->setGeometry( width() - 16, top , 15, height() - 16 - top );
     m_pVertScrollBar->setSteps( 20 /*linestep*/, m_pVertScrollBar->height() /*pagestep*/);
     if(m_pDoc->getShowVerticalScrollBar())
         m_pVertScrollBar->show();
@@ -3135,7 +3135,7 @@ void KSpreadView::refreshView()
                 statusBar()->hide();
         }
 
-    m_pHorzScrollBar->setGeometry( width() / 2, height() - 16, width() / 2 - widthScrollbarVertical, 16 );
+    m_pHorzScrollBar->setGeometry( width() / 2, height() - 16, width() / 2 - widthScrollbarVertical, 15 );
     m_pHorzScrollBar->setSteps( 20 /*linestep*/, m_pHorzScrollBar->width() /*pagestep*/);
 
     if(!m_pDoc->getShowTabBar() && !m_pDoc->getShowHorizontalScrollBar())
