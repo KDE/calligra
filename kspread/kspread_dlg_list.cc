@@ -95,6 +95,8 @@ KSpreadList::KSpreadList( KSpreadView* parent, const char* name )
   init();
   entryList->setEnabled(false);
   m_pModify->setEnabled(false);
+  if(list->count()==0)
+    m_pRemove->setEnabled(false);
   resize( 600, 250 );
 
 }
@@ -156,6 +158,7 @@ void KSpreadList::slotAdd()
   entryList->setText("");
   entryList->setEnabled(false);
   entryList->setFocus();
+  m_pRemove->setEnabled(true);
 }
 
 void KSpreadList::slotNew()
@@ -169,12 +172,16 @@ void KSpreadList::slotNew()
 
 void KSpreadList::slotRemove()
 {
+  if(list->currentItem()==-1)
+    return;
   int ret = KMessageBox::warningYesNo( this, i18n("Do you want really remove this list?")); 
   if(ret==4) // reponse = No
     return;
   list->removeItem(list->currentItem ());
   entryList->setEnabled(false);
   entryList->setText("");
+  if(list->count()==0)
+    m_pRemove->setEnabled(false);
 }
 
 void KSpreadList::slotOk()

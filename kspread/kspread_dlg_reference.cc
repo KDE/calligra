@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 1999 Montel Laurent <montell@club-internet.fr>
+   Copyright (C) 1999, 2000, 2001  Montel Laurent <lmontel@mandrakesoft.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,6 +33,7 @@
 #include <qstringlist.h>
 #include <qlayout.h>
 #include <kbuttonbox.h>
+#include <kmessagebox.h>
 #include <qstrlist.h>
 #include <qlist.h>
 
@@ -91,6 +92,12 @@ void KSpreadreference::slotDoubleClicked(QListBoxItem *)
 
 void KSpreadreference::slotRemove()
 {
+  if(list->currentItem()==-1)
+    return;
+  int ret = KMessageBox::warningYesNo( this, i18n("Do you want really remove this area name?")); 
+  if(ret==4) // reponse = No
+    return;
+  
   QString textRemove;
   if( list->currentItem()!=-1)
         {
