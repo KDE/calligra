@@ -1677,7 +1677,7 @@ QDomElement RowLayout::save( QDomDocument& doc, int yshift )
     return row;
 }
 
-bool RowLayout::load( const QDomElement& row, int yshift )
+bool RowLayout::load( const QDomElement& row, int yshift, PasteMode sp)
 {
     bool ok;
     if ( row.hasAttribute( "height" ) )
@@ -1703,9 +1703,9 @@ bool RowLayout::load( const QDomElement& row, int yshift )
 
     QDomElement f = row.namedItem( "format" ).toElement();
 
-    if ( !f.isNull() )
+    if ( !f.isNull() && ( sp == Normal || sp == Format || sp == NoBorder ))
         {
-        if ( !loadLayout( f ) )
+        if ( !loadLayout( f,sp ) )
                 return false;
         return true;
         }
@@ -1841,7 +1841,7 @@ QDomElement ColumnLayout::save( QDomDocument& doc, int xshift )
   return col;
 }
 
-bool ColumnLayout::load( const QDomElement& col, int xshift )
+bool ColumnLayout::load( const QDomElement& col, int xshift,PasteMode sp )
 {
     bool ok;
     if ( col.hasAttribute( "width" ) )
@@ -1868,9 +1868,9 @@ bool ColumnLayout::load( const QDomElement& col, int xshift )
 
     QDomElement f = col.namedItem( "format" ).toElement();
 
-    if ( !f.isNull() )
+    if ( !f.isNull() && ( sp == Normal || sp == Format || sp == NoBorder ))
         {
-        if ( !loadLayout( f ) )
+        if ( !loadLayout( f,sp ) )
                 return false;
         return true;
         }

@@ -5005,7 +5005,7 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
             if ( c.tagName() == "column" )
             {
                 ColumnLayout *cl = new ColumnLayout( this, 0 );
-                if ( cl->load( c, _xshift ) )
+                if ( cl->load( c, _xshift,sp ) )
                     insertColumnLayout( cl );
                 else
                     delete cl;
@@ -5035,7 +5035,7 @@ bool KSpreadTable::loadSelection( const QDomDocument& doc, int _xshift, int _ysh
             if ( c.tagName() == "row" )
             {
                 RowLayout *cl = new RowLayout( this, 0 );
-                if ( cl->load( c, _yshift ) )
+                if ( cl->load( c, _yshift,sp ) )
                     insertRowLayout( cl );
                 else
                     delete cl;

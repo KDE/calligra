@@ -469,7 +469,7 @@ public:
     ~RowLayout();
 
     virtual QDomElement save( QDomDocument&, int yshift = 0 );
-    virtual bool load( const QDomElement& row, int yshift = 0 );
+    virtual bool load( const QDomElement& row, int yshift = 0, PasteMode sp=Normal );
 
     /**
      * @param _canvas is needed to get information about the zooming factor.
@@ -583,7 +583,7 @@ public:
     ~ColumnLayout();
 
     virtual QDomElement save( QDomDocument&, int xshift = 0 );
-    virtual bool load( const QDomElement& row, int xshift = 0 );
+    virtual bool load( const QDomElement& row, int xshift = 0,PasteMode sp=Normal );
 
     /**
      * @param _canvas is needed to get information about the zooming factor.

@@ -1849,6 +1849,7 @@ void KSpreadView::popupColumnMenu(const QPoint & _point)
     m_cut->plug( m_pPopupColumn );
     m_copy->plug( m_pPopupColumn );
     m_paste->plug( m_pPopupColumn );
+    m_specialPaste->plug( m_pPopupColumn );
     m_default->plug( m_pPopupColumn );
 
     m_pPopupColumn->insertItem( KSBarIcon("insert_table_col"),i18n("Insert Column"), this, SLOT( slotPopupInsertColumn() ) );
@@ -1906,6 +1907,7 @@ void KSpreadView::popupRowMenu(const QPoint & _point )
     m_cut->plug( m_pPopupRow );
     m_copy->plug( m_pPopupRow );
     m_paste->plug( m_pPopupRow );
+    m_specialPaste->plug( m_pPopupRow );
     m_default->plug( m_pPopupRow );
 
     m_pPopupRow->insertItem( KSBarIcon("insert_table_row"),i18n("Insert Row"), this, SLOT( slotPopupInsertRow() ) );
