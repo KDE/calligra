@@ -21,7 +21,7 @@
 #define __VDASHPATTERN_H__
 
 #include <qvaluelist.h>
-
+#include <koffice_export.h>
 
 class QDomElement;
 
@@ -37,7 +37,7 @@ class QDomElement;
  * Default is no dashes.
  */
 
-class VDashPattern
+class KARBONBASE_EXPORT VDashPattern
 {
 public:
 	VDashPattern( double dashOffset = 0.0 );
