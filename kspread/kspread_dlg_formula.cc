@@ -51,8 +51,12 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
     m_focus = 0;
 
     QGridLayout *grid1 = new QGridLayout(this,11,2,15,7);
+    searchFunct=new KLineEdit(this);
+
+    grid1->addWidget(searchFunct,0,0);
+
     typeFunction=new QComboBox(this);
-    grid1->addWidget(typeFunction,0,0);
+    grid1->addWidget(typeFunction,1,0);
     typeFunction->insertItem(i18n("All"));
     typeFunction->insertItem(i18n("Statistic"));
     typeFunction->insertItem(i18n("Trigonometric"));
@@ -63,7 +67,7 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
     typeFunction->insertItem(i18n("Financial"));
 
     functions=new QListBox(this);
-    grid1->addMultiCellWidget( functions,1,7,0,0 );
+    grid1->addMultiCellWidget( functions,2,7,0,0 );
 
     selectFunction = new QPushButton(QString::null, this);
     selectFunction->setPixmap(BarIcon("down", KIcon::SizeSmall));
@@ -169,10 +173,30 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
         {
         functions->setCurrentItem(functions->index(functions->findItem(formulaName)));
         slotDoubleClicked(functions->findItem(formulaName));
-
+        }
+    else
+        {
+        searchFunct->setFocus();
         }
     if(functions->currentItem()==-1)
         selectFunction->setEnabled(false);
+    connect(searchFunct, SIGNAL( textChanged( const QString & )),
+          this,SLOT(slotSearchText(const QString &)));
+    connect(searchFunct, SIGNAL( returnPressed()),
+          this,SLOT(slotPressReturn()));
+}
+
+void KSpreadDlgFormula::slotPressReturn()
+{
+if(!functions->currentText().isEmpty())
+        slotDoubleClicked(functions->findItem(functions->currentText()));
+}
+void KSpreadDlgFormula::slotSearchText(const QString &_text)
+{
+QString result;
+result=listFunct.makeCompletion( _text );
+if(!result.isNull())
+        functions->setCurrentItem(functions->index(functions->findItem(result)));
 }
 
 bool KSpreadDlgFormula::eventFilter( QObject* obj, QEvent* ev )
@@ -740,41 +764,47 @@ void KSpreadDlgFormula::slotActivated(const QString & string)
     list_financial+="PV";
     list_financial+="PV_annuity";
     list_financial.sort();
-
     if(string== i18n("Statistic") )
     {
 	functions->clear();
 	functions->insertStringList(list_stat);
+        listFunct.setItems(list_stat);
     }
     if (string ==i18n("Trigonometric"))
     {
 	functions->clear();
 	functions->insertStringList(list_trig);
+        listFunct.setItems(list_trig);
     }
     if (string ==i18n("Analytic"))
     {
 	functions->clear();
 	functions->insertStringList(list_anal);
+        listFunct.setItems(list_anal);
     }
     if(string== i18n("Logic") )
     {
 	functions->clear();
 	functions->insertStringList(list_logic);
+        listFunct.setItems(list_logic);
     }
     if(string== i18n("Text") )
     {
 	functions->clear();
 	functions->insertStringList(list_text);
+        listFunct.setItems(list_text);
     }
     if(string== i18n("Time and Date") )
     {
 	functions->clear();
 	functions->insertStringList(list_date_time);
+        listFunct.setItems(list_date_time);
     }
     if(string== i18n("Financial") )
     {
 	functions->clear();
 	functions->insertStringList(list_financial);
+        listFunct.setItems(list_financial);
     }
     if(string == i18n("All"))
     {
@@ -786,7 +816,15 @@ void KSpreadDlgFormula::slotActivated(const QString & string)
 	functions->insertStringList(list_logic);
 	functions->insertStringList(list_date_time);
 	functions->insertStringList(list_financial);
+        listFunct.setItems(list_stat);
+        listFunct.insertItems(list_trig);
+	listFunct.insertItems(list_anal);
+	listFunct.insertItems(list_text);
+	listFunct.insertItems(list_logic);
+	listFunct.insertItems(list_date_time);
+	listFunct.insertItems(list_financial);
     }
+
 }
 
 void KSpreadDlgFormula::changeFunction()

@@ -30,6 +30,8 @@
 #include <qlineedit.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
+#include <klineedit.h>
+#include <kcompletion.h>
 
 class KSpreadView;
 class KSpreadTable;
@@ -75,6 +77,8 @@ public slots:
   void slotChangeText(const QString &);
   void slotSelectionChanged( KSpreadTable* _table, const QRect& _selection );
   void slotSelectButton();
+  void slotSearchText(const QString &);
+  void slotPressReturn();
 private:
   bool eventFilter( QObject* obj, QEvent* ev );
 protected:
@@ -109,6 +113,9 @@ protected:
   QString m_rightText;
   QString m_leftText;
   bool refresh_result;
+
+  KLineEdit *searchFunct;
+  KCompletion listFunct;
 };
 
 #endif

@@ -721,3 +721,4 @@ top to bottom and left to right.
 ----------------------------------------------------
 -Now kspread can understand Table1!C1 and Table1!c1
 it works.
+-Improved kspread_dlg_formula
