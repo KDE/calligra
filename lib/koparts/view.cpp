@@ -72,12 +72,12 @@ Shell* View::shell()
     return 0;
 }
 
-QAction* View::action( const char* name )
+KAction* View::action( const char* name )
 {
     return m_collection.action( name );
 }
 
-QActionCollection* View::actionCollection()
+KActionCollection* View::actionCollection()
 {
     return &m_collection;
 }

@@ -9,12 +9,12 @@ Plugin::~Plugin()
 {
 }
 
-QAction* Plugin::action( const char* name )
+KAction* Plugin::action( const char* name )
 {
     return m_collection.action( name );
 }
 
-QActionCollection* Plugin::actionCollection()
+KActionCollection* Plugin::actionCollection()
 {
     return &m_collection;
 }

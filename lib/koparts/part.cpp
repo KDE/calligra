@@ -81,12 +81,12 @@ Part* Part::hitTest( const QPoint&, const QWMatrix& )
     return this;
 }
 
-QAction* Part::action( const char* name )
+KAction* Part::action( const char* name )
 {
     return m_collection.action( name );
 }
 
-QActionCollection* Part::actionCollection()
+KActionCollection* Part::actionCollection()
 {
     return &m_collection;
 }

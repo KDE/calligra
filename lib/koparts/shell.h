@@ -2,7 +2,7 @@
 #define OFFICE_SHELL_H
 
 #include <qlist.h>
-#include <qaction.h>
+#include <kaction.h>
 #include <qdom.h>
 
 #include <ktmainwindow.h>
@@ -51,7 +51,7 @@ public:
      *
      *  @see action
      */
-    QActionCollection* actionCollection();
+    KActionCollection* actionCollection();
 
     /**
      *  Sets the main part of this shell.
@@ -156,7 +156,7 @@ protected:
      *
      *  @ref actionCollection
      */
-    QAction* action( const char* name, bool shell = FALSE );
+    KAction* action( const char* name, bool shell = FALSE );
 
 private:
 
@@ -170,7 +170,7 @@ private:
 
     QList<KToolBar> m_toolbars;
 
-    QActionCollection m_collection;
+    KActionCollection m_collection;
 
     SelectionPolicy m_policy;
 

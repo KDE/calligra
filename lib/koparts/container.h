@@ -9,7 +9,7 @@
 
 class QPainter;
 class QRect;
-class QAction;
+class KAction;
 class QPointArray;
 
 class ContainerHandler;

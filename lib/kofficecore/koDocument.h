@@ -69,7 +69,7 @@ public:
 
   virtual QWidget *widget();
 
-  virtual QAction *action( const QDomElement &element );
+  virtual KAction *action( const QDomElement &element );
 
   virtual QDomDocument document() const;
 

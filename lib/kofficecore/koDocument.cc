@@ -232,7 +232,7 @@ QWidget *KoDocument::widget()
 */
 }
 
-QAction *KoDocument::action( const QDomElement &element )
+KAction *KoDocument::action( const QDomElement &element )
 {
   return d->m_views.getFirst()->action( element );
 }

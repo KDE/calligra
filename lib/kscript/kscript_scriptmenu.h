@@ -1,7 +1,7 @@
 #ifndef KSCRIPTMENU_H
 #define KSCRIPTMENU_H
 
-#include <qaction.h>
+#include <kaction.h>
 #include <qlist.h>
 #include <qptrdict.h>
 #include <qstring.h>
@@ -11,7 +11,7 @@
 class KInstance;
 class KSInterpreter;
 
-class KScriptMenu : public QActionMenu
+class KScriptMenu : public KActionMenu
 {
     Q_OBJECT
 public:
@@ -22,7 +22,7 @@ protected slots:
     void slotActivated();
 
 private:
-    QList<QAction> m_actions;
+    QList<KAction> m_actions;
     QPtrDict<QString> m_filenames;
     DCOPRef m_ref;
     KInstance* m_instance;

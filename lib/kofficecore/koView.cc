@@ -102,12 +102,12 @@ KParts::PartManager *KoView::partManager() const
   return d->m_manager;
 }
 
-QAction *KoView::action( const QDomElement &element )
+KAction *KoView::action( const QDomElement &element )
 {
   static QString attrName = QString::fromLatin1( "name" );
   QString name = element.attribute( attrName );
 
-  QAction *act = KXMLGUIClient::action( name.utf8() );
+  KAction *act = KXMLGUIClient::action( name.utf8() );
 
   if ( !act )
     act = d->m_doc->KXMLGUIClient::action( name.utf8() );

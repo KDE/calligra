@@ -2,7 +2,7 @@
 #define PLUGIN_H
 
 #include <qobject.h>
-#include <qaction.h>
+#include <kaction.h>
 
 /**
  *  A KParts plugin.
@@ -34,18 +34,18 @@ public:
      *
      *  @see actionCollection
      */
-    QAction* action( const char* name );
+    KAction* action( const char* name );
 
     /**
      *  Retrieves the action collection of this plugin.
      *
      *  @see action
      */
-    QActionCollection* actionCollection();
+    KActionCollection* actionCollection();
     
 private:
 
-    QActionCollection m_collection;
+    KActionCollection m_collection;
 };
 
 #endif

@@ -4,7 +4,7 @@
 #include <qwidget.h>
 #include <qvaluelist.h>
 #include <qpopupmenu.h>
-#include <qaction.h>
+#include <kaction.h>
 #include <qevent.h>
 
 class Part;
@@ -67,12 +67,12 @@ public:
      *
      *  @return The retrieved action, may be NULL.
      */
-    QAction* action( const char* name );
+    KAction* action( const char* name );
     
     /**
      *  Retrieves all possible actions of the view.
      */
-    QActionCollection* actionCollection();
+    KActionCollection* actionCollection();
 
     virtual int leftBorder() const;
     virtual int rightBorder() const;
@@ -143,7 +143,7 @@ protected:
 private:
 
     Part* m_part;
-    QActionCollection m_collection;
+    KActionCollection m_collection;
     double m_scaleX;
     double m_scaleY;
 };

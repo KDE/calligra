@@ -1,7 +1,7 @@
 #ifndef OFFICE_PART_H
 #define OFFICE_PART_H
 
-#include <qaction.h>
+#include <kaction.h>
 #include <qobject.h>
 #include <qlist.h>
 #include <qstring.h>
@@ -110,14 +110,14 @@ public:
      *
      *  @return The action, may be NULL if no action with the desired name found.
      */
-    QAction* action( const char* name );
+    KAction* action( const char* name );
 
     /**
      *  Retrives all actions of this part.
      *
      *  @return An action collection with all actions.
      */
-    QActionCollection* actionCollection();
+    KActionCollection* actionCollection();
 
     /**
      *  Paints the whole part into the given painter object.
@@ -169,7 +169,7 @@ private:
 
     QList<View> m_views;
     QString m_config;
-    QActionCollection m_collection;
+    KActionCollection m_collection;
 };
 
 class PartChild : public QObject

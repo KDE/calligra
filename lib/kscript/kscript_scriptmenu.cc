@@ -9,7 +9,7 @@
 #include <qmessagebox.h>
 
 KScriptMenu::KScriptMenu( const DCOPRef& ref, KInstance* instance, const QString& text, QObject* parent, const char* name )
-    : QActionMenu( text, parent, name ), m_ref( ref ), m_instance( instance ), m_interpreter( 0 )
+    : KActionMenu( text, parent, name ), m_ref( ref ), m_instance( instance ), m_interpreter( 0 )
 {   
     m_actions.setAutoDelete( TRUE );
     m_filenames.setAutoDelete( TRUE );
@@ -26,7 +26,7 @@ KScriptMenu::KScriptMenu( const DCOPRef& ref, KInstance* instance, const QString
 	QString name = file;
 	pos = file.findRev( '/' );
 	name = file.mid( pos + 1 );
-	QAction* action = new QAction( name, 0, (QObject*)0, name.latin1() );
+	KAction* action = new KAction( name, 0, (QObject*)0, name.latin1() );
 	m_actions.append( action );
 	action->plug( popupMenu() );
 	connect( action, SIGNAL( activated() ), this, SLOT( slotActivated() ) );

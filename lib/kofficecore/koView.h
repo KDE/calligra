@@ -25,8 +25,8 @@
 #include <kparts/part.h>
 #include <kparts/partmanager.h>
 
-class QAction;
-class QActionCollection;
+class KAction;
+class KActionCollection;
 class QCustomEvent;
 class KoDocument;
 class KoDocumentChild;
@@ -58,7 +58,7 @@ public:
   virtual void setPartManager( KParts::PartManager *manager );
   virtual KParts::PartManager *partManager() const;
 
-  virtual QAction *action( const QDomElement &element );
+  virtual KAction *action( const QDomElement &element );
 
   /**
    *  Retrieves the document that is hit. This can be an embedded document.

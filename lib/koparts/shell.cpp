@@ -197,8 +197,8 @@ void Shell::setActiveView( View* view, Part* part )
     {
       QObjectListIt it( *children );
       for (; it.current(); ++it )
-        if ( it.current()->inherits( "QAction" ) )
-	  ((QAction *)it.current())->unplug( menuBar() );
+        if ( it.current()->inherits( "KAction" ) )
+	  ((KAction *)it.current())->unplug( menuBar() );
     }
 
     menuBar()->clear();
@@ -296,7 +296,7 @@ void Shell::createToolBars( const QDomElement& element )
 	    {
 		if ( f.tagName() == "Action" )
 	        {
-		    QAction* a = action( f.attribute("name") );
+		    KAction* a = action( f.attribute("name") );
 		    if ( a )
 		      a->plug( bar );
 		}
@@ -305,7 +305,7 @@ void Shell::createToolBars( const QDomElement& element )
 		    Plugin* plugin = m_activeView->plugin( f.attribute("plugin") );
 		    if ( plugin )
 		    {
-			QAction* a = plugin->action( f.attribute("name") );
+			KAction* a = plugin->action( f.attribute("name") );
 			if ( a )
 			    a->plug( bar );
 			else
@@ -371,7 +371,7 @@ void Shell::createMenuBar( const QDomElement& shell, const QDomElement& part )
 		  }
 		  else if ( f.tagName() == "Action" )
 		  {
-		    QAction *a = action( f.attribute( "name" ) );
+		    KAction *a = action( f.attribute( "name" ) );
 		    if ( a )
 		    {
 		      //Simon: now we're getting *rude*...
@@ -419,7 +419,7 @@ QPopupMenu* Shell::createMenu( const QDomElement& shell, const QDomElement& part
 	else if ( e.tagName() == "Action" )
         {
 	    first = FALSE;
-	    QAction* a = action( e.attribute("name"), shellmenu );
+	    KAction* a = action( e.attribute("name"), shellmenu );
 	    if ( a )
 		a->plug( menu );
 	    else
@@ -431,7 +431,7 @@ QPopupMenu* Shell::createMenu( const QDomElement& shell, const QDomElement& part
 	    Plugin* plugin = m_activeView->plugin( e.attribute("plugin") );
 	    if ( plugin )
 	    {
-		QAction* a = plugin->action( e.attribute("name") );
+		KAction* a = plugin->action( e.attribute("name") );
 		if ( a )
 		    a->plug( menu );
 		else
@@ -473,7 +473,7 @@ QPopupMenu* Shell::createMenu( const QDomElement& shell, const QDomElement& part
 			menu->insertSeparator();
 		    empty = FALSE;
 				
-		    QAction* a = action( f.attribute("name") );
+		    KAction* a = action( f.attribute("name") );
 		    if ( a )
 			a->plug( menu );
 		    else
@@ -488,7 +488,7 @@ QPopupMenu* Shell::createMenu( const QDomElement& shell, const QDomElement& part
 		    Plugin* plugin = m_activeView->plugin( e.attribute("plugin") );
 		    if ( plugin )
 	            {
-			QAction* a = plugin->action( e.attribute("name") );
+			KAction* a = plugin->action( e.attribute("name") );
 			if ( a )
 			    a->plug( menu );
 			else
@@ -663,19 +663,19 @@ QString Shell::readConfigFile( const QString& filename ) const
     return text;
 }
 
-QActionCollection* Shell::actionCollection()
+KActionCollection* Shell::actionCollection()
 {
     return &m_collection;
 }
 
-QAction* Shell::action( const char* name, bool shell )
+KAction* Shell::action( const char* name, bool shell )
 {
     if ( shell )
 	return m_collection.action( name );
 
     if ( m_activeView->part() == m_activePart )
     {
-	QAction* a = m_activeView->action( name );
+	KAction* a = m_activeView->action( name );
 	if ( a )
 	    return a;
     }
