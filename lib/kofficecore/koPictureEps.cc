@@ -45,7 +45,7 @@
 #include "koPictureEps.h"
 
 
-KoPictureEps::KoPictureEps(void) : m_cacheIsInFastMode(true)
+KoPictureEps::KoPictureEps(void) : m_psStreamStart(0), m_psStreamLength(0), m_cacheIsInFastMode(true)
 {
     // Forbid QPixmap to cache the X-Window resources (Yes, it is slower!)
     m_cachedPixmap.setOptimization(QPixmap::MemoryOptim);
@@ -79,7 +79,7 @@ QImage KoPictureEps::scaleWithGhostScript(const QSize& size, const int resolutio
     }
 
     // ### TODO: do not call GhostScript up to three times for each re-scaling (one call of GhostScript should be enough to know which device is available: gs --help)
-    // PNG16m is better, but not always available -> fallback to bmp16m, then fallback to ppm (256 colors)
+    // png16m is better, but not always available -> fallback to bmp16m, then fallback to ppm (256 colors)
     QImage img;
     int ret = tryScaleWithGhostScript(img, size, resolutionx, resolutiony, "png16m");
     if ( ret == -1 )
@@ -159,7 +159,7 @@ int KoPictureEps::tryScaleWithGhostScript(QImage &image, const QSize& size, cons
 
     // write image to gs
 
-    fwrite(m_rawData.data(), sizeof(char), m_rawData.size(), ghostfd);
+    fwrite( m_rawData.data() + m_psStreamStart, sizeof(char), m_psStreamLength, ghostfd);
 
     pclose ( ghostfd );
 
@@ -302,8 +302,17 @@ bool KoPictureEps::load(const QByteArray& array, const QString& /* extension */ 
         // We have a so-called "MS-DOS EPS file", we have to extract the PostScript stream
         if (!extractPostScriptStream()) // Changes m_rawData
             return false;
+        // ### TODO
+        m_psStreamStart = 0;
+        m_psStreamLength = m_rawData.size();
+    }
+    else
+    {
+        m_psStreamStart = 0;
+        m_psStreamLength = m_rawData.size();
     }
 
+    
     QTextStream stream(m_rawData, IO_ReadOnly);
     QString lineBox;
     QString line( stream.readLine() );
