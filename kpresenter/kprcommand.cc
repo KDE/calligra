@@ -398,7 +398,7 @@ void DeleteCmd::execute()
 	    objects.at( i )->removeFromObjList();
             if(objects.at(i)->getType()==OT_TEXT)
             {
-                KPTextObject * tmp = dynamic_cast<KPTextObject *>(tmp);
+                KPTextObject * tmp = dynamic_cast<KPTextObject *>( objects.at( i ) );
                 if ( tmp )
                     tmp->setEditingTextObj( false );
                 textObj=true;
