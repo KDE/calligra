@@ -187,13 +187,21 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
 
 KoMainWindow::~KoMainWindow()
 {
-    kdDebug(30003) << "KoMainWindow::~KoMainWindow" << endl;
+    kdDebug(30003) << "KoMainWindow::~KoMainWindow -----------------------------" << endl;
     // The doc and view might still exist (this is the case when closing the window)
-    if (d->m_rootDoc)
+    if (d->m_rootDoc) {
+	kdDebug() << "root doc" << endl;
         d->m_rootDoc->removeShell(this);
+    }
 
+    if(d->m_rootViews.findRef(d->m_activeView)==-1) {
+	kdDebug() << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
+	delete d->m_activeView;
+	d->m_activeView=0L;
+    }
     d->m_rootViews.setAutoDelete( true );
     d->m_rootViews.clear();
+    kdDebug() << " views deleted" << endl;
 
     // We have to check if this was a root document.
     // -> We aren't allowed to delete the (embedded) document!
@@ -202,7 +210,7 @@ KoMainWindow::~KoMainWindow()
 	 !d->m_rootDoc->isEmbedded())
     {
         kdDebug(30003) << "Destructor. No more views, deleting old doc " << d->m_rootDoc << endl;
-        d->m_rootDoc->delayedDestruction();
+        delete d->m_rootDoc;
     }
 
     // Save list of recent files
@@ -215,6 +223,7 @@ KoMainWindow::~KoMainWindow()
     delete d->m_splitter;
     d->m_splitter=0L;
     delete d;
+    kdDebug(30003) << "KoMainWindow::~KoMainWindow -----------------------------" << endl;
 }
 
 void KoMainWindow::setRootDocument( KoDocument *doc )
@@ -244,7 +253,6 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
   updateCaption();
 
   d->m_manager->setActivePart( d->m_rootDoc, d->m_rootViews.current() );
-  //d->m_orientation->setCurrentItem(static_cast<int>(d->m_splitter->orientation()));
 
   oldRootViews.setAutoDelete( true );
   oldRootViews.clear();
@@ -273,18 +281,18 @@ void KoMainWindow::updateCaption()
   {
       QString caption;
       // Get caption from document info (title(), in about page)
-      if ( d->m_rootDoc->documentInfo() )
+      if ( topmostParentDocument()->documentInfo() )
       {
-          KoDocumentInfoPage * page = d->m_rootDoc->documentInfo()->page( QString::fromLatin1("about"));
+          KoDocumentInfoPage * page = topmostParentDocument()->documentInfo()->page( QString::fromLatin1("about"));
           if (page)
               caption = static_cast<KoDocumentInfoAbout *>(page)->title();
       }
       if ( caption.isEmpty() )
           // Fall back to document URL
-          caption = d->m_rootDoc->url().prettyURL();
+          caption = topmostParentDocument()->url().prettyURL();
 
       // KTMW hides some of the functionality of kapp->makeStdCaption !
-      QWidget::setCaption( kapp->makeStdCaption( caption, true, d->m_rootDoc->isModified() ) );
+      QWidget::setCaption( kapp->makeStdCaption( caption, true, topmostParentDocument()->isModified() ) );
   }
 }
 

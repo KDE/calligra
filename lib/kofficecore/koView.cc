@@ -479,7 +479,8 @@ void KoViewChild::slotFrameGeometryChanged()
 			geom.width() - m_frame->leftBorder() - m_frame->rightBorder(),
 			geom.height() - m_frame->topBorder() - m_frame->bottomBorder() );
   setGeometry( borderRect );
-  m_child->setGeometry( borderLessRect );
+  if(m_child)
+      m_child->setGeometry( borderLessRect );
 }
 
 void KoViewChild::slotDocGeometryChanged()

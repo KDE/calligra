@@ -74,7 +74,6 @@ class KoDocumentPrivate
 public:
   KoDocumentPrivate()
   {
-    m_children.setAutoDelete( true );
   }
   ~KoDocumentPrivate()
   {
@@ -122,6 +121,8 @@ KoDocument::KoDocument( QWidget * parentWidget, const char *widgetName, QObject*
   if(m_documentList==0L)
     m_documentList=new QList<KoDocument>;
   m_documentList->append(this);
+  kdDebug() << "XXXXXXXXXXXXX docList (append): " << m_documentList->count()
+	    << endl;
 
   d = new KoDocumentPrivate;
   m_bEmpty = TRUE;
@@ -168,6 +169,8 @@ KoDocument::~KoDocument()
 
   delete d;
   m_documentList->removeRef(this);
+  kdDebug() << "XXXXXXXXXXXXX docList (remove): " << m_documentList->count()
+	    << endl;
   if(m_documentList->isEmpty())
     kapp->quit();
 }
