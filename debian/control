@@ -17,7 +17,7 @@ Architecture: any
 Section: x11
 Replaces: koffice, koffice-common
 Depends: ${shlibs:Depends}, kdebase-libs
-Conflicts: koffice, koffice-common
+Conflicts: koffice-common
 Suggests: kdebase
 Description: KDE Office Suite (Common libraries and binaries)
  KDE Office Suite 

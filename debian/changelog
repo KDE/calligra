@@ -1,3 +1,10 @@
+koffice (2.0-final-9) unstable; urgency=low
+ 
+  * More upstream fixes
+  * More i18n patch updates
+ 
+ -- Ivan E. Moore II <rkrusty@debian.org>  Mon, 27 Nov 2000 01:45:00 -0700
+
 koffice (2.0-final-8) unstable; urgency=low
  
   * More upstream fixes
