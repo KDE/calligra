@@ -368,7 +368,7 @@ public:
    *
    * @see #isModified
    */
-  virtual void insertChild( KoDocumentChild *child );
+  virtual void insertChild( const KoDocumentChild *child );
 
   /**
    * @return the list of all children. Do not modify the
@@ -542,6 +542,7 @@ protected:
 
 private slots:
   void slotChildChanged( KoChild *c );
+  void slotChildDestroyed();
   void slotDestruct();
 
 private:

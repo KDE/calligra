@@ -152,19 +152,28 @@ KoDocument::~KoDocument()
 {
   kdDebug(30003) << "KoDocument::~KoDocument() " << this << endl;
 
+  QListIterator<KoDocumentChild> childIt( d->m_children );
+  for (; childIt.current(); ++childIt )
+    disconnect( childIt.current(), SIGNAL( destroyed() ),
+		this, SLOT( slotChildDestroyed() ) );
+  
+  d->m_children.setAutoDelete( true );
+  d->m_children.clear();
+  
+  /*
   KoDocumentChild *child=d->m_children.first();
   for( ; child!=0L; child=d->m_children.next()) {
       d->m_children.removeRef(child);
       delete child;
       child=0L;
   }
-
+  */
   kdDebug(30003) << "KoDocument::~KoDocument() shells:" << d->m_shells.count() << endl;
-  
+
   QListIterator<KoMainWindow> shellIt( d->m_shells );
   for (; shellIt.current(); ++shellIt )
     shellIt.current()->setRootDocumentDirect( 0L );
-  
+
   d->m_shells.setAutoDelete( true );
   d->m_shells.clear();
 
@@ -311,7 +320,7 @@ unsigned int KoDocument::viewCount()
   return d->m_views.count();
 }
 
-void KoDocument::insertChild( KoDocumentChild *child )
+void KoDocument::insertChild( const KoDocumentChild *child )
 {
   setModified( true );
 
@@ -319,6 +328,8 @@ void KoDocument::insertChild( KoDocumentChild *child )
 
   connect( child, SIGNAL( changed( KoChild * ) ),
 	   this, SLOT( slotChildChanged( KoChild * ) ) );
+  connect( child, SIGNAL( destroyed() ),
+	   this, SLOT( slotChildDestroyed() ) );
 }
 
 void KoDocument::slotChildChanged( KoChild *c )
@@ -326,6 +337,12 @@ void KoDocument::slotChildChanged( KoChild *c )
   assert( c->inherits( "KoDocumentChild" ) );
   emit childChanged( static_cast<KoDocumentChild *>( c ) );
 }
+
+void KoDocument::slotChildDestroyed()
+{
+  const KoDocumentChild *child = static_cast<const KoDocumentChild *>( sender() );
+  d->m_children.removeRef( child );
+} 
 
 void KoDocument::slotDestruct()
 {
