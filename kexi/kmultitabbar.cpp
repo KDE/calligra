@@ -486,7 +486,7 @@ void KMultiTabBar::setTab(int id,bool state)
 	KMultiTabBarTab *tab=getTab(id);
 	if (tab)
 	{
-		if(state) tab->setState(true); else tab->setState(false);
+		tab->setState(state);
 	}
 }
 
@@ -495,8 +495,9 @@ bool KMultiTabBar::isTabRaised(int id)
 	KMultiTabBarTab *tab=getTab(id);
 	if (tab)
 	{
-		if (tab->isOn()) return true;
+		return tab->isOn();
 	}
+	
 	return false;
 }
 
