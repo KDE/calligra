@@ -27,8 +27,8 @@ libkspread_la_SOURCES = kspread_canvas.cc \
 	kspread_dlg_resize.cc kspread_factory.cc kspread_handler.cc \
 	kspread_events.cc  kspread_dlg_assistant2.cc kspread_dlg_show.cc \
 	kspread_dlg_insert.cc KSpreadDocIface_skel.cpp KSpreadMapIface_skel.cpp \
-	KSpreadTableIface_skel.cpp KSpreadDocIface.cpp KSpreadMapIface.cpp \
-	KSpreadTableIface.cpp
+	KSpreadTableIface_skel.cpp KSpreadDocIface.cc KSpreadMapIface.cc \
+	KSpreadTableIface.cc
 
 kspread_SOURCES = main.cc
 
