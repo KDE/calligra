@@ -748,6 +748,7 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     settingsWriter->addAttribute("config:name", "view-settings");
 
     KoUnit::saveOasis(settingsWriter, unit());
+
     saveOasisSettings( *settingsWriter );
 
     settingsWriter->endElement(); // config:config-item-set
@@ -785,7 +786,12 @@ void KSpreadDoc::loadOasisSettings( const QDomDocument&settingsDoc )
 
 void KSpreadDoc::saveOasisSettings( KoXmlWriter &settingsWriter )
 {
+    settingsWriter.startElement("config:config-item-map-indexed");
+    settingsWriter.addAttribute("config:name", "Views");
+    settingsWriter.startElement( "config:config-item-map-entry" );
     d->workbook->saveOasisSettings( settingsWriter );
+    settingsWriter.endElement();
+    settingsWriter.endElement();
 }
 
 
