@@ -655,7 +655,7 @@ bool KPresenterPageIface::isOneObjectSelected() const
 
 bool KPresenterPageIface::haveASelectedPictureObj() const
 {
-    return m_page->haveASelectedPictureObj();
+    return m_page->haveASelectedClipartObj();
 }
 
 bool KPresenterPageIface::haveASelectedPartObj() const
