@@ -40,9 +40,10 @@ KoDataToolInfo::KoDataToolInfo()
     m_service = 0;
 }
 
-KoDataToolInfo::KoDataToolInfo( const KService::Ptr& service )
+KoDataToolInfo::KoDataToolInfo( const KService::Ptr& service, KInstance* instance )
 {
     m_service = service;
+    m_instance = instance;
 
     if ( !!m_service && !m_service->serviceTypes().contains( "KoDataTool" ) )
     {
@@ -139,7 +140,7 @@ QStringList KoDataToolInfo::userCommands() const
     return QStringList::split( ',', m_service->comment() );
 }
 
-KoDataTool* KoDataToolInfo::createTool( KInstance* instance, QObject* parent, const char* name ) const
+KoDataTool* KoDataToolInfo::createTool( QObject* parent, const char* name ) const
 {
     if ( !m_service )
         return 0;
@@ -156,18 +157,13 @@ KoDataTool* KoDataToolInfo::createTool( KInstance* instance, QObject* parent, co
         return 0;
     }
     KoDataTool * tool = static_cast<KoDataTool *>(obj);
-    tool->setInstance( instance );
+    tool->setInstance( m_instance );
     return tool;
 }
 
 KService::Ptr KoDataToolInfo::service() const
 {
     return m_service;
-}
-
-QValueList<KoDataToolInfo> KoDataToolInfo::query( const QString& datatype, const QString& mimetype )
-{
-    return query( datatype, mimetype, 0L );
 }
 
 QValueList<KoDataToolInfo> KoDataToolInfo::query( const QString& datatype, const QString& mimetype, KInstance* instance )
@@ -208,7 +204,7 @@ QValueList<KoDataToolInfo> KoDataToolInfo::query( const QString& datatype, const
         // Temporary replacement for the non-working trader query above
         if ( !instance || !(*it)->property("ExcludeFrom").toStringList()
              .contains( instance->instanceName() ) )
-            lst.append( KoDataToolInfo( *it ) );
+            lst.append( KoDataToolInfo( *it, instance ) );
         else
             kdDebug() << (*it)->entryPath() << " excluded." << endl;
     }

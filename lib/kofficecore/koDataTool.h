@@ -49,7 +49,10 @@ public:
      * Create an invalid KoDataToolInfo.
      */
     KoDataToolInfo();
-    KoDataToolInfo( const KService::Ptr& service );
+    /**
+     * Create a valid KoDataToolInfo.
+     */
+    KoDataToolInfo( const KService::Ptr& service, KInstance* instance );
     /**
      * Copy constructor.
      */
@@ -122,11 +125,9 @@ public:
 
     /**
      * Creates the data tool described by this KoDataToolInfo.
-     * @param instance the instance that creates this tool.
-     * Your KPart's instance, or KGlobal::instance().
      * @return a pointer to the created data tool or 0 on error.
      */
-    KoDataTool* createTool( KInstance *instance, QObject* parent = 0, const char* name = 0 ) const;
+    KoDataTool* createTool( QObject* parent = 0, const char* name = 0 ) const;
 
     KService::Ptr service() const;
 
@@ -137,20 +138,17 @@ public:
     bool isValid() const;
 
     /**
-     * @deprecated, use the other query method
-     * Queries the @ref KTrader about installed @ref KoDataTool implementations.
-     */
-    static QValueList<KoDataToolInfo> query( const QString& datatype = QString::null, const QString& mimetype = QString::null );
-    /**
      * Queries the @ref KTrader about installed @ref KoDataTool implementations.
      * @param datatype a type that the application can 'export' to the tools (e.g. QString)
      * @param mimetype the mimetype of the data (e.g. text/plain)
-     * @param instance the application or the part (to check if a tool is excluded from this part)
+     * @param instance the application (or the part)'s instance (to check if a tool is excluded from this part,
+     * and also used if the tool wants to read its configuration in the app's config file).
      */
     static QValueList<KoDataToolInfo> query( const QString& datatype, const QString& mimetype, KInstance * instance );
 
 private:
     KService::Ptr m_service;
+    KInstance* m_instance;
 };
 
 
