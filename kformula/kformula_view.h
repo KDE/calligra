@@ -37,6 +37,7 @@ public:
 public slots:
     // Document signals
     void slotModified();
+    void slotTypeChanged(int type);
 
 protected:
     virtual void cleanUp();

@@ -67,6 +67,9 @@ void KFormulaView::setDocument( KFormulaDocument *_doc )
 
     QObject::connect( m_pDoc, SIGNAL( sig_modified() ), 
 		      this, SLOT( slotModified() ) );
+
+    QObject::connect( m_pDoc, SIGNAL( sig_changeType(int) ), 
+		      this, SLOT( slotTypeChanged(int) ) );
 }
 
 void KFormulaView::paintEvent( QPaintEvent *_ev )
@@ -85,29 +88,10 @@ void KFormulaView::resizeEvent( QResizeEvent *_ev )
 void KFormulaView::keyPressEvent( QKeyEvent *k )
 {
     m_pDoc->keyPressEvent(k);
- /*int c,prev,next,c1,c2,c3,len,type;
- c=m_pDoc->getCurrent();
- warning(c);
- prev=m_pDoc->Blocks[c]->getprev();
- next=m_pDoc->Blocks[c]->getnext();
- c1=m_pDoc->Blocks[c]->getchild1();
- c2=m_pDoc->Blocks[c]->getchild2();
- c3=m_pDoc->Blocks[c]->getchild3();
- type=m_pDoc->Blocks[c]->gettype();
- len=m_pDoc->Blocks[c]->getcont().length();
-
- if(k->key()==Key_Left) {
-			warning("LEFT ;-)");
-m_pDoc->Blocks[0]->setcont("ca**o");
-  */
-  }
-
-
-
-void KFormulaView::slotModified()
-{
-    update();
+ 
 }
+
+
 
 CORBA::Long KFormulaView::addToolButton (ToolBar_ref toolbar,
 					 const char* pictname,
@@ -222,6 +206,30 @@ void KFormulaView::createGUI()
 	}  
 }
 
+
+void KFormulaView::slotTypeChanged(int type)
+{   
+   debug("qui");
+   m_rToolBarType->setItemEnabled(m_idButtonType_0,(type==0));          
+   m_rToolBarType->setItemEnabled(m_idButtonType_1,(type==0));          
+   m_rToolBarType->setItemEnabled(m_idButtonType_2,(type==1));          
+   m_rToolBarType->setItemEnabled(m_idButtonType_3,(type==2));          
+   m_rToolBarType->setItemEnabled(m_idButtonType_4,(type==2));          
+   m_rToolBarType->setItemEnabled(m_idButtonType_5,(type==3));          
+
+                
+debug("Type Changed");
+    update();
+
+}
+
+
+void KFormulaView::slotModified()
+{
+    update();
+}
+
+
 void KFormulaView::newView()
 {
     assert( (m_pDoc != 0L) );
@@ -270,7 +278,7 @@ void KFormulaView::addB3()
 void KFormulaView::addB2()
 {
     debug("addB2");
-    m_pDoc->addB4();
+    m_pDoc->addB2(); 
 
 }
 
