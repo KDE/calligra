@@ -328,8 +328,8 @@ VPath::boundingBox( const double zoomFactor ) const
 	return QRect(
 		qRound( rect.left() / zoomFactor ),
 		qRound( rect.top() / zoomFactor ),
-		qRound( rect.right() / zoomFactor ),
-		qRound( rect.bottom() / zoomFactor ) );
+		qRound( rect.width() / zoomFactor ),
+		qRound( rect.height() / zoomFactor ) );
 }
 
 bool
