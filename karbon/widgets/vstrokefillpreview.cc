@@ -135,7 +135,22 @@ VStrokeFillPreview::update( const VStroke &s, const VFill &f )
 		m_painter->lineTo( KoPoint( 15.0, 50.0 ) );
 		m_painter->lineTo( KoPoint( 15.0, 20.0 ) );
 		m_painter->fillPath();
+
 	}
+		m_painter->setBrush( Qt::NoBrush );
+		m_painter->setPen( Qt::white );
+		m_painter->newPath();
+		m_painter->moveTo( KoPoint( 45.0, 20.0 ) );
+		m_painter->lineTo( KoPoint( 15.0, 20.0 ) );
+		m_painter->lineTo( KoPoint( 15.0, 50.0 ) );
+		m_painter->strokePath();
+
+		m_painter->setPen( Qt::black );
+		m_painter->newPath();
+		m_painter->moveTo( KoPoint( 45.0, 20.0 ) );
+		m_painter->lineTo( KoPoint( 45.0, 50.0 ) );
+		m_painter->lineTo( KoPoint( 15.0, 50.0 ) );
+		m_painter->strokePath();
 	m_painter->end();
 
 	repaint();
