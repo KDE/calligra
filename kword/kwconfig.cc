@@ -124,7 +124,6 @@ void KWConfig::slotApply()
         m_doc->addCommand( macro );
     else
         delete macro;
-
 }
 
 void KWConfig::slotDefault()
@@ -685,12 +684,16 @@ KCommand *ConfigureDefaultDocPage::apply()
     double newTabStop = KoUnit::ptFromUnit( m_tabStopWidth->value(), doc->getUnit() );
     if ( newTabStop != m_oldTabStopWidth)
     {
+        if ( !macroCmd )
+            macroCmd=new KMacroCommand(i18n("Change Tab Stop Value"));
+
 
         KWChangeTabStopValueCommand *cmd = new KWChangeTabStopValueCommand( i18n("Change Tab Stop Value"), m_oldTabStopWidth, newTabStop, doc);
         cmd->execute();
         macroCmd->addCommand(cmd);
         m_oldTabStopWidth = newTabStop;
     }
+
     return macroCmd;
 }
 
