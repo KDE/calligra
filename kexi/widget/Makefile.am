@@ -1,7 +1,8 @@
 include $(top_srcdir)/kexi/Makefile.global
 
 lib_LTLIBRARIES = libkexiextendedwidgets.la
-libkexiextendedwidgets_la_SOURCES = kexidatatable.cpp kexidatatableview.cpp #kexirecordnavigator.cpp kexifilterdlg.cpp kexiquerydesignersqleditor.cpp
+libkexiextendedwidgets_la_SOURCES = kexidatatable.cpp kexidatatableview.cpp 
+# kexirecordnavigator.cpp kexifilterdlg.cpp kexiquerydesignersqleditor.cpp
 libkexiextendedwidgets_la_LDFLAGS = $(all_libraries) -Wnounresolved
 libkexiextendedwidgets_la_LIBADD = $(LIB_KDEUI) ../tableview/libkexidatatable.la ../core/libkexicore.la
 
