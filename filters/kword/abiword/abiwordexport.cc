@@ -852,7 +852,6 @@ QString AbiWordWorker::layoutToCss(const LayoutData& layoutOrigin,
             }
         case LayoutData::LS_MULTIPLE:
             {
-                const QString mult ( QString::number( qRound( layout.lineSpacing * 100 ) ) );
                 props += "line-height:";
                 props += QString::number( layout.lineSpacing ); // ### TODO: rounding?
                 props += "; ";
