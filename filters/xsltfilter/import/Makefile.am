@@ -1,7 +1,6 @@
 ####### General stuff
 
 INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES)  $(all_includes) $(LIBXML_CFLAGS) $(LIBXSLT_CFLAGS)
-AM_CPPFLAGS = -DSRCDIR="\"$(shell (cd $(top_srcdir)/filters/xsltfilter/import && pwd))\"" 
 
 ####### Files
 
