@@ -1055,9 +1055,6 @@ KarbonView::initActions()
 #endif
 	connect( m_capStyle, SIGNAL(clicked()), this, SLOT(slotCapStyleClicked()) );
 
-	//m_strokeFillPreview->update( *( part()->document().selection()->stroke() ),
-	//							 *( part()->document().selection()->fill() ) );
-
 	m_configureAction = new KAction(
 		i18n( "Configure Karbon..." ), "configure", 0, this,
 		SLOT( configure() ), actionCollection(), "configure" );
