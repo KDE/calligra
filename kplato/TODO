@@ -1,4 +1,3 @@
-Last updated: 30 Oct 2004
 
 Status      Description
 ------------------------------------------------------------------
@@ -71,14 +70,14 @@ Done        From given project start time.
 Done        From given project end time:
             Based on task relations: 
 Done            Finish to start.
-Taken           Start to start.
-Taken           Finish to finish.
+Done            Start to start.
+Done            Finish to finish.
             Based on constraints.
 Done            As soon as possible.
 Done            As late as possible.
-Taken           Must start on.
-Taken           Start not earlier than.
-Taken           Finish not later than.
+                Must start on.
+                Start not earlier than.
+                Finish not later than.
                 
 Done        Based on resource requests to specific resources.
 Done        Allocation of resources and calculates durations accordingly.
@@ -86,18 +85,18 @@ Done        Allocation of resources and calculates durations accordingly.
             
 -           Resource leveling, monte carlo estimation, etc, etc...
             
--           Icons
-                A few icons for menu/toolbars created, but a lot missing.
+-       Icons
+            A few icons for menu/toolbars created, but a lot missing.
             
--           Reports
-                2 test reports implemented. Uses Kugar report library. 
-                On 'feasibility study' level.
+-       Reports
+            2 test reports implemented. Uses Kugar report library. 
+            On 'feasibility study' level.
         
--           Settings/configuration. Nothing done.
+-       Settings/configuration. Nothing done.
         
-            Templates:
-Done        Plain
--           All the others :)
+        Templates:
+Done    Plain
+-       All the others :)
         
 -           Command history. 
             Most commands done.
