@@ -536,7 +536,7 @@ void KWStylePreview::drawContents( QPainter *painter )
     }
 
     parag->format();
-    QRect textRect = parag->pixelRect();
+    QRect textRect = parag->pixelRect( m_zoomHandler );
 
     // Center vertically, but not horizontally, to keep the parag alignment working,
     textRect.moveTopLeft( QPoint( whiteRect.x() + 10,
@@ -546,7 +546,7 @@ void KWStylePreview::drawContents( QPainter *painter )
     painter->setClipRect( textRect.intersect( whiteRect ) );
     painter->translate( textRect.x(), textRect.y() );
 
-    m_textdoc->drawWYSIWYG( painter, 0, 0, textRect.width(), textRect.height(), cg );
+    m_textdoc->drawWYSIWYG( painter, 0, 0, textRect.width(), textRect.height(), cg, m_zoomHandler );
     painter->restore();
 }
 

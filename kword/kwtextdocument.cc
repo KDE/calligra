@@ -23,14 +23,14 @@
 #include "kwtextframeset.h"
 #include <kdebug.h>
 
-KWTextDocument::KWTextDocument( KWTextFrameSet * textfs, QTextDocument *p, KoTextFormatCollection *fc, KoTextFormatter *formatter )
-    : KoTextDocument( textfs->kWordDocument(), p, fc, formatter, false ), m_textfs( textfs )
+KWTextDocument::KWTextDocument( KWTextFrameSet * textfs, KoTextFormatCollection *fc, KoTextFormatter *formatter )
+    : KoTextDocument( textfs->kWordDocument(), fc, formatter, false ), m_textfs( textfs )
 {
     init();
 }
 
 KWTextDocument::KWTextDocument( KoZoomHandler * zoomHandler )
-    : KoTextDocument( zoomHandler, 0, new KoTextFormatCollection( QFont("helvetica") /*unused*/ ), 0L, false ),
+    : KoTextDocument( zoomHandler, new KoTextFormatCollection( QFont("helvetica") /*unused*/ ), 0L, false ),
       m_textfs( 0 )
 {
     init();

@@ -55,9 +55,9 @@ public:
     bool hardFrameBreakAfter() const { return m_layout.pageBreaking & KoParagLayout::HardFrameBreakAfter; }
 
     /** Public for loading a style */
-    static KoTextFormat loadFormat( QDomElement &formatElem, KoTextFormat *refFormat, const QFont &defaultFont, KoZoomHandler *zh );
+    static KoTextFormat loadFormat( QDomElement &formatElem, KoTextFormat *refFormat, const QFont &defaultFont );
     /** Public for saving a style */
-    static QDomElement saveFormat( QDomDocument &doc, KoTextFormat *curFormat, KoTextFormat *refFormat, int pos, int len, KoZoomHandler *zh );
+    static QDomElement saveFormat( QDomDocument &doc, KoTextFormat *curFormat, KoTextFormat *refFormat, int pos, int len );
 
 
     /** Save the whole paragraph */

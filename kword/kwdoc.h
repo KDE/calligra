@@ -536,9 +536,7 @@ protected:
 
     void loadFrameSets( QDomElement framesets );
     void loadStyleTemplates( QDomElement styles );
-    /** Create a style from a saved document */
-    KWStyle* loadStyle( QDomElement & styleElem, KWDocument * doc, const QFont & defaultFont );
-    void saveStyle( KWStyle *sty, QDomElement parentElem, KoZoomHandler* zh );
+    void saveStyle( KWStyle *sty, QDomElement parentElem );
 
     void newZoomAndResolution( bool updateViews, bool forPrint );
 

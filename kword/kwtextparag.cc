@@ -47,10 +47,10 @@ void KWTextParag::drawFormattingChars( QPainter &painter, const QString & /*s*/,
     {
         bool forPrint = ( painter.device()->devType() == QInternal::Printer );
         KWDocument * doc = textfs->kWordDocument();
-        KoZoomHandler * zh = doc;
-        drawSelections=textfs->currentViewMode()->drawSelections();
+        KoZoomHandler * zh = kwTextDocument()->paintingZoomHandler();
         if ( doc && doc->viewFormattingChars() && !forPrint )
         {
+            Q_ASSERT( drawSelections == false );
             painter.save();
             QPen pen( cg.color( QColorGroup::Highlight ) );
             painter.setPen( pen );
@@ -204,7 +204,7 @@ KWTextDocument * KWTextParag::kwTextDocument() const
 }
 
 //static
-QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curFormat, KoTextFormat * refFormat, int pos, int len, KoZoomHandler *zh )
+QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curFormat, KoTextFormat * refFormat, int pos, int len )
 {
     //kdDebug() << "KWTextParag::saveFormat refFormat=" << (  refFormat ? refFormat->key() : "none" )
     //          << " curFormat=" << curFormat->key()
@@ -242,7 +242,7 @@ QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curForma
     {
         elem = doc.createElement( "SIZE" );
         formatElem.appendChild( elem );
-        int size = static_cast<int>( zh->layoutUnitToPt( curFormat->font().pointSize() ) );
+        int size = static_cast<int>( KoTextZoomHandler::layoutUnitToPt( curFormat->font().pointSize() ) );
         elem.setAttribute( "value", size );
     }
     if( !refFormat || curFormat->font().italic() != refFormat->font().italic() )
@@ -323,13 +323,12 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */,
         {
             if ( startPos > -1 && curFormat) { // Save former format
                 QDomElement formatElem = saveFormat( doc, curFormat,
-                                                     paragraphFormat(), startPos, index-startPos,
-                                                     textDocument()->zoomHandler() );
+                                                     paragraphFormat(), startPos, index-startPos );
                 if ( !formatElem.firstChild().isNull() ) // Don't save an empty format tag
                     formatsElem.appendChild( formatElem );
             }
 
-            QDomElement formatElem = saveFormat( doc, newFormat, paragraphFormat(), index, 1, textDocument()->zoomHandler() );
+            QDomElement formatElem = saveFormat( doc, newFormat, paragraphFormat(), index, 1 );
             formatsElem.appendChild( formatElem );
             static_cast<KoTextCustomItem *>( ch.customItem() )->save( formatElem );
             startPos = -1;
@@ -359,7 +358,7 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */,
             {
                 // Format changed.
                 if ( startPos > -1 && curFormat) { // Save former format
-                    QDomElement formatElem = saveFormat( doc, curFormat, paragraphFormat(), startPos, index-startPos, textDocument()->zoomHandler() );
+                    QDomElement formatElem = saveFormat( doc, curFormat, paragraphFormat(), startPos, index-startPos );
                     if ( !formatElem.firstChild().isNull() ) // Don't save an empty format tag
                         formatsElem.appendChild( formatElem );
                 }
@@ -379,7 +378,7 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */,
         }
     }
     if ( startPos > -1 && index > startPos && curFormat) { // Save last format
-        QDomElement formatElem = saveFormat( doc, curFormat, paragraphFormat(), startPos, index-startPos, textDocument()->zoomHandler() );
+        QDomElement formatElem = saveFormat( doc, curFormat, paragraphFormat(), startPos, index-startPos );
         if ( !formatElem.firstChild().isNull() ) // Don't save an empty format tag
             formatsElem.appendChild( formatElem );
     }
@@ -396,12 +395,12 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */,
     // Paragraph's format
     // ## Maybe we should have a "default format" somewhere and
     // pass it instead of 0L, to only save the non-default attributes
-    QDomElement paragFormatElement = saveFormat( doc, paragraphFormat(), 0L, 0, to - from + 1, textDocument()->zoomHandler() );
+    QDomElement paragFormatElement = saveFormat( doc, paragraphFormat(), 0L, 0, to - from + 1 );
     layoutElem.appendChild( paragFormatElement );
 }
 
 //static
-KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * refFormat, const QFont & defaultFont, KoZoomHandler *zh )
+KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * refFormat, const QFont & defaultFont )
 {
     KoTextFormat format;
     if ( refFormat )
@@ -427,7 +426,7 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
     if ( !elem.isNull() )
     {
         int size = elem.attribute("value").toInt();
-        font.setPointSize( zh->ptToLayoutUnit( size ) );
+        font.setPointSize( KoTextZoomHandler::ptToLayoutUnit( size ) );
     }
     elem = formatElem.namedItem( "ITALIC" ).toElement();
     if ( !elem.isNull() )
@@ -491,7 +490,7 @@ void KWTextParag::loadLayout( QDomElement & attributes )
         if ( !formatElem.isNull() )
         {
             // Load paragraph format
-            KoTextFormat f = loadFormat( formatElem, defaultFormat, doc->defaultFont(), textDocument()->zoomHandler() );
+            KoTextFormat f = loadFormat( formatElem, defaultFormat, doc->defaultFont() );
             setFormat( document()->formatCollection()->format( &f ) );
         }
         else // No paragraph format
@@ -545,7 +544,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
                 switch( id ) {
                 case 1: // Normal text
                 {
-                    KoTextFormat f = loadFormat( formatElem, paragraphFormat(), doc->defaultFont(), textDocument()->zoomHandler() );
+                    KoTextFormat f = loadFormat( formatElem, paragraphFormat(), doc->defaultFont() );
                     //kdDebug(32002) << "KWTextParag::loadFormatting applying formatting from " << index << " to " << index+len << endl;
                     setFormat( index, len, document()->formatCollection()->format( &f ) );
                     break;
@@ -585,7 +584,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset )
                         // If varFormat is 0 (no key specified), the default format will be used.
                         KWVariable * var = KWVariable::createVariable( type, -1, kwTextDocument()->textFrameSet(), varFormat );
                         var->load( varElem );
-                        KoTextFormat f = loadFormat( formatElem, paragraphFormat(), doc->defaultFont(), textDocument()->zoomHandler() );
+                        KoTextFormat f = loadFormat( formatElem, paragraphFormat(), doc->defaultFont() );
                         setCustomItem( index, var, document()->formatCollection()->format( &f ) );
                         var->recalc();
                     }
@@ -688,7 +687,7 @@ void KWTextParag::printRTDebug( int info )
             kdDebug() << i << ": '" << QString(ch.c) << "' (" << ch.c.unicode() << ")"
                       << " x(LU)=" << ch.x
                       << " w(LU)=" << ch.width//s->width(i)
-                      << " x(PIX)=" << textDocument()->zoomHandler()->layoutUnitToPixelX( ch.x )
+                      << " x(PIX)=" << textDocument()->formattingZoomHandler()->layoutUnitToPixelX( ch.x )
                 + ch.pixelxadj
                       << " (xadj=" << + ch.pixelxadj << ")"
                       << " w(PIX)=" << ch.pixelwidth

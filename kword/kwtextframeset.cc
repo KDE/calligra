@@ -101,7 +101,7 @@ KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
     m_framesInPage.setAutoDelete( true );
     m_firstPage = 0;
     // Create the text document to set in the text object
-    KWTextDocument* textdoc = new KWTextDocument( this, 0,
+    KWTextDocument* textdoc = new KWTextDocument( this,
         new KoTextFormatCollection( _doc->defaultFont() ), new KWTextFormatter( this ) );
     textdoc->setFlow( this );
     textdoc->setPageBreakEnabled( true );              // get verticalBreak to be called
@@ -372,7 +372,8 @@ void KWTextFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &
 
     Qt3::QTextParag * lastFormatted = textDocument()->drawWYSIWYG(
         painter, r.x(), r.y(), r.width(), r.height(),
-        cg, onlyChanged, drawCursor, cursor, resetChanged );
+        cg, kWordDocument(), // TODO view's zoom handler
+        onlyChanged, drawCursor, cursor, resetChanged );
 
     // The last paragraph of this frame might have a bit in the next frame too.
     // In that case, and if we're only drawing changed paragraphs, (and resetting changed),
@@ -492,9 +493,11 @@ void KWTextFrameSet::drawCursor( QPainter *p, QTextCursor *cursor, bool cursorVi
             bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), p ) );
             cg.setBrush( QColorGroup::Base, bgBrush );
 
-            textDocument()->drawParagWYSIWYG( p, cursor->parag(),
-                                iPoint.x() - 5, iPoint.y(), clip.width(), clip.height(),
-                                pix, cg, cursorVisible, cursor );
+            textDocument()->drawParagWYSIWYG(
+                p, cursor->parag(),
+                iPoint.x() - 5, iPoint.y(), clip.width(), clip.height(),
+                pix, cg, m_doc, // TODO view's zoom handler
+                cursorVisible, cursor );
             p->restore();
             cursor->parag()->setChanged( wasChanged );      // Maybe we have more changes to draw!
 
@@ -1089,7 +1092,7 @@ void KWTextFrameSet::updateFrames()
     for ( ; frameIt.current(); ++frameIt )
     {
         // Calculate max width while we're at it
-        width = QMAX( width, m_doc->ptToLayoutUnit( frameIt.current()->width() ) );
+        width = QMAX( width, KoTextZoomHandler::ptToLayoutUnit( frameIt.current()->width() ) );
 
         FrameStruct str;
         str.frame = frameIt.current();

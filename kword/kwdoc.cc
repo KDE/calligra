@@ -1457,7 +1457,7 @@ void KWDocument::loadStyleTemplates( QDomElement stylesElem )
 
         QDomElement formatElem = styleElem.namedItem( "FORMAT" ).toElement();
         if ( !formatElem.isNull() )
-            sty->format() = KWTextParag::loadFormat( formatElem, 0L, defaultFont(), this );
+            sty->format() = KWTextParag::loadFormat( formatElem, 0L, defaultFont() );
         else
             kdWarning(32001) << "No FORMAT tag in <STYLE>" << endl; // This leads to problems in applyStyle().
 
@@ -1901,7 +1901,7 @@ QDomDocument KWDocument::saveXML()
     QDomElement styles = doc.createElement( "STYLES" );
     kwdoc.appendChild( styles );
     for ( KWStyle * p = m_styleList.first(); p != 0L; p = m_styleList.next() )
-        saveStyle( p, styles, this );
+        saveStyle( p, styles );
 
     // Save the PIXMAPS list
     QString prefix = isStoredExtern() ? QString::null : url().url() + "/";
@@ -1960,7 +1960,7 @@ QDomDocument KWDocument::saveXML()
     return doc;
 }
 
-void KWDocument::saveStyle( KWStyle *sty, QDomElement parentElem, KoZoomHandler* zh )
+void KWDocument::saveStyle( KWStyle *sty, QDomElement parentElem )
 {
     QDomDocument doc = parentElem.ownerDocument();
     QDomElement styleElem = doc.createElement( "STYLE" );
@@ -1975,7 +1975,7 @@ void KWDocument::saveStyle( KWStyle *sty, QDomElement parentElem, KoZoomHandler*
         element.setAttribute( "name", sty->followingStyle()->name() );
     }
 
-    QDomElement formatElem = KWTextParag::saveFormat( doc, &sty->format(), 0L, 0, 0, zh );
+    QDomElement formatElem = KWTextParag::saveFormat( doc, &sty->format(), 0L, 0, 0 );
     styleElem.appendChild( formatElem );
 }
 

@@ -157,7 +157,7 @@ void KWVariable::resize()
 void KWVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, int offset )
 {
     KoTextFormat * f = static_cast<KoTextFormat *>(format());
-    KoZoomHandler * zh = textDocument()->zoomHandler();
+    KoZoomHandler * zh = textDocument()->paintingZoomHandler();
     int bl, _y;
     KWTextParag * parag = static_cast<KWTextParag *>( paragraph() );
     //kdDebug() << "KWVariable::draw index=" << index() << " x=" << x << " y=" << y << endl;

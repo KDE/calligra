@@ -114,6 +114,8 @@ public:
      */
     KWVariableFormat *format( const QCString &key );
 
+    // TODO Refcounting and removing unused formats
+    // Not critical, that we don't delete unused formats until closing the doc...
 protected:
     KWVariableFormat *createFormat( const QCString &key );
 
@@ -170,17 +172,18 @@ public:
     virtual int minimumWidth() const { return width; }
     virtual void drawCustomItem( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected, int offset);
 
-    void setVariableFormat( KWVariableFormat *_varFormat, bool _deleteOld = false )
-    { if ( _deleteOld && m_varFormat ) delete m_varFormat; m_varFormat = _varFormat; }
+    void setVariableFormat( KWVariableFormat *_varFormat )
+    { m_varFormat = _varFormat; }
 
     KWVariableFormat *variableFormat() const
     { return m_varFormat; }
 
-    // Returns the text to be displayed for this variable
-    // It doesn't need to be cached, convert() is fast, and it's the actual
-    // value (date, time etc.) that is cached in the variable already.
+    /** Returns the text to be displayed for this variable
+     * It doesn't need to be cached, convert() is fast, and it's the actual
+     * value (date, time etc.) that is cached in the variable already.
+     */
     virtual QString text() = 0;
-    // { return varFormat->convert( variantValue() ); } too bad QVariant doesn't have QDate/QTime :(
+   // { return varFormat->convert( variantValue() ); } too bad QVariant doesn't have QDate/QTime :(
 
     // Variables reimplement this method to recalculate their value
     // They must call resize() after having done that.
