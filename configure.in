@@ -142,9 +142,10 @@ AC_OUTPUT( \
 	pics/toolbar/Makefile \
 	po/Makefile \
 	po/de/Makefile \
-	po/pt/Makefile \
-	po/no/Makefile \
 	po/fr/Makefile \
-	po/sv/Makefile 
+	po/is/Makefile \
+	po/no/Makefile \
+	po/pt/Makefile \
 	po/sk/Makefile 
+	po/sv/Makefile 
  )
