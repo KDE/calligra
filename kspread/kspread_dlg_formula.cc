@@ -717,7 +717,7 @@ void KSpreadDlgFormula::slotActivated( const QString& category )
     list_text+="left";
     list_text+="len";
     list_text+="EXACT";
-    list_text+="STXT";
+    //list_text+="STXT";
     list_text+="REPT";
     list_text+="lower";
     list_text+="upper";
@@ -1696,7 +1696,7 @@ void KSpreadDlgFormula::changeFunction()
         tmp.firstElementType=type_double;
         tmp.secondElementType=type_double;
     }
-    else if(m_funcName=="STXT")
+    /*else if(m_funcName=="STXT")
     {
         tmp.nb_param=3;
         tmp.firstElementLabel=i18n("Text");
@@ -1715,7 +1715,7 @@ void KSpreadDlgFormula::changeFunction()
         tmp.firstElementType=type_string;
         tmp.secondElementType=type_int;
         tmp.thirdElementType=type_int;
-    }
+    } */
     else if (m_funcName=="pow"  )
     {
         tmp.nb_param=2;
