@@ -128,6 +128,7 @@ KWordView::KWordView( QWidget *_parent, const char *_name, KWordDocument* _doc )
     tableDia = 0L;
     m_pKWordDoc = _doc;
     backColor = QBrush( white );
+    spc=0;  // default line spacing (Werner)
 
     setInstance( KWordFactory::global() );
     setXMLFile( "kword.rc" );
