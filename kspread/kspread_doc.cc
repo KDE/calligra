@@ -169,8 +169,6 @@ bool KSpreadDoc::save( ostream& out, const char* )
   QDomDocument doc( "spreadsheet" );
   doc.appendChild( doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
   QDomElement spread = doc.createElement( "spreadsheet" );
-  spread.setAttribute( "author", "Torben Weis" );
-  spread.setAttribute( "email", "weis@kde.org" );
   spread.setAttribute( "editor", "KSpread" );
   spread.setAttribute( "mime", "application/x-kspread" );
   doc.appendChild( spread );
@@ -241,12 +239,12 @@ bool KSpreadDoc::save( ostream& out, const char* )
   // This allows us to treat the QCString like a QByteArray later on.
   QCString s = buffer.utf8();
   int len = s.length();
-  char tmp = s[ len - 1 ]; 
+  char tmp = s[ len - 1 ];
   s.resize( len );
   *( s.data() + len - 1 ) = tmp;
 
   buffer = QString::null;
-    
+
   out.write( s.data(), s.size() );
 
   setModified( false );

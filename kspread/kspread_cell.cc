@@ -1910,10 +1910,6 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 	    _painter.setBackgroundColor( defaultColorGroup.base() );
     }
 
-    // Erase the background of the cell.
-    // ### Optimize. Dont erase where the grid is drawn.
-    _painter.eraseRect( _tx, _ty, w, h );
-
     //
     // Determine the pens that should be used for drawing
     // the borders.
@@ -1923,6 +1919,13 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     QPen top_pen = topBorderPen( _col, _row );
     QPen bottom_pen = bottomBorderPen( _col, _row );
 
+    // Calculate some offsets so that we know later which
+    // rectangle of the cell still needs to be erased.
+    int top_offset = 0;
+    int bottom_offset = 0;
+    int left_offset = 0;
+    int right_offset = 0;
+
     //
     // First draw the default borders so that they dont
     // overwrite any other border.
@@ -1931,6 +1934,8 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     {
 	if( table()->getShowGrid() )
         {
+	    left_offset = 1;
+	
 	    QPen t = m_pTable->cellAt( _col, _row - 1 )->leftBorderPen( _col, _row - 1 );
 	    QPen b = m_pTable->cellAt( _col, _row + 1 )->leftBorderPen( _col, _row + 1 );
 
@@ -1949,15 +1954,17 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     {
 	if( table()->getShowGrid() )
         {
+	    top_offset = 1;
+	
 	    QPen l = m_pTable->cellAt( _col, _row - 1 )->leftBorderPen( _col, _row - 1 );
 	    QPen r = m_pTable->cellAt( _col, _row - 1 )->rightBorderPen( _col, _row - 1 );
 
 	    int dl = 0;
 	    if ( l.style() != Qt::NoPen )
-		dl = ( l.width() - 1 ) / 2;
+		dl = ( l.width() - 1 ) / 2 + 1;
 	    int dr = 0;
 	    if ( r.style() != Qt::NoPen )
-		dr = ( r.width() - 1 ) / 2 + ( ( r.width() - 1 ) % 2 );
+		dr = ( r.width() - 1 ) / 2 + 1; //  + ( ( r.width() - 1 ) % 2 );
 
 	    _painter.setPen( table()->doc()->defaultGridPen() );
 	    _painter.drawLine( _tx + dl, _ty, _tx + w - dr, _ty );
@@ -1971,27 +1978,35 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
     {
 	int top = ( QMAX( 0, -1 + (int)top_pen.width() ) ) / 2 + ( ( QMAX( 0, -1 + (int)top_pen.width() ) ) % 2 );
 	int bottom = ( QMAX( 0, -1 + (int)bottom_pen.width() ) ) / 2 + 1;
-	// printf("l top=%i b=%i\n", top, bottom );
+
 	_painter.setPen( left_pen );
 	_painter.drawLine( _tx, _ty - top, _tx, _ty + h + bottom );
+	
+	left_offset = left_pen.width() - ( left_pen.width() / 2 );
     }
     if ( right_pen.style() != Qt::NoPen )
     {
 	int top = ( QMAX( 0, -1 + (int)top_pen.width() ) ) / 2 +  ( ( QMAX( 0, -1 + (int)top_pen.width() ) ) % 2 );
 	int bottom = ( QMAX( 0, -1 + (int)bottom_pen.width() ) ) / 2 + 1;
-	// printf("r top=%i b=%i\n", top, bottom );
+
 	_painter.setPen( right_pen );
 	_painter.drawLine( w + _tx, _ty - top, w + _tx, _ty + h + bottom );
+	
+	right_offset = right_pen.width() / 2;
     }
     if ( top_pen.style() != Qt::NoPen )
     {
 	_painter.setPen( top_pen );
 	_painter.drawLine( _tx, _ty, _tx + w, _ty );
+	
+	top_offset = top_pen.width() - ( top_pen.width() / 2 );
     }
     if ( bottom_pen.style() != Qt::NoPen )
     {
 	_painter.setPen( bottom_pen );
 	_painter.drawLine( _tx, h + _ty, _tx + w, h + _ty );
+	
+	bottom_offset = bottom_pen.width() / 2;
     }
 
     //
@@ -2008,18 +2023,18 @@ void KSpreadCell::paintCell( const QRect& _rect, QPainter &_painter,
 	_painter.drawLine( _tx, _ty + h , _tx + w, _ty );
     }
 
+    // Erase the background of the cell.
+    _painter.eraseRect( _tx + left_offset, _ty + top_offset,
+			w - left_offset - right_offset,
+			h - top_offset - bottom_offset );
+
     // Draw a background brush
     if( m_backGroundBrush.style() != Qt::NoBrush )
     {
-	// #### What is BORDER_SPACE good for ?
-	int left = left_pen.width() + BORDER_SPACE;
-	int top = top_pen.width() + BORDER_SPACE;
-	int right = right_pen.width() + BORDER_SPACE;
-	int bottom = bottom_pen.width() + BORDER_SPACE;
-
-	_painter.setPen( Qt::NoPen );
-	_painter.setBrush( m_backGroundBrush );
-	_painter.drawRect( _tx + left, _ty + top, w - left - right, h - top - bottom );
+	_painter.fillRect( _tx + left_offset, _ty + top_offset,
+			   w - left_offset - right_offset,
+			   h - top_offset - bottom_offset,
+			   backGroundBrush( _col, _row ) );
     }
 
     // Point the little corner if there is a comment attached
