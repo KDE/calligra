@@ -1076,7 +1076,7 @@ void KSpreadUndoCellLayout::undo()
     return;
 
   doc()->undoBuffer()->lock();
-
+  doc()->emitBeginOperation();
   copyLayout( m_lstRedoLayouts, m_lstRedoColLayouts, m_lstRedoRowLayouts, table );
   if( util_isColumnSelected( m_rctRect ) )
   {
@@ -1108,6 +1108,8 @@ void KSpreadUndoCellLayout::undo()
   }
 
   table->updateView(m_rctRect);
+  doc()->emitEndOperation();
+
   doc()->undoBuffer()->unlock();
 }
 
@@ -1118,6 +1120,7 @@ void KSpreadUndoCellLayout::redo()
     return;
 
   doc()->undoBuffer()->lock();
+  doc()->emitBeginOperation();
 
   if ( util_isColumnSelected( m_rctRect ) )
   {
@@ -1149,6 +1152,7 @@ void KSpreadUndoCellLayout::redo()
   }
 
   table->updateView( m_rctRect );
+  doc()->emitEndOperation();
   doc()->undoBuffer()->unlock();
 }
 
