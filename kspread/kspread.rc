@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="23">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="24">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -171,24 +171,14 @@
  <Action name="copy"/>
  <Action name="paste"/>
  <Separator/>
- <Action name="view_zoom"/>
- <Separator/>
- <Action name="insertColumn"/>
- <Action name="insertRow"/>
- <Action name="deleteColumn"/>
- <Action name="deleteRow"/>
- <Separator/>
+ <Action name="autoSum"/>
  <Action name="sortInc"/>
  <Action name="sortDec"/>
  <Separator/>
  <Action name="insertChart"/>
  <Action name="insertPart"/>
- <Action name="transform"/>
-</ToolBar>
-<ToolBar fullWidth="true" name="mathToolBar"><text>Math</text>
- <Action name="autoSum"/>
- <Action name="insertMathExpr"/>
- <Action name="formulaSelection"/>
+ <Separator/>
+ <Action name="view_zoom"/>
 </ToolBar>
 <ToolBar fullWidth="true" hidden="true" name="navigationToolBar"><text>Navigation</text>
  <Action name="firstTable"/>
@@ -200,7 +190,6 @@
  <Action name="selectFont"/>
  <Action name="selectFontSize"/>
  <Separator/>
- <Action name="textColor"/>
  <Action name="bold"/>
  <Action name="italic"/>
  <Action name="underline"/>
@@ -218,9 +207,6 @@
  <Action name="precplus"/>
  <Action name="precminus"/>
  <Action name="money"/>
- <Separator/>
- <Action name="decreaseindent"/>
- <Action name="increaseindent"/>
 </ToolBar>
 <ToolBar fullWidth="true" hidden="true" name="colorAndBorderToolBar"><text>Color/Border</text>
  <Action name="borderLeft"/>
@@ -235,6 +221,7 @@
  <Action name="dissociatecell"/>
  <Action name="mergecell"/>
  <Separator/>
+ <Action name="textColor"/>
  <Action name="backgroundColor"/>
 </ToolBar>
 <Menu name="menupage_popup">
