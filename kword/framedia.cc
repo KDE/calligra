@@ -24,6 +24,7 @@
 #include <kapp.h>
 #include <krestrictedline.h>
 #include <kiconloader.h>
+#include <kglobal.h>
 
 #include <qwidget.h>
 #include <qlayout.h>

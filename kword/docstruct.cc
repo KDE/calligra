@@ -23,6 +23,7 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kglobal.h>
 
 #include <qframe.h>
 #include <qlayout.h>
@@ -324,7 +325,7 @@ void KWDocStructRootItem::setupTextFrames()
         {
             _name.sprintf( i18n( "Frameset %d" ), ++k );
             item = new QListViewItem( this, _name );
-    
+
             for ( int j = frameset->getNumFrames() - 1; j >= 0; j-- )
             {
                 if ( i == 0 && doc->getProcessingType() == KWordDocument::WP )

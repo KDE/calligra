@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -27,6 +27,7 @@
 
 #include <kapp.h>
 #include <kiconloader.h>
+#include <kglobal.h>
 
 #include <iostream.h>
 
@@ -34,14 +35,14 @@
 #define CELL1_WIDTH 25
 #define CELL2_WIDTH 200
 
-LayerView::LayerView (QWidget *parent, const char *name) 
+LayerView::LayerView (QWidget *parent, const char *name)
   : QTableView (parent, name) {
   setNumCols (4);
   setBackgroundColor (white);
-  
+
   document = 0L;
-  KIconLoader* loader = kapp->getIconLoader ();
-  
+  KIconLoader* loader = KGlobal::iconLoader ();
+
   pixmaps[0] = loader->loadIcon ("eye.xpm");
   pixmaps[1] = loader->loadIcon ("freehandtool.xpm");
   pixmaps[2] = loader->loadIcon ("fileprint.xpm");
@@ -83,7 +84,7 @@ void LayerView::paintCell (QPainter *p, int row, int col) {
   p->save ();
   p->setPen (rowIsActive ? white : black);
   if (col < 3)
-    p->fillRect (0, 0, CELL1_WIDTH, cellHeight (row), 
+    p->fillRect (0, 0, CELL1_WIDTH, cellHeight (row),
 		 QBrush (rowIsActive ? darkBlue : white));
 
   switch (col) {
@@ -118,8 +119,8 @@ void LayerView::paintCell (QPainter *p, int row, int col) {
 	  connect (lineEditor, SIGNAL(returnPressed ()),
 		   this, SLOT(lineEditorSlot ()));
 	}
-	lineEditor->setGeometry (3 * CELL1_WIDTH + 3, 
-				 CELL_HEIGHT * editorRow + 1, 
+	lineEditor->setGeometry (3 * CELL1_WIDTH + 3,
+				 CELL_HEIGHT * editorRow + 1,
 				 CELL2_WIDTH, CELL_HEIGHT);
 	lineEditor->setEnabled (true);
 	lineEditor->show ();
@@ -142,10 +143,10 @@ void LayerView::paintCell (QPainter *p, int row, int col) {
 
 void LayerView::mouseDoubleClickEvent (QMouseEvent *event) {
   int row, col;
-  
+
   row = findRow (event->y ());
   col = findCol (event->x ());
-  
+
   if (row != -1 && col == 3) {
     editorRow = row;
     repaint ();
@@ -154,10 +155,10 @@ void LayerView::mouseDoubleClickEvent (QMouseEvent *event) {
 
 void LayerView::mousePressEvent (QMouseEvent *event) {
   int row, col;
-  
+
   row = findRow (event->y ());
   col = findCol (event->x ());
-  
+
   if (row != -1 && col != -1) {
     if (editorRow != -1) {
       editorRow = -1;
@@ -166,7 +167,7 @@ void LayerView::mousePressEvent (QMouseEvent *event) {
     }
     else {
       GLayer* layer = layers[numRows () - 1 - row];
-      
+
       switch (col) {
       case 0:
 	layer->setVisible (! layer->isVisible ());

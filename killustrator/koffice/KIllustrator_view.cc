@@ -79,6 +79,7 @@
 #include <kurl.h>
 #include <kfiledialog.h>
 #include <kcombo.h>
+#include <kglobal.h>
 #include <qlayout.h>
 #include <unistd.h>
 
@@ -230,7 +231,7 @@ bool KIllustratorView::mappingCreateMenubar (OpenPartsUI::MenuBar_ptr
   }
 
   CORBA::WString_var text;
-  
+
   // Menu: Edit
   text = Q2C( i18n ("&Edit") );
   menubar->insertMenu (text, m_vMenuEdit, -1, -1);
@@ -839,7 +840,7 @@ void KIllustratorView::setUndoStatus(bool undoPossible, bool redoPossible)
     m_vMenuEdit->setItemEnabled (m_idMenuEdit_Undo, undoPossible);
 
     CORBA::WString_var text;
-    
+
     QString label = i18n ("Undo");
     if (undoPossible)
       label += " " + cmdHistory.getUndoName ();

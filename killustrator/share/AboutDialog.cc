@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -32,6 +32,8 @@
 #include <kiconloader.h>
 #include "version.h"
 
+#include <kglobal.h>
+
 #define ABOUT_INFO "Version "APP_VERSION"\n\nCopyright (C) 1998-99\n\
 Kai-Uwe Sattler (kus@iti.cs.uni-magdeburg.de)\n\n\
 Contributions by\n\
@@ -39,7 +41,7 @@ Steffen Thorhauer, Stefan Taferner\n\
 Stephan Kulow, Jost Schenck, Ben Skelton\n\
 Reginald Stadlbauer"
 
-AboutDialog::AboutDialog (QWidget* parent) : 
+AboutDialog::AboutDialog (QWidget* parent) :
     QDialog (parent, "About", true) {
     QString info (ABOUT_INFO);
 

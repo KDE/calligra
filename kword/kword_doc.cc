@@ -40,6 +40,7 @@
 
 #include <kurl.h>
 #include <klocale.h>
+#include <kglobal.h>
 
 #include <strstream>
 #include <fstream>

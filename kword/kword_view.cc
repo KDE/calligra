@@ -65,6 +65,7 @@
 #include <kspell.h>
 #include <kcolordlg.h>
 #include <kiconloader.h>
+#include <kglobal.h>
 
 #define DEBUG
 
@@ -417,7 +418,7 @@ void KWordView::setFormat( KWFormat &_format, bool _check = true, bool _update_p
         {
             OpenPartsUI::Pixmap pix;
             pix.data = CORBA::string_dup( colorToPixString( _format.getColor(), TXT_COLOR ) );
-    
+
             m_vToolBarText->setButtonPixmap( ID_TEXT_COLOR, pix );
         }
         tbColor = QColor( _format.getColor() );
@@ -1014,7 +1015,7 @@ void KWordView::insertFootNoteEndNote()
     p.begin( gui->getPaperWidget() );
     int start = m_pKWordDoc->getFootNoteManager().findStart( gui->getPaperWidget()->getCursor(), p );
     p.end();
-                            
+
     if ( start == -1 )
         QMessageBox::critical( 0L, i18n( "Error" ), i18n( "Currently you can only insert footnotes or\n"
                                                           "endotes into the first frameset!" ), i18n( "OK" ) );
@@ -1502,7 +1503,7 @@ void KWordView::textSizeSelected( const char *size )
     gui->getPaperWidget()->formatChanged( format );
 
     sendFocusEvent();
-}   
+}
 
 /*======================= text font selected  ===================*/
 void KWordView::textFontSelected( const char *font )
@@ -2743,12 +2744,12 @@ QString KWordView::colorToPixString( QColor c, PType _type )
         pix += "\"............aaaaaaaa\"};\n";
 
 //        pix += "\" 20 20 3 1 \", \n";
-    
+
 //      pix += "\"  c none \", \n";
 //      pix += "\". c black \", \n";
 //      line.sprintf( "\"+ c #%02X%02X%02X \", \n", r, g, b );
 //      pix += line.copy();
-    
+
 //      pix += "\"                    \", \n";
 //      pix += "\"                    \", \n";
 //      pix += "\"  ..............    \", \n";
@@ -2773,12 +2774,12 @@ QString KWordView::colorToPixString( QColor c, PType _type )
     case FRAME_COLOR:
     {
         pix += "\" 20 20 3 1 \",\n";
-    
+
         pix += "\"  c none \",\n";
         pix += "\"+ c white \",\n";
         line.sprintf( "\". c #%02X%02X%02X \",\n", r, g, b );
         pix += line.copy();
-    
+
         pix += "\"                    \",\n";
         pix += "\"                    \",\n";
         pix += "\"  ................  \",\n";
@@ -2803,12 +2804,12 @@ QString KWordView::colorToPixString( QColor c, PType _type )
     case BACK_COLOR:
     {
         pix += "\" 20 20 3 1 \",\n";
-    
+
         pix += "\"  c none \",\n";
         pix += "\". c red \",\n";
         line.sprintf( "\"+ c #%02X%02X%02X \",\n", r, g, b );
         pix += line.copy();
-    
+
         pix += "\"                    \",\n";
         pix += "\"                    \",\n";
         pix += "\"  ................  \",\n";

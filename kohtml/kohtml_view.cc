@@ -58,6 +58,7 @@
 #include "openurldlg.h"
 #include "kfileio.h"
 #include <klocale.h>
+#include <kglobal.h>
 
 KoHTMLFrame::KoHTMLFrame(KoHTMLView *_view, KoHTMLChild *_child)
 :KoFrame(_view)
@@ -70,21 +71,21 @@ KoHTMLView::KoHTMLView(QWidget *parent, const char *name, KoHTMLDoc *_doc)
 : KMyHTMLView(_doc, parent, name), KoViewIf(_doc), OPViewIf(_doc), KoHTML::KoHTMLView_skel()
 {
   setWidget(this);
-  
+
   OPPartIf::setFocusPolicy(OpenParts::Part::ClickFocus);
 
   m_strCaptionText = "KOffice HTML Viewer";
-  
+
   m_pDoc = _doc;
-  
+
   m_lstFrames.setAutoDelete(true);
-  
+
   QObject::connect(m_pDoc, SIGNAL(sig_insertObject(KoHTMLChild *)),
                    this, SLOT(slotInsertObject(KoHTMLChild *)));
   QObject::connect(m_pDoc, SIGNAL(sig_updateChildGeometry(KoHTMLChild *)),
                    this, SLOT(slotUpdateChildGeometry(KoHTMLChild *)));
-		   
-  m_bToolBarVisible = true;		   
+		
+  m_bToolBarVisible = true;		
   m_bStatusBarVisible = true;
 
   m_pAccel = new KAccel(this);
@@ -106,13 +107,13 @@ KoHTMLView::KoHTMLView(QWidget *parent, const char *name, KoHTMLDoc *_doc)
   m_pAccel->connectItem("Forward", this, SLOT(slotForward2()));
 
   m_pAccel->readSettings();
-  
+
   QObject::connect(m_pDoc, SIGNAL(contentChanged()),
                    this, SLOT(slotDocumentContentChanged()));
 
   KoHTML::KoHTMLDocument_var m_vDoc = KoHTML::KoHTMLDocument::_duplicate( m_pDoc );
 
-  m_vDoc->connect("documentStarted", this, "slotDocumentStarted");  
+  m_vDoc->connect("documentStarted", this, "slotDocumentStarted");
   m_vDoc->connect("documentDone", this, "slotDocumentDone");
 
   m_idBookmarkId = 111;
@@ -120,14 +121,14 @@ KoHTMLView::KoHTMLView(QWidget *parent, const char *name, KoHTMLDoc *_doc)
   m_bStackLock = false;
   m_backStack.setAutoDelete(false);
   m_forwardStack.setAutoDelete(false);
-  
+
   m_strTmpFile = "";
 }
 
 KoHTMLView::~KoHTMLView()
 {
   delete m_pAccel;
-  
+
   cleanUp();
 }
 
@@ -136,29 +137,29 @@ void KoHTMLView::cleanUp()
   if (m_bIsClean) return;
 
   KoHTML::KoHTMLDocument_var m_vDoc = KoHTML::KoHTMLDocument::_duplicate( m_pDoc );
-  
+
   m_vDoc->disconnect("documentDone", this, "slotDocumentDone");
   m_vDoc->disconnect("documentStarted", this, "slotDocumentStarted");
 
   QListIterator<KoHTMLFrame> it(m_lstFrames);
-  
+
   for (; it.current(); ++it)
       {
         it.current()->detach();
       }
 
   OpenParts::MenuBarManager_var menuBarMan = m_vMainWindow->menuBarManager();
-  
+
   if (!CORBA::is_nil(menuBarMan))
      menuBarMan->unregisterClient(id());
-     
+
   OpenParts::ToolBarManager_var toolBarMan = m_vMainWindow->toolBarManager();
-  
+
   if (!CORBA::is_nil(toolBarMan))
      toolBarMan->unregisterClient(id());
 
   OpenParts::StatusBarManager_var statusBarMan = m_vMainWindow->statusBarManager();
-  
+
   if (!CORBA::is_nil(statusBarMan))
      statusBarMan->unregisterClient(id());
 
@@ -169,7 +170,7 @@ void KoHTMLView::cleanUp()
   for( ; it2 != m_mapBookmarks.end(); ++it2 )
     delete it2->second;
   m_mapBookmarks.clear();
-  
+
   m_backStack.setAutoDelete(true);
   m_backStack.clear();
 
@@ -178,8 +179,8 @@ void KoHTMLView::cleanUp()
 
   if ( !m_strTmpFile.isEmpty() )
     unlink( m_strTmpFile.data() );
-  
-  KoViewIf::cleanUp();     
+
+  KoViewIf::cleanUp();
 }
 
 void KoHTMLView::newView()
@@ -196,22 +197,22 @@ void KoHTMLView::insertObject()
   KoDocumentEntry de = KoPartSelectDia::selectPart();
 
   if (de.name.isEmpty()) return;
-  
+
   KRect tmp;
   tmp.setLeft(0);
   tmp.setTop(0);
   tmp.setRight(100);
   tmp.setBottom(100);
-  
+
   m_pDoc->insertObject(tmp, de);
 }
-  
+
 void KoHTMLView::setFocus(CORBA::Boolean mode)
 {
   CORBA::Boolean old = m_bFocus;
-  
+
   KoViewIf::setFocus( mode );
-  
+
   if ( old == m_bFocus )
     return;
 
@@ -227,14 +228,14 @@ CORBA::Boolean KoHTMLView::printDlg()
 void KoHTMLView::init()
 {
   OpenParts::MenuBarManager_var menuBarMan = m_vMainWindow->menuBarManager();
-  
+
   if (!CORBA::is_nil(menuBarMan))
      menuBarMan->registerClient(id(), this);
-     
+
   OpenParts::ToolBarManager_var toolBarMan = m_vMainWindow->toolBarManager();
-  
+
   if (!CORBA::is_nil(toolBarMan))
-     toolBarMan->registerClient(id(), this);     
+     toolBarMan->registerClient(id(), this);
 
   OpenParts::StatusBarManager_var statusBarMan = m_vMainWindow->statusBarManager();
 
@@ -248,10 +249,10 @@ void KoHTMLView::init()
   QListIterator<KoHTMLChild> it = m_pDoc->childIterator();
   for (; it.current(); ++it)
       slotInsertObject(it.current());
-      
+
   CORBA::WString_var caption = Q2C( m_strCaptionText );
-  m_vMainWindow->setPartCaption( id(), caption );      
-  
+  m_vMainWindow->setPartCaption( id(), caption );
+
   slotUpdateConfig();
 
   if (m_browserStart == 1) eventOpenURL( m_strHomePage, false );
@@ -262,13 +263,13 @@ bool KoHTMLView::event(const char *event, const CORBA::Any &value)
 {
 
   EVENT_MAPPER(event, value);
-  
+
   MAPPING(OpenPartsUI::eventCreateMenuBar, OpenPartsUI::typeCreateMenuBar_var, mappingCreateMenuBar);
   MAPPING(OpenPartsUI::eventCreateToolBar, OpenPartsUI::typeCreateToolBar_var, mappingCreateToolBar);
   MAPPING(KoHTML::eventOpenURL, KoHTML::EventOpenURL, mappingOpenURL);
-  
+
   END_EVENT_MAPPER;
-  
+
   return false;
 }
 
@@ -279,10 +280,10 @@ bool KoHTMLView::mappingCreateToolBar(OpenPartsUI::ToolBarFactory_ptr factory)
   if (CORBA::is_nil(factory))
      {
        m_vMainToolBar->disconnect("highlighted", this, "statusCallback");
-     
+
        m_vMainToolBar = 0L;
        m_vLocationToolBar = 0L;
-       
+
        return true;
      }
 
@@ -317,9 +318,9 @@ bool KoHTMLView::mappingCreateToolBar(OpenPartsUI::ToolBarFactory_ptr factory)
   pix = OPUIUtils::convertPixmap(ICON("go-url3.xpm"));
   toolTip = Q2C( i18n("Open URL") );
   m_idOpenURL = m_vMainToolBar->insertButton2(pix, ID_OPENURL, SIGNAL(clicked()), this, "slotOpenURLDlg", true, toolTip, -1);
-    
+
   m_vMainToolBar->insertSeparator(-1);
-  
+
   pix = OPUIUtils::convertPixmap(ICON("editcopy.xpm"));
   toolTip = Q2C( i18n("Copy") );
   m_idButton_Copy = m_vMainToolBar->insertButton2(pix, ID_EDIT_COPY, SIGNAL(clicked()), this, "editCopy", true, toolTip, -1);
@@ -331,7 +332,7 @@ bool KoHTMLView::mappingCreateToolBar(OpenPartsUI::ToolBarFactory_ptr factory)
   m_idConfigure = m_vMainToolBar->insertButton2(pix, ID_OPTIONS_SETTINGS, SIGNAL(clicked()), this, "editSettings", true, toolTip, -1);
 
   m_vMainToolBar->insertSeparator(-1);
-  
+
   pix = OPUIUtils::convertPixmap(ICON("parts.xpm"));
   toolTip = Q2C( i18n("Insert Object") );
   m_idInsert_Object = m_vMainToolBar->insertButton2(pix, ID_EDIT_INSERT_OBJECT, SIGNAL(clicked()), this, "insertObject", true, toolTip, -1);
@@ -339,14 +340,14 @@ bool KoHTMLView::mappingCreateToolBar(OpenPartsUI::ToolBarFactory_ptr factory)
   pix = OPUIUtils::convertPixmap(ICON("edit-html.xpm"));
   toolTip = Q2C( i18n("Edit current HTML code") );
   m_idEditHTMLCode = m_vMainToolBar->insertButton2(pix, ID_EDIT_HTMLCODE, SIGNAL(clicked()), this, "editHTMLCode", true, toolTip, -1);
-  
+
   m_vLocationToolBar = factory->create(OpenPartsUI::ToolBarFactory::Transient);
 
   m_vLocationToolBar->setFullWidth(true);
 
   CORBA::WString_var labelText = Q2C( i18n("Location : ") );
   m_vLocationToolBar->insertTextLabel(labelText, -1, -1);
-  
+
   CORBA::String_var htmlURL = m_pDoc->htmlURL();
   QString u = htmlURL.in();
   CORBA::WString_var wu = Q2C( u );
@@ -354,16 +355,16 @@ bool KoHTMLView::mappingCreateToolBar(OpenPartsUI::ToolBarFactory_ptr factory)
   m_idLocation = m_vLocationToolBar->insertLined(wu, ID_LOCATION, SIGNAL(returnPressed()), this, "slotURLEntered", true, toolTip, 70, -1);
   m_vLocationToolBar->setItemAutoSized(ID_LOCATION, true);
 
-  if (m_bToolBarVisible) 
+  if (m_bToolBarVisible)
      {
        m_vMainToolBar->enable(OpenPartsUI::Show);
        m_vLocationToolBar->enable(OpenPartsUI::Show);
-     }  
-  else 
+     }
+  else
      {
        m_vMainToolBar->enable(OpenPartsUI::Hide);
        m_vLocationToolBar->enable(OpenPartsUI::Hide);
-     }  
+     }
 
   return true;
 }
@@ -373,7 +374,7 @@ bool KoHTMLView::mappingCreateMenuBar(OpenPartsUI::MenuBar_ptr menuBar)
   OpenPartsUI::Pixmap_var pix;
 
   if (CORBA::is_nil(menuBar))
-     { 
+     {
        m_vMenuBar->disconnect("highlighted", this, "statusCallback");
        m_vMenuBar->disconnect("activated", this, "slotBookmarkSelected");
 
@@ -381,7 +382,7 @@ bool KoHTMLView::mappingCreateMenuBar(OpenPartsUI::MenuBar_ptr menuBar)
        m_vMenuEdit = 0L;
        m_vMenuEdit_Insert = 0L;
        m_vMenuOptions = 0L;
-     
+
        return true;
      }
 
@@ -394,7 +395,7 @@ bool KoHTMLView::mappingCreateMenuBar(OpenPartsUI::MenuBar_ptr menuBar)
   pix = OPUIUtils::convertPixmap(ICON("go-url3.xpm"));
   text = Q2C( i18n("Open &URL...") );
   m_vMenuFile->insertItem6( pix, text, this, "slotOpenURLDlg", CTRL + Key_U, ID_OPENURL, -1 );
-  
+
   text = Q2C( i18n("&Edit") );
   menuBar->insertMenu(text, m_vMenuEdit, -1, -1);
 
@@ -403,34 +404,34 @@ bool KoHTMLView::mappingCreateMenuBar(OpenPartsUI::MenuBar_ptr menuBar)
   m_idMenuEdit_Copy = m_vMenuEdit->insertItem6(pix, text, this, "editCopy", CTRL + Key_C, ID_EDIT_COPY, -1);
 
   m_vMenuEdit->insertSeparator(-1);
-  
+
   text = Q2C( i18n("&Insert") );
   m_vMenuEdit->insertItem8(text, m_vMenuEdit_Insert, -1, -1);
-  
-  pix = OPUIUtils::convertPixmap(ICON("parts.xpm"));  
+
+  pix = OPUIUtils::convertPixmap(ICON("parts.xpm"));
   text = Q2C( i18n("&Object...") );
   m_idMenuEdit_Insert_Object = m_vMenuEdit_Insert->insertItem6(pix, text, this, "insertObject", 0, ID_EDIT_INSERT_OBJECT, -1);
 
   m_vMenuEdit->insertSeparator(-1);
-  
+
   pix = OPUIUtils::convertPixmap(ICON("edit-html.xpm"));
   text = Q2C( i18n("Edit HTML code") );
   m_vMenuEdit->insertItem6(pix, text, this, "editHTMLCode", 0, ID_EDIT_HTMLCODE, -1);
 
   text = Q2C( i18n("Bookmarks") );
   menuBar->insertMenu(text, m_vMenuBookmarks, -1, -1);
-  
+
   m_vMenuBar->connect("activated", this, "slotBookmarkSelected");
-  
+
   text = Q2C( i18n("Add Bookmark") );
   m_vMenuBookmarks->insertItem4(text, this, "addBookmark", 0, ID_BOOKMARKS_ADD, -1);
   text = Q2C( i18n("Edit Bookmarks") );
   m_vMenuBookmarks->insertItem4(text, this, "editBookmarks", 0, ID_BOOKMARKS_EDIT, -1);
   m_vMenuBookmarks->insertSeparator(-1);
-  
+
   QString bdir(kapp->localkdedir().data());
   bdir += "/share/apps/kfm/bookmarks";
-  scanBookmarks( m_vMenuBookmarks, bdir );  
+  scanBookmarks( m_vMenuBookmarks, bdir );
 
   text = Q2C( i18n("&Options") );
   menuBar->insertMenu(text, m_vMenuOptions, -1, -1);
@@ -441,7 +442,7 @@ bool KoHTMLView::mappingCreateMenuBar(OpenPartsUI::MenuBar_ptr menuBar)
 
   text = Q2C( i18n("Configure &keys") );
   m_idMenuOptions_ConfigureKeys = m_vMenuOptions->insertItem4(text, this, "editKeys", 0, ID_OPTIONS_CONFIGUREKEYS, -1);
-  
+
   m_vMenuOptions->insertSeparator(-1);
 
   text = Q2C( i18n("Show/Hide Tool&bar") );
@@ -464,16 +465,16 @@ bool KoHTMLView::mappingOpenURL( KoHTML::EventOpenURL event )
 void KoHTMLView::pushURLToHistory()
 {
   if (m_bStackLock) return;
-  
+
   SavedPage *p = saveYourself();
   if (!p) return;
-  
+
   m_backStack.push(p);
-  
+
   m_forwardStack.setAutoDelete(true);
   m_forwardStack.clear();
   m_forwardStack.setAutoDelete(false);
-  
+
   updateHistory(true, false);
 }
 
@@ -489,7 +490,7 @@ void KoHTMLView::updateHistory(bool enableBack, bool enableForward)
 void KoHTMLView::slotInsertObject(KoHTMLChild *child)
 {
   OpenParts::View_var v;
-  
+
   try
   {
     v = child->createView(m_vKoMainWindow);
@@ -499,31 +500,31 @@ void KoHTMLView::slotInsertObject(KoHTMLChild *child)
     printf("HMPFL, could not create view :(\n");
     exit(1);
   }
-  
+
   if (CORBA::is_nil(v))
      {
        printf("ARGHL, view is nil :(\n");
        exit(1);
      }
-     
+
   KoHTMLFrame *f = new KoHTMLFrame(this, child);
   f->setGeometry(child->geometry());
-  
+
   m_lstFrames.append(f);
-  
+
   KOffice::View_var koV = KOffice::View::_narrow(v);
-  
-  assert(!CORBA::is_nil(koV));     
-  
+
+  assert(!CORBA::is_nil(koV));
+
   koV->setMode(KOffice::View::ChildMode);
   f->attachView(koV);
-  
+
   KOffice::View::EventNewPart event;
   event.view = KOffice::View::_duplicate( koV );
   EMIT_EVENT( this, KOffice::View::eventNewPart, event );
-  
+
   f->show();
-  
+
   QObject::connect(f, SIGNAL(sig_geometryEnd(KoFrame *)),
                    this, SLOT(slotGeometryEnd(KoFrame *)));
   QObject::connect(f, SIGNAL(sig_moveEnd(KoFrame *)),
@@ -533,30 +534,30 @@ void KoHTMLView::slotInsertObject(KoHTMLChild *child)
 void KoHTMLView::slotUpdateChildGeometry(KoHTMLChild *child)
 {
   KoHTMLFrame *f = 0L;
-  
+
   QListIterator<KoHTMLFrame> it(m_lstFrames);
   for (; it.current(); ++it)
     if(it.current()->getChild() == child)
       f = it.current();
-      
+
   assert(f != 0L);
-  
+
   if (child->geometry() == f->partGeometry()) return;
-  
-  f->setPartGeometry(child->geometry());      
+
+  f->setPartGeometry(child->geometry());
 }
 
 void KoHTMLView::slotGeometryEnd(KoFrame *frame)
 {
   KoHTMLFrame *f = (KoHTMLFrame *)frame;
-  
+
   m_pDoc->changeChildGeometry(f->getChild(), f->partGeometry());
 }
 
 void KoHTMLView::slotMoveEnd(KoFrame *frame)
 {
   KoHTMLFrame *f = (KoHTMLFrame *)frame;
-  
+
   m_pDoc->changeChildGeometry(f->getChild(), f->partGeometry());
 }
 
@@ -564,34 +565,34 @@ void KoHTMLView::editCopy()
 {
   QClipboard *clip = QApplication::clipboard();
   QString text;
-  
+
   if (!isTextSelected()) return;
-  
+
   getSelectedText(text);
-  
+
   clip->setText(text);
 }
 
 void KoHTMLView::editHTMLCode()
 {
   HTMLEditDlg htmlEditDlg( m_strDocument );
-  
+
   int w = QApplication::desktop()->width() / 2;
   int h = QApplication::desktop()->height() / 2;
 
   htmlEditDlg.setGeometry( w / 2, h / 2, w, h );
-  
+
   if (htmlEditDlg.exec() == QDialog::Accepted)
      {
        if ( !m_strTmpFile.isEmpty() )
          unlink( m_strTmpFile.data() );
-	 
-       m_strTmpFile = tmpnam(0);	 
-	 
+	
+       m_strTmpFile = tmpnam(0);	
+	
        kStringToFile( htmlEditDlg.getText(), m_strTmpFile, false, false, false );
 
        QString tmp = "file:" + m_strTmpFile;
-       
+
        //don't use a) history b) openurl-event (for macros)
        m_pDoc->openURL( tmp.data(), true );
      }
@@ -600,7 +601,7 @@ void KoHTMLView::editHTMLCode()
 void KoHTMLView::editSettings()
 {
   SettingsDlg settingsDlg;
-  
+
   QObject::connect(&settingsDlg, SIGNAL(configChanged()),
                    this, SLOT(slotUpdateConfig()));
 
@@ -618,35 +619,35 @@ void KoHTMLView::viewToolBar()
 
   if (m_vMainToolBar != 0L)
      {
-       if (m_bToolBarVisible) 
+       if (m_bToolBarVisible)
           {
 	    m_vMainToolBar->enable(OpenPartsUI::Show);
 	    m_vLocationToolBar->enable(OpenPartsUI::Show);
 	  }
-       else 
+       else
           {
 	    m_vMainToolBar->enable(OpenPartsUI::Hide);
 	    m_vLocationToolBar->enable(OpenPartsUI::Hide);
 	  }
      }
 
-  if (!CORBA::is_nil( m_vMenuOptions )) 
+  if (!CORBA::is_nil( m_vMenuOptions ))
     m_vMenuOptions->setItemChecked(m_idMenuOptions_View_ToolBar, m_bToolBarVisible);
 }
 
 void KoHTMLView::viewStatusBar()
 {
   m_bStatusBarVisible = !m_bStatusBarVisible;
-  
+
   if (m_vStatusBar != 0L)
      {
        if (m_bStatusBarVisible) m_vStatusBar->enable(OpenPartsUI::Show);
        else m_vStatusBar->enable(OpenPartsUI::Hide);
      }
 
-  if (!CORBA::is_nil( m_vMenuOptions )) 
+  if (!CORBA::is_nil( m_vMenuOptions ))
     m_vMenuOptions->setItemChecked(m_idMenuOptions_View_StatusBar, m_bStatusBarVisible);
-}     
+}
 
 void KoHTMLView::slotStatusMsg(const CORBA::WChar *text)
 {
@@ -663,7 +664,7 @@ void KoHTMLView::statusCallback(CORBA::Long ID)
 { \
   CORBA::WString_var msg = Q2C( s ); \
   slotStatusMsg( msg.out() ); \
-} 
+}
 
   switch (ID)
     {
@@ -679,12 +680,12 @@ void KoHTMLView::statusCallback(CORBA::Long ID)
       case ID_BACK		     : STATUSMSG(i18n("Load the previous document in the history")); break;
       case ID_FORWARD                : STATUSMSG(i18n("Load the next document in the history")); break;
       case ID_HOME		     : STATUSMSG(i18n("Load the start document")); break;
-      case ID_RELOAD		     : STATUSMSG(i18n("Reload the current document")); break;      
+      case ID_RELOAD		     : STATUSMSG(i18n("Reload the current document")); break;
       case ID_STOP		     : STATUSMSG(i18n("Stop loading the current document")); break;
       case ID_OPENURL                : STATUSMSG(i18n("Open an URL dialog")); break;
       default                        : STATUSMSG(i18n("Ready."));
     }
-#undef STATUSMSG    
+#undef STATUSMSG
 }
 
 void KoHTMLView::slotBack2()
@@ -703,24 +704,24 @@ void KoHTMLView::slotDocumentContentChanged()
   QString u = htmlURL.in();
   CORBA::WString_var wu = Q2C( u );
   if (m_vLocationToolBar) m_vLocationToolBar->setLinedText(ID_LOCATION, wu);
-} 
+}
 
 void KoHTMLView::slotURLEntered()
 {
   CORBA::WString_var wurl = m_vLocationToolBar->linedText(ID_LOCATION);
   QString url = C2Q( wurl.in() );
-  
+
   if (url.isEmpty()) return;
-  
+
   url = url.stripWhiteSpace();
-  
+
   if (url.find("www") == 0)
      url.prepend("http://");
   else if (url.find("ftp.") == 0)
      url.prepend("ftp://");
-     
+
   KURL u(url.data());
-  
+
   if (u.isMalformed())
      {
        QString tmp;
@@ -728,8 +729,8 @@ void KoHTMLView::slotURLEntered()
        tmp += C2Q( wurl.in() );
        QMessageBox::critical((QWidget *)0L, i18n("KoHTML Error"), tmp);
        return;
-     }     
-     
+     }
+
   pushURLToHistory();
 //  m_pDoc->openURL(url, false);
   eventOpenURL( url, false );
@@ -740,21 +741,21 @@ void KoHTMLView::addBookmark()
   CORBA::String_var url = m_pDoc->htmlURL();
   QString title = m_strCaptionText;
   KURL u(url.in());
-  
+
   QFileInfo icon(KPixmapCache::pixmapFileForURL(url.in(), 0, u.isLocalFile(), false));
   QFileInfo miniIcon(KPixmapCache::pixmapFileForURL(url.in(), 0, u.isLocalFile(), true));
-  
-  
+
+
   if (title.isEmpty())
      title = u.filename();
 
   QString p = kapp->localkdedir().data();
-  
+
   p += "/share/apps/kfm/bookmarks/";
   p += title;
-     
+
   KSimpleConfig c(p, true);
-  
+
   c.setGroup("KDE Desktop Entry");
   c.writeEntry("Type", "Link");
   c.writeEntry("URL", url.in());
@@ -768,9 +769,9 @@ void KoHTMLView::addBookmark()
 void KoHTMLView::editBookmarks()
 {
   QString p = kapp->localkdedir().data();
-  
+
   p += "/share/apps/kfm/bookmarks/";
-  
+
   KFM kfm;
   kfm.openURL(p);
 }
@@ -778,10 +779,10 @@ void KoHTMLView::editBookmarks()
 void KoHTMLView::slotBookmarkSelected( CORBA::Long ID )
 {
   map<int,QString*>::iterator it = m_mapBookmarks.find(ID);
-  
+
   if (it != m_mapBookmarks.end())
      {
-       pushURLToHistory();  
+       pushURLToHistory();
        //m_pDoc->openURL(it->second->data(), false);
        eventOpenURL( it->second->data(), false );
      }
@@ -790,36 +791,36 @@ void KoHTMLView::slotBookmarkSelected( CORBA::Long ID )
 void KoHTMLView::slotBack()
 {
   if (m_backStack.isEmpty()) return;
-  
+
   SavedPage *s = m_backStack.pop();
   SavedPage *p = saveYourself();
-  
+
   m_forwardStack.push(p);
-  
+
   updateHistory(!m_backStack.isEmpty(), true);
 
-  m_bStackLock = true; 
+  m_bStackLock = true;
   restore(s);
   m_bStackLock = false;
-  
+
   delete s;
 }
 
 void KoHTMLView::slotForward()
 {
   if (m_forwardStack.isEmpty()) return;
-  
+
   SavedPage *s = m_forwardStack.pop();
   SavedPage *p = saveYourself();
-  
+
   m_backStack.push(p);
-  
+
   updateHistory(true, !m_forwardStack.isEmpty());
-  
+
   m_bStackLock = true;
   restore(s);
   m_bStackLock = false;
-  
+
   delete s;
 }
 
@@ -834,7 +835,7 @@ void KoHTMLView::slotReload()
   cerr << "void KoHTMLView::slotReload()" << endl;
 
   cancelAllRequests();
-  
+
   m_pDoc->stopLoading();
 
 //  m_pDoc->openURL(m_pDoc->htmlURL(), true);
@@ -851,14 +852,14 @@ void KoHTMLView::slotStop()
 void KoHTMLView::slotOpenURLDlg()
 {
   OpenURLDlg openURLDlg;
-  
+
   if (openURLDlg.exec() == QDialog::Accepted)
      {
        KURL url( openURLDlg.url() );
-       
+
        if (!url.isMalformed())
           {
-            pushURLToHistory();       
+            pushURLToHistory();
 	    //m_pDoc->openURL( url.url(), false );
 	    eventOpenURL( url.url(), false );
 	  }
@@ -874,7 +875,7 @@ void KoHTMLView::slotDocumentStarted()
 void KoHTMLView::slotDocumentDone()
 {
   if (!CORBA::is_nil(m_vMainToolBar))
-    m_vMainToolBar->setItemEnabled(ID_STOP, false);  
+    m_vMainToolBar->setItemEnabled(ID_STOP, false);
 }
 
 //----------------------------------------------
@@ -984,12 +985,12 @@ void KoHTMLView::scanBookmarks( OpenPartsUI::Menu_var menu, const char * path )
 void KoHTMLView::slotSetCaption(const char *title)
 {
   m_strCaptionText = i18n("KOffice HTML Viewer");
-    
+
   if (title)
     {
       if (!(strlen(title) == 1 && *title == ':'))
         m_strCaptionText = QString(title).prepend("KoHTML : ");
-    }  
+    }
 
   CORBA::WString_var caption = Q2C( m_strCaptionText );
   if (!CORBA::is_nil( m_vMainWindow ))
@@ -999,17 +1000,17 @@ void KoHTMLView::slotSetCaption(const char *title)
 void KoHTMLView::slotShowURL(KHTMLView *view, const char *url)
 {
   cerr << "on url : " << url << endl;
-  
+
   if ( !url )
    return;
 
   QString StatusMsg = url;
-  
+
   if (!strnicmp(StatusMsg, "mailto:", 7))
      StatusMsg.remove(0, 7);
 
   CORBA::WString_var WStatusMsg = Q2C( StatusMsg );
-  slotStatusMsg(WStatusMsg);     
+  slotStatusMsg(WStatusMsg);
 }
 
 void KoHTMLView::slotOpenURL(KHTMLView *view, const char *url, int button, const char *target)
@@ -1022,16 +1023,16 @@ void KoHTMLView::slotOpenURL(KHTMLView *view, const char *url, int button, const
      {
        system("kmail " + QString(url));
        return;
-     }  
-     
+     }
+
   if (target != 0L && target[0] != 0)
      {
-      
+
         QString tmp = "searching view:\n";
 	tmp.sprintf("searching view:\n%s\nurl is :\n%s", target, url);
 	
 	QMessageBox::critical(0L, "KoHTML", tmp);
-     
+
         KHTMLView *targetView1 = view->findView(target);
 	KHTMLView *targetView2 = findView(target);
 
@@ -1043,9 +1044,9 @@ void KoHTMLView::slotOpenURL(KHTMLView *view, const char *url, int button, const
 	    KoHTMLDoc *doc = new KoHTMLDoc();
 
 	    if (!doc->initDoc()) return;
-	    
+	
 	    doc->openURL(url, false);
-	    
+	
 	    KoHTMLShell *shell = new KoHTMLShell();
 	    shell->show();
 	    shell->setDocument(doc);
@@ -1057,14 +1058,14 @@ void KoHTMLView::slotOpenURL(KHTMLView *view, const char *url, int button, const
 
 	cerr << "getFrameName() = " << getFrameName() << endl;
 	cerr << "this = " << this << endl;
-	   
+	
         if (targetView1 != this)
 	   {
-             pushURLToHistory();  
+             pushURLToHistory();
 	     cerr << "targetView1->openURL(url);" << endl;
 	     targetView1->openURL(url);
 	     return;
-	   }     
+	   }
 
      }
 
@@ -1086,19 +1087,19 @@ void KoHTMLView::slotOpenURLInNewWindow()
   KoHTMLDoc *doc = new KoHTMLDoc();
 
   if (!doc->initDoc()) return;
-	    
+	
   KoHTMLShell *shell = new KoHTMLShell();
   shell->show();
   shell->setDocument(doc);
-  
+
   doc->openURL(m_strCurrentURL, false);
 }
 
 void KoHTMLView::slotURLPopup(KHTMLView *view, const char *url, const QPoint &coord)
 {
   QPopupMenu *menu = new QPopupMenu;
-  
-  if ( url ) 
+
+  if ( url )
      {
        m_strCurrentURL = url;
 
@@ -1107,53 +1108,53 @@ void KoHTMLView::slotURLPopup(KHTMLView *view, const char *url, const QPoint &co
        menu->insertItem(i18n("Copy URL to clipboard"), this, SLOT(slotCopyURLtoClipboard()));
        menu->insertSeparator(-1);
      }
-       
+
   menu->setItemEnabled( menu->insertItem(i18n("Back"), this, SLOT(slotBack2())), !m_backStack.isEmpty() );
   menu->setItemEnabled( menu->insertItem(i18n("Forward"), this, SLOT(slotForward2())), !m_forwardStack.isEmpty() );
-  
+
   menu->exec(coord);
-  
-  delete menu;  
+
+  delete menu;
 }
 
 void KoHTMLView::slotCopyURLtoClipboard()
 {
   QClipboard *clip = QApplication::clipboard();
   QString text = m_strCurrentURL;
-  
+
   if (!strnicmp(text, "mailto:", 7))
      text.remove(0, 7);
-     
-  clip->setText(text);     
+
+  clip->setText(text);
 }
 
 void KoHTMLView::slotUpdateConfig()
 {
   KConfig *config = kapp->getConfig();
-  
+
   config->setGroup("Personal Settings");
-  
+
   m_browserStart = config->readNumEntry("BrowserStart", 0);
   m_strHomePage = config->readEntry("HomePage", "http://www.kde.org/");
 
   config->writeEntry("BrowserStart", m_browserStart);
   config->writeEntry("HomePage", m_strHomePage);
-  
+
   config->setGroup("Fonts");
-  
+
   QFont helvetica("helvetica");
   QFont courier("courier");
-  
+
   m_fontSize = config->readNumEntry("FontSize", 0);
   m_standardFont = config->readFontEntry("StandardFont", &helvetica);
   m_fixedFont = config->readFontEntry("FixedFont", &courier);
 
   config->writeEntry("FontSize", m_fontSize);
   config->writeEntry("StandardFont", m_standardFont);
-  config->writeEntry("FixedFont", m_fixedFont);    
-  
+  config->writeEntry("FixedFont", m_fixedFont);
+
   config->setGroup("Colors");
-  
+
   m_bgColor = config->readColorEntry("BackgroundColor", &white);
   m_lnkColor = config->readColorEntry("LinkColor", &red);
   m_txtColor = config->readColorEntry("TextColor", &black);
@@ -1163,19 +1164,19 @@ void KoHTMLView::slotUpdateConfig()
   config->writeEntry("LinkColor", m_lnkColor);
   config->writeEntry("TextColor", m_txtColor);
   config->writeEntry("VLinkColor", m_vlnkColor);
-  
+
   getKHTMLWidget()->setDefaultBGColor(m_bgColor);
   getKHTMLWidget()->setDefaultTextColors(m_txtColor, m_lnkColor, m_vlnkColor);
   getKHTMLWidget()->setStandardFont(m_standardFont.family());
   getKHTMLWidget()->setFixedFont(m_fixedFont.family());
-  
+
   config->sync();
 }
 
 void KoHTMLView::eventOpenURL( const char *url, bool reload )
 {
   KoHTML::EventOpenURL event;
-  
+
   event.url = CORBA::string_dup( url );
   event.reload = (CORBA::Boolean)reload;
   EMIT_EVENT( this, KoHTML::eventOpenURL, event );

@@ -43,6 +43,7 @@
 #include <krestrictedline.h>
 #include <kbuttonbox.h>
 #include <kcolorbtn.h>
+#include <kglobal.h>
 
 #include <koRuler.h>
 

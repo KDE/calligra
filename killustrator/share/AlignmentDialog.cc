@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -32,6 +32,7 @@
 #include <kbuttonbox.h>
 #include <kseparator.h>
 #include <kiconloader.h>
+#include <kglobal.h>
 
 #include <qpushbt.h>
 #include <qbttngrp.h>
@@ -42,7 +43,7 @@
 #define BUTTON_WIDTH  40
 #define BUTTON_HEIGHT 40
 
-AlignmentDialog::AlignmentDialog (QWidget* parent, const char* name) : 
+AlignmentDialog::AlignmentDialog (QWidget* parent, const char* name) :
     QDialog (parent, name, true) {
   QPushButton* button;
   QWidget* widget;
@@ -51,7 +52,7 @@ AlignmentDialog::AlignmentDialog (QWidget* parent, const char* name) :
 
   QVBoxLayout *vl = new QVBoxLayout (this, 2);
 
-  // the tab control 
+  // the tab control
   tabctl = new KTabCtl (this);
   connect (tabctl, SIGNAL(tabSelected(int)), this, SLOT(selectTab(int)));
 
@@ -85,7 +86,7 @@ AlignmentDialog::AlignmentDialog (QWidget* parent, const char* name) :
 
   vl->activate ();
   adjustSize ();
- 
+
   setMinimumSize (300, 300);
   setMaximumSize (350, 300);
 }
@@ -95,7 +96,7 @@ QWidget* AlignmentDialog::createAlignmentWidget (QWidget* parent) {
   QButtonGroup* group;
   QGroupBox* box;
 
-  KIconLoader* loader = kapp->getIconLoader ();
+  KIconLoader* loader = KGlobal::iconLoader ();
 
   w = new QWidget (parent);
   QGridLayout *layout = new QGridLayout (w, 2, 3, 10);
@@ -106,20 +107,20 @@ QWidget* AlignmentDialog::createAlignmentWidget (QWidget* parent) {
   valignButton[0] = new QPushButton (group);
   valignButton[0]->setToggleButton (true);
   valignButton[0]->setPixmap (loader->loadIcon ("atop.xpm"));
-  valignButton[0]->setGeometry (20, 30, 
+  valignButton[0]->setGeometry (20, 30,
 				BUTTON_WIDTH, BUTTON_HEIGHT);
 
 
   valignButton[1] = new QPushButton (group);
   valignButton[1]->setToggleButton (true);
   valignButton[1]->setPixmap (loader->loadIcon ("avcenter.xpm"));
-  valignButton[1]->setGeometry (20, 30 + 1 * BUTTON_HEIGHT, 
+  valignButton[1]->setGeometry (20, 30 + 1 * BUTTON_HEIGHT,
 				BUTTON_WIDTH, BUTTON_HEIGHT);
 
   valignButton[2] = new QPushButton (group);
   valignButton[2]->setToggleButton (true);
   valignButton[2]->setPixmap (loader->loadIcon ("abottom.xpm"));
-  valignButton[2]->setGeometry (20, 30 + 2 * BUTTON_HEIGHT, 
+  valignButton[2]->setGeometry (20, 30 + 2 * BUTTON_HEIGHT,
 				BUTTON_WIDTH, BUTTON_HEIGHT);
 
   group->setExclusive (true);
@@ -131,19 +132,19 @@ QWidget* AlignmentDialog::createAlignmentWidget (QWidget* parent) {
   halignButton[0] = new QPushButton (group);
   halignButton[0]->setToggleButton (true);
   halignButton[0]->setPixmap (loader->loadIcon ("aleft.xpm"));
-  halignButton[0]->setGeometry (20, 30, BUTTON_WIDTH, 
+  halignButton[0]->setGeometry (20, 30, BUTTON_WIDTH,
 				BUTTON_HEIGHT);
 
   halignButton[1] = new QPushButton (group);
   halignButton[1]->setToggleButton (true);
   halignButton[1]->setPixmap (loader->loadIcon ("ahcenter.xpm"));
-  halignButton[1]->setGeometry (20 + BUTTON_WIDTH, 30, 
+  halignButton[1]->setGeometry (20 + BUTTON_WIDTH, 30,
                            BUTTON_WIDTH, BUTTON_HEIGHT);
 
   halignButton[2] = new QPushButton (group);
   halignButton[2]->setToggleButton (true);
   halignButton[2]->setPixmap (loader->loadIcon ("aright.xpm"));
-  halignButton[2]->setGeometry (20 + 2 * BUTTON_WIDTH, 
+  halignButton[2]->setGeometry (20 + 2 * BUTTON_WIDTH,
                            30, BUTTON_WIDTH, BUTTON_HEIGHT);
 
   group->setExclusive (true);
@@ -161,7 +162,7 @@ QWidget* AlignmentDialog::createAlignmentWidget (QWidget* parent) {
   cbutton->move (15, 45);
 
   layout->addMultiCellWidget (box, 1, 1, 1, 2, AlignCenter);
-  
+
   layout->activate ();
   w->adjustSize ();
   return w;
@@ -171,7 +172,7 @@ QWidget* AlignmentDialog::createDistributionWidget (QWidget* parent) {
   QWidget* w;
   QButtonGroup* group;
 
-  KIconLoader* loader = kapp->getIconLoader ();
+  KIconLoader* loader = KGlobal::iconLoader ();
 
   w = new QWidget (parent);
   QGridLayout *layout = new QGridLayout (w, 2, 3, 10);
@@ -188,19 +189,19 @@ QWidget* AlignmentDialog::createDistributionWidget (QWidget* parent) {
   vdistButton[1] = new QPushButton (group);
   vdistButton[1]->setToggleButton (true);
   vdistButton[1]->setPixmap (loader->loadIcon ("dvcenter.xpm"));
-  vdistButton[1]->setGeometry (20, 30 + 1 * BUTTON_HEIGHT, 
+  vdistButton[1]->setGeometry (20, 30 + 1 * BUTTON_HEIGHT,
 			       BUTTON_WIDTH, BUTTON_HEIGHT);
 
   vdistButton[2] = new QPushButton (group);
   vdistButton[2]->setToggleButton (true);
   vdistButton[2]->setPixmap (loader->loadIcon ("dvdist.xpm"));
-  vdistButton[2]->setGeometry (20, 30 + 2 * BUTTON_HEIGHT, 
+  vdistButton[2]->setGeometry (20, 30 + 2 * BUTTON_HEIGHT,
 			       BUTTON_WIDTH, BUTTON_HEIGHT);
 
   vdistButton[3] = new QPushButton (group);
   vdistButton[3]->setToggleButton (true);
   vdistButton[3]->setPixmap (loader->loadIcon ("dbottom.xpm"));
-  vdistButton[3]->setGeometry (20, 30 + 3 * BUTTON_HEIGHT, 
+  vdistButton[3]->setGeometry (20, 30 + 3 * BUTTON_HEIGHT,
 			       BUTTON_WIDTH, BUTTON_HEIGHT);
 
   group->setExclusive (true);
@@ -212,7 +213,7 @@ QWidget* AlignmentDialog::createDistributionWidget (QWidget* parent) {
   hdistButton[0] = new QPushButton (group);
   hdistButton[0]->setToggleButton (true);
   hdistButton[0]->setPixmap (loader->loadIcon ("dleft.xpm"));
-  hdistButton[0]->setGeometry (20, 30, BUTTON_WIDTH, 
+  hdistButton[0]->setGeometry (20, 30, BUTTON_WIDTH,
 				BUTTON_HEIGHT);
 
   hdistButton[1] = new QPushButton (group);
@@ -224,13 +225,13 @@ QWidget* AlignmentDialog::createDistributionWidget (QWidget* parent) {
   hdistButton[2] = new QPushButton (group);
   hdistButton[2]->setToggleButton (true);
   hdistButton[2]->setPixmap (loader->loadIcon ("dhdist.xpm"));
-  hdistButton[2]->setGeometry (20 + 2 * BUTTON_WIDTH, 
+  hdistButton[2]->setGeometry (20 + 2 * BUTTON_WIDTH,
 			       30, BUTTON_WIDTH, BUTTON_HEIGHT);
 
   hdistButton[3] = new QPushButton (group);
   hdistButton[3]->setToggleButton (true);
   hdistButton[3]->setPixmap (loader->loadIcon ("dright.xpm"));
-  hdistButton[3]->setGeometry (20 + 3 * BUTTON_WIDTH, 
+  hdistButton[3]->setGeometry (20 + 3 * BUTTON_WIDTH,
                            30, BUTTON_WIDTH, BUTTON_HEIGHT);
 
   group->setExclusive (true);
@@ -249,7 +250,7 @@ QWidget* AlignmentDialog::createDistributionWidget (QWidget* parent) {
   pbutton->move (15, 45);
 
   layout->addMultiCellWidget (group, 1, 1, 1, 2, AlignCenter);
-  
+
   layout->activate ();
   w->adjustSize ();
   return w;
@@ -261,26 +262,26 @@ void AlignmentDialog::helpPressed () {
 HorizAlignment AlignmentDialog::getHorizAlignment () {
   HorizAlignment result = HAlign_None;
 
-  if (halignButton[0]->isOn ()) 
+  if (halignButton[0]->isOn ())
     result = HAlign_Left;
   else if (halignButton[1]->isOn ())
     result = HAlign_Center;
-  else if (halignButton[2]->isOn ()) 
+  else if (halignButton[2]->isOn ())
     result = HAlign_Right;
-    
+
   return result;
 }
 
 VertAlignment AlignmentDialog::getVertAlignment () {
   VertAlignment result = VAlign_None;
 
-  if (valignButton[0]->isOn ()) 
+  if (valignButton[0]->isOn ())
     result = VAlign_Top;
   else if (valignButton[1]->isOn ())
     result = VAlign_Center;
-  else if (valignButton[2]->isOn ()) 
+  else if (valignButton[2]->isOn ())
     result = VAlign_Bottom;
-    
+
   return result;
 }
 
@@ -334,28 +335,28 @@ void AlignmentDialog::selectTab (int t) {
   activeTab = t;
 }
 
-void AlignmentDialog::alignSelection (GDocument* doc, 
+void AlignmentDialog::alignSelection (GDocument* doc,
 				      CommandHistory* history) {
   if (! doc->selectionIsEmpty ()) {
     AlignmentDialog dialog (0L, "Alignment");
-  
+
     int result = dialog.exec ();
     if (result == Accepted) {
       if (dialog.getMode () == AMode_Align) {
         AlignCmd *cmd = new AlignCmd (doc, dialog.getHorizAlignment (),
 				      dialog.getVertAlignment (),
-				      dialog.centerToPage (), 
+				      dialog.centerToPage (),
 				      dialog.snapToGrid ());
         history->addCommand (cmd, true);
       }
       else {
-        DistributeCmd *cmd = 
+        DistributeCmd *cmd =
 	  new DistributeCmd (doc, dialog.getHorizDistribution (),
 			     dialog.getVertDistribution (),
 			     dialog.getDistributionMode ());
         history->addCommand (cmd, true);
       }
-    }  
+    }
   }
 }
-  
+

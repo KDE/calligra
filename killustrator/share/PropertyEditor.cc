@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -32,6 +32,7 @@
 #include <kbuttonbox.h>
 #include <kseparator.h>
 #include <kiconloader.h>
+#include <kglobal.h>
 
 #include <qpushbt.h>
 #include <qlabel.h>
@@ -52,8 +53,8 @@
 #define GRADIENT_BOX 2
 #define NOFILL_BOX   3
 
-PropertyEditor::PropertyEditor (CommandHistory* history, GDocument* doc, 
-				QWidget* parent, const char* name) : 
+PropertyEditor::PropertyEditor (CommandHistory* history, GDocument* doc,
+				QWidget* parent, const char* name) :
     QDialog (parent, name, true) {
   QPushButton* button;
   QWidget* widget;
@@ -101,7 +102,7 @@ PropertyEditor::PropertyEditor (CommandHistory* history, GDocument* doc,
 
   QVBoxLayout *vl = new QVBoxLayout (this, 2);
 
-  // the tab control 
+  // the tab control
   tabctl = new KTabCtl (this);
 
   widget = createInfoWidget (tabctl);
@@ -139,7 +140,7 @@ PropertyEditor::PropertyEditor (CommandHistory* history, GDocument* doc,
   vl->addWidget (bbox);
 
   vl->activate ();
- 
+
   setMinimumSize (430, 400);
   setMaximumSize (430, 400);
   adjustSize ();
@@ -232,7 +233,7 @@ QWidget* PropertyEditor::createOutlineWidget (QWidget* parent) {
   label->setAlignment (AlignLeft | AlignVCenter);
   label->setText (i18n ("Width:"));
   label->move (10, 20);
-  
+
   widthField = new FloatSpinBox (w);
   widthField->setFormatString ("%-3.3f");
   widthField->setEditable (true);
@@ -243,7 +244,7 @@ QWidget* PropertyEditor::createOutlineWidget (QWidget* parent) {
   label->setAlignment (AlignLeft | AlignVCenter);
   label->setText (i18n ("Color:"));
   label->move (10, 60);
-  
+
   penColorBttn = new KColorButton (w);
   penColorBttn->setColor (white);
   penColorBttn->move (80, 60);
@@ -252,7 +253,7 @@ QWidget* PropertyEditor::createOutlineWidget (QWidget* parent) {
   label->setAlignment (AlignLeft | AlignVCenter);
   label->setText (i18n ("Style:"));
   label->move (10, 100);
-  
+
   penStyleField = new KCombo (w);
   penStyleField->setGeometry (80, 100, 100, 30);
   QIntDictIterator<LineStyle> lit = LineStyle::getLineStyles ();
@@ -295,12 +296,12 @@ QWidget* PropertyEditor::createOutlineWidget (QWidget* parent) {
     QButtonGroup *group = new QButtonGroup (w);
     group->move (80, 140);
 
-    KIconLoader* loader = kapp->getIconLoader ();
+    KIconLoader* loader = KGlobal::iconLoader ();
 
     ellipseKind[0] = new QPushButton (group);
     ellipseKind[0]->setToggleButton (true);
     ellipseKind[0]->setPixmap (loader->loadIcon ("ellipse1.xpm"));
-    ellipseKind[0]->setGeometry (0, 0, 
+    ellipseKind[0]->setGeometry (0, 0,
 				 BUTTON_WIDTH, BUTTON_HEIGHT);
 
     ellipseKind[1] = new QPushButton (group);
@@ -312,7 +313,7 @@ QWidget* PropertyEditor::createOutlineWidget (QWidget* parent) {
     ellipseKind[2] = new QPushButton (group);
     ellipseKind[2]->setToggleButton (true);
     ellipseKind[2]->setPixmap (loader->loadIcon ("ellipse3.xpm"));
-    ellipseKind[2]->setGeometry (2 * BUTTON_WIDTH, 0, 
+    ellipseKind[2]->setGeometry (2 * BUTTON_WIDTH, 0,
 				 BUTTON_WIDTH, BUTTON_HEIGHT);
     group->adjustSize ();
     group->setExclusive (true);
@@ -337,12 +338,12 @@ QWidget* PropertyEditor::createOutlineWidget (QWidget* parent) {
     QButtonGroup *group = new QButtonGroup (w);
     group->move (80, 140);
 
-    KIconLoader* loader = kapp->getIconLoader ();
+    KIconLoader* loader = KGlobal::iconLoader ();
 
     textAlign[0] = new QPushButton (group);
     textAlign[0]->setToggleButton (true);
     textAlign[0]->setPixmap (loader->loadIcon ("tleftalign.xpm"));
-    textAlign[0]->setGeometry (0, 0, 
+    textAlign[0]->setGeometry (0, 0,
 				 BUTTON_WIDTH, BUTTON_HEIGHT);
 
     textAlign[1] = new QPushButton (group);
@@ -354,7 +355,7 @@ QWidget* PropertyEditor::createOutlineWidget (QWidget* parent) {
     textAlign[2] = new QPushButton (group);
     textAlign[2]->setToggleButton (true);
     textAlign[2]->setPixmap (loader->loadIcon ("trightalign.xpm"));
-    textAlign[2]->setGeometry (2 * BUTTON_WIDTH, 0, 
+    textAlign[2]->setGeometry (2 * BUTTON_WIDTH, 0,
 				 BUTTON_WIDTH, BUTTON_HEIGHT);
     group->adjustSize ();
     group->setExclusive (true);
@@ -378,7 +379,7 @@ QWidget* PropertyEditor::createFillWidget (QWidget* parent) {
     fillStyleBttn[i] = new QRadioButton (group);
     fillStyleBttn[i]->setText (msg[i]);
     fillStyleBttn[i]->move (10, i * 30);
-    connect (fillStyleBttn[i], SIGNAL(clicked()), 
+    connect (fillStyleBttn[i], SIGNAL(clicked()),
 	     this, SLOT(fillStyleChanged()));
   }
   group->adjustSize ();
@@ -466,7 +467,7 @@ QWidget* PropertyEditor::createFillWidget (QWidget* parent) {
   gradStyleCombo->insertItem (i18n ("Rectangular"));
   //  gradStyleCombo->insertItem (i18n ("Diagonal 1"));
   //  gradStyleCombo->insertItem (i18n ("Diagonal 2"));
-  connect (gradStyleCombo, SIGNAL(activated(int)), 
+  connect (gradStyleCombo, SIGNAL(activated(int)),
 	   this, SLOT(gradientStyleChanged(int)));
   QFrame* frame = new QFrame (box);
   frame->setLineWidth (1);
@@ -561,7 +562,7 @@ void PropertyEditor::applyPressed () {
 	  tinfo.align = GText::TextInfo::AlignRight;
 	cmd = new SetPropertyCmd (document, oinfo, finfo, tinfo);
       }
-      else 
+      else
 	cmd = new SetPropertyCmd (document, oinfo, finfo);
 
       cmdHistory->addCommand (cmd, true);
@@ -587,7 +588,7 @@ void PropertyEditor::readProperties () {
     PStateManager *psm = PStateManager::instance ();
     MeasurementUnit munit = psm->defaultMeasurementUnit ();
     const char* ustr = unitToString (munit);
-    
+
     if (document->selectionCount () == 1) {
       GObject* object = document->getSelection ().front ();
       // Info tab
@@ -595,17 +596,17 @@ void PropertyEditor::readProperties () {
       infoLabel[0]->setText (object->typeName ());
       sprintf (buf, "%5.2f %s", cvtPtToUnit (munit, boundingBox.left ()),
 	       ustr);
-      infoLabel[1]->setText (buf);     
+      infoLabel[1]->setText (buf);
       sprintf (buf, "%5.2f %s", cvtPtToUnit (munit, boundingBox.top ()),
 	       ustr);
-      infoLabel[2]->setText (buf);     
+      infoLabel[2]->setText (buf);
       sprintf (buf, "%5.2f %s", cvtPtToUnit (munit, boundingBox.width ()),
 	       ustr);
-      infoLabel[3]->setText (buf);     
+      infoLabel[3]->setText (buf);
       sprintf (buf, "%5.2f %s", cvtPtToUnit (munit, boundingBox.height ()),
 	       ustr);
-      infoLabel[4]->setText (buf);     
-    
+      infoLabel[4]->setText (buf);
+
       // Outline tab
       GObject::OutlineInfo oInfo = object->getOutlineInfo ();
       widthField->setValue (oInfo.width);
@@ -633,7 +634,7 @@ void PropertyEditor::readProperties () {
 	  break;
 	}
       }
-      
+
       // Fill tab
       switch (object->getFillStyle ()) {
       case GObject::FillInfo::NoFill:
@@ -665,7 +666,7 @@ void PropertyEditor::readProperties () {
       default:
 	break;
       }
-      
+
       // Font tab
       if (object->isA ("GText")) {
 	GText* tobj = (GText *) object;
@@ -694,17 +695,17 @@ void PropertyEditor::readProperties () {
 	infoLabel[0]->setText (i18n ("multiple selection"));
       sprintf (buf, "%5.2f %s", cvtPtToUnit (munit, boundingBox.left ()),
 	       ustr);
-      infoLabel[1]->setText (buf);     
+      infoLabel[1]->setText (buf);
       sprintf (buf, "%5.2f %s", cvtPtToUnit (munit, boundingBox.top ()),
 	       ustr);
-      infoLabel[2]->setText (buf);     
+      infoLabel[2]->setText (buf);
       sprintf (buf, "%5.2f %s", cvtPtToUnit (munit, boundingBox.width ()),
 	       ustr);
-      infoLabel[3]->setText (buf);     
+      infoLabel[3]->setText (buf);
       sprintf (buf, "%5.2f %s", cvtPtToUnit (munit, boundingBox.height ()),
 	       ustr);
-      infoLabel[4]->setText (buf);     
-    
+      infoLabel[4]->setText (buf);
+
       // Outline tab
       GObject::OutlineInfo oInfo = GObject::getDefaultOutlineInfo ();
       widthField->setValue (oInfo.width);
@@ -713,7 +714,7 @@ void PropertyEditor::readProperties () {
       // Fill tab
       GObject::FillInfo fInfo = GObject::getDefaultFillInfo ();
       solidColorBttn->setColor (fInfo.color);
-      
+
       // Font tab
       if (!haveObjects || haveTextObjects) {
 	GText::TextInfo tInfo = GText::getDefaultTextInfo ();
@@ -742,13 +743,13 @@ void PropertyEditor::gradientStyleChanged (int) {
 }
 
 void PropertyEditor::updateGradient () {
-  static Gradient::Style styles[] = { 
-    Gradient::Horizontal, Gradient::Vertical, Gradient::Radial, 
-    Gradient::Rectangular, Gradient::Diagonal1, Gradient::Diagonal2 
+  static Gradient::Style styles[] = {
+    Gradient::Horizontal, Gradient::Vertical, Gradient::Radial,
+    Gradient::Rectangular, Gradient::Diagonal1, Gradient::Diagonal2
   };
 
   if (gradient == 0L) {
-      gradient = new Gradient (gradColor1Bttn->color (), 
+      gradient = new Gradient (gradColor1Bttn->color (),
 			       gradColor2Bttn->color (), Gradient::Horizontal);
       gradient->setStyle (styles[gradStyleCombo->currentItem ()]);
   }
@@ -764,7 +765,7 @@ void PropertyEditor::updateGradient () {
 
 int PropertyEditor::edit (CommandHistory* history, GDocument* doc) {
   PropertyEditor dialog (history, doc, 0L, "Properties");
-  
+
   return dialog.exec ();
 }
-  
+

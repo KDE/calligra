@@ -22,6 +22,8 @@
 #include <opMainWindow.h>
 #include <opMainWindowIf.h>
 
+#include <kglobal.h>
+
 /**********************************************************
  *
  * KFormulaView
@@ -175,7 +177,7 @@ bool KFormulaView::mappingCreateMenubar( OpenPartsUI::MenuBar_ptr _menubar )
     cerr << "START --------------- MENU -------------------" << endl;
 
     CORBA::WString_var text;
-    
+
     // View
     text = Q2C( i18n( "&View" ) );
     _menubar->insertMenu( text, m_vMenuView, -1, -1 );
@@ -408,7 +410,7 @@ bool KFormulaView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factor
     fonts[3] = CORBA::string_dup( "(default)" );
 
     CORBA::WString_var toolTip;
-    
+
     toolTip = Q2C( i18n("Font Family") );
     m_idComboFont_FontFamily = m_vToolBarFont->insertCombo( fonts,   0, false, SIGNAL( activated( const QString & ) ), this,
 							    "fontSelected", true, toolTip,

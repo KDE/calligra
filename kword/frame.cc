@@ -33,6 +33,7 @@
 #include <qpicture.h>
 #include <qwidget.h>
 #include <qpixmap.h>
+#include <qfile.h>
 
 #ifndef max
 #define max(a,b) ((a)>(b)?(a):(b))
@@ -689,7 +690,7 @@ void KWTextFrameSet::update()
                 }
                 if ( !inserted ) l2->append( ll->at( k ) );
             }
-    
+
             delete ll;
             delete l;
             l = l2;
@@ -919,7 +920,7 @@ void KWTextFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
             KWParagLayout::Border l, r, t, b;
             float lmm = 0, linch = 0, rmm = 0, rinch = 0, tmm = 0, tinch = 0, bmm = 0, binch = 0, ramm = 0, rainch = -1;
             unsigned int lpt = 0, rpt = 0, tpt = 0, bpt = 0, rapt = 0;
-    
+
             l.color = Qt::white;
             l.style = KWParagLayout::SOLID;
             l.ptWidth = 1;
@@ -933,7 +934,7 @@ void KWTextFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
             b.style = KWParagLayout::SOLID;
             b.ptWidth = 1;
             QColor c( Qt::white );
-    
+
             KOMLParser::parseTag( tag.c_str(), name, lst );
             vector<KOMLAttrib>::const_iterator it = lst.begin();
             for( ; it != lst.end(); it++ )
@@ -1267,7 +1268,7 @@ void KWPictureFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
             for( ; it != lst.end(); it++ )
             {
             }
-    
+
             KWImage *_image = new KWImage();
             _image->load( parser, lst, doc );
             setFileName( _image->getFilename() );
@@ -1280,7 +1281,7 @@ void KWPictureFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
             KWParagLayout::Border l, r, t, b;
             float lmm = 0, linch = 0, rmm = 0, rinch = 0, tmm = 0, tinch = 0, bmm = 0, binch = 0, ramm = 0, rainch = -1;
             unsigned int lpt = 0, rpt = 0, tpt = 0, bpt = 0, rapt = 0;
-    
+
             l.color = Qt::white;
             l.style = KWParagLayout::SOLID;
             l.ptWidth = 1;
@@ -1294,7 +1295,7 @@ void KWPictureFrameSet::load( KOMLParser& parser, vector<KOMLAttrib>& lst )
             b.style = KWParagLayout::SOLID;
             b.ptWidth = 1;
             QColor c( Qt::white );
-    
+
             KOMLParser::parseTag( tag.c_str(), name, lst );
             vector<KOMLAttrib>::const_iterator it = lst.begin();
             for( ; it != lst.end(); it++ )
@@ -1628,19 +1629,19 @@ void KWGroupManager::recalcCols()
         {
             Cell *cell = getCell( i, j );
             if ( cell->cols != 1 )
-            {   
+            {
                 if ( cell->cols > 0 )
                 {
                     int w = 0;
                     for ( unsigned int k = 0; k < cell->cols; k++ )
                         w += *ws.at( k + cell->col );
-        
+
                     cell->frameSet->getFrame( 0 )->setWidth( w + ( cell->cols - 2 ) * 2 + 2 );
                 }
-            }   
-        }   
-    }   
-}   
+            }
+        }
+    }
+}
 
 /*================================================================*/
 void KWGroupManager::recalcRows( QPainter &_painter )
@@ -1761,15 +1762,15 @@ void KWGroupManager::recalcRows( QPainter &_painter )
         {
             Cell *cell = getCell( j, i );
             if ( cell->rows != 1 )
-            {   
+            {
                 if ( cell->rows > 0 )
                 {
                     int h = 0;
                     for ( unsigned int k = 0; k < cell->rows; k++ )
                         h += *hs.at( k + cell->row );
-        
+
                     debug( "expanded %d/%d", cell->row, cell->col );
-        
+
                     cell->frameSet->getFrame( 0 )->setHeight( h + ( cell->rows - 2 ) * 2 + 2 );
                 }
             }
@@ -2046,18 +2047,18 @@ void KWGroupManager::updateTempHeaders()
             if ( fs->isRemoveableHeader() )
             {
                 dynamic_cast<KWTextFrameSet*>( fs )->assign( dynamic_cast<KWTextFrameSet*>( getFrameSet( 0, j ) ) );
-    
+
                 QPainter p;
                 QPicture pic;
                 p.begin( &pic );
-    
+
                 KWFormatContext fc( doc, doc->getFrameSetNum( fs ) + 1 );
                 fc.init( dynamic_cast<KWTextFrameSet*>( fs )->getFirstParag(), p, true, true );
 
                 bool bend = false;
                 while ( !bend )
                     bend = !fc.makeNextLineLayout( p );
-    
+
                 p.end();
             }
         }
@@ -2130,7 +2131,7 @@ bool KWGroupManager::joinCells( QPainter &_painter )
                     cell = 0L;
             }
             if ( col + 1 > cols - 1 ) break;
-    
+
             cell = getCell( row, col + 1 );
             tmpCol = col + 1;
             while ( cell && cell->frameSet->getFrame( 0 )->isSelected() )
@@ -2159,7 +2160,7 @@ bool KWGroupManager::joinCells( QPainter &_painter )
                     cell = 0L;
             }
             if ( row + 1 > rows - 1 ) break;
-    
+
             cell = getCell( row + 1, col );
             tmpRow = row + 1;
             while ( cell && cell->frameSet->getFrame( 0 )->isSelected() )

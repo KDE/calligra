@@ -7,7 +7,7 @@
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU Library General Public License as
-  published by  
+  published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
 
@@ -15,7 +15,7 @@
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU Library General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -32,6 +32,7 @@
 #include <kbuttonbox.h>
 #include <kseparator.h>
 #include <kiconloader.h>
+#include <kglobal.h>
 
 #include <qpushbt.h>
 #include <qbttngrp.h>
@@ -46,8 +47,8 @@
 #include "Handle.h" // for scaling directions
 
 TransformationDialog::TransformationDialog (CommandHistory* cmdHist,
-					    QWidget* parent, 
-					    const char* name) : 
+					    QWidget* parent,
+					    const char* name) :
   QDialog (parent, name, false) {
   document = 0L;
   history = cmdHist;
@@ -55,7 +56,7 @@ TransformationDialog::TransformationDialog (CommandHistory* cmdHist,
 
   QVBoxLayout *vl = new QVBoxLayout (this, 2);
 
-  // the tab control 
+  // the tab control
   tabCtl = new MyTabCtl (this);
 
   widgets[0] = createPositionWidget (tabCtl);
@@ -130,7 +131,7 @@ QWidget* TransformationDialog::createPositionWidget (QWidget* parent) {
 
   applyToDupBttn[0] = new QPushButton (w);
   applyToDupBttn[0]->setText (i18n ("Apply To Duplicate"));
-  connect (applyToDupBttn[0], SIGNAL(clicked()), 
+  connect (applyToDupBttn[0], SIGNAL(clicked()),
 	   this, SLOT(applyToDuplicatePressed()));
 
   int width = applyToDupBttn[0]->sizeHint ().width ();
@@ -202,7 +203,7 @@ QWidget* TransformationDialog::createDimensionWidget (QWidget* parent) {
 
   applyToDupBttn[1] = new QPushButton (w);
   applyToDupBttn[1]->setText (i18n ("Apply To Duplicate"));
-  connect (applyToDupBttn[1], SIGNAL(clicked()), 
+  connect (applyToDupBttn[1], SIGNAL(clicked()),
 	   this, SLOT(applyToDuplicatePressed()));
 
   int width = applyToDupBttn[1]->sizeHint ().width ();
@@ -259,7 +260,7 @@ QWidget* TransformationDialog::createRotationWidget (QWidget* parent) {
   vertRotCenter->setStep (0.1);
   vertRotCenter->setEditable (true);
   vertRotCenter->move (90, 50);
-  
+
   relativeRotCenter = new QCheckBox (box);
   relativeRotCenter->setText (i18n ("Relative Position"));
   relativeRotCenter->setGeometry (20, 80, 150, 20);
@@ -271,7 +272,7 @@ QWidget* TransformationDialog::createRotationWidget (QWidget* parent) {
 
   applyToDupBttn[2] = new QPushButton (w);
   applyToDupBttn[2]->setText (i18n ("Apply To Duplicate"));
-  connect (applyToDupBttn[2], SIGNAL(clicked()), 
+  connect (applyToDupBttn[2], SIGNAL(clicked()),
 	   this, SLOT(applyToDuplicatePressed()));
 
   int width = applyToDupBttn[2]->sizeHint ().width ();
@@ -287,7 +288,7 @@ QWidget* TransformationDialog::createRotationWidget (QWidget* parent) {
 QWidget* TransformationDialog::createMirrorWidget (QWidget* parent) {
   QWidget* w;
   QButtonGroup* group;
-  KIconLoader* loader = kapp->getIconLoader ();
+  KIconLoader* loader = KGlobal::iconLoader ();
 
   w = new QWidget (parent);
 
@@ -313,7 +314,7 @@ QWidget* TransformationDialog::createMirrorWidget (QWidget* parent) {
 
   applyToDupBttn[3] = new QPushButton (w);
   applyToDupBttn[3]->setText (i18n ("Apply To Duplicate"));
-  connect (applyToDupBttn[3], SIGNAL(clicked()), 
+  connect (applyToDupBttn[3], SIGNAL(clicked()),
 	   this, SLOT(applyToDuplicatePressed()));
 
   int width = applyToDupBttn[3]->sizeHint ().width ();
@@ -332,7 +333,7 @@ void TransformationDialog::applyToDuplicatePressed () {
 
   int buttonId = -1;
 
-  for (int i = 0; i < 4; i++) 
+  for (int i = 0; i < 4; i++)
     if (sender () == applyToDupBttn[i]) {
       buttonId = i;
       break;
@@ -354,14 +355,14 @@ void TransformationDialog::applyToDuplicatePressed () {
     return;
   }
 }
-  
+
 void TransformationDialog::applyPressed () {
   if (document == 0L || document->selectionIsEmpty ())
     return;
 
   int buttonId = -1;
 
-  for (int i = 0; i < 4; i++) 
+  for (int i = 0; i < 4; i++)
     if (sender () == applyBttn[i]) {
       buttonId = i;
       break;
@@ -400,7 +401,7 @@ void TransformationDialog::translate (bool onDuplicate) {
     QList<GObject> duplicates;
     duplicates.setAutoDelete (false);
 
-    for (list<GObject*>::iterator it = document->getSelection ().begin (); 
+    for (list<GObject*>::iterator it = document->getSelection ().begin ();
 	 it != document->getSelection ().end (); it++) {
       GObject* obj = (*it)->copy ();
       QWMatrix m;
@@ -415,7 +416,7 @@ void TransformationDialog::translate (bool onDuplicate) {
     TranslateCmd* cmd = new TranslateCmd (document, xval, yval);
     history->addCommand (cmd, true);
   }
-}  
+}
 
 void TransformationDialog::scale (bool onDuplicate) {
   float xval, yval;
@@ -441,7 +442,7 @@ void TransformationDialog::scale (bool onDuplicate) {
     QList<GObject> duplicates;
     duplicates.setAutoDelete (false);
 
-    for (list<GObject*>::iterator it = document->getSelection ().begin (); 
+    for (list<GObject*>::iterator it = document->getSelection ().begin ();
 	 it != document->getSelection ().end (); it++) {
       GObject* obj = (*it)->copy ();
       QWMatrix m1, m2, m3;
@@ -449,7 +450,7 @@ void TransformationDialog::scale (bool onDuplicate) {
       m1.translate (-xoff, -yoff);
       m2.scale (xval, yval);
       m3.translate (xoff, yoff);
-      
+
       obj->transform (m1);
       obj->transform (m2);
       obj->transform (m3, true);
@@ -463,11 +464,11 @@ void TransformationDialog::scale (bool onDuplicate) {
 				 xval, yval);
     history->addCommand (cmd, true);
   }
-}  
+}
 
 void TransformationDialog::rotate (bool onDuplicate) {
   float xcenter, ycenter, angle;
- 
+
   xcenter = horizRotCenter->getValue ();
   ycenter = vertRotCenter->getValue ();
   angle = rotAngle->getValue ();
@@ -482,7 +483,7 @@ void TransformationDialog::rotate (bool onDuplicate) {
     QList<GObject> duplicates;
     duplicates.setAutoDelete (false);
 
-    for (list<GObject*>::iterator it = document->getSelection ().begin (); 
+    for (list<GObject*>::iterator it = document->getSelection ().begin ();
 	 it != document->getSelection ().end (); it++) {
       GObject* obj = (*it)->copy ();
       QWMatrix m1, m2, m3;
@@ -502,7 +503,7 @@ void TransformationDialog::rotate (bool onDuplicate) {
 				    angle);
     history->addCommand (cmd, true);
   }
-}  
+}
 
 void TransformationDialog::mirror (bool onDuplicate) {
   float sx = 1, sy = 1;
@@ -518,7 +519,7 @@ void TransformationDialog::mirror (bool onDuplicate) {
     QList<GObject> duplicates;
     duplicates.setAutoDelete (false);
 
-    for (list<GObject*>::iterator it = document->getSelection ().begin (); 
+    for (list<GObject*>::iterator it = document->getSelection ().begin ();
 	 it != document->getSelection ().end (); it++) {
       GObject* obj = (*it)->copy ();
       QWMatrix m1, m2, m3;
@@ -526,7 +527,7 @@ void TransformationDialog::mirror (bool onDuplicate) {
       m1.translate (-xoff, -yoff);
       m2.scale (sx, sy);
       m3.translate (xoff, yoff);
-      
+
       obj->transform (m1);
       obj->transform (m2);
       obj->transform (m3, true);
@@ -540,7 +541,7 @@ void TransformationDialog::mirror (bool onDuplicate) {
 				  sx, sy);
     history->addCommand (cmd, true);
   }
-}  
+}
 
 void TransformationDialog::setDocument (GDocument* doc) {
   document = doc;
@@ -558,7 +559,7 @@ void TransformationDialog::update () {
     document = (GDocument *) sender ();
 
   Rect r = document->boundingBoxForSelection ();
-  
+
   // position
   horizPosition->setValue (r.left ());
   vertPosition->setValue (r.top ());
@@ -584,7 +585,7 @@ void TransformationDialog::update () {
 void TransformationDialog::updateProportionalDimension (float value) {
   if (proportional->isChecked ()) {
     if (sender () == horizDim) {
-      if (percent->isChecked ()) 
+      if (percent->isChecked ())
 	vertDim->setValue (horizDim->getValue ());
       else {
 	float h = horizDim->getValue ();
@@ -592,7 +593,7 @@ void TransformationDialog::updateProportionalDimension (float value) {
       }
     }
     else if (sender () == vertDim) {
-      if (percent->isChecked ()) 
+      if (percent->isChecked ())
 	horizDim->setValue (vertDim->getValue ());
       else {
 	float v = vertDim->getValue ();
