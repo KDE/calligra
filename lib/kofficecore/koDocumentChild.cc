@@ -278,19 +278,22 @@ bool KoDocumentChild::createUnavailDocument( KoStore* store, bool doOpenURL )
 
 QDomElement KoDocumentChild::save( QDomDocument& doc, bool uppercase )
 {
-    assert( document() );
-    QDomElement e = doc.createElement( ( uppercase ? "OBJECT" : "object" ) );
-    e.setAttribute( "url", document()->url().url() );
-    kdDebug() << "KoDocumentChild::save url=" << document()->url().url() << endl;
-    e.setAttribute( "mime", document()->nativeFormatMimeType() );
-    kdDebug() << "KoDocumentChild::save mime=" << document()->nativeFormatMimeType() << endl;
-    QDomElement rect = doc.createElement( ( uppercase ? "RECT" : "rect" ) );
-    rect.setAttribute( "x", geometry().left() );
-    rect.setAttribute( "y", geometry().top() );
-    rect.setAttribute( "w", geometry().width() );
-    rect.setAttribute( "h", geometry().height() );
-    e.appendChild(rect);
-    return e;
+    if( document() )
+    {
+        QDomElement e = doc.createElement( ( uppercase ? "OBJECT" : "object" ) );
+        e.setAttribute( "url", document()->url().url() );
+        kdDebug() << "KoDocumentChild::save url=" << document()->url().url() << endl;
+        e.setAttribute( "mime", document()->nativeFormatMimeType() );
+        kdDebug() << "KoDocumentChild::save mime=" << document()->nativeFormatMimeType() << endl;
+        QDomElement rect = doc.createElement( ( uppercase ? "RECT" : "rect" ) );
+        rect.setAttribute( "x", geometry().left() );
+        rect.setAttribute( "y", geometry().top() );
+        rect.setAttribute( "w", geometry().width() );
+        rect.setAttribute( "h", geometry().height() );
+        e.appendChild(rect);
+        return e;
+    }
+    return QDomElement();
 }
 
 bool KoDocumentChild::isStoredExtern()
