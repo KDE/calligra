@@ -222,10 +222,10 @@ void KWFrameStyleManager::addGeneralTab()
     tabLayout->setSpacing( KDialog::spacingHint() );
     tabLayout->setMargin( KDialog::marginHint() );
 
-    previewBox = new QGroupBox( i18n( "Preview" ), tab );
-    QGridLayout *previewLayout = new QGridLayout( previewBox );
-//    previewLayout->setSpacing( KDialog::spacingHint() );
-    previewLayout->setMargin( KDialog::marginHint() );
+    previewBox = new QGroupBox( 0, Qt::Vertical, i18n( "Preview" ), tab );
+    previewBox->layout()->setSpacing(KDialog::spacingHint());
+    previewBox->layout()->setMargin(KDialog::marginHint());
+    QGridLayout *previewLayout = new QGridLayout( previewBox->layout() );
 
     preview = new KWFrameStylePreview( previewBox );
     preview->resize(preview->sizeHint());
