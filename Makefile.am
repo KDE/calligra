@@ -1,8 +1,8 @@
 
 SUBDIRS = lib kspread kimage kpresenter kchart killustrator kformula kword po 
 
-acinclude.m4: acinclude.m4.in libtool.m4.in
-	cat acinclude.m4.in libtool.m4.in   > acinclude.m4 
+acinclude.m4: admin/acinclude.m4.in admin/libtool.m4.in
+	cat admin/acinclude.m4.in admin/libtool.m4.in   > acinclude.m4 
 
 messages:
 	rm -rf po.backup
