@@ -4476,7 +4476,7 @@ void KWView::slotFrameSetEditChanged()
     actionFormatFont->setEnabled( rw );
     actionFormatFontSize->setEnabled( rw );
     actionFormatFontFamily->setEnabled( rw );
-    actionFormatStyle->setEnabled( rw );
+
     actionFormatStyleMenu->setEnabled( rw );
     actionFormatBold->setEnabled( rw );
     actionFormatItalic->setEnabled( rw );
@@ -4579,8 +4579,6 @@ void KWView::frameSelectedChanged()
         actionRaiseFrame->setEnabled( false );
         actionSendBackward->setEnabled( false );
         actionBringToFront->setEnabled( false );
-        actionFormatBullet->setEnabled( false );
-        actionFormatNumber->setEnabled( false );
 
     }
     bool frameDifferentOfPart=false;
