@@ -284,12 +284,9 @@ void KFormulaDocument::addB2()
 
 void KFormulaDocument::addB0()
 {   
-    int nextold=-1; 
-    int Id,cur;
-    cur=getCurrent();
-    Id=cur;
-    nextold=Blocks[cur]->getnext();
-    Id=addBlock(-1,-1,nextold,cur,"");
+    int cur=getCurrent();
+    int nextold=Blocks[cur]->getnext();
+    int Id=addBlock(-1,-1,nextold,cur,"");
     Blocks[cur]->setnext(Id); 
     
     setCurrent(Id);	
