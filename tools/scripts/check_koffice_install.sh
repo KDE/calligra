@@ -52,7 +52,7 @@ if [ $found = 0 ]; then
 fi
 
 if [ $found = 0 ]; then
-  echo '***** Native mimetype not found !'
+  echo "***** No $instance.desktop with X-KDE-NativeMimetype in it was found! Installation problem."
   echo $applnks
 fi
 
