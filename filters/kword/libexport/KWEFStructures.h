@@ -109,39 +109,6 @@ class TextFormatting
 };
 
 
-class ParaData;
-
-class TableCell
-{
-   public:
-      TableCell (): col( 0 ), row( 0 ), paraList( 0 ) {}
-
-      TableCell ( int                   c,
-                  int                   r,
-                  QValueList<ParaData> *p  ) : col (c), row (r), paraList (p) {}
-
-      ~TableCell ();
-
-      int                   col;
-      int                   row;
-      QValueList<ParaData> *paraList;
-};
-
-
-class Table
-{
-   public:
-      Table () : cols (0) {}
-
-      void addCell ( int                   c,
-                     int                   r,
-                     QValueList<ParaData> &p  );
-
-      int                   cols;
-      QValueList<TableCell> cellList;
-};
-
-
 class Picture
 {
     public:
@@ -185,6 +152,43 @@ public:
     int    bkStyle;
     double bleftpt, brightpt, btoppt, bbottompt;
 };
+
+
+class ParaData;
+
+class TableCell
+{
+   public:
+      TableCell (): col( 0 ), row( 0 ), paraList( 0 ) {}
+
+      TableCell ( int                   c,
+                  int                   r,
+                  QValueList<ParaData> *p,
+                  FrameData &frameData  ) : col (c), row (r), paraList (p), frame (frameData) {}
+
+      ~TableCell ();
+
+      int                   col;
+      int                   row;
+      QValueList<ParaData> *paraList;
+      FrameData   frame;
+};
+
+
+class Table
+{
+   public:
+      Table () : cols (0) {}
+
+      void addCell ( int                   c,
+                     int                   r,
+                     QValueList<ParaData> &p,
+                     FrameData &frameData  );
+
+      int                   cols;
+      QValueList<TableCell> cellList;
+};
+
 
 //This is basically FRAMESET tag
 class FrameAnchor

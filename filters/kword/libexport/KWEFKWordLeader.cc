@@ -380,7 +380,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                                           << TagProcessing ( "PARAGRAPH", ProcessParagraphTag, &cellParaList );
                         ProcessSubtags (myNode, tagProcessingList, leader);
 
-                        frameAnchor->table.addCell (col, row, cellParaList);
+                        frameAnchor->table.addCell (col, row, cellParaList, frameAnchor->frame);
                     }
                     else
                     {
