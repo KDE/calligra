@@ -1,0 +1,316 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>KPTTaskAppointmentsView</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>KPTTaskAppointmentsView</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>715</width>
+            <height>900</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>KPTTaskAppointmentsView</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLayoutWidget" row="0" column="0">
+            <property name="name">
+                <cstring>layout3</cstring>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="KLineEdit" row="2" column="3">
+                    <property name="name">
+                        <cstring>m_costDeviation</cstring>
+                    </property>
+                </widget>
+                <widget class="KLineEdit" row="2" column="1">
+                    <property name="name">
+                        <cstring>m_costToDate</cstring>
+                    </property>
+                </widget>
+                <widget class="KLineEdit" row="3" column="3">
+                    <property name="name">
+                        <cstring>m_workDeviation</cstring>
+                    </property>
+                </widget>
+                <widget class="QTabWidget" row="4" column="0" rowspan="1" colspan="8">
+                    <property name="name">
+                        <cstring>tabWidget1</cstring>
+                    </property>
+                    <widget class="QWidget">
+                        <property name="name">
+                            <cstring>tab</cstring>
+                        </property>
+                        <attribute name="title">
+                            <string>&amp;Appointments</string>
+                        </attribute>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="KListView" row="0" column="0">
+                                <column>
+                                    <property name="text">
+                                        <string>Resource</string>
+                                    </property>
+                                    <property name="clickable">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="resizable">
+                                        <bool>true</bool>
+                                    </property>
+                                </column>
+                                <column>
+                                    <property name="text">
+                                        <string>Type</string>
+                                    </property>
+                                    <property name="clickable">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="resizable">
+                                        <bool>true</bool>
+                                    </property>
+                                </column>
+                                <column>
+                                    <property name="text">
+                                        <string>Start date</string>
+                                    </property>
+                                    <property name="clickable">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="resizable">
+                                        <bool>true</bool>
+                                    </property>
+                                </column>
+                                <column>
+                                    <property name="text">
+                                        <string>Duration</string>
+                                    </property>
+                                    <property name="clickable">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="resizable">
+                                        <bool>true</bool>
+                                    </property>
+                                </column>
+                                <column>
+                                    <property name="text">
+                                        <string>Normal rate</string>
+                                    </property>
+                                    <property name="clickable">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="resizable">
+                                        <bool>true</bool>
+                                    </property>
+                                </column>
+                                <column>
+                                    <property name="text">
+                                        <string>Overtime rate</string>
+                                    </property>
+                                    <property name="clickable">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="resizable">
+                                        <bool>true</bool>
+                                    </property>
+                                </column>
+                                <column>
+                                    <property name="text">
+                                        <string>Fixed cost</string>
+                                    </property>
+                                    <property name="clickable">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="resizable">
+                                        <bool>true</bool>
+                                    </property>
+                                </column>
+                                <property name="name">
+                                    <cstring>m_appList</cstring>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                </widget>
+                <widget class="KLineEdit" row="0" column="5" rowspan="1" colspan="3">
+                    <property name="name">
+                        <cstring>m_responsible</cstring>
+                    </property>
+                </widget>
+                <widget class="KLineEdit" row="3" column="1">
+                    <property name="name">
+                        <cstring>m_workToDate</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Task name</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>kLineEdit1</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="3" column="4">
+                    <property name="name">
+                        <cstring>textLabel8</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Total planned work</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>kLineEdit8</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="3" column="6">
+                    <property name="name">
+                        <cstring>textLabel9</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Completion</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>kIntSpinBox9</cstring>
+                    </property>
+                </widget>
+                <widget class="KIntSpinBox" row="3" column="7">
+                    <property name="name">
+                        <cstring>m_completion</cstring>
+                    </property>
+                    <property name="suffix">
+                        <string>%</string>
+                    </property>
+                    <property name="maxValue">
+                        <number>100</number>
+                    </property>
+                </widget>
+                <widget class="KLineEdit" row="3" column="5">
+                    <property name="name">
+                        <cstring>m_totalWork</cstring>
+                    </property>
+                </widget>
+                <widget class="KLineEdit" row="0" column="1" rowspan="1" colspan="3">
+                    <property name="name">
+                        <cstring>m_taskName</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="2">
+                    <property name="name">
+                        <cstring>textLabel4</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Deviation</string>
+                    </property>
+                    <property name="indent">
+                        <number>-1</number>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>kLineEdit4</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="4">
+                    <property name="name">
+                        <cstring>textLabel5</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Total planned cost</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>kLineEdit5</cstring>
+                    </property>
+                </widget>
+                <widget class="KLineEdit" row="2" column="5">
+                    <property name="name">
+                        <cstring>m_totalCost</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="4">
+                    <property name="name">
+                        <cstring>textLabel2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Responsible</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>kLineEdit2</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="3" column="2">
+                    <property name="name">
+                        <cstring>textLabel7</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Deviation</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>kLineEdit7</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="3" column="0">
+                    <property name="name">
+                        <cstring>textLabel6</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Work to date</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>kLineEdit6</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>textLabel3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Cost to date</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>kLineEdit3</cstring>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+    </grid>
+</widget>
+<tabstops>
+    <tabstop>m_taskName</tabstop>
+    <tabstop>m_responsible</tabstop>
+    <tabstop>m_costToDate</tabstop>
+    <tabstop>m_costDeviation</tabstop>
+    <tabstop>m_totalCost</tabstop>
+    <tabstop>m_workToDate</tabstop>
+    <tabstop>m_workDeviation</tabstop>
+    <tabstop>m_totalWork</tabstop>
+    <tabstop>tabWidget1</tabstop>
+    <tabstop>m_completion</tabstop>
+</tabstops>
+<includes>
+    <include location="local" impldecl="in implementation">kptproject.h</include>
+    <include location="local" impldecl="in implementation">kpttask.h</include>
+    <include location="local" impldecl="in implementation">kglobal.h</include>
+    <include location="local" impldecl="in implementation">kpttaskappointmentsview.ui.h</include>
+</includes>
+<forwards>
+    <forward>class KPTTask;</forward>
+</forwards>
+<slots>
+    <slot>clear()</slot>
+    <slot>draw( KPTTask * task )</slot>
+</slots>
+<functions>
+    <function access="private" specifier="non virtual">init()</function>
+</functions>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
