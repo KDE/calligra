@@ -37,6 +37,7 @@
 #include <qradiobutton.h>
 #include <qvalidator.h>
 #include <qspinbox.h>
+#include <qtl.h>
 
 #include <klocale.h>
 
@@ -230,8 +231,8 @@ KoPageLayout KoPageLayoutDia::standardLayout()
     _layout.ptRight = MM_TO_POINT( 20.0 );
     _layout.ptTop = MM_TO_POINT( 20.0 );
     _layout.ptBottom = MM_TO_POINT( 20.0 );
-    _layout.inchWidth = PG_A4_WIDTH_I;
-    _layout.inchHeight = PG_A4_HEIGHT_I;
+    _layout.inchWidth = MM_TO_INCH( PG_A4_WIDTH );
+    _layout.inchHeight = MM_TO_INCH( PG_A4_HEIGHT );
     _layout.inchLeft = MM_TO_INCH( 20.0 );
     _layout.inchRight = MM_TO_INCH( 20.0 );
     _layout.inchTop = MM_TO_INCH( 20.0 );
@@ -369,15 +370,7 @@ void KoPageLayoutDia::setupTab1()
     // combo format
     cpgFormat = new QComboBox( false, formatFrame, "cpgFormat" );
     cpgFormat->setAutoResize( false );
-    cpgFormat->insertItem( i18n( "DIN A3" ) );
-    cpgFormat->insertItem( i18n( "DIN A4" ) );
-    cpgFormat->insertItem( i18n( "DIN A5" ) );
-    cpgFormat->insertItem( i18n( "US Letter" ) );
-    cpgFormat->insertItem( i18n( "US Legal" ) );
-    cpgFormat->insertItem( i18n( "Screen" ) );
-    cpgFormat->insertItem( i18n( "Custom" ) );
-    cpgFormat->insertItem( i18n( "DIN B5" ) );
-    cpgFormat->insertItem( i18n( "US Executive" ) );
+    cpgFormat->insertStringList( KoPageFormat::allFormats() );
     formatGrid->addWidget( cpgFormat, 1, 0 );
     connect( cpgFormat, SIGNAL( activated( int ) ), this, SLOT( formatChanged( int ) ) );
 
@@ -585,7 +578,7 @@ void KoPageLayoutDia::setValuesTab1()
 
 void KoPageLayoutDia::setValuesTab1Helper() {
 
-        QString tmp1, tmp2, tmp3, tmp4, tmp5, tmp6;
+    QString tmp1, tmp2, tmp3, tmp4, tmp5, tmp6;
 
     switch ( layout.unit ) {
         case PG_MM: {
@@ -934,79 +927,26 @@ void KoPageLayoutDia::formatChanged( int _format )
 {
     if ( ( KoFormat )_format != layout.format ) {
         bool enable = true;
-        double w = 0, h = 0, dtmp = 0;
-        double wi = 0, hi = 0, dtmpi = 0;
 
         layout.format = ( KoFormat )_format;
         if ( ( KoFormat )_format != PG_CUSTOM ) enable = false;
         epgWidth->setEnabled( enable );
         epgHeight->setEnabled( enable );
 
-        switch ( layout.format ) {
-        case PG_DIN_A4: case PG_CUSTOM: {
-            w = PG_A4_WIDTH;
-            h = PG_A4_HEIGHT;
-            wi = PG_A4_WIDTH_I;
-            hi = PG_A4_HEIGHT_I;
-        } break;
-        case PG_DIN_A3: {
-            w = PG_A3_WIDTH;
-            h = PG_A3_HEIGHT;
-            wi = PG_A3_WIDTH_I;
-            hi = PG_A3_HEIGHT_I;
-        } break;
-        case PG_DIN_A5: {
-            w = PG_A5_WIDTH;
-            h = PG_A5_HEIGHT;
-            wi = PG_A5_WIDTH_I;
-            hi = PG_A5_HEIGHT_I;
-        } break;
-        case PG_US_LETTER: {
-            w = PG_US_LETTER_WIDTH;
-            h = PG_US_LETTER_HEIGHT;
-            wi = PG_US_LETTER_WIDTH_I;
-            hi = PG_US_LETTER_HEIGHT_I;
-        } break;
-        case PG_US_LEGAL: {
-            w = PG_US_LEGAL_WIDTH;
-            h = PG_US_LEGAL_HEIGHT;
-            wi = PG_US_LEGAL_WIDTH_I;
-            hi = PG_US_LEGAL_HEIGHT_I;
-        } break;
-        case PG_SCREEN: {
-            w = PG_SCREEN_WIDTH;
-            h = PG_SCREEN_HEIGHT;
-            wi = PG_SCREEN_WIDTH_I;
-            hi = PG_SCREEN_HEIGHT_I;
-        } break;
-        case PG_DIN_B5: {
-            w = PG_B5_WIDTH;
-            h = PG_B5_HEIGHT;
-            wi = PG_B5_WIDTH_I;
-            hi = PG_B5_HEIGHT_I;
-        } break;
-        case PG_US_EXECUTIVE: {
-            w = PG_US_EXECUTIVE_WIDTH;
-            h = PG_US_EXECUTIVE_HEIGHT;
-            wi = PG_US_EXECUTIVE_WIDTH_I;
-            hi = PG_US_EXECUTIVE_HEIGHT_I;
-        } break;
-        }
-        if ( layout.orientation == PG_LANDSCAPE ) {
-            dtmp = w;
-            w = h;
-            h = dtmp;
-            dtmpi = wi;
-            wi = hi;
-            hi = dtmpi;
+        double w = layout.mmWidth;
+        double h = layout.mmHeight;
+        if ( layout.format != PG_CUSTOM )
+        {
+            w = KoPageFormat::width( layout.format, layout.orientation );
+            h = KoPageFormat::height( layout.format, layout.orientation );
         }
 
         layout.mmWidth = w;
         layout.mmHeight = h;
         layout.ptWidth = MM_TO_POINT( w );
         layout.ptHeight = MM_TO_POINT( h );
-        layout.inchWidth = wi;
-        layout.inchHeight = hi;
+        layout.inchWidth = MM_TO_INCH( w );
+        layout.inchHeight = MM_TO_INCH( h );
 
         QString tmp1, tmp2;
         switch ( layout.unit ) {
@@ -1038,7 +978,6 @@ void KoPageLayoutDia::orientationChanged( int _orientation )
     // is very brittle and I didn't want to break anything else by fixing that
     // preview bug (#10775). I hope you don't mind >;)  (Werner)
     if ( ( KoOrientation )_orientation != layout.orientation ) {
-        double tmp;
 
         switch ( layout.unit ) {
             case PG_MM:
@@ -1103,16 +1042,11 @@ void KoPageLayoutDia::orientationChanged( int _orientation )
                 break;
         }
 
-        tmp = layout.mmWidth;
-        layout.mmWidth = layout.mmHeight;
-        layout.mmHeight = tmp;
-        tmp = layout.ptWidth;
-        layout.ptWidth = layout.ptHeight;
-        layout.ptHeight = tmp;
-        tmp = layout.inchWidth;
-        layout.inchWidth = layout.inchHeight;
-        layout.inchHeight = tmp;
+        qSwap( layout.mmWidth, layout.mmHeight );
+        qSwap( layout.ptWidth, layout.ptHeight );
+        qSwap( layout.inchWidth, layout.inchHeight );
 
+        double tmp;
         if ( ( KoOrientation )_orientation == PG_LANDSCAPE ) {
             tmp = layout.mmLeft;
             layout.mmLeft = layout.mmBottom;

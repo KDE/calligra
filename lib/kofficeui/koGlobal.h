@@ -20,7 +20,10 @@
 #ifndef koGlobal_h
 #define koGlobal_h
 
-// paper formats ( mm )
+#include <qstringlist.h>
+
+// paper formats ( mm ) - public for compat reasons, but DO NOT USE in new programs !
+// See KoPageFormat's methods instead.
 #define PG_A3_WIDTH		297.0
 #define PG_A3_HEIGHT		420.0
 #define PG_A4_WIDTH		210.0
@@ -35,29 +38,11 @@
 #define PG_US_LEGAL_HEIGHT	356.0
 #define PG_US_EXECUTIVE_WIDTH	191.0
 #define PG_US_EXECUTIVE_HEIGHT	254.0
-#define PG_SCREEN_WIDTH		240.0
-#define PG_SCREEN_HEIGHT	180.0
-
-// paper formats ( inch ) (obsolete?)
-#define PG_A3_WIDTH_I		  11.69
-#define PG_A3_HEIGHT_I		  16.54
-#define PG_A4_WIDTH_I		  8.26
-#define PG_A4_HEIGHT_I		  11.7
-#define PG_A5_WIDTH_I		  5.83
-#define PG_A5_HEIGHT_I		  8.27
-#define PG_B5_WIDTH_I		  7.17
-#define PG_B5_HEIGHT_I		  10.13
-#define PG_US_LETTER_WIDTH_I	  8.5
-#define PG_US_LETTER_HEIGHT_I	  11.0
-#define PG_US_LEGAL_WIDTH_I	  8.5
-#define PG_US_LEGAL_HEIGHT_I	  14.0
-#define PG_US_EXECUTIVE_WIDTH_I	  7.5
-#define PG_US_EXECUTIVE_HEIGHT_I  10.0
-#define PG_SCREEN_WIDTH_I	  9.45
-#define PG_SCREEN_HEIGHT_I	  7.09
 
 /**
  *  Represents the paper format a document shall be printed on.
+ *  For compatibility reasons, and because of screen and custom,
+ *  this enum doesn't map to QPrinter::PageSize but KoPageFormat::printerPageSize does the conversion.
  */
 enum KoFormat {
     PG_DIN_A3 = 0,
@@ -68,7 +53,22 @@ enum KoFormat {
     PG_SCREEN = 5,
     PG_CUSTOM = 6,
     PG_DIN_B5 = 7,
-    PG_US_EXECUTIVE = 8
+    PG_US_EXECUTIVE = 8,
+    PG_DIN_A0 = 9,
+    PG_DIN_A1 = 10,
+    PG_DIN_A2 = 11,
+    PG_DIN_A6 = 12,
+    PG_DIN_A7 = 13,
+    PG_DIN_A8 = 14,
+    PG_DIN_A9 = 15,
+    PG_DIN_B0 = 16,
+    PG_DIN_B1 = 17,
+    PG_DIN_B10 = 18,
+    PG_DIN_B2 = 19,
+    PG_DIN_B3 = 20,
+    PG_DIN_B4 = 21,
+    PG_DIN_B6 = 22
+    // etc.
 };
 
 /**
@@ -77,6 +77,55 @@ enum KoFormat {
 enum KoOrientation {
     PG_PORTRAIT = 0,
     PG_LANDSCAPE = 1
+};
+
+namespace KoPageFormat
+{
+    /**
+     * Convert a KoFormat into a KPrinter::PageSize.
+     * If format is 'screen' it will use A4 landscape.
+     * If format is 'custom' it will use A4 portrait.
+     * (you may want to take care of those cases separately).
+     * Usually passed to KPrinter::setPageSize().
+     */
+    int /*KPrinter::PageSize*/ printerPageSize( KoFormat format );
+    // We return int instead of the enum to avoid including kprinter.h
+
+    /**
+     * Returns the width (in mm) for a given page format and orientation
+     * 'Custom' isn't supported by this function, obviously.
+     */
+    double width( KoFormat format, KoOrientation orientation );
+
+    /**
+     * Returns the height (in mm) for a given page format and orientation
+     * 'Custom' isn't supported by this function, obviously.
+     */
+    double height( KoFormat format, KoOrientation orientation );
+
+    /**
+     * Returns the internal name of the given page format.
+     * Use for saving.
+     */
+    QString formatString( KoFormat format );
+
+    /**
+     * Convert a format string (internal name) to a page format value.
+     * Use for loading.
+     */
+    KoFormat formatFromString( const QString & string );
+
+    /**
+     * Returns the translated name of the given page format.
+     * Use for showing the user.
+     */
+    QString name( KoFormat format );
+
+    /**
+     * Lists the translated names of all the available formats
+     */
+    QStringList allFormats();
+
 };
 
 /**

@@ -11,7 +11,7 @@ SUBDIRS = . pics
 
 lib_LTLIBRARIES = libkofficeui.la
 
-libkofficeui_la_SOURCES = koFind.cc koReplace.cc \
+libkofficeui_la_SOURCES = koGlobal.cc koFind.cc koReplace.cc \
         koPageLayoutDia.cc \
 	koPartSelectDia.cc \
 	koRuler.cc koTemplateChooseDia.cc koTabChooser.cc \
