@@ -38,6 +38,7 @@
 #include <kurlcombobox.h>
 #include <kiconview.h>
 #include <kmessagebox.h>
+#include <klineedit.h>
 
 #include <qobjectlist.h>
 #include <qlabel.h>

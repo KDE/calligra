@@ -58,7 +58,8 @@ public:
 	enum ConnType { FileBased=1, ServerBased=2 };
     
 	/*! Constructs a KexiConnSelector which contain \a conn_set as connection set. */
-	KexiConnSelectorWidget( const KexiDBConnectionSet& conn_set, QWidget* parent = 0, const char* name = 0 );
+	KexiConnSelectorWidget( const KexiDBConnectionSet& conn_set, QWidget* parent = 0, 
+		const char* name = 0 );
     ~KexiConnSelectorWidget();
 	
 	/*! After accepting this dialog this method returns wherher user selected

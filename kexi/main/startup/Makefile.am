@@ -8,8 +8,10 @@ libkeximainstartup_la_SOURCES = KexiConnSelectorBase.ui KexiProjectSelectorBase.
 	KexiServerDBNamePage.ui \
 	KexiConnSelector.cpp KexiProjectSelector.cpp \
 	KexiStartupDialog.cpp \
-	KexiXMLStorage.cpp KexiStartupFileDialog.cpp KexiNewProjectWizard.cpp \
+	KexiStartupFileDialog.cpp KexiNewProjectWizard.cpp \
 	KexiStartup.cpp KexiStartup_p.cpp
+
+#KexiXMLStorage.cpp 
 
 noinst_HEADERS = KexiStartup_p.h
 
