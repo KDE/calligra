@@ -77,7 +77,14 @@ public:
 
   virtual void setReadWrite( bool readwrite = true );
 
-  static QCString nativeFormatMimeType( KInstance *instance = 0L );
+  /**
+   * Used by KoApplication, when no document exists yet
+   */ 
+  static QCString readNativeFormatMimeType( KInstance *instance = 0L );
+  /**
+   * To be preferred when a document exists (a lot faster)
+   */
+  QCString nativeFormatMimeType();
 
   /**
    *  Create a new view for the document.
@@ -431,6 +438,7 @@ protected:
 private:
 
     KoDocumentPrivate *d;
+    QCString m_nativeFormatMimeType;
     KURL m_strURL;
     bool m_bEmpty;
 };

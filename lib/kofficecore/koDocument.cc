@@ -508,7 +508,7 @@ bool KoDocument::openFile()
   QApplication::setOverrideCursor( waitCursor );
 
   // Launch a filter if we need one for this url ?
-  QString importedFile = KoFilterManager::self()->import( m_file, nativeFormatMimeType( instance() ) );
+  QString importedFile = KoFilterManager::self()->import( m_file, nativeFormatMimeType() );
 
   QApplication::restoreOverrideCursor();
 
@@ -732,7 +732,16 @@ bool KoDocument::hasToWriteMultipart()
     return FALSE;
 }
 
-QCString KoDocument::nativeFormatMimeType( KInstance *instance )
+QCString KoDocument::nativeFormatMimeType()
+{
+  if ( m_nativeFormatMimeType.isEmpty() )
+  {
+    m_nativeFormatMimeType = readNativeFormatMimeType( instance() );
+  }
+  return m_nativeFormatMimeType;
+}
+
+QCString KoDocument::readNativeFormatMimeType( KInstance *instance )
 {
   QString instname = instance ? instance->instanceName() : kapp->instanceName();
 

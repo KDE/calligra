@@ -55,7 +55,7 @@ KoApplication::KoApplication()
 
 void KoApplication::start()
 {
-    QCString nativeFormat = KoDocument::nativeFormatMimeType();
+    QCString nativeFormat = KoDocument::readNativeFormatMimeType();
     if ( nativeFormat.isEmpty() )
     {
         kdError() << "Couldn't find the native MimeType in " << kapp->name() << "'s desktop file. Check your installation !" << endl;
