@@ -1,5 +1,11 @@
 2005-03-17  Inge Wallin  <inge@lysator.liu.se>
 
+	Fix the uglyness of the font config dialog.
+	* kchartFontConfigPage.cc (KChartFontConfigPage): Add some stretch
+	in suitable places.
+
+	----------------------------------------------------------------
+
 	Separate the toolbar for chart types from the actions.
 	* kchart.rc (Actions): Renamed from Chart
 	(Types): New toolbar.

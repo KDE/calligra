@@ -106,19 +106,21 @@ Item								   Prio Status
     - Color		Ugly					     S1 --
     - Combo		When is this used?			     S1 --
     - Data		OK					     S1 done
-    - Font		Ugly					     S1 --
+    - Font		Ugly -> OK				     S1 done
     - Geometry		REMOVE					     S1 done
     - HeaderFooter	Somewhat ugly?				     S1 --
     - Legend		OK					     S1 done
     - Line3d		UGLY!!  FIX!				     S1 --
     - Parameter3d	OK					     S1 done
-    - Parameter (Axes)	Ugly->OK				     S1 done
+    - Parameter (Axes)	Ugly -> OK				     S1 done
     - ParameterPie	Ugly					     S1 --
     - ParameterPolar	Ugly					     S1 --
     - Pie		Remove?					     S1 --
     - SubtypeChartPage						     S1 --
   + Check handling of defaults.					      1 DONE
   + Integrate the Colors and Font pages into Axes?		      2 ----
+    - Maybe create a little combination widget that can change        2 --
+      both font and color for a text item?
 
 * Wizard
   + New data page?						     S1 ----

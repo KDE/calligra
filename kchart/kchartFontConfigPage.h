@@ -48,17 +48,23 @@ public:
 
 public slots:
     void changeLabelFont();
+
 private:
-    KChartParams* _params;
-    QLineEdit *font;
-    QListBox *list;
-    QPushButton *fontButton;
+    KChartParams  *m_params;
+
+    // Widgets
+    QLineEdit     *m_font;
+    QListBox      *m_list;
+    QPushButton   *m_fontButton;
+
+    // Fonts for different things.
     QFont xTitle;
     QFont yTitle;
-    QFont label;
     QFont yAxis;
     QFont xAxis;
-    QFont legend;
+    QFont label;
+
+    // Old stuff.  Remove?
     QButton::ToggleState xTitleIsRelative;
     QButton::ToggleState yTitleIsRelative;
     QButton::ToggleState labelIsRelative;
