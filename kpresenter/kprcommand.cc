@@ -1498,6 +1498,48 @@ void PgConfCmd::unexecute()
 }
 
 /******************************************************************/
+/* Class: TransEffectCmd                                               */
+/******************************************************************/
+
+/*================================================================*/
+TransEffectCmd::TransEffectCmd( const QString &_name, PageEffect _pageEffect, PresSpeed _presSpeed, 
+                      bool _soundEffect, const QString& _soundFileName, 
+                      PageEffect _oldPageEffect, PresSpeed _oldPresSpeed, 
+                      bool _oldSoundEffect, const QString& _oldSoundFileName, 
+                      KPresenterDoc *_doc, KPrPage *_page )
+    : KNamedCommand( _name )
+{
+    pageEffect = _pageEffect;
+    presSpeed = _presSpeed;
+    soundEffect = _soundEffect;
+    soundFileName = _soundFileName;
+    oldPageEffect = _oldPageEffect;
+    oldPresSpeed = _oldPresSpeed;
+    oldSoundEffect = _oldSoundEffect;
+    oldSoundFileName = _oldSoundFileName;
+    doc = _doc;
+    m_page=_page;
+}
+
+/*================================================================*/
+void TransEffectCmd::execute()
+{
+    m_page->setPageEffect( pageEffect );
+    doc->setPresSpeed( presSpeed );
+    m_page->setPageSoundEffect( soundEffect );
+    m_page->setPageSoundFileName( soundFileName );
+}
+
+/*================================================================*/
+void TransEffectCmd::unexecute()
+{
+    m_page->setPageEffect( oldPageEffect );
+    doc->setPresSpeed( oldPresSpeed );
+    m_page->setPageSoundEffect( oldSoundEffect );
+    m_page->setPageSoundFileName( oldSoundFileName );
+}
+
+/******************************************************************/
 /* Class: PgLayoutCmd                                             */
 /******************************************************************/
 

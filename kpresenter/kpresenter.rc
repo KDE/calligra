@@ -154,6 +154,7 @@
  <Menu name="Screen Presentations"><text>Screen &amp;Presentations</text>
   <Action name="screen_configpages"/>
   <Action name="screen_assigneffect"/>
+  <Action name="screen_transeffect"/>
   <Separator/>
   <Action name="screen_start"/>
   <Action name="screen_viewpage"/>

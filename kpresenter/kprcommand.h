@@ -554,6 +554,32 @@ protected:
 };
 
 /******************************************************************/
+/* Class: TransEffectCmd                                               */
+/******************************************************************/
+
+class TransEffectCmd : public KNamedCommand
+{
+public:
+    TransEffectCmd( const QString &_name, PageEffect _pageEffect, PresSpeed _presSpeed, 
+               bool _soundEffect, const QString& _soundFileName, 
+               PageEffect _oldPageEffect, PresSpeed _oldPresSpeed, 
+               bool _oldSoundEffect, const QString& _oldSoundFileName, 
+               KPresenterDoc *_doc, KPrPage *_page );
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    PageEffect pageEffect, oldPageEffect;
+    PresSpeed presSpeed, oldPresSpeed;
+    bool soundEffect, oldSoundEffect;
+    QString soundFileName, oldSoundFileName;
+    KPrPage *m_page;
+    KPresenterDoc *doc;
+
+};
+
+/******************************************************************/
 /* Class: PgLayoutCmd                                             */
 /******************************************************************/
 

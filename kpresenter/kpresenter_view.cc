@@ -46,6 +46,8 @@
 
 #include <koAutoFormat.h>
 
+#include <transeffectdia.h>
+
 #include <confpiedia.h>
 #include <confrectdia.h>
 #include <confpolygondia.h>
@@ -224,6 +226,7 @@ KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const cha
     afChoose = 0;
     styleDia = 0;
     pgConfDia = 0;
+    transEffectDia = 0;
     rotateDia = 0;
     shadowDia = 0;
     imageEffectDia = 0;
@@ -441,6 +444,7 @@ KPresenterView::~KPresenterView()
     delete m_specialCharDlg;
     delete styleDia;
     delete pgConfDia;
+    delete transEffectDia;
     delete rotateDia;
     delete shadowDia;
     delete rb_pstyle;
@@ -1458,6 +1462,28 @@ void KPresenterView::screenConfigPages()
     pgConfDia = 0;
 }
 
+
+/*========================== screen transEffect ================= */
+void KPresenterView::screenTransEffect()
+{
+    if( transEffectDia ) {
+       delete transEffectDia;
+       transEffectDia = 0;
+    }
+
+    transEffectDia = new KPTransEffectDia( this, "TransEffect",
+                                           kPresenterDoc(), this );
+
+    transEffectDia->setCaption( i18n("Transition Effect") );
+
+    QObject::connect( transEffectDia, SIGNAL( transEffectDiaOk() ), this, SLOT( transEffectOk() ) );
+    transEffectDia->exec();
+
+    QObject::disconnect( transEffectDia, SIGNAL( transEffectDiaOk() ), this, SLOT( transEffectOk() ) );
+    delete transEffectDia;
+    transEffectDia = 0;
+}
+
 /*========================== screen presStructView  =============*/
 void KPresenterView::screenPresStructView()
 {
@@ -1482,8 +1508,8 @@ void KPresenterView::screenAssignEffect()
 
     QPtrList<KPObject> objs;
     if ( m_canvas->canAssignEffect( objs ) ) {
-        EffectDia *effectDia = new EffectDia( this, "Effect", objs, this );
-	effectDia->setCaption( i18n( "Assign Effects" ) );
+        EffectDia *effectDia = new EffectDia( this, "Object Effect", objs, this );
+	effectDia->setCaption( i18n( "Object Effect" ) );
 	if(effectDia->exec())
             effectOk();
         delete effectDia;
@@ -3017,10 +3043,16 @@ void KPresenterView::setupActions()
                                               this, SLOT( screenPresStructView() ),
                                               actionCollection(), "screen_presstruct" );
 
-    actionScreenAssignEffect = new KAction( i18n( "&Assign Effect..." ),
+    actionScreenAssignEffect = new KAction( i18n( "&Object Effect..." ),
                                             "effect", 0,
                                             this, SLOT( screenAssignEffect() ),
                                             actionCollection(), "screen_assigneffect");
+
+    actionScreenTransEffect = new KAction( i18n( "&Transition Effect..." ),
+                                           "effect", 0,
+                                           this, SLOT( screenTransEffect() ),
+                                           actionCollection(), "screen_transeffect");
+
 
     actionScreenStart = new KAction( i18n( "&Start" ),
                                      "1rightarrow", 0,
@@ -3863,6 +3895,22 @@ void KPresenterView::pgConfOk()
 					  kPresenterDoc(), page );
     pgConfCmd->execute();
     kPresenterDoc()->addCommand( pgConfCmd );
+}
+
+/*=================== transition effect ok ======================*/
+void KPresenterView::transEffectOk()
+{
+kdDebug() << "======= KPresenterView::transEffectOK\n";
+
+    KPrPage *page=m_canvas->activePage();
+    TransEffectCmd *transEffectCmd = new TransEffectCmd( i18n( "Transition Effect" ),
+                                          transEffectDia->getPageEffect(), transEffectDia->getPresSpeed(),
+                                          transEffectDia->getSoundEffect(), transEffectDia->getSoundFileName(),
+                                          page->getPageEffect(), kPresenterDoc()->getPresSpeed(),
+                                          page->getPageSoundEffect(), page->getPageSoundFileName(),
+                                          kPresenterDoc(), page );
+    transEffectCmd->execute();
+    kPresenterDoc()->addCommand( transEffectCmd );
 }
 
 /*=================== effect dialog ok ===========================*/

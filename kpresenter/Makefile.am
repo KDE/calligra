@@ -11,6 +11,7 @@ libkpresenterpart_la_SOURCES = koPointArray.cc kprcanvas.cc kprpage.cc searchdia
 	pgconfdia.cc effectdia.cc kprcommand.cc \
 	kpresenter_utils.cc  \
 	presstructview.cc \
+	transeffectdia.cc \
 	confpiedia.cc confrectdia.cc \
 	kpobject.cc kplineobject.cc kprectobject.cc kpellipseobject.cc \
 	kpautoformobject.cc kptextobject.cc \

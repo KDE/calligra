@@ -41,6 +41,7 @@ class QScrollBar;
 class AFChoose;
 class StyleDia;
 class PgConfDia;
+class KPTransEffectDia;
 class RotationDialogImpl;
 class ShadowDialogImpl;
 class ImageEffectDia;
@@ -259,6 +260,7 @@ public slots:
     void screenConfigPages();
     void screenPresStructView();
     void screenAssignEffect();
+    void screenTransEffect();
     void screenStart();
     void screenViewPage();
     void screenStop();
@@ -608,6 +610,7 @@ protected slots:
     void slotAfchooseCanceled();
     void styleOk();
     void pgConfOk();
+    void transEffectOk();
     void effectOk();
     void rotateOk();
     void shadowOk();
@@ -763,6 +766,7 @@ private:
     AFChoose *afChoose;
     StyleDia *styleDia;
     PgConfDia *pgConfDia;
+    KPTransEffectDia *transEffectDia;
     RotationDialogImpl *rotateDia;
     ShadowDialogImpl *shadowDia;
     ImageEffectDia *imageEffectDia;
@@ -930,6 +934,7 @@ private:
     KAction *actionScreenConfigPages;
     KAction *actionScreenPresStructView;
     KAction *actionScreenAssignEffect;
+    KAction *actionScreenTransEffect;
     KAction *actionScreenStart;
     KAction *actionScreenViewPage;
     KAction *actionScreenStop;
