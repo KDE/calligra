@@ -282,7 +282,7 @@ void DomNode::closeNode( const char *name )
     str += ">\n";
 
     --documentLevel;
-    for (int i=1; i<documentLevel; i++)
+    for (int i=documentLevel-1; i>0; i--)
     {
         str += ' ';
     }
@@ -303,7 +303,7 @@ void DomNode::closeTag( bool nl )
         {
             str += '\n';
 
-            for (int i=1; i<documentLevel; i++)
+            for (int i=documentLevel-1; i>0; i--)
             {
                 str += ' ';
             }
