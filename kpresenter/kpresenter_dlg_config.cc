@@ -526,6 +526,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage(KPresenterView *_view, QVBox *b
     QString labelName = font->family() + ' ' + QString::number(font->pointSize());
     fontName = new QLabel(labelName, fontContainer);
     fontName->setFont(*font);
+    fontName->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
 
     QPushButton *chooseButton = new QPushButton(i18n("Choose..."), fontContainer);
     connect(chooseButton, SIGNAL(clicked()), this, SLOT(selectNewDefaultFont()));
