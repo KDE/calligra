@@ -19,7 +19,7 @@ New functions added:
  date/time:
    DAYS, WEEKS, MONTHS, YEARS
  financial:
-   DB, SLN, SYD
+   DB, SLN, SYD, EURO
  statistical:
    CHIDIST, FDIST, TDIST, CONFIDENCE, BETADIST, GAMMADIST, 
    PHI, GAUSS, MEDIAN, POISSON, GAMMALN, NORMINV, NORMSINV, 
