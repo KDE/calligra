@@ -110,8 +110,7 @@ KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
     m_bShowRulers = true;
     mParent = parent;
 
-    readConfig();
-    kdDebug()<<"KIlluView after readConfig: "<<time.elapsed()<<endl;
+    //kdDebug()<<"KIlluView after readConfig: "<<time.elapsed()<<endl;
 
     // restore default settings
     PStateManager::instance ();
@@ -129,6 +128,7 @@ KIllustratorView::KIllustratorView (QWidget* parent, const char* name,
     kdDebug()<<"KIlluView after setXMLFile(): "<<time.elapsed()<<endl;
     canvas->docSizeChanged();
     connect (activeDocument(),SIGNAL(pageChanged()),canvas,SLOT(repaint()));
+    readConfig();
 }
 
 KIllustratorView::~KIllustratorView()
@@ -387,9 +387,9 @@ void KIllustratorView::setupCanvas()
     //Layer Panel
     mLayerPanel = new LayerPanel(this);
     mLayerDockBase = mToolDockManager->createToolDock(mLayerPanel, i18n("Layers"));
+    m_showLayers = new KToggleAction( i18n("Layers Panel"), "layers", CTRL+Key_L, actionCollection(), "layers" );
 
-    KToggleAction* showLayers = new KToggleAction( i18n("Layers Panel"), "layers", CTRL+Key_L, actionCollection(), "layers" );
-    connect( showLayers, SIGNAL(toggled(bool)), mLayerDockBase, SLOT(makeVisible(bool)));
+    connect( m_showLayers, SIGNAL(toggled(bool)), mLayerDockBase, SLOT(makeVisible(bool)));
     connect(mLayerDockBase, SIGNAL(visibleChange(bool)), SLOT(slotLayersPanel(bool)));
     slotLayersPanel(false);
 
@@ -441,11 +441,20 @@ void KIllustratorView::setupCanvas()
 }
 
 void KIllustratorView::readConfig()
- {
- }
+{
+   KConfig* config = kapp->config ();
+   config->setGroup("Panels");
+   bool b=config->readBoolEntry("Enabled",true);
+   if (!b)
+      mLayerDockBase->makeVisible(b);
+}
 
 void KIllustratorView::writeConfig()
  {
+   KConfig* config = kapp->config ();
+   config->setGroup("Panels");
+   config->writeEntry("Enabled",m_showLayers->isChecked());
+   config->sync();
  }
 
 void KIllustratorView::showCurrentMode (Tool::ToolID, const QString& msg)
@@ -1268,7 +1277,8 @@ void KIllustratorView::slotSplitLine( bool b )
 void KIllustratorView::slotLayersPanel(bool b)
  {
   mLayerPanel->manageDocument(activeDocument());
-  ((KToggleAction*)actionCollection()->action("layers"))->setChecked(b);
+  m_showLayers->setChecked(b);
+  //((KToggleAction*)actionCollection()->action("layers"))->setChecked(b);
  }
 
 void KIllustratorView::slotLoadPalette () {
@@ -1347,7 +1357,7 @@ QButton* KIllustratorView::newIconButton( const char* file, bool kbutton, QWidge
   if (!parent)
     parent = this;
   QPixmap *pixmap = new QPixmap(BarIcon(file));
-  QButton *pb;
+  QButton *pb(0);
   if (!kbutton)
     pb = new QPushButton(parent);
 //  else

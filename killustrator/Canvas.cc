@@ -822,35 +822,31 @@ void Canvas::snapPositionToGrid (float& x, float& y) {
   }
 }
 
-#include <iostream.h>
+//#include <iostream.h>
 void Canvas::drawGrid (QPainter& p)
 {
-   float h, v;
-   float hd = hGridDistance * zoomFactor;
-   float vd = vGridDistance * zoomFactor;
-
-   while(hd < MIN_GRID_DIST)
-     hd *= 2.0;
-   
-   while(vd < MIN_GRID_DIST)
-     vd *= 2.0;
-
    QPen pen1 (mGridColor, 0);
-
    p.save ();
    p.setPen (pen1);
-   //correct grid, aleXXX
+
+   //the vertical lines
+   float hd = hGridDistance * zoomFactor;
+   while(hd < MIN_GRID_DIST)
+     hd *= 2.0;
    int tmp=m_visibleArea.left()/(int)hd;
    if (m_visibleArea.left()>0) tmp++;
-   h=tmp*int(vd)-m_visibleArea.left();
-
-   //cerr<<"grid x: ";
+   float h=tmp*int(hd)-m_visibleArea.left();
    for (; h < width(); h += hd)
    {
       int hi = qRound (h);
       p.drawLine (hi, 0, hi, height());
-      //cerr<<h<<" ";
    }
+
+   //the horizontal lines
+   //correct grid, aleXXX
+   float vd = vGridDistance * zoomFactor;
+   while(vd < MIN_GRID_DIST)
+     vd *= 2.0;
    //cerr<<endl;
    /* example:   vd = 20
     top = 49
@@ -858,18 +854,20 @@ void Canvas::drawGrid (QPainter& p)
 
     top=-49
     -> v=9 = -40- (-49)  */
-
    tmp=m_visibleArea.top()/(int)vd;
    if (m_visibleArea.top()>0) tmp++;
-   v=tmp*int(vd)-m_visibleArea.top();
+   float v=tmp*int(vd)-m_visibleArea.top();
 
+//   cerr<<"grid y: ";
    for (; v < height() ; v += vd)
    {
       int vi = qRound (v);
       p.drawLine (0, vi, width(), vi);
+//      cerr<<vi<<" ";
    }
 
    p.restore ();
+//   cerr<<"Canvas::drawGrid(): x: "<<hGridDistance<<" hd: "<<hd<<" y: "<<vGridDistance<<" vd: "<<vd<<endl;
 }
 
 void Canvas::readGridProperties ()

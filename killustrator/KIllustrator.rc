@@ -81,9 +81,7 @@
   <Action name="polygonSettings"/>
   <Action name="configure"/>
   <Separator/>
-   <Menu name="panelsettings"><text>&amp;Panels</text>
     <Action name="layers"/>
-   </Menu>
  </Menu>
 </MenuBar>
 <ToolBar fullWidth="false" name="edit"><Text>Edit</Text>

@@ -236,7 +236,7 @@ void GPolygon::draw (QPainter& p, bool withBasePoints, bool outline)
          Painter::drawRect (p, p1.x (), p1.y (),
                             qRound (p2.x () - p1.x ()/* + xcorr*/),
                             qRound (p2.y () - p1.y () /*+ ycorr*/));
-         kdDebug()<<"( "<<p1.x()<<" | "<<p1.y()<<" )    ( "<<p2.x()<<" | "<<p2.y()<<" )"<<endl;
+         //kdDebug()<<"( "<<p1.x()<<" | "<<p1.y()<<" )    ( "<<p2.x()<<" | "<<p2.y()<<" )"<<endl;
       };
    }
 

@@ -36,6 +36,9 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <math.h>  //fabs()
+
+#include <iostream.h>
 
 #define MARKER_WIDTH 11
 #define MARKER_HEIGHT 6
@@ -236,8 +239,9 @@ void Ruler::paintEvent (QPaintEvent *e)
 void Ruler::drawRuler ()
 {
    QPainter p;
-   int start, pos, step;
-   bool s1, s2, s3;
+   int start(0), pos(0);
+   double step(0);
+   bool s1(false), s2(false), s3(false);
 
    if (! buffer)
       return;
@@ -254,18 +258,14 @@ void Ruler::drawRuler ()
       s1 = cvtInchToPt(10.0) * zoom > 3.0;
       s2 = cvtInchToPt(50.0) * zoom > 3.0;
       s3 = cvtInchToPt(100.0) * zoom > 3.0;
-      step = qRound (30.0 / (100.0 * zoom));
-      if(step == 0)
-         step = 1;
+      step = 30.0 / (100.0 * zoom);
       start = (int)(zeroPoint / zoom);
       break;
    case UnitInch:
       s1 = cvtInchToPt(0.1) * zoom > 3.0;
       s2 = cvtInchToPt(0.5) * zoom > 3.0;
       s3 = cvtInchToPt(1.0) * zoom > 3.0;
-      step = qRound (24.0 / (cvtInchToPt(1.0) * zoom));
-      if(step == 0)
-         step = 1;
+      step = 24.0 / (cvtInchToPt(1.0) * zoom);
       start = 10*(int)(cvtPtToInch(zeroPoint) / zoom);
       break;
    case UnitCentimeter:
@@ -273,39 +273,37 @@ void Ruler::drawRuler ()
       s1 = cvtMmToPt(1.0) * zoom > 3.0;
       s2 = cvtMmToPt(5.0) * zoom > 3.0;
       s3 = cvtMmToPt(10.0) * zoom > 3.0;
-      step = qRound (30.0 / (cvtMmToPt(10.0) * zoom));
-      if(step == 0)
-         step = 1;
+      step = 30.0 / (cvtMmToPt(10.0) * zoom);
+      //cerr<<" 30 / "<<cvtMmToPt(10.0)<<" * "<<zoom<<" = "<<step<<endl;
       start = (int)(cvtPtToMm(zeroPoint) / zoom);
       break;
    case UnitPica:
       s1 = cvtPicaToPt(1.0) * zoom > 3.0;
       s2 = cvtPicaToPt(5.0) * zoom > 3.0;
       s3 = cvtPicaToPt(10.0) * zoom > 3.0;
-      step = qRound (30.0 / (cvtPicaToPt(10.0) * zoom));
-      if(step == 0)
-         step = 1;
+      step = 30.0 / (cvtPicaToPt(10.0) * zoom);
       start = (int)(cvtPtToPica(zeroPoint) / zoom);
       break;
    case UnitDidot:
       s1 = cvtDidotToPt(10.0) * zoom > 3.0;
       s2 = cvtDidotToPt(50.0) * zoom > 3.0;
       s3 = cvtDidotToPt(100.0) * zoom > 3.0;
-      step = qRound (30.0 / (cvtDidotToPt(100.0) * zoom));
-      if(step == 0)
-         step = 1;
+      step = 30.0 / (cvtDidotToPt(100.0) * zoom);
       start = (int)(cvtPtToDidot(zeroPoint) / zoom);
       break;
    case UnitCicero:
       s1 = cvtCiceroToPt(1.0) * zoom > 3.0;
       s2 = cvtCiceroToPt(5.0) * zoom > 3.0;
       s3 = cvtCiceroToPt(10.0) * zoom > 3.0;
-      step = qRound (30.0 / (cvtCiceroToPt(10.0) * zoom));
-      if(step == 0)
-         step = 1;
+      step = 30.0 / (cvtCiceroToPt(10.0) * zoom);
       start = (int)(cvtPtToCicero(zeroPoint) / zoom);
       break;
    }
+   if(fabs(step)<0.1)
+      step = 1;
+
+   //workaround, will fix it, aleXXX
+   step=qRound(step);
 
    if (orientation == Horizontal)
    {
@@ -322,13 +320,31 @@ void Ruler::drawRuler ()
                   p.drawLine (pos, RULER_SIZE-7, pos, RULER_SIZE);
                if( s1 && start % 10 == 0 )
                   p.drawLine (pos, RULER_SIZE-5, pos, RULER_SIZE);
-               if( start % (step * 100) == 0 )
+               if( start % qRound(step * 100) == 0 )
                   drawNum (p, pos, 8, start, true);
                start++;
             } while(pos < buffer->width());
             break;
          }
       case UnitMillimeter:
+         {
+            do
+            {
+
+               pos = (int)(cvtMmToPt(start) * zoom - zeroPoint);
+               if( s3 && start % 10 == 0 )
+                  p.drawLine (pos, RULER_SIZE-10, pos, RULER_SIZE);
+               if( s2 && start % 5 == 0 )
+                  p.drawLine (pos, RULER_SIZE-7, pos, RULER_SIZE);
+               if( s1 )
+                  p.drawLine (pos, RULER_SIZE-5, pos, RULER_SIZE);
+               if( start % qRound(step * 10) == 0 )
+                  drawNum (p, pos, 8, start, true);
+               start++;
+            } while(pos < buffer->width());
+            break;
+         }
+      case UnitCentimeter:
          {
             do
             {
@@ -339,28 +355,11 @@ void Ruler::drawRuler ()
                   p.drawLine (pos, RULER_SIZE-7, pos, RULER_SIZE);
                if( s1 )
                   p.drawLine (pos, RULER_SIZE-5, pos, RULER_SIZE);
-               if( start % (step * 10) == 0 )
-                  drawNum (p, pos, 8, start, true);
+               if( start % qRound(step * 10) == 0 )
+                  drawNum (p, pos, 8, start/10, true);
                start++;
             } while(pos < buffer->width());
             break;
-         }
-      case UnitCentimeter:
-      {
-         do
-         {
-            pos = (int)(cvtMmToPt(start) * zoom - zeroPoint);
-            if( s3 && start % 10 == 0 )
-               p.drawLine (pos, RULER_SIZE-10, pos, RULER_SIZE);
-            if( s2 && start % 5 == 0 )
-               p.drawLine (pos, RULER_SIZE-7, pos, RULER_SIZE);
-            if( s1 )
-               p.drawLine (pos, RULER_SIZE-5, pos, RULER_SIZE);
-            if( start % (step * 10) == 0 )
-               drawNum (p, pos, 8, start/10, true);
-            start++;
-         } while(pos < buffer->width());
-         break;
       }
       case UnitDidot:
          {
@@ -373,7 +372,7 @@ void Ruler::drawRuler ()
                   p.drawLine (pos, RULER_SIZE-7, pos, RULER_SIZE);
                if( s1 && start % 10 == 0 )
                   p.drawLine (pos, RULER_SIZE-5, pos, RULER_SIZE);
-               if( start % (step * 100) == 0 )
+               if( start % qRound(step * 100) == 0 )
                   drawNum (p, pos, 8, start, true);
                start++;
             } while(pos < buffer->width());
@@ -390,7 +389,7 @@ void Ruler::drawRuler ()
                   p.drawLine (pos, RULER_SIZE-7, pos, RULER_SIZE);
                if( s1 )
                   p.drawLine (pos, RULER_SIZE-5, pos, RULER_SIZE);
-               if( start % (step * 10) == 0 )
+               if( start % qRound(step * 10) == 0 )
                   drawNum (p, pos, 8, start, true);
                start++;
             } while(pos < buffer->width());
@@ -407,7 +406,7 @@ void Ruler::drawRuler ()
                   p.drawLine (pos, RULER_SIZE-7, pos, RULER_SIZE);
                if( s1 )
                   p.drawLine (pos, RULER_SIZE-5, pos, RULER_SIZE);
-               if( start % (step * 10) == 0 )
+               if( start % qRound(step * 10) == 0 )
                   drawNum (p, pos, 8, start, true);
                start++;
             } while(pos < buffer->width());
@@ -424,7 +423,7 @@ void Ruler::drawRuler ()
                   p.drawLine (pos, RULER_SIZE-7, pos, RULER_SIZE);
                if( s1 )
                   p.drawLine (pos, RULER_SIZE-5, pos, RULER_SIZE);
-               if( start % (step * 10) == 0 )
+               if( start % qRound(step * 10) == 0 )
                   drawNum (p, pos, 8, start/10, true);
                start++;
             } while(pos < buffer->width());
@@ -449,7 +448,7 @@ void Ruler::drawRuler ()
                   p.drawLine (RULER_SIZE-7, pos, RULER_SIZE, pos);
                if( s1 && start % 10 == 0 )
                   p.drawLine (RULER_SIZE-5, pos, RULER_SIZE, pos);
-               if( start % (step * 100) == 0 )
+               if( start % qRound(step * 100) == 0 )
                   drawNum (p, 2, pos, start, false);
                start++;
             } while(pos < buffer->height());
@@ -466,7 +465,7 @@ void Ruler::drawRuler ()
                   p.drawLine (RULER_SIZE-7, pos, RULER_SIZE, pos);
                if( s1 && start % 10 == 0 )
                   p.drawLine (RULER_SIZE-5, pos, RULER_SIZE, pos);
-               if( start % (step * 100) == 0 )
+               if( start % qRound(step * 100) == 0 )
                   drawNum (p, 2, pos, start, false);
                start++;
             } while(pos < buffer->height());
@@ -480,10 +479,13 @@ void Ruler::drawRuler ()
                if( s3 && start % 10 == 0 )
                   p.drawLine (RULER_SIZE-10, pos, RULER_SIZE, pos);
                if( s2 && start % 5 == 0 )
+               {
+                  //cout<<"start: "<<start<<" toPt: "<<cvtMmToPt(start)<<" *  zoom: "<<zoom<<" - zero: "<<zeroPoint<<" = pos: "<<pos<<endl;
                   p.drawLine (RULER_SIZE-7, pos, RULER_SIZE, pos);
+               };
                if( s1 )
                   p.drawLine (RULER_SIZE-5, pos, RULER_SIZE, pos);
-               if( start % (step * 10) == 0 )
+               if( start % qRound(step * 10) == 0 )
                   drawNum (p, 2, pos, start, false);
                start++;
             } while(pos < buffer->height());
@@ -500,7 +502,7 @@ void Ruler::drawRuler ()
                   p.drawLine (RULER_SIZE-7, pos, RULER_SIZE, pos);
                if( s1 )
                   p.drawLine (RULER_SIZE-5, pos, RULER_SIZE, pos);
-               if( start % (step * 10) == 0 )
+               if( start % qRound(step * 10) == 0 )
                   drawNum (p, 2, pos, start/10, false);
                start++;
             } while(pos < buffer->height());
@@ -508,53 +510,60 @@ void Ruler::drawRuler ()
          }
       case UnitCicero:
          {
-        do{
-	  pos = (int)(cvtCiceroToPt(start) * zoom - zeroPoint);
-          if( s3 && start % 10 == 0 )
-	   p.drawLine (RULER_SIZE-10, pos, RULER_SIZE, pos);
-	  if( s2 && start % 5 == 0 )
-	   p.drawLine (RULER_SIZE-7, pos, RULER_SIZE, pos);
-	  if( s1 )
-	   p.drawLine (RULER_SIZE-5, pos, RULER_SIZE, pos);
-	  if( start % (step * 10) == 0 )
-           drawNum (p, 2, pos, start, false);
-	  start++;
-	 }while(pos < buffer->height());
-        break;
+            do
+            {
+               pos = (int)(cvtCiceroToPt(start) * zoom - zeroPoint);
+               if( s3 && start % 10 == 0 )
+                  p.drawLine (RULER_SIZE-10, pos, RULER_SIZE, pos);
+               if( s2 && start % 5 == 0 )
+                  p.drawLine (RULER_SIZE-7, pos, RULER_SIZE, pos);
+               if( s1 )
+                  p.drawLine (RULER_SIZE-5, pos, RULER_SIZE, pos);
+               if( start % qRound(step * 10) == 0 )
+                  drawNum (p, 2, pos, start, false);
+               start++;
+            } while(pos < buffer->height());
+            break;
+         }
+      case UnitPica:
+         {
+            do
+            {
+               pos = (int)(cvtPicaToPt(start) * zoom - zeroPoint);
+               if( s3 && start % 10 == 0 )
+                  p.drawLine (RULER_SIZE-10, pos, RULER_SIZE, pos);
+               if( s2 && start % 5 == 0 )
+                  p.drawLine (RULER_SIZE-7, pos, RULER_SIZE, pos);
+               if( s1 )
+                  p.drawLine (RULER_SIZE-5, pos, RULER_SIZE, pos);
+               if( start % qRound(step * 10) == 0 )
+                  drawNum (p, 2, pos, start, false);
+               start++;
+            } while(pos < buffer->height());
+            break;
+         }
+      case UnitInch:
+         do
+         {
+            pos = (int)(cvtInchToPt(start/10.0) * zoom - zeroPoint);
+            if( s3 && start % 10 == 0 )
+               p.drawLine (RULER_SIZE-10, pos, RULER_SIZE, pos);
+            if( s2 && start % 5 == 0 )
+               p.drawLine (RULER_SIZE-7, pos, RULER_SIZE, pos);
+            if( s1 )
+               p.drawLine (RULER_SIZE-5, pos, RULER_SIZE, pos);
+            if( start % qRound(step * 10) == 0 )
+               drawNum (p, 2, pos, start/10, false);
+            start++;
+         } while(pos < buffer->height ());
+         break;
       }
-    case UnitPica:
-      {
-        do{
-	  pos = (int)(cvtPicaToPt(start) * zoom - zeroPoint);
-	  if( s3 && start % 10 == 0 )
-	   p.drawLine (RULER_SIZE-10, pos, RULER_SIZE, pos);
-	  if( s2 && start % 5 == 0 )
-	   p.drawLine (RULER_SIZE-7, pos, RULER_SIZE, pos);
-	  if( s1 )
-	   p.drawLine (RULER_SIZE-5, pos, RULER_SIZE, pos);
-	  if( start % (step * 10) == 0 )
-           drawNum (p, 2, pos, start, false);
-	  start++;
-         }while(pos < buffer->height());
-        break;
-      }
-    case UnitInch:
-      do {
-	  pos = (int)(cvtInchToPt(start/10.0) * zoom - zeroPoint);
-	  if( s3 && start % 10 == 0 )
-	   p.drawLine (RULER_SIZE-10, pos, RULER_SIZE, pos);
-	  if( s2 && start % 5 == 0 )
-	   p.drawLine (RULER_SIZE-7, pos, RULER_SIZE, pos);
-	  if( s1 )
-	   p.drawLine (RULER_SIZE-5, pos, RULER_SIZE, pos);
-	  if( start % (step * 10) == 0 )
-           drawNum (p, 2, pos, start/10, false);
-	  start++;
-         }while(pos < buffer->height ());
-      break;
-    }
-  }
-  p.end ();
+   }
+   p.end ();
+   //killu draws its rulers 6 (!!!!) times on startup..., aleXXX
+/*   static int blah(0);
+   kdDebug()<<"Ruler::drawing ruler "<<blah<<endl;
+   blah++;*/
 }
 
 void Ruler::resizeEvent (QResizeEvent *e) {

@@ -245,6 +245,7 @@ protected:
     KToggleAction *m_alignToGrid;
     KToggleAction *m_showGrid;
 
+    KToggleAction* m_showLayers;
     KToggleAction *m_alignToHelplines;
     KToggleAction *m_showHelplines;
     KToggleAction* m_selectTool;
