@@ -179,7 +179,7 @@ void GPolyline::writeToPS (ostream& os) {
 }
 
 bool GPolyline::contains (const Coord& p) {
-  float x1, x2, y1, y2, m, n, yp;
+  float x1, x2, y1, y2, m, n, xp, yp;
 
   if (box.contains (p)) {
     QWMatrix mi = tMatrix.invert ();
@@ -201,7 +201,7 @@ bool GPolyline::contains (const Coord& p) {
       }
 
       if (x1 - 3 <= pp.x () && pp.x () <= x2 + 3) {
-        if (x1 == x2) {
+        if (abs (int (x1 - x2)) < 5) {
           if ((y1 <= pp.y () && pp.y () <= y2) ||
               (y2 <= pp.y () && pp.y () <= y1))
           return true;
@@ -210,11 +210,19 @@ bool GPolyline::contains (const Coord& p) {
           // y = m * x + n;
           m = (y2 - y1) / (x2 - x1);
           n = y1 - m * x1;
-          yp = m * (float) pp.x () + n;
 
-          if (yp - 3 <= pp.y () && pp.y () <= yp + 3) 
-            return true;
-        }
+	  if (m > 1) {
+	    xp = ((float) pp.y () + n) / m;
+	    if (xp - 5 <= pp.x () && pp.x () <= xp + 5)
+	      return true;
+	  }
+	  else {
+	    yp = m * (float) pp.x () + n;
+	    
+	    if (yp - 5 <= pp.y () && pp.y () <= yp + 5) 
+	      return true;
+	  }
+	}
       }
     }
   }
