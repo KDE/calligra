@@ -1611,7 +1611,8 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QRect& old_mar
     //
     // Clip away children
     //
-    painter.save();
+    
+    // painter.save();
 
     QRegion rgn = painter.clipRegion();
     if ( rgn.isEmpty() )
@@ -1811,7 +1812,7 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QRect& old_mar
     //
     // Draw the children
     //
-    painter.restore();
+    /* painter.restore();
 
     // Draw children
     it.toFirst();
@@ -1826,7 +1827,8 @@ void KSpreadCanvas::updateSelection( const QRect &_old_sel, const QRect& old_mar
 	    painter.restore();
 	}
     }
-
+    */
+    
     painter.end();
 }
 
