@@ -125,8 +125,10 @@ VShearTool::mouseDrag( )
 void
 VShearTool::mouseDragRelease()
 {
+	// Get center:
+	KoPoint m_center = view()->part()->document().selection()->boundingBox().center();
 	view()->part()->addCommand(
-		new VShearCmd( &view()->part()->document(), last(), m_s1, m_s2 ),
+		new VShearCmd( &view()->part()->document(), m_center, m_s1, m_s2 ),
 		true );
 }
 
