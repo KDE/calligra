@@ -136,6 +136,7 @@ void KivioAddStencilCommand::execute()
     m_layer->insertStencil( m_stencil );
     m_page->doc()->updateView(m_page);
     m_stencil->unselect();
+    m_stencil->searchForConnections(m_page, 4.0); //FIXME: The threshold should probably be zoomed....
     m_page->doc()->slotSelectionChanged();
 }
 

@@ -139,6 +139,7 @@ public:
     // returns which resize handles are valid
     virtual int resizeHandlePositions();
 
+    virtual void disconnectFromTargets();
 };
 
 

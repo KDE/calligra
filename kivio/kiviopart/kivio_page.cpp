@@ -64,6 +64,7 @@
 #include "kivio_point.h"
 #include "kivio_ps_printer.h"
 #include "kivio_stencil.h"
+#include "kivio_1d_stencil.h"
 #include "KIvioPageIface.h"
 #include "kivio_command.h"
 #include "kivioglobal.h"
@@ -635,34 +636,14 @@ void KivioPage::deleteSelectedStencils()
     bool createMacro = false;
     while( pStencil )
     {
-        /*
-         * The following code is commented out because selections can only take
-         * place on the current layer.
-         */
-        // Now iterate through the layers attempting to delete the current stencil.  If
-        // true is returned, that means that the delete was successful and we can stop
-        // looking through layers.
-        /*
-        KivioLayer* pLayer = m_lstLayers.first();
-        while( pLayer )
-        {
-            if( pLayer->removeStencil( pStencil )==true )
-            {
-                break;
-            }
-
-            pLayer = m_lstLayers.next();
-        }
-        */
-/*
-        if( m_pCurLayer->removeStencil( pStencil ) == false )
-        {
-	   kdDebug(43000) << "KivioPage::deleteSelectedStencils() - Failed to locate a selected stencil in the current layer" << endl;
-        }
-*/
         KivioRemoveStencilCommand *cmd =new KivioRemoveStencilCommand(i18n("Remove Stencil"), this,  m_pCurLayer , pStencil );
         createMacro = true;
         macro->addCommand( cmd);
+
+        if(pStencil->type() == kstConnector) {
+            static_cast<Kivio1DStencil*>(pStencil)->disconnectFromTargets();
+        }
+
         pStencil = m_lstSelection.take();
     }
     if ( createMacro )

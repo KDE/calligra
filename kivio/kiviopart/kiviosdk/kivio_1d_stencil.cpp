@@ -948,3 +948,15 @@ bool Kivio1DStencil::connected()
 
   return false;
 }
+
+void Kivio1DStencil::disconnectFromTargets()
+{
+  KivioConnectorPoint *p;
+  p = m_pConnectorPoints->first();
+
+  while( p )
+  {
+    p->disconnect(true);
+    p = m_pConnectorPoints->next();
+  }
+}
