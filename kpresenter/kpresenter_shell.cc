@@ -15,7 +15,6 @@
 #include <qprinter.h>
 #include <qmsgbox.h>
 #include <qtimer.h>
-#include <qfile.h>
 
 #include "kpresenter_shell.h"
 #include "kpresenter_doc.h"
@@ -95,7 +94,7 @@ bool KPresenterShell::requestClose()
                                     i18n( "Yes" ), i18n( "No" ), i18n( "Cancel" ) );
 
     if ( res == 0 )
-        return saveDocument( "", "" );
+        return saveDocument();
 
     if ( res == 1 )
         return true;
@@ -238,40 +237,9 @@ bool KPresenterShell::openDocument( const char *_url, const char *_format )
 }
 
 /*================================================================*/
-bool KPresenterShell::saveDocument( const char *_url, const char *_format )
+bool KPresenterShell::saveDocument()
 {
-    assert( m_pDoc != 0L );
-
-    CORBA::String_var url;
-    if ( _url == 0L || *_url == 0 )
-    {
-        url = m_pDoc->url();
-        _url = url.in();
-    }
-
-    QString file;
-    if ( _url == 0L || *_url == 0 )
-    {
-        file = KFileDialog::getSaveFileName( getenv( "HOME" ) );
-
-        if ( file.isNull() )
-            return false;
-        _url = file.data();
-        m_pDoc->setURL( _url );
-    }
-
-    if ( _format == 0L || *_format == 0 )
-        _format = "application/x-kPresenter";
-
-    KURL u( _url );
-    if ( QFile::exists( u.path() ) ) {
-	system( QString( "rm -rf %1~" ).arg( u.path() ) );
-	QString cmd = "cp %1 %2~";
-	cmd = cmd.arg( u.path() ).arg( u.path() );
-	system( cmd.latin1() );
-    }
-
-    return m_pDoc->saveToURL( _url, _format );
+    return KoMainWindow::saveDocument( "application/x-kpresenter", "*.kpr" );
 }
 
 /*================================================================*/
@@ -432,19 +400,7 @@ void KPresenterShell::slotFileSave()
 
     m_pDoc->enableEmbeddedParts( false );
 
-    CORBA::String_var url = m_pDoc->url();
-    if ( strlen( url.in() ) == 0 )
-    {
-        slotFileSaveAs();
-        return;
-    }
-
-    if ( !saveDocument( url.in(), "" ) )
-    {
-        QString tmp;
-        tmp.sprintf( i18n( "Could not save\n%s" ), url.in() );
-        QMessageBox::critical( this, i18n( "IO Error" ), tmp, i18n( "OK" ) );
-    }
+    (void) saveDocument();
 
     m_pDoc->enableEmbeddedParts( true );
     m_pView->getPage()->repaint( false );
@@ -455,20 +411,11 @@ void KPresenterShell::slotFileSaveAs()
 {
     m_pDoc->enableEmbeddedParts( false );
 
-    QString _url = "";
-    if ( m_pDoc )
-    {
-        _url = m_pDoc->url();
-        m_pDoc->setURL( "" );
-    }
+    QString _url = m_pDoc->url();
+    m_pDoc->setURL( "" );
 
-    if ( !saveDocument( "", "" ) )
-    {
-        QString tmp;
-        tmp.sprintf( i18n( "Could not save file" ) );
-        QMessageBox::critical( this, i18n( "IO Error" ), tmp, i18n( "OK" ) );
-        if ( m_pDoc ) m_pDoc->setURL( _url );
-    }
+    if ( !saveDocument() )
+      m_pDoc->setURL( _url );
 
     m_pDoc->enableEmbeddedParts( true );
     m_pView->getPage()->repaint( false );

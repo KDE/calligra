@@ -256,29 +256,9 @@ bool KIllustratorShell::openDocument (const char* url, const char* fmt) {
   return true;
 }
 
-bool KIllustratorShell::saveDocument (const char* _url, const char* fmt) {
+bool KIllustratorShell::saveDocument () {
   assert (m_pDoc != 0L);
-
-  CORBA::String_var url;
-  if (_url == 0L || *_url == '\0') {
-    url = m_pDoc->url ();
-    _url = url.in ();
-  }
-
-  QString file;
-  if (_url == 0L || *_url == '\0') {
-    file = KFileDialog::getSaveFileName (getenv ("HOME"));
-
-    if (file.isNull ())
-      return false;
-    _url = file.data ();
-    m_pDoc->setURL (_url);
-  }
-
-  if (fmt == 0L || *fmt == '\0')
-    fmt = "application/x-killustrator";
-
-  return m_pDoc->saveToURL (_url, fmt);
+  return KoMainWindow::saveDocument( "application/x-killustrator", "*.kil" );
 }
 
 bool KIllustratorShell::closeDocument () {
@@ -329,24 +309,15 @@ void KIllustratorShell::slotFileOpen () {
 
 void KIllustratorShell::slotFileSave () {
   assert (m_pDoc != 0L);
-
-  CORBA::String_var url = m_pDoc->url ();
-  if (strlen (url.in ()) == 0) {
-    slotFileSaveAs ();
-    return;
-  }
-
-  if (! saveDocument (url.in (), "")) {
-    QMessageBox::critical (this, i18n ("KIllustrator Error"),
-			   i18n ("Could not save file"), i18n ("OK"));
-  }
+  (void) saveDocument();
 }
 
 void KIllustratorShell::slotFileSaveAs () {
-  if (! saveDocument ("", "")) {
-    QMessageBox::critical (this, i18n ("KIllustrator Error"),
-			   i18n ("Could not save file"), i18n ("OK"));
-  }
+  QString _url = m_pDoc->url();
+  m_pDoc->setURL( "" );
+
+  if ( !saveDocument() )
+    m_pDoc->setURL( _url );
 }
 
 void KIllustratorShell::slotFileClose () {
@@ -445,7 +416,7 @@ bool KIllustratorShell::requestClose () {
 			  i18n ("Yes"), i18n ("No"), i18n ("Cancel"));
 
   if (result == 0)
-    return saveDocument ("", "");
+    return saveDocument ();
 
   if (result == 1)
     return true;
