@@ -253,7 +253,7 @@ double KPTextObject::load(const QDomElement &element)
         loadKTextObject( e, t );
     }
     m_textobj->formatMore();
-    //resizeTextDocument(); // this will to formatMore()
+    resizeTextDocument(); // this will to formatMore()
     return offset;
 }
 
