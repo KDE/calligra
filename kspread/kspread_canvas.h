@@ -188,17 +188,6 @@ public:
      */
     void showMarker() { if ( m_iMarkerVisible == 1 ) return; m_iMarkerVisible++; if ( m_iMarkerVisible == 1 ) drawMarker(); }
 
-    /**
-     * Redraws a single object.
-     * This is a convenience function that
-     * creates a new @ref QPainter for you. Dont use if another @ref QPainter is active!
-     *
-     * @param _cell is the @ref KSpreadCell to draw.
-     * @param _col is the column this object is assumed to reside in.
-     * @param _row is the row this object is assumed to reside in.
-     */
-    void drawCell( KSpreadCell *_cell, int _col, int _row );
-
     void updateCellRect( const QRect &_rect );
 
     const QPen& defaultGridPen() { return m_defaultGridPen; }
@@ -323,10 +312,6 @@ private:
     void showMarker( QPainter& );
 
     void drawMarker( QPainter * _painter = 0L );
-    /**
-     * Redraws a single object.
-     */
-    void drawCell( QPainter &_painter, KSpreadCell *_cell, int _col, int _row );
 
     bool choose_visible;
     int  length_namecell;

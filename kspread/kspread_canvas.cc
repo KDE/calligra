@@ -63,7 +63,7 @@ void KSpreadEditWidget::slotDoneEdit()
 void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
 {
   // Dont handle special keys and accelerators
-if ( _ev->state() & ( Qt::AltButton | Qt::ControlButton ) )
+  if ( _ev->state() & ( Qt::AltButton | Qt::ControlButton ) )
   {
     QLineEdit::keyPressEvent( _ev );
     return;
@@ -1785,27 +1785,6 @@ void KSpreadCanvas::showMarker( QPainter& _painter)
     drawMarker( &_painter );
 }
 
-// Torben: ########### Not needed any more
-
-void KSpreadCanvas::drawCell( KSpreadCell *_cell, int _col, int _row )
-{
-  int left = activeTable()->columnPos( _col ) - m_iXOffset;
-  int top = activeTable()->rowPos( _row ) - m_iYOffset;
-  int right = left + _cell->extraWidth() - m_iXOffset;
-  int bottom = top + _cell->extraHeight() - m_iYOffset;
-
-  kdDebug(36001) << "left=" << left << " right=" << right << " extra=" << _cell->extraWidth() << endl;
-
-  QPoint tl( left, top );
-  QPoint br( right, bottom );
-  QWMatrix m = m_pView->matrix();
-  tl = m.map( tl );
-  br = m.map( br );
-
-  QPaintEvent event( QRect( tl, br ) );
-  paintEvent( &event );
-}
-
 void KSpreadCanvas::adjustArea()
 {
   QRect selection( activeTable()->selectionRect() );
@@ -1848,86 +1827,86 @@ void KSpreadCanvas::adjustArea()
 
 void KSpreadCanvas::equalizeRow()
 {
-QRect selection( activeTable()->selectionRect() );
-bool selected = ( selection.left() != 0 );
-RowLayout *rl;
-int size;
-if(selected)
-	{
-	rl = m_pView->activeTable()->rowLayout(selection.top());
-	size=rl->height(this);
-	for(int i=selection.top()+1;i<=selection.bottom();i++)
-		size=QMAX(m_pView->activeTable()->rowLayout(i)->height(this),size);
-	for(int i=selection.top()+1;i<=selection.bottom();i++)
-		m_pView->vBorderWidget()->resizeRow(size,i );
-	}
+  QRect selection( activeTable()->selectionRect() );
+  bool selected = ( selection.left() != 0 );
+  RowLayout *rl;
+  int size;
+  if(selected)
+  {
+    rl = m_pView->activeTable()->rowLayout(selection.top());
+    size=rl->height(this);
+    for(int i=selection.top()+1;i<=selection.bottom();i++)
+      size=QMAX(m_pView->activeTable()->rowLayout(i)->height(this),size);
+    for(int i=selection.top()+1;i<=selection.bottom();i++)
+      m_pView->vBorderWidget()->resizeRow(size,i );
+  }
 
 }
 
 void KSpreadCanvas::equalizeColumn()
 {
-ColumnLayout *cl;
-QRect selection( activeTable()->selectionRect() );
-bool selected = ( selection.left() != 0 );
-int size;
-if(selected)
-	{
-	cl = m_pView->activeTable()->columnLayout(selection.left());
-	size=cl->width(this);
-	for(int i=selection.left()+1;i<=selection.right();i++)
-		size=QMAX(m_pView->activeTable()->columnLayout(i)->width(this),size);
-	for(int i=selection.left()+1;i<=selection.right();i++)
-		m_pView->hBorderWidget()->resizeColumn(size,i );
-	}
+  ColumnLayout *cl;
+  QRect selection( activeTable()->selectionRect() );
+  bool selected = ( selection.left() != 0 );
+  int size;
+  if(selected)
+  {
+    cl = m_pView->activeTable()->columnLayout(selection.left());
+    size=cl->width(this);
+    for(int i=selection.left()+1;i<=selection.right();i++)
+      size=QMAX(m_pView->activeTable()->columnLayout(i)->width(this),size);
+    for(int i=selection.left()+1;i<=selection.right();i++)
+      m_pView->hBorderWidget()->resizeColumn(size,i );
+  }
 
 }
 
 void KSpreadCanvas::showComment()
 {
-QPainter painter;
-KSpreadCell* cell = activeTable()->cellAt( marker() );
-QString tmp;
-int pos=0;
-int pos1=0;
-int index=0;
-int line=0;
-int start=0;
-if(labelComment)
-        {
-        delete labelComment;
-        labelComment=0;
-        }
-tmp=cell->getComment();
-int len=tmp.length();
+  QPainter painter;
+  KSpreadCell* cell = activeTable()->cellAt( marker() );
+  QString tmp;
+  int pos=0;
+  int pos1=0;
+  int index=0;
+  int line=0;
+  int start=0;
+  if(labelComment)
+  {
+    delete labelComment;
+    labelComment=0;
+  }
+  tmp=cell->getComment();
+  int len=tmp.length();
 
-do
-{
-  pos=tmp.find("\n",pos);
-  if(QMAX((pos-pos1),index)!=index)
-        {
-        index=QMAX((pos-pos1),index);
-        start=pos1;
-        }
-  pos++;
-  pos1=pos;
-  line++;
-}
-while(pos!=len);
-painter.begin( this );
+  do
+  {
+    pos=tmp.find("\n",pos);
+    if(QMAX((pos-pos1),index)!=index)
+    {
+      index=QMAX((pos-pos1),index);
+      start=pos1;
+    }
+    pos++;
+    pos1=pos;
+    line++;
+  }
+  while(pos!=len);
+  painter.begin( this );
 
-len = painter.fontMetrics().width(tmp.mid(start,index));
-int hei =painter.fontMetrics().height()*line;
-painter.end();
+  len = painter.fontMetrics().width(tmp.mid(start,index));
+  int hei =painter.fontMetrics().height()*line;
+  painter.end();
 
-labelComment=new QLabel(this);
-labelComment->setBackgroundColor( yellow );
-int xpos = activeTable()->columnPos( markerColumn(), this );
-int ypos = activeTable()->rowPos( markerRow(), this );
-int w = cell->width( markerColumn(), this );
-labelComment->setGeometry(xpos +w +10, ypos + 10,len+10, hei+10 ) ;
-labelComment->setAlignment(Qt::AlignVCenter);
-labelComment->setText(tmp);
-labelComment->show();
+  labelComment=new QLabel(this);
+  labelComment->setBackgroundColor( yellow );
+  int xpos = activeTable()->columnPos( markerColumn(), this );
+  int ypos = activeTable()->rowPos( markerRow(), this );
+  int w = cell->width( markerColumn(), this );
+  labelComment->setGeometry(xpos +w +10, ypos + 10,len+10, hei+10 ) ;
+  labelComment->setAlignment(Qt::AlignVCenter);
+  labelComment->setText(tmp);
+  labelComment->show();
 }
 
 /****************************************************************
@@ -2614,14 +2593,12 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
 
     if ( selected )
     {
-      // static QColorGroup g2( black, white, white, darkGray, lightGray, black, black );
-      static QBrush fill2( colorGroup().brush( QColorGroup::Button ) );
+      static QBrush fill2( colorGroup().brush( QColorGroup::Highlight ) );
       qDrawShadePanel( &painter, xpos, 0, col_lay->width( m_pCanvas ),
                        XBORDER_HEIGHT, colorGroup(), FALSE, 1, &fill2 );
     }
     else
     {
-      // static QColorGroup g( black, white, white, darkGray, lightGray, black, black );
       static QBrush fill( colorGroup().brush( QColorGroup::Background ) );
       qDrawShadePanel( &painter, xpos, 0, col_lay->width( m_pCanvas ),
                        XBORDER_HEIGHT, colorGroup(), FALSE, 1, &fill );
