@@ -40,7 +40,7 @@ public:
      * to contain the pixmap.
      *
      * dst    The paint device to which the output will be directed.
-     *        It has to show the current pixmap. 
+     *        It has to show the current pixmap.
      * pageTo The pixmap which will be shown when the effect is finished.
      * effect The effect which sould be used.
      * speed  The speed which should be used.
@@ -50,57 +50,57 @@ public:
     ~KPPageEffects();
 
     /**
-     * doEffect handles the next step of the page effect. 
+     * doEffect handles the next step of the page effect.
      * Returns true if the effect is finished.
      */
     bool doEffect();
-    
+
     /**
      * Ends the page effect by displaying the m_pageTo.
      */
     void finish();
 protected:
-    bool effectNone();
-    bool effectCloseHorizontal();
-    bool effectCloseVertical();
-    bool effectCloseFromAllDirections();
-    bool effectOpenHorizontal();
-    bool effectOpenVertical();
-    bool effectOpenFromAllDirections();
-    bool effectInterlockingHorizontal1();
-    bool effectInterlockingHorizontal2();
-    bool effectInterlockingVertical1();
-    bool effectInterlockingVertical2();
-    bool effectSurround1();
-    bool effectFlyAway1();
-    bool effectBlindsHorizontal();
-    bool effectBlindsVertical();
-    bool effectBoxIn();
-    bool effectBoxOut();
-    bool effectCheckboardAcross();
-    bool effectCheckboardDown();
-    bool effectCoverDown();
-    bool effectUncoverDown();
-    bool effectCoverUp();
+    bool effectNone() const;
+    bool effectCloseHorizontal() const;
+    bool effectCloseVertical() const;
+    bool effectCloseFromAllDirections() const;
+    bool effectOpenHorizontal() const;
+    bool effectOpenVertical() const;
+    bool effectOpenFromAllDirections() const;
+    bool effectInterlockingHorizontal1() const;
+    bool effectInterlockingHorizontal2() const;
+    bool effectInterlockingVertical1() const;
+    bool effectInterlockingVertical2() const;
+    bool effectSurround1() const;
+    bool effectFlyAway1() const;
+    bool effectBlindsHorizontal() const;
+    bool effectBlindsVertical() const;
+    bool effectBoxIn() const;
+    bool effectBoxOut() const ;
+    bool effectCheckboardAcross() const;
+    bool effectCheckboardDown() const;
+    bool effectCoverDown() const;
+    bool effectUncoverDown() const;
+    bool effectCoverUp() const;
     bool effectUncoverUp();
-    bool effectCoverLeft();
+    bool effectCoverLeft() const;
     bool effectUncoverLeft();
-    bool effectCoverRight();
+    bool effectCoverRight() const;
     bool effectUncoverRight();
-    bool effectCoverLeftUp();
+    bool effectCoverLeftUp() const;
     bool effectUncoverLeftUp();
-    bool effectCoverLeftDown();
+    bool effectCoverLeftDown() const;
     bool effectUncoverLeftDown();
-    bool effectCoverRightUp();
+    bool effectCoverRightUp() const;
     bool effectUncoverRightUp();
-    bool effectCoverRightDown();
+    bool effectCoverRightDown() const;
     bool effectUncoverRightDown();
-    bool effectDissolve();
-    bool effectStripesLeftUp();
-    bool effectStripesLeftDown();
-    bool effectStripesRightUp();
-    bool effectStripesRigthDown();
-    bool effectMelting();
+    bool effectDissolve() const;
+    bool effectStripesLeftUp() const;
+    bool effectStripesLeftDown() const;
+    bool effectStripesRightUp() const;
+    bool effectStripesRigthDown() const;
+    bool effectMelting() const;
 
     QPaintDevice *m_dst;
     const QPixmap m_pageTo;

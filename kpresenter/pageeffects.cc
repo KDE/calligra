@@ -192,14 +192,14 @@ void KPPageEffects::finish()
 }
 
 
-bool KPPageEffects::effectNone()
+bool KPPageEffects::effectNone() const
 {
     bitBlt( m_dst, 0, 0, &m_pageTo );
     return true;
 }
 
 
-bool KPPageEffects::effectCloseHorizontal()
+bool KPPageEffects::effectCloseHorizontal()  const
 {
     int h = (int)( 0.5 * m_effectStep * 10.0 * (m_speed + 1) );
 
@@ -209,7 +209,7 @@ bool KPPageEffects::effectCloseHorizontal()
         h = m_height / 2;
         finished = true;
     }
-      
+
     bitBlt( m_dst, 0, 0, &m_pageTo, 0, m_height / 2 - h, m_width, h, Qt::CopyROP );
     bitBlt( m_dst, 0, m_height - h, &m_pageTo, 0, m_height / 2, m_width, h );
 
@@ -219,7 +219,7 @@ bool KPPageEffects::effectCloseHorizontal()
 }
 
 
-bool KPPageEffects::effectCloseVertical()
+bool KPPageEffects::effectCloseVertical()  const
 {
     int w = (int)( 0.5 * m_effectStep * 10.0 * (m_speed + 1) );
 
@@ -229,7 +229,7 @@ bool KPPageEffects::effectCloseVertical()
         w = m_width / 2;
         finished = true;
     }
-      
+
     bitBlt( m_dst, 0, 0, &m_pageTo, m_width / 2 - w, 0, w, m_height );
     bitBlt( m_dst, m_width - w, 0, &m_pageTo, m_width / 2, 0, w, m_height );
 
@@ -239,7 +239,7 @@ bool KPPageEffects::effectCloseVertical()
 }
 
 
-bool KPPageEffects::effectCloseFromAllDirections()
+bool KPPageEffects::effectCloseFromAllDirections()  const
 {
     double fact = (double) m_height / (double) m_width;
     int h = (int)( 0.5 * m_effectStep * 10.0 * (m_speed + 1) * fact );
@@ -258,7 +258,7 @@ bool KPPageEffects::effectCloseFromAllDirections()
     {
         finished = true;
     }
-      
+
     bitBlt( m_dst, 0, 0, &m_pageTo, m_width / 2 - w, m_height / 2 - h, w, h );
     bitBlt( m_dst, m_width - w, 0, &m_pageTo, m_width / 2, m_height / 2 - h, w, h );
     bitBlt( m_dst, 0, m_height - h, &m_pageTo, m_width / 2 - w, m_height / 2, w, h );
@@ -270,7 +270,7 @@ bool KPPageEffects::effectCloseFromAllDirections()
 }
 
 
-bool KPPageEffects::effectOpenHorizontal()
+bool KPPageEffects::effectOpenHorizontal()  const
 {
     int h = (int)( 0.5 * m_effectStep * 10.0 * (m_speed + 1) );
 
@@ -280,7 +280,7 @@ bool KPPageEffects::effectOpenHorizontal()
         h = m_height / 2;
         finished = true;
     }
-      
+
     bitBlt( m_dst, 0, m_height / 2 - h, &m_pageTo, 0, 0, m_width, h );
     bitBlt( m_dst, 0, m_height / 2, &m_pageTo, 0, m_height - h, m_width, h );
 
@@ -290,7 +290,7 @@ bool KPPageEffects::effectOpenHorizontal()
 }
 
 
-bool KPPageEffects::effectOpenVertical()
+bool KPPageEffects::effectOpenVertical()  const
 {
     int w = (int)( 0.5 * m_effectStep * 10.0 * (m_speed + 1) );
 
@@ -300,7 +300,7 @@ bool KPPageEffects::effectOpenVertical()
         w = m_width / 2;
         finished = true;
     }
-      
+
     bitBlt( m_dst, m_width / 2 - w, 0, &m_pageTo, 0, 0, w, m_height );
     bitBlt( m_dst, m_width / 2, 0, &m_pageTo, m_width - w, 0, w, m_height );
 
@@ -310,7 +310,7 @@ bool KPPageEffects::effectOpenVertical()
 }
 
 
-bool KPPageEffects::effectOpenFromAllDirections()
+bool KPPageEffects::effectOpenFromAllDirections()  const
 {
     double fact = (double) m_height / (double) m_width;
     int h = (int)( 0.5 * m_effectStep * 10.0 * (m_speed + 1) * fact );
@@ -329,7 +329,7 @@ bool KPPageEffects::effectOpenFromAllDirections()
     {
         finished = true;
     }
-      
+
     bitBlt( m_dst, m_width / 2 - w, m_height / 2 - h, &m_pageTo, 0, 0, w, h );
     bitBlt( m_dst, m_width / 2, m_height / 2 - h, &m_pageTo, m_width - w, 0, w, h );
     bitBlt( m_dst, m_width / 2 - w, m_height / 2, &m_pageTo, 0, m_height - h, w, h );
@@ -341,7 +341,7 @@ bool KPPageEffects::effectOpenFromAllDirections()
 }
 
 
-bool KPPageEffects::effectInterlockingHorizontal1()
+bool KPPageEffects::effectInterlockingHorizontal1() const
 {
     int stepWidth = (int)( 5.0 * (m_speed + 1) );
     int w = (int)( m_effectStep * stepWidth );
@@ -354,7 +354,7 @@ bool KPPageEffects::effectInterlockingHorizontal1()
     }
 
     int h = m_height / 4;
-      
+
     bitBlt( m_dst, w, 0, &m_pageTo, w, 0, stepWidth, h );
     bitBlt( m_dst, m_width - w, h, &m_pageTo, m_width - w, h, stepWidth, h );
     bitBlt( m_dst, w, 2 * h, &m_pageTo, w, 2 * h, stepWidth, h );
@@ -366,7 +366,7 @@ bool KPPageEffects::effectInterlockingHorizontal1()
 }
 
 
-bool KPPageEffects::effectInterlockingHorizontal2()
+bool KPPageEffects::effectInterlockingHorizontal2() const
 {
     int stepWidth = (int)( 5.0 * (m_speed + 1) );
     int w = (int)( m_effectStep * stepWidth );
@@ -379,7 +379,7 @@ bool KPPageEffects::effectInterlockingHorizontal2()
     }
 
     int h = m_height / 4;
-      
+
     bitBlt( m_dst, m_width - w, 0, &m_pageTo, m_width - w, 0, stepWidth, h );
     bitBlt( m_dst, w, h, &m_pageTo, w, h, stepWidth, h );
     bitBlt( m_dst, m_width - w, 2 * h, &m_pageTo, m_width - w, 2 * h, stepWidth, h );
@@ -391,7 +391,7 @@ bool KPPageEffects::effectInterlockingHorizontal2()
 }
 
 
-bool KPPageEffects::effectInterlockingVertical1()
+bool KPPageEffects::effectInterlockingVertical1() const
 {
     int stepHeight = (int)( 5.0 * (m_speed + 1) );
     int h = (int)( m_effectStep * stepHeight );
@@ -404,7 +404,7 @@ bool KPPageEffects::effectInterlockingVertical1()
     }
 
     int w = m_width / 4;
-      
+
     bitBlt( m_dst, 0, h, &m_pageTo, 0, h, w, stepHeight );
     bitBlt( m_dst, w, m_height - h, &m_pageTo, w, m_height - h, w, stepHeight );
     bitBlt( m_dst, 2 * w, h, &m_pageTo, 2 * w, h, w, stepHeight );
@@ -416,7 +416,7 @@ bool KPPageEffects::effectInterlockingVertical1()
 }
 
 
-bool KPPageEffects::effectInterlockingVertical2()
+bool KPPageEffects::effectInterlockingVertical2() const
 {
     int stepHeight = (int)( 5.0 * (m_speed + 1) );
     int h = (int)( m_effectStep * stepHeight );
@@ -429,7 +429,7 @@ bool KPPageEffects::effectInterlockingVertical2()
     }
 
     int w = m_width / 4;
-      
+
     bitBlt( m_dst, 0, m_height - h, &m_pageTo, 0, m_height - h, w, stepHeight );
     bitBlt( m_dst, w, h, &m_pageTo, w, h, w, stepHeight );
     bitBlt( m_dst, 2 * w, m_height - h, &m_pageTo, 2 * w, m_height - h, w, stepHeight );
@@ -441,7 +441,7 @@ bool KPPageEffects::effectInterlockingVertical2()
 }
 
 
-bool KPPageEffects::effectSurround1()
+bool KPPageEffects::effectSurround1() const
 {
     //int stepSize = (int)( 5.0 * (m_speed + 1) );
     int stepSize = (int)( 10.0 * (m_speed + 1) );
@@ -527,7 +527,7 @@ bool KPPageEffects::effectSurround1()
         if ( step + stepSize >=  3 * m_height - 3 * repaint_h + 2 * m_width - 3 * repaint_w )
         {
             repaint = true;
-            
+
             repaint_rh = m_height - 2 * repaint_h;
             repaint_rw = step - 3 * m_height + 3 * repaint_h - 2 * m_width + 5 * repaint_w;
             repaint_w = stepSize;
@@ -572,7 +572,7 @@ bool KPPageEffects::effectSurround1()
         if ( step + stepSize >= 4 * m_height - 6 * repaint_h + 4 * m_width - 10 * repaint_w )
         {
             repaint = true;
-            
+
             repaint_rh = step - 4 * m_height + 8 * repaint_h - 4 * m_width + 10 * repaint_w;
             repaint_rw = 2 * repaint_w;
             repaint_h = stepSize;
@@ -587,7 +587,7 @@ bool KPPageEffects::effectSurround1()
         if ( step + stepSize >= 5 * m_height - 10 * h + 4 * m_width - 10 * w )
         {
             repaint = true;
-            
+
             repaint_rh = m_height - 3 * repaint_h;
             repaint_rw = step - 5 * m_height + 10 * repaint_h - 4 * m_width + 13 * repaint_w;
             repaint_w = stepSize;
@@ -602,7 +602,7 @@ bool KPPageEffects::effectSurround1()
         if ( step + stepSize >= 5 * m_height - 10 * repaint_h + 5 * m_width - 15 * repaint_w )
         {
             repaint = true;
-            
+
             repaint_rh = m_height - ( step - 5 * m_height + 13 * repaint_h - 5 * m_width + 15 * repaint_w + stepSize );
             repaint_rw = m_width - 3 * repaint_w;
             repaint_h = stepSize;
@@ -742,14 +742,14 @@ bool KPPageEffects::effectSurround1()
         rw = m_width - ( step - 8 * m_height + 28 * h - 7 * m_width + 32 * w + stepSize );
         w = stepSize;
     }*/
-    else 
+    else
     {
         finished = true;
     }
-      
+
     bitBlt( m_dst, rw, rh, &m_pageTo, rw, rh, w, h );
 
-    kdDebug(33001) << "effectSurround1 rh = " << rh << " rw = " << rw << " height = " << m_height << " m_width = "<< m_width 
+    kdDebug(33001) << "effectSurround1 rh = " << rh << " rw = " << rw << " height = " << m_height << " m_width = "<< m_width
                    << " step =  " << step << endl;
 
     if ( repaint )
@@ -759,13 +759,13 @@ bool KPPageEffects::effectSurround1()
 }
 
 
-bool KPPageEffects::effectFlyAway1()
+bool KPPageEffects::effectFlyAway1() const
 {
     return true;
 }
 
 
-bool KPPageEffects::effectBlindsHorizontal()
+bool KPPageEffects::effectBlindsHorizontal() const
 {
     int stepHeight = (int)( 5.0 * (m_speed + 1) );
     int h = (int)( m_effectStep * stepHeight );
@@ -780,12 +780,12 @@ bool KPPageEffects::effectBlindsHorizontal()
 
     for ( int i=0; i < m_height; i += blockSize )
         bitBlt( m_dst, 0, h + i, &m_pageTo, 0, h + i, m_width, stepHeight );
-    
+
     return finished;
 }
 
 
-bool KPPageEffects::effectBlindsVertical()
+bool KPPageEffects::effectBlindsVertical() const
 {
     int stepWidth = (int)( 5.0 * (m_speed + 1) );
     int w = (int)( m_effectStep * stepWidth );
@@ -800,12 +800,12 @@ bool KPPageEffects::effectBlindsVertical()
 
     for ( int i=0; i < m_width; i += blockSize )
         bitBlt( m_dst, w + i, 0, &m_pageTo, w + i, 0, stepWidth, m_height );
-    
+
     return finished;
 }
 
 
-bool KPPageEffects::effectBoxIn()
+bool KPPageEffects::effectBoxIn() const
 {
     double fact = (double) m_height / (double) m_width;
     int stepHeigth = (int)( 5.0 * (m_speed + 1) * fact );
@@ -836,7 +836,7 @@ bool KPPageEffects::effectBoxIn()
 }
 
 
-bool KPPageEffects::effectBoxOut()
+bool KPPageEffects::effectBoxOut() const
 {
     double fact = (double) m_height / (double) m_width;
     int stepHeigth = (int)( 5.0 * (m_speed + 1) * fact );
@@ -867,7 +867,7 @@ bool KPPageEffects::effectBoxOut()
 }
 
 
-bool KPPageEffects::effectCheckboardAcross()
+bool KPPageEffects::effectCheckboardAcross() const
 {
     int stepWidth = (int)( 5.0 * (m_speed + 1) );
     int w = (int)( m_effectStep * stepWidth );
@@ -892,12 +892,12 @@ bool KPPageEffects::effectCheckboardAcross()
             bitBlt( m_dst, x + w, y, &m_pageTo, x + w, y, stepWidth, blockSize );
         }
     }
-    
+
     return finished;
 }
 
 
-bool KPPageEffects::effectCheckboardDown()
+bool KPPageEffects::effectCheckboardDown() const
 {
     int stepHeigth = (int)( 5.0 * (m_speed + 1) );
     int h = (int)( m_effectStep * stepHeigth );
@@ -922,12 +922,12 @@ bool KPPageEffects::effectCheckboardDown()
             bitBlt( m_dst, x, y + h, &m_pageTo, x, y + h, blockSize, stepHeigth );
         }
     }
-    
+
     return finished;
 }
 
 
-bool KPPageEffects::effectCoverDown()
+bool KPPageEffects::effectCoverDown() const
 {
     int h = (int)( 0.5 * m_effectStep * 10.0 * (m_speed + 1) );
 
@@ -937,7 +937,7 @@ bool KPPageEffects::effectCoverDown()
         h = m_height;
         finished = true;
     }
-      
+
     bitBlt( m_dst, 0, 0, &m_pageTo, 0, m_height - h, m_width, h );
 
     kdDebug(33001) << "effectCoverDown h = " << h << " height = " << m_height << " m_width = "<< m_width << endl;
@@ -946,7 +946,7 @@ bool KPPageEffects::effectCoverDown()
 }
 
 
-bool KPPageEffects::effectUncoverDown()
+bool KPPageEffects::effectUncoverDown() const
 {
     int stepHeigth = (int)( 5.0 * (m_speed + 1) );
     int h = (int)( m_effectStep * stepHeigth );
@@ -957,7 +957,7 @@ bool KPPageEffects::effectUncoverDown()
         h = m_height;
         finished = true;
     }
-      
+
     bitBlt( m_dst, 0, h + stepHeigth, m_dst, 0, h, m_width, m_height - h - stepHeigth );
     bitBlt( m_dst, 0, h, &m_pageTo, 0, h, m_width, stepHeigth );
 
@@ -967,7 +967,7 @@ bool KPPageEffects::effectUncoverDown()
 }
 
 
-bool KPPageEffects::effectCoverUp()
+bool KPPageEffects::effectCoverUp() const
 {
     int h = (int)( 0.5 * m_effectStep * 10.0 * (m_speed + 1) );
 
@@ -977,7 +977,7 @@ bool KPPageEffects::effectCoverUp()
         h = m_height;
         finished = true;
     }
-      
+
     bitBlt( m_dst, 0, m_height - h, &m_pageTo, 0, 0, m_width, h );
 
     kdDebug(33001) << "effectCoverUp h = " << h << " height = " << m_height << " m_width = "<< m_width << endl;
@@ -1000,7 +1000,7 @@ bool KPPageEffects::effectUncoverUp()
         h = m_height;
         finished = true;
     }
-      
+
     bitBlt( m_dst, 0, 0, &m_pageFrom, 0, h + stepHeigth, m_width, m_height - h - stepHeigth );
     bitBlt( m_dst, 0, m_height - h - stepHeigth, &m_pageTo, 0, m_height - h - stepHeigth, m_width, stepHeigth );
 
@@ -1010,7 +1010,7 @@ bool KPPageEffects::effectUncoverUp()
 }
 
 
-bool KPPageEffects::effectCoverLeft()
+bool KPPageEffects::effectCoverLeft() const
 {
     int w = (int)( 0.5 * m_effectStep * 10.0 * (m_speed + 1) );
 
@@ -1020,7 +1020,7 @@ bool KPPageEffects::effectCoverLeft()
         w = m_width;
         finished = true;
     }
-      
+
     bitBlt( m_dst, m_width - w, 0, &m_pageTo, 0, 0, w, m_height );
 
     kdDebug(33001) << "effectCoverLeft w = " << w << " height = " << m_height << " m_width = "<< m_width << endl;
@@ -1043,7 +1043,7 @@ bool KPPageEffects::effectUncoverLeft()
         w = m_width;
         finished = true;
     }
-      
+
     bitBlt( m_dst, 0, 0, &m_pageFrom, w + stepWidth, 0, m_width - w - stepWidth, m_height );
     bitBlt( m_dst, m_width - w - stepWidth, 0, &m_pageTo, m_width - w - stepWidth, 0, stepWidth, m_height );
 
@@ -1053,7 +1053,7 @@ bool KPPageEffects::effectUncoverLeft()
 }
 
 
-bool KPPageEffects::effectCoverRight()
+bool KPPageEffects::effectCoverRight() const
 {
     int w = (int)( 0.5 * m_effectStep * 10.0 * (m_speed + 1) );
 
@@ -1063,7 +1063,7 @@ bool KPPageEffects::effectCoverRight()
         w = m_width;
         finished = true;
     }
-      
+
     bitBlt( m_dst, 0, 0, &m_pageTo, m_width - w, 0, w, m_height );
 
     kdDebug(33001) << "effectCoverLeft w = " << w << " height = " << m_height << " m_width = "<< m_width << endl;
@@ -1086,7 +1086,7 @@ bool KPPageEffects::effectUncoverRight()
         w = m_width;
         finished = true;
     }
-      
+
     bitBlt( m_dst, 0, 0, &m_pageFrom, w + stepWidth, 0, m_width - w - stepWidth, m_height );
     bitBlt( m_dst, w, 0, &m_pageTo, w, 0, stepWidth, m_height );
 
@@ -1096,7 +1096,7 @@ bool KPPageEffects::effectUncoverRight()
 }
 
 
-bool KPPageEffects::effectCoverLeftUp()
+bool KPPageEffects::effectCoverLeftUp() const
 {
     double fact = (double) m_height / (double) m_width;
     int h = (int)( 0.5 * m_effectStep * 10.0 * (m_speed + 1) * fact );
@@ -1115,7 +1115,7 @@ bool KPPageEffects::effectCoverLeftUp()
     {
         finished = true;
     }
-      
+
     bitBlt( m_dst, m_width - w, m_height - h, &m_pageTo, 0, 0, w, h );
 
     kdDebug(33001) << "effectCoverLeftUp h = " << h << " height = " << m_height << " m_width = "<< m_width << endl;
@@ -1146,7 +1146,7 @@ bool KPPageEffects::effectUncoverLeftUp()
     {
         finished = true;
     }
-      
+
     bitBlt( m_dst, 0, 0, &m_pageFrom, w, h, m_width - w, m_height - h );
     bitBlt( m_dst, m_width - w, 0, &m_pageTo, m_width - w, 0, w, m_height );
     bitBlt( m_dst, 0, m_height - h, &m_pageTo, 0, m_height - h, m_width, h );
@@ -1157,7 +1157,7 @@ bool KPPageEffects::effectUncoverLeftUp()
 }
 
 
-bool KPPageEffects::effectCoverLeftDown()
+bool KPPageEffects::effectCoverLeftDown() const
 {
     double fact = (double) m_height / (double) m_width;
     int h = (int)( 0.5 * m_effectStep * 10.0 * (m_speed + 1) * fact );
@@ -1176,7 +1176,7 @@ bool KPPageEffects::effectCoverLeftDown()
     {
         finished = true;
     }
-      
+
     bitBlt( m_dst, m_width - w, 0, &m_pageTo, 0, m_height - h, w, h );
 
     kdDebug(33001) << "effectCoverLeftDown h = " << h << " height = " << m_height << " m_width = "<< m_width << endl;
@@ -1207,7 +1207,7 @@ bool KPPageEffects::effectUncoverLeftDown()
     {
         finished = true;
     }
-      
+
     // fix only copy what is nesseccary
     bitBlt( m_dst, 0, h, &m_pageFrom, w, 0, m_width - w, m_height - h );
     bitBlt( m_dst, 0, 0, &m_pageTo, 0, 0, m_width, h );
@@ -1219,7 +1219,7 @@ bool KPPageEffects::effectUncoverLeftDown()
 }
 
 
-bool KPPageEffects::effectCoverRightUp()
+bool KPPageEffects::effectCoverRightUp() const
 {
     double fact = (double) m_height / (double) m_width;
     int h = (int)( 0.5 * m_effectStep * 10.0 * (m_speed + 1) * fact );
@@ -1238,7 +1238,7 @@ bool KPPageEffects::effectCoverRightUp()
     {
         finished = true;
     }
-      
+
     bitBlt( m_dst, 0, m_height - h, &m_pageTo, m_width - w, 0, w, h );
 
     kdDebug(33001) << "effectCoverRightUp h = " << h << " height = " << m_height << " m_width = "<< m_width << endl;
@@ -1269,7 +1269,7 @@ bool KPPageEffects::effectUncoverRightUp()
     {
         finished = true;
     }
-    // only draw what nesseccary  
+    // only draw what nesseccary
     bitBlt( m_dst, w, 0, &m_pageFrom, 0, h, m_width - w, m_height - h );
     bitBlt( m_dst, 0, 0, &m_pageTo, 0, 0, w, m_height );
     bitBlt( m_dst, w, m_height - h, &m_pageTo, w, m_height - h, m_width - w, h );
@@ -1280,7 +1280,7 @@ bool KPPageEffects::effectUncoverRightUp()
 }
 
 
-bool KPPageEffects::effectCoverRightDown()
+bool KPPageEffects::effectCoverRightDown() const
 {
     double fact = (double) m_height / (double) m_width;
     int h = (int)( 0.5 * m_effectStep * 10.0 * (m_speed + 1) * fact );
@@ -1299,7 +1299,7 @@ bool KPPageEffects::effectCoverRightDown()
     {
         finished = true;
     }
-      
+
     bitBlt( m_dst, 0, 0, &m_pageTo, m_width - w, m_height - h, w, h );
 
     kdDebug(33001) << "effectCoverRightDown h = " << h << " height = " << m_height << " m_width = "<< m_width << endl;
@@ -1330,7 +1330,7 @@ bool KPPageEffects::effectUncoverRightDown()
     {
         finished = true;
     }
-    // only draw what nesseccary  
+    // only draw what nesseccary
     bitBlt( m_dst, w, h, &m_pageFrom, 0, 0, m_width - w, m_height - h );
     bitBlt( m_dst, 0, 0, &m_pageTo, 0, 0, m_width, h );
     bitBlt( m_dst, 0, h, &m_pageTo, 0, h, w, m_height - h );
@@ -1341,18 +1341,18 @@ bool KPPageEffects::effectUncoverRightDown()
 }
 
 
-bool KPPageEffects::effectDissolve()
+bool KPPageEffects::effectDissolve() const
 {
     return true;
 }
 
 
-bool KPPageEffects::effectStripesLeftUp()
+bool KPPageEffects::effectStripesLeftUp() const
 {
     int stepWidth = (int)( 5.0 * (m_speed + 1) );
     int wSteps = m_width / stepWidth;
     int hSteps = m_height / stepWidth + 1;
-    
+
     int xStart = m_effectStep < wSteps ? m_effectStep : wSteps;
     int xStop = 1 > m_effectStep - hSteps + 1 ? 1 : m_effectStep - hSteps + 1;
 
@@ -1366,7 +1366,7 @@ bool KPPageEffects::effectStripesLeftUp()
 
     for ( int x = xStart; x >= xStop; --x )
     {
-        bitBlt( m_dst, m_width - x * stepWidth, m_height - y * stepWidth, 
+        bitBlt( m_dst, m_width - x * stepWidth, m_height - y * stepWidth,
                 &m_pageTo, m_width - x * stepWidth, m_height - y * stepWidth , stepWidth, stepWidth );
         ++y;
     }
@@ -1375,12 +1375,12 @@ bool KPPageEffects::effectStripesLeftUp()
 }
 
 
-bool KPPageEffects::effectStripesLeftDown()
+bool KPPageEffects::effectStripesLeftDown() const
 {
     int stepWidth = (int)( 5.0 * (m_speed + 1) );
     int wSteps = m_width / stepWidth;
     int hSteps = m_height / stepWidth + 1;
-    
+
     int xStart = m_effectStep < wSteps ? m_effectStep : wSteps;
     int xStop = 1 > m_effectStep - hSteps + 1 ? 1 : m_effectStep - hSteps + 1;
 
@@ -1394,7 +1394,7 @@ bool KPPageEffects::effectStripesLeftDown()
 
     for ( int x = xStart; x >= xStop; --x )
     {
-        bitBlt( m_dst, m_width - x * stepWidth, ( y - 1 ) * stepWidth, 
+        bitBlt( m_dst, m_width - x * stepWidth, ( y - 1 ) * stepWidth,
                 &m_pageTo, m_width - x * stepWidth, ( y - 1 ) * stepWidth , stepWidth, stepWidth );
         ++y;
     }
@@ -1403,12 +1403,12 @@ bool KPPageEffects::effectStripesLeftDown()
 }
 
 
-bool KPPageEffects::effectStripesRightUp()
+bool KPPageEffects::effectStripesRightUp() const
 {
     int stepWidth = (int)( 5.0 * (m_speed + 1) );
     int wSteps = m_width / stepWidth;
     int hSteps = m_height / stepWidth + 1;
-    
+
     int xStart = m_effectStep < wSteps ? m_effectStep : wSteps;
     int xStop = 1 > m_effectStep - hSteps + 1 ? 1 : m_effectStep - hSteps + 1;
 
@@ -1422,7 +1422,7 @@ bool KPPageEffects::effectStripesRightUp()
 
     for ( int x = xStart; x >= xStop; --x )
     {
-        bitBlt( m_dst, ( x - 1 ) * stepWidth, m_height - y * stepWidth, 
+        bitBlt( m_dst, ( x - 1 ) * stepWidth, m_height - y * stepWidth,
                 &m_pageTo, ( x - 1 ) * stepWidth, m_height - y * stepWidth , stepWidth, stepWidth );
         ++y;
     }
@@ -1431,12 +1431,12 @@ bool KPPageEffects::effectStripesRightUp()
 }
 
 
-bool KPPageEffects::effectStripesRigthDown()
+bool KPPageEffects::effectStripesRigthDown() const
 {
     int stepWidth = (int)( 5.0 * (m_speed + 1) );
     int wSteps = m_width / stepWidth;
     int hSteps = m_height / stepWidth + 1;
-    
+
     int xStart = m_effectStep < wSteps ? m_effectStep : wSteps;
     int xStop = 1 > m_effectStep - hSteps + 1 ? 1 : m_effectStep - hSteps + 1;
 
@@ -1450,7 +1450,7 @@ bool KPPageEffects::effectStripesRigthDown()
 
     for ( int x = xStart; x >= xStop; --x )
     {
-        bitBlt( m_dst, ( x - 1 ) * stepWidth, ( y - 1 ) * stepWidth, 
+        bitBlt( m_dst, ( x - 1 ) * stepWidth, ( y - 1 ) * stepWidth,
                 &m_pageTo, ( x - 1 ) * stepWidth, ( y - 1 ) * stepWidth , stepWidth, stepWidth );
         ++y;
     }
@@ -1459,7 +1459,7 @@ bool KPPageEffects::effectStripesRigthDown()
 }
 
 
-bool KPPageEffects::effectMelting()
+bool KPPageEffects::effectMelting() const
 {
     return true;
 }
