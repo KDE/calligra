@@ -265,7 +265,7 @@ void PicturePreview::setMirrorType (PictureMirrorType _t)
 /*==================== constructor ===============================*/
 ConfPictureDia::ConfPictureDia( QWidget *parent, const char *name, PictureMirrorType _mirrorType,
                                 int _depth, bool _swapRGB, bool _grayscal, int _bright, QPixmap _origPixmap )
-    : KDialogBase( parent, name, true ,i18n( "KPresenter - Configure Picture" ), Ok|Cancel|KDialogBase::Apply|KDialogBase::User1, Ok)
+    : KDialogBase( parent, name, true ,i18n( "Configure Picture" ), Ok|Cancel|KDialogBase::Apply|KDialogBase::User1, Ok)
 {
     mirrorType = _mirrorType;
     depth = _depth;

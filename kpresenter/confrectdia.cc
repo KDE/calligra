@@ -66,7 +66,7 @@ void RectPreview::drawContents( QPainter* painter )
 
 /*==================== constructor ===============================*/
 ConfRectDia::ConfRectDia( QWidget* parent, const char* name )
-    : KDialogBase( parent, name, true, i18n( "KPresenter - Configure Rectangle" ), Ok|Cancel|KDialogBase::Apply|KDialogBase::User1, Ok )
+    : KDialogBase( parent, name, true, i18n( "Configure Rectangle" ), Ok|Cancel|KDialogBase::Apply|KDialogBase::User1, Ok )
 {
 
     // ------------------------ layout

@@ -130,7 +130,7 @@ void PolygonPreview::slotSharpnessValue( int value )
 /*==================== constructor ===============================*/
 ConfPolygonDia::ConfPolygonDia( QWidget *parent, const char *name, bool _checkConcavePolygon,
                                 int _cornersValue, int _sharpnessValue )
-    : KDialogBase( parent, name, true , i18n( "KPresenter - Configure Polygon" ), Ok|Cancel|KDialogBase::Apply|KDialogBase::User1, Ok )
+    : KDialogBase( parent, name, true , i18n( "Configure Polygon" ), Ok|Cancel|KDialogBase::Apply|KDialogBase::User1, Ok )
 {
     checkConcavePolygon = _checkConcavePolygon;
     cornersValue = _cornersValue;

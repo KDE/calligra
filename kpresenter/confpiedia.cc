@@ -86,7 +86,7 @@ void PiePreview::drawContents( QPainter* painter )
 
 /*==================== constructor ===============================*/
 ConfPieDia::ConfPieDia( QWidget* parent, const char* name )
-    : KDialogBase( parent, name, true , i18n( "KPresenter - Configure Pie/Arc/Chord" ), Ok|Cancel|KDialogBase::Apply|KDialogBase::User1, Ok)
+    : KDialogBase( parent, name, true , i18n( "Configure Pie/Arc/Chord" ), Ok|Cancel|KDialogBase::Apply|KDialogBase::User1, Ok)
 {
   // ------------------------ layout
   QWidget *page = new QWidget( this );

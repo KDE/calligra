@@ -964,7 +964,7 @@ void KPresenterView::extraPenBrush()
     //now all sticky object are stored in sticky page
     styleDia->setSticky( stickyPage()->getSticky( sticky ) );
 
-    styleDia->setCaption( i18n( "KPresenter - Pen and Brush" ) );
+    styleDia->setCaption( i18n( "Pen and Brush" ) );
     QObject::connect( styleDia, SIGNAL( styleOk() ), this, SLOT( styleOk() ) );
     m_canvas->setToolEditMode( TEM_MOUSE );
     styleDia->exec();
@@ -1180,7 +1180,7 @@ void KPresenterView::extraBackground()
 			   page->getBackXFactor(),
 			   page->getBackYFactor( ),
 			   page );
-    backDia->setCaption( i18n( "KPresenter - Page Background" ) );
+    backDia->setCaption( i18n( "Page Background" ) );
     QObject::connect( backDia, SIGNAL( backOk( bool ) ), this, SLOT( backOk( bool ) ) );
     backDia->exec();
 
@@ -1339,7 +1339,7 @@ void KPresenterView::screenConfigPages()
 			       page->getPageSoundEffect(),
 			       page->getPageSoundFileName(),
                                kPresenterDoc()->presentationDuration() );
-    pgConfDia->setCaption( i18n( "KPresenter - Page Configuration for Screen Presentations" ) );
+    pgConfDia->setCaption( i18n( "Page Configuration for Screen Presentations" ) );
     QObject::connect( pgConfDia, SIGNAL( pgConfDiaOk() ), this, SLOT( pgConfOk() ) );
     pgConfDia->exec();
 
@@ -1359,7 +1359,7 @@ void KPresenterView::screenPresStructView()
     m_canvas->deSelectAllObj();
 
     presStructView = new KPPresStructView( this, "", kPresenterDoc(), this );
-    presStructView->setCaption( i18n( "KPresenter - Presentation Structure Viewer" ) );
+    presStructView->setCaption( i18n( "Presentation Structure Viewer" ) );
     QObject::connect( presStructView, SIGNAL( presStructViewClosed() ), this, SLOT( psvClosed() ) );
     presStructView->exec();
     delete presStructView;
@@ -1374,7 +1374,7 @@ void KPresenterView::screenAssignEffect()
     QPtrList<KPObject> objs;
     if ( m_canvas->canAssignEffect( objs ) ) {
         EffectDia *effectDia = new EffectDia( this, "Effect", objs, this );
-	effectDia->setCaption( i18n( "KPresenter - Assign Effects" ) );
+	effectDia->setCaption( i18n( "Assign Effects" ) );
 	if(effectDia->exec())
             effectOk();
         delete effectDia;
@@ -5806,7 +5806,7 @@ void KPresenterView::openThePresentationDurationDialog()
 
     presDurationDia = new KPPresDurationDia( this, "presDurationDia", kPresenterDoc(),
                                              presentationDurationStringList, presentationTotalDurationString );
-    presDurationDia->setCaption( i18n( "KPresenter - Presentation Duration" ) );
+    presDurationDia->setCaption( i18n( "Presentation Duration" ) );
     QObject::connect( presDurationDia, SIGNAL( presDurationDiaClosed() ), this, SLOT( pddClosed() ) );
     presDurationDia->exec();
 
