@@ -90,7 +90,7 @@ void KWDeleteDia::setupTab1()
 
 bool KWDeleteDia::doDelete()
 {
-    KCommand *globalCommand;
+    KMacroCommand *globalCommand=0L;
 
     if (m_toRemove.count() == ( (type == ROW) ? table->getRows() : table->getCols() ) )
     {   // we have to delete the whole table
@@ -105,7 +105,7 @@ bool KWDeleteDia::doDelete()
             for (uint i=0;i<m_toRemove.count();i++)
             {
                 KWRemoveRowCommand *cmd = new KWRemoveRowCommand( i18n("Remove row"), table, m_toRemove[i] );
-                static_cast<KMacroCommand*>(globalCommand)->addCommand(cmd);
+                globalCommand->addCommand(cmd);
             }
         }
         else
@@ -114,7 +114,7 @@ bool KWDeleteDia::doDelete()
             for (uint i=0;i<m_toRemove.count();i++)
             {
                 KWRemoveColumnCommand *cmd = new KWRemoveColumnCommand( i18n("Remove column"), table, m_toRemove[i] );
-                static_cast<KMacroCommand*>(globalCommand)->addCommand(cmd);
+                globalCommand->addCommand(cmd);
             }
         }
         globalCommand->execute();
