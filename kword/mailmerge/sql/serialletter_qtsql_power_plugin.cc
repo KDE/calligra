@@ -85,10 +85,68 @@ QString KWQTSQLPowerSerialDataSource::getValue( const QString &name, int record 
 
 void KWQTSQLPowerSerialDataSource::save( QDomDocument &doc, QDomElement &parent)
 {
+        QDomElement def=doc.createElement(QString::fromLatin1("DEFINITION"));
+        parent.appendChild(def);
+        {
+                QDomElement defEnt=doc.createElement(QString::fromLatin1("DATABASE"));
+                defEnt.setAttribute(QString::fromLatin1("hostname"),hostname);
+                defEnt.setAttribute(QString::fromLatin1("port"),port);
+                defEnt.setAttribute(QString::fromLatin1("driver"),driver);
+                defEnt.setAttribute(QString::fromLatin1("databasename"),databasename);
+                defEnt.setAttribute(QString::fromLatin1("username"),username);
+                def.appendChild(defEnt);
+		
+		defEnt=doc.createElement(QString::fromLatin1("QUERY"));
+		defEnt.setAttribute(QString::fromLatin1("value"),query);
+		def.appendChild(defEnt);
+
+		QDomElement sampleEnt=doc.createElement(QString::fromLatin1("SAMPLERECORD"));
+		parent.appendChild(sampleEnt);
+	        for (DbRecord::Iterator it=sampleRecord.begin();it!=sampleRecord.end();++it)
+        	{
+                	QDomElement fieldEnt=doc.createElement(QString::fromLatin1("FIELD"));
+	                fieldEnt.setAttribute(QString::fromLatin1("name"),it.key());
+	                sampleEnt.appendChild(fieldEnt);
+	        }
+        }
 }
 
 void KWQTSQLPowerSerialDataSource::load( QDomElement& parentElem )
 {
+        clearSampleRecord();
+        QDomNode defNd=parentElem.namedItem("DEFINITION");
+        if (!defNd.isNull())
+	{
+	        QDomElement def=defNd.toElement();
+		QDomNode dbNd=def.namedItem("DATABASE");
+		if (!dbNd.isNull())
+		{
+			QDomElement dbEnt=dbNd.toElement();
+			if (dbEnt.tagName()==QString::fromLatin1("DATABASE"))
+			{
+				hostname=dbEnt.attribute(QString::fromLatin1("hostname"));
+				port=dbEnt.attribute(QString::fromLatin1("port"));
+				driver=dbEnt.attribute(QString::fromLatin1("driver"));
+				databasename=dbEnt.attribute(QString::fromLatin1("databasename"));
+				username=dbEnt.attribute(QString::fromLatin1("username"));
+			}
+		}
+		QDomNode queryNd=def.namedItem("QUERY");
+		if (!queryNd.isNull())
+		{
+			query=queryNd.toElement().attribute(QString::fromLatin1("value"));
+		}
+        }
+
+        defNd=parentElem.namedItem("SAMPLERECORD");
+        if (!defNd.isNull())
+	{
+		QDomElement def1=defNd.toElement();
+	        for (QDomElement defEnt=defNd.firstChild().toElement();!defEnt.isNull();defEnt=defEnt.nextSibling().toElement())
+	        {
+	               addSampleRecordEntry(defEnt.attribute(QString::fromLatin1("name")));
+	        }
+	}
 }
 
 bool KWQTSQLPowerSerialDataSource::showConfigDialog(QWidget *par,int action)
@@ -137,6 +195,7 @@ void KWQTSQLPowerMailMergeEditor::slotSetQuery()
 
 void KWQTSQLPowerMailMergeEditor::slotExecute()
 {
+	if (!db->database) if (!db->openDatabase()) return;
 	QString tmp=widget->query->text().upper();
 	if (!tmp.startsWith("SELECT")) return;
 	QMySqlCursor *cur=new QMySqlCursor(widget->query->text(),true,db->database);
