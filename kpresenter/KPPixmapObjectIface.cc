@@ -75,3 +75,24 @@ int KPPixmapObjectIface::bright() const
     return (int)_bright;
 }
 
+void KPPixmapObjectIface::setDepth(int depth )
+{
+    PictureMirrorType _mirrorType;
+    int _depth=0;
+    bool _swapRGB=false;
+    int _bright=0;
+    obj->getPictureSettings( &_mirrorType, &_depth, &_swapRGB, &_bright );
+
+    obj->setPictureSettings( _mirrorType,  depth, _swapRGB,_bright );
+}
+
+void KPPixmapObjectIface::setBright(int bright )
+{
+    PictureMirrorType _mirrorType;
+    int _depth=0;
+    bool _swapRGB=false;
+    int _bright=0;
+    obj->getPictureSettings( &_mirrorType, &_depth, &_swapRGB, &_bright );
+
+    obj->setPictureSettings( _mirrorType,  _depth, _swapRGB,bright );
+}

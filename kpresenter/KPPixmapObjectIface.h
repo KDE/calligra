@@ -42,6 +42,9 @@ k_dcop:
     int pictureMirrorType() const;
     int bright() const;
 
+    void setDepth(int depth );
+    void setBright(int bright );
+
 private:
     KPPixmapObject *obj;
 };
