@@ -29,8 +29,11 @@ DESCRIPTION
 
 #ifndef __GNUC__
 #define __attribute__(a)
-#define __UNAL __unaligned
 #pragma pack(1)
+#endif
+
+#ifdef DECCXX
+#define __UNAL __unaligned
 #else
 #define __UNAL
 #endif
