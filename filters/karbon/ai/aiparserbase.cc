@@ -97,6 +97,8 @@ static AIOperationMapping aiMappings[] = {
   { "*u", AIO_BeginCombination },
   { "*U", AIO_EndCombination },
 
+  { "XR", AIO_SetFillMode },
+
   { NULL, AIO_Other }
 };
 
@@ -155,13 +157,16 @@ static CommentOperationMapping commentMappings[] = {
   { "DocumentCustomColors",  CO_DocumentCustomColors },
   { "CMYKCustomColor", CO_CMYKCustomColor },
   { "TileBox",  CO_TileBox },
-  { "+",  CO_Continuation },
+  { "%+",  CO_Continuation },
 
   { "Template",  CO_Template },
   { "PageOrigin",  CO_PageOrigin },
   { "PrinterName",  CO_PrinterName },
   { "PrinterRect",  CO_PrinterRect },
   { "Note",  CO_Note },
+
+  { "DocumentNeededResources", CO_DocumentNeededResources },
+
 
   { "IncludeFont",  CO_IncludeFont },
   { "BeginBrushPattern", CO_BeginBrushPattern },
@@ -171,10 +176,20 @@ static CommentOperationMapping commentMappings[] = {
   { "BeginPalette", CO_BeginPalette },
   { "EndPalette", CO_EndPalette },
 
+  { "IncludeFile", CO_IncludeFile },
+  { "IncludeResource", CO_IncludeResource },
+
   { NULL, CO_Other }
 };
 
 AIParserBase::AIParserBase() : m_ignoring(false), m_debug(false), m_sink (DS_Other), m_continuationMode(CM_None) {
+  m_gstateHandler = NULL;
+  m_structureHandler = NULL;
+  m_pathHandler = NULL;
+  m_miscGStateHandler = NULL;
+  m_documentHandler = NULL;
+  m_moduleHandler = NULL;
+  m_embeddedHandler = NULL;
 }
 AIParserBase::~AIParserBase(){
 }
@@ -188,34 +203,34 @@ void AIParserBase::gotComment (const char *value) {
   CommentOperation cop = getCommentOperation (value);
   switch (cop) {
     case CO_BeginDocument :
-       gotBeginSection (ST_Document, value);
+       if (m_moduleHandler) m_moduleHandler->gotBeginSection (ST_Document, value);
        break;
     case CO_EndDocument :
-       gotBeginSection (ST_Document, value);
+       if (m_moduleHandler) m_moduleHandler->gotBeginSection (ST_Document, value);
        break;
     case CO_BeginPattern :
-       gotBeginSection (ST_Pattern, value);
+       if (m_moduleHandler) m_moduleHandler->gotBeginSection (ST_Pattern, value);
        break;
     case CO_EndPattern :
-       gotBeginSection (ST_Pattern, value);
+       if (m_moduleHandler) m_moduleHandler->gotBeginSection (ST_Pattern, value);
        break;
     case CO_BeginProlog :
-       gotBeginSection (ST_Prolog, value);
+       if (m_moduleHandler) m_moduleHandler->gotBeginSection (ST_Prolog, value);
 /*       if (m_debug) qDebug ("start ignoring");
        m_ignoring = true; */
        break;
     case CO_BeginProcSet :
-       gotBeginSection (ST_ProcSet, value);
+       if (m_moduleHandler) m_moduleHandler->gotBeginSection (ST_ProcSet, value);
        if (m_debug) qDebug ("start ignoring");
        m_ignoring = true;
        break;
     case CO_BeginResource :
-       gotBeginSection (ST_Resource, value);
+       if (m_moduleHandler) m_moduleHandler->gotBeginSection (ST_Resource, value);
        if (m_debug) qDebug ("start ignoring");
        m_ignoring = true;
        break;
     case CO_BeginEncoding :
-       gotBeginSection (ST_Encoding, value);
+       if (m_moduleHandler) m_moduleHandler->gotBeginSection (ST_Encoding, value);
        m_ignoring = false;
 /*       if (m_debug) qDebug ("start ignoring");
        m_ignoring = true; */
@@ -225,12 +240,12 @@ void AIParserBase::gotComment (const char *value) {
        m_ignoring = true;
        break;
     case CO_BeginBrushPattern :
-       gotBeginSection (ST_BrushPattern, value);
+       if (m_moduleHandler) m_moduleHandler->gotBeginSection (ST_BrushPattern, value);
 /*       if (m_debug) qDebug ("start ignoring");
        m_ignoring = true; */
        break;
     case CO_BeginGradient :
-       gotBeginSection (ST_Gradient, value);
+       if (m_moduleHandler) m_moduleHandler->gotBeginSection (ST_Gradient, value);
 /*       if (m_debug) qDebug ("start ignoring");
        m_ignoring = true; */
        break;
@@ -239,57 +254,57 @@ void AIParserBase::gotComment (const char *value) {
        m_ignoring = true;
        break;
     case CO_BeginPalette :
-       gotBeginSection (ST_Palette, value);
+       if (m_moduleHandler) m_moduleHandler->gotBeginSection (ST_Palette, value);
 /*       if (m_debug) qDebug ("start ignoring");
        m_ignoring = true; */
        break;
     case CO_BeginSetup :
-       gotBeginSection (ST_Setup, value);
+       if (m_moduleHandler) m_moduleHandler->gotBeginSection (ST_Setup, value);
 /*       if (m_debug) qDebug ("start ignoring");
        m_ignoring = true; */
        break;
     case CO_EndSetup :
        cleanupArrays();
-       gotEndSection (ST_Setup, value);
+       if (m_moduleHandler) m_moduleHandler->gotEndSection (ST_Setup, value);
 /*       if (m_debug) qDebug ("stop ignoring");
        m_ignoring = false; */
        break;
     case CO_EndProlog :
-       gotEndSection (ST_Prolog, value);
+       if (m_moduleHandler) m_moduleHandler->gotEndSection (ST_Prolog, value);
 /*       if (m_debug) qDebug ("stop ignoring");
        m_ignoring = false; */
        break;
     case CO_EndProcSet :
-       gotEndSection (ST_ProcSet, value);
+       if (m_moduleHandler) m_moduleHandler->gotEndSection (ST_ProcSet, value);
        if (m_debug) qDebug ("stop ignoring");
        m_ignoring = false;
        break;
     case CO_EndResource :
-       gotEndSection (ST_Resource, value);
+       if (m_moduleHandler) m_moduleHandler->gotEndSection (ST_Resource, value);
        if (m_debug) qDebug ("stop ignoring");
        m_ignoring = false;
        break;
     case CO_EndEncoding :
        cleanupArrays();
-       gotEndSection (ST_Encoding, value);
+       if (m_moduleHandler) m_moduleHandler->gotEndSection (ST_Encoding, value);
 /*       if (m_debug) qDebug ("stop ignoring");
        m_ignoring = false; */
        break;
     case CO_EndBrushPattern :
        cleanupArrays();
-       gotEndSection (ST_BrushPattern, value);
+       if (m_moduleHandler) m_moduleHandler->gotEndSection (ST_BrushPattern, value);
 /*       if (m_debug) qDebug ("stop ignoring");
        m_ignoring = false; */
        break;
     case CO_EndGradient :
        cleanupArrays();
-       gotEndSection (ST_Gradient, value);
+       if (m_moduleHandler) m_moduleHandler->gotEndSection (ST_Gradient, value);
 /*       if (m_debug) qDebug ("stop ignoring");
        m_ignoring = false; */
        break;
     case CO_EndPalette :
        cleanupArrays();
-       gotEndSection (ST_Palette, value);
+       if (m_moduleHandler) m_moduleHandler->gotEndSection (ST_Palette, value);
 /*       if (m_debug) qDebug ("stop ignoring");
        m_ignoring = false; */
        break;
@@ -297,21 +312,27 @@ void AIParserBase::gotComment (const char *value) {
       break;
     case CO_BoundingBox :
       if (getRectangle (value, llx, lly, urx, ury))
-        gotBoundingBox (llx, lly, urx, ury);
+      {
+        if (m_documentHandler) m_documentHandler->gotBoundingBox (llx, lly, urx, ury);
+      }
       break;
     case CO_TemplateBox :
       if (getRectangle (value, llx, lly, urx, ury))
-        gotTemplateBox (llx, lly, urx, ury);
+      {
+        if (m_documentHandler) m_documentHandler->gotTemplateBox (llx, lly, urx, ury);
+      }
       break;
     case CO_Margin :
       if (getRectangle (value, llx, lly, urx, ury))
-        gotMargin (llx, lly, urx, ury);
+      {
+        if (m_documentHandler) m_documentHandler->gotMargin (llx, lly, urx, ury);
+      }
       break;
     case CO_Title :
-      gotTitle (getValue (value));
+      if (m_documentHandler) m_documentHandler->gotTitle (getValue (value));
       break;
     case CO_Creator :
-      gotCreator (getValue (value));
+      if (m_documentHandler) m_documentHandler->gotCreator (getValue (value));
       break;
     case CO_DocumentFonts :
       _handleDocumentFonts (value);
@@ -329,12 +350,29 @@ void AIParserBase::gotComment (const char *value) {
       _handleCMYKCustomColor (value);
       m_continuationMode = CM_CMYKCustomColor;
       break;
+    case CO_DocumentNeededResources :
+      _handleDocumentNeededResources (value);
+      m_continuationMode = CM_DocumentNeededResources;
+      break;
+    case CO_DocumentProcessColors :
+      _handleDocumentProcessColors (value);
+      break;
+    case CO_CreationDate :
+      _handleCreationDate (value);
+      break;
+    case CO_IncludeFile :
+      break;
+    case CO_IncludeResource :
+      _handleIncludeResource (value);
+      break;
     case CO_Continuation :
       switch (m_continuationMode) {
         case CM_DocumentFonts : _handleDocumentFonts (value); break;
         case CM_DocumentFiles : _handleDocumentFiles (value); break;
         case CM_DocumentCustomColors : _handleDocumentCustomColors (value); break;
         case CM_CMYKCustomColor :  _handleCMYKCustomColor (value); break;
+        case CM_DocumentNeededResources :  _handleDocumentNeededResources (value); break;
+
         default : qWarning ("unknown continuation mode %d",m_continuationMode);
       }
       break;
@@ -369,38 +407,53 @@ void AIParserBase::handleElement (AIElement &element)
 }
 
 void AIParserBase::gotIntValue (int value) {
+  if (m_debug) qDebug ("got int value");
   if (m_ignoring) return;
   AIElement element (value);
   handleElement (element);
+  if (m_debug) qDebug ("/got int value");
 }
 
 void AIParserBase::gotDoubleValue (double value) {
+  if (m_debug) qDebug ("got double value");
   if (m_ignoring) return;
   AIElement element (value);
   handleElement (element);
+  if (m_debug) qDebug ("/got double value");
 }
 
 void AIParserBase::gotStringValue (const char *value) {
+  if (m_debug) qDebug ("got string value");
   if (m_ignoring) return;
   if (value == NULL) value = "";
   if (m_debug) qDebug ("string: %s", value);
   AIElement element (value);
   handleElement (element);
+  if (m_debug) qDebug ("/got string value");
+
 }
 
 void AIParserBase::gotReference (const char *value) {
+  if (m_debug) qDebug ("got reference value");
+
   if (m_ignoring) return;
   if (value == NULL) value = "";
   if (m_debug) qDebug ("reference: %s", value);
   QString string(value);
   AIElement element (string, AIElement::Reference);
   handleElement (element);
+  if (m_debug) qDebug ("/got reference value");
+
 }
 
 void AIParserBase::gotByte (uchar value) {
+  if (m_debug) qDebug ("got byte value");
+
   if (m_ignoring) return;
   AIElement element (value);
   handleElement (element);
+  if (m_debug) qDebug ("/got byte value");
+
 }
 
 void AIParserBase::gotByteArray (const QByteArray &data) {
@@ -505,7 +558,7 @@ void AIParserBase::_handleSetDash()
   m_stack.pop();
 
   const QValueVector<AIElement> aval = elem.toElementArray();
-  gotDash (aval, fval);
+  if (m_gstateHandler) m_gstateHandler->gotDash (aval, fval);
 //  qDebug ("dash operation finished");
 }
 
@@ -519,7 +572,7 @@ void AIParserBase::_handleSetFillColorCMYK()
   if (m_debug) qDebug ("values 1 are %f %f %f %f",c,m,y,k);
   AIColor color (c,m,y,k);
 
-  gotFillColor (color);
+  if (m_gstateHandler) m_gstateHandler->gotFillColor (color);
 }
 
 void AIParserBase::_handleSetFillPattern()
@@ -543,8 +596,9 @@ void AIParserBase::_handleSetFillPattern()
   m_stack.pop();
 
   const QString &name = elem2.toString();
-  gotFillPattern (name.latin1(), px, py, sx, sy, angle, rf, r, k, ka, aval);
+  if (m_gstateHandler) m_gstateHandler->gotFillPattern (name.latin1(), px, py, sx, sy, angle, rf, r, k, ka, aval);
 }
+
 void AIParserBase::_handleSetStrokePattern()
 {
   AIElement elem (m_stack.top());
@@ -566,7 +620,7 @@ void AIParserBase::_handleSetStrokePattern()
   m_stack.pop();
 
   const QString &name = elem2.toString();
-  gotStrokePattern (name.latin1(), px, py, sx, sy, angle, rf, r, k, ka, aval);
+  if (m_gstateHandler) m_gstateHandler->gotStrokePattern (name.latin1(), px, py, sx, sy, angle, rf, r, k, ka, aval);
 }
 
 
@@ -580,7 +634,7 @@ void AIParserBase::_handleSetStrokeColorCMYK()
 
   AIColor color (c,m,y,k);
 
-  gotStrokeColor (color);
+  if (m_gstateHandler) m_gstateHandler->gotStrokeColor (color);
 }
 
 void AIParserBase::_handleSetFillColorGray()
@@ -590,7 +644,7 @@ void AIParserBase::_handleSetFillColorGray()
 
   AIColor color (g);
 
-  gotFillColor (color);
+  if (m_gstateHandler) m_gstateHandler->gotFillColor (color);
 }
 
 void AIParserBase::_handleSetStrokeColorGray()
@@ -600,7 +654,7 @@ void AIParserBase::_handleSetStrokeColorGray()
 
   AIColor color (g);
 
-  gotStrokeColor (color);
+  if (m_gstateHandler) m_gstateHandler->gotStrokeColor (color);
 }
 
 void AIParserBase::_handleSetFillColorCustom()
@@ -615,7 +669,7 @@ void AIParserBase::_handleSetFillColorCustom()
 
   AIColor color (c,m,y,k,name.latin1(),g);
 
-  gotFillColor (color);
+  if (m_gstateHandler) m_gstateHandler->gotFillColor (color);
 }
 
 void AIParserBase::_handlePSGet() {
@@ -707,7 +761,7 @@ void AIParserBase::_handlePatternDefinition()
 
   const QString &name = elem2.toString();
 
-  gotPatternDefinition (name.latin1(), aval, llx, lly, urx, ury);
+  if (m_documentHandler) m_documentHandler->gotPatternDefinition (name.latin1(), aval, llx, lly, urx, ury);
 
 }
 
@@ -734,7 +788,7 @@ void AIParserBase::_handleSetStrokeColorCustom()
 
   AIColor color (c,m,y,k,name.latin1(),g);
 
-  gotStrokeColor (color);
+  if (m_gstateHandler) m_gstateHandler->gotStrokeColor (color);
 }
 
 void AIParserBase::_handleDocumentFonts(const char *data) {
@@ -749,11 +803,153 @@ void AIParserBase::_handleDocumentCustomColors(const char *data) {
 // qDebug ("in handle document colors");
 }
 
+void AIParserBase::_handleDocumentNeededResources(const char *data) {
+  if (!data) return;
+  QStringList items = QStringList::split (' ', data);
+
+  QString itemType = items[1];
+  QString name = items[2];
+  QString version = items[3];
+  QString release = items[4];
+
+//  qDebug ("document needed resources (%s) (%s) (%s) (%s)",itemType.latin1(),name.latin1(),version.latin1(),release.latin1());
+
+
+}
+
+void AIParserBase::_handleIncludeResource(const char *data) {
+  if (!data) return;
+  QStringList items = QStringList::split (' ', data);
+
+  QString itemType = items[1];
+  QString name = items[2];
+  QString version = items[3];
+  QString release = items[4];
+
+  m_modules.push_back (name);
+}
+
+void AIParserBase::_handleDocumentProcessColors(const char *data) {
+  if (!data) return;
+
+  int colorSet = 0;
+  QString tmp (data);
+
+  signed int index;
+
+  index = tmp.find ("Cyan");
+  if (index > 0) colorSet |= PC_Cyan;
+
+  index = tmp.find ("Magenta");
+  if (index > 0) colorSet |= PC_Magenta;
+
+  index = tmp.find ("Yellow");
+  if (index > 0) colorSet |= PC_Yellow;
+
+  index = tmp.find ("Black");
+  if (index > 0) colorSet |= PC_Black;
+
+  if (m_documentHandler) m_documentHandler->gotProcessColors (colorSet);
+}
+
 void AIParserBase::_handleCMYKCustomColor(const char *data) {
 // qDebug ("in handle cmyk custom color");
 }
 
+void AIParserBase::_handleGsaveIncludeDocument() {
+  AIElement elem2 (m_stack.top());
+  m_stack.pop();
+
+  const QString &name = elem2.toString();
+
+  int ury = getIntValue();
+  int urx = getIntValue();
+  int lly = getIntValue();
+  int llx = getIntValue();
+
+  AIElement elem (m_stack.top());
+  m_stack.pop();
+
+  const QValueVector<AIElement> aval = elem.toElementArray();
+
+  if (m_embeddedHandler) m_embeddedHandler->gotGsaveIncludeDocument (aval, llx,lly,urx,ury,name.latin1());
+}
+
+void AIParserBase::_handleSetCurrentText() {
+  int iAlign = getIntValue();
+  TextAlign ta = TA_HLeft;
+
+  switch (iAlign)
+  {
+    case 0 : ta = TA_HLeft; break;
+    case 1 : ta = TA_HCenter; break;
+    case 2 : ta = TA_HRight; break;
+    case 3:  ta = TA_VTop; break;
+    case 4 : ta = TA_VCenter; break;
+    case 5 : ta = TA_VBottom; break;
+  }
+
+  double kerning = getDoubleValue();
+  double leading = getDoubleValue();
+  double size = getDoubleValue();
+
+  AIElement elem2 (m_stack.top());
+  m_stack.pop();
+
+  const QString &fontname = elem2.toReference();
+
+  if (m_textHandler) m_textHandler->gotFontDefinition (fontname.latin1(), size, leading, kerning, ta);
+
+}
+
+void AIParserBase::_handleTextBlock (TextOperation to) {
+  AIElement elem (m_stack.top());
+  qDebug ("to element is (%s)",elem.typeName());
+  m_stack.pop();
+
+  const QValueVector<AIElement> aval = elem.toElementArray();
+
+  if (m_textHandler) m_textHandler->gotTextBlockBegin (aval, to);
+}
+
+void AIParserBase::_handleTextOutput () {
+  AIElement elem (m_stack.top());
+  m_stack.pop();
+
+  const QString &text = elem.toString();
+
+  int length = -1;
+
+  if (m_stack.empty())
+  {
+    AIElement elem2 (m_stack.top());
+    if (elem2.type() == AIElement::Int)
+    {
+      length = elem2.asInt();
+      m_stack.pop();
+    }
+  }
+  if (m_textHandler) m_textHandler->gotTextOutput (text.latin1(), length);
+}
+
+void AIParserBase::_handleCreationDate (const char *data)
+{
+  if (!data) return;
+
+  QRegExp test ("\\((.+)\\) \\((.+)\\)");
+  if (test.search (data))
+  {
+    QString val1 = test.cap(1);
+    QString val2 = test.cap(2);
+
+   if (m_documentHandler) m_documentHandler->gotCreationDate (val1.latin1(),val2.latin1());
+  }
+
+}
+
 void AIParserBase::gotToken (const char *value) {
+  if (m_debug) qDebug ("got token");
+
   if (m_ignoring) return;
   if (m_debug) qDebug ("token: %s", value);
 
@@ -777,6 +973,8 @@ void AIParserBase::gotToken (const char *value) {
   }
 
 //  qDebug ("got token %s",value);
+
+  if (m_debug) qDebug ("get ai operation");
 
   AIOperation op = getAIOperation (value);
   PathElement pathElement;
@@ -811,79 +1009,85 @@ void AIParserBase::gotToken (const char *value) {
       _handleSetStrokePattern();
       break;
     case AIO_SetFillOverprinting :
-      gotFillOverprinting (getBoolValue());
+      if (m_miscGStateHandler) m_miscGStateHandler->gotFillOverprinting (getBoolValue());
       break;
     case AIO_SetStrokeOverprinting :
-      gotStrokeOverprinting (getBoolValue());
+      if (m_miscGStateHandler) m_miscGStateHandler->gotStrokeOverprinting (getBoolValue());
       break;
     case AIO_LockElement :
-      gotLockNextObject (getBoolValue());
+      if (m_miscGStateHandler) m_miscGStateHandler->gotLockNextObject (getBoolValue());
       break;
     case AIO_SetFlatness :
       fval = getDoubleValue();
-      gotFlatness (fval);
+      if (m_gstateHandler) m_gstateHandler->gotFlatness (fval);
       break;
     case AIO_SetLineCap :
       ival = getIntValue();
-      gotLineCaps (ival);
+      if (m_gstateHandler) m_gstateHandler->gotLineCaps (ival);
       break;
     case AIO_SetLineJoin :
       ival = getIntValue();
-      gotLineJoin (ival);
+      if (m_gstateHandler) m_gstateHandler->gotLineJoin (ival);
       break;
     case AIO_SetLineWidth :
       fval = getDoubleValue();
-      gotLineWidth (fval);
+      if (m_gstateHandler) m_gstateHandler->gotLineWidth (fval);
       break;
     case AIO_SetMiterLimit :
       fval = getDoubleValue();
-      gotMiterLimit (fval);
+      if (m_gstateHandler) m_gstateHandler->gotMiterLimit (fval);
       break;
     case AIO_SetWindingOrder :
       ival = getIntValue();
-      gotWindingOrder (ival);
+      if (m_gstateHandler) m_gstateHandler->gotWindingOrder (ival);
       break;
     case AIO_SetDash :
       _handleSetDash();
       break;
     case AIO_BeginGroupClip :
-      gotBeginGroup (true);
+      if (m_structureHandler) m_structureHandler->gotBeginGroup (true);
       break;
     case AIO_EndGroupClip :
-      gotEndGroup (true);
+      if (m_debug) qDebug ("got end group clip");
+      if (m_structureHandler) m_structureHandler->gotEndGroup (true);
+      if (m_debug) qDebug ("/got end group clip");
+
       break;
     case AIO_BeginGroupNoClip :
-      gotBeginGroup (false);
+      if (m_structureHandler) m_structureHandler->gotBeginGroup (false);
       break;
     case AIO_EndGroupNoClip :
-      gotEndGroup (false);
+      if (m_debug) qDebug ("got end group noclip");
+      if (m_structureHandler) m_structureHandler->gotEndGroup (false);
+      if (m_debug) qDebug ("/got end group noclip");
+
       break;
     case AIO_BeginCombination :
-      gotBeginCombination ();
+      if (m_structureHandler) m_structureHandler->gotBeginCombination ();
       break;
     case AIO_EndCombination :
-      gotEndCombination ();
+      if (m_structureHandler) m_structureHandler->gotEndCombination ();
       break;
     case AIO_MoveTo :
       pathElement.petype = PET_MoveTo;
       pathElement.pttype = PT_Corner;
       pathElement.pevalue.pointdata.y = getDoubleValue();
       pathElement.pevalue.pointdata.x = getDoubleValue();
-      gotPathElement (pathElement);
+      if (m_pathHandler) m_pathHandler->gotPathElement (pathElement);
       break;
     case AIO_LineToCorner :
       pathElement.petype = PET_LineTo;
       pathElement.pttype = PT_Corner;
       pathElement.pevalue.pointdata.y = getDoubleValue();
       pathElement.pevalue.pointdata.x = getDoubleValue();
-      gotPathElement (pathElement);
+      if (m_pathHandler) m_pathHandler->gotPathElement (pathElement);
       break;
     case AIO_LineToSmooth :
       pathElement.petype = PET_LineTo;
       pathElement.pttype = PT_Smooth;
       pathElement.pevalue.pointdata.y = getDoubleValue();
       pathElement.pevalue.pointdata.x = getDoubleValue();
-      gotPathElement (pathElement);
+      if (m_pathHandler) m_pathHandler->gotPathElement (pathElement);
       break;
     case AIO_CurveToCorner :
       pathElement.petype = PET_CurveTo;
@@ -894,7 +1098,7 @@ void AIParserBase::gotToken (const char *value) {
       pathElement.pevalue.bezierdata.x2 = getDoubleValue();
       pathElement.pevalue.bezierdata.y1 = getDoubleValue();
       pathElement.pevalue.bezierdata.x1 = getDoubleValue();
-      gotPathElement (pathElement);
+      if (m_pathHandler) m_pathHandler->gotPathElement (pathElement);
       break;
     case AIO_CurveToSmooth :
       pathElement.petype = PET_CurveTo;
@@ -905,7 +1109,7 @@ void AIParserBase::gotToken (const char *value) {
       pathElement.pevalue.bezierdata.x2 = getDoubleValue();
       pathElement.pevalue.bezierdata.y1 = getDoubleValue();
       pathElement.pevalue.bezierdata.x1 = getDoubleValue();
-      gotPathElement (pathElement);
+      if (m_pathHandler) m_pathHandler->gotPathElement (pathElement);
       break;
     case AIO_CurveToOmitC1Corner :
       pathElement.petype = PET_CurveTo;
@@ -914,7 +1118,7 @@ void AIParserBase::gotToken (const char *value) {
       pathElement.pevalue.bezierdata.x3 = getDoubleValue();
       pathElement.pevalue.bezierdata.y2 = getDoubleValue();
       pathElement.pevalue.bezierdata.x2 = getDoubleValue();
-      gotPathElement (pathElement);
+      if (m_pathHandler) m_pathHandler->gotPathElement (pathElement);
       break;
     case AIO_CurveToOmitC1Smooth :
       pathElement.petype = PET_CurveTo;
@@ -923,7 +1127,7 @@ void AIParserBase::gotToken (const char *value) {
       pathElement.pevalue.bezierdata.x3 = getDoubleValue();
       pathElement.pevalue.bezierdata.y2 = getDoubleValue();
       pathElement.pevalue.bezierdata.x2 = getDoubleValue();
-      gotPathElement (pathElement);
+      if (m_pathHandler) m_pathHandler->gotPathElement (pathElement);
       break;
     case AIO_CurveToOmitC2Corner :
       pathElement.petype = PET_CurveTo;
@@ -932,7 +1136,7 @@ void AIParserBase::gotToken (const char *value) {
       pathElement.pevalue.bezierdata.x3 = getDoubleValue();
       pathElement.pevalue.bezierdata.y1 = getDoubleValue();
       pathElement.pevalue.bezierdata.x1 = getDoubleValue();
-      gotPathElement (pathElement);
+      if (m_pathHandler) m_pathHandler->gotPathElement (pathElement);
       break;
     case AIO_CurveToOmitC2Smooth :
       pathElement.petype = PET_CurveTo;
@@ -941,58 +1145,109 @@ void AIParserBase::gotToken (const char *value) {
       pathElement.pevalue.bezierdata.x3 = getDoubleValue();
       pathElement.pevalue.bezierdata.y1 = getDoubleValue();
       pathElement.pevalue.bezierdata.x1 = getDoubleValue();
-      gotPathElement (pathElement);
+      if (m_pathHandler) m_pathHandler->gotPathElement (pathElement);
       break;
 
     case AIO_PathIgnoreReset :
-      gotIgnorePath(false, true);
+      if (m_pathHandler) m_pathHandler->gotIgnorePath(false, true);
       break;
     case AIO_PathIgnoreResetClose :
-      gotIgnorePath(true, true);
+      if (m_pathHandler) m_pathHandler->gotIgnorePath(true, true);
       break;
     case AIO_PathIgnoreNoReset :
-      gotIgnorePath(false, false);
+      if (m_pathHandler) m_pathHandler->gotIgnorePath(false, false);
       break;
     case AIO_PathIgnoreNoResetClose :
-      gotIgnorePath(true, false);
+      if (m_pathHandler) m_pathHandler->gotIgnorePath(true, false);
       break;
     case AIO_PathClipPath :
-      gotClipPath(false);
+      if (m_pathHandler) m_pathHandler->gotClipPath(false);
       break;
     case AIO_PathFillNonZero :
-      gotFillPath(false, true, FM_NonZero);
+      if (m_pathHandler)
+      {
+        m_pathHandler->gotFillMode (FM_NonZero);
+        m_pathHandler->gotFillPath(false, true);
+      }
       break;
     case AIO_PathFillNonZeroClose :
-      gotFillPath(true, true);
+      if (m_pathHandler) m_pathHandler->gotFillPath(true, true);
       break;
     case AIO_PathFillNoReset :
-      gotFillPath(false, false);
+      if (m_pathHandler) m_pathHandler->gotFillPath(false, false);
       break;
     case AIO_PathFillNoResetClose :
-      gotFillPath(true, false);
+      if (m_pathHandler) m_pathHandler->gotFillPath(true, false);
       break;
     case AIO_PathStroke :
-      gotStrokePath(false);
+      if (m_pathHandler) m_pathHandler->gotStrokePath(false);
       break;
     case AIO_PathStrokeClose :
-      gotStrokePath(true);
+      if (m_pathHandler) m_pathHandler->gotStrokePath(true);
       break;
     case AIO_PatternDefinition :
       _handlePatternDefinition();
       break;
-
+    case AIO_GsaveIncludeDocument :
+      _handleGsaveIncludeDocument();
+      break;
+    case AIO_Grestore :
+      if (m_embeddedHandler) m_embeddedHandler->gotGrestore();
+      break;
+    case AIO_FontEncoding :
+      _handleFontEncoding();
+      break;
+    case AIO_SetCurrentText :
+      _handleSetCurrentText();
+      break;
+    case AIO_TextBlockFillStroke :
+      _handleTextBlock (TO_FillStroke);
+      break;
+    case AIO_TextBlockFill :
+      _handleTextBlock (TO_Fill);
+      break;
+    case AIO_TextBlockAppend :
+      _handleTextBlock (TO_Append);
+      break;
+    case AIO_TextBlockIgnore :
+      _handleTextBlock (TO_Ignore);
+      break;
+    case AIO_TextBlockStroke :
+      _handleTextBlock (TO_Stroke);
+      break;
+    case AIO_TextOutput :
+      _handleTextOutput ();
+      break;
+    case AIO_TextBlockEnd :
+      if (m_textHandler) m_textHandler->gotTextBlockEnd();
+      break;
+    case AIO_SetFillMode :
+      if (m_pathHandler) m_pathHandler->gotFillMode((FillMode) getIntValue());
+      break;
     default :
 //      qWarning ( "unknown operator: %s", value );
       if (m_sink == DS_Other)
       {
         if (handlePS (value)) return;
       }
+
+      QString string(value);
+
+      if (m_modules.findIndex(string) != -1)
+      {
+        AIElement element (string, AIElement::Reference);
+        handleElement (element);
+        return;
+      }
+
       if (m_debug) stacktoa (m_stack);
       qWarning ( "pushing %s to stack", value );
-      QString string(value);
       AIElement element (string, AIElement::Operator);
       handleElement (element);
   }
+
+  if (m_debug) qDebug ("/got token value");
+
 }
 
 bool AIParserBase::handlePS (const char *operand){
@@ -1111,69 +1366,69 @@ CommentOperation AIParserBase::getCommentOperation (const char *command) {
 
 }
 
-void AIParserBase::gotFillColor (AIColor &color) {
-/*  double r, g, b;
+/* void AIParserBase::gotFillColor (AIColor &color) {
+  double r, g, b;
   color.toRGB (r, g, b);
-  qDebug ( "got fill color: %f %f %f ", r, g, b ); */
-}
+  qDebug ( "got fill color: %f %f %f ", r, g, b );
+} */
 
-void AIParserBase::gotStrokeColor (AIColor &color) {
-/*  double r, g, b;
+/* void AIParserBase::gotStrokeColor (AIColor &color) {
+  double r, g, b;
   color.toRGB (r, g, b);
-  qDebug ( "got stroke color: %f %f %f ", r, g, b ); */
-}
+  qDebug ( "got stroke color: %f %f %f ", r, g, b );
+} */
 
-void AIParserBase::gotFillPattern (const char *pname, double px, double py, double sx, double sy, double angle, double rf, double r, double k, double ka, const QValueVector<AIElement>& transformData) {
+void GStateHandlerBase::gotFillPattern (const char *pname, double px, double py, double sx, double sy, double angle, double rf, double r, double k, double ka, const QValueVector<AIElement>& transformData) {
   qDebug ( "got fill pattern %s %f %f %f %f %f %f %f %f %f", pname, px, py, sx, sy, angle, rf, r, k, ka);
   arraytoa (transformData);
   qDebug ("/got fill pattern");
 }
 
-void AIParserBase::gotStrokePattern (const char *pname, double px, double py, double sx, double sy, double angle, double rf, double r, double k, double ka, const QValueVector<AIElement>& transformData) {
+void GStateHandlerBase::gotStrokePattern (const char *pname, double px, double py, double sx, double sy, double angle, double rf, double r, double k, double ka, const QValueVector<AIElement>& transformData) {
   qDebug ( "got stroke pattern %s %f %f %f %f %f %f %f %f %f", pname, px, py, sx, sy, angle, rf, r, k, ka);
   arraytoa (transformData);
   qDebug ("/got stroke pattern");
 }
 
 
-void AIParserBase::gotFlatness (double val) {
+/* void AIParserBase::gotFlatness (double val) {
 //  qDebug ( "got flatness: %f ", val );
-}
+} */
 
-void AIParserBase::gotLineWidth (double val) {
+/* void AIParserBase::gotLineWidth (double val) {
 //  qDebug ( "got line width: %f ", val );
-}
+} */
 
-void AIParserBase::gotMiterLimit (double val) {
+/* void AIParserBase::gotMiterLimit (double val) {
 //  qDebug ( "got miter limit: %f ", val );
-}
+} */
 
-void AIParserBase::gotLineCaps (int val) {
+/* void AIParserBase::gotLineCaps (int val) {
 //  qDebug ( "got line caps: %d ", val );
-}
+} */
 
-void AIParserBase::gotLineJoin (int val) {
+/* void AIParserBase::gotLineJoin (int val) {
 //  qDebug ( "got line join: %d ", val );
-}
+} */
 
-void AIParserBase::gotBeginGroup (bool clipping) {
+/* void AIParserBase::gotBeginGroup (bool clipping) {
 //  qDebug ( "got begin group: %d ", clipping );
-}
+} */
 
-void AIParserBase::gotEndGroup (bool clipping) {
+/* void AIParserBase::gotEndGroup (bool clipping) {
 //  qDebug ( "got end group: %d ", clipping );
-}
+} */
 
-void AIParserBase::gotBeginCombination () {
+/* void AIParserBase::gotBeginCombination () {
 //  qDebug ( "got begin combination" );
-}
+} */
 
-void AIParserBase::gotEndCombination () {
+/* void AIParserBase::gotEndCombination () {
 //  qDebug ( "got end combination" );
-}
+} */
 
-void AIParserBase::gotPathElement (PathElement &element) {
-/*  float x1, y1, x2, y2, x3, y3;
+/* void AIParserBase::gotPathElement (PathElement &element) {
+  float x1, y1, x2, y2, x3, y3;
   char *pttype = NULL;
   switch (element.pttype)
   {
@@ -1206,65 +1461,65 @@ void AIParserBase::gotPathElement (PathElement &element) {
       y3 = element.pevalue.bezierdata.y3;
       qDebug ( "got curveto %f %f %f %f %f %f %s", x1, y1, x2, y2, x3, y3, pttype );
       break;
-  } */
+  }
 
-}
+}  */
 
-void AIParserBase::gotFillPath (bool closed, bool reset, FillMode fm) {
+/* void AIParserBase::gotFillPath (bool closed, bool reset, FillMode fm) {
 //  qDebug ( "got fill path closed %d reset %d fillmode %d", closed, reset, fm);
-}
+} */
 
-void AIParserBase::gotStrokePath (bool closed) {
+/* void AIParserBase::gotStrokePath (bool closed) {
 //  qDebug ( "got stroke path closed %d", closed );
-}
+} */
 
-void AIParserBase::gotClipPath (bool closed) {
+/* void AIParserBase::gotClipPath (bool closed) {
 //  qDebug ( "got clip path closed %d", closed );
-}
+} */
 
-void AIParserBase::gotIgnorePath (bool closed, bool reset)
+/* void AIParserBase::gotIgnorePath (bool closed, bool reset)
 {
 //  qDebug ( "got ignore path closed %d reset %d", closed, reset );
-}
+} */
 
-void AIParserBase::gotWindingOrder (int val) {
+/* void AIParserBase::gotWindingOrder (int val) {
 //  qDebug ( "got winding order: %d", val );
-}
+} */
 
-void AIParserBase::gotDash (const QValueVector<AIElement>& dashData, double phase) {
+/* void AIParserBase::gotDash (const QValueVector<AIElement>& dashData, double phase) {
 //  qDebug ("got dash: <data> %f", phase );
 //  arraytoa (dashData);
 //  qDebug ("/got dash" );
-}
+} */
 
-void AIParserBase::gotPatternDefinition (const char*name, const QValueVector<AIElement>& patternData, double llx, double lly, double urx, double ury) {
+/* void AIParserBase::gotPatternDefinition (const char*name, const QValueVector<AIElement>& patternData, double llx, double lly, double urx, double ury) {
 //  qDebug ("got pattern definition: %s <data> %f %f %f %f", name, lly, lly, urx, ury );
 //  arraytoa (patternData);
 //  qDebug ("/got pattern definition" );
-}
+} */
 
 
-void AIParserBase::gotBoundingBox (int llx, int lly, int urx, int ury) {
+/* void AIParserBase::gotBoundingBox (int llx, int lly, int urx, int ury) {
 //  qDebug ("got binding box: %d %d %d %d", llx, lly, urx, ury );
-}
+} */
 
-void AIParserBase::gotTemplateBox (int llx, int lly, int urx, int ury) {
+/* void AIParserBase::gotTemplateBox (int llx, int lly, int urx, int ury) {
 //  qDebug ("got template box: %d %d %d %d", llx, lly, urx, ury );
-}
+} */
 
-void AIParserBase::gotMargin (int llx, int lly, int urx, int ury) {
+/* void AIParserBase::gotMargin (int llx, int lly, int urx, int ury) {
 //  qDebug ("got margin box: %d %d %d %d", llx, lly, urx, ury );
-}
+} */
 
-void AIParserBase::gotTitle (const char *data) {
-/*  if (data != NULL)
-    qDebug ("got title: %s", data ); */
-}
+/* void AIParserBase::gotTitle (const char *data) {
+  if (data != NULL)
+    qDebug ("got title: %s", data );
+} */
 
-void AIParserBase::gotCreator (const char *data) {
-/*  if (data != NULL)
-    qDebug ("got creator: %s", data ); */
-}
+/* void AIParserBase::gotCreator (const char *data) {
+  if (data != NULL)
+    qDebug ("got creator: %s", data );
+} */
 
 const char *AIParserBase::getValue (const char *input) {
   QString data(input);
@@ -1305,34 +1560,33 @@ bool AIParserBase::getPoint (const char* input, int &x, int &y) {
   return true;
 }
 
-
-void AIParserBase::gotFillOverprinting (bool value){
+/* void AIParserBase::gotFillOverprinting (bool value){
 //  qDebug ("got fill overprinting %d", value);
-}
+} */
 
-void AIParserBase::gotStrokeOverprinting (bool value){
+/* void AIParserBase::gotStrokeOverprinting (bool value){
 //  qDebug ("got stroke overprinting %d", value);
-}
+} */
 
-void AIParserBase::gotLockNextObject (bool value){
+/* void AIParserBase::gotLockNextObject (bool value){
 //  qDebug ("got lock next object %d", value);
-}
+} */
 
-void AIParserBase::gotPrinterRect (int llx, int lly, int urx, int ury){
+/* void AIParserBase::gotPrinterRect (int llx, int lly, int urx, int ury){
 //  qDebug ("got printer rect %d %d %d %d", llx, lly, urx, ury);
-}
+} */
 
-void AIParserBase::gotPrinterName (const char *data){
+/* void AIParserBase::gotPrinterName (const char *data){
 //  qDebug ("got printer name %s", data);
-}
+} */
 
-void AIParserBase::gotPageOrigin (int x, int y){
+/* void AIParserBase::gotPageOrigin (int x, int y){
 //  qDebug ("got page origin %d %d", x, y);
-}
+} */
 
-void AIParserBase::gotTemplate (const char *data){
+/* void AIParserBase::gotTemplate (const char *data){
 //  qDebug ("got template %s", data);
-}
+} */
 
 void AIParserBase::cleanupArrays()
 {
@@ -1341,17 +1595,81 @@ void AIParserBase::cleanupArrays()
   stacktoa (m_stack);
 }
 
-void AIParserBase::gotBeginSection (SectionType st, const char *data) {
+/* void AIParserBase::gotBeginSection (SectionType st, const char *data) {
   sttoa (st, true);
+} */
+
+/* void AIParserBase::gotEndSection (SectionType st, const char *data) {
+  sttoa (st, false);
+} */
+
+/* void AIParserBase::gotGsaveIncludeDocument (const QValueVector<AIElement>& transData, int llx, int lly, int urx, int ury, const char*fileName) {
+  qDebug ("got gsave");
+  arraytoa (transData);
+  qDebug ("llx %d lly %d urx %d ury %d name %s",llx,lly,urx,ury,fileName);
+} */
+
+/* void AIParserBase::gotGrestore () {
+  qDebug ("got grestore");
+} */
+
+void AIParserBase::_handleFontEncoding()
+{
+//  qDebug ("pre cleaning stack");
+  while (m_stack.top().type() != AIElement::Reference) {
+//    qDebug ("type: %s", AIElement::typeToName (m_stack.top().type()));
+    m_stack.pop();
+  }
+//  qDebug ("after cleaning stack");
+
+  AIElement elem (m_stack.top());
+  m_stack.pop();
+  const QString &oldFont = elem.toReference();
+
+  AIElement elem2 (m_stack.top());
+  m_stack.pop();
+  const QString &newFont = elem2.toReference();
+
+  AIElement elem3 (m_stack.top());
+  m_stack.pop();
+  const QValueVector<AIElement> encodingData = elem3.toElementArray();
+
+  if (m_textHandler) m_textHandler->gotFontEncoding (encodingData, oldFont.latin1(), newFont.latin1());
 }
 
-void AIParserBase::gotEndSection (SectionType st, const char *data) {
-  sttoa (st, false);
+void TextHandlerBase::gotFontEncoding (const QValueVector<AIElement>& encodingData, const char*oldFontName, const char*newFontName)
+{
+  qDebug ("font encoding %s to %s",oldFontName, newFontName);
+  arraytoa (encodingData);
+  qDebug ("/font encoding");
 }
+
+void TextHandlerBase::gotFontDefinition (const char*fontName, double size, double leading, double kerning, TextAlign align)
+{
+  qDebug ("font definition: name %s size %f leading %f kerning %f align %d", fontName, size, leading, kerning, align);
+}
+
+void TextHandlerBase::gotTextBlockBegin (const QValueVector<AIElement>& transData, TextOperation mode)
+{
+  qDebug ("text block begin %d",mode);
+  arraytoa (transData);
+  qDebug ("/text block begin");
+}
+
+void TextHandlerBase::gotTextOutput (const char*text, int length)
+{
+  qDebug ("text output (%s) %d",text,length);
+}
+
+void TextHandlerBase::gotTextBlockEnd ()
+{
+  qDebug ("text block end");
+}
+
 
 const void elementtoa (const AIElement &data)
 {
-  AIElement::Type type = data.type();
+/*  AIElement::Type type = data.type();
   qDebug ("type: %s", AIElement::typeToName (type));
 
   switch (type)
@@ -1378,12 +1696,12 @@ const void elementtoa (const AIElement &data)
 
     default :
       qDebug ("could not fetch data");
-  }
+  } */
 }
 
 const void arraytoa (const QValueVector<AIElement> &data)
 {
-  qDebug ("array size is %d ",data.size());
+/*  qDebug ("array size is %d ",data.size());
   if (data.size() > 0)
   {
     qDebug ("[[[[[[[[[[[[[[[[[[[[");
@@ -1392,12 +1710,12 @@ const void arraytoa (const QValueVector<AIElement> &data)
       elementtoa (data[i]);
     }
     qDebug ("]]]]]]]]]]]]]]]]]]]]");
-  }
+  } */
 }
 
 const void stacktoa (const QValueStack<AIElement> &data)
 {
-  qDebug ("stack size is %d",data.size());
+/*  qDebug ("stack size is %d",data.size());
   if (data.size() > 0)
   {
     qDebug ("<<<<<<<<<<<<<<<<<<");
@@ -1406,12 +1724,12 @@ const void stacktoa (const QValueStack<AIElement> &data)
       elementtoa (data[i]);
     }
   }
-  qDebug (">>>>>>>>>>>>>>>>>>");
+  qDebug (">>>>>>>>>>>>>>>>>>"); */
 }
 
 const void stacktoa2 (const QValueStack<QValueVector<AIElement> >&data)
 {
-  qDebug ("stack size is %d",data.size());
+/*  qDebug ("stack size is %d",data.size());
 
   if (data.size() > 0)
   {
@@ -1421,7 +1739,7 @@ const void stacktoa2 (const QValueStack<QValueVector<AIElement> >&data)
       arraytoa (data[i]);
     }
     qDebug (")))))))))))))))))))))))");
-  }
+  } */
 }
 
 const void aiotoa (AIOperation &data)
@@ -1503,3 +1821,4 @@ const void sttoa (SectionType &data, bool begin)
 
   }
 }
+

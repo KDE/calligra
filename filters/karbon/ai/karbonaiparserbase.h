@@ -49,7 +49,84 @@ typedef enum { PTT_Output = 1, PTT_Combine = 2 } PathTransferType;
 
 typedef struct { int llx, lly, urx, ury; } BoundingBox;
 
-class KarbonAIParserBase : public AIParserBase  {
+class KarbonAIParserBase;
+class KarbonGStateHandler;
+class KarbonStructureHandler;
+class KarbonPathHandler;
+class KarbonDocumentHandler;
+
+class KarbonDocumentHandler : public DocumentHandlerBase
+{
+  private:
+    KarbonAIParserBase *delegate;
+  public:
+    KarbonDocumentHandler (KarbonAIParserBase *delegate) : DocumentHandlerBase () { this->delegate = delegate; }
+
+    void gotBoundingBox (int llx, int lly, int urx, int ury);
+    void gotCreationDate (const char *val1,const char *val2);
+    void gotProcessColors (int colors);
+};
+
+class KarbonGStateHandler : public GStateHandlerBase
+{
+  private:
+    KarbonAIParserBase *delegate;
+  public:
+    KarbonGStateHandler (KarbonAIParserBase *delegate) : GStateHandlerBase() { this->delegate = delegate; }
+
+    void gotFillColor (AIColor &color);
+    void gotStrokeColor (AIColor &color);
+
+    void gotFlatness (double val);
+    void gotLineWidth (double val);
+    void gotLineCaps (int val);
+    void gotLineJoin (int val);
+    void gotMiterLimit (double val);
+    void gotWindingOrder (int val);
+
+};
+
+class KarbonStructureHandler : public StructureHandlerBase
+{
+  private:
+    KarbonAIParserBase *delegate;
+  public:
+    KarbonStructureHandler (KarbonAIParserBase *delegate) : StructureHandlerBase() { this->delegate = delegate; }
+
+   void gotBeginGroup (bool clipping);
+   void gotEndGroup (bool clipping);
+   void gotBeginCombination ();
+   void gotEndCombination ();
+
+};
+
+class KarbonPathHandler : public PathHandlerBase
+{
+  private:
+    KarbonAIParserBase *delegate;
+    FillMode m_fm;
+  public:
+    KarbonPathHandler (KarbonAIParserBase *delegate) : PathHandlerBase ()
+    {
+       m_fm = FM_EvenOdd;
+       this->delegate = delegate;
+    }
+
+  void gotPathElement (PathElement &element);
+  void gotFillPath (bool closed, bool reset);
+  void gotStrokePath (bool closed);
+  void gotIgnorePath (bool closed, bool reset);
+  void gotClipPath (bool closed);
+  void gotFillMode (FillMode fm);
+
+};
+
+class KarbonAIParserBase : public AIParserBase {
+  friend class KarbonDocumentHandler;
+  friend class KarbonGStateHandler;
+  friend class KarbonStructureHandler;
+  friend class KarbonPathHandler;
+
 public: 
 	KarbonAIParserBase();
 	~KarbonAIParserBase();
@@ -80,8 +157,11 @@ private:
 
   void doOutputCurrentPath2(PathOutputType type);
   const VColor toKarbonColor (const AIColor &color);
-
+  void ensureLayer ();
 protected:
+  void setupHandlers();
+  void teardownHandlers();
+
   void parsingStarted();
   void parsingFinished();
 

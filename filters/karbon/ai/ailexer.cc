@@ -151,7 +151,7 @@ static Transition transitions[] = {
   { State_StringEncodedChar, '\\', State_String, Action_Copy},
   { State_StringEncodedChar, CATEGORY_ANY, State_String, Action_DecodeUnget},
   { State_CommentEncodedChar, CATEGORY_DIGIT, State_CommentEncodedChar, Action_CopyTemp},
-  { State_CommentEncodedChar, '\\', State_String, Action_Copy},
+  { State_CommentEncodedChar, '\\', State_Comment, Action_Copy},
   { State_CommentEncodedChar, CATEGORY_ANY, State_Comment, Action_DecodeUnget},
   { State_ByteArray2, '\n', State_Start, Action_Output},
   { State_ByteArray2, '\r', State_Start, Action_Output},

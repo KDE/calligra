@@ -46,10 +46,13 @@ KarbonAIParserBase::KarbonAIParserBase() : m_pot(POT_Other), m_ptt (PTT_Output)
   m_document = new VDocument();
   m_layer = NULL;
   m_combination = NULL;
+
+  setupHandlers();
 }
 
 // generic
 KarbonAIParserBase::~KarbonAIParserBase(){
+  teardownHandlers();
   delete m_curKarbonPath;
 
   delete m_document;
@@ -126,7 +129,7 @@ void KarbonAIParserBase::gotPathElement (PathElement &element){
 // generic
 void KarbonAIParserBase::gotFillPath (bool closed, bool reset, FillMode /*fm*/){
 //  qDebug ("found fill path");
-  if (!reset) qDebug ("retain filled path");
+//  if (!reset) qDebug ("retain filled path");
 
   if (closed) m_curKarbonPath->close();
 
@@ -274,16 +277,37 @@ void KarbonAIParserBase::gotEndGroup (bool /*clipping*/)
 {
 //  qDebug ("start end group");
 
+  if (m_debug) qDebug ("got end group");
+
+  if (m_groupStack.isEmpty()) return;
+
+  if (m_debug) qDebug ("got end group 2");
+
   VGroup *group = m_groupStack.pop();
+
+  if (m_debug) qDebug ("got end group 3");
+
+  if (m_debug)
+  {
+    if (!group) qDebug ("group is NULL");
+  }
 
   if (m_groupStack.isEmpty())
   {
-    m_layer->append( group );
+    if (m_debug) qDebug ("insert object");
+    ensureLayer();
+    m_layer->insertObject (group);
+    if (m_debug) qDebug ("/insert object");
   }
   else
   {
-    m_groupStack.top()->append( group );
+    if (m_debug) qDebug ("insert object to group");
+
+    m_groupStack.top()->insertObject (group);
+    if (m_debug) qDebug ("/insert object to group");
   }
+
+  if (m_debug) qDebug ("/got end group");
 
 //  qDebug ("end end group");
 }
@@ -328,11 +352,7 @@ const VColor KarbonAIParserBase::toKarbonColor (const AIColor &color)
 
 void KarbonAIParserBase::doOutputCurrentPath2(PathOutputType type)
 {
-  if (!m_layer)
-  {
-    m_layer = new VLayer( 0L );
-    m_document->insertLayer (m_layer);
-  }
+  ensureLayer();
 
   if (type != POT_Leave)
   {
@@ -367,6 +387,8 @@ void KarbonAIParserBase::doOutputCurrentPath2(PathOutputType type)
     return;
   }
 
+  ensureLayer();
+
   if (m_groupStack.isEmpty())
   {
     m_layer->append( m_curKarbonPath );
@@ -400,3 +422,149 @@ bool KarbonAIParserBase::parse (QIODevice& fin, QDomDocument &doc)
   return res;
 }
 
+void KarbonAIParserBase::ensureLayer ()
+{
+  if (!m_layer)
+  {
+    m_layer = new VLayer();
+    m_document->insertLayer (m_layer);
+  }
+}
+
+
+void KarbonAIParserBase::setupHandlers()
+{
+//  qDebug("setupHandler called");
+  m_gstateHandler = new KarbonGStateHandler(this);
+  m_structureHandler = new KarbonStructureHandler(this);
+  m_pathHandler = new KarbonPathHandler(this);
+  m_documentHandler = new KarbonDocumentHandler(this);
+
+  m_textHandler = new TextHandlerBase();
+
+}
+
+void KarbonAIParserBase::teardownHandlers()
+{
+//  qDebug("teardownHandler called");
+  delete m_textHandler;
+
+  delete m_gstateHandler;
+  delete m_structureHandler;
+  delete m_pathHandler;
+  delete m_documentHandler;
+}
+
+
+void KarbonDocumentHandler::gotBoundingBox (int llx, int lly, int urx, int ury)
+{
+  delegate->gotBoundingBox(llx,lly,urx,ury);
+}
+
+void KarbonDocumentHandler::gotCreationDate (const char *val1,const char *val2)
+{
+//  qDebug ("got creation date [%s], [%s]",val1,val2);
+}
+
+void KarbonDocumentHandler::gotProcessColors (int colors)
+{
+/*  if (colors && PC_Cyan) qDebug ("contains cyan");
+  if (colors && PC_Magenta) qDebug ("contains magenta");
+  if (colors && PC_Yellow) qDebug ("contains yellow");
+  if (colors && PC_Black) qDebug ("contains black"); */
+}
+
+
+void KarbonGStateHandler::gotFillColor (AIColor &color)
+{
+  delegate->gotFillColor (color);
+}
+
+void KarbonGStateHandler::gotStrokeColor (AIColor &color)
+{
+  delegate->gotStrokeColor(color);
+}
+
+void KarbonGStateHandler::gotFlatness (double val)
+{
+  delegate->gotFlatness(val);
+}
+
+void KarbonGStateHandler::gotLineWidth (double val)
+{
+  delegate->gotLineWidth(val);
+}
+
+void KarbonGStateHandler::gotLineCaps (int val)
+{
+  delegate->gotLineCaps(val);
+}
+
+void KarbonGStateHandler::gotLineJoin (int val)
+{
+  delegate->gotLineJoin(val);
+}
+
+void KarbonGStateHandler::gotMiterLimit (double val)
+{
+  delegate->gotMiterLimit(val);
+}
+
+void KarbonGStateHandler::gotWindingOrder (int val)
+{
+  delegate->gotWindingOrder(val);
+}
+
+void KarbonStructureHandler::gotBeginGroup (bool clipping)
+{
+  delegate->gotBeginGroup(clipping);
+}
+
+void KarbonStructureHandler::gotEndGroup (bool clipping)
+{
+  delegate->gotEndGroup(clipping);
+}
+
+void KarbonStructureHandler::gotBeginCombination ()
+{
+  delegate->gotBeginCombination();
+}
+
+void KarbonStructureHandler::gotEndCombination ()
+{
+  delegate->gotEndCombination();
+}
+
+void KarbonPathHandler::gotPathElement (PathElement &element)
+{
+  delegate->gotPathElement (element);
+}
+
+void KarbonPathHandler::gotFillPath (bool closed, bool reset)
+{
+  delegate->gotFillPath(closed, reset, m_fm);
+}
+
+void KarbonPathHandler::gotFillMode (FillMode fm)
+{
+  m_fm = fm;
+}
+
+void KarbonPathHandler::gotStrokePath (bool closed)
+{
+  delegate->gotStrokePath(closed);
+}
+
+void KarbonPathHandler::gotIgnorePath (bool closed, bool reset)
+{
+  delegate->gotIgnorePath(closed, reset);
+}
+
+void KarbonPathHandler::gotClipPath (bool closed)
+{
+  delegate->gotClipPath(closed);
+}
+
+=======
+
+>>>>>>> 1.11
