@@ -81,7 +81,7 @@ KWSpinBox::KWSpinBox( int minValue, int maxValue, int step ,
 void KWSpinBox::setCounterType(counterType _type)
 {
     m_Etype=_type;
-    textChanged();
+    editor()->setText(mapValueToText(value()));
 }
 
 
@@ -1376,7 +1376,7 @@ void KWParagDia::numStyleChanged( int _type )
     m_counter.setStyle( static_cast<Counter::Style>( _type ) );
 
     // Disable start at for bullet styles.
-    bool hasStart = !m_counter.isBullet();
+    bool hasStart = ((!m_counter.isBullet())&&(m_counter.style()!=Counter::STYLE_NONE));
     lStart->setEnabled( hasStart );
     eStart->setEnabled( hasStart );
     changeKWSpinboxType();
