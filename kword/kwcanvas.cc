@@ -678,7 +678,7 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
     bool bFirst = true;
 
     QListIterator<KWFrameSet> framesetIt( doc->framesetsIterator() );
-    for (; framesetIt.current(); ++framesetIt, bFirst=false )
+    for ( ; framesetIt.current(); ++framesetIt, bFirst=false )
     {
         KWFrameSet *frameset = framesetIt.current();
         if ( doc->processingType() == KWDocument::WP && bFirst ||
@@ -687,76 +687,27 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
         QListIterator<KWFrame> frameIt( frameset->frameIterator() );
         for ( ; frameIt.current(); ++frameIt )
         {
-            KWFrameSet *frameset = framesetIt.current();
-            if ( doc->processingType() == KWDocument::WP && bFirst ||
-                 frameset->getFrameType() == FT_TEXT && frameset->getFrameInfo() != FI_BODY ) continue;
-
-            QListIterator<KWFrame> frameIt( frameset->frameIterator() );
-            for ( ; frameIt.current(); ++frameIt )
-            {
-                KWFrame *frame = frameIt.current();
-                if ( frame->isSelected() ) {
-                    if ( frameset->getFrameType() == FT_TABLE ) {
-                        if ( updates.findRef( static_cast<KWTableFrameSet *> (frameset) ) == -1 )
-                            updates.append( static_cast<KWTableFrameSet *> (frameset));
-                    } else {
-                        QRect oldRect( *frame );
-                        int page = doc->getPageOfRect( *frame );
-                        // Move the frame
-                        frame->setX( static_cast<int>((double)mx / doc->zoomedResolutionX()) );
-                        frame->setY( static_cast<int>((double)my / doc->zoomedResolutionY()) );
-                        // But not out of the page it was on initially
-                        if ( doc->isOutOfPage( *frame, page ) )
-                        {
-                            frame->setRect( oldRect.x(), oldRect.y(), oldRect.width(), oldRect.height() );
-                            mx = oldMx; my = oldMy;
-                            QCursor::setPos( viewport()->mapToGlobal( QPoint( oldMx, oldMy ) ) );
-                        }
-                        // Calculate new rectangle for this frame
-                        QRect newRect( *frame );
-                        // Repaing only the changed rects (oldRect U newRect)
-                        oldRect = doc->zoomRect(oldRect);
-                        oldRect.rLeft() -= 1;
-                        oldRect.rTop() -= 1;
-                        oldRect.rRight() += 1;
-                        oldRect.rBottom() += 1;
-                        newRect = doc->zoomRect(newRect);
-                        newRect.rLeft() -= 1;
-                        newRect.rTop() -= 1;
-                        newRect.rRight() += 1;
-                        newRect.rBottom() += 1;
-                        // ## TODO port to outerRect ( see KWFrameSet )
-                        repaintContents( QRegion(oldRect).unite(newRect).boundingRect() );
+            KWFrame *frame = frameIt.current();
+            if ( frame->isSelected() ) {
+                if ( frameset->getFrameType() == FT_TABLE ) {
+                    if ( tablesMoved.findRef( static_cast<KWTableFrameSet *> (frameset) ) == -1 )
+                        tablesMoved.append( static_cast<KWTableFrameSet *> (frameset));
+                } else {
+                    QRect oldRect( frame->outerRect() );
+                    int page = doc->getPageOfRect( *frame );
+                    // Move the frame
+                    frame->setX( static_cast<int>((double)mx / doc->zoomedResolutionX()) );
+                    frame->setY( static_cast<int>((double)my / doc->zoomedResolutionY()) );
+                    // But not out of the page it was on initially
+                    if ( doc->isOutOfPage( *frame, page ) )
+                    {
+                        frame->setRect( oldRect.x(), oldRect.y(), oldRect.width(), oldRect.height() );
+                        //mx = oldMx; my = oldMy;
+                        //QCursor::setPos( viewport()->mapToGlobal( QPoint( oldMx, oldMy ) ) );
                     }
-                    // Move resize handles to new position
-                    frame->updateResizeHandles();
-                }
-            }
-        }
-
-        if ( !updates.isEmpty() ) {
-            //kdDebug() << "KWCanvas::mmEditFrameMove UPDATES" << endl;
-            for ( unsigned int i = 0; i < updates.count(); i++ ) {
-                KWTableFrameSet *table = updates.at( i );
-                for ( unsigned k = 0; k < table->getNumCells(); k++ ) {
-                    KWFrame * frame = table->getCell( k )->getFrame( 0 );
-
-                    QRect oldRect( *frame );
-                    // Move frame
-                    frame->moveTopLeft( frame->topLeft() + m_boundingRect.topLeft() - oldBoundingRect.topLeft() );
                     // Calculate new rectangle for this frame
-                    QRect newRect( *frame );
+                    QRect newRect( frame->outerRect() );
                     // Repaing only the changed rects (oldRect U newRect)
-                    oldRect = doc->zoomRect(oldRect);
-                    oldRect.rLeft() -= 1;
-                    oldRect.rTop() -= 1;
-                    oldRect.rRight() += 1;
-                    oldRect.rBottom() += 1;
-                    newRect = doc->zoomRect(newRect);
-                    newRect.rLeft() -= 1;
-                    newRect.rTop() -= 1;
-                    newRect.rRight() += 1;
-                    newRect.rBottom() += 1;
                     repaintContents( QRegion(oldRect).unite(newRect).boundingRect() );
                 }
                 // Move resize handles to new position
@@ -771,21 +722,11 @@ void KWCanvas::mmEditFrameMove( int mx, int my )
             KWTableFrameSet *table = tablesMoved.at( i );
             for ( unsigned k = 0; k < table->getNumCells(); k++ ) {
                 KWFrame * frame = table->getCell( k )->getFrame( 0 );
-                QRect oldRect( *frame );
+                QRect oldRect( frame->outerRect() );
                 frame->moveTopLeft( frame->topLeft() + m_boundingRect.topLeft() - oldBoundingRect.topLeft() );
                 // Calculate new rectangle for this frame
-                QRect newRect( *frame );
+                QRect newRect( frame->outerRect() );
                 // Repaing only the changed rects (oldRect U newRect)
-                oldRect = doc->zoomRect(oldRect);
-                oldRect.rLeft() -= 1;
-                oldRect.rTop() -= 1;
-                oldRect.rRight() += 1;
-                oldRect.rBottom() += 1;
-                newRect = doc->zoomRect(newRect);
-                newRect.rLeft() -= 1;
-                newRect.rTop() -= 1;
-                newRect.rRight() += 1;
-                newRect.rBottom() += 1;
                 repaintContents( QRegion(oldRect).unite(newRect).boundingRect() );
                 // Move resize handles to new position
                 frame->updateResizeHandles();
