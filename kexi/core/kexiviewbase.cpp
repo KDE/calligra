@@ -27,16 +27,12 @@ KexiViewBase::KexiViewBase(KexiMainWindow *mainWin, QWidget *parent, const char 
  : QWidget(parent, name)
  , KexiActionProxy(this, mainWin)
  , m_mainWin(mainWin)
+ , m_dirty(false)
 {
 }
 
 KexiViewBase::~KexiViewBase()
 {
-}
-
-bool KexiViewBase::dirty()
-{
-	return false;
 }
 
 bool KexiViewBase::beforeSwitchTo(int /* mode */)

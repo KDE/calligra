@@ -51,7 +51,6 @@ KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent,
 	KexiDB::TableSchema &table, const char *name)
  : KexiViewBase(win, parent, name)
 {
-	m_dirty = false;
 	m_table = &table; //orig table
 	m_newTable = new KexiDB::TableSchema(*m_table); //deep copy of the original table
 	m_fields.resize(MAX_FIELDS);
@@ -331,11 +330,6 @@ void KexiAlterTableDialog::slotUpdateRowActions(int row)
 	setAvailable("edit_delete_row", !m_view->isReadOnly() && !(m_view->isInsertingEnabled() && row==m_view->rows()) );
 	setAvailable("data_save_row", m_view->rowEditing());
 }*/
-
-bool KexiAlterTableDialog::dirty()
-{
-	return m_dirty;
-}
 
 void KexiAlterTableDialog::slotPropertyChanged(KexiPropertyBuffer& buf,KexiProperty& prop)
 {

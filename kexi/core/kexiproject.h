@@ -120,8 +120,21 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		//! For convenience
 		KexiDialogBase* openObject(KexiMainWindow *wnd, const QString &mime, const QString& name, int viewMode = Kexi::DataViewMode);
 
+		/*! Remove part instance pointed by \a item.
+		 \return true on success.
+		*/
 		bool removeObject(KexiMainWindow *wnd, const KexiPart::Item& item);
 
+		/*! Creates part item for given part \a info. 
+		 Newly item will not be saved to the backend but stored in memory only
+		 (owned by project), and marked as "neverSaved" (see KexiPart::Item::neverSaved()).
+		 The item will have assigned new unique name like e.g. "Table15",
+		 and unique name like "table15", but no specific identifier 
+		 (because id will be assigned on creation at the backend side).
+
+		 This method is used before creating new object.
+		 \return newly created part item or NULL on any error. */
+		KexiPart::Item* createPartItem(KexiPart::Info *info);
 
 	protected:
 //		bool			openConnection(KexiProjectConnectionData *connection);
@@ -153,7 +166,7 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		void itemRemoved(const KexiPart::Item &item);
 
 	private:
-//		KexiDB::DriverManager		*m_drvManager;
+	//		KexiDB::DriverManager		*m_drvManager;
 		KexiDB::Connection		*m_connection;
 		QGuardedPtr<KexiProjectData> m_data;
 //		KexiDB::ConnectionData *m_conn_data_to_use; //!< 
@@ -162,6 +175,10 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 
 		//! a cache for item() method, indexed by project part's ids
 		QIntDict<KexiPart::ItemDict> m_itemDictsCache;
+
+		QAsciiDict<KexiPart::Item> m_unstoredItems;
+		int m_tempPartItemID_Counter; //!< helper for getting unique 
+		                              //!< temporary identifiers for unstored items
 //		KexiProjectConnectionData	*m_connData;
 //js		KexiPart::Manager		*m_partManager;
 //		QString				m_error;

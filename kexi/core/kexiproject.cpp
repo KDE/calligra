@@ -46,6 +46,9 @@
 KexiProject::KexiProject(KexiProjectData *pdata)
  : QObject(), Object()
  , m_data(pdata)
+ , m_itemDictsCache(199)
+ , m_unstoredItems(199, false)
+ , m_tempPartItemID_Counter(0)
 {
 //	m_drvManager = new KexiDB::DriverManager();
 //	m_connData = new KexiProjectConnectionData();
@@ -53,8 +56,8 @@ KexiProject::KexiProject(KexiProjectData *pdata)
 
 //TODO: partmanager is outside project, so can be initialised just once:
 
-	m_itemDictsCache = QIntDict<KexiPart::ItemDict>(199);
 	m_itemDictsCache.setAutoDelete(true);
+	m_unstoredItems.setAutoDelete(true);
 	Kexi::partManager().lookup();
 	
 	m_connection = 0;
@@ -348,8 +351,48 @@ bool KexiProject::removeObject(KexiMainWindow *wnd, const KexiPart::Item& item)
 		if (dict) {
 			dict->remove( item.identifier() );
 		}
+		else
+			m_unstoredItems.remove((item.mime()+" "+item.name()).latin1());//remove temp.
 	}
 	return true;
+}
+
+KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info)
+{
+	KexiPart::Part *part = Kexi::partManager().part(info);
+	if(!part)
+		return 0;
+
+	KexiPart::ItemDict *dict = items(info);
+	QString new_name;
+	const QString base_name = Kexi::string2Identifier(part->instanceName()).lower();
+
+	//find new, unique default name for this item
+	int n = 0;
+	KexiPart::ItemDictIterator it(*dict);
+	do {
+		new_name = base_name+QString::number(++n);
+		for (it.toFirst(); it.current(); ++it) {
+			if (it.current()->name().lower()==new_name)
+				break;
+		}
+		if ( !it.current() && !m_unstoredItems[(info->mime()+" "+new_name).latin1()] )
+			break;
+	} while (n<1000/*sanity*/);
+
+	if (n>=1000)
+		return 0;
+
+	QString new_caption = part->instanceName()+QString::number(n);
+
+	KexiPart::Item *item = new KexiPart::Item();
+	item->setIdentifier( --m_tempPartItemID_Counter );//temporary
+	item->setMime(info->mime());
+	item->setName(new_name);
+	item->setCaption(new_caption);
+	item->setNeverSaved(true);
+	m_unstoredItems.insert( (info->mime()+" "+new_name).latin1(), item );
+	return item;
 }
 
 #include "kexiproject.moc"

@@ -74,9 +74,11 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		 This may or not be used, depending if changes in the dialog 
 		 are saved immediately (e.g. like in datatableview) or saved by hand (by user)
 		 (e.g. like in alter-table dialog).
-		 Default implementation always return false. Reimplement this if you e.g. want reuse "dirty" 
+		 "Dirty" flag is reused by KexiDialogBase::dirty().
+		 Default implementation just uses internal m_dirty flag, that is false by default.
+		 Reimplement this if you e.g. want reuse other "dirty" 
 		 flag from internal structures that may be changed. */
-		virtual bool dirty();
+		virtual bool dirty() const { return m_dirty; }
 
 		virtual void closeEvent( QCloseEvent * e );
 
@@ -90,9 +92,8 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 
 		QString m_defaultIconName;
 
-	private:
-
 		KexiMainWindow *m_mainWin;
+		bool m_dirty : 1;
 
 	friend class KexiDialogBase;
 };

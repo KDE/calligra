@@ -23,13 +23,6 @@
 #include <qobject.h>
 #include <qintdict.h>
 
-/** Project Part Item stores 
-	- KexiProjectHandler
-	- identifier ident (low-level name, for example: table name)
-	- mime type name
-	- title (visible hight leve name, eg. table or query title)
-*/
-
 namespace KexiDB
 {
 	class Connection;
@@ -40,6 +33,11 @@ namespace KexiPart
 
 class Info;
 
+/** Project Part Item stores:
+	- identifier ident (low-level name, for example: table name)
+	- mime type name, eg. "kexi/table"
+	- caption (visible, i18n'd hight level name, eg. table or query title)
+*/
 //! Data that identifies a single part object (not necessary instantiated)
 class KEXICORE_EXPORT Item
 {
@@ -49,23 +47,37 @@ class KEXICORE_EXPORT Item
 		~Item();
 
 		int identifier() const { return m_id; }
+		void setIdentifier(int id) { m_id = id; }
+
 		QString	mime() const { return m_mime; }
+		void setMime(const QString &mime) { m_mime = mime; }
+
 		QString	name() const { return m_name; }
+		void setName(const QString &name) { m_name = name; }
+
 		QString	caption() const { return m_caption; }
+		void setCaption(const QString &c) { m_caption = c; }
+
+		/*! \return "neverSaved" flag for this item what mean 
+		 that is used when new item is created in-memory-only,
+		 so we need to indicate for KexiProject about that state. 
+		 By default this flag is false. 
+		 Used by KexiMainWindowImpl::newObject(). */
+		bool neverSaved() const { return m_neverSaved; }
+
+		/*! \sa neverSaved().
+		 Used by KexiMainWindowImpl::newObject(). */
+		void setNeverSaved(bool set) { m_neverSaved = set; }
 
 		bool isNull() const { return m_id==0; }
 
-
-		void		setIdentifier(int id) { m_id = id; }
-		void		setMime(const QString &mime) { m_mime = mime; }
-		void		setName(const QString &name) { m_name = name; }
-		void		setCaption(const QString &c) { m_caption = c; }
 
 	private:
 		QString		m_mime;
 		QString 	m_caption;
 		QString		m_name;
 		int		m_id;
+		bool m_neverSaved : 1;
 };
 
 //typedef QValueList<Item> ItemList;

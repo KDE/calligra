@@ -39,6 +39,7 @@ KexiDialogBase::KexiDialogBase(KexiMainWindow *parent, const QString &caption)
  : KMdiChildView(caption, parent, "KexiDialogBase")
  , KexiActionProxy(this, parent)
  , m_isRegistered(false)
+ , m_neverSaved(false)
 {
 	m_supportedViewModes = 0; //will be set by KexiPart
 	m_currentViewMode = 0; //override this!
@@ -167,9 +168,10 @@ bool KexiDialogBase::tryClose(bool dontSaveChanges)
 	return true;
 }
 
-bool KexiDialogBase::dirty()
+bool KexiDialogBase::dirty() const
 {
-	return false;
+	KexiViewBase *v = static_cast<KexiViewBase*>(m_stack->visibleWidget());
+	return v ? v->dirty() : false;
 }
 
 QString KexiDialogBase::itemIcon()

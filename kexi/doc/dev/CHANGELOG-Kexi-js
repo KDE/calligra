@@ -326,6 +326,13 @@ KexiDB
 -"kexi__parts" table is now filled with default (required) parts info
   automatically in Connection::createDatabase(), not somewhere outside
 TODO: add version info?
+Main Window
+-Part type name removed MDI Taskbar buttons' captions, to save some space
+Kexi Views/Dialogs
+-"dirty" and "neverSaved" flags added
+Parts / Kexi Project
+-so-called "unstoredItems" introduced, so they can initially exist in memory only 
+ and user may want to give up, not saving them
 
 2004-02-27
 Kexi Property Editor, Kexi Property Framework

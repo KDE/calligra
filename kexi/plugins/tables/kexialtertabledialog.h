@@ -75,8 +75,6 @@ class KexiAlterTableDialog : public KexiViewBase
 
 		void removeCurrentPropertyBuffer();
 
-		virtual bool dirty();
-
 	protected slots:
 		void slotCellSelected(int col, int row);
 //		void slotUpdateRowActions(int row);
@@ -109,7 +107,6 @@ class KexiAlterTableDialog : public KexiViewBase
 //		KexiPropertyEditor *m_properties;
 		FieldsBuffer m_fields; //!< buffer
 		int m_row; //!< used to know if a new row is selected in slotCellSelected()
-		bool m_dirty : 1;
 		bool m_currentBufferCleared : 1;
 };
 

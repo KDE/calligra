@@ -1660,7 +1660,7 @@ KexiDialogBase *
 KexiMainWindowImpl::openObject(KexiPart::Item* item, int viewMode)
 {
 	if (!item)
-		return false;
+		return 0;
 	KexiDialogBase *dlg = d->dialogs[ item->identifier() ];
 	if (dlg) {
 		if (dlg->currentViewMode()!=viewMode) {
@@ -1730,6 +1730,7 @@ bool KexiMainWindowImpl::newObject( KexiPart::Info *info )
 		kdDebug() << "KexiMainWindowImpl::newObject(): new id is: " << info->projectPartID()  << endl;
 	}
 
+#if 0 //js: this will be performed after saving confirmation
 	KexiCreateItemDlg *dlg = new KexiCreateItemDlg(this, info->objectName(), "citem");
 	if(!dlg->exec())
 		return false;
@@ -1768,7 +1769,19 @@ bool KexiMainWindowImpl::newObject( KexiPart::Info *info )
 	openObject(it, Kexi::DesignViewMode);
 
 	delete dlg;
-	return true;
+#endif //0
+	KexiPart::Item *it = d->prj->createPartItem(info); //this, *item, viewMode);
+	if (!it) {
+		//js: todo: err
+		return false;
+	}
+/*	KexiPart::Item *it = new KexiPart::Item();
+	it->setMime(info->mime());
+	it->setName(dlg->name());
+	it->setNeverSaved(true);*/
+
+	d->nav->addItem(it);
+	return openObject(it, Kexi::DesignViewMode);
 }
 
 bool KexiMainWindowImpl::removeObject( KexiPart::Item *item )

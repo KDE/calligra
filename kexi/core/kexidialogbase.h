@@ -101,6 +101,34 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 
 		/*! Internal reimplementation. */
 		virtual bool eventFilter(QObject *obj, QEvent *e);
+
+		/*! Used by Main Window 
+		 \todo js: PROBABLY REMOVE THESE TWO?
+		*/
+		virtual void attachToGUIClient();
+		virtual void detachFromGUIClient();
+
+		/*! True if contents (data) of the dialog is dirty and need to be saved
+		 This may or not be used, depending if changes in the dialog 
+		 are saved immediately (e.g. like in datatableview) or saved by hand (by user)
+		 (e.g. like in alter-table dialog).
+		 Default implementation always returns "dirty" flag retrieved from the current 
+		 view (if present) ot just false;
+		 Reimplement this if you e.g. want reuse "dirty" 
+		 flag from internal structures that may be changed. */
+		virtual bool dirty() const;
+
+		/*! \return true, if this dialog's contents were never saved.
+		 If it's true we're usually try to ask a user if the dialog's 
+		 data should be saved somewhere. After dialog construction,
+		 "neverSaved" flag is set to appropriate value.
+		*/
+		bool neverSaved();
+
+		/*! \return property buffer provided by a current view,
+		 or NULL if there is no view set (or the view has no buffer assgned). */
+		KexiPropertyBuffer *propertyBuffer();
+
 	public slots:
 //		virtual void detach();
 		virtual void setFocus();
@@ -113,17 +141,7 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 
 	protected:
 		void registerDialog();
-		virtual void attachToGUIClient();
-		virtual void detachFromGUIClient();
 		virtual void closeEvent( QCloseEvent * e );
-
-		/*! True if contents (data) of the dialog is dirty and need to be saved
-		 This may or not be used, depending if changes in the dialog 
-		 are saved immediately (e.g. like in datatableview) or saved by hand (by user)
-		 (e.g. like in alter-table dialog).
-		 Default implementation always return false. Reimplement this if you e.g. want reuse "dirty" 
-		 flag from internal structures that may be changed. */
-		virtual bool dirty();
 
 		//! Internal.
 		void addView(KexiViewBase *view, int mode);
@@ -132,8 +150,6 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		int m_currentViewMode;
 
 		inline QWidgetStack * stack() const { return m_stack; }
-
-		KexiPropertyBuffer *propertyBuffer();
 
 	private:
 		KexiMainWindow *m_parentWindow;
@@ -146,9 +162,10 @@ class KEXICORE_EXPORT KexiDialogBase : public KMdiChildView, public KexiActionPr
 		QGuardedPtr<KexiPart::Part> m_part;
 		const KexiPart::Item *m_item;
 		QWidgetStack *m_stack;
+		bool m_neverSaved : 1; //!< true, if this dialog's contents were never saved 
 
 		friend class KexiMainWindow;
-		friend class KexiMainWindowImpl;
+//		friend class KexiMainWindowImpl;
 		friend class KexiPart::Part;
 		friend class KexiInternalPart;
 };
