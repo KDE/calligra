@@ -45,7 +45,7 @@ KPPartObject &KPPartObject::operator=( const KPPartObject & )
 void KPPartObject::updateChildGeometry()
 {
     KoZoomHandler* zh = child->parent()->zoomHandler();
-    child->setGeometry( zh->zoomRect( getRect() ), false );
+    child->setGeometry( zh->zoomRect( getRect() ), true );
     child->setRotationPoint( QPoint( zh->zoomItX( getOrig().x() + getSize().width() / 2 ),
                                      zh->zoomItY( getOrig().y() + getSize().height() / 2 ) ) );
 }
@@ -78,12 +78,11 @@ void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
         pen2.setWidth( _zoomhandler->zoomItX( pen.width() ) );
     }
     _painter->save();
+    child->transform( *_painter );
+    _painter->setPen( Qt::NoPen );
+    _painter->setBrush( brush );
 
     if ( angle == 0 ) {
-        child->transform( *_painter );
-
-        _painter->setPen( Qt::NoPen );
-        _painter->setBrush( brush );
         if ( fillType == FT_BRUSH || !gradient )
             _painter->drawRect( penw, penw, _zoomhandler->zoomItX( ext.width() - 2 * penw ),
                                 _zoomhandler->zoomItY( ext.height() - 2 * penw ) );
@@ -93,19 +92,9 @@ void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
                                   _zoomhandler->zoomItX( ow - 2 * penw ),
                                   _zoomhandler->zoomItY( oh - 2 * penw ) );
         }
-        _painter->setPen( pen2 );
-        _painter->setBrush( Qt::NoBrush );
-        _painter->drawRect( _zoomhandler->zoomItX( penw ), _zoomhandler->zoomItY( penw ),
-                            _zoomhandler->zoomItX( ow - 2 * penw ), _zoomhandler->zoomItY( oh - 2 * penw ) );
-
-        paint( _painter,_zoomhandler, selectionMode, drawContour );
     }
     else
     {
-        child->transform( *_painter );
-        _painter->setPen( Qt::NoPen );
-        _painter->setBrush( brush );
-
         if ( fillType == FT_BRUSH || !gradient )
             _painter->drawRect( _zoomhandler->zoomItX( penw ), _zoomhandler->zoomItY( penw ),
                                 _zoomhandler->zoomItX( ext.width() - 2 * penw ),
@@ -116,14 +105,13 @@ void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
                                   _zoomhandler->zoomItX( ow - 2 * penw ),
                                   _zoomhandler->zoomItY( oh - 2 * penw ) );
         }
-        _painter->setPen( pen2 );
-        _painter->setBrush( Qt::NoBrush );
-        _painter->drawRect( _zoomhandler->zoomItX( penw ), _zoomhandler->zoomItY( penw ),
-                            _zoomhandler->zoomItX( ow - 2 * penw ), _zoomhandler->zoomItY( oh - 2 * penw ) );
-
-        paint( _painter, _zoomhandler, selectionMode, drawContour );
     }
 
+    _painter->setPen( pen2 );
+    _painter->setBrush( Qt::NoBrush );
+    _painter->drawRect( _zoomhandler->zoomItX( penw ), _zoomhandler->zoomItY( penw ),
+                        _zoomhandler->zoomItX( ow - 2 * penw ), _zoomhandler->zoomItY( oh - 2 * penw ) );
+    paint( _painter, _zoomhandler, selectionMode, drawContour );
     _painter->restore();
 
     KPObject::draw( _painter, _zoomhandler, selectionMode, drawContour );
@@ -132,9 +120,9 @@ void KPPartObject::draw( QPainter *_painter, KoZoomHandler *_zoomhandler,
 void KPPartObject::slot_changed( KoChild *_koChild )
 {
     KoZoomHandler* zh = child->parent()->zoomHandler();
-    QRect g = _koChild->geometry();
-    KPObject::setOrig( zh->unzoomItX( g.x() ), zh->unzoomItY( g.y() ) );
-    KPObject::setSize( zh->unzoomItX( g.width() ), zh->unzoomItY( g.height() ) );
+    KoRect g = zh->unzoomRect( _koChild->geometry() );
+    KPObject::setOrig( g.x(), g.y() );
+    KPObject::setSize( g.width(), g.height() );
 }
 
 void KPPartObject::paint( QPainter *_painter, KoZoomHandler *_zoomHandler,
@@ -146,15 +134,18 @@ void KPPartObject::paint( QPainter *_painter, KoZoomHandler *_zoomHandler,
         QPen pen3( Qt::black, 1, Qt::DotLine );
         _painter->setPen( pen3 );
         _painter->setRasterOp( Qt::NotXorROP );
-        _painter->drawRect( KoRect( KoPoint( 0.0, 0.0 ), getSize() ).toQRect() );
+        _painter->drawRect( _zoomHandler->zoomRect( KoRect( KoPoint( 0.0, 0.0 ), getSize() ) ) );
         return;
     }
 
     if ( !child || !child->document() )
         return;
 
+    int penw = pen.width();
+    KoRect r( KoPoint( penw, penw ), KoPoint( getSize().width() - ( penw * 2.0 ),
+              getSize().height() - ( penw * 2.0 ) ) );
     child->document()->paintEverything( *_painter,
-                                        KoRect( KoPoint( 0.0, 0.0 ), getSize() ).toQRect(),
+                                        _zoomHandler->zoomRect( r ),
                                         true, // flicker?
                                         0 /* View isn't known from here - is that a problem? */,
                                         _zoomHandler->zoomedResolutionX(),
