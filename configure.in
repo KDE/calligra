@@ -44,7 +44,7 @@ AC_TRY_COMPILE(
 #include <mico/template_impl.h>
 #include <algorithm>       
 ],
-[int main() {}],
+[ ; ],
 kde_mini_stl=no,
 kde_mini_stl=yes)
 
