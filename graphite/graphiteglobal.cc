@@ -260,8 +260,7 @@ void PageLayout::loadDefaults() {
     KConfig *config=KGlobal::config();
     config->setGroup(QString::fromLatin1("PageLayout"));
     orientation=static_cast<QPrinter::Orientation>(config->readNumEntry(QString::fromLatin1("Orientation"), 0));
-    int layout=config->readNumEntry(QString::fromLatin1("Layout"), 0);
-    if(layout==0)
+    if(config->readNumEntry(QString::fromLatin1("Layout"), 0)==0)
         layout=Graphite::PageLayout::Norm;
     else
         layout=Graphite::PageLayout::Custom;
