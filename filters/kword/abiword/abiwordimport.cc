@@ -25,8 +25,6 @@
 #include <unistd.h>
 #endif
 
-#include <qptrstack.h>
-#include <qmap.h>
 #include <qxml.h>
 #include <qdom.h>
 
@@ -35,137 +33,17 @@
 
 #include <koGlobal.h>
 
-#include <abiwordimport.h>
-#include <abiwordimport.moc>
+#include "ImportHelpers.h"
+#include "ImportFormatting.h"
+
+#include "abiwordimport.h"
+#include "abiwordimport.moc"
 
 // *Note for the reader of this code*
 // Tags in lower case (e.g. <c>) are AbiWord's ones.
 // Tags in upper case (e.g. <TEXT>) are KWord's ones.
 
-class AbiProps
-{
-public:
-    AbiProps() {};
-    AbiProps(QString newValue) : m_value(newValue) {};
-    virtual ~AbiProps() {};
-public:
-    inline QString getValue(void) const { return m_value; }
-private:
-    QString m_value;
-};
-
-class AbiPropsMap : public QMap<QString,AbiProps>
-{
-public:
-    AbiPropsMap() {};
-    virtual ~AbiPropsMap() {};
-public:
-    bool setProperty(QString newName, QString newValue);
-    void splitAndAddAbiProps(const QString& strProps);
-};
-
-bool AbiPropsMap::setProperty(QString newName, QString newValue)
-{
-    replace(newName,AbiProps(newValue));
-    return true;
-}
-
-// Treat the "props" attribute of AbiWord's tags and split it in separates names and values
-void AbiPropsMap::splitAndAddAbiProps(const QString& strProps)
-{
-    // NOTE: we assume that all AbiWord properties are in the form:
-    //     property:value;
-    //  If, as in CSS2, any new AbiWord property is not anymore in this form,
-    //  then this method will need to be changed (perhaps with QStringList::split())
-    if (strProps.isEmpty())
-        return;
-
-    QString name,value;
-    bool notFinished=true;
-    int position=0;
-    int result;
-    while (notFinished)
-    {
-        //Find next name and its value
-        result=strProps.find(':',position);
-        if (result==-1)
-        {
-            name=strProps.mid(position).stripWhiteSpace();
-            value="";
-            notFinished=false;
-        }
-        else
-        {
-            name=strProps.mid(position,result-position).stripWhiteSpace();
-            position=result+1;
-            result=strProps.find(';',position);
-            if (result==-1)
-            {
-                value=strProps.mid(position).stripWhiteSpace();
-                notFinished=false;
-            }
-            else
-            {
-                value=strProps.mid(position,result-position).stripWhiteSpace();
-                position=result+1;
-            }
-        }
-        kdDebug(30506) << "========== (Property :" << name << "=" << value <<":)"<<endl;
-        // Now set the property
-        setProperty(name,value);
-    }
-}
-
-enum StackItemElementType{
-    ElementTypeUnknown  = 0,
-    ElementTypeBottom,      // Bottom of the stack
-    ElementTypeIgnore,      // Element is known but ignored
-    ElementTypeEmpty,       // Element is empty
-    ElementTypeAbiWord,     // <abiword>
-    ElementTypeSection,     // <section>
-    ElementTypeParagraph,   // <p>
-    ElementTypeContent,     // <c>
-    ElementTypeField        // <field>
-};
-
-class StackItem
-{
-public:
-    StackItem()
-    {
-        fontSize=0; //No explicit font size
-        italic=false;
-        bold=false;
-        underline=false;
-        strikeout=false;
-        textPosition=0;
-    }
-    ~StackItem()
-    {
-    }
-public:
-    StackItemElementType elementType;
-    QDomElement stackElementParagraph; // <PARAGRAPH>
-    QDomElement stackElementText; // <TEXT>
-    QDomElement stackElementFormatsPlural; // <FORMATS>
-    QString     fontName;
-    int         fontSize;
-    int         pos; //Position
-    bool        italic;
-    bool        bold;
-    bool        underline;
-    bool        strikeout;
-    QColor      fgColor;
-    QColor      bgColor;
-    int         textPosition; //Normal (0), subscript(1), superscript (2)
-};
-
-class StackItemStack : public QPtrStack<StackItem>
-{
-public:
-        StackItemStack(void) { }
-        virtual ~StackItemStack(void) { }
-};
+// enum StackItemElementType is now in the file ImportFormatting.h
 
 class StructureParser : public QXmlDefaultHandler
 {
@@ -201,226 +79,6 @@ private:
     QDomDocument mainDocument;
     QDomElement mainFramesetElement;     // The main <FRAMESET> where the body text will be under.
 };
-
-
-// <pagesize>
-
-static inline double CentimetresToPoints(const double d)
-{
-    return d * 72.0 / 2.54;
-}
-
-static inline double MillimetresToPoints(const double d)
-{
-    return d * 72.0 / 25.4;
-}
-
-static inline double InchesToPoints(const double d)
-{
-    return d * 72.0;
-}
-
-static inline double PicaToPoints(const double d)
-{
-    // 1 pica = 12 pt
-    return d * 12.0;
-}
-
-// Do not put this function inline (it's too long!)
-static double ValueWithLengthUnit( const QString& _str )
-{
-    double d;
-    int pos=0;
-    if ((pos=_str.find("cm"))>=0)
-    {
-        d=CentimetresToPoints(_str.left(pos).toDouble());
-    }
-    else if ((pos=_str.find("in"))>=0)
-    {
-        d=InchesToPoints(_str.left(pos).toDouble());
-    }
-    else if ((pos=_str.find("mm"))>=0)
-    {
-        d=MillimetresToPoints(_str.left(pos).toDouble());
-    }
-    else if((pos=_str.find("pt"))>=0)
-    {
-        d=_str.left(pos).toDouble();
-    }
-    else if((pos=_str.find("pi"))>=0)
-    {
-        d=PicaToPoints(_str.left(pos).toDouble());
-    }
-    else
-    {
-        bool b=false;
-        d=_str.toDouble(&b);
-        if (!b)
-        {
-            d=0;
-            kdWarning(30506) << "Unknown value: " << _str << " (ValueWithLengthUnit)" << endl;
-        }
-    }
-    return d;
-}
-
-void PopulateProperties(StackItem* stackItem,
-                        const QXmlAttributes& attributes,
-                        AbiPropsMap& abiPropsMap, const bool allowInit)
-// TODO: find a better name for this function
-{
-    if (allowInit)
-    {
-        // Initialize the QStrings with the previous values of the properties
-        // TODO: any others needed?
-        if (stackItem->italic)
-        {
-            abiPropsMap.setProperty("font-style","italic");
-        }
-        if (stackItem->bold)
-        {
-            abiPropsMap.setProperty("font-weight","bold");
-        }
-
-        if (stackItem->underline)
-        {
-            abiPropsMap.setProperty("text-decoration","underline");
-        }
-        else if (stackItem->strikeout)
-        {
-            abiPropsMap.setProperty("text-decoration","line-through");
-        }
-    }
-
-    kdDebug(30506)<< "========== props=\"" << attributes.value("props") << "\"" << endl;
-    // Treat the props attributes in the two available flavors: lower case and upper case.
-    abiPropsMap.splitAndAddAbiProps(attributes.value("props"));
-    abiPropsMap.splitAndAddAbiProps(attributes.value("PROPS")); // PROPS is deprecated
-
-    stackItem->italic=(abiPropsMap["font-style"].getValue()=="italic");
-    stackItem->bold=(abiPropsMap["font-weight"].getValue()=="bold");
-
-    QString strDecoration=abiPropsMap["text-decoration"].getValue();
-    stackItem->underline=(strDecoration=="underline");
-    stackItem->strikeout=(strDecoration=="line-through");
-
-    QString strTextPosition=abiPropsMap["text-position"].getValue();
-    if (strTextPosition=="subscript")
-    {
-        stackItem->textPosition=1;
-    }
-    else if (strTextPosition=="superscript")
-    {
-        stackItem->textPosition=2;
-    }
-    else if (!strTextPosition.isEmpty())
-    {
-        // we have any other new value, assume it means normal!
-        stackItem->textPosition=0;
-    }
-
-    QString strColour=abiPropsMap["color"].getValue();
-    if (!strColour.isEmpty())
-    {
-        // The colour information is *not* lead by a hash (#)
-        stackItem->fgColor.setNamedColor("#"+strColour);
-   }
-
-    QString strBackgroundTextColor=abiPropsMap["bgcolor"].getValue();
-    if(!strBackgroundTextColor.isEmpty())
-    {
-        // The colour information is *not* lead by a hash (#)
-        stackItem->bgColor.setNamedColor("#"+strBackgroundTextColor);
-    }
-
-    QString strFontSize=abiPropsMap["font-size"].getValue();
-    if (!strFontSize.isEmpty())
-    {
-        const int size=int(ValueWithLengthUnit(strFontSize));
-        if (size>0)
-        {
-            stackItem->fontSize=size;
-        }
-    }
-
-    QString strFontFamily=abiPropsMap["font-family"].getValue();
-    if (!strFontFamily.isEmpty())
-    {
-        // TODO: transform the font-family in a font we have on the system on which KWord runs.
-        stackItem->fontName=strFontFamily;
-    }
-}
-
-static void AddFormat(QDomElement& formatElementOut, StackItem* stackItem, QDomDocument& mainDocument)
-{
-    QDomElement element;
-    if (!stackItem->fontName.isEmpty())
-    {
-        element=mainDocument.createElement("FONT");
-        element.setAttribute("name",stackItem->fontName); // Font name
-        formatElementOut.appendChild(element); //Append to <FORMAT>
-    }
-
-    if (stackItem->fontSize)
-    {
-        element=mainDocument.createElement("SIZE");
-        element.setAttribute("value",stackItem->fontSize);
-        formatElementOut.appendChild(element); //Append to <FORMAT>
-    }
-
-    if (stackItem->italic)
-    {
-        element=mainDocument.createElement("ITALIC");
-        element.setAttribute("value",1);
-        formatElementOut.appendChild(element); //Append to <FORMAT>
-    }
-
-    if (stackItem->bold)
-    {
-        element=mainDocument.createElement("WEIGHT");
-        element.setAttribute("value",75);
-        formatElementOut.appendChild(element); //Append to <FORMAT>
-    }
-
-    if (stackItem->underline)
-    {
-        element=mainDocument.createElement("UNDERLINE");
-        element.setAttribute("value",1);
-        formatElementOut.appendChild(element); //Append to <FORMAT>
-    }
-
-    if (stackItem->strikeout)
-    {
-        element=mainDocument.createElement("STRIKEOUT");
-        element.setAttribute("value",1);
-        formatElementOut.appendChild(element); //Append to <FORMAT>
-    }
-
-    if (stackItem->textPosition)
-    {
-        element=mainDocument.createElement("VERTALIGN");
-        element.setAttribute("value",stackItem->textPosition);
-        formatElementOut.appendChild(element); //Append to <FORMAT>
-    }
-
-    if (stackItem->fgColor.isValid())
-    {
-        element=mainDocument.createElement("COLOR");
-        element.setAttribute("red",  stackItem->fgColor.red());
-        element.setAttribute("green",stackItem->fgColor.green());
-        element.setAttribute("blue", stackItem->fgColor.blue());
-        formatElementOut.appendChild(element); //Append to <FORMAT>
-    }
-
-    if (stackItem->bgColor.isValid())
-    {
-        element=mainDocument.createElement("TEXTBACKGROUNDCOLOR");
-        element.setAttribute("red",  stackItem->bgColor.red());
-        element.setAttribute("green",stackItem->bgColor.green());
-        element.setAttribute("blue", stackItem->bgColor.blue());
-        formatElementOut.appendChild(element); //Append to <FORMAT>
-    }
-}
 
 // Element <c>
 
@@ -693,6 +351,22 @@ bool EndElementField (StackItem* stackItem, StackItem* stackCurrent)
     return true;
 }
 
+// <s> (style)
+
+static bool StartElementS(StackItem* stackItem, StackItem* stackCurrent,
+    QDomDocument& mainDocument, QDomElement& mainFramesetElement,
+    const QXmlAttributes& attributes)
+{
+    stackItem->elementType=ElementTypeEmpty;
+
+    AbiPropsMap abiPropsMap;
+    PopulateProperties(stackItem,attributes,abiPropsMap,false);
+
+    // TODO
+
+    return true;
+}
+
 // <br> (forced line break)
 // <cbr> (forced column break, not supported)
 // <pbr> (forced page break)
@@ -765,7 +439,6 @@ static bool StartElementBR(StackItem* stackItem, StackItem* stackCurrent,
 
     return true;
 }
-
 
 
 static bool StartElementPageSize(QDomDocument& mainDocument, const QXmlAttributes& attributes)
@@ -1024,6 +697,10 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
     {
         kdDebug(30506)<<"A Field ------------------------------------\n";
         success=StartElementField(stackItem,structureStack.current(),attributes);
+    }
+    else if (name=="s") // Seems only to exist as lower case
+    {
+        success=StartElementS(stackItem,structureStack.current(),mainDocument,mainFramesetElement,attributes);
     }
     else
     {
