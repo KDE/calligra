@@ -46,8 +46,19 @@
 
 #define SECSPERDAY (24 * 60 * 60)
 
-typedef KGenericFactory<OpenCalcImport, KoFilter> OpenCalcImportFactory;
-K_EXPORT_COMPONENT_FACTORY( libopencalcimport, OpenCalcImportFactory( "opencalcfilter" ) );
+class OpenCalcImportFactory : KGenericFactory<OpenCalcImport, KoFilter>
+{
+public:
+    OpenCalcImportFactory(void) : KGenericFactory<OpenCalcImport, KoFilter> ("kspreadopencalcimport")
+    {}
+protected:
+    virtual void setupTranslations( void )
+    {
+        KGlobal::locale()->insertCatalogue( "kspreadopencalcfilter" );
+    }
+};
+
+K_EXPORT_COMPONENT_FACTORY( libopencalcimport, OpenCalcImportFactory() );
 
 OpenCalcImport::OpenCalcPoint::OpenCalcPoint( QString const & str )
   : isRange( false )

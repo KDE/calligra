@@ -48,9 +48,19 @@
 
 typedef QValueList<Reference> AreaList;
 
-typedef KGenericFactory<OpenCalcExport, KoFilter> OpenCalcExportFactory;
-K_EXPORT_COMPONENT_FACTORY( libopencalcexport, 
-                            OpenCalcExportFactory( "opencalcfilter" ) );
+class OpenCalcExportFactory : KGenericFactory<OpenCalcExport, KoFilter>
+{
+public:
+    OpenCalcExportFactory(void) : KGenericFactory<OpenCalcExport, KoFilter> ("kspreadopencalcexport")
+    {}
+protected:
+    virtual void setupTranslations( void )
+    {
+        KGlobal::locale()->insertCatalogue( "kspreadopencalcfilter" );
+    }
+};
+
+K_EXPORT_COMPONENT_FACTORY( libopencalcexport, OpenCalcExportFactory() );
 
 #define STOPEXPORT \
   do \
