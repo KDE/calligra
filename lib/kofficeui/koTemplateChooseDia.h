@@ -41,12 +41,13 @@ class KoTemplateChooseDia : public QTabDialog
   Q_OBJECT
 
 public:
-  KoTemplateChooseDia(QWidget *parent,const char *name,QString _templatePath,bool _hasCancel); 
+  KoTemplateChooseDia(QWidget *parent,const char *name,QString _globalTemplatePath,QString _personalTemplatePath,bool _hasCancel); 
   ~KoTemplateChooseDia() {;}
 
-  static bool chooseTemplate(QString _templatePath,QString &_template,bool _hasCancel);
+  static bool chooseTemplate(QString _globalTemplatePath,QString _personalTemplatePath,QString &_template,bool _hasCancel);
 
   QString getTemplate() { return templateName; }
+  QString getFullTemplate() { return fullTemplateName; }
 
 protected:
   struct Group
@@ -64,8 +65,8 @@ protected:
 
   QList<Group> groupList;
   Group *grpPtr;
-  QString templatePath;
-  QString templateName;
+  QString globalTemplatePath,personalTemplatePath;
+  QString templateName,fullTemplateName;
 
 private slots:
   void nameChanged(const char*);
