@@ -125,6 +125,12 @@ public:
     void eraseSelection( Direction direction = beforeCursor );
     void addText( QString str );
 
+    /** Gets called if the cursor ties to leave the formula at its begin. */
+    virtual void exitLeft();
+
+    /** Gets called if the cursor ties to leave the formula at its end. */
+    virtual void exitRight();
+
 signals:
 
     /**
@@ -154,6 +160,9 @@ protected slots:
      * our cursor must not be inside it.
      */
     void slotElementWillVanish(BasicElement*);
+
+    void slotCursorExitLeft( FormulaCursor* cursor );
+    void slotCursorExitRight( FormulaCursor* cursor );
 
 private:
 

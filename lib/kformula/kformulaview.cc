@@ -46,6 +46,10 @@ struct View::View_Impl {
                 view, SLOT(slotFormulaLoaded(FormulaElement*)));
         connect(document, SIGNAL(cursorMoved(FormulaCursor*)),
                 view, SLOT(slotCursorMoved(FormulaCursor*)));
+        connect( document, SIGNAL( cursorExitLeft( FormulaCursor* ) ),
+                 view, SLOT( slotCursorExitLeft( FormulaCursor* ) ) );
+        connect( document, SIGNAL( cursorExitRight( FormulaCursor* ) ),
+                 view, SLOT( slotCursorExitRight( FormulaCursor* ) ) );
 
         cursor = document->createCursor();
     }
@@ -260,6 +264,20 @@ void View::slotElementWillVanish(BasicElement* element)
     emitCursorChanged();
 }
 
+void View::slotCursorExitLeft( FormulaCursor* c )
+{
+    if ( cursor() == c ) {
+        exitLeft();
+    }
+}
+
+void View::slotCursorExitRight( FormulaCursor* c )
+{
+    if ( cursor() == c ) {
+        exitRight();
+    }
+}
+
 void View::slotSelectAll()
 {
     cursor()->moveHome(WordMovement);
@@ -331,6 +349,16 @@ void View::addText( QString str )
 {
     TextRequest r( str );
     container()->performRequest( &r );
+}
+
+void View::exitLeft()
+{
+    kdDebug( DEBUGID ) << "View::exitLeft" << endl;
+}
+
+void View::exitRight()
+{
+    kdDebug( DEBUGID ) << "View::exitRight" << endl;
 }
 
 void View::emitCursorChanged()

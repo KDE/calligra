@@ -43,6 +43,8 @@ public:
     virtual void elementRemoval(BasicElement* child);
     virtual void changed();
     virtual void cursorHasMoved( FormulaCursor* );
+    virtual void moveOutLeft( FormulaCursor* ) {}
+    virtual void moveOutRight( FormulaCursor* ) {}
     virtual const SymbolTable& getSymbolTable() const;
 
     static const char* selectionMimeType();

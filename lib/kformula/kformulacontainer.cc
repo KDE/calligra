@@ -158,6 +158,16 @@ void Container::cursorHasMoved( FormulaCursor* )
     impl->cursorMoved = true;
 }
 
+void Container::moveOutLeft( FormulaCursor* cursor )
+{
+    emit cursorExitLeft( cursor );
+}
+
+void Container::moveOutRight( FormulaCursor* cursor )
+{
+    emit cursorExitRight( cursor );
+}
+
 FormulaCursor* Container::activeCursor()
 {
     return impl->activeCursor;

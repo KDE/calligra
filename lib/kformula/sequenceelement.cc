@@ -377,6 +377,9 @@ void SequenceElement::moveLeft(FormulaCursor* cursor, BasicElement* from)
             if (getParent() != 0) {
                 getParent()->moveLeft(cursor, this);
             }
+            else {
+                formula()->moveOutLeft( cursor );
+            }
         }
     }
 
@@ -428,6 +431,9 @@ void SequenceElement::moveRight(FormulaCursor* cursor, BasicElement* from)
             // Needed because FormulaElement derives this.
             if (getParent() != 0) {
                 getParent()->moveRight(cursor, this);
+            }
+            else {
+                formula()->moveOutRight( cursor );
             }
         }
     }

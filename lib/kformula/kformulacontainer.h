@@ -70,6 +70,8 @@ public:
     virtual void elementRemoval(BasicElement* child) = 0;
     virtual void changed() = 0;
     virtual void cursorHasMoved( FormulaCursor* ) = 0;
+    virtual void moveOutLeft( FormulaCursor* ) = 0;
+    virtual void moveOutRight( FormulaCursor* ) = 0;
     virtual const SymbolTable& getSymbolTable() const = 0;
 };
 
@@ -121,6 +123,9 @@ public:
      * call this.
      */
     void cursorHasMoved( FormulaCursor* );
+
+    void moveOutLeft( FormulaCursor* );
+    void moveOutRight( FormulaCursor* );
 
     /**
      * Draws the whole thing.
@@ -260,6 +265,9 @@ signals:
      * The cursor has been moved because of a change at the formula.
      */
     //void cursorChanged(FormulaCursor* cursor);
+
+    void cursorExitLeft( FormulaCursor* cursor );
+    void cursorExitRight( FormulaCursor* cursor );
 
     /**
      * The formula has changed and needs to be redrawn.

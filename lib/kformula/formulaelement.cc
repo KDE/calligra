@@ -67,6 +67,16 @@ void FormulaElement::cursorHasMoved( FormulaCursor* cursor )
     document->cursorHasMoved( cursor );
 }
 
+void FormulaElement::moveOutLeft( FormulaCursor* cursor )
+{
+    document->moveOutLeft( cursor );
+}
+
+void FormulaElement::moveOutRight( FormulaCursor* cursor )
+{
+    document->moveOutRight( cursor );
+}
+
 /**
  * Calculates the formulas sizes and positions.
  */

@@ -81,6 +81,9 @@ public:
      */
     void cursorHasMoved( FormulaCursor* );
 
+    void moveOutLeft( FormulaCursor* );
+    void moveOutRight( FormulaCursor* );
+
     /**
      * Calculates the formulas sizes and positions.
      */
