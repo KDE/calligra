@@ -194,7 +194,7 @@
                         <bool>true</bool>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>Convert as much possible of the KWord document (Recommend for exporting to other modern word processors or to modern browsers)</string>
+                        <string>Convert as much as possible of the KWord document (Recommended for exporting to other modern word processors or to modern browsers)</string>
                     </property>
                 </widget>
             </vbox>
