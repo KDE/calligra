@@ -360,6 +360,11 @@ QStringList KWPgNumVariable::actionTexts()
     return lst;
 }
 
+void KWPgNumVariable::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg )
+{
+    recalc();
+    KWVariable::draw( p, x, y,cx,cy, cw, ch, cg );
+}
 
 /******************************************************************/
 /* Class: KWCustomVariable                                        */

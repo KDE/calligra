@@ -234,7 +234,7 @@ public:
 
     virtual void save( QDomElement &parentElem );
     virtual void load( QDomElement &elem );
-
+    virtual void draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, const QColorGroup& cg );
 protected:
     short int m_subtype;
     int m_pgNum;
