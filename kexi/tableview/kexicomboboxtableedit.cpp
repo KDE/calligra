@@ -127,6 +127,8 @@ void KexiComboBoxTableEdit::resize(int w, int h)
 	m_button->resize( h, h );
 	m_rightMargin = m_parentRightMargin + m_button->width();
 	updateFocus( QRect( pos().x(), pos().y(), w+1, h+1 ) );
+	if (m_popup)
+		m_popup->resize(w, m_popup->height());
 //	m_lineedit->resize(w - m_button->width()-1, h);
 }
 

@@ -58,10 +58,8 @@ class KActionCollection;
 //! minimum column width in pixels
 #define KEXITV_MINIMUM_COLUMN_WIDTH 10
 
-/*
-	This class provides a table view widget.
+/*! @short KexiTableView class provides a table view widget.
 */
-
 class KEXIDATATABLE_EXPORT KexiTableView : public QScrollView
 {
 Q_OBJECT

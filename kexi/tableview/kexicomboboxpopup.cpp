@@ -61,6 +61,7 @@ KexiComboBoxPopup::KexiComboBoxPopup(QWidget* parent, KexiDB::Field &f)
 	d->tv->setLineWidth( 0 );
 	d->tv->setNavigatorEnabled( false );
 	d->tv->setFullRowSelectionEnabled( true );
+	d->tv->setBackgroundAltering( false ); //TODO add option??
 	d->tv->setInsertingEnabled( false );
 	d->tv->setSortingEnabled( false );
 	d->tv->setVerticalHeaderVisible( false );

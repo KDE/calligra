@@ -28,6 +28,8 @@ namespace KexiDB {
 	class Field;
 }
 
+/*! @short Abstract class for a cell editor.
+*/
 class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget
 {
 	Q_OBJECT

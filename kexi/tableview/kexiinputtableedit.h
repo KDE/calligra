@@ -27,6 +27,8 @@
 #include "kexitableedit.h"
 #include "kexicelleditorfactory.h"
 
+/*! @short General purpose cell editor using line edit widget.
+*/
 class KEXIDATATABLE_EXPORT KexiInputTableEdit : public KexiTableEdit
 {
 	Q_OBJECT
