@@ -110,7 +110,16 @@ k_dcop:
     QColor bottomBorderColor() const;
 
     void changeCaseOfText( const QString & caseType);
+    bool isALinkVariable() const;
+    //return false if there is not a link
+    bool changeLinkVariableUrl( const QString & _url);
+    //return false if there is not a link
+    bool changeLinkVariableName( const QString & _name);
 
+    bool isANoteVariable() const ;
+    QString noteVariableText() const;
+    //return false if there is not a note variable
+    bool setNoteVariableText(const QString & note);
 
 private:
     KoTextView *m_textView;

@@ -23,6 +23,7 @@
 #include <dcopclient.h>
 #include <kdebug.h>
 #include "koborder.h"
+#include <koVariable.h>
 
 KoTextViewIface::KoTextViewIface( KoTextView *_textview )
     : DCOPObject()
@@ -369,4 +370,62 @@ void KoTextViewIface::changeCaseOfText( const QString & caseType)
     }
     else
         kdDebug()<<"Error in void KoTextViewIface::changeCaseOfText( const QString & caseType) parameter\n";
+}
+
+bool KoTextViewIface::isALinkVariable() const
+{
+    return (m_textView->linkVariable()!=0);
+}
+
+bool KoTextViewIface::changeLinkVariableUrl( const QString & _url)
+{
+    KoLinkVariable *var=m_textView->linkVariable();
+    if ( !var)
+        return false;
+    else
+    {
+        var->setLink(var->value(), _url);
+        var->recalc();
+    }
+    return true;
+}
+
+bool KoTextViewIface::changeLinkVariableName( const QString & _name)
+{
+    KoLinkVariable *var=m_textView->linkVariable();
+    if ( !var)
+        return false;
+    else
+    {
+        var->setLink(_name, var->url());
+        var->recalc();
+    }
+    return true;
+}
+
+bool KoTextViewIface::isANoteVariable() const
+{
+    KoNoteVariable *var = dynamic_cast<KoNoteVariable *>(m_textView->variable());
+    return (var!=0);
+}
+
+QString KoTextViewIface::noteVariableText() const
+{
+    KoNoteVariable *var = dynamic_cast<KoNoteVariable *>(m_textView->variable());
+    if( var )
+        return var->note();
+    else
+        return QString::null;
+}
+
+bool KoTextViewIface::setNoteVariableText(const QString & note)
+{
+    KoNoteVariable *var = dynamic_cast<KoNoteVariable *>(m_textView->variable());
+    if( var )
+    {
+        var->setNote( note);
+        return true;
+    }
+    else
+        return false;
 }
