@@ -71,7 +71,7 @@ void KWTextParag::drawFormattingChars( QPainter &painter, const QString & /*s*/,
                     QString str = i18n( "--- Frame Break ---" );
                     int width = 0;
                     for ( int i = 0 ; i < (int)str.length() ; ++i )
-                        width += lastFormat->width( str, i );
+                        width +=  lastFormat->width( str, i );
                     QColorGroup cg2( cg );
                     cg2.setColor( QColorGroup::Base, Qt::green );
                     int last = length() - 1;

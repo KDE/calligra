@@ -156,7 +156,7 @@ void KWVariable::resize()
 
 void KWVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy*/, int /*cw*/, int /*ch*/, const QColorGroup& cg, bool selected, const QFont & customItemFont, int offset )
 {
-    QTextFormat * f = format();
+    KoTextFormat * f = static_cast<KoTextFormat *>(format());
     KoZoomHandler * zh = textDocument()->zoomHandler();
     int bl, _y;
     KWTextParag * parag = static_cast<KWTextParag *>( paragraph() );
@@ -168,6 +168,8 @@ void KWVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy
 
     p->save();
     p->setPen( QPen( f->color() ) );
+    if ( f->textBackgroundColor().isValid() )
+        p->fillRect(   x, y,  zh->layoutUnitToPixelX( width ), h,f->textBackgroundColor() );
     if ( selected )
     {
         p->setPen( QPen( cg.color( QColorGroup::HighlightedText ) ) );
@@ -180,7 +182,6 @@ void KWVariable::drawCustomItem( QPainter* p, int x, int y, int /*cx*/, int /*cy
     }
 
     p->setFont( customItemFont );
-
     //kdDebug() << "KWVariable::draw bl=" << bl << << endl;
     p->drawText( x, y + bl + offset, text() );
     p->restore();
