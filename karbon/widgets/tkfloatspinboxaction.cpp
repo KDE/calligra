@@ -187,12 +187,14 @@ void TKFloatSpinBoxAction::setMinimumStyle(bool value )
 
 TKUFloatSpinBoxAction::TKUFloatSpinBoxAction( const QString& text, const QString& icon, int accel, QObject* parent, const char* name)
 : TKFloatSpinBoxAction(text,icon,accel,parent,name)
+, m_unit(UnitPoint)
 {
   setUnit((int)UnitPoint);
 }
 
 TKUFloatSpinBoxAction::TKUFloatSpinBoxAction( const QString& text, int accel, QObject* parent, const char* name)
 : TKFloatSpinBoxAction(text,accel,parent,name)
+, m_unit(UnitPoint)
 {
   setUnit((int)UnitPoint);
 }
