@@ -131,9 +131,9 @@ void ChartBinding::cellChanged( KSpreadCell* )
 	KSpreadCell* cell = m_pTable->cellAt( m_rctDataArea.left() + x, m_rctDataArea.top() + y );
 	matrix.cell( y, x ).exists = TRUE;
 	if ( cell && cell->isValue() )
-	    matrix.cell( y, x ).value.setValue( cell->valueDouble() );
+	    matrix.cell( y, x ).value = cell->valueDouble();
 	else if ( cell )
-	    matrix.cell( y, x ).value.setValue( cell->valueString() );
+	    matrix.cell( y, x ).value = cell->valueString();
 	else
 	    matrix.cell( y, x ).exists = FALSE;
     }
@@ -3091,7 +3091,7 @@ KSpreadConditional *tmpCondition=0;
 				}
 		 }
 	  it.current()->clearDisplayDirtyFlag();
-	  
+	
 	}
       }
 
@@ -3109,7 +3109,7 @@ KSpreadConditional *tmpCondition=0;
 	if ( m_rctSelection.left() <= col && m_rctSelection.right() >= col )
 	{
 	  it.current()->setDisplayDirtyFlag();
-          
+
           for(int i=0;i<3;i++)
                 {
                 switch(i)
@@ -3238,7 +3238,7 @@ KSpreadConditional *tmpCondition=0;
         	       			tmpCondition->m_cond=tmp[i].m_cond;
 						}	
 
-					break;  
+					break;
                         }
                     }
                     cell->clearDisplayDirtyFlag();
@@ -3831,13 +3831,13 @@ bool KSpreadTable::loadXML( const QDomElement& table )
       insertColumnLayout( cl );
     }
     else if ( !e.isNull() && e.tagName() == "object" )
-    { 
+    {
       KSpreadChild *ch = new KSpreadChild( m_pDoc, this );
       if ( !ch->load( e ) )
-	return false;   
+	return false;
      insertChild( ch );
-      
-   
+
+
     }
     else if ( !e.isNull() && e.tagName() == "chart" )
     {
