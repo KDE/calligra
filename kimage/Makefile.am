@@ -1,14 +1,17 @@
 
-INCLUDES  = $(all_includes) -I$(idldir)
+INCLUDES  = $(all_includes) $(MICO_INCLUDES) -I$(idldir) \
+	-I../lib/kofficecore -I../lib/kofficeui
 LDFLAGS =   $(all_libraries)
-LDADD =  -lkfile -lkfm -lkdeui -lkdecore -lqt $(LIBMICO) -lXext \
-	-lX11 -lkom -lop -lkoml -lkofficecore -lkofficeui
+LDADD =  ../lib/kofficeui/libkofficeui.la \
+	../lib/kofficecore/libkofficecore.la \
+	../lib/koml/libkoml.la -lkfile -lkfm -lkdeui -lkdecore \
+	-lqt $(LIBMICO) -lXext -lX11 -lkom -lop 
 
 ####### Files
 
-bin_PROGRAMS = img
+bin_PROGRAMS = img.bin
 
-img_SOURCES = img_main.cc img_doc.cc img_view.cc img.cc img_shell.cc
+img_bin_SOURCES = img_main.cc img_doc.cc img_view.cc img.cc img_shell.cc
 noinst_HEADERS = img_main.h img_doc.h img_view.h img.h img_shell.h
 SRCMETA =	img_main.moc img_view.moc img_doc.moc img_shell.moc
 
@@ -27,14 +30,17 @@ SUFFIXES = .h .moc
 
 ####### Build rules
 
-idl: img.idl
-	@echo idl --query-server-for-narrow -I$(idldir) img.idl ;\
+img.h: img.idl
+	@echo $(IDL) --query-server-for-narrow -I$(idldir) img.idl ;\
 	olddir=$(idldir) ;\
-	idl --query-server-for-narrow -I$(idldir) img.idl ;\
+	$(IDL) --query-server-for-narrow -I$(idldir) img.idl ;\
 	sed -e "s,#include \"$$olddir/,#include <,;s,.h\",.h>," img.h > img.h.new && mv img.h.new img.h
 
+img.cc: img.h
+img_view.h: img.h
+img_shell.h: img.h
 img_doc.cc: img_doc.moc
 img_main.cc: img_main.moc
 img_shell.cc: img_shell.moc
 img_view.cc: img_view.moc
-
+img_main.cc: img_view.h img.h

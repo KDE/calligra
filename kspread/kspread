@@ -4,4 +4,4 @@ sleep 1
 
 trap "kill $micod_pid" 0
 
-./kspread -ORBImplRepoAddr inet:localhost:8888 -ORBIIOPAddr inet:localhost:9999
+./kspread.bin -ORBImplRepoAddr inet:localhost:8888 -ORBIIOPAddr inet:localhost:9999

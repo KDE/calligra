@@ -6,6 +6,7 @@ LDADD = ../lib/kofficeui/libkofficeui.la ../lib/kofficecore/libkofficecore.la ..
 ####### Files
 
 bin_PROGRAMS = kspread.bin
+bin_SCRIPTS = kspread
 
 kspread_bin_SOURCES = kmetaedit.cc kspread_emacs.cc kspread_main.cc \
 	kspread_shell.cc kspread_doc.cc \
