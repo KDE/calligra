@@ -854,6 +854,11 @@ void KSpreadDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
     delete stylesWriter;;
 }
 
+#define deleteLoadingInfo() { \
+        delete d->m_loadingInfo; \
+        d->m_loadingInfo = 0L; \
+}
+
 bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const QDomDocument& settings, KoStore* )
 {
     d->m_loadingInfo = new KSPLoadingInfo;
@@ -872,8 +877,7 @@ bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     if ( body.isNull() )
     {
         setErrorMessage( i18n( "Invalid document. No office:body." ));
-        delete d->m_loadingInfo;
-        d->m_loadingInfo = 0L;
+        deleteLoadingInfo();
         return false;
     }
     body = KoDom::namedItemNS( body, KoXmlNS::office, "spreadsheet" );
@@ -881,8 +885,7 @@ bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     if ( body.isNull() )
     {
         setErrorMessage( i18n( "Invalid document. No office:spreadsheet." ));
-        delete d->m_loadingInfo;
-        d->m_loadingInfo = 0L;
+        deleteLoadingInfo();
         return false;
     }
     //load in first
@@ -896,8 +899,7 @@ bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     if ( !d->workbook->loadOasis( body, oasisStyles ) )
     {
         d->isLoading = false;
-        delete d->m_loadingInfo;
-        d->m_loadingInfo = 0L;
+        deleteLoadingInfo();
         return false;
     }
 
@@ -912,8 +914,7 @@ bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     emit sigProgress(-1);
 
     kdDebug(36001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;
-    delete d->m_loadingInfo;
-    d->m_loadingInfo = 0L;
+    deleteLoadingInfo();
     return true;
 }
 
@@ -2111,6 +2112,7 @@ QDomElement KSpreadDoc::saveAreaName( QDomDocument& doc )
 void KSpreadDoc::loadOasisCellValidation( const QDomElement&body )
 {
     QDomNode validation = KoDom::namedItemNS( body, KoXmlNS::table, "content-validations" );
+    kdDebug()<<"void KSpreadDoc::loadOasisCellValidation( const QDomElement&body ) \n";
     kdDebug()<<"validation.isNull ? "<<validation.isNull()<<endl;
     if ( !validation.isNull() )
     {
@@ -2120,6 +2122,7 @@ void KSpreadDoc::loadOasisCellValidation( const QDomElement&body )
             if ( n.isElement() )
             {
                 QDomElement element = n.toElement();
+                kdDebug()<<" loadOasisCellValidation element.tagName() :"<<element.tagName()<<endl;
                 if ( element.tagName() ==  "table:content-validation" ) {
                     d->m_loadingInfo->appendValidation(element.attributeNS( KoXmlNS::table, "name", QString::null ), element );
                     kdDebug()<<" validation found :"<<element.attributeNS( KoXmlNS::table, "name", QString::null )<<endl;
@@ -2154,9 +2157,11 @@ void KSpreadDoc::saveOasisAreaName( KoXmlWriter & xmlWriter )
 
 void KSpreadDoc::loadOasisAreaName( const QDomElement& body )
 {
+    kdDebug()<<"void KSpreadDoc::loadOasisAreaName( const QDomElement& body ) \n";
     QDomNode namedAreas = KoDom::namedItemNS( body, KoXmlNS::table, "named-expressions" );
     if ( !namedAreas.isNull() )
     {
+        kdDebug()<<" area name exist \n";
         QDomNode area = namedAreas.firstChild();
         while ( !area.isNull() )
         {
@@ -2171,7 +2176,7 @@ void KSpreadDoc::loadOasisAreaName( const QDomElement& body )
             // TODO: what is: table:base-cell-address
             QString name  = e.attributeNS( KoXmlNS::table, "name", QString::null );
             QString areaPoint = e.attributeNS( KoXmlNS::table, "cell-range-address", QString::null );
-
+            kdDebug()<<"area name : "<<name<<" areaPoint :"<<areaPoint<<endl;
             d->m_loadingInfo->addWordInAreaList( name );
             kdDebug() << "Reading in named area, name: " << name << ", area: " << areaPoint << endl;
 

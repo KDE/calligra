@@ -249,14 +249,19 @@ bool KSpreadMap::loadOasis( const QDomElement& body, KoOasisStyles& oasisStyles 
     {
         QDomElement tableElement = tableNode.toElement();
         if( !tableElement.isNull() )
-        if( tableElement.nodeName() == "table:table" )
-        if( !tableElement.attributeNS( KoXmlNS::table, "name", QString::null ).isEmpty() )
+        {
+            kdDebug()<<"  KSpreadMap::loadOasis tableElement is not null \n";
+            kdDebug()<<"tableElement.nodeName() :"<<tableElement.nodeName()<<endl;
+            if( tableElement.nodeName() == "table:table" )
             {
-                KSpreadSheet* sheet = m_pDoc->createTable();
-                m_pDoc->addTable( sheet );
-                sheet->setTableName( tableElement.attributeNS( KoXmlNS::table, "name", QString::null ), true, false );
+                if( !tableElement.attributeNS( KoXmlNS::table, "name", QString::null ).isEmpty() )
+                {
+                    KSpreadSheet* sheet = m_pDoc->createTable();
+                    m_pDoc->addTable( sheet );
+                    sheet->setTableName( tableElement.attributeNS( KoXmlNS::table, "name", QString::null ), true, false );
+                }
             }
-
+        }
         tableNode = tableNode.nextSibling();
     }
 
@@ -266,13 +271,18 @@ bool KSpreadMap::loadOasis( const QDomElement& body, KoOasisStyles& oasisStyles 
     {
         QDomElement tableElement = tableNode.toElement();
         if( !tableElement.isNull() )
-        if( tableElement.nodeName() == "table:table" )
-        if( !tableElement.attributeNS( KoXmlNS::table, "name", QString::null ).isEmpty() )
         {
-            QString name = tableElement.attributeNS( KoXmlNS::table, "name", QString::null );
-            KSpreadSheet* sheet = m_pDoc->map()->findTable( name );
-            if( sheet )
-                sheet->loadOasis( tableElement , oasisStyles );
+            kdDebug()<<"tableElement.nodeName() bis :"<<tableElement.nodeName()<<endl;
+            if( tableElement.nodeName() == "table:table" )
+            {
+                if( !tableElement.attributeNS( KoXmlNS::table, "name", QString::null ).isEmpty() )
+                {
+                    QString name = tableElement.attributeNS( KoXmlNS::table, "name", QString::null );
+                    KSpreadSheet* sheet = m_pDoc->map()->findTable( name );
+                    if( sheet )
+                        sheet->loadOasis( tableElement , oasisStyles );
+                }
+            }
         }
         tableNode = tableNode.nextSibling();
     }
