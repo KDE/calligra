@@ -87,26 +87,20 @@ void VGradientWidget::paintEvent( QPaintEvent* )
 	QPixmap pixmap( width(), height() );
 	VKoPainter gp( &pixmap, width(), height() );
 	gp.setRasterOp( Qt::XorROP );
-	gp.newPath();
 	VGradient gradient( **m_lpgradient );
 	gradient.setType( VGradient::linear );
 	gradient.setOrigin( KoPoint( 2, 2 ) );
 	gradient.setVector( KoPoint( width() - 3, 2 ) );
-	gp.moveTo( KoPoint( 2, 2 ) );
-	gp.lineTo( KoPoint( 2, height() - 16 ) );
-	gp.lineTo( KoPoint( width() - 2, height() - 16 ) );
-	gp.lineTo( KoPoint( width() - 2, 2 ) );
-	gp.lineTo( KoPoint( 2, 2 ) );
 	VFill fill;
 	KIconLoader il;
 	fill.pattern() = VPattern( il.iconPath( "karbon.png", KIcon::Small ) );
 	fill.setType( VFill::patt );
 	gp.setBrush( fill );
-	gp.fillPath();
+	gp.drawRect( KoRect( 2, 2, width(), height() - 14 ) );
 	fill.gradient() = gradient;
 	fill.setType( VFill::grad );
 	gp.setBrush( fill );
-	gp.fillPath();
+	gp.drawRect( KoRect( 2, 2, width(), height() - 14 ) );
 	gp.end();
 
 	QPainter p( &pixmap );
