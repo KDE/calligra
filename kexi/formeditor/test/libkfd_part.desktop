@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=KFormDesignerPart
+MimeType=application/x-designer;
+ServiceTypes=KParts/ReadOnlyPart,KParts/ReadWritePart
+X-KDE-Library=libkfd_part
+Type=Service

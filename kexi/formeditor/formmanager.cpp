@@ -117,7 +117,7 @@ FormManager::setEditors(KexiPropertyEditor *editor, ObjectTreeView *treeview)
 }
 
 Actions
-FormManager::createActions(KActionCollection *parent, KMainWindow *client)
+FormManager::createActions(KActionCollection *parent/*, KMainWindow *client*/)
 {
 	m_collection = parent;
 #ifdef ENABLE_UNDO_ACTIONS
@@ -373,17 +373,20 @@ FormManager::windowChanged(QWidget *w)
 			if(m_collection)
 				m_collection->addDocCollection(form->actionCollection());
 #endif
-			KSelectAction *m_style = (KSelectAction*)m_collection->action("change_style", "KSelectAction");
-			const QString currentStyle = form->toplevelContainer()->widget()->style().name();
-			const QStringList styles = m_style->items();
-
-			int idx = 0;
-			for (QStringList::ConstIterator it = styles.begin(); it != styles.end(); ++it, ++idx)
+			if(m_collection)
 			{
-				if ((*it).lower() == currentStyle) {
-					kdDebug() << "Updating the style to " << currentStyle << endl;
-					m_style->setCurrentItem(idx);
-					break;
+				KSelectAction *m_style = (KSelectAction*)m_collection->action("change_style", "KSelectAction");
+				const QString currentStyle = form->toplevelContainer()->widget()->style().name();
+				const QStringList styles = m_style->items();
+
+				int idx = 0;
+				for (QStringList::ConstIterator it = styles.begin(); it != styles.end(); ++it, ++idx)
+				{
+					if ((*it).lower() == currentStyle) {
+						kdDebug() << "Updating the style to " << currentStyle << endl;
+						m_style->setCurrentItem(idx);
+						break;
+					}
 				}
 			}
 

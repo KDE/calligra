@@ -1,20 +1,25 @@
-/*
- * Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
- */
+/* This file is part of the KDE project
+   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
 
-#include "container.h"
-#include "widgetlibrary.h"
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
 
-#include "kfmview.h"
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
 
-#include <qtabwidget.h>
-#include <qpushbutton.h>
-#include <qrect.h>
-#include <qbuttongroup.h>
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
+#include "kfd_mainwindow.h"
 
 #include <kapplication.h>
 #include <kiconloader.h>
-#include <dcopclient.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
@@ -22,7 +27,7 @@
 static const char *description =
     I18N_NOOP("KFormDesigner");
 
-static const char *version = "0.2";
+static const char *version = "0.3";
 
 static KCmdLineOptions options[] =
 {
@@ -36,14 +41,15 @@ int main(int argc, char **argv)
                      KAboutData::License_LGPL, "(C) 2003-2004 Kexi Team", 0, 0);
     about.addCredit( "Lucijan Busch", "Original author", 0, "lucijan@kde.org" );
     about.addAuthor( "Cedric Pasteur", 0, "cedric.pasteur@free.fr");
-    about.addCredit( "Jaroslaw Staniek", "Win32 version, some other little changes and lots of ideas", "js@iidea.pl", 0);
+    about.addCredit( "Jaroslaw Staniek", "Win32 version, some icons, other little fixes and lots of ideas and bug reports", "js@iidea.pl", 0);
+    about.addCredit( "Kristof Borrey ", "Icons", 0, "kristof.borrey@skynet.be" );
     KCmdLineArgs::init(argc, argv, &about);
     KCmdLineArgs::addCmdLineOptions(options);
     KApplication app;
 
    KGlobal::iconLoader()->addAppDir("kexi");
 
-    KFMView *v = new KFMView();
+    KFDMainWindow *v = new KFDMainWindow();
     v->show();
     app.setMainWidget(v);
 
@@ -52,7 +58,7 @@ int main(int argc, char **argv)
     // see if we are starting with session management
 	if (app.isRestored())
 	{
-		RESTORE(KFMView);
+		RESTORE(KFDMainWindow);
 	}
 	else
 	{

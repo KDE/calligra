@@ -65,6 +65,9 @@ int
 FormIO::saveForm(Form *form, const QString &filename)
 {
 	QString m_filename;
+	if(!form->filename().isNull() && filename.isNull())
+		m_filename = form->filename();
+
 	if(filename.isNull())
 	{
 		m_filename = KFileDialog::getSaveFileName(QString::null, i18n("*.ui|Qt Designer UI Files"));
