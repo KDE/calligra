@@ -1789,7 +1789,10 @@ void KWordDocument::printBorders(QPainter &_painter,int xOffset,int yOffset,int 
 	{
 	  tmp = frameset->getFrame(j);
 	  frame = KRect(tmp->x() - xOffset - 1,tmp->y() - yOffset - 1,tmp->width() + 2,tmp->height() + 2);
+
 	  if (!frame.intersects(KRect(xOffset,yOffset,_w,_h))) continue;
+	  
+	  _painter.fillRect(frame,tmp->getBackgroundColor());
 
 	  tmp = frameset->getFrame(j);
 	  if (tmp->getLeftBorder().ptWidth > 0 && tmp->getLeftBorder().color != tmp->getBackgroundColor().color())

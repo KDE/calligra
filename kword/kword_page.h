@@ -190,6 +190,7 @@ public:
   void setRightFrameBorder(KWParagLayout::Border _brd,bool _enable);
   void setTopFrameBorder(KWParagLayout::Border _brd,bool _enable);
   void setBottomFrameBorder(KWParagLayout::Border _brd,bool _enable);
+  void setFrameBackgroundColor(QBrush _color);
 
 public slots:
   void newLeftIndent(int _left); 
@@ -318,6 +319,7 @@ protected:
   unsigned int tcols,trows;
 
   bool recalcingText;
+  bool mouseMoved;
 
 };
 

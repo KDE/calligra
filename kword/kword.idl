@@ -83,6 +83,7 @@ module KWord
       slot void frameBorderColor();
       slot void frameBorderWidth(in string width);
       slot void frameBorderStyle(in string style);
+      slot void frameBackColor();
     };
 
   interface KWordDocument : KOffice::Document, KOffice::Print

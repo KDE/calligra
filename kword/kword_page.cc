@@ -123,6 +123,8 @@ void KWPage::init()
 /*================================================================*/
 void KWPage::mouseMoveEvent(QMouseEvent *e)
 {
+  mouseMoved = true;
+
   if (mousePressed)
     {
       switch (mouseMode)
@@ -784,6 +786,7 @@ void KWPage::mousePressEvent(QMouseEvent *e)
       } break;
     default: break;
     }
+  mouseMoved = false;
 }
 
 /*================================================================*/
@@ -837,12 +840,16 @@ void KWPage::mouseReleaseEvent(QMouseEvent *e)
 	  }
 	selectedFrame = frame;
 	selectedFrameSet = frameset;
-	doc->recalcFrames();
-	doc->updateAllFrames();
-	recalcAll = true;
-	recalcText();
-	recalcCursor();
-	recalcAll = false;
+	if (mouseMoved)
+	  {
+	    doc->recalcFrames();
+	    doc->updateAllFrames();
+	    recalcAll = true;
+	    recalcText();
+	    recalcCursor();
+	    recalcAll = false;
+	  }
+	else doc->updateAllViews(0L);
       } break;
     case MM_CREATE_TEXT:
       {
@@ -3522,6 +3529,35 @@ void KWPage::setBottomFrameBorder(KWParagLayout::Border _brd,bool _enable)
 		  _brd.color = frame->getBackgroundColor().color();
 		}
 	      frame->setBottomBorder(_brd);
+	    }
+	}
+    }
+  doc->updateAllViews(0L);
+}
+
+/*================================================================*/
+void KWPage::setFrameBackgroundColor(QBrush _color)
+{
+  KWFrameSet *frameset = 0L;
+  KWFrame *frame = 0L;
+
+  for (unsigned int i = 0;i < doc->getNumFrameSets();i++)
+    {
+      frameset = doc->getFrameSet(i);
+      for (unsigned int j = 0;j < frameset->getNumFrames();j++)
+	{
+	  frame = frameset->getFrame(j);
+	  if (frame->isSelected())
+	    {
+	      if (frame->getLeftBorder().color == frame->getBackgroundColor().color())
+		frame->getLeftBorder().color = _color.color();
+	      if (frame->getRightBorder().color == frame->getBackgroundColor().color())
+		frame->getRightBorder().color = _color.color();
+	      if (frame->getTopBorder().color == frame->getBackgroundColor().color())
+		frame->getTopBorder().color = _color.color();
+	      if (frame->getBottomBorder().color == frame->getBackgroundColor().color())
+		frame->getBottomBorder().color = _color.color();
+	      frame->setBackgroundColor(_color);
 	    }
 	}
     }

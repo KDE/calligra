@@ -38,6 +38,7 @@ class KWPaintWindow;
 #include <qfont.h>
 #include <qmessagebox.h>
 #include <qclipboard.h>
+#include <qbrush.h>
 
 #include <koRuler.h>
 #include <kcolordlg.h>
@@ -177,6 +178,7 @@ public:
   virtual void frameBorderColor();
   virtual void frameBorderWidth(const char *width);
   virtual void frameBorderStyle(const char *style);
+  virtual void frameBackColor();
 
   virtual void setMode( KOffice::View::Mode _mode);
   virtual void setFocus(CORBA::Boolean mode);
@@ -237,8 +239,9 @@ protected:
   void mousePressEvent(QMouseEvent *e);
   void mouseReleaseEvent(QMouseEvent *e);
   void mouseMoveEvent(QMouseEvent *e);
-
-  QString colorToPixString(QColor);
+  
+  enum PType {TXT_COLOR,FRAME_COLOR,BACK_COLOR};
+  QString colorToPixString(QColor,PType _type);
   void getFonts();
   void setParagBorderValues();
 
@@ -364,6 +367,7 @@ protected:
   CORBA::Long m_idButtonFrame_BorderColor;
   CORBA::Long m_idComboFrame_BorderWidth;
   CORBA::Long m_idComboFrame_BorderStyle;
+  CORBA::Long m_idButtonFrame_BackColor;
 
   QList<KWordFrame> m_lstFrames;
 
@@ -381,6 +385,7 @@ protected:
   KWFormat::VertAlign vertAlign;
   KWParagLayout::Border left,right,top,bottom,tmpBrd,frmBrd;
   KWSearchDia::KWSearchEntry *searchEntry,*replaceEntry;
+  QBrush backColor;
 
   KWParagDia *paragDia;
   KWStyleManager *styleManager;
@@ -431,7 +436,8 @@ protected:
   static const int ID_FBRD_LEFT = 38;
   static const int ID_FBRD_RIGHT = 39;
   static const int ID_FBRD_TOP = 40;
-  static const int ID_FBRD_BOTTOM = 31;
+  static const int ID_FBRD_BOTTOM = 41;
+  static const int ID_FBACK_COLOR = 42;
 
 };
 

@@ -101,6 +101,7 @@ KWordView::KWordView( QWidget *_parent, const char *_name, KWordDocument* _doc )
   m_pKWordDoc = _doc;
   oldFramePos = OpenPartsUI::Top;
   oldTextPos = OpenPartsUI::Top;
+  backColor = QBrush(white);
 
   QObject::connect(m_pKWordDoc,SIGNAL(sig_insertObject(KWordChild*,KWPartFrameSet*)),
 		   this,SLOT(slotInsertObject(KWordChild*,KWPartFrameSet*)));
@@ -334,7 +335,7 @@ void KWordView::setFormat(KWFormat &_format,bool _check = true,bool _update_page
       if ( !CORBA::is_nil( m_vToolBarText ) )
 	{  
 	  OpenPartsUI::Pixmap pix;
-	  pix.data = CORBA::string_dup( colorToPixString(_format.getColor() ) );
+	  pix.data = CORBA::string_dup(colorToPixString(_format.getColor(),TXT_COLOR));
 	  
 	  m_vToolBarText->setButtonPixmap(ID_TEXT_COLOR, pix );
 	}
@@ -1032,7 +1033,7 @@ void KWordView::textColor()
   if (KColorDialog::getColor(tbColor))
     {
       OpenPartsUI::Pixmap pix;
-      pix.data = CORBA::string_dup( colorToPixString( tbColor ) );
+      pix.data = CORBA::string_dup(colorToPixString(tbColor,TXT_COLOR));
 
       m_vToolBarText->setButtonPixmap( ID_TEXT_COLOR , pix );
       format.setColor(tbColor);
@@ -1178,7 +1179,7 @@ void KWordView::textBorderColor()
   if (KColorDialog::getColor(tmpBrd.color))
     {
       OpenPartsUI::Pixmap pix;
-      pix.data = CORBA::string_dup( colorToPixString( tmpBrd.color ) );
+      pix.data = CORBA::string_dup(colorToPixString(tmpBrd.color,FRAME_COLOR));
       m_vToolBarText->setButtonPixmap( ID_BORDER_COLOR , pix );
     }
 }
@@ -1236,7 +1237,7 @@ void KWordView::frameBorderColor()
   if (KColorDialog::getColor(frmBrd.color))
     {
       OpenPartsUI::Pixmap pix;
-      pix.data = CORBA::string_dup(colorToPixString(frmBrd.color));
+      pix.data = CORBA::string_dup(colorToPixString(frmBrd.color,FRAME_COLOR));
       m_vToolBarFrame->setButtonPixmap(ID_FBORDER_COLOR,pix);
     }
 }
@@ -1263,6 +1264,21 @@ void KWordView::frameBorderStyle(const char *style)
   else if (stl == i18n("dash dot dot line (-**-)"))
     frmBrd.style = KWParagLayout::DASH_DOT_DOT;
 }
+
+/*================================================================*/
+void KWordView::frameBackColor()
+{
+  QColor c = backColor.color();
+  if (KColorDialog::getColor(c))
+    {
+      backColor.setColor(c);
+      OpenPartsUI::Pixmap pix;
+      pix.data = CORBA::string_dup(colorToPixString(backColor.color(),BACK_COLOR));
+      m_vToolBarFrame->setButtonPixmap(ID_FBACK_COLOR,pix);
+      gui->getPaperWidget()->setFrameBackgroundColor(backColor);
+    }
+}
+
 
 /*================================================================*/
 void KWordView::resizeEvent(QResizeEvent *e)
@@ -1650,7 +1666,7 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   // color
   tbColor = black;
   OpenPartsUI::Pixmap colpix;
-  colpix.data = CORBA::string_dup( colorToPixString( tbColor ) );
+  colpix.data = CORBA::string_dup(colorToPixString(tbColor,TXT_COLOR));
   m_idButtonText_Color = m_vToolBarText->insertButton2( colpix, ID_TEXT_COLOR, SIGNAL( clicked() ), this, "textColor", 
 							true, i18n("Text Color"), -1 );
 
@@ -1749,7 +1765,7 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   
   // border color
   tmpBrd.color = black;
-  colpix.data = CORBA::string_dup( colorToPixString( tmpBrd.color ) );
+  colpix.data = CORBA::string_dup( colorToPixString(tmpBrd.color,FRAME_COLOR));
   m_idButtonText_BorderColor = m_vToolBarText->insertButton2( colpix, ID_BORDER_COLOR, SIGNAL( clicked() ), this, "textBorderColor", 
 							      true, i18n("Paragraph Border Color"), -1);
 
@@ -1815,7 +1831,7 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
 
   // border color
   tmpBrd.color = black;
-  colpix.data = CORBA::string_dup(colorToPixString(frmBrd.color));
+  colpix.data = CORBA::string_dup(colorToPixString(frmBrd.color,FRAME_COLOR));
   m_idButtonFrame_BorderColor = m_vToolBarFrame->insertButton2( colpix, ID_FBORDER_COLOR, SIGNAL( clicked() ), this, "frameBorderColor", 
 							      true, i18n("Frame Border Color"), -1);
 
@@ -1826,6 +1842,12 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
   m_idComboFrame_BorderStyle = m_vToolBarFrame->insertCombo( stylelist,ID_FBRD_STYLE, false, SIGNAL( activated( const char* ) ),
 							   this, "frameBorderStyle", true, i18n("Frame Border Style"),
 							   150, -1, OpenPartsUI::AtBottom );
+
+  // frame back color
+  backColor.setColor(white);
+  colpix.data = CORBA::string_dup(colorToPixString(backColor.color(),BACK_COLOR));
+  m_idButtonFrame_BackColor = m_vToolBarFrame->insertButton2( colpix, ID_FBACK_COLOR, SIGNAL( clicked() ), this, "frameBackColor", 
+							      true, i18n("Frame Background Color"), -1);
 
   m_vToolBarFrame->enable(OpenPartsUI::Hide);
 
@@ -1838,7 +1860,7 @@ bool KWordView::mappingCreateToolbar( OpenPartsUI::ToolBarFactory_ptr _factory )
 }      
 
 /*============== create a pixmapstring from a color ============*/
-QString KWordView::colorToPixString(QColor c)
+QString KWordView::colorToPixString(QColor c,PType _type)
 {
   int r,g,b;
   QString pix;
@@ -1850,18 +1872,99 @@ QString KWordView::colorToPixString(QColor c)
   
   pix += "static char * text_xpm[] = {\n";
 
-  line.sprintf("%c 20 20 1 1 %c,\n",34,34);
-  pix += line.copy();
-
-  line.sprintf("%c c #%02X%02X%02X %c,\n",34,r,g,b,34);
-  pix += line.copy();
-
-  line.sprintf("%c                    %c,\n",34,34);
-  for (unsigned int i = 1;i <= 20;i++)
-    pix += line.copy();
-    
-  line.sprintf("%c                    %c};\n",34,34);
-  pix += line.copy();
+  switch (_type)
+    {
+    case TXT_COLOR:
+      {
+	pix += "\" 20 20 3 1 \",\n";
+	
+	pix += "\"  c none \",\n";
+	pix += "\". c black \",\n";
+	line.sprintf("\"+ c #%02X%02X%02X \",\n",r,g,b);
+	pix += line.copy();
+	
+	pix += "\"                    \",\n";
+	pix += "\"                    \",\n";
+	pix += "\"  ..............    \",\n";
+	pix += "\"   ............     \",\n";
+	pix += "\"        ..          \",\n";
+	pix += "\"        ..          \",\n";
+	pix += "\"        ..          \",\n";
+	pix += "\"        ..          \",\n";
+	pix += "\"        ..          \",\n";
+	pix += "\"        ..          \",\n";
+	pix += "\"        ..          \",\n";
+	pix += "\"        .++++++++   \",\n";
+	pix += "\"        .++++++++   \",\n";
+	pix += "\"        +++++++++   \",\n";
+	pix += "\"        +++++++++   \",\n";
+	pix += "\"        +++++++++   \",\n";
+	pix += "\"        +++++++++   \",\n";
+	pix += "\"        +++++++++   \",\n";
+	pix += "\"                    \",\n";
+	pix += "\"                    \"};\n";
+      } break;
+    case FRAME_COLOR:
+      {
+	pix += "\" 20 20 3 1 \",\n";
+	
+	pix += "\"  c none \",\n";
+	pix += "\"+ c white \",\n";
+	line.sprintf("\". c #%02X%02X%02X \",\n",r,g,b);
+	pix += line.copy();
+	
+	pix += "\"                    \",\n";
+	pix += "\"                    \",\n";
+	pix += "\"  ................  \",\n";
+	pix += "\"  ................  \",\n";
+	pix += "\"  ................  \",\n";
+	pix += "\"  ...++++++++++...  \",\n";
+	pix += "\"  ...++++++++++...  \",\n";
+	pix += "\"  ...++++++++++...  \",\n";
+	pix += "\"  ...++++++++++...  \",\n";
+	pix += "\"  ...++++++++++...  \",\n";
+	pix += "\"  ...++++++++++...  \",\n";
+	pix += "\"  ...++++++++++...  \",\n";
+	pix += "\"  ...++++++++++...  \",\n";
+	pix += "\"  ...++++++++++...  \",\n";
+	pix += "\"  ...++++++++++...  \",\n";
+	pix += "\"  ................  \",\n";
+	pix += "\"  ................  \",\n";
+	pix += "\"  ................  \",\n";
+	pix += "\"                    \",\n";
+	pix += "\"                    \"};\n";
+      } break;
+    case BACK_COLOR:
+      {
+	pix += "\" 20 20 3 1 \",\n";
+	
+	pix += "\"  c none \",\n";
+	pix += "\". c red \",\n";
+	line.sprintf("\"+ c #%02X%02X%02X \",\n",r,g,b);
+	pix += line.copy();
+	
+	pix += "\"                    \",\n";
+	pix += "\"                    \",\n";
+	pix += "\"  ................  \",\n";
+	pix += "\"  ................  \",\n";
+	pix += "\"  ..++++++++++++..  \",\n";
+	pix += "\"  ..++++++++++++..  \",\n";
+	pix += "\"  ..++++++++++++..  \",\n";
+	pix += "\"  ..++++++++++++..  \",\n";
+	pix += "\"  ..++++++++++++..  \",\n";
+	pix += "\"  ..++++++++++++..  \",\n";
+	pix += "\"  ..++++++++++++..  \",\n";
+	pix += "\"  ..++++++++++++..  \",\n";
+	pix += "\"  ..++++++++++++..  \",\n";
+	pix += "\"  ..++++++++++++..  \",\n";
+	pix += "\"  ..++++++++++++..  \",\n";
+	pix += "\"  ..++++++++++++..  \",\n";
+	pix += "\"  ................  \",\n";
+	pix += "\"  ................  \",\n";
+	pix += "\"                    \",\n";
+	pix += "\"                    \"};\n";
+      } break;
+    }
 
   return QString(pix);
 }
@@ -1937,7 +2040,7 @@ void KWordView::setParagBorderValues()
   m_vToolBarText->setCurrentComboItem(ID_BRD_STYLE,static_cast<int>(tmpBrd.style));
 
   OpenPartsUI::Pixmap colpix;
-  colpix.data = CORBA::string_dup( colorToPixString( tmpBrd.color ) );
+  colpix.data = CORBA::string_dup(colorToPixString(tmpBrd.color,FRAME_COLOR));
   m_vToolBarText->setButtonPixmap(ID_BORDER_COLOR, colpix );
 }
 
@@ -2281,11 +2384,11 @@ void KWordGUI::setRanges()
 
       s_vert->setSteps(10,hei);
       range = (hei * doc->getPages() - paperWidget->height());
-      s_vert->setRange(0,range);
+      s_vert->setRange(0,range > 0 ? range : 0);
 
       s_horz->setSteps(10,wid);
       range = wid - paperWidget->width();
-      s_horz->setRange(0,range);
+      s_horz->setRange(0,range > 0 ? range : 0);
     }
 }
 

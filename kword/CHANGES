@@ -694,3 +694,9 @@ Reggie, 19.1.1999:
 - Fixes when moving around frames to avoid crashes
 - Fixed (or worked around :-) the strange bug when saving embedded objects
 
+Reggie, 20.1.1999:
+------------------
+- Changed the toolbar pixmaps for choosing colors, which get automatically generated - they show now for what you choose the color
+- Setting background colors for frames works
+- setting the ranges of scrollbars is correctly now (no maxrange > minrange warnings anymore)
+- Loading, Saving and Printing background colors of frame works

@@ -474,7 +474,9 @@ void KWFrameSet::save(ostream &out)
 	  << "\" runaround=\"" << static_cast<int>(frame->getRunAround()) 
 	  << "\" runaroundGap=\"" << frame->getRunAroundGap() << "\""
 	  << frame->leftBrd2String() << frame->rightBrd2String() << frame->topBrd2String() 
-	  << frame->bottomBrd2String() << "/>" << endl;
+	  << frame->bottomBrd2String() << "bkRed=\"" << frame->getBackgroundColor().color().red()
+	  << "\" bkGreen=\"" << frame->getBackgroundColor().color().green() << "\" bkBlue=\"" << frame->getBackgroundColor().color().blue()
+	  << "/>" << endl;
     }
 }
 
@@ -803,6 +805,7 @@ void KWTextFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 	  b.color = rect.getBackgroundColor().color();
 	  b.style = KWParagLayout::SOLID;
 	  b.ptWidth = 1;
+	  QColor c(white);
 	  
 	  KOMLParser::parseTag(tag.c_str(),name,lst);
 	  vector<KOMLAttrib>::const_iterator it = lst.begin();
@@ -860,12 +863,19 @@ void KWTextFrameSet::load(KOMLParser& parser,vector<KOMLAttrib>& lst)
 		t.style = static_cast<KWParagLayout::BorderStyle>(atoi((*it).m_strValue.c_str()));
 	      else if ((*it).m_strName == "bStyle")
 		b.style = static_cast<KWParagLayout::BorderStyle>(atoi((*it).m_strValue.c_str()));
+	      else if ((*it).m_strName == "bkRed")
+		c.setRgb(atoi((*it).m_strValue.c_str()),c.green(),c.blue());
+	      else if ((*it).m_strName == "bkGreen")
+		c.setRgb(c.red(),atoi((*it).m_strValue.c_str()),c.blue());
+	      else if ((*it).m_strName == "bkBlue")
+		c.setRgb(c.red(),c.green(),atoi((*it).m_strValue.c_str()));
 	    }
 	  KWFrame *_frame = new KWFrame(rect.x(),rect.y(),rect.width(),rect.height(),rect.getRunAround(),rect.getRunAroundGap());
 	  _frame->setLeftBorder(l);
 	  _frame->setRightBorder(r);
 	  _frame->setTopBorder(t);
 	  _frame->setBottomBorder(b);
+	  _frame->setBackgroundColor(QBrush(c));
 	  frames.append(_frame);
 	}
 

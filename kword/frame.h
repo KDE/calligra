@@ -94,10 +94,10 @@ public:
   void setPageNum(int i) { pageNum = i; }
   int getPageNum() { return pageNum; }
 
-  KWParagLayout::Border getLeftBorder() { return brd_left; }
-  KWParagLayout::Border getRightBorder() { return brd_right; }
-  KWParagLayout::Border getTopBorder() { return brd_top; }
-  KWParagLayout::Border getBottomBorder() { return brd_bottom; }
+  KWParagLayout::Border &getLeftBorder() { return brd_left; }
+  KWParagLayout::Border &getRightBorder() { return brd_right; }
+  KWParagLayout::Border &getTopBorder() { return brd_top; }
+  KWParagLayout::Border &getBottomBorder() { return brd_bottom; }
   void setLeftBorder(KWParagLayout::Border _brd) { brd_left = _brd; }
   void setRightBorder(KWParagLayout::Border _brd) { brd_right = _brd; }
   void setTopBorder(KWParagLayout::Border _brd) { brd_top = _brd; }
@@ -106,6 +106,7 @@ public:
   QRegion getEmptyRegion();
 
   QBrush getBackgroundColor() { return backgroundColor; }
+  void setBackgroundColor(QBrush _color) { backgroundColor = _color; }
 
   QString leftBrd2String();
   QString rightBrd2String();
