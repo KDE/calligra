@@ -234,16 +234,16 @@ Container::eventFilter(QObject *s, QEvent *e)
 					}
 				}
 				else // the widget is not yet selected, we add it
-					setSelectedWidget(m_moving, true);
+					setSelectedWidget(m_moving, true, (mev->button() == RightButton));
 			}
 			else if((m_form->selectedWidgets()->count() > 1))//&& (!m_form->manager()->inserting())) // more than one widget selected
 			{
 				if(m_form->selectedWidgets()->findRef(m_moving) == -1) // widget is not selected, it becomes the only selected widget
-					setSelectedWidget(m_moving, false);
+					setSelectedWidget(m_moving, false, (mev->button() == RightButton));
 				// If the widget is already selected, we do nothing (to ease widget moving, etc.)
 			}
 			else// if(!m_form->manager()->inserting())
-				setSelectedWidget(m_moving, false);
+				setSelectedWidget(m_moving, false, (mev->button() == RightButton));
 
 			// we are inserting a widget or drawing a selection rect in the form
 			if((/*s == m_container &&*/ m_form->manager()->inserting()) || ((s == m_container) && !m_toplevel))
@@ -656,7 +656,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 }
 
 void
-Container::setSelectedWidget(QWidget *w, bool add)
+Container::setSelectedWidget(QWidget *w, bool add, bool dontRaise)
 {
 	if (w)
 		kdDebug() << "slotSelectionChanged " << w->name()<< endl;
@@ -667,7 +667,7 @@ Container::setSelectedWidget(QWidget *w, bool add)
 		return;
 	}
 
-	m_form->setSelectedWidget(w, add);
+	m_form->setSelectedWidget(w, add, dontRaise);
 }
 
 void

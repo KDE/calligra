@@ -118,7 +118,9 @@ Actions
 FormManager::createActions(KActionCollection *parent, KMainWindow *client)
 {
 	m_collection = parent;
+#ifdef ENABLE_UNDO_ACTIONS
 	m_client = client;
+#endif
 
 	Actions actions = m_lib->createActions(parent, this, SLOT(insertWidget(const QString &)));
 
@@ -132,7 +134,7 @@ FormManager::createActions(KActionCollection *parent, KMainWindow *client)
 	m_pointer->setChecked(true);
 	actions.append(m_pointer);
 
-	m_snapToGrid = new KToggleAction(i18n("Snap to Grid"), QString::null, KShortcut(0), this, SLOT(slotSnapToGrid()), parent, "snap_to_grid");
+	m_snapToGrid = new KToggleAction(i18n("Snap to Grid"), QString::null, KShortcut(0), 0, 0, parent, "snap_to_grid");
 	m_snapToGrid->setChecked(true);
 	actions.append(m_snapToGrid);
 
@@ -343,13 +345,15 @@ FormManager::windowChanged(QWidget *w)
 		return;
 	}
 
-//	if(m_forms.count() >= 1)
-//	{
-	/*if(m_collection && m_collection->action( KStdAction::name(KStdAction::Undo)))
-		m_collection->take( m_collection->action( KStdAction::name(KStdAction::Undo) ) );
-	if(m_collection && m_collection->action( KStdAction::name(KStdAction::Redo)))
-		m_collection->take( m_collection->action( KStdAction::name(KStdAction::Redo) ) );*/
-//	}
+#ifdef ENABLE_UNDO_ACTIONS
+	if(m_forms.count() >= 1)
+	{
+		if(m_collection && m_collection->action( KStdAction::name(KStdAction::Undo)))
+			m_collection->take( m_collection->action( KStdAction::name(KStdAction::Undo) ) );
+		if(m_collection && m_collection->action( KStdAction::name(KStdAction::Redo)))
+			m_collection->take( m_collection->action( KStdAction::name(KStdAction::Redo) ) );
+	}
+#endif
 
 	Form *previousActive = m_active;
 	Form *form;
@@ -363,8 +367,10 @@ FormManager::windowChanged(QWidget *w)
 				m_buffer->setCollection(form->pixmapCollection());
 
 			kdDebug() << "FormManager::windowChanged() active form is " << form->objectTree()->name() << endl;
-			//if(m_collection)
-				//m_collection->addDocCollection(form->actionCollection());
+#ifdef ENABLE_UNDO_ACTIONS
+			if(m_collection)
+				m_collection->addDocCollection(form->actionCollection());
+#endif
 			KSelectAction *m_style = (KSelectAction*)m_collection->action("change_style", "KSelectAction");
 			const QString currentStyle = form->toplevelContainer()->widget()->style().name();
 			const QStringList styles = m_style->items();
@@ -388,13 +394,10 @@ FormManager::windowChanged(QWidget *w)
 				emit noFormSelected();
 			else
 				m_active->emitActionSignals();
-			//if(m_client)
-			//	m_client->createGUI(m_client->xmlFile());
-			/*Actions actions;
-			actions.append(form->actionCollection()->action( KStdAction::name(KStdAction::Undo) ));
-			actions.append(form->actionCollection()->action( KStdAction::name(KStdAction::Redo) ));
-			m_client->unplugActionList("undo_actions");
-			m_client->plugActionList("undo_actions", actions);*/
+#ifdef ENABLE_UNDO_ACTIONS
+			if(m_client)
+				m_client->createGUI(m_client->xmlFile());
+#endif
 			return;
 		}
 	}
@@ -925,6 +928,29 @@ FormManager::createLayout(int layoutType)
 
 	KCommand *com = new CreateLayoutCommand(layoutType, *list, m_active);
 	m_active->addCommand(com, true);
+}
+
+void
+FormManager::breakLayout()
+{
+	if(!activeForm())
+		return;
+
+	Container *container = activeForm()->activeContainer();
+	QString c = container->widget()->className();
+
+	if((c == "Grid") || (c == "VBox") || (c == "HBox"))
+	{
+		KCommand *com = new BreakLayoutCommand(container);
+		m_active->addCommand(com, true);
+	}
+	else // normal container
+	{
+		if(activeForm()->selectedWidgets()->count() == 1)
+			(*m_buffer)["layout"]->setValue("NoLayout");
+		else
+			container->setLayout(Container::NoLayout);
+	}
 }
 
 void

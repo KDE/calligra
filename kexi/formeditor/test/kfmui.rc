@@ -48,6 +48,7 @@
    <Action name="layout_hbox"/>
    <Action name="layout_vbox"/>
    <Action name="layout_grid"/>
+   <Action name="break_layout"/>
    <Separator/>
    <Action name="align_menu"/>
    <Action name="adjust_size_menu"/>
@@ -93,6 +94,10 @@
 <ToolBar name="tools" fullWidth="false">
    <Action name="pixmap_collection"/>
    <Action name="change_style"/>
+</ToolBar>
+<ToolBar name="format" fullWidth="false">
+   <Action name="align_menu"/>
+   <Action name="adjust_size_menu"/>
 </ToolBar>
 
 </kpartgui>

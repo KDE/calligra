@@ -167,7 +167,7 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		/*! Sets \a selected to be the selected widget of this container (and so of the Form). If \a add is true, the formerly selected widget
 		  is still selected, and the new one is just added. If false, \a selected replace the actually selected widget.
 		 */
-		void		setSelectedWidget(QWidget *selected, bool add);
+		void		setSelectedWidget(QWidget *selected, bool add, bool dontRaise=false);
 		/*! Unselects the widget \a w. Te widget is removed from the Cntainer 's list and its resizeHandles are removed. */
 		void		unSelectWidget(QWidget *w);
 		void		deleteWidget(QWidget *w);

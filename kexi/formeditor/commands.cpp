@@ -382,7 +382,8 @@ CreateLayoutCommand::unexecute()
 		{
 			item->widget()->reparent(parent->widget(), QPoint(0,0), true);
 			item->eventEater()->setContainer(parent->container());
-			item->widget()->setGeometry(m_pos[it.key()]);
+			if(m_pos[it.key()].isValid())
+				item->widget()->setGeometry(m_pos[it.key()]);
 			m_form->objectTree()->reparent(item->name(), m_containername);
 		}
 	}
@@ -408,6 +409,41 @@ CreateLayoutCommand::name() const
 		default:
 			return i18n("Create Layout");
 	}
+}
+
+/// BreakLayoutCommand ///////////////
+
+BreakLayoutCommand::BreakLayoutCommand(Container *container)
+ : CreateLayoutCommand()
+{
+	m_containername = container->toplevel()->widget()->name();
+	m_name = container->widget()->name();
+	m_form = container->form();
+	m_type = container->layoutType();
+
+	for(ObjectTreeItem *tree = container->tree()->children()->first(); tree; tree = container->tree()->children()->next())
+	{
+		QRect r(container->widget()->mapTo(container->widget()->parentWidget(), tree->widget()->pos()), tree->widget()->size());
+		m_pos.insert(tree->widget()->name(), r);
+	}
+}
+
+void
+BreakLayoutCommand::execute()
+{
+	CreateLayoutCommand::unexecute();
+}
+
+void
+BreakLayoutCommand::unexecute()
+{
+	CreateLayoutCommand::execute();
+}
+
+QString
+BreakLayoutCommand::name() const
+{
+	return i18n("Break Layout: %1").arg(m_name);
 }
 
 // PasteWidgetCommand

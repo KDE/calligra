@@ -169,6 +169,11 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void editFormPixmapCollection();
 		void editConnections();
 
+		void layoutHBox();
+		void layoutVBox();
+		void layoutGrid();
+		void breakLayout();
+
 		void alignWidgetsToLeft();
 		void alignWidgetsToRight();
 		void alignWidgetsToTop();
@@ -214,10 +219,6 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		void buddyChoosed(int id);
 		void menuSignalChoosed(int id);
 		void slotStyle();
-
-		void layoutHBox();
-		void layoutVBox();
-		void layoutGrid();
 
 		void slotConnectionCreated(Form*, Connection&);
 
@@ -272,7 +273,9 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		// Actions
 		KActionCollection	*m_collection;
+#ifdef ENABLE_UNDO_ACTIONS
 		KMainWindow 		*m_client;
+#endif
 		KToggleAction		*m_pointer, *m_dragConnection, *m_snapToGrid;
 
 		//! Used to delayed widgets deletion

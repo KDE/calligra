@@ -12,7 +12,7 @@ icon_ICON = button button_no test_it db form form_edit forms lineedit business_u
 	pixmaplabel select_item spring signalslot \
 	grid aoleft aoright aotop aobottom \
 	aowidest aotallest aoshortest aonarrowest aogrid aofit aopos2grid \
-	new_sign raise lower
+	new_sign raise lower alignobjs
 
 icondir = $(kde_datadir)/kexi/icons
 

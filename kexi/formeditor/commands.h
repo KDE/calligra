@@ -124,6 +124,7 @@ class KFORMEDITOR_EXPORT CreateLayoutCommand : public KCommand
 {
 	public:
 		CreateLayoutCommand(int layoutType, QtWidgetList &list, Form *form);
+		CreateLayoutCommand() {;} // for BreakLayoutCommand
 
 		virtual void execute();
 		virtual void unexecute();
@@ -135,6 +136,23 @@ class KFORMEDITOR_EXPORT CreateLayoutCommand : public KCommand
 		QString  m_name;
 		QMap<QString,QRect>  m_pos;
 		int  m_type;
+};
+
+class KFORMEDITOR_EXPORT BreakLayoutCommand : public CreateLayoutCommand
+{
+	public:
+		BreakLayoutCommand(Container *container);
+
+		virtual void execute();
+		virtual void unexecute();
+		virtual QString name() const;
+
+	/*protected:
+		Form  *m_form;
+		QString  m_containername;
+		QString  m_name;
+		QMap<QString,QRect>  m_pos;
+		int  m_type;*/
 };
 
 /*! This command is used when pasting widgets. You need to give the QDomDocument containing te widget(s) to paste, and optionnally the point where to paste widgets. */
