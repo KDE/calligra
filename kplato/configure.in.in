@@ -1,1 +1,1 @@
-DO_NOT_COMPILE=kplato
+DO_NOT_COMPILE="$DO_NOT_COMPILE kplato"
