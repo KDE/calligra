@@ -606,6 +606,32 @@ QDomDocument KPresenterDoc::saveXML()
     presenter.appendChild(element);
 
     if ( saveOnlyPage == -1 )
+    {
+        if ( !m_customListSlideShow.isEmpty() )
+        {
+            element = doc.createElement( "CUSTOMSLIDESHOWCONFIG" );
+            ListCustomSlideShow::Iterator it;
+            for ( it = m_customListSlideShow.begin(); it != m_customListSlideShow.end(); ++it )
+            {
+                QDomElement slide=doc.createElement("CUSTOMSLIDESHOW");
+                slide.setAttribute("name", it.key() );
+                QString tmp;
+                QValueListIterator<KPrPage*> itPage ;
+                for( itPage = ( *it ).begin(); itPage != ( *it ).end(); ++itPage )
+                {
+                    int posPage = m_pageList.find(*itPage );
+                    if ( posPage != -1 )
+                        tmp+=( *itPage )->oasisNamePage(posPage+1)+",";
+                }
+                slide.setAttribute( "pages", tmp );
+                element.appendChild(slide);
+            }
+            presenter.appendChild(element);
+        }
+
+    }
+
+    if ( saveOnlyPage == -1 )
         emit sigProgress( 40 );
 
     if ( saveOnlyPage == -1 )
@@ -2027,6 +2053,7 @@ bool KPresenterDoc::loadXML( QIODevice * dev, const QDomDocument& doc )
         setModified(false);
         startBackgroundSpellCheck();
     }
+    updateCustomListSlideShow( m_loadingInfo->m_tmpCustomListMap, true );
 
     kdDebug(33001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;
     return b;
@@ -2346,6 +2373,18 @@ bool KPresenterDoc::loadXML( const QDomDocument &doc )
         } else if(elem.tagName()=="PRESSLIDES") {
             if(elem.hasAttribute("value") && elem.attribute("value").toInt()==0)
                 allSlides = TRUE;
+        } else if ( elem.tagName()=="CUSTOMSLIDESHOWCONFIG" ) {
+            if ( _clean ) {
+                QDomElement slide=elem.firstChild().toElement();
+                while(!slide.isNull()) {
+                    if(slide.tagName()=="CUSTOMSLIDESHOW") {
+                        QStringList tmp = QStringList::split( ",", slide.attribute( "pages" ) );
+                        m_loadingInfo->m_tmpCustomListMap.insert( slide.attribute( "name" ), tmp );
+
+                    }
+                    slide=slide.nextSibling().toElement();
+                }
+            }
         } else if(elem.tagName()=="SELSLIDES") {
             if( _clean ) { // Skip this when loading a single page
                 QDomElement slide=elem.firstChild().toElement();
