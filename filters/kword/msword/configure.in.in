@@ -1,4 +1,4 @@
-AC_ARG_WITH(libwv2,[  --with-libwv2=DIR       use libwv2 in DIR],[
+AC_ARG_WITH(libwv2,AC_HELP_STRING([--with-libwv2=DIR],[use libwv2 in DIR]),[
 	if [ test "x$withval" != "xno" ]; then
 		if [ test "x$withval" != "xyes" ]; then
 			WV2_DIR=$withval
