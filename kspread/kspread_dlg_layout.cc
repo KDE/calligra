@@ -26,6 +26,7 @@
 #include "kspread_util.h"
 #include "kspread_canvas.h"
 
+#include <qbitmap.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qfontdatabase.h>
@@ -649,6 +650,14 @@ QPixmap* CellLayoutDlg::paintFormatPixmap( const char *_string1, const QColor & 
     painter.drawText( 75, 11, _string2 );
     painter.end();
 
+    QBitmap bm(pixmap->size());
+    bm.fill(color0);
+    painter.begin(&bm );
+    painter.setPen(color1);
+    painter.drawText( 2, 11, _string1 );
+    painter.drawText( 75, 11, _string2 );
+    painter.end();
+    pixmap->setMask(bm);
     return pixmap;
 }
 
