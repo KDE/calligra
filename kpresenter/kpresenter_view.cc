@@ -437,15 +437,15 @@ void KPresenterView::unZoomDocument(int &dpiX,int &dpiY)
     // No koffice app supports zooming in paintContent currently.
     // Disable in ALL cases now
     bool doZoom=false;
-    dpiX = doZoom ? 300 : QPaintDevice::x11AppDpiX();
-    dpiY = doZoom ? 300 : QPaintDevice::x11AppDpiY();
+    dpiX = doZoom ? 300 : KoGlobal::dpiX();
+    dpiY = doZoom ? 300 : KoGlobal::dpiY();
     zoomHandler()->setZoomAndResolution( 100, dpiX, dpiY );
     m_pKPresenterDoc->newZoomAndResolution( false, true /* for printing*/ );
 }
 
 void KPresenterView::zoomDocument(int zoom)
 {
-    zoomHandler()->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+    zoomHandler()->setZoomAndResolution( zoom, KoGlobal::dpiX(), KoGlobal::dpiY() );
     m_pKPresenterDoc->newZoomAndResolution( false, false );
     updateRuler();
 }
@@ -5818,8 +5818,8 @@ void KPresenterView::setZoomRect( const QRect & rect, bool drawRubber )
 
 void KPresenterView::setZoom( int zoom, bool updateViews )
 {
-    zoomHandler()->setZoomAndResolution( zoom, QPaintDevice::x11AppDpiX(),
-                                         QPaintDevice::x11AppDpiY());
+    zoomHandler()->setZoomAndResolution( zoom, KoGlobal::dpiX(),
+                                         KoGlobal::dpiY());
     m_pKPresenterDoc->newZoomAndResolution(updateViews,false);
     m_pKPresenterDoc->updateZoomRuler();
 

@@ -3067,7 +3067,7 @@ void KPrCanvas::startScreenPresentation( float presFakt, int curPgNum /* 1-based
     m_zoomBeforePresentation=doc->zoomHandler()->zoom();
     // ## TODO get rid of presFakt
     doc->zoomHandler()->setZoomAndResolution( qRound(_presFakt*m_zoomBeforePresentation),
-                                              QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+                                              KoGlobal::dpiX(), KoGlobal::dpiY() );
     doc->newZoomAndResolution(false,false);
 
     QPtrListIterator<KPObject> oIt(doc->pageList().at( curPgNum-1 )->objectList());
@@ -3118,7 +3118,7 @@ void KPrCanvas::stopScreenPresentation()
     doc->displayActivePage( m_activePageBeforePresentation );
     _presFakt = 1.0;
     doc->zoomHandler()->setZoomAndResolution( m_zoomBeforePresentation,
-                                              QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+                                              KoGlobal::dpiX(), KoGlobal::dpiY() );
     doc->newZoomAndResolution(false,false);
     goingBack = false;
     m_step.m_pageNumber = 0;

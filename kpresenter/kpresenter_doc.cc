@@ -215,7 +215,7 @@ KPresenterDoc::KPresenterDoc( QWidget *parentWidget, const char *widgetName, QOb
     usedSoundFile = QStringList();
     haveNotOwnDiskSoundFile = QStringList();
 
-    m_zoomHandler->setZoomAndResolution( 100, QPaintDevice::x11AppDpiX(), QPaintDevice::x11AppDpiY() );
+    m_zoomHandler->setZoomAndResolution( 100, KoGlobal::dpiX(), KoGlobal::dpiY() );
     newZoomAndResolution(false,false);
 
     //   _pageLayout.format = PG_SCREEN;
