@@ -79,7 +79,7 @@
  <Menu name="help"><text>Help</text>
  </Menu>
 </MenuBar>
-<ToolBar>
+<ToolBar name="editAndColumnAndSortAndPartToolBar">
  <Action name="undo"/>
  <Action name="redo"/>
  <Separator/>
@@ -99,14 +99,14 @@
  <Action name="insert_part"/>
  <Action name="transform"/>
 </ToolBar>
-<ToolBar>
+<ToolBar name="fontPropertyToolBar">
  <Action name="bold"/>
  <Action name="italic"/>
  <Action name="underline"/>
  <Action name="selectFont"/>
  <Action name="selectFontSize"/>
 </ToolBar>
-<ToolBar>
+<ToolBar name="calcAndAlignToolBar">
  <Action name="percent"/>
  <Action name="precplus"/>
  <Action name="precminus"/>
@@ -117,12 +117,12 @@
  <Action name="right"/>
  <Action name="multiRow"/>
 </ToolBar>
-<ToolBar>
+<ToolBar name="mathToolBar">
  <Action name="autoSum"/>
  <Action name="function"/>
  <Action name="formulaSelection"/>
 </ToolBar>
-<ToolBar>
+<ToolBar name="formulaToolBar">
  <Action name="formulaPower"/>
  <Action name="formulaSubscript"/>
  <Action name="formulaParentheses"/>
@@ -137,7 +137,7 @@
  <Action name="formulaSum"/>
  <Action name="formulaProduct"/>
 </ToolBar>
-<ToolBar>
+<ToolBar name="colorAndBorderToolBar">
  <Action name="textColor"/>
  <Action name="backgroundColor"/>
  <Separator/>
