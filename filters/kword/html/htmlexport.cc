@@ -49,7 +49,7 @@ const bool HTMLExport::filter(const QCString &fileIn, const QCString &fileOut,
       return false;
     }
 
-    kdDebug() << buf << endl;
+    //kdDebug() << buf << endl;
 
     int begin = buf.find( "<DOC" ); // skip <?...?>
     mainFunc( (const char*)buf + begin );
