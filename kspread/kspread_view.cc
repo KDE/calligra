@@ -46,6 +46,7 @@
 #include <knotifyclient.h>
 #include <kformulaedit.h>
 #include <kcoloractions.h>
+#include <tkcoloractions.h>
 #include <kaction.h>
 
 #include <kprocess.h>
@@ -426,10 +427,12 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name, KSpreadDoc* doc )
                              actionCollection(), "sortDec" );
     m_sortInc = new KAction( i18n("Sort increasing"), "sort_incr", 0, this, SLOT( sortInc() ),
                              actionCollection(), "sortInc" );
-    m_textColor = new KSelectColorAction( i18n("Text color"), KColorAction::TextColor, 0, this, SLOT( changeTextColor() ),
-                               actionCollection(), "textColor" );
-    m_bgColor = new KSelectColorAction( i18n("Background color"), KColorAction::BackgroundColor, 0, this, SLOT( changeBackgroundColor() ),
-                               actionCollection(), "backgroundColor" );
+    m_textColor = new TKSelectColorAction( i18n("Text color"), TKSelectColorAction::TextColor, actionCollection(), "textColor" );
+    connect( m_textColor, SIGNAL(activated()), SLOT(changeTextColor()) );
+
+    m_bgColor = new TKSelectColorAction( i18n("Background color"),TKSelectColorAction::FillColor, actionCollection(), "backgroundColor" );
+    connect(m_bgColor,SIGNAL(activated()),SLOT(changeBackgroundColor()));
+
     m_borderLeft = new KAction( i18n("Border left"), "border_left", 0, this, SLOT( borderLeft() ), actionCollection(), "borderLeft" );
     m_borderRight = new KAction( i18n("Border Right"), "border_right", 0, this, SLOT( borderRight() ), actionCollection(), "borderRight" );
     m_borderTop = new KAction( i18n("Border Top"), "border_top", 0, this, SLOT( borderTop() ), actionCollection(), "borderTop" );

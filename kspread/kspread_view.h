@@ -47,7 +47,7 @@ class KSpreadLocationEditWidget;
 class KoDocumentEntry;
 
 class KSelectColorAction;
-
+class TKSelectColorAction;
 class KAction;
 class KSelectAction;
 class KFontAction;
@@ -502,8 +502,8 @@ private:
     KSelectAction* m_formulaSelection;
     KAction* m_sortDec;
     KAction* m_sortInc;
-    KSelectColorAction* m_textColor;
-    KSelectColorAction* m_bgColor;
+    TKSelectColorAction* m_textColor;
+    TKSelectColorAction* m_bgColor;
     KAction* m_cellLayout;
     KAction* m_hideTable;
     KAction* m_showTable;
