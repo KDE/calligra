@@ -130,6 +130,8 @@ void DriverManagerInternal::lookupDrivers()
 	}
 }
 
+
+
 Driver* DriverManagerInternal::driver(const QCString& name)
 {
 	clearError();
@@ -238,6 +240,11 @@ KService::Ptr DriverManager::serviceInfo(const QString &name)
 const DriverManager::ServicesMap& DriverManager::services()
 {
 	return d_int->m_services;
+}
+
+const QString DriverManager::lookupByMime(const QString &mime)
+{
+
 }
 
 Driver* DriverManager::driver(const QCString& name)
