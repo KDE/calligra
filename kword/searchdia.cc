@@ -862,7 +862,7 @@ void KWSearchDia::replaceAll()
         if ( replace && cAsk->isChecked() )
         {
             bool _exit = false;
-            switch ( QMessageBox::information( thsi, i18n( "Replace" ), i18n( "Replace selected text?" ), 
+            switch ( QMessageBox::information( this, i18n( "Replace" ), i18n( "Replace selected text?" ), 
 					       i18n( "&Yes" ), i18n( "&No" ), i18n( "&Skip" ) ) )
             {
             case 0: break;
