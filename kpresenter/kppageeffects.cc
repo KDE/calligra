@@ -194,6 +194,8 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
     case PEF_INTERLOCKING_HORZ_1:
     case PEF_INTERLOCKING_HORZ_2:
     {
+        _steps = hsteps;
+
         int w0 = 0;
         int h4 = height / 4;
         int loff = 0; // vertical offset for upper stripe coming from left
@@ -205,13 +207,13 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
 
         _time.start();
 
-        for ( ; _step < _steps ; )
+        for ( _w = 0 ;  _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
             {
                 _step++;
-                _w = ( width / wsteps ) * _step;
+                _w = width * _step / _steps;
                 _w = kMin( _w, width );
 
                 bitBlt( canv, w0, loff, &_pix2, w0, loff, _w - w0, h4 );
@@ -225,12 +227,15 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
 
                 _time.restart();
             }
-            if ( ( width / wsteps ) * _step >= width ) break;
+            if ( _w >= width ) break;
         }
     } break;
+
     case PEF_INTERLOCKING_VERT_1:
     case PEF_INTERLOCKING_VERT_2:
     {
+        _steps = wsteps;
+
         int h0 = 0;
         int w4 = width / 4;
         int toff = 0; // horizontal offset for left-most stripe from top
@@ -241,13 +246,13 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
         }
         _time.start();
 
-        for ( ; _step < _steps ; )
+        for ( _h = 0 ; _step < _steps ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
             {
                 _step++;
-                _h = ( height / hsteps ) * _step;
+                _h = height * _step / _steps;
                 _h = kMin( _h, height );
 
                 bitBlt( canv, toff, h0, &_pix2, toff, h0, w4, _h - h0 );
@@ -261,9 +266,10 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
 
                 _time.restart();
             }
-            if ( ( height / hsteps ) * _step >= height ) break;
+            if ( _h >= height ) break;
         }
     } break;
+
     case PEF_SURROUND1:
     {
         int wid = width / 10;
@@ -275,7 +281,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
         _steps = wsteps;
         _time.start();
 
-        for ( ; _step < _steps ; )
+        for ( ; curr < 22 ; )
         {
             kapp->processEvents();
             if ( _time.elapsed() >= 1 )
@@ -286,7 +292,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
                 {
                     int dx = ( curr2 / 4 ) * wid;
                     int dy = ( curr2 / 4 ) * hei;
-                    _h = ( height / _steps ) * _step;
+                    _h = height * _step / _steps;
                     if ( _h >= height - 2 * dy )
                     {
                         _h = height - 2 * dy;
@@ -299,7 +305,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
                 {
                     int dx = ( curr2 / 4 ) * wid;
                     int dy = ( curr2 / 4 ) * hei;
-                    _w = ( width / _steps ) * _step;
+                    _w = width * _step / _steps;
                     if ( _w >= width - wid - 2 * dx )
                     {
                         _w = width - wid - 2 * dx;
@@ -312,7 +318,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
                 {
                     int dx = ( curr2 / 4 ) * wid;
                     int dy = ( curr2 / 4 ) * hei;
-                    _h = ( height / _steps ) * _step;
+                    _h = height * _step / _steps;
                     if ( _h >= height - hei - 2 * dy )
                     {
                         _h = height - hei - 2 * dy;
@@ -326,7 +332,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
                 {
                     int dx = ( curr2 / 4 ) * wid;
                     int dy = ( curr2 / 4 ) * hei;
-                    _w = ( width / _steps ) * _step;
+                    _w = width * _step / _steps;
                     if ( _w >= width - 2 * wid - 2 * dx )
                     {
                         _w = width - 2 * wid - 2 * dx;
@@ -348,6 +354,7 @@ void kPchangePages( QWidget *canv, const QPixmap &_pix1, const QPixmap &_pix2,
             }
         }
     } break;
+
     case PEF_FLY1:
     {
         _steps = hsteps;
