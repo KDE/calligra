@@ -19,6 +19,7 @@
 
 #include "serialletter_qtsql_power_plugin.h"
 #include "serialletter_qtsql_power_plugin.moc"
+#include "qtsqlopeneditor.h"
 #include <qlayout.h>
 #include <qdom.h>
 #include <kcombobox.h>
@@ -41,7 +42,7 @@
  ******************************************************************/
 
 KWQTSQLPowerSerialDataSource::KWQTSQLPowerSerialDataSource(KInstance *inst)
-	: KWSerialLetterDataSource(inst),myquery(0)
+	: KWQTSQLSerialDataSourceBase(inst),myquery(0)
 {
 	port=i18n("default");
 }
@@ -93,20 +94,13 @@ void KWQTSQLPowerSerialDataSource::load( QDomElement& parentElem )
 bool KWQTSQLPowerSerialDataSource::showConfigDialog(QWidget *par,int action)
 {
    bool ret=false;
-   if (action==KWSLOpen)
-   {
-   	KWQTSQLPowerSerialLetterOpen *dia=new KWQTSQLPowerSerialLetterOpen(par,this);
-
-	ret=dia->exec();
-	if (ret) openDatabase();
-	delete dia;
-   }
-   else
+   if (action==KWSLEdit)
    {
 	KWQTSQLPowerSerialLetterEditor *dia=new KWQTSQLPowerSerialLetterEditor(par,this);
 	ret=dia->exec();
 	delete dia;
    }
+	else ret=KWQTSQLSerialDataSourceBase::showConfigDialog(par,action);
    return ret;
 }
 
@@ -115,66 +109,6 @@ void KWQTSQLPowerSerialDataSource::clearSampleRecord() {sampleRecord.clear();}
 void KWQTSQLPowerSerialDataSource::addSampleRecordEntry(QString name)
 {sampleRecord[name]=i18n("No Value");}
 
-bool  KWQTSQLPowerSerialDataSource::openDatabase()
-{
-	QCString pwd;
-	QSqlDatabase::removeDatabase("KWQTSQLPOWER");
-        database=QSqlDatabase::addDatabase(driver,"KWQTSQLPOWER");
-        if (database)
-        {
-                if (database->lastError().type()!=QSqlError::None)
-                {
-			QMessageBox::critical(0,i18n("Error"),database->lastError().databaseText(),QMessageBox::Abort,QMessageBox::NoButton,QMessageBox::NoButton);
-			return false;
-                }
-                database->setDatabaseName(databasename);
-                database->setUserName(username);
-                database->setHostName(hostname);
-		if ((port!=i18n("default"))&& (!port.isEmpty()))
-			database->setPort(port.toInt());
-
-		if (KPasswordDialog::getPassword(pwd, i18n("Please enter the password for the database connection"))
-			== KPasswordDialog::Accepted) database->setPassword(pwd);
-                if (database->open())
-                {
-                        return true;
-                }
-		QMessageBox::critical(0,i18n("Error"),database->lastError().databaseText(),QMessageBox::Abort,QMessageBox::NoButton,QMessageBox::NoButton);
-		return false;
-        }
-	QMessageBox::critical(0,i18n("Error"),i18n("Couldn't create database object"),QMessageBox::Abort,QMessageBox::NoButton,QMessageBox::NoButton);
-
-}
-
-/******************************************************************
- *
- * Class: KWQTSQLPowerSerialLetterOpen
- *
- ******************************************************************/
-
-KWQTSQLPowerSerialLetterOpen::KWQTSQLPowerSerialLetterOpen( QWidget *parent, KWQTSQLPowerSerialDataSource *db_ )
-        :KDialogBase( Plain, i18n( "Serial Letter - Setup database connection" ), Ok | Cancel, Ok, parent, "", true ), db( db_ )
-{
-	(new QVBoxLayout(plainPage()))->setAutoAdd(true);
-	setMainWidget(widget=new KWQTSQLOpenWidget(plainPage()));
-	widget->drivers->insertStringList(QSqlDatabase::drivers());
-	widget->hostname->setText(db->hostname);
-	widget->username->setText(db->username);
-	widget->port->setText(db->port);
-	widget->databasename->setText(db->databasename);
-	connect(this,SIGNAL(okClicked()),this,SLOT(handleOk()));
-}
-
-KWQTSQLPowerSerialLetterOpen::~KWQTSQLPowerSerialLetterOpen(){;}
-
-void KWQTSQLPowerSerialLetterOpen::handleOk()
-{
-	db->hostname=widget->hostname->text();
-	db->username=widget->username->text();
-	db->port=widget->port->text();
-	db->databasename=widget->databasename->text();
-	db->driver=widget->drivers->currentText();
-}
 
 /******************************************************************
  *
@@ -233,7 +167,7 @@ void KWQTSQLPowerSerialLetterEditor::slotTableChanged ( QListBoxItem * item )
 
 void KWQTSQLPowerSerialLetterEditor::openSetup()
 {
-        KWQTSQLPowerSerialLetterOpen *dia=new KWQTSQLPowerSerialLetterOpen(this,db);
+        KWQTSQLSerialLetterOpen *dia=new KWQTSQLSerialLetterOpen(this,db);
         if (dia->exec())
 	{
 		 db->openDatabase();

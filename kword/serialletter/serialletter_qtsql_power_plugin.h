@@ -34,7 +34,7 @@
 #include <koUtils.h>
 #include "defs.h"
 #include "serialletter_interface.h"
-#include "qtsqlopenwidget.h"
+#include "serialletter_qtsql_base.h"
 #include "kwqtsqlpower.h"
 
 /******************************************************************
@@ -83,13 +83,11 @@ QSqlIndex(); }
  * Class: KWQTSQLSerialDataSource
  *
  ******************************************************************/
-class KWQTSQLPowerSerialDataSource: public KWSerialLetterDataSource
+class KWQTSQLPowerSerialDataSource: public KWQTSQLSerialDataSourceBase
 {
     public:
     KWQTSQLPowerSerialDataSource(KInstance *inst);
     ~KWQTSQLPowerSerialDataSource();
-
-    bool openDatabase();
 
     virtual void save( QDomDocument &doc,QDomElement&);
     virtual void load( QDomElement& elem );
@@ -102,14 +100,7 @@ class KWQTSQLPowerSerialDataSource: public KWSerialLetterDataSource
 
     protected:
 	friend class KWQTSQLPowerSerialLetterEditor;
-	friend class KWQTSQLPowerSerialLetterOpen;
-	QString hostname;
-	QString username;
-	QString driver;
-	QString port;
-	QString databasename;
 	QString query;
-	QGuardedPtr<QSqlDatabase> database;
 	QMySqlCursor *myquery;
 
     void clearSampleRecord();
@@ -119,7 +110,7 @@ class KWQTSQLPowerSerialDataSource: public KWSerialLetterDataSource
 
 /******************************************************************
  *
- * Class: KWQTSQLSerialLetterEditor
+ * Class: KWQTSQLPowerSerialLetterEditor
  *
  ******************************************************************/
 
@@ -139,25 +130,6 @@ private slots:
  void slotTableChanged ( QListBoxItem * item );
  void slotExecute();
  void slotSetQuery();
-};
-
-/******************************************************************
- *
- * Class: KWQTSQPowerLSerialLetterOpen
- *
- ******************************************************************/
-class KWQTSQLPowerSerialLetterOpen : public KDialogBase
-{
-    Q_OBJECT
-
-public:
-    KWQTSQLPowerSerialLetterOpen( QWidget *parent, KWQTSQLPowerSerialDataSource *db_ );
-    ~KWQTSQLPowerSerialLetterOpen();
-private:
- KWQTSQLPowerSerialDataSource *db;
- KWQTSQLOpenWidget *widget;
-private slots:
-void handleOk();
 };
 
 

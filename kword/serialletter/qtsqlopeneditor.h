@@ -17,46 +17,39 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef _SERIALLETTER_QTSQL_PLUGIN_H_
-#define _SERIALLETTER_QTSQL_PLUGIN_H_
+#ifndef _SERIALLETTER_QTSQL_OPEN_EDITOR_H_
+#define _SERIALLETTER_QTSQL_OPEN_EDITOR_H_
 
 #include <qdom.h>
+#include <klocale.h>
+#include <kiconloader.h>
+#include <kdialogbase.h>
+#include <qsqldatabase.h>
+#include <qguardedptr.h>
+#include <qwidget.h>
+
 #include "serialletter_interface.h"
-#include "qtsqldatasourceeditor.h"
+#include "serialletter_qtsql_base.h"
+#include "qtsqlopenwidget.h"
 
 /******************************************************************
  *
- * Class: KWQTSQLSerialDataSource
+ * Class: KWQTSQLSerialLetterOpen
  *
  ******************************************************************/
-
-class KWQTSQLSerialDataSource: public KWSerialLetterDataSource
+class KWQTSQLSerialLetterOpen : public KDialogBase
 {
-    public:
-    KWQTSQLSerialDataSource(KInstance *inst);
-    ~KWQTSQLSerialDataSource();
+    Q_OBJECT
 
-    virtual void save( QDomDocument &doc,QDomElement&);
-    virtual void load( QDomElement& elem );
-    virtual class QString getValue( const class QString &name, int record = -1 ) const;
-    virtual int getNumRecords() const {
-        return /*(int)db.count()*/ 0;
-    }
-    virtual void refresh(bool){;}
-    virtual  bool showConfigDialog(QWidget *,int);
-
-    protected:
-};
-
-/******************************************************************
- *
- * Class: KWQTSQLDataSourceEditor
- *
- ******************************************************************/
-
-class KWQTSQLDataSourceEditor: public QTSQLDataSourceEditor
-{
-
+public:
+    KWQTSQLSerialLetterOpen( QWidget *parent, KWQTSQLSerialDataSourceBase *db_ );
+    ~KWQTSQLSerialLetterOpen();
+private:
+ KWQTSQLSerialDataSourceBase *db;
+ KWQTSQLOpenWidget *widget;
+private slots:
+void handleOk();
 };
 
 #endif
+
