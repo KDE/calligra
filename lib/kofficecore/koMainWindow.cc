@@ -1533,27 +1533,49 @@ DCOPObject * KoMainWindow::dcopObject()
 
 void KoMainWindow::slotEmailFile()
 {
-   saveDocument();
-   // Subject = Document file name
-   // Attachment = The current file
-   // Message Body = The current document in HTML export? <-- This may be an option.
-   QString fileURL = d->m_rootDoc->url().url();
-   QString theSubject = d->m_rootDoc->url().fileName(false);
-   kdDebug(30003) << "(" << fileURL <<")" << endl;
-   QStringList urls;
-   urls.append( fileURL );
-   if (!fileURL.isEmpty())
-       kapp->invokeMailer(QString::null, QString::null, QString::null, theSubject,
-                          QString::null, //body
-                          QString::null,
-                          urls); // attachments
+    if (!rootDocument ())
+        return;
+        
+    if (rootDocument ()->url ().isEmpty () ||
+        rootDocument ()->isModified ())
+    {
+        int result = KMessageBox::questionYesNo (this,
+                        i18n ("You must save this document before sending it.\n"
+                              "Do you want to save it?"),
+                        QString::null,
+                        KStdGuiItem::save (), KStdGuiItem::cancel ());
 
-   /*kapp->invokeMailer("mailto:?subject=" + theSubject +
-     "&attach=" + fileURL);*/
-   else
-       KMessageBox::detailedSorry (this, i18n("ERROR: File not found."),
-                                   i18n("To send a file you must first have saved the file to the filesystem."),
-                                   i18n("Error: File Not Found!"));
+        if (result == KMessageBox::Yes)
+        {
+            if (!saveDocument ())
+            {
+                // save failed or aborted - don't email
+                return;
+            }
+        }
+        else
+        {
+            // don't want to save - don't email
+            return;
+        }
+    }
+    
+    // Subject = Document file name
+    // Attachment = The current file
+    // Message Body = The current document in HTML export? <-- This may be an option.
+    QString fileURL = rootDocument ()->url().url();
+    QString theSubject = rootDocument ()->url().fileName(false);
+    kdDebug(30003) << "(" << fileURL <<")" << endl;
+    QStringList urls;
+    urls.append( fileURL );
+    
+    if (!fileURL.isEmpty())
+    {
+        kapp->invokeMailer(QString::null, QString::null, QString::null, theSubject,
+                            QString::null, //body
+                            QString::null,
+                            urls); // attachments
+    }
 }
 
 void KoMainWindow::slotReloadFile()
