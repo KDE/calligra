@@ -2183,10 +2183,6 @@ void KWDocument::insertObject( const KoRect& rect, KoDocumentEntry& _e )
     frameChanged( frame ); // repaint etc.
 }
 
-/* Update all views of this document, area can be cleared
-   before redrawing with the _erase flag. (false implied)
-   All views EXCEPT the argument _view are updated ( 0L = all )
- */
 void KWDocument::repaintAllViewsExcept( KWView *_view, bool erase )
 {
     //kdDebug() << "KWDocument::repaintAllViewsExcept" << endl;
@@ -2372,30 +2368,26 @@ KWFrameSet * KWDocument::frameSetByName( const QString & name )
 }
 
 KWFrame * KWDocument::deepestInlineFrame(KWFrame *parent, const QPoint& nPoint, bool *border) {
-    KWFrameSet *fs=parent->frameSet();
+    KWFrameSet *hostFrameSet=parent->frameSet();
     KoPoint docPoint( unzoomPoint( nPoint ) );
-    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
+    int page = QMIN(m_pages-1, static_cast<int>(docPoint.y() / ptPaperHeight()));
+    QPtrList<KWFrame> frames = framesInPage(page);
 
-    for (fit.toLast(); fit.current(); --fit) // z-order
-    {
-        KWFrameSet *frameSet = fit.current();
-        if ( !frameSet->isVisible() || frameSet->isRemoveableHeader() )
-                    continue;
-        if (!frameSet->isFloating())
+    for (KWFrame *f = frames.last();f;f=frames.prev()) { // z-order
+        // only consider inline frames.
+        if (! f->frameSet()->isFloating())
             continue;
-        if (fs != frameSet->anchorFrameset())
+
+        // only use the frames that are embedded in the parent
+        if (hostFrameSet != f->frameSet()->anchorFrameset())
             continue;
-        // frameset is a child of parent. now find out if its under the mouse.
-        KWFrame *frsFrame = frameSet->frameByBorder(nPoint);
-        // yup it is. its even the border. stop looking for childs.
-        if (frsFrame) {
-            if (border) *border=true;
-            return frsFrame;
+
+        if(f->frameAtPos(nPoint, true)) {
+            if ( border ) *border = true;
+            return f;
         }
-        frsFrame = frameSet->frameAtPos(docPoint.x(),docPoint.y());
-        // yup it is. look for childs
-        if (frsFrame) {
-             return deepestInlineFrame(frsFrame,nPoint,border);
+        if(f->frameAtPos(nPoint)) {
+            return deepestInlineFrame(f,nPoint,border);
         }
     }
     if (border != 0) border=false;
@@ -2406,88 +2398,67 @@ KWFrame * KWDocument::frameBelowFrame(const QPoint& nPoint, KWFrame *frame, bool
 
     KWFrameSet *fs = frame->frameSet();
     KoPoint docPoint( unzoomPoint( nPoint ) );
-    bool reallyStartLooking=false;
+    bool allreadyFoundArgumentFrame=false;
     if (fs->isFloating()) {
-        // inline frame: the frame below is the parent frame.
-        // since we know nPoint is already in frame, we don't have to check it for anchorFrame here.
-        KWFrameSet *frameSet = fs->anchorFrameset();
-        KWFrame *f = frameSet->frameByBorder(nPoint);
-        // for comments see below.
+        // now lets be smart here; we know that a frame that is floating is embedded 
+        // inside its hostFrameSet frame. This basically means that the frame directly 
+        // below is the hostFrameSet frame :)
+        // since we know nPoint is already in frame, we don't have to check for anchorFrame here.
+        KWFrameSet *hostFrameSet = fs->anchorFrameset();
+        KWFrame *f = hostFrameSet->frameByBorder(nPoint);
         if (f) {
             if (border) *border=true;
             return f;
         }
-        f = frameSet->frameAtPos(docPoint.x(),docPoint.y());
+        f = hostFrameSet->frameAtPos(docPoint.x(),docPoint.y());
         if (f) {
             if (border) *border=false;
             return f;
         }
-
-
     } else {
-        QPtrListIterator<KWFrameSet> fit = framesetsIterator();
-        for (fit.toLast(); fit.current(); --fit) // z-order
-            {
-            KWFrameSet *frameSet = fit.current();
-            if ( !(frameSet->isVisible()) || frameSet->isRemoveableHeader() )
-                        continue;
-            // we're not interested in floating frames here.
-            if (frameSet->isFloating())
+        int page = QMIN(m_pages-1, static_cast<int>(docPoint.y() / ptPaperHeight()));
+        QPtrList<KWFrame> frames = framesInPage(page);
+
+        for (KWFrame *f = frames.last();f;f=frames.prev()) { // z-order
+            // only consider non-inline frames.
+            if (f->frameSet()->isFloating())
                 continue;
-            // if we are really looking (we already found the given frameset in the z-ordered
-            // tree)
-            if (reallyStartLooking) {
-                KWFrame *f = frameSet->frameByBorder(nPoint);
-                // We found a frame below the given frame that is okay for a border.
-                if (f) {
-                    if (border) *border=true;
-                    return f;
+
+            if (allreadyFoundArgumentFrame) {
+                if(f->frameAtPos(nPoint, true)) {
+                    if ( border ) *border = true;
+                    return frame;
                 }
-                // We found a frame below the given frame that is okay.
-                f = frameSet->frameAtPos(docPoint.x(),docPoint.y());
-                // return the deepest inline frame. Remember less deep inline frames
-                // are 'below' deeper inline frames.
-                if (f) {
+                if(f->frameAtPos(nPoint))
                     return deepestInlineFrame(f,nPoint,border);
-                }
-            }
-
-            if (frameSet == fs)
-                reallyStartLooking=true;
-
+            } else if(f == frame)
+                allreadyFoundArgumentFrame=true;
         }
-        return 0L;
     }
+    if (border != 0) border=false;
     return 0L;
 }
 
-
-KWFrame * KWDocument::topFrameUnderMouse( const QPoint& nPoint, bool* border)
-{
+KWFrame * KWDocument::topFrameUnderMouse( const QPoint& nPoint, bool* border) {
     KoPoint docPoint( unzoomPoint( nPoint ) );
-    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
+    int page = QMIN(m_pages-1, static_cast<int>(docPoint.y() / ptPaperHeight()));
+    QPtrList<KWFrame> frames = framesInPage(page);
 
-    for ( fit.toLast(); fit.current() ; --fit ) // z-order
-    {
-        KWFrameSet *frameSet = fit.current();
-    // only consider non-inline frames.
-    if (frameSet->isFloating())
-        continue;
-        if ( !frameSet->isVisible() || frameSet->isRemoveableHeader() )
+    
+    for (KWFrame *f = frames.last();f;f=frames.prev()) { // z-order
+        // only consider non-inline frames.
+        if (f->frameSet()->isFloating())
             continue;
 
-        KWFrame * frame = frameSet->frameByBorder( nPoint );
-        if ( frame )
-        {
+        if(f->frameAtPos(nPoint, true)) {
             if ( border ) *border = true;
-            return frame;
+            return f;
         }
-        frame = frameSet->frameAtPos( docPoint.x(), docPoint.y() );
-        if ( frame )
-        {
-            return deepestInlineFrame(frame,nPoint,border);
+        if(f->frameAtPos(nPoint)) {
+            return deepestInlineFrame(f,nPoint,border);
         }
     }
+    if (border != 0) border=false;
     return 0L;
 }
 
@@ -2505,12 +2476,12 @@ KWFrame * KWDocument::frameUnderMouse( const QPoint& nPoint, bool* border, bool 
             goDeeper=frameBelowFrame(nPoint, goDeeper, border);
             foundselected=true;
         }
-        if (foundselected)
+        if (foundselected) {
             if (goDeeper)
                 return goDeeper;
             else
                 return candidate;
-        else
+        } else
             goDeeper=frameBelowFrame(nPoint, goDeeper, border);
 
     }
@@ -2801,8 +2772,6 @@ void KWDocument::removeFrameSet( KWFrameSet *f )
     setModified( true );
 }
 
-// Returns 0-based page number where rect is (in fact its topleft corner).
-// Use isOutOfPage to check that the rectangle is fully contained in that page.
 int KWDocument::getPageOfRect( KoRect & _rect ) const
 {
     int page = static_cast<int>(_rect.y() / ptPaperHeight());

@@ -214,6 +214,12 @@ public:
     void setMinFrameHeight(double h) {m_minFrameHeight=h;}
     double minFrameHeight(void) {return m_minFrameHeight;}
 
+    /** Return if the point is on the frame. 
+        @param point the point in real pt
+        @param borderOfFrameOnly when true an additional check is done if the point 
+          is on the border.  */
+    bool frameAtPos( QPoint point, bool borderOfFrameOnly=false);
+
 private:
     SheetSide m_sheetSide;
     RunAround m_runAround;

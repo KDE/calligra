@@ -177,9 +177,11 @@ public:
     // Return the frameset with a given name
     KWFrameSet * frameSetByName( const QString & name );
 
-    // Returns the frame under the mouse (or 0)
-    // The bool border is true if the mouse is on a border, false if it's inside the frame
-    // if firstNonSelected is set to true, frameUnderMouse searches for the upper frame that is not selected.
+    /** Returns the frame under the mouse. (or 0 if no frame is found)
+     * @param border is set to true if the mouse is on a border of the frame found.
+     * @param firstNonSelected when set to true, frameUnderMouse searches for the frame on 
+     *        top that is not selected.
+     */
     KWFrame * frameUnderMouse( const QPoint& nPoint, bool* border = 0L, bool firstNonSelected = false );
 
     // Return the total number of framesets
@@ -230,19 +232,24 @@ public:
 
     unsigned int getColumns() const { return m_pageColumns.columns; }
 
-    // Returns 0-based page number where rect is (in real pt coordinates)
-    // (in fact its topleft corner).
-    // Use isOutOfPage to check that the rectangle is fully contained in that page.
+    /** Returns 0-based page number where rect is.
+     * @param _rect should be a rect in real pt coordinates.
+     * Use isOutOfPage to check that the rectangle is fully contained in that page.
+     */
     int getPageOfRect( KoRect & _rect ) const;
 
-    // Return true if @p r (in real pt coordinates) is out of the page @p page
+    /** Return true if @p r (in real pt coordinates) is out of the page @p page */
     bool isOutOfPage( KoRect & r, int page ) const;
 
-    //update koRuler in each view
+    /** update koRuler in each view */
     void updateRuler();
 
     void repaintAllViews( bool erase = false );
+    /** Update all views of this document, area can be cleared before redrawing with the 
+     * _erase flag. (false implied). All views EXCEPT the argument _view are updated ( give 0L for all )
+     */
     void repaintAllViewsExcept( KWView *_view, bool _erase = false );
+
     /**
      * Tell this method when a frame is moved / resized / created / deleted
      * and everything will be update / repainted accordingly.
@@ -274,6 +281,9 @@ public:
     QCursor getMouseCursor( const QPoint& nPoint, bool controlPressed );
     QPtrList<KWFrame> getSelectedFrames() const;
     KWFrame *getFirstSelectedFrame() const;
+    /** Gather all the frames which are on a certain page and return them.
+      * The list is unordered. @see KWFrameSet::framesInPage 
+      */
     QPtrList<KWFrame> framesInPage( int pageNum ) const;
     int frameSetNum( KWFrameSet* fs ) { return m_lstFrameSet.findRef( fs ); }
 
@@ -543,8 +553,15 @@ protected:
 
 private:
     //private helper functions for frameUnderMouse
+    /** return the top-most frame under mouse, using nPoint, always returns the first found. */
     KWFrame *topFrameUnderMouse( const QPoint& nPoint, bool* border=0L);
+    /** Search the list of frames for a frame that is directly below the argument frame, 
+      * and return that.*/
     KWFrame *frameBelowFrame(const QPoint& nPoint, KWFrame *frame, bool *border=0L);
+    /** Search if the frame (parent) has any embedded frames we might be clickin on and
+        return that frame if so.  The algoritm will recursively search for the deepest
+        inline frame we clicked on.
+    */
     KWFrame *deepestInlineFrame(KWFrame *parent, const QPoint& nPoint, bool *border);
 
     QPtrList<KWView> m_lstViews;

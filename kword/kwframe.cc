@@ -445,6 +445,28 @@ void KWFrame::load( QDomElement &frameElem, bool headerOrFooter, int syntaxVersi
 }
 
 
+bool KWFrame::frameAtPos( QPoint point, bool borderOfFrameOnly) {
+    QRect outerRect( outerRect() );
+    // Give the user a bit of margin for clicking on it :)
+    const int margin = 2;
+    outerRect.rLeft() -= margin;
+    outerRect.rTop() -= margin;
+    outerRect.rRight() += margin;
+    outerRect.rBottom() += margin;
+    if ( outerRect.contains( point ) ) {
+        if(borderOfFrameOnly && frameSet()) {
+            QRect innerRect( frameSet()->kWordDocument()->zoomRect( *this ) );
+            innerRect.rLeft() += margin;
+            innerRect.rTop() += margin;
+            innerRect.rRight() -= margin;
+            innerRect.rBottom() -= margin;
+            return (!innerRect.contains(point) );
+        }
+        return true;
+    }
+    return false;
+}
+
 /******************************************************************/
 /* Class: KWFrameSet                                              */
 /******************************************************************/
@@ -771,25 +793,9 @@ KCommand * KWFrameSet::anchoredObjectDeleteCommand( int frameNum )
 KWFrame * KWFrameSet::frameByBorder( const QPoint & nPoint )
 {
     QPtrListIterator<KWFrame> frameIt = frameIterator();
-    for ( ; frameIt.current(); ++frameIt )
-    {
-        QRect outerRect( frameIt.current()->outerRect() );
-        // Give the user a bit of margin for clicking on it :)
-        const int margin = 2;
-        outerRect.rLeft() -= margin;
-        outerRect.rTop() -= margin;
-        outerRect.rRight() += margin;
-        outerRect.rBottom() += margin;
-        if ( outerRect.contains( nPoint ) )
-        {
-            QRect innerRect( m_doc->zoomRect( *frameIt.current() ) );
-            innerRect.rLeft() += margin;
-            innerRect.rTop() += margin;
-            innerRect.rRight() -= margin;
-            innerRect.rBottom() -= margin;
-            if ( !innerRect.contains( nPoint ) )
-                return frameIt.current();
-        }
+    for ( ; frameIt.current(); ++frameIt ) {
+        if(frameIt.current()->frameAtPos(nPoint, true))
+            return frameIt.current();
     }
     return 0L;
 }
