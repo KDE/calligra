@@ -487,7 +487,7 @@ void CellLayoutDlg::slotApply()
     	for ( int x = left; x <= right; x++ )
     		{
     		m_pView->hBorderWidget()->resizeColumn(positionPage->getSizeWidth(),x );
-    		}	
+    		}
     	}
     	
     // Outline
@@ -516,7 +516,7 @@ CellLayoutPageFloat::CellLayoutPageFloat( QWidget* parent, CellLayoutDlg *_dlg )
     grid->addWidget(precision,1,1);
     prefix = new QLineEdit( box, "LineEdit_3" );
     grid->addWidget(prefix,2,1);
-    
+
     format = new QComboBox( box, "ListBox_1" );
     grid->addWidget(format,3,1);
     
@@ -1696,7 +1696,7 @@ CellLayoutPageBorder::CellLayoutPageBorder( QWidget* parent, CellLayoutDlg *_dlg
     pattern9->setPattern( black, 1, DashDotLine );
     pattern10->setPattern( black, 1, DashDotDotLine );
 
-    customize->setPattern( black, 1, NoPen );
+    customize->setPattern( black, 1, DotLine );
 
     slotSetColorButton( black );
 

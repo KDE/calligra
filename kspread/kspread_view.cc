@@ -2363,33 +2363,40 @@ void KSpreadView::alignLeft( bool b )
 {
     if ( m_toolbarLock )
 	return;
-    if ( !b )
-	return;
-
     if ( m_pTable != 0L )
-	m_pTable->setSelectionAlign( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), KSpreadLayout::Left );
+        {
+        if ( !b )
+                m_pTable->setSelectionAlign( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), KSpreadLayout::Undefined );
+        else
+	        m_pTable->setSelectionAlign( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), KSpreadLayout::Left );
+        }
 }
 
 void KSpreadView::alignRight( bool b )
 {
     if ( m_toolbarLock )
 	return;
-    if ( !b )
-	return;
-
     if ( m_pTable != 0L )
-      m_pTable->setSelectionAlign( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), KSpreadLayout::Right );
+        {
+        if ( !b )
+	        m_pTable->setSelectionAlign( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), KSpreadLayout::Undefined );
+        else
+                m_pTable->setSelectionAlign( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), KSpreadLayout::Right );
+        }
 }
 
 void KSpreadView::alignCenter( bool b )
 {
     if ( m_toolbarLock )
 	return;
-    if ( !b )
-	return;
 
     if ( m_pTable != 0L )
-	m_pTable->setSelectionAlign( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), KSpreadLayout::Center );
+        {
+        if ( !b )
+                m_pTable->setSelectionAlign( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), KSpreadLayout::Undefined );
+        else
+	        m_pTable->setSelectionAlign( QPoint( m_pCanvas->markerColumn(), m_pCanvas->markerRow() ), KSpreadLayout::Center );
+        }
 }
 
 void KSpreadView::alignTop( bool b )
