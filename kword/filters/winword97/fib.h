@@ -26,7 +26,7 @@ struct FIB {
     unsigned short fLoadOverride:1;
     unsigned short fFarEast:1;
     unsigned short fCrypto:1;
-    unsigned short nFibBack;
+    unsigned short nFibBack; 
     unsigned long lKey;
     unsigned char envr;
     unsigned char fMac:1;

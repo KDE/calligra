@@ -1,6 +1,7 @@
 #ifndef WINWORDDOC_H
 #define WINWORDDOC_H
 
+#include <string.h>
 #include <qstring.h>
 #include <kdebug.h>
 #include "myfile.h"
@@ -14,7 +15,7 @@ public:
 	~WinWordDoc();
 	
 private:
-	myFile doc;   // raw data
+    myFile doc;     // raw data
     FIB *fib;
 };
 #endif // WINWORDDOC_H

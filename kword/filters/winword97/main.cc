@@ -172,4 +172,3 @@ void main(int argc,char **argv) {
     MyAutoLoader loader("IDL:KOffice/FilterFactory:1.0","KWordWinword97");
     app.exec();
 }
-

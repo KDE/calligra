@@ -18,7 +18,7 @@ public:
 	QString kwdFile();
 	
 private:
-	WinWordDoc *myDoc;
+    WinWordDoc *myDoc;
 	KWordDoc *myKwd;
 };
 #endif // WORDFILTER_H
