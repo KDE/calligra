@@ -53,12 +53,12 @@ Other things: (please add the things you are working on!)
 
 
 BEGGING: Please: can somebody enhance koScript so that a formula not only gets the values but also
-         the references? (e.g.: =DATAAVG(A1:C12, "weight", A1:C12) 
-         puts a list of values to KSContext (as usual) but also A1:C12 (in something like getRef() which 
+         the references? (e.g.: =DATAAVG(A1:C12, "weight", A1:C12)
+         puts a list of values to KSContext (as usual) but also A1:C12 (in something like getRef() which
          returns 0L if there are no references (for the second parameter in the example)
         I designed the database formulas available in Excel and MultipleOperations which both depend
         on this, but I have no idea how to add it.
-        
+----I'll take care of this first thing after 1.2. - John        
 
 
 
@@ -71,11 +71,12 @@ John
 
 - Pulling the cell 'result' into it's own class for future enhancements to 
   calculation precision, new datatypes (matrix?), and cleaner code
-  -- I've started on this now since we pushed the beta back, but I'm probably
-     not going to finish it by then anyway since I'm moving.
-- Let me know about problems after the multiple views change -- I'm sure I 
-  introduced a bunch of bugs with that because I touched code on virtually 
-  every user operation.
+  --will do after 1.2
+
+- Bugfixing for the 1.2 release -- I've got excel where I work now, so I might
+start playing around in the filter code.  I will at least try to fix some
+of the reported crashing.
+
 
 Philipp
 =======
