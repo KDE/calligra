@@ -40,6 +40,14 @@
   <Action name="paperLayout"/>
   <Separator/>
   <Action name="adjust"/>
+  <Menu name="Row"><text>&amp;Row</text>
+    <Action name="resizeRow"/>
+    <Action name="equalizeRow"/>
+  </Menu>
+  <Menu name="Column"><text>&amp;Column</text>
+    <Action name="resizeCol"/>
+    <Action name="equalizeCol"/>
+  </Menu>
   <Action name="tableFormat"/>
  </Menu>
  <Menu name="Insert"><text>&amp;Insert</text>
@@ -64,16 +72,6 @@
   <Action name="showPageBorders"/>
  </Menu>
  <Menu name="Folder"><text>F&amp;older</text>
-  <Menu name="Row"><text>&amp;Row</text>
-    <Action name="resizeRow"/>
-    <Action name="equalizeRow"/>
-  </Menu>
-  <Separator/>
-  <Menu name="Column"><text>&amp;Column</text>
-    <Action name="resizeCol"/>
-    <Action name="equalizeCol"/>
-  </Menu>
-  <Separator/>
   <Action name="insertTable"/>
   <Action name="removeTable"/>
   <Action name="hideTable"/>
