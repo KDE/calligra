@@ -597,6 +597,11 @@ void KoTextParag::drawParagStringInternal( QPainter &painter, const QString &s, 
 		painter.setPen( QPen( textColor, lineWidth, Qt::DashDotLine ) );
 		painter.drawLine( startX, lastY + baseLine, startX + bw, lastY + baseLine );
 		break;
+            case TF_DASH_DOT_DOT:
+		painter.setPen( QPen( textColor, lineWidth, Qt::DashDotDotLine ) );
+		painter.drawLine( startX, lastY + baseLine, startX + bw, lastY + baseLine );
+		break;
+
             default:
                 break;
 	}
