@@ -515,21 +515,22 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     firstX = contentsPoint.x();
                     firstY = contentsPoint.y();
 		    kpobject = m_activePage->getObjectResized( docPoint, modType, deSelAll, overObject, _resizeObj );
-		    if ( kpobject && _resizeObj ) {
-			oldBoundingRect = getOldBoundingRect( kpobject );
-                        resizeObjNum = kpobject;
+		    if ( kpobject ) {
+                        if(_resizeObj)
+                        {
+                            oldBoundingRect = getOldBoundingRect( kpobject );
+                            resizeObjNum = kpobject;
+                        }
                     }
-                    /*
-                    else {
+                    else
+                    {
                         _resizeObj = false;
-                        kpobject = m_view->kPresenterDoc()->stickyPage()->getObjectResized( docPoint, modType,
-                                                                                            deSelAll, overObject, _resizeObj );
+                        kpobject = m_view->kPresenterDoc()->stickyPage()->getObjectResized( docPoint, modType, deSelAll, overObject, _resizeObj );
                         if( kpobject && _resizeObj ) {
                             oldBoundingRect = getOldBoundingRect( kpobject );
                             resizeObjNum = kpobject;
                         }
                     }
-                    */
                     if ( deSelAll && !( e->state() & ShiftButton ) && !( e->state() & ControlButton ) )
                         deSelectAllObj();
 
@@ -747,7 +748,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 void KPrCanvas::calcBoundingRect()
 {
   m_boundingRect = KoRect();
-  
+
   m_boundingRect=m_activePage->getBoundingRect(m_boundingRect, m_view->zoomHandler());
   m_boundingRect=m_view->kPresenterDoc()->stickyPage()->getBoundingRect(m_boundingRect, m_view->zoomHandler());
 
@@ -1351,34 +1352,6 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
 
   deSelectAllObj();
   KPObject *kpobject = 0;
-#if 0
-  if ( (int)objectList().count() - 1 >= 0 ) {
-    for ( int i = objectList().count()  - 1; i >= 0; i-- ) {
-      kpobject = objectList().at( i );
-      if ( kpobject->contains( docPoint ) ) {
-	if ( kpobject->getType() == OT_TEXT ) {
-	  KPTextObject *kptextobject = dynamic_cast<KPTextObject*>( kpobject );
-	  if(m_currentTextObjectView)
-	    {
-	      m_currentTextObjectView->terminate();
-	      delete m_currentTextObjectView;
-	    }
-	  m_currentTextObjectView=kptextobject->createKPTextView(this);
-
-	  setTextBackground( kptextobject );
-	  setCursor( arrowCursor );
-	  editNum = kptextobject;
-	  break;
-	} else if ( kpobject->getType() == OT_PART ) {
-	  KPPartObject * obj=static_cast<KPPartObject *>(kpobject);
-	  obj->activate( m_view );
-	  editNum = obj;
-	  break;
-	}
-      }
-    }
-  }
-#endif
   kpobject=m_activePage->getEditObj(docPoint);
   if( !kpobject)
     {
@@ -1386,7 +1359,7 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
     }
   if(kpobject)
     {
-      if ( kpobject->getType() == OT_TEXT ) 
+      if ( kpobject->getType() == OT_TEXT )
 	{
 	KPTextObject *kptextobject = dynamic_cast<KPTextObject*>( kpobject );
 	if(m_currentTextObjectView)
@@ -1395,12 +1368,12 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
 	    delete m_currentTextObjectView;
 	  }
 	m_currentTextObjectView=kptextobject->createKPTextView(this);
-	
+
 	setTextBackground( kptextobject );
 	setCursor( arrowCursor );
 	editNum = kpobject;
-      } 
-      else if ( kpobject->getType() == OT_PART ) 
+      }
+      else if ( kpobject->getType() == OT_PART )
 	{
 	  KPPartObject * obj=static_cast<KPPartObject *>(kpobject);
 	  obj->activate( m_view );
@@ -1655,7 +1628,7 @@ void KPrCanvas::deSelectObj( int num )
 void KPrCanvas::selectObj( KPObject *kpobject )
 {
     kpobject->setSelected( true );
-    //FIXME 
+    //FIXME
     m_view->penColorChanged( m_activePage->getPen( QPen( Qt::black, 1, Qt::SolidLine ) ) );
     m_view->brushColorChanged( m_activePage->getBrush( QBrush( Qt::white, Qt::SolidPattern ) ) );
     _repaint( kpobject );
@@ -2321,7 +2294,7 @@ bool KPrCanvas::canAssignEffect( QPtrList<KPObject> &objs ) const
 
     return !objs.isEmpty();
 }
- 
+
 /*================================================================*/
 bool KPrCanvas::isOneObjectSelected()
 {
@@ -4441,9 +4414,9 @@ bool KPrCanvas::calcRatio( double &dx, double &dy, KPObject *kpobject, double ra
 /*================================================================*/
 void KPrCanvas::exitEditMode()
 {
-  if ( editNum ) 
+  if ( editNum )
     {
-      if ( editNum->getType() == OT_TEXT ) 
+      if ( editNum->getType() == OT_TEXT )
 	{
 	  if(m_currentTextObjectView)
             {
@@ -4458,14 +4431,14 @@ void KPrCanvas::exitEditMode()
 	  emit updateSideBarItem( currPgNum()-1 );
 	  emit objectSelectedChanged();
 	  editNum=0L;
-        } 
-      else if (editNum->getType() == OT_PART ) 
+        }
+      else if (editNum->getType() == OT_PART )
 	{
 	  static_cast<KPPartObject *>(editNum)->deactivate();
 	  _repaint( editNum );
 	  editNum=0L;
 	  return;
-        }	
+        }
     }
 }
 
