@@ -36,6 +36,7 @@
 #include <kdebug.h>
 #include <kurlrequester.h>
 #include <klineedit.h>
+#include <kseparator.h>
 
 KSpreadLinkDlg::KSpreadLinkDlg( KSpreadView* parent, const char* /*name*/ )
 :  KDialogBase(KDialogBase::IconList,i18n("Create Hyperlink") ,
@@ -143,6 +144,10 @@ internetAnchor::internetAnchor( KSpreadView* _view,QWidget *parent , char *name 
 
   lay2->addWidget(italic);
 
+  KSeparator* bar1 = new KSeparator( KSeparator::HLine, this);
+  bar1->setFixedHeight( 10 );
+  lay2->addWidget( bar1 );
+
   text->setFocus();
 }
 
@@ -218,6 +223,10 @@ mailAnchor::mailAnchor( KSpreadView* _view,QWidget *parent , char *name )
   italic=new QCheckBox(i18n("Italic"),this);
 
   lay2->addWidget(italic);
+
+  KSeparator* bar1 = new KSeparator( KSeparator::HLine, this);
+  bar1->setFixedHeight( 10 );
+  lay2->addWidget( bar1 );
 
   text->setFocus();
 }
@@ -296,6 +305,10 @@ fileAnchor::fileAnchor( KSpreadView* _view,QWidget *parent , char *name )
   italic=new QCheckBox(i18n("Italic"),this);
 
   lay2->addWidget(italic);
+
+  KSeparator* bar1 = new KSeparator( KSeparator::HLine, this);
+  bar1->setFixedHeight( 10 );
+  lay2->addWidget( bar1 );
 
   text->setFocus();
 }
@@ -377,6 +390,10 @@ cellAnchor::cellAnchor( KSpreadView* _view,QWidget *parent , char *name )
   italic=new QCheckBox(i18n("Italic"),this);
 
   lay2->addWidget(italic);
+
+  KSeparator* bar1 = new KSeparator( KSeparator::HLine, this);
+  bar1->setFixedHeight( 10 );
+  lay2->addWidget( bar1 );
 
   text->setFocus();
 }
