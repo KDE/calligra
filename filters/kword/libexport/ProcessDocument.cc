@@ -221,28 +221,15 @@ static void ProcessUnderlineTag (QDomNode myNode, void *tagData, KWEFKWordLeader
     QString str;
     ProcessOneAttrTag (myNode, "value", "QString", &str, leader);
     str=str.stripWhiteSpace();
-    if (str=="0")
+    text->underlineValue=str;
+    if ( (str=="0") || (str.isEmpty()) )
     {
-        // As it is the default, do not put it with the "else" case
         text->underline=false;
-        text->underlineIsDouble=false;
-    }
-    else if ((str=="1") || (str=="single"))
-    {
-        text->underline=true;
-        text->underlineIsDouble=false;
-    }
-    else if (str=="double")
-    {
-        text->underline=true; // Yes, it is true!
-        text->underlineIsDouble=true;
     }
     else
     {
-        kdWarning (30508) << "Unknown underline value:" << str << endl;
-        // We assume no underline
-        text->underline=false;
-        text->underlineIsDouble=false;
+        // We assume that anything else is underlined
+        text->underline=true;
     }
 }
 
