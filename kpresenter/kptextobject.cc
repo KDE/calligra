@@ -1383,8 +1383,11 @@ void KPTextView::showPopup( KPresenterView *view, const QPoint &point, QPtrList<
             QPopupMenu * popup;
             view->plugActionList( "datatools", actionList );
             KoNoteVariable * var = dynamic_cast<KoNoteVariable *>(variable());
+            KoCustomVariable * varCustom = dynamic_cast<KoCustomVariable *>(variable());
             if( var )
                 popup = view->popupMenu("note_popup");
+            else if( varCustom )
+                popup = view->popupMenu("custom_var_popup");
             else
                 popup = view->popupMenu("text_popup");
             Q_ASSERT(popup);

@@ -2904,6 +2904,11 @@ void KPresenterView::setupActions()
                                   actionCollection(), "change_link");
 
 
+    actionEditCustomVars = new KAction( i18n( "&Custom Variables..." ), 0,
+                                        this, SLOT( editCustomVars() ),
+                                        actionCollection(), "edit_customvars" );
+
+
     m_variableDefMap.clear();
     actionInsertVariable = new KActionMenu( i18n( "&Variable" ),
                                             actionCollection(), "insert_variable" );
@@ -2974,7 +2979,6 @@ void KPresenterView::setupActions()
     actionEditComment = new KAction( i18n("Edit Comment"), 0,
                                   this,SLOT(editComment()),
                                   actionCollection(), "edit_comment");
-
 }
 
 void KPresenterView::textSubScript()
@@ -5027,9 +5031,6 @@ void KPresenterView::refreshCustomMenu()
 
     actionInsertCustom->popupMenu()->insertSeparator();
 
-    actionEditCustomVars = new KAction( i18n( "&Custom Variables..." ), 0,
-                                        this, SLOT( editCustomVars() ),
-                                        actionCollection(), "edit_customvars" );
     actionEditCustomVars->setEnabled(state);
     actionInsertCustom->insert( actionEditCustomVars );
 }
