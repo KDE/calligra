@@ -1024,6 +1024,8 @@ void KoRuler::setZoom( const double& zoom )
 {
     if(zoom==m_zoom)
         return;
+    if(zoom < 1E-4) // Don't do 0 or negative values
+        return;
     m_zoom=zoom;
     m_1_zoom=1/m_zoom;
     update();
