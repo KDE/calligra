@@ -44,7 +44,7 @@ KSpreadAngle::KSpreadAngle( KSpreadView* parent, const char* name,const QPoint &
   m_pSize2->setLabel(i18n("Angle"));
   m_pSize2->setSuffix(" °");
   lay1->addWidget(m_pSize2);
-  m_pDefault=new QCheckBox(i18n("Default (0°)"),this);
+  m_pDefault=new QCheckBox(i18n("Default (0Â°")"),this);
   lay1->addWidget(m_pDefault);
 
   KButtonBox *bb = new KButtonBox( this );

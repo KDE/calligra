@@ -341,7 +341,7 @@ void PropertyEditor::createFillWidget (QWidget* parent) {
     label = new QLabel(i18n("Angle:"), groupbox);
     gradlayout->addWidget(label, 3, 0);
     gradientAngle = new QSpinBox(0,359,1, groupbox);
-    gradientAngle->setSuffix(i18n("°"));
+    gradientAngle->setSuffix(i18n("Â°"));
     gradlayout->addWidget(gradientAngle, 3, 1);
     connect (gradientAngle, SIGNAL(valueChanged(int)),
              this, SLOT(gradientAngleChanged(int)));
