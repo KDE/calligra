@@ -35,6 +35,7 @@ public:
     KPrMoveHelpLineDia( QWidget *parent, double value, double limitTop, double limitBottom , KPresenterDoc *_doc, const char *name=0L);
 
     double newPosition();
+    bool removeLine() const { return m_bRemoveLine;}
 
 private slots:
     void slotRemoveHelpLine();
@@ -42,6 +43,7 @@ private slots:
 protected:
     KLineEdit* position;
     KPresenterDoc *m_doc;
+    bool m_bRemoveLine;
 };
 
 class KPrInsertHelpLineDia : public KDialogBase

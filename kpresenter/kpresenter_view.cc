@@ -5918,7 +5918,10 @@ void KPresenterView::changeHelpLinePosition()
     KPrMoveHelpLineDia *dlg= new KPrMoveHelpLineDia(this, pos, limitTop , limitBottom,  m_pKPresenterDoc);
     if ( dlg->exec())
     {
-        m_canvas->changeHelpLinePosition( dlg->newPosition() );
+        if ( dlg->removeLine())
+            m_canvas->removeHelpLine();
+        else
+            m_canvas->changeHelpLinePosition( dlg->newPosition() );
     }
     delete dlg;
 }

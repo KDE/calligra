@@ -36,6 +36,8 @@ KPrMoveHelpLineDia::KPrMoveHelpLineDia( QWidget *parent, double value, double li
     : KDialogBase( parent, name , true, "", Ok | Cancel | User1, Ok, true )
 {
     m_doc=_doc;
+    m_bRemoveLine = false;
+
     setButtonText( KDialogBase::User1, i18n("Remove") );
     setCaption( i18n("Change Help Line position") );
     QVBox *page = makeVBoxMainWidget();
@@ -49,7 +51,7 @@ KPrMoveHelpLineDia::KPrMoveHelpLineDia( QWidget *parent, double value, double li
 
 void KPrMoveHelpLineDia::slotRemoveHelpLine()
 {
-    position->setText("-1");
+    m_bRemoveLine = true;
     KDialogBase::slotOk();
 }
 
