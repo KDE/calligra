@@ -23,6 +23,7 @@
 
 #include <klocale.h>
 #include <qradiobutton.h>
+#include <qwhatsthis.h>
 #include <knuminput.h>
 #include <qvbuttongroup.h>
 #include <qlabel.h>
@@ -70,11 +71,15 @@ void KWConfigFootNoteDia::setupTab2()
 void KWConfigFootNoteDia::setupTab3()
 {
     QFrame * page = addPage( i18n( "Separator Line" ) );
+    QString comment= i18n ("Configure the seperator line. The seperator line "
+        "is drawn directly above the frame for the footnotes");
+    QWhatsThis::add(page, comment);
     QVBoxLayout *pageLayout= new QVBoxLayout( page, 11, 6);
 
-    // use this when the message freeze is lifted.
-    //QButtonGroup *positionGroupBox = new QButtonGroup( i18n( "Position"), page );
-    QButtonGroup *positionGroupBox = new QButtonGroup( i18n( "Separator Line Position"), page );
+    QButtonGroup *positionGroupBox = new QButtonGroup( i18n( "Position"), page );
+    comment= i18n ("The seperator can be positioned horizontally by picking one "
+        "of the three alignments");
+    QWhatsThis::add(positionGroupBox, comment);
     positionGroupBox->setColumnLayout(0, Qt::Vertical );
     QVBoxLayout *positionLayout = new QVBoxLayout( positionGroupBox->layout() );
     positionLayout->setAlignment( Qt::AlignTop );
@@ -114,27 +119,27 @@ void KWConfigFootNoteDia::setupTab3()
     spLength->setSuffix(i18n(" %"));
     layout->addWidget( spLength, 0, 1 );
 
-    // use this when the message freeze is lifted.
-    //QLabel *lSize = new QLabel( i18n("arg is a unit such as pt", "&Width (%1)").arg("pt"), page );
-    //lSize->setBuddy( spWidth );
-    QLabel *lSize = new QLabel( i18n("Separator line width (%1):").arg(QString("pt")), page );
+    QLabel *lSize = new QLabel( i18n("arg is a unit such as pt", "&Width (%1)").arg("pt"), page );
+    lSize->setBuddy( spWidth );
+    comment= i18n ("The width is the thickness of the seperator line, set to 0 for no seperator line");
+    QWhatsThis::add(lSize, comment);
+    QWhatsThis::add(spWidth, comment);
     layout->addWidget( lSize, 1, 0 );
 
     QSpacerItem* spacer = new QSpacerItem( 0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum );
     layout->addMultiCell( spacer, 0, 1, 2, 2 );
 
-    // use this when the message freeze is lifted.
-    //QLabel *lWidth = new QLabel( i18n("&Size on page:"), page, "lWidth" );
-    //lWidth->setBuddy( spLength );
-    QLabel *lWidth = new QLabel( i18n("Separator line length:"), page, "lWidth" );
+    QLabel *lWidth = new QLabel( i18n("&Size on page:"), page, "lWidth" );
+    lWidth->setBuddy( spLength );
+    comment= i18n ("The size of the seperator line can be defined in a percentage of the width of the page");
+    QWhatsThis::add(spLength, comment);
+    QWhatsThis::add(lWidth, comment);
     layout->addWidget( lWidth, 0, 0 );
     pageLayout->addLayout( layout );
 
     QHBoxLayout *styleLayout = new QHBoxLayout( 0, 0, 6, "styleLayout");
 
-    // use this when the message freeze is lifted.
-    //QLabel *styleLabel = new QLabel( i18n("Style:"), page );
-    QLabel *styleLabel = new QLabel( i18n("Separator line type:"), page );
+    QLabel *styleLabel = new QLabel( i18n("Style:"), page );
     styleLayout->addWidget( styleLabel );
 
     m_cbLineType = new QComboBox( page );
@@ -146,6 +151,10 @@ void KWConfigFootNoteDia::setupTab3()
     lst <<i18n("Dash Dot Dot Line");
     m_cbLineType->insertStringList( lst );
     m_cbLineType->setCurrentItem( static_cast<int>(m_doc->footNoteSeparatorLineType()));
+    comment= i18n ("The seperator line can be drawn as a solid line or as a line which has a "
+        "pattern; the pattern can be set in the style-type");
+    QWhatsThis::add(styleLabel, comment);
+    QWhatsThis::add(m_cbLineType, comment);
     styleLayout->addWidget( m_cbLineType );
 
     QSpacerItem* spacer_2 = new QSpacerItem( 0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum );
