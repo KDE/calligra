@@ -255,6 +255,11 @@ void KWAnchor::save( QDomElement &parentElem )
     anchorElem.setAttribute( "instance", m_frameset->getName() );
 }
 
+void KWAnchor::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
+{
+    m_frameset->saveOasis( writer, context );
+}
+
 bool KWAnchor::ownLine() const
 {
     if ( m_deleted )

@@ -663,8 +663,8 @@ void KWFrame::startOasisFrame( KoXmlWriter &writer, KoGenStyles& mainStyles ) co
         writer.addAttributePt( "svg:x", left() );
         writer.addAttributePt( "svg:y", yInPage );
     }
-    writer.addAttributePt( "svg:width", right() );
-    writer.addAttributePt( "svg:height", bottom() );
+    writer.addAttributePt( "svg:width", width() );
+    writer.addAttributePt( "svg:height", height() );
 
     // the caller fills in the child element, then closes draw:frame
 }
@@ -2218,7 +2218,7 @@ void KWPictureFrameSet::load( QDomElement &attributes, bool loadFrames )
 
 void KWPictureFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const
 {
-    if ( frames.isEmpty() ) // Deleted frameset -> don't save
+    if( frames.isEmpty() ) // Deleted frameset -> don't save
         return;
     KWFrame* frame = frames.getFirst();
     frame->startOasisFrame( writer, context.mainStyles() );

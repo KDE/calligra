@@ -72,6 +72,8 @@ public:
     virtual KCommand * deleteCommand();
     virtual void setDeleted( bool b );
     virtual void save( QDomElement &formatElem );
+    virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context ) const;
+
     virtual int typeId() const { return 6; }
 
 private:
