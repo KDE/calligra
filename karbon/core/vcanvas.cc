@@ -176,7 +176,8 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 		p->setClipPath();
 
 		m_part->document().drawPage( p );
-		m_part->document().draw( p, &r );
+		KoRect r2 = boundingBox();
+		m_part->document().draw( p, &r2 );
 
 		p->resetClipPath();
 		m_bScrolling = false;
@@ -242,7 +243,8 @@ VCanvas::drawDocument( QPainter* /*painter*/, const KoRect& rect, bool drawVObje
 		p->setWorldMatrix( mat.translate( -.5, -.5 ) );
 
 		m_part->document().drawPage( p );
-		m_part->document().draw( p, &rect );
+		KoRect r2 = boundingBox();
+		m_part->document().draw( p, &r2 );
 
 		p->end();
 	}

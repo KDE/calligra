@@ -92,7 +92,7 @@ DCOPObject* VComposite::dcopObject()
 
 
 void
-VComposite::draw( VPainter* painter, const KoRect * /*rect*/ ) const
+VComposite::draw( VPainter* painter, const KoRect *rect ) const
 {
 	if(
 		state() == deleted ||
@@ -102,8 +102,8 @@ VComposite::draw( VPainter* painter, const KoRect * /*rect*/ ) const
 		return;
 	}
 
-	//if( rect && !rect->intersects( boundingBox() ) )
-	//	return;
+	if( rect && !rect->intersects( boundingBox() ) )
+		return;
 
 	painter->save();
 
