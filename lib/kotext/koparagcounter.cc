@@ -34,8 +34,6 @@ KoParagCounter::KoParagCounter()
     m_startNumber = 1;
     m_displayLevels = 1;
     m_restartCounter = false;
-    m_prefix = QString::null;
-    m_suffix = '.';
     m_customBulletChar = QChar( '-' );
     m_customBulletFont = QString::null;
     m_align = Qt::AlignAuto;
@@ -499,11 +497,6 @@ QString KoParagCounter::levelText( const KoTextParag *paragraph )
         text = m_customBulletChar;
         break;
     }
-    // We want the '.' to be before the number in a RTL parag,
-    // but we can't paint the whole string using QPainter::RTL direction, otherwise
-    // '10' becomes '01'.
-    text.prepend( paragraph->string()->isRightToLeft() ? suffix() : prefix() );
-    text.append( paragraph->string()->isRightToLeft() ? prefix() : suffix() );
     return text;
 }
 
@@ -534,8 +527,10 @@ QString KoParagCounter::text( const KoTextParag *paragraph )
                 // Find the number of missing parents, and add dummy text for them.
                 int missingParents = m_depth - level - p->counter()->m_depth;
                 for ( ; missingParents > 0 ; --missingParents )
-                    // Each missing level adds a "0." prefix.
-                    str.append( "0." );
+                    // Each missing level adds a "0"
+                    str.append('0' );
+
+                str.append('.'); // hardcoded on purpose (like OO) until anyone complains
 
                 m_cache.text.prepend( str );
                 // Prepare next iteration
@@ -558,6 +553,13 @@ QString KoParagCounter::text( const KoTextParag *paragraph )
     //kdDebug() << "result: " << m_cache.text << " + " << levelText( paragraph ) << endl;
     // Now add text for this level.
     m_cache.text.append( levelText( paragraph ) );
+
+    // Now apply prefix and suffix
+    // We want the '.' to be before the number in a RTL parag,
+    // but we can't paint the whole string using QPainter::RTL direction, otherwise
+    // '10' becomes '01'.
+    m_cache.text.prepend( paragraph->string()->isRightToLeft() ? suffix() : prefix() );
+    m_cache.text.append( paragraph->string()->isRightToLeft() ? prefix() : suffix() );
     return m_cache.text;
 }
 
