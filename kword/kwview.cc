@@ -5611,6 +5611,7 @@ void KWView::editFootEndNote()
         if(var && var->frameSet())
         {
             m_gui->canvasWidget()->editFrameSet( var->frameSet());
+            m_gui->canvasWidget()->scrollToOffset( var->frameSet()->frame(0)->topLeft() );
         }
     }
 }
