@@ -236,7 +236,6 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
     double ptGridX=10.0;
     double ptGridY=10.0;
     double ptIndent = MM_TO_POINT(10.0);
-    bool bShowRuler=true;
     bool oldShowStatusBar = true;
     bool oldPgUpDownMovesCaret = false;
     bool oldShowScrollBar = true;
@@ -249,20 +248,11 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char 
         ptGridY=config->readDoubleNumEntry("GridY", ptGridY);
         ptIndent = config->readDoubleNumEntry("Indent", ptIndent);
         oldNbRecentFiles=config->readNumEntry("NbRecentFile", oldNbRecentFiles);
-        bShowRuler=config->readBoolEntry("Rulers", true);
         nbPagePerRow=config->readNumEntry("nbPagePerRow", nbPagePerRow);
         oldShowStatusBar = config->readBoolEntry( "ShowStatusBar", true );
         oldPgUpDownMovesCaret = config->readBoolEntry( "PgUpDownMovesCaret", false );
         oldShowScrollBar = config->readBoolEntry("ShowScrollBar", true);
     }
-
-
-    showRuler= new QCheckBox(i18n("Show rulers"),gbInterfaceGroup);
-    QWhatsThis::add( showRuler, i18n("The rulers are the white measuring spaces top and left of the "
-                    "document. The rulers show the position and width of pages and of frames and can "
-                    "be used to position tabulators among others.<p>Uncheck this checkbox to disable "
-                    "the rulers from being displayed.") );
-    showRuler->setChecked(bShowRuler);
 
     showStatusBar = new QCheckBox(i18n("Show status bar"),gbInterfaceGroup);
     showStatusBar->setChecked(oldShowStatusBar);
@@ -325,7 +315,6 @@ void ConfigureInterfacePage::apply()
     double valX=KoUnit::ptFromUnit( gridX->value(), doc->getUnit() );
     double valY=KoUnit::ptFromUnit( gridY->value(), doc->getUnit() );
     int nbRecent=recentFiles->value();
-    bool ruler=showRuler->isChecked();
     bool statusBar=showStatusBar->isChecked();
     bool scrollBar = showScrollBar->isChecked();
     config->setGroup( "Interface" );
@@ -353,13 +342,6 @@ void ConfigureInterfacePage::apply()
     }
 
     bool refreshGUI= false;
-
-    if(ruler != doc->showRuler())
-    {
-        config->writeEntry( "Rulers", ruler );
-        doc->setShowRuler( ruler );
-        refreshGUI=true;
-    }
 
     if( statusBar != doc->showStatusBar() )
     {
@@ -405,7 +387,6 @@ void ConfigureInterfacePage::slotDefault()
     double newIndent = KoUnit::ptToUnit( MM_TO_POINT( 10 ), doc->getUnit() );
     indent->setValue( newIndent );
     recentFiles->setValue(10);
-    showRuler->setChecked(true);
     showStatusBar->setChecked(true);
     pgUpDownMovesCaret->setChecked(false);
     showScrollBar->setChecked( true);

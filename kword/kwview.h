@@ -320,6 +320,7 @@ public slots:
     void changeLink();
     void editComment();
     void showDocStructure();
+	void showRuler();
 
     void slotSoftHyphen();
     void slotLineBreak();
@@ -410,6 +411,7 @@ private:
     KToggleAction *actionViewFootNotes;
     KToggleAction *actionViewEndNotes;
     KToggleAction *actionShowDocStruct;
+	KToggleAction *actionShowRuler;
     KToggleAction *actionAllowAutoFormat;
 
 

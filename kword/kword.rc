@@ -30,6 +30,7 @@
   <Action name="view_frameborders"/>
   <Separator/>
   <Action name="show_docstruct"/>
+  <Action name="show_ruler"/>
   <Separator/>
   <Action name="view_header"/>
   <Action name="view_footer"/>

@@ -315,6 +315,7 @@ void KWView::initGUIButton()
     actionViewFrameBorders->setChecked( viewFrameBorders() );
     actionViewFormattingChars->setChecked( m_doc->viewFormattingChars() );
     actionShowDocStruct->setChecked(m_doc->showdocStruct());
+	actionShowRuler->setChecked(m_doc->showRuler());
 
     updateHeaderFooterButton();
     actionAllowAutoFormat->setChecked( m_doc->allowAutoFormat() );
@@ -873,6 +874,15 @@ void KWView::setupActions()
     actionShowDocStruct->setToolTip( i18n( "Open document structure sidebar." ) );
     actionShowDocStruct->setWhatsThis( i18n( "Open document structure sidebar.<p>This sidebar helps you organize your document and quickly find pictures, tables, etc." ) );
 
+	actionShowRuler = new KToggleAction( i18n( "Show Ruler" ), 0,
+										this, SLOT( showRuler() ),
+										actionCollection(), "show_ruler" );
+	actionShowRuler->setToolTip( i18n( "Shows or hides ruler." ) );
+	actionShowRuler->setWhatsThis( i18n("The rulers are the white measuring spaces top and left of the "
+                    "document. The rulers show the position and width of pages and of frames and can "
+                    "be used to position tabulators among others.<p>Uncheck this to disable "
+                    "the rulers from being displayed." ) );
+	
     actionConfigureCompletion = new KAction( i18n( "&Configure Completion..." ), 0,
                         this, SLOT( configureCompletion() ),
                         actionCollection(), "configure_completion" );
@@ -4825,6 +4835,12 @@ void KWView::showDocStructure()
 {
     m_doc->setShowDocStruct(actionShowDocStruct->isChecked());
     m_doc->reorganizeGUI();
+}
+
+void KWView::showRuler()
+{
+	m_doc->setShowRuler( actionShowRuler->isChecked());
+	m_doc->reorganizeGUI();
 }
 
 void KWView::slotSoftHyphen()
