@@ -1223,45 +1223,20 @@ void KP2DObject::loadOasis(const QDomElement &element, const KoStyleStack & styl
         else if ( fill == "hatch" )
         {
             QString style = styleStack.attribute( "draw:fill-hatch-name" );
-            kdDebug()<<" style hatch :"<<style<<endl;
-            if ( style == "Black 0 Degrees" )
-                {
-                tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 9 ) );
-                }
-            else if ( style == "Black 90 Degrees" )
-                tmpBrush.setStyle(static_cast<Qt::BrushStyle>(10 ) );
-            else if ( style == "Red Crossed 0 Degrees" )
-                {
-                    tmpBrush.setColor( Qt::red );
-                    tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 11 ) );
-                }
-            else if ( style == "Blue Crossed 0 Degrees" )
-                {
-                    tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 11 ) );
-                    tmpBrush.setColor( Qt::blue );
-                }
-            else if ( style == "Black 45 Degrees" || style == "Black 45 Degrees Wide" )
-                tmpBrush.setStyle(static_cast<Qt::BrushStyle>(12 ) );
-            else if ( style == "Black -45 Degrees" )
-                tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 13 ) );
-            else if ( style == "Red Crossed 45 Degrees" )
-                {
-                    tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 14 ) );
-                    tmpBrush.setColor( Qt::red );
-                }
-            else if ( style == "Blue Crossed 45 Degrees" )
-                {
-                    tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 14 ) );
-                    tmpBrush.setColor( Qt::blue );
-                }
-            else
-                kdDebug()<<" hatch style not supported !!!!!!!!!!!!: "<<style<<endl;
+            kdDebug()<<" hatch style is  : "<<style<<endl;
 
             //type not defined by default
             //try to use style.
             QDomElement* draw = oasisStyles.drawStyles()[style];
             if ( draw) 
                 {
+                    kdDebug()<<"We have a style";
+                    int angle = 0;
+                    if( draw->hasAttribute( "draw:rotation" ))
+                        {
+                            angle = (draw->attribute( "draw:rotation" ).toInt())/10;
+                            kdDebug()<<"angle :"<<angle<<endl;
+                        }
                     if(draw->hasAttribute( "draw:color" ) )
                         {
                             //kdDebug()<<" draw:color :"<<draw->attribute( "draw:color" )<<endl;
@@ -1281,39 +1256,56 @@ void KP2DObject::loadOasis(const QDomElement &element, const KoStyleStack & styl
                             QString styleHash = draw->attribute( "draw:style" );
                             if( styleHash == "single")
                                 {
+                                    switch( angle )
+                                        {
+                                        case 0:
+                                        case 180:
+                                            tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 9 ) );
+                                            break;
+                                        case 45:
+                                        case 225:
+                                            tmpBrush.setStyle(static_cast<Qt::BrushStyle>(12 ) );
+                                            break;
+                                        case 90:
+                                        case 270:
+                                            tmpBrush.setStyle(static_cast<Qt::BrushStyle>(10 ) );
+                                            break;
+                                        case 135:
+                                        case 315:
+                                            tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 13 ) );
+                                            break;
+                                        default:
+                                            //todo fixme when we will have a kopaint
+                                            kdDebug()<<" draw:rotation 'angle' : "<<angle<<endl;
+                                            break;
+                                        }                                  
                                 }
                             else if( styleHash == "double")
                                 {
+                                    switch( angle )
+                                        {
+                                        case 0:
+                                        case 180:
+                                        case 90:
+                                        case 270:
+                                            tmpBrush.setStyle(Qt::CrossPattern );
+                                            break;
+                                        case 45:
+                                        case 135:
+                                        case 225:
+                                        case 315:
+                                            tmpBrush.setStyle(Qt::DiagCrossPattern );
+                                            break;
+                                        default:
+                                            //todo fixme when we will have a kopaint
+                                            kdDebug()<<" draw:rotation 'angle' : "<<angle<<endl;
+                                            break;
+                                        }                                  
+
                                 }
                             else if( styleHash == "triple")
                                 {
-                                }
-                        }
-                    if( draw->hasAttribute( "draw:rotation" ))
-                        {
-                            int angle = (draw->attribute( "draw:rotation" ).toInt())/10;
-                            switch( angle )
-                                {
-                                case 0:
-                                case 180:
-                                    tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 9 ) );
-                                    break;
-                                case 45:
-                                case 225:
-                                    tmpBrush.setStyle(static_cast<Qt::BrushStyle>(12 ) );
-                                    break;
-                                case 90:
-                                case 270:
-                                    tmpBrush.setStyle(static_cast<Qt::BrushStyle>(10 ) );
-                                    break;
-                                case 135:
-                                case 315:
-                                    tmpBrush.setStyle(static_cast<Qt::BrushStyle>( 13 ) );
-                                    break;
-                                default:
-                                    //todo fixme when we will have a kopaint
-                                    kdDebug()<<" draw:rotation 'angle' : "<<angle<<endl;
-                                    break;
+                                    kdDebug()<<" it is not implemented :( \n";
                                 }
                         }
                 }

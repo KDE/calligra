@@ -960,16 +960,19 @@ bool KPresenterDoc::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyle
         {
             __pgLayout.ptWidth = KoUnit::parseValue(properties.attribute( "fo:page-width" ) );
             __pgLayout.ptHeight = KoUnit::parseValue(properties.attribute( "fo:page-height" ) );
+	    kdDebug()<<"Page size __pgLayout.ptWidth :"<<__pgLayout.ptWidth<<" __pgLayout.ptHeight :"<<__pgLayout.ptHeight<<endl;
             if (properties.attribute("style:print-orientation")=="portrait")
                 __pgLayout.orientation=PG_PORTRAIT;
             else if (properties.attribute("style:print-orientation")=="landscape")
                 __pgLayout.orientation=PG_LANDSCAPE;
+	    kdDebug()<<"Page orientation :"<<(( __pgLayout.orientation== PG_LANDSCAPE )? " landscape " : " portrait ")<<endl;
 
             //pageHeight = properties.attribute( "fo:page-height" ).remove( "cm" ).toDouble();
             __pgLayout.ptRight = KoUnit::parseValue( properties.attribute( "fo:margin-right" ) );
             __pgLayout.ptBottom = KoUnit::parseValue( properties.attribute( "fo:margin-bottom" ) );
             __pgLayout.ptLeft = KoUnit::parseValue( properties.attribute( "fo:margin-left" ) );
-            __pgLayout.ptLeft = KoUnit::parseValue( properties.attribute( "fo:margin-top" ) );
+            __pgLayout.ptTop = KoUnit::parseValue( properties.attribute( "fo:margin-top" ) );
+	    kdDebug()<<" margin right:"<< __pgLayout.ptRight <<" __pgLayout.ptBottom :"<<__pgLayout.ptBottom<<" __pgLayout.ptLeft :"<<__pgLayout.ptLeft<<" __pgLayout.ptTop :"<<__pgLayout.ptTop<<endl;
         }
     }
     if ( _clean )
