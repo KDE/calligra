@@ -201,3 +201,14 @@
       downside, this made all previous save files incompatible.  I know this
       sucks, but it was necessary and writing a converter at this point in time
       is something I don't have time to do.
+
+(Dave Marotti)
+03/18/2001
+    - Modified the way the SML file format is.  The text="" and html="" tags
+      are no longer valid for the textbox shape.  Instead, a KivioTextStyle
+      tag should be nested under the KivioShape tag to specify the font,
+      text, color, style, etc...
+    - All SML files were updated to reflect this.
+    - The kivioconnector tool and kiviotexttools were fixed to find
+      the correct stencil in the internal list of spawners.
+
