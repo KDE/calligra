@@ -722,7 +722,37 @@ void OoImpressImport::appendBrush( QDomDocument& doc, QDomElement& e )
 
             QDomElement* draw = m_draws[style];
             if ( draw && draw->hasAttribute( "draw:color" ) )
-                brush.setAttribute( "color", draw->attribute( "draw:color" ) );
+                {
+                    if( draw->hasAttribute( "draw:rotation" ))
+                        {
+                            int angle = (draw->attribute( "draw:rotation" ).toInt())/10;
+                            switch( angle )
+                                {
+                                case 0:
+                                case 180:
+                                    brush.setAttribute( "style", 9 );
+                                    break;
+                                case 45:
+                                case 225:
+                                    brush.setAttribute( "style", 12 );
+                                    break;
+                                case 90:
+                                case 270:
+                                    brush.setAttribute( "style", 10 );
+                                    break;
+                                case 135:
+                                case 315:
+                                    brush.setAttribute( "style", 13 );
+                                    break;
+                                default:
+                                    //todo fixme when we will have a kopaint
+                                    kdDebug()<<" angle : "<<angle<<endl;
+                                    break;
+                                }
+                        }
+                    
+                    brush.setAttribute( "color", draw->attribute( "draw:color" ) );
+                }
             e.appendChild( brush );
         }
         else if ( fill == "gradient" )
