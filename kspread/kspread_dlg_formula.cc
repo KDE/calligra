@@ -131,14 +131,7 @@ void KSpreaddlgformula::slotOk()
 	
 	
 	    //last position of cursor + length of function +1 "("
-	    if(math=="TRUE" || math=="FALSE")
-	    	{
-	    	name_function=math;
-	    	}
-	    else
-	    	{
-	    	name_function= math  + "(" + string + ")";
-	    	}
+	    name_function= math  + "(" + string + ")";
 	    pos=m_pView->editWidget()->cursorPosition()+ math.length()+1;
 	    m_pView->editWidget()->setText( m_pView->editWidget()->text().insert(m_pView->editWidget()->cursorPosition(),name_function) );
 	    m_pView->editWidget()->setFocus();
@@ -149,14 +142,7 @@ void KSpreaddlgformula::slotOk()
 	    if(m_pView->canvasWidget()->EditorisActivate())
 	    {
 		
-		if(math=="TRUE" || math=="FALSE")
-			{
-	    		name_function=math;
-	    		}
-	  	else
-	  		{
-	  		name_function= math  + "(" + string + ")";
-	  		}
+		name_function= math  + "(" + string + ")";
 		pos=m_pView->canvasWidget()->posEditor()+ math.length()+1;
 		m_pView->canvasWidget()->setEditor(m_pView->canvasWidget()->editEditor().insert(m_pView->canvasWidget()->posEditor(),name_function) );
 	    	m_pView->canvasWidget()->focusEditor();
@@ -166,7 +152,8 @@ void KSpreaddlgformula::slotOk()
      	}
     }
     //don't work for the moment
-    //KSpreadcreate* dlg = new KSpreadcreate( m_pView, math,2 );
+
+    //KSpreadcreate* dlg = new KSpreadcreate( m_pView, math,math );
     //dlg->show();
   accept();
 }
@@ -204,12 +191,12 @@ if(string=="IF")
 	exp->clear();
 	exp->setText("IF(exp logic,if true so,if false so..)");
 	}
-else if(string=="TRUE")
+else if(string=="true")
 	{
 	exp->clear();
 	exp->setText("TRUE return value TRUE");
 	}
-else if(string=="FALSE")
+else if(string=="false")
 	{
 	exp->clear();
 	exp->setText("FALSE return value FALSE");
@@ -241,7 +228,8 @@ list_anal+="ceil";
 list_anal+="max";
 list_anal+="min";
 list_anal+="mult";
-list_anal+="INT";
+list_anal+="ENT";
+list_anal+="PI";
 
 QStringList list_trig;
 list_trig+="cos";
@@ -261,8 +249,8 @@ list_trig+="radian";
 
 QStringList list_logic;
 list_logic+="IF";
-list_logic+="TRUE";
-list_logic+="FALSE";
+list_logic+="true";
+list_logic+="false";
 list_logic+="NO";
 
 QStringList list_text;

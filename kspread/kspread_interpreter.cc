@@ -761,7 +761,7 @@ static bool kspreadfunc_TRUE( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
-  if ( !KSUtil::checkArgumentsCount( context, 0, "TRUE", true ) )
+  if ( !KSUtil::checkArgumentsCount( context, 0, "true", true ) )
     return false;
 
   bool toto=true;
@@ -773,7 +773,7 @@ static bool kspreadfunc_FALSE( KSContext& context )
 {
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
 
-  if ( !KSUtil::checkArgumentsCount( context, 0, "FALSE", true ) )
+  if ( !KSUtil::checkArgumentsCount( context, 0, "false", true ) )
     return false;
 
   bool toto=false;
@@ -818,6 +818,7 @@ static bool kspreadfunc_if( KSContext& context )
       else
 	{
 	  cout <<"Pb in function IF\n";
+	  return false;
 	}
     }
   else
@@ -846,6 +847,7 @@ static bool kspreadfunc_if( KSContext& context )
     else
     	{
     	cout <<"Pb in function IF\n";
+    	return false;
     	}
    }	
 
@@ -957,6 +959,17 @@ static bool kspreadfunc_ENT( KSContext& context )
   return true;
 }
 
+static bool kspreadfunc_PI( KSContext& context )
+{
+  QValueList<KSValue::Ptr>& args = context.value()->listValue();
+
+  if ( !KSUtil::checkArgumentsCount( context, 0, "PI", true ) )
+    return false;
+
+  context.setValue( new KSValue(M_PI));
+  //cout <<"Power : " << (32)<<endl; 	
+  return true;
+}
 
 static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
 {
@@ -993,14 +1006,15 @@ static KSModule::Ptr kspreadCreateModule_KSpread( KSInterpreter* interp )
   module->addObject( "conc", new KSValue( new KSBuiltinFunction( module, "conc", kspreadfunc_conc) ) );
   module->addObject( "NO", new KSValue( new KSBuiltinFunction( module, "NO", kspreadfunc_no) ) );
   module->addObject( "IF", new KSValue( new KSBuiltinFunction( module, "IF", kspreadfunc_if) ) );
-  module->addObject( "TRUE", new KSValue( new KSBuiltinFunction( module, "TRUE", kspreadfunc_TRUE) ) );
-  module->addObject( "FALSE", new KSValue( new KSBuiltinFunction( module, "FALSE", kspreadfunc_FALSE) ) );
+  module->addObject( "true", new KSValue( new KSBuiltinFunction( module, "true", kspreadfunc_TRUE) ) );
+  module->addObject( "false", new KSValue( new KSBuiltinFunction( module, "false", kspreadfunc_FALSE) ) );
   module->addObject( "LEFT", new KSValue( new KSBuiltinFunction( module, "LEFT", kspreadfunc_LEFT) ) );
   module->addObject( "RIGHT", new KSValue( new KSBuiltinFunction( module, "RIGHT", kspreadfunc_RIGHT) ) );
   module->addObject( "NBCAR", new KSValue( new KSBuiltinFunction( module, "NBCAR", kspreadfunc_NBCAR) ) );
   module->addObject( "EXACT", new KSValue( new KSBuiltinFunction( module, "EXACT", kspreadfunc_EXACT) ) );
   module->addObject( "STXT", new KSValue( new KSBuiltinFunction( module, "STXT", kspreadfunc_STXT) ) );
   module->addObject( "ENT", new KSValue( new KSBuiltinFunction( module, "ENT",kspreadfunc_ENT) ) );
+  module->addObject( "PI", new KSValue( new KSBuiltinFunction( module, "PI",kspreadfunc_PI) ) );
   return module;
 }
 

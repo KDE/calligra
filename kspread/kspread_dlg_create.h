@@ -26,6 +26,7 @@
 #include <qlineedit.h>
 
 
+
 class KSpreadView;
 class KSpreadTable;
 class KSpreadCell;
@@ -34,18 +35,25 @@ class KSpreadcreate : public QDialog
 {
   Q_OBJECT
 public:
-  KSpreadcreate( KSpreadView* parent, const char* name=0L,int param=0 );
-
+  KSpreadcreate( KSpreadView* parent, const QString _name,QString _formula);
+  void init();
+  QString create_formula();
+  int nb_param;
 public slots:
   void slotOk();
   void slotClose();
+  void slotSelectionChanged( KSpreadTable* _table, const QRect& _selection );
 
 protected:
-
+   virtual void mousePressEvent( QMouseEvent *_ev );
   KSpreadView* m_pView;
-  
+  QString name;
+  QString old_formula;
   QLineEdit* f_param;
   QLineEdit* s_param;
+  QLineEdit* t_param;
+  QLineEdit* fo_param;
+  QLineEdit* fi_param;
   QPushButton* m_pOk;
   QPushButton* m_pClose;
 

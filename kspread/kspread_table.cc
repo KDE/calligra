@@ -2169,7 +2169,6 @@ void KSpreadTable::paste( const QPoint &_marker,Special_paste sp)
 
   istrstream in( data.c_str() );
   loadSelection( in, _marker.x() - 1, _marker.y() - 1,sp);
-
   m_pDoc->setModified( true );
   emit sig_updateView( this );
 }
