@@ -152,7 +152,12 @@ void FormulaParserTester::run()
   CHECK_PARSE( "SUM(A1:Z10)", "xoro" ); 
   CHECK_PARSE( "MAX(Sheet1!Sales)", "xoro" ); 
   
-  // invalid formulas  
+  // should be correctly parsed though they are nonsense (can't be evaluated)
+  CHECK_PARSE( "0E0.5", "ff" );  
+  CHECK_PARSE( "B3 D4:D5 Sheet1!K1", "crc" );  
+  CHECK_PARSE( "SIN A1", "xc" );  
+  CHECK_PARSE( "SIN A1:A20", "xr" );  
+  
+  // invalid formulas, can't be parsed correctly  
   CHECK_PARSE( "+1.23E", QString::null );  
-  CHECK_PARSE( "0E0.5", QString::null );  
 }
