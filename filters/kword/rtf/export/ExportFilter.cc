@@ -278,11 +278,12 @@ void RTFWorker::ProcessParagraphData (const QString& strTag, const QString &para
                     // A link
                     m_textBody += "{\\field";
                     m_textBody += "{\\*\\fldinst { HYPERLINK ";
-                    m_textBody += escapeRtfText((*paraFormatDataIt).variable.getHrefName());
+                    m_textBody +=  escapeRtfText((*paraFormatDataIt).variable.getHrefName());
                     m_textBody += "}}";
                     m_textBody += "{\\fldrslt ";
+                    m_textBody += "{\\ul\\cf2";   // underline+blue, TODO: use style Hyperlink
                     m_textBody += escapeRtfText((*paraFormatDataIt).variable.getLinkName());
-                    m_textBody += "}}";
+                    m_textBody += "}}}";
                 }
                 else
                 {
@@ -886,7 +887,35 @@ QString RTFWorker::textFormatToRtf(const TextFormatting& formatOrigin,
     {
         if ( formatData.underline )
         {
-            strElement+="\\ul1";
+            QString underlineValue = formatData.underlineValue;  
+            QString underlineStyle = formatData.underlineStyle;  
+            bool underlineWord = formatData.underlineWord;  
+            QString ul = "\\ul1";  // fall-back: simple underline
+
+            if( underlineStyle.isEmpty() ) underlineStyle = "solid"; 
+            if( underlineValue == "1" ) underlineValue = "single"; 
+
+            if( underlineValue == "double" )
+                ul = "\\uldb";
+            else if( underlineValue == "single-bold" )
+                ul = "\\ulth";
+            else if( underlineValue == "wave" )
+                ul = "\\ulwave";
+            else if( underlineValue == "single" )
+            {
+                if( underlineStyle == "dash" )
+                    ul = "\\uldash";
+                else if( underlineStyle == "dot" )
+                    ul = "\\uld";
+                else if( underlineStyle == "dashdot" )
+                    ul = "\\uldashd";
+                else if( underlineStyle == "dashdotdot" )
+                    ul = "\\uldashdd";
+                else if( ( underlineStyle == "single" ) && underlineWord )
+                    ul = "\\ulw";
+            };
+
+            strElement+= ul;
         }
         else
         {
