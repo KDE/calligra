@@ -489,10 +489,10 @@ void KWFrameDia::setupTab2() // TAB Text Runaround
     groupBox1Layout->setAlignment( Qt::AlignTop );
 
     rRunNo = new QRadioButton( i18n( "&Run through this frame" ), runGroup );
-    groupBox1Layout->addWidget( rRunNo, 1, 1 );
+    groupBox1Layout->addWidget( rRunNo, 0, 1 );
 
     rRunBounding = new QRadioButton( i18n( "Run around the &boundary rectangle of this frame" ), runGroup );
-    groupBox1Layout->addWidget( rRunBounding, 0, 1 );
+    groupBox1Layout->addWidget( rRunBounding, 1, 1 );
 
     rRunContur = new QRadioButton( i18n( "Do&n't run around this frame" ), runGroup );
     groupBox1Layout->addWidget( rRunContur, 2, 1 );
