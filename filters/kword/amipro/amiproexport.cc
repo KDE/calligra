@@ -109,6 +109,25 @@ bool AmiProWorker::doCloseDocument(void)
   return TRUE;
 }
 
+static QString AmiProEscape( const QString& text )
+{
+  QString result;
+
+  for( unsigned i=0; i<text.length(); i++ )
+  {
+    QChar ch = text[i];
+    switch( ch.unicode() )
+    {
+      case '<': result += "<<"; break;
+      case '>': result += "<;>"; break;
+      case '[': result += "<[>"; break;
+      default: result += ch; break;
+    }
+  }
+
+  return result; 
+}
+
 bool AmiProWorker::doFullParagraph(const QString& paraText, 
   const LayoutData& layout, const ValueListFormatData& paraFormatDataList)
 {
@@ -125,6 +144,8 @@ bool AmiProWorker::doFullParagraph(const QString& paraText,
     {
       QString partialText;
       partialText = text.mid( formatData.pos, formatData.len );
+
+      partialText = AmiProEscape( partialText );
   
       // apply formatting
       m_bold = formatData.text.weight >= 75;

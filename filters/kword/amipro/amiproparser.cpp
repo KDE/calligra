@@ -132,14 +132,28 @@ bool AmiProParser::parseParagraph( const QString& partext )
   for( unsigned i=0; i<partext.length(); i++ )
   {
     QChar ch = partext[i];
-    
+   
     // handle a tag
     if( ch == '<' )
     {
-      QString tag = "";
-      for( i++; (i < partext.length()) && 
-         (partext[i] != '>'); i++) tag.append( partext[i] );
-      handleTag( tag );
+
+      // check for <<, which is decoded as <, not tag
+      if( i+1 < partext.length() )
+        if( partext[i+1] == '<' )
+        {
+          m_text.append( '<' );
+          i++;
+        }
+
+      else
+      {
+        // this a tag, enclosed with >
+        QString tag = "";
+        for( i++; (i < partext.length()) && 
+           (partext[i] != '>'); i++) tag.append( partext[i] );
+        handleTag( tag );
+      }
+
     }
 
     else
@@ -176,6 +190,14 @@ bool AmiProParser::parseParagraph( const QString& partext )
 
 bool AmiProParser::handleTag( const QString& tag )
 {
+  // > (actually encoded as <;>)
+  if( tag == ";" )
+    m_text.append( ">" );
+
+  // [ (actually encoded as <[>)
+  if( tag == "[" )
+    m_text.append( "[" );
+
   // bold on
   if( tag == "+!" )
   {
