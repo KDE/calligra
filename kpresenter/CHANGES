@@ -38,3 +38,8 @@ Reggie, 7.2.1999:
 -----------------
 - Fixed strange problems when inserting pages in a presentation with embedded objects
 - Added a small demo presentation with an embedded part (KSpread table)
+
+Reggie, 28.1.1999:
+------------------
+- Optimized speed of moving objects in screenpresentations. 
+  Now this is much smoother than before (even on high resolutions)

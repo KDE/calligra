@@ -50,7 +50,7 @@ Page::Page(QWidget *parent=0,const char *name=0,KPresenterView *_view=0)
       toolEditMode = TEM_MOUSE;
       tmpObjs.setAutoDelete(false);
     }
-  else 
+  else
     {
       view = 0;
       hide();
@@ -101,7 +101,7 @@ void Page::paintEvent(QPaintEvent* paintEvent)
 
   painter.setClipping(true);
   painter.setClipRect(paintEvent->rect());
-  
+
   drawBackground(&painter,paintEvent->rect());
   drawObjects(&painter,paintEvent->rect());
 
@@ -115,7 +115,7 @@ void Page::paintEvent(QPaintEvent* paintEvent)
 void Page::drawBackground(QPainter *painter,KRect rect)
 {
   KPBackGround *kpbackground = 0;
-  
+
   for (int i = 0;i < static_cast<int>(backgroundList()->count());i++)
     {
       kpbackground = backgroundList()->at(i);
@@ -141,7 +141,7 @@ void Page::drawObjects(QPainter *painter,KRect rect)
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
-      
+
       if ((rect.intersects(kpobject->getBoundingRect(diffx(i),diffy(i))) && editMode) ||
 	   (!editMode && getPageOfObj(i,_presFakt) == static_cast<int>(currPresPage) &&
 	    kpobject->getPresNum() <= static_cast<int>(currPresStep)))
@@ -356,7 +356,7 @@ void Page::mousePressEvent(QMouseEvent *e)
 	    {
 	      if (drawMode)
 		{}
-	      else 
+	      else
 		view->screenNext();
 	    }
 	}
@@ -367,9 +367,9 @@ void Page::mousePressEvent(QMouseEvent *e)
 	  setCursor(arrowCursor);
 	  KPoint pnt = QCursor::pos();
 	  presMenu->popup(pnt);
-	} 
+	}
     }
-  
+
   mouseMoveEvent(e);
 }
 
@@ -377,7 +377,7 @@ void Page::mousePressEvent(QMouseEvent *e)
 void Page::mouseReleaseEvent(QMouseEvent *e)
 {
   if (e->button() != LeftButton) return;
-  
+
   int mx = e->x();
   int my = e->y();
   mx = (mx / rastX()) * rastX();
@@ -408,7 +408,7 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
 		  p.drawRect(rubber);
 		  p.end();
 		  drawRubber = false;
-		  
+		
 		  rubber = rubber.normalize();
 		  KPObject *kpobject = 0;
 		  if (objectList()->count() - 1 >= 0)
@@ -446,7 +446,7 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
 		  MoveByCmd *moveByCmd = new MoveByCmd(i18n("Move object(s)"),KPoint(mx - firstX,my - firstY),
 						       _objects,view->kPresenterDoc());
 		  view->kPresenterDoc()->commands()->addCommand(moveByCmd);
-		} 
+		}
 	      else
 		if (objectList()->count() - 1 >= 0)
 		  {
@@ -609,7 +609,7 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
       } break;
     case INS_TEXT:
       {
-	if (insRect.width() > 0 && insRect.height() > 0) 
+	if (insRect.width() > 0 && insRect.height() > 0)
 	  {
 	    insertText(insRect);
 	    setToolEditMode(TEM_MOUSE);
@@ -617,7 +617,7 @@ void Page::mouseReleaseEvent(QMouseEvent *e)
       } break;
     case INS_LINE:
       {
-	if (insRect.width() != 0 && insRect.height() != 0) 
+	if (insRect.width() != 0 && insRect.height() != 0)
 	  {
 	    if (insRect.top() == insRect.bottom())
 	      {
@@ -692,7 +692,7 @@ void Page::mouseMoveEvent(QMouseEvent *e)
       view->setRulerMousePos(e->x(),e->y());
 
       KPObject *kpobject;
-      
+
       if ((!mousePressed || (!drawRubber && modType == MT_NONE)) && toolEditMode == TEM_MOUSE)
 	{
 	  setCursor(arrowCursor);
@@ -743,7 +743,7 @@ void Page::mouseMoveEvent(QMouseEvent *e)
 		  {
 		    QPainter p;
 		    p.begin(this);
-		    
+		
 		    if (objectList()->count() - 1 >= 0)
 		      {
 			for (int i = static_cast<int>(objectList()->count()) - 1;i >= 0;i--)
@@ -758,20 +758,20 @@ void Page::mouseMoveEvent(QMouseEvent *e)
 			      }
 			  }
 		      }
-		    
+		
 		    p.end();
 		  }
 		else if (modType != MT_NONE && resizeObjNum != -1)
 		  {
 		    QPainter p;
 		    p.begin(this);
-		    
+		
 		    KRect oldRect;
 		    kpobject = objectList()->at(resizeObjNum);
 		    oldRect = kpobject->getBoundingRect(0,0);
 		    kpobject->setMove(true);
 		    kpobject->draw(&p,diffx(),diffy());
-		    
+		
 		    switch (modType)
 		      {
 		      case MT_RESIZE_LU:
@@ -943,7 +943,7 @@ void Page::mouseDoubleClickEvent(QMouseEvent *e)
 	      if (kpobject->getType() == OT_TEXT)
 		{
 		  KPTextObject *kptextobject = dynamic_cast<KPTextObject*>(kpobject);
-		  
+		
 		  kpobject->activate(this,diffx(),diffy());
 		  kptextobject->getKTextObject()->setBackgroundColor(txtBackCol());
 		  setFocusProxy(kptextobject->getKTextObject());
@@ -954,7 +954,7 @@ void Page::mouseDoubleClickEvent(QMouseEvent *e)
 		  connect(kptextobject->getKTextObject(),SIGNAL(fontChanged(QFont*)),this,SLOT(toFontChanged(QFont*)));
 		  connect(kptextobject->getKTextObject(),SIGNAL(colorChanged(QColor*)),this,SLOT(toColorChanged(QColor*)));
 		  connect(kptextobject->getKTextObject(),SIGNAL(horzAlignChanged(TxtParagraph::HorzAlign)),
-			  this,SLOT(toAlignChanged(TxtParagraph::HorzAlign)));      
+			  this,SLOT(toAlignChanged(TxtParagraph::HorzAlign)));
 		  editNum = i;
 		  break;
 		}
@@ -1045,12 +1045,12 @@ int Page::getObjectAt(int x,int y)
 	    return i;
 	}
     }
-  
+
   return -1;
 }
 
 /*================================================================*/
-int Page::diffx(int i = -1) 
+int Page::diffx(int i = -1)
 {
   //if (i == -1)
     return view->getDiffX();
@@ -1062,7 +1062,7 @@ int Page::diffx(int i = -1)
 }
 
 /*================================================================*/
-int Page::diffy(int i = -1) 
+int Page::diffy(int i = -1)
 {
   //if (i == -1)
     return view->getDiffY();
@@ -1070,7 +1070,7 @@ int Page::diffy(int i = -1)
 //   if (editMode)
 //     return view->getDiffY();
 
-//   return static_cast<int>(view->getDiffY() + ((i + 1) * view->kPresenterDoc()->getTopBorder() + 
+//   return static_cast<int>(view->getDiffY() + ((i + 1) * view->kPresenterDoc()->getTopBorder() +
 // 					      i * view->kPresenterDoc()->getBottomBorder()) * _presFakt);
 }
 /*======================= select object ==========================*/
@@ -1137,13 +1137,13 @@ void Page::selectAllObj()
 void Page::deSelectAllObj()
 {
   KPObject *kpobject;
-  
+
   for (int i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
       if (kpobject->isSelected()) deSelectObj(kpobject);
     }
-  
+
 }
 
 /*======================== setup menus ===========================*/
@@ -1262,7 +1262,7 @@ void Page::setupMenus()
   alignMenu7->setMouseTracking(true);
   alignMenu7->setCheckable(false);
 
-  // create right button graph menu 
+  // create right button graph menu
   graphMenu = new QPopupMenu();
   CHECK_PTR(graphMenu);
   graphMenu->insertItem(ICON("editcut.xpm"),i18n("&Cut"),this,SLOT(clipCut()));
@@ -1279,7 +1279,7 @@ void Page::setupMenus()
   graphMenu->insertItem(ICON("alignobjs.xpm"),i18n("&Align objects"),alignMenu1);
   graphMenu->setMouseTracking(true);
 
-  // create right button part menu 
+  // create right button part menu
   partMenu = new QPopupMenu();
   CHECK_PTR(partMenu);
   partMenu->insertItem(ICON("editcut.xpm"),i18n("&Cut"),this,SLOT(clipCut()));
@@ -1295,7 +1295,7 @@ void Page::setupMenus()
   partMenu->insertItem(ICON("alignobjs.xpm"),i18n("&Align objects"),alignMenu7);
   partMenu->setMouseTracking(true);
 
-  // create right button rect menu 
+  // create right button rect menu
   rectMenu = new QPopupMenu();
   CHECK_PTR(rectMenu);
   rectMenu->insertItem(ICON("editcut.xpm"),i18n("&Cut"),this,SLOT(clipCut()));
@@ -1313,7 +1313,7 @@ void Page::setupMenus()
   rectMenu->insertItem(ICON("alignobjs.xpm"),i18n("&Align objects"),alignMenu6);
   rectMenu->setMouseTracking(true);
 
-  // create right button pie menu 
+  // create right button pie menu
   pieMenu = new QPopupMenu();
   CHECK_PTR(pieMenu);
   pieMenu->insertItem(ICON("editcut.xpm"),i18n("&Cut"),this,SLOT(clipCut()));
@@ -1349,7 +1349,7 @@ void Page::setupMenus()
   picMenu->insertItem(ICON("alignobjs.xpm"),i18n("&Align objects"),alignMenu2);
   picMenu->setMouseTracking(true);
 
-  // create right button clipart menu 
+  // create right button clipart menu
   clipMenu = new QPopupMenu();
   CHECK_PTR(clipMenu);
   clipMenu->insertItem(ICON("editcut.xpm"),i18n("&Cut"),this,SLOT(clipCut()));
@@ -1367,7 +1367,7 @@ void Page::setupMenus()
   clipMenu->insertItem(ICON("alignobjs.xpm"),i18n("&Align objects"),alignMenu3);
   clipMenu->setMouseTracking(true);
 
-  // create right button text menu 
+  // create right button text menu
   txtMenu = new QPopupMenu();
   CHECK_PTR(txtMenu);
   txtMenu->insertItem(ICON("editcut.xpm"),i18n("&Cut"),this,SLOT(clipCut()));
@@ -1384,7 +1384,7 @@ void Page::setupMenus()
   txtMenu->insertItem(ICON("alignobjs.xpm"),i18n("&Align objects"),alignMenu4);
   txtMenu->setMouseTracking(true);
 
-  // create right button presentation menu 
+  // create right button presentation menu
   presMenu = new QPopupMenu();
   CHECK_PTR(presMenu);
   presMenu->setCheckable(true);
@@ -1539,7 +1539,7 @@ void Page::setTextAlign(TxtParagraph::HorzAlign align)
 KTextObject *Page::haveASelectedTextObj()
 {
   KPObject *kpobject = 0;
-  
+
   for (unsigned int i = 0;i < objectList()->count();i++)
     {
       kpobject = objectList()->at(i);
@@ -1588,29 +1588,29 @@ void Page::startScreenPresentation(bool zoom)
 
   if (zoom)
     {
-      float _presFaktW = static_cast<float>(width()) / static_cast<float>(getPageSize(0,1.0,false).width()) > 0.0 ? 
+      float _presFaktW = static_cast<float>(width()) / static_cast<float>(getPageSize(0,1.0,false).width()) > 0.0 ?
 	static_cast<float>(width()) / static_cast<float>(getPageSize(0,1.0,false).width()) : 1.0;
-      float _presFaktH = static_cast<float>(height()) / static_cast<float>(getPageSize(0,1.0,false).height()) > 0.0 ? 
+      float _presFaktH = static_cast<float>(height()) / static_cast<float>(getPageSize(0,1.0,false).height()) > 0.0 ?
 	static_cast<float>(height()) / static_cast<float>(getPageSize(0,1.0,false).height()) : 1.0;
       _presFakt = min(_presFaktW,_presFaktH);
     }
   else _presFakt = 1.0;
 
   KPBackGround *kpbackground = 0;
-  
+
   for (i = 0;i < static_cast<int>(backgroundList()->count());i++)
     {
       kpbackground = backgroundList()->at(i);
       kpbackground->setSize(getPageSize(i,_presFakt).width(),getPageSize(i,_presFakt).height());
       kpbackground->restore();
     }
-  
+
   for (i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
       kpobject->zoom(_presFakt);
       kpobject->drawSelection(false);
-      
+
       if (getPageOfObj(i,_presFakt) == 1)
 	tmpObjs.append(kpobject);
     }
@@ -1667,13 +1667,13 @@ bool Page::pNext(bool)
 
   goingBack = false;
   KPObject *kpobject = 0;
-  
+
   if ((int*)(currPresStep) < presStepList.last())
     {
       for (int i = 0;i < static_cast<int>(objectList()->count());i++)
 	{
 	  kpobject = objectList()->at(i);
-	  if (getPageOfObj(i,_presFakt) == static_cast<int>(currPresPage) 
+	  if (getPageOfObj(i,_presFakt) == static_cast<int>(currPresPage)
 	      && kpobject->getPresNum() == static_cast<int>(currPresStep)
 	    && kpobject->getType() == OT_TEXT && kpobject->getEffect2() != EF2_NONE)
 	    {
@@ -1683,7 +1683,7 @@ bool Page::pNext(bool)
 		clearSubPres = true;
 	    }
 	}
-      
+
       if (addSubPres)
 	{
 	  subPresStep++;
@@ -1692,16 +1692,16 @@ bool Page::pNext(bool)
 	}
       else if (clearSubPres)
 	subPresStep = 0;
-      
+
       presStepList.find((int*)(currPresStep));
       currPresStep = (int)(presStepList.next());
-    
+
       if (currPresStep == 0)
 	{
 	  QPainter p;
 	  p.begin(this);
 	  drawBackground(&p,KRect(0,0,kapp->desktop()->width(),kapp->desktop()->height()));
-	  p.end();  
+	  p.end();
 	}
 
       doObjEffects();
@@ -1713,7 +1713,7 @@ bool Page::pNext(bool)
 	  for (int i = 0;i < static_cast<int>(objectList()->count());i++)
 	    {
 	      kpobject = objectList()->at(i);
-	      if (getPageOfObj(i,_presFakt) == static_cast<int>(currPresPage) 
+	      if (getPageOfObj(i,_presFakt) == static_cast<int>(currPresPage)
 		  && kpobject->getPresNum() == static_cast<int>(currPresStep)
 		  && kpobject->getType() == OT_TEXT && kpobject->getEffect2() != EF2_NONE)
 		{
@@ -1743,7 +1743,7 @@ bool Page::pNext(bool)
       for (int i = 0;i < static_cast<int>(objectList()->count());i++)
 	{
 	  kpobject = objectList()->at(i);
-	  if (getPageOfObj(i,_presFakt) == static_cast<int>(currPresPage) 
+	  if (getPageOfObj(i,_presFakt) == static_cast<int>(currPresPage)
 	      && kpobject->getPresNum() == static_cast<int>(currPresStep)
 	      && kpobject->getType() == OT_TEXT && kpobject->getEffect2() != EF2_NONE)
 	    {
@@ -1765,7 +1765,7 @@ bool Page::pNext(bool)
 
       QPixmap _pix1(QApplication::desktop()->width(),QApplication::desktop()->height());
       drawPageInPix(_pix1,view->getDiffY());
-      
+
       currPresPage++;
 
       tmpObjs.clear();
@@ -1777,12 +1777,12 @@ bool Page::pNext(bool)
 
       presStepList = view->kPresenterDoc()->reorderPage(currPresPage,diffx(),diffy(),_presFakt);
       currPresStep = (int)(presStepList.first());
-      
+
       QPixmap _pix2(QApplication::desktop()->width(),QApplication::desktop()->height());
       drawPageInPix(_pix2,view->getDiffY() + view->kPresenterDoc()->getPageSize(0,0,0,_presFakt,false).height());
-      
+
       changePages(_pix1,_pix2,backgroundList()->at(currPresPage - 2)->getPageEffect());
-      
+
       return true;
     }
   return false;
@@ -1830,7 +1830,7 @@ bool Page::pPrev(bool manual)
 /*======================== can we assign an effect ? =============*/
 bool Page::canAssignEffect(int &pgNum,int &objNum)
 {
-  bool ret = false; 
+  bool ret = false;
   pgNum = -1; objNum = -1;
   KPObject *kpobject;
 
@@ -1847,8 +1847,8 @@ bool Page::canAssignEffect(int &pgNum,int &objNum)
     }
   return ret;
 }
-	    
-/*==================== draw a page in a pixmap ===================*/ 
+	
+/*==================== draw a page in a pixmap ===================*/
 void Page::drawPageInPix(QPixmap &_pix,int __diffy)
 {
   int _yOffset = view->getDiffY();
@@ -1859,13 +1859,13 @@ void Page::drawPageInPix(QPixmap &_pix,int __diffy)
 
   drawBackground(&p,_pix.rect());
   drawObjects(&p,_pix.rect());
-  
+
   p.end();
 
   view->setDiffY(_yOffset);
 }
 
-/*==================== draw a page in a pixmap ===================*/ 
+/*==================== draw a page in a pixmap ===================*/
 void Page::drawPageInPainter(QPainter* painter,int __diffy,KRect _rect)
 {
   int _yOffset = view->getDiffY();
@@ -1873,7 +1873,7 @@ void Page::drawPageInPainter(QPainter* painter,int __diffy,KRect _rect)
 
   drawBackground(painter,_rect);
   drawObjects(painter,_rect);
-  
+
   view->setDiffY(_yOffset);
 }
 
@@ -2032,7 +2032,7 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
 	
 		_time.restart();
 	      }
-	    if ((_pix2.width() / _steps) * _step >= _pix2.width() && 
+	    if ((_pix2.width() / _steps) * _step >= _pix2.width() &&
 		(_pix2.height() / _steps) * _step >= _pix2.height()) break;
 	  }
       } break;
@@ -2158,8 +2158,8 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
 		    int dy = (curr2 / 4) * hei;
 		    _h = (_pix2.height() / _steps) * _step;
 		    if (_h >= _pix2.height() - 2 * dy)
-		      { 
-			_h = _pix2.height() - 2 * dy; 
+		      {
+			_h = _pix2.height() - 2 * dy;
 			curr++;
 			_step = 0;
 		      }
@@ -2184,8 +2184,8 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
 		    int dy = (curr2 / 4) * hei;
 		    _h = (_pix2.height() / _steps) * _step;
 		    if (_h >= _pix2.height() - hei - 2 * dy)
-		      { 
-			_h = _pix2.height() - hei - 2 * dy; 
+		      {
+			_h = _pix2.height() - hei - 2 * dy;
 			curr++;
 			_step = 0;
 		      }
@@ -2210,7 +2210,7 @@ void Page::changePages(QPixmap _pix1,QPixmap _pix2,PageEffect _effect)
 		  }
 		_time.restart();
 	      }
-	    if (curr == 21) 
+	    if (curr == 21)
 	      {
 		bitBlt(this,0,0,&_pix2,0,0,_pix2.width(),_pix2.height());
 		break;
@@ -2237,11 +2237,11 @@ void Page::doObjEffects()
   QPixmap *screen = new QPixmap(screen_orig);
 
   KPObject *kpobject = 0;
-  
+
   for (i = 0;i < static_cast<int>(objectList()->count());i++)
     {
       kpobject = objectList()->at(i);
-      if (getPageOfObj(i,_presFakt) == static_cast<int>(currPresPage) 
+      if (getPageOfObj(i,_presFakt) == static_cast<int>(currPresPage)
 	  && kpobject->getPresNum() == static_cast<int>(currPresStep))
 	{
 	  if (kpobject->getEffect() != EF_NONE)
@@ -2304,7 +2304,7 @@ void Page::doObjEffects()
 	    }
 	}
     }
-  
+
   if (effects)
     {
       _step_width = static_cast<int>((static_cast<float>(kapp->desktop()->width()) / objSpeedFakt()));
@@ -2314,15 +2314,23 @@ void Page::doObjEffects()
 	(kapp->desktop()->width() - x_pos2) / _step_width : (kapp->desktop()->height() - y_pos2) / _step_height;
       _time.start();
 
+      QList<KRect> xy;
+      xy.setAutoDelete(true);
+
       for (;;)
 	{
 	  kapp->processEvents();
 	  if (nothingHappens) break; // || _step >= _steps1 && _step >= _steps2) break;
+	
+	  QList<KRect> changes;
+	  changes.setAutoDelete(true);
 	  
 	  if (_time.elapsed() >= 1)
 	    {
 	      nothingHappens = true;
 	      _step++;
+	      
+	      changes.clear();
 	      
 	      for (i = 0;i < static_cast<int>(_objList.count());i++)
 		{
@@ -2335,6 +2343,23 @@ void Page::doObjEffects()
 		  ow = kpobject->getSize().width();
 		  oh = kpobject->getSize().height();
 
+		  KRect br = kpobject->getBoundingRect(0,0);
+		  int bx = br.x();
+		  int by = br.y();
+		  int bw = br.width();
+		  int bh = br.height();
+		  
+		  KRect oldRect;
+		  KRect newRect;
+		  
+		  if (static_cast<int>(xy.count() - 1) < i)
+		    {
+		      xy.append(new KRect(0,0,0,0));
+		      oldRect.setRect(bx - diffx(),by - diffy(),bw,bh);
+		    }
+		  else
+		    oldRect.setRect(bx - (diffx() - xy.at(i)->x()),by - (diffy() - xy.at(i)->y()),bw - xy.at(i)->width(),bh - xy.at(i)->height());
+		  
 		  switch (kpobject->getEffect())
 		    {
 		    case EF_NONE:
@@ -2345,141 +2370,222 @@ void Page::doObjEffects()
 		    case EF_COME_LEFT:
 		      {
 			if (subPresStep == 0 || subPresStep != 0 && kpobject->getType() == OT_TEXT && kpobject->getEffect2() == EF2T_PARA)
-			  { 
-			    x_pos1 = _step_width * _step < ox - diffx() + ow ? 
+			  {
+			    x_pos1 = _step_width * _step < ox - diffx() + ow ?
 			      ox - diffx() + ow - _step_width * _step : 0;
 			    y_pos1 = 0;
 			    drawObject(kpobject,screen,-x_pos1,y_pos1,0,0,0,0);
 			    if (x_pos1 != 0) nothingHappens = false;
+			    xy.at(i)->setX(-x_pos1);
+			    xy.at(i)->setY(y_pos1);
+			    xy.at(i)->setWidth(0);
+			    xy.at(i)->setHeight(0);
 			  }
 		      } break;
 		    case EF_COME_TOP:
 		      {
 			if (subPresStep == 0 || subPresStep != 0 && kpobject->getType() == OT_TEXT && kpobject->getEffect2() == EF2T_PARA)
-			  { 
+			  {
 			    y_pos1 = _step_height * _step < oy - diffy() + oh ?
 			      oy - diffy() + oh - _step_height * _step : 0;
 			    x_pos1 = 0;
 			    drawObject(kpobject,screen,x_pos1,-y_pos1,0,0,0,0);
 			    if (y_pos1 != 0) nothingHappens = false;
+			    xy.at(i)->setX(x_pos1);
+			    xy.at(i)->setY(-y_pos1);
+			    xy.at(i)->setWidth(0);
+			    xy.at(i)->setHeight(0);
 			  }
 		      } break;
 		    case EF_COME_RIGHT:
 		      {
 			if (subPresStep == 0 || subPresStep != 0 && kpobject->getType() == OT_TEXT && kpobject->getEffect2() == EF2T_PARA)
-			  { 
+			  {
 			    x_pos2 = _w - (_step_width * _step) + (ox - diffx()) > ox - diffx() ?
 			      _w - (_step_width * _step) : 0;
 			    y_pos2 = 0;
 			    drawObject(kpobject,screen,x_pos2,y_pos2,0,0,0,0);
 			    if (x_pos2 != 0) nothingHappens = false;
+			    xy.at(i)->setX(x_pos2);
+			    xy.at(i)->setY(y_pos2);
+			    xy.at(i)->setWidth(0);
+			    xy.at(i)->setHeight(0);
 			  }
 		      } break;
 		    case EF_COME_BOTTOM:
 		      {
 			if (subPresStep == 0 || subPresStep != 0 && kpobject->getType() == OT_TEXT && kpobject->getEffect2() == EF2T_PARA)
-			  { 
+			  {
 			    y_pos2 = _h - (_step_height * _step) + (oy - diffy()) > oy - diffy() ?
 			      _h - (_step_height * _step) : 0;
 			    x_pos2 = 0;
 			    drawObject(kpobject,screen,x_pos2,y_pos2,0,0,0,0);
 			    if (y_pos2 != 0) nothingHappens = false;
+			    xy.at(i)->setX(x_pos2);
+			    xy.at(i)->setY(y_pos2);
+			    xy.at(i)->setWidth(0);
+			    xy.at(i)->setHeight(0);
 			  }
 		      } break;
 		    case EF_COME_LEFT_TOP:
 		      {
 			if (subPresStep == 0 || subPresStep != 0 && kpobject->getType() == OT_TEXT && kpobject->getEffect2() == EF2T_PARA)
-			  { 
-			    x_pos1 = _step_width * _step < ox - diffx() + ow ? 
+			  {
+			    x_pos1 = _step_width * _step < ox - diffx() + ow ?
 			      ox - diffx() + ow - _step_width * _step : 0;
 			    y_pos1 = _step_height * _step < oy - diffy() + oh ?
 			      oy - diffy() + oh - _step_height * _step : 0;
 			    drawObject(kpobject,screen,-x_pos1,-y_pos1,0,0,0,0);
 			    if (x_pos1 != 0 || y_pos1 != 0) nothingHappens = false;
+			    xy.at(i)->setX(-x_pos1);
+			    xy.at(i)->setY(-y_pos1);
+			    xy.at(i)->setWidth(0);
+			    xy.at(i)->setHeight(0);
 			  }
 		      } break;
 		    case EF_COME_LEFT_BOTTOM:
 		      {
 			if (subPresStep == 0 || subPresStep != 0 && kpobject->getType() == OT_TEXT && kpobject->getEffect2() == EF2T_PARA)
-			  { 
-			    x_pos1 = _step_width * _step < ox - diffx() + ow ? 
+			  {
+			    x_pos1 = _step_width * _step < ox - diffx() + ow ?
 			      ox - diffx() + ow - _step_width * _step : 0;
 			    y_pos2 = _h - (_step_height * _step) + (oy - diffy()) > oy - diffy() ?
 			      _h - (_step_height * _step) : 0;
 			    drawObject(kpobject,screen,-x_pos1,y_pos2,0,0,0,0);
 			    if (x_pos1 != 0 || y_pos2 != 0) nothingHappens = false;
+			    xy.at(i)->setX(-x_pos1);
+			    xy.at(i)->setY(y_pos2);
+			    xy.at(i)->setWidth(0);
+			    xy.at(i)->setHeight(0);
 			  }
 		      } break;
 		    case EF_COME_RIGHT_TOP:
 		      {
 			if (subPresStep == 0 || subPresStep != 0 && kpobject->getType() == OT_TEXT && kpobject->getEffect2() == EF2T_PARA)
-			  { 
+			  {
 			    x_pos2 = _w - (_step_width * _step) + (ox - diffx()) > ox - diffx() ?
 			      _w - (_step_width * _step) : 0;
 			    y_pos1 = _step_height * _step < oy - diffy() + oh ?
 			      oy - diffy() + oh - _step_height * _step : 0;
 			    drawObject(kpobject,screen,x_pos2,-y_pos1,0,0,0,0);
 			    if (x_pos2 != 0 || y_pos1 != 0) nothingHappens = false;
+			    xy.at(i)->setX(x_pos2);
+			    xy.at(i)->setY(-y_pos1);
+			    xy.at(i)->setWidth(0);
+			    xy.at(i)->setHeight(0);
 			  }
 		      } break;
 		    case EF_COME_RIGHT_BOTTOM:
 		      {
 			if (subPresStep == 0 || subPresStep != 0 && kpobject->getType() == OT_TEXT && kpobject->getEffect2() == EF2T_PARA)
-			  { 
+			  {
 			    x_pos2 = _w - (_step_width * _step) + (ox - diffx()) > ox - diffx() ?
 			      _w - (_step_width * _step) : 0;
 			    y_pos2 = _h - (_step_height * _step) + (oy - diffy()) > oy - diffy() ?
 			      _h - (_step_height * _step) : 0;
 			    drawObject(kpobject,screen,x_pos2,y_pos2,0,0,0,0);
 			    if (x_pos2 != 0 || y_pos2 != 0) nothingHappens = false;
+			    xy.at(i)->setX(x_pos2);
+			    xy.at(i)->setY(y_pos2);
+			    xy.at(i)->setWidth(0);
+			    xy.at(i)->setHeight(0);
 			  }
 		      } break;
 		    case EF_WIPE_LEFT:
 		      {
 			if (subPresStep == 0 || subPresStep != 0 && kpobject->getType() == OT_TEXT && kpobject->getEffect2() == EF2T_PARA)
-			  { 
+			  {
 			    w_pos1 = _step_width * (_steps1 - _step) > 0 ? _step_width * (_steps1 - _step) : 0;
 			    drawObject(kpobject,screen,0,0,w_pos1,0,0,0);
  			    if (w_pos1 != 0) nothingHappens = false;
+			    xy.at(i)->setX(0);
+			    xy.at(i)->setY(0);
+			    xy.at(i)->setWidth(w_pos1);
+			    xy.at(i)->setHeight(0);
 			  }
 		      } break;
 		    case EF_WIPE_RIGHT:
 		      {
 			if (subPresStep == 0 || subPresStep != 0 && kpobject->getType() == OT_TEXT && kpobject->getEffect2() == EF2T_PARA)
-			  { 
+			  {
 			    w_pos1 = _step_width * (_steps1 - _step) > 0 ? _step_width * (_steps1 - _step) : 0;
 			    x_pos1 = w_pos1;
 			    drawObject(kpobject,screen,0,0,w_pos1,0,x_pos1,0);
  			    if (w_pos1 != 0) nothingHappens = false;
+			    xy.at(i)->setX(x_pos1);
+			    xy.at(i)->setY(0);
+			    xy.at(i)->setWidth(w_pos1);
+			    xy.at(i)->setHeight(0);
 			  }
 		      } break;
 		    case EF_WIPE_TOP:
 		      {
 			if (subPresStep == 0 || subPresStep != 0 && kpobject->getType() == OT_TEXT && kpobject->getEffect2() == EF2T_PARA)
-			  { 
+			  {
 			    h_pos1 = _step_height * (_steps1 - _step) > 0 ? _step_height * (_steps1 - _step) : 0;
 			    drawObject(kpobject,screen,0,0,0,h_pos1,0,0);
  			    if (h_pos1 != 0) nothingHappens = false;
+			    xy.at(i)->setX(0);
+			    xy.at(i)->setY(0);
+			    xy.at(i)->setWidth(0);
+			    xy.at(i)->setHeight(h_pos1);
 			  }
 		      } break;
 		    case EF_WIPE_BOTTOM:
 		      {
 			if (subPresStep == 0 || subPresStep != 0 && kpobject->getType() == OT_TEXT && kpobject->getEffect2() == EF2T_PARA)
-			  { 
+			  {
 			    h_pos1 = _step_height * (_steps1 - _step) > 0 ? _step_height * (_steps1 - _step) : 0;
 			    y_pos1 = h_pos1;
 			    drawObject(kpobject,screen,0,0,0,h_pos1,0,y_pos1);
  			    if (h_pos1 != 0) nothingHappens = false;
+			    xy.at(i)->setX(0);
+			    xy.at(i)->setY(y_pos1);
+			    xy.at(i)->setWidth(0);
+			    xy.at(i)->setHeight(h_pos1);
 			  }
 		      } break;
 		    default: break;
 		    }
+		  
+		  newRect.setRect(bx - (diffx() - xy.at(i)->x()),by - (diffy() - xy.at(i)->y()),bw - xy.at(i)->width(),bh - xy.at(i)->height());
+		  newRect = newRect.unite(oldRect);
+
+		  bool append = true;
+		  for (unsigned j = 0;j < changes.count();j++)
+		    {
+		      if (changes.at(j)->intersects(newRect))
+			{
+			  KRect r = changes.at(j)->intersect(newRect);
+			  int s1 = r.width() * r.height();
+			  int s2 = newRect.width() * newRect.height();
+			  int s3 = changes.at(j)->width() * changes.at(j)->height();
+			  
+			  if (s1 > (s2 / 100) * 50 || s1 > (s3 / 100) * 50)
+			    {
+			      KRect rr = changes.at(j)->unite(newRect);
+			      changes.at(j)->setRect(rr.x(),rr.y(),rr.width(),rr.height());
+			      append = false;			  
+			    }
+			  
+			  break;
+			}
+		    }
+		  
+		  if (append)
+		    changes.append(new KRect(newRect));
+		}
+	
+	      KRect *changed;
+	      for (i = 0;i < static_cast<int>(changes.count());i++)
+		{
+		  changed = changes.at(i);
+		  bitBlt(this,changed->x(),changed->y(),screen,changed->x(),changed->y(),changed->width(),changed->height());
 		}
 	      
-	      bitBlt(this,0,0,screen);
 	      delete screen;
 	      screen = new QPixmap(screen_orig);
-	      
+	
 	      _time.restart();
 	    }
 	}
@@ -2491,7 +2597,7 @@ void Page::doObjEffects()
       p.begin(this);
       p.drawPixmap(0,0,screen_orig);
       drawObjects(&p,KRect(0,0,kapp->desktop()->width(),kapp->desktop()->height()));
-      p.end();  
+      p.end();
     }
   else
     {
@@ -2515,14 +2621,15 @@ void Page::drawObject(KPObject *kpobject,QPixmap *screen,int _x,int _y,int _w,in
 
   QPainter p;
   p.begin(screen);
-
+  //p.begin(this);
+  
   if (_w != 0 || _h != 0)
     {
       p.setClipping(true);
       p.setClipRect(ox - diffx() + _cx,oy - diffy() + _cy,ow - _w,oh - _h);
       ownClipping = false;
     }
-  
+
   if (!editMode && static_cast<int>(currPresStep) == kpobject->getPresNum() && !goingBack)
     {
       kpobject->setSubPresStep(subPresStep);
@@ -2566,7 +2673,7 @@ void Page::print(QPainter *painter,QPrinter *printer,float left_margin,float top
 
   for (i = 0;i < static_cast<int>(objectList()->count());i++)
     objectList()->at(i)->drawSelection(false);
-  
+
   view->setDiffX(-static_cast<int>(MM_TO_POINT(left_margin)));
   view->setDiffY(-static_cast<int>(MM_TO_POINT(top_margin)));
 
@@ -2609,7 +2716,7 @@ void Page::print(QPainter *painter,QPrinter *printer,float left_margin,float top
   setToolEditMode(toolEditMode);
   view->setDiffX(_xOffset);
   view->setDiffY(_yOffset);
-  
+
   progress.setProgress(printer->toPage() - printer->fromPage() + 2);
   kapp->setWinStyleHighlightColor(c);
 
@@ -2640,7 +2747,7 @@ void Page::editSelectedTextArea()
 	      if (kpobject->getType() == OT_TEXT)
 		{
 		  KPTextObject *kptextobject = dynamic_cast<KPTextObject*>(kpobject);
-		  
+		
 		  kpobject->activate(this,diffx(),diffy());
 		  kptextobject->getKTextObject()->setBackgroundColor(txtBackCol());
 		  setFocusProxy(kptextobject->getKTextObject());
@@ -2650,7 +2757,7 @@ void Page::editSelectedTextArea()
 		  connect(kptextobject->getKTextObject(),SIGNAL(fontChanged(QFont*)),this,SLOT(toFontChanged(QFont*)));
 		  connect(kptextobject->getKTextObject(),SIGNAL(colorChanged(QColor*)),this,SLOT(toColorChanged(QColor*)));
 		  connect(kptextobject->getKTextObject(),SIGNAL(horzAlignChanged(TxtParagraph::HorzAlign)),
-			  this,SLOT(toAlignChanged(TxtParagraph::HorzAlign)));      
+			  this,SLOT(toAlignChanged(TxtParagraph::HorzAlign)));
 		  editNum = i;
 		  break;
 		}
