@@ -30,3 +30,14 @@ Wed Jan 6 22:00:41 1999 Simon Hausmann <tronical@gmx.net>
         * improved KIO-handling again (error handling)
 
         * improved some drawing stuff
+
+Thu Jan 7 18:56:56 1999 Simon Hausmann <tronical@gmx.net>
+
+        * _tons_ of fixes with the KIO handling
+
+        * started on support for redirection (I actually couldn't test it, yet, I hope it works :)
+
+        * the stop button works now (added two KOM signals to KoHTMLDocument)
+
+        * code cleanups (separated KoHTMLJob)
+

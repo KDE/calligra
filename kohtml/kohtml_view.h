@@ -98,6 +98,9 @@ public:
   virtual void slotReload();
   virtual void slotStop();
   
+  virtual void slotDocumentStarted();
+  virtual void slotDocumentDone();
+  
   virtual void setFocus(CORBA::Boolean mode);
   virtual CORBA::Boolean printDlg();
 
@@ -116,6 +119,7 @@ public slots:
   void slotShowURL(KHTMLView *view, const char *url);
   void slotOpenURL(KHTMLView *view, const char *url, int button, const char *target);
   void slotOpenURL();
+  void slotOpenURLInNewWindow();
   void slotURLPopup(KHTMLView *view, const char *url, const QPoint &coord);  
   void slotCopyURLtoClipboard();
 
@@ -184,7 +188,7 @@ protected:
   static const int ID_RELOAD = 13;
   static const int ID_STOP = 14;
 
-  KoHTMLDoc *m_pDoc;  
+  KoHTMLDoc *m_pDoc;
   
   KHTMLView_Patched *m_pHTMLView;
 
@@ -198,6 +202,8 @@ protected:
   QStack<SavedPage> m_vForwardStack;
  
   QList<KoHTMLFrame> m_lstFrames;
+
+  QString captionText;
 
   // config variables
   int browserStart;

@@ -4,8 +4,8 @@ INCLUDES = -I../lib/store -I../lib/kofficecore -I../lib/kofficeui \
 LDFLAGS	= $(all_libraries) $(MICO_LDFLAGS) $(KDE_RPATH)
 LDADD = ../lib/kofficeui/libkofficeui.la \
 	../lib/kofficecore/libkofficecore.la ../lib/koml/libkoml.la \
-	../lib/store/libkstore.la -lkspell -lkparts -lkpartsui -lkom \
-	-lkio -lkfm $(LIB_KHTML) $(LIB_KFILE) -lkdeutil $(LIBMICO) 
+	../lib/store/libkstore.la -lkparts -lkpartsui -lkom -lkio -lkfm\
+	$(LIB_KHTML) $(LIB_KFILE) -lkdeutil $(LIBMICO) 
 
 ####### Files
 
@@ -15,18 +15,19 @@ kohtml_bin_SOURCES = kohtml_main.cc kohtml_doc.cc kohtml_view.cc \
 	kohtml_shell.cc kohtml.cc khtmlwidget_patched.cc khtmlview_patched.cc \
 	kfileio.cc kpropcheck.cc kpropcolor.cc kpropcombo.cc kpropdlg.cc \
 	kpropfont.cc kpropgroup.cc kpropradio.cc kpropspin.cc kproptext.cc \
-	settingsdlg.cc edithtmldlg.cc
+	settingsdlg.cc edithtmldlg.cc kohtmljob.cc
 
 noinst_HEADERS = kohtml_main.h kohtml_doc.h kohtml_view.h kohtml_shell.h \
 	kohtml.h khtmlwidget_patched.h khtmlview_patched.h kfileio.h \
 	kpropcheck.h kpropcolor.h kpropcombo.h kpropdlg.h kpropfont.h \
 	kpropgroup.h kpropradio.h kpropspin.h kproptext.h settingsdlg.h \
-	edithtmldlg.h
+	edithtmldlg.h kohtmljob.h
 
 SRCMETA = kohtml_main.moc kohtml_view.moc kohtml_shell.moc kohtml_doc.moc \
 	khtmlwidget_patched.moc khtmlview_patched.moc kpropcheck.moc \
 	kpropcolor.moc kpropcombo.moc kpropdlg.moc kpropfont.moc kpropgroup.moc \
-	kpropradio.moc kpropspin.moc kproptext.moc settingsdlg.moc edithtmldlg.moc
+	kpropradio.moc kpropspin.moc kproptext.moc settingsdlg.moc edithtmldlg.moc \
+	kohtmljob.moc
 
 DISTCLEANFILES = $(idl_DATA:.idl=.cc) $(idl_HEADERS) $(SRCMETA)
 
@@ -74,3 +75,4 @@ kpropspin.cc: kpropspin.h kpropspin.moc
 kproptext.cc: kproptext.h kproptext.moc
 settingsdlg.cc: settingsdlg.h settingsdlg.moc
 edithtmldlg.cc: edithtmldlg.h edithtmldlg.moc
+kohtmljob.cc: kohtmljob.h kohtmljob.moc

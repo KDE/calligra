@@ -60,6 +60,8 @@ KoHTMLView::KoHTMLView(QWidget *parent, const char *name, KoHTMLDoc *_doc)
   setWidget(this);
   
   OPPartIf::setFocusPolicy(OpenParts::Part::ClickFocus);
+
+  captionText = "KoHTML";
   
   m_pDoc = _doc;
   
@@ -101,6 +103,11 @@ KoHTMLView::KoHTMLView(QWidget *parent, const char *name, KoHTMLDoc *_doc)
   QObject::connect(m_pDoc, SIGNAL(contentChanged()),
                    this, SLOT(slotDocumentContentChanged()));
 
+  KoHTML::KoHTMLDocument_var m_vDoc = KoHTML::KoHTMLDocument::_duplicate( m_pDoc );
+
+  m_vDoc->connect("documentStarted", this, "slotDocumentStarted");  
+  m_vDoc->connect("documentDone", this, "slotDocumentDone");
+
   bookmarkId = 111;
 
   m_bStackLock = false;
@@ -122,6 +129,11 @@ KoHTMLView::~KoHTMLView()
 void KoHTMLView::cleanUp()
 {
   if (m_bIsClean) return;
+
+  KoHTML::KoHTMLDocument_var m_vDoc = KoHTML::KoHTMLDocument::_duplicate( m_pDoc );
+  
+  m_vDoc->disconnect("documentDone", this, "slotDocumentDone");
+  m_vDoc->disconnect("documentStarted", this, "slotDocumentStarted");
 
   QListIterator<KoHTMLFrame> it(m_lstFrames);
   
@@ -201,7 +213,10 @@ void KoHTMLView::setFocus(CORBA::Boolean mode)
     resizeEvent( 0L );
 
   if ((bool)mode)
-     m_pHTMLView->setMouseLock(true);
+     {
+       m_pHTMLView->setMouseLock(true);
+//       m_vMainWindow->setCaption( captionText );
+     }  
 }
 
 CORBA::Boolean KoHTMLView::printDlg()
@@ -281,7 +296,7 @@ bool KoHTMLView::mappingCreateToolBar(OpenPartsUI::ToolBarFactory_ptr factory)
   m_idReload = m_vMainToolBar->insertButton2(pix, ID_RELOAD, SIGNAL(clicked()), this, "slotReload", true, i18n("Reload Page"), -1);
 
   pix = OPUIUtils::convertPixmap(ICON("stop.xpm"));
-  m_idStop = m_vMainToolBar->insertButton2(pix, ID_STOP, SIGNAL(clicked()), this, "slotStop", false, i18n("Stop"), -1);
+  m_idStop = m_vMainToolBar->insertButton2(pix, ID_STOP, SIGNAL(clicked()), this, "slotStop", true, i18n("Stop"), -1);
   
   m_vMainToolBar->insertSeparator(-1);
   
@@ -702,6 +717,20 @@ void KoHTMLView::slotReload()
 
 void KoHTMLView::slotStop()
 {
+  m_pDoc->stopLoading();
+  slotDocumentDone();
+}
+
+void KoHTMLView::slotDocumentStarted()
+{
+  if (!CORBA::is_nil(m_vMainToolBar))
+    m_vMainToolBar->setItemEnabled(ID_STOP, true);
+}
+
+void KoHTMLView::slotDocumentDone()
+{
+  if (!CORBA::is_nil(m_vMainToolBar))
+    m_vMainToolBar->setItemEnabled(ID_STOP, false);  
 }
 
 //----------------------------------------------
@@ -813,7 +842,9 @@ void KoHTMLView::slotSetCaption(const char *title)
   QString caption(title);
   caption.prepend("KoHTML : ");
   
-//  setCaption(caption);
+  captionText = caption;
+  
+//  if (m_bFocus) m_vMainWindow->setCaption(captionText);
 }
 
 void KoHTMLView::slotShowURL(KHTMLView *view, const char *url)
@@ -889,6 +920,21 @@ void KoHTMLView::slotOpenURL()
   slotOpenURL(0, m_vCurrentURL, LeftButton, 0);
 }
 
+void KoHTMLView::slotOpenURLInNewWindow()
+{
+  assert( m_pDoc != 0L );
+
+  KoHTMLDoc *doc = new KoHTMLDoc();
+
+  if (!doc->init()) return;
+	    
+  doc->openURL(m_vCurrentURL);
+	    
+  KoHTMLShell *shell = new KoHTMLShell();
+  shell->show();
+  shell->setDocument(doc);
+}
+
 void KoHTMLView::slotURLPopup(KHTMLView *view, const char *url, const QPoint &coord)
 {
   QPopupMenu *menu = new QPopupMenu;
@@ -898,7 +944,8 @@ void KoHTMLView::slotURLPopup(KHTMLView *view, const char *url, const QPoint &co
   m_vCurrentURL = url;
 
   menu->insertItem(i18n("Open URL..."), this, SLOT(slotOpenURL()));
-  menu->insertItem(i18n("Copy to clipboard"), this, SLOT(slotCopyURLtoClipboard()));
+  menu->insertItem(i18n("Open URL in new window..."), this, SLOT(slotOpenURLInNewWindow()));
+  menu->insertItem(i18n("Copy URL to clipboard"), this, SLOT(slotCopyURLtoClipboard()));
   
   menu->exec(coord);
   

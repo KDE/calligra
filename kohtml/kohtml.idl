@@ -53,6 +53,9 @@ module KoHTML
 		slot void slotHome();
 		slot void slotReload();
 		slot void slotStop();
+		
+		slot void slotDocumentStarted();
+		slot void slotDocumentDone();
 	};
 
 	interface KoHTMLDocument : KOffice::Document, KOffice::Print
@@ -64,10 +67,14 @@ module KoHTML
 		
 		/**
 		 * Use this function to manually "load" html code.
+		 * (note: data must contain the complete html code!)
 		 */ 
 		void feedData(in string url, in string data);
 		
-		boolean documentDone();
+		signal void documentStarted();
+		signal void documentDone();
+		
+		void stopLoading();
         };
 	
 	interface DocumentFactory : KOffice::DocumentFactory

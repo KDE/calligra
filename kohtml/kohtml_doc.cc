@@ -30,8 +30,6 @@
 
 #include <khtmlsavedpage.h>
 
-#include <kio_error.h>
-
 #include "khtmlwidget_patched.h"
 #include "kfileio.h"
 
@@ -63,57 +61,12 @@ KoHTMLChild::~KoHTMLChild()
   m_rDoc = 0L;
 }
 
-KoHTMLJob::KoHTMLJob(KHTMLView *_topParent, KHTMLView *_parent, const char *_url, JobType _jType)
-:KIOJob()
-{
-  topParent = _topParent;
-  parent = _parent;
-  url = _url;    
-  tmpFile = tmpnam(0);
-  jType = _jType;
-  
-  enableGUI(false);
-  
-  connect(this, SIGNAL(sigFinished(int)),
-          this, SLOT(slotJobFinished()));
-  connect(this, SIGNAL(sigError(int, int, const char *)),
-          this, SLOT(slotError()));	  
-}
-
-KoHTMLJob::~KoHTMLJob()
-{
-  cout << "KoHTMLJob::~KoHTMLJob()" << endl;
-  if (!tmpFile.isEmpty())
-     unlink(tmpFile.data());
-}
-  
-void KoHTMLJob::start()
-{
-  K2URL u(url.data());
-  if (u.isLocalFile() && !u.hasSubURL())
-     {
-       emit jobDone(this, topParent, parent, url.data(), u.path());
-       return;
-     }
-
-  copy(url.data(), tmpFile.data());     
-}
-
-void KoHTMLJob::slotJobFinished()
-{
-  cout << "KoHTMLJob::slotJobFinished()" << endl;
-
-  emit jobDone(this, topParent, parent, url.data(), tmpFile.data());
-}
-
-void KoHTMLJob::slotError()
-{
-  emit jobDone(this, topParent, parent, url.data(), 0L); //hm... this doesn't work that fine :-(
-}
-
 KoHTMLDoc::KoHTMLDoc()
 {
   ADD_INTERFACE("IDL:KOffice/Print:1.0");
+
+  SIGNAL_IMPL( "documentStarted" );  
+  SIGNAL_IMPL( "documentDone" );
 
   KIOJob::initStatic();
 
@@ -127,8 +80,6 @@ KoHTMLDoc::KoHTMLDoc()
   htmlData = "";  
   m_vCurrentURL = "";
   
-  m_pMainJob = 0L;
-
   m_vInternalView = new KHTMLView_Patched;
   
   addHTMLView(m_vInternalView);
@@ -230,17 +181,24 @@ void KoHTMLDoc::openURL(const char *_url)
   
   if (!u.isMalformed())
      {
-       cerr << "killing old stuff" << endl;
-       if (m_pMainJob) m_pMainJob->kill();
-	  
-       m_pMainJob = new KoHTMLJob(0L, 0L, u.url(), KoHTMLJob::HTML);
+       stopLoading();
+       
+       m_bLoadError = false;
      
-       QObject::connect(m_pMainJob, SIGNAL(jobDone(KoHTMLJob *, KHTMLView *, KHTMLView *, const char *, const char *)),
-                        this, SLOT(slotHTMLCodeLoaded(KoHTMLJob *, KHTMLView *, KHTMLView *, const char *, const char *)));
-       QObject::connect(m_pMainJob, SIGNAL(sigError(int, int, const char *)),
-                        this, SLOT(slotHTMLLoadError(int, int, const char *)));			
+       htmlData = "";
+       
+       KoHTMLJob *job = new KoHTMLJob(0L, 0L, u.url(), KoHTMLJob::HTML);
+       
+       QObject::connect(job, SIGNAL(jobDone(KoHTMLJob *, KHTMLView *, KHTMLView *, const char *, const char *, int)),
+                        this, SLOT(slotHTMLCodeLoaded(KoHTMLJob *, KHTMLView *, KHTMLView *, const char *, const char *, int)));
+       QObject::connect(job, SIGNAL(jobError(const char *)),
+                        this, SLOT(slotHTMLLoadError(const char *)));
+       QObject::connect(job, SIGNAL(sigRedirection(int, const char *)),
+                        this, SLOT(slotHTMLRedirect(int, const char *)));
      
-       m_pMainJob->start();
+       m_lstJobs.append(job);
+     
+       job->start();
      }
 }
 
@@ -249,29 +207,57 @@ void KoHTMLDoc::feedData(const char *url, const char *data)
   m_vCurrentURL = url;
   htmlData = data;
   m_bDocumentDone = true;
+  documentDone();
   emit contentChanged();
 }
 
-void KoHTMLDoc::slotHTMLCodeLoaded(KoHTMLJob *, KHTMLView *, KHTMLView *, const char *, const char *file)
+void KoHTMLDoc::documentStarted()
 {
-  m_pMainJob = 0L; // the job will delete itself so we don't have to take care of this
+  SIGNAL_CALL0( "documentStarted" );
+}
+
+void KoHTMLDoc::documentDone()
+{
+  SIGNAL_CALL0( "documentDone" );
+}
+
+void KoHTMLDoc::stopLoading()
+{
+  cerr << "killing old stuff" << endl;
+  QListIterator<KoHTMLJob> it(m_lstJobs);
+  for (; it.current(); ++it)
+      {
+        KoHTMLJob *job = it.current();
+        m_lstJobs.removeRef(job);
+        job->kill();
+        cerr << "killed job" << endl;
+      }     
+      
+  assert( m_lstJobs.count() == 0 );      
+}
+
+void KoHTMLDoc::slotHTMLCodeLoaded(KoHTMLJob *job, KHTMLView *topParent, KHTMLView *parent, const char *url, const char *data, int len)
+{
+  cerr << "void KoHTMLDoc::slotHTMLCodeLoaded(...)" <<endl;
+  htmlData = QString(data, len);
+
+  cerr << "removing job ref" << endl;  
+  m_lstJobs.removeRef(job);
   
-  htmlData = kFileToString(file);
-  
-  cerr << "finished!!!!!!!!!!" << endl;
+  cerr << "emitting contentChanged()" << endl;
   emit contentChanged();    
+  cerr << "done... now our job should kill itself..." << endl;
 }
 
-void KoHTMLDoc::slotHTMLLoadError(int id, int errid, const char *txt)
+void KoHTMLDoc::slotHTMLLoadError(const char *errMsg)
 {
-  QString msg;
-  
-  msg.sprintf(i18n("error while loading:\n%s\nerror message:\n%s"), m_vCurrentURL.data(), kioErrorString(errid, txt).data());
-  
-  QMessageBox::critical(0L, i18n("KoHTML IO Error"), msg, i18n("Abort"));
-  
-  htmlData = "";
-  emit contentChanged();
+  m_bLoadError = true;
+  m_strErrorMsg = errMsg;
+}
+
+void KoHTMLDoc::slotHTMLRedirect(int id, const char *url)
+{
+  m_vCurrentURL = url;
 }
 
 void KoHTMLDoc::draw(QPaintDevice *dev, CORBA::Long width, CORBA::Long height,
@@ -630,6 +616,8 @@ void KoHTMLDoc::slotDocumentStarted(KHTMLView *view)
        cerr << "AAAAAAIEEEEEE!!!" << endl;
        return;
      }
+     
+  if (view == topView) documentStarted();     
 }
 
 void KoHTMLDoc::slotDocumentDone(KHTMLView *view)
@@ -641,6 +629,18 @@ void KoHTMLDoc::slotDocumentDone(KHTMLView *view)
        cerr << "AAAAAAIEEEEEE!!!" << endl;
        return;
      }
+     
+  if (view == topView) 
+    {
+      documentDone();
+      
+      // BadHack(tm) ... :-((
+      if (m_bLoadError)
+         {
+           m_bLoadError = false;
+           QMessageBox::critical(0L, i18n("KoHTML IO Error"), m_strErrorMsg, i18n("Abort"));
+	 }  
+    }  
 }
 
 void KoHTMLDoc::slotDocumentLoaded(KoHTMLJob *job, KHTMLView *topParent, KHTMLView *parent, const char *url, const char *filename)

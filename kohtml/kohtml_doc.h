@@ -47,6 +47,7 @@ class KoHTMLDoc;
 
 #include "kohtml.h"
 #include "kohtml_view.h"
+#include "kohtmljob.h"
 
 #define MIME_TYPE "application/x-kohtml"
 #define EDITOR "IDL:KoHTML/Document:1.0"
@@ -68,36 +69,6 @@ protected:
   KRect m__geometry;  
 };
 
-class KoHTMLJob: public KIOJob
-{
-  Q_OBJECT
-public:
-  enum JobType { HTML, Image };
-
-  KoHTMLJob(KHTMLView *_topParent, KHTMLView *_parent, const char *_url, JobType _jType);
-  ~KoHTMLJob();
-  
-  void start();
-  
-  JobType getType() { return jType; }
-  const char *getURL() { return url.data(); }
-  KHTMLView *getParent() { return parent; }
-  KHTMLView *getTopParent() { return topParent; }
-  
-signals:  
-  void jobDone(KoHTMLJob *job, KHTMLView *topParent, KHTMLView *parent, const char *url, const char *filename);
-  
-protected slots:
-  void slotJobFinished();
-  void slotError();
-  
-private:
-  KHTMLView *topParent, *parent;
-  QString url;
-  QString tmpFile;
-  JobType jType;
-};
-
 class KoHTMLDoc : public QObject,
                  virtual public KoDocument,
 		 virtual public KoPrintExt,
@@ -113,7 +84,10 @@ public:
   virtual void openURL(const char *_url);
   virtual void feedData(const char *url, const char *data);
 
-  virtual CORBA::Boolean documentDone() { return (CORBA::Boolean)m_bDocumentDone; }
+  virtual void documentStarted();
+  virtual void documentDone();
+  
+  virtual void stopLoading();
 
   virtual void draw( QPaintDevice *dev, CORBA::Long width, CORBA::Long height,
 		     CORBA::Float _scale );
@@ -185,8 +159,9 @@ protected slots:
   void slotUpdateInternalView();
   void slotDocumentDoneInternal(KHTMLView *view);
 
-  void slotHTMLCodeLoaded(KoHTMLJob *, KHTMLView *, KHTMLView *, const char *, const char *file);
-  void slotHTMLLoadError(int id, int errid, const char *txt);  
+  void slotHTMLCodeLoaded(KoHTMLJob *job, KHTMLView *topParent, KHTMLView *parent, const char *url, const char *data, int len);
+  void slotHTMLLoadError(const char *errMsg);
+  void slotHTMLRedirect(int id, const char *url);
 
 private:
   KoHTMLJob *findJob(KHTMLView *view, const char *url, KoHTMLJob::JobType jType);
@@ -194,6 +169,9 @@ private:
   bool m_bModified;
   bool m_bEmpty;
   bool m_bDocumentDone;
+
+  bool m_bLoadError;
+  QString m_strErrorMsg;
   
   QString htmlData;
   
@@ -201,8 +179,6 @@ private:
 
   KHTMLView_Patched *m_vInternalView;
 
-  KoHTMLJob *m_pMainJob;
-  
   QList<KoHTMLView> m_lstViews;
   QList<KoHTMLChild> m_lstChildren;
   QList<KHTMLView> m_lstHTMLViews;
