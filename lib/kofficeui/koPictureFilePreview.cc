@@ -44,8 +44,10 @@ public:
 
     void setPixmap( const QPixmap &pix ) {
 	pixmap = pix;
-	resizeContents( pixmap.size().width(), pixmap.size().height() );
-	viewport()->repaint( FALSE );
+        const QBitmap nullBitmap;
+        pixmap.setMask( nullBitmap );  //don't show transparency
+	resizeContents( pixmap.width(), pixmap.height() );
+	viewport()->repaint( false );
     }
 
     void setClipart( const QString &s ) {
@@ -65,7 +67,7 @@ public:
  	    p.drawPicture( pic );
  	    p.end();
  	    resizeContents( pixmap.width(), pixmap.height() );
- 	    viewport()->repaint( FALSE );
+ 	    viewport()->repaint( false );
  	}
     }
 
@@ -99,6 +101,7 @@ void KoPictureFilePreview::showPreview( const KURL &u )
 	    m_widget->setPixmap( pix );
 	}
     } else {
+        // ## TODO support for remote URLs
 	m_widget->setPixmap( QPixmap() );
     }
 }
