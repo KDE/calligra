@@ -114,10 +114,15 @@ KexiDataTable::initActions()
 	plugSharedAction("data_save_row",m_view, SLOT(acceptRowEdit()));
 	m_view->plugSharedAction(sharedAction("data_save_row")); //for proper shortcut
 
+	plugSharedAction("data_cancel_row_changes",m_view, SLOT(cancelRowEdit()));
+	m_view->plugSharedAction(sharedAction("data_cancel_row_changes")); //for proper shortcut
+
 	if (m_view->isSortingEnabled()) {
 		plugSharedAction("data_sort_az", m_view, SLOT(sortAscending()));
 		plugSharedAction("data_sort_za", m_view, SLOT(sortDescending()));
 	}
+	setAvailable("data_sort_az", m_view->isSortingEnabled());
+	setAvailable("data_sort_za", m_view->isSortingEnabled());
 //! \todo 	plugSharedAction("data_filter", this, SLOT(???()));
 }
 
@@ -148,12 +153,12 @@ void KexiDataTable::reloadActions()
 	else
 		unplugSharedAction("edit_delete_row", m_view->popup());
 
-	if (!m_view->isSortingEnabled()) {
-		unplugSharedAction("data_sort_az");
-		unplugSharedAction("data_sort_za");
-	}
-//	setAvailable("data_sort_az", m_view->isSortingEnabled());
-//	setAvailable("data_sort_za", m_view->isSortingEnabled());
+	//if (!m_view->isSortingEnabled()) {
+//		unplugSharedAction("data_sort_az");
+//		unplugSharedAction("data_sort_za");
+	//}
+	setAvailable("data_sort_az", m_view->isSortingEnabled());
+	setAvailable("data_sort_za", m_view->isSortingEnabled());
 
 	slotCellSelected( m_view->currentColumn(), m_view->currentRow() );
 }
@@ -200,6 +205,10 @@ void KexiDataTable::slotUpdateRowActions(int row)
 	setAvailable("edit_delete_row", !m_view->isReadOnly() && !(m_view->isInsertingEnabled() && row==m_view->rows()) );
 	setAvailable("edit_insert_empty_row", !m_view->isReadOnly() && m_view->isEmptyRowInsertingEnabled());
 	setAvailable("data_save_row", m_view->rowEditing());
+	setAvailable("data_cancel_row_changes", m_view->rowEditing());
+
+	setAvailable("data_sort_az", m_view->isSortingEnabled());
+	setAvailable("data_sort_za", m_view->isSortingEnabled());
 }
 
 #include "kexidatatable.moc"
