@@ -131,7 +131,7 @@ public:
      */
     QWidget *replaceExtension();
 
-private slots:
+protected slots:
 
     void slotOk();
 
