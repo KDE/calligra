@@ -164,12 +164,12 @@ Rect Canvas::snapTranslatedBoxToGrid (const Rect& r) {
     if (fabs (r.left () - x1) < fabs (r.right () - x2)) 
       x = x1;
     else
-      x = x2 - r.width () + 2;
+      x = x2 - r.width ();
 
     if (fabs (r.top () - y1) < fabs (r.bottom () - y2)) 
       y = y1;
     else 
-      y = y2 - r.height () + 2;
+      y = y2 - r.height ();
     return Rect (x, y, r.width (), r.height ());
   }
   else
@@ -191,9 +191,9 @@ Rect Canvas::snapScaledBoxToGrid (const Rect& r, int hmask) {
     if (hmask & Handle::HPos_Top)
       retval.top (y1);
     if (hmask & Handle::HPos_Right)
-      retval.right (x2 + 1);
+      retval.right (x2);
     if (hmask & Handle::HPos_Bottom)
-      retval.bottom (y2 + 1);
+      retval.bottom (y2);
     return retval;
   }
   else

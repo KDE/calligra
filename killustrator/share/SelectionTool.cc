@@ -587,6 +587,17 @@ void SelectionTool::rotate (GDocument* doc, float dx, float dy,
 	(xp < rotCenter.x () && dy > 0))
       angle = -angle;
   }
+/*
+  if (adx > ady)
+    angle=atan2((float)rotCenter.y()-yp,(float)rotCenter.x()-xp);
+  else
+    angle-=atan2((float)(rotCenter.y()-firstpos.y()),
+		 (float)(rotCenter.x()-firstpos.x()));
+
+  angle*=180.0/M_PI;
+  if (angle<180.0) angle+=360.0;
+  if (angle>180.0) angle-=360.0;
+*/
 
   if (permanent) {
     for_each (doc->getSelection ().begin (), doc->getSelection ().end (), 
@@ -732,7 +743,7 @@ void SelectionTool::activate (GDocument* doc, Canvas*) {
   ctype = C_Arrow;
 
   if (doc->selectionIsEmpty ()) {
-    emit modeSelected (i18n ("Selection Mode"));
+    emit modeSelected (I18N ("Selection Mode"));
   }
   else {
     Rect box = doc->boundingBoxForSelection ();

@@ -558,7 +558,7 @@ void QWinMetaFile::ellipse(short, short* parm)
 
 
 //-----------------------------------------------------------------------------
-void QWinMetaFile::polypolygon(short, short* parm)
+void QWinMetaFile::polypolygon(short num, short* parm)
 {
   QPointArray* pa;
   int i;

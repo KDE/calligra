@@ -71,7 +71,7 @@ public:
   Rect (const Coord& p1, const Coord& p2) : 
     x1_ (p1.x ()), y1_ (p1.y ()), x2_ (p2.x ()), y2_ (p2.y ()) {}
   Rect (float l, float t, float w, float h) :
-    x1_ (l), y1_ (t), x2_ (l + w - 1), y2_ (t + h - 1) {}
+    x1_ (l), y1_ (t), x2_ (l + w), y2_ (t + h) {}
   Rect (const Rect& r) : 
     x1_ (r.x1_), y1_ (r.y1_), x2_ (r.x2_), y2_ (r.y2_) {}
 
@@ -81,8 +81,8 @@ public:
   float bottom () const { return y2_; }
   float x () const { return x1_; }
   float y () const { return y1_; }
-  float width () const { return x2_ - x1_ + 1; }
-  float height () const { return y2_ - y1_ + 1; }
+  float width () const { return x2_ - x1_; }
+  float height () const { return y2_ - y1_; }
 
   void left (float f) { x1_ = f; }
   void top (float f) { y1_ = f; }
