@@ -54,5 +54,5 @@ messages:
 kformula.cc: kformula.h
 kformula_view.h: kformula.h
 kformula_shell.h: kformula.h
-kformula_main.cc:  kformula.h
-kformula_main.cc: kformula_view.h kformula.h
+$(srcdir)/kformula_main.cc: kformula_view.h kformula.h
+$(srcdir)/kformula_view.cc: kformula.h

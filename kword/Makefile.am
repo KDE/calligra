@@ -57,10 +57,10 @@ kword.h: kword.idl
 	$(IDL) --query-server-for-narrow --relative-paths -I$(top_srcdir)/lib/kofficecore -I$(top_srcdir)/lib/store -I$(idldir) $(srcdir)/kword.idl
 
 kword.cc: kword.h
-kword_view.h: kword.h
-kword_shell.h: kword.h
+$(srcdir)/kword_view.h: kword.h
+$(srcdir)/kword_shell.h: kword.h
 kword_main.cc: kword_view.h kword.h
-char.cc: char.h kword.h
+$(srcdir)/char.cc: char.h kword.h
 fc.cc: fc.h
 font.cc: font.h
 format.cc: format.h
