@@ -379,8 +379,9 @@ void KWDocument::initUnit()
     {
         config->setGroup( "Misc" );
         setUnit(KoUnit::unit( config->readEntry("Units",KoUnit::unitName(KoUnit::U_MM  ))));
-         setDefaultColumnSpacing((int)config->readDoubleNumEntry("ColumnSpacing",3));
+        setDefaultColumnSpacing((int)config->readDoubleNumEntry("ColumnSpacing",3));
     }
+    m_pageColumns.ptColumnSpacing = m_defaultColumnSpacing;
 }
 
 void KWDocument::initEmpty()
@@ -1012,7 +1013,6 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
     m_pageLayout.unit = KoUnit::U_MM;
 
     m_pageColumns.columns = 1;
-    m_pageColumns.ptColumnSpacing = m_defaultColumnSpacing;
 
     m_pageHeaderFooter.header = HF_SAME;
     m_pageHeaderFooter.footer = HF_SAME;
