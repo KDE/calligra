@@ -36,10 +36,24 @@ class KToolBar;
 class KoMainWindow : public Shell
 {
     Q_OBJECT
+
 public:
+
+    /**
+     *  Constructor.
+     *
+     *  Initializes a window with a file toolbar.
+     */
     KoMainWindow( QWidget* parent = 0, const char *_name = 0 );
+
+    /**
+     *  Destructor.
+     */
     ~KoMainWindow();
 
+    /**
+     *  Retrieves the document that is displayed in the mainwindow.
+     */
     KoDocument* document() { return (KoDocument*)rootPart(); }
 
     /**
@@ -47,38 +61,103 @@ public:
      * For example "application/x-kspread".
      */
     virtual QString nativeFormatMimeType() const = 0;
+
     /**
      * The pattern of the native file format, for example "*.ksp".
      */
     virtual QString nativeFormatPattern() const = 0;
+    
     /**
      * The name of the native file format. Usually the name of
      * your component, for example "KSpread" or "KWord".
      */
     virtual QString nativeFormatName() const = 0;
 
+    /**
+     *  Retrieves the first MainWindow.
+     *
+     *  @ref nextMainWindow
+     */
     static KoMainWindow* firstMainWindow();
+
+    /**
+     *  Retrieves the next window.
+     *
+     *  @ref firstMeinWindow
+     */
     static KoMainWindow* nextMainWindow();
 
+    /**
+     *  Retrieves a pointer to the file toolbar. Each mainwindow
+     *  has this toolbar per default.
+     */
     KToolBar *fileToolBar() { return fileTools; }
     
 public slots:
+
+    /**
+     *  Slot for opening a new document.
+     *
+     *  If the current document is empty, the new document replaces the it.
+     *  If not a new shell will be opened for showing the document.
+     */
     virtual void slotFileNew();
+
+    /**
+     *  Slot for opening a saved file.
+     *
+     *  If the current document is empty, the opened document replaces the it.
+     *  If not a new shell will be opened for showing the opened file.
+     */
     virtual void slotFileOpen();
+
+    /**
+     *  Saves the current document with the current name.
+     */
     virtual void slotFileSave();
+
+    /**
+     *  Saves the current document with a new name.
+     */
     virtual void slotFileSaveAs();
+
+    /**
+     *  Prints the actual document.
+     */
     virtual void slotFilePrint();
+
+    /**
+     *  Closes the actual shell.
+     */
     virtual void slotFileClose();
+
+    /**
+     *  Quits the Application.
+     */
     virtual void slotFileQuit();
+
+    /**
+     *  Shows an about dialog for the app.
+     */
     virtual void slotHelpAbout();
 
 protected:
+
+    /**
+     *  Closes all documents.
+     */
     virtual bool closeAllDocuments();
+
+    /**
+     *  Closes the actual document.
+     */
     virtual bool closeDocument();
+
     /**
      * Create a new empty document.
      */
     virtual KoDocument* createDoc() = 0;
+
     /**
      * Load the desired document and show it.
      *
@@ -104,6 +183,7 @@ protected:
 			       const char* _native_name = 0L, bool _saveas = FALSE );
 
 private:
+
     static QList<KoMainWindow>* s_lstMainWindows;
     KToolBar* fileTools;
 
