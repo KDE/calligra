@@ -119,3 +119,4 @@ void   AIBase::printOut(QPainter *p)
 }
 	
 
+#include "qtai_base.moc"

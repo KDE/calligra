@@ -320,3 +320,4 @@ void KSpreadOsziDlg::slotCalc()
     dlg.hide();
     m_plot->repaint( FALSE );
 }
+#include "kspread_dlg_oszi.moc"

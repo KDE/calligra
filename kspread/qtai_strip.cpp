@@ -336,3 +336,4 @@ void AIStrip::setGridUnit(double wox)
   w_of_x=wox; // Set the width between 2 X Axis Scales
 }
 
+#include "qtai_strip.moc"

@@ -485,3 +485,4 @@ void AIBar::setCalcLimits(bool calc_limits)
 {
   this->calc_limits=calc_limits;
 }
+#include "qtai_bar.moc"

@@ -202,3 +202,4 @@ void AIMeter::setType(int type)
     break;
   }
 }
+#include "qtai_meter.moc"

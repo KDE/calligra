@@ -1283,3 +1283,4 @@ double AICursor::y(void)
   return ypos;
 }
 
+#include "qtai_plot.moc"

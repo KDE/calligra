@@ -343,3 +343,4 @@ QPen KSpreadFormatDlg::toPen(QDomElement &element) const {
 
   return p;
 }
+#include "kspread_dlg_format.moc"
